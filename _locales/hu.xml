@@ -242,7 +242,7 @@
     <string name="menu_mute">Értesítések némítása</string>
     <string name="menu_unmute">Némítás kikapcsolása</string>
     <string name="menu_export_attachment">Csatolmány exportálása</string>
-    <string name="menu_export_attachments">Csatolmány exportálása</string>
+    <string name="menu_export_attachments">Csatolmányok exportálása</string>
     <string name="menu_all_media">Minden média</string>
     <!-- Command to jump to the original message corresponding to a gallery image or document -->
     <string name="show_in_chat">Megjelenítés a csevegésben</string>
@@ -359,7 +359,7 @@
     <string name="ask_remove_members">Eltávolítja a csoportból őt: %1$s?</string>
     <!-- %1$s is replaced by a comma-separated list of names -->
     <string name="ask_remove_from_broadcast">Eltávolítja az adáslistából a következőt: %1$s?</string>
-    <string name="open_url_confirmation">Biztosan megnyitja ezt a jivatkozást?</string>
+    <string name="open_url_confirmation">Biztosan megnyitja ezt a hivatkozást?</string>
 
 
     <!-- contact list -->
@@ -501,7 +501,7 @@
     <!-- Multi Device -->
     <!-- "Second Device" can also be translated as "Another Device", if that is catchier in the destination language. However, make sure to use the term consistently. -->
     <string name="multidevice_title">Második eszköz hozzáadása</string>
-    <string name="multidevice_same_network_hint">Győződjön meg róla, hogy mindkét eszköz ugyanazon a Wi-Fi- vagy hálózaton van-e</string>
+    <string name="multidevice_same_network_hint">Győződjön meg róla, hogy mindkét eszköz ugyanazon a Wi-Fi-n vagy hálózaton van-e</string>
     <string name="multidevice_this_creates_a_qr_code">Ez egy QR-kódot hoz létre, amelyet a második eszköz beolvashat a profil másolásához.</string>
     <string name="multidevice_install_dc_on_other_device">Telepítse a Delta Chat-et a másik eszközére (https://get.delta.chat)</string>
     <!-- "I Already Have a Login / Add as Second Device” should be the same text as defined by the keys onboarding_alternative_logins and multidevice_receiver_title -->
