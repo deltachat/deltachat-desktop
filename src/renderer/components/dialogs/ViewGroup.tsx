@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
 import ChatListItem from '../chat/ChatListItem'
@@ -56,16 +56,21 @@ export const useGroup = (accountId: number, chat: T.FullChat) => {
     chat.contacts?.map(({ id }) => id)
   )
   const [groupImage, setGroupImage] = useState(chat.profileImage)
+  const firstLoad = useRef(true)
 
   useEffect(() => {
-    modifyGroup(accountId, chat.id, groupName, groupImage, groupMembers).then(
-      (chat: T.FullChat) => {
-        // we have to refresh the local group since the current edited group chat
-        // might not be the current selected chat in chatContext
-        // (when editGroup was opened via chat list context menu)
-        setGroup(chat)
-      }
-    )
+    if (firstLoad.current) {
+      firstLoad.current = false
+    } else {
+      modifyGroup(accountId, chat.id, groupName, groupImage, groupMembers).then(
+        (chat: T.FullChat) => {
+          // we have to refresh the local group since the current edited group chat
+          // might not be the current selected chat in chatContext
+          // (when editGroup was opened via chat list context menu)
+          setGroup(chat)
+        }
+      )
+    }
   }, [groupName, groupImage, groupMembers, chat.id, accountId])
 
   const removeGroupMember = (contactId: number) =>
