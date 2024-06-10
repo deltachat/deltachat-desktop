@@ -24,7 +24,7 @@ export async function updateDeviceChats(
     }
   }
 
-  await addDeviceMessage('changelog-version-1.46.0-version0', {
+  await addDeviceMessage('changelog-version-1.46.0-version1', {
     text: `What's new in 1.46.0?
 
     🐣 New Onboarding: ⚡️ Sign up to secure fast chatmail servers (https://delta.chat/chatmail) or use classic e-mail servers
@@ -37,10 +37,5 @@ export async function updateDeviceChats(
     ✨ Many improvements and bug fixes
     
     [Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/main/CHANGELOG.md#1_46_0)`,
-  })
-
-  await addDeviceMessage('changelog-version-1.45.5', {
-    text: `Thanks for testing the 1.45.5 testrelease, this is the release candidate for the 1.46.0 release.
-Please report issues that you found on https://support.delta.chat/t/help-testing-the-upcoming-v1-45-x-release/3089`,
   })
 }
