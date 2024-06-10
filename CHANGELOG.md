@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+<a id="1_46_0"></a>
+
+## [v1.46.0] - 2024-06-10
+
 ### Changed
 - Update translations (2024-06-09) #3925
 
@@ -2658,7 +2662,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.5...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.0...HEAD
+
+[1.45.5]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.5...v1.46.0
 
 [1.45.5]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.4...v1.45.5
 
