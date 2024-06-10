@@ -5,6 +5,9 @@
 ### Changed
 - Update translations (2024-06-09) #3925
 
+### Fixed
+- refresh member list after changes #3807
+
 <a id="1_45_5"></a>
 
 ## [v1.45.5] - 2024-06-08
@@ -19,7 +22,6 @@
 - Do not set min window dimensions on screens that are smaller than those min dimensions (such as linux phones) #3919
 - packaging: respect `NO_ASAR` env var in `afterPackHook` #3916
 - fix image cropper is not started when creating a group #3920
-- refresh member list after changes #3807
 
 ### Changed
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.140.2`
