@@ -982,7 +982,7 @@
     <string name="qrshow_join_group_hint">Отсканируйте код, чтобы присоединиться к группе «%1$s».</string>
     <string name="qrshow_join_contact_title">QR-код приглашения</string>
     <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and address eg. "Scan to chat with Alice (alice@example.org)" -->
-    <string name="qrshow_join_contact_hint">Отсканируйте чтобы начать чат с %1$s</string>
+    <string name="qrshow_join_contact_hint">Отсканируйте, чтобы начать чат с %1$s</string>
     <string name="qrshow_join_contact_no_connection_toast">Нет соединения к интернету, невозможно начать процесс настройки по QR-коду.</string>
     <string name="qraccount_ask_create_and_login">Создать новый адрес электронной почты на \"%1$s\" и войти?</string>
     <string name="qraccount_ask_create_and_login_another">Создать новый адрес почты на \"%1$s\" и войти?\n\nВаш существующий аккаунт не будет удалён. Используйте пункт меню «Сменить аккаунт», чтобы переключаться между аккаунтами.</string>
