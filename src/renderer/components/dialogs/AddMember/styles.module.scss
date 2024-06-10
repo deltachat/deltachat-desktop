@@ -6,3 +6,14 @@
   // Similar approach is taken by the ForwardMessage component.
   height: 100vh;
 }
+
+.addMemberDialogBody {
+  // Stretch the parent, same as above.
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+}
+.addMemberContactList {
+  flex-grow: 1;
+}

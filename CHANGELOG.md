@@ -5,6 +5,9 @@
 ### Changed
 - Update translations (2024-06-09) #3925
 
+### Fixed
+- refresh member list after changes #3807
+
 <a id="1_45_5"></a>
 
 ## [v1.45.5] - 2024-06-08

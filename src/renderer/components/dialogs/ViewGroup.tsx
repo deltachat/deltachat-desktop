@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
 import ChatListItem from '../chat/ChatListItem'
-import { useContactSearch, AddMemberInnerDialog } from './CreateChat'
 import { QrCodeShowQrInner } from './QrCode'
 import { useThemeCssVar } from '../../ThemeManager'
-import { ContactList, useContactsMap } from '../contact/ContactList'
+import { ContactList } from '../contact/ContactList'
 import { useLogicVirtualChatList, ChatListPart } from '../chat/ChatList'
 import {
   PseudoListItemShowQrCode,
@@ -35,31 +34,43 @@ import { modifyGroup } from '../../backend/group'
 import type { T } from '@deltachat/jsonrpc-client'
 import type { DialogProps } from '../../contexts/DialogContext'
 import ImageCropper from '../ImageCropper'
+import { AddMemberDialog } from './AddMember/AddMemberDialog'
 
 export default function ViewGroup(
   props: {
     chat: T.FullChat
-    isBroadcast: boolean
   } & DialogProps
 ) {
-  const { onClose, isBroadcast, chat } = props
-
+  const { chat, onClose } = props
   return (
     <Dialog width={400} onClose={onClose} fixed>
-      <ViewGroupInner onClose={onClose} chat={chat} isBroadcast={isBroadcast} />
+      <ViewGroupInner onClose={onClose} chat={chat} />
     </Dialog>
   )
 }
 
 export const useGroup = (accountId: number, chat: T.FullChat) => {
+  const [group, setGroup] = useState(chat)
   const [groupName, setGroupName] = useState(chat.name)
   const [groupMembers, setGroupMembers] = useState(
     chat.contacts?.map(({ id }) => id)
   )
   const [groupImage, setGroupImage] = useState(chat.profileImage)
+  const firstLoad = useRef(true)
 
   useEffect(() => {
-    modifyGroup(accountId, chat.id, groupName, groupImage, groupMembers)
+    if (firstLoad.current) {
+      firstLoad.current = false
+    } else {
+      modifyGroup(accountId, chat.id, groupName, groupImage, groupMembers).then(
+        (chat: T.FullChat) => {
+          // we have to refresh the local group since the current edited group chat
+          // might not be the current selected chat in chatContext
+          // (when editGroup was opened via chat list context menu)
+          setGroup(chat)
+        }
+      )
+    }
   }, [groupName, groupImage, groupMembers, chat.id, accountId])
 
   const removeGroupMember = (contactId: number) =>
@@ -68,8 +79,8 @@ export const useGroup = (accountId: number, chat: T.FullChat) => {
   const addGroupMembers = async (newGroupMembers: number[]) => {
     setGroupMembers(members => [...members, ...newGroupMembers])
   }
-
   return {
+    group,
     groupName,
     setGroupName,
     groupMembers,
@@ -84,10 +95,10 @@ export const useGroup = (accountId: number, chat: T.FullChat) => {
 function ViewGroupInner(
   props: {
     chat: T.FullChat
-    isBroadcast: boolean
   } & DialogProps
 ) {
-  const { onClose, chat, isBroadcast } = props
+  const { chat, onClose } = props
+  const isBroadcast = chat.chatType === C.DC_CHAT_TYPE_BROADCAST
   const { openDialog } = useDialog()
   const accountId = selectedAccountId()
   const openConfirmationDialog = useConfirmationDialog()
@@ -97,7 +108,6 @@ function ViewGroupInner(
   const [chatListIds, setChatListIds] = useState<number[]>([])
   const isRelatedChatsEnabled =
     settings?.desktopSettings.enableRelatedChats || false
-
   useEffect(() => {
     if (isRelatedChatsEnabled)
       BackendRemote.rpc
@@ -111,6 +121,7 @@ function ViewGroupInner(
   const chatDisabled = !chat.canSend
 
   const {
+    group,
     groupName,
     setGroupName,
     groupMembers,
@@ -260,7 +271,7 @@ function ViewGroupInner(
                 </>
               )}
               <ContactList
-                contacts={chat.contacts}
+                contacts={group.contacts}
                 showRemove={!chatDisabled}
                 onClick={contact => {
                   if (contact.id === C.DC_CONTACT_ID_SELF) {
@@ -282,45 +293,6 @@ function ViewGroupInner(
         />
       )}
     </>
-  )
-}
-
-export function AddMemberDialog({
-  onClose,
-  onOk,
-  groupMembers,
-  listFlags,
-  isBroadcast = false,
-  isVerificationRequired = false,
-}: {
-  onOk: (members: number[]) => void
-  groupMembers: number[]
-  listFlags: number
-  isBroadcast?: boolean
-  isVerificationRequired?: boolean
-} & DialogProps) {
-  const [searchContacts, updateSearchContacts] = useContactsMap(listFlags, '')
-  const [queryStr, onSearchChange, _, refreshContacts] =
-    useContactSearch(updateSearchContacts)
-  return (
-    <Dialog canOutsideClickClose={false} fixed onClose={onClose}>
-      {AddMemberInnerDialog({
-        onOk: addMembers => {
-          onOk(addMembers)
-          onClose()
-        },
-        onCancel: () => {
-          onClose()
-        },
-        onSearchChange,
-        queryStr,
-        searchContacts,
-        refreshContacts,
-        groupMembers,
-        isBroadcast,
-        isVerificationRequired,
-      })}
-    </Dialog>
   )
 }
 

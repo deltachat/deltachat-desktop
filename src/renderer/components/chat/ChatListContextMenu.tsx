@@ -227,7 +227,7 @@ export function useChatListContextMenu(): {
               },
             // Edit Broadcast List
             chatListItem.isBroadcast && {
-              label: 'Edit Broadcast List',
+              label: tx('menu_edit_broadcast_list'),
               action: onViewGroup,
             },
             // View Profile
