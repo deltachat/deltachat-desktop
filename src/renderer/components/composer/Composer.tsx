@@ -412,7 +412,7 @@ function emptyDraft(chatId: number | null): DraftObject {
     fileMime: null,
     fileName: null,
     quote: null,
-    viewType: 'Unknown',
+    viewType: 'Text',
     vcardContact: null,
   }
 }
