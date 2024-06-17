@@ -3,7 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Fixed
-- skip `requestSingleInstanceLock` on mac appstore builds (mas), because it made it unable to start the app on older macOS devices.
+- skip `requestSingleInstanceLock` on mac appstore builds (mas), because it made it unable to start the app on older macOS devices. #3946
 
 <a id="1_46_0"></a>
 
