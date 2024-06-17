@@ -22,7 +22,7 @@ export default function VCardComponent({ message }: { message: T.Message }) {
   if (!message.vcardContact) {
     return null
   }
-  const { profileImage, color, displayName, addr } = message.vcardContact
+  const { displayName, addr } = message.vcardContact
   const startChatWithContact = async (addr: string) => {
     const confirmed = await openConfirmationDialog({
       message: tx('ask_start_chat_with', displayName),
@@ -41,12 +41,28 @@ export default function VCardComponent({ message }: { message: T.Message }) {
       await selectChat(selectedAccountId(), chatId)
     }
   }
+  return (
+    <VisualVCardComponent
+      onClick={() => startChatWithContact(addr)}
+      vcardContact={message.vcardContact}
+    />
+  )
+}
+
+export function VisualVCardComponent({
+  vcardContact,
+  onClick,
+}: {
+  vcardContact: NonNullable<T.Message['vcardContact']>
+  onClick?: () => void
+}) {
+  const { profileImage, color, displayName, addr } = vcardContact
   const codepoint = displayName && displayName.codePointAt(0)
   const initial = codepoint
     ? String.fromCodePoint(codepoint).toUpperCase()
     : '#'
   return (
-    <div className={styles.vcard} onClick={() => startChatWithContact(addr)}>
+    <div className={styles.vcard} onClick={onClick}>
       <div
         className={classNames('avatar', styles.avatar)}
         aria-label={displayName}
