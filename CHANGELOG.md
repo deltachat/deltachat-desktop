@@ -13,6 +13,7 @@
 ### Fixed
 - skip `requestSingleInstanceLock` on mac appstore builds (mas), because it made it unable to start the app on older macOS devices. #3946
 - fix tray icon explaination in settings that appears when started with `--minimized` #3949
+- performance: memorize MessageBody, don't run message parser multiple times for the same message #3951
 
 ### Removed
 - removed unused Roboto font variants #3949
