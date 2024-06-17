@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { getSizeClass, replaceColons } from '../conversations/emoji'
 import { message2React } from './MessageMarkdown'
 
-export default function MessageBody({
+function MessageBody({
   text,
   disableJumbomoji,
 }: {
@@ -25,6 +25,9 @@ export default function MessageBody({
   return message2React(emojifiedText, false)
 }
 const trimRegex = /^[\s\uFEFF\xA0\n\t]+|[\s\uFEFF\xA0\n\t]+$/g
+
+// Do not run expensive message parser multiple times for the same message
+export default React.memo(MessageBody)
 
 /** removes linebreaks at start and end */
 function trim(str: string) {
