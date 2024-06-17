@@ -2,6 +2,8 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- add option to use sytem ui font in appearance settings
 
 ### Changed
 - use `SOURCE_DATE_EPOCH` environment var for build timestamp instead of `Date.now()` if set.

@@ -63,6 +63,8 @@ export interface DesktopSettingsType {
   enableRelatedChats: boolean
   /** gallery image & video - keep aspect ratio (true) or cover (false) */
   galleryImageKeepAspectRatio: boolean
+  /** whether to use system ui font */
+  useSystemUIFont: boolean
 }
 
 export interface RC_Config {

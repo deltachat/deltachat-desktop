@@ -21,6 +21,13 @@ export namespace ThemeManager {
       themeVars.innerText = theme.data
       currentThemeChangeHook()
     }
+
+    // update app font according to `useSystemUIFont` setting
+    if ((await runtime.getDesktopSettings()).useSystemUIFont) {
+      document.body.classList.add('system-fonts')
+    } else {
+      document.body.classList.remove('system-fonts')
+    }
   }
 
   export function getCurrentThemeMetaData() {

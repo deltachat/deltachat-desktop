@@ -47,5 +47,8 @@
   },
   "menu_edit_broadcast_list": {
     "message": "Edit Broadcast List"
+  },
+  "pref_use_system_ui_font": {
+    "message": "Use System UI Font"
   }
 }

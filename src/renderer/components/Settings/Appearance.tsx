@@ -125,6 +125,11 @@ export default function Appearance({
       <br />
       <br />
       <SettingsTrayIcon settingsStore={settingsStore} />
+      <DesktopSettingsSwitch
+        settingsKey='useSystemUIFont'
+        label={tx('pref_use_system_ui_font')}
+        callback={() => ThemeManager.refresh()}
+      />
     </>
   )
 }
@@ -333,9 +338,7 @@ function SettingsTrayIcon({
         disabledValue={settingsStore.rc.minimized}
       />
       {settingsStore.rc.minimized && (
-        <Callout>
-          {tx('explain_desktop_minimized_disabled_tray_pref')}
-        </Callout>
+        <Callout>{tx('explain_desktop_minimized_disabled_tray_pref')}</Callout>
       )}
     </>
   )

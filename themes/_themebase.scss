@@ -13,6 +13,9 @@ $hover-contrast-change: 2%;
 }
 
 :root {
+  --font-family: Roboto, $emojifonts, 'Helvetica Neue', Arial, Helvetica,
+    NotoMono, sans-serif;
+
   --colorPrimary: #{$colorPrimary};
   --colorDanger: #{$colorDanger};
   --colorNone: #{$colorNone};
