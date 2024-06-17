@@ -86,7 +86,7 @@ $emojimart-search-height: 31px + 6px;
           font-size: large;
           font-weight: 500;
           text-transform: capitalize;
-          font-family: $roboto;
+          font-family: var(--font-family);
           font-size: 16px;
           font-weight: 500;
           position: sticky;

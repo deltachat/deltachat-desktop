@@ -13,7 +13,7 @@
       --rgb-input: var(--emoji-picker-selected-input-bg-rgb);
       // border, scrollbar, in-active search input, emoji hover background
       --color-border: var(--emoji-picker-border-and-hover-color);
-      --font-family: $roboto;
+      --font-family: var(--font-family);
       --color-border-over: rgba(0, 0, 0, 0);
       --shadow: none;
     }

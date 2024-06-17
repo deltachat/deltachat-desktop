@@ -12,11 +12,19 @@ body {
   height: 100%;
   width: 100%;
   margin: 0;
-  font-family: $roboto !important;
   font-size: 14px;
   color: var(--globalText);
   background-color: var(--globalBackground);
   cursor: default;
+
+  &:not(.system-fonts) {
+    --font-family: #{$fonts-default};
+    font-family: var(--font-family);
+  }
+  &.system-fonts {
+    --font-family: #{$fonts-system};
+    font-family: var(--font-family);
+  }
 }
 
 ul {
