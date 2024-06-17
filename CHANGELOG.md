@@ -3,18 +3,18 @@
 ## [Unreleased][unreleased]
 
 ### Added
-- add option to use sytem ui font in appearance settings
+- add option to use sytem ui font in appearance settings #3949
 
 ### Changed
 - use `SOURCE_DATE_EPOCH` environment var for build timestamp instead of `Date.now()` if set.
-- use italic variants of Roboto font correctly
+- use italic variants of Roboto font correctly #3949
 
 ### Fixed
 - skip `requestSingleInstanceLock` on mac appstore builds (mas), because it made it unable to start the app on older macOS devices. #3946
-- fix tray icon explaination in settings that appears when started with `--minimized`
+- fix tray icon explaination in settings that appears when started with `--minimized` #3949
 
 ### Removed
-- removed unused Roboto font variants
+- removed unused Roboto font variants #3949
 
 <a id="1_46_0"></a>
 
