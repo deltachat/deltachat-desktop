@@ -7,6 +7,10 @@
 
 ### Changed
 - use `SOURCE_DATE_EPOCH` environment var for build timestamp instead of `Date.now()` if set.
+- use italic variants of Roboto font correctly
+
+### Removed
+- removed unused Roboto font variants
 
 <a id="1_46_0"></a>
 
