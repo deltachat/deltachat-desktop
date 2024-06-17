@@ -34,6 +34,7 @@ import useChat from '../../hooks/chat/useChat'
 
 import type { EmojiData, BaseEmoji } from 'emoji-mart/index'
 import type { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
+import { VisualVCardComponent } from '../message/VCard'
 
 const log = getLogger('renderer/composer')
 
@@ -338,12 +339,18 @@ const Composer = forwardRef<
               <QuoteOrDraftRemoveButton onClick={removeQuote} />
             </div>
           )}
-          {draftState.file && (
+          {draftState.file && !draftState.vcardContact && (
             <div className='attachment-quote-section is-attachment'>
               {/* TODO make this pretty: draft image/video/attachment */}
               {/* <p>file: {draftState.file}</p> */}
               {/* {draftState.viewType} */}
               <DraftAttachment attachment={draftState} />
+              <QuoteOrDraftRemoveButton onClick={removeFile} />
+            </div>
+          )}
+          {draftState.vcardContact && (
+            <div className='attachment-quote-section is-attachment'>
+              <VisualVCardComponent vcardContact={draftState.vcardContact} />
               <QuoteOrDraftRemoveButton onClick={removeFile} />
             </div>
           )}
@@ -392,9 +399,23 @@ export default Composer
 
 export type DraftObject = { chatId: number } & Pick<
   Type.Message,
-  'text' | 'file' | 'quote' | 'viewType'
+  'text' | 'file' | 'quote' | 'viewType' | 'vcardContact'
 > &
   MessageTypeAttachmentSubset
+
+function emptyDraft(chatId: number | null): DraftObject {
+  return {
+    chatId: chatId || 0,
+    text: '',
+    file: null,
+    fileBytes: 0,
+    fileMime: null,
+    fileName: null,
+    quote: null,
+    viewType: 'Unknown',
+    vcardContact: null,
+  }
+}
 
 export function useDraft(
   chatId: number | null,
@@ -409,39 +430,12 @@ export function useDraft(
   removeFile: () => void
   clearDraft: () => void
 } {
-  const [draftState, _setDraft] = useState<DraftObject>({
-    chatId: chatId || 0,
-    text: '',
-    file: null,
-    fileBytes: 0,
-    fileMime: null,
-    fileName: null,
-    quote: null,
-    viewType: 'Unknown',
-  })
-  const draftRef = useRef<DraftObject>({
-    chatId: chatId || 0,
-    text: '',
-    file: null,
-    fileBytes: 0,
-    fileMime: null,
-    fileName: null,
-    quote: null,
-    viewType: 'Unknown',
-  })
+  const [draftState, _setDraft] = useState<DraftObject>(emptyDraft(chatId))
+  const draftRef = useRef<DraftObject>(emptyDraft(chatId))
   draftRef.current = draftState
 
   const clearDraft = useCallback(() => {
-    _setDraft(_ => ({
-      chatId: chatId || 0,
-      text: '',
-      file: null,
-      fileBytes: 0,
-      fileMime: null,
-      fileName: null,
-      quote: null,
-      viewType: 'Text',
-    }))
+    _setDraft(_ => emptyDraft(chatId))
     inputRef.current?.focus()
   }, [chatId, inputRef])
 
@@ -462,6 +456,7 @@ export function useDraft(
             fileName: newDraft.fileName,
             viewType: newDraft.viewType,
             quote: newDraft.quote,
+            vcardContact: newDraft.vcardContact,
           }))
           inputRef.current?.setText(newDraft.text)
         }
@@ -530,6 +525,7 @@ export function useDraft(
         fileName: newDraft.fileName,
         viewType: newDraft.viewType,
         quote: newDraft.quote,
+        vcardContact: newDraft.vcardContact,
       }))
       // don't load text to prevent bugging back
     } else {
