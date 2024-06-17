@@ -93,6 +93,9 @@ export default function MainScreen({ accountId }: Props) {
   }
 
   const searchChats = (queryStr: string, chatId: number | null = null) => {
+    if (smallScreenMode) {
+      unselectChat()
+    }
     setQueryStr(queryStr)
     setQueryChatId(chatId)
   }

@@ -318,7 +318,7 @@ export default function ChatList(props: {
             {({ width, height }) => (
               <div>
                 <div className='search-result-divider' style={{ width: width }}>
-                  {tx('search_in_chat')}
+                  {tx('search_in', searchChatInfo.name)}
                   {messageResultIds.length !== 0 &&
                     ': ' + translate_n('n_messages', messageResultIds.length)}
                 </div>
