@@ -70,7 +70,10 @@ protocol.registerSchemesAsPrivileged([
 const app = rawApp as ExtendedAppMainProcess
 app.rc = rc
 
-if (!app.requestSingleInstanceLock()) {
+// requestSingleInstanceLock always returns false on mas (mac app store) builds
+// due to electron issue https://github.com/electron/electron/issues/35540
+// dc-desktop issue: https://github.com/deltachat/deltachat-desktop/issues/3938
+if (!process.mas && !app.requestSingleInstanceLock()) {
   /* ignore-console-log */
   console.error('Only one instance allowed. Quitting.')
   app.quit()
