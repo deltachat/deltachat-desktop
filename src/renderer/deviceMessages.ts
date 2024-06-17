@@ -42,7 +42,7 @@ export async function updateDeviceChats(
   await addDeviceMessage('changelog-version-1.46.1-version0', {
     text: `What's new in 1.46.1?
 
-✨ Some performance-, some general-improvements and bug fixes
+✨ Some enhancements to performance, some general improvements and a few issues fixed.
 
 [Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/main/CHANGELOG.md#1_46_1)`,
   })
