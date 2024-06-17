@@ -5,6 +5,9 @@
 ### Fixed
 - skip `requestSingleInstanceLock` on mac appstore builds (mas), because it made it unable to start the app on older macOS devices. #3946
 
+### Changed
+- use `SOURCE_DATE_EPOCH` environment var for build timestamp instead of `Date.now()` if set.
+
 <a id="1_46_0"></a>
 
 ## [v1.46.0] - 2024-06-10

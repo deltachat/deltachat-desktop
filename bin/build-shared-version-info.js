@@ -51,7 +51,7 @@ async function gatherBuildInfo() {
   const packageObject = JSON.parse(await readFile(packageJSON, 'utf8'))
   return {
     VERSION: packageObject.version,
-    BUILD_TIMESTAMP: Date.now(),
+    BUILD_TIMESTAMP: process.env.SOURCE_DATE_EPOCH || Date.now(),
     GIT_REF: await getGitRef(),
   }
 }
