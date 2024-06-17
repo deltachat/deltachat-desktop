@@ -21,6 +21,7 @@ import { DialogContent } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/dialog/useDialog'
 import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
+import Callout from '../Callout'
 
 const log = getLogger('renderer/settings/appearance')
 
@@ -332,9 +333,9 @@ function SettingsTrayIcon({
         disabledValue={settingsStore.rc.minimized}
       />
       {settingsStore.rc.minimized && (
-        <div className='bp4-callout'>
+        <Callout>
           {tx('explain_desktop_minimized_disabled_tray_pref')}
-        </div>
+        </Callout>
       )}
     </>
   )

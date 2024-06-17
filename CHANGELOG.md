@@ -2,12 +2,14 @@
 
 ## [Unreleased][unreleased]
 
-### Fixed
-- skip `requestSingleInstanceLock` on mac appstore builds (mas), because it made it unable to start the app on older macOS devices. #3946
 
 ### Changed
 - use `SOURCE_DATE_EPOCH` environment var for build timestamp instead of `Date.now()` if set.
 - use italic variants of Roboto font correctly
+
+### Fixed
+- skip `requestSingleInstanceLock` on mac appstore builds (mas), because it made it unable to start the app on older macOS devices. #3946
+- fix tray icon explaination in settings that appears when started with `--minimized`
 
 ### Removed
 - removed unused Roboto font variants
