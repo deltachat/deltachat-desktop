@@ -4,11 +4,10 @@ import { writeFileSync } from 'fs'
 import { readFile } from 'fs/promises'
 import { join } from 'path'
 
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { dirname } from 'path'
+import { fileURLToPath } from 'url'
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 function gatherProcessStdout(cmd, args) {
   const { status, stdout, stderr } = spawnSync(cmd, args)
@@ -41,8 +40,7 @@ async function getGitRef() {
     process.exit(1)
   }
 
-  const git_ref =
-    git_describe + (git_branch === 'main' ? '' : '-' + git_branch)
+  const git_ref = git_describe + (git_branch === 'main' ? '' : '-' + git_branch)
   return git_ref
 }
 
@@ -51,7 +49,9 @@ async function gatherBuildInfo() {
   const packageObject = JSON.parse(await readFile(packageJSON, 'utf8'))
   return {
     VERSION: packageObject.version,
-    BUILD_TIMESTAMP: process.env.SOURCE_DATE_EPOCH || Date.now(),
+    BUILD_TIMESTAMP: process.env.SOURCE_DATE_EPOCH
+      ? Number(process.env.SOURCE_DATE_EPOCH) * 1000
+      : Date.now(),
     GIT_REF: await getGitRef(),
   }
 }
