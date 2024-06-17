@@ -50,5 +50,8 @@
   },
   "pref_use_system_ui_font": {
     "message": "Use System UI Font"
+  },
+  "search_in": {
+    "message": "Search in %1$s"
   }
 }

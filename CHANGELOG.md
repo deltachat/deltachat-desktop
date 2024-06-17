@@ -9,6 +9,7 @@
 ### Changed
 - use `SOURCE_DATE_EPOCH` environment var for build timestamp instead of `Date.now()` if set.
 - use italic variants of Roboto font correctly #3949
+- show chat name when searching in chat #3950
 
 ### Fixed
 - skip `requestSingleInstanceLock` on mac appstore builds (mas), because it made it unable to start the app on older macOS devices. #3946
@@ -17,6 +18,7 @@
 - performance: add limits for MessageBody text generally and for quotes, core already has limits on text size, but for the cases where core has a bug it's still useful to have a failsave #3951
 - Fix some strings not being translated on some locales (e.g. "1 minute" message age in Indonesian) #3910
 - Fix strings being incorrectly pluralized for many locales (such as "2 members" in Russian) #3910
+- make search ui visible when searching in a chat when in small screen mode #3950
 
 ### Removed
 - removed unused Roboto font variants #3949
