@@ -15,6 +15,8 @@
 - fix tray icon explaination in settings that appears when started with `--minimized` #3949
 - performance: memorize MessageBody, don't run message parser multiple times for the same message #3951
 - performance: add limits for MessageBody text generally and for quotes, core already has limits on text size, but for the cases where core has a bug it's still useful to have a failsave #3951
+- Fix some strings not being translated on some locales (e.g. "1 minute" message age in Indonesian) #3910
+- Fix strings being incorrectly pluralized for many locales (such as "2 members" in Russian) #3910
 
 ### Removed
 - removed unused Roboto font variants #3949
@@ -64,8 +66,6 @@
 ### Fixed
 
 - Show error to user if core process exits unexpectedly #3904
-- Fix some strings not being translated on some locales (e.g. "1 minute" message age in Indonesian) #3910
-- Fix strings being incorrectly pluralized for many locales (such as "2 members" in Russian) #3910
 
 <a id="1_45_3"></a>
 
