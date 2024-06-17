@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+<a id="1_46_1"></a>
+
+## [v1.46.1] - 2024-06-17
+
 ### Added
 - add option to use sytem ui font in appearance settings #3949
 - pretty preview for vcard draft #3948
@@ -2683,7 +2687,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.1...HEAD
+
+[1.46.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.0...v1.46.1
 
 [1.45.5]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.5...v1.46.0
 
