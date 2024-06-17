@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- code: comply with react hook rules
+
 <a id="1_46_1"></a>
 
 ## [v1.46.1] - 2024-06-17
