@@ -4,7 +4,7 @@
 
 ### Added
 - add option to use sytem ui font in appearance settings #3949
-- pretty preview for vcard draft
+- pretty preview for vcard draft #3948
 
 ### Changed
 - use `SOURCE_DATE_EPOCH` environment var for build timestamp instead of `Date.now()` if set.
