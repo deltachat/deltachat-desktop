@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- New keyboard shortcuts (experimental setting): Telegram-style Ctrl+Up/Down to select the message to reply to
+
 ### Changed
 - reword advanced setting "Disable Background Sync For All Accounts" -> "Only Synchronize the Currently Selected Account" #3960
 - use 'Info' and 'Message Info' consistently #3961

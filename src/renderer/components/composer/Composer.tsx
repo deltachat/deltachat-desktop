@@ -575,8 +575,12 @@ export function useDraft(
       saveDraft()
       inputRef.current?.focus()
     }
+    window.__getQuoteInDraft = () => {
+      return draftRef.current.quote
+    }
     return () => {
       window.__setQuoteInDraft = null
+      window.__getQuoteInDraft = null
     }
   }, [draftRef, inputRef, saveDraft])
 

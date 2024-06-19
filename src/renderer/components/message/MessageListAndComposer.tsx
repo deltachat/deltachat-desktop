@@ -16,6 +16,8 @@ import useDialog from '../../hooks/dialog/useDialog'
 import useMessage from '../../hooks/chat/useMessage'
 
 import type { T } from '@deltachat/jsonrpc-client'
+import { BackendRemote } from '../../backend-com'
+import { setQuoteInDraft } from './messageFunctions'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
@@ -86,6 +88,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     chat.isProtectionBroken,
     messageInputRef
   )
+  const settingsStore = useSettingsStore()[0]
 
   const onDrop = (e: React.DragEvent<any>) => {
     if (chat === null) {
@@ -188,6 +191,69 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     [hasOpenDialogs]
   )
 
+  const { jumpToMessage } = useMessage()
+  const onCtrlArrow = useCallback(
+    async (e: KeyboardEvent) => {
+      if (
+        (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') ||
+        (!e.ctrlKey && !e.metaKey) ||
+        (e.ctrlKey && e.metaKey) // Both at the same time
+      ) {
+        return
+      }
+      const quoteMessage = (messageId: number) => {
+        setQuoteInDraft(messageId)
+
+        // TODO improvement: perhaps the animation could used
+        // a little less intensity.
+        // Not good when jumping through several messages.
+        // Can we just cancel the animation on the previously highlighted message?
+        // Also it looks like it takes a while to execute
+        jumpToMessage(accountId, messageId, true)
+      }
+      // TODO perf: I imagine this is pretty slow, given IPC and some chats
+      // being quite large. Perhaps we could hook into the
+      // MessageList component, or share the list of messages with it.
+      // If not, at least cache this list. Use the cached version first,
+      // then, when the Promise resolves, execute this code again in case
+      // the message list got updated so that it feels more reponsive.
+      const messageIds = await BackendRemote.rpc.getMessageIds(
+        accountId,
+        chat.id,
+        false,
+        false
+      )
+      const currQuote = window.__getQuoteInDraft?.()
+      if (!currQuote) {
+        quoteMessage(messageIds[messageIds.length - 1])
+        return
+      }
+      if (currQuote.kind !== 'WithMessage') {
+        // Or shall we override with the last message?
+        return
+      }
+      const currQuoteMessageIdInd = messageIds.lastIndexOf(currQuote.messageId)
+      const newId: number | undefined =
+        messageIds[
+          e.key === 'ArrowUp'
+            ? currQuoteMessageIdInd - 1
+            : currQuoteMessageIdInd + 1
+        ]
+      if (newId == undefined) {
+        return
+      }
+      quoteMessage(newId)
+    },
+    [accountId, chat.id, jumpToMessage]
+  )
+  useEffect(() => {
+    if (settingsStore?.desktopSettings.enableCtrlUpToReplyShortcut !== true) {
+      return
+    }
+    window.addEventListener('keyup', onCtrlArrow)
+    return () => window.removeEventListener('keyup', onCtrlArrow)
+  }, [onCtrlArrow, settingsStore?.desktopSettings.enableCtrlUpToReplyShortcut])
+
   const onSelectionChange = () => {
     const selection = window.getSelection()
 
@@ -219,7 +285,6 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     }
   }, [onMouseUp])
 
-  const settingsStore = useSettingsStore()[0]
   const style = settingsStore
     ? getBackgroundImageStyle(settingsStore.desktopSettings)
     : {}
