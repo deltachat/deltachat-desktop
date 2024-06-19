@@ -81,9 +81,9 @@ function buildContextMenu(
         navigator.clipboard.writeText(message.text || '')
       },
     },
-    // Message details
+    // Message Info
     {
-      label: tx('menu_message_details'),
+      label: tx('info'),
       action: openMessageInfo.bind(null, openDialog, message),
     },
   ]
