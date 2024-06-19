@@ -14,6 +14,7 @@
 - use `SOURCE_DATE_EPOCH` environment var for build timestamp instead of `Date.now()` if set.
 - use italic variants of Roboto font correctly #3949
 - show chat name when searching in chat #3950
+- optimized some of the images
 
 ### Fixed
 - skip `requestSingleInstanceLock` on mac appstore builds (mas), because it made it unable to start the app on older macOS devices. #3946
