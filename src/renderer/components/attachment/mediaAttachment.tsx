@@ -76,7 +76,7 @@ const contextMenuFactory = (
       action: () => jumpToMessage(accountId, message.id),
     },
     {
-      label: tx('menu_message_details'),
+      label: tx('info'),
       action: () => {
         openDialog(MessageDetail, { id: msgId })
       },

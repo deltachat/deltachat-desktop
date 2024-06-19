@@ -312,9 +312,9 @@ function buildContextMenu(
         BackendRemote.rpc.resendMessages(selectedAccountId(), [message.id])
       },
     },
-    // Message details
+    // Message Info
     {
-      label: tx('menu_message_details'),
+      label: tx('info'),
       action: openMessageInfo.bind(null, openDialog, message),
     },
     // Delete message
