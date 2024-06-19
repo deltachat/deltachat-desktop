@@ -113,7 +113,7 @@ Install the [transifex client](https://developers.transifex.com/docs/cli) and ge
 And periodically we can run the following command to get the new translation strings from translators:
 
 ```
-npm run update-translations
+npm run translations-update
 ```
 
 When you need to modify language strings do it as a PR on English language strings in the Android repo. It is in a language other than English do it in Transifex.
