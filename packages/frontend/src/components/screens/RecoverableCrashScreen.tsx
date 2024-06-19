@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PropsWithChildren } from 'react'
 
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { getLogger } from '../../../../shared/logger'
@@ -9,9 +9,9 @@ const log = getLogger('renderer/react-crashhandler')
 /**
  * if props.reset_on_change_key changes the RecoverableCrashScreen is reset
  */
-export class RecoverableCrashScreen extends React.Component<{
+export class RecoverableCrashScreen extends React.Component<PropsWithChildren<{
   reset_on_change_key: string | number
-}> {
+}>> {
   state = {
     hasError: false,
     error: '',
