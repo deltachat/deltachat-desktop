@@ -4,6 +4,7 @@
 
 ### Fixed
 - Fix crash on "Settings" click when not on main screen (e.g. no account selected): hide the "settings" button
+- code: comply with react hook rules #3955
 
 <a id="1_46_1"></a>
 

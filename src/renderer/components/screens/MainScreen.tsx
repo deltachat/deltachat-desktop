@@ -92,13 +92,16 @@ export default function MainScreen({ accountId }: Props) {
     accountId && selectChat(accountId, chatId)
   }
 
-  const searchChats = (queryStr: string, chatId: number | null = null) => {
-    if (smallScreenMode) {
-      unselectChat()
-    }
-    setQueryStr(queryStr)
-    setQueryChatId(chatId)
-  }
+  const searchChats = useCallback(
+    (queryStr: string, chatId: number | null = null) => {
+      if (smallScreenMode) {
+        unselectChat()
+      }
+      setQueryStr(queryStr)
+      setQueryChatId(chatId)
+    },
+    [smallScreenMode, unselectChat]
+  )
 
   const handleSearchChange = (event: { target: { value: string } }) => {
     setQueryStr(event.target.value)
@@ -118,7 +121,7 @@ export default function MainScreen({ accountId }: Props) {
     if (!chat?.archived && archivedChatsSelected) {
       setArchivedChatsSelected(false)
     }
-  }, [archivedChatsSelected, chat?.archived])
+  }, [archivedChatsSelected, chat?.archived, searchChats])
 
   window.__chatlistSetSearch = searchChats
 
