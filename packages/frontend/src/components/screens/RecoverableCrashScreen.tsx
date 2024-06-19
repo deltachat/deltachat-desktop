@@ -9,9 +9,11 @@ const log = getLogger('renderer/react-crashhandler')
 /**
  * if props.reset_on_change_key changes the RecoverableCrashScreen is reset
  */
-export class RecoverableCrashScreen extends React.Component<PropsWithChildren<{
-  reset_on_change_key: string | number
-}>> {
+export class RecoverableCrashScreen extends React.Component<
+  PropsWithChildren<{
+    reset_on_change_key: string | number
+  }>
+> {
   state = {
     hasError: false,
     error: '',
