@@ -293,7 +293,7 @@ function BackgroundSelector({
           'wheat.webp',
           'mm-1.webp',
           'mm-2.webp',
-          'lake-tekapo.jpg',
+          'lake-tekapo.webp',
           'nz-beach.webp',
           'petito-moreno.webp',
         ].map(elem => (
