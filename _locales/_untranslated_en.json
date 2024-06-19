@@ -4,25 +4,25 @@
     "message": "Broadcast Lists are always unencrypted because they use blind copy (BCC)"
   },
   "no_account_selected": {
-    "message": "No Account is selected"
+    "message": "No profile selected"
   },
   "pref_background_sync_disabled": {
-    "message": "Only Synchronize the Currently Selected Account"
+    "message": "Only Synchronize Selected Profile"
   },
   "explain_background_sync_disabled": {
-    "message": "All the other accounts will be deactivated and get no notifications."
+    "message": "Other profiles will be deactivated and get no notifications."
   },
   "background_sync_disabled_explaination": {
-    "message": "Background Sync Disabled, Account is only synced when selected"
+    "message": "Background Sync Disabled, Profile is only synced when selected"
   },
   "muted": {
     "message": "Muted"
   },
   "pref_all_accounts": {
-    "message": "All Accounts"
+    "message": "All Profiles"
   },
   "pref_current_account": {
-    "message": "Current Account"
+    "message": "Current Profile"
   },
   "camera_access_failed": {
     "message": "Could not access video camera. You might want to check your video permissions or if the camera is used already by another program"
@@ -40,7 +40,7 @@
     "message": "Open global map"
   },
   "all_chats_map_title": {
-    "message": "Map for all chats (Account '%1')"
+    "message": "Map for all chats (Profile '%1')"
   },
   "chat_map_title": {
     "message": "Map for chat '%1'"
