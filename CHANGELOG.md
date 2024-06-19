@@ -6,6 +6,7 @@
 - reword advanced setting "Disable Background Sync For All Accounts" -> "Only Synchronize the Currently Selected Account" #3960
 - use 'Info' and 'Message Info' consistently #3961
 - consolidate 'Profile' wording #3963
+- Update local help (2024-06-19)
 
 ### Fixed
 - Fix crash on "Settings" click when not on main screen (e.g. no account selected): hide the "settings" button
