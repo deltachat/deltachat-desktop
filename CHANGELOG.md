@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- Fix crash on "Settings" click when not on main screen (e.g. no account selected): hide the "settings" button #3962
+
 <a id="1_46_1"></a>
 
 ## [v1.46.1] - 2024-06-17

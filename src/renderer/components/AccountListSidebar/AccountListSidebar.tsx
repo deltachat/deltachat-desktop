@@ -22,6 +22,7 @@ import styles from './styles.module.scss'
 import type { T } from '@deltachat/jsonrpc-client'
 import { ScreenContext } from '../../contexts/ScreenContext'
 import useChat from '../../hooks/chat/useChat'
+import { Screens } from '../../ScreenController'
 
 type Props = {
   onAddAccount: () => Promise<number>
@@ -139,15 +140,18 @@ export default function AccountListSidebar({
           +
         </button>
       </div>
-      <div className={styles.buttonsContainer}>
-        <button className={styles.settingsButton} onClick={openSettings}>
-          <Icon
-            size={38}
-            className={styles.settingsButtonIcon}
-            icon={'settings'}
-          />
-        </button>
-      </div>
+      {/* The condition is the same as in https://github.com/deltachat/deltachat-desktop/blob/63af023437ff1828a27de2da37bf94ab180ec528/src/renderer/contexts/KeybindingsContext.tsx#L26 */}
+      {window.__screen === Screens.Main && (
+        <div className={styles.buttonsContainer}>
+          <button className={styles.settingsButton} onClick={openSettings}>
+            <Icon
+              size={38}
+              className={styles.settingsButtonIcon}
+              icon={'settings'}
+            />
+          </button>
+        </div>
+      )}
       <div className={styles.accountHoverInfoContainer} ref={hoverInfo}>
         {accountForHoverInfo && (
           <AccountHoverInfo

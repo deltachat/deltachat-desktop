@@ -23,6 +23,8 @@ export const KeybindingsContextProvider = ({
 
   // @TODO: This probably needs another place
   useKeyBindingAction(KeybindAction.Settings_Open, () => {
+    // The condition is the same as for the "settings" button in
+    // `AccountListSidebar.tsx`
     if (window.__screen === Screens.Main) {
       // Only if user is logged in & open settings if not already opened
       if (!window.__settingsOpened) {
