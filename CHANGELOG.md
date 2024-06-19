@@ -5,6 +5,7 @@
 ## Added
 
 ## Changed
+- dev: upgrade react to v18 and react pinch pan zoom to v3
 
 ## Fixed
 
