@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PropsWithChildren } from 'react'
 
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { getLogger } from '../../../../shared/logger'
@@ -6,13 +6,21 @@ import { DialogContext } from '../../contexts/DialogContext'
 
 const log = getLogger('renderer/react-crashhandler')
 
-export class CrashScreen extends React.Component {
+interface CrashScreenState {
+  hasError: boolean
+  error: string
+}
+
+export class CrashScreen extends React.Component<
+  PropsWithChildren<{}>,
+  CrashScreenState
+> {
   state = {
     hasError: false,
     error: '',
   }
 
-  componentDidCatch(error: any) {
+  componentDidCatch(error: object | Error) {
     log.error('The app encountered an react error', error)
     this.setState({
       hasError: true,
@@ -20,7 +28,7 @@ export class CrashScreen extends React.Component {
     })
   }
 
-  errorToText(error: any) {
+  errorToText(error: object | Error) {
     if (error instanceof Error) {
       // TODO parse the stack and map the sourcemap to provide a useful stacktrace
       return (error.stack || '[no stack trace provided]')
