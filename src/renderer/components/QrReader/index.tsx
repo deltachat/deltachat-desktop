@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import scanQrCode from 'jsqr'
+import scanQrCode, { QRCode } from 'jsqr'
 import classNames from 'classnames'
 
 import Icon from '../Icon'
@@ -14,6 +14,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import { ScreenContext } from '../../contexts/ScreenContext'
 import { runtime } from '../../runtime'
+import { getLogger } from '../../../shared/logger'
 
 // @ts-ignore:next-line: We're importing a worker here with the help of the
 // "esbuild-plugin-inline-worker" plugin
@@ -22,6 +23,8 @@ import Worker from './qr.worker.ts'
 import styles from './styles.module.scss'
 
 import type { ContextMenuItem } from '../ContextMenu'
+
+const log = getLogger('QrReader')
 
 type Props = {
   onError: (error: string) => void
@@ -133,14 +136,14 @@ export default function QrReader({ onError, onScan }: Props) {
   // Additionally we have checks in place to make sure we're not firing any
   // callbacks when this React component has already been unmounted.
   const handleScanResult = useCallback(
-    result => {
+    (result: QRCode | null) => {
       let unmounted = false
 
       if (unmounted) {
         return
       }
 
-      onScan(result.data)
+      result && onScan(result.data)
 
       return () => {
         unmounted = true
@@ -384,15 +387,13 @@ export default function QrReader({ onError, onScan }: Props) {
   useEffect(() => {
     const canvas = canvasRef.current
     const video = videoRef.current
-
     const handleWorkerMessage = (event: MessageEvent) => {
       if (event.data) {
-        handleScanResult(event)
+        handleScanResult(event as unknown as QRCode)
       }
     }
 
     worker.addEventListener('message', handleWorkerMessage)
-
     if (!canvas) {
       return
     }
