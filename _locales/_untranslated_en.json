@@ -13,7 +13,7 @@
     "message": "Other profiles will be deactivated and get no notifications."
   },
   "background_sync_disabled_explaination": {
-    "message": "Background Sync Disabled, Profile is only synced when selected"
+    "message": "Background sync disabled, profile is only synced when selected"
   },
   "muted": {
     "message": "Muted"
