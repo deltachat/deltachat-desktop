@@ -1,6 +1,5 @@
 import { getMessageFunction, LocaleData } from '../shared/localize'
 import { userFeedback, Screens } from './ScreenController'
-import type { Type } from './backend-com'
 
 declare global {
   interface Window {
@@ -25,7 +24,6 @@ declare global {
     __keybindingsDialogOpened: boolean
     __aboutDialogOpened: boolean
     __setQuoteInDraft: ((msgId: number) => void) | null
-    __getQuoteInDraft: (() => Type.MessageQuote | null) | null
     __reloadDraft: (() => void) | null
     __chatlistSetSearch:
       | ((searchTerm: string, chatId: number | null) => void)

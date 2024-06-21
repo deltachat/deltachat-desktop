@@ -35,6 +35,8 @@ import useChat from '../../hooks/chat/useChat'
 import type { EmojiData, BaseEmoji } from 'emoji-mart/index'
 import type { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 import { VisualVCardComponent } from '../message/VCard'
+import { KeybindAction } from '../../keybindings'
+import useKeyBindingAction from '../../hooks/useKeyBindingAction'
 
 const log = getLogger('renderer/composer')
 
@@ -418,6 +420,7 @@ function emptyDraft(chatId: number | null): DraftObject {
 }
 
 export function useDraft(
+  accountId: number,
   chatId: number | null,
   isContactRequest: boolean,
   isProtectionBroken: boolean,
@@ -566,6 +569,76 @@ export function useDraft(
     [saveDraft]
   )
 
+  const settingsStore = useSettingsStore()[0]
+  useKeyBindingAction(KeybindAction.Composer_SelectReplyToUp, () => {
+    if (settingsStore?.desktopSettings.enableCtrlUpToReplyShortcut !== true) {
+      return
+    }
+    onSelectReplyToShortcut(KeybindAction.Composer_SelectReplyToUp)
+  })
+  useKeyBindingAction(KeybindAction.Composer_SelectReplyToDown, () => {
+    if (settingsStore?.desktopSettings.enableCtrlUpToReplyShortcut !== true) {
+      return
+    }
+    onSelectReplyToShortcut(KeybindAction.Composer_SelectReplyToDown)
+  })
+  const { jumpToMessage } = useMessage()
+  const onSelectReplyToShortcut = async (
+    upOrDown:
+      | KeybindAction.Composer_SelectReplyToUp
+      | KeybindAction.Composer_SelectReplyToDown
+  ) => {
+    if (chatId == undefined) {
+      return
+    }
+    const quoteMessage = (messageId: number) => {
+      draftRef.current.quote = {
+        kind: 'WithMessage',
+        messageId,
+      } as Type.MessageQuote
+      saveDraft()
+
+      // TODO improvement: perhaps the animation could used
+      // a little less intensity.
+      // Not good when jumping through several messages.
+      // Can we just cancel the animation on the previously highlighted message?
+      // Also it looks like it takes a while to execute
+      jumpToMessage(accountId, messageId, true)
+    }
+    // TODO perf: I imagine this is pretty slow, given IPC and some chats
+    // being quite large. Perhaps we could hook into the
+    // MessageList component, or share the list of messages with it.
+    // If not, at least cache this list. Use the cached version first,
+    // then, when the Promise resolves, execute this code again in case
+    // the message list got updated so that it feels more reponsive.
+    const messageIds = await BackendRemote.rpc.getMessageIds(
+      accountId,
+      chatId,
+      false,
+      false
+    )
+    const currQuote = draftRef.current.quote
+    if (!currQuote) {
+      quoteMessage(messageIds[messageIds.length - 1])
+      return
+    }
+    if (currQuote.kind !== 'WithMessage') {
+      // Or shall we override with the last message?
+      return
+    }
+    const currQuoteMessageIdInd = messageIds.lastIndexOf(currQuote.messageId)
+    const newId: number | undefined =
+      messageIds[
+        upOrDown === KeybindAction.Composer_SelectReplyToUp
+          ? currQuoteMessageIdInd - 1
+          : currQuoteMessageIdInd + 1
+      ]
+    if (newId == undefined) {
+      return
+    }
+    quoteMessage(newId)
+  }
+
   useEffect(() => {
     window.__setQuoteInDraft = (messageId: number) => {
       draftRef.current.quote = {
@@ -575,12 +648,8 @@ export function useDraft(
       saveDraft()
       inputRef.current?.focus()
     }
-    window.__getQuoteInDraft = () => {
-      return draftRef.current.quote
-    }
     return () => {
       window.__setQuoteInDraft = null
-      window.__getQuoteInDraft = null
     }
   }, [draftRef, inputRef, saveDraft])
 
