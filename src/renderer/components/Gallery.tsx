@@ -19,6 +19,8 @@ import FullscreenMedia, {
   NeighboringMediaMode,
 } from './dialogs/FullscreenMedia'
 import { DialogContext } from '../contexts/DialogContext'
+import useTranslationFunction from '../hooks/useTranslationFunction'
+import TabList from './TabList'
 
 const log = getLogger('renderer/Gallery')
 
@@ -232,6 +234,25 @@ export default class Gallery extends Component<
 
     return (
       <div className='media-view'>
+        <TabList
+          tabNames={[
+            "images",
+            "video",
+            "audio",
+            "files",
+            "webxdc_apps"
+          ]}
+          tabChangeCb=((newTab: string) => this.setState({ currentTab: newTab })
+        >
+          <>
+            <>
+            </>
+            <>
+              { showDateHeader && <div className='big-date' ref={this.dateHeader} /> }
+              {currentTab === 'files' && <FileSearch onChange={this.onChangeInput.bind(this)}
+            </>
+          </>
+        </TabList>
         <ul
           className='bp4-tab-list .modifier'
           role='tablist'
@@ -254,18 +275,7 @@ export default class Gallery extends Component<
           {showDateHeader && (
             <div className='big-date' ref={this.dateHeader}></div>
           )}
-          {currentTab === 'files' && (
-            <>
-              <div style={{ flexGrow: 1 }}></div>
-              <div className='searchbar'>
-                <input
-                  type='search'
-                  placeholder={tx('search_files')}
-                  onChange={this.onChangeInput.bind(this)}
-                />
-              </div>
-            </>
-          )}
+          
         </ul>
         <div role='tabpanel' style={{ flexGrow: 1 }}>
           <div
@@ -437,5 +447,21 @@ function FileTable({
         )
       }}
     </FixedSizeList>
+  )
+}
+
+function FileSearchBox({ onChange }: { onChange: (evt: ChangeEvent) => void })
+  const tx = useTranslationFunction()
+  return (
+    <>
+      <div style={{ flexGrow: 1 }}></div>
+      <div className='searchbar'>
+        <input
+          type='search'
+          placeholder={tx('search_files')}
+          onChange={onChange}
+        />
+      </div>
+    </>
   )
 }
