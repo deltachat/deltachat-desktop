@@ -71,6 +71,11 @@
 }
 
 div.delta-form-group {
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 15px;
+  position: relative;
+
   div.label {
     height: 13px;
     font-size: 13px;
@@ -80,6 +85,11 @@ div.delta-form-group {
     &.focus {
       color: var(--loginInputFocusColor);
     }
+  }
+
+  div.right-element {
+    position: absolute;
+    right: 10px;
   }
 
   &.delta-select {
@@ -117,10 +127,27 @@ div.delta-form-group {
   }
 
   &.delta-input {
-    .bp4-input {
+    input {
+      appearance: none;
+      background: #fff;
+      border: none;
+      border-radius: 2px;
+      box-shadow:
+        0 0 0 0 rgba(45, 114, 210, 0),
+        0 0 0 0 rgba(45, 114, 210, 0),
+        inset 0 0 0 1px rgba(17, 20, 24, 0.2),
+        inset 0 1px 1px rgba(17, 20, 24, 0.5);
+      color: #1c2127;
+      font-size: 14px;
+      font-weight: 400;
+      height: 30px;
+      line-height: 30px;
+      outline: none;
+      padding: 0 10px;
+      transition: box-shadow 100ms cubic-bezier(0.4, 1, 0.75, 0.9);
+      vertical-align: middle;
       padding: unset;
       border-radius: unset;
-      -webkit-box-shadow: none;
       box-shadow: none;
       border-bottom: 2px solid;
       border-bottom-color: var(--deltaChatPrimaryFgLight);

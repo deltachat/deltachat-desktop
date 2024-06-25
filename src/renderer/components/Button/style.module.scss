@@ -40,6 +40,10 @@
     background-color: var(--navBarButtonActive);
   }
 
+  &.minimal {
+    padding: 3px;
+  }
+
   &:disabled {
     background-color: var(--buttonDisabledBackground);
     color: var(--buttonDisabledText);

@@ -3,7 +3,7 @@ cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )/.."
 
 echo "Top-Evil TypeScript"
 
-res=$( grep -r "^import.*blueprint" src --color=always )
+res=$( grep -r "} from '@blueprint" src --color=always )
 echo "🤔 Using Blueprint code: $( echo "$res" | wc -l )"
 code=$( echo "$res" | wc -l )
 echo "-----------------------------------------------------"

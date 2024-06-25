@@ -7,19 +7,31 @@
   & > .row {
     width: 100%;
 
-    .bp4-input {
+    input {
       width: 66%;
       float: left;
       border: 1px solid var(--colorNone);
+      border-radius: 2px;
       box-shadow: none;
       text-align: center;
+      appearance: none;
+      background: #fff;
+      color: #1c2127;
+      font-size: 14px;
+      font-weight: 400;
+      height: 30px;
+      line-height: 30px;
+      outline: none;
+      padding: 0 10px;
+      transition: box-shadow 100ms cubic-bezier(0.4, 1, 0.75, 0.9);
+      vertical-align: middle;
     }
 
-    .bp4-input:focus {
+    input:focus {
       border-color: var(--bp4-input-focused);
     }
 
-    .bp4-input:disabled {
+    input:disabled {
       cursor: text;
       color: inherit;
       background: inherit;

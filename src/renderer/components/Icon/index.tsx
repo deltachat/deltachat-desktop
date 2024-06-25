@@ -14,6 +14,8 @@ export type IconName =
   | 'code-tags'
   | 'cross'
   | 'devices'
+  | 'eye-off'
+  | 'eye-open'
   | 'favorite'
   | 'forum'
   | 'image'
@@ -53,14 +55,16 @@ export default function Icon({
   rotation = 0,
   icon,
   className,
+  onClick,
 }: Props) {
   return (
     <span
       className={classNames(
         styles.icon,
         coloring && styles[coloring],
-        className,
+        className
       )}
+      onClick={onClick}
       style={{
         transform: `rotate(${rotation}deg)`,
         WebkitMaskImage: `url(../images/icons/${icon}.svg)`,

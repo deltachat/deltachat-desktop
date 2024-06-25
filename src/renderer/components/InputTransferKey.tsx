@@ -1,5 +1,4 @@
 import React from 'react'
-import { InputGroup } from '@blueprintjs/core'
 import Icon from './Icon'
 
 export default function InputTransferKey(
@@ -22,7 +21,7 @@ export default function InputTransferKey(
   for (let i = 0; i < 9; i++) {
     inputs.push(
       <div className='row' key={i}>
-        <InputGroup
+        <input
           key={i}
           data-index={i}
           id={'autocrypt-input-' + i}

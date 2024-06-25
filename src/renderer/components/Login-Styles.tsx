@@ -1,12 +1,7 @@
 import React, { useState } from 'react'
-import {
-  Button,
-  InputGroup,
-  FormGroup,
-  Intent,
-  ProgressBar,
-  Switch,
-} from '@blueprintjs/core'
+import Button from './Button'
+import Icon from './Icon'
+import Switch from './Switch'
 import useTranslationFunction from '../hooks/useTranslationFunction'
 
 export const DeltaSelect = React.memo(
@@ -25,20 +20,18 @@ export const DeltaSelect = React.memo(
 
     return (
       <div className='delta-form-group delta-select'>
-        <FormGroup>
-          <div className={`label ${isFocused && 'focus'}`}>{props.label}</div>
-          <div className='bp4-select .modifier'>
-            <select
-              id={props.id}
-              value={props.value}
-              onChange={props.onChange}
-              onFocus={onFocus}
-              onBlur={onBlur}
-            >
-              {props.children}
-            </select>
-          </div>
-        </FormGroup>
+        <div className={`label ${isFocused && 'focus'}`}>{props.label}</div>
+        <div className='.modifier'>
+          <select
+            id={props.id}
+            value={props.value}
+            onChange={props.onChange}
+            onFocus={onFocus}
+            onBlur={onBlur}
+          >
+            {props.children}
+          </select>
+        </div>
       </div>
     )
   }
@@ -56,18 +49,16 @@ export const DeltaSwitch = React.memo(
   ) => {
     return (
       <div className='delta-form-group delta-switch'>
-        <FormGroup>
-          <Switch
-            label={props.label}
-            id={props.id}
-            disabled={props.disabled}
-            onChange={ev => {
-              props.onChange(ev.currentTarget.checked)
-            }}
-            alignIndicator='right'
-            checked={props.value === '1'}
-          />
-        </FormGroup>
+        <Switch
+          label={props.label}
+          id={props.id}
+          disabled={props.disabled || false}
+          onChange={changed => {
+            props.onChange(changed)
+          }}
+          alignIndicator='right'
+          checked={props.value === '1'}
+        />
       </div>
     )
   }
@@ -98,26 +89,24 @@ export const DeltaTextarea = React.memo(
 
     return (
       <div className='delta-form-group delta-textarea'>
-        <FormGroup>
-          <div
-            className={`label ${isFocused && 'focus'}`}
-            style={{ visibility: !showLabel ? 'hidden' : 'visible' }}
-          >
-            {props.label && props.label.length > 0
-              ? props.label
-              : props.placeholder}
-          </div>
-          <textarea
-            onChange={props.onChange}
-            value={props.value}
-            id={props.id}
-            disabled={props.disabled}
-            placeholder={!isFocused ? props.placeholder : ''}
-            onFocus={onFocus}
-            onBlur={onBlur}
-            rows={5}
-          />
-        </FormGroup>
+        <div
+          className={`label ${isFocused && 'focus'}`}
+          style={{ visibility: !showLabel ? 'hidden' : 'visible' }}
+        >
+          {props.label && props.label.length > 0
+            ? props.label
+            : props.placeholder}
+        </div>
+        <textarea
+          onChange={props.onChange}
+          value={props.value}
+          id={props.id}
+          disabled={props.disabled}
+          placeholder={!isFocused ? props.placeholder : ''}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          rows={5}
+        />
       </div>
     )
   }
@@ -158,29 +147,29 @@ export const DeltaInput = React.memo(
 
     return (
       <div className='delta-form-group delta-input'>
-        <FormGroup>
-          <div
-            className={`label ${isFocused && 'focus'}`}
-            style={{ visibility: !showLabel ? 'hidden' : 'visible' }}
-          >
-            {props.label && props.label.length > 0
-              ? props.label
-              : props.placeholder}
-          </div>
-          <InputGroup
-            id={props.id}
-            type={props.type}
-            value={props.value}
-            onChange={props.onChange}
-            placeholder={props.placeholder}
-            min={props.min}
-            max={props.max}
-            disabled={props.disabled}
-            onFocus={onFocus}
-            onBlur={onBlur}
-            rightElement={props.rightElement}
-          />
-        </FormGroup>
+        <div
+          className={`label ${isFocused && 'focus'}`}
+          style={{ visibility: !showLabel ? 'hidden' : 'visible' }}
+        >
+          {props.label && props.label.length > 0
+            ? props.label
+            : props.placeholder}
+        </div>
+        <input
+          id={props.id}
+          type={props.type}
+          value={props.value}
+          onChange={props.onChange}
+          placeholder={props.placeholder}
+          min={props.min}
+          max={props.max}
+          disabled={props.disabled}
+          onFocus={onFocus}
+          onBlur={onBlur}
+        />
+        {props.rightElement && (
+          <div className='right-element'>{props.rightElement}</div>
+        )}
       </div>
     )
   }
@@ -205,27 +194,32 @@ export const DeltaPasswordInput = React.memo(
 
     const password = props.password || ''
 
-    const lockButton = (
+    const rightElement = (
       <Button
-        icon={showPassword ? 'eye-open' : 'eye-off'}
-        title={showPassword ? tx('hide_password') : tx('show_password')}
-        intent={Intent.WARNING}
-        minimal
+        styling='minimal'
+        type='danger'
         onClick={() => setShowPassword(!showPassword)}
         aria-label={showPassword ? tx('hide_password') : tx('show_password')}
-      />
+      >
+        <Icon
+          coloring='context-menu'
+          size={16}
+          icon={showPassword ? 'eye-open' : 'eye-off'}
+        />
+      </Button>
     )
-
     return (
-      <DeltaInput
-        id={props.id}
-        type={showPassword ? 'text' : 'password'}
-        label={props.label ? props.label : ''}
-        value={password}
-        onChange={props.onChange}
-        placeholder={props.placeholder}
-        rightElement={lockButton}
-      />
+      <>
+        <DeltaInput
+          id={props.id}
+          type={showPassword ? 'text' : 'password'}
+          label={props.label ? props.label : ''}
+          value={password}
+          onChange={props.onChange}
+          placeholder={props.placeholder}
+          rightElement={rightElement}
+        />
+      </>
     )
   }
 )
@@ -233,17 +227,18 @@ export const DeltaPasswordInput = React.memo(
 export const DeltaProgressBar = function (
   props: React.PropsWithChildren<{
     progress: number
-    intent?: Intent
+    intent?: string
   }>
 ) {
   return (
     <div style={{ marginTop: '20px', marginBottom: '10px' }}>
-      <ProgressBar
+      <progress
         value={props.progress ? props.progress / 1000 : 0}
-        intent={Intent.PRIMARY}
-        stripes={false}
-        animate={false}
-      />
+        max={100}
+        //intent={Intent.PRIMARY}
+        // stripes={false}
+        // animate={false}
+      ></progress>
     </div>
   )
 }
