@@ -1,5 +1,6 @@
 import React from 'react'
-import { Icon, InputGroup } from '@blueprintjs/core'
+import { InputGroup } from '@blueprintjs/core'
+import Icon from './Icon'
 
 export default function InputTransferKey(
   props:
@@ -31,7 +32,7 @@ export default function InputTransferKey(
         />
         {i !== 8 && i !== 2 && i !== 5 && (
           <div className='separator'>
-            <Icon icon='small-minus' />
+            <Icon icon='minus' size={12} />
           </div>
         )}
       </div>

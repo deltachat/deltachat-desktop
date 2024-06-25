@@ -4,10 +4,6 @@
 
   position: relative;
 
-  .icon-rotated > .bp4-icon > svg:not([fill]) {
-    transform: rotate(90deg);
-  }
-
   .bp4-navbar {
     padding: 0px;
     background-color: var(--navBarBackground);
@@ -34,10 +30,6 @@
 
   .bp4-align-right {
     float: none;
-  }
-
-  .bp4-icon > svg:not([fill]) {
-    fill: var(--navBarText);
   }
 
   span.views {

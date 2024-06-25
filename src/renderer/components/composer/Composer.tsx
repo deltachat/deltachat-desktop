@@ -8,6 +8,7 @@ import React, {
 } from 'react'
 import { C, T } from '@deltachat/jsonrpc-client'
 
+import Icon from '../Icon'
 import MenuAttachment from './menuAttachment'
 import ComposerMessageInput from './ComposerMessageInput'
 import { getLogger } from '../../../shared/logger'
@@ -54,11 +55,9 @@ export const insideBoundingRect = (
 
 const QuoteOrDraftRemoveButton = ({ onClick }: { onClick: () => void }) => {
   return (
-    <button
-      onClick={onClick}
-      aria-label='Clear'
-      className='clear-quote-icon bp4-dialog-close-button bp4-button bp4-minimal bp4-icon-large bp4-icon-cross'
-    />
+    <button onClick={onClick} aria-label='Clear' className='clear-quote-icon'>
+      <Icon icon='cross' />
+    </button>
   )
 }
 

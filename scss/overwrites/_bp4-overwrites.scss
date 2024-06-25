@@ -35,32 +35,6 @@
   border-radius: 0px;
 }
 
-.bp4-button[class*='bp4-icon-']::before {
-  color: var(--scrollbarThumb);
-}
-
-.bp4-button:not([class*='bp4-intent-'], :icon) {
-  color: var(--bp4ButtonText);
-  background-color: var(--bp4ButtonBg);
-  background-image: linear-gradient(
-    to bottom,
-    var(--bp4ButtonGradientTop),
-    var(--bp4ButtonGradientBottom)
-  );
-}
-
-.bp4-button:not([class*='bp4-intent-'], :icon):hover {
-  background-color: var(--bp4ButtonHoverBg);
-}
-
-.bp4-button.bp4-minimal {
-  color: var(--bp4ButtonText);
-}
-
-.bp4-button.bp4-minimal:hover {
-  color: inherit; // todo adjust this to be an extra var
-}
-
 .bp4-input {
   background-color: var(--bp4InputBg);
   color: var(--bp4InputText);

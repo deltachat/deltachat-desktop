@@ -139,17 +139,6 @@ div.delta-form-group {
         color: var(--deltaChatPrimaryFgLight);
       }
     }
-
-    .bp4-button.bp4-minimal.bp4-intent-warning {
-      color: #62656a !important;
-      &:hover {
-        color: white !important;
-      }
-    }
-
-    .bp4-button.bp4-minimal.bp4-intent-warning:hover {
-      background-color: var(--deltaChatPrimaryFgLight) !important;
-    }
   }
 
   textarea {
