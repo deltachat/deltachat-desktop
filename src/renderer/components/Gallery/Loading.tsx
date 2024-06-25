@@ -70,7 +70,6 @@ function computeNewState(currentState: CAState[][]): CAState[][] {
   return newState
 }
 
-
 function generateRandomInitialState(): CAState[][] {
   const state = [
     [0, 0, 0, 0, 0, 0],
@@ -85,7 +84,7 @@ function generateRandomInitialState(): CAState[][] {
       const r = Math.random()
       if (r >= 0.3) {
         if (r <= 0.9) {
-          state[i][j] = Alive 
+          state[i][j] = Alive
         } else {
           state[i][j] = Cancer
         }
@@ -137,7 +136,7 @@ const CellColor = ['#ffffff', '#3584e4', '#e01b24']
 
 function CellRow({ row }: { row: CAState[] }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'row', }}>
+    <div style={{ display: 'flex', flexDirection: 'row' }}>
       {row.map((cell, idx) => (
         <Cell state={cell} key={idx.toString() + 'c'} />
       ))}
@@ -154,7 +153,7 @@ function Cell({ state }: { state: CAState }) {
         borderColor: '#000',
         borderWidth: '2px',
         borderRadius: '2px',
-        backgroundColor: CellColor[state]
+        backgroundColor: CellColor[state],
       }}
     >
       &nbsp;
