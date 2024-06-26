@@ -9,11 +9,7 @@ import { FixedSizeList } from 'react-window'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { C } from '@deltachat/jsonrpc-client'
 
-import {
-  useContacts,
-  ContactList,
-  useContactsNew,
-} from '../../contact/ContactList'
+import { ContactList, useContactsNew } from '../../contact/ContactList'
 import {
   PseudoListItem,
   PseudoListItemAddMember,
@@ -413,6 +409,7 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
   const { openDialog } = useDialog()
   const { setViewMode, onClose } = props
   const tx = useTranslationFunction()
+  const accountId = selectedAccountId()
 
   const [broadcastName, setBroadcastName] = useState<string>('')
   const [broadcastRecipients, removeBroadcastRecipient, addBroadcastRecipient] =
@@ -423,7 +420,18 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
     onClose
   )
 
-  const searchContacts = useContacts(C.DC_GCL_ADD_SELF, '')[0]
+  const [broadcastContacts, setBroadcastContacts] = useState<Type.Contact[]>([])
+
+  useMemo(() => {
+    BackendRemote.rpc
+      .getContactsByIds(accountId, broadcastRecipients)
+      .then(records => {
+        setBroadcastContacts(
+          Object.entries(records).map(([_, contact]) => contact)
+        )
+      })
+  }, [accountId, broadcastRecipients])
+
   const [errorMissingChatName, setErrorMissingChatName] =
     useState<boolean>(false)
 
@@ -480,9 +488,7 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
               isBroadcast
             />
             <ContactList
-              contacts={searchContacts.filter(
-                ({ id }) => broadcastRecipients.indexOf(id) !== -1
-              )}
+              contacts={broadcastContacts}
               onClick={() => {}}
               showRemove
               onRemoveClick={c => {

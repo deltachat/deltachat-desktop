@@ -62,31 +62,6 @@ export function ContactList(props: {
   )
 }
 
-export function useContacts(listFlags: number, queryStr: string) {
-  const [contacts, setContacts] = useState<Type.Contact[]>([])
-  const accountId = selectedAccountId()
-
-  const debouncedGetContacts2 = useMemo(
-    () =>
-      debounce((listFlags: number, queryStr: string) => {
-        BackendRemote.rpc
-          .getContacts(accountId, listFlags, queryStr)
-          .then(setContacts)
-      }, 200),
-    [accountId]
-  )
-  const updateContacts = (queryStr: string) =>
-    debouncedGetContacts2(listFlags, queryStr)
-
-  useInitEffect(() => {
-    BackendRemote.rpc
-      .getContacts(accountId, listFlags, queryStr)
-      .then(setContacts)
-  })
-
-  return [contacts, updateContacts] as [typeof contacts, typeof updateContacts]
-}
-
 async function getAndSetContacts(
   listFlags: number,
   queryStr: string,
