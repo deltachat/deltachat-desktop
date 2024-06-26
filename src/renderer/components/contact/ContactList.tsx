@@ -181,7 +181,7 @@ export function useLazyLoadedContacts(
   queryStr: string | undefined
 ) {
   const accountId = selectedAccountId()
-  const { contactIds, queryStrIsValidEmail } = useContactIds(
+  const { contactIds, queryStrIsValidEmail, refresh } = useContactIds(
     listFlags,
     queryStr
   )
@@ -228,6 +228,9 @@ export function useLazyLoadedContacts(
     contactCache,
 
     queryStrIsValidEmail,
+
+    /** Useful when e.g. a contact got deleted or added. */
+    refresh,
   }
 }
 
@@ -265,5 +268,14 @@ function useContactIds(listFlags: number, queryStr: string | undefined) {
     }
   }, [debouncedGetContactsIds, listFlags, queryStr])
 
-  return state
+  const refresh = () => {
+    debouncedGetContactsIds(listFlags, queryStr)
+    debouncedGetContactsIds.flush()
+  }
+
+  return {
+    ...state,
+    /** Useful when e.g. a contact got deleted or added. */
+    refresh,
+  }
 }
