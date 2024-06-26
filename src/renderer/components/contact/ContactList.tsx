@@ -1,8 +1,6 @@
-import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react'
+import React, { useState, useEffect, useMemo, useRef } from 'react'
 import { ContactListItem } from './ContactListItem'
 import { debounce } from 'debounce'
-import { useInitEffect } from '../helpers/hooks'
-import { debounceWithInit } from '../chat/ChatListHelpers'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 
@@ -60,86 +58,6 @@ export function ContactList(props: {
       })}
     </div>
   )
-}
-
-async function getAndSetContacts(
-  listFlags: number,
-  queryStr: string,
-  setContacts: (a: Map<number, Type.Contact>) => void
-) {
-  const accountId = selectedAccountId()
-  const contactArrayToMap = (contactArray: Type.Contact[]) => {
-    return new Map(
-      contactArray.map((contact: Type.Contact) => {
-        return [contact.id, contact]
-      })
-    )
-  }
-  const contactArray = await BackendRemote.rpc.getContacts(
-    accountId,
-    listFlags,
-    queryStr
-  )
-  setContacts(contactArrayToMap(contactArray))
-}
-
-export function useContactsMap(listFlags: number, queryStr: string) {
-  const [contacts, setContacts] = useState<Map<number, Type.Contact>>(new Map())
-
-  const debouncedGetContacts = useMemo(
-    () =>
-      debounce((listFlags: number, queryStr: string) => {
-        getAndSetContacts(listFlags, queryStr, setContacts)
-      }, 200),
-    []
-  )
-  const updateContacts = (queryStr: string) =>
-    debouncedGetContacts(listFlags, queryStr)
-
-  useInitEffect(() => {
-    getAndSetContacts(listFlags, queryStr, setContacts)
-  })
-
-  return [contacts, updateContacts] as [typeof contacts, typeof updateContacts]
-}
-
-// The queryStr is trimmed for contact search and for checking validity of the string as an Email address
-export function useContactsNew(listFlags: number, initialQueryStr: string) {
-  const [state, setState] = useState<{
-    contacts: Type.Contact[]
-    queryStrIsValidEmail: boolean
-  }>({ contacts: [], queryStrIsValidEmail: false })
-  const accountId = selectedAccountId()
-
-  const debouncedGetContacts2 = useMemo(
-    () =>
-      debounceWithInit(async (listFlags: number, queryStr: string) => {
-        const contacts = await BackendRemote.rpc.getContacts(
-          accountId,
-          listFlags,
-          queryStr.trim()
-        )
-        const queryStrIsValidEmail = await BackendRemote.rpc.checkEmailValidity(
-          queryStr.trim()
-        )
-        setState({ contacts, queryStrIsValidEmail })
-      }, 200),
-    [accountId]
-  )
-
-  const search = useCallback(
-    (queryStr: string) => {
-      debouncedGetContacts2(listFlags, queryStr)
-    },
-    [listFlags, debouncedGetContacts2]
-  )
-
-  useEffect(
-    () => debouncedGetContacts2(listFlags, initialQueryStr),
-    [listFlags, initialQueryStr, debouncedGetContacts2]
-  )
-
-  return [state, search] as [typeof state, typeof search]
 }
 
 /**

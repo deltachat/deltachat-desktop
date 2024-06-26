@@ -7,9 +7,10 @@ import React, {
 } from 'react'
 import { FixedSizeList } from 'react-window'
 import AutoSizer from 'react-virtualized-auto-sizer'
+import InfiniteLoader from 'react-window-infinite-loader'
 import { C } from '@deltachat/jsonrpc-client'
 
-import { ContactList, useContactsNew } from '../../contact/ContactList'
+import { ContactList, useLazyLoadedContacts } from '../../contact/ContactList'
 import {
   PseudoListItem,
   PseudoListItemAddMember,
@@ -86,12 +87,14 @@ function CreateChatMain(props: CreateChatMainProps) {
   const { openDialog } = useDialog()
   const createChatByContactId = useCreateChatByContactId()
 
-  const [{ contacts, queryStrIsValidEmail }, updateContacts] = useContactsNew(
-    C.DC_GCL_ADD_SELF,
-    ''
-  )
-  const [queryStr, onSearchChange, _, refreshContacts] =
-    useContactSearch(updateContacts)
+  const [queryStr, setQueryStr] = useState('')
+  const {
+    contactIds,
+    contactCache,
+    loadContacts,
+    queryStrIsValidEmail,
+    refresh: refreshContacts,
+  } = useLazyLoadedContacts(C.DC_GCL_ADD_SELF, queryStr)
 
   const chooseContact = async ({ id }: Type.Contact) => {
     try {
@@ -114,11 +117,14 @@ function CreateChatMain(props: CreateChatMainProps) {
   const needToRenderAddContactQRScan = queryStr.length === 0
   const needToRenderAddContact = !(
     queryStr === '' ||
-    (contacts.length === 1 &&
-      contacts[0].address.toLowerCase() === queryStr.trim().toLowerCase())
+    (contactIds.length === 1 &&
+      contactCache[contactIds[0]]?.address.toLowerCase() ===
+        queryStr.trim().toLowerCase())
   )
   const enum ExtraItemType {
-    ADD_CONTACT_QR_SCAN = 1,
+    // Negative number so that we can differentiate these from
+    // contact IDs, which (I assume) are always non-negative.
+    ADD_CONTACT_QR_SCAN = -999,
     ADD_GROUP,
     ADD_BROADCAST_LIST,
     ADD_CONTACT,
@@ -129,7 +135,7 @@ function CreateChatMain(props: CreateChatMainProps) {
       : []),
     ...(needToRenderAddGroup ? [ExtraItemType.ADD_GROUP] : []),
     ...(needToRenderAddBroadcastList ? [ExtraItemType.ADD_BROADCAST_LIST] : []),
-    ...contacts,
+    ...contactIds,
     ...(needToRenderAddContact ? [ExtraItemType.ADD_CONTACT] : []),
   ]
 
@@ -184,7 +190,7 @@ function CreateChatMain(props: CreateChatMainProps) {
       <DialogHeader>
         <input
           className='search-input'
-          onChange={onSearchChange}
+          onChange={e => setQueryStr(e.target.value)}
           value={queryStr}
           placeholder={
             isChatmail ? tx('search') : tx('contacts_enter_name_or_email')
@@ -196,92 +202,119 @@ function CreateChatMain(props: CreateChatMainProps) {
       <DialogBody className={styles.createChatDialogBody}>
         <AutoSizer disableWidth>
           {({ height }) => (
-            // Not using 'react-window' results in ~5 second rendering time
-            // if the user has 5000 contacts.
-            // (see https://github.com/deltachat/deltachat-desktop/issues/1830)
-            <FixedSizeList
+            <InfiniteLoader
               itemCount={contactsAndExtraItems.length}
-              itemKey={index => {
-                const item = contactsAndExtraItems[index]
-                const isExtraItem = typeof item === 'number'
-                return isExtraItem ? `extraItem-${item}` : item.id
+              loadMoreItems={(startInd, stopInd) => {
+                // The indices are shifted due to the existence of extra items.
+                return loadContacts(
+                  contactIds.indexOf(contactsAndExtraItems[startInd]),
+                  contactIds.indexOf(contactsAndExtraItems[stopInd])
+                )
               }}
-              height={height}
-              width='100%'
-              // TODO fix: The size of each item is determined
-              // by `--local-avatar-size` and `--local-avatar-vertical-margin`,
-              // which might be different, e.g. currently they're smaller for
-              // "Rocket Theme", which results in gaps between the elements.
-              itemSize={64}
+              // perf: consider using `isContactLoaded` from `useLazyLoadedContacts`
+              // otherwise sometimes we might load the same contact twice (performance thing)
+              // See https://github.com/bvaughn/react-window/issues/765
+              isItemLoaded={index => {
+                const isExtraItem = contactsAndExtraItems[index] < -100
+                if (isExtraItem) {
+                  return true
+                }
+                return contactCache[contactsAndExtraItems[index]] != undefined
+              }}
+              // minimumBatchSize={100}
             >
-              {({ index, style }) => {
-                const item = contactsAndExtraItems[index]
+              {({ onItemsRendered, ref }) => (
+                // Not using 'react-window' results in ~5 second rendering time
+                // if the user has 5000 contacts.
+                // (see https://github.com/deltachat/deltachat-desktop/issues/1830)
+                <FixedSizeList
+                  itemCount={contactsAndExtraItems.length}
+                  itemKey={index => contactsAndExtraItems[index]}
+                  onItemsRendered={onItemsRendered}
+                  ref={ref}
+                  height={height}
+                  width='100%'
+                  // TODO fix: The size of each item is determined
+                  // by `--local-avatar-size` and `--local-avatar-vertical-margin`,
+                  // which might be different, e.g. currently they're smaller for
+                  // "Rocket Theme", which results in gaps between the elements.
+                  itemSize={64}
+                >
+                  {({ index, style }) => {
+                    const item = contactsAndExtraItems[index]
 
-                const el = (() => {
-                  switch (item) {
-                    case ExtraItemType.ADD_GROUP: {
-                      return (
-                        <PseudoListItem
-                          id='newgroup'
-                          cutoff='+'
-                          text={tx('menu_new_group')}
-                          onClick={() => setViewMode('createGroup')}
-                        />
-                      )
-                    }
-                    case ExtraItemType.ADD_BROADCAST_LIST: {
-                      return (
-                        <PseudoListItem
-                          id='newbroadcastlist'
-                          cutoff='+'
-                          text={tx('new_broadcast_list')}
-                          onClick={() => setViewMode('createBroadcastList')}
-                        />
-                      )
-                    }
-                    case ExtraItemType.ADD_CONTACT_QR_SCAN: {
-                      return (
-                        <PseudoListItem
-                          id='showqrcode'
-                          text={tx('menu_new_contact')}
-                          onClick={openQRScan}
-                        >
-                          <QRAvatar />
-                        </PseudoListItem>
-                      )
-                    }
-                    case ExtraItemType.ADD_CONTACT: {
-                      return (
-                        <PseudoListItemAddContact
-                          queryStr={queryStr.trim()}
-                          queryStrIsEmail={queryStrIsValidEmail}
-                          onClick={addContactOnClick}
-                        />
-                      )
-                    }
-                    default: {
-                      const contact: Type.Contact = item
-                      return (
-                        <ContactListItem
-                          contact={contact}
-                          onClick={chooseContact}
-                          onContextMenu={
-                            contact.id !== C.DC_CONTACT_ID_SELF
-                              ? ev => onContactContextMenu(contact, ev)
-                              : undefined
+                    const el = (() => {
+                      switch (item) {
+                        case ExtraItemType.ADD_GROUP: {
+                          return (
+                            <PseudoListItem
+                              id='newgroup'
+                              cutoff='+'
+                              text={tx('menu_new_group')}
+                              onClick={() => setViewMode('createGroup')}
+                            />
+                          )
+                        }
+                        case ExtraItemType.ADD_BROADCAST_LIST: {
+                          return (
+                            <PseudoListItem
+                              id='newbroadcastlist'
+                              cutoff='+'
+                              text={tx('new_broadcast_list')}
+                              onClick={() => setViewMode('createBroadcastList')}
+                            />
+                          )
+                        }
+                        case ExtraItemType.ADD_CONTACT_QR_SCAN: {
+                          return (
+                            <PseudoListItem
+                              id='showqrcode'
+                              text={tx('menu_new_contact')}
+                              onClick={openQRScan}
+                            >
+                              <QRAvatar />
+                            </PseudoListItem>
+                          )
+                        }
+                        case ExtraItemType.ADD_CONTACT: {
+                          return (
+                            <PseudoListItemAddContact
+                              queryStr={queryStr.trim()}
+                              queryStrIsEmail={queryStrIsValidEmail}
+                              onClick={addContactOnClick}
+                            />
+                          )
+                        }
+                        default: {
+                          const contact: Type.Contact | undefined =
+                            contactCache[item]
+                          if (!contact) {
+                            // It's not loaded yet
+                            return null
                           }
-                          showCheckbox={false}
-                          checked={false}
-                          showRemove={false}
-                        />
-                      )
-                    }
-                  }
-                })()
+                          return (
+                            <ContactListItem
+                              contact={contact}
+                              onClick={chooseContact}
+                              onContextMenu={
+                                contact.id !== C.DC_CONTACT_ID_SELF
+                                  ? ev => onContactContextMenu(contact, ev)
+                                  : undefined
+                              }
+                              showCheckbox={false}
+                              checked={false}
+                              showRemove={false}
+                            />
+                          )
+                        }
+                      }
+                    })()
 
-                return <div style={style}>{el}</div>
-              }}
-            </FixedSizeList>
+                    return <div style={style}>{el}</div>
+                  }}
+                </FixedSizeList>
+              )}
+            </InfiniteLoader>
           )}
         </AutoSizer>
       </DialogBody>
@@ -657,29 +690,6 @@ const useCreateBroadcast = (
     onClose()
     selectChat(accountId, chatId)
   }
-}
-
-export function useContactSearch(
-  updateContacts: (searchString: string) => void
-) {
-  const [searchString, setSearchString] = useState('')
-
-  const updateSearch = (searchString: string) => {
-    setSearchString(searchString)
-    updateContacts(searchString)
-  }
-
-  const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    updateSearch(e.target.value)
-
-  const refresh = () => updateContacts(searchString)
-
-  return [searchString, onSearchChange, updateSearch, refresh] as [
-    searchString: string,
-    onSearchChange: typeof onSearchChange,
-    updateSearch: typeof updateSearch,
-    refresh: typeof refresh,
-  ]
 }
 
 export function useGroupImage(image: string | null) {
