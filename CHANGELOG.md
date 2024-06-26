@@ -13,6 +13,7 @@
 - code: comply with react hook rules #3955
 - fix mailto dialog #3976
 - "Realtime Webxdc Channels" toggle not reflecting actual setting value #3992
+- even faster load of contact lists in "New Chat" and "New Group" #3927
 
 <a id="1_46_1"></a>
 
