@@ -8,7 +8,7 @@ import { ChatListPart, useLogicVirtualChatList } from '../../chat/ChatList'
 import { useChatList } from '../../chat/ChatListHelpers'
 import { useThemeCssVar } from '../../../ThemeManager'
 import { selectedAccountId } from '../../../ScreenController'
-import Dialog, { DialogBody, DialogContent, DialogHeader } from '../../Dialog'
+import Dialog, { DialogBody, DialogHeader } from '../../Dialog'
 import useCreateDraftMessage from '../../../hooks/chat/useCreateDraftMesssage'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 
