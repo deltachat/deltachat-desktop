@@ -128,9 +128,11 @@ export function AddMemberInnerDialog({
   }
 
   const _onCancel = async () => {
-    for (const contactId of contactsToDeleteOnCancel) {
-      await BackendRemote.rpc.deleteContact(selectedAccountId(), contactId)
-    }
+    await Promise.all(
+      contactsToDeleteOnCancel.map(contactId =>
+        BackendRemote.rpc.deleteContact(selectedAccountId(), contactId)
+      )
+    )
     onCancel()
   }
 
