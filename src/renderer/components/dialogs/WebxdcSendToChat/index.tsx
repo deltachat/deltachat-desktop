@@ -155,13 +155,14 @@ function useSendToChatAction() {
       messageText: string | null,
       file: string | null
     ) => {
-      const chat = await BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
+      const chatP = BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
       const draft = await BackendRemote.rpc.getDraft(accountId, chatId)
 
       selectChat(accountId, chatId)
 
       if (draft) {
         // ask if the draft should be replaced
+        const chat = await chatP
         const continueProcess = await new Promise((resolve, _reject) => {
           openDialog(ConfirmationDialog, {
             message: tx('confirm_replace_draft', chat.name),
