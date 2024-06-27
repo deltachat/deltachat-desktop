@@ -217,6 +217,10 @@ export function getKeybindings(
         keyBindings: [
           ['Alt', 'ArrowUp'],
           ['Alt', 'ArrowDown'],
+          ['Control', 'PageUp'],
+          ['Control', 'PageDown'],
+          ['Control', 'Tab'],
+          ['Control', 'Shift', 'Tab'],
         ],
       },
       {
