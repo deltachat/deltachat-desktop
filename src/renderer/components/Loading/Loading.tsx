@@ -1,4 +1,11 @@
+/*
+ * This is a loading screen currently used when Gallery
+ * is loading media. It is a 3 state version of game of life which
+ * itself is a 2D Cellular Automata. --Farooq
+ */
+
 import React, { PureComponent } from 'react'
+import styles from './loading.style.module.scss'
 
 const Dead = 0
 const Alive = 1
@@ -20,7 +27,7 @@ function getNeighbors(
   for (let di = -1; di <= 1; di++) {
     for (let dj = -1; dj <= 1; dj++) {
       switch (
-        currentState[(i + di + height) % height][(j + dj + width) % width]
+      currentState[(i + di + height) % height][(j + dj + width) % width]
       ) {
         case Alive:
           alives++
@@ -46,6 +53,9 @@ function computeNewState(currentState: CAState[][]): CAState[][] {
       const nonDeads = alives + cancers
       switch (cell) {
         case Alive:
+          // an alive cell is alive if there are exactly 2 or 3
+          // alive neighbors, otherwise dead. an alive cell will be
+          // alive if there are more cancer cells than alive cells
           if (nonDeads === 2 || nonDeads === 3) {
             newState[i][j] = alives > cancers ? Alive : Cancer
           } else {
@@ -53,11 +63,15 @@ function computeNewState(currentState: CAState[][]): CAState[][] {
           }
           break
         case Dead:
+          // a dead cell will become alive if there are exactly 3 non dead
+          // neighbors. if there are more cancer cells than alive cells, it'll be cancer
           if (nonDeads == 3) {
             newState[i][j] = alives > cancers ? Alive : Cancer
           }
           break
         case Cancer:
+          // a cancer cell will remain cancer if there are 1 to 3 non dead cells
+          // otherwise will die.
           if (nonDeads >= 1 && nonDeads <= 3) {
             newState[i][j] = Cancer
           } else {
@@ -102,7 +116,7 @@ export default class Loading extends PureComponent<{}, State> {
   board: CAState[][] = []
   interval: number = 0
 
-  constructor(props) {
+  constructor(props: any) {
     super(props)
     this.board = generateRandomInitialState()
     this.state = {
@@ -111,49 +125,54 @@ export default class Loading extends PureComponent<{}, State> {
   }
 
   componentDidMount() {
-    this.interval = setInterval(() => {
+    this.interval = window.setInterval(() => {
       this.board = computeNewState(this.board)
       this.setState({ generation: this.state.generation + 1 })
     }, 750)
   }
 
   componentWillUnmount() {
-    clearInterval(this.interval)
+    window.clearInterval(this.interval)
   }
 
   render() {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', margin: 'auto' }}>
-        {this.board.map((row, idx) => (
-          <CellRow row={row} key={idx.toString() + 'r'} />
-        ))}
+      <div className={styles.loading}>
+        <p>Please wait...</p>
+        <div>
+          {this.board.map((row: CAState[], idx) => (
+            <CellRow row={row} key={idx.toString() + 'r'} />
+          ))}
+        </div>
       </div>
     )
   }
 }
 
-const CellColor = ['#ffffff', '#3584e4', '#e01b24']
+const CellColor = [
+  'var(--buttonPrimaryText)',
+  'var(--buttonPrimaryBackground',
+  'var(--buttonDangerText)'
+]
 
 function CellRow({ row }: { row: CAState[] }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'row' }}>
-      {row.map((cell, idx) => (
-        <Cell state={cell} key={idx.toString() + 'c'} />
-      ))}
-    </div>
+    <div className={styles["cell-row"]}>
+      {
+        row.map((cell: CAState, idx) => (
+          <Cell state={cell} key={idx.toString() + 'c'} />
+        ))
+      }
+    </ div>
   )
 }
 
 function Cell({ state }: { state: CAState }) {
   return (
     <div
+      className={styles.cell}
       style={{
-        height: '36px',
-        width: '36px',
-        borderColor: '#000',
-        borderWidth: '2px',
-        borderRadius: '2px',
-        backgroundColor: CellColor[state],
+        backgroundColor: CellColor[state]
       }}
     >
       &nbsp;

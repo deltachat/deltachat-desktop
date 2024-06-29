@@ -28,69 +28,43 @@ import FullscreenMedia, {
 import { DialogContext } from '../../contexts/DialogContext'
 import TabList from '../TabList'
 import { FileSearch, FileTable, FilesNoResult } from './Files'
-import { GalleryElement, MediaTabKey } from './types'
-import Loading from './Loading'
+import { ChatId, MessageId, GalleryElement, MediaTabKey } from './types'
+import Loading from '../Loading'
 
 const log = getLogger('renderer/Gallery')
 
-const MediaTabs: Readonly<{
-  [key in MediaTabKey]: {
-    values: Type.Viewtype[]
-    element: GalleryElement
-  }
-}> = {
-  images: {
-    values: ['Gif', 'Image'],
-    element: ImageAttachment,
-  },
-  video: {
-    values: ['Video'],
-    element: VideoAttachment,
-  },
-  audio: {
-    values: ['Audio', 'Voice'],
-    element: AudioAttachment,
-  },
-  files: {
-    values: ['File'],
-    element: FileAttachmentRow,
-  },
-  webxdc_apps: {
-    values: ['Webxdc'],
-    element: WebxdcAttachment,
-  },
-}
+const tabNames: MediaTabKey[] = [
+  'images',
+  'video',
+  'audio',
+  'files',
+  'webxdc_apps',
+]
 
-interface Props {
-  chatId: number | 'all'
-  onUpdateView?: () => void
+const tabMsgTypes: Record<MediaTabKey, string | string[]> = {
+  images: ['Gif', 'Image'],
+  video: 'Video',
+  audio: ['Audio', 'Voice'],
+  files: 'File',
+  webxdc_apps: 'Webxdc',
 }
 
 interface State {
   currentTab: MediaTabKey
-  mediaMessageIds: number[] // TODO: Message Id should have its own type
+  mediaMessageIds: MessageId[]
   queryText: string
   loading: boolean
-  mediaLoadResult: Record<number, Type.MessageLoadResult>
+  mediaLoadResult: Record<MessageId, Type.MessageLoadResult>
   galleryImageKeepAspectRatio?: boolean
+}
+
+interface Props {
+  chatId: ChatId | 'all'
+  onUpdateView?: () => void
 }
 
 export default class Gallery extends Component<Props, State> {
   dateHeader: Ref<HTMLDivElement> = createRef<HTMLDivElement>()
-  tabNames: readonly MediaTabKey[] = [
-    'images',
-    'video',
-    'audio',
-    'files',
-    'webxdc_apps',
-  ]
-  tabMsgTypes: readonly Record<MediaTabKey, string | string[]> = {
-    images: ['Gif', 'Image'],
-    video: 'Video',
-    audio: ['Audio', 'Voice'],
-    files: 'File',
-    webxdc_apps: 'Webxdc',
-  }
   constructor(props: Props) {
     super(props)
 
@@ -156,7 +130,7 @@ export default class Gallery extends Component<Props, State> {
     const chatId2 = chatId !== 'all' ? chatId : null
     this.setState({ loading: true })
     const [type0, type1] = (() => {
-      const result = this.tabMsgTypes[tab]
+      const result = tabMsgTypes[tab]
       if (Array.isArray(result)) {
         return result
       } else {
@@ -165,7 +139,7 @@ export default class Gallery extends Component<Props, State> {
     })()
     BackendRemote.rpc
       .getChatMedia(accountId, chatId2, type0, type1, null)
-      .then(async (mediaIds: number[]) => {
+      .then(async (mediaIds: MessageId[]) => {
         const mediaLoadResult = await BackendRemote.rpc.getMessages(
           accountId,
           mediaIds
@@ -177,7 +151,7 @@ export default class Gallery extends Component<Props, State> {
           mediaLoadResult,
           loading: false,
         })
-        this.forceUpdate()
+        this.forceUpdate() // why?
         onUpdateView?.()
       })
       .catch(log.error.bind(log))
@@ -189,10 +163,11 @@ export default class Gallery extends Component<Props, State> {
 
   updateFirstVisibleMessage(message: Type.MessageLoadResult) {
     if (message.kind === 'message') {
-      if (this.dateHeader.current)
+      if (typeof this.dateHeader.current === 'object' && this.dateHeader.current) {
         this.dateHeader.current.innerText = moment(
           message.timestamp * 1000
         ).format('LL')
+      }
     }
   }
 
@@ -215,8 +190,7 @@ export default class Gallery extends Component<Props, State> {
       queryText,
       galleryImageKeepAspectRatio,
     } = this.state
-    return <Loading />
-    /*
+    const chatId = this.props.chatId
     const filteredMediaMessageIds = mediaMessageIds.filter(id => {
       const result = mediaLoadResult[id]
       return (
@@ -230,14 +204,14 @@ export default class Gallery extends Component<Props, State> {
     return (
       <div className='media-view'>
         <TabList
-          tabNames={this.tabNames}
+          tabNames={tabNames}
           tabChangeCb={(newTab: string) =>
             this.setState({ currentTab: newTab })
           }
         >
           <>
             {
-             // Order here is important, it should be according to this.tabNames --Farooq
+              // Order here is important, it should be according to this.tabNames --Farooq
             }
             <TabBody
               attachmentElement={ImageAttachment}
@@ -273,8 +247,8 @@ export default class Gallery extends Component<Props, State> {
               key={'audio' + chatId}
             />
             <div key={'file' + chatId}>
-              { loading && <Loading /> }
-              { !loading &&
+              {loading && <Loading />}
+              {!loading &&
                 <>
                   <AutoSizer>
                     {({ width, height }) => (
@@ -316,7 +290,6 @@ export default class Gallery extends Component<Props, State> {
         </TabList>
       </div>
     )
-      */
   }
 }
 
@@ -347,7 +320,9 @@ function TabBody({
   if (loading) {
     return (
       <AutoSizer>
-        <Loading />
+        {() => {
+          return <Loading />
+        }}
       </AutoSizer>
     )
   }
@@ -380,7 +355,7 @@ function TabBody({
             }) => {
               const msgId =
                 mediaMessageIds[
-                  visibleRowStartIndex * itemsPerRow + visibleColumnStartIndex
+                visibleRowStartIndex * itemsPerRow + visibleColumnStartIndex
                 ]
               const message = mediaLoadResult[msgId]
               if (!message) {

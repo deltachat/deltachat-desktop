@@ -8,3 +8,6 @@ export type GalleryElement = (
     openFullscreenMedia: (message: Type.Message) => void
   }
 ) => JSX.Element
+
+export type MessageId = number
+export type ChatId = number
