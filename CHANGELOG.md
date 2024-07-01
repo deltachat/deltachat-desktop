@@ -19,6 +19,7 @@
 - "Realtime Webxdc Channels" toggle not reflecting actual setting value #3992
 - even faster load of contact lists in "New Chat" and "New Group" #3927
 - really hide 3dot menu when it is hidden #3998
+- fix bug that showed placeholders while searching in chat forward dialog until you scrolled #4001
 
 <a id="1_46_1"></a>
 
