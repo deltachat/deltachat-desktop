@@ -12,6 +12,7 @@
 - Fix crash on "Settings" click when not on main screen (e.g. no account selected): hide the "settings" button
 - code: comply with react hook rules #3955
 - fix mailto dialog #3976
+- "Realtime Webxdc Channels" toggle not reflecting actual setting value #3992
 
 <a id="1_46_1"></a>
 

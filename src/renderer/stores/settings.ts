@@ -51,6 +51,7 @@ const settingsKeys: Array<keyof SettingsStoreState['settings']> = [
   'disable_idle',
   'media_quality',
   'is_chatmail',
+  'webxdc_realtime_enabled',
 ]
 
 class SettingsStore extends Store<SettingsStoreState | null> {
