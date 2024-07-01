@@ -179,20 +179,28 @@ export function getFileMenu(
 ): Electron.MenuItemConstructorOptions {
   const fileMenuNonMac: Electron.MenuItemConstructorOptions = {
     label: tx('global_menu_file_desktop'),
-    submenu: [
-      {
-        label: tx('menu_settings'),
-        click: () => {
-          mainWindow.send('showSettingsDialog')
+    submenu: (() => {
+      let result = [
+        {
+          label: tx('global_menu_file_quit_desktop'),
+          click: () => window?.close(),
+          accelerator: 'Ctrl+q',
         },
-        accelerator: 'Ctrl+,',
-      },
-      {
-        label: tx('global_menu_file_quit_desktop'),
-        role: 'quit',
-        accelerator: 'Ctrl+q',
-      },
-    ],
+      ]
+      if (window === mainWindow.window) {
+        result = [
+          {
+            label: tx('menu_settings'),
+            click: () => {
+              mainWindow.send('showSettingsDialog')
+            },
+            accelerator: 'Ctrl+,',
+          },
+          ...result,
+        ]
+      }
+      return result
+    })(),
   }
   const fileMenuMac: Electron.MenuItemConstructorOptions = {
     label: tx('global_menu_file_desktop'),

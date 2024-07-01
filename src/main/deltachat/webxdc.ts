@@ -213,7 +213,7 @@ export default class DCWebxdc extends SplitOut {
       const app_icon = icon_blob && nativeImage?.createFromBuffer(icon_blob)
 
       const lastBounds = await getLastBounds(this, accountId, msg_id)
-      const webxdc_windows = new BrowserWindow({
+      const webxdcWindow = new BrowserWindow({
         webPreferences: {
           partition: partitionFromAccountId(accountId),
           sandbox: true,
@@ -238,11 +238,11 @@ export default class DCWebxdc extends SplitOut {
         show: false,
       })
       // reposition the window to last position (or default)
-      webxdc_windows.setBounds(lastBounds, true)
+      webxdcWindow.setBounds(lastBounds, true)
       // show after repositioning to avoid blinking
-      webxdc_windows.show()
+      webxdcWindow.show()
       open_apps[`${accountId}.${msg_id}`] = {
-        win: webxdc_windows,
+        win: webxdcWindow,
         accountId,
         msgId: msg_id,
         internet_access: webxdcInfo['internetAccess'],
@@ -253,7 +253,7 @@ export default class DCWebxdc extends SplitOut {
       const makeMenu = () => {
         return Menu.buildFromTemplate([
           ...(isMac ? [getAppMenu(false)] : []),
-          getFileMenu(webxdc_windows, isMac),
+          getFileMenu(webxdcWindow, isMac),
           getEditMenu(),
           {
             label: tx('global_menu_view_desktop'),
@@ -274,11 +274,11 @@ export default class DCWebxdc extends SplitOut {
               {
                 label: tx('global_menu_view_floatontop_desktop'),
                 type: 'checkbox',
-                checked: webxdc_windows.isAlwaysOnTop(),
+                checked: webxdcWindow.isAlwaysOnTop(),
                 click: () => {
-                  webxdc_windows.setAlwaysOnTop(!webxdc_windows.isAlwaysOnTop())
+                  webxdcWindow.setAlwaysOnTop(!webxdcWindow.isAlwaysOnTop())
                   if (platform() !== 'darwin') {
-                    webxdc_windows.setMenu(makeMenu())
+                    webxdcWindow.setMenu(makeMenu())
                   } else {
                     // change to webxdc menu
                     Menu.setApplicationMenu(makeMenu())
@@ -304,7 +304,7 @@ export default class DCWebxdc extends SplitOut {
                   } else if (webxdcInfo.sourceCodeUrl) {
                     const url = webxdcInfo.sourceCodeUrl
                     dialog
-                      .showMessageBox(webxdc_windows, {
+                      .showMessageBox(webxdcWindow, {
                         buttons: [tx('no'), tx('menu_copy_link_to_clipboard')],
                         message: tx(
                           'ask_copy_unopenable_link_to_clipboard',
@@ -332,39 +332,39 @@ export default class DCWebxdc extends SplitOut {
       }
 
       if (!isMac) {
-        webxdc_windows.setMenu(makeMenu())
+        webxdcWindow.setMenu(makeMenu())
       }
 
-      webxdc_windows.on('focus', () => {
+      webxdcWindow.on('focus', () => {
         if (isMac) {
           // change to webxdc menu
           Menu.setApplicationMenu(makeMenu())
         }
       })
-      webxdc_windows.on('blur', () => {
+      webxdcWindow.on('blur', () => {
         if (isMac) {
           // change back to main-window menu
           refreshTitleMenu()
         }
       })
 
-      webxdc_windows.once('closed', () => {
+      webxdcWindow.once('closed', () => {
         delete open_apps[`${accountId}.${msg_id}`]
       })
 
-      webxdc_windows.once('close', () => {
-        const lastBounds = webxdc_windows.getBounds()
+      webxdcWindow.once('close', () => {
+        const lastBounds = webxdcWindow.getBounds()
         setLastBounds(this, accountId, msg_id, lastBounds)
       })
 
-      webxdc_windows.once('ready-to-show', () => {})
+      webxdcWindow.once('ready-to-show', () => {})
 
-      webxdc_windows.webContents.loadURL(appURL + '/' + WRAPPER_PATH, {
+      webxdcWindow.webContents.loadURL(appURL + '/' + WRAPPER_PATH, {
         extraHeaders: 'Content-Security-Policy: ' + CSP,
       })
 
       // prevent reload and navigation of wrapper page
-      webxdc_windows.webContents.on('will-navigate', ev => {
+      webxdcWindow.webContents.on('will-navigate', ev => {
         ev.preventDefault()
       })
 
@@ -372,12 +372,12 @@ export default class DCWebxdc extends SplitOut {
       // but https://github.com/electron/electron/pull/34418 is not merged yet.
 
       // prevent webxdc content from setting the window title
-      webxdc_windows.on('page-title-updated', ev => {
+      webxdcWindow.on('page-title-updated', ev => {
         ev.preventDefault()
       })
 
       type setPermissionRequestHandler =
-        typeof webxdc_windows.webContents.session.setPermissionRequestHandler
+        typeof webxdcWindow.webContents.session.setPermissionRequestHandler
       type permission_arg = Parameters<
         Exclude<Parameters<setPermissionRequestHandler>[0], null>
       >[1]
@@ -409,21 +409,21 @@ If you think that's a bug and you need that permission, then please open an issu
         return false
       }
 
-      webxdc_windows.webContents.session.setPermissionCheckHandler(
+      webxdcWindow.webContents.session.setPermissionCheckHandler(
         (_wc, permission) => {
           return permission_handler(permission as any)
         }
       )
-      webxdc_windows.webContents.session.setPermissionRequestHandler(
+      webxdcWindow.webContents.session.setPermissionRequestHandler(
         (_wc, permission, callback) => {
           callback(permission_handler(permission))
         }
       )
 
-      webxdc_windows.webContents.on('before-input-event', (event, input) => {
+      webxdcWindow.webContents.on('before-input-event', (event, input) => {
         if (input.key.toLowerCase() === 'f12') {
           if (DesktopSettings.state.enableWebxdcDevTools) {
-            webxdc_windows.webContents.toggleDevTools()
+            webxdcWindow.webContents.toggleDevTools()
             event.preventDefault()
           }
         }

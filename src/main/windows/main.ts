@@ -25,7 +25,7 @@ import { DesktopSettings } from '../desktop_settings.js'
 import { refresh as refreshTitleMenu } from '../menu.js'
 import { initMinWinDimensionHandling } from './helpers.js'
 
-const log = getLogger('main/mainWindow')
+const log = getLogger('/mainWindow')
 
 type ExtendedBrowserWindow = BrowserWindow & {
   hidden?: boolean
@@ -51,37 +51,31 @@ export function init(options: { hidden: boolean }) {
 
   const isMac = platform() === 'darwin'
 
-  const main_window = (window = <ExtendedBrowserWindow>(
-    new electron.BrowserWindow({
-      backgroundColor: '#282828',
-      // backgroundThrottling: false, // do not throttle animations/timers when page is background
-      darkTheme: true, // Forces dark theme (GTK+3)
-      icon: appIcon(),
-      show: false,
-      title: appWindowTitle,
-      height: initialBounds.height,
-      width: initialBounds.width,
-      x: initialBounds.x,
-      y: initialBounds.y,
-      webPreferences: {
-        nodeIntegration: false,
-        preload: defaults.preload,
-        spellcheck: false, // until we can load a local dictionary, see https://github.com/electron/electron/issues/22995
-        webSecurity: true,
-        allowRunningInsecureContent: false,
-        contextIsolation: false,
-      },
-      titleBarStyle: isMac ? 'hidden' : 'default',
-      titleBarOverlay: true,
-    })
-  ))
-  main_window.filePathWhiteList = []
+  const _window = (window = <ExtendedBrowserWindow>new electron.BrowserWindow({
+    backgroundColor: '#282828',
+    // backgroundThrottling: false, // do not throttle animations/timers when page is background
+    darkTheme: true, // Forces dark theme (GTK+3)
+    icon: appIcon(),
+    show: false,
+    title: appWindowTitle,
+    height: initialBounds.height,
+    width: initialBounds.width,
+    x: initialBounds.x,
+    y: initialBounds.y,
+    webPreferences: {
+      nodeIntegration: false,
+      preload: defaults.preload,
+      spellcheck: false, // until we can load a local dictionary, see https://github.com/electron/electron/issues/22995
+      webSecurity: true,
+      allowRunningInsecureContent: false,
+      contextIsolation: false,
+    },
+    titleBarStyle: isMac ? 'hidden' : 'default',
+    titleBarOverlay: true,
+  }))
+  _window.filePathWhiteList = []
 
-  initMinWinDimensionHandling(
-    main_window,
-    defaults.minWidth,
-    defaults.minHeight
-  )
+  initMinWinDimensionHandling(_window, defaults.minWidth, defaults.minHeight)
 
   // disable network request to fetch dictionary
   // issue: https://github.com/electron/electron/issues/22995
@@ -91,9 +85,9 @@ export function init(options: { hidden: boolean }) {
   window.loadFile(join(htmlDistDir(), defaults.main))
 
   window.once('ready-to-show', () => {
-    if (!options.hidden) main_window.show()
+    if (!options.hidden) _window.show()
     if (process.env.NODE_ENV === 'test') {
-      main_window.maximize()
+      _window.maximize()
     }
   })
 
@@ -119,15 +113,15 @@ export function init(options: { hidden: boolean }) {
   window.on('resize', saveBounds)
 
   window.once('show', () => {
-    main_window.webContents.setZoomFactor(DesktopSettings.state.zoomFactor)
+    _window.webContents.setZoomFactor(DesktopSettings.state.zoomFactor)
   })
   window.on('close', () => {})
   window.on('blur', () => {
-    main_window.hidden = true
+    _window.hidden = true
     refreshTrayContextMenu()
   })
   window.on('focus', () => {
-    main_window.hidden = false
+    _window.hidden = false
     refreshTrayContextMenu()
     refreshTitleMenu()
   })
@@ -157,7 +151,7 @@ export function init(options: { hidden: boolean }) {
     log.info('preq', permission)
     if (!allowed_web_permissions.includes(permission)) {
       log.info(
-        `main window requested "${permission}" permission, but we denied it, because it is not in the list of allowed permissions.`
+        ` window requested "${permission}" permission, but we denied it, because it is not in the list of allowed permissions.`
       )
       return false
     } else {
