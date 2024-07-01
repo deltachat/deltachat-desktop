@@ -1,0 +1,23 @@
+.loading {
+  > p {
+    text-align: center;
+  }
+  > div {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+  }
+}
+
+.cell-row { 
+  display: 'flex';
+  flex-direction: row;
+}
+
+.cell {
+  height: '36px';
+  width: '36px';
+  border-color: '#000';
+  border-width: '2px';
+  border-radius: '2px';
+}
