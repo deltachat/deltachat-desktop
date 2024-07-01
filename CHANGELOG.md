@@ -11,6 +11,7 @@
 - consolidate 'Profile' wording #3963
 - Update local help (2024-06-19)
 - refactor: safer types #3993
+- keep aspect ratio in quoted images
 
 ### Fixed
 - Fix crash on "Settings" click when not on main screen (e.g. no account selected): hide the "settings" button
