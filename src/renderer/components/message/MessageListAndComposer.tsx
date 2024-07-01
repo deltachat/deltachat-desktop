@@ -81,6 +81,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     removeFile,
     clearDraft,
   } = useDraft(
+    accountId,
     chat.id,
     chat.isContactRequest,
     chat.isProtectionBroken,

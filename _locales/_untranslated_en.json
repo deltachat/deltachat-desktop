@@ -15,6 +15,12 @@
   "background_sync_disabled_explaination": {
     "message": "Background sync disabled, profile is only synced when selected"
   },
+  "pref_ctrl_up_down_to_reply": {
+    "message": "Ctrl + Up/Down to Reply"
+  },
+  "explain_ctrl_up_down_to_reply": {
+    "message": "Choose the message to reply to with this shortcut"
+  },
   "muted": {
     "message": "Muted"
   },
