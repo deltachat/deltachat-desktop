@@ -643,11 +643,14 @@ const useCreateGroup = (
       await BackendRemote.rpc.setChatProfileImage(accountId, chatId, groupImage)
     }
 
-    for (const contactId of groupMembers) {
-      if (contactId !== C.DC_CONTACT_ID_SELF) {
-        await BackendRemote.rpc.addContactToChat(accountId, chatId, contactId)
-      }
-    }
+    await Promise.all(
+      groupMembers.map(contactId => {
+        if (contactId === C.DC_CONTACT_ID_SELF) {
+          return
+        }
+        return BackendRemote.rpc.addContactToChat(accountId, chatId, contactId)
+      })
+    )
 
     return chatId
   }, [accountId, groupImage, groupMembers, groupName])
@@ -674,11 +677,14 @@ const useCreateBroadcast = (
   const createBroadcastList = async () => {
     const chatId = await BackendRemote.rpc.createBroadcastList(accountId)
 
-    for (const contactId of broadcastRecipients) {
-      if (contactId !== C.DC_CONTACT_ID_SELF) {
-        await BackendRemote.rpc.addContactToChat(accountId, chatId, contactId)
-      }
-    }
+    await Promise.all(
+      broadcastRecipients.map(contactId => {
+        if (contactId === C.DC_CONTACT_ID_SELF) {
+          return
+        }
+        return BackendRemote.rpc.addContactToChat(accountId, chatId, contactId)
+      })
+    )
 
     await BackendRemote.rpc.setChatName(accountId, chatId, groupName)
 

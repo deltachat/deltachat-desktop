@@ -137,15 +137,18 @@ function useContactIds(listFlags: number, queryStr: string | undefined) {
   const debouncedGetContactsIds = useMemo(
     () =>
       debounce(async (listFlags: number, queryStr: string | undefined) => {
-        const contactIds = await BackendRemote.rpc.getContactIds(
+        const contactIdsP = BackendRemote.rpc.getContactIds(
           accountId,
           listFlags,
           queryStr?.trim() || null
         )
-        const queryStrIsValidEmail = await BackendRemote.rpc.checkEmailValidity(
+        const queryStrIsValidEmailP = BackendRemote.rpc.checkEmailValidity(
           queryStr?.trim() || ''
         )
-        setState({ contactIds, queryStrIsValidEmail })
+        setState({
+          contactIds: await contactIdsP,
+          queryStrIsValidEmail: await queryStrIsValidEmailP,
+        })
       }, 200),
     [setState, accountId]
   )
