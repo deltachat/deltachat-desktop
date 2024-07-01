@@ -48,7 +48,7 @@ const onWindowFocus = (accountId: number) => {
       rect.top >= 0 &&
       rect.left >= 0 &&
       rect.bottom <=
-        (window.innerHeight || document.documentElement.clientHeight) &&
+      (window.innerHeight || document.documentElement.clientHeight) &&
       rect.right <= (window.innerWidth || document.documentElement.clientWidth)
     )
   })
@@ -330,9 +330,9 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
     } else if (scrollTo.type === 'scrollToLastKnownPosition') {
       log.debug(
         'scrollTo type: scrollToLastKnownPosition; lastKnownScrollHeight: ' +
-          scrollTo.lastKnownScrollHeight +
-          '; lastKnownScrollTop: ' +
-          scrollTo.lastKnownScrollTop
+        scrollTo.lastKnownScrollHeight +
+        '; lastKnownScrollTop: ' +
+        scrollTo.lastKnownScrollTop
       )
 
       if (scrollTo.appendedOn === 'top') {
@@ -637,16 +637,6 @@ export const MessageListInner = React.memo(
         </ul>
       </div>
     )
-  },
-  (prevProps, nextProps) => {
-    const areEqual: boolean =
-      prevProps.activeView === nextProps.activeView &&
-      prevProps.messageCache === nextProps.messageCache &&
-      prevProps.oldestFetchedMessageIndex ===
-        nextProps.oldestFetchedMessageIndex &&
-      prevProps.onScroll === nextProps.onScroll &&
-      prevProps.messageListItems.length === prevProps.messageListItems.length
-    return areEqual
   }
 )
 
