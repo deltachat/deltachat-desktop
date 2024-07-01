@@ -1,0 +1,22 @@
+.loading {
+  margin: auto;
+  > p {
+    text-align: center;
+  }
+}
+
+.cells {
+  display: grid;
+  grid-gap: 2px;
+  grid-template-columns: repeat(6, auto);
+  grid-template-rows: auto;
+}
+
+.cell {
+  height: 36px;
+  width: 36px;
+  border-color: #000;
+  border-width: 2px;
+  border-radius: 2px;
+  border-style: solid;
+}
