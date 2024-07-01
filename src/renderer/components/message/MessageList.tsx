@@ -450,31 +450,31 @@ export type ConversationType = {
   chatType: ChatTypes
 }
 
-export const MessageListInner = React.memo(
-  (props: {
-    onScroll: (event: React.UIEvent<HTMLDivElement>) => void
-    oldestFetchedMessageIndex: number
-    messageListItems: T.MessageListItem[]
-    activeView: T.MessageListItem[]
-    messageCache: { [msgId: number]: T.MessageLoadResult | undefined }
-    messageListRef: React.MutableRefObject<HTMLDivElement | null>
-    chat: T.FullChat
-    loaded: boolean
-    unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
-    loadMissingMessages: () => Promise<void>
-  }) => {
-    const {
-      onScroll,
-      messageListItems,
-      messageCache,
-      activeView,
-      messageListRef,
-      chat,
-      loaded,
-      unreadMessageInViewIntersectionObserver,
-      loadMissingMessages,
-    } = props
+interface MessageListInnerProps {
+  onScroll: (event: React.UIEvent<HTMLDivElement>) => void
+  oldestFetchedMessageIndex: number
+  messageListItems: T.MessageListItem[]
+  activeView: T.MessageListItem[]
+  messageCache: { [msgId: number]: T.MessageLoadResult | undefined }
+  messageListRef: React.MutableRefObject<HTMLDivElement | null>
+  chat: T.FullChat
+  loaded: boolean
+  unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
+  loadMissingMessages: () => Promise<void>
+}
 
+export const MessageListInner = React.memo(
+  ({
+    onScroll,
+    messageListItems,
+    messageCache,
+    activeView,
+    messageListRef,
+    chat,
+    loaded,
+    unreadMessageInViewIntersectionObserver,
+    loadMissingMessages,
+  }: MessageListInnerProps) => {
     const conversationType: ConversationType = {
       hasMultipleParticipants:
         chat.chatType === C.DC_CHAT_TYPE_GROUP ||
@@ -637,15 +637,6 @@ export const MessageListInner = React.memo(
         </ul>
       </div>
     )
-  },
-  (prevProps, nextProps) => {
-    const areEqual: boolean =
-      prevProps.activeView === nextProps.activeView &&
-      prevProps.messageCache === nextProps.messageCache &&
-      prevProps.oldestFetchedMessageIndex ===
-        nextProps.oldestFetchedMessageIndex &&
-      prevProps.onScroll === nextProps.onScroll
-    return areEqual
   }
 )
 
