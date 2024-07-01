@@ -223,7 +223,7 @@ export default function MainScreen({ accountId }: Props) {
                     marginLeft: 0,
                     marginRight: '3px',
                     ...(threeDotMenuHidden
-                      ? { opacity: 0.4, pointerEvents: 'none' }
+                      ? { opacity: 0, pointerEvents: 'none' }
                       : {}),
                   }}
                   className='no-drag'

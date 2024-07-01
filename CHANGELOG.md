@@ -18,6 +18,7 @@
 - fix mailto dialog #3976
 - "Realtime Webxdc Channels" toggle not reflecting actual setting value #3992
 - even faster load of contact lists in "New Chat" and "New Group" #3927
+- really hide 3dot menu when it is hidden
 
 <a id="1_46_1"></a>
 
