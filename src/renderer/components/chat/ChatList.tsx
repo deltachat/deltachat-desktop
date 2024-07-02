@@ -72,12 +72,12 @@ export function ChatListPart({
     | MessageChatListItemData
   itemHeight: number
 }) {
-  const r = useRef<InfiniteLoader | null>(null)
+  const infiniteLoaderRef = useRef<InfiniteLoader | null>(null)
 
   useEffect(() => {
     // make sure infinite list reloads when list changes
     // to fix https://github.com/deltachat/deltachat-desktop/issues/3921
-    r.current?.resetloadMoreItemsCache(true)
+    infiniteLoaderRef.current?.resetloadMoreItemsCache(true)
   }, [rowCount])
 
   return (
@@ -85,7 +85,7 @@ export function ChatListPart({
       isItemLoaded={isRowLoaded}
       itemCount={rowCount}
       loadMoreItems={loadMoreRows}
-      ref={r}
+      ref={infiniteLoaderRef}
     >
       {({ onItemsRendered, ref }) => (
         <List
