@@ -74,11 +74,21 @@ export function ChatListPart({
 }) {
   const infiniteLoaderRef = useRef<InfiniteLoader | null>(null)
 
+  // By default InfiniteLoader assumes that each item's index in the list
+  // never changes. But in our case they do change because of filtering.
+  // This code ensures that the currently displayed items get loaded
+  // even if the scroll position didn't change.
+  // Relevant issues:
+  // - https://github.com/deltachat/deltachat-desktop/issues/3921
+  // - https://github.com/deltachat/deltachat-desktop/issues/3208
   useEffect(() => {
-    // make sure infinite list reloads when list changes
-    // to fix https://github.com/deltachat/deltachat-desktop/issues/3921
     infiniteLoaderRef.current?.resetloadMoreItemsCache(true)
-  }, [rowCount])
+    // We could specify `useEffect`'s dependencies (the major one being
+    // `rowCount`) for some performance, but it's not enough
+    // because items could change with `rowCount` being the same,
+    // e.g. when you archive a chat for the first time.
+    // So let's play it safe.
+  })
 
   return (
     <InfiniteLoader
@@ -615,19 +625,6 @@ function useLogicChatPart(
     [showArchivedChats, queryStr, setListFlags]
   )
 
-  // for example user switched to search or to archived chats
-  // so force refresh of inital data
-  const shouldReload = useRef(false)
-  useEffect(() => {
-    shouldReload.current = true
-  }, [showArchivedChats, queryStr]) // eslint-disable-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    if (shouldReload.current) {
-      shouldReload.current = false
-      loadChats(0, Math.min(chatListIds.length, 20))
-    }
-  }, [chatListIds]) // eslint-disable-line react-hooks/exhaustive-deps
-
   return { chatListIds, isChatLoaded, loadChats, chatCache }
 }
 
@@ -677,12 +674,6 @@ function useContactAndMessageLogic(
       return state
     })
   }
-
-  useEffect(() => {
-    // force refresh of initial data
-    loadContact(0, Math.min(contactIds.length, 10))
-    loadMessages(0, Math.min(messageResultIds.length, 10))
-  }, [contactIds, messageResultIds]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     // contacts
