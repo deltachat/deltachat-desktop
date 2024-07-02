@@ -156,14 +156,14 @@ export function getAppMenu(
       { type: 'separator' },
       ...(isMainWindow
         ? [
-          {
-            // because menubar stays when it's closed and apple wants that the user can reopen it via the menu bar
-            label: tx('show_window'),
-            click: () => {
-              mainWindow.show()
+            {
+              // because menubar stays when it's closed and apple wants that the user can reopen it via the menu bar
+              label: tx('show_window'),
+              click: () => {
+                mainWindow.show()
+              },
             },
-          },
-        ]
+          ]
         : []),
       {
         label: tx('global_menu_file_quit_desktop'),
@@ -183,7 +183,10 @@ export function getFileMenu(
     submenu: (() => {
       let result = [
         {
-          label: tx('global_menu_file_quit_desktop'),
+          label:
+            window === mainWindow.window
+              ? tx('global_menu_file_quit_desktop')
+              : tx('close_window'),
           click: () => window?.close(),
           accelerator: 'Ctrl+q',
         },

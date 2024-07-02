@@ -260,11 +260,11 @@ export default class DCWebxdc extends SplitOut {
             submenu: [
               ...(DesktopSettings.state.enableWebxdcDevTools
                 ? [
-                  {
-                    label: tx('global_menu_view_developer_tools_desktop'),
-                    role: 'toggleDevTools',
-                  } as MenuItemConstructorOptions,
-                ]
+                    {
+                      label: tx('global_menu_view_developer_tools_desktop'),
+                      role: 'toggleDevTools',
+                    } as MenuItemConstructorOptions,
+                  ]
                 : []),
               { type: 'separator' },
               { role: 'resetZoom' },
@@ -357,7 +357,7 @@ export default class DCWebxdc extends SplitOut {
         setLastBounds(this, accountId, msg_id, lastBounds)
       })
 
-      webxdcWindow.once('ready-to-show', () => { })
+      webxdcWindow.once('ready-to-show', () => {})
 
       webxdcWindow.webContents.loadURL(appURL + '/' + WRAPPER_PATH, {
         extraHeaders: 'Content-Security-Policy: ' + CSP,
@@ -709,8 +709,9 @@ If you think that's a bug and you need that permission, then please open an issu
 }
 
 function makeTitle(webxdcInfo: T.WebxdcMessageInfo, chatName: string): string {
-  return `${webxdcInfo.document ? truncateText(webxdcInfo.document, 32) + ' - ' : ''
-    }${truncateText(webxdcInfo.name, 42)} – ${chatName}`
+  return `${
+    webxdcInfo.document ? truncateText(webxdcInfo.document, 32) + ' - ' : ''
+  }${truncateText(webxdcInfo.name, 42)} – ${chatName}`
 }
 
 function partitionFromAccountId(accountId: number) {

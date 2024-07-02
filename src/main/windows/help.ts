@@ -42,8 +42,8 @@ export async function openHelpWindow(locale: string, anchor?: string) {
     if (anchor) {
       win.webContents.executeJavaScript(`
         document.getElementById(atob("${btoa(
-        anchor
-      )}"))?.scrollIntoView({"behavior":"smooth"})
+          anchor
+        )}"))?.scrollIntoView({"behavior":"smooth"})
       `)
     }
     return

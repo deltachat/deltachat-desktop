@@ -51,28 +51,30 @@ export function init(options: { hidden: boolean }) {
 
   const isMac = platform() === 'darwin'
 
-  const mainWindow = (window = <ExtendedBrowserWindow>new electron.BrowserWindow({
-    backgroundColor: '#282828',
-    // backgroundThrottling: false, // do not throttle animations/timers when page is background
-    darkTheme: true, // Forces dark theme (GTK+3)
-    icon: appIcon(),
-    show: false,
-    title: appWindowTitle,
-    height: initialBounds.height,
-    width: initialBounds.width,
-    x: initialBounds.x,
-    y: initialBounds.y,
-    webPreferences: {
-      nodeIntegration: false,
-      preload: defaults.preload,
-      spellcheck: false, // until we can load a local dictionary, see https://github.com/electron/electron/issues/22995
-      webSecurity: true,
-      allowRunningInsecureContent: false,
-      contextIsolation: false,
-    },
-    titleBarStyle: isMac ? 'hidden' : 'default',
-    titleBarOverlay: true,
-  }))
+  const mainWindow = (window = <ExtendedBrowserWindow>(
+    new electron.BrowserWindow({
+      backgroundColor: '#282828',
+      // backgroundThrottling: false, // do not throttle animations/timers when page is background
+      darkTheme: true, // Forces dark theme (GTK+3)
+      icon: appIcon(),
+      show: false,
+      title: appWindowTitle,
+      height: initialBounds.height,
+      width: initialBounds.width,
+      x: initialBounds.x,
+      y: initialBounds.y,
+      webPreferences: {
+        nodeIntegration: false,
+        preload: defaults.preload,
+        spellcheck: false, // until we can load a local dictionary, see https://github.com/electron/electron/issues/22995
+        webSecurity: true,
+        allowRunningInsecureContent: false,
+        contextIsolation: false,
+      },
+      titleBarStyle: isMac ? 'hidden' : 'default',
+      titleBarOverlay: true,
+    })
+  ))
   mainWindow.filePathWhiteList = []
 
   initMinWinDimensionHandling(mainWindow, defaults.minWidth, defaults.minHeight)
@@ -115,7 +117,7 @@ export function init(options: { hidden: boolean }) {
   window.once('show', () => {
     mainWindow.webContents.setZoomFactor(DesktopSettings.state.zoomFactor)
   })
-  window.on('close', () => { })
+  window.on('close', () => {})
   window.on('blur', () => {
     mainWindow.hidden = true
     refreshTrayContextMenu()
