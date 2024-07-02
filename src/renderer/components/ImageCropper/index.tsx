@@ -48,7 +48,8 @@ export default function ImageCropper({
   const shade = useRef<HTMLImageElement>(null)
   // a wrapper inside which we drag an image
   const container = useRef<HTMLImageElement>(null)
-  // a temporary canvas for rotation and result output so we don't create
+  // a temporary canvas for rotation and result output
+  // so we don't create a new canvas element on each operation
   const tmpCanvas = useRef<HTMLCanvasElement>(null)
 
   const dragging = useRef<boolean>(false)
@@ -65,7 +66,7 @@ export default function ImageCropper({
   const containerScale = useRef<number>(1.0)
   const zoom = useRef<number>(1.0)
   const initialZoom = useRef<number>(1.0)
-  // we use radians
+  /** we use radians */
   const rotation = useRef<number>(0.0)
 
   const onSubmit = () => {
@@ -133,6 +134,7 @@ export default function ImageCropper({
     zoom.current = initialZoom.current
     moveImages(0, 0)
     if (rotation.current > 0) {
+      rotation.current = 0
       cutImage.current.src = filepath
       fullImage.current.src = filepath
     }
@@ -365,14 +367,14 @@ export default function ImageCropper({
               onClick={onZoomIn}
               aria-label={tx('menu_zoom_in')}
             >
-              <Icon coloring='navbar' icon='plus' size={20} />
+              <Icon coloring='navbar' icon='plus' size={18} />
             </button>
             <button
               className={styles.imageCropperControlsButton}
               onClick={onZoomOut}
               aria-label={tx('menu_zoom_out')}
             >
-              <Icon coloring='navbar' icon='minus' size={24} />
+              <Icon coloring='navbar' icon='minus' size={18} />
             </button>
             <button
               className={styles.imageCropperControlsButton}
@@ -381,21 +383,16 @@ export default function ImageCropper({
             >
               <Icon coloring='navbar' icon='rotate-right' size={24} />
             </button>
-            <button
-              className={styles.imageCropperControlsButton}
-              onClick={onZoomReset}
-              aria-label={tx('reset')}
-            >
-              <Icon coloring='navbar' icon='reset-image' size={24} />
-            </button>
-          </div>
-          <div className={styles.imageCropperHint}>
-            {tx('image_cropper_hint_desktop')}
           </div>
           <canvas ref={tmpCanvas} style={{ display: 'none' }}></canvas>
         </DialogContent>
       </DialogBody>
       <DialogFooter>
+        <FooterActions align='start'>
+          <FooterActionButton onClick={onZoomReset} aria-label={tx('reset')}>
+            {tx('reset')}
+          </FooterActionButton>
+        </FooterActions>
         <FooterActions>
           <FooterActionButton
             onClick={() => {

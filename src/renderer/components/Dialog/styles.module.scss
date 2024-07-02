@@ -78,6 +78,9 @@ $paddingVertical: 20px;
   padding-bottom: $paddingVertical;
   padding-left: $paddingHorizontal;
   padding-right: $paddingHorizontal;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .headerButton {

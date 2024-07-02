@@ -49,15 +49,16 @@
 
 .imageCropperControls {
   position: absolute;
-  top: 40px;
-  right: 15px;
+  top: 8px;
+  right: 5px;
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 10px;
 }
 
 .imageCropperControlsButton {
   display: flex;
+  padding: 12px;
   align-items: center;
   justify-content: center;
   background: transparent;
