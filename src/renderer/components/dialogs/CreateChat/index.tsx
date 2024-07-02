@@ -2,7 +2,9 @@ import React, {
   MouseEvent,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react'
 import { FixedSizeList } from 'react-window'
@@ -185,6 +187,20 @@ function CreateChatMain(props: CreateChatMainProps) {
     [accountId, openConfirmationDialog, refreshContacts, tx, openContextMenu]
   )
 
+  const infiniteLoaderRef = useRef<InfiniteLoader | null>(null)
+  // By default InfiniteLoader assumes that each item's index in the list
+  // never changes. But in our case they do change because of filtering.
+  // This code ensures that the currently displayed items get loaded
+  // even if the scroll position didn't change.
+  // Relevant issues:
+  // - https://github.com/deltachat/deltachat-desktop/issues/3921
+  // - https://github.com/deltachat/deltachat-desktop/issues/3208
+  useEffect(() => {
+    infiniteLoaderRef.current?.resetloadMoreItemsCache(true)
+    // We could specify `useEffect`'s dependencies (the major one being
+    // `contactsAndExtraItems`) for some performance, but let's play it safe.
+  })
+
   return (
     <>
       <DialogHeader>
@@ -203,6 +219,7 @@ function CreateChatMain(props: CreateChatMainProps) {
         <AutoSizer disableWidth>
           {({ height }) => (
             <InfiniteLoader
+              ref={infiniteLoaderRef}
               itemCount={contactsAndExtraItems.length}
               loadMoreItems={(startInd, stopInd) => {
                 // The indices are shifted due to the existence of extra items.

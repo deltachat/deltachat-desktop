@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 import Dialog, {
   DialogBody,
@@ -38,6 +38,21 @@ export default function SelectContactDialog({
     queryStr
   )
   const tx = useTranslationFunction()
+
+  const infiniteLoaderRef = useRef<InfiniteLoader | null>(null)
+  // By default InfiniteLoader assumes that each item's index in the list
+  // never changes. But in our case they do change because of filtering.
+  // This code ensures that the currently displayed items get loaded
+  // even if the scroll position didn't change.
+  // Relevant issues:
+  // - https://github.com/deltachat/deltachat-desktop/issues/3921
+  // - https://github.com/deltachat/deltachat-desktop/issues/3208
+  useEffect(() => {
+    infiniteLoaderRef.current?.resetloadMoreItemsCache(true)
+    // We could specify `useEffect`'s dependencies (the major one being
+    // `contactIds`) for some performance, but let's play it safe.
+  })
+
   return (
     <Dialog width={400} onClose={onClose} fixed>
       <DialogHeader>
@@ -55,6 +70,7 @@ export default function SelectContactDialog({
           <AutoSizer disableWidth>
             {({ height }) => (
               <InfiniteLoader
+                ref={infiniteLoaderRef}
                 itemCount={contactIds.length}
                 loadMoreItems={loadContacts}
                 // perf: consider using `isContactLoaded` from `useLazyLoadedContacts`
