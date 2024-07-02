@@ -151,7 +151,7 @@ export function init(options: { hidden: boolean }) {
     log.info('preq', permission)
     if (!allowed_web_permissions.includes(permission)) {
       log.info(
-        ` window requested "${permission}" permission, but we denied it, because it is not in the list of allowed permissions.`
+        `main window requested "${permission}" permission, but we denied it, because it is not in the list of allowed permissions.`
       )
       return false
     } else {
