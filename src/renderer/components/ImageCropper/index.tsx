@@ -388,23 +388,23 @@ export default function ImageCropper({
         </DialogContent>
       </DialogBody>
       <DialogFooter>
-        <FooterActions align='start'>
+        <FooterActions align='spaceBetween'>
           <FooterActionButton onClick={onZoomReset} aria-label={tx('reset')}>
             {tx('reset')}
           </FooterActionButton>
-        </FooterActions>
-        <FooterActions>
-          <FooterActionButton
-            onClick={() => {
-              onCancel()
-              onClose()
-            }}
-          >
-            {tx('cancel')}
-          </FooterActionButton>
-          <FooterActionButton onClick={onSubmit}>
-            {tx('save')}
-          </FooterActionButton>
+          <FooterActions>
+            <FooterActionButton
+              onClick={() => {
+                onCancel()
+                onClose()
+              }}
+            >
+              {tx('cancel')}
+            </FooterActionButton>
+            <FooterActionButton onClick={onSubmit}>
+              {tx('save')}
+            </FooterActionButton>
+          </FooterActions>
         </FooterActions>
       </DialogFooter>
     </Dialog>
