@@ -25,6 +25,7 @@
 - fix bug that showed placeholders while searching in chat forward dialog until you scrolled #4001
 - Fix the problem of Quit menu item on WebXDC apps closes the whole DC app #3995
 - minor performance improvements #3981
+- fix chat list items (e.g. Archive) and contacts not showing up sometimes #4004
 
 <a id="1_46_1"></a>
 
