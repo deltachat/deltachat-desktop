@@ -30,6 +30,23 @@ export const enum AutodeleteDuration {
 
 export const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'apng', 'gif']
 
-// Videochat Server URLs
-export const VIDEO_CHAT_INSTANCE_SYSTEMLI = 'https://meet.systemli.org/$ROOM'
-export const VIDEO_CHAT_INSTANCE_AUTISTICI = 'https://vc.autistici.org/$ROOM'
+// Videochat Server URLs and icons
+
+interface VideoChatInstanceProps {
+  name: string
+  url: string
+  icon: string
+}
+
+export const VIDEO_CHAT_INSTANCES: Record<string, VideoChatInstanceProps> = {
+  systemli: {
+    name: 'Systemli',
+    url: 'https://meet.systemli.org/$ROOM',
+    icon: '../images/videochat_instances/systemli.ico',
+  },
+  autistici: {
+    name: 'Autistici',
+    url: 'https://vc.autistici.org/$ROOM',
+    icon: '../images/videochat_instances/autistici.ico',
+  },
+}
