@@ -33,9 +33,6 @@
   "crop_image": {
     "message": "Crop Image"
   },
-  "image_cropper_hint_desktop": {
-    "message": "Select an area on the image"
-  },
   "menu_global_map": {
     "message": "Open global map"
   },

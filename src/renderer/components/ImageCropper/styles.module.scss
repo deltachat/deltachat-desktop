@@ -46,3 +46,21 @@
   text-align: center;
   user-select: none;
 }
+
+.imageCropperControls {
+  position: absolute;
+  top: 8px;
+  right: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.imageCropperControlsButton {
+  display: flex;
+  padding: 12px;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+}
