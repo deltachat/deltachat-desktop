@@ -51,7 +51,7 @@ export function init(options: { hidden: boolean }) {
 
   const isMac = platform() === 'darwin'
 
-  const _window = (window = <ExtendedBrowserWindow>new electron.BrowserWindow({
+  const mainWindow = (window = <ExtendedBrowserWindow>new electron.BrowserWindow({
     backgroundColor: '#282828',
     // backgroundThrottling: false, // do not throttle animations/timers when page is background
     darkTheme: true, // Forces dark theme (GTK+3)
@@ -73,9 +73,9 @@ export function init(options: { hidden: boolean }) {
     titleBarStyle: isMac ? 'hidden' : 'default',
     titleBarOverlay: true,
   }))
-  _window.filePathWhiteList = []
+  mainWindow.filePathWhiteList = []
 
-  initMinWinDimensionHandling(_window, defaults.minWidth, defaults.minHeight)
+  initMinWinDimensionHandling(mainWindow, defaults.minWidth, defaults.minHeight)
 
   // disable network request to fetch dictionary
   // issue: https://github.com/electron/electron/issues/22995
@@ -85,9 +85,9 @@ export function init(options: { hidden: boolean }) {
   window.loadFile(join(htmlDistDir(), defaults.main))
 
   window.once('ready-to-show', () => {
-    if (!options.hidden) _window.show()
+    if (!options.hidden) mainWindow.show()
     if (process.env.NODE_ENV === 'test') {
-      _window.maximize()
+      mainWindow.maximize()
     }
   })
 
@@ -113,15 +113,15 @@ export function init(options: { hidden: boolean }) {
   window.on('resize', saveBounds)
 
   window.once('show', () => {
-    _window.webContents.setZoomFactor(DesktopSettings.state.zoomFactor)
+    mainWindow.webContents.setZoomFactor(DesktopSettings.state.zoomFactor)
   })
-  window.on('close', () => {})
+  window.on('close', () => { })
   window.on('blur', () => {
-    _window.hidden = true
+    mainWindow.hidden = true
     refreshTrayContextMenu()
   })
   window.on('focus', () => {
-    _window.hidden = false
+    mainWindow.hidden = false
     refreshTrayContextMenu()
     refreshTitleMenu()
   })
