@@ -146,7 +146,7 @@ export function openHtmlEmailWindow(
   // TODO: would make sense to refactor these menus at some point
   const makeMenu = () => {
     return Menu.buildFromTemplate([
-      ...(isMac ? [getAppMenu(false)] : []),
+      ...(isMac ? [getAppMenu(window)] : []),
       getFileMenu(window, isMac),
       {
         label: tx('global_menu_edit_desktop'),
@@ -315,7 +315,7 @@ export function openHtmlEmailWindow(
             throw new Error('user denied')
           },
         },
-        { label: tx('yes'), action: () => {} },
+        { label: tx('yes'), action: () => { } },
         // isContactRequest || {
         //   label: tx('pref_html_always_load_remote_content'),
         //   action: () => {

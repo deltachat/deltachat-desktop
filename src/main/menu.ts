@@ -125,8 +125,9 @@ function getZoomFactors(): Electron.MenuItemConstructorOptions[] {
 }
 
 export function getAppMenu(
-  isMainWindow: boolean
+  window: BrowserWindow | null
 ): Electron.MenuItemConstructorOptions {
+  const isMainWindow = window === mainWindow.window
   const extraItemsForMainWindow: rawMenuItem[] = [
     {
       label: tx('global_menu_help_about_desktop'),
@@ -166,7 +167,7 @@ export function getAppMenu(
         : []),
       {
         label: tx('global_menu_file_quit_desktop'),
-        role: 'quit',
+        click: () => window?.close(),
         accelerator: 'Cmd+q',
       },
     ],
@@ -322,7 +323,7 @@ function getMenuTemplate(
 ): Electron.MenuItemConstructorOptions[] {
   const isMac = process.platform === 'darwin'
   return [
-    ...(isMac ? [getAppMenu(true)] : []),
+    ...(isMac ? [getAppMenu(mainWindow.window)] : []),
     getFileMenu(mainWindow.window, isMac),
     getEditMenu(),
     {
