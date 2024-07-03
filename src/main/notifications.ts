@@ -79,8 +79,8 @@ function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
       notify.close()
     })
     notify.on('close', () => {
-      notifications[chatId] =
-        notifications[chatId]?.filter(n => n !== notify) || []
+      // this is triggered when the message is moved to notification center
+      // so we don't remove the instance from the list
     })
 
     if (notifications[chatId]) {

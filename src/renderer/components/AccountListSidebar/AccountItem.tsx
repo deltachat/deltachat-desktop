@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react'
 import classNames from 'classnames'
 import debounce from 'debounce'
 
-import { BackendRemote, onDCEvent } from '../../backend-com'
+import {
+  BackendRemote,
+  onDCEvent,
+  EffectfulBackendActions,
+} from '../../backend-com'
 import { avatarInitial } from '../Avatar'
 import { getLogger } from '../../../shared/logger'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
@@ -201,9 +205,7 @@ async function markAccountAsRead(accountId: number) {
     }
   }
 
-  await Promise.all(
-    [...uniqueChatIds].map(chatId =>
-      BackendRemote.rpc.marknoticedChat(accountId, chatId)
-    )
-  )
+  for (const chatId of uniqueChatIds) {
+    await EffectfulBackendActions.marknoticedChat(accountId, chatId)
+  }
 }
