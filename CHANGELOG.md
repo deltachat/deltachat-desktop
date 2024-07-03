@@ -11,6 +11,7 @@
 - consolidate 'Profile' wording #3963
 - Update local help (2024-06-19)
 - refactor: safer types #3993
+- keep aspect ratio in quoted images #3999
 
 ### Fixed
 - Fix crash on "Settings" click when not on main screen (e.g. no account selected): hide the "settings" button
@@ -20,6 +21,7 @@
 - even faster load of contact lists in "New Chat" and "New Group" #3927
 - really hide 3dot menu when it is hidden #3998
 - fix react crash when downloading a video message on demand #4000
+- fix bug that showed placeholders while searching in chat forward dialog until you scrolled #4001
 
 <a id="1_46_1"></a>
 
