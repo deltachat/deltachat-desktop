@@ -1,6 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
-import { useContactSearch } from '../CreateChat'
 import Dialog, {
   DialogBody,
   DialogFooter,
@@ -12,10 +11,11 @@ import styles from './styles.module.scss'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import type { T } from '@deltachat/jsonrpc-client'
 import { DialogProps } from '../../../contexts/DialogContext'
-import { useContactsMap } from '../../contact/ContactList'
+import { useLazyLoadedContacts } from '../../contact/ContactList'
 import { ContactListItem } from '../../contact/ContactListItem'
 import { FixedSizeList } from 'react-window'
 import AutoSizer from 'react-virtualized-auto-sizer'
+import InfiniteLoader from 'react-window-infinite-loader'
 
 /**
  * display a dialog with a react-window of contacts
@@ -32,18 +32,18 @@ export default function SelectContactDialog({
 }: {
   onOk: (contact: T.Contact) => void
 } & DialogProps) {
-  const [searchContacts, updateSearchContacts] = useContactsMap(
+  const [queryStr, setQueryStr] = useState('')
+  const { contactIds, contactCache, loadContacts } = useLazyLoadedContacts(
     C.DC_GCL_ADD_SELF,
-    ''
+    queryStr
   )
-  const [queryStr, onSearchChange] = useContactSearch(updateSearchContacts)
   const tx = useTranslationFunction()
   return (
     <Dialog width={400} onClose={onClose} fixed>
       <DialogHeader>
         <input
           className='search-input'
-          onChange={onSearchChange}
+          onChange={e => setQueryStr(e.target.value)}
           value={queryStr}
           placeholder={tx('contacts_enter_name_or_email')}
           autoFocus
@@ -54,31 +54,51 @@ export default function SelectContactDialog({
         <div className={styles.selectContactList}>
           <AutoSizer disableWidth>
             {({ height }) => (
-              <FixedSizeList
-                itemCount={Array.from(searchContacts).length}
-                itemKey={index => Array.from(searchContacts)[index][0]}
-                height={height}
-                width='100%'
-                itemSize={64}
+              <InfiniteLoader
+                itemCount={contactIds.length}
+                loadMoreItems={loadContacts}
+                // perf: consider using `isContactLoaded` from `useLazyLoadedContacts`
+                // otherwise sometimes we might load the same contact twice (performance thing)
+                // See https://github.com/bvaughn/react-window/issues/765
+                isItemLoaded={index =>
+                  contactCache[contactIds[index]] != undefined
+                }
+                // minimumBatchSize={100}
               >
-                {({ index, style }) => {
-                  const item = Array.from(searchContacts)[index][1]
-                  const el = (() => {
-                    const contact: T.Contact = item
-                    return (
-                      <ContactListItem
-                        contact={contact}
-                        onClick={onOk}
-                        showCheckbox={false}
-                        checked={false}
-                        showRemove={false}
-                      />
-                    )
-                  })()
+                {({ onItemsRendered, ref }) => (
+                  <FixedSizeList
+                    itemCount={contactIds.length}
+                    itemKey={index => contactIds[index]}
+                    onItemsRendered={onItemsRendered}
+                    ref={ref}
+                    height={height}
+                    width='100%'
+                    itemSize={64}
+                  >
+                    {({ index, style }) => {
+                      const el = (() => {
+                        const item = contactCache[contactIds[index]]
+                        if (!item) {
+                          // It's not loaded yet
+                          return null
+                        }
+                        const contact: T.Contact = item
+                        return (
+                          <ContactListItem
+                            contact={contact}
+                            onClick={onOk}
+                            showCheckbox={false}
+                            checked={false}
+                            showRemove={false}
+                          />
+                        )
+                      })()
 
-                  return <div style={style}>{el}</div>
-                }}
-              </FixedSizeList>
+                      return <div style={style}>{el}</div>
+                    }}
+                  </FixedSizeList>
+                )}
+              </InfiniteLoader>
             )}
           </AutoSizer>
         </div>

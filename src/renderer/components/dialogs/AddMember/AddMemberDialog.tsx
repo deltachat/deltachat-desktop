@@ -1,7 +1,6 @@
-import React from 'react'
-import { useContactSearch } from '../CreateChat'
+import React, { useState } from 'react'
 import { AddMemberInnerDialog } from './AddMemberInnerDialog'
-import { useContactsMap } from '../../contact/ContactList'
+import { useLazyLoadedContacts } from '../../contact/ContactList'
 import Dialog from '../../Dialog'
 import type { T } from '@deltachat/jsonrpc-client'
 import type { DialogProps } from '../../../contexts/DialogContext'
@@ -22,9 +21,14 @@ export function AddMemberDialog({
   isBroadcast?: boolean
   isVerificationRequired?: boolean
 } & DialogProps) {
-  const [searchContacts, updateSearchContacts] = useContactsMap(listFlags, '')
-  const [queryStr, onSearchChange, _, refreshContacts] =
-    useContactSearch(updateSearchContacts)
+  const [queryStr, setQueryStr] = useState('')
+  const {
+    contactIds,
+    contactCache,
+    loadContacts,
+    queryStrIsValidEmail,
+    refresh: refreshContacts,
+  } = useLazyLoadedContacts(listFlags, queryStr)
   return (
     <Dialog canOutsideClickClose={false} fixed onClose={onClose}>
       {AddMemberInnerDialog({
@@ -35,10 +39,15 @@ export function AddMemberDialog({
         onCancel: () => {
           onClose()
         },
-        onSearchChange,
+        onSearchChange: e => setQueryStr(e.target.value),
         queryStr,
-        searchContacts,
+        queryStrIsValidEmail,
+
+        contactIds,
+        contactCache,
+        loadContacts,
         refreshContacts,
+
         groupMembers,
         isBroadcast,
         isVerificationRequired,

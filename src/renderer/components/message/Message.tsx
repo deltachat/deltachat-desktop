@@ -50,10 +50,13 @@ import styles from './styles.module.scss'
 import type { OpenDialog } from '../../contexts/DialogContext'
 import type { PrivateReply } from '../../hooks/chat/usePrivateReply'
 
-const Avatar = (
-  contact: T.Contact,
+const Avatar = ({
+  contact,
+  onContactClick,
+}: {
+  contact: T.Contact
   onContactClick: (contact: T.Contact) => void
-) => {
+}) => {
   const { profileImage, color, displayName } = contact
 
   const onClick = () => onContactClick(contact)
@@ -83,11 +86,15 @@ const Avatar = (
   }
 }
 
-const AuthorName = (
-  contact: T.Contact,
-  onContactClick: (contact: T.Contact) => void,
-  overrideSenderName?: string
-) => {
+const AuthorName = ({
+  contact,
+  onContactClick,
+  overrideSenderName,
+}: {
+  contact: T.Contact
+  onContactClick: (contact: T.Contact) => void
+  overrideSenderName: string | null
+}) => {
   const accountId = selectedAccountId()
   const { color, id } = contact
   const [displayName, setDisplayName] = useState<string>(contact.displayName)
@@ -118,13 +125,19 @@ const AuthorName = (
   )
 }
 
-const ForwardedTitle = (
-  contact: T.Contact,
-  onContactClick: (contact: T.Contact) => void,
-  direction: 'incoming' | 'outgoing',
-  conversationType: ConversationType,
-  overrideSenderName?: string
-) => {
+const ForwardedTitle = ({
+  contact,
+  onContactClick,
+  direction,
+  conversationType,
+  overrideSenderName,
+}: {
+  contact: T.Contact
+  onContactClick: (contact: T.Contact) => void
+  direction: 'incoming' | 'outgoing'
+  conversationType: ConversationType
+  overrideSenderName: string | null
+}) => {
   const tx = useTranslationFunction()
 
   const { displayName, color } = contact
@@ -555,9 +568,7 @@ export default function Message(props: {
     )
   }
 
-  // we need this typeconversion, if we don't have it esbuild tries bundling deltachat-node again,
-  // which fails because it imports stuff only available in nodejs
-  const downloadState = message.downloadState
+  const { downloadState } = message
 
   if (downloadState !== 'Done') {
     content = (
@@ -605,22 +616,23 @@ export default function Message(props: {
       })}
       id={message.id.toString()}
     >
-      {showAuthor &&
-        direction === 'incoming' &&
-        Avatar(message.sender, onContactClick)}
+      {showAuthor && direction === 'incoming' && (
+        <Avatar contact={message.sender} onContactClick={onContactClick} />
+      )}
       <div
         onContextMenu={showContextMenu}
         className='msg-container'
         style={{ borderColor: message.sender.color }}
       >
-        {message.isForwarded &&
-          ForwardedTitle(
-            message.sender,
-            onContactClick,
-            direction,
-            conversationType,
-            message.overrideSenderName || undefined
-          )}
+        {message.isForwarded && (
+          <ForwardedTitle
+            contact={message.sender}
+            onContactClick={onContactClick}
+            direction={direction}
+            conversationType={conversationType}
+            overrideSenderName={message.overrideSenderName}
+          />
+        )}
         {!message.isForwarded && (
           <div
             className={classNames('author-wrapper', {
@@ -629,11 +641,11 @@ export default function Message(props: {
                 !showAuthor,
             })}
           >
-            {AuthorName(
-              message.sender,
-              onContactClick,
-              message.overrideSenderName || undefined
-            )}
+            <AuthorName
+              contact={message.sender}
+              onContactClick={onContactClick}
+              overrideSenderName={message.overrideSenderName}
+            />
           </div>
         )}
         <div
@@ -785,7 +797,7 @@ export const Quote = ({
 
 export function getAuthorName(
   displayName: string,
-  overrideSenderName?: string
+  overrideSenderName?: string | null
 ) {
   return overrideSenderName ? `~${overrideSenderName}` : displayName
 }

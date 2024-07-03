@@ -9,7 +9,7 @@ import React, {
 import { FixedSizeList } from 'react-window'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { C } from '@deltachat/jsonrpc-client'
-import { useContactsNew } from '../../contact/ContactList'
+import type { T } from '@deltachat/jsonrpc-client'
 import { PseudoListItemAddContact } from '../../helpers/PseudoListItem'
 import { ContactListItem } from '../../contact/ContactListItem'
 import { BackendRemote, onDCEvent, Type } from '../../../backend-com'
@@ -19,7 +19,7 @@ import useDialog from '../../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { VerifiedContactsRequiredDialog } from '../ProtectionStatusDialog'
 import styles from './styles.module.scss'
-import { useContactSearch } from '../CreateChat'
+import InfiniteLoader from 'react-window-infinite-loader'
 import { AddMemberChip } from './AddMemberDialog'
 
 export function AddMemberInnerDialog({
@@ -27,18 +27,28 @@ export function AddMemberInnerDialog({
   onOk,
   onSearchChange,
   queryStr,
-  searchContacts,
+  queryStrIsValidEmail,
+
+  contactIds,
+  contactCache,
+  loadContacts,
   refreshContacts,
+
   groupMembers,
   isBroadcast = false,
   isVerificationRequired = false,
 }: {
   onOk: (addMembers: number[]) => void
   onCancel: Parameters<typeof OkCancelFooterAction>[0]['onCancel']
-  onSearchChange: ReturnType<typeof useContactSearch>[1]
+  onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   queryStr: string
-  searchContacts: Map<number, Type.Contact>
+  queryStrIsValidEmail: boolean
+
+  contactIds: number[]
+  contactCache: { [id: number]: T.Contact | undefined }
+  loadContacts: (startIndex: number, stopIndex: number) => Promise<void>
   refreshContacts: () => void
+
   groupMembers: number[]
   isBroadcast: boolean
   isVerificationRequired: boolean
@@ -46,22 +56,10 @@ export function AddMemberInnerDialog({
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
   const accountId = selectedAccountId()
-  const contactIdsInGroup: number[] = [...searchContacts]
-    .filter(([contactId, _contact]) => groupMembers.indexOf(contactId) !== -1)
-    .map(([contactId, _contact]) => contactId)
-  const [contactIdsToAdd, setContactIdsToAdd] = useState<Type.Contact[]>([])
-  const [{ queryStrIsValidEmail }, updateContacts] = useContactsNew(
-    C.DC_GCL_ADD_SELF,
-    ''
+  const contactIdsInGroup: number[] = contactIds.filter(contactId =>
+    groupMembers.includes(contactId)
   )
-  const [_, onSearchChangeNewContact] = useContactSearch(updateContacts)
-
-  const onSearchChangeValidation = (query: ChangeEvent<HTMLInputElement>) => {
-    onSearchChange(query)
-    if (searchContacts.size === 0) {
-      onSearchChangeNewContact(query)
-    }
-  }
+  const [contactIdsToAdd, setContactIdsToAdd] = useState<Type.Contact[]>([])
 
   useEffect(
     () =>
@@ -153,7 +151,8 @@ export function AddMemberInnerDialog({
   useLayoutEffect(applyCSSHacks, [inputRef, contactIdsToAdd])
   useEffect(applyCSSHacks, [])
 
-  const needToRenderAddContact = queryStr !== '' && searchContacts.size === 0
+  const needToRenderAddContact = queryStr !== '' && contactIds.length === 0
+  const itemCount = contactIds.length + (needToRenderAddContact ? 1 : 0)
   const renderAddContact = () => {
     if (queryStrIsValidEmail) {
       const pseudoContact: Type.Contact = {
@@ -221,7 +220,7 @@ export function AddMemberInnerDialog({
             <input
               ref={inputRef}
               className='search-input group-member-search'
-              onChange={onSearchChangeValidation}
+              onChange={onSearchChange}
               onKeyDown={event => {
                 addContactOnKeyDown(event)
               }}
@@ -235,52 +234,79 @@ export function AddMemberInnerDialog({
         <div className={styles.addMemberContactList} ref={contactListRef}>
           <AutoSizer disableWidth>
             {({ height }) => (
-              // Not using 'react-window' results in ~5 second rendering time
-              // if the user has 5000 contacts.
-              // (see https://github.com/deltachat/deltachat-desktop/issues/1830)
-              <FixedSizeList
-                itemData={Array.from(searchContacts.values())}
-                itemCount={
-                  searchContacts.size + (needToRenderAddContact ? 1 : 0)
-                }
-                itemKey={(index, contacts) =>
-                  contacts[index]?.id ?? 'addContact'
-                }
-                height={height}
-                width='100%'
-                // TODO fix: The size of each item is determined
-                // by `--local-avatar-size` and `--local-avatar-vertical-margin`,
-                // which might be different, e.g. currently they're smaller for
-                // "Rocket Theme", which results in gaps between the elements.
-                itemSize={64}
-              >
-                {({ index, style, data: contacts }) => {
-                  const isExtraItem = index >= contacts.length
-                  if (isExtraItem) {
-                    return renderAddContact()
-                  }
-
-                  const contact = contacts[index]
-                  return (
-                    <div style={style}>
-                      <ContactListItem
-                        contact={contact}
-                        showCheckbox
-                        checked={
-                          contactIdsToAdd.some(c => c.id === contact.id) ||
-                          contactIdsInGroup.includes(contact.id)
-                        }
-                        disabled={
-                          contactIdsInGroup.includes(contact.id) ||
-                          contact.id === C.DC_CONTACT_ID_SELF
-                        }
-                        onCheckboxClick={toggleMember}
-                        showRemove={false}
-                      />
-                    </div>
-                  )
+              <InfiniteLoader
+                itemCount={itemCount}
+                // Careful, keep in mind that the rendered array is not the same as
+                // contactIds, `InfiniteLoader` must not call `loadContacts`
+                // with wrong indices.
+                // See `CreateChatMain` component.
+                loadMoreItems={loadContacts}
+                // perf: consider using `isContactLoaded` from `useLazyLoadedContacts`
+                // otherwise sometimes we might load the same contact twice (performance thing)
+                // See https://github.com/bvaughn/react-window/issues/765
+                isItemLoaded={index => {
+                  const isExtraItem = index >= contactIds.length
+                  return isExtraItem
+                    ? true
+                    : contactCache[contactIds[index]] != undefined
                 }}
-              </FixedSizeList>
+                // minimumBatchSize={100}
+              >
+                {({ onItemsRendered, ref }) => (
+                  // Not using 'react-window' results in ~5 second rendering time
+                  // if the user has 5000 contacts.
+                  // (see https://github.com/deltachat/deltachat-desktop/issues/1830)
+                  <FixedSizeList
+                    itemData={contactIds}
+                    itemCount={itemCount}
+                    itemKey={(index, contactIds) => {
+                      const isExtraItem = index >= contactIds.length
+                      return isExtraItem ? 'addContact' : contactIds[index]
+                    }}
+                    onItemsRendered={onItemsRendered}
+                    ref={ref}
+                    height={height}
+                    width='100%'
+                    // TODO fix: The size of each item is determined
+                    // by `--local-avatar-size` and `--local-avatar-vertical-margin`,
+                    // which might be different, e.g. currently they're smaller for
+                    // "Rocket Theme", which results in gaps between the elements.
+                    itemSize={64}
+                  >
+                    {({ index, style, data: contactIds }) => {
+                      const isExtraItem = index >= contactIds.length
+                      if (isExtraItem) {
+                        return renderAddContact()
+                      }
+
+                      const contact = contactCache[contactIds[index]]
+                      if (!contact) {
+                        // Not loaded yet
+                        return <div style={style}></div>
+                      }
+
+                      return (
+                        <div style={style}>
+                          <ContactListItem
+                            contact={contact}
+                            showCheckbox
+                            checked={
+                              contactIdsToAdd.some(c => c.id === contact.id) ||
+                              contactIdsInGroup.includes(contact.id)
+                            }
+                            disabled={
+                              contactIdsInGroup.includes(contact.id) ||
+                              contact.id === C.DC_CONTACT_ID_SELF
+                            }
+                            onCheckboxClick={toggleMember}
+                            showRemove={false}
+                          />
+                        </div>
+                      )
+                    }}
+                  </FixedSizeList>
+                )}
+              </InfiniteLoader>
             )}
           </AutoSizer>
         </div>

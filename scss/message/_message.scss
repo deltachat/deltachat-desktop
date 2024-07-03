@@ -479,7 +479,7 @@
 
   img.quoted-image {
     height: var(--quote-img-size);
-    width: var(--quote-img-size);
+    // do not set width, to keep the aspect ratio (see https://github.com/deltachat/deltachat-desktop/issues/3931)
     margin-left: 6px;
   }
 
