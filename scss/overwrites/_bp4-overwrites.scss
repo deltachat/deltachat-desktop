@@ -156,7 +156,8 @@
 .bp4-control input:focus ~ .bp4-control-indicator,
 input[type='text']:active,
 input[type='text']:focus {
-  outline: unset;
+  outline: revert;
+  outline-offset: revert;
 }
 
 .bp4-spinner-animation {

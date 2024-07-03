@@ -4,6 +4,7 @@
 
 ## Added
 - More shortcuts to switch between chats: `Ctrl + PageDown`, `Ctrl + PageUp`, `Ctrl + Tab`, `Ctrl + Shift + Tab` #3984
+- Better keyboard accessibility: make more elements focusable, add outline them #4005
 
 ### Changed
 - reword advanced setting "Disable Background Sync For All Accounts" -> "Only Synchronize the Currently Selected Account" #3960
