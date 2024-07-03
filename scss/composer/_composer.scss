@@ -60,11 +60,16 @@
     display: flex;
     align-items: flex-end;
 
+    .attachment-button,
+    .emoji-button {
+      background: none;
+      border: none;
+    }
+
     .attachment-button {
       width: 40px;
       height: 40px;
 
-      background: none;
       box-shadow: none;
       border: none;
 
@@ -91,7 +96,6 @@
         display: block;
         width: 25px;
         height: 25px;
-        margin-top: calc((40px - 25px) / 2);
         background-image: url(../images/emoji.png);
         background-size: contain;
       }

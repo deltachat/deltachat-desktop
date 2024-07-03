@@ -95,7 +95,7 @@ const Composer = forwardRef<
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
-  const pickerButtonRef = useRef<HTMLDivElement>(null)
+  const pickerButtonRef = useRef<HTMLButtonElement>(null)
 
   const tx = useTranslationFunction()
   const accountId = selectedAccountId()
@@ -372,14 +372,15 @@ const Composer = forwardRef<
               onPaste={handlePaste}
             />
           )}
-          <div
+          <button
+            type='button'
             className='emoji-button'
             ref={pickerButtonRef}
             onClick={onEmojiIconClick}
             aria-label={tx('emoji')}
           >
             <span />
-          </div>
+          </button>
           <div className='send-button-wrapper' onClick={composerSendMessage}>
             <button aria-label={tx('menu_send')} />
           </div>
