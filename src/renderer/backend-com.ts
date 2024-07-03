@@ -80,6 +80,11 @@ export namespace EffectfulBackendActions {
     await BackendRemote.rpc.deleteChat(accountId, chatId)
     clearNotificationsForChat(accountId, chatId)
   }
+
+  export async function marknoticedChat(accountId: number, chatId: number) {
+    await BackendRemote.rpc.marknoticedChat(accountId, chatId)
+    clearNotificationsForChat(accountId, chatId)
+  }
 }
 
 type ContextEvents = { ALL: (event: DcEvent) => void } & {
