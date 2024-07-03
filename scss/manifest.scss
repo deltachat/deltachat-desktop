@@ -5,6 +5,10 @@
 @import '../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css';
 @import '../node_modules/@blueprintjs/core/lib/css/blueprint.css';
 
+// Overwrites for third party node modules.
+// Above our styles, so that our styles take priority by being defined after.
+@import 'overwrites/_bp4-overwrites';
+
 // Global Settings, Variables, and Mixins
 @import 'variables';
 @import 'mixins';
@@ -67,9 +71,6 @@
 @import 'misc/_context_menu.scss';
 @import 'misc/_keyboard_hint_box.scss';
 @import 'misc/_search-input.scss';
-
-// Overwrites for third party node modules
-@import 'overwrites/_bp4-overwrites';
 
 // ConnectivityToast
 @import '_connectivity-toast';
