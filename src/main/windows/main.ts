@@ -25,7 +25,7 @@ import { DesktopSettings } from '../desktop_settings.js'
 import { refresh as refreshTitleMenu } from '../menu.js'
 import { initMinWinDimensionHandling } from './helpers.js'
 
-const log = getLogger('main/mainWindow')
+const log = getLogger('/mainWindow')
 
 type ExtendedBrowserWindow = BrowserWindow & {
   hidden?: boolean
@@ -51,7 +51,7 @@ export function init(options: { hidden: boolean }) {
 
   const isMac = platform() === 'darwin'
 
-  const main_window = (window = <ExtendedBrowserWindow>(
+  const mainWindow = (window = <ExtendedBrowserWindow>(
     new electron.BrowserWindow({
       backgroundColor: '#282828',
       // backgroundThrottling: false, // do not throttle animations/timers when page is background
@@ -75,13 +75,9 @@ export function init(options: { hidden: boolean }) {
       titleBarOverlay: true,
     })
   ))
-  main_window.filePathWhiteList = []
+  mainWindow.filePathWhiteList = []
 
-  initMinWinDimensionHandling(
-    main_window,
-    defaults.minWidth,
-    defaults.minHeight
-  )
+  initMinWinDimensionHandling(mainWindow, defaults.minWidth, defaults.minHeight)
 
   // disable network request to fetch dictionary
   // issue: https://github.com/electron/electron/issues/22995
@@ -91,9 +87,9 @@ export function init(options: { hidden: boolean }) {
   window.loadFile(join(htmlDistDir(), defaults.main))
 
   window.once('ready-to-show', () => {
-    if (!options.hidden) main_window.show()
+    if (!options.hidden) mainWindow.show()
     if (process.env.NODE_ENV === 'test') {
-      main_window.maximize()
+      mainWindow.maximize()
     }
   })
 
@@ -119,15 +115,15 @@ export function init(options: { hidden: boolean }) {
   window.on('resize', saveBounds)
 
   window.once('show', () => {
-    main_window.webContents.setZoomFactor(DesktopSettings.state.zoomFactor)
+    mainWindow.webContents.setZoomFactor(DesktopSettings.state.zoomFactor)
   })
   window.on('close', () => {})
   window.on('blur', () => {
-    main_window.hidden = true
+    mainWindow.hidden = true
     refreshTrayContextMenu()
   })
   window.on('focus', () => {
-    main_window.hidden = false
+    mainWindow.hidden = false
     refreshTrayContextMenu()
     refreshTitleMenu()
   })

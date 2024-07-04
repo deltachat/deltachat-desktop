@@ -125,8 +125,9 @@ function getZoomFactors(): Electron.MenuItemConstructorOptions[] {
 }
 
 export function getAppMenu(
-  isMainWindow: boolean
+  window: BrowserWindow | null
 ): Electron.MenuItemConstructorOptions {
+  const isMainWindow = window === mainWindow.window
   const extraItemsForMainWindow: rawMenuItem[] = [
     {
       label: tx('global_menu_help_about_desktop'),
@@ -179,20 +180,31 @@ export function getFileMenu(
 ): Electron.MenuItemConstructorOptions {
   const fileMenuNonMac: Electron.MenuItemConstructorOptions = {
     label: tx('global_menu_file_desktop'),
-    submenu: [
-      {
-        label: tx('menu_settings'),
-        click: () => {
-          mainWindow.send('showSettingsDialog')
+    submenu: (() => {
+      let result = [
+        {
+          label:
+            window === mainWindow.window
+              ? tx('global_menu_file_quit_desktop')
+              : tx('close_window'),
+          click: () => window?.close(),
+          accelerator: 'Ctrl+q',
         },
-        accelerator: 'Ctrl+,',
-      },
-      {
-        label: tx('global_menu_file_quit_desktop'),
-        role: 'quit',
-        accelerator: 'Ctrl+q',
-      },
-    ],
+      ]
+      if (window === mainWindow.window) {
+        result = [
+          {
+            label: tx('menu_settings'),
+            click: () => {
+              mainWindow.send('showSettingsDialog')
+            },
+            accelerator: 'Ctrl+,',
+          },
+          ...result,
+        ]
+      }
+      return result
+    })(),
   }
   const fileMenuMac: Electron.MenuItemConstructorOptions = {
     label: tx('global_menu_file_desktop'),
@@ -206,7 +218,7 @@ export function getFileMenu(
             refresh()
           }
         },
-        accelerator: isMac ? 'Cmd+w' : 'Ctrl+w',
+        accelerator: 'Cmd+w',
       },
     ],
   }
@@ -314,7 +326,7 @@ function getMenuTemplate(
 ): Electron.MenuItemConstructorOptions[] {
   const isMac = process.platform === 'darwin'
   return [
-    ...(isMac ? [getAppMenu(true)] : []),
+    ...(isMac ? [getAppMenu(mainWindow.window)] : []),
     getFileMenu(mainWindow.window, isMac),
     getEditMenu(),
     {
