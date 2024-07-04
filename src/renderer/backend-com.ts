@@ -88,6 +88,7 @@ type ContextEvents = { ALL: (event: DcEvent) => void } & {
   ) => void
 }
 
+/** For use in react useEffect hooks, already returns the cleanup function */
 export function onDCEvent<variant extends keyof ContextEvents>(
   accountId: number,
   eventType: variant,
