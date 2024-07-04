@@ -14,38 +14,38 @@ const keySymbols: { [key: string]: string } = {
 
 const showOnlySymbolOn = ['ArrowDown', 'ArrowUp']
 
-function get_label(keyboard_key: string) {
+function getLabel(keyboardKey: string) {
   if (runtime.getRuntimeInfo().isMac) {
-    switch (keyboard_key) {
+    switch (keyboardKey) {
       case 'Alt':
         return 'Option'
       case 'Meta':
         return 'Command'
       default:
-        return keyboard_key
+        return keyboardKey
     }
   } else {
-    switch (keyboard_key) {
+    switch (keyboardKey) {
       case 'Control':
         // German seems to be the only language that uses another label for the control key
         return window.localeData.locale == 'de' ? 'Strg' : 'Ctrl'
       default:
-        return keyboard_key
+        return keyboardKey
     }
   }
 }
 
-function Key({ keyboard_key }: { keyboard_key: string }) {
+function Key({ keyboardKey }: { keyboardKey: string }) {
   const [pressed, setPressed] = useState(false)
 
   useEffect(() => {
     const onKeyDown = (ev: KeyboardEvent) => {
-      if (keyboard_key === ev.key) {
+      if (keyboardKey === ev.key) {
         setPressed(true)
       }
     }
     const onKeyUp = (ev: KeyboardEvent) => {
-      if (keyboard_key === ev.key) {
+      if (keyboardKey === ev.key) {
         setPressed(false)
       }
     }
@@ -55,15 +55,15 @@ function Key({ keyboard_key }: { keyboard_key: string }) {
       document.removeEventListener('keydown', onKeyDown)
       document.removeEventListener('keyup', onKeyUp)
     }
-  }, [keyboard_key])
+  }, [keyboardKey])
 
-  const shouldHideLabel = showOnlySymbolOn.indexOf(keyboard_key) !== -1
+  const shouldHideLabel = showOnlySymbolOn.indexOf(keyboardKey) !== -1
 
   return (
     <kbd className={pressed ? 'key pressed' : 'key'}>
-      {shouldHideLabel || get_label(keyboard_key)}
-      {keySymbols[keyboard_key]
-        ? (shouldHideLabel ? '' : ' ') + keySymbols[keyboard_key]
+      {shouldHideLabel || getLabel(keyboardKey)}
+      {keySymbols[keyboardKey]
+        ? (shouldHideLabel ? '' : ' ') + keySymbols[keyboardKey]
         : ''}
     </kbd>
   )
@@ -75,18 +75,18 @@ export type ShortcutAction = {
 }
 
 export function KeyboardShortcut({ elements }: { elements: string[] }) {
-  const binding_elements = []
+  const bindingElements = []
 
   for (const element of elements) {
-    binding_elements.push(<Key key={element} keyboard_key={element} />)
-    binding_elements.push(' + ')
+    bindingElements.push(<Key key={element} keyboardKey={element} />)
+    bindingElements.push(' + ')
   }
 
-  if (binding_elements.length !== 0) {
-    binding_elements.pop()
+  if (bindingElements.length !== 0) {
+    bindingElements.pop()
   }
 
-  return <div className='keybinding'>{binding_elements}</div>
+  return <div className='keybinding'>{bindingElements}</div>
 }
 
 /** a group representing the same or similar actions  */
