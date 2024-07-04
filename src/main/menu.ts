@@ -167,7 +167,7 @@ export function getAppMenu(
         : []),
       {
         label: tx('global_menu_file_quit_desktop'),
-        click: () => window?.close(),
+        role: 'quit',
         accelerator: 'Cmd+q',
       },
     ],
