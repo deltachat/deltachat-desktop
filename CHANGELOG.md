@@ -3,16 +3,28 @@
 ## [Unreleased][unreleased]
 
 ### Added
-- New keyboard shortcuts (experimental setting): Telegram-style Ctrl+Up/Down to select the message to reply to
+- New keyboard shortcuts (experimental setting): Telegram-style Ctrl+Up/Down to select the message to reply to #3965
+- More shortcuts to switch between chats: `Ctrl + PageDown`, `Ctrl + PageUp`, `Ctrl + Tab`, `Ctrl + Shift + Tab` #3984
 
 ### Changed
 - reword advanced setting "Disable Background Sync For All Accounts" -> "Only Synchronize the Currently Selected Account" #3960
 - use 'Info' and 'Message Info' consistently #3961
 - consolidate 'Profile' wording #3963
+- Update local help (2024-06-19)
+- refactor: safer types #3993
+- keep aspect ratio in quoted images #3999
 
 ### Fixed
 - Fix crash on "Settings" click when not on main screen (e.g. no account selected): hide the "settings" button
 - code: comply with react hook rules #3955
+- fix mailto dialog #3976
+- "Realtime Webxdc Channels" toggle not reflecting actual setting value #3992
+- even faster load of contact lists in "New Chat" and "New Group" #3927
+- really hide 3dot menu when it is hidden #3998
+- fix react crash when downloading a video message on demand #4000
+- fix bug that showed placeholders while searching in chat forward dialog until you scrolled #4001
+- Fix the problem of Quit menu item on WebXDC apps closes the whole DC app #3995
+- minor performance improvements #3981
 
 <a id="1_46_1"></a>
 

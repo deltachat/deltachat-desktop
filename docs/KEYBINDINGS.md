@@ -2,7 +2,9 @@
 
 > If you are on mac replace alt with the option key.
 
-Switch between chats: `alt + arrow down`, `alt + arrow up`
+Switch between chats: `alt + arrow down`, `alt + arrow up`,
+`Ctrl + PageDown`, `Ctrl + PageUp`,
+`Ctrl + Tab`, `Ctrl + Shift + Tab`
 
 Scroll active chat into view ~~`alt + arrow left`~~ _(disabled until we find a better key combo, because this one collides with to mac system shortcut to move a word (see [#1796](https://github.com/deltachat/deltachat-desktop/issues/1796)))_
 

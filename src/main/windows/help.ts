@@ -136,7 +136,7 @@ export async function openHelpWindow(locale: string, anchor?: string) {
   // TODO: would make sense to refactor these menus at some point
   const makeMenu = () => {
     return Menu.buildFromTemplate([
-      ...(isMac ? [getAppMenu(false)] : []),
+      ...(isMac ? [getAppMenu(help_window)] : []),
       getFileMenu(win, isMac),
       {
         label: tx('global_menu_edit_desktop'),

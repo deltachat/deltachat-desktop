@@ -10,30 +10,32 @@ export interface SettingsStoreState {
   accountId: number
   selfContact: Type.Contact
   settings: {
-    sentbox_watch: string
-    mvbox_move: string
-    e2ee_enabled: string
-    addr: string
-    displayname: string
-    selfstatus: string
-    mdns_enabled: string
-    show_emails: string
-    bcc_self: string
-    delete_device_after: string
-    delete_server_after: string
-    webrtc_instance: string
-    download_limit: string
-    only_fetch_mvbox: string
-    disable_idle: string
-    media_quality: string
-    is_chatmail: '0' | '1'
-    webxdc_realtime_enabled: string
+    [P in (typeof settingsKeys)[number]]: {
+      sentbox_watch: string
+      mvbox_move: string
+      e2ee_enabled: string
+      addr: string
+      displayname: string
+      selfstatus: string
+      mdns_enabled: string
+      show_emails: string
+      bcc_self: string
+      delete_device_after: string
+      delete_server_after: string
+      webrtc_instance: string
+      download_limit: string
+      only_fetch_mvbox: string
+      disable_idle: string
+      media_quality: string
+      is_chatmail: '0' | '1'
+      webxdc_realtime_enabled: string
+    }[P]
   }
   desktopSettings: DesktopSettingsType
   rc: RC_Config
 }
 
-const settingsKeys: Array<keyof SettingsStoreState['settings']> = [
+const settingsKeys = [
   'sentbox_watch',
   'mvbox_move',
   'e2ee_enabled',
@@ -51,7 +53,8 @@ const settingsKeys: Array<keyof SettingsStoreState['settings']> = [
   'disable_idle',
   'media_quality',
   'is_chatmail',
-]
+  'webxdc_realtime_enabled',
+] as const
 
 class SettingsStore extends Store<SettingsStoreState | null> {
   reducer = {
@@ -122,7 +125,7 @@ class SettingsStore extends Store<SettingsStoreState | null> {
       }
       const settings = (await BackendRemote.rpc.batchGetConfig(
         accountId,
-        settingsKeys
+        settingsKeys as unknown as Array<(typeof settingsKeys)[number]>
       )) as SettingsStoreState['settings']
       const selfContact = await BackendRemote.rpc.getContact(
         accountId,

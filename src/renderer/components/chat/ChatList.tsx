@@ -15,7 +15,7 @@ import { C, T } from '@deltachat/jsonrpc-client'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import InfiniteLoader from 'react-window-infinite-loader'
 
-import { useContactIds } from '../contact/ContactList'
+import { useLazyLoadedContacts } from '../contact/ContactList'
 import { useChatListContextMenu } from './ChatListContextMenu'
 import { useMessageResults, useChatList } from './ChatListHelpers'
 import {
@@ -72,11 +72,20 @@ export function ChatListPart({
     | MessageChatListItemData
   itemHeight: number
 }) {
+  const infiniteLoaderRef = useRef<InfiniteLoader | null>(null)
+
+  useEffect(() => {
+    // make sure infinite list reloads when list changes
+    // to fix https://github.com/deltachat/deltachat-desktop/issues/3921
+    infiniteLoaderRef.current?.resetloadMoreItemsCache(true)
+  }, [rowCount])
+
   return (
     <InfiniteLoader
       isItemLoaded={isRowLoaded}
       itemCount={rowCount}
       loadMoreItems={loadMoreRows}
+      ref={infiniteLoaderRef}
     >
       {({ onItemsRendered, ref }) => (
         <List
@@ -627,37 +636,16 @@ function useContactAndMessageLogic(
   searchChatId: number | null = null
 ) {
   const accountId = selectedAccountId()
-  const { contactIds, queryStrIsValidEmail } = useContactIds(0, queryStr)
   const messageResultIds = useMessageResults(queryStr, searchChatId)
 
   // Contacts ----------------
-  const [contactCache, setContactCache] = useState<{
-    [id: number]: Type.Contact | undefined
-  }>({})
-  const [contactLoadState, setContactLoading] = useState<{
-    [id: number]: undefined | LoadStatus.FETCHING | LoadStatus.LOADED
-  }>({})
-
-  const isContactLoaded: (index: number) => boolean = index =>
-    !!contactLoadState[contactIds[index]]
-  const loadContact: (
-    startIndex: number,
-    stopIndex: number
-  ) => Promise<void> = async (startIndex, stopIndex) => {
-    const ids = contactIds.slice(startIndex, stopIndex + 1)
-
-    setContactLoading(state => {
-      ids.forEach(id => (state[id] = LoadStatus.FETCHING))
-      return state
-    })
-
-    const contacts = await BackendRemote.rpc.getContactsByIds(accountId, ids)
-    setContactCache(cache => ({ ...cache, ...contacts }))
-    setContactLoading(state => {
-      ids.forEach(id => (state[id] = LoadStatus.LOADED))
-      return state
-    })
-  }
+  const {
+    contactIds,
+    contactCache,
+    loadContacts: loadContact,
+    isContactLoaded,
+    queryStrIsValidEmail,
+  } = useLazyLoadedContacts(0, queryStr)
 
   // Message ----------------
   const [messageCache, setMessageCache] = useState<{

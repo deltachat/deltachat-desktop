@@ -146,7 +146,7 @@ export function openHtmlEmailWindow(
   // TODO: would make sense to refactor these menus at some point
   const makeMenu = () => {
     return Menu.buildFromTemplate([
-      ...(isMac ? [getAppMenu(false)] : []),
+      ...(isMac ? [getAppMenu(window)] : []),
       getFileMenu(window, isMac),
       {
         label: tx('global_menu_edit_desktop'),

@@ -73,6 +73,14 @@ export function keyDownEvent2Action(
       return KeybindAction.ChatList_SelectNextChat
     } else if (ev.altKey && ev.key === 'ArrowUp') {
       return KeybindAction.ChatList_SelectPreviousChat
+    } else if (ev.ctrlKey && ev.key === 'PageDown') {
+      return KeybindAction.ChatList_SelectNextChat
+    } else if (ev.ctrlKey && ev.key === 'PageUp') {
+      return KeybindAction.ChatList_SelectPreviousChat
+    } else if (ev.ctrlKey && ev.key === 'Tab') {
+      return !ev.shiftKey
+        ? KeybindAction.ChatList_SelectNextChat
+        : KeybindAction.ChatList_SelectPreviousChat
       // } else if (ev.altKey && ev.key === 'ArrowLeft') {
       // disabled until we find a better keycombination (see https://github.com/deltachat/deltachat-desktop/issues/1796)
       //   return KeybindAction.ChatList_ScrollToSelectedChat
@@ -116,7 +124,11 @@ export function keyDownEvent2Action(
     }
   } else {
     // fire continuesly as long as button is pressed
-    if (ev.key === 'PageUp') {
+    if (ev.ctrlKey && ev.key === 'PageDown') {
+      return KeybindAction.ChatList_SelectNextChat
+    } else if (ev.ctrlKey && ev.key === 'PageUp') {
+      return KeybindAction.ChatList_SelectPreviousChat
+    } else if (ev.key === 'PageUp') {
       return KeybindAction.MessageList_PageUp
     } else if (ev.key === 'PageDown') {
       return KeybindAction.MessageList_PageDown
