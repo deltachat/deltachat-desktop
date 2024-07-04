@@ -107,6 +107,13 @@ export function ExperimentalFeatures({ settingsStore }: Props) {
         settingsKey='webxdc_realtime_enabled'
         description={tx('enable_realtime_explain')}
       />
+      {/* If this stops being experimental, add it to the
+      Keyboard shortcuts help (Ctrl + /), and KEYBINDINGS.md */}
+      <DesktopSettingsSwitch
+        settingsKey='enableCtrlUpToReplyShortcut'
+        label={tx('pref_ctrl_up_down_to_reply')}
+        description={tx('explain_ctrl_up_down_to_reply')}
+      />
     </>
   )
 }

@@ -2,7 +2,8 @@
 
 ## [Unreleased][unreleased]
 
-## Added
+### Added
+- New keyboard shortcuts (experimental setting): Telegram-style Ctrl+Up/Down to select the message to reply to #3965
 - More shortcuts to switch between chats: `Ctrl + PageDown`, `Ctrl + PageUp`, `Ctrl + Tab`, `Ctrl + Shift + Tab` #3984
 
 ### Changed

@@ -10,6 +10,8 @@ export enum KeybindAction {
   ChatList_FocusSearchInput = 'chatlist:focus-search',
   ChatList_ClearSearchInput = 'chatlist:clear-search',
   Composer_Focus = 'composer:focus',
+  Composer_SelectReplyToUp = 'composer:select-reply-to-up',
+  Composer_SelectReplyToDown = 'composer:select-reply-to-down',
   Settings_Open = 'settings:open',
   KeybindingCheatSheet_Open = 'keybindinginfo:open',
   MessageList_PageUp = 'msglist:pageup',
@@ -86,6 +88,19 @@ export function keyDownEvent2Action(
       return KeybindAction.ChatList_FocusAndClearSearchInput
     } else if (ev.ctrlKey && ev.key === 'n') {
       return KeybindAction.Composer_Focus
+    } else if (
+      // Also consider adding this to `ev.repeat` when it stops being so sluggish
+      ev.key === 'ArrowUp' &&
+      (ev.ctrlKey || ev.metaKey) &&
+      !(ev.ctrlKey && ev.metaKey) // Both at the same time
+    ) {
+      return KeybindAction.Composer_SelectReplyToUp
+    } else if (
+      ev.key === 'ArrowDown' &&
+      (ev.ctrlKey || ev.metaKey) &&
+      !(ev.ctrlKey && ev.metaKey) // Both at the same time
+    ) {
+      return KeybindAction.Composer_SelectReplyToDown
     } else if ((ev.metaKey || ev.ctrlKey) && ev.key === ',') {
       return KeybindAction.Settings_Open
     } else if (
