@@ -85,18 +85,6 @@ const CSP =
   webrtc 'block'"
 
 /**
- * Allowed permissions for webxdc applications.
- * https://www.electronjs.org/docs/latest/api/session#sessetpermissioncheckhandlerhandler
- * https://www.electronjs.org/docs/latest/api/session#sessetpermissionrequesthandlerhandler
- */
-const ALLOWED_PERMISSIONS: string[] = [
-  // Games might lock the pointer
-  'pointerLock',
-  // Games might do that too
-  'fullscreen',
-]
-
-/**
  * Prefix for the webxdc bounds UI configuration
  * used to save and retrieve the last bound of a webxdc window
  */
@@ -386,6 +374,45 @@ export default class DCWebxdc {
         sendUpdateMaxSize: webxdcInfo.sendUpdateMaxSize,
       }
 
+      type setPermissionRequestHandler =
+        typeof webxdcWindow.webContents.session.setPermissionRequestHandler
+      type permission_arg = Parameters<
+        Exclude<Parameters<setPermissionRequestHandler>[0], null>
+      >[1]
+      // TODO some (poorly written?) apps might require a refresh
+      // after a permission has been granted,
+      // but we don't support it because
+      // 1. There is no way to refresh a webxdc
+      // 2. There is the WebRTC 500 exhaustion hack which doesn't allow the app
+      //     to load. We should wait there instead of immediately closing.
+      const grantedPermissions = new Set<permission_arg>([
+        // Games might lock the pointer
+        'pointerLock',
+        // Games might do that too
+        'fullscreen',
+      ])
+      const userControllablePermissions: permission_arg[] = [
+        // TODO should add more permissions, I added just a few for a POC.
+        //
+        // Or, we should instead dynamically add items here as the app
+        // makes permission requests (see `permission_handler`).
+        // Would we have to `window.setMenu()` each time?
+        // Can we utilize `visible: boolean` attribute instead?
+        'media',
+        // TODO `navigator.geolocation.getCurrentPosition(console.log, console.error)`
+        // fails because
+        // `Network location provider at 'https://www.googleapis.com/' : ERR_NAME_NOT_RESOLVED.`
+        'geolocation',
+        'notifications',
+        'display-capture',
+        'storage-access',
+        'top-level-storage-access',
+        // These are allowed by default, see `grantedPermissions = ` above.
+        // TODO Should we remove them from here as to not confuse the user?
+        'fullscreen',
+        'pointerLock',
+      ]
+
       const isMac = platform() === 'darwin'
 
       const { locale } = getCurrentLocaleDate()
@@ -394,6 +421,40 @@ export default class DCWebxdc {
         ...(isMac ? [getAppMenu(webxdcWindow)] : []),
         getFileMenu(webxdcWindow, isMac),
         getEditMenu(),
+        // TODO consider whether putting this inside some other menu
+        // (say, "Edit") is reasonable, though I don't think so.
+        ...(DesktopSettings.state.enableWebxdcPermissionManagement
+          ? [
+              {
+                label: tx('menu_webxdc_permissions'),
+                submenu: userControllablePermissions.map(permissionName => ({
+                  // TODO proper names and tooltips for permissions + i18n
+                  label:
+                    permissionName === 'media'
+                      ? 'Camera and microphone'
+                      : permissionName,
+                  type: 'checkbox',
+                  // toolTip:
+                  // visible:
+                  // sublabel:
+
+                  checked: grantedPermissions.has(permissionName),
+                  id: `webxdc_permission_${permissionName}`,
+                  click: () => {
+                    const newIsGranted = !grantedPermissions.has(permissionName)
+                    if (newIsGranted) {
+                      grantedPermissions.add(permissionName)
+                    } else {
+                      grantedPermissions.delete(permissionName)
+                    }
+                    menu.getMenuItemById(
+                      `webxdc_permission_${permissionName}`
+                    )!.checked = newIsGranted
+                  },
+                })),
+              } as MenuItemConstructorOptions,
+            ]
+          : []),
         {
           label: tx('global_menu_view_desktop'),
           submenu: [
@@ -500,6 +561,9 @@ export default class DCWebxdc {
       // as a result of its message getting deleted.
       // This is fine, we'll still clean it up next time.
       webxdcWindow.once('close', saveBounds.bind(this))
+      // TODO shall we save permissions for next session?
+      // Probably when we implement explicit user consent for this,
+      // like in browsers.
 
       webxdcWindow.once('ready-to-show', () => {
         // also saving at the start, because this.webxdcCleanup uses this
@@ -602,8 +666,8 @@ export default class DCWebxdc {
 
       const loggedPermissionRequests = new Set<string>()
 
-      const permission_handler = (permission: string) => {
-        const isAllowed: boolean = ALLOWED_PERMISSIONS.includes(permission)
+      const permission_handler = (permission: permission_arg) => {
+        const isAllowed: boolean = grantedPermissions.has(permission)
 
         // Prevent webxdcs from spamming the log
         if (!loggedPermissionRequests.has(permission)) {
@@ -624,7 +688,10 @@ export default class DCWebxdc {
 
       webxdcWindow.webContents.session.setPermissionCheckHandler(
         (_wc, permission) => {
-          return permission_handler(permission)
+          // TODO figure out why `setPermissionCheckHandler`
+          // and `setPermissionRequestHandler` have a different set
+          // of permission, then remove the type cast.
+          return permission_handler(permission satisfies string as any)
         }
       )
       webxdcWindow.webContents.session.setPermissionRequestHandler(
@@ -837,6 +904,8 @@ export default class DCWebxdc {
           await this.removeWebxdcAppData(accountId, instanceId)
         }
         this.webxdcCleanup(accountId)
+        // Maybe clean up here if we store granted permissions
+        // (currently we don't).
       }
     )
 
