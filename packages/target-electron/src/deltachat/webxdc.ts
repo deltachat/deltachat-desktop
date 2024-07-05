@@ -262,95 +262,87 @@ export default class DCWebxdc extends SplitOut {
 
       const isMac = platform() === 'darwin'
 
-      const makeMenu = () => {
-        return Menu.buildFromTemplate([
-          ...(isMac ? [getAppMenu(webxdcWindow)] : []),
-          getFileMenu(webxdcWindow, isMac),
-          getEditMenu(),
-          {
-            label: tx('global_menu_view_desktop'),
-            submenu: [
-              ...(DesktopSettings.state.enableWebxdcDevTools
-                ? [
-                    {
-                      label: tx('global_menu_view_developer_tools_desktop'),
-                      role: 'toggleDevTools',
-                    } as MenuItemConstructorOptions,
-                  ]
-                : []),
-              { type: 'separator' },
-              { role: 'resetZoom' },
-              { role: 'zoomIn' },
-              { role: 'zoomOut' },
-              { type: 'separator' },
-              {
-                label: tx('global_menu_view_floatontop_desktop'),
-                type: 'checkbox',
-                checked: webxdcWindow.isAlwaysOnTop(),
-                click: () => {
-                  webxdcWindow.setAlwaysOnTop(!webxdcWindow.isAlwaysOnTop())
-                  if (platform() !== 'darwin') {
-                    webxdcWindow.setMenu(makeMenu())
-                  } else {
-                    // change to webxdc menu
-                    Menu.setApplicationMenu(makeMenu())
-                  }
-                },
+      const menu = Menu.buildFromTemplate([
+        ...(isMac ? [getAppMenu(webxdcWindow)] : []),
+        getFileMenu(webxdcWindow, isMac),
+        getEditMenu(),
+        {
+          label: tx('global_menu_view_desktop'),
+          submenu: [
+            ...(DesktopSettings.state.enableWebxdcDevTools
+              ? [
+                  {
+                    label: tx('global_menu_view_developer_tools_desktop'),
+                    role: 'toggleDevTools',
+                  } as MenuItemConstructorOptions,
+                ]
+              : []),
+            { type: 'separator' },
+            { role: 'resetZoom' },
+            { role: 'zoomIn' },
+            { role: 'zoomOut' },
+            { type: 'separator' },
+            {
+              label: tx('global_menu_view_floatontop_desktop'),
+              type: 'checkbox',
+              checked: webxdcWindow.isAlwaysOnTop(),
+              id: 'floatontop',
+              click: () => {
+                const newVal = !webxdcWindow.isAlwaysOnTop()
+                webxdcWindow.setAlwaysOnTop(newVal)
+                menu.getMenuItemById('floatontop')!.checked = newVal
               },
-              { role: 'togglefullscreen' },
-            ],
-          },
-          {
-            label: tx('menu_help'),
-            submenu: [
-              {
-                label: tx('source_code'),
-                enabled: !!webxdcInfo.sourceCodeUrl,
-                icon: app_icon?.resize({ width: 24 }) || undefined,
-                click: () => {
-                  if (
-                    webxdcInfo.sourceCodeUrl?.startsWith('https:') ||
-                    webxdcInfo.sourceCodeUrl?.startsWith('http:')
-                  ) {
-                    shell.openExternal(webxdcInfo.sourceCodeUrl)
-                  } else if (webxdcInfo.sourceCodeUrl) {
-                    const url = webxdcInfo.sourceCodeUrl
-                    dialog
-                      .showMessageBox(webxdcWindow, {
-                        buttons: [tx('no'), tx('menu_copy_link_to_clipboard')],
-                        message: tx(
-                          'ask_copy_unopenable_link_to_clipboard',
-                          url
-                        ),
-                      })
-                      .then(({ response }) => {
-                        if (response == 1) {
-                          clipboard.writeText(url)
-                        }
-                      })
-                  }
-                },
+            },
+            { role: 'togglefullscreen' },
+          ],
+        },
+        {
+          label: tx('menu_help'),
+          submenu: [
+            {
+              label: tx('source_code'),
+              enabled: !!webxdcInfo.sourceCodeUrl,
+              icon: app_icon?.resize({ width: 24 }) || undefined,
+              click: () => {
+                if (
+                  webxdcInfo.sourceCodeUrl?.startsWith('https:') ||
+                  webxdcInfo.sourceCodeUrl?.startsWith('http:')
+                ) {
+                  shell.openExternal(webxdcInfo.sourceCodeUrl)
+                } else if (webxdcInfo.sourceCodeUrl) {
+                  const url = webxdcInfo.sourceCodeUrl
+                  dialog
+                    .showMessageBox(webxdcWindow, {
+                      buttons: [tx('no'), tx('menu_copy_link_to_clipboard')],
+                      message: tx('ask_copy_unopenable_link_to_clipboard', url),
+                    })
+                    .then(({ response }) => {
+                      if (response == 1) {
+                        clipboard.writeText(url)
+                      }
+                    })
+                }
               },
-              {
-                type: 'separator',
-              },
-              {
-                label: tx('what_is_webxdc'),
-                click: () => shell.openExternal('https://webxdc.org'),
-              },
-            ],
-          },
-        ])
-      }
+            },
+            {
+              type: 'separator',
+            },
+            {
+              label: tx('what_is_webxdc'),
+              click: () => shell.openExternal('https://webxdc.org'),
+            },
+          ],
+        },
+      ])
 
       if (!isMac) {
-        webxdcWindow.setMenu(makeMenu())
+        webxdcWindow.setMenu(menu)
       }
 
       webxdcWindow.on('focus', () => {
         if (isMac) {
           // change to webxdc menu
-          Menu.setApplicationMenu(makeMenu())
+          Menu.setApplicationMenu(menu)
         }
       })
       webxdcWindow.on('blur', () => {
