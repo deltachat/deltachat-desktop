@@ -284,6 +284,7 @@ export default class DCWebxdc {
       let fullHref: string | undefined = undefined
       const appId = `${accountId}.${msg_id}`
       const appURL = `webxdc://${appId}.webxdc`
+      const appURLParsed = new URL(appURL)
       if (href && href !== '') {
         // href is user provided content, so we want to be sure it's relative
         // relative href needs a base to construct URL
@@ -401,10 +402,14 @@ export default class DCWebxdc {
         isBroadcast: webxdcInfo.isBroadcast,
       }
 
-      type setPermissionRequestHandler =
-        typeof webxdcWindow.webContents.session.setPermissionRequestHandler
       type PermissionArg = Parameters<
-        Exclude<Parameters<setPermissionRequestHandler>[0], null>
+        Exclude<
+          Parameters<
+            | typeof webxdcWindow.webContents.session.setPermissionCheckHandler
+            | typeof webxdcWindow.webContents.session.setPermissionRequestHandler
+          >[0],
+          null
+        >
       >[1]
       // TODO some (poorly written?) apps might require a refresh
       // after a permission has been granted,
@@ -418,26 +423,46 @@ export default class DCWebxdc {
         // Games might do that too
         'fullscreen',
       ])
+      const requestedOrCheckedPermissions = new Set<PermissionArg>()
+      // All permissions:
+      // https://www.electronjs.org/docs/latest/api/session#sessetpermissioncheckhandlerhandler
+      // TODO `setPermissionCheckHandler` and `setPermissionRequestHandler`
+      // have different possible permissions, e.g. 'serial', 'hid', 'usb',
+      // 'fileSystem', 'window-management'.
+      // Need to handle requests and checks separately.
       const userControllablePermissions = [
-        // TODO should add more permissions, I added just a few for a POC.
-        //
-        // Or, we should instead dynamically add items here as the app
-        // makes permission requests (see `permission_handler`).
-        // Would we have to `window.setMenu()` each time?
-        // Can we utilize `visible: boolean` attribute instead?
-        'media',
+        'clipboard-read',
+        'clipboard-sanitized-write',
+
+        // TODO apparently display-capture needs `ses.setDisplayMediaRequestHandler()` to work
+        // 'display-capture',
+
+        'fileSystem',
+
+        // 'fullscreen', // This is allowed by default
+
         // TODO `navigator.geolocation.getCurrentPosition(console.log, console.error)`
         // fails because
         // `Network location provider at 'https://www.googleapis.com/' : ERR_NAME_NOT_RESOLVED.`
         'geolocation',
+
+        'hid',
+        'idle-detection',
+        'keyboardLock',
+        'media',
+        'mediaKeySystem',
+        'midi',
+        'midiSysex',
         'notifications',
-        'display-capture',
+        'openExternal',
+        // 'pointerLock', // This is allowed by default
+        'serial',
+        'speaker-selection',
         'storage-access',
         'top-level-storage-access',
-        // These are allowed by default, see `grantedPermissions = ` above.
-        // TODO Should we remove them from here as to not confuse the user?
-        'fullscreen',
-        'pointerLock',
+        // 'unknown',
+        'usb',
+        'window-management',
       ] as const satisfies PermissionArg[]
 
       const isMac = platform() === 'darwin'
@@ -455,6 +480,7 @@ export default class DCWebxdc {
               {
                 label: tx('menu_webxdc_permissions'),
                 submenu: userControllablePermissions.map(permissionName => ({
+                  id: `webxdc_permission_${permissionName}`,
                   // TODO proper names and tooltips for permissions + i18n
                   label:
                     permissionName === 'media'
@@ -462,17 +488,19 @@ export default class DCWebxdc {
                       : permissionName,
                   type: 'checkbox',
                   // toolTip:
-                  // visible:
                   // sublabel:
 
                   checked: grantedPermissions.has(permissionName),
-                  click: (item) => {
+                  click: item => {
                     if (item.checked) {
                       grantedPermissions.add(permissionName)
                     } else {
                       grantedPermissions.delete(permissionName)
                     }
                   },
+                  // Don't clutter the UI with permissions
+                  // that were never checked or requested.
+                  visible: requestedOrCheckedPermissions.has(permissionName),
                 })),
               } satisfies Electron.MenuItemConstructorOptions,
             ]
@@ -712,41 +740,85 @@ export default class DCWebxdc {
         ev.preventDefault()
       })
 
-      const loggedPermissionRequests = new Set<string>()
+      const permission_handler = (
+        permission: PermissionArg,
+        requestingUrl: string
+      ) => {
+        const requestingUrlParsed = URL.parse(requestingUrl)
+        if (!requestingUrlParsed) {
+          log.error(
+            `Got permission request but requestingUrl is invalid: '${requestingUrl}', rejecting`
+          )
 
-      const permission_handler = (permission: PermissionArg) => {
-        const isAllowed: boolean = grantedPermissions.has(permission)
+          return false
+        }
+        // Hardening measure. WebXDCs shouldn't be able
+        // to load other origins already, but let's check just in case.
+        // TODO refactor: DRY this check? We also have it elsewhere.
+        const isSameOrigin =
+          requestingUrlParsed.protocol === appURLParsed.protocol &&
+          requestingUrlParsed.hostname === appURLParsed.hostname &&
+          requestingUrlParsed.port === appURLParsed.port
+        if (!isSameOrigin) {
+          log.error(
+            `Got permission request from another origin: '${requestingUrl}'`
+          )
 
-        // Prevent webxdcs from spamming the log
-        if (!loggedPermissionRequests.has(permission)) {
-          loggedPermissionRequests.add(permission)
-          if (isAllowed) {
-            log.info(
-              `ALLOWED permission '${permission}' to webxdc '${webxdcInfo.name}'`
-            )
-          } else {
-            log.info(
-              `DENIED permission '${permission}' to webxdc '${webxdcInfo.name}'. If you think that's a bug and you need that permission, then please open an issue on github.`
-            )
+          return false
+        }
+
+        /**
+         * Permission check could be performed quite frequently,
+         * so we need to check this in order to not spam the log.
+         */
+        const firstTimeRequestOrCheck =
+          !requestedOrCheckedPermissions.has(permission)
+        requestedOrCheckedPermissions.add(permission)
+
+        if (firstTimeRequestOrCheck) {
+          const menuItem = menu.getMenuItemById(
+            `webxdc_permission_${permission}`
+          )
+          // We might not have a menu item for some permissions.
+          if (menuItem) {
+            menuItem.visible = true
           }
         }
 
-        return isAllowed
+        if (grantedPermissions.has(permission)) {
+          // TODO should also print this once to prevent log spam.
+          // Not sure if they spam in this case.
+          // Though simply checking `firstTimeRequestOrCheck` will not work,
+          // cause the first time the permission usually is denied.
+          log.info(
+            `ALLOWED permission '${permission}' to webxdc '${webxdcInfo.name}'`
+          )
+
+          return true
+        }
+
+        if (firstTimeRequestOrCheck) {
+          log.info(
+            `DENIED permission '${permission}' to webxdc '${webxdcInfo.name}'.`
+          )
+        }
+        return false
       }
 
       // TODO these are per-session and not per-app,
       // and a session is responsible for all apps on an account.
       webxdcWindow.webContents.session.setPermissionCheckHandler(
-        (_wc, permission) => {
-          // TODO figure out why `setPermissionCheckHandler`
-          // and `setPermissionRequestHandler` have a different set
-          // of permission, then remove the type cast.
-          return permission_handler(permission satisfies string as any)
+        (_wc, permission, requestingOrigin, _details) => {
+          // _details.requestingUrl
+          return permission_handler(permission, requestingOrigin)
         }
       )
       webxdcWindow.webContents.session.setPermissionRequestHandler(
-        (_wc, permission, callback) => {
-          callback(permission_handler(permission))
+        // TODO maybe handle `details`, which has specific properties
+        // depending on which permission is requested, e.g. for 'media'
+        // it would be `mediaType: 'video' | 'audio'`.
+        (_wc, permission, callback, details) => {
+          callback(permission_handler(permission, details.requestingUrl))
         }
       )
     }
