@@ -106,6 +106,13 @@ export function ExperimentalFeatures() {
         // 853b584251a5dacf60ebc616f7fb10edffb5c5e5/src/main/index.ts#L12-L21
         description='Careful: opening developer tools on a malicious webxdc app could lead to the app getting access to the Internet'
       />
+      {runtime.getRuntimeInfo().target === 'electron' && (
+        <DesktopSettingsSwitch
+          settingsKey='enableWebxdcPermissionManagement'
+          label={tx('pref_webxdc_permission_management')}
+          description={tx('explain_webxdc_permission_management')}
+        />
+      )}
     </>
   )
 }

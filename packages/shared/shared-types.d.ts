@@ -83,6 +83,11 @@ export interface DesktopSettingsType {
   autostart: boolean
   /** whether to start Electron with system on supported platforms */
   autostartElectron: boolean
+  /**
+   * Whether the user can grant webxdc apps permissions,
+   * such as camera access, like in browsers.
+   */
+  enableWebxdcPermissionManagement: boolean
 }
 
 export interface RC_Config {
