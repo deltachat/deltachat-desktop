@@ -417,122 +417,119 @@ export default class DCWebxdc {
 
       const { locale } = getCurrentLocaleDate()
 
-      const makeMenu = () => {
-        return Menu.buildFromTemplate([
-          ...(isMac ? [getAppMenu(webxdcWindow)] : []),
-          getFileMenu(webxdcWindow, isMac),
-          getEditMenu(),
-          {
-            label: tx('global_menu_view_desktop'),
-            submenu: [
-              {
-                accelerator: 'CmdOrCtrl+=',
-                label: tx('menu_zoom_in'),
-                role: 'zoomIn',
+      const menu = Menu.buildFromTemplate([
+        ...(isMac ? [getAppMenu(webxdcWindow)] : []),
+        getFileMenu(webxdcWindow, isMac),
+        getEditMenu(),
+        {
+          label: tx('global_menu_view_desktop'),
+          submenu: [
+            {
+              accelerator: 'CmdOrCtrl+=',
+              label: tx('menu_zoom_in'),
+              role: 'zoomIn',
+            },
+            {
+              accelerator: 'CmdOrCtrl+-',
+              label: tx('menu_zoom_out'),
+              role: 'zoomOut',
+            },
+            {
+              accelerator: 'CmdOrCtrl+0',
+              label: `${tx('reset')}`,
+              role: 'resetZoom',
+            },
+            { type: 'separator' },
+            {
+              label: tx('global_menu_view_floatontop_desktop'),
+              type: 'checkbox',
+              checked: webxdcWindow.isAlwaysOnTop(),
+              click: item => {
+                webxdcWindow.setAlwaysOnTop(item.checked)
               },
-              {
-                accelerator: 'CmdOrCtrl+-',
-                label: tx('menu_zoom_out'),
-                role: 'zoomOut',
-              },
-              {
-                accelerator: 'CmdOrCtrl+0',
-                label: `${tx('reset')}`,
-                role: 'resetZoom',
-              },
-              { type: 'separator' },
-              {
-                label: tx('global_menu_view_floatontop_desktop'),
-                type: 'checkbox',
-                checked: webxdcWindow.isAlwaysOnTop(),
-                click: () => {
-                  webxdcWindow.setAlwaysOnTop(!webxdcWindow.isAlwaysOnTop())
-                  if (isMac) {
-                    // change to webxdc menu
-                    Menu.setApplicationMenu(makeMenu())
-                  } else {
-                    webxdcWindow.setMenu(makeMenu())
-                  }
-                },
-              },
-              { role: 'togglefullscreen' },
-              { type: 'separator' },
-              {
-                label: tx('global_menu_view_developer_desktop'),
-                submenu: [
-                  {
-                    label: tx('global_menu_view_developer_tools_desktop'),
-                    accelerator: isMac ? 'Alt+Command+I' : 'Ctrl+Shift+I',
-                    // Deliberately no `role: 'toggleDevTools'`: the role opens
-                    // devtools directly, bypassing the confirmation below.
-                    // Its shortcuts are bound to this item instead.
-                    click: async () => {
-                      const { webContents } = webxdcWindow
-                      if (webContents.isDevToolsOpened()) {
-                        webContents.closeDevTools()
+            },
+            { role: 'togglefullscreen' },
+            { type: 'separator' },
+            {
+              label: tx('global_menu_view_developer_desktop'),
+              submenu: [
+                {
+                  label: tx('global_menu_view_developer_tools_desktop'),
+                  accelerator: isMac ? 'Alt+Command+I' : 'Ctrl+Shift+I',
+                  // Deliberately no `role: 'toggleDevTools'`: the role opens
+                  // devtools directly, bypassing the confirmation below.
+                  // Its shortcuts are bound to this item instead.
+                  click: async () => {
+                    const { webContents } = webxdcWindow
+                    if (webContents.isDevToolsOpened()) {
+                      webContents.closeDevTools()
+                      return
+                    }
+                    const instance = open_apps[appId]
+                    if (!instance.devToolsConfirmed) {
+                      const confirmed =
+                        (
+                          await dialog.showMessageBox(webxdcWindow, {
+                            type: 'warning',
+                            buttons: [tx('cancel'), tx('open')],
+                            defaultId: 0,
+                            cancelId: 0,
+                            title: tx('webxdc_devtools_dialog_title'),
+                            message: tx('webxdc_devtools_dialog_title'),
+                            detail: tx('webxdc_devtools_dialog_message'),
+                          })
+                        ).response === 1
+                      if (!confirmed) {
                         return
                       }
-                      const instance = open_apps[appId]
-                      if (!instance.devToolsConfirmed) {
-                        const confirmed =
-                          (
-                            await dialog.showMessageBox(webxdcWindow, {
-                              type: 'warning',
-                              buttons: [tx('cancel'), tx('open')],
-                              defaultId: 0,
-                              cancelId: 0,
-                              title: tx('webxdc_devtools_dialog_title'),
-                              message: tx('webxdc_devtools_dialog_title'),
-                              detail: tx('webxdc_devtools_dialog_message'),
-                            })
-                          ).response === 1
-                        if (!confirmed) {
-                          return
-                        }
-                        instance.devToolsConfirmed = true
-                      }
-                      webContents.openDevTools()
-                    },
+                      instance.devToolsConfirmed = true
+                    }
+                    webContents.openDevTools()
                   },
-                ],
-              },
-            ],
-          },
-          {
-            label: tx('menu_help'),
-            submenu: [
-              {
-                label: tx('source_code'),
-                enabled: !!webxdcInfo.sourceCodeUrl,
-                icon: app_icon?.resize({ width: 24 }) || undefined,
-                click: () =>
-                  openExternalHttpOrPromptToCopy(
-                    webxdcWindow,
-                    webxdcInfo.sourceCodeUrl ?? ''
-                  ),
-              },
-              {
-                type: 'separator',
-              },
-              {
-                label: tx('what_is_webxdc'),
-                click: () => openHelpWindow(locale, 'webxdc'),
-              },
-            ],
-          },
-        ])
-      }
+                },
+              ],
+            },
+          ],
+        },
+        {
+          label: tx('menu_help'),
+          submenu: [
+            {
+              id: 'source-code',
+              label: tx('source_code'),
+              enabled: !!webxdcInfo.sourceCodeUrl,
+              icon: app_icon?.resize({ width: 24 }) || undefined,
+              click: () =>
+                openExternalHttpOrPromptToCopy(
+                  webxdcWindow,
+                  webxdcInfo.sourceCodeUrl ?? ''
+                ),
+            },
+            {
+              type: 'separator',
+            },
+            {
+              label: tx('what_is_webxdc'),
+              click: () => openHelpWindow(locale, 'webxdc'),
+            },
+          ],
+        },
+      ])
+      appIconPromise.then(icon => {
+        if (icon == undefined) {
+          return
+        }
+        menu.getMenuItemById('source-code')!.icon = icon.resize({ width: 24 })
+      })
 
       if (!isMac) {
-        // the menu shows the app icon, so it can only be built once the
-        // icon is loaded
-        appIconPromise.then(() => webxdcWindow.setMenu(makeMenu()))
+        webxdcWindow.setMenu(menu)
       }
 
       webxdcWindow.on('focus', () => {
         if (isMac) {
           // change to webxdc menu
-          Menu.setApplicationMenu(makeMenu())
+          Menu.setApplicationMenu(menu)
         }
       })
       webxdcWindow.on('blur', () => {
