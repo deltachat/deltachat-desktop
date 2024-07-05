@@ -118,6 +118,7 @@ export default class DCWebxdc extends SplitOut {
 
       const ses = sessionFromAccountId(accountId)
       const appURL = `webxdc://${accountId}.${msg_id}.webxdc`
+      const appOrigin = new URL(appURL).origin
 
       // TODO intercept / deny network access - CSP should probably be disabled for testing
 
@@ -260,10 +261,14 @@ export default class DCWebxdc extends SplitOut {
         internet_access: webxdcInfo['internetAccess'],
       }
 
-      type setPermissionRequestHandler =
-        typeof webxdcWindow.webContents.session.setPermissionRequestHandler
       type permission_arg = Parameters<
-        Exclude<Parameters<setPermissionRequestHandler>[0], null>
+        Exclude<
+          Parameters<
+            | typeof webxdcWindow.webContents.session.setPermissionCheckHandler
+            | typeof webxdcWindow.webContents.session.setPermissionRequestHandler
+          >[0],
+          null
+        >
       >[1]
       // TODO some (poorly written?) apps might require a refresh
       // after a permission has been granted,
@@ -277,25 +282,47 @@ export default class DCWebxdc extends SplitOut {
         // games might do that too
         'fullscreen',
       ])
-      const userControllablePermissions: permission_arg[] = [
-        // TODO should add more permissions, I added just a few for a POC.
-        //
-        // Or, we should instead dynamically add items here as the app
-        // makes permission requests (see `permission_handler`).
-        // Would we have to `window.setMenu()` each time?
-        // Can we utilize `visible: boolean` attribute instead?
-        'media',
+      const requestedOrCheckedPermissions: { [K in permission_arg]?: true } = {}
+      // All permissions:
+      // https://www.electronjs.org/docs/latest/api/session#sessetpermissioncheckhandlerhandler
+      // TODO `setPermissionCheckHandler` and `setPermissionRequestHandler`
+      // have different possible permissions, e.g. 'serial', 'hid', 'usb',
+      // 'fileSystem', 'window-management'.
+      // Need to handle requests and checks separately.
+      const userControllablePermissions = [
+        'clipboard-read',
+        'clipboard-sanitized-write',
+
+        // TODO apparently display-capture needs `ses.setDisplayMediaRequestHandler()` to work
+        // 'display-capture',
+
+        'fileSystem',
+
+        // 'fullscreen', // This is allowed by default
+
         // TODO `navigator.geolocation.getCurrentPosition(console.log, console.error)`
         // fails because
         // `Network location provider at 'https://www.googleapis.com/' : ERR_NAME_NOT_RESOLVED.`
         'geolocation',
+
+        'hid',
+        'idle-detection',
+        'keyboardLock',
+        'media',
+        'mediaKeySystem',
+        'midi',
+        'midiSysex',
         'notifications',
-        'display-capture',
-        // These are allowed by default, see `grantedPermissions = ` above.
-        // TODO Should we remove them from here as to not confuse the user?
-        'fullscreen',
-        'pointerLock',
-      ]
+        'openExternal',
+        // 'pointerLock', // This is allowed by default
+        'serial',
+        'speaker-selection',
+        'storage-access',
+        'top-level-storage-access',
+        // 'unknown',
+        'usb',
+        'window-management',
+      ] as const satisfies permission_arg[]
 
       const isMac = platform() === 'darwin'
 
@@ -317,7 +344,6 @@ export default class DCWebxdc extends SplitOut {
                       : permissionName,
                   type: 'checkbox',
                   // toolTip:
-                  // visible:
                   // sublabel:
 
                   checked: grantedPermissions.has(permissionName),
@@ -333,6 +359,10 @@ export default class DCWebxdc extends SplitOut {
                       `webxdc_permission_${permissionName}`
                     )!.checked = newIsGranted
                   },
+                  // Don't clutter the UI with permissions
+                  // that were never checked or requested.
+                  visible:
+                    requestedOrCheckedPermissions[permissionName] === true,
                 })),
               } as MenuItemConstructorOptions,
             ]
@@ -454,42 +484,69 @@ export default class DCWebxdc extends SplitOut {
         ev.preventDefault()
       })
 
-      const loggedPermissionRequests: { [K in permission_arg]?: true } = {}
-      /** prevents webxdcs from spamming the log */
-      const logPermissionRequest = (permission: permission_arg) => {
-        if (loggedPermissionRequests[permission]) {
-          return
+      const permission_handler = (
+        permission: permission_arg,
+        requestingUrl: string | undefined
+      ) => {
+        // Hardening measure. webxdcs shouldn't be able
+        // to load other origins already, but let's check just in case.
+        if (!requestingUrl || new URL(requestingUrl).origin !== appOrigin) {
+          log.error(
+            `Got permission request from another origin: '${requestingUrl}'`
+          )
+
+          return false
         }
-        loggedPermissionRequests[permission] = true
-        log.info(
-          `webxdc '${webxdcInfo.name}' requested "${permission}" permission, but we denied it.
-If you think that's a bug and you need that permission, then please open an issue on github`
-        )
-      }
-      const permission_handler = (permission: permission_arg) => {
+
+        /**
+         * Permission check could be performed quite frequently,
+         * so we need to check this in order to not spam the log.
+         */
+        const firstTimeRequestOrCheck =
+          requestedOrCheckedPermissions[permission] !== true
+        requestedOrCheckedPermissions[permission] = true
+
+        if (firstTimeRequestOrCheck) {
+          const menuItem = menu.getMenuItemById(
+            `webxdc_permission_${permission}`
+          )
+          // We might not have a menu item for some permissions.
+          if (menuItem) {
+            menuItem.visible = true
+          }
+        }
+
         if (grantedPermissions.has(permission)) {
-          // TODO should also use `logPermissionRequest` to prevent log spam.
+          // TODO should also print this once to prevent log spam.
           // Not sure if they spam in this case.
+          // Though simply checking `firstTimeRequestOrCheck` will not work,
+          // cause the first time the permission usually is denied.
           log.info(
             `allowed webxdc '${webxdcInfo.name}' '${permission}' permission`
           )
+
           return true
         }
 
-        logPermissionRequest(permission)
+        if (firstTimeRequestOrCheck) {
+          log.info(
+            `webxdc '${webxdcInfo.name}' requested "${permission}" permission, but we denied it.`
+          )
+        }
         return false
       }
 
-      // TODO is there a reason now to use different handlers
-      // for these two events?
       webxdcWindow.webContents.session.setPermissionCheckHandler(
-        (_wc, permission) => {
-          return permission_handler(permission as any)
+        (_wc, permission, _requestingOrigin, details) => {
+          return permission_handler(permission, details.requestingUrl)
         }
       )
       webxdcWindow.webContents.session.setPermissionRequestHandler(
-        (_wc, permission, callback) => {
-          callback(permission_handler(permission))
+        // TODO maybe handle `details`, which has specific properties
+        // depending on which permission is requested, e.g. for 'media'
+        // it would be `mediaType: 'video' | 'audio'`.
+        (_wc, permission, callback, details) => {
+          callback(permission_handler(permission, details.requestingUrl))
         }
       )
 
