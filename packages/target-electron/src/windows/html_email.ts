@@ -149,75 +149,73 @@ export function openHtmlEmailWindow(
 
   // copied and adapted from webxdc menu
   // TODO: would make sense to refactor these menus at some point
-  const makeMenu = () => {
-    return Menu.buildFromTemplate([
-      ...(isMac ? [getAppMenu(window)] : []),
-      getFileMenu(window, isMac),
-      {
-        label: tx('global_menu_edit_desktop'),
-        submenu: [
-          {
-            label: tx('global_menu_edit_copy_desktop'),
-            role: 'copy',
+  const menu = Menu.buildFromTemplate([
+    ...(isMac ? [getAppMenu(window)] : []),
+    getFileMenu(window, isMac),
+    {
+      label: tx('global_menu_edit_desktop'),
+      submenu: [
+        {
+          label: tx('global_menu_edit_copy_desktop'),
+          role: 'copy',
+        },
+        {
+          label: tx('menu_select_all'),
+          click: () => {
+            sandboxedView.webContents.focus()
+            sandboxedView.webContents.selectAll()
           },
-          {
-            label: tx('menu_select_all'),
-            click: () => {
-              sandboxedView.webContents.focus()
-              sandboxedView.webContents.selectAll()
-            },
-            accelerator: isMac ? 'Cmd+A' : 'Ctrl+A',
+          accelerator: isMac ? 'Cmd+A' : 'Ctrl+A',
+        },
+      ],
+    },
+    {
+      label: tx('global_menu_view_desktop'),
+      submenu: [
+        {
+          accelerator: 'CmdOrCtrl+=',
+          label: tx('menu_zoom_in'),
+          role: 'zoomIn',
+        },
+        {
+          accelerator: 'CmdOrCtrl+-',
+          label: tx('menu_zoom_out'),
+          role: 'zoomOut',
+        },
+        {
+          accelerator: 'CmdOrCtrl+0',
+          label: `${tx('reset')}`,
+          role: 'resetZoom',
+        },
+        { type: 'separator' },
+        {
+          label: tx('global_menu_view_floatontop_desktop'),
+          type: 'checkbox',
+          checked: window.isAlwaysOnTop(),
+          click: () => {
+            window.setAlwaysOnTop(!window.isAlwaysOnTop())
+            if (platform() !== 'darwin') {
+              window.setMenu(menu)
+            } else {
+              // change to window menu
+              Menu.setApplicationMenu(menu)
+            }
           },
-        ],
-      },
-      {
-        label: tx('global_menu_view_desktop'),
-        submenu: [
-          {
-            accelerator: 'CmdOrCtrl+=',
-            label: tx('menu_zoom_in'),
-            role: 'zoomIn',
-          },
-          {
-            accelerator: 'CmdOrCtrl+-',
-            label: tx('menu_zoom_out'),
-            role: 'zoomOut',
-          },
-          {
-            accelerator: 'CmdOrCtrl+0',
-            label: `${tx('reset')}`,
-            role: 'resetZoom',
-          },
-          { type: 'separator' },
-          {
-            label: tx('global_menu_view_floatontop_desktop'),
-            type: 'checkbox',
-            checked: window.isAlwaysOnTop(),
-            click: () => {
-              window.setAlwaysOnTop(!window.isAlwaysOnTop())
-              if (platform() !== 'darwin') {
-                window.setMenu(makeMenu())
-              } else {
-                // change to window menu
-                Menu.setApplicationMenu(makeMenu())
-              }
-            },
-          },
-          { role: 'togglefullscreen' },
-        ],
-      },
-      getHelpMenu(isMac),
-    ])
-  }
+        },
+        { role: 'togglefullscreen' },
+      ],
+    },
+    getHelpMenu(isMac),
+  ])
 
   if (!isMac) {
-    window.setMenu(makeMenu())
+    window.setMenu(menu)
   }
 
   window.on('focus', () => {
     if (isMac) {
       // change to email menu
-      Menu.setApplicationMenu(makeMenu())
+      Menu.setApplicationMenu(menu)
     }
   })
   window.on('blur', () => {

@@ -390,98 +390,93 @@ export default class DCWebxdc {
 
       const { locale } = getCurrentLocaleDate()
 
-      const makeMenu = () => {
-        return Menu.buildFromTemplate([
-          ...(isMac ? [getAppMenu(webxdcWindow)] : []),
-          getFileMenu(webxdcWindow, isMac),
-          getEditMenu(),
-          {
-            label: tx('global_menu_view_desktop'),
-            submenu: [
-              {
-                accelerator: 'CmdOrCtrl+=',
-                label: tx('menu_zoom_in'),
-                role: 'zoomIn',
+      const menu = Menu.buildFromTemplate([
+        ...(isMac ? [getAppMenu(webxdcWindow)] : []),
+        getFileMenu(webxdcWindow, isMac),
+        getEditMenu(),
+        {
+          label: tx('global_menu_view_desktop'),
+          submenu: [
+            {
+              accelerator: 'CmdOrCtrl+=',
+              label: tx('menu_zoom_in'),
+              role: 'zoomIn',
+            },
+            {
+              accelerator: 'CmdOrCtrl+-',
+              label: tx('menu_zoom_out'),
+              role: 'zoomOut',
+            },
+            {
+              accelerator: 'CmdOrCtrl+0',
+              label: `${tx('reset')}`,
+              role: 'resetZoom',
+            },
+            { type: 'separator' },
+            {
+              label: tx('global_menu_view_floatontop_desktop'),
+              type: 'checkbox',
+              checked: webxdcWindow.isAlwaysOnTop(),
+              id: 'floatontop',
+              click: () => {
+                const newVal = !webxdcWindow.isAlwaysOnTop()
+                webxdcWindow.setAlwaysOnTop(newVal)
+                menu.getMenuItemById('floatontop')!.checked = newVal
               },
-              {
-                accelerator: 'CmdOrCtrl+-',
-                label: tx('menu_zoom_out'),
-                role: 'zoomOut',
-              },
-              {
-                accelerator: 'CmdOrCtrl+0',
-                label: `${tx('reset')}`,
-                role: 'resetZoom',
-              },
-              { type: 'separator' },
-              {
-                label: tx('global_menu_view_floatontop_desktop'),
-                type: 'checkbox',
-                checked: webxdcWindow.isAlwaysOnTop(),
-                click: () => {
-                  webxdcWindow.setAlwaysOnTop(!webxdcWindow.isAlwaysOnTop())
-                  if (platform() !== 'darwin') {
-                    webxdcWindow.setMenu(makeMenu())
-                  } else {
-                    // change to webxdc menu
-                    Menu.setApplicationMenu(makeMenu())
-                  }
-                },
-              },
-              { role: 'togglefullscreen' },
-              ...(DesktopSettings.state.enableWebxdcDevTools
-                ? [
-                    { type: 'separator' } as MenuItemConstructorOptions,
-                    {
-                      label: tx('global_menu_view_developer_desktop'),
-                      submenu: [
-                        {
-                          label: tx('global_menu_view_developer_tools_desktop'),
-                          role: 'toggleDevTools',
-                        } as MenuItemConstructorOptions,
-                      ],
-                    },
-                  ]
-                : []),
-            ],
-          },
-          {
-            label: tx('menu_help'),
-            submenu: [
-              {
-                label: tx('source_code'),
-                enabled: !!webxdcInfo.sourceCodeUrl,
-                icon: app_icon?.resize({ width: 24 }) || undefined,
-                click: () =>
-                  openExternalHttpOrPromptToCopy(
-                    webxdcWindow,
-                    webxdcInfo.sourceCodeUrl ?? ''
-                  ),
-              },
-              {
-                type: 'separator',
-              },
-              {
-                label: tx('what_is_webxdc'),
-                click: () => openHelpWindow(locale, 'webxdc'),
-              },
-            ],
-          },
-        ])
-      }
+            },
+            { role: 'togglefullscreen' },
+            ...(DesktopSettings.state.enableWebxdcDevTools
+              ? [
+                  { type: 'separator' } as MenuItemConstructorOptions,
+                  {
+                    label: tx('global_menu_view_developer_desktop'),
+                    submenu: [
+                      {
+                        label: tx('global_menu_view_developer_tools_desktop'),
+                        role: 'toggleDevTools',
+                      } as MenuItemConstructorOptions,
+                    ],
+                  },
+                ]
+              : []),
+          ],
+        },
+        {
+          label: tx('menu_help'),
+          submenu: [
+            {
+              label: tx('source_code'),
+              enabled: !!webxdcInfo.sourceCodeUrl,
+              icon: app_icon?.resize({ width: 24 }) || undefined,
+              click: () =>
+                openExternalHttpOrPromptToCopy(
+                  webxdcWindow,
+                  webxdcInfo.sourceCodeUrl ?? ''
+                ),
+            },
+            {
+              type: 'separator',
+            },
+            {
+              label: tx('what_is_webxdc'),
+              click: () => openHelpWindow(locale, 'webxdc'),
+            },
+          ],
+        },
+      ])
 
       if (!isMac) {
         if (app_icon != undefined) {
-          webxdcWindow.setMenu(makeMenu())
+          webxdcWindow.setMenu(menu)
         } else {
-          appIconPromise.then(() => webxdcWindow.setMenu(makeMenu()))
+          appIconPromise.then(() => webxdcWindow.setMenu(menu))
         }
       }
 
       webxdcWindow.on('focus', () => {
         if (isMac) {
           // change to webxdc menu
-          Menu.setApplicationMenu(makeMenu())
+          Menu.setApplicationMenu(menu)
         }
       })
       webxdcWindow.on('blur', () => {
