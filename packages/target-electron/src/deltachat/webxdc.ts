@@ -260,12 +260,83 @@ export default class DCWebxdc extends SplitOut {
         internet_access: webxdcInfo['internetAccess'],
       }
 
+      type setPermissionRequestHandler =
+        typeof webxdcWindow.webContents.session.setPermissionRequestHandler
+      type permission_arg = Parameters<
+        Exclude<Parameters<setPermissionRequestHandler>[0], null>
+      >[1]
+      // TODO some (poorly written?) apps might require a refresh
+      // after a permission has been granted,
+      // but we don't support it because
+      // 1. There is no way to refresh a webxdc
+      // 2. There is the WebRTC 500 exhaustion hack which doesn't allow the app
+      //     to load. We should wait there instead of immediately closing.
+      const grantedPermissions = new Set<permission_arg>([
+        // because games might lock the pointer
+        'pointerLock',
+        // games might do that too
+        'fullscreen',
+      ])
+      const userControllablePermissions: permission_arg[] = [
+        // TODO should add more permissions, I added just a few for a POC.
+        //
+        // Or, we should instead dynamically add items here as the app
+        // makes permission requests (see `permission_handler`).
+        // Would we have to `window.setMenu()` each time?
+        // Can we utilize `visible: boolean` attribute instead?
+        'media',
+        // TODO `navigator.geolocation.getCurrentPosition(console.log, console.error)`
+        // fails because
+        // `Network location provider at 'https://www.googleapis.com/' : ERR_NAME_NOT_RESOLVED.`
+        'geolocation',
+        'notifications',
+        'display-capture',
+        // These are allowed by default, see `grantedPermissions = ` above.
+        // TODO Should we remove them from here as to not confuse the user?
+        'fullscreen',
+        'pointerLock',
+      ]
+
       const isMac = platform() === 'darwin'
 
       const menu = Menu.buildFromTemplate([
         ...(isMac ? [getAppMenu(webxdcWindow)] : []),
         getFileMenu(webxdcWindow, isMac),
         getEditMenu(),
+        // TODO consider whether putting this inside some other menu
+        // (say, "Edit") is reasonable, though I don't think so.
+        ...(DesktopSettings.state.enableWebxdcPermissionManagement
+          ? [
+              {
+                label: tx('menu_webxdc_permissions'),
+                submenu: userControllablePermissions.map(permissionName => ({
+                  // TODO proper names and tooltips for permissions + i18n
+                  label:
+                    permissionName === 'media'
+                      ? 'Camera and microphone'
+                      : permissionName,
+                  type: 'checkbox',
+                  // toolTip:
+                  // visible:
+                  // sublabel:
+
+                  checked: grantedPermissions.has(permissionName),
+                  id: `webxdc_permission_${permissionName}`,
+                  click: () => {
+                    const newIsGranted = !grantedPermissions.has(permissionName)
+                    if (newIsGranted) {
+                      grantedPermissions.add(permissionName)
+                    } else {
+                      grantedPermissions.delete(permissionName)
+                    }
+                    menu.getMenuItemById(
+                      `webxdc_permission_${permissionName}`
+                    )!.checked = newIsGranted
+                  },
+                })),
+              } as MenuItemConstructorOptions,
+            ]
+          : []),
         {
           label: tx('global_menu_view_desktop'),
           submenu: [
@@ -359,6 +430,9 @@ export default class DCWebxdc extends SplitOut {
       webxdcWindow.once('close', () => {
         const lastBounds = webxdcWindow.getBounds()
         setLastBounds(this, accountId, msg_id, lastBounds)
+        // TODO shall we save permissions for next session?
+        // Probably when we implement explicit user consent for this,
+        // like in browsers.
       })
 
       webxdcWindow.once('ready-to-show', () => {})
@@ -380,11 +454,6 @@ export default class DCWebxdc extends SplitOut {
         ev.preventDefault()
       })
 
-      type setPermissionRequestHandler =
-        typeof webxdcWindow.webContents.session.setPermissionRequestHandler
-      type permission_arg = Parameters<
-        Exclude<Parameters<setPermissionRequestHandler>[0], null>
-      >[1]
       const loggedPermissionRequests: { [K in permission_arg]?: true } = {}
       /** prevents webxdcs from spamming the log */
       const logPermissionRequest = (permission: permission_arg) => {
@@ -398,14 +467,12 @@ If you think that's a bug and you need that permission, then please open an issu
         )
       }
       const permission_handler = (permission: permission_arg) => {
-        if (permission == 'pointerLock') {
-          log.info(`allowed webxdc '${webxdcInfo.name}' to lock the pointer`)
-          // because games might lock the pointer
-          return true
-        }
-        if (permission == 'fullscreen') {
-          log.info(`allowed webxdc '${webxdcInfo.name}' to go into fullscreen`)
-          // games might do that too
+        if (grantedPermissions.has(permission)) {
+          // TODO should also use `logPermissionRequest` to prevent log spam.
+          // Not sure if they spam in this case.
+          log.info(
+            `allowed webxdc '${webxdcInfo.name}' '${permission}' permission`
+          )
           return true
         }
 
@@ -413,6 +480,8 @@ If you think that's a bug and you need that permission, then please open an issu
         return false
       }
 
+      // TODO is there a reason now to use different handlers
+      // for these two events?
       webxdcWindow.webContents.session.setPermissionCheckHandler(
         (_wc, permission) => {
           return permission_handler(permission as any)
@@ -646,6 +715,8 @@ If you think that's a bug and you need that permission, then please open an issu
         s.clearData({ origins: [appURL] })
         s.clearCodeCaches({ urls: [appURL] })
         s.clearCache()
+        // Maybe clean up here if we store granted permissions
+        // (currently we don't).
       }
     )
     ipcMain.handle(
