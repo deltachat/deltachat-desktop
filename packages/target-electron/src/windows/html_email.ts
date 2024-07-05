@@ -182,97 +182,93 @@ export function openHtmlEmailWindow(
       DesktopSettings.update({ HTMLEmailAlwaysLoadRemoteContent: false })
     }
     update_restrictions(state !== 'never')
-    // so that the radio items reflect the new state
-    refreshMenu()
-  }
 
-  const refreshMenu = () => {
-    if (isMac) {
-      Menu.setApplicationMenu(makeMenu())
-    } else {
-      window.setMenu(makeMenu())
-    }
+    possibleRemoteContentStates.forEach(s => {
+      menu.getMenuItemById(
+        `remote-content-state-${s satisfies string}`
+      )!.checked = s === state
+    })
+    // The loop above seems not enough.
+    menu.getMenuItemById(`remote-content-state-${state}`)!.checked = true
   }
 
   // copied and adapted from webxdc menu
   // TODO: would make sense to refactor these menus at some point
-  const makeMenu = () => {
-    return Menu.buildFromTemplate([
-      ...(isMac ? [getAppMenu(window)] : []),
-      getFileMenu(window, isMac),
-      {
-        label: tx('global_menu_edit_desktop'),
-        submenu: [
-          {
-            label: tx('global_menu_edit_copy_desktop'),
-            role: 'copy',
+  const menu = Menu.buildFromTemplate([
+    ...(isMac ? [getAppMenu(window)] : []),
+    getFileMenu(window, isMac),
+    {
+      label: tx('global_menu_edit_desktop'),
+      submenu: [
+        {
+          label: tx('global_menu_edit_copy_desktop'),
+          role: 'copy',
+        },
+        {
+          label: tx('menu_select_all'),
+          click: () => {
+            sandboxedView.webContents.focus()
+            sandboxedView.webContents.selectAll()
           },
-          {
-            label: tx('menu_select_all'),
-            click: () => {
-              sandboxedView.webContents.focus()
-              sandboxedView.webContents.selectAll()
-            },
-            accelerator: isMac ? 'Cmd+A' : 'Ctrl+A',
+          accelerator: isMac ? 'Cmd+A' : 'Ctrl+A',
+        },
+      ],
+    },
+    {
+      label: tx('global_menu_view_desktop'),
+      submenu: [
+        {
+          // The same choice is behind the "⋮" button, which is hard to get
+          // to without a mouse: it lives in a different `webContents` than
+          // the message, and `Tab` cannot move focus between the two.
+          label: tx('load_remote_content'),
+          submenu: possibleRemoteContentStates.map(state => ({
+            label: tx(state),
+            type: 'radio' as const,
+            checked: state === getRemoteContentState(),
+            id: `remote-content-state-${state satisfies string}`,
+            click: () => applyRemoteContentState(state),
+          })),
+        },
+        { type: 'separator' },
+        {
+          accelerator: 'CmdOrCtrl+=',
+          label: tx('menu_zoom_in'),
+          role: 'zoomIn',
+        },
+        {
+          accelerator: 'CmdOrCtrl+-',
+          label: tx('menu_zoom_out'),
+          role: 'zoomOut',
+        },
+        {
+          accelerator: 'CmdOrCtrl+0',
+          label: tx('reset'),
+          role: 'resetZoom',
+        },
+        { type: 'separator' },
+        {
+          label: tx('global_menu_view_floatontop_desktop'),
+          type: 'checkbox',
+          checked: window.isAlwaysOnTop(),
+          click: item => {
+            window.setAlwaysOnTop(item.checked)
           },
-        ],
-      },
-      {
-        label: tx('global_menu_view_desktop'),
-        submenu: [
-          {
-            // The same choice is behind the "⋮" button, which is hard to get
-            // to without a mouse: it lives in a different `webContents` than
-            // the message, and `Tab` cannot move focus between the two.
-            label: tx('load_remote_content'),
-            submenu: possibleRemoteContentStates.map(state => ({
-              label: tx(state),
-              type: 'radio' as const,
-              checked: state === getRemoteContentState(),
-              click: () => applyRemoteContentState(state),
-            })),
-          },
-          { type: 'separator' },
-          {
-            accelerator: 'CmdOrCtrl+=',
-            label: tx('menu_zoom_in'),
-            role: 'zoomIn',
-          },
-          {
-            accelerator: 'CmdOrCtrl+-',
-            label: tx('menu_zoom_out'),
-            role: 'zoomOut',
-          },
-          {
-            accelerator: 'CmdOrCtrl+0',
-            label: tx('reset'),
-            role: 'resetZoom',
-          },
-          { type: 'separator' },
-          {
-            label: tx('global_menu_view_floatontop_desktop'),
-            type: 'checkbox',
-            checked: window.isAlwaysOnTop(),
-            click: () => {
-              window.setAlwaysOnTop(!window.isAlwaysOnTop())
-              refreshMenu()
-            },
-          },
-          { role: 'togglefullscreen' },
-        ],
-      },
-      getHelpMenu(isMac),
-    ])
-  }
+        },
+        { role: 'togglefullscreen' },
+      ],
+    },
+    getHelpMenu(isMac),
+  ])
 
   if (!isMac) {
-    window.setMenu(makeMenu())
+    window.setMenu(menu)
   }
 
   window.on('focus', () => {
     if (isMac) {
       // change to email menu
-      Menu.setApplicationMenu(makeMenu())
+      Menu.setApplicationMenu(menu)
     }
   })
   window.on('blur', () => {
