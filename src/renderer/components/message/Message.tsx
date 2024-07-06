@@ -36,7 +36,7 @@ import useOpenViewProfileDialog from '../../hooks/dialog/useOpenViewProfileDialo
 import usePrivateReply from '../../hooks/chat/usePrivateReply'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useVideoChat from '../../hooks/useVideoChat'
-import { useReactionsBar, showReactionsUi } from '../ReactionsBar'
+import { type useReactionsBar, showReactionsUi } from '../ReactionsBar'
 import EnterAutocryptSetupMessage from '../dialogs/EnterAutocryptSetupMessage'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import Reactions from '../Reactions'
@@ -342,8 +342,9 @@ export default function Message(props: {
   chat: T.FullChat
   message: T.Message
   conversationType: ConversationType
+  showReactionsBar: ReturnType<typeof useReactionsBar>['showReactionsBar']
 }) {
-  const { message, conversationType } = props
+  const { message, conversationType, showReactionsBar } = props
   const { id, viewType, text, hasLocation, isSetupmessage, hasHtml } = message
   const direction = getDirection(message)
   const status = mapCoreMsgStatus2String(message.state)
@@ -351,7 +352,6 @@ export default function Message(props: {
   const tx = useTranslationFunction()
   const accountId = selectedAccountId()
 
-  const { showReactionsBar } = useReactionsBar()
   const { openDialog } = useDialog()
   const privateReply = usePrivateReply()
   const { openContextMenu } = useContext(ContextMenuContext)

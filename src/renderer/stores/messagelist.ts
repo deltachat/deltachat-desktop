@@ -233,7 +233,6 @@ class MessageListStore extends Store<MessageListState> {
             ...payload.newMessageCacheItems,
           },
           newestFetchedMessageListItemIndex: payload.newestFetchedMessageIndex,
-          viewState: ChatViewReducer.fetchedIncomingMessages(state.viewState),
         }
         return modifiedState
       }, 'fetchedIncomingMessages')

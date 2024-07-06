@@ -91,6 +91,60 @@
     width: 100%;
     padding: 0 0.5em;
 
+    // The following code block is to prevent
+    // https://github.com/deltachat/deltachat-desktop/issues/3753
+    // which is 'Adding a reaction makes the chat "scroll up"
+    // (then you have to scroll to see new messages)'.
+    // Signal messenger implements the same measure:
+    // https://github.com/signalapp/Signal-Desktop/blob/29c404266863491a3b26a73b24602d36d7a3ac46/stylesheets/_modules.scss#L5573-L5587
+    // which they have looked up here:
+    // https://css-tricks.com/books/greatest-css-tricks/pin-scrolling-to-bottom/
+    // Spec:
+    // https://drafts.csswg.org/css-scroll-anchoring
+    //
+    // TODO there is a concern: whether this makes the chat list jumpy
+    // when it is scrolled up, making the scroll anchor
+    // (which is at the bottom of chat list) go way off screen.
+    // This doesn't appear to be the case.
+    // Also whether we're gonna jump to bottom if the user is reading old
+    // messages as is waiting for the newer ones to load
+    // while scrolled to bottom. This would be unexpected.
+    // I suppose this is why Signal has `--have-newest`.
+    // But I also haven't managed to see this happen.
+    // But, for example, if you scroll up a bit, and then someone
+    // adds a reaction to a message that is rendered, but is above the messages
+    // that are currently in view, the view will shift down.
+    //
+    // Perhaps a more reasonable approch would be to set the last message
+    // _in view_ as the anchor, and only explicitly scroll to latest message
+    // when it is freshly received,
+    // but this will (probably?) require quite some JS.
+    // Or simply only alternate scroll anchoring behavior when
+    // we're scrolled to bottom.
+    // Ah, if only there was a way to "flip" overflow anchor selection
+    // algorithm to just select bottom-most visible element
+    // and not the top-most.
+    // Maybe we could though? E.g. with `order` CSS property?
+    //
+    // Anyways, it's not often that already sent messages change in Delta Chat,
+    // because there is no "delete for everyone" and no "Edit".
+    & > ul {
+      // But the scrollable element is not `<ul>` but `#message-list` -
+      // its parent?? This appears to still work.
+      & > *:not(.overflow-anchor) {
+        overflow-anchor: none;
+      }
+      &::after {
+        content: '';
+        height: 1px;
+        display: block;
+        overflow-anchor: auto;
+      }
+      & > :last-child {
+        margin-bottom: 0;
+      }
+    }
+
     &::-webkit-scrollbar-track {
       background: transparent;
     }

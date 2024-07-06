@@ -6,6 +6,8 @@ import { ConversationType } from './MessageList'
 import { getLogger } from '../../../shared/logger'
 
 import type { T } from '@deltachat/jsonrpc-client'
+import classNames from 'classnames'
+import { useReactionsBar } from '../ReactionsBar'
 
 type RenderMessageProps = {
   key2: string
@@ -21,6 +23,8 @@ export function MessageWrapper(props: RenderMessageProps) {
   const state = props.message.state
   const shouldInViewObserve =
     state === C.DC_STATE_IN_FRESH || state === C.DC_STATE_IN_NOTICED
+
+  const { showReactionsBar, reactionBarShownForMessageId } = useReactionsBar()
 
   // Add this message to unreadMessageInViewIntersectionObserver to mark this message
   // as read if it's displayed on the screen
@@ -64,8 +68,13 @@ export function MessageWrapper(props: RenderMessageProps) {
   ])
 
   return (
-    <li id={props.key2} className='message-wrapper'>
-      <Message {...props} />
+    <li
+      id={props.key2}
+      className={classNames('message-wrapper', {
+        'overflow-anchor': reactionBarShownForMessageId === props.message.id,
+      })}
+    >
+      <Message showReactionsBar={showReactionsBar} {...props} />
       <div className='message-observer-bottom' id={'bottom-' + props.key2} />
     </li>
   )

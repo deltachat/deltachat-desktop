@@ -17,6 +17,8 @@ export type ReactionsBarValue = {
   showReactionsBar: (args: ShowReactionBar) => void
   hideReactionsBar: () => void
   isReactionsBarShown: boolean
+  /** `undefined` when `!isReactionsBarShown` */
+  reactionBarShownForMessageId: number | undefined
 }
 
 export const ReactionsBarContext =
@@ -37,6 +39,7 @@ export const ReactionsBarProvider = ({ children }: PropsWithChildren<{}>) => {
     showReactionsBar,
     hideReactionsBar,
     isReactionsBarShown: barArgs !== null,
+    reactionBarShownForMessageId: barArgs?.messageId,
   }
 
   return (

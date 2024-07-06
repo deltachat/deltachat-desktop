@@ -84,22 +84,6 @@ export class ChatViewReducer {
     }
   }
 
-  static fetchedIncomingMessages(prevState: ChatViewState): ChatViewState {
-    const {
-      lastKnownScrollHeight,
-      // lastKnownScrollTop,
-    } = getLastKnownScrollPosition()
-
-    return {
-      ...prevState,
-      scrollTo: {
-        type: 'scrollToBottom',
-        ifClose: true,
-      },
-      lastKnownScrollHeight,
-    }
-  }
-
   static unlockScroll(prevState: ChatViewState): ChatViewState {
     return {
       ...prevState,

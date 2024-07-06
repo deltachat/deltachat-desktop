@@ -8,7 +8,7 @@ import type { T } from '@deltachat/jsonrpc-client'
 
 type UseReactionsBar = Pick<
   ReactionsBarValue,
-  'hideReactionsBar' | 'isReactionsBarShown'
+  'hideReactionsBar' | 'isReactionsBarShown' | 'reactionBarShownForMessageId'
 > & {
   showReactionsBar: (
     args: Pick<ShowReactionBar, 'messageId' | 'x' | 'y'> & {

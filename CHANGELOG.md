@@ -26,6 +26,7 @@
 - Fix the problem of Quit menu item on WebXDC apps closes the whole DC app #3995
 - minor performance improvements #3981
 - fix chat list items (e.g. Archive) and contacts not showing up sometimes #4004
+- fix chat "scrolling up" when someone adds a reaction #4012
 
 <a id="1_46_1"></a>
 

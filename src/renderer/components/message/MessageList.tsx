@@ -203,6 +203,31 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
     }
   }, [jumpToMessage])
 
+  const getDistanceToBottom = (el: HTMLElement) =>
+    el.scrollHeight - el.scrollTop - el.clientHeight
+
+  const needToShowJumpToBottom: () => boolean = useCallback(() => {
+    if (!messageListRef.current) {
+      return false
+    }
+    const distanceToBottom = getDistanceToBottom(messageListRef.current)
+
+    const isNewestMessageLoaded =
+      newestFetchedMessageListItemIndex === messageListItems.length - 1
+
+    return (
+      !isNewestMessageLoaded ||
+      distanceToBottom >= 10 /* 10 is close enough to 0 */
+    )
+  }, [messageListItems.length, newestFetchedMessageListItemIndex])
+
+  useLayoutEffect(() => {
+    const newShowJumpDownButton = needToShowJumpToBottom()
+    if (newShowJumpDownButton !== showJumpDownButton) {
+      setShowJumpDownButton(newShowJumpDownButton)
+    }
+  }, [needToShowJumpToBottom, showJumpDownButton])
+
   const onScroll = useCallback(
     (ev: React.UIEvent<HTMLDivElement> | null) => {
       if (!messageListRef.current) {
@@ -215,16 +240,9 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
       if (ev) hideReactionsBar()
 
       const distanceToTop = messageListRef.current.scrollTop
-      const distanceToBottom =
-        messageListRef.current.scrollHeight -
-        messageListRef.current.scrollTop -
-        messageListRef.current.clientHeight
+      const distanceToBottom = getDistanceToBottom(messageListRef.current)
 
-      const isNewestMessageLoaded =
-        newestFetchedMessageListItemIndex === messageListItems.length - 1
-      const newShowJumpDownButton =
-        !isNewestMessageLoaded ||
-        distanceToBottom >= 10 /* 10 is close enough to 0 */
+      const newShowJumpDownButton = needToShowJumpToBottom()
       if (newShowJumpDownButton != showJumpDownButton) {
         setShowJumpDownButton(newShowJumpDownButton)
       }
@@ -258,10 +276,8 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
       fetchMoreBottom,
       fetchMoreTop,
       hideReactionsBar,
-      messageListItems.length,
-      newestFetchedMessageListItemIndex,
+      needToShowJumpToBottom,
       scheduler,
-      setShowJumpDownButton,
       showJumpDownButton,
     ]
   )
