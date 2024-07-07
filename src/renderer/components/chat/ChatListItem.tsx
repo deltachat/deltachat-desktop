@@ -4,7 +4,7 @@ import { T, C } from '@deltachat/jsonrpc-client'
 
 import Timestamp from '../conversations/Timestamp'
 import { Avatar } from '../Avatar'
-import { BackendRemote, Type, EffectfulBackendActions } from '../../backend-com'
+import { Type, EffectfulBackendActions } from '../../backend-com'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { getLogger } from '../../../shared/logger'
 import { useContextMenuWithActiveState } from '../ContextMenu'
