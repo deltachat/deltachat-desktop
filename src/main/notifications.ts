@@ -79,12 +79,14 @@ function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
       notify.close()
     })
     notify.on('close', () => {
-      // this can be triggered by system out when the message
-      // is moved to notification center (Window, Linux)
+      // on Window and Linux this can be triggered by system time out
+      // when the message is moved to notification center so only close
+      // the notification on this event on Mac
       if (isMac) {
         notifications[chatId] =
           notifications[chatId]?.filter(n => n !== notify) || []
       }
+      /* ignore-console-log */
       console.log('Notification close event triggered', notify)
     })
 
