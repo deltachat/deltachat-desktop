@@ -10,6 +10,7 @@
 - reword advanced setting "Disable Background Sync For All Accounts" -> "Only Synchronize the Currently Selected Account" #3960
 - use 'Info' and 'Message Info' consistently #3961
 - consolidate 'Profile' wording #3963
+- name "Search" fields as such #4015
 - Update local help (2024-06-19)
 - refactor: safer types #3993
 - keep aspect ratio in quoted images #3999
