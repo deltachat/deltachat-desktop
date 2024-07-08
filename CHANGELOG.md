@@ -27,6 +27,7 @@
 - minor performance improvements #3981
 - fix chat list items (e.g. Archive) and contacts not showing up sometimes #4004
 - fix bug notifications not being removed on Mac  #4010
+- fix bug "Mark All as Read" does not remove notifications #4002
 
 <a id="1_46_1"></a>
 
