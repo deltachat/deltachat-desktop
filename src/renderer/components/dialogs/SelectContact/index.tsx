@@ -60,7 +60,7 @@ export default function SelectContactDialog({
           className='search-input'
           onChange={e => setQueryStr(e.target.value)}
           value={queryStr}
-          placeholder={tx('contacts_enter_name_or_email')}
+          placeholder={tx('search')}
           autoFocus
           spellCheck={false}
         />
