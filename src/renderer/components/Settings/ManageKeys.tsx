@@ -98,10 +98,10 @@ export default function ManageKeys() {
   return (
     <>
       <SettingsButton onClick={onKeysExport}>
-        {tx('pref_managekeys_export_secret_keys')}...
+        {tx('pref_managekeys_export_secret_keys')}
       </SettingsButton>
       <SettingsButton onClick={onKeysImport}>
-        {tx('pref_managekeys_import_secret_keys')}...
+        {tx('pref_managekeys_import_secret_keys')}
       </SettingsButton>
     </>
   )
