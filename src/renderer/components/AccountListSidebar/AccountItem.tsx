@@ -56,6 +56,11 @@ export default function AccountItem({
 
     const cleanup = [
       onDCEvent(account.id, 'IncomingMsg', update),
+      // IncomingMsg doesn't listen for added device messages,
+      // so we also listen to `ChatlistChanged` because it is a good indicator and not emitted too often
+      // https://github.com/deltachat/deltachat-desktop/issues/4013
+      onDCEvent(account.id, 'ChatlistChanged', update),
+
       onDCEvent(account.id, 'MsgsNoticed', update),
       // when muting or unmuting a chat
       onDCEvent(account.id, 'ChatModified', update),
