@@ -57,6 +57,8 @@ export default function AccountItem({
     const cleanup = [
       onDCEvent(account.id, 'IncomingMsg', update),
       onDCEvent(account.id, 'MsgsNoticed', update),
+      // when muting or unmuting a chat
+      onDCEvent(account.id, 'ChatModified', update),
     ]
 
     return () => cleanup.forEach(off => off())
