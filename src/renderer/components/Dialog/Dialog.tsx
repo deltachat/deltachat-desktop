@@ -1,9 +1,7 @@
 import classNames from 'classnames'
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 
 import type { DialogProps } from '../../contexts/DialogContext'
-
-import Overlay from '../Overlay'
 
 import styles from './styles.module.scss'
 
@@ -29,32 +27,60 @@ const Dialog = React.memo<Props>(
     height,
     ...props
   }) => {
-    canOutsideClickClose
     canEscapeKeyClose
 
-    const onOverlayClick = canOutsideClickClose
-      ? (ev: React.MouseEvent) => {
-          ev.preventDefault()
-          props.onClose()
+    const dialog = useRef<HTMLDialogElement>(null)
+
+    const onClick = canOutsideClickClose
+      ? (ev: React.MouseEvent<HTMLDialogElement>) => {
+          if (!dialog.current) {
+            return
+          }
+	  ev.stopPropagation()
+          // that is the way to check if we clicked on dialog::backdrop
+          const rect = dialog.current.getBoundingClientRect()
+          const isInDialog =
+            rect.top <= ev.clientY &&
+            ev.clientY <= rect.top + rect.height &&
+            rect.left <= ev.clientX &&
+            ev.clientX <= rect.left + rect.width
+          if (!isInDialog) {
+            dialog.current.close()
+          }
         }
       : () => {}
 
+    const onClose = () => {
+      props.onClose()
+    }
+
+    const onCancel = (ev: React.BaseSyntheticEvent) => {
+      if (!canEscapeKeyClose) {
+        ev.preventDefault()
+      }
+    }
+
+    useEffect(() => {
+      // calling showModal is "only" the way to have ::backdrop
+      dialog.current?.showModal()
+    })
+
     return (
-      <div>
-        <Overlay onClick={onOverlayClick} isOpen={true}>
-          <div
-            className={classNames(styles.dialog, props.className, {
-              [styles.fixed]: props.fixed,
-            })}
-            style={{
-              width: width && `${width}px`,
-              height: height && `${height}px`,
-            }}
-          >
-            {children}
-          </div>
-        </Overlay>
-      </div>
+      <dialog
+        onClick={onClick}
+        onClose={onClose}
+        onCancel={onCancel}
+        ref={dialog}
+        className={classNames(styles.dialog, props.className, {
+          [styles.fixed]: props.fixed,
+        })}
+        style={{
+          width: width && `${width}px`,
+          height: height && `${height}px`,
+        }}
+      >
+        {children}
+      </dialog>
     )
   }
 )

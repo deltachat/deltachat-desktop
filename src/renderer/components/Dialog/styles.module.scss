@@ -5,13 +5,13 @@ $paddingVertical: 20px;
 .dialog {
   background-color: var(--bp4DialogBgPrimary);
   border-radius: 10px;
+  border: none;
   box-shadow:
     0 0 0 1px rgba(16, 22, 26, 0.1),
     0 4px 8px rgba(16, 22, 26, 0.2),
     0 0 20px 3px rgba(16, 22, 26, 0.2);
-  display: flex;
+  // display: flex;
   flex-direction: column;
-  margin: 0;
   max-height: calc(100% - 50px);
   max-width: 733px;
   min-width: 350px;
@@ -26,7 +26,11 @@ $paddingVertical: 20px;
     position: absolute;
     top: 25px;
   }
+  &::backdrop {
+    background-color: rgba(17, 20, 24, 0.7);
+  }
 }
+
 
 .dialogHeader {
   width: 100%;
