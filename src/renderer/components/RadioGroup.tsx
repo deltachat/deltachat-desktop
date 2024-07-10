@@ -17,9 +17,10 @@ export default function RadioGroup({
   return (
     <form>
       <fieldset className='radiogroup'>
-        {children.map((radio: any) => {
+        {children.map((radio: any, index: number) => {
           return (
             <Radio
+              key={index}
               {...radio.props}
               selected={radio.props.value === selectedValue}
               onSelect={() => onChange && onChange(radio.props.value)}

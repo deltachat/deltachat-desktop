@@ -19,6 +19,9 @@ $paddingVertical: 20px;
   padding: 0;
   width: unset;
 
+  align-items: center;
+  justify-content: center;
+
   &.fixed {
     position: absolute;
     top: 25px;
@@ -26,6 +29,7 @@ $paddingVertical: 20px;
 }
 
 .dialogHeader {
+  width: 100%;
   align-items: center;
   background-color: var(--bp4DialogHeaderBg);
   border-bottom: var(--outlineProperties);
@@ -49,6 +53,7 @@ $paddingVertical: 20px;
 }
 
 .dialogBody {
+  width: 100%;
   background-color: var(--bp4DialogBgPrimary);
   flex: 1 1 auto;
   max-height: 90vh;

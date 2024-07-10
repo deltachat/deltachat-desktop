@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Intent } from '@blueprintjs/core'
 
 import { DeltaProgressBar } from '../Login-Styles'
 import { runtime } from '../../runtime'
@@ -101,7 +100,7 @@ function ExportProgressDialog() {
       <DialogHeader title={tx('export_backup_desktop')} />
       <DialogBody>
         <DialogContent>
-          <DeltaProgressBar intent={Intent.PRIMARY} progress={progress} />
+          <DeltaProgressBar intent='primary' progress={progress} />
         </DialogContent>
       </DialogBody>
     </Dialog>

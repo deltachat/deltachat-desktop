@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react'
-import { Icon, Overlay } from '@blueprintjs/core'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 import debounce from 'debounce'
 
+import Icon from '../Icon'
+import Overlay from '../Overlay'
 import { onDownload } from '../message/messageFunctions'
 import { runtime } from '../../runtime'
 import { isImage, isVideo, isAudio } from '../attachment/Attachment'
@@ -236,11 +237,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
   if (!msg || !msg.file) return elm
 
   return (
-    <Overlay
-      isOpen={Boolean(file)}
-      className='attachment-overlay'
-      onClose={onClose}
-    >
+    <Overlay isOpen={Boolean(file)} className='attachment-overlay'>
       <div className='render-media-wrapper' tabIndex={0}>
         <div className='attachment-view'>{elm}</div>
         {elm && (
@@ -255,7 +252,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
               onClick={onClose}
               icon='cross'
               size={32}
-              color={'grey'}
+              coloring='settings-menu'
               aria-label={tx('close')}
             />
           </div>

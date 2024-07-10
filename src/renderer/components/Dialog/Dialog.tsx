@@ -1,8 +1,9 @@
-import { Dialog as BlueprintDialog } from '@blueprintjs/core'
 import classNames from 'classnames'
 import React from 'react'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+
+import Overlay from '../Overlay'
 
 import styles from './styles.module.scss'
 
@@ -10,7 +11,6 @@ const DEFAULT_WIDTH = 500
 
 type Props = React.PropsWithChildren<
   {
-    backdropProps?: any
     canEscapeKeyClose?: boolean
     canOutsideClickClose?: boolean
     className?: string
@@ -29,23 +29,32 @@ const Dialog = React.memo<Props>(
     height,
     ...props
   }) => {
+    canOutsideClickClose
+    canEscapeKeyClose
+
+    const onOverlayClick = canOutsideClickClose
+      ? (ev: React.MouseEvent) => {
+          ev.preventDefault()
+          props.onClose()
+        }
+      : () => {}
+
     return (
-      <BlueprintDialog
-        isOpen
-        onClose={props.onClose}
-        canOutsideClickClose={canOutsideClickClose}
-        canEscapeKeyClose={canEscapeKeyClose}
-        backdropProps={props.backdropProps}
-        className={classNames(styles.dialog, props.className, {
-          [styles.fixed]: props.fixed,
-        })}
-        style={{
-          width: width && `${width}px`,
-          height: height && `${height}px`,
-        }}
-      >
-        {children}
-      </BlueprintDialog>
+      <div>
+        <Overlay onClick={onOverlayClick} isOpen={true}>
+          <div
+            className={classNames(styles.dialog, props.className, {
+              [styles.fixed]: props.fixed,
+            })}
+            style={{
+              width: width && `${width}px`,
+              height: height && `${height}px`,
+            }}
+          >
+            {children}
+          </div>
+        </Overlay>
+      </div>
     )
   }
 )

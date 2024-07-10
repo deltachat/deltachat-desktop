@@ -52,10 +52,6 @@
       cursor: pointer;
       margin-right: 5px;
     }
-
-    .bp4-icon-cross {
-      cursor: pointer;
-    }
   }
 }
 
@@ -65,13 +61,6 @@
   top: calc(50vh - (60px / 2));
   background-color: #3131316b;
   border-radius: 8%;
-
-  .bp4-icon > svg:not([fill]) {
-    fill: var(--bp4ButtonHoverBg);
-    &:hover {
-      fill: white;
-    }
-  }
 }
 
 .media-previous-button {

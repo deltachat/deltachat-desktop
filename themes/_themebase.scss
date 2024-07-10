@@ -34,6 +34,7 @@ $hover-contrast-change: 2%;
   --iconBackground: #757575; /* color from emoji.png */
   /* NavBar */
   --navBarBackground: #{$bgNavBar};
+  --navBarHeight: 50px;
   --navBarText: #{$textNavBar};
   --navBarButtonHover: rgba(143, 153, 168, 0.15);
   --navBarButtonActive: rgba(143, 153, 168, 0.3);

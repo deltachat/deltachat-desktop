@@ -9,9 +9,13 @@ export type IconName =
   | 'bell'
   | 'brightness-6'
   | 'chats'
+  | 'chevron-left'
+  | 'chevron-right'
   | 'code-tags'
   | 'cross'
   | 'devices'
+  | 'eye-off'
+  | 'eye-open'
   | 'favorite'
   | 'forum'
   | 'image'
@@ -20,6 +24,7 @@ export type IconName =
   | 'list'
   | 'map'
   | 'media'
+  | 'minus'
   | 'more'
   | 'open_in_new'
   | 'paperclip'
@@ -31,11 +36,13 @@ export type IconName =
   | 'reaction'
   | 'settings'
   | 'swap_vert'
+  | 'tint'
   | 'undo'
   | 'upload-file'
 
 type Props = {
   className?: string
+  onClick?: (ev: Event | React.SyntheticEvent<Element, Event>) => void
   icon: IconName
   coloring?: keyof Omit<typeof styles, 'icon'>
   size?: number
@@ -48,6 +55,7 @@ export default function Icon({
   rotation = 0,
   icon,
   className,
+  onClick,
 }: Props) {
   return (
     <span
@@ -56,6 +64,7 @@ export default function Icon({
         coloring && styles[coloring],
         className
       )}
+      onClick={onClick}
       style={{
         transform: `rotate(${rotation}deg)`,
         WebkitMaskImage: `url(../images/icons/${icon}.svg)`,

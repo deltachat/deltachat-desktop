@@ -10,6 +10,7 @@ type Props = React.PropsWithChildren<{
   active?: boolean
   id?: string
   onClick: any
+  styling?: 'minimal'
   type?: 'primary' | 'secondary' | 'danger'
 }>
 
@@ -20,6 +21,7 @@ export default function Button({
   id,
   onClick,
   type,
+  styling,
   ...props
 }: Props) {
   return (
@@ -31,6 +33,7 @@ export default function Button({
         styles.button,
         active && styles.active,
         type && styles[type],
+        styling && styles[styling],
         props.className
       )}
       onClick={onClick}

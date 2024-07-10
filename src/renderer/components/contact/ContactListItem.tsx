@@ -1,8 +1,8 @@
 import React, { MouseEventHandler } from 'react'
 import Contact from './Contact'
-import { Icon } from '@blueprintjs/core'
 import classNames from 'classnames'
 import { Type } from '../../backend-com'
+import Icon from '../Icon'
 
 export const DeltaCheckbox = (props: {
   checked: boolean

@@ -1,4 +1,3 @@
-import { Intent } from '@blueprintjs/core'
 import { DcEventType } from '@deltachat/jsonrpc-client'
 import React, { useEffect, useState } from 'react'
 
@@ -68,7 +67,7 @@ export function ReceiveBackupProgressDialog({
           )}
           <DeltaProgressBar
             progress={importProgress}
-            intent={!error ? Intent.SUCCESS : Intent.DANGER}
+            intent={error ? 'danger' : 'success'}
           />
         </DialogContent>
       </DialogBody>

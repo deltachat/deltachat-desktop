@@ -1,0 +1,32 @@
+.overlayOpen {
+  position: relative;
+  display: block;
+}
+
+.overlayClosed {
+  position: relative;
+  display: none;
+}
+
+.overlayBackdrop {
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  opacity: 1;
+  background-color: rgba(17, 20, 24, 0.7);
+  overflow: auto;
+  z-index: 20;
+}
+
+.overlayContent {
+  position: fixed;
+  z-index: 20;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  object-fit: stretch;
+}

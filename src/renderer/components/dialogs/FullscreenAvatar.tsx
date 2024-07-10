@@ -1,6 +1,5 @@
 import React, { useRef } from 'react'
 import { basename } from 'path'
-import { Icon, Overlay } from '@blueprintjs/core'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 
 import { runtime } from '../../runtime'
@@ -8,6 +7,8 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useContextMenu from '../../hooks/useContextMenu'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+import Icon from '../Icon'
+import Overlay from '../Overlay'
 
 export default function FullscreenAvatar(
   props: { imagePath: string } & DialogProps
@@ -37,7 +38,7 @@ export default function FullscreenAvatar(
   ])
 
   return (
-    <Overlay isOpen={true} className='attachment-overlay' onClose={onClose}>
+    <Overlay isOpen={true} className='attachment-overlay'>
       <div className='render-media-wrapper' tabIndex={0}>
         <div className='attachment-view'>
           <div className='image-container'>
@@ -71,7 +72,7 @@ export default function FullscreenAvatar(
             onClick={onClose}
             icon='cross'
             size={32}
-            color={'grey'}
+            coloring='settings-menu'
             aria-label={tx('close')}
           />
         </div>
