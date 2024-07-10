@@ -15,6 +15,9 @@
 - Update local help (2024-06-19)
 - refactor: safer types #3993
 - keep aspect ratio in quoted images #3999
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.141.2`
+  - fix memory leak in jsonrpc client code (to be specific in yerpc)
+  - support vcards exported by protonmail
 
 ### Fixed
 - Fix crash on "Settings" click when not on main screen (e.g. no account selected): hide the "settings" button
