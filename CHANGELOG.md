@@ -18,6 +18,8 @@
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.141.2`
   - fix memory leak in jsonrpc client code (to be specific in yerpc)
   - support vcards exported by protonmail
+  - Display vCard contact name in the message summary
+  - Case-insensitive search for non-ASCII messages
 
 ### Fixed
 - Fix crash on "Settings" click when not on main screen (e.g. no account selected): hide the "settings" button
