@@ -1,12 +1,10 @@
 .composer {
-  background-color: var(--composerBg);
   border-left: 1px solid rgba(16, 22, 26, 0.1);
 
   &.contact-request {
     display: flex;
     justify-content: space-around;
     padding: 15px 0px;
-
     & > .contact-request-button {
       background-color: var(--chatListItemSelectedBg);
       border-radius: 10px;
@@ -25,7 +23,11 @@
     & > .attachment-quote-section {
       display: flex;
       justify-content: space-between;
-      padding: 3px 0;
+      padding: 5px 0 0 5px;
+      background-color: #efefef;
+      border-radius: 8px;
+      margin: 0px 12px 10px;
+      opacity: 0.85;
 
       .quote {
         // this is just overwrites for the quote styles defined in _message.scss
@@ -59,6 +61,7 @@
   .lower-bar {
     display: flex;
     align-items: flex-end;
+    background-color: var(--composerBg);
 
     .attachment-button {
       width: 40px;
