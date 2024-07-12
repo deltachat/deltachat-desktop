@@ -230,7 +230,6 @@ export function AddMemberInnerDialog({
             {contactIdsToAdd.map(contact => {
               return AddMemberChip({
                 contact,
-                onRemoveClick: toggleMember,
               })
             })}
             <input

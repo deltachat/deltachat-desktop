@@ -56,17 +56,10 @@ export function AddMemberDialog({
   )
 }
 
-export const AddMemberChip = (props: {
-  contact: T.Contact
-  onRemoveClick: (contact: T.Contact) => void
-}) => {
-  const { contact, onRemoveClick } = props
+export const AddMemberChip = (props: { contact: T.Contact }) => {
+  const { contact } = props
   return (
-    <div
-      key={contact.id}
-      className='AddMemberChip'
-      onClick={() => onRemoveClick(contact)}
-    >
+    <div key={contact.id} className='AddMemberChip'>
       <div className='Avatar'>
         <Avatar
           displayName={contact.displayName}
