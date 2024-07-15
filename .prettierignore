@@ -1,4 +1,4 @@
 CONTRIBUTORS.md
 CHANGELOG.md
 node_modules
-src/shared/build-info.ts
+packages/shared/build-info.ts
