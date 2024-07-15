@@ -61,7 +61,7 @@
 1. Make sure no "blocking" bugs are in the issue tracker. If there's any, try
    to solve them first:
    <https://github.com/deltachat/deltachat-desktop/issues?q=is%3Aopen+is%3Aissue+label%3Ablocker>
-2. Pull translations via `npm run translations-update` in a separate PR
+2. Pull translations via `pnpm translations-update` in a separate PR
 3. Update the local help files if necessary in a separate PR:
    <https://github.com/deltachat/deltachat-pages/blob/master/tools/create-local-help.py>
 4. If you've updated any translations or local help files, make sure that the
@@ -75,7 +75,7 @@
    section with your new version code)
 3. Do not forget to update the tag links at the end of the `CHANGELOG.md` file!
 4. Change `version` field in `package.json` to `X.Y.Z`
-5. Run `npm install` to update `package-lock.json`
+5. Run `pnpm install` to update `package-lock.json`
 6. Open a PR for your branch and get it reviewed.
 7. As soon as your PR is approved merge it to `main`
 8. After the PR is merged, checkout the latest version on `main`. Tag the latest commit
