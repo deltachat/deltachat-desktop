@@ -48,17 +48,17 @@ You can modify all classes and use all kind of css, but we recommend using the c
 > Warning: This will also (probably) change in the future.
 
 ```
-npx electron . --theme dc:dark
+pnpm electron . --theme dc:dark
 or
-npm run dev -- --theme dc:dark
+pnpm dev -- --theme dc:dark
 or
-npm run start -- --theme dc:dark
+pnpm start -- --theme dc:dark
 ```
 
 You can also enable hot reload for loaded theme with:
 
 ```
-npm run start -- --theme dc:dark --theme-watch
+pnpm start -- --theme dc:dark --theme-watch
 ```
 
 ## Creating your own Theme:
@@ -71,7 +71,7 @@ We use SCSS to create themes, because it allows us to save work by using its col
 
 1. copy the light or dark theme and save it to your user deltachat folder `DeltaChat/custom-themes/my_theme.scss`
 
-2. run `npm i`
+2. run `pnpm i`
 
 3. compile the theme to CSS in watch mode.
 

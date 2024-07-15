@@ -61,7 +61,7 @@ async function gatherBuildInfo() {
 gatherBuildInfo().then(build_info => {
   writeFileSync(
     join(__dirname, '../src/shared/build-info.ts'),
-    '/// GENERATED FILE run `npm run build` to refresh\n' +
+    '/// GENERATED FILE run `pnpm build` to refresh\n' +
       Object.keys(build_info)
         .map(
           key =>

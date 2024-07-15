@@ -22,18 +22,19 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 20.x
-    - name: npm ci
+    - name: pnpm install
       run: |
-        npm ci
+        npm i -g pnpm
+        pnpm install --frozen-lockfile
     - name: preperation (generate code)
       run: |
-        npm run build:shared:version
+        pnpm build:shared:version
     - name: Run all checks
       run: |
-        npm run check
+        pnpm check
     - name: Check for misplaced console.log statements
       run: |
-        npm run test-log-conventions
+        pnpm test-log-conventions
     - name: Misc tests
       run: |
-        npm run test-misc
+        pnpm test-misc
