@@ -1,0 +1,590 @@
+import React, { useContext } from 'react'
+import { filesize } from 'filesize'
+
+import {
+  openAttachmentInShell,
+  onDownload,
+  openWebxdc,
+} from '../message/messageFunctions'
+import {
+  isImage,
+  isVideo,
+  isAudio,
+  getExtension,
+  dragAttachmentOut,
+} from './Attachment'
+import Timestamp from '../conversations/Timestamp'
+import { makeContextMenu, OpenContextMenu } from '../ContextMenu'
+import { runtime } from '../../../../runtime/runtime'
+import { getLogger } from '../../../../shared/logger'
+import { truncateText } from '../../../../shared/util'
+import { selectedAccountId } from '../../ScreenController'
+import ConfirmationDialog from '../dialogs/ConfirmationDialog'
+import useDialog from '../../hooks/dialog/useDialog'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useMessage from '../../hooks/chat/useMessage'
+import MessageDetail from '../dialogs/MessageDetail/MessageDetail'
+import { ContextMenuContext } from '../../contexts/ContextMenuContext'
+import AudioPlayer from '../AudioPlayer'
+
+import type { T } from '@deltachat/jsonrpc-client'
+import type { OpenDialog } from '../../contexts/DialogContext'
+import type { JumpToMessage, DeleteMessage } from '../../hooks/chat/useMessage'
+
+const log = getLogger('mediaAttachment')
+
+const hideOpenInShellTypes: T.Viewtype[] = [
+  'Gif',
+  'Image',
+  'Video',
+  'Audio',
+  'Voice',
+  'Webxdc',
+]
+
+const contextMenuFactory = (
+  message: T.Message,
+  accountId: number,
+  openDialog: OpenDialog,
+  jumpToMessage: JumpToMessage,
+  deleteMessage: DeleteMessage
+) => {
+  const showCopyImage = message.viewType === 'Image'
+  const tx = window.static_translate
+  const { id: msgId, viewType } = message
+  return [
+    !hideOpenInShellTypes.includes(viewType) && {
+      label: tx('open'),
+      action: openAttachmentInShell.bind(null, message),
+    },
+    viewType === 'Webxdc' && {
+      label: tx('start_app'),
+      action: openWebxdc.bind(null, message.id),
+    },
+    {
+      label: tx('save_as'),
+      action: onDownload.bind(null, message),
+    },
+    showCopyImage && {
+      label: tx('menu_copy_image_to_clipboard'),
+      action: () => {
+        message.file && runtime.writeClipboardImage(message.file)
+      },
+    },
+    {
+      label: tx('show_in_chat'),
+      action: () => jumpToMessage(accountId, message.id),
+    },
+    {
+      label: tx('info'),
+      action: () => {
+        openDialog(MessageDetail, { id: msgId })
+      },
+    },
+    {
+      label: tx('delete'),
+      action: () =>
+        openDialog(ConfirmationDialog, {
+          message: tx('ask_delete_message'),
+          confirmLabel: tx('delete'),
+          cb: (yes: boolean) => yes && deleteMessage(accountId, msgId),
+        }),
+    },
+  ]
+}
+
+/** provides a quick link to commonly used functions to save a few duplicated lines  */
+const getMediaActions = (
+  openContextMenu: OpenContextMenu,
+  openDialog: OpenDialog,
+  jumpToMessage: JumpToMessage,
+  deleteMessage: DeleteMessage,
+  message: T.Message,
+  accountId: number
+) => {
+  return {
+    openContextMenu: makeContextMenu(
+      contextMenuFactory.bind(
+        null,
+        message,
+        accountId,
+        openDialog,
+        jumpToMessage,
+        deleteMessage
+      ),
+      openContextMenu
+    ),
+    downloadMedia: onDownload.bind(null, message),
+    openInShell: openAttachmentInShell.bind(null, message),
+  }
+}
+
+function getBrokenMediaContextMenu(
+  openContextMenu: OpenContextMenu,
+  openDialog: OpenDialog,
+  deleteMessage: DeleteMessage,
+  messageId: number,
+  accountId: number
+) {
+  const tx = window.static_translate
+  return makeContextMenu(
+    [
+      {
+        label: tx('delete'),
+        action: () =>
+          openDialog(ConfirmationDialog, {
+            message: tx('ask_delete_message'),
+            confirmLabel: tx('delete'),
+            cb: (yes: boolean) => yes && deleteMessage(accountId, messageId),
+          }),
+      },
+    ],
+    openContextMenu
+  )
+}
+
+function squareBrokenMediaContent(
+  hasSupportedFormat: boolean,
+  contentType: string | null
+) {
+  const tx = window.static_translate
+  return (
+    <div className='attachment-content'>
+      {hasSupportedFormat
+        ? tx('attachment_failed_to_load')
+        : tx('cannot_display_unsuported_file_type', contentType || 'null')}
+    </div>
+  )
+}
+
+export type GalleryAttachmentElementProps = {
+  messageId: number
+  loadResult: T.MessageLoadResult
+}
+
+export function ImageAttachment({
+  messageId,
+  loadResult,
+  openFullscreenMedia,
+}: GalleryAttachmentElementProps & {
+  openFullscreenMedia: (message: T.Message) => void
+}) {
+  const { openDialog } = useDialog()
+  const tx = useTranslationFunction()
+  const contextMenu = useContext(ContextMenuContext)
+  const { jumpToMessage, deleteMessage } = useMessage()
+  const accountId = selectedAccountId()
+
+  if (loadResult.kind === 'loadingError') {
+    const onContextMenu = getBrokenMediaContextMenu(
+      contextMenu.openContextMenu,
+      openDialog,
+      deleteMessage,
+      messageId,
+      accountId
+    )
+
+    return (
+      <div
+        className={'media-attachment-media broken'}
+        title={loadResult.error}
+        onContextMenu={onContextMenu}
+      >
+        <div className='attachment-content'>
+          {tx('attachment_failed_to_load')}
+        </div>
+      </div>
+    )
+  } else {
+    const message = loadResult
+    const { openContextMenu, openInShell } = getMediaActions(
+      contextMenu.openContextMenu,
+      openDialog,
+      jumpToMessage,
+      deleteMessage,
+      message,
+      accountId
+    )
+    const { file, fileMime } = message
+    const hasSupportedFormat = isImage(fileMime)
+    const isBroken = !file || !hasSupportedFormat
+
+    return (
+      <div
+        className={`media-attachment-media${isBroken ? ` broken` : ''}`}
+        onClick={
+          isBroken ? openInShell : openFullscreenMedia.bind(null, message)
+        }
+        onContextMenu={openContextMenu}
+      >
+        {isBroken ? (
+          squareBrokenMediaContent(hasSupportedFormat, fileMime)
+        ) : (
+          <img
+            className='attachment-content'
+            src={runtime.transformBlobURL(file)}
+            loading='lazy'
+          />
+        )}
+      </div>
+    )
+  }
+}
+
+export function VideoAttachment({
+  messageId,
+  loadResult,
+  openFullscreenMedia,
+}: GalleryAttachmentElementProps & {
+  openFullscreenMedia: (message: T.Message) => void
+}) {
+  const { openDialog } = useDialog()
+  const tx = useTranslationFunction()
+  const contextMenu = useContext(ContextMenuContext)
+  const { deleteMessage, jumpToMessage } = useMessage()
+  const accountId = selectedAccountId()
+
+  if (loadResult.kind === 'loadingError') {
+    const onContextMenu = getBrokenMediaContextMenu(
+      contextMenu.openContextMenu,
+      openDialog,
+      jumpToMessage,
+      messageId,
+      accountId
+    )
+
+    return (
+      <div
+        className={'media-attachment-media broken'}
+        title={loadResult.error}
+        onContextMenu={onContextMenu}
+      >
+        <div className='attachment-content'>
+          {tx('attachment_failed_to_load')}
+        </div>
+      </div>
+    )
+  } else {
+    const message = loadResult
+    const { openContextMenu, openInShell } = getMediaActions(
+      contextMenu.openContextMenu,
+      openDialog,
+      jumpToMessage,
+      deleteMessage,
+      message,
+      accountId
+    )
+    const { file, fileMime } = message
+    const hasSupportedFormat = isVideo(fileMime)
+    const isBroken = !file || !hasSupportedFormat
+    return (
+      <div
+        className={`media-attachment-media${isBroken ? ` broken` : ''}`}
+        onClick={
+          isBroken ? openInShell : openFullscreenMedia.bind(null, message)
+        }
+        onContextMenu={openContextMenu}
+      >
+        {isBroken ? (
+          squareBrokenMediaContent(hasSupportedFormat, fileMime || '')
+        ) : (
+          <>
+            <video
+              className='attachment-content'
+              src={runtime.transformBlobURL(file)}
+              controls={false}
+            />
+            <div className='video-play-btn'>
+              <div className='video-play-btn-icon' />
+            </div>
+          </>
+        )}
+      </div>
+    )
+  }
+}
+
+export function AudioAttachment({
+  messageId,
+  loadResult,
+}: GalleryAttachmentElementProps) {
+  const { openDialog } = useDialog()
+  const tx = useTranslationFunction()
+  const contextMenu = useContext(ContextMenuContext)
+  const { deleteMessage, jumpToMessage } = useMessage()
+  const accountId = selectedAccountId()
+
+  if (loadResult.kind === 'loadingError') {
+    const onContextMenu = getBrokenMediaContextMenu(
+      contextMenu.openContextMenu,
+      openDialog,
+      deleteMessage,
+      messageId,
+      accountId
+    )
+    return (
+      <div
+        className={'media-attachment-audio broken'}
+        title={loadResult.error}
+        onContextMenu={onContextMenu}
+      >
+        <div className='heading'>
+          <div className='name'>? Error ?</div>
+          <span className='date'>?</span>
+        </div>
+        <div className='attachment-content'>
+          {tx('attachment_failed_to_load')}
+        </div>
+      </div>
+    )
+  } else {
+    const message = loadResult
+    const { openContextMenu } = getMediaActions(
+      contextMenu.openContextMenu,
+      openDialog,
+      jumpToMessage,
+      deleteMessage,
+      message,
+      accountId
+    )
+    const { file, fileMime } = message
+    const hasSupportedFormat = isAudio(fileMime)
+    const isBroken = !file || !hasSupportedFormat
+    return (
+      <div
+        className={`media-attachment-audio${isBroken ? ` broken` : ''}`}
+        onContextMenu={openContextMenu}
+      >
+        <div className='heading'>
+          <div className='name'>
+            {message?.overrideSenderName
+              ? `~${message.overrideSenderName}`
+              : message?.sender?.displayName}
+          </div>
+          <Timestamp
+            timestamp={message?.timestamp * 1000}
+            extended
+            module='date'
+          />
+        </div>
+        {hasSupportedFormat ? (
+          <AudioPlayer src={runtime.transformBlobURL(file || '')} />
+        ) : (
+          <div>
+            {window.static_translate(
+              'cannot_display_unsuported_file_type',
+              fileMime || 'null'
+            )}
+          </div>
+        )}
+      </div>
+    )
+  }
+}
+
+export function FileAttachmentRow({
+  messageId,
+  loadResult,
+  queryText,
+}: GalleryAttachmentElementProps & { queryText?: string }) {
+  const { openDialog } = useDialog()
+  const tx = useTranslationFunction()
+  const contextMenu = useContext(ContextMenuContext)
+  const { deleteMessage, jumpToMessage } = useMessage()
+  const accountId = selectedAccountId()
+
+  if (loadResult.kind === 'loadingError') {
+    const onContextMenu = getBrokenMediaContextMenu(
+      contextMenu.openContextMenu,
+      openDialog,
+      deleteMessage,
+      messageId,
+      accountId
+    )
+
+    return (
+      <div
+        className={'media-attachment-generic broken'}
+        title={loadResult.error}
+        onContextMenu={onContextMenu}
+      >
+        <div className='file-icon'>
+          <div className='file-extension'>?</div>
+        </div>
+
+        <div className='name'>{tx('attachment_failed_to_load')}</div>
+        <div className='size'>{'?'}</div>
+        <div className='date'>{'?'}</div>
+      </div>
+    )
+  } else {
+    const message = loadResult
+    const { openContextMenu, openInShell } = getMediaActions(
+      contextMenu.openContextMenu,
+      openDialog,
+      jumpToMessage,
+      deleteMessage,
+      message,
+      accountId
+    )
+    const { fileName, fileBytes, fileMime, file, timestamp } = message
+
+    const extension = getExtension(message)
+    return (
+      <div
+        className='media-attachment-generic'
+        role='button'
+        onClick={ev => {
+          ev.stopPropagation()
+          openInShell()
+        }}
+        onContextMenu={openContextMenu}
+      >
+        <div
+          className='file-icon'
+          draggable='true'
+          onDragStart={dragAttachmentOut.bind(null, file)}
+          title={fileMime || 'null'}
+        >
+          {extension ? (
+            <div className='file-extension'>
+              {fileMime === 'application/octet-stream' ? '' : extension}
+            </div>
+          ) : null}
+        </div>
+
+        <div className='name'>
+          {queryText && fileName
+            ? highlightQuery(fileName, queryText)
+            : fileName}
+        </div>
+        <div className='size'>{fileBytes ? filesize(fileBytes) : '?'}</div>
+        <div className='date'>
+          <Timestamp
+            timestamp={timestamp * 1000}
+            module={''}
+            extended={false}
+          />
+        </div>
+      </div>
+    )
+  }
+}
+
+const highlightQuery = (msg: string, query: string) => {
+  const pos_of_search_term = msg.toLowerCase().indexOf(query.toLowerCase())
+  if (pos_of_search_term == -1) return msg
+  const text = msg
+  const pos_of_search_term_in_text = pos_of_search_term
+
+  const before = text.slice(0, pos_of_search_term_in_text)
+  const search_term = text.slice(
+    pos_of_search_term_in_text,
+    pos_of_search_term_in_text + query.length
+  )
+  const after = text.slice(pos_of_search_term_in_text + query.length)
+
+  return (
+    <>
+      {before}
+      <span className='highlight'>{search_term}</span>
+      {after}
+    </>
+  )
+}
+
+export function WebxdcAttachment({
+  messageId,
+  loadResult,
+}: GalleryAttachmentElementProps) {
+  const { openDialog } = useDialog()
+  const tx = useTranslationFunction()
+  const contextMenu = useContext(ContextMenuContext)
+  const { jumpToMessage, deleteMessage } = useMessage()
+  const accountId = selectedAccountId()
+
+  if (loadResult.kind === 'loadingError') {
+    const onContextMenu = getBrokenMediaContextMenu(
+      contextMenu.openContextMenu,
+      openDialog,
+      deleteMessage,
+      messageId,
+      accountId
+    )
+
+    return (
+      <div
+        className={'media-attachment-webxdc broken'}
+        title={loadResult.error}
+        onContextMenu={onContextMenu}
+      >
+        <div className='icon'></div>
+        <div className='text-part'>
+          <div className='name'>{tx('attachment_failed_to_load')}</div>
+          <div className='summary'></div>
+        </div>
+      </div>
+    )
+  } else if (loadResult.webxdcInfo == null) {
+    const onContextMenu = getBrokenMediaContextMenu(
+      contextMenu.openContextMenu,
+      openDialog,
+      deleteMessage,
+      messageId,
+      accountId
+    )
+    // webxdc info is not set, show different error
+    log.error('message.webxdcInfo is undefined, msgid:', messageId)
+    return (
+      <div
+        className='media-attachment-webxdc'
+        role='button'
+        onContextMenu={onContextMenu}
+      >
+        <img
+          className='icon'
+          src={runtime.getWebxdcIconURL(selectedAccountId(), messageId)}
+        />
+        <div className='text-part'>
+          <div className='name'>Error loading info</div>
+          <div className='summary'>
+            {'message.webxdcInfo is undefined, msgid:' + messageId}
+          </div>
+        </div>
+      </div>
+    )
+  } else {
+    const { openContextMenu } = getMediaActions(
+      contextMenu.openContextMenu,
+      openDialog,
+      jumpToMessage,
+      deleteMessage,
+      loadResult,
+      accountId
+    )
+    const { summary, name, document } = loadResult.webxdcInfo
+    return (
+      <div
+        className='media-attachment-webxdc'
+        role='button'
+        onContextMenu={openContextMenu}
+        onClick={openWebxdc.bind(null, loadResult.id)}
+      >
+        <img
+          className='icon'
+          src={runtime.getWebxdcIconURL(selectedAccountId(), loadResult.id)}
+        />
+        <div className='text-part'>
+          <div
+            className='name'
+            title={`${document ? document + ' \n' : ''}${name}`}
+          >
+            {document && truncateText(document, 25) + ' - '}
+            {name}
+          </div>
+          <div className='summary'>{summary}</div>
+        </div>
+      </div>
+    )
+  }
+}
