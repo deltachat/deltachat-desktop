@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "outDir": "../../tsc-dist/main",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "module": "NodeNext",
+    "target": "es6",
+    "rootDir": ".",
+    "allowJs": false,
+    "esModuleInterop": true,
+    "moduleResolution": "NodeNext",
+    "strictNullChecks": true,
+    "strict": true
+  },
+  "include": ["./**/*.ts", "./**/*.js", "../../bin/copy.js"],
+  "references": [
+    {
+      "path": "../shared/tsconfig.json"
+    }
+  ]
+}
