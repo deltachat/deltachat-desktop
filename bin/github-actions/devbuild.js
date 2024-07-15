@@ -1,4 +1,4 @@
-// this file gets run BEFORE `npm i` so you CAN NOT use npm packages here
+// this file gets run BEFORE `pnpm i` so you CAN NOT use npm packages here
 //@ts-check
 
 import { join, dirname } from 'path'

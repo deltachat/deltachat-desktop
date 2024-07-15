@@ -34,17 +34,18 @@ jobs:
       run: |
         node ./bin/github-actions/devbuild.js
     # Building JS
-    - name: npm install, build
+    - name: pnpm install, build
       run: |
-        npm install
-        npm run build
-        npm run pack:generate_config
+        npm i -g pnpm
+        pnpm install --frozen-lockfile
+        pnpm build
+        pnpm pack:generate_config
     # Packaging and processing
     - name: LINUX electron builder
       if: runner.os == 'Linux'
       run: |
         export DEBUG=electron-builder
-        npm exec -- electron-builder --publish never --linux AppImage
+        pnpm electron-builder --publish never --linux AppImage
     - name: LINUX renaming / upload Preperation
       if: runner.os == 'Linux'
       run: |
@@ -59,11 +60,12 @@ jobs:
         echo "module.exports=()=>Promise.resolve()" > stub.cjs
         export CSC_IDENTITY_AUTO_DISCOVERY=false
         export DEBUG=electron-builder
-        npm i dmg-license
-        npm i --cpu x64 --os darwin
-        npm i --cpu arm64 --os darwin
+        pnpm i dmg-license
+        # all archs are enabled, because only installing some is not supported yet by pnpm: https://github.com/pnpm/pnpm/issues/7510
+        # pnpm i --cpu x64 --os darwin
+        # pnpm i --cpu arm64 --os darwin
         ls node_modules/@deltachat
-        npm exec -- electron-builder --publish never --mac mas dmg -c.mac.identity=null --universal --config.afterSign="stub.cjs"
+        pnpm electron-builder --publish never --mac mas dmg -c.mac.identity=null --universal --config.afterSign="stub.cjs"
     - name: MAC renaming / upload Preperation
       if: runner.os == 'macOS'
       run: |
@@ -78,7 +80,7 @@ jobs:
       if: runner.os == 'Windows'
       run: |
         set DEBUG=electron-builder
-        npm exec -- electron-builder --win portable --config.artifactName="deltachat-desktop-${{ steps.prepare.outputs.prid }}.portable.exe"
+        pnpm electron-builder --win portable --config.artifactName="deltachat-desktop-${{ steps.prepare.outputs.prid }}.portable.exe"
     - name: WINDOWS renaming / upload Preperation
       if: runner.os == 'Windows'
       run: |

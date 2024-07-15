@@ -142,14 +142,17 @@ You can find the downloads for windows on <https://get.delta.chat>, though we re
 $ git clone https://github.com/deltachat/deltachat-desktop.git
 $ cd deltachat-desktop
 
+# Install pnpm
+$ npm i -g pnpm
+
 # Install dependencies
-$ npm install
+$ pnpm install
 
 # Build the app (only needed on the first time or if the code was changed)
-$ npm run build
+$ pnpm build
 
 # Start the application:
-$ npm start
+$ pnpm start
 ```
 
 For development with local deltachat-core read the [docs](docs/UPDATE_CORE.md)

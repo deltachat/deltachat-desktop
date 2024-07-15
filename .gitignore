@@ -89,9 +89,6 @@ stub.js
 # message list e2e test
 .test_tmp_data
 
-# pnpm lockfile
-pnpm-lock.yaml
-
 deltachat-rpc-server-aarch64-macos
 .direnv
 .envrc

@@ -30,21 +30,21 @@
 While developing the following command will build the app and start `electron` in debug mode with http cache disabled:
 
 ```
-$ npm run dev
+$ pnpm dev
 ```
 
 It's also handy to develop in watch mode so that your changes to the code are immediately recompiled. For this you need two terminal windows:
 
 ```sh
 # Terminal 1
-$ npm run watch
+$ pnpm watch
 # Terminal 2
-$ npm run start
+$ pnpm start
 ```
 
 After making your changes, go in the deltachat/electron Dev-console and press `F5` to reload the frontend process.
 
-> **Note:** this only applies to the frontend code in `src/renderer`. To build the main process you still need to use `npm run build` and then restart the deltachat-desktop process. (`npm run start`)
+> **Note:** this only applies to the frontend code in `src/renderer`. To build the main process you still need to use `pnpm run` and then restart the deltachat-desktop process. (`pnpm start`)
 
 ### Code Style <a id="code-style"></a>
 
@@ -53,14 +53,14 @@ After making your changes, go in the deltachat/electron Dev-console and press `F
 The primary command for checking any changes made to the code is:
 
 ```sh
-npm run check
+pnpm check
 ```
 
 This command in turn splits up into the following commands:
 
-- `npm run check:types` -> Runs `tsc` to make sure the `TypeScript` code is ok
-- `npm run check:lint` -> Runs [`eslint`](https://eslint.org) with [`TypeScript`](https://typescriptlang.org/) rules to check for common bad practices in all `.js`, `.ts` and `.tsx` files
-- `npm run check:format` -> Runs [`Prettier`](https://prettier.io/) with rules inspired by [`StandardJS`](https://standardjs.com/) to check formatting in all `.scss`, `.js`, `.ts`, `.tsx`, `.json` and `.md` files
+- `pnpm check:types` -> Runs `tsc` to make sure the `TypeScript` code is ok
+- `pnpm check:lint` -> Runs [`eslint`](https://eslint.org) with [`TypeScript`](https://typescriptlang.org/) rules to check for common bad practices in all `.js`, `.ts` and `.tsx` files
+- `pnpm check:format` -> Runs [`Prettier`](https://prettier.io/) with rules inspired by [`StandardJS`](https://standardjs.com/) to check formatting in all `.scss`, `.js`, `.ts`, `.tsx`, `.json` and `.md` files
 
 Sometimes `eslint` complains on code lines that for whatever reason doesn't fit well with the project style. Lines like this can be ignored by using `// eslint-disable-next-line` on the line prior to the line you would like to ignore:
 
@@ -73,28 +73,28 @@ We set up the linting using this [`guide`](https://github.com/typescript-eslint/
 
 If you work with SCSS make sure you read [`docs/STYLES.md`](./STYLES.md)
 
-Running `npm run check:lint` when using VS Code will make VS Code display the found problems.
+Running `pnpm check:lint` when using VS Code will make VS Code display the found problems.
 
-If you're unsure it's always safe to run `npm run check` to check everything. If you know what you're doing you can run the lower level commands for a more fine grained check.
+If you're unsure it's always safe to run `pnpm check` to check everything. If you know what you're doing you can run the lower level commands for a more fine grained check.
 
 #### Fixing Code Style
 
 If the code style check fails you can try to have it fixed for you. The primary command for doing this is:
 
 ```sh
-npm run fix
+pnpm fix
 ```
 
 This command in turn splits up into the following commands:
 
-- `npm run fix:lint` -> Runs [`eslint`](https://eslint.org) to attempt fixing any issues in all `.js`, `.ts` and `.tsx` files
-- `npm run fix:format` -> Runs [`Prettier`](https://prettier.io/) to attempt fixing formatting in all `.scss`, `.js`, `.ts`, `.tsx`, `.json` and `.md` files
+- `pnpm fix:lint` -> Runs [`eslint`](https://eslint.org) to attempt fixing any issues in all `.js`, `.ts` and `.tsx` files
+- `pnpm fix:format` -> Runs [`Prettier`](https://prettier.io/) to attempt fixing formatting in all `.scss`, `.js`, `.ts`, `.tsx`, `.json` and `.md` files
 
-If you're unsure it's always safe to run `npm run fix` to fix everything. If you know what you're doing you can run the lower level commands for a more fine grained fix.
+If you're unsure it's always safe to run `pnpm fix` to fix everything. If you know what you're doing you can run the lower level commands for a more fine grained fix.
 
 ### Tests <a id="tests"></a>
 
-Running `npm test` does the following:
+Running `pnpm test` does the following:
 
 - runs `ESLint` and `Prettier` to check the code formatting
 - runs the unit tests
@@ -102,9 +102,11 @@ Running `npm test` does the following:
 
 #### E2E testing <a id="tests-e2e"></a>
 
-Run `npm run test-e2e` for end-to-end (E2E) testing. In E2E testing, [TestCafe](https://testcafe.io/) clicks through the app and simulates normal usage.
+> Info here is outdated, at the moment there is no E2E testing anymore.
 
-You need to provide a temporary email account generation token via the environment variable `DCC_NEW_TMP_EMAIL`. (ask contributors on how to get one of these tokens)
+~~Run `npm test-e2e` for end-to-end (E2E) testing. In E2E testing, [TestCafe](https://testcafe.io/) clicks through the app and simulates normal usage.~~
+
+~~You need to provide a temporary email account generation token via the environment variable `DCC_NEW_TMP_EMAIL`. (ask contributors on how to get one of these tokens)~~
 
 ### Translations <a id="translations"></a>
 
@@ -113,7 +115,7 @@ Install the [transifex client](https://developers.transifex.com/docs/cli) and ge
 And periodically we can run the following command to get the new translation strings from translators:
 
 ```
-npm run translations-update
+pnpm translations-update
 ```
 
 When you need to modify language strings do it as a PR on English language strings in the Android repo. It is in a language other than English do it in Transifex.
@@ -137,7 +139,7 @@ The syntax is exactly the same as for all other `_locales/*.json` files.
 Example:
 `{"foobar_desktop": {"message": "This is a test"}}`
 
-> **Tip:** run with the `--translation-watch` flag (included in `npm start`) to start in translation
+> **Tip:** run with the `--translation-watch` flag (included in `pnpm start`) to start in translation
 > watch mode - which watches the experimental language strings and hot reloads them into dc-desktop on save
 
 #### Use localized strings in code
@@ -169,16 +171,16 @@ For Continuous Integration we use GitHub Actions.
 Build in production mode (development tools disabled and minified frontend code)
 
 ```sh
-NODE_ENV=production npm run build
+NODE_ENV=production pnpm build
 ```
 
 (for building on Windows you need another command to set the environment variable)
 
 #### 1. Generate Electron-Builder Configuration
 
-Generate the `electron-builder.json5` file with `npm run pack:generate_config`.
+Generate the `electron-builder.json5` file with `pnpm pack:generate_config`.
 
-Possible options for `npm run pack:generate_config`:
+Possible options for `pnpm pack:generate_config`:
 
 | Environment var | Effect                          |
 | --------------- | ------------------------------- |
@@ -186,16 +188,16 @@ Possible options for `npm run pack:generate_config`:
 
 #### 2. Run electron-builder
 
-If you haven't done so run `npm run build` now.
+If you haven't done so run `pnpm build` now.
 
 Start electron-builder:
 
-| Command                  | Description                                                                 |
-| ------------------------ | --------------------------------------------------------------------------- |
-| `npm run pack:win`       | Build for Windows (`nsis` & `portable` target)                              |
-| `npm run pack:mac`       | Build for macOS (`dmg` & `mas` target)                                      |
-| `npm run pack:linux`     | Build for Linux (`AppImage` & `deb` target)                                 |
-| `npm run pack:linux:dir` | Build for Linux, but just the folder, no package. This is used for Flatpak. |
+| Command               | Description                                                                 |
+| --------------------- | --------------------------------------------------------------------------- |
+| `pnpm pack:win`       | Build for Windows (`nsis` & `portable` target)                              |
+| `pnpm pack:mac`       | Build for macOS (`dmg` & `mas` target)                                      |
+| `pnpm pack:linux`     | Build for Linux (`AppImage` & `deb` target)                                 |
+| `pnpm pack:linux:dir` | Build for Linux, but just the folder, no package. This is used for Flatpak. |
 
 For more info look at the `scripts` section in `package.json`.
 
@@ -246,7 +248,7 @@ Solution: Tell VS Code to use the workspace version of TypeScript instead of an 
 
 ### URI Schemes on linux <a id="linux-uri-schemes"></a>
 
-Can only be tested in builds that have a desktop file. The simplest way to do this is to install the appimage generated by `npx electron-builder --linux AppImage`. (Installing with AppImageLauncher)
+Can only be tested in builds that have a desktop file. The simplest way to do this is to install the appimage generated by `pnpm electron-builder --linux AppImage`. (Installing with AppImageLauncher)
 
 ### Disable code signing on packaging for macOS
 

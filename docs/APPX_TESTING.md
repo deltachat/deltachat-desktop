@@ -12,7 +12,7 @@ First generate a certificate with these steps:
 Now you have a certificate with which you can package a self-signed appx:
 
 ```
-npm run build && npm exec -- electron-builder --config ./electron-builder.json5 --config.win.certificateFile=../my.pfx --win
+pnpm build && pnpm electron-builder --config ./electron-builder.json5 --config.win.certificateFile=../my.pfx --win
 ```
 
 To install your self-signed appx, you first need to import it: double click on the certificate and install it into the **Trusted People** store. After that you should be able to double click the appx package in the `dist/` folder to install it. If not have a look at the properties of that file (right click in Explorer), select Certificates => Details => View Certificate => Install => Store => Trusted People
