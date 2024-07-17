@@ -17,6 +17,7 @@ import useDialog from '../../hooks/dialog/useDialog'
 import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+import AlertDialog from './AlertDialog'
 
 export default function EditAccountAndPasswordDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
@@ -36,14 +37,20 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
   const [accountSettings, _setAccountSettings] =
     useState<Credentials>(defaultCredentials())
 
-  const [disableUpdate, setDisableUpdate] = useState(true)
+  const [userNeverChangedAccountSettings, setUserNeverChangedAccountSettings] =
+    useState(true)
+  const [
+    userNeverAppliedNewAccountSettings,
+    setUserNeverAppliedNewAccountSettings,
+  ] = useState(true)
 
   const { openDialog } = useDialog()
   const openConfirmationDialog = useConfirmationDialog()
   const tx = useTranslationFunction()
 
   const setAccountSettings = (value: Credentials) => {
-    disableUpdate === true && setDisableUpdate(false)
+    userNeverChangedAccountSettings === true &&
+      setUserNeverChangedAccountSettings(false)
     _setAccountSettings(value)
   }
 
@@ -85,13 +92,17 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
   }, [])
 
   const onUpdate = useCallback(async () => {
-    if (disableUpdate) return true
+    if (userNeverChangedAccountSettings) return true
     const onSuccess = () => onClose()
 
     const update = () => {
+      setUserNeverAppliedNewAccountSettings(false)
       openDialog(ConfigureProgressDialog, {
         credentials: accountSettings,
         onSuccess,
+        onFail: error => {
+          openDialog(AlertDialog, { message: error })
+        },
       })
     }
 
@@ -113,7 +124,7 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
     }
   }, [
     accountSettings,
-    disableUpdate,
+    userNeverChangedAccountSettings,
     initial_settings.addr,
     onClose,
     openConfirmationDialog,
@@ -125,6 +136,44 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
     const update = await onUpdate()
     if (update) onClose()
   }, [onClose, onUpdate])
+
+  const onCacnel = () => {
+    if (userNeverAppliedNewAccountSettings) {
+      onClose()
+      return
+    }
+    // This for the case when the user edited credentials, pressed "OK",
+    // and then we failed to confugure account (see `ConfigureProgressDialog`),
+    // (which would result in `EditAccountAndPasswordDialog`
+    // not getting closed).
+    // In this case, "cancel" should revert back to the credentials that were
+    // set when the dialog was first opened.
+    //
+    // Yes, simply doing
+    // `await BackendRemote.rpc.batchSetConfig(accountId, initial_settings)`
+    // is also an option, but let's show the user that the original
+    // credentials are also not good, if that is the case.
+    //
+    // And yes, simply closing Delta Chat without pressing "Cancel",
+    // or the user closing the dialog wiht "Esc"
+    // would result this code not gettings invoked, and therefore
+    // original credentials not getting restored...
+    openDialog(ConfigureProgressDialog, {
+      credentials: initial_settings, // Yes, `initial_settings`.
+      onSuccess: () => {},
+      onFail: error => {
+        // This shouldn't happen often, because
+        // we simply returned to original settings.
+        // But it could, if, for example, the credentials
+        // were changed on the server,
+        // and the user never entered the correct credentials.
+        openDialog(AlertDialog, { message: error })
+      },
+    })
+    // Close the dialog immediately, no matter the result of the
+    // `ConfigureProgressDialog`.
+    onClose()
+  }
 
   if (accountSettings === null) return null
   return (
@@ -139,7 +188,7 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
           )}
         </DialogContent>
       </DialogBody>
-      <OkCancelFooterAction onCancel={() => onClose()} onOk={onOk} />
+      <OkCancelFooterAction onCancel={onCacnel} onOk={onOk} />
     </>
   )
 }

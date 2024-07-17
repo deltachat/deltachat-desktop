@@ -368,7 +368,7 @@ interface ConfigureProgressDialogProps {
   credentials?: Partial<Credentials>
   onSuccess?: () => void
   onUserCancellation?: () => void
-  onFail?: (error: string) => void
+  onFail: (error: string) => void
 }
 
 export function ConfigureProgressDialog({
@@ -403,10 +403,7 @@ export function ConfigureProgressDialog({
       await BackendRemote.rpc.stopOngoingProcess(window.__selectedAccountId)
     } catch (error: any) {
       log.error('failed to stopOngoingProcess', error)
-      onFail &&
-        onFail(
-          'failed to stopOngoingProcess' + error.message || error.toString()
-        )
+      onFail('failed to stopOngoingProcess' + error.message || error.toString())
       // If it fails to cancel but is still successful, it should behave like normal.
       wasCanceled.current = false
     }
@@ -446,7 +443,7 @@ export function ConfigureProgressDialog({
         } catch (err: any) {
           log.error('configure error', err)
           onClose()
-          onFail && onFail(err.message || err.toString())
+          onFail(err.message || err.toString())
         }
       })()
     },
