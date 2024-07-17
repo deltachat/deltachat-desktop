@@ -39,6 +39,10 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
 
   const [userNeverChangedAccountSettings, setUserNeverChangedAccountSettings] =
     useState(true)
+  const [
+    userNeverAppliedNewAccountSettings,
+    setUserNeverAppliedNewAccountSettings,
+  ] = useState(true)
 
   const { openDialog } = useDialog()
   const openConfirmationDialog = useConfirmationDialog()
@@ -92,6 +96,7 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
     const onSuccess = () => onClose()
 
     const update = () => {
+      setUserNeverAppliedNewAccountSettings(false)
       openDialog(ConfigureProgressDialog, {
         credentials: accountSettings,
         onSuccess,
@@ -132,6 +137,44 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
     if (update) onClose()
   }, [onClose, onUpdate])
 
+  const onCacnel = () => {
+    if (userNeverAppliedNewAccountSettings) {
+      onClose()
+      return
+    }
+    // This for the case when the user edited credentials, pressed "OK",
+    // and then we failed to confugure account (see `ConfigureProgressDialog`),
+    // (which would result in `EditAccountAndPasswordDialog`
+    // not getting closed).
+    // In this case, "cancel" should revert back to the credentials that were
+    // set when the dialog was first opened.
+    //
+    // Yes, simply doing
+    // `await BackendRemote.rpc.batchSetConfig(accountId, initial_settings)`
+    // is also an option, but let's show the user that the original
+    // credentials are also not good, if that is the case.
+    //
+    // And yes, simply closing Delta Chat without pressing "Cancel",
+    // or the user closing the dialog wiht "Esc"
+    // would result this code not gettings invoked, and therefore
+    // original credentials not getting restored...
+    openDialog(ConfigureProgressDialog, {
+      credentials: initial_settings, // Yes, `initial_settings`.
+      onSuccess: () => {},
+      onFail: error => {
+        // This shouldn't happen often, because
+        // we simply returned to original settings.
+        // But it could, if, for example, the credentials
+        // were changed on the server,
+        // and the user never entered the correct credentials.
+        openDialog(AlertDialog, { message: error })
+      },
+    })
+    // Close the dialog immediately, no matter the result of the
+    // `ConfigureProgressDialog`.
+    onClose()
+  }
+
   if (accountSettings === null) return null
   return (
     <>
@@ -145,7 +188,7 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
           )}
         </DialogContent>
       </DialogBody>
-      <OkCancelFooterAction onCancel={() => onClose()} onOk={onOk} />
+      <OkCancelFooterAction onCancel={onCacnel} onOk={onOk} />
     </>
   )
 }
