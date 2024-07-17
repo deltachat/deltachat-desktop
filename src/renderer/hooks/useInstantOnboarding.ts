@@ -135,6 +135,7 @@ export default function useInstantOnboarding(): InstantOnboarding {
               reject(error)
             }
           },
+          onFail: () => {},
         })
       })
     },

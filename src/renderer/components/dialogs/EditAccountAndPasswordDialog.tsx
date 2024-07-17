@@ -92,6 +92,7 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
       openDialog(ConfigureProgressDialog, {
         credentials: accountSettings,
         onSuccess,
+        onFail: () => {},
       })
     }
 
