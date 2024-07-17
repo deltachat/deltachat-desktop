@@ -43,7 +43,7 @@
 
 <a id="1_46_1"></a>
 
-## [v1.46.1] - 2024-06-17
+## [1.46.1] - 2024-06-17
 
 ### Added
 - add option to use sytem ui font in appearance settings #3949
@@ -68,7 +68,7 @@
 
 <a id="1_46_0"></a>
 
-## [v1.46.0] - 2024-06-10
+## [1.46.0] - 2024-06-10
 
 ### Changed
 - Update translations (2024-06-09) #3925
@@ -78,7 +78,7 @@
 
 <a id="1_45_5"></a>
 
-## [v1.45.5] - 2024-06-08
+## [1.45.5] - 2024-06-08
 
 ### Added
 - send contact as VCard from attachment context menu #3830
@@ -96,7 +96,7 @@
 
 <a id="1_45_4"></a>
 
-## [v1.45.4] - 2024-06-06
+## [1.45.4] - 2024-06-06
 
 ### Added
 - Add image cropper to setting group avatars #3905
@@ -114,21 +114,21 @@
 
 <a id="1_45_3"></a>
 
-## [v1.45.3] - 2024-06-05
+## [1.45.3] - 2024-06-05
 
 ### Fix
 - Fix map in packaged build #3900
 
 <a id="1_45_2"></a>
 
-## [v1.45.2] - 2024-06-04
+## [1.45.2] - 2024-06-04
 
 ### Fix
 - Fix notifications (was broken in 1.45.1) #3898
 
 <a id="1_45_1"></a>
 
-## [v1.45.1] - 2024-06-04
+## [1.45.1] - 2024-06-04
 
 ### Added
 - Added a Small Screen Mode, when you rezise the window to be small it will only show the chatlist with account sidebar or the Chat View with a back button.
@@ -161,7 +161,7 @@
 
 <a id="1_45_0"></a>
 
-## [v1.45.0] - 2024-05-24
+## [1.45.0] - 2024-05-24
 
 ### Added
 - Remember last position & size of webxdc windows #3754 #3755
