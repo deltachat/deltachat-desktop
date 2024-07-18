@@ -51,6 +51,7 @@ const Dialog = React.memo<Props>(
       : () => {}
 
     const onClose = () => {
+      dialog.current!.style.display = 'none'
       props.onClose()
     }
 
@@ -63,6 +64,7 @@ const Dialog = React.memo<Props>(
     useEffect(() => {
       // calling showModal is "only" the way to have ::backdrop
       dialog.current?.showModal()
+      dialog.current!.style.display = 'flex'
     })
 
     return (
