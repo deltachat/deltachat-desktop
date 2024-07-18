@@ -252,7 +252,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
               onClick={onClose}
               icon='cross'
               size={32}
-              coloring='settings-menu'
+              coloring='fullscreen-controls'
               aria-label={tx('close')}
             />
           </div>

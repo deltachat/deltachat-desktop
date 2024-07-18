@@ -16,4 +16,16 @@
   &.context-menu {
     background-color: var(--contextMenuText);
   }
+
+  &.fullscreen-controls {
+    background-color: var(--fullScreenMediaButtons);
+  }
+  &.remove {
+    margin-top: calc((64px - 20px) / 2);
+    margin-right: 10px;
+
+    &:hover {
+      fill: #bf0000;
+    }
+  }
 }

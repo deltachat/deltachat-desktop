@@ -4,6 +4,7 @@ $paddingVertical: 20px;
 
 .dialog {
   background-color: var(--bp4DialogBgPrimary);
+  color: var(--globalText);
   border-radius: 10px;
   border: none;
   box-shadow:
@@ -30,7 +31,6 @@ $paddingVertical: 20px;
     background-color: rgba(17, 20, 24, 0.7);
   }
 }
-
 
 .dialogHeader {
   width: 100%;

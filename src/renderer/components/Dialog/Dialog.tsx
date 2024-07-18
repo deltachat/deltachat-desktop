@@ -36,7 +36,7 @@ const Dialog = React.memo<Props>(
           if (!dialog.current) {
             return
           }
-	  ev.stopPropagation()
+          ev.stopPropagation()
           // that is the way to check if we clicked on dialog::backdrop
           const rect = dialog.current.getBoundingClientRect()
           const isInDialog =
