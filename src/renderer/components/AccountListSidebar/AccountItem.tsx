@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react'
 import classNames from 'classnames'
 import debounce from 'debounce'
 
-import { BackendRemote, onDCEvent } from '../../backend-com'
+import {
+  BackendRemote,
+  onDCEvent,
+  EffectfulBackendActions,
+} from '../../backend-com'
 import { avatarInitial } from '../Avatar'
 import { getLogger } from '../../../shared/logger'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
@@ -52,7 +56,14 @@ export default function AccountItem({
 
     const cleanup = [
       onDCEvent(account.id, 'IncomingMsg', update),
+      // IncomingMsg doesn't listen for added device messages,
+      // so we also listen to `ChatlistChanged` because it is a good indicator and not emitted too often
+      // https://github.com/deltachat/deltachat-desktop/issues/4013
+      onDCEvent(account.id, 'ChatlistChanged', update),
+
       onDCEvent(account.id, 'MsgsNoticed', update),
+      // when muting or unmuting a chat
+      onDCEvent(account.id, 'ChatModified', update),
     ]
 
     return () => cleanup.forEach(off => off())
@@ -201,9 +212,7 @@ async function markAccountAsRead(accountId: number) {
     }
   }
 
-  await Promise.all(
-    [...uniqueChatIds].map(chatId =>
-      BackendRemote.rpc.marknoticedChat(accountId, chatId)
-    )
-  )
+  for (const chatId of uniqueChatIds) {
+    await EffectfulBackendActions.marknoticedChat(accountId, chatId)
+  }
 }

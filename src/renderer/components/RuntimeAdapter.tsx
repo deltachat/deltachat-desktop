@@ -9,6 +9,8 @@ import type { PropsWithChildren } from 'react'
 import { ActionEmitter, KeybindAction } from '../keybindings'
 import useDialog from '../hooks/dialog/useDialog'
 import WebxdcSaveToChatDialog from './dialogs/WebxdcSendToChat'
+import { saveLastChatId } from '../backend/chat'
+import useChat from '../hooks/chat/useChat'
 
 type Props = {
   accountId?: number
@@ -25,6 +27,7 @@ export default function RuntimeAdapter({
 }: PropsWithChildren<Props>) {
   const processQr = useProcessQr()
   const { jumpToMessage } = useMessage()
+  const { selectChat } = useChat()
 
   const { closeDialog, openDialog, closeAllDialogs } = useDialog()
   const openSendToDialogId = useRef<string | undefined>(undefined)
@@ -42,15 +45,17 @@ export default function RuntimeAdapter({
       async ({ accountId: notificationAccountId, msgId, chatId }) => {
         if (accountId !== notificationAccountId) {
           closeAllDialogs()
+          // selectAccount always loads the last used chat
+          // by setting saveLastChatId we force to load immediately
+          // the chat holding the notification message
+          await saveLastChatId(notificationAccountId, chatId)
           await window.__selectAccount(notificationAccountId)
-        }
-
-        if (chatId !== 0) {
+        } else if (chatId !== 0) {
+          await selectChat(accountId, chatId)
           clearNotificationsForChat(notificationAccountId, chatId)
-
-          if (msgId !== 0) {
-            jumpToMessage(notificationAccountId, msgId, true)
-          }
+        }
+        if (msgId) {
+          window.__internal_jump_to_message?.(msgId)
         }
       }
     )
@@ -64,7 +69,7 @@ export default function RuntimeAdapter({
         ActionEmitter.emitAction(KeybindAction.Settings_Open)
       }
     }
-  }, [accountId, jumpToMessage, processQr, closeAllDialogs])
+  }, [accountId, jumpToMessage, processQr, selectChat, closeAllDialogs])
 
   useEffect(() => {
     runtime.onWebxdcSendToChat = (file, text) => {

@@ -57,7 +57,7 @@ export default function MailtoDialog(props: Props & DialogProps) {
               className='search-input'
               onChange={onSearchChange}
               value={queryStr}
-              placeholder={tx('contacts_enter_name_or_email')}
+              placeholder={tx('search')}
               autoFocus
               spellCheck={false}
             />
