@@ -1,5 +1,6 @@
 .composer {
   border-left: 1px solid rgba(16, 22, 26, 0.1);
+  background-color: var(--composerBg);
 
   &.contact-request {
     display: flex;
@@ -22,12 +23,8 @@
   .upper-bar {
     & > .attachment-quote-section {
       display: flex;
-      justify-content: space-between;
-      padding: 5px 0 0 5px;
-      background-color: #efefef;
-      border-radius: 8px;
-      margin: 0px 12px 10px;
-      opacity: 0.85;
+      padding: 9px;
+      border-bottom: 1px solid #eee;
 
       .quote {
         // this is just overwrites for the quote styles defined in _message.scss
@@ -49,6 +46,7 @@
       }
 
       .clear-quote-icon {
+        margin-left: auto;
         margin-right: 5px;
         min-width: 32px;
         &::before {
