@@ -10,9 +10,16 @@
 - reword advanced setting "Disable Background Sync For All Accounts" -> "Only Synchronize the Currently Selected Account" #3960
 - use 'Info' and 'Message Info' consistently #3961
 - consolidate 'Profile' wording #3963
+- consolidate 'Export/Import secret keys' button format #4019
+- name "Search" fields as such #4015
 - Update local help (2024-06-19)
 - refactor: safer types #3993
 - keep aspect ratio in quoted images #3999
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.141.2`
+  - fix memory leak in jsonrpc client code (to be specific in yerpc)
+  - support vcards exported by protonmail
+  - Display vCard contact name in the message summary
+  - Case-insensitive search for non-ASCII messages
 
 ### Fixed
 - Fix crash on "Settings" click when not on main screen (e.g. no account selected): hide the "settings" button
@@ -26,6 +33,11 @@
 - Fix the problem of Quit menu item on WebXDC apps closes the whole DC app #3995
 - minor performance improvements #3981
 - fix chat list items (e.g. Archive) and contacts not showing up sometimes #4004
+- fix bug notifications not being removed on Mac  #4010
+- fix bug "Mark All as Read" does not remove notifications #4002
+- fix update unread badge on when muting / unmuting a chat #4020
+- fix update unread badge on receiving device messages #4020
+- fix target chat was not opened on notification click #3983
 - fix CSP bypass in webxdc (not a vulnerability) #4011
 
 <a id="1_46_1"></a>
