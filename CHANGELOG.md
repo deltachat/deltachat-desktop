@@ -8,7 +8,7 @@
 - Better keyboard accessibility: make more elements focusable, add outline them #4005
 - a way to add contact by pasting invite link to the search field #4041
 - add on-screen controls to ImageCropper and the ability to rotate by 90 degrees #3893
-- Added UI for read receipts in message info dialog
+- Added UI for read receipts in message info dialog #4036
 
 ### Changed
 - reword advanced setting "Disable Background Sync For All Accounts" -> "Only Synchronize the Currently Selected Account" #3960
