@@ -38,6 +38,7 @@
 - fix update unread badge on when muting / unmuting a chat #4020
 - fix update unread badge on receiving device messages #4020
 - fix target chat was not opened on notification click #3983
+- fix CSP bypass in webxdc (not a vulnerability) #4011
 
 <a id="1_46_1"></a>
 
