@@ -44,14 +44,6 @@
       .message-attachment-generic {
         margin: 4px;
       }
-
-      .clear-quote-icon {
-        margin-right: 5px;
-        min-width: 32px;
-        &::before {
-          color: var(--chat-list-item-summary-text);
-        }
-      }
     }
   }
 

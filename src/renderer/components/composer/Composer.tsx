@@ -37,6 +37,7 @@ import type { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 import { VisualVCardComponent } from '../message/VCard'
 import { KeybindAction } from '../../keybindings'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
+import { CloseButton } from '../Dialog'
 
 const log = getLogger('renderer/composer')
 
@@ -51,16 +52,6 @@ export const insideBoundingRect = (
     mouseX <= boundingRect.x + boundingRect.width + margin &&
     mouseY >= boundingRect.y - margin &&
     mouseY <= boundingRect.y + boundingRect.height + margin
-  )
-}
-
-const QuoteOrDraftRemoveButton = ({ onClick }: { onClick: () => void }) => {
-  return (
-    <button
-      onClick={onClick}
-      aria-label='Clear'
-      className='clear-quote-icon bp4-dialog-close-button bp4-button bp4-minimal bp4-icon-large bp4-icon-cross'
-    />
   )
 }
 
@@ -338,7 +329,7 @@ const Composer = forwardRef<
           {draftState.quote !== null && (
             <div className='attachment-quote-section is-quote'>
               <Quote quote={draftState.quote} />
-              <QuoteOrDraftRemoveButton onClick={removeQuote} />
+              <CloseButton onClick={removeQuote} />
             </div>
           )}
           {draftState.file && !draftState.vcardContact && (
@@ -347,13 +338,13 @@ const Composer = forwardRef<
               {/* <p>file: {draftState.file}</p> */}
               {/* {draftState.viewType} */}
               <DraftAttachment attachment={draftState} />
-              <QuoteOrDraftRemoveButton onClick={removeFile} />
+              <CloseButton onClick={removeFile} />
             </div>
           )}
           {draftState.vcardContact && (
             <div className='attachment-quote-section is-attachment'>
               <VisualVCardComponent vcardContact={draftState.vcardContact} />
-              <QuoteOrDraftRemoveButton onClick={removeFile} />
+              <CloseButton onClick={removeFile} />
             </div>
           )}
         </div>
