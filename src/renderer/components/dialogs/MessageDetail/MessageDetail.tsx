@@ -1,12 +1,13 @@
 import React from 'react'
 import moment from 'moment'
 
-import { selectedAccountId } from '../../ScreenController'
-import { BackendRemote } from '../../backend-com'
-import { DialogBody, DialogContent, DialogWithHeader } from '../Dialog'
-import Callout from '../Callout'
+import { selectedAccountId } from '../../../ScreenController'
+import { BackendRemote } from '../../../backend-com'
+import { DialogBody, DialogContent, DialogWithHeader } from '../../Dialog'
+import Callout from '../../Callout'
 
-import type { DialogProps } from '../../contexts/DialogContext'
+import type { DialogProps } from '../../../contexts/DialogContext'
+import { ReadReceiptsList } from './ReadReceipts'
 
 type MessageInfoProps = {
   messageId: number
@@ -62,6 +63,7 @@ class MessageInfo extends React.Component<
     return (
       <div className='module-message-detail'>
         <br />
+        <ReadReceiptsList messageId={this.props.messageId} />
         <Callout>
           <p>{content}</p>
         </Callout>

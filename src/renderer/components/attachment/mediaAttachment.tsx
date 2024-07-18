@@ -23,7 +23,7 @@ import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import useDialog from '../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useMessage from '../../hooks/chat/useMessage'
-import MessageDetail from '../dialogs/MessageDetail'
+import MessageDetail from '../dialogs/MessageDetail/MessageDetail'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import AudioPlayer from '../AudioPlayer'
 
