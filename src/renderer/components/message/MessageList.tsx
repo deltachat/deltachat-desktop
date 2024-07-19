@@ -122,6 +122,13 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
   } = useMessageList(accountId, chat.id)
   const { hideReactionsBar, isReactionsBarShown } = useReactionsBar()
 
+  const bottomRef = useRef<HTMLDivElement>(null)
+
+  const scrollToBottom = () => {
+    console.log('scrollToBottomRef')
+    bottomRef.current ? bottomRef.current.scrollIntoView() : () => {}
+  }
+
   const countUnreadMessages = useUnreadCount(
     accountId,
     chat.id,
@@ -430,12 +437,14 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
           unreadMessageInViewIntersectionObserver
         }
         loadMissingMessages={loadMissingMessages}
+        bottomRefProp={bottomRef}
       />
       {showJumpDownButton && (
         <JumpDownButton
           countUnreadMessages={countUnreadMessages}
           jumpToMessage={jumpToMessage}
           jumpToMessageStack={jumpToMessageStack}
+          scrollToBottom={scrollToBottom}
         />
       )}
     </MessagesDisplayContext.Provider>
@@ -462,6 +471,7 @@ export const MessageListInner = React.memo(
     loaded: boolean
     unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
     loadMissingMessages: () => Promise<void>
+    bottomRefProp: React.MutableRefObject<HTMLDivElement | null>
   }) => {
     const {
       onScroll,
@@ -473,6 +483,7 @@ export const MessageListInner = React.memo(
       loaded,
       unreadMessageInViewIntersectionObserver,
       loadMissingMessages,
+      bottomRefProp,
     } = props
 
     const conversationType: ConversationType = {
@@ -635,6 +646,7 @@ export const MessageListInner = React.memo(
             }
           })}
         </ul>
+        <div ref={bottomRefProp}></div>
       </div>
     )
   },
@@ -653,6 +665,7 @@ function JumpDownButton({
   countUnreadMessages,
   jumpToMessage,
   jumpToMessageStack,
+  scrollToBottom
 }: {
   countUnreadMessages: number
   jumpToMessage: (
@@ -661,6 +674,7 @@ function JumpDownButton({
     addMessageIdToStack?: undefined | number
   ) => Promise<void>
   jumpToMessageStack: number[]
+  scrollToBottom: () => void
 }) {
   let countToShow: string = countUnreadMessages.toString()
   if (countUnreadMessages > 99) {
@@ -682,7 +696,7 @@ function JumpDownButton({
         <div
           className='button'
           onClick={() => {
-            jumpToMessage(undefined, true)
+            scrollToBottom()
           }}
         >
           <div
