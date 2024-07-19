@@ -40,6 +40,7 @@
 - fix update unread badge on receiving device messages #4020
 - fix target chat was not opened on notification click #3983
 - fix CSP bypass in webxdc (not a vulnerability) #4011
+- fix: QR scanning not showing errors on failure #4040
 
 <a id="1_46_1"></a>
 
