@@ -35,7 +35,7 @@ export default function ForwardMessage(props: Props) {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
   const { selectChat } = useChat()
-  const { forwardMessage } = useMessage()
+  const { forwardMessage, jumpToMessage } = useMessage()
 
   const { chatListIds, queryStr, setQueryStr } = useChatList(LIST_FLAGS)
   const { isChatLoaded, loadChats, chatCache } =
@@ -45,6 +45,8 @@ export default function ForwardMessage(props: Props) {
     const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
     onClose()
     if (!chat.isSelfTalk) {
+      // show the target chat to avoid unintended forwarding to the wrong chat
+      selectChat(accountId, chat.id)
       const yes = await confirmForwardMessage(
         openDialog,
         accountId,
@@ -52,7 +54,20 @@ export default function ForwardMessage(props: Props) {
         chat
       )
       if (yes) {
-        selectChat(accountId, chat.id)
+        // get the id of forwarded message
+        // to jump to the message
+        const messageIds = await BackendRemote.rpc.getMessageIds(
+          accountId,
+          chatId,
+          false,
+          true
+        )
+        const lastMessage = messageIds[messageIds.length - 1]
+        if (lastMessage) {
+          jumpToMessage(accountId, lastMessage)
+        }
+      } else {
+        selectChat(accountId, message.chatId)
       }
     } else {
       await forwardMessage(accountId, message.id, chat.id)
