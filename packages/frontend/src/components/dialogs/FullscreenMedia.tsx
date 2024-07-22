@@ -4,12 +4,11 @@ import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 import debounce from 'debounce'
 
 import { onDownload } from '../message/messageFunctions'
-import { runtime } from '../../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 import { isImage, isVideo, isAudio } from '../attachment/Attachment'
 import { getLogger } from '../../../../shared/logger'
 import { gitHubIssuesUrl } from '../../../../shared/constants'
 import { useInitEffect } from '../helpers/hooks'
-import { preventDefault } from '../../../../shared/util'
 import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
@@ -19,6 +18,17 @@ import useMessage from '../../hooks/chat/useMessage'
 import type { DialogProps } from '../../contexts/DialogContext'
 
 const log = getLogger('renderer/fullscreen_media')
+
+/** wraps a callback so that `event.preventDefault()` is called before it */
+export function preventDefault<EventType extends React.SyntheticEvent | Event>(
+  callback: Function
+) {
+  const wrapper = (cb: Function, ev: EventType) => {
+    ev.preventDefault()
+    cb()
+  }
+  return wrapper.bind(null, callback)
+}
 
 export enum NeighboringMediaMode {
   Chat,

@@ -13,7 +13,7 @@ import styles from './styles.module.scss'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
 import useAlertDialog from '../../../hooks/dialog/useAlertDialog'
-import { runtime } from '../../../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 const log = getLogger('renderer/dialogs/SetupMultiDevice/ReceiveBackup')
 

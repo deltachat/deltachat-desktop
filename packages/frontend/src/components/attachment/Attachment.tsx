@@ -1,6 +1,6 @@
 import mimeTypes from 'mime-types'
 import { Type } from '../../backend-com'
-import { runtime } from '../../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 /* Section - Data Copied in part from Signal */
 // Supported media types in google chrome

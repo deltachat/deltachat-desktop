@@ -8,7 +8,7 @@ import classNames from 'classnames'
 
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import { runtime } from '../../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 import EmojiPicker from '../EmojiPicker'
 import Button from '../Button'
 import useTranslationFunction from '../../hooks/useTranslationFunction'

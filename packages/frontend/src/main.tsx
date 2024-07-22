@@ -6,7 +6,7 @@ import App from './App'
 import initSystemIntegration from './system-integration'
 import { exp } from './experimental'
 import { printProcessLogLevelInfo } from '../../shared/logger'
-import { runtime } from '../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 async function main() {
   exp.help //make sure experimental.ts is used

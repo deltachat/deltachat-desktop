@@ -19,7 +19,7 @@ import {
   PseudoListItemAddContact,
 } from '../../helpers/PseudoListItem'
 import GroupImage from '../../GroupImage'
-import { runtime } from '../../../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 import { QRAvatar } from '../../Avatar'
 import { AddMemberDialog } from '../AddMember/AddMemberDialog'
 import { ContactListItem } from '../../contact/ContactListItem'

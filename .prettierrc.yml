@@ -6,3 +6,11 @@ singleQuote: true
 jsxSingleQuote: true
 endOfLine: auto
 arrowParens: avoid
+
+overrides:
+- files: "*.json5"
+  options:
+    singleQuote: false
+    quoteProps: preserve
+    trailingComma: none
+    parser: json5

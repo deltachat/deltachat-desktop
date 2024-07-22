@@ -1,5 +1,5 @@
 import { BaseDeltaChat, yerpc, DcEvent } from '@deltachat/jsonrpc-client'
-import { runtime } from '../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 import { hasDebugEnabled } from '../../shared/logger'
 import { clearNotificationsForChat } from './system-integration/notifications'
 import { countCall } from './debug-tools'

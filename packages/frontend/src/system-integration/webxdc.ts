@@ -3,7 +3,7 @@
 // and heavily uses the events
 
 import { BackendRemote } from '../backend-com'
-import { runtime } from '../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 export function initWebxdc() {
   BackendRemote.on('WebxdcStatusUpdate', (accountId, { msgId }) => {

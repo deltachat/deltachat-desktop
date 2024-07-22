@@ -6,7 +6,7 @@ import Icon from '../Icon'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { getLogger } from '../../../../shared/logger'
-import { runtime } from '../../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 import styles from './styles.module.scss'
 

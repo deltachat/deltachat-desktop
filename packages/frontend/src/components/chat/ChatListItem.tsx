@@ -10,7 +10,7 @@ import { getLogger } from '../../../../shared/logger'
 import { useContextMenuWithActiveState } from '../ContextMenu'
 import { selectedAccountId } from '../../ScreenController'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
-import { runtime } from '../../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 import { message2React } from '../message/MessageMarkdown'
 
 const log = getLogger('renderer/chatlist/item')

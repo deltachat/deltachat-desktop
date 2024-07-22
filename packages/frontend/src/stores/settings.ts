@@ -2,7 +2,7 @@ import { C } from '@deltachat/jsonrpc-client'
 import { DesktopSettingsType, RC_Config } from '../../../shared/shared-types'
 import { BackendRemote, Type } from '../backend-com'
 import { onReady } from '../onready'
-import { runtime } from '../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 import { Store, useStore } from './store'
 import { debouncedUpdateBadgeCounter } from '../system-integration/badge-counter'
 

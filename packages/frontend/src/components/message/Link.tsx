@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react'
 import { DeltaCheckbox } from '../contact/ContactListItem'
 import { getLogger } from '../../../../shared/logger'
 import reactStringReplace from 'react-string-replace'
-import { runtime } from '../../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -15,7 +15,7 @@ import useDialog from '../../hooks/dialog/useDialog'
 import useOpenLinkSafely from '../../hooks/useOpenLinkSafely'
 import useProcessQr from '../../hooks/useProcessQr'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import { isInviteLink } from '../../../../shared/util'
+import { isInviteLink } from '@deltachat-desktop/shared/util'
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
 import { selectedAccountId } from '../../ScreenController'
 
