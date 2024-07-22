@@ -1,7 +1,6 @@
 import { useCallback, useContext } from 'react'
 
 import CopyContentAlertDialog from '../components/CopyContentAlertDialog'
-import QrErrorMessage from '../components/QrErrorMessage'
 import useAlertDialog from './dialog/useAlertDialog'
 import useConfirmationDialog from './dialog/useConfirmationDialog'
 import useDialog from './dialog/useDialog'
@@ -137,7 +136,7 @@ export default function useProcessQR() {
         log.error(err)
 
         await openAlertDialog({
-          message: QrErrorMessage({ url }),
+          message: tx('qrscan_failed') + '\n\n' + url,
         })
 
         return callback?.()
