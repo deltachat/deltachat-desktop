@@ -17,3 +17,69 @@
 .addMemberContactList {
   flex-grow: 1;
 }
+
+.AddMemberChipsWrapper {
+  border-bottom: solid 2px #d3d3d3;
+  max-height: 33%;
+  overflow: scroll;
+  padding-left: 19px;
+  padding-right: 30px;
+
+  .AddMemberChips {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    margin-left: -5px;
+    margin-right: -5px;
+
+    .AddMemberChip {
+      display: flex;
+      width: auto;
+      max-width: fit-content;
+      margin: 5px;
+      background-color: #ddd;
+      border-radius: 25px;
+      padding: 3px 5px 5px 3px;
+
+      .DisplayName {
+        line-height: 68px;
+        padding-right: 6px;
+        height: var(--local-height);
+        line-height: var(--local-height);
+        max-width: 130px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-left: 5px;
+      }
+      .Avatar {
+        height: var(--local-height);
+        .content {
+          margin: 0px !important;
+        }
+      }
+      .removeMember {
+        cursor: pointer;
+        background-color: #777;
+        border-radius: 15px;
+        padding: 3px;
+        padding-top: 2px;
+        height: 18px;
+        margin-top: 9px;
+        .removeIcon {
+          cursor: pointer;
+          background-color: #fff;
+        }
+      }
+    }
+
+    .groupMemberSearch {
+      display: flex;
+      line-height: var(--local-height);
+      height: var(--local-height);
+      width: 90px;
+      margin: 5px;
+      margin-top: 8px;
+    }
+  }
+}

@@ -2,10 +2,12 @@ import React, { useState } from 'react'
 import { AddMemberInnerDialog } from './AddMemberInnerDialog'
 import { useLazyLoadedContacts } from '../../contact/ContactList'
 import Dialog from '../../Dialog'
+import Icon from '../../Icon'
 import type { T } from '@deltachat/jsonrpc-client'
 import type { DialogProps } from '../../../contexts/DialogContext'
 import { InlineVerifiedIcon } from '../../VerifiedIcon'
 import { Avatar } from '../../Avatar'
+import styles from './styles.module.scss'
 
 export function AddMemberDialog({
   onClose,
@@ -62,20 +64,24 @@ export const AddMemberChip = (props: {
 }) => {
   const { contact, onRemoveClick } = props
   return (
-    <div
-      key={contact.id}
-      className='AddMemberChip'
-      onClick={() => onRemoveClick(contact)}
-    >
-      <div className='Avatar'>
+    <div key={contact.id} className={styles.AddMemberChip}>
+      <div className={styles.Avatar}>
         <Avatar
           displayName={contact.displayName}
           avatarPath={contact.profileImage}
           color={contact.color}
+          small={true}
         />
       </div>
-      <div className='DisplayName'>
+      <div className={styles.DisplayName}>
         {contact.displayName} {contact.isVerified && <InlineVerifiedIcon />}
+      </div>
+      <div
+        className={styles.removeMember}
+        onClick={() => onRemoveClick(contact)}
+        aria-label='Remove'
+      >
+        <Icon className={styles.removeIcon} icon={'cross'} size={12} />
       </div>
     </div>
   )
