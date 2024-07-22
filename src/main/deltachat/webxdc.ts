@@ -123,16 +123,38 @@ export default class DCWebxdc extends SplitOut {
       if (!accounts_sessions.includes(accountId)) {
         accounts_sessions.push(accountId)
         ses.protocol.handle('webxdc', async request => {
-          const get_headers = (mime_type: string | undefined) => {
+          /**
+           * Make sure to only `return makeResponse()` because it sets headers
+           * that are important for security, namely `Content-Security-Policy`.
+           * Failing to set CSP might result in the app being able to create
+           * an <iframe> with no CSP, e.g. `<iframe src="/no_such_file.lol">`
+           * within which they can then do whatever
+           * through the parent frame, see
+           * "XDC-01-002 WP1: Full CSP bypass via desktop app webxdc.js"
+           * https://public.opentech.fund/documents/XDC-01-report_2_1.pdf
+           */
+          const makeResponse = (
+            body: BodyInit,
+            responseInit: Omit<ResponseInit, 'headers'>,
+            mime_type?: undefined | string
+          ) => {
             const headers = new Headers()
             if (!open_apps[id].internet_access) {
               headers.append('Content-Security-Policy', CSP)
             }
+            // Ensure that the client doesn't try to interpret a file as
+            // one with 'application/pdf' mime type and therefore open it
+            // in the PDF viewer, see
+            // "XDC-01-005 WP1: Full CSP bypass via desktop app PDF embed"
+            // https://public.opentech.fund/documents/XDC-01-report_2_1.pdf
             headers.append('X-Content-Type-Options', 'nosniff')
             if (mime_type) {
               headers.append('content-type', mime_type)
             }
-            return headers
+            return new Response(body, {
+              ...responseInit,
+              headers,
+            })
           }
 
           const url = new URL(request.url)
@@ -140,7 +162,7 @@ export default class DCWebxdc extends SplitOut {
           const id = `${account}.${msg}`
 
           if (!open_apps[id]) {
-            return new Response('', { status: 500 })
+            return makeResponse('', { status: 500 })
           }
 
           let filename = url.pathname
@@ -164,11 +186,10 @@ export default class DCWebxdc extends SplitOut {
           }
 
           if (filename === WRAPPER_PATH) {
-            return new Response(
+            return makeResponse(
               await readFile(join(htmlDistDir(), '/webxdc_wrapper.html')),
-              {
-                headers: get_headers(mimeType),
-              }
+              {},
+              mimeType
             )
           } else if (filename === 'webxdc.js') {
             const displayName = Buffer.from(
@@ -179,15 +200,14 @@ export default class DCWebxdc extends SplitOut {
             )
 
             // initializes the preload script, the actual implementation of `window.webxdc` is found there: static/webxdc-preload.js
-            return new Response(
+            return makeResponse(
               Buffer.from(
                 `window.parent.webxdc_internal.setup("${selfAddr}","${displayName}")
                 window.webxdc = window.parent.webxdc
                 window.webxdc_custom = window.parent.webxdc_custom`
               ),
-              {
-                headers: get_headers(mimeType),
-              }
+              {},
+              mimeType
             )
           } else {
             try {
@@ -199,12 +219,10 @@ export default class DCWebxdc extends SplitOut {
                 ),
                 'base64'
               )
-              return new Response(blob, {
-                headers: get_headers(mimeType),
-              })
+              return makeResponse(blob, {}, mimeType)
             } catch (error) {
               log.error('webxdc: load blob:', error)
-              return new Response('', { status: 404 })
+              return makeResponse('', { status: 404 })
             }
           }
         })

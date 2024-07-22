@@ -60,11 +60,16 @@
     display: flex;
     align-items: flex-end;
 
+    .attachment-button,
+    .emoji-button {
+      background: none;
+      border: none;
+    }
+
     .attachment-button {
       width: 40px;
       height: 40px;
 
-      background: none;
       box-shadow: none;
       border: none;
 
@@ -72,7 +77,7 @@
         background: none;
         cursor: pointer;
       }
-      &:focus {
+      &:focus:not(:focus-visible) {
         outline: none;
       }
     }
@@ -80,7 +85,7 @@
     .emoji-button {
       height: 40px;
       padding: 0px 3px;
-      &:focus {
+      &:focus:not(:focus-visible) {
         outline: none;
       }
       &:hover {
@@ -91,7 +96,6 @@
         display: block;
         width: 25px;
         height: 25px;
-        margin-top: calc((40px - 25px) / 2);
         background-image: url(../images/emoji.png);
         background-size: contain;
       }
@@ -107,7 +111,7 @@
       border-radius: 180px;
       cursor: pointer;
 
-      &:focus {
+      &:focus:not(:focus-visible) {
         outline: none;
       }
 
@@ -123,7 +127,7 @@
         background-size: contain;
         vertical-align: middle;
 
-        &:focus {
+        &:focus:not(:focus-visible) {
           outline: none;
         }
       }
@@ -146,6 +150,8 @@
         color: var(--composerPlaceholderText);
       }
 
+      // Let's not add `:not(:focus-visible)` since the blinking cursor
+      // might be enough, (or it might not, we'll see).
       &:focus {
         outline: none;
       }
