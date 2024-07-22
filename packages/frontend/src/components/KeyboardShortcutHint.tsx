@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { DesktopSettingsType } from '../../../shared/shared-types'
-import { runtime } from '../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 const keySymbols: { [key: string]: string } = {
   Control: '^',

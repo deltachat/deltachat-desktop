@@ -13,10 +13,5 @@
     "strictNullChecks": true,
     "strict": true,
     "plugins": [{ "name": "typescript-plugin-css-modules" }]
-  },
-  "references": [
-    {
-      "path": "../shared/tsconfig.json"
-    }
-  ]
+  }
 }

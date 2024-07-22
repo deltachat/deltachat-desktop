@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { avatarInitial } from '../Avatar'
-import { runtime } from '../../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 import LargeProfileImage from '../LargeProfileImage'
 
 import type { SettingsStoreState } from '../../stores/settings'

@@ -2,7 +2,7 @@ import { appName } from '../../../shared/constants'
 import { getLogger } from '../../../shared/logger'
 import { BackendRemote } from '../backend-com'
 import { isImage } from '../components/attachment/Attachment'
-import { runtime } from '../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 import SettingsStoreInstance from '../stores/settings'
 import AccountNotificationStoreInstance from '../stores/accountNotifications'
 

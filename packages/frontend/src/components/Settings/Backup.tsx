@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { Intent } from '@blueprintjs/core'
 
 import { DeltaProgressBar } from '../Login-Styles'
-import { runtime } from '../../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 import { getLogger } from '../../../../shared/logger'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'

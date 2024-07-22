@@ -7,7 +7,7 @@ import Dialog, {
   FooterActionButton,
   FooterActions,
 } from './Dialog'
-import { runtime } from '../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 import useTranslationFunction from '../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../contexts/DialogContext'

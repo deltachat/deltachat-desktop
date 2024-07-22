@@ -1,6 +1,11 @@
+//@ts-check
 import { readFile } from 'fs/promises';
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
+import { parse as parseYAML } from 'yaml'
+
+console.log("test versions of packages TODO!");
+process.exit(1)
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -9,12 +14,14 @@ const colorize = (light, code) => str =>
 const red = colorize(1, 31)
 const grey = colorize(1, 37)
 
+// check all files
+
 ;(async () => {
   const packageObject = JSON.parse(
     await readFile(join(__dirname, '../package.json'), 'utf8')
   )
-  const packageLock = JSON.parse(
-    await readFile(join(__dirname, '../package-lock.json'), 'utf8')
+  const packageLock = parseYAML(
+    await readFile(join(__dirname, '../pnpm-lock.yaml'), 'utf8')
   )
 
   if (packageObject['version'] !== packageLock['version']) {

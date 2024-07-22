@@ -16,7 +16,7 @@ import { platform } from 'os'
 
 import { appIcon, htmlDistDir } from '../application-constants.js'
 import { DesktopSettings } from '../desktop_settings.js'
-import { isInviteLink, truncateText } from '../../../shared/util.js'
+import { isInviteLink, truncateText } from '@deltachat-desktop/shared/util.js'
 import { tx } from '../load-translations.js'
 import { open_url } from '../open_url.js'
 import { loadTheme } from '../themes.js'

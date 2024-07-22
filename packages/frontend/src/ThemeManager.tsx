@@ -1,6 +1,6 @@
 import { Theme } from '../../shared/shared-types'
 import React, { useContext, useMemo } from 'react'
-import { runtime } from '../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 export namespace ThemeManager {
   let currentThemeMetaData: Theme

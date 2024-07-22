@@ -1,7 +1,7 @@
 import { getLogger } from '../../shared/logger'
 import { BackendRemote } from './backend-com'
 import { printCallCounterResult } from './debug-tools'
-import { runtime } from '../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 import { selectedAccountId } from './ScreenController'
 
 const log = getLogger('renderer/experiments')

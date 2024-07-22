@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "name": "@deltachat-desktop/target-browser",
+  "type": "module",
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "@deltachat-desktop/runtime-interface": "link:../runtime",
+    "@deltachat-desktop/shared": "link:../shared"
+  }
+}

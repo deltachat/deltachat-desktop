@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 import { useSettingsStore } from '../../stores/settings'
 import { SendBackupDialog } from '../dialogs/SetupMultiDevice'
-import { runtime } from '../../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 import { donationUrl } from '../../../../shared/constants'
 import SettingsIconButton from './SettingsIconButton'
 import ConnectivityButton from './ConnectivityButton'

@@ -35,6 +35,6 @@ jobs:
     - name: Check for misplaced console.log statements
       run: |
         pnpm test-log-conventions
-    - name: Misc tests
+    - name: test if version is the same across packages
       run: |
-        pnpm test-misc
+        pnpm test:package-versions
