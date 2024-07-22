@@ -740,20 +740,23 @@ class MessageListStore extends Store<MessageListState> {
         true
       )
       let indexEnd = -1
-      const last_item =
+      const last_item: Type.MessageListItem | undefined =
         this.state.messageListItems[this.state.messageListItems.length - 1]
 
-      let indexStart = messageListItems.findIndex(item => {
-        if (last_item.kind !== item.kind) {
-          return false
-        } else {
-          if (item.kind === 'message') {
-            return item.msg_id === (last_item as any).msg_id
-          } else {
-            return item.timestamp === (last_item as any).timestamp
-          }
-        }
-      })
+      let indexStart =
+        last_item === undefined
+          ? -1
+          : messageListItems.findIndex(item => {
+              if (last_item.kind !== item.kind) {
+                return false
+              } else {
+                if (item.kind === 'message') {
+                  return item.msg_id === (last_item as any).msg_id
+                } else {
+                  return item.timestamp === (last_item as any).timestamp
+                }
+              }
+            })
 
       // check if there is an intersection
       if (indexStart !== -1 && messageListItems[indexStart + 1]) {
