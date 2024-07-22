@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 import useConfirmationDialog from './dialog/useConfirmationDialog'
 import useOpenMailtoLink from './useOpenMailtoLink'
 import useTranslationFunction from './useTranslationFunction'
-import { runtime } from '../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 /**
  * Opens http, https and mailto links, offers to copy all other links.

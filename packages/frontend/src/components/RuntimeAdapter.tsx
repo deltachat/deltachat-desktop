@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react'
 import useMessage from '../hooks/chat/useMessage'
 import useProcessQr from '../hooks/useProcessQr'
 import { clearNotificationsForChat } from '../system-integration/notifications'
-import { runtime } from '../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 import type { PropsWithChildren } from 'react'
 import { ActionEmitter, KeybindAction } from '../keybindings'

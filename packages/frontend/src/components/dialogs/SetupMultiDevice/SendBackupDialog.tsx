@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 
 import { getLogger } from '../../../../../shared/logger'
 import { BackendRemote, onDCEvent } from '../../../backend-com'
-import { runtime } from '../../../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 import { selectedAccountId } from '../../../ScreenController'
 import Dialog, {
   DialogBody,

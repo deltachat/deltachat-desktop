@@ -1,0 +1,68 @@
+{
+  "private": true,
+  "type": "module",
+  "name": "@deltachat-desktop/target-electron",
+  "version": "1.46.1",
+  "description": "Desktop Application for delta.chat",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/deltachat/deltachat-desktop.git"
+  },
+  "keywords": [
+    "deltachat",
+    "email",
+    "messaging",
+    "desktop"
+  ],
+  "author": {
+    "name": "DeltaChat Developers",
+    "email": "delta-systems@codespeak.net"
+  },
+  "main": "index.js",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/deltachat/deltachat-desktop/issues"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "productName": "DeltaChat",
+  "homepage": "https://delta.chat",
+  "scripts": {
+    "build": "tsc --build",
+    "dev": "pnpm build && pnpm start --",
+    "start": "electron . --devmode --disable-http-cache --translation-watch",
+    "clean": "rm -rf ./tsc-dist ./html-dist ./dist",
+    "pack": "pnpm pack:generate_config && pnpm pack:all",
+    "pack:generate_config": "node ./build/gen-electron-builder-config.js && prettier --write ./electron-builder.json5 --log-level silent",
+    "pack:win": "electron-builder --config ./electron-builder.json5 --win nsis portable",
+    "pack:mac": "electron-builder --config ./electron-builder.json5 --mac dmg mas",
+    "pack:linux:dir": "electron-builder --config ./electron-builder.json5 --linux --dir",
+    "pack:linux": "electron-builder --config ./electron-builder.json5 --linux AppImage deb",
+    "pack:all": "electron-builder --config ./electron-builder.json5 --mac dmg --win nsis portable --linux AppImage deb"
+  },
+  "dependencies": {
+    "@deltachat-desktop/runtime-interface": "link:../runtime",
+    "@deltachat-desktop/shared": "link:../shared",
+    "@deltachat/jsonrpc-client": "^1.141.2",
+    "@deltachat/stdio-rpc-server": "^1.141.2",
+    "application-config": "^1.0.1",
+    "mime-types": "^2.1.31",
+    "rc": "^1.2.8",
+    "source-map-support": "^0.5.19",
+    "webxdc-types": "^1.0.1",
+    "ws": "7.5.10"
+  },
+  "devDependencies": {
+    "@electron/notarize": "^2.1.0",
+    "@types/mime-types": "^2.1.0",
+    "@types/node": "^20.12.11",
+    "@types/rc": "^1.1.0",
+    "@typescript-eslint/eslint-plugin": "^7.8.0",
+    "@typescript-eslint/parser": "^7.8.0",
+    "chokidar": "^3.5.3",
+    "electron": "^30.0.5",
+    "electron-builder": "^24.13.3",
+    "typescript": "^5.3.2"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "name": "@deltachat-desktop/runtime-interface",
+  "type": "module",
+  "main": "runtime.ts",
+  "dependencies": {
+    "@deltachat-desktop/shared": "link:../shared"
+  }
+}

@@ -24,7 +24,7 @@ import {
 } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { MessageTypeAttachmentSubset } from '../attachment/Attachment'
-import { runtime } from '../../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 import { confirmDialog } from '../message/messageFunctions'
 import { ProtectionBrokenDialog } from '../dialogs/ProtectionStatusDialog'
 import useDialog from '../../hooks/dialog/useDialog'

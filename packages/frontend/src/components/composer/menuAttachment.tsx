@@ -1,7 +1,7 @@
 import React, { useCallback, useContext } from 'react'
 import { dirname } from 'path'
 
-import { runtime } from '../../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 import { useStore } from '../../stores/store'
 import SettingsStoreInstance from '../../stores/settings'
 import { IMAGE_EXTENSIONS } from '../../../../shared/constants'

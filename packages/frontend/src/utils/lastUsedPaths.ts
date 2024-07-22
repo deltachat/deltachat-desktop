@@ -1,4 +1,4 @@
-import { runtime } from '../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 export const enum LastUsedSlot {
   Attachment = 'last_directory:attachment',

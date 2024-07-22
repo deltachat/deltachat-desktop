@@ -14,7 +14,7 @@ import Icon from '../Icon'
 import Settings from '../Settings'
 import useDialog from '../../hooks/dialog/useDialog'
 import { BackendRemote } from '../../backend-com'
-import { runtime } from '../../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 import { useAccountNotificationStore } from '../../stores/accountNotifications'
 
 import styles from './styles.module.scss'

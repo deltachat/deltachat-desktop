@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "../../tsc-dist/main",
+    "outDir": "tsc-dist/main",
     "sourceMap": true,
     "noImplicitAny": true,
     "module": "NodeNext",
@@ -12,10 +12,5 @@
     "strictNullChecks": true,
     "strict": true
   },
-  "include": ["./**/*.ts", "./**/*.js", "../../bin/copy.js"],
-  "references": [
-    {
-      "path": "../shared/tsconfig.json"
-    }
-  ]
+  "include": ["./**/*.ts", "./**/*.js"]
 }

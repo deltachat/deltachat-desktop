@@ -2,7 +2,7 @@ import React, { useRef, useLayoutEffect } from 'react'
 
 import { dirname } from 'path'
 
-import { runtime } from '../../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 import Dialog, {
   DialogBody,

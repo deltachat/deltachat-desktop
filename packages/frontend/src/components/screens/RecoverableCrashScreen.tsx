@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { runtime } from '../../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 import { VERSION, GIT_REF } from '../../../../shared/build-info'
 import { getLogger } from '../../../../shared/logger'
 import { DialogContext } from '../../contexts/DialogContext'

@@ -13,7 +13,7 @@ import Spinner from '../Spinner'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import { ScreenContext } from '../../contexts/ScreenContext'
-import { runtime } from '../../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 // @ts-ignore:next-line: We're importing a worker here with the help of the
 // "esbuild-plugin-inline-worker" plugin

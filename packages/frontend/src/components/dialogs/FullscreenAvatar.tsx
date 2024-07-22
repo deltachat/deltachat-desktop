@@ -3,7 +3,7 @@ import { basename } from 'path'
 import { Icon, Overlay } from '@blueprintjs/core'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 
-import { runtime } from '../../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useContextMenu from '../../hooks/useContextMenu'
 

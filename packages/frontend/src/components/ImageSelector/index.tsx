@@ -5,7 +5,7 @@ import Icon from '../Icon'
 import LargeProfileImage from '../LargeProfileImage'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
-import { runtime } from '../../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 import styles from './styles.module.scss'
 

@@ -12,9 +12,9 @@ import {
   dragAttachmentOut,
   MessageTypeAttachmentSubset,
 } from './Attachment'
-import { runtime } from '../../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 import { ConversationType } from '../message/MessageList'
-import { getDirection } from '../../../../shared/util'
+import { getDirection } from '../../utils/getDirection'
 import { Type } from '../../backend-com'
 import FullscreenMedia, {
   NeighboringMediaMode,

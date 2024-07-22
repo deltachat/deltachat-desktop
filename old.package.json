@@ -1,0 +1,44 @@
+{
+  "name": "deltachat-desktop-meta",
+  "scripts": {
+    
+    
+    
+    "test": "pnpm check && pnpm test:log-conventions && pnpm test-unit && pnpm test:pnpm-lock",
+    
+    "test-unit": "mocha 'test/mocha/**/*.js'",
+    
+    
+
+    "build": "pnpm build:shared && pnpm build:backend && pnpm build:frontend",
+
+
+    "build:shared": "pnpm build:shared:translations && pnpm build:shared:version",
+    
+    "build:shared:version": "node ./bin/build-shared-version-info.js",
+    
+    "build:frontend": "pnpm --filter=@deltachat-desktop/frontend build",
+
+    "watch": "pnpm watch:shared & pnpm watch:frontend",
+    "watch:shared": "pnpm watch:shared:translations",
+    "watch:shared:translations": "pnpm build:shared:translations -- -w",
+    
+    "build4production": "NODE_ENV=production pnpm build && pnpm check:types",
+    
+
+
+  },
+
+  "dependencies": {},
+  "devDependencies": {
+    //testing
+    "@types/chai": "^4.3.0",
+    "@types/mocha": "^9.0.0",
+
+    "adm-zip": "^0.5.12",
+    "chai": "^4.3.4",
+    "mocha": "^9.2.2",
+    "@types/node-fetch": "^2.6.9",
+    "node-fetch": "^2.6.7"
+  }
+}

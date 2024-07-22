@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 
 import { BackendRemote } from '../../backend-com'
-import { runtime } from '../../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 import { selectedAccountId } from '../../ScreenController'
 import SettingsButton from './SettingsButton'
 import useTranslationFunction from '../../hooks/useTranslationFunction'

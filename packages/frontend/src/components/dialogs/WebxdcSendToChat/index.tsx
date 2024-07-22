@@ -10,7 +10,7 @@ import { useChatList } from '../../chat/ChatListHelpers'
 import { useThemeCssVar } from '../../../ThemeManager'
 import { BackendRemote } from '../../../backend-com'
 import { selectedAccountId } from '../../../ScreenController'
-import { runtime } from '../../../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 import Dialog, {
   DialogBody,
   DialogFooter,

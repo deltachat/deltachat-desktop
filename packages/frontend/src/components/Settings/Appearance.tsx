@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Icon } from '@blueprintjs/core'
 
 import { ThemeManager } from '../../ThemeManager'
-import { runtime } from '../../../../runtime/runtime'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 import {
   DesktopSettingsType,
   RC_Config,
