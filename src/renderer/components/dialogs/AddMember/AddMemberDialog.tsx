@@ -74,7 +74,7 @@ export const AddMemberChip = (props: {
         />
       </div>
       <div className={styles.DisplayName}>
-        {contact.displayName} {contact.isVerified && <InlineVerifiedIcon />}
+        <div>{contact.displayName}</div> {contact.isVerified && <InlineVerifiedIcon />}
       </div>
       <div
         className={styles.removeMember}
