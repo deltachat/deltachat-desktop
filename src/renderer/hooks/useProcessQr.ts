@@ -105,7 +105,10 @@ export default function useProcessQR() {
         )
 
         const userConfirmed = await openConfirmationDialog({
-          message: tx('instant_onboarding_confirm_contact', contact.address),
+          message: tx(
+            'instant_onboarding_confirm_contact',
+            contact.nameAndAddr
+          ),
           confirmLabel: tx('ok'),
         })
 
