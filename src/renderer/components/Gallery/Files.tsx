@@ -1,13 +1,14 @@
 import React, { ChangeEvent } from 'react'
-import { FixedSizeGrid, FixedSizeList } from 'react-window'
+import { FixedSizeList } from 'react-window'
 import { FileAttachmentRow } from '../attachment/mediaAttachment'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { Type } from '../../backend-com'
 
 interface FileTableProps {
   width: number
   height: number
   mediaMessageIds: number[]
-  mediaLoadResult: Reacord<number, Type.MessageLoadResult>
+  mediaLoadResult: Record<number, Type.MessageLoadResult>
   queryText: string
 }
 

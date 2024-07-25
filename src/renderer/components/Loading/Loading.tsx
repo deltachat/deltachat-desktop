@@ -5,12 +5,12 @@
  */
 
 import React, { PureComponent } from 'react'
-import styles from './loading.style.module.scss'
+import './Loading.css'
 
 const Dead = 0
 const Alive = 1
 const Cancer = 2
-type CAState = Dead | Alive | Cancer
+type CAState = 0 | 1 | 2
 // see this: https://math.uchicago.edu/~alephnil/en/talks/logm-conway-poster.pdf
 // done with <3 by Farooq!
 
@@ -27,7 +27,7 @@ function getNeighbors(
   for (let di = -1; di <= 1; di++) {
     for (let dj = -1; dj <= 1; dj++) {
       switch (
-      currentState[(i + di + height) % height][(j + dj + width) % width]
+        currentState[(i + di + height) % height][(j + dj + width) % width]
       ) {
         case Alive:
           alives++
@@ -85,7 +85,7 @@ function computeNewState(currentState: CAState[][]): CAState[][] {
 }
 
 function generateRandomInitialState(): CAState[][] {
-  const state = [
+  const state: CAState[][] = [
     [0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0],
@@ -137,7 +137,7 @@ export default class Loading extends PureComponent<{}, State> {
 
   render() {
     return (
-      <div className={styles.loading}>
+      <div className='loading'>
         <p>Please wait...</p>
         <div>
           {this.board.map((row: CAState[], idx) => (
@@ -152,27 +152,25 @@ export default class Loading extends PureComponent<{}, State> {
 const CellColor = [
   'var(--buttonPrimaryText)',
   'var(--buttonPrimaryBackground',
-  'var(--buttonDangerText)'
+  'var(--buttonDangerText)',
 ]
 
 function CellRow({ row }: { row: CAState[] }) {
   return (
-    <div className={styles["cell-row"]}>
-      {
-        row.map((cell: CAState, idx) => (
-          <Cell state={cell} key={idx.toString() + 'c'} />
-        ))
-      }
-    </ div>
+    <div className='cell-row'>
+      {row.map((cell: CAState, idx) => (
+        <Cell state={cell} key={idx.toString() + 'c'} />
+      ))}
+    </div>
   )
 }
 
 function Cell({ state }: { state: CAState }) {
   return (
     <div
-      className={styles.cell}
+      className='cell'
       style={{
-        backgroundColor: CellColor[state]
+        backgroundColor: CellColor[state],
       }}
     >
       &nbsp;

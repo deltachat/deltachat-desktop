@@ -1,17 +1,19 @@
 .loading {
-  > p {
-    text-align: center;
-  }
-  > div {
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-  }
+  margin: auto;
 }
 
-.cell-row { 
-  display: 'flex';
+.loading > p {
+  text-align: center;
+}
+
+.loading > div {
+  display: flex;
   flex-direction: row;
+}
+
+.cell-row {
+  display: flex;
+  flex-direction: column;
 }
 
 .cell {

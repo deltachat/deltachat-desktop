@@ -3,12 +3,13 @@
   flex-direction: row;
   justify-content: start;
   flex-grow: 3 1;
-  > ul {
-    display: flex;
-    flex-direction: row;
-    flex-grow: 1;
-    justify-content: start;
-  }
+}
+
+.tablist-header-ul {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  justify-content: start;
 }
 
 .tab-header {
@@ -17,6 +18,6 @@
   height: 0.35rem;
   box-shadow: 0 2.45rem 0 0;
   .focused {
-    box-shadow-color: var(--delta-btn-tab-selected-bg);
+    box-shadow: 0 2.45rem 0 0 var(--delta-btn-tab-selected-bg);
   }
 }

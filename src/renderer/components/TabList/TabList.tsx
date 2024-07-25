@@ -1,6 +1,7 @@
 import React, { PropsWithChildren, useState, useEffect } from 'react'
 import classNames from 'classnames'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import styles from './styles.module.scss'
 
 interface TabListProps {
   tabNames: string[]
@@ -59,8 +60,8 @@ function TabListHeader({
   children,
 }: PropsWithChildren<TabListHeaderProps>) {
   return (
-    <div className='tablist-header'>
-      <ul>
+    <div className={styles['tablist-header']}>
+      <ul className={styles['tablist-header-ul']}>
         {tabs.map((tab: string, index: number) => {
           if (index == currentTab) {
             return (
@@ -99,7 +100,7 @@ function TabHeader({ name, isFocused, onClick }: TabHeaderProps) {
   return (
     <li
       key={name}
-      className={classNames('tab-header', isFocused && 'focused')}
+      className={classNames(styles['tab-header'], { [styles['focused']]: isFocused })}
       onClick={onClick}
     >
       {tx(name)}

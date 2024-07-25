@@ -1,17 +1,10 @@
-import React, {
-  ChangeEvent,
-  Component,
-  PureComponent,
-  createRef,
-  Ref,
-} from 'react'
+import React, { ChangeEvent, PureComponent, createRef, RefObject } from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { FixedSizeGrid, FixedSizeList } from 'react-window'
 import moment from 'moment'
 
 import {
   AudioAttachment,
-  FileAttachmentRow,
   ImageAttachment,
   VideoAttachment,
   WebxdcAttachment,
@@ -41,12 +34,12 @@ const tabNames: MediaTabKey[] = [
   'webxdc_apps',
 ]
 
-const tabMsgTypes: Record<MediaTabKey, string | string[]> = {
+const tabMsgTypes: Record<MediaTabKey, (Type.Viewtype | null)[]> = {
   images: ['Gif', 'Image'],
-  video: 'Video',
+  video: ['Video', null],
   audio: ['Audio', 'Voice'],
-  files: 'File',
-  webxdc_apps: 'Webxdc',
+  files: ['File', null],
+  webxdc_apps: ['Webxdc', null],
 }
 
 interface State {
@@ -63,8 +56,8 @@ interface Props {
   onUpdateView?: () => void
 }
 
-export default class Gallery extends Component<Props, State> {
-  dateHeader: Ref<HTMLDivElement> = createRef<HTMLDivElement>()
+export default class Gallery extends PureComponent<Props, State> {
+  dateHeader: RefObject<HTMLDivElement>
   constructor(props: Props) {
     super(props)
 
@@ -76,7 +69,7 @@ export default class Gallery extends Component<Props, State> {
       queryText: '',
       galleryImageKeepAspectRatio: false,
     }
-
+    this.dateHeader = createRef()
     this.settingsStoreListener = this.settingsStoreListener.bind(this)
   }
 
@@ -122,21 +115,17 @@ export default class Gallery extends Component<Props, State> {
   }
 
   onSelect(tab: MediaTabKey) {
+    this.setState({ loading: true })
     const { chatId, onUpdateView } = this.props
     if (!chatId) {
       throw new Error('chat id missing')
     }
     const accountId = selectedAccountId()
     const chatId2 = chatId !== 'all' ? chatId : null
-    this.setState({ loading: true })
-    const [type0, type1] = (() => {
-      const result = tabMsgTypes[tab]
-      if (Array.isArray(result)) {
-        return result
-      } else {
-        return [result, null]
-      }
-    })()
+
+    const type0 = tabMsgTypes[tab][0] as Type.Viewtype
+    const type1 = tabMsgTypes[tab][1]
+
     BackendRemote.rpc
       .getChatMedia(accountId, chatId2, type0, type1, null)
       .then(async (mediaIds: MessageId[]) => {
@@ -163,7 +152,10 @@ export default class Gallery extends Component<Props, State> {
 
   updateFirstVisibleMessage(message: Type.MessageLoadResult) {
     if (message.kind === 'message') {
-      if (typeof this.dateHeader.current === 'object' && this.dateHeader.current) {
+      if (
+        typeof this.dateHeader.current === 'object' &&
+        this.dateHeader.current
+      ) {
         this.dateHeader.current.innerText = moment(
           message.timestamp * 1000
         ).format('LL')
@@ -206,7 +198,7 @@ export default class Gallery extends Component<Props, State> {
         <TabList
           tabNames={tabNames}
           tabChangeCb={(newTab: string) =>
-            this.setState({ currentTab: newTab })
+            this.setState({ currentTab: newTab as MediaTabKey })
           }
         >
           <>
@@ -220,7 +212,7 @@ export default class Gallery extends Component<Props, State> {
               mediaMessageIds={mediaMessageIds}
               mediaLoadResult={mediaLoadResult}
               openFullscreenMedia={this.openFullscreenMedia.bind(this)}
-              updateFirstVisibleMessage={this.updateFirstVisibleMessage}
+              updateFirstVisibleMessage={this.updateFirstVisibleMessage.bind(this)}
               loading={loading}
               key={'image' + chatId}
             />
@@ -231,7 +223,7 @@ export default class Gallery extends Component<Props, State> {
               mediaMessageIds={mediaMessageIds}
               mediaLoadResult={mediaLoadResult}
               openFullscreenMedia={this.openFullscreenMedia.bind(this)}
-              updateFirstVisibleMessage={this.updateFirstVisibleMessage}
+              updateFirstVisibleMessage={this.updateFirstVisibleMessage.bind(this)}
               loading={loading}
               key={'video' + chatId}
             />
@@ -242,13 +234,13 @@ export default class Gallery extends Component<Props, State> {
               mediaMessageIds={mediaMessageIds}
               mediaLoadResult={mediaLoadResult}
               openFullscreenMedia={this.openFullscreenMedia.bind(this)}
-              updateFirstVisibleMessage={this.updateFirstVisibleMessage}
+              updateFirstVisibleMessage={this.updateFirstVisibleMessage.bind(this)}
               loading={loading}
               key={'audio' + chatId}
             />
             <div key={'file' + chatId}>
               {loading && <Loading />}
-              {!loading &&
+              {!loading && (
                 <>
                   <AutoSizer>
                     {({ width, height }) => (
@@ -265,7 +257,7 @@ export default class Gallery extends Component<Props, State> {
                     <FilesNoResult queryText={queryText} />
                   )}
                 </>
-              }
+              )}
             </div>
             <TabBody
               attachmentElement={WebxdcAttachment}
@@ -274,7 +266,7 @@ export default class Gallery extends Component<Props, State> {
               mediaMessageIds={mediaMessageIds}
               mediaLoadResult={mediaLoadResult}
               openFullscreenMedia={this.openFullscreenMedia.bind(this)}
-              updateFirstVisibleMessage={this.updateFirstVisibleMessage}
+              updateFirstVisibleMessage={this.updateFirstVisibleMessage.bind(this)}
               loading={loading}
               key={'xdc' + chatId}
             />
@@ -297,12 +289,12 @@ Gallery.contextType = DialogContext
 
 interface TabBodyProps {
   minWidth: number
-  mediaMessageIds: number[]
+  mediaMessageIds: MessageId[]
   itemHeight: number
-  mediaLoadResult: Record<number, Type.MessageLoadResult>
+  mediaLoadResult: Record<MessageId, Type.MessageLoadResult>
   attachmentElement: GalleryElement
-  openFullscreenMedia: todo
-  updateFirstVisibleMessage: todo
+  openFullscreenMedia: (message: Type.Message) => void
+  updateFirstVisibleMessage: (result: Type.MessageLoadResult) => void
   loading: boolean
 }
 
