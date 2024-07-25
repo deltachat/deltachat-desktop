@@ -31,6 +31,10 @@
         margin: 4px;
       }
 
+      button {
+        margin-left: auto;
+      }
+
       .message-attachment-media {
         flex-grow: 1;
         margin: 4px;
@@ -46,7 +50,6 @@
       }
     }
   }
-
   .lower-bar {
     display: flex;
     align-items: flex-end;
