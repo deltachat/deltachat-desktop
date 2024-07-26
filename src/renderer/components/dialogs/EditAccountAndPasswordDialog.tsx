@@ -17,6 +17,7 @@ import useDialog from '../../hooks/dialog/useDialog'
 import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+import AlertDialog from './AlertDialog'
 
 export default function EditAccountAndPasswordDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
@@ -92,6 +93,9 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
       openDialog(ConfigureProgressDialog, {
         credentials: accountSettings,
         onSuccess,
+        onFail: error => {
+          openDialog(AlertDialog, { message: error })
+        },
       })
     }
 

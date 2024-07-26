@@ -15,6 +15,7 @@ import type {
   VerifyContactQr,
   VerifyGroupQr,
 } from '../backend/qr'
+import AlertDialog from '../components/dialogs/AlertDialog'
 
 type InstantOnboarding = {
   createInstantAccount: (accountId: number) => Promise<T.FullChat['id'] | null>
@@ -134,6 +135,9 @@ export default function useInstantOnboarding(): InstantOnboarding {
             } catch (error: any) {
               reject(error)
             }
+          },
+          onFail: error => {
+            openDialog(AlertDialog, { message: error })
           },
         })
       })
