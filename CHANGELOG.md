@@ -24,6 +24,7 @@
   - Display vCard contact name in the message summary
   - Case-insensitive search for non-ASCII messages
 - make ImageCropper use CSS-transforms for UI and canvas API to cut the result #3893
+- update stock translations #4051
 
 ### Fixed
 - Fix crash on "Settings" click when not on main screen (e.g. no account selected): hide the "settings" button
