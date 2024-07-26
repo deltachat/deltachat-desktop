@@ -6,6 +6,7 @@ import FullscreenAvatar from './dialogs/FullscreenAvatar'
 
 import type { Type } from '../backend-com'
 import type { PropsWithChildren } from 'react'
+import { get_first_emoji } from '@deltachat/message_parser_wasm'
 
 export function QRAvatar() {
   return (
@@ -18,9 +19,14 @@ export function QRAvatar() {
 }
 
 export function avatarInitial(name: string, addr?: string) {
-  const nameOrAddr = name || addr
-  const codepoint = nameOrAddr && nameOrAddr.codePointAt(0)
-  return codepoint ? String.fromCodePoint(codepoint).toUpperCase() : ''
+  const firstEmoji = name && get_first_emoji(name)
+  if (firstEmoji) {
+    return firstEmoji
+  } else {
+    const nameOrAddr = name || addr
+    const codepoint = nameOrAddr && nameOrAddr.codePointAt(0)
+    return codepoint ? String.fromCodePoint(codepoint).toUpperCase() : ''
+  }
 }
 
 type htmlDivProps = React.HTMLAttributes<HTMLDivElement>

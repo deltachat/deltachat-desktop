@@ -1,9 +1,9 @@
 .icon {
   background-color: var(--colorPrimary);
   display: inline-block;
-  -webkit-mask-position: center;
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-size: contain;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
 
   &.navbar {
     background-color: var(--navBarText);

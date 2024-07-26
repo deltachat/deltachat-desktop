@@ -1,12 +1,11 @@
 .composer {
-  background-color: var(--composerBg);
   border-left: 1px solid rgba(16, 22, 26, 0.1);
+  background-color: var(--composerBg);
 
   &.contact-request {
     display: flex;
     justify-content: space-around;
     padding: 15px 0px;
-
     & > .contact-request-button {
       background-color: var(--chatListItemSelectedBg);
       border-radius: 10px;
@@ -24,12 +23,16 @@
   .upper-bar {
     & > .attachment-quote-section {
       display: flex;
-      justify-content: space-between;
-      padding: 3px 0;
+      padding: 9px;
+      border-bottom: 1px solid #eee;
 
       .quote {
         // this is just overwrites for the quote styles defined in _message.scss
         margin: 4px;
+      }
+
+      button {
+        margin-left: auto;
       }
 
       .message-attachment-media {
@@ -45,26 +48,23 @@
       .message-attachment-generic {
         margin: 4px;
       }
-
-      .clear-quote-icon {
-        margin-right: 5px;
-        min-width: 32px;
-        &::before {
-          color: var(--chat-list-item-summary-text);
-        }
-      }
     }
   }
-
   .lower-bar {
     display: flex;
     align-items: flex-end;
+    background-color: var(--composerBg);
+
+    .attachment-button,
+    .emoji-button {
+      background: none;
+      border: none;
+    }
 
     .attachment-button {
       width: 40px;
       height: 40px;
 
-      background: none;
       box-shadow: none;
       border: none;
 
@@ -72,7 +72,7 @@
         background: none;
         cursor: pointer;
       }
-      &:focus {
+      &:focus:not(:focus-visible) {
         outline: none;
       }
     }
@@ -80,7 +80,7 @@
     .emoji-button {
       height: 40px;
       padding: 0px 3px;
-      &:focus {
+      &:focus:not(:focus-visible) {
         outline: none;
       }
       &:hover {
@@ -91,7 +91,6 @@
         display: block;
         width: 25px;
         height: 25px;
-        margin-top: calc((40px - 25px) / 2);
         background-image: url(../images/emoji.png);
         background-size: contain;
       }
@@ -107,7 +106,7 @@
       border-radius: 180px;
       cursor: pointer;
 
-      &:focus {
+      &:focus:not(:focus-visible) {
         outline: none;
       }
 
@@ -123,7 +122,7 @@
         background-size: contain;
         vertical-align: middle;
 
-        &:focus {
+        &:focus:not(:focus-visible) {
           outline: none;
         }
       }
@@ -146,6 +145,8 @@
         color: var(--composerPlaceholderText);
       }
 
+      // Let's not add `:not(:focus-visible)` since the blinking cursor
+      // might be enough, (or it might not, we'll see).
       &:focus {
         outline: none;
       }

@@ -23,7 +23,10 @@ import {
   ChatListItemRowContact,
   ChatListItemRowMessage,
 } from './ChatListItemRow'
-import { PseudoListItemAddContact } from '../helpers/PseudoListItem'
+import {
+  PseudoListItemAddContact,
+  PseudoListItemAddContactFromInviteLink,
+} from '../helpers/PseudoListItem'
 import { KeybindAction } from '../../keybindings'
 import { useThemeCssVar } from '../../ThemeManager'
 import { BackendRemote, onDCEvent, Type } from '../../backend-com'
@@ -40,6 +43,7 @@ import type {
   ContactChatListItemData,
   MessageChatListItemData,
 } from './ChatListItemRow'
+import { isInviteLink } from '../../../shared/util'
 
 const enum LoadStatus {
   FETCHING = 1,
@@ -201,12 +205,17 @@ export default function ChatList(props: {
       contactIds.length * CHATLISTITEM_CONTACT_HEIGHT
     )
 
+  const showPseudoListItemAddContactFromInviteLink =
+    queryStr && isInviteLink(queryStr)
   const messagesHeight = (height: number) =>
     height -
     (DIVIDER_HEIGHT * 3 +
       chatsHeight(height) +
       contactsHeight(height) +
       (chatListIds.length == 0 && queryStrIsValidEmail
+        ? CHATLISTITEM_MESSAGE_HEIGHT
+        : 0) +
+      (showPseudoListItemAddContactFromInviteLink
         ? CHATLISTITEM_MESSAGE_HEIGHT
         : 0))
 
@@ -421,6 +430,14 @@ export default function ChatList(props: {
                         />
                       </div>
                     )}
+                  {showPseudoListItemAddContactFromInviteLink && (
+                    <div style={{ width: width }}>
+                      <PseudoListItemAddContactFromInviteLink
+                        inviteLink={queryStr!}
+                        accountId={accountId}
+                      />
+                    </div>
+                  )}
                   <div
                     className='search-result-divider'
                     style={{ width: width }}
