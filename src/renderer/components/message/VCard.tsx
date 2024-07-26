@@ -62,7 +62,10 @@ export function VisualVCardComponent({
     ? String.fromCodePoint(codepoint).toUpperCase()
     : '#'
   return (
-    <div className={styles.vcard} onClick={onClick}>
+    <div
+      className={styles.vcard + `${onClick ? ' clickable' : ''}`}
+      onClick={onClick}
+    >
       <div
         className={classNames('avatar', styles.avatar)}
         aria-label={displayName}

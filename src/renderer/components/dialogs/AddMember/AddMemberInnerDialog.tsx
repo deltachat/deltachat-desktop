@@ -18,9 +18,9 @@ import { DialogBody, DialogHeader, OkCancelFooterAction } from '../../Dialog'
 import useDialog from '../../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { VerifiedContactsRequiredDialog } from '../ProtectionStatusDialog'
-import styles from './styles.module.scss'
 import InfiniteLoader from 'react-window-infinite-loader'
 import { AddMemberChip } from './AddMemberDialog'
+import styles from './styles.module.scss'
 
 export function AddMemberInnerDialog({
   onCancel,
@@ -225,8 +225,8 @@ export function AddMemberInnerDialog({
         title={!isBroadcast ? tx('group_add_members') : tx('add_recipients')}
       />
       <DialogBody className={styles.addMemberDialogBody}>
-        <div className='AddMemberChipsWrapper'>
-          <div className='AddMemberChips'>
+        <div className={styles.AddMemberChipsWrapper}>
+          <div className={styles.AddMemberChips}>
             {contactIdsToAdd.map(contact => {
               return AddMemberChip({
                 contact,
@@ -235,7 +235,7 @@ export function AddMemberInnerDialog({
             })}
             <input
               ref={inputRef}
-              className='search-input group-member-search'
+              className={'search-input ' + styles.groupMemberSearch}
               onChange={onSearchChange}
               onKeyDown={event => {
                 addContactOnKeyDown(event)

@@ -37,7 +37,11 @@ $reaction-transition-duration: 100ms;
 
 .vcard {
   display: flex;
-  cursor: pointer;
+  background-color: #dedede;
+  border-radius: 10px;
+  padding: 9px;
+  padding-top: 0;
+  padding-right: 15px;
   .avatar {
     margin-bottom: 0;
   }

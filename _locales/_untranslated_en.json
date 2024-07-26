@@ -39,8 +39,11 @@
   "crop_image": {
     "message": "Crop Image"
   },
-  "image_cropper_hint_desktop": {
-    "message": "Select an area on the image"
+  "flip_image_horizontally": {
+    "message": "Flip image horizontally"
+  },
+  "flip_image_vertically": {
+    "message": "Flip image vertically"
   },
   "menu_global_map": {
     "message": "Open global map"

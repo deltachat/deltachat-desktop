@@ -4,6 +4,7 @@ import { PseudoContact } from '../contact/Contact'
 import { QRAvatar } from '../Avatar'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { useSettingsStore } from '../../stores/settings'
+import useProcessQR from '../../hooks/useProcessQr'
 
 export function PseudoListItem(
   props: PropsWithChildren<{
@@ -107,5 +108,27 @@ export const PseudoListItemAddContact = ({
       }
       onClick={onClick}
     />
+  )
+}
+
+export const PseudoListItemAddContactFromInviteLink = ({
+  inviteLink,
+  accountId,
+}: {
+  inviteLink: string
+  accountId: number
+}) => {
+  const tx = useTranslationFunction()
+  const processQr = useProcessQR()
+
+  return (
+    <PseudoListItem
+      id='newcontactfrominvitelink'
+      cutoff='+'
+      text={tx('menu_new_contact')}
+      onClick={() => processQr(accountId, inviteLink.trim())}
+    />
+    // Perhaps we could also parse username from the link
+    // and put it into `subText`.
   )
 }

@@ -24,7 +24,6 @@
   top: 0;
   left: 0;
   z-index: 2;
-  zoom: 1;
 }
 
 .imageCropperFullImage {
@@ -33,7 +32,6 @@
   left: 0;
   z-index: 0;
   background: black;
-  zoom: 1;
 }
 
 .imageCropperHint {
@@ -45,4 +43,22 @@
   right: 0;
   text-align: center;
   user-select: none;
+}
+
+.imageCropperControls {
+  position: absolute;
+  top: 8px;
+  right: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.imageCropperControlsButton {
+  display: flex;
+  padding: 12px;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
 }

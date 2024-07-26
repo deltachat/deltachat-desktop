@@ -1,12 +1,11 @@
 .composer {
-  background-color: var(--composerBg);
   border-left: 1px solid rgba(16, 22, 26, 0.1);
+  background-color: var(--composerBg);
 
   &.contact-request {
     display: flex;
     justify-content: space-around;
     padding: 15px 0px;
-
     & > .contact-request-button {
       background-color: var(--chatListItemSelectedBg);
       border-radius: 10px;
@@ -24,12 +23,16 @@
   .upper-bar {
     & > .attachment-quote-section {
       display: flex;
-      justify-content: space-between;
-      padding: 3px 0;
+      padding: 9px;
+      border-bottom: 1px solid #eee;
 
       .quote {
         // this is just overwrites for the quote styles defined in _message.scss
         margin: 4px;
+      }
+
+      button {
+        margin-left: auto;
       }
 
       .message-attachment-media {
@@ -45,20 +48,12 @@
       .message-attachment-generic {
         margin: 4px;
       }
-
-      .clear-quote-icon {
-        margin-right: 5px;
-        min-width: 32px;
-        &::before {
-          color: var(--chat-list-item-summary-text);
-        }
-      }
     }
   }
-
   .lower-bar {
     display: flex;
     align-items: flex-end;
+    background-color: var(--composerBg);
 
     .attachment-button,
     .emoji-button {
