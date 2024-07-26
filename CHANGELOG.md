@@ -48,6 +48,7 @@
 - fix show new incoming messages after clearing chat #4037
 - fix: QR scanning not showing errors on failure #4040
 - fix missing remove button in AddMemberChip #393
+- fix composite emoji in text avatar #4038
 
 <a id="1_46_1"></a>
 
