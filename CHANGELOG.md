@@ -7,6 +7,7 @@
 - More shortcuts to switch between chats: `Ctrl + PageDown`, `Ctrl + PageUp`, `Ctrl + Tab`, `Ctrl + Shift + Tab` #3984
 - Better keyboard accessibility: make more elements focusable, add outline them #4005
 - a way to add contact by pasting invite link to the search field #4041
+- add on-screen controls to ImageCropper and the ability to rotate by 90 degrees #3893
 
 ### Changed
 - reword advanced setting "Disable Background Sync For All Accounts" -> "Only Synchronize the Currently Selected Account" #3960
@@ -22,6 +23,7 @@
   - support vcards exported by protonmail
   - Display vCard contact name in the message summary
   - Case-insensitive search for non-ASCII messages
+- make ImageCropper use CSS-transforms for UI and canvas API to cut the result #3893
 
 ### Fixed
 - Fix crash on "Settings" click when not on main screen (e.g. no account selected): hide the "settings" button

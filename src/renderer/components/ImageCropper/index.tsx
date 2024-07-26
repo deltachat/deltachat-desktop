@@ -13,11 +13,23 @@ import Dialog, {
   FooterActionButton,
 } from '../Dialog'
 
+import Icon from '../Icon'
+
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
 
 import styles from './styles.module.scss'
 
+// Implementation notes:
+// * CSS-transforms for picking, canvas API to actually cut the result
+//
+// * since we're using transform-origin we don't need to multiply any coordinate by current zoom value
+//   the only thing we need zoom value for is to adjust targetWidth/targetHeight and scale the image
+//
+// * coordinate system for cursor position doesn't change, we just change the input,
+//   cursor (0, 0) is always at the top-left corner of non-rotated image
+//
+// * on export we just cut the bounding box (targetWidth, targetHeight) around cursor position and rotate/flip it
 export default function ImageCropper({
   filepath,
   shape,
@@ -46,6 +58,9 @@ export default function ImageCropper({
   const shade = useRef<HTMLImageElement>(null)
   // a wrapper inside which we drag an image
   const container = useRef<HTMLImageElement>(null)
+  // a temporary canvas for rotation and result output
+  // so we don't create a new canvas element on each operation
+  const tmpCanvas = useRef<HTMLCanvasElement>(null)
 
   const dragging = useRef<boolean>(false)
   // where we start dragging
@@ -55,79 +70,117 @@ export default function ImageCropper({
   const posX = useRef<number>(0)
   const posY = useRef<number>(0)
 
+  // multiplier to flip direction on X or Y
+  type FlipDir = -1 | 1
+  const flipDirX = useRef<FlipDir>(1)
+  const flipDirY = useRef<FlipDir>(1)
+
   const targetWidth = useRef<number>(desiredWidth)
   const targetHeight = useRef<number>(desiredHeight)
 
   const containerScale = useRef<number>(1.0)
   const zoom = useRef<number>(1.0)
   const initialZoom = useRef<number>(1.0)
+  /** we use degrees for simple comparision check */
+  const rotation = useRef<number>(0)
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (!fullImage.current) {
       return
     }
 
-    const canvas = document.createElement('canvas')
+    const canvas = tmpCanvas.current
+
+    if (!canvas) {
+      return
+    }
+
+    const resultW = targetWidth.current / zoom.current
+    const resultH = targetHeight.current / zoom.current
     canvas.width = targetWidth.current
     canvas.height = targetHeight.current
 
     const context = canvas.getContext('2d', {
       willReadFrequently: false,
     }) as CanvasRenderingContext2D
+
     context.imageSmoothingEnabled = false
 
-    const imgW = fullImage.current.clientWidth
-    const imgH = fullImage.current.clientHeight
-
+    context.translate(canvas.width / 2, canvas.height / 2)
+    context.rotate((rotation.current * Math.PI) / 180)
+    // to flip we need not only negative width or height in drawImage
+    // but also a context scale
+    context.scale(flipDirX.current, flipDirY.current)
     context.drawImage(
       fullImage.current as CanvasImageSource,
-      posX.current - (targetWidth.current / zoom.current - imgW) / 2,
-      posY.current - (targetHeight.current / zoom.current - imgH) / 2,
-      targetWidth.current / zoom.current,
-      targetHeight.current / zoom.current,
-      0,
-      0,
-      targetWidth.current,
-      targetHeight.current
+      posX.current - Math.floor(resultW / 2) * flipDirX.current,
+      posY.current - Math.floor(resultW / 2) * flipDirY.current,
+      // negative values flip the image
+      resultW * flipDirX.current,
+      resultH * flipDirY.current,
+      canvas.width / -2,
+      canvas.height / -2,
+      canvas.width,
+      canvas.height
     )
-    ;(async () => {
-      const tempfilename = `profile_pic_${Date.now()}.png`
-      const tempfilepath = await runtime.writeTempFileFromBase64(
-        tempfilename,
-        canvas.toDataURL('image/png').split(';base64,')[1]
-      )
 
-      setLastPath(dirname(filepath))
-      onResult(tempfilepath)
-      onClose()
-    })()
+    const tempfilename = `profile_pic_${Date.now()}.png`
+    const tempfilepath = await runtime.writeTempFileFromBase64(
+      tempfilename,
+      canvas.toDataURL('image/png').split(';base64,')[1]
+    )
+
+    setLastPath(dirname(filepath))
+    onResult(tempfilepath)
+    onClose()
   }
 
-  const onZoomReset = () => {
-    posX.current = 0
-    posY.current = 0
+  const onFlipX = () => {
+    if (rotation.current === 90 || rotation.current === 270) {
+      flipDirY.current = flipDirY.current === 1 ? -1 : 1
+    } else {
+      flipDirX.current = flipDirX.current === 1 ? -1 : 1
+    }
+    moveImages(posX.current, posY.current)
+  }
+
+  const onZoomIn = () => {
+    zoom.current += 0.01
+    moveImages(posX.current, posY.current)
+  }
+
+  const onZoomOut = () => {
+    zoom.current -= 0.01
+    moveImages(posX.current, posY.current)
+  }
+
+  const onReset = () => {
+    if (!cutImage.current || !fullImage.current) {
+      return
+    }
+    posX.current = fullImage.current.clientWidth / 2
+    posY.current = fullImage.current.clientHeight / 2
     zoom.current = initialZoom.current
+    flipDirX.current = 1
+    flipDirY.current = 1
+    rotation.current = 0
     moveImages(0, 0)
   }
 
-  const makeSelector = (x: number, y: number) => {
-    const hw = targetWidth.current / zoom.current / 2
-    const hh = targetHeight.current / zoom.current / 2
-    if (shape === 'circle') {
-      return `circle(${hw}px at ${x}px ${y}px)`
-    } else {
-      return (
-        'rect(' +
-        (y - hh) +
-        'px ' +
-        (x + hw) +
-        'px ' +
-        (y + hh) +
-        'px ' +
-        (x - hw) +
-        'px)'
-      )
+  const onRotateImages = () => {
+    rotation.current = Math.round(rotation.current + 90)
+
+    if (rotation.current >= 360) {
+      rotation.current = 0
     }
+
+    ;[targetWidth.current, targetHeight.current] = [
+      targetHeight.current,
+      targetWidth.current,
+    ]
+    ;[flipDirX.current, flipDirY.current] = [flipDirY.current, flipDirX.current]
+
+    moveImages(posX.current, posY.current)
   }
 
   const setupImages = () => {
@@ -160,10 +213,30 @@ export default function ImageCropper({
       targetWidth.current / imgW,
       targetHeight.current / imgH
     )
-    posX.current = 0
-    posY.current = 0
+    posX.current = imgW / 2
+    posY.current = imgH / 2
 
-    moveImages(0, 0)
+    moveImages(posX.current, posY.current)
+  }
+
+  const makeSelector = (x: number, y: number) => {
+    const hw = targetWidth.current / zoom.current / 2
+    const hh = targetHeight.current / zoom.current / 2
+    if (shape === 'circle') {
+      return `circle(${hw}px at ${x}px ${y}px)`
+    } else {
+      return (
+        'rect(' +
+        (y - hh) +
+        'px ' +
+        (x + hw) +
+        'px ' +
+        (y + hh) +
+        'px ' +
+        (x - hw) +
+        'px)'
+      )
+    }
   }
 
   // returns new position after clamping
@@ -174,8 +247,6 @@ export default function ImageCropper({
 
     const imgW = fullImage.current.clientWidth
     const imgH = fullImage.current.clientHeight
-    const ctxW = container.current.clientWidth
-    const ctxH = container.current.clientHeight
 
     zoom.current = Math.min(
       imgW / targetWidth.current,
@@ -187,28 +258,51 @@ export default function ImageCropper({
       )
     )
 
+    // clamp cursor position
     const nX = Math.max(
-      Math.min((imgW - targetWidth.current / zoom.current) / 2, x),
-      (targetWidth.current / zoom.current - imgW) / 2
+      Math.min(imgW - targetWidth.current / zoom.current / 2, x),
+      targetWidth.current / zoom.current / 2
     )
     const nY = Math.max(
-      Math.min((imgH - targetHeight.current / zoom.current) / 2, y),
-      (targetHeight.current / zoom.current - imgH) / 2
+      Math.min(imgH - targetHeight.current / zoom.current / 2, y),
+      targetHeight.current / zoom.current / 2
     )
 
-    // we don't multiply nX and nY by zoom.current here since image scale does that for us
-    cutImage.current.style.clipPath = makeSelector(imgW / 2 + nX, imgH / 2 + nY)
+    cutImage.current.style.clipPath = makeSelector(nX, nY)
 
-    // here we are in absolute coordinates, we have to multiply image offset by zoom
-    const imgX = (ctxW - imgW) / 2 - nX * zoom.current
-    const imgY = (ctxH - imgH) / 2 - nY * zoom.current
+    // we rotate and scale around cursor
+    const transformOriginValue = `${nX}px ${nY}px`
 
-    const transformValue = `translate(${imgX}px, ${imgY}px) scale(${zoom.current})`
+    // now we compensate for origin with -nX, -nY, rotate and scale
+    const imgX = container.current.clientWidth / 2 - nX
+    const imgY = container.current.clientHeight / 2 - nY
+    const transformValue = `translate(${imgX}px, ${imgY}px) rotate(${
+      rotation.current
+    }deg) scale(${zoom.current * flipDirX.current}, ${
+      zoom.current * flipDirY.current
+    })`
 
     cutImage.current.style.transform = transformValue
     fullImage.current.style.transform = transformValue
+    cutImage.current.style.transformOrigin = transformOriginValue
+    fullImage.current.style.transformOrigin = transformOriginValue
 
     return [nX, nY]
+  }
+
+  // (x, y) is the point, (px, py) is the pivot
+  const rotate = (
+    x: number,
+    y: number,
+    angle: number,
+    px: number = 0,
+    py: number = 0
+  ) => {
+    const cos = Math.cos(angle)
+    const sin = Math.sin(angle)
+    x -= px
+    y -= py
+    return [cos * x - sin * y + px, sin * x + cos * y + py]
   }
 
   useLayoutEffect(() => {
@@ -216,20 +310,39 @@ export default function ImageCropper({
       ev.preventDefault()
 
       dragging.current = true
+      ;[startX.current, startY.current] = rotate(
+        ev.clientX,
+        ev.clientY,
+        -(rotation.current * Math.PI) / 180,
+        window.innerWidth / 2,
+        window.innerHeight / 2
+      )
+    }
 
-      startX.current = ev.clientX
-      startY.current = ev.clientY
+    const handleMouseCoords = (ev: MouseEvent) => {
+      const [dx, dy] = rotate(
+        ev.clientX,
+        ev.clientY,
+        -(rotation.current * Math.PI) / 180,
+        window.innerWidth / 2,
+        window.innerHeight / 2
+      )
+
+      return [dx - startX.current, dy - startY.current]
     }
 
     const onMouseUp = (ev: MouseEvent) => {
       ev.preventDefault()
 
       dragging.current = false
+
+      const [dx, dy] = handleMouseCoords(ev)
+      const scaleFactor = zoom.current * containerScale.current
+
+      // we update position only when mouse movement stops
       ;[posX.current, posY.current] = moveImages(
-        posX.current -
-          (ev.clientX - startX.current) / zoom.current / containerScale.current,
-        posY.current -
-          (ev.clientY - startY.current) / zoom.current / containerScale.current
+        posX.current - (dx * flipDirX.current) / scaleFactor,
+        posY.current - (dy * flipDirY.current) / scaleFactor
       )
     }
 
@@ -238,11 +351,12 @@ export default function ImageCropper({
         return
       }
 
+      const [dx, dy] = handleMouseCoords(ev)
+      const scaleFactor = zoom.current * containerScale.current
+
       moveImages(
-        posX.current -
-          (ev.clientX - startX.current) / zoom.current / containerScale.current,
-        posY.current -
-          (ev.clientY - startY.current) / zoom.current / containerScale.current
+        posX.current - (dx * flipDirX.current) / scaleFactor,
+        posY.current - (dy * flipDirY.current) / scaleFactor
       )
     }
 
@@ -289,27 +403,57 @@ export default function ImageCropper({
               src={filepath}
             />
           </div>
-          <div className={styles.imageCropperHint}>
-            {tx('image_cropper_hint_desktop')}
+          <div className={styles.imageCropperControls}>
+            <button
+              className={styles.imageCropperControlsButton}
+              onClick={onZoomIn}
+              aria-label={tx('menu_zoom_in')}
+            >
+              <Icon coloring='navbar' icon='plus' size={18} />
+            </button>
+            <button
+              className={styles.imageCropperControlsButton}
+              onClick={onZoomOut}
+              aria-label={tx('menu_zoom_out')}
+            >
+              <Icon coloring='navbar' icon='minus' size={18} />
+            </button>
+            <button
+              className={styles.imageCropperControlsButton}
+              onClick={onRotateImages}
+              aria-label={tx('ImageEditorHud_rotate')}
+            >
+              <Icon coloring='navbar' icon='rotate-right' size={24} />
+            </button>
+            <button
+              className={styles.imageCropperControlsButton}
+              onClick={onFlipX}
+              aria-label={tx('flip_image_horizontally')}
+            >
+              <Icon coloring='navbar' icon='swap_hor' size={24} />
+            </button>
           </div>
+          <canvas ref={tmpCanvas} style={{ display: 'none' }}></canvas>
         </DialogContent>
       </DialogBody>
       <DialogFooter>
-        <FooterActions>
-          <FooterActionButton
-            onClick={() => {
-              onCancel()
-              onClose()
-            }}
-          >
-            {tx('cancel')}
-          </FooterActionButton>
-          <FooterActionButton onClick={onZoomReset}>
+        <FooterActions align='spaceBetween'>
+          <FooterActionButton onClick={onReset} aria-label={tx('reset')}>
             {tx('reset')}
           </FooterActionButton>
-          <FooterActionButton onClick={onSubmit}>
-            {tx('save')}
-          </FooterActionButton>
+          <FooterActions>
+            <FooterActionButton
+              onClick={() => {
+                onCancel()
+                onClose()
+              }}
+            >
+              {tx('cancel')}
+            </FooterActionButton>
+            <FooterActionButton onClick={onSubmit}>
+              {tx('save')}
+            </FooterActionButton>
+          </FooterActions>
         </FooterActions>
       </DialogFooter>
     </Dialog>
