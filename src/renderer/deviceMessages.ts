@@ -19,6 +19,7 @@ export async function updateDeviceChats(
         location: null,
         overrideSenderName: null,
         quotedMessageId: null,
+        quotedText: null,
         ...msg,
       })
     }
