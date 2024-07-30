@@ -38,12 +38,8 @@ export default function OnboardingScreen(props: Props) {
         props.selectedAccountId
       )
       if (acInfo.kind === 'Unconfigured') {
-        try {
-          await props.onUnSelectAccount()
-          EffectfulBackendActions.removeAccount(props.selectedAccountId)
-        } catch (error) {
-          log.error('error on removeAccount', error)
-        }
+        await props.onUnSelectAccount()
+        await EffectfulBackendActions.removeAccount(props.selectedAccountId)
       }
 
       props.onExitWelcomeScreen()
