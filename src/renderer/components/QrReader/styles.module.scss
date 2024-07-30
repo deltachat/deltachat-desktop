@@ -90,15 +90,6 @@
 }
 
 .qrReaderScanLine {
-  @keyframes pulsating {
-    from {
-      opacity: 1;
-    }
-    to {
-      opacity: 0;
-    }
-  }
-
   animation-direction: alternate;
   animation-duration: 0.6s;
   animation-iteration-count: infinite;
@@ -111,6 +102,15 @@
   position: absolute;
   right: 50px;
   top: 50%;
+
+  @keyframes pulsating {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
 }
 
 .qrReaderFileInput {

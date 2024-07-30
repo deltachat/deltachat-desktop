@@ -30,6 +30,7 @@
   ul {
     list-style: none;
     li.time {
+      padding-bottom: 11px;
       div {
         text-transform: capitalize;
         border-bottom: 2px solid var(--globalText);
@@ -37,7 +38,6 @@
         font-weight: bold;
         display: inline-block;
       }
-      padding-bottom: 11px;
     }
 
     li.info {

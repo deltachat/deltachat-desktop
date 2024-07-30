@@ -6,13 +6,13 @@
   background-color: transparent;
   pointer-events: none;
 
-  &.active {
-    pointer-events: all;
-  }
-
   // prevent double context menu on macOS
   // (when using touchpad it sometimes selects the text in the context menu, and then show a native context menu on top)
   user-select: none;
+
+  &.active {
+    pointer-events: all;
+  }
 }
 
 .dc-context-menu {
