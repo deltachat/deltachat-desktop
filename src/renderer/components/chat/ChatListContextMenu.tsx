@@ -9,6 +9,7 @@ import { selectedAccountId } from '../../ScreenController'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import { unmuteChat } from '../../backend/chat'
 import useChat from '../../hooks/chat/useChat'
+import { useCreateGroup } from '../dialogs/CreateChat'
 import useChatDialog from '../../hooks/chat/useChatDialog'
 import useDialog from '../../hooks/dialog/useDialog'
 import useOpenViewGroupDialog from '../../hooks/dialog/useOpenViewGroupDialog'
@@ -96,6 +97,7 @@ export function useChatListContextMenu(): {
   const { openContextMenu } = useContext(ContextMenuContext)
   const accountId = selectedAccountId()
   const { unselectChat } = useChat()
+  const cloneGroup = useCreateGroup('', null, [], () => {})
   const tx = useTranslationFunction()
   const [activeContextMenuChatId, setActiveContextMenuChatId] = useState<
     number | null
@@ -225,6 +227,13 @@ export function useChatListContextMenu(): {
                 label: tx('menu_edit_group'),
                 action: onViewGroup,
               },
+            // Clone Group
+            chatListItem.isGroup && {
+              label: tx('menu_clone_chat'),
+              action: () => {
+                cloneGroup(chatListItem.id)
+              },
+            },
             // Edit Broadcast List
             chatListItem.isBroadcast && {
               label: tx('menu_edit_broadcast_list'),

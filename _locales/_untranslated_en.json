@@ -62,5 +62,8 @@
   },
   "search_in": {
     "message": "Search in %1$s"
+  },
+  "menu_clone_chat": {
+	  "message": "Clone group"
   }
 }
