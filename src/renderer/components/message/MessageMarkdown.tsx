@@ -111,23 +111,19 @@ function renderElementPreview(elm: ParsedElement, key?: number): JSX.Element {
       )
 
     case 'StrikeThrough':
-      return <s key={key}>{elm.c.map(renderElement)}</s>
+      return <s key={key}>{elm.c.map(renderElementPreview)}</s>
 
     case 'Italics':
-      return <i key={key}>{elm.c.map(renderElement)}</i>
+      return <i key={key}>{elm.c.map(renderElementPreview)}</i>
 
     case 'Bold':
-      return <b key={key}>{elm.c.map(renderElement)}</b>
+      return <b key={key}>{elm.c.map(renderElementPreview)}</b>
 
     case 'Link':
       return <span key={key}>{elm.c.destination.target}</span>
 
     case 'LabeledLink':
-      return (
-        <span key={key}>
-          <span>{elm.c.label.map(renderElement)}</span>{' '}
-        </span>
-      )
+      return <span key={key}>{elm.c.label.map(renderElementPreview)} </span>
 
     case 'Linebreak':
       return <span key={key}>{''}</span>
@@ -141,9 +137,9 @@ function renderElementPreview(elm: ParsedElement, key?: number): JSX.Element {
       //@ts-ignore
       log.error(`type ${elm.t} not known/implemented yet`, elm)
       return (
-        <span key={key} style={{ color: 'red' }}>
+        <div key={key} style={{ color: 'red' }}>
           {JSON.stringify(elm)}
-        </span>
+        </div>
       )
   }
 }
@@ -151,7 +147,11 @@ function renderElementPreview(elm: ParsedElement, key?: number): JSX.Element {
 export function message2React(message: string, preview: boolean): JSX.Element {
   try {
     const elements = parseMessage(message)
-    return <>{elements.map(preview ? renderElementPreview : renderElement)}</>
+    return preview ? (
+      <div className='truncated'>{elements.map(renderElementPreview)}</div>
+    ) : (
+      <>{elements.map(renderElement)}</>
+    )
   } catch (error) {
     log.error('parseMessage failed:', { input: message, error })
     return <>{message}</>

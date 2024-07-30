@@ -29,6 +29,8 @@
   - Display vCard contact name in the message summary
   - Case-insensitive search for non-ASCII messages
 - upgrade `electron` from `30.0.2` to `30.3.1`
+- truncate message previews in chat list #4059
+- renderElementPreview calls renderElementPreview for message element children #4059
 
 ### Fixed
 - Fix crash on "Settings" click when not on main screen (e.g. no account selected): hide the "settings" button
