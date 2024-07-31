@@ -1,6 +1,7 @@
 import { BackendRemote } from './backend-com'
+import { getDeviceChatId, markChatAsSeen } from './backend/chat'
 
-export async function updateDeviceChats(
+export async function updateDeviceChat(
   accountId: number,
   skipCurrentChangelog: boolean = false
 ) {
@@ -38,4 +39,15 @@ export async function updateDeviceChats(
 
 [Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/main/CHANGELOG.md#1_46_0)`,
   })
+}
+
+export async function updateDeviceChats() {
+  const selectedAccount = await BackendRemote.rpc.getSelectedAccountId()
+  for (const accountId of await BackendRemote.rpc.getAllAccountIds()) {
+    await updateDeviceChat(accountId, false)
+    if (accountId !== selectedAccount) {
+      const devChatId = await getDeviceChatId(accountId)
+      if (devChatId) markChatAsSeen(accountId, devChatId)
+    }
+  }
 }
