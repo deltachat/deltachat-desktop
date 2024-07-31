@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { BackendRemote } from '../../../backend-com'
+import { BackendRemote, onDCEvent } from '../../../backend-com'
 import { T } from '@deltachat/jsonrpc-client'
 import { selectedAccountId } from '../../../ScreenController'
 
@@ -15,9 +15,17 @@ export function ReadReceiptsList(props: ReadReceiptsListProps) {
   const accountId = selectedAccountId()
   const [receipts, setReceipts] = useState<T.MessageReadReceipt[]>([])
   useEffect(() => {
-    BackendRemote.rpc
-      .getMessageReadReceipts(accountId, props.messageId)
-      .then(setReceipts)
+    const update = () => {
+      BackendRemote.rpc
+        .getMessageReadReceipts(accountId, props.messageId)
+        .then(setReceipts)
+    }
+    update()
+    return onDCEvent(accountId, 'MsgRead', ({ msgId }) => {
+      if (msgId === props.messageId) {
+        update()
+      }
+    })
   }, [props.messageId, accountId])
 
   if (receipts.length === 0) {
