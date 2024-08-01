@@ -89,6 +89,11 @@
   flex-direction: row;
   width: calc(100% - 5px);
   padding: 5px;
+  align-items: center;
+  position: relative;
+
+  $size_width: 70px;
+  $date_width: 120px;
 
   &:hover {
     background: var(--galleryFileRowHover);
@@ -127,12 +132,6 @@
       font-family: monospace;
     }
   }
-
-  align-items: center;
-  position: relative;
-
-  $size_width: 70px;
-  $date_width: 120px;
 
   & > .name {
     flex-grow: 1;

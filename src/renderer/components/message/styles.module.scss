@@ -1,16 +1,17 @@
 $reaction-transition-duration: 100ms;
 
 .message {
+  transition: margin-bottom ease-out $reaction-transition-duration;
   &.withReactions {
     margin-bottom: 10px;
   }
-  transition: margin-bottom ease-out $reaction-transition-duration;
 }
 
 .messageFooter {
   display: flex;
   flex-direction: row-reverse;
   justify-content: space-between;
+  transition: margin-bottom ease-out $reaction-transition-duration;
 
   &.onlyMedia {
     bottom: 0;
@@ -20,7 +21,6 @@ $reaction-transition-duration: 100ms;
     right: 0;
   }
 
-  transition: margin-bottom ease-out $reaction-transition-duration;
   &.withReactionsNoText {
     margin-bottom: 10px;
   }
