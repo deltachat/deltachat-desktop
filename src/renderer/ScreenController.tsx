@@ -8,7 +8,7 @@ import { getLogger } from '../shared/logger'
 import AccountSetupScreen from './components/screens/AccountSetupScreen'
 import WelcomeScreen from './components/screens/WelcomeScreen'
 import { BackendRemote, EffectfulBackendActions } from './backend-com'
-import { updateDeviceChats } from './deviceMessages'
+import { updateDeviceChat, updateDeviceChats } from './deviceMessages'
 import { runtime } from './runtime'
 import { updateTimestamps } from './components/conversations/Timestamp'
 import { ScreenContext } from './contexts/ScreenContext'
@@ -95,6 +95,7 @@ export default class ScreenController extends Component {
         await this.addAndSelectAccount()
       }
     }
+    updateDeviceChats()
   }
 
   private async _getLastUsedAccount(): Promise<number | undefined> {
@@ -130,7 +131,6 @@ export default class ScreenController extends Component {
     )
     if (account.kind === 'Configured') {
       this.changeScreen(Screens.Main)
-      updateDeviceChats(this.selectedAccountId)
     } else {
       this.changeScreen(Screens.Welcome)
     }
@@ -167,7 +167,7 @@ export default class ScreenController extends Component {
       this.lastAccountBeforeAddingNewAccount = this.selectedAccountId
     }
     const accountId = await BackendRemote.rpc.addAccount()
-    updateDeviceChats(accountId, true) // skip changelog
+    updateDeviceChat(accountId, true) // skip changelog
     await this.selectAccount(accountId)
     return accountId
   }
