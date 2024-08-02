@@ -13,6 +13,7 @@ import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { platform } from 'os'
 import { readdir, stat, rmdir, writeFile, readFile } from 'fs/promises'
+import { existsSync } from 'fs'
 import type DeltaChatController from './controller.js'
 import SplitOut from './splitout.js'
 import { getLogger } from '../../shared/logger.js'
@@ -855,6 +856,9 @@ async function get_recursive_folder_size(
 export async function webxdcStartUpCleanup() {
   try {
     const partitions_dir = join(getConfigPath(), 'Partitions')
+    if (!existsSync(partitions_dir)) {
+      return
+    }
     const folders = await readdir(partitions_dir)
     for (const folder of folders) {
       if (!folder.startsWith('webxdc')) {
