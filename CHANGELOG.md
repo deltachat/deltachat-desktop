@@ -1,6 +1,7 @@
 # Changelog
 
 ## [Unreleased][unreleased]
+- Fixed Icon preview of latest WebXDC displayed when summary is reaction event #4062
 
 ### Added
 - New keyboard shortcuts (experimental setting): Telegram-style Ctrl+Up/Down to select the message to reply to #3965
