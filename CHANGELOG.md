@@ -18,14 +18,16 @@
 - Update local help (2024-06-19)
 - refactor: safer types #3993
 - keep aspect ratio in quoted images #3999
-- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.141.2`
+- make ImageCropper use CSS-transforms for UI and canvas API to cut the result #3893
+- update stock translations #4051
+- show device message only once as unread #4057
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.142.1`
+  - explicitly close the database on account removal to avoid crash on Windows #3959
   - fix memory leak in jsonrpc client code (to be specific in yerpc)
   - support vcards exported by protonmail
   - Display vCard contact name in the message summary
   - Case-insensitive search for non-ASCII messages
-- make ImageCropper use CSS-transforms for UI and canvas API to cut the result #3893
-- update stock translations #4051
-- show device message only once as unread #4057
+- upgrade `electron` from `30.0.2` to `30.3.1`
 
 ### Fixed
 - Fix crash on "Settings" click when not on main screen (e.g. no account selected): hide the "settings" button

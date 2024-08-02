@@ -40,6 +40,7 @@ const MESSAGE_DEFAULT: T.MessageData = {
   location: null,
   overrideSenderName: null,
   quotedMessageId: null,
+  quotedText: null,
   text: null,
 }
 
