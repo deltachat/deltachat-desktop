@@ -87,7 +87,7 @@ function Message({
 
   const status = wasReceived ? '' : mapCoreMsgStatus2String(summaryStatus)
 
-  const iswebxdc = summaryPreviewImage === "webxdc-icon://last-msg-id"
+  const iswebxdc = summaryPreviewImage === 'webxdc-icon://last-msg-id'
 
   return (
     <div className='chat-list-item-message'>
@@ -101,7 +101,7 @@ function Message({
             {summaryText1 + ': '}
           </div>
         )}
-        {summaryPreviewImage && !iswebxdc &&(
+        {summaryPreviewImage && !iswebxdc && (
           <img className='summary_thumbnail' src={summaryPreviewImage} />
         )}
         {iswebxdc && lastMessageId && (
