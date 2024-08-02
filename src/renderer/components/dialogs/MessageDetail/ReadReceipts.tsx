@@ -39,7 +39,9 @@ export function ReadReceiptsList(props: ReadReceiptsListProps) {
       </div>
       <ul className={styles.ReadReceiptBox}>
         {receipts.map(receipt => (
-          <li><ReadReceipt receipt={receipt} /></li>
+          <li>
+            <ReadReceipt receipt={receipt} />
+          </li>
         ))}
       </ul>
     </div>
