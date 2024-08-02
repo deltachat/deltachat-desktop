@@ -66,7 +66,6 @@ function Message({
   isArchived,
   isContactRequest,
   summaryPreviewImage,
-  lastMessageType,
   lastMessageId,
 }: Pick<
   ChatListItemType,
@@ -77,7 +76,6 @@ function Message({
   | 'isArchived'
   | 'isContactRequest'
   | 'summaryPreviewImage'
-  | 'lastMessageType'
   | `lastMessageId`
 >) {
   const wasReceived =
