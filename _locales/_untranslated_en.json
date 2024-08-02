@@ -62,5 +62,8 @@
   },
   "search_in": {
     "message": "Search in %1$s"
+  },
+  "read_by": {
+    "message": "Read by"
   }
 }
