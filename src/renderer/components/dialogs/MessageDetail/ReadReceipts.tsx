@@ -37,11 +37,11 @@ export function ReadReceiptsList(props: ReadReceiptsListProps) {
         <div className={styles.DoubleCheckmarkIcon}></div>
         {tx('pref_read_receipts')}
       </div>
-      <div className={styles.ReadReceiptBox}>
+      <table className={styles.ReadReceiptBox}>
         {receipts.map(receipt => (
           <ReadReceipt receipt={receipt} />
         ))}
-      </div>
+      </table>
     </div>
   )
 }
