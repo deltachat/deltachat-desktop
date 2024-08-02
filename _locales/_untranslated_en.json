@@ -63,7 +63,7 @@
   "search_in": {
     "message": "Search in %1$s"
   },
-  "pref_read_by": {
+  "read_by": {
     "message": "Read by"
   }
 }
