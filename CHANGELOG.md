@@ -20,6 +20,7 @@
 - keep aspect ratio in quoted images #3999
 - make ImageCropper use CSS-transforms for UI and canvas API to cut the result #3893
 - update stock translations #4051
+- show device message only once as unread #4057
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.142.1`
   - explicitly close the database on account removal to avoid crash on Windows #3959
   - fix memory leak in jsonrpc client code (to be specific in yerpc)

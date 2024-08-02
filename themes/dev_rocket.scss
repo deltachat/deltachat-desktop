@@ -481,6 +481,7 @@ div.group-image-wrapper div.group-image-edit-button {
 
 .message {
   .msg-container {
+    display: flex;
     .msg-body {
       display: flex;
       flex-direction: column;
@@ -510,8 +511,6 @@ div.group-image-wrapper div.group-image-edit-button {
         display: none;
       }
     }
-
-    display: flex;
   }
 
   &.incoming {
@@ -527,11 +526,10 @@ div.group-image-wrapper div.group-image-edit-button {
   }
 
   &.outgoing {
+    margin-left: 0;
     .author-wrapper .author {
       background-color: black;
     }
-
-    margin-left: 0;
   }
 
   .author-wrapper {
