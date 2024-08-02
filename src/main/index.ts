@@ -5,7 +5,7 @@ import { app as rawApp, dialog, ipcMain, protocol } from 'electron'
 import rc from './rc.js'
 import { VERSION, GIT_REF, BUILD_TIMESTAMP } from '../shared/build-info.js'
 import contextMenu from './electron-context-menu.js'
-import { findOutIfWeAreRunningAsAppx } from './isAppx.js'
+import { isWindowsStorePackage } from './isAppx.js'
 import { getHelpMenu } from './help_menu.js'
 import { initialisePowerMonitor } from './resume_from_sleep.js'
 
@@ -134,7 +134,7 @@ app.isQuitting = false
 Promise.all([
   new Promise((resolve, _reject) => app.on('ready', resolve)),
   DesktopSettings.load(),
-  findOutIfWeAreRunningAsAppx(),
+  isWindowsStorePackage(),
   webxdcStartUpCleanup(),
 ])
   .then(onReady)

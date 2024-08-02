@@ -85,6 +85,7 @@ interface Runtime {
   writeClipboardText(text: string): Promise<void>
   writeClipboardImage(path: string): Promise<void>
   getAppPath(name: Parameters<typeof app.getPath>[0]): string
+  getStickerFolderPath(accountId: number): Promise<string>
   openMapsWebxdc(accountId: number, chatId?: number): void
   openPath(path: string): Promise<string>
   getConfigPath(): string
@@ -299,6 +300,9 @@ class Browser implements Runtime {
   getAppPath(_name: string): string {
     throw new Error('Method not implemented.')
   }
+  getStickerFolderPath(_accountId: number): Promise<string> {
+    throw new Error('Method not implemented.')
+  }
   downloadFile(_pathToSource: string, _filename: string): Promise<void> {
     throw new Error('Method not implemented.')
   }
@@ -504,6 +508,9 @@ class Electron implements Runtime {
   }
   getAppPath(name: Parameters<Runtime['getAppPath']>[0]): string {
     return app_getPath(name)
+  }
+  getStickerFolderPath(accountId: number): Promise<string> {
+    return ipcBackend.invoke('app-get-sticker-path', accountId)
   }
   async downloadFile(pathToSource: string, filename: string): Promise<void> {
     await ipcBackend.invoke('saveFile', pathToSource, filename)

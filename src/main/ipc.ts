@@ -16,17 +16,20 @@ import { versions } from 'process'
 import { fileURLToPath } from 'url'
 
 import { getLogger } from '../shared/logger.js'
-import { getDraftTempDir, getLogsPath } from './application-constants.js'
+import {
+  getDraftTempDir,
+  getLogsPath,
+  getConfigPath,
+} from './application-constants.js'
 import { LogHandler } from './log-handler.js'
 import { ExtendedAppMainProcess } from './types.js'
 import * as mainWindow from './windows/main.js'
 import { openHelpWindow } from './windows/help.js'
 import { DesktopSettings } from './desktop_settings.js'
-import { getConfigPath } from './application-constants.js'
 import { DesktopSettingsType, RuntimeInfo } from '../shared/shared-types.js'
 import { set_has_unread, updateTrayIcon } from './tray.js'
 import { openHtmlEmailWindow } from './windows/html_email.js'
-import { appx } from './isAppx.js'
+import { appx, getAppxPath } from './isAppx.js'
 import DeltaChatController from './deltachat/controller.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -128,6 +131,21 @@ ${error instanceof Error ? error.message : inspect(error, { depth: null })}`
 
   ipcMain.on('app-get-path', (ev, arg) => {
     ev.returnValue = app.getPath(arg)
+  })
+
+  ipcMain.handle('app-get-sticker-path', async (_ev, accountId) => {
+    let blobdir = await getDCJsonrpcClient().getBlobDir(accountId)
+    if (blobdir) {
+      if (!existsSync(blobdir) && appx) {
+        const appxPath = getAppxPath(getConfigPath())
+        blobdir = blobdir.replace(getConfigPath(), appxPath)
+      }
+
+      const stickerFolderPath = join(blobdir, '../stickers')
+      return stickerFolderPath
+    } else {
+      throw Error('Failed to get account path!')
+    }
   })
 
   ipcMain.handle('fileChooser', async (_ev, options) => {
