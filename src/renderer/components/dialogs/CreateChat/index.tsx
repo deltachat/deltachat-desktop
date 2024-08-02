@@ -638,7 +638,7 @@ export const ChatSettingsSetNameAndProfileImage = ({
   )
 }
 
-const useCreateGroup = (
+export const useCreateGroup = (
   groupName: string,
   groupImage: string | null | undefined,
   groupMembers: number[],
@@ -647,37 +647,61 @@ const useCreateGroup = (
   const accountId = selectedAccountId()
   const { selectChat } = useChat()
 
-  const createGroup = useCallback(async () => {
-    const isVerified = await areAllContactsVerified(accountId, groupMembers)
+  const createGroup = useCallback(
+    async (groupTemplateId?: number | null) => {
+      let finalGroupName = groupName
 
-    const chatId = await BackendRemote.rpc.createGroupChat(
-      accountId,
-      groupName,
-      isVerified
-    )
+      if (groupTemplateId) {
+        const chat = await BackendRemote.rpc.getFullChatById(
+          accountId,
+          groupTemplateId
+        )
 
-    if (groupImage && groupImage !== '') {
-      await BackendRemote.rpc.setChatProfileImage(accountId, chatId, groupImage)
-    }
+        groupMembers.push(...chat.contactIds)
 
-    await Promise.all(
-      groupMembers.map(contactId => {
-        if (contactId === C.DC_CONTACT_ID_SELF) {
-          return
-        }
-        return BackendRemote.rpc.addContactToChat(accountId, chatId, contactId)
-      })
-    )
+        finalGroupName = `Copy: ${chat.name}`
+      }
 
-    return chatId
-  }, [accountId, groupImage, groupMembers, groupName])
+      const isVerified = await areAllContactsVerified(accountId, groupMembers)
 
-  return async () => {
-    if (groupName === '') {
+      const chatId = await BackendRemote.rpc.createGroupChat(
+        accountId,
+        finalGroupName,
+        isVerified
+      )
+
+      if (groupImage && groupImage !== '') {
+        await BackendRemote.rpc.setChatProfileImage(
+          accountId,
+          chatId,
+          finalGroupName
+        )
+      }
+
+      await Promise.all(
+        groupMembers.map(contactId => {
+          if (contactId === C.DC_CONTACT_ID_SELF) {
+            return
+          }
+          return BackendRemote.rpc.addContactToChat(
+            accountId,
+            chatId,
+            contactId
+          )
+        })
+      )
+
+      return chatId
+    },
+    [accountId, groupImage, groupMembers, groupName]
+  )
+
+  return async (groupTemplateId?: number | null) => {
+    if (groupName === '' && groupTemplateId === null) {
       return
     }
 
-    const chatId = await createGroup()
+    const chatId = await createGroup(groupTemplateId)
     onClose()
     selectChat(accountId, chatId)
   }
