@@ -11,14 +11,14 @@ To update the desktop application to a new core you need to update the following
 
 Let's say the core version you want to upgrade to is `X.Y.Z`.
 
-1. `npm i @deltachat/stdio-rpc-server@X.Y.Z @deltachat/jsonrpc-client@X.Y.Z`
+1. `node ./bin/link_core/link_version.js X.Y.Z`
 2. mention that you updated those dependencies in `CHANGELOG.md`
 
 If version `X.Y.Z` hasn't yet been published to `npm`, then ask another maintainer.
 
 GitHub CI builds and publishes [stdio-rpc-server](https://github.com/deltachat/deltachat-core-rust/actions/workflows/deltachat-rpc-server.yml) and [jsonrpc-client](https://github.com/deltachat/deltachat-core-rust/actions/workflows/jsonrpc-client-npm-package.yml) to npm.
 
-> bash shortcut `export TAG=1.139.3 && npm i @deltachat/stdio-rpc-server@$TAG @deltachat/jsonrpc-client@$TAG`
+> bash shortcut `node ./bin/link_core/link_version.js 1.142.2`
 
 ## Update to a development version
 
@@ -64,6 +64,10 @@ If you already have a core git checkout, you can skip the first step.
 2. go into your core checkout and run `git pull` to update it to the newest version, then create a branch for your changes
 3. run `python3 deltachat-rpc-server/npm-package/scripts/make_local_dev_version.py`
 4. run `npm i` and `npm run build` inside `../deltachat-core-rust/deltachat-jsonrpc/typescript/`
-5. go into your desktop repo and run `npm i ../deltachat-core-rust/deltachat-jsonrpc/typescript ../deltachat-core-rust/deltachat-rpc-server/npm-package`
+5. go into your desktop repo and run `./bin/link_core/link_local.sh` [^1]
 
 Note that you need to run step 3 and 4 again after each change to core sourcecode.
+
+> to reset to normal run `./bin/link_core/link_catalog.sh` [^1]
+
+[^1]: for window look inside of the script to learn what to do and please write one for powershell
