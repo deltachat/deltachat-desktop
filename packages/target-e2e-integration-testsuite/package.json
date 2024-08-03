@@ -2,5 +2,6 @@
   "private": true,
   "name": "@deltachat-desktop/target-e2e-testing",
   "type": "module",
-  "license": "GPL-3.0-or-later"
+  "license": "GPL-3.0-or-later",
+  "version": "1.47.0"
 }

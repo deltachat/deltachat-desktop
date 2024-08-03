@@ -2,6 +2,7 @@
   "private": "true",
   "name": "deltachat-desktop",
   "type": "module",
+  "version": "1.47.0",
   "scripts": {
     "preinstall": "node ./bin/check-nodejs-version.js",
     "check": "pnpm check:types && pnpm check:lint && pnpm check:format",
@@ -18,7 +19,8 @@
     "build:electron": "pnpm --filter=@deltachat-desktop/frontend build && pnpm --filter=@deltachat-desktop/target-electron build",
     "translations:pull": "tx pull -s -f && tx pull -f -a",
     "translations:convert": "node ./bin/build-shared-convert-translations.mjs ./_locales",
-    "translations:update": "pnpm translations:pull && pnpm translations:convert && ./bin/find_complete_translations.sh"
+    "translations:update": "pnpm translations:pull && pnpm translations:convert && ./bin/find_complete_translations.sh",
+    "update-target-versions": "node ./bin/update_desktop_version.js && prettier --write --log-level=silent \"packages/target**/package.json\""
   },
   "dependencies": {},
   "engineStrict": true,
