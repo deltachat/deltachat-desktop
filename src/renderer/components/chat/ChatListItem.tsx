@@ -100,10 +100,21 @@ function Message({
           </div>
         )}
         {summaryPreviewImage && !iswebxdc && (
-          <div className='summary_thumbnail' style={{backgroundImage: `url(${summaryPreviewImage})`}}/>
+          <div
+            className='summary_thumbnail'
+            style={{ backgroundImage: `url(${summaryPreviewImage})` }}
+          />
         )}
         {iswebxdc && lastMessageId && (
-          <div className='summary_thumbnail' style={{backgroundImage: `url(${runtime.getWebxdcIconURL(selectedAccountId(), lastMessageId)})`}}/>
+          <div
+            className='summary_thumbnail'
+            style={{
+              backgroundImage: `url(${runtime.getWebxdcIconURL(
+                selectedAccountId(),
+                lastMessageId
+              )})`,
+            }}
+          />
         )}
         <div>{message2React(summaryText2 || '', true)}</div>
       </div>
