@@ -2,6 +2,9 @@
   "private": true,
   "name": "@deltachat-desktop/shared",
   "type": "module",
+  "scripts": {
+    "check:types": "tsc --noEmit"
+  },
   "dependencies": {
     "@deltachat/jsonrpc-client": "^1.141.2",
     "error-stack-parser": "^2.0.7",
