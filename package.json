@@ -45,11 +45,12 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react-hooks": "^4.6.2",
+    "@typescript-eslint/eslint-plugin": "^7.8.0",
+    "@typescript-eslint/parser": "^7.8.0",
     "prettier": "3.1.0",
-    "sass": "^1.69.5",
     "walk": "^2.3.14",
     "xml-js": "^1.6.8",
-    "typescript": "^5.3.2",
+    "typescript": "catalog:",
     "chokidar": "^3.5.3"
   }
 }

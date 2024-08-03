@@ -45,25 +45,23 @@
   "dependencies": {
     "@deltachat-desktop/runtime-interface": "link:../runtime",
     "@deltachat-desktop/shared": "link:../shared",
-    "@deltachat/jsonrpc-client": "^1.141.2",
-    "@deltachat/stdio-rpc-server": "^1.141.2",
+    "@deltachat/jsonrpc-client": "catalog:",
+    "@deltachat/stdio-rpc-server": "catalog:",
     "application-config": "^1.0.1",
-    "mime-types": "^2.1.31",
+    "mime-types": "catalog:",
     "rc": "^1.2.8",
     "source-map-support": "^0.5.19",
-    "webxdc-types": "^1.0.1",
+    "webxdc-types": "catalog:",
     "ws": "7.5.10"
   },
   "devDependencies": {
     "@electron/notarize": "^2.1.0",
-    "@types/mime-types": "^2.1.0",
+    "@types/mime-types": "catalog:",
     "@types/node": "^20.12.11",
     "@types/rc": "^1.1.0",
-    "@typescript-eslint/eslint-plugin": "^7.8.0",
-    "@typescript-eslint/parser": "^7.8.0",
     "chokidar": "^3.5.3",
     "electron": "^30.0.5",
     "electron-builder": "^24.13.3",
-    "typescript": "^5.3.2"
+    "typescript": "catalog:"
   }
 }
