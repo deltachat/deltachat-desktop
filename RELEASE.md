@@ -74,7 +74,7 @@
 2. Update the `CHANGELOG.md` file (put the stuff in "unreleased" under a
    section with your new version code)
 3. Do not forget to update the tag links at the end of the `CHANGELOG.md` file!
-4. Change `version` field in `package.json` to `X.Y.Z`
+4. Change `version` field in `package.json` to `X.Y.Z` and run `pnpm update-target-versions`
 5. Run `pnpm install` to update `package-lock.json`
 6. Open a PR for your branch and get it reviewed.
 7. As soon as your PR is approved merge it to `main`
