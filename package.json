@@ -5,7 +5,7 @@
   "scripts": {
     "preinstall": "node ./bin/check-nodejs-version.js",
     "check": "pnpm check:types && pnpm check:lint && pnpm check:format",
-    "check:types": "echo 1",
+    "check:types": "pnpm -r --no-bail check:types",
     "check:lint": "eslint . --ext .js,.ts,.tsx",
     "check:format": "prettier --check \"**/*.scss\" \"packages/**/*.{js,ts,tsx,json}\" \"**/*.md\"",
     "fix": "pnpm fix:lint && pnpm fix:format",
