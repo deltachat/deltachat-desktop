@@ -21,6 +21,11 @@
     "translations:update": "pnpm translations:pull && pnpm translations:convert && ./bin/find_complete_translations.sh"
   },
   "dependencies": {},
+  "engineStrict": true,
+  "engines": {
+    "node": "^20",
+    "pnpm": "9.6.0"
+  },
   "pnpm": {
     "supportedArchitectures": {
       "os": [
