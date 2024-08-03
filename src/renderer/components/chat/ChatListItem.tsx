@@ -279,7 +279,6 @@ function ChatListItemNormal({
           freshMessageCounter={chatListItem.freshMessageCounter}
           isArchived={chatListItem.isArchived}
           isContactRequest={chatListItem.isContactRequest}
-          lastMessageType={chatListItem.lastMessageType}
           lastMessageId={chatListItem.lastMessageId}
         />
       </div>
