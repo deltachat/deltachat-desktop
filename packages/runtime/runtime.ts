@@ -6,12 +6,7 @@ import {
   RuntimeInfo,
   Theme,
 } from '@deltachat-desktop/shared/shared-types.js'
-import { setLogHandler } from '@deltachat-desktop/shared/logger.js'
-import { getLogger } from '@deltachat-desktop/shared/logger.js'
 import { LocaleData } from '@deltachat-desktop/shared/localize.js'
-
-
-const log = getLogger('renderer/runtime')
 
 /**
  * Offers an abstraction Layer to make it easier to make browser client in the future

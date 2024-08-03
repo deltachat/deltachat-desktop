@@ -29,6 +29,7 @@
   "productName": "DeltaChat",
   "homepage": "https://delta.chat",
   "scripts": {
+    "check:types": "tsc --noEmit && tsc --noEmit -p runtime-electron",
     "build": "tsc --build",
     "dev": "pnpm build && pnpm start --",
     "start": "electron . --devmode --disable-http-cache --translation-watch",

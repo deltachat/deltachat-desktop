@@ -4,6 +4,7 @@
   "type": "module",
   "license": "GPL-3.0-or-later",
   "scripts": {
+    "check:types": "tsc --noEmit",
     "build": "pnpm build:ts && pnpm build:themes && pnpm build:static && pnpm build:source-map-support && pnpm build:scss",
     "build:ts": "node ./bin/build-frontend-ts.mjs",
     "build:themes": "sass themes/light.scss static/fallback-theme.css --style=compressed --embed-source-map && node ./bin/build-frontend-themes.js",

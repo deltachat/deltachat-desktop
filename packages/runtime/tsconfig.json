@@ -1,14 +1,14 @@
 {
   "compilerOptions": {
-    "declaration": true,
+    "rootDir": ".",
     "sourceMap": true,
     "noImplicitAny": true,
-    "module": "NodeNext",
+    "module": "es6",
     "target": "es2018",
     "allowJs": false,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
     "strictNullChecks": true,
-    "strict": true,
-    "moduleResolution": "NodeNext"
-  },
-  "include": ["./**/*.ts", "./**/*.js"]
+    "strict": true
+  }
 }

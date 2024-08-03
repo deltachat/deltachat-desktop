@@ -3,6 +3,9 @@
   "name": "@deltachat-desktop/target-browser",
   "type": "module",
   "license": "GPL-3.0-or-later",
+  "scripts": {
+    "check:types": "tsc --noEmit -p runtime-browser"
+  },
   "dependencies": {
     "@deltachat-desktop/runtime-interface": "link:../runtime",
     "@deltachat-desktop/shared": "link:../shared"

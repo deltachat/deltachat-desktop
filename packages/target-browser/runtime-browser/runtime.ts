@@ -8,7 +8,6 @@ import {
   RuntimeInfo,
   Theme,
 } from '@deltachat-desktop/shared/shared-types.js'
-import { setLogHandler } from '@deltachat-desktop/shared/logger.js'
 import { getLogger } from '@deltachat-desktop/shared/logger.js'
 import { LocaleData } from '@deltachat-desktop/shared/localize.js'
 import { Runtime } from '@deltachat-desktop/runtime-interface'
