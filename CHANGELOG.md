@@ -1,7 +1,6 @@
 # Changelog
 
 ## [Unreleased][unreleased]
-- Fixed Icon preview of latest WebXDC displayed when summary is reaction event #4062
 
 ### Added
 - New keyboard shortcuts (experimental setting): Telegram-style Ctrl+Up/Down to select the message to reply to #3965
@@ -55,6 +54,7 @@
 - fix missing remove button in AddMemberChip #393
 - fix composite emoji in text avatar #4038
 - fix "Password and Account" dialog not indicating invalid credentials, making it seem that you can change password like this #4032
+- fix Icon preview of latest WebXDC displayed when summary is reaction event #4062
 
 <a id="1_46_1"></a>
 
