@@ -136,9 +136,12 @@ ${error instanceof Error ? error.message : inspect(error, { depth: null })}`
   ipcMain.handle('app-get-sticker-path', async (_ev, accountId) => {
     let blobdir = await getDCJsonrpcClient().getBlobDir(accountId)
     if (blobdir) {
+      log.info('Blobdir: ' + blobdir)
       if (!existsSync(blobdir) && appx) {
+        log.info('Blobdir not existing in Appx mode ')
         const appxPath = getAppxPath(getConfigPath())
         blobdir = blobdir.replace(getConfigPath(), appxPath)
+        log.info('Blobdir in Appx mode:' + blobdir)
       }
 
       const stickerFolderPath = join(blobdir, '../stickers')
