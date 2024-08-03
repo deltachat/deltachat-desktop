@@ -66,7 +66,6 @@ function Message({
   isArchived,
   isContactRequest,
   summaryPreviewImage,
-  lastMessageType,
   lastMessageId,
 }: Pick<
   ChatListItemType,
@@ -77,7 +76,6 @@ function Message({
   | 'isArchived'
   | 'isContactRequest'
   | 'summaryPreviewImage'
-  | 'lastMessageType'
   | `lastMessageId`
 >) {
   const wasReceived =
@@ -87,7 +85,7 @@ function Message({
 
   const status = wasReceived ? '' : mapCoreMsgStatus2String(summaryStatus)
 
-  const iswebxdc = lastMessageType === 'Webxdc'
+  const iswebxdc = summaryPreviewImage === 'webxdc-icon://last-msg-id'
 
   return (
     <div className='chat-list-item-message'>
@@ -101,7 +99,7 @@ function Message({
             {summaryText1 + ': '}
           </div>
         )}
-        {summaryPreviewImage && (
+        {summaryPreviewImage && !iswebxdc && (
           <img className='summary_thumbnail' src={summaryPreviewImage} />
         )}
         {iswebxdc && lastMessageId && (
@@ -281,7 +279,6 @@ function ChatListItemNormal({
           freshMessageCounter={chatListItem.freshMessageCounter}
           isArchived={chatListItem.isArchived}
           isContactRequest={chatListItem.isContactRequest}
-          lastMessageType={chatListItem.lastMessageType}
           lastMessageId={chatListItem.lastMessageId}
         />
       </div>

@@ -55,6 +55,7 @@
 - fix composite emoji in text avatar #4038
 - fix "Password and Account" dialog not indicating invalid credentials, making it seem that you can change password like this #4032
 - fix empty context menu and unneccessary separators in HTML mail view #4053
+- fix Icon preview of latest WebXDC displayed when summary is reaction event #4062
 
 <a id="1_46_1"></a>
 
