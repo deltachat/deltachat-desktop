@@ -48,6 +48,7 @@
     "@deltachat/jsonrpc-client": "catalog:",
     "@deltachat/stdio-rpc-server": "catalog:",
     "application-config": "^1.0.1",
+    "deltachat-jsonrpc": "link:../../../deltachat-core-rust/deltachat-jsonrpc",
     "mime-types": "catalog:",
     "rc": "^1.2.8",
     "source-map-support": "^0.5.19",
