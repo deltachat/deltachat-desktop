@@ -3,6 +3,7 @@ import electron, {
   BrowserWindow,
   dialog,
   Menu,
+  MenuItem,
   MenuItemConstructorOptions,
   nativeTheme,
   session,
@@ -518,61 +519,65 @@ const createContextMenu = (win: BrowserWindow, webContents: WebContents) => {
     const { editFlags } = props
     const hasText = props.selectionText.trim().length > 0
 
-    const defaultActions: {
-      [key: string]: () => MenuItemConstructorOptions
-    } = {
-      separator: () => ({ type: 'separator' }),
-      copy: () => ({
-        id: 'copy',
-        label: tx('global_menu_edit_copy_desktop'),
-        enabled: editFlags.canCopy && hasText,
-        visible: props.isEditable || hasText,
-        click() {
-          if (webContents) {
-            webContents.copy()
-          } else {
-            electron.clipboard.writeText(props.selectionText)
-          }
-        },
-      }),
-      paste: () => ({
-        id: 'paste',
-        label: tx('global_menu_edit_paste_desktop'),
-        enabled: editFlags.canPaste,
-        visible: props.isEditable,
-        click() {
-          webContents.paste()
-        },
-      }),
-      copyLink: () => ({
-        id: 'copyLink',
-        label: tx('menu_copy_link_to_clipboard'),
-        visible: props.linkURL.length !== 0 && props.mediaType === 'none',
-        click() {
-          electron.clipboard.write({
-            bookmark: props.linkText,
-            text: props.linkURL,
-          })
-        },
-      }),
-      copyImage: () => ({
-        id: 'copyImage',
-        label: tx('menu_copy_image_to_clipboard'),
-        visible: props.mediaType === 'image',
-        click() {
-          webContents.copyImageAt(props.x, props.y)
-        },
-      }),
+    const menuItems = []
+
+    if (props.isEditable || hasText) {
+      menuItems.push(
+        new MenuItem({
+          id: 'copy',
+          label: tx('global_menu_edit_copy_desktop'),
+          enabled: editFlags.canCopy && hasText,
+          click() {
+            if (webContents) {
+              webContents.copy()
+            } else {
+              electron.clipboard.writeText(props.selectionText)
+            }
+          },
+        })
+      )
     }
 
-    const menu = electron.Menu.buildFromTemplate([
-      defaultActions.copy(),
-      defaultActions.separator(),
-      defaultActions.copyImage(),
-      defaultActions.separator(),
-      defaultActions.copyLink(),
-    ])
-    menu.popup({ window: win })
+    if (props.mediaType === 'image') {
+      if (menuItems.length) {
+        menuItems.push(new MenuItem({ type: 'separator' }))
+      }
+
+      menuItems.push(
+        new MenuItem({
+          id: 'copyImage',
+          label: tx('menu_copy_image_to_clipboard'),
+          click() {
+            webContents.copyImageAt(props.x, props.y)
+          },
+        })
+      )
+    }
+
+    if (props.linkURL.length !== 0 && props.mediaType === 'none') {
+      if (menuItems.length) {
+        menuItems.push(new MenuItem({ type: 'separator' }))
+      }
+
+      menuItems.push(
+        new MenuItem({
+          id: 'copyLink',
+          label: tx('menu_copy_link_to_clipboard'),
+          click() {
+            electron.clipboard.write({
+              bookmark: props.linkText,
+              text: props.linkURL,
+            })
+          },
+        })
+      )
+    }
+
+    if (menuItems.length) {
+      const menu = electron.Menu.buildFromTemplate(menuItems)
+
+      menu.popup({ window: win })
+    }
   }
   webContents.on('context-menu', handleContextMenu)
   return () => {
