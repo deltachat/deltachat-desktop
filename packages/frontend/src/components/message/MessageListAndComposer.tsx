@@ -97,8 +97,8 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
 
     e.preventDefault()
     e.stopPropagation()
-    
-    openDialog(AlertDialog, {message: "DRAG AND DROP is BROKEN for now"})
+
+    openDialog(AlertDialog, { message: 'DRAG AND DROP is BROKEN for now' })
     return
 
     const sanitizedFileList: Pick<File, 'name' | 'type'>[] = []
