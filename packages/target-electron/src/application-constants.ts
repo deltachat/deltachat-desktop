@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
-const AppFilesDir = join(__dirname, '..', '..')
+const AppFilesDir = join(__dirname, '..')
 
 export function appIcon() {
   const iconFormat = process.platform === 'win32' ? '.ico' : '.png'
@@ -43,7 +43,7 @@ export function windowDefaults() {
     minWidth: 450,
     minHeight: 450,
     main: targetFile,
-    preload: join(__dirname, '..', '..', 'html-dist', 'preload.js'),
+    preload: join(htmlDistDir(), 'preload.js'),
   }
 }
 

@@ -9,12 +9,13 @@ import {
   RuntimeOpenDialogOptions,
   Theme,
 } from '@deltachat-desktop/shared/shared-types.js'
-import { getLogger } from '@deltachat-desktop/shared/logger.js'
+
 import { LocaleData } from '@deltachat-desktop/shared/localize.js'
 import { Runtime } from '@deltachat-desktop/runtime-interface'
 import { BaseDeltaChat } from '@deltachat/jsonrpc-client'
 
-const log = getLogger('renderer/runtime')
+import type { getLogger as getLoggerFunction } from '@deltachat-desktop/shared/logger.js'
+import type { setLogHandler as setLogHandlerFunction } from '@deltachat-desktop/shared/logger.js'
 
 class BrowserRuntime implements Runtime {
   onResumeFromSleep: (() => void) | undefined
@@ -140,7 +141,7 @@ class BrowserRuntime implements Runtime {
     throw new Error('Method not implemented.')
   }
   setBadgeCounter(_value: number): void {
-    log.warn('setBadgeCounter is not implemented for browser')
+    this.log.warn('setBadgeCounter is not implemented for browser')
   }
   deleteWebxdcAccountData(_accountId: number): Promise<void> {
     throw new Error('Method not implemented.')
@@ -195,7 +196,10 @@ class BrowserRuntime implements Runtime {
   openLink(_link: string): void {
     throw new Error('Method not implemented.')
   }
-  initialize(): void {
+
+  private log!: ReturnType<typeof getLoggerFunction>
+  initialize(setLogHandler: typeof setLogHandlerFunction, getLogger: typeof getLoggerFunction): void {
+    this.log = getLogger('runtime/browser')
     throw new Error('Method not implemented.')
   }
   getRC_Config(): RC_Config {
