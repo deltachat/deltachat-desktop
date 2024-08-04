@@ -1,6 +1,4 @@
 //@ts-check
-import sourceMap from 'source-map-support'
-sourceMap.install()
 
 if (process.env.NODE_ENV === 'test') {
   if (!process.env.TEST_DIR) {
