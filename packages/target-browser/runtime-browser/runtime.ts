@@ -6,6 +6,7 @@ import {
   DesktopSettingsType,
   RC_Config,
   RuntimeInfo,
+  RuntimeOpenDialogOptions,
   Theme,
 } from '@deltachat-desktop/shared/shared-types.js'
 import { getLogger } from '@deltachat-desktop/shared/logger.js'
@@ -180,7 +181,7 @@ class BrowserRuntime implements Runtime {
     throw new Error('Method not implemented.')
   }
   async showOpenFileDialog(
-    _options: Electron.OpenDialogOptions
+    _options: RuntimeOpenDialogOptions
   ): Promise<string> {
     throw new Error('Method not implemented.')
   }

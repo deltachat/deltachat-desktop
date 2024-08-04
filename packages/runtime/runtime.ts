@@ -3,7 +3,9 @@ import {
   DcOpenWebxdcParameters,
   DesktopSettingsType,
   RC_Config,
+  RuntimeAppPath,
   RuntimeInfo,
+  RuntimeOpenDialogOptions,
   Theme,
 } from '@deltachat-desktop/shared/shared-types.js'
 import { LocaleData } from '@deltachat-desktop/shared/localize.js'
@@ -58,9 +60,7 @@ export interface Runtime {
    * @param link
    */
   openLink(link: string): void
-  showOpenFileDialog(
-    options: Electron.OpenDialogOptions
-  ): Promise<string | null>
+  showOpenFileDialog(options: RuntimeOpenDialogOptions): Promise<string | null>
   downloadFile(pathToSource: string, filename: string): Promise<void>
   transformBlobURL(blob: string): string
   readClipboardText(): Promise<string>
@@ -71,7 +71,7 @@ export interface Runtime {
   readClipboardImage(): Promise<string | null>
   writeClipboardText(text: string): Promise<void>
   writeClipboardImage(path: string): Promise<void>
-  getAppPath(name: Parameters<typeof app.getPath>[0]): string
+  getAppPath(name: RuntimeAppPath): string
   openMapsWebxdc(accountId: number, chatId?: number): void
   openPath(path: string): Promise<string>
   getConfigPath(): string

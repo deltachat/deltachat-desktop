@@ -6,6 +6,7 @@ import {
   DesktopSettingsType,
   RC_Config,
   RuntimeInfo,
+  RuntimeOpenDialogOptions,
   Theme,
 } from '@deltachat-desktop/shared/shared-types.js'
 import { setLogHandler } from '@deltachat-desktop/shared/logger.js'
@@ -211,11 +212,9 @@ class ElectronRuntime implements Runtime {
       return blob
     }
   }
-  async showOpenFileDialog(
-    options: Electron.OpenDialogOptions
-  ): Promise<string> {
+  async showOpenFileDialog(options: RuntimeOpenDialogOptions): Promise<string> {
     const { filePaths } = await (<ReturnType<typeof dialog.showOpenDialog>>(
-      ipcBackend.invoke('fileChooser', options)
+      ipcBackend.invoke('fileChooser', options as Electron.OpenDialogOptions)
     ))
     return filePaths && filePaths[0]
   }
