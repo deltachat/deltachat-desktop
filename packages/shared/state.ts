@@ -10,7 +10,7 @@ export function getDefaultState(): DesktopSettingsType {
     enterKeySends: false,
     notifications: true,
     showNotificationContent: true,
-    locale: null, // if this is null, the system chooses the system language electron reports
+    locale: null, // if this is null, the system chooses the system language that electron reports
     credentials: undefined,
     lastAccount: undefined,
     enableAVCalls: false,

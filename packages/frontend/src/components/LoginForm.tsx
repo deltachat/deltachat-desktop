@@ -13,7 +13,7 @@ import {
   DeltaSwitch,
 } from './Login-Styles'
 import ClickableLink from './helpers/ClickableLink'
-import { Credentials } from '../../../shared/shared-types'
+import { Credentials } from '../types-app'
 import { getLogger } from '../../../shared/logger'
 import { BackendRemote, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
