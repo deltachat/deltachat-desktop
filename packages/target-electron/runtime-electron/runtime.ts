@@ -12,6 +12,7 @@ import {
 import { setLogHandler } from '@deltachat-desktop/shared/logger.js'
 import { getLogger } from '@deltachat-desktop/shared/logger.js'
 import { LocaleData } from '@deltachat-desktop/shared/localize.js'
+import '@deltachat-desktop/shared/global.d.ts'
 
 import type { dialog, app } from 'electron'
 import { Runtime } from '@deltachat-desktop/runtime-interface'
