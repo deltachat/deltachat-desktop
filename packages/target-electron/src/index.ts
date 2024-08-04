@@ -174,13 +174,16 @@ async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
   }
 
   if (app.rc['translation-watch']) {
-    watchFile('_locales/_untranslated_en.json', (curr: Stats, prev: Stats) => {
-      if (curr.mtime !== prev.mtime) {
-        log.info('translation-watch: File changed reloading translation data')
-        mainWindow.chooseLanguage(getCurrentLocaleDate().locale)
-        log.info('translation-watch: reloading translation data - done')
+    watchFile(
+      join(getLocaleDirectoryPath(), '/_untranslated_en.json'),
+      (curr: Stats, prev: Stats) => {
+        if (curr.mtime !== prev.mtime) {
+          log.info('translation-watch: File changed reloading translation data')
+          mainWindow.chooseLanguage(getCurrentLocaleDate().locale)
+          log.info('translation-watch: reloading translation data - done')
+        }
       }
-    })
+    )
   }
 
   cleanupLogFolder().catch(err =>
@@ -343,6 +346,8 @@ app.on('web-contents-created', (_ev, contents) => {
 contextMenu()
 
 import { openUrlsAndFilesFromArgv, open_url } from './open_url.js'
+import { getLocaleDirectoryPath } from './getLocaleDirectory.js'
+import { join } from 'path'
 openUrlsAndFilesFromArgv(process.argv)
 
 ipcMain.handle('restart_app', async _ev => {

@@ -1,7 +1,6 @@
-import path, { dirname } from 'path'
+import path from 'path'
 import fs from 'fs'
 import { ipcMain } from 'electron'
-import { fileURLToPath } from 'url'
 
 import { getLogger } from '../../shared/logger.js'
 import {
@@ -10,8 +9,7 @@ import {
   translate as getTranslateFunction,
 } from '../../shared/localize.js'
 import { refresh as refreshMenu } from './menu.js'
-
-const __dirname = dirname(fileURLToPath(import.meta.url))
+import { getLocaleDirectoryPath } from './getLocaleDirectory.js'
 
 const log = getLogger('load-translations')
 
@@ -81,7 +79,7 @@ export function loadTranslations(locale: string) {
 
 function retrieveLocaleFile(locale: string) {
   const onDiskLocale = locale.replace('-', '_')
-  return path.join(__dirname, '..', '..', '_locales', onDiskLocale + '.json')
+  return path.join(getLocaleDirectoryPath(), onDiskLocale + '.json')
 }
 
 function getLocaleMessages(file: string) {

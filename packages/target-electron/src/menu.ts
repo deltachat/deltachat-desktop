@@ -16,8 +16,7 @@ import * as mainWindow from './windows/main.js'
 import { DesktopSettings } from './desktop_settings.js'
 import { getCurrentLocaleDate, tx } from './load-translations.js'
 import { mapPackagePath } from './isAppx.js'
-
-const __dirname = dirname(fileURLToPath(import.meta.url))
+import { getLocaleDirectoryPath } from './getLocaleDirectory.js'
 
 const log = getLogger('main/menu')
 
@@ -25,7 +24,7 @@ const languages: {
   locale: string
   name: string
 }[] = (() => {
-  const languagesFile = join(__dirname, '../../_locales/_languages.json')
+  const languagesFile = join(getLocaleDirectoryPath(), '_languages.json')
   const rawLanguageList: { [locale: string]: string } = JSON.parse(
     readFileSync(languagesFile, 'utf8')
   )
