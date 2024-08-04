@@ -28,6 +28,7 @@ import { set_has_unread, updateTrayIcon } from './tray.js'
 import { openHtmlEmailWindow } from './windows/html_email.js'
 import { appx, mapPackagePath } from './isAppx.js'
 import DeltaChatController from './deltachat/controller.js'
+import { BuildInfo } from './get-build-info.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -122,6 +123,7 @@ ${error instanceof Error ? error.message : inspect(error, { depth: null })}`
       ],
       runningUnderARM64Translation: app.runningUnderARM64Translation,
       rpcServerPath: dcController.rpcServerPath,
+      buildInfo: BuildInfo,
     }
     ev.returnValue = info
   })

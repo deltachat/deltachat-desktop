@@ -80,7 +80,6 @@ DeltaChatData
 static/fallback-theme.css
 themes/*.css
 
-packages/shared/build-info.ts
 # ignore provisioning file
 embedded.provisionprofile
 

@@ -12,10 +12,7 @@
 
     "build": "pnpm build:shared && pnpm build:backend && pnpm build:frontend",
 
-
-    "build:shared": "pnpm build:shared:translations && pnpm build:shared:version",
-    
-    "build:shared:version": "node ./bin/build-shared-version-info.js",
+    "build:shared": "pnpm build:shared:translations",
     
     "build:frontend": "pnpm --filter=@deltachat-desktop/frontend build",
 
@@ -23,9 +20,7 @@
     "watch:shared": "pnpm watch:shared:translations",
     "watch:shared:translations": "pnpm build:shared:translations -- -w",
     
-    "build4production": "NODE_ENV=production pnpm build && pnpm check:types",
-    
-
+    "build4production": "NODE_ENV=production pnpm build && pnpm check:types"
 
   },
 

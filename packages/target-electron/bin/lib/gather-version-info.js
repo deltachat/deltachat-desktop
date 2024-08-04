@@ -1,6 +1,5 @@
 //@ts-check
 import { spawnSync } from 'child_process'
-import { writeFileSync } from 'fs'
 import { readFile } from 'fs/promises'
 import { join } from 'path'
 
@@ -44,8 +43,11 @@ async function getGitRef() {
   return git_ref
 }
 
-async function gatherBuildInfo() {
-  const packageJSON = join(__dirname, '../package.json')
+/**
+ * @returns {Promise<import('@deltachat-desktop/shared/shared-types').BuildInfo>}
+ */
+export async function gatherBuildInfo() {
+  const packageJSON = join(__dirname, '../../package.json')
   const packageObject = JSON.parse(await readFile(packageJSON, 'utf8'))
   return {
     VERSION: packageObject.version,
@@ -55,23 +57,3 @@ async function gatherBuildInfo() {
     GIT_REF: await getGitRef(),
   }
 }
-
-// write file
-
-gatherBuildInfo().then(build_info => {
-  writeFileSync(
-    join(__dirname, '../src/shared/build-info.ts'),
-    '/// GENERATED FILE run `pnpm build` to refresh\n' +
-      Object.keys(build_info)
-        .map(
-          key =>
-            `export const ${key} = ${JSON.stringify(build_info[key]).replace(
-              /^"|"$/g,
-              "'"
-            )}`
-        )
-        .join('\n') +
-      '\n',
-    'utf-8'
-  )
-})

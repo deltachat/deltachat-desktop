@@ -26,9 +26,6 @@ jobs:
       run: |
         npm i -g pnpm
         pnpm install --frozen-lockfile
-    - name: preperation (generate code)
-      run: |
-        pnpm build:shared:version
     - name: Run all checks
       run: |
         pnpm check
