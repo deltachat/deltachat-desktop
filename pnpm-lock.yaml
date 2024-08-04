@@ -184,8 +184,8 @@ importers:
         specifier: ^7.8.0
         version: 7.8.0(eslint@8.57.0)(typescript@5.5.4)
       esbuild:
-        specifier: ^0.19.8
-        version: 0.19.8
+        specifier: ^0.23.0
+        version: 0.23.0
       esbuild-plugin-inline-worker:
         specifier: ^0.1.1
         version: 0.1.1
@@ -204,6 +204,9 @@ importers:
       sass:
         specifier: 'catalog:'
         version: 1.69.5
+      source-map-support:
+        specifier: ^0.5.21
+        version: 0.5.21
       typescript:
         specifier: 'catalog:'
         version: 5.5.4
