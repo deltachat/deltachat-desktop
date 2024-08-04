@@ -32,8 +32,9 @@
     "check:types": "tsc --noEmit && tsc --noEmit -p runtime-electron",
     "build": "node ./bin/build.js",
     "dev": "pnpm build && pnpm start --",
-    "start": "electron . --devmode --disable-http-cache --translation-watch",
-    "clean": "rm -rf ./tsc-dist ./html-dist ./dist",
+    "dev-inspect": "pnpm build && pnpm start --inspect --",
+    "start": "NODE_OPTIONS=--enable-source-maps electron . --devmode --disable-http-cache --translation-watch",
+    "clean": "rm -rf ./bundle_out ./html-dist ./dist",
     "pack": "pnpm pack:generate_config && pnpm pack:all",
     "pack:generate_config": "node ./build/gen-electron-builder-config.js && prettier --write ./electron-builder.json5 --log-level silent",
     "pack:win": "electron-builder --config ./electron-builder.json5 --win nsis portable",
@@ -47,7 +48,6 @@
     "@deltachat/stdio-rpc-server": "catalog:",
     "deltachat-jsonrpc": "link:../../../deltachat-core-rust/deltachat-jsonrpc",
     "mime-types": "catalog:",
-    "source-map-support": "^0.5.19",
     "ws": "7.5.10"
   },
   "devDependencies": {
