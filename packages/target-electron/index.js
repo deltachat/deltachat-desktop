@@ -10,4 +10,4 @@ if (process.env.NODE_ENV === 'test') {
     process.env.TEST_DIR = mkdtempSync(join(tmpdir(), 'deltachat-'))
   }
 }
-import './tsc-dist/main/index.js'
+import './bundle_out/index.js'

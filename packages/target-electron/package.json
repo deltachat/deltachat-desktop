@@ -30,7 +30,7 @@
   "homepage": "https://delta.chat",
   "scripts": {
     "check:types": "tsc --noEmit && tsc --noEmit -p runtime-electron",
-    "build": "tsc --build",
+    "build": "node ./bin/build.js",
     "dev": "pnpm build && pnpm start --",
     "start": "electron . --devmode --disable-http-cache --translation-watch",
     "clean": "rm -rf ./tsc-dist ./html-dist ./dist",
@@ -43,28 +43,29 @@
     "pack:all": "electron-builder --config ./electron-builder.json5 --mac dmg --win nsis portable --linux AppImage deb"
   },
   "dependencies": {
-    "@deltachat-desktop/runtime-interface": "link:../runtime",
-    "@deltachat-desktop/shared": "link:../shared",
     "@deltachat/jsonrpc-client": "catalog:",
     "@deltachat/stdio-rpc-server": "catalog:",
-    "application-config": "^1.0.1",
     "deltachat-jsonrpc": "link:../../../deltachat-core-rust/deltachat-jsonrpc",
     "mime-types": "catalog:",
-    "rc": "^1.2.8",
     "source-map-support": "^0.5.19",
-    "webxdc-types": "catalog:",
-    "ws": "7.5.10",
-    "debounce": "^1.2.0"
+    "ws": "7.5.10"
   },
   "devDependencies": {
+    "@deltachat-desktop/shared": "link:../shared",
+    "@deltachat-desktop/runtime-interface": "link:../runtime",
+    "rc": "^1.2.8",
+    "application-config": "^1.0.1",
+    "debounce": "^1.2.0",
+    "webxdc-types": "catalog:",
     "@electron/notarize": "^2.1.0",
+    "@types/debounce": "^1.2.0",
     "@types/mime-types": "catalog:",
     "@types/node": "^20.12.11",
     "@types/rc": "^1.1.0",
-    "@types/debounce": "^1.2.0",
     "chokidar": "^3.5.3",
     "electron": "^30.0.5",
     "electron-builder": "^24.13.3",
+    "esbuild": "^0.19.8",
     "typescript": "catalog:"
   }
 }

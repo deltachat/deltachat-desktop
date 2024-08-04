@@ -312,6 +312,9 @@ importers:
       electron-builder:
         specifier: ^24.13.3
         version: 24.13.3(electron-builder-squirrel-windows@24.13.3(dmg-builder@24.13.3))
+      esbuild:
+        specifier: ^0.19.8
+        version: 0.19.8
       typescript:
         specifier: 'catalog:'
         version: 5.5.4
