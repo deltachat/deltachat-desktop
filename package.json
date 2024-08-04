@@ -13,14 +13,15 @@
     "fix:lint": "eslint . --ext .js,.ts,.tsx --fix || true",
     "fix:format": "prettier --write \"**/*.scss\" \"packages/**/*.{js,ts,tsx,json}\" \"**/*.md\"",
     "test:log-conventions": "node ./bin/log-conventions",
-    "test:package-versions": "node ./bin/test_package_versions",
     "start:electron": "pnpm --filter=@deltachat-desktop/target-electron start",
     "dev:electron": "pnpm --filter=@deltachat-desktop/target-electron dev",
-    "build:electron": "pnpm --filter=@deltachat-desktop/frontend build && pnpm --filter=@deltachat-desktop/target-electron build",
     "translations:pull": "tx pull -s -f && tx pull -f -a",
     "translations:convert": "node ./bin/build-shared-convert-translations.mjs ./_locales",
     "translations:update": "pnpm translations:pull && pnpm translations:convert && ./bin/find_complete_translations.sh",
-    "update-target-versions": "node ./bin/update_desktop_version.js && prettier --write --log-level=silent \"packages/target**/package.json\""
+    "update-target-versions": "node ./bin/update_desktop_version.js && prettier --write --log-level=silent \"packages/target**/package.json\"",
+    "WIP": "exit 1 # scripts below this still are not done",
+    "test:package-versions": "node ./bin/test_package_versions",
+    "build:electron": "pnpm --filter=@deltachat-desktop/frontend build && pnpm --filter=@deltachat-desktop/target-electron build"
   },
   "dependencies": {},
   "engineStrict": true,
