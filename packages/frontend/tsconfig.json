@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "outDir": "../../tsc-dist/renderer",
-    "rootDir": ".",
+    "rootDirs": [".", "../shared"],
     "sourceMap": true,
     "noImplicitAny": true,
     "module": "es6",
