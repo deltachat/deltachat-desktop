@@ -7,9 +7,9 @@ import SettingsButton from './SettingsButton'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
 
-import type { OpenDialogOptions } from 'electron'
 import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
 import { dirname } from 'path'
+import { RuntimeOpenDialogOptions } from '@deltachat-desktop/shared/shared-types'
 
 export default function ManageKeys() {
   const tx = useTranslationFunction()
@@ -19,7 +19,7 @@ export default function ManageKeys() {
     const { defaultPath, setLastPath } = rememberLastUsedPath(
       LastUsedSlot.KeyImport
     )
-    const opts: OpenDialogOptions = {
+    const opts: RuntimeOpenDialogOptions = {
       title: tx('pref_managekeys_import_secret_keys'),
       defaultPath,
       properties: ['openFile'],
@@ -57,7 +57,7 @@ export default function ManageKeys() {
     const { defaultPath, setLastPath } = rememberLastUsedPath(
       LastUsedSlot.KeyExport
     )
-    const opts: OpenDialogOptions = {
+    const opts: RuntimeOpenDialogOptions = {
       title: tx('pref_managekeys_export_secret_keys'),
       defaultPath,
       properties: ['openDirectory', 'createDirectory'],
