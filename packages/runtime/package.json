@@ -8,5 +8,8 @@
   },
   "dependencies": {
     "@deltachat-desktop/shared": "link:../shared"
+  },
+  "peerDependencies": {
+    "@deltachat/jsonrpc-client": "*"
   }
 }

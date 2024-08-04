@@ -6,47 +6,8 @@ import { countCall } from './debug-tools'
 
 export { T as Type } from '@deltachat/jsonrpc-client'
 
-const { BaseTransport } = yerpc
-
-class ElectronTransport extends BaseTransport {
-  constructor() {
-    super()
-    window.electron_functions.ipcRenderer.on(
-      'json-rpc-message',
-      (_ev: any, response: any) => {
-        const message: yerpc.Message = JSON.parse(response)
-        if (hasDebugEnabled()) {
-          /* ignore-console-log */
-          console.debug('%c▼ %c[JSONRPC]', 'color: red', 'color:grey', message)
-        }
-        this._onmessage(message)
-      }
-    )
-  }
-  _send(message: yerpc.Message): void {
-    const serialized = JSON.stringify(message)
-    window.electron_functions.ipcRenderer.invoke('json-rpc-request', serialized)
-    if (hasDebugEnabled()) {
-      /* ignore-console-log */
-      console.debug('%c▲ %c[JSONRPC]', 'color: green', 'color:grey', message)
-      if ((message as any)['method']) {
-        countCall((message as any).method)
-        countCall('total')
-      }
-    }
-  }
-}
-
-class ElectronDeltachat extends BaseDeltaChat<ElectronTransport> {
-  close() {
-    /** noop */
-  }
-  constructor() {
-    super(new ElectronTransport(), true)
-  }
-}
-
-export const BackendRemote: BaseDeltaChat<any> = new ElectronDeltachat()
+export const BackendRemote: BaseDeltaChat<any> =
+  runtime.createDeltaChatConnection(hasDebugEnabled(), countCall)
 
 /** Functions with side-effects */
 export namespace EffectfulBackendActions {

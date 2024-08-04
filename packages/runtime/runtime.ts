@@ -9,6 +9,7 @@ import {
   Theme,
 } from '@deltachat-desktop/shared/shared-types.js'
 import { LocaleData } from '@deltachat-desktop/shared/localize.js'
+import { BaseDeltaChat } from '@deltachat/jsonrpc-client'
 
 /**
  * Offers an abstraction Layer to make it easier to make browser client in the future
@@ -16,6 +17,10 @@ import { LocaleData } from '@deltachat-desktop/shared/localize.js'
 export interface Runtime {
   emitUIFullyReady(): void
   emitUIReady(): void
+  createDeltaChatConnection(
+    hasDebugEnabled: boolean,
+    callCounterFunction: (label: string) => void
+  ): BaseDeltaChat<any>
   /**
    * open html message, in dedicated window or in system browser
    * @param window_id unique id that we know if it's already open, should be accountid+"-"+msgid
