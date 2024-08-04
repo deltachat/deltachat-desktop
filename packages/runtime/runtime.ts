@@ -10,6 +10,9 @@ import {
 import { LocaleData } from '@deltachat-desktop/shared/localize.js'
 import { BaseDeltaChat } from '@deltachat/jsonrpc-client'
 
+import type { getLogger as getLoggerFunction } from '@deltachat-desktop/shared/logger.js'
+import type { setLogHandler as setLogHandlerFunction } from '@deltachat-desktop/shared/logger.js'
+
 /**
  * Offers an abstraction Layer to make it easier to make browser client in the future
  */
@@ -46,7 +49,7 @@ export interface Runtime {
    * - sets the LogHandler
    * - event listeners on runtime events
    */
-  initialize(): void
+  initialize(setLogHandler: typeof setLogHandlerFunction, getLogger: typeof getLoggerFunction): void
   reloadWebContent(): void
   openLogFile(): void
   getCurrentLogLocation(): string
