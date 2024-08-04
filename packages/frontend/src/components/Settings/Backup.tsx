@@ -12,9 +12,9 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/dialog/useDialog'
 import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
 
-import type { OpenDialogOptions } from 'electron'
 import type { DcEventType } from '@deltachat/jsonrpc-client'
 import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
+import { RuntimeOpenDialogOptions } from '@deltachat-desktop/shared/shared-types'
 
 const log = getLogger('renderer/Settings/Backup')
 
@@ -36,7 +36,7 @@ export default function Backup() {
       const { defaultPath, setLastPath } = rememberLastUsedPath(
         LastUsedSlot.Backup
       )
-      const opts: OpenDialogOptions = {
+      const opts: RuntimeOpenDialogOptions = {
         title: tx('export_backup_desktop'),
         defaultPath,
         buttonLabel: tx('save'),
