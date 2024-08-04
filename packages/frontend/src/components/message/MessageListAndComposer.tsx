@@ -16,6 +16,7 @@ import useDialog from '../../hooks/dialog/useDialog'
 import useMessage from '../../hooks/chat/useMessage'
 
 import type { T } from '@deltachat/jsonrpc-client'
+import AlertDialog from '../dialogs/AlertDialog'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
@@ -96,25 +97,28 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
 
     e.preventDefault()
     e.stopPropagation()
+    
+    openDialog(AlertDialog, {message: "DRAG AND DROP is BROKEN for now"})
+    return
 
-    const sanitizedFileList: Pick<File, 'name' | 'path' | 'type'>[] = []
+    const sanitizedFileList: Pick<File, 'name' | 'type'>[] = []
     {
       const fileList: FileList = (e.target as any).files || e.dataTransfer.files
       // TODO maybe add a clause here for windows because that uses backslash instead of slash
       const forbiddenPathRegEx = /DeltaChat\/.+?\.sqlite-blobs\//gi
       for (let i = 0; i < fileList.length; i++) {
-        const { path, name, type } = fileList[i]
+        const { name, type } = fileList[i]
         // TODO filter out folders somehow
         // if that is possible without a backend call to check whether the file exists,
         // maybe some browser api like FileReader could help
-        if (!forbiddenPathRegEx.test(path.replace('\\', '/'))) {
-          sanitizedFileList.push({ path, name, type })
-        } else {
-          log.warn(
-            'Prevented a file from being send again while dragging it out',
-            name
-          )
-        }
+        // if (!forbiddenPathRegEx.test(path.replace('\\', '/'))) {
+        //   sanitizedFileList.push({ path, name, type })
+        // } else {
+        //   log.warn(
+        //     'Prevented a file from being send again while dragging it out',
+        //     name
+        //   )
+        // }
       }
     }
 
@@ -131,7 +135,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
       )
         ? 'Image'
         : 'File'
-      addFileToDraft(sanitizedFileList[0].path, msgViewType)
+      // addFileToDraft(sanitizedFileList[0].path, msgViewType)
       return
     }
 
@@ -145,7 +149,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
         }
 
         for (const file of sanitizedFileList) {
-          sendMessage(accountId, chat.id, { file: file.path, viewtype: 'File' })
+          // sendMessage(accountId, chat.id, { file: file.path, viewtype: 'File' })
         }
       },
     })
