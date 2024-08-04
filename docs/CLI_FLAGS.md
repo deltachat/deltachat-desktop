@@ -18,3 +18,11 @@ Options:
 | `--no-color` | Disable colors in the output of main process |
 
 For more info on logging see [LOGGING.md](./LOGGING.md).
+
+## Env vars
+
+useful env vars you can set
+
+| Variable (sometimes with value) | Effect |
+|---------------------------------|--------|
+|`NODE_OPTIONS=--enable-source-maps`| Make stacktraces in errors useful by enabling source map support in the main process |
