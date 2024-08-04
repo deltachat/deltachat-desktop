@@ -23,7 +23,11 @@ async function copy(source, destination, watch = false) {
   try {
     files = await readdir(source)
   } catch (err) {
-    return console.error('- Unable to scan directory: ' + err)
+    console.error('- Unable to scan directory: ' + err)
+    if (!watch) {
+      process.exit(1)
+    }
+    return
   }
   for (let f of files) {
     const pathSource = join(source, f)
