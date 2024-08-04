@@ -16,6 +16,7 @@ import '@deltachat-desktop/shared/global.d.ts'
 
 import type { dialog, app } from 'electron'
 import { Runtime } from '@deltachat-desktop/runtime-interface'
+import { BaseDeltaChat, yerpc } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/runtime')
 
@@ -24,6 +25,49 @@ const { app_getPath, ipcRenderer: ipcBackend } = (window as any)
   // see static/preload.js
   ipcRenderer: import('electron').IpcRenderer
   app_getPath: typeof app.getPath
+}
+
+const { BaseTransport } = yerpc
+
+class ElectronTransport extends BaseTransport {
+  constructor(
+    private hasDebugEnabled: boolean,
+    private callCounterFunction: (label: string) => void
+  ) {
+    super()
+    ipcBackend.on('json-rpc-message', (_ev: any, response: any) => {
+      const message: yerpc.Message = JSON.parse(response)
+      if (hasDebugEnabled) {
+        /* ignore-console-log */
+        console.debug('%c▼ %c[JSONRPC]', 'color: red', 'color:grey', message)
+      }
+      this._onmessage(message)
+    })
+  }
+  _send(message: yerpc.Message): void {
+    const serialized = JSON.stringify(message)
+    ipcBackend.invoke('json-rpc-request', serialized)
+    if (this.hasDebugEnabled) {
+      /* ignore-console-log */
+      console.debug('%c▲ %c[JSONRPC]', 'color: green', 'color:grey', message)
+      if ((message as any)['method']) {
+        this.callCounterFunction((message as any).method)
+        this.callCounterFunction('total')
+      }
+    }
+  }
+}
+
+class ElectronDeltachat extends BaseDeltaChat<ElectronTransport> {
+  close() {
+    /** noop */
+  }
+  constructor(
+    hasDebugEnabled: boolean,
+    callCounterFunction: (label: string) => void
+  ) {
+    super(new ElectronTransport(hasDebugEnabled, callCounterFunction), true)
+  }
 }
 
 class ElectronRuntime implements Runtime {
@@ -48,6 +92,12 @@ class ElectronRuntime implements Runtime {
   }
   emitUIReady(): void {
     ipcBackend.send('ipcReady')
+  }
+  createDeltaChatConnection(
+    hasDebugEnabled: boolean,
+    callCounterFunction: (label: string) => void
+  ): BaseDeltaChat<any> {
+    return new ElectronDeltachat(hasDebugEnabled, callCounterFunction)
   }
   openMessageHTML(
     window_id: string,

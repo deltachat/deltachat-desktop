@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "@deltachat-desktop/runtime-interface": "link:../runtime",
-    "@deltachat-desktop/shared": "link:../shared"
+    "@deltachat-desktop/shared": "link:../shared",
+    "@deltachat/jsonrpc-client": "catalog:",
+    "@deltachat/stdio-rpc-server": "catalog:"
   }
 }

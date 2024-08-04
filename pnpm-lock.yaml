@@ -216,6 +216,9 @@ importers:
       '@deltachat-desktop/shared':
         specifier: link:../shared
         version: link:../shared
+      '@deltachat/jsonrpc-client':
+        specifier: '*'
+        version: 1.141.2(ws@8.18.0)
 
   packages/shared:
     dependencies:
@@ -237,6 +240,12 @@ importers:
       '@deltachat-desktop/shared':
         specifier: link:../shared
         version: link:../shared
+      '@deltachat/jsonrpc-client':
+        specifier: 'catalog:'
+        version: 1.141.2(ws@8.18.0)
+      '@deltachat/stdio-rpc-server':
+        specifier: 'catalog:'
+        version: 1.141.2(@deltachat/jsonrpc-client@1.141.2(ws@8.18.0))
 
   packages/target-e2e-integration-testsuite: {}
 
@@ -2845,6 +2854,21 @@ snapshots:
   '@deltachat/stdio-rpc-server@1.141.2(@deltachat/jsonrpc-client@1.141.2(ws@7.5.10))':
     dependencies:
       '@deltachat/jsonrpc-client': 1.141.2(ws@7.5.10)
+    optionalDependencies:
+      '@deltachat/stdio-rpc-server-android-arm': 1.141.2
+      '@deltachat/stdio-rpc-server-android-arm64': 1.141.2
+      '@deltachat/stdio-rpc-server-darwin-arm64': 1.141.2
+      '@deltachat/stdio-rpc-server-darwin-x64': 1.141.2
+      '@deltachat/stdio-rpc-server-linux-arm': 1.141.2
+      '@deltachat/stdio-rpc-server-linux-arm64': 1.141.2
+      '@deltachat/stdio-rpc-server-linux-ia32': 1.141.2
+      '@deltachat/stdio-rpc-server-linux-x64': 1.141.2
+      '@deltachat/stdio-rpc-server-win32-ia32': 1.141.2
+      '@deltachat/stdio-rpc-server-win32-x64': 1.141.2
+
+  '@deltachat/stdio-rpc-server@1.141.2(@deltachat/jsonrpc-client@1.141.2(ws@8.18.0))':
+    dependencies:
+      '@deltachat/jsonrpc-client': 1.141.2(ws@8.18.0)
     optionalDependencies:
       '@deltachat/stdio-rpc-server-android-arm': 1.141.2
       '@deltachat/stdio-rpc-server-android-arm64': 1.141.2

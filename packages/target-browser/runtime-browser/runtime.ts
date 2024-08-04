@@ -12,6 +12,7 @@ import {
 import { getLogger } from '@deltachat-desktop/shared/logger.js'
 import { LocaleData } from '@deltachat-desktop/shared/localize.js'
 import { Runtime } from '@deltachat-desktop/runtime-interface'
+import { BaseDeltaChat } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/runtime')
 
@@ -41,6 +42,9 @@ class BrowserRuntime implements Runtime {
     throw new Error('Method not implemented.')
   }
   emitUIReady(): void {
+    throw new Error('Method not implemented.')
+  }
+  createDeltaChatConnection(_hasDebugEnabled: boolean, _callCounterFunction: (label: string) => void): BaseDeltaChat<any> {
     throw new Error('Method not implemented.')
   }
   openMessageHTML(
