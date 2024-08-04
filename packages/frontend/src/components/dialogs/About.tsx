@@ -3,7 +3,6 @@ import reactStringReplace from 'react-string-replace'
 
 import { getLogger } from '../../../../shared/logger'
 import { gitHubUrl, gitHubLicenseUrl } from '../../../../shared/constants'
-import { VERSION, GIT_REF } from '../../../../shared/build-info'
 import ClickableLink from '../helpers/ClickableLink'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { BackendRemote } from '../../backend-com'
@@ -114,6 +113,7 @@ export default function About({ onClose }: DialogProps) {
       </ClickableLink>
     )
   )
+  const { VERSION, GIT_REF } = runtime.getRuntimeInfo().buildInfo
 
   return (
     <DialogWithHeader

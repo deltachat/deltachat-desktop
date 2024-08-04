@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { runtime } from '@deltachat-desktop/runtime-interface'
-import { VERSION, GIT_REF } from '../../../../shared/build-info'
 import { getLogger } from '../../../../shared/logger'
 import { DialogContext } from '../../contexts/DialogContext'
 
@@ -34,6 +33,7 @@ export class CrashScreen extends React.Component {
 
   render() {
     if (this.state.hasError) {
+      const { VERSION, GIT_REF } = runtime.getRuntimeInfo().buildInfo
       return (
         <div className='crash-screen'>
           <h1>Ooops something crashed</h1>

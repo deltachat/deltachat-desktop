@@ -3,7 +3,6 @@ console.time('init')
 import { mkdirSync, Stats, watchFile } from 'fs'
 import { app as rawApp, dialog, ipcMain, protocol } from 'electron'
 import rc from './rc.js'
-import { VERSION, GIT_REF, BUILD_TIMESTAMP } from '../../shared/build-info.js'
 import contextMenu from './electron-context-menu.js'
 import { isWindowsStorePackage } from './isAppx.js'
 import { getHelpMenu } from './help_menu.js'
@@ -24,7 +23,7 @@ rawApp.commandLine.appendSwitch('host-rules', hostRules)
 
 if (rc['version'] === true || rc['v'] === true) {
   /* ignore-console-log */
-  console.info(VERSION)
+  console.info(BuildInfo.VERSION)
   process.exit()
 }
 
@@ -97,7 +96,9 @@ const logHandler = createLogHandler()
 import { getLogger, setLogHandler } from '../../shared/logger.js'
 const log = getLogger('main/index')
 setLogHandler(logHandler.log, rc)
-log.info(`Deltachat Version ${VERSION} ${GIT_REF} ${BUILD_TIMESTAMP}`)
+log.info(
+  `Deltachat Version ${BuildInfo.VERSION} ${BuildInfo.GIT_REF} ${BuildInfo.BUILD_TIMESTAMP}`
+)
 process.on('exit', logHandler.end)
 
 // Report uncaught exceptions
@@ -348,6 +349,7 @@ contextMenu()
 import { openUrlsAndFilesFromArgv, open_url } from './open_url.js'
 import { getLocaleDirectoryPath } from './getLocaleDirectory.js'
 import { join } from 'path'
+import { BuildInfo } from './get-build-info.js'
 openUrlsAndFilesFromArgv(process.argv)
 
 ipcMain.handle('restart_app', async _ev => {

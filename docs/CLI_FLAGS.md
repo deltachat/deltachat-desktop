@@ -28,5 +28,4 @@ useful env vars you can set:
 |`TEST_DIR=<dir>`| specify an alternative data directory |
 | `DELTACHAT_LOCALE_DIR=<path>` | allows to specify an alternative translation data directory in development, the intended purpose is to be used together with `--translation-watch` [^1] |
 
-
 [^1]: Someone could develop a gui tool for users to live-edit translations in released versions of deltachat desktop with these two options. Like directly see in the app how your translation looks without needing a dev environment to build desktop.

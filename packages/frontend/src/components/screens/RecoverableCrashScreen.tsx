@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { runtime } from '@deltachat-desktop/runtime-interface'
-import { VERSION, GIT_REF } from '../../../../shared/build-info'
 import { getLogger } from '../../../../shared/logger'
 import { DialogContext } from '../../contexts/DialogContext'
 
@@ -57,6 +56,7 @@ export class RecoverableCrashScreen extends React.Component<{
       this.state.hasError &&
       this.state.old_error_reset_key === this.props.reset_on_change_key
     ) {
+      const { VERSION, GIT_REF } = runtime.getRuntimeInfo().buildInfo
       return (
         <div className='crash-screen'>
           {this.props.reset_on_change_key}:{this.state.timestamp}
