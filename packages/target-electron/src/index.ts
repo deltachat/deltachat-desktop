@@ -11,7 +11,7 @@ import { initialisePowerMonitor } from './resume_from_sleep.js'
 import type { EventEmitter } from 'events'
 
 // Hardening: prohibit all DNS queries, except for  OpenStreetMap
-// (used by /static/webxdc/maps.xdc)
+// (used by /static/xdcs/maps.xdc)
 // The `~NOTFOUND` string is here:
 // https://chromium.googlesource.com/chromium/src/+/6459548ee396bbe1104978b01e19fcb1bb68d0e5/net/dns/mapped_host_resolver.cc#46
 // Chromium docs that touch on `--host-resolver-rules` and DNS:
