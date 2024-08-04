@@ -1,7 +1,7 @@
 import { build } from 'esbuild'
 
 const isProduction = process.env['NODE_ENV'] === 'production'
-const isMinify = process.argv.indexOf('-m') !== -1 
+const isMinify = process.argv.indexOf('-m') !== -1
 
 await build({
   bundle: true,
@@ -21,5 +21,5 @@ await build({
   ],
   entryPoints: ['src/index.ts'],
   treeShaking: true,
-  inject: ['src/cjs-shim.ts']
+  inject: ['src/cjs-shim.ts'],
 })
