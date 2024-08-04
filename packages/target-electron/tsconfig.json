@@ -5,7 +5,7 @@
     "noImplicitAny": true,
     "module": "NodeNext",
     "target": "es2018",
-    "rootDir": ".",
+    "rootDirs": [".", "../shared"],
     "allowJs": false,
     "esModuleInterop": true,
     "moduleResolution": "NodeNext",
