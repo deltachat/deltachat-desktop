@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 
 import { BackendRemote } from '../../backend-com'
-import { Credentials } from '../../../../shared/shared-types'
+import { Credentials } from '../../types-app'
 import LoginForm, {
   ConfigureProgressDialog,
   defaultCredentials,

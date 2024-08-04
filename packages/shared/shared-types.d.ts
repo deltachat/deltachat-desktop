@@ -1,27 +1,5 @@
 type PromiseType<T> = T extends Promise<infer U> ? U : any
 
-export type Credentials = {
-  [key: string]: any
-  addr?: string
-  mail_user?: string
-  mail_pw?: string
-  mail_server?: string
-  mail_port?: string
-  mail_security?: 'automatic' | '' | 'ssl' | 'default'
-  imap_certificate_checks?: any
-  send_user?: string
-  send_pw?: string
-  send_server?: string
-  send_port?: string
-  send_security?: 'automatic' | '' | 'ssl' | 'starttls' | 'plain'
-  smtp_certificate_checks?: any
-  socks5_enabled: '1' | '0'
-  socks5_host: string
-  socks5_port: string
-  socks5_user: string
-  socks5_password: string
-}
-
 type Bounds = {
   height: number
   width: number
@@ -33,8 +11,10 @@ export interface DesktopSettingsType {
   bounds: Bounds | {}
   HTMLEmailWindowBounds: Bounds | undefined
   chatViewBgImg?: string
-  /** @deprecated replaced by lastAccount */
-  credentials?: Credentials
+  /**
+   * @deprecated replaced by lastAccount,
+   * not used since ages, still here so we are reminded to delete it should it exist */
+  credentials?: never
   /** path to last used/selected Account */
   lastAccount?: number
   enableAVCalls: boolean
@@ -86,15 +66,6 @@ export interface RC_Config {
 
 import type { T } from '@deltachat/jsonrpc-client'
 
-export type msgStatus =
-  | 'error'
-  | 'sending'
-  | 'draft'
-  | 'delivered'
-  | 'read'
-  | 'sent'
-  | ''
-
 export type Theme = {
   name: string
   description: string
@@ -102,8 +73,6 @@ export type Theme = {
   /** whether the theme is a prototype and should be hidden in the selection unless deltachat is started in devmode */
   is_prototype: boolean
 }
-
-// Types that will stay:
 
 /** Additional info about the runtime the ui might need */
 export type RuntimeInfo = {
@@ -154,23 +123,3 @@ export interface RuntimeOpenDialogOptions {
   defaultPath?: string
   buttonLabel?: string
 }
-
-// copied the ones from electron
-// TODO: remove the ones that we don't use / plan on using to make it simpler to implement for other targets/runtimes
-export type RuntimeAppPath =
-  | 'home'
-  | 'appData'
-  | 'userData'
-  | 'sessionData'
-  | 'temp'
-  | 'exe'
-  | 'module'
-  | 'desktop'
-  | 'documents'
-  | 'downloads'
-  | 'music'
-  | 'pictures'
-  | 'videos'
-  | 'recent'
-  | 'logs'
-  | 'crashDumps'

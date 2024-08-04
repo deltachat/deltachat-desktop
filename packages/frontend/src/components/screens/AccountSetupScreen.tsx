@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 
-import { Credentials } from '../../../../shared/shared-types'
+import { Credentials } from '../../types-app'
 import ImageBackdrop from '../ImageBackdrop'
 import LoginForm, {
   defaultCredentials,

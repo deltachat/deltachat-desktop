@@ -4,7 +4,7 @@ import { T } from '@deltachat/jsonrpc-client'
 
 import Timestamp from '../conversations/Timestamp'
 import { isImage, isVideo } from '../attachment/Attachment'
-import { msgStatus } from '../../../../shared/shared-types'
+import { msgStatus } from '../../types-app'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 type Props = {

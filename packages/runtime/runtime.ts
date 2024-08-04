@@ -3,7 +3,6 @@ import {
   DcOpenWebxdcParameters,
   DesktopSettingsType,
   RC_Config,
-  RuntimeAppPath,
   RuntimeInfo,
   RuntimeOpenDialogOptions,
   Theme,
@@ -145,3 +144,23 @@ export interface Runtime {
 }
 
 export const runtime: Runtime = (window as any).r
+
+// copied the ones from electron
+// TODO: remove the ones that we don't use / plan on using to make it simpler to implement for other targets/runtimes
+export type RuntimeAppPath =
+  | 'home'
+  | 'appData'
+  | 'userData'
+  | 'sessionData'
+  | 'temp'
+  | 'exe'
+  | 'module'
+  | 'desktop'
+  | 'documents'
+  | 'downloads'
+  | 'music'
+  | 'pictures'
+  | 'videos'
+  | 'recent'
+  | 'logs'
+  | 'crashDumps'
