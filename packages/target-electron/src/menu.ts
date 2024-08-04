@@ -1,7 +1,6 @@
 import { BrowserWindow, Menu, shell } from 'electron'
 import { readFileSync } from 'fs'
-import { join, dirname } from 'path'
-import { fileURLToPath } from 'url'
+import { join } from 'path'
 
 import {
   gitHubIssuesUrl,
@@ -17,8 +16,7 @@ import { DesktopSettings } from './desktop_settings.js'
 import { getCurrentLocaleDate, tx } from './load-translations.js'
 import { mapPackagePath } from './isAppx.js'
 import { quitDeltaChat } from './tray.js'
-
-const __dirname = dirname(fileURLToPath(import.meta.url))
+import { getLocaleDirectoryPath } from './getLocaleDirectory.js'
 
 const log = getLogger('main/menu')
 
@@ -26,7 +24,7 @@ const languages: {
   locale: string
   name: string
 }[] = (() => {
-  const languagesFile = join(__dirname, '../../_locales/_languages.json')
+  const languagesFile = join(getLocaleDirectoryPath(), '_languages.json')
   const rawLanguageList: { [locale: string]: string } = JSON.parse(
     readFileSync(languagesFile, 'utf8')
   )
