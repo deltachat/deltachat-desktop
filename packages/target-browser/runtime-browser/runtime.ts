@@ -44,7 +44,10 @@ class BrowserRuntime implements Runtime {
   emitUIReady(): void {
     throw new Error('Method not implemented.')
   }
-  createDeltaChatConnection(_hasDebugEnabled: boolean, _callCounterFunction: (label: string) => void): BaseDeltaChat<any> {
+  createDeltaChatConnection(
+    _hasDebugEnabled: boolean,
+    _callCounterFunction: (label: string) => void
+  ): BaseDeltaChat<any> {
     throw new Error('Method not implemented.')
   }
   openMessageHTML(
