@@ -116,6 +116,13 @@ export type RuntimeInfo = {
   versions: { label: string; value: string }[]
   runningUnderARM64Translation?: boolean
   rpcServerPath?: string
+  buildInfo: BuildInfo
+}
+
+export interface BuildInfo {
+  VERSION: string
+  GIT_REF: string
+  BUILD_TIMESTAMP: number
 }
 
 export interface DcNotification {
