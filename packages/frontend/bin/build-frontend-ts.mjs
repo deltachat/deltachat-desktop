@@ -10,6 +10,8 @@ import { compile } from 'sass'
 /**
  * Helper method returning a bundle configuration which is shared amongst
  * different `esbuild` methods.
+ *
+ * @returns {esbuild.BuildOptions}
  */
 function config(options) {
   const { isProduction, isMinify, isWatch } = options
@@ -22,16 +24,20 @@ function config(options) {
   }
 
   return {
-    entryPoints: ['src/renderer/main.tsx'],
+    entryPoints: ['src/main.tsx'],
     bundle: true,
     minify: isMinify,
     sourcemap: true,
     outfile: 'html-dist/bundle.js',
+    platform: 'browser',
     define: {
       'process.env.NODE_ENV': isProduction ? '"production"' : '"development"',
     },
     plugins,
     external: ['*.jpg', '*.png', '*.webp', '*.svg'],
+    alias: {
+      'path': 'path-browserify'
+    }
   }
 }
 
