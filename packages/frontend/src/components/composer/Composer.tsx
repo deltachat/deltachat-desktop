@@ -228,17 +228,11 @@ const Composer = forwardRef<
     const file = e.clipboardData.files[0]
 
     log.debug(
-      `paste: received file: "${file.path}" "${file.name}" ${file.type}`,
+      `paste: received file: "${file.name}" ${file.type}`,
       e.clipboardData.files
     )
 
     const msgType: Viewtype = file.type.startsWith('image') ? 'Image' : 'File'
-
-    // file.path is always set to empty string?
-    if (file.path) {
-      addFileToDraft(file.path, msgType)
-      return
-    }
 
     try {
       // Write clipboard to file then attach it to the draft
