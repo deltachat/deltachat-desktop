@@ -21,7 +21,7 @@
     "update-target-versions": "node ./bin/update_desktop_version.js && prettier --write --log-level=silent \"packages/target**/package.json\"",
     "WIP": "exit 1 # scripts below this still are not done",
     "test:package-versions": "node ./bin/test_package_versions",
-    "build:electron": "pnpm --filter=@deltachat-desktop/frontend build && pnpm --filter=@deltachat-desktop/target-electron build"
+    "build:electron": "pnpm --filter=@deltachat-desktop/target-electron build"
   },
   "dependencies": {},
   "engineStrict": true,

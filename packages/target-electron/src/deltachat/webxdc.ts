@@ -243,11 +243,7 @@ export default class DCWebxdc extends SplitOut {
           devTools: DesktopSettings.state.enableWebxdcDevTools,
           javascript: true,
           preload: join(
-            __dirname,
-            '..',
-            '..',
-            '..',
-            'html-dist',
+            htmlDistDir(),
             'webxdc-preload.js'
           ),
         },

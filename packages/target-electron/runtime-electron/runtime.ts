@@ -9,16 +9,16 @@ import {
   RuntimeOpenDialogOptions,
   Theme,
 } from '@deltachat-desktop/shared/shared-types.js'
-import { setLogHandler } from '@deltachat-desktop/shared/logger.js'
-import { getLogger } from '@deltachat-desktop/shared/logger.js'
-import { LocaleData } from '@deltachat-desktop/shared/localize.js'
 import '@deltachat-desktop/shared/global.d.ts'
 
-import type { dialog, app } from 'electron'
 import { Runtime } from '@deltachat-desktop/runtime-interface'
 import { BaseDeltaChat, yerpc } from '@deltachat/jsonrpc-client'
 
-const log = getLogger('renderer/runtime')
+import type { dialog, app } from 'electron'
+import type { LocaleData } from '@deltachat-desktop/shared/localize.js'
+import type { getLogger as getLoggerFunction } from '@deltachat-desktop/shared/logger.js'
+import type { setLogHandler as setLogHandlerFunction } from '@deltachat-desktop/shared/logger.js'
+
 
 const { app_getPath, ipcRenderer: ipcBackend } = (window as any)
   .electron_functions as {
@@ -273,7 +273,7 @@ class ElectronRuntime implements Runtime {
     if (link.startsWith('http:') || link.startsWith('https:')) {
       ipcBackend.invoke('electron.shell.openExternal', link)
     } else {
-      log.error('tried to open a non http/https external link', {
+      this.log.error('tried to open a non http/https external link', {
         link,
       })
     }
@@ -292,7 +292,13 @@ class ElectronRuntime implements Runtime {
     }
     return this.runtime_info
   }
-  initialize() {
+
+  private log!: ReturnType<typeof getLoggerFunction>
+  // we need to get them from outside,
+  // because its a different bundle otherwise we would create a disconnected instance of the logging system 
+  initialize(setLogHandler: typeof setLogHandlerFunction, getLogger: typeof getLoggerFunction) {
+    this.log = getLogger('runtime/electron')
+
     // fetch vars
     this.rc_config = ipcBackend.sendSync('get-rc-config')
     this.runtime_info = ipcBackend.sendSync('get-runtime-info')
