@@ -26,3 +26,4 @@ useful env vars you can set
 | Variable (sometimes with value) | Effect |
 |---------------------------------|--------|
 |`NODE_OPTIONS=--enable-source-maps`| Make stacktraces in errors useful by enabling source map support in the main process |
+|`TEST_DIR=<dir>`| specify an alternative data directory |
