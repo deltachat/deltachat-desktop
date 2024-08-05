@@ -106,11 +106,9 @@ function log(
         LoggerVariants[level].symbol
       }${grey(channel)}:`
       if (!stacktrace) {
-        /* ignore-console-log */
-        console.log(beginning, ...args)
+        variant.log(beginning, ...args)
       } else {
-        /* ignore-console-log */
-        console.log(
+        variant.log(
           beginning,
           ...args,
           red(
