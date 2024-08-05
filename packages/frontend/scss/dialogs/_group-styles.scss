@@ -63,7 +63,7 @@ input.group-name-input {
     div {
       height: 20px;
       width: 20px;
-      @include color-svg('../images/icons/lead-pencil.svg', white);
+      @include color-svg('./images/icons/lead-pencil.svg', white);
     }
   }
 }

@@ -12,7 +12,7 @@ export function QRAvatar() {
   return (
     <div className='avatar'>
       <div className='content'>
-        <img className='avatar-qr-code-img' src='../images/icons/qr.svg' />
+        <img className='avatar-qr-code-img' src='./images/icons/qr.svg' />
       </div>
     </div>
   )

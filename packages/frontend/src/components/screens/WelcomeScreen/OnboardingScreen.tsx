@@ -71,7 +71,7 @@ export default function OnboardingScreen(props: Props) {
           <div className={styles.welcomeScreenSection}>
             <img
               className={styles.welcomeScreenImage}
-              src='../images/intro1.png'
+              src='./images/intro1.png'
             />
             <p className={styles.welcomeScreenTitle}>
               {tx('welcome_chat_over_email')}

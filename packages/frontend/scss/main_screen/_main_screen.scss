@@ -78,7 +78,7 @@
 
       .disapearing-messages-icon {
         display: inline-block;
-        @include color-svg('../images/clock.svg', var(--navBarGroupSubtitle));
+        @include color-svg('./images/clock.svg', var(--navBarGroupSubtitle));
       }
     }
   }

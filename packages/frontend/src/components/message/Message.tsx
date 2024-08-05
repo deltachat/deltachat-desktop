@@ -480,8 +480,8 @@ export default function Message(props: {
             className='verified-icon-info-msg'
             src={
               isProtectionBrokenMsg
-                ? '../images/verified_broken.svg'
-                : '../images/verified.svg'
+                ? './images/verified_broken.svg'
+                : './images/verified.svg'
             }
           />
         )}

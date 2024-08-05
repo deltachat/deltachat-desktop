@@ -11,7 +11,7 @@ $navbarBgLight: $borderColor;
 $outlineColor: #b9b9b9;
 $accentColor: #000000;
 $bgChatView: #e6dcd4;
-$bgImage: url('../images/background_light.svg');
+$bgImage: url('./images/background_light.svg');
 $bgMessageBubbleIncoming: $navbarBgLight;
 $bgMessageBubbleOutgoing: #efffde;
 $bgNavBar: #fff;
@@ -298,7 +298,7 @@ $scrollbarTransparency: 0.5;
   color: var(--messageMetadataIncoming);
 }
 .metadata.with-image-no-caption > .padlock-icon {
-  -webkit-mask: url(../images/padlock.svg) no-repeat center;
+  -webkit-mask: url(./images/padlock.svg) no-repeat center;
   -webkit-mask-size: 125%;
   background-color: var(--messagePadlockIncoming);
 }

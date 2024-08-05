@@ -42,7 +42,7 @@
       display: inline-block;
       vertical-align: text-bottom;
       @include color-svg(
-        '../images/download.svg',
+        './images/download.svg',
         var(--fullScreenMediaButtons)
       );
       cursor: pointer;
