@@ -133,19 +133,6 @@ ${error instanceof Error ? error.message : inspect(error, { depth: null })}`
     ev.returnValue = app.getPath(arg)
   })
 
-  ipcMain.handle('app-get-sticker-path', async (_ev, accountId) => {
-    const blobdir = await getDCJsonrpcClient().getBlobDir(accountId)
-    if (blobdir) {
-      const accountDir = mapPackagePath(blobdir)
-      log.info('accountDir: ' + accountDir)
-      const stickerFolderPath = join(accountDir, '../stickers')
-      log.info('stickerFolderPath: ' + stickerFolderPath)
-      return stickerFolderPath
-    } else {
-      throw Error('Failed to get account path!')
-    }
-  })
-
   ipcMain.handle('fileChooser', async (_ev, options) => {
     if (!mainWindow.window) {
       throw new Error('window does not exist, this should never happen')
@@ -238,7 +225,10 @@ ${error instanceof Error ? error.message : inspect(error, { depth: null })}`
   ipcMain.handle('electron.shell.openExternal', (_ev, url) =>
     shell.openExternal(url)
   )
-  ipcMain.handle('electron.shell.openPath', (_ev, path) => shell.openPath(path))
+  ipcMain.handle('electron.shell.openPath', (_ev, path) => {
+    // map sandbox path if on Windows
+    shell.openPath(mapPackagePath(path))
+  })
   ipcMain.handle('electron.clipboard.readText', () => {
     return clipboard.readText()
   })
