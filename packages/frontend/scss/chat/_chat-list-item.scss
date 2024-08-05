@@ -250,7 +250,7 @@
   }
   .pin_icon {
     flex-shrink: 0;
-    @include color-svg('../images/pin.svg', var(--globalText));
+    @include color-svg('./images/pin.svg', var(--globalText));
     width: 16px;
     height: 16px;
     margin-left: 6px;
@@ -263,7 +263,7 @@
   }
   .mute_icon {
     flex-shrink: 0;
-    @include color-svg('../images/mute.png', var(--globalText));
+    @include color-svg('./images/mute.png', var(--globalText));
     width: 16px;
     height: 16px;
   }

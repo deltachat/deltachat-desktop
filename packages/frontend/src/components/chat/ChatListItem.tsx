@@ -174,7 +174,7 @@ function ChatListItemArchiveLink({
       }`}
     >
       <div className='avatar'>
-        <img className='content' src='../images/icons/icon-archive.svg' />
+        <img className='content' src='./images/icons/icon-archive.svg' />
       </div>
       <div className='content'>
         <div className='archive-link'>{tx('chat_archived_chats_title')}</div>

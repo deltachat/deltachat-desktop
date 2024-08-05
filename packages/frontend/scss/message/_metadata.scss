@@ -22,7 +22,7 @@
     }
 
     & > .padlock-icon {
-      @include color-svg('../images/padlock.svg', white, 125%);
+      @include color-svg('./images/padlock.svg', white, 125%);
     }
 
     .status-icon.sending {

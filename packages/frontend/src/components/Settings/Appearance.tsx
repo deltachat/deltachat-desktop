@@ -300,7 +300,7 @@ function BackgroundSelector({
           <div
             onClick={onButton.bind(null, SetBackgroundAction.presetImage)}
             style={{
-              backgroundImage: `url(../images/backgrounds/thumb/${elem})`,
+              backgroundImage: `url(./images/backgrounds/thumb/${elem})`,
             }}
             key={elem}
             data-url={elem}

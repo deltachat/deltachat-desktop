@@ -15,7 +15,7 @@
 
   &.sending {
     @include color-svg(
-      '../images/sending.svg',
+      './images/sending.svg',
       var(--messageStatusIconSending)
     );
     animation: __status-icon--spinning 4s linear infinite;
@@ -24,15 +24,15 @@
     margin-left: 8px;
   }
   &.delivered {
-    @include color-svg('../images/sent.svg', var(--messageStatusIcon));
+    @include color-svg('./images/sent.svg', var(--messageStatusIcon));
   }
 
   &.read {
-    @include color-svg('../images/read.svg', var(--messageStatusIcon));
+    @include color-svg('./images/read.svg', var(--messageStatusIcon));
   }
 
   &.error {
-    @include color-svg('../images/error.svg', var(--errorColor));
+    @include color-svg('./images/error.svg', var(--errorColor));
     // ensure the element takes always the same width:
     width: 12px;
     margin-left: 8px;

@@ -9,7 +9,7 @@
     "build:ts": "node ./bin/build-frontend-ts.mjs",
     "build:source-map-support": "node ./bin/build-frontend-source_map_support.js",
     "build:scss": "sass ./scss/manifest.scss ./html-dist/main.css --embed-source-map --style=compressed",
-    "build:static": "node ../../bin/copy.js ../../static ./html-dist && node ../../bin/copy.js ./static ./html-dist",
+    "build:static": "node ../../bin/copy.js ../../static ./html-dist && node ../../bin/copy.js ./static ./html-dist && node ../../bin/copy.js ../../images ./html-dist/images",
     "build:themes": "sass themes/light.scss static/fallback-theme.css --style=compressed --embed-source-map && node ./bin/build-frontend-themes.js",
     "WIP": "exit 1 # scripts below this still are not done",
     "watch": "pnpm build:source-map-support && pnpm watch:ts & pnpm watch:static & pnpm watch:scss & pnpm watch:types",

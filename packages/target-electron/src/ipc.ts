@@ -16,7 +16,11 @@ import { versions } from 'process'
 import { fileURLToPath } from 'url'
 
 import { getLogger } from '../../shared/logger.js'
-import { getDraftTempDir, getLogsPath } from './application-constants.js'
+import {
+  getDraftTempDir,
+  getLogsPath,
+  htmlDistDir,
+} from './application-constants.js'
 import { LogHandler } from './log-handler.js'
 import { ExtendedAppMainProcess } from './types.js'
 import * as mainWindow from './windows/main.js'
@@ -86,7 +90,7 @@ ${error instanceof Error ? error.message : inspect(error, { depth: null })}`
   ipcMain.on('ondragstart', (event, filePath) => {
     event.sender.startDrag({
       file: filePath,
-      icon: join(__dirname, '../../images/electron-file-drag-out.png'),
+      icon: join(htmlDistDir(), 'electron-file-drag-out.png'),
     })
   })
 
@@ -255,7 +259,7 @@ ${error instanceof Error ? error.message : inspect(error, { depth: null })}`
     async (_ev, file: string, isDefaultPicture: boolean) => {
       const originalFilePath = !isDefaultPicture
         ? file
-        : join(__dirname, '../../images/backgrounds/', file)
+        : join(htmlDistDir(), 'images/backgrounds/', file)
 
       const bgDir = join(getConfigPath(), 'background')
       await rm(bgDir, { recursive: true, force: true })

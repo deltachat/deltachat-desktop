@@ -24,9 +24,9 @@
     div.content,
     img.content {
       border-radius: 0;
-      mask: url('../images/avatar/online-avatar-mask-smaller.svg') no-repeat
+      mask: url('./images/avatar/online-avatar-mask-smaller.svg') no-repeat
         center;
-      -webkit-mask: url('../images/avatar/online-avatar-mask-smaller.svg')
+      -webkit-mask: url('./images/avatar/online-avatar-mask-smaller.svg')
         no-repeat center;
       mask-size: var(--local-avatar-size);
       -webkit-mask-size: var(--local-avatar-size);
@@ -42,8 +42,8 @@
       width: var(--local-avatar-size);
 
       background-color: var(--recently-seen-indicator-color);
-      mask: url('../images/avatar/online-avatar-dot.svg') no-repeat center;
-      -webkit-mask: url('../images/avatar/online-avatar-dot.svg') no-repeat
+      mask: url('./images/avatar/online-avatar-dot.svg') no-repeat center;
+      -webkit-mask: url('./images/avatar/online-avatar-dot.svg') no-repeat
         center;
       mask-size: var(--local-avatar-size);
       -webkit-mask-size: var(--local-avatar-size);
