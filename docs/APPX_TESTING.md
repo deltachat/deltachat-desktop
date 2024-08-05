@@ -15,4 +15,10 @@ Now you have a certificate with which you can package a self-signed appx:
 npm run build && npm exec -- electron-builder --config ./electron-builder.json5 --config.win.certificateFile=../my.pfx --win
 ```
 
-To install your self-signed appx, you first need to import it: double click on the certificate and install it into the **Trusted People** store. After that you should be able to double click the appx package in the `dist/` folder to install it.
+To install your self-signed appx, you first need to import it: double click on the certificate and install it into the **Trusted People** store. After that you should be able to double click the appx package in the `dist/` folder to install it. If not have a look at the properties of that file (right click in Explorer), select Certificates => Details => View Certificate => Install => Store => Trusted People
+
+If signing fails with some "Timestamp server not reachable" error, have a look at System Settings => Date & Time => Synchronize to see if the server is reachable
+
+If you get an install error after having uninstalled the app before try logging out and in again before installing
+
+If you have installed deltachat-desktop manually with a setup.exe your AppData will be stored in AppData/Local/DeltaChat. If you install then an appx package the user data will also go there. If you remove the data from there before installing the appx package, your data will go to AppData/Local/Packages/merlinux_xxx/LocalCache/Local/DeltaChat/

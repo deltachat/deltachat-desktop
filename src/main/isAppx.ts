@@ -2,10 +2,11 @@ import { platform } from 'os'
 import { join } from 'path'
 import { app } from 'electron'
 import { readFile } from 'fs/promises'
+import { existsSync } from 'fs'
 
 export let appx = false
 
-export async function findOutIfWeAreRunningAsAppx() {
+export async function isWindowsStorePackage() {
   if (platform() === 'win32') {
     const app_path = app.getAppPath()
     try {
@@ -27,6 +28,28 @@ export async function findOutIfWeAreRunningAsAppx() {
       )
     }
   }
+}
+
+/**
+ * if installed as an appx package the config folder
+ * core sees only the relative part as path
+ * without the Packages/package_id/LocalCache part
+ * but that path is needed if client tries to open
+ * such a folder
+ */
+export function mapPackagePath(path: string) {
+  const basePath = 'AppData\\Local\\DeltaChat'
+  const packagePath =
+    'AppData\\Local\\Packages\\merlinux.DeltaChat_v2ry5hvxhdhyy\\LocalCache\\Local\\DeltaChat'
+  if (appx && path.indexOf(basePath) > -1) {
+    // only test for packagePath is reliable here, for basePath
+    // existsSync might return true even if it not exists!
+    const transformedPath = path.replace(basePath, packagePath)
+    if (existsSync(transformedPath)) {
+      return transformedPath
+    }
+  }
+  return path
 }
 
 export function getAppxPath(app_folder: string) {
