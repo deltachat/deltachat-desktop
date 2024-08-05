@@ -5,18 +5,17 @@ import { app as rawApp, ipcMain, nativeTheme } from 'electron'
 import { fileURLToPath } from 'url'
 
 import { Theme } from '../../shared/shared-types.js'
-import { getCustomThemesPath } from './application-constants.js'
+import { getCustomThemesPath, htmlDistDir } from './application-constants.js'
 import { ExtendedAppMainProcess } from './types.js'
 import * as mainWindow from './windows/main.js'
 import { getLogger } from '../../shared/logger.js'
 import { DesktopSettings } from './desktop_settings.js'
 
 const app = rawApp as ExtendedAppMainProcess
-const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const log = getLogger('main/themes')
 
-const dc_theme_dir = join(__dirname, '../../themes')
+const dc_theme_dir = join(htmlDistDir(), 'themes')
 
 function parseThemeMetaData(rawTheme: string): {
   name: string
