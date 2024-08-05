@@ -3,6 +3,16 @@
 ## [Unreleased][unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+<a id="1_46_2"></a>
+
+## [1.46.2] - 2024-08-05
+
+### Added
 - New keyboard shortcuts (experimental setting): Telegram-style Ctrl+Up/Down to select the message to reply to #3965
 - More shortcuts to switch between chats: `Ctrl + PageDown`, `Ctrl + PageUp`, `Ctrl + Tab`, `Ctrl + Shift + Tab` #3984
 - Better keyboard accessibility: make more elements focusable, add outline them #4005
@@ -2749,11 +2759,13 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.2...HEAD
+
+[1.46.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.1...v1.46.2
 
 [1.46.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.0...v1.46.1
 
-[1.45.5]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.5...v1.46.0
+[1.46.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.5...v1.46.0
 
 [1.45.5]: https://github.com/deltachat/deltachat-desktop/compare/v1.45.4...v1.45.5
 
