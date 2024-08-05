@@ -116,7 +116,7 @@ function Message({
             }}
           />
         )}
-        <div>{message2React(summaryText2 || '', true)}</div>
+        {message2React(summaryText2 || '', true)}
       </div>
       {isContactRequest && (
         <div className='label'>

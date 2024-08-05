@@ -110,6 +110,11 @@
         color: var(--chat-list-item-summary-text);
         user-select: none;
 
+        .truncated {
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
+
         & > .summary_thumbnail {
           height: 18px;
           width: 18px;
