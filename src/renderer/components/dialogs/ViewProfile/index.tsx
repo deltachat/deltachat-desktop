@@ -300,7 +300,7 @@ export function ViewProfileInner({
                   loadMoreRows={loadChats}
                   rowCount={chatListIds.length}
                   width={width}
-                  height={height}
+                  height={height - 2}
                   itemKey={index => 'key' + chatListIds[index]}
                   itemHeight={CHATLISTITEM_CHAT_HEIGHT}
                 >

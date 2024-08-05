@@ -62,6 +62,7 @@
 - fix Icon preview of latest WebXDC displayed when summary is reaction event #4062
 - fix stretched summaryPreviewIcon #4064
 - fix wrong paths in some Window installations #4058
+- fix "Contact info" card layout continuously jumping for contact names of certain length #4068
 
 <a id="1_46_1"></a>
 
