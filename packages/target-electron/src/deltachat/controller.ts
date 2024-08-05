@@ -8,7 +8,6 @@ import * as mainWindow from '../windows/main.js'
 import { ExtendedAppMainProcess } from '../types.js'
 import DCWebxdc from './webxdc.js'
 import { DesktopSettings } from '../desktop_settings.js'
-// import rc_config from '../rc.js'
 import { StdioServer } from './stdio_server.js'
 import rc_config from '../rc.js'
 import { migrateAccountsIfNeeded } from './migration.js'
@@ -16,8 +15,6 @@ import { migrateAccountsIfNeeded } from './migration.js'
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/deltachat')
 const logCoreEvent = getLogger('core/event')
-const logCoreEventM = getLogger('core/event/m')
-// const logMigrate = getLogger('main/migrate')
 
 class ElectronMainTransport extends yerpc.BaseTransport {
   constructor(private sender: (message: yerpc.Message) => void) {
@@ -175,17 +172,4 @@ export default class DeltaChatController extends EventEmitter {
   }
 
   readonly webxdc = new DCWebxdc(this)
-
-  onAll(event: string, accountId: number, data1: any, data2: any) {
-    if (event === 'DC_EVENT_WARNING') {
-      logCoreEventM.warn(accountId, event, data1, data2)
-    } else if (event === 'DC_EVENT_INFO') {
-      logCoreEventM.info(accountId, event, data1, data2)
-    } else if (event.startsWith('DC_EVENT_ERROR')) {
-      logCoreEventM.error(accountId, event, data1, data2)
-    } else if (app.rc['log-debug']) {
-      // in debug mode log all core events
-      logCoreEventM.debug(accountId, event, data1, data2)
-    }
-  }
 }
