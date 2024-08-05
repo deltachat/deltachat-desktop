@@ -29,7 +29,7 @@ import { DesktopSettings } from './desktop_settings.js'
 import { DesktopSettingsType, RuntimeInfo } from '../shared/shared-types.js'
 import { set_has_unread, updateTrayIcon } from './tray.js'
 import { openHtmlEmailWindow } from './windows/html_email.js'
-import { appx, getAppxPath } from './isAppx.js'
+import { appx, mapPackagePath } from './isAppx.js'
 import DeltaChatController from './deltachat/controller.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -134,17 +134,12 @@ ${error instanceof Error ? error.message : inspect(error, { depth: null })}`
   })
 
   ipcMain.handle('app-get-sticker-path', async (_ev, accountId) => {
-    let blobdir = await getDCJsonrpcClient().getBlobDir(accountId)
+    const blobdir = await getDCJsonrpcClient().getBlobDir(accountId)
     if (blobdir) {
-      log.info('Blobdir: ' + blobdir)
-      if (!existsSync(blobdir) && appx) {
-        log.info('Blobdir not existing in Appx mode ')
-        const appxPath = getAppxPath(getConfigPath())
-        blobdir = blobdir.replace(getConfigPath(), appxPath)
-        log.info('Blobdir in Appx mode:' + blobdir)
-      }
-
-      const stickerFolderPath = join(blobdir, '../stickers')
+      const accountDir = mapPackagePath(blobdir)
+      log.info('accountDir: ' + accountDir)
+      const stickerFolderPath = join(accountDir, '../stickers')
+      log.info('stickerFolderPath: ' + stickerFolderPath)
       return stickerFolderPath
     } else {
       throw Error('Failed to get account path!')

@@ -10,12 +10,12 @@ import {
   appWindowTitle,
 } from '../shared/constants.js'
 import { getLogger } from '../shared/logger.js'
-import { getConfigPath, getLogsPath } from './application-constants.js'
+import { getLogsPath } from './application-constants.js'
 import { LogHandler } from './log-handler.js'
 import * as mainWindow from './windows/main.js'
 import { DesktopSettings } from './desktop_settings.js'
 import { getCurrentLocaleDate, tx } from './load-translations.js'
-import { appx, getAppxPath } from './isAppx.js'
+import { mapPackagePath } from './isAppx.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -362,33 +362,13 @@ function getMenuTemplate(
             {
               label: tx('menu.view.developer.open.log.folder'),
               click: () => {
-                if (appx) {
-                  shell.openPath(
-                    getLogsPath().replace(
-                      getConfigPath(),
-                      getAppxPath(getConfigPath())
-                    )
-                  )
-                } else {
-                  shell.openPath(getLogsPath())
-                }
+                shell.openPath(mapPackagePath(getLogsPath()))
               },
             },
             {
               label: tx('menu.view.developer.open.current.log.file'),
               click: () => {
-                if (appx) {
-                  const file = join(
-                    getLogsPath().replace(
-                      getConfigPath(),
-                      getAppxPath(getConfigPath())
-                    ),
-                    basename(logHandler.logFilePath())
-                  )
-                  shell.openPath(file)
-                } else {
-                  shell.openPath(logHandler.logFilePath())
-                }
+                shell.openPath(mapPackagePath(logHandler.logFilePath()))
               },
             },
           ],
