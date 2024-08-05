@@ -42,6 +42,8 @@ export function mapPackagePath(path: string) {
   const packagePath =
     'AppData\\Local\\Packages\\merlinux.DeltaChat_v2ry5hvxhdhyy\\LocalCache\\Local\\DeltaChat'
   if (appx && path.indexOf(basePath) > -1) {
+    // only test for packagePath is reliable here, for basePath
+    // existsSync might return true even if it not exists!
     const transformedPath = path.replace(basePath, packagePath)
     if (existsSync(transformedPath)) {
       return transformedPath

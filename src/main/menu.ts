@@ -1,6 +1,6 @@
 import { BrowserWindow, Menu, shell } from 'electron'
 import { readFileSync } from 'fs'
-import { basename, join, dirname } from 'path'
+import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
 import {

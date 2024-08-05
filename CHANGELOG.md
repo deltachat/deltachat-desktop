@@ -61,7 +61,7 @@
 - fix HTML email content not being zoomed #4052
 - fix Icon preview of latest WebXDC displayed when summary is reaction event #4062
 - fix stretched summaryPreviewIcon #4064
-
+- fix wrong paths in some Window installations #4058
 
 <a id="1_46_1"></a>
 
