@@ -63,7 +63,7 @@ export default function Icon({
       )}
       style={{
         transform: `rotate(${rotation}deg)`,
-        WebkitMaskImage: `url(../images/icons/${icon}.svg)`,
+        WebkitMaskImage: `url(./images/icons/${icon}.svg)`,
         height: `${size}px`,
         width: `${size}px`,
       }}

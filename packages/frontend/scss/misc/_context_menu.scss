@@ -48,7 +48,7 @@
       height: 18px;
       margin-left: auto;
       @include color-svg(
-        '../images/icons/navigate_next.svg',
+        './images/icons/navigate_next.svg',
         var(--textPrimary),
         100%
       );

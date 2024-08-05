@@ -43,7 +43,7 @@ import type {
   ContactChatListItemData,
   MessageChatListItemData,
 } from './ChatListItemRow'
-import { isInviteLink } from '../../../shared/util'
+import { isInviteLink } from '../../../../shared/util'
 
 const enum LoadStatus {
   FETCHING = 1,
@@ -471,7 +471,7 @@ export default function ChatList(props: {
                   className='Icon'
                   style={{
                     WebkitMask:
-                      'url(../images/icons/plus.svg) no-repeat center',
+                      'url(./images/icons/plus.svg) no-repeat center',
                   }}
                 ></div>
               </div>

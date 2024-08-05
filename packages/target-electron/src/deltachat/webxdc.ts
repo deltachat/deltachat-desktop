@@ -242,10 +242,7 @@ export default class DCWebxdc extends SplitOut {
           navigateOnDragDrop: false,
           devTools: DesktopSettings.state.enableWebxdcDevTools,
           javascript: true,
-          preload: join(
-            htmlDistDir(),
-            'webxdc-preload.js'
-          ),
+          preload: join(htmlDistDir(), 'webxdc-preload.js'),
         },
         title: makeTitle(webxdcInfo, chatName),
         icon: app_icon || undefined,
@@ -590,8 +587,8 @@ If you think that's a bug and you need that permission, then please open an issu
       ) => {
         const path = await writeTempFileFromBase64(file_name, base64_content)
         let icon: string | Electron.NativeImage = join(
-          __dirname,
-          '../../../images/electron-file-drag-out.png'
+          htmlDistDir(),
+          'images/electron-file-drag-out.png'
         )
         if (icon_data_url) {
           icon = nativeImage.createFromDataURL(icon_data_url)

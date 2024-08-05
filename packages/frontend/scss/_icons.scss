@@ -4,7 +4,7 @@
   height: 48px;
 
   &.videocamera {
-    background-image: url('../images/videocamera.svg');
+    background-image: url('./images/videocamera.svg');
     background-repeat: no-repeat;
     margin: 5px;
     background-size: 38px;
@@ -59,7 +59,7 @@ i.material-svg-icon {
 }
 
 i.material-icon-schedule {
-  mask-image: url(../images/icons/schedule.svg);
-  -webkit-mask-image: url(../images/icons/schedule.svg);
+  mask-image: url(./images/icons/schedule.svg);
+  -webkit-mask-image: url(./images/icons/schedule.svg);
   transform: translate(0px, -0.07em);
 }
