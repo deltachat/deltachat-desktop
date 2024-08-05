@@ -132,9 +132,6 @@ export function openHtmlEmailWindow(
     window.show()
   })
 
-  window.once('focus', () => {
-    window.webContents.setZoomFactor(DesktopSettings.state.zoomFactor)
-  })
   window.on('close', () => {
     context_menu_handle?.()
     delete open_windows[window_id]
@@ -218,6 +215,10 @@ export function openHtmlEmailWindow(
     window
   )
   window.setBrowserView(sandboxedView)
+  sandboxedView.webContents.setZoomFactor(
+    DesktopSettings.state.zoomFactor *
+      Math.pow(1.2, window.webContents.getZoomLevel())
+  )
   let context_menu_handle = createContextMenu(window, sandboxedView.webContents)
 
   window.webContents.ipc.handle('html-view:more-menu', (_ev, { x, y }) => {
@@ -273,15 +274,28 @@ export function openHtmlEmailWindow(
   window.webContents.ipc.handle(
     'html-view:resize-content',
     (_ev, bounds: Electron.Rectangle) => {
+      const contentZoomFactor =
+        DesktopSettings.state.zoomFactor *
+        Math.pow(1.2, window.webContents.getZoomLevel())
+      const windowZoomFactor = window.webContents.getZoomFactor()
+
       const window_bounds = window.getBounds()
-      const new_y = Math.floor(window_bounds.height - bounds.height)
+      const content_size = window.getContentSize()
+      const new_w = bounds.width * windowZoomFactor
+      const new_h = bounds.height * windowZoomFactor
+      const new_y = content_size[1] - new_h
+
       sandboxedView?.setBounds({
-        ...bounds,
+        x: bounds.x,
         y: new_y,
+        width: new_w,
+        height: new_h,
       })
+      sandboxedView?.webContents.setZoomFactor(contentZoomFactor)
       DesktopSettings.update({ HTMLEmailWindowBounds: window_bounds })
     }
   )
+
   window.on('moved', () => {
     const window_bounds = window.getBounds()
     DesktopSettings.update({ HTMLEmailWindowBounds: window_bounds })
