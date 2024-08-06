@@ -128,7 +128,13 @@ export interface Runtime {
   } | null>
   resolveThemeAddress(address: string): Promise<string>
   saveBackgroundImage(file: string, isDefaultPicture: boolean): Promise<string>
+  
+  /** only support this if you have a real implementation for `isDroppedFileFromOutside`  */
   onDragFileOut(file: string): void
+  /** guard function that checks if it is a file from `onDragFileOut`, if so it denies the drop.
+   * It checks by checking if file path contains references to the deltachat bob dir,
+   */
+  isDroppedFileFromOutside(file: File): boolean
 
   // callbacks to set
   onChooseLanguage: ((locale: string) => Promise<void>) | undefined
