@@ -5,7 +5,7 @@
   "version": "1.47.0",
   "scripts": {
     "preinstall": "node ./bin/check-nodejs-version.js",
-    "check": "pnpm check:types && pnpm check:lint && pnpm check:format",
+    "check": "pnpm check:types && pnpm check:lint && pnpm check:format && pnpm check:target-versions",
     "check:types": "pnpm -r --no-bail check:types",
     "check:lint": "eslint . --ext .js,.ts,.tsx",
     "check:format": "prettier --check \"**/*.scss\" \"packages/**/*.{js,ts,tsx,json}\" \"**/*.md\"",
@@ -20,9 +20,8 @@
     "translations:pull": "tx pull -s -f && tx pull -f -a",
     "translations:convert": "node ./bin/build-shared-convert-translations.mjs ./_locales",
     "translations:update": "pnpm translations:pull && pnpm translations:convert && ./bin/find_complete_translations.sh",
-    "update-target-versions": "node ./bin/update_desktop_version.js && prettier --write --log-level=silent \"packages/target**/package.json\"",
-    "WIP": "exit 1 # scripts below this still are not done",
-    "test:package-versions": "node ./bin/test_package_versions"
+    "update:target-versions": "node ./bin/update_desktop_version.js && prettier --write --log-level=silent \"packages/target**/package.json\"",
+    "check:target-versions": "node ./bin/update_desktop_version.js --check"
   },
   "dependencies": {},
   "engineStrict": true,
