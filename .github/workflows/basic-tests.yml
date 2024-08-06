@@ -34,4 +34,4 @@ jobs:
         pnpm test-log-conventions
     - name: test if version is the same across packages
       run: |
-        pnpm test:package-versions
+        pnpm check:target-versions
