@@ -1,3 +1,5 @@
 CONTRIBUTORS.md
 CHANGELOG.md
 node_modules
+
+packages/target-electron/bundle_out
