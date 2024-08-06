@@ -40,7 +40,11 @@ class BrowserRuntime implements Runtime {
     throw new Error('Method not implemented.')
   }
   onDragFileOut(_file: string): void {
-    throw new Error('Method not implemented.')
+    // Browser can not implement this
+    return
+  }
+  isDroppedFileFromOutside(_file: File): boolean {
+    return true // Browser does not support dragging files out, so can only be from outside
   }
   emitUIReady(): void {
     throw new Error('Method not implemented.')

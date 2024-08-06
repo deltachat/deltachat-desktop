@@ -89,7 +89,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     messageInputRef
   )
 
-  const onDrop = (e: React.DragEvent<any>) => {
+  const onDrop = async (e: React.DragEvent<any>) => {
     if (chat === null) {
       log.warn('dropped something, but no chat is selected')
       return
@@ -98,27 +98,20 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     e.preventDefault()
     e.stopPropagation()
 
-    openDialog(AlertDialog, { message: 'DRAG AND DROP is BROKEN for now' })
-    return
-
-    const sanitizedFileList: Pick<File, 'name' | 'type'>[] = []
+    const sanitizedFileList: File[] = []
     {
-      const fileList: FileList = (e.target as any).files || e.dataTransfer.files
-      // TODO maybe add a clause here for windows because that uses backslash instead of slash
-      const forbiddenPathRegEx = /DeltaChat\/.+?\.sqlite-blobs\//gi
+      const fileList: FileList =
+        /* (e.target as any).files */ e.dataTransfer.files
       for (let i = 0; i < fileList.length; i++) {
-        const { name, type } = fileList[i]
-        // TODO filter out folders somehow
-        // if that is possible without a backend call to check whether the file exists,
-        // maybe some browser api like FileReader could help
-        // if (!forbiddenPathRegEx.test(path.replace('\\', '/'))) {
-        //   sanitizedFileList.push({ path, name, type })
-        // } else {
-        //   log.warn(
-        //     'Prevented a file from being send again while dragging it out',
-        //     name
-        //   )
-        // }
+        const file = fileList[i]
+        if (runtime.isDroppedFileFromOutside(file)) {
+          sanitizedFileList.push(file)
+        } else {
+          log.warn(
+            'Prevented a file from being send again while dragging it out',
+            file.name
+          )
+        }
       }
     }
 
@@ -128,14 +121,47 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
       return
     }
 
+    function writeTempFileFromFile(file: File): Promise<string> {
+      if (file.size > 1e8 /* 100mb */) {
+        log.warn(
+          `dropped file is bigger than 100mb ${file.name} ${file.size} ${file.type}`
+        )
+      }
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = event => {
+          if (reader.result === null) {
+            return reject(new Error('result empty'))
+          } else if (typeof reader.result !== 'string') {
+            return reject(new Error('wrong type'))
+          }
+          const base64Content = reader.result.split(',')[1]
+          runtime
+            .writeTempFileFromBase64(file.name, base64Content)
+            .then(tempUrl => {
+              resolve(tempUrl)
+            })
+            .catch(err => {
+              reject(err)
+            })
+        }
+        reader.onerror = err => {
+          reject(err)
+        }
+        reader.readAsDataURL(file)
+      })
+    }
+
     if (fileCount === 1) {
-      log.debug(`dropped image of type ${sanitizedFileList[0].type}`)
-      const msgViewType: Viewtype = sanitizedFileList[0].type.startsWith(
-        'image'
-      )
+      const file = sanitizedFileList[0]
+      log.debug(`dropped image of type ${file.type}`)
+      const msgViewType: Viewtype = file.type.startsWith('image')
         ? 'Image'
         : 'File'
-      // addFileToDraft(sanitizedFileList[0].path, msgViewType)
+
+      const path = await writeTempFileFromFile(sanitizedFileList[0])
+      await addFileToDraft(path, msgViewType)
+      await runtime.removeTempFile(path)
       return
     }
 
@@ -143,13 +169,20 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     openDialog(ConfirmSendingFiles, {
       sanitizedFileList,
       chatName: chat.name,
-      onClick: (isConfirmed: boolean) => {
+      onClick: async (isConfirmed: boolean) => {
         if (!isConfirmed) {
           return
         }
 
         for (const file of sanitizedFileList) {
-          // sendMessage(accountId, chat.id, { file: file.path, viewtype: 'File' })
+          const path = await writeTempFileFromFile(file)
+          sendMessage(accountId, chat.id, {
+            file: path,
+            viewtype: 'File',
+          }).then(() => {
+            // start sending other files, don't wait until last file is sent
+            runtime.removeTempFile(path)
+          })
         }
       },
     })
