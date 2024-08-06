@@ -1,6 +1,6 @@
 //@ts-check
 import { readdir, readFile, writeFile, rm, mkdir } from 'fs/promises'
-import { renderSync } from 'sass'
+import { compile, compileString, renderSync } from 'sass'
 import { join, dirname } from 'path'
 
 import { fileURLToPath } from 'url'
@@ -26,17 +26,18 @@ const dc_theme_out_dir = join(__dirname, '../html-dist/themes')
   try {
     const result = await Promise.all(
       themes.map(async theme => {
+        const start = performance.now()
         const theme_data = await readFile(join(dc_theme_in_dir, theme), 'utf-8')
 
-        const result = renderSync({
-          outputStyle: 'compressed',
-          data: theme_data,
-          includePaths: [dc_theme_in_dir],
+        const result = compileString(theme_data, {
+          style: 'compressed',
+          loadPaths: [dc_theme_in_dir],
           sourceMap: false,
         })
         const resulting_filename = theme.replace('.scss', '.css')
         await writeFile(join(dc_theme_out_dir, resulting_filename), result.css)
-        return [theme, result.stats.duration]
+        const end = performance.now()
+        return [theme, end - start]
       })
     )
     // result.forEach(([theme, duration]) => {
