@@ -202,7 +202,10 @@ class BrowserRuntime implements Runtime {
   }
 
   private log!: ReturnType<typeof getLoggerFunction>
-  initialize(setLogHandler: typeof setLogHandlerFunction, getLogger: typeof getLoggerFunction): void {
+  initialize(
+    setLogHandler: typeof setLogHandlerFunction,
+    getLogger: typeof getLoggerFunction
+  ): void {
     this.log = getLogger('runtime/browser')
     throw new Error('Method not implemented.')
   }
