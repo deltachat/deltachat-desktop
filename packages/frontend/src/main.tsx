@@ -5,7 +5,11 @@ import initWasm from '@deltachat/message_parser_wasm'
 import App from './App'
 import initSystemIntegration from './system-integration'
 import { exp } from './experimental'
-import { getLogger, printProcessLogLevelInfo, setLogHandler } from '../../shared/logger'
+import {
+  getLogger,
+  printProcessLogLevelInfo,
+  setLogHandler,
+} from '../../shared/logger'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 
 async function main() {

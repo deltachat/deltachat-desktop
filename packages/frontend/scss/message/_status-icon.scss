@@ -14,10 +14,7 @@
   margin-left: 2px;
 
   &.sending {
-    @include color-svg(
-      './images/sending.svg',
-      var(--messageStatusIconSending)
-    );
+    @include color-svg('./images/sending.svg', var(--messageStatusIconSending));
     animation: __status-icon--spinning 4s linear infinite;
     // ensure the element takes always the same width:
     width: 12px;

@@ -16,7 +16,6 @@ import useDialog from '../../hooks/dialog/useDialog'
 import useMessage from '../../hooks/chat/useMessage'
 
 import type { T } from '@deltachat/jsonrpc-client'
-import AlertDialog from '../dialogs/AlertDialog'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
@@ -129,7 +128,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
       }
       return new Promise((resolve, reject) => {
         const reader = new FileReader()
-        reader.onload = event => {
+        reader.onload = _ => {
           if (reader.result === null) {
             return reject(new Error('result empty'))
           } else if (typeof reader.result !== 'string') {

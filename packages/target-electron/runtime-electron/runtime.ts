@@ -19,12 +19,14 @@ import type { LocaleData } from '@deltachat-desktop/shared/localize.js'
 import type { getLogger as getLoggerFunction } from '@deltachat-desktop/shared/logger.js'
 import type { setLogHandler as setLogHandlerFunction } from '@deltachat-desktop/shared/logger.js'
 
-
-const { app_getPath, ipcRenderer: ipcBackend, getPathForFile } = (window as any)
-  .get_electron_functions() as {
+const {
+  app_getPath,
+  ipcRenderer: ipcBackend,
+  getPathForFile,
+} = (window as any).get_electron_functions() as {
   // see static/preload.js
   ipcRenderer: IpcRenderer
-  app_getPath: typeof app.getPath,
+  app_getPath: typeof app.getPath
   getPathForFile: typeof webUtils.getPathForFile
 }
 
@@ -86,7 +88,7 @@ class ElectronRuntime implements Runtime {
   onDragFileOut(file: string): void {
     ipcBackend.send('ondragstart', file)
   }
-  isDroppedFileFromOutside(file:File): boolean {
+  isDroppedFileFromOutside(file: File): boolean {
     const path = getPathForFile(file)
     const forbiddenPathRegEx = /DeltaChat\/.+?\.sqlite-blobs\//gi
     return !forbiddenPathRegEx.test(path.replace('\\', '/'))
@@ -301,8 +303,11 @@ class ElectronRuntime implements Runtime {
 
   private log!: ReturnType<typeof getLoggerFunction>
   // we need to get them from outside,
-  // because its a different bundle otherwise we would create a disconnected instance of the logging system 
-  initialize(setLogHandler: typeof setLogHandlerFunction, getLogger: typeof getLoggerFunction) {
+  // because its a different bundle otherwise we would create a disconnected instance of the logging system
+  initialize(
+    setLogHandler: typeof setLogHandlerFunction,
+    getLogger: typeof getLoggerFunction
+  ) {
     this.log = getLogger('runtime/electron')
 
     // fetch vars
