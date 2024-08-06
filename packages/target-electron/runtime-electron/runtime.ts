@@ -21,7 +21,7 @@ import type { setLogHandler as setLogHandlerFunction } from '@deltachat-desktop/
 
 
 const { app_getPath, ipcRenderer: ipcBackend, getPathForFile } = (window as any)
-  .electron_functions as {
+  .get_electron_functions() as {
   // see static/preload.js
   ipcRenderer: IpcRenderer
   app_getPath: typeof app.getPath,
