@@ -1,8 +1,7 @@
 import { existsSync, watchFile } from 'fs'
 import { readFile, readdir } from 'fs/promises'
-import { join, basename, dirname } from 'path'
+import { join, basename } from 'path'
 import { app as rawApp, ipcMain, nativeTheme } from 'electron'
-import { fileURLToPath } from 'url'
 
 import { Theme } from '../../shared/shared-types.js'
 import { getCustomThemesPath, htmlDistDir } from './application-constants.js'

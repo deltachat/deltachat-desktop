@@ -470,8 +470,7 @@ export default function ChatList(props: {
                 <div
                   className='Icon'
                   style={{
-                    WebkitMask:
-                      'url(./images/icons/plus.svg) no-repeat center',
+                    WebkitMask: 'url(./images/icons/plus.svg) no-repeat center',
                   }}
                 ></div>
               </div>

@@ -12,9 +12,8 @@ contextBridge.exposeInMainWorld('htmlview', {
 })
 
 async function updateTheme() {
-  window.document.getElementById(
-    'theme-vars'
-  ).innerText = await ipcRenderer.invoke('get-theme')
+  window.document.getElementById('theme-vars').innerText =
+    await ipcRenderer.invoke('get-theme')
 }
 ipcRenderer.on('theme-update', updateTheme)
 window.onload = updateTheme.bind(this)

@@ -49,7 +49,10 @@ export interface Runtime {
    * - sets the LogHandler
    * - event listeners on runtime events
    */
-  initialize(setLogHandler: typeof setLogHandlerFunction, getLogger: typeof getLoggerFunction): void
+  initialize(
+    setLogHandler: typeof setLogHandlerFunction,
+    getLogger: typeof getLoggerFunction
+  ): void
   reloadWebContent(): void
   openLogFile(): void
   getCurrentLogLocation(): string
@@ -128,7 +131,7 @@ export interface Runtime {
   } | null>
   resolveThemeAddress(address: string): Promise<string>
   saveBackgroundImage(file: string, isDefaultPicture: boolean): Promise<string>
-  
+
   /** only support this if you have a real implementation for `isDroppedFileFromOutside`  */
   onDragFileOut(file: string): void
   /** guard function that checks if it is a file from `onDragFileOut`, if so it denies the drop.
