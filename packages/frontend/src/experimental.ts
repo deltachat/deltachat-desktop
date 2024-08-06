@@ -20,6 +20,7 @@ only for debugging:
 - getContextEmitters()
 - printCallCounterResult() // for profiling you can track what is called how often with 'countCall(label: string)'
 - .rpc // only available in devmode, gives full access to jsonrpc
+- .runtime // only available in devmode, gives full access to runtime
     `)
   }
   constructor() {
@@ -66,6 +67,15 @@ only for debugging:
       )
     }
     return BackendRemote.rpc
+  }
+
+  get runtime() {
+    if (!runtime.getRC_Config().devmode) {
+      throw new Error(
+        "you need to enable devmode to access this. This is dangerous don't continue if you don't know what you are doing."
+      )
+    }
+    return runtime
   }
 }
 

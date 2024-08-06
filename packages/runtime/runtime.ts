@@ -154,6 +154,10 @@ export interface Runtime {
 
 export const runtime: Runtime = (window as any).r
 
+// delete runtime reference on window (`window.r`) so it can only be used by importing this file.
+// if you need to use it to debug stuff use the reference on `window.exp.runtime` instead, which is only available in --devmode
+delete (window as any).r
+
 // copied the ones from electron
 // TODO: remove the ones that we don't use / plan on using to make it simpler to implement for other targets/runtimes
 export type RuntimeAppPath =
