@@ -10,5 +10,6 @@
     "strict": true,
     "moduleResolution": "NodeNext"
   },
-  "include": ["./**/*.ts", "./**/*.js"]
+  "include": ["./**/*.ts", "./**/*.js"],
+  "exclude": ["./ts-compiled-for-tests"]
 }
