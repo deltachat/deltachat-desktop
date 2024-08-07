@@ -1,4 +1,4 @@
-name: Basic Code Checks
+name: Basic Code Checks & Tests
 
 on:
   push:
@@ -12,7 +12,7 @@ on:
       - '.vscode/**'
 
 jobs:
-  test:
+  check:
     name: Code Validation
     runs-on: ubuntu-latest
 
@@ -29,9 +29,20 @@ jobs:
     - name: Run all checks
       run: |
         pnpm check
-    - name: Check for misplaced console.log statements
+  test:
+    name: Code Tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js 20.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 20.x
+    - name: pnpm install
       run: |
-        pnpm test-log-conventions
-    - name: test if version is the same across packages
+        npm i -g pnpm
+        pnpm install --frozen-lockfile
+    - name: Run all checks
       run: |
-        pnpm check:target-versions
+        pnpm test
