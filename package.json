@@ -17,6 +17,7 @@
     "start:electron": "pnpm --filter=@deltachat-desktop/target-electron start",
     "build:electron": "pnpm --filter=@deltachat-desktop/target-electron build",
     "dev:electron": "pnpm --filter=@deltachat-desktop/target-electron dev",
+    "watch:electron": "pnpm --filter=@deltachat-desktop/target-electron watch",
     "translations:pull": "tx pull -s -f && tx pull -f -a",
     "translations:convert": "node ./bin/build-shared-convert-translations.mjs ./_locales",
     "translations:update": "pnpm translations:pull && pnpm translations:convert && ./bin/find_complete_translations.sh",

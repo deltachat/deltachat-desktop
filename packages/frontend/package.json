@@ -11,12 +11,11 @@
     "build:scss": "sass ./scss/manifest.scss ./html-dist/main.css --embed-source-map --style=compressed",
     "build:static": "node ../../bin/copy.js ../../static ./html-dist && node ../../bin/copy.js ./static ./html-dist && node ../../bin/copy.js ../../images ./html-dist/images",
     "build:themes": "sass themes/light.scss static/fallback-theme.css --style=compressed --embed-source-map && node ./bin/build-frontend-themes.js",
-    "WIP": "exit 1 # scripts below this still are not done",
     "watch": "pnpm build:source-map-support && pnpm watch:ts & pnpm watch:static & pnpm watch:scss & pnpm watch:types",
     "watch:ts": "pnpm build:ts -- -w",
-    "watch:types": "npx tsc -b src/renderer --pretty -w --preserveWatchOutput",
-    "watch:static": "pnpm build:static -- -w",
-    "watch:scss": "pnpm build:scss -- --watch"
+    "watch:types": "npx tsc --noEmit --pretty -w --preserveWatchOutput",
+    "watch:static": "node ../../bin/copy.js ../../static ./html-dist -w & node ../../bin/copy.js ./static ./html-dist -w & node ../../bin/copy.js ../../images ./html-dist/images -w",
+    "watch:scss": "pnpm build:scss --watch"
   },
   "browser": {
     "path": "path-browserify"
