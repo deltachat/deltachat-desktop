@@ -7,24 +7,35 @@ import { fileURLToPath } from 'url'
 import AdmZip from 'adm-zip'
 import { tmpdir } from 'os'
 import { readdir } from 'fs/promises'
-import { migrateAccountsIfNeeded } from '../../tsc-dist/main/deltachat/migration.js'
-import { getLogger, setLogHandler } from '../../tsc-dist/shared/logger.js'
+import { migrateAccountsIfNeeded } from '../src/deltachat/migration'
+import { getLogger, setLogHandler } from '@deltachat-desktop/shared/logger'
 import { startDeltaChat } from '@deltachat/stdio-rpc-server'
+import { RC_Config } from '@deltachat-desktop/shared/shared-types'
 
-//@ts-expect-error
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const log = getLogger('test')
 
-before(() => {
+before(async () => {
   if (process.env['DEBUG']) {
     setLogHandler(console.debug, {
       'log-debug': process.env['DEBUG'] == '2',
-    })
+    } as RC_Config)
   } else {
-    setLogHandler(() => {}, {})
+    setLogHandler(() => {}, {} as RC_Config)
   }
 })
+
+const zip = new AdmZip(join(__dirname, '../test_data/migration-test-data.zip'))
+
+// make test environment
+const testEnvironment = mkdtempSync(join(tmpdir(), 'deltachat-migration-test-'))
+
+zip.extractAllTo(testEnvironment)
+
+log.debug({ testEnvironment })
+
+const versions = await readdir(testEnvironment)
 
 /** the test data for these versions is broken, like only one account */
 const BROKEN_TEST_DATA = [
@@ -33,20 +44,6 @@ const BROKEN_TEST_DATA = [
 ]
 
 describe('/electron/main/account-migration', async () => {
-  const zip = new AdmZip(
-    join(__dirname, '../test_data/migration-test-data.zip')
-  )
-  // make test environment
-  const testEnvironment = mkdtempSync(
-    join(tmpdir(), 'deltachat-migration-test-')
-  )
-
-  zip.extractAllTo(testEnvironment)
-
-  log.debug({ testEnvironment })
-
-  const versions = await readdir(testEnvironment)
-
   for (const version of versions) {
     const versionPath = join(testEnvironment, version)
 
@@ -74,11 +71,13 @@ describe('/electron/main/account-migration', async () => {
       }
 
       // test after migration if both accounts are there
-      const eventLogger = (accountId, event) =>
+      const eventLogger = (accountId: number, event: any) =>
         log.debug('core-event', { accountId, ...event })
-      let tmpDC = await startDeltaChat(targetFolder, {
-        skipSearchInPath: true,
-        muteStdErr: process.env['DEBUG'] === undefined || process.env['RUST_LOG'] === undefined,
+      const tmpDC = await startDeltaChat(targetFolder, {
+        disableEnvPath: true,
+        muteStdErr:
+          process.env['DEBUG'] === undefined ||
+          process.env['RUST_LOG'] === undefined,
       })
       tmpDC.on('ALL', eventLogger)
       after(() => {

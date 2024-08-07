@@ -298,21 +298,36 @@ importers:
       '@electron/notarize':
         specifier: ^2.1.0
         version: 2.2.1
+      '@types/adm-zip':
+        specifier: ^0.5.5
+        version: 0.5.5
+      '@types/chai':
+        specifier: ^4.3.17
+        version: 4.3.17
       '@types/debounce':
         specifier: ^1.2.0
         version: 1.2.1
       '@types/mime-types':
         specifier: 'catalog:'
         version: 2.1.1
+      '@types/mocha':
+        specifier: ^10.0.7
+        version: 10.0.7
       '@types/node':
         specifier: ^20.12.11
         version: 20.12.11
       '@types/rc':
         specifier: ^1.1.0
         version: 1.2.1
+      adm-zip:
+        specifier: 0.5.12
+        version: 0.5.12
       application-config:
         specifier: ^1.0.1
         version: 1.0.1
+      chai:
+        specifier: ^5.1.1
+        version: 5.1.1
       chokidar:
         specifier: ^3.5.3
         version: 3.5.3
@@ -328,6 +343,9 @@ importers:
       esbuild:
         specifier: ^0.19.8
         version: 0.19.8
+      mocha:
+        specifier: ^10.7.0
+        version: 10.7.0
       rc:
         specifier: ^1.2.8
         version: 1.2.8
@@ -858,6 +876,9 @@ packages:
   '@tsconfig/node16@1.0.3':
     resolution: {integrity: sha512-yOlFc+7UtL/89t2ZhjPvvB/DeAr3r+Dq58IgzsFkOAvVC6NMJXmCGjbptdXdR9qsX7pKcTL+s87FtYREi2dEEQ==}
 
+  '@types/adm-zip@0.5.5':
+    resolution: {integrity: sha512-YCGstVMjc4LTY5uK9/obvxBya93axZOVOyf2GSUulADzmLhYE45u2nAssCs/fWBs1Ifq5Vat75JTPwd5XZoPJw==}
+
   '@types/cacheable-request@6.0.3':
     resolution: {integrity: sha512-IQ3EbTzGxIigb1I3qPZc1rWJnH0BmSKv5QYTalEwweFvyBDLSAe24zP0le/hyi7ecGfZVlIVAg4BZqb8WBwKqw==}
 
@@ -1026,6 +1047,10 @@ packages:
     resolution: {integrity: sha512-nc0Axzp/0FILLEVsm4fNwLCwMttvhEI263QtVPQcbpfZZ3ts0hLsZGOpE6czNlid7CJ9MlyH8reXkpsf3YUY4w==}
     engines: {node: '>=0.4.0'}
     hasBin: true
+
+  adm-zip@0.5.12:
+    resolution: {integrity: sha512-6TVU49mK6KZb4qG6xWaaM4C7sA/sgUMLy/JYMOzkcp3BvVLpW0fXDFQiIzAuxFCt/2+xD7fNIiPFAoLZPhVNLQ==}
+    engines: {node: '>=6.0'}
 
   agent-base@6.0.2:
     resolution: {integrity: sha512-RZNwNclF7+MS/8bDg70amg32dyeZGZxiDuQmZxKLAlQjr3jGyLx+4Kkk58UO7D2QdgFIQCovuSuZESne6RG6XQ==}
@@ -3339,6 +3364,10 @@ snapshots:
   '@tsconfig/node16@1.0.3':
     optional: true
 
+  '@types/adm-zip@0.5.5':
+    dependencies:
+      '@types/node': 20.12.11
+
   '@types/cacheable-request@6.0.3':
     dependencies:
       '@types/http-cache-semantics': 4.0.1
@@ -3541,6 +3570,8 @@ snapshots:
     optional: true
 
   acorn@8.11.2: {}
+
+  adm-zip@0.5.12: {}
 
   agent-base@6.0.2:
     dependencies:
