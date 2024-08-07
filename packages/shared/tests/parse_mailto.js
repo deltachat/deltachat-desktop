@@ -1,16 +1,22 @@
 //@ts-check
-import { describe } from 'mocha';
-import { expect } from 'chai';
-import { parseMailto } from '../../../tsc-dist/shared/parse_mailto.js'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* global it console */
+import { describe } from 'mocha'
+import { expect } from 'chai'
+import { parseMailto } from '../ts-compiled-for-tests/parse_mailto.js'
 
-describe('/shared/parse_mailto', () => { // the tests container
-  it('mailto-parsing', () => { // the single test
+describe('/shared/parse_mailto', () => {
+  // the tests container
+  it('mailto-parsing', () => {
+    // the single test
     expect(parseMailto('mailto:ex@example.com?body=hello')).to.deep.eq({
       to: 'ex@example.com',
       subject: undefined,
       body: 'hello',
     })
-    expect(parseMailto('mailto:ex@example.com?body=hello&subject=hi')).to.deep.eq({
+    expect(
+      parseMailto('mailto:ex@example.com?body=hello&subject=hi')
+    ).to.deep.eq({
       to: 'ex@example.com',
       subject: 'hi',
       body: 'hello',
@@ -33,13 +39,10 @@ describe('/shared/parse_mailto', () => { // the tests container
     // unescaped
     expect(
       parseMailto('mailto:deltabot@example.com?body=/web+https://github.com/')
-    ).to.deep.eq(
-      {
-        to: 'deltabot@example.com',
-        subject: undefined,
-        body: '/web https://github.com/',
-      }
-    )
+    ).to.deep.eq({
+      to: 'deltabot@example.com',
+      subject: undefined,
+      body: '/web https://github.com/',
+    })
   })
 })
-

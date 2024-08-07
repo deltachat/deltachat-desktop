@@ -1,16 +1,20 @@
 //@ts-check
-import { describe } from 'mocha';
-import { expect, assert } from 'chai';
-import fs from 'fs';
-import path, { dirname } from 'path';
-import { translate } from '../../../tsc-dist/shared/localize.js'
-import { fileURLToPath } from 'url';
-import { createRequire } from 'module';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+/* global it, console */
+import { describe } from 'mocha'
+import { expect, assert } from 'chai'
+import fs from 'fs'
+import path, { dirname } from 'path'
+import { translate } from '../ts-compiled-for-tests/localize.js'
+import { fileURLToPath } from 'url'
+import { createRequire } from 'module'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
-describe('/shared/localize', () => { // the tests container
-  it('translation files should be valid json', () => { // the single test
+describe('/shared/localize', () => {
+  // the tests container
+  it('translation files should be valid json', () => {
+    // the single test
     const dir = path.join(__dirname, '../../../_locales')
     fs.readdir(dir, (err, files) => {
       if (err) {
@@ -23,12 +27,10 @@ describe('/shared/localize', () => { // the tests container
           path.basename(f) !== '_languages.json' &&
           path.basename(f) !== '_untranslated_en.json'
       )
-      const name = (f) => f.split('.')[0]
-      expect(xmlFiles.map(name)).to.deep.eq(
-        jsonFiles.map(name)
-      )
+      const name = f => f.split('.')[0]
+      expect(xmlFiles.map(name)).to.deep.eq(jsonFiles.map(name))
       const require = createRequire(import.meta.filename)
-      const testFile = (file) => {
+      const testFile = file => {
         let json = null
         try {
           json = require(file)
@@ -42,7 +44,9 @@ describe('/shared/localize', () => { // the tests container
             const v2 = v1[k2]
             if (typeof v2 !== 'string') {
               console.error(
-                `> ${JSON.stringify(v2)} not a string (${file} -> ${k1} -> ${k2})`
+                `> ${JSON.stringify(
+                  v2
+                )} not a string (${file} -> ${k1} -> ${k2})`
               )
               return false
             }
@@ -72,10 +76,8 @@ describe('/shared/localize', () => { // the tests container
           })
         })
       }
-      expect(
-        jsonFiles.every(f => testFile(path.join(dir, f))),
-      ).to.eq(true)
-    });
+      expect(jsonFiles.every(f => testFile(path.join(dir, f)))).to.eq(true)
+    })
   })
 
   it('translations methods should work as expected', () => {
@@ -112,5 +114,4 @@ describe('/shared/localize', () => { // the tests container
     expect(tx('test_d', ['1'], { quantity: 1 })).to.eq('1 foo')
     expect(tx('test_d', ['5'], { quantity: 5 })).to.eq('5 other foos')
   })
-});
-
+})

@@ -23,3 +23,5 @@ test
 
 index.js
 .eslintrc.js
+
+packages/shared/ts-compiled-for-tests
