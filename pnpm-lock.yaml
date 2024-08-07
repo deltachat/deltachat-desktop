@@ -201,6 +201,9 @@ importers:
       eslint-plugin-react-hooks:
         specifier: ^4.6.2
         version: 4.6.2(eslint@8.57.0)
+      normalize.css:
+        specifier: ^8.0.1
+        version: 8.0.1
       sass:
         specifier: 'catalog:'
         version: 1.69.5
