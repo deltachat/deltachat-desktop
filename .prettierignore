@@ -3,4 +3,5 @@ CHANGELOG.md
 node_modules
 
 packages/target-electron/bundle_out
+packages/target-electron/tests/compiled
 packages/shared/ts-compiled-for-tests

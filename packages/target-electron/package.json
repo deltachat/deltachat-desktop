@@ -38,6 +38,8 @@
     "dev-inspect": "pnpm build && pnpm start --inspect --",
     "start": "NODE_OPTIONS=--enable-source-maps electron . --devmode --disable-http-cache --translation-watch",
     "clean": "rm -rf ./bundle_out ./html-dist ./dist",
+    "pretest": "esbuild --bundle --sourcemap --platform=node tests/*.ts --outdir=tests/compiled --external:mocha --external:chai --external:adm-zip --external:isomorphic-ws --external:@deltachat/jsonrpc-client --external:@deltachat/stdio-rpc-server --format=esm",
+    "test": "NODE_OPTIONS=--enable-source-maps mocha 'tests/compiled/*.js'",
     "WIP": "exit 1 # scripts below this still are not done",
     "pack": "pnpm pack:generate_config && pnpm pack:all",
     "pack:generate_config": "node ./build/gen-electron-builder-config.js && prettier --write ./electron-builder.json5 --log-level silent",
@@ -55,21 +57,27 @@
     "ws": "7.5.10"
   },
   "devDependencies": {
-    "@deltachat-desktop/shared": "link:../shared",
     "@deltachat-desktop/runtime-interface": "link:../runtime",
-    "rc": "^1.2.8",
-    "application-config": "^1.0.1",
-    "debounce": "^1.2.0",
-    "webxdc-types": "catalog:",
+    "@deltachat-desktop/shared": "link:../shared",
     "@electron/notarize": "^2.1.0",
+    "@types/adm-zip": "^0.5.5",
+    "@types/chai": "^4.3.17",
     "@types/debounce": "^1.2.0",
     "@types/mime-types": "catalog:",
+    "@types/mocha": "^10.0.7",
     "@types/node": "^20.12.11",
     "@types/rc": "^1.1.0",
+    "adm-zip": "0.5.12",
+    "application-config": "^1.0.1",
+    "chai": "^5.1.1",
     "chokidar": "^3.5.3",
+    "debounce": "^1.2.0",
     "electron": "^30.0.5",
     "electron-builder": "^24.13.3",
     "esbuild": "^0.19.8",
-    "typescript": "catalog:"
+    "mocha": "^10.7.0",
+    "rc": "^1.2.8",
+    "typescript": "catalog:",
+    "webxdc-types": "catalog:"
   }
 }

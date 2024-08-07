@@ -25,3 +25,4 @@ index.js
 .eslintrc.js
 
 packages/shared/ts-compiled-for-tests
+packages/target-electron/tests/compiled

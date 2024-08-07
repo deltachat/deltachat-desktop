@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "check:types": "tsc --noEmit",
-    "test": "esbuild *.ts --outdir=ts-compiled-for-tests --sourcemap && mocha 'tests/**/*.js'"
+    "pretest": "esbuild *.ts --outdir=ts-compiled-for-tests --sourcemap",
+    "test": "NODE_OPTIONS=--enable-source-maps mocha 'tests/**/*.js'"
   },
   "dependencies": {
     "@deltachat/jsonrpc-client": "catalog:",
