@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import classNames from 'classnames'
 
 import Dialog, {
   DialogBody,
@@ -19,8 +20,11 @@ import styles from './styles.module.scss'
 import type { DialogProps } from '../../../contexts/DialogContext'
 import type { T } from '@deltachat/jsonrpc-client'
 
+import useOpenViewProfileDialog from '../../../hooks/dialog/useOpenViewProfileDialog'
+
 export type Props = {
   reactionsByContact: T.Reactions['reactionsByContact']
+  onClose?: () => void
 }
 
 type ContactWithReaction = T.Contact & {
@@ -38,7 +42,10 @@ export default function ReactionsDialog({
       <DialogHeader title={tx('reactions')} />
       <DialogBody>
         <DialogContent>
-          <ReactionsDialogList reactionsByContact={reactionsByContact} />
+          <ReactionsDialogList
+            reactionsByContact={reactionsByContact}
+            onClose={onClose}
+          />
         </DialogContent>
       </DialogBody>
       <DialogFooter>
@@ -50,9 +57,10 @@ export default function ReactionsDialog({
   )
 }
 
-function ReactionsDialogList({ reactionsByContact }: Props) {
+function ReactionsDialogList({ reactionsByContact, onClose }: Props) {
   const accountId = selectedAccountId()
   const [contacts, setContacts] = useState<ContactWithReaction[]>([])
+  const openViewProfileDialog = useOpenViewProfileDialog({ onAction: onClose })
 
   useEffect(() => {
     const resolveContacts = async () => {
@@ -84,16 +92,25 @@ function ReactionsDialogList({ reactionsByContact }: Props) {
   return (
     <ul className={styles.reactionsDialogList}>
       {contacts.map(contact => {
+        const notFromSelf = accountId !== contact.id
         return (
-          <li key={contact.id} className={styles.reactionsDialogListItem}>
+          <li
+            key={contact.id}
+            className={classNames(styles.reactionsDialogListItem, {
+              [styles.reactionsDialogListClickable]: notFromSelf,
+            })}
+            onClick={() => {
+              if (notFromSelf) {
+                openViewProfileDialog(accountId, contact.id)
+              }
+            }}
+            role='button'
+          >
             <div className={styles.reactionsDialogAvatar}>
               <AvatarFromContact contact={contact} />
             </div>
             <div className={styles.reactionsDialogContactName}>
-              <ContactName
-                displayName={contact.displayName}
-                address={contact.address}
-              />
+              <ContactName displayName={contact.displayName} />
             </div>
             <div className={styles.reactionsDialogEmoji}>{contact.emoji}</div>
           </li>

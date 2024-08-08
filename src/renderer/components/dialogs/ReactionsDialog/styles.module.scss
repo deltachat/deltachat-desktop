@@ -6,6 +6,14 @@
   align-items: center;
   display: flex;
   justify-content: space-between;
+  border-radius: 10px;
+}
+
+.reactionsDialogListClickable {
+  cursor: pointer;
+  &:hover {
+    background-color: var(--chatListItemBgHover);
+  }
 }
 
 .reactionsDialogAvatar {
