@@ -5,6 +5,8 @@
 ### Added
 
 ### Changed
+- do not display email adresses in reactions dialog #4066
+- click on a row in reactions dialog opens contact profile #4066
 
 ### Fixed
 
