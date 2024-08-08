@@ -224,7 +224,7 @@
     <string name="menu_delete_chat">Delete Chat</string>
     <!-- Command to delete all messages in a chat. The chat itself will not be deleted but will be empty afterwards, so make sure to be different from "Delete Chat" here. "Clear" is a verb here, "Empty Chat" would also be fine (eg. in German "Chat leeren") -->
     <string name="clear_chat">Clear Chat</string>
-    <string name="ask_delete_named_chat">Are you sure you want to delete \"%1$s\"?</string>
+    <string name="ask_delete_named_chat">Delete chat with \"%1$s\"? It will no longer be shown in the chat list; its messages will remain on the server.</string>
     <string name="menu_delete_messages">Delete Messages</string>
     <string name="delete_contact">Delete Contact</string>
     <string name="menu_delete_location">Delete this Location?</string>

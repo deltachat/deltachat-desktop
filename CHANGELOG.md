@@ -5,6 +5,7 @@
 ### Added
 
 ### Changed
+- rephrase english translation for 'Delete Chat' #4050
 
 ### Fixed
 
