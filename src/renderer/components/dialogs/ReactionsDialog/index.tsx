@@ -19,6 +19,8 @@ import styles from './styles.module.scss'
 import type { DialogProps } from '../../../contexts/DialogContext'
 import type { T } from '@deltachat/jsonrpc-client'
 
+import useOpenViewProfileDialog from '../../../hooks/dialog/useOpenViewProfileDialog'
+
 export type Props = {
   reactionsByContact: T.Reactions['reactionsByContact']
 }
@@ -53,6 +55,7 @@ export default function ReactionsDialog({
 function ReactionsDialogList({ reactionsByContact }: Props) {
   const accountId = selectedAccountId()
   const [contacts, setContacts] = useState<ContactWithReaction[]>([])
+  const openViewProfileDialog = useOpenViewProfileDialog()
 
   useEffect(() => {
     const resolveContacts = async () => {
@@ -85,15 +88,17 @@ function ReactionsDialogList({ reactionsByContact }: Props) {
     <ul className={styles.reactionsDialogList}>
       {contacts.map(contact => {
         return (
-          <li key={contact.id} className={styles.reactionsDialogListItem}>
+          <li
+            key={contact.id}
+            className={styles.reactionsDialogListItem}
+            onClick={() => openViewProfileDialog(accountId, contact.id)}
+            role='button'
+          >
             <div className={styles.reactionsDialogAvatar}>
               <AvatarFromContact contact={contact} />
             </div>
             <div className={styles.reactionsDialogContactName}>
-              <ContactName
-                displayName={contact.displayName}
-                address={contact.address}
-              />
+              <ContactName displayName={contact.displayName} />
             </div>
             <div className={styles.reactionsDialogEmoji}>{contact.emoji}</div>
           </li>
