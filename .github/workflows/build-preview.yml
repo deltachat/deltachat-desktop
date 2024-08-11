@@ -39,7 +39,8 @@ jobs:
         npm i -g pnpm
         pnpm install --frozen-lockfile
         pnpm build
-        pnpm pack:generate_config
+        pnpm run pack:generate_config
+        pnpm run pack:patch-node-modules
     # Packaging and processing
     - name: LINUX electron builder
       if: runner.os == 'Linux'
