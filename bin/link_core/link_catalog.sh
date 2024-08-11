@@ -9,3 +9,6 @@ pnpm add --save @deltachat/jsonrpc-client@catalog: @deltachat/stdio-rpc-server@c
 
 cd ../frontend
 pnpm add @deltachat/jsonrpc-client@catalog:
+
+cd ../runtime
+pnpm add @deltachat/jsonrpc-client@catalog:

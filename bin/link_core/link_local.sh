@@ -13,3 +13,6 @@ pnpm add @deltachat/jsonrpc-client@link:../../$CORE_REPO_CHECKOUT/deltachat-json
 
 cd ../frontend
 pnpm add @deltachat/jsonrpc-client@link:../../$CORE_REPO_CHECKOUT/deltachat-jsonrpc/
+
+cd ../runtime
+pnpm add @deltachat/jsonrpc-client@catalog:
