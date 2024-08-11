@@ -253,12 +253,14 @@ Can only be tested in builds that have a desktop file. The simplest way to do th
 ### pnpm cli shell completion
 
 bash:
+
 ```bash
 pnpm completion bash > ~/completion-for-pnpm.bash
 echo 'source ~/completion-for-pnpm.bash' >> ~/.bashrc
 ```
 
 zsh:
+
 ```bash
 pnpm completion zsh > ~/completion-for-pnpm.zsh
 echo 'source ~/completion-for-pnpm.zsh' >> ~/.zshrc
