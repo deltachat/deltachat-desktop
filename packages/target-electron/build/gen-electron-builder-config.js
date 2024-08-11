@@ -7,6 +7,8 @@ import { isAppxSupportedLanguage } from './appx_languages.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
+const previewBuild = false
+
 const exclude_list = readFileSync(
   join(__dirname, 'packageignore_list'),
   'utf-8'
@@ -31,6 +33,20 @@ build['extraMetadata'] = {
   // restore old name before mono-repo
   name: 'deltachat-desktop',
 }
+
+if (previewBuild) {
+  build.appId = 'chat.delta.desktop.electron.dev'
+  //@ts-ignore
+  build.extraMetadata.name = 'deltachat-desktop-dev'
+  //@ts-ignore
+  build.extraMetadata.productName = 'DeltaChat-DevBuild'
+  const p = JSON.parse(
+    readFileSync(join(__dirname, '../../package.json'), { encoding: 'utf-8' })
+  )
+  //@ts-ignore
+  build.extraMetadata.version = p.version + '-DevBuild'
+}
+
 build['protocols'] = [
   {
     name: 'QR code data',
@@ -127,7 +143,7 @@ build['linux'] = {
 }
 
 build['deb'] = {
-  packageName: 'deltachat',
+  packageName: previewBuild ? 'deltachat-preview' : 'deltachat',
 }
 
 build['win'] = {
