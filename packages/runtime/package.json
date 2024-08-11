@@ -7,9 +7,7 @@
     "check:types": "tsc --noEmit"
   },
   "dependencies": {
-    "@deltachat-desktop/shared": "link:../shared"
-  },
-  "peerDependencies": {
-    "@deltachat/jsonrpc-client": "*"
+    "@deltachat-desktop/shared": "link:../shared",
+    "@deltachat/jsonrpc-client": "catalog:"
   }
 }

@@ -223,8 +223,8 @@ importers:
         specifier: link:../shared
         version: link:../shared
       '@deltachat/jsonrpc-client':
-        specifier: '*'
-        version: 1.141.2(ws@8.18.0)
+        specifier: 'catalog:'
+        version: 1.142.1(ws@8.18.0)
 
   packages/shared:
     dependencies:
@@ -391,9 +391,6 @@ packages:
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
-
-  '@deltachat/jsonrpc-client@1.141.2':
-    resolution: {integrity: sha512-VqffKbOVdAMiTGSePOs0UymWPzSfyb2G1fcXIJZ+mBjBVHV10dAXdY9ROMjLgZmwDGIJ/y2TED2TNlR/3AWmxw==}
 
   '@deltachat/jsonrpc-client@1.142.1':
     resolution: {integrity: sha512-nQDjtBJteXRr113LhfqiVuQrddBUau0hicrUp1XTuRdrBdv02JBG1/yC0BQ415QvwAI/cMFB6sAPt8xEvKccjQ==}
@@ -3037,16 +3034,6 @@ snapshots:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
     optional: true
-
-  '@deltachat/jsonrpc-client@1.141.2(ws@8.18.0)':
-    dependencies:
-      '@deltachat/tiny-emitter': 3.0.0
-      isomorphic-ws: 4.0.1(ws@8.18.0)
-      yerpc: 0.6.2
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
-      - ws
 
   '@deltachat/jsonrpc-client@1.142.1(ws@7.5.10)':
     dependencies:
