@@ -1,5 +1,13 @@
 const { copyFileSync } = require('fs')
-const { readdir, writeFile, rm, copyFile, cp, mkdir } = require('fs/promises')
+const {
+  readdir,
+  writeFile,
+  rm,
+  copyFile,
+  cp,
+  mkdir,
+  readFile,
+} = require('fs/promises')
 const { join } = require('path')
 
 const { Arch } = require('electron-builder')
@@ -27,7 +35,6 @@ module.exports = async context => {
   const source_dir = join(__dirname, '..')
 
   console.log({ context, source_dir })
-
   const isMacBuild = ['darwin', 'mas', 'dmg'].includes(
     context.electronPlatformName
   )
@@ -44,10 +51,47 @@ module.exports = async context => {
     '/app.asar.unpacked/node_modules/@deltachat'
   )
 
+  // #region workaround for including prebuilds
+
+  // workaround for pnpm and electron builder not working together nicely:
+  // copy prebuild packages in manually
+  // currently not needed
+
+  // const stdioServerVersion = JSON.parse(
+  //   await readFile(
+  //     join(source_dir, '/node_modules/@deltachat/stdio-rpc-server/package.json')
+  //   )
+  // ).version
+
+  // const workspaceNodeModules = join(source_dir, '../../node_modules')
+  // const workspacePnpmModules = join(workspaceNodeModules, '.pnpm')
+  // const dcStdioServers = (await readdir(workspacePnpmModules)).filter(
+  //   name =>
+  //     name.startsWith('@deltachat+stdio-rpc-server-') &&
+  //     name.endsWith(stdioServerVersion)
+  // )
+
+  // console.log({ dcStdioServers })
+
+
+  // for (const serverPackage of dcStdioServers) {
+  //   const name = serverPackage.split('+')[1].split('@')[0]
+  //   await cp(
+  //     join(workspacePnpmModules, serverPackage),
+  //     join(prebuild_dir, name),
+  //     { recursive: true }
+  //   )
+  // }
+  // #endregion
+
   // delete not needed prebuilds
   // ---------------------------------------------------------------------------------
-  if (!env['NO_ASAR']){
-    await deleteNotNeededPrebuildsFromUnpackedASAR(prebuild_dir, context, isMacBuild)
+  if (!env['NO_ASAR']) {
+    await deleteNotNeededPrebuildsFromUnpackedASAR(
+      prebuild_dir,
+      context,
+      isMacBuild
+    )
   }
 
   // package msvc redist
@@ -105,7 +149,11 @@ async function copyMapXdcToUnpackedASAR(resources_dir, source_dir) {
   await cp(join(source_dir, 'html-dist/xdcs'), destination, { recursive: true })
 }
 
-async function deleteNotNeededPrebuildsFromUnpackedASAR(prebuild_dir, context, isMacBuild) {
+async function deleteNotNeededPrebuildsFromUnpackedASAR(
+  prebuild_dir,
+  context,
+  isMacBuild
+) {
   const prebuilds = await readdir(prebuild_dir)
 
   const toDelete = prebuilds.filter(name => {
@@ -115,7 +163,8 @@ async function deleteNotNeededPrebuildsFromUnpackedASAR(prebuild_dir, context, i
     } else if (
       // convertArch(context.arch) === 'universal' && does not work for some reason
       isMacBuild &&
-      (architecture === 'arm64' || architecture === 'x64')) {
+      (architecture === 'arm64' || architecture === 'x64')
+    ) {
       return false
     } else {
       return true
@@ -136,4 +185,3 @@ async function deleteNotNeededPrebuildsFromUnpackedASAR(prebuild_dir, context, i
     )
   }
 }
-
