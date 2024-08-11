@@ -5,8 +5,18 @@
 ### Added
 
 ### Changed
+- dev: transformed repo into monorepo
+- dev: switched from `npm` to `pnpm`
+- dev: esbuild bundling for electron main process js (+minification for releases)
+- changed implementation for accepting dropped in files, use browser apis instead of electron specific hack.
+- dev: improved `./bin/test_for_missing_translations.sh` script: It is now more correct, helpful and faster
 
 ### Fixed
+- dev: proper native source-map support during development for main process
+- dev: use correct log level when logging to console in main process
+- security: harden electron_functions, only runtime can use them now
+- security: harden runtime interface by deleting the reference on window (`window.r`) after the first use. For development it is now accessible at `exp.runtime` but only in `--devmode` like `exp.rpc`
+- dev: update `./bin/update_background_thumbnails.sh` script
 
 <a id="1_46_6"></a>
 
