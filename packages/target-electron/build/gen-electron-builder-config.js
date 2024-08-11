@@ -19,12 +19,18 @@ const files = [
   // start with including all files
   '**/*',
   ...exclude_list,
+  { from: '../../_locales', to: '_locales', filter: '*.json' },
 ]
 const env = process.env
 
 /** @type {import('./types').DeepWriteable<import('electron-builder').Configuration>} */
 const build = {}
 build['appId'] = 'chat.delta.desktop.electron'
+build['extraMetadata'] = {
+  //@ts-ignore
+  // restore old name before mono-repo
+  name: 'deltachat-desktop',
+}
 build['protocols'] = [
   {
     name: 'QR code data',
@@ -49,7 +55,7 @@ build['fileAssociations'] = [
 ]
 
 build['files'] = files
-build['asarUnpack'] = []
+build['asarUnpack'] = [] // ['./node_modules/@deltachat/stdio-rpc-server']
 // 'html-dist/xdcs/' should be in 'asarUnpack', but that had "file already exists" errors in the ci
 // see https://github.com/deltachat/deltachat-desktop/pull/3876, so we now do it "manually" in the afterPackHook
 
@@ -81,7 +87,7 @@ build['mac'] = {
   gatekeeperAssess: true,
   hardenedRuntime: true,
   icon: 'resources/icon.icns',
-  provisioningProfile: './../embedded.provisionprofile',
+  provisioningProfile: '../../../embedded.provisionprofile',
   files: [...files, PREBUILD_FILTERS.NOT_LINUX, PREBUILD_FILTERS.NOT_WINDOWS],
   darkModeSupport: true,
 }
@@ -119,6 +125,11 @@ build['linux'] = {
   icon: 'build/icon.icns', // electron builder gets the icon out of the mac icon archive
   description: 'The Email messenger (https://delta.chat)',
 }
+
+build['deb'] = {
+  packageName: 'deltachat',
+}
+
 build['win'] = {
   icon: 'images/deltachat.ico',
   files: [...files, PREBUILD_FILTERS.NOT_MAC, PREBUILD_FILTERS.NOT_LINUX],

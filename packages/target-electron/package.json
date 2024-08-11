@@ -29,7 +29,8 @@
   "productName": "DeltaChat",
   "homepage": "https://delta.chat",
   "scripts": {
-    "check:types": "tsc --noEmit && tsc --noEmit -p runtime-electron",
+    "check:types": "tsc --noEmit && tsc --noEmit -p runtime-electron || node ./bin/printCheckWarning.js",
+    "build4production": "NODE_ENV=production pnpm build && pnpm -w check:types",
     "build": "pnpm build:backend && pnpm --filter=@deltachat-desktop/frontend build && pnpm build:compose-frontend",
     "build:backend": "node ./bin/build.js",
     "build:runtime-impl": "pnpm esbuild --bundle --minify --sourcemap --outdir=./html-dist runtime-electron/runtime.ts",
@@ -42,9 +43,9 @@
     "clean": "rm -rf ./bundle_out ./html-dist ./dist",
     "pretest": "esbuild --bundle --sourcemap --platform=node tests/*.ts --outdir=tests/compiled --external:mocha --external:chai --external:adm-zip --external:isomorphic-ws --external:@deltachat/jsonrpc-client --external:@deltachat/stdio-rpc-server --format=esm",
     "test": "NODE_OPTIONS=--enable-source-maps mocha 'tests/compiled/*.js'",
-    "WIP": "exit 1 # scripts below this still are not done",
-    "pack": "pnpm pack:generate_config && pnpm pack:all",
     "pack:generate_config": "node ./build/gen-electron-builder-config.js && prettier --write ./electron-builder.json5 --log-level silent",
+    "pack:patch-node-modules": "node ../../bin/writeFlatDependencies.js packages/target-electron node_modules",
+    "pack": "pnpm pack:generate_config && pnpm run pack:patch-node-modules && pnpm pack:all && pnpm -w run reset:node_modules",
     "pack:win": "electron-builder --config ./electron-builder.json5 --win nsis portable",
     "pack:mac": "electron-builder --config ./electron-builder.json5 --mac dmg mas",
     "pack:linux:dir": "electron-builder --config ./electron-builder.json5 --linux --dir",
@@ -54,7 +55,6 @@
   "dependencies": {
     "@deltachat/jsonrpc-client": "catalog:",
     "@deltachat/stdio-rpc-server": "catalog:",
-    "deltachat-jsonrpc": "link:../../../deltachat-core-rust/deltachat-jsonrpc",
     "mime-types": "catalog:",
     "ws": "7.5.10"
   },

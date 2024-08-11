@@ -24,13 +24,14 @@
     "update:target-versions": "node ./bin/update_desktop_version.js && prettier --write --log-level=silent \"packages/target**/package.json\"",
     "check:target-versions": "node ./bin/update_desktop_version.js --check",
     "test": "pnpm -r --no-bail test",
-    "test-and-check": "pnpm test && pnpm check"
+    "test-and-check": "pnpm test && pnpm check",
+    "reset:node_modules": "rm -rf node_modules && rm -rf packages/*/node_modules || true && pnpm i"
   },
   "dependencies": {},
   "engineStrict": true,
   "engines": {
     "node": "^20",
-    "pnpm": "9.6.0"
+    "pnpm": "^9.6.0"
   },
   "pnpm": {
     "supportedArchitectures": {

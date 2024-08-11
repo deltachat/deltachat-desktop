@@ -18,9 +18,7 @@
 
     "watch": "pnpm watch:shared & pnpm watch:frontend",
     "watch:shared": "pnpm watch:shared:translations",
-    "watch:shared:translations": "pnpm build:shared:translations -- -w",
-    
-    "build4production": "NODE_ENV=production pnpm build && pnpm check:types"
+    "watch:shared:translations": "pnpm build:shared:translations -- -w"
 
   },
 

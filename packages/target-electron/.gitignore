@@ -2,3 +2,5 @@ html-dist
 bundle_out
 themes
 tests/compiled
+
+electron-builder.json5
