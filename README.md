@@ -146,14 +146,16 @@ $ cd deltachat-desktop
 $ npm i -g pnpm
 
 # Install dependencies
-$ pnpm install
+$ pnpm -w install
 
 # Build the app (only needed on the first time or if the code was changed)
-$ pnpm build
+$ pnpm -w build
 
 # Start the application:
-$ pnpm start
+$ pnpm -w start
 ```
+
+> `-w` means workspace root package, with this you don't need to have your current working directory at the repo-root to run those scripts.
 
 For development with local deltachat-core read the [docs](docs/UPDATE_CORE.md)
 

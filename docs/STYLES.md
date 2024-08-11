@@ -1,6 +1,6 @@
 # CSS Guidelines
 
-We use `prettier` for CSS formatting. Use `pnpm fix:format` before committing to format the code.
+We use `prettier` for CSS formatting. Use `pnpm -w fix:format` before committing to format the code.
 
 ## How we go about styles
 
