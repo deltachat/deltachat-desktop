@@ -7,6 +7,7 @@ import { isAppxSupportedLanguage } from './appx_languages.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
+// this can be changed by ../../../bin/github-actions/devbuild.js
 const previewBuild = false
 
 const exclude_list = readFileSync(
