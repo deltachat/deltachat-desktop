@@ -1,7 +1,6 @@
 import { BrowserWindow, Menu, shell } from 'electron'
 import { readFileSync } from 'fs'
-import { join, dirname } from 'path'
-import { fileURLToPath } from 'url'
+import { join } from 'path'
 
 import {
   gitHubIssuesUrl,
