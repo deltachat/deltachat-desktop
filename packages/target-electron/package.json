@@ -31,7 +31,8 @@
   "scripts": {
     "check:types": "tsc --noEmit && tsc --noEmit -p runtime-electron || node ./bin/printCheckWarning.js",
     "build4production": "NODE_ENV=production pnpm build && pnpm -w check:types",
-    "build": "pnpm build:backend && pnpm --filter=@deltachat-desktop/frontend build && pnpm build:compose-frontend",
+    "build": "pnpm build:locales && pnpm build:backend && pnpm --filter=@deltachat-desktop/frontend build && pnpm build:compose-frontend",
+    "build:locales": "pnpm -w translations:convert",
     "build:backend": "node ./bin/build.js",
     "build:runtime-impl": "pnpm esbuild --bundle --minify --sourcemap --outdir=./html-dist runtime-electron/runtime.ts",
     "build:compose-frontend": "node ../../bin/copy.js ../frontend/html-dist ./html-dist && node ../../bin/copy.js ./static ./html-dist && pnpm build:runtime-impl",

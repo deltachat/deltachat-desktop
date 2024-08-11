@@ -43,6 +43,8 @@ jobs:
       run: |
         npm i -g pnpm
         pnpm install --frozen-lockfile
+    - name: Build
+      run: pnpm build:electron
     - name: Run all checks
       run: |
         pnpm test
