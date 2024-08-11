@@ -20,6 +20,8 @@ GitHub CI builds and publishes [stdio-rpc-server](https://github.com/deltachat/d
 
 > bash shortcut `node ./bin/link_core/link_version.js 1.142.2`
 
+> make sure you are in the repository root, otherwise the command will not work
+
 ## Update to a development version
 
 So you are prototyping a new function and have a desktop and a core pr and want to link the core pr in the desktop pr so that the CI can properly test your pull request.

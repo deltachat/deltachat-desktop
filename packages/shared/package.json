@@ -9,8 +9,8 @@
   },
   "dependencies": {
     "@deltachat/jsonrpc-client": "catalog:",
-    "error-stack-parser": "^2.0.7",
-    "stackframe": "^1.2.1"
+    "error-stack-parser": "^2.1.4",
+    "stackframe": "^1.3.4"
   },
   "devDependencies": {
     "@types/chai": "^4.3.17",
