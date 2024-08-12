@@ -42,7 +42,7 @@ if (previewBuild) {
   //@ts-ignore
   build.extraMetadata.productName = 'DeltaChat-DevBuild'
   const p = JSON.parse(
-    readFileSync(join(__dirname, '../../package.json'), { encoding: 'utf-8' })
+    readFileSync(join(__dirname, '../package.json'), { encoding: 'utf-8' })
   )
   //@ts-ignore
   build.extraMetadata.version = p.version + '-DevBuild'
