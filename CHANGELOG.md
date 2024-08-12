@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+- Fix account import in BACKUP2 format #4075
 
 <a id="1_46_2"></a>
 
