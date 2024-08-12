@@ -103,7 +103,7 @@ build['mac'] = {
   },
   gatekeeperAssess: true,
   hardenedRuntime: true,
-  icon: 'resources/icon.icns',
+  icon: 'build/icon.icns',
   provisioningProfile: '../../../embedded.provisionprofile',
   files: [...files, PREBUILD_FILTERS.NOT_LINUX, PREBUILD_FILTERS.NOT_WINDOWS],
   darkModeSupport: true,
@@ -148,7 +148,7 @@ build['deb'] = {
 }
 
 build['win'] = {
-  icon: 'images/deltachat.ico',
+  icon: 'html-dist/images/deltachat.ico',
   files: [...files, PREBUILD_FILTERS.NOT_MAC, PREBUILD_FILTERS.NOT_LINUX],
 }
 

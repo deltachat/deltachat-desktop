@@ -8,6 +8,7 @@ import { ExtendedAppMainProcess } from './types.js'
 import { getLogger } from '../../shared/logger.js'
 import { DesktopSettings } from './desktop_settings.js'
 import { tx } from './load-translations.js'
+import { htmlDistDir } from './application-constants.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -27,7 +28,7 @@ export function set_has_unread(new_has_unread: boolean) {
 }
 
 function TrayImage(): string | NativeImage {
-  const trayIconFolder = join(__dirname, '..', '..', 'images/tray')
+  const trayIconFolder = join(htmlDistDir(), 'images/tray')
   if (process.platform === 'darwin') {
     const image = nativeImage
       .createFromPath(join(trayIconFolder, 'tray-icon-mac.png'))
