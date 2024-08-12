@@ -51,6 +51,7 @@ jobs:
         pnpm electron-builder --publish never --linux AppImage
     - name: LINUX renaming / upload Preperation
       if: runner.os == 'Linux'
+      working-directory: packages/target-electron
       run: |
         cd dist
         mkdir preview
@@ -72,6 +73,7 @@ jobs:
         pnpm electron-builder --publish never --mac mas dmg -c.mac.identity=null --universal --config.afterSign="stub.cjs"
     - name: MAC renaming / upload Preperation
       if: runner.os == 'macOS'
+      working-directory: packages/target-electron
       run: |
         ls -lah dist
         mkdir -p dist/preview
@@ -88,8 +90,8 @@ jobs:
         pnpm electron-builder --win portable --config.artifactName="deltachat-desktop-${{ steps.prepare.outputs.prid }}.portable.exe"
     - name: WINDOWS renaming / upload Preperation
       if: runner.os == 'Windows'
+      working-directory: packages/target-electron/dist
       run: |
-        cd dist
         dir
         mkdir preview
         move deltachat-desktop-${{ steps.prepare.outputs.prid }}.portable.exe preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.portable.exe
@@ -102,7 +104,7 @@ jobs:
       run: |
         echo -e "${{ secrets.KEY }}" >__TEMP_INPUT_KEY_FILE
         chmod 600 __TEMP_INPUT_KEY_FILE
-        scp -o StrictHostKeyChecking=no -v -i __TEMP_INPUT_KEY_FILE -P "22" -r dist/preview/* "${{ secrets.USERNAME }}"@"download.delta.chat":"/var/www/html/download/desktop/preview/"
+        scp -o StrictHostKeyChecking=no -v -i __TEMP_INPUT_KEY_FILE -P "22" -r packages/target-electron/dist/preview/* "${{ secrets.USERNAME }}"@"download.delta.chat":"/var/www/html/download/desktop/preview/"
       continue-on-error: true
     - name: "Post links to details"
       if: steps.upload.outcome == 'success'
@@ -115,4 +117,4 @@ jobs:
       uses: actions/upload-artifact@master
       with:
         name: ${{ matrix.os }} output
-        path: dist/preview/
+        path: packages/target-electron/dist/preview/
