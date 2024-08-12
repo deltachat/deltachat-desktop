@@ -92,7 +92,9 @@ const PREBUILD_FILTERS = {
 }
 
 build['mac'] = {
-  appId: 'chat.delta.desktop.electron',
+  appId: previewBuild
+    ? 'chat.delta.desktop.electron.devbuild'
+    : 'chat.delta.desktop.electron',
   category: 'public.app-category.social-networking',
   entitlements: 'build/entitlements.mac.plist',
   entitlementsInherit: 'build/entitlements.mac.plist',
