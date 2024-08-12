@@ -24,6 +24,7 @@ const ALLOWED_QR_CODES_ON_WELCOME_SCREEN: T.Qr['kind'][] = [
   'askVerifyContact',
   'askVerifyGroup',
   'backup',
+  'backup2',
   'login',
   'text',
   'url',
@@ -239,7 +240,7 @@ export default function useProcessQR() {
       }
 
       // DCBACKUP: Ask the user if they want to set up a new device
-      if (qr.kind === 'backup') {
+      if (qr.kind === 'backup' || qr.kind === 'backup2') {
         if (isLoggedIn) {
           await openAlertDialog({
             message: tx('Please logout first'),
