@@ -9,7 +9,7 @@ const AppFilesDir = join(__dirname, '..')
 
 export function appIcon() {
   const iconFormat = process.platform === 'win32' ? '.ico' : '.png'
-  return `${join(AppFilesDir, 'images', 'deltachat' + iconFormat)}`
+  return `${join(htmlDistDir(), 'images', 'deltachat' + iconFormat)}`
 }
 
 export function htmlDistDir() {
