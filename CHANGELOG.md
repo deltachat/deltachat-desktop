@@ -7,6 +7,15 @@
 ### Changed
 
 ### Fixed
+
+<a id="1_46_3"></a>
+
+## [1.46.3] - 2024-08-14
+
+### Changed
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.142.4`
+
+### Fixed
 - Fix account import in BACKUP2 format #4075
 
 <a id="1_46_2"></a>
@@ -2760,7 +2769,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.2...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.3...HEAD
+
+[1.46.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.2...v1.46.3
 
 [1.46.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.1...v1.46.2
 
