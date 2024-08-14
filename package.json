@@ -1,6 +1,6 @@
 {
   "name": "deltachat-desktop",
-  "version": "1.46.2",
+  "version": "1.46.3",
   "description": "Desktop Application for delta.chat",
   "main": "index.js",
   "type": "module",
@@ -78,9 +78,9 @@
   },
   "dependencies": {
     "@blueprintjs/core": "^4.20.2",
-    "@deltachat/jsonrpc-client": "^1.142.1",
+    "@deltachat/jsonrpc-client": "^1.142.4",
     "@deltachat/message_parser_wasm": "^0.11.0",
-    "@deltachat/stdio-rpc-server": "^1.142.1",
+    "@deltachat/stdio-rpc-server": "^1.142.4",
     "@emoji-mart/data": "1.1.2",
     "@emoji-mart/react": "1.1.1",
     "application-config": "^1.0.1",
