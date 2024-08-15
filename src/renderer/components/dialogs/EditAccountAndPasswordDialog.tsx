@@ -121,8 +121,7 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
   ])
 
   const onOk = useCallback(async () => {
-    const update = await onUpdate()
-    if (update) onClose()
+    await onUpdate()
   }, [onClose, onUpdate])
 
   if (accountSettings === null) return null
