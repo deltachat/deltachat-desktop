@@ -8,6 +8,18 @@
 
 ### Fixed
 
+<a id="1_46_4"></a>
+
+## [1.46.4] - 2024-08-16
+
+### Changed
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.142.7`
+  - Increase timeout for QR generation to 60s #5882
+  - Fix default to strict TLS checks if not configured #5888
+  - Update rpgp 0.13.2 to fix "unable to decrypt" errors when sending messages to old Delta Chat clients using Ed25519
+  - Do not request ALPN on standard ports and when using STARTTLS
+  - for more see [Changelog](https://github.com/deltachat/deltachat-core-rust/blob/v1.142.7/CHANGELOG.md)
+
 <a id="1_46_3"></a>
 
 ## [1.46.3] - 2024-08-14
@@ -2769,7 +2781,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.3...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.4...HEAD
+
+[1.46.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.3...v1.46.4
 
 [1.46.3]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.2...v1.46.3
 
