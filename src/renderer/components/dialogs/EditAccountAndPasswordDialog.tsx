@@ -122,7 +122,7 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
 
   const onOk = useCallback(async () => {
     await onUpdate()
-  }, [onClose, onUpdate])
+  }, [onUpdate])
 
   if (accountSettings === null) return null
   return (
