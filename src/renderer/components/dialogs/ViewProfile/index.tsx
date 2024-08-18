@@ -75,7 +75,7 @@ export default function ViewProfile(
 
   const onClickEdit = () => {
     openDialog(EditContactNameDialog, {
-      contactName: contact.name,
+      contactName: contact.name === '' ? contact.displayName : contact.name,
       onOk: async (contactName: string) => {
         await BackendRemote.rpc.changeContactName(
           accountId,
