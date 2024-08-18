@@ -174,6 +174,7 @@ export function AddMemberInnerDialog({
         wasSeenRecently: false,
         isProfileVerified: false,
         isBot: false,
+        e2eeAvail: false,
       }
       return (
         <ContactListItem
