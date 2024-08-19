@@ -94,11 +94,22 @@ const Composer = forwardRef<
   const { sendMessage } = useMessage()
   const { unselectChat } = useChat()
 
+  const hasSecureJoinEnded = useRef<boolean>(false)
+  useEffect(() => {
+    if (hasSecureJoinEnded) {
+      // after can send was updated
+      window.__reloadDraft && window.__reloadDraft()
+      hasSecureJoinEnded.current = false
+    }
+  }, [selectedChat.canSend])
+
   useEffect(() => {
     return onDCEvent(accountId, 'SecurejoinJoinerProgress', ({ progress }) => {
       // fix bug where composer was locked after joining a group via qr code
       if (progress === 1000) {
+        // if already updated can send, currently this is not the case
         window.__reloadDraft && window.__reloadDraft()
+        hasSecureJoinEnded.current = true
       }
     })
   }, [accountId])

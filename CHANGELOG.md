@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+  - fix blocked composer after secure join #3917
 
 <a id="1_46_4"></a>
 
