@@ -37,14 +37,11 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
   const [accountSettings, _setAccountSettings] =
     useState<Credentials>(defaultCredentials())
 
-  const [disableUpdate, setDisableUpdate] = useState(true)
-
   const { openDialog } = useDialog()
   const openConfirmationDialog = useConfirmationDialog()
   const tx = useTranslationFunction()
 
   const setAccountSettings = (value: Credentials) => {
-    disableUpdate === true && setDisableUpdate(false)
     _setAccountSettings(value)
   }
 
@@ -86,7 +83,6 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
   }, [])
 
   const onUpdate = useCallback(async () => {
-    if (disableUpdate) return true
     const onSuccess = () => onClose()
 
     const update = () => {
@@ -117,7 +113,6 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
     }
   }, [
     accountSettings,
-    disableUpdate,
     initial_settings.addr,
     onClose,
     openConfirmationDialog,
@@ -126,9 +121,8 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
   ])
 
   const onOk = useCallback(async () => {
-    const update = await onUpdate()
-    if (update) onClose()
-  }, [onClose, onUpdate])
+    await onUpdate()
+  }, [onUpdate])
 
   if (accountSettings === null) return null
   return (
