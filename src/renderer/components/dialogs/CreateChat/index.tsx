@@ -726,7 +726,7 @@ export function useGroupImage(image: string | null) {
     )
     const file = await runtime.showOpenFileDialog({
       title: tx('select_group_image_desktop'),
-      filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif'] }],
+      filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif', 'webp'] }],
       properties: ['openFile'],
       defaultPath,
     })
