@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+- Experimental Telegram-style Ctrl+Up/Down: improve behavior to align more with Telegram #4088
 
 <a id="1_46_5"></a>
 
