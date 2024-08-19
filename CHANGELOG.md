@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+- Allowed webp in image selector, added webp consistantly #4087
 
 <a id="1_46_5"></a>
 
