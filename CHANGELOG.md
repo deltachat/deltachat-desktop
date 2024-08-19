@@ -7,7 +7,13 @@
 ### Changed
 
 ### Fixed
-  - fix blocked composer after secure join #3917
+
+<a id="1_46_5"></a>
+
+## [1.46.5] - 2024-08-19
+
+### Fixed
+- fix blocked composer after secure join #3917
 
 <a id="1_46_4"></a>
 
@@ -2782,7 +2788,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.4...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.5...HEAD
+
+[1.46.5]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.4...v1.46.5
 
 [1.46.4]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.3...v1.46.4
 
