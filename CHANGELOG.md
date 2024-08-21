@@ -6,6 +6,9 @@
 
 ### Changed
 
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.142.8`
+  - Fixed panic on unknown "certificate checks" configuration. This is needed for backwards compatibility with backups imported from future versions of Delta Chat.
+
 ### Fixed
 
 <a id="1_46_5"></a>
