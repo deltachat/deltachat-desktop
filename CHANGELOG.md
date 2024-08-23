@@ -10,6 +10,7 @@
   - Fixed panic on unknown "certificate checks" configuration. This is needed for backwards compatibility with backups imported from future versions of Delta Chat.
 
 ### Fixed
+- enhance edit name dialog #4090
 
 <a id="1_46_5"></a>
 

@@ -65,5 +65,11 @@
   },
   "read_by": {
     "message": "Read by"
+  },
+  "edit_name_explain": {
+    "message": "Set a nickname that will be shown to you instead of '%1'. Leave empty to use the contact's chosen name."
+  },
+  "edit_name_placeholder": {
+    "message": "Nickname for '%1'"
   }
 }
