@@ -220,6 +220,11 @@ export function ViewProfileInner({
     avatarPath = selfChatAvatar
   }
 
+  const mutualChatsMinItems = 5
+  const mutualChatsMinHeight =
+    CHATLISTITEM_CHAT_HEIGHT *
+    Math.max(Math.min(mutualChatsMinItems, chatListIds.length), 1)
+
   return (
     <>
       <div>
@@ -292,7 +297,10 @@ export function ViewProfileInner({
       {!(isDeviceChat || isSelfChat) && (
         <>
           <div className='group-separator'>{tx('profile_shared_chats')}</div>
-          <div className='mutual-chats' style={{ flexGrow: 1 }}>
+          <div
+            className='mutual-chats'
+            style={{ flexGrow: 1, minHeight: mutualChatsMinHeight }}
+          >
             <AutoSizer>
               {({ width, height }) => (
                 <ChatListPart
