@@ -6,8 +6,10 @@
 
 ### Changed
 
-- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.142.8`
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.142.9`
   - Fixed panic on unknown "certificate checks" configuration. This is needed for backwards compatibility with backups imported from future versions of Delta Chat.
+  - Fix reading of multiline SMTP greetings.
+  - Update preloaded DNS cache.
 
 ### Fixed
 - enhance edit name dialog #4090
