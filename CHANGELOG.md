@@ -26,6 +26,8 @@
 - dev: improved `./bin/test_for_missing_translations.sh` script: It is now more correct, helpful and faster
 
 ### Fixed
+- fix that you can not click header button in dialog when they are on top of the navbar #4093
+- fix if Contact has long bio/signature, then shared chats were hidden #4093
 - dev: proper native source-map support during development for main process
 - dev: use correct log level when logging to console in main process
 - security: harden electron_functions, only runtime can use them now

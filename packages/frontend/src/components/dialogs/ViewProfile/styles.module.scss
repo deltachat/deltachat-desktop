@@ -6,5 +6,12 @@
 .viewProfileDialogBody {
   display: flex;
   flex-direction: column;
-  padding-bottom: 0.6px;
+  padding-bottom: 2px;
+}
+
+.statusText {
+  padding: 15px 15px;
+  color: var(--globalText);
+  white-space: pre-wrap;
+  overflow-y: scroll;
 }
