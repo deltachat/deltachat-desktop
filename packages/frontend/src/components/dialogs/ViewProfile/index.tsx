@@ -233,7 +233,7 @@ export function ViewProfileInner({
   const maxMinHeightItems = 5
   const mutualChatsMinHeight =
     CHATLISTITEM_CHAT_HEIGHT *
-      Math.max(Math.min(maxMinHeightItems, chatListIds.length), 1)
+    Math.max(Math.min(maxMinHeightItems, chatListIds.length), 1)
 
   return (
     <>
