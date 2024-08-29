@@ -622,7 +622,9 @@ export function useDraft(
     )
     const currQuote = draftRef.current.quote
     if (!currQuote) {
-      quoteMessage(messageIds[messageIds.length - 1])
+      if (upOrDown === KeybindAction.Composer_SelectReplyToUp) {
+        quoteMessage(messageIds[messageIds.length - 1])
+      }
       return
     }
     if (currQuote.kind !== 'WithMessage') {
@@ -630,6 +632,13 @@ export function useDraft(
       return
     }
     const currQuoteMessageIdInd = messageIds.lastIndexOf(currQuote.messageId)
+    if (
+      currQuoteMessageIdInd === messageIds.length - 1 && // Last message
+      upOrDown === KeybindAction.Composer_SelectReplyToDown
+    ) {
+      removeQuote()
+      return
+    }
     const newId: number | undefined =
       messageIds[
         upOrDown === KeybindAction.Composer_SelectReplyToUp

@@ -13,6 +13,7 @@
   - Only include one `From:` header in securejoin messages
 
 ### Fixed
+- Experimental Telegram-style Ctrl+Up/Down: improve behavior to align more with Telegram #4088
 - Allowed webp in image selector, added webp consistantly #4087
 - enhance edit name dialog #4090
 
