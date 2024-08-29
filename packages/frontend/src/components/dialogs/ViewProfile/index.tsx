@@ -223,8 +223,7 @@ export function ViewProfileInner({
   const maxMinHeightItems = 5
   const mutualChatsMinHeight =
     CHATLISTITEM_CHAT_HEIGHT *
-      Math.max(Math.min(maxMinHeightItems, chatListIds.length), 1) +
-    2 /* the 2 is because of the offset workaround that we added to avoid scrollbar jumping */
+      Math.max(Math.min(maxMinHeightItems, chatListIds.length), 1)
 
   return (
     <>
@@ -307,7 +306,7 @@ export function ViewProfileInner({
                   loadMoreRows={loadChats}
                   rowCount={chatListIds.length}
                   width={width}
-                  height={height - 2}
+                  height={height}
                   itemKey={index => 'key' + chatListIds[index]}
                   itemHeight={CHATLISTITEM_CHAT_HEIGHT}
                 >
