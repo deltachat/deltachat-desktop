@@ -220,10 +220,10 @@ export function ViewProfileInner({
     avatarPath = selfChatAvatar
   }
 
-  const mutualChatsMinItems = 5
+  const maxMinHeightItems = 5
   const mutualChatsMinHeight =
     CHATLISTITEM_CHAT_HEIGHT *
-    Math.max(Math.min(mutualChatsMinItems, chatListIds.length), 1)
+    Math.max(Math.min(maxMinHeightItems, chatListIds.length), 1)
 
   return (
     <>
