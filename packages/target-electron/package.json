@@ -62,7 +62,7 @@
   "devDependencies": {
     "@deltachat-desktop/runtime-interface": "link:../runtime",
     "@deltachat-desktop/shared": "link:../shared",
-    "@electron/notarize": "^2.3.2",
+    "@electron/notarize": "^2.4",
     "@types/adm-zip": "^0.5.5",
     "@types/chai": "^4.3.17",
     "@types/debounce": "^1.2.4",
