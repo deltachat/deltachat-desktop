@@ -223,77 +223,76 @@ export function ViewProfileInner({
   const maxMinHeightItems = 5
   const mutualChatsMinHeight =
     CHATLISTITEM_CHAT_HEIGHT *
-    Math.max(Math.min(maxMinHeightItems, chatListIds.length), 1)
+      Math.max(Math.min(maxMinHeightItems, chatListIds.length), 1) +
+    2 /* the 2 is because of the offset workaround that we added to avoid scrollbar jumping */
 
   return (
     <>
-      <div>
-        <DialogContent>
-          <ProfileInfoHeader
-            address={addressLine}
-            avatarPath={avatarPath ? avatarPath : undefined}
-            color={contact.color}
-            displayName={displayName}
-            isVerified={contact.isProfileVerified}
-            wasSeenRecently={contact.wasSeenRecently}
-          />
-          {!isSelfChat && (
-            <div className='contact-attributes'>
-              {verifier && (
-                <div
-                  className={verifier.action && 'clickable'}
-                  onClick={verifier.action}
-                  style={{ display: 'flex' }}
-                >
-                  <InlineVerifiedIcon />
-                  {verifier.label}
-                </div>
-              )}
-              {contact.lastSeen !== 0 && (
-                <div>
-                  <i className='material-svg-icon material-icon-schedule' />
-                  <LastSeen timestamp={contact.lastSeen} />
-                </div>
-              )}
-            </div>
-          )}
-        </DialogContent>
-        <div
-          style={{
-            display: 'flex',
-            margin: '20px 0px',
-            justifyContent: 'center',
-          }}
-        >
-          {!isDeviceChat && (
-            <Button
-              type='primary'
-              aria-label={tx('send_message')}
-              onClick={onSendMessage}
-            >
-              {tx('send_message')}
-            </Button>
-          )}
-        </div>
-        {statusText != '' && (
-          <>
-            <div className='group-separator'>
-              {tx('pref_default_status_label')}
-            </div>
-            <div className='status-text'>
-              <MessagesDisplayContext.Provider
-                value={{
-                  context: 'contact_profile_status',
-                  contact_id: contact.id,
-                  closeProfileDialog: onClose,
-                }}
+      <DialogContent>
+        <ProfileInfoHeader
+          address={addressLine}
+          avatarPath={avatarPath ? avatarPath : undefined}
+          color={contact.color}
+          displayName={displayName}
+          isVerified={contact.isProfileVerified}
+          wasSeenRecently={contact.wasSeenRecently}
+        />
+        {!isSelfChat && (
+          <div className='contact-attributes'>
+            {verifier && (
+              <div
+                className={verifier.action && 'clickable'}
+                onClick={verifier.action}
+                style={{ display: 'flex' }}
               >
-                <MessageBody text={statusText} disableJumbomoji />
-              </MessagesDisplayContext.Provider>
-            </div>
-          </>
+                <InlineVerifiedIcon />
+                {verifier.label}
+              </div>
+            )}
+            {contact.lastSeen !== 0 && (
+              <div>
+                <i className='material-svg-icon material-icon-schedule' />
+                <LastSeen timestamp={contact.lastSeen} />
+              </div>
+            )}
+          </div>
+        )}
+      </DialogContent>
+      <div
+        style={{
+          display: 'flex',
+          margin: '20px 0px',
+          justifyContent: 'center',
+        }}
+      >
+        {!isDeviceChat && (
+          <Button
+            type='primary'
+            aria-label={tx('send_message')}
+            onClick={onSendMessage}
+          >
+            {tx('send_message')}
+          </Button>
         )}
       </div>
+      {statusText != '' && (
+        <>
+          <div className='group-separator'>
+            {tx('pref_default_status_label')}
+          </div>
+          <div className={styles.statusText}>
+            <MessagesDisplayContext.Provider
+              value={{
+                context: 'contact_profile_status',
+                contact_id: contact.id,
+                closeProfileDialog: onClose,
+              }}
+            >
+              <MessageBody text={statusText} disableJumbomoji />
+            </MessagesDisplayContext.Provider>
+          </div>
+        </>
+      )}
       {!(isDeviceChat || isSelfChat) && (
         <>
           <div className='group-separator'>{tx('profile_shared_chats')}</div>
