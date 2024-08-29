@@ -28,7 +28,7 @@ export const enum AutodeleteDuration {
   ONE_YEAR = Timespans.ONE_YEAR_IN_SECONDS,
 }
 
-export const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'apng', 'gif']
+export const IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'apng', 'gif', 'webp']
 
 // Videochat Server URLs
 export const VIDEO_CHAT_INSTANCE_SYSTEMLI = 'https://meet.systemli.org/$ROOM'

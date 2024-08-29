@@ -13,6 +13,7 @@
   - Only include one `From:` header in securejoin messages
 
 ### Fixed
+- Allowed webp in image selector, added webp consistantly #4087
 - enhance edit name dialog #4090
 
 <a id="1_46_5"></a>

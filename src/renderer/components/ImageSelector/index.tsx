@@ -41,7 +41,7 @@ export default function ImageSelector({
       filters: [
         {
           name: tx('images'),
-          extensions: ['jpg', 'png', 'gif', 'jpeg'],
+          extensions: ['jpg', 'png', 'gif', 'jpeg', 'webp'],
         },
       ],
       properties: ['openFile'],
