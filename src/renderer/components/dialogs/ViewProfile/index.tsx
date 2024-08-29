@@ -76,6 +76,8 @@ export default function ViewProfile(
   const onClickEdit = () => {
     openDialog(EditContactNameDialog, {
       contactName: contact.name,
+      originalName:
+        contact.authName !== '' ? contact.authName : contact.address,
       onOk: async (contactName: string) => {
         await BackendRemote.rpc.changeContactName(
           accountId,
@@ -329,9 +331,11 @@ export function EditContactNameDialog({
   onClose,
   onOk,
   contactName: initialGroupName,
+  originalName,
 }: {
   onOk: (contactName: string) => void
   contactName: string
+  originalName: string
 } & DialogProps) {
   const [contactName, setContactName] = useState(initialGroupName)
   const tx = useTranslationFunction()
@@ -350,10 +354,11 @@ export function EditContactNameDialog({
       <DialogHeader title={tx('menu_edit_name')} />
       <DialogBody>
         <DialogContent>
+          <p>{tx('edit_name_explain', originalName)}</p>
           <DeltaInput
             key='contactname'
             id='contactname'
-            placeholder={tx('name_desktop')}
+            placeholder={tx('edit_name_placeholder', originalName)}
             value={contactName}
             onChange={(
               event: React.FormEvent<HTMLElement> &

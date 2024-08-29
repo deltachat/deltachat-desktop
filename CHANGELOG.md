@@ -6,8 +6,15 @@
 
 ### Changed
 
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.142.10`
+  - Fixed panic on unknown "certificate checks" configuration. This is needed for backwards compatibility with backups imported from future versions of Delta Chat.
+  - Fix reading of multiline SMTP greetings.
+  - Update preloaded DNS cache.
+  - Only include one `From:` header in securejoin messages
+
 ### Fixed
 - Allowed webp in image selector, added webp consistantly #4087
+- enhance edit name dialog #4090
 
 <a id="1_46_5"></a>
 
