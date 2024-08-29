@@ -6,6 +6,14 @@
 
 ### Changed
 
+### Fixed
+
+<a id="1_46_6"></a>
+
+## [1.46.6] - 2024-08-29
+
+### Changed
+
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.142.10`
   - Fixed panic on unknown "certificate checks" configuration. This is needed for backwards compatibility with backups imported from future versions of Delta Chat.
   - Fix reading of multiline SMTP greetings.
@@ -2797,7 +2805,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.5...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.6...HEAD
+
+[1.46.6]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.5...v1.46.6
 
 [1.46.5]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.4...v1.46.5
 
