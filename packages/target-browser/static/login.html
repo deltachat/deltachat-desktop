@@ -4,14 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Delta Chat Browser Login</title>
+    <link rel="stylesheet" href="login.css">
   </head>
   <body>
-    <h1>Delta Chat Browser Login</h1>
+   <div class="container">
+    <div class="formDiv"><h1 class="heading">Delta Chat Browser Login</h1>
+    <img src="images/deltachat.png" class="logo"/>
     <form action="/authenticate" method="post">
       <p id="error" style="color: red"></p>
-      <input type="password" name="password" id="pw" required />
-      <button type="submit" id="loginButton">Login</button>
-    </form>
+      <input type="password" name="password" id="pw" required class="inp" />
+      <button type="submit" id="loginButton" class="butt">Login</button>
+    </form></div>
+    </div>
     <script>
       function login(ev) {
         ev.preventDefault()
