@@ -19,6 +19,7 @@
 - security: harden electron_functions, only runtime can use them now
 - security: harden runtime interface by deleting the reference on window (`window.r`) after the first use. For development it is now accessible at `exp.runtime` but only in `--devmode` like `exp.rpc`
 - dev: update `./bin/update_background_thumbnails.sh` script
+- fix chatlist image thumbnails #4101
 
 <a id="1_46_6"></a>
 
