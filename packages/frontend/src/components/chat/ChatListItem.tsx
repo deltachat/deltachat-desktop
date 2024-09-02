@@ -102,17 +102,17 @@ function Message({
         {summaryPreviewImage && !iswebxdc && (
           <div
             className='summary_thumbnail'
-            style={{ backgroundImage: `url(${summaryPreviewImage})` }}
+            style={{ backgroundImage: `url("${summaryPreviewImage}")` }}
           />
         )}
         {iswebxdc && lastMessageId && (
           <div
             className='summary_thumbnail'
             style={{
-              backgroundImage: `url(${runtime.getWebxdcIconURL(
+              backgroundImage: `url("${runtime.getWebxdcIconURL(
                 selectedAccountId(),
                 lastMessageId
-              )})`,
+              )}")`,
             }}
           />
         )}
