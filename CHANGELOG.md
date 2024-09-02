@@ -6,10 +6,16 @@
 
 ### Changed
 
+### Fixed
+
+<a id="1_46_7"></a>
+
+## [1.46.7] - 2024-09-02
+
+### Changed
+
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.142.11`
   - Set backward verification when observing `vc-contact-confirm` or `vg-member-added`
-
-### Fixed
 
 <a id="1_46_6"></a>
 
@@ -2808,7 +2814,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.6...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.7...HEAD
+
+[1.46.7]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.6...v1.46.7
 
 [1.46.6]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.5...v1.46.6
 
