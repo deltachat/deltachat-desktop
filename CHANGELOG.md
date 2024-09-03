@@ -6,6 +6,9 @@
 
 ### Changed
 
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.142.12`
+  - Display `Config::MdnsEnabled` as true by default.
+
 ### Fixed
 
 <a id="1_46_7"></a>
