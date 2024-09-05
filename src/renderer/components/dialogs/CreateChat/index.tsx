@@ -60,16 +60,53 @@ type ViewMode = 'main' | 'createGroup' | 'createBroadcastList'
 
 export default function CreateChat(props: DialogProps) {
   const { onClose } = props
+  const tx = useTranslationFunction()
+
   const [viewMode, setViewMode] = useState<ViewMode>('main')
 
   return (
     <Dialog width={400} onClose={onClose} fixed>
       {viewMode == 'main' && <CreateChatMain {...{ setViewMode, onClose }} />}
       {viewMode == 'createGroup' && (
-        <CreateGroup {...{ setViewMode, onClose }} />
+        <>
+          <DialogHeader title={tx('clone_chat')} />
+          <CreateGroup {...{ setViewMode, onClose }} />
+        </>
       )}
       {viewMode == 'createBroadcastList' && (
         <CreateBroadcastList {...{ setViewMode, onClose }} />
+      )}
+    </Dialog>
+  )
+}
+
+export function CloneChat(props: { chatTemplateId: number } & DialogProps) {
+  const { chatTemplateId, onClose } = props
+  const accountId = selectedAccountId()
+  const tx = useTranslationFunction()
+
+  const [chat, setChat] = useState<T.FullChat | null>(null)
+
+  useMemo(() => {
+    BackendRemote.rpc
+      .getFullChatById(accountId, chatTemplateId)
+      .then(c => setChat(c))
+  }, [accountId, chatTemplateId])
+
+  return (
+    <Dialog width={400} onClose={onClose} fixed>
+      {chat && (
+        <>
+          <DialogHeader title={tx('clone_chat')} />
+          <CreateGroup
+            {...{
+              setViewMode: onClose,
+              onClose,
+              groupMembers: chat.contactIds,
+              groupImage: chat.profileImage,
+            }}
+          />
+        </>
       )}
     </Dialog>
   )
@@ -349,25 +386,25 @@ function CreateChatMain(props: CreateChatMainProps) {
 type CreateGroupProps = {
   setViewMode: (newViewMode: ViewMode) => void
   onClose: DialogProps['onClose']
+  groupImage?: string | null
+  groupMembers?: number[]
 }
 
-function CreateGroup(props: CreateGroupProps) {
+export function CreateGroup(props: CreateGroupProps) {
+  const { selectChat } = useChat()
   const { openDialog } = useDialog()
   const { setViewMode, onClose } = props
   const tx = useTranslationFunction()
   const accountId = selectedAccountId()
 
   const [groupName, setGroupName] = useState('')
-  const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage(null)
-  const [groupMembers, removeGroupMember, addGroupMember] = useGroupMembers([
-    C.DC_CONTACT_ID_SELF,
-  ])
-  const finishCreateGroup = useCreateGroup(
-    groupName,
-    groupImage,
-    groupMembers,
-    onClose
+  const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage(
+    props.groupImage || null
   )
+  const [groupMembers, removeGroupMember, addGroupMember] = useGroupMembers(
+    props.groupMembers || [C.DC_CONTACT_ID_SELF]
+  )
+  const finishCreateGroup = useCreateGroup(groupName, groupImage, groupMembers)
 
   const [errorMissingGroupName, setErrorMissingGroupName] = useState(false)
   const [groupContacts, setGroupContacts] = useState<Type.Contact[]>([])
@@ -394,7 +431,6 @@ function CreateGroup(props: CreateGroupProps) {
 
   return (
     <>
-      <DialogHeader title={tx('menu_new_group')} />
       <DialogBody>
         <DialogContent>
           <ChatSettingsSetNameAndProfileImage
@@ -440,6 +476,14 @@ function CreateGroup(props: CreateGroupProps) {
                 return
               }
               finishCreateGroup()
+                .then(groupId => {
+                  if (groupId) {
+                    selectChat(accountId, groupId)
+                  } else {
+                    // TODO: handle error
+                  }
+                })
+                .finally(onClose)
             }}
           >
             {tx('group_create_button')}
@@ -641,11 +685,9 @@ export const ChatSettingsSetNameAndProfileImage = ({
 const useCreateGroup = (
   groupName: string,
   groupImage: string | null | undefined,
-  groupMembers: number[],
-  onClose: DialogProps['onClose']
+  groupMembers: number[]
 ) => {
   const accountId = selectedAccountId()
-  const { selectChat } = useChat()
 
   const createGroup = useCallback(async () => {
     const isVerified = await areAllContactsVerified(accountId, groupMembers)
@@ -677,9 +719,7 @@ const useCreateGroup = (
       return
     }
 
-    const chatId = await createGroup()
-    onClose()
-    selectChat(accountId, chatId)
+    return createGroup()
   }
 }
 
