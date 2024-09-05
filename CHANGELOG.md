@@ -12,6 +12,7 @@
   - Display `Config::MdnsEnabled` as true by default.
 
 ### Fixed
+- fix newlines in messages with WebXDC attachments #4079
 
 <a id="1_46_7"></a>
 
