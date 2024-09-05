@@ -6,7 +6,7 @@ import styles from './styles.module.scss'
 
 type Props = {
   displayName: string
-  address: string
+  address?: string
   isVerified?: boolean
 }
 
@@ -17,7 +17,9 @@ export default function ContactName(props: Props) {
         <span className={styles.contactNameTruncated}>{props.displayName}</span>
         {props.isVerified && <InlineVerifiedIcon />}
       </div>
-      <div className={styles.contactNameAddress}>{props.address}</div>
+      {!!props.address && (
+        <div className={styles.contactNameAddress}>{props.address}</div>
+      )}
     </div>
   )
 }

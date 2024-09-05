@@ -62,9 +62,10 @@ export default function ViewProfile(
   props: {
     contact: T.Contact
     onBack?: () => void
+    onAction?: () => void
   } & DialogProps
 ) {
-  const { onClose, onBack } = props
+  const { onClose, onBack, onAction } = props
 
   const accountId = selectedAccountId()
   const tx = useTranslationFunction()
@@ -110,7 +111,11 @@ export default function ViewProfile(
         onClickBack={onBack}
       />
       <DialogBody className={styles.viewProfileDialogBody}>
-        <ViewProfileInner contact={contact} onClose={onClose} />
+        <ViewProfileInner
+          contact={contact}
+          onClose={onClose}
+          onAction={onAction}
+        />
       </DialogBody>
     </Dialog>
   )
@@ -119,9 +124,11 @@ export default function ViewProfile(
 export function ViewProfileInner({
   contact,
   onClose,
+  onAction,
 }: {
   contact: T.Contact
   onClose: () => void
+  onAction?: () => void
 }) {
   const accountId = selectedAccountId()
   const tx = useTranslationFunction()
@@ -142,6 +149,7 @@ export function ViewProfileInner({
 
   const onChatClick = (chatId: number) => {
     selectChat(accountId, chatId)
+    onAction && onAction()
     onClose()
   }
   const onSendMessage = async () => {

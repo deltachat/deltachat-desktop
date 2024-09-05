@@ -5,6 +5,8 @@
 ### Added
 
 ### Changed
+- do not display email adresses in reactions dialog #4066
+- click on a row in reactions dialog opens contact profile #4066
 
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.142.12`
   - Display `Config::MdnsEnabled` as true by default.
