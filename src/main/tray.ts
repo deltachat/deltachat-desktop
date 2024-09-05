@@ -76,7 +76,7 @@ function hideOrShowDeltaChat() {
   mainWindowIsVisible() ? hideDeltaChat(true) : showDeltaChat()
 }
 
-function quitDeltaChat() {
+export function quitDeltaChat() {
   globalShortcut.unregisterAll()
   app.quit()
 }

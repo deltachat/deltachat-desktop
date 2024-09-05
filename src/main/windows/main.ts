@@ -235,7 +235,7 @@ export function send(channel: string, ...args: any[]) {
     return
   }
   if (window.isDestroyed()) {
-    log.warn('window is destroyed. not sending message', args)
+    log.info('window is destroyed. not sending message', args)
     return
   }
   try {

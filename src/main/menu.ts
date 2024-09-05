@@ -16,6 +16,7 @@ import * as mainWindow from './windows/main.js'
 import { DesktopSettings } from './desktop_settings.js'
 import { getCurrentLocaleDate, tx } from './load-translations.js'
 import { mapPackagePath } from './isAppx.js'
+import { quitDeltaChat } from './tray.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -181,18 +182,8 @@ export function getFileMenu(
   const fileMenuNonMac: Electron.MenuItemConstructorOptions = {
     label: tx('global_menu_file_desktop'),
     submenu: (() => {
-      let result = [
-        {
-          label:
-            window === mainWindow.window
-              ? tx('global_menu_file_quit_desktop')
-              : tx('close_window'),
-          click: () => window?.close(),
-          accelerator: 'Ctrl+q',
-        },
-      ]
       if (window === mainWindow.window) {
-        result = [
+        return [
           {
             label: tx('menu_settings'),
             click: () => {
@@ -200,10 +191,21 @@ export function getFileMenu(
             },
             accelerator: 'Ctrl+,',
           },
-          ...result,
+          {
+            label: tx('global_menu_file_quit_desktop'),
+            click: quitDeltaChat,
+            accelerator: 'Ctrl+q',
+          },
+        ]
+      } else {
+        return [
+          {
+            label: tx('close_window'),
+            click: () => window?.close(),
+            accelerator: 'Ctrl+q',
+          },
         ]
       }
-      return result
     })(),
   }
   const fileMenuMac: Electron.MenuItemConstructorOptions = {
