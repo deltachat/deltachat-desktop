@@ -12,6 +12,7 @@
   - Display `Config::MdnsEnabled` as true by default.
 
 ### Fixed
+- Text sent with webxdc messages now respects line breaks #4108
 
 <a id="1_46_7"></a>
 
