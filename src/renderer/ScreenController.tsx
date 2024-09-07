@@ -137,8 +137,12 @@ export default class ScreenController extends Component {
 
     await BackendRemote.rpc.startIo(accountId)
     runtime.setDesktopSetting('lastAccount', accountId)
-    log.info('system_info', await BackendRemote.rpc.getSystemInfo())
-    log.info('account_info', await BackendRemote.rpc.getInfo(accountId))
+    BackendRemote.rpc.getSystemInfo().then(info => {
+      log.info('system_info', info)
+    })
+    BackendRemote.rpc.getInfo(accountId).then(info => {
+      log.info('account_info', info)
+    })
   }
 
   async unSelectAccount() {
