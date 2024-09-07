@@ -116,7 +116,7 @@ export default class ScreenController extends Component {
     }
   }
 
-  async selectAccount(accountId: number) {
+  async selectAccount(accountId: number, dontStartIo = false) {
     if (accountId !== this.selectedAccountId) {
       await this.unSelectAccount()
       this.selectedAccountId = accountId
@@ -135,7 +135,9 @@ export default class ScreenController extends Component {
       this.changeScreen(Screens.Welcome)
     }
 
-    await BackendRemote.rpc.startIo(accountId)
+    if (!dontStartIo) {
+      await BackendRemote.rpc.startIo(accountId)
+    }
     runtime.setDesktopSetting('lastAccount', accountId)
     BackendRemote.rpc.getSystemInfo().then(info => {
       log.info('system_info', info)
@@ -190,7 +192,8 @@ export default class ScreenController extends Component {
   }
 
   async openAccountDeletionScreen(accountId: number) {
-    await this.selectAccount(accountId)
+    const dontStartIo = true
+    await this.selectAccount(accountId, dontStartIo)
     this.changeScreen(Screens.DeleteAccount)
   }
 

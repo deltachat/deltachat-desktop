@@ -13,6 +13,7 @@
 
 ### Fixed
 - fix newlines in messages with WebXDC attachments #4079
+- being unable to delete a nonfunctional account imported from ArcaneChat #4104
 
 <a id="1_46_7"></a>
 
