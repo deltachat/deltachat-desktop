@@ -20,6 +20,7 @@
 - security: harden runtime interface by deleting the reference on window (`window.r`) after the first use. For development it is now accessible at `exp.runtime` but only in `--devmode` like `exp.rpc`
 - dev: update `./bin/update_background_thumbnails.sh` script
 - fix chatlist image thumbnails #4101
+- fix: spacing around avatars in reaction details dialog #4114
 
 <a id="1_46_8"></a>
 
