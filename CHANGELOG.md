@@ -33,8 +33,6 @@
   - Display `Config::MdnsEnabled` as true by default.
 
 ### Fixed
-- fix that you can not click header button in dialog when they are on top of the navbar #4093
-- fix if Contact has long bio/signature, then shared chats were hidden #4093
 - fix newlines in messages with WebXDC attachments #4079
 - being unable to delete a nonfunctional account imported from ArcaneChat #4104
 - Ctrl/Cmd+Q (also File->Quit) now should properly close the app when focus is on main window
