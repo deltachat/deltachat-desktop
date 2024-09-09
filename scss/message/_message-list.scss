@@ -91,6 +91,14 @@
     width: 100%;
     padding: 0 0.5em;
 
+    // Yes, we apply this to the wrapper around <ul>,
+    // as described here
+    // https://code.hnldesign.nl/scrolltobottom/
+    // https://stackoverflow.com/questions/72636816/scroll-to-bottom-when-new-message-added/72644230#72644230
+    // https://github.com/deltachat/deltachat-desktop/issues/3753#issuecomment-2336809190
+    display: flex;
+    flex-direction: column-reverse;
+
     &::-webkit-scrollbar-track {
       background: transparent;
     }

@@ -154,6 +154,7 @@ function getLastKnownScrollPosition(): {
   lastKnownScrollTop: number
 } {
   //@ts-ignore
+  // Remove this?
   const { scrollHeight, scrollTop } = document.querySelector('#message-list')
   return {
     lastKnownScrollHeight: scrollHeight,

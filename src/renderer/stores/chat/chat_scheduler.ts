@@ -20,10 +20,18 @@ export class ChatStoreScheduler {
   }
 
   lock(key: keyof ChatStoreLocks) {
+    console.log('lock', key);
+    if (key === 'scroll') {
+      return
+    }
     this.locks[key] = true
   }
 
   isLocked(key: keyof ChatStoreLocks) {
+    console.log('isLocked', key)
+    if (key === 'scroll') {
+      return false
+    }
     return this.locks[key]
   }
 

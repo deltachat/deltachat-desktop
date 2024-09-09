@@ -203,6 +203,9 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
     }
   }, [jumpToMessage])
 
+  window.fetchMoreTop = fetchMoreTop
+  window.fetchMoreBottom = fetchMoreBottom
+
   const onScroll = useCallback(
     (ev: React.UIEvent<HTMLDivElement> | null) => {
       if (!messageListRef.current) {
@@ -214,11 +217,11 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
 
       if (ev) hideReactionsBar()
 
-      const distanceToTop = messageListRef.current.scrollTop
-      const distanceToBottom =
+      const distanceToTop =
         messageListRef.current.scrollHeight -
-        messageListRef.current.scrollTop -
-        messageListRef.current.clientHeight
+        messageListRef.current.clientHeight +
+        messageListRef.current.scrollTop
+      const distanceToBottom = -messageListRef.current.scrollTop
 
       const isNewestMessageLoaded =
         newestFetchedMessageListItemIndex === messageListItems.length - 1
@@ -236,20 +239,20 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
         log.debug('onScroll: Lets try loading messages from both ends')
         setTimeout(() => fetchMoreTop(), 0)
         setTimeout(() => fetchMoreBottom(), 0)
-        ev?.preventDefault()
-        ev?.stopPropagation()
+        // ev?.preventDefault()
+        // ev?.stopPropagation()
         return false
       } else if (distanceToTop < 200) {
         log.debug('onScroll: Scrolled to top, fetching more messages!')
         setTimeout(() => fetchMoreTop(), 0)
-        ev?.preventDefault()
-        ev?.stopPropagation()
+        // ev?.preventDefault()
+        // ev?.stopPropagation()
         return false
       } else if (distanceToBottom < 200) {
         log.debug('onScroll: Scrolled to bottom, fetching more messages!')
         setTimeout(() => fetchMoreBottom(), 0)
-        ev?.preventDefault()
-        ev?.stopPropagation()
+        // ev?.preventDefault()
+        // ev?.stopPropagation()
         return false
       }
     },
@@ -332,29 +335,33 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
         'scrollTo type: scrollToLastKnownPosition; lastKnownScrollHeight: ' +
           scrollTo.lastKnownScrollHeight +
           '; lastKnownScrollTop: ' +
+          // TODO should we use `lastKnownScrollBottom` instead???
           scrollTo.lastKnownScrollTop
       )
 
       if (scrollTo.appendedOn === 'top') {
-        messageListRef.current.scrollTop =
-          messageListRef.current.scrollHeight -
-          scrollTo.lastKnownScrollHeight +
-          scrollTo.lastKnownScrollTop
+        // messageListRef.current.scrollTop =
+        //   messageListRef.current.scrollHeight -
+        //   scrollTo.lastKnownScrollHeight +
+        //   scrollTo.lastKnownScrollTop
+
+        // messageListRef.current.scrollTop = scrollTo.lastKnownScrollTop
       } else {
-        messageListRef.current.scrollTop = scrollTo.lastKnownScrollTop
+        // messageListRef.current.scrollTop = scrollTo.lastKnownScrollTop
       }
     } else if (scrollTo.type === 'scrollToPosition') {
       log.debug(
         'scrollTo type: scrollToPosition; scrollTop: ' + scrollTo.scrollTop
       )
-      messageListRef.current.scrollTop = scrollTo.scrollTop
+      // messageListRef.current.scrollTop = scrollTo.scrollTop
     } else if (scrollTo.type === 'scrollToBottom' && !isReactionsBarShown) {
       if (scrollTo.ifClose === true) {
         const scrollHeight = lastKnownScrollHeight
-        const { scrollTop, clientHeight } = messageListRef.current
-        const scrollBottom = scrollTop + clientHeight
+        // const { scrollTop, clientHeight } = messageListRef.current
+        // const scrollBottom = scrollTop + clientHeight
+        const scrollBottom = -messageListRef.current.scrollTop
 
-        const shouldScrollToBottom = scrollBottom >= scrollHeight - 7
+        const shouldScrollToBottom = scrollBottom >= 7
 
         log.debug(
           'scrollToBottomIfClose',
@@ -364,7 +371,9 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
         )
 
         if (shouldScrollToBottom) {
-          messageListRef.current.scrollTop = messageListRef.current.scrollHeight
+          // TODO should this be `-1` instead?
+          // messageListRef.current.scrollTop = 0
+          messageListRef.current.scrollTop = -1
         }
       } else {
         log.debug(
@@ -372,7 +381,9 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
           messageListRef.current.scrollTop,
           messageListRef.current.scrollHeight
         )
-        messageListRef.current.scrollTop = messageListRef.current.scrollHeight
+        // TODO should this be `-1` instead?
+        // messageListRef.current.scrollTop = 0
+        messageListRef.current.scrollTop = -1
       }
     }
     setTimeout(() => {
@@ -406,7 +417,8 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
     }
     const composerTextarea = refComposer.current.childNodes[1]
     composerTextarea && composerTextarea.focus()
-    messageListRef.current.scrollTop = messageListRef.current.scrollHeight
+    // TODO should this be `-1` instead?
+    // messageListRef.current.scrollTop = 0
   }, [refComposer])
 
   return (
@@ -486,16 +498,15 @@ export const MessageListInner = React.memo(
 
     useKeyBindingAction(KeybindAction.MessageList_PageUp, () => {
       if (messageListRef.current) {
-        messageListRef.current.scrollTop =
-          messageListRef.current.scrollTop - messageListRef.current.clientHeight
+        messageListRef.current.scrollTop -= messageListRef.current.clientHeight
         // @ts-ignore
         onScroll(null)
       }
     })
     useKeyBindingAction(KeybindAction.MessageList_PageDown, () => {
       if (messageListRef.current) {
-        messageListRef.current.scrollTop =
-          messageListRef.current.scrollTop + messageListRef.current.clientHeight
+        // TODO wait, will this work if we overflow?
+        messageListRef.current.scrollTop += messageListRef.current.clientHeight
         // @ts-ignore
         onScroll(null)
       }
