@@ -45,7 +45,7 @@ BackendApiRoute.get('/runtime_info', (_req, res) => {
       VERSION: version,
     },
     isAppx: false,
-    isMac: false, // this has an alternative frameless design
+    isMac: false, // this has an alternative frameless design that we don't want in browser
     versions: [],
   }
   res.status(200).json(runtimeInfo)
