@@ -1,0 +1,86 @@
+{
+  "private": true,
+  "type": "module",
+  "name": "@deltachat-desktop/target-electron",
+  "version": "1.46.2-monorepo",
+  "description": "Desktop Application for delta.chat",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/deltachat/deltachat-desktop.git"
+  },
+  "keywords": [
+    "deltachat",
+    "email",
+    "messaging",
+    "desktop"
+  ],
+  "author": {
+    "name": "DeltaChat Developers",
+    "email": "delta-systems@codespeak.net"
+  },
+  "main": "index.js",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/deltachat/deltachat-desktop/issues"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "productName": "DeltaChat",
+  "homepage": "https://delta.chat",
+  "scripts": {
+    "check:types": "tsc --noEmit && tsc --noEmit -p runtime-electron || node ./bin/printCheckWarning.js",
+    "build4production": "NODE_ENV=production pnpm build && pnpm -w check:types",
+    "build": "pnpm build:locales && pnpm build:backend && pnpm --filter=@deltachat-desktop/frontend build && pnpm build:compose-frontend",
+    "build:locales": "pnpm -w translations:convert",
+    "build:backend": "node ./bin/build.js",
+    "build:runtime-impl": "pnpm esbuild --bundle --minify --sourcemap --outdir=./html-dist runtime-electron/runtime.ts",
+    "build:compose-frontend": "node ../../bin/copy.js ../frontend/html-dist ./html-dist && node ../../bin/copy.js ./static ./html-dist && pnpm build:runtime-impl",
+    "watch:compose-frontend": "node ../../bin/copy.js ../frontend/html-dist ./html-dist -w & node ../../bin/copy.js ./static ./html-dist -w & pnpm build:runtime-impl --watch",
+    "watch": "pnpm -w --filter=@deltachat-desktop/frontend watch & pnpm watch:compose-frontend",
+    "dev": "pnpm build && pnpm start --",
+    "dev-inspect": "pnpm build && pnpm start --inspect --",
+    "start": "NODE_OPTIONS=--enable-source-maps electron . --devmode --disable-http-cache --translation-watch",
+    "clean": "rm -rf ./bundle_out ./html-dist ./dist",
+    "pretest": "esbuild --bundle --sourcemap --platform=node tests/*.ts --outdir=tests/compiled --external:mocha --external:chai --external:adm-zip --external:isomorphic-ws --external:@deltachat/jsonrpc-client --external:@deltachat/stdio-rpc-server --format=esm",
+    "test": "NODE_OPTIONS=--enable-source-maps mocha 'tests/compiled/*.js'",
+    "pack:generate_config": "node ./build/gen-electron-builder-config.js && prettier --write ./electron-builder.json5 --log-level silent",
+    "pack:patch-node-modules": "node ../../bin/writeFlatDependencies.js packages/target-electron node_modules",
+    "pack": "pnpm pack:generate_config && pnpm run pack:patch-node-modules && pnpm pack:all && pnpm -w run reset:node_modules",
+    "pack:win": "electron-builder --config ./electron-builder.json5 --win nsis portable",
+    "pack:mac": "electron-builder --config ./electron-builder.json5 --mac dmg mas",
+    "pack:linux:dir": "electron-builder --config ./electron-builder.json5 --linux --dir",
+    "pack:linux": "electron-builder --config ./electron-builder.json5 --linux AppImage deb",
+    "pack:all": "electron-builder --config ./electron-builder.json5 --mac dmg --win nsis portable --linux AppImage deb"
+  },
+  "dependencies": {
+    "@deltachat/jsonrpc-client": "catalog:",
+    "@deltachat/stdio-rpc-server": "catalog:",
+    "mime-types": "catalog:",
+    "ws": "7.5.10"
+  },
+  "devDependencies": {
+    "@deltachat-desktop/runtime-interface": "link:../runtime",
+    "@deltachat-desktop/shared": "link:../shared",
+    "@electron/notarize": "^2.4",
+    "@types/adm-zip": "^0.5.5",
+    "@types/chai": "^4.3.17",
+    "@types/debounce": "^1.2.4",
+    "@types/mime-types": "catalog:",
+    "@types/mocha": "^10.0.7",
+    "@types/node": "^20.14.13",
+    "@types/rc": "^1.2.4",
+    "adm-zip": "0.5.14",
+    "application-config": "^1.0.1",
+    "chai": "^5.1.1",
+    "chokidar": "^3.6.0",
+    "debounce": "^1.2.0",
+    "electron": "^30.3.1",
+    "electron-builder": "^24.13.3",
+    "esbuild": "^0.19.8",
+    "mocha": "^10.7.0",
+    "rc": "^1.2.8",
+    "typescript": "catalog:",
+    "webxdc-types": "catalog:"
+  }
+}

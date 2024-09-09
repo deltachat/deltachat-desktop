@@ -1,0 +1,17 @@
+// We need to force the dialog to full height to make `AutoSizer` work
+.viewProfileDialog {
+  height: 100%;
+}
+
+.viewProfileDialogBody {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 2px;
+}
+
+.statusText {
+  padding: 15px 15px;
+  color: var(--globalText);
+  white-space: pre-wrap;
+  overflow-y: scroll;
+}

@@ -11,14 +11,16 @@ To update the desktop application to a new core you need to update the following
 
 Let's say the core version you want to upgrade to is `X.Y.Z`.
 
-1. `npm i @deltachat/stdio-rpc-server@X.Y.Z @deltachat/jsonrpc-client@X.Y.Z`
+1. `node ./bin/link_core/link_version.js X.Y.Z`
 2. mention that you updated those dependencies in `CHANGELOG.md`
 
 If version `X.Y.Z` hasn't yet been published to `npm`, then ask another maintainer.
 
 GitHub CI builds and publishes [stdio-rpc-server](https://github.com/deltachat/deltachat-core-rust/actions/workflows/deltachat-rpc-server.yml) and [jsonrpc-client](https://github.com/deltachat/deltachat-core-rust/actions/workflows/jsonrpc-client-npm-package.yml) to npm.
 
-> bash shortcut `export TAG=1.139.3 && npm i @deltachat/stdio-rpc-server@$TAG @deltachat/jsonrpc-client@$TAG`
+> bash shortcut `node ./bin/link_core/link_version.js 1.142.2`
+
+> make sure you are in the repository root, otherwise the command will not work
 
 ## Update to a development version
 
@@ -29,7 +31,7 @@ Then you need to use a local core checkout (the next section in this document).
 Or point desktop to use the the new deltachat-rpc-server binary with the `DELTA_CHAT_RPC_SERVER` environment variable:
 
 ```
-DELTA_CHAT_RPC_SERVER=path/to/deltachat-rpc-server npm run dev -- --allow-unsafe-core-replacement
+DELTA_CHAT_RPC_SERVER=path/to/deltachat-rpc-server pnpm -w dev:electron -- --allow-unsafe-core-replacement
 ```
 
 You can easily get the deltachat-rpc-server binary for your pr by installing it with cargo install:
@@ -44,10 +46,10 @@ Then you can run:
 # let it find the executable in $PATH
 # - pro: faster to type, does a basic version check
 # - contra: uses prebuild if not find in path
-npm run dev -- --allow-unsafe-core-replacement
+pnpm -w dev:electron -- --allow-unsafe-core-replacement
 # explicitly set the rpc binary
 # - pro: fails when the binary is not found
-DELTA_CHAT_RPC_SERVER=$(which deltachat-rpc-server) npm run dev -- --allow-unsafe-core-replacement
+DELTA_CHAT_RPC_SERVER=$(which deltachat-rpc-server) pnpm -w dev:electron -- --allow-unsafe-core-replacement
 ```
 
 > (on windows you need to look up how to set env vars yourself, but the command to find it is `where deltachat-rpc-server`)
@@ -64,6 +66,10 @@ If you already have a core git checkout, you can skip the first step.
 2. go into your core checkout and run `git pull` to update it to the newest version, then create a branch for your changes
 3. run `python3 deltachat-rpc-server/npm-package/scripts/make_local_dev_version.py`
 4. run `npm i` and `npm run build` inside `../deltachat-core-rust/deltachat-jsonrpc/typescript/`
-5. go into your desktop repo and run `npm i ../deltachat-core-rust/deltachat-jsonrpc/typescript ../deltachat-core-rust/deltachat-rpc-server/npm-package`
+5. go into your desktop repo and run `./bin/link_core/link_local.sh` [^1]
 
 Note that you need to run step 3 and 4 again after each change to core sourcecode.
+
+> to reset to normal run `./bin/link_core/link_catalog.sh` [^1]
+
+[^1]: for window look inside of the script to learn what to do and please write one for powershell

@@ -1,0 +1,46 @@
+.ReadReceiptsContainer {
+  margin: 10px;
+}
+
+.Heading {
+  display: flex;
+  align-items: center;
+  font-size: 1.15em;
+}
+
+.ReadReceiptBox {
+  background-color: var(--MessageDetails-ReadReceipt-Bg);
+  border-radius: 10px;
+  padding: 3px 9px;
+}
+
+.DoubleCheckmarkIcon {
+  height: 1.5em;
+  width: 2.25em;
+  $svg: './images/read.svg';
+  mask: url($svg) no-repeat center;
+  mask-size: 1.5em;
+  background-color: var(--messageStatusIcon);
+}
+
+.ReadReceipt {
+  display: flex;
+  align-items: center;
+  margin-block: 5.8px;
+}
+
+.ReadReceiptContactLabel {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: center;
+  margin-inline-start: 7px;
+}
+
+.ContactEmail {
+  color: var(--textSecondary);
+}
+
+.Date {
+  color: var(--MessageDetails-ReadReceipt-Date);
+}

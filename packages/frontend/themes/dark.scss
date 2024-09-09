@@ -1,0 +1,39 @@
+.theme-meta {
+  --name: 'Dark Theme';
+  --description: 'Our default dark theme.';
+}
+
+/* Set theme variables used for theme Generation */
+$outlineColor: #505050;
+$accentColor: #2090ea;
+$bgChatView: #19232b;
+$bgImage: url('./images/background_dark.svg');
+$bgMessageBubbleIncoming: #303030;
+$bgMessageBubbleOutgoing: #354535;
+$bgNavBar: #272727;
+$bgPrimary: #222;
+$bgSecondary: #333;
+$chatListItemSelectedBg: #4c6e7d;
+$colorDanger: #f96856;
+$colorNone: #a0a0a0;
+$colorPrimary: #42a5f5;
+$floatingActionButtonBg: #333;
+$keybindingHintsBoxBackground: #333;
+$keybindingActionBackground: #454545;
+$keybindingKeyBackground: lightgray;
+$keybindingKeyBorder: rgba(0, 0, 0, 0.2);
+$keybindingKeyShadow: rgba(0, 0, 0, 0.35);
+$textNavBar: #ddddf0;
+$textPrimary: #fff;
+$textSecondary: #ddd;
+
+$scrollbarTransparency: 0.34;
+
+/* Derive the themedata from the theme variables */
+@import '_themebase.scss';
+
+/* overwrite themedata */
+:root {
+}
+
+/* overwrite css */

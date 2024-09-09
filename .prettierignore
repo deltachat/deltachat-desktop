@@ -1,4 +1,7 @@
 CONTRIBUTORS.md
 CHANGELOG.md
 node_modules
-src/shared/build-info.ts
+
+packages/target-electron/bundle_out
+packages/target-electron/tests/compiled
+packages/shared/ts-compiled-for-tests

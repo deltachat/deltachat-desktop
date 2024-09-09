@@ -10,7 +10,7 @@ on:
 
 jobs:
   test:
-    name: Tests and E2E Tests
+    name: Tests #and E2E Tests
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -22,20 +22,21 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 20.x
-    - name: npm ci
+    - name: install dependencies
       run: |
-        npm ci
-    - name: npm run build
+        npm i -g pnpm
+        pnpm install --frozen-lockfile
+    - name: build
       run: |
-        npm run build
-    - name: npm test-unit
+        pnpm run build
+    - name: test
       run: |
-        npm run test-unit
-    - uses: DevExpress/testcafe-action@latest
-      with:
-        version: "1.15.0"
-        args: "--skip-js-errors electron:. ./test/testcafe/test.js ./test/testcafe/messagelist_tests.ts"
-      env:
-        DCC_NEW_TMP_EMAIL: ${{secrets.DCC_NEW_TMP_EMAIL}}
-        NODE_ENV: test
-        TEST_DIR: .test_tmp_data
+        pnpm run test
+    # - uses: DevExpress/testcafe-action@latest
+    #   with:
+    #     version: "1.15.0"
+    #     args: "--skip-js-errors electron:. ./test/testcafe/test.js ./test/testcafe/messagelist_tests.ts"
+    #   env:
+    #     DCC_NEW_TMP_EMAIL: ${{secrets.DCC_NEW_TMP_EMAIL}}
+    #     NODE_ENV: test
+    #     TEST_DIR: .test_tmp_data

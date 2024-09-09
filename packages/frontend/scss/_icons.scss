@@ -1,0 +1,65 @@
+.icon {
+  display: block;
+  width: 48px;
+  height: 48px;
+
+  &.videocamera {
+    background-image: url('./images/videocamera.svg');
+    background-repeat: no-repeat;
+    margin: 5px;
+    background-size: 38px;
+  }
+}
+
+.remove-icon {
+  margin-top: calc((64px - 20px) / 2);
+  margin-right: 10px;
+  .bp4-icon > svg {
+    width: 20px;
+    height: 20px;
+    fill: grey;
+  }
+}
+
+.remove-icon:hover {
+  .bp4-icon {
+    & > svg {
+      fill: #bf0000;
+    }
+  }
+}
+
+img.verified-icon {
+  width: 1em;
+  height: 1em;
+  // about 1 white space's width
+  margin-inline-start: 0.3em;
+  vertical-align: middle;
+}
+
+img.material-icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+  transform: translate(0px, -0.07em);
+}
+
+i.material-svg-icon {
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  background-color: var(--globalText);
+  display: inline-block;
+  height: 1.15em;
+  width: 1.15em;
+  -webkit-mask-size: 1.15em;
+  mask-size: 1.15em;
+  margin-inline-start: 0.3em;
+  margin-inline-end: 0.3em;
+  vertical-align: middle;
+}
+
+i.material-icon-schedule {
+  mask-image: url(./images/icons/schedule.svg);
+  -webkit-mask-image: url(./images/icons/schedule.svg);
+  transform: translate(0px, -0.07em);
+}

@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "module": "NodeNext",
+    "target": "es2018",
+    "allowJs": false,
+    "strictNullChecks": true,
+    "strict": true,
+    "moduleResolution": "NodeNext"
+  },
+  "include": ["./**/*.ts", "./**/*.js"],
+  "exclude": ["./ts-compiled-for-tests"]
+}

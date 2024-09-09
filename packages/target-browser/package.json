@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "name": "@deltachat-desktop/target-browser",
+  "type": "module",
+  "version": "1.46.2-monorepo",
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "check:types": "tsc --noEmit -p runtime-browser"
+  },
+  "dependencies": {
+    "@deltachat-desktop/runtime-interface": "link:../runtime",
+    "@deltachat-desktop/shared": "link:../shared",
+    "@deltachat/jsonrpc-client": "catalog:",
+    "@deltachat/stdio-rpc-server": "catalog:"
+  }
+}

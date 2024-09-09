@@ -23,8 +23,8 @@ The actual theme code is build as follows:
 Some examples:
 
 ```
-dc:dark -> ./themes/dark.css
-dc:light -> ./themes/light.css
+dc:dark -> ./html-dist/themes/dark.css
+dc:light -> ./html-dist/themes/light.css
 custom:mytheme -> ~/.config/DeltaChat/custom-themes/mytheme.css
 ```
 
@@ -48,17 +48,17 @@ You can modify all classes and use all kind of css, but we recommend using the c
 > Warning: This will also (probably) change in the future.
 
 ```
-npx electron . --theme dc:dark
+cd packages/target-electron && pnpm electron . --theme dc:dark
 or
-npm run dev -- --theme dc:dark
+pnpm dev:electron -- --theme dc:dark
 or
-npm run start -- --theme dc:dark
+pnpm start:electron -- --theme dc:dark
 ```
 
 You can also enable hot reload for loaded theme with:
 
 ```
-npm run start -- --theme dc:dark --theme-watch
+pnpm start:electron -- --theme dc:dark --theme-watch
 ```
 
 ## Creating your own Theme:
@@ -71,17 +71,17 @@ We use SCSS to create themes, because it allows us to save work by using its col
 
 1. copy the light or dark theme and save it to your user deltachat folder `DeltaChat/custom-themes/my_theme.scss`
 
-2. run `npm i`
+2. run `pnpm i` at your desktop checkout.
 
 3. compile the theme to CSS in watch mode.
 
 ```sh
-npx sass --watch path/to/Deltachat/config/folder/custom-themes/my_theme.scss path/to/Deltachat/config/folder/custom-themes/my_theme.css -I themes/ --no-source-map
+pnpm sass --watch path/to/Deltachat/config/folder/custom-themes/my_theme.scss path/to/Deltachat/config/folder/custom-themes/my_theme.css -I packages/frontend/themes/ --no-source-map
 # for linux
-npx sass --watch ~/.config/DeltaChat/custom-themes/my_theme.scss ~/.config/DeltaChat/custom-themes/my_theme.css -I themes/ --no-source-map
+pnpm sass --watch ~/.config/DeltaChat/custom-themes/my_theme.scss ~/.config/DeltaChat/custom-themes/my_theme.css -I packages/frontend/themes/ --no-source-map
 ```
 
-> Note: you have to set `-I` to the theme folder in a deltachat-desktop git checkout, otherwise you'll get an error!
+> Note: you have to set `-I` to the theme folder (`packages/frontend/themes`) in a deltachat-desktop git checkout, otherwise you'll get an error!
 
 4. open a new terminal window/tab
 
@@ -98,18 +98,18 @@ Read the comments in the theme files for additional information.
 
 ### **Method B** - Without cloning the whole deltachat desktop
 
-0. install the sass compiler via `npm i -g node-sass` (if it says that npm was not found, then you need to install nodejs first)
+0. install the sass compiler via `npm i -g sass` (if it says that npm was not found, then you need to install nodejs first)
 
-1. Download all files starting with `_` from https://github.com/deltachat/deltachat-desktop/tree/main/themes and put them in a `./themes/` folder in your working directory (or alternatively download the folder to your working directory).
+1. Download all files starting with `_` from https://github.com/deltachat/deltachat-desktop/tree/main/packages/frontend/themes and put them in a `./themes/` folder in your working directory (or alternatively download the folder to your working directory).
 
 2. copy the light or dark theme and save it to your user deltachat folder `DeltaChat/custom-themes/my_theme.scss`
 
 3. compile the theme to CSS in watch mode.
 
 ```sh
-node-sass -w path/to/Deltachat/config/folder/custom-themes/my_theme.scss path/to/Deltachat/config/folder/custom-themes/my_theme.css --include-path path/to/deltachat-desktop-git-folder/themes/
+sass -w path/to/Deltachat/config/folder/custom-themes/my_theme.scss path/to/Deltachat/config/folder/custom-themes/my_theme.css --include-path path/to/deltachat-desktop-git-folder/themes/
 # for linux:
-node-sass -w ~/.config/DeltaChat/custom-themes/my_theme.scss ~/.config/DeltaChat/custom-themes/my_theme.css --include-path themes/
+sass -w ~/.config/DeltaChat/custom-themes/my_theme.scss ~/.config/DeltaChat/custom-themes/my_theme.css --include-path themes/
 ```
 
 > Note: you have to set `--include-path` to the theme folder you created or downloaded earlier in step 1.

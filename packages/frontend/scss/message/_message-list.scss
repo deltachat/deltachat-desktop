@@ -1,0 +1,139 @@
+.message-list-and-composer {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-image: var(--chatViewBgImgPath);
+  background-size: cover;
+  background-color: var(--chatViewBg);
+  overflow: hidden;
+
+  .jump-down-button {
+    $heightUnreadCounter: 20px;
+    $heightJumpToBottomButton: 40px;
+    $width: 40px;
+    $height: $heightUnreadCounter + $heightJumpToBottomButton - 5px;
+    $marginBottom: 10px;
+    $marginRight: 10px;
+
+    position: relative;
+    left: calc(100% - #{$width} - #{$marginRight});
+    bottom: calc(-100% + #{$height} + #{$marginBottom});
+    height: $height;
+    width: $width;
+    z-index: $z-index-new-local-scope; // needed for .jump-down-button>.counter
+
+    .counter {
+      position: relative;
+      z-index: map-get($z-index, jump-down-button-scope-counter);
+      width: 25px;
+      height: 25px;
+      margin: 0 auto;
+      margin-bottom: 0px;
+      border-radius: 100%;
+      background-color: var(--colorPrimary);
+      color: #fff;
+      line-height: 25px;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .counter-3digits {
+      font-size: 11px !important;
+    }
+
+    .button {
+      position: relative;
+
+      height: $heightJumpToBottomButton;
+      margin: 0 auto;
+      margin-top: -10px;
+      width: $width;
+
+      line-height: $heightJumpToBottomButton;
+      background-color: var(--jumpDownButtonBackgroundColor);
+      border-radius: 100%;
+      box-shadow: 0px 3px 5px #66666630;
+
+      cursor: pointer;
+      .icon {
+        height: $heightJumpToBottomButton;
+        width: $width;
+        background-color: var(--jumpDownButtonIconColor);
+        &.down {
+          mask: url(./images/ic_scroll_down.png) no-repeat center;
+          -webkit-mask: url(./images/ic_scroll_down.png) no-repeat center;
+          mask-size: 65%;
+          -webkit-mask-size: 65%;
+        }
+        &.back {
+          mask: url(./images/ic_scroll_back.svg) no-repeat center;
+          -webkit-mask: url(./images/ic_scroll_back.svg) no-repeat center;
+          mask-size: 65%;
+          -webkit-mask-size: 65%;
+        }
+      }
+    }
+  }
+}
+
+.message-list-and-composer__message-list {
+  position: relative;
+  flex-grow: 1;
+
+  #message-list {
+    position: absolute;
+    bottom: 0;
+    // There is also `will-change: scroll-position` dynamically set on this
+    // element.
+    overflow: scroll;
+    max-height: 100%;
+    width: 100%;
+    padding: 0 0.5em;
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+  }
+
+  ul {
+    list-style: none;
+    min-width: 200px;
+    margin: 10px 0px;
+
+    li {
+      margin-bottom: 10px;
+      min-width: 200px;
+
+      &::after {
+        visibility: hidden;
+        display: block;
+        font-size: 0;
+        content: ' ';
+        clear: both;
+        height: 0;
+      }
+      &.highlight {
+        -webkit-animation: highlight-fade 3s 1;
+        -moz-animation: highlight-fade 3s 1;
+      }
+
+      @-webkit-keyframes highlight-fade {
+        0% {
+          background-color: var(--messageHightlightColor);
+        }
+        100% {
+          background-color: transparent;
+        }
+      }
+      @-moz-keyframes highlight-fade {
+        0% {
+          background-color: var(--messageHightlightColor);
+        }
+        100% {
+          background-color: transparent;
+        }
+      }
+    }
+  }
+}

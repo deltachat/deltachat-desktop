@@ -1,0 +1,37 @@
+/* Message Status */
+
+@keyframes __status-icon--spinning {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+.status-icon {
+  width: 18px; // respect the 1.5:1 aspect ratio (dictated by delivered & seen icon)
+  height: 12px;
+  display: inline-block;
+  margin-left: 2px;
+
+  &.sending {
+    @include color-svg('./images/sending.svg', var(--messageStatusIconSending));
+    animation: __status-icon--spinning 4s linear infinite;
+    // ensure the element takes always the same width:
+    width: 12px;
+    margin-left: 8px;
+  }
+  &.delivered {
+    @include color-svg('./images/sent.svg', var(--messageStatusIcon));
+  }
+
+  &.read {
+    @include color-svg('./images/read.svg', var(--messageStatusIcon));
+  }
+
+  &.error {
+    @include color-svg('./images/error.svg', var(--errorColor));
+    // ensure the element takes always the same width:
+    width: 12px;
+    margin-left: 8px;
+  }
+}

@@ -20,6 +20,10 @@
 - [Tips for specific subjects](#specific-tipps)
   - [VS Code users](#vscode)
   - [URI Schemes on linux](#linux-uri-schemes)
+  - [pnpm cli shell completion](#pnpm-tab-completion)
+  - [Disable code signing on packaging for macOS](#disable-mac-codesigning)
+  - [Useful Links](#useful-links)
+  - [JSONRPC debug tricks](#jsonrpc-debug-tricks)
 
 </details>
 
@@ -30,21 +34,21 @@
 While developing the following command will build the app and start `electron` in debug mode with http cache disabled:
 
 ```
-$ npm run dev
+$ pnpm dev
 ```
 
 It's also handy to develop in watch mode so that your changes to the code are immediately recompiled. For this you need two terminal windows:
 
 ```sh
 # Terminal 1
-$ npm run watch
+$ pnpm -w watch:electron
 # Terminal 2
-$ npm run start
+$ pnpm -w start:electron
 ```
 
-After making your changes, go in the deltachat/electron Dev-console and press `F5` to reload the frontend process.
+After making your changes, go in the deltachat/electron Dev-console and press `F5` or `Cmd+R` to reload the frontend process.
 
-> **Note:** this only applies to the frontend code in `src/renderer`. To build the main process you still need to use `npm run build` and then restart the deltachat-desktop process. (`npm run start`)
+> **Note:** this only applies to the frontend code in `src/renderer`. To build the main process you still need to use `pnpm -w build:electron` and then restart the deltachat-desktop process. (`pnpm -w start:electron`)
 
 ### Code Style <a id="code-style"></a>
 
@@ -53,14 +57,15 @@ After making your changes, go in the deltachat/electron Dev-console and press `F
 The primary command for checking any changes made to the code is:
 
 ```sh
-npm run check
+pnpm -w check
 ```
 
 This command in turn splits up into the following commands:
 
-- `npm run check:types` -> Runs `tsc` to make sure the `TypeScript` code is ok
-- `npm run check:lint` -> Runs [`eslint`](https://eslint.org) with [`TypeScript`](https://typescriptlang.org/) rules to check for common bad practices in all `.js`, `.ts` and `.tsx` files
-- `npm run check:format` -> Runs [`Prettier`](https://prettier.io/) with rules inspired by [`StandardJS`](https://standardjs.com/) to check formatting in all `.scss`, `.js`, `.ts`, `.tsx`, `.json` and `.md` files
+- `pnpm -w check:types` -> Runs `tsc` to make sure the `TypeScript` code is ok
+- `pnpm -w check:lint` -> Runs [`eslint`](https://eslint.org) with [`TypeScript`](https://typescriptlang.org/) rules to check for common bad practices in all `.js`, `.ts` and `.tsx` files
+- `pnpm -w check:format` -> Runs [`Prettier`](https://prettier.io/) with rules inspired by [`StandardJS`](https://standardjs.com/) to check formatting in all `.scss`, `.js`, `.ts`, `.tsx`, `.json` and `.md` files
+- `pnpm -w check:log-conventions` -> checks for illegal use of `console.log()`
 
 Sometimes `eslint` complains on code lines that for whatever reason doesn't fit well with the project style. Lines like this can be ignored by using `// eslint-disable-next-line` on the line prior to the line you would like to ignore:
 
@@ -73,38 +78,36 @@ We set up the linting using this [`guide`](https://github.com/typescript-eslint/
 
 If you work with SCSS make sure you read [`docs/STYLES.md`](./STYLES.md)
 
-Running `npm run check:lint` when using VS Code will make VS Code display the found problems.
+Running `pnpm -w check:lint` when using VS Code will make VS Code display the found problems.
 
-If you're unsure it's always safe to run `npm run check` to check everything. If you know what you're doing you can run the lower level commands for a more fine grained check.
+If you're unsure it's always safe to run `pnpm -w check` to check everything. If you know what you're doing you can run the lower level commands for a more fine grained check.
 
 #### Fixing Code Style
 
 If the code style check fails you can try to have it fixed for you. The primary command for doing this is:
 
 ```sh
-npm run fix
+pnpm -w fix
 ```
 
 This command in turn splits up into the following commands:
 
-- `npm run fix:lint` -> Runs [`eslint`](https://eslint.org) to attempt fixing any issues in all `.js`, `.ts` and `.tsx` files
-- `npm run fix:format` -> Runs [`Prettier`](https://prettier.io/) to attempt fixing formatting in all `.scss`, `.js`, `.ts`, `.tsx`, `.json` and `.md` files
+- `pnpm -w fix:lint` -> Runs [`eslint`](https://eslint.org) to attempt fixing any issues in all `.js`, `.ts` and `.tsx` files
+- `pnpm -w fix:format` -> Runs [`Prettier`](https://prettier.io/) to attempt fixing formatting in all `.scss`, `.js`, `.ts`, `.tsx`, `.json` and `.md` files
 
-If you're unsure it's always safe to run `npm run fix` to fix everything. If you know what you're doing you can run the lower level commands for a more fine grained fix.
+If you're unsure it's always safe to run `pnpm -w fix` to fix everything. If you know what you're doing you can run the lower level commands for a more fine grained fix.
 
 ### Tests <a id="tests"></a>
 
-Running `npm test` does the following:
-
-- runs `ESLint` and `Prettier` to check the code formatting
-- runs the unit tests
-- checks for illegal use of `console.log()`
+Running `pnpm -w test` runs the unit tests.
 
 #### E2E testing <a id="tests-e2e"></a>
 
-Run `npm run test-e2e` for end-to-end (E2E) testing. In E2E testing, [TestCafe](https://testcafe.io/) clicks through the app and simulates normal usage.
+> Info here is outdated, at the moment there is no E2E testing anymore.
 
-You need to provide a temporary email account generation token via the environment variable `DCC_NEW_TMP_EMAIL`. (ask contributors on how to get one of these tokens)
+~~Run `npm test-e2e` for end-to-end (E2E) testing. In E2E testing, [TestCafe](https://testcafe.io/) clicks through the app and simulates normal usage.~~
+
+~~You need to provide a temporary email account generation token via the environment variable `DCC_NEW_TMP_EMAIL`. (ask contributors on how to get one of these tokens)~~
 
 ### Translations <a id="translations"></a>
 
@@ -113,7 +116,7 @@ Install the [transifex client](https://developers.transifex.com/docs/cli) and ge
 And periodically we can run the following command to get the new translation strings from translators:
 
 ```
-npm run translations-update
+pnpm -w translations:update
 ```
 
 When you need to modify language strings do it as a PR on English language strings in the Android repo. It is in a language other than English do it in Transifex.
@@ -137,7 +140,7 @@ The syntax is exactly the same as for all other `_locales/*.json` files.
 Example:
 `{"foobar_desktop": {"message": "This is a test"}}`
 
-> **Tip:** run with the `--translation-watch` flag (included in `npm start`) to start in translation
+> **Tip:** run with the `--translation-watch` flag (included in `pnpm start`) to start in translation
 > watch mode - which watches the experimental language strings and hot reloads them into dc-desktop on save
 
 #### Use localized strings in code
@@ -169,16 +172,22 @@ For Continuous Integration we use GitHub Actions.
 Build in production mode (development tools disabled and minified frontend code)
 
 ```sh
-NODE_ENV=production npm run build
+NODE_ENV=production pnpm -w build
+
+# the electron target also has a shortcut that should also work on windows
+cd packages/target-electron
+pnpm build4production
 ```
 
 (for building on Windows you need another command to set the environment variable)
 
 #### 1. Generate Electron-Builder Configuration
 
-Generate the `electron-builder.json5` file with `npm run pack:generate_config`.
+> First make sure you are in the `packages/target-electron` dirctory.
 
-Possible options for `npm run pack:generate_config`:
+Generate the `electron-builder.json5` file with `pnpm pack:generate_config`.
+
+Possible options for `pnpm pack:generate_config`:
 
 | Environment var | Effect                          |
 | --------------- | ------------------------------- |
@@ -186,20 +195,23 @@ Possible options for `npm run pack:generate_config`:
 
 #### 2. Run electron-builder
 
-If you haven't done so run `npm run build` now.
+If you haven't done so run `pnpm build` now.
 
 Start electron-builder:
 
-| Command                  | Description                                                                 |
-| ------------------------ | --------------------------------------------------------------------------- |
-| `npm run pack:win`       | Build for Windows (`nsis` & `portable` target)                              |
-| `npm run pack:mac`       | Build for macOS (`dmg` & `mas` target)                                      |
-| `npm run pack:linux`     | Build for Linux (`AppImage` & `deb` target)                                 |
-| `npm run pack:linux:dir` | Build for Linux, but just the folder, no package. This is used for Flatpak. |
+| Command               | Description                                                                 |
+| --------------------- | --------------------------------------------------------------------------- |
+| `pnpm pack:win`       | Build for Windows (`nsis` & `portable` target)                              |
+| `pnpm pack:mac`       | Build for macOS (`dmg` & `mas` target)                                      |
+| `pnpm pack:linux`     | Build for Linux (`AppImage` & `deb` target)                                 |
+| `pnpm pack:linux:dir` | Build for Linux, but just the folder, no package. This is used for Flatpak. |
 
 For more info look at the `scripts` section in `package.json`.
 
 The commands for windows10 appx and the App Store package for mac are currently not in the scripts section. They are useless for most people anyway, as they require special paid developer accounts or signing certificates.
+
+- `mas` - mac appstore build
+- `appx` - windows appstore build, you can find info on how to build a self-signed appx in [`APPX_TESTING.md`](./APPX_TESTING.md).
 
 ### Release Workflow <a id="release"></a>
 
@@ -209,31 +221,52 @@ See [RELEASE.md](../RELEASE.md)
 
 Some important folders and files:
 
-```powershell
-├── _locales/                 # translation files in xml and json
-│   ├── _untranslated_en.json # can contain experimental language strings
-│   └── languages.json        # central file which defines the visible languages and their native names for the users to choose
-├── .gihub/workflows          # source of our Github Actions
-├── bin/                      # various helper scripts
-│   └── build/                # build scripts
-├── build/                    # files needed for electron-builder
-├── docs/                     # documentation
-├── images/                   # image files like icons or backgrounds
-├── index.js                  # entry point for the main process
-├── README_ASSETS/            # images used in the readme file and documentation
-├── scss/                     # stylesheets which need preprocessing
-├── src/
-│   ├── main/                 # TypeScript for the main process
-│   ├── renderer/             # TypeScript for the renderer process
-│   └── shared/               # TypeScript that is shared between both processes
-├── static/
-│   ├── fonts/                # fonts
-│   ├── help/                 # the in-app help
-│   └── main.html             # main html file in renderer process
-├── test/
-│   ├── testcafe/             # TestCafe tests
-│   └── unit/                 # unit tests
-└── themes/                   # default themes
+```ini
+├── .gihub/workflows                        # source of our Github Actions
+├── CHANGELOG.md                            # what changed
+├── RELEASE.md                              # how to make a release
+├── _locales                                # translations
+│   ├── _languages.json                     # central file which defines the visible languages and their native names for the users to choose
+│   ├── _untranslated_en.json               # new translation keys that are not yet upstreamed to the android-repo/transifex.
+│   └── ...
+├── bin                                     # executable scripts for various developer tasks
+├── docs                                    # documentation
+├── images                                  # images and icons
+├── packages
+│   ├── frontend                            # the frontend / UI
+│   │   ├── bin                             # executable scripts specific to the frontend
+│   │   ├── html-dist                       # [generated] output from building
+│   │   ├── scss                            # global css stylesheets
+│   │   ├── src                             # source code
+│   │   ├── static                          # static files that are needed
+│   │   └── themes                          # themes
+│   ├── runtime
+│   │   └── runtime.ts                      # runtime interface that abstracts over runtime, so frontend can run on electron, tauri and browser
+│   ├── shared                              # code that is shared between the packages
+│   │   ├── shared-types.d.ts               # shared types
+│   │   ├── tests                           # tests
+│   │   └── ts-compiled-for-tests           # [generated] compiled code for testing
+│   ├── target-browser
+│   │   └── runtime-browser                 # runtime implementation for browsers
+│   ├── target-e2e-integration-testsuite
+│   ├── target-electron
+│   │   ├── bin                             # executable scripts specific to the electron target
+│   │   ├── build                           # scripts and files needed for packaging
+│   │   ├── bundle_out                      # [generated] compiled+bundled js code for electron main rocess
+│   │   ├── dist                            # [generated] output from packaging
+│   │   ├── electron-builder.json5          # [generated] config file for packaging with electron-builder
+│   │   ├── html-dist                       # [generated] bundled frontend and static resources
+│   │   ├── runtime-electron                # runtime implementation for electron
+│   │   ├── src                             # source for electron main process js code
+│   │   ├── static                          # static files that are needed
+│   │   ├── stub.cjs                        # file that can be used for electron builder to skip signing
+│   │   └── tests                           # tests, like a test for the account data migration function
+│   └── target-tauri
+├── static
+│   ├── fonts                               # fonts
+│   ├── help                                # help files in different languages, generated by bin/create-local-help.sh
+│   └── xdcs                                # internal extension xdcs
+└── test                                    # old inactive tests that will be rewritten soon
 ```
 
 ## Tips for specific subjects <a id="specific-tipps"></a>
@@ -246,9 +279,27 @@ Solution: Tell VS Code to use the workspace version of TypeScript instead of an 
 
 ### URI Schemes on linux <a id="linux-uri-schemes"></a>
 
-Can only be tested in builds that have a desktop file. The simplest way to do this is to install the appimage generated by `npx electron-builder --linux AppImage`. (Installing with AppImageLauncher)
+Can only be tested in builds that have a desktop file. The simplest way to do this is to install the appimage generated by `pnpm electron-builder --linux AppImage`. (Installing with AppImageLauncher)
 
-### Disable code signing on packaging for macOS
+### pnpm cli shell completion <a id="pnpm-tab-completion"></a>
+
+bash:
+
+```bash
+pnpm completion bash > ~/completion-for-pnpm.bash
+echo 'source ~/completion-for-pnpm.bash' >> ~/.bashrc
+```
+
+zsh:
+
+```bash
+pnpm completion zsh > ~/completion-for-pnpm.zsh
+echo 'source ~/completion-for-pnpm.zsh' >> ~/.zshrc
+```
+
+see also: <https://pnpm.io/completion>
+
+### Disable code signing on packaging for macOS <a id="disable-mac-codesigning"></a>
 
 Sometimes you want to package the app for macOS for testing, but don't have the required certificates for signing it. You can set the following environment variable to skip code signing:
 
@@ -256,7 +307,7 @@ Sometimes you want to package the app for macOS for testing, but don't have the 
 export CSC_IDENTITY_AUTO_DISCOVERY=false
 ```
 
-### Useful Links:
+### Useful Links <a id="useful-links"></a>:
 
 Docs about macOS sandbox permissions:
 
@@ -264,7 +315,7 @@ Docs about macOS sandbox permissions:
 
 - https://developer.apple.com/library/archive/documentation/Miscellaneous/Reference/EntitlementKeyReference/Chapters/AppSandboxTemporaryExceptionEntitlements.html#//apple_ref/doc/uid/TP40011195-CH5-SW1
 
-### JSONRPC stuff:
+### JSONRPC debug tricks: <a id="jsonrpc-debug-tricks"></a>
 
 If you want to debug how many jsonrpc calls were made you can run `exp.printCallCounterResult()` in the devConsole when you have debug logging enabled.
 This can be useful if you want to test your debouncing logic or compare a branch against another branch, to see if your changes reduced overall jsonrpc calls.
