@@ -12,6 +12,8 @@
 - dev: improved `./bin/test_for_missing_translations.sh` script: It is now more correct, helpful and faster
 
 ### Fixed
+- fix that you can not click header button in dialog when they are on top of the navbar #4093
+- fix if Contact has long bio/signature, then shared chats were hidden #4093
 - dev: proper native source-map support during development for main process
 - dev: use correct log level when logging to console in main process
 - security: harden electron_functions, only runtime can use them now
@@ -36,6 +38,7 @@
 - fix newlines in messages with WebXDC attachments #4079
 - being unable to delete a nonfunctional account imported from ArcaneChat #4104
 - Ctrl/Cmd+Q (also File->Quit) now should properly close the app when focus is on main window
+
 
 <a id="1_46_7"></a>
 
