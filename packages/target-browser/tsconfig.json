@@ -6,6 +6,7 @@
     "module": "ES2022",
     "target": "es2022",
     "rootDirs": [".", "../shared"],
+    "lib": [],
     "allowJs": false,
     "esModuleInterop": true,
     "moduleResolution": "Node10",

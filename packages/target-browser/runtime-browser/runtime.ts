@@ -12,12 +12,96 @@ import {
 
 import { LocaleData } from '@deltachat-desktop/shared/localize.js'
 import { Runtime } from '@deltachat-desktop/runtime-interface'
-import { BaseDeltaChat } from '@deltachat/jsonrpc-client'
+import { BaseDeltaChat, yerpc } from '@deltachat/jsonrpc-client'
 
 import type { getLogger as getLoggerFunction } from '@deltachat-desktop/shared/logger.js'
 import type { setLogHandler as setLogHandlerFunction } from '@deltachat-desktop/shared/logger.js'
 
+import { MessageToBackend } from '../src/runtime-ws-protocol.js'
+
+const { WebsocketTransport } = yerpc
+
+class BrowserTransport extends WebsocketTransport {
+  constructor(
+    private hasDebugEnabled: boolean,
+    private callCounterFunction: (label: string) => void
+  ) {
+    super('wss://localhost:3000/ws/dc')
+  }
+
+  protected _onmessage(message: yerpc.Message): void {
+    if (this.hasDebugEnabled) {
+      /* ignore-console-log */
+      console.debug('%c▼ %c[JSONRPC]', 'color: red', 'color:grey', message)
+    }
+    super._onmessage(message)
+  }
+
+  _send(message: yerpc.Message): void {
+    super._send(message)
+    if (this.hasDebugEnabled) {
+      /* ignore-console-log */
+      console.debug('%c▲ %c[JSONRPC]', 'color: green', 'color:grey', message)
+      if ((message as any)['method']) {
+        this.callCounterFunction((message as any).method)
+        this.callCounterFunction('total')
+      }
+    }
+  }
+}
+
+class BrowserDeltachat extends BaseDeltaChat<BrowserTransport> {
+  close() {
+    /** noop */
+  }
+  constructor(
+    hasDebugEnabled: boolean,
+    callCounterFunction: (label: string) => void
+  ) {
+    super(new BrowserTransport(hasDebugEnabled, callCounterFunction), true)
+  }
+}
+
 class BrowserRuntime implements Runtime {
+  socket: WebSocket
+  private rc_config: RC_Config | null = null
+  constructor() {
+    this.socket = new WebSocket('wss://localhost:3000/ws/backend')
+
+    this.socket.addEventListener('open', () => {
+      console.log('WebSocket connection opened')
+    })
+
+    this.socket.addEventListener('message', event => {
+      console.log('Received message from server:', event.data)
+    })
+
+    this.socket.addEventListener('close', () => {
+      console.log('WebSocket connection closed')
+    })
+
+    this.socket.addEventListener('error', event => {
+      console.error('WebSocket error:', event)
+    })
+  }
+
+  sendToBackendOverWS(message: MessageToBackend.AllTypes) {
+    if (this.socket.readyState != this.socket.OPEN) {
+      /* ignore-console-log */
+      console.warn(
+        'sendToBackendOverWS can not send message to backend because websocket is not open'
+      )
+    } else {
+      try {
+        this.socket.send(JSON.stringify(message))
+      } catch (error) {
+        console.warn(
+          'sendToBackendOverWS failed to send message to backend over websocket'
+        )
+      }
+    }
+  }
+
   onResumeFromSleep: (() => void) | undefined
   onChooseLanguage: ((locale: string) => Promise<void>) | undefined
   onThemeUpdate: (() => void) | undefined
@@ -37,7 +121,7 @@ class BrowserRuntime implements Runtime {
   }
 
   emitUIFullyReady(): void {
-    throw new Error('Method not implemented.')
+    this.sendToBackendOverWS({ type: 'UIReadyFrontendReady' })
   }
   onDragFileOut(_file: string): void {
     // Browser can not implement this
@@ -47,13 +131,13 @@ class BrowserRuntime implements Runtime {
     return true // Browser does not support dragging files out, so can only be from outside
   }
   emitUIReady(): void {
-    throw new Error('Method not implemented.')
+    this.sendToBackendOverWS({ type: 'UIReady' })
   }
   createDeltaChatConnection(
-    _hasDebugEnabled: boolean,
-    _callCounterFunction: (label: string) => void
+    hasDebugEnabled: boolean,
+    callCounterFunction: (label: string) => void
   ): BaseDeltaChat<any> {
-    throw new Error('Method not implemented.')
+    return new BrowserDeltachat(hasDebugEnabled, callCounterFunction)
   }
   openMessageHTML(
     _window_id: string,
@@ -88,17 +172,63 @@ class BrowserRuntime implements Runtime {
   ): Promise<string> {
     throw new Error('Method not implemented.')
   }
-  getLocaleData(_locale?: string | undefined): Promise<LocaleData> {
-    throw new Error('Method not implemented.')
+  async getLocaleData(locale?: string | undefined): Promise<LocaleData> {
+    const messagesEnglish = await (await fetch('/locales/en.json')).json()
+    const untranslated = await (
+      await fetch('/locales/_untranslated_en.json')
+    ).json()
+
+    if (!locale) {
+      return { locale: 'en', messages: { ...messagesEnglish, ...untranslated } }
+    }
+
+    let localeMessages: LocaleData['messages']
+    try {
+      localeMessages = await (await fetch(`/locales/${locale}.json`)).json()
+    } catch (error1) {
+      // We couldn't load the file for the locale but it's a dialect. Try to fall
+      // back to the main language (example: de-CH -> de)
+      try {
+        if (locale.indexOf('-') !== -1) {
+          let base_locale = (locale = locale.split('-')[0])
+
+          localeMessages = await (
+            await fetch(`/locales/${base_locale}.json`)
+          ).json()
+        } else {
+          throw new Error(
+            'language load failed, even alternative of base language failed.'
+          )
+        }
+      } catch (error2) {
+        this.log.error(
+          `Could not load messages for ${locale}, falling back to english`,
+          error1,
+          error2
+        )
+        locale = 'en'
+        localeMessages = messagesEnglish
+      }
+    }
+    return { locale: 'en', messages: { ...localeMessages, ...untranslated } }
   }
   setLocale(_locale: string): Promise<void> {
     throw new Error('Method not implemented.')
   }
-  setDesktopSetting(
-    _key: keyof DesktopSettingsType,
-    _value: string | number | boolean | undefined
+  async setDesktopSetting(
+    key: keyof DesktopSettingsType,
+    value: string | number | boolean | undefined
   ): Promise<void> {
-    throw new Error('Method not implemented.')
+    const request = await fetch(`/backend-api/config/${key}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(value),
+    })
+    if (!request.ok) {
+      throw new Error('getDesktopSettings request failed')
+    }
   }
   getAvailableThemes(): Promise<Theme[]> {
     throw new Error('Method not implemented.')
@@ -133,7 +263,7 @@ class BrowserRuntime implements Runtime {
   setNotificationCallback(
     _cb: (data: { accountId: number; chatId: number; msgId: number }) => void
   ): void {
-    throw new Error('Method not implemented.')
+    this.log.critical('Method not implemented.')
   }
   showNotification(_data: DcNotification): void {
     throw new Error('Method not implemented.')
@@ -144,8 +274,8 @@ class BrowserRuntime implements Runtime {
   clearNotifications(_chatId: number): void {
     throw new Error('Method not implemented.')
   }
-  setBadgeCounter(_value: number): void {
-    this.log.warn('setBadgeCounter is not implemented for browser')
+  setBadgeCounter(value: number): void {
+    document.title = `DeltaChat${value ? `(${value})` : ''}`
   }
   deleteWebxdcAccountData(_accountId: number): Promise<void> {
     throw new Error('Method not implemented.')
@@ -156,11 +286,19 @@ class BrowserRuntime implements Runtime {
   restartApp(): void {
     throw new Error('Method not implemented.')
   }
+  private runtime_info: RuntimeInfo | null = null
   getRuntimeInfo(): RuntimeInfo {
-    throw new Error('Method not implemented.')
+    if (this.runtime_info === null) {
+      throw new Error('this.runtime_info is not set')
+    }
+    return this.runtime_info
   }
-  getDesktopSettings(): Promise<DesktopSettingsType> {
-    throw new Error('Method not implemented.')
+  async getDesktopSettings(): Promise<DesktopSettingsType> {
+    const request = await fetch('/backend-api/config')
+    if (!request.ok) {
+      throw new Error('getDesktopSettings request failed')
+    }
+    return await request.json()
   }
   getWebxdcIconURL(_accountId: number, _msgId: number): string {
     throw new Error('Method not implemented.')
@@ -202,15 +340,40 @@ class BrowserRuntime implements Runtime {
   }
 
   private log!: ReturnType<typeof getLoggerFunction>
-  initialize(
+  async initialize(
     setLogHandler: typeof setLogHandlerFunction,
     getLogger: typeof getLoggerFunction
-  ): void {
+  ): Promise<void> {
     this.log = getLogger('runtime/browser')
-    throw new Error('Method not implemented.')
+
+    const [RCConfigRequest, RuntimeInfoRequest] = await Promise.all([
+      fetch('/backend-api/rc_config'),
+      fetch('/backend-api/runtime_info'),
+    ])
+
+    if (!RCConfigRequest.ok || !RuntimeInfoRequest.ok) {
+      throw new Error(
+        'initialisation failed, look into network tab for more into'
+      )
+    }
+
+    let config: RC_Config = (this.rc_config = await RCConfigRequest.json())
+    /* ignore-console-log */
+    console.info('RC_Config', config)
+    this.runtime_info = await RuntimeInfoRequest.json()
+
+    setLogHandler((channel, level, stack_trace, ...args) => {
+      this.sendToBackendOverWS({
+        type: 'log',
+        data: [channel, level, stack_trace, ...args],
+      })
+    }, config)
   }
   getRC_Config(): RC_Config {
-    throw new Error('Method not implemented.')
+    if (this.rc_config === null) {
+      throw new Error('this.rc_config is not set')
+    }
+    return this.rc_config
   }
   openHelpWindow(_anchor?: string): void {
     throw new Error('Method not implemented.')

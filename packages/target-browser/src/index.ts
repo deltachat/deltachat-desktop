@@ -1,60 +1,35 @@
-import { existsSync } from 'fs'
-import { join, dirname } from 'path'
-import { fileURLToPath } from 'url'
+import { join } from 'path'
 import express from 'express'
 import https from 'https'
 import { readFile, stat } from 'fs/promises'
 import session from 'express-session'
-import { LocalStorage } from 'node-localstorage'
 import { FileStore } from './session-store'
 import { authMiddleWare, CORSMiddleWare } from './middlewares'
 import { startDeltaChat } from '@deltachat/stdio-rpc-server'
 import { C } from '@deltachat/jsonrpc-client'
 import resolvePath from 'resolve-path'
+import { WebSocketServer } from 'ws'
+import { BackendApiRoute } from './backendApi'
+import { MessageToBackend } from './runtime-ws-protocol'
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
-
-// Directories & Files
-const DIST_DIR = join(__dirname)
-const DATA_DIR = join(__dirname, '../data')
-const PRIVATE_CERTIFICATE_KEY = join(DATA_DIR, 'certificate/cert.key.pem')
-const PRIVATE_CERTIFICATE_CERT = join(DATA_DIR, 'certificate/cert.pem')
-const DC_ACCOUNTS_DIR = join(DATA_DIR, 'accounts')
-
-// ENV Vars
-const ENV_WEB_PASSWORD = process.env['WEB_PASSWORD']
-const ENV_WEB_PORT = process.env['WEB_PORT'] || 3000
-// set this to one if you use this behind a proxy
-const ENV_WEB_TRUST_FIRST_PROXY = Boolean(process.env['WEB_TRUST_FIRST_PROXY'])
-
-if (!existsSync(DATA_DIR)) {
-  console.log(
-    '\n[ERROR]: Data dir does not exist, make sure you follow the steps in the Readme file\n'
-  )
-  process.exit(1)
-}
-
-if (!existsSync(PRIVATE_CERTIFICATE_KEY)) {
-  console.log(
-    `\n[ERROR]: Certificate at "${PRIVATE_CERTIFICATE_KEY}" not exist, make sure you follow the steps in the Readme file\n`
-  )
-  process.exit(1)
-}
-
-if (!ENV_WEB_PASSWORD) {
-  console.log(
-    `\n[ERROR]: Environment Variable WEB_PASSWORD is not set. You need to set it.\n`
-  )
-  process.exit(1)
-}
+// This import has side effects, it will quit the app if env vars or files are missing
+import {
+  ENV_WEB_TRUST_FIRST_PROXY,
+  DC_ACCOUNTS_DIR,
+  DIST_DIR,
+  ENV_WEB_PASSWORD,
+  ENV_WEB_PORT,
+  PRIVATE_CERTIFICATE_CERT,
+  PRIVATE_CERTIFICATE_KEY,
+  localStorage,
+  LOCALES_DIR,
+} from './config'
 
 const app = express()
 
 if (ENV_WEB_TRUST_FIRST_PROXY) {
   app.set('trust proxy', 1)
 }
-
-const localStorage = new LocalStorage(join(DATA_DIR, 'browser-runtime-data'))
 
 const getCookieSecret = () => {
   const savedSecret = localStorage.getItem('cookieSecret')
@@ -67,20 +42,20 @@ const getCookieSecret = () => {
   }
 }
 
-app.use(
-  session({
-    store: new FileStore(localStorage),
-    secret: getCookieSecret(),
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-      sameSite: 'strict',
-      priority: 'high',
-      secure: true, // This makes it only work in https
-      httpOnly: true,
-    },
-  })
-)
+const sessionParser = session({
+  store: new FileStore(localStorage),
+  secret: getCookieSecret(),
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    sameSite: 'strict',
+    priority: 'high',
+    secure: true, // This makes it only work in https
+    httpOnly: true,
+  },
+})
+
+app.use(sessionParser)
 
 app.use(CORSMiddleWare)
 
@@ -94,6 +69,11 @@ app.get('/', (req, res) => {
 })
 
 app.use(express.static(DIST_DIR))
+app.use('/locales', express.static(LOCALES_DIR))
+
+app.get('/favicon.ico', (_req, res) =>
+  res.sendFile(join(DIST_DIR, 'images/deltachat.ico'))
+)
 
 app.post(
   '/authenticate',
@@ -151,6 +131,8 @@ app.get('/stickers/:account/:?pack/:filename', authMiddleWare, (req, res) => {
   res.send('req.params' + JSON.stringify(req.params))
 })
 
+app.use('/backend-api', BackendApiRoute)
+
 const sslserver = https.createServer(
   {
     key: await readFile(PRIVATE_CERTIFICATE_KEY),
@@ -158,6 +140,63 @@ const sslserver = https.createServer(
   },
   app
 )
+
+const wssDC = new WebSocketServer({ noServer: true, perMessageDeflate: true })
+wssDC.on('connection', function connection(ws) {
+  ws.on('error', console.error)
+
+  // custom dc connection like on electron
+
+  console.log('connected dc socket')
+})
+const wssBackend = new WebSocketServer({
+  noServer: true,
+  perMessageDeflate: true,
+})
+wssBackend.on('connection', function connection(ws) {
+  ws.on('error', console.error)
+
+  ws.on('message', raw_data => {
+    try {
+      // Try to decode the binary data as a UTF-8 string
+      const utf8String = raw_data.toString('utf8')
+      const msg: MessageToBackend.AllTypes = JSON.parse(utf8String)
+      if (msg.type == 'log') {
+        let [channel, level, _, ...data] = msg.data
+        console.debug(channel, level, data[0], '[..]')
+      } else {
+        console.debug('[recv on backend ws]', msg)
+      }
+    } catch (e) {
+      console.log('failed to read message as json string', e)
+    }
+  })
+
+  console.log('connected backend socket')
+})
+
+sslserver.on('upgrade', (request, socket, head) => {
+  socket.on('error', console.error)
+
+  sessionParser(request as any, {} as any, () => {
+    if (!(request as express.Request).session.isAuthenticated) {
+      console.log('unauthorized websocket session')
+      socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n')
+      socket.destroy()
+      return
+    }
+    const { pathname } = new URL(request.url || '', 'wss://base.url')
+    if (pathname === '/ws/dc') {
+      wssDC.handleUpgrade(request, socket, head, function (ws) {
+        wssDC.emit('connection', ws, request)
+      })
+    } else if (pathname === '/ws/backend') {
+      wssBackend.handleUpgrade(request, socket, head, function (ws) {
+        wssBackend.emit('connection', ws, request)
+      })
+    }
+  })
+})
 
 sslserver.listen(ENV_WEB_PORT, () => {
   console.log(`HTTPS app listening on port ${ENV_WEB_PORT}`)

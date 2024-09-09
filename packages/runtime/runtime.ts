@@ -52,7 +52,7 @@ export interface Runtime {
   initialize(
     setLogHandler: typeof setLogHandlerFunction,
     getLogger: typeof getLoggerFunction
-  ): void
+  ): Promise<void>
   reloadWebContent(): void
   openLogFile(): void
   getCurrentLogLocation(): string

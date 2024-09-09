@@ -6,8 +6,9 @@
   "license": "GPL-3.0-or-later",
   "scripts": {
     "check:types": "tsc --noEmit && tsc --noEmit -p runtime-browser",
-    "build": "pnpm run build:backend && pnpm run build:compose-frontend",
-    "build:backend": "esbuild --bundle src/index.ts --outfile=dist/server.js --platform=node --format=esm --packages=external",
+    "build": "pnpm build:locales && pnpm build:backend && pnpm --filter=@deltachat-desktop/frontend build && pnpm run build:compose-frontend",
+    "build:locales": "pnpm -w translations:convert",
+    "build:backend": "node ./bin/build.js",
     "build:runtime-impl": "pnpm esbuild --bundle --minify --sourcemap --outdir=./dist runtime-browser/runtime.ts",
     "build:compose-frontend": "node ../../bin/copy.js ../frontend/html-dist ./dist && node ../../bin/copy.js ./static ./dist && pnpm build:runtime-impl",
     "start": "pnpm run build && node dist/server.js"
@@ -22,12 +23,14 @@
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "node-localstorage": "^3.0.5",
-    "resolve-path": "^1.4.0"
+    "resolve-path": "^1.4.0",
+    "ws": "~8.18.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/node": "^20.14.13",
     "@types/resolve-path": "^1.4.2",
+    "@types/ws": "^8.5.12",
     "esbuild": "^0.23.1"
   }
 }
