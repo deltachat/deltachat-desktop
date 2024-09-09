@@ -5,6 +5,7 @@
 ### Added
 
 ### Changed
+- Update electron from `30.3.1` to `32.0.2`
 - dev: transformed repo into monorepo
 - dev: switched from `npm` to `pnpm`
 - dev: esbuild bundling for electron main process js (+minification for releases)

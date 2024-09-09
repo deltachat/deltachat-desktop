@@ -651,6 +651,7 @@ If you think that's a bug and you need that permission, then please open an issu
         const s = sessionFromAccountId(accountId)
         const appURL = `webxdc://${webxdcId}.webxdc`
         s.clearStorageData({ origin: appURL })
+        s.clearData({ origins: [appURL] })
         s.clearCodeCaches({ urls: [appURL] })
         s.clearCache()
       }
@@ -784,8 +785,10 @@ function removeLastBounds(
   )
 }
 
-ipcMain.handle('webxdc.clearWebxdcDOMStorage', (_, accountId: number) => {
-  sessionFromAccountId(accountId).clearStorageData()
+ipcMain.handle('webxdc.clearWebxdcDOMStorage', async (_, accountId: number) => {
+  const session = sessionFromAccountId(accountId)
+  await session.clearStorageData()
+  await session.clearData()
 })
 
 ipcMain.handle('webxdc.getWebxdcDiskUsage', async (_, accountId: number) => {
@@ -879,6 +882,7 @@ ipcMain.handle('delete_webxdc_account_data', async (_ev, accountId: number) => {
     cache: false,
   })
   await s.clearStorageData()
+  await s.clearData()
 
   // mark the folder for deletion on next startup
   if (s.storagePath) {
