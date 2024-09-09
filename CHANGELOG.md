@@ -5,6 +5,14 @@
 ### Added
 
 ### Changed
+
+### Fixed
+
+<a id="1_46_8"></a>
+
+## [1.46.8] - 2024-09-09
+
+### Changed
 - do not display email adresses in reactions dialog #4066
 - click on a row in reactions dialog opens contact profile #4066
 
@@ -15,6 +23,7 @@
 - fix newlines in messages with WebXDC attachments #4079
 - being unable to delete a nonfunctional account imported from ArcaneChat #4104
 - Ctrl/Cmd+Q (also File->Quit) now should properly close the app when focus is on main window
+
 
 <a id="1_46_7"></a>
 
@@ -2823,7 +2832,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.7...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.8...HEAD
+
+[1.46.8]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.7...v1.46.8
 
 [1.46.7]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.6...v1.46.7
 
