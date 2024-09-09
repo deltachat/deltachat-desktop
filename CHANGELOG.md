@@ -14,6 +14,7 @@
 ### Fixed
 - fix newlines in messages with WebXDC attachments #4079
 - being unable to delete a nonfunctional account imported from ArcaneChat #4104
+- Ctrl/Cmd+Q (also File->Quit) now should properly close the app when focus is on main window
 
 <a id="1_46_7"></a>
 
