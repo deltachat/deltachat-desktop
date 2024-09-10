@@ -322,9 +322,15 @@ class BrowserRuntime implements Runtime {
   openWebxdc(_msgId: number, _params: DcOpenWebxdcParameters): void {
     throw new Error('Method not implemented.')
   }
-  openPath(path: string): Promise<string> {
-    window.open('file://' + path, '_blank')?.focus()
-    return Promise.resolve('')
+  async openPath(path: string): Promise<string> {
+    if (path.includes('dc.db-blobs')) {
+      window.open(this.transformBlobURL(path), '_blank')?.focus()
+      return ''
+    } else {
+      throw new Error(
+        'Browser does not support opening urls outside of blob directory'
+      )
+    }
   }
   getAppPath(_name: string): string {
     this.log.critical('Method not implemented.')
@@ -355,7 +361,8 @@ class BrowserRuntime implements Runtime {
     if (matches) {
       return `/blobs/${matches[2]}/${matches[3]}`
     }
-    return '/transformBlobURL/url-wrong-format/' + blob_path
+    this.log.error("transformBlobURL wrong url format", blob_path)
+    return ''
   }
   async showOpenFileDialog(
     _options: RuntimeOpenDialogOptions
