@@ -5,8 +5,6 @@ import { readFile, stat } from 'fs/promises'
 import session from 'express-session'
 import { FileStore } from './session-store'
 import { authMiddleWare, CORSMiddleWare } from './middlewares'
-import { startDeltaChat } from '@deltachat/stdio-rpc-server'
-import { C } from '@deltachat/jsonrpc-client'
 import resolvePath from 'resolve-path'
 import { WebSocketServer } from 'ws'
 import { BackendApiRoute } from './backendApi'
@@ -15,7 +13,6 @@ import { MessageToBackend } from './runtime-ws-protocol'
 // This import has side effects, it will quit the app if env vars or files are missing
 import {
   ENV_WEB_TRUST_FIRST_PROXY,
-  DC_ACCOUNTS_DIR,
   DIST_DIR,
   ENV_WEB_PASSWORD,
   ENV_WEB_PORT,
@@ -24,6 +21,7 @@ import {
   localStorage,
   LOCALES_DIR,
 } from './config'
+import { startDeltaChat } from './deltachat-rpc'
 
 const app = express()
 
@@ -101,7 +99,7 @@ app.get('/logout', (req, res) => {
   res.redirect('/')
 })
 
-const dc = await startDeltaChat(DC_ACCOUNTS_DIR)
+const [dc, wssDC, shutdownDC] = await startDeltaChat()
 console.log(await dc.rpc.getSystemInfo())
 
 app.get('/blobs/:accountId/:filename', authMiddleWare, async (req, res) => {
@@ -141,14 +139,6 @@ const sslserver = https.createServer(
   app
 )
 
-const wssDC = new WebSocketServer({ noServer: true, perMessageDeflate: true })
-wssDC.on('connection', function connection(ws) {
-  ws.on('error', console.error)
-
-  // custom dc connection like on electron
-
-  console.log('connected dc socket')
-})
 const wssBackend = new WebSocketServer({
   noServer: true,
   perMessageDeflate: true,
@@ -205,5 +195,5 @@ sslserver.listen(ENV_WEB_PORT, () => {
 process.on('exit', () => {
   sslserver.closeAllConnections()
   sslserver.close()
-  dc.close()
+  shutdownDC()
 })

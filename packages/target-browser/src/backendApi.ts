@@ -64,7 +64,7 @@ BackendApiRoute.get('/config', (_req, res) => {
 
 BackendApiRoute.post('/config/:key', BodyParserJson(), (req, res) => {
   let key = req.params.key
-  let value = req.body
+  let value = req.body.new_value
 
   if (allowedKeys.includes(key)) {
     ;(Config as any)[key] = value

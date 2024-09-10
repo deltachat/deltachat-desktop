@@ -30,6 +30,16 @@ class BrowserTransport extends WebsocketTransport {
   }
 
   protected _onmessage(message: yerpc.Message): void {
+    if (
+      (message as any)['method'] === 'error_other_client_stole_dc_connection'
+    ) {
+      alert(
+        'error other client stole dc connection.\nonly use deltachat web in one browser at a time.\nreload to steal connection back.'
+      )
+      throw new Error(
+        'connection inactive: error other client stole dc connection, please reload page'
+      )
+    }
     if (this.hasDebugEnabled) {
       /* ignore-console-log */
       console.debug('%c▼ %c[JSONRPC]', 'color: red', 'color:grey', message)
@@ -224,10 +234,10 @@ class BrowserRuntime implements Runtime {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(value),
+      body: JSON.stringify({new_value:value}),
     })
     if (!request.ok) {
-      throw new Error('getDesktopSettings request failed')
+      throw new Error('setDesktopSettings request failed')
     }
   }
   getAvailableThemes(): Promise<Theme[]> {
