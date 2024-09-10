@@ -218,6 +218,9 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
         return
       }
 
+      // We call `onScroll` manually with `null` argument.
+      // We only want to hide the reactions bar when the user scrolls,
+      // intentionally
       if (ev) hideReactionsBar()
 
       const distanceToTop = messageListRef.current.scrollTop
