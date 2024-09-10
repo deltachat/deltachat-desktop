@@ -336,10 +336,21 @@ class BrowserRuntime implements Runtime {
     this.log.critical('Method not implemented.')
     return 'not-implemented'
   }
-  downloadFile(_pathToSource: string, _filename: string): Promise<void> {
-    throw new Error('Method not implemented.')
-    // should open new tab to endpoint that sends header:
-    // Content-Disposition: attachment; filename="myfile.pdf";
+  async downloadFile(pathToSource: string, filename: string): Promise<void> {
+    if (pathToSource.includes('dc.db-blobs')) {
+      window
+        .open(
+          this.transformBlobURL(pathToSource) +
+            '?download_with_filename=' +
+            encodeURIComponent(filename),
+          '_blank'
+        )
+        ?.focus()
+    } else {
+      throw new Error(
+        'Browser does not support opening urls outside of blob directory'
+      )
+    }
   }
   readClipboardText(): Promise<string> {
     return navigator.clipboard.readText()
@@ -361,7 +372,7 @@ class BrowserRuntime implements Runtime {
     if (matches) {
       return `/blobs/${matches[2]}/${matches[3]}`
     }
-    this.log.error("transformBlobURL wrong url format", blob_path)
+    this.log.error('transformBlobURL wrong url format', blob_path)
     return ''
   }
   async showOpenFileDialog(

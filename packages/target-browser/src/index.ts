@@ -133,6 +133,12 @@ app.get('/blobs/:accountId/:filename', authMiddleWare, async (req, res) => {
     return res.status(404).send('404 Not Found')
   }
 
+  if (req.query.download_with_filename) {
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename="${req.query.download_with_filename}"`
+    )
+  }
   res.sendFile(filePath)
 })
 
