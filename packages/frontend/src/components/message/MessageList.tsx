@@ -242,7 +242,7 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
       }
 
       // Remember that `distanceToTop` and `distanceToBottom` can both be true.
-      if (distanceToTop < 200) {
+      if (distanceToTop < 800) {
         // Prevent the scroll position from "sticking" to the top,
         // which would disable scroll anchoring, and would make
         // the scroll position continuosuly jump to the very top and we'd
@@ -260,7 +260,7 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
         log.debug('onScroll: Scrolled to top, fetching more messages!')
         setTimeout(() => fetchMoreTop(), 0)
       }
-      if (distanceToBottom < 200) {
+      if (distanceToBottom < 800) {
         log.debug('onScroll: Scrolled to bottom, fetching more messages!')
         setTimeout(() => fetchMoreBottom(), 0)
       }
