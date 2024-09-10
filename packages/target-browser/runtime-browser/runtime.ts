@@ -161,20 +161,20 @@ class BrowserRuntime implements Runtime {
     throw new Error('Method not implemented.')
   }
   notifyWebxdcStatusUpdate(_accountId: number, _instanceId: number): void {
-    throw new Error('Method not implemented.')
+    this.log.critical('Method not implemented.')
   }
   notifyWebxdcRealtimeData(
     _accountId: number,
     _instanceId: number,
     _payload: number[]
   ): void {
-    throw new Error('Method not implemented.')
+    this.log.critical('Method not implemented.')
   }
   notifyWebxdcMessageChanged(_accountId: number, _instanceId: number): void {
-    throw new Error('Method not implemented.')
+    this.log.critical('Method not implemented.')
   }
   notifyWebxdcInstanceDeleted(_accountId: number, _instanceId: number): void {
-    throw new Error('Method not implemented.')
+    this.log.critical('Method not implemented.')
   }
   saveBackgroundImage(
     _file: string,
@@ -247,16 +247,19 @@ class BrowserRuntime implements Runtime {
     return null
   }
   resolveThemeAddress(_address: string): Promise<string> {
+    this.log.critical('Method not implemented.')
     throw new Error('Method not implemented.')
   }
-  clearWebxdcDOMStorage(_accountId: number): Promise<void> {
-    throw new Error('Method not implemented.')
+  async clearWebxdcDOMStorage(_accountId: number): Promise<void> {
+    // not applicable in browser
+    this.log.warn('clearWebxdcDOMStorage method does not exist in browser.')
   }
   getWebxdcDiskUsage(_accountId: number): Promise<{
     total_size: number
     data_size: number
   }> {
-    throw new Error('Method not implemented.')
+    // not applicable in browser
+    throw new Error('getWebxdcDiskUsage method does not exist in browser.')
   }
   async writeClipboardToTempFile(): Promise<string> {
     throw new Error('Method not implemented.')
@@ -276,25 +279,27 @@ class BrowserRuntime implements Runtime {
     this.log.critical('Method not implemented.')
   }
   showNotification(_data: DcNotification): void {
-    throw new Error('Method not implemented.')
+    this.log.critical('Method not implemented.')
   }
   clearAllNotifications(): void {
-    throw new Error('Method not implemented.')
+    this.log.critical('Method not implemented.')
   }
   clearNotifications(_chatId: number): void {
-    throw new Error('Method not implemented.')
+    this.log.critical('Method not implemented.')
   }
   setBadgeCounter(value: number): void {
     document.title = `DeltaChat${value ? `(${value})` : ''}`
   }
   deleteWebxdcAccountData(_accountId: number): Promise<void> {
-    throw new Error('Method not implemented.')
+    // not applicable in browser
+    this.log.warn('deleteWebxdcAccountData method does not exist in browser.')
+    return Promise.resolve()
   }
   closeAllWebxdcInstances(): void {
-    throw new Error('Method not implemented.')
+    this.log.critical('Method not implemented.')
   }
   restartApp(): void {
-    throw new Error('Method not implemented.')
+    this.log.critical('Method not implemented.')
   }
   private runtime_info: RuntimeInfo | null = null
   getRuntimeInfo(): RuntimeInfo {
@@ -311,42 +316,51 @@ class BrowserRuntime implements Runtime {
     return await request.json()
   }
   getWebxdcIconURL(_accountId: number, _msgId: number): string {
-    throw new Error('Method not implemented.')
+    this.log.critical('getWebxdcIconURL Method not implemented.')
+    return 'not-implemented'
   }
   openWebxdc(_msgId: number, _params: DcOpenWebxdcParameters): void {
     throw new Error('Method not implemented.')
   }
-  openPath(_path: string): Promise<string> {
-    throw new Error('Method not implemented.')
+  openPath(path: string): Promise<string> {
+    window.open('file://' + path, '_blank')?.focus()
+    return Promise.resolve('')
   }
   getAppPath(_name: string): string {
-    throw new Error('Method not implemented.')
+    this.log.critical('Method not implemented.')
+    return 'not-implemented'
   }
   downloadFile(_pathToSource: string, _filename: string): Promise<void> {
     throw new Error('Method not implemented.')
+    // should open new tab to endpoint that sends header:
+    // Content-Disposition: attachment; filename="myfile.pdf";
   }
-  async readClipboardText(): Promise<string> {
-    throw new Error('Method not implemented.')
+  readClipboardText(): Promise<string> {
+    return navigator.clipboard.readText()
   }
   async readClipboardImage(): Promise<string | null> {
-    throw new Error('Method not implemented.')
+    this.log.critical('readClipboardImage: Method not implemented.')
+    return null
   }
-  writeClipboardText(_text: string): Promise<void> {
-    throw new Error('Method not implemented.')
+  writeClipboardText(text: string): Promise<void> {
+    return navigator.clipboard.writeText(text)
   }
   writeClipboardImage(_path: string): Promise<void> {
     throw new Error('Method not implemented.')
   }
-  transformBlobURL(_blob: string): string {
-    throw new Error('Method not implemented.')
+  transformBlobURL(blob: string): string {
+    this.log.info({ transformBlobURL: blob })
+    this.log.critical('Method not implemented.')
+    return ''
   }
   async showOpenFileDialog(
     _options: RuntimeOpenDialogOptions
   ): Promise<string> {
     throw new Error('Method not implemented.')
   }
-  openLink(_link: string): void {
-    throw new Error('Method not implemented.')
+
+  openLink(link: string): void {
+    window.open(link, '_blank')?.focus()
   }
 
   private log!: ReturnType<typeof getLoggerFunction>
@@ -398,7 +412,8 @@ class BrowserRuntime implements Runtime {
     window.location.reload()
   }
   getConfigPath(): string {
-    throw new Error('Method not implemented.')
+    this.log.warn('getConfigPath method does not exist in browser.')
+    return ''
   }
 }
 
