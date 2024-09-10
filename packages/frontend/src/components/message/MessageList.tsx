@@ -238,25 +238,28 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
         clearJumpStack()
       }
 
-      if (distanceToTop < 200 && distanceToBottom < 200) {
-        log.debug('onScroll: Lets try loading messages from both ends')
-        setTimeout(() => fetchMoreTop(), 0)
-        setTimeout(() => fetchMoreBottom(), 0)
-        ev?.preventDefault()
-        ev?.stopPropagation()
-        return false
-      } else if (distanceToTop < 200) {
+      // Remember that `distanceToTop` and `distanceToBottom` can both be true.
+      if (distanceToTop < 200) {
+        // Prevent the scroll position from "sticking" to the top,
+        // which would disable scroll anchoring, and would make
+        // the scroll position continuosuly jump to the very top and we'd
+        // continuously load older messages without the user scrolling.
+        //
+        // See https://drafts.csswg.org/css-scroll-anchoring/#suppression-triggers
+        // > A suppression trigger is an operation that suppresses
+        // > the scroll anchoring
+        // > ...
+        // > The scroll offset of the scrollable element being zero.
+        if (distanceToTop < 3) {
+          messageListRef.current.scrollTop = 3
+        }
+
         log.debug('onScroll: Scrolled to top, fetching more messages!')
         setTimeout(() => fetchMoreTop(), 0)
-        ev?.preventDefault()
-        ev?.stopPropagation()
-        return false
-      } else if (distanceToBottom < 200) {
+      }
+      if (distanceToBottom < 200) {
         log.debug('onScroll: Scrolled to bottom, fetching more messages!')
         setTimeout(() => fetchMoreBottom(), 0)
-        ev?.preventDefault()
-        ev?.stopPropagation()
-        return false
       }
     },
     [
