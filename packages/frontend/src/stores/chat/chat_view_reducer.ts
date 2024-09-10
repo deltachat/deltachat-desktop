@@ -11,6 +11,10 @@ interface ScrollToMessage {
   highlight: boolean
 }
 
+/**
+ * Used for manual "scroll anchoring", e.g. when loading older messages
+ * and inserting them into the messages list.
+ */
 interface ScrollToLastKnownPosition {
   type: 'scrollToLastKnownPosition'
   lastKnownScrollHeight: number
