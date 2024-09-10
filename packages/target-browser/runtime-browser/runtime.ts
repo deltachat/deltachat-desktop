@@ -348,10 +348,14 @@ class BrowserRuntime implements Runtime {
   writeClipboardImage(_path: string): Promise<void> {
     throw new Error('Method not implemented.')
   }
-  transformBlobURL(blob: string): string {
-    this.log.info({ transformBlobURL: blob })
-    this.log.critical('Method not implemented.')
-    return ''
+
+  transformBlobURL(blob_path: string): string {
+    const matches = blob_path.match(/.*(:?\\|\/)(.+?)\1dc.db-blobs\1(.*)/)
+    // this.log.info({ transformBlobURL: blob_path, matches })
+    if (matches) {
+      return `/blobs/${matches[2]}/${matches[3]}`
+    }
+    return '/transformBlobURL/url-wrong-format/' + blob_path
   }
   async showOpenFileDialog(
     _options: RuntimeOpenDialogOptions

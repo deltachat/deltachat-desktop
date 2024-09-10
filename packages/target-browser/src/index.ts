@@ -1,4 +1,4 @@
-import { join } from 'path'
+import { basename, dirname, join } from 'path'
 import express from 'express'
 import https from 'https'
 import { readFile, stat } from 'fs/promises'
@@ -103,11 +103,24 @@ const [dc, wssDC, shutdownDC] = await startDeltaChat()
 console.log(await dc.rpc.getSystemInfo())
 
 app.get('/blobs/:accountId/:filename', authMiddleWare, async (req, res) => {
-  const { accountId, filename } = req.params
+  let { accountId, filename } = req.params
+
   if (isNaN(Number(accountId))) {
-    return res.status(400).send('Bad Request: account id is not a number')
+    // workaround until core gives out relative urls
+    for (const id of await dc.rpc.getAllAccountIds()) {
+      const blobdir = (await dc.rpc.getBlobDir(id)) || ''
+      if (basename(dirname(blobdir)) === accountId) {
+        accountId = String(id)
+        break
+      }
+    }
+
+    if (isNaN(Number(accountId))) {
+      return res.status(400).send('Bad Request: account id is not a number')
+    }
   }
-  const blobDir = await dc.rpc.getBlobDir(Number(req.params.accountId))
+
+  const blobDir = await dc.rpc.getBlobDir(Number(accountId))
   if (!blobDir) {
     throw new Error('no blobdir')
   }
