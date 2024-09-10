@@ -193,7 +193,7 @@ class MessageListStore extends Store<MessageListState> {
         return modifiedState
       }, 'modifiedChat')
     },
-    appendMessagePageTop: (payload: {
+    appendMessagesTop: (payload: {
       id: number
       newMessageCacheItems: MessageListState['messageCache']
       oldestFetchedMessageListItemIndex: number
@@ -207,12 +207,12 @@ class MessageListStore extends Store<MessageListState> {
           },
           oldestFetchedMessageListItemIndex:
             payload.oldestFetchedMessageListItemIndex,
-          viewState: ChatViewReducer.appendMessagePageTop(state.viewState),
+          viewState: ChatViewReducer.appendMessagesTop(state.viewState),
         }
         return modifiedState
-      }, 'appendMessagePageTop')
+      }, 'appendMessagesTop')
     },
-    appendMessagePageBottom: (payload: {
+    appendMessagesBottom: (payload: {
       newMessageCacheItems: MessageListState['messageCache']
       newestFetchedMessageIndex: number
     }) => {
@@ -224,10 +224,10 @@ class MessageListStore extends Store<MessageListState> {
             ...payload.newMessageCacheItems,
           },
           newestFetchedMessageListItemIndex: payload.newestFetchedMessageIndex,
-          viewState: ChatViewReducer.appendMessagePageBottom(state.viewState),
+          viewState: ChatViewReducer.appendMessagesBottom(state.viewState),
         }
         return modifiedState
-      }, 'appendMessagePageBottom')
+      }, 'appendMessagesBottom')
     },
     fetchedIncomingMessages: (payload: {
       messageListItems: MessageListState['messageListItems']
@@ -637,7 +637,7 @@ class MessageListStore extends Store<MessageListState> {
               lastMessageIndexOnLastPage - 1
             ).catch(err => this.log.error('loadMessages failed', err))) || {}
 
-          this.reducer.appendMessagePageTop({
+          this.reducer.appendMessagesTop({
             id,
             newMessageCacheItems,
             oldestFetchedMessageListItemIndex,
@@ -693,7 +693,7 @@ class MessageListStore extends Store<MessageListState> {
               newNewestFetchedMessageListItemIndex
             ).catch(err => this.log.error('loadMessages failed', err))) || {}
 
-          this.reducer.appendMessagePageBottom({
+          this.reducer.appendMessagesBottom({
             newMessageCacheItems,
             newestFetchedMessageIndex: newNewestFetchedMessageListItemIndex,
           })

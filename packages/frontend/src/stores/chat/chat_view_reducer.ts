@@ -58,7 +58,7 @@ export class ChatViewReducer {
     }
   }
 
-  static appendMessagePageTop(prevState: ChatViewState): ChatViewState {
+  static appendMessagesTop(prevState: ChatViewState): ChatViewState {
     const { lastKnownScrollHeight, lastKnownScrollTop } =
       getLastKnownScrollPosition()
 
@@ -73,7 +73,7 @@ export class ChatViewReducer {
     }
   }
 
-  static appendMessagePageBottom(prevState: ChatViewState): ChatViewState {
+  static appendMessagesBottom(prevState: ChatViewState): ChatViewState {
     const { lastKnownScrollHeight, lastKnownScrollTop } =
       getLastKnownScrollPosition()
 
