@@ -35,7 +35,9 @@ BackendApiRoute.get('/rc_config', (_req, res) => {
   res.status(200).json(config)
 })
 
-const version = JSON.parse(readFileSync(join(DIST_DIR,'../package.json'), 'utf8')).version
+const version = JSON.parse(
+  readFileSync(join(DIST_DIR, '../package.json'), 'utf8')
+).version
 
 BackendApiRoute.get('/runtime_info', (_req, res) => {
   const runtimeInfo: RuntimeInfo = {
@@ -63,8 +65,8 @@ BackendApiRoute.get('/config', (_req, res) => {
 })
 
 BackendApiRoute.post('/config/:key', BodyParserJson(), (req, res) => {
-  let key = req.params.key
-  let value = req.body.new_value
+  const key = req.params.key
+  const value = req.body.new_value
 
   if (allowedKeys.includes(key)) {
     ;(Config as any)[key] = value

@@ -1,14 +1,17 @@
-import { LocalStorage } from "node-localstorage"
-import { existsSync } from "node:fs"
-import { fileURLToPath } from "node:url"
-import { dirname, join } from "path"
+import { LocalStorage } from 'node-localstorage'
+import { existsSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+import { dirname, join } from 'path'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
 // Directories & Files
 export const DIST_DIR = join(__dirname)
 export const DATA_DIR = join(__dirname, '../data')
-export const PRIVATE_CERTIFICATE_KEY = join(DATA_DIR, 'certificate/cert.key.pem')
+export const PRIVATE_CERTIFICATE_KEY = join(
+  DATA_DIR,
+  'certificate/cert.key.pem'
+)
 export const PRIVATE_CERTIFICATE_CERT = join(DATA_DIR, 'certificate/cert.pem')
 export const DC_ACCOUNTS_DIR = join(DATA_DIR, 'accounts')
 
@@ -18,7 +21,9 @@ export const LOCALES_DIR = join(__dirname, '../../../_locales')
 export const ENV_WEB_PASSWORD = process.env['WEB_PASSWORD']
 export const ENV_WEB_PORT = process.env['WEB_PORT'] || 3000
 // set this to one if you use this behind a proxy
-export const ENV_WEB_TRUST_FIRST_PROXY = Boolean(process.env['WEB_TRUST_FIRST_PROXY'])
+export const ENV_WEB_TRUST_FIRST_PROXY = Boolean(
+  process.env['WEB_TRUST_FIRST_PROXY']
+)
 
 if (!existsSync(DATA_DIR)) {
   console.log(
@@ -41,4 +46,6 @@ if (!ENV_WEB_PASSWORD) {
   process.exit(1)
 }
 
-export const localStorage = new LocalStorage(join(DATA_DIR, 'browser-runtime-data'))
+export const localStorage = new LocalStorage(
+  join(DATA_DIR, 'browser-runtime-data')
+)

@@ -1,7 +1,5 @@
 # Architecture
 
-
-
 ## Endpoints
 
 ```sh

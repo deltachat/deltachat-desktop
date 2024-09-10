@@ -200,7 +200,7 @@ class BrowserRuntime implements Runtime {
       // back to the main language (example: de-CH -> de)
       try {
         if (locale.indexOf('-') !== -1) {
-          let base_locale = (locale = locale.split('-')[0])
+          const base_locale = (locale = locale.split('-')[0])
 
           localeMessages = await (
             await fetch(`/locales/${base_locale}.json`)
@@ -234,7 +234,7 @@ class BrowserRuntime implements Runtime {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({new_value:value}),
+      body: JSON.stringify({ new_value: value }),
     })
     if (!request.ok) {
       throw new Error('setDesktopSettings request failed')
@@ -367,7 +367,7 @@ class BrowserRuntime implements Runtime {
       )
     }
 
-    let config: RC_Config = (this.rc_config = await RCConfigRequest.json())
+    const config: RC_Config = (this.rc_config = await RCConfigRequest.json())
     /* ignore-console-log */
     console.info('RC_Config', config)
     this.runtime_info = await RuntimeInfoRequest.json()

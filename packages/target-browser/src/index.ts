@@ -152,7 +152,7 @@ wssBackend.on('connection', function connection(ws) {
       const utf8String = raw_data.toString('utf8')
       const msg: MessageToBackend.AllTypes = JSON.parse(utf8String)
       if (msg.type == 'log') {
-        let [channel, level, _, ...data] = msg.data
+        const [channel, level, _, ...data] = msg.data
         console.debug(channel, level, data[0], '[..]')
       } else {
         console.debug('[recv on backend ws]', msg)

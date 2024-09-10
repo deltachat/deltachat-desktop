@@ -88,7 +88,7 @@ export async function startDeltaChat(): Promise<
 > {
   let active_connection: WebSocket | undefined
 
-  let DCInstance = new StdioServer(response => {
+  const DCInstance = new StdioServer(response => {
     try {
       if (response.indexOf('"id":"main-') !== -1) {
         const message = JSON.parse(response)
