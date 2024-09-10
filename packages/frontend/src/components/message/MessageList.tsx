@@ -218,9 +218,9 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
         return
       }
 
-      // We call `onScroll` manually with `null` argument.
-      // We only want to hide the reactions bar when the user scrolls,
-      // intentionally
+      // We might call `onScroll` manually with `null` argument.
+      // We only want to hide the reactions bar when _the user_ scrolls,
+      // intentionally.
       if (ev) hideReactionsBar()
 
       const distanceToTop = messageListRef.current.scrollTop
@@ -278,6 +278,10 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
     ]
   )
 
+  // This `useLayoutEffect` is made to run whenever `viewState` changes.
+  // `viewState` controls the desired scroll position of `messageListRef`.
+  // After the following callback is run and the message list is scrolled
+  // to where `viewState` told it to be, we reset `viewState` back to `null`.
   useLayoutEffect(() => {
     if (!chat) {
       return
@@ -340,6 +344,14 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
         }
       }
     } else if (scrollTo.type === 'scrollToLastKnownPosition') {
+      // "Why need scrollToLastKnownPosition if there is scroll anchoring
+      // in browsers already?"
+      // https://developer.mozilla.org/en-US/docs/Web/CSS/overflow-anchor/Guide_to_scroll_anchoring
+      // Well, I am not sure why it is introduced back then,
+      // but the reason we need it now is because scroll anchoring
+      // isn't supported by Safari (WebKit) yet, and we are gonna run on WebKit
+      // when we switch to Tauri, so let's not remove it yet.
+
       log.debug(
         'scrollTo type: scrollToLastKnownPosition; lastKnownScrollHeight: ' +
           scrollTo.lastKnownScrollHeight +
@@ -390,8 +402,15 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
       }
     }
     setTimeout(() => {
+      // We just scrolled where we needed to, now let's reset the value of
+      // `viewState` so that we don't keep scrolling to the same place
+      // again and again.
       unlockScroll()
+
       setTimeout(() => {
+        // Since the scroll position might have changed,
+        // let's invoke `onScroll`, e.g. to load more messages if we're close
+        // to top / bottom
         onScroll(null)
       }, 0)
     }, 0)

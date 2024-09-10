@@ -22,6 +22,16 @@ interface MessageListState {
   messageCache: { [msgId: number]: T.MessageLoadResult | undefined }
   newestFetchedMessageListItemIndex: number
   oldestFetchedMessageListItemIndex: number
+  /**
+   * This is used as an "event bus". When we need to update the scroll position
+   * of the messages list (e.g. `scrollToMessage`), or, instead, keep the
+   * scroll position in the same place as we append newly loaded messages,
+   * to prevent content jumps (`scrollToLastKnownPosition`,
+   * manual scroll anchoring), then we set `viewState.scrollTo`
+   * to the desired state.
+   * After that, the MessageList component looks at the new state,
+   * sets the scroll position accordingly, and resets the state to null.
+   */
   viewState: ChatViewState
   jumpToMessageStack: number[]
   loaded: boolean
