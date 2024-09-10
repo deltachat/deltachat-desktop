@@ -1,17 +1,23 @@
-$reaction-transition-duration: 100ms;
+// $reaction-transition-duration: 100ms;
 
 .message {
-  transition: margin-bottom ease-out $reaction-transition-duration;
-  &.withReactions {
-    margin-bottom: 10px;
-  }
+  // Commented-out for now because of
+  // https://github.com/deltachat/deltachat-desktop/issues/3753
+  // (i.e. adding a reaction would change the height of the message,
+  // which would make the chat "scroll up", and so new messages would not
+  // get automatically scrolled into view).
+  //
+  // transition: margin-bottom ease-out $reaction-transition-duration;
+  // &.withReactions {
+  //   margin-bottom: 10px;
+  // }
 }
 
 .messageFooter {
   display: flex;
   flex-direction: row-reverse;
   justify-content: space-between;
-  transition: margin-bottom ease-out $reaction-transition-duration;
+  // transition: margin-bottom ease-out $reaction-transition-duration;
 
   &.onlyMedia {
     bottom: 0;
@@ -21,9 +27,9 @@ $reaction-transition-duration: 100ms;
     right: 0;
   }
 
-  &.withReactionsNoText {
-    margin-bottom: 10px;
-  }
+  // &.withReactionsNoText {
+  //   margin-bottom: 10px;
+  // }
 }
 
 .startWebxdcButton {
