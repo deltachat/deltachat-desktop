@@ -11,6 +11,7 @@
 - dev: esbuild bundling for electron main process js (+minification for releases)
 - changed implementation for accepting dropped in files, use browser apis instead of electron specific hack.
 - dev: improved `./bin/test_for_missing_translations.sh` script: It is now more correct, helpful and faster
+- Experimental: a way to grant permissions to webxdcs #4008
 
 ### Fixed
 - fix that you can not click header button in dialog when they are on top of the navbar #4093

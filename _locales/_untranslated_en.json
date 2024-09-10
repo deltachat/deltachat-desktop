@@ -21,6 +21,15 @@
   "explain_ctrl_up_down_to_reply": {
     "message": "Choose the message to reply to with this shortcut"
   },
+  "pref_webxdc_permission_management": {
+    "message": "Manage webxdc permissions"
+  },
+  "explain_webxdc_permission_management": {
+    "message": "By default, webxdc apps are denied all permissions, such as access to camera and geolocation. Enabling this allows you to manually grant permissions through the menu bar of webxdc apps. Be cautious granting permissions to untrusted apps!"
+  },
+  "menu_webxdc_permissions": {
+    "message": "Permissions"
+  },
   "muted": {
     "message": "Muted"
   },

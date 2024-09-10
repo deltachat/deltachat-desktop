@@ -142,63 +142,58 @@ export function openHtmlEmailWindow(
 
   // copied and adapted from webxdc menu
   // TODO: would make sense to refactor these menus at some point
-  const makeMenu = () => {
-    return Menu.buildFromTemplate([
-      ...(isMac ? [getAppMenu(window)] : []),
-      getFileMenu(window, isMac),
-      {
-        label: tx('global_menu_edit_desktop'),
-        submenu: [
-          {
-            label: tx('global_menu_edit_copy_desktop'),
-            role: 'copy',
+  const menu = Menu.buildFromTemplate([
+    ...(isMac ? [getAppMenu(window)] : []),
+    getFileMenu(window, isMac),
+    {
+      label: tx('global_menu_edit_desktop'),
+      submenu: [
+        {
+          label: tx('global_menu_edit_copy_desktop'),
+          role: 'copy',
+        },
+        {
+          label: tx('menu_select_all'),
+          click: () => {
+            sandboxedView.webContents.focus()
+            sandboxedView.webContents.selectAll()
           },
-          {
-            label: tx('menu_select_all'),
-            click: () => {
-              sandboxedView.webContents.focus()
-              sandboxedView.webContents.selectAll()
-            },
-            accelerator: isMac ? 'Cmd+A' : 'Ctrl+A',
+          accelerator: isMac ? 'Cmd+A' : 'Ctrl+A',
+        },
+      ],
+    },
+    {
+      label: tx('global_menu_view_desktop'),
+      submenu: [
+        { role: 'resetZoom' },
+        { role: 'zoomIn' },
+        { role: 'zoomOut' },
+        { type: 'separator' },
+        {
+          label: tx('global_menu_view_floatontop_desktop'),
+          type: 'checkbox',
+          checked: window.isAlwaysOnTop(),
+          id: 'floatontop',
+          click: () => {
+            const newVal = !window.isAlwaysOnTop()
+            window.setAlwaysOnTop(newVal)
+            menu.getMenuItemById('floatontop')!.checked = newVal
           },
-        ],
-      },
-      {
-        label: tx('global_menu_view_desktop'),
-        submenu: [
-          { role: 'resetZoom' },
-          { role: 'zoomIn' },
-          { role: 'zoomOut' },
-          { type: 'separator' },
-          {
-            label: tx('global_menu_view_floatontop_desktop'),
-            type: 'checkbox',
-            checked: window.isAlwaysOnTop(),
-            click: () => {
-              window.setAlwaysOnTop(!window.isAlwaysOnTop())
-              if (platform() !== 'darwin') {
-                window.setMenu(makeMenu())
-              } else {
-                // change to window menu
-                Menu.setApplicationMenu(makeMenu())
-              }
-            },
-          },
-          { role: 'togglefullscreen' },
-        ],
-      },
-      getHelpMenu(isMac),
-    ])
-  }
+        },
+        { role: 'togglefullscreen' },
+      ],
+    },
+    getHelpMenu(isMac),
+  ])
 
   if (!isMac) {
-    window.setMenu(makeMenu())
+    window.setMenu(menu)
   }
 
   window.on('focus', () => {
     if (isMac) {
       // change to email menu
-      Menu.setApplicationMenu(makeMenu())
+      Menu.setApplicationMenu(menu)
     }
   })
   window.on('blur', () => {
