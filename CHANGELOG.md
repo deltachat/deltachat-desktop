@@ -31,6 +31,7 @@
 - fix chat "scrolling up" when someone adds a reaction, resulting in new messages not getting scrolled into view when they arrive #4120
 - fix missing space between overriden sender name and image attachment #3914
 - when adding new line for a long multi-line message, the cursor would get out of view #4152
+- Chat "scrolling up" when typing a multi-line message, quoting a message, or adding an attachment, resulting in new messages not getting scrolled into view #4119
 
 <a id="1_46_8"></a>
 

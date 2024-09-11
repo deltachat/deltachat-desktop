@@ -131,6 +131,12 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
   const messageListRef = useRef<HTMLDivElement | null>(null)
   const [showJumpDownButton, setShowJumpDownButton] = useState(false)
 
+  /**
+   * If scroll distance to bottom is bigger than this, we'll show
+   * the "scroll to bottom" button and not scroll new messages into view.
+   */
+  const maxScrollToBottomDistanceConsideredShort = 10
+
   const onUnreadMessageInView: IntersectionObserverCallback = entries => {
     if (!chat) return
     // Don't mark messages as read if window is not focused
@@ -224,7 +230,7 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
         newestFetchedMessageListItemIndex === messageListItems.length - 1
       const newShowJumpDownButton =
         !isNewestMessageLoaded ||
-        distanceToBottom >= 10 /* 10 is close enough to 0 */
+        distanceToBottom > maxScrollToBottomDistanceConsideredShort
       if (newShowJumpDownButton != showJumpDownButton) {
         setShowJumpDownButton(newShowJumpDownButton)
       }
@@ -354,7 +360,9 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
         const { scrollTop, clientHeight } = messageListRef.current
         const scrollBottom = scrollTop + clientHeight
 
-        const shouldScrollToBottom = scrollBottom >= scrollHeight - 7
+        const shouldScrollToBottom =
+          scrollBottom >=
+          scrollHeight - maxScrollToBottomDistanceConsideredShort
 
         log.debug(
           'scrollToBottomIfClose',
@@ -408,6 +416,78 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
     composerTextarea && composerTextarea.focus()
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight
   }, [refComposer])
+
+  // This is a fix for
+  // https://github.com/deltachat/deltachat-desktop/issues/3763
+  // That is, when the chat is scrolled to the bottom and you type
+  // a multiline message, the composer would resize and the chat list would
+  // get "scrolled up", i.e. the last message in the chat would get
+  // partically covered. And so if someone sends a message while you're typing,
+  // you'd have scroll down for it manually.
+  //
+  // This also handles other resizes, e.g. quoting a message, attaching a file,
+  // or resizing the Delta Chat window itself.
+  //
+  // The behavior we're implementing here is similar to "scroll anchoring"
+  // that browsers are supposed to perform, but unfortunately simply adding
+  // one scroll anchor at the bottom of the message list doesn't save us
+  // when the scrollable element itself resizes, and not just
+  // the content inside of it.
+  //
+  // A probably better approach would be to use
+  // `flex-direction: column-reverse;`, as in
+  // https://github.com/deltachat/deltachat-desktop/pull/4116,
+  // but it is buggy in Chromium and maybe WebKit (which we'll be using
+  // when we switch to Tauri).
+  //
+  // `useEffect` instead of `useLayoutEffect` because we read `el.clientHeight`
+  // on the first run and for that we want the contents to be painted already.
+  // However, it appears to work either way.
+  useEffect(() => {
+    const el = messageListRef.current
+    if (!el) {
+      return
+    }
+
+    let prevHeight = el.clientHeight
+
+    const observer = new ResizeObserver(entries => {
+      const entry = entries[0]
+      if (!entry) {
+        return
+      }
+      const newHeight = el.clientHeight
+      if (newHeight === prevHeight) {
+        // In case only width changed or something.
+        return
+      }
+
+      const scrollDistanceToBottomBeforeResize =
+        el.scrollHeight - el.scrollTop - prevHeight
+      if (
+        scrollDistanceToBottomBeforeResize <=
+        maxScrollToBottomDistanceConsideredShort
+      ) {
+        el.scrollTop = Number.MAX_SAFE_INTEGER
+        // Sometimes this spews out negative numbers when we're scrolled
+        // all the way to the bottom and then resize the window.
+        // We'd expect this to be 0 in that case, but as long as
+        // it works it's fine I guess.
+        console.debug(
+          `Message list resized, and distance to bottom was` +
+            ` ${scrollDistanceToBottomBeforeResize} before the resize.` +
+            ` Scrolling to bottom.`
+        )
+      }
+
+      prevHeight = newHeight
+    })
+
+    observer.observe(el)
+    return () => {
+      observer.unobserve(el)
+    }
+  }, [])
 
   return (
     <MessagesDisplayContext.Provider
