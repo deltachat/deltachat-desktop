@@ -90,6 +90,11 @@ button:focus:not(:focus-visible) {
   outline: none;
 }
 
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbarThumb) var(--globalBackground);
+}
+
 ::-webkit-scrollbar {
   width: 6px;
   height: 0;
