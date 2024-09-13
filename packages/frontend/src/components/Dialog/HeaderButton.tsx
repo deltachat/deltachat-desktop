@@ -11,6 +11,7 @@ import styles from './styles.module.scss'
 type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   icon: IconName
   iconSize: number
+  'aria-label': string
 }
 
 export default function HeaderButton({
