@@ -150,7 +150,7 @@ export default function AccountItem({
     )
   }
 
-  const ref = useRef<HTMLDivElement>(null)
+  const ref = useRef<HTMLButtonElement>(null)
   useLayoutEffect(() => {
     if (!isSelected) {
       return
@@ -186,7 +186,7 @@ export default function AccountItem({
   }, [isSelected, window.__screen])
 
   return (
-    <div
+    <button
       className={classNames(styles.account, {
         [styles.active]: isSelected,
         [styles['context-menu-active']]: isContextMenuActive,
@@ -232,7 +232,7 @@ export default function AccountItem({
         </div>
       )}
       <div className={classNames(styles.accountBadge)}>{badgeContent}</div>
-    </div>
+    </button>
   )
 }
 
