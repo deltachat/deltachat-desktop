@@ -92,7 +92,7 @@ export default function AccountListSidebar({
   const updateHoverInfoPosition = useCallback(() => {
     if (hoverInfo.current && accountForHoverInfo) {
       const elem = document.querySelector(
-        `div[x-account-sidebar-account-id="${accountForHoverInfo.id}"]`
+        `[x-account-sidebar-account-id="${accountForHoverInfo.id}"]`
       )
       if (elem) {
         const rect = elem.getBoundingClientRect()

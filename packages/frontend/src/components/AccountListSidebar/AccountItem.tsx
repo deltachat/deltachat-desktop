@@ -148,7 +148,7 @@ export default function AccountItem({
   }
 
   return (
-    <div
+    <button
       className={classNames(styles.account, {
         [styles.active]: isSelected,
         [styles['context-menu-active']]: isContextMenuActive,
@@ -193,7 +193,7 @@ export default function AccountItem({
         </div>
       )}
       <div className={classNames(styles.accountBadge)}>{badgeContent}</div>
-    </div>
+    </button>
   )
 }
 
