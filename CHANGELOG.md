@@ -11,7 +11,7 @@
 - dev: esbuild bundling for electron main process js (+minification for releases)
 - changed implementation for accepting dropped in files, use browser apis instead of electron specific hack.
 - dev: improved `./bin/test_for_missing_translations.sh` script: It is now more correct, helpful and faster
-- windows 64bit and 32bit protable and setup now have different filenames
+- windows 64bit and 32bit protable and setup now have different filenames #4131
 
 ### Fixed
 - fix that you can not click header button in dialog when they are on top of the navbar #4093
@@ -23,7 +23,7 @@
 - dev: update `./bin/update_background_thumbnails.sh` script
 - fix chatlist image thumbnails #4101
 - fix: spacing around avatars in reaction details dialog #4114
-- fix: packaging: windows 64bit and 32bit releases now have different filenames, bring back 64bit windows releases.
+- fix: packaging: windows 64bit and 32bit releases now have different filenames, bring back 64bit windows releases. #4131
 
 <a id="1_46_8"></a>
 
