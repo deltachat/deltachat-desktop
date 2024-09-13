@@ -464,7 +464,11 @@ export default function QrReader({ onError, onScan }: Props) {
       {!error && (
         <div className={styles.qrReaderHint}>{tx('qrscan_hint_desktop')}</div>
       )}
-      <button className={styles.qrReaderButton} onClick={handleSelectInput}>
+      <button
+        className={styles.qrReaderButton}
+        onClick={handleSelectInput}
+        aria-label={tx('menu_settings')}
+      >
         <Icon icon='settings' size={24} className={styles.qrReaderButtonIcon} />
       </button>
       <input
