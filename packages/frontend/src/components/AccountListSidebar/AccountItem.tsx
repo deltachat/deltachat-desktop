@@ -130,7 +130,7 @@ export default function AccountItem({
     badgeContent = (
       <div
         className={classNames(styles.accountBadgeIcon, styles.bgSyncDisabled)}
-        aria-label='Background sync disabled'
+        aria-label={tx('background_sync_disabled_explaination')}
       >
         ⏻
       </div>
