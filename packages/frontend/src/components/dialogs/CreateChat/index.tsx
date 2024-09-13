@@ -69,7 +69,7 @@ export default function CreateChat(props: DialogProps) {
       {viewMode == 'main' && <CreateChatMain {...{ setViewMode, onClose }} />}
       {viewMode == 'createGroup' && (
         <>
-          <DialogHeader title={tx('clone_chat')} />
+          <DialogHeader title={tx('menu_new_group')} />
           <CreateGroup {...{ setViewMode, onClose }} />
         </>
       )}
