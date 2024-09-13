@@ -150,6 +150,7 @@ build['deb'] = {
 }
 
 build['win'] = {
+  artifactName: '${productName}-${version}.${arch}.${ext}',
   icon: 'html-dist/images/deltachat.ico',
   files: [...files, PREBUILD_FILTERS.NOT_MAC, PREBUILD_FILTERS.NOT_LINUX],
 }
