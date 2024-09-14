@@ -368,7 +368,6 @@ class BrowserRuntime implements Runtime {
         for (const type of clipboardItem.types) {
           if (type.startsWith('image')) {
             const blob = await clipboardItem.getType(type)
-            console.log('1234 ', blob)
             return await new Promise((resolve, _) => {
               const reader = new FileReader()
               reader.onloadend = () => resolve(reader.result as any)
