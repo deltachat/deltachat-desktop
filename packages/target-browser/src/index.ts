@@ -22,6 +22,7 @@ import {
   LOCALES_DIR,
 } from './config'
 import { startDeltaChat } from './deltachat-rpc'
+import { helpRoute } from './help'
 
 const app = express()
 
@@ -149,6 +150,7 @@ app.get('/stickers/:account/:?pack/:filename', authMiddleWare, (req, res) => {
 })
 
 app.use('/backend-api', BackendApiRoute)
+app.use(helpRoute)
 
 const sslserver = https.createServer(
   {

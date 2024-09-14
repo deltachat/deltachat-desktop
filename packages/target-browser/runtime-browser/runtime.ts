@@ -9,6 +9,7 @@ import {
   RuntimeOpenDialogOptions,
   Theme,
 } from '@deltachat-desktop/shared/shared-types.js'
+import '@deltachat-desktop/shared/global.d.ts'
 
 import { LocaleData } from '@deltachat-desktop/shared/localize.js'
 import { Runtime } from '@deltachat-desktop/runtime-interface'
@@ -421,8 +422,16 @@ class BrowserRuntime implements Runtime {
     }
     return this.rc_config
   }
-  openHelpWindow(_anchor?: string): void {
-    throw new Error('Method not implemented.')
+  async openHelpWindow(anchor?: string): Promise<void> {
+    const curLang = window.localeData.locale
+    const response = await fetch(`/help_exists/${curLang}`)
+
+    const anchorPath = anchor ? '#' + anchor : ''
+    if (response.ok) {
+      window.open(`/help/${curLang}/help.html${anchorPath}`, '_blank')?.focus()
+    } else {
+      window.open('/help/en/help.html' + anchorPath, '_blank')?.focus()
+    }
   }
   openLogFile(): void {
     throw new Error('Method not implemented.')
