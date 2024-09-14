@@ -1,4 +1,5 @@
 import { build } from 'esbuild'
+import { gatherBuildInfo } from './lib/gather-version-info.js'
 
 await build({
   bundle: true,
@@ -24,4 +25,10 @@ await build({
       },
     },
   ],
+  define: {
+    BUILD_INFO_JSON_STRING: `"${JSON.stringify(await gatherBuildInfo()).replace(
+      /"/g,
+      '\\"'
+    )}"`,
+  },
 })

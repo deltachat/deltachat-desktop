@@ -9,6 +9,7 @@ import { getDefaultState } from '@deltachat-desktop/shared/state'
 import { DIST_DIR, localStorage } from './config'
 import { readFileSync } from 'fs'
 import { join } from 'path'
+import { BuildInfo } from './get-build-info'
 
 export const BackendApiRoute = Router()
 
@@ -41,11 +42,7 @@ const version = JSON.parse(
 
 BackendApiRoute.get('/runtime_info', (_req, res) => {
   const runtimeInfo: RuntimeInfo = {
-    buildInfo: {
-      BUILD_TIMESTAMP: 0,
-      GIT_REF: 'dev-browser-version',
-      VERSION: version,
-    },
+    buildInfo: BuildInfo,
     isAppx: false,
     isMac: false, // this has an alternative frameless design that we don't want in browser
     versions: [],
