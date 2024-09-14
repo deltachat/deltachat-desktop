@@ -314,7 +314,11 @@ class BrowserRuntime implements Runtime {
     if (!request.ok) {
       throw new Error('getDesktopSettings request failed')
     }
-    return await request.json()
+    const config = await request.json()
+    if (config.locale === null){
+      config.locale = navigator.language
+    }
+    return config
   }
   getWebxdcIconURL(_accountId: number, _msgId: number): string {
     this.log.critical('getWebxdcIconURL Method not implemented.')
