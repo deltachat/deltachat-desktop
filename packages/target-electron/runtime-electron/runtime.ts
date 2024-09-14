@@ -307,7 +307,7 @@ class ElectronRuntime implements Runtime {
   initialize(
     setLogHandler: typeof setLogHandlerFunction,
     getLogger: typeof getLoggerFunction
-  ):Promise<void> {
+  ): Promise<void> {
     this.log = getLogger('runtime/electron')
 
     // fetch vars

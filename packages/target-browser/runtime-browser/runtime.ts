@@ -315,7 +315,7 @@ class BrowserRuntime implements Runtime {
       throw new Error('getDesktopSettings request failed')
     }
     const config = await request.json()
-    if (config.locale === null){
+    if (config.locale === null) {
       config.locale = navigator.language
     }
     return config
@@ -361,7 +361,25 @@ class BrowserRuntime implements Runtime {
     return navigator.clipboard.readText()
   }
   async readClipboardImage(): Promise<string | null> {
-    this.log.critical('readClipboardImage: Method not implemented.')
+    try {
+      const clipboardItems = await navigator.clipboard.read()
+
+      for (const clipboardItem of clipboardItems) {
+        for (const type of clipboardItem.types) {
+          if (type.startsWith('image')) {
+            const blob = await clipboardItem.getType(type)
+            console.log('1234 ', blob)
+            return await new Promise((resolve, _) => {
+              const reader = new FileReader()
+              reader.onloadend = () => resolve(reader.result as any)
+              reader.readAsDataURL(blob)
+            })
+          }
+        }
+      }
+    } catch (err) {
+      console.error('NotImageError', 'No Image Found')
+    }
     return null
   }
   writeClipboardText(text: string): Promise<void> {

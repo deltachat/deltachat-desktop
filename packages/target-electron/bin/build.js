@@ -25,10 +25,7 @@ await build({
   treeShaking: false,
   inject: ['src/cjs-shim.ts'],
   define: {
-    BUILD_INFO_JSON_STRING: `"${BuildInfoString.replace(
-      /"/g,
-      '\\"'
-    )}"`,
+    BUILD_INFO_JSON_STRING: `"${BuildInfoString.replace(/"/g, '\\"')}"`,
   },
 })
 

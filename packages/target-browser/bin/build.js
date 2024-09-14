@@ -28,10 +28,7 @@ await build({
     },
   ],
   define: {
-    BUILD_INFO_JSON_STRING: `"${BuildInfoString.replace(
-      /"/g,
-      '\\"'
-    )}"`,
+    BUILD_INFO_JSON_STRING: `"${BuildInfoString.replace(/"/g, '\\"')}"`,
   },
 })
 
