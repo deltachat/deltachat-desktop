@@ -23,6 +23,7 @@
 - dev: update `./bin/update_background_thumbnails.sh` script
 - fix chatlist image thumbnails #4101
 - fix: spacing around avatars in reaction details dialog #4114
+- fix: wrong translation string for new group creation #4126
 - fix: packaging: windows 64bit and 32bit releases now have different filenames, bring back 64bit windows releases. #4131
 
 <a id="1_46_8"></a>
