@@ -378,8 +378,9 @@ class BrowserRuntime implements Runtime {
       }
     } catch (err) {
       console.error('NotImageError', 'No Image Found')
+    } finally {
+      return null
     }
-    return null
   }
   writeClipboardText(text: string): Promise<void> {
     return navigator.clipboard.writeText(text)
