@@ -377,7 +377,7 @@ class BrowserRuntime implements Runtime {
         }
       }
     } catch (err) {
-      console.error('NotImageError', 'No Image Found')
+      console.error('error in readClipboardImage', err)
     } finally {
       return null
     }
@@ -388,17 +388,47 @@ class BrowserRuntime implements Runtime {
   async writeClipboardImage(path: string): Promise<void> {
     try {
       const imgURL = this.transformBlobURL(path)
-      const data = await fetch(imgURL);
-      const blob = await data.blob();
+      const data = await fetch(imgURL)
+      let blob = await data.blob()
+      if (!blob.type.startsWith('image')) {
+        throw new Error('Not an image mimetype:' + blob.type)
+      }
+      if (blob.type !== 'image/png') {
+        let img = new Image()
+        const blobPromise = new Promise<Blob>(async (resolve, reject) => {
+          img.onload = async () => {
+            try {
+              const canvas = new OffscreenCanvas(
+                img.naturalWidth,
+                img.naturalHeight
+              )
+              const ctx = canvas.getContext('2d')
+              if (!ctx) {
+                throw new Error('canvas context creation error')
+              }
+              ctx.fillRect(0, 0, canvas.width, canvas.height)
+              ctx.drawImage(img, 0, 0)
+              resolve(await canvas.convertToBlob())
+            } catch (error) {
+              reject(error)
+            }
+          }
+          img.onerror = reject
+          img.onabort = reject
+        })
+        img.src = imgURL // load the image
+        blob = await blobPromise
+      }
       await navigator.clipboard.write([
         new ClipboardItem({
           [blob.type]: blob,
         }),
-      ]);
-      console.log("Fetched image copied.");
-  } catch (err) {
-    console.error('ClipboardError', "Couldn't write to clipboard");
-  }
+      ])
+      console.log('Fetched image copied.')
+    } catch (err) {
+      console.error('error in writeClipboardImage', err)
+      throw err
+    }
   }
 
   transformBlobURL(blob_path: string): string {
