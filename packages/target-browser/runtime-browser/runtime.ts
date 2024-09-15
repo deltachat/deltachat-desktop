@@ -363,24 +363,26 @@ class BrowserRuntime implements Runtime {
   async readClipboardImage(): Promise<string | null> {
     try {
       const clipboardItems = await navigator.clipboard.read()
-
       for (const clipboardItem of clipboardItems) {
         for (const type of clipboardItem.types) {
           if (type.startsWith('image')) {
             const blob = await clipboardItem.getType(type)
-            return await new Promise((resolve, _) => {
+            return await new Promise((resolve, reject) => {
               const reader = new FileReader()
-              reader.onloadend = () => resolve(reader.result as any)
+              reader.onloadend = () => {
+                resolve(reader.result as any)
+              }
+              reader.onabort = reject
+              reader.onerror = reject
               reader.readAsDataURL(blob)
             })
           }
         }
       }
     } catch (err) {
-      console.error('error in readClipboardImage', err)
-    } finally {
-      return null
+      this.log.error('error in readClipboardImage', err)
     }
+    return null
   }
   writeClipboardText(text: string): Promise<void> {
     return navigator.clipboard.writeText(text)
@@ -424,9 +426,9 @@ class BrowserRuntime implements Runtime {
           [blob.type]: blob,
         }),
       ])
-      console.log('Fetched image copied.')
+      this.log.debug('Fetched image copied.')
     } catch (err) {
-      console.error('error in writeClipboardImage', err)
+      this.log.error('error in writeClipboardImage', err)
       throw err
     }
   }
