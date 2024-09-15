@@ -150,9 +150,18 @@ build['deb'] = {
 }
 
 build['win'] = {
-  artifactName: '${productName}-${version}.${arch}.${ext}',
   icon: 'html-dist/images/deltachat.ico',
+  artifactName: '${productName}-${version}-Setup.${arch}.${ext}', // specifying it inside of build['nsis'] does not work for unknown reasons.
   files: [...files, PREBUILD_FILTERS.NOT_MAC, PREBUILD_FILTERS.NOT_LINUX],
+}
+
+build['appx'] = {
+  // TODO: find out why this is not working
+  artifactName: '${productName}-${version}-Package.${arch}.${ext}',
+}
+
+build['portable'] = {
+  artifactName: '${productName}-${version}-Portable.${arch}.${ext}',
 }
 
 // supported languages are on https://learn.microsoft.com/en-us/windows/apps/publish/publish-your-app/supported-languages?pivots=store-installer-msix
