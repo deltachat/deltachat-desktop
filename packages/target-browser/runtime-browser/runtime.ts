@@ -385,8 +385,20 @@ class BrowserRuntime implements Runtime {
   writeClipboardText(text: string): Promise<void> {
     return navigator.clipboard.writeText(text)
   }
-  writeClipboardImage(_path: string): Promise<void> {
-    throw new Error('Method not implemented.')
+  async writeClipboardImage(path: string): Promise<void> {
+    try {
+      const imgURL = this.transformBlobURL(path)
+      const data = await fetch(imgURL);
+      const blob = await data.blob();
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          [blob.type]: blob,
+        }),
+      ]);
+      console.log("Fetched image copied.");
+  } catch (err) {
+    console.error('ClipboardError', "Couldn't write to clipboard");
+  }
   }
 
   transformBlobURL(blob_path: string): string {
