@@ -67,6 +67,8 @@ export function keyDownEvent2Action(
   if (window.__contextMenuActive) {
     return
   }
+  // When modifying this, don't forget to also update the corresponding
+  // `aria-keyshortcuts` properties, and the "Keybindings" help window.
   if (!ev.repeat) {
     // fire only on first press
     if (ev.altKey && ev.key === 'ArrowDown') {
