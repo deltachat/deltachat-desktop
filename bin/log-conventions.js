@@ -25,7 +25,7 @@ ${blue('------------------------------------------------')}`
 
 import { readFile } from 'fs/promises'
 import walk from 'ignore-walk'
-import { basename } from 'path'
+import { basename, relative } from 'path'
 //@ts-ignore
 const files = await walk({
   ignoreFiles: ['.log.convention.ignore', '.gitignore'],
@@ -56,7 +56,7 @@ for (const file of files) {
 
     if (ignoreConsoleLog) continue
 
-    const filename = basename(file)
+    const filename = relative(process.cwd(), file)
 
     formattedOutput(
       `${filename}:${i + 1}`,
