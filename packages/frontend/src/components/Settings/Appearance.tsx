@@ -329,16 +329,22 @@ function SettingsTrayIcon({
 }) {
   const tx = useTranslationFunction()
 
+  const isBrowser = runtime.getRuntimeInfo().target === 'browser'
+  const disabled = settingsStore.rc.minimized || isBrowser
+
   return (
     <>
       <DesktopSettingsSwitch
         settingsKey='minimizeToTray'
         label={tx('pref_show_tray_icon')}
-        disabled={settingsStore.rc.minimized}
-        disabledValue={settingsStore.rc.minimized}
+        disabled={disabled}
+        disabledValue={settingsStore.rc.minimized && !isBrowser}
       />
       {settingsStore.rc.minimized && (
         <Callout>{tx('explain_desktop_minimized_disabled_tray_pref')}</Callout>
+      )}
+      {isBrowser && (
+        <Callout>{tx('explain_desktop_browser_disabled_tray_pref')}</Callout>
       )}
     </>
   )

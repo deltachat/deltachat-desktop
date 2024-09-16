@@ -53,6 +53,7 @@ BackendApiRoute.get('/runtime_info', (_req, res) => {
 
 const Config: DesktopSettingsType = {
   ...getDefaultState(),
+  minimizeToTray: false, // does not exist in browser
   ...JSON.parse(localStorage.getItem('config') || '{}'),
 }
 

@@ -493,7 +493,7 @@ class BrowserRuntime implements Runtime {
         throw new Error('Not an image mimetype:' + blob.type)
       }
       if (blob.type !== 'image/png') {
-        let img = new Image()
+        const img = new Image()
         const blobPromise = new Promise<Blob>(async (resolve, reject) => {
           img.onload = async () => {
             try {

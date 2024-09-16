@@ -153,10 +153,12 @@ export default function About({ onClose }: DialogProps) {
                   <td style={{ userSelect: 'all' }}>{value}</td>
                 </tr>
               ))}
-              {runtime.getRuntimeInfo().target === 'browser' && <tr key={'browser-version'} style={{ color: 'grey' }}>
+              {runtime.getRuntimeInfo().target === 'browser' && (
+                <tr key={'browser-version'} style={{ color: 'grey' }}>
                   <td>Browser UA</td>
                   <td style={{ userSelect: 'all' }}>{navigator.userAgent}</td>
-                </tr>} 
+                </tr>
+              )}
               {runtime.getRuntimeInfo().runningUnderARM64Translation && (
                 <tr>
                   <td>runningUnderARM64Translation</td>
