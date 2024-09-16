@@ -230,6 +230,11 @@ class BrowserRuntime implements Runtime {
     key: keyof DesktopSettingsType,
     value: string | number | boolean | undefined
   ): Promise<void> {
+    // if key is notifications and new vlaue is on/true, then ask browser for permission
+    if (key == 'notifications' && Boolean(value)) {
+      await this.askBrowserForNotificationPermission()
+    }
+
     const request = await fetch(`/backend-api/config/${key}`, {
       method: 'POST',
       headers: {
@@ -274,19 +279,111 @@ class BrowserRuntime implements Runtime {
   removeTempFile(_name: string): Promise<void> {
     throw new Error('Method not implemented.')
   }
-  setNotificationCallback(
-    _cb: (data: { accountId: number; chatId: number; msgId: number }) => void
-  ): void {
-    this.log.critical('Method not implemented.')
+
+  activeNotifications: { [chatId: number]: Notification[] } = {}
+  notificationCB: (data: {
+    accountId: number
+    chatId: number
+    msgId: number
+  }) => void = () => {
+    this.log.critical('notification click handler not initialized yet')
   }
-  showNotification(_data: DcNotification): void {
-    this.log.critical('Method not implemented.')
+
+  setNotificationCallback(
+    cb: (data: { accountId: number; chatId: number; msgId: number }) => void
+  ): void {
+    this.notificationCB = cb
+  }
+  async showNotification(data: DcNotification): Promise<void> {
+    if (Notification.permission != 'granted') {
+      this.log.warn(
+        "failed to showNotification: we don't have permission to send notifications"
+      )
+      return
+    }
+    const {
+      accountId,
+      chatId,
+      body,
+      title,
+      icon: notificationIcon,
+      messageId,
+    } = data
+    this.log.debug('showNotification', { accountId, chatId, messageId })
+
+    // TODO real timestamp (why? because we can! ;)
+
+    let icon = (() => {
+      const url = new URL(location.origin)
+      url.pathname = 'images/deltachat.png'
+      return url.toString()
+    })()
+
+    if (notificationIcon) {
+      // we need to pass the image/icon as dataurl, otherwise the browser has no permission to access it.
+      // IDEA: alternatively we could make another route that exposes the file with a random hash without authentification?
+      // Concern: Also the current method could run into size limits because it loads the whole image, which can be large? like high ram usage in browser?
+      try {
+        const response = await fetch(this.transformBlobURL(notificationIcon))
+        if (!response.ok) {
+          throw new Error('request failed: code' + response.status)
+        }
+        const blob = await response.blob()
+        icon = await new Promise((resolve, reject) => {
+          const reader = new FileReader()
+          reader.onloadend = () => {
+            resolve(reader.result as any)
+          }
+          reader.onabort = reject
+          reader.onerror = reject
+          reader.readAsDataURL(blob)
+        })
+      } catch (error) {
+        this.log.warn('failed to load thumbnail for notification', error)
+      }
+    }
+
+    this.log.info('notify-icon', { icon }) // todo rm
+    const notification = new Notification(title, {
+      body,
+      icon,
+      tag: `${accountId}.${chatId}.${messageId}`,
+    })
+
+    notification.onclick = this.notificationCB.bind(this, {
+      accountId,
+      chatId,
+      msgId: messageId,
+    })
+
+    if (this.activeNotifications[chatId]) {
+      this.activeNotifications[chatId].push(notification)
+    } else {
+      this.activeNotifications[chatId] = [notification]
+    }
   }
   clearAllNotifications(): void {
-    this.log.critical('Method not implemented.')
+    for (const chatId of Object.keys(this.activeNotifications)) {
+      if (isNaN(Number(chatId))) {
+        this.clearNotifications(Number(chatId))
+      }
+    }
   }
-  clearNotifications(_chatId: number): void {
-    this.log.critical('Method not implemented.')
+  clearNotifications(chatId: number): void {
+    this.log.debug('clearNotificationsForChat', {
+      chatId,
+      notifications: this.activeNotifications,
+    })
+    if (this.activeNotifications[chatId]) {
+      for (const notify of this.activeNotifications[chatId]) {
+        notify.close()
+      }
+      delete this.activeNotifications[chatId]
+    }
+    this.log.debug('after cleared Notifications', {
+      chatId,
+      notifications: this.activeNotifications,
+    })
   }
   setBadgeCounter(value: number): void {
     document.title = `DeltaChat${value ? `(${value})` : ''}`
@@ -485,7 +582,17 @@ class BrowserRuntime implements Runtime {
         data: [channel, level, stack_trace, ...args],
       })
     }, config)
+
+    this.askBrowserForNotificationPermission()
   }
+
+  async askBrowserForNotificationPermission() {
+    if ('Notification' in window && Notification.permission !== 'granted') {
+      const result = await Notification.requestPermission()
+      this.log.debug('Notification.requestPermission', { result })
+    }
+  }
+
   getRC_Config(): RC_Config {
     if (this.rc_config === null) {
       throw new Error('this.rc_config is not set')

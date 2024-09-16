@@ -59,7 +59,7 @@ function onClickNotification(
   mainWindow.window?.focus()
 }
 
-const notifications: { [key: number]: Notification[] } = {}
+const notifications: { [chatId: number]: Notification[] } = {}
 
 function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
   const chatId = data.chatId
