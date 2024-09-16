@@ -35,6 +35,9 @@ importers:
 
   .:
     devDependencies:
+      '@types/ignore-walk':
+        specifier: ^4.0.3
+        version: 4.0.3
       '@typescript-eslint/eslint-plugin':
         specifier: ^7.8.0
         version: 7.8.0(@typescript-eslint/parser@7.8.0(eslint@8.57.0)(typescript@5.5.4))(eslint@8.57.0)(typescript@5.5.4)
@@ -56,15 +59,15 @@ importers:
       eslint-plugin-react-hooks:
         specifier: ^4.6.2
         version: 4.6.2(eslint@8.57.0)
+      ignore-walk:
+        specifier: ^7.0.0
+        version: 7.0.0
       prettier:
         specifier: 3.1.0
         version: 3.1.0
       typescript:
         specifier: 'catalog:'
         version: 5.5.4
-      walk:
-        specifier: ^2.3.15
-        version: 2.3.15
       xml-js:
         specifier: ^1.6.11
         version: 1.6.11
@@ -1215,6 +1218,9 @@ packages:
   '@types/http-errors@2.0.4':
     resolution: {integrity: sha512-D0CFMMtydbJAegzOyHjtiKPLlvnm3iTZyZRSZoLq2mRhDdmLfIWOCYPfQJ4cu2erKghU++QvjcUjp/5h7hESpA==}
 
+  '@types/ignore-walk@4.0.3':
+    resolution: {integrity: sha512-6V7wDsk0nz8LtRC7qeC0GfXadFLT4FdCtVbXhxoIGRdkn2kLr20iMLupRGiBhlZ79WWWqaObIdR3nkXfUrBPdQ==}
+
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
@@ -2139,9 +2145,6 @@ packages:
   flatted@3.2.7:
     resolution: {integrity: sha512-5nqDSxl8nn5BSNxyR3n4I6eDmbolI6WT+QqR547RwxQapgjQBmtktdP+HTBb/a/zLsbzERTONyUB5pefh5TtjQ==}
 
-  foreachasync@3.0.0:
-    resolution: {integrity: sha512-J+ler7Ta54FwwNcx6wQRDhTIbNeyDcARMkOcguEqnEdtm0jKvN3Li3PDAb2Du3ubJYEWfYL83XMROXdsXAXycw==}
-
   foreground-child@3.1.1:
     resolution: {integrity: sha512-TMKDUnIte6bfb5nWv7V/caI169OHgvwjb7V4WkeUvbQQdjr5rWKqHFiKWb/fcOwB+CzBT+qbWjvj+DVwRskpIg==}
     engines: {node: '>=14'}
@@ -2338,6 +2341,10 @@ packages:
 
   ieee754@1.2.1:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
+
+  ignore-walk@7.0.0:
+    resolution: {integrity: sha512-T4gbf83A4NH95zvhVYZc+qWocBBGlpzUXLPGurJggw/WIOwicfXJChLDP/iBZnN5WqROSu5Bm3hhle4z8a8YGQ==}
+    engines: {node: ^18.17.0 || >=20.5.0}
 
   ignore@5.3.1:
     resolution: {integrity: sha512-5Fytz/IraMjqpwfd34ke28PTVMjZjJG2MPn5t7OE4eUCUNf8BAa7b5WUS9/Qvr6mwOQS7Mk6vdsMno5he+T8Xw==}
@@ -3362,9 +3369,6 @@ packages:
     resolution: {integrity: sha512-veufcmxri4e3XSrT0xwfUR7kguIkaxBeosDg00yDWhk49wdwkSUrvvsm7nc75e1PUyvIeZj6nS8VQRYz2/S4Xg==}
     engines: {node: '>=0.6.0'}
 
-  walk@2.3.15:
-    resolution: {integrity: sha512-4eRTBZljBfIISK1Vnt69Gvr2w/wc3U6Vtrw7qiN5iqYJPH7LElcYh/iU4XWhdCy2dZqv1ToMyYlybDylfG/5Vg==}
-
   webxdc-types@1.0.1:
     resolution: {integrity: sha512-voocssWnUiMoJoicPWmCKnjd6OG8TNuUq+5n9+0gMSBMg0h1KxapnN9Vq6WssK0jhKcGBSZvcQf8tGK+X88IaQ==}
 
@@ -4094,6 +4098,10 @@ snapshots:
   '@types/http-cache-semantics@4.0.1': {}
 
   '@types/http-errors@2.0.4': {}
+
+  '@types/ignore-walk@4.0.3':
+    dependencies:
+      '@types/node': 20.14.15
 
   '@types/json-schema@7.0.15': {}
 
@@ -5320,8 +5328,6 @@ snapshots:
 
   flatted@3.2.7: {}
 
-  foreachasync@3.0.0: {}
-
   foreground-child@3.1.1:
     dependencies:
       cross-spawn: 7.0.3
@@ -5564,6 +5570,10 @@ snapshots:
       postcss: 8.4.41
 
   ieee754@1.2.1: {}
+
+  ignore-walk@7.0.0:
+    dependencies:
+      minimatch: 9.0.4
 
   ignore@5.3.1: {}
 
@@ -6545,10 +6555,6 @@ snapshots:
       core-util-is: 1.0.2
       extsprintf: 1.4.1
     optional: true
-
-  walk@2.3.15:
-    dependencies:
-      foreachasync: 3.0.0
 
   webxdc-types@1.0.1: {}
 
