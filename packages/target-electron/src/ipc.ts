@@ -121,6 +121,7 @@ ${error instanceof Error ? error.message : inspect(error, { depth: null })}`
     const info: RuntimeInfo = {
       isMac: platform() === 'darwin',
       isAppx: appx,
+      target: 'electron',
       versions: [
         { label: 'electron', value: versions.electron },
         { label: 'node', value: versions.node },
