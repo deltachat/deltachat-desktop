@@ -436,8 +436,7 @@ export function useDraft(
 
   const clearDraft = useCallback(() => {
     _setDraft(_ => emptyDraft(chatId))
-    inputRef.current?.focus()
-  }, [chatId, inputRef])
+  }, [chatId])
 
   const loadDraft = useCallback(
     (chatId: number) => {
@@ -549,21 +548,24 @@ export function useDraft(
       draftRef.current.quote = null
     }
     saveDraft()
-  }, [saveDraft])
+    inputRef.current?.focus()
+  }, [inputRef, saveDraft])
 
   const removeFile = useCallback(() => {
     draftRef.current.file = ''
     draftRef.current.viewType = 'Text'
     saveDraft()
-  }, [saveDraft])
+    inputRef.current?.focus()
+  }, [inputRef, saveDraft])
 
   const addFileToDraft = useCallback(
     async (file: string, viewType: Viewtype) => {
       draftRef.current.file = file
       draftRef.current.viewType = viewType
+      inputRef.current?.focus()
       return saveDraft()
     },
-    [saveDraft]
+    [inputRef, saveDraft]
   )
 
   const settingsStore = useSettingsStore()[0]
