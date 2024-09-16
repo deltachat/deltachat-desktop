@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import classNames from 'classnames'
 import debounce from 'debounce'
 
@@ -147,6 +147,41 @@ export default function AccountItem({
     )
   }
 
+  const ref = useRef<HTMLDivElement>(null)
+  useLayoutEffect(() => {
+    if (!isSelected) {
+      return
+    }
+
+    if (ref.current == null) {
+      log.warn(
+        'Could not scroll the selected account into view. Element:',
+        ref.current
+      )
+      return
+    }
+
+    ref.current.scrollIntoView({
+      // We mostly want this code for the initial render
+      // and for when the user switches accounts by clicking a message
+      // notification,
+      // so let's not smooth-scroll here as this is not a "state change"
+      // that needs to be shown to the user.
+      behavior: 'instant',
+      // "nearest" so as to not scroll if it's already in view.
+      block: 'nearest',
+      inline: 'nearest',
+    })
+    // `window.__screen` because we display the "settings" button
+    // based on that, and whether it is displayed or not determines the
+    // scrollHeight of the accounts list, so we want to make sure
+    // to scroll after it gets displayed.
+    // TODO refactor: maybe just use `ResizeObserver`,
+    // as we do with messages list:
+    // https://github.com/deltachat/deltachat-desktop/pull/4119
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSelected, window.__screen])
+
   return (
     <div
       className={classNames(styles.account, {
@@ -158,6 +193,7 @@ export default function AccountItem({
       onMouseEnter={() => updateAccountForHoverInfo(account, true)}
       onMouseLeave={() => updateAccountForHoverInfo(account, false)}
       x-account-sidebar-account-id={account.id}
+      ref={ref}
     >
       {account.kind == 'Configured' ? (
         <div className={styles.avatar}>
