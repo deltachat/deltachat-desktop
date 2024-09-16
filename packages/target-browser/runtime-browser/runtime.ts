@@ -439,7 +439,11 @@ class BrowserRuntime implements Runtime {
     if (matches) {
       return `/blobs/${matches[2]}/${matches[3]}`
     }
-    this.log.error('transformBlobURL wrong url format', blob_path)
+    if (blob_path !== '') {
+      this.log.error('transformBlobURL wrong url format', blob_path)
+    } else {
+      this.log.debug('transformBlobURL called with empty string for blob_path')
+    }
     return ''
   }
   async showOpenFileDialog(
