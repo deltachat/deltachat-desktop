@@ -13,5 +13,5 @@
     "strictNullChecks": true,
     "strict": true
   },
-  "include": ["./**/*.ts", "./**/*.js"]
+  "include": ["./src/**/*"]
 }
