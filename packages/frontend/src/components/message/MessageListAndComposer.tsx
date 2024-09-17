@@ -238,7 +238,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
   }
 
   const onEscapeKeyUp = (ev: KeyboardEvent) => {
-    if (ev.key === 'Escape') {
+    if (ev.code === 'Escape') {
       messageInputRef?.current?.focus()
     }
   }

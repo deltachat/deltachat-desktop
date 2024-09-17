@@ -254,22 +254,22 @@ export function ContextMenu(props: {
     const onKeyDown = (ev: KeyboardEvent) => {
       const current = parent?.querySelector(':focus')
 
-      if (ev.key == 'ArrowDown') {
+      if (ev.code == 'ArrowDown') {
         if (current && current.nextElementSibling) {
           ;(current.nextElementSibling as HTMLDivElement)?.focus()
         } else {
           ;(parent?.firstElementChild as HTMLDivElement).focus()
         }
-      } else if (ev.key == 'ArrowUp') {
+      } else if (ev.code == 'ArrowUp') {
         if (current && current.previousElementSibling) {
           ;(current.previousElementSibling as HTMLDivElement)?.focus()
         } else {
           ;(parent?.lastElementChild as HTMLDivElement).focus()
         }
-      } else if (ev.key == 'ArrowLeft') {
+      } else if (ev.code == 'ArrowLeft') {
         setSublevels(l => l.slice(0, Math.max(0, l.length - 1)))
         keyboardFocus.current = openSublevels[openSublevels.length - 1]
-      } else if (ev.key == 'ArrowRight') {
+      } else if (ev.code == 'ArrowRight') {
         if (current) {
           const el = current as HTMLDivElement
           const index = parseInt(el.dataset.expandableIndex as string, 10)
@@ -278,11 +278,11 @@ export function ContextMenu(props: {
             keyboardFocus.current = 0
           }
         }
-      } else if (ev.key == 'Enter') {
+      } else if (ev.code == 'Enter') {
         if (current) {
           ;(current as HTMLDivElement)?.click()
         }
-      } else if (ev.key == 'Escape') {
+      } else if (ev.code == 'Escape') {
         closeCallback()
         keyboardFocus.current = -1
       }
