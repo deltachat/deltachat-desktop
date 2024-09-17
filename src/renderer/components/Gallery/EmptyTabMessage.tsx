@@ -12,7 +12,7 @@ export default function EmptyTabMessage({ tab }: { tab: MediaTabKey }) {
       message = tx('tab_video_empty_hint')
     case 'audio':
       message = tx('tab_audio_empty_hint')
-    case 'webxdc_apps':
+    case 'apps':
       message = tx('tab_webxdc_empty_hint')
     case 'files':
     default:

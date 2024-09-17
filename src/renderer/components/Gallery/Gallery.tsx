@@ -22,25 +22,27 @@ import { DialogContext } from '../../contexts/DialogContext'
 import TabList from '../TabList'
 import { FileSearch, FileTable, FilesNoResult } from './Files'
 import { ChatId, MessageId, GalleryElement, MediaTabKey } from './types'
-import Loading from '../Loading'
 
 const log = getLogger('renderer/Gallery')
 
 const tabNames: MediaTabKey[] = [
   'images',
   'video',
+  'voice',
   'audio',
   'files',
-  'webxdc_apps',
+  'apps',
 ]
 
-const tabMsgTypes: Record<MediaTabKey, (Type.Viewtype | null)[]> = {
-  images: ['Gif', 'Image'],
-  video: ['Video', null],
-  audio: ['Audio', 'Voice'],
-  files: ['File', null],
-  webxdc_apps: ['Webxdc', null],
-}
+const tabMsgTypes: Record<MediaTabKey, [Type.Viewtype, Type.Viewtype | null]> =
+  {
+    images: ['Gif', 'Image'],
+    video: ['Video', null],
+    voice: ['Voice', null],
+    audio: ['Audio', null],
+    files: ['File', null],
+    apps: ['Webxdc', null],
+  }
 
 interface State {
   currentTab: MediaTabKey
@@ -123,11 +125,10 @@ export default class Gallery extends PureComponent<Props, State> {
     const accountId = selectedAccountId()
     const chatId2 = chatId !== 'all' ? chatId : null
 
-    const type0 = tabMsgTypes[tab][0] as Type.Viewtype
-    const type1 = tabMsgTypes[tab][1]
+    const types = tabMsgTypes[tab]
 
     BackendRemote.rpc
-      .getChatMedia(accountId, chatId2, type0, type1, null)
+      .getChatMedia(accountId, chatId2, types[0], types[1], null)
       .then(async (mediaIds: MessageId[]) => {
         const mediaLoadResult = await BackendRemote.rpc.getMessages(
           accountId,
@@ -182,6 +183,7 @@ export default class Gallery extends PureComponent<Props, State> {
       queryText,
       galleryImageKeepAspectRatio,
     } = this.state
+    console.log('MEOW', this)
     const chatId = this.props.chatId
     const filteredMediaMessageIds = mediaMessageIds.filter(id => {
       const result = mediaLoadResult[id]
@@ -191,8 +193,16 @@ export default class Gallery extends PureComponent<Props, State> {
       )
     })
 
-    const showDateHeader =
-      currentTab !== 'files' && currentTab !== 'webxdc_apps'
+    const showDateHeader = currentTab !== 'files' && currentTab !== 'apps'
+
+    const extraChild = (
+      <>
+        {showDateHeader && <div className='big-date' ref={this.dateHeader} />}
+        {currentTab === 'files' && (
+          <FileSearch onChange={this.onChangeInput.bind(this)} />
+        )}
+      </>
+    )
     return (
       <div className='media-view'>
         <TabList
@@ -200,85 +210,97 @@ export default class Gallery extends PureComponent<Props, State> {
           tabChangeCb={(newTab: string) =>
             this.setState({ currentTab: newTab as MediaTabKey })
           }
+          extra={extraChild}
         >
-          <>
-            {
-              // Order here is important, it should be according to this.tabNames --Farooq
-            }
-            <TabBody
-              attachmentElement={ImageAttachment}
-              minWidth={160}
-              itemHeight={160}
-              mediaMessageIds={mediaMessageIds}
-              mediaLoadResult={mediaLoadResult}
-              openFullscreenMedia={this.openFullscreenMedia.bind(this)}
-              updateFirstVisibleMessage={this.updateFirstVisibleMessage.bind(this)}
-              loading={loading}
-              key={'image' + chatId}
-            />
-            <TabBody
-              attachmentElement={VideoAttachment}
-              minWidth={160}
-              itemHeight={160}
-              mediaMessageIds={mediaMessageIds}
-              mediaLoadResult={mediaLoadResult}
-              openFullscreenMedia={this.openFullscreenMedia.bind(this)}
-              updateFirstVisibleMessage={this.updateFirstVisibleMessage.bind(this)}
-              loading={loading}
-              key={'video' + chatId}
-            />
-            <TabBody
-              attachmentElement={AudioAttachment}
-              minWidth={322}
-              itemHeight={94}
-              mediaMessageIds={mediaMessageIds}
-              mediaLoadResult={mediaLoadResult}
-              openFullscreenMedia={this.openFullscreenMedia.bind(this)}
-              updateFirstVisibleMessage={this.updateFirstVisibleMessage.bind(this)}
-              loading={loading}
-              key={'audio' + chatId}
-            />
-            <div key={'file' + chatId}>
-              {loading && <Loading />}
-              {!loading && (
-                <>
-                  <AutoSizer>
-                    {({ width, height }) => (
-                      <FileTable
-                        width={width}
-                        height={height}
-                        mediaLoadResult={mediaLoadResult}
-                        mediaMessageIds={filteredMediaMessageIds}
-                        queryText={queryText}
-                      ></FileTable>
-                    )}
-                  </AutoSizer>
-                  {filteredMediaMessageIds.length === 0 && (
-                    <FilesNoResult queryText={queryText} />
+          {
+            // Order here is important, it should be according to this.tabNames --Farooq
+          }
+          <TabBody
+            attachmentElement={ImageAttachment}
+            minWidth={160}
+            itemHeight={160}
+            mediaMessageIds={mediaMessageIds}
+            mediaLoadResult={mediaLoadResult}
+            openFullscreenMedia={this.openFullscreenMedia.bind(this)}
+            updateFirstVisibleMessage={this.updateFirstVisibleMessage.bind(
+              this
+            )}
+            loading={loading}
+            key={'image' + chatId}
+          />
+          <TabBody
+            attachmentElement={VideoAttachment}
+            minWidth={160}
+            itemHeight={160}
+            mediaMessageIds={mediaMessageIds}
+            mediaLoadResult={mediaLoadResult}
+            openFullscreenMedia={this.openFullscreenMedia.bind(this)}
+            updateFirstVisibleMessage={this.updateFirstVisibleMessage.bind(
+              this
+            )}
+            loading={loading}
+            key={'video' + chatId}
+          />
+          <TabBody
+            attachmentElement={AudioAttachment}
+            minWidth={322}
+            itemHeight={94}
+            mediaMessageIds={mediaMessageIds}
+            mediaLoadResult={mediaLoadResult}
+            openFullscreenMedia={this.openFullscreenMedia.bind(this)}
+            updateFirstVisibleMessage={this.updateFirstVisibleMessage.bind(
+              this
+            )}
+            loading={loading}
+            key={'voice' + chatId}
+          />
+          <TabBody
+            attachmentElement={AudioAttachment}
+            minWidth={322}
+            itemHeight={94}
+            mediaMessageIds={mediaMessageIds}
+            mediaLoadResult={mediaLoadResult}
+            openFullscreenMedia={this.openFullscreenMedia.bind(this)}
+            updateFirstVisibleMessage={this.updateFirstVisibleMessage.bind(
+              this
+            )}
+            loading={loading}
+            key={'audio' + chatId}
+          />
+          <div key={'file' + chatId}>
+            {loading && <Loading />}
+            {!loading && (
+              <>
+                <AutoSizer>
+                  {({ width, height }) => (
+                    <FileTable
+                      width={width}
+                      height={height}
+                      mediaLoadResult={mediaLoadResult}
+                      mediaMessageIds={filteredMediaMessageIds}
+                      queryText={queryText}
+                    ></FileTable>
                   )}
-                </>
-              )}
-            </div>
-            <TabBody
-              attachmentElement={WebxdcAttachment}
-              minWidth={265}
-              itemHeight={61}
-              mediaMessageIds={mediaMessageIds}
-              mediaLoadResult={mediaLoadResult}
-              openFullscreenMedia={this.openFullscreenMedia.bind(this)}
-              updateFirstVisibleMessage={this.updateFirstVisibleMessage.bind(this)}
-              loading={loading}
-              key={'xdc' + chatId}
-            />
-          </>
-          <>
-            {showDateHeader && (
-              <div className='big-date' ref={this.dateHeader} />
+                </AutoSizer>
+                {filteredMediaMessageIds.length === 0 && (
+                  <FilesNoResult queryText={queryText} />
+                )}
+              </>
             )}
-            {currentTab === 'files' && (
-              <FileSearch onChange={this.onChangeInput.bind(this)} />
+          </div>
+          <TabBody
+            attachmentElement={WebxdcAttachment}
+            minWidth={265}
+            itemHeight={61}
+            mediaMessageIds={mediaMessageIds}
+            mediaLoadResult={mediaLoadResult}
+            openFullscreenMedia={this.openFullscreenMedia.bind(this)}
+            updateFirstVisibleMessage={this.updateFirstVisibleMessage.bind(
+              this
             )}
-          </>
+            loading={loading}
+            key={'xdc' + chatId}
+          />
         </TabList>
       </div>
     )
@@ -347,7 +369,7 @@ function TabBody({
             }) => {
               const msgId =
                 mediaMessageIds[
-                visibleRowStartIndex * itemsPerRow + visibleColumnStartIndex
+                  visibleRowStartIndex * itemsPerRow + visibleColumnStartIndex
                 ]
               const message = mediaLoadResult[msgId]
               if (!message) {
@@ -378,4 +400,8 @@ function TabBody({
       }}
     </AutoSizer>
   )
+}
+
+function Loading() {
+  return <p style={{ textAlign: 'center' }}>Please wait...</p>
 }

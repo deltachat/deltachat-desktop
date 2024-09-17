@@ -1,7 +1,13 @@
 import { GalleryAttachmentElementProps } from '../attachment/mediaAttachment'
 import { Type } from '../../backend-com'
 
-export type MediaTabKey = 'images' | 'video' | 'audio' | 'files' | 'webxdc_apps'
+export type MediaTabKey =
+  | 'images'
+  | 'video'
+  | 'audio'
+  | 'voice'
+  | 'files'
+  | 'apps'
 
 export type GalleryElement = (
   props: GalleryAttachmentElementProps & {
