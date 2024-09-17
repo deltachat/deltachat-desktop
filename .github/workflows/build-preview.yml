@@ -94,7 +94,7 @@ jobs:
       run: |
         dir
         mkdir preview
-        move deltachat-desktop-${{ steps.prepare.outputs.prid }}.portable.exe preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.portable.exe
+        move Delta*Chat*.exe preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.portable.exe
         dir preview
         cd ..
     # Upload Step
