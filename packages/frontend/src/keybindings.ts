@@ -69,72 +69,72 @@ export function keyDownEvent2Action(
   }
   if (!ev.repeat) {
     // fire only on first press
-    if (ev.altKey && ev.key === 'ArrowDown') {
+    if (ev.altKey && ev.code === 'ArrowDown') {
       return KeybindAction.ChatList_SelectNextChat
-    } else if (ev.altKey && ev.key === 'ArrowUp') {
+    } else if (ev.altKey && ev.code === 'ArrowUp') {
       return KeybindAction.ChatList_SelectPreviousChat
-    } else if (ev.ctrlKey && ev.key === 'PageDown') {
+    } else if (ev.ctrlKey && ev.code === 'PageDown') {
       return KeybindAction.ChatList_SelectNextChat
-    } else if (ev.ctrlKey && ev.key === 'PageUp') {
+    } else if (ev.ctrlKey && ev.code === 'PageUp') {
       return KeybindAction.ChatList_SelectPreviousChat
-    } else if (ev.ctrlKey && ev.key === 'Tab') {
+    } else if (ev.ctrlKey && ev.code === 'Tab') {
       return !ev.shiftKey
         ? KeybindAction.ChatList_SelectNextChat
         : KeybindAction.ChatList_SelectPreviousChat
-      // } else if (ev.altKey && ev.key === 'ArrowLeft') {
+      // } else if (ev.altKey && ev.code === 'ArrowLeft') {
       // disabled until we find a better keycombination (see https://github.com/deltachat/deltachat-desktop/issues/1796)
       //   return KeybindAction.ChatList_ScrollToSelectedChat
-    } else if (ev.ctrlKey && ev.key === 'k') {
+    } else if (ev.ctrlKey && ev.code === 'KeyK') {
       return KeybindAction.ChatList_FocusAndClearSearchInput
-    } else if (ev.ctrlKey && ev.key === 'n') {
+    } else if (ev.ctrlKey && ev.code === 'KeyN') {
       return KeybindAction.Composer_Focus
     } else if (
       // Also consider adding this to `ev.repeat` when it stops being so sluggish
-      ev.key === 'ArrowUp' &&
+      ev.code === 'ArrowUp' &&
       (ev.ctrlKey || ev.metaKey) &&
       !(ev.ctrlKey && ev.metaKey) // Both at the same time
     ) {
       return KeybindAction.Composer_SelectReplyToUp
     } else if (
-      ev.key === 'ArrowDown' &&
+      ev.code === 'ArrowDown' &&
       (ev.ctrlKey || ev.metaKey) &&
       !(ev.ctrlKey && ev.metaKey) // Both at the same time
     ) {
       return KeybindAction.Composer_SelectReplyToDown
-    } else if ((ev.metaKey || ev.ctrlKey) && ev.key === ',') {
+    } else if ((ev.metaKey || ev.ctrlKey) && ev.code === 'Comma') {
       return KeybindAction.Settings_Open
     } else if (
-      ev.key === 'Escape' &&
+      ev.code === 'Escape' &&
       (ev.target as any).id === 'chat-list-search'
     ) {
       return KeybindAction.ChatList_ExitSearch
     } else if (
-      ev.key === 'Enter' &&
+      ev.code === 'Enter' &&
       (ev.target as any).id === 'chat-list-search'
     ) {
       return KeybindAction.ChatList_SearchSelectFirstChat
-    } else if (ev.key === 'F5') {
+    } else if (ev.code === 'F5') {
       return KeybindAction.Debug_MaybeNetwork
-    } else if (ev.key === 'PageUp') {
+    } else if (ev.code === 'PageUp') {
       return KeybindAction.MessageList_PageUp
-    } else if (ev.key === 'PageDown') {
+    } else if (ev.code === 'PageDown') {
       return KeybindAction.MessageList_PageDown
-    } else if ((ev.metaKey || ev.ctrlKey) && ev.key === '/') {
+    } else if ((ev.metaKey || ev.ctrlKey) && ev.code === 'Slash') {
       return KeybindAction.KeybindingCheatSheet_Open
     }
   } else {
     // fire continuesly as long as button is pressed
-    if (ev.ctrlKey && ev.key === 'PageDown') {
+    if (ev.ctrlKey && ev.code === 'PageDown') {
       return KeybindAction.ChatList_SelectNextChat
-    } else if (ev.ctrlKey && ev.key === 'PageUp') {
+    } else if (ev.ctrlKey && ev.code === 'PageUp') {
       return KeybindAction.ChatList_SelectPreviousChat
-    } else if (ev.key === 'PageUp') {
+    } else if (ev.code === 'PageUp') {
       return KeybindAction.MessageList_PageUp
-    } else if (ev.key === 'PageDown') {
+    } else if (ev.code === 'PageDown') {
       return KeybindAction.MessageList_PageDown
-    } else if (ev.altKey && ev.key === 'ArrowDown') {
+    } else if (ev.altKey && ev.code === 'ArrowDown') {
       return KeybindAction.ChatList_SelectNextChat
-    } else if (ev.altKey && ev.key === 'ArrowUp') {
+    } else if (ev.altKey && ev.code === 'ArrowUp') {
       return KeybindAction.ChatList_SelectPreviousChat
     }
   }

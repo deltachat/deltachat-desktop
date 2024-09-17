@@ -25,6 +25,7 @@
 - fix: spacing around avatars in reaction details dialog #4114
 - fix: wrong translation string for new group creation #4126
 - fix: packaging: windows 64bit and 32bit releases now have different filenames, bring back 64bit windows releases. #4131
+- some shortcuts (e.g. `Ctrl + N`, `Ctrl + K`) not working on some languages' keyboard layots #4140
 
 <a id="1_46_8"></a>
 
