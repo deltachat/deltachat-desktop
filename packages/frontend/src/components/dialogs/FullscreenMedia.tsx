@@ -233,9 +233,9 @@ export default function FullscreenMedia(props: Props & DialogProps) {
       }
       ev.preventDefault()
       ev.stopPropagation()
-      if (ev.key == 'ArrowLeft') {
+      if (ev.code == 'ArrowLeft') {
         previousImage()
-      } else if (ev.key == 'ArrowRight') {
+      } else if (ev.code == 'ArrowRight') {
         nextImage()
       }
     }

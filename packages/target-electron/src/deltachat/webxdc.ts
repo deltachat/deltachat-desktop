@@ -433,7 +433,7 @@ If you think that's a bug and you need that permission, then please open an issu
       )
 
       webxdcWindow.webContents.on('before-input-event', (event, input) => {
-        if (input.key.toLowerCase() === 'f12') {
+        if (input.code === 'F12') {
           if (DesktopSettings.state.enableWebxdcDevTools) {
             webxdcWindow.webContents.toggleDevTools()
             event.preventDefault()

@@ -303,7 +303,7 @@ class RealtimeListener {
   })
 
   const keydown_handler = ev => {
-    if (ev.key == 'Escape') {
+    if (ev.code == 'Escape') {
       ipcRenderer.invoke('webxdc.exitFullscreen')
     }
   }
