@@ -182,8 +182,10 @@ wssBackend.on('connection', function connection(ws) {
       const utf8String = raw_data.toString('utf8')
       const msg: MessageToBackend.AllTypes = JSON.parse(utf8String)
       if (msg.type == 'log') {
-        const [channel, level, _, ...data] = msg.data
-        log.debug(channel, level, data[0], '[..]')
+        const [channel, level, stackTrace, ...data] = msg.data
+        // /* ignore-console-log */
+        // console.debug("frontend", channel, level, data[0], '[..]')
+        logHandler.log(channel, level, stackTrace, ...data)
       } else {
         log.debug('[recv on backend ws]', msg)
       }
