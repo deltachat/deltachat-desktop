@@ -7,6 +7,7 @@ import { RCConfig } from './rc-config'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 
 const log = getLogger('main/dc_wss')
+const logCoreEvent = getLogger('core')
 
 class StdioServer {
   serverProcess: ChildProcessWithoutNullStreams | null
@@ -108,14 +109,6 @@ export async function startDeltaChat(): Promise<
     active_connection?.send(response)
     if (response.indexOf('event') !== -1)
       try {
-        // TODO use better logger
-        const logCoreEvent = {
-          log: console.log.bind(null, '[c]  '),
-          error: console.error.bind(null, '[c](e)'),
-          warn: console.warn.bind(null, '[c](w)'),
-          info: console.info.bind(null, '[c](i)'),
-          debug: console.debug.bind(null, '[c](d)'),
-        }
         const { result } = JSON.parse(response)
         const { contextId, event } = result
         if (
