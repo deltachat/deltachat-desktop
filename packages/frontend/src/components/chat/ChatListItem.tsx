@@ -102,7 +102,9 @@ function Message({
         {summaryPreviewImage && !iswebxdc && (
           <div
             className='summary_thumbnail'
-            style={{ backgroundImage: `url("${summaryPreviewImage}")` }}
+            style={{
+              backgroundImage: `url(${JSON.stringify(summaryPreviewImage)})`,
+            }}
           />
         )}
         {iswebxdc && lastMessageId && (

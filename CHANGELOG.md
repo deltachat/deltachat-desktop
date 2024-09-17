@@ -21,7 +21,7 @@
 - security: harden electron_functions, only runtime can use them now
 - security: harden runtime interface by deleting the reference on window (`window.r`) after the first use. For development it is now accessible at `exp.runtime` but only in `--devmode` like `exp.rpc`
 - dev: update `./bin/update_background_thumbnails.sh` script
-- fix chatlist image thumbnails #4101
+- fix chatlist image thumbnails #4101, #4139
 - fix: spacing around avatars in reaction details dialog #4114
 - fix: wrong translation string for new group creation #4126
 - fix: packaging: windows 64bit and 32bit releases now have different filenames, bring back 64bit windows releases. #4131
