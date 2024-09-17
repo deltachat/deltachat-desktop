@@ -31,6 +31,7 @@
     "@types/node": "^20.14.13",
     "@types/resolve-path": "^1.4.2",
     "@types/ws": "^8.5.12",
+    "error-stack-parser": "^2.1.4",
     "esbuild": "^0.23.1"
   }
 }

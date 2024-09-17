@@ -3,6 +3,10 @@ import { DC_ACCOUNTS_DIR } from './config'
 import { getRPCServerPath } from '@deltachat/stdio-rpc-server'
 import { BaseDeltaChat, yerpc } from '@deltachat/jsonrpc-client'
 import { WebSocket, WebSocketServer } from 'ws'
+import { RCConfig } from './rc-config'
+import { getLogger } from '@deltachat-desktop/shared/logger'
+
+const log = getLogger('main/dc_wss')
 
 class StdioServer {
   serverProcess: ChildProcessWithoutNullStreams | null
@@ -12,7 +16,7 @@ class StdioServer {
 
   async start() {
     const serverPath = await getRPCServerPath()
-    console.info('using deltachat-rpc-server at', { serverPath })
+    log.info('using deltachat-rpc-server at', { serverPath })
     this.serverProcess = spawn(serverPath, {
       env: {
         DC_ACCOUNTS_PATH: DC_ACCOUNTS_DIR,
@@ -36,28 +40,28 @@ class StdioServer {
     let errorLog = ''
     const ERROR_LOG_LENGTH = 800
     this.serverProcess.stderr.on('data', data => {
-      console.log(`stderr: ${data}`.trimEnd())
+      log.error(`stderr: ${data}`.trimEnd())
       errorLog = (errorLog + data).slice(-ERROR_LOG_LENGTH)
     })
 
     this.serverProcess.on('close', (code, signal) => {
       if (code !== null) {
-        console.log(`child process close all stdio with code ${code}`)
+        log.debug(`child process close all stdio with code ${code}`)
       } else {
-        console.log(`child process close all stdio with signal ${signal}`)
+        log.debug(`child process close all stdio with signal ${signal}`)
       }
     })
 
     this.serverProcess.on('exit', (code, signal) => {
       if (code !== null) {
-        console.log(`child process exited with code ${code}`)
+        log.debug(`child process exited with code ${code}`)
         if (code !== 0) {
           // IDEA attempt restart it automatically with backoff-Algorithm?
-          console.error('Fatal: The Delta Chat Core exited unexpectedly', code)
+          log.critical('Fatal: The Delta Chat Core exited unexpectedly', code)
           process.exit(1)
         }
       } else {
-        console.log(`child process exited with signal ${signal}`)
+        log.debug(`child process exited with signal ${signal}`)
       }
     })
   }
@@ -99,7 +103,7 @@ export async function startDeltaChat(): Promise<
         }
       }
     } catch (error) {
-      console.error('jsonrpc-decode', error)
+      log.error('jsonrpc-decode', error)
     }
     active_connection?.send(response)
     if (response.indexOf('event') !== -1)
@@ -128,7 +132,7 @@ export async function startDeltaChat(): Promise<
             logCoreEvent.info(contextId, event.msg)
           } else if (event.kind.startsWith('Error')) {
             logCoreEvent.error(contextId, event.msg)
-          } else if (true /* TODO app.rc['log-debug']*/) {
+          } else if (RCConfig['log-debug']) {
             // in debug mode log all core events
             const event_clone = Object.assign({}, event) as Partial<
               typeof event
@@ -170,7 +174,7 @@ export async function startDeltaChat(): Promise<
       if (active_connection === ws) {
         DCInstance.send(raw_data.toString('utf-8'))
       } else {
-        console.debug(
+        log.debug(
           'ignored dc jsonrpc request because client is not the active one anymore'
         )
         ws.send(StolenConnectionPacket)
@@ -178,7 +182,7 @@ export async function startDeltaChat(): Promise<
     })
     // custom dc connection like on electron
 
-    console.log('connected dc socket')
+    log.debug('connected dc socket')
   })
 
   return [

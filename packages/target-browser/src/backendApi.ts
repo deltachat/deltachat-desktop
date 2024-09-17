@@ -1,44 +1,23 @@
 import { json as BodyParserJson, Router } from 'express'
-import { authMiddleWare } from './middlewares'
 import {
   DesktopSettingsType,
   RC_Config,
   RuntimeInfo,
 } from '@deltachat-desktop/shared/shared-types'
 import { getDefaultState } from '@deltachat-desktop/shared/state'
-import { DIST_DIR, localStorage } from './config'
-import { readFileSync } from 'fs'
-import { join } from 'path'
+
+import { authMiddleWare } from './middlewares'
+import { localStorage } from './config'
 import { BuildInfo } from './get-build-info'
+import { RCConfig } from './rc-config'
 
 export const BackendApiRoute = Router()
 
 BackendApiRoute.use(authMiddleWare)
 
 BackendApiRoute.get('/rc_config', (_req, res) => {
-  const config: RC_Config = {
-    'log-debug': true, // should become real
-    'log-to-console': true, // should become real
-    'machine-readable-stacktrace': false, // should become real
-    devmode: true, // should become real
-    theme: undefined, // maybe real
-    'theme-watch': false, // maybe real
-    'translation-watch': false, // maybe real
-    'allow-unsafe-core-replacement': false, //maybe real when we implement it
-
-    // those do not apply to browser
-    minimized: false,
-    version: false,
-    v: false,
-    help: false,
-    h: false,
-  }
-  res.status(200).json(config)
+  res.status(200).json(RCConfig as RC_Config)
 })
-
-const version = JSON.parse(
-  readFileSync(join(DIST_DIR, '../package.json'), 'utf8')
-).version
 
 BackendApiRoute.get('/runtime_info', (_req, res) => {
   const runtimeInfo: RuntimeInfo = {

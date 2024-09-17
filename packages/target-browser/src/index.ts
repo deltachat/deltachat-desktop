@@ -23,6 +23,14 @@ import {
 } from './config'
 import { startDeltaChat } from './deltachat-rpc'
 import { helpRoute } from './help'
+import { cleanupLogFolder, createLogHandler } from './log-handler'
+import { getLogger, setLogHandler } from '@deltachat-desktop/shared/logger'
+import { RCConfig } from './rc-config'
+
+const logHandler = createLogHandler()
+setLogHandler(logHandler.log, RCConfig)
+cleanupLogFolder()
+const log = getLogger('main')
 
 const app = express()
 
@@ -101,10 +109,11 @@ app.get('/logout', (req, res) => {
 })
 
 const [dc, wssDC, shutdownDC] = await startDeltaChat()
-console.log(await dc.rpc.getSystemInfo())
+log.info(await dc.rpc.getSystemInfo())
 
 app.get('/blobs/:accountId/:filename', authMiddleWare, async (req, res) => {
-  let { accountId, filename } = req.params
+  const { filename } = req.params
+  let { accountId } = req.params
 
   if (isNaN(Number(accountId))) {
     // workaround until core gives out relative urls
@@ -165,7 +174,7 @@ const wssBackend = new WebSocketServer({
   perMessageDeflate: true,
 })
 wssBackend.on('connection', function connection(ws) {
-  ws.on('error', console.error)
+  ws.on('error', log.error)
 
   ws.on('message', raw_data => {
     try {
@@ -174,16 +183,16 @@ wssBackend.on('connection', function connection(ws) {
       const msg: MessageToBackend.AllTypes = JSON.parse(utf8String)
       if (msg.type == 'log') {
         const [channel, level, _, ...data] = msg.data
-        console.debug(channel, level, data[0], '[..]')
+        log.debug(channel, level, data[0], '[..]')
       } else {
-        console.debug('[recv on backend ws]', msg)
+        log.debug('[recv on backend ws]', msg)
       }
     } catch (e) {
-      console.log('failed to read message as json string', e)
+      log.error('failed to read message as json string', e)
     }
   })
 
-  console.log('connected backend socket')
+  log.debug('connected backend socket')
 })
 
 sslserver.on('upgrade', (request, socket, head) => {
@@ -191,7 +200,7 @@ sslserver.on('upgrade', (request, socket, head) => {
 
   sessionParser(request as any, {} as any, () => {
     if (!(request as express.Request).session.isAuthenticated) {
-      console.log('unauthorized websocket session')
+      log.debug('unauthorized websocket session')
       socket.write('HTTP/1.1 401 Unauthorized\r\n\r\n')
       socket.destroy()
       return
@@ -210,11 +219,12 @@ sslserver.on('upgrade', (request, socket, head) => {
 })
 
 sslserver.listen(ENV_WEB_PORT, () => {
-  console.log(`HTTPS app listening on port ${ENV_WEB_PORT}`)
+  log.info(`HTTPS app listening on port ${ENV_WEB_PORT}`)
 })
 
 process.on('exit', () => {
   sslserver.closeAllConnections()
   sslserver.close()
   shutdownDC()
+  logHandler.end
 })

@@ -80,18 +80,22 @@ class BrowserRuntime implements Runtime {
     this.socket = new WebSocket('wss://localhost:3000/ws/backend')
 
     this.socket.addEventListener('open', () => {
+      /* ignore-console-log */
       console.log('WebSocket connection opened')
     })
 
     this.socket.addEventListener('message', event => {
+      /* ignore-console-log */
       console.log('Received message from server:', event.data)
     })
 
     this.socket.addEventListener('close', () => {
+      /* ignore-console-log */
       console.log('WebSocket connection closed')
     })
 
     this.socket.addEventListener('error', event => {
+      /* ignore-console-log */
       console.error('WebSocket error:', event)
     })
   }
@@ -106,6 +110,7 @@ class BrowserRuntime implements Runtime {
       try {
         this.socket.send(JSON.stringify(message))
       } catch (error) {
+        /* ignore-console-log */
         console.warn(
           'sendToBackendOverWS failed to send message to backend over websocket'
         )
@@ -494,7 +499,7 @@ class BrowserRuntime implements Runtime {
       }
       if (blob.type !== 'image/png') {
         const img = new Image()
-        const blobPromise = new Promise<Blob>(async (resolve, reject) => {
+        const blobPromise = new Promise<Blob>((resolve, reject) => {
           img.onload = async () => {
             try {
               const canvas = new OffscreenCanvas(

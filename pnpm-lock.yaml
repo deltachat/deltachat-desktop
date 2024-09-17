@@ -302,6 +302,9 @@ importers:
       '@types/ws':
         specifier: ^8.5.12
         version: 8.5.12
+      error-stack-parser:
+        specifier: ^2.1.4
+        version: 2.1.4
       esbuild:
         specifier: ^0.23.1
         version: 0.23.1
