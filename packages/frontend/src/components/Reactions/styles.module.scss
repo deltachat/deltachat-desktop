@@ -2,7 +2,8 @@
   cursor: pointer;
   margin-right: 10px;
   position: relative;
-  top: 20px;
+  line-height: 1; // So that it doesn't change the message height.
+  top: 16px;
 }
 
 .emoji {

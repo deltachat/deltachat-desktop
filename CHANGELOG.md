@@ -26,6 +26,7 @@
 - fix: wrong translation string for new group creation #4126
 - fix: packaging: windows 64bit and 32bit releases now have different filenames, bring back 64bit windows releases. #4131
 - some shortcuts (e.g. `Ctrl + N`, `Ctrl + K`) not working on some languages' keyboard layots #4140
+- fix chat "scrolling up" when someone adds a reaction, resulting in new messages not getting scrolled into view when they arrive #4120
 
 <a id="1_46_8"></a>
 
