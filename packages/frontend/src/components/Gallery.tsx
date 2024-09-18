@@ -78,6 +78,9 @@ export default class Gallery extends Component<
     galleryImageKeepAspectRatio?: boolean
   }
 > {
+  static contextType = DialogContext
+  declare context: React.ContextType<typeof DialogContext>
+
   dateHeader = createRef<HTMLDivElement>()
   tabListRef = createRef<HTMLUListElement>()
   constructor(props: Props) {
@@ -442,8 +445,6 @@ function GalleryTab(props: {
     </button>
   )
 }
-
-Gallery.contextType = DialogContext
 
 function FileTable({
   width,
