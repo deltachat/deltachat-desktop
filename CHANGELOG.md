@@ -15,6 +15,7 @@
 - windows 64bit and 32bit protable and setup now have different filenames #4131
 - scroll the selected account into view in the accounts sidebar #4137
 - dev: clarify scrolling-related code #4121
+- improved performance a bit #4145
 
 ### Fixed
 - fix that you can not click header button in dialog when they are on top of the navbar #4093
