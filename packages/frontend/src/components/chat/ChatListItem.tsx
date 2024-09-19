@@ -58,7 +58,22 @@ function Header({
   )
 }
 
-function Message({
+// `React.memo()` because `message2React` inside of it takes a while.
+// Although we also `React.memo()` entire `ChatListItem`s,
+// they are still re-rendered when their `isSelected` changes.
+const Message = React.memo<
+  Pick<
+    ChatListItemType,
+    | 'summaryStatus'
+    | 'summaryText1'
+    | 'summaryText2'
+    | 'freshMessageCounter'
+    | 'isArchived'
+    | 'isContactRequest'
+    | 'summaryPreviewImage'
+    | `lastMessageId`
+  >
+>(function ({
   summaryStatus,
   summaryText1,
   summaryText2,
@@ -67,17 +82,7 @@ function Message({
   isContactRequest,
   summaryPreviewImage,
   lastMessageId,
-}: Pick<
-  ChatListItemType,
-  | 'summaryStatus'
-  | 'summaryText1'
-  | 'summaryText2'
-  | 'freshMessageCounter'
-  | 'isArchived'
-  | 'isContactRequest'
-  | 'summaryPreviewImage'
-  | `lastMessageId`
->) {
+}) {
   const wasReceived =
     summaryStatus === C.DC_STATE_IN_FRESH ||
     summaryStatus === C.DC_STATE_IN_SEEN ||
@@ -138,7 +143,7 @@ function Message({
       )}
     </div>
   )
-}
+})
 
 export const PlaceholderChatListItem = React.memo(_ => {
   return <div className={classNames('chat-list-item', 'skeleton')} />
