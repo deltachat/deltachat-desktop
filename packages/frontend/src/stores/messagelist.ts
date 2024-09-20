@@ -447,10 +447,11 @@ class MessageListStore extends Store<MessageListState> {
             highlight = false
           }
         } else {
-          message = await BackendRemote.rpc.getMessage(
-            accountId,
-            msgId as number
-          )
+          const fromCache = this.state.messageCache[msgId]
+          message =
+            fromCache?.kind === 'message'
+              ? fromCache
+              : await BackendRemote.rpc.getMessage(accountId, msgId as number)
           chatId = message.chatId
 
           jumpToMessageId = msgId as number
