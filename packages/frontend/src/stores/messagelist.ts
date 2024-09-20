@@ -488,14 +488,15 @@ class MessageListStore extends Store<MessageListState> {
           )
         }
 
-        const chat = await BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
-        if (chat.id === null) {
-          this.log.debug(
-            'SELECT CHAT chat does not exist, id is null. chatId:',
-            chat.id
-          )
-          return
-        }
+        setTimeout(async () => {
+          const chat = await BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
+          if (chat.id === null) {
+            this.log.debug(
+              'SELECT CHAT chat does not exist, id is null. chatId:',
+              chat.id
+            )
+          }
+        })
         const messageListItems = await BackendRemote.rpc.getMessageListItems(
           accountId,
           chatId,
