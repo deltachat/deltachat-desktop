@@ -319,7 +319,7 @@ class MessageListStore extends Store<MessageListState> {
     loadChat: this.scheduler.lockedQueuedEffect(
       'scroll',
       async () => {
-        const chat = await BackendRemote.rpc.getFullChatById(
+        const chat = await BackendRemote.rpc.getBasicChatInfo(
           this.accountId,
           this.chatId
         )
@@ -485,7 +485,7 @@ class MessageListStore extends Store<MessageListState> {
           )
         }
 
-        const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
+        const chat = await BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
         if (chat.id === null) {
           this.log.debug(
             'SELECT CHAT chat does not exist, id is null. chatId:',
