@@ -446,16 +446,6 @@ class MessageListStore extends Store<MessageListState> {
             jumpToMessageId = message.id
             highlight = false
           }
-        } else if (addMessageIdToStack === undefined) {
-          // reset jumpToMessageStack
-          message = await BackendRemote.rpc.getMessage(
-            accountId,
-            msgId as number
-          )
-          chatId = message.chatId
-
-          jumpToMessageId = msgId as number
-          jumpToMessageStack = []
         } else {
           message = await BackendRemote.rpc.getMessage(
             accountId,
@@ -464,19 +454,25 @@ class MessageListStore extends Store<MessageListState> {
           chatId = message.chatId
 
           jumpToMessageId = msgId as number
-          // If we are not switching chats, add current jumpToMessageId to the stack
-          const currentChatId = this.chatId || -1
-          if (chatId !== currentChatId) {
+
+          if (addMessageIdToStack === undefined) {
+            // reset jumpToMessageStack
             jumpToMessageStack = []
-          } else if (
-            this.state.jumpToMessageStack.indexOf(addMessageIdToStack) !== -1
-          ) {
-            jumpToMessageStack = this.state.jumpToMessageStack
           } else {
-            jumpToMessageStack = [
-              ...this.state.jumpToMessageStack,
-              addMessageIdToStack,
-            ]
+            // If we are not switching chats, add current jumpToMessageId to the stack
+            const currentChatId = this.chatId || -1
+            if (chatId !== currentChatId) {
+              jumpToMessageStack = []
+            } else if (
+              this.state.jumpToMessageStack.indexOf(addMessageIdToStack) !== -1
+            ) {
+              jumpToMessageStack = this.state.jumpToMessageStack
+            } else {
+              jumpToMessageStack = [
+                ...this.state.jumpToMessageStack,
+                addMessageIdToStack,
+              ]
+            }
           }
         }
 
