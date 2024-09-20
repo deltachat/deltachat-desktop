@@ -319,31 +319,33 @@ class MessageListStore extends Store<MessageListState> {
     loadChat: this.scheduler.lockedQueuedEffect(
       'scroll',
       async () => {
-        const chat = await BackendRemote.rpc.getBasicChatInfo(
+        const firstUnreadMsgIdP = BackendRemote.rpc.getFirstUnreadMessageOfChat(
           this.accountId,
           this.chatId
         )
-        if (chat.id === null) {
-          this.log.debug(
-            'SELECT CHAT chat does not exist, id is null. chatId:',
-            chat.id
-          )
-          return
-        }
-        const messageListItems = await BackendRemote.rpc.getMessageListItems(
+        const messageListItemsP = BackendRemote.rpc.getMessageListItems(
           this.accountId,
           this.chatId,
           false,
           true
         )
+        const chatP = BackendRemote.rpc.getBasicChatInfo(
+          this.accountId,
+          this.chatId
+        )
+        chatP.then(chat => {
+          if (chat.id === null) {
+            this.log.debug(
+              'SELECT CHAT chat does not exist, id is null. chatId:',
+              chat.id
+            )
+          }
+        })
 
-        const firstUnreadMsgId =
-          await BackendRemote.rpc.getFirstUnreadMessageOfChat(
-            this.accountId,
-            this.chatId
-          )
+        const firstUnreadMsgId = await firstUnreadMsgIdP
         if (firstUnreadMsgId !== null) {
-          setTimeout(() => {
+          setTimeout(async () => {
+            const chat = await chatP
             this.effect.jumpToMessage(firstUnreadMsgId, false)
             ActionEmitter.emitAction(
               chat.archived
@@ -357,6 +359,7 @@ class MessageListStore extends Store<MessageListState> {
         let oldestFetchedMessageListItemIndex = -1
         let newestFetchedMessageListItemIndex = -1
         let messageCache: MessageListState['messageCache'] = {}
+        const messageListItems = await messageListItemsP
         if (messageListItems.length !== 0) {
           // mesageIds.length = 1767
           // oldestFetchedMessageListItemIndex = 1767 - 1 = 1766 - 10 = 1756
