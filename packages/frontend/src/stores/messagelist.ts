@@ -485,25 +485,47 @@ class MessageListStore extends Store<MessageListState> {
           )
         }
 
-        setTimeout(async () => {
-          const chat = await BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
-          if (chat.id === null) {
-            this.log.debug(
-              'SELECT CHAT chat does not exist, id is null. chatId:',
-              chat.id
-            )
-          }
-        })
-        const messageListItems = await BackendRemote.rpc.getMessageListItems(
-          accountId,
-          chatId,
-          false,
-          true
-        )
+        const isMessageInCurrentChat =
+          this.accountId === accountId && this.chatId === chatId
 
-        const jumpToMessageIndex = messageListItems.findIndex(
-          m => m.kind === 'message' && m.msg_id === jumpToMessageId
-        )
+        if (!isMessageInCurrentChat) {
+          setTimeout(async () => {
+            const chat = await BackendRemote.rpc.getBasicChatInfo(
+              accountId,
+              chatId
+            )
+            if (chat.id === null) {
+              this.log.debug(
+                'SELECT CHAT chat does not exist, id is null. chatId:',
+                chat.id
+              )
+            }
+          })
+        }
+
+        let messageListItems = this.state.messageListItems
+        const findMessageIndex = (): number =>
+          messageListItems.findIndex(
+            m => m.kind === 'message' && m.msg_id === jumpToMessageId
+          )
+
+        let jumpToMessageIndex = findMessageIndex()
+        const currentMessageListContainsTheMessage = jumpToMessageIndex >= 0
+        // Even if the message is in the current chat, it could still
+        // be missing from `this.state.messageListItems` in these cases:
+        // - `this.state.messageListItems` is still unloaded,
+        //   e.g. when `loadChat` interrupts itself and calls `jumpToMessage`.
+        // - A new message has just been sent to the chat and we want to jump
+        //   to it.
+        if (!isMessageInCurrentChat || !currentMessageListContainsTheMessage) {
+          messageListItems = await BackendRemote.rpc.getMessageListItems(
+            accountId,
+            chatId,
+            false,
+            true
+          )
+          jumpToMessageIndex = findMessageIndex()
+        }
 
         // calculate page indexes, so that jumpToMessageId is in the middle of the page
         let oldestFetchedMessageListItemIndex = -1
