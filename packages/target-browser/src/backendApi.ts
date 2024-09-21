@@ -1,4 +1,7 @@
-import { json as BodyParserJson, Router } from 'express'
+import express, { json as BodyParserJson, Router } from 'express'
+import { mkdtemp, writeFile } from 'fs/promises'
+import { basename, join } from 'path'
+import { tmpdir } from 'os'
 import {
   DesktopSettingsType,
   RC_Config,
@@ -54,3 +57,30 @@ BackendApiRoute.post('/config/:key', BodyParserJson(), (req, res) => {
     res.status(404).send({ message: `config key ${key} is not known` })
   }
 })
+
+BackendApiRoute.post(
+  '/uploadTempFile/:filename',
+  express.raw({
+    type: () => {
+      return true /* Accept all filetypes */
+    },
+    limit: '500mb'
+  }),
+  async (req, res) => {
+    try {
+      const tmpFile: Buffer = req.body
+      const filename = basename(req.params.filename)
+
+      const tmppath = await mkdtemp(join(tmpdir(), 'tmp-'))
+
+      const filepath = join(tmppath, filename)
+      await writeFile(filepath, tmpFile, 'binary')
+
+      res.status(200).send({ path: filepath })
+      console.log(tmpFile)
+      console.log(filename, tmppath, filepath)
+    } catch (error) {
+      res.status(500).json({message: 'Failed to create Tempfile'})
+    }
+  }
+)
