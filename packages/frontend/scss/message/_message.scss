@@ -229,7 +229,7 @@
     }
 
     .quote-background {
-      background: #01010159;
+      background: var(--messageIncomingBg);
       padding: 5px;
       padding-left: 6px;
       border-radius: 7px;
