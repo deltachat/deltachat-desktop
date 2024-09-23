@@ -58,6 +58,7 @@ export default function Attachment({
   // For attachments which aren't full-frame
   const withContentBelow = withCaption
   const withContentAbove =
+    message.overrideSenderName != null ||
     hasQuote ||
     (conversationType.hasMultipleParticipants && direction === 'incoming')
   // const dimensions = message.msg.dimensions || {}
