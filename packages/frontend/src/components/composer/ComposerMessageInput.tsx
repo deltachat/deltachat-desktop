@@ -49,7 +49,7 @@ export default class ComposerMessageInput extends React.Component<
     this.saveDraft = debounce(() => {
       const { text, chatId } = this.state
       this.props.updateDraftText(text.trim() === '' ? '' : text, chatId)
-    }, 1000)
+    }, 100)
 
     this.textareaRef = React.createRef()
     this.focus = this.focus.bind(this)
