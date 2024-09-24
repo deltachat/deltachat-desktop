@@ -637,10 +637,26 @@ export const MessageListInner = React.memo(
     // E.g. tinker with `position: absolte`, `z-index` or something IDK.
     // [MDN docs say](https://developer.mozilla.org/en-US/docs/Web/CSS/will-change):
     // > `will-change` is intended to be used as a last resort
-    const [scrolledRecently, setScrolledRecently] = useState(false)
+    const scrolledRecently = useRef(false)
+    const onScrolledRecentlyChange = useCallback(
+      (newVal: boolean) => {
+        if (scrolledRecently.current === newVal) {
+          return
+        }
+        scrolledRecently.current = newVal
+
+        if (messageListRef.current == undefined) {
+          return
+        }
+        messageListRef.current.style.willChange = newVal
+          ? 'scroll-position'
+          : ''
+      },
+      [messageListRef]
+    )
     const debouncedResetScrolledRecently = useMemo(
-      () => debounce(() => setScrolledRecently(false), 3000),
-      []
+      () => debounce(() => onScrolledRecentlyChange(false), 3000),
+      [onScrolledRecentlyChange]
     )
     const onScroll2 = (...args: Parameters<typeof onScroll>) => {
       const switchedChatRecently = Date.now() - switchedChatAt < 200
@@ -649,7 +665,7 @@ export const MessageListInner = React.memo(
       // Maybe they're just jumping between chats.
       const isScrollProgrammatic = switchedChatRecently
       if (!isScrollProgrammatic) {
-        setScrolledRecently(true)
+        onScrolledRecentlyChange(true)
         debouncedResetScrolledRecently()
       }
 
@@ -672,14 +688,7 @@ export const MessageListInner = React.memo(
     }
 
     return (
-      <div
-        id='message-list'
-        ref={messageListRef}
-        onScroll={onScroll2}
-        style={{
-          willChange: scrolledRecently ? 'scroll-position' : undefined,
-        }}
-      >
+      <div id='message-list' ref={messageListRef} onScroll={onScroll2}>
         <ul>
           {messageListItems.length === 0 && <EmptyChatMessage chat={chat} />}
           {activeView.map(messageId => {
