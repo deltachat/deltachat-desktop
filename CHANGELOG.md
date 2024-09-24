@@ -4,6 +4,7 @@
 
 ### Added
 - Experimental Telegram-style Esc to cancel reply (quote) #4153
+- new ViewProfile context menu for blocking/unblocking contact and checking encryption #4043
 
 ### Changed
 - Update electron from `30.3.1` to `32.1.0` #4138

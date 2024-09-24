@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 
 import ChatAuditLogDialog from '../../components/dialogs/ChatAuditLogDialog'
-import EncryptionInfo from '../../components/dialogs/EncryptionInfo'
+import { Props, EncryptionInfo } from '../../components/dialogs/EncryptionInfo'
 import MuteChat from '../../components/dialogs/MuteChat'
 import useChat from './useChat'
 import useConfirmationDialog from '../dialog/useConfirmationDialog'
@@ -17,7 +17,29 @@ export default function useChatDialog() {
   const tx = useTranslationFunction()
   const openConfirmationDialog = useConfirmationDialog()
   const { openDialog } = useDialog()
-  const { selectChat, unselectChat } = useChat()
+  const { chat, selectChat, unselectChat } = useChat()
+
+  const openBlockContactById = useCallback(
+    async (accountId: number, dmChatContact: number) => {
+      const hasUserConfirmed = await openConfirmationDialog({
+        message: tx('ask_block_contact'),
+        confirmLabel: tx('menu_block_contact'),
+        isConfirmDanger: true,
+      })
+
+      if (hasUserConfirmed) {
+        if (
+          chat?.contactIds &&
+          chat.contactIds.length === 1 &&
+          chat.contactIds[0] === dmChatContact
+        ) {
+          unselectChat()
+        }
+        await BackendRemote.rpc.blockContact(accountId, dmChatContact)
+      }
+    },
+    [openConfirmationDialog, tx, unselectChat, chat?.contactIds]
+  )
 
   /**
    * Block contacts based on a DM chat/chatlistentry with that contact.
@@ -32,18 +54,9 @@ export default function useChatDialog() {
         return
       }
 
-      const hasUserConfirmed = await openConfirmationDialog({
-        message: tx('ask_block_contact'),
-        confirmLabel: tx('menu_block_contact'),
-        isConfirmDanger: true,
-      })
-
-      if (hasUserConfirmed) {
-        await BackendRemote.rpc.blockContact(accountId, dmChatContact)
-        unselectChat()
-      }
+      return openBlockContactById(accountId, dmChatContact)
     },
-    [openConfirmationDialog, tx, unselectChat]
+    [openBlockContactById]
   )
 
   const openChatAuditDialog = useCallback(
@@ -103,8 +116,8 @@ export default function useChatDialog() {
   )
 
   const openEncryptionInfoDialog = useCallback(
-    (chatListItem: ChatListItem) => {
-      openDialog(EncryptionInfo, { chatListItem })
+    (props: Props) => {
+      openDialog(EncryptionInfo, props)
     },
     [openDialog]
   )
@@ -134,6 +147,7 @@ export default function useChatDialog() {
 
   return {
     openBlockFirstContactOfChatDialog,
+    openBlockContactById,
     openChatAuditDialog,
     openClearChatDialog,
     openDeleteChatDialog,

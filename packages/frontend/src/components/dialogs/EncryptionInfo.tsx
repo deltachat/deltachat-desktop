@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import { BackendRemote, Type } from '../../backend-com'
+import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import Dialog, {
   DialogBody,
@@ -13,31 +13,30 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 
-type Props = {
-  chatListItem: Pick<
-    Type.ChatListItemFetchResult & { kind: 'ChatListItem' },
-    'id' | 'dmChatContact'
-  >
+export type Props = {
+  chatId: number | null
+  dmChatContact: number | null
 }
 
-export default function EncryptionInfo({
-  chatListItem,
+export function EncryptionInfo({
+  chatId,
+  dmChatContact,
   onClose,
 }: Props & DialogProps) {
   const [encryptionInfo, setEncryptionInfo] = useState('Fetching...')
   useEffect(() => {
-    if (!chatListItem) return
-    ;(chatListItem.dmChatContact
+    if (dmChatContact == null && chatId == null) return
+    ;(dmChatContact != null
       ? BackendRemote.rpc.getContactEncryptionInfo(
           selectedAccountId(),
-          chatListItem.dmChatContact
+          dmChatContact
         )
       : BackendRemote.rpc.getChatEncryptionInfo(
           selectedAccountId(),
-          chatListItem.id
+          chatId as number
         )
     ).then(setEncryptionInfo)
-  }, [chatListItem])
+  }, [dmChatContact, chatId])
 
   const tx = useTranslationFunction()
 
