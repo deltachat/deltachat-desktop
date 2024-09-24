@@ -402,6 +402,8 @@ class MessageListStore extends Store<MessageListState> {
         highlight = true,
         addMessageIdToStack?: undefined | number
       ) => {
+        const startTime = performance.now()
+
         this.log.debug('jumpToMessage with messageId: ', msgId)
         const accountId = selectedAccountId()
         // these methods were called in backend before
@@ -596,6 +598,7 @@ class MessageListStore extends Store<MessageListState> {
           }
         }
 
+        this.log.debug('jumpToMessage took', performance.now() - startTime)
         // TODO perf: it could so happen that nothing except `viewState` (which
         // is only responsible for scrolling)
         // has changed after this function has run.
