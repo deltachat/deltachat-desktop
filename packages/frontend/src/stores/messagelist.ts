@@ -530,7 +530,7 @@ class MessageListStore extends Store<MessageListState> {
         // calculate page indexes, so that jumpToMessageId is in the middle of the page
         let oldestFetchedMessageListItemIndex = -1
         let newestFetchedMessageListItemIndex = -1
-        let messageCache: MessageListState['messageCache'] = {}
+        let newMessageCache: MessageListState['messageCache'] = {}
         const half_page_size = Math.ceil(PAGE_SIZE / 2)
         if (messageListItems.length !== 0) {
           oldestFetchedMessageListItemIndex = Math.max(
@@ -560,17 +560,48 @@ class MessageListStore extends Store<MessageListState> {
             )
           }
 
-          messageCache =
-            (await loadMessages(
-              accountId,
-              messageListItems,
-              oldestFetchedMessageListItemIndex,
-              newestFetchedMessageListItemIndex
-            ).catch(err => this.log.error('loadMessages failed', err))) || {}
+          const messagesAlreadyLoaded = getView(
+            messageListItems,
+            oldestFetchedMessageListItemIndex,
+            newestFetchedMessageListItemIndex
+          ).every(item => {
+            if (item.kind !== 'message') {
+              return true
+            }
+            return this.state.messageCache[item.msg_id] != undefined
+          })
+
+          this.log.debug(
+            'messagesAlreadyLoaded:',
+            messagesAlreadyLoaded,
+            messagesAlreadyLoaded
+              ? 'Using the existing cache'
+              : 'Resetting the messageCache'
+          )
+
+          if (messagesAlreadyLoaded) {
+            newMessageCache = this.state.messageCache
+            oldestFetchedMessageListItemIndex =
+              this.state.oldestFetchedMessageListItemIndex
+            newestFetchedMessageListItemIndex =
+              this.state.newestFetchedMessageListItemIndex
+          } else {
+            newMessageCache =
+              (await loadMessages(
+                accountId,
+                messageListItems,
+                oldestFetchedMessageListItemIndex,
+                newestFetchedMessageListItemIndex
+              ).catch(err => this.log.error('loadMessages failed', err))) || {}
+          }
         }
 
+        // TODO perf: it could so happen that nothing except `viewState` (which
+        // is only responsible for scrolling)
+        // has changed after this function has run.
+        // It woud be great to not re-render the message list in that case.
         this.reducer.selectedChat({
-          messageCache,
+          messageCache: newMessageCache,
           messageListItems,
           oldestFetchedMessageListItemIndex,
           newestFetchedMessageListItemIndex: newestFetchedMessageListItemIndex,
