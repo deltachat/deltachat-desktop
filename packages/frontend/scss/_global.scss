@@ -92,7 +92,7 @@ button:focus:not(:focus-visible) {
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--scrollbarThumb) var(--globalBackground);
+  scrollbar-color: var(--scrollbarThumb) transparent;
 }
 
 ::-webkit-scrollbar {
