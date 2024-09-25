@@ -490,21 +490,6 @@ class MessageListStore extends Store<MessageListState> {
         const isMessageInCurrentChat =
           this.accountId === accountId && this.chatId === chatId
 
-        if (!isMessageInCurrentChat) {
-          setTimeout(async () => {
-            const chat = await BackendRemote.rpc.getBasicChatInfo(
-              accountId,
-              chatId
-            )
-            if (chat.id === null) {
-              this.log.debug(
-                'SELECT CHAT chat does not exist, id is null. chatId:',
-                chat.id
-              )
-            }
-          })
-        }
-
         let messageListItems = this.state.messageListItems
         const findMessageIndex = (): number =>
           messageListItems.findIndex(
