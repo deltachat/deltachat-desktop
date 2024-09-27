@@ -376,6 +376,12 @@ class MessageListStore extends Store<MessageListState> {
       },
       'selectChat'
     ),
+    /**
+     * Loads and shows the message in the messages list.
+     * It can handle showing the message in a chat other than `this.chatId`,
+     * loading the message if it is missing from `this.state.messageCache`,
+     * and reloading `messageListItems` if the message is missing from there.
+     */
     jumpToMessage: this.scheduler.lockedQueuedEffect(
       'scroll',
       async (
