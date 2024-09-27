@@ -13,6 +13,7 @@
 - dev: improved `./bin/test_for_missing_translations.sh` script: It is now more correct, helpful and faster
 - windows 64bit and 32bit protable and setup now have different filenames #4131
 - scroll the selected account into view in the accounts sidebar #4137
+- keep cursor visible in composer even with many linebreaks #3774
 
 ### Fixed
 - fix that you can not click header button in dialog when they are on top of the navbar #4093
