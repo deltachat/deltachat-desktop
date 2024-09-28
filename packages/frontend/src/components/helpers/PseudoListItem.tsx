@@ -1,10 +1,17 @@
-import React, { PropsWithChildren, CSSProperties } from 'react'
+import React, {
+  PropsWithChildren,
+  CSSProperties,
+  useState,
+  useEffect,
+} from 'react'
 
 import { PseudoContact } from '../contact/Contact'
 import { QRAvatar } from '../Avatar'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { useSettingsStore } from '../../stores/settings'
 import useProcessQR from '../../hooks/useProcessQr'
+import { BackendRemote } from '../../backend-com'
+import { T } from '@deltachat/jsonrpc-client'
 
 export function PseudoListItem(
   props: PropsWithChildren<{
@@ -120,13 +127,41 @@ export const PseudoListItemAddContactOrGroupFromInviteLink = ({
 }) => {
   const tx = useTranslationFunction()
   const processQr = useProcessQR()
+  const inviteLinkTrimmed = inviteLink.trim()
+
+  const [parsedQr, setParsedQr] = useState<null | T.Qr>(null)
+  useEffect(() => {
+    setParsedQr(null)
+    let outdated = false
+
+    BackendRemote.rpc
+      .checkQr(accountId, inviteLinkTrimmed)
+      .then(qr => {
+        if (!outdated) {
+          setParsedQr(qr)
+        }
+      })
+      .catch(() => {
+        if (!outdated) {
+          setParsedQr(null)
+        }
+      })
+
+    return () => {
+      outdated = true
+    }
+  }, [accountId, inviteLinkTrimmed])
 
   return (
     <PseudoListItem
       id='newcontactorgroupfrominvitelink'
       cutoff='+'
-      text={tx('menu_new_contact')}
-      onClick={() => processQr(accountId, inviteLink.trim())}
+      text={
+        parsedQr?.kind === 'askVerifyGroup'
+          ? tx('menu_new_group')
+          : tx('menu_new_contact')
+      }
+      onClick={() => processQr(accountId, inviteLinkTrimmed)}
     />
     // Perhaps we could also parse username from the link
     // and put it into `subText`.

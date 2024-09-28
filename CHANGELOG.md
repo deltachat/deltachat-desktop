@@ -35,6 +35,7 @@
 - when adding new line for a long multi-line message, the cursor would get out of view #4152
 - Chat "scrolling up" when typing a multi-line message, quoting a message, or adding an attachment, resulting in new messages not getting scrolled into view #4119
 - crash on clicking "About" when no account is selected (e.g. after deleting an account) #4154
+- show "new group" instead of "new contact" when pasting a group invite link in the search field #4151
 
 <a id="1_46_8"></a>
 
