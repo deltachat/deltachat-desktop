@@ -152,6 +152,31 @@ export const PseudoListItemAddContactOrGroupFromInviteLink = ({
     }
   }, [accountId, inviteLinkTrimmed])
 
+  const [contactName, setContactName] = useState<'' | T.Contact['displayName']>(
+    ''
+  )
+  useEffect(() => {
+    setContactName('')
+
+    if (parsedQr?.kind !== 'askVerifyContact') {
+      return
+    }
+
+    let outdated = false
+
+    BackendRemote.rpc
+      .getContact(accountId, parsedQr.contact_id)
+      .then(contact => {
+        if (!outdated) {
+          setContactName(contact.displayName)
+        }
+      })
+
+    return () => {
+      outdated = true
+    }
+  }, [accountId, parsedQr])
+
   return (
     <PseudoListItem
       id='newcontactorgroupfrominvitelink'
@@ -161,9 +186,10 @@ export const PseudoListItemAddContactOrGroupFromInviteLink = ({
           ? tx('menu_new_group')
           : tx('menu_new_contact')
       }
+      subText={
+        parsedQr?.kind === 'askVerifyGroup' ? parsedQr.grpname : contactName
+      }
       onClick={() => processQr(accountId, inviteLinkTrimmed)}
     />
-    // Perhaps we could also parse username from the link
-    // and put it into `subText`.
   )
 }
