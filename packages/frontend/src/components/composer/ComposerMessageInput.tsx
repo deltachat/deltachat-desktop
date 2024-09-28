@@ -186,7 +186,9 @@ export default class ComposerMessageInput extends React.Component<
     }
 
     if (scrollHeight > maxScrollHeight && el.classList.contains('scroll')) {
-      el.scrollTo(0, scrollHeight) // keep cursor visible
+      if (el.selectionStart === el.textLength) {
+        el.scrollTo(0, scrollHeight) // keep cursor visible if it's at the end of the text
+      }
       el.style.height = maxScrollHeight + 'px'
       return
     }
