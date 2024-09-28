@@ -111,7 +111,7 @@ export const PseudoListItemAddContact = ({
   )
 }
 
-export const PseudoListItemAddContactFromInviteLink = ({
+export const PseudoListItemAddContactOrGroupFromInviteLink = ({
   inviteLink,
   accountId,
 }: {
@@ -123,7 +123,7 @@ export const PseudoListItemAddContactFromInviteLink = ({
 
   return (
     <PseudoListItem
-      id='newcontactfrominvitelink'
+      id='newcontactorgroupfrominvitelink'
       cutoff='+'
       text={tx('menu_new_contact')}
       onClick={() => processQr(accountId, inviteLink.trim())}

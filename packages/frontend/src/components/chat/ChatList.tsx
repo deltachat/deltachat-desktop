@@ -25,7 +25,7 @@ import {
 } from './ChatListItemRow'
 import {
   PseudoListItemAddContact,
-  PseudoListItemAddContactFromInviteLink,
+  PseudoListItemAddContactOrGroupFromInviteLink,
 } from '../helpers/PseudoListItem'
 import { KeybindAction } from '../../keybindings'
 import { useThemeCssVar } from '../../ThemeManager'
@@ -432,7 +432,7 @@ export default function ChatList(props: {
                     )}
                   {showPseudoListItemAddContactFromInviteLink && (
                     <div style={{ width: width }}>
-                      <PseudoListItemAddContactFromInviteLink
+                      <PseudoListItemAddContactOrGroupFromInviteLink
                         inviteLink={queryStr!}
                         accountId={accountId}
                       />
