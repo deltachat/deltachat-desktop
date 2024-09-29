@@ -3,7 +3,7 @@ import reactStringReplace from 'react-string-replace'
 
 import { getLogger } from '../../../../shared/logger'
 import { gitHubUrl, gitHubLicenseUrl } from '../../../../shared/constants'
-import ClickableLink from '../helpers/ClickableLink'
+import { ClickableNonMailtoLink } from '../helpers/ClickableLink'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { BackendRemote } from '../../backend-com'
 import { DialogBody, DialogContent, DialogWithHeader } from '../Dialog'
@@ -90,27 +90,27 @@ export default function About({ onClose }: DialogProps) {
     tx('about_offical_app_desktop'),
     'Delta Chat',
     (_match, _index, offset) => (
-      <ClickableLink key={offset} href='https://delta.chat'>
+      <ClickableNonMailtoLink key={offset} href='https://delta.chat'>
         {'Delta Chat'}
-      </ClickableLink>
+      </ClickableNonMailtoLink>
     )
   )
   let licenceAndSource = reactStringReplace(
     tx('about_licensed_under_desktop'),
     'GNU GPL version 3',
     (_match, _index, offset) => (
-      <ClickableLink key={offset} href={gitHubLicenseUrl}>
+      <ClickableNonMailtoLink key={offset} href={gitHubLicenseUrl}>
         {'GNU GPL version 3'}
-      </ClickableLink>
+      </ClickableNonMailtoLink>
     )
   )
   licenceAndSource = reactStringReplace(
     licenceAndSource,
     'GitHub',
     (_match, _index, offset) => (
-      <ClickableLink key={offset} href={gitHubUrl}>
+      <ClickableNonMailtoLink key={offset} href={gitHubUrl}>
         {'GitHub'}
-      </ClickableLink>
+      </ClickableNonMailtoLink>
     )
   )
   const { VERSION, GIT_REF } = runtime.getRuntimeInfo().buildInfo

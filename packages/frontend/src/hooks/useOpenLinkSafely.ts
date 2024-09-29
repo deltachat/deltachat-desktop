@@ -10,14 +10,31 @@ import { runtime } from '@deltachat-desktop/runtime-interface'
  */
 export default function useOpenLinkSafely() {
   const openMailtoLink = useOpenMailtoLink()
-  const tx = useTranslationFunction()
-  const openConfirmationDialog = useConfirmationDialog()
+  const openNonMailtoLinkSafely = useOpenNonMailtoLinkSafely()
 
   return useCallback(
     async (accountId: number, url: string) => {
       if (url.startsWith('mailto:')) {
         openMailtoLink(accountId, url)
-      } else if (url.startsWith('http:') || url.startsWith('https:')) {
+      } else {
+        await openNonMailtoLinkSafely(url)
+      }
+    },
+    [openMailtoLink, openNonMailtoLinkSafely]
+  )
+}
+
+/**
+ * Same as {@link useOpenLinkSafely}, but does not require `accountId`,
+ * but the caller guarantees that `url` is not a `mailto:` link.
+ */
+export function useOpenNonMailtoLinkSafely() {
+  const tx = useTranslationFunction()
+  const openConfirmationDialog = useConfirmationDialog()
+
+  return useCallback(
+    async (url: string) => {
+      if (url.startsWith('http:') || url.startsWith('https:')) {
         runtime.openLink(url)
       } else {
         const userConfirmed = await openConfirmationDialog({
@@ -31,6 +48,6 @@ export default function useOpenLinkSafely() {
         }
       }
     },
-    [openMailtoLink, openConfirmationDialog, tx]
+    [openConfirmationDialog, tx]
   )
 }
