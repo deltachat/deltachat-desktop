@@ -579,6 +579,12 @@ export function useDraft(
     }
     onSelectReplyToShortcut(KeybindAction.Composer_SelectReplyToDown)
   })
+  useKeyBindingAction(KeybindAction.Composer_CancelReply, () => {
+    if (settingsStore?.desktopSettings.enableCtrlUpToReplyShortcut !== true) {
+      return
+    }
+    removeQuote()
+  })
   const { jumpToMessage } = useMessage()
   const onSelectReplyToShortcut = async (
     upOrDown:

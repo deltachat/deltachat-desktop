@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- Experimental Telegram-style Esc to cancel reply (quote) #4153
 
 ### Changed
 - Update electron from `30.3.1` to `32.1.0` #4138
