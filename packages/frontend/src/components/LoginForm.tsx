@@ -12,7 +12,7 @@ import {
   DeltaProgressBar,
   DeltaSwitch,
 } from './Login-Styles'
-import ClickableLink from './helpers/ClickableLink'
+import { ClickableLink } from './helpers/ClickableLink'
 import { Credentials } from '../types-app'
 import { getLogger } from '../../../shared/logger'
 import { BackendRemote, Type } from '../backend-com'

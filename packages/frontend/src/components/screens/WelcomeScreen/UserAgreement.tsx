@@ -1,6 +1,6 @@
 import React from 'react'
 
-import ClickableLink from '../../helpers/ClickableLink'
+import { ClickableLink } from '../../helpers/ClickableLink'
 import useInstantOnboarding from '../../../hooks/useInstantOnboarding'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import {
