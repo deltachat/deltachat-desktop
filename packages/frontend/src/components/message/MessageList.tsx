@@ -307,26 +307,19 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
     if (scrollTo.type === 'scrollToMessage') {
       log.debug('scrollTo: scrollToMessage: ' + scrollTo.msgId)
 
-      let domElement = document.querySelector(
-        `.message[id="${scrollTo.msgId.toString()}"]`
-      )
-      if (!domElement) {
-        domElement = document.querySelector(
-          `.info-message[id="${scrollTo.msgId.toString()}"]`
-        )
-      }
-      if (!domElement) {
-        domElement = document.querySelector(
-          `.videochat-invitation[id="${scrollTo.msgId.toString()}"]`
-        )
-      }
-
-      if (!domElement) {
+      const domElement = document.getElementById(scrollTo.msgId.toString())
+      if (
+        !domElement ||
+        (!domElement.classList.contains('message') &&
+          !domElement.classList.contains('info-message') &&
+          !domElement.classList.contains('videochat-invitation'))
+      ) {
         log.debug(
-          "scrollTo: scrollToMessage, couldn't find matching message in dom, returning"
+          `scrollTo: scrollToMessage, couldn't find matching message in dom: ${domElement}, returning`
         )
         return
       }
+
       domElement.scrollIntoView()
 
       if (scrollTo.highlight === true) {
