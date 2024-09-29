@@ -29,6 +29,7 @@
 - some shortcuts (e.g. `Ctrl + N`, `Ctrl + K`) not working on some languages' keyboard layots #4140
 - fix chat "scrolling up" when someone adds a reaction, resulting in new messages not getting scrolled into view when they arrive #4120
 - fix missing space between overriden sender name and image attachment #3914
+- when adding new line for a long multi-line message, the cursor would get out of view #4152
 
 <a id="1_46_8"></a>
 
