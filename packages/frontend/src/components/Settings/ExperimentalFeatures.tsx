@@ -108,7 +108,8 @@ export function ExperimentalFeatures({ settingsStore }: Props) {
         description={tx('enable_realtime_explain')}
       />
       {/* If this stops being experimental, add it to the
-      Keyboard shortcuts help (Ctrl + /), and KEYBINDINGS.md */}
+      Keyboard shortcuts help (Ctrl + /), and KEYBINDINGS.md.
+      And don't forget about "Esc" to cancel reply */}
       <DesktopSettingsSwitch
         settingsKey='enableCtrlUpToReplyShortcut'
         label={tx('pref_ctrl_up_down_to_reply')}

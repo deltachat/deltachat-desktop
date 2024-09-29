@@ -12,6 +12,7 @@ export enum KeybindAction {
   Composer_Focus = 'composer:focus',
   Composer_SelectReplyToUp = 'composer:select-reply-to-up',
   Composer_SelectReplyToDown = 'composer:select-reply-to-down',
+  Composer_CancelReply = 'composer:cancel-reply',
   Settings_Open = 'settings:open',
   KeybindingCheatSheet_Open = 'keybindinginfo:open',
   MessageList_PageUp = 'msglist:pageup',
@@ -103,11 +104,12 @@ export function keyDownEvent2Action(
       return KeybindAction.Composer_SelectReplyToDown
     } else if ((ev.metaKey || ev.ctrlKey) && ev.code === 'Comma') {
       return KeybindAction.Settings_Open
-    } else if (
-      ev.code === 'Escape' &&
-      (ev.target as any).id === 'chat-list-search'
-    ) {
-      return KeybindAction.ChatList_ExitSearch
+    } else if (ev.code === 'Escape') {
+      if ((ev.target as any).id === 'chat-list-search') {
+        return KeybindAction.ChatList_ExitSearch
+      } else if ((ev.target as any).id === 'composer-textarea') {
+        return KeybindAction.Composer_CancelReply
+      }
     } else if (
       ev.code === 'Enter' &&
       (ev.target as any).id === 'chat-list-search'
