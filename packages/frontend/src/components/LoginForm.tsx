@@ -2,7 +2,6 @@
 
 import { C, DcEventType } from '@deltachat/jsonrpc-client'
 import React, { useEffect, useRef, useState } from 'react'
-import { Collapse } from '@blueprintjs/core'
 import { useDebouncedCallback } from 'use-debounce/lib'
 
 import {
@@ -10,7 +9,6 @@ import {
   DeltaPasswordInput,
   DeltaSelect,
   DeltaProgressBar,
-  DeltaSwitch,
 } from './Login-Styles'
 import { ClickableLink } from './helpers/ClickableLink'
 import { Credentials } from '../types-app'
@@ -24,11 +22,13 @@ import Dialog, {
   FooterActionButton,
   FooterActions,
 } from './Dialog'
+import Collapse from './Collapse'
 import { I18nContext } from '../contexts/I18nContext'
 import useTranslationFunction from '../hooks/useTranslationFunction'
 import { getDeviceChatId, saveLastChatId } from '../backend/chat'
 
 import type { DialogProps } from '../contexts/DialogContext'
+import SettingsSwitch from './Settings/SettingsSwitch'
 
 const log = getLogger('renderer/loginForm')
 
@@ -307,10 +307,9 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
                 {tx('accept_invalid_certificates')}
               </option>
             </DeltaSelect>
-            <DeltaSwitch
-              id='socks5_enabled'
+            <SettingsSwitch
               label={tx('login_socks5_use_socks5')}
-              value={socks5_enabled}
+              value={socks5_enabled !== '0'}
               onChange={isTrue =>
                 _handleCredentialsChange('socks5_enabled', isTrue ? '1' : '0')
               }

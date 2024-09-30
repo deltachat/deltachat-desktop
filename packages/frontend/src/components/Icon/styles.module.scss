@@ -13,7 +13,20 @@
     background-color: var(--settingsIconColor);
   }
 
-  &.context-menu {
+  &.contextMenu {
     background-color: var(--contextMenuText);
+  }
+
+  &.fullscreenControls {
+    background-color: var(--fullScreenMediaButtons);
+  }
+
+  &.remove {
+    margin-top: calc((64px - 20px) / 2);
+    margin-right: 10px;
+
+    &:hover {
+      fill: #bf0000;
+    }
   }
 }

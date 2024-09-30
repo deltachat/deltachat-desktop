@@ -41,7 +41,7 @@ export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
 
   return (
     <ImageBackdrop variant='welcome'>
-      <Dialog fixed onClose={onClose} width={400}>
+      <Dialog fixed onClose={onClose} width={400} canOutsideClickClose={false}>
         {!showInstantOnboarding ? (
           <OnboardingScreen
             onNextStep={() => startInstantOnboardingFlow()}

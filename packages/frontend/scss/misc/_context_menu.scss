@@ -1,22 +1,30 @@
 .dc-context-menu-layer {
   width: 100vw;
   height: 100vh;
-  position: absolute;
-  z-index: map-get($z-index, context-menu-layer);
+  // position: absolute;
+  // z-index: map-get($z-index, context-menu-layer);
   background-color: transparent;
-  pointer-events: none;
+  padding: 0;
+  margin: 0;
+  border: none;
+  outline: none;
 
   // prevent double context menu on macOS
   // (when using touchpad it sometimes selects the text in the context menu, and then show a native context menu on top)
   user-select: none;
 
-  &.active {
-    pointer-events: all;
+  pointer-events: all;
+
+  // default backdrop has almost transparent black background
+  &::backdrop {
+    pointer-events: none;
+    background: none;
   }
 }
 
 .dc-context-menu {
   // position is determined in code
+  z-index: 1000;
   position: fixed;
   pointer-events: auto;
   background-color: var(--bgPrimary);

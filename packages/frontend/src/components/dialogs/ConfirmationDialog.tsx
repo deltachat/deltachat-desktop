@@ -44,7 +44,7 @@ export default function ConfirmationDialog({
   }
 
   return (
-    <Dialog onClose={handleClose}>
+    <Dialog onClose={handleClose} canOutsideClickClose={false}>
       {header && <DialogHeader title={header} />}
       <DialogBody>
         <DialogContent paddingTop={header === undefined}>

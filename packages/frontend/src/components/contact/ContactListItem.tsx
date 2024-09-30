@@ -1,8 +1,8 @@
 import React, { MouseEventHandler } from 'react'
 import Contact from './Contact'
-import { Icon } from '@blueprintjs/core'
 import classNames from 'classnames'
 import { Type } from '../../backend-com'
+import Icon from '../Icon'
 
 export const DeltaCheckbox = (props: {
   checked: boolean
@@ -90,8 +90,8 @@ export function ContactListItem(props: {
         />
       )}
       {showRemove && contact.id !== 1 && (
-        <div className='remove-icon' onClick={onRemoveClick}>
-          <Icon icon='cross' />
+        <div onClick={onRemoveClick}>
+          <Icon icon='cross' coloring='remove' />
         </div>
       )}
     </div>

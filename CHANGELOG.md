@@ -69,6 +69,7 @@
 
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.142.11`
   - Set backward verification when observing `vc-contact-confirm` or `vg-member-added`
+- replace BlueprintJS Button, Icon, Radio, RadioGroup, Collapse, Dialog with our implementation
 
 
 <a id="1_46_6"></a>

@@ -54,6 +54,8 @@ export default function AccountSetupScreen({
     [accountId, openDialog, selectAccount, credentials]
   )
 
+  // TODO(maxph): we're now using <dialog> and can submit result via input
+  // and not an explicit keyboard handling
   const onKeyDown = useCallback(
     (ev: KeyboardEvent) => {
       if (ev.code === 'Enter') {
@@ -78,23 +80,23 @@ export default function AccountSetupScreen({
     }
   }, [onKeyDown])
 
+  const onCancel = () => selectAccount(accountId)
+
   return (
     <ImageBackdrop variant='welcome'>
-      <Dialog onClose={() => {}} fixed>
+      <Dialog canOutsideClickClose={false} onClose={onCancel} fixed>
         <DialogHeader title={tx('login_explain')} />
         <DialogBody>
           <DialogContent>
-            <div className='login'>
-              <LoginForm
-                credentials={credentials}
-                setCredentials={setCredentials}
-              />
-            </div>
+            <LoginForm
+              credentials={credentials}
+              setCredentials={setCredentials}
+            />
           </DialogContent>
         </DialogBody>
         <DialogFooter>
           <FooterActions>
-            <FooterActionButton onClick={() => selectAccount(accountId)}>
+            <FooterActionButton onClick={onCancel}>
               {tx('cancel')}
             </FooterActionButton>
             <FooterActionButton onClick={onClickLogin}>

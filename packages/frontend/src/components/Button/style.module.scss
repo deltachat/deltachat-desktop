@@ -12,9 +12,26 @@
   padding: 12px 15px;
   text-align: center;
   text-transform: uppercase;
+  user-select: none;
+  outline: none;
 
   &:hover {
     background-color: var(--buttonHover);
+  }
+
+  &:disabled {
+    background-color: var(--buttonDisabledBackground);
+    color: var(--buttonDisabledText);
+    cursor: not-allowed;
+  }
+
+  &:focus {
+    outline: revert;
+    outline-offset: revert;
+  }
+
+  & > span {
+    user-select: none;
   }
 
   &.primary {
@@ -35,9 +52,16 @@
     background-color: var(--navBarButtonActive);
   }
 
-  &:disabled {
-    background-color: var(--buttonDisabledBackground);
-    color: var(--buttonDisabledText);
-    cursor: not-allowed;
+  &.minimal {
+    padding: 3px;
+  }
+
+  // used for accesibility as a wrapper for some other element
+  &.transparent {
+    padding: 0;
+    margin: 0;
+    background: none;
+    border: none;
+    appearance: none;
   }
 }
