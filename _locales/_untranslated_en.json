@@ -71,5 +71,8 @@
   },
   "edit_name_placeholder": {
     "message": "Nickname for '%1'"
+  },
+  "react_more_emojis": {
+    "message": "More emojis…"
   }
 }

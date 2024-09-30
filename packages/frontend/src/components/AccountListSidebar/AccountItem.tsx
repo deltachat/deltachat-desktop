@@ -130,7 +130,7 @@ export default function AccountItem({
     badgeContent = (
       <div
         className={classNames(styles.accountBadgeIcon, styles.bgSyncDisabled)}
-        aria-label='Background sync disabled'
+        aria-label={tx('background_sync_disabled_explaination')}
       >
         ⏻
       </div>
@@ -183,7 +183,7 @@ export default function AccountItem({
   }, [isSelected, window.__screen])
 
   return (
-    <div
+    <button
       className={classNames(styles.account, {
         [styles.active]: isSelected,
         [styles['context-menu-active']]: isContextMenuActive,
@@ -229,7 +229,7 @@ export default function AccountItem({
         </div>
       )}
       <div className={classNames(styles.accountBadge)}>{badgeContent}</div>
-    </div>
+    </button>
   )
 }
 
