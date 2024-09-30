@@ -140,30 +140,23 @@ export default class ComposerMessageInput extends React.Component<
   keyEventToAction(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     const enterKeySends = this.props.enterKeySends
 
-    // ENTER + SHIFT
-    if (e.code === 'Enter' && e.shiftKey) {
-      return 'NEWLINE'
-      // ENTER + CTRL
-    } else if (e.code === 'Enter' && (e.ctrlKey || e.metaKey)) {
+    // ENTER + CTRL
+    if (e.code === 'Enter' && (e.ctrlKey || e.metaKey)) {
       return 'SEND'
       // ENTER
     } else if (e.code === 'Enter' && !e.shiftKey) {
-      return enterKeySends ? 'SEND' : 'NEWLINE'
+      return enterKeySends ? 'SEND' : undefined
     }
   }
 
   onKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     const action = this.keyEventToAction(e)
 
-    if (!action) return
-
-    if (action === 'NEWLINE') {
-      this.insertStringAtCursorPosition('\n')
-    } else if (action === 'SEND') {
+    if (action === 'SEND') {
       this.props.sendMessage()
+      e.preventDefault()
+      e.stopPropagation()
     }
-    e.preventDefault()
-    e.stopPropagation()
   }
 
   resizeTextareaAndComposer() {
