@@ -8,7 +8,8 @@ export function truncateText(text: string, max_len: number) {
 
 /**
  * @returns Whether the `url` is an invite link (for contact or a group).
- * (https://github.com/deltachat/invite/blob/1b5b2e2a9bfcaf87c4f44929fb7734819d1d9679/README.md?plain=1#L6-L7)
+ * - https://github.com/deltachat/invite
+ * - https://github.com/deltachat/interface/blob/main/uri-schemes.md#invite-links-httpsideltachat-
  */
 export function isInviteLink(url: string) {
   return url.startsWith('https://i.delta.chat/') && url.includes('#')
