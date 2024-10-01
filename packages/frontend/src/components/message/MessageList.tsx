@@ -314,8 +314,9 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
           !domElement.classList.contains('info-message') &&
           !domElement.classList.contains('videochat-invitation'))
       ) {
-        log.debug(
-          `scrollTo: scrollToMessage, couldn't find matching message in dom: ${domElement}, returning`
+        log.error(
+          "scrollTo: scrollToMessage, couldn't find matching message in dom, returning",
+          domElement
         )
         return
       }
