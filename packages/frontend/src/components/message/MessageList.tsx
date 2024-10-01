@@ -308,17 +308,29 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
       log.debug('scrollTo: scrollToMessage: ' + scrollTo.msgId)
 
       const domElement = document.getElementById(scrollTo.msgId.toString())
-      if (
-        !domElement ||
-        (!domElement.classList.contains('message') &&
-          !domElement.classList.contains('info-message') &&
-          !domElement.classList.contains('videochat-invitation'))
-      ) {
+      if (!domElement) {
         log.error(
           "scrollTo: scrollToMessage, couldn't find matching message in dom, returning",
           domElement
         )
         return
+      }
+      if (
+        !domElement.classList.contains('message') &&
+        !domElement.classList.contains('info-message') &&
+        !domElement.classList.contains('videochat-invitation') &&
+        // Currently we have the same `id=` set on both `<li>` and its child.
+        !domElement.firstElementChild?.classList.contains('message') &&
+        !domElement.firstElementChild?.classList.contains('info-message') &&
+        !domElement.firstElementChild?.classList.contains(
+          'videochat-invitation'
+        )
+      ) {
+        log.warn(
+          `scrollTo: scrollToMessage, found an element with ` +
+            `id=${scrollTo.msgId}, but it's not a message:`,
+          domElement
+        )
       }
 
       domElement.scrollIntoView()
