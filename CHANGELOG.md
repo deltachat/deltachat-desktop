@@ -22,6 +22,7 @@
 - avoid showing wrong menu items for blocked users #4353
 - fix: save message draft every 200ms if message text changed #3733
 - fix mac drag window issues #4300
+- the main window overflowing small screens, or/and if zoom level is high #4156
 
 <a id="1_48_0"></a>
 
