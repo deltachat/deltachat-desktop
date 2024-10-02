@@ -3,6 +3,7 @@ import { getLogger } from '../../../../shared/logger'
 import { debounce } from 'debounce'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import { useHasChanged2 } from '../../hooks/useHasChanged'
 
 const log = getLogger('renderer/helpers/ChatList')
 
@@ -45,10 +46,10 @@ export function useMessageResults(
     [chatId]
   )
 
-  useEffect(
-    () => debouncedSearchMessages(queryStr),
-    [queryStr, debouncedSearchMessages]
-  )
+  const queryStrHasChanged = useHasChanged2(queryStr)
+  if (queryStrHasChanged) {
+    debouncedSearchMessages(queryStr)
+  }
 
   return ids
 }
