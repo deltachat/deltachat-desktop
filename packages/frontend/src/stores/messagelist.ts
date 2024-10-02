@@ -353,6 +353,10 @@ class MessageListStore extends Store<MessageListState> {
                 : KeybindAction.ChatList_SwitchToNormalView
             )
           })
+          // Since we haven't changed `viewState`, `MessageList` won't
+          // call `unlockScroll()`, so let's unlock it now.
+          // `jumpToMessage` (above) will take care
+          // of the future locking / unlocking.
           return false
         }
 
@@ -658,6 +662,8 @@ class MessageListStore extends Store<MessageListState> {
             this.log.debug(
               'FETCH_MORE_MESSAGES: lastMessageIndexOnLastPage is zero, returning'
             )
+            // Since we haven't changed `viewState`, `MessageList` won't
+            // call `unlockScroll()`, so let's unlock it now.
             return false
           }
           const fetchedMessageListItems = state.messageListItems.slice(
@@ -668,6 +674,8 @@ class MessageListStore extends Store<MessageListState> {
             this.log.debug(
               'fetchMoreMessagesTop: fetchedMessageListItems.length is zero, returning'
             )
+            // Since we haven't changed `viewState`, `MessageList` won't
+            // call `unlockScroll()`, so let's unlock it now.
             return false
           }
 
@@ -706,6 +714,8 @@ class MessageListStore extends Store<MessageListState> {
             newestFetchedMessageListItemIndex === state.messageListItems.length
           ) {
             //log.debug('fetchMoreMessagesBottom: no more messages, returning')
+            // Since we haven't changed `viewState`, `MessageList` won't
+            // call `unlockScroll()`, so let's unlock it now.
             return false
           }
           this.log.debug(`fetchMoreMessagesBottom`)
@@ -724,6 +734,8 @@ class MessageListStore extends Store<MessageListState> {
                 messageIds: state.messageListItems,
               })
             )
+            // Since we haven't changed `viewState`, `MessageList` won't
+            // call `unlockScroll()`, so let's unlock it now.
             return false
           }
 
