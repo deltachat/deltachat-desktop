@@ -29,7 +29,10 @@ export class ChatStoreScheduler {
 
   /**  This effect will only get executed if the lock is unlocked. If it's still locked, this effect
    * will get dropped/not executed. If you want the effect to get executed as soon as the lock with
-   * lockNameis unlocked, use lockedQueuedEffect.*/
+   * lockNameis unlocked, use lockedQueuedEffect.
+   *
+   * If `await effect() === false`, the lock will be automatically unlocked
+   * synchronously right after the effect is executed.*/
   lockedEffect<T extends Function>(
     lockName: keyof ChatStoreLocks,
     effect: T,
