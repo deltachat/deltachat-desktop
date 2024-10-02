@@ -39,6 +39,7 @@
 - crash on clicking "About" when no account is selected (e.g. after deleting an account) #4154
 - show "new group" instead of "new contact" when pasting a group invite link in the search field #4151
 - message input getting unexpectedly re-focused, and not re-focused after some actions if the draft text is not empty #4136
+- the main window overflowing small screens, or/and if zoom level is high #4156
 
 <a id="1_46_8"></a>
 

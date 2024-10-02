@@ -40,8 +40,10 @@ export function windowDefaults() {
       y,
     },
     headerHeight,
-    minWidth: 450,
-    minHeight: 450,
+    // On 0.6x zoom Delta Chat and 200x window size it's still somewhat usable,
+    // not much is overflowing.
+    minWidth: 225,
+    minHeight: 125,
     main: targetFile,
     preload: join(htmlDistDir(), 'preload.js'),
   }
