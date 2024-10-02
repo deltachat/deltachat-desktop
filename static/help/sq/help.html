@@ -8,7 +8,7 @@
       <li><a href="#a-mbulon-delta-chat-i-figura-video-dhe-bashkëngjitje-të-tjera">A mbulon Delta Chat-i figura, video dhe bashkëngjitje të tjera?</a></li>
       <li><a href="#multiple-accounts">What are profiles? How can I switch between them?</a></li>
       <li><a href="#kush-e-sheh-profilin-tim">Kush e sheh profilin tim?</a></li>
-      <li><a href="#signature">Can I set a Signature Text/Status/Motto with Delta Chat?</a></li>
+      <li><a href="#signature">Can I set a Bio/Signature/Status/Motto with Delta Chat?</a></li>
       <li><a href="#çdo-të-thotë-fiksim-heshtim-arkivim">Ç’do të thotë Fiksim, Heshtim, Arkivim?</a></li>
       <li><a href="#çdo-të-thotë-pika-e-gjelbër">Ç’do të thotë pika e gjelbër?</a></li>
       <li><a href="#ephemeralmsgs">How do disappearing messages work?</a></li>
@@ -55,7 +55,7 @@
       <li><a href="#how-can-i-ensure-message-end-to-end-encryption-and-deletion">How can I ensure message end-to-end encryption and deletion?</a></li>
       <li><a href="#pfs">Does Delta Chat support Perfect Forward Secrecy?</a></li>
       <li><a href="#is-end-to-end-encryption-of-delta-chat-as-safe-as-signal">Is end-to-end encryption of Delta Chat as safe as Signal?</a></li>
-      <li><a href="#a-mund-të-ripërdor-kyçin-tim-ekzistues-privat">A mund të ripërdor kyçin tim ekzistues privat?</a></li>
+      <li><a href="#importkey">A mund të ripërdor kyçin tim ekzistues privat?</a></li>
       <li><a href="#seksportoj-dot-kyçet-e-mi-ekzistues-pgp-në-delta-chat">S’eksportoj dot kyçet e mi ekzistues PGP në Delta Chat.</a></li>
       <li><a href="#security-audits">A është bërë auditim i pavarur i Delta Chat-it për cenueshmëri sigurie?</a></li>
     </ul>
@@ -80,7 +80,6 @@
       <li><a href="#si-mund-të-përdor-thirrje-audiovideo-me-delta-chat-in">Si mund të përdor thirrje audio/video me Delta Chat-in?</a></li>
       <li><a href="#çjanë-listat-e-transmetimeve-dhe-si-mund-ti-përdor">Ç’janë Listat e Transmetimeve dhe si mund t’i përdor?</a></li>
       <li><a href="#si-mund-tu-tregoj-partnerëve-të-mi-në-fjalosje-vendndodhjen-time">Si mund t’u tregoj partnerëve të mi në fjalosje vendndodhjen time?</a></li>
-      <li><a href="#çmbron-konkretisht-fshehtëzimi-eksperimental-i-bazës-së-të-dhënave">Ç’mbron konkretisht fshehtëzimi eksperimental i bazës së të dhënave?</a></li>
       <li><a href="#pse-mund-të-zgjedh-vetëm-të-shoh-dosjen-deltachat">Pse mund të zgjedh vetëm të shoh dosjen DeltaChat?</a></li>
       <li><a href="#si-mund-ta-ndryshoj-llogarinë-time-me-një-tjetër-adresë-email">Si mund ta ndryshoj llogarinë time me një tjetër adresë email?</a></li>
     </ul>
@@ -98,7 +97,7 @@
       <li><a href="#pse-mund-të-zgjedh-të-vëzhgoj-dosjen-të-dërguar">Pse mund të zgjedh të vëzhgoj dosjen “Të dërguar”?</a></li>
       <li><a href="#pse-mund-të-zgjedh-të-mos-e-vëzhgoj-dosjen-deltachat">Pse mund të zgjedh të mos e vëzhgoj dosjen DeltaChat?</a></li>
       <li><a href="#a-është-i-përputhshëm-delta-chat-i-me-protonmail-in--tutanota-n--criptext-in">A është i përputhshëm Delta Chat-i me Protonmail-in / Tutanota-n / Criptext-in?</a></li>
-      <li><a href="#si-mund-ta-fshij-llogarinë-time">Si mund ta fshij llogarinë time?</a></li>
+      <li><a href="#remove-account">Si mund ta fshij llogarinë time?</a></li>
       <li><a href="#më-interesojnë-hollësitë-teknike-mund-të-më-tregoni-diçka-më-tepër">Më interesojnë hollësitë teknike. Mund të më tregoni diçka më tepër?</a></li>
       <li><a href="#si-financohet-zhvillimi-i-delta-chat-it">Si financohet zhvillimi i Delta Chat-it?</a></li>
     </ul>
@@ -264,18 +263,16 @@ pajisje të re.</p>
       <h3 id="signature">
         
         
-          Can I set a Signature Text/Status/Motto with Delta Chat? <a href="#signature" class="anchor"></a>
+          Can I set a Bio/Signature/Status/Motto with Delta Chat? <a href="#signature" class="anchor"></a>
         
         
       </h3>
 
 <p>Yes,
-you can do so under “Settings &gt; Profile &gt; Signature Text”.
+you can do so under <strong>Settings → Profile → Bio</strong>.
 Your contacts who use Delta Chat will see it
 when they view your contact details.
-To everyone else,
-It will appear as an e-mail signature
-below the text of all your messages.</p>
+Moreover, it will appear as a classic e-mail signature.</p>
     
       <h3 id="çdo-të-thotë-fiksim-heshtim-arkivim">
         
@@ -550,7 +547,7 @@ for Delta Chat users.</p>
 And no, there is no alternative on Apple’s phones to achieve instant message delivery
 because Apple devices do not allow Delta Chat to fetch data in the background.
 Push notifications are automatically activated for iOS users because
-<a href="#privacy-notifications">Delta Chat’s privacy-minimizing Push Notification system</a>
+<a href="#privacy-notifications">Delta Chat’s privacy-preserving Push Notification system</a>
 does not expose data to Apple that it doesn’t already have.</p>
     
       <h3 id="android-push">
@@ -570,13 +567,6 @@ Push Notifications are not available.</p>
 you can change the following settings effecting all chat profiles:</p>
 
 <ul>
-  <li>
-    <p>Use Push Service: the default when using chatmail profiles and if
-a Push service is available on the phone.
-If you have both chatmail and classic e-mail profiles,
-then Push Notification will only work
-for incoming messages on chatmail profiles.</p>
-  </li>
   <li>
     <p>Use Background Connection: If you are not using a Push service,
 you may disable “battery optimizations” for Delta Chat,
@@ -1161,10 +1151,10 @@ past encrypted messages.</p>
 <p>In any case, Delta Chat’s end-to-end encryption uses a <a href="#openpgp-secure">secure subset of OpenPGP</a>
 which has been <a href="https://delta.chat/assets/blog/2019-first-security-review.pdf">independently security-audited</a>.</p>
     
-      <h3 id="a-mund-të-ripërdor-kyçin-tim-ekzistues-privat">
+      <h3 id="importkey">
         
         
-          A mund të ripërdor kyçin tim ekzistues privat? <a href="#a-mund-të-ripërdor-kyçin-tim-ekzistues-privat" class="anchor"></a>
+          A mund të ripërdor kyçin tim ekzistues privat? <a href="#importkey" class="anchor"></a>
         
         
       </h3>
@@ -1221,7 +1211,9 @@ independent security analysis, from most recent to older:</p>
   <li>
     <p>2024 March, we received a deep security analysis from the Applied Cryptography
 research group at ETH Zuerich and addressed all raised issues. 
-See our blog post about <a href="https://delta.chat/en/2024-03-25-crypto-analysis-securejoin">Hardening Guaranteed End-to-End encryption</a> for more detailed information.</p>
+See our blog post about <a href="https://delta.chat/en/2024-03-25-crypto-analysis-securejoin">Hardening Guaranteed End-to-End encryption</a> for more detailed information and the
+<a href="https://eprint.iacr.org/2024/918.pdf">Cryptographic Analysis of Delta Chat</a> 
+research paper published afterwards.</p>
   </li>
   <li>
     <p>Në fillim të 2023-shit, ndreqëm probleme sigurie dhe privatësie me
@@ -1552,28 +1544,6 @@ right click on the map and describe a location, which is sent to the chat as
 a message, but also appears on the map.</li>
 </ul>
     
-      <h3 id="çmbron-konkretisht-fshehtëzimi-eksperimental-i-bazës-së-të-dhënave">
-        
-        
-          Ç’mbron konkretisht fshehtëzimi eksperimental i bazës së të dhënave? <a href="#çmbron-konkretisht-fshehtëzimi-eksperimental-i-bazës-së-të-dhënave" class="anchor"></a>
-        
-        
-      </h3>
-
-<ul>
-  <li>Tani për tani, fshehtëzimi i bazës së të dhënave është ende eksperimental në
-shkallë të madhe. Mos u bazoni në të për mbrojtje, duhet të përdorni si shtesë
-fshehtëzim nga sistemi juaj operativ, nëse ofron të tillë.</li>
-  <li>Fshehtëzimi i bazës së të dhënave s’fshehtëzon ende copat, vetëm rreshtat dhe
-shtyllat e bazës së të dhënave. Kjo pak a shumë do të thotë se mesazhet tuaja
-janë të parrezik, por jo bashkëngjitjet tuaja.</li>
-  <li>Për iOS dhe Android, kyçet e fshehtëzimit depozitohen te vargu i kyçeve i sistemit.
-Kjo do të thotë se fshehtëzimi është aq i sigurt sa sistemi operativ ku funksionon.</li>
-  <li>Klienti Delta Chat për desktop s’ofron ende fshehtëzim baze të dhënash, ngaqë
-s’ka rrugë standarde për të depozituar kyçet e fshehtëzimit në platforma të ndryshme
-që mbulohen.</li>
-</ul>
-    
       <h3 id="pse-mund-të-zgjedh-vetëm-të-shoh-dosjen-deltachat">
         
         
@@ -1735,10 +1705,6 @@ Sigurisht, fjalëkalimi depozitohet vetëm në pajisjen tuaj. Fjalëkalimi i tra
 vetëm furnizuesit të email-it tuaj (kur bëni hyrjen), i cili mund të hyjë te email-et
 tuaj, sido qoftë.</p>
 
-<p>Nëse përdorni një furnizues email-i që mbulon OAuth2, bie fjala gmail.com ose
-yandex.ru, s’ka nevojë të depozitoni fjalëkalimin tuaj në pajisje. Në këtë rast
-do të përdoret vetëm një token hyrjesh.</p>
-
 <p>Ngaqë Delta Chat-i është Me Burim të Hapur, mund të kontrolloni <a href="https://github.com/deltachat/deltachat-core-rust/blob/master/src/login_param.rs">Kodin
 Burim</a>,
 nëse doni të verifikoni se a trajtohen me siguri kredencialet tuaja. Na gëzojnë
@@ -1879,22 +1845,38 @@ uses.</li>
 <a href="https://autocrypt.org/dev-status.html">Autocrypt-enabled e-mail app</a>.</li>
 </ul>
     
-      <h3 id="si-mund-ta-fshij-llogarinë-time">
+      <h3 id="remove-account">
         
         
-          Si mund ta fshij llogarinë time? <a href="#si-mund-ta-fshij-llogarinë-time" class="anchor"></a>
+          Si mund ta fshij llogarinë time? <a href="#remove-account" class="anchor"></a>
         
         
       </h3>
 
-<p>Ngaqë për Delta Chat-in përdorni një llogari email,
-se si mund të fshini llogarinë tuaj, varet nga shërbimi juaj email.
-Nuk kemi fuqi mbi llogarinë tuaj email,
-ndaj, mjerisht, s’mund t’ju ndihmojmë për këtë.</p>
+<p>If you use a default chat profile
+you can simply uninstall the app.
+This will automatically trigger deletion of all associated account data on the chatmail server.
+For more info, please refer to <a href="https://nine.testrun.org/info.html#account-deletion">nine.testrun.org account-deletion</a> for the default onboarding server,
+or the respective page from your chosen <a href="https://delta.chat/sq/chatmail">3rd party chatmail server</a>.</p>
 
-<p>Nëse doni ta mbani llogarinë,
-por të çinstaloni Delta Chat-in,
-rekomandohet të braktisni çfarëdo grupi fjalosjeje, para çinstalimit të Delta Chat-it.</p>
+<p>If you have set up your chat profile on multiple devices
+you need to remove it from all devices.</p>
+
+<p>If you are using more than one account,
+but don’t want to get rid of all of them,
+you can remove it in the account switcher menu (on android and iOS),
+or in the sidebar with a right click (in the desktop client).</p>
+
+<p>Accounts on <a href="https://providers.delta.chat">classic e-mail providers</a>
+will not be deleted automatically;
+how you can delete your account depends on your e-mail provider.
+We don’t have any control over e-mail accounts at those providers,
+so unfortunately we can’t help you with that.</p>
+
+<p>If you want to continue using a classic e-mail account with other apps,
+but uninstall Delta Chat,
+it is recommended to leave any group chat before uninstalling Delta Chat.
+Otherwise you might receive undecryptable messages from those group chats.</p>
     
       <h3 id="më-interesojnë-hollësitë-teknike-mund-të-më-tregoni-diçka-më-tepër">
         

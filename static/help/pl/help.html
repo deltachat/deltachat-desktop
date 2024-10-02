@@ -8,7 +8,7 @@
       <li><a href="#czy-delta-chat-obsługuje-obrazy-filmy-i-inne-załączniki">Czy Delta Chat obsługuje obrazy, filmy i inne załączniki?</a></li>
       <li><a href="#multiple-accounts">Czym są profile? Jak mogę przełączać się między nimi?</a></li>
       <li><a href="#kto-widzi-moje-zdjęcie-profilowe">Kto widzi moje zdjęcie profilowe?</a></li>
-      <li><a href="#signature">Czy w Delta Chat mogę ustawić tekst podpisu/status/motto?</a></li>
+      <li><a href="#signature">Czy w Delta Chat mogę ustawić Biografię/Podpis/Status/Motto?</a></li>
       <li><a href="#co-oznacza-przypinanie-wyciszanie-i-archiwizowanie">Co oznacza przypinanie, wyciszanie i archiwizowanie?</a></li>
       <li><a href="#co-oznacza-zielona-kropka">Co oznacza zielona kropka?</a></li>
       <li><a href="#ephemeralmsgs">Jak działają znikające wiadomości?</a></li>
@@ -55,7 +55,7 @@
       <li><a href="#jak-mogę-zapewnić-kompleksowe-szyfrowanie-i-usuwanie-wiadomości">Jak mogę zapewnić kompleksowe szyfrowanie i usuwanie wiadomości?</a></li>
       <li><a href="#pfs">Czy Delta Chat obsługuje funkcję Perfect Forward Secrecy?</a></li>
       <li><a href="#czy-szyfrowanie-end-to-end-delta-chat-jest-tak-samo-bezpieczne-jak-signal">Czy szyfrowanie end-to-end Delta Chat jest tak samo bezpieczne jak Signal?</a></li>
-      <li><a href="#czy-mogę-ponownie-wykorzystać-mój-istniejący-klucz-prywatny">Czy mogę ponownie wykorzystać mój istniejący klucz prywatny?</a></li>
+      <li><a href="#importkey">Czy mogę ponownie wykorzystać mój istniejący klucz prywatny?</a></li>
       <li><a href="#nie-mogę-zaimportować-istniejącego-klucza-pgp-do-delta-chat">Nie mogę zaimportować istniejącego klucza PGP do Delta Chat.</a></li>
       <li><a href="#security-audits">Czy Delta Chat był niezależnie kontrolowany pod kątem luk w zabezpieczeniach?</a></li>
     </ul>
@@ -80,7 +80,6 @@
       <li><a href="#jak-mogę-korzystać-z-połączeń-audiowideo-z-delta-chat">Jak mogę korzystać z połączeń audio/wideo z Delta Chat?</a></li>
       <li><a href="#co-to-są-listy-rozgłoszeniowe-i-jak-mogę-ich-używać">Co to są Listy rozgłoszeniowe i jak mogę ich używać?</a></li>
       <li><a href="#jak-mogę-udostępnić-swoją-lokalizację-moim-rozmówcom">Jak mogę udostępnić swoją lokalizację moim rozmówcom?</a></li>
-      <li><a href="#co-właściwie-chroni-eksperymentalne-szyfrowanie-bazy-danych">Co właściwie chroni eksperymentalne szyfrowanie bazy danych?</a></li>
       <li><a href="#dlaczego-mogę-wybrać-aby-widzieć-tylko-folder-deltachat">Dlaczego mogę wybrać, aby widzieć tylko folder DeltaChat?</a></li>
       <li><a href="#jak-mogę-zmienić-moje-konto-na-inny-adres-e-mail">Jak mogę zmienić moje konto na inny adres e-mail?</a></li>
     </ul>
@@ -98,7 +97,7 @@
       <li><a href="#po-co-mam-wybrać-opcję-oglądania-folderu-wysłane">Po co mam wybrać opcję oglądania folderu „Wysłane”?</a></li>
       <li><a href="#dlaczego-mogę-nie-widzieć-folderu-deltachat">Dlaczego mogę nie widzieć folderu DeltaChat?</a></li>
       <li><a href="#czy-delta-chat-jest-kompatybilny-z-protonmail--tutanota--criptext">Czy Delta Chat jest kompatybilny z Protonmail / Tutanota / Criptext?</a></li>
-      <li><a href="#jak-mogę-usunąć-swoje-konto">Jak mogę usunąć swoje konto?</a></li>
+      <li><a href="#remove-account">Jak mogę usunąć swoje konto?</a></li>
       <li><a href="#interesują-mnie-szczegóły-techniczne-możesz-powiedzieć-mi-coś-więcej">Interesują mnie szczegóły techniczne. Możesz powiedzieć mi coś więcej?</a></li>
       <li><a href="#w-jaki-sposób-finansowany-jest-rozwój-delta-chat">W jaki sposób finansowany jest rozwój Delta Chat?</a></li>
     </ul>
@@ -233,12 +232,12 @@
       <h3 id="signature">
         
         
-          Czy w Delta Chat mogę ustawić tekst podpisu/status/motto? <a href="#signature" class="anchor"></a>
+          Czy w Delta Chat mogę ustawić Biografię/Podpis/Status/Motto? <a href="#signature" class="anchor"></a>
         
         
       </h3>
 
-<p>Tak, możesz to zrobić w „Ustawienia » Profil » Tekst podpisu”. Twoje kontakty korzystające z Delta Chat, zobaczą go, przeglądając twoje dane kontaktowe. Dla wszystkich innych będzie on widoczny jako podpis e-mail pod tekstem wszystkich twoich wiadomości.</p>
+<p>Tak, możesz to zrobić w <strong>Ustawienia » Profil » Biografia</strong>. Twoje kontakty korzystające z Delta Chat, zobaczą go, przeglądając twoje dane kontaktowe. Ponadto będzie on wyglądał jak klasyczny podpis w wiadomości e-mail.</p>
     
       <h3 id="co-oznacza-przypinanie-wyciszanie-i-archiwizowanie">
         
@@ -459,7 +458,7 @@ nadal będziesz mógł pisać, ale nie będziesz już powiadamiany o żadnych no
       </h3>
 
 <p>Tak, Delta Chat automatycznie korzysta z powiadomień push dla profili <a href="https://delta.chat/chatmail">chatmail</a>
-. I nie, w telefonach Apple nie ma alternatywy umożliwiającej natychmiastowe dostarczanie wiadomości, ponieważ urządzenia Apple nie pozwalają Delta Chat na pobieranie danych w tle. Powiadomienia push są automatycznie aktywowane dla użytkowników iOS, ponieważ <a href="#privacy-notifications">minimalizujący prywatność system powiadomień push Delta Chat</a> nie udostępnia Apple danych, których jeszcze nie posiada.</p>
+. I nie, w telefonach Apple nie ma alternatywy umożliwiającej natychmiastowe dostarczanie wiadomości, ponieważ urządzenia Apple nie pozwalają Delta Chat na pobieranie danych w tle. Powiadomienia push są automatycznie aktywowane dla użytkowników iOS, ponieważ <a href="#privacy-notifications">system prywatności powiadomień Delta Chat</a> nie udostępnia Apple danych, których jeszcze nie posiada.</p>
     
       <h3 id="android-push">
         
@@ -474,12 +473,7 @@ nadal będziesz mógł pisać, ale nie będziesz już powiadamiany o żadnych no
 <p>W ustawieniach „Powiadomień” Delta Chat dla „Natychmiastowej dostawy” możesz zmienić następujące ustawienia wpływające na wszystkie profile czatu:</p>
 
 <ul>
-  <li>
-    <p>Użyj usługi Push: ustawienie domyślne podczas korzystania z profili czatu i jeśli w telefonie dostępna jest usługa Push. Jeśli masz zarówno chatmail, jak i klasyczny profil e-mail, powiadomienie push będzie działać tylko w przypadku wiadomości przychodzących z profili chatmail.</p>
-  </li>
-  <li>
-    <p>Użyj połączenia w tle: Jeśli nie korzystasz z usługi Push, możesz wyłączyć „optymalizację baterii” dla Delta Chat, umożliwiając mu pobieranie wiadomości w tle. Mogą jednak wystąpić opóźnienia od minut do godzin. Niektórzy dostawcy Androida nawet całkowicie ograniczają aplikacje (zobacz <a href="https://dontkillmyapp.com">dontkillmyapp.com</a>), a Delta Chat może nie wyświetlać wiadomości przychodzących, dopóki ręcznie ponownie nie otworzysz aplikacji.</p>
-  </li>
+  <li>Użyj połączenia w tle: Jeśli nie korzystasz z usługi Push, możesz wyłączyć „optymalizację baterii” dla Delta Chat, umożliwiając mu pobieranie wiadomości w tle. Mogą jednak wystąpić opóźnienia od minut do godzin. Niektórzy dostawcy Androida nawet całkowicie ograniczają aplikacje (zobacz <a href="https://dontkillmyapp.com">dontkillmyapp.com</a>), a Delta Chat może nie wyświetlać wiadomości przychodzących, dopóki ręcznie ponownie nie otworzysz aplikacji.</li>
 </ul>
 
 <p>Wymuś połączenie w tle: Jest to opcja awaryjna, jeśli poprzednie opcje nie są dostępne lub nie zapewniają „natychmiastowej dostawy”. Włączenie tej opcji powoduje stałe powiadomienie na twoim telefonie, które czasami może zostać „minifikowane” w przypadku najnowszych telefonów z Androidem.</p>
@@ -830,10 +824,10 @@ nadal będziesz mógł pisać, ale nie będziesz już powiadamiany o żadnych no
 
 <p>W każdym razie szyfrowanie end-to-end Delta Chat wykorzystuje <a href="#openpgp-secure">bezpieczny podzbiór OpenPGP</a>, który został poddany <a href="https://delta.chat/assets/blog/2019-first-security-review.pdf">niezależnemu audytowi bezpieczeństwa</a>.</p>
     
-      <h3 id="czy-mogę-ponownie-wykorzystać-mój-istniejący-klucz-prywatny">
+      <h3 id="importkey">
         
         
-          Czy mogę ponownie wykorzystać mój istniejący klucz prywatny? <a href="#czy-mogę-ponownie-wykorzystać-mój-istniejący-klucz-prywatny" class="anchor"></a>
+          Czy mogę ponownie wykorzystać mój istniejący klucz prywatny? <a href="#importkey" class="anchor"></a>
         
         
       </h3>
@@ -876,9 +870,10 @@ W przypadku innych programów można znaleźć rozwiązanie online.</p>
 
 <p>Projekt Delta Chat przeszedł cztery niezależne audyty bezpieczeństwa i jedną niezależną analizę bezpieczeństwa, od najnowszego do najstarszego:</p>
 
-<p>W marcu 2024 r. otrzymaliśmy dogłębną analizę bezpieczeństwa od grupy badawczej ds. kryptografii stosowanej w ETH Zuerich i zajęliśmy się wszystkimi poruszonymi kwestiami. Bardziej szczegółowe informacje można znaleźć w naszym poście na blogu na temat <a href="https://delta.chat/en/2024-03-25-crypto-analysis-securejoin">szyfrowania typu „end-to-end” z gwarancją hartowania</a>.</p>
-
 <ul>
+  <li>
+    <p>W marcu 2024 r. otrzymaliśmy dogłębną analizę bezpieczeństwa od grupy badawczej ds. kryptografii stosowanej w ETH Zuerich i zajęliśmy się wszystkimi poruszonymi kwestiami. Więcej szczegółowych informacji można znaleźć na naszym blogu na temat <a href="https://delta.chat/en/2024-03-25-crypto-analysis-securejoin">szyfrowania typu End-to-End z gwarancją Hardening</a> oraz opublikowanym później artykule badawczym <a href="https://eprint.iacr.org/2024/918.pdf">Cryptographic Analysis of Delta Chat</a>.</p>
+  </li>
   <li>
     <p>W kwietniu 2023 r. naprawiliśmy problemy z bezpieczeństwem i prywatnością w funkcji „aplikacje internetowe udostępniane na czacie”, związane z awariami piaskownicy, szczególnie w przypadku Chromium. Następnie przeprowadziliśmy niezależny audyt bezpieczeństwa od Cure53 i wszystkie wykryte problemy zostały naprawione w aplikacji z serii 1.36 wydanej w kwietniu 2023 r. <a href="https://delta.chat/en/2023-05-22-webxdc-security">Pełną historię bezpieczeństwa end-to-end w sieci można znaleźć tutaj</a>.</p>
   </li>
@@ -1114,21 +1109,6 @@ W przypadku innych programów można znaleźć rozwiązanie online.</p>
   <li>Na komputerze system operacyjny zwykle nie może określić twojej lokalizacji. Zamiast tego możesz kliknąć prawym przyciskiem myszy na mapie i opisać lokalizację, która jest wysyłana do czatu jako wiadomość, ale także pojawia się na mapie.</li>
 </ul>
     
-      <h3 id="co-właściwie-chroni-eksperymentalne-szyfrowanie-bazy-danych">
-        
-        
-          Co właściwie chroni eksperymentalne szyfrowanie bazy danych? <a href="#co-właściwie-chroni-eksperymentalne-szyfrowanie-bazy-danych" class="anchor"></a>
-        
-        
-      </h3>
-
-<ul>
-  <li>W tej chwili szyfrowanie bazy danych jest jeszcze bardzo eksperymentalne. Nie polegaj na nim w kwestii ochrony, powinieneś dodatkowo użyć szyfrowania systemu operacyjnego, jeśli takie zapewnia.</li>
-  <li>Szyfrowanie bazy danych nie szyfruje jeszcze obiektów blob, tylko wiersze i kolumny bazy danych. Oznacza to mniej więcej tyle, że Twoje wiadomości są bezpieczne, ale nie załączniki.</li>
-  <li>W systemach iOS i Android klucze szyfrujące są przechowywane w pęku kluczy systemowych. Oznacza to, że szyfrowanie jest tak bezpieczne, jak system operacyjny, na którym działa.</li>
-  <li>Klient Delta Chat na komputer nie oferuje jeszcze szyfrowania bazy danych, ponieważ nie ma standardowego sposobu przechowywania kluczy szyfrowania na różnych obsługiwanych platformach.</li>
-</ul>
-    
       <h3 id="dlaczego-mogę-wybrać-aby-widzieć-tylko-folder-deltachat">
         
         
@@ -1252,8 +1232,6 @@ Jednak niektórzy dostawcy potrzebują specjalnych opcji, aby działać poprawni
 
 <p>Podobnie jak w przypadku innych programów pocztowych, takich jak Thunderbird, K9-Mail lub Outlook, program potrzebuje hasła, aby można było go używać do wysyłania i odbierania e-maili. Oczywiście hasło jest przechowywane tylko na Twoim urządzeniu. Hasło jest przesyłane tylko do Twojego dostawcy poczty e-mail (po zalogowaniu), który i tak ma dostęp do Twojej poczty</p>
 
-<p>Jeśli korzystasz z dostawcy poczty e-mail z obsługą OAuth2, takiego jak gmail.com lub yandex.ru, nie musisz przechowywać hasła na urządzeniu. W takim przypadku używany jest tylko token dostępu.</p>
-
 <p>Ponieważ Delta Chat jest Open Source, możesz sprawdzić <a href="https://github.com/deltachat/deltachat-core-rust/blob/master/src/login_param.rs">Kod źródłowy</a>
 jeśli chcesz sprawdzić, czy Twoje poświadczenia są przetwarzane w bezpieczny sposób. Cieszymy się z opinii, które sprawiają, że aplikacja jest bezpieczniejsza dla wszystkich naszych użytkowników.</p>
     
@@ -1348,18 +1326,38 @@ jeśli chcesz sprawdzić, czy Twoje poświadczenia są przetwarzane w bezpieczny
   <li>Delta Chat może zaszyfrować metodą end-to-end za pośrednictwem dowolnego dostawcy poczty e-mail z dowolną <a href="https://autocrypt.org/dev-status.html">aplikacją e-mail z włączoną funkcją Autocrypt</a>.</li>
 </ul>
     
-      <h3 id="jak-mogę-usunąć-swoje-konto">
+      <h3 id="remove-account">
         
         
-          Jak mogę usunąć swoje konto? <a href="#jak-mogę-usunąć-swoje-konto" class="anchor"></a>
+          Jak mogę usunąć swoje konto? <a href="#remove-account" class="anchor"></a>
         
         
       </h3>
 
-<p>Gdy korzystasz z konta e-mail w Delta Chat, sposób usunięcia konta zależy od dostawcy poczty e-mail.
-Nie mamy żadnej kontroli nad twoim kontem e-mail, więc niestety nie możemy ci w tym pomóc.</p>
+<p>If you use a default chat profile
+you can simply uninstall the app.
+This will automatically trigger deletion of all associated account data on the chatmail server.
+For more info, please refer to <a href="https://nine.testrun.org/info.html#account-deletion">nine.testrun.org account-deletion</a> for the default onboarding server,
+or the respective page from your chosen <a href="https://delta.chat/pl/chatmail">3rd party chatmail server</a>.</p>
 
-<p>Jeśli chcesz zachować konto, ale odinstalować Delta Chat, zaleca się opuszczenie każdego czatu grupowego przed odinstalowaniem Delta Chat.</p>
+<p>If you have set up your chat profile on multiple devices
+you need to remove it from all devices.</p>
+
+<p>If you are using more than one account,
+but don’t want to get rid of all of them,
+you can remove it in the account switcher menu (on android and iOS),
+or in the sidebar with a right click (in the desktop client).</p>
+
+<p>Accounts on <a href="https://providers.delta.chat">classic e-mail providers</a>
+will not be deleted automatically;
+how you can delete your account depends on your e-mail provider.
+We don’t have any control over e-mail accounts at those providers,
+so unfortunately we can’t help you with that.</p>
+
+<p>If you want to continue using a classic e-mail account with other apps,
+but uninstall Delta Chat,
+it is recommended to leave any group chat before uninstalling Delta Chat.
+Otherwise you might receive undecryptable messages from those group chats.</p>
     
       <h3 id="interesują-mnie-szczegóły-techniczne-możesz-powiedzieć-mi-coś-więcej">
         
