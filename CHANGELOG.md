@@ -17,6 +17,7 @@
 - dev: clarify scrolling-related code #4121
 - improved performance a bit #4145
 - show contact / group name when pasting invite link in the search field #4151
+- Update local help (2024-10-02)
 
 ### Fixed
 - fix that you can not click header button in dialog when they are on top of the navbar #4093

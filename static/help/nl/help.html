@@ -8,7 +8,7 @@
       <li><a href="#ondersteunt-delta-chat-afbeeldingen-videos-en-ander-soort-bijlagen">Ondersteunt Delta Chat afbeeldingen, video’s en ander soort bijlagen?</a></li>
       <li><a href="#multiple-accounts">What are profiles? How can I switch between them?</a></li>
       <li><a href="#wie-kan-mijn-profielfoto-zien">Wie kan mijn profielfoto zien?</a></li>
-      <li><a href="#signature">Can I set a Signature Text/Status/Motto with Delta Chat?</a></li>
+      <li><a href="#signature">Can I set a Bio/Signature/Status/Motto with Delta Chat?</a></li>
       <li><a href="#wat-is-vastmaken-negeren-en-archiveren">Wat is vastmaken, negeren en archiveren?</a></li>
       <li><a href="#wat-betekent-die-groene-stip">Wat betekent die groene stip?</a></li>
       <li><a href="#ephemeralmsgs">How do disappearing messages work?</a></li>
@@ -55,7 +55,7 @@
       <li><a href="#how-can-i-ensure-message-end-to-end-encryption-and-deletion">How can I ensure message end-to-end encryption and deletion?</a></li>
       <li><a href="#pfs">Does Delta Chat support Perfect Forward Secrecy?</a></li>
       <li><a href="#is-end-to-end-encryption-of-delta-chat-as-safe-as-signal">Is end-to-end encryption of Delta Chat as safe as Signal?</a></li>
-      <li><a href="#kan-ik-mijn-bestaande-privésleutel-hergebruiken">Kan ik mijn bestaande privésleutel hergebruiken?</a></li>
+      <li><a href="#importkey">Kan ik mijn bestaande privésleutel hergebruiken?</a></li>
       <li><a href="#ik-kan-mijn-bestaande-pgp-sleutel-niet-importeren">Ik kan mijn bestaande PGP-sleutel niet importeren</a></li>
       <li><a href="#security-audits">Heeft Delta Chat ooit onafhankelijke beveiligingscontroles ondergaan?</a></li>
     </ul>
@@ -80,7 +80,6 @@
       <li><a href="#hoe-kan-ik-audio--en-videogesprekken-voeren-in-delta-chat">Hoe kan ik audio- en videogesprekken voeren in Delta Chat?</a></li>
       <li><a href="#wat-zijn-verzendlijsten-en-hoe-gebruik-ik-deze">Wat zijn verzendlijsten en hoe gebruik ik deze?</a></li>
       <li><a href="#hoe-kan-ik-mijn-locatie-delen-met-anderen">Hoe kan ik mijn locatie delen met anderen?</a></li>
-      <li><a href="#wat-beveiligt-de-experimentele-databankversleuteling-precies">Wat beveiligt de experimentele databankversleuteling precies?</a></li>
       <li><a href="#waarom-kan-ik-kiezen-om-alleen-de-deltachat-map-te-controleren">Waarom kan ik kiezen om alleen de DeltaChat-map te controleren?</a></li>
       <li><a href="#hoe-kan-ik-mijn-e-mailadres-veranderen-in-de-app">Hoe kan ik mijn e-mailadres veranderen in de app?</a></li>
     </ul>
@@ -98,7 +97,7 @@
       <li><a href="#waarom-kan-ik-kiezen-om-de-map-verzonden-te-controleren">Waarom kan ik kiezen om de map ‘Verzonden’ te controleren?</a></li>
       <li><a href="#waarom-kan-ik-kiezen-om-de-deltachat-map-te-negeren">Waarom kan ik kiezen om de DeltaChat-map te negeren?</a></li>
       <li><a href="#is-delta-chat-compatibel-met-protonmailtutanotacriptext">Is Delta Chat compatibel met Protonmail/Tutanota/Criptext?</a></li>
-      <li><a href="#hoe-kan-ik-mijn-account-verwijderen">Hoe kan ik mijn account verwijderen?</a></li>
+      <li><a href="#remove-account">Hoe kan ik mijn account verwijderen?</a></li>
       <li><a href="#ik-wil-graag-meer-weten-over-de-gebruikte-technieken-waar-kan-ik-meer-informatie-vinden">Ik wil graag meer weten over de gebruikte technieken. Waar kan ik meer informatie vinden?</a></li>
       <li><a href="#hoe-wordt-de-ontwikkeling-van-delta-chat-gefinancierd">Hoe wordt de ontwikkeling van Delta Chat gefinancierd?</a></li>
     </ul>
@@ -262,18 +261,16 @@ Je contactpersonen ontvangen hem dan opnieuw, zelfs als ze een nieuw apparaat to
       <h3 id="signature">
         
         
-          Can I set a Signature Text/Status/Motto with Delta Chat? <a href="#signature" class="anchor"></a>
+          Can I set a Bio/Signature/Status/Motto with Delta Chat? <a href="#signature" class="anchor"></a>
         
         
       </h3>
 
 <p>Yes,
-you can do so under “Settings &gt; Profile &gt; Signature Text”.
+you can do so under <strong>Settings → Profile → Bio</strong>.
 Your contacts who use Delta Chat will see it
 when they view your contact details.
-To everyone else,
-It will appear as an e-mail signature
-below the text of all your messages.</p>
+Moreover, it will appear as a classic e-mail signature.</p>
     
       <h3 id="wat-is-vastmaken-negeren-en-archiveren">
         
@@ -542,7 +539,7 @@ for Delta Chat users.</p>
 And no, there is no alternative on Apple’s phones to achieve instant message delivery
 because Apple devices do not allow Delta Chat to fetch data in the background.
 Push notifications are automatically activated for iOS users because
-<a href="#privacy-notifications">Delta Chat’s privacy-minimizing Push Notification system</a>
+<a href="#privacy-notifications">Delta Chat’s privacy-preserving Push Notification system</a>
 does not expose data to Apple that it doesn’t already have.</p>
     
       <h3 id="android-push">
@@ -562,13 +559,6 @@ Push Notifications are not available.</p>
 you can change the following settings effecting all chat profiles:</p>
 
 <ul>
-  <li>
-    <p>Use Push Service: the default when using chatmail profiles and if
-a Push service is available on the phone.
-If you have both chatmail and classic e-mail profiles,
-then Push Notification will only work
-for incoming messages on chatmail profiles.</p>
-  </li>
   <li>
     <p>Use Background Connection: If you are not using a Push service,
 you may disable “battery optimizations” for Delta Chat,
@@ -1153,10 +1143,10 @@ past encrypted messages.</p>
 <p>In any case, Delta Chat’s end-to-end encryption uses a <a href="#openpgp-secure">secure subset of OpenPGP</a>
 which has been <a href="https://delta.chat/assets/blog/2019-first-security-review.pdf">independently security-audited</a>.</p>
     
-      <h3 id="kan-ik-mijn-bestaande-privésleutel-hergebruiken">
+      <h3 id="importkey">
         
         
-          Kan ik mijn bestaande privésleutel hergebruiken? <a href="#kan-ik-mijn-bestaande-privésleutel-hergebruiken" class="anchor"></a>
+          Kan ik mijn bestaande privésleutel hergebruiken? <a href="#importkey" class="anchor"></a>
         
         
       </h3>
@@ -1212,7 +1202,9 @@ independent security analysis, from most recent to older:</p>
   <li>
     <p>2024 March, we received a deep security analysis from the Applied Cryptography
 research group at ETH Zuerich and addressed all raised issues. 
-See our blog post about <a href="https://delta.chat/en/2024-03-25-crypto-analysis-securejoin">Hardening Guaranteed End-to-End encryption</a> for more detailed information.</p>
+See our blog post about <a href="https://delta.chat/en/2024-03-25-crypto-analysis-securejoin">Hardening Guaranteed End-to-End encryption</a> for more detailed information and the
+<a href="https://eprint.iacr.org/2024/918.pdf">Cryptographic Analysis of Delta Chat</a> 
+research paper published afterwards.</p>
   </li>
   <li>
     <p>Sinds begin 2023 hebben we diverse beveiligings- en privacyproblemen met ‘webapps
@@ -1541,26 +1533,6 @@ right click on the map and describe a location, which is sent to the chat as
 a message, but also appears on the map.</li>
 </ul>
     
-      <h3 id="wat-beveiligt-de-experimentele-databankversleuteling-precies">
-        
-        
-          Wat beveiligt de experimentele databankversleuteling precies? <a href="#wat-beveiligt-de-experimentele-databankversleuteling-precies" class="anchor"></a>
-        
-        
-      </h3>
-
-<ul>
-  <li>Momenteel is databankversleuteling nog experimenteel en dus nog niet volledig
-betrouwbaar. Gebruik, indien mogelijk, de versleuteling van je besturingssysteem.</li>
-  <li>Databankversleuteling versleutelt momenteel alléén de rijen en
-kolommen van de databank. Hierdoor zijn je berichten veilig,
-maar je bijlagen niet.</li>
-  <li>Op iOS en Android worden de sleutels opgeslagen in de sleutelbos van het systeem.
-Versleuteling is daar dus niet zo betrouwbaar als het besturingssysteem in kwestie.</li>
-  <li>Op computers wordt databankversleuteling nog niet ondersteund omdat er geen
-standaardmethode is om de sleutels op de verschillende systemen op te slaan.</li>
-</ul>
-    
       <h3 id="waarom-kan-ik-kiezen-om-alleen-de-deltachat-map-te-controleren">
         
         
@@ -1717,8 +1689,6 @@ blog</a>.</li>
 
 <p>Delta Chat heeft, net zoals andere e-mailprogramma’s (Thunderbird, K9-Mail, Outlook, etc.), je wachtwoord nodig om berichten te versturen. Het wordt alleen opgeslagen op je apparaat en alleen uitgewisseld met je e-mailprovider, die toch al toegang heeft tot je mails.</p>
 
-<p>Als je een e-mailprovider gebruikt die OAuth2 ondersteunt, zoals Gmail of Yandex, dan hoeft je wachtwoord niet lokaal te worden opgeslagen. Er wordt dan alleen een toegangssleutel gebruikt.</p>
-
 <p>Delta Chat is open source. Dit betekent dat je de <a href="https://github.com/deltachat/deltachat-core-rust/blob/master/src/login_param.rs">bron-
 code</a>
 kunt bekijken om er zeker van te zijn dat er veilig wordt omgegaan met je inloggegevens. We ontvangen graag feedback hierover.</p>
@@ -1853,22 +1823,38 @@ uses.</li>
 <a href="https://autocrypt.org/dev-status.html">Autocrypt-enabled e-mail app</a>.</li>
 </ul>
     
-      <h3 id="hoe-kan-ik-mijn-account-verwijderen">
+      <h3 id="remove-account">
         
         
-          Hoe kan ik mijn account verwijderen? <a href="#hoe-kan-ik-mijn-account-verwijderen" class="anchor"></a>
+          Hoe kan ik mijn account verwijderen? <a href="#remove-account" class="anchor"></a>
         
         
       </h3>
 
-<p>Delta Chat maakt gebruik van je e-mailaccount,
-dus de verwijderprocedure is afhankelijk van je provider.
-We hebben geen zeggenschap over je account,
-dus helaas kunnen we je daar niet bij helpen.</p>
+<p>If you use a default chat profile
+you can simply uninstall the app.
+This will automatically trigger deletion of all associated account data on the chatmail server.
+For more info, please refer to <a href="https://nine.testrun.org/info.html#account-deletion">nine.testrun.org account-deletion</a> for the default onboarding server,
+or the respective page from your chosen <a href="https://delta.chat/nl/chatmail">3rd party chatmail server</a>.</p>
 
-<p>Als je je account wilt behouden maar Delta Chat
-niet wilt verwijderen, verlaat dan groeps-
-gesprekken voordat je Delta Chat verwijdert.</p>
+<p>If you have set up your chat profile on multiple devices
+you need to remove it from all devices.</p>
+
+<p>If you are using more than one account,
+but don’t want to get rid of all of them,
+you can remove it in the account switcher menu (on android and iOS),
+or in the sidebar with a right click (in the desktop client).</p>
+
+<p>Accounts on <a href="https://providers.delta.chat">classic e-mail providers</a>
+will not be deleted automatically;
+how you can delete your account depends on your e-mail provider.
+We don’t have any control over e-mail accounts at those providers,
+so unfortunately we can’t help you with that.</p>
+
+<p>If you want to continue using a classic e-mail account with other apps,
+but uninstall Delta Chat,
+it is recommended to leave any group chat before uninstalling Delta Chat.
+Otherwise you might receive undecryptable messages from those group chats.</p>
     
       <h3 id="ik-wil-graag-meer-weten-over-de-gebruikte-technieken-waar-kan-ik-meer-informatie-vinden">
         
