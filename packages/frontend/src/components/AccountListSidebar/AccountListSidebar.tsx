@@ -23,6 +23,7 @@ import type { T } from '@deltachat/jsonrpc-client'
 import { ScreenContext } from '../../contexts/ScreenContext'
 import useChat from '../../hooks/chat/useChat'
 import { Screens } from '../../ScreenController'
+import { ActionEmitter, KeybindAction } from '../../keybindings'
 
 type Props = {
   onAddAccount: () => Promise<number>
@@ -48,6 +49,7 @@ export default function AccountListSidebar({
 
   const selectAccount = async (accountId: number) => {
     if (selectedAccountId === accountId) {
+      ActionEmitter.emitAction(KeybindAction.ChatList_ExitSearch)
       return
     }
 
