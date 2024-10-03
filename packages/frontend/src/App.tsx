@@ -13,8 +13,6 @@ import { runPostponedFunctions } from './onready'
 import { I18nContext } from './contexts/I18nContext'
 
 export default function App(_props: any) {
-  const [localeData, setLocaleData] = useState<LocaleData | null>(null)
-
   useEffect(() => {
     runtime.emitUIReady()
     window.addEventListener('keydown', function (ev: KeyboardEvent) {
@@ -48,6 +46,23 @@ export default function App(_props: any) {
   useLayoutEffect(() => {
     startBackendLogging()
     runPostponedFunctions()
+  }, [])
+
+  return (
+    <CrashScreen>
+      <ThemeContextWrapper>
+        <I18nContextWrapper>
+          <ScreenController />
+        </I18nContextWrapper>
+      </ThemeContextWrapper>
+    </CrashScreen>
+  )
+}
+
+function I18nContextWrapper({ children }: { children: React.ReactChild }) {
+  const [localeData, setLocaleData] = useState<LocaleData | null>(null)
+
+  useLayoutEffect(() => {
     ;(async () => {
       const desktop_settings = await runtime.getDesktopSettings()
       await reloadLocaleData(desktop_settings.locale || 'en')
@@ -72,13 +87,14 @@ export default function App(_props: any) {
 
   if (!localeData) return null
   return (
-    <CrashScreen>
-      <ThemeContextWrapper>
-        <I18nContext.Provider value={window.static_translate}>
-          <ScreenController />
-        </I18nContext.Provider>
-      </ThemeContextWrapper>
-    </CrashScreen>
+    <I18nContext.Provider
+      value={{
+        tx: window.static_translate,
+        writing_direction: window.localeData.dir,
+      }}
+    >
+      <div dir={window.localeData.dir}>{children}</div>
+    </I18nContext.Provider>
   )
 }
 function ThemeContextWrapper({ children }: { children: React.ReactElement }) {
