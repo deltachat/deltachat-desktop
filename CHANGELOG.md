@@ -40,6 +40,7 @@
 - show "new group" instead of "new contact" when pasting a group invite link in the search field #4151
 - message input getting unexpectedly re-focused, and not re-focused after some actions if the draft text is not empty #4136
 - fix: exit search when clicking on profile when the selected profile is already the selected account #4166
+- "Encryption Info" dialog showing all info in one line #4162
 
 <a id="1_46_8"></a>
 
