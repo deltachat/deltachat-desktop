@@ -16,5 +16,5 @@ export default function useTranslationFunction() {
 }
 
 export function useTranslationWritingDirection() {
-  return useContext(I18nContext).writing_direction
+  return useContext(I18nContext).writingDirection
 }
