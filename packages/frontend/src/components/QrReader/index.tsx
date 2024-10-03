@@ -188,7 +188,9 @@ export default function QrReader({ onError, onScan }: Props) {
       if (!data) {
         throw new Error('no data in clipboard')
       }
-      onScan(data)
+      // trim whitespaces because user might copy them by accident when sending over other messengers
+      // see https://github.com/deltachat/deltachat-desktop/issues/4161#issuecomment-2390428338
+      onScan(data.trim())
     } catch (error) {
       userFeedback({
         type: 'error',
