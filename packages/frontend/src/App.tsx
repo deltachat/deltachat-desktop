@@ -90,7 +90,7 @@ function I18nContextWrapper({ children }: { children: React.ReactChild }) {
     <I18nContext.Provider
       value={{
         tx: window.static_translate,
-        writing_direction: window.localeData.dir,
+        writingDirection: window.localeData.dir,
       }}
     >
       <div dir={window.localeData.dir}>{children}</div>
