@@ -4,6 +4,7 @@ import { throttle } from '@deltachat-desktop/shared/util.js'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 import { getLogger } from '../../../../shared/logger'
 import { DialogContext } from '../../contexts/DialogContext'
+import { I18nContext } from '../../contexts/I18nContext'
 
 const log = getLogger('renderer/composer/ComposerMessageInput')
 
@@ -265,36 +266,44 @@ export default class ComposerMessageInput extends React.Component<
       return null
     }
     return (
-      <textarea
-        className='message-input-area'
-        id='composer-textarea'
-        ref={this.textareaRef}
-        rows={1}
-        // intent={this.state.error ? 'danger' : 'none'}
-        // large
-        value={this.state.text}
-        onKeyDown={this.onKeyDown}
-        onChange={this.onChange}
-        onPaste={this.props.onPaste}
-        placeholder={
-          this.props.isMessageEditingMode
-            ? window.static_translate('edit_message')
-            : window.static_translate('write_message_desktop')
-        }
-        aria-label={
-          (this.props.isMessageEditingMode
-            ? window.static_translate('edit_message')
-            : window.static_translate('write_message_desktop')) +
-          // Make it clear which chat we're in.
-          // TODO probably need a proper string, with interpolation.
-          ': ' +
-          this.props.chatName
-        }
-        disabled={this.state.loadingDraft}
-        dir='auto'
-        spellCheck={true}
-        aria-keyshortcuts='Control+M'
-      />
+      <I18nContext.Consumer>
+        {({ writing_direction }) => (
+          <textarea
+            className='message-input-area'
+            id='composer-textarea'
+            ref={this.textareaRef}
+            rows={1}
+            // intent={this.state.error ? 'danger' : 'none'}
+            // large
+            value={this.state.text}
+            onKeyDown={this.onKeyDown}
+            onChange={this.onChange}
+            onPaste={this.props.onPaste}
+            placeholder={
+              this.props.isMessageEditingMode
+                ? window.static_translate('edit_message')
+                : window.static_translate('write_message_desktop')
+            }
+            aria-label={
+              (this.props.isMessageEditingMode
+                ? window.static_translate('edit_message')
+                : window.static_translate('write_message_desktop')) +
+              // Make it clear which chat we're in.
+              // TODO probably need a proper string, with interpolation.
+              ': ' +
+              this.props.chatName
+            }
+            disabled={this.state.loadingDraft}
+            dir={
+              writing_direction === 'rtl'
+                ? 'rtl'
+                : 'auto' /* auto is based on content but defaults to ltr */
+            }
+            spellCheck={true}
+            aria-keyshortcuts='Control+M'
+          />
+        )}
+      </I18nContext.Consumer>
     )
   }
 }
