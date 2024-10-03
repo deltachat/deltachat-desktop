@@ -8,7 +8,7 @@ import {
   LocaleData,
   translate as getTranslateFunction,
 } from '../../shared/localize.js'
-import { refresh as refreshMenu } from './menu.js'
+import { languages, refresh as refreshMenu } from './menu.js'
 import { getLocaleDirectoryPath } from './getLocaleDirectory.js'
 
 const log = getLogger('load-translations')
@@ -41,7 +41,11 @@ export default function setLanguage(locale: string) {
   )
 }
 
-export function loadTranslations(locale: string) {
+export function loadTranslations(locale: string): LocaleData {
+  const metaData = languages.find(item => item.locale === locale)
+  if (!metaData) {
+    throw new Error('Language not found in language list')
+  }
   const messagesEnglish = getLocaleMessages(retrieveLocaleFile('en'))
 
   let messages
@@ -74,7 +78,7 @@ export function loadTranslations(locale: string) {
   }
 
   log.debug(messages['no_chat_selected_suggestion_desktop'])
-  return { messages, locale }
+  return { messages, locale, dir: metaData.dir }
 }
 
 function retrieveLocaleFile(locale: string) {
