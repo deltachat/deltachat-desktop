@@ -33,7 +33,7 @@
     margin-top: 1px;
 
     font-size: 9pt;
-    margin-left: 5px;
+    margin-inline-start: 5px;
     height: 20px;
     padding: 0 5pt;
     line-height: 20px;
@@ -46,8 +46,9 @@
     // the parent if the content is too long.
     width: 0;
     flex-grow: 1;
-
-    margin-left: 10px;
+    margin-inline-start: 10px;
+    // parent - 48px (for avatar) - 10px (our right padding)
+    max-width: calc(100% - 58px);
 
     display: flex;
     flex-direction: column;
@@ -87,7 +88,7 @@
 
       & > div > .timestamp {
         flex-shrink: 0;
-        margin-left: 6px;
+        margin-inline-start: 6px;
         font-size: 11px;
         line-height: 16px;
         letter-spacing: 0.3px;
@@ -138,8 +139,8 @@
         }
 
         & > .summary {
-          float: left;
-          margin-right: 2px;
+          float: inline-start;
+          margin-inline-end: 2px;
           &.draft {
             color: var(--draftTextColor);
           }
@@ -152,7 +153,7 @@
       border-radius: 2px;
       font-size: 11px;
       padding: 1px 4px;
-      margin-left: 2px;
+      margin-inline-start: 2px;
     }
   }
 
@@ -264,7 +265,7 @@
     @include mixins.color-svg('./images/pin.svg', var(--globalText));
     width: 16px;
     height: 16px;
-    margin-left: 6px;
+    margin-inline-start: 6px;
   }
 }
 

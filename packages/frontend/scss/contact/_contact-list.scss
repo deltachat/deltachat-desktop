@@ -3,6 +3,7 @@
 .contact-list-item {
   display: flex;
   --contact-padding-start: 20px;
+  padding-inline-start: 20px;
 
   &:hover {
     background-color: var(--contactListItemBgHover);
@@ -13,8 +14,8 @@
   }
 
   .chat-list & {
-    padding-left: 0px;
     --contact-padding-start: 0px;
+    padding-inline-start: 0px;
   }
 
   .contact-list-item-button {
@@ -37,7 +38,7 @@
 }
 
 .delta-checkbox {
-  margin-right: 10px;
+  margin-inline-end: 10px;
   input {
     -webkit-appearance: none;
     width: 20px;

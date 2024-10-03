@@ -20,7 +20,10 @@
 
     display: inline-block;
     // height: 54px;
-    margin-left: 10px;
+    margin-inline-start: 10px;
+    .chat-list & {
+      width: calc(100% - 37px);
+    }
     .display-name {
       font-weight: bold;
       margin-bottom: 0px;
