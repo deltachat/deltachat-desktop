@@ -38,7 +38,9 @@ import useChat from '../../hooks/chat/useChat'
 import useCreateChatByContactId from '../../hooks/chat/useCreateChatByContactId'
 import useDialog from '../../hooks/dialog/useDialog'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
-import useTranslationFunction, { useTranslationWritingDirection } from '../../hooks/useTranslationFunction'
+import useTranslationFunction, {
+  useTranslationWritingDirection,
+} from '../../hooks/useTranslationFunction'
 
 import type {
   ChatListItemData,
