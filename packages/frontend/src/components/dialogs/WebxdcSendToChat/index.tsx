@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import classNames from 'classnames'
@@ -40,7 +40,8 @@ export default function WebxdcSaveToChatDialog(props: Props) {
   const tx = useTranslationFunction()
   const accountId = selectedAccountId()
   const sendToChatAction = useSendToChatAction()
-  const { chatListIds, queryStr, setQueryStr } = useChatList(LIST_FLAGS)
+  const [queryStr, setQueryStr] = useState('')
+  const { chatListIds } = useChatList(LIST_FLAGS, queryStr)
   const { isChatLoaded, loadChats, chatCache } =
     useLogicVirtualChatList(chatListIds)
 
