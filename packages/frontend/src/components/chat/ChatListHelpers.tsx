@@ -54,19 +54,19 @@ export function useMessageResults(
 }
 
 export function useChatList(
-  _listFlags: number | null = null,
-  _queryStr?: string,
-  _queryContactId?: number
+  initialListFlags: number | null = null,
+  initialQueryStr?: string,
+  initialQueryContactId?: number
 ) {
   if (window.__selectedAccountId === undefined) {
     throw new Error('no context selected')
   }
   const accountId = window.__selectedAccountId
-  if (!_queryStr) _queryStr = ''
+  if (!initialQueryStr) initialQueryStr = ''
 
-  const [listFlags, setListFlags] = useState(_listFlags)
-  const [queryStr, setQueryStr] = useState<string | undefined>(_queryStr)
-  const [queryContactId, setQueryContactId] = useState(_queryContactId)
+  const [listFlags, setListFlags] = useState(initialListFlags)
+  const [queryStr, setQueryStr] = useState<string | undefined>(initialQueryStr)
+  const [queryContactId, setQueryContactId] = useState(initialQueryContactId)
   const [chatListEntries, setChatListEntries] = useState<number[]>([])
 
   const debouncedGetChatListEntries = useMemo(
