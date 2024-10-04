@@ -624,7 +624,10 @@ function useLogicChatPart(
   queryStr: string | undefined,
   showArchivedChats: boolean
 ) {
-  const { chatListIds, setQueryStr, setListFlags } = useChatList()
+  const defaultListFlags = 0
+
+  const { chatListIds, setQueryStr, setListFlags } =
+    useChatList(defaultListFlags)
   const { isChatLoaded, loadChats, chatCache } =
     useLogicVirtualChatList(chatListIds)
 
@@ -637,7 +640,7 @@ function useLogicChatPart(
     () =>
       showArchivedChats && queryStr?.length === 0
         ? setListFlags(C.DC_GCL_ARCHIVED_ONLY)
-        : setListFlags(0),
+        : setListFlags(defaultListFlags),
     [showArchivedChats, queryStr, setListFlags]
   )
 
