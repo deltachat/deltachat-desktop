@@ -182,12 +182,12 @@ export const PseudoListItemAddContactOrGroupFromInviteLink = ({
       id='newcontactorgroupfrominvitelink'
       cutoff='+'
       text={
+        parsedQr?.kind === 'askVerifyGroup' ? parsedQr.grpname : contactName
+      }
+      subText={
         parsedQr?.kind === 'askVerifyGroup'
           ? tx('menu_new_group')
           : tx('menu_new_contact')
-      }
-      subText={
-        parsedQr?.kind === 'askVerifyGroup' ? parsedQr.grpname : contactName
       }
       onClick={() => processQr(accountId, inviteLinkTrimmed)}
     />
