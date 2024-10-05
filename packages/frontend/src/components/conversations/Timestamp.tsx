@@ -77,6 +77,7 @@ const UpdatingTimestamp = (props: TimestampProps) => {
   )
 
   useEffect(() => {
+    // TODO so, do we run `recalculateRelativeTime` twice even if props don't change?
     //register in global updater
     const key = `${timestamp}|${deduplicationCounter++}`
     updateRefs[key] = recalculateRelativeTime

@@ -38,6 +38,7 @@ import { VisualVCardComponent } from '../message/VCard'
 import { KeybindAction } from '../../keybindings'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
 import { CloseButton } from '../Dialog'
+import { useHasChanged2 } from '../../hooks/useHasChanged'
 
 const log = getLogger('renderer/composer')
 

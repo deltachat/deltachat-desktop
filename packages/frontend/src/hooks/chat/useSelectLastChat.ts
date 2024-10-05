@@ -33,6 +33,7 @@ export default function useSelectLastChat(accountId?: number) {
     }
   }, [accountId, selectChat, smallScreenMode])
 
+  // TODO here.
   useEffect(() => {
     if (
       hasAccountIdChanged ||

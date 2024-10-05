@@ -677,6 +677,7 @@ export const MessageListInner = React.memo(
 
       onScroll(...args)
     }
+    // TODO here?
     const hasChatChanged = useHasChanged(chat)
     const [switchedChatAt, setSwitchedChatAt] = useState(0)
     useEffect(() => {

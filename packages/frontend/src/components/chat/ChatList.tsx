@@ -44,6 +44,7 @@ import type {
   MessageChatListItemData,
 } from './ChatListItemRow'
 import { isInviteLink } from '../../../../shared/util'
+import { useHasChanged2 } from '../../hooks/useHasChanged'
 
 const enum LoadStatus {
   FETCHING = 1,
@@ -629,17 +630,21 @@ function useLogicChatPart(
     useLogicVirtualChatList(chatListIds)
 
   // effects
-  useEffect(() => {
+  const queryStrHasChanged = useHasChanged2(queryStr)
+  // TODO why don't we just call this unconditionally?????
+  // `Object.is()` will take care of infinite loops.
+  if (queryStrHasChanged) {
     setQueryStr(queryStr)
-  }, [queryStr, setQueryStr])
+  }
 
-  useEffect(
-    () =>
-      showArchivedChats && queryStr?.length === 0
-        ? setListFlags(C.DC_GCL_ARCHIVED_ONLY)
-        : setListFlags(0),
-    [showArchivedChats, queryStr, setListFlags]
-  )
+  const showArchivedChatsHasChanged = useHasChanged2(showArchivedChats)
+  // TODO why don't we just call this unconditionally?????
+  // `Object.is()` will take care of infinite loops.
+  if (showArchivedChatsHasChanged && queryStrHasChanged) {
+    showArchivedChats && queryStr?.length === 0
+      ? setListFlags(C.DC_GCL_ARCHIVED_ONLY)
+      : setListFlags(0)
+  }
 
   return { chatListIds, isChatLoaded, loadChats, chatCache }
 }
