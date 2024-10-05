@@ -41,8 +41,12 @@ export default function Reactions(props: Props) {
               })}
               key={emoji}
             >
-              {emoji}
-              {count > 1 && <span className={styles.emojiCount}>{count}</span>}
+              <span>
+                {emoji}
+                {count > 1 && (
+                  <span className={styles.emojiCount}>{count}</span>
+                )}
+              </span>
             </span>
           )
         })}
