@@ -88,6 +88,10 @@ also has a setup guide for many Linux platforms.
 
 #### Arch Linux <a id="arch-linux"></a>
 
+Run `pacman -S deltachat-desktop` to install Delta Chat Desktop on Arch Linux.
+
+Alternatively, build `deltachat-desktop-git` package from Arch User Repository.
+
 > **WARNING: Currently the AUR package compiles from latest master. This can be more recent as the latest release, introduce new features but also new bugs.**
 
 If you have a AUR helper like yay or paru installed, you can install it by running `yay -S deltachat-desktop-git` and following the instruction in your terminal.
