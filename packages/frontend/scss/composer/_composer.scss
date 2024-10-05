@@ -24,7 +24,8 @@
     & > .attachment-quote-section {
       display: flex;
       padding: 9px;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid
+        color-mix(in srgb, var(--messageQuotedText) 15%, transparent);
 
       .quote {
         // this is just overwrites for the quote styles defined in _message.scss
