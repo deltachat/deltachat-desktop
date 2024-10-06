@@ -195,6 +195,8 @@ Possible options for `pnpm pack:generate_config`:
 
 #### 2. Run electron-builder
 
+> note: on Windows you need to enable Developer Mode in System settings > For developers before packing
+
 If you haven't done so run `pnpm build` now.
 
 Then you need to run `pnpm pack:patch-node-modules` to patch `node_modules`. (**DON'T forget this step!**)
