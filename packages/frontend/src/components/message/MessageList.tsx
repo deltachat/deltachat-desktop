@@ -337,15 +337,21 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
 
       if (scrollTo.highlight === true) {
         // Trigger highlight animation
-        const parentElement = domElement.parentElement
-        if (parentElement !== null) {
+
+        // As was menitioned above, `domElement` could either be an
+        // element inside of `<li>`, or the `<li>` itself.
+        // The `<li>` is what implements the animation, so let's ensure that
+        // we add the class to the `<li>` element.
+        const highlightableElement =
+          domElement.tagName === 'LI' ? domElement : domElement.parentElement
+        if (highlightableElement !== null) {
           setTimeout(() => {
             // Retrigger animation
-            parentElement.classList.add('highlight')
-            parentElement.style.animation = 'none'
-            parentElement.offsetHeight
+            highlightableElement.classList.add('highlight')
+            highlightableElement.style.animation = 'none'
+            highlightableElement.offsetHeight
             //@ts-ignore
-            parentElement.style.animation = null
+            highlightableElement.style.animation = null
           }, 0)
         }
       }
