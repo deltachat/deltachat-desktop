@@ -572,10 +572,37 @@ class MessageListStore extends Store<MessageListState> {
 
           if (messagesAlreadyLoaded) {
             newMessageCache = this.state.messageCache
-            oldestFetchedMessageListItemIndex =
-              this.state.oldestFetchedMessageListItemIndex
-            newestFetchedMessageListItemIndex =
-              this.state.newestFetchedMessageListItemIndex
+
+            // Why do we need `Math.min` / `Math.max` here, instead of simply
+            // keeping `this.state.oldestFetchedMessageListItemIndex`
+            // and `this.state.newestFetchedMessageListItemIndex` as they are?
+            // Because some other code might update the state in such a way
+            // that `messageCache` and these
+            // `(oldest|newest)FetchedMessageListItemIndex` are out of sync:
+            // `messageCache` actually has a message, but
+            // these integers say that the message is not yet fetched.
+            // Namely, this can happen inside of `messageChanged` when
+            // it gets invoked for a not yet fetched message, and it gets
+            // added `messageCache` instead of getting updated.
+            // This, in turn, can happen when you send a message.
+            //
+            // The result would be that we'd fail to jump to message inside of
+            // `MessageList.tsx`, because the message wouldn't be rendered,
+            // because we only render messages that are between
+            // `oldestFetchedMessageListItemIndex` and
+            // `newestFetchedMessageListItemIndex` (see `activeView`).
+            //
+            // TODO it would be ideal to get ensure that we don't corrupt
+            // the state in the first place, but let's make
+            // this workaround for now.
+            oldestFetchedMessageListItemIndex = Math.min(
+              this.state.oldestFetchedMessageListItemIndex,
+              oldestFetchedMessageListItemIndex
+            )
+            newestFetchedMessageListItemIndex = Math.max(
+              this.state.newestFetchedMessageListItemIndex,
+              newestFetchedMessageListItemIndex
+            )
           } else {
             newMessageCache =
               (await loadMessages(
