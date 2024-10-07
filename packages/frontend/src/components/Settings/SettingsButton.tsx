@@ -17,6 +17,7 @@ export default function SettingsButton({
 }: Props) {
   return (
     <button
+      tabIndex={0}
       className={classNames(styles.settingsButton, {
         [styles.highlight]: highlight,
       })}

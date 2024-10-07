@@ -22,6 +22,7 @@ export default function SettingsSwitch({
 }: Props) {
   return (
     <label
+      tabIndex={0}
       className={classNames(styles.settingsSwitch, {
         [styles.disabled]: disabled,
       })}
