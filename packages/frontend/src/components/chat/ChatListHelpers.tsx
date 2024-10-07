@@ -1,6 +1,9 @@
 import { useState, useEffect, useMemo } from 'react'
-import { getLogger } from '../../../../shared/logger'
 import { debounce } from 'debounce'
+
+import { asyncThrottle } from '@deltachat-desktop/shared/async-throttle'
+
+import { getLogger } from '../../../../shared/logger'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 
@@ -179,9 +182,9 @@ function useChatListNoDebounce(
   const [chatListEntries, setChatListEntries] = useState<number[]>([])
 
   // Though perhaps a throttle would be more appropriate.
-  const debouncedFetchChatlist = useMemo(
+  const throttledFetchChatlist = useMemo(
     () =>
-      debounce(
+      asyncThrottle(
         (
           listFlags: number | null,
           queryStr: string,
@@ -204,14 +207,14 @@ function useChatListNoDebounce(
   )
 
   useEffect(() => {
-    debouncedFetchChatlist(listFlags, queryStr, queryContactId)
-    debouncedFetchChatlist.flush()
+    throttledFetchChatlist(listFlags, queryStr, queryContactId)
+    throttledFetchChatlist.flush()
 
-    const debouncedFetchChatlist2 = () => {
-      debouncedFetchChatlist(listFlags, queryStr, queryContactId)
+    const throttledFetchChatlist2 = () => {
+      throttledFetchChatlist(listFlags, queryStr, queryContactId)
     }
-    return onDCEvent(accountId, 'ChatlistChanged', debouncedFetchChatlist2)
-  }, [accountId, listFlags, queryStr, queryContactId, debouncedFetchChatlist])
+    return onDCEvent(accountId, 'ChatlistChanged', throttledFetchChatlist2)
+  }, [accountId, listFlags, queryStr, queryContactId, throttledFetchChatlist])
 
   return chatListEntries
 }
