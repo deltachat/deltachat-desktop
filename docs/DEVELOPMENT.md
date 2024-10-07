@@ -195,7 +195,12 @@ Possible options for `pnpm pack:generate_config`:
 
 #### 2. Run electron-builder
 
+> note: on Windows you need to enable Developer Mode in System settings > For developers before packing
+
 If you haven't done so run `pnpm build` now.
+
+Then you need to run `pnpm pack:patch-node-modules` to patch `node_modules`. (**DON'T forget this step!**)
+So that the `electron-builder` `afterPackHook` is able to find the rpc binaries.
 
 Start electron-builder:
 
@@ -212,6 +217,9 @@ The commands for windows10 appx and the App Store package for mac are currently 
 
 - `mas` - mac appstore build
 - `appx` - windows appstore build, you can find info on how to build a self-signed appx in [`APPX_TESTING.md`](./APPX_TESTING.md).
+
+> If you are building window on windows you might run into the file path limit of 260 characters.
+> To avoid that, make a folder with a short name directly on your drive (like c.tmp).
 
 ### Release Workflow <a id="release"></a>
 
