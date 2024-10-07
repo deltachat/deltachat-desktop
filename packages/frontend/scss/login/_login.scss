@@ -147,7 +147,6 @@ div.delta-form-group {
   &.delta-input {
     input {
       appearance: none;
-      background: #fff;
       border: none;
       border-radius: 2px;
       box-shadow:
@@ -155,7 +154,7 @@ div.delta-form-group {
         0 0 0 0 rgba(45, 114, 210, 0),
         inset 0 0 0 1px rgba(17, 20, 24, 0.2),
         inset 0 1px 1px rgba(17, 20, 24, 0.5);
-      color: #1c2127;
+      color: var(--bp4InputText);
       font-size: 14px;
       font-weight: 400;
       height: 30px;
