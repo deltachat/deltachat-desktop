@@ -228,15 +228,21 @@ export default function FullscreenMedia(props: Props & DialogProps) {
     // this will need adjustment to the keybindings manager once we have proper screen management
     // where we can know exactly which screen / menu / dialog is focused
     // and only send the context dependend keys to there
+    // for now limit only to left/right arrow to not mess up Escape-handling for dialog
     const listener = (ev: KeyboardEvent) => {
       if (ev.repeat) {
         return
       }
+      const left = ev.code === 'ArrowLeft'
+      const right = ev.code === 'ArrowRight'
+      if (!left && !right) {
+        return
+      }
       ev.preventDefault()
       ev.stopPropagation()
-      if (ev.code == 'ArrowLeft') {
+      if (left) {
         previousImage()
-      } else if (ev.code == 'ArrowRight') {
+      } else if (right) {
         nextImage()
       }
     }
