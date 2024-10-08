@@ -21,6 +21,7 @@
 - Update local help (2024-10-02) #4165
 - trim whitepaces when reading from clipboard in qr code reader #4169
 - load chat lists faster (the chat list on the main screen, "Forward to..." dialog, etc)
+- fix blocked status of a contact in context menu for ChatListItem #4046
 
 ### Fixed
 - fix that you can not click header button in dialog when they are on top of the navbar #4093
