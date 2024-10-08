@@ -1,17 +1,44 @@
+$reaction-font-size: 16px;
+$reaction-row-height: 25px;
 .reactions {
   cursor: pointer;
   margin-right: 10px;
   position: relative;
-  line-height: 1; // So that it doesn't change the message height.
   top: 16px;
+  // In case the parent element is vertically taller than this element.
+  align-self: flex-end;
+  // Ensure that the reactions element doesn't change the height of a message,
+  // so that the message list doesn't get "scrolled up".
+  // See https://github.com/deltachat/deltachat-desktop/issues/3753
+  //
+  // The actual value of `margin-top` doesn't matter, it could be
+  // -9999px as well.
+  margin-top: -16px;
+  // Make space for the "sent at" element - don't make it wrap.
+  flex-shrink: 999999999999999;
+  // In case the parent is vertically taller than this element.
+  align-self: flex-end;
+
+  display: flex;
+  // In case the screen in so narrow that we can't even show
+  // 5 emojis (SHOW_MAX_DIFFERENT_EMOJIS).
+  // Let's wrap and hide them.
+  // See https://stackoverflow.com/questions/43547430/how-can-i-completely-hide-elements-that-overflow-their-container-vertically
+  flex-wrap: wrap;
+  overflow: hidden;
+  height: $reaction-row-height;
 }
 
 .emoji {
   background-color: var(--messageIncomingBg);
   border-radius: 24px;
   border: solid 1px rgba(100, 100, 100, 0.3);
-  font-size: 16px;
+  font-size: $reaction-font-size;
+  line-height: 1;
   padding: 2px 6px;
+  display: flex;
+  align-items: center;
+  height: $reaction-row-height;
 
   & ~ & {
     margin-left: 2px;
