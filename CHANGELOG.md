@@ -44,6 +44,8 @@
 - fix: exit search when clicking on profile when the selected profile is already the selected account #4166
 - "Encryption Info" dialog showing all info in one line #4162
 - losing scrolling "momentum" while scrolling the messages list fast #4122
+- fix crash when you chose Settings from a context menu on account you haven't selected #4190
+- fix All Media not opening from a context menu on account you haven't selected #4191
 
 <a id="1_46_8"></a>
 
