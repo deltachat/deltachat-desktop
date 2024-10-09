@@ -58,7 +58,9 @@ DELTA_CHAT_RPC_SERVER=$(which deltachat-rpc-server) pnpm -w dev:electron -- --al
 
 ## Use a local core git checkout
 
-very useful for development.
+very useful for development. 
+
+But be aware: there might be **migrations** that are applied to your accounts databases and there is no way back, unless you have a **backup**!
 
 If you already have a core git checkout, you can skip the first step.
 
