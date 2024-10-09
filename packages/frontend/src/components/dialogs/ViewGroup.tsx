@@ -336,6 +336,7 @@ export function EditGroupNameDialog({
 
   const onClickOk = () => {
     onClose()
+
     onOk(groupName, groupImage)
   }
 
