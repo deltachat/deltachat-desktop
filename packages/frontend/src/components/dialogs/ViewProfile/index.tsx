@@ -8,17 +8,12 @@ import { useChatList } from '../../chat/ChatListHelpers'
 import { useLogicVirtualChatList, ChatListPart } from '../../chat/ChatList'
 import MessageBody from '../../message/MessageBody'
 import { useThemeCssVar } from '../../../ThemeManager'
-import { DeltaInput } from '../../Login-Styles'
 import { BackendRemote, onDCEvent } from '../../../backend-com'
 import { selectedAccountId } from '../../../ScreenController'
 import { InlineVerifiedIcon } from '../../VerifiedIcon'
 import { getLogger } from '../../../../../shared/logger'
-import Dialog, {
-  DialogBody,
-  DialogContent,
-  DialogHeader,
-  OkCancelFooterAction,
-} from '../../Dialog'
+import Dialog, { DialogBody, DialogContent, DialogHeader } from '../../Dialog'
+import HeaderButton from '../../Dialog/HeaderButton'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import useDialog from '../../../hooks/dialog/useDialog'
 import useChat from '../../../hooks/chat/useChat'
@@ -27,10 +22,12 @@ import { MessagesDisplayContext } from '../../../contexts/MessagesDisplayContext
 import ProfileInfoHeader from '../../ProfileInfoHeader'
 import Button from '../../Button'
 
+import useViewProfileMenu from './menu'
+
 import styles from './styles.module.scss'
 
-import type { T } from '@deltachat/jsonrpc-client'
 import type { DialogProps } from '../../../contexts/DialogContext'
+import type { T } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/dialogs/ViewProfile')
 
@@ -69,25 +66,7 @@ export default function ViewProfile(
 
   const accountId = selectedAccountId()
   const tx = useTranslationFunction()
-  const { openDialog } = useDialog()
   const [contact, setContact] = useState<T.Contact>(props.contact)
-  const isDeviceChat = contact.id === C.DC_CONTACT_ID_DEVICE
-  const isSelfChat = contact.id === C.DC_CONTACT_ID_SELF
-
-  const onClickEdit = () => {
-    openDialog(EditContactNameDialog, {
-      contactName: contact.name,
-      originalName:
-        contact.authName !== '' ? contact.authName : contact.address,
-      onOk: async (contactName: string) => {
-        await BackendRemote.rpc.changeContactName(
-          accountId,
-          contact.id,
-          contactName
-        )
-      },
-    })
-  }
 
   useEffect(() => {
     return onDCEvent(accountId, 'ContactsChanged', () => {
@@ -95,7 +74,12 @@ export default function ViewProfile(
     })
   }, [accountId, contact.id])
 
-  const showEditButton = !(isDeviceChat || isSelfChat)
+  const isDeviceChat = contact.id === C.DC_CONTACT_ID_DEVICE
+  const isSelfChat = contact.id === C.DC_CONTACT_ID_SELF
+
+  const showMenu = !(isDeviceChat || isSelfChat)
+
+  const onClickViewProfileMenu = useViewProfileMenu(contact)
 
   return (
     <Dialog
@@ -106,10 +90,20 @@ export default function ViewProfile(
     >
       <DialogHeader
         title={tx('contact')}
-        onClickEdit={showEditButton ? onClickEdit : undefined}
         onClose={onClose}
         onClickBack={onBack}
-      />
+      >
+        {showMenu && (
+          <HeaderButton
+            id='view-profile-menu'
+            onClick={onClickViewProfileMenu}
+            icon='more'
+            iconSize={24}
+            rotation={90}
+            aria-label='Profile Menu'
+          ></HeaderButton>
+        )}
+      </DialogHeader>
       <DialogBody className={styles.viewProfileDialogBody}>
         <ViewProfileInner
           contact={contact}
@@ -338,52 +332,5 @@ export function ViewProfileInner({
         </>
       )}
     </>
-  )
-}
-
-export function EditContactNameDialog({
-  onClose,
-  onOk,
-  contactName: initialGroupName,
-  originalName,
-}: {
-  onOk: (contactName: string) => void
-  contactName: string
-  originalName: string
-} & DialogProps) {
-  const [contactName, setContactName] = useState(initialGroupName)
-  const tx = useTranslationFunction()
-
-  const onClickCancel = () => {
-    onClose()
-  }
-
-  const onClickOk = () => {
-    onClose()
-    onOk(contactName)
-  }
-
-  return (
-    <Dialog canOutsideClickClose={false} fixed onClose={onClose}>
-      <DialogHeader title={tx('menu_edit_name')} />
-      <DialogBody>
-        <DialogContent>
-          <p>{tx('edit_name_explain', originalName)}</p>
-          <DeltaInput
-            key='contactname'
-            id='contactname'
-            placeholder={tx('edit_name_placeholder', originalName)}
-            value={contactName}
-            onChange={(
-              event: React.FormEvent<HTMLElement> &
-                React.ChangeEvent<HTMLInputElement>
-            ) => {
-              setContactName(event.target.value)
-            }}
-          />
-        </DialogContent>
-      </DialogBody>
-      <OkCancelFooterAction onCancel={onClickCancel} onOk={onClickOk} />
-    </Dialog>
   )
 }
