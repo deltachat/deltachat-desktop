@@ -11,8 +11,6 @@ type Props = PropsWithChildren<{
 
 export default function DialogBody({ children, className }: Props) {
   return (
-    <main autoFocus className={classNames(styles.dialogBody, className)}>
-      {children}
-    </main>
+    <main className={classNames(styles.dialogBody, className)}>{children}</main>
   )
 }
