@@ -49,7 +49,6 @@ export default function SmallSelectDialog({
     onClose()
   }
 
-  // FIXME(maxph): get a name for RadioGroup
   return (
     <Dialog onClose={onClose}>
       <DialogHeader title={title} />
