@@ -113,8 +113,14 @@ jobs:
        PR_ID: ${{ steps.prepare.outputs.prid }}
        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Upload result to artifacts
+      id: upload_github
       if: steps.upload.outcome == 'failure'
       uses: actions/upload-artifact@master
       with:
         name: ${{ matrix.os }} output
         path: packages/target-electron/dist/preview/
+    - name: "Post links to GitHub artifact to details"
+      needs: upload_github
+      run: node ./bin/github-actions/postLinksToDetails.js
+      env:
+        FULL_URL: ${{ steps.upload_github.artifact-url }}

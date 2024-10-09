@@ -12,18 +12,21 @@ const GITHUB_API_URL =
 const prId = process.env['PR_ID']
 const GITHUB_TOKEN = process.env['GITHUB_TOKEN']
 
+/** May be absent */
+const FULL_URL = process.env['FULL_URL']
+
 let platform_status = {}
 
 if (process.platform === 'darwin') {
   platform_status['context'] = '⭐ MacOS Preview Build'
   // platform_status['target_url'] = base_url + prId + '.dmg'
-  platform_status['target_url'] = base_url + 'mas-' + prId + '.zip'
+  platform_status['target_url'] = FULL_URL || base_url + 'mas-' + prId + '.zip'
 } else if (process.platform === 'win32') {
   platform_status['context'] = '⭐ Windows Preview Build (portable)'
-  platform_status['target_url'] = base_url + prId + '.portable.exe'
+  platform_status['target_url'] = FULL_URL || base_url + prId + '.portable.exe'
 } else if (process.platform === 'linux') {
   platform_status['context'] = '⭐ Linux Preview Build'
-  platform_status['target_url'] = base_url + prId + '.AppImage'
+  platform_status['target_url'] = FULL_URL || base_url + prId + '.AppImage'
 } else {
   throw new Error('Unsuported platform: ' + process.platform)
 }
