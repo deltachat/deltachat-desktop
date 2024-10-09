@@ -504,7 +504,7 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
         // all the way to the bottom and then resize the window.
         // We'd expect this to be 0 in that case, but as long as
         // it works it's fine I guess.
-        console.debug(
+        log.debug(
           `Message list resized, and distance to bottom was` +
             ` ${scrollDistanceToBottomBeforeResize} before the resize.` +
             ` Scrolling to bottom.`
