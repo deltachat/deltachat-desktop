@@ -104,7 +104,7 @@ export function ClickForFullscreenAvatarWrapper(
   const { openDialog } = useDialog()
 
   return (
-    <div
+    <button
       onClick={() => {
         if (!props.filename) {
           return
@@ -113,11 +113,8 @@ export function ClickForFullscreenAvatarWrapper(
           imagePath: props.filename,
         })
       }}
-      style={{
-        cursor: props.filename ? 'pointer' : 'default',
-      }}
     >
       {props.children}
-    </div>
+    </button>
   )
 }

@@ -128,7 +128,7 @@ export default function SyncAllAccountsSwitch() {
       label={tx('pref_background_sync_disabled')}
       description={tx('explain_background_sync_disabled')}
       value={settingsStore.desktopSettings.syncAllAccounts !== true}
-      onClick={() => {
+      onChange={() => {
         SettingsStoreInstance.effect.setDesktopSetting(
           'syncAllAccounts',
           !settingsStore.desktopSettings.syncAllAccounts

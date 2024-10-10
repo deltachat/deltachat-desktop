@@ -1,5 +1,5 @@
 import React from 'react'
-import { Icon, InputGroup } from '@blueprintjs/core'
+import Icon from './Icon'
 
 export default function InputTransferKey(
   props:
@@ -21,7 +21,7 @@ export default function InputTransferKey(
   for (let i = 0; i < 9; i++) {
     inputs.push(
       <div className='row' key={i}>
-        <InputGroup
+        <input
           key={i}
           data-index={i}
           id={'autocrypt-input-' + i}
@@ -31,7 +31,7 @@ export default function InputTransferKey(
         />
         {i !== 8 && i !== 2 && i !== 5 && (
           <div className='separator'>
-            <Icon icon='small-minus' />
+            <Icon icon='minus' size={12} />
           </div>
         )}
       </div>

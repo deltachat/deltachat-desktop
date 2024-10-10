@@ -3,7 +3,7 @@ cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )/.."
 
 echo "Top-Evil TypeScript"
 
-res=$( grep -r "^import.*blueprint" packages/frontend/src --color=always )
+res=$( grep -r "} from '@blueprint" src --color=always )
 echo "🤔 Using Blueprint code: $( echo "$res" | wc -l )"
 code=$( echo "$res" | wc -l )
 echo "-----------------------------------------------------"
@@ -30,3 +30,4 @@ echo "CODE: $code | CLASSES: $classes | SCSS: $scss"
 # echo "🤔 Using Electron inside of the deltachat controller: $( echo "$res" | wc -l )"
 # echo "-----------------------------------------------------"
 # echo "$res"
+

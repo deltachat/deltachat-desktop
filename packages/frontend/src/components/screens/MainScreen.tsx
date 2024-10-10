@@ -6,17 +6,12 @@ import React, {
   useContext,
 } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
-import {
-  Alignment,
-  Navbar,
-  NavbarGroup,
-  NavbarHeading,
-} from '@blueprintjs/core'
 
 import Gallery from '../Gallery'
 import { useThreeDotMenu } from '../ThreeDotMenu'
 import ChatList from '../chat/ChatList'
 import { Avatar } from '../Avatar'
+import { Navbar, NavbarGroupLeft, NavbarGroupRight } from '../Navbar'
 import ConnectivityToast from '../ConnectivityToast'
 import MailingListProfile from '../dialogs/MessageListProfile'
 import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
@@ -175,7 +170,7 @@ export default function MainScreen({ accountId }: Props) {
       <div className='navbar-wrapper'>
         <Navbar>
           {!chatListShouldBeHidden && (
-            <NavbarGroup align={Alignment.LEFT}>
+            <NavbarGroupLeft>
               {showArchivedChats && (
                 <>
                   <div className='archived-chats-title no-drag'>
@@ -199,10 +194,10 @@ export default function MainScreen({ accountId }: Props) {
                   value={queryStr}
                 />
               )}
-            </NavbarGroup>
+            </NavbarGroupLeft>
           )}
           {!messageSectionShouldBeHidden && (
-            <NavbarGroup align={Alignment.RIGHT}>
+            <NavbarGroupRight>
               {smallScreenMode && (
                 <span className='no-drag'>
                   <Button
@@ -214,7 +209,12 @@ export default function MainScreen({ accountId }: Props) {
                   </Button>
                 </span>
               )}
-              {alternativeView === 'global-gallery' && <GlobalGalleryHeading />}
+              {alternativeView === 'global-gallery' && (
+                <>
+                  <div className='navbar-heading'>{tx('menu_all_media')}</div>
+                  <span className='views' />
+                </>
+              )}
               {chat && <ChatHeading chat={chat} />}
               {chat && <ChatNavButtons />}
               {(chat || alternativeView === 'global-gallery') && (
@@ -244,7 +244,7 @@ export default function MainScreen({ accountId }: Props) {
                   </Button>
                 </span>
               )}
-            </NavbarGroup>
+            </NavbarGroupRight>
           )}
         </Navbar>
       </div>
@@ -305,25 +305,6 @@ function chatSubtitle(chat: Type.FullChat) {
   return 'ErrTitle'
 }
 
-function GlobalGalleryHeading() {
-  const tx = useTranslationFunction()
-
-  return (
-    <>
-      <NavbarHeading
-        style={{
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
-        {tx('menu_all_media')}
-      </NavbarHeading>
-      <span className='views' />
-    </>
-  )
-}
-
 function ChatHeading({ chat }: { chat: T.FullChat }) {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
@@ -350,16 +331,10 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
     }
   }
 
+  const subtitle = chatSubtitle(chat)
+
   return (
-    <NavbarHeading
-      style={{
-        cursor: 'pointer',
-        display: 'flex',
-        alignItems: 'center',
-      }}
-      className='no-drag'
-      onClick={onTitleClick}
-    >
+    <div className='navbar-heading no-drag' onClick={onTitleClick}>
       <Avatar
         displayName={chat.name}
         color={chat.color}
@@ -380,9 +355,11 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
             )}
           </div>
         </div>
-        <div className='navbar-chat-subtile'>{chatSubtitle(chat)}</div>
+        {subtitle && subtitle.length && (
+          <div className='navbar-chat-subtitle'>{chatSubtitle(chat)}</div>
+        )}
       </div>
-    </NavbarHeading>
+    </div>
   )
 }
 

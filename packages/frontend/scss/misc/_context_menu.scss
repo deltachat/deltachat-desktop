@@ -1,17 +1,29 @@
 .dc-context-menu-layer {
   width: 100vw;
   height: 100vh;
-  position: absolute;
-  z-index: map-get($z-index, context-menu-layer);
+  // Built-in Chromium styles set `max-height` and `max-width`
+  // on `dialog:-internal-dialog-in-top-layer` to `calc(100% - 2em - 6px)`.
+  // Let's override that, otherwise the "backdrop" area doesn't
+  // fully cover the screen.
+  max-height: unset;
+  max-width: unset;
+  // position: absolute;
+  // z-index: map-get($z-index, context-menu-layer);
   background-color: transparent;
-  pointer-events: none;
+  padding: 0;
+  margin: 0;
+  border: none;
+  outline: none;
 
   // prevent double context menu on macOS
   // (when using touchpad it sometimes selects the text in the context menu, and then show a native context menu on top)
   user-select: none;
 
-  &.active {
-    pointer-events: all;
+  pointer-events: all;
+
+  // default backdrop has almost transparent black background
+  &::backdrop {
+    display: none;
   }
 }
 
