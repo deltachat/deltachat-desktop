@@ -47,6 +47,7 @@
 - losing scrolling "momentum" while scrolling the messages list fast #4122
 - fix crash when you chose Settings from a context menu on account you haven't selected #4190
 - fix All Media not opening from a context menu on account you haven't selected #4191
+- cancel old message highlight animations when a new message is highlighted #4203
 
 <a id="1_46_8"></a>
 
