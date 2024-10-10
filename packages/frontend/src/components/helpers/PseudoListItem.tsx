@@ -12,6 +12,7 @@ import { useSettingsStore } from '../../stores/settings'
 import useProcessQR from '../../hooks/useProcessQr'
 import { BackendRemote } from '../../backend-com'
 import { T } from '@deltachat/jsonrpc-client'
+import { ContactListItem } from '../contact/ContactListItem'
 
 export function PseudoListItem(
   props: PropsWithChildren<{
@@ -152,11 +153,9 @@ export const PseudoListItemAddContactOrGroupFromInviteLink = ({
     }
   }, [accountId, inviteLinkTrimmed])
 
-  const [contactName, setContactName] = useState<'' | T.Contact['displayName']>(
-    ''
-  )
+  const [contact, setContact] = useState<null | T.Contact>(null)
   useEffect(() => {
-    setContactName('')
+    setContact(null)
 
     if (parsedQr?.kind !== 'askVerifyContact') {
       return
@@ -168,7 +167,7 @@ export const PseudoListItemAddContactOrGroupFromInviteLink = ({
       .getContact(accountId, parsedQr.contact_id)
       .then(contact => {
         if (!outdated) {
-          setContactName(contact.displayName)
+          setContact(contact)
         }
       })
 
@@ -177,19 +176,35 @@ export const PseudoListItemAddContactOrGroupFromInviteLink = ({
     }
   }, [accountId, parsedQr])
 
-  return (
+  const onClick = () => processQr(accountId, inviteLinkTrimmed)
+
+  return contact ? (
+    <ContactListItem
+      showCheckbox={false}
+      checked={false}
+      showRemove={false}
+      contact={contact}
+      onClick={onClick}
+    />
+  ) : parsedQr?.kind === 'askVerifyGroup' ? (
     <PseudoListItem
-      id='newcontactorgroupfrominvitelink'
+      id='newgroupfrominvitelink'
       cutoff='+'
-      text={
-        parsedQr?.kind === 'askVerifyGroup' ? parsedQr.grpname : contactName
-      }
-      subText={
-        parsedQr?.kind === 'askVerifyGroup'
-          ? tx('menu_new_group')
-          : tx('menu_new_contact')
-      }
-      onClick={() => processQr(accountId, inviteLinkTrimmed)}
+      text={parsedQr.grpname}
+      subText={tx('join_group')}
+      onClick={onClick}
+    />
+  ) : (
+    // There are many kinds of QRs. For example, if you paste an invite link
+    // of a group that you created yourself, you'll get
+    // `parsedQr.kind === "withdrawVerifyGroup"`.
+    // TODO we probably want to better handle such cases.
+    <PseudoListItem
+      id='otherinvitelinkaction'
+      cutoff='+'
+      text={tx('menu_new_contact')}
+      subText={undefined}
+      onClick={onClick}
     />
   )
 }
