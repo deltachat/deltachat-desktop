@@ -17,7 +17,7 @@
 - scroll the selected account into view in the accounts sidebar #4137
 - dev: clarify scrolling-related code #4121
 - improved performance a bit #4145, #4188
-- show contact / group name when pasting invite link in the search field #4151
+- show contact / group name & avatar when pasting invite link in the search field #4151, #4178
 - Update local help (2024-10-02) #4165
 - trim whitepaces when reading from clipboard in qr code reader #4169
 - load chat lists faster (the chat list on the main screen, "Forward to..." dialog, etc)
