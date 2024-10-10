@@ -20,20 +20,28 @@ import { getLocaleDirectoryPath } from './getLocaleDirectory.js'
 
 const log = getLogger('main/menu')
 
-const languages: {
+export const languages: {
   locale: string
   name: string
+  dir: 'ltr' | 'rtl'
 }[] = (() => {
   const languagesFile = join(getLocaleDirectoryPath(), '_languages.json')
-  const rawLanguageList: { [locale: string]: string } = JSON.parse(
-    readFileSync(languagesFile, 'utf8')
-  )
+  const rawLanguageList: {
+    [locale: string]: string | { name: string; dir?: 'ltr' | 'rtl' }
+  } = JSON.parse(readFileSync(languagesFile, 'utf8'))
 
   return Object.keys(rawLanguageList)
-    .map(locale => ({
-      locale: locale,
-      name: rawLanguageList[locale],
-    }))
+    .map(locale => {
+      const data =
+        typeof rawLanguageList[locale] === 'string'
+          ? { name: rawLanguageList[locale] }
+          : rawLanguageList[locale]
+      return {
+        locale: locale,
+        name: data.name,
+        dir: data.dir || 'ltr',
+      }
+    })
     .filter(({ name }) => name.indexOf('*') === -1)
     .sort(({ name: name1 }, { name: name2 }) => (name1 > name2 ? 1 : -1))
 })()

@@ -4,6 +4,7 @@ import debounce from 'debounce'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 import { getLogger } from '../../../../shared/logger'
 import { DialogContext } from '../../contexts/DialogContext'
+import { I18nContext } from '../../contexts/I18nContext'
 
 const log = getLogger('renderer/composer/ComposerMessageInput')
 
@@ -214,22 +215,30 @@ export default class ComposerMessageInput extends React.Component<
 
   render() {
     return (
-      <textarea
-        className='message-input-area'
-        id='composer-textarea'
-        ref={this.textareaRef}
-        rows={1}
-        // intent={this.state.error ? 'danger' : 'none'}
-        // large
-        value={this.state.text}
-        onKeyDown={this.onKeyDown}
-        onChange={this.onChange}
-        onPaste={this.props.onPaste}
-        placeholder={window.static_translate('write_message_desktop')}
-        disabled={this.state.loadingDraft}
-        dir='auto'
-        spellCheck={true}
-      />
+      <I18nContext.Consumer>
+        {({ writingDirection }) => (
+          <textarea
+            className='message-input-area'
+            id='composer-textarea'
+            ref={this.textareaRef}
+            rows={1}
+            // intent={this.state.error ? 'danger' : 'none'}
+            // large
+            value={this.state.text}
+            onKeyDown={this.onKeyDown}
+            onChange={this.onChange}
+            onPaste={this.props.onPaste}
+            placeholder={window.static_translate('write_message_desktop')}
+            disabled={this.state.loadingDraft}
+            dir={
+              writingDirection === 'rtl'
+                ? 'rtl'
+                : 'auto' /* auto is based on content but defaults to ltr */
+            }
+            spellCheck={true}
+          />
+        )}
+      </I18nContext.Consumer>
     )
   }
 }

@@ -208,3 +208,11 @@ input[type='text']:focus {
 .bp4-tab-list {
   padding: 5px;
 }
+
+.bp4-navbar-group.bp4-align-left {
+  float: inline-start;
+}
+
+.bp4-navbar-group.bp4-align-right {
+  float: inline-end;
+}

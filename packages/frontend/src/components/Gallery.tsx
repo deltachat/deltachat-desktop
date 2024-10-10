@@ -19,6 +19,7 @@ import FullscreenMedia, {
   NeighboringMediaMode,
 } from './dialogs/FullscreenMedia'
 import { DialogContext } from '../contexts/DialogContext'
+import { useTranslationWritingDirection } from '../hooks/useTranslationFunction'
 
 const log = getLogger('renderer/Gallery')
 
@@ -411,6 +412,7 @@ function FileTable({
   mediaLoadResult: Record<number, Type.MessageLoadResult>
   queryText: string
 }) {
+  const writingDirection = useTranslationWritingDirection()
   return (
     <FixedSizeList
       width={width}
@@ -419,6 +421,7 @@ function FileTable({
       itemCount={mediaMessageIds.length}
       overscanCount={10}
       itemData={mediaMessageIds}
+      direction={writingDirection}
     >
       {({ index, style, data }) => {
         const msgId = data[index]

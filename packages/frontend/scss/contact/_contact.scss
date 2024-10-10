@@ -16,7 +16,7 @@
     display: inline-block;
     width: calc(100% - 64px);
     // height: 54px;
-    margin-left: 10px;
+    margin-inline-start: 10px;
     .chat-list & {
       width: calc(100% - 37px);
     }

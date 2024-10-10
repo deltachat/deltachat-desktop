@@ -1,6 +1,7 @@
 import React, {
   ChangeEvent,
   useCallback,
+  useContext,
   useEffect,
   useLayoutEffect,
   useRef,
@@ -16,11 +17,11 @@ import { BackendRemote, onDCEvent, Type } from '../../../backend-com'
 import { selectedAccountId } from '../../../ScreenController'
 import { DialogBody, DialogHeader, OkCancelFooterAction } from '../../Dialog'
 import useDialog from '../../../hooks/dialog/useDialog'
-import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { VerifiedContactsRequiredDialog } from '../ProtectionStatusDialog'
 import InfiniteLoader from 'react-window-infinite-loader'
 import { AddMemberChip } from './AddMemberDialog'
 import styles from './styles.module.scss'
+import { I18nContext } from '../../../contexts/I18nContext'
 
 export function AddMemberInnerDialog({
   onCancel,
@@ -53,7 +54,7 @@ export function AddMemberInnerDialog({
   isBroadcast: boolean
   isVerificationRequired: boolean
 }) {
-  const tx = useTranslationFunction()
+  const { tx, writingDirection } = useContext(I18nContext)
   const { openDialog } = useDialog()
   const accountId = selectedAccountId()
   const contactIdsInGroup: number[] = contactIds.filter(contactId =>
@@ -290,6 +291,7 @@ export function AddMemberInnerDialog({
                     // which might be different, e.g. currently they're smaller for
                     // "Rocket Theme", which results in gaps between the elements.
                     itemSize={64}
+                    direction={writingDirection}
                   >
                     {({ index, style, data: contactIds }) => {
                       const isExtraItem = index >= contactIds.length

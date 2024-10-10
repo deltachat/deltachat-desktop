@@ -55,6 +55,7 @@ import styles from './styles.module.scss'
 import { makeContextMenu } from '../../ContextMenu'
 import { ContextMenuContext } from '../../../contexts/ContextMenuContext'
 import ImageCropper from '../../ImageCropper'
+import { I18nContext } from '../../../contexts/I18nContext'
 
 type ViewMode = 'main' | 'createGroup' | 'createBroadcastList'
 
@@ -119,7 +120,7 @@ type CreateChatMainProps = {
 
 function CreateChatMain(props: CreateChatMainProps) {
   const { setViewMode, onClose } = props
-  const tx = useTranslationFunction()
+  const { tx, writingDirection } = useContext(I18nContext)
   const { userFeedback } = useContext(ScreenContext)
   const openConfirmationDialog = useConfirmationDialog()
   const accountId = selectedAccountId()
@@ -293,6 +294,7 @@ function CreateChatMain(props: CreateChatMainProps) {
                   // which might be different, e.g. currently they're smaller for
                   // "Rocket Theme", which results in gaps between the elements.
                   itemSize={64}
+                  direction={writingDirection}
                 >
                   {({ index, style }) => {
                     const item = contactsAndExtraItems[index]
