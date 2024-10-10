@@ -102,7 +102,20 @@
     margin: 10px 0px;
 
     li {
-      margin-bottom: 10px;
+      $margin-bottom: 10px;
+      margin-bottom: $margin-bottom;
+      // This is so that when we `scrollIntoView()` the last message
+      // in the chat, its margin is also scrolled into view.
+      // Otherwise only the visible part of the message would get scrolled
+      // into view, resulting in the message list not getting
+      // scrolled all the way to the bottom,
+      // resulting in the message list not not getting scrolled to the
+      // bottom when another message arrives.
+      scroll-margin-bottom: $margin-bottom;
+      // And this is purely cosmetic. For scrolling to a message
+      // that is above the visible area.
+      scroll-margin-top: $margin-bottom / 2;
+
       min-width: 200px;
 
       &::after {

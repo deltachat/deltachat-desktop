@@ -333,7 +333,17 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
         )
       }
 
-      domElement.scrollIntoView()
+      domElement.scrollIntoView({
+        // "nearest" so as to not scroll if the message is already in view.
+        // Otherwise we'd try to scroll in such a way that the message
+        // is at the very top of the messages list.
+        // This would not be nice for the Ctrl + Down shortcut
+        // (when quoting a message that a bit far up),
+        // or when highlighting the reply that is already in view.
+        block: 'nearest',
+        inline: 'nearest',
+        // behavior:
+      })
 
       if (scrollTo.highlight === true) {
         // Trigger highlight animation
