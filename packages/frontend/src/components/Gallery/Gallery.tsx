@@ -30,7 +30,7 @@ const tabNames: MediaTabKey[] = [
   'video',
   'audio',
   'files',
-  'apps',
+  'webxdc_apps',
 ]
 
 const tabMsgTypes: Record<MediaTabKey, [Type.Viewtype, Type.Viewtype | null]> =
@@ -39,7 +39,7 @@ const tabMsgTypes: Record<MediaTabKey, [Type.Viewtype, Type.Viewtype | null]> =
     video: ['Video', null],
     audio: ['Audio', null],
     files: ['File', null],
-    apps: ['Webxdc', null],
+    webxdc_apps: ['Webxdc', null],
   }
 
 interface State {
@@ -185,7 +185,7 @@ export default class Gallery extends PureComponent<Props, State> {
       )
     })
 
-    const showDateHeader = currentTab !== 'files' && currentTab !== 'apps'
+    const showDateHeader = currentTab !== 'files' && currentTab !== 'webxdc_apps'
 
     const extraChild = (
       <>
