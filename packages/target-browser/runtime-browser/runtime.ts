@@ -276,7 +276,8 @@ class BrowserRuntime implements Runtime {
     const clipboardItems = await navigator.clipboard.read()
     for (const clipboardItem of clipboardItems) {
       for (const type of clipboardItem.types) {
-        if (type === 'text/html') { /* ignores html. Needed for images copied from web */
+        if (type === 'text/html') {
+          /* ignores html. Needed for images copied from web */
           continue
         }
         const blob = await clipboardItem.getType(type)
@@ -296,14 +297,34 @@ class BrowserRuntime implements Runtime {
     }
     throw new Error('No supported clipboard item found')
   }
-  writeTempFileFromBase64(_name: string, _content: string): Promise<string> {
-    throw new Error('Method not implemented.')
+  async writeTempFileFromBase64(
+    name: string,
+    content: string
+  ): Promise<string> {
+    return (
+      await (
+        await fetch(`/backend-api/uploadTempFileB64/${name}`, {
+          method: 'POST',
+          body: content,
+        })
+      ).json()
+    ).path
   }
-  writeTempFile(_name: string, _content: string): Promise<string> {
-    throw new Error('Method not implemented.')
+  async writeTempFile(name: string, content: string): Promise<string> {
+    return (
+      await (
+        await fetch(`/backend-api/uploadTempFile/${name}`, {
+          method: 'POST',
+          body: content,
+        })
+      ).json()
+    ).path
   }
-  removeTempFile(_name: string): Promise<void> {
-    throw new Error('Method not implemented.')
+  async removeTempFile(name: string): Promise<void> {
+    await fetch(`/backend-api/removeTempFile`, {
+      method: 'POST',
+      body: name,
+    })
   }
 
   activeNotifications: { [chatId: number]: Notification[] } = {}
@@ -520,7 +541,7 @@ class BrowserRuntime implements Runtime {
       }
       if (blob.type !== 'image/png') {
         const img = new Image()
-        const blobPromise = new Promise<Blob>((resolve, reject) => {
+        const blobPromise = new Promise<Blob>(async (resolve, reject) => {
           img.onload = async () => {
             try {
               const canvas = new OffscreenCanvas(
@@ -569,10 +590,38 @@ class BrowserRuntime implements Runtime {
     }
     return ''
   }
-  async showOpenFileDialog(
-    _options: RuntimeOpenDialogOptions
-  ): Promise<string> {
-    throw new Error('Method not implemented.')
+  async showOpenFileDialog(options: RuntimeOpenDialogOptions): Promise<string> {
+    const extstring = options.filters
+      ?.map(filter => filter.extensions)
+      .reduce((p, c) => c.concat(p))
+      .map(ext => `.${ext}`)
+      .join()
+    return new Promise(resolve => {
+      const input = document.createElement('input')
+      input.type = 'file'
+      input.accept = extstring || ''
+      input.onchange = async () => {
+        if (input.files != null) {
+          resolve(
+            (
+              await (
+                await fetch(
+                  `/backend-api/uploadTempFile/${input.files[0].name}`,
+                  {
+                    method: 'POST',
+                    body: input.files[0],
+                  }
+                )
+              ).json()
+            ).path
+          )
+        } else {
+          resolve('')
+        }
+      }
+
+      input.click()
+    })
   }
 
   openLink(link: string): void {

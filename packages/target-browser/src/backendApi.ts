@@ -1,5 +1,5 @@
 import express, { json as BodyParserJson, Router } from 'express'
-import { mkdtemp, writeFile } from 'fs/promises'
+import { mkdtemp, writeFile, unlink } from 'fs/promises'
 import { basename, join } from 'path'
 import { tmpdir } from 'os'
 import {
@@ -64,7 +64,7 @@ BackendApiRoute.post(
     type: () => {
       return true /* Accept all filetypes */
     },
-    limit: '500mb'
+    limit: '500mb',
   }),
   async (req, res) => {
     try {
@@ -80,7 +80,57 @@ BackendApiRoute.post(
       console.log(tmpFile)
       console.log(filename, tmppath, filepath)
     } catch (error) {
-      res.status(500).json({message: 'Failed to create Tempfile'})
+      res.status(500).json({ message: 'Failed to create Tempfile' })
+    }
+  }
+)
+
+BackendApiRoute.post(
+  '/uploadTempFileB64/:filename',
+  express.raw({
+    type: () => {
+      return true /* Accept all filetypes */
+    },
+    limit: '500mb',
+  }),
+  async (req, res) => {
+    try {
+      const tmpFilebin: Buffer = Buffer.from(req.body.toString(), 'base64')
+
+      const filename = basename(req.params.filename)
+      const tmppath = await mkdtemp(join(tmpdir(), 'tmp-'))
+
+      const filepath = join(tmppath, filename)
+      await writeFile(filepath, tmpFilebin, 'binary')
+
+      res.status(200).send({ path: filepath })
+      console.log(tmpFilebin.toString('utf-8'))
+      console.log(filename, tmppath, filepath)
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to create Tempfile' })
+    }
+  }
+)
+
+BackendApiRoute.post(
+  '/removeTempFile',
+  express.raw({
+    type: () => {
+      return true /* Accept all filetypes */
+    },
+  }),
+  async (req, _res) => {
+    try {
+      const filepath = req.body.toString('utf8')
+      console.log(filepath)
+      if (filepath.includes('tmp') && !filepath.includes('..')) {
+        await unlink(filepath)
+      }
+    } catch (e) {
+      // file doesn't exist, no permissions, etc..
+      // full list of possible errors is here
+      // http://man7.org/linux/man-pages/man2/unlink.2.html#ERRORS
+      console.log(e)
     }
   }
 )

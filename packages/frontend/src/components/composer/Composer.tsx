@@ -248,7 +248,9 @@ const Composer = forwardRef<
 
     try {
       // Write clipboard to file then attach it to the draft
-      const path = await runtime.writeClipboardToTempFile(file.name || `file.${extension(file.type)}`)
+      const path = await runtime.writeClipboardToTempFile(
+        file.name || `file.${extension(file.type)}`
+      )
       await addFileToDraft(path, msgType)
       // delete file again after it was sucessfuly added
       await runtime.removeTempFile(path)

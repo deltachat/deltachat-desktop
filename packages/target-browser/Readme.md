@@ -41,3 +41,7 @@ pnpm run start
 Then point your browser to <https://localhost:3000> and acept the locally signed certificate to continue.
 
 > If you get an "The connection was reset"-Error, then you have likely forgotten to use http**s** instead of http.
+
+### Known broken things
+
+> Image Cropper is broken because accesing tmp files directly isn't implemented. Suggestion: handle image preview in cache or memory.
