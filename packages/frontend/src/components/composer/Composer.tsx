@@ -603,11 +603,8 @@ export function useDraft(
       } as Type.MessageQuote
       saveDraft()
 
-      // TODO improvement: perhaps the animation could used
-      // a little less intensity.
-      // Not good when jumping through several messages.
-      // Can we just cancel the animation on the previously highlighted message?
-      // Also it looks like it takes a while to execute
+      // TODO perf: jumpToMessage is not instant, but it should be
+      // since the message is (almost?) always already rendered.
       jumpToMessage(accountId, messageId, true)
     }
     // TODO perf: I imagine this is pretty slow, given IPC and some chats
