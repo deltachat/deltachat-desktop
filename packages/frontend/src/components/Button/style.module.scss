@@ -25,11 +25,6 @@
     cursor: not-allowed;
   }
 
-  &:focus {
-    outline: revert;
-    outline-offset: revert;
-  }
-
   & > span {
     user-select: none;
   }
@@ -54,14 +49,5 @@
 
   &.minimal {
     padding: 3px;
-  }
-
-  // used for accesibility as a wrapper for some other element
-  &.transparent {
-    padding: 0;
-    margin: 0;
-    background: none;
-    border: none;
-    appearance: none;
   }
 }

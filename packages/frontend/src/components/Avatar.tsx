@@ -7,7 +7,6 @@ import FullscreenAvatar from './dialogs/FullscreenAvatar'
 import type { Type } from '../backend-com'
 import type { PropsWithChildren } from 'react'
 import { get_first_emoji } from '@deltachat/message_parser_wasm'
-import Button from './Button'
 
 export function QRAvatar() {
   return (
@@ -105,8 +104,7 @@ export function ClickForFullscreenAvatarWrapper(
   const { openDialog } = useDialog()
 
   return (
-    <Button
-      type='unstyled'
+    <button
       onClick={() => {
         if (!props.filename) {
           return
@@ -117,6 +115,6 @@ export function ClickForFullscreenAvatarWrapper(
       }}
     >
       {props.children}
-    </Button>
+    </button>
   )
 }
