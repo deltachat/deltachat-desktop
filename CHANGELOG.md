@@ -47,6 +47,7 @@
 - losing scrolling "momentum" while scrolling the messages list fast #4122
 - fix crash when you chose Settings from a context menu on account you haven't selected #4190
 - fix All Media not opening from a context menu on account you haven't selected #4191
+- fix: make open external link scheme case insensive #4201
 
 <a id="1_46_8"></a>
 
