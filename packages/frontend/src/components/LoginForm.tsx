@@ -309,7 +309,7 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
             </DeltaSelect>
             <SettingsSwitch
               label={tx('login_socks5_use_socks5')}
-              value={socks5_enabled !== '0'}
+              value={!!socks5_enabled}
               onChange={isTrue =>
                 _handleCredentialsChange('socks5_enabled', isTrue ? '1' : '0')
               }

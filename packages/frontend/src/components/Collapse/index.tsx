@@ -32,14 +32,14 @@ export default function Collapse({
       ref={wrapper}
       style={{
         overflow: 'hidden',
-        transition: 'height 0.5s linear',
+        transition: 'height 0.5s ease-out',
       }}
     >
       <div
         ref={content}
         className={className}
         style={{
-          transition: 'transform 0.5s linear',
+          transition: 'transform 0.5s ease-out',
         }}
       >
         {children}

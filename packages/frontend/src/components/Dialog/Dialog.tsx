@@ -16,7 +16,7 @@ type Props = React.PropsWithChildren<
     height?: number
     width?: number
     // takes full screen and is transparent
-    fullscreenTransparent?: boolean
+    unstyled?: boolean
   } & DialogProps
 >
 
@@ -27,7 +27,7 @@ const Dialog = React.memo<Props>(
     canEscapeKeyClose = true,
     width = DEFAULT_WIDTH,
     height,
-    fullscreenTransparent = false,
+    unstyled = false,
     fixed,
     ...props
   }) => {
@@ -36,6 +36,10 @@ const Dialog = React.memo<Props>(
     const onClick = canOutsideClickClose
       ? (ev: React.MouseEvent<HTMLDialogElement>) => {
           if (!dialog.current) {
+            return
+          }
+          // this is to filter out when pressing keys trigger `onClick`
+          if (ev.screenX == 0 && ev.screenY == 0) {
             return
           }
           ev.stopPropagation()
@@ -74,7 +78,7 @@ const Dialog = React.memo<Props>(
 
     let style
 
-    if (!fullscreenTransparent) {
+    if (!unstyled) {
       style = {
         width: width && `${width}px`,
         height: height && `${height}px`,
@@ -89,7 +93,7 @@ const Dialog = React.memo<Props>(
         ref={dialog}
         className={classNames(styles.dialog, props.className, {
           [styles.fixed]: fixed,
-          [styles.fullscreenTransparent]: fullscreenTransparent,
+          [styles.unstyled]: unstyled,
         })}
         style={style}
       >

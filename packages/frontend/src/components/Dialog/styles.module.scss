@@ -5,7 +5,7 @@ $paddingVertical: 20px;
 .dialog {
   padding: 0;
 
-  &.fullscreenTransparent {
+  &.unstyled {
     background: none;
     width: 100vw;
     height: 100vh;
@@ -15,7 +15,7 @@ $paddingVertical: 20px;
     margin: 0;
   }
 
-  &:not(.fullscreenTransparent) {
+  &:not(.unstyled) {
     background-color: var(--bp4DialogBgPrimary);
     color: var(--globalText);
     border-radius: 10px;
@@ -32,7 +32,6 @@ $paddingVertical: 20px;
     overflow: hidden;
     width: unset;
 
-    align-items: center;
     justify-content: center;
   }
   &::backdrop {

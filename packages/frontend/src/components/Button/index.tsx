@@ -11,8 +11,8 @@ type Props = React.PropsWithChildren<{
   id?: string
   onClick: any
   styling?: 'minimal'
-  // 'transparent' is to wrap other elements and mark those as button
-  type?: 'primary' | 'secondary' | 'danger' | 'transparent'
+  // 'unstyled' is to wrap other elements and mark those as button
+  type?: 'primary' | 'secondary' | 'danger' | 'unstyled'
 }>
 
 export default function Button({

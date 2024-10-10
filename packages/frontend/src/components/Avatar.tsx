@@ -106,7 +106,7 @@ export function ClickForFullscreenAvatarWrapper(
 
   return (
     <Button
-      type='transparent'
+      type='unstyled'
       onClick={() => {
         if (!props.filename) {
           return

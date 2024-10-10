@@ -17,14 +17,12 @@
 
   // default backdrop has almost transparent black background
   &::backdrop {
-    pointer-events: none;
-    background: none;
+    display: none;
   }
 }
 
 .dc-context-menu {
   // position is determined in code
-  z-index: 1000;
   position: fixed;
   pointer-events: auto;
   background-color: var(--bgPrimary);
