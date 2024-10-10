@@ -1,6 +1,12 @@
 .dc-context-menu-layer {
   width: 100vw;
   height: 100vh;
+  // Built-in Chromium styles set `max-height` and `max-width`
+  // on `dialog:-internal-dialog-in-top-layer` to `calc(100% - 2em - 6px)`.
+  // Let's override that, otherwise the "backdrop" area doesn't
+  // fully cover the screen.
+  max-height: unset;
+  max-width: unset;
   // position: absolute;
   // z-index: map-get($z-index, context-menu-layer);
   background-color: transparent;
