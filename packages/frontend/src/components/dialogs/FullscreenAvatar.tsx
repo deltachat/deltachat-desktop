@@ -38,7 +38,7 @@ export default function FullscreenAvatar(
   ])
 
   return (
-    <Dialog fullscreenTransparent onClose={onClose}>
+    <Dialog unstyled onClose={onClose}>
       <div className='attachment-view'>
         <div className='image-container'>
           <TransformWrapper initialScale={1}>

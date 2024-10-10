@@ -1,24 +1,21 @@
 import classNames from 'classnames'
 import React, { useEffect, useRef } from 'react'
 
-import type { DialogProps } from '../../contexts/DialogContext'
-
 import styles from './styles.module.scss'
 
 const DEFAULT_WIDTH = 500
 
-type Props = React.PropsWithChildren<
-  {
-    canEscapeKeyClose?: boolean
-    canOutsideClickClose?: boolean
-    className?: string
-    fixed?: boolean
-    height?: number
-    width?: number
-    // takes full screen and is transparent
-    unstyled?: boolean
-  } & DialogProps
->
+type Props = React.PropsWithChildren<{
+  onClose?: (result?: any) => void
+  canEscapeKeyClose?: boolean
+  canOutsideClickClose?: boolean
+  className?: string
+  fixed?: boolean
+  height?: number
+  width?: number
+  // takes full screen and is transparent
+  unstyled?: boolean
+}>
 
 const Dialog = React.memo<Props>(
   ({
@@ -28,7 +25,6 @@ const Dialog = React.memo<Props>(
     width = DEFAULT_WIDTH,
     height,
     unstyled = false,
-    fixed,
     ...props
   }) => {
     const dialog = useRef<HTMLDialogElement>(null)
@@ -60,8 +56,8 @@ const Dialog = React.memo<Props>(
       : () => {}
 
     const onClose = (value: any) => {
+      props.onClose && props.onClose(value)
       dialog.current!.style.display = 'none'
-      props.onClose(value)
     }
 
     const onCancel = (ev: React.BaseSyntheticEvent) => {
@@ -92,7 +88,6 @@ const Dialog = React.memo<Props>(
         onCancel={onCancel}
         ref={dialog}
         className={classNames(styles.dialog, props.className, {
-          [styles.fixed]: fixed,
           [styles.unstyled]: unstyled,
         })}
         style={style}

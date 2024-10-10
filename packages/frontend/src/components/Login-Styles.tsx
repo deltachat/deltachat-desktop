@@ -199,11 +199,13 @@ export const DeltaPasswordInput = React.memo(
 export const DeltaProgressBar = function (
   props: React.PropsWithChildren<{
     progress: number
+    intent?: string
   }>
 ) {
   return (
     <div style={{ marginTop: '20px', marginBottom: '10px' }}>
       <progress
+        className='delta-progress-bar'
         value={props.progress ? props.progress / 1000 : 0}
         max={100}
       ></progress>

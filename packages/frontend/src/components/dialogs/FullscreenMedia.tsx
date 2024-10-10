@@ -253,7 +253,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
   if (!msg || !msg.file) return elm
 
   return (
-    <Dialog fullscreenTransparent onClose={onClose}>
+    <Dialog unstyled onClose={onClose}>
       <div className='attachment-view'>{elm}</div>
       {elm && (
         <div className='btn-wrapper no-drag'>

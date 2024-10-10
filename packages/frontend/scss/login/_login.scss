@@ -194,3 +194,17 @@ div.delta-form-group {
     }
   }
 }
+
+.delta-progress-bar {
+  &.primary-intent {
+    color: var(--colorPrimary);
+  }
+
+  &.danger-intent {
+    color: var(--colorPrimary);
+  }
+
+  &.success-intent {
+    color: var(--colorPrimary);
+  }
+}

@@ -22,10 +22,6 @@ export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
   const [hasConfiguredAccounts, setHasConfiguredAccounts] = useState(false)
   const showBackButton = hasConfiguredAccounts
 
-  const onClose = () => {
-    // Prevent user from closing dialog
-  }
-
   useLayoutEffect(() => {
     // Show back button when user has already created and configured accounts.
     // On a fresh DC start we will not have any yet.
@@ -41,7 +37,12 @@ export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
 
   return (
     <ImageBackdrop variant='welcome'>
-      <Dialog fixed onClose={onClose} width={400} canOutsideClickClose={false}>
+      <Dialog
+        fixed
+        width={400}
+        canEscapeKeyClose={false}
+        canOutsideClickClose={false}
+      >
         {!showInstantOnboarding ? (
           <OnboardingScreen
             onNextStep={() => startInstantOnboardingFlow()}

@@ -84,7 +84,7 @@ export default function AccountSetupScreen({
 
   return (
     <ImageBackdrop variant='welcome'>
-      <Dialog canOutsideClickClose={false} onClose={onCancel} fixed>
+      <Dialog canOutsideClickClose={false} onClose={() => {}} fixed>
         <DialogHeader title={tx('login_explain')} />
         <DialogBody>
           <DialogContent>
