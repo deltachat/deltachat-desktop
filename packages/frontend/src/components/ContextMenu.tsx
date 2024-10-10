@@ -54,11 +54,10 @@ export function ContextMenuLayer({
 }: {
   setShowFunction: (showFn: OpenContextMenu) => void
 }) {
-  const layerRef = useRef<HTMLDivElement>(null)
+  const layerRef = useRef<HTMLDialogElement>(null)
   const cursorX = useRef<number>(0)
   const cursorY = useRef<number>(0)
 
-  const [active, setActive] = useState(false)
   const [currentItems, setCurrentItems] = useState<ContextMenuItem[]>([])
   const [position, setPosition] = useState<{ top: number; left: number }>({
     top: 0,
@@ -73,6 +72,8 @@ export function ContextMenuLayer({
         throw new Error('Somehow the ContextMenuLayer went missing')
       }
 
+      layerRef.current.showModal()
+
       // Filter out empty null items
       // (can happen when constructing the array with inline conditions,
       // look at the chatlistitem context menu for an example)
@@ -83,7 +84,6 @@ export function ContextMenuLayer({
       // Get required information
       setCurrentItems(items)
       window.__setContextMenuActive(true)
-      setActive(true)
 
       await new Promise<void>((resolve, _reject) => {
         endPromiseRef.current = resolve
@@ -129,8 +129,8 @@ export function ContextMenuLayer({
 
   const cancel = useCallback(() => {
     window.__setContextMenuActive(false)
-    setActive(false)
     setCurrentItems([])
+    layerRef.current?.close()
     endPromiseRef.current?.()
   }, [])
 
@@ -141,13 +141,13 @@ export function ContextMenuLayer({
   }, [setShowFunction, show])
 
   return (
-    <div
+    <dialog
       ref={layerRef}
-      className={`dc-context-menu-layer ${active ? 'active' : ''}`}
+      className='dc-context-menu-layer'
       onClick={cancel}
       onContextMenuCapture={cancel}
     >
-      {active && currentItems.length > 0 && (
+      {currentItems.length > 0 && (
         <ContextMenu
           rightLimit={
             (layerRef.current as HTMLElement).clientLeft +
@@ -160,7 +160,7 @@ export function ContextMenuLayer({
           closeCallback={cancel}
         />
       )}
-    </div>
+    </dialog>
   )
 }
 

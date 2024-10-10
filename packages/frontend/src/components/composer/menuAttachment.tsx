@@ -181,7 +181,7 @@ export default function MenuAttachment({
       className='attachment-button'
       onClick={onClickAttachmentMenu}
     >
-      <Icon coloring='context-menu' icon='paperclip' />
+      <Icon coloring='contextMenu' icon='paperclip' />
     </button>
   )
 }

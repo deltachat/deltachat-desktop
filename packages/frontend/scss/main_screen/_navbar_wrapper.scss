@@ -4,18 +4,10 @@
 
   position: relative;
 
-  .icon-rotated > .bp4-icon > svg:not([fill]) {
-    transform: rotate(90deg);
-  }
-
-  .bp4-navbar {
-    padding: 0px;
-    background-color: var(--navBarBackground);
-    color: var(--navBarText);
-    border-bottom: var(--outlineProperties);
-  }
-
-  .bp4-navbar-heading {
+  .navbar-heading {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
     padding-left: 5px;
     margin-right: 0px;
     overflow-x: hidden;
@@ -24,20 +16,6 @@
     font-size: 18px;
     font-weight: bold;
     overflow: hidden;
-  }
-
-  .bp4-align-left {
-    width: 30%;
-    min-width: 295px; /* don't forget to update .chat-list */
-    padding: 0px 10px;
-  }
-
-  .bp4-align-right {
-    float: none;
-  }
-
-  .bp4-icon > svg:not([fill]) {
-    fill: var(--navBarText);
   }
 
   span.views {

@@ -11,6 +11,7 @@ type Props = React.PropsWithChildren<
     fixed?: boolean
     height?: number
     onClickBack?: () => void
+    canOutsideClickClose?: boolean
     title: string
     width?: number
   } & DialogProps
@@ -24,6 +25,7 @@ const DialogWithHeader = React.memo<Props>(props => {
       className={props.className}
       width={props.width}
       height={props.height}
+      canOutsideClickClose={props.canOutsideClickClose}
     >
       <DialogHeader
         onClose={props.onClose}

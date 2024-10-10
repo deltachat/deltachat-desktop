@@ -44,3 +44,6 @@ $scrollbarTransparency: 0.5;
 }
 
 /* overwrite css */
+* {
+  font-family: var(--font-family);
+}

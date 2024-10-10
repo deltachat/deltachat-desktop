@@ -14,11 +14,27 @@ $tab-height: 46px;
     flex-grow: 1;
     text-align: end;
     align-self: center;
-    padding-right: 12px;
+    margin-right: 12px;
     font-size: 18px;
     color: var(--summary-text-color);
     white-space: nowrap;
   }
+
+  .tab-list {
+    display: flex;
+    justify-content: space-between;
+    .tab-item {
+      margin-right: 30px;
+      font-size: 1.1rem;
+      padding-bottom: 6px;;
+      &.selected, &:hover {
+        color: #42A5F5;
+        border-bottom: 3px solid #42A5F5;
+        cursor: pointer;
+      }
+    }
+  }
+
 
   & .gallery {
     height: 100%;

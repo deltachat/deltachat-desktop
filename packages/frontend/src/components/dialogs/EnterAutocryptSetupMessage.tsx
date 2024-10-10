@@ -103,6 +103,7 @@ export default function EnterAutocryptSetupMessage({
     <DialogWithHeader
       onClose={onClose}
       title={tx('autocrypt_continue_transfer_title')}
+      canOutsideClickClose={false}
     >
       <DialogBody>
         <DialogContent>

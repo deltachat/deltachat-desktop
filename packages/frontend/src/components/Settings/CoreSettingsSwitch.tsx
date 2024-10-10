@@ -40,7 +40,7 @@ export default function CoreSettingsSwitch({
       label={label}
       value={value}
       description={description}
-      onClick={() => {
+      onChange={() => {
         SettingsStoreInstance.effect.setCoreSetting(
           settingsKey,
           flipDeltaBoolean(settingsStore.settings[settingsKey])

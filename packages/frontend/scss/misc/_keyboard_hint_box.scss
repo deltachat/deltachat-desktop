@@ -47,24 +47,11 @@
 }
 
 .keyboard-hint-cheatsheet-dialog {
-  &.bp4-dialog {
-    background-color: var(--bp4DialogBgPrimary);
-  }
-  .bp4-dialog-header {
-    .bp4-heading {
-      flex-grow: 0;
-      margin-right: 8px;
-    }
-    .keybinding {
-      display: block;
-      margin-bottom: 7px;
-      flex-grow: 1;
-      font-size: 0.84em;
-      margin-bottom: 0;
-    }
-  }
-  .bp4-dialog-body {
-    overflow: scroll;
+  .keybinding {
+    display: block;
+    flex-grow: 1;
+    font-size: 0.84em;
+    margin-bottom: 0;
   }
   .keyboard-hint-dialog-body {
     display: flex;

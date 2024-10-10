@@ -232,17 +232,13 @@ export default class Gallery extends Component<
 
     return (
       <div className='media-view'>
-        <ul
-          className='bp4-tab-list .modifier'
-          role='tablist'
-          style={{ display: 'flex', alignItems: 'center' }}
-        >
+        <ul className='tab-list .modifier' role='tablist'>
           {Object.keys(MediaTabs).map(realId => {
             const tabId = realId as MediaTabKey
             return (
               <li
                 key={tabId}
-                className='bp4-tab'
+                className={`tab-item ${currentTab === tabId ? 'selected' : ''}`}
                 role='tab'
                 aria-selected={currentTab === tabId}
                 onClick={() => this.onSelect(tabId)}
@@ -252,7 +248,7 @@ export default class Gallery extends Component<
             )
           })}
           {showDateHeader && (
-            <div className='big-date' ref={this.dateHeader}></div>
+            <div className='tab-item big-date' ref={this.dateHeader}></div>
           )}
           {currentTab === 'files' && (
             <>
