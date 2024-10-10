@@ -100,7 +100,8 @@ export default function AccountItem({
         setTimeout(() => {
           ActionEmitter.emitAction(KeybindAction.GlobalGallery_Open)
           // NOTE(maxph): Gallery.tsx gets unmounted before receiving media data
-          // and breaks markdown, so here 50ms is a temprorary workaround for that
+          // and only partially updates chat header without changing chat view to Gallery, 
+          // so here 50ms is a temprorary workaround for that
         }, 50)
       },
     },
