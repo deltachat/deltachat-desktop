@@ -13,7 +13,7 @@ export default function SettingsSelector(props: Props) {
   const { onClick, currentValue, children } = props
 
   return (
-    <div tabIndex={0} className={styles.settingsSelector} onClick={onClick}>
+    <div className={styles.settingsSelector} onClick={onClick}>
       <div className={styles.settingsSelectorLabel}>{children}</div>
       {currentValue && (
         <div className={styles.settingsSelectorValue}>{currentValue}</div>
