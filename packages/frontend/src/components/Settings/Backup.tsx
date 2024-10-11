@@ -100,7 +100,7 @@ function ExportProgressDialog() {
       <DialogHeader title={tx('export_backup_desktop')} />
       <DialogBody>
         <DialogContent>
-          <DeltaProgressBar intent='primary' progress={progress} />
+          <DeltaProgressBar progress={progress} />
         </DialogContent>
       </DialogBody>
     </Dialog>

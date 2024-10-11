@@ -196,19 +196,23 @@ export const DeltaPasswordInput = React.memo(
   }
 )
 
-export const DeltaProgressBar = function (
-  props: React.PropsWithChildren<{
-    progress: number
-    intent?: string
-  }>
-) {
-  return (
-    <div style={{ marginTop: '20px', marginBottom: '10px' }}>
-      <progress
-        className='delta-progress-bar'
-        value={props.progress ? props.progress / 1000 : 0}
-        max={100}
-      ></progress>
-    </div>
-  )
-}
+type DeltaIntent = 'primary' | 'success' | 'fail'
+
+type ProgressBarProps = React.PropsWithChildren<{
+  progress: number
+  intent?: DeltaIntent
+}>
+
+export const DeltaProgressBar = React.memo<ProgressBarProps>(
+  ({ progress, intent = 'primary' }) => {
+    return (
+      <div style={{ marginTop: '20px', marginBottom: '10px' }}>
+        <progress
+          className={`delta-progress-bar delta-intent-${intent}`}
+          value={progress ? progress / 1000 : 0}
+          max={100}
+        ></progress>
+      </div>
+    )
+  }
+)

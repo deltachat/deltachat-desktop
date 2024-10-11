@@ -68,7 +68,7 @@ export function ReceiveBackupProgressDialog({
           )}
           <DeltaProgressBar
             progress={importProgress}
-            intent={error ? 'danger' : 'success'}
+            intent={error ? 'fail' : 'success'}
           />
         </DialogContent>
       </DialogBody>

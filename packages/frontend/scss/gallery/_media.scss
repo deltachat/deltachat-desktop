@@ -26,15 +26,15 @@ $tab-height: 46px;
     .tab-item {
       margin-right: 30px;
       font-size: 1.1rem;
-      padding-bottom: 6px;;
-      &.selected, &:hover {
-        color: #42A5F5;
-        border-bottom: 3px solid #42A5F5;
+      padding-bottom: 6px;
+      &.selected,
+      &:hover {
+        color: #42a5f5;
+        border-bottom: 3px solid #42a5f5;
         cursor: pointer;
       }
     }
   }
-
 
   & .gallery {
     height: 100%;

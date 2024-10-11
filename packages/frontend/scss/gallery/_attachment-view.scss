@@ -25,6 +25,7 @@
   position: absolute;
   background-color: rgba(0, 0, 0, 0.75);
   border-radius: 3px;
+  display: flex;
 
   right: 8px;
   top: 6px;
@@ -33,9 +34,10 @@
   .download-btn {
     height: 32px;
     width: 32px;
-    display: inline-block;
     vertical-align: text-bottom;
     @include color-svg('./images/download.svg', var(--fullScreenMediaButtons));
+    // to offset a bit visual center of the button
+    mask-position: 0px 2px;
     cursor: pointer;
     margin-right: 5px;
 

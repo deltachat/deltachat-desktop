@@ -22,11 +22,8 @@
   }
 
   &.remove {
-    margin-top: calc((64px - 20px) / 2);
-    margin-right: 10px;
-
     &:hover {
-      fill: #bf0000;
+      background-color: #bf0000;
     }
   }
 }

@@ -42,8 +42,3 @@ $scrollbarTransparency: 0.5;
   --cli-search-result-divider-border-width: 0px;
   --emojiMartSelect: var(--chatListItemBgHover);
 }
-
-/* overwrite css */
-* {
-  font-family: var(--font-family);
-}

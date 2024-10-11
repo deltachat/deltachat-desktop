@@ -196,15 +196,15 @@ div.delta-form-group {
 }
 
 .delta-progress-bar {
-  &.primary-intent {
+  &.delta-intent-primary {
     color: var(--colorPrimary);
   }
 
-  &.danger-intent {
+  &.delta-intent-success {
     color: var(--colorPrimary);
   }
 
-  &.success-intent {
+  &.delta-intent-fail {
     color: var(--colorPrimary);
   }
 }
