@@ -71,5 +71,23 @@
   },
   "edit_name_placeholder": {
     "message": "Nickname for '%1'"
+  },
+  "join_group": {
+    "message": "Join Group"
+  },
+  "login_proxy_use_proxy": {
+    "message": "Use Proxy"
+  },
+  "login_proxy_url_placeholder": {
+    "message": "i.e. https://proxy.host:1234 or socks5://127.0.0.1:4567"
+  },
+  "login_proxy_url_label": {
+    "message": "Enter proxy URL here"
+  },
+  "login_proxy_experimental_warning": {
+    "message": "Proxy support is currently experimental. Please use at your own risk. If you type in an address in the e-mail field, there will be DNS lookup that won't get tunneled through proxy."
+  },
+  "login_proxy_supported_types": {
+    "message": "Supported proxy types: HTTP(S), SOCKS5 and Shadowsocks."
   }
 }

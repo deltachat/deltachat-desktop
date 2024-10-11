@@ -16,11 +16,8 @@ export type Credentials = {
   send_port?: string
   send_security?: 'automatic' | '' | 'ssl' | 'starttls' | 'plain'
   smtp_certificate_checks?: any
-  socks5_enabled: '1' | '0'
-  socks5_host: string
-  socks5_port: string
-  socks5_user: string
-  socks5_password: string
+  proxy_enabled: '1' | '0'
+  proxy_url: string
 }
 
 export type msgStatus =

@@ -47,11 +47,8 @@ export function defaultCredentials(credentials?: Credentials): Credentials {
     send_port: '',
     send_security: '',
     smtp_certificate_checks: '',
-    socks5_enabled: '0',
-    socks5_host: '',
-    socks5_port: '',
-    socks5_user: '',
-    socks5_password: '',
+    proxy_enabled: '0',
+    proxy_url: '',
   }
   return { ...defaultCredentials, ...credentials }
 }
@@ -144,11 +141,8 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
     send_server,
     send_port,
     send_security,
-    socks5_enabled,
-    socks5_host,
-    socks5_port,
-    socks5_user,
-    socks5_password,
+    proxy_enabled,
+    proxy_url,
   } = credentials
 
   // We assume that smtp_certificate_checks has the same value.
@@ -308,49 +302,23 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
               </option>
             </DeltaSelect>
             <DeltaSwitch
-              id='socks5_enabled'
-              label={tx('login_socks5_use_socks5')}
-              value={socks5_enabled}
+              id='proxy_enabled'
+              label={tx('login_proxy_use_proxy')}
+              value={proxy_enabled}
               onChange={isTrue =>
-                _handleCredentialsChange('socks5_enabled', isTrue ? '1' : '0')
+                _handleCredentialsChange('proxy_enabled', isTrue ? '1' : '0')
               }
             />
-            {socks5_enabled === '1' && (
+            {proxy_enabled === '1' && (
               <>
-                <p className='text'>
-                  {tx('login_socks5_experimental_warning')}
-                </p>
+                <p className='text'>{tx('login_proxy_experimental_warning')}</p>
+                <p className='text'>{tx('login_proxy_supported_types')}</p>
                 <DeltaInput
-                  key='socks5_host'
-                  id='socks5_host'
-                  placeholder={tx('default_value', 'localhost')}
-                  label={tx('login_socks5_host')}
-                  value={socks5_host}
-                  onChange={handleCredentialsChange}
-                />
-                <DeltaInput
-                  key='socks5_port'
-                  id='socks5_port'
-                  placeholder={tx('default_value', '9150')}
-                  label={tx('login_socks5_port')}
-                  type='number'
-                  min='0'
-                  max='65535'
-                  value={socks5_port}
-                  onChange={handleCredentialsChange}
-                />
-                <DeltaInput
-                  key='socks5_user'
-                  id='socks5_user'
-                  label={tx('login_socks5_user')}
-                  value={socks5_user}
-                  onChange={handleCredentialsChange}
-                />
-                <DeltaInput
-                  key='socks5_password'
-                  id='socks5_password'
-                  label={tx('login_socks5_password')}
-                  value={socks5_password}
+                  key='proxy_url'
+                  id='proxy_url'
+                  placeholder={tx('login_proxy_url_placeholder')}
+                  label={tx('login_proxy_url_label')}
+                  value={proxy_url}
                   onChange={handleCredentialsChange}
                 />
               </>
