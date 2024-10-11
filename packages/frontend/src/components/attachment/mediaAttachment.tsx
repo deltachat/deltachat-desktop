@@ -73,7 +73,7 @@ const contextMenuFactory = (
     },
     {
       label: tx('show_in_chat'),
-      action: () => jumpToMessage(accountId, message.id),
+      action: () => jumpToMessage(accountId, message.id, message.chatId),
     },
     {
       label: tx('info'),
