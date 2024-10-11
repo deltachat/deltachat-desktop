@@ -398,6 +398,8 @@ class MessageListStore extends Store<MessageListState> {
      * It can handle showing the message in a chat other than `this.chatId`,
      * loading the message if it is missing from `this.state.messageCache`,
      * and reloading `messageListItems` if the message is missing from there.
+     * @param msgId - when `undefined`, pop the jump stack, or,
+     * if the stack is empty, jump to last message.
      */
     jumpToMessage: this.scheduler.lockedQueuedEffect(
       'scroll',
