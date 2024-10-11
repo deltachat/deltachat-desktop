@@ -418,7 +418,7 @@ class MessageListStore extends Store<MessageListState> {
         }
         // this function already throws an error if message is not found
 
-        let chatId = -1
+        let chatId: number | undefined = undefined
         let jumpToMessageStack: number[] = []
         let message: Type.Message | undefined = undefined
         if (jumpToMessageId === undefined) {
