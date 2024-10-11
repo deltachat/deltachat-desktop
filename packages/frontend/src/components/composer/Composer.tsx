@@ -605,7 +605,7 @@ export function useDraft(
 
       // TODO perf: jumpToMessage is not instant, but it should be
       // since the message is (almost?) always already rendered.
-      jumpToMessage(accountId, messageId, true)
+      jumpToMessage(accountId, messageId, chatId, true)
     }
     // TODO perf: I imagine this is pretty slow, given IPC and some chats
     // being quite large. Perhaps we could hook into the
