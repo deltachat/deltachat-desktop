@@ -402,13 +402,13 @@ class MessageListStore extends Store<MessageListState> {
     jumpToMessage: this.scheduler.lockedQueuedEffect(
       'scroll',
       async (
-        msgId: number | undefined,
+        jumpToMessageId: number | undefined,
         highlight = true,
         addMessageIdToStack?: undefined | number
       ) => {
         const startTime = performance.now()
 
-        this.log.debug('jumpToMessage with messageId: ', msgId)
+        this.log.debug('jumpToMessage with messageId: ', jumpToMessageId)
         const accountId = selectedAccountId()
         // these methods were called in backend before
         // might be an issue if DeltaBackend.call has a significant delay
@@ -419,10 +419,9 @@ class MessageListStore extends Store<MessageListState> {
         // this function already throws an error if message is not found
 
         let chatId = -1
-        let jumpToMessageId = -1
         let jumpToMessageStack: number[] = []
         let message: Type.Message | undefined = undefined
-        if (msgId === undefined) {
+        if (jumpToMessageId === undefined) {
           // jump down
           const jumpToMessageStackLength = this.state.jumpToMessageStack.length
           if (jumpToMessageStackLength !== 0) {
@@ -434,7 +433,7 @@ class MessageListStore extends Store<MessageListState> {
               this.state.jumpToMessageStack[jumpToMessageStackLength - 1]
             message = await BackendRemote.rpc.getMessage(
               accountId,
-              jumpToMessageId as number
+              jumpToMessageId
             )
             chatId = message.chatId
           } else {
@@ -453,14 +452,12 @@ class MessageListStore extends Store<MessageListState> {
             highlight = false
           }
         } else {
-          const fromCache = this.state.messageCache[msgId]
+          const fromCache = this.state.messageCache[jumpToMessageId]
           message =
             fromCache?.kind === 'message'
               ? fromCache
-              : await BackendRemote.rpc.getMessage(accountId, msgId as number)
+              : await BackendRemote.rpc.getMessage(accountId, jumpToMessageId)
           chatId = message.chatId
-
-          jumpToMessageId = msgId as number
 
           if (addMessageIdToStack === undefined) {
             // reset jumpToMessageStack
@@ -487,7 +484,7 @@ class MessageListStore extends Store<MessageListState> {
         if (message === undefined) {
           throw new Error(
             'jumpToMessage: Tried to jump to non existing message with id: ' +
-              msgId
+              jumpToMessageId
           )
         }
 
