@@ -418,11 +418,9 @@ class MessageListStore extends Store<MessageListState> {
         if (!accountId) {
           throw new Error('no account set')
         }
-        // this function already throws an error if message is not found
 
         let chatId: number | undefined = undefined
         let jumpToMessageStack: number[] = []
-        let message: Type.Message | undefined = undefined
         if (jumpToMessageId === undefined) {
           // jump down
           const jumpToMessageStackLength = this.state.jumpToMessageStack.length
@@ -433,18 +431,16 @@ class MessageListStore extends Store<MessageListState> {
             )
             jumpToMessageId =
               this.state.jumpToMessageStack[jumpToMessageStackLength - 1]
-            message = await BackendRemote.rpc.getMessage(
-              accountId,
-              jumpToMessageId
-            )
-            chatId = message.chatId
+            chatId = (
+              await BackendRemote.rpc.getMessage(accountId, jumpToMessageId)
+            ).chatId
           } else {
             const items = this.state.messageListItems
               .map(m =>
                 m.kind === 'message' ? m.msg_id : C.DC_MSG_ID_LAST_SPECIAL
               )
               .filter(msgId => msgId !== C.DC_MSG_ID_LAST_SPECIAL)
-            message = await BackendRemote.rpc.getMessage(
+            const message = await BackendRemote.rpc.getMessage(
               accountId,
               items[items.length - 1]
             )
@@ -455,11 +451,11 @@ class MessageListStore extends Store<MessageListState> {
           }
         } else {
           const fromCache = this.state.messageCache[jumpToMessageId]
-          message =
+          chatId = (
             fromCache?.kind === 'message'
               ? fromCache
               : await BackendRemote.rpc.getMessage(accountId, jumpToMessageId)
-          chatId = message.chatId
+          ).chatId
 
           if (addMessageIdToStack === undefined) {
             // reset jumpToMessageStack
@@ -480,14 +476,6 @@ class MessageListStore extends Store<MessageListState> {
               ]
             }
           }
-        }
-
-        //@ts-ignore
-        if (message === undefined) {
-          throw new Error(
-            'jumpToMessage: Tried to jump to non existing message with id: ' +
-              jumpToMessageId
-          )
         }
 
         const isMessageInCurrentChat =
