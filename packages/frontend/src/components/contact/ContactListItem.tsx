@@ -90,7 +90,7 @@ export function ContactListItem(props: {
         />
       )}
       {showRemove && contact.id !== 1 && (
-        <button onClick={onRemoveClick}>
+        <button className='btn-remove' onClick={onRemoveClick}>
           <Icon icon='cross' coloring='remove' />
         </button>
       )}

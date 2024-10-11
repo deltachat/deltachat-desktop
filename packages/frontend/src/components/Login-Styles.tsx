@@ -196,7 +196,7 @@ export const DeltaPasswordInput = React.memo(
   }
 )
 
-type DeltaIntent = 'primary' | 'success' | 'fail'
+type DeltaIntent = 'primary' | 'success' | 'danger'
 
 type ProgressBarProps = React.PropsWithChildren<{
   progress: number

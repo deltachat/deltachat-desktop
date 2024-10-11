@@ -5,18 +5,6 @@ $imageSize: 100px;
   height: $imageSize;
   user-select: none;
   width: $imageSize;
-
-  button {
-    background: none;
-    border: none;
-    border-radius: 50%;
-    padding: 0;
-    // space for focus outline
-    margin: 3px;
-    &:hover {
-      background-color: var(--buttonHover);
-    }
-  }
 }
 
 .largeProfileImageArea {
