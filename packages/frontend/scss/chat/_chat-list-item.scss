@@ -3,6 +3,11 @@
 .chat-list-item,
 .pseudo-chat-list-item {
   height: 64px;
+  width: 100%;
+  text-align: unset;
+  color: var(--globalText);
+  background-color: transparent;
+  border: none;
   display: flex;
   flex-direction: row;
   padding: 0px 10px;
