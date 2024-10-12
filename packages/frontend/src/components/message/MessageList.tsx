@@ -346,6 +346,11 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
           domElement.tagName === 'LI' ? domElement : domElement.parentElement
         if (highlightableElement !== null) {
           setTimeout(() => {
+            // Stop the animation on the previously highlighted message.
+            highlightableElement.parentElement
+              ?.querySelectorAll(':scope > .highlight')
+              .forEach(el => el.classList.remove('highlight'))
+
             // Retrigger animation
             highlightableElement.classList.add('highlight')
             highlightableElement.style.animation = 'none'
