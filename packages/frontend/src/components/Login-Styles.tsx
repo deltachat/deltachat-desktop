@@ -171,7 +171,6 @@ export const DeltaPasswordInput = React.memo(
 
     const rightElement = (
       <Button
-        styling='minimal'
         onClick={() => setShowPassword(!showPassword)}
         aria-label={showPassword ? tx('hide_password') : tx('show_password')}
       >

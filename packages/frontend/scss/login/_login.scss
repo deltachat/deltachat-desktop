@@ -11,14 +11,15 @@
     font-weight: bold;
   }
 
-  div.advanced {
-    -webkit-appearance: button-bevel;
+  button.advanced {
     background-color: transparent;
     color: var(--loginInputFocusColor);
+    border: none;
     font-size: 16px;
     display: block;
     width: 100%;
     margin-top: 30px;
+    text-align: left;
     &:hover {
       cursor: pointer;
     }
@@ -91,6 +92,11 @@ div.delta-form-group {
     position: absolute;
     right: 7px;
     bottom: 7px;
+
+    // make buttons smaller
+    button {
+      padding: 3px;
+    }
   }
 
   &.delta-select {

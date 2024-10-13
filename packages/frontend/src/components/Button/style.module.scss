@@ -13,7 +13,6 @@
   text-align: center;
   text-transform: uppercase;
   user-select: none;
-  outline: none;
 
   &:hover {
     background-color: var(--buttonHover);
@@ -45,9 +44,5 @@
 
   &.active {
     background-color: var(--navBarButtonActive);
-  }
-
-  &.minimal {
-    padding: 3px;
   }
 }

@@ -191,15 +191,16 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
           )}
 
           <p className='text'>{tx('login_no_servers_hint')}</p>
-          <div
+          <button
             className='advanced'
+            aria-controls='advanced-collapse'
             onClick={() => setUiShowAdvanced(!uiShowAdvanced)}
             id={'show-advanced-button'}
           >
             <div className={`advanced-icon ${uiShowAdvanced && 'opened'}`} />
             <p>{tx('menu_advanced')}</p>
-          </div>
-          <Collapse isOpen={uiShowAdvanced}>
+          </button>
+          <Collapse id='advanced-collapse' isOpen={uiShowAdvanced}>
             <br />
             <p className='delta-headline'>{tx('login_inbox')}</p>
 

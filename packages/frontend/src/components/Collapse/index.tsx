@@ -1,16 +1,11 @@
 import React, { useLayoutEffect, useRef } from 'react'
 
-type Props = {
-  className?: string
+type Props = React.PropsWithChildren<{
+  id?: string
   isOpen: boolean
-  children: any
-}
+}>
 
-export default function Collapse({
-  className,
-  children,
-  isOpen = false,
-}: Props) {
+export default function Collapse({ isOpen = false, children, id }: Props) {
   const content = useRef<HTMLDivElement>(null)
   const wrapper = useRef<HTMLDivElement>(null)
 
@@ -26,6 +21,14 @@ export default function Collapse({
     wrapper.current.style.height = maxHeight
 
     content.current.style.transform = `translate(0px, ${translateY})`
+
+    // hack to support inert while it's not in React types
+    // inert makes elements inside non-focusable
+    if (isOpen) {
+      content.current.removeAttribute('inert')
+    } else {
+      content.current.setAttribute('inert', 'inert')
+    }
   })
   return (
     <div
@@ -34,11 +37,13 @@ export default function Collapse({
         overflow: 'hidden',
         transition: 'height 0.5s ease-out',
       }}
+      aria-expanded={isOpen}
     >
       <div
+        id={id}
         ref={content}
-        className={className}
         style={{
+          display: 'block',
           transition: 'transform 0.5s ease-out',
         }}
       >
