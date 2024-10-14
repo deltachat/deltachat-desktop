@@ -216,8 +216,6 @@
     <string name="chat_record_slide_to_cancel">Ləğv etmək üçün sürüşdürün</string>
     <string name="chat_record_explain">Bir səsli mesajı yazmaq üçün toxunun və saxlayın, göndərmək üçün buraxın</string>
     <string name="chat_no_chats_yet_title">Qutu boşdur.\nYeni çata başlamaq üçün \"+\" işarəsinə toxunun. </string>
-    <!-- deprecated -->
-    <string name="chat_no_chats_yet_hint">Digər Delta Chat istifadəçiləri ilə və hər hansı bir e-poçt ünvanı ilə söhbət edə bilərsiniz.</string>
     <string name="chat_all_archived">Bütün çatlar saxlanıldı.\nYeni çata başlamaq üçün \"+\" işarəsinə toxunun. </string>
     <string name="chat_share_with_title">Göndər </string>
     <string name="chat_input_placeholder">Mesaj</string>
@@ -235,8 +233,6 @@
     <string name="search">Axtarış</string>
     <string name="search_explain">Çatlar, kontaktlar və mesajlar axtar</string>
     <string name="search_no_result_for_x">\"%s\" üçün heç bir nəticə tapılmadı</string>
-
-
     <!-- create/edit groups, contact/group profile -->
     <string name="group_name">Qrup adı</string>
     <string name="group_avatar">Qrupun şəkili</string>
@@ -372,10 +368,6 @@
     <string name="pref_background_custom_image">Şəkil</string>
     <string name="pref_background_custom_color">Rəng</string>
     <!-- autocrypt -->
-    <!-- deprecated, used "Encryption" if a headline is needed -->
-    <string name="autocrypt">Avtomatik şifrələmə</string>
-    <!-- deprecated, the button "Send Autocrypt Setup Message" is enough -->
-    <string name="autocrypt_explain">Avtoşifrələmə, avtomatik ucdan uca e-poçt şifrələməsi üçün yeni və açıq bir spesifikasiyadır. \n\nTədbirdən sonrakı qurulum avtomatik olaraq yaradılıb və Autocrypt Setup Messages ilə cihazlar arasında köçürə bilərsiniz.</string>
     <string name="autocrypt_send_asm_title">Autocrypt mesaj ayarı göndər</string>
     <string name="autocrypt_send_asm_explain_before">Autocrypt Setup Message digər Autocrypt-uyğun proqramlarla təhlükəsiz şəkildə bölüşür. \n\nSizin buradakı quraşdırma koduyla şifrələnir və digər qurğuda yazılmalıdır.</string>
     <string name="autocrypt_send_asm_button">Autocrypt Setup Message-ı göndər</string>
@@ -392,6 +384,7 @@
 
 
     <!-- system messages -->
+    <!-- deprecated -->
     <string name="systemmsg_read_receipt_subject">Qəbul olunanları oxuyun</string>
     <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name -->
     <string name="group_name_changed_by_you">Qrupun adı \"%1$s\" - dən \"%2$s\" - yə deyişildi məndən. </string>

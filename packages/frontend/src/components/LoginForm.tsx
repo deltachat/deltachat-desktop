@@ -303,7 +303,7 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
             </DeltaSelect>
             <DeltaSwitch
               id='proxy_enabled'
-              label={tx('login_proxy_use_proxy')}
+              label={tx('proxy_use_proxy')}
               value={proxy_enabled}
               onChange={isTrue =>
                 _handleCredentialsChange('proxy_enabled', isTrue ? '1' : '0')
@@ -312,12 +312,11 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
             {proxy_enabled === '1' && (
               <>
                 <p className='text'>{tx('login_proxy_experimental_warning')}</p>
-                <p className='text'>{tx('login_proxy_supported_types')}</p>
+                <p className='text'>{tx('proxy_add_explain')}</p>
                 <DeltaInput
                   key='proxy_url'
                   id='proxy_url'
-                  placeholder={tx('login_proxy_url_placeholder')}
-                  label={tx('login_proxy_url_label')}
+                  label={tx('proxy_add_url_hint')}
                   value={proxy_url}
                   onChange={handleCredentialsChange}
                 />

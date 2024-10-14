@@ -21,6 +21,7 @@
 - trim whitepaces when reading from clipboard in qr code reader #4169
 - load chat lists faster (the chat list on the main screen, "Forward to..." dialog, etc)
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.147.0`
+- Update proxy configuration - a full url can be entered now
 
 ### Fixed
 - fix that you can not click header button in dialog when they are on top of the navbar #4093

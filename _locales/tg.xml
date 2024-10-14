@@ -4,7 +4,7 @@
     <string name="app_name">Дилтачат</string>
     <string name="ok">Хуб</string>
     <string name="cancel">Бекор</string>
-   <!-- the word "or" to separate blocks in the user interface that are mutually exclusive -->
+   <!-- deprecated, the word "or" to separate blocks in the user interface that are mutually exclusive -->
     <string name="or_separator">ё</string>
     <string name="yes">Бале</string>
     <string name="no">Не</string>

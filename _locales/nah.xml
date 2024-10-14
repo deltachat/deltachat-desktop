@@ -4,7 +4,7 @@
     <string name="app_name">Delta Chat</string>
     <string name="ok">Kwalli</string>
     <string name="cancel">Axkanah</string>
-   <!-- the word "or" to separate blocks in the user interface that are mutually exclusive -->
+   <!-- deprecated, the word "or" to separate blocks in the user interface that are mutually exclusive -->
     <string name="or_separator">so</string>
     <string name="clear_search">Xikixpolo</string>
     <string name="yes">Kena</string>

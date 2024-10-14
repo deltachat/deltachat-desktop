@@ -166,7 +166,6 @@
     <string name="menu_add_attachment">Tilføj vedhæftning</string>
     <string name="menu_leave_group">Forlad gruppe</string>
     <string name="menu_delete_chat">Slet samtale</string>
-    <string name="ask_delete_named_chat">Er du sikker på at du vil slette \"%1$s\"?</string>
     <string name="menu_delete_messages">Slet beskeder</string>
     <string name="delete_contact">Slet kontakt</string>
     <string name="menu_delete_location">Slet denne placering?</string>
@@ -213,11 +212,11 @@
     <string name="device_talk_subtitle">Lokalt genererede beskeder</string>
     <string name="device_talk_explain">Beskederne i denne chat er blevet generated lokalt af din Delta Chat app. Skaberne af appen bruger dette til at informere om app-opdateringer og problemer under brug.</string>
     <string name="edit_contact">Rediger kontakt</string>
-    <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
+    <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin_chat">Fastgør chat</string>
     <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
     <string name="unpin_chat">Løsn samtale</string>
-    <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
+    <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin">Fastgør</string>
     <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
     <string name="unpin">Løsn</string>
@@ -260,6 +259,7 @@
         <item quantity="one">Slette %d samtale? Den vil ikke længere blive vist i samtale listen, dens beskeder vil forblive på serveren.</item>
         <item quantity="other">Slet %d samtaler? De vil ikke længere blive vist i samtale listen, deres beskeder vil forblive på serveren.</item>
     </plurals>
+    <string name="ask_delete_named_chat">Er du sikker på at du vil slette \"%1$s\"?</string>
     <string name="ask_delete_message">Er du sikker på at du vil slette denne besked?</string>
     <plurals name="ask_delete_messages">
         <item quantity="one">Slette %d besked her og på serveren?</item>
@@ -312,8 +312,6 @@
     <string name="chat_record_slide_to_cancel">Træk for at annullere</string>
     <string name="chat_record_explain">Tryk og hold for at optage talebesked, slip for at sende.</string>
     <string name="chat_no_chats_yet_title">Tom indbakke.\nTryk \"+\" for at starte ny samtale.</string>
-    <!-- deprecated -->
-    <string name="chat_no_chats_yet_hint">Du kan have samtaler med andre Delta Chat brugere og med enhver e-mailadresse.</string>
     <string name="chat_all_archived">Alle samtaler er arkiveret.\nTryk \"+\" for at starte ny samtale.</string>
     <string name="chat_share_with_title">Del med</string>
     <string name="chat_input_placeholder">Besked</string>
@@ -338,8 +336,6 @@
     <string name="search">Søg</string>
     <string name="search_explain">Søg efter samtaler, kontakter og beskeder</string>
     <string name="search_no_result_for_x">Ingen resultater fundet for  \"%s\"</string>
-
-
     <!-- create/edit groups, contact/group profile -->
     <string name="group_name">Gruppenavn</string>
     <string name="group_avatar">Gruppeikon</string>
@@ -400,13 +396,14 @@
     <string name="login_smtp_port">SMTP port</string>
     <string name="login_smtp_security">SMTP sikkerhed</string>
     <string name="login_auth_method">Autorisationsmetode</string>
-    <!-- the word "SOCKS5" here and in the following strings should not be translated in most cases -->
+    <!-- deprecated -->
     <string name="login_socks5">SOCKS5</string>
     <string name="login_socks5_use_socks5">Brug SOCKS5</string>
     <string name="login_socks5_host">SOCKS5 Værtsnavn</string>
     <string name="login_socks5_port">SOCKS5 Port</string>
     <string name="login_socks5_user">SOCKS5 Brugernavn</string>
     <string name="login_socks5_password">SOCKS5 adgangskode</string>
+
     <string name="login_info_oauth2_title">Fortsæt med forenklet opsætning?</string>
     <string name="login_info_oauth2_text">Indtastet e-mail adresse understøtter simple opsætning (OAuth2).\n\nTillad i næste trin at Delta Chat agerer som samtale med e-mail program.\n\nDer er ingen Delta Chat servere, data forbliver på enhed.</string>
     <string name="login_certificate_checks">Certifikationstjek</string>
@@ -421,7 +418,6 @@
     <string name="login_error_cannot_login">Kan ikke logge ind som  \"%1$s\". Kontroller om e-mailadresse og adgangskode er korrekt.</string>
     <!-- TLS certificate checks -->
     <string name="accept_invalid_certificates">Acceptér ugyldige certifikater</string>
-    <string name="used_settings">Benyttede indstillinger:</string>
     <string name="switch_account">Skift konto</string>
     <string name="add_account">Tilføj konto</string>
     <string name="delete_account">Slet konto</string>
@@ -435,8 +431,7 @@
     <!-- share and forward messages -->
     <!-- Translators: shown above a chat/contact list when selecting recipients to forward messages -->
     <string name="forward_to">Videresend til …</string>
-    <string name="share_multiple_attachments">Send %1$d filer til den valgte samtale?\n\nFilerne bliver sendt umodificeret i deres originale størrelse, f.eks. billeder og videoer bliver ikke ændret.</string>
-    <string name="share_multiple_attachments_multiple_chats">Send %1$d file(er) til %2$d samtaler?\n\nFilerne bliver sendt umodificeret i deres originale størrelse, f.eks. billeder og videoer bliver ikke ændret.</string>
+    <string name="ask_send_files_to_selected_chats">Send %1$d file(er) til %2$d samtaler?</string>
     <string name="share_text_multiple_chats">Send denne tekst til %1$d samtaler?\n\n\"%2$s\"</string>
     <string name="share_abort">Deling afbrudt på grund af manglende tilladelser.</string>
 
@@ -568,15 +563,10 @@
     <string name="autodel_after_1_hour">Efter 1 time</string>
     <string name="autodel_after_1_day">Efter 1 dag</string>
     <string name="autodel_after_1_week">Efter 1 uge</string>
-    <string name="autodel_after_4_weeks">Efter 4 uger</string>
     <string name="after_5_weeks">Efter 5 uger</string>
     <string name="autodel_after_1_year">Efter 1 år</string>
 
     <!-- autocrypt -->
-    <!-- deprecated, used "Encryption" if a headline is needed -->
-    <string name="autocrypt">Autocrypt</string>
-    <!-- deprecated, the button "Send Autocrypt Setup Message" is enough -->
-    <string name="autocrypt_explain">Autocrypt er en ny åben specifikation for automatisk end-to-end e-mail kryptering.\n\nEnd-to-end opsætning bliver oprettet automatisk efter behov og kan overføres mellem enheder med Autocrypt opsætning beskeder.</string>
     <string name="autocrypt_send_asm_title">Send Autocrypt opsætning besked</string>
     <string name="autocrypt_send_asm_explain_before">En \"Autocrypt opsætning besked\" deler sikkert end-to-end opsætning med andre Autocrypt kompatible programmer.\n\nOpsætning er krypteret med en kode som er vist her og skal indtastes på den anden enhed.</string>
     <string name="autocrypt_send_asm_button">Send autocrypt-opsætningsbesked</string>
@@ -593,7 +583,9 @@
 
 
     <!-- system messages -->
+    <!-- deprecated -->
     <string name="systemmsg_read_receipt_subject">Besked åbnet</string>
+    <!-- deprecated -->
     <string name="systemmsg_read_receipt_body">Beskeden \"%1$s\" du har sendt blev vist på modtagerens skærm.\n\nDette er ikke en garanti for at indholdet blev læst.</string>
     <string name="systemmsg_unknown_sender_for_chat">Ukent afsender af denne chat. Se \'info\' for flere detaljer.</string>
     <string name="systemmsg_subject_for_new_contact">Besked fra %1$s</string>
@@ -679,8 +671,6 @@
     <string name="qraccount_ask_create_and_login">Opret ny e-mail adresse på \"%1$s\" og log ind der?</string>
     <string name="qraccount_ask_create_and_login_another">Opret ny e-mail adresse på \"%1$s\" og log ind der?\n\nDin eksisterende konto bliver ikke slettet. Brug \"Skift konto\" for at skifte imellem dine konti.</string>
     <string name="qraccount_qr_code_cannot_be_used">Den skannede QR-kode kan ikke bruges til at opsætte en ny konto.</string>
-    <!-- deprecated -->
-    <string name="qraccount_use_on_new_install">Den skannede QR-kode er til at opsætte en ny konto. Du kan skanne QR-kode når du opsætter en ny Delta Chat installation.</string>
     <string name="contact_verified">%1$s bekræftet.</string>
     <string name="contact_not_verified">Kan ikke bekræfte %1$s</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
