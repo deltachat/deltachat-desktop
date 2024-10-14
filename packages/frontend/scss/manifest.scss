@@ -3,8 +3,6 @@
 // import node_module dependencies (without ".css" means include)
 @import '../node_modules/normalize.css/normalize';
 
-// Overwrites for third party node modules.
-// Above our styles, so that our styles take priority by being defined after.
 
 // Global Settings, Variables, and Mixins
 @import 'variables';
