@@ -33,6 +33,11 @@ $tab-height: 46px;
         border-bottom: 3px solid #42a5f5;
         cursor: pointer;
       }
+      &.big-date:hover {
+        color: var(--summary-text-color);
+        border-bottom: none;
+        cursor: default;
+      }
     }
   }
 

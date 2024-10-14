@@ -262,6 +262,7 @@ export default class Gallery extends Component<
               </div>
             </>
           )}
+          {currentTab === 'webxdc_apps' && <div style={{ flexGrow: 1 }}></div>}
         </ul>
         <div role='tabpanel' style={{ flexGrow: 1 }}>
           <div
