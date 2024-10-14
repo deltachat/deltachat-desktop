@@ -20,7 +20,7 @@
 - Update local help (2024-10-02) #4165
 - trim whitepaces when reading from clipboard in qr code reader #4169
 - load chat lists faster (the chat list on the main screen, "Forward to..." dialog, etc)
-- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.147.0`
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.147.1`
 - Update proxy configuration - a full url can be entered now
 
 ### Fixed
