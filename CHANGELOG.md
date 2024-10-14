@@ -19,6 +19,7 @@
 - show contact / group name when pasting invite link in the search field #4151
 - Update local help (2024-10-02) #4165
 - trim whitepaces when reading from clipboard in qr code reader #4169
+- replace BlueprintJS Button, Icon, Radio, RadioGroup, Collapse, Dialog with our implementation
 
 ### Fixed
 - fix that you can not click header button in dialog when they are on top of the navbar #4093
@@ -69,7 +70,6 @@
 
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.142.11`
   - Set backward verification when observing `vc-contact-confirm` or `vg-member-added`
-- replace BlueprintJS Button, Icon, Radio, RadioGroup, Collapse, Dialog with our implementation
 
 
 <a id="1_46_6"></a>

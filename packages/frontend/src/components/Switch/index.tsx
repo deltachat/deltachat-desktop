@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useRef } from 'react'
+import React, { PropsWithChildren, useState } from 'react'
 
 import classNames from 'classnames'
 
@@ -12,36 +12,29 @@ type Props = {
   onChange: (value: boolean) => void
 }
 export default function Switch({ ...props }: PropsWithChildren<Props>) {
-  const inputRef = useRef<HTMLInputElement>(null)
+  const [checked, setChecked] = useState(props.checked)
 
-  const toggle = () => {
-    if (!inputRef.current) {
-      return
-    }
-    const prev = !!inputRef.current.checked
-
-    inputRef.current.checked = !prev
+  const toggle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const v = event.target.checked
+    props.onChange(v)
+    setChecked(v)
   }
+
   return (
-    <>
-      <div onClick={toggle} className={styles.switchWrapper}>
-        <input
-          id={props.id}
-          ref={inputRef}
-          onChange={event => {
-            props.onChange(event.currentTarget.checked)
-          }}
-          type='checkbox'
-          disabled={props.disabled}
-          checked={props.checked}
-          aria-label={props.label}
-        />
-        <span
-          className={classNames(styles.switchIndicator, {
-            [styles.switchIndicatorOn]: props.checked,
-          })}
-        ></span>
-      </div>
-    </>
+    <div className={styles.switchWrapper}>
+      <input
+        id={props.id}
+        type='checkbox'
+        disabled={props.disabled}
+        onChange={toggle}
+        checked={checked}
+        aria-label={props.label}
+      />
+      <span
+        className={classNames(styles.switchIndicator, {
+          [styles.switchIndicatorOn]: checked,
+        })}
+      ></span>
+    </div>
   )
 }
