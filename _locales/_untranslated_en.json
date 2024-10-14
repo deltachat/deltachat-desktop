@@ -74,8 +74,5 @@
   },
   "join_group": {
     "message": "Join Group"
-  },
-  "login_proxy_experimental_warning": {
-    "message": "Proxy support is currently experimental. Please use at your own risk. If you type in an address in the e-mail field, there will be DNS lookup that won't get tunneled through proxy."
   }
 }
