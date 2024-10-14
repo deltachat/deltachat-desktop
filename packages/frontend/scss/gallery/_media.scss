@@ -23,8 +23,8 @@ $tab-height: 46px;
   .tab-list {
     display: flex;
     justify-content: space-between;
+    gap: 30px;
     .tab-item {
-      margin-right: 30px;
       font-size: 1.1rem;
       padding-bottom: 6px;
       &.selected,
