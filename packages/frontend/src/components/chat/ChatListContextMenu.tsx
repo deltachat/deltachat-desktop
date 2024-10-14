@@ -1,10 +1,10 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
+import { BackendRemote, onDCEvent } from '../../backend-com'
 
 import { Timespans } from '../../../../shared/constants'
 import { ContextMenuItem } from '../ContextMenu'
 import MailingListProfile from '../dialogs/MessageListProfile'
-import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import { unmuteChat } from '../../backend/chat'
@@ -14,10 +14,13 @@ import useChatDialog from '../../hooks/chat/useChatDialog'
 import useDialog from '../../hooks/dialog/useDialog'
 import useOpenViewGroupDialog from '../../hooks/dialog/useOpenViewGroupDialog'
 import useOpenViewProfileDialog from '../../hooks/dialog/useOpenViewProfileDialog'
+import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import type { UnselectChat } from '../../contexts/ChatContext'
+
+import debounce from 'debounce'
 
 function archiveStateMenu(
   unselectChat: UnselectChat,
@@ -94,6 +97,7 @@ export function useChatListContextMenu(): {
   } = useChatDialog()
   const openViewGroupDialog = useOpenViewGroupDialog()
   const openViewProfileDialog = useOpenViewProfileDialog()
+  const openConfirmationDialog = useConfirmationDialog()
   const { openContextMenu } = useContext(ContextMenuContext)
   const accountId = selectedAccountId()
   const { unselectChat } = useChat()
@@ -101,6 +105,22 @@ export function useChatListContextMenu(): {
   const [activeContextMenuChatId, setActiveContextMenuChatId] = useState<
     number | null
   >(null)
+
+  const [blockedContacts, setBlockedContacts] = useState<T.Contact[] | null>(
+    null
+  )
+
+  useEffect(() => {
+    const onContactsUpdate = async () => {
+      setBlockedContacts(await BackendRemote.rpc.getBlockedContacts(accountId))
+    }
+    onContactsUpdate()
+    return onDCEvent(
+      accountId,
+      'ContactsChanged',
+      debounce(onContactsUpdate, 500)
+    )
+  }, [accountId])
 
   return {
     activeContextMenuChatId,
@@ -139,7 +159,29 @@ export function useChatListContextMenu(): {
       const onLeaveGroup = () => openLeaveChatDialog(accountId, chatListItem.id)
       const onBlockContact = () =>
         openBlockFirstContactOfChatDialog(accountId, chatListItem)
+      const onUnblockContact = async () => {
+        const contactId = chatListItem.dmChatContact
+
+        if (contactId) {
+          const confirmed = await openConfirmationDialog({
+            message: tx('ask_unblock_contact'),
+            confirmLabel: tx('menu_unblock_contact'),
+          })
+
+          if (confirmed) {
+            await BackendRemote.rpc.unblockContact(accountId, contactId)
+          }
+        }
+      }
       const onUnmuteChat = () => unmuteChat(accountId, chatListItem.id)
+
+      const displayBlocked =
+        !chatListItem.isGroup &&
+        !(chatListItem.isSelfTalk || chatListItem.isDeviceTalk)
+
+      const isContactBlocked =
+        displayBlocked &&
+        blockedContacts?.some(c => chatListItem.dmChatContact === c.id)
 
       const menu: (ContextMenuItem | false)[] = chatListItem
         ? [
@@ -263,11 +305,16 @@ export function useChatListContextMenu(): {
                 action: onLeaveGroup,
               },
             // Block contact
-            !chatListItem.isGroup &&
-              !(chatListItem.isSelfTalk || chatListItem.isDeviceTalk) && {
-                label: tx('menu_block_contact'),
-                action: onBlockContact,
-              },
+            displayBlocked &&
+              (isContactBlocked
+                ? {
+                    label: tx('menu_unblock_contact'),
+                    action: onUnblockContact,
+                  }
+                : {
+                    label: tx('menu_block_contact'),
+                    action: onBlockContact,
+                  }),
             // Delete
             {
               label: tx('menu_delete_chat'),
