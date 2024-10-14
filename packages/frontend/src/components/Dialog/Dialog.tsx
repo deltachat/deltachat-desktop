@@ -34,7 +34,9 @@ const Dialog = React.memo<Props>(
           if (!dialog.current) {
             return
           }
-          // this is to filter out when pressing keys trigger `onClick`
+          // pressing a button with Spacebar inside a dialog
+          // triggers the `onClick` event.
+          // Let's ignore such "clicks" here.
           if (ev.screenX == 0 && ev.screenY == 0) {
             return
           }
