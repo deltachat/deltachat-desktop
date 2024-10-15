@@ -10,12 +10,15 @@
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
+    & > input {
+      margin: 0 3px 0 0;
+    }
     & > img {
       height: 36px;
       width: 36px;
     }
     & > label {
-      padding-left: 4px;
+      padding-left: 7px;
       padding-right: 4px;
       height: 36px;
       display: inline-flex;

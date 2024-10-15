@@ -133,7 +133,7 @@ class SettingsStore extends Store<SettingsStoreState | null> {
       )
       const desktopSettings = await runtime.getDesktopSettings()
 
-      const rc = await runtime.getRC_Config()
+      const rc = runtime.getRC_Config()
       this.reducer.setState({
         settings,
         selfContact,

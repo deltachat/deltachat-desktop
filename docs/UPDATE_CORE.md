@@ -60,6 +60,8 @@ DELTA_CHAT_RPC_SERVER=$(which deltachat-rpc-server) pnpm -w dev:electron -- --al
 
 very useful for development.
 
+But be aware: there might be **migrations** that are applied to your accounts databases and there is no way back, unless you have a **backup**!
+
 If you already have a core git checkout, you can skip the first step.
 
 1. clone the core repo, right next to your desktop repo folder: `git clone git@github.com:deltachat/deltachat-core-rust.git`

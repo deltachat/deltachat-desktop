@@ -4,6 +4,7 @@
 
 ### Added
 - Experimental Telegram-style Esc to cancel reply (quote) #4153
+- new ViewProfile context menu for blocking/unblocking contact and checking encryption #4043
 
 ### Changed
 - Update electron from `30.3.1` to `32.1.0` #4138
@@ -15,11 +16,12 @@
 - windows 64bit and 32bit protable and setup now have different filenames #4131
 - scroll the selected account into view in the accounts sidebar #4137
 - dev: clarify scrolling-related code #4121
-- improved performance a bit #4145, #4188
-- show contact / group name when pasting invite link in the search field #4151
+- improved performance a bit #4145, #4188, #4206
+- show contact / group name & avatar when pasting invite link in the search field #4151, #4178
 - Update local help (2024-10-02) #4165
 - trim whitepaces when reading from clipboard in qr code reader #4169
 - load chat lists faster (the chat list on the main screen, "Forward to..." dialog, etc)
+- replace BlueprintJS Button, Icon, Radio, RadioGroup, Collapse, Dialog with our implementation
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.147.1`
 - Update proxy configuration - a full url can be entered now
 
@@ -46,6 +48,11 @@
 - fix: exit search when clicking on profile when the selected profile is already the selected account #4166
 - "Encryption Info" dialog showing all info in one line #4162
 - losing scrolling "momentum" while scrolling the messages list fast #4122
+- fix crash when you chose Settings from a context menu on account you haven't selected #4190
+- fix All Media not opening from a context menu on account you haven't selected #4191
+- cancel old message highlight animations when a new message is highlighted #4203
+- fix: packaging: include architecture in filename for all appimages #4202
+- fix: make open external link scheme case insensive #4201
 
 <a id="1_46_8"></a>
 

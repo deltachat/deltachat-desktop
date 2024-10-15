@@ -2,7 +2,6 @@
 
 import { C, DcEventType } from '@deltachat/jsonrpc-client'
 import React, { useEffect, useRef, useState } from 'react'
-import { Collapse } from '@blueprintjs/core'
 import { useDebouncedCallback } from 'use-debounce/lib'
 
 import {
@@ -10,7 +9,6 @@ import {
   DeltaPasswordInput,
   DeltaSelect,
   DeltaProgressBar,
-  DeltaSwitch,
 } from './Login-Styles'
 import { ClickableLink } from './helpers/ClickableLink'
 import { Credentials } from '../types-app'
@@ -24,11 +22,13 @@ import Dialog, {
   FooterActionButton,
   FooterActions,
 } from './Dialog'
+import Collapse from './Collapse'
 import { I18nContext } from '../contexts/I18nContext'
 import useTranslationFunction from '../hooks/useTranslationFunction'
 import { getDeviceChatId, saveLastChatId } from '../backend/chat'
 
 import type { DialogProps } from '../contexts/DialogContext'
+import SettingsSwitch from './Settings/SettingsSwitch'
 
 const log = getLogger('renderer/loginForm')
 
@@ -185,15 +185,16 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
           )}
 
           <p className='text'>{tx('login_no_servers_hint')}</p>
-          <div
+          <button
             className='advanced'
+            aria-controls='advanced-collapse'
             onClick={() => setUiShowAdvanced(!uiShowAdvanced)}
             id={'show-advanced-button'}
           >
             <div className={`advanced-icon ${uiShowAdvanced && 'opened'}`} />
             <p>{tx('menu_advanced')}</p>
-          </div>
-          <Collapse isOpen={uiShowAdvanced}>
+          </button>
+          <Collapse id='advanced-collapse' isOpen={uiShowAdvanced}>
             <br />
             <p className='delta-headline'>{tx('login_inbox')}</p>
 
@@ -301,11 +302,10 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
                 {tx('accept_invalid_certificates')}
               </option>
             </DeltaSelect>
-            <DeltaSwitch
-              id='proxy_enabled'
+            <SettingsSwitch
               label={tx('proxy_use_proxy')}
-              value={proxy_enabled}
-              onChange={isTrue =>
+              value={proxy_enabled === '1'}
+              onChange={(isTrue: boolean) =>
                 _handleCredentialsChange('proxy_enabled', isTrue ? '1' : '0')
               }
             />

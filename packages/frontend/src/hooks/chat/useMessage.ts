@@ -10,6 +10,13 @@ import type { T } from '@deltachat/jsonrpc-client'
 export type JumpToMessage = (
   accountId: number,
   msgId: number,
+  /**
+   * Optional, but if it is known, it's best to provide it
+   * for better performance.
+   * When provided, the caller guarantees that
+   * `msgChatId === await rpc.getMessage(accountId, msgId)).chatId`.
+   */
+  msgChatId?: number,
   highlight?: boolean,
   msgParentId?: number
 ) => Promise<void>
@@ -51,15 +58,19 @@ export default function useMessage() {
     async (
       accountId: number,
       msgId: number,
+      msgChatId?: number,
       highlight = true,
       msgParentId?: number
     ) => {
       log.debug(`jumpToMessage with messageId: ${msgId}`)
 
+      if (msgChatId == undefined) {
+        msgChatId = (await BackendRemote.rpc.getMessage(accountId, msgId))
+          .chatId
+      }
       // Check if target message is in same chat, if not switch first
-      const message = await BackendRemote.rpc.getMessage(accountId, msgId)
-      if (message.chatId !== chatId) {
-        await selectChat(accountId, message.chatId)
+      if (msgChatId !== chatId) {
+        await selectChat(accountId, msgChatId)
       }
       setChatView(ChatView.MessageList)
 
@@ -83,7 +94,7 @@ export default function useMessage() {
       })
 
       // Jump down on sending
-      jumpToMessage(accountId, id, false)
+      jumpToMessage(accountId, id, chatId, false)
     },
     [jumpToMessage]
   )

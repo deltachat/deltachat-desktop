@@ -34,7 +34,10 @@ export function useOpenNonMailtoLinkSafely() {
 
   return useCallback(
     async (url: string) => {
-      if (url.startsWith('http:') || url.startsWith('https:')) {
+      if (
+        url.toLowerCase().startsWith('http:') ||
+        url.toLowerCase().startsWith('https:')
+      ) {
         runtime.openLink(url)
       } else {
         const userConfirmed = await openConfirmationDialog({

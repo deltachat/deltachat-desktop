@@ -13,7 +13,17 @@
     background-color: var(--settingsIconColor);
   }
 
-  &.context-menu {
+  &.contextMenu {
     background-color: var(--contextMenuText);
+  }
+
+  &.fullscreenControls {
+    background-color: var(--fullScreenMediaButtons);
+  }
+
+  &.remove {
+    &:hover {
+      background-color: #bf0000;
+    }
   }
 }

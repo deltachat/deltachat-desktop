@@ -99,7 +99,10 @@ export default function AccountItem({
         // set Timeout forces it to be run after react update
         setTimeout(() => {
           ActionEmitter.emitAction(KeybindAction.GlobalGallery_Open)
-        }, 0)
+          // NOTE(maxph): Gallery.tsx gets unmounted before receiving media data
+          // and only partially updates chat header without changing chat view to Gallery,
+          // so here 50ms is a temprorary workaround for that
+        }, 50)
       },
     },
     {

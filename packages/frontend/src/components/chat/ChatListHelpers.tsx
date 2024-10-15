@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { getLogger } from '../../../../shared/logger'
 import { debounce } from 'debounce'
 import { BackendRemote, onDCEvent } from '../../backend-com'
@@ -59,30 +59,30 @@ export function useMessageResults(
  * The said cache is also updated on `ChatlistChanged` event.
  */
 export function useChatList(
-  initialListFlags: number | null = null,
-  initialQueryStr?: string,
-  initialQueryContactId?: number
+  listFlags: number | null = null,
+  queryStr?: string,
+  queryContactId?: number
 ) {
   if (window.__selectedAccountId === undefined) {
     throw new Error('no context selected')
   }
   const accountId = window.__selectedAccountId
-  if (!initialQueryStr) initialQueryStr = ''
+  if (!queryStr) queryStr = ''
 
-  const [listFlags, setListFlags] = useState(initialListFlags)
-  const [queryStr, setQueryStr] = useState<string | undefined>(initialQueryStr)
-  const [queryContactId, setQueryContactId] = useState(initialQueryContactId)
+  const initialListFlags = useRef(listFlags)
+  const initialQueryStr = useRef(queryStr)
+  const initialQueryContactId = useRef(queryContactId)
   const [chatListEntries, setChatListEntries] = useState<number[]>([])
 
   const areQueryParamsInitial: boolean =
-    initialListFlags === listFlags &&
-    initialQueryStr === queryStr &&
-    initialQueryContactId === queryContactId
+    listFlags === initialListFlags.current &&
+    queryStr === initialQueryStr.current &&
+    queryContactId === initialQueryContactId.current
   const chatListEntriesForInitialQueryParams = useChatListNoDebounce(
     accountId,
-    initialListFlags,
-    initialQueryStr,
-    initialQueryContactId
+    initialListFlags.current,
+    initialQueryStr.current,
+    initialQueryContactId.current
   )
 
   const debouncedGetChatListEntries = useMemo(
@@ -157,12 +157,6 @@ export function useChatList(
     chatListIds: areQueryParamsInitial
       ? chatListEntriesForInitialQueryParams
       : chatListEntries,
-    listFlags,
-    setListFlags,
-    queryStr,
-    setQueryStr,
-    queryContactId,
-    setQueryContactId,
   }
 }
 

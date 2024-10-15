@@ -1,0 +1,25 @@
+.navbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: var(--navBarBackground);
+  color: var(--navBarText);
+  border-bottom: var(--outlineProperties);
+}
+
+.navbarGroupLeft {
+  width: 30%;
+  height: var(--navBarHeight);
+  display: flex;
+  align-items: center;
+  padding: 0px 10px;
+  min-width: 295px; /* don't forget to update .chat-list */
+}
+
+.navbarGroupRight {
+  width: 70%;
+  height: var(--navBarHeight);
+  display: flex;
+  align-items: center;
+  padding: 0px;
+}
