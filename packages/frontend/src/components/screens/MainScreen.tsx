@@ -31,11 +31,11 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { KeybindAction } from '../../keybindings'
 import { selectedAccountId } from '../../ScreenController'
 import { openMapWebxdc } from '../../system-integration/webxdc'
-import SearchInputButton from '../SearchInput/SearchInputButton'
 import { ChatView } from '../../contexts/ChatContext'
 import { ScreenContext } from '../../contexts/ScreenContext'
 
 import type { T } from '@deltachat/jsonrpc-client'
+import { BackButton } from '../Dialog'
 
 type Props = {
   accountId?: number
@@ -173,16 +173,15 @@ export default function MainScreen({ accountId }: Props) {
             <NavbarGroupLeft>
               {showArchivedChats && (
                 <>
+                  <span className='no-drag'>
+                    <BackButton
+                      aria-label={tx('back')}
+                      onClick={() => setArchivedChatsSelected(false)}
+                    />
+                  </span>
                   <div className='archived-chats-title no-drag'>
                     {tx('chat_archived_chats_title')}
                   </div>
-                  {/* reusing SearchInputButton here so that the button has the same style as the qr code button */}
-                  <SearchInputButton
-                    className='no-drag'
-                    onClick={() => setArchivedChatsSelected(false)}
-                    aria-label={tx('back')}
-                    icon='undo'
-                  />
                 </>
               )}
               {!showArchivedChats && (
