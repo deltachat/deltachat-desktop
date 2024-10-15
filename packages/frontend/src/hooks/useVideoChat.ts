@@ -47,7 +47,7 @@ export default function useVideoChat() {
           accountId,
           chatId
         )
-        jumpToMessage(accountId, messageId, false)
+        jumpToMessage(accountId, messageId, chatId, false)
         await joinVideoChat(accountId, messageId)
       } catch (error: todo) {
         log.error('failed send call invitation', error)

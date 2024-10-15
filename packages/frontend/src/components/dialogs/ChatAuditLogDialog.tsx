@@ -44,7 +44,9 @@ function buildContextMenu(
       label: tx('show_in_chat'),
       action: () => {
         closeDialogCallback()
-        setTimeout(() => jumpToMessage(accountId, message.id, true))
+        setTimeout(() =>
+          jumpToMessage(accountId, message.id, message.chatId, true)
+        )
       },
     },
     // Show Webxdc in Chat
@@ -53,7 +55,10 @@ function buildContextMenu(
       action: () => {
         if (message.parentId) {
           closeDialogCallback()
-          jumpToMessage(accountId, message.parentId, true)
+          // Currently the info message is always in the same chat
+          // as the message with `message.parentId`,
+          // but let's not pass `chatId` here, for future-proofing.
+          jumpToMessage(accountId, message.parentId, undefined, true)
         }
       },
     },

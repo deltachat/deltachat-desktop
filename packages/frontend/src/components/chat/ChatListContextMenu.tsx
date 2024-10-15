@@ -107,7 +107,11 @@ export function useChatListContextMenu(): {
     openContextMenu: async (event, chatListItem, selectedChatId) => {
       const onDeleteChat = () =>
         openDeleteChatDialog(accountId, chatListItem, selectedChatId)
-      const onEncrInfo = () => openEncryptionInfoDialog(chatListItem)
+      const onEncrInfo = () =>
+        openEncryptionInfoDialog({
+          chatId: chatListItem.id,
+          dmChatContact: chatListItem.dmChatContact,
+        })
       const onViewGroup = async () => {
         // throws error if chat was not found
         const fullChat = await BackendRemote.rpc.getFullChatById(

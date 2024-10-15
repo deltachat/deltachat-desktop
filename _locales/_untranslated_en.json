@@ -71,5 +71,8 @@
   },
   "edit_name_placeholder": {
     "message": "Nickname for '%1'"
+  },
+  "join_group": {
+    "message": "Join Group"
   }
 }

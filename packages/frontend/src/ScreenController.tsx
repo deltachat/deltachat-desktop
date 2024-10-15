@@ -121,6 +121,9 @@ export default class ScreenController extends Component {
       await this.unSelectAccount()
       this.selectedAccountId = accountId
       ;(window.__selectedAccountId as number) = accountId
+      // forcing to load settings here so when we for example switch to Settings
+      // from context menu they're already present and we avoid crashing
+      SettingsStoreInstance.effect.load()
     } else {
       log.info('account is already selected')
       // do not return here as this can be the state transition between unconfigured to configured
@@ -138,13 +141,15 @@ export default class ScreenController extends Component {
     if (!dontStartIo) {
       await BackendRemote.rpc.startIo(accountId)
     }
-    runtime.setDesktopSetting('lastAccount', accountId)
-    BackendRemote.rpc.getSystemInfo().then(info => {
-      log.info('system_info', info)
-    })
+
     BackendRemote.rpc.getInfo(accountId).then(info => {
       log.info('account_info', info)
     })
+    BackendRemote.rpc.getSystemInfo().then(info => {
+      log.info('system_info', info)
+    })
+
+    await runtime.setDesktopSetting('lastAccount', accountId)
   }
 
   async unSelectAccount() {

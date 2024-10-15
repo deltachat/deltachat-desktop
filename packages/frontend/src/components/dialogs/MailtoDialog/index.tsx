@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { C } from '@deltachat/jsonrpc-client'
 
@@ -27,7 +27,8 @@ export default function MailtoDialog(props: Props & DialogProps) {
   const tx = useTranslationFunction()
   const createDraftMessage = useCreateDraftMessage()
   const accountId = selectedAccountId()
-  const { chatListIds, queryStr, setQueryStr } = useChatList(listFlags)
+  const [queryStr, setQueryStr] = useState('')
+  const { chatListIds } = useChatList(listFlags, queryStr)
   const { isChatLoaded, loadChats, chatCache } =
     useLogicVirtualChatList(chatListIds)
 
