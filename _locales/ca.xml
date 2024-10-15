@@ -4,7 +4,7 @@
     <string name="app_name">Delta Chat</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel·la</string>
-   <!-- the word "or" to separate blocks in the user interface that are mutually exclusive -->
+   <!-- deprecated, the word "or" to separate blocks in the user interface that are mutually exclusive -->
     <string name="or_separator">o</string>
     <string name="clear_search">Neteja la cerca</string>
     <string name="yes">Si</string>
@@ -31,8 +31,6 @@
     <string name="emoji">Emoticona</string>
     <string name="attachment">Adjunt</string>
     <string name="back">Enrere</string>
-    <!-- this string is deprecated; the new wording is "introduced by ..." -->
-    <string name="verified">Verificat</string>
     <string name="close">Tanca</string>
     <string name="close_window">Tanca la finestra</string>
     <string name="forward">Reenvia</string>
@@ -218,7 +216,6 @@
     <string name="menu_delete_chat">Esborra el xat</string>
     <!-- Command to delete all messages in a chat. The chat itself will not be deleted but will be empty afterwards, so make sure to be different from "Delete Chat" here. "Clear" is a verb here, "Empty Chat" would also be fine (eg. in German "Chat leeren") -->
     <string name="clear_chat">Neteja el xat</string>
-    <string name="ask_delete_named_chat">Segur que voleu esborrar \"%1$s\"?</string>
     <string name="menu_delete_messages">Esborra els missatges</string>
     <string name="delete_contact">Esborra el contacte</string>
     <string name="menu_delete_location">Voleu esborrar aquesta ubicació?</string>
@@ -274,11 +271,11 @@
     <string name="device_talk_subtitle">Missatges generats localment</string>
     <string name="device_talk_explain">Els missatges d\'aquest xat són generats localment per la vostra app de Delta Chat. Els seus creadors els usen per informar-vos d\'actualitzacions de l\'app i problemes durant el seu ús.</string>
     <string name="edit_contact">Edita el contacte</string>
-    <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
+    <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin_chat">Fixa el xat</string>
     <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
     <string name="unpin_chat">Desfixa el xat</string>
-    <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
+    <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin">Fixa</string>
     <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
     <string name="unpin">Desfixa</string>
@@ -316,6 +313,7 @@
     <string name="videochat_tap_to_open">Toca per obrir-ho</string>
     <string name="videochat_instance">Instància de vídeo xat</string>
     <string name="videochat_instance_placeholder">La vostra instància de vídeo xat</string>
+    <!-- Do not translate "$ROOM", since it is a fixed token Delta Chat will replace with a generated room ID like "aOclju5eCky" -->
     <string name="videochat_instance_example">Exemples: https://meet.jit.si/$ROOM o basicwebrtc:https://your-server</string>
     <string name="videochat_invitation">Invitació a un vídeo xat</string>
     <string name="videochat_invitation_body">Heu sigut convidats a un vídeo xat, cliqueu %1$s per unir-vos-hi.</string>
@@ -326,6 +324,7 @@
         <item quantity="one">Esborra %d xat? Ja no es mostrarà al llistat de xats, i els seus missatges no romandran al servidor.</item>
         <item quantity="other">Voleu esborrar %d xats? Ja no es mostraran al llistat de xats i els missatges no quedaran al servidor.</item>
     </plurals>
+    <string name="ask_delete_named_chat">Segur que voleu esborrar \"%1$s\"?</string>
     <string name="ask_delete_message">Esteu segur de voler esborrar aquest missatge?</string>
     <plurals name="ask_delete_messages">
         <item quantity="one">Esborra %d missatge aquí i al servidor?</item>
@@ -381,8 +380,6 @@
     <string name="chat_record_slide_to_cancel">Llisca per cancel·lar</string>
     <string name="chat_record_explain">Mantingues premut per gravar un missatge de veu i deixa anar per enviar-lo</string>
     <string name="chat_no_chats_yet_title">Safata d\'entrada buida.\nPrem \"+\" per començar un xat nou.</string>
-    <!-- deprecated -->
-    <string name="chat_no_chats_yet_hint">Pots xatejar amb altres usuaris de Delta Chat i amb qualsevol adreça de correu electrònic.</string>
     <string name="chat_all_archived">Tots els xats s\'han arxivat.\nPrem \"+\" per començar-ne un de nou.</string>
     <string name="chat_share_with_title">Comparteix amb</string>
     <string name="chat_input_placeholder">Missatge</string>
@@ -437,8 +434,6 @@
     <string name="search_files">Busca els fitxers</string>
     <string name="search_explain">Busca als xats, contactes i missatges</string>
     <string name="search_no_result_for_x">No s\'han trobat resultats per \"%s\"</string>
-
-
     <!-- create/edit groups, contact/group profile -->
     <string name="group_name">Nom del grup</string>
     <string name="group_avatar">Imatge del grup</string>
@@ -514,7 +509,7 @@
     <string name="login_smtp_port">Port SMTP</string>
     <string name="login_smtp_security">Seguretat SMTP</string>
     <string name="login_auth_method">Mètode d\'autorització</string>
-    <!-- the word "SOCKS5" here and in the following strings should not be translated in most cases -->
+    <!-- deprecated -->
     <string name="login_socks5">SOCKS5</string>
     <string name="login_info_oauth2_title">Voleu continuar amb la configuració simplificada?</string>
     <string name="login_info_oauth2_text">L’adreça d\'e-mail que heu introduït admet una configuració simplificada. (OAuth2).\n\nEn el pas següent, permeteu que Delta Chat actuï com a xat amb l\'aplicació de correu electrònic..\n\nNo hi ha servidors de Delta Chat, les vostres dades romanen al vostre dispositiu!</string>
@@ -606,10 +601,6 @@
     <string name="pref_show_emails_accepted_contacts">Per a contactes acceptats</string>
     <string name="pref_show_emails_all">Tot</string>
     <!-- autocrypt -->
-    <!-- deprecated, used "Encryption" if a headline is needed -->
-    <string name="autocrypt">Autocrypt</string>
-    <!-- deprecated, the button "Send Autocrypt Setup Message" is enough -->
-    <string name="autocrypt_explain">Autocrypt és una especificació nova i oberta per al xifratge automàtic de correu electrònic d\'extrem a extrem.\n\nLa vostra configuració d\'extrem a extrem es crea automàticament segons calgui i es pot transferir entre dispositius amb els missatges de configuració Autocrypt.</string>
     <string name="autocrypt_send_asm_title">Envia el missatge de configuració Autocrypt</string>
     <string name="autocrypt_send_asm_explain_before">Un \"missatge de configuració Autocrypt\" comparteix de forma segura la vostra configuració d\'extrem a extrem amb altres aplicacions compatibles amb Autocrypt.\n\nLa configuració es xifrarà amb un codi de configuració que es mostrarà aquí i que haureu d\'escriure a l’altre dispositiu.</string>
     <string name="autocrypt_send_asm_button">Envia el missatge de configuració Autocrypt</string>
@@ -626,7 +617,9 @@
 
 
     <!-- system messages -->
+    <!-- deprecated -->
     <string name="systemmsg_read_receipt_subject">Confirmació de lectura</string>
+    <!-- deprecated -->
     <string name="systemmsg_read_receipt_body">Confirmació de lectura del missatge \"%1$s\".\n\nVol dir que el missatge s\'ha mostrat al dispositiu del receptor, no necessàriament que s\'hagi llegit.</string>
     <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name -->
     <string name="group_name_changed_by_you">Nom del grup \"%1$s\" canviat a \"%2$s\" per mi.</string>

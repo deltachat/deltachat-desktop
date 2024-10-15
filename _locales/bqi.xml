@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!-- common strings without special context -->
-    <string name="app_name">Dêltā Čat</string>
-    <string name="ok">xā</string>
-    <string name="cancel">raď</string>
-   <string name="clear_search">roftênê pitiniďên</string>
-    <string name="yes">harêy</string>
+    <string name="app_name">دلتا چت</string>
+    <string name="ok">خا</string>
+    <string name="cancel">رڌ</string>
+   <!-- deprecated, the word "or" to separate blocks in the user interface that are mutually exclusive -->
+    <string name="or_separator">یا</string>
+    <string name="clear_search">روفتن پیتینیڌن</string>
+    <string name="yes">هری</string>
     <string name="no">na</string>
     <string name="select">pêsand</string>
     <string name="on">rušên</string>
@@ -29,8 +31,6 @@
     <string name="emoji">êmuji</string>
     <string name="attachment">zamima</string>
     <string name="back">vorgaštên</string>
-    <!-- this string is deprecated; the new wording is "introduced by ..." -->
-    <string name="verified">taiď biďa</string>
     <string name="close">bastên</string>
     <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
     <string name="resend">zênu bêfêšn</string>
@@ -223,9 +223,9 @@
     <string name="device_talk">payomā dasgā</string>
     <string name="device_talk_subtitle">payomā mêni</string>
     <string name="edit_contact">ālêštê homdang</string>
-    <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
+    <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin_chat">disniďên goftoloft</string>
-    <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
+    <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin">disniďên</string>
     <string name="source_code">kodê bončak</string>
     <string name="mute_for_one_hour">bî dong kerdên si 1 sāat</string>
@@ -347,7 +347,6 @@
     <string name="autodel_after_1_hour">ba\'ďê 1 sāat</string>
     <string name="autodel_after_1_day">ba\'ďê 1 ru</string>
     <string name="autodel_after_1_week">ba\'ďê 1 hafta</string>
-    <string name="autodel_after_4_weeks">ba\'ďê 4 hafta</string>
     <string name="after_5_weeks">ba\'ďê 5 hafta</string>
     <string name="autodel_after_1_year">ba\'ďê 1 sāl</string>
 

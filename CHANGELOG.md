@@ -22,6 +22,8 @@
 - trim whitepaces when reading from clipboard in qr code reader #4169
 - load chat lists faster (the chat list on the main screen, "Forward to..." dialog, etc)
 - replace BlueprintJS Button, Icon, Radio, RadioGroup, Collapse, Dialog with our implementation
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.147.1`
+- Update proxy configuration - a full url can be entered now
 
 ### Fixed
 - fix that you can not click header button in dialog when they are on top of the navbar #4093

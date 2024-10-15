@@ -4,7 +4,7 @@
     <string name="app_name">Delta Chat</string>
     <string name="ok">Souhlas</string>
     <string name="cancel">Zrušit</string>
-   <!-- the word "or" to separate blocks in the user interface that are mutually exclusive -->
+   <!-- deprecated, the word "or" to separate blocks in the user interface that are mutually exclusive -->
     <string name="or_separator">nebo</string>
     <string name="clear_search">Vyčistit vyhledávání</string>
     <string name="yes">Ano</string>
@@ -31,8 +31,6 @@
     <string name="emoji">Smajlíky</string>
     <string name="attachment">Příloha</string>
     <string name="back">Zpět</string>
-    <!-- this string is deprecated; the new wording is "introduced by ..." -->
-    <string name="verified">Ověřeno</string>
     <string name="close">Zavřít</string>
     <string name="close_window">Zavřít okno</string>
     <string name="forward">Přeposlat</string>
@@ -224,7 +222,6 @@
     <string name="menu_delete_chat">Vymaž chat</string>
     <!-- Command to delete all messages in a chat. The chat itself will not be deleted but will be empty afterwards, so make sure to be different from "Delete Chat" here. "Clear" is a verb here, "Empty Chat" would also be fine (eg. in German "Chat leeren") -->
     <string name="clear_chat">Vyčisti chat</string>
-    <string name="ask_delete_named_chat">Skutečně úplně vymazat \"%1$s\"?</string>
     <string name="menu_delete_messages">Vymaž zprávy</string>
     <string name="delete_contact">Vymaž kontakt</string>
     <string name="menu_delete_location">Smazat tuto polohu?</string>
@@ -281,11 +278,11 @@
     <string name="device_talk_subtitle">Samovytvořené zprávy</string>
     <string name="device_talk_explain">Zprávy v tomto hovoru jsou vytvořeny aplikací Delta Chat. Její tvůrci tak informují o aktualizacích a potížích při používání.</string>
     <string name="edit_contact">Uprav kontakt</string>
-    <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
+    <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin_chat">Připíchni chat</string>
     <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
     <string name="unpin_chat">Odpíchni chat</string>
-    <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
+    <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin">Připíchnout</string>
     <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
     <string name="unpin">Odpíchnout</string>
@@ -332,6 +329,7 @@
         <item quantity="many">Vymazat %d hovorů? Pak už je neuvidíte v seznamu hovorů, ale jejich zprávy zůstanou na serveru.</item>
         <item quantity="other">Vymazat %d hovorů? Pak už je neuvidíte v seznamu hovorů, ale jejich zprávy zůstanou na serveru.</item>
     </plurals>
+    <string name="ask_delete_named_chat">Skutečně úplně vymazat \"%1$s\"?</string>
     <plurals name="ask_delete_messages">
         <item quantity="one">Vymaž %d zprávu zde i ze serveru?</item>
         <item quantity="few">Vymaž %d zprávy zde i ze serveru?</item>
@@ -388,8 +386,6 @@
     <string name="chat_record_slide_to_cancel">Zrušit tahem</string>
     <string name="chat_record_explain">K nahrání hlasové zprávy stiskni a drž mikrofon, uvolni pro odeslání.</string>
     <string name="chat_no_chats_yet_title">Prázdná schránka.\nStiskem \"+\" založ nový chat.</string>
-    <!-- deprecated -->
-    <string name="chat_no_chats_yet_hint">Založ chat s jakýmkoli uživatelem Delta Chatu a s jakýmkoli e-mailem.</string>
     <string name="chat_all_archived">Všechny chaty archivovány.\nStiskem \"+\" založ nový chat.</string>
     <string name="chat_share_with_title">Sdílet s</string>
     <string name="chat_input_placeholder">Zpráva</string>
@@ -425,8 +421,6 @@
     <string name="search_in_chat">Vyhledávat v chatu</string>
     <string name="search_explain">Vyhledávat chaty, kontakty a zprávy</string>
     <string name="search_no_result_for_x">Žádný výsledek pro \"%s\"</string>
-
-
     <!-- create/edit groups, contact/group profile -->
     <string name="group_name">Název skupiny</string>
     <string name="group_avatar">Obrázek skupiny</string>
@@ -455,7 +449,7 @@
     <string name="media_preview">Náhled multimedia</string>
     <string name="send_message">Pošli zprávu</string>
     <string name="multidevice_install_dc_on_other_device">Nainstalujte si Delta Chat do druhého zařízení (https://get.delta.chat)</string>
-    <!-- "I Already Have a Login / Add as Second Device” should be the same text as defined by the keys onboarding_alternative_logins and multidevice_receiver_title -->
+    <!-- "I Already Have a Profile / Add as Second Device” should be the same text as defined by the keys onboarding_alternative_logins and multidevice_receiver_title -->
     <string name="multidevice_tap_scan_on_other_device">Spusťte Delta Chat, klepněte na „Přidat jako druhé zařízení“ a naskenujte zde zobrazený kód</string>
     <string name="login_title">Přihlaš se</string>
     <!-- for classic email, we use the classical term "Account" -->
@@ -490,7 +484,6 @@
     <string name="login_error_cannot_login">Přihlášení jako \"%1$s\" selhalo. Zkontrolujte si prosím ještě jednou e-mail a heslo.</string>
     <!-- TLS certificate checks -->
     <string name="accept_invalid_certificates">Přijmout neplatné certifikáty</string>
-    <string name="used_settings">Použité nastavení</string>
     <string name="switch_account">Přepni účet</string>
     <string name="add_account">Přidej účet</string>
     <string name="delete_account">Vymaž účet</string>
@@ -503,8 +496,7 @@
     <!-- share and forward messages -->
     <!-- Translators: shown above a chat/contact list when selecting recipients to forward messages -->
     <string name="forward_to">Přeposlat komu ...</string>
-    <string name="share_multiple_attachments">Poslat %1$d soubory do zvoleného chatu?\n\nSoubory budou zachovány v původní velikosti. Obrázky a videa nebudou překódována.</string>
-    <string name="share_multiple_attachments_multiple_chats">Poslat %1$d soubor(y) do %2$d chatu?\n\nSoubory budou zachovány v původní velikosti. Obrázky a videa nebudou překódována.</string>
+    <string name="ask_send_files_to_selected_chats">Poslat %1$d soubor(y) do %2$d chatu?</string>
     <string name="share_text_multiple_chats">Poslat tento text do %1$d chatů?\n\n\"%2$s\"</string>
     <string name="share_abort">Sdílení přerušeno díky chybějícím oprávnění.</string>
 
@@ -639,15 +631,10 @@
     <string name="autodel_after_1_hour">Po 1 hodině</string>
     <string name="autodel_after_1_day">Po 1 dni</string>
     <string name="autodel_after_1_week">Po 1 týdnu</string>
-    <string name="autodel_after_4_weeks">Po 4 týdnech</string>
     <string name="after_5_weeks">Po 5 týdnech</string>
     <string name="autodel_after_1_year">Po 1 roce</string>
 
     <!-- autocrypt -->
-    <!-- deprecated, used "Encryption" if a headline is needed -->
-    <string name="autocrypt">Autocrypt</string>
-    <!-- deprecated, the button "Send Autocrypt Setup Message" is enough -->
-    <string name="autocrypt_explain">Autocrypt je nový, otevřený technický popis samočinného end-to-end šifrování.\n\nNastavení šifrování se vytváří samočinně dle potřeby a mužeš si ho přenášet mezi zařízeními zasláním zprávy s Nastavením Autocryptu.</string>
     <string name="autocrypt_send_asm_title">Pošli Nastavení Autocryptu</string>
     <string name="autocrypt_send_asm_explain_before">Pomocí Nastavení Autocryptu lze bezpečně sdílet nastavení šifrování této aplikace s jinou, která také používá Autocrypt.\n\nNastavení je zašifrované zobrazeným kódem, který musí být vložen i na druhém zařízení.</string>
     <string name="autocrypt_send_asm_button">Pošli Nastavení Autocryptu</string>
@@ -664,7 +651,9 @@
 
 
     <!-- system messages -->
+    <!-- deprecated -->
     <string name="systemmsg_read_receipt_subject">Zpráva otevřena</string>
+    <!-- deprecated -->
     <string name="systemmsg_read_receipt_body">Odeslaná zpráva \"%1$s\" byla příjemci zobrazena na jeho přístroji.\n\nNicméně přečtení obsahu není zaručeno.</string>
     <string name="systemmsg_cannot_decrypt">Tuto zprávu nelze dešifrovat.\n\n• Už teď by mohlo pomoci jednoduše odpovědět na tuto zprávu a požádat odesílatele, aby zprávu poslal znovu.\n\n• Pokud jste právě přeinstalovali Delta Chat, bude nejlepší, když znovu nastavíte Delta Chat a zvolíte \"Přidat jako druhé zařízení\" nebo importujete zálohu. </string>
     <string name="systemmsg_unknown_sender_for_chat">Neznámý odesílatel tohoto chatu. Další podrobnosti naleznete v části „informace“. </string>
@@ -754,8 +743,6 @@
     <string name="qraccount_ask_create_and_login">Vytvořit nový e-mail na \"%1$s\" a připojit se k němu?</string>
     <string name="qraccount_ask_create_and_login_another">Vytvořit nový e-mail na \"%1$s\" a připojit se k němu?\n\nTvůj původní ůčet nebude smazán. Použij \"Přepni účet\" k přepnutí na jiný účet.</string>
     <string name="qraccount_qr_code_cannot_be_used">Sejmutý QR kód neumožňuje nastavení nového účtu.</string>
-    <!-- deprecated -->
-    <string name="qraccount_use_on_new_install">Sejmutý QR kód je k nastavení nového účtu. Tento QR kód můžeš použít když budeš provádět novou instalaci Delta Chatu.</string>
     <string name="contact_verified">%1$s ověřen.</string>
     <string name="contact_not_verified">Nelze ověřit %1$s.</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->

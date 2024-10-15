@@ -175,7 +175,6 @@
     <string name="menu_add_attachment">បន្ថែមឯកសារភ្ជាប់</string>
     <string name="menu_leave_group">ចាកចេញពីក្រុម</string>
     <string name="menu_delete_chat">លុបសារសន្ទនា</string>
-    <string name="ask_delete_named_chat">តើអ្នកប្រាកដហើយថាចង់លុប \"%1$s\"?</string>
     <string name="menu_delete_messages">លុបសារ</string>
     <string name="delete_contact">លុបទំនាក់ទំនង</string>
     <string name="menu_delete_location">លុបទីតាំងនេះ?</string>
@@ -227,11 +226,11 @@
     <string name="device_talk_subtitle">សារដែលបានបង្កើតពីសា Delta Chat</string>
     <string name="device_talk_explain">សារក្នុងការសន្ទនានេះ បានបង្កើតទិនេះដោយ សា Delta Chat ។ អ្នកបង្កើតវា ប្រើវាដើម្បីជូនដំណឹងពីការធ្វើបច្ចុប្បន្នភាពកម្មវិធី និងបញ្ហាកំឡុងពេលប្រើ។</string>
     <string name="edit_contact">កែសម្រួល ទំនាក់ទំនង</string>
-    <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
+    <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin_chat">ខ្ទាស់សន្ទនា</string>
     <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
     <string name="unpin_chat">ដកខ្ទាស់សន្ទនា</string>
-    <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
+    <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin">ខ្ទាស់</string>
     <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
     <string name="unpin">ដកខ្ទាស់</string>
@@ -272,6 +271,7 @@
     <plurals name="ask_delete_chat">
         <item quantity="other">លុបសារសន្ទនាទាំង %d  នេះ? ពួកគេនឹងមិនត្រូវបានបង្ហាញនៅក្នុងបញ្ជីសន្ទនាទៀតទេ។ សាររបស់ពួកគេនឹងនៅមានលើម៉ាសុីនមេ</item>
     </plurals>
+    <string name="ask_delete_named_chat">តើអ្នកប្រាកដហើយថាចង់លុប \"%1$s\"?</string>
     <string name="ask_delete_message">តើអ្នកប្រាកដថា ចង់លុបសារនេះ?</string>
     <plurals name="ask_delete_messages">
         <item quantity="other">លុបសារទាំង %d នេះ នៅទីនេះ និងនៅលើម៉ាសុីននេ</item>
@@ -321,8 +321,6 @@
     <string name="chat_record_slide_to_cancel">អូសដើម្បីផ្អាកសិន</string>
     <string name="chat_record_explain">ប៉ៈ និងសង្កត់ដើម្បីថតសារសម្លេង លែងដើម្បីផ្ញើ។</string>
     <string name="chat_no_chats_yet_title">ប្រអប់ទទួលគឺទទេ។\nចុច \"+\" ដើម្បីចាប់ផ្តើមការការសន្ទនាថ្មី។</string>
-    <!-- deprecated -->
-    <string name="chat_no_chats_yet_hint">អ្នកអាចសន្ទនាជាមួយអ្នកប្រើប្រាស់សា Delta Chat ផ្សេងទៀត និងជាមួយអ្នកមានអសយដ្ឋានអុីម៉េលណាមួយ។</string>
     <string name="chat_all_archived">សន្ទនាទាំងអស់បានកំណត់ទុក។\nចុច \"+\" ដើម្បីចាប់ផ្តើមការសន្ទនាថ្មី។</string>
     <string name="chat_share_with_title">ចែករំលែកជាមួយ</string>
     <string name="chat_input_placeholder">សារ</string>
@@ -372,8 +370,6 @@
     <string name="search">ស្វែងរក</string>
     <string name="search_explain">ស្វែងរកការសន្ទនា ទំនាក់ទំនង និងសារ។</string>
     <string name="search_no_result_for_x">រកមិនឃើញលទ្ធផលសម្រាប់ \"%s\"</string>
-
-
     <!-- create/edit groups, contact/group profile -->
     <string name="group_name">ឈ្មោះរបស់ក្រុម</string>
     <string name="group_avatar">រូបភាពរបស់ក្រុម</string>
@@ -439,13 +435,14 @@
     <string name="login_smtp_port">ច្រករបស SMTP</string>
     <string name="login_smtp_security">សន្តិសុខ SMTP</string>
     <string name="login_auth_method">ការចុះបញ្ជី</string>
-    <!-- the word "SOCKS5" here and in the following strings should not be translated in most cases -->
+    <!-- deprecated -->
     <string name="login_socks5">SOCKS5</string>
     <string name="login_socks5_use_socks5">ប្រើ SOCKS5</string>
     <string name="login_socks5_host">ម្ចាស់ SOCKS5</string>
     <string name="login_socks5_port">ច្រក SOCKS5</string>
     <string name="login_socks5_user">អ្នកប្រើប្រាស់ SOCKS5</string>
     <string name="login_socks5_password">ពាក្យសម្ងាត់ SOCKS5</string>
+
     <string name="login_info_oauth2_title">បន្តជាមួយការដំឡើងសាមញ្ញ?</string>
     <string name="login_info_oauth2_text">អស័យដ្ឋានអុីម៉េលដែលបានបញ្ចូល គាំទ្រការដំឡើងសាមញ្ញ (OAuth 2.0)\n\nនៅជំហានបន្ទាប់ សូមអនុញ្ញាតឲ្យសាហារីសង្ឃ ដើរតួជាការសន្ទនារបស់អ្នកនៅលើកម្មវិធីអុីម៉េល។\n\nមិនមាន ម៉ាសុីនមេ សាហារីសង្ឃទេ។ ទិន្ន័យរបស់អ្នកស្ថិតនៅលើឧបករណ៍របស់អ្នក។</string>
     <string name="login_certificate_checks">ការត្រួតពិនិត្យលិខិតបញ្ជាក់</string>
@@ -460,7 +457,6 @@
     <string name="login_error_cannot_login">មិនអាចកត់ចូលជា \"%1$s\" ។ សូមផ្ទៀតផ្ទាត់មើលអស័យដ្ឋានអុីម៉េល និងពាក្យសម្ងាត់ឲ្យបានត្រឹមត្រូវ។</string>
     <!-- TLS certificate checks -->
     <string name="accept_invalid_certificates">ទទួលយកលិខិតបញ្ជាក់មិនត្រឹមត្រូវ</string>
-    <string name="used_settings">ការកំណត់ដែលបានប្រើ:</string>
     <string name="switch_account">ប្តូរឆ្លាស់គណនី</string>
     <string name="add_account">បន្ថែមគណនី</string>
     <string name="delete_account">លុបគណនី</string>
@@ -476,8 +472,7 @@
     <!-- share and forward messages -->
     <!-- Translators: shown above a chat/contact list when selecting recipients to forward messages -->
     <string name="forward_to">បញ្ជូនទៅ…</string>
-    <string name="share_multiple_attachments">ផ្ញើ ឯកសារ %1$d  ទៅការសន្ទនាដែលបានជ្រើសរើស?\n\nឯកសារដែលបានផ្ញើហើយ មិនកែប្រែបានក្នុងទំហំដើមរបស់វា។ នេះ​មានន័យថា រូបភាព និងវីដេអូមិនត្រូវបានថតទុកទេ។</string>
-    <string name="share_multiple_attachments_multiple_chats">ផ្ញើឯកសារ %1$d ទៅ សន្ទនា %2$d?\n\nឯកសារដែលបានផ្ញើហើយ មិនកែប្រែបានក្នុងទំហំដើមរបស់វា។ នេះ​មានន័យថា រូបភាព និងវីដេអូមិនត្រូវបានថតទុកទេ។</string>
+    <string name="ask_send_files_to_selected_chats">ផ្ញើឯកសារ %1$d ទៅ សន្ទនា %2$d?</string>
     <string name="share_text_multiple_chats">ផ្ញើអត្ថបទនេះទៅសន្ទនា %1$d?\n\n\"%2$s\"</string>
     <string name="share_abort">ការខកខានចែករំលែក ដល់ពេលកំណត់បាត់បង់សិទ្ធ។</string>
 
@@ -620,15 +615,10 @@
     <string name="autodel_after_1_hour">បន្ទាប់ពី ១ម៉ោង</string>
     <string name="autodel_after_1_day">បន្ទាប់ពី ១ថ្ងៃ</string>
     <string name="autodel_after_1_week">បន្ទាប់ពី ១អាទិត្យ</string>
-    <string name="autodel_after_4_weeks">បន្ទាប់ពី ៤អាទិត្យ</string>
     <string name="after_5_weeks">ក្រោយរយៈពេល៣០៥សប្តាហ៍</string>
     <string name="autodel_after_1_year">បន្ទាប់ពី ១ឆ្នាំ</string>
 
     <!-- autocrypt -->
-    <!-- deprecated, used "Encryption" if a headline is needed -->
-    <string name="autocrypt">អ៊ិនគ្រីបស្វ័យប្រវត្តិ (ផ្ញើនិងទទួលសារដោយសម្ងាត់)</string>
-    <!-- deprecated, the button "Send Autocrypt Setup Message" is enough -->
-    <string name="autocrypt_explain">អ៊ិនគ្រីបស្វ័យប្រវត្តិគឺជាបើកការបញ្ជាក់ថ្មីសម្រាប់អ៊ិនគ្រីប  (ការធ្វើឲ្យការផ្ញើសារជាសារដាយសញ្ញាសម្ងាត់) អ៊ីមែលពីឧបករណ៍ដល់ឧបករណ៍ស្វ័យប្រវត្តិ\n\nការរៀបចំការចាត់របសឧបករណ៍ដល់ឧបករណ៍នឹអបានតាមស្វ័យប្រវត្តិបើយោងតាមតម្រូវការរបស់អ្នក។ អ្នកនឹងបានផ្ទេរវារវាងឧបករណ៍ពិសារអ៊ិនគ្រីបស្វ័យប្រវត្តិ</string>
     <string name="autocrypt_send_asm_title">ផ្ញើសារអ៊ិនគ្រីបស្វ័យប្រវត្តិសម្រាប់ការរៀបចំ</string>
     <string name="autocrypt_send_asm_explain_before">សារអ៊ិនគ្រីបស្វ័យប្រវត្តិសម្រាប់ការរៀបចំចែកចាយចាត់របសឧបករណ៍ដល់ឧបករណ៍ជាមួយកម្មវិធីដែលមានអ៊ិនគ្រីបស្វ័យប្រវត្តិផ្សេងទៀត។\n\n ការចាត់នឹងបានអ៊ិនគ្រីប (ការធ្វើឲ្យការផ្ញើសារជាសារដាយសញ្ញាសម្ងាត់) នៅទីនេះ នឹងត្រូវតែបានវាយបញ្ចូលនៅលើឧបករណ៍ផ្សេង។</string>
     <string name="autocrypt_send_asm_button">ផ្ញើសារអ៊ិនគ្រីបស្វ័យប្រវត្តិសម្រាប់ការរៀបចំ</string>
@@ -645,7 +635,9 @@
 
 
     <!-- system messages -->
+    <!-- deprecated -->
     <string name="systemmsg_read_receipt_subject">សារត្រូវបានបើក</string>
+    <!-- deprecated -->
     <string name="systemmsg_read_receipt_body">\"%1$s\" សារដែលអ្នកបានផ្ញើត្រូវបានបង្ហាញនៅលើ អេក្រង់របស់អ្នកទទួល\n\nនេះមិនមែនជាការធានាថា មាតិកាត្រួវបានអានទេ។</string>
     <string name="systemmsg_unknown_sender_for_chat">មិនស្គាល់អ្នកផ្ញើការសន្ទនានេះ។ មើល \'ពត៌មាន\' សម្រាប់ពត៌មានលំអិត</string>
     <string name="systemmsg_subject_for_new_contact">សារពី %1$s</string>
@@ -747,8 +739,6 @@
     <string name="qraccount_ask_create_and_login">បង្កើតអស័យដ្ឋានអុីម៉េលថ្មីនៅលើ \"%1$s\" និងកត់ចូលនៅទីនោះ?</string>
     <string name="qraccount_ask_create_and_login_another">បង្កើតអស័យដ្ឋានអុីម៉េលថ្មីនៅលើ \"%1$s\" និងកត់ចូលនៅទីនោះ?\n\nគណនីរបស់អ្នកដែលមានស្រាប់ នឹងមិនត្រូវបានលុបចោលទេ។ ប្រើប្រាស់ ការ \"ឆ្លាស់ប្តូរគណនី\" ដើម្បីធាតុប្តូររវាងគណនីរបស់អ្នក។</string>
     <string name="qraccount_qr_code_cannot_be_used">កូដ QR ដែលបានស្គេន មិនអាចត្រូវបានប្រើប្រាស់ដើម្បីរៀបចំគណនីថ្មីមួយទេ។</string>
-    <!-- deprecated -->
-    <string name="qraccount_use_on_new_install">កូដ QR ដែលបានស្គេន គឺសម្រាប់ការកំណត់ឡើងនូវគណនីថ្មីមួយ។ អ្នកអាចស្គេនកូដ QR នៅពេលការកំណត់តម្លើងនូវ សា Delta Chat ។</string>
     <string name="contact_verified">%1$s បានផ្ទៀងផ្ទាត់</string>
     <string name="contact_not_verified">មិនអាចផ្ទៀងផ្ទាត់ %1$s</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->

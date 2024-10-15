@@ -68,11 +68,8 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
         'send_port',
         'send_security',
         'smtp_certificate_checks',
-        'socks5_enabled',
-        'socks5_host',
-        'socks5_port',
-        'socks5_user',
-        'socks5_password',
+        'proxy_enabled',
+        'proxy_url',
       ])) as unknown as Credentials
     setInitialAccountSettings(accountSettings)
     _setAccountSettings(accountSettings)

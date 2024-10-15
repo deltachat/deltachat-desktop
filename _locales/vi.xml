@@ -4,7 +4,7 @@
     <string name="app_name">Delta Chat</string>
     <string name="ok">OK</string>
     <string name="cancel">Hủy</string>
-   <!-- the word "or" to separate blocks in the user interface that are mutually exclusive -->
+   <!-- deprecated, the word "or" to separate blocks in the user interface that are mutually exclusive -->
     <string name="or_separator">hoặc</string>
     <string name="clear_search">Dọn dẹp tìm kiếm</string>
     <string name="yes">Có</string>
@@ -31,8 +31,6 @@
     <string name="emoji">Emoji</string>
     <string name="attachment">Tệp đính kèm</string>
     <string name="back">Quay lại</string>
-    <!-- this string is deprecated; the new wording is "introduced by ..." -->
-    <string name="verified">Đã xác minh</string>
     <string name="close">Đóng</string>
     <string name="close_window">Đóng cửa sổ</string>
     <string name="forward">Chuyển tiếp</string>
@@ -214,7 +212,6 @@
     <string name="menu_delete_chat">Xóa cuộc trò chuyện</string>
     <!-- Command to delete all messages in a chat. The chat itself will not be deleted but will be empty afterwards, so make sure to be different from "Delete Chat" here. "Clear" is a verb here, "Empty Chat" would also be fine (eg. in German "Chat leeren") -->
     <string name="clear_chat">Xóa cuộc trò chuyện</string>
-    <string name="ask_delete_named_chat">Bạn có chắc chắn muốn xóa \"%1$s\" không?</string>
     <string name="menu_delete_messages">Xóa tin nhắn</string>
     <string name="delete_contact">Xóa liên hệ</string>
     <string name="menu_delete_location">Xóa vị trí này?</string>
@@ -271,11 +268,11 @@
     <string name="device_talk_subtitle">Tin nhắn được tạo cục bộ</string>
     <string name="device_talk_explain">Tin nhắn trong cuộc trò chuyện này được tạo trên thiết bị của bạn để thông báo về các bản cập nhật ứng dụng và sự cố trong quá trình sử dụng.</string>
     <string name="edit_contact">Chỉnh sửa liên hệ</string>
-    <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
+    <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin_chat">Ghim trò chuyện</string>
     <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
     <string name="unpin_chat">Bỏ ghim cuộc trò chuyện</string>
-    <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
+    <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin">Ghim</string>
     <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
     <string name="unpin">Bỏ ghim</string>
@@ -312,6 +309,7 @@
     <string name="videochat_tap_to_open">Nhấn để mở</string>
     <string name="videochat_instance">Phiên bản trò chuyện video</string>
     <string name="videochat_instance_placeholder">Phiên bản trò chuyện video của bạn</string>
+    <!-- Do not translate "$ROOM", since it is a fixed token Delta Chat will replace with a generated room ID like "aOclju5eCky" -->
     <string name="videochat_instance_example">Ví dụ: https://your-server.org/$ROOM</string>
     <string name="videochat_instance_explain_2">Nếu được bật, bạn có thể bắt đầu trò chuyện video từ mỗi cuộc trò chuyện. Yêu cầu ứng dụng tương thích hoặc trình duyệt ở cả hai đầu.</string>
     <string name="videochat_instance_from_qr">Sử dụng \"%1$s\" để mời người khác trò chuyện video?\n\nSau khi thiết lập, bạn có thể bắt đầu trò chuyện video từ mỗi cuộc trò chuyện. Điều này sẽ thay thế mọi cài đặt trước đó cho trò chuyện video.</string>
@@ -323,6 +321,7 @@
     <plurals name="ask_delete_chat">
         <item quantity="other">Xóa cuộc trò chuyện %d? Nó sẽ không còn được hiển thị trong danh sách trò chuyện nữa; tin nhắn của nó sẽ vẫn còn trên máy chủ.</item>
     </plurals>
+    <string name="ask_delete_named_chat">Bạn có chắc chắn muốn xóa \"%1$s\" không?</string>
     <string name="ask_delete_message">Bạn có chắc chắn muốn xóa tin nhắn này?</string>
     <plurals name="ask_delete_messages">
         <item quantity="other">Xóa %d tin nhắn ở đây và trên máy chủ?</item>
@@ -375,8 +374,6 @@
     <string name="chat_record_slide_to_cancel">Trượt để hủy</string>
     <string name="chat_record_explain">Nhấn và giữ để ghi tin nhắn thoại, thả ra để gửi</string>
     <string name="chat_no_chats_yet_title">Hộp thư đến trống.\nNhấn \"+\" để bắt đầu cuộc trò chuyện mới.</string>
-    <!-- deprecated -->
-    <string name="chat_no_chats_yet_hint">Bạn có thể trò chuyện với những người dùng Delta Chat khác và với bất kỳ địa chỉ e-mail nào.</string>
     <string name="chat_all_archived">Tất cả các cuộc trò chuyện đã được lưu trữ.\nNhấn \"+\" để bắt đầu cuộc trò chuyện mới.</string>
     <string name="chat_share_with_title">Chia sẻ với</string>
     <string name="chat_input_placeholder">Tin nhắn</string>
@@ -438,8 +435,6 @@
     <string name="search_files">Tìm kiếm tập tin</string>
     <string name="search_explain">Tìm kiếm cuộc trò chuyện, danh bạ và tin nhắn</string>
     <string name="search_no_result_for_x">Không tìm thấy kết quả nào cho \"%s\"</string>
-
-
     <!-- create/edit groups, contact/group profile -->
     <string name="group_name">Tên nhóm</string>
     <string name="group_avatar">Hình ảnh nhóm</string>
@@ -483,7 +478,7 @@
     <string name="multidevice_same_network_hint">Đảm bảo cả hai thiết bị đều sử dụng cùng một Wi-Fi hoặc mạng</string>
     <string name="multidevice_this_creates_a_qr_code">Thao tác này sẽ tạo mã QR mà thiết bị thứ hai có thể quét để sao chép tài khoản.</string>
     <string name="multidevice_install_dc_on_other_device">Cài đặt Delta Chat trên thiết bị khác của bạn (https://get.delta.chat)</string>
-    <!-- "I Already Have a Login / Add as Second Device” should be the same text as defined by the keys onboarding_alternative_logins and multidevice_receiver_title -->
+    <!-- "I Already Have a Profile / Add as Second Device” should be the same text as defined by the keys onboarding_alternative_logins and multidevice_receiver_title -->
     <string name="multidevice_tap_scan_on_other_device">Bắt đầu Delta Chat, nhấn vào “Thêm làm thiết bị thứ hai” và quét mã được hiển thị ở đây</string>
     <!-- Shown inside a "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and/or address eg. "Scan to set up second device for Alice (alice@example.org)" -->
     <string name="multidevice_qr_subtitle">Quét để thiết lập thiết bị thứ hai cho %1$s</string>
@@ -496,9 +491,9 @@
     <string name="multidevice_transfer_done_devicemsg">ℹ️ Tài khoản đã được chuyển sang thiết bị thứ hai của bạn.</string>
     <!-- Shown beside progress bar, stay short -->
     <string name="preparing_account">Đang chuẩn bị tài khoản…</string>
-    <!-- Shown beside progress bar, stay short -->
+    <!-- deprecated, shown beside progress bar, stay short -->
     <string name="waiting_for_receiver">Đang chờ người nhận…</string>
-    <!-- Shown beside progress bar, stay short -->
+    <!-- deprecated, shown beside progress bar, stay short -->
     <string name="receiver_connected">Đã kết nối bộ thu…</string>
     <!-- Shown beside progress bar, stay short -->
     <string name="transferring">Đang chuyển…</string>
@@ -549,13 +544,14 @@
     <string name="login_smtp_port">Cổng SMTP</string>
     <string name="login_smtp_security">Bảo mật SMTP</string>
     <string name="login_auth_method">Phương thức ủy quyền</string>
-    <!-- the word "SOCKS5" here and in the following strings should not be translated in most cases -->
+    <!-- deprecated -->
     <string name="login_socks5">SOCKS5</string>
     <string name="login_socks5_use_socks5">Sử dụng SOCKS5</string>
     <string name="login_socks5_host">Máy chủ SOCKS5</string>
     <string name="login_socks5_port">Cổng SOCKS5</string>
     <string name="login_socks5_user">Người dùng SOCKS5</string>
     <string name="login_socks5_password">Mật khẩu SOCKS5</string>
+
     <string name="login_info_oauth2_title">Tiếp tục với thiết lập đơn giản hóa?</string>
     <string name="login_info_oauth2_text">Địa chỉ e-mail đã nhập hỗ trợ thiết lập đơn giản hóa (OAuth 2.0).\n\nTrong bước tiếp theo, vui lòng cho phép Delta Chat hoạt động như ứng dụng Trò chuyện qua E-mail của bạn.\n\nKhông có máy chủ Delta Chat, dữ liệu của bạn vẫn ở trên thiết bị của bạn.</string>
     <string name="login_certificate_checks">Kiểm tra chứng chỉ</string>
@@ -570,7 +566,6 @@
     <string name="login_error_cannot_login">Không thể đăng nhập với tên \"%1$s\". Vui lòng kiểm tra xem địa chỉ e-mail và mật khẩu có đúng không.</string>
     <!-- TLS certificate checks -->
     <string name="accept_invalid_certificates">Chấp nhận chứng chỉ không hợp lệ</string>
-    <string name="used_settings">Thiết đặt đã sử dụng:</string>
     <string name="switch_account">Chuyển đổi tài khoản</string>
     <string name="add_account">Thêm tài khoản</string>
     <string name="delete_account">Xóa tài khoản</string>
@@ -586,8 +581,7 @@
     <!-- share and forward messages -->
     <!-- Translators: shown above a chat/contact list when selecting recipients to forward messages -->
     <string name="forward_to">Chuyển tiếp tới…</string>
-    <string name="share_multiple_attachments">Gửi tệp %1$d đến cuộc trò chuyện đã chọn?\n\nCác tệp được gửi không được sửa đổi ở kích thước ban đầu (ví dụ: hình ảnh và video không được mã hóa lại).</string>
-    <string name="share_multiple_attachments_multiple_chats">Gửi %1$d tệp tới %2$d cuộc trò chuyện?\n\nCác tệp được gửi không được sửa đổi ở kích thước ban đầu (ví dụ: hình ảnh và video không được mã hóa lại).</string>
+    <string name="ask_send_files_to_selected_chats">Gửi %1$d tệp tới %2$d cuộc trò chuyện?</string>
     <string name="share_text_multiple_chats">Gửi văn bản này tới %1$d cuộc trò chuyện?\n\n\"%2$s\"</string>
     <string name="share_abort">Chia sẻ bị hủy do thiếu quyền.</string>
 
@@ -747,15 +741,10 @@
     <string name="autodel_after_1_hour">Sau 1 giờ</string>
     <string name="autodel_after_1_day">Sau 1 ngày</string>
     <string name="autodel_after_1_week">Sau 1 tuần</string>
-    <string name="autodel_after_4_weeks">Sau 4 tuần</string>
     <string name="after_5_weeks">Sau 5 tuần</string>
     <string name="autodel_after_1_year">Sau 1 năm</string>
 
     <!-- autocrypt -->
-    <!-- deprecated, used "Encryption" if a headline is needed -->
-    <string name="autocrypt">Autocrypt</string>
-    <!-- deprecated, the button "Send Autocrypt Setup Message" is enough -->
-    <string name="autocrypt_explain">Autocrypt là một đặc tả mới và mở để mã hóa e-mail hai đầu tự động.\n\nThiết lập hai đầu của bạn được tạo tự động khi cần và bạn có thể chuyển nó giữa các thiết bị bằng Tin nhắn thiết lập Autocrypt.</string>
     <string name="autocrypt_send_asm_title">Gửi tin nhắn thiết lập Autocrypt</string>
     <string name="autocrypt_send_asm_explain_before">Thông báo thiết lập Autocrypt chia sẻ an toàn thiết lập end-to-end của bạn với các ứng dụng tương thích Autocrypt khác.\n\nThiết lập sẽ được mã hóa bằng mã thiết lập được hiển thị ở đây và phải được nhập trên thiết bị kia.</string>
     <string name="autocrypt_send_asm_button">Gửi tin nhắn thiết lập Autocrypt</string>
@@ -772,7 +761,9 @@
 
 
     <!-- system messages -->
+    <!-- deprecated -->
     <string name="systemmsg_read_receipt_subject">Đã mở tin nhắn</string>
+    <!-- deprecated -->
     <string name="systemmsg_read_receipt_body">Tin nhắn \"%1$s\" bạn gửi đã được hiển thị trên màn hình của người nhận.\n\nĐiều này không đảm bảo rằng nội dung đã được đọc.</string>
     <string name="systemmsg_cannot_decrypt">Không thể giải mã tin nhắn này.\n\n• Bạn chỉ cần trả lời tin nhắn này và yêu cầu người gửi gửi lại tin nhắn là đủ.\n\n• Nếu bạn vừa cài đặt lại Delta Chat thì tốt nhất bạn nên cài đặt lại thiết lập lại Delta Chat ngay bây giờ và chọn "Thêm làm thiết bị thứ hai" hoặc nhập bản sao lưu.</string>
     <string name="systemmsg_unknown_sender_for_chat">Người gửi không xác định cho cuộc trò chuyện này. Xem \'thông tin\' để biết thêm chi tiết.</string>
@@ -892,8 +883,6 @@
     <string name="qraccount_ask_create_and_login">Tạo địa chỉ email mới trên \"%1$s\" và đăng nhập vào đó?</string>
     <string name="qraccount_ask_create_and_login_another">Tạo địa chỉ email mới trên \"%1$s\" và đăng nhập vào đó?\n\nTài khoản hiện tại của bạn sẽ không bị xóa. Sử dụng mục \"Chuyển tài khoản\" để chuyển đổi giữa các tài khoản của bạn.</string>
     <string name="qraccount_qr_code_cannot_be_used">Mã QR được quét không thể được sử dụng để thiết lập tài khoản mới.</string>
-    <!-- deprecated -->
-    <string name="qraccount_use_on_new_install">Mã QR được quét là để thiết lập một tài khoản mới. Bạn có thể quét mã QR khi thiết lập cài đặt Delta Chat mới.</string>
     <!-- the placeholder will be replaced by the e-mail address of the profile -->
     <string name="qrlogin_ask_login">Đăng nhập vào \"%1$s\"?</string>
     <!-- the placeholder will be replaced by the e-mail address of the profile -->
@@ -917,6 +906,7 @@
     <string name="mailto_link_could_not_be_decoded">không thể giải mã được liên kết mailto: %1$s</string>
 
     <!-- notifications  -->
+    <!-- deprecated, use mark_as_read or mark_as_read_short -->
     <string name="notify_dismiss">Loại bỏ</string>
     <string name="notify_reply_button">Trả lời</string>
     <string name="notify_new_message">Tin nhắn mới</string>
@@ -990,8 +980,6 @@
     <string name="export_backup_desktop">Xuất bản sao lưu</string>
     <string name="autocrypt_correct_desktop">Đã chuyển thiết lập Autocrypt.</string>
     <string name="forget_login_confirmation_desktop">Xóa thông tin đăng nhập này? Mọi thứ sẽ bị xóa, bao gồm thiết lập đầu cuối, danh bạ, cuộc trò chuyện, tin nhắn và phương tiện của bạn. Hành động này không thể hoàn tác được.</string>
-    <!-- deprecated -->
-    <string name="account_info_hover_tooltip_desktop2">E-mail: %1$s\nKích thước: %2$s\nId tài khoản: %3$s</string>
     <string name="message_detail_sent_desktop">đã gửi</string>
     <string name="message_detail_received_desktop">đã nhận được</string>
     <string name="menu.view.developer.open.log.folder">Mở thư mục nhật ký</string>

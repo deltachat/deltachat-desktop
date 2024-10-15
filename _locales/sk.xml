@@ -213,7 +213,6 @@
     <string name="menu_add_attachment">Pridať prílohu</string>
     <string name="menu_leave_group">Opustiť skupinu</string>
     <string name="menu_delete_chat">Odstrániť konverzáciu</string>
-    <string name="ask_delete_named_chat">Naozaj chcete položku odstrániť  \"%1$s\" ?</string>
     <string name="menu_delete_messages">Odstrániť správy</string>
     <string name="delete_contact">Odstrániť kontakt</string>
     <string name="menu_delete_location">Odstrániť toto miesto?</string>
@@ -266,11 +265,11 @@
     <string name="device_talk_subtitle">Miestne generované správy</string>
     <string name="device_talk_explain">Správy v tejto konverzácií sú generované lokálne vašou aplikáciou Delta Chat. Jeho tvorcovia ho používajú na informovanie o aktualizáciách aplikácií a problémoch počas používania.</string>
     <string name="edit_contact">Upraviť kontakt</string>
-    <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
+    <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin_chat">Pripnúť konverzáciu</string>
     <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
     <string name="unpin_chat">Odopnúť konverzáciu</string>
-    <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
+    <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin">Pripnúť</string>
     <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
     <string name="unpin">Uvoľniť</string>
@@ -308,7 +307,8 @@
     <string name="videochat_tap_to_open">Otvoríte klepnutím</string>
     <string name="videochat_instance">Inštancia videohovoru</string>
     <string name="videochat_instance_placeholder">Vaša inštancia videohovoru</string>
-    <string name="videochat_instance_example">Príklady: https://meet.jit.si/$MIESTNOST alebo basicwebrtc:https://vas-server</string>
+    <!-- Do not translate "$ROOM", since it is a fixed token Delta Chat will replace with a generated room ID like "aOclju5eCky" -->
+    <string name="videochat_instance_example">Príklady: https://your-server.org/$ROOM</string>
     <string name="videochat_instance_explain_2">Ak to zapnete, môžete začať video rozhovor z každej konverzácie. Vyžaduje kompatibilnú aplikáciu alebo prehliadač na oboch stranách.</string>
     <string name="videochat_instance_from_qr">Použiť „%1$s“ na odoslanie pozvánky na videohovor?\n\nPo nastavení môžete začať videohovor z každej jednotlivej konverzácie. Toto nahradí predchádzajúce nastavenie pre videohovory, ak existujú.</string>
     <string name="videochat_invitation">Pozvánka na videohovor</string>
@@ -322,6 +322,7 @@
         <item quantity="many">Odstrániť %d chaty? Už sa nebudú zobrazovať v zozname chatu, ich správy zostanú na serveri.</item>
         <item quantity="other">Odstrániť %d konverzácií? Už sa nebudú zobrazovať v zozname konverzácií, ich správy zostanú na serveri.</item>
     </plurals>
+    <string name="ask_delete_named_chat">Naozaj chcete položku odstrániť  \"%1$s\" ?</string>
     <string name="ask_delete_message">Naozaj chcete odstrániť túto správu?</string>
     <plurals name="ask_delete_messages">
         <item quantity="one">Odstrániť %d správu tu a na serveri?</item>
@@ -388,8 +389,6 @@
     <string name="chat_record_slide_to_cancel">Posunutím akciu zrušíte</string>
     <string name="chat_record_explain">Klepnutím a podržaním nahráte hlasovú správu, uvoľnením ju odošlete</string>
     <string name="chat_no_chats_yet_title">Prázdna doručená pošta.\nStlačením tlačidla + začnete novú konverzáciu</string>
-    <!-- deprecated -->
-    <string name="chat_no_chats_yet_hint">Môžete konverzovať s ostatnými používateľmi služby Delta Chat a s ľubovoľnou e-mailovou adresou.</string>
     <string name="chat_all_archived">Všetky konverzácie boli archivované.\nStlačením tlačidla „+“ začnete novú konverzáciu</string>
     <string name="chat_share_with_title">Zdieľať s</string>
     <string name="chat_input_placeholder">Správa</string>
@@ -445,8 +444,6 @@
     <string name="search">Vyhľadávanie</string>
     <string name="search_explain">Vyhľadajte konverzácie, kontakty a správy</string>
     <string name="search_no_result_for_x">Neboli nájdené žiadne výsledky pre \"%s\"</string>
-
-
     <!-- create/edit groups, contact/group profile -->
     <string name="group_name">Názov skupiny</string>
     <string name="group_avatar">Obrázok skupiny</string>
@@ -519,13 +516,14 @@
     <string name="login_smtp_port">Port SMTP</string>
     <string name="login_smtp_security">Zabezpečenie SMTP</string>
     <string name="login_auth_method">Metóda autorizácie</string>
-    <!-- the word "SOCKS5" here and in the following strings should not be translated in most cases -->
+    <!-- deprecated -->
     <string name="login_socks5">SOCKS5</string>
     <string name="login_socks5_use_socks5">Použiť SOCKS5</string>
     <string name="login_socks5_host">SOCKS5 Host</string>
     <string name="login_socks5_port">SOCKS5 Port</string>
     <string name="login_socks5_user">SOCKS5 Používateľ</string>
     <string name="login_socks5_password">SOCKS5 Heslo</string>
+
     <string name="login_info_oauth2_title">Pokračovať v zjednodušenom nastavovaní?</string>
     <string name="login_info_oauth2_text">Zadaná e-mailová adresa podporuje zjednodušené nastavenie (OAuth 2.0).\n\nV ďalšom kroku povoľte aplikácii Delta Chat, aby fungovala ako vaša aplikácia Chat cez e-mail.\n\nNie sú k dispozícii servery Delta Chat, vaše dáta zostanú vo vašom zariadení .</string>
     <string name="login_certificate_checks">Osvedčovacie kontroly</string>
@@ -540,7 +538,6 @@
     <string name="login_error_cannot_login">Nie je možné prihlásiť sa ako „%1$s“. Skontrolujte správnosť e-mailovej adresy a hesla.</string>
     <!-- TLS certificate checks -->
     <string name="accept_invalid_certificates">Prijmite neplatné certifikáty</string>
-    <string name="used_settings">Použité nastavenia:</string>
     <string name="switch_account">Prepnúť účet</string>
     <string name="add_account">Pridať účet</string>
     <string name="delete_account">Odstrániť účet</string>
@@ -556,8 +553,7 @@
     <!-- share and forward messages -->
     <!-- Translators: shown above a chat/contact list when selecting recipients to forward messages -->
     <string name="forward_to">Poslať ďalej ...</string>
-    <string name="share_multiple_attachments">Poslať %1$d súbory do vybranej konverzácie?\n\nSúbory sa odosielajú bez zmeny v pôvodnej veľkosti, napr. obrázky a videá nie sú prekódované.</string>
-    <string name="share_multiple_attachments_multiple_chats">Poslať %1$d súbor(y) do %2$d konverzácií?\n\nSúbory sa odosielajú neupravené v pôvodnej veľkosti, napr. obrázky a videá nie sú prekódované.</string>
+    <string name="ask_send_files_to_selected_chats">Poslať %1$d súbor(y) do %2$d konverzácií?</string>
     <string name="share_text_multiple_chats">Odoslať tento text d %1$d konverzácií?\n\n \"%2$s\"</string>
     <string name="share_abort">Zdieľanie bolo prerušené z dôvodu chýbajúcich povolení.</string>
 
@@ -707,15 +703,10 @@
     <string name="autodel_after_1_hour">Po 1 hodine</string>
     <string name="autodel_after_1_day">Po 1 dni</string>
     <string name="autodel_after_1_week">Po 1 týždni</string>
-    <string name="autodel_after_4_weeks">Po 4 týždňoch</string>
     <string name="after_5_weeks">Po 5 týždňoch</string>
     <string name="autodel_after_1_year">Po 1 roku</string>
 
     <!-- autocrypt -->
-    <!-- deprecated, used "Encryption" if a headline is needed -->
-    <string name="autocrypt">Autokrypt</string>
-    <!-- deprecated, the button "Send Autocrypt Setup Message" is enough -->
-    <string name="autocrypt_explain">Autokrypt je nová a otvorená špecifikácia automatického šifrovania e-mailov typu end-to-end.\n\nVaše komplexné nastavenie sa vytvára automaticky podľa potreby a môžete ho medzi zariadeniami prenášať pomocou správ o nastavení automatického šifrovania.</string>
     <string name="autocrypt_send_asm_title">Pošlite správu s nastavením autokryptovania</string>
     <string name="autocrypt_send_asm_explain_before">Správa o nastavení automatického šifrovania bezpečne zdieľa vaše komplexné nastavenie s ostatnými aplikáciami kompatibilnými s automatickým šifrovaním.\n\nNastavenie bude šifrované tu zobrazeným nastavovacím kódom a musí byť zadané na druhom zariadení.</string>
     <string name="autocrypt_send_asm_button">Pošlite správu s nastavením autokryptovania</string>
@@ -732,7 +723,9 @@
 
 
     <!-- system messages -->
+    <!-- deprecated -->
     <string name="systemmsg_read_receipt_subject">Správa otvorená</string>
+    <!-- deprecated -->
     <string name="systemmsg_read_receipt_body">%1$s Správa, ktorú ste poslali, sa zobrazila na obrazovke príjemcu.\n\nZaručujeme, že obsah nebol prečítaný.</string>
     <string name="systemmsg_unknown_sender_for_chat">Neznámy odosielateľ pre túto konverzáciu. Ďalšie informácie nájdete v časti „Informácie“.</string>
     <string name="systemmsg_subject_for_new_contact">Správa od %1$s</string>
@@ -841,8 +834,6 @@
     <string name="qraccount_ask_create_and_login">Vytvoriť novú e-mailovú adresu na „%1$s“ a prihlásiť sa tam?</string>
     <string name="qraccount_ask_create_and_login_another">Vytvorte novú e-mailovú adresu na „%1$s“ a prihláste sa tam?\n\nVáš existujúci účet nebude odstránený. Medzi položkami môžete prepínať pomocou položky „Prepnúť účet“.</string>
     <string name="qraccount_qr_code_cannot_be_used">Naskenovaný QR kód nie je možné použiť na založenie nového účtu.</string>
-    <!-- deprecated -->
-    <string name="qraccount_use_on_new_install">Naskenovaný QR kód slúži na založenie nového účtu. QR kód môžete naskenovať pri nastavovaní novej inštalácie Delta Chat.</string>
     <!-- the placeholder will be replaced by the e-mail address of the profile -->
     <string name="qrlogin_ask_login">Prihlásiť sa na \"%1$s\"?</string>
     <!-- first placeholder will be replaced by name and address of the inviter, second placeholder will be replaced by the name of the inviter. -->
@@ -860,6 +851,7 @@
     <string name="mailto_link_could_not_be_decoded">prepojenie mailto sa nepodarilo dekódovať: %1$s</string>
 
     <!-- notifications  -->
+    <!-- deprecated, use mark_as_read or mark_as_read_short -->
     <string name="notify_dismiss">Odmietnuť</string>
     <string name="notify_reply_button">Odpovedať</string>
     <string name="notify_new_message">Nová správa</string>
@@ -926,8 +918,6 @@
     <string name="export_backup_desktop">Exportovať zálohu</string>
     <string name="autocrypt_correct_desktop">Nastavenie automatického šifrovania bolo prenesené.</string>
     <string name="forget_login_confirmation_desktop">Odstrániť tieto prihlasovacie údaje? Odstráni sa všetko vrátane vášho kompletného nastavenia, kontaktov, konverzácií, správ a médií. Túto akciu nie je možné vrátiť späť.</string>
-    <!-- deprecated -->
-    <string name="account_info_hover_tooltip_desktop2">E-Mail: %1$s\nVeľkosť: %2$s\n ID Účtu: %3$s</string>
     <string name="message_detail_sent_desktop">odoslané</string>
     <string name="message_detail_received_desktop">prijaté</string>
     <string name="menu.view.developer.open.log.folder">Otvoriť priečinok denníka</string>

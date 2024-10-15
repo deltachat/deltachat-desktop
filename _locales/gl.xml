@@ -203,7 +203,6 @@
     <string name="menu_delete_chat">Eliminar conversa</string>
     <!-- Command to delete all messages in a chat. The chat itself will not be deleted but will be empty afterwards, so make sure to be different from "Delete Chat" here. "Clear" is a verb here, "Empty Chat" would also be fine (eg. in German "Chat leeren") -->
     <string name="clear_chat">Limpar Chat</string>
-    <string name="ask_delete_named_chat">Tes a certeza de querer eliminar \"%1$s\"?</string>
     <string name="menu_delete_messages">Eliminar mensaxes</string>
     <string name="delete_contact">Eliminar contacto</string>
     <string name="menu_delete_location">Eliminar esta localización?</string>
@@ -256,11 +255,11 @@
     <string name="device_talk_subtitle">Mensaxes xeradas localmente</string>
     <string name="device_talk_explain">As mensaxes de esta conversa xéranse localmente na túa app Delta Chat. Os creadores utilízanas para informar acerca de actualizacións e problemas durante a utilización.</string>
     <string name="edit_contact">Editar contacto</string>
-    <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
+    <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin_chat">Fixar conversa</string>
     <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
     <string name="unpin_chat">Desafixar conversa</string>
-    <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
+    <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin">Fixar</string>
     <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
     <string name="unpin">Desafixar</string>
@@ -296,6 +295,7 @@
     <string name="videochat_tap_to_open">Toca para abrir</string>
     <string name="videochat_instance">Instancia para video chat</string>
     <string name="videochat_instance_placeholder">A túa instancia para video chat</string>
+    <!-- Do not translate "$ROOM", since it is a fixed token Delta Chat will replace with a generated room ID like "aOclju5eCky" -->
     <string name="videochat_instance_example">Exemplos: https://meet.jit.si/$ROOM ou basicwebrtc:https://your-server</string>
     <string name="videochat_instance_explain_2">Se o chat por vídeo está activado, podes iniciar o chat de vídeo desde cada chat. Os chats de vídeo requiren unha app compatible ou un navegador compatible nos dous extremos.</string>
     <string name="videochat_instance_from_qr">¿Usar \"%1$s\" para convidar a outras a chats de vídeo?\n\nUnha vez establecido podes iniciar o chat desde a conversa un-a-un. Esto restablece o axuste anterior para video chats se existise.</string>
@@ -308,6 +308,7 @@
         <item quantity="one">Eliminar %d conversa? Non se mostrará na lista de conversas, as súas mensaxes permanecerán no servidor.</item>
         <item quantity="other">Eliminar %d conversas? Non se mostrarán máis na listas de conversas, as mensaxes permanecerán no servidor.</item>
     </plurals>
+    <string name="ask_delete_named_chat">Tes a certeza de querer eliminar \"%1$s\"?</string>
     <string name="ask_delete_message">Tes a certeza de querer eliminar esta mensaxe?</string>
     <plurals name="ask_delete_messages">
         <item quantity="one">Eliminar %d mensaxe aquí e no servidor?</item>
@@ -364,8 +365,6 @@
     <string name="chat_record_slide_to_cancel">Desliza para cancelar</string>
     <string name="chat_record_explain">Toca e mantén para gravar mensaxe de voz, solta para enviar</string>
     <string name="chat_no_chats_yet_title">Caixa de entrada baldeira.\n Preme \"+\" para iniciar conversa.</string>
-    <!-- deprecated -->
-    <string name="chat_no_chats_yet_hint">Podes conversar con outra usuaria Delta Chat e con calquera enderezo de correo.</string>
     <string name="chat_all_archived">Arquiváronse todas as conversas.\nPreme \"+\" para iniciar unha nova.</string>
     <string name="chat_share_with_title">Compartir con</string>
     <string name="chat_input_placeholder">Mensaxe</string>
@@ -421,8 +420,6 @@
     <string name="search">Buscar</string>
     <string name="search_explain">Buscar conversas, contactos e mensaxes</string>
     <string name="search_no_result_for_x">Non hai resultados para \"%s\"</string>
-
-
     <!-- create/edit groups, contact/group profile -->
     <string name="group_name">Nome do grupo</string>
     <string name="group_avatar">Avatar do grupo</string>
@@ -500,13 +497,14 @@
     <string name="login_smtp_port">Porto SMTP</string>
     <string name="login_smtp_security">Seguridade SMTP</string>
     <string name="login_auth_method">Método de autorización</string>
-    <!-- the word "SOCKS5" here and in the following strings should not be translated in most cases -->
+    <!-- deprecated -->
     <string name="login_socks5">SOCKS5</string>
     <string name="login_socks5_use_socks5">Usar SOCKS5</string>
     <string name="login_socks5_host">Servidor SOCKS5</string>
     <string name="login_socks5_port">Porto SOCKS5</string>
     <string name="login_socks5_user">Usuaria SOCKS5</string>
     <string name="login_socks5_password">Contrasinal SOCKS5</string>
+
     <string name="login_info_oauth2_title">Continuar co axuste simplificado?</string>
     <string name="login_info_oauth2_text">O enderezo introducido soporta o axuste simplificado (OAuth 2.0).\n\nNo seguinte paso, permite a Delta Chat actuar como app de Conversa sobre Correo-e.\n\nNon hai servidores Delta Chat, os teus datos permanecen no dispositivo.</string>
     <string name="login_certificate_checks">Comprobacións do certificado</string>
@@ -521,7 +519,6 @@
     <string name="login_error_cannot_login">Non se puido acceder como \"%1$s\". Comproba o enderezo de correo e o contrasinal.</string>
     <!-- TLS certificate checks -->
     <string name="accept_invalid_certificates">Aceptar certificados non válidos</string>
-    <string name="used_settings">Axustes utilizados:</string>
     <string name="switch_account">Cambiar de conta</string>
     <string name="add_account">Engadir conta</string>
     <string name="delete_account">Eliminar conta</string>
@@ -537,8 +534,7 @@
     <!-- share and forward messages -->
     <!-- Translators: shown above a chat/contact list when selecting recipients to forward messages -->
     <string name="forward_to">Reenviar a…</string>
-    <string name="share_multiple_attachments">Enviar %1$d ficheiro á conversa seleccionada?\n\nOs ficheiros terán o mesmo tamaño que o orixinal, ex. as imaxes e vídeos non se recodifican.</string>
-    <string name="share_multiple_attachments_multiple_chats">Enviar %1$d ficheiro(s) a %2$d conversas?\n\nOs ficheiros terán o mesmo tamaño, ex. imaxes e vídeos non se recodifican.</string>
+    <string name="ask_send_files_to_selected_chats">Enviar %1$d ficheiro(s) a %2$d conversas?</string>
     <string name="share_text_multiple_chats">Enviar este texto a %1$d conversas?\n\n\"%2$s\"</string>
     <string name="share_abort">Cancelouse a compartición debido a falta de permisos.</string>
 
@@ -688,15 +684,10 @@
     <string name="autodel_after_1_hour">Após 1 hora</string>
     <string name="autodel_after_1_day">Após 1 día</string>
     <string name="autodel_after_1_week">Após 1 semana</string>
-    <string name="autodel_after_4_weeks">Após 4 semanas</string>
     <string name="after_5_weeks">Após 5 semanas</string>
     <string name="autodel_after_1_year">Após 1 ano</string>
 
     <!-- autocrypt -->
-    <!-- deprecated, used "Encryption" if a headline is needed -->
-    <string name="autocrypt">Autocrypt</string>
-    <!-- deprecated, the button "Send Autocrypt Setup Message" is enough -->
-    <string name="autocrypt_explain">Autocrypt é un xeito novo de cifrado extremo-a-extremo automático do correo electrónico.\n\nOs axustes extremo-a-extremo créanse de xeito automático cando se precisan e son transferidos entre dispositivos con Mensaxes de Configuración Autocrypt.</string>
     <string name="autocrypt_send_asm_title">Enviar Mensaxe de Configuración Autocrypt</string>
     <string name="autocrypt_send_asm_explain_before">Unha Mensaxe de Configuración Autocrypt comparte de xeito seguro o teu cifrado extremo-a-extremo con outras apps compatibles con Autocrypt.\n\nO axuste realízase cifrado e protexido cun código que se debe escribir no outro dispositivo.</string>
     <string name="autocrypt_send_asm_button">Enviar Mensaxe de Configuración Autocrypt</string>
@@ -713,7 +704,9 @@
 
 
     <!-- system messages -->
+    <!-- deprecated -->
     <string name="systemmsg_read_receipt_subject">Mensaxe aberta</string>
+    <!-- deprecated -->
     <string name="systemmsg_read_receipt_body">A mensaxe \"%1$s\" que enviaches mostrouse na pantalla do correspondente.\n\nNon hai garantía de que o contido fose lido.</string>
     <string name="systemmsg_unknown_sender_for_chat">Remitente descoñecido para esta convers. Mira en \'info\' para saber máis.</string>
     <string name="systemmsg_subject_for_new_contact">Mensaxe de %1$s</string>
@@ -795,8 +788,6 @@
     <string name="qraccount_ask_create_and_login">Crear un novo enderezo de correo en \"%1$s\" e acceder ali?</string>
     <string name="qraccount_ask_create_and_login_another">Crear un novo enderezo de email en \"%1$s\" e acceder?\n\nNon se eliminará a conta actual. Usa \"Cambiar de conta\" para cambiar entre as túas contas.</string>
     <string name="qraccount_qr_code_cannot_be_used">O código QR escaneado non se pode utilizar para crear unha nova conta.</string>
-    <!-- deprecated -->
-    <string name="qraccount_use_on_new_install">O código QR escaneado é para crear unha nova conta. Podes escanear o código QR cando configures unha nova instalación de Delta Chat.</string>
     <!-- first placeholder will be replaced by name and address of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">%1$s convidoute a este grupo.\n\nAgardando a que responda o dispositivo de %2$s ...</string>
     <!-- placeholder will be replaced by the name of the inviter. -->
@@ -812,6 +803,7 @@
     <string name="mailto_link_could_not_be_decoded">a ligazón mailto non se puido descodificar: %1$s</string>
 
     <!-- notifications  -->
+    <!-- deprecated, use mark_as_read or mark_as_read_short -->
     <string name="notify_dismiss">Desbotar</string>
     <string name="notify_reply_button">Responder</string>
     <string name="notify_new_message">Nova mensaxe</string>
@@ -878,8 +870,6 @@
     <string name="export_backup_desktop">Exportar respaldo</string>
     <string name="autocrypt_correct_desktop">Axuste Autocrypt transferido.</string>
     <string name="forget_login_confirmation_desktop">Eliminar esta conexión? Borrarase todo, incluíndo os axustes de cifrado, contactos, conversas, mensaxes e ficheiros de medios. Esta acción non ten volta atrás.</string>
-    <!-- deprecated -->
-    <string name="account_info_hover_tooltip_desktop2">Email: %1$s \nTamaño: %2$s \nId. da conta: %3$s</string>
     <string name="message_detail_sent_desktop">enviado</string>
     <string name="message_detail_received_desktop">recibido</string>
     <string name="menu.view.developer.open.log.folder">Abrir cartafol do rexistro</string>

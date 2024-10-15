@@ -29,8 +29,6 @@
     <string name="emoji">Емоџи</string>
     <string name="attachment">Прилог</string>
     <string name="back">Назад</string>
-    <!-- this string is deprecated; the new wording is "introduced by ..." -->
-    <string name="verified">Проверено</string>
     <string name="close">Затвори</string>
     <string name="forward">Проследи</string>
     <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
@@ -217,7 +215,6 @@
     <string name="menu_delete_chat">Обриши ћаскање</string>
     <!-- Command to delete all messages in a chat. The chat itself will not be deleted but will be empty afterwards, so make sure to be different from "Delete Chat" here. "Clear" is a verb here, "Empty Chat" would also be fine (eg. in German "Chat leeren") -->
     <string name="clear_chat">Обриши ћаскање</string>
-    <string name="ask_delete_named_chat">Јесте ли сигурни да желите да избришете „%1$s“?</string>
     <string name="menu_delete_messages">Избришите поруке</string>
     <string name="delete_contact">Избриши контакт</string>
     <string name="menu_delete_location">Избриши овај положај?</string>
@@ -271,11 +268,11 @@
     <string name="device_talk_subtitle">Поруке генерисане на уређају</string>
     <string name="device_talk_explain">Поруке у овом ћаскању се генеришу на вашем уређају да обавештавају о ажурирањима апликација и проблемима током коришћења.</string>
     <string name="edit_contact">Измени контакт</string>
-    <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
+    <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin_chat">Закачи ћаскање</string>
     <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
     <string name="unpin_chat">Откачи ћаскање</string>
-    <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
+    <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin">Закачи</string>
     <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
     <string name="unpin">Откачи</string>
@@ -312,6 +309,7 @@
     <string name="videochat_tap_to_open">Додирни да отвориш</string>
     <string name="videochat_instance">Инстанца видео ћаскања</string>
     <string name="videochat_instance_placeholder">Ваша инстанца видео ћаскања</string>
+    <!-- Do not translate "$ROOM", since it is a fixed token Delta Chat will replace with a generated room ID like "aOclju5eCky" -->
     <string name="videochat_instance_example">Примери: https://meet.jit.si/$ROOM или basicwebrtc:https://your-server</string>
     <string name="videochat_instance_explain_2">Ако је омогућено, можете започети видео ћаскање из сваког ћаскања. Ово захтева компатибилну апликацију или прегледач на оба краја.</string>
     <string name="videochat_instance_from_qr">Да ли желите да користите „%1$s“ да позовете друге у видео ћаскање?\n\nКада ово поставите, можете да започнете видео ћаскање из сваког ћаскања. Ово замењује све претходне поставке за видео ћаскање.</string>
@@ -325,6 +323,7 @@
         <item quantity="few">Избриши %d ћаскањa? Они више неће бити приказани на листи ћаскања; али поруке ће остати на серверу.</item>
         <item quantity="other">Избриши %d ћаскањa? Они више неће бити приказани на листи ћаскања; али поруке ће остати на серверу.</item>
     </plurals>
+    <string name="ask_delete_named_chat">Јесте ли сигурни да желите да избришете „%1$s“?</string>
     <string name="ask_delete_message">Да ли желите да избришете ову поруку?</string>
     <plurals name="ask_delete_messages">
         <item quantity="one">Обриши %d поруку овде и са сервера.</item>
@@ -386,8 +385,6 @@
     <string name="chat_record_slide_to_cancel">Превуците за отказивање</string>
     <string name="chat_record_explain">Додирните и држите за снимање гласовне поруке, пустите за слање</string>
     <string name="chat_no_chats_yet_title">Сандуче је празно.\nПритисните „+“ да почнете ново ћаскање.</string>
-    <!-- deprecated -->
-    <string name="chat_no_chats_yet_hint">Можете ћаскати са другим Delta Chat корисницима и са онима који имају било коју другу е-адресу.</string>
     <string name="chat_all_archived">Сва ћаскања су архивирана.\nПритисните „+“ да почнете ново ћаскање.</string>
     <string name="chat_share_with_title">Подели са</string>
     <string name="chat_input_placeholder">Порука</string>
@@ -443,8 +440,6 @@
     <string name="search">Претрага</string>
     <string name="search_explain">Претражи ћаскања, контакте и поруке</string>
     <string name="search_no_result_for_x">Нема резултата за „%s“</string>
-
-
     <!-- create/edit groups, contact/group profile -->
     <string name="group_name">Назив групе</string>
     <string name="group_avatar">Слика групе</string>
@@ -521,13 +516,14 @@
     <string name="login_smtp_port">СМТП порт</string>
     <string name="login_smtp_security">СМТП безбедност</string>
     <string name="login_auth_method">Начин овлашћења</string>
-    <!-- the word "SOCKS5" here and in the following strings should not be translated in most cases -->
+    <!-- deprecated -->
     <string name="login_socks5">SOCKS5</string>
     <string name="login_socks5_use_socks5">Користи SOCKS5</string>
     <string name="login_socks5_host">SOCKS5 сервер</string>
     <string name="login_socks5_port">SOCKS5 порт</string>
     <string name="login_socks5_user">SOCKS5 корисник</string>
     <string name="login_socks5_password">SOCKS5 лозинка</string>
+
     <string name="login_info_oauth2_title">Наставите са поједностављеним поставкама?</string>
     <string name="login_info_oauth2_text">Унета е-адреса подржава поједностављено подешавање (OAuth 2.0).\n\nУ следећем кораку, дозволите Delta Chat-у да  да дејствује као ваша апликација за ћаскање преко е-поште.\n\nDelta Chat нема сервере и ваши подаци остају на вашем уређају.</string>
     <string name="login_certificate_checks">Провери сертификате</string>
@@ -542,7 +538,6 @@
     <string name="login_error_cannot_login">Не могу да се пријавим као „%1$s“. Проверите да ли су е-адреса и лозинка тачни.</string>
     <!-- TLS certificate checks -->
     <string name="accept_invalid_certificates">Прихватите и неважеће сертификате</string>
-    <string name="used_settings">Поставке за корисника:</string>
     <string name="switch_account">Промени налог</string>
     <string name="add_account">Додај налог</string>
     <string name="delete_account">Избриши налог</string>
@@ -558,8 +553,7 @@
     <!-- share and forward messages -->
     <!-- Translators: shown above a chat/contact list when selecting recipients to forward messages -->
     <string name="forward_to">Проследи за…</string>
-    <string name="share_multiple_attachments">Пошаљи %1$d фајлове у изабрано ћаскање?\n\nФајлови се шаљу неизмењене у оригиналној величини (нпр. слике и видео снимци се не кодирају поново).</string>
-    <string name="share_multiple_attachments_multiple_chats">Пошаљи %1$d фајл(ове) у %2$d ћаскања?\n\nДатотеке се шаљу неизмењене у оригиналној величини (нпр. слике и видео снимци се не кодирају поново).</string>
+    <string name="ask_send_files_to_selected_chats">Пошаљи %1$d фајл(ове) у %2$d ћаскања?</string>
     <string name="share_text_multiple_chats">Пошаљи овај текст %1$dиз ћаскања?\n\n„%2$s“</string>
     <string name="share_abort">Дељење прекинуто због неодговарајуће дозволе.</string>
 
@@ -709,15 +703,10 @@
     <string name="autodel_after_1_hour">За 1 сат</string>
     <string name="autodel_after_1_day">За 1 дан</string>
     <string name="autodel_after_1_week">За 1 недељу</string>
-    <string name="autodel_after_4_weeks">За 4 недеље</string>
     <string name="after_5_weeks">За 5 недеља</string>
     <string name="autodel_after_1_year">За 1 годину</string>
 
     <!-- autocrypt -->
-    <!-- deprecated, used "Encryption" if a headline is needed -->
-    <string name="autocrypt">Аутошифровање</string>
-    <!-- deprecated, the button "Send Autocrypt Setup Message" is enough -->
-    <string name="autocrypt_explain">Аутошифровање је нова и отворена спецификација за аутоматско с-краја-на-крај шифровање е-поште.\n\nПостаке се стварају аутоматски по потреби и можете да их преносите између уређаја помоћу Порука поставки за аутошифровање.</string>
     <string name="autocrypt_send_asm_title">Пошаљите поруку поставки за аутошифровање</string>
     <string name="autocrypt_send_asm_explain_before">Порука о подешавању аутоматског шифровања безбедно дели ваше комплетно подешавање са другим апликацијама које су компатибилне са аутоматским шифровањем.\n\nПодешавање ће бити шифровано кодом за подешавање приказаним овде и мора се унети на другом уређају.</string>
     <string name="autocrypt_send_asm_button">Пошаљите поруку поставки за аутошифровање</string>
@@ -734,7 +723,9 @@
 
 
     <!-- system messages -->
+    <!-- deprecated -->
     <string name="systemmsg_read_receipt_subject">Порука је отворена</string>
+    <!-- deprecated -->
     <string name="systemmsg_read_receipt_body">Порука „%1$s“ коју сте послали била је приказана на екрану примаоца.\n\nОво није гаранција да је садржај прочитан.</string>
     <string name="systemmsg_unknown_sender_for_chat">Непознати пошиљалац за ово ћаскање. Погледајте „информације“ за више детаља.</string>
     <string name="systemmsg_subject_for_new_contact">Поруке од %1$s</string>
@@ -843,8 +834,6 @@
     <string name="qraccount_ask_create_and_login">Направите нову е-адресу на „%1$s“ и приступите јој тамо?</string>
     <string name="qraccount_ask_create_and_login_another">Направите нову е-адресу на „%1$s“ и приступите јој тамо?\n\nВаш постојећи налог неће бити избрисан. Користите „Промени налог“ да пређете са једног налога на други.</string>
     <string name="qraccount_qr_code_cannot_be_used">Очитани бар-кôд не може бити коришћен да подеси нови налог.</string>
-    <!-- deprecated -->
-    <string name="qraccount_use_on_new_install">Очитани бар-кôд је за подешавање новог налога. Можете очитати овај бар-кôд за подешавања после инсталације Delta Chat апликације.</string>
     <!-- the placeholder will be replaced by the e-mail address of the profile -->
     <string name="qrlogin_ask_login">Пријави се у „%1$s“?</string>
     <!-- the placeholder will be replaced by the e-mail address of the profile -->
@@ -866,6 +855,7 @@
     <string name="mailto_link_could_not_be_decoded">mailto веза не може бити декодирана: %1$s</string>
 
     <!-- notifications  -->
+    <!-- deprecated, use mark_as_read or mark_as_read_short -->
     <string name="notify_dismiss">Одбаци</string>
     <string name="notify_reply_button">Одговори</string>
     <string name="notify_new_message">Нова порука</string>
@@ -932,8 +922,6 @@
     <string name="export_backup_desktop">Извези резервну копију</string>
     <string name="autocrypt_correct_desktop">Поставке за аутошифровање су послате.</string>
     <string name="forget_login_confirmation_desktop">Да ли желите да избришете овај налог? Све ће бити избрисано, укључујући и ваше подешавање с-краја-на-крај шифровања, контакти, ћаскања, поруке и медији. Ова радња се не може опозвати.</string>
-    <!-- deprecated -->
-    <string name="account_info_hover_tooltip_desktop2">Е-пошта: %1$s\nВеличина: %2$s\nИдентификатор налога: %3$s</string>
     <string name="message_detail_sent_desktop">послато</string>
     <string name="message_detail_received_desktop">примљено</string>
     <string name="menu.view.developer.open.log.folder">Отвори директоријум где се налазе дневници</string>

@@ -167,11 +167,11 @@
     <string name="device_talk_subtitle">Lokalki sortutako mezuak</string>
     <string name="device_talk_explain">Txat honetako mezuak zure Delta Chat aplikazioak sortu ditu lokalki. Egileek aplikazioaren eguneraketei buruz eta erabileran arazoei buruz informatzeko erabiltzen dute.</string>
     <string name="edit_contact">Editatu kontaktua</string>
-    <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
+    <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin_chat">Finkatu txata</string>
     <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
     <string name="unpin_chat">Desfinkatu txata</string>
-    <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
+    <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin">Finkatu</string>
     <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
     <string name="unpin">Desfinkatu</string>
@@ -237,8 +237,6 @@
     <string name="chat_record_slide_to_cancel">Irristatu ezeztatzeko</string>
     <string name="chat_record_explain">Sakatu eta mantendu ahots-mezu bat grabatzeko, askatu bidaltzeko.</string>
     <string name="chat_no_chats_yet_title">Sarrera-ontzi hutsa.\nSakatu \"+\" txat berria hasteko.</string>
-    <!-- deprecated -->
-    <string name="chat_no_chats_yet_hint">Beste Delta Chat erabiltzaileekin txateatu dezakezu, edo edozein e-mail helbiderekin</string>
     <string name="chat_all_archived">Txat guztiak artxibatuta.\nSakatu \"+\" txat berri bat hasteko.</string>
     <string name="chat_share_with_title">Partekatu honekin</string>
     <string name="chat_input_placeholder">Mezua</string>
@@ -257,8 +255,6 @@
     <string name="search">Bilatu</string>
     <string name="search_explain">Bilatu txatak, kontaktuak, eta mezuak.</string>
     <string name="search_no_result_for_x">Ez da emaitzarik aurkitu \"%s\" bilaketarentzat</string>
-
-
     <!-- create/edit groups, contact/group profile -->
     <string name="group_name">Taldearen izena</string>
     <string name="group_avatar">Taldearen abatarra</string>
@@ -311,7 +307,6 @@
     <string name="login_error_cannot_login">Ezin da \"%1$s\" bezala saioa hasi. Egiaztatu E-mail helbidea eta pasahitza zuzenak diren.</string>
     <!-- TLS certificate checks -->
     <string name="accept_invalid_certificates">Onartu ziurtagiri baliogabeak</string>
-    <string name="used_settings">Erabilitako ezarpenak:</string>
     <string name="switch_account">Aldatu kontua</string>
     <string name="add_account">Gehitu kontua</string>
     <string name="delete_account">Ezabatu kontua</string>
@@ -418,14 +413,9 @@
     <string name="autodel_after_1_hour">Ordubete eta gero</string>
     <string name="autodel_after_1_day">Egun bat eta gero</string>
     <string name="autodel_after_1_week">Aste bat eta gero</string>
-    <string name="autodel_after_4_weeks">4 aste eta gero</string>
     <string name="autodel_after_1_year">Urtebete eta gero</string>
 
     <!-- autocrypt -->
-    <!-- deprecated, used "Encryption" if a headline is needed -->
-    <string name="autocrypt">Autocrypt</string>
-    <!-- deprecated, the button "Send Autocrypt Setup Message" is enough -->
-    <string name="autocrypt_explain">Autocrypt e-maila muturretik muturrera zifratzeko espezifikazio berri eta ireki bat da.\n\nZure muturretik muturrerako ezarpena automatikoki sortzend a behar denean eta gailutik gailura eraman dezakezu Autocrypt ezarpen mezuekin.</string>
     <string name="autocrypt_send_asm_title">Bidali Autocrypt ezarpen mezua</string>
     <string name="autocrypt_send_asm_explain_before">\"Autocrypt ezarpen mezua\" batek modu seguruan partekatzen du zure muturretik muturrerako ezarpena Autocryptekin bateragarriak diren beste aplikazioekin. Ezarpena hemen bistaratutako ezarpen kodearekin zifratuko  da, eta beste gailuan kode hau sartu beharko da.</string>
     <string name="autocrypt_send_asm_button">Bidali Autocrypt ezarpen mezua</string>
@@ -442,7 +432,9 @@
 
 
     <!-- system messages -->
+    <!-- deprecated -->
     <string name="systemmsg_read_receipt_subject">Irakurragiria</string>
+    <!-- deprecated -->
     <string name="systemmsg_read_receipt_body">Hau \"%1$s\" mezuaren irakurragiri bat da.\n\nHonek mezua jasotzailearen gailuan bistaratu dela esan nahi du, ez edukia irakurri dela.</string>
     <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name -->
     <string name="group_name_changed_by_you">Nik: Taldearen izena \"%1$s\" izatetik \"%2$s\" izatera aldatu da</string>
@@ -485,8 +477,6 @@
     <string name="qrshow_join_contact_no_connection_toast">Ez dago Internet konexiorik, ezin da QR kode bidezko ezarpena aplikatu</string>
     <string name="qraccount_ask_create_and_login">Sortu kontu berria \"%1$s\" zerbitzarian eta saioa han hasi?</string>
     <string name="qraccount_qr_code_cannot_be_used">Eskaneatutako QR kodea ezin da kontu berri bat ezartzeko erabili.</string>
-    <!-- deprecated -->
-    <string name="qraccount_use_on_new_install">Eskaneatutako QR kodea kontu berri bat ezartzeko da. QR kodea Delta Chat instalazio berri batean eskaneatu dezakezu.</string>
     <string name="contact_verified">%1$s egiaztatuta.</string>
     <string name="contact_not_verified">Ezin da %1$s egiaztatu</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
