@@ -314,8 +314,7 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
                 <p className='text'>
                   Proxy support is currently experimental. Please use at your
                   own risk. If you type in an address in the e-mail field, there
-                  there will be DNS lookup that won't get tunneled through
-                  proxy.
+                  will be a DNS lookup that won't get tunneled through proxy.
                 </p>
                 <p className='text'>{tx('proxy_add_explain')}</p>
                 <DeltaInput
