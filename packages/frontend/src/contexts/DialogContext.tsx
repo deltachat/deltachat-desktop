@@ -7,7 +7,7 @@ import { generateRandomUUID } from '../utils/random'
 export type DialogId = string
 
 export type DialogProps = {
-  onClose: () => void
+  onClose: (result?: any) => void
 }
 
 type DialogElementConstructor<T> = JSXElementConstructor<DialogProps & T>

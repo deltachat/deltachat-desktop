@@ -36,7 +36,7 @@ export default function DesktopSettingsSwitch({
       label={label}
       description={description}
       value={value}
-      onClick={() => {
+      onChange={() => {
         SettingsStoreInstance.effect.setDesktopSetting(
           settingsKey,
           !settingsStore.desktopSettings[settingsKey]

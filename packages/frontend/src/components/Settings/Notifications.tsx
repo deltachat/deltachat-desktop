@@ -53,7 +53,7 @@ function AccountNotificationMutedSwitch({
       label={label}
       value={isMuted}
       description={description}
-      onClick={() => {
+      onChange={() => {
         AccountNotificationStoreInstance.effect.setMuted(accountId, !isMuted)
       }}
     />

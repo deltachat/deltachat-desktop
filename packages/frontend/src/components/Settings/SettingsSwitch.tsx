@@ -9,7 +9,7 @@ type Props = {
   description?: string
   disabled?: boolean
   label: string
-  onClick: () => void
+  onChange: (val: boolean) => void
   value: boolean
 }
 
@@ -17,7 +17,7 @@ export default function SettingsSwitch({
   description,
   disabled = false,
   label,
-  onClick,
+  onChange,
   value,
 }: Props) {
   return (
@@ -45,7 +45,7 @@ export default function SettingsSwitch({
         )}
       </div>
       <div className={styles.settingsSwitchRight}>
-        <Switch checked={value} disabled={disabled} onChange={onClick} />
+        <Switch checked={value} disabled={disabled} onChange={onChange} />
       </div>
     </label>
   )
