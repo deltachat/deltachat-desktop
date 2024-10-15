@@ -74,5 +74,8 @@
   },
   "join_group": {
     "message": "Join Group"
+  },
+  "react_more_emojis": {
+    "message": "More emojis…"
   }
 }

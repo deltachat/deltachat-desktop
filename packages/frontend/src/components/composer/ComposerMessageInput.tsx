@@ -229,6 +229,7 @@ export default class ComposerMessageInput extends React.Component<
         disabled={this.state.loadingDraft}
         dir='auto'
         spellCheck={true}
+        aria-keyshortcuts='Control+N'
       />
     )
   }
