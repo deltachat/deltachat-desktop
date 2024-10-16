@@ -29,7 +29,7 @@ export default class ComposerMessageInput extends React.Component<
   composerSize: number
   setCursorPosition: number | false
   textareaRef: React.RefObject<HTMLTextAreaElement>
-  saveDraft: () => void
+  saveDraft: ReturnType<typeof debounce<(text: string, chatId: number) => void>>
   constructor(props: ComposerMessageInputProps) {
     super(props)
     this.state = {
@@ -46,10 +46,9 @@ export default class ComposerMessageInput extends React.Component<
     this.insertStringAtCursorPosition =
       this.insertStringAtCursorPosition.bind(this)
 
-    this.saveDraft = debounce(() => {
-      const { text, chatId } = this.state
+    this.saveDraft = debounce((text: string, chatId: number) => {
       this.props.updateDraftText(text.trim() === '' ? '' : text, chatId)
-    }, 1000)
+    }, 200)
 
     this.textareaRef = React.createRef()
     this.focus = this.focus.bind(this)
@@ -124,7 +123,7 @@ export default class ComposerMessageInput extends React.Component<
       this.resizeTextareaAndComposer()
       if (prevState.text !== this.state.text) {
         if (!this.state.loadingDraft) {
-          this.saveDraft()
+          this.saveDraft(this.state.text, prevState.chatId)
         }
       }
     }
@@ -132,9 +131,6 @@ export default class ComposerMessageInput extends React.Component<
 
   onChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     this.setState({ text: e.target.value /*error: false*/ })
-    if (!this.state.loadingDraft) {
-      this.saveDraft()
-    }
   }
 
   keyEventToAction(e: React.KeyboardEvent<HTMLTextAreaElement>) {
