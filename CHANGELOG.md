@@ -53,7 +53,7 @@
 - cancel old message highlight animations when a new message is highlighted #4203
 - fix: packaging: include architecture in filename for all appimages #4202
 - fix: make open external link scheme case insensive #4201
-- make wide but short message attachments have less empty space on top/bottom
+- wide but narrow images have less empty space on top/bottom
 
 <a id="1_46_8"></a>
 
