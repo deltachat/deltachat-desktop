@@ -5,23 +5,23 @@
   position: relative;
   overflow: hidden;
 
+  .backButton {
+    $backBtnText: white;
+    .backButtonIcon {
+      background-color: $backBtnText;
+    }
+
+    &:hover {
+      background-color: rgba(143, 153, 168, 0.15);
+    }
+  }
+
   &.small-screen {
     .message-list-and-composer,
     .chat-list,
     .media-view {
       width: unset;
       flex-grow: 1;
-    }
-
-    .backButton {
-      $backBtnText: white;
-      .backButtonIcon {
-        background-color: $backBtnText;
-      }
-
-      &:hover {
-        background-color: rgba(143, 153, 168, 0.15);
-      }
     }
 
     &.chat-view-open {

@@ -35,7 +35,6 @@ import { ChatView } from '../../contexts/ChatContext'
 import { ScreenContext } from '../../contexts/ScreenContext'
 
 import type { T } from '@deltachat/jsonrpc-client'
-import { BackButton } from '../Dialog'
 
 type Props = {
   accountId?: number
@@ -174,10 +173,13 @@ export default function MainScreen({ accountId }: Props) {
               {showArchivedChats && (
                 <>
                   <span className='no-drag'>
-                    <BackButton
+                    <Button
                       aria-label={tx('back')}
                       onClick={() => setArchivedChatsSelected(false)}
-                    />
+                      className='backButton'
+                    >
+                      <Icon icon='arrow-left' className='backButtonIcon'></Icon>
+                    </Button>
                   </span>
                   <div className='archived-chats-title no-drag'>
                     {tx('chat_archived_chats_title')}

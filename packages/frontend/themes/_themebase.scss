@@ -130,6 +130,7 @@ $hover-contrast-change: 2%;
   --contextMenuSelectedBg: #a4a6a9;
   --bp4DialogHeaderBg: #{$bgPrimary};
   /* BlueprintJS overwrites, used in code, just weren't renamed for the sake of renaming */
+  --bp4DialogHeaderIcon: #666666;
   --bp4DialogBgSecondary: #{$bgSecondary};
   --bp4DialogBgPrimary: #{$bgPrimary};
   --bp4Heading: #{$textPrimary};
