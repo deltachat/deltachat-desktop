@@ -3,38 +3,27 @@ import classNames from 'classnames'
 
 import styles from './style.module.scss'
 
-type Props = React.PropsWithChildren<{
-  'aria-label'?: string
-  className?: string
-  disabled?: boolean
+export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   active?: boolean
-  id?: string
-  onClick: any
-  type?: 'primary' | 'secondary' | 'danger'
-}>
+  styling?: 'primary' | 'secondary' | 'danger'
+}
 
 export default function Button({
   children,
-  disabled = false,
   active = false,
-  id,
-  onClick,
   type,
+  className,
   ...props
-}: Props) {
+}: ButtonProps) {
   return (
     <button
-      id={id}
-      disabled={disabled}
-      role='button'
       className={classNames(
         styles.button,
         active && styles.active,
         type && styles[type],
-        props.className
+        className
       )}
-      onClick={onClick}
-      aria-label={props['aria-label']}
+      {...props}
     >
       {children}
     </button>

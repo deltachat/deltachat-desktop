@@ -5,7 +5,6 @@ import useDialog from '../../hooks/dialog/useDialog'
 import FullscreenAvatar from '../dialogs/FullscreenAvatar'
 
 import type { Type } from '../../backend-com'
-import type { PropsWithChildren } from 'react'
 import { get_first_emoji } from '@deltachat/message_parser_wasm'
 
 import styles from './styles.module.scss'
@@ -99,9 +98,9 @@ export function AvatarFromContact(
 }
 
 export function ClickForFullscreenAvatarWrapper(
-  props: PropsWithChildren<{
+  props: React.ButtonHTMLAttributes<HTMLButtonElement> & {
     filename?: string
-  }>
+  }
 ) {
   const { openDialog } = useDialog()
 
@@ -115,6 +114,7 @@ export function ClickForFullscreenAvatarWrapper(
           imagePath: filename!,
         })
       }}
+      {...props}
     >
       {children}
     </button>

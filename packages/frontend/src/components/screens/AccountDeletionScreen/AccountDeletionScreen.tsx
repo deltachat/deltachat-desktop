@@ -113,7 +113,7 @@ export default function AccountDeletionScreen({
                 {tx('cancel')}
               </FooterActionButton>
               <FooterActionButton
-                danger={true}
+                styling='danger'
                 onClick={async () => onDeleteAccount(selectedAccountId)}
               >
                 {tx('delete')}
