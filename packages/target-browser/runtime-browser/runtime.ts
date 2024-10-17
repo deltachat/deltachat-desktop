@@ -541,7 +541,7 @@ class BrowserRuntime implements Runtime {
       }
       if (blob.type !== 'image/png') {
         const img = new Image()
-        const blobPromise = new Promise<Blob>(async (resolve, reject) => {
+        const blobPromise = new Promise<Blob>((resolve, reject) => {
           img.onload = async () => {
             try {
               const canvas = new OffscreenCanvas(
