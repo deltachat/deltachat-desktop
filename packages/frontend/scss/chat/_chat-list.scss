@@ -12,6 +12,9 @@
   // So that `.floating-action-button` is positioned relative to `.chat-list`.
   position: relative;
 
+  // don't show extra scrollbar in browser edition
+  overflow: hidden;
+
   .search-result-divider {
     line-height: 43px;
     height: 40px;

@@ -52,7 +52,7 @@ export interface Runtime {
   initialize(
     setLogHandler: typeof setLogHandlerFunction,
     getLogger: typeof getLoggerFunction
-  ): void
+  ): Promise<void>
   reloadWebContent(): void
   openLogFile(): void
   getCurrentLogLocation(): string
@@ -115,7 +115,8 @@ export interface Runtime {
   setNotificationCallback(
     cb: (data: { accountId: number; chatId: number; msgId: number }) => void
   ): void
-  writeClipboardToTempFile(): Promise<string>
+  /** @param name optional name needed for browser */
+  writeClipboardToTempFile(name?: string): Promise<string>
   writeTempFileFromBase64(name: string, content: string): Promise<string>
   writeTempFile(name: string, content: string): Promise<string>
   removeTempFile(path: string): Promise<void>

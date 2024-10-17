@@ -18,68 +18,67 @@ ${lines}
 
 Consider using our logger (log.debug) or add this line ${green(
       '/* ignore-console-log */'
-    )} above to add an exception
+    )} above to add an exception (or add your file to '.log.convention.ignore')
 ${blue('------------------------------------------------')}`
   )
 }
 
-import { walk as _walk } from 'walk'
-import { readFile } from 'fs'
-import { join } from 'path'
-const walker = _walk('./src')
+import { readFile } from 'fs/promises'
+import walk from 'ignore-walk'
+import { basename, relative } from 'path'
+//@ts-ignore
+const files = await walk({
+  ignoreFiles: ['.log.convention.ignore', '.gitignore'],
+})
 let found = 0
 
-walker.on('file', function(root, fileStats, next) {
-  if (!fileStats.name.includes('.js')) next()
-  const filename = join(root, fileStats.name)
-  readFile(filename, 'utf-8', function(err, data) {
-    if (err) throw err
-    const lines = data.split('\n')
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i]
-      const previousLine = i === 0 ? '' : lines[i - 1]
+for (const file of files) {
+  if (!file.endsWith('.ts')) {
+    continue
+  }
 
-      const lineContainsConsoleLog =
-        line.indexOf('console.') !== -1 &&
-        /console.(debug|log|info|error)\(/.test(line) === true
+  //@ts-ignore
+  const data = await readFile(file, 'utf-8')
 
-      if (!lineContainsConsoleLog) continue
+  const lines = data.split('\n')
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]
+    const previousLine = i === 0 ? '' : lines[i - 1]
 
-      const ignoreConsoleLog =
-        previousLine.includes('/* ignore-console-log */') ||
-        /^\s*\/\//.test(line)
+    const lineContainsConsoleLog =
+      line.indexOf('console.') !== -1 &&
+      /console.(debug|log|info|error)\(/.test(line) === true
 
-      if (ignoreConsoleLog) continue
+    if (!lineContainsConsoleLog) continue
 
-      formattedOutput(
-        `${filename}:${i + 1}`,
-        lines
-          .slice(i - 1, i + 2)
-          .join('\n')
-          .replace(line, string =>
-            string.replace(
-              /^([^]*)(console.(?:debug|log|info|error))([^]*)$/,
-              (_s, s1, s2, s3) => `${cyan(s1)}${red(s2)}${cyan(s3)}`
-            )
+    const ignoreConsoleLog =
+      previousLine.includes('/* ignore-console-log */') || /^\s*\/\//.test(line)
+
+    if (ignoreConsoleLog) continue
+
+    const filename = relative(process.cwd(), file)
+
+    formattedOutput(
+      `${filename}:${i + 1}`,
+      lines
+        .slice(i - 1, i + 2)
+        .join('\n')
+        .replace(line, string =>
+          string.replace(
+            /^([^]*)(console.(?:debug|log|info|error))([^]*)$/,
+            (_s, s1, s2, s3) => `${cyan(s1)}${red(s2)}${cyan(s3)}`
           )
-      )
-      found++
-    }
-    next()
-  })
-})
+        )
+    )
+    found++
+  }
+}
 
-walker.on('errors', function(root, nodeStatsArray, next) {
-  next()
-})
-
-walker.on('end', function() {
-  console.log(
-    `found ${[
-      found > 0 ? bgRed(found.toString()) : bgGreen(found.toString()),
-    ]} misplaced console.log statements ( ${grey(
-      '// comment'
-    )} lines were ignored)`
-  )
-  process.exit(found > 0 ? 1 : 0)
-})
+console.log(
+  `found ${[
+    found > 0 ? bgRed(found.toString()) : bgGreen(found.toString()),
+  ]} misplaced console.log statements ( ${grey(
+    '// comment'
+  )} lines were ignored)`
+)
+process.exit(found > 0 ? 1 : 0)

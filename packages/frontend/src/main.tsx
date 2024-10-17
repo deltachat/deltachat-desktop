@@ -15,7 +15,7 @@ import { runtime } from '@deltachat-desktop/runtime-interface'
 async function main() {
   exp.help //make sure experimental.ts is used
   try {
-    runtime.initialize(setLogHandler, getLogger)
+    await runtime.initialize(setLogHandler, getLogger)
     printProcessLogLevelInfo()
 
     await initWasm('./message_parser_wasm_bg.wasm')

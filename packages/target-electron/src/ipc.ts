@@ -121,6 +121,7 @@ ${error instanceof Error ? error.message : inspect(error, { depth: null })}`
     const info: RuntimeInfo = {
       isMac: platform() === 'darwin',
       isAppx: appx,
+      target: 'electron',
       versions: [
         { label: 'electron', value: versions.electron },
         { label: 'node', value: versions.node },
@@ -230,7 +231,7 @@ ${error instanceof Error ? error.message : inspect(error, { depth: null })}`
   )
   ipcMain.handle('electron.shell.openPath', (_ev, path) => {
     // map sandbox path if on Windows
-    shell.openPath(mapPackagePath(path))
+    return shell.openPath(mapPackagePath(path))
   })
   ipcMain.handle('electron.clipboard.readText', () => {
     return clipboard.readText()

@@ -27,7 +27,6 @@
     "test-and-check": "pnpm test && pnpm check",
     "reset:node_modules": "rm -rf node_modules && rm -rf packages/*/node_modules || true && pnpm i"
   },
-  "dependencies": {},
   "engineStrict": true,
   "engines": {
     "node": "^20",
@@ -48,17 +47,18 @@
     }
   },
   "devDependencies": {
-    "yaml": "^2.4.5",
+    "@types/ignore-walk": "^4.0.3",
+    "@typescript-eslint/eslint-plugin": "^7.8.0",
+    "@typescript-eslint/parser": "^7.8.0",
+    "chokidar": "^3.6.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react-hooks": "^4.6.2",
-    "@typescript-eslint/eslint-plugin": "^7.8.0",
-    "@typescript-eslint/parser": "^7.8.0",
+    "ignore-walk": "^7.0.0",
     "prettier": "3.1.0",
-    "walk": "^2.3.15",
-    "xml-js": "^1.6.11",
     "typescript": "catalog:",
-    "chokidar": "^3.6.0"
+    "xml-js": "^1.6.11",
+    "yaml": "^2.4.5"
   }
 }

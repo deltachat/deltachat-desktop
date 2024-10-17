@@ -86,11 +86,12 @@
     bottom: 0;
     // There is also `will-change: scroll-position` dynamically set on this
     // element.
-    overflow: scroll;
+    overflow-y: scroll;
     max-height: 100%;
     width: 100%;
     padding: 0 0.5em;
 
+    scrollbar-color: var(--scrollbarThumb) transparent;
     &::-webkit-scrollbar-track {
       background: transparent;
     }

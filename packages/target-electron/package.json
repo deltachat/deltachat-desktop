@@ -34,7 +34,7 @@
     "build": "pnpm build:locales && pnpm build:backend && pnpm --filter=@deltachat-desktop/frontend build && pnpm build:compose-frontend",
     "build:locales": "pnpm -w translations:convert",
     "build:backend": "node ./bin/build.js",
-    "build:runtime-impl": "pnpm esbuild --bundle --minify --sourcemap --outdir=./html-dist runtime-electron/runtime.ts",
+    "build:runtime-impl": "pnpm esbuild --bundle --minify --keep-names --sourcemap --outdir=./html-dist runtime-electron/runtime.ts",
     "build:compose-frontend": "node ../../bin/copy.js ../frontend/html-dist ./html-dist && node ../../bin/copy.js ./static ./html-dist && pnpm build:runtime-impl",
     "watch:compose-frontend": "node ../../bin/copy.js ../frontend/html-dist ./html-dist -w & node ../../bin/copy.js ./static ./html-dist -w & pnpm build:runtime-impl --watch",
     "watch": "pnpm -w --filter=@deltachat-desktop/frontend watch & pnpm watch:compose-frontend",
