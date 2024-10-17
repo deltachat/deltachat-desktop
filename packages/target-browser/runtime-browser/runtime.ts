@@ -281,7 +281,6 @@ class BrowserRuntime implements Runtime {
           continue
         }
         const blob = await clipboardItem.getType(type)
-        console.log(blob, blob.type, type)
         if (!name) {
           throw new Error('writeClipboardToTempFile: Browser needs a filename')
         }

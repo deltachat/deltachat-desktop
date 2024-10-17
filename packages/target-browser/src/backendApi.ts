@@ -8,11 +8,14 @@ import {
   RuntimeInfo,
 } from '@deltachat-desktop/shared/shared-types'
 import { getDefaultState } from '@deltachat-desktop/shared/state'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 
 import { authMiddleWare } from './middlewares'
 import { localStorage } from './config'
 import { BuildInfo } from './get-build-info'
 import { RCConfig } from './rc-config'
+
+const log = getLogger('main/BackendApiRoute')
 
 export const BackendApiRoute = Router()
 
@@ -77,8 +80,6 @@ BackendApiRoute.post(
       await writeFile(filepath, tmpFile, 'binary')
 
       res.status(200).send({ path: filepath })
-      console.log(tmpFile)
-      console.log(filename, tmppath, filepath)
     } catch (error) {
       res.status(500).json({ message: 'Failed to create Tempfile' })
     }
@@ -104,8 +105,6 @@ BackendApiRoute.post(
       await writeFile(filepath, tmpFilebin, 'binary')
 
       res.status(200).send({ path: filepath })
-      console.log(tmpFilebin.toString('utf-8'))
-      console.log(filename, tmppath, filepath)
     } catch (error) {
       res.status(500).json({ message: 'Failed to create Tempfile' })
     }
@@ -122,7 +121,6 @@ BackendApiRoute.post(
   async (req, _res) => {
     try {
       const filepath = req.body.toString('utf8')
-      console.log(filepath)
       if (filepath.includes('tmp') && !filepath.includes('..')) {
         await unlink(filepath)
       }
@@ -130,7 +128,7 @@ BackendApiRoute.post(
       // file doesn't exist, no permissions, etc..
       // full list of possible errors is here
       // http://man7.org/linux/man-pages/man2/unlink.2.html#ERRORS
-      console.log(e)
+      log.error(e)
     }
   }
 )
