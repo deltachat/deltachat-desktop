@@ -57,7 +57,7 @@ export default function ConfirmationDialog({
             {cancelLabel || tx('cancel')}
           </FooterActionButton>
           <FooterActionButton
-            danger={isConfirmDanger}
+            styling={isConfirmDanger ? 'danger' : undefined}
             onClick={() => handleClick(true)}
           >
             {confirmLabel || tx('yes')}

@@ -45,7 +45,7 @@ export default function UseOtherServerDialog({ onClose }: DialogProps) {
       <DialogBody>
         <DialogContent>
           <Button
-            type='secondary'
+            styling='secondary'
             className={styles.welcomeScreenButton}
             onClick={onShowMoreInstances}
           >
@@ -54,14 +54,14 @@ export default function UseOtherServerDialog({ onClose }: DialogProps) {
           </Button>
 
           <Button
-            type='secondary'
+            styling='secondary'
             className={styles.welcomeScreenButton}
             onClick={onClickLogin}
           >
             {tx('manual_account_setup_option')}
           </Button>
           <Button
-            type='secondary'
+            styling='secondary'
             className={styles.welcomeScreenButton}
             onClick={onScanQRCode}
           >
