@@ -91,7 +91,7 @@ importers:
         version: 1.1.2
       '@emoji-mart/react':
         specifier: 1.1.1
-        version: 1.1.1(emoji-mart@5.5.2)(react@17.0.2)
+        version: 1.1.1(emoji-mart@5.5.2)(react@18.3.1)
       classnames:
         specifier: ^2.5.1
         version: 2.5.1
@@ -123,32 +123,32 @@ importers:
         specifier: ^1.0.1
         version: 1.0.1
       react:
-        specifier: ^17.0.2
-        version: 17.0.2
+        specifier: ^18.0.0
+        version: 18.3.1
       react-dom:
-        specifier: ^17.0.2
-        version: 17.0.2(react@17.0.2)
+        specifier: ^18.0.0
+        version: 18.3.1(react@18.3.1)
       react-string-replace:
         specifier: ^1.1.1
         version: 1.1.1
       react-virtualized-auto-sizer:
         specifier: ^1.0.24
-        version: 1.0.24(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+        version: 1.0.24(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-window:
         specifier: ^1.8.10
-        version: 1.8.10(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+        version: 1.8.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-window-infinite-loader:
         specifier: ^1.0.9
-        version: 1.0.9(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+        version: 1.0.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-zoom-pan-pinch:
-        specifier: ^2.6.1
-        version: 2.6.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
+        specifier: ^3.0.0
+        version: 3.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       split2:
         specifier: ^4.2.0
         version: 4.2.0
       use-debounce:
         specifier: ^3.3.0
-        version: 3.4.3(react@17.0.2)
+        version: 3.4.3(react@18.3.1)
       ws:
         specifier: 7.5.10
         version: 7.5.10
@@ -163,11 +163,11 @@ importers:
         specifier: 'catalog:'
         version: 2.1.4
       '@types/react':
-        specifier: ^17.0.80
-        version: 17.0.80
+        specifier: ^18.0.0
+        version: 18.3.11
       '@types/react-dom':
-        specifier: ^17.0.25
-        version: 17.0.25
+        specifier: ^18.0.0
+        version: 18.3.1
       '@types/react-window':
         specifier: ^1.8.8
         version: 1.8.8
@@ -1052,8 +1052,8 @@ packages:
   '@types/rc@1.2.4':
     resolution: {integrity: sha512-xD6+epQoMH79A1uwmJIq25D+XZ57jUzCQ1DGSvs3tGKdx7QDYOOaMh6m5KBkEIW4+Cy5++bZ7NLDfdpNiYVKYA==}
 
-  '@types/react-dom@17.0.25':
-    resolution: {integrity: sha512-urx7A7UxkZQmThYA4So0NelOVjx3V4rNFVJwp0WZlbIK5eM4rNJDiN3R/E9ix0MBh6kAEojk/9YL+Te6D9zHNA==}
+  '@types/react-dom@18.3.1':
+    resolution: {integrity: sha512-qW1Mfv8taImTthu4KoXgDfLuk4bydU6Q/TkADnDWWHwi4NX4BR+LWfTp2sVmTqRrsHvyDDTelgelxJ+SsejKKQ==}
 
   '@types/react-window-infinite-loader@1.0.9':
     resolution: {integrity: sha512-gEInTjQwURCnDOFyIEK2+fWB5gTjqwx30O62QfxA9stE5aiB6EWkGj4UMhc0axq7/FV++Gs/TGW8FtgEx0S6Tw==}
@@ -1061,14 +1061,11 @@ packages:
   '@types/react-window@1.8.8':
     resolution: {integrity: sha512-8Ls660bHR1AUA2kuRvVG9D/4XpRC6wjAaPT9dil7Ckc76eP9TKWZwwmgfq8Q1LANX3QNDnoU4Zp48A3w+zK69Q==}
 
-  '@types/react@17.0.80':
-    resolution: {integrity: sha512-LrgHIu2lEtIo8M7d1FcI3BdwXWoRQwMoXOZ7+dPTW0lYREjmlHl3P0U1VD0i/9tppOuv8/sam7sOjx34TxSFbA==}
+  '@types/react@18.3.11':
+    resolution: {integrity: sha512-r6QZ069rFTjrEYgFdOck1gK7FLVsgJE7tTz0pQBczlBNUhBNk0MQH4UbnFSwjpQLMkLzgqvBBa+qGpLje16eTQ==}
 
   '@types/responselike@1.0.0':
     resolution: {integrity: sha512-85Y2BjiufFzaMIlvJDvTTB8Fxl2xfLo4HgmHzVBz08w4wDePCTjYw66PdrolO0kzli3yam/YCgRufyo1DdQVTA==}
-
-  '@types/scheduler@0.16.2':
-    resolution: {integrity: sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==}
 
   '@types/semver@7.5.8':
     resolution: {integrity: sha512-I8EUhyrgfLrcTkzV3TSsGyl1tSuPrEDzr0yd5m90UgNxQkyDXULk3b6MlQqTCpZpNtWe1K0hzclnZkTcLBe2UQ==}
@@ -2318,10 +2315,6 @@ packages:
   normalize.css@8.0.1:
     resolution: {integrity: sha512-qizSNPO93t1YUuUhP22btGOo3chcvDFqFaj2TRybP0DMxkHOCTYwp3n34fel4a31ORXy4m1Xq0Gyqpb5m33qIg==}
 
-  object-assign@4.1.1:
-    resolution: {integrity: sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==}
-    engines: {node: '>=0.10.0'}
-
   object-keys@1.1.1:
     resolution: {integrity: sha512-NuAESUOUMrlIXOfHKzD6bpPu3tYt3xvjNdRIQ+FeT0lNb4K8WR70CaDxhuNguS2XG+GjkyMwOzsN5ZktImfhLA==}
     engines: {node: '>= 0.4'}
@@ -2503,10 +2496,10 @@ packages:
     resolution: {integrity: sha512-y3bGgqKj3QBdxLbLkomlohkvsA8gdAiUQlSBJnBhfn+BPxg4bc62d8TcBW15wavDfgexCgccckhcZvywyQYPOw==}
     hasBin: true
 
-  react-dom@17.0.2:
-    resolution: {integrity: sha512-s4h96KtLDUQlsENhMn1ar8t2bEa+q/YAtj8pPPdIjPDGBDIVNsrD9aXNWqspUe6AzKCIG0C1HZZLqLV7qpOBGA==}
+  react-dom@18.3.1:
+    resolution: {integrity: sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==}
     peerDependencies:
-      react: 17.0.2
+      react: ^18.3.1
 
   react-string-replace@1.1.1:
     resolution: {integrity: sha512-26TUbLzLfHQ5jO5N7y3Mx88eeKo0Ml0UjCQuX4BMfOd/JX+enQqlKpL1CZnmjeBRvQE8TR+ds9j1rqx9CxhKHQ==}
@@ -2532,15 +2525,15 @@ packages:
       react: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
       react-dom: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
 
-  react-zoom-pan-pinch@2.6.1:
-    resolution: {integrity: sha512-4Cgdnn6OwN4DomY/E9NpAf0TyCtslEgwdYn96ZV/f5LKuw/FE3gcIBJiaKFmMGThDGV0yKN5mzO8noi34+UE4Q==}
+  react-zoom-pan-pinch@3.6.1:
+    resolution: {integrity: sha512-SdPqdk7QDSV7u/WulkFOi+cnza8rEZ0XX4ZpeH7vx3UZEg7DoyuAy3MCmm+BWv/idPQL2Oe73VoC0EhfCN+sZQ==}
     engines: {node: '>=8', npm: '>=5'}
     peerDependencies:
       react: '*'
       react-dom: '*'
 
-  react@17.0.2:
-    resolution: {integrity: sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==}
+  react@18.3.1:
+    resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
     engines: {node: '>=0.10.0'}
 
   read-config-file@6.3.2:
@@ -2624,8 +2617,8 @@ packages:
   sax@1.3.0:
     resolution: {integrity: sha512-0s+oAmw9zLl1V1cS9BtZN7JAd0cW5e0QH4W3LWEK6a4LaLEA2OTpGYWDY+6XasBLtz6wkm3u1xRw95mRuJ59WA==}
 
-  scheduler@0.20.2:
-    resolution: {integrity: sha512-2eWfGgAqqWFGqtdMmcL5zCMK1U8KlXv8SQFGglL3CEtd0aDVDWgeF/YoCmvln55m5zSk3J/20hTaSBeSObsQDQ==}
+  scheduler@0.23.2:
+    resolution: {integrity: sha512-UOShsPwz7NrMUqhR6t0hWjFduvOzbtv7toDH1/hIrfRNIDBnnBWd0CwJTGvTpngVlmwGCdP9/Zl/tVrDqcuYzQ==}
 
   semver-compare@1.0.0:
     resolution: {integrity: sha512-YM3/ITh2MJ5MtzaM429anh+x2jiLVjqILF4m4oyQB18W7Ggea7BfqdH/wGMK7dDiMghv/6WG7znWMwUDzJiXow==}
@@ -3157,10 +3150,10 @@ snapshots:
 
   '@emoji-mart/data@1.1.2': {}
 
-  '@emoji-mart/react@1.1.1(emoji-mart@5.5.2)(react@17.0.2)':
+  '@emoji-mart/react@1.1.1(emoji-mart@5.5.2)(react@18.3.1)':
     dependencies:
       emoji-mart: 5.5.2
-      react: 17.0.2
+      react: 18.3.1
 
   '@esbuild/aix-ppc64@0.23.0':
     optional: true
@@ -3499,7 +3492,7 @@ snapshots:
 
   '@types/emoji-mart@3.0.14':
     dependencies:
-      '@types/react': 17.0.80
+      '@types/react': 18.3.11
 
   '@types/fs-extra@9.0.13':
     dependencies:
@@ -3545,30 +3538,27 @@ snapshots:
     dependencies:
       '@types/minimist': 1.2.2
 
-  '@types/react-dom@17.0.25':
+  '@types/react-dom@18.3.1':
     dependencies:
-      '@types/react': 17.0.80
+      '@types/react': 18.3.11
 
   '@types/react-window-infinite-loader@1.0.9':
     dependencies:
-      '@types/react': 17.0.80
+      '@types/react': 18.3.11
       '@types/react-window': 1.8.8
 
   '@types/react-window@1.8.8':
     dependencies:
-      '@types/react': 17.0.80
+      '@types/react': 18.3.11
 
-  '@types/react@17.0.80':
+  '@types/react@18.3.11':
     dependencies:
       '@types/prop-types': 15.7.5
-      '@types/scheduler': 0.16.2
       csstype: 3.1.1
 
   '@types/responselike@1.0.0':
     dependencies:
       '@types/node': 20.14.15
-
-  '@types/scheduler@0.16.2': {}
 
   '@types/semver@7.5.8': {}
 
@@ -5055,8 +5045,6 @@ snapshots:
 
   normalize.css@8.0.1: {}
 
-  object-assign@4.1.1: {}
-
   object-keys@1.1.1:
     optional: true
 
@@ -5214,41 +5202,39 @@ snapshots:
       minimist: 1.2.6
       strip-json-comments: 2.0.1
 
-  react-dom@17.0.2(react@17.0.2):
+  react-dom@18.3.1(react@18.3.1):
     dependencies:
       loose-envify: 1.4.0
-      object-assign: 4.1.1
-      react: 17.0.2
-      scheduler: 0.20.2
+      react: 18.3.1
+      scheduler: 0.23.2
 
   react-string-replace@1.1.1: {}
 
-  react-virtualized-auto-sizer@1.0.24(react-dom@17.0.2(react@17.0.2))(react@17.0.2):
+  react-virtualized-auto-sizer@1.0.24(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
-      react: 17.0.2
-      react-dom: 17.0.2(react@17.0.2)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
 
-  react-window-infinite-loader@1.0.9(react-dom@17.0.2(react@17.0.2))(react@17.0.2):
+  react-window-infinite-loader@1.0.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
-      react: 17.0.2
-      react-dom: 17.0.2(react@17.0.2)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
 
-  react-window@1.8.10(react-dom@17.0.2(react@17.0.2))(react@17.0.2):
+  react-window@1.8.10(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@babel/runtime': 7.19.0
       memoize-one: 5.2.1
-      react: 17.0.2
-      react-dom: 17.0.2(react@17.0.2)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
 
-  react-zoom-pan-pinch@2.6.1(react-dom@17.0.2(react@17.0.2))(react@17.0.2):
+  react-zoom-pan-pinch@3.6.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
-      react: 17.0.2
-      react-dom: 17.0.2(react@17.0.2)
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
 
-  react@17.0.2:
+  react@18.3.1:
     dependencies:
       loose-envify: 1.4.0
-      object-assign: 4.1.1
 
   read-config-file@6.3.2:
     dependencies:
@@ -5339,10 +5325,9 @@ snapshots:
 
   sax@1.3.0: {}
 
-  scheduler@0.20.2:
+  scheduler@0.23.2:
     dependencies:
       loose-envify: 1.4.0
-      object-assign: 4.1.1
 
   semver-compare@1.0.0:
     optional: true
@@ -5587,9 +5572,9 @@ snapshots:
     dependencies:
       punycode: 2.1.1
 
-  use-debounce@3.4.3(react@17.0.2):
+  use-debounce@3.4.3(react@18.3.1):
     dependencies:
-      react: 17.0.2
+      react: 18.3.1
 
   utf8-byte-length@1.0.5: {}
 

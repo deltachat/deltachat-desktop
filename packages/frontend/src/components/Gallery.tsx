@@ -73,6 +73,8 @@ export default class Gallery extends Component<
     galleryImageKeepAspectRatio?: boolean
   }
 > {
+  declare context: React.ContextType<typeof DialogContext>
+
   dateHeader = createRef<HTMLDivElement>()
   constructor(props: Props) {
     super(props)
