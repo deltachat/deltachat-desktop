@@ -42,6 +42,24 @@ Then point your browser to <https://localhost:3000> and acept the locally signed
 
 > If you get an "The connection was reset"-Error, then you have likely forgotten to use http**s** instead of http.
 
-### Known broken things
+### Limitations
 
-> Image Cropper is broken because accesing tmp files directly isn't implemented. Suggestion: handle image preview in cache or memory.
+- Only basic features are implemented
+- There are only notifications if the tab is open, if no tab is open there are no notifications, because the code for it is run in the frontend.
+
+#### Known broken things
+
+- Image Cropper is broken because accesing tmp files directly isn't implemented. Suggestion: handle image preview in cache or memory.
+- Sometimes it takes long to start.
+
+#### There is no browser api for that
+
+- Dragging out files
+- Tray icon
+
+#### Not implemented
+
+- Stickers
+- Webxdc
+- HTML emails
+- and more...
