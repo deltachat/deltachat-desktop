@@ -62,7 +62,6 @@ protocol.registerSchemesAsPrivileged([
       standard: true,
       supportFetchAPI: true,
       stream: true, // needed for audio playback
-      codeCache: true,
     },
   },
 ])
