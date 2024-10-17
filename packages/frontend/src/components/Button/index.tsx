@@ -11,7 +11,7 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 export default function Button({
   children,
   active = false,
-  type,
+  styling,
   className,
   ...props
 }: ButtonProps) {
@@ -20,7 +20,7 @@ export default function Button({
       className={classNames(
         styles.button,
         active && styles.active,
-        type && styles[type],
+        styling && styles[styling],
         className
       )}
       {...props}
