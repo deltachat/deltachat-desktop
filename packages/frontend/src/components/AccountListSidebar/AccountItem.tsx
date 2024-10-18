@@ -7,6 +7,7 @@ import {
   onDCEvent,
   EffectfulBackendActions,
 } from '../../backend-com'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 import { avatarInitial } from '../Avatar'
 import { getLogger } from '../../../../shared/logger'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
@@ -204,7 +205,7 @@ export default function AccountItem({
           {account.profileImage ? (
             <img
               className={styles.content}
-              src={'file://' + account.profileImage}
+              src={runtime.transformBlobURL(account.profileImage)}
             />
           ) : (
             <div

@@ -795,7 +795,10 @@ export const Quote = ({
           </div>
         </div>
         {hasMessage && quote.image && (
-          <img className='quoted-image' src={quote.image} />
+          <img
+            className='quoted-image'
+            src={runtime.transformBlobURL(quote.image)}
+          />
         )}
         {hasMessage && quote.viewType == 'Webxdc' && (
           <img

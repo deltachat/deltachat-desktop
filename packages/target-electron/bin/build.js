@@ -1,8 +1,9 @@
 import { build } from 'esbuild'
-import { gatherBuildInfo } from './lib/gather-version-info.js'
+import { gatherBuildInfo } from '../../../bin/lib/gather-version-info.js'
 
 const isProduction = process.env['NODE_ENV'] === 'production'
 const isMinify = process.argv.indexOf('-m') !== -1
+const BuildInfoString = JSON.stringify(await gatherBuildInfo())
 
 await build({
   bundle: true,
@@ -24,11 +25,8 @@ await build({
   treeShaking: false,
   inject: ['src/cjs-shim.ts'],
   define: {
-    BUILD_INFO_JSON_STRING: `"${JSON.stringify(await gatherBuildInfo()).replace(
-      /"/g,
-      '\\"'
-    )}"`,
+    BUILD_INFO_JSON_STRING: `"${BuildInfoString.replace(/"/g, '\\"')}"`,
   },
 })
 
-console.log(JSON.stringify(await gatherBuildInfo()))
+console.log(BuildInfoString)
