@@ -162,7 +162,7 @@ export default function InstantOnboardingScreen({
             </div>
             <Button
               className={styles.welcomeScreenButton}
-              type='primary'
+              styling='primary'
               onClick={onConfirm}
             >
               {welcomeQr?.qr.kind === 'login'
@@ -171,7 +171,7 @@ export default function InstantOnboardingScreen({
             </Button>
             <Button
               className={styles.welcomeScreenButton}
-              type='secondary'
+              styling='secondary'
               onClick={showOtherOptions}
             >
               {tx('instant_onboarding_show_more_instances')}

@@ -443,7 +443,7 @@ export function ConfigureProgressDialog({
       </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <FooterActionButton danger onClick={onCancel}>
+          <FooterActionButton styling='danger' onClick={onCancel}>
             {tx('cancel')}
           </FooterActionButton>
         </FooterActions>

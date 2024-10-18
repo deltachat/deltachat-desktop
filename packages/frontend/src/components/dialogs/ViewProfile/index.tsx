@@ -270,7 +270,7 @@ export function ViewProfileInner({
       >
         {!isDeviceChat && (
           <Button
-            type='primary'
+            styling='primary'
             aria-label={tx('send_message')}
             onClick={onSendMessage}
           >

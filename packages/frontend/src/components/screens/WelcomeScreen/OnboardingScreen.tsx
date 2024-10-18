@@ -80,14 +80,14 @@ export default function OnboardingScreen(props: Props) {
           <div className={styles.welcomeScreenButtonGroup}>
             <Button
               className={styles.welcomeScreenButton}
-              type='primary'
+              styling='primary'
               onClick={props.onNextStep}
             >
               {tx('onboarding_create_instant_account')}
             </Button>
             <Button
               className={styles.welcomeScreenButton}
-              type='secondary'
+              styling='secondary'
               onClick={onAlreadyHaveAccount}
             >
               {tx('onboarding_alternative_logins')}
