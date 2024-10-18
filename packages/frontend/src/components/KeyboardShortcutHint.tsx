@@ -159,6 +159,8 @@ export function enterKeySendsKeyboardShortcuts(
   const CtrlOrMetaEnter = isMac ? MetaEnter : CtrlEnter
   const ShiftEnter = ['Shift', 'Enter']
 
+  // FYI the send button's `aria-keyshortcuts` relies on this code,
+  // in a not-so-beautiful way.
   if (enterKeySends) {
     return [
       {

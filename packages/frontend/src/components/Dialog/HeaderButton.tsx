@@ -12,6 +12,7 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   icon: IconName
   iconSize: number
   rotation?: number
+  'aria-label': string
 }
 
 export default function HeaderButton({
