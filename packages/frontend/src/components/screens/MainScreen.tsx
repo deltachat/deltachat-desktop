@@ -335,7 +335,10 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
   const subtitle = chatSubtitle(chat)
 
   return (
-    <div className='navbar-heading no-drag' onClick={onTitleClick}>
+    <button
+      className='navbar-heading navbar-heading__button no-drag'
+      onClick={onTitleClick}
+    >
       <Avatar
         displayName={chat.name}
         color={chat.color}
@@ -360,7 +363,7 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
           <div className='navbar-chat-subtitle'>{chatSubtitle(chat)}</div>
         )}
       </div>
-    </div>
+    </button>
   )
 }
 
