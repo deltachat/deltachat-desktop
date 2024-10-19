@@ -216,7 +216,7 @@ export function ImageAttachment({
     const isBroken = !file || !hasSupportedFormat
 
     return (
-      <div
+      <button
         className={`media-attachment-media${isBroken ? ` broken` : ''}`}
         onClick={
           isBroken ? openInShell : openFullscreenMedia.bind(null, message)
@@ -232,7 +232,7 @@ export function ImageAttachment({
             loading='lazy'
           />
         )}
-      </div>
+      </button>
     )
   }
 }
@@ -284,7 +284,7 @@ export function VideoAttachment({
     const hasSupportedFormat = isVideo(fileMime)
     const isBroken = !file || !hasSupportedFormat
     return (
-      <div
+      <button
         className={`media-attachment-media${isBroken ? ` broken` : ''}`}
         onClick={
           isBroken ? openInShell : openFullscreenMedia.bind(null, message)
@@ -305,7 +305,7 @@ export function VideoAttachment({
             </div>
           </>
         )}
-      </div>
+      </button>
     )
   }
 }
@@ -437,9 +437,8 @@ export function FileAttachmentRow({
 
     const extension = getExtension(message)
     return (
-      <div
+      <button
         className='media-attachment-generic'
-        role='button'
         onClick={ev => {
           ev.stopPropagation()
           openInShell()
@@ -472,7 +471,7 @@ export function FileAttachmentRow({
             extended={false}
           />
         </div>
-      </div>
+      </button>
     )
   }
 }
@@ -570,9 +569,8 @@ export function WebxdcAttachment({
     )
     const { summary, name, document } = loadResult.webxdcInfo
     return (
-      <div
+      <button
         className='media-attachment-webxdc'
-        role='button'
         onContextMenu={openContextMenu}
         onClick={openWebxdc.bind(null, loadResult.id)}
       >
@@ -590,7 +588,7 @@ export function WebxdcAttachment({
           </div>
           <div className='summary'>{summary}</div>
         </div>
-      </div>
+      </button>
     )
   }
 }
