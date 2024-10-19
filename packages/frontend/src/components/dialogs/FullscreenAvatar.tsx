@@ -61,10 +61,11 @@ export default function FullscreenAvatar(
         </div>
       </div>
       <div className='btn-wrapper no-drag'>
-        <div
-          role='button'
+        <IconButton
           onClick={saveAs}
-          className='download-btn'
+          icon='download'
+          size={32}
+          coloring='fullscreenControls'
           aria-label={tx('save')}
         />
         <IconButton

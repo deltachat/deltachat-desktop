@@ -14,6 +14,7 @@ export type IconName =
   | 'code-tags'
   | 'cross'
   | 'devices'
+  | 'download'
   | 'eye-off'
   | 'eye-open'
   | 'favorite'

@@ -194,12 +194,6 @@ $scrollbarTransparency: 0.5;
   background-color: unset;
   padding: 0px;
 }
-.attachment-overlay .btn-wrapper .download-btn {
-  background-color: rgb(160, 160, 160);
-  &:hover {
-    background-color: rgb(160, 160, 160);
-  }
-}
 .attachment-overlay .bp4-icon > svg {
   fill: rgb(160, 160, 160);
 }
@@ -456,12 +450,6 @@ div.group-image-wrapper div.group-image-edit-button {
       fill: black;
       cursor: pointer;
     }
-  }
-}
-.attachment-overlay .btn-wrapper .download-btn {
-  background-color: black;
-  &:hover {
-    background-color: black;
   }
 }
 .attachment-overlay .bp4-icon > svg {
