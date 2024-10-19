@@ -236,14 +236,17 @@ export default class Gallery extends Component<
           {Object.keys(MediaTabs).map(realId => {
             const tabId = realId as MediaTabKey
             return (
-              <li
-                key={tabId}
-                className={`tab-item ${currentTab === tabId ? 'selected' : ''}`}
-                role='tab'
-                aria-selected={currentTab === tabId}
-                onClick={() => this.onSelect(tabId)}
-              >
-                {tx(tabId)}
+              <li key={tabId}>
+                <button
+                  className={`tab-item ${
+                    currentTab === tabId ? 'selected' : ''
+                  }`}
+                  role='tab'
+                  aria-selected={currentTab === tabId}
+                  onClick={() => this.onSelect(tabId)}
+                >
+                  {tx(tabId)}
+                </button>
               </li>
             )
           })}
