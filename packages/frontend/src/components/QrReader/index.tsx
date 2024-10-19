@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import scanQrCode from 'jsqr'
+import scanQrCode, { QRCode } from 'jsqr'
 import classNames from 'classnames'
 
 import Icon from '../Icon'
@@ -133,14 +133,14 @@ export default function QrReader({ onError, onScan }: Props) {
   // Additionally we have checks in place to make sure we're not firing any
   // callbacks when this React component has already been unmounted.
   const handleScanResult = useCallback(
-    result => {
+    (result: QRCode | null) => {
       let unmounted = false
 
       if (unmounted) {
         return
       }
 
-      onScan(result.data)
+      result && onScan(result.data)
 
       return () => {
         unmounted = true
@@ -386,15 +386,13 @@ export default function QrReader({ onError, onScan }: Props) {
   useEffect(() => {
     const canvas = canvasRef.current
     const video = videoRef.current
-
     const handleWorkerMessage = (event: MessageEvent) => {
       if (event.data) {
-        handleScanResult(event)
+        handleScanResult(event as unknown as QRCode)
       }
     }
 
     worker.addEventListener('message', handleWorkerMessage)
-
     if (!canvas) {
       return
     }

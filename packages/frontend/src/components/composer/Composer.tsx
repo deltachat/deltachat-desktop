@@ -217,8 +217,14 @@ const Composer = forwardRef<
       if (clickIsOutSideEmojiPicker) setShowEmojiPicker(false)
     }
 
-    document.addEventListener('click', onClick)
+    // `setTimeout` to work around the fact that otherwise we'd catch
+    // the "click" event that caused the emoji picker to open
+    // in the first place, resulting in it getting closed immediately.
+    const timeoutId = setTimeout(() => {
+      document.addEventListener('click', onClick)
+    })
     return () => {
+      clearTimeout(timeoutId)
       document.removeEventListener('click', onClick)
     }
   }, [showEmojiPicker, emojiAndStickerRef])

@@ -26,6 +26,8 @@ export default class ComposerMessageInput extends React.Component<
   ComposerMessageInputProps,
   ComposerMessageInputState
 > {
+  declare context: React.ContextType<typeof DialogContext>
+
   composerSize: number
   setCursorPosition: number | false
   textareaRef: React.RefObject<HTMLTextAreaElement>
