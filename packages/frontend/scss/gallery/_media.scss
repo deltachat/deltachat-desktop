@@ -24,6 +24,9 @@ $tab-height: 46px;
     display: flex;
     justify-content: space-between;
     gap: 30px;
+
+    overflow-x: auto;
+
     .tab-item {
       font-size: 1.1rem;
       padding-bottom: 6px;
