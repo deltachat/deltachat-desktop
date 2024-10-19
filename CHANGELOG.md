@@ -53,6 +53,7 @@
 - cancel old message highlight animations when a new message is highlighted #4203
 - fix: packaging: include architecture in filename for all appimages #4202
 - fix: make open external link scheme case insensive #4201
+- some reactions dialog items not being clickable on secondary accounts (profiles) #4228
 
 <a id="1_46_8"></a>
 

@@ -18,7 +18,7 @@ import ContactName from '../../ContactName'
 import styles from './styles.module.scss'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
-import type { T } from '@deltachat/jsonrpc-client'
+import { type T, C } from '@deltachat/jsonrpc-client'
 
 import useOpenViewProfileDialog from '../../../hooks/dialog/useOpenViewProfileDialog'
 
@@ -92,7 +92,7 @@ function ReactionsDialogList({ reactionsByContact, onClose }: Props) {
   return (
     <ul className={styles.reactionsDialogList}>
       {contacts.map(contact => {
-        const notFromSelf = accountId !== contact.id
+        const notFromSelf = C.DC_CONTACT_ID_SELF !== contact.id
         return (
           <li
             key={contact.id}
