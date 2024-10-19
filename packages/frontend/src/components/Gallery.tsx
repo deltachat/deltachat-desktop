@@ -243,6 +243,8 @@ export default class Gallery extends Component<
                   }`}
                   role='tab'
                   aria-selected={currentTab === tabId}
+                  id={`gallery-tab-${tabId}`}
+                  aria-controls={`gallery-tabpanel-${tabId}`}
                   onClick={() => this.onSelect(tabId)}
                 >
                   {tx(tabId)}
@@ -267,12 +269,21 @@ export default class Gallery extends Component<
           )}
           {currentTab === 'webxdc_apps' && <div style={{ flexGrow: 1 }}></div>}
         </ul>
-        <div role='tabpanel' style={{ flexGrow: 1 }}>
+        <div
+          role='tabpanel'
+          key={msgTypes.join('.') + String(this.props.chatId)}
+          // TODO a11y: is it fine to only render one `tabpanel`
+          // instead of rendering all and applying the `hidden` attribute
+          // to the inactive ones?
+          // See https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/tab_role#example
+          id={`gallery-tabpanel-${currentTab}`}
+          aria-labelledby={`gallery-tab-${currentTab}`}
+          style={{ flexGrow: 1 }}
+        >
           <div
             className={`gallery gallery-image-object-fit_${
               galleryImageKeepAspectRatio ? 'contain' : 'cover'
             }`}
-            key={msgTypes.join('.') + String(this.props.chatId)}
           >
             {mediaMessageIds.length < 1 && !loading && (
               <div className='empty-screen'>
