@@ -257,8 +257,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
       <div className='attachment-view'>{elm}</div>
       {elm && (
         <div className='btn-wrapper no-drag'>
-          <div
-            role='button'
+          <button
             onClick={onDownload.bind(null, msg)}
             className='download-btn'
             aria-label={tx('save')}
