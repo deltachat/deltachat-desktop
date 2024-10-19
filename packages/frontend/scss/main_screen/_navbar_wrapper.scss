@@ -4,8 +4,10 @@
 
   position: relative;
 
+  .navbar-heading__button {
+    @include button-reset;
+  }
   .navbar-heading {
-    cursor: pointer;
     display: flex;
     align-items: center;
     padding-left: 5px;
