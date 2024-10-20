@@ -58,18 +58,18 @@ export default function QrCode({
   return (
     <Dialog onClose={onClose}>
       <div className='qr-code-switch'>
-        <p
+        <button
           className={classNames({ active: showQrCode })}
           onClick={() => setShowQrCode(true)}
         >
           {tx('qrshow_title')}
-        </p>
-        <p
+        </button>
+        <button
           className={classNames({ active: !showQrCode })}
           onClick={() => setShowQrCode(false)}
         >
           {tx('qrscan_title')}
-        </p>
+        </button>
       </div>
       {showQrCode && (
         <QrCodeShowQrInner
