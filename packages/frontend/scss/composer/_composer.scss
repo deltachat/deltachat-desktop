@@ -69,7 +69,6 @@
 
       &:hover {
         background: none;
-        cursor: pointer;
       }
       &:focus:not(:focus-visible) {
         outline: none;
@@ -81,9 +80,6 @@
       padding: 0px 3px;
       &:focus:not(:focus-visible) {
         outline: none;
-      }
-      &:hover {
-        cursor: pointer;
       }
 
       span {
