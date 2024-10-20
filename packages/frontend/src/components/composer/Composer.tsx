@@ -290,7 +290,7 @@ const Composer = forwardRef<
   if (isContactRequest) {
     return (
       <div ref={ref} className='composer contact-request'>
-        <div
+        <button
           className='contact-request-button delete'
           onClick={async () => {
             if (selectedChat.chatType !== C.DC_CHAT_TYPE_SINGLE) {
@@ -313,36 +313,36 @@ const Composer = forwardRef<
           {selectedChat.chatType === C.DC_CHAT_TYPE_SINGLE
             ? tx('block')
             : tx('delete')}
-        </div>
-        <div
+        </button>
+        <button
           className='contact-request-button accept'
           onClick={() => {
             EffectfulBackendActions.acceptChat(selectedAccountId(), chatId)
           }}
         >
           {tx('accept')}
-        </div>
+        </button>
       </div>
     )
   } else if (isProtectionBroken) {
     return (
       <div ref={ref} className='composer contact-request'>
-        <div
+        <button
           className='contact-request-button'
           onClick={async () => {
             openDialog(ProtectionBrokenDialog, { name: selectedChat.name })
           }}
         >
           {tx('more_info_desktop')}
-        </div>
-        <div
+        </button>
+        <button
           className='contact-request-button'
           onClick={() => {
             EffectfulBackendActions.acceptChat(selectedAccountId(), chatId)
           }}
         >
           {tx('ok')}
-        </div>
+        </button>
       </div>
     )
   } else if (!selectedChat.canSend) {
