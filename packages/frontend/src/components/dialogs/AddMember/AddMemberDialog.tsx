@@ -77,13 +77,13 @@ export const AddMemberChip = (props: {
         <div>{contact.displayName}</div>
         {contact.isVerified && <InlineVerifiedIcon />}
       </div>
-      <div
+      <button
         className={styles.removeMember}
         onClick={() => onRemoveClick(contact)}
         aria-label='Remove'
       >
         <Icon className={styles.removeIcon} icon={'cross'} size={12} />
-      </div>
+      </button>
     </div>
   )
 }
