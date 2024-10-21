@@ -6,7 +6,6 @@
   --local-avatar-vertical-margin: 8px;
   --local-avatar-font-size: 26px;
 
-  cursor: pointer;
   display: inline-block;
   font-weight: normal;
   height: var(--local-avatar-size);
@@ -65,6 +64,11 @@
   }
 
   .account {
+    border: none;
+    background: none;
+    padding: 0;
+    text-align: start; // To align the "active" indicator
+
     height: var(--als-avatar-size);
     margin-bottom: var(--als-avatar-margin);
     margin-top: var(--als-avatar-margin);

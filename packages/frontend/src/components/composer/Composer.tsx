@@ -5,6 +5,7 @@ import React, {
   forwardRef,
   useLayoutEffect,
   useCallback,
+  useMemo,
 } from 'react'
 import { C, T } from '@deltachat/jsonrpc-client'
 import { extension } from 'mime-types'
@@ -39,6 +40,7 @@ import { VisualVCardComponent } from '../message/VCard'
 import { KeybindAction } from '../../keybindings'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
 import { CloseButton } from '../Dialog'
+import { enterKeySendsKeyboardShortcuts } from '../KeyboardShortcutHint'
 
 const log = getLogger('renderer/composer')
 
@@ -266,6 +268,23 @@ const Composer = forwardRef<
     messageInputRef.current?.focus()
   }, [chatId, messageInputRef])
 
+  const ariaSendShortcut: string = useMemo(() => {
+    if (settingsStore == undefined) {
+      return ''
+    }
+
+    const firstShortcut = enterKeySendsKeyboardShortcuts(
+      settingsStore.desktopSettings.enterKeySends
+    )[0].keyBindings[0]
+
+    if (!Array.isArray(firstShortcut) || !firstShortcut.includes('Enter')) {
+      log.warn('Unexpected shortcut for "Send Message"')
+      return ''
+    }
+
+    return firstShortcut.join('+')
+  }, [settingsStore])
+
   if (chatId === null) {
     return <div ref={ref}>Error, chatid missing</div>
   }
@@ -381,7 +400,10 @@ const Composer = forwardRef<
             <span />
           </button>
           <div className='send-button-wrapper' onClick={composerSendMessage}>
-            <button aria-label={tx('menu_send')} />
+            <button
+              aria-label={tx('menu_send')}
+              aria-keyshortcuts={ariaSendShortcut}
+            />
           </div>
         </div>
         {showEmojiPicker && (

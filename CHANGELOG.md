@@ -55,6 +55,8 @@
 - fix: packaging: include architecture in filename for all appimages #4202
 - fix: make open external link scheme case insensive #4201
 - target-electron: make sure log of stdio server is also logged to file
+- improve accessibility a little #4133
+
 
 <a id="1_46_8"></a>
 

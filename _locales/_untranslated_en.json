@@ -77,5 +77,8 @@
   },
   "explain_desktop_browser_disabled_tray_pref": {
     "message": "Tray icon does exist in the web version, install the full version from https://get.delta.chat"
+  },
+  "react_more_emojis": {
+    "message": "More emojis…"
   }
 }
