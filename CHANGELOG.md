@@ -25,6 +25,7 @@
 - replace BlueprintJS Button, Icon, Radio, RadioGroup, Collapse, Dialog with our implementation
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.147.1`
 - Update proxy configuration - a full url can be entered now
+- show "Mark All As Read" in account menu unconditionally #4234
 
 ### Fixed
 - fix that you can not click header button in dialog when they are on top of the navbar #4093
