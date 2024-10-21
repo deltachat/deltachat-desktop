@@ -1,5 +1,8 @@
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import { ChildProcessWithoutNullStreams, spawn } from 'child_process'
 import { app, dialog } from 'electron/main'
+
+const log = getLogger('DC-RPC')
 
 export class StdioServer {
   serverProcess: ChildProcessWithoutNullStreams | null
@@ -35,23 +38,23 @@ export class StdioServer {
     let errorLog = ''
     const ERROR_LOG_LENGTH = 800
     this.serverProcess.stderr.on('data', data => {
-      console.log(`stderr: ${data}`.trimEnd())
+      log.error(`stderr: ${data}`.trimEnd())
       errorLog = (errorLog + data).slice(-ERROR_LOG_LENGTH)
     })
 
     this.serverProcess.on('close', (code, signal) => {
       if (code !== null) {
-        console.log(`child process close all stdio with code ${code}`)
+        log.info(`child process close all stdio with code ${code}`)
       } else {
-        console.log(`child process close all stdio with signal ${signal}`)
+        log.info(`child process close all stdio with signal ${signal}`)
       }
     })
 
     this.serverProcess.on('exit', (code, signal) => {
       if (code !== null) {
-        console.log(`child process exited with code ${code}`)
+        log.info(`child process exited with code ${code}`)
         if (code !== 0) {
-          console.error('Fatal: The Delta Chat Core exited unexpectedly', code)
+          log.critical('Fatal: The Delta Chat Core exited unexpectedly', code)
           dialog.showErrorBox(
             'Fatal Error',
             `The Delta Chat Core exited unexpectedly with code ${code}\n${errorLog}`
@@ -59,7 +62,7 @@ export class StdioServer {
           app.exit(1)
         }
       } else {
-        console.log(`child process exited with signal ${signal}`)
+        log.warn(`child process exited with signal ${signal}`)
       }
     })
   }

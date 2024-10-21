@@ -5,6 +5,7 @@
 ### Added
 - Experimental Telegram-style Esc to cancel reply (quote) #4153
 - new ViewProfile context menu for blocking/unblocking contact and checking encryption #4043
+- added experimental browser version for developers (`packages/target-browser`)
 
 ### Changed
 - Update electron from `30.3.1` to `32.1.0` #4138
@@ -54,6 +55,9 @@
 - fix: packaging: include architecture in filename for all appimages #4202
 - fix: make open external link scheme case insensive #4201
 - some reactions dialog items not being clickable on secondary accounts (profiles) #4228
+- target-electron: make sure log of stdio server is also logged to file
+- improve accessibility a little #4133
+
 
 <a id="1_46_8"></a>
 

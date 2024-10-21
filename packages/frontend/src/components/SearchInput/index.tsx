@@ -51,6 +51,7 @@ export default function SearchInput(props: Props) {
         className={classNames(styles.searchInput)}
         ref={props.inputRef}
         spellCheck={false}
+        aria-keyshortcuts='Control+K'
       />
       {hasValue && (
         <SearchInputButton

@@ -177,6 +177,7 @@ export default function MenuAttachment({
 
   return (
     <button
+      aria-label={tx('menu_add_attachment')}
       id='attachment-menu-button'
       className='attachment-button'
       onClick={onClickAttachmentMenu}

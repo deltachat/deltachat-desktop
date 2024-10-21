@@ -7,6 +7,7 @@ import FullscreenAvatar from '../dialogs/FullscreenAvatar'
 import type { Type } from '../../backend-com'
 import type { PropsWithChildren } from 'react'
 import { get_first_emoji } from '@deltachat/message_parser_wasm'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 import styles from './styles.module.scss'
 
@@ -58,7 +59,7 @@ export function Avatar(props: {
   } = props
 
   const content = avatarPath ? (
-    <img className='content' src={'file://' + avatarPath} />
+    <img className='content' src={runtime.transformBlobURL(avatarPath)} />
   ) : (
     <div className='content' style={{ backgroundColor: color }}>
       {avatarInitial(displayName, addr)}
