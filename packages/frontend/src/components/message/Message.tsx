@@ -853,7 +853,7 @@ function WebxdcMessageContent({ message }: { message: T.Message }) {
       )}
       <Button
         className={styles.startWebxdcButton}
-        type='primary'
+        styling='primary'
         onClick={() => openWebxdc(message.id)}
       >
         {tx('start_app')}
