@@ -8,6 +8,7 @@ import React, {
   useMemo,
 } from 'react'
 import { C, T } from '@deltachat/jsonrpc-client'
+import { extension } from 'mime-types'
 
 import MenuAttachment from './menuAttachment'
 import ComposerMessageInput from './ComposerMessageInput'
@@ -249,7 +250,9 @@ const Composer = forwardRef<
 
     try {
       // Write clipboard to file then attach it to the draft
-      const path = await runtime.writeClipboardToTempFile()
+      const path = await runtime.writeClipboardToTempFile(
+        file.name || `file.${extension(file.type)}`
+      )
       await addFileToDraft(path, msgType)
       // delete file again after it was sucessfuly added
       await runtime.removeTempFile(path)
