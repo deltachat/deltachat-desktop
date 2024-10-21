@@ -3,6 +3,7 @@ import Contact from './Contact'
 import classNames from 'classnames'
 import { Type } from '../../backend-com'
 import Icon from '../Icon'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 export const DeltaCheckbox = (props: {
   checked: boolean
@@ -46,6 +47,8 @@ export function ContactListItem(props: {
   disabled?: boolean
   onContextMenu?: MouseEventHandler<HTMLButtonElement>
 }) {
+  const tx = useTranslationFunction()
+
   const {
     contact,
     onClick,
@@ -106,6 +109,7 @@ export function ContactListItem(props: {
           className='btn-remove'
           onClick={onRemoveClick}
           disabled={disabled}
+          aria-label={tx('remove_desktop')}
         >
           <Icon icon='cross' coloring='remove' />
         </button>
