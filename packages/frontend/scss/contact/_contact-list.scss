@@ -1,23 +1,28 @@
 .contact-list-item {
   display: flex;
-  padding-left: 20px;
+  --contact-padding-start: 20px;
 
   &:hover {
     background-color: var(--contactListItemBgHover);
   }
 
-  &:focus {
+  &:focus-within {
     background-color: var(--contactListItemBgFocus);
   }
 
   .chat-list & {
     padding-left: 0px;
+    --contact-padding-start: 0px;
   }
 
-  &[disabled] {
-    input:hover,
-    .checkmark:hover {
-      cursor: 'default';
+  .contact-list-item-button {
+    @include button-reset;
+    padding-inline-start: var(--contact-padding-start);
+    flex-grow: 1;
+
+    &:disabled,
+    &[aria-disabled='true'] {
+      cursor: default;
     }
   }
 
