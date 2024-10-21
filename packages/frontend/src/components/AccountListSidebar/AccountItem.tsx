@@ -73,13 +73,6 @@ export default function AccountItem({
   const bgSyncDisabled = syncAllAccounts === false && !isSelected
 
   const { onContextMenu, isContextMenuActive } = useContextMenuWithActiveState([
-    !bgSyncDisabled &&
-      unreadCount > 0 && {
-        label: tx('mark_all_as_read'),
-        action: () => {
-          markAccountAsRead(account.id)
-        },
-      },
     muted
       ? {
           label: tx('menu_unmute'),
@@ -111,6 +104,12 @@ export default function AccountItem({
       action: async () => {
         await onSelectAccount(account.id)
         openMapWebxdc(account.id)
+      },
+    },
+    {
+      label: tx('mark_all_as_read'),
+      action: () => {
+        markAccountAsRead(account.id)
       },
     },
     {
