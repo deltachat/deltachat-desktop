@@ -13,6 +13,8 @@ input.search-input {
   background-color: transparent;
   caret-color: var(--navBarSearchPlaceholder);
   color: var(--globalText);
+  // A blinking cursor is enough in terms of visibility. Or is it??
+  outline: none;
 
   &.wrap {
     margin-left: 40px;

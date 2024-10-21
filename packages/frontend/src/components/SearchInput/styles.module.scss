@@ -16,6 +16,8 @@ $closeButtonSize: 30px;
   padding-right: 5px;
   padding-top: 0;
   width: 100%;
+  // A blinking cursor is enough in terms of visibility. Or is it??
+  outline: none;
 
   &::placeholder {
     color: var(--navBarSearchPlaceholder);

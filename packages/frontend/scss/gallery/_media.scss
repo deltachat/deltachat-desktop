@@ -25,6 +25,8 @@ $tab-height: 46px;
     justify-content: space-between;
     gap: 30px;
     .tab-item {
+      @include button-reset;
+
       font-size: 1.1rem;
       padding-bottom: 6px;
       &.selected,

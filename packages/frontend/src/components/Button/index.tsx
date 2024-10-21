@@ -26,7 +26,6 @@ export default function Button({
     <button
       id={id}
       disabled={disabled}
-      role='button'
       className={classNames(
         styles.button,
         active && styles.active,
