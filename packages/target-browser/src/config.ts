@@ -2,8 +2,11 @@ import { LocalStorage } from 'node-localstorage'
 import { existsSync, mkdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'path'
+import { config } from 'dotenv'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
+
+config({ path: join(__dirname, '../') + '.env' })
 
 // Directories & Files
 export const DIST_DIR = join(__dirname)
@@ -20,7 +23,7 @@ export const LOCALES_DIR = join(__dirname, '../../../_locales')
 
 // ENV Vars
 export const ENV_WEB_PASSWORD = process.env['WEB_PASSWORD']
-export const ENV_WEB_PORT = process.env['WEB_PORT'] || 3000
+export const ENV_WEB_PORT = process.env['WEB_PORT'] || 3000 // currently only port 3000 is supported
 // set this to one if you use this behind a proxy
 export const ENV_WEB_TRUST_FIRST_PROXY = Boolean(
   process.env['WEB_TRUST_FIRST_PROXY']

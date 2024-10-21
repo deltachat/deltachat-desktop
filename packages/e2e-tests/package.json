@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "name": "@deltachat-desktop/e2e-tests",
+  "type": "module",
+  "license": "GPL-3.0-or-later",
+  "version": "1.46.2-monorepo",
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.1",
+    "@types/node": "^20.14.13"
+  },
+  "scripts": {
+    "e2e": "pnpm exec playwright test"
+  }
+}

@@ -235,7 +235,7 @@ class BrowserRuntime implements Runtime {
     key: keyof DesktopSettingsType,
     value: string | number | boolean | undefined
   ): Promise<void> {
-    // if key is notifications and new vlaue is on/true, then ask browser for permission
+    // if key is notifications and new value is on/true, then ask browser for permission
     if (key == 'notifications' && Boolean(value)) {
       await this.askBrowserForNotificationPermission()
     }
