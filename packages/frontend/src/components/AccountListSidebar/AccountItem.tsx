@@ -18,7 +18,7 @@ import Icon from '../Icon'
 
 import styles from './styles.module.scss'
 
-import type { T } from '@deltachat/jsonrpc-client'
+import { C, type T } from '@deltachat/jsonrpc-client'
 import { openMapWebxdc } from '../../system-integration/webxdc'
 
 type Props = {
@@ -250,6 +250,8 @@ async function markAccountAsRead(accountId: number) {
       }
     }
   }
+  // Add archived chats to also mark them as read
+  uniqueChatIds.add(C.DC_CHAT_ID_ARCHIVED_LINK)
 
   for (const chatId of uniqueChatIds) {
     await EffectfulBackendActions.marknoticedChat(accountId, chatId)

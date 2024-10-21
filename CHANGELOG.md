@@ -58,6 +58,7 @@
 - some reactions dialog items not being clickable on secondary accounts (profiles) #4228
 - target-electron: make sure log of stdio server is also logged to file
 - improve accessibility a little #4133
+- fix "Mark All As Read" in account menu mark also archived chats as read
 
 
 <a id="1_46_8"></a>
