@@ -57,6 +57,7 @@
 - some reactions dialog items not being clickable on secondary accounts (profiles) #4228
 - target-electron: make sure log of stdio server is also logged to file
 - improve accessibility a little #4133
+- use authname instead of displayname for vcard filename #4233
 
 
 <a id="1_46_8"></a>
