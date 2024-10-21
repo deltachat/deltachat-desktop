@@ -44,7 +44,7 @@ export function ContactListItem(props: {
   onCheckboxClick?: (contact: Type.Contact) => void
   onRemoveClick?: (contact: Type.Contact) => void
   disabled?: boolean
-  onContextMenu?: MouseEventHandler<HTMLDivElement>
+  onContextMenu?: MouseEventHandler<HTMLButtonElement>
 }) {
   const {
     contact,
@@ -55,42 +55,58 @@ export function ContactListItem(props: {
     disabled,
     onContextMenu,
   } = props
-  const onCheckboxClick = (e?: React.SyntheticEvent) => {
+  const onCheckboxClick = () => {
     if (disabled) return
     if (!showCheckbox) return
-    e && e.stopPropagation()
     typeof props.onCheckboxClick === 'function' &&
       props.onCheckboxClick(contact)
   }
-  const onRemoveClick = (e?: React.SyntheticEvent) => {
+  const onRemoveClick = () => {
     if (disabled) return
     if (!showRemove) return
-    e && e.stopPropagation()
     typeof props.onRemoveClick === 'function' && props.onRemoveClick(contact)
   }
   return (
     <div
       className={classNames('contact-list-item', { disabled })}
       key={contact.id}
-      onClick={() => {
-        if (disabled) return
-        onClick && onClick(contact)
-        onCheckboxClick()
-      }}
-      onContextMenu={onContextMenu}
     >
-      <div style={{ width: '100%' }}>
+      <button
+        className={classNames('contact-list-item-button', { disabled })}
+        // `aria-disabled` instead of just `disabled` because we probably
+        // still want to keep it focusable so that the context menu can be
+        // activated, and for screen-readers.
+        aria-disabled={disabled}
+        disabled={disabled && !onContextMenu}
+        onClick={() => {
+          if (disabled) return
+          onClick && onClick(contact)
+          // TODO improvement: in "Add Members" dialog,
+          // this button and the checkbox are both focusable
+          // and they both do the same thing...
+          // This could be confusing for keyboard users.
+          // Perhaps we should make this button take full width,
+          // and make the checkbox unfocusable?
+          // Or is it not a big deal since we're gonna add arrow key shortcuts?
+          onCheckboxClick()
+        }}
+        onContextMenu={onContextMenu}
+      >
         <Contact contact={contact} />
-      </div>
+      </button>
       {showCheckbox && (
         <DeltaCheckbox
           checked={checked}
-          disabled={contact.id === 1}
+          disabled={disabled || contact.id === 1}
           onClick={onCheckboxClick}
         />
       )}
       {showRemove && contact.id !== 1 && (
-        <button className='btn-remove' onClick={onRemoveClick}>
+        <button
+          className='btn-remove'
+          onClick={onRemoveClick}
+          disabled={disabled}
+        >
           <Icon icon='cross' coloring='remove' />
         </button>
       )}
