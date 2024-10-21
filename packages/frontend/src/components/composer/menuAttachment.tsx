@@ -120,10 +120,9 @@ export default function MenuAttachment({
           [selectedContact.id]
         )
         // Use original name set by contact instead of nickname chosen by user
-        const cleanAuthname = selectedContact.authName.replace(
-          /[^a-z_A-Z0-9]/gi,
-          ''
-        )
+        const cleanAuthname = (
+          selectedContact.authName || selectedContact.address
+        ).replace(/[^a-z_A-Z0-9]/gi, '')
         const tmp_file = await runtime.writeTempFile(
           `VCard-${cleanAuthname}.vcf`,
           vCardContact
