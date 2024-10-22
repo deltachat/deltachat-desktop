@@ -115,7 +115,7 @@
       scroll-margin-bottom: $margin-bottom;
       // And this is purely cosmetic. For scrolling to a message
       // that is above the visible area.
-      scroll-margin-top: $margin-bottom / 2;
+      scroll-margin-top: math.div($margin-bottom, 2);
 
       min-width: 200px;
 
