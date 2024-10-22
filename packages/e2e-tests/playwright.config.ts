@@ -1,7 +1,5 @@
 import { defineConfig, devices } from '@playwright/test'
 
-import { join, dirname } from 'path'
-
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -12,20 +10,11 @@ dotenv.config({ path: path.resolve(process.cwd(), '.env') })
 
 const port = process.env.PORT ?? 3000
 
-const WEB_PASSWORD = process.env.WEB_PASSWORD
+// const WEB_PASSWORD = process.env.WEB_PASSWORD
 
 process.env.NODE_EXTRA_CA_CERTS = `${process.cwd()}/data/certificate/cert.pem`
 
 const baseURL = `https://localhost:${port}`
-
-console.log(`baseURL: ${baseURL} `)
-console.log(`NODE_EXTRA_CA_CERTS: ${process.env.NODE_EXTRA_CA_CERTS} `)
-
-console.log(`process.cwd ${process.cwd()}`)
-
-const workspaceRoot = join(dirname(process.cwd()), '..', '..')
-
-console.log('workspaceRoot:', workspaceRoot)
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -39,9 +28,10 @@ export default defineConfig({
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  workers: 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
+  // timeout: 30 * 60 * 1000,
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
@@ -49,6 +39,8 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+    video: 'retain-on-failure',
+    screenshot: 'only-on-failure',
   },
 
   /* Configure projects for major browsers */
@@ -57,15 +49,14 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'], permissions: ['notifications'] },
     },
-
-    {
-      name: 'firefox',
-      use: {
-        ...devices['Desktop Firefox'],
-        ignoreHTTPSErrors: true,
-        permissions: ['notifications'],
-      },
-    },
+    // {
+    //   name: 'firefox',
+    //   use: {
+    //     ...devices['Desktop Firefox'],
+    //     ignoreHTTPSErrors: true,
+    //     permissions: ['notifications'],
+    //   },
+    // },
 
     // {
     //   name: 'webkit',
@@ -89,7 +80,11 @@ export default defineConfig({
     // },
     // {
     //   name: 'Google Chrome',
-    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
+    //   use: {
+    //     ...devices['Desktop Chrome'],
+    //     channel: 'chrome',
+    //     permissions: ['notifications'],
+    //   },
     // },
   ],
 

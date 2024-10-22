@@ -29,6 +29,8 @@ export const ENV_WEB_TRUST_FIRST_PROXY = Boolean(
   process.env['WEB_TRUST_FIRST_PROXY']
 )
 
+export const MODE = process.env['MODE'] ?? 'TESTING'
+
 if (!existsSync(DATA_DIR)) {
   /* ignore-console-log */
   console.log(

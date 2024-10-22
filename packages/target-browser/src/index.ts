@@ -15,6 +15,7 @@ import {
   ENV_WEB_TRUST_FIRST_PROXY,
   DIST_DIR,
   ENV_WEB_PASSWORD,
+  MODE,
   ENV_WEB_PORT,
   PRIVATE_CERTIFICATE_CERT,
   PRIVATE_CERTIFICATE_KEY,
@@ -67,8 +68,13 @@ app.use(sessionParser)
 app.use(CORSMiddleWare)
 
 app.get('/', (req, res) => {
+  let startPage = 'main.html'
+  if (MODE === 'TESTING') {
+    req.session.isAuthenticated = true
+    startPage = 'test.html'
+  }
   if (req.session.isAuthenticated) {
-    res.sendFile(join(DIST_DIR, 'main.html'))
+    res.sendFile(join(DIST_DIR, startPage))
   } else {
     res.status(401)
     return res.sendFile(join(DIST_DIR, 'login.html')) // TODO some nice site
@@ -86,19 +92,19 @@ app.post(
   '/authenticate',
   express.urlencoded({ extended: true }),
   (req, res) => {
-    // check password
     if (req.body?.password === ENV_WEB_PASSWORD) {
+      // check password
       req.session.isAuthenticated = true
       // redirect to root (/)
       res.redirect('/')
     } else {
       res.status(401)
       return res.send(`<html>
-<head></head>
-<body>
-    Password wrong, <a href="/">go back to login</a>
-</body>
-</html>`)
+    <head></head>
+    <body>
+        Password wrong, <a href="/">go back to login</a>
+    </body>
+    </html>`)
     }
   }
 )

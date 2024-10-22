@@ -1,71 +1,59 @@
-import { test, expect, Locator } from '@playwright/test'
+import { test, expect } from '@playwright/test'
 
-// import { WEB_PASSWORD } from 'playright.config.js'
+import { createNewProfile, deleteAccount, User } from '../playwright-helper'
 
-// test.beforeEach(async ({ page }) => {
-//   await page.goto('https://localhost:3000/')
-// })
+let userA: User = { name: 'Alice' }
+let userB: User = { name: 'Bob' }
+let userC: User = { name: 'Chris' }
 
-const user1 = { name: 'userA' }
-
-test('login & create profile', async ({ page }) => {
-  await page.goto('/')
-
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Delta Chat Browser Login/)
-  await page.locator('#pw').fill('opopq')
-  await page.locator('#loginButton').click()
-  // await expect(page).toHaveTitle(/DeltaChat/)
-  // const buttons = page.locator('.styles_module_welcomeScreenButtonGroup button')
-  // await expect(buttons).toHaveCount(2)
-
-  const waitForLocator = (locator: Locator): Promise<Locator> => {
-    return locator.waitFor().then(() => locator)
-  }
-
-  const returnedLocator = await Promise.race([
-    // first login without account
-    waitForLocator(page.locator('.styles_module_welcomeScreenButtonGroup')),
-    waitForLocator(
-      page.locator('.styles_module_accountList .styles_module_addButton')
-    ),
-  ])
-
-  console.log(returnedLocator)
-
-  await page
-    .locator('.styles_module_welcomeScreenButtonGroup button')
-    .first()
-    .click()
-
-  const nameInput = page.locator('#displayName')
-
-  await expect(nameInput).toBeVisible()
-
-  await nameInput.fill(user1.name)
-
-  await page
-    .locator('.styles_module_welcomeScreenButtonGroup button')
-    .first()
-    .click()
-
-  const settingsButton = page.locator(
-    '.styles_module_accountListSidebar .styles_module_settingsButtonIcon'
-  )
-  await settingsButton.click()
-
-  await expect(page.locator('.styles_module_profileDisplayName')).toHaveText(
-    user1.name
-  )
+test.beforeEach(async ({ page }) => {
+  await page.goto('https://localhost:3000/')
 })
 
-// test('get started link', async ({ page }) => {
-//   await page.goto('/')
+test('create profiles', async ({ page }) => {
+  await page.goto('/')
 
-//   // Click the get started link.
-//   await page.locator('.styles_module_addButton').click()
+  userA = await createNewProfile(page, userA.name)
 
-//   await expect(
-//     page.locator('.styles_module_welcomeScreenButton')
-//   ).toBeInViewport()
-// })
+  expect(userA.id).toBeDefined()
+
+  console.log(`User ${userA.name} wurde angelegt!`, userA)
+
+  userB = await createNewProfile(page, userB.name)
+
+  expect(userB.id).toBeDefined()
+
+  console.log(`User ${userB.name} wurde angelegt!`, userB)
+
+  userC = await createNewProfile(page, userC.name)
+
+  expect(userC.id).toBeDefined()
+
+  console.log(`User ${userC.name} wurde angelegt!`, userC)
+})
+
+test('delete profiles', async ({ page }) => {
+  await page.goto('/')
+
+  if (userA.id) {
+    const deleted = await deleteAccount(page, userA.id)
+    expect(deleted).toContain(userA.name)
+    if (deleted) {
+      console.log(`User ${userA.name} wurde gelöscht!`, userA)
+    }
+  }
+  if (userB.id) {
+    const deleted = await deleteAccount(page, userB.id)
+    expect(deleted).toContain(userB.name)
+    if (deleted) {
+      console.log(`User ${userB.name} wurde gelöscht!`, userB)
+    }
+  }
+  if (userC.id) {
+    const deleted = await deleteAccount(page, userC.id)
+    expect(deleted).toContain(userC.name)
+    if (deleted) {
+      console.log(`User ${userC.name} wurde gelöscht!`, userC)
+    }
+  }
+})

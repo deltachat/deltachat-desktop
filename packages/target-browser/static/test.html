@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- this page has less security restrictions to be used in e2e tests -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="/images/deltachat.ico">
+    <link rel="stylesheet" href="./fonts/fonts.css" />
+    <link rel="stylesheet" href="./main.css" />
+    <link rel="stylesheet" href="./bundle.css" />
+    <link rel="stylesheet" href="./fallback-theme.css" />
+    <title>Delta Chat Testing</title>
+    <style id="theme-vars"></style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/javascript" src="./browser-source-map-support.js"></script>
+    <script type="text/javascript" src="./fix-missing-vars.js"></script>
+    <script type="text/javascript" src="./runtime.js" type="module"></script>
+    <script type="text/javascript" src="./bundle.js"></script>
+    <div aria-hidden="true" style="position: absolute; touch-action: none; z-index: 0; user-select: none; pointer-events: none; opacity: 0;">
+      <input id="color-input" tabindex="-1" type="color" />
+    </div>
+  </body>
+</html>
