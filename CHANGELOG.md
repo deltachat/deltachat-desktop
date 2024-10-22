@@ -62,6 +62,7 @@
 - improve accessibility a little #4133
 - fix "Mark All As Read" in account menu mark also archived chats as read
 - use authname instead of displayname for vcard filename #4233
+- ugly positioning of reactions on image-only messages #4237
 
 
 <a id="1_46_8"></a>
