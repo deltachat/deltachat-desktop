@@ -182,9 +182,7 @@ const Composer = forwardRef<
   // also handle escape key for emoji picker
   useEffect(() => {
     const onKey = (ev: KeyboardEvent) => {
-      if (ev.code === 'Shift') {
-        shiftPressed.current = ev.shiftKey
-      }
+      shiftPressed.current = ev.shiftKey
       if (ev.type === 'keydown' && ev.code === 'Escape') {
         setShowEmojiPicker(false)
       }
