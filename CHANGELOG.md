@@ -25,6 +25,7 @@
 - replace BlueprintJS Button, Icon, Radio, RadioGroup, Collapse, Dialog with our implementation #4006, #4226
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.147.1`
 - Update proxy configuration - a full url can be entered now
+- show "Mark All As Read" in account menu unconditionally #4234
 
 ### Fixed
 - fix that you can not click header button in dialog when they are on top of the navbar #4093
@@ -57,6 +58,7 @@
 - some reactions dialog items not being clickable on secondary accounts (profiles) #4228
 - target-electron: make sure log of stdio server is also logged to file
 - improve accessibility a little #4133
+- fix "Mark All As Read" in account menu mark also archived chats as read
 - use authname instead of displayname for vcard filename #4233
 
 

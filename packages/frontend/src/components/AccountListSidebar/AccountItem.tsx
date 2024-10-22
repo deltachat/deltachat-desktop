@@ -18,7 +18,7 @@ import Icon from '../Icon'
 
 import styles from './styles.module.scss'
 
-import type { T } from '@deltachat/jsonrpc-client'
+import { C, type T } from '@deltachat/jsonrpc-client'
 import { openMapWebxdc } from '../../system-integration/webxdc'
 
 type Props = {
@@ -73,13 +73,6 @@ export default function AccountItem({
   const bgSyncDisabled = syncAllAccounts === false && !isSelected
 
   const { onContextMenu, isContextMenuActive } = useContextMenuWithActiveState([
-    !bgSyncDisabled &&
-      unreadCount > 0 && {
-        label: tx('mark_all_as_read'),
-        action: () => {
-          markAccountAsRead(account.id)
-        },
-      },
     muted
       ? {
           label: tx('menu_unmute'),
@@ -111,6 +104,12 @@ export default function AccountItem({
       action: async () => {
         await onSelectAccount(account.id)
         openMapWebxdc(account.id)
+      },
+    },
+    {
+      label: tx('mark_all_as_read'),
+      action: () => {
+        markAccountAsRead(account.id)
       },
     },
     {
@@ -251,6 +250,8 @@ async function markAccountAsRead(accountId: number) {
       }
     }
   }
+  // Add archived chats to also mark them as read
+  uniqueChatIds.add(C.DC_CHAT_ID_ARCHIVED_LINK)
 
   for (const chatId of uniqueChatIds) {
     await EffectfulBackendActions.marknoticedChat(accountId, chatId)
