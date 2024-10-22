@@ -46,7 +46,7 @@
   - [ ] MacOS store
   - [ ] Windows store
   - [ ] homebrew
-  - [ ] aur
+  - [ ] arch
   - [ ] nix
   - [ ] (community) snap
   ```
