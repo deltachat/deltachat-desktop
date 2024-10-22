@@ -173,6 +173,7 @@ export function QrCodeShowQrInner({
               }}
               src={svgUrl}
               onContextMenu={imageContextMenu}
+              tabIndex={0}
             />
           )}
         </DialogContent>

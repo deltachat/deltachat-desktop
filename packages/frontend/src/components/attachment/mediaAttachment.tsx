@@ -189,6 +189,7 @@ export function ImageAttachment({
         className={'media-attachment-media broken'}
         title={loadResult.error}
         onContextMenu={onContextMenu}
+        tabIndex={0}
       >
         <div className='attachment-content'>
           {tx('attachment_failed_to_load')}
@@ -258,6 +259,7 @@ export function VideoAttachment({
         className={'media-attachment-media broken'}
         title={loadResult.error}
         onContextMenu={onContextMenu}
+        tabIndex={0}
       >
         <div className='attachment-content'>
           {tx('attachment_failed_to_load')}
@@ -327,6 +329,7 @@ export function AudioAttachment({
         className={'media-attachment-audio broken'}
         title={loadResult.error}
         onContextMenu={onContextMenu}
+        tabIndex={0}
       >
         <div className='heading'>
           <div className='name'>? Error ?</div>
@@ -407,6 +410,7 @@ export function FileAttachmentRow({
         className={'media-attachment-generic broken'}
         title={loadResult.error}
         onContextMenu={onContextMenu}
+        tabIndex={0}
       >
         <div className='file-icon'>
           <div className='file-extension'>?</div>
@@ -516,6 +520,7 @@ export function WebxdcAttachment({
         className={'media-attachment-webxdc broken'}
         title={loadResult.error}
         onContextMenu={onContextMenu}
+        tabIndex={0}
       >
         <div className='icon'></div>
         <div className='text-part'>
@@ -537,8 +542,8 @@ export function WebxdcAttachment({
     return (
       <div
         className='media-attachment-webxdc'
-        role='button'
         onContextMenu={onContextMenu}
+        tabIndex={0}
       >
         <img
           className='icon'

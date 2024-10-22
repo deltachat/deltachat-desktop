@@ -51,6 +51,7 @@ export default function FullscreenAvatar(
                   <div
                     className='image-context-menu-container'
                     onContextMenu={openMenu}
+                    tabIndex={0}
                   >
                     <img src={runtime.transformBlobURL(imagePath)} />
                   </div>
