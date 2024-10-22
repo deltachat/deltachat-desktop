@@ -141,6 +141,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
                 <div
                   className='image-context-menu-container'
                   onContextMenu={openMenu}
+                  tabIndex={0}
                 >
                   <img src={runtime.transformBlobURL(file)} />
                 </div>
