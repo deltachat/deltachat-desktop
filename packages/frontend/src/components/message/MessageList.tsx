@@ -209,6 +209,9 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
     }
   }, [jumpToMessage])
 
+  const pendingProgrammaticSmoothScrollTo = useRef<null | number>(null)
+  const pendingProgrammaticSmoothScrollTimeout = useRef<number>(-1)
+
   const onScroll = useCallback(
     (ev: React.UIEvent<HTMLDivElement> | null) => {
       if (!messageListRef.current) {
@@ -277,6 +280,10 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
       showJumpDownButton,
     ]
   )
+  const onScrollEnd = useCallback((_ev: Event) => {
+    clearTimeout(pendingProgrammaticSmoothScrollTimeout.current)
+    pendingProgrammaticSmoothScrollTo.current = null
+  }, [])
 
   // This `useLayoutEffect` is made to run whenever `viewState` changes.
   // `viewState` controls the desired scroll position of `messageListRef`.
@@ -291,6 +298,33 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
     }
     if (viewState.scrollTo === null) {
       return
+    }
+
+    if (pendingProgrammaticSmoothScrollTo.current != null) {
+      // Let's finish the pending scroll immediately
+      // so that our further calculations that are based on `scrollTop`
+      // (e.g. whether we're close to the bottom (`ifClose`)) are correct.
+      //
+      // FYI instead of interrupting the pending scroll, we could
+      // postpone calling `unlockScroll` when initiating a smooth scroll
+      // until the said scroll finishes (see `scheduler.lockedQueuedEffect()`).
+      // This would queue new scrollTo "events" until after
+      // the smooth scroll finishes.
+      log.debug(
+        'New viewState received, but a previous programmatic smooth scroll ' +
+          "is pending. Let's finish the pending one immediately. " +
+          `Scrolling to ${pendingProgrammaticSmoothScrollTo.current}`
+      )
+      messageListRef.current.scrollTop =
+        pendingProgrammaticSmoothScrollTo.current
+      clearTimeout(pendingProgrammaticSmoothScrollTimeout.current)
+      pendingProgrammaticSmoothScrollTo.current = null
+
+      // But keep in mind that we record `lastKnownScrollTop`
+      // in `chat_view_reducer`, and that recording could happen during
+      // a pending smooth scroll.
+      // This does not appear to matter though. We don't use
+      // `lastKnownScrollTop` too much.
     }
 
     const { scrollTo, lastKnownScrollHeight } = viewState
@@ -417,7 +451,44 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
         )
 
         if (shouldScrollToBottom) {
-          messageListRef.current.scrollTop = messageListRef.current.scrollHeight
+          const scrollTo = messageListRef.current.scrollHeight
+          // Smooth scroll for newly arrived messages.
+          // TODO also add this for self-sent messages.
+          // In that case 'scrollToMessage' is used though...
+          messageListRef.current.scrollTo({
+            top: scrollTo,
+            behavior: 'smooth',
+          })
+          pendingProgrammaticSmoothScrollTo.current = scrollTo
+
+          // Smooth scroll duration is not defined by the spec:
+          // https://drafts.csswg.org/cssom-view/#scrolling:
+          // > in a user-agent-defined fashion
+          // > over a user-agent-defined amount of time
+          // As of 2024-09, on Firefox it appears to range from
+          // 300 to 1000 ms, depending on scroll amount.
+          // On Chromium: 50-700
+          const smoothScrollMaxDuration = 1000
+
+          // Why is 'scrollend' event not enough?
+          // - Because the user might interrup such a scroll and start scrolling
+          //   wherever they like, and 'scrollend' won't fire
+          //   until they finish scrolling.
+          // - Because 'scrollend' is not supported by WebKit yet
+          //   https://webkit.org/b/201556
+          //   and we'll be running on WebKit when we switch to Tauri.
+          clearTimeout(pendingProgrammaticSmoothScrollTimeout.current)
+          pendingProgrammaticSmoothScrollTimeout.current = window.setTimeout(
+            () => {
+              pendingProgrammaticSmoothScrollTo.current = null
+
+              console.warn(
+                'Smooth scroll: scrollend did not fire before timeout.\n' +
+                  'Did the user scroll, or did the smooth scroll take so long?'
+              )
+            },
+            smoothScrollMaxDuration
+          )
         }
       } else {
         log.debug(
@@ -551,6 +622,7 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
     >
       <MessageListInner
         onScroll={onScroll}
+        onScrollEnd={onScrollEnd}
         oldestFetchedMessageIndex={oldestFetchedMessageListItemIndex}
         messageListItems={messageListItems}
         activeView={activeView}
@@ -585,6 +657,7 @@ export type ConversationType = {
 export const MessageListInner = React.memo(
   (props: {
     onScroll: (event: React.UIEvent<HTMLDivElement>) => void
+    onScrollEnd: (event: Event) => void
     oldestFetchedMessageIndex: number
     messageListItems: T.MessageListItem[]
     activeView: T.MessageListItem[]
@@ -597,6 +670,7 @@ export const MessageListInner = React.memo(
   }) => {
     const {
       onScroll,
+      onScrollEnd,
       messageListItems,
       messageCache,
       activeView,
@@ -705,6 +779,20 @@ export const MessageListInner = React.memo(
         setSwitchedChatAt(Date.now())
       }
     }, [hasChatChanged])
+
+    // onScrollend is not defined in React, let's attach manually...
+    useEffect(() => {
+      const el = messageListRef.current
+      if (!el) {
+        return
+      }
+
+      el.addEventListener('scrollend', onScrollEnd)
+      return () => el.removeEventListener('scrollend', onScrollEnd)
+
+      // Yes, re-run on every re-render, because `messageListRef` might change
+      // over the lifetime of this component.
+    })
 
     if (!loaded) {
       return (
