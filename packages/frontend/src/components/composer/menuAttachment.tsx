@@ -119,12 +119,12 @@ export default function MenuAttachment({
           selectedAccountId(),
           [selectedContact.id]
         )
-        const cleanDisplayname = selectedContact.displayName.replace(
-          /[^a-z_A-Z0-9]/gi,
-          ''
-        )
+        // Use original name set by contact instead of nickname chosen by user
+        const cleanAuthname = (
+          selectedContact.authName || selectedContact.address
+        ).replace(/[^a-z_A-Z0-9]/gi, '')
         const tmp_file = await runtime.writeTempFile(
-          `VCard-${cleanDisplayname}.vcf`,
+          `VCard-${cleanAuthname}.vcf`,
           vCardContact
         )
         addFileToDraft(tmp_file, 'Vcard')
@@ -177,11 +177,12 @@ export default function MenuAttachment({
 
   return (
     <button
+      aria-label={tx('menu_add_attachment')}
       id='attachment-menu-button'
       className='attachment-button'
       onClick={onClickAttachmentMenu}
     >
-      <Icon coloring='context-menu' icon='paperclip' />
+      <Icon coloring='contextMenu' icon='paperclip' />
     </button>
   )
 }

@@ -7,6 +7,7 @@ import Icon from '../Icon'
 import styles from './styles.module.scss'
 
 import type { T } from '@deltachat/jsonrpc-client'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 type OnButtonClick = React.MouseEvent<HTMLButtonElement, MouseEvent>
 
@@ -40,6 +41,8 @@ function ReactButton(props: {
   messageId: number
   reactions: T.Message['reactions']
 }) {
+  const tx = useTranslationFunction()
+
   const { showReactionsBar } = useReactionsBar()
 
   const onClick = (event: OnButtonClick) => {
@@ -60,15 +63,25 @@ function ReactButton(props: {
   }
 
   return (
-    <button className={styles.shortcutMenuButton} onClick={onClick}>
+    <button
+      aria-label={tx('react')}
+      className={styles.shortcutMenuButton}
+      onClick={onClick}
+    >
       <Icon className={styles.shortcutMenuIcon} icon='reaction' />
     </button>
   )
 }
 
 function ContextMenuButton(props: { onClick: (event: OnButtonClick) => void }) {
+  const tx = useTranslationFunction()
+
   return (
-    <button className={styles.shortcutMenuButton} onClick={props.onClick}>
+    <button
+      aria-label={tx('a11y_message_context_menu_btn_label')}
+      className={styles.shortcutMenuButton}
+      onClick={props.onClick}
+    >
       <Icon className={styles.shortcutMenuIcon} icon='more' />
     </button>
   )

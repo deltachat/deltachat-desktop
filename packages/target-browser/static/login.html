@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Delta Chat Browser Login</title>
+    <link rel="stylesheet" href="login.css">
+  </head>
+  <body>
+   <div class="container">
+    <div class="formDiv"><h1 class="heading">Delta Chat Browser Login</h1>
+    <img src="images/deltachat.png" class="logo"/>
+    <form action="/authenticate" method="post">
+      <p id="error" style="color: red"></p>
+      <input type="password" name="password" id="pw" required class="inp" />
+      <button type="submit" id="loginButton" class="butt">Login</button>
+    </form></div>
+    </div>
+    <script>
+      function login(ev) {
+        ev.preventDefault()
+        fetch('/authenticate', {
+          method: 'POST',
+          body: `password=${document.getElementById('pw').value}`,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        })
+          .then(response =>
+            response.ok
+              ? Promise.resolve('logged in')
+              : Promise.reject('Login failed')
+          )
+          .then(data => location.reload())
+          .catch(error => {
+            document.getElementById('error').textContent = 'Incorrect password'
+          })
+      }
+      document.getElementById('loginButton').onclick = login
+    </script>
+  </body>
+</html>

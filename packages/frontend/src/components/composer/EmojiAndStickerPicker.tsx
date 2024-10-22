@@ -38,7 +38,7 @@ const DisplayedStickerPack = ({
     const stickerPath = fileName.replace('file://', '')
     BackendRemote.rpc
       .sendSticker(accountId, chatId, stickerPath)
-      .then(id => jumpToMessage(accountId, id, false))
+      .then(id => jumpToMessage(accountId, id, chatId, false))
     setShowEmojiPicker(false)
   }
 
@@ -95,7 +95,7 @@ export const StickerPicker = ({
             ))}
           </div>
           <div className='sticker-actions-container'>
-            <Button type='secondary' onClick={onOpenStickerFolder}>
+            <Button styling='secondary' onClick={onOpenStickerFolder}>
               {tx('open_sticker_folder')}
             </Button>
           </div>

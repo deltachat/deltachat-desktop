@@ -145,6 +145,10 @@ build['linux'] = {
   description: 'The Email messenger (https://delta.chat)',
 }
 
+build['appImage'] = {
+  artifactName: '${productName}-${version}-${arch}.${ext}',
+}
+
 build['deb'] = {
   packageName: previewBuild ? 'deltachat-preview' : 'deltachat',
 }

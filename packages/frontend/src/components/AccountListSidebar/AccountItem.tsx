@@ -7,6 +7,7 @@ import {
   onDCEvent,
   EffectfulBackendActions,
 } from '../../backend-com'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 import { avatarInitial } from '../Avatar'
 import { getLogger } from '../../../../shared/logger'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
@@ -17,7 +18,7 @@ import Icon from '../Icon'
 
 import styles from './styles.module.scss'
 
-import type { T } from '@deltachat/jsonrpc-client'
+import { C, type T } from '@deltachat/jsonrpc-client'
 import { openMapWebxdc } from '../../system-integration/webxdc'
 
 type Props = {
@@ -72,13 +73,6 @@ export default function AccountItem({
   const bgSyncDisabled = syncAllAccounts === false && !isSelected
 
   const { onContextMenu, isContextMenuActive } = useContextMenuWithActiveState([
-    !bgSyncDisabled &&
-      unreadCount > 0 && {
-        label: tx('mark_all_as_read'),
-        action: () => {
-          markAccountAsRead(account.id)
-        },
-      },
     muted
       ? {
           label: tx('menu_unmute'),
@@ -113,6 +107,12 @@ export default function AccountItem({
       },
     },
     {
+      label: tx('mark_all_as_read'),
+      action: () => {
+        markAccountAsRead(account.id)
+      },
+    },
+    {
       label: tx('menu_settings'),
       action: async () => {
         await onSelectAccount(account.id)
@@ -133,7 +133,7 @@ export default function AccountItem({
     badgeContent = (
       <div
         className={classNames(styles.accountBadgeIcon, styles.bgSyncDisabled)}
-        aria-label='Background sync disabled'
+        aria-label={tx('background_sync_disabled_explaination')}
       >
         ⏻
       </div>
@@ -150,7 +150,7 @@ export default function AccountItem({
     )
   }
 
-  const ref = useRef<HTMLDivElement>(null)
+  const ref = useRef<HTMLButtonElement>(null)
   useLayoutEffect(() => {
     if (!isSelected) {
       return
@@ -186,7 +186,7 @@ export default function AccountItem({
   }, [isSelected, window.__screen])
 
   return (
-    <div
+    <button
       className={classNames(styles.account, {
         [styles.active]: isSelected,
         [styles['context-menu-active']]: isContextMenuActive,
@@ -204,7 +204,7 @@ export default function AccountItem({
           {account.profileImage ? (
             <img
               className={styles.content}
-              src={'file://' + account.profileImage}
+              src={runtime.transformBlobURL(account.profileImage)}
             />
           ) : (
             <div
@@ -232,7 +232,7 @@ export default function AccountItem({
         </div>
       )}
       <div className={classNames(styles.accountBadge)}>{badgeContent}</div>
-    </div>
+    </button>
   )
 }
 
@@ -250,6 +250,8 @@ async function markAccountAsRead(accountId: number) {
       }
     }
   }
+  // Add archived chats to also mark them as read
+  uniqueChatIds.add(C.DC_CHAT_ID_ARCHIVED_LINK)
 
   for (const chatId of uniqueChatIds) {
     await EffectfulBackendActions.marknoticedChat(accountId, chatId)

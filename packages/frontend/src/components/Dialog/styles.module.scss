@@ -3,29 +3,43 @@ $paddingHorizontal: 30px;
 $paddingVertical: 20px;
 
 .dialog {
-  background-color: var(--bp4DialogBgPrimary);
-  border-radius: 10px;
-  box-shadow:
-    0 0 0 1px rgba(16, 22, 26, 0.1),
-    0 4px 8px rgba(16, 22, 26, 0.2),
-    0 0 20px 3px rgba(16, 22, 26, 0.2);
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-  max-height: calc(100% - 50px);
-  max-width: 733px;
-  min-width: 350px;
-  overflow: hidden;
   padding: 0;
-  width: unset;
 
-  &.fixed {
-    position: absolute;
-    top: 25px;
+  &.unstyled {
+    background: none;
+    width: 100vw;
+    height: 100vh;
+    max-width: 100vw;
+    max-height: 100vh;
+    border: none;
+    margin: 0;
+  }
+
+  &:not(.unstyled) {
+    background-color: var(--bp4DialogBgPrimary);
+    color: var(--globalText);
+    border-radius: 10px;
+    border: none;
+    box-shadow:
+      0 0 0 1px rgba(16, 22, 26, 0.1),
+      0 4px 8px rgba(16, 22, 26, 0.2),
+      0 0 20px 3px rgba(16, 22, 26, 0.2);
+    // display: flex;
+    flex-direction: column;
+    max-height: calc(100% - 50px);
+    max-width: 733px;
+    min-width: 350px;
+    width: unset;
+
+    justify-content: center;
+  }
+  &::backdrop {
+    background-color: var(--dialogBackdropBackground);
   }
 }
 
 .dialogHeader {
+  width: 100%;
   align-items: center;
   background-color: var(--bp4DialogHeaderBg);
   border-bottom: var(--outlineProperties);
@@ -49,6 +63,7 @@ $paddingVertical: 20px;
 }
 
 .dialogBody {
+  width: 100%;
   background-color: var(--bp4DialogBgPrimary);
   flex: 1 1 auto;
   max-height: 90vh;
@@ -74,6 +89,7 @@ $paddingVertical: 20px;
 }
 
 .dialogFooter {
+  width: 100%;
   background-color: var(--bp4DialogBgPrimary);
   padding-bottom: $paddingVertical;
   padding-left: $paddingHorizontal;

@@ -20,6 +20,13 @@
       cursor: 'default';
     }
   }
+
+  button.btn-remove {
+    appearance: none;
+    background: none;
+    border: none;
+    margin-right: 10px;
+  }
 }
 
 .delta-checkbox {

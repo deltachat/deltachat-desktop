@@ -449,7 +449,13 @@ export default function Message(props: {
     if (isInteractive) {
       onClick = async () => {
         if (isWebxdcInfo && message.parentId) {
-          jumpToMessage(accountId, message.parentId, true, message.id)
+          jumpToMessage(
+            accountId,
+            message.parentId,
+            undefined,
+            true,
+            message.id
+          )
         } else if (isProtectionBrokenMsg) {
           const { name } = await BackendRemote.rpc.getBasicChatInfo(
             selectedAccountId(),
@@ -738,7 +744,13 @@ export const Quote = ({
       className='quote-background'
       onClick={() => {
         quote.kind === 'WithMessage' &&
-          jumpToMessage(accountId, quote.messageId, true, msgParentId)
+          jumpToMessage(
+            accountId,
+            quote.messageId,
+            undefined,
+            true,
+            msgParentId
+          )
       }}
     >
       <div
@@ -783,7 +795,10 @@ export const Quote = ({
           </div>
         </div>
         {hasMessage && quote.image && (
-          <img className='quoted-image' src={quote.image} />
+          <img
+            className='quoted-image'
+            src={runtime.transformBlobURL(quote.image)}
+          />
         )}
         {hasMessage && quote.viewType == 'Webxdc' && (
           <img
@@ -838,7 +853,7 @@ function WebxdcMessageContent({ message }: { message: T.Message }) {
       )}
       <Button
         className={styles.startWebxdcButton}
-        type='primary'
+        styling='primary'
         onClick={() => openWebxdc(message.id)}
       >
         {tx('start_app')}

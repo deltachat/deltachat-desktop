@@ -21,7 +21,6 @@
     "path": "path-browserify"
   },
   "dependencies": {
-    "@blueprintjs/core": "^4.20.2",
     "@deltachat-desktop/runtime-interface": "link:../runtime",
     "@deltachat-desktop/shared": "link:../shared",
     "@deltachat/jsonrpc-client": "catalog:",

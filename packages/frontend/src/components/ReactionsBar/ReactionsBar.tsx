@@ -9,6 +9,7 @@ import EmojiPicker from '../EmojiPicker'
 import styles from './styles.module.scss'
 
 import type { BaseEmoji } from 'emoji-mart/index'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 type Props = {
   messageId: number
@@ -23,6 +24,8 @@ export default function ReactionsBar({
   messageId,
   myReaction,
 }: Props) {
+  const tx = useTranslationFunction()
+
   const [showAllEmojis, setShowAllEmojis] = useState(false)
   const accountId = selectedAccountId()
 
@@ -87,6 +90,7 @@ export default function ReactionsBar({
               styles.showAllEmojis
             )}
             onClick={handleShowAllEmojis}
+            aria-label={tx('react_more_emojis')}
           >
             <Icon className={styles.showAllIcon} icon='more' />
           </button>

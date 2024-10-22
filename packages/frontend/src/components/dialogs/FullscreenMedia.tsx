@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react'
-import { Icon, Overlay } from '@blueprintjs/core'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 import debounce from 'debounce'
 
+import Dialog from '../Dialog'
+import Icon from '../Icon'
 import { onDownload } from '../message/messageFunctions'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { isImage, isVideo, isAudio } from '../attachment/Attachment'
@@ -114,7 +115,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
     {
       label: tx('show_in_chat'),
       action: () => {
-        jumpToMessage(accountId, msg.id)
+        jumpToMessage(accountId, msg.id, msg.chatId)
         onClose()
       },
     },
@@ -227,15 +228,21 @@ export default function FullscreenMedia(props: Props & DialogProps) {
     // this will need adjustment to the keybindings manager once we have proper screen management
     // where we can know exactly which screen / menu / dialog is focused
     // and only send the context dependend keys to there
+    // for now limit only to left/right arrow to not mess up Escape-handling for dialog
     const listener = (ev: KeyboardEvent) => {
       if (ev.repeat) {
         return
       }
+      const left = ev.code === 'ArrowLeft'
+      const right = ev.code === 'ArrowRight'
+      if (!left && !right) {
+        return
+      }
       ev.preventDefault()
       ev.stopPropagation()
-      if (ev.code == 'ArrowLeft') {
+      if (left) {
         previousImage()
-      } else if (ev.code == 'ArrowRight') {
+      } else if (right) {
         nextImage()
       }
     }
@@ -246,50 +253,46 @@ export default function FullscreenMedia(props: Props & DialogProps) {
   if (!msg || !msg.file) return elm
 
   return (
-    <Overlay
-      isOpen={Boolean(file)}
-      className='attachment-overlay'
-      onClose={onClose}
-    >
-      <div className='render-media-wrapper' tabIndex={0}>
-        <div className='attachment-view'>{elm}</div>
-        {elm && (
-          <div className='btn-wrapper no-drag'>
-            <div
-              role='button'
-              onClick={onDownload.bind(null, msg)}
-              className='download-btn'
-              aria-label={tx('save')}
-            />
-            <Icon
-              onClick={onClose}
-              icon='cross'
-              size={32}
-              color={'grey'}
-              aria-label={tx('close')}
-            />
-          </div>
-        )}
-        {showPreviousNextMessageButtons.previous && (
-          <div className='media-previous-button'>
-            <Icon
-              onClick={preventDefault(previousImage)}
-              icon='chevron-left'
-              size={60}
-            />
-          </div>
-        )}
-        {showPreviousNextMessageButtons.next && (
-          <div className='media-next-button'>
-            <Icon
-              onClick={preventDefault(nextImage)}
-              icon='chevron-right'
-              size={60}
-            />
-          </div>
-        )}
-      </div>
-    </Overlay>
+    <Dialog unstyled onClose={onClose}>
+      <div className='attachment-view'>{elm}</div>
+      {elm && (
+        <div className='btn-wrapper no-drag'>
+          <div
+            role='button'
+            onClick={onDownload.bind(null, msg)}
+            className='download-btn'
+            aria-label={tx('save')}
+          />
+          <Icon
+            onClick={onClose}
+            icon='cross'
+            size={32}
+            coloring='fullscreenControls'
+            aria-label={tx('close')}
+          />
+        </div>
+      )}
+      {showPreviousNextMessageButtons.previous && (
+        <div className='media-previous-button'>
+          <Icon
+            onClick={preventDefault(previousImage)}
+            icon='chevron-left'
+            coloring='fullscreenControls'
+            size={60}
+          />
+        </div>
+      )}
+      {showPreviousNextMessageButtons.next && (
+        <div className='media-next-button'>
+          <Icon
+            onClick={preventDefault(nextImage)}
+            icon='chevron-right'
+            coloring='fullscreenControls'
+            size={60}
+          />
+        </div>
+      )}
+    </Dialog>
   )
 }
 

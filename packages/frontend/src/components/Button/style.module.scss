@@ -12,9 +12,20 @@
   padding: 12px 15px;
   text-align: center;
   text-transform: uppercase;
+  user-select: none;
 
   &:hover {
     background-color: var(--buttonHover);
+  }
+
+  &:disabled {
+    background-color: var(--buttonDisabledBackground);
+    color: var(--buttonDisabledText);
+    cursor: not-allowed;
+  }
+
+  & > span {
+    user-select: none;
   }
 
   &.primary {
@@ -33,11 +44,5 @@
 
   &.active {
     background-color: var(--navBarButtonActive);
-  }
-
-  &:disabled {
-    background-color: var(--buttonDisabledBackground);
-    color: var(--buttonDisabledText);
-    cursor: not-allowed;
   }
 }

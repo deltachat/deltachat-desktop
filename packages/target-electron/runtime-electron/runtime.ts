@@ -178,7 +178,7 @@ class ElectronRuntime implements Runtime {
   }> {
     return ipcBackend.invoke('webxdc.getWebxdcDiskUsage', accountId)
   }
-  async writeClipboardToTempFile(): Promise<string> {
+  async writeClipboardToTempFile(_name: string | undefined): Promise<string> {
     return ipcBackend.invoke('app.writeClipboardToTempFile')
   }
   writeTempFileFromBase64(name: string, content: string): Promise<string> {
@@ -307,7 +307,7 @@ class ElectronRuntime implements Runtime {
   initialize(
     setLogHandler: typeof setLogHandlerFunction,
     getLogger: typeof getLoggerFunction
-  ) {
+  ): Promise<void> {
     this.log = getLogger('runtime/electron')
 
     // fetch vars
@@ -355,6 +355,8 @@ class ElectronRuntime implements Runtime {
       ) => this.onWebxdcSendToChat?.(file, text)
     )
     ipcBackend.on('onResumeFromSleep', () => this.onResumeFromSleep?.())
+
+    return Promise.resolve()
   }
   openHelpWindow(anchor?: string): void {
     ipcBackend.send('help', window.localeData.locale, anchor)

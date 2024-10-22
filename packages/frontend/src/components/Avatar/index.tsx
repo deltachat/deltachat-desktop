@@ -1,12 +1,14 @@
 import React from 'react'
 import classNames from 'classnames'
 
-import useDialog from '../hooks/dialog/useDialog'
-import FullscreenAvatar from './dialogs/FullscreenAvatar'
+import useDialog from '../../hooks/dialog/useDialog'
+import FullscreenAvatar from '../dialogs/FullscreenAvatar'
 
-import type { Type } from '../backend-com'
-import type { PropsWithChildren } from 'react'
+import type { Type } from '../../backend-com'
 import { get_first_emoji } from '@deltachat/message_parser_wasm'
+import { runtime } from '@deltachat-desktop/runtime-interface'
+
+import styles from './styles.module.scss'
 
 export function QRAvatar() {
   return (
@@ -56,7 +58,7 @@ export function Avatar(props: {
   } = props
 
   const content = avatarPath ? (
-    <img className='content' src={'file://' + avatarPath} />
+    <img className='content' src={runtime.transformBlobURL(avatarPath)} />
   ) : (
     <div className='content' style={{ backgroundColor: color }}>
       {avatarInitial(displayName, addr)}
@@ -97,27 +99,27 @@ export function AvatarFromContact(
 }
 
 export function ClickForFullscreenAvatarWrapper(
-  props: PropsWithChildren<{
+  props: React.ButtonHTMLAttributes<HTMLButtonElement> & {
     filename?: string
-  }>
+  }
 ) {
   const { openDialog } = useDialog()
 
-  return (
-    <div
+  const { children, filename } = props
+
+  return filename ? (
+    <button
+      className={styles.avatarButton}
       onClick={() => {
-        if (!props.filename) {
-          return
-        }
         openDialog(FullscreenAvatar, {
-          imagePath: props.filename,
+          imagePath: filename!,
         })
       }}
-      style={{
-        cursor: props.filename ? 'pointer' : 'default',
-      }}
+      {...props}
     >
-      {props.children}
-    </div>
+      {children}
+    </button>
+  ) : (
+    <div>{children}</div>
   )
 }

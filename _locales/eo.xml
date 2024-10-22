@@ -27,8 +27,6 @@
     <string name="emoji">Emoji</string>
     <string name="attachment">Aldonaĵo</string>
     <string name="back">Reen</string>
-    <!-- this string is deprecated; the new wording is "introduced by ..." -->
-    <string name="verified">Konfirmita</string>
     <string name="close">Fermi</string>
     <string name="forward">Plusendi</string>
     <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
@@ -208,7 +206,6 @@
     <string name="menu_delete_chat">Forigi babilon</string>
     <!-- Command to delete all messages in a chat. The chat itself will not be deleted but will be empty afterwards, so make sure to be different from "Delete Chat" here. "Clear" is a verb here, "Empty Chat" would also be fine (eg. in German "Chat leeren") -->
     <string name="clear_chat">Viŝi la babilejon</string>
-    <string name="ask_delete_named_chat">Ĉu vi certas, ke vi deziras forigi \"%1$s\"?</string>
     <string name="menu_delete_messages">Forigi mesaĝojn</string>
     <string name="delete_contact">Forviŝi Kontakton</string>
     <string name="menu_delete_location">Ĉu forigi tiun ĉi lokon?</string>
@@ -260,11 +257,11 @@
     <string name="device_talk_subtitle">Loke generitaj mesaĝoj</string>
     <string name="device_talk_explain">Mesaĝoj en tiu ĉi babilo estas surloke generataj de via Delta Chat apo. Ĝiaj kreintoj uzas ilin por informi pri apaj ĝisdatigoj kaj problemoj dum uzado.</string>
     <string name="edit_contact">Redakti kontakton</string>
-    <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
+    <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin_chat">Alpingli babilon</string>
     <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
     <string name="unpin_chat">Depingli babilon</string>
-    <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
+    <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin">Alpingli</string>
     <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
     <string name="unpin">Depingli</string>
@@ -288,6 +285,7 @@
         <item quantity="one">Ĉu forigi %d babilon? Ĝi ne plu troveblos en la babilaro, tamen ĝiaj mesaĝoj plurestos en la servilo.</item>
         <item quantity="other">Ĉu forigi %d babilojn? Ili ne plu troveblos en la babilaro, tamen iliaj mesaĝoj plurestos en la servilo.</item>
     </plurals>
+    <string name="ask_delete_named_chat">Ĉu vi certas, ke vi deziras forigi \"%1$s\"?</string>
     <plurals name="ask_delete_messages">
         <item quantity="one">Ĉu forigi %d mesaĝon kaj ĉi tie kaj en la servilo?</item>
         <item quantity="other">Ĉu forigi %d mesaĝojn kaj ĉi tie kaj en la servilo?</item>
@@ -323,8 +321,6 @@
     </plurals>
     <string name="chat_record_slide_to_cancel">Gliti por nuligi</string>
     <string name="chat_record_explain">Tuŝadi por registri voĉan mesaĝon, maltuŝadi por sendi</string>
-    <!-- deprecated -->
-    <string name="chat_no_chats_yet_hint">Vi povas babili kun aliaj uzantoj de Delta Chat kaj kun iu ajn retadreso.</string>
     <string name="chat_all_archived">Ĉiuj babiloj enarĥivigitaj.\nPremu \"+\" por komenci novan babilon.</string>
     <string name="chat_share_with_title">Kunhavigi kun</string>
     <string name="chat_input_placeholder">Mesaĝo</string>
@@ -340,8 +336,6 @@
     <string name="search">Serĉi</string>
     <string name="search_explain">Serĉi babilojn, kontaktojn, kaj mesaĝojn</string>
     <string name="search_no_result_for_x">Neniu rezulto trovita por \"%s\"</string>
-
-
     <!-- create/edit groups, contact/group profile -->
     <string name="group_name">Grup-nomo</string>
     <string name="group_avatar">Bildo de la grupo</string>
@@ -383,7 +377,6 @@
     <string name="import_backup_title">Importi savkopion</string>
     <!-- TLS certificate checks -->
     <string name="accept_invalid_certificates">Akcepti nevalidajn atestilojn</string>
-    <string name="used_settings">Uzitaj agordoj:</string>
     <string name="delete_account">Forigi konton</string>
     <string name="delete_account_ask">Ĉu vi certas, ke vi volas forigi ĉiujn datumojn de vi konto?</string>
     <!-- share and forward messages -->

@@ -4,7 +4,7 @@
     <string name="app_name">Delta Chat</string>
     <string name="ok">OK</string>
     <string name="cancel">Annulla</string>
-   <!-- the word "or" to separate blocks in the user interface that are mutually exclusive -->
+   <!-- deprecated, the word "or" to separate blocks in the user interface that are mutually exclusive -->
     <string name="or_separator">o</string>
     <string name="clear_search">Cancella Ricerca</string>
     <string name="yes">Sì</string>
@@ -31,8 +31,6 @@
     <string name="emoji">Emoji</string>
     <string name="attachment">Allegato</string>
     <string name="back">Indietro</string>
-    <!-- this string is deprecated; the new wording is "introduced by ..." -->
-    <string name="verified">Verificato</string>
     <string name="close">Chiudi</string>
     <string name="close_window">Chiudi finestra</string>
     <string name="forward">Inoltra</string>
@@ -56,8 +54,9 @@
     <string name="show_full_message">Mostra Messaggio Completo…</string>
     <!-- Stay short here, say ~16 characters. The source string could also be "All Read", maybe that hint can make translations easier :) -->
     <string name="mark_all_as_read">Segna Tutti come Letti</string>
+    <string name="mark_as_read">Segna come Letto</string>
     <!-- Shortest text for "Mark as being read". In english, this could be "Read" (past tense of "to read"), in german, this could be "Gelesen". -->
-    <string name="mark_as_read_short">Leggi</string>
+    <string name="mark_as_read_short">Segna Letto</string>
     <!-- Placeholder text when something is loading -->
     <string name="loading">Caricamento in Corso…</string>
     <string name="hide">Nascondi</string>
@@ -131,6 +130,11 @@
         <item quantity="many">%d messaggi</item>
         <item quantity="other">%d messaggi</item>
     </plurals>
+    <plurals name="n_reactions">
+        <item quantity="one">%d reazione</item>
+        <item quantity="many">%d reazioni</item>
+        <item quantity="other">%d reazioni</item>
+    </plurals>
     <plurals name="n_members">
         <item quantity="one">%d membri</item>
         <item quantity="many">%d membri</item>
@@ -169,6 +173,7 @@
     <string name="video">Video</string>
     <string name="documents">Documenti</string>
     <string name="contact">Contatto</string>
+    <string name="bot">Bot</string>
     <string name="camera">Camera</string>
     <!-- As in "start a video recording" or "take a photo"; eg. the description of the "shutter button" in cameras -->
     <string name="capture">Cattura</string>
@@ -232,12 +237,15 @@
     <string name="menu_delete_chat">Elimina Chat</string>
     <!-- Command to delete all messages in a chat. The chat itself will not be deleted but will be empty afterwards, so make sure to be different from "Delete Chat" here. "Clear" is a verb here, "Empty Chat" would also be fine (eg. in German "Chat leeren") -->
     <string name="clear_chat">Cancella Messaggi</string>
-    <string name="ask_delete_named_chat">Sei sicuro di voler eliminare \"%1$s\"?</string>
     <string name="menu_delete_messages">Elimina Messaggi</string>
     <string name="delete_contact">Elimina Contatto</string>
     <string name="menu_delete_location">Elimino questa Posizione?</string>
     <string name="menu_message_details">Dettagli Messaggio</string>
     <string name="menu_copy_to_clipboard">Copia negli Appunti</string>
+    <string name="share_invite_link">Condividi Link d\'Invito</string>
+    <string name="invite_friends">Invita Gli Amici</string>
+    <!-- %1$s is replaced by the user's invitation link ("https://i.delta.chat/...") -->
+    <string name="invite_friends_text">Contattami su Delta Chat:\n%1$s</string>
     <string name="menu_copy_selection_to_clipboard">Copia Selezione</string>
     <string name="menu_copy_link_to_clipboard">Copia Link</string>
     <string name="menu_copy_text_to_clipboard">Copia Testo</string>
@@ -267,11 +275,15 @@
     <string name="menu_scroll_to_top">Scorri in Cima</string>
     <string name="menu_help">Aiuto</string>
     <string name="what_is_webxdc">Cos\'è Webxdc?</string>
-    <string name="privacy_policy">Privacy Policy</string>
+    <string name="privacy_policy">Politica sulla Riservatezza</string>
     <string name="menu_select_all">Seleziona Tutto</string>
     <string name="select_chat">Seleziona Chat</string>
     <string name="select_more">Seleziona di più</string>
     <string name="menu_edit_name">Modifica Nome</string>
+    <!-- The placeholder will be replaced by the name the contact gave themself (if any) or by an e-mail address. -->
+    <string name="edit_name_explain">Imposta un soprannome che ti verrà mostrato al posto di \"%1$s\". Lasciare vuoto per utilizzare il nome scelto dal contatto.</string>
+    <!-- The placeholder will be replaced by the name the contact gave themself (if any) or by an e-mail address. -->
+    <string name="edit_name_placeholder">Soprannome per \"%1$s\"</string>
     <string name="menu_settings">Impostazioni</string>
     <string name="menu_advanced">Avanzate</string>
     <string name="menu_view_profile">Vedi Profilo</string>
@@ -290,11 +302,11 @@
     <string name="device_talk_explain">I messaggi in questa chat vengono generati localmente da Delta Chat. Gli sviluppatori li usano per informarti sugli aggiornamenti o sui problemi di utilizzo.</string>
     <string name="device_talk_welcome_message2">Mettiti in contatto!\n\n🙌 Tocca \"Codice QR\" sulla schermata principale di entrambi i dispositivi. Scegli \"Scansiona codice QR\" su un dispositivo e puntalo verso l\'altro\n\n🌍 Se non siete nella stessa stanza, esegui la scansione tramite videochiamata o condividi un collegamento di invito da \"Scansiona codice QR\"\n\nQuindi: goditi la ​​tua esperienza di messaggistica sulla più grande rete decentralizzata mai esistita: l\'E-mail. E a differenza di altre app popolari, senza controllo centrale né monitoraggio o vendita dati tuoi, dei tuoi amici, colleghi o familiari a grandi organizzazioni.</string>
     <string name="edit_contact">Modifica Contatto</string>
-    <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
+    <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin_chat">Fissa Chat</string>
     <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
     <string name="unpin_chat">Sblocca Chat</string>
-    <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
+    <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin">Fissa</string>
     <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
     <string name="unpin">Sblocca</string>
@@ -333,6 +345,7 @@
     <string name="videochat_tap_to_open">Tocca per Aprire</string>
     <string name="videochat_instance">Istanza Video Chat</string>
     <string name="videochat_instance_placeholder">La Tua Istanza Video Chat</string>
+    <!-- Do not translate "$ROOM", since it is a fixed token Delta Chat will replace with a generated room ID like "aOclju5eCky" -->
     <string name="videochat_instance_example">Esempi: https://your-server.org/$ROOM</string>
     <string name="videochat_instance_explain_2">Se la video chat è abilitata, è possibile avviare una video chat da ogni chat. Le video chat richiedono un\'applicazione compatibile o un browser compatibile da entrambe le parti.</string>
     <string name="videochat_instance_from_qr">Utilizzare \"%1$s\" per invitare altri alla video chat?\n\nUna volta impostato, è possibile avviare una video chat da ogni chat uno a uno. Ciò sostituirà l\'eventuale impostazione precedente per le video chat.</string>
@@ -346,6 +359,7 @@
         <item quantity="many">Eliminare %d chat? Non verranno più mostrate nella lista delle chat, ma i messaggi rimarranno sul server.</item>
         <item quantity="other">Eliminare %d chat? Non verranno più mostrate nella lista delle chat, ma i messaggi rimarranno sul server.</item>
     </plurals>
+    <string name="ask_delete_named_chat">Sei sicuro di voler eliminare \"%1$s\"?</string>
     <string name="ask_delete_message">Sei sicuro di voler eliminare questo messaggio?</string>
     <plurals name="ask_delete_messages">
         <item quantity="one">Eliminare %d messaggio qui e sul sever?</item>
@@ -408,8 +422,6 @@
     <string name="chat_record_slide_to_cancel">Scorri per annullare</string>
     <string name="chat_record_explain">Tocca e mantieni per registrare un messaggio vocale, rilascia per inviare </string>
     <string name="chat_no_chats_yet_title">Casella vuota.\nPremi \"+\" per iniziare una chat.</string>
-    <!-- deprecated -->
-    <string name="chat_no_chats_yet_hint">Puoi chattare con altri utenti Delta Chat o con qualsiasi indirizzo email.</string>
     <string name="chat_all_archived">Chat archiviate.\nPremi \"+\" per iniziare una nuova chat.</string>
     <string name="chat_share_with_title">Condividi con</string>
     <string name="chat_input_placeholder">Messaggio</string>
@@ -474,6 +486,8 @@
     <string name="search_files">Cerca Files</string>
     <string name="search_explain">Cerca in chat, contatti e messaggi</string>
     <string name="search_no_result_for_x">Nessun risultato per \"%s\"</string>
+    <!-- Adjective, as in "Show Unread Messages" -->
+    <string name="search_unread">Non Letto</string>
 
 
     <!-- create/edit groups, contact/group profile -->
@@ -519,7 +533,7 @@
     <string name="multidevice_same_network_hint">Assicurati che entrambi i dispositivi siano sulla stessa rete o Wi-Fi.</string>
     <string name="multidevice_this_creates_a_qr_code">In questo modo si crea un codice QR che il secondo dispositivo può scansionare per copiare l\'account.</string>
     <string name="multidevice_install_dc_on_other_device">Installa Delta Chat sull\'altro dispositivo (https://get.delta.chat)</string>
-    <!-- "I Already Have a Login / Add as Second Device” should be the same text as defined by the keys onboarding_alternative_logins and multidevice_receiver_title -->
+    <!-- "I Already Have a Profile / Add as Second Device” should be the same text as defined by the keys onboarding_alternative_logins and multidevice_receiver_title -->
     <string name="multidevice_tap_scan_on_other_device">Avvia Delta Chat, tocca \"Aggiungi come secondo dispositivo\" e scansiona il codice qui mostrato</string>
     <!-- Shown inside a "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and/or address eg. "Scan to set up second device for Alice (alice@example.org)" -->
     <string name="multidevice_qr_subtitle">Scansiona per impostare un secondo dispositivo per %1$s</string>
@@ -532,9 +546,9 @@
     <string name="multidevice_transfer_done_devicemsg">ℹ️ Account trasferito sul tuo secondo dispositivo.</string>
     <!-- Shown beside progress bar, stay short -->
     <string name="preparing_account">Preparazione account…</string>
-    <!-- Shown beside progress bar, stay short -->
+    <!-- deprecated, shown beside progress bar, stay short -->
     <string name="waiting_for_receiver">In attesa del ricevente...</string>
-    <!-- Shown beside progress bar, stay short -->
+    <!-- deprecated, shown beside progress bar, stay short -->
     <string name="receiver_connected">Ricevente connesso…</string>
     <!-- Shown beside progress bar, stay short -->
     <string name="transferring">Trasferimento…</string>
@@ -574,8 +588,6 @@
     <string name="manual_account_setup_option">Accesso E-Mail Classico</string>
     <!-- Instant onboarding title (there is not more to do than to set name and avatar) -->
     <string name="instant_onboarding_title">Il Tuo Profilo</string>
-    <!-- deprecated -->
-    <string name="instant_onboarding_agree_default">Leggi l\'Informativa Riservatezza</string>
     <!-- The placeholder will be replaced by the default onboarding server -->
     <string name="instant_onboarding_agree_default2">Informativa sulla Riservatezza per %1$s</string>
     <!-- The placeholder will be replaced by instance name, the whole text will link to the instance page -->
@@ -615,13 +627,26 @@
     <string name="login_smtp_port">Porta SMTP</string>
     <string name="login_smtp_security">Sicurezza SMTP</string>
     <string name="login_auth_method">Metodo di Autorizzazione</string>
-    <!-- the word "SOCKS5" here and in the following strings should not be translated in most cases -->
+    <!-- the word "Proxy" might be left untranslated unless the destination language has a well-known term for a "Proxy Server", acting intermediary between the app and the chatmail or email server -->
+    <string name="proxy_settings">Proxy</string>
+    <string name="proxy_use_proxy">Usa Proxy</string>
+    <string name="proxy_add">Aggiungi Proxy</string>
+    <string name="proxy_add_explain">Tipi di proxy supportati: HTTP(S), SOCKS5 e Shadowsocks.</string>
+    <string name="proxy_add_url_hint">Inserisci qui l\'URL del proxy</string>
+    <string name="proxy_invalid">URL proxy non valido o non supportato</string>
+    <string name="proxy_list_header">Proxy Salvati</string>
+    <string name="proxy_delete">Elimina Proxy</string>
+    <string name="proxy_delete_explain">Sei sicuro di voler eliminare \"%1$s\"?</string>
+    <string name="proxy_use_proxy_confirm">Vuoi usare il proxy \"%1$s\"?</string>
+
+    <!-- deprecated -->
     <string name="login_socks5">SOCKS5</string>
     <string name="login_socks5_use_socks5">Usa SOCKS5</string>
     <string name="login_socks5_host">SOCKS5 Host</string>
     <string name="login_socks5_port">SOCKS5 Porta</string>
     <string name="login_socks5_user">SOCKS5 Utente</string>
     <string name="login_socks5_password">SOCKS5 Password</string>
+
     <string name="login_info_oauth2_title">Usare il setup semplificato?</string>
     <string name="login_info_oauth2_text">L\'indirizzo email inserito supporta l\'autenticazione semplificata (OAuth2.0).\n\nContinuando, puoi autorizzare Delta Chat a operare come app di messaggistica via e-mail.\n\nNon esistono server di Delta Chat, i tuoi dati restano nel tuo dispositivo!</string>
     <string name="login_certificate_checks">Controlli Certificato</string>
@@ -636,7 +661,6 @@
     <string name="login_error_cannot_login">Impossibile accedere come \"%1$s\". Verifica che l\'indirizzo email e la password siano corretti.</string>
     <!-- TLS certificate checks -->
     <string name="accept_invalid_certificates">Accetta certificati non validi</string>
-    <string name="used_settings">Impostazioni in uso:</string>
     <string name="switch_account">Cambia Account</string>
     <string name="add_account">Aggiungi Account</string>
     <string name="delete_account">Elimina Account</string>
@@ -652,8 +676,10 @@
     <!-- share and forward messages -->
     <!-- Translators: shown above a chat/contact list when selecting recipients to forward messages -->
     <string name="forward_to">Inoltra a…</string>
-    <string name="share_multiple_attachments">Invia %1$d files alla chat selezionata?\n\nI files vengono inviati non modificati nella loro dimensione originale (ad es. immagini e video non vengono ricodificati).</string>
-    <string name="share_multiple_attachments_multiple_chats">Invia %1$d file(s) a %2$d chat?\n\nI files vengono inviati non modificati nella loro dimensione originale (ad es. immagini e video non vengono ricodificat)i.</string>
+    <!-- first placeholder is replaced by the number of files (always 2 or more); second placeholder is replaced by a chat name -->
+    <string name="ask_send_files_to_chat">Inviare %1$d files a \"%2$s\"?</string>
+    <string name="ask_send_files_to_selected_chats">Invia %1$d file(s) a %2$d chat?</string>
+    <string name="videos_sent_without_recoding">(I video vengono inviati come file originali di grandi dimensioni. Per inviare i video come file più piccoli, allegali separatamente)</string>
     <string name="share_text_multiple_chats">Invia questo testo alle %1$d chat?\n\n\"%2$s\"</string>
     <string name="share_abort">Condivisione annullata per permessi mancanti.</string>
 
@@ -690,7 +716,7 @@
     <string name="pref_led_color">Colore LED</string>
     <string name="pref_sound">Suono</string>
     <string name="pref_silent">Silenzia</string>
-    <string name="pref_privacy">Privacy</string>
+    <string name="pref_privacy">Riservatezza</string>
     <string name="pref_chats_and_media">Chat e Media</string>
     <string name="pref_system_default">Predefinito di sistema</string>
     <!-- Translators: as in "opposite of dark" -->
@@ -812,11 +838,13 @@
     <string name="autodel_device_title">Elimina Messaggi dal Dispositivo</string>
     <string name="autodel_server_title">Elimina Messaggi dal Server</string>
     <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
-    <string name="autodel_device_ask">Vuoi eliminare %1$d messaggi ora e tutti i messaggi arrivati \"%2$s\" nel futuro?\n\n• Questo include tutti i media\n\n• I messaggi verranno eliminati anche se non sono stati letti\n\n• I \"Messaggi salvati\" vengono preservati dalla cancellazione locale.</string>
+    <string name="autodel_device_ask">Vuoi eliminare %1$d messaggi ora e tutti i messaggi arrivati \"%2$s\" d\'ora in poi?\n\n• Questo include tutti i media\n\n• I messaggi verranno eliminati anche se non sono stati letti\n\n• I \"Messaggi salvati\" vengono preservati dalla cancellazione locale.</string>
     <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
-    <string name="autodel_server_ask">Vuoi eliminare %1$d messaggi ora e tutti i messaggi appena recuperati \"%2$s\" nel futuro?\n\n⚠️ Ciò include emails, contenuti multimediali e \"Messaggi salvati\" in tutte le cartelle del server\n\n⚠️ Non utilizzare questa funzione se vuoi mantenere i dati sul server\n\n⚠️ Non utilizzare questa funzione se stai utilizzando altri client di posta elettronica oltre a Delta Chat</string>
+    <string name="autodel_server_ask">Vuoi eliminare %1$d messaggi ora e tutti i messaggi appena recuperati \"%2$s\" d\'ora in poi?\n\n⚠️ Ciò include e-mails, contenuti multimediali e \"Messaggi salvati\" in tutte le cartelle del server\n\n⚠️ Non utilizzare questa funzione se vuoi mantenere i dati sul server\n\n⚠️ Non utilizzare questa funzione se stai utilizzando altri client e-mail oltre a Delta Chat</string>
     <!-- shown below enabled autodel_server-option, should be a summary of autodel_server_ask and remind about the impact -->
     <string name="autodel_server_enabled_hint">Questo include email, media e \"Messaggi salvati\" in tutte le cartelle del server. Non utilizzare questa funzione se desideri mantenere i dati sul server o se stai utilizzando altri client di posta elettronica oltre a Delta Chat.</string>
+    <string name="autodel_server_warn_multi_device_title">Attiva l\'eliminazione immediata</string>
+    <string name="autodel_server_warn_multi_device">Se abiliti l\'eliminazione immediata non potrai utilizzare più dispositivi su questo profilo.</string>
     <string name="autodel_confirm">Ho capito, elimina tutti i messaggi</string>
     <!-- "At once" in the meaning of "Immediately", without any intervening time. -->
     <string name="autodel_at_once">Subito</string>
@@ -827,15 +855,10 @@
     <string name="autodel_after_1_hour">Dopo 1 ora</string>
     <string name="autodel_after_1_day">Dopo 1 giorno</string>
     <string name="autodel_after_1_week">Dopo 1 settimana</string>
-    <string name="autodel_after_4_weeks">Dopo 4 settimane</string>
     <string name="after_5_weeks">Dopo 5 settimane</string>
     <string name="autodel_after_1_year">Dopo 1 anno</string>
 
     <!-- autocrypt -->
-    <!-- deprecated, used "Encryption" if a headline is needed -->
-    <string name="autocrypt">Autocrypt</string>
-    <!-- deprecated, the button "Send Autocrypt Setup Message" is enough -->
-    <string name="autocrypt_explain">Autocrypt è una nuova specifica aperta per la cifratura end-to-end delle email.\n\nLa tua configurazione end-to-end viene creata automaticamente quando necessario e puoi trasferirla tra dispositivi tramite i Messaggi di configurazione.</string>
     <string name="autocrypt_send_asm_title">Messaggio di Configurazione Autocrypt </string>
     <string name="autocrypt_send_asm_explain_before">Un \'Messaggio di configurazione Autocrypt\' condivide in sicurezza le tue impostazioni end-to-end con altre app compatibili. Le impostazioni sono criptate con un codice mostrato qui che deve essere inserito nell\'altro dispositivo.</string>
     <string name="autocrypt_send_asm_button">Invia Messaggio di Configurazione Autocrypt</string>
@@ -852,7 +875,9 @@
 
 
     <!-- system messages -->
+    <!-- deprecated -->
     <string name="systemmsg_read_receipt_subject">Ricevuta di lettura</string>
+    <!-- deprecated -->
     <string name="systemmsg_read_receipt_body">Questa è una ricevuta di lettura del messaggio \"%1$s\".\n\nCiò significa che il messaggio è stato mostrato nel dispositivo del destinatario, ma non necessariamente che il contenuto è stato letto.</string>
     <string name="systemmsg_cannot_decrypt">Questo messaggio non può essere decrittografato.\n\n• Potrebbe essere già utile rispondere semplicemente a questo messaggio e chiedere al mittente d\'inviare nuovamente il messaggio.\n\n• Se hai appena reinstallato Delta Chat, è meglio se riconfiguri ora Delta Chat e scegli \"Aggiungi come secondo dispositivo\" o importa un backup.</string>
     <string name="systemmsg_unknown_sender_for_chat">Mittente sconosciuto per questa chat. Vedi \'info\' per maggiori dettagli.</string>
@@ -928,6 +953,7 @@
     <string name="chat_protection_broken_explanation">La crittografia end-to-end non può più essere garantita, probabilmente perché %1$s ha reinstallato Delta Chat o inviato un messaggio da un altro dispositivo.\n\nPuoi incontrarlo di persona e scansionare nuovamente il suo Codice QR per ristabilire la crittografia end-to-end garantita.</string>
     <string name="invalid_unencrypted_tap_to_learn_more">⚠️ %1$s richiede la crittografia end-to-end che non è ancora configurata per questa chat. Tocca per saperne di più.</string>
     <string name="invalid_unencrypted_explanation">Per stabilire la crittografia end-to-end, potresti incontrare i contatti di persona e scansionare il loro codice QR per presentarli.</string>
+    <string name="encryption_required_for_new_contact">È richiesta la crittografia end-to-end, ma non è ancora configurata per %1$s.\n\nPuoi condividere con loro il link d\'invito o incontrarli di persona e scansionare il loro Codice QR.</string>
     <string name="learn_more">Per Saperne di Più</string>
 
     <string name="devicemsg_self_deleted">Hai eliminato la chat \"Messaggi salvati\".\n\nℹ️ Per utilizzare nuovamente la funzione \"Messaggi salvati\", crea una nuova chat con te stesso.</string>
@@ -942,7 +968,7 @@
 
     <!-- qr code stuff -->
     <string name="qr_code">Codice QR</string>
-    <string name="load_qr_code_as_image">Carica il Codice QR come Immagine</string>
+    <string name="load_qr_code_as_image">Carica il Codice QR da Immagine</string>
     <string name="qrscan_title">Scansiona Codice QR</string>
     <string name="qrscan_hint">Posiziona la camera sopra il codice QR</string>
     <string name="qrscan_hint_desktop">Sposta il codice QR sulla fotocamera</string>
@@ -977,8 +1003,6 @@
     <string name="set_name_and_avatar_explain">Imposta un nome che i tuoi contatti riconosceranno. Puoi anche impostare un\'immagine del profilo.</string>
     <string name="please_enter_name">Inserisci un nome.</string>
     <string name="qraccount_qr_code_cannot_be_used">Il codice QR scansionato non può essere utilizzato per creare un nuovo account.</string>
-    <!-- deprecated -->
-    <string name="qraccount_use_on_new_install">Il codice QR scansionato serve a creare un nuovo account. Puoi scansionare il codice quando configuri una nuova installazione di Delta Chat.</string>
     <!-- the placeholder will be replaced by the e-mail address of the profile -->
     <string name="qrlogin_ask_login">Accedere a \"%1$s\"?</string>
     <!-- the placeholder will be replaced by the e-mail address of the profile -->
@@ -1004,6 +1028,7 @@
     <string name="mailto_link_could_not_be_decoded">Il link mailto non può essere decodificato: %1$s</string>
 
     <!-- notifications  -->
+    <!-- deprecated, use mark_as_read or mark_as_read_short -->
     <string name="notify_dismiss">Ignora</string>
     <string name="notify_reply_button">Rispondi</string>
     <string name="notify_new_message">Nuovo messaggio</string>
@@ -1079,8 +1104,6 @@
     <string name="export_backup_desktop">Esporta Backup</string>
     <string name="autocrypt_correct_desktop">Configurazione di Autocrypt trasferita.</string>
     <string name="forget_login_confirmation_desktop">Eliminare questo accesso? Tutto verrà eliminato, inclusa la configurazione end-to-end, i contatti, le chat, i messaggi e i media. Questa azione non può essere annullata.</string>
-    <!-- deprecated -->
-    <string name="account_info_hover_tooltip_desktop2">E-Mail: %1$s\nDimensione: %2$s\nProfilo Id: %3$s</string>
     <string name="message_detail_sent_desktop">inviato</string>
     <string name="message_detail_received_desktop">ricevuto</string>
     <string name="menu.view.developer.open.log.folder">Apri Cartella dei Log</string>
@@ -1152,9 +1175,6 @@
 
     <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
     <string name="pref_instant_delivery">Consegna Istantanea</string>
-    <string name="pref_push_notifications">Utilizza Servizio Push</string>
-    <string name="pref_push_notifications_explain">Notifiche Push Affidabili per Server-Chatmail</string>
-    <string name="pref_push_ask_disable">Disabilitare Servizio Push?\n\nCiò potrebbe causare ritardi nelle notifiche.</string>
     <string name="pref_background_notifications">Utilizza Connessione Background</string>
     <string name="pref_background_notifications_explain">Richiede ignora ottimizzazioni della batteria, da utilizzare se il Servizio Push non è disponibile</string>
     <string name="pref_reliable_service">Forza Connessione Background</string>
@@ -1166,8 +1186,7 @@
     <string name="perm_enable_bg_already_done">Hai già autorizzato Delta Chat a ricevere messaggi in background.\n\nSe i messaggi non arrivano in background controlla le impostazioni di sistema.</string>
 
     <!-- device messages for updates -->
-    <string name="update_1_44_android">Novità:\n\n❤️ Sì! Questo era atteso da tempo: tocca a lungo un messaggio per reagire\n\n🔗 Se non riesci a scansionare i codici QR, condividili come link di invito\n\n🔵 I messaggi non letti di tutti i profili vengono ora conteggiati e mostrati nel titolo\n\n… e TONNELLATE di correzioni bug … %1$s\n\nAiuta a migliorare l\'app: usa \"Impostazioni/Avanzate/Invia statistiche\" per aiutare gli sviluppatori a ottimizzare meglio per l\'utilizzo nel mondo reale. È possibile rivedere i dati prima dell\'invio</string>
-    <string name="update_1_44_ios">Novità:\n\n❤️ Sì! Questo era atteso da tempo: tocca a lungo un messaggio per reagire\n\n🫸 Notifiche PUSH se supportate dai provider come https://nine.testrun.org\n\n🔗 Se non riesci a scansionare i codici QR, condividili come link di invito\n\n... e TONNELLATE di correzioni bug ... %1$s</string>
     <string name="update_1_46_android">Nuovo Inserimento 🐣 e Altro:\n\n⚡️ Iscriviti ai sicuri e veloci server chatmail (https://delta.chat/chatmail) o utilizza i classici server e-mail\n\n👉 Notifiche PUSH per qualsiasi server chatmail\n\n👤 Connettiti con i tuoi amici in modo sicuro tramite \"Allega contatti\"\n\n🥰 Reagisci con qualsiasi emoji\n\n📌 Appunta le chat direttamente dalla ricerca... e ALTRO su %1$s</string>
     <string name="update_1_46_ios">Nuovo Inserimento 🐣 e Altro:\n\n⚡️ Iscriviti ai sicuri e veloci server chatmail (https://delta.chat/chatmail) o usa i classici server e-mail\n\n👉 Notifiche PUSH per qualsiasi server chatmail\n\n👤 Ricevi \"Contatti allegati\" e connettiti ai tuoi amici\n\n🥰 Selezione della reazione più rapida ... e ALTRO su %1$s</string>
+    <string name="update_switch_profile_placement">ℹ️ Opzione \"Cambia Profilo\" spostata: tocca l\'immagine del tuo profilo nell\'angolo superiore della schermata principale per aggiungere o cambiare profili 💡</string>
 </resources>

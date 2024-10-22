@@ -18,6 +18,7 @@ import { Screens } from '../../../ScreenController'
 import { avatarInitial } from '../../Avatar'
 import { getLogger } from '../../../../../shared/logger'
 import ImageBackdrop from '../../ImageBackdrop'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 const log = getLogger('AccountDeletionScreen')
 
@@ -69,7 +70,7 @@ export default function AccountDeletionScreen({
                     {accountInfo.profileImage ? (
                       <img
                         className={styles.content}
-                        src={'file://' + accountInfo.profileImage}
+                        src={runtime.transformBlobURL(accountInfo.profileImage)}
                       />
                     ) : (
                       <div
@@ -113,7 +114,7 @@ export default function AccountDeletionScreen({
                 {tx('cancel')}
               </FooterActionButton>
               <FooterActionButton
-                danger={true}
+                styling='danger'
                 onClick={async () => onDeleteAccount(selectedAccountId)}
               >
                 {tx('delete')}

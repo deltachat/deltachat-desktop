@@ -4,7 +4,7 @@
     <string name="app_name">Delta Chat</string>
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
-   <!-- the word "or" to separate blocks in the user interface that are mutually exclusive -->
+   <!-- deprecated, the word "or" to separate blocks in the user interface that are mutually exclusive -->
     <string name="or_separator">或</string>
     <string name="clear_search">清除搜索</string>
     <string name="yes">是</string>
@@ -31,8 +31,6 @@
     <string name="emoji">Emoji</string>
     <string name="attachment">附件</string>
     <string name="back">返回</string>
-    <!-- this string is deprecated; the new wording is "introduced by ..." -->
-    <string name="verified">已验证</string>
     <string name="close">关闭</string>
     <string name="close_window">关闭窗口</string>
     <string name="forward">转发</string>
@@ -46,16 +44,17 @@
     <string name="unarchive">取消存档</string>
     <string name="mute">静音</string>
     <string name="ephemeral_messages">消息定时销毁</string>
-    <string name="ephemeral_messages_hint">对本聊天内使用 Delta Chat 的成员有效；不过，这些成员还是能够保存、复制和转发消息，以及使用其他的电子邮件客户端。</string>
+    <string name="ephemeral_messages_hint">适用于此聊天内使用 Delta Chat 的所有成员；这些成员仍然可以复制、保存和转发消息，或使用其他电子邮件客户端。</string>
     <string name="save">保存</string>
     <string name="chat">聊天</string>
     <string name="media">媒体</string>
-    <string name="profile">概要</string>
+    <string name="profile">账号</string>
     <string name="main_menu">主菜单</string>
     <string name="start_chat">开始聊天</string>
     <string name="show_full_message">显示完整消息…</string>
     <!-- Stay short here, say ~16 characters. The source string could also be "All Read", maybe that hint can make translations easier :) -->
     <string name="mark_all_as_read">将所有标记为已读</string>
+    <string name="mark_as_read">标记为已读</string>
     <!-- Shortest text for "Mark as being read". In english, this could be "Read" (past tense of "to read"), in german, this could be "Gelesen". -->
     <string name="mark_as_read_short">已读</string>
     <!-- Placeholder text when something is loading -->
@@ -121,6 +120,9 @@
     <plurals name="n_messages">
         <item quantity="other">%d 条消息</item>
     </plurals>
+    <plurals name="n_reactions">
+        <item quantity="other">%d 个回应</item>
+    </plurals>
     <plurals name="n_members">
         <item quantity="other">%d 个成员</item>
     </plurals>
@@ -153,6 +155,7 @@
     <string name="video">视频</string>
     <string name="documents">文档</string>
     <string name="contact">联系人</string>
+    <string name="bot">机器人</string>
     <string name="camera">相机</string>
     <!-- As in "start a video recording" or "take a photo"; eg. the description of the "shutter button" in cameras -->
     <string name="capture">捕获</string>
@@ -216,12 +219,15 @@
     <string name="menu_delete_chat">删除聊天</string>
     <!-- Command to delete all messages in a chat. The chat itself will not be deleted but will be empty afterwards, so make sure to be different from "Delete Chat" here. "Clear" is a verb here, "Empty Chat" would also be fine (eg. in German "Chat leeren") -->
     <string name="clear_chat">清空聊天记录</string>
-    <string name="ask_delete_named_chat">您确定要删除“%1$s”吗？</string>
     <string name="menu_delete_messages">删除消息</string>
     <string name="delete_contact">删除联系人</string>
     <string name="menu_delete_location">删除此位置？</string>
     <string name="menu_message_details">消息详情</string>
     <string name="menu_copy_to_clipboard">复制到剪贴板</string>
+    <string name="share_invite_link">分享邀请链接</string>
+    <string name="invite_friends">邀请好友</string>
+    <!-- %1$s is replaced by the user's invitation link ("https://i.delta.chat/...") -->
+    <string name="invite_friends_text">在 Delta Chat 上联系我：\n%1$s</string>
     <string name="menu_copy_selection_to_clipboard">复制所选内容</string>
     <string name="menu_copy_link_to_clipboard">复制链接</string>
     <string name="menu_copy_text_to_clipboard">复制文本</string>
@@ -256,9 +262,13 @@
     <string name="select_chat">选择聊天</string>
     <string name="select_more">选择更多</string>
     <string name="menu_edit_name">编辑名称</string>
+    <!-- The placeholder will be replaced by the name the contact gave themself (if any) or by an e-mail address. -->
+    <string name="edit_name_explain">设置将显示给您的昵称，而不是“%1$s”。留空可使用联系人选择的名称。</string>
+    <!-- The placeholder will be replaced by the name the contact gave themself (if any) or by an e-mail address. -->
+    <string name="edit_name_placeholder">“%1$s”的昵称</string>
     <string name="menu_settings">设置</string>
     <string name="menu_advanced">高级</string>
-    <string name="menu_view_profile">查看概要</string>
+    <string name="menu_view_profile">查看账号</string>
     <string name="menu_zoom_in">放大</string>
     <string name="menu_zoom_out">缩小</string>
     <string name="menu_save_log">保存日志</string>
@@ -274,11 +284,11 @@
     <string name="device_talk_explain">此聊天中的消息是由 Delta Chat 应用本地生成的。 它的制作者使用它来通知应用更新和使用过程中出现的问题。</string>
     <string name="device_talk_welcome_message2">取得联系！\n\n🙌 轻按两台设备主屏上的“二维码”。 在其中一台设备上选择“扫描二维码”，并将其对准另一台设备上显示的二维码\n\n🌍 如果双方不在同一个房间内，可以通过视频通话进行扫描，或从“扫描二维码”那里分享一个邀请链接\n\n接下来： 通过有史以来存在的最大去中心化网络：电子邮件来享受收发消息。和其他流行的即时聊天应用相比，DeltaChat 没有中央控制，不跟踪您本人、您的好友、同事或家人，也不售卖你们的数据给大型组织。</string>
     <string name="edit_contact">编辑联系人</string>
-    <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
+    <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin_chat">固定聊天</string>
     <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
     <string name="unpin_chat">取消固定聊天</string>
-    <!-- Verb "to pin", making something sticky, not a noun or appreviation for "pin number". -->
+    <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin">固定</string>
     <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
     <string name="unpin">取消固定</string>
@@ -315,6 +325,7 @@
     <string name="videochat_tap_to_open">点击来打开</string>
     <string name="videochat_instance">视频聊天实例</string>
     <string name="videochat_instance_placeholder">您的视频聊天实例</string>
+    <!-- Do not translate "$ROOM", since it is a fixed token Delta Chat will replace with a generated room ID like "aOclju5eCky" -->
     <string name="videochat_instance_example">示例： https://meet.jit.si/$ROOM 或 basicwebrtc:https://your-server</string>
     <string name="videochat_instance_explain_2">启用视频聊天后，您便可以在所有聊天中发起视频聊天。需要双方均装有兼容的应用或浏览器。</string>
     <string name="videochat_instance_from_qr">使用“%1$s”邀请其他人参加视频聊天吗？\n\n设置好后，您就可以在聊天里发起视频聊天了。 这会取代之前的视频聊天设置。</string>
@@ -326,6 +337,7 @@
     <plurals name="ask_delete_chat">
         <item quantity="other">删除 %d 个聊天？被删除的聊天不会再显示在聊天列表中；聊天消息仍将保留于服务器。</item>
     </plurals>
+    <string name="ask_delete_named_chat">删除聊天“%1$s”？它将不再显示在聊天列表中，其消息将保留在服务器上。</string>
     <string name="ask_delete_message">您确定要删除这条消息吗？</string>
     <plurals name="ask_delete_messages">
         <item quantity="other">在此处和服务器上删除 %d 条消息？</item>
@@ -378,8 +390,6 @@
     <string name="chat_record_slide_to_cancel">滑动来取消</string>
     <string name="chat_record_explain">按住来录制语音消息，松开来发送</string>
     <string name="chat_no_chats_yet_title">收件箱为空。\n按“+”来开始新聊天。</string>
-    <!-- deprecated -->
-    <string name="chat_no_chats_yet_hint">您可以与其他 Delta Chat 用户以及任意电子邮件地址聊天。</string>
     <string name="chat_all_archived">所有聊天已存档。\n按“+”来开始新聊天。</string>
     <string name="chat_share_with_title">分享给</string>
     <string name="chat_input_placeholder">输入消息…</string>
@@ -444,6 +454,8 @@
     <string name="search_files">搜索文件</string>
     <string name="search_explain">搜索聊天、联系人和消息</string>
     <string name="search_no_result_for_x">没有找到有关\"%s\"的结果</string>
+    <!-- Adjective, as in "Show Unread Messages" -->
+    <string name="search_unread">未读</string>
 
 
     <!-- create/edit groups, contact/group profile -->
@@ -487,24 +499,24 @@
     <!-- "Second Device" can also be translated as "Another Device", if that is catchier in the destination language. However, make sure to use the term consistently. -->
     <string name="multidevice_title">添加第二台设备</string>
     <string name="multidevice_same_network_hint">让两台设备连接相同的 Wi-Fi 或网络</string>
-    <string name="multidevice_this_creates_a_qr_code">这会创建供第二台设备扫描、用于复制此账户的二维码。</string>
+    <string name="multidevice_this_creates_a_qr_code">这将创建第二台设备可以扫描用于复制此账号的二维码。</string>
     <string name="multidevice_install_dc_on_other_device">在你的其他设备上安装 Delta Chat (https://get.delta.chat)</string>
-    <!-- "I Already Have a Login / Add as Second Device” should be the same text as defined by the keys onboarding_alternative_logins and multidevice_receiver_title -->
-    <string name="multidevice_tap_scan_on_other_device">启动 Delta Chat 应用，点击“添加为第二台设备”并扫描显示的二维码</string>
+    <!-- "I Already Have a Profile / Add as Second Device” should be the same text as defined by the keys onboarding_alternative_logins and multidevice_receiver_title -->
+    <string name="multidevice_tap_scan_on_other_device">启动 Delta Chat，点击“我已有账号/添加为第二台设备”，扫描此处显示的二维码</string>
     <!-- Shown inside a "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and/or address eg. "Scan to set up second device for Alice (alice@example.org)" -->
     <string name="multidevice_qr_subtitle">扫描此处为 %1$s 设置第二台设备</string>
     <string name="multidevice_receiver_title">添加为第二台设备</string>
     <string name="multidevice_open_settings_on_other_device">在第一台设备上，转到“设置/添加第二台设备”并扫描显示的二维码</string>
-    <string name="multidevice_receiver_scanning_ask">将账户从其他设备复制到此设备吗？</string>
+    <string name="multidevice_receiver_scanning_ask">是否将账号从其他设备复制到此设备？</string>
     <string name="multidevice_abort">中止第二台设备的设置吗？</string>
     <string name="multidevice_abort_will_invalidate_copied_qr">这会让复制到剪贴板的二维码失效。</string>
     <string name="multidevice_experimental_hint">（实验性，需要 1.36 版本）</string>
-    <string name="multidevice_transfer_done_devicemsg">ℹ️ 账户已传输到你的第二台设备。</string>
+    <string name="multidevice_transfer_done_devicemsg">ℹ️ 账号已传输到您的第二台设备。</string>
     <!-- Shown beside progress bar, stay short -->
-    <string name="preparing_account">准备账户中…</string>
-    <!-- Shown beside progress bar, stay short -->
+    <string name="preparing_account">正在准备账号…</string>
+    <!-- deprecated, shown beside progress bar, stay short -->
     <string name="waiting_for_receiver">等待接收者…</string>
-    <!-- Shown beside progress bar, stay short -->
+    <!-- deprecated, shown beside progress bar, stay short -->
     <string name="receiver_connected">接收者已连接…</string>
     <!-- Shown beside progress bar, stay short -->
     <string name="transferring">传输中…</string>
@@ -537,21 +549,19 @@
 
     <!-- welcome and login -->
     <!-- Primary button on the welcome screen, allows to create an instant profile -->
-    <string name="onboarding_create_instant_account">让我们开始吧！</string>
+    <string name="onboarding_create_instant_account">创建新账号</string>
     <!-- Secondary button on the welcome screen, allows to "Add as Second Device", "Restore from Backup"  -->
-    <string name="onboarding_alternative_logins">我已经有登录凭据了</string>
+    <string name="onboarding_alternative_logins">我已有账号</string>
     <!-- Button, allows to log in to existing email accounts, setting ports, passwords and so on -->
     <string name="manual_account_setup_option">传统电子邮件登录</string>
     <!-- Instant onboarding title (there is not more to do than to set name and avatar) -->
     <string name="instant_onboarding_title">个人资料</string>
-    <!-- deprecated -->
-    <string name="instant_onboarding_agree_default">阅读隐私政策</string>
     <!-- The placeholder will be replaced by the default onboarding server -->
     <string name="instant_onboarding_agree_default2">%1$s 的隐私政策</string>
     <!-- The placeholder will be replaced by instance name, the whole text will link to the instance page -->
     <string name="instant_onboarding_agree_instance">关于 %1$s 上的个人资料</string>
     <!-- Confirmation button on the instant onboarding screen -->
-    <string name="instant_onboarding_create">同意 &amp; 创建个人资料</string>
+    <string name="instant_onboarding_create">同意并创建账号</string>
     <!-- Secondary, link-like button to open a page with other possible instances -->
     <string name="instant_onboarding_show_more_instances">使用其他服务器</string>
     <string name="instant_onboarding_other_server">列出聊天邮件服务器</string>
@@ -568,9 +578,9 @@
     <string name="scan_invitation_code">扫描邀请码</string>
     <string name="login_title">登录</string>
     <!-- for classic email, we use the classical term "Account" -->
-    <string name="login_header">登录您的电子邮件账户</string>
+    <string name="login_header">登录您的电子邮件账号</string>
     <!-- for classic email, we use the classical term "Account" -->
-    <string name="login_explain">使用现有电子邮件帐户登录</string>
+    <string name="login_explain">使用现有电子邮件账号登录</string>
     <string name="login_subheader">对于已知的电子邮件提供商，附加设置会被自动设置。有时 IMAP 需要在网页版设置里启用。 请咨询您的电子邮件提供商或朋友来寻求帮助。</string>
     <string name="login_no_servers_hint">不存在 Delta Chat 服务器，您的数据保留于您的设备！</string>
     <string name="login_inbox">收件箱</string>
@@ -585,13 +595,26 @@
     <string name="login_smtp_port">SMTP 端口</string>
     <string name="login_smtp_security">SMTP 安全类型</string>
     <string name="login_auth_method">认证方法</string>
-    <!-- the word "SOCKS5" here and in the following strings should not be translated in most cases -->
+    <!-- the word "Proxy" might be left untranslated unless the destination language has a well-known term for a "Proxy Server", acting intermediary between the app and the chatmail or email server -->
+    <string name="proxy_settings">代理</string>
+    <string name="proxy_use_proxy">使用代理</string>
+    <string name="proxy_add">添加代理</string>
+    <string name="proxy_add_explain">支持的代理类型：HTTP(S)、SOCKS5 和 Shadowsocks.</string>
+    <string name="proxy_add_url_hint">在此输入代理 URL</string>
+    <string name="proxy_invalid">无效或不受支持的代理 URL</string>
+    <string name="proxy_list_header">已保存的代理</string>
+    <string name="proxy_delete">删除代理</string>
+    <string name="proxy_delete_explain">你确定要删除 \"%1$s\"吗？</string>
+    <string name="proxy_use_proxy_confirm">你想使用代理“%1$s”吗？</string>
+
+    <!-- deprecated -->
     <string name="login_socks5">SOCKS5</string>
     <string name="login_socks5_use_socks5">使用 SOCKS5 代理</string>
     <string name="login_socks5_host">SOCKS5 主机</string>
     <string name="login_socks5_port">SOCKS5 端口</string>
     <string name="login_socks5_user">SOCKS5 用户名</string>
     <string name="login_socks5_password">SOCKS5 密码</string>
+
     <string name="login_info_oauth2_title">使用简易设置继续？</string>
     <string name="login_info_oauth2_text">输入的电子邮件地址支持简化设置（OAuth 2.0）。\n\n在下一步中，请允许 Delta Chat 充当您的“通过电子邮件聊天”应用程序。\n\n不存在 Delta Chat 服务器，您的数据保留于您的设备！</string>
     <string name="login_certificate_checks">证书检查</string>
@@ -606,14 +629,13 @@
     <string name="login_error_cannot_login">无法作为“%1$s”登录。请检查电子邮件地址和密码是否正确。</string>
     <!-- TLS certificate checks -->
     <string name="accept_invalid_certificates">接受无效的证书</string>
-    <string name="used_settings">已使用设置：</string>
-    <string name="switch_account">切换账户 </string>
-    <string name="add_account">添加账户</string>
-    <string name="delete_account">删除账户</string>
-    <string name="delete_account_ask">您确定要删除您的账户数据吗？</string>
-    <string name="delete_account_explain_with_name">此设备上“%s”的所有帐户数据都将被删除，包括您的端到端加密设置、联系人、聊天、消息及媒体。 此操作无法撤消。</string>
-    <string name="unconfigured_account">未配置的账户</string>
-    <string name="unconfigured_account_hint">打开账户来配置它</string>
+    <string name="switch_account">切换账号</string>
+    <string name="add_account">添加账号</string>
+    <string name="delete_account">删除账号</string>
+    <string name="delete_account_ask">是否确定要删除您的账号数据？</string>
+    <string name="delete_account_explain_with_name">将会删除此设备上“%s”的所有账号数据，包括您的端到端加密设置、联系人、聊天、消息和媒体。此操作无法撤销。</string>
+    <string name="unconfigured_account">未配置的账号</string>
+    <string name="unconfigured_account_hint">打开账号来配置它</string>
     <string name="try_connect_now">立即尝试连接</string>
     <string name="sync_all">同步所有</string>
     <!-- Translations: %1$s will be replaced by a more detailed error message -->
@@ -622,8 +644,10 @@
     <!-- share and forward messages -->
     <!-- Translators: shown above a chat/contact list when selecting recipients to forward messages -->
     <string name="forward_to">转发给…</string>
-    <string name="share_multiple_attachments">发送 %1$d 个文件到所选聊天？\n\n文件将以原样发送（例如：图像和视频不会被重新编码）。</string>
-    <string name="share_multiple_attachments_multiple_chats">发送 %1$d 个文件到 %2$d 个聊天？\n\n文件将以原样发送（例如：图像和视频不会被重新编码）。</string>
+    <!-- first placeholder is replaced by the number of files (always 2 or more); second placeholder is replaced by a chat name -->
+    <string name="ask_send_files_to_chat">发送 %1$d 个文件到“%2$s”？</string>
+    <string name="ask_send_files_to_selected_chats">发送 %1$d 个文件到 %2$d 个聊天？</string>
+    <string name="videos_sent_without_recoding">（视频以未经处理的大文件形式发送。要发送较小的视频文件，请分别附加它们）</string>
     <string name="share_text_multiple_chats">发送这段文字到 %1$d 个聊天？\n\n\"%2$s“</string>
     <string name="share_abort">由于缺少权限，分享中止。</string>
 
@@ -636,7 +660,7 @@
     <string name="pref_blocked_contacts">已屏蔽的联系人</string>
     <string name="blocked_empty_hint">被您屏蔽的联系人将显示于此。</string>
     <!-- for classic email, we use the classical term "Account" -->
-    <string name="pref_password_and_account_settings">密码和账户</string>
+    <string name="pref_password_and_account_settings">密码和账号</string>
     <string name="pref_who_can_see_profile_explain">在与其他用户交流时，您的个人资料图片和名称将与您的消息一起发送。</string>
     <string name="pref_your_name">您的名称</string>
     <!-- Translators: Visible only to recipients who DO NOT use Delta Chat, so it's the last line in an E-mail and not a "Status". -->
@@ -698,7 +722,7 @@
     <!-- the placeholder will be replaced by the name of the profile's email address -->
     <string name="pref_backup_export_x">导出 %1$s</string>
     <!-- the placeholder will be replaced by the number of profiles to export; the number is always larger than 1 -->
-    <string name="pref_backup_export_all">导出全部 %1$d 个账户</string>
+    <string name="pref_backup_export_all">导出全部 %1$d 个账号</string>
     <string name="pref_backup_export_start_button">开始备份</string>
     <string name="pref_backup_written_to_x">备份已成功写入到“%1$s”。</string>
     <string name="pref_managekeys_menu_title">管理密钥</string>
@@ -717,7 +741,7 @@
     <string name="pref_watch_sent_folder">监视已发送文件夹</string>
     <string name="pref_send_copy_to_self">给自己发送副本</string>
     <!-- for classic email, we use the classical term "Account" -->
-    <string name="pref_send_copy_to_self_explain">在多台设备上使用此账户时，这是必需的。</string>
+    <string name="pref_send_copy_to_self_explain">在多台设备上使用此账号时，这是必需的。</string>
     <string name="pref_auto_folder_moves">自动移动至 DeltaChat 文件夹</string>
     <string name="pref_auto_folder_moves_explain">移动聊天对话以免弄乱收件箱</string>
     <string name="pref_only_fetch_mvbox_title">只从 DeltaChat 文件夹获取</string>
@@ -787,9 +811,11 @@
     <string name="autodel_server_ask">您是否要立即删除 %1$d 条消息，并在之后于消息收到 %2$s 删除它们？\n\n⚠️ 这包括服务器所有文件夹中的电子邮件、媒体和“保存的消息”\n\n⚠️ 如果您想在服务器上保留数据，请不要使用此功能\n\n⚠️ 如果您正在使用 Delta Chat 之外的电子邮件客户端，请不要使用此功能</string>
     <!-- shown below enabled autodel_server-option, should be a summary of autodel_server_ask and remind about the impact -->
     <string name="autodel_server_enabled_hint">这包括所有服务器文件夹中的电子邮件、媒体和\"保存的消息\"。如果您想在服务器上保存数据，或者您正在使用除 Delta Chat 之外的其他电子邮件客户端，请不要使用此功能。</string>
+    <string name="autodel_server_warn_multi_device_title">开启一次性删除</string>
+    <string name="autodel_server_warn_multi_device">如果您启用一次删除，则无法在此配置文件中使用多个设备。</string>
     <string name="autodel_confirm">我了解，将这些消息全部删除</string>
     <!-- "At once" in the meaning of "Immediately", without any intervening time. -->
-    <string name="autodel_at_once">立刻</string>
+    <string name="autodel_at_once">下载后立即</string>
     <string name="after_30_seconds">30 秒后</string>
     <string name="after_1_minute">1 分钟后</string>
     <string name="after_5_minutes">5 分钟后</string>
@@ -797,15 +823,10 @@
     <string name="autodel_after_1_hour">1 小时后</string>
     <string name="autodel_after_1_day">1 天后</string>
     <string name="autodel_after_1_week">1 周后</string>
-    <string name="autodel_after_4_weeks">4 周后</string>
     <string name="after_5_weeks">5 周后</string>
     <string name="autodel_after_1_year">1 年后</string>
 
     <!-- autocrypt -->
-    <!-- deprecated, used "Encryption" if a headline is needed -->
-    <string name="autocrypt">Autocrypt</string>
-    <!-- deprecated, the button "Send Autocrypt Setup Message" is enough -->
-    <string name="autocrypt_explain">Autocrypt 是一种用于自动端到端电子邮件加密的全新开放规范。\n\n您的端到端设置会根据需要自动创建；之后您可以使用 Autocrypt 设置消息在设备间传输此设置。</string>
     <string name="autocrypt_send_asm_title">发送 Autocrypt 设置消息</string>
     <string name="autocrypt_send_asm_explain_before">Autocrypt 设置消息安全地共享您的端到端设置至其他兼容 Autocrypt 的应用程序。\n\n该设置将通过在此显示的、必须在另一台设备上输入的设置码进行加密。</string>
     <string name="autocrypt_send_asm_button">发送 Autocrypt 设置消息</string>
@@ -822,7 +843,9 @@
 
 
     <!-- system messages -->
+    <!-- deprecated -->
     <string name="systemmsg_read_receipt_subject">消息已被打开</string>
+    <!-- deprecated -->
     <string name="systemmsg_read_receipt_body">您发送的“%1$s”消息已在接收者的屏幕上显示过。\n\n这并不保证内容已被阅读。</string>
     <string name="systemmsg_cannot_decrypt">无法解密此消息。\n\n• 简化对此消息的回复并请求发送方再次发送消息可能会有帮助。\n\n•  如果你刚重新安装 Delta Chat，你最好立即重新设置 Delta Chat 并选择“添加为第二台设备”或导入备份文件。</string>
     <string name="systemmsg_unknown_sender_for_chat">此聊天发送者未知。查看“信息”来获取更多详情。</string>
@@ -898,6 +921,7 @@
     <string name="chat_protection_broken_explanation">无法再确保端到端加密，可能的原因是 %1$s 重新安装了 Delta Chat 或从其他设备发送了一则消息。\n\n你可以和联系人线下见面并再次扫描联系人的二维码重新建立端到端加密的通信。</string>
     <string name="invalid_unencrypted_tap_to_learn_more">⚠️ %1$s要求端到端加密，而此聊天尚未建立端到端加密。轻按了解更多。</string>
     <string name="invalid_unencrypted_explanation">要建立端到端加密，你可以亲自和联系人碰面并扫描联系人的二维码</string>
+    <string name="encryption_required_for_new_contact">端到端加密是必需的但 %1$s 还没有设置它。\n\n你可以和这些人分享你的邀请链接或亲自会面扫描其二维码。</string>
     <string name="learn_more">了解更多</string>
 
     <string name="devicemsg_self_deleted">您已删除“保存的消息”聊天。\n\nℹ️要再次使用“保存的消息”功能，请创建一个与自己的新聊天。</string>
@@ -943,16 +967,14 @@
     <string name="qrshow_join_contact_hint">扫描此处来与 %1$s 聊天。</string>
     <string name="qrshow_join_contact_no_connection_toast">没有互联网连接，无法进行二维码设置。</string>
     <string name="qraccount_ask_create_and_login">在“%1$s”创建新的电子邮件地址并登录？</string>
-    <string name="qraccount_ask_create_and_login_another">在“%1$s”创建新的电子邮件地址并登录？\n\n已存在的账户不会被删除。使用“切换账户”来在账户之间切换。</string>
+    <string name="qraccount_ask_create_and_login_another">在“%1$s”创建新账号并登录？\n\n不会删除您现有的账号。使用“切换账号”在账号之间切换。</string>
     <string name="set_name_and_avatar_explain">设置一个你的联系人认得出的名字。你还可以设置头像图片</string>
     <string name="please_enter_name">请输入名字</string>
-    <string name="qraccount_qr_code_cannot_be_used">无法使用扫描到的二维码建立新账户。</string>
-    <!-- deprecated -->
-    <string name="qraccount_use_on_new_install">扫描到的二维码是用于设置新帐户的。设置新的 Delta Chat 安装时，您可以扫描此二维码。</string>
+    <string name="qraccount_qr_code_cannot_be_used">扫描的二维码不能用于创建新账号。</string>
     <!-- the placeholder will be replaced by the e-mail address of the profile -->
     <string name="qrlogin_ask_login">登录 \"%1$s\"吗？</string>
     <!-- the placeholder will be replaced by the e-mail address of the profile -->
-    <string name="qrlogin_ask_login_another">登录“%1$s“吗？\n\n你现有的账户不会被删除。使用“切换账户”来在不同账户间进行切换。</string>
+    <string name="qrlogin_ask_login_another">是否登录“%1$s”？\n\n不会删除您现有的账号。使用“切换账号”在账号之间切换。</string>
     <!-- first placeholder will be replaced by name and address of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">%1$s 邀请你加入此群组。\n\n等待 %2$s 的设备回复…</string>
     <!-- placeholder will be replaced by the name of the inviter. -->
@@ -974,6 +996,7 @@
     <string name="mailto_link_could_not_be_decoded">无法解码 mailto 链接：%1$s</string>
 
     <!-- notifications  -->
+    <!-- deprecated, use mark_as_read or mark_as_read_short -->
     <string name="notify_dismiss">不予理会</string>
     <string name="notify_reply_button">回复</string>
     <string name="notify_new_message">新消息</string>
@@ -1048,9 +1071,7 @@
     <string name="select_group_image_desktop">选择群组图像</string>
     <string name="export_backup_desktop">导出备份</string>
     <string name="autocrypt_correct_desktop">Autocrypt 设置已传输 。</string>
-    <string name="forget_login_confirmation_desktop">删除此登录？ 一切都将被删除，包括您的端到端设置、联系人、聊天、消息及媒体。 此操作无法撤消。</string>
-    <!-- deprecated -->
-    <string name="account_info_hover_tooltip_desktop2">电子邮件：%1$s\n大小：%2$s\n账户 Id：%3$s</string>
+    <string name="forget_login_confirmation_desktop">删除此登录？所有内容都将会删除，包括您的端到端设置、联系人、聊天、消息和媒体。此操作无法撤销。</string>
     <string name="message_detail_sent_desktop">发送于</string>
     <string name="message_detail_received_desktop">接收于</string>
     <string name="menu.view.developer.open.log.folder">打开日志文件夹</string>
@@ -1088,7 +1109,7 @@
     <string name="a11y_voice_message_hint_ios">录音后轻按两次发送。要丢弃录音，用两根手指左右滑动。</string>
     <string name="a11y_connectivity_hint">轻按两次查看连接详情</string>
     <string name="login_error_no_internet_connection">无互联网连接，登录失败。</string>
-    <string name="share_account_not_configured">账户未配置。</string>
+    <string name="share_account_not_configured">账号未配置。</string>
     <string name="cannot_play_audio_file">无法播放音频文件。</string>
     <!-- iOS camera permission alert -->
     <string name="perm_ios_explain_access_to_camera_denied">要拍照、拍摄视频或扫描二维码，请打开系统设置并启用“相机”。</string>
@@ -1122,9 +1143,6 @@
 
     <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
     <string name="pref_instant_delivery">即时传送</string>
-    <string name="pref_push_notifications">使用推送服务</string>
-    <string name="pref_push_notifications_explain">Chatmail 服务器的可靠推送通知</string>
-    <string name="pref_push_ask_disable">停用推送服务吗？\n\n这可能导致通知延迟。</string>
     <string name="pref_background_notifications">使用后台连接</string>
     <string name="pref_background_notifications_explain">需要忽略电池优化，请在推送服务不可用时使用它</string>
     <string name="pref_reliable_service">强制后台连接</string>
@@ -1136,8 +1154,7 @@
     <string name="perm_enable_bg_already_done">您已允许 Delta Chat 在后台接收消息。\n\n若 Delta Chat 在后台时消息仍未到达，请检查系统设置。</string>
 
     <!-- device messages for updates -->
-    <string name="update_1_44_android">变化：\n\n❤️ 耶！等待已久的功能来了：长按消息做出回应\n\n🔗 如果你无法扫描二维码，将它们分享为邀请链接\n\n🔵 计算所有账户的未读消息并显示在标题中\n\n… 以及修复许多 bug … %1$s\n\n帮助改进应用：使用“设置/高级、发送统计数据”帮助开发者为实际使用而更好地优化。发送前你可以查看数据</string>
-    <string name="update_1_44_ios">变化：\n\n❤️ 耶！等待已久的功能来了：长按消息做出回应\n\n🫸 支持推送通知，不过需要提供商像 https://nine.testrun.org 一样支持该功能\n\n🔗 如果你无法扫描二维码，将它们分享为邀请链接\n\n… 以及修复许多 bug … %1$s</string>
     <string name="update_1_46_android">新用户引导流程 🐣 以及更多信息：\n\n⚡️ 注册安全的快速聊天邮件服务器（https://delta.chat/chatmail）或使用传统的电子邮件服务器\n\n👉 为任何聊天邮件服务器推送通知\n\n👤 通过“附加联系人”安全地连接您的朋友\n\n🥰 使用任何表情符号进行回应\n\n📌 直接从搜索中固定聊天…以及更多信息，请访问 %1$s</string>
     <string name="update_1_46_ios">新用户引导流程 🐣 以及更多信息：\n\n⚡️ 注册安全的快速聊天邮件服务器（https://delta.chat/chatmail）或使用传统的电子邮件服务器\n\n👉 为任何聊天邮件服务器推送通知\n\n👤 接收“附加联系人”安全地连接您的朋友\n\n🥰 更快选择消息回应 …更多信息，请访问 %1$s</string>
+    <string name="update_switch_profile_placement">ℹ️ “切换账号”选项已移动：点击主屏幕上角的个人资料图片以添加或切换账号 💡</string>
 </resources>

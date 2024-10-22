@@ -14,10 +14,34 @@ $tab-height: 46px;
     flex-grow: 1;
     text-align: end;
     align-self: center;
-    padding-right: 12px;
+    margin-right: 12px;
     font-size: 18px;
     color: var(--summary-text-color);
     white-space: nowrap;
+  }
+
+  .tab-list {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+
+    overflow-x: auto;
+
+    .tab-item {
+      font-size: 1.1rem;
+      padding-bottom: 6px;
+      &.selected,
+      &:hover {
+        color: var(--globalLinkColor);
+        border-bottom: 3px solid var(--globalLinkColor);
+        cursor: pointer;
+      }
+      &.big-date:hover {
+        color: var(--summary-text-color);
+        border-bottom: none;
+        cursor: default;
+      }
+    }
   }
 
   & .gallery {
@@ -53,10 +77,6 @@ $tab-height: 46px;
     &.gallery-image-object-fit_cover {
       --gallery-image-object-fit: cover;
     }
-  }
-
-  .bp4-tab-panel {
-    margin-top: 0;
   }
 
   .searchbar {

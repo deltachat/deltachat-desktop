@@ -38,7 +38,6 @@ h3,
 h4,
 h5,
 p,
-.bp4-button,
 button > span,
 label {
   user-select: none;
@@ -89,6 +88,11 @@ textarea {
 //yellow/blue border fix
 button:focus:not(:focus-visible) {
   outline: none;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbarThumb) transparent;
 }
 
 ::-webkit-scrollbar {

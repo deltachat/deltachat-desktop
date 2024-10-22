@@ -1,60 +1,48 @@
-.attachment-overlay {
-  .attachment-view {
-    height: 100%;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(49, 49, 49, 1);
+.attachment-view {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(49, 49, 49, 1);
 
-    img,
-    video {
-      width: 100vw;
-      max-height: 100vh;
-      object-fit: contain;
-      user-select: none;
-    }
-
-    video {
-      width: 95vw;
-    }
-  }
-
-  .render-media-wrapper {
+  img,
+  video {
     width: 100vw;
-    height: 100vh;
+    max-height: 100vh;
+    object-fit: contain;
+    user-select: none;
   }
 
-  .btn-wrapper {
-    float: right;
-    position: absolute;
-    background-color: rgba(0, 0, 0, 0.75);
-    border-radius: 3px;
+  video {
+    width: 95vw;
+  }
+}
 
-    right: 8px;
-    top: 6px;
-    padding: 5px;
+.btn-wrapper {
+  float: right;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.75);
+  border-radius: 3px;
+  display: flex;
 
-    .download-btn {
-      height: 32px;
-      width: 32px;
-      display: inline-block;
-      vertical-align: text-bottom;
-      @include color-svg(
-        './images/download.svg',
-        var(--fullScreenMediaButtons)
-      );
-      cursor: pointer;
-      margin-right: 5px;
+  right: 8px;
+  top: 6px;
+  padding: 5px;
 
-      &:hover {
-        background-color: var(--fullScreenMediaButtons);
-      }
-    }
+  .download-btn {
+    height: 32px;
+    width: 32px;
+    vertical-align: text-bottom;
+    @include color-svg('./images/download.svg', var(--fullScreenMediaButtons));
+    // to offset a bit visual center of the button
+    mask-position: 0px 2px;
+    cursor: pointer;
+    margin-right: 5px;
 
-    .bp4-icon-cross {
-      cursor: pointer;
+    &:hover {
+      background-color: var(--fullScreenMediaButtons);
     }
   }
 }
@@ -65,13 +53,6 @@
   top: calc(50vh - (60px / 2));
   background-color: #3131316b;
   border-radius: 8%;
-
-  .bp4-icon > svg:not([fill]) {
-    fill: var(--bp4ButtonHoverBg);
-    &:hover {
-      fill: white;
-    }
-  }
 }
 
 .media-previous-button {

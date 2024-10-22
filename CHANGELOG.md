@@ -5,6 +5,7 @@
 ### Added
 - Experimental Telegram-style Esc to cancel reply (quote) #4153
 - new ViewProfile context menu for blocking/unblocking contact and checking encryption #4043
+- added experimental browser version for developers (`packages/target-browser`)
 
 ### Changed
 - Update electron from `30.3.1` to `32.1.0` #4138
@@ -16,12 +17,17 @@
 - windows 64bit and 32bit protable and setup now have different filenames #4131
 - scroll the selected account into view in the accounts sidebar #4137
 - dev: clarify scrolling-related code #4121
-- improved performance a bit #4145, #4188
+- improved performance a bit #4145, #4188, #4206
 - show contact / group name & avatar when pasting invite link in the search field #4151, #4178
 - Update local help (2024-10-02) #4165
 - trim whitepaces when reading from clipboard in qr code reader #4169
 - load chat lists faster (the chat list on the main screen, "Forward to..." dialog, etc)
 - when jumping to message, don't scroll the message list if the message is already in view #4204
+- replace BlueprintJS Button, Icon, Radio, RadioGroup, Collapse, Dialog with our implementation #4006, #4226
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.147.1`
+- Update proxy configuration - a full url can be entered now
+- show "Mark All As Read" in account menu unconditionally #4234
+- Update translations (2024-22-10) #4238
 
 ### Fixed
 - fix that you can not click header button in dialog when they are on top of the navbar #4093
@@ -48,6 +54,15 @@
 - losing scrolling "momentum" while scrolling the messages list fast #4122
 - fix crash when you chose Settings from a context menu on account you haven't selected #4190
 - fix All Media not opening from a context menu on account you haven't selected #4191
+- cancel old message highlight animations when a new message is highlighted #4203
+- fix: packaging: include architecture in filename for all appimages #4202
+- fix: make open external link scheme case insensive #4201
+- some reactions dialog items not being clickable on secondary accounts (profiles) #4228
+- target-electron: make sure log of stdio server is also logged to file
+- improve accessibility a little #4133
+- fix "Mark All As Read" in account menu mark also archived chats as read
+- use authname instead of displayname for vcard filename #4233
+
 
 <a id="1_46_8"></a>
 

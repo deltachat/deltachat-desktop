@@ -5,8 +5,10 @@ import React, {
   forwardRef,
   useLayoutEffect,
   useCallback,
+  useMemo,
 } from 'react'
 import { C, T } from '@deltachat/jsonrpc-client'
+import { extension } from 'mime-types'
 
 import MenuAttachment from './menuAttachment'
 import ComposerMessageInput from './ComposerMessageInput'
@@ -38,6 +40,7 @@ import { VisualVCardComponent } from '../message/VCard'
 import { KeybindAction } from '../../keybindings'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
 import { CloseButton } from '../Dialog'
+import { enterKeySendsKeyboardShortcuts } from '../KeyboardShortcutHint'
 
 const log = getLogger('renderer/composer')
 
@@ -179,9 +182,7 @@ const Composer = forwardRef<
   // also handle escape key for emoji picker
   useEffect(() => {
     const onKey = (ev: KeyboardEvent) => {
-      if (ev.code === 'Shift') {
-        shiftPressed.current = ev.shiftKey
-      }
+      shiftPressed.current = ev.shiftKey
       if (ev.type === 'keydown' && ev.code === 'Escape') {
         setShowEmojiPicker(false)
       }
@@ -247,7 +248,9 @@ const Composer = forwardRef<
 
     try {
       // Write clipboard to file then attach it to the draft
-      const path = await runtime.writeClipboardToTempFile()
+      const path = await runtime.writeClipboardToTempFile(
+        file.name || `file.${extension(file.type)}`
+      )
       await addFileToDraft(path, msgType)
       // delete file again after it was sucessfuly added
       await runtime.removeTempFile(path)
@@ -262,6 +265,23 @@ const Composer = forwardRef<
     // focus composer on chat change
     messageInputRef.current?.focus()
   }, [chatId, messageInputRef])
+
+  const ariaSendShortcut: string = useMemo(() => {
+    if (settingsStore == undefined) {
+      return ''
+    }
+
+    const firstShortcut = enterKeySendsKeyboardShortcuts(
+      settingsStore.desktopSettings.enterKeySends
+    )[0].keyBindings[0]
+
+    if (!Array.isArray(firstShortcut) || !firstShortcut.includes('Enter')) {
+      log.warn('Unexpected shortcut for "Send Message"')
+      return ''
+    }
+
+    return firstShortcut.join('+')
+  }, [settingsStore])
 
   if (chatId === null) {
     return <div ref={ref}>Error, chatid missing</div>
@@ -378,7 +398,10 @@ const Composer = forwardRef<
             <span />
           </button>
           <div className='send-button-wrapper' onClick={composerSendMessage}>
-            <button aria-label={tx('menu_send')} />
+            <button
+              aria-label={tx('menu_send')}
+              aria-keyshortcuts={ariaSendShortcut}
+            />
           </div>
         </div>
         {showEmojiPicker && (
@@ -603,12 +626,9 @@ export function useDraft(
       } as Type.MessageQuote
       saveDraft()
 
-      // TODO improvement: perhaps the animation could used
-      // a little less intensity.
-      // Not good when jumping through several messages.
-      // Can we just cancel the animation on the previously highlighted message?
-      // Also it looks like it takes a while to execute
-      jumpToMessage(accountId, messageId, true)
+      // TODO perf: jumpToMessage is not instant, but it should be
+      // since the message is (almost?) always already rendered.
+      jumpToMessage(accountId, messageId, chatId, true)
     }
     // TODO perf: I imagine this is pretty slow, given IPC and some chats
     // being quite large. Perhaps we could hook into the

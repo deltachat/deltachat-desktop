@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { Intent } from '@blueprintjs/core'
 
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { BackendRemote } from '../../../backend-com'
@@ -69,7 +68,7 @@ export default function ImportBackupProgressDialog({
           )}
           <DeltaProgressBar
             progress={importProgress}
-            intent={!error ? Intent.SUCCESS : Intent.DANGER}
+            intent={error ? 'danger' : 'success'}
           />
         </DialogContent>
       </DialogBody>
