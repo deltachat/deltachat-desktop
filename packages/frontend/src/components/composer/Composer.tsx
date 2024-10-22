@@ -44,20 +44,6 @@ import { enterKeySendsKeyboardShortcuts } from '../KeyboardShortcutHint'
 
 const log = getLogger('renderer/composer')
 
-export const insideBoundingRect = (
-  mouseX: number,
-  mouseY: number,
-  boundingRect: DOMRect,
-  margin = 0
-) => {
-  return (
-    mouseX >= boundingRect.x - margin &&
-    mouseX <= boundingRect.x + boundingRect.width + margin &&
-    mouseY >= boundingRect.y - margin &&
-    mouseY <= boundingRect.y + boundingRect.height + margin
-  )
-}
-
 const Composer = forwardRef<
   any,
   {
@@ -200,20 +186,11 @@ const Composer = forwardRef<
   }, [shiftPressed])
   useEffect(() => {
     if (!showEmojiPicker) return
-    const onClick = ({
-      clientX,
-      clientY,
-    }: {
-      clientX: number
-      clientY: number
-    }) => {
+    const onClick = (e: MouseEvent) => {
       if (!emojiAndStickerRef.current) return
-      const boundingRect = emojiAndStickerRef.current.getBoundingClientRect()
-      const clickIsOutSideEmojiPicker = !insideBoundingRect(
-        clientX,
-        clientY,
-        boundingRect,
-        2
+      // The same approach as in `OutsideClickHelper`.
+      const clickIsOutSideEmojiPicker = !emojiAndStickerRef.current.contains(
+        e.target as Node
       )
       if (clickIsOutSideEmojiPicker) setShowEmojiPicker(false)
     }
