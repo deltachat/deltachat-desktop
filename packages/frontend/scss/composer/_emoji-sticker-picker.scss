@@ -23,11 +23,13 @@ $emojimart-search-height: 31px + 6px;
     display: flex;
     border-bottom: 1px solid #00000017;
 
-    div.selector-button {
+    .selector-button {
+      background: transparent;
       width: 50%;
       padding-top: 7px;
       font-size: large;
       text-align: center;
+      border: none;
       border-bottom-style: solid;
       border-bottom-width: 4px;
       border-bottom-color: transparent;
