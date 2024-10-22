@@ -32,6 +32,7 @@
     <string name="close">Užverti</string>
     <string name="close_window">Užverti langą</string>
     <string name="forward">Persiųsti</string>
+    <string name="create">Sukurti</string>
     <string name="later">Vėliau</string>
     <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
     <string name="resend">Siųsti iš naujo</string>
@@ -118,6 +119,12 @@
         <item quantity="many">%d žinučių</item>
         <item quantity="other">%d žinutė</item>
     </plurals>
+    <plurals name="n_reactions">
+        <item quantity="one">%d reakcija</item>
+        <item quantity="few">%d reakcijos</item>
+        <item quantity="many">%d reakcijų</item>
+        <item quantity="other">%d reakcija</item>
+    </plurals>
     <plurals name="n_members">
         <item quantity="one">%d dalyvis</item>
         <item quantity="few">%d dalyviai</item>
@@ -135,7 +142,7 @@
     <string name="image">Paveikslas</string>
     <!-- Used in summaries as "Draft: Reply", similar as "Draft: Image". Use a noun here, not a verb (not: "to reply") -->
     <string name="reply_noun">Atsakymas</string>
-    <string name="gif">Gif</string>
+    <string name="gif">GIF</string>
     <!-- "Stickers" as known from other messengers; in some languages, the English "Sticker" is fine. -->
     <string name="sticker">Lipdukas</string>
     <string name="add_to_sticker_collection">Pridėti į lipdukų rinkinį</string>
@@ -154,6 +161,7 @@
     <string name="switch_camera">Perjungti kamerą</string>
     <string name="toggle_fullscreen">Perjungti viso ekrano veikseną</string>
     <string name="location">Vieta</string>
+    <string name="locations">Vietos</string>
     <string name="gallery">Galerija</string>
     <string name="images_and_videos">Paveikslai ir vaizdo įrašai</string>
     <string name="file">Failas</string>
@@ -185,6 +193,7 @@
 
     <!-- menu labels (or icon, buttons...) -->
     <string name="menu_new_contact">Naujas adresatas</string>
+    <string name="menu_new_classic_contact">Pridėti adresatą rankiniu būdu</string>
     <string name="menu_new_chat">Naujas pokalbis</string>
     <string name="menu_new_group">Nauja grupė</string>
     <string name="add_recipients">Pridėti gavėjus</string>
@@ -428,6 +437,10 @@
     <string name="multidevice_open_settings_on_other_device">Pirmajame įrenginyje pereikite į „Nustatymai / Pridėti antrąjį įrenginį“ ir nuskenuokite ten rodomą kodą</string>
     <!-- Shown beside progress bar, stay short -->
     <string name="preparing_account">Ruošiama paskyra…</string>
+    <!-- deprecated, shown beside progress bar, stay short -->
+    <string name="waiting_for_receiver">Laukiama gavėjo…</string>
+    <!-- deprecated, shown beside progress bar, stay short -->
+    <string name="receiver_connected">Gavėjas prisijungęs…</string>
     <string name="troubleshooting">Nesklandumų šalinimas</string>
 
     <!-- Connectivity -->
@@ -455,6 +468,8 @@
     <string name="onboarding_alternative_logins">Aš jau turiu profilį</string>
     <!-- Instant onboarding title (there is not more to do than to set name and avatar) -->
     <string name="instant_onboarding_title">Jūsų profilis</string>
+    <!-- The placeholder will be replaced by the default onboarding server -->
+    <string name="instant_onboarding_agree_default2">%1$s privatumo politika</string>
     <!-- Secondary, link-like button to open a page with other possible instances -->
     <string name="instant_onboarding_show_more_instances">Naudoti kitą serverį</string>
     <string name="scan_invitation_code">Skenuoti pakvietimo kodą</string>
@@ -481,6 +496,7 @@
     <string name="proxy_settings">Įgaliotasis serveris</string>
     <string name="proxy_use_proxy">Naudoti įgaliotąjį serverį</string>
     <string name="proxy_add">Pridėti įgaliotąjį serverį</string>
+    <string name="proxy_add_explain">Palaikomi įgaliotųjų serverių tipai: HTTP(S), SOCKS5 ir Shadowsocks.</string>
     <string name="proxy_add_url_hint">Čia įveskite įgaliotojo serverio URL</string>
     <string name="proxy_invalid">Neteisingas arba nepalaikomas įgaliotojo serverio URL</string>
     <string name="proxy_list_header">Įrašyti įgaliotieji serveriai</string>
@@ -496,7 +512,7 @@
     <string name="login_socks5_user">SOCKS5 naudotojas</string>
     <string name="login_socks5_password">SOCKS5 slaptažodis</string>
 
-    <string name="login_info_oauth2_title">Tęsti, naudojant supaprastintą sąranką?</string>
+    <string name="login_info_oauth2_title">Tęsti naudojant supaprastintą sąranką?</string>
     <string name="login_certificate_checks">Liudijimų patikrinimai</string>
     <string name="login_error_mail">Įveskite teisingą el. pašto adresą.</string>
     <string name="login_error_server">Įveskite teisingą serverį / IP adresą</string>
