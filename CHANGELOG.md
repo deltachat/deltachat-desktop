@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+<a id="1_47_0"></a>
+
+## [1.47.0] - 2024-09-22
+
 ### Added
 - Experimental Telegram-style Esc to cancel reply (quote) #4153
 - new ViewProfile context menu for blocking/unblocking contact and checking encryption #4043
@@ -2889,7 +2893,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.8...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.47.0...HEAD
+
+[1.47.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.8...v1.47.0
 
 [1.46.8]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.7...v1.46.8
 
