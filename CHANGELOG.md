@@ -22,7 +22,7 @@
 - Update local help (2024-10-02) #4165
 - trim whitepaces when reading from clipboard in qr code reader #4169
 - load chat lists faster (the chat list on the main screen, "Forward to..." dialog, etc)
-- replace BlueprintJS Button, Icon, Radio, RadioGroup, Collapse, Dialog with our implementation
+- replace BlueprintJS Button, Icon, Radio, RadioGroup, Collapse, Dialog with our implementation #4006, #4226
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.147.1`
 - Update proxy configuration - a full url can be entered now
 - show "Mark All As Read" in account menu unconditionally #4234
@@ -59,6 +59,7 @@
 - target-electron: make sure log of stdio server is also logged to file
 - improve accessibility a little #4133
 - fix "Mark All As Read" in account menu mark also archived chats as read
+- use authname instead of displayname for vcard filename #4233
 
 
 <a id="1_46_8"></a>

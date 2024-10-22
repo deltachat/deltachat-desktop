@@ -17,9 +17,19 @@
 }
 
 .navbarGroupRight {
-  width: 70%;
+  // Otherwise it will refuse to truncate the chat name
+  // and will overflow instead.
+  width: 0;
+  flex-grow: 1;
+
   height: var(--navBarHeight);
   display: flex;
   align-items: center;
   padding: 0px;
+}
+
+:global(.small-screen) {
+  .navbarGroupLeft {
+    flex-grow: 1;
+  }
 }
