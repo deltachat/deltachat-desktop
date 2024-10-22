@@ -515,6 +515,7 @@ export function WebxdcAttachment({
       <div
         className={'media-attachment-webxdc broken'}
         title={loadResult.error}
+        tabIndex={0}
         onContextMenu={onContextMenu}
       >
         <div className='icon'></div>
@@ -537,7 +538,7 @@ export function WebxdcAttachment({
     return (
       <div
         className='media-attachment-webxdc'
-        role='button'
+        tabIndex={0}
         onContextMenu={onContextMenu}
       >
         <img
