@@ -120,14 +120,14 @@ const EmojiOrStickerSelectorButton = (
   props: PropsWithChildren<{ onClick: () => void; isSelected: boolean }>
 ) => {
   return (
-    <div
+    <button
       className={classNames('selector-button', {
         selected: props.isSelected,
       })}
       onClick={props.onClick}
     >
       {props.children}
-    </div>
+    </button>
   )
 }
 
