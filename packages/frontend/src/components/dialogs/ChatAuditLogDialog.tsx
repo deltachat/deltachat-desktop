@@ -25,6 +25,7 @@ import { selectedAccountId } from '../../ScreenController'
 import type { DialogProps, OpenDialog } from '../../contexts/DialogContext'
 import type { JumpToMessage } from '../../hooks/chat/useMessage'
 import type { PrivateReply } from '../../hooks/chat/usePrivateReply'
+import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
 
 const log = getLogger('render/ChatAuditLog')
 
@@ -130,11 +131,9 @@ export default function ChatAuditLogDialog(
       selectedChat.chatType === C.DC_CHAT_TYPE_GROUP,
       onClose
     )
-    const [cursorX, cursorY] = [event.clientX, event.clientY]
 
     openContextMenu({
-      x: cursorX,
-      y: cursorY,
+      ...mouseEventToPosition(event),
       items,
     })
   }

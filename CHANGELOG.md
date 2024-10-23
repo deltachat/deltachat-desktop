@@ -25,6 +25,7 @@
 - fix Delta Chat not launching on Debian sometimes due to missing package dependencies (`libasound2`) #4275
 - fix not being able to remove avatar for a mailing list #4270
 - fix deleting messages with broken video attachment from gallery #4283
+- accessibility: wrong positioning of some context menus and popups when activating them with keyboard #4246
 
 <a id="1_47_0"></a>
 
