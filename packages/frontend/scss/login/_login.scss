@@ -202,6 +202,8 @@ div.delta-form-group {
 }
 
 progress.delta-progress-bar {
+  width: 100%;
+
   // https://stackoverflow.com/questions/18368202/how-can-i-set-the-color-for-the-progress-element
   accent-color: var(--progress-bar-color);
   &::-moz-progress-bar,
