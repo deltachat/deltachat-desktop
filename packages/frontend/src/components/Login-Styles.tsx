@@ -198,18 +198,26 @@ export const DeltaPasswordInput = React.memo(
 type DeltaIntent = 'primary' | 'success' | 'danger'
 
 type ProgressBarProps = React.PropsWithChildren<{
+  /**
+   * Min is 0, max is {@link ProgressBarProps.max}
+   */
   progress: number
+  /**
+   * @default 1000
+   * for reasons see <https://github.com/deltachat/deltachat-core-rust/blob/75fe4e106a740f8e3205d0bb56ce676fb2cd2411/deltachat-ffi/deltachat.h#L2928>
+   */
+  max?: number
   intent?: DeltaIntent
 }>
 
 export const DeltaProgressBar = React.memo<ProgressBarProps>(
-  ({ progress, intent = 'primary' }) => {
+  ({ progress, intent = 'primary', max = 1000 }) => {
     return (
       <div style={{ marginTop: '20px', marginBottom: '10px' }}>
         <progress
           className={`delta-progress-bar delta-intent-${intent}`}
-          value={progress ? progress / 1000 : 0}
-          max={100}
+          value={progress ? progress : 0}
+          max={max}
         ></progress>
       </div>
     )
