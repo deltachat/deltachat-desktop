@@ -1,8 +1,13 @@
+@import '../../../../scss/mixins';
+
 .reactionsDialogList {
   margin: 0;
 }
 
 .reactionsDialogListItem {
+  @include button-reset;
+
+  width: 100%;
   align-items: center;
   display: flex;
   justify-content: space-between;
@@ -10,8 +15,8 @@
 }
 
 .reactionsDialogListClickable {
-  cursor: pointer;
-  &:hover {
+  &:hover,
+  &:focus {
     background-color: var(--chatListItemBgHover);
   }
 }

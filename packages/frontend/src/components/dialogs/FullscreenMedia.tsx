@@ -3,7 +3,7 @@ import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 import debounce from 'debounce'
 
 import Dialog from '../Dialog'
-import Icon from '../Icon'
+import { IconButton } from '../Icon'
 import { onDownload } from '../message/messageFunctions'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { isImage, isVideo, isAudio } from '../attachment/Attachment'
@@ -257,13 +257,12 @@ export default function FullscreenMedia(props: Props & DialogProps) {
       <div className='attachment-view'>{elm}</div>
       {elm && (
         <div className='btn-wrapper no-drag'>
-          <div
-            role='button'
+          <button
             onClick={onDownload.bind(null, msg)}
             className='download-btn'
             aria-label={tx('save')}
           />
-          <Icon
+          <IconButton
             onClick={onClose}
             icon='cross'
             size={32}
@@ -274,21 +273,23 @@ export default function FullscreenMedia(props: Props & DialogProps) {
       )}
       {showPreviousNextMessageButtons.previous && (
         <div className='media-previous-button'>
-          <Icon
+          <IconButton
             onClick={preventDefault(previousImage)}
             icon='chevron-left'
             coloring='fullscreenControls'
             size={60}
+            aria-label='⬅️'
           />
         </div>
       )}
       {showPreviousNextMessageButtons.next && (
         <div className='media-next-button'>
-          <Icon
+          <IconButton
             onClick={preventDefault(nextImage)}
             icon='chevron-right'
             coloring='fullscreenControls'
             size={60}
+            aria-label='➡️'
           />
         </div>
       )}

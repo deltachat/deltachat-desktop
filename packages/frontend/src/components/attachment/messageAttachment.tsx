@@ -75,9 +75,8 @@ export default function Attachment({
       )
     }
     return (
-      <div
+      <button
         onClick={onClickAttachment}
-        role='button'
         className={classNames(
           'message-attachment-media',
           withCaption ? 'content-below' : null,
@@ -88,19 +87,18 @@ export default function Attachment({
           className='attachment-content'
           src={runtime.transformBlobURL(message.file)}
         />
-      </div>
+      </button>
     )
   } else if (isVideo(message.fileMime)) {
     if (!message.file) {
       return (
-        <div
-          role='button'
+        <button
           onClick={onClickAttachment}
           style={{ cursor: 'pointer' }}
           className={classNames('message-attachment-broken-media', direction)}
         >
           {tx('attachment_failed_to_load')}
-        </div>
+        </button>
       )
     }
     // the native fullscreen option is better right now so we don't need to open our own one

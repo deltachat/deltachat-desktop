@@ -8,7 +8,7 @@ import useContextMenu from '../../hooks/useContextMenu'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 import Dialog from '../Dialog'
-import Icon from '../Icon'
+import { IconButton } from '../Icon'
 
 export default function FullscreenAvatar(
   props: { imagePath: string } & DialogProps
@@ -61,13 +61,12 @@ export default function FullscreenAvatar(
         </div>
       </div>
       <div className='btn-wrapper no-drag'>
-        <div
-          role='button'
+        <button
           onClick={saveAs}
           className='download-btn'
           aria-label={tx('save')}
         />
-        <Icon
+        <IconButton
           onClick={onClose}
           icon='cross'
           size={32}
