@@ -278,8 +278,8 @@ export default function QrReader({ onError, onScan }: Props) {
       ]
 
       openContextMenu({
-        cursorX,
-        cursorY,
+        x: cursorX,
+        y: cursorY,
         items,
       })
     },
