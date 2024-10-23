@@ -18,6 +18,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import type { UnselectChat } from '../../contexts/ChatContext'
+import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
 
 function archiveStateMenu(
   unselectChat: UnselectChat,
@@ -276,13 +277,11 @@ export function useChatListContextMenu(): {
           ]
         : []
 
-      const [cursorX, cursorY] = [event.clientX, event.clientY]
       event.preventDefault() // prevent default runtime context menu from opening
 
       setActiveContextMenuChatId(chatListItem.id)
       await openContextMenu({
-        x: cursorX,
-        y: cursorY,
+        ...mouseEventToPosition(event),
         items: menu,
       })
       setActiveContextMenuChatId(null)
