@@ -456,7 +456,6 @@ export function CreateGroup(props: CreateGroupProps) {
           />
           <ContactList
             contacts={groupContacts}
-            onClick={() => {}}
             showRemove
             onRemoveClick={c => {
               removeGroupMember(c)
@@ -583,7 +582,6 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
             />
             <ContactList
               contacts={broadcastContacts}
-              onClick={() => {}}
               showRemove
               onRemoveClick={c => {
                 removeBroadcastRecipient(c)
