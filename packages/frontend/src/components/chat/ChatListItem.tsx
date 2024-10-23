@@ -108,9 +108,9 @@ const Message = React.memo<
           <div
             className='summary_thumbnail'
             style={{
-              backgroundImage: `url("${JSON.stringify(
+              backgroundImage: `url(${JSON.stringify(
                 runtime.transformBlobURL(summaryPreviewImage)
-              )}")`,
+              )})`,
             }}
           />
         )}

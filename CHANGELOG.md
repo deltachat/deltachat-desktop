@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+## Fixed
+- image thumbnails not showing in chat list #4247
+
 <a id="1_47_0"></a>
 
 ## [1.47.0] - 2024-09-22
