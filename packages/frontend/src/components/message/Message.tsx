@@ -408,8 +408,8 @@ export default function Message(props: {
       const [cursorX, cursorY] = [event.clientX, event.clientY]
 
       openContextMenu({
-        cursorX,
-        cursorY,
+        x: cursorX,
+        y: cursorY,
         items,
       })
     },

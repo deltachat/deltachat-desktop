@@ -145,8 +145,8 @@ export default function ChatAuditLogDialog(
     const [cursorX, cursorY] = [event.clientX, event.clientY]
 
     openContextMenu({
-      cursorX,
-      cursorY,
+      x: cursorX,
+      y: cursorY,
       items,
     })
   }

@@ -109,15 +109,12 @@ export default function useViewProfileMenu(contact: T.Contact) {
 
     const boundingBox = threeDotButtonElement.getBoundingClientRect()
 
-    const [cursorX, cursorY] = [
-      boundingBox.x + 3,
-      boundingBox.y + boundingBox.height - 2,
-    ]
+    const [x, y] = [boundingBox.x + 3, boundingBox.y + boundingBox.height - 2]
     event.preventDefault() // prevent default runtime context menu from opening
 
     openContextMenu({
-      cursorX,
-      cursorY,
+      x,
+      y,
       items: menu,
     })
   }

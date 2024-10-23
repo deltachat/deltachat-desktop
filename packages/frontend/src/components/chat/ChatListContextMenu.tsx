@@ -281,8 +281,8 @@ export function useChatListContextMenu(): {
 
       setActiveContextMenuChatId(chatListItem.id)
       await openContextMenu({
-        cursorX,
-        cursorY,
+        x: cursorX,
+        y: cursorY,
         items: menu,
       })
       setActiveContextMenuChatId(null)
