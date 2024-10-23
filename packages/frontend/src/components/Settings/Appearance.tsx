@@ -22,6 +22,7 @@ import useDialog from '../../hooks/dialog/useDialog'
 import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
 import Icon from '../Icon'
 import Callout from '../Callout'
+import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
 
 const log = getLogger('renderer/settings/appearance')
 
@@ -162,13 +163,14 @@ function BackgroundSelector({
   const openColorInput = (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     // opens the color input and sets its offset so it lines up with the button
     if (colorInput) {
+      const eventPos = mouseEventToPosition(ev)
       const y =
-        (ev.clientY || 0) -
+        (eventPos.y || 0) -
         (Number(window.getComputedStyle(colorInput).height.replace('px', '')) ||
           0)
       colorInput.setAttribute(
         'style',
-        `position:absolute;top:${y}px;left:${ev.clientX}px;`
+        `position:absolute;top:${y}px;left:${eventPos.x}px;`
       )
       if (desktopSettings?.chatViewBgImg?.startsWith('color: ')) {
         colorInput.value = desktopSettings?.chatViewBgImg.slice(7) || ''

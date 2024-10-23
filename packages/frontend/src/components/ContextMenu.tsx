@@ -10,6 +10,7 @@ import Icon from './Icon'
 import type { IconName } from './Icon'
 
 import useContextMenu from '../hooks/useContextMenu'
+import { mouseEventToPosition } from '../utils/mouseEventToPosition'
 
 type ContextMenuItemActionable = {
   icon?: IconName
@@ -381,7 +382,6 @@ export function makeContextMenu(
 ) {
   return (ev: React.MouseEvent<any, MouseEvent>) => {
     ev.preventDefault() // prevent default runtime context menu from opening
-    const [cursorX, cursorY] = [ev.clientX, ev.clientY]
 
     const items =
       typeof itemsOrItemsFactoryFn === 'function'
@@ -389,8 +389,7 @@ export function makeContextMenu(
         : itemsOrItemsFactoryFn
 
     return openContextMenu({
-      x: cursorX,
-      y: cursorY,
+      ...mouseEventToPosition(ev),
       items,
     })
   }
