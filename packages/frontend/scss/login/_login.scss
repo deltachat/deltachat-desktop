@@ -201,16 +201,23 @@ div.delta-form-group {
   }
 }
 
-.delta-progress-bar {
+progress.delta-progress-bar {
+  // https://stackoverflow.com/questions/18368202/how-can-i-set-the-color-for-the-progress-element
+  accent-color: var(--progress-bar-color);
+  &::-moz-progress-bar,
+  &::-webkit-progress-value {
+    background: var(--progress-bar-color);
+  }
+
   &.delta-intent-primary {
-    color: var(--colorPrimary);
+    --progress-bar-color: var(--colorPrimary);
   }
 
   &.delta-intent-success {
-    color: var(--colorPrimary);
+    --progress-bar-color: green;
   }
 
-  &.delta-intent-fail {
-    color: var(--colorPrimary);
+  &.delta-intent-danger {
+    --progress-bar-color: var(--colorDanger);
   }
 }
