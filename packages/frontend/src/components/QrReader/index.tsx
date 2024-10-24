@@ -22,6 +22,7 @@ import Worker from './qr.worker'
 import styles from './styles.module.scss'
 
 import type { ContextMenuItem } from '../ContextMenu'
+import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
 
 type Props = {
   onError: (error: string) => void
@@ -251,8 +252,6 @@ export default function QrReader({ onError, onScan }: Props) {
   // Show a context menu with different video input options to the user.
   const handleSelectInput = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
-      const [cursorX, cursorY] = [event.clientX, event.clientY]
-
       // Allow user to select a different camera when more than one is given
       const cameraItems: ContextMenuItem[] =
         videoDevices.length > 1
@@ -278,8 +277,7 @@ export default function QrReader({ onError, onScan }: Props) {
       ]
 
       openContextMenu({
-        cursorX,
-        cursorY,
+        ...mouseEventToPosition(event),
         items,
       })
     },

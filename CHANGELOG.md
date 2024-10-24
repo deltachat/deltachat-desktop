@@ -14,6 +14,9 @@
 
 ## [1.47.0] - 2024-09-22
 
+### Fixed
+- accesibility: wrong positioning of some context menus and popups when activating them with keyboard #4246
+
 ### Added
 - Experimental Telegram-style Esc to cancel reply (quote) #4153
 - new ViewProfile context menu for blocking/unblocking contact and checking encryption #4043
