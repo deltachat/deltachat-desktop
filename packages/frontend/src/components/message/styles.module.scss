@@ -43,7 +43,8 @@
 
 .vcard {
   display: flex;
-  background-color: #dedede;
+  // TODO should probably lighten instead of darkening if the theme is dark.
+  background-color: #0002;
   border-radius: 10px;
   padding: 9px;
   padding-top: 0;
