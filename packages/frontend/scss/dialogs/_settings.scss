@@ -62,25 +62,6 @@
     align-items: center;
     flex-direction: column;
   }
-  .profile-displayname-addr {
-    display: flex;
-    margin-left: 20px;
-    flex-direction: column;
-    justify-content: center;
-
-    .displayname {
-      font-size: large;
-      font-weight: 200;
-    }
-
-    .addr {
-      color: #969696;
-      margin-top: 5px;
-      text-overflow: ellipsis;
-      overflow-wrap: break-word;
-      overflow-wrap: anywhere;
-    }
-  }
 }
 
 .theme-meta {
