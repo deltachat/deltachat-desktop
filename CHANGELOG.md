@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+## Changed
+- style: avoid scrolling to account list items such that they're at the very edge of the list #4252
+
 ## Fixed
 - image thumbnails not showing in chat list #4247
 - progress bar not working #4248

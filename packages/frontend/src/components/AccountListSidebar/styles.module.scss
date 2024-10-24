@@ -72,6 +72,8 @@
     height: var(--als-avatar-size);
     margin-bottom: var(--als-avatar-margin);
     margin-top: var(--als-avatar-margin);
+    scroll-margin-bottom: var(--als-avatar-margin);
+    scroll-margin-top: var(--als-avatar-margin);
     position: relative;
     z-index: $z-index-new-local-scope;
 
