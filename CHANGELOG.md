@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+## Added
+- light theme for the account list sidebar #4260
+
 ## Changed
 - style: avoid scrolling to account list items such that they're at the very edge of the list #4252
 

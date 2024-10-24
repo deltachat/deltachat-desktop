@@ -37,7 +37,11 @@
 }
 
 .accountListSidebar {
-  --accountSidebarBg: #2c2c2c;
+  --accountSidebarBg: color-mix(
+    in srgb,
+    var(--bgPrimary) 96%,
+    var(--textPrimary)
+  );
 
   background-color: var(--accountSidebarBg);
   display: flex;
@@ -48,7 +52,7 @@
   .accountList {
     --als-avatar-size: 42px;
     --als-avatar-margin: 5px;
-    --als-active-indicator-color: white;
+    --als-active-indicator-color: var(--textPrimary);
 
     align-items: center;
     display: flex;
@@ -132,7 +136,8 @@
   }
 
   .addButton {
-    --add-button-color: #808080;
+    --add-button-color: var(--textSecondary);
+    opacity: 0.6;
 
     background: none;
     border-radius: 10%;
@@ -147,6 +152,7 @@
     &:hover {
       color: var(--accountSidebarBg);
       background: var(--add-button-color);
+      opacity: 1;
     }
   }
 }
@@ -157,7 +163,7 @@
 
 .buttonsContainer {
   align-items: center;
-  border-top: 1px #404040 solid;
+  border-top: 1px color-mix(in srgb, var(--textPrimary) 10%, transparent) solid;
   display: flex;
   flex-direction: column;
   padding: 8px 0;
@@ -173,13 +179,14 @@
 
   &:hover {
     .settingsButtonIcon {
-      background-color: lightgray;
+      opacity: 0.8;
     }
   }
 }
 
 .settingsButtonIcon {
-  background-color: gray;
+  background-color: var(--textSecondary);
+  opacity: 0.5;
 }
 
 .accountBadge {
