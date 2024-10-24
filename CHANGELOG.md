@@ -11,6 +11,7 @@
 - progress bar not working #4248
 - avoid showing horizontal scrollbars in chat list #4253
 - style: fix VCard color being too bright in dark theme #4255
+- remove unnecessary horizontal scrollbar in "View Group" dialog #4254
 
 <a id="1_47_0"></a>
 

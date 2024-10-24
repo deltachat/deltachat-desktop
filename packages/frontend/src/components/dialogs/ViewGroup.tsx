@@ -35,6 +35,7 @@ import type { T } from '@deltachat/jsonrpc-client'
 import type { DialogProps } from '../../contexts/DialogContext'
 import ImageCropper from '../ImageCropper'
 import { AddMemberDialog } from './AddMember/AddMemberDialog'
+import AutoSizer from 'react-virtualized-auto-sizer'
 
 export default function ViewGroup(
   props: {
@@ -221,27 +222,33 @@ function ViewGroupInner(
               <>
                 <div className='group-separator'>{tx('related_chats')}</div>
                 <div className='group-related-chats-list-wrapper'>
-                  <ChatListPart
-                    isRowLoaded={isChatLoaded}
-                    loadMoreRows={loadChats}
-                    rowCount={chatListIds.length}
-                    width={400}
-                    height={CHATLISTITEM_CHAT_HEIGHT * chatListIds.length}
-                    itemKey={index => 'key' + chatListIds[index]}
-                    itemHeight={CHATLISTITEM_CHAT_HEIGHT}
-                  >
-                    {({ index, style }) => {
-                      const chatId = chatListIds[index]
-                      return (
-                        <div style={style}>
-                          <ChatListItem
-                            chatListItem={chatCache[chatId] || undefined}
-                            onClick={onChatClick.bind(null, chatId)}
-                          />
-                        </div>
-                      )
-                    }}
-                  </ChatListPart>
+                  <AutoSizer disableHeight>
+                    {({ width }) => (
+                      <ChatListPart
+                        isRowLoaded={isChatLoaded}
+                        loadMoreRows={loadChats}
+                        rowCount={chatListIds.length}
+                        // We cannot just set the width to the width
+                        // of the dialog, because scrollbars might have width.
+                        width={width}
+                        height={CHATLISTITEM_CHAT_HEIGHT * chatListIds.length}
+                        itemKey={index => 'key' + chatListIds[index]}
+                        itemHeight={CHATLISTITEM_CHAT_HEIGHT}
+                      >
+                        {({ index, style }) => {
+                          const chatId = chatListIds[index]
+                          return (
+                            <div style={style}>
+                              <ChatListItem
+                                chatListItem={chatCache[chatId] || undefined}
+                                onClick={onChatClick.bind(null, chatId)}
+                              />
+                            </div>
+                          )
+                        }}
+                      </ChatListPart>
+                    )}
+                  </AutoSizer>
                 </div>
               </>
             )}
