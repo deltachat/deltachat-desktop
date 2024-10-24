@@ -32,10 +32,12 @@
   }
 
   & > .content {
+    // Ensure it's as wide as the parent allows, but doesn't overflow
+    // the parent if the content is too long.
+    width: 0;
     flex-grow: 1;
+
     margin-left: 10px;
-    // parent - 48px (for avatar) - 10px (our right padding)
-    max-width: calc(100% - 58px);
 
     display: flex;
     flex-direction: column;
@@ -46,7 +48,6 @@
       flex-direction: row;
       align-items: center;
       & > .name {
-        width: 90%;
         flex-grow: 1;
         flex-shrink: 1;
         font-size: 14px;

@@ -13,13 +13,14 @@
   }
 
   div.contact-name {
+    // Ensure it's as wide as the parent allows, but doesn't overflow
+    // the parent if the content is too long.
+    width: 0;
+    flex-grow: 1;
+
     display: inline-block;
-    width: calc(100% - 64px);
     // height: 54px;
     margin-left: 10px;
-    .chat-list & {
-      width: calc(100% - 37px);
-    }
     .display-name {
       font-weight: bold;
       margin-bottom: 0px;
