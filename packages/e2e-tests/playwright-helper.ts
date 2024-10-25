@@ -6,14 +6,26 @@ type LocatorWithSelector = Locator & {
 
 export type User = {
   name: string
-  id?: string | null
-  address?: string | null
+  id: string
+  address: string
 }
 
-function hasSelector(
+function _hasSelector(
   arg: Locator | LocatorWithSelector
 ): arg is LocatorWithSelector {
   return '_selector' in arg
+}
+
+export async function switchToProfile(
+  page: Page,
+  accountId: string
+): Promise<void> {
+  await expect(
+    page.locator(`[x-account-sidebar-account-id="${accountId}"]`)
+  ).toBeVisible()
+  return await page
+    .locator(`[x-account-sidebar-account-id="${accountId}"]`)
+    .click()
 }
 
 export async function createNewProfile(
@@ -41,7 +53,7 @@ export async function createNewProfile(
 
   if (
     returnedLocator &&
-    hasSelector(returnedLocator) &&
+    _hasSelector(returnedLocator) &&
     returnedLocator['_selector'] === welcomeButtonsSelector
   ) {
     const c = await returnedLocator.evaluate('node => node.className')
@@ -109,7 +121,25 @@ export async function createNewProfile(
   }
 }
 
-export async function deleteAccount(
+export async function getProfile(page: Page, accountId: string): Promise<User> {
+  await page.getByTestId(`account-item-${accountId}`).click({ button: 'right' })
+  await page.getByTestId('open-settings-menu-item').click()
+  const name = await page
+    .locator('.styles_module_profileDisplayName')
+    .textContent()
+  const address = await page
+    .locator('.styles_module_profileAddress')
+    .textContent()
+  await page.getByTestId('close-settings').click()
+
+  return {
+    id: accountId,
+    name: name ?? '',
+    address: address ?? '',
+  }
+}
+
+export async function deleteProfile(
   page: Page,
   accountId?: string // if empty, the last account will be deleted
 ): Promise<string | null> {
@@ -120,32 +150,25 @@ export async function deleteAccount(
   if (accounts.length > 0) {
     if (accountId) {
       await page
-        .locator(`[x-account-sidebar-account-id="${accountId}"]`)
+        .getByTestId(`account-item-${accountId}`)
         .click({ button: 'right' })
     } else {
       await accountList.last().click({ button: 'right' })
     }
     // await page.screenshot({ path: 'accountList.png' })
-    const items = page.locator('.dc-context-menu-layer .dc-context-menu .item')
-    expect(await items.last().textContent()).toContain('Delete')
-    // await page.screenshot({ path: 'account-context-menu.png' })
-    items.last().click()
-    await expect(
-      page.locator('.styles_module_AccountDeletionScreen')
-    ).toBeVisible()
+    await page.getByTestId('delete-account-menu-item').click()
+    await expect(page.getByTestId('account-deletion-dialog')).toBeVisible()
     const userName: string | null = await page
       .locator('.styles_module_accountName > div')
       .nth(0)
       .textContent()
-    const deleteButton = page.locator('button.style_module_danger')
+    const deleteButton = page.getByTestId('delete-account')
     await expect(deleteButton).toBeVisible()
     await deleteButton.click()
     await expect(page.locator('.styles_module_infoBox')).toBeVisible()
     if (accountId) {
       expect(
-        await page
-          .locator(`[x-account-sidebar-account-id="${accountId}"]`)
-          .count()
+        await page.getByTestId(`account-item-${accountId}`).count()
       ).toEqual(0)
     }
     return userName
