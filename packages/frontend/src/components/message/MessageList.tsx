@@ -811,7 +811,7 @@ function JumpDownButton({
         >
           {countToShow}
         </div>
-        <div
+        <button
           className='button'
           onClick={() => {
             jumpToMessage({
@@ -829,7 +829,7 @@ function JumpDownButton({
               'icon ' + (jumpToMessageStack.length > 0 ? 'back' : 'down')
             }
           />
-        </div>
+        </button>
       </div>
     </>
   )
