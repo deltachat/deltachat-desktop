@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+## Added
+- clicking on webxdc info message icon opens the webxdc app #4265
+
 ## Changed
 - style: avoid scrolling to account list items such that they're at the very edge of the list #4252
 

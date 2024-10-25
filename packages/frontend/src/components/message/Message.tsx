@@ -498,7 +498,7 @@ export default function Message(props: {
                 selectedAccountId(),
                 message.parentId
               )}
-              onClick={() => openWebxdc(message.id)}
+              onClick={() => openWebxdc(message.parentId!)}
             />
           )}
           {text}
