@@ -139,9 +139,7 @@ export default function ConnectivityToast() {
     }
   }, [onBrowserOnline, maybeNetwork, onConnectivityChanged, accountId])
 
-  const onTryReconnectClick = (ev: React.MouseEvent<HTMLDivElement>) => {
-    ev.preventDefault()
-    ev.stopPropagation()
+  const onTryReconnectClick = (_ev: React.MouseEvent<HTMLButtonElement>) => {
     setTryConnectCooldown(false)
     setTimeout(() => setTryConnectCooldown(true), 15000)
     setTimeout(() => maybeNetwork(), 100)
@@ -159,16 +157,28 @@ export default function ConnectivityToast() {
   }
 
   return (
-    <div className='ConnectivityToast' onClick={onInfoTextClick}>
+    <div className='ConnectivityToast'>
+      {/* This button fills the entire `ConnectivityToast`.
+      Ensure to set `position: relative` on all interactive elements
+      so that they are clickable */}
+      <button
+        onClick={onInfoTextClick}
+        className='showInfoButton'
+        aria-label={tx('connectivity')}
+      ></button>
+
       {networkState[0] === Connectivity.NOT_CONNECTED && (
         <>
           <a title={networkState[1]}>{tx('connectivity_not_connected')}</a>
-          <div
-            className={tryConnectCooldown ? '' : 'disabled'}
+          <button
+            className='tryNowButton'
             onClick={onTryReconnectClick}
+            disabled={!tryConnectCooldown}
+            // See comment above
+            style={{ position: 'relative' }}
           >
             {tx('try_connect_now')}
-          </div>
+          </button>
         </>
       )}
       {networkState[0] === Connectivity.CONNECTING && (
