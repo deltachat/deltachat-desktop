@@ -6,6 +6,7 @@ import styles from './style.module.scss'
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   active?: boolean
   styling?: 'primary' | 'secondary' | 'danger'
+  dataTestid?: string
 }
 
 export default function Button({
@@ -23,6 +24,7 @@ export default function Button({
         styling && styles[styling],
         className
       )}
+      data-testid={props.dataTestid}
       {...props}
     >
       {children}

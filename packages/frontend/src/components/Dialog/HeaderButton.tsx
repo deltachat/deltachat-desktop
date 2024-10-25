@@ -13,6 +13,7 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   iconSize: number
   rotation?: number
   'aria-label': string
+  dataTestid?: string
 }
 
 export default function HeaderButton({
@@ -23,7 +24,11 @@ export default function HeaderButton({
   ...props
 }: Props) {
   return (
-    <button className={classNames(styles.headerButton, className)} {...props}>
+    <button
+      className={classNames(styles.headerButton, className)}
+      data-testid={props.dataTestid}
+      {...props}
+    >
       <Icon
         className={styles.headerButtonIcon}
         icon={icon}

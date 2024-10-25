@@ -156,6 +156,7 @@ export default function AccountListSidebar({
             aria-label={tx('menu_settings')}
             className={styles.settingsButton}
             onClick={openSettings}
+            data-testid='open-settings-button'
           >
             <Icon
               size={38}

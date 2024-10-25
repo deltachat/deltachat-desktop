@@ -56,6 +56,7 @@ export default function AccountDeletionScreen({
           fixed={true}
           onClose={() => {}}
           width={400}
+          dataTestid='account-deletion-dialog'
         >
           <DialogHeader
             onClickBack={accountInfo ? onCancel : undefined}
@@ -110,12 +111,16 @@ export default function AccountDeletionScreen({
           </DialogBody>
           <DialogFooter>
             <FooterActions>
-              <FooterActionButton onClick={() => onCancel()}>
+              <FooterActionButton
+                onClick={() => onCancel()}
+                dataTestid='cancel-delete-account'
+              >
                 {tx('cancel')}
               </FooterActionButton>
               <FooterActionButton
                 styling='danger'
                 onClick={async () => onDeleteAccount(selectedAccountId)}
+                dataTestid='delete-account'
               >
                 {tx('delete')}
               </FooterActionButton>

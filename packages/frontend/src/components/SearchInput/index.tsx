@@ -62,10 +62,11 @@ export default function SearchInput(props: Props) {
       )}
       {!hasValue && (
         <SearchInputButton
-          aria-label={tx('qrscan_title')}
+          aria-label={tx('qrscan_title') + 'xxx'}
           size={17}
           icon='qr'
           onClick={handleQRScan}
+          dataTestid='qr-scan-button'
         />
       )}
     </>

@@ -47,10 +47,14 @@ export default function Settings({ onClose }: DialogProps) {
   }, [])
 
   return (
-    <Dialog onClose={onClose} fixed width={400}>
+    <Dialog onClose={onClose} fixed width={400} dataTestid='settings-dialog'>
       {settingsMode === 'main' && (
         <>
-          <DialogHeader title={tx('menu_settings')} onClose={onClose} />
+          <DialogHeader
+            title={tx('menu_settings')}
+            onClose={onClose}
+            dataTestid='close-settings'
+          />
           <DialogBody>
             <Profile settingsStore={settingsStore} />
             <SettingsIconButton

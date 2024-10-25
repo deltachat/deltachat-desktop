@@ -6,7 +6,7 @@ import type { ButtonHTMLAttributes } from 'react'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 export default function CloseButton(
-  props: ButtonHTMLAttributes<HTMLButtonElement>
+  props: ButtonHTMLAttributes<HTMLButtonElement> & { dataTestid?: string }
 ) {
   const tx = useTranslationFunction()
 

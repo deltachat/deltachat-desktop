@@ -13,6 +13,7 @@ type Props = {
   onClick: () => void
   size?: number
   className?: string
+  dataTestid?: string
 }
 
 export default function SearchInputButton({
@@ -25,6 +26,7 @@ export default function SearchInputButton({
   return (
     <button
       aria-label={props['aria-label']}
+      data-testid={props['dataTestid']}
       className={classNames(styles.searchInputButton, 'no-drag', className)}
       onClick={onClick}
     >

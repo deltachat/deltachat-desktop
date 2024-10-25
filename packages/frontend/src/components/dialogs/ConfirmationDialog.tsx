@@ -30,6 +30,7 @@ export default function ConfirmationDialog({
   onClose,
   isConfirmDanger = false,
   header,
+  dataTestid = 'confirm-dialog',
 }: Props) {
   const tx = useTranslationFunction()
 
@@ -44,7 +45,7 @@ export default function ConfirmationDialog({
   }
 
   return (
-    <Dialog onClose={handleClose}>
+    <Dialog onClose={handleClose} data-testid={dataTestid}>
       {header && <DialogHeader title={header} />}
       <DialogBody>
         <DialogContent paddingTop={header === undefined}>
@@ -53,12 +54,16 @@ export default function ConfirmationDialog({
       </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <FooterActionButton onClick={() => handleClick(false)}>
+          <FooterActionButton
+            onClick={() => handleClick(false)}
+            dataTestid='cancel'
+          >
             {cancelLabel || tx('cancel')}
           </FooterActionButton>
           <FooterActionButton
             styling={isConfirmDanger ? 'danger' : undefined}
             onClick={() => handleClick(true)}
+            dataTestid='confirm'
           >
             {confirmLabel || tx('yes')}
           </FooterActionButton>
