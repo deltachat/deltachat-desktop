@@ -229,6 +229,8 @@ export function ViewProfileInner({
     CHATLISTITEM_CHAT_HEIGHT *
     Math.max(Math.min(maxMinHeightItems, chatListIds.length), 1)
 
+  const VerificationTag = verifier?.action ? 'button' : 'div'
+
   return (
     <>
       <DialogContent>
@@ -243,14 +245,14 @@ export function ViewProfileInner({
         {!isSelfChat && (
           <div className='contact-attributes'>
             {verifier && (
-              <div
-                className={verifier.action && 'clickable'}
+              <VerificationTag
+                className='verification'
                 onClick={verifier.action}
                 style={{ display: 'flex' }}
               >
                 <InlineVerifiedIcon />
                 {verifier.label}
-              </div>
+              </VerificationTag>
             )}
             {contact.lastSeen !== 0 && (
               <div>
