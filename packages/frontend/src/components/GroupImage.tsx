@@ -43,9 +43,13 @@ export default function GroupImage(props: Props) {
     },
   ])
 
+  const AvatarTag = groupImage ? 'button' : 'div'
   return (
     <div className='group-image-wrapper'>
-      <div onClick={() => groupImage && showAvatarFullscreen()}>
+      <AvatarTag
+        className='group-image'
+        onClick={() => groupImage && showAvatarFullscreen()}
+      >
         <Avatar
           displayName={groupName || ''}
           avatarPath={groupImage || undefined}
@@ -53,14 +57,14 @@ export default function GroupImage(props: Props) {
           style={{ ...style, cursor: 'pointer' }}
           large
         />
-      </div>
-      <div
+      </AvatarTag>
+      <button
         className='group-image-edit-button'
         onClick={openContextMenu}
         aria-label={tx('change_group_image')}
       >
         <div />
-      </div>
+      </button>
     </div>
   )
 }
