@@ -98,7 +98,7 @@ function renderElement(elm: ParsedElement, key?: number): JSX.Element {
   }
 }
 
-/** render in preview mode for ChatListItem summary,
+/** render in preview mode for ChatListItem summary and for quoted messages,
  *  not interactive (links can not be clicked) just looks more similar to the message in the chatview/message-list */
 function renderElementPreview(elm: ParsedElement, key?: number): JSX.Element {
   switch (elm.t) {
