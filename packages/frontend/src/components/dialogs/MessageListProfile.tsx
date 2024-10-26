@@ -65,18 +65,12 @@ export default function MailingListProfile(
 const useEdit = (
   accountId: number,
   groupName: string,
-  groupImage: string | null | undefined,
+  groupImage: string | null,
   groupId: number,
   onClose: DialogProps['onClose']
 ) => {
   const updateGroup = async () => {
-    await modifyGroup(
-      accountId,
-      groupId,
-      groupName,
-      groupImage || undefined,
-      null
-    )
+    await modifyGroup(accountId, groupId, groupName, groupImage, null)
   }
 
   const onUpdateGroup = async () => {
