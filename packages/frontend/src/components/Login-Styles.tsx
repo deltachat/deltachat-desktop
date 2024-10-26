@@ -212,7 +212,7 @@ type ProgressBarProps = React.PropsWithChildren<{
 
 export const DeltaProgressBar = React.memo<ProgressBarProps>(
   ({ progress, intent = 'primary', max = 1000 }) => {
-    const progressPercent = (progress||0) * 100 / max
+    const progressPercent = ((progress || 0) * 100) / max
     return (
       <div style={{ marginTop: '20px', marginBottom: '10px' }}>
         <div
@@ -222,7 +222,7 @@ export const DeltaProgressBar = React.memo<ProgressBarProps>(
           aria-valuemin={0}
           aria-valuemax={100}
         >
-          <div className="bar" style={{width: `${progressPercent}%`}}></div>
+          <div className='bar' style={{ width: `${progressPercent}%` }}></div>
         </div>
       </div>
     )
