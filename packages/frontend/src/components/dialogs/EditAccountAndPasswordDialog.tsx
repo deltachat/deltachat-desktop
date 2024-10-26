@@ -24,7 +24,7 @@ export default function EditAccountAndPasswordDialog({ onClose }: DialogProps) {
 
   return (
     <Dialog canOutsideClickClose={false} onClose={onClose}>
-      <DialogHeader title={tx('pref_password_and_account_settings')} />
+      <DialogHeader title={tx('login_header')} />
       {EditAccountInner(onClose)}
     </Dialog>
   )
