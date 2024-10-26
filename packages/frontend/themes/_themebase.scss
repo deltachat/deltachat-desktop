@@ -165,6 +165,12 @@ $hover-contrast-change: 2%;
   --delta-dialog-separator: #{$bgSecondary};
   --delta-dialog-separator-text: #{changeContrast($bgSecondary, 24%)};
 
+  /* progressBar */
+  --progressBarBg: #{changeContrast($bgPrimary, 10%)};
+  --progressBarSuccess: green;
+  --progressBarPrimary: var(--colorPrimary);
+  --progressBarDanger: var(--colorDanger);
+
   /* Misc */
   --galleryBg: #{$bgPrimary};
   --avatarLabelColor: #ffffff; // Manual value: This will not get generated in the future
