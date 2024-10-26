@@ -5,7 +5,14 @@ import { getLogger } from '../../../../../shared/logger'
 import { BackendRemote } from '../../../backend-com'
 import { selectedAccountId } from '../../../ScreenController'
 import { DeltaProgressBar } from '../../Login-Styles'
-import { DialogBody, DialogContent, DialogWithHeader } from '../../Dialog'
+import {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogWithHeader,
+  FooterActionButton,
+  FooterActions,
+} from '../../Dialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
@@ -29,6 +36,10 @@ export function ReceiveBackupProgressDialog({
   }
 
   const accountId = selectedAccountId()
+
+  const cancel = () => {
+    BackendRemote.rpc.stopOngoingProcess(accountId).then(onClose)
+  }
 
   useEffect(() => {
     ;(async () => {
@@ -71,6 +82,13 @@ export function ReceiveBackupProgressDialog({
             intent={error ? 'danger' : 'success'}
           />
         </DialogContent>
+        <DialogFooter>
+          <FooterActions align='end'>
+            <FooterActionButton onClick={cancel}>
+              {tx('cancel')}
+            </FooterActionButton>
+          </FooterActions>
+        </DialogFooter>
       </DialogBody>
     </DialogWithHeader>
   )

@@ -3,7 +3,14 @@ import React, { useEffect, useState } from 'react'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { BackendRemote } from '../../../backend-com'
 import { DeltaProgressBar } from '../../Login-Styles'
-import { DialogBody, DialogContent, DialogWithHeader } from '../../Dialog'
+import {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogWithHeader,
+  FooterActionButton,
+  FooterActions,
+} from '../../Dialog'
 import { getLogger } from '../../../../../shared/logger'
 import { selectedAccountId } from '../../../ScreenController'
 
@@ -28,6 +35,10 @@ export default function ImportBackupProgressDialog({
   }
 
   const accountId = selectedAccountId()
+
+  const cancel = () => {
+    BackendRemote.rpc.stopOngoingProcess(accountId).then(onClose)
+  }
 
   useEffect(() => {
     ;(async () => {
@@ -71,6 +82,13 @@ export default function ImportBackupProgressDialog({
             intent={error ? 'danger' : 'success'}
           />
         </DialogContent>
+        <DialogFooter>
+          <FooterActions align='end'>
+            <FooterActionButton onClick={cancel}>
+              {tx('cancel')}
+            </FooterActionButton>
+          </FooterActions>
+        </DialogFooter>
       </DialogBody>
     </DialogWithHeader>
   )
