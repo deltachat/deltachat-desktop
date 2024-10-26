@@ -326,13 +326,6 @@
   }
 }
 
-.chat-list-item.is-deaddrop {
-  background-color: var(--chatListItemDeaddropBg);
-  &:hover {
-    background-color: var(--chatListItemDeaddropBgHover);
-  }
-}
-
 .floating-action-button {
   --size: 50px;
   --iconSize: 20px;
