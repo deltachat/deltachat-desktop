@@ -11,7 +11,7 @@
     "build:backend": "node ./bin/build.js",
     "build:runtime-impl": "pnpm esbuild --bundle --minify --keep-names --sourcemap --outdir=./dist runtime-browser/runtime.ts",
     "build:compose-frontend": "node ../../bin/copy.js ../frontend/html-dist ./dist && node ../../bin/copy.js ./static ./dist && pnpm build:runtime-impl",
-    "start": "pnpm run build && node --inspect dist/server.js",
+    "start": "pnpm run build && node dist/server.js",
     "start:server": "node dist/server.js"
   },
   "dependencies": {
