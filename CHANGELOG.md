@@ -15,6 +15,7 @@
 - remove unnecessary horizontal scrollbar in "View Group" dialog #4254
 - change title of EditAccountAndPasswordDialog to make it clearer that it is about email account #4271
 - fix styling of progressbars in light theme #4274
+- fix not being able to remove avatar for a mailing list #4270
 
 <a id="1_47_0"></a>
 
