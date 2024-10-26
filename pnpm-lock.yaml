@@ -7,10 +7,10 @@ settings:
 catalogs:
   default:
     '@deltachat/jsonrpc-client':
-      specifier: 1.147.1
+      specifier: 1.148.4
       version: 1.147.1
     '@deltachat/stdio-rpc-server':
-      specifier: 1.147.1
+      specifier: 1.148.4
       version: 1.147.1
     '@types/mime-types':
       specifier: ^2.1.4
