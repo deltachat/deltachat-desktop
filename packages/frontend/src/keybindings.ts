@@ -120,9 +120,13 @@ export function keyDownEvent2Action(
     } else if (ev.code === 'F5') {
       return KeybindAction.Debug_MaybeNetwork
     } else if (ev.code === 'PageUp') {
-      return KeybindAction.MessageList_PageUp
+      if ((ev.target as HTMLElement)?.id === 'composer-textarea') {
+        return KeybindAction.MessageList_PageUp
+      }
     } else if (ev.code === 'PageDown') {
-      return KeybindAction.MessageList_PageDown
+      if ((ev.target as HTMLElement)?.id === 'composer-textarea') {
+        return KeybindAction.MessageList_PageDown
+      }
     } else if ((ev.metaKey || ev.ctrlKey) && ev.code === 'Slash') {
       return KeybindAction.KeybindingCheatSheet_Open
     }
@@ -133,9 +137,13 @@ export function keyDownEvent2Action(
     } else if (ev.ctrlKey && ev.code === 'PageUp') {
       return KeybindAction.ChatList_SelectPreviousChat
     } else if (ev.code === 'PageUp') {
-      return KeybindAction.MessageList_PageUp
+      if ((ev.target as HTMLElement)?.id === 'composer-textarea') {
+        return KeybindAction.MessageList_PageUp
+      }
     } else if (ev.code === 'PageDown') {
-      return KeybindAction.MessageList_PageDown
+      if ((ev.target as HTMLElement)?.id === 'composer-textarea') {
+        return KeybindAction.MessageList_PageDown
+      }
     } else if (ev.altKey && ev.code === 'ArrowDown') {
       return KeybindAction.ChatList_SelectNextChat
     } else if (ev.altKey && ev.code === 'ArrowUp') {
