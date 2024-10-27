@@ -89,11 +89,13 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: `WEB_SERVER=${WEB_PASSWORD} node ../target-browser/dist/server.js`,
-  //   url: baseURL,
-  //   reuseExistingServer: !process.env.CI,
-  //   stdout: 'pipe',
-  //   stderr: 'pipe',
-  // },
+  webServer: {
+    command: `MODE=TESTING DC_ACCOUNTS_DIR=../../e2e-tests/data/accounts node ../target-browser/dist/server.js`,
+    url: baseURL,
+    timeout: 120 * 1000,
+    ignoreHTTPSErrors: true,
+    reuseExistingServer: !process.env.CI,
+    stdout: 'pipe',
+    stderr: 'pipe',
+  },
 })

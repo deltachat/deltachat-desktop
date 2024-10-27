@@ -28,10 +28,10 @@ export default function OkCancelFooterAction({
   return (
     <DialogFooter>
       <FooterActions>
-        <FooterActionButton onClick={onCancel} dataTestid="cancel">
+        <FooterActionButton onClick={onCancel} dataTestid='cancel'>
           {cancelLabel}
         </FooterActionButton>
-        <FooterActionButton disabled={disableOK} dataTestid="ok" onClick={onOk}>
+        <FooterActionButton disabled={disableOK} dataTestid='ok' onClick={onOk}>
           {confirmLabel}
         </FooterActionButton>
       </FooterActions>

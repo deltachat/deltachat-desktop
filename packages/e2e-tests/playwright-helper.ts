@@ -20,12 +20,12 @@ export async function switchToProfile(
   page: Page,
   accountId: string
 ): Promise<void> {
-  await expect(
-    page.locator(`[x-account-sidebar-account-id="${accountId}"]`)
-  ).toBeVisible()
-  return await page
-    .locator(`[x-account-sidebar-account-id="${accountId}"]`)
-    .click()
+  await page.getByTestId(`account-item-${accountId}`).hover() // without click is not received!
+  await page.getByTestId(`account-item-${accountId}`).click()
+  await expect(page.getByTestId(`selected-account:${accountId}`)).toHaveCount(
+    1,
+    { timeout: 10000 }
+  )
 }
 
 export async function createNewProfile(
@@ -39,7 +39,6 @@ export async function createNewProfile(
 
   await page.waitForSelector('.styles_module_account')
   const accountList = page.locator('.styles_module_account')
-  // await expect(accountList.last()).toBeVisible()
 
   const addAccountSelector =
     '.styles_module_accountList .styles_module_addButton'
@@ -124,6 +123,8 @@ export async function createNewProfile(
 export async function getProfile(page: Page, accountId: string): Promise<User> {
   await page.getByTestId(`account-item-${accountId}`).click({ button: 'right' })
   await page.getByTestId('open-settings-menu-item').click()
+  // await page.getByTestId(`account-item-${accountId}`).click()
+  // await page.getByTestId('open-settings-button').click()
   const name = await page
     .locator('.styles_module_profileDisplayName')
     .textContent()
@@ -137,6 +138,42 @@ export async function getProfile(page: Page, accountId: string): Promise<User> {
     name: name ?? '',
     address: address ?? '',
   }
+}
+
+/**
+ * can be used to load existing profiles from db
+ * if fixtures are used, and the profiles are already created
+ */
+export async function loadExistingProfiles(page: Page): Promise<User[]> {
+  // await page.goto('https://localhost:3000/')
+  const existingProfiles: User[] = []
+  const accountList = page.locator('.styles_module_account')
+  const existingAccountItems = await accountList.count()
+  if (existingAccountItems > 0) {
+    console.log('Existing accounts found:', existingAccountItems)
+    if (existingAccountItems === 1) {
+      const welcomeDialog = await page
+        .locator('.styles_module_welcome')
+        .isVisible()
+      if (welcomeDialog) {
+        // special case: when no account exists on app start a new empty
+        // account is created but not yet persisted, so there are no
+        // existing profiles in database yet
+        return []
+      }
+    }
+    for (let i = 0; i < existingAccountItems; i++) {
+      const account = accountList.nth(i)
+      const id = await account.getAttribute('x-account-sidebar-account-id')
+      if (id) {
+        const p = await getProfile(page, id)
+        existingProfiles.push(p)
+      }
+    }
+    console.log(existingProfiles)
+    return existingProfiles
+  }
+  return []
 }
 
 export async function deleteProfile(

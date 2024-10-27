@@ -17,7 +17,7 @@ export const PRIVATE_CERTIFICATE_KEY = join(
   'certificate/cert.key.pem'
 )
 export const PRIVATE_CERTIFICATE_CERT = join(DATA_DIR, 'certificate/cert.pem')
-export const DC_ACCOUNTS_DIR = join(DATA_DIR, 'accounts')
+export let DC_ACCOUNTS_DIR = join(DATA_DIR, 'accounts')
 
 export const LOCALES_DIR = join(__dirname, '../../../_locales')
 
@@ -29,7 +29,11 @@ export const ENV_WEB_TRUST_FIRST_PROXY = Boolean(
   process.env['WEB_TRUST_FIRST_PROXY']
 )
 
-export const MODE = process.env['MODE'] ?? 'TESTING'
+if (process.env['DC_ACCOUNTS_DIR']) {
+  DC_ACCOUNTS_DIR = join(__dirname, process.env['DC_ACCOUNTS_DIR'])
+}
+
+export const MODE = process.env['MODE'] ?? 'production'
 
 if (!existsSync(DATA_DIR)) {
   /* ignore-console-log */
@@ -49,7 +53,7 @@ if (!existsSync(PRIVATE_CERTIFICATE_KEY)) {
   process.exit(1)
 }
 
-if (!ENV_WEB_PASSWORD) {
+if (!ENV_WEB_PASSWORD && MODE !== 'TESTING') {
   /* ignore-console-log */
   console.log(
     `\n[ERROR]: Environment Variable WEB_PASSWORD is not set. You need to set it.\n`

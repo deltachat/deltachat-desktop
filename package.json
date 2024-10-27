@@ -28,7 +28,7 @@
     "check:target-versions": "node ./bin/update_desktop_version.js --check",
     "test": "pnpm -r --no-bail test",
     "test-and-check": "pnpm test && pnpm check",
-    "e2e": "pnpm build:browser && pnpm start:webserver & pnpm --filter=@deltachat-desktop/e2e-tests e2e",
+    "e2e": "pnpm build:browser && pnpm --filter=@deltachat-desktop/e2e-tests e2e",
     "reset:node_modules": "rm -rf node_modules && rm -rf packages/*/node_modules || true && pnpm i"
   },
   "engineStrict": true,

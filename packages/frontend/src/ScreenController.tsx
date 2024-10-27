@@ -316,7 +316,7 @@ export default class ScreenController extends Component {
 
   render() {
     return (
-      <div>
+      <div data-testid={`selected-account:${this.selectedAccountId}`}>
         {this.state.message && (
           <div
             onClick={this.userFeedbackClick}

@@ -2,15 +2,32 @@ import { test, expect } from '@playwright/test'
 
 import {
   createNewProfile,
-  getProfile,
   deleteProfile,
   switchToProfile,
   User,
+  loadExistingProfiles,
 } from '../playwright-helper'
 
-const existingProfiles: User[] = []
-// maybe use json file for existing profiles?
-// const existingProfiles: User[] = [
+test.describe.configure({ mode: 'serial' })
+
+let existingProfiles: User[] = []
+
+test.beforeAll(async ({ browser }) => {
+  const context = await browser.newContext()
+  const page = await context.newPage()
+  await page.goto('/')
+
+  existingProfiles = (await loadExistingProfiles(page)) ?? []
+
+  await context.close()
+})
+
+test.beforeEach(async ({ page }) => {
+  await page.goto('/')
+})
+
+// uncomment to debug single steps
+// existingProfiles = [
 //   {
 //     id: '1',
 //     name: 'Alice',
@@ -25,40 +42,11 @@ const existingProfiles: User[] = []
 
 const userNames = ['Alice', 'Bob', 'Chris', 'Denis', 'Eve']
 
-test.beforeEach(async ({ page }) => {
-  await page.goto('https://localhost:3000/')
-  const accountList = page.locator('.styles_module_account')
-  const existingAccountItems = await accountList.count()
-  if (existingAccountItems > 0) {
-    console.log('Existing accounts found:', existingAccountItems)
-    if (existingAccountItems === 1) {
-      const welcomeDialog = await page
-        .locator('.styles_module_welcome')
-        .isVisible()
-      if (welcomeDialog) {
-        // special case: when no account exists on app start a new empty
-        // account is created but not yet persisted, so there are no
-        // existing profiles in database yet
-        return
-      }
-    }
-    for (let i = 0; i < existingAccountItems; i++) {
-      const account = accountList.nth(i)
-      const id = await account.getAttribute('x-account-sidebar-account-id')
-      if (id) {
-        const p = await getProfile(page, id)
-        existingProfiles.push(p)
-      }
-    }
-    console.log(existingProfiles)
-  }
-})
-
 /**
  * covers creating a profile with standard
  * chatmail server on first start or after
  */
-test.skip('create profiles', async ({ page }) => {
+test('create profiles', async ({ page }) => {
   await page.goto('/')
 
   if (existingProfiles.length > 0) {
@@ -72,24 +60,23 @@ test.skip('create profiles', async ({ page }) => {
 
   expect(userA.id).toBeDefined()
 
+  existingProfiles.push(userA)
+
   console.log(`User ${userA.name} wurde angelegt!`, userA)
 
   const userB = await createNewProfile(page, userNames[1])
 
   expect(userB.id).toBeDefined()
 
+  existingProfiles.push(userB)
+
   console.log(`User ${userB.name} wurde angelegt!`, userB)
-
-  // userC = await createNewProfile(page, userC.name)
-
-  // expect(userC.id).toBeDefined()
-
-  // console.log(`User ${userC.name} wurde angelegt!`, userC)
 })
 
 test('start chat with user', async ({ page, context }) => {
   await context.grantPermissions(['clipboard-read', 'clipboard-write'])
-  if (existingProfiles.length < 2) {
+  // const existingProfiles = await loadProfiles(page)
+  if (!existingProfiles || existingProfiles.length < 2) {
     throw new Error('Not enough profiles for chat test!')
   }
   const userA = existingProfiles[0]
@@ -99,7 +86,6 @@ test('start chat with user', async ({ page, context }) => {
   await page.getByTestId('qr-scan-button').click()
   await page.getByTestId('copy-qr-code').click()
   await page.getByTestId('qr-dialog').getByTestId('close').click()
-  // await page.locator('.styles_module_footerActions button').last().click()
 
   await switchToProfile(page, userB.id)
 
@@ -121,8 +107,6 @@ test('start chat with user', async ({ page, context }) => {
     .locator('.styles_module_dialogContent p')
     .textContent()
 
-  console.log(t) // deactivate
-
   expect(t).toContain(userA.name)
 
   await page
@@ -130,13 +114,17 @@ test('start chat with user', async ({ page, context }) => {
     .last() // 2 dialogs are open! data-testid can't be added to ConfirmationDialog so far!
     .getByTestId('confirm')
     .click()
-  expect(await page.locator('.navbar-chat-name').textContent()).toContain(
-    userA.name
-  )
+  await expect(
+    page.locator('.chat-list .chat-list-item').filter({ hasText: userA.name })
+  ).toHaveCount(1)
   console.log(`Chat with ${userA.name} created!`)
 })
 
 test('send message', async ({ page }) => {
+  // const existingProfiles = await loadProfiles(page)
+  if (!existingProfiles || existingProfiles.length < 2) {
+    throw new Error('Not enough profiles for chat test!')
+  }
   if (existingProfiles.length < 2) {
     throw new Error('Not enough profiles for chat test!')
   }
@@ -148,6 +136,10 @@ test('send message', async ({ page }) => {
   // when profile is selected
   await page.locator('.chat-list .chat-list-item').last().click()
   await switchToProfile(page, userA.id)
+  await page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: userB.name })
+    .click()
   const messageText = `Hello ${userB.name}!`
   page.locator('#composer-textarea').fill(messageText)
   page.locator('.send-button-wrapper button').click()
@@ -157,15 +149,18 @@ test('send message', async ({ page }) => {
     .textContent()
   expect(badgeNumber).toBe('1')
   const sentMessageText = await page
-    .locator(`.message.outgoing .msg-body .text`)
+    .locator(`.message.outgoing`)
+    .last()
+    .locator('.msg-body .text')
     .textContent()
   expect(sentMessageText).toEqual(messageText)
-  page.getByTestId(`account-item-${userB.id}`).click()
-  const chatListItem = page.locator('.chat-list .chat-list-item').first()
-  expect(chatListItem).toHaveClass('has-unread')
-  await expect(chatListItem.locator('.chat-list-item-message')).toHaveText(
-    messageText
-  )
+  await switchToProfile(page, userB.id)
+  const chatListItem = page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: userB.name })
+  await expect(
+    chatListItem.locator('.chat-list-item-message .text')
+  ).toHaveText(messageText)
   await expect(
     chatListItem
       .locator('.chat-list-item-message')
@@ -173,12 +168,14 @@ test('send message', async ({ page }) => {
   ).toHaveText('1')
   await chatListItem.click()
   const receivedMessageText = await page
-    .locator(`.message.incoming .msg-body .text`)
+    .locator(`.message.incoming`)
+    .last()
+    .locator(`.msg-body .text`)
     .textContent()
   expect(receivedMessageText).toEqual(messageText)
 })
 
-test.skip('delete profiles', async ({ page }) => {
+test('delete profiles', async ({ page }) => {
   await page.goto('/')
   if (existingProfiles.length < 1) {
     throw new Error('Not existing profiles to delete!')
@@ -188,7 +185,8 @@ test.skip('delete profiles', async ({ page }) => {
     const deleted = await deleteProfile(page, profileToDelete.id)
     expect(deleted).toContain(profileToDelete.name)
     if (deleted) {
-      console.log(`User ${profileToDelete.name} wurde gelöscht!`)
+      console.log(`User ${profileToDelete.name} was deleted!`)
     }
   }
+  // expect(page.locator('.styles_module_accountList button')).toHaveCount(1)
 })
