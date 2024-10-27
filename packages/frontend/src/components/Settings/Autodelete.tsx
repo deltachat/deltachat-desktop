@@ -73,6 +73,8 @@ export default function Autodelete({
   const AUTODELETE_DURATION_OPTIONS_SERVER = [
     AutodeleteDuration.NEVER,
     AutodeleteDuration.AT_ONCE,
+    // These do not make sense for Chatmail servers.
+    // See https://github.com/deltachat/deltachat-desktop/issues/4113
     ...(isChatMail
       ? []
       : [
