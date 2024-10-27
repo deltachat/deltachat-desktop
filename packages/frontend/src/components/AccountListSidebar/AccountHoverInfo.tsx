@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from 'react'
+import React, { Component, PropsWithChildren, useEffect, useState } from 'react'
 import debounce from 'debounce'
 import { C } from '@deltachat/jsonrpc-client'
 
@@ -53,26 +53,36 @@ export default function AccountHoverInfo({
     content = (
       <>
         <b>{account.displayName ? account.displayName : account.addr}</b>
+        {account.privateTag && (
+          <HoverInfoProperty>
+            <Icon
+              icon='sell'
+              size={12}
+              className={styles.hoverInfoMuteIcon}
+            />{' '}
+            {account.privateTag}
+          </HoverInfoProperty>
+        )}
         {showConnection && (
-          <div className={styles.hoverInfoProperty}>
+          <HoverInfoProperty>
             <Connectivity accountId={account.id} />
-          </div>
+          </HoverInfoProperty>
         )}
         {muted && (
-          <div className={styles.hoverInfoProperty}>
+          <HoverInfoProperty>
             <Icon
               icon='audio-muted'
               size={12}
               className={styles.hoverInfoMuteIcon}
             />{' '}
             {tx('muted')}
-          </div>
+          </HoverInfoProperty>
         )}
         {bgSyncDisabled && (
-          <div className={styles.hoverInfoProperty}>
+          <HoverInfoProperty>
             <span className={styles.hoverInfoDisabledIcon}>⏻</span>{' '}
             {tx('background_sync_disabled_explaination')}
-          </div>
+          </HoverInfoProperty>
         )}
       </>
     )
@@ -83,6 +93,10 @@ export default function AccountHoverInfo({
       {content}
     </div>
   )
+}
+
+function HoverInfoProperty({ children }: PropsWithChildren<{}>) {
+  return <div className={styles.hoverInfoProperty}>{children}</div>
 }
 
 class Connectivity extends Component<{ accountId: number }, ConnectivityState> {

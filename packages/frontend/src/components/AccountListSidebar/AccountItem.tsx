@@ -20,6 +20,8 @@ import styles from './styles.module.scss'
 
 import { C, type T } from '@deltachat/jsonrpc-client'
 import { openMapWebxdc } from '../../system-integration/webxdc'
+import useDialog from '../../hooks/dialog/useDialog'
+import { EditPrivateTagDialog } from './EditPrivateTagDialog'
 
 type Props = {
   accountId: number
@@ -45,6 +47,7 @@ export default function AccountItem({
   const tx = useTranslationFunction()
   const [unreadCount, setUnreadCount] = useState<number>(0)
   const [account, setAccount] = useState<T.Account | null>(null)
+  const { openDialog } = useDialog()
 
   useEffect(() => {
     const updateAccount = debounce(() => {
@@ -130,6 +133,18 @@ export default function AccountItem({
         setTimeout(() => {
           ActionEmitter.emitAction(KeybindAction.Settings_Open)
         }, 0)
+      },
+    },
+    {
+      label: tx('profile_tag'),
+      action: async () => {
+        openDialog(EditPrivateTagDialog, {
+          accountId,
+          currentTag: await BackendRemote.rpc.getConfig(
+            accountId,
+            'private_tag'
+          ),
+        })
       },
     },
     {

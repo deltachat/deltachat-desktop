@@ -37,6 +37,7 @@ export type IconName =
   | 'question_mark'
   | 'reaction'
   | 'reset-image'
+  | 'sell'
   | 'settings'
   | 'swap_vert'
   | 'swap_hor'
