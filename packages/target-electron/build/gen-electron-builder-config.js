@@ -151,6 +151,18 @@ build['appImage'] = {
 
 build['deb'] = {
   packageName: previewBuild ? 'deltachat-desktop-preview' : 'deltachat-desktop',
+  depends: [
+    'libasound2',
+    'libgtk-3-0',
+    'libnotify4',
+    'libnss3',
+    'libxss1',
+    'libxtst6',
+    'xdg-utils',
+    'libatspi2.0-0',
+    'libuuid1',
+    'libsecret-1-0',
+  ],
 }
 
 build['win'] = {
