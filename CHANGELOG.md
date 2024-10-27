@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+## Added
+- add ability to add private tags to accounts
+
 ## Changed
 - style: avoid scrolling to account list items such that they're at the very edge of the list #4252
 - Update local help (2024-10-25) #4264
@@ -12,6 +15,7 @@
   - Sort received outgoing message down if it's fresher than all non fresh messages.
   - Auto-restore 1:1 chat protection after receiving old unverified message.
 - when jumping to a message (e.g. when showing the first unread message, or when jumping to a message through "show in chat"), position it more appropriately in the scrollable area #4286
+- move responsibility for updating account list to core through the `AccountsChanged` and `AccountsItemChanged` event
 
 ## Fixed
 - image thumbnails not showing in chat list #4247
