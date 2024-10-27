@@ -42,7 +42,7 @@ export default function AccountListSidebar({
   const tx = useTranslationFunction()
 
   const { openDialog } = useDialog()
-  const [accounts, setAccounts] = useState<T.Account[]>([])
+  const [accounts, setAccounts] = useState<number[]>([])
   const [{ accounts: noficationSettings }] = useAccountNotificationStore()
 
   const { smallScreenMode } = useContext(ScreenContext)
@@ -63,7 +63,7 @@ export default function AccountListSidebar({
 
   const refresh = useMemo(
     () => async () => {
-      const accounts = await BackendRemote.rpc.getAllAccounts()
+      const accounts = await BackendRemote.rpc.getAllAccountIds()
       setAccounts(accounts)
       const desktopSettings = await runtime.getDesktopSettings()
       setSyncAllAccounts(desktopSettings.syncAllAccounts)
@@ -112,9 +112,16 @@ export default function AccountListSidebar({
   }, [accountForHoverInfo, updateHoverInfoPosition])
 
   useEffect(() => {
-    window.__updateAccountListSidebar = debounce(() => {
+    const debouncedUpdate = debounce(() => {
       refresh()
     }, 200)
+
+    /// now this workaround is only used when changing background sync setting
+    window.__updateAccountListSidebar = debouncedUpdate
+    BackendRemote.on('AccountsChanged', debouncedUpdate)
+    return () => {
+      BackendRemote.off('AccountsChanged', debouncedUpdate)
+    }
   }, [refresh])
 
   const openSettings = () => openDialog(Settings)
@@ -129,16 +136,16 @@ export default function AccountListSidebar({
         <div className={styles.macOSTrafficLightBackground} />
       )}
       <div className={styles.accountList} onScroll={updateHoverInfoPosition}>
-        {accounts.map(account => (
+        {accounts.map(id => (
           <AccountItem
-            key={account.id}
-            account={account}
-            isSelected={selectedAccountId === account.id}
+            key={id}
+            accountId={id}
+            isSelected={selectedAccountId === id}
             onSelectAccount={selectAccount}
             openAccountDeletionScreen={openAccountDeletionScreen}
             updateAccountForHoverInfo={updateAccountForHoverInfo}
             syncAllAccounts={syncAllAccounts}
-            muted={noficationSettings[account.id]?.muted || false}
+            muted={noficationSettings[id]?.muted || false}
           />
         ))}
         <button
