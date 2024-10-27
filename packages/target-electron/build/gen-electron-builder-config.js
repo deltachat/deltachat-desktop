@@ -150,7 +150,7 @@ build['appImage'] = {
 }
 
 build['deb'] = {
-  packageName: previewBuild ? 'deltachat-preview' : 'deltachat',
+  packageName: previewBuild ? 'deltachat-desktop-preview' : 'deltachat-desktop',
 }
 
 build['win'] = {

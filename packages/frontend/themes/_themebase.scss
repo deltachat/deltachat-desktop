@@ -63,11 +63,6 @@ $hover-contrast-change: 2%;
       $bgPrimary,
       7% + $hover-contrast-change
     )};
-  --chatListItemDeaddropBg: #{changeContrast($bgPrimary, 15%)};
-  --chatListItemDeaddropBgHover: #{changeContrast(
-      $bgPrimary,
-      15% + $hover-contrast-change
-    )};
   --chat-list-item-summary-text: #{changeContrast($textPrimary, 33%)};
   --chat-list-item-archived-label: #{changeContrast($textPrimary, 20%)};
   --chat-list-item-archived-label-border: #{changeContrast($textPrimary, 33%)};
@@ -164,6 +159,12 @@ $hover-contrast-change: 2%;
   --outlineColor: #{$outlineColor};
   --delta-dialog-separator: #{$bgSecondary};
   --delta-dialog-separator-text: #{changeContrast($bgSecondary, 24%)};
+
+  /* progressBar */
+  --progressBarBg: #{changeContrast($bgPrimary, 10%)};
+  --progressBarSuccess: green;
+  --progressBarPrimary: var(--colorPrimary);
+  --progressBarDanger: var(--colorDanger);
 
   /* Misc */
   --galleryBg: #{$bgPrimary};
