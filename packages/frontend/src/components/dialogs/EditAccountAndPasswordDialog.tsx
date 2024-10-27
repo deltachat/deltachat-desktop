@@ -134,7 +134,11 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
           )}
         </DialogContent>
       </DialogBody>
-      <OkCancelFooterAction onCancel={() => onClose()} onOk={onOk} />
+      <OkCancelFooterAction
+        onCancel={() => onClose()}
+        onOk={onOk}
+        confirmLabel={tx('login_title')}
+      />
     </>
   )
 }
