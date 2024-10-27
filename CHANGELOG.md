@@ -3,12 +3,12 @@
 ## [Unreleased][unreleased]
 
 ## Added
-- Added support for selecting multiple files in the attachment file picker.
+- Added support for selecting multiple files in the attachment file picker. #4278
 
 ## Changed
 - style: avoid scrolling to account list items such that they're at the very edge of the list #4252
 - Update local help (2024-10-25)
-- Dropping multiple files onto deltachat now sends images as compressed images instead of uncompressed files
+- Dropping multiple files onto deltachat now sends images as compressed images instead of uncompressed files #4278
 
 ## Fixed
 - image thumbnails not showing in chat list #4247
@@ -20,7 +20,7 @@
 - change title of EditAccountAndPasswordDialog to make it clearer that it is about email account #4271
 - fix styling of progressbars in light theme #4274
 - fix not being able to remove avatar for a mailing list #4270
-- fix compression of images when added with Image option from attachment menu.
+- fix compression of images when added with Image option from attachment menu. #4278
 
 <a id="1_47_0"></a>
 

@@ -43,7 +43,10 @@ export default function MenuAttachment({
   const [settings] = useStore(SettingsStoreInstance)
   const accountId = selectedAccountId()
 
-  const sendMultipleFiles = (filePaths: string[], msgViewType: Viewtype) => {
+  const confirmSendMultipleFiles = (
+    filePaths: string[],
+    msgViewType: Viewtype
+  ) => {
     if (!selectedChat) {
       throw new Error('no chat selected')
     }
@@ -88,7 +91,7 @@ export default function MenuAttachment({
       setLastPath(dirname(files[0]))
       addFileToDraft(files[0], 'File')
     } else if (files.length > 1) {
-      sendMultipleFiles(files, 'File')
+      confirmSendMultipleFiles(files, 'File')
     }
   }
 
@@ -112,7 +115,7 @@ export default function MenuAttachment({
       setLastPath(dirname(files[0]))
       addFileToDraft(files[0], 'Image')
     } else if (files.length > 1) {
-      sendMultipleFiles(files, 'Image')
+      confirmSendMultipleFiles(files, 'Image')
     }
   }
 
