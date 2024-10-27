@@ -22,12 +22,12 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 
-function durationToString(configValue: number | string, isChatmail: boolean) {
+function durationToString(configValue: number | string, neverMeansAutomatic: boolean) {
   if (typeof configValue === 'string') configValue = Number(configValue)
   const tx = window.static_translate
   switch (configValue) {
     case AutodeleteDuration.NEVER:
-      return isChatmail ? tx('automatic') : tx('never')
+      return neverMeansAutomatic ? tx('automatic') : tx('never')
     case AutodeleteDuration.AT_ONCE:
       return tx('autodel_at_once')
     case AutodeleteDuration.ONE_MINUTE:
