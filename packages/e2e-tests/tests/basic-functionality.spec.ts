@@ -15,7 +15,8 @@ let existingProfiles: User[] = []
 test.beforeAll(async ({ browser }) => {
   const context = await browser.newContext()
   const page = await context.newPage()
-  await page.goto('/')
+
+  await page.goto('https://localhost:3000/')
 
   existingProfiles = (await loadExistingProfiles(page)) ?? []
 
@@ -23,7 +24,7 @@ test.beforeAll(async ({ browser }) => {
 })
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('/')
+  await page.goto('https://localhost:3000/')
 })
 
 // uncomment to debug single steps
@@ -47,8 +48,6 @@ const userNames = ['Alice', 'Bob', 'Chris', 'Denis', 'Eve']
  * chatmail server on first start or after
  */
 test('create profiles', async ({ page }) => {
-  await page.goto('/')
-
   if (existingProfiles.length > 0) {
     // this test should only run on a fresh start
     throw new Error(
@@ -73,8 +72,10 @@ test('create profiles', async ({ page }) => {
   console.log(`User ${userB.name} wurde angelegt!`, userB)
 })
 
-test('start chat with user', async ({ page, context }) => {
-  await context.grantPermissions(['clipboard-read', 'clipboard-write'])
+test('start chat with user', async ({ page, context, browserName }) => {
+  if (browserName.toLowerCase().indexOf('chrom') > -1) {
+    await context.grantPermissions(['clipboard-read', 'clipboard-write'])
+  }
   // const existingProfiles = await loadProfiles(page)
   if (!existingProfiles || existingProfiles.length < 2) {
     throw new Error('Not enough profiles for chat test!')
@@ -176,7 +177,6 @@ test('send message', async ({ page }) => {
 })
 
 test('delete profiles', async ({ page }) => {
-  await page.goto('/')
   if (existingProfiles.length < 1) {
     throw new Error('Not existing profiles to delete!')
   }

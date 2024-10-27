@@ -10,10 +10,6 @@ dotenv.config({ path: path.resolve(process.cwd(), '.env') })
 
 const port = process.env.PORT ?? 3000
 
-// const WEB_PASSWORD = process.env.WEB_PASSWORD
-
-process.env.NODE_EXTRA_CA_CERTS = `${process.cwd()}/data/certificate/cert.pem`
-
 const baseURL = `https://localhost:${port}`
 
 /**
@@ -41,22 +37,34 @@ export default defineConfig({
     trace: 'on-first-retry',
     video: 'retain-on-failure',
     screenshot: 'only-on-failure',
+    permissions: ['notifications'],
+    ignoreHTTPSErrors: true,
+    launchOptions: {
+      args: ['--ignore-certificate-errors'],
+    },
   },
 
   /* Configure projects for major browsers */
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'], permissions: ['notifications'] },
+      use: {
+        ...devices['Desktop Chrome'],
+      },
     },
-    // {
-    //   name: 'firefox',
-    //   use: {
-    //     ...devices['Desktop Firefox'],
-    //     ignoreHTTPSErrors: true,
-    //     permissions: ['notifications'],
-    //   },
-    // },
+    {
+      name: 'firefox',
+      use: {
+        ...devices['Desktop Firefox'],
+      },
+    },
+    {
+      name: 'Chrome', // Google Chrome
+      use: {
+        ...devices['Desktop Chrome'],
+        channel: 'chrome',
+      },
+    },
 
     // {
     //   name: 'webkit',
@@ -78,13 +86,6 @@ export default defineConfig({
     //   name: 'Microsoft Edge',
     //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
     // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: {
-    //     ...devices['Desktop Chrome'],
-    //     channel: 'chrome',
-    //     permissions: ['notifications'],
-    //   },
     // },
   ],
 
