@@ -22,12 +22,15 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 
-function durationToString(configValue: number | string) {
+function durationToString(
+  configValue: number | string,
+  neverMeansAutomatic: boolean
+) {
   if (typeof configValue === 'string') configValue = Number(configValue)
   const tx = window.static_translate
   switch (configValue) {
     case AutodeleteDuration.NEVER:
-      return tx('never')
+      return neverMeansAutomatic ? tx('automatic') : tx('never')
     case AutodeleteDuration.AT_ONCE:
       return tx('autodel_at_once')
     case AutodeleteDuration.ONE_MINUTE:
@@ -56,6 +59,8 @@ export default function Autodelete({
   const accountId = selectedAccountId()
   const tx = useTranslationFunction()
 
+  const isChatMail = settingsStore.settings.is_chatmail === '1'
+
   const AUTODELETE_DURATION_OPTIONS_DEVICE = [
     AutodeleteDuration.NEVER,
     AutodeleteDuration.ONE_HOUR,
@@ -63,17 +68,29 @@ export default function Autodelete({
     AutodeleteDuration.ONE_WEEK,
     AutodeleteDuration.FIVE_WEEKS,
     AutodeleteDuration.ONE_YEAR,
-  ].map(value => [String(value), durationToString(value)] as SelectDialogOption)
+  ].map(
+    value =>
+      [String(value), durationToString(value, false)] as SelectDialogOption
+  )
 
   const AUTODELETE_DURATION_OPTIONS_SERVER = [
     AutodeleteDuration.NEVER,
     AutodeleteDuration.AT_ONCE,
-    AutodeleteDuration.ONE_HOUR,
-    AutodeleteDuration.ONE_DAY,
-    AutodeleteDuration.ONE_WEEK,
-    AutodeleteDuration.FIVE_WEEKS,
-    AutodeleteDuration.ONE_YEAR,
-  ].map(value => [String(value), durationToString(value)] as SelectDialogOption)
+    // These do not make sense for Chatmail servers.
+    // See https://github.com/deltachat/deltachat-desktop/issues/4113
+    ...(isChatMail
+      ? []
+      : [
+          AutodeleteDuration.ONE_HOUR,
+          AutodeleteDuration.ONE_DAY,
+          AutodeleteDuration.ONE_WEEK,
+          AutodeleteDuration.FIVE_WEEKS,
+          AutodeleteDuration.ONE_YEAR,
+        ]),
+  ].map(
+    value =>
+      [String(value), durationToString(value, isChatMail)] as SelectDialogOption
+  )
 
   const onOpenDialog = async (fromServer: boolean) => {
     openDialog(SmallSelectDialog, {
@@ -117,7 +134,8 @@ export default function Autodelete({
       <SettingsSelector
         onClick={onOpenDialog.bind(null, false)}
         currentValue={durationToString(
-          settingsStore.settings['delete_device_after']
+          settingsStore.settings['delete_device_after'],
+          false
         )}
       >
         {tx('autodel_device_title')}
@@ -125,7 +143,8 @@ export default function Autodelete({
       <SettingsSelector
         onClick={onOpenDialog.bind(null, true)}
         currentValue={durationToString(
-          settingsStore.settings['delete_server_after']
+          settingsStore.settings['delete_server_after'],
+          isChatMail
         )}
       >
         {tx('autodel_server_title')}
@@ -170,7 +189,7 @@ function AutodeleteConfirmationDialog({
           <p style={{ whiteSpace: 'pre-line' }}>
             {tx(fromServer ? 'autodel_server_ask' : 'autodel_device_ask', [
               String(estimateCount),
-              durationToString(seconds),
+              durationToString(seconds, false),
             ])}
           </p>
           <div style={{ display: 'flex' }}>
