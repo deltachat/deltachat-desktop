@@ -4,7 +4,8 @@
 
 ## Changed
 - style: avoid scrolling to account list items such that they're at the very edge of the list #4252
-- Update local help (2024-10-25)
+- Update local help (2024-10-25) #4264
+- Update translations (2024-27-10) #4281
 - Limit options for "Delete Messages from Server" for chatmail accounts #4276
 
 ## Fixed

@@ -7,6 +7,10 @@
    <!-- deprecated, the word "or" to separate blocks in the user interface that are mutually exclusive -->
     <string name="or_separator">of</string>
     <string name="clear_search">Zoekopdracht wissen</string>
+    <!-- a noun, used on a button, short for "show link" -->
+    <string name="link">Link</string>
+    <!-- "scan" in the meaning of "scan QR code" -->
+    <string name="scan">Scannen</string>
     <string name="yes">Ja</string>
     <string name="no">Nee</string>
     <string name="select">Selecteren</string>
@@ -234,6 +238,7 @@
     <string name="menu_message_details">Berichtinformatie</string>
     <string name="menu_copy_to_clipboard">Kopiëren naar klembord</string>
     <string name="share_invite_link">Uitnodigingslink versturen</string>
+    <string name="share_invite_link_explain">Iedereen die deze link ontvangt kan je profiel bekijken en een gesprek met je starten. Deel hem daarom alleen met mensen die je vertrouwt.</string>
     <string name="invite_friends">Vrienden uitnodigen</string>
     <!-- %1$s is replaced by the user's invitation link ("https://i.delta.chat/...") -->
     <string name="invite_friends_text">Neem contact met me op via Delta Chat:\n%1$s</string>
@@ -616,12 +621,14 @@
     <string name="proxy_use_proxy">Proxy gebruiken</string>
     <string name="proxy_add">Proxy toevoegen</string>
     <string name="proxy_add_explain">Ondersteunde proxytypes: http(s), socks5 en shadowsocks.</string>
-    <string name="proxy_add_url_hint">Voer een proxy-url in</string>
-    <string name="proxy_invalid">Ongeldige of niet-ondersteunde proxy-url</string>
+    <string name="proxy_add_url_hint">Voer een proxylink in</string>
+    <string name="proxy_invalid">Ongeldige of niet-ondersteunde proxy</string>
     <string name="proxy_list_header">Bewaarde proxy\'s</string>
     <string name="proxy_delete">Proxy verwijderen</string>
     <string name="proxy_delete_explain">Weet je zeker dat je ‘%1$s’ wilt verwijderen?</string>
     <string name="proxy_use_proxy_confirm">Wil je gebruikmaken van de proxy ‘%1$s’?</string>
+    <string name="proxy_share_explain">Je kunt vrienden toevoegen aan deze proxy door de QR-code te scannen.</string>
+    <string name="proxy_share_link">Link delen</string>
 
     <!-- deprecated -->
     <string name="login_socks5">SOCKS5</string>
@@ -647,6 +654,9 @@
     <string name="accept_invalid_certificates">Ongeldige certificaten accepteren</string>
     <string name="switch_account">Ander account kiezen</string>
     <string name="add_account">Account toevoegen</string>
+    <string name="profile_tag">Privélabel</string>
+    <string name="profile_tag_hint">bijv. werk, familie</string>
+    <string name="profile_tag_explain">Een label dat alleen jij kan zien, om profielen van elkaar te onderscheiden.</string>
     <string name="delete_account">Account verwijderen</string>
     <string name="delete_account_ask">Weet je zeker dat je je accountgegevens wilt verwijderen?</string>
     <string name="delete_account_explain_with_name">Alle gegevens van ‘%s’ worden verwijderd: de eind-tot-eindinstellingen, contactpersonen, gesprekken, berichten en media. Deze actie kan niet ongedaan worden gemaakt.</string>
