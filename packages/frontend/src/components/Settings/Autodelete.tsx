@@ -22,7 +22,10 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 
-function durationToString(configValue: number | string, neverMeansAutomatic: boolean) {
+function durationToString(
+  configValue: number | string,
+  neverMeansAutomatic: boolean
+) {
   if (typeof configValue === 'string') configValue = Number(configValue)
   const tx = window.static_translate
   switch (configValue) {
