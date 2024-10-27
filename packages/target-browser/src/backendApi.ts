@@ -81,6 +81,10 @@ BackendApiRoute.post(
 
       res.status(200).send({ path: filepath })
     } catch (error) {
+      log.debug('uploadTempFile: error', {
+        error,
+        filename: req.params.filename,
+      })
       res.status(500).json({ message: 'Failed to create Tempfile' })
     }
   }

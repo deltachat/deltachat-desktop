@@ -121,7 +121,12 @@ export interface RuntimeOpenDialogOptions {
     name: string
     extensions: string[]
   }[]
-  properties: ('openFile' | 'openDirectory' | 'createDirectory')[]
+  properties: (
+    | 'openFile'
+    | 'openDirectory'
+    | 'createDirectory'
+    | 'multiSelections'
+  )[]
   defaultPath?: string
   buttonLabel?: string
 }

@@ -764,7 +764,7 @@ export function useGroupImage(image: string | null) {
     const { defaultPath, setLastPath } = rememberLastUsedPath(
       LastUsedSlot.GroupImage
     )
-    const file = await runtime.showOpenFileDialog({
+    const [file] = await runtime.showOpenFileDialog({
       title: tx('select_group_image_desktop'),
       filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif', 'webp'] }],
       properties: ['openFile'],
