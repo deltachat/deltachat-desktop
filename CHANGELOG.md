@@ -5,6 +5,7 @@
 ## Changed
 - style: avoid scrolling to account list items such that they're at the very edge of the list #4252
 - Update local help (2024-10-25)
+- Dropping multiple files onto deltachat now sends images as compressed images instead of uncompressed files
 
 ## Fixed
 - image thumbnails not showing in chat list #4247

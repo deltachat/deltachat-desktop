@@ -175,9 +175,12 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
 
         for (const file of sanitizedFileList) {
           const path = await writeTempFileFromFile(file)
+          const msgViewType: Viewtype = file.type.startsWith('image')
+            ? 'Image'
+            : 'File'
           sendMessage(accountId, chat.id, {
             file: path,
-            viewtype: 'File',
+            viewtype: msgViewType,
           }).then(() => {
             // start sending other files, don't wait until last file is sent
             runtime.removeTempFile(path)
