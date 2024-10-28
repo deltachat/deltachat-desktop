@@ -18,6 +18,7 @@
 - fix styling of progressbars in light theme #4274
 - fix Delta Chat not launching on Debian sometimes due to missing package dependencies (`libasound2`) #4275
 - fix not being able to remove avatar for a mailing list #4270
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.148.5`
 
 <a id="1_47_0"></a>
 
