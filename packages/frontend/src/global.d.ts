@@ -27,6 +27,7 @@ declare global {
           msgId: number | undefined
           highlight?: boolean
           addMessageIdToStack?: undefined | number
+          scrollIntoViewArg?: Parameters<HTMLElement['scrollIntoView']>[0]
         }) => Promise<void>)
     __updateAccountListSidebar: (() => void) | undefined
   }

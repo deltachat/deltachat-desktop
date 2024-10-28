@@ -333,17 +333,7 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
         )
       }
 
-      domElement.scrollIntoView({
-        // "nearest" so as to not scroll if the message is already in view.
-        // Otherwise we'd try to scroll in such a way that the message
-        // is at the very top of the messages list.
-        // This would not be nice for the Ctrl + Down shortcut
-        // (when quoting a message that a bit far up),
-        // or when highlighting the reply that is already in view.
-        block: 'nearest',
-        inline: 'nearest',
-        // behavior:
-      })
+      domElement.scrollIntoView(scrollTo.scrollIntoViewArg)
 
       if (scrollTo.highlight === true) {
         // Trigger highlight animation
@@ -800,6 +790,7 @@ function JumpDownButton({
     msgId: number | undefined
     highlight?: boolean
     addMessageIdToStack?: undefined | number
+    scrollIntoViewArg?: Parameters<HTMLElement['scrollIntoView']>[0]
   }) => Promise<void>
   jumpToMessageStack: number[]
 }) {
@@ -823,7 +814,14 @@ function JumpDownButton({
         <div
           className='button'
           onClick={() => {
-            jumpToMessage({ msgId: undefined, highlight: true })
+            jumpToMessage({
+              msgId: undefined,
+              highlight: true,
+              // 'center' is for when we're jumping the message stack.
+              // When the stack is empty, we'll jump to last message,
+              // and 'center' will make the chat scroll down all the way.
+              scrollIntoViewArg: { block: 'center' },
+            })
           }}
         >
           <div

@@ -455,6 +455,7 @@ export default function Message(props: {
             msgChatId: undefined,
             highlight: true,
             msgParentId: message.id,
+            scrollIntoViewArg: { block: 'center' },
           })
         } else if (isProtectionBrokenMsg) {
           const { name } = await BackendRemote.rpc.getBasicChatInfo(
@@ -749,6 +750,9 @@ export const Quote = ({
             msgChatId: undefined,
             highlight: true,
             msgParentId,
+            // Often times the quoted message is already in view,
+            // so let's not scroll at all if so.
+            scrollIntoViewArg: { block: 'nearest' },
           })
       }}
     >

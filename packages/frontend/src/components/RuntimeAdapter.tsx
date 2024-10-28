@@ -55,7 +55,10 @@ export default function RuntimeAdapter({
           clearNotificationsForChat(notificationAccountId, chatId)
         }
         if (msgId) {
-          window.__internal_jump_to_message?.({ msgId })
+          window.__internal_jump_to_message?.({
+            msgId,
+            scrollIntoViewArg: { block: 'center' },
+          })
         }
       }
     )

@@ -122,7 +122,11 @@ export const ChatListItemRowMessage = React.memo<{
           queryStr={queryStr || ''}
           msr={messageSearchResult}
           onClick={() => {
-            jumpToMessage({ accountId, msgId: msrId })
+            jumpToMessage({
+              accountId,
+              msgId: msrId,
+              scrollIntoViewArg: { block: 'center' },
+            })
           }}
         />
       ) : (

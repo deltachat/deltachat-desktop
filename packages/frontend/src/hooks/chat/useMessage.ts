@@ -19,6 +19,13 @@ export type JumpToMessage = (params: {
   msgChatId?: number
   highlight?: boolean
   msgParentId?: number
+  /**
+   * `behavior: 'smooth'` should not be used due to "scroll locking":
+   * they don't behave well together currently.
+   * `inline` also isn't supposed to have effect because
+   * the messages list should not be horizontally scrollable.
+   */
+  scrollIntoViewArg?: Parameters<HTMLElement['scrollIntoView']>[0]
 }) => Promise<void>
 
 export type SendMessage = (
@@ -55,7 +62,14 @@ export default function useMessage() {
   const { chatId, setChatView, selectChat } = useChat()
 
   const jumpToMessage = useCallback<JumpToMessage>(
-    async ({ accountId, msgId, msgChatId, highlight = true, msgParentId }) => {
+    async ({
+      accountId,
+      msgId,
+      msgChatId,
+      highlight = true,
+      msgParentId,
+      scrollIntoViewArg,
+    }) => {
       log.debug(`jumpToMessage with messageId: ${msgId}`)
 
       if (msgChatId == undefined) {
@@ -74,6 +88,7 @@ export default function useMessage() {
           msgId,
           highlight,
           addMessageIdToStack: msgParentId,
+          scrollIntoViewArg,
         })
       }, 0)
     },

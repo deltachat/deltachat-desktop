@@ -79,6 +79,8 @@ export const ChatProvider = ({
           msgId: undefined,
           highlight: false,
           addMessageIdToStack: undefined,
+          // `scrollIntoViewArg:` doesn't really have effect when
+          // jumping to the last message.
         })
       }
 
