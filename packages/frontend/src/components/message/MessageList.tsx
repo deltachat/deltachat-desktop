@@ -796,11 +796,11 @@ function JumpDownButton({
   jumpToMessageStack,
 }: {
   countUnreadMessages: number
-  jumpToMessage: (
-    msgId: number | undefined,
-    highlight?: boolean,
+  jumpToMessage: (params: {
+    msgId: number | undefined
+    highlight?: boolean
     addMessageIdToStack?: undefined | number
-  ) => Promise<void>
+  }) => Promise<void>
   jumpToMessageStack: number[]
 }) {
   let countToShow: string = countUnreadMessages.toString()
@@ -823,7 +823,7 @@ function JumpDownButton({
         <div
           className='button'
           onClick={() => {
-            jumpToMessage(undefined, true)
+            jumpToMessage({ msgId: undefined, highlight: true })
           }}
         >
           <div

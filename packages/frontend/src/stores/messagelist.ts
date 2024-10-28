@@ -346,7 +346,10 @@ class MessageListStore extends Store<MessageListState> {
         if (firstUnreadMsgId !== null) {
           setTimeout(async () => {
             const chat = await chatP
-            this.effect.jumpToMessage(firstUnreadMsgId, false)
+            this.effect.jumpToMessage({
+              msgId: firstUnreadMsgId,
+              highlight: false,
+            })
             ActionEmitter.emitAction(
               chat.archived
                 ? KeybindAction.ChatList_SwitchToArchiveView
@@ -403,11 +406,15 @@ class MessageListStore extends Store<MessageListState> {
      */
     jumpToMessage: this.scheduler.lockedQueuedEffect(
       'scroll',
-      async (
-        jumpToMessageId: number | undefined,
+      async ({
+        msgId: jumpToMessageId,
         highlight = true,
+        addMessageIdToStack,
+      }: {
+        msgId: number | undefined
+        highlight?: boolean
         addMessageIdToStack?: undefined | number
-      ) => {
+      }) => {
         const startTime = performance.now()
 
         this.log.debug('jumpToMessage with messageId: ', jumpToMessageId)
