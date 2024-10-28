@@ -27,7 +27,7 @@ let translateFunction: getMessageFunction | null = null
 export const tx: getMessageFunction = function (key, substitutions, raw_opts) {
   if (translateFunction === null) {
     log.error('tried to use translation function before init')
-    return key
+    return key as string
   }
   return translateFunction(key, substitutions, raw_opts)
 }

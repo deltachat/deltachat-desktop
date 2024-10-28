@@ -1,4 +1,5 @@
 import { getLogger } from './logger.js'
+import { TranslationKey } from './translationKeyType.js'
 const log = getLogger('localize')
 
 export interface LocaleData {
@@ -12,12 +13,18 @@ export interface LocaleData {
   }
 }
 
+// Solution to typescript thinking our variants can be just combined into the type string
+// adapted from https://github.com/sindresorhus/type-fest/blob/cabce984e5c19558f2f0061c3cd9488a945f60e6/source/literal-union.d.ts
+export type LiteralUnion<LiteralType> =
+  | LiteralType
+  | (string & Record<never, never>)
+
 // 'other' should exists for all languages (source?)
 // https://www.unicode.org/cldr/charts/43/supplemental/language_plural_rules.html
 type getMessageOptions = { quantity?: 'other' | number }
 
 export type getMessageFunction = (
-  key: string,
+  key: LiteralUnion<TranslationKey>,
   substitutions?: string | string[],
   raw_opts?: 'other' | getMessageOptions
 ) => string
@@ -44,19 +51,20 @@ export function translate(
   }
 
   function getMessage(
-    key: string,
+    key: LiteralUnion<TranslationKey>,
     substitutions?: string | string[],
     raw_opts?: 'other' | getMessageOptions
   ) {
+    const translationKey = key as string
     let opts: getMessageOptions = {}
     if (typeof raw_opts === 'string') opts = { quantity: raw_opts }
     else opts = Object.assign({}, raw_opts)
 
-    const entry = messages[key]
+    const entry = messages[translationKey]
 
     if (!entry) {
-      log.error(`Missing translation for key '${key}'`)
-      return key
+      log.error(`Missing translation for key '${translationKey}'`)
+      return translationKey
     }
 
     let message: string | undefined = entry.message
@@ -89,16 +97,18 @@ export function translate(
         message = undefined
       }
       if (typeof message === 'undefined') {
-        log.error(`Missing quantity '${opts.quantity}' for key '${key}'`)
-        return `${key}:${opts.quantity}`
+        log.error(
+          `Missing quantity '${opts.quantity}' for key '${translationKey}'`
+        )
+        return `${translationKey}:${opts.quantity}`
       }
     }
 
     if (typeof message === 'undefined') {
       log.error(
-        `Missing 'message' for key '${key}', maybe you need to specify quantity`
+        `Missing 'message' for key '${translationKey}', maybe you need to specify quantity`
       )
-      return `${key}:?`
+      return `${translationKey}:?`
     }
 
     if (substitutions) {
@@ -112,7 +122,7 @@ export function translate(
           substitutions === undefined ||
           typeof substitutions[c] === 'undefined'
         ) {
-          log.error(`Missing ${c} argument for key %c'${key}'`)
+          log.error(`Missing ${c} argument for key %c'${translationKey}'`)
           return ''
         }
         return substitutions[c++].toString()
