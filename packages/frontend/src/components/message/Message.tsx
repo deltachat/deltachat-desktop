@@ -449,13 +449,13 @@ export default function Message(props: {
     if (isInteractive) {
       onClick = async () => {
         if (isWebxdcInfo && message.parentId) {
-          jumpToMessage(
+          jumpToMessage({
             accountId,
-            message.parentId,
-            undefined,
-            true,
-            message.id
-          )
+            msgId: message.parentId,
+            msgChatId: undefined,
+            highlight: true,
+            msgParentId: message.id,
+          })
         } else if (isProtectionBrokenMsg) {
           const { name } = await BackendRemote.rpc.getBasicChatInfo(
             selectedAccountId(),
@@ -743,13 +743,13 @@ export const Quote = ({
       className='quote-background'
       onClick={() => {
         quote.kind === 'WithMessage' &&
-          jumpToMessage(
+          jumpToMessage({
             accountId,
-            quote.messageId,
-            undefined,
-            true,
-            msgParentId
-          )
+            msgId: quote.messageId,
+            msgChatId: undefined,
+            highlight: true,
+            msgParentId,
+          })
       }}
     >
       <div
