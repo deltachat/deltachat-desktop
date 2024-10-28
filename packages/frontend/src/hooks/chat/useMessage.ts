@@ -70,7 +70,11 @@ export default function useMessage() {
 
       // Workaround to actual jump to message in regarding mounted component view
       setTimeout(() => {
-        window.__internal_jump_to_message?.(msgId, highlight, msgParentId)
+        window.__internal_jump_to_message?.({
+          msgId,
+          highlight,
+          addMessageIdToStack: msgParentId,
+        })
       }, 0)
     },
     [chatId, selectChat, setChatView]
