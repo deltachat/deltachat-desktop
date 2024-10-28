@@ -11,6 +11,7 @@
   - IMAP COMPRESS support.
   - Sort received outgoing message down if it's fresher than all non fresh messages.
   - Auto-restore 1:1 chat protection after receiving old unverified message.
+- when jumping to a message (e.g. when showing the first unread message, or when jumping to a message through "show in chat"), position it more appropriately in the scrollable area #4286
 
 ## Fixed
 - image thumbnails not showing in chat list #4247
