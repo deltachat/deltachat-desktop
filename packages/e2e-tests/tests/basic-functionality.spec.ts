@@ -60,7 +60,7 @@ test('create profiles', async ({ page }) => {
   expect(userA.id).toBeDefined()
 
   existingProfiles.push(userA)
-
+  /* ignore-console-log */
   console.log(`User ${userA.name} wurde angelegt!`, userA)
 
   const userB = await createNewProfile(page, userNames[1])
@@ -68,7 +68,7 @@ test('create profiles', async ({ page }) => {
   expect(userB.id).toBeDefined()
 
   existingProfiles.push(userB)
-
+  /* ignore-console-log */
   console.log(`User ${userB.name} wurde angelegt!`, userB)
 })
 
@@ -118,6 +118,7 @@ test('start chat with user', async ({ page, context, browserName }) => {
   await expect(
     page.locator('.chat-list .chat-list-item').filter({ hasText: userA.name })
   ).toHaveCount(1)
+  /* ignore-console-log */
   console.log(`Chat with ${userA.name} created!`)
 })
 
@@ -185,8 +186,8 @@ test('delete profiles', async ({ page }) => {
     const deleted = await deleteProfile(page, profileToDelete.id)
     expect(deleted).toContain(profileToDelete.name)
     if (deleted) {
+      /* ignore-console-log */
       console.log(`User ${profileToDelete.name} was deleted!`)
     }
   }
-  // expect(page.locator('.styles_module_accountList button')).toHaveCount(1)
 })

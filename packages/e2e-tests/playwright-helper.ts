@@ -55,16 +55,12 @@ export async function createNewProfile(
     _hasSelector(returnedLocator) &&
     returnedLocator['_selector'] === welcomeButtonsSelector
   ) {
-    const c = await returnedLocator.evaluate('node => node.className')
-    console.log(c)
     // no account yet
     await page
       .locator('.styles_module_welcomeScreenButtonGroup button')
       .first()
       .click()
   } else {
-    const c = await returnedLocator.evaluate('node => node.className')
-    console.log(c)
     // create a new account
     returnedLocator.click()
     await page
@@ -150,7 +146,6 @@ export async function loadExistingProfiles(page: Page): Promise<User[]> {
   const accountList = page.locator('.styles_module_account')
   const existingAccountItems = await accountList.count()
   if (existingAccountItems > 0) {
-    console.log('Existing accounts found:', existingAccountItems)
     if (existingAccountItems === 1) {
       const welcomeDialog = await page
         .locator('.styles_module_welcome')
@@ -170,7 +165,6 @@ export async function loadExistingProfiles(page: Page): Promise<User[]> {
         existingProfiles.push(p)
       }
     }
-    console.log(existingProfiles)
     return existingProfiles
   }
   return []
