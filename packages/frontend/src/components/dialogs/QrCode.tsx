@@ -81,7 +81,7 @@ export default function QrCode({
           onClose={onClose}
         />
       )}
-      {!showQrCode && <QrCodeScanQrInner onClose={onClose}/>}
+      {!showQrCode && <QrCodeScanQrInner onClose={onClose} />}
     </Dialog>
   )
 }

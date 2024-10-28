@@ -23,7 +23,7 @@ type ContextMenuItemExpandable = {
   subitems: (ContextMenuItem | undefined)[]
 }
 
-export type ContextMenuItem = { label: string, dataTestid?: string } & (
+export type ContextMenuItem = { label: string; dataTestid?: string } & (
   | ContextMenuItemActionable
   | ContextMenuItemExpandable
 )
