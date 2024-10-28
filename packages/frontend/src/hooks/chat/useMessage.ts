@@ -7,19 +7,19 @@ import { getLogger } from '../../../../shared/logger'
 
 import type { T } from '@deltachat/jsonrpc-client'
 
-export type JumpToMessage = (
-  accountId: number,
-  msgId: number,
+export type JumpToMessage = (params: {
+  accountId: number
+  msgId: number
   /**
    * Optional, but if it is known, it's best to provide it
    * for better performance.
    * When provided, the caller guarantees that
    * `msgChatId === await rpc.getMessage(accountId, msgId)).chatId`.
    */
-  msgChatId?: number,
-  highlight?: boolean,
+  msgChatId?: number
+  highlight?: boolean
   msgParentId?: number
-) => Promise<void>
+}) => Promise<void>
 
 export type SendMessage = (
   accountId: number,
@@ -55,13 +55,7 @@ export default function useMessage() {
   const { chatId, setChatView, selectChat } = useChat()
 
   const jumpToMessage = useCallback<JumpToMessage>(
-    async (
-      accountId: number,
-      msgId: number,
-      msgChatId?: number,
-      highlight = true,
-      msgParentId?: number
-    ) => {
+    async ({ accountId, msgId, msgChatId, highlight = true, msgParentId }) => {
       log.debug(`jumpToMessage with messageId: ${msgId}`)
 
       if (msgChatId == undefined) {
@@ -88,13 +82,13 @@ export default function useMessage() {
       chatId: number,
       message: Partial<T.MessageData>
     ) => {
-      const id = await BackendRemote.rpc.sendMsg(accountId, chatId, {
+      const msgId = await BackendRemote.rpc.sendMsg(accountId, chatId, {
         ...MESSAGE_DEFAULT,
         ...message,
       })
 
       // Jump down on sending
-      jumpToMessage(accountId, id, chatId, false)
+      jumpToMessage({ accountId, msgId, msgChatId: chatId, highlight: false })
     },
     [jumpToMessage]
   )

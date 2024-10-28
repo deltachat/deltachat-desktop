@@ -45,7 +45,12 @@ function buildContextMenu(
       action: () => {
         closeDialogCallback()
         setTimeout(() =>
-          jumpToMessage(accountId, message.id, message.chatId, true)
+          jumpToMessage({
+            accountId,
+            msgId: message.id,
+            msgChatId: message.chatId,
+            highlight: true,
+          })
         )
       },
     },
@@ -55,10 +60,15 @@ function buildContextMenu(
       action: () => {
         if (message.parentId) {
           closeDialogCallback()
-          // Currently the info message is always in the same chat
-          // as the message with `message.parentId`,
-          // but let's not pass `chatId` here, for future-proofing.
-          jumpToMessage(accountId, message.parentId, undefined, true)
+          jumpToMessage({
+            accountId,
+            msgId: message.parentId,
+            // Currently the info message is always in the same chat
+            // as the message with `message.parentId`,
+            // but let's not pass `chatId` here, for future-proofing.
+            msgChatId: undefined,
+            highlight: true,
+          })
         }
       },
     },
