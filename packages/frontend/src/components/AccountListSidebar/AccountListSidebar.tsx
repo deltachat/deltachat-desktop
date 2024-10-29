@@ -141,13 +141,7 @@ export default function AccountListSidebar({
             muted={noficationSettings[account.id]?.muted || false}
           />
         ))}
-        <button
-          aria-label={tx('add_account')}
-          className={styles.addButton}
-          onClick={onAddAccount}
-        >
-          +
-        </button>
+        <AddAccountButton onClick={onAddAccount} />
       </div>
       {/* The condition is the same as in https://github.com/deltachat/deltachat-desktop/blob/63af023437ff1828a27de2da37bf94ab180ec528/src/renderer/contexts/KeybindingsContext.tsx#L26 */}
       {window.__screen === Screens.Main && (
@@ -176,5 +170,19 @@ export default function AccountListSidebar({
         )}
       </div>
     </div>
+  )
+}
+
+function AddAccountButton(props: { onClick: () => void }) {
+  const tx = useTranslationFunction()
+
+  return (
+    <button
+      aria-label={tx('add_account')}
+      className={styles.addButton}
+      {...props}
+    >
+      +
+    </button>
   )
 }
