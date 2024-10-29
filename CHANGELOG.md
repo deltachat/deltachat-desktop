@@ -4,7 +4,13 @@
 
 ## Changed
 - style: avoid scrolling to account list items such that they're at the very edge of the list #4252
-- Update local help (2024-10-25)
+- Update local help (2024-10-25) #4264
+- Update translations (2024-27-10) #4281
+- Limit options for "Delete Messages from Server" for chatmail accounts #4276
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.148.5`
+  - IMAP COMPRESS support.
+  - Sort received outgoing message down if it's fresher than all non fresh messages.
+  - Auto-restore 1:1 chat protection after receiving old unverified message.
 
 ## Fixed
 - image thumbnails not showing in chat list #4247
@@ -14,9 +20,11 @@
 - style: fix VCard color being too bright in dark theme #4255
 - remove unnecessary horizontal scrollbar in "View Group" dialog #4254
 - add missing cancel buttons to import-/export- and reveive-backup progress dialogs #4272
-- change title of EditAccountAndPasswordDialog to make it clearer that it is about email account #4271
+- change title and button label of EditAccountAndPasswordDialog to make it clearer that it is about email account #4271, #4279
 - fix styling of progressbars in light theme #4274
+- fix Delta Chat not launching on Debian sometimes due to missing package dependencies (`libasound2`) #4275
 - fix not being able to remove avatar for a mailing list #4270
+- fix deleting messages with broken video attachment from gallery #4283
 
 <a id="1_47_0"></a>
 

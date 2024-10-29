@@ -10,6 +10,7 @@
     "allowJs": false,
     "esModuleInterop": true,
     "moduleResolution": "Node10",
+    "resolveJsonModule": true,
     "strictNullChecks": true,
     "strict": true
   },

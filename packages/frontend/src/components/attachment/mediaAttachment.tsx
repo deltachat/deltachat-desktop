@@ -248,7 +248,7 @@ export function VideoAttachment({
     const onContextMenu = getBrokenMediaContextMenu(
       contextMenu.openContextMenu,
       openDialog,
-      jumpToMessage,
+      deleteMessage,
       messageId,
       accountId
     )

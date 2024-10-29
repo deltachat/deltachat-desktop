@@ -7,6 +7,10 @@
    <!-- deprecated, the word "or" to separate blocks in the user interface that are mutually exclusive -->
     <string name="or_separator">or</string>
     <string name="clear_search">Clear Search</string>
+    <!-- a noun, used on a button, short for "show link" -->
+    <string name="link">Link</string>
+    <!-- "scan" in the meaning of "scan QR code" -->
+    <string name="scan">Scan</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="select">Select</string>
@@ -234,6 +238,7 @@
     <string name="menu_message_details">Message Info</string>
     <string name="menu_copy_to_clipboard">Copy to Clipboard</string>
     <string name="share_invite_link">Share Invite Link</string>
+    <string name="share_invite_link_explain">Anyone with this link can view your profile and start a chat with you. Only share it with people you trust.</string>
     <string name="invite_friends">Invite Friends</string>
     <!-- %1$s is replaced by the user's invitation link ("https://i.delta.chat/...") -->
     <string name="invite_friends_text">Contact me on Delta Chat:\n%1$s</string>
@@ -616,12 +621,14 @@
     <string name="proxy_use_proxy">Use Proxy</string>
     <string name="proxy_add">Add Proxy</string>
     <string name="proxy_add_explain">Supported proxy types: HTTP(S), SOCKS5 and Shadowsocks.</string>
-    <string name="proxy_add_url_hint">Enter proxy URL here</string>
-    <string name="proxy_invalid">Invalid or unsupported proxy URL</string>
+    <string name="proxy_add_url_hint">Enter proxy link here</string>
+    <string name="proxy_invalid">Invalid or unsupported proxy</string>
     <string name="proxy_list_header">Saved Proxies</string>
     <string name="proxy_delete">Delete Proxy</string>
     <string name="proxy_delete_explain">Are you sure you want to delete \"%1$s\"?</string>
     <string name="proxy_use_proxy_confirm">Do you want to use proxy \"%1$s\"?</string>
+    <string name="proxy_share_explain">Your friends can add this proxy by scanning the QR code.</string>
+    <string name="proxy_share_link">Share Link</string>
 
     <!-- deprecated -->
     <string name="login_socks5">SOCKS5</string>
@@ -647,6 +654,9 @@
     <string name="accept_invalid_certificates">Accept invalid certificates</string>
     <string name="switch_account">Switch Profile</string>
     <string name="add_account">Add Profile</string>
+    <string name="profile_tag">Private Tag</string>
+    <string name="profile_tag_hint">eg. Work, Family</string>
+    <string name="profile_tag_explain">Tag that is visible only for you; helping you to differ between your profiles.</string>
     <string name="delete_account">Delete Profile</string>
     <string name="delete_account_ask">Are you sure you want to delete your profile data?</string>
     <string name="delete_account_explain_with_name">All profile data of \"%s\" on this device will be deleted, including your end-to-end encryption setup, contacts, chats, messages and media. This action cannot be undone.</string>
