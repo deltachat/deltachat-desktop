@@ -7,6 +7,10 @@
 - Update local help (2024-10-25) #4264
 - Update translations (2024-27-10) #4281
 - Limit options for "Delete Messages from Server" for chatmail accounts #4276
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.148.5`
+  - IMAP COMPRESS support.
+  - Sort received outgoing message down if it's fresher than all non fresh messages.
+  - Auto-restore 1:1 chat protection after receiving old unverified message.
 
 ## Fixed
 - image thumbnails not showing in chat list #4247
