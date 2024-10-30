@@ -17,7 +17,7 @@ This package depends on the target-browser so make sure you prepared that to run
 But don't run the browser at the same time, it will be started inside the test routine.
 
 ```sh
-pnpm e2e --project <chromium | firefox | Chrome>
+pnpm -w e2e --project <chromium | firefox | Chrome>
 ```
 
 for headless usage
@@ -25,11 +25,11 @@ for headless usage
 or
 
 ```sh
-pnpm e2e --project <chromium | firefox | Chrome> --ui
+pnpm -w e2e --project <chromium | firefox | Chrome> --ui
 ```
 
 for [UI mode](https://playwright.dev/docs/test-ui-mode)
 
-So far the tests do not allow to run different browsers at the same time, since they use the same account dir which is
+The account dir for tests is in _packages/e2e-tests/data/accounts_
 
-_packages/e2e-tests/data/accounts_
+It can be deleted after running tests and will be recreated in the next run.
