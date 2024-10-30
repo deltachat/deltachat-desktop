@@ -21,7 +21,7 @@ export default function DialogHeader(props: Props) {
   const { onClickBack, title, onClose, onClickEdit, children } = props
 
   return (
-    <header className={classNames(styles.dialogHeader)}>
+    <header className={classNames(styles.dialogHeader, 'drag')}>
       {onClickBack && <BackButton onClick={onClickBack} />}
       {title && <DialogHeading>{title}</DialogHeading>}
       {children}
