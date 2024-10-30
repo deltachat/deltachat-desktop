@@ -76,6 +76,6 @@ body.show-drag-areas {
   -webkit-app-region: drag;
 }
 
-.no-drag {
+.no-drag, input, button {
   -webkit-app-region: no-drag;
 }
