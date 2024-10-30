@@ -37,6 +37,7 @@ Windows (Powershell):
 $env:WEB_PASSWORD="my_password"
 pnpm run start
 ```
+
 or add a .env file with the password see [env.example](.env.example)
 
 From the root of this repo you can start the server with
