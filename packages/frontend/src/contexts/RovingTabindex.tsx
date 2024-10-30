@@ -6,6 +6,8 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useRef,
+  // useEffect,
   useState,
 } from 'react'
 
@@ -30,15 +32,60 @@ import React, {
  *   Then `tabindex` is 0 for all the components,
  *   until `setAsActiveElement` is called explicitly.
  * - lacks "Home", "End" key handling, and some other features.
+ *
+ * @param elementId any value to identify this element among others when using
+ * with `setActiveElement`.
+ * `null` must not be used - it's a special value.
  */
-export function useRovingTabindex(elementRef: RefObject<HTMLElement>) {
+export function useRovingTabindex(elementId?: unknown) {
+  const defaultId = useRef(Symbol())
+  if (elementId === undefined) {
+    elementId = defaultId
+  }
+
   const context = useContext(RovingTabindexContext)
+
+  // const unsetAsActiveElement = context.unsetAsActiveElement
+  // useEffect(() => {
+  //   return () => unsetAsActiveElement(elementId)
+  //   // TODO fix: this is not gonna work because `unsetAsActiveElement`
+  //   // changes every time we set a different active element.
+  // }, [])
+  // const unsetAsActiveElement = context.unsetAsActiveElement
+
+  // useEffect(() => {
+  //   if (context.activeElementId !== elementId) {
+  //     return
+  //   }
+  //   return () => {
+  //     // unsetAsActiveElement(elementId)
+  //     context.setActiveElement(null)
+  //   }
+  // }, [context, context.activeElementId, elementId])
+
+  // const mounted = useRef<boolean>(true)
+  const unsetAsActiveTimeoutId = useRef<number>(-1)
+  useEffect(() => {
+    clearTimeout(unsetAsActiveTimeoutId.current)
+
+    if (context.activeElementId !== elementId) {
+      return
+    }
+
+    // A bit of a hack to unset the element as active when it gets unmounted.
+    return () => {
+      unsetAsActiveTimeoutId.current = window.setTimeout(() => {
+        if (context.activeElementId === elementId) {
+          context.setActiveElement(null)
+        }
+      })
+    }
+  }, [context, elementId])
 
   const tabIndex: 0 | -1 =
     // If the active element has not been chosen yet,
     // let' keep the default behavior (tabindex="0")
-    context.activeElement == null ||
-    context.activeElement === elementRef.current
+    context.activeElementId == null || context.activeElementId === elementId
       ? 0
       : -1
 
@@ -64,17 +111,18 @@ export function useRovingTabindex(elementRef: RefObject<HTMLElement>) {
      */
     // `elementRef.current` could be null, I am not sure
     // if this means something to us practically.
-    setAsActiveElement: () => context.setActiveElement(elementRef.current),
-    activeElement: context.activeElement,
+    setAsActiveElement: () => context.setActiveElement(elementId),
+    activeElementId: context.activeElementId,
   }
 }
 
 const log = getLogger('contexts/RovingTabindex')
 
 type ContextValue = {
-  activeElement: HTMLElement | null
+  activeElementId: unknown | null
   onKeydown: (event: React.KeyboardEvent) => void
-  setActiveElement: (element: HTMLElement | null) => void
+  setActiveElement: (elementId: unknown | null) => void
+  // unsetAsActiveElement: (elementId: unknown) => void
 }
 
 type ProviderProps = PropsWithChildren<{
@@ -92,9 +140,10 @@ type ProviderProps = PropsWithChildren<{
 }>
 
 export const RovingTabindexContext = createContext<ContextValue>({
-  activeElement: null,
+  activeElementId: null,
   onKeydown: () => {},
   setActiveElement: () => {},
+  // unsetAsActiveElement: () => {},
 })
 
 /** @see {@link useRovingTabindex} */
@@ -107,47 +156,53 @@ export function RovingTabindexProvider({
     classNameOfTargetElements = 'roving-tabindex'
   }
 
-  const [activeElement, setActiveElement] = useState<HTMLElement | null>(null)
+  const [activeElementId, setActiveElementId] = useState<unknown | null>(null)
 
-  // Ensure that the "active" element is actually in DOM,
-  // because it's the only one that is keyboard focusable.
-  // Otherwise it's impossible to focus the widget by pressing "Tab".
-  // If it's not in DOM, we need to either set another element
-  // as the active one, or `setActiveElement(null)` to make
-  // all the elements focusable.
-  //
-  // FYI instead of using a `MutationObserver` we could probaby have
-  // utilized React's "unmount" callback (i.e. `useEffect`'s cleanup function),
-  // but I failed at it.
-  // Let's keep things vanilla then I guess.
-  useEffect(() => {
-    if (activeElement == null) {
-      return
-    }
+  // // Ensure that the "active" element is actually in DOM,
+  // // because it's the only one that is keyboard focusable.
+  // // Otherwise it's impossible to focus the widget by pressing "Tab".
+  // // If it's not in DOM, we need to either set another element
+  // // as the active one, or `setActiveElement(null)` to make
+  // // all the elements focusable.
+  // //
+  // // FYI instead of using a `MutationObserver` we could probaby have
+  // // utilized React's "unmount" callback (i.e. `useEffect`'s cleanup function),
+  // // but I failed at it.
+  // // Let's keep things vanilla then I guess.
+  // useEffect(() => {
+  //   if (activeElementId == null) {
+  //     return
+  //   }
 
-    const observer = new MutationObserver(_mutations => {
-      if (!document.body.contains(activeElement)) {
-        // Another option is to select the next/closest element
-        // as the new active one.
-        setActiveElement(null)
-      }
-    })
-    // Maybe we could observe `wrapperElementRef` for performance,
-    // but IDK let's play it safe.
-    observer.observe(document.body, { childList: true, subtree: true })
-    return () => observer.disconnect()
-  }, [activeElement])
+  //   const observer = new MutationObserver(_mutations => {
+  //     if (!document.body.contains(activeElementId)) {
+  //       // Another option is to select the next/closest element
+  //       // as the new active one.
+  //       setActiveElementId(null)
+  //     }
+  //   })
+  //   // Maybe we could observe `wrapperElementRef` for performance,
+  //   // but IDK let's play it safe.
+  //   observer.observe(document.body, { childList: true, subtree: true })
+  //   return () => observer.disconnect()
+  // }, [activeElementId])
+
+  // const unsetAsActiveElement = (elementId: unknown) => {
+  //   if (activeElementId === elementId) {
+  //     setActiveElementId(null)
+  //   }
+  // }
 
   const onKeydown = useCallback(
     (event: React.KeyboardEvent) => {
       if (!wrapperElementRef.current) {
         log.warn(
           'Received keydown event, but there is no wrapperElement? How?',
-          activeElement
+          activeElementId
         )
         return
       }
-      if (!activeElement) {
+      if (activeElementId === null) {
         // This could happen either after the initial render,
         // or if the active element was removed from DOM.
         // Let's just wait for the user to focus another element
@@ -174,7 +229,10 @@ export function RovingTabindexProvider({
       let oldActiveElementInd: number | undefined
       for (let i = 0; i < eligibleElements.length; i++) {
         const eligibleEl = eligibleElements[i]
-        if (eligibleEl === activeElement) {
+        // if (eligibleEl === activeElementId) {
+
+        // TODO is `document.activeElement` fine?
+        if (eligibleEl === document.activeElement) {
           oldActiveElementInd = i
           break
         }
@@ -182,7 +240,7 @@ export function RovingTabindexProvider({
       if (oldActiveElementInd == undefined) {
         log.warn(
           'Could not find the currently active element in DOM',
-          activeElement
+          activeElementId
         )
         return
       }
@@ -195,22 +253,23 @@ export function RovingTabindexProvider({
       // the last or the first.
       if (newActiveElement != undefined) {
         const newActiveElement_ = newActiveElement as HTMLElement
-        setActiveElement(newActiveElement_)
+        setActiveElementId(newActiveElement_)
         // It is fine to `.focus()` here without wating for a render
         // or `useEffect`, because elements with `tabindex="-1"`
         // are still programmatically focusable.
         newActiveElement_.focus()
       }
     },
-    [activeElement, classNameOfTargetElements, wrapperElementRef]
+    [activeElementId, classNameOfTargetElements, wrapperElementRef]
   )
 
   return (
     <RovingTabindexContext.Provider
       value={{
-        activeElement,
+        activeElementId,
         onKeydown,
-        setActiveElement,
+        setActiveElement: setActiveElementId,
+        // unsetAsActiveElement,
       }}
     >
       {children}
