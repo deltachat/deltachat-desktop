@@ -346,7 +346,13 @@ class MessageListStore extends Store<MessageListState> {
         if (firstUnreadMsgId !== null) {
           setTimeout(async () => {
             const chat = await chatP
-            this.effect.jumpToMessage(firstUnreadMsgId, false)
+            this.effect.jumpToMessage({
+              msgId: firstUnreadMsgId,
+              highlight: false,
+              // 'center' so that old messages are also shown, for context.
+              // See https://github.com/deltachat/deltachat-desktop/issues/4284
+              scrollIntoViewArg: { block: 'center' },
+            })
             ActionEmitter.emitAction(
               chat.archived
                 ? KeybindAction.ChatList_SwitchToArchiveView
@@ -403,11 +409,17 @@ class MessageListStore extends Store<MessageListState> {
      */
     jumpToMessage: this.scheduler.lockedQueuedEffect(
       'scroll',
-      async (
-        jumpToMessageId: number | undefined,
+      async ({
+        msgId: jumpToMessageId,
         highlight = true,
+        addMessageIdToStack,
+        scrollIntoViewArg,
+      }: {
+        msgId: number | undefined
+        highlight?: boolean
         addMessageIdToStack?: undefined | number
-      ) => {
+        scrollIntoViewArg?: Parameters<HTMLElement['scrollIntoView']>[0]
+      }) => {
         const startTime = performance.now()
 
         this.log.debug('jumpToMessage with messageId: ', jumpToMessageId)
@@ -614,7 +626,8 @@ class MessageListStore extends Store<MessageListState> {
           viewState: ChatViewReducer.jumpToMessage(
             this.state.viewState,
             jumpToMessageId,
-            highlight
+            highlight,
+            scrollIntoViewArg
           ),
           jumpToMessageStack,
         })

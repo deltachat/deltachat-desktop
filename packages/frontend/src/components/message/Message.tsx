@@ -50,6 +50,7 @@ import styles from './styles.module.scss'
 
 import type { OpenDialog } from '../../contexts/DialogContext'
 import type { PrivateReply } from '../../hooks/chat/usePrivateReply'
+import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
 
 const Avatar = ({
   contact,
@@ -374,19 +375,31 @@ export default function Message(props: {
         message.chatId
       )
 
+      const showContextMenuEventPos = mouseEventToPosition(event)
+
       const handleReactClick = (
-        event: React.MouseEvent<Element, MouseEvent>
+        reactClickEvent: React.MouseEvent<Element, MouseEvent>
       ) => {
         // We don't want `OutsideClickHelper` to catch this event, causing
         // the reaction bar to directly hide again when switching to other
         // messages by clicking the "react" button
-        event.stopPropagation()
+        reactClickEvent.stopPropagation()
+
+        const reactClickEventPos = mouseEventToPosition(reactClickEvent)
+        // `reactClickEventPos` might have a wrong ((0, 0)) position
+        // if the "react" button was activated with keyboard,
+        // because the element on which it was activated
+        // (the menu item) gets removed from DOM immediately.
+        // Let's fall back to `showContextMenuEventPos` in such a case.
+        const position =
+          reactClickEventPos.x > 0 && reactClickEventPos.y > 0
+            ? reactClickEventPos
+            : showContextMenuEventPos
 
         showReactionsBar({
           messageId: message.id,
           reactions: message.reactions,
-          x: event.clientX,
-          y: event.clientY,
+          ...position,
         })
       }
 
@@ -405,11 +418,9 @@ export default function Message(props: {
         },
         target
       )
-      const [cursorX, cursorY] = [event.clientX, event.clientY]
 
       openContextMenu({
-        cursorX,
-        cursorY,
+        ...showContextMenuEventPos,
         items,
       })
     },
@@ -449,13 +460,14 @@ export default function Message(props: {
     if (isInteractive) {
       onClick = async () => {
         if (isWebxdcInfo && message.parentId) {
-          jumpToMessage(
+          jumpToMessage({
             accountId,
-            message.parentId,
-            undefined,
-            true,
-            message.id
-          )
+            msgId: message.parentId,
+            msgChatId: undefined,
+            highlight: true,
+            msgParentId: message.id,
+            scrollIntoViewArg: { block: 'center' },
+          })
         } else if (isProtectionBrokenMsg) {
           const { name } = await BackendRemote.rpc.getBasicChatInfo(
             selectedAccountId(),
@@ -743,13 +755,16 @@ export const Quote = ({
       className='quote-background'
       onClick={() => {
         quote.kind === 'WithMessage' &&
-          jumpToMessage(
+          jumpToMessage({
             accountId,
-            quote.messageId,
-            undefined,
-            true,
-            msgParentId
-          )
+            msgId: quote.messageId,
+            msgChatId: undefined,
+            highlight: true,
+            msgParentId,
+            // Often times the quoted message is already in view,
+            // so let's not scroll at all if so.
+            scrollIntoViewArg: { block: 'nearest' },
+          })
       }}
     >
       <div

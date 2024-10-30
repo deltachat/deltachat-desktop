@@ -25,6 +25,7 @@ import { selectedAccountId } from '../../ScreenController'
 import type { DialogProps, OpenDialog } from '../../contexts/DialogContext'
 import type { JumpToMessage } from '../../hooks/chat/useMessage'
 import type { PrivateReply } from '../../hooks/chat/usePrivateReply'
+import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
 
 const log = getLogger('render/ChatAuditLog')
 
@@ -45,7 +46,13 @@ function buildContextMenu(
       action: () => {
         closeDialogCallback()
         setTimeout(() =>
-          jumpToMessage(accountId, message.id, message.chatId, true)
+          jumpToMessage({
+            accountId,
+            msgId: message.id,
+            msgChatId: message.chatId,
+            highlight: true,
+            scrollIntoViewArg: { block: 'center' },
+          })
         )
       },
     },
@@ -55,10 +62,16 @@ function buildContextMenu(
       action: () => {
         if (message.parentId) {
           closeDialogCallback()
-          // Currently the info message is always in the same chat
-          // as the message with `message.parentId`,
-          // but let's not pass `chatId` here, for future-proofing.
-          jumpToMessage(accountId, message.parentId, undefined, true)
+          jumpToMessage({
+            accountId,
+            msgId: message.parentId,
+            // Currently the info message is always in the same chat
+            // as the message with `message.parentId`,
+            // but let's not pass `chatId` here, for future-proofing.
+            msgChatId: undefined,
+            highlight: true,
+            scrollIntoViewArg: { block: 'center' },
+          })
         }
       },
     },
@@ -130,11 +143,9 @@ export default function ChatAuditLogDialog(
       selectedChat.chatType === C.DC_CHAT_TYPE_GROUP,
       onClose
     )
-    const [cursorX, cursorY] = [event.clientX, event.clientY]
 
     openContextMenu({
-      cursorX,
-      cursorY,
+      ...mouseEventToPosition(event),
       items,
     })
   }

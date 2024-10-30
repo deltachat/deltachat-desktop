@@ -10,6 +10,7 @@ import Icon from './Icon'
 import type { IconName } from './Icon'
 
 import useContextMenu from '../hooks/useContextMenu'
+import { mouseEventToPosition } from '../utils/mouseEventToPosition'
 
 type ContextMenuItemActionable = {
   icon?: IconName
@@ -29,8 +30,8 @@ export type ContextMenuItem = { label: string; dataTestid?: string } & (
 )
 
 type showFnArguments = {
-  cursorX: number
-  cursorY: number
+  x: number
+  y: number
   items: (ContextMenuItem | false)[]
 }
 
@@ -67,7 +68,7 @@ export function ContextMenuLayer({
   const endPromiseRef = useRef<(() => void) | null>(null)
 
   const show = useCallback(
-    async ({ cursorX: x, cursorY: y, items: rawItems }: showFnArguments) => {
+    async ({ x, y, items: rawItems }: showFnArguments) => {
       if (!layerRef.current) {
         throw new Error('Somehow the ContextMenuLayer went missing')
       }
@@ -382,7 +383,6 @@ export function makeContextMenu(
 ) {
   return (ev: React.MouseEvent<any, MouseEvent>) => {
     ev.preventDefault() // prevent default runtime context menu from opening
-    const [cursorX, cursorY] = [ev.clientX, ev.clientY]
 
     const items =
       typeof itemsOrItemsFactoryFn === 'function'
@@ -390,8 +390,7 @@ export function makeContextMenu(
         : itemsOrItemsFactoryFn
 
     return openContextMenu({
-      cursorX,
-      cursorY,
+      ...mouseEventToPosition(ev),
       items,
     })
   }

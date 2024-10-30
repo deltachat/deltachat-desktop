@@ -8,6 +8,7 @@ type ScrollTo =
 interface ScrollToMessage {
   type: 'scrollToMessage'
   msgId: number
+  scrollIntoViewArg?: Parameters<HTMLElement['scrollIntoView']>[0]
   highlight: boolean
 }
 
@@ -140,7 +141,8 @@ export class ChatViewReducer {
   static jumpToMessage(
     prevState: ChatViewState,
     jumpToMessageId: number,
-    highlight: boolean
+    highlight: boolean,
+    scrollIntoViewArg: ScrollToMessage['scrollIntoViewArg']
   ): ChatViewState {
     return {
       ...prevState,
@@ -148,6 +150,7 @@ export class ChatViewReducer {
         type: 'scrollToMessage',
         msgId: jumpToMessageId,
         highlight,
+        scrollIntoViewArg,
       },
     }
   }

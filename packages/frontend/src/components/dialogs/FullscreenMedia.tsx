@@ -115,7 +115,12 @@ export default function FullscreenMedia(props: Props & DialogProps) {
     {
       label: tx('show_in_chat'),
       action: () => {
-        jumpToMessage(accountId, msg.id, msg.chatId)
+        jumpToMessage({
+          accountId,
+          msgId: msg.id,
+          msgChatId: msg.chatId,
+          scrollIntoViewArg: { block: 'center' },
+        })
         onClose()
       },
     },

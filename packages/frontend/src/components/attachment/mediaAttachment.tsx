@@ -73,7 +73,13 @@ const contextMenuFactory = (
     },
     {
       label: tx('show_in_chat'),
-      action: () => jumpToMessage(accountId, message.id, message.chatId),
+      action: () =>
+        jumpToMessage({
+          accountId,
+          msgId: message.id,
+          msgChatId: message.chatId,
+          scrollIntoViewArg: { block: 'center' },
+        }),
     },
     {
       label: tx('info'),
@@ -248,7 +254,7 @@ export function VideoAttachment({
     const onContextMenu = getBrokenMediaContextMenu(
       contextMenu.openContextMenu,
       openDialog,
-      jumpToMessage,
+      deleteMessage,
       messageId,
       accountId
     )

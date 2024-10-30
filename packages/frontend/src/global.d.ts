@@ -23,11 +23,12 @@ declare global {
     __refetchChatlist: undefined | (() => void)
     __internal_jump_to_message:
       | undefined
-      | ((
-          msgId: number | undefined,
-          highlight?: boolean,
+      | ((params: {
+          msgId: number | undefined
+          highlight?: boolean
           addMessageIdToStack?: undefined | number
-        ) => Promise<void>)
+          scrollIntoViewArg?: Parameters<HTMLElement['scrollIntoView']>[0]
+        }) => Promise<void>)
     __updateAccountListSidebar: (() => void) | undefined
   }
 }
