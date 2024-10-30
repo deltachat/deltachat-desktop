@@ -88,7 +88,7 @@ export default function ForwardMessage(props: Props) {
       <DialogBody className={styles.forwardMessageDialogBody}>
         <div className='forward-message-account-input'>
           <input
-            className='search-input'
+            className='search-input no-drag'
             onChange={onSearchChange}
             value={queryStr}
             placeholder={tx('search')}
