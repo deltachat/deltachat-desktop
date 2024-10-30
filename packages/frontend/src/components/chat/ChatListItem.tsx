@@ -174,17 +174,14 @@ function ChatListItemArchiveLink({
     },
   ])
 
-  const ref = useRef<HTMLButtonElement>(null)
-
   const {
     tabIndex,
     onKeydown: tabindexOnKeydown,
     setAsActiveElement: tabindexSetAsActiveElement,
-  } = useRovingTabindex(ref)
+  } = useRovingTabindex()
 
   return (
     <button
-      ref={ref}
       tabIndex={tabIndex}
       onClick={onClick}
       onKeyDown={tabindexOnKeydown}
@@ -222,17 +219,14 @@ function ChatListItemError({
 }) {
   log.info('Error Loading Chatlistitem ' + chatListItem.id, chatListItem.error)
 
-  const ref = useRef<HTMLButtonElement>(null)
-
   const {
     tabIndex,
     onKeydown: tabindexOnKeydown,
     setAsActiveElement: tabindexSetAsActiveElement,
-  } = useRovingTabindex(ref)
+  } = useRovingTabindex(chatListItem.id)
 
   return (
     <button
-      ref={ref}
       tabIndex={tabIndex}
       onClick={onClick}
       onKeyDown={tabindexOnKeydown}
@@ -284,18 +278,15 @@ function ChatListItemNormal({
   isSelected?: boolean
   hover?: boolean
 }) {
-  const ref = useRef<HTMLButtonElement>(null)
-
   const {
     tabIndex,
     onKeydown: tabindexOnKeydown,
     setAsActiveElement: tabindexSetAsActiveElement,
-  } = useRovingTabindex(ref)
+  } = useRovingTabindex(chatListItem.id)
   // TODO `setAsActiveElement` if `isSelected` and `activeElement === null`
 
   return (
     <button
-      ref={ref}
       tabIndex={tabIndex}
       onClick={onClick}
       onKeyDown={tabindexOnKeydown}
@@ -410,19 +401,16 @@ export const ChatListItemMessageResult = React.memo<{
 }>(props => {
   const { msr, onClick, queryStr } = props
 
-  const ref = useRef<HTMLButtonElement>(null)
-
   const {
     tabIndex,
     onKeydown: tabindexOnKeydown,
     setAsActiveElement: tabindexSetAsActiveElement,
-  } = useRovingTabindex(ref)
+  } = useRovingTabindex()
 
   if (typeof msr === 'undefined') return <PlaceholderChatListItem />
 
   return (
     <button
-      ref={ref}
       tabIndex={tabIndex}
       onClick={onClick}
       onKeyDown={tabindexOnKeydown}
