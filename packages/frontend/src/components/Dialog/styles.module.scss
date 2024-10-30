@@ -107,7 +107,6 @@ $paddingVertical: 20px;
   justify-content: center;
   padding: 0;
   width: $headerButtonSize;
-  -webkit-app-region: no-drag; // make it clickable, even when it is on top of navbar
 
   & + & {
     margin-left: 5px;

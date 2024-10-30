@@ -77,6 +77,10 @@ only for debugging:
     }
     return runtime
   }
+
+  showDragAreas() {
+    document.body.classList.toggle("show-drag-areas")
+  }
 }
 
 export const exp = new Experimental()
