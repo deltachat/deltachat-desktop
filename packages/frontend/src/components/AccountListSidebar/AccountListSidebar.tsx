@@ -197,7 +197,7 @@ function AddAccountButton(props: { onClick: () => void }) {
     <button
       ref={ref}
       aria-label={tx('add_account')}
-      className={classNames(styles.addButton, 'roving-tabindex')}
+      className={classNames(styles.addButton, rovingTabindex.className)}
       tabIndex={rovingTabindex.tabIndex}
       onKeyDown={rovingTabindex.onKeydown}
       onFocus={rovingTabindex.setAsActiveElement}

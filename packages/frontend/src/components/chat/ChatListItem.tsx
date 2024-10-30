@@ -180,6 +180,7 @@ function ChatListItemArchiveLink({
     tabIndex,
     onKeydown: tabindexOnKeydown,
     setAsActiveElement: tabindexSetAsActiveElement,
+    className: tabindexClassName,
   } = useRovingTabindex(ref)
 
   return (
@@ -190,7 +191,7 @@ function ChatListItemArchiveLink({
       onKeyDown={tabindexOnKeydown}
       onFocus={tabindexSetAsActiveElement}
       onContextMenu={onContextMenu}
-      className={`chat-list-item archive-link-item roving-tabindex ${
+      className={`chat-list-item archive-link-item ${tabindexClassName} ${
         isContextMenuActive ? 'context-menu-active' : ''
       }`}
     >
@@ -228,6 +229,7 @@ function ChatListItemError({
     tabIndex,
     onKeydown: tabindexOnKeydown,
     setAsActiveElement: tabindexSetAsActiveElement,
+    className: tabindexClassName,
   } = useRovingTabindex(ref)
 
   return (
@@ -238,7 +240,7 @@ function ChatListItemError({
       onKeyDown={tabindexOnKeydown}
       onFocus={tabindexSetAsActiveElement}
       onContextMenu={onContextMenu}
-      className={classNames('chat-list-item roving-tabindex', {
+      className={classNames('chat-list-item', tabindexClassName, {
         isError: true,
         selected: isSelected,
       })}
@@ -290,6 +292,7 @@ function ChatListItemNormal({
     tabIndex,
     onKeydown: tabindexOnKeydown,
     setAsActiveElement: tabindexSetAsActiveElement,
+    className: tabindexClassName,
   } = useRovingTabindex(ref)
   // TODO `setAsActiveElement` if `isSelected` and `activeElement === null`
 
@@ -301,7 +304,7 @@ function ChatListItemNormal({
       onKeyDown={tabindexOnKeydown}
       onFocus={tabindexSetAsActiveElement}
       onContextMenu={onContextMenu}
-      className={classNames('chat-list-item roving-tabindex', {
+      className={classNames('chat-list-item', tabindexClassName, {
         'has-unread': chatListItem.freshMessageCounter > 0,
         'is-contact-request': chatListItem.isContactRequest,
         pinned: chatListItem.isPinned,
@@ -416,6 +419,7 @@ export const ChatListItemMessageResult = React.memo<{
     tabIndex,
     onKeydown: tabindexOnKeydown,
     setAsActiveElement: tabindexSetAsActiveElement,
+    className: tabindexClassName,
   } = useRovingTabindex(ref)
 
   if (typeof msr === 'undefined') return <PlaceholderChatListItem />
@@ -427,7 +431,7 @@ export const ChatListItemMessageResult = React.memo<{
       onClick={onClick}
       onKeyDown={tabindexOnKeydown}
       onFocus={tabindexSetAsActiveElement}
-      className='pseudo-chat-list-item message-search-result roving-tabindex'
+      className={`pseudo-chat-list-item message-search-result ${tabindexClassName}`}
     >
       <div className='avatars'>
         <Avatar

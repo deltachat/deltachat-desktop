@@ -195,7 +195,7 @@ export default function AccountItem({
 
   return (
     <button
-      className={classNames(styles.account, 'roving-tabindex', {
+      className={classNames(styles.account, rovingTabindex.className, {
         [styles.active]: isSelected,
         [styles['context-menu-active']]: isContextMenuActive,
       })}
