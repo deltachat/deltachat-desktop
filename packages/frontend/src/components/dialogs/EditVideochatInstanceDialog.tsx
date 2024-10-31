@@ -85,7 +85,12 @@ export default function EditVideochatInstanceDialog({
             selectedValue={radioValue}
             name='videochat-instance'
           >
-            <Radio key='select-none' label={tx('off')} value='disabled' />
+            <Radio
+              key='select-none'
+              label={tx('off')}
+              value='disabled'
+              subtitle=''
+            />
             <Radio
               key='select-systemli'
               label='Systemli'
@@ -102,6 +107,7 @@ export default function EditVideochatInstanceDialog({
               key='select-custom'
               label={tx('custom')}
               value='custom'
+              subtitle=''
               className={'test-videochat-custom'}
             />
           </RadioGroup>
