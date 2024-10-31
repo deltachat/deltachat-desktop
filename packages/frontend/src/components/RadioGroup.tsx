@@ -8,6 +8,8 @@ type RadioGroupProps = {
   name: string
 }
 
+type RadioProps = Parameters<typeof Radio>[0]
+
 export default function RadioGroup({
   onChange,
   children,
@@ -17,12 +19,12 @@ export default function RadioGroup({
   return (
     <form>
       <fieldset className='radiogroup'>
-        {children.map((radio: any) => {
+        {children.map(({ props }: { props: RadioProps }) => {
           return (
             <Radio
-              {...radio.props}
-              selected={radio.props.value === selectedValue}
-              onSelect={() => onChange && onChange(radio.props.value)}
+              {...props}
+              selected={props.value === selectedValue}
+              onSelect={() => onChange && onChange(props.value)}
               name={name}
             />
           )
