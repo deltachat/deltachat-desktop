@@ -1,5 +1,9 @@
 // @ts-ignore
 import applicationConfig from 'application-config'
+import { config } from 'dotenv'
+
+config()
+
 const appConfig = applicationConfig('DeltaChat')
 
 import { join } from 'path'
