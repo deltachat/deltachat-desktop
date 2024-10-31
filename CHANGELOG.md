@@ -20,6 +20,7 @@
 - revert debian packagename from `deltachat` back to `deltachat-desktop` #4266
 - style: fix VCard color being too bright in dark theme #4255
 - style: less vertical space between radio group items #4298
+- style: fix the avatar in the profile dialog being oval-shaped #4299
 - remove unnecessary horizontal scrollbar in "View Group" dialog #4254
 - add missing cancel buttons to import-/export- and reveive-backup progress dialogs #4272
 - change title and button label of EditAccountAndPasswordDialog to make it clearer that it is about email account #4271, #4279
