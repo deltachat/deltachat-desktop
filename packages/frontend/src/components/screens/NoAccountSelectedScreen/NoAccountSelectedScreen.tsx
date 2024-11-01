@@ -11,7 +11,9 @@ export function NoAccountSelectedScreen() {
   return (
     <div className={classNames(styles.noAccountSelectedScreen, 'drag')}>
       <div className={styles.background}>
-        <div className={classNames(styles.infoBox, 'no-drag')}>{tx('no_account_selected')}</div>
+        <div className={classNames(styles.infoBox, 'no-drag')}>
+          {tx('no_account_selected')}
+        </div>
       </div>
     </div>
   )
