@@ -1,6 +1,6 @@
 import { getLogger } from '../../shared/logger'
 import { BackendRemote } from './backend-com'
-import { printCallCounterResult } from './debug-tools'
+import { DragRegionOverlay, printCallCounterResult } from './debug-tools'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { selectedAccountId } from './ScreenController'
 
@@ -21,6 +21,7 @@ only for debugging:
 - printCallCounterResult() // for profiling you can track what is called how often with 'countCall(label: string)'
 - .rpc // only available in devmode, gives full access to jsonrpc
 - .runtime // only available in devmode, gives full access to runtime
+- showDragAreas() // toggle drag region overlay
     `)
   }
   constructor() {
@@ -78,76 +79,12 @@ only for debugging:
     return runtime
   }
 
-  debugDragAreaActive: boolean = false
-  debugDragAreaUpdateInterval: ReturnType<typeof setInterval> | null
+  dragRegionOverlay?: DragRegionOverlay
   showDragAreas() {
-    let element: HTMLCanvasElement | undefined = document.getElementById(
-      'drag-area-visualisation'
-    ) as HTMLCanvasElement
-    if (!element) {
-      element = document.createElement('canvas')
-      element.height = window.visualViewport.height
-      element.width = window.visualViewport.width
-      element.id = 'drag-area-visualisation'
-      element.popover = 'manual'
-      document.body.append(element)
+    if (!this.dragRegionOverlay) {
+      this.dragRegionOverlay = new DragRegionOverlay()
     }
-
-    if (this.debugDragAreaActive) {
-      element.hidePopover()
-      clearInterval(this.debugDragAreaUpdateInterval)
-      this.debugDragAreaUpdateInterval = null
-      this.debugDragAreaActive = false
-    } else {
-      element.showPopover()
-      const drawing = element.getContext('2d')
-      drawing.translate(0.5, 0.5)
-      this.debugDragAreaUpdateInterval = setInterval(() => {
-        element.height = window.visualViewport.height
-        element.width = window.visualViewport.width
-        // hack to make it show on top of dialogs
-        element.hidePopover()
-        element.showPopover()
-
-        const { height, width } = element.getBoundingClientRect()
-        drawing.clearRect(0, 0, width, height)
-
-        function drawElement(rect: DOMRect | undefined, color: string) {
-          if (!rect) {
-            return
-          }
-          drawing.fillStyle = color
-          drawing.fillRect(rect.x, rect.y, rect.width, rect.height)
-        }
-
-        function traverseDOMRecursively(element: HTMLElement) {
-          // element.computedStyleMap
-          const styles = window.getComputedStyle(element)
-
-          //@ts-ignore
-          const role = styles.webkitAppRegion
-
-          if (role !== 'none') {
-            const boundingRect = element.getClientRects()[0]
-            if (role === 'no-drag') {
-              drawElement(boundingRect, 'green')
-            } else if (role === 'drag') {
-              drawElement(boundingRect, 'red')
-            }
-            drawing.moveTo(0, 0)
-          }
-
-          for (const child of element.children) {
-            if (child instanceof HTMLElement) {
-              traverseDOMRecursively(child)
-            }
-          }
-        }
-
-        traverseDOMRecursively(document.documentElement)
-      }, 50)
-      this.debugDragAreaActive = true
-    }
+    this.dragRegionOverlay.toggle()
   }
 }
 
