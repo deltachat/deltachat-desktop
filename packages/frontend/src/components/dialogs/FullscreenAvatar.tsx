@@ -8,7 +8,7 @@ import useContextMenu from '../../hooks/useContextMenu'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 import Dialog from '../Dialog'
-import Icon from '../Icon'
+import { IconButton } from '../Icon'
 
 export default function FullscreenAvatar(
   props: { imagePath: string } & DialogProps
@@ -51,6 +51,7 @@ export default function FullscreenAvatar(
                   <div
                     className='image-context-menu-container'
                     onContextMenu={openMenu}
+                    tabIndex={0}
                   >
                     <img src={runtime.transformBlobURL(imagePath)} />
                   </div>
@@ -61,13 +62,14 @@ export default function FullscreenAvatar(
         </div>
       </div>
       <div className='btn-wrapper no-drag'>
-        <div
-          role='button'
+        <IconButton
           onClick={saveAs}
-          className='download-btn'
+          icon='download'
+          size={32}
+          coloring='fullscreenControls'
           aria-label={tx('save')}
         />
-        <Icon
+        <IconButton
           onClick={onClose}
           icon='cross'
           size={32}

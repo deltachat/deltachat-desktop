@@ -38,7 +38,9 @@ const DisplayedStickerPack = ({
     const stickerPath = fileName.replace('file://', '')
     BackendRemote.rpc
       .sendSticker(accountId, chatId, stickerPath)
-      .then(id => jumpToMessage(accountId, id, chatId, false))
+      .then(msgId =>
+        jumpToMessage({ accountId, msgId, msgChatId: chatId, highlight: false })
+      )
     setShowEmojiPicker(false)
   }
 
@@ -118,14 +120,14 @@ const EmojiOrStickerSelectorButton = (
   props: PropsWithChildren<{ onClick: () => void; isSelected: boolean }>
 ) => {
   return (
-    <div
+    <button
       className={classNames('selector-button', {
         selected: props.isSelected,
       })}
       onClick={props.onClick}
     >
       {props.children}
-    </div>
+    </button>
   )
 }
 

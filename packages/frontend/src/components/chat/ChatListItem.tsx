@@ -174,8 +174,7 @@ function ChatListItemArchiveLink({
   ])
 
   return (
-    <div
-      role='button'
+    <button
       onClick={onClick}
       onContextMenu={onContextMenu}
       className={`chat-list-item archive-link-item ${
@@ -189,7 +188,7 @@ function ChatListItemArchiveLink({
         <div className='archive-link'>{tx('chat_archived_chats_title')}</div>
       </div>
       <FreshMessageCounter counter={chatListItem.freshMessageCounter} />
-    </div>
+    </button>
   )
 }
 
@@ -203,13 +202,14 @@ function ChatListItemError({
     kind: 'Error'
   }
   onClick: () => void
-  onContextMenu?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  onContextMenu?: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void
   isSelected?: boolean
 }) {
   log.info('Error Loading Chatlistitem ' + chatListItem.id, chatListItem.error)
   return (
-    <div
-      role='button'
+    <button
       onClick={onClick}
       onContextMenu={onContextMenu}
       className={classNames('chat-list-item', {
@@ -235,7 +235,7 @@ function ChatListItemError({
           </div>
         </div>
       </div>
-    </div>
+    </button>
   )
 }
 
@@ -251,14 +251,15 @@ function ChatListItemNormal({
     kind: 'ChatListItem'
   }
   onClick: () => void
-  onContextMenu?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  onContextMenu?: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void
   isContextMenuActive?: boolean
   isSelected?: boolean
   hover?: boolean
 }) {
   return (
-    <div
-      role='button'
+    <button
       onClick={onClick}
       onContextMenu={onContextMenu}
       className={classNames('chat-list-item', {
@@ -299,14 +300,16 @@ function ChatListItemNormal({
           lastMessageId={chatListItem.lastMessageId}
         />
       </div>
-    </div>
+    </button>
   )
 }
 
 type ChatListItemProps = {
   chatListItem: Type.ChatListItemFetchResult | undefined
   onClick: () => void
-  onContextMenu?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  onContextMenu?: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void
   isContextMenuActive?: boolean
   isSelected?: boolean
   hover?: boolean
@@ -369,8 +372,7 @@ export const ChatListItemMessageResult = React.memo<{
   const { msr, onClick, queryStr } = props
   if (typeof msr === 'undefined') return <PlaceholderChatListItem />
   return (
-    <div
-      role='button'
+    <button
       onClick={onClick}
       className='pseudo-chat-list-item message-search-result'
     >
@@ -426,7 +428,7 @@ export const ChatListItemMessageResult = React.memo<{
           <div className='text'>{rMessage(msr.message, queryStr)}</div>
         </div>
       </div>
-    </div>
+    </button>
   )
 })
 

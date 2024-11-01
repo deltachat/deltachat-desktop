@@ -70,12 +70,6 @@ a {
 
 $unread-badge-size: 21px;
 
-// Let's not add `:not(:focus-visible)` since the blinking cursor
-// might be enough, (or it might not, we'll see).
-input:focus {
-  outline: none;
-}
-
 input[type='text'],
 input[type='search'],
 textarea {
@@ -220,8 +214,4 @@ samp {
   display: flex;
   flex-grow: 1;
   overflow: hidden;
-}
-
-.clickable {
-  cursor: pointer;
 }

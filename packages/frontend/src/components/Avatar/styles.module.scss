@@ -5,7 +5,12 @@
   padding: 0;
   // space for focus outline
   margin: 3px;
+  // Ensure that this element is not taller than the children.
+  display: flex;
   &:hover {
     background-color: var(--buttonHover);
+  }
+  :global(.avatar) {
+    --local-avatar-vertical-margin: 0;
   }
 }

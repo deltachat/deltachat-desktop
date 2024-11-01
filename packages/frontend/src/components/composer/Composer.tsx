@@ -44,20 +44,6 @@ import { enterKeySendsKeyboardShortcuts } from '../KeyboardShortcutHint'
 
 const log = getLogger('renderer/composer')
 
-export const insideBoundingRect = (
-  mouseX: number,
-  mouseY: number,
-  boundingRect: DOMRect,
-  margin = 0
-) => {
-  return (
-    mouseX >= boundingRect.x - margin &&
-    mouseX <= boundingRect.x + boundingRect.width + margin &&
-    mouseY >= boundingRect.y - margin &&
-    mouseY <= boundingRect.y + boundingRect.height + margin
-  )
-}
-
 const Composer = forwardRef<
   any,
   {
@@ -200,20 +186,11 @@ const Composer = forwardRef<
   }, [shiftPressed])
   useEffect(() => {
     if (!showEmojiPicker) return
-    const onClick = ({
-      clientX,
-      clientY,
-    }: {
-      clientX: number
-      clientY: number
-    }) => {
+    const onClick = (e: MouseEvent) => {
       if (!emojiAndStickerRef.current) return
-      const boundingRect = emojiAndStickerRef.current.getBoundingClientRect()
-      const clickIsOutSideEmojiPicker = !insideBoundingRect(
-        clientX,
-        clientY,
-        boundingRect,
-        2
+      // The same approach as in `OutsideClickHelper`.
+      const clickIsOutSideEmojiPicker = !emojiAndStickerRef.current.contains(
+        e.target as Node
       )
       if (clickIsOutSideEmojiPicker) setShowEmojiPicker(false)
     }
@@ -289,7 +266,7 @@ const Composer = forwardRef<
   if (isContactRequest) {
     return (
       <div ref={ref} className='composer contact-request'>
-        <div
+        <button
           className='contact-request-button delete'
           onClick={async () => {
             if (selectedChat.chatType !== C.DC_CHAT_TYPE_SINGLE) {
@@ -312,36 +289,36 @@ const Composer = forwardRef<
           {selectedChat.chatType === C.DC_CHAT_TYPE_SINGLE
             ? tx('block')
             : tx('delete')}
-        </div>
-        <div
+        </button>
+        <button
           className='contact-request-button accept'
           onClick={() => {
             EffectfulBackendActions.acceptChat(selectedAccountId(), chatId)
           }}
         >
           {tx('accept')}
-        </div>
+        </button>
       </div>
     )
   } else if (isProtectionBroken) {
     return (
       <div ref={ref} className='composer contact-request'>
-        <div
+        <button
           className='contact-request-button'
           onClick={async () => {
             openDialog(ProtectionBrokenDialog, { name: selectedChat.name })
           }}
         >
           {tx('more_info_desktop')}
-        </div>
-        <div
+        </button>
+        <button
           className='contact-request-button'
           onClick={() => {
             EffectfulBackendActions.acceptChat(selectedAccountId(), chatId)
           }}
         >
           {tx('ok')}
-        </div>
+        </button>
       </div>
     )
   } else if (!selectedChat.canSend) {
@@ -627,7 +604,15 @@ export function useDraft(
 
       // TODO perf: jumpToMessage is not instant, but it should be
       // since the message is (almost?) always already rendered.
-      jumpToMessage(accountId, messageId, chatId, true)
+      jumpToMessage({
+        accountId,
+        msgId: messageId,
+        msgChatId: chatId,
+        highlight: true,
+        // The message is usually already in view,
+        // so let's not scroll at all if so.
+        scrollIntoViewArg: { block: 'nearest' },
+      })
     }
     // TODO perf: I imagine this is pretty slow, given IPC and some chats
     // being quite large. Perhaps we could hook into the

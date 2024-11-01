@@ -1,8 +1,10 @@
 .message-attachment-media {
+  @include button-reset;
+  display: block;
+
   // Entirely to ensure that images are centered if they aren't full width of bubble
   text-align: center;
   position: relative;
-  cursor: pointer;
 
   margin-left: -12px;
   margin-right: -12px;
@@ -70,6 +72,9 @@
 }
 
 .message-attachment-broken-media {
+  @include button-reset;
+  display: block;
+
   font-size: 11px;
   line-height: 16px;
   letter-spacing: 0.3px;
@@ -99,9 +104,10 @@
 }
 
 .message-attachment-generic {
+  @include button-reset;
+
   display: flex;
   flex-direction: row;
-  cursor: pointer;
 
   &.content-below {
     padding-bottom: 6px;

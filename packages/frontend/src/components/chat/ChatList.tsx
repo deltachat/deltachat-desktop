@@ -462,10 +462,11 @@ export default function ChatList(props: {
                   </ChatListPart>
                 </>
               )}
-              <div
+              <button
                 className='floating-action-button'
                 onClick={onCreateChat}
                 id='new-chat-button'
+                aria-label={tx('menu_new_chat')}
               >
                 <div
                   className='Icon'
@@ -473,7 +474,7 @@ export default function ChatList(props: {
                     WebkitMask: 'url(./images/icons/plus.svg) no-repeat center',
                   }}
                 ></div>
-              </div>
+              </button>
             </div>
           )}
         </AutoSizer>

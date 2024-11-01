@@ -9,9 +9,15 @@ const UPPER_LIMIT_FOR_PARSED_MESSAGES = 20_000
 function MessageBody({
   text,
   disableJumbomoji,
+  nonInteractiveContent = false,
 }: {
   text: string
   disableJumbomoji?: boolean
+  /**
+   * Ensure that links and other things are non-interactive,
+   * display them as regular text.
+   */
+  nonInteractiveContent?: boolean
 }): JSX.Element {
   if (text.length >= UPPER_LIMIT_FOR_PARSED_MESSAGES) {
     return <>{text}</>
@@ -28,7 +34,7 @@ function MessageBody({
       )
     }
   }
-  return message2React(emojifiedText, false)
+  return message2React(emojifiedText, nonInteractiveContent)
 }
 const trimRegex = /^[\s\uFEFF\xA0\n\t]+|[\s\uFEFF\xA0\n\t]+$/g
 

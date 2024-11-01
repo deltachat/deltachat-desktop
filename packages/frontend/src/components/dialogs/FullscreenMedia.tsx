@@ -3,7 +3,7 @@ import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 import debounce from 'debounce'
 
 import Dialog from '../Dialog'
-import Icon from '../Icon'
+import { IconButton } from '../Icon'
 import { onDownload } from '../message/messageFunctions'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { isImage, isVideo, isAudio } from '../attachment/Attachment'
@@ -115,7 +115,12 @@ export default function FullscreenMedia(props: Props & DialogProps) {
     {
       label: tx('show_in_chat'),
       action: () => {
-        jumpToMessage(accountId, msg.id, msg.chatId)
+        jumpToMessage({
+          accountId,
+          msgId: msg.id,
+          msgChatId: msg.chatId,
+          scrollIntoViewArg: { block: 'center' },
+        })
         onClose()
       },
     },
@@ -136,6 +141,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
                 <div
                   className='image-context-menu-container'
                   onContextMenu={openMenu}
+                  tabIndex={0}
                 >
                   <img src={runtime.transformBlobURL(file)} />
                 </div>
@@ -257,13 +263,14 @@ export default function FullscreenMedia(props: Props & DialogProps) {
       <div className='attachment-view'>{elm}</div>
       {elm && (
         <div className='btn-wrapper no-drag'>
-          <div
-            role='button'
+          <IconButton
             onClick={onDownload.bind(null, msg)}
-            className='download-btn'
+            icon='download'
+            size={32}
+            coloring='fullscreenControls'
             aria-label={tx('save')}
           />
-          <Icon
+          <IconButton
             onClick={onClose}
             icon='cross'
             size={32}
@@ -274,21 +281,23 @@ export default function FullscreenMedia(props: Props & DialogProps) {
       )}
       {showPreviousNextMessageButtons.previous && (
         <div className='media-previous-button'>
-          <Icon
+          <IconButton
             onClick={preventDefault(previousImage)}
             icon='chevron-left'
             coloring='fullscreenControls'
             size={60}
+            aria-label='⬅️'
           />
         </div>
       )}
       {showPreviousNextMessageButtons.next && (
         <div className='media-next-button'>
-          <Icon
+          <IconButton
             onClick={preventDefault(nextImage)}
             icon='chevron-right'
             coloring='fullscreenControls'
             size={60}
+            aria-label='➡️'
           />
         </div>
       )}

@@ -204,12 +204,12 @@ export default function MenuAttachment({
 
     const boundingBox = attachmentMenuButtonElement.getBoundingClientRect()
 
-    const [cursorX, cursorY] = [boundingBox.x, boundingBox.y]
+    const [x, y] = [boundingBox.x, boundingBox.y]
     event.preventDefault() // prevent default runtime context menu from opening
 
     openContextMenu({
-      cursorX,
-      cursorY,
+      x,
+      y,
       items: menu,
     })
   }

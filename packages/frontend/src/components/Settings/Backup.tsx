@@ -6,7 +6,14 @@ import { getLogger } from '../../../../shared/logger'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import SettingsButton from './SettingsButton'
-import Dialog, { DialogBody, DialogContent, DialogHeader } from '../Dialog'
+import Dialog, {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  FooterActionButton,
+  FooterActions,
+} from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/dialog/useDialog'
 import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
@@ -14,6 +21,7 @@ import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
 import type { DcEventType } from '@deltachat/jsonrpc-client'
 import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
 import { RuntimeOpenDialogOptions } from '@deltachat-desktop/shared/shared-types'
+import { DialogProps } from '../../contexts/DialogContext'
 
 const log = getLogger('renderer/Settings/Backup')
 
@@ -79,7 +87,7 @@ export default function Backup() {
   )
 }
 
-function ExportProgressDialog() {
+function ExportProgressDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
   const [progress, setProgress] = useState(0.0)
 
@@ -87,6 +95,11 @@ function ExportProgressDialog() {
     setProgress(progress)
   }
   const accountId = selectedAccountId()
+
+  const cancel = () => {
+    BackendRemote.rpc.stopOngoingProcess(accountId).then(onClose)
+  }
+
   useEffect(() => {
     const emitter = BackendRemote.getContextEvents(accountId)
     emitter.on('ImexProgress', onImexProgress)
@@ -96,12 +109,19 @@ function ExportProgressDialog() {
   }, [accountId])
 
   return (
-    <Dialog onClose={() => {}}>
+    <Dialog onClose={() => {}} canOutsideClickClose={false}>
       <DialogHeader title={tx('export_backup_desktop')} />
       <DialogBody>
         <DialogContent>
           <DeltaProgressBar progress={progress} />
         </DialogContent>
+        <DialogFooter>
+          <FooterActions align='end'>
+            <FooterActionButton onClick={cancel}>
+              {tx('cancel')}
+            </FooterActionButton>
+          </FooterActions>
+        </DialogFooter>
       </DialogBody>
     </Dialog>
   )

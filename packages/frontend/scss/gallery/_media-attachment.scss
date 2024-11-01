@@ -1,8 +1,9 @@
 .media-attachment-media {
+  @include button-reset;
+
   // Entirely to ensure that images are centered if they aren't full width of bubble
   text-align: center;
   position: relative;
-  cursor: pointer;
 
   overflow: hidden;
   height: 100%;
@@ -85,6 +86,8 @@
 }
 
 .media-attachment-generic {
+  @include button-reset;
+
   display: flex;
   flex-direction: row;
   width: calc(100% - 5px);
@@ -194,6 +197,8 @@
 }
 
 .media-attachment-webxdc {
+  @include button-reset;
+
   display: flex;
   flex-direction: row;
   width: 300px;

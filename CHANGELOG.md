@@ -7,7 +7,16 @@
 
 ## Changed
 - style: avoid scrolling to account list items such that they're at the very edge of the list #4252
-- Update local help (2024-10-25)
+- Update local help (2024-10-25) #4264
+- Update translations (2024-27-10) #4281
+- Limit options for "Delete Messages from Server" for chatmail accounts #4276
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.148.6`
+  - IMAP COMPRESS support.
+  - Sort received outgoing message down if it's fresher than all non fresh messages.
+  - Auto-restore 1:1 chat protection after receiving old unverified message.
+  - Enable Webxdc realtime by default (!)
+  - Save full text to mime_headers for long outgoing messages #4289
+- when jumping to a message (e.g. when showing the first unread message, or when jumping to a message through "show in chat"), position it more appropriately in the scrollable area #4286
 - Dropping multiple files onto deltachat now sends images as compressed images instead of uncompressed files #4278
 
 ## Fixed
@@ -16,11 +25,18 @@
 - avoid showing horizontal scrollbars in chat list #4253
 - revert debian packagename from `deltachat` back to `deltachat-desktop` #4266
 - style: fix VCard color being too bright in dark theme #4255
+- style: less vertical space between radio group items #4298
+- style: fix the avatar in the profile dialog being oval-shaped #4299
 - remove unnecessary horizontal scrollbar in "View Group" dialog #4254
-- change title of EditAccountAndPasswordDialog to make it clearer that it is about email account #4271
+- add missing cancel buttons to import-/export- and reveive-backup progress dialogs #4272
+- change title and button label of EditAccountAndPasswordDialog to make it clearer that it is about email account #4271, #4279
 - fix styling of progressbars in light theme #4274
+- fix Delta Chat not launching on Debian sometimes due to missing package dependencies (`libasound2`) #4275
 - fix not being able to remove avatar for a mailing list #4270
 - fix compression of images when added with Image option from attachment menu. #4278
+- fix deleting messages with broken video attachment from gallery #4283
+- accessibility: wrong positioning of some context menus and popups when activating them with keyboard #4246
+- improve keyboard and screen-reader accessibility #4210
 
 <a id="1_47_0"></a>
 
