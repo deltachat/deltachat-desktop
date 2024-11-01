@@ -38,6 +38,7 @@
 - accessibility: wrong positioning of some context menus and popups when activating them with keyboard #4246
 - improve keyboard and screen-reader accessibility #4210
 - "Page Up" / "Page Down" not working on scrollable elements except for messages list #4269
+- make name more readable in sticker reply #3291
 
 <a id="1_47_0"></a>
 
