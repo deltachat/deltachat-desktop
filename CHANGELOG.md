@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+## Added
+- Added support for selecting multiple files in the attachment file picker. #4278
+
 ## Changed
 - style: avoid scrolling to account list items such that they're at the very edge of the list #4252
 - Update local help (2024-10-25) #4264
@@ -14,6 +17,7 @@
   - Enable Webxdc realtime by default (!)
   - Save full text to mime_headers for long outgoing messages #4289
 - when jumping to a message (e.g. when showing the first unread message, or when jumping to a message through "show in chat"), position it more appropriately in the scrollable area #4286
+- Dropping multiple files onto deltachat now sends images as compressed images instead of uncompressed files #4278
 
 ## Fixed
 - image thumbnails not showing in chat list #4247
@@ -29,6 +33,7 @@
 - fix styling of progressbars in light theme #4274
 - fix Delta Chat not launching on Debian sometimes due to missing package dependencies (`libasound2`) #4275
 - fix not being able to remove avatar for a mailing list #4270
+- fix compression of images when added with Image option from attachment menu. #4278
 - fix deleting messages with broken video attachment from gallery #4283
 - accessibility: wrong positioning of some context menus and popups when activating them with keyboard #4246
 - improve keyboard and screen-reader accessibility #4210

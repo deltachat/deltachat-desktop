@@ -589,33 +589,54 @@ class BrowserRuntime implements Runtime {
     }
     return ''
   }
-  async showOpenFileDialog(options: RuntimeOpenDialogOptions): Promise<string> {
+  async showOpenFileDialog(
+    options: RuntimeOpenDialogOptions
+  ): Promise<string[]> {
     const extstring = options.filters
       ?.map(filter => filter.extensions)
       .reduce((p, c) => c.concat(p))
       .map(ext => `.${ext}`)
       .join()
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       const input = document.createElement('input')
       input.type = 'file'
       input.accept = extstring || ''
+      if (options.properties.includes('multiSelections')) {
+        input.multiple = true
+      }
       input.onchange = async () => {
         if (input.files != null) {
-          resolve(
-            (
-              await (
-                await fetch(
-                  `/backend-api/uploadTempFile/${input.files[0].name}`,
-                  {
-                    method: 'POST',
-                    body: input.files[0],
-                  }
-                )
-              ).json()
-            ).path
+          const uploads: Promise<string>[] = [...input.files].map(file =>
+            fetch(`/backend-api/uploadTempFile/${file.name}`, {
+              method: 'POST',
+              body: file,
+            })
+              .then(r => r.json())
+              .then(r => r.path)
           )
+          const results = await Promise.allSettled(uploads)
+          this.log.debug('showOpenFileDialog upload - results', results)
+          const uploadedFiles = results
+            .filter(result => result.status == 'fulfilled')
+            .map(result => result.value)
+          const rejectedPromise = results.find(
+            result => result.status == 'rejected'
+          )
+          if (rejectedPromise) {
+            this.log.warn(
+              'some file failed to upload with error, removing other files now:',
+              rejectedPromise.reason
+            )
+            // remove other files on error
+            uploadedFiles.every(path => {
+              this.removeTempFile(path)
+            })
+            reject(rejectedPromise.reason)
+          } else {
+            resolve(uploadedFiles)
+          }
         } else {
-          resolve('')
+          resolve([])
         }
       }
 

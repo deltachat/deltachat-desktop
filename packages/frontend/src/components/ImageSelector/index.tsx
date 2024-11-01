@@ -36,7 +36,7 @@ export default function ImageSelector({
   const handleSelect = async () => {
     const { defaultPath, setLastPath } = rememberLastUsedPath(lastUsedSlot)
 
-    const file = await runtime.showOpenFileDialog({
+    const [file] = await runtime.showOpenFileDialog({
       title: titleLabel ? titleLabel : tx('select_your_new_profile_image'),
       filters: [
         {

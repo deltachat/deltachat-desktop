@@ -198,15 +198,17 @@ function BackgroundSelector({
         onChange('var(--chatViewBg)')
         break
       case SetBackgroundAction.customImage:
-        url = await runtime.showOpenFileDialog({
-          title: 'Select Background Image',
-          filters: [
-            { name: 'Images', extensions: ['jpg', 'png', 'gif', 'webp'] },
-            { name: 'All Files', extensions: ['*'] },
-          ],
-          properties: ['openFile'],
-          defaultPath,
-        })
+        url = (
+          await runtime.showOpenFileDialog({
+            title: 'Select Background Image',
+            filters: [
+              { name: 'Images', extensions: ['jpg', 'png', 'gif', 'webp'] },
+              { name: 'All Files', extensions: ['*'] },
+            ],
+            properties: ['openFile'],
+            defaultPath,
+          })
+        )[0]
         if (!url) {
           break
         }

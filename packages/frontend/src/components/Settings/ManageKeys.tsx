@@ -26,7 +26,7 @@ export default function ManageKeys() {
       filters: [{ extensions: ['asc'], name: 'PGP Key' }],
     }
 
-    const filename = await runtime.showOpenFileDialog(opts)
+    const [filename] = await runtime.showOpenFileDialog(opts)
     if (!filename) {
       return
     }
@@ -64,7 +64,7 @@ export default function ManageKeys() {
       buttonLabel: tx('select'),
     }
 
-    const destination = await runtime.showOpenFileDialog(opts)
+    const [destination] = await runtime.showOpenFileDialog(opts)
     if (!destination) {
       return
     }

@@ -213,7 +213,6 @@ const Composer = forwardRef<
     e.preventDefault()
 
     // File object
-    // https://www.electronjs.org/docs/api/file-object
     const file = e.clipboardData.files[0]
 
     log.debug(

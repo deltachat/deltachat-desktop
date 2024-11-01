@@ -49,7 +49,7 @@ export default function Backup() {
         buttonLabel: tx('save'),
         properties: ['openDirectory', 'createDirectory'],
       }
-      const destination = await runtime.showOpenFileDialog(opts)
+      const [destination] = await runtime.showOpenFileDialog(opts)
       if (!destination) {
         return
       }

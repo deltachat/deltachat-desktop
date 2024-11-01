@@ -271,11 +271,13 @@ class ElectronRuntime implements Runtime {
       return blob
     }
   }
-  async showOpenFileDialog(options: RuntimeOpenDialogOptions): Promise<string> {
+  async showOpenFileDialog(
+    options: RuntimeOpenDialogOptions
+  ): Promise<string[]> {
     const { filePaths } = await (<ReturnType<typeof dialog.showOpenDialog>>(
       ipcBackend.invoke('fileChooser', options as Electron.OpenDialogOptions)
     ))
-    return filePaths && filePaths[0]
+    return filePaths
   }
   openLink(link: string): void {
     if (link.startsWith('http:') || link.startsWith('https:')) {

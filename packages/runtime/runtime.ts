@@ -70,7 +70,7 @@ export interface Runtime {
    * @param link
    */
   openLink(link: string): void
-  showOpenFileDialog(options: RuntimeOpenDialogOptions): Promise<string | null>
+  showOpenFileDialog(options: RuntimeOpenDialogOptions): Promise<string[]>
   downloadFile(pathToSource: string, filename: string): Promise<void>
   transformBlobURL(blob: string): string
   readClipboardText(): Promise<string>
