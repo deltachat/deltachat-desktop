@@ -15,7 +15,7 @@ import {
   ENV_WEB_TRUST_FIRST_PROXY,
   DIST_DIR,
   ENV_WEB_PASSWORD,
-  MODE,
+  NODE_ENV,
   ENV_WEB_PORT,
   PRIVATE_CERTIFICATE_CERT,
   PRIVATE_CERTIFICATE_KEY,
@@ -69,7 +69,7 @@ app.use(CORSMiddleWare)
 
 app.get('/', (req, res) => {
   let startPage = 'main.html'
-  if (MODE === 'TESTING') {
+  if (NODE_ENV === 'test') {
     req.session.isAuthenticated = true
     startPage = 'test.html'
   }
