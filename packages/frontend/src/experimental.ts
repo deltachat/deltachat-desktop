@@ -103,6 +103,8 @@ only for debugging:
       const drawing = element.getContext('2d')
       drawing.translate(0.5, 0.5)
       this.debugDragAreaUpdateInterval = setInterval(() => {
+        element.height = window.visualViewport.height
+        element.width = window.visualViewport.width
         // hack to make it show on top of dialogs
         element.hidePopover()
         element.showPopover()
