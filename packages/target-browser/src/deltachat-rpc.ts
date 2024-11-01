@@ -167,11 +167,12 @@ export async function startDeltaChat(): Promise<
     ws.on('message', raw_data => {
       if (active_connection === ws) {
         const stringData = raw_data.toString('utf-8')
-        if (stringData.indexOf('export_backup') !== -1) {
+        if (stringData.indexOf('export') !== -1) {
           // modify backup export location
           const request = JSON.parse(stringData)
           if (
-            request.method === 'export_backup' &&
+            (request.method === 'export_backup' ||
+              request.method === 'export_self_keys') &&
             request.params[1] === '<BROWSER>'
           ) {
             request.params[1] = join(DC_ACCOUNTS_DIR, 'backups')
