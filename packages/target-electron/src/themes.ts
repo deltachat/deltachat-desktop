@@ -186,8 +186,4 @@ ipcMain.handle('themes.getActiveTheme', async () => {
   }
 })
 
-ipcMain.handle('themes.resolveThemeAddress', (_, address: string) =>
-  resolveThemeAddress(address)
-)
-
 ipcMain.handle('themes.getAvailableThemes', getAvailableThemes)

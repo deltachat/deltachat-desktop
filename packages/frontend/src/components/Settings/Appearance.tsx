@@ -317,7 +317,6 @@ function BackgroundSelector({
 
 async function setThemeFunction(address: string) {
   try {
-    runtime.resolveThemeAddress(address)
     await runtime.setDesktopSetting('activeTheme', address)
     return true
   } catch (error) {

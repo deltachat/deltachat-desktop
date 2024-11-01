@@ -268,10 +268,6 @@ class BrowserRuntime implements Runtime {
   async getActiveTheme(): Promise<{ theme: Theme; data: string } | null> {
     return null
   }
-  resolveThemeAddress(_address: string): Promise<string> {
-    this.log.critical('Method not implemented.')
-    throw new Error('Method not implemented.')
-  }
   async clearWebxdcDOMStorage(_accountId: number): Promise<void> {
     // not applicable in browser
     this.log.warn('clearWebxdcDOMStorage method does not exist in browser.')

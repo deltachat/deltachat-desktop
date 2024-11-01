@@ -130,7 +130,6 @@ export interface Runtime {
     theme: Theme
     data: string
   } | null>
-  resolveThemeAddress(address: string): Promise<string>
   saveBackgroundImage(file: string, isDefaultPicture: boolean): Promise<string>
 
   /** only support this if you have a real implementation for `isDroppedFileFromOutside`  */
