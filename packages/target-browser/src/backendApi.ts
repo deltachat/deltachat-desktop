@@ -122,17 +122,21 @@ BackendApiRoute.post(
       return true /* Accept all filetypes */
     },
   }),
-  async (req, _res) => {
+  async (req, res) => {
     try {
       const filepath = req.body.toString('utf8')
       if (filepath.includes('tmp') && !filepath.includes('..')) {
         await unlink(filepath)
       }
+      res.status(200).json({ status: 'ok' })
     } catch (e) {
       // file doesn't exist, no permissions, etc..
       // full list of possible errors is here
       // http://man7.org/linux/man-pages/man2/unlink.2.html#ERRORS
       log.error(e)
+      res.status(500).json({ status: 'error' })
     }
+  }
+)
   }
 )
