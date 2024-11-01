@@ -7,10 +7,12 @@
 - Update local help (2024-10-25) #4264
 - Update translations (2024-27-10) #4281
 - Limit options for "Delete Messages from Server" for chatmail accounts #4276
-- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.148.5`
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.148.6`
   - IMAP COMPRESS support.
   - Sort received outgoing message down if it's fresher than all non fresh messages.
   - Auto-restore 1:1 chat protection after receiving old unverified message.
+  - Enable Webxdc realtime by default (!)
+  - Save full text to mime_headers for long outgoing messages #4289
 - when jumping to a message (e.g. when showing the first unread message, or when jumping to a message through "show in chat"), position it more appropriately in the scrollable area #4286
 
 ## Fixed
