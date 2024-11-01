@@ -65,7 +65,7 @@ export default function MenuAttachment({
           }).then(() => {
             // start sending other files, don't wait until last file is sent
             if (runtime.getRuntimeInfo().target === 'browser') {
-              // browser creeated temp files during upload that can now be cleaned up
+              // browser created temp files during upload that can now be cleaned up
               runtime.removeTempFile(filePath)
             }
           })
