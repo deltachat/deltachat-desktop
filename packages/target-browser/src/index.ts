@@ -27,6 +27,7 @@ import { helpRoute } from './help'
 import { cleanupLogFolder, createLogHandler } from './log-handler'
 import { getLogger, setLogHandler } from '@deltachat-desktop/shared/logger'
 import { RCConfig } from './rc-config'
+import { readThemeDir } from './themes'
 
 const logHandler = createLogHandler()
 setLogHandler(logHandler.log, RCConfig)
@@ -163,6 +164,10 @@ app.use('/background', express.static(join(DATA_DIR, 'background')))
 
 app.use('/backend-api', BackendApiRoute)
 app.use(helpRoute)
+
+app.get('/themes.json', async (req, res) => {
+  res.json(await readThemeDir())
+})
 
 const sslserver = https.createServer(
   {

@@ -17,6 +17,10 @@ import { BaseDeltaChat, yerpc } from '@deltachat/jsonrpc-client'
 
 import type { getLogger as getLoggerFunction } from '@deltachat-desktop/shared/logger.js'
 import type { setLogHandler as setLogHandlerFunction } from '@deltachat-desktop/shared/logger.js'
+import {
+  HIDDEN_THEME_PREFIX,
+  parseThemeMetaData,
+} from '@deltachat-desktop/shared/themes.js'
 
 import { MessageToBackend } from '../src/runtime-ws-protocol.js'
 
@@ -270,11 +274,39 @@ class BrowserRuntime implements Runtime {
       throw new Error('setDesktopSettings request failed')
     }
   }
-  getAvailableThemes(): Promise<Theme[]> {
-    throw new Error('Method not implemented.')
+  async getAvailableThemes(): Promise<Theme[]> {
+    return (await fetch('/themes.json')).json()
   }
   async getActiveTheme(): Promise<{ theme: Theme; data: string } | null> {
-    return null
+    const address = (await this.getDesktopSettings()).activeTheme
+    let [location, id] = address.split(':')
+    if (location === 'system') {
+      location = 'dc'
+      id = window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'light'
+    }
+    if (location !== 'dc') {
+      throw new Error('only dc themes are implmented in the browser edition')
+    }
+
+    const realPath = `/themes/${id}.css`
+    const theme_file_request = await fetch(realPath)
+    if (!theme_file_request.ok) {
+      throw new Error('error loading theme: ' + theme_file_request.statusText)
+    }
+    const data = await theme_file_request.text()
+    const metadata = parseThemeMetaData(data)
+
+    return {
+      theme: {
+        address,
+        description: metadata.description,
+        name: metadata.name,
+        is_prototype: id.startsWith(HIDDEN_THEME_PREFIX),
+      },
+      data,
+    }
   }
   async clearWebxdcDOMStorage(_accountId: number): Promise<void> {
     // not applicable in browser
