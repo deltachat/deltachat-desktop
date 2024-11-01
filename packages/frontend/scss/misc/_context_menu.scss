@@ -32,6 +32,7 @@
   pointer-events: auto;
   background-color: var(--bgPrimary);
   color: var(--textPrimary);
+  -webkit-app-region: no-drag;
 
   border-radius: 3px;
   overflow: hidden;
