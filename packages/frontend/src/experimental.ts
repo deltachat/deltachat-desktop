@@ -107,10 +107,13 @@ only for debugging:
         element.hidePopover()
         element.showPopover()
 
-        let { height, width } = element.getBoundingClientRect()
+        const { height, width } = element.getBoundingClientRect()
         drawing.clearRect(0, 0, width, height)
 
-        function drawElement(rect: DOMRect, color: string) {
+        function drawElement(rect: DOMRect | undefined, color: string) {
+          if (!rect) {
+            return
+          }
           drawing.fillStyle = color
           drawing.fillRect(rect.x, rect.y, rect.width, rect.height)
         }
@@ -132,7 +135,7 @@ only for debugging:
             drawing.moveTo(0, 0)
           }
 
-          for (let child of element.children) {
+          for (const child of element.children) {
             if (child instanceof HTMLElement) {
               traverseDOMRecursively(child)
             }
