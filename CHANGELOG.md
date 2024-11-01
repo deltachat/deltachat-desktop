@@ -3,10 +3,21 @@
 ## [Unreleased][unreleased]
 
 ## Added
+
+## Changed
+
+## Fixed
+
+<a id="1_47_1"></a>
+
+## [1.47.1] - 2024-11-01
+
+## Added
 - Added support for selecting multiple files in the attachment file picker. #4278
 - browser edition:
   - support for selecting custom chat wallpaper #4306
   - support for themes #4304
+- improve keyboard and screen-reader accessibility #4210
 
 ## Changed
 - style: avoid scrolling to account list items such that they're at the very edge of the list #4252
@@ -39,7 +50,6 @@
 - fix compression of images when added with Image option from attachment menu. #4278
 - fix deleting messages with broken video attachment from gallery #4283
 - accessibility: wrong positioning of some context menus and popups when activating them with keyboard #4246
-- improve keyboard and screen-reader accessibility #4210
 - "Page Up" / "Page Down" not working on scrollable elements except for messages list #4269
 - make name more readable in sticker reply #3291
 - fix missing icons in wallpaper settings #4308
@@ -2936,7 +2946,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.47.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.47.1...HEAD
+
+[1.47.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.47.0...v1.47.1
 
 [1.47.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.8...v1.47.0
 
