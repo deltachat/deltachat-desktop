@@ -18,7 +18,12 @@ export type Props = {
   okBtnLabel?: string
 } & DialogProps
 
-export default function AlertDialog({ message, onClose, cb, okBtnLabel }: Props) {
+export default function AlertDialog({
+  message,
+  onClose,
+  cb,
+  okBtnLabel,
+}: Props) {
   const tx = useTranslationFunction()
 
   const onClick = () => {
@@ -35,7 +40,9 @@ export default function AlertDialog({ message, onClose, cb, okBtnLabel }: Props)
       </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <FooterActionButton onClick={onClick}>{okBtnLabel || tx('ok')}</FooterActionButton>
+          <FooterActionButton onClick={onClick}>
+            {okBtnLabel || tx('ok')}
+          </FooterActionButton>
         </FooterActions>
       </DialogFooter>
     </Dialog>

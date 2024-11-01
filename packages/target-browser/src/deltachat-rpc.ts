@@ -5,6 +5,7 @@ import { BaseDeltaChat, yerpc } from '@deltachat/jsonrpc-client'
 import { WebSocket, WebSocketServer } from 'ws'
 import { RCConfig } from './rc-config'
 import { getLogger } from '@deltachat-desktop/shared/logger'
+import { join } from 'path'
 
 const log = getLogger('main/dc_wss')
 const logCoreEvent = getLogger('core')
@@ -165,7 +166,19 @@ export async function startDeltaChat(): Promise<
 
     ws.on('message', raw_data => {
       if (active_connection === ws) {
-        DCInstance.send(raw_data.toString('utf-8'))
+        const stringData = raw_data.toString('utf-8')
+        if (stringData.indexOf('export_backup') !== -1) {
+          // modify backup export location
+          const request = JSON.parse(stringData)
+          if (
+            request.method === 'export_backup' &&
+            request.params[1] === '<BROWSER>'
+          ) {
+            request.params[1] = join(DC_ACCOUNTS_DIR, 'backups')
+            return DCInstance.send(JSON.stringify(request))
+          }
+        }
+        DCInstance.send(stringData)
       } else {
         log.debug(
           'ignored dc jsonrpc request because client is not the active one anymore'
