@@ -33,7 +33,7 @@ if (process.env['DC_ACCOUNTS_DIR']) {
   DC_ACCOUNTS_DIR = join(__dirname, process.env['DC_ACCOUNTS_DIR'])
 }
 
-export const MODE = process.env['MODE'] ?? 'production'
+export const NODE_ENV = (process.env['NODE_ENV'] ?? 'production').toLowerCase()
 
 if (!existsSync(DATA_DIR)) {
   /* ignore-console-log */
@@ -53,7 +53,7 @@ if (!existsSync(PRIVATE_CERTIFICATE_KEY)) {
   process.exit(1)
 }
 
-if (!ENV_WEB_PASSWORD && MODE !== 'TESTING') {
+if (!ENV_WEB_PASSWORD && NODE_ENV !== 'test') {
   /* ignore-console-log */
   console.log(
     `\n[ERROR]: Environment Variable WEB_PASSWORD is not set. You need to set it.\n`
