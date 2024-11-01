@@ -118,19 +118,27 @@ class BrowserRuntime implements Runtime {
     }
   }
 
-  onResumeFromSleep: (() => void) | undefined
-  onChooseLanguage: ((locale: string) => Promise<void>) | undefined
-  onThemeUpdate: (() => void) | undefined
-  onShowDialog:
-    | ((kind: 'about' | 'keybindings' | 'settings') => void)
-    | undefined
-  onOpenQrUrl: ((url: string) => void) | undefined
+  // #region event callbacks from runtime backend
+
   onWebxdcSendToChat:
     | ((
         file: { file_name: string; file_content: string } | null,
         text: string | null
       ) => void)
     | undefined
+  onThemeUpdate: (() => void) | undefined //!!!TODO!!!
+
+  // not used in browser, there is no menu to trigger these
+  onChooseLanguage: ((locale: string) => Promise<void>) | undefined
+  onShowDialog:
+    | ((kind: 'about' | 'keybindings' | 'settings') => void)
+    | undefined
+
+  // not used in browser - other reasons
+  onResumeFromSleep: (() => void) | undefined
+  onOpenQrUrl: ((url: string) => void) | undefined
+
+  // #endregion
 
   openMapsWebxdc(_accountId: number, _chatId?: number | undefined): void {
     throw new Error('Method not implemented.')
