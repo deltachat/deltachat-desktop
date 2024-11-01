@@ -18,13 +18,18 @@ export function printCallCounterResult() {
  * See https://github.com/deltachat/deltachat-desktop/issues/4018 to get an idea why this is important to get right.
  */
 export class DragRegionOverlay {
-  debugDragAreaActive: boolean = false
-  debugDragAreaUpdateInterval: ReturnType<typeof setInterval> | null
+  debugDragAreaUpdateInterval: ReturnType<typeof setInterval> | null = null
   toggle() {
     let element: HTMLCanvasElement | undefined = document.getElementById(
       'drag-area-visualisation'
     ) as HTMLCanvasElement
     if (!element) {
+      if (!window.visualViewport) {
+        throw new Error(
+          'failed to init DragRegionOverlay: window.visualViewport is undefined, this is unexpected.'
+        )
+      }
+
       element = document.createElement('canvas')
       element.height = window.visualViewport.height
       element.width = window.visualViewport.width
@@ -33,16 +38,25 @@ export class DragRegionOverlay {
       document.body.append(element)
     }
 
-    if (this.debugDragAreaActive) {
+    if (this.debugDragAreaUpdateInterval) {
       element.hidePopover()
       clearInterval(this.debugDragAreaUpdateInterval)
       this.debugDragAreaUpdateInterval = null
-      this.debugDragAreaActive = false
     } else {
       element.showPopover()
       const drawing = element.getContext('2d')
+      if (!drawing) {
+        throw new Error(
+          'failed to init DragRegionOverlay: canvas context not set'
+        )
+      }
       drawing.translate(0.5, 0.5)
       this.debugDragAreaUpdateInterval = setInterval(() => {
+        if (!window.visualViewport) {
+          throw new Error(
+            'failed to init DragRegionOverlay: window.visualViewport is undefined, this is unexpected.'
+          )
+        }
         element.height = window.visualViewport.height
         element.width = window.visualViewport.width
         // hack to make it show on top of dialogs
@@ -53,7 +67,7 @@ export class DragRegionOverlay {
         drawing.clearRect(0, 0, width, height)
 
         function drawElement(rect: DOMRect | undefined, color: string) {
-          if (!rect) {
+          if (!rect || !drawing) {
             return
           }
           drawing.fillStyle = color
@@ -74,7 +88,6 @@ export class DragRegionOverlay {
             } else if (role === 'drag') {
               drawElement(boundingRect, 'red')
             }
-            drawing.moveTo(0, 0)
           }
 
           for (const child of element.children) {
@@ -86,7 +99,6 @@ export class DragRegionOverlay {
 
         traverseDOMRecursively(document.documentElement)
       }, 50)
-      this.debugDragAreaActive = true
     }
   }
 }
