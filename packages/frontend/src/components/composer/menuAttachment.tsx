@@ -64,7 +64,10 @@ export default function MenuAttachment({
             viewtype: msgViewType,
           }).then(() => {
             // start sending other files, don't wait until last file is sent
-            runtime.removeTempFile(filePath)
+            if (runtime.getRuntimeInfo().target == "browser") {
+              // browser creeated temp files during upload that can now be cleaned up
+              runtime.removeTempFile(filePath)
+            }
           })
         }
       },
