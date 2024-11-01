@@ -14,7 +14,7 @@ export function printCallCounterResult() {
  * This is important because on MacOS there is no window title bar,
  * so the navbar and other elements need to take that role to make the window dragable.
  * But whats draggable is not clickable, so buttons need to be excluded.
- * 
+ *
  * See https://github.com/deltachat/deltachat-desktop/issues/4018 to get an idea why this is important to get right.
  */
 export class DragRegionOverlay {
