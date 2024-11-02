@@ -20,6 +20,7 @@ import {
   PRIVATE_CERTIFICATE_KEY,
   localStorage,
   LOCALES_DIR,
+  DATA_DIR,
 } from './config'
 import { startDeltaChat } from './deltachat-rpc'
 import { helpRoute } from './help'
@@ -157,6 +158,8 @@ app.get('/stickers/:account/:?pack/:filename', authMiddleWare, (req, res) => {
   //TODO (also not sure how to make the pack optional)
   res.send('req.params' + JSON.stringify(req.params))
 })
+
+app.use('/background', express.static(join(DATA_DIR, 'background')))
 
 app.use('/backend-api', BackendApiRoute)
 app.use(helpRoute)

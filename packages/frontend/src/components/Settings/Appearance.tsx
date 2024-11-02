@@ -1,4 +1,3 @@
-import { join } from 'path'
 import React, { useEffect, useState } from 'react'
 
 import { ThemeManager } from '../../ThemeManager'
@@ -23,6 +22,7 @@ import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
 import Icon from '../Icon'
 import Callout from '../Callout'
 import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
+import { getBackgroundImageStyle } from '../message/MessageListAndComposer'
 
 const log = getLogger('renderer/settings/appearance')
 
@@ -212,11 +212,17 @@ function BackgroundSelector({
         if (!url) {
           break
         }
-        setLastPath(url)
+        if (runtime.getRuntimeInfo().target !== 'browser') {
+          setLastPath(url)
+        }
         SettingsStoreInstance.effect.setDesktopSetting(
           'chatViewBgImg',
           await runtime.saveBackgroundImage(url, false)
         )
+        if (runtime.getRuntimeInfo().target === 'browser') {
+          // browser implementation of showOpenFileDialog created a temp file that we can now remove again
+          runtime.removeTempFile(url)
+        }
         break
       case SetBackgroundAction.presetImage:
         SettingsStoreInstance.effect.setDesktopSetting(
@@ -243,13 +249,7 @@ function BackgroundSelector({
         <div
           style={{
             ...(desktopSettings.chatViewBgImg?.startsWith('img: ')
-              ? {
-                  backgroundImage: `url("file://${join(
-                    runtime.getConfigPath(),
-                    'background/',
-                    desktopSettings.chatViewBgImg.slice(5)
-                  )}")`,
-                }
+              ? getBackgroundImageStyle(desktopSettings)
               : {
                   backgroundColor: desktopSettings.chatViewBgImg?.slice(7),
                   backgroundImage: 'unset',
