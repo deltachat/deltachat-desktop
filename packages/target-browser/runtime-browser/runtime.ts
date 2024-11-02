@@ -182,11 +182,22 @@ class BrowserRuntime implements Runtime {
   notifyWebxdcInstanceDeleted(_accountId: number, _instanceId: number): void {
     this.log.critical('Method not implemented.')
   }
-  saveBackgroundImage(
-    _file: string,
-    _isDefaultPicture: boolean
+  async saveBackgroundImage(
+    file: string,
+    isDefaultPicture: boolean
   ): Promise<string> {
-    throw new Error('Method not implemented.')
+    const result = await fetch('/backend-api/saveBackgroundImage', {
+      body: JSON.stringify({ file, isDefaultPicture }),
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    if (!result.ok) {
+      this.log.error('saveBackgroundImage failed', result)
+      throw new Error('saveBackgroundImage failed: ' + result.statusText)
+    }
+    return (await result.json()).result
   }
   async getLocaleData(locale?: string | undefined): Promise<LocaleData> {
     const messagesEnglish = await (await fetch('/locales/en.json')).json()

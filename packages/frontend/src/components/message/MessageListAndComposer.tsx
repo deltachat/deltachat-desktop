@@ -42,8 +42,14 @@ export function getBackgroundImageStyle(
     }
     if (bgImg.startsWith('img: ')) {
       const filePath = bgImg.slice(5)
-      const bgImgPath = join(runtime.getConfigPath(), 'background/', filePath)
-      style.backgroundImage = `url("file://${bgImgPath}")`
+      style.backgroundImage =
+        runtime.getRuntimeInfo().target === 'browser'
+          ? `url("/${join('background/', filePath)}")`
+          : `url("file://${join(
+              runtime.getConfigPath(),
+              'background/',
+              filePath
+            )}")`
     } else if (bgImg.startsWith('color: ')) {
       style.backgroundColor = bgImg.slice(7)
       style.backgroundImage = 'none'
