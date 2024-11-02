@@ -39,7 +39,7 @@
 - improve keyboard and screen-reader accessibility #4210
 - "Page Up" / "Page Down" not working on scrollable elements except for messages list #4269
 - make name more readable in sticker reply #3291
-- fix missing icons in wallpaper settings
+- fix missing icons in wallpaper settings #4308
 
 <a id="1_47_0"></a>
 
