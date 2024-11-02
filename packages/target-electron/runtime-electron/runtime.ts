@@ -166,9 +166,6 @@ class ElectronRuntime implements Runtime {
   getActiveTheme(): Promise<{ theme: Theme; data: string } | null> {
     return ipcBackend.invoke('themes.getActiveTheme')
   }
-  resolveThemeAddress(address: string): Promise<string> {
-    return ipcBackend.invoke('themes.getAvailableThemes', address)
-  }
   async clearWebxdcDOMStorage(accountId: number): Promise<void> {
     ipcBackend.invoke('webxdc.clearWebxdcDOMStorage', accountId)
   }

@@ -3,50 +3,23 @@ import { readFile, readdir } from 'fs/promises'
 import { join, basename } from 'path'
 import { app as rawApp, ipcMain, nativeTheme } from 'electron'
 
-import { Theme } from '../../shared/shared-types.js'
 import { getCustomThemesPath, htmlDistDir } from './application-constants.js'
 import { ExtendedAppMainProcess } from './types.js'
 import * as mainWindow from './windows/main.js'
 import { getLogger } from '../../shared/logger.js'
 import { DesktopSettings } from './desktop_settings.js'
 
+import { Theme } from '@deltachat-desktop/shared/shared-types.js'
+import {
+  HIDDEN_THEME_PREFIX,
+  parseThemeMetaData,
+} from '@deltachat-desktop/shared/themes'
+
 const app = rawApp as ExtendedAppMainProcess
 
 const log = getLogger('main/themes')
 
 const dc_theme_dir = join(htmlDistDir(), 'themes')
-
-function parseThemeMetaData(rawTheme: string): {
-  name: string
-  description: string
-} {
-  const meta_data_block =
-    /.theme-meta ?{([^]*)}/gm.exec(rawTheme)?.[1].trim() || ''
-
-  const regex = /--(\w*): ?['"]([^]*?)['"];?/gi
-
-  const meta: { [key: string]: string } = {}
-
-  let last_result: any = true
-
-  while (last_result) {
-    last_result = regex.exec(meta_data_block)
-    if (last_result) {
-      meta[last_result[1]] = last_result[2]
-    }
-  }
-
-  // check if name and description are defined
-  if (!meta.name || !meta.description) {
-    throw new Error(
-      'The meta variables meta.name and meta.description must be defined'
-    )
-  }
-
-  return <any>meta
-}
-
-const hidden_theme_prefix = 'dev_'
 
 async function readThemeDir(path: string, prefix: string): Promise<Theme[]> {
   const files = await readdir(path)
@@ -62,7 +35,7 @@ async function readThemeDir(path: string, prefix: string): Promise<Theme[]> {
             name: theme_meta.name,
             description: theme_meta.description,
             address,
-            is_prototype: f.startsWith(hidden_theme_prefix),
+            is_prototype: f.startsWith(HIDDEN_THEME_PREFIX),
           }
         } catch (error) {
           log.error('Error while parsing theme ${address}: ', error)
@@ -70,7 +43,7 @@ async function readThemeDir(path: string, prefix: string): Promise<Theme[]> {
             name: address + ' [Invalid Meta]',
             description: '[missing description]',
             address: prefix + ':' + basename(f, '.css'),
-            is_prototype: f.startsWith(hidden_theme_prefix),
+            is_prototype: f.startsWith(HIDDEN_THEME_PREFIX),
           }
         }
       })
@@ -101,7 +74,7 @@ export async function loadTheme(
       name: theme_meta.name,
       description: theme_meta.description,
       address: theme_address,
-      is_prototype: basename(effective_path).startsWith(hidden_theme_prefix),
+      is_prototype: basename(effective_path).startsWith(HIDDEN_THEME_PREFIX),
     },
     data: themedata,
   }
@@ -185,9 +158,5 @@ ipcMain.handle('themes.getActiveTheme', async () => {
     return null
   }
 })
-
-ipcMain.handle('themes.resolveThemeAddress', (_, address: string) =>
-  resolveThemeAddress(address)
-)
 
 ipcMain.handle('themes.getAvailableThemes', getAvailableThemes)

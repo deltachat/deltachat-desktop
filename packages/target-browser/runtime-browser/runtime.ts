@@ -17,6 +17,10 @@ import { BaseDeltaChat, yerpc } from '@deltachat/jsonrpc-client'
 
 import type { getLogger as getLoggerFunction } from '@deltachat-desktop/shared/logger.js'
 import type { setLogHandler as setLogHandlerFunction } from '@deltachat-desktop/shared/logger.js'
+import {
+  HIDDEN_THEME_PREFIX,
+  parseThemeMetaData,
+} from '@deltachat-desktop/shared/themes.js'
 
 import { MessageToBackend } from '../src/runtime-ws-protocol.js'
 
@@ -118,19 +122,27 @@ class BrowserRuntime implements Runtime {
     }
   }
 
-  onResumeFromSleep: (() => void) | undefined
-  onChooseLanguage: ((locale: string) => Promise<void>) | undefined
-  onThemeUpdate: (() => void) | undefined
-  onShowDialog:
-    | ((kind: 'about' | 'keybindings' | 'settings') => void)
-    | undefined
-  onOpenQrUrl: ((url: string) => void) | undefined
+  // #region event callbacks from runtime backend
+
   onWebxdcSendToChat:
     | ((
         file: { file_name: string; file_content: string } | null,
         text: string | null
       ) => void)
     | undefined
+  onThemeUpdate: (() => void) | undefined //!!!TODO!!!
+
+  // not used in browser, there is no menu to trigger these
+  onChooseLanguage: ((locale: string) => Promise<void>) | undefined
+  onShowDialog:
+    | ((kind: 'about' | 'keybindings' | 'settings') => void)
+    | undefined
+
+  // not used in browser - other reasons
+  onResumeFromSleep: (() => void) | undefined
+  onOpenQrUrl: ((url: string) => void) | undefined
+
+  // #endregion
 
   openMapsWebxdc(_accountId: number, _chatId?: number | undefined): void {
     throw new Error('Method not implemented.')
@@ -262,15 +274,39 @@ class BrowserRuntime implements Runtime {
       throw new Error('setDesktopSettings request failed')
     }
   }
-  getAvailableThemes(): Promise<Theme[]> {
-    throw new Error('Method not implemented.')
+  async getAvailableThemes(): Promise<Theme[]> {
+    return (await fetch('/themes.json')).json()
   }
   async getActiveTheme(): Promise<{ theme: Theme; data: string } | null> {
-    return null
-  }
-  resolveThemeAddress(_address: string): Promise<string> {
-    this.log.critical('Method not implemented.')
-    throw new Error('Method not implemented.')
+    const address = (await this.getDesktopSettings()).activeTheme
+    let [location, id] = address.split(':')
+    if (location === 'system') {
+      location = 'dc'
+      id = window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'light'
+    }
+    if (location !== 'dc') {
+      throw new Error('only dc themes are implmented in the browser edition')
+    }
+
+    const realPath = `/themes/${id}.css`
+    const theme_file_request = await fetch(realPath)
+    if (!theme_file_request.ok) {
+      throw new Error('error loading theme: ' + theme_file_request.statusText)
+    }
+    const data = await theme_file_request.text()
+    const metadata = parseThemeMetaData(data)
+
+    return {
+      theme: {
+        address,
+        description: metadata.description,
+        name: metadata.name,
+        is_prototype: id.startsWith(HIDDEN_THEME_PREFIX),
+      },
+      data,
+    }
   }
   async clearWebxdcDOMStorage(_accountId: number): Promise<void> {
     // not applicable in browser
