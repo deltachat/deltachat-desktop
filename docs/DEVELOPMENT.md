@@ -4,26 +4,33 @@
 
 <details><summary>Click to expand</summary>
 
-- [How to Contribute](#how-to-contribute)
-  - [Run the Code](#run-the-code)
-  - [Code Style](#code-style)
-    - [Linting](#linting)
-    - [Code Formatting](#code-formatting)
-  - [Tests](#tests)
-    - [E2E testing](#tests-e2e)
-  - [Translations](#translations)
-    - [Add experimental language strings](#translations-experimental-strings)
-  - [CI](#ci)
-  - [Packaging](#packaging)
-  - [Release Workflow](#release)
-  - [Code Structure](#code-structure)
-- [Tips for specific subjects](#specific-tipps)
-  - [VS Code users](#vscode)
-  - [URI Schemes on linux](#linux-uri-schemes)
-  - [pnpm cli shell completion](#pnpm-tab-completion)
-  - [Disable code signing on packaging for macOS](#disable-mac-codesigning)
-  - [Useful Links](#useful-links)
-  - [JSONRPC debug tricks](#jsonrpc-debug-tricks)
+- [Development](#development)
+  - [Table of Contents](#table-of-contents)
+  - [How to Contribute ](#how-to-contribute-)
+    - [Run the Code ](#run-the-code-)
+    - [Code Style ](#code-style-)
+      - [Checking Code Style](#checking-code-style)
+      - [Fixing Code Style](#fixing-code-style)
+    - [Tests ](#tests-)
+      - [E2E testing ](#e2e-testing-)
+    - [Translations ](#translations-)
+      - [Add experimental language strings ](#add-experimental-language-strings-)
+      - [Use localized strings in code](#use-localized-strings-in-code)
+        - [Thumb-rule:](#thumb-rule)
+        - [Usage:](#usage)
+    - [CI ](#ci-)
+    - [Packaging ](#packaging-)
+      - [1. Generate Electron-Builder Configuration](#1-generate-electron-builder-configuration)
+      - [2. Run electron-builder](#2-run-electron-builder)
+    - [Release Workflow ](#release-workflow-)
+    - [Code Structure ](#code-structure-)
+  - [Tips for specific subjects ](#tips-for-specific-subjects-)
+    - [VS Code users ](#vs-code-users-)
+    - [URI Schemes on linux ](#uri-schemes-on-linux-)
+    - [pnpm cli shell completion ](#pnpm-cli-shell-completion-)
+    - [Disable code signing on packaging for macOS ](#disable-code-signing-on-packaging-for-macos-)
+    - [Useful Links :](#useful-links-)
+    - [JSONRPC debug tricks: ](#jsonrpc-debug-tricks-)
 
 </details>
 
@@ -103,11 +110,7 @@ Running `pnpm -w test` runs the unit tests.
 
 #### E2E testing <a id="tests-e2e"></a>
 
-> Info here is outdated, at the moment there is no E2E testing anymore.
-
-~~Run `npm test-e2e` for end-to-end (E2E) testing. In E2E testing, [TestCafe](https://testcafe.io/) clicks through the app and simulates normal usage.~~
-
-~~You need to provide a temporary email account generation token via the environment variable `DCC_NEW_TMP_EMAIL`. (ask contributors on how to get one of these tokens)~~
+see [E2E-TESTING.md](./E2E-TESTING.md)
 
 ### Translations <a id="translations"></a>
 
