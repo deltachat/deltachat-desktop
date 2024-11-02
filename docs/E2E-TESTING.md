@@ -30,6 +30,8 @@ pnpm -w e2e --project <chromium | firefox | Chrome> --ui
 
 for [UI mode](https://playwright.dev/docs/test-ui-mode)
 
+If you omit the project parameter the tests will be executed in all configured browsers (Chrome, chromium, and Firefox at the moment)
+
 The account dir for tests is in _packages/e2e-tests/data/accounts_
 
 It can be deleted after running tests and will be recreated in the next run.
