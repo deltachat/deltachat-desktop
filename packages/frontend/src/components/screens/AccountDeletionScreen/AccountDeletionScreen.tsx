@@ -113,14 +113,14 @@ export default function AccountDeletionScreen({
             <FooterActions>
               <FooterActionButton
                 onClick={() => onCancel()}
-                dataTestid='cancel-delete-account'
+                data-testid='cancel-delete-account'
               >
                 {tx('cancel')}
               </FooterActionButton>
               <FooterActionButton
                 styling='danger'
                 onClick={async () => onDeleteAccount(selectedAccountId)}
-                dataTestid='delete-account'
+                data-testid='delete-account'
               >
                 {tx('delete')}
               </FooterActionButton>

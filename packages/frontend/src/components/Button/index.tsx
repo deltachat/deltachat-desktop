@@ -14,7 +14,6 @@ export default function Button({
   active = false,
   styling,
   className,
-  dataTestid,
   ...props
 }: ButtonProps) {
   return (
@@ -25,7 +24,6 @@ export default function Button({
         styling && styles[styling],
         className
       )}
-      data-testid={dataTestid}
       {...props}
     >
       {children}

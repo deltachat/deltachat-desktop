@@ -426,7 +426,6 @@ export function CreateGroup(props: CreateGroupProps) {
       },
       isBroadcast: false,
       isVerificationRequired: false,
-      dataTestid: 'add-member-dialog',
     })
   }
 

@@ -28,7 +28,7 @@ export default function DialogHeader(props: Props) {
       {children}
       {onClickEdit && <EditButton onClick={onClickEdit} />}
       {onClose && (
-        <CloseButton onClick={onClose} dataTestid={props.dataTestid} />
+        <CloseButton onClick={onClose} data-testid={props.dataTestid} />
       )}
     </header>
   )
