@@ -5,6 +5,7 @@ if (process.env.NODE_ENV !== 'production') {
     const { config } = await import('dotenv')
     config()
   } catch (e) {
+    /* ignore-console-log */
     console.error('Failed to load .env file', e)
   }
 }
