@@ -80,5 +80,8 @@
   },
   "react_more_emojis": {
     "message": "More emojis…"
+  },
+  "paste": {
+    "message": "Paste"
   }
 }

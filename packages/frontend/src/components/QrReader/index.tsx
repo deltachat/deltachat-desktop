@@ -13,7 +13,6 @@ import Spinner from '../Spinner'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import { ScreenContext } from '../../contexts/ScreenContext'
-import { runtime } from '@deltachat-desktop/runtime-interface'
 
 // @ts-ignore:next-line: We're importing a worker here with the help of the
 // "esbuild-plugin-inline-worker" plugin
@@ -23,6 +22,8 @@ import styles from './styles.module.scss'
 
 import type { ContextMenuItem } from '../ContextMenu'
 import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
+import { runtime, Runtime } from '@deltachat-desktop/runtime-interface'
+import QrCode from '../dialogs/QrCode'
 
 type Props = {
   onError: (error: string) => void
@@ -64,7 +65,7 @@ async function fileToBase64(file: File): Promise<string> {
 /**
  * Convert base64-encoded blob string into image data.
  */
-async function base64ToImageData(base64: string): Promise<ImageData> {
+export async function base64ToImageData(base64: string): Promise<ImageData> {
   return new Promise((resolve, reject) => {
     const image = new Image()
 
@@ -90,6 +91,29 @@ async function base64ToImageData(base64: string): Promise<ImageData> {
 
     image.src = base64
   })
+}
+
+export async function processClipBoard(runtime: Runtime) {
+  // Try interpreting the clipboard data as an image
+  const base64 = await runtime.readClipboardImage()
+  if (base64) {
+    const imageData = await base64ToImageData(base64)
+    const result = scanQrCode(imageData.data, imageData.width, imageData.height)
+    if (result) {
+      return result
+    } else {
+      throw new Error('no data in clipboard image')
+    }
+  }
+
+  // .. otherwise return non-image data from clipboard directly
+  const data = await runtime.readClipboardText()
+  if (!data) {
+    throw new Error('no data in clipboard')
+  }
+  // trim whitespaces because user might copy them by accident when sending over other messengers
+  // see https://github.com/deltachat/deltachat-desktop/issues/4161#issuecomment-2390428338
+  return data.trim()
 }
 
 export default function QrReader({ onError, onScan }: Props) {
@@ -164,42 +188,6 @@ export default function QrReader({ onError, onScan }: Props) {
     [onError]
   )
 
-  // Read data from clipboard which potentially can be an image itself.
-  const handlePasteFromClipboard = useCallback(async () => {
-    try {
-      // Try interpreting the clipboard data as an image
-      const base64 = await runtime.readClipboardImage()
-      if (base64) {
-        const imageData = await base64ToImageData(base64)
-        const result = scanQrCode(
-          imageData.data,
-          imageData.width,
-          imageData.height
-        )
-        if (result) {
-          handleScanResult(result)
-          return
-        } else {
-          throw new Error('no data in clipboard image')
-        }
-      }
-
-      // .. otherwise return non-image data from clipboard directly
-      const data = await runtime.readClipboardText()
-      if (!data) {
-        throw new Error('no data in clipboard')
-      }
-      // trim whitespaces because user might copy them by accident when sending over other messengers
-      // see https://github.com/deltachat/deltachat-desktop/issues/4161#issuecomment-2390428338
-      onScan(data.trim())
-    } catch (error) {
-      userFeedback({
-        type: 'error',
-        text: `${tx('qrscan_failed')}: ${error}`,
-      })
-    }
-  }, [handleScanResult, onScan, tx, userFeedback])
-
   // Read data from an external image file.
   //
   // We first trigger an "file open" dialog by automatically "clicking"
@@ -271,11 +259,6 @@ export default function QrReader({ onError, onScan }: Props) {
           action: handleImportImage,
           dataTestid: 'load-qr-code-as-image',
         },
-        {
-          label: tx('paste_from_clipboard'),
-          action: handlePasteFromClipboard,
-          dataTestid: 'paste-from-clipboard',
-        },
       ]
 
       openContextMenu({
@@ -283,14 +266,7 @@ export default function QrReader({ onError, onScan }: Props) {
         items,
       })
     },
-    [
-      deviceId,
-      handleImportImage,
-      handlePasteFromClipboard,
-      openContextMenu,
-      tx,
-      videoDevices,
-    ]
+    [deviceId, handleImportImage, openContextMenu, tx, videoDevices]
   )
 
   // Whenever a camera was (automatically or manually) selected we attempt

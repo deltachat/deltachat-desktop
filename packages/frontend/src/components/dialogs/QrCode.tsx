@@ -8,6 +8,8 @@ import React, {
 } from 'react'
 import classNames from 'classnames'
 
+import scanQrCode from 'jsqr'
+
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -22,6 +24,7 @@ import { runtime } from '@deltachat-desktop/runtime-interface'
 import { ScreenContext } from '../../contexts/ScreenContext'
 import useContextMenu from '../../hooks/useContextMenu'
 import useProcessQr from '../../hooks/useProcessQr'
+import { base64ToImageData } from '../QrReader'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { qrCodeToInviteUrl } from '../../utils/invite'
 import { selectedAccountId } from '../../ScreenController'
@@ -211,6 +214,7 @@ export function QrCodeScanQrInner({
   const processQr = useProcessQr()
   const processingQrCode = useRef(false)
   const openAlertDialog = useAlertDialog()
+  const { userFeedback } = useContext(ScreenContext)
 
   const onDone = useCallback(() => {
     onClose()
@@ -237,6 +241,63 @@ export function QrCodeScanQrInner({
     [accountId, processQr, onDone, openAlertDialog]
   )
 
+  // General handler for scanning results coming from the "jsqr" library.
+  //
+  // Additionally we have checks in place to make sure we're not firing any
+  // callbacks when this React component has already been unmounted.
+  const handleScanResult = useCallback(
+    result => {
+      let unmounted = false
+
+      if (unmounted) {
+        return
+      }
+
+      handleScan(result.data)
+
+      return () => {
+        unmounted = true
+      }
+    },
+    [handleScan]
+  )
+
+  // Read data from clipboard which potentially can be an image itself.
+  const handlePasteFromClipboard = useCallback(async () => {
+    try {
+      // Try interpreting the clipboard data as an image
+      const base64 = await runtime.readClipboardImage()
+      if (base64) {
+        const imageData = await base64ToImageData(base64)
+        const result = scanQrCode(
+          imageData.data,
+          imageData.width,
+          imageData.height
+        )
+        if (result) {
+          handleScanResult(result)
+          return
+        } else {
+          throw new Error('no data in clipboard image')
+        }
+      }
+
+      // .. otherwise return non-image data from clipboard directly
+      const data = await runtime.readClipboardText()
+      if (!data) {
+        throw new Error('no data in clipboard')
+      }
+      // trim whitespaces because user might copy them by accident when sending over other messengers
+      // see https://github.com/deltachat/deltachat-desktop/issues/4161#issuecomment-2390428338
+      handleScan(data.trim())
+    } catch (error) {
+      userFeedback({
+        type: 'error',
+        text: `${tx('qrscan_failed')}: ${error}`,
+      })
+    }
+  }, [handleScanResult, handleScan, tx, userFeedback])
+
   const handleError = (err: string) => {
     log.error('QrReader error: ' + err)
   }
@@ -247,7 +308,13 @@ export function QrCodeScanQrInner({
         <QrReader onScan={handleScan} onError={handleError} />
       </DialogBody>
       <DialogFooter>
-        <FooterActions>
+        <FooterActions align='spaceBetween'>
+          <FooterActionButton
+            onClick={handlePasteFromClipboard}
+            data-testid='paste'
+          >
+            {tx('paste')}
+          </FooterActionButton>
           <FooterActionButton onClick={onClose} data-testid='close'>
             {tx('close')}
           </FooterActionButton>
