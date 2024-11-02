@@ -2,7 +2,7 @@
 import applicationConfig from 'application-config'
 if (process.env.NODE_ENV !== 'production') {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { config } = require('dotenv')
+  const { config } = await import('dotenv')
   config()
 }
 
