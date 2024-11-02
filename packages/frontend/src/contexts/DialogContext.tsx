@@ -8,6 +8,7 @@ export type DialogId = string
 
 export type DialogProps = {
   onClose: (result?: any) => void
+  dataTestid?: string
 }
 
 type DialogElementConstructor<T> = JSXElementConstructor<DialogProps & T>

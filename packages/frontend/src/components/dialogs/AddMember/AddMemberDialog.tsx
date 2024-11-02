@@ -32,7 +32,12 @@ export function AddMemberDialog({
     refresh: refreshContacts,
   } = useLazyLoadedContacts(listFlags, queryStr)
   return (
-    <Dialog canOutsideClickClose={false} fixed onClose={onClose}>
+    <Dialog
+      canOutsideClickClose={false}
+      fixed
+      onClose={onClose}
+      data-testid='add-member-dialog'
+    >
       {AddMemberInnerDialog({
         onOk: addMembers => {
           onOk(addMembers)

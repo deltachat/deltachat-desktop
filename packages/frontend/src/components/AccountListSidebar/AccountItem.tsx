@@ -121,10 +121,12 @@ export default function AccountItem({
           ActionEmitter.emitAction(KeybindAction.Settings_Open)
         }, 0)
       },
+      dataTestid: 'open-settings-menu-item',
     },
     {
       label: tx('delete_account'),
       action: openAccountDeletionScreen.bind(null, account.id),
+      dataTestid: 'delete-account-menu-item',
     },
   ])
 
@@ -196,6 +198,7 @@ export default function AccountItem({
       onMouseEnter={() => updateAccountForHoverInfo(account, true)}
       onMouseLeave={() => updateAccountForHoverInfo(account, false)}
       x-account-sidebar-account-id={account.id}
+      data-testid={`account-item-${account.id}`}
       ref={ref}
     >
       {account.kind == 'Configured' ? (

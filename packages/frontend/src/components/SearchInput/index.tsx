@@ -66,6 +66,7 @@ export default function SearchInput(props: Props) {
           size={17}
           icon='qr'
           onClick={handleQRScan}
+          dataTestid='qr-scan-button'
         />
       )}
     </>

@@ -47,6 +47,9 @@ importers:
       chokidar:
         specifier: ^3.6.0
         version: 3.6.0
+      dotenv:
+        specifier: ^16.4.5
+        version: 16.4.5
       eslint:
         specifier: ^8.57.0
         version: 8.57.0
@@ -74,6 +77,15 @@ importers:
       yaml:
         specifier: ^2.4.5
         version: 2.4.5
+
+  packages/e2e-tests:
+    devDependencies:
+      '@playwright/test':
+        specifier: ^1.48.1
+        version: 1.48.1
+      '@types/node':
+        specifier: ^20.14.13
+        version: 20.14.15
 
   packages/frontend:
     dependencies:
@@ -308,8 +320,6 @@ importers:
       esbuild:
         specifier: ^0.23.1
         version: 0.23.1
-
-  packages/target-e2e-integration-testsuite: {}
 
   packages/target-electron:
     dependencies:
@@ -1154,6 +1164,11 @@ packages:
   '@pkgr/core@0.1.1':
     resolution: {integrity: sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
+
+  '@playwright/test@1.48.1':
+    resolution: {integrity: sha512-s9RtWoxkOLmRJdw3oFvhFbs9OJS0BzrLUc8Hf6l2UdCNd1rqeEyD4BhCJkvzeEoD1FsK4mirsWwGerhVmYKtZg==}
+    engines: {node: '>=18'}
+    hasBin: true
 
   '@sindresorhus/is@4.6.0':
     resolution: {integrity: sha512-t09vSN3MdfsyCHoFcTRCH/iUtG7OJ0CsjzB8cjAmKc/va/kIgeDI/TxsigdncE/4be734m0cvIYwNaV4i2XqAw==}
@@ -2041,6 +2056,7 @@ packages:
   eslint@8.57.0:
     resolution: {integrity: sha512-dZ6+mexnaTIbSBZWgou51U6OmzIhYM2VcNdtiTtI7qPNZm35Akpr0f6vtw3w1Kmn5PYo+tZVfh13WrhpS6oLqQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
 
   espree@9.6.1:
@@ -2185,6 +2201,11 @@ packages:
 
   fs.realpath@1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
+
+  fsevents@2.3.2:
+    resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
+    engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
+    os: [darwin]
 
   fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
@@ -2828,6 +2849,16 @@ packages:
   pkg-dir@4.2.0:
     resolution: {integrity: sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==}
     engines: {node: '>=8'}
+
+  playwright-core@1.48.1:
+    resolution: {integrity: sha512-Yw/t4VAFX/bBr1OzwCuOMZkY1Cnb4z/doAFSwf4huqAGWmf9eMNjmK7NiOljCdLmxeRYcGPPmcDgU0zOlzP0YA==}
+    engines: {node: '>=18'}
+    hasBin: true
+
+  playwright@1.48.1:
+    resolution: {integrity: sha512-j8CiHW/V6HxmbntOfyB4+T/uk08tBy6ph0MpBXwuoofkSnLmlfdYNNkFTYD6ofzzlSqLA1fwH4vwvVFvJgLN0w==}
+    engines: {node: '>=18'}
+    hasBin: true
 
   plist@3.1.0:
     resolution: {integrity: sha512-uysumyrvkUX0rX/dEVqt8gC3sTBzd4zoWfLeS29nb53imdaXVvLINYXTI2GNqzaMuvacNx4uJQ8+b3zXR0pkgQ==}
@@ -4023,6 +4054,10 @@ snapshots:
     optional: true
 
   '@pkgr/core@0.1.1': {}
+
+  '@playwright/test@1.48.1':
+    dependencies:
+      playwright: 1.48.1
 
   '@sindresorhus/is@4.6.0': {}
 
@@ -5373,6 +5408,9 @@ snapshots:
 
   fs.realpath@1.0.0: {}
 
+  fsevents@2.3.2:
+    optional: true
+
   fsevents@2.3.3:
     optional: true
 
@@ -5991,6 +6029,14 @@ snapshots:
   pkg-dir@4.2.0:
     dependencies:
       find-up: 4.1.0
+
+  playwright-core@1.48.1: {}
+
+  playwright@1.48.1:
+    dependencies:
+      playwright-core: 1.48.1
+    optionalDependencies:
+      fsevents: 2.3.2
 
   plist@3.1.0:
     dependencies:

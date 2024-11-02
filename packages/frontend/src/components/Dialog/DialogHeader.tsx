@@ -15,6 +15,7 @@ type Props = PropsWithChildren<{
   onClickBack?: () => void
   onClickEdit?: () => void
   onClose?: DialogProps['onClose']
+  dataTestid?: string
 }>
 
 export default function DialogHeader(props: Props) {
@@ -26,7 +27,9 @@ export default function DialogHeader(props: Props) {
       {title && <DialogHeading>{title}</DialogHeading>}
       {children}
       {onClickEdit && <EditButton onClick={onClickEdit} />}
-      {onClose && <CloseButton onClick={onClose} />}
+      {onClose && (
+        <CloseButton onClick={onClose} data-testid={props.dataTestid} />
+      )}
     </header>
   )
 }

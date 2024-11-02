@@ -269,10 +269,12 @@ export default function QrReader({ onError, onScan }: Props) {
         {
           label: tx('load_qr_code_as_image'),
           action: handleImportImage,
+          dataTestid: 'load-qr-code-as-image',
         },
         {
           label: tx('paste_from_clipboard'),
           action: handlePasteFromClipboard,
+          dataTestid: 'paste-from-clipboard',
         },
       ]
 
@@ -466,6 +468,7 @@ export default function QrReader({ onError, onScan }: Props) {
         className={styles.qrReaderButton}
         onClick={handleSelectInput}
         aria-label={tx('menu_settings')}
+        data-testid='qr-reader-settings'
       >
         <Icon icon='settings' size={24} className={styles.qrReaderButtonIcon} />
       </button>

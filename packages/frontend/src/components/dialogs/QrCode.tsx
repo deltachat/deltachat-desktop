@@ -56,17 +56,19 @@ export default function QrCode({
   }, [])
 
   return (
-    <Dialog onClose={onClose}>
+    <Dialog onClose={onClose} dataTestid='qr-dialog'>
       <div className='qr-code-switch'>
         <button
           className={classNames({ active: showQrCode })}
           onClick={() => setShowQrCode(true)}
+          data-testid='qr-show'
         >
           {tx('qrshow_title')}
         </button>
         <button
           className={classNames({ active: !showQrCode })}
           onClick={() => setShowQrCode(false)}
+          data-testid='show-qr-scan'
         >
           {tx('qrscan_title')}
         </button>
@@ -180,16 +182,16 @@ export function QrCodeShowQrInner({
       </DialogBody>
       <DialogFooter>
         <FooterActions align={!onClose && !onBack ? 'center' : 'spaceBetween'}>
-          <FooterActionButton onClick={onCopy}>
+          <FooterActionButton data-testid='copy-qr-code' onClick={onCopy}>
             {tx('global_menu_edit_copy_desktop')}
           </FooterActionButton>
           {onClose && (
-            <FooterActionButton onClick={onClose}>
+            <FooterActionButton onClick={onClose} data-testid='close'>
               {tx('close')}
             </FooterActionButton>
           )}
           {onBack && (
-            <FooterActionButton onClick={onBack}>
+            <FooterActionButton onClick={onBack} data-testid='back'>
               {tx('back')}
             </FooterActionButton>
           )}
@@ -246,7 +248,7 @@ export function QrCodeScanQrInner({
       </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <FooterActionButton onClick={onClose}>
+          <FooterActionButton onClick={onClose} data-testid='close'>
             {tx('close')}
           </FooterActionButton>
         </FooterActions>
