@@ -24,7 +24,6 @@ export type IconName =
   | 'lead-pencil'
   | 'list'
   | 'map'
-  | 'media'
   | 'minus'
   | 'more'
   | 'open_in_new'
@@ -41,7 +40,6 @@ export type IconName =
   | 'settings'
   | 'swap_vert'
   | 'swap_hor'
-  | 'tint'
   | 'undo'
   | 'upload-file'
 
