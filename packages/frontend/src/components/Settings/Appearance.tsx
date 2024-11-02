@@ -279,14 +279,14 @@ function BackgroundSelector({
             className='custom-image'
             aria-label={tx('pref_background_custom_image')}
           >
-            <Icon icon='media' size={30} />
+            <Icon icon='image_outline' size={36} coloring='iconColorCSSVar' />
           </div>
           <div
             onClick={onButton.bind(null, SetBackgroundAction.customColor)}
             className='custom-color'
             aria-label={tx('pref_background_custom_color')}
           >
-            <Icon icon='tint' size={30} />
+            <Icon icon='palette' size={36} coloring='iconColorCSSVar' />
           </div>
         </div>
       </div>

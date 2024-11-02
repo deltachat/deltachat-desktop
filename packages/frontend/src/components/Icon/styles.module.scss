@@ -23,6 +23,10 @@
     background-color: var(--fullScreenMediaButtons);
   }
 
+  &.iconColorCSSVar {
+    background-color: var(--icon-color);
+  }
+
   &.remove {
     &:hover {
       background-color: #bf0000;
