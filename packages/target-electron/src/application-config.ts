@@ -1,9 +1,12 @@
 // @ts-ignore
 import applicationConfig from 'application-config'
 if (process.env.NODE_ENV !== 'production') {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { config } = await import('dotenv')
-  config()
+  try {
+    const { config } = await import('dotenv')
+    config()
+  } catch (e) {
+    console.error('Failed to load .env file', e)
+  }
 }
 
 const appConfig = applicationConfig('DeltaChat')
