@@ -20,7 +20,7 @@
   & > .attachment-content {
     object-fit: scale-down;
     object-position: center;
-    height: 200px;
+    max-height: 800px;
     max-width: 100%;
 
     // The padding on the bottom of the bubble produces 4 extra pixels of space at the
