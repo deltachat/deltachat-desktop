@@ -174,6 +174,26 @@ export default function QrReader({ onError, onScan }: Props) {
     [onScan]
   )
 
+  const handlePasteFromClipboard = useCallback(async () => {
+    try {
+      const result = await processClipBoard(runtime)
+      if (typeof result === 'string') {
+        onScan(result)
+      } else {
+        try {
+          handleScanResult(result)
+        } catch (error) {
+          console.error('Error while processing clipboard content:', error)
+        }
+      }
+    } catch (error) {
+      userFeedback({
+        type: 'error',
+        text: `${tx('qrscan_failed')}: ${error}`,
+      })
+    }
+  }, [handleScanResult, onScan, tx, userFeedback])
+
   // General handler for errors which might occur during scanning.
   const handleError = useCallback(
     (error: any) => {
@@ -259,6 +279,11 @@ export default function QrReader({ onError, onScan }: Props) {
           action: handleImportImage,
           dataTestid: 'load-qr-code-as-image',
         },
+        {
+          label: tx('paste_from_clipboard'),
+          action: handlePasteFromClipboard,
+          dataTestid: 'paste-from-clipboard',
+        },
       ]
 
       openContextMenu({
@@ -266,7 +291,14 @@ export default function QrReader({ onError, onScan }: Props) {
         items,
       })
     },
-    [deviceId, handleImportImage, openContextMenu, tx, videoDevices]
+    [
+      deviceId,
+      handleImportImage,
+      openContextMenu,
+      tx,
+      videoDevices,
+      handlePasteFromClipboard,
+    ]
   )
 
   // Whenever a camera was (automatically or manually) selected we attempt

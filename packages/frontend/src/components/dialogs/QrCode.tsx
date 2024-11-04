@@ -8,8 +8,6 @@ import React, {
 } from 'react'
 import classNames from 'classnames'
 
-import scanQrCode from 'jsqr'
-
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -24,7 +22,7 @@ import { runtime } from '@deltachat-desktop/runtime-interface'
 import { ScreenContext } from '../../contexts/ScreenContext'
 import useContextMenu from '../../hooks/useContextMenu'
 import useProcessQr from '../../hooks/useProcessQr'
-import { base64ToImageData } from '../QrReader'
+import { processClipBoard } from '../QrReader'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { qrCodeToInviteUrl } from '../../utils/invite'
 import { selectedAccountId } from '../../ScreenController'
@@ -40,6 +38,9 @@ type Props = {
   qrCode: string
 }
 
+/**
+ * dialog to show a qr code and scan a qr code
+ */
 export default function QrCode({
   qrCodeSVG,
   qrCode,
@@ -265,31 +266,17 @@ export function QrCodeScanQrInner({
   // Read data from clipboard which potentially can be an image itself.
   const handlePasteFromClipboard = useCallback(async () => {
     try {
-      // Try interpreting the clipboard data as an image
-      const base64 = await runtime.readClipboardImage()
-      if (base64) {
-        const imageData = await base64ToImageData(base64)
-        const result = scanQrCode(
-          imageData.data,
-          imageData.width,
-          imageData.height
-        )
-        if (result) {
+      const result = await processClipBoard(runtime)
+
+      if (typeof result === 'string') {
+        handleScan(result)
+      } else {
+        try {
           handleScanResult(result)
-          return
-        } else {
-          throw new Error('no data in clipboard image')
+        } catch (error) {
+          log.error('Error while processing clipboard content:', error)
         }
       }
-
-      // .. otherwise return non-image data from clipboard directly
-      const data = await runtime.readClipboardText()
-      if (!data) {
-        throw new Error('no data in clipboard')
-      }
-      // trim whitespaces because user might copy them by accident when sending over other messengers
-      // see https://github.com/deltachat/deltachat-desktop/issues/4161#issuecomment-2390428338
-      handleScan(data.trim())
     } catch (error) {
       userFeedback({
         type: 'error',
