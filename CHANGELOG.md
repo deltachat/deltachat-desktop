@@ -7,6 +7,7 @@
 ## Changed
 
 ## Fixed
+- image attachments not being centered within a message #4313
 
 <a id="1_47_1"></a>
 

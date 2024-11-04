@@ -8,6 +8,7 @@
 
   margin-left: calc(-1 * var(--msg-container-padding-horizontal));
   margin-right: calc(-1 * var(--msg-container-padding-horizontal));
+  width: calc(100% + 2 * var(--msg-container-padding-horizontal));
   margin-top: calc(-1 * var(--msg-container-padding-top));
   margin-bottom: -12px;
 
