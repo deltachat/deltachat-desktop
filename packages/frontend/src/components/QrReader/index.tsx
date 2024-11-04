@@ -13,6 +13,7 @@ import Spinner from '../Spinner'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import { ScreenContext } from '../../contexts/ScreenContext'
+import { runtime, Runtime } from '@deltachat-desktop/runtime-interface'
 
 // @ts-ignore:next-line: We're importing a worker here with the help of the
 // "esbuild-plugin-inline-worker" plugin
@@ -22,8 +23,6 @@ import styles from './styles.module.scss'
 
 import type { ContextMenuItem } from '../ContextMenu'
 import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
-import { runtime, Runtime } from '@deltachat-desktop/runtime-interface'
-import QrCode from '../dialogs/QrCode'
 
 type Props = {
   onError: (error: string) => void
@@ -65,7 +64,7 @@ async function fileToBase64(file: File): Promise<string> {
 /**
  * Convert base64-encoded blob string into image data.
  */
-export async function base64ToImageData(base64: string): Promise<ImageData> {
+async function base64ToImageData(base64: string): Promise<ImageData> {
   return new Promise((resolve, reject) => {
     const image = new Image()
 

@@ -94,13 +94,7 @@ test('start chat with user', async ({ page, context, browserName }) => {
 
   await page.getByTestId('show-qr-scan').click()
 
-  await page.getByTestId('qr-reader-settings').click()
-
-  const item = page.getByTestId('paste-from-clipboard')
-
-  expect(await item.isVisible()).toBeTruthy()
-
-  await item.click()
+  await page.getByTestId('paste').click()
 
   const t = await page
     .locator('.styles_module_dialog')
