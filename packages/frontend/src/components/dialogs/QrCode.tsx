@@ -22,7 +22,6 @@ import { runtime } from '@deltachat-desktop/runtime-interface'
 import { ScreenContext } from '../../contexts/ScreenContext'
 import useContextMenu from '../../hooks/useContextMenu'
 import useProcessQr from '../../hooks/useProcessQr'
-import { processClipBoard } from '../QrReader'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { qrCodeToInviteUrl } from '../../utils/invite'
 import { selectedAccountId } from '../../ScreenController'
@@ -215,7 +214,8 @@ export function QrCodeScanQrInner({
   const processQr = useProcessQr()
   const processingQrCode = useRef(false)
   const openAlertDialog = useAlertDialog()
-  const { userFeedback } = useContext(ScreenContext)
+
+  const readerRef = useRef<{ pasteFromClipboard: () => void }>(null)
 
   const onDone = useCallback(() => {
     onClose()
@@ -233,8 +233,8 @@ export function QrCodeScanQrInner({
           openAlertDialog({
             message: error.message || error.toString(),
           })
+          processingQrCode.current = false
         }
-        processingQrCode.current = false
       } else if (processingQrCode.current === true) {
         log.debug('Already processing a qr code')
       }
@@ -242,64 +242,24 @@ export function QrCodeScanQrInner({
     [accountId, processQr, onDone, openAlertDialog]
   )
 
-  // General handler for scanning results coming from the "jsqr" library.
-  //
-  // Additionally we have checks in place to make sure we're not firing any
-  // callbacks when this React component has already been unmounted.
-  const handleScanResult = useCallback(
-    result => {
-      let unmounted = false
-
-      if (unmounted) {
-        return
-      }
-
-      handleScan(result.data)
-
-      return () => {
-        unmounted = true
-      }
-    },
-    [handleScan]
-  )
-
-  // Read data from clipboard which potentially can be an image itself.
-  const handlePasteFromClipboard = useCallback(async () => {
-    try {
-      const result = await processClipBoard(runtime)
-
-      if (typeof result === 'string') {
-        handleScan(result)
-      } else {
-        try {
-          handleScanResult(result)
-        } catch (error) {
-          log.error('Error while processing clipboard content:', error)
-        }
-      }
-    } catch (error) {
-      userFeedback({
-        type: 'error',
-        text: `${tx('qrscan_failed')}: ${error}`,
-      })
-    }
-  }, [handleScanResult, handleScan, tx, userFeedback])
-
   const handleError = (err: string) => {
     log.error('QrReader error: ' + err)
   }
 
+  const pasteToReader = useCallback(() => {
+    if (readerRef.current) {
+      readerRef.current.pasteFromClipboard()
+    }
+  }, [readerRef])
+
   return (
     <>
       <DialogBody>
-        <QrReader onScan={handleScan} onError={handleError} />
+        <QrReader onScan={handleScan} onError={handleError} ref={readerRef} />
       </DialogBody>
       <DialogFooter>
         <FooterActions align='spaceBetween'>
-          <FooterActionButton
-            onClick={handlePasteFromClipboard}
-            data-testid='paste'
-          >
+          <FooterActionButton onClick={pasteToReader} data-testid='paste'>
             {tx('paste')}
           </FooterActionButton>
           <FooterActionButton onClick={onClose} data-testid='close'>

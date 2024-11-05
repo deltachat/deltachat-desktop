@@ -1,7 +1,9 @@
 import React, {
+  forwardRef,
   useCallback,
   useContext,
   useEffect,
+  useImperativeHandle,
   useRef,
   useState,
 } from 'react'
@@ -92,7 +94,7 @@ async function base64ToImageData(base64: string): Promise<ImageData> {
   })
 }
 
-export async function processClipBoard(runtime: Runtime) {
+async function processClipBoard(runtime: Runtime) {
   // Try interpreting the clipboard data as an image
   const base64 = await runtime.readClipboardImage()
   if (base64) {
@@ -115,7 +117,11 @@ export async function processClipBoard(runtime: Runtime) {
   return data.trim()
 }
 
-export default function QrReader({ onError, onScan }: Props) {
+/**
+ * using forwardRef here, enables to call the exposed function
+ * pasteFromClipboard from "outside" of the component (by parent component)
+ */
+const QrReader = forwardRef(function QrReader({ onError, onScan }: Props, ref) {
   const tx = useTranslationFunction()
   const { openContextMenu } = useContext(ContextMenuContext)
   const { userFeedback } = useContext(ScreenContext)
@@ -152,27 +158,6 @@ export default function QrReader({ onError, onScan }: Props) {
     getAllCameras()
   }, [])
 
-  // General handler for scanning results coming from the "jsqr" library.
-  //
-  // Additionally we have checks in place to make sure we're not firing any
-  // callbacks when this React component has already been unmounted.
-  const handleScanResult = useCallback(
-    result => {
-      let unmounted = false
-
-      if (unmounted) {
-        return
-      }
-
-      onScan(result.data)
-
-      return () => {
-        unmounted = true
-      }
-    },
-    [onScan]
-  )
-
   const handlePasteFromClipboard = useCallback(async () => {
     try {
       const result = await processClipBoard(runtime)
@@ -180,7 +165,7 @@ export default function QrReader({ onError, onScan }: Props) {
         onScan(result)
       } else {
         try {
-          handleScanResult(result)
+          onScan(result.data)
         } catch (error) {
           console.error('Error while processing clipboard content:', error)
         }
@@ -191,7 +176,23 @@ export default function QrReader({ onError, onScan }: Props) {
         text: `${tx('qrscan_failed')}: ${error}`,
       })
     }
-  }, [handleScanResult, onScan, tx, userFeedback])
+  }, [onScan, tx, userFeedback])
+
+  /**
+   * used to expose the handlePasteFromClipboard
+   * function to the parent component
+   */
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        pasteFromClipboard() {
+          handlePasteFromClipboard()
+        },
+      }
+    },
+    [handlePasteFromClipboard]
+  )
 
   // General handler for errors which might occur during scanning.
   const handleError = useCallback(
@@ -236,7 +237,7 @@ export default function QrReader({ onError, onScan }: Props) {
         )
 
         if (result) {
-          handleScanResult(result)
+          onScan(result.data)
         } else {
           userFeedback({
             type: 'error',
@@ -253,7 +254,7 @@ export default function QrReader({ onError, onScan }: Props) {
         inputRef.current.value = ''
       }
     },
-    [handleError, handleScanResult, tx, userFeedback]
+    [handleError, tx, onScan, userFeedback]
   )
 
   // Show a context menu with different video input options to the user.
@@ -396,7 +397,7 @@ export default function QrReader({ onError, onScan }: Props) {
 
     const handleWorkerMessage = (event: MessageEvent) => {
       if (event.data) {
-        handleScanResult(event)
+        onScan(event.data)
       }
     }
 
@@ -438,7 +439,7 @@ export default function QrReader({ onError, onScan }: Props) {
       worker.removeEventListener('message', handleWorkerMessage)
       window.clearInterval(interval)
     }
-  }, [handleError, handleScanResult, onScan])
+  }, [handleError, onScan])
 
   return (
     <div className={styles.qrReader}>
@@ -488,4 +489,6 @@ export default function QrReader({ onError, onScan }: Props) {
       />
     </div>
   )
-}
+})
+
+export default QrReader
