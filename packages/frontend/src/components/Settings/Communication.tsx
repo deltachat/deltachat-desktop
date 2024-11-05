@@ -8,6 +8,7 @@ import SettingsSelector from './SettingsSelector'
 import SmallSelectDialog, { SelectDialogOption } from '../SmallSelectDialog'
 import useDialog from '../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import CoreSettingsSwitch from './CoreSettingsSwitch'
 
 function showToString(configValue: number | string) {
   if (typeof configValue === 'string') configValue = Number(configValue)
@@ -55,11 +56,18 @@ export default function Communication({ settingsStore }: Props) {
   if (!settingsStore.settings['show_emails']) return null
 
   return (
-    <SettingsSelector
-      onClick={onOpenDialog.bind(null)}
-      currentValue={showToString(settingsStore.settings['show_emails'])}
-    >
-      {tx('pref_show_emails')}
-    </SettingsSelector>
+    <>
+      <SettingsSelector
+        onClick={onOpenDialog.bind(null)}
+        currentValue={showToString(settingsStore.settings['show_emails'])}
+      >
+        {tx('pref_show_emails')}
+      </SettingsSelector>
+      <CoreSettingsSwitch
+        label={tx('enable_realtime')}
+        settingsKey='webxdc_realtime_enabled'
+        description={tx('enable_realtime_explain')}
+      />
+    </>
   )
 }
