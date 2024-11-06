@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "identifier": "chat.delta.desktop.tauri",
   "build": {
+    "devUrl": null,
     "beforeDevCommand": "pnpm build",
     "beforeBuildCommand": "pnpm build4production",
     "frontendDist": "../html-dist"
