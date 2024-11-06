@@ -16,3 +16,6 @@ pnpm add @deltachat/jsonrpc-client@link:../../$CORE_REPO_CHECKOUT/deltachat-json
 
 cd ../runtime
 pnpm add @deltachat/jsonrpc-client@link:../../$CORE_REPO_CHECKOUT/deltachat-jsonrpc/typescript
+
+cd ../target-tauri/src-tauri/
+cargo add deltachat-jsonrpc --path ../../../$CORE_REPO_CHECKOUT/deltachat-jsonrpc
