@@ -33,8 +33,12 @@ execSync('pnpm i', { stdio: 'inherit' })
 execSync('./bin/link_core/link_catalog.sh', { stdio: 'inherit' })
 
 // cargo / tauri
-
-execSync(`cargo add deltachat-jsonrpc --git https://github.com/deltachat/deltachat-core-rust --tag v${newVersion}`, {
-  stdio: 'inherit',
-  cwd: resolve('packages/target-tauri/src-tauri'),
-})
+try {
+  execSync(`cargo add deltachat deltachat-jsonrpc --git https://github.com/deltachat/deltachat-core-rust --tag v${newVersion}`, {
+    stdio: 'inherit',
+    cwd: resolve('packages/target-tauri/src-tauri'),
+  })
+} catch (error) {
+  console.error("Failed to link local core to tauri: please update Cargo.toml in packages/target-tauri/src-tauri manually")
+  process.exit(1)
+}

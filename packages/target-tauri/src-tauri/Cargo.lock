@@ -1532,6 +1532,7 @@ dependencies = [
 name = "deltachat-tauri"
 version = "0.1.0"
 dependencies = [
+ "deltachat",
  "deltachat-jsonrpc",
  "serde",
  "serde_json",
