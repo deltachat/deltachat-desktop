@@ -216,13 +216,21 @@ export function QrCodeScanQrInner({
   const processQr = useProcessQr()
   const processingQrCode = useRef(false)
   const openAlertDialog = useAlertDialog()
-  const { userFeedback } = useContext(ScreenContext)
 
   const onDone = useCallback(() => {
     onClose()
     processingQrCode.current = false
   }, [onClose])
 
+  const handleError = useCallback(
+    (error: any) => {
+      const errorMessage = error?.message || error.toString()
+      openAlertDialog({
+        message: `${tx('qrscan_failed')}: ${errorMessage}`,
+      })
+    },
+    [openAlertDialog, tx]
+  )
   const handleScan = useCallback(
     async (data: string) => {
       if (data && !processingQrCode.current) {
@@ -231,27 +239,16 @@ export function QrCodeScanQrInner({
           await processQr(accountId, data, onDone)
         } catch (error: any) {
           log.errorWithoutStackTrace('QrReader process error: ', error)
-          openAlertDialog({
-            message: error.message || error.toString(),
-          })
+          handleError
         }
         processingQrCode.current = false
       } else if (processingQrCode.current === true) {
         log.debug('Already processing a qr code')
       }
     },
-    [accountId, processQr, onDone, openAlertDialog]
+    [accountId, processQr, onDone, handleError]
   )
 
-  const handleError = useCallback(
-    (error: string) => {
-      userFeedback({
-        type: 'error',
-        text: `${tx('qrscan_failed')}: ${error}`,
-      })
-    },
-    [tx, userFeedback]
-  )
 
   const pasteClipboard = useCallback(async () => {
     try {
@@ -269,7 +266,7 @@ export function QrCodeScanQrInner({
   return (
     <>
       <DialogBody>
-        <QrReader onScan={handleScan} onError={handleError} />
+        <QrReader onScanSuccess={handleScan} onError={handleError} />
       </DialogBody>
       <DialogFooter>
         <FooterActions align='spaceBetween'>

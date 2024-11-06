@@ -26,7 +26,7 @@ import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
 
 type Props = {
   onError: (error: string) => void
-  onScan: (data: string) => void
+  onScanSuccess: (data: string) => void
 }
 
 type ImageDimensions = {
@@ -38,7 +38,7 @@ const SCAN_QR_INTERVAL_MS = 250
 
 const worker = new Worker()
 
-export default function QrReader({ onError, onScan }: Props) {
+export default function QrReader({ onError, onScanSuccess }: Props) {
   const tx = useTranslationFunction()
   const { openContextMenu } = useContext(ContextMenuContext)
 
@@ -89,11 +89,11 @@ export default function QrReader({ onError, onScan }: Props) {
   const handlePasteFromClipboard = useCallback(async () => {
     try {
       const result = await qrCodeFromClipboard(runtime)
-      onScan(result)
+      onScanSuccess(result)
     } catch (error) {
       handleError(error)
     }
-  }, [onScan, handleError])
+  }, [onScanSuccess, handleError])
 
   // Read data from an external image file.
   //
@@ -118,7 +118,7 @@ export default function QrReader({ onError, onScan }: Props) {
         const result = await qrCodeFromImage(file)
 
         if (result) {
-          onScan(result.data)
+          onScanSuccess(result.data)
         } else {
           throw Error(`${tx('qrscan_failed')}: no data in image`)
         }
@@ -132,7 +132,7 @@ export default function QrReader({ onError, onScan }: Props) {
         inputRef.current.value = ''
       }
     },
-    [handleError, tx, onScan]
+    [handleError, tx, onScanSuccess]
   )
 
   // Show a context menu with different video input options to the user.
@@ -172,10 +172,10 @@ export default function QrReader({ onError, onScan }: Props) {
     [
       deviceId,
       handleImportImage,
+      handlePasteFromClipboard,
       openContextMenu,
       tx,
       videoDevices,
-      handlePasteFromClipboard,
     ]
   )
 
@@ -275,7 +275,7 @@ export default function QrReader({ onError, onScan }: Props) {
 
     const handleWorkerMessage = (event: MessageEvent) => {
       if (event.data) {
-        onScan(event.data)
+        onScanSuccess(event.data)
       }
     }
 
@@ -317,7 +317,7 @@ export default function QrReader({ onError, onScan }: Props) {
       worker.removeEventListener('message', handleWorkerMessage)
       window.clearInterval(interval)
     }
-  }, [handleError, onScan])
+  }, [handleError, onScanSuccess])
 
   return (
     <div className={styles.qrReader}>
