@@ -160,7 +160,9 @@ function BackgroundSelector({
     }
   }, [onChange, colorInput])
 
-  const openColorInput = (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const openColorInput = (
+    ev: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     // opens the color input and sets its offset so it lines up with the button
     if (colorInput) {
       const eventPos = mouseEventToPosition(ev)
@@ -184,7 +186,7 @@ function BackgroundSelector({
 
   const onButton = async (
     type: SetBackgroundAction,
-    ev: React.MouseEvent<HTMLDivElement, MouseEvent>
+    ev: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     const { defaultPath, setLastPath } = rememberLastUsedPath(
       LastUsedSlot.BackgroundImage
@@ -260,7 +262,7 @@ function BackgroundSelector({
           className={'background-preview'}
         />
         <div className={'background-options'}>
-          <div
+          <button
             onClick={onButton.bind(null, SetBackgroundAction.default)}
             style={{
               backgroundImage: 'var(--chatViewBgImgPath)',
@@ -269,25 +271,25 @@ function BackgroundSelector({
             }}
             aria-label={tx('pref_background_default')}
           />
-          <div
+          <button
             onClick={onButton.bind(null, SetBackgroundAction.defaultColor)}
             style={{ backgroundColor: 'var(--chatViewBg)' }}
             aria-label={tx('pref_background_default_color')}
           />
-          <div
+          <button
             onClick={onButton.bind(null, SetBackgroundAction.customImage)}
             className='custom-image'
             aria-label={tx('pref_background_custom_image')}
           >
             <Icon icon='image_outline' size={36} coloring='iconColorCSSVar' />
-          </div>
-          <div
+          </button>
+          <button
             onClick={onButton.bind(null, SetBackgroundAction.customColor)}
             className='custom-color'
             aria-label={tx('pref_background_custom_color')}
           >
             <Icon icon='palette' size={36} coloring='iconColorCSSVar' />
-          </div>
+          </button>
         </div>
       </div>
       <div className={'background-default-images'}>
@@ -301,7 +303,7 @@ function BackgroundSelector({
           'nz-beach.webp',
           'petito-moreno.webp',
         ].map(elem => (
-          <div
+          <button
             onClick={onButton.bind(null, SetBackgroundAction.presetImage)}
             style={{
               backgroundImage: `url(./images/backgrounds/thumb/${elem})`,

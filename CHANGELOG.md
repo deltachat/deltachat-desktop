@@ -9,6 +9,7 @@
 
 ## Fixed
 - "Disappearing Messages" dialog not reflecting the actual current value #4327
+- accessibility: make settings keyboard-navigable #4319
 
 <a id="1_48_0"></a>
 
