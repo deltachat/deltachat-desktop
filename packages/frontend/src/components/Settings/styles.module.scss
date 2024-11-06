@@ -1,3 +1,5 @@
+@import '../../../scss/mixins';
+
 $settingsHeight: 40px;
 
 .settingsHeading {
@@ -73,6 +75,9 @@ $settingsHeight: 40px;
 }
 
 .settingsSelector {
+  @include button-reset;
+  width: 100%;
+
   align-items: center;
   cursor: pointer;
   display: flex;
