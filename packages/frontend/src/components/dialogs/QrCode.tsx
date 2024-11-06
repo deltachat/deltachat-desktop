@@ -16,6 +16,8 @@ import Dialog, {
 } from '../Dialog'
 import FooterActionButton from '../Dialog/FooterActionButton'
 import QrReader from '../QrReader'
+import { qrCodeFromClipboard } from '../QrReader/helper'
+
 import { BackendRemote } from '../../backend-com'
 import { getLogger } from '../../../../shared/logger'
 import { runtime } from '@deltachat-desktop/runtime-interface'
@@ -214,8 +216,7 @@ export function QrCodeScanQrInner({
   const processQr = useProcessQr()
   const processingQrCode = useRef(false)
   const openAlertDialog = useAlertDialog()
-
-  const readerRef = useRef<{ pasteFromClipboard: () => void }>(null)
+  const { userFeedback } = useContext(ScreenContext)
 
   const onDone = useCallback(() => {
     onClose()
@@ -233,8 +234,8 @@ export function QrCodeScanQrInner({
           openAlertDialog({
             message: error.message || error.toString(),
           })
-          processingQrCode.current = false
         }
+        processingQrCode.current = false
       } else if (processingQrCode.current === true) {
         log.debug('Already processing a qr code')
       }
@@ -242,24 +243,37 @@ export function QrCodeScanQrInner({
     [accountId, processQr, onDone, openAlertDialog]
   )
 
-  const handleError = (err: string) => {
-    log.error('QrReader error: ' + err)
-  }
+  const handleError = useCallback(
+    (error: string) => {
+      userFeedback({
+        type: 'error',
+        text: `${tx('qrscan_failed')}: ${error}`,
+      })
+    },
+    [tx, userFeedback]
+  )
 
-  const pasteToReader = useCallback(() => {
-    if (readerRef.current) {
-      readerRef.current.pasteFromClipboard()
+  const pasteClipboard = useCallback(async () => {
+    try {
+      const result = await qrCodeFromClipboard(runtime)
+      handleScan(result)
+    } catch (error: any) {
+      if (typeof error === 'string') {
+        handleError(error)
+      } else {
+        handleError(error.toString())
+      }
     }
-  }, [readerRef])
+  }, [handleError, handleScan])
 
   return (
     <>
       <DialogBody>
-        <QrReader onScan={handleScan} onError={handleError} ref={readerRef} />
+        <QrReader onScan={handleScan} onError={handleError} />
       </DialogBody>
       <DialogFooter>
         <FooterActions align='spaceBetween'>
-          <FooterActionButton onClick={pasteToReader} data-testid='paste'>
+          <FooterActionButton onClick={pasteClipboard} data-testid='paste'>
             {tx('paste')}
           </FooterActionButton>
           <FooterActionButton onClick={onClose} data-testid='close'>

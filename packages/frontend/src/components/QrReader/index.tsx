@@ -1,21 +1,19 @@
 import React, {
-  forwardRef,
   useCallback,
   useContext,
   useEffect,
-  useImperativeHandle,
   useRef,
   useState,
 } from 'react'
-import scanQrCode from 'jsqr'
 import classNames from 'classnames'
 
 import Icon from '../Icon'
 import Spinner from '../Spinner'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
-import { ScreenContext } from '../../contexts/ScreenContext'
-import { runtime, Runtime } from '@deltachat-desktop/runtime-interface'
+import { runtime } from '@deltachat-desktop/runtime-interface'
+
+import { qrCodeFromImage, qrCodeFromClipboard } from './helper'
 
 // @ts-ignore:next-line: We're importing a worker here with the help of the
 // "esbuild-plugin-inline-worker" plugin
@@ -40,98 +38,16 @@ const SCAN_QR_INTERVAL_MS = 250
 
 const worker = new Worker()
 
-/**
- * Convert file data to base64 encoded data URL string.
- */
-async function fileToBase64(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-
-    try {
-      reader.addEventListener(
-        'load',
-        () => {
-          resolve(reader.result as string)
-        },
-        false
-      )
-
-      reader.readAsDataURL(file)
-    } catch (error) {
-      reject(error)
-    }
-  })
-}
-
-/**
- * Convert base64-encoded blob string into image data.
- */
-async function base64ToImageData(base64: string): Promise<ImageData> {
-  return new Promise((resolve, reject) => {
-    const image = new Image()
-
-    image.addEventListener('load', () => {
-      try {
-        const canvas = document.createElement('canvas')
-        const context = canvas.getContext('2d')
-        canvas.width = image.width
-        canvas.height = image.height
-
-        if (!context) {
-          return
-        }
-
-        context.drawImage(image, 0, 0)
-
-        const imageData = context.getImageData(0, 0, image.width, image.height)
-        resolve(imageData)
-      } catch (error) {
-        reject(error)
-      }
-    })
-
-    image.src = base64
-  })
-}
-
-async function processClipBoard(runtime: Runtime) {
-  // Try interpreting the clipboard data as an image
-  const base64 = await runtime.readClipboardImage()
-  if (base64) {
-    const imageData = await base64ToImageData(base64)
-    const result = scanQrCode(imageData.data, imageData.width, imageData.height)
-    if (result) {
-      return result
-    } else {
-      throw new Error('no data in clipboard image')
-    }
-  }
-
-  // .. otherwise return non-image data from clipboard directly
-  const data = await runtime.readClipboardText()
-  if (!data) {
-    throw new Error('no data in clipboard')
-  }
-  // trim whitespaces because user might copy them by accident when sending over other messengers
-  // see https://github.com/deltachat/deltachat-desktop/issues/4161#issuecomment-2390428338
-  return data.trim()
-}
-
-/**
- * using forwardRef here, enables to call the exposed function
- * pasteFromClipboard from "outside" of the component (by parent component)
- */
-const QrReader = forwardRef(function QrReader({ onError, onScan }: Props, ref) {
+export default function QrReader({ onError, onScan }: Props) {
   const tx = useTranslationFunction()
   const { openContextMenu } = useContext(ContextMenuContext)
-  const { userFeedback } = useContext(ScreenContext)
 
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
   const [ready, setReady] = useState(false)
-  const [error, setError] = useState(false)
+  const [cameraAccessError, setCameraAccessError] = useState(false)
   const [videoDevices, setVideoDevices] = useState<MediaDeviceInfo[]>([])
   const [deviceId, setDeviceId] = useState<string | undefined>(undefined)
   const [dimensions, setDimensions] = useState<ImageDimensions>({
@@ -158,42 +74,6 @@ const QrReader = forwardRef(function QrReader({ onError, onScan }: Props, ref) {
     getAllCameras()
   }, [])
 
-  const handlePasteFromClipboard = useCallback(async () => {
-    try {
-      const result = await processClipBoard(runtime)
-      if (typeof result === 'string') {
-        onScan(result)
-      } else {
-        try {
-          onScan(result.data)
-        } catch (error) {
-          console.error('Error while processing clipboard content:', error)
-        }
-      }
-    } catch (error) {
-      userFeedback({
-        type: 'error',
-        text: `${tx('qrscan_failed')}: ${error}`,
-      })
-    }
-  }, [onScan, tx, userFeedback])
-
-  /**
-   * used to expose the handlePasteFromClipboard
-   * function to the parent component
-   */
-  useImperativeHandle(
-    ref,
-    () => {
-      return {
-        pasteFromClipboard() {
-          handlePasteFromClipboard()
-        },
-      }
-    },
-    [handlePasteFromClipboard]
-  )
-
   // General handler for errors which might occur during scanning.
   const handleError = useCallback(
     (error: any) => {
@@ -202,11 +82,18 @@ const QrReader = forwardRef(function QrReader({ onError, onScan }: Props, ref) {
       } else {
         onError(error.toString())
       }
-
-      setError(true)
     },
     [onError]
   )
+
+  const handlePasteFromClipboard = useCallback(async () => {
+    try {
+      const result = await qrCodeFromClipboard(runtime)
+      onScan(result)
+    } catch (error) {
+      handleError(error)
+    }
+  }, [onScan, handleError])
 
   // Read data from an external image file.
   //
@@ -228,21 +115,12 @@ const QrReader = forwardRef(function QrReader({ onError, onScan }: Props, ref) {
 
       try {
         // Convert file to correct image data and scan it
-        const base64 = await fileToBase64(file)
-        const imageData = await base64ToImageData(base64)
-        const result = scanQrCode(
-          imageData.data,
-          imageData.width,
-          imageData.height
-        )
+        const result = await qrCodeFromImage(file)
 
         if (result) {
           onScan(result.data)
         } else {
-          userFeedback({
-            type: 'error',
-            text: `${tx('qrscan_failed')}: no data in image`,
-          })
+          throw Error(`${tx('qrscan_failed')}: no data in image`)
         }
       } catch (error: any) {
         handleError(error)
@@ -254,7 +132,7 @@ const QrReader = forwardRef(function QrReader({ onError, onScan }: Props, ref) {
         inputRef.current.value = ''
       }
     },
-    [handleError, tx, onScan, userFeedback]
+    [handleError, tx, onScan]
   )
 
   // Show a context menu with different video input options to the user.
@@ -367,7 +245,7 @@ const QrReader = forwardRef(function QrReader({ onError, onScan }: Props, ref) {
         setReady(true)
       } catch {
         stopStream(activeStream)
-        setError(true)
+        setCameraAccessError(true)
       }
     }
 
@@ -383,7 +261,7 @@ const QrReader = forwardRef(function QrReader({ onError, onScan }: Props, ref) {
       stopStream(activeStream)
 
       setReady(false)
-      setError(false)
+      setCameraAccessError(false)
     }
   }, [deviceId])
 
@@ -454,7 +332,7 @@ const QrReader = forwardRef(function QrReader({ onError, onScan }: Props, ref) {
       />
       <video
         className={classNames(styles.qrReaderVideo, {
-          [styles.visible]: ready && !error,
+          [styles.visible]: ready && !cameraAccessError,
         })}
         autoPlay
         muted
@@ -462,14 +340,16 @@ const QrReader = forwardRef(function QrReader({ onError, onScan }: Props, ref) {
         playsInline
         ref={videoRef}
       />
-      {error && (
+      {cameraAccessError && (
         <div className={classNames(styles.qrReaderStatus, styles.error)}>
           {tx('camera_access_failed')}
         </div>
       )}
       <div className={styles.qrReaderOverlay} />
-      {ready && !error && <div className={styles.qrReaderScanLine} />}
-      {!error && (
+      {ready && !cameraAccessError && (
+        <div className={styles.qrReaderScanLine} />
+      )}
+      {!cameraAccessError && (
         <div className={styles.qrReaderHint}>{tx('qrscan_hint_desktop')}</div>
       )}
       <button
@@ -489,6 +369,4 @@ const QrReader = forwardRef(function QrReader({ onError, onScan }: Props, ref) {
       />
     </div>
   )
-})
-
-export default QrReader
+}
