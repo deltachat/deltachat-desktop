@@ -1,6 +1,12 @@
 .switchWrapper {
+  position: relative;
+
   & input {
-    display: none;
+    // Hide it, but keep in DOM purely for accessibility reasons
+    // (e.g. the outline).
+    appearance: none;
+    position: absolute;
+    inset: 0;
   }
 }
 
