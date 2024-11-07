@@ -32,6 +32,9 @@
   - Save full text to mime_headers for long outgoing messages #4289
 - when jumping to a message (e.g. when showing the first unread message, or when jumping to a message through "show in chat"), position it more appropriately in the scrollable area #4286
 - Dropping multiple files onto deltachat now sends images as compressed images instead of uncompressed files #4278
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.148.7`
+  - Emit chatlist events only if message still exists
+  - send_msg_to_smtp: Do not fail if the message does not exist anymore
 
 ## Fixed
 - image thumbnails not showing in chat list #4247
