@@ -239,7 +239,7 @@ export function QrCodeScanQrInner({
           await processQr(accountId, data, onDone)
         } catch (error: any) {
           log.errorWithoutStackTrace('QrReader process error: ', error)
-          handleError
+          handleError(error)
         }
         processingQrCode.current = false
       } else if (processingQrCode.current === true) {
