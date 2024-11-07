@@ -226,7 +226,7 @@ export function QrCodeScanQrInner({
     (error: any) => {
       const errorMessage = error?.message || error.toString()
       openAlertDialog({
-        message: `${tx('qrscan_failed')}: ${errorMessage}`,
+        message: `${tx('qrscan_failed')} ${errorMessage}`,
       })
     },
     [openAlertDialog, tx]
@@ -248,7 +248,6 @@ export function QrCodeScanQrInner({
     },
     [accountId, processQr, onDone, handleError]
   )
-
 
   const pasteClipboard = useCallback(async () => {
     try {

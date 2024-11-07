@@ -38,10 +38,10 @@ export function ReceiveBackupDialog({ onClose }: Props & DialogProps) {
       log.errorWithoutStackTrace('QrReader process error: ', error)
       const errorMessage = error?.message || error.toString()
       openAlertDialog({
-        message: errorMessage,
+        message: `${tx('qrscan_failed')} ${errorMessage}`,
       })
     },
-    [openAlertDialog]
+    [openAlertDialog, tx]
   )
 
   const handleScan = useCallback(

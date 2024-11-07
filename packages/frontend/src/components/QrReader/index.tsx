@@ -120,7 +120,7 @@ export default function QrReader({ onError, onScanSuccess }: Props) {
         if (result) {
           onScanSuccess(result.data)
         } else {
-          throw Error(`${tx('qrscan_failed')}: no data in image`)
+          throw Error(`no data in image`)
         }
       } catch (error: any) {
         handleError(error)
@@ -132,7 +132,7 @@ export default function QrReader({ onError, onScanSuccess }: Props) {
         inputRef.current.value = ''
       }
     },
-    [handleError, tx, onScanSuccess]
+    [handleError, onScanSuccess]
   )
 
   // Show a context menu with different video input options to the user.
