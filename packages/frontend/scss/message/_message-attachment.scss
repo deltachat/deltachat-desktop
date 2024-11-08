@@ -6,9 +6,10 @@
   text-align: center;
   position: relative;
 
-  margin-left: -12px;
-  margin-right: -12px;
-  margin-top: -10px;
+  margin-left: calc(-1 * var(--msg-container-padding-horizontal));
+  margin-right: calc(-1 * var(--msg-container-padding-horizontal));
+  width: calc(100% + 2 * var(--msg-container-padding-horizontal));
+  margin-top: calc(-1 * var(--msg-container-padding-top));
   margin-bottom: -12px;
 
   border-radius: 16px;
