@@ -79,7 +79,7 @@ export default function Appearance({
 
     openDialog(SmallSelectDialog, {
       values,
-      selectedValue: activeTheme,
+      initialSelectedValue: activeTheme,
       title: tx('pref_theme'),
       onSelect,
       onCancel,
