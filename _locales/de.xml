@@ -248,7 +248,7 @@
     <string name="menu_copy_image_to_clipboard">Bild kopieren</string>
     <string name="menu_copy_email_to_clipboard">E-Mail kopieren</string>
     <string name="paste_from_clipboard">Von der Zwischenablage einfügen</string>
-    <string name="ask_copy_unopenable_link_to_clipboard">Der Verweis \"%1$d\" kann nicht im Webbrowser geöffnet werden. Möchten Sie den Link in die Zwischenablage kopieren?</string>
+    <string name="ask_copy_unopenable_link_to_clipboard">Der Link \"%1$d\" kann nicht im Webbrowser geöffnet werden. Möchten Sie den Link in die Zwischenablage kopieren?</string>
     <string name="menu_forward">Nachricht weiterleiten</string>
     <string name="menu_reply">Antworten</string>
     <string name="menu_mute">Stummschalten</string>
@@ -446,8 +446,8 @@
     <string name="send_file_to">Sende \"%1$s\" an…</string>
     <!-- title shown above a list contacts where one should be selected (eg. when a webxdc attempts to send a message to a chat) -->
     <string name="send_message_to">Nachricht senden an…</string>
-    <string name="enable_realtime">Webxdc-Echtzeit-Kanäle</string>
-    <string name="enable_realtime_explain">Webxdc-Echtzeit-APIs aktivieren und direkte Verbindungen zwischen Geräten ermöglichen.</string>
+    <string name="enable_realtime">Echtzeit-Apps</string>
+    <string name="enable_realtime_explain">Aktiviert Echtzeitverbindungen für in Chats verwendeten Apps. Wenn aktiviert, können Chat-Partner möglicherweise Ihre IP-Adresse ermitteln, wenn Sie eine App starten.</string>
 
     <!-- map -->
     <string name="filter_map_on_time">Standorte im Zeitrahmen anzeigen</string>
@@ -621,10 +621,15 @@
     <string name="proxy_use_proxy">Proxy verwenden</string>
     <string name="proxy_add">Proxy hinzufügen</string>
     <string name="proxy_add_explain">Unterstützte Typen: HTTP(S), SOCKS5 und Shadowsocks.</string>
+    <string name="proxy_add_url_hint">Proxy-Link hier eingeben</string>
+    <string name="proxy_invalid">Ungültiger oder nicht unterstützter Proxy</string>
     <string name="proxy_list_header">Proxies</string>
     <string name="proxy_delete">Proxy löschen</string>
     <string name="proxy_delete_explain">\"%1$s\" löschen?</string>
     <string name="proxy_use_proxy_confirm">Proxy \"%1$s\" verwenden?</string>
+    <string name="proxy_share_explain">Freunde können das Proxy durch Scannen des QR-Codes verwenden.</string>
+    <string name="proxy_share_link">Link teilen</string>
+
     <!-- deprecated -->
     <string name="login_socks5">SOCKS5</string>
     <string name="login_socks5_use_socks5">SOCKS5 verwenden</string>
@@ -649,6 +654,9 @@
     <string name="accept_invalid_certificates">Ungültige Zertifikate akzeptieren</string>
     <string name="switch_account">Profil wechseln</string>
     <string name="add_account">Profil hinzufügen</string>
+    <string name="profile_tag">Private Bezeichnung</string>
+    <string name="profile_tag_hint">Familie, Arbeit, Freunde</string>
+    <string name="profile_tag_explain">Die Bezeichnung ist nur für Sie sichtbar um zwischen Profilen zu unterscheiden.</string>
     <string name="delete_account">Profil löschen</string>
     <string name="delete_account_ask">Möchten Sie das Profil und alle Daten wirklich von diesem Gerät löschen?</string>
     <string name="delete_account_explain_with_name">Alle Daten des Profils \"%s\" werden von diesem Gerät gelöscht, dies schließt Ihre Ende-zu-Ende Autocrypt-Einstellungen, Kontakte, Chats, Nachrichten und Medien mit ein. Diese Aktion kann nicht rückgängig gemacht werden.</string>
@@ -936,7 +944,7 @@
     <string name="chat_protection_enabled_tap_to_learn_more">Nachrichten sind von nun an garantiert Ende-zu-Ende-verschlüsselt. Tippen, um mehr zu erfahren.</string>
     <string name="chat_protection_enabled_explanation">Es ist nun garantiert, dass alle Nachrichten in diesem Chat Ende-zu-Ende verschlüsselt sind.\n\nDurch die Ende-zu-Ende-Verschlüsselung bleiben die Nachrichten zwischen Ihnen und Ihren Chat-Partnern privat. Nicht einmal Ihr E-Mail-Anbieter kann sie lesen.</string>
     <string name="chat_protection_broken_tap_to_learn_more">%1$s hat eine Nachricht von einem anderen Gerät gesendet. Tippen, um mehr zu erfahren.</string>
-    <string name="chat_protection_broken_explanation">Die Ende-zu-Ende-Verschlüsselung kann nicht mehr garantiert werden, wahrscheinlich weil %1$s Delta Chat neu installiert oder eine Nachricht von einem anderen Gerät gesendet hat.\n\n Sie können ihn persönlich treffen und seinen QR-Code erneut scannen, um die garantierte Ende-zu-Ende-Verschlüsselung wiederherzustellen.</string>
+    <string name="chat_protection_broken_explanation">Die Ende-zu-Ende-Verschlüsselung kann nicht mehr garantiert werden, wahrscheinlich weil %1$s Delta Chat neu installiert oder eine Nachricht von einem anderen Gerät gesendet hat.\n\nSie können sich persönlich treffen und den QR-Code erneut scannen, um die garantierte Ende-zu-Ende-Verschlüsselung wiederherzustellen.</string>
     <string name="invalid_unencrypted_tap_to_learn_more">⚠️ %1$s verlangt eine Ende-zu-Ende-Verschlüsselung, die für diesen Chat noch nicht hergestellt wurde. Tippen, um mehr zu erfahren.</string>
     <string name="invalid_unencrypted_explanation">Um eine Ende-zu-Ende-Verschlüsselung herzustellen, können Sie Kontakte persönlich treffen und ihren QR-Code scannen.</string>
     <string name="encryption_required_for_new_contact">Ende-zu-Ende-Verschlüsselung ist notwendig, aber für %1$s nicht eingerichtet.\n\nZum Herstellen der Ende-zu-Ende-Verschlüsselung, können Sie Ihren Einladungslink teilen oder den Kontakt persönlich zum QR-Code-Scannen treffen.</string>
