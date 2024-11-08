@@ -7,6 +7,7 @@
 ## Changed
 
 ## Fixed
+- "Disappearing Messages" dialog not reflecting the actual current value #4327
 
 <a id="1_48_0"></a>
 

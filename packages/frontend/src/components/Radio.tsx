@@ -32,9 +32,12 @@ export default function Radio({
         id={id}
         name={name}
         type='radio'
-        onClick={() => onSelect && onSelect()}
+        // > change event fires
+        // > When a <input type="radio"> element is checked
+        // > (but not when unchecked);
+        onChange={() => onSelect && onSelect()}
         value={value}
-        defaultChecked={Boolean(selected)}
+        checked={Boolean(selected)}
       />
       <label
         htmlFor={id}
