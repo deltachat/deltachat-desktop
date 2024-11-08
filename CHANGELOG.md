@@ -2965,7 +2965,7 @@ This section is only relevant to contributors.
 
 [unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.48.0...HEAD
 
-[1.47.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.47.1...v1.48.0
+[1.48.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.47.1...v1.48.0
 
 [1.47.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.47.0...v1.47.1
 
