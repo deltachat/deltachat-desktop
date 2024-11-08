@@ -6,6 +6,7 @@
 
 ## Changed
 - move the "Realtime Webxdc Channels" setting out of the "Experimental" section #4316
+- Update local help (2024-11-08)
 
 ## Fixed
 - image attachments not being centered within a message #4313
