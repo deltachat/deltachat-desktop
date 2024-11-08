@@ -5,6 +5,7 @@
 ## Added
 
 ## Changed
+- move the "Realtime Webxdc Channels" setting out of the "Experimental" section #4316
 
 ## Fixed
 
