@@ -35,7 +35,7 @@ export default function DownloadOnDemand(props: {
       values: options.map(
         ({ label, value }) => [String(value), label] as SelectDialogOption
       ),
-      selectedValue: String(Number(settings['download_limit'])),
+      initialSelectedValue: String(Number(settings['download_limit'])),
       title: tx('auto_download_messages'),
       onSave: async (bytes: string) => {
         const seconds = Number(bytes)

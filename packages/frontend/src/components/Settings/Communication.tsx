@@ -45,7 +45,7 @@ export default function Communication({ settingsStore }: Props) {
 
     openDialog(SmallSelectDialog, {
       values,
-      selectedValue: String(settingsStore.settings['show_emails']),
+      initialSelectedValue: String(settingsStore.settings['show_emails']),
       title: tx('pref_show_emails'),
       onSave: (show: string) => {
         SettingsStoreInstance.effect.setCoreSetting('show_emails', show)
