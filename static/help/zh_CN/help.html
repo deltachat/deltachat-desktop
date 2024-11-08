@@ -6,7 +6,7 @@
       <li><a href="#与其他通信软件相比delta-chat-有哪些优势">与其他通信软件相比，Delta Chat 有哪些优势？</a></li>
       <li><a href="#如果希望收到我从未发送过消息的人的消息该怎么办">如果希望收到我从未发送过消息的人的消息，该怎么办?</a></li>
       <li><a href="#delta-chat-支持图像视频和其他附件吗">Delta Chat 支持图像、视频和其他附件吗？</a></li>
-      <li><a href="#multiple-accounts">如何添加账户或在多个账户之间切换？</a></li>
+      <li><a href="#multiple-accounts">什么是账户资料？如何在它们之间切换？</a></li>
       <li><a href="#谁会看见我的个人资料图片">谁会看见我的个人资料图片？</a></li>
       <li><a href="#signature">我可以为 Delta Chat 设置签名文本/状态/格言吗？</a></li>
       <li><a href="#固定静音归档是什么意思">固定、静音、归档是什么意思？</a></li>
@@ -23,6 +23,15 @@
       <li><a href="#显示在发出消息旁边的对勾表示什么">显示在发出消息旁边的对勾表示什么？</a></li>
       <li><a href="#打开从服务器删除旧消息后会发生什么">打开“从服务器删除旧消息”后，会发生什么？</a></li>
       <li><a href="#delold">打开“从设备删除旧消息”后，会发生什么？</a></li>
+    </ul>
+  </li>
+  <li><a href="#instant-delivery">Instant message delivery and Push Notifications</a>
+    <ul>
+      <li><a href="#what-are-push-notifications-how-can-i-get-instant-message-delivery">What are Push Notifications? How can I get instant message delivery?</a></li>
+      <li><a href="#are-push-notifications-enabled-on-ios-devices-is-there-an-alternative">Are Push Notifications enabled on iOS devices? Is there an alternative?</a></li>
+      <li><a href="#android-push">Are Push notifications enabled / needed on Android devices?</a></li>
+      <li><a href="#privacy-notifications">How private are Delta Chat Push Notifications?</a></li>
+      <li><a href="#why-does-delta-chat-integrate-with-centralized-proprietary-applegoogle-push-services">Why does Delta Chat integrate with centralized proprietary Apple/Google push services?</a></li>
     </ul>
   </li>
   <li><a href="#加密和安全">加密和安全</a>
@@ -46,7 +55,7 @@
       <li><a href="#how-can-i-ensure-message-end-to-end-encryption-and-deletion">How can I ensure message end-to-end encryption and deletion?</a></li>
       <li><a href="#pfs">Does Delta Chat support Perfect Forward Secrecy?</a></li>
       <li><a href="#is-end-to-end-encryption-of-delta-chat-as-safe-as-signal">Is end-to-end encryption of Delta Chat as safe as Signal?</a></li>
-      <li><a href="#我可以重复使用现有的私钥吗">我可以重复使用现有的私钥吗？</a></li>
+      <li><a href="#importkey">我可以重复使用现有的私钥吗？</a></li>
       <li><a href="#我无法将现有的-pgp-密钥导入-delta-chat">我无法将现有的 PGP 密钥导入 Delta Chat。</a></li>
       <li><a href="#security-audits">Was Delta Chat independently audited for security vulnerabilities?</a></li>
     </ul>
@@ -71,7 +80,6 @@
       <li><a href="#怎样在-delta-chat-中使用音频视频通话">怎样在 Delta Chat 中使用音频/视频通话？</a></li>
       <li><a href="#什么是广播列表怎样使用它们">什么是广播列表？怎样使用它们？</a></li>
       <li><a href="#如何与聊天伙伴分享位置">如何与聊天伙伴分享位置？</a></li>
-      <li><a href="#实验性的数据库加密到底保护了什么">实验性的数据库加密到底保护了什么？</a></li>
       <li><a href="#为什么我可以选择只监视-deltachat-文件夹">为什么我可以选择只监视 DeltaChat 文件夹？</a></li>
       <li><a href="#如何将我的账户迁移到一个不同的电子邮件地址">如何将我的账户迁移到一个不同的电子邮件地址？</a></li>
     </ul>
@@ -82,7 +90,6 @@
       <li><a href="#delta-chat-可用于-我的-电子邮件提供商吗">Delta Chat 可用于 <em>我的</em> 电子邮件提供商吗？</a></li>
       <li><a href="#i-want-to-manage-my-own-e-mail-server-for-delta-chat-what-do-you-recommend">I want to manage my own e-mail server for Delta Chat. What do you recommend?</a></li>
       <li><a href="#为什么我必须在-delta-chat-中输入我的电子邮件密码-这样安全吗">为什么我必须在 Delta Chat 中输入我的电子邮件密码？ 这样安全吗？</a></li>
-      <li><a href="#使用电子邮件的-delta-chat-真的是-即时-通讯工具吗">使用电子邮件的 Delta Chat 真的是 <em>即时</em> 通讯工具吗？</a></li>
       <li><a href="#哪些消息会在-delta-chat-中出现">哪些消息会在 Delta Chat 中出现？</a></li>
       <li><a href="#delta-chat-支持-html-电子邮件吗">Delta Chat 支持 HTML 电子邮件吗？</a></li>
       <li><a href="#can-i-set-the-e-mail-subject-with-delta-chat">Can I set the E-Mail Subject with Delta Chat?</a></li>
@@ -90,7 +97,7 @@
       <li><a href="#为什么我可以选择监视已发送文件夹">为什么我可以选择监视“已发送”文件夹？</a></li>
       <li><a href="#为什么我可以选择不监视-deltachat-文件夹">为什么我可以选择不监视 DeltaChat 文件夹？</a></li>
       <li><a href="#delta-chat-与-protonmail--tutanota--criptext-兼容吗">Delta Chat 与 Protonmail / Tutanota / Criptext 兼容吗？</a></li>
-      <li><a href="#如何删除我的账户">如何删除我的账户？</a></li>
+      <li><a href="#remove-account">如何删除我的账户？</a></li>
       <li><a href="#我对技术细节很感兴趣能告诉我更多吗">我对技术细节很感兴趣。能告诉我更多吗？</a></li>
       <li><a href="#delta-chat-的开发是如何被资助的">Delta Chat 的开发是如何被资助的?</a></li>
     </ul>
@@ -107,7 +114,14 @@
         
       </h2>
 
-<p>Delta Chat 是一个新的聊天应用，它通过电子邮件发送消息，并在条件允许情况下使用 Autocrypt 对其进行加密。<strong>您不必在任何地方进行注册，在 Delta Chat 中使用您现有的电子邮件帐户即可。</strong></p>
+<p>Delta Chat 是一款可靠、去中心化和安全的消息应用程序、 
+适用于移动和桌面平台。</p>
+
+<p>Delta Chat 感觉就像 Whatsapp 或 Telegram，但你也可以把它当作电子邮件应用程序来使用。 
+你可以匿名注册到各种<a href="https://delta.chat/chatmail">可互操作的聊天邮件服务器</a>
+这些都是为快速安全运行而优化的最小电子邮件服务器。 
+您也可以使用传统的电子邮件服务器和现有的电子邮件账户
+在这种情况下， Delta Chat 可充当邮件客户端。</p>
 
 <p><img style="float:right; width:50%; max-width:360%; margin:1em;" src="../delta-what-optim.png" /></p>
     
@@ -119,7 +133,15 @@
         
       </h3>
 
-<p>通过 Delta Chat，您可以发消息到每个现有的电子邮件地址——即使收件人没有使用 Delta Chat 应用。不需要像其他通信软件一样，要收件人安装和您一样的应用。</p>
+<p>要安全地与他人建立联系[扫描邀请二维码 
+或分享邀请链接]（#howtoe2ee）。 
+使用（默认的）基于chatmail的聊天账户时需要这样做 
+因为chatmail会拒绝未加密的发送信息。</p>
+
+<p>当使用经典电子邮件地址创建聊天配置文件时 
+如果您知道联系人的电子邮件地址，您可以手动创建联系人
+然后给他们写信息 
+即使收件人没有使用Delta Chat 。</p>
     
       <h3 id="与其他通信软件相比delta-chat-有哪些优势">
         
@@ -130,15 +152,25 @@
       </h3>
 
 <ul>
-  <li><em>独立</em> 于任何公司或服务。<em>您</em> 拥有您的数据。</li>
-  <li>您的数据不会保存于中央服务器，除非所有用户都在使用同一个电子邮件服务器。</li>
-  <li>您不会将通讯录分发给任何人。</li>
-  <li><em>快速</em>——使用 Push-IMAP。</li>
-  <li><em>最广泛的用户基础</em>——也可以与 <em>不</em> 使用 Delta Chat 的收件人进行联系。</li>
-  <li><em>没有垃圾信息</em>——默认情况下仅显示已知用户的消息。</li>
-  <li><em>端到端加密</em>——通过 Autocrypt。</li>
-  <li>基于 <em>著佐权</em> 与 <em>标准</em> 的自由软件。</li>
-  <li><em>身份灵活</em>，内置<a href="#multiple-accounts">多账户</a>支持。</li>
+  <li>
+    <p>使用快速、安全、可互操作的 <a href="https://delta.chat/chatmail">chatmail 服务器</a> 创建匿名聊天账户
+为 iOS 和 Android 设备提供即时推送通知。</p>
+  </li>
+  <li>
+    <p>跨平台支持 [多配置文件]（#多账户）和多设备。</p>
+  </li>
+  <li>
+    <p>交互性 <a href="https://webxdc.org/apps">聊天中的网页小程序</a></p>
+  </li>
+  <li>
+    <p><a href="#security-audits">经审计的端到端加密</a> 
+安全地抵御网络和服务器攻击。</p>
+  </li>
+  <li>
+    <p>免费开源软件，包括应用程序和服务器端。 
+基于<a href="https://github.com/deltachat/deltachat-core-rust/blob/master/standards.md">电子邮件和网络互联网标准</a>、 
+<a href="https://xkcd.com/927/">避免 “又一个标准综合症（xkcd 927）”</a></p>
+  </li>
 </ul>
     
       <h3 id="如果希望收到我从未发送过消息的人的消息该怎么办">
@@ -175,18 +207,25 @@
       <h3 id="multiple-accounts">
         
         
-          如何添加账户或在多个账户之间切换？ <a href="#multiple-accounts" class="anchor"></a>
+          什么是账户资料？如何在它们之间切换？ <a href="#multiple-accounts" class="anchor"></a>
         
         
       </h3>
 
-<p>您可以在Delta Chat 移动和桌面客户端上轻松使用其他账户，只需点击以下任一按钮：</p>
-<ul>
-  <li>菜单按钮，然后点击 “切换账户”（安卓和桌面客户端）</li>
-  <li>或个人资料图标，然后点击 “添加账户”（iOS）</li>
-</ul>
+<p>一份账户资料包括<strong>姓名、照片</strong>和一些额外的加密信息。
+个人配置只存在于您的设备(们)中
+并使用聊天邮件或传统电子邮件服务器传输信息。</p>
 
-<p>您可能还想了解 <a href="#multiclient">如何为多个设备添加账户</a>。</p>
+<p>首次安装Delta Chat 时，会创建第一个账户资料文件。</p>
+
+<p>之后，您可以点击左上角的个人资料图像，<strong>添加个人账户</strong>
+或<strong>切换账户</strong>。</p>
+
+<p>您可能希望为政治、家庭或工作相关的活动使用不同的账户资料,
+或者例如，为专门用于注册网站和平台的“垃圾邮件账户资料”,
+这些网站和平台往往会早晚导致未经请求的消息（即“垃圾邮件”）</p>
+
+<p>您可能还想了解 <a href="#multiclient">如何在多台设备上使用同一账户资料</a>。</p>
     
       <h3 id="谁会看见我的个人资料图片">
         
@@ -398,16 +437,18 @@ They will most likely also not be decryptable anymore
 
 <ul>
   <li>
-    <p>默认情况下，Delta Chat 会在本地设备上存储您的所有消息。如果您，例如，想要节省邮件提供商处的存储空间，那么可以选择开启自动删除旧消息。这些消息还将保存在您的设备上（除非您在设备上删除它们）。</p>
+    <p>默认情况下，Delta Chat 会在本地设备上存储您的所有消息。
+ 如果您，例如，想要节省邮件提供商处的存储空间，
+那么可以选择配置Delta Chat 以开启服务端自动删除旧消息。
+这些消息还将保存在您的设备上,除非您在设备上删除它们。</p>
   </li>
   <li>
-    <p>To turn it on, go to <strong>Delete Old Messages → Delete Messages from Server</strong>
-in the “Chats and Media” settings.
-You can set a timeframe between “At once” and “After 1 year”.
-All e-mails received by Delta Chat will be deleted from the server after this timeframe.</p>
+    <p>要打开它，请转到 “聊天和媒体 “设置中的<strong>删除旧信息 → 从服务器删除信息</strong>。
+您可以在 “立即 “和 “1 年后 “之间设置时限。
+Delta Chat 收到的所有电子邮件都将在此期限后从服务器中删除。</p>
   </li>
   <li>
-    <p>注意：如果在多台设备上使用 Delta Chat，请将消息在服务器上保存足够长的时间，以便其他设备能够下载消息。在这种情况下，您应当根据其他设备的使用频率，将自动删除设置到“一天后”或相似的选项上。</p>
+    <p>注意：如果在多台设备上使用 Delta Chat，请将消息在服务器上保存足够长的时间，以便其他设备能够下载消息。在这种情况下，您应当根据其他设备(们)的使用频率，将自动删除设置到“一天后”或相似的选项上。</p>
   </li>
 </ul>
     
@@ -423,6 +464,163 @@ All e-mails received by Delta Chat will be deleted from the server after this ti
   <li>若要节省设备上的存储空间，可以开启自动删除旧消息。</li>
   <li>找到“聊天与媒体”设置中的“从设备删除旧消息”，在从“一小时后”到“一年后”的一系列选项中选择一个。这样，设备上 <em>所有</em> 比所选择时间长度老的消息将被删除。</li>
 </ul>
+    
+      <h2 id="instant-delivery">
+        
+        
+          Instant message delivery and Push Notifications <a href="#instant-delivery" class="anchor"></a>
+        
+        
+      </h2>
+    
+      <h3 id="what-are-push-notifications-how-can-i-get-instant-message-delivery">
+        
+        
+          What are Push Notifications? How can I get instant message delivery? <a href="#what-are-push-notifications-how-can-i-get-instant-message-delivery" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Push Notifications are sent by Apple and Google “Push services” to a user’s device
+so that an inactive Delta Chat app can fetch messages in the background
+and show notifications on a user’s phone if needed.</p>
+
+<p>Push Notifications work with all <a href="https://delta.chat/chatmail">chatmail</a> servers on</p>
+
+<ul>
+  <li>
+    <p>iOS devices, by integrating with Apple Push services.</p>
+  </li>
+  <li>
+    <p>Android devices, by integrating with the Google FCM Push service,
+including on devices that use <a href="https://microg.org">microG</a>
+instead of proprietary Google code on the phone.</p>
+  </li>
+</ul>
+
+<p>As of May 2024, classic e-mail servers do not support Push Notifications
+for Delta Chat users.</p>
+    
+      <h3 id="are-push-notifications-enabled-on-ios-devices-is-there-an-alternative">
+        
+        
+          Are Push Notifications enabled on iOS devices? Is there an alternative? <a href="#are-push-notifications-enabled-on-ios-devices-is-there-an-alternative" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Yes, Delta Chat automatically uses Push Notifications for <a href="https://delta.chat/chatmail">chatmail</a> profiles.
+And no, there is no alternative on Apple’s phones to achieve instant message delivery
+because Apple devices do not allow Delta Chat to fetch data in the background.
+Push notifications are automatically activated for iOS users because
+<a href="#privacy-notifications">Delta Chat’s privacy-preserving Push Notification system</a>
+does not expose data to Apple that it doesn’t already have.</p>
+    
+      <h3 id="android-push">
+        
+        
+          Are Push notifications enabled / needed on Android devices? <a href="#android-push" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>If a “Push Service” is available, Delta Chat enables Push Notifications
+to achieve instant message delivery for all chatmail users.
+If you are using a classic e-mail provider instead of <a href="https://delta.chat/chatmail">chatmail</a> servers,
+Push Notifications are not available.</p>
+
+<p>In the Delta Chat “Notifications” settings for “Instant delivery”
+you can change the following settings effecting all chat profiles:</p>
+
+<ul>
+  <li>
+    <p>Use Background Connection: If you are not using a Push service,
+you may disable “battery optimizations” for Delta Chat,
+allowing it to fetch messages in the background.
+However, there could be delays from minutes to hours.
+Some Android vendors even restrict apps completely
+(see <a href="https://dontkillmyapp.com">dontkillmyapp.com</a>)
+and Delta Chat might not show  incoming messages
+until you manually open the app again.</p>
+  </li>
+  <li>
+    <p>Force Background Connection: This is the fallback option
+if the previous options are not available or do not achieve “instant delivery”.
+Enabling it causes a permanent notification on your phone
+which may sometimes be “minified” with recent Android phones.</p>
+  </li>
+</ul>
+
+<p>Both “Background Connection” options are energy-efficient and
+safe to try if you experience messages arrive only with long delays.</p>
+    
+      <h3 id="privacy-notifications">
+        
+        
+          How private are Delta Chat Push Notifications? <a href="#privacy-notifications" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Delta Chat Push Notification support avoids leakage of private information.
+It does not leak e-mail, IP address or message content (not even encrypted)
+to any system involved in the delivery of Push Notifications.</p>
+
+<p>Here is how Delta Chat apps perform Push Notification delivery:</p>
+
+<ul>
+  <li>
+    <p>A Delta Chat app obtains a “device token” locally and stores it
+on the <a href="https://delta.chat/chatmail">chatmail</a> server.</p>
+  </li>
+  <li>
+    <p>When a <a href="https://delta.chat/chatmail">chatmail</a> server receives an e-mail for a Delta Chat user
+it forwards the “device token” to the central Delta Chat notification proxy.</p>
+  </li>
+  <li>
+    <p>The central Delta Chat notification proxy forwards
+the “device token” to the respective Push service (Apple, Google, etc.),
+without ever knowing the IP or e-mail address of Delta Chat users.</p>
+  </li>
+  <li>
+    <p>The central Push Service (Apple, Google, etc.)
+wakes up the Delta Chat app on your device
+to check for new messages in the background.
+It does not know about the chatmail or e-mail address of the device it wakes up.
+The central Apple/Google Push services never see an e-mail address (sender or receiver)
+and also never see any message content (also not in encrypted forms).</p>
+  </li>
+</ul>
+
+<p>As of May 2024, chatmail servers know about “device tokens”
+but we plan to encrypt this information to the notification proxy
+such that the chatmail server never learns the device token.</p>
+
+<p>The central Delta Chat notification proxy <a href="https://github.com/deltachat/notifiers">is small and fully implemented in Rust</a>
+and forgets about device-tokens as soon as Apple/Google/etc processed them,
+usually in a matter of milliseconds.</p>
+
+<p>Resulting from this overall privacy design, even the seizure of a chatmail server,
+or the full seizure of the central Delta Chat notification proxy
+would not reveal private information that Push services do not already have.</p>
+    
+      <h3 id="why-does-delta-chat-integrate-with-centralized-proprietary-applegoogle-push-services">
+        
+        
+          Why does Delta Chat integrate with centralized proprietary Apple/Google push services? <a href="#why-does-delta-chat-integrate-with-centralized-proprietary-applegoogle-push-services" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Delta Chat is a free and open source decentralized messenger with free server choice,
+but we want users to reliably experience “instant delivery” of messages,
+like they experience from Whatsapp, Signal or Telegram apps,
+without asking questions up-front that are more suited to expert users or developers.</p>
+
+<p>Note that Delta Chat has a <a href="#privacy-notifications">small and privacy-preserving Push Notification system</a>
+that achieves “instant delivery” of messages for all chatmail servers
+including a potential one <a href="https://delta.chat/chatmail#selfhosted">you might setup yourself without our permission</a>.
+Welcome to the power of the interoperable and massive chatmail and e-mail system :)</p>
     
       <h2 id="加密和安全">
         
@@ -477,51 +675,32 @@ guarantee end-to-end encrypted messages.</p>
         
       </h3>
 
-<p>Meet your chat partner outside Delta Chat, preferably in person
-but a second channel like a video chat
-or a different messenger is fine as well.
-Perform the following QR show/scan procedure with your chat partner.
-One of you is the “Inviter”, the other is the “Joiner”.</p>
+<p>If you have a second communication channel with your chat partner,
+like a video chat or a different messenger,
+you can generate an invite link.</p>
 
-<p><strong>Inviter side</strong>:</p>
-
-<ul>
-  <li>
-    <p>Group invitation: 
-Tap the chat group title to see its member list, and select “QR Invite code”. 
-Share the QR image with the other side either in person or through a second channel.</p>
-  </li>
-  <li>
-    <p>Direct 1:1 chat invitation: 
-Tap the QR Code icon <img style="vertical-align:middle; width:1.8em; margin:1px" src="../qr-icon.png" />
-on the Delta Chat app main screen.
-Share the QR image with the other side either in person or through a second channel.</p>
-  </li>
-</ul>
-
-<p><strong>Joiner side</strong>:</p>
+<p>If you are together in person,
+you can show a QR code to your chat partner.</p>
 
 <ul>
   <li>
-    <p>Tap the QR Code icon <img style="vertical-align:middle; width:1.8em; margin:1px" src="../qr-icon.png" />
+    <p>For <strong>Group invitations</strong>,
+tap the chat group title to see its member list,
+and select “QR Invite code”.</p>
+  </li>
+  <li>
+    <p>For <strong>direct 1:1 chat invitations</strong>,
+tap the QR Code icon <img style="vertical-align:middle; width:1.8em; margin:1px" src="../qr-icon.png" />
 on the Delta Chat app main screen.</p>
   </li>
-  <li>
-    <p>Choose “SCAN QR CODE” and scan the QR Code 
-that you see from your chat partner in a second channel.</p>
-  </li>
-  <li>
-    <p>Tap “OK”</p>
-  </li>
 </ul>
 
-<p>If the QR code scanning doesn’t work in your situation,
-you can also <strong>Share</strong> (or <strong>Copy to Clipboard</strong>) an equivalent invite link
-to the other person through a second channel.</p>
+<p>Let your chat partner scan the QR image
+with their Delta Chat app,
+or click “Copy” or “Share” to create an invite link
+and share it with your chat partner.</p>
 
-<p><strong>Both Inviter and Joiner</strong>:</p>
-
-<p>Wait while <a href="https://securejoin.delta.chat/en/latest/new.html#setup-contact-protocol">Secure-Join network messages are exchanged</a> between both devices.</p>
+<p>Now wait while <a href="https://securejoin.delta.chat/en/latest/new.html#setup-contact-protocol">Secure-Join network messages are exchanged</a> between both devices.</p>
 
 <ul>
   <li>
@@ -603,7 +782,7 @@ even if the contact is a member there.</p>
 <p><strong>Your contact is using Delta Chat on a second device (phone or laptop)</strong></p>
 
 <p>If they have another device with a Delta Chat app running,
-they should remove the account from the new device
+they should remove the profile from the new device
 and add it <a href="#multiclient">as a second device as described here</a>.
 As soon as they message you afterwards, the warning will be gone
 and guaranteed encryption is established with both devices of your contact.</p>
@@ -611,8 +790,8 @@ and guaranteed encryption is established with both devices of your contact.</p>
 <p><strong>Your contact reinstalled Delta Chat using their old account login</strong></p>
 
 <p>If they have <a href="#backup">a backup file</a>, 
-they should remove the account from the new device 
-and rather import the backup file to re-create their account. 
+they should remove the profile from the new device
+and rather import the backup file to re-create their profile.
 As soon as they message you afterwards, the warning will be gone
 and guaranteed encryption is re-established for this contact.</p>
 
@@ -799,12 +978,12 @@ deliver messages to recipient’s devices.</p>
 
 <p>Both for protecting against metadata-collecting e-mail servers 
 as well as against the threat of device seizure
-we recommend to use a Delta Chat optimized <a href="https://delta.chat/serverguide">e-mail server instance</a>
-to create pseudonymous temporary accounts through QR-code scans.
-Note that Delta Chat apps on all platforms support multiple accounts 
-so you can easily use action-specific “1-week” or “1-month” accounts next to your “main” account
-with the knowledge that all temporary account data, along with all metadata, will be deleted.
-Moreover, if a device is seized then contacts using temporary e-mail accounts
+we recommend to use a <a href="https://delta.chat/chatmail">chatmail server</a>
+to create pseudonymous temporary profiles through QR-code scans.
+Note that Delta Chat apps on all platforms support multiple profiles
+so you can easily use situation-specific profiles next to your “main” profile
+with the knowledge that all their data, along with all metadata, will be deleted.
+Moreover, if a device is seized then contacts using temporary profiles
 can not be identified easily, as compared to messengers which reveal
 phone numbers in chat groups which in turn are often associated with legal identities.</p>
     
@@ -863,7 +1042,7 @@ and their non-Autocrypt e-mail app.</p>
       </h3>
 
 <p>If you need a safely end-to-end encrypted chat with a contact 
-who is using their account both with Delta Chat and non-Autocrypt apps (e.g. webmail),
+who is using their e-mail account both with Delta Chat and non-Autocrypt apps (e.g. webmail),
 it’s best to setup <a href="#howtoe2ee">guaranteed end-to-end encryption with them</a>
 and then create a guaranteed end-to-end encrypted group chat with you two as members. 
 In this group chat all messages will be end-to-end encrypted 
@@ -938,10 +1117,10 @@ past encrypted messages.</p>
 <p>In any case, Delta Chat’s end-to-end encryption uses a <a href="#openpgp-secure">secure subset of OpenPGP</a>
 which has been <a href="https://delta.chat/assets/blog/2019-first-security-review.pdf">independently security-audited</a>.</p>
     
-      <h3 id="我可以重复使用现有的私钥吗">
+      <h3 id="importkey">
         
         
-          我可以重复使用现有的私钥吗？ <a href="#我可以重复使用现有的私钥吗" class="anchor"></a>
+          我可以重复使用现有的私钥吗？ <a href="#importkey" class="anchor"></a>
         
         
       </h3>
@@ -988,7 +1167,9 @@ independent security analysis, from most recent to older:</p>
   <li>
     <p>2024 March, we received a deep security analysis from the Applied Cryptography
 research group at ETH Zuerich and addressed all raised issues. 
-See our blog post about <a href="https://delta.chat/en/2024-03-25-crypto-analysis-securejoin">Hardening Guaranteed End-to-End encryption</a> for more detailed information.</p>
+See our blog post about <a href="https://delta.chat/en/2024-03-25-crypto-analysis-securejoin">Hardening Guaranteed End-to-End encryption</a> for more detailed information and the
+<a href="https://eprint.iacr.org/2024/918.pdf">Cryptographic Analysis of Delta Chat</a> 
+research paper published afterwards.</p>
   </li>
   <li>
     <p>2023 April, we fixed security and privacy issues with the “web
@@ -1048,7 +1229,7 @@ You can read the <a href="https://delta.chat/assets/blog/2019-first-security-rev
         
       </h3>
 
-<p>Yes. Delta Chat 1.36 comes with a new, experimental function for using the same account on different devices:</p>
+<p>Yes. Delta Chat 1.36 comes with a new, experimental function for using the same profile on different devices:</p>
 
 <ul>
   <li>
@@ -1110,7 +1291,7 @@ Do not exit Delta Chat.
   </li>
   <li>
     <p>Delta Chat is <strong>already logged in</strong> on the destination device?
-You can use multiple accounts per device, just <a href="#multiple-accounts">add another account</a></p>
+You can use multiple profiles per device, just <a href="#multiple-accounts">add another profile</a></p>
   </li>
   <li>
     <p>If you still have problems or if you <strong>cannot scan a QR code</strong>
@@ -1133,8 +1314,8 @@ try the <strong>manual transfer</strong> described below</p>
 screen unlock PIN, pattern, or password. Then you can click on “Start
 Backup”. This saves the backup file to your device. Now you have to transfer
 it to the other device somehow.</li>
-  <li>On the new device, on the login screen, instead of logging into your email
-account, choose “Import Backup”. After import, your conversations, encryption
+  <li>On the new device, in the “I already have a profile” menu,
+choose “restore from backup”. After import, your conversations, encryption
 keys, and media should be copied to the new device.
     <ul>
       <li><strong>If you use iOS:</strong> and you encounter difficulties, maybe
@@ -1203,6 +1384,7 @@ you only open attachments from senders you trust, and not from spammers.</li>
 <ul>
   <li>In general, anyone can share webxdc apps with each
 other without restrictions.</li>
+  <li>From <a href="https://webxdc.org/apps/">webxdc.org/apps</a>.</li>
   <li>You can <a href="https://delta.chat/en/2023-08-11-xstore">send ‘hi’ to xstore@testrun.org</a>
 to see an experimental webxdc appstore.
 All of the apps are open source and for free.</li>
@@ -1289,27 +1471,20 @@ this way, you will have a new random jitsi room every time you call someone.</li
       </h3>
 
 <ul>
-  <li>您可以在高级设置的“实验性功能”部分打开位置流。</li>
-  <li>如果您想在聊天中分享位置，找到“附件”然后选择“位置”。现在，在 5 分钟到 6 小时之间，设置一个将您的位置传输给聊天伙伴的时间长度。</li>
-  <li>在您的位置发生变化时，聊天中的其他人可以在地图上看到它。</li>
-  <li>要看到地图和他人的位置，您需要在高级设置中打开该功能。</li>
-  <li>此功能不会与您的聊天伙伴以外的任何人分享您的位置。 <em>但是：</em>为了显示地图，我们需要从 mapbox.com 下载地图图块。所以，当您 <em>查看</em> 地图时， mapbox.com 会收到下载特定区域地图的请求。 如果这对您来说是隐私风险，那么这项功能可能不适合您。我们正在寻找 Mapbox 的去中心化替代品。</li>
-  <li>在桌面端，操作系统通常不能确定您的位置。不过您可以在地图上右键，然后描述一个位置；这个位置会作为一条消息发送到聊天中，同时也会出现在地图上。</li>
-</ul>
-    
-      <h3 id="实验性的数据库加密到底保护了什么">
-        
-        
-          实验性的数据库加密到底保护了什么？ <a href="#实验性的数据库加密到底保护了什么" class="anchor"></a>
-        
-        
-      </h3>
-
-<ul>
-  <li>目前，数据库加密仍处于高度试验性状态。不要依靠它来提供保护。如果操作系统提供了加密，您还应当使用它。</li>
-  <li>数据库加密目前只加密了数据库的行与列，没有加密二进制数据块。这多少意味着您的消息是安全的，但您的附件不是。</li>
-  <li>对于 iOS 和 Android，加密密钥存储在系统钥匙串中。这意味着加密安全性和所运行在的操作系统安全性一样。</li>
-  <li>由于没有标准方法在不同平台上存储加密密钥，Delta Chat 桌面客户端尚未提供数据库加密。</li>
+  <li>You can turn on location streaming in the “experimental features” section of
+the advanced settings.</li>
+  <li>Now, if you want to share your location in a chat, go to “attach” and select
+“location”. You can now set a time frame in which your location will be
+streamed to your chat partners, between 5 minutes and 6 hours.</li>
+  <li>When your location changes, the others in the chat can view it on a map in
+the chat.</li>
+  <li>To see the map and view locations of others, you need to turn on the feature
+in the advanced settings.</li>
+  <li>This feature will not share your location with anyone except your chat partners.
+Map tiles are downloaded from <a href="https://openstreetmap.org">OpenStreetMap</a>.</li>
+  <li>On desktop, the OS typically can’t determine your location. Instead you can
+right click on the map and describe a location, which is sent to the chat as
+a message, but also appears on the map.</li>
 </ul>
     
       <h3 id="为什么我可以选择只监视-deltachat-文件夹">
@@ -1341,8 +1516,8 @@ this way, you will have a new random jitsi room every time you call someone.</li
 
 <ol>
   <li>
-    <p>Change your address in “Settings - Password and Account” and
-enter the password of your new account (and if necessary, server settings).
+    <p>Change your address in “Settings → Advanced → Password and Account” and
+enter the password of your new e-mail account (and if necessary, server settings).
 You will get an information notice about the fact that you are moving to a new address. 
 An additional notice will also show up in your “Device messages” chat.</p>
   </li>
@@ -1384,43 +1559,43 @@ it</a>.</p>
 <p>根据使用的操作系统，系统可能会要求您向本应用授予权限。下面 Delta Chat 使用各类权限进行的操作：</p>
 
 <ul>
-  <li>相机<em>（可被禁止）</em>
+  <li>Camera <em>(can be disallowed)</em>
     <ul>
-      <li>拍照和录像：用于发送照片</li>
+      <li>take pictures and videos: for sending Photos</li>
     </ul>
   </li>
-  <li>联系人<em>（可被禁止）</em>
+  <li>Contacts <em>(can be disallowed)</em>
     <ul>
-      <li>读取联系人：发现要与之聊天的联系人</li>
+      <li>read your contacts: to discover contacts to chat with</li>
     </ul>
   </li>
-  <li>位置<em>（可被禁止）</em>
+  <li>Location <em>(can be disallowed)</em>
     <ul>
-      <li>访问大概位置（基于网络）：用于位置流功能</li>
-      <li>访问精确位置（基于 GPS 和网络）：用于位置流功能</li>
+      <li>access approximate location (network location sources): for the location streaming feature</li>
+      <li>access precise location (GPS and network location sources): for the location streaming feature</li>
     </ul>
   </li>
-  <li>麦克风<em>（可被禁止）</em>
+  <li>Microphone <em>(can be disallowed)</em>
     <ul>
-      <li>录制音频：用于音频消息</li>
+      <li>record audio: for audio messages</li>
     </ul>
   </li>
-  <li>存储<em>（可被禁止）</em>
+  <li>Storage <em>(can be disallowed)</em>
     <ul>
-      <li>修改或删除 SD 卡的内容：下载消息附件</li>
-      <li>读取 SD 卡的内容：与联系人分享文件</li>
+      <li>modify or delete the contents of your SD card: to download message attachments</li>
+      <li>read the contents of your SD card: to share files with your contacts</li>
     </ul>
   </li>
-  <li>其他权限
+  <li>Other app capabilities
     <ul>
-      <li>更改音频设置：允许您选择通知和音频消息的铃声和音量</li>
-      <li>开机自启动：您不必手动启动 Delta Chat</li>
-      <li>控制振动：用于通知</li>
-      <li>查看网络连接：连接到您的电子邮件提供商</li>
-      <li>阻止手机进入休眠状态：您可以在 Autocrypt 设置消息中更轻松地复制安全代码</li>
-      <li>具有完全的网络访问权限：连接到您的电子邮件提供商</li>
-      <li>查看 Wi-Fi 连接：连接到您的电子邮件提供商</li>
-      <li>要求忽略电池优化：给希望一直接收消息的用户使用</li>
+      <li>change your audio settings: so you can choose ring tones and volume for notifications and audio messages</li>
+      <li>run at startup: so you don’t have to start Delta Chat manually</li>
+      <li>control vibration: for notifications</li>
+      <li>view network connections: to connect to your E-Mail provider</li>
+      <li>prevent phone from sleeping: so you can easier copy the security code during the Autocrypt Setup Message</li>
+      <li>have full network access: to connect to your E-Mail provider</li>
+      <li>view Wi-Fi connections: to connect to your E-Mail provider</li>
+      <li>ask to ignore battery optimisations: for achieving “instant message delivery”</li>
     </ul>
   </li>
 </ul>
@@ -1463,24 +1638,7 @@ blogpost</a>.</li>
 
 <p>与其他电子邮件程序（比如 Thunderbird、K9-Mail 或 Outlook）一样，本程序需要您的密码来允许您通过它发送邮件。当然，密码仅储存在您的设备上，并只会在登录时发送给您的电子邮件提供商（无论如何，您的提供商总是能够访问您的邮件）。</p>
 
-<p>如果您使用具有 OAuth2 支持的电子邮件提供商，例如 gmail.com 或 yandex.ru，则无需在设备上存储密码。在这种情况下，只有访问令牌被使用。</p>
-
 <p>由于 Delta Chat 是开源的，要验证您的凭据是否被安全地处理了，可以检查<a href="https://github.com/deltachat/deltachat-core-rust/blob/master/src/login_param.rs">源代码</a>。我们很高兴能收到使本应用对我们的所有用户更加安全的反馈。</p>
-    
-      <h3 id="使用电子邮件的-delta-chat-真的是-即时-通讯工具吗">
-        
-        
-          使用电子邮件的 Delta Chat 真的是 <em>即时</em> 通讯工具吗？ <a href="#使用电子邮件的-delta-chat-真的是-即时-通讯工具吗" class="anchor"></a>
-        
-        
-      </h3>
-
-<ul>
-  <li>通常情况下，发送和接收消息会花费数秒。收发消息有时会花费更长时间；但是对于其他的通信软件来说，这也是真的。</li>
-  <li>在双方都积极使用本应用时，即时聊天反应迅速；而当应用运行在后台时，有时就会很慢。</li>
-  <li>由于 Android 与 iOS 经常阻止 Delta Chat 在后台运行、偶尔才会唤醒它，接收消息可能要花费数分钟。iOS 上的这种人为延迟通常比 Android 上的更糟糕。</li>
-  <li>另外，对于很多正常应用来说，Android 和 iOS 杀掉后台应用是一个问题。更多信息，请参阅 <a href="https://dontkillmyapp.com/">dontkillmyapp.com</a>。</li>
-</ul>
     
       <h3 id="哪些消息会在-delta-chat-中出现">
         
@@ -1492,7 +1650,8 @@ blogpost</a>.</li>
 
 <p>默认情况下， Delta Chat 会显示所有电子邮件。</p>
 
-<p>通过“设置-&gt;聊天与媒体-&gt;显示传统电子邮件”，您可以改变这种行为。有三个选项：</p>
+<p>At “Settings → Advanced → Show Classic E-Mails”,
+you can change this. You have these options:</p>
 
 <ul>
   <li>“不显示，仅聊天”：只显示由其他 Delta Chat 用户发送的消息和对您 Delta Chat 消息的回复。这在电子邮件地址同时用于处理普通邮件的情况下很有用。</li>
@@ -1546,7 +1705,7 @@ if you set a <a href="#signature">signature text</a>.</p>
 
 <p>副本会被发送到收件箱，然后会被移动到 DeltaChat 文件夹；它不会被放到“已发送”文件夹里。Delta Chat <em>从不</em> 将东西上传到已发送文件夹，因为这意味着上传一条消息两次（一次通过 SMTP，一次通过 IMAP 到已发送文件夹）。</p>
 
-<p>给自己发送副本的默认设置是“不”。</p>
+<p>“给自己发送副本”的默认设置为 “开”。</p>
     
       <h3 id="为什么我可以选择监视已发送文件夹">
         
@@ -1556,7 +1715,7 @@ if you set a <a href="#signature">signature text</a>.</p>
         
       </h3>
 
-<p>监视已发送文件夹的唯一原因是：您在同时使用其他的邮件应用程序（比如 Thunderbird），并且想让邮件分发代理参与聊天对话。</p>
+<p>监视已发送文件夹的唯一原因是：您在使用Delta Chat软件的同时也使用其他的邮件应用程序（比如 Thunderbird），并且想让邮件分发代理参与聊天对话。</p>
 
 <p>不过，我们推荐使用 Delta Chat 桌面客户端；您可以在 <a href="https://get.delta.chat">get.delta.chat</a> 下载它。监视“已发送”文件夹的选项是在还没有 Delta Chat 桌面客户端的时候引入的，这个选项可能会在未来消失。</p>
     
@@ -1591,22 +1750,38 @@ uses.</li>
 <a href="https://autocrypt.org/dev-status.html">Autocrypt-enabled e-mail app</a>.</li>
 </ul>
     
-      <h3 id="如何删除我的账户">
+      <h3 id="remove-account">
         
         
-          如何删除我的账户？ <a href="#如何删除我的账户" class="anchor"></a>
+          如何删除我的账户？ <a href="#remove-account" class="anchor"></a>
         
         
       </h3>
 
-<p>As you use an e-mail account for Delta Chat,
+<p>If you use a default chat profile
+you can simply uninstall the app.
+This will automatically trigger deletion of all associated account data on the chatmail server.
+For more info, please refer to <a href="https://nine.testrun.org/info.html#account-deletion">nine.testrun.org account-deletion</a> for the default onboarding server,
+or the respective page from your chosen <a href="https://delta.chat/chatmail">3rd party chatmail server</a>.</p>
+
+<p>If you have set up your chat profile on multiple devices
+you need to remove it from all devices.</p>
+
+<p>If you are using more than one account,
+but don’t want to get rid of all of them,
+you can remove it in the account switcher menu (on android and iOS),
+or in the sidebar with a right click (in the desktop client).</p>
+
+<p>Accounts on <a href="https://providers.delta.chat">classic e-mail providers</a>
+will not be deleted automatically;
 how you can delete your account depends on your e-mail provider.
-We don’t have any control over your e-mail account,
+We don’t have any control over e-mail accounts at those providers,
 so unfortunately we can’t help you with that.</p>
 
-<p>If you want to keep the account,
+<p>If you want to continue using a classic e-mail account with other apps,
 but uninstall Delta Chat,
-it is recommended to leave any group chat before uninstalling Delta Chat.</p>
+it is recommended to leave any group chat before uninstalling Delta Chat.
+Otherwise you might receive undecryptable messages from those group chats.</p>
     
       <h3 id="我对技术细节很感兴趣能告诉我更多吗">
         
@@ -1628,48 +1803,46 @@ it is recommended to leave any group chat before uninstalling Delta Chat.</p>
         
       </h3>
 
-<p>Delta Chat 没有接受风险投资，也没有负债累累，更没有承受产生巨额利润或将用户及其朋友和家人卖给广告商（或更糟）的压力。我们宁愿使用（目前来自欧盟和美国的）公共资金，来帮助我们努力建立一个基于自由开源社区开发的、去中心化的、多样化的聊天消息（软件）生态系统。</p>
+<p>Delta Chat 没有接受风险投资，也没有负债累累，更没有承受产生巨额利润或将用户及其朋友和家人卖给广告商（或更糟）的压力。我们宁愿使用目前来自欧盟和美国的公共资金，来帮助我们努力建立一个基于自由开源社区开发的、去中心化的、多样化的聊天消息软件生态系统。</p>
 
-<p>具体来说，到目前为止，对 Delta Chat 开发的资助有这些来源：</p>
+<p>Concretely, Delta Chat developments have so far been funded from these sources,
+ordered chronologically:</p>
 
 <ul>
   <li>
-    <p>The <a href="https://nextleap.eu">NEXTLEAP</a> EU project funded the research
-and implementation of verified groups and setup contact protocols
-in 2017 and 2018 and also helped to integrate end-to-end Encryption
-through <a href="https://autocrypt.org">Autocrypt</a>.</p>
+    <p><a href="https://nextleap.eu">NEXTLEAP</a>欧盟项目资助了以下研究和实施工作：在 2017 年和 2018 年实施的验证组和设置联系协议和通过 <a href="https://autocrypt.org">Autocrypt</a>整合了端到端加密。</p>
   </li>
   <li>
     <p>在<a href="https://opentechfund.org">开放技术基金</a> 2018/2019 年提供的第一笔赠款（约 20 万美元）期间，我们显著改善了安卓应用，发布了第一个桌面测试版，并根据人权方面的用户体验研究进行了功能开发，请参阅我们的结论<a href="https://delta.chat/en/2019-07-19-uxreport">《需求发现与用户体验报告》</a>。2019/2020 年的第二笔赠款（约 30 万美元）对发布 Delta/iOS 版本，将核心库转换到 Rust ，以及为所有平台开发新功能提供了帮助。</p>
   </li>
   <li>
-    <p>The <a href="https://nlnet.nl/">NLnet foundation</a> granted in 2019/2020 EUR 46K for
-completing Rust/Python bindings and instigating a Chat-bot eco-system.</p>
+    <p><a href="https://nlnet.nl/">NLnet 基金会</a> 2019/2020 年拨款 4.6 万欧元，用于完成 Rust/Python 绑定并建立聊天机器人生态系统。</p>
   </li>
   <li>
     <p>在 2021 年，我们从两项下一代互联网提案收到了欧盟的进一步资助，即 <a href="https://dapsi.ngi.eu/hall-of-fame/eppd/">EPPD - 电子邮件提供商可移植性目录</a>（约 9.7 万欧元）和 <a href="https://nlnet.nl/project/EmailPorting/">AEAP - 电子邮件地址移植</a>（约 9 万欧元）。这带来了更好的多账户支持，改进的二维码联系人和群组设置，和所有平台上的多处网络改进。</p>
   </li>
   <li>
-    <p>From End 2021 till March 2023 we received <em>Internet Freedom</em> funding (500K USD) from the
-U.S. Bureau of Democracy, Human Rights and Labor (DRL). 
-This funding supported our long-running goals to make Delta Chat more usable 
-and compatible with a wide range of e-mail servers world-wide, and more resilient and secure
-in places often affected by internet censorship and shutdowns.</p>
+    <p>从 2021 年底到 2023 年 3 月，我们从美国民主、人权和劳工局（DRL）获得了<em>互联网自由</em>资金（50 万美元）。这笔资金支持了我们的长期目标，即让Delta Chat 更好用，并与全球范围内的各种电子邮件服务器兼容，而且在经常受到互联网审查制度影响的地方更具弹性和安全性。</p>
   </li>
   <li>
-    <p>Beginning 2023 we got accepted in the Next Generation Internet (NGI)
-Entrust program for our “Private Decentralized Apps” proposals. 
-Exact amount is to be determined (around 100K EUR). 
-This funding supports further developments of <a href="https://webxdc.org">webxdc “apps shared in a chat”</a>.</p>
+    <p>2023-2024 we successfully completed the OTF-funded 
+<a href="https://www.opentech.fund/projects-we-support/supported-projects/secure-chat-mail-with-delta-chat/">Secure Chatmail project</a>, 
+allowing us to introduce guaranteed encryption, 
+creating a <a href="https://delta.chat/chatmail">chatmail server network</a> 
+and providing “instant onboarding” in all apps released from April 2024 on.</p>
   </li>
   <li>
-    <p>Sometimes we receive one-time donations from private individuals. 
-For example, in 2021 a generous individual bank-wired us 4K EUR 
-with the subject “keep up the good developments!”. 💜 
-We use such money to fund development gatherings or to care for ad-hoc expenses 
-that can not easily be predicted for, or reimbursed from, public funding grants. 
-Receiving more donations also helps us to become more independent and long-term viable
-as a contributor community.</p>
+    <p>In 2023 and 2024 we got accepted in the Next Generation Internet (NGI)
+program for our work in <a href="https://nlnet.nl/project/WebXDC-Push/">webxdc PUSH</a>,
+along with collaboration partners working on 
+<a href="https://nlnet.nl/project/Webxdc-Evolve/">webxdc evolve</a>, 
+<a href="https://nlnet.nl/project/WebXDC-XMPP/">webxdc XMPP</a>, 
+<a href="https://nlnet.nl/project/DeltaTouch/">DeltaTouch</a> and 
+<a href="https://nlnet.nl/project/DeltaTauri/">DeltaTauri</a>. 
+All of these projects are partially completed or to be completed in early 2025.</p>
+  </li>
+  <li>
+    <p>我们有时会收到个人的一次性捐款。 例如，2021 年，一位慷慨的人士以 “继续保持良好的发展态势！”为主题通过银行向我们捐赠了4千欧元💜。 我们用这些钱来资助发展活动或支付不容易预测或从公共基金中报销的临时费用。收到更多的捐款也有助于我们作为一个贡献者社区变得更加独立和长期可持续。</p>
 
     
   </li>
@@ -1680,8 +1853,8 @@ as a contributor community.</p>
 
 <p>上面提到的钱款资助主要是由在弗赖堡（德国）的 merlinux GmbH 组织的，分发给了来自世界各地的十多位贡献者。</p>
 
-<p>Please see <a href="https://delta.chat/zh_CN/contribute">Delta Chat Contribution channels</a>
-for both monetary and and other contribution possibilities.</p>
+<p>请参阅 [Delta Chat 捐款渠道]（捐款）
+以了解货币捐款和其他捐款的可能性。</p>
 
 
 

@@ -5,10 +5,24 @@
 ## Added
 
 ## Changed
+
+## Fixed
+
+<a id="1_48_0"></a>
+
+## [1.48.0] - 2024-11-08
+
+## Changed
+- Update translations (2024-11-08)
+- Update local help (2024-11-08)
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.148.7`
+  - Emit chatlist events only if message still exists
+  - send_msg_to_smtp: Do not fail if the message does not exist anymore
 - move the "Realtime Webxdc Channels" setting out of the "Experimental" section #4316
 
 ## Fixed
 - image attachments not being centered within a message #4313
+
 
 <a id="1_47_1"></a>
 
@@ -34,9 +48,7 @@
   - Save full text to mime_headers for long outgoing messages #4289
 - when jumping to a message (e.g. when showing the first unread message, or when jumping to a message through "show in chat"), position it more appropriately in the scrollable area #4286
 - Dropping multiple files onto deltachat now sends images as compressed images instead of uncompressed files #4278
-- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.148.7`
-  - Emit chatlist events only if message still exists
-  - send_msg_to_smtp: Do not fail if the message does not exist anymore
+
 
 ## Fixed
 - image thumbnails not showing in chat list #4247
@@ -2951,7 +2963,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.47.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.48.0...HEAD
+
+[1.47.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.47.1...v1.48.0
 
 [1.47.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.47.0...v1.47.1
 

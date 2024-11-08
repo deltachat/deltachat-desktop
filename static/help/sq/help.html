@@ -6,9 +6,9 @@
       <li><a href="#cilat-janë-përparësitë-e-delta-chat-it-krahasuar-me-programe-të-tjerë-të-llojit">Cilat janë përparësitë e Delta Chat-it krahasuar me programe të tjerë të llojit?</a></li>
       <li><a href="#po-nëse-pres-një-mesazh-prej-dikujt-të-cilit-si-kam-shkruar-në-të-kaluarën">Po nëse pres një mesazh prej dikujt të cilit s’i kam shkruar në të kaluarën?</a></li>
       <li><a href="#a-mbulon-delta-chat-i-figura-video-dhe-bashkëngjitje-të-tjera">A mbulon Delta Chat-i figura, video dhe bashkëngjitje të tjera?</a></li>
-      <li><a href="#multiple-accounts">Si mund të shtoj shumë llogari, ose të kaloj nga njëra te tjetra?</a></li>
+      <li><a href="#multiple-accounts">What are profiles? How can I switch between them?</a></li>
       <li><a href="#kush-e-sheh-profilin-tim">Kush e sheh profilin tim?</a></li>
-      <li><a href="#signature">Can I set a Signature Text/Status/Motto with Delta Chat?</a></li>
+      <li><a href="#signature">Can I set a Bio/Signature/Status/Motto with Delta Chat?</a></li>
       <li><a href="#çdo-të-thotë-fiksim-heshtim-arkivim">Ç’do të thotë Fiksim, Heshtim, Arkivim?</a></li>
       <li><a href="#çdo-të-thotë-pika-e-gjelbër">Ç’do të thotë pika e gjelbër?</a></li>
       <li><a href="#ephemeralmsgs">How do disappearing messages work?</a></li>
@@ -23,6 +23,15 @@
       <li><a href="#çduan-të-thonë-shenjat-e-shfaqura-pas-mesazheve-që-dërgohen">Ç’duan të thonë shenjat e shfaqura pas mesazheve që dërgohen?</a></li>
       <li><a href="#çndodh-nëse-aktivizoj-fshi-nga-shërbyesi-mesazhe-të-vjetër">Ç’ndodh, nëse aktivizoj “Fshi nga shërbyesi mesazhe të vjetër”?</a></li>
       <li><a href="#delold">Ç’ndodh, nëse aktivizoj “Fshi prej pajisjes mesazhe të vjetër”?</a></li>
+    </ul>
+  </li>
+  <li><a href="#instant-delivery">Instant message delivery and Push Notifications</a>
+    <ul>
+      <li><a href="#what-are-push-notifications-how-can-i-get-instant-message-delivery">What are Push Notifications? How can I get instant message delivery?</a></li>
+      <li><a href="#are-push-notifications-enabled-on-ios-devices-is-there-an-alternative">Are Push Notifications enabled on iOS devices? Is there an alternative?</a></li>
+      <li><a href="#android-push">Are Push notifications enabled / needed on Android devices?</a></li>
+      <li><a href="#privacy-notifications">How private are Delta Chat Push Notifications?</a></li>
+      <li><a href="#why-does-delta-chat-integrate-with-centralized-proprietary-applegoogle-push-services">Why does Delta Chat integrate with centralized proprietary Apple/Google push services?</a></li>
     </ul>
   </li>
   <li><a href="#fshehtëzim-dhe-siguri">Fshehtëzim dhe Siguri</a>
@@ -46,7 +55,7 @@
       <li><a href="#how-can-i-ensure-message-end-to-end-encryption-and-deletion">How can I ensure message end-to-end encryption and deletion?</a></li>
       <li><a href="#pfs">Does Delta Chat support Perfect Forward Secrecy?</a></li>
       <li><a href="#is-end-to-end-encryption-of-delta-chat-as-safe-as-signal">Is end-to-end encryption of Delta Chat as safe as Signal?</a></li>
-      <li><a href="#a-mund-të-ripërdor-kyçin-tim-ekzistues-privat">A mund të ripërdor kyçin tim ekzistues privat?</a></li>
+      <li><a href="#importkey">A mund të ripërdor kyçin tim ekzistues privat?</a></li>
       <li><a href="#seksportoj-dot-kyçet-e-mi-ekzistues-pgp-në-delta-chat">S’eksportoj dot kyçet e mi ekzistues PGP në Delta Chat.</a></li>
       <li><a href="#security-audits">A është bërë auditim i pavarur i Delta Chat-it për cenueshmëri sigurie?</a></li>
     </ul>
@@ -71,7 +80,6 @@
       <li><a href="#si-mund-të-përdor-thirrje-audiovideo-me-delta-chat-in">Si mund të përdor thirrje audio/video me Delta Chat-in?</a></li>
       <li><a href="#çjanë-listat-e-transmetimeve-dhe-si-mund-ti-përdor">Ç’janë Listat e Transmetimeve dhe si mund t’i përdor?</a></li>
       <li><a href="#si-mund-tu-tregoj-partnerëve-të-mi-në-fjalosje-vendndodhjen-time">Si mund t’u tregoj partnerëve të mi në fjalosje vendndodhjen time?</a></li>
-      <li><a href="#çmbron-konkretisht-fshehtëzimi-eksperimental-i-bazës-së-të-dhënave">Ç’mbron konkretisht fshehtëzimi eksperimental i bazës së të dhënave?</a></li>
       <li><a href="#pse-mund-të-zgjedh-vetëm-të-shoh-dosjen-deltachat">Pse mund të zgjedh vetëm të shoh dosjen DeltaChat?</a></li>
       <li><a href="#si-mund-ta-ndryshoj-llogarinë-time-me-një-tjetër-adresë-email">Si mund ta ndryshoj llogarinë time me një tjetër adresë email?</a></li>
     </ul>
@@ -82,7 +90,6 @@
       <li><a href="#a-funksionon-delta-chat-me-shërbimin-tim-email">A funksionon Delta Chat me shërbimin <em>tim</em> email?</a></li>
       <li><a href="#dua-të-administroj-shërbyesin-tim-email-për-delta-chat-çrekomandoni">Dua të administroj shërbyesin tim email për Delta Chat. Ç’rekomandoni?</a></li>
       <li><a href="#pse-më-duhet-të-jap-fjalëkalimin-e-email-it-tim-në-delta-chat-a-është-e-sigurt-kjo">Pse më duhet të jap fjalëkalimin e email-it tim në Delta Chat? A është e sigurt kjo?</a></li>
-      <li><a href="#sa-kohë-që-delta-chat-i-përdor-email-a-është-vërtet-një-shkëmbyes-mesazhesh-të-atypëratyshme">Sa kohë që Delta Chat-i përdor email, a është vërtet një Shkëmbyes Mesazhesh të <em>Atypëratyshme</em>?</a></li>
       <li><a href="#cilat-mesazhe-shfaqen-në-delta-chat">Cilat mesazhe shfaqen në Delta Chat?</a></li>
       <li><a href="#a-mbulon-delta-chat-i-email-e-html">A mbulon Delta Chat-i email-e HTML?</a></li>
       <li><a href="#can-i-set-the-e-mail-subject-with-delta-chat">Can I set the E-Mail Subject with Delta Chat?</a></li>
@@ -90,7 +97,7 @@
       <li><a href="#pse-mund-të-zgjedh-të-vëzhgoj-dosjen-të-dërguar">Pse mund të zgjedh të vëzhgoj dosjen “Të dërguar”?</a></li>
       <li><a href="#pse-mund-të-zgjedh-të-mos-e-vëzhgoj-dosjen-deltachat">Pse mund të zgjedh të mos e vëzhgoj dosjen DeltaChat?</a></li>
       <li><a href="#a-është-i-përputhshëm-delta-chat-i-me-protonmail-in--tutanota-n--criptext-in">A është i përputhshëm Delta Chat-i me Protonmail-in / Tutanota-n / Criptext-in?</a></li>
-      <li><a href="#si-mund-ta-fshij-llogarinë-time">Si mund ta fshij llogarinë time?</a></li>
+      <li><a href="#remove-account">Si mund ta fshij llogarinë time?</a></li>
       <li><a href="#më-interesojnë-hollësitë-teknike-mund-të-më-tregoni-diçka-më-tepër">Më interesojnë hollësitë teknike. Mund të më tregoni diçka më tepër?</a></li>
       <li><a href="#si-financohet-zhvillimi-i-delta-chat-it">Si financohet zhvillimi i Delta Chat-it?</a></li>
     </ul>
@@ -107,8 +114,14 @@
         
       </h2>
 
-<p>Delta Chat është një aplikacion i ri bisedash që i dërgon mesazhet përmes email-i, të fshehtëzuar, nëse është e mundur, me Autocrypt. 
-<strong>Nuk ju duhet të regjistroheni gjëkundi, thjesht përdorni me Delta Chat-in llogarinë tuaj ekzistuese email.</strong></p>
+<p>Delta Chat is a reliable, decentralized and secure messaging app, 
+available for mobile and desktop platforms.</p>
+
+<p>Delta Chat feels like Whatsapp or Telegram but you can also use and regard it as an e-mail app. 
+You can signup anonymously to a variety of <a href="https://delta.chat/chatmail">interoperable chatmail servers</a>
+which are minimal e-mail servers optimized for fast and secure operations. 
+Or you may use classic e-mail servers and an existing e-mail account
+in which case Delta Chat acts as an e-mail app.</p>
 
 <p><img style="float:right; width:50%; max-width:360%; margin:1em;" src="../delta-what-optim.png" /></p>
     
@@ -120,9 +133,15 @@
         
       </h3>
 
-<p>Me Delta Chat-in, mund t’i shkruani cilësdo adresë email ekzistuese - madje
-edhe kur marrësi nuk përdor aplikacionin Delta Chat. Për marrësin s’është
-e nevojshme të instalojë të njëjtin aplikacion me ju, si me programe të tjera.</p>
+<p>To securely setup contact with others <a href="#howtoe2ee">scan an invite QR code 
+or share an invite link</a>. 
+This is required when using a (default) chatmail-based chat profile 
+because chatmail servers reject un-encrypted outgoing messages.</p>
+
+<p>If you create a chat profile with a classic e-mail address 
+you may manually create a contact if you know their e-mail address
+and then write a message to them 
+even if the recipient is not using Delta Chat.</p>
     
       <h3 id="cilat-janë-përparësitë-e-delta-chat-it-krahasuar-me-programe-të-tjerë-të-llojit">
         
@@ -133,16 +152,25 @@ e nevojshme të instalojë të njëjtin aplikacion me ju, si me programe të tje
       </h3>
 
 <ul>
-  <li><em>Independent</em> of any company or services. <em>You</em> own your data.</li>
-  <li>Your data is not saved on a central server unless all users are using
-the same e-mail servers</li>
-  <li>You do not distribute your address book to anyone.</li>
-  <li><em>Fast</em> by the use of Push-IMAP.</li>
-  <li><em>Largest userbase</em> - recipients <em>not</em> using Delta Chat can be reached as well.</li>
-  <li><em>No Spam</em> - only messages of known users are shown by default.</li>
-  <li><em>End-to-end encryption</em> via Autocrypt.</li>
-  <li><em>Copyleft</em> and <em>Standards</em> based libre software.</li>
-  <li><em>Flexible identity</em> with built-in support for <a href="#multiple-accounts">multiple accounts</a></li>
+  <li>
+    <p>Anonymous chat profiles with fast, secure and interoperable <a href="https://delta.chat/chatmail">chatmail servers</a>
+which offer instant Push Notifications for iOS and Android devices.</p>
+  </li>
+  <li>
+    <p>Pervasive <a href="#multiple-accounts">multi-profile</a> and multi-device support on all platforms.</p>
+  </li>
+  <li>
+    <p>Interactive <a href="https://webxdc.org/apps">web apps in chats</a> for gaming and collaboration</p>
+  </li>
+  <li>
+    <p><a href="#security-audits">Audited end-to-end encryption</a> 
+safe against network and server attacks.</p>
+  </li>
+  <li>
+    <p>Free and Open Source software, both app and server side. 
+Built on <a href="https://github.com/deltachat/deltachat-core-rust/blob/master/standards.md">E-mail and Web Internet Standards</a>, 
+<a href="https://xkcd.com/927/">to avoid “yet another standard syndrome (xkcd 927)”</a></p>
+  </li>
 </ul>
     
       <h3 id="po-nëse-pres-një-mesazh-prej-dikujt-të-cilit-si-kam-shkruar-në-të-kaluarën">
@@ -184,18 +212,25 @@ s’doni të merrni mesazhe prej këtij personi, shihni mundësinë e <em>blloki
       <h3 id="multiple-accounts">
         
         
-          Si mund të shtoj shumë llogari, ose të kaloj nga njëra te tjetra? <a href="#multiple-accounts" class="anchor"></a>
+          What are profiles? How can I switch between them? <a href="#multiple-accounts" class="anchor"></a>
         
         
       </h3>
 
-<p>Mundeni të punoni kollaj me llogari shtesë në klientët Delta Chat për celular dhe desktop, duke klikuar:</p>
-<ul>
-  <li>mbi butonin e menusë dhe mandej “Ndërroni Llogari” (Android dhe desktop)</li>
-  <li>ose mbi ikonën e profilit dhe mandej “Shtoni Llogari” (iOS)</li>
-</ul>
+<p>A profile is <strong>a name, a picture</strong> and some additional information for encrypting messages.
+A profile lives on your device(s) only
+and uses a chatmail or a classic e-mail server to transport messages.</p>
 
-<p>Mundet edhe të doni të mësoni <a href="#multiclient">si të shtoni llogari në pajisje të shumta</a>.</p>
+<p>On first installation of Delta Chat a first profile is created.</p>
+
+<p>Later, you can tap your profile image in the upper left corner to <strong>Add Profiles</strong>
+or to <strong>Switch Profiles</strong>.</p>
+
+<p>You may want to use separate profiles for political, family or work related activities,
+or e. g. for a dedicated “spam-profile” with which you register at websites and platforms
+that tend to cause unsolicited messages (“spam”) sooner or later.</p>
+
+<p>You may also wish to learn <a href="#multiclient">how to use the same profile on multiple devices</a>.</p>
     
       <h3 id="kush-e-sheh-profilin-tim">
         
@@ -228,18 +263,16 @@ pajisje të re.</p>
       <h3 id="signature">
         
         
-          Can I set a Signature Text/Status/Motto with Delta Chat? <a href="#signature" class="anchor"></a>
+          Can I set a Bio/Signature/Status/Motto with Delta Chat? <a href="#signature" class="anchor"></a>
         
         
       </h3>
 
 <p>Yes,
-you can do so under “Settings &gt; Profile &gt; Signature Text”.
+you can do so under <strong>Settings → Profile → Bio</strong>.
 Your contacts who use Delta Chat will see it
 when they view your contact details.
-To everyone else,
-It will appear as an e-mail signature
-below the text of all your messages.</p>
+Moreover, it will appear as a classic e-mail signature.</p>
     
       <h3 id="çdo-të-thotë-fiksim-heshtim-arkivim">
         
@@ -466,6 +499,163 @@ automatikisht mesazhe të vjetër.</li>
 sapo të jenë më të vjetër se aq.</li>
 </ul>
     
+      <h2 id="instant-delivery">
+        
+        
+          Instant message delivery and Push Notifications <a href="#instant-delivery" class="anchor"></a>
+        
+        
+      </h2>
+    
+      <h3 id="what-are-push-notifications-how-can-i-get-instant-message-delivery">
+        
+        
+          What are Push Notifications? How can I get instant message delivery? <a href="#what-are-push-notifications-how-can-i-get-instant-message-delivery" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Push Notifications are sent by Apple and Google “Push services” to a user’s device
+so that an inactive Delta Chat app can fetch messages in the background
+and show notifications on a user’s phone if needed.</p>
+
+<p>Push Notifications work with all <a href="https://delta.chat/chatmail">chatmail</a> servers on</p>
+
+<ul>
+  <li>
+    <p>iOS devices, by integrating with Apple Push services.</p>
+  </li>
+  <li>
+    <p>Android devices, by integrating with the Google FCM Push service,
+including on devices that use <a href="https://microg.org">microG</a>
+instead of proprietary Google code on the phone.</p>
+  </li>
+</ul>
+
+<p>As of May 2024, classic e-mail servers do not support Push Notifications
+for Delta Chat users.</p>
+    
+      <h3 id="are-push-notifications-enabled-on-ios-devices-is-there-an-alternative">
+        
+        
+          Are Push Notifications enabled on iOS devices? Is there an alternative? <a href="#are-push-notifications-enabled-on-ios-devices-is-there-an-alternative" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Yes, Delta Chat automatically uses Push Notifications for <a href="https://delta.chat/chatmail">chatmail</a> profiles.
+And no, there is no alternative on Apple’s phones to achieve instant message delivery
+because Apple devices do not allow Delta Chat to fetch data in the background.
+Push notifications are automatically activated for iOS users because
+<a href="#privacy-notifications">Delta Chat’s privacy-preserving Push Notification system</a>
+does not expose data to Apple that it doesn’t already have.</p>
+    
+      <h3 id="android-push">
+        
+        
+          Are Push notifications enabled / needed on Android devices? <a href="#android-push" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>If a “Push Service” is available, Delta Chat enables Push Notifications
+to achieve instant message delivery for all chatmail users.
+If you are using a classic e-mail provider instead of <a href="https://delta.chat/chatmail">chatmail</a> servers,
+Push Notifications are not available.</p>
+
+<p>In the Delta Chat “Notifications” settings for “Instant delivery”
+you can change the following settings effecting all chat profiles:</p>
+
+<ul>
+  <li>
+    <p>Use Background Connection: If you are not using a Push service,
+you may disable “battery optimizations” for Delta Chat,
+allowing it to fetch messages in the background.
+However, there could be delays from minutes to hours.
+Some Android vendors even restrict apps completely
+(see <a href="https://dontkillmyapp.com">dontkillmyapp.com</a>)
+and Delta Chat might not show  incoming messages
+until you manually open the app again.</p>
+  </li>
+  <li>
+    <p>Force Background Connection: This is the fallback option
+if the previous options are not available or do not achieve “instant delivery”.
+Enabling it causes a permanent notification on your phone
+which may sometimes be “minified” with recent Android phones.</p>
+  </li>
+</ul>
+
+<p>Both “Background Connection” options are energy-efficient and
+safe to try if you experience messages arrive only with long delays.</p>
+    
+      <h3 id="privacy-notifications">
+        
+        
+          How private are Delta Chat Push Notifications? <a href="#privacy-notifications" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Delta Chat Push Notification support avoids leakage of private information.
+It does not leak e-mail, IP address or message content (not even encrypted)
+to any system involved in the delivery of Push Notifications.</p>
+
+<p>Here is how Delta Chat apps perform Push Notification delivery:</p>
+
+<ul>
+  <li>
+    <p>A Delta Chat app obtains a “device token” locally and stores it
+on the <a href="https://delta.chat/chatmail">chatmail</a> server.</p>
+  </li>
+  <li>
+    <p>When a <a href="https://delta.chat/chatmail">chatmail</a> server receives an e-mail for a Delta Chat user
+it forwards the “device token” to the central Delta Chat notification proxy.</p>
+  </li>
+  <li>
+    <p>The central Delta Chat notification proxy forwards
+the “device token” to the respective Push service (Apple, Google, etc.),
+without ever knowing the IP or e-mail address of Delta Chat users.</p>
+  </li>
+  <li>
+    <p>The central Push Service (Apple, Google, etc.)
+wakes up the Delta Chat app on your device
+to check for new messages in the background.
+It does not know about the chatmail or e-mail address of the device it wakes up.
+The central Apple/Google Push services never see an e-mail address (sender or receiver)
+and also never see any message content (also not in encrypted forms).</p>
+  </li>
+</ul>
+
+<p>As of May 2024, chatmail servers know about “device tokens”
+but we plan to encrypt this information to the notification proxy
+such that the chatmail server never learns the device token.</p>
+
+<p>The central Delta Chat notification proxy <a href="https://github.com/deltachat/notifiers">is small and fully implemented in Rust</a>
+and forgets about device-tokens as soon as Apple/Google/etc processed them,
+usually in a matter of milliseconds.</p>
+
+<p>Resulting from this overall privacy design, even the seizure of a chatmail server,
+or the full seizure of the central Delta Chat notification proxy
+would not reveal private information that Push services do not already have.</p>
+    
+      <h3 id="why-does-delta-chat-integrate-with-centralized-proprietary-applegoogle-push-services">
+        
+        
+          Why does Delta Chat integrate with centralized proprietary Apple/Google push services? <a href="#why-does-delta-chat-integrate-with-centralized-proprietary-applegoogle-push-services" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Delta Chat is a free and open source decentralized messenger with free server choice,
+but we want users to reliably experience “instant delivery” of messages,
+like they experience from Whatsapp, Signal or Telegram apps,
+without asking questions up-front that are more suited to expert users or developers.</p>
+
+<p>Note that Delta Chat has a <a href="#privacy-notifications">small and privacy-preserving Push Notification system</a>
+that achieves “instant delivery” of messages for all chatmail servers
+including a potential one <a href="https://delta.chat/chatmail#selfhosted">you might setup yourself without our permission</a>.
+Welcome to the power of the interoperable and massive chatmail and e-mail system :)</p>
+    
       <h2 id="fshehtëzim-dhe-siguri">
         
         
@@ -519,51 +709,32 @@ guarantee end-to-end encrypted messages.</p>
         
       </h3>
 
-<p>Meet your chat partner outside Delta Chat, preferably in person
-but a second channel like a video chat
-or a different messenger is fine as well.
-Perform the following QR show/scan procedure with your chat partner.
-One of you is the “Inviter”, the other is the “Joiner”.</p>
+<p>If you have a second communication channel with your chat partner,
+like a video chat or a different messenger,
+you can generate an invite link.</p>
 
-<p><strong>Inviter side</strong>:</p>
-
-<ul>
-  <li>
-    <p>Group invitation: 
-Tap the chat group title to see its member list, and select “QR Invite code”. 
-Share the QR image with the other side either in person or through a second channel.</p>
-  </li>
-  <li>
-    <p>Direct 1:1 chat invitation: 
-Tap the QR Code icon <img style="vertical-align:middle; width:1.8em; margin:1px" src="../qr-icon.png" />
-on the Delta Chat app main screen.
-Share the QR image with the other side either in person or through a second channel.</p>
-  </li>
-</ul>
-
-<p><strong>Joiner side</strong>:</p>
+<p>If you are together in person,
+you can show a QR code to your chat partner.</p>
 
 <ul>
   <li>
-    <p>Tap the QR Code icon <img style="vertical-align:middle; width:1.8em; margin:1px" src="../qr-icon.png" />
+    <p>For <strong>Group invitations</strong>,
+tap the chat group title to see its member list,
+and select “QR Invite code”.</p>
+  </li>
+  <li>
+    <p>For <strong>direct 1:1 chat invitations</strong>,
+tap the QR Code icon <img style="vertical-align:middle; width:1.8em; margin:1px" src="../qr-icon.png" />
 on the Delta Chat app main screen.</p>
   </li>
-  <li>
-    <p>Choose “SCAN QR CODE” and scan the QR Code 
-that you see from your chat partner in a second channel.</p>
-  </li>
-  <li>
-    <p>Tap “OK”</p>
-  </li>
 </ul>
 
-<p>If the QR code scanning doesn’t work in your situation,
-you can also <strong>Share</strong> (or <strong>Copy to Clipboard</strong>) an equivalent invite link
-to the other person through a second channel.</p>
+<p>Let your chat partner scan the QR image
+with their Delta Chat app,
+or click “Copy” or “Share” to create an invite link
+and share it with your chat partner.</p>
 
-<p><strong>Both Inviter and Joiner</strong>:</p>
-
-<p>Wait while <a href="https://securejoin.delta.chat/en/latest/new.html#setup-contact-protocol">Secure-Join network messages are exchanged</a> between both devices.</p>
+<p>Now wait while <a href="https://securejoin.delta.chat/en/latest/new.html#setup-contact-protocol">Secure-Join network messages are exchanged</a> between both devices.</p>
 
 <ul>
   <li>
@@ -645,7 +816,7 @@ even if the contact is a member there.</p>
 <p><strong>Your contact is using Delta Chat on a second device (phone or laptop)</strong></p>
 
 <p>If they have another device with a Delta Chat app running,
-they should remove the account from the new device
+they should remove the profile from the new device
 and add it <a href="#multiclient">as a second device as described here</a>.
 As soon as they message you afterwards, the warning will be gone
 and guaranteed encryption is established with both devices of your contact.</p>
@@ -653,8 +824,8 @@ and guaranteed encryption is established with both devices of your contact.</p>
 <p><strong>Your contact reinstalled Delta Chat using their old account login</strong></p>
 
 <p>If they have <a href="#backup">a backup file</a>, 
-they should remove the account from the new device 
-and rather import the backup file to re-create their account. 
+they should remove the profile from the new device
+and rather import the backup file to re-create their profile.
 As soon as they message you afterwards, the warning will be gone
 and guaranteed encryption is re-established for this contact.</p>
 
@@ -841,12 +1012,12 @@ deliver messages to recipient’s devices.</p>
 
 <p>Both for protecting against metadata-collecting e-mail servers 
 as well as against the threat of device seizure
-we recommend to use a Delta Chat optimized <a href="https://delta.chat/serverguide">e-mail server instance</a>
-to create pseudonymous temporary accounts through QR-code scans.
-Note that Delta Chat apps on all platforms support multiple accounts 
-so you can easily use action-specific “1-week” or “1-month” accounts next to your “main” account
-with the knowledge that all temporary account data, along with all metadata, will be deleted.
-Moreover, if a device is seized then contacts using temporary e-mail accounts
+we recommend to use a <a href="https://delta.chat/chatmail">chatmail server</a>
+to create pseudonymous temporary profiles through QR-code scans.
+Note that Delta Chat apps on all platforms support multiple profiles
+so you can easily use situation-specific profiles next to your “main” profile
+with the knowledge that all their data, along with all metadata, will be deleted.
+Moreover, if a device is seized then contacts using temporary profiles
 can not be identified easily, as compared to messengers which reveal
 phone numbers in chat groups which in turn are often associated with legal identities.</p>
     
@@ -905,7 +1076,7 @@ and their non-Autocrypt e-mail app.</p>
       </h3>
 
 <p>If you need a safely end-to-end encrypted chat with a contact 
-who is using their account both with Delta Chat and non-Autocrypt apps (e.g. webmail),
+who is using their e-mail account both with Delta Chat and non-Autocrypt apps (e.g. webmail),
 it’s best to setup <a href="#howtoe2ee">guaranteed end-to-end encryption with them</a>
 and then create a guaranteed end-to-end encrypted group chat with you two as members. 
 In this group chat all messages will be end-to-end encrypted 
@@ -980,10 +1151,10 @@ past encrypted messages.</p>
 <p>In any case, Delta Chat’s end-to-end encryption uses a <a href="#openpgp-secure">secure subset of OpenPGP</a>
 which has been <a href="https://delta.chat/assets/blog/2019-first-security-review.pdf">independently security-audited</a>.</p>
     
-      <h3 id="a-mund-të-ripërdor-kyçin-tim-ekzistues-privat">
+      <h3 id="importkey">
         
         
-          A mund të ripërdor kyçin tim ekzistues privat? <a href="#a-mund-të-ripërdor-kyçin-tim-ekzistues-privat" class="anchor"></a>
+          A mund të ripërdor kyçin tim ekzistues privat? <a href="#importkey" class="anchor"></a>
         
         
       </h3>
@@ -1040,7 +1211,9 @@ independent security analysis, from most recent to older:</p>
   <li>
     <p>2024 March, we received a deep security analysis from the Applied Cryptography
 research group at ETH Zuerich and addressed all raised issues. 
-See our blog post about <a href="https://delta.chat/en/2024-03-25-crypto-analysis-securejoin">Hardening Guaranteed End-to-End encryption</a> for more detailed information.</p>
+See our blog post about <a href="https://delta.chat/en/2024-03-25-crypto-analysis-securejoin">Hardening Guaranteed End-to-End encryption</a> for more detailed information and the
+<a href="https://eprint.iacr.org/2024/918.pdf">Cryptographic Analysis of Delta Chat</a> 
+research paper published afterwards.</p>
   </li>
   <li>
     <p>Në fillim të 2023-shit, ndreqëm probleme sigurie dhe privatësie me
@@ -1099,7 +1272,7 @@ Mund të lexoni <a href="https://delta.chat/assets/blog/2019-first-security-revi
         
       </h3>
 
-<p>Po Delta Chat 1.36 comes with a new, experimental function for using the same account on different devices:</p>
+<p>Po Delta Chat 1.36 comes with a new, experimental function for using the same profile on different devices:</p>
 
 <ul>
   <li>
@@ -1184,8 +1357,8 @@ provoni <strong>shpërnguljen dorazi</strong> të përshkruar më poshtë</p>
 screen unlock PIN, pattern, or password. Then you can click on “Start
 Backup”. This saves the backup file to your device. Now you have to transfer
 it to the other device somehow.</li>
-  <li>On the new device, on the login screen, instead of logging into your email
-account, choose “Import Backup”. After import, your conversations, encryption
+  <li>On the new device, in the “I already have a profile” menu,
+choose “restore from backup”. After import, your conversations, encryption
 keys, and media should be copied to the new device.
     <ul>
       <li><strong>If you use iOS:</strong> and you encounter difficulties, maybe
@@ -1355,48 +1528,20 @@ kufizimesh sasie email-esh që dërgohen dhe konsum trafiku në rrjet).</li>
       </h3>
 
 <ul>
-  <li>Dhënien e vendndodhjes mund ta aktivizoni te ndarja “veçori eksperimentale”
-e rregullimeve të mëtejshme.</li>
-  <li>Nëse doni të jepni vendndodhjen tuaj në një fjalosje, kaloni te “bashkëngjit” dhe
-përzgjidhni “vendndodhje”. Tanimë mund të caktoni një interval kohor gjatë
-të cilit vendndodhja juaj do t’u tregohet partnerëve të fjalosjes tuaj, nga 5 minuta
-deri në 6 orë.</li>
-  <li>Kur ndryshon vendndodhja juaj, të tjerët në fjalosje mund ta shohin te një hartë
-te fjalosja.</li>
-  <li>Që të shihni hartën dhe shihni vendndodhjen e të tjerëve, lypset ta aktivizoni
-veçorinë te rregullimet e mëtejshme.</li>
-  <li>Kjo veçori s’do t’i tregojë vendndodhjen tuaj tjetërkujt nga partnerët e fjalosjes
-tuaj. <em>Por:</em> që të shfaqin hartën, na duhet të shkarkojmë pjesë harte nga
-mapbox.com, ndaj, nëse <strong>shihni</strong> hartën, mapbox.com i kërkohet harta e
-një zone të caktuar. Nëse kjo përbën rrezik privatësie për ju, kjo veçori s’bën
-për ju. Po punojmë për të gjetur një alternativë të decentralizuar në vend të
-Mapbox-it.</li>
-  <li>Në desktop, OS më vete s’mund të përcaktojë vendndodhjen tuaj. Në vend
-të kësaj, mund të djathtasklikoni mbi hartën dhe të përshkruani një
-vendndodhje, e cila dërgohet te fjalosja si një mesazh, por që shfaqet edhe
-te harta.</li>
-</ul>
-    
-      <h3 id="çmbron-konkretisht-fshehtëzimi-eksperimental-i-bazës-së-të-dhënave">
-        
-        
-          Ç’mbron konkretisht fshehtëzimi eksperimental i bazës së të dhënave? <a href="#çmbron-konkretisht-fshehtëzimi-eksperimental-i-bazës-së-të-dhënave" class="anchor"></a>
-        
-        
-      </h3>
-
-<ul>
-  <li>Tani për tani, fshehtëzimi i bazës së të dhënave është ende eksperimental në
-shkallë të madhe. Mos u bazoni në të për mbrojtje, duhet të përdorni si shtesë
-fshehtëzim nga sistemi juaj operativ, nëse ofron të tillë.</li>
-  <li>Fshehtëzimi i bazës së të dhënave s’fshehtëzon ende copat, vetëm rreshtat dhe
-shtyllat e bazës së të dhënave. Kjo pak a shumë do të thotë se mesazhet tuaja
-janë të parrezik, por jo bashkëngjitjet tuaja.</li>
-  <li>Për iOS dhe Android, kyçet e fshehtëzimit depozitohen te vargu i kyçeve i sistemit.
-Kjo do të thotë se fshehtëzimi është aq i sigurt sa sistemi operativ ku funksionon.</li>
-  <li>Klienti Delta Chat për desktop s’ofron ende fshehtëzim baze të dhënash, ngaqë
-s’ka rrugë standarde për të depozituar kyçet e fshehtëzimit në platforma të ndryshme
-që mbulohen.</li>
+  <li>You can turn on location streaming in the “experimental features” section of
+the advanced settings.</li>
+  <li>Now, if you want to share your location in a chat, go to “attach” and select
+“location”. You can now set a time frame in which your location will be
+streamed to your chat partners, between 5 minutes and 6 hours.</li>
+  <li>When your location changes, the others in the chat can view it on a map in
+the chat.</li>
+  <li>To see the map and view locations of others, you need to turn on the feature
+in the advanced settings.</li>
+  <li>This feature will not share your location with anyone except your chat partners.
+Map tiles are downloaded from <a href="https://openstreetmap.org">OpenStreetMap</a>.</li>
+  <li>On desktop, the OS typically can’t determine your location. Instead you can
+right click on the map and describe a location, which is sent to the chat as
+a message, but also appears on the map.</li>
 </ul>
     
       <h3 id="pse-mund-të-zgjedh-vetëm-të-shoh-dosjen-deltachat">
@@ -1431,8 +1576,8 @@ DeltaChat. Zakonisht kjo do të bëhej nga aplikacioni Delta Chat.</p>
 
 <ol>
   <li>
-    <p>Change your address in “Settings - Password and Account” and
-enter the password of your new account (and if necessary, server settings).
+    <p>Change your address in “Settings → Advanced → Password and Account” and
+enter the password of your new e-mail account (and if necessary, server settings).
 You will get an information notice about the fact that you are moving to a new address. 
 An additional notice will also show up in your “Device messages” chat.</p>
   </li>
@@ -1476,43 +1621,43 @@ t’ju kërkohet t’i akordoni leje aplikacionit.
 Ja se ç’bën Delta Chat-i me këto leje:</p>
 
 <ul>
-  <li>Mbi kamerën <em>(mund të çaktivizohet)</em>
+  <li>Camera <em>(can be disallowed)</em>
     <ul>
-      <li>të bëjë foto dhe video: për dërgim Fotosh</li>
+      <li>take pictures and videos: for sending Photos</li>
     </ul>
   </li>
-  <li>Mbi kontaktet <em>(mund të çaktivizohet)</em>
+  <li>Contacts <em>(can be disallowed)</em>
     <ul>
-      <li>të lexojë kontaktet tuaja: për të zbuluar kontakte për bisedë</li>
+      <li>read your contacts: to discover contacts to chat with</li>
     </ul>
   </li>
-  <li>Mbi vendndodhjen <em>(mund të çaktivizohet)</em>
+  <li>Location <em>(can be disallowed)</em>
     <ul>
-      <li>të njohë vendndodhjen me përafërsi (burime vendndodhjeje rrjeti): për veçorinë e transmetimit të vendndodhjesh</li>
-      <li>të njohë vendndodhjen e përpiktë (GPS dhe burime vendndodhjeje rrjeti): për veçorinë e transmetimit të vendndodhjesh</li>
+      <li>access approximate location (network location sources): for the location streaming feature</li>
+      <li>access precise location (GPS and network location sources): for the location streaming feature</li>
     </ul>
   </li>
-  <li>Mbi mikrofonin <em>(mund të çaktivizohet)</em>
+  <li>Microphone <em>(can be disallowed)</em>
     <ul>
-      <li>të incizojë audio: për mesazhe audio</li>
+      <li>record audio: for audio messages</li>
     </ul>
   </li>
-  <li>Mbi depozitimin <em>(mund të çaktivizohet)</em>
+  <li>Storage <em>(can be disallowed)</em>
     <ul>
-      <li>të ndryshojë ose fshijë lëndën në kartën tuaj SD: për shkarkim bashkëngjitjesh mesazhesh</li>
-      <li>të lexojë lëndën e kartës tuaj SD: për të ndarë kartela me kontaktet tuaj</li>
+      <li>modify or delete the contents of your SD card: to download message attachments</li>
+      <li>read the contents of your SD card: to share files with your contacts</li>
     </ul>
   </li>
-  <li>Aftësi të tjera të aplikacionit
+  <li>Other app capabilities
     <ul>
-      <li>të ndryshojë rregullimet tuaja mbi audion: që të mund të zgjidhni zile dhe volum për njoftime dhe mesazhe audio</li>
-      <li>të xhirojë gjatë nisjes së sistemit: që të mos ju duhet ta nisni Delta Chat-in dorazi</li>
-      <li>të kontrollojë dridhjen: për njoftime</li>
-      <li>të shohë lidhje në rrjet: për t’u lidhur me furnizuesin e shërbimit tuaj email</li>
-      <li>të pengojë telefonin tuaj të flejë: që të mund ta kopjoni më kollaj kodin e sigurisë gjatë Mesazhit të Ujdisjes së Autocrypt-it</li>
-      <li>të ketë hyrje të plotë në rrjet: për t’u lidhur me furnizuesin e shërbimit tuaj email</li>
-      <li>të shohë lidhjet Wi-Fi: për t’u lidhur me furnizuesin e shërbimit tuaj email</li>
-      <li>të kërkojë shpërfillje të optimizimeve për baterinë: për përdoruesit që duan t’i marrin mesazhet gjatë gjithë kohës</li>
+      <li>change your audio settings: so you can choose ring tones and volume for notifications and audio messages</li>
+      <li>run at startup: so you don’t have to start Delta Chat manually</li>
+      <li>control vibration: for notifications</li>
+      <li>view network connections: to connect to your E-Mail provider</li>
+      <li>prevent phone from sleeping: so you can easier copy the security code during the Autocrypt Setup Message</li>
+      <li>have full network access: to connect to your E-Mail provider</li>
+      <li>view Wi-Fi connections: to connect to your E-Mail provider</li>
+      <li>ask to ignore battery optimisations: for achieving “instant message delivery”</li>
     </ul>
   </li>
 </ul>
@@ -1560,38 +1705,10 @@ Sigurisht, fjalëkalimi depozitohet vetëm në pajisjen tuaj. Fjalëkalimi i tra
 vetëm furnizuesit të email-it tuaj (kur bëni hyrjen), i cili mund të hyjë te email-et
 tuaj, sido qoftë.</p>
 
-<p>Nëse përdorni një furnizues email-i që mbulon OAuth2, bie fjala gmail.com ose
-yandex.ru, s’ka nevojë të depozitoni fjalëkalimin tuaj në pajisje. Në këtë rast
-do të përdoret vetëm një token hyrjesh.</p>
-
 <p>Ngaqë Delta Chat-i është Me Burim të Hapur, mund të kontrolloni <a href="https://github.com/deltachat/deltachat-core-rust/blob/master/src/login_param.rs">Kodin
 Burim</a>,
 nëse doni të verifikoni se a trajtohen me siguri kredencialet tuaja. Na gëzojnë
 përshtypjet që e bëjn aplikacionin më të sigurt për krejt përdoruesit tanë.</p>
-    
-      <h3 id="sa-kohë-që-delta-chat-i-përdor-email-a-është-vërtet-një-shkëmbyes-mesazhesh-të-atypëratyshme">
-        
-        
-          Sa kohë që Delta Chat-i përdor email, a është vërtet një Shkëmbyes Mesazhesh të <em>Atypëratyshme</em>? <a href="#sa-kohë-që-delta-chat-i-përdor-email-a-është-vërtet-një-shkëmbyes-mesazhesh-të-atypëratyshme" class="anchor"></a>
-        
-        
-      </h3>
-
-<ul>
-  <li>Normalisht, dërgimi dhe marrja e mesazheve ha ca sekonda. Ndonjëherë ka raste
-kur kjo zgjat pak më shumë, por mund të thuhet se kjo është e vërtetë edhe për
-çfarëdo shkëmbyesi tjetër mesazhesh.</li>
-  <li>Biseda e atypëratyshme funksionon shpejt, nëse të dy palët përdorin aktivisht
-aplikacionin. Ndonjëherë është më e ngadaltë, nëse aplikacioni xhiron në
-prapaskenë.</li>
-  <li>Në raste të tilla, marrja e mesazheve mund të dojë minuta, ngaqë si Android-i,
-ashtu edhe iOS-i shpesh e ndalin funksionimin në prapaskenë të Delta Chat-it,
-dhe e zgjojnë vetëm me raste. Kjo vonesë artificiale zakonisht është më keq në
-iOS, se sa në Android.</li>
-  <li>Sido qoftë, fakti që Android-i dhe iOS-i asgjësojnë aplikacione që xhirojnë në
-prapaskenë është një problem për mjaft aplikaicone të ligjshme. Për më tepër
-të dhëna, shihni <a href="https://dontkillmyapp.com/">dontkillmyapp.com</a>.</li>
-</ul>
     
       <h3 id="cilat-mesazhe-shfaqen-në-delta-chat">
         
@@ -1603,8 +1720,8 @@ të dhëna, shihni <a href="https://dontkillmyapp.com/">dontkillmyapp.com</a>.</
 
 <p>Si parazgjedhje, Delta Chat i shfaq krejt email-et.</p>
 
-<p>Këtë mund ta ndryshoni te
-“Rregullime -&gt; Fjalosje &amp; Media -&gt; Shfaq Email-e Klasikë. Keni këto mundësi:</p>
+<p>At “Settings → Advanced → Show Classic E-Mails”,
+you can change this. You have these options:</p>
 
 <ul>
   <li>“Jo, vetëm fjalosje”: Shfaqen vetëm mesazhe dërguar nga përdorues të tjerë
@@ -1674,7 +1791,7 @@ te dosja “Të dërguar”. Delta Chat-i nuk ngarkon <em>kurrë</em> ndonjë gj
 Të dërguar, ngaqë kjo do të thoshte ngarkim dy herë të një mesazhi (një herë
 përmes SMTP-s, dhe një herë përmes IMAP-it në dosjen Të dërguar).</p>
 
-<p>Parazgjedhja për rregullimin dërgoja-vetes është “jo”.</p>
+<p>The default setting for “Send Copy to Self” is “on”.</p>
     
       <h3 id="pse-mund-të-zgjedh-të-vëzhgoj-dosjen-të-dërguar">
         
@@ -1728,22 +1845,38 @@ uses.</li>
 <a href="https://autocrypt.org/dev-status.html">Autocrypt-enabled e-mail app</a>.</li>
 </ul>
     
-      <h3 id="si-mund-ta-fshij-llogarinë-time">
+      <h3 id="remove-account">
         
         
-          Si mund ta fshij llogarinë time? <a href="#si-mund-ta-fshij-llogarinë-time" class="anchor"></a>
+          Si mund ta fshij llogarinë time? <a href="#remove-account" class="anchor"></a>
         
         
       </h3>
 
-<p>Ngaqë për Delta Chat-in përdorni një llogari email,
-se si mund të fshini llogarinë tuaj, varet nga shërbimi juaj email.
-Nuk kemi fuqi mbi llogarinë tuaj email,
-ndaj, mjerisht, s’mund t’ju ndihmojmë për këtë.</p>
+<p>If you use a default chat profile
+you can simply uninstall the app.
+This will automatically trigger deletion of all associated account data on the chatmail server.
+For more info, please refer to <a href="https://nine.testrun.org/info.html#account-deletion">nine.testrun.org account-deletion</a> for the default onboarding server,
+or the respective page from your chosen <a href="https://delta.chat/chatmail">3rd party chatmail server</a>.</p>
 
-<p>Nëse doni ta mbani llogarinë,
-por të çinstaloni Delta Chat-in,
-rekomandohet të braktisni çfarëdo grupi fjalosjeje, para çinstalimit të Delta Chat-it.</p>
+<p>If you have set up your chat profile on multiple devices
+you need to remove it from all devices.</p>
+
+<p>If you are using more than one account,
+but don’t want to get rid of all of them,
+you can remove it in the account switcher menu (on android and iOS),
+or in the sidebar with a right click (in the desktop client).</p>
+
+<p>Accounts on <a href="https://providers.delta.chat">classic e-mail providers</a>
+will not be deleted automatically;
+how you can delete your account depends on your e-mail provider.
+We don’t have any control over e-mail accounts at those providers,
+so unfortunately we can’t help you with that.</p>
+
+<p>If you want to continue using a classic e-mail account with other apps,
+but uninstall Delta Chat,
+it is recommended to leave any group chat before uninstalling Delta Chat.
+Otherwise you might receive undecryptable messages from those group chats.</p>
     
       <h3 id="më-interesojnë-hollësitë-teknike-mund-të-më-tregoni-diçka-më-tepër">
         
@@ -1773,7 +1906,8 @@ BE dhe ShBA, si ndihmë të përpjekjeve tona për lulëzimin e një ekosistemi 
 decentralizuar dhe të larmishëm shkëmbimi mesazhesh bazuar në zhvillime
 bashkësie të Lirë dhe Me Burim të Hapët.</p>
 
-<p>Konkretisht, zhvillimet e Delta Chat-it deri sot janë financuar nga këto burime:</p>
+<p>Concretely, Delta Chat developments have so far been funded from these sources,
+ordered chronologically:</p>
 
 <ul>
   <li>
@@ -1811,10 +1945,21 @@ botës dhe më të qëndrueshëm dhe më të siguruar
 në vende të prekura shpesh nga censurim dhe fikje të internetit.</p>
   </li>
   <li>
-    <p>Në fillim të 2023-shit u pranuam për programin Next Generation Internet
-(NGI) Entrust, me propozimet tona “Private Decentralized Apps”. 
-Sasia e saktë është për t’u vendosur (rreth 100K euro). 
-Ky financim mbështet zhvillime të mëtejshme të <a href="https://webxdc.org">webxdc-së, “aplikacione të dhënë në një fjalosje”</a>.</p>
+    <p>2023-2024 we successfully completed the OTF-funded 
+<a href="https://www.opentech.fund/projects-we-support/supported-projects/secure-chat-mail-with-delta-chat/">Secure Chatmail project</a>, 
+allowing us to introduce guaranteed encryption, 
+creating a <a href="https://delta.chat/chatmail">chatmail server network</a> 
+and providing “instant onboarding” in all apps released from April 2024 on.</p>
+  </li>
+  <li>
+    <p>In 2023 and 2024 we got accepted in the Next Generation Internet (NGI)
+program for our work in <a href="https://nlnet.nl/project/WebXDC-Push/">webxdc PUSH</a>,
+along with collaboration partners working on 
+<a href="https://nlnet.nl/project/Webxdc-Evolve/">webxdc evolve</a>, 
+<a href="https://nlnet.nl/project/WebXDC-XMPP/">webxdc XMPP</a>, 
+<a href="https://nlnet.nl/project/DeltaTouch/">DeltaTouch</a> and 
+<a href="https://nlnet.nl/project/DeltaTauri/">DeltaTauri</a>. 
+All of these projects are partially completed or to be completed in early 2025.</p>
   </li>
   <li>
     <p>Ndonjëherë marrim dhurime unike nga individë privatë. 

@@ -3,5 +3,5 @@
   "name": "deltachat-desktop-tauri",
   "type": "module",
   "license": "GPL-3.0-or-later",
-  "version": "1.47.1"
+  "version": "1.48.0"
 }
