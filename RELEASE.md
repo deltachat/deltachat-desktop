@@ -49,8 +49,6 @@
   - [ ] arch
   - [ ] nix
   - [ ] (community) snap
-  after all appstores are done:
-  - [ ] add/update entry on https://github.com/deltachat/deltachat-pages/blob/main/releases.md
   ```
   See [example](https://github.com/deltachat/deltachat-desktop/issues/3582)
 
