@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ## Added
+- Add "Learn More" button to "Disappearing Messages" dialog #4330
 
 ## Changed
 
