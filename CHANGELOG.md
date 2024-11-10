@@ -5,6 +5,7 @@
 ## Added
 
 ## Changed
+- improve performance a little #4334
 
 ## Fixed
 - "Disappearing Messages" dialog not reflecting the actual current value #4327
