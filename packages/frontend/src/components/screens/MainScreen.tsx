@@ -358,7 +358,7 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
 
   return (
     <button
-      className='navbar-heading navbar-heading__button'
+      className='navbar-heading navbar-heading--button'
       data-no-drag-region
       onClick={onTitleClick}
       data-testid='chat-info-button'
