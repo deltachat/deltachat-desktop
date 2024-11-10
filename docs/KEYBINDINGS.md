@@ -12,6 +12,10 @@ Search contact list: `ctrl + k`
 
 Focus message composer: `ctrl + n`
 
+Select a message to reply to: `ctrl + arrow up`, `ctrl + arrow down`
+
+Cancel reply (remove quote): `Esc`
+
 Open settings: `cmd ⌘ + ,` or `ctrl + ,`
 
 Open help: `F1`

@@ -567,23 +567,13 @@ export function useDraft(
     [inputRef, saveDraft]
   )
 
-  const settingsStore = useSettingsStore()[0]
   useKeyBindingAction(KeybindAction.Composer_SelectReplyToUp, () => {
-    if (settingsStore?.desktopSettings.enableCtrlUpToReplyShortcut !== true) {
-      return
-    }
     onSelectReplyToShortcut(KeybindAction.Composer_SelectReplyToUp)
   })
   useKeyBindingAction(KeybindAction.Composer_SelectReplyToDown, () => {
-    if (settingsStore?.desktopSettings.enableCtrlUpToReplyShortcut !== true) {
-      return
-    }
     onSelectReplyToShortcut(KeybindAction.Composer_SelectReplyToDown)
   })
   useKeyBindingAction(KeybindAction.Composer_CancelReply, () => {
-    if (settingsStore?.desktopSettings.enableCtrlUpToReplyShortcut !== true) {
-      return
-    }
     removeQuote()
   })
   const { jumpToMessage } = useMessage()

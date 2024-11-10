@@ -5,6 +5,7 @@
 ## Added
 
 ## Changed
+- enable Telegram-style Ctrl + ArrowUp to reply by default #4333
 - improve performance a little #4334
 
 ## Fixed

@@ -45,7 +45,6 @@ export interface DesktopSettingsType {
   galleryImageKeepAspectRatio: boolean
   /** whether to use system ui font */
   useSystemUIFont: boolean
-  enableCtrlUpToReplyShortcut: boolean
 }
 
 export interface RC_Config {
