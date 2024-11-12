@@ -11,7 +11,6 @@ pnpm i
 pnpm tauri dev
 ```
 
-
 ## Generate the icon
 
 ```
@@ -21,3 +20,11 @@ pnpm tauri icon deltachat-tauri2.svg --ios-color #2c3e50
 ## Recommended IDE Setup
 
 - [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+
+## Profiling startup time and get more information about tauri
+
+You can use https://devtools.crabnebula.dev/ for that, for this you need to build with the `crabnebula_extras` feature:
+
+```
+pnpm tauri dev -f=crabnebula_extras
+```

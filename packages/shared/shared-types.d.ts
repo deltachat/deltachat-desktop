@@ -80,7 +80,7 @@ export type Theme = {
 
 /** Additional info about the runtime the ui might need */
 export type RuntimeInfo = {
-  /** used to determine wether to use command key in shortcuts or not */
+  /** used to determine wether to use borderless design and to use command key in shortcuts or not */
   isMac: boolean
   /** currently used to check for an additional device message */
   isAppx: boolean

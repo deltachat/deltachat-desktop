@@ -1,6 +1,6 @@
 [package]
 name = "deltachat-tauri"
-version = "0.1.0"
+version = "1.47.1"
 description = "Delta Chat Desktop Tauri Edition"
 authors = ["DeltaChat Contributors"]
 edition = "2021"
@@ -15,21 +15,27 @@ name = "deltachat_tauri_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]
-tauri-build = { version = "2", features = [ "isolation", "config-json5"] }
+tauri-build = { version = "2", features = [ "config-json5"] }
 
 [dependencies]
-tauri = { version = "2", features = ["isolation"] }
+tauri = { version = "2", features = [] }
 tauri-plugin-shell = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
-trace = "0.1.7"
 tokio = "1.38.1"
 deltachat = { git = "https://github.com/deltachat/deltachat-core-rust", tag = "v1.148.6", version = "1.148.6" }
 deltachat-jsonrpc = { version = "1.148.6", git = "https://github.com/deltachat/deltachat-core-rust", tag = "v1.148.6" }
 tauri-plugin-dialog = "2"
 tauri-plugin-clipboard-manager = "2.0.2"
+log = "0.4.22"
+anyhow = "1.0.93"
+futures-lite = "2.5.0"
+tauri-plugin-devtools = {version = "2.0.0", optional = true}
+tauri-plugin-log = "2"
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-single-instance = "2"
 tauri-plugin-window-state = "2"
 
+[features]
+crabnebula_extras = ["tauri-plugin-devtools"]

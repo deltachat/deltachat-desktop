@@ -13,20 +13,50 @@
     "withGlobalTauri": false,
     "windows": [
       {
+        "label": "main",
         "title": "Delta Chat Tauri",
         "width": 800,
         "height": 600,
-        "url": "main.html"
+        "url": "tauri_main.html"
       }
     ],
     "security": {
-      "csp": null,
-      "pattern": {
-        "use": "isolation",
-        "options": {
-          "dir": "../isolation"
+      "csp": {
+        "default-src": "none",
+        "connect-src": "'self' ipc: http://ipc.localhost",
+        "style-src": "'self' 'unsafe-inline'",
+        "font-src": "'self'",
+        "script-src": "'self' 'wasm-unsafe-eval'",
+        "worker-src": "blob: ",
+        "child-src": "blob: ",
+        "img-src": "'self' data: blob: file: webxdc-icon: ",
+        "media-src": "'self' file: "
+      },
+      // TODO postponed to later
+      // "pattern": {
+      //   "use": "isolation",
+      //   "options": {
+      //     "dir": "../isolation"
+      //   }
+      // },
+      "capabilities": [
+        {
+          "identifier": "Main window",
+          "windows": ["main"],
+          "permissions": [
+            "log:allow-log",
+            // list of core permissions can be found under https://github.com/tauri-apps/tauri/tree/dev/crates/tauri/permissions
+            // or when running `pnpm tauri permission list`
+            "core:event:allow-emit",
+            "core:event:allow-listen",
+            "clipboard-manager:allow-read-image",
+            "clipboard-manager:allow-read-text",
+            "clipboard-manager:allow-write-image",
+            "clipboard-manager:allow-write-text"
+            // TODO dialog permissions
+          ]
         }
-      }
+      ]
     }
   },
   "bundle": {
