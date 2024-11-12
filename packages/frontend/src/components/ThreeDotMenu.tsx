@@ -1,21 +1,26 @@
 import { C } from '@deltachat/jsonrpc-client'
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
+import debounce from 'debounce'
 
 import { Timespans } from '../../../shared/constants'
 import { ContextMenuItem } from './ContextMenu'
 import SettingsStoreInstance, { useSettingsStore } from '../stores/settings'
-import { BackendRemote } from '../backend-com'
+import { BackendRemote, onDCEvent } from '../backend-com'
 import { ActionEmitter, KeybindAction } from '../keybindings'
 import useChat from '../hooks/chat/useChat'
 import useChatDialog from '../hooks/chat/useChatDialog'
 import useDialog from '../hooks/dialog/useDialog'
 import useTranslationFunction from '../hooks/useTranslationFunction'
+import useConfirmationDialog from '../hooks/dialog/useConfirmationDialog'
 import DisappearingMessages from './dialogs/DisappearingMessages'
 import { ContextMenuContext } from '../contexts/ContextMenuContext'
 import { selectedAccountId } from '../ScreenController'
 import { unmuteChat } from '../backend/chat'
 
 import type { T } from '@deltachat/jsonrpc-client'
+
+import { getLogger } from '../../../shared/logger'
+const log = getLogger('renderer/threedotmenu')
 
 export function useThreeDotMenu(
   selectedChat?: T.FullChat,
@@ -34,8 +39,36 @@ export function useThreeDotMenu(
     openLeaveChatDialog,
     openClearChatDialog,
   } = useChatDialog()
+  const openConfirmationDialog = useConfirmationDialog()
 
   let menu: (ContextMenuItem | false)[] = [false]
+  const [isBlocked, setBlocked] = useState(false)
+  useEffect(() => {
+    if (!selectedChat?.id) {
+      return
+    }
+
+    const contactId = selectedChat.contactIds[0]
+    const updateBlocked = async (contactId: number) => {
+      try {
+        setBlocked(
+          (await BackendRemote.rpc.getContact(accountId, contactId)).isBlocked
+        )
+      } catch (err) {
+        log.error(err)
+      }
+    }
+    return onDCEvent(
+      accountId,
+      'ContactsChanged',
+      debounce(async ({ contactId: eventContactId }) => {
+        if (eventContactId == contactId) {
+          updateBlocked(eventContactId)
+        }
+      }, 500)
+    )
+  }, [accountId, selectedChat])
+
   if (selectedChat && selectedChat.id) {
     const {
       selfInGroup,
@@ -46,9 +79,21 @@ export function useThreeDotMenu(
     } = selectedChat
     const isGroup = selectedChat.chatType === C.DC_CHAT_TYPE_GROUP
 
+    const contactId = selectedChat.contactIds[0]
+
     const onLeaveGroup = () =>
       selectedChat && openLeaveChatDialog(accountId, chatId)
 
+    const onUnblockContact = async () => {
+      const confirmed = await openConfirmationDialog({
+        message: tx('ask_unblock_contact'),
+        confirmLabel: tx('menu_unblock_contact'),
+      })
+
+      if (confirmed) {
+        await BackendRemote.rpc.unblockContact(accountId, contactId)
+      }
+    }
     const onBlockContact = () =>
       openBlockFirstContactOfChatDialog(accountId, selectedChat)
 
@@ -177,10 +222,16 @@ export function useThreeDotMenu(
             },
           },
       !isGroup &&
-        !(isSelfTalk || isDeviceChat) && {
-          label: tx('menu_block_contact'),
-          action: onBlockContact,
-        },
+        !(isSelfTalk || isDeviceChat) &&
+        (isBlocked
+          ? {
+              label: tx('menu_unblock_contact'),
+              action: onUnblockContact,
+            }
+          : {
+              label: tx('menu_block_contact'),
+              action: onBlockContact,
+            }),
       isGroup &&
         selfInGroup && {
           label: tx('menu_leave_group'),

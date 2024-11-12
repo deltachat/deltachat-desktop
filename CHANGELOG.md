@@ -25,6 +25,7 @@
 
 ## Fixed
 - image attachments not being centered within a message #4313
+- fix blocked status of a contact in context menu for ChatListItem and ThreeDotMenu #4046
 
 
 <a id="1_47_1"></a>
