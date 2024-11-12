@@ -1,7 +1,6 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "deltachat-tauri",
-  "version": "0.1.0",
   "identifier": "chat.delta.desktop.tauri",
   "build": {
     "devUrl": null,
