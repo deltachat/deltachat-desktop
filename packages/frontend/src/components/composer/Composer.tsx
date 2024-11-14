@@ -325,7 +325,13 @@ const Composer = forwardRef<
         </button>
       </div>
     )
-  } else if (!selectedChat.canSend) {
+  } else if (
+    !selectedChat.canSend &&
+    draftState.text === '' &&
+    draftState.file === null &&
+    draftState.quote === null &&
+    draftState.vcardContact === null
+  ) {
     return null
   } else {
     return (
@@ -377,12 +383,14 @@ const Composer = forwardRef<
           >
             <span />
           </button>
-          <div className='send-button-wrapper' onClick={composerSendMessage}>
-            <button
-              aria-label={tx('menu_send')}
-              aria-keyshortcuts={ariaSendShortcut}
-            />
-          </div>
+          {selectedChat.canSend && (
+            <div className='send-button-wrapper' onClick={composerSendMessage}>
+              <button
+                aria-label={tx('menu_send')}
+                aria-keyshortcuts={ariaSendShortcut}
+              />
+            </div>
+          )}
         </div>
         {showEmojiPicker && (
           <EmojiAndStickerPicker
