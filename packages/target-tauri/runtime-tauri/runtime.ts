@@ -66,10 +66,10 @@ export class TauriDeltaChat extends BaseDeltaChat<TauriTransport> {
 
 class TauriRuntime implements Runtime {
   emitUIFullyReady(): void {
-    throw new Error('Method not implemented. 1')
+    invoke('ui_frontend_ready')
   }
   emitUIReady(): void {
-    throw new Error('Method not implemented. 2')
+    invoke('ui_ready')
   }
   createDeltaChatConnection(
     hasDebugEnabled: boolean,
