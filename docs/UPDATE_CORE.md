@@ -31,7 +31,7 @@ Then you need to use a local core checkout (the next section in this document).
 Or point desktop to use the the new deltachat-rpc-server binary with the `DELTA_CHAT_RPC_SERVER` environment variable:
 
 ```
-DELTA_CHAT_RPC_SERVER=path/to/deltachat-rpc-server pnpm -w dev:electron -- --allow-unsafe-core-replacement
+DELTA_CHAT_RPC_SERVER=path/to/deltachat-rpc-server pnpm -w dev:electron --allow-unsafe-core-replacement
 ```
 
 You can easily get the deltachat-rpc-server binary for your pr by installing it with cargo install:
@@ -45,11 +45,11 @@ Then you can run:
 ```sh
 # let it find the executable in $PATH
 # - pro: faster to type, does a basic version check
-# - contra: uses prebuild if not find in path
-pnpm -w dev:electron -- --allow-unsafe-core-replacement
+# - contra: uses prebuild if not found in path
+pnpm -w dev:electron --allow-unsafe-core-replacement
 # explicitly set the rpc binary
 # - pro: fails when the binary is not found
-DELTA_CHAT_RPC_SERVER=$(which deltachat-rpc-server) pnpm -w dev:electron -- --allow-unsafe-core-replacement
+DELTA_CHAT_RPC_SERVER=$(which deltachat-rpc-server) pnpm -w dev:electron --allow-unsafe-core-replacement
 ```
 
 > (on windows you need to look up how to set env vars yourself, but the command to find it is `where deltachat-rpc-server`)
