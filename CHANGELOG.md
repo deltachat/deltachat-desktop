@@ -12,6 +12,7 @@
 ## Fixed
 - "Disappearing Messages" dialog not reflecting the actual current value #4327
 - accessibility: make settings keyboard-navigable #4319
+- Do not clear the draft if sending failed. #4340
 
 <a id="1_48_0"></a>
 
@@ -27,7 +28,6 @@
 
 ## Fixed
 - image attachments not being centered within a message #4313
-
 
 <a id="1_47_1"></a>
 
