@@ -136,12 +136,16 @@ const Composer = forwardRef<
         viewtype: draftState.viewType,
       })
 
-      /* clear it here to make sure the draft is cleared */
-      await BackendRemote.rpc.removeDraft(selectedAccountId(), chatId)
-      // /* update the state to reflect the removed draft */
-      window.__reloadDraft && window.__reloadDraft()
-
       await sendMessagePromise
+
+      // Ensure that the draft is cleared
+      // and the state is reflected in the UI.
+      //
+      // At this point we know that sending has succeeded,
+      // so we do not accidentally remove the draft
+      // if the core fails to send.
+      await BackendRemote.rpc.removeDraft(selectedAccountId(), chatId)
+      window.__reloadDraft && window.__reloadDraft()
     } catch (error) {
       log.error(error)
     } finally {
