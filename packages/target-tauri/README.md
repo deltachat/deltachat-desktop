@@ -28,3 +28,8 @@ You can use https://devtools.crabnebula.dev/ for that, for this you need to buil
 ```
 pnpm tauri dev -f=crabnebula_extras
 ```
+
+## Shorten compile times in development
+
+- use [sccache](https://github.com/mozilla/sccache)
+- (on linux) use [mold linker](https://github.com/rui314/mold)
