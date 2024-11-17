@@ -33,3 +33,13 @@ pnpm tauri dev -f=crabnebula_extras
 
 - use [sccache](https://github.com/mozilla/sccache)
 - (on linux) use [mold linker](https://github.com/rui314/mold)
+
+# for users
+
+## Log location
+
+| platform | location                                |
+| -------- | --------------------------------------- |
+| linux    | ~/.config/chat.delta.desktop.tauri      |
+| macOS    | ~/Library/Logs/chat.delta.desktop.tauri |
+| windows  | %AppData%\chat.delta.desktop.tauri      |
