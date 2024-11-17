@@ -1,4 +1,4 @@
-type PromiseType<T> = T extends Promise<infer U> ? U : any
+export type PromiseType<T> = T extends Promise<infer U> ? U : any
 
 type Bounds = {
   height: number

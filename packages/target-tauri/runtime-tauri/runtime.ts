@@ -4,11 +4,14 @@ import { invoke } from '@tauri-apps/api/core'
 import { listen } from '@tauri-apps/api/event'
 
 import type { attachLogger } from '@tauri-apps/plugin-log'
+import { getStore } from '@tauri-apps/plugin-store'
+import type { Store } from '@tauri-apps/plugin-store'
 
 import {
   DcNotification,
   DcOpenWebxdcParameters,
   DesktopSettingsType,
+  PromiseType,
   RC_Config,
   RuntimeInfo,
   RuntimeOpenDialogOptions,
@@ -88,18 +91,76 @@ class TauriRuntime implements Runtime {
   ): void {
     throw new Error('Method not implemented. 3')
   }
-  getDesktopSettings(): Promise<DesktopSettingsType> {
-    throw new Error('Method not implemented. 4')
+  async getDesktopSettings(): Promise<DesktopSettingsType> {
+    // static not saved - not needed anymore besides cleaning up values in electron version
+    const deprecated = {
+      credentials: undefined,
+      lastAccount: undefined,
+      lastChats: {},
+    } satisfies Partial<DesktopSettingsType>
+    // static not saved - not needed in tauri version
+    const static_backend = {
+      ...deprecated,
+      bounds: {}, // managed by tauri_plugin_window_state plugin
+      HTMLEmailWindowBounds: undefined, // managed by tauri_plugin_window_state plugin
+    } satisfies Partial<DesktopSettingsType>
+
+    const frontendAndTauri = {
+      // TODO field 1
+      zoomFactor: 1, // ? not sure yet
+      minimizeToTray: true,
+      lastSaveDialogLocation: undefined,
+      enableWebxdcDevTools: false, // likely impossible in mac appstore version, either hide setting there or use sth like eruda js to fill the gap?
+      HTMLEmailAskForRemoteLoadingConfirmation: true,
+      HTMLEmailAlwaysLoadRemoteContent: false,
+    } satisfies Partial<DesktopSettingsType>
+
+    const frontendOnly = {
+      // TODO field 2
+      locale: null, // if this is null, the system chooses the system language that electron reports
+      notifications: true,
+      showNotificationContent: true,
+      enterKeySends: false,
+      enableCtrlUpToReplyShortcut: false,
+      enableAVCalls: false,
+      enableBroadcastLists: false,
+      enableChatAuditLog: false,
+      enableOnDemandLocationStreaming: false,
+      chatViewBgImg: undefined,
+      activeTheme: 'system',
+      syncAllAccounts: true,
+      experimentalEnableMarkdownInMessages: false,
+      enableRelatedChats: false,
+      galleryImageKeepAspectRatio: false,
+      useSystemUIFont: false,
+    } satisfies Partial<DesktopSettingsType>
+
+    const savedEntries = (await this.store.entries()).reduce(
+      (acc, [key, value]) => {
+        ;(acc as any)[key] = value
+        return acc
+      },
+      {} as Partial<DesktopSettingsType>
+    )
+
+    return {
+      ...static_backend,
+      ...frontendAndTauri,
+      ...frontendOnly,
+      ...savedEntries,
+    } satisfies DesktopSettingsType
   }
-  setDesktopSetting(
+  async setDesktopSetting(
     key: keyof DesktopSettingsType,
     value: string | number | boolean | undefined
   ): Promise<void> {
-    throw new Error('Method not implemented. 5')
-    // 1. set values in generic key value store
-    // 2. if supported in tauri settings, then also set there (like tray_icon, but not experimental ui options)
+    // 1. set values in key value store
+    await this.store.set(key, value)
+    // 2. if supported in tauri settings, then also notifiy tauri (like tray_icon, but not experimental ui options)
+    // IDEA: if there is a way to listen for changes in rust code, then that would be preferably?
   }
   private log!: ReturnType<typeof getLoggerFunction>
+  private store!: Store
   async initialize(
     setLogHandler: typeof setLogHandlerFunction,
     getLogger: typeof getLoggerFunction
@@ -195,6 +256,11 @@ class TauriRuntime implements Runtime {
     }, rc_config)
 
     this.log = getLogger('runtime/tauri')
+    const store = await getStore('config.json')
+    if (!store) {
+      throw new Error('Configuration Store was not loaded')
+    }
+    this.store = store
   }
   reloadWebContent(): void {
     throw new Error('Method not implemented.7')
@@ -296,7 +362,9 @@ class TauriRuntime implements Runtime {
     throw new Error('Method not implemented.35')
   }
   setBadgeCounter(value: number): void {
-    throw new Error('Method not implemented.36')
+    this.log.error(
+      'setBadgeCounter: Method not implemented (36) -> this will come in one of the next tauri releases'
+    )
   }
   showNotification(data: DcNotification): void {
     throw new Error('Method not implemented.37')

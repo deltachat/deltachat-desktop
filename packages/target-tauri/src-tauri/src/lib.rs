@@ -16,6 +16,7 @@ use tauri::{
     ipc::{Channel, InvokeResponseBody, IpcResponse},
     AppHandle, Emitter, EventTarget, Manager,
 };
+use tauri_plugin_store::StoreExt;
 use tokio::sync::RwLock;
 
 use log::{error, info};
@@ -123,6 +124,7 @@ pub fn run() {
     let startup_timestamp = SystemTime::now();
 
     let mut builder = tauri::Builder::default()
+        .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_shell::init());
@@ -174,6 +176,9 @@ pub fn run() {
             app.state::<AppState>()
                 .log_duration_since_startup("setup done");
 
+            let store = app.store("config.json")?;
+            // todo: activate tray icon based on minimizeToTray
+            
             // we can only do this in debug mode, macOS doesn't not allow this in the appstore, because it uses private apis
             // we should think about wether we want it on other production builds (except store),
             // because having that console in production can be useful for fixing bugs..

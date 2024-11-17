@@ -51,8 +51,12 @@
             "clipboard-manager:allow-read-image",
             "clipboard-manager:allow-read-text",
             "clipboard-manager:allow-write-image",
-            "clipboard-manager:allow-write-text"
+            "clipboard-manager:allow-write-text",
             // TODO dialog permissions
+            "store:allow-get-store",
+            "store:allow-entries",
+            "store:allow-save",
+            "store:allow-set"
           ]
         }
       ]
