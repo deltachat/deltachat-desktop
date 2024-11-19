@@ -54,7 +54,6 @@ export default function AccountDeletionScreen({
         <Dialog
           canEscapeKeyClose={true}
           fixed={true}
-          onClose={() => {}}
           width={400}
           dataTestid='account-deletion-dialog'
         >

@@ -34,14 +34,9 @@ export default function ConfirmationDialog({
 }: Props) {
   const tx = useTranslationFunction()
 
-  const handleClick = (yes: boolean) => {
+  const handleClose = (result: string) => {
+    cb(result === 'confirm')
     onClose()
-    cb(yes)
-  }
-
-  const handleClose = () => {
-    onClose()
-    cb(false)
   }
 
   return (
@@ -55,14 +50,16 @@ export default function ConfirmationDialog({
       <DialogFooter>
         <FooterActions>
           <FooterActionButton
-            onClick={() => handleClick(false)}
+            formMethod='dialog'
+            value='cancel'
             data-testid='cancel'
           >
             {cancelLabel || tx('cancel')}
           </FooterActionButton>
           <FooterActionButton
             styling={isConfirmDanger ? 'danger' : undefined}
-            onClick={() => handleClick(true)}
+            formMethod='dialog'
+            value='confirm'
             data-testid='confirm'
           >
             {confirmLabel || tx('yes')}

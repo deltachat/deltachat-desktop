@@ -1,6 +1,5 @@
 import React, { useLayoutEffect, useState } from 'react'
 
-import Dialog from '../../Dialog'
 import ImageBackdrop from '../../ImageBackdrop'
 import InstantOnboardingScreen from './InstantOnboardingScreen'
 import OnboardingScreen from './OnboardingScreen'
@@ -37,27 +36,20 @@ export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
 
   return (
     <ImageBackdrop variant='welcome'>
-      <Dialog
-        fixed
-        width={400}
-        canEscapeKeyClose={false}
-        canOutsideClickClose={false}
-      >
-        {!showInstantOnboarding ? (
-          <OnboardingScreen
-            onNextStep={() => startInstantOnboardingFlow()}
-            selectedAccountId={selectedAccountId}
-            showBackButton={showBackButton}
-            hasConfiguredAccounts={hasConfiguredAccounts}
-            {...props}
-          />
-        ) : (
-          <InstantOnboardingScreen
-            selectedAccountId={selectedAccountId}
-            onCancel={() => resetInstantOnboarding()}
-          />
-        )}
-      </Dialog>
+      {!showInstantOnboarding ? (
+        <OnboardingScreen
+          onNextStep={() => startInstantOnboardingFlow()}
+          selectedAccountId={selectedAccountId}
+          showBackButton={showBackButton}
+          hasConfiguredAccounts={hasConfiguredAccounts}
+          {...props}
+        />
+      ) : (
+        <InstantOnboardingScreen
+          selectedAccountId={selectedAccountId}
+          onCancel={() => resetInstantOnboarding()}
+        />
+      )}
     </ImageBackdrop>
   )
 }
