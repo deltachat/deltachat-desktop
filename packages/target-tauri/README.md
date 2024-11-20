@@ -43,3 +43,11 @@ pnpm tauri dev -f=crabnebula_extras
 | linux    | ~/.config/chat.delta.desktop.tauri      |
 | macOS    | ~/Library/Logs/chat.delta.desktop.tauri |
 | windows  | %AppData%\chat.delta.desktop.tauri      |
+
+## Data location
+
+| platform | location                                               |
+| -------- | ------------------------------------------------------ |
+| linux    | ~/.config/chat.delta.desktop.tauri                     |
+| macOS    | ~/Library/Application Support/chat.delta.desktop.tauri |
+| windows  | %AppData%\chat.delta.desktop.tauri                     |
