@@ -51,7 +51,10 @@ impl AppState {
         let get_current_log_file_task =
             tauri::async_runtime::spawn(async move { Self::get_current_log_file(handle).await });
 
-        let accounts = Accounts::new(PathBuf::from("../data/"), true).await?;
+        let data_dir = app.path().app_data_dir()?;
+        info!("Data directory is {data_dir:?}");
+
+        let accounts = Accounts::new(data_dir.join("accounts"), true).await?;
         let accounts = Arc::new(RwLock::new(accounts));
         let state = CommandApi::from_arc(accounts.clone()).await;
         let (client, mut out_receiver) = RpcClient::new();
