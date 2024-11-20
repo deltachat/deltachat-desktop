@@ -261,6 +261,7 @@ class TauriRuntime implements Runtime {
       throw new Error('Configuration Store was not loaded')
     }
     this.store = store
+    this.currentLogFileLocation = await invoke('get_current_logfile')
   }
   reloadWebContent(): void {
     throw new Error('Method not implemented.7')
@@ -268,8 +269,12 @@ class TauriRuntime implements Runtime {
   openLogFile(): void {
     throw new Error('Method not implemented.8')
   }
+  currentLogFileLocation:string|null = null
   getCurrentLogLocation(): string {
-    throw new Error('Method not implemented.9')
+    if (this.currentLogFileLocation === null) {
+      throw new Error('this.currentLogFileLocation is not set')
+    }
+    return this.currentLogFileLocation
   }
   openHelpWindow(anchor?: string): void {
     throw new Error('Method not implemented.10')
@@ -298,6 +303,7 @@ class TauriRuntime implements Runtime {
     throw new Error('Method not implemented.15')
   }
   transformBlobURL(blob: string): string {
+    // TODO next - like electron for now?
     throw new Error('Method not implemented.16')
   }
   readClipboardText(): Promise<string> {
@@ -337,26 +343,28 @@ class TauriRuntime implements Runtime {
     throw new Error('Method not implemented.28')
   }
   notifyWebxdcStatusUpdate(accountId: number, instanceId: number): void {
-    throw new Error('Method not implemented.29')
+    invoke('on_webxdc_status_update', {accountId, instanceId})
   }
   notifyWebxdcRealtimeData(
     accountId: number,
     instanceId: number,
     payload: number[]
   ): void {
-    throw new Error('Method not implemented.30')
+    invoke('on_webxdc_realtime_data', {accountId, instanceId, payload})
   }
   notifyWebxdcMessageChanged(accountId: number, instanceId: number): void {
-    throw new Error('Method not implemented.31')
+    invoke('on_webxdc_message_changed', {accountId, instanceId})
   }
   notifyWebxdcInstanceDeleted(accountId: number, instanceId: number): void {
-    throw new Error('Method not implemented.32')
+    invoke('on_webxdc_message_deleted', {accountId, instanceId})
   }
   restartApp(): void {
     throw new Error('Method not implemented.33')
   }
-  getLocaleData(locale?: string): Promise<LocaleData> {
-    throw new Error('Method not implemented.34')
+  async getLocaleData(locale?: string): Promise<LocaleData> {
+    return await invoke('get_locale_data', {
+      locale: locale || (await this.getDesktopSettings()).locale || "en",
+    })
   }
   setLocale(locale: string): Promise<void> {
     throw new Error('Method not implemented.35')
@@ -378,7 +386,7 @@ class TauriRuntime implements Runtime {
   setNotificationCallback(
     cb: (data: { accountId: number; chatId: number; msgId: number }) => void
   ): void {
-    throw new Error('Method not implemented.40')
+    this.log.error('Method not implemented.40')
   }
   writeClipboardToTempFile(name?: string): Promise<string> {
     throw new Error('Method not implemented.41')
@@ -403,8 +411,9 @@ class TauriRuntime implements Runtime {
   getAvailableThemes(): Promise<Theme[]> {
     throw new Error('Method not implemented.47')
   }
-  getActiveTheme(): Promise<{ theme: Theme; data: string } | null> {
-    throw new Error('Method not implemented.48')
+  async getActiveTheme(): Promise<{ theme: Theme; data: string } | null> {
+    this.log.error('Method not implemented.48')
+    return null
   }
   saveBackgroundImage(
     file: string,

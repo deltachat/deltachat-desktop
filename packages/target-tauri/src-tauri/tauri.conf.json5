@@ -71,6 +71,9 @@
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+    "resources": {
+      "../../../_locales/*.json" : "_locales"
+    }
   }
 }

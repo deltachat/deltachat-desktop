@@ -1,25 +1,25 @@
 use std::{
-    path::PathBuf,
+    collections::HashMap,
+    path::{self, PathBuf},
     sync::{Arc, Mutex},
     time::SystemTime,
 };
 
+use anyhow::{bail, Context};
 use deltachat_jsonrpc::{
     api::{Accounts, CommandApi},
     yerpc::{RpcClient, RpcSession},
 };
 use futures_lite::stream::StreamExt;
-use serde::Serialize;
-use serde_json::error;
-use tauri::{
-    async_runtime::JoinHandle,
-    ipc::{Channel, InvokeResponseBody, IpcResponse},
-    AppHandle, Emitter, EventTarget, Manager,
-};
+
+use tauri::{async_runtime::JoinHandle, AppHandle, Emitter, EventTarget, Manager};
 use tauri_plugin_store::StoreExt;
 use tokio::sync::RwLock;
 
-use log::{error, info};
+use log::info;
+
+mod locales;
+mod webxdc;
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
@@ -34,15 +34,23 @@ struct InnerAppState {
 }
 
 struct AppState {
-    inner: Arc<Mutex<InnerAppState>>,
-    deltachat: Arc<RwLock<Accounts>>,
-    deltachat_rpc_session: RpcSession<CommandApi>,
-    deltachat_rpc_send_task: JoinHandle<anyhow::Result<()>>,
-    startup_timestamp: SystemTime,
+    pub(crate) inner: Arc<Mutex<InnerAppState>>,
+    pub(crate) deltachat: Arc<RwLock<Accounts>>,
+    pub(crate) deltachat_rpc_session: RpcSession<CommandApi>,
+    pub(crate) deltachat_rpc_send_task: JoinHandle<anyhow::Result<()>>,
+    pub(crate) startup_timestamp: SystemTime,
+    pub(crate) current_log_file_path: String,
 }
 
 impl AppState {
-    async fn try_new(app: &tauri::App, startup_timestamp: SystemTime) -> anyhow::Result<Self> {
+    pub(crate) async fn try_new(
+        app: &tauri::App,
+        startup_timestamp: SystemTime,
+    ) -> anyhow::Result<Self> {
+        let handle = app.handle().clone();
+        let get_current_log_file_task =
+            tauri::async_runtime::spawn(async move { Self::get_current_log_file(handle).await });
+
         let accounts = Accounts::new(PathBuf::from("../data/"), true).await?;
         let accounts = Arc::new(RwLock::new(accounts));
         let state = CommandApi::from_arc(accounts.clone()).await;
@@ -63,16 +71,45 @@ impl AppState {
             Ok(())
         });
 
+        let current_log_file_path = get_current_log_file_task.await??;
+
         Ok(Self {
             inner: Arc::new(Mutex::new(InnerAppState::default())),
             deltachat: accounts,
             deltachat_rpc_session: session,
             deltachat_rpc_send_task: send_task,
             startup_timestamp,
+            current_log_file_path,
         })
     }
 
-    fn log_duration_since_startup(&self, label: &str) {
+    async fn get_current_log_file(app: AppHandle) -> anyhow::Result<String> {
+        let mut log_files: Vec<(PathBuf, std::time::Duration)> =
+            std::fs::read_dir(app.path().app_log_dir()?)?
+                .filter_map(|entry| entry.ok())
+                .map(|entry| {
+                    let elapsed = entry.metadata()?.created()?.elapsed()?;
+                    let path = entry.path();
+                    if !path.to_string_lossy().ends_with(".log") {
+                        bail!("not logfile")
+                    }
+                    anyhow::Ok((path, elapsed))
+                })
+                .filter_map(|entry| entry.ok())
+                .collect();
+        log_files.sort_by(|a, b| a.1.cmp(&b.1));
+        let current_log_file_path = log_files
+            .first()
+            .context("current logfile does not exist")?
+            .0
+            .to_str()
+            .context("invalid characters in logfile path, this should not happen")?
+            .to_owned();
+        info!("Current Logfile: {current_log_file_path}");
+        Ok(current_log_file_path)
+    }
+
+    pub(crate) fn log_duration_since_startup(&self, label: &str) {
         if let Ok(duration) = SystemTime::now().duration_since(self.startup_timestamp) {
             let micros = duration.as_micros();
             info!("{label} took {micros}μs");
@@ -119,6 +156,11 @@ fn ui_frontend_ready(state: tauri::State<AppState>) -> Result<(), String> {
     Ok(())
 }
 
+#[tauri::command]
+fn get_current_logfile(state: tauri::State<AppState>) -> String {
+    state.current_log_file_path.clone()
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let startup_timestamp = SystemTime::now();
@@ -147,7 +189,13 @@ pub fn run() {
             greet,
             deltachat_jsonrpc_request,
             ui_ready,
-            ui_frontend_ready
+            ui_frontend_ready,
+            get_current_logfile,
+            locales::get_locale_data,
+            webxdc::on_webxdc_message_changed,
+            webxdc::on_webxdc_message_deleted,
+            webxdc::on_webxdc_status_update,
+            webxdc::on_webxdc_realtime_data,
         ])
         .setup(move |app| {
             let (tauri_plugin_log, max_level, logger) = tauri_plugin_log::Builder::new()
@@ -178,7 +226,7 @@ pub fn run() {
 
             let store = app.store("config.json")?;
             // todo: activate tray icon based on minimizeToTray
-            
+
             // we can only do this in debug mode, macOS doesn't not allow this in the appstore, because it uses private apis
             // we should think about wether we want it on other production builds (except store),
             // because having that console in production can be useful for fixing bugs..
