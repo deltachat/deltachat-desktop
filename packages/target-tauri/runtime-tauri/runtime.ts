@@ -334,7 +334,7 @@ class TauriRuntime implements Runtime {
     throw new Error('Method not implemented.25')
   }
   getWebxdcIconURL(accountId: number, msgId: number): string {
-    throw new Error('Method not implemented.26')
+    return `webxdc-icon://${accountId}/${msgId}`
   }
   deleteWebxdcAccountData(accountId: number): Promise<void> {
     throw new Error('Method not implemented.27')
@@ -381,7 +381,7 @@ class TauriRuntime implements Runtime {
     throw new Error('Method not implemented.38')
   }
   clearNotifications(chatId: number): void {
-    throw new Error('Method not implemented.39')
+    this.log.error('Method not implemented.39 - clearNotifications')
   }
   setNotificationCallback(
     cb: (data: { accountId: number; chatId: number; msgId: number }) => void

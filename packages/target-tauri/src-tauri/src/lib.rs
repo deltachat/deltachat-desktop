@@ -1,6 +1,5 @@
 use std::{
-    collections::HashMap,
-    path::{self, PathBuf},
+    path::PathBuf,
     sync::{Arc, Mutex},
     time::SystemTime,
 };
@@ -16,7 +15,7 @@ use tauri::{async_runtime::JoinHandle, AppHandle, Emitter, EventTarget, Manager}
 use tauri_plugin_store::StoreExt;
 use tokio::sync::RwLock;
 
-use log::info;
+use log::{error, info};
 
 mod locales;
 mod webxdc;
@@ -200,6 +199,7 @@ pub fn run() {
             webxdc::on_webxdc_status_update,
             webxdc::on_webxdc_realtime_data,
         ])
+        .register_asynchronous_uri_scheme_protocol("webxdc-icon", webxdc::webxdc_icon_protocol)
         .setup(move |app| {
             let (tauri_plugin_log, max_level, logger) = tauri_plugin_log::Builder::new()
                 // default targets are file and stdout
@@ -216,7 +216,7 @@ pub fn run() {
             }
             #[cfg(not(feature = "crabnebula_extras"))]
             {
-                tauri_plugin_log::attach_logger(max_level, logger);
+                let _ = tauri_plugin_log::attach_logger(max_level, logger);
             }
             app.handle().plugin(tauri_plugin_log)?;
 
