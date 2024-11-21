@@ -4,6 +4,7 @@
 
 ## Added
 - Add "Learn More" button to "Disappearing Messages" dialog #4330
+- new icon for Mac users
 
 ## Changed
 - enable Telegram-style Ctrl + ArrowUp to reply by default #4333
