@@ -81,16 +81,24 @@ export default function ViewProfile(
 
   const onClickViewProfileMenu = useViewProfileMenu(contact)
 
+  const handleClose = (result: string) => {
+    if (result === 'close') {
+      onClose()
+    } else if (result === 'cancel') {
+      onBack && onBack()
+    }
+  }
+
   return (
     <Dialog
       width={400}
-      onClose={onClose}
+      onClose={handleClose}
       fixed
       className={styles.viewProfileDialog}
     >
       <DialogHeader
         title={tx('contact')}
-        onClose={onClose}
+        onClose={handleClose}
         onClickBack={onBack}
       >
         {showMenu && (

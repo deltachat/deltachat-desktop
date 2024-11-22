@@ -14,6 +14,8 @@ export default function BackButton(
 
   return (
     <HeaderButton
+      value='cancel'
+      formMethod='dialog'
       aria-label={tx('back')}
       icon='arrow-left'
       iconSize={24}

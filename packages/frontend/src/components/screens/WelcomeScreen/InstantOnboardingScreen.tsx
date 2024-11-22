@@ -9,7 +9,7 @@ import useChat from '../../../hooks/chat/useChat'
 import useInstantOnboarding from '../../../hooks/useInstantOnboarding'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { DeltaInput } from '../../Login-Styles'
-import { DialogBody, DialogContent, DialogHeader } from '../../Dialog'
+import Dialog, { DialogBody, DialogContent, DialogHeader } from '../../Dialog'
 import { ScreenContext } from '../../../contexts/ScreenContext'
 import { Screens } from '../../../ScreenController'
 
@@ -122,17 +122,22 @@ export default function InstantOnboardingScreen({
     openDialog(UseOtherServerDialog)
   }
 
-  const onClickBack = () => {
-    saveDisplayName()
-    onCancel()
+  const onClose = (result: string) => {
+    if (result === 'cancel') {
+      saveDisplayName()
+      onCancel()
+    }
   }
 
   return (
-    <>
-      <DialogHeader
-        onClickBack={onClickBack}
-        title={tx('instant_onboarding_title')}
-      />
+    <Dialog
+      fixed
+      onClose={onClose}
+      width={400}
+      canEscapeKeyClose={false}
+      canOutsideClickClose={false}
+    >
+      <DialogHeader title={tx('instant_onboarding_title')} />
       <DialogBody className={styles.welcomeScreenBody}>
         <DialogContent paddingBottom>
           <ProfileImageSelector
@@ -179,6 +184,6 @@ export default function InstantOnboardingScreen({
           </div>
         </DialogContent>
       </DialogBody>
-    </>
+    </Dialog>
   )
 }

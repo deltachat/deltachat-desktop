@@ -6,7 +6,7 @@ import Button from '../../Button'
 import useDialog from '../../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { BackendRemote, EffectfulBackendActions } from '../../../backend-com'
-import { DialogBody, DialogContent, DialogHeader } from '../../Dialog'
+import Dialog, { DialogBody, DialogContent, DialogHeader } from '../../Dialog'
 import { getLogger } from '../../../../../shared/logger'
 
 import styles from './styles.module.scss'
@@ -56,8 +56,20 @@ export default function OnboardingScreen(props: Props) {
     }
   }
 
+  const onClose = (result: string) => {
+    if (result === 'cancel') {
+      onClickBackButton()
+    }
+  }
+
   return (
-    <>
+    <Dialog
+      fixed
+      onClose={onClose}
+      width={400}
+      canEscapeKeyClose={false}
+      canOutsideClickClose={false}
+    >
       <DialogHeader
         onClickBack={props.showBackButton ? onClickBackButton : undefined}
         title={
@@ -95,6 +107,6 @@ export default function OnboardingScreen(props: Props) {
           </div>
         </DialogContent>
       </DialogBody>
-    </>
+    </Dialog>
   )
 }

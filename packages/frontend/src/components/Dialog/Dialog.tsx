@@ -50,45 +50,44 @@ const Dialog = React.memo<Props>(
             rect.left <= ev.clientX &&
             ev.clientX <= rect.left + rect.width
           if (!isInDialog) {
-            const cancelEvent = new Event('cancel')
-            dialog.current.dispatchEvent(cancelEvent)
-            // cancel event doesn't trigger dialog close
-            dialog.current.close()
+            dialog.current.close('cancel')
           }
         }
       : () => {}
 
-    const onClose = (value: any) => {
-      props.onClose && props.onClose(value)
-      dialog.current!.style.display = 'none'
+    const onClose = (_: any) => {
+      props.onClose && props.onClose(dialog.current?.returnValue)
     }
 
-    const onCancel = (ev: React.BaseSyntheticEvent) => {
+    const onEscapePress = (ev: React.BaseSyntheticEvent) => {
+      // by default this fires a 'close' event with undefined as value
+      // to unify everything we explicitly call close with 'cancel' value
+      ev.preventDefault()
       if (!canEscapeKeyClose) {
-        ev.preventDefault()
+        return
       }
+
+      dialog.current?.close('cancel')
     }
 
     useEffect(() => {
-      // calling showModal is "only" the way to have ::backdrop
+      // calling showModal is "only" the way to have ::backdrop and "cancel" event
       dialog.current?.showModal()
-      dialog.current!.style.display = 'flex'
     })
 
-    let style
+    const style = unstyled
+      ? undefined
+      : {
+          width: width && `${width}px`,
+          height: height && `${height}px`,
+        }
 
-    if (!unstyled) {
-      style = {
-        width: width && `${width}px`,
-        height: height && `${height}px`,
-      }
-    }
-
+    // NOTE: do not set method="dialog" on form, it will cause every button to close the dialog
     return (
       <dialog
         onClick={onClick}
         onClose={onClose}
-        onCancel={onCancel}
+        onCancel={onEscapePress}
         ref={dialog}
         className={classNames(styles.dialog, props.className, {
           [styles.unstyled]: unstyled,
@@ -96,7 +95,7 @@ const Dialog = React.memo<Props>(
         style={style}
         data-testid={props['dataTestid']}
       >
-        {children}
+        <form>{children}</form>
       </dialog>
     )
   }

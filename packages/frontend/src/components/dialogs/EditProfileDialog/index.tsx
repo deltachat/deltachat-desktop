@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 
-import SettingsStoreInstance, {
-  SettingsStoreState,
-} from '../../../stores/settings'
+import SettingsStoreInstance from '../../../stores/settings'
+import { useSettingsStore } from '../../../stores/settings'
 import { BackendRemote } from '../../../backend-com'
 import { selectedAccountId } from '../../../ScreenController'
 import { DeltaInput, DeltaTextarea } from '../../Login-Styles'
@@ -24,7 +23,6 @@ import styles from './styles.module.scss'
 import type { DialogProps } from '../../../contexts/DialogContext'
 
 type Props = {
-  settingsStore: SettingsStoreState
   firstSetup?: boolean
 } & DialogProps
 
@@ -39,13 +37,12 @@ export default function EditProfileDialog({ onClose, ...props }: Props) {
   )
 }
 
-function EditProfileDialogInner({
-  onClose,
-  settingsStore,
-  firstSetup = false,
-}: Props) {
+function EditProfileDialogInner({ onClose, firstSetup = false }: Props) {
   const tx = useTranslationFunction()
   const openAlertDialog = useAlertDialog()
+
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const settingsStore = useSettingsStore()[0]!
 
   const [displayname, setDisplayname] = useState(
     settingsStore.settings.displayname || ''

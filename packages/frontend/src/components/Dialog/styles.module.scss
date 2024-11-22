@@ -3,7 +3,12 @@ $paddingHorizontal: 30px;
 $paddingVertical: 20px;
 
 .dialog {
+  opacity: 0;
   padding: 0;
+
+  &:last-of-type {
+    opacity: 1;
+  }
 
   &.unstyled {
     background: none;
