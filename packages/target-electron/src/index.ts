@@ -21,6 +21,8 @@ const hostRules = 'MAP * ~NOTFOUND, EXCLUDE *.openstreetmap.org'
 rawApp.commandLine.appendSwitch('host-resolver-rules', hostRules)
 rawApp.commandLine.appendSwitch('host-rules', hostRules)
 
+rawApp.commandLine.appendSwitch('disable-features', 'IsolateSandboxedIframes')
+
 if (rc['version'] === true || rc['v'] === true) {
   /* ignore-console-log */
   console.info(BuildInfo.VERSION)
