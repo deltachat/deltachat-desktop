@@ -154,6 +154,10 @@ export function ViewProfileInner({
     onChatClick(dmChatId)
   }
 
+  const onUnblockContact = async () => {
+    await BackendRemote.rpc.unblockContact(accountId, contact.id)
+  }
+
   useEffect(() => {
     if (isSelfChat) {
       ;(async () => {
@@ -260,6 +264,12 @@ export function ViewProfileInner({
                 <LastSeen timestamp={contact.lastSeen} />
               </div>
             )}
+            {contact.isBlocked && (
+              <div>
+                <i className='material-svg-icon material-icon-blocked' />
+                {tx('contact_is_blocked')}
+              </div>
+            )}
           </div>
         )}
       </DialogContent>
@@ -270,13 +280,22 @@ export function ViewProfileInner({
           justifyContent: 'center',
         }}
       >
-        {!isDeviceChat && (
+        {!isDeviceChat && !contact.isBlocked && (
           <Button
             styling='primary'
             aria-label={tx('send_message')}
             onClick={onSendMessage}
           >
             {tx('send_message')}
+          </Button>
+        )}
+        {!isDeviceChat && contact.isBlocked && (
+          <Button
+            styling='primary'
+            aria-label={tx('menu_unblock_contact')}
+            onClick={onUnblockContact}
+          >
+            {tx('menu_unblock_contact')}
           </Button>
         )}
       </div>
