@@ -142,7 +142,7 @@ export default function ManageKeys() {
         emitter.off('ImexFileWritten', listenForOutputFiles)
       }
     }
-  }, [tx, openConfirmationDialog])
+  }, [tx, openConfirmationDialog, openDialog])
 
   return (
     <>
