@@ -13,7 +13,7 @@ import {
 import ViewProfile from './ViewProfile'
 import { avatarInitial } from '../Avatar'
 import { DeltaInput } from '../Login-Styles'
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote, onDCEvent } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { useSettingsStore } from '../../stores/settings'
 import Dialog, {
@@ -131,6 +131,18 @@ function ViewGroupInner(
     groupImage,
     setGroupImage,
   } = useGroup(accountId, chat)
+
+  useEffect(() => {
+    onDCEvent(accountId, 'ContactsChanged', () => {
+      BackendRemote.rpc
+        .getContactsByIds(accountId, group.contactIds)
+        .then(contacts => {
+          // update contacts in case a contact changed
+          // while this dialog is open (e.g. contact got blocked)
+          group.contacts = Object.values(contacts)
+        })
+    })
+  }, [accountId, group])
 
   const showRemoveGroupMemberConfirmationDialog = useCallback(
     async (contact: T.Contact) => {
