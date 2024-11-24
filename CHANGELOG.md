@@ -7,6 +7,7 @@
 - Add "Learn More" button to "Disappearing Messages" dialog #4330
 - new icon for Mac users
 - smooth-scroll to newly arriving messages instead of jumping instantly #4125
+- make backup and key export work in browser #4303
 
 ## Changed
 - enable Telegram-style Ctrl + ArrowUp to reply by default #4333
@@ -43,7 +44,6 @@
   - support for selecting custom chat wallpaper #4306
   - support for themes #4304
 - improve keyboard and screen-reader accessibility #4210
-- make backup and key export work in browser #4303
 
 ## Changed
 - style: avoid scrolling to account list items such that they're at the very edge of the list #4252
