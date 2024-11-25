@@ -806,6 +806,7 @@ export const Quote = ({
               }
               disableJumbomoji
               nonInteractiveContent
+              isQuote={true}
             />
           </div>
         </div>
