@@ -1,5 +1,4 @@
 import { BrowserWindow, Menu, shell } from 'electron'
-import { join } from 'path'
 import { stat } from 'fs/promises'
 import { platform } from 'os'
 
@@ -8,6 +7,8 @@ import { getLogger } from '../../../shared/logger.js'
 import { appWindowTitle } from '../../../shared/constants.js'
 import { tx } from '../load-translations.js'
 import { window as main_window } from './main.js'
+import rc from '../rc.js'
+import { join } from 'path'
 import {
   getAppMenu,
   getFileMenu,
@@ -72,6 +73,7 @@ export async function openHelpWindow(locale: string, anchor?: string) {
       contextIsolation: true,
       sandbox: true,
       spellcheck: false,
+      devTools: rc.devmode,
     },
     alwaysOnTop: main_window?.isAlwaysOnTop(),
   }))
@@ -83,7 +85,6 @@ export async function openHelpWindow(locale: string, anchor?: string) {
   )
 
   const url = await getHelpFileForLang(locale)
-
   log.debug(url)
 
   win.loadFile(url)
@@ -132,6 +133,41 @@ export async function openHelpWindow(locale: string, anchor?: string) {
 
   const isMac = platform() === 'darwin'
 
+  function getViewMenu(): Electron.MenuItemConstructorOptions {
+    const menuOptions = {
+      label: tx('global_menu_view_desktop'),
+      submenu: [
+        { role: 'resetZoom' },
+        { role: 'zoomIn' },
+        { role: 'zoomOut' },
+        { type: 'separator' },
+        {
+          label: tx('global_menu_view_floatontop_desktop'),
+          type: 'checkbox',
+          checked: win?.isAlwaysOnTop(),
+          click: () => {
+            win?.setAlwaysOnTop(!win.isAlwaysOnTop())
+            if (isMac) {
+              win?.setMenu(makeMenu())
+            } else {
+              // change to window menu
+              Menu.setApplicationMenu(makeMenu())
+            }
+          },
+        },
+        { role: 'togglefullscreen' },
+        {
+          label: tx('global_menu_view_developer_tools_desktop'),
+          click: () => win?.webContents.openDevTools({ mode: 'detach' }),
+        },
+      ],
+    }
+    if (!rc.devmode) {
+      menuOptions.submenu.pop()
+    }
+    return menuOptions as Electron.MenuItemConstructorOptions
+  }
+
   // copied and adapted from webxdc menu
   // TODO: would make sense to refactor these menus at some point
   const makeMenu = () => {
@@ -151,30 +187,7 @@ export async function openHelpWindow(locale: string, anchor?: string) {
           },
         ],
       },
-      {
-        label: tx('global_menu_view_desktop'),
-        submenu: [
-          { role: 'resetZoom' },
-          { role: 'zoomIn' },
-          { role: 'zoomOut' },
-          { type: 'separator' },
-          {
-            label: tx('global_menu_view_floatontop_desktop'),
-            type: 'checkbox',
-            checked: win?.isAlwaysOnTop(),
-            click: () => {
-              win?.setAlwaysOnTop(!win.isAlwaysOnTop())
-              if (isMac) {
-                win?.setMenu(makeMenu())
-              } else {
-                // change to window menu
-                Menu.setApplicationMenu(makeMenu())
-              }
-            },
-          },
-          { role: 'togglefullscreen' },
-        ],
-      },
+      getViewMenu(),
       getHelpMenu(isMac),
     ])
   }
