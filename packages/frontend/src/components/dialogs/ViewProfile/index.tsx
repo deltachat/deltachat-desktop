@@ -281,20 +281,12 @@ export function ViewProfileInner({
         }}
       >
         {!isDeviceChat && !contact.isBlocked && (
-          <Button
-            styling='primary'
-            aria-label={tx('send_message')}
-            onClick={onSendMessage}
-          >
+          <Button styling='primary' onClick={onSendMessage}>
             {tx('send_message')}
           </Button>
         )}
         {!isDeviceChat && contact.isBlocked && (
-          <Button
-            styling='primary'
-            aria-label={tx('menu_unblock_contact')}
-            onClick={onUnblockContact}
-          >
+          <Button styling='primary' onClick={onUnblockContact}>
             {tx('menu_unblock_contact')}
           </Button>
         )}
