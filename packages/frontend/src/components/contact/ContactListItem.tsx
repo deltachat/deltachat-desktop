@@ -1,16 +1,18 @@
-import React, { MouseEventHandler } from 'react'
+import React, { MouseEventHandler, useRef } from 'react'
 import Contact from './Contact'
 import classNames from 'classnames'
 import { Type } from '../../backend-com'
 import Icon from '../Icon'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { useRovingTabindex } from '../../contexts/RovingTabindex'
 
 export const DeltaCheckbox = (props: {
   checked: boolean
   disabled?: boolean
   onClick?: (event: React.SyntheticEvent) => void
+  tabIndex?: 0 | -1
 }) => {
-  const { checked, disabled } = props
+  const { checked, disabled, tabIndex } = props
   const _onClick = props.onClick
   const onClick = (
     event: React.ChangeEvent<any> | React.MouseEvent<any, MouseEvent>
@@ -24,6 +26,7 @@ export const DeltaCheckbox = (props: {
         disabled={disabled === true}
         onChange={onClick}
         checked={checked}
+        tabIndex={tabIndex}
       />
       <div
         className='checkmark'
@@ -58,6 +61,11 @@ export function ContactListItem(props: {
     disabled,
     onContextMenu,
   } = props
+
+  const checkboxDisabled = disabled || contact.id === 1
+
+  const refMain = useRef<HTMLButtonElement>(null)
+
   const onCheckboxClick = () => {
     if (disabled) return
     if (!showCheckbox) return
@@ -69,18 +77,37 @@ export function ContactListItem(props: {
     if (!showRemove) return
     typeof props.onRemoveClick === 'function' && props.onRemoveClick(contact)
   }
+
+  // Keep in mind that this component is not always placed inside of
+  // `RovingTabindexContext`. It's fine, because `useRovingTabindex`
+  // will simply always return `tabIndex === 0` in this case.
+  const rovingTabindex = useRovingTabindex(refMain)
+
   return (
     <div
       className={classNames('contact-list-item', { disabled })}
       key={contact.id}
+      // Apply these to the wrapper element,
+      // because there may be several interactive elements in this component.
+      onKeyDown={rovingTabindex.onKeydown}
+      onFocus={rovingTabindex.setAsActiveElement}
     >
       <button
-        className={classNames('contact-list-item-button', { disabled })}
+        ref={refMain}
+        className={classNames(
+          'contact-list-item-button',
+          rovingTabindex.className,
+          { disabled }
+        )}
         // `aria-disabled` instead of just `disabled` because we probably
         // still want to keep it focusable so that the context menu can be
         // activated, and for screen-readers.
         aria-disabled={disabled}
         disabled={disabled && !onContextMenu}
+        // FYI this makes this element keyboard-navigarble
+        // regardless of whether it is disabled.
+        // This is probably fine.
+        tabIndex={rovingTabindex.tabIndex}
         onClick={() => {
           if (disabled) return
           onClick && onClick(contact)
@@ -100,7 +127,8 @@ export function ContactListItem(props: {
       {showCheckbox && (
         <DeltaCheckbox
           checked={checked}
-          disabled={disabled || contact.id === 1}
+          disabled={checkboxDisabled}
+          tabIndex={checkboxDisabled ? undefined : rovingTabindex.tabIndex}
           onClick={onCheckboxClick}
         />
       )}
@@ -109,6 +137,7 @@ export function ContactListItem(props: {
           className='btn-remove'
           onClick={onRemoveClick}
           disabled={disabled}
+          tabIndex={disabled ? undefined : rovingTabindex.tabIndex}
           aria-label={tx('remove_desktop')}
         >
           <Icon icon='cross' coloring='remove' />
