@@ -119,9 +119,25 @@
       scroll-margin-bottom: $margin-bottom;
       // And this is purely cosmetic. For scrolling to a message
       // that is above the visible area.
-      scroll-margin-top: math.div($margin-bottom, 2);
+      $scroll-margin-top: math.div($margin-bottom, 2);
+      scroll-margin-top: $scroll-margin-top;
 
       min-width: 200px;
+
+      .roving-tabindex {
+        // The contents of the `<li>` are focusable (see `useRovingTabindex`).
+        // Focusing an element inside a scrollable region makes the browser
+        // scroll the focused element into view, so let's also apply the same
+        // margins for it.
+        // This is not as important though, but still nice.
+        //
+        // But ideally we'd probably want to refactor this in such a way that
+        // the focusabe element and the element that we `scrollIntoView()`
+        // when `jumpToMessage` is the same element, so only one
+        // needs `scroll-margin`.
+        scroll-margin-bottom: $margin-bottom;
+        scroll-margin-top: $scroll-margin-top;
+      }
 
       &::after {
         visibility: hidden;

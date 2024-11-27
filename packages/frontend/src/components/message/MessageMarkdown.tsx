@@ -30,7 +30,13 @@ SettingsStoreInstance.subscribe(newState => {
   }
 })
 
-function renderElement(elm: ParsedElement, key?: number): JSX.Element {
+function renderElement(
+  elm: ParsedElement,
+  tabindexForInteractiveContents: -1 | 0,
+  key?: number
+): JSX.Element {
+  const mapFn = (elm: ParsedElement, index: number) =>
+    renderElement(elm, tabindexForInteractiveContents, index)
   switch (elm.t) {
     case 'CodeBlock':
       return (
@@ -48,20 +54,32 @@ function renderElement(elm: ParsedElement, key?: number): JSX.Element {
       )
 
     case 'StrikeThrough':
-      return <s key={key}>{elm.c.map(renderElement)}</s>
+      return <s key={key}>{elm.c.map(mapFn)}</s>
 
     case 'Italics':
-      return <i key={key}>{elm.c.map(renderElement)}</i>
+      return <i key={key}>{elm.c.map(mapFn)}</i>
 
     case 'Bold':
-      return <b key={key}>{elm.c.map(renderElement)}</b>
+      return <b key={key}>{elm.c.map(mapFn)}</b>
 
     case 'Tag':
-      return <TagLink key={key} tag={elm.c} />
+      return (
+        <TagLink
+          key={key}
+          tag={elm.c}
+          tabIndex={tabindexForInteractiveContents}
+        />
+      )
 
     case 'Link': {
       const { destination } = elm.c
-      return <Link destination={destination} key={key} />
+      return (
+        <Link
+          destination={destination}
+          key={key}
+          tabIndex={tabindexForInteractiveContents}
+        />
+      )
     }
 
     case 'LabeledLink':
@@ -69,18 +87,31 @@ function renderElement(elm: ParsedElement, key?: number): JSX.Element {
         <span key={key}>
           <LabeledLink
             destination={elm.c.destination}
-            label={<>{elm.c.label.map(renderElement)}</>}
+            label={<>{elm.c.label.map(mapFn)}</>}
+            tabIndex={tabindexForInteractiveContents}
           />{' '}
         </span>
       )
 
     case 'EmailAddress': {
       const email = elm.c
-      return <EmailLink key={key} email={email} />
+      return (
+        <EmailLink
+          key={key}
+          email={email}
+          tabIndex={tabindexForInteractiveContents}
+        />
+      )
     }
 
     case 'BotCommandSuggestion':
-      return <BotCommandSuggestion key={key} suggestion={elm.c} />
+      return (
+        <BotCommandSuggestion
+          key={key}
+          suggestion={elm.c}
+          tabIndex={tabindexForInteractiveContents}
+        />
+      )
 
     case 'Linebreak':
       return <span key={key}>{'\n'}</span>
@@ -144,13 +175,25 @@ function renderElementPreview(elm: ParsedElement, key?: number): JSX.Element {
   }
 }
 
-export function message2React(message: string, preview: boolean): JSX.Element {
+export function message2React(
+  message: string,
+  preview: boolean,
+  /**
+   * Has no effect `{@link preview} === true`, because there should be
+   * no interactive elements in the first place
+   */
+  tabindexForInteractiveContents: -1 | 0
+): JSX.Element {
   try {
     const elements = parseMessage(message)
     return preview ? (
       <div className='truncated'>{elements.map(renderElementPreview)}</div>
     ) : (
-      <>{elements.map(renderElement)}</>
+      <>
+        {elements.map((el, index) =>
+          renderElement(el, tabindexForInteractiveContents, index)
+        )}
+      </>
     )
   } catch (error) {
     log.error('parseMessage failed:', { input: message, error })
@@ -158,7 +201,13 @@ export function message2React(message: string, preview: boolean): JSX.Element {
   }
 }
 
-function EmailLink({ email }: { email: string }): JSX.Element {
+function EmailLink({
+  email,
+  tabIndex,
+}: {
+  email: string
+  tabIndex: -1 | 0
+}): JSX.Element {
   const accountId = selectedAccountId()
   const createChatByEmail = useCreateChatByEmail()
   const { selectChat } = useChat()
@@ -176,13 +225,14 @@ function EmailLink({ email }: { email: string }): JSX.Element {
       x-not-a-link='email'
       x-target-email={email}
       onClick={handleClick}
+      tabIndex={tabIndex}
     >
       {email}
     </a>
   )
 }
 
-function TagLink({ tag }: { tag: string }) {
+function TagLink({ tag, tabIndex }: { tag: string; tabIndex: -1 | 0 }) {
   const setSearch = () => {
     log.debug(
       `Clicked on a hastag, this should open search for the text "${tag}"`
@@ -196,13 +246,19 @@ function TagLink({ tag }: { tag: string }) {
   }
 
   return (
-    <a href={'#'} x-not-a-link='tag' onClick={setSearch}>
+    <a href={'#'} x-not-a-link='tag' onClick={setSearch} tabIndex={tabIndex}>
       {tag}
     </a>
   )
 }
 
-function BotCommandSuggestion({ suggestion }: { suggestion: string }) {
+function BotCommandSuggestion({
+  suggestion,
+  tabIndex,
+}: {
+  suggestion: string
+  tabIndex: -1 | 0
+}) {
   const openConfirmationDialog = useConfirmationDialog()
   const messageDisplay = useContext(MessagesDisplayContext)
   const accountId = selectedAccountId()
@@ -278,7 +334,12 @@ function BotCommandSuggestion({ suggestion }: { suggestion: string }) {
   }
 
   return (
-    <a href='#' x-not-a-link='bcs' onClick={applySuggestion}>
+    <a
+      href='#'
+      x-not-a-link='bcs'
+      onClick={applySuggestion}
+      tabIndex={tabIndex}
+    >
       {suggestion}
     </a>
   )

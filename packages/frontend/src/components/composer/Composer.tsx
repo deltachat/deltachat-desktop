@@ -329,7 +329,7 @@ const Composer = forwardRef<
         <div className='upper-bar'>
           {draftState.quote !== null && (
             <div className='attachment-quote-section is-quote'>
-              <Quote quote={draftState.quote} />
+              <Quote quote={draftState.quote} tabIndex={0} />
               <CloseButton onClick={removeQuote} />
             </div>
           )}
