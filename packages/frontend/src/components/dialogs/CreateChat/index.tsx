@@ -55,6 +55,7 @@ import styles from './styles.module.scss'
 import { makeContextMenu } from '../../ContextMenu'
 import { ContextMenuContext } from '../../../contexts/ContextMenuContext'
 import ImageCropper from '../../ImageCropper'
+import { RovingTabindexProvider } from '../../../contexts/RovingTabindex'
 
 type ViewMode = 'main' | 'createGroup' | 'createBroadcastList'
 
@@ -238,6 +239,8 @@ function CreateChatMain(props: CreateChatMainProps) {
     // `contactsAndExtraItems`) for some performance, but let's play it safe.
   })
 
+  const fixedSizeListOuterRef = useRef<HTMLElement>(null)
+
   return (
     <>
       <DialogHeader>
@@ -278,95 +281,102 @@ function CreateChatMain(props: CreateChatMainProps) {
               // minimumBatchSize={100}
             >
               {({ onItemsRendered, ref }) => (
-                // Not using 'react-window' results in ~5 second rendering time
-                // if the user has 5000 contacts.
-                // (see https://github.com/deltachat/deltachat-desktop/issues/1830)
-                <FixedSizeList
-                  itemCount={contactsAndExtraItems.length}
-                  itemKey={index => contactsAndExtraItems[index]}
-                  onItemsRendered={onItemsRendered}
-                  ref={ref}
-                  height={height}
-                  width='100%'
-                  // TODO fix: The size of each item is determined
-                  // by `--local-avatar-size` and `--local-avatar-vertical-margin`,
-                  // which might be different, e.g. currently they're smaller for
-                  // "Rocket Theme", which results in gaps between the elements.
-                  itemSize={64}
+                <RovingTabindexProvider
+                  wrapperElementRef={fixedSizeListOuterRef}
                 >
-                  {({ index, style }) => {
-                    const item = contactsAndExtraItems[index]
+                  {/* Not using 'react-window' results in ~5 second rendering time
+                  if the user has 5000 contacts.
+                  (see https://github.com/deltachat/deltachat-desktop/issues/1830) */}
+                  <FixedSizeList
+                    itemCount={contactsAndExtraItems.length}
+                    itemKey={index => contactsAndExtraItems[index]}
+                    onItemsRendered={onItemsRendered}
+                    ref={ref}
+                    outerRef={fixedSizeListOuterRef}
+                    height={height}
+                    width='100%'
+                    // TODO fix: The size of each item is determined
+                    // by `--local-avatar-size` and `--local-avatar-vertical-margin`,
+                    // which might be different, e.g. currently they're smaller for
+                    // "Rocket Theme", which results in gaps between the elements.
+                    itemSize={64}
+                  >
+                    {({ index, style }) => {
+                      const item = contactsAndExtraItems[index]
 
-                    const el = (() => {
-                      switch (item) {
-                        case ExtraItemType.ADD_GROUP: {
-                          return (
-                            <PseudoListItem
-                              id='newgroup'
-                              cutoff='+'
-                              text={tx('menu_new_group')}
-                              onClick={() => setViewMode('createGroup')}
-                            />
-                          )
-                        }
-                        case ExtraItemType.ADD_BROADCAST_LIST: {
-                          return (
-                            <PseudoListItem
-                              id='newbroadcastlist'
-                              cutoff='+'
-                              text={tx('new_broadcast_list')}
-                              onClick={() => setViewMode('createBroadcastList')}
-                            />
-                          )
-                        }
-                        case ExtraItemType.ADD_CONTACT_QR_SCAN: {
-                          return (
-                            <PseudoListItem
-                              id='showqrcode'
-                              text={tx('menu_new_contact')}
-                              onClick={openQRScan}
-                            >
-                              <QRAvatar />
-                            </PseudoListItem>
-                          )
-                        }
-                        case ExtraItemType.ADD_CONTACT: {
-                          return (
-                            <PseudoListItemAddContact
-                              queryStr={queryStr.trim()}
-                              queryStrIsEmail={queryStrIsValidEmail}
-                              onClick={addContactOnClick}
-                            />
-                          )
-                        }
-                        default: {
-                          const contact: Type.Contact | undefined =
-                            contactCache[item]
-                          if (!contact) {
-                            // It's not loaded yet
-                            return null
+                      const el = (() => {
+                        switch (item) {
+                          case ExtraItemType.ADD_GROUP: {
+                            return (
+                              <PseudoListItem
+                                id='newgroup'
+                                cutoff='+'
+                                text={tx('menu_new_group')}
+                                onClick={() => setViewMode('createGroup')}
+                              />
+                            )
                           }
-                          return (
-                            <ContactListItem
-                              contact={contact}
-                              onClick={chooseContact}
-                              onContextMenu={
-                                contact.id !== C.DC_CONTACT_ID_SELF
-                                  ? ev => onContactContextMenu(contact, ev)
-                                  : undefined
-                              }
-                              showCheckbox={false}
-                              checked={false}
-                              showRemove={false}
-                            />
-                          )
+                          case ExtraItemType.ADD_BROADCAST_LIST: {
+                            return (
+                              <PseudoListItem
+                                id='newbroadcastlist'
+                                cutoff='+'
+                                text={tx('new_broadcast_list')}
+                                onClick={() =>
+                                  setViewMode('createBroadcastList')
+                                }
+                              />
+                            )
+                          }
+                          case ExtraItemType.ADD_CONTACT_QR_SCAN: {
+                            return (
+                              <PseudoListItem
+                                id='showqrcode'
+                                text={tx('menu_new_contact')}
+                                onClick={openQRScan}
+                              >
+                                <QRAvatar />
+                              </PseudoListItem>
+                            )
+                          }
+                          case ExtraItemType.ADD_CONTACT: {
+                            return (
+                              <PseudoListItemAddContact
+                                queryStr={queryStr.trim()}
+                                queryStrIsEmail={queryStrIsValidEmail}
+                                onClick={addContactOnClick}
+                              />
+                            )
+                          }
+                          default: {
+                            const contact: Type.Contact | undefined =
+                              contactCache[item]
+                            if (!contact) {
+                              // It's not loaded yet
+                              return null
+                            }
+                            return (
+                              <ContactListItem
+                                contact={contact}
+                                onClick={chooseContact}
+                                onContextMenu={
+                                  contact.id !== C.DC_CONTACT_ID_SELF
+                                    ? ev => onContactContextMenu(contact, ev)
+                                    : undefined
+                                }
+                                showCheckbox={false}
+                                checked={false}
+                                showRemove={false}
+                              />
+                            )
+                          }
                         }
-                      }
-                    })()
+                      })()
 
-                    return <div style={style}>{el}</div>
-                  }}
-                </FixedSizeList>
+                      return <div style={style}>{el}</div>
+                    }}
+                  </FixedSizeList>
+                </RovingTabindexProvider>
               )}
             </InfiniteLoader>
           )}
