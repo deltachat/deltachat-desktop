@@ -133,7 +133,7 @@ function ViewGroupInner(
   } = useGroup(accountId, chat)
 
   useEffect(() => {
-    onDCEvent(accountId, 'ContactsChanged', () => {
+    return onDCEvent(accountId, 'ContactsChanged', () => {
       BackendRemote.rpc
         .getContactsByIds(accountId, group.contactIds)
         .then(contacts => {
