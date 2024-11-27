@@ -7,7 +7,27 @@ mergeable:
         validate:
           - do: dependent
             changed:
-              file: 'src/**'
+              file: 'packages/frontend/**'
+              required: ['CHANGELOG.md']
+          - do: dependent
+            changed:
+              file: 'packages/runtime/**'
+              required: ['CHANGELOG.md']
+          - do: dependent
+            changed:
+              file: 'packages/shared/**'
+              required: ['CHANGELOG.md']
+          - do: dependent
+            changed:
+              file: 'packages/target-browser/**'
+              required: ['CHANGELOG.md']
+          - do: dependent
+            changed:
+              file: 'packages/target-electron/**'
+              required: ['CHANGELOG.md']
+          - do: dependent
+            changed:
+              file: 'packages/target-tauri/**'
               required: ['CHANGELOG.md']
           - do: dependent
             changed:

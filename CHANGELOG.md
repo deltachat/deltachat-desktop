@@ -18,6 +18,7 @@
 - accessibility: make settings keyboard-navigable #4319
 - Fix documentation for --allow-unsafe-core-replacement #4341
 - fix missing linebreaks in quotes #4360
+- avoid showing wrong menu items for blocked users #4353
 
 <a id="1_48_0"></a>
 
