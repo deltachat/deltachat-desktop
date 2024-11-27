@@ -13,6 +13,7 @@
 - enable Telegram-style Ctrl + ArrowUp to reply by default #4333
 - improve performance a little #4334
 - extend image max-height in messages
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.151.1`
 
 ## Fixed
 - "Disappearing Messages" dialog not reflecting the actual current value #4327
