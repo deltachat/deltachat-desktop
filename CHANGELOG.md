@@ -3,7 +3,7 @@
 ## [Unreleased][unreleased]
 
 ## Added
-- accessibility: arrow-key navigation for the list of chats, list of accounts #4224, #4291
+- accessibility: arrow-key navigation for the list of chats, list of accounts #4224, #4291, #4361
 - Add "Learn More" button to "Disappearing Messages" dialog #4330
 - new icon for Mac users
 - smooth-scroll to newly arriving messages instead of jumping instantly #4125
