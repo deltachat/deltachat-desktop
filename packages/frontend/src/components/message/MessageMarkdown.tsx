@@ -126,7 +126,10 @@ function renderElementPreview(elm: ParsedElement, key?: number): JSX.Element {
       return <span key={key}>{elm.c.label.map(renderElementPreview)} </span>
 
     case 'Linebreak':
-      return <span key={key}>{''}</span>
+      // In ChatListItem this will be collapsed by default.
+      // We need line breaks to be displayed for quoted messages
+      // and in the composer.
+      return <span key={key}>{'\n'}</span>
 
     case 'Tag':
     case 'EmailAddress':
