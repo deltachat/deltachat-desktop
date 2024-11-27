@@ -67,8 +67,8 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
   const _handleCredentialsChange = (id: string, value: string) => {
     let changeCredentials = {}
     if (id === 'certificate_checks') {
-      // Change to certificate_checks updates certificate checks configuration
-      // for all protocols.
+      // Change to certificate_checks updates certificate
+      // checks configuration for all protocols.
 
       changeCredentials = {
         imap_certificate_checks: value,
@@ -146,7 +146,10 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
   } = credentials
 
   // We assume that smtp_certificate_checks has the same value.
-  const certificate_checks = imap_certificate_checks
+  const certificate_checks =
+    imap_certificate_checks === C.DC_CERTCK_ACCEPT_INVALID_CERTIFICATES // deprecated value
+      ? C.DC_CERTCK_ACCEPT_INVALID
+      : imap_certificate_checks
 
   return (
     <I18nContext.Consumer>
@@ -298,7 +301,7 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
             >
               <option value={C.DC_CERTCK_AUTO}>{tx('automatic')}</option>
               <option value={C.DC_CERTCK_STRICT}>{tx('strict')}</option>
-              <option value={C.DC_CERTCK_ACCEPT_INVALID_CERTIFICATES}>
+              <option value={C.DC_CERTCK_ACCEPT_INVALID}>
                 {tx('accept_invalid_certificates')}
               </option>
             </DeltaSelect>
