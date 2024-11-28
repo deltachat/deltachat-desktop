@@ -21,6 +21,7 @@ import { VerifiedContactsRequiredDialog } from '../ProtectionStatusDialog'
 import InfiniteLoader from 'react-window-infinite-loader'
 import { AddMemberChip } from './AddMemberDialog'
 import styles from './styles.module.scss'
+import classNames from 'classnames'
 
 export function AddMemberInnerDialog({
   onCancel,
@@ -236,7 +237,7 @@ export function AddMemberInnerDialog({
             })}
             <input
               ref={inputRef}
-              className={'search-input ' + styles.groupMemberSearch}
+              className={classNames('search-input', styles.groupMemberSearch)}
               onChange={onSearchChange}
               onKeyDown={event => {
                 addContactOnKeyDown(event)

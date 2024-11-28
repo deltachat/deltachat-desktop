@@ -48,7 +48,7 @@ export default function SearchInput(props: Props) {
         autoFocus
         onChange={onChange}
         value={value}
-        className={classNames(styles.searchInput)}
+        className={classNames(styles.searchInput, 'no-drag')}
         ref={props.inputRef}
         spellCheck={false}
         aria-keyshortcuts='Control+K'

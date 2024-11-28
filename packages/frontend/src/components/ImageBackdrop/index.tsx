@@ -14,7 +14,7 @@ export default function ImageBackdrop({
   variant = 'welcome',
 }: PropsWithChildren<Props>) {
   return (
-    <div className={classNames(styles.imageBackdrop, styles[variant])}>
+    <div className={classNames(styles.imageBackdrop, styles[variant], 'drag')}>
       {children}
     </div>
   )

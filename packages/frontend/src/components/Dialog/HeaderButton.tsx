@@ -23,7 +23,10 @@ export default function HeaderButton({
   ...props
 }: Props) {
   return (
-    <button className={classNames(styles.headerButton, className)} {...props}>
+    <button
+      className={classNames(styles.headerButton, 'no-drag', className)}
+      {...props}
+    >
       <Icon
         className={styles.headerButtonIcon}
         icon={icon}

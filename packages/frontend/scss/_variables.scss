@@ -42,8 +42,7 @@ $z-index: (
   account-hover-info: 200,
 
   // toast for errors and success messages
-  absolute-positioning-helper: 1000,
-  context-menu-layer: 9999
+  absolute-positioning-helper: 1000
 );
 
 // setting z-index to 0 creates a new scope for children without changing the ordering of the parent element

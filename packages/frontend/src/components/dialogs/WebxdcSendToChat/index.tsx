@@ -93,7 +93,7 @@ export default function WebxdcSaveToChatDialog(props: Props) {
         )}
       >
         <input
-          className='search-input'
+          className='search-input no-drag'
           onChange={onSearchChange}
           value={queryStr}
           placeholder={tx('search')}

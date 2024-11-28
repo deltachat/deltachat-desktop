@@ -24,14 +24,13 @@ export function SmallScreenModeMacOSTitleBar() {
         height: '26px',
         lineHeight: '26px',
         textAlign: 'center',
-        //@ts-ignore
-        '-webkit-app-region': 'drag',
         flexShrink: 0,
         flexGrow: 0,
         backgroundColor: '#2c2c2c',
         color: hasFocus ? '#d2d2d2' : '#565656',
         fontWeight: 'bold',
       }}
+      className='drag'
     >
       {appWindowTitle}
     </div>

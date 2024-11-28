@@ -21,6 +21,7 @@
 - fix missing linebreaks in quotes #4360
 - avoid showing wrong menu items for blocked users #4353
 - fix: save message draft every 200ms if message text changed #3733
+- fix mac drag window issues #4300
 
 <a id="1_48_0"></a>
 

@@ -166,7 +166,7 @@ export default function MainScreen({ accountId }: Props) {
         !messageSectionShouldBeHidden ? 'chat-view-open' : ''
       }`}
     >
-      <div className='navbar-wrapper'>
+      <div className='navbar-wrapper drag'>
         <Navbar>
           {!chatListShouldBeHidden && (
             <NavbarGroupLeft>

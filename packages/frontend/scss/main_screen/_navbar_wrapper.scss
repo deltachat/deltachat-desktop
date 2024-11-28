@@ -1,7 +1,4 @@
 .navbar-wrapper {
-  // so it can be used to drag the window around
-  -webkit-app-region: drag;
-
   position: relative;
 
   .navbar-heading__button {
@@ -54,8 +51,27 @@
   }
 }
 
+.drag {
+  // so it can be used to drag the window around
+  -webkit-app-region: drag;
+}
+
 .no-drag,
-#hamburger-menu-button,
-#chat-list-search {
+input,
+button {
   -webkit-app-region: no-drag;
+}
+
+#drag-area-visualisation {
+  background-color: transparent;
+  opacity: 0.5;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  border: 0;
 }
