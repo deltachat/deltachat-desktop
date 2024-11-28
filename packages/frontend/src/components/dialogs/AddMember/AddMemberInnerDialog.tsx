@@ -229,10 +229,13 @@ export function AddMemberInnerDialog({
         <div className={styles.AddMemberChipsWrapper}>
           <div className={styles.AddMemberChips}>
             {contactIdsToAdd.map(contact => {
-              return AddMemberChip({
-                contact,
-                onRemoveClick: toggleMember,
-              })
+              return (
+                <AddMemberChip
+                  key={contact.id}
+                  contact={contact}
+                  onRemoveClick={toggleMember}
+                />
+              )
             })}
             <input
               ref={inputRef}
