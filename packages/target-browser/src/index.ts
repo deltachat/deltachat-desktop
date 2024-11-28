@@ -1,7 +1,7 @@
 import { basename, dirname, join } from 'path'
 import express from 'express'
 import https from 'https'
-import { readFile, stat } from 'fs/promises'
+import { readFile, stat, unlink } from 'fs/promises'
 import session from 'express-session'
 import { FileStore } from './session-store'
 import { authMiddleWare, CORSMiddleWare } from './middlewares'
@@ -22,6 +22,7 @@ import {
   localStorage,
   LOCALES_DIR,
   DATA_DIR,
+  DC_ACCOUNTS_DIR,
 } from './config'
 import { startDeltaChat } from './deltachat-rpc'
 import { helpRoute } from './help'
@@ -158,6 +159,21 @@ app.get('/blobs/:accountId/:filename', authMiddleWare, async (req, res) => {
     )
   }
   res.sendFile(filePath)
+})
+
+app.get('/download-backup/:filename', authMiddleWare, async (req, res) => {
+  const filePath = resolvePath(
+    join(DC_ACCOUNTS_DIR, 'backups'),
+    req.params.filename
+  )
+  res.download(filePath)
+  res.on('finish', () => {
+    setTimeout(() => {
+      unlink(filePath).then(() => {
+        log.info('deleted backup file 10s after download')
+      })
+    }, 10000)
+  })
 })
 
 // TODO

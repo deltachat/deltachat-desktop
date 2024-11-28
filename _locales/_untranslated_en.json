@@ -74,5 +74,11 @@
   },
   "react_more_emojis": {
     "message": "More emojis…"
+  },
+  "paste": {
+    "message": "Paste"
+  },
+  "contact_is_blocked": {
+    "message": "This contact is blocked"
   }
 }

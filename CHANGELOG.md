@@ -3,16 +3,23 @@
 ## [Unreleased][unreleased]
 
 ## Added
+- accessibility: arrow-key navigation for the list of chats, list of accounts #4224, #4291
 - Add "Learn More" button to "Disappearing Messages" dialog #4330
+- new icon for Mac users
+- smooth-scroll to newly arriving messages instead of jumping instantly #4125
+- make backup and key export work in browser #4303
 
 ## Changed
 - enable Telegram-style Ctrl + ArrowUp to reply by default #4333
 - improve performance a little #4334
+- extend image max-height in messages
 
 ## Fixed
 - "Disappearing Messages" dialog not reflecting the actual current value #4327
 - accessibility: make settings keyboard-navigable #4319
 - Fix documentation for --allow-unsafe-core-replacement #4341
+- fix missing linebreaks in quotes #4360
+- avoid showing wrong menu items for blocked users #4353
 - fix: save message draft every 200ms if message text changed #3733
 
 <a id="1_48_0"></a>

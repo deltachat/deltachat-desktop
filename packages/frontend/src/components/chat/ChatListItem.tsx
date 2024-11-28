@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import classNames from 'classnames'
 import { T, C } from '@deltachat/jsonrpc-client'
 
@@ -12,6 +12,7 @@ import { selectedAccountId } from '../../ScreenController'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { message2React } from '../message/MessageMarkdown'
+import { useRovingTabindex } from '../../contexts/RovingTabindex'
 
 const log = getLogger('renderer/chatlist/item')
 
@@ -173,11 +174,24 @@ function ChatListItemArchiveLink({
     },
   ])
 
+  const ref = useRef<HTMLButtonElement>(null)
+
+  const {
+    tabIndex,
+    onKeydown: tabindexOnKeydown,
+    setAsActiveElement: tabindexSetAsActiveElement,
+    className: tabindexClassName,
+  } = useRovingTabindex(ref)
+
   return (
     <button
+      ref={ref}
+      tabIndex={tabIndex}
       onClick={onClick}
+      onKeyDown={tabindexOnKeydown}
+      onFocus={tabindexSetAsActiveElement}
       onContextMenu={onContextMenu}
-      className={`chat-list-item archive-link-item ${
+      className={`chat-list-item archive-link-item ${tabindexClassName} ${
         isContextMenuActive ? 'context-menu-active' : ''
       }`}
     >
@@ -208,11 +222,25 @@ function ChatListItemError({
   isSelected?: boolean
 }) {
   log.info('Error Loading Chatlistitem ' + chatListItem.id, chatListItem.error)
+
+  const ref = useRef<HTMLButtonElement>(null)
+
+  const {
+    tabIndex,
+    onKeydown: tabindexOnKeydown,
+    setAsActiveElement: tabindexSetAsActiveElement,
+    className: tabindexClassName,
+  } = useRovingTabindex(ref)
+
   return (
     <button
+      ref={ref}
+      tabIndex={tabIndex}
       onClick={onClick}
+      onKeyDown={tabindexOnKeydown}
+      onFocus={tabindexSetAsActiveElement}
       onContextMenu={onContextMenu}
-      className={classNames('chat-list-item', {
+      className={classNames('chat-list-item', tabindexClassName, {
         isError: true,
         selected: isSelected,
       })}
@@ -258,11 +286,25 @@ function ChatListItemNormal({
   isSelected?: boolean
   hover?: boolean
 }) {
+  const ref = useRef<HTMLButtonElement>(null)
+
+  const {
+    tabIndex,
+    onKeydown: tabindexOnKeydown,
+    setAsActiveElement: tabindexSetAsActiveElement,
+    className: tabindexClassName,
+  } = useRovingTabindex(ref)
+  // TODO `setAsActiveElement` if `isSelected` and `activeElement === null`
+
   return (
     <button
+      ref={ref}
+      tabIndex={tabIndex}
       onClick={onClick}
+      onKeyDown={tabindexOnKeydown}
+      onFocus={tabindexSetAsActiveElement}
       onContextMenu={onContextMenu}
-      className={classNames('chat-list-item', {
+      className={classNames('chat-list-item', tabindexClassName, {
         'has-unread': chatListItem.freshMessageCounter > 0,
         'is-contact-request': chatListItem.isContactRequest,
         pinned: chatListItem.isPinned,
@@ -370,11 +412,26 @@ export const ChatListItemMessageResult = React.memo<{
   queryStr: string
 }>(props => {
   const { msr, onClick, queryStr } = props
+
+  const ref = useRef<HTMLButtonElement>(null)
+
+  const {
+    tabIndex,
+    onKeydown: tabindexOnKeydown,
+    setAsActiveElement: tabindexSetAsActiveElement,
+    className: tabindexClassName,
+  } = useRovingTabindex(ref)
+
   if (typeof msr === 'undefined') return <PlaceholderChatListItem />
+
   return (
     <button
+      ref={ref}
+      tabIndex={tabIndex}
       onClick={onClick}
-      className='pseudo-chat-list-item message-search-result'
+      onKeyDown={tabindexOnKeydown}
+      onFocus={tabindexSetAsActiveElement}
+      className={`pseudo-chat-list-item message-search-result ${tabindexClassName}`}
     >
       <div className='avatars'>
         <Avatar
