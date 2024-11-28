@@ -32,7 +32,12 @@ export function AddMemberDialog({
     refresh: refreshContacts,
   } = useLazyLoadedContacts(listFlags, queryStr)
   return (
-    <Dialog canOutsideClickClose={false} fixed onClose={onClose}>
+    <Dialog
+      canOutsideClickClose={false}
+      fixed
+      onClose={onClose}
+      data-testid='add-member-dialog'
+    >
       {AddMemberInnerDialog({
         onOk: addMembers => {
           onOk(addMembers)
@@ -77,13 +82,13 @@ export const AddMemberChip = (props: {
         <div>{contact.displayName}</div>
         {contact.isVerified && <InlineVerifiedIcon />}
       </div>
-      <div
+      <button
         className={styles.removeMember}
         onClick={() => onRemoveClick(contact)}
         aria-label='Remove'
       >
         <Icon className={styles.removeIcon} icon={'cross'} size={12} />
-      </div>
+      </button>
     </div>
   )
 }

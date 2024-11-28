@@ -16,6 +16,7 @@ import RadioGroup from '../RadioGroup'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 enum DisappearingMessageDuration {
   OFF = Timespans.ZERO_SECONDS,
@@ -134,7 +135,12 @@ export default function DisappearingMessage({
         </DialogContent>
       </DialogBody>
       <DialogFooter>
-        <FooterActions>
+        <FooterActions align='spaceBetween'>
+          <FooterActionButton
+            onClick={() => runtime.openHelpWindow('ephemeralmsgs')}
+          >
+            {tx('learn_more')}
+          </FooterActionButton>
           <FooterActionButton onClick={onClose}>
             {tx('cancel')}
           </FooterActionButton>

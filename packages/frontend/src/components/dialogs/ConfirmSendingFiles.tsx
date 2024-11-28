@@ -13,7 +13,7 @@ import type { DialogProps } from '../../contexts/DialogContext'
 
 type Props = {
   onClick: (isConfirmed: boolean) => void
-  sanitizedFileList: Pick<File, 'name' | 'type'>[]
+  sanitizedFileList: Pick<File, 'name'>[]
   chatName: string
 } & DialogProps
 

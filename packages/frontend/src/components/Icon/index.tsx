@@ -14,19 +14,21 @@ export type IconName =
   | 'code-tags'
   | 'cross'
   | 'devices'
+  | 'download'
   | 'eye-off'
   | 'eye-open'
   | 'favorite'
   | 'forum'
   | 'image'
+  | 'image_outline'
   | 'info'
   | 'lead-pencil'
   | 'list'
   | 'map'
-  | 'media'
   | 'minus'
   | 'more'
   | 'open_in_new'
+  | 'palette'
   | 'paperclip'
   | 'person'
   | 'person-filled'
@@ -40,17 +42,23 @@ export type IconName =
   | 'settings'
   | 'swap_vert'
   | 'swap_hor'
-  | 'tint'
   | 'undo'
   | 'upload-file'
 
-type Props = {
+type PropsBase = {
   className?: string
   onClick?: (ev: Event | React.SyntheticEvent<Element, Event>) => void
   icon: IconName
   coloring?: keyof Omit<typeof styles, 'icon'>
   size?: number
   rotation?: number
+}
+type JustIconProps = PropsBase & {
+  /** Consider using IconButton instead */
+  onClick?: undefined
+}
+type IconButtonProps = PropsBase & {
+  'aria-label': string
 }
 
 export default function Icon({
@@ -59,8 +67,7 @@ export default function Icon({
   rotation = 0,
   icon,
   className,
-  onClick,
-}: Props) {
+}: JustIconProps) {
   return (
     <span
       className={classNames(
@@ -68,7 +75,6 @@ export default function Icon({
         coloring && styles[coloring],
         className
       )}
-      onClick={onClick}
       style={{
         transform: `rotate(${rotation}deg)`,
         WebkitMaskImage: `url(./images/icons/${icon}.svg)`,
@@ -76,5 +82,19 @@ export default function Icon({
         width: `${size}px`,
       }}
     />
+  )
+}
+
+export function IconButton({
+  coloring,
+  size,
+  rotation,
+  icon,
+  ...rest
+}: IconButtonProps) {
+  return (
+    <button {...rest} className={classNames(styles.iconButton)}>
+      <Icon coloring={coloring} size={size} rotation={rotation} icon={icon} />
+    </button>
   )
 }

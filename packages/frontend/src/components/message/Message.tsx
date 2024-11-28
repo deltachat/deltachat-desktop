@@ -805,6 +805,7 @@ export const Quote = ({
                 quote.text.slice(0, 3000 /* limit quoted message size */) || ''
               }
               disableJumbomoji
+              nonInteractiveContent
             />
           </div>
         </div>

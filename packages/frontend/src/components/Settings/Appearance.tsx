@@ -1,4 +1,3 @@
-import { join } from 'path'
 import React, { useEffect, useState } from 'react'
 
 import { ThemeManager } from '../../ThemeManager'
@@ -23,6 +22,7 @@ import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
 import Icon from '../Icon'
 import Callout from '../Callout'
 import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
+import { getBackgroundImageStyle } from '../message/MessageListAndComposer'
 
 const log = getLogger('renderer/settings/appearance')
 
@@ -79,7 +79,7 @@ export default function Appearance({
 
     openDialog(SmallSelectDialog, {
       values,
-      selectedValue: activeTheme,
+      initialSelectedValue: activeTheme,
       title: tx('pref_theme'),
       onSelect,
       onCancel,
@@ -160,7 +160,9 @@ function BackgroundSelector({
     }
   }, [onChange, colorInput])
 
-  const openColorInput = (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const openColorInput = (
+    ev: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     // opens the color input and sets its offset so it lines up with the button
     if (colorInput) {
       const eventPos = mouseEventToPosition(ev)
@@ -184,7 +186,7 @@ function BackgroundSelector({
 
   const onButton = async (
     type: SetBackgroundAction,
-    ev: React.MouseEvent<HTMLDivElement, MouseEvent>
+    ev: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     const { defaultPath, setLastPath } = rememberLastUsedPath(
       LastUsedSlot.BackgroundImage
@@ -198,23 +200,31 @@ function BackgroundSelector({
         onChange('var(--chatViewBg)')
         break
       case SetBackgroundAction.customImage:
-        url = await runtime.showOpenFileDialog({
-          title: 'Select Background Image',
-          filters: [
-            { name: 'Images', extensions: ['jpg', 'png', 'gif', 'webp'] },
-            { name: 'All Files', extensions: ['*'] },
-          ],
-          properties: ['openFile'],
-          defaultPath,
-        })
+        url = (
+          await runtime.showOpenFileDialog({
+            title: 'Select Background Image',
+            filters: [
+              { name: 'Images', extensions: ['jpg', 'png', 'gif', 'webp'] },
+              { name: 'All Files', extensions: ['*'] },
+            ],
+            properties: ['openFile'],
+            defaultPath,
+          })
+        )[0]
         if (!url) {
           break
         }
-        setLastPath(url)
+        if (runtime.getRuntimeInfo().target !== 'browser') {
+          setLastPath(url)
+        }
         SettingsStoreInstance.effect.setDesktopSetting(
           'chatViewBgImg',
           await runtime.saveBackgroundImage(url, false)
         )
+        if (runtime.getRuntimeInfo().target === 'browser') {
+          // browser implementation of showOpenFileDialog created a temp file that we can now remove again
+          runtime.removeTempFile(url)
+        }
         break
       case SetBackgroundAction.presetImage:
         SettingsStoreInstance.effect.setDesktopSetting(
@@ -241,13 +251,7 @@ function BackgroundSelector({
         <div
           style={{
             ...(desktopSettings.chatViewBgImg?.startsWith('img: ')
-              ? {
-                  backgroundImage: `url("file://${join(
-                    runtime.getConfigPath(),
-                    'background/',
-                    desktopSettings.chatViewBgImg.slice(5)
-                  )}")`,
-                }
+              ? getBackgroundImageStyle(desktopSettings)
               : {
                   backgroundColor: desktopSettings.chatViewBgImg?.slice(7),
                   backgroundImage: 'unset',
@@ -258,7 +262,7 @@ function BackgroundSelector({
           className={'background-preview'}
         />
         <div className={'background-options'}>
-          <div
+          <button
             onClick={onButton.bind(null, SetBackgroundAction.default)}
             style={{
               backgroundImage: 'var(--chatViewBgImgPath)',
@@ -267,25 +271,25 @@ function BackgroundSelector({
             }}
             aria-label={tx('pref_background_default')}
           />
-          <div
+          <button
             onClick={onButton.bind(null, SetBackgroundAction.defaultColor)}
             style={{ backgroundColor: 'var(--chatViewBg)' }}
             aria-label={tx('pref_background_default_color')}
           />
-          <div
+          <button
             onClick={onButton.bind(null, SetBackgroundAction.customImage)}
             className='custom-image'
             aria-label={tx('pref_background_custom_image')}
           >
-            <Icon icon='media' size={30} />
-          </div>
-          <div
+            <Icon icon='image_outline' size={36} coloring='iconColorCSSVar' />
+          </button>
+          <button
             onClick={onButton.bind(null, SetBackgroundAction.customColor)}
             className='custom-color'
             aria-label={tx('pref_background_custom_color')}
           >
-            <Icon icon='tint' size={30} />
-          </div>
+            <Icon icon='palette' size={36} coloring='iconColorCSSVar' />
+          </button>
         </div>
       </div>
       <div className={'background-default-images'}>
@@ -299,7 +303,7 @@ function BackgroundSelector({
           'nz-beach.webp',
           'petito-moreno.webp',
         ].map(elem => (
-          <div
+          <button
             onClick={onButton.bind(null, SetBackgroundAction.presetImage)}
             style={{
               backgroundImage: `url(./images/backgrounds/thumb/${elem})`,
@@ -315,7 +319,6 @@ function BackgroundSelector({
 
 async function setThemeFunction(address: string) {
   try {
-    runtime.resolveThemeAddress(address)
     await runtime.setDesktopSetting('activeTheme', address)
     return true
   } catch (error) {

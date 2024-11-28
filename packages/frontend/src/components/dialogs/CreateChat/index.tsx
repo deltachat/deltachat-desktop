@@ -456,7 +456,6 @@ export function CreateGroup(props: CreateGroupProps) {
           />
           <ContactList
             contacts={groupContacts}
-            onClick={() => {}}
             showRemove
             onRemoveClick={c => {
               removeGroupMember(c)
@@ -583,7 +582,6 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
             />
             <ContactList
               contacts={broadcastContacts}
-              onClick={() => {}}
               showRemove
               onRemoveClick={c => {
                 removeBroadcastRecipient(c)
@@ -764,7 +762,7 @@ export function useGroupImage(image: string | null) {
     const { defaultPath, setLastPath } = rememberLastUsedPath(
       LastUsedSlot.GroupImage
     )
-    const file = await runtime.showOpenFileDialog({
+    const [file] = await runtime.showOpenFileDialog({
       title: tx('select_group_image_desktop'),
       filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif', 'webp'] }],
       properties: ['openFile'],

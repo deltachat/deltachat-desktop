@@ -14,10 +14,6 @@
     object-fit: contain;
     user-select: none;
   }
-
-  video {
-    width: 95vw;
-  }
 }
 
 .btn-wrapper {
@@ -26,25 +22,11 @@
   background-color: rgba(0, 0, 0, 0.75);
   border-radius: 3px;
   display: flex;
+  gap: 5px;
 
   right: 8px;
   top: 6px;
   padding: 5px;
-
-  .download-btn {
-    height: 32px;
-    width: 32px;
-    vertical-align: text-bottom;
-    @include color-svg('./images/download.svg', var(--fullScreenMediaButtons));
-    // to offset a bit visual center of the button
-    mask-position: 0px 2px;
-    cursor: pointer;
-    margin-right: 5px;
-
-    &:hover {
-      background-color: var(--fullScreenMediaButtons);
-    }
-  }
 }
 
 .media-previous-button,

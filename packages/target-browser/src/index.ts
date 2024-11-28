@@ -1,7 +1,7 @@
 import { basename, dirname, join } from 'path'
 import express from 'express'
 import https from 'https'
-import { readFile, stat } from 'fs/promises'
+import { readFile, stat, unlink } from 'fs/promises'
 import session from 'express-session'
 import { FileStore } from './session-store'
 import { authMiddleWare, CORSMiddleWare } from './middlewares'
@@ -15,17 +15,21 @@ import {
   ENV_WEB_TRUST_FIRST_PROXY,
   DIST_DIR,
   ENV_WEB_PASSWORD,
+  NODE_ENV,
   ENV_WEB_PORT,
   PRIVATE_CERTIFICATE_CERT,
   PRIVATE_CERTIFICATE_KEY,
   localStorage,
   LOCALES_DIR,
+  DATA_DIR,
+  DC_ACCOUNTS_DIR,
 } from './config'
 import { startDeltaChat } from './deltachat-rpc'
 import { helpRoute } from './help'
 import { cleanupLogFolder, createLogHandler } from './log-handler'
 import { getLogger, setLogHandler } from '@deltachat-desktop/shared/logger'
 import { RCConfig } from './rc-config'
+import { readThemeDir } from './themes'
 
 const logHandler = createLogHandler()
 setLogHandler(logHandler.log, RCConfig)
@@ -67,8 +71,13 @@ app.use(sessionParser)
 app.use(CORSMiddleWare)
 
 app.get('/', (req, res) => {
+  let startPage = 'main.html'
+  if (NODE_ENV === 'test') {
+    req.session.isAuthenticated = true
+    startPage = 'test.html'
+  }
   if (req.session.isAuthenticated) {
-    res.sendFile(join(DIST_DIR, 'main.html'))
+    res.sendFile(join(DIST_DIR, startPage))
   } else {
     res.status(401)
     return res.sendFile(join(DIST_DIR, 'login.html')) // TODO some nice site
@@ -86,19 +95,19 @@ app.post(
   '/authenticate',
   express.urlencoded({ extended: true }),
   (req, res) => {
-    // check password
     if (req.body?.password === ENV_WEB_PASSWORD) {
+      // check password
       req.session.isAuthenticated = true
       // redirect to root (/)
       res.redirect('/')
     } else {
       res.status(401)
       return res.send(`<html>
-<head></head>
-<body>
-    Password wrong, <a href="/">go back to login</a>
-</body>
-</html>`)
+    <head></head>
+    <body>
+        Password wrong, <a href="/">go back to login</a>
+    </body>
+    </html>`)
     }
   }
 )
@@ -152,14 +161,35 @@ app.get('/blobs/:accountId/:filename', authMiddleWare, async (req, res) => {
   res.sendFile(filePath)
 })
 
+app.get('/download-backup/:filename', authMiddleWare, async (req, res) => {
+  const filePath = resolvePath(
+    join(DC_ACCOUNTS_DIR, 'backups'),
+    req.params.filename
+  )
+  res.download(filePath)
+  res.on('finish', () => {
+    setTimeout(() => {
+      unlink(filePath).then(() => {
+        log.info('deleted backup file 10s after download')
+      })
+    }, 10000)
+  })
+})
+
 // TODO
 app.get('/stickers/:account/:?pack/:filename', authMiddleWare, (req, res) => {
   //TODO (also not sure how to make the pack optional)
   res.send('req.params' + JSON.stringify(req.params))
 })
 
+app.use('/background', express.static(join(DATA_DIR, 'background')))
+
 app.use('/backend-api', BackendApiRoute)
 app.use(helpRoute)
+
+app.get('/themes.json', async (req, res) => {
+  res.json(await readThemeDir())
+})
 
 const sslserver = https.createServer(
   {

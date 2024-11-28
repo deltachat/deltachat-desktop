@@ -1,6 +1,14 @@
 .switchWrapper {
+  position: relative;
+  margin-left: 10px;
+
   & input {
-    display: none;
+    // Hide it, but keep in DOM purely for accessibility reasons
+    // (e.g. the outline).
+    appearance: none;
+    position: absolute;
+    inset: 0;
+    outline-offset: 5px;
   }
 }
 
@@ -13,7 +21,6 @@
   display: inline-block;
   vertical-align: middle;
 
-  margin-left: 10px;
   margin-top: 1px;
   user-select: none;
   cursor: pointer;

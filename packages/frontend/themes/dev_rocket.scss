@@ -203,13 +203,6 @@ $scrollbarTransparency: 0.5;
     border-radius: 0;
     float: none;
     position: static;
-
-    .download-btn {
-      background-color: rgb(160, 160, 160);
-      &:hover {
-        background-color: rgb(160, 160, 160);
-      }
-    }
   }
 
   .attachment-view {

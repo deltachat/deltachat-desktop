@@ -28,17 +28,23 @@ rustls-cert-gen -o data/certificate
 Linux / MacOS:
 
 ```sh
-WEB_PASSWORD="my_passwort" pnpm run start
+WEB_PASSWORD="my_password" pnpm run start
 ```
 
 Windows (Powershell):
 
 ```pwsh
-$env:WEB_PASSWORD="my_passwort"
+$env:WEB_PASSWORD="my_password"
 pnpm run start
 ```
 
-Then point your browser to <https://localhost:3000> and acept the locally signed certificate to continue.
+or add a .env file with the password see [env.example](.env.example)
+
+From the root of this repo you can start the server with
+
+`pnpm start:browser`
+
+Then point your browser to <https://localhost:3000> and accept the locally signed certificate to continue.
 
 > If you get an "The connection was reset"-Error, then you have likely forgotten to use http**s** instead of http.
 

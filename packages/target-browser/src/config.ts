@@ -2,8 +2,11 @@ import { LocalStorage } from 'node-localstorage'
 import { existsSync, mkdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'path'
+import { config } from 'dotenv'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
+
+config({ path: join(__dirname, '../') + '.env' })
 
 // Directories & Files
 export const DIST_DIR = join(__dirname)
@@ -14,17 +17,23 @@ export const PRIVATE_CERTIFICATE_KEY = join(
   'certificate/cert.key.pem'
 )
 export const PRIVATE_CERTIFICATE_CERT = join(DATA_DIR, 'certificate/cert.pem')
-export const DC_ACCOUNTS_DIR = join(DATA_DIR, 'accounts')
+export let DC_ACCOUNTS_DIR = join(DATA_DIR, 'accounts')
 
 export const LOCALES_DIR = join(__dirname, '../../../_locales')
 
 // ENV Vars
 export const ENV_WEB_PASSWORD = process.env['WEB_PASSWORD']
-export const ENV_WEB_PORT = process.env['WEB_PORT'] || 3000
+export const ENV_WEB_PORT = process.env['WEB_PORT'] || 3000 // currently only port 3000 is supported
 // set this to one if you use this behind a proxy
 export const ENV_WEB_TRUST_FIRST_PROXY = Boolean(
   process.env['WEB_TRUST_FIRST_PROXY']
 )
+
+if (process.env['DC_ACCOUNTS_DIR']) {
+  DC_ACCOUNTS_DIR = join(__dirname, process.env['DC_ACCOUNTS_DIR'])
+}
+
+export const NODE_ENV = (process.env['NODE_ENV'] ?? 'production').toLowerCase()
 
 if (!existsSync(DATA_DIR)) {
   /* ignore-console-log */
@@ -44,7 +53,7 @@ if (!existsSync(PRIVATE_CERTIFICATE_KEY)) {
   process.exit(1)
 }
 
-if (!ENV_WEB_PASSWORD) {
+if (!ENV_WEB_PASSWORD && NODE_ENV !== 'test') {
   /* ignore-console-log */
   console.log(
     `\n[ERROR]: Environment Variable WEB_PASSWORD is not set. You need to set it.\n`

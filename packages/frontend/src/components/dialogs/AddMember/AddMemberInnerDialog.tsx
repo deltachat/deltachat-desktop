@@ -191,7 +191,7 @@ export function AddMemberInnerDialog({
         <PseudoListItemAddContact
           queryStr={queryStr}
           queryStrIsEmail={false}
-          onClick={() => {}}
+          onClick={undefined}
         />
       )
     }

@@ -42,8 +42,14 @@ export function getBackgroundImageStyle(
     }
     if (bgImg.startsWith('img: ')) {
       const filePath = bgImg.slice(5)
-      const bgImgPath = join(runtime.getConfigPath(), 'background/', filePath)
-      style.backgroundImage = `url("file://${bgImgPath}")`
+      style.backgroundImage =
+        runtime.getRuntimeInfo().target === 'browser'
+          ? `url("/${join('background/', filePath)}")`
+          : `url("file://${join(
+              runtime.getConfigPath(),
+              'background/',
+              filePath
+            )}")`
     } else if (bgImg.startsWith('color: ')) {
       style.backgroundColor = bgImg.slice(7)
       style.backgroundImage = 'none'
@@ -175,9 +181,12 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
 
         for (const file of sanitizedFileList) {
           const path = await writeTempFileFromFile(file)
+          const msgViewType: Viewtype = file.type.startsWith('image')
+            ? 'Image'
+            : 'File'
           sendMessage(accountId, chat.id, {
             file: path,
-            viewtype: 'File',
+            viewtype: msgViewType,
           }).then(() => {
             // start sending other files, don't wait until last file is sent
             runtime.removeTempFile(path)

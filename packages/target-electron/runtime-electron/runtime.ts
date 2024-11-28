@@ -166,9 +166,6 @@ class ElectronRuntime implements Runtime {
   getActiveTheme(): Promise<{ theme: Theme; data: string } | null> {
     return ipcBackend.invoke('themes.getActiveTheme')
   }
-  resolveThemeAddress(address: string): Promise<string> {
-    return ipcBackend.invoke('themes.getAvailableThemes', address)
-  }
   async clearWebxdcDOMStorage(accountId: number): Promise<void> {
     ipcBackend.invoke('webxdc.clearWebxdcDOMStorage', accountId)
   }
@@ -271,11 +268,13 @@ class ElectronRuntime implements Runtime {
       return blob
     }
   }
-  async showOpenFileDialog(options: RuntimeOpenDialogOptions): Promise<string> {
+  async showOpenFileDialog(
+    options: RuntimeOpenDialogOptions
+  ): Promise<string[]> {
     const { filePaths } = await (<ReturnType<typeof dialog.showOpenDialog>>(
       ipcBackend.invoke('fileChooser', options as Electron.OpenDialogOptions)
     ))
-    return filePaths && filePaths[0]
+    return filePaths
   }
   openLink(link: string): void {
     if (link.startsWith('http:') || link.startsWith('https:')) {

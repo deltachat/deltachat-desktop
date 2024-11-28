@@ -277,7 +277,7 @@
     <string name="select_more">Több kiválasztása</string>
     <string name="menu_edit_name">Név szerkesztése</string>
     <!-- The placeholder will be replaced by the name the contact gave themself (if any) or by an e-mail address. -->
-    <string name="edit_name_explain">Állítson be egy becenevet a(z) „%1$s” nevű ismerősének. Hagyja üresen a partnere által választott név megjelenítéséhez.</string>
+    <string name="edit_name_explain">Állítson be egy becenevet a(z) „%1$s” nevű ismerősének. Hagyja üresen az ismerőse által választott név megjelenítéséhez.</string>
     <!-- The placeholder will be replaced by the name the contact gave themself (if any) or by an e-mail address. -->
     <string name="edit_name_placeholder">Becenév megadása „%1$s“ számára</string>
     <string name="menu_settings">Beállítások</string>
@@ -446,8 +446,8 @@
     <string name="send_file_to">„%1$s” küldése…</string>
     <!-- title shown above a list contacts where one should be selected (eg. when a webxdc attempts to send a message to a chat) -->
     <string name="send_message_to">Üzenet küldése…</string>
-    <string name="enable_realtime">Valósidejű Webxdc-csatornák</string>
-    <string name="enable_realtime_explain">A Webxdc valós idejű API-k engedélyezése az eszközök közötti közvetlen kapcsolatok létrehozásához.</string>
+    <string name="enable_realtime">Valós idejű alkalmazások</string>
+    <string name="enable_realtime_explain">Valós idejű kapcsolatok engedélyezése a csevegésekben megosztott alkalmazásokhoz. Ha engedélyezve van, az ismerősei képesek lehetnek felfedezni az Ön IP-címét, amikor elindít egy alkalmazást.</string>
 
     <!-- map -->
     <string name="filter_map_on_time">Helyszínek megjelenítése időkeretben</string>
@@ -621,10 +621,15 @@
     <string name="proxy_use_proxy">Proxy használata</string>
     <string name="proxy_add">Proxy hozzáadása</string>
     <string name="proxy_add_explain">Támogatott proxytípusok: HTTP(S), SOCKS5 és ShadowSOCKS</string>
+    <string name="proxy_add_url_hint">Adja meg a proxy hivatkozását</string>
+    <string name="proxy_invalid">Érvénytelen vagy nem támogatott proxy</string>
     <string name="proxy_list_header">Mentett proxyk</string>
     <string name="proxy_delete">Proxy törlése</string>
     <string name="proxy_delete_explain">Biztosan törli a következőt: „%1$s”?</string>
     <string name="proxy_use_proxy_confirm">Biztosan használni akarja a következő proxyt: „%1$s”?</string>
+    <string name="proxy_share_explain">Az ismerősei a QR-kód beolvasásával hozzáadhatják ezt a proxyt.</string>
+    <string name="proxy_share_link">Hivatkozás megosztása</string>
+
     <!-- deprecated -->
     <string name="login_socks5">SOCKS5</string>
     <string name="login_socks5_use_socks5">SOCKS5 használata</string>
@@ -649,6 +654,9 @@
     <string name="accept_invalid_certificates">Érvénytelen tanúsítványok elfogadása</string>
     <string name="switch_account">Profilváltás</string>
     <string name="add_account">Profil hozzáadása</string>
+    <string name="profile_tag">Privát címke</string>
+    <string name="profile_tag_hint">Például: „Munka”, „Család”</string>
+    <string name="profile_tag_explain">A címke csak az Ön számára jelenik meg; segít megkülönböztetni a profiljait.</string>
     <string name="delete_account">Profil törlése</string>
     <string name="delete_account_ask">Biztosan törölni szeretné a profiladatait?</string>
     <string name="delete_account_explain_with_name">A(z) „%s” nevű profilhoz tartozó mindet adat ezen az eszközön törölve lesz,  beleértve a végpontok közötti titkosítás beállításait, a névjegyeket, a csevegéseket, az üzeneteket és a médiát. Ez a művelet nem vonható vissza. </string>
@@ -715,7 +723,7 @@
     <!-- Translators: Must indicate that there is no guarantee as the system may not honor our request. -->
     <string name="pref_incognito_keyboard_explain">Tanulás letiltásának kérése a billentyűzettől</string>
     <string name="pref_read_receipts">Olvasási visszaigazolások</string>
-    <string name="pref_read_receipts_explain">Ha az olvasási visszaigazolások le vannak tiltva, ön sem fogja látni mások olvasási visszaigazolásait.</string>
+    <string name="pref_read_receipts_explain">Ha az olvasási visszaigazolások le vannak tiltva, így Ön sem fogja látni mások olvasási visszaigazolásait.</string>
     <string name="pref_server">Kiszolgáló</string>
     <string name="pref_encryption">Titkosítás</string>
     <string name="pref_manage_keys">Privát kulcsok kezelése</string>
@@ -757,7 +765,7 @@
     <string name="pref_imap_folder_handling">IMAP-mappák kezelése</string>
     <string name="pref_imap_folder_warn_disable_defaults">Ha megváltoztatja ezt a beállítást, győződjön meg arról, hogy a kiszolgálója és a többi kliense is ennek megfelelően van beállítva.\n\nMáskülönben előfordulhat, hogy a dolgok egyáltalán nem fognak működni.</string>
     <string name="pref_watch_sent_folder">Elküldött üzenetek mappájának figyelése</string>
-    <string name="pref_send_copy_to_self">Másolat küldése önmagának</string>
+    <string name="pref_send_copy_to_self">Másolat küldése Önmagának</string>
     <!-- for classic email, we use the classical term "Account" -->
     <string name="pref_send_copy_to_self_explain">Szükséges, ha ezt a fiókot több eszközön is használja.</string>
     <string name="pref_auto_folder_moves">Automatikus áthelyezés a DeltaChat mappába</string>
@@ -767,7 +775,7 @@
     <string name="pref_show_emails">Klasszikus e-mailek megjelenítése</string>
     <string name="pref_show_emails_no">Nem, csak csevegések</string>
     <string name="pref_show_emails_accepted_contacts">Elfogadott ismerősök számára</string>
-    <string name="pref_show_emails_all">Mind</string>
+    <string name="pref_show_emails_all">Összes</string>
     <string name="pref_experimental_features">Kísérleti funkciók</string>
     <string name="pref_on_demand_location_streaming">On-Demand folyamatos helyszín megosztás</string>
     <string name="pref_developer_mode">Fejlesztői mód</string>

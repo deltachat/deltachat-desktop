@@ -20,6 +20,7 @@ import styles from './styles.module.scss'
 
 import { C, type T } from '@deltachat/jsonrpc-client'
 import { openMapWebxdc } from '../../system-integration/webxdc'
+import { useRovingTabindex } from '../../contexts/RovingTabindex'
 
 type Props = {
   account: T.Account
@@ -121,10 +122,12 @@ export default function AccountItem({
           ActionEmitter.emitAction(KeybindAction.Settings_Open)
         }, 0)
       },
+      dataTestid: 'open-settings-menu-item',
     },
     {
       label: tx('delete_account'),
       action: openAccountDeletionScreen.bind(null, account.id),
+      dataTestid: 'delete-account-menu-item',
     },
   ])
 
@@ -185,9 +188,14 @@ export default function AccountItem({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSelected, window.__screen])
 
+  const rovingTabindex = useRovingTabindex(ref)
+  // TODO `rovingTabindex.setAsActiveElement()` when the active account
+  // gets switched, e.g. via clicking on a message notification
+  // for a different account, and upon initial render.
+
   return (
     <button
-      className={classNames(styles.account, {
+      className={classNames(styles.account, rovingTabindex.className, {
         [styles.active]: isSelected,
         [styles['context-menu-active']]: isContextMenuActive,
       })}
@@ -196,7 +204,11 @@ export default function AccountItem({
       onMouseEnter={() => updateAccountForHoverInfo(account, true)}
       onMouseLeave={() => updateAccountForHoverInfo(account, false)}
       x-account-sidebar-account-id={account.id}
+      data-testid={`account-item-${account.id}`}
       ref={ref}
+      tabIndex={rovingTabindex.tabIndex}
+      onFocus={rovingTabindex.setAsActiveElement}
+      onKeyDown={rovingTabindex.onKeydown}
     >
       {account.kind == 'Configured' ? (
         <div className={styles.avatar}>

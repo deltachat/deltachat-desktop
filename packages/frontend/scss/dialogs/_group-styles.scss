@@ -10,6 +10,8 @@ input.group-name-input {
   margin-left: 0;
   user-select: text;
   width: 100%;
+  // A blinking cursor is enough in terms of visibility. Or is it??
+  outline: none;
 }
 
 .group-separator {
@@ -40,7 +42,13 @@ input.group-name-input {
 .group-image-wrapper {
   position: relative;
 
+  .group-image {
+    @include button-reset;
+  }
+
   .group-image-edit-button {
+    @include button-reset;
+
     position: absolute;
     width: 28px;
     height: 28px;

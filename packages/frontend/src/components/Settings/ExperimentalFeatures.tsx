@@ -102,19 +102,6 @@ export function ExperimentalFeatures({ settingsStore }: Props) {
         // 853b584251a5dacf60ebc616f7fb10edffb5c5e5/src/main/index.ts#L12-L21
         description='Careful: opening developer tools on a malicious webxdc app could lead to the app getting access to the Internet'
       />
-      <CoreSettingsSwitch
-        label={tx('enable_realtime')}
-        settingsKey='webxdc_realtime_enabled'
-        description={tx('enable_realtime_explain')}
-      />
-      {/* If this stops being experimental, add it to the
-      Keyboard shortcuts help (Ctrl + /), and KEYBINDINGS.md.
-      And don't forget about "Esc" to cancel reply */}
-      <DesktopSettingsSwitch
-        settingsKey='enableCtrlUpToReplyShortcut'
-        label={tx('pref_ctrl_up_down_to_reply')}
-        description={tx('explain_ctrl_up_down_to_reply')}
-      />
     </>
   )
 }

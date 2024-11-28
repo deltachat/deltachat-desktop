@@ -1,3 +1,5 @@
+@import '../../../scss/mixins';
+
 .icon {
   background-color: var(--colorPrimary);
   display: inline-block;
@@ -21,9 +23,19 @@
     background-color: var(--fullScreenMediaButtons);
   }
 
+  &.iconColorCSSVar {
+    background-color: var(--icon-color);
+  }
+
   &.remove {
     &:hover {
       background-color: #bf0000;
     }
   }
+}
+.iconButton {
+  @include button-reset;
+  // Ensure that the button wraps the icon tightly and doesn't produce
+  // extra height.
+  display: flex;
 }

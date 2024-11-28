@@ -1,12 +1,15 @@
 .message-attachment-media {
+  @include button-reset;
+  display: block;
+
   // Entirely to ensure that images are centered if they aren't full width of bubble
   text-align: center;
   position: relative;
-  cursor: pointer;
 
-  margin-left: -12px;
-  margin-right: -12px;
-  margin-top: -10px;
+  margin-left: calc(-1 * var(--msg-container-padding-horizontal));
+  margin-right: calc(-1 * var(--msg-container-padding-horizontal));
+  width: calc(100% + 2 * var(--msg-container-padding-horizontal));
+  margin-top: calc(-1 * var(--msg-container-padding-top));
   margin-bottom: -12px;
 
   border-radius: 16px;
@@ -17,8 +20,9 @@
   & > .attachment-content {
     object-fit: scale-down;
     object-position: center;
-    height: 200px;
+    max-height: 600px;
     max-width: 100%;
+    min-width: 80px;
 
     // The padding on the bottom of the bubble produces 4 extra pixels of space at the
     //   bottom, so this doesn't match up with the padding numbers above.
@@ -69,7 +73,19 @@
   }
 }
 
+.message.type-sticker {
+  .message-attachment-media {
+    & > .attachment-content {
+      max-height: 300px;
+      max-width: 80%;
+    }
+  }
+}
+
 .message-attachment-broken-media {
+  @include button-reset;
+  display: block;
+
   font-size: 11px;
   line-height: 16px;
   letter-spacing: 0.3px;
@@ -99,9 +115,10 @@
 }
 
 .message-attachment-generic {
+  @include button-reset;
+
   display: flex;
   flex-direction: row;
-  cursor: pointer;
 
   &.content-below {
     padding-bottom: 6px;

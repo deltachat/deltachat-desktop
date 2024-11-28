@@ -24,7 +24,7 @@ type ContextMenuItemExpandable = {
   subitems: (ContextMenuItem | undefined)[]
 }
 
-export type ContextMenuItem = { label: string } & (
+export type ContextMenuItem = { label: string; dataTestid?: string } & (
   | ContextMenuItemActionable
   | ContextMenuItemExpandable
 )
@@ -345,6 +345,7 @@ export function ContextMenu(props: {
                 }
               }}
               tabIndex={-1}
+              data-testid={item.dataTestid}
               role='menuitem'
               key={index}
               {...(item.subitems && { 'data-expandable-index': index })}

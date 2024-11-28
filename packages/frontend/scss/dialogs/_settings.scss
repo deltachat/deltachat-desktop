@@ -40,14 +40,15 @@
   align-content: center;
   justify-content: center;
   background-color: #d6d6d6 !important;
-  color: #545454;
+  --icon-color: #545454;
 }
 
-.background-options > div,
-.background-default-images > div {
+.background-options > button,
+.background-default-images > button {
   flex-wrap: wrap;
   width: 75px;
   height: 75px;
+  border: none;
   border-radius: 3pt;
   background-color: darkcyan;
   background-size: cover;

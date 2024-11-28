@@ -16,6 +16,8 @@ import Dialog, {
 } from '../Dialog'
 import FooterActionButton from '../Dialog/FooterActionButton'
 import QrReader from '../QrReader'
+import { qrCodeFromClipboard } from '../QrReader/helper'
+
 import { BackendRemote } from '../../backend-com'
 import { getLogger } from '../../../../shared/logger'
 import { runtime } from '@deltachat-desktop/runtime-interface'
@@ -37,6 +39,9 @@ type Props = {
   qrCode: string
 }
 
+/**
+ * dialog to show a qr code and scan a qr code
+ */
 export default function QrCode({
   qrCodeSVG,
   qrCode,
@@ -56,20 +61,22 @@ export default function QrCode({
   }, [])
 
   return (
-    <Dialog onClose={onClose}>
+    <Dialog onClose={onClose} dataTestid='qr-dialog'>
       <div className='qr-code-switch'>
-        <p
+        <button
           className={classNames({ active: showQrCode })}
           onClick={() => setShowQrCode(true)}
+          data-testid='qr-show'
         >
           {tx('qrshow_title')}
-        </p>
-        <p
+        </button>
+        <button
           className={classNames({ active: !showQrCode })}
           onClick={() => setShowQrCode(false)}
+          data-testid='show-qr-scan'
         >
           {tx('qrscan_title')}
-        </p>
+        </button>
       </div>
       {showQrCode && (
         <QrCodeShowQrInner
@@ -173,22 +180,23 @@ export function QrCodeShowQrInner({
               }}
               src={svgUrl}
               onContextMenu={imageContextMenu}
+              tabIndex={0}
             />
           )}
         </DialogContent>
       </DialogBody>
       <DialogFooter>
         <FooterActions align={!onClose && !onBack ? 'center' : 'spaceBetween'}>
-          <FooterActionButton onClick={onCopy}>
+          <FooterActionButton data-testid='copy-qr-code' onClick={onCopy}>
             {tx('global_menu_edit_copy_desktop')}
           </FooterActionButton>
           {onClose && (
-            <FooterActionButton onClick={onClose}>
+            <FooterActionButton onClick={onClose} data-testid='close'>
               {tx('close')}
             </FooterActionButton>
           )}
           {onBack && (
-            <FooterActionButton onClick={onBack}>
+            <FooterActionButton onClick={onBack} data-testid='back'>
               {tx('back')}
             </FooterActionButton>
           )}
@@ -214,6 +222,15 @@ export function QrCodeScanQrInner({
     processingQrCode.current = false
   }, [onClose])
 
+  const handleError = useCallback(
+    (error: any) => {
+      const errorMessage = error?.message || error.toString()
+      openAlertDialog({
+        message: `${tx('qrscan_failed')} ${errorMessage}`,
+      })
+    },
+    [openAlertDialog, tx]
+  )
   const handleScan = useCallback(
     async (data: string) => {
       if (data && !processingQrCode.current) {
@@ -222,30 +239,40 @@ export function QrCodeScanQrInner({
           await processQr(accountId, data, onDone)
         } catch (error: any) {
           log.errorWithoutStackTrace('QrReader process error: ', error)
-          openAlertDialog({
-            message: error.message || error.toString(),
-          })
+          handleError(error)
         }
         processingQrCode.current = false
       } else if (processingQrCode.current === true) {
         log.debug('Already processing a qr code')
       }
     },
-    [accountId, processQr, onDone, openAlertDialog]
+    [accountId, processQr, onDone, handleError]
   )
 
-  const handleError = (err: string) => {
-    log.error('QrReader error: ' + err)
-  }
+  const pasteClipboard = useCallback(async () => {
+    try {
+      const result = await qrCodeFromClipboard(runtime)
+      handleScan(result)
+    } catch (error: any) {
+      if (typeof error === 'string') {
+        handleError(error)
+      } else {
+        handleError(error.toString())
+      }
+    }
+  }, [handleError, handleScan])
 
   return (
     <>
       <DialogBody>
-        <QrReader onScan={handleScan} onError={handleError} />
+        <QrReader onScanSuccess={handleScan} onError={handleError} />
       </DialogBody>
       <DialogFooter>
-        <FooterActions>
-          <FooterActionButton onClick={onClose}>
+        <FooterActions align='spaceBetween'>
+          <FooterActionButton onClick={pasteClipboard} data-testid='paste'>
+            {tx('paste')}
+          </FooterActionButton>
+          <FooterActionButton onClick={onClose} data-testid='close'>
             {tx('close')}
           </FooterActionButton>
         </FooterActions>

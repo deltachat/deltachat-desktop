@@ -98,7 +98,7 @@ function renderElement(elm: ParsedElement, key?: number): JSX.Element {
   }
 }
 
-/** render in preview mode for ChatListItem summary,
+/** render in preview mode for ChatListItem summary and for quoted messages,
  *  not interactive (links can not be clicked) just looks more similar to the message in the chatview/message-list */
 function renderElementPreview(elm: ParsedElement, key?: number): JSX.Element {
   switch (elm.t) {
@@ -126,7 +126,10 @@ function renderElementPreview(elm: ParsedElement, key?: number): JSX.Element {
       return <span key={key}>{elm.c.label.map(renderElementPreview)} </span>
 
     case 'Linebreak':
-      return <span key={key}>{''}</span>
+      // In ChatListItem this will be collapsed by default.
+      // We need line breaks to be displayed for quoted messages
+      // and in the composer.
+      return <span key={key}>{'\n'}</span>
 
     case 'Tag':
     case 'EmailAddress':

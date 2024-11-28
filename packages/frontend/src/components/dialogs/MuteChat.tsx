@@ -49,7 +49,7 @@ export default function MuteChat({ onClose, chatId }: Props & DialogProps) {
     <SmallSelectDialog
       title={tx('menu_mute')}
       values={MUTE_DURATION_OPTIONS}
-      selectedValue={'0'} // first option selected by default which is "not muted"
+      initialSelectedValue={'0'} // first option selected by default which is "not muted"
       onSave={onSave}
       onClose={onClose}
     />

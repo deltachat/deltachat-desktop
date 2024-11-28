@@ -15,6 +15,7 @@ type Props = React.PropsWithChildren<{
   width?: number
   // takes full screen and is transparent
   unstyled?: boolean
+  dataTestid?: string
 }>
 
 const Dialog = React.memo<Props>(
@@ -93,6 +94,7 @@ const Dialog = React.memo<Props>(
           [styles.unstyled]: unstyled,
         })}
         style={style}
+        data-testid={props['dataTestid']}
       >
         {children}
       </dialog>

@@ -13,11 +13,13 @@ export default function SettingsSelector(props: Props) {
   const { onClick, currentValue, children } = props
 
   return (
-    <div className={styles.settingsSelector} onClick={onClick}>
+    // TODO a11y: this component implements `<select>` functionality,
+    // but there are no `aria` attributes that make it clear.
+    <button className={styles.settingsSelector} onClick={onClick}>
       <div className={styles.settingsSelectorLabel}>{children}</div>
       {currentValue && (
         <div className={styles.settingsSelectorValue}>{currentValue}</div>
       )}
-    </div>
+    </button>
   )
 }

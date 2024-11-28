@@ -54,9 +54,11 @@
     display: inline-block;
     max-width: 100%;
     border-radius: 16px;
-    padding-right: 12px;
-    padding-left: 12px;
-    padding-top: 10px;
+    --msg-container-padding-horizontal: 12px;
+    --msg-container-padding-top: 10px;
+    padding-right: var(--msg-container-padding-horizontal);
+    padding-left: var(--msg-container-padding-horizontal);
+    padding-top: var(--msg-container-padding-top);
     padding-bottom: 10px;
 
     .msg-body {
@@ -229,7 +231,7 @@
     }
 
     .quote-background {
-      background: #01010159;
+      background: var(--messageIncomingBg);
       padding: 5px;
       padding-left: 6px;
       border-radius: 7px;

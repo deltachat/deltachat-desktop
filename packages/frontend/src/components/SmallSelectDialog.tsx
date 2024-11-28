@@ -18,7 +18,7 @@ export type SelectDialogOption = [value: string, label: string]
 
 type Props = {
   title: string
-  selectedValue: string
+  initialSelectedValue: string
   values: SelectDialogOption[]
   onSave?: (selectedValue: string) => void
   onSelect?: (selectedValue: string) => void
@@ -26,7 +26,7 @@ type Props = {
 } & DialogProps
 
 export default function SmallSelectDialog({
-  selectedValue,
+  initialSelectedValue,
   values,
   onSave,
   title,
@@ -36,8 +36,8 @@ export default function SmallSelectDialog({
 }: Props) {
   const tx = useTranslationFunction()
 
-  const [actualSelectedValue, setActualSelectedValue] =
-    useState<string>(selectedValue)
+  const [selectedValue, setActualSelectedValue] =
+    useState<string>(initialSelectedValue)
 
   const onChange = (value: string) => {
     setActualSelectedValue(value)
@@ -45,7 +45,7 @@ export default function SmallSelectDialog({
   }
 
   const saveAndClose = () => {
-    onSave && onSave(actualSelectedValue)
+    onSave && onSave(selectedValue)
     onClose()
   }
 
@@ -56,7 +56,7 @@ export default function SmallSelectDialog({
         <DialogContent>
           <RadioGroup
             onChange={onChange}
-            selectedValue={actualSelectedValue}
+            selectedValue={selectedValue}
             name='small-dialog-value'
           >
             {values.map((element, index) => {
