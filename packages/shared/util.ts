@@ -14,3 +14,28 @@ export function truncateText(text: string, max_len: number) {
 export function isInviteLink(url: string) {
   return url.startsWith('https://i.delta.chat/') && url.includes('#')
 }
+
+export function throttle<R, A extends any[]>(
+  fn: (...args: A) => R,
+  wait: number
+) {
+  let inThrottle: boolean,
+    timeout: ReturnType<typeof setTimeout>,
+    lastTime: number
+  return (...args: A) => {
+    if (!inThrottle) {
+      fn(...args)
+      lastTime = performance.now()
+      inThrottle = true
+    } else {
+      clearTimeout(timeout)
+      timeout = setTimeout(
+        () => {
+          fn(...args)
+          lastTime = performance.now()
+        },
+        Math.max(wait - (performance.now() - lastTime), 0)
+      )
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import React from 'react'
-import debounce from 'debounce'
+import { throttle } from '@deltachat-desktop/shared/util.js'
 
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 import { getLogger } from '../../../../shared/logger'
@@ -29,7 +29,7 @@ export default class ComposerMessageInput extends React.Component<
   composerSize: number
   setCursorPosition: number | false
   textareaRef: React.RefObject<HTMLTextAreaElement>
-  saveDraft: () => void
+  saveDraft: ReturnType<typeof throttle>
   constructor(props: ComposerMessageInputProps) {
     super(props)
     this.state = {
@@ -46,10 +46,11 @@ export default class ComposerMessageInput extends React.Component<
     this.insertStringAtCursorPosition =
       this.insertStringAtCursorPosition.bind(this)
 
-    this.saveDraft = debounce(() => {
-      const { text, chatId } = this.state
-      this.props.updateDraftText(text.trim() === '' ? '' : text, chatId)
-    }, 1000)
+    this.saveDraft = throttle((text, chatId) => {
+      if (this.state.chatId === chatId) {
+        this.props.updateDraftText(text.trim() === '' ? '' : text, chatId)
+      }
+    }, 400)
 
     this.textareaRef = React.createRef()
     this.focus = this.focus.bind(this)
@@ -122,19 +123,13 @@ export default class ComposerMessageInput extends React.Component<
     }
     if (prevState.chatId === this.state.chatId) {
       this.resizeTextareaAndComposer()
-      if (prevState.text !== this.state.text) {
-        if (!this.state.loadingDraft) {
-          this.saveDraft()
-        }
-      }
     }
   }
 
   onChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    this.setState({ text: e.target.value /*error: false*/ })
-    if (!this.state.loadingDraft) {
-      this.saveDraft()
-    }
+    const text = e.target.value
+    this.setState({ text /*error: false*/ })
+    this.saveDraft(text, this.state.chatId)
   }
 
   keyEventToAction(e: React.KeyboardEvent<HTMLTextAreaElement>) {
