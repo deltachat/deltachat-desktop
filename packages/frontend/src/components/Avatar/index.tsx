@@ -68,7 +68,7 @@ export function Avatar(props: {
   const content = avatarPath ? (
     <img className='content' src={runtime.transformBlobURL(avatarPath)} />
   ) : (
-    <div className='content' style={{ backgroundColor: color }}>
+    <div className='content' style={{ ["--local-avatar-color"]: color }}>
       {avatarInitial(displayName, addr)}
     </div>
   )

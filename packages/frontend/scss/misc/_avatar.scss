@@ -51,12 +51,33 @@
   }
 
   div.content {
-    background-color: #505050;
+    --local-avatar-color: #505050;
+    background-color: var(--local-avatar-color);
+
     line-height: var(--local-avatar-size);
     object-fit: cover;
     color: var(--avatarLabelColor);
     text-align: center;
     font-size: var(--local-avatar-font-size);
+
+    @supports (
+      // text-wrap was introduced in 2023 slightly after color-mix,
+      // since we can't test for color-mix support directly we use this instead.
+      text-wrap: wrap
+    ) {
+      // make avatars look slightly 3D
+      background: linear-gradient(
+        45deg,
+        var(--local-avatar-color),
+        color-mix(
+          in srgb,
+          var(--local-avatar-color) var(--avatarGradientMixFactor),
+          white
+        )
+      );
+    }
+    // TODO author avatar
+    // TODO .styles_module_largeProfileImageArea
 
     .avatar-qr-code-img {
       width: 22px;

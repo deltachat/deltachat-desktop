@@ -169,6 +169,7 @@ $hover-contrast-change: 2%;
   /* Misc */
   --galleryBg: #{$bgPrimary};
   --avatarLabelColor: #ffffff; // Manual value: This will not get generated in the future
+  --avatarGradientMixFactor: 80%;
   --brokenMediaText: #070c14;
   --brokenMediaBg: #ffffff;
   --unreadCountBg: #{$accentColor};
