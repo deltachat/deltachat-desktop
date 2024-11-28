@@ -16,6 +16,7 @@ import { ContactListItem } from '../../contact/ContactListItem'
 import { FixedSizeList } from 'react-window'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import InfiniteLoader from 'react-window-infinite-loader'
+import { RovingTabindexProvider } from '../../../contexts/RovingTabindex'
 
 /**
  * display a dialog with a react-window of contacts
@@ -38,6 +39,8 @@ export default function SelectContactDialog({
     queryStr
   )
   const tx = useTranslationFunction()
+
+  const selectContactListRef = useRef<HTMLDivElement>(null)
 
   const infiniteLoaderRef = useRef<InfiniteLoader | null>(null)
   // By default InfiniteLoader assumes that each item's index in the list
@@ -66,7 +69,7 @@ export default function SelectContactDialog({
         />
       </DialogHeader>
       <DialogBody className={styles.selectContactDialogBody}>
-        <div className={styles.selectContactList}>
+        <div className={styles.selectContactList} ref={selectContactListRef}>
           <AutoSizer disableWidth>
             {({ height }) => (
               <InfiniteLoader
@@ -82,37 +85,41 @@ export default function SelectContactDialog({
                 // minimumBatchSize={100}
               >
                 {({ onItemsRendered, ref }) => (
-                  <FixedSizeList
-                    itemCount={contactIds.length}
-                    itemKey={index => contactIds[index]}
-                    onItemsRendered={onItemsRendered}
-                    ref={ref}
-                    height={height}
-                    width='100%'
-                    itemSize={64}
+                  <RovingTabindexProvider
+                    wrapperElementRef={selectContactListRef}
                   >
-                    {({ index, style }) => {
-                      const el = (() => {
-                        const item = contactCache[contactIds[index]]
-                        if (!item) {
-                          // It's not loaded yet
-                          return null
-                        }
-                        const contact: T.Contact = item
-                        return (
-                          <ContactListItem
-                            contact={contact}
-                            onClick={onOk}
-                            showCheckbox={false}
-                            checked={false}
-                            showRemove={false}
-                          />
-                        )
-                      })()
+                    <FixedSizeList
+                      itemCount={contactIds.length}
+                      itemKey={index => contactIds[index]}
+                      onItemsRendered={onItemsRendered}
+                      ref={ref}
+                      height={height}
+                      width='100%'
+                      itemSize={64}
+                    >
+                      {({ index, style }) => {
+                        const el = (() => {
+                          const item = contactCache[contactIds[index]]
+                          if (!item) {
+                            // It's not loaded yet
+                            return null
+                          }
+                          const contact: T.Contact = item
+                          return (
+                            <ContactListItem
+                              contact={contact}
+                              onClick={onOk}
+                              showCheckbox={false}
+                              checked={false}
+                              showRemove={false}
+                            />
+                          )
+                        })()
 
-                      return <div style={style}>{el}</div>
-                    }}
-                  </FixedSizeList>
+                        return <div style={style}>{el}</div>
+                      }}
+                    </FixedSizeList>
+                  </RovingTabindexProvider>
                 )}
               </InfiniteLoader>
             )}
