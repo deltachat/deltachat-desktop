@@ -3,7 +3,7 @@
 ## [Unreleased][unreleased]
 
 ## Added
-- accessibility: arrow-key navigation for the list of chats, list of accounts #4224, #4291
+- accessibility: arrow-key navigation for the list of chats, list of accounts, list of contacts in the "New Chat" dialog #4224, #4291, #4361, #4362
 - Add "Learn More" button to "Disappearing Messages" dialog #4330
 - new icon for Mac users
 - smooth-scroll to newly arriving messages instead of jumping instantly #4125
@@ -22,7 +22,9 @@
 - avoid showing wrong menu items for blocked users #4353
 - fix: save message draft every 200ms if message text changed #3733
 - fix mac drag window issues #4300
-- Do not clear the draft if sending failed. #4340
+- the main window overflowing small screens, or/and if zoom level is high #4156
+- do not clear the draft if sending failed. #4340
+
 
 <a id="1_48_0"></a>
 

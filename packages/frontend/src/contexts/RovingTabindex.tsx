@@ -18,6 +18,9 @@ import React, {
  * https://developer.mozilla.org/en-US/docs/Web/Accessibility/Keyboard-navigable_JavaScript_widgets#technique_1_roving_tabindex
  * ).
  *
+ * It is OK to use this outside of `RovingTabindexContext`.
+ * In this case it will simply always return `tabIndex === 0`.
+ *
  * This is similar to https://www.npmjs.com/package/react-roving-tabindex, but
  * - it handles elements changing their order in DOM:
  *   'ArrowDown' will always focus the element that is next in DOM,
