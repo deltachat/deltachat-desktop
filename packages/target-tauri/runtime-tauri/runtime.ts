@@ -303,8 +303,21 @@ class TauriRuntime implements Runtime {
     throw new Error('Method not implemented.15')
   }
   transformBlobURL(blob: string): string {
-    // TODO next - like electron for now?
-    throw new Error('Method not implemented.16')
+    // for now file scheme like electron, could be custom scheme in future
+    // need to use custom protocol like the asset: protocol of convertFileSrc
+    if (!blob) {
+      return blob
+    }
+    const path_components = blob.replace(/\\/g, '/').split('/')
+    const filename2 = path_components[path_components.length - 1]
+
+    let new_blob_path
+
+    if (decodeURIComponent(filename2) === filename2) {
+      // if it is not already encoded then encode it.
+      new_blob_path = blob.replace(filename2, encodeURIComponent(filename2))
+    }
+    return `file://${new_blob_path}`
   }
   readClipboardText(): Promise<string> {
     throw new Error('Method not implemented.17')
