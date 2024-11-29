@@ -3,7 +3,7 @@
 ## [Unreleased][unreleased]
 
 ## Added
-- accessibility: arrow-key navigation for gallery #4376
+- accessibility: arrow-key navigation for gallery and sticker picker #4376, #4372
 - accessibility: arrow-key navigation: handle "End" and "Home" keys to go to last / first item #4438
 - add show_app_in_chat option to webxdc info message context menu #4459
 
