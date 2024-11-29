@@ -39,7 +39,7 @@ export function ReadReceiptsList(props: ReadReceiptsListProps) {
       </div>
       <ul className={styles.ReadReceiptBox}>
         {receipts.map(receipt => (
-          <li>
+          <li key={receipt.contactId}>
             <ReadReceipt receipt={receipt} />
           </li>
         ))}
