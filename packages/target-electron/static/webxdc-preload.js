@@ -54,7 +54,7 @@ class RealtimeListener {
   let callback = null
   /** @type {RT | null} */
   let realtimeListener = null
-  var last_serial = 0
+  let last_serial = 0
   let setUpdateListenerPromise = null
   let is_running = false
   let scheduled = false
@@ -62,7 +62,7 @@ class RealtimeListener {
     const updates = JSON.parse(
       await ipcRenderer.invoke('webxdc.getAllUpdates', last_serial)
     )
-    for (let update of updates) {
+    for (const update of updates) {
       last_serial = update.max_serial
       callback(update)
     }
@@ -138,12 +138,14 @@ class RealtimeListener {
       )
       return Promise.resolve([])
     },
-    sendUpdate: (update, description) =>
-      ipcRenderer.invoke(
-        'webxdc.sendUpdate',
-        JSON.stringify(update),
-        description
-      ),
+    sendUpdate: (update, description) => {
+      if (description) {
+        console.error(
+          'parameter description in sendUpdate is deprecated and will be removed in the future'
+        )
+      }
+      ipcRenderer.invoke('webxdc.sendUpdate', JSON.stringify(update))
+    },
     sendToChat: async content => {
       if (!content.file && !content.text) {
         return Promise.reject(
@@ -159,7 +161,7 @@ class RealtimeListener {
           reader.onload = () => {
             /** @type {string} */
             //@ts-ignore
-            let data = reader.result
+            const data = reader.result
             resolve(data.slice(data.indexOf(data_start) + data_start.length))
           }
           reader.onerror = () => reject(reader.error)
@@ -212,7 +214,7 @@ class RealtimeListener {
       await ipcRenderer.invoke('webxdc.sendToChat', file, content.text)
     },
     importFiles: filters => {
-      var element = document.createElement('input')
+      const element = document.createElement('input')
       element.type = 'file'
       element.accept = [
         ...(filters.extensions || []),

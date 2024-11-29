@@ -477,7 +477,7 @@ If you think that's a bug and you need that permission, then please open an issu
       return await this.rpc.getWebxdcStatusUpdates(accountId, msgId, serial)
     })
 
-    ipcMain.handle('webxdc.sendUpdate', async (event, update, description) => {
+    ipcMain.handle('webxdc.sendUpdate', async (event, update) => {
       const key = Object.keys(open_apps).find(
         key => open_apps[key].win.webContents === event.sender
       )
@@ -493,7 +493,7 @@ If you think that's a bug and you need that permission, then please open an issu
           accountId,
           msgId,
           update,
-          description
+          ''
         )
       } catch (error) {
         log.error('webxdc.sendUpdate failed:', error)
