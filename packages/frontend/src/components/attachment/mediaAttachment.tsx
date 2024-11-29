@@ -195,6 +195,7 @@ export function ImageAttachment({
         className={'media-attachment-media broken'}
         title={loadResult.error}
         onContextMenu={onContextMenu}
+        tabIndex={0}
       >
         <div className='attachment-content'>
           {tx('attachment_failed_to_load')}
@@ -216,7 +217,7 @@ export function ImageAttachment({
     const isBroken = !file || !hasSupportedFormat
 
     return (
-      <div
+      <button
         className={`media-attachment-media${isBroken ? ` broken` : ''}`}
         onClick={
           isBroken ? openInShell : openFullscreenMedia.bind(null, message)
@@ -232,7 +233,7 @@ export function ImageAttachment({
             loading='lazy'
           />
         )}
-      </div>
+      </button>
     )
   }
 }
@@ -264,6 +265,7 @@ export function VideoAttachment({
         className={'media-attachment-media broken'}
         title={loadResult.error}
         onContextMenu={onContextMenu}
+        tabIndex={0}
       >
         <div className='attachment-content'>
           {tx('attachment_failed_to_load')}
@@ -284,7 +286,7 @@ export function VideoAttachment({
     const hasSupportedFormat = isVideo(fileMime)
     const isBroken = !file || !hasSupportedFormat
     return (
-      <div
+      <button
         className={`media-attachment-media${isBroken ? ` broken` : ''}`}
         onClick={
           isBroken ? openInShell : openFullscreenMedia.bind(null, message)
@@ -305,7 +307,7 @@ export function VideoAttachment({
             </div>
           </>
         )}
-      </div>
+      </button>
     )
   }
 }
@@ -333,6 +335,7 @@ export function AudioAttachment({
         className={'media-attachment-audio broken'}
         title={loadResult.error}
         onContextMenu={onContextMenu}
+        tabIndex={0}
       >
         <div className='heading'>
           <div className='name'>? Error ?</div>
@@ -413,6 +416,7 @@ export function FileAttachmentRow({
         className={'media-attachment-generic broken'}
         title={loadResult.error}
         onContextMenu={onContextMenu}
+        tabIndex={0}
       >
         <div className='file-icon'>
           <div className='file-extension'>?</div>
@@ -437,9 +441,8 @@ export function FileAttachmentRow({
 
     const extension = getExtension(message)
     return (
-      <div
+      <button
         className='media-attachment-generic'
-        role='button'
         onClick={ev => {
           ev.stopPropagation()
           openInShell()
@@ -472,7 +475,7 @@ export function FileAttachmentRow({
             extended={false}
           />
         </div>
-      </div>
+      </button>
     )
   }
 }
@@ -523,6 +526,7 @@ export function WebxdcAttachment({
         className={'media-attachment-webxdc broken'}
         title={loadResult.error}
         onContextMenu={onContextMenu}
+        tabIndex={0}
       >
         <div className='icon'></div>
         <div className='text-part'>
@@ -544,8 +548,8 @@ export function WebxdcAttachment({
     return (
       <div
         className='media-attachment-webxdc'
-        role='button'
         onContextMenu={onContextMenu}
+        tabIndex={0}
       >
         <img
           className='icon'
@@ -570,9 +574,8 @@ export function WebxdcAttachment({
     )
     const { summary, name, document } = loadResult.webxdcInfo
     return (
-      <div
+      <button
         className='media-attachment-webxdc'
-        role='button'
         onContextMenu={openContextMenu}
         onClick={openWebxdc.bind(null, loadResult.id)}
       >
@@ -590,7 +593,7 @@ export function WebxdcAttachment({
           </div>
           <div className='summary'>{summary}</div>
         </div>
-      </div>
+      </button>
     )
   }
 }

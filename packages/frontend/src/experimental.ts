@@ -1,6 +1,6 @@
 import { getLogger } from '../../shared/logger'
 import { BackendRemote } from './backend-com'
-import { printCallCounterResult } from './debug-tools'
+import { DragRegionOverlay, printCallCounterResult } from './debug-tools'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { selectedAccountId } from './ScreenController'
 
@@ -21,6 +21,7 @@ only for debugging:
 - printCallCounterResult() // for profiling you can track what is called how often with 'countCall(label: string)'
 - .rpc // only available in devmode, gives full access to jsonrpc
 - .runtime // only available in devmode, gives full access to runtime
+- showDragAreas() // toggle drag region overlay
     `)
   }
   constructor() {
@@ -76,6 +77,14 @@ only for debugging:
       )
     }
     return runtime
+  }
+
+  dragRegionOverlay?: DragRegionOverlay
+  showDragAreas() {
+    if (!this.dragRegionOverlay) {
+      this.dragRegionOverlay = new DragRegionOverlay()
+    }
+    this.dragRegionOverlay.toggle()
   }
 }
 

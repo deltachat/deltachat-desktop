@@ -3,6 +3,11 @@
 .chat-list-item,
 .pseudo-chat-list-item {
   height: 64px;
+  width: 100%;
+  text-align: unset;
+  color: var(--globalText);
+  background-color: transparent;
+  border: none;
   display: flex;
   flex-direction: row;
   padding: 0px 10px;
@@ -337,11 +342,9 @@
   height: var(--size);
   padding: calc((var(--size) - var(--iconSize)) / 2);
 
+  border: none;
   background-color: var(--floatingActionButtonBg);
   border-radius: 100%;
-  &:hover {
-    cursor: pointer;
-  }
 
   .Icon {
     height: 100%;

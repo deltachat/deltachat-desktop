@@ -9,7 +9,7 @@
   margin-bottom: 20px;
   font-size: 1.08em;
 
-  & > div {
+  & > * {
     margin-bottom: 8px;
     & > img {
       width: 1.15em;
@@ -18,9 +18,9 @@
       margin-inline-end: 0.3em;
       vertical-align: middle;
     }
+  }
 
-    &.clickable:hover {
-      cursor: pointer;
-    }
+  .verification {
+    @include button-reset;
   }
 }

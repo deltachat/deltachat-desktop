@@ -44,17 +44,20 @@ export function ContactList(props: {
         if (disabledContacts !== undefined) {
           disabled = disabledContacts.indexOf(contact.id) !== -1
         }
-        return ContactListItem({
-          contact,
-          onClick,
-          showCheckbox: showCheckbox || false,
-          checked,
-          onCheckboxClick,
-          showRemove: showRemove || false,
-          onRemoveClick,
-          disabled,
-          onContextMenu: onContactContextMenu?.bind(null, contact),
-        })
+        return (
+          <ContactListItem
+            key={contact.id}
+            contact={contact}
+            onClick={onClick}
+            showCheckbox={showCheckbox || false}
+            checked={checked}
+            onCheckboxClick={onCheckboxClick}
+            showRemove={showRemove || false}
+            onRemoveClick={onRemoveClick}
+            disabled={disabled}
+            onContextMenu={onContactContextMenu?.bind(null, contact)}
+          />
+        )
       })}
     </div>
   )

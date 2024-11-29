@@ -125,6 +125,7 @@ export const ChatListItemRowMessage = React.memo<{
             jumpToMessage({
               accountId,
               msgId: msrId,
+              msgChatId: messageSearchResult.chatId,
               scrollIntoViewArg: { block: 'center' },
             })
           }}

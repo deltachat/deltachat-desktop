@@ -61,11 +61,10 @@ export function VisualVCardComponent({
   const initial = codepoint
     ? String.fromCodePoint(codepoint).toUpperCase()
     : '#'
+
+  const Tag = onClick ? 'button' : 'div'
   return (
-    <div
-      className={styles.vcard + `${onClick ? ' clickable' : ''}`}
-      onClick={onClick}
-    >
+    <Tag onClick={onClick} className={styles.vcard}>
       <div
         className={classNames('avatar', styles.avatar)}
         aria-label={displayName}
@@ -86,6 +85,6 @@ export function VisualVCardComponent({
         <div className={styles.displayName}>{displayName}</div>
         <div>{addr}</div>
       </div>
-    </div>
+    </Tag>
   )
 }

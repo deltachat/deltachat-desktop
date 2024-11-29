@@ -3,19 +3,74 @@
 ## [Unreleased][unreleased]
 
 ## Added
+- accessibility: arrow-key navigation for the list of chats, list of accounts, list of contacts in the "New Chat" dialog #4224, #4291, #4361, #4362
+- Add "Learn More" button to "Disappearing Messages" dialog #4330
+- new icon for Mac users
+- smooth-scroll to newly arriving messages instead of jumping instantly #4125
+- make backup and key export work in browser #4303
 - add ability to add private tags to accounts
+
+## Changed
+- enable Telegram-style Ctrl + ArrowUp to reply by default #4333
+- improve performance a little #4334
+- extend image max-height in messages
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.151.1`
+- dev: inviteCode doesn't needs conversion any more #4363
+- dev: move responsibility for updating account list to core through the `AccountsChanged` and `AccountsItemChanged` event
+
+## Fixed
+- "Disappearing Messages" dialog not reflecting the actual current value #4327
+- accessibility: make settings keyboard-navigable #4319
+- Fix documentation for --allow-unsafe-core-replacement #4341
+- fix missing linebreaks in quotes #4360
+- avoid showing wrong menu items for blocked users #4353
+- fix: save message draft every 200ms if message text changed #3733
+- fix mac drag window issues #4300
+- the main window overflowing small screens, or/and if zoom level is high #4156
+- do not clear the draft if sending failed. #4340
+
+
+<a id="1_48_0"></a>
+
+## [1.48.0] - 2024-11-08
+
+## Changed
+- Update translations (2024-11-08)
+- Update local help (2024-11-08)
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.148.7`
+  - Emit chatlist events only if message still exists
+  - send_msg_to_smtp: Do not fail if the message does not exist anymore
+- move the "Realtime Webxdc Channels" setting out of the "Experimental" section #4316
+
+## Fixed
+- image attachments not being centered within a message #4313
+
+
+<a id="1_47_1"></a>
+
+## [1.47.1] - 2024-11-01
+
+## Added
+- Added support for selecting multiple files in the attachment file picker. #4278
+- browser edition:
+  - support for selecting custom chat wallpaper #4306
+  - support for themes #4304
+- improve keyboard and screen-reader accessibility #4210
 
 ## Changed
 - style: avoid scrolling to account list items such that they're at the very edge of the list #4252
 - Update local help (2024-10-25) #4264
 - Update translations (2024-27-10) #4281
 - Limit options for "Delete Messages from Server" for chatmail accounts #4276
-- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.148.5`
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.148.6`
   - IMAP COMPRESS support.
   - Sort received outgoing message down if it's fresher than all non fresh messages.
   - Auto-restore 1:1 chat protection after receiving old unverified message.
+  - Enable Webxdc realtime by default (!)
+  - Save full text to mime_headers for long outgoing messages #4289
 - when jumping to a message (e.g. when showing the first unread message, or when jumping to a message through "show in chat"), position it more appropriately in the scrollable area #4286
-- move responsibility for updating account list to core through the `AccountsChanged` and `AccountsItemChanged` event
+- Dropping multiple files onto deltachat now sends images as compressed images instead of uncompressed files #4278
+
 
 ## Fixed
 - image thumbnails not showing in chat list #4247
@@ -23,13 +78,20 @@
 - avoid showing horizontal scrollbars in chat list #4253
 - revert debian packagename from `deltachat` back to `deltachat-desktop` #4266
 - style: fix VCard color being too bright in dark theme #4255
+- style: less vertical space between radio group items #4298
+- style: fix the avatar in the profile dialog being oval-shaped #4299
 - remove unnecessary horizontal scrollbar in "View Group" dialog #4254
 - add missing cancel buttons to import-/export- and reveive-backup progress dialogs #4272
 - change title and button label of EditAccountAndPasswordDialog to make it clearer that it is about email account #4271, #4279
 - fix styling of progressbars in light theme #4274
 - fix Delta Chat not launching on Debian sometimes due to missing package dependencies (`libasound2`) #4275
 - fix not being able to remove avatar for a mailing list #4270
+- fix compression of images when added with Image option from attachment menu. #4278
 - fix deleting messages with broken video attachment from gallery #4283
+- accessibility: wrong positioning of some context menus and popups when activating them with keyboard #4246
+- "Page Up" / "Page Down" not working on scrollable elements except for messages list #4269
+- make name more readable in sticker reply #3291
+- fix missing icons in wallpaper settings #4308
 
 <a id="1_47_0"></a>
 
@@ -2923,7 +2985,11 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.47.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.48.0...HEAD
+
+[1.48.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.47.1...v1.48.0
+
+[1.47.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.47.0...v1.47.1
 
 [1.47.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.46.8...v1.47.0
 

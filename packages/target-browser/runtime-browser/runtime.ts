@@ -17,6 +17,10 @@ import { BaseDeltaChat, yerpc } from '@deltachat/jsonrpc-client'
 
 import type { getLogger as getLoggerFunction } from '@deltachat-desktop/shared/logger.js'
 import type { setLogHandler as setLogHandlerFunction } from '@deltachat-desktop/shared/logger.js'
+import {
+  HIDDEN_THEME_PREFIX,
+  parseThemeMetaData,
+} from '@deltachat-desktop/shared/themes.js'
 
 import { MessageToBackend } from '../src/runtime-ws-protocol.js'
 
@@ -118,19 +122,27 @@ class BrowserRuntime implements Runtime {
     }
   }
 
-  onResumeFromSleep: (() => void) | undefined
-  onChooseLanguage: ((locale: string) => Promise<void>) | undefined
-  onThemeUpdate: (() => void) | undefined
-  onShowDialog:
-    | ((kind: 'about' | 'keybindings' | 'settings') => void)
-    | undefined
-  onOpenQrUrl: ((url: string) => void) | undefined
+  // #region event callbacks from runtime backend
+
   onWebxdcSendToChat:
     | ((
         file: { file_name: string; file_content: string } | null,
         text: string | null
       ) => void)
     | undefined
+  onThemeUpdate: (() => void) | undefined //!!!TODO!!!
+
+  // not used in browser, there is no menu to trigger these
+  onChooseLanguage: ((locale: string) => Promise<void>) | undefined
+  onShowDialog:
+    | ((kind: 'about' | 'keybindings' | 'settings') => void)
+    | undefined
+
+  // not used in browser - other reasons
+  onResumeFromSleep: (() => void) | undefined
+  onOpenQrUrl: ((url: string) => void) | undefined
+
+  // #endregion
 
   openMapsWebxdc(_accountId: number, _chatId?: number | undefined): void {
     throw new Error('Method not implemented.')
@@ -182,11 +194,22 @@ class BrowserRuntime implements Runtime {
   notifyWebxdcInstanceDeleted(_accountId: number, _instanceId: number): void {
     this.log.critical('Method not implemented.')
   }
-  saveBackgroundImage(
-    _file: string,
-    _isDefaultPicture: boolean
+  async saveBackgroundImage(
+    file: string,
+    isDefaultPicture: boolean
   ): Promise<string> {
-    throw new Error('Method not implemented.')
+    const result = await fetch('/backend-api/saveBackgroundImage', {
+      body: JSON.stringify({ file, isDefaultPicture }),
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    if (!result.ok) {
+      this.log.error('saveBackgroundImage failed', result)
+      throw new Error('saveBackgroundImage failed: ' + result.statusText)
+    }
+    return (await result.json()).result
   }
   async getLocaleData(locale?: string | undefined): Promise<LocaleData> {
     const messagesEnglish = await (await fetch('/locales/en.json')).json()
@@ -235,7 +258,7 @@ class BrowserRuntime implements Runtime {
     key: keyof DesktopSettingsType,
     value: string | number | boolean | undefined
   ): Promise<void> {
-    // if key is notifications and new vlaue is on/true, then ask browser for permission
+    // if key is notifications and new value is on/true, then ask browser for permission
     if (key == 'notifications' && Boolean(value)) {
       await this.askBrowserForNotificationPermission()
     }
@@ -251,15 +274,39 @@ class BrowserRuntime implements Runtime {
       throw new Error('setDesktopSettings request failed')
     }
   }
-  getAvailableThemes(): Promise<Theme[]> {
-    throw new Error('Method not implemented.')
+  async getAvailableThemes(): Promise<Theme[]> {
+    return (await fetch('/themes.json')).json()
   }
   async getActiveTheme(): Promise<{ theme: Theme; data: string } | null> {
-    return null
-  }
-  resolveThemeAddress(_address: string): Promise<string> {
-    this.log.critical('Method not implemented.')
-    throw new Error('Method not implemented.')
+    const address = (await this.getDesktopSettings()).activeTheme
+    let [location, id] = address.split(':')
+    if (location === 'system') {
+      location = 'dc'
+      id = window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'light'
+    }
+    if (location !== 'dc') {
+      throw new Error('only dc themes are implmented in the browser edition')
+    }
+
+    const realPath = `/themes/${id}.css`
+    const theme_file_request = await fetch(realPath)
+    if (!theme_file_request.ok) {
+      throw new Error('error loading theme: ' + theme_file_request.statusText)
+    }
+    const data = await theme_file_request.text()
+    const metadata = parseThemeMetaData(data)
+
+    return {
+      theme: {
+        address,
+        description: metadata.description,
+        name: metadata.name,
+        is_prototype: id.startsWith(HIDDEN_THEME_PREFIX),
+      },
+      data,
+    }
   }
   async clearWebxdcDOMStorage(_accountId: number): Promise<void> {
     // not applicable in browser
@@ -589,33 +636,54 @@ class BrowserRuntime implements Runtime {
     }
     return ''
   }
-  async showOpenFileDialog(options: RuntimeOpenDialogOptions): Promise<string> {
+  async showOpenFileDialog(
+    options: RuntimeOpenDialogOptions
+  ): Promise<string[]> {
     const extstring = options.filters
       ?.map(filter => filter.extensions)
       .reduce((p, c) => c.concat(p))
       .map(ext => `.${ext}`)
       .join()
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       const input = document.createElement('input')
       input.type = 'file'
       input.accept = extstring || ''
+      if (options.properties.includes('multiSelections')) {
+        input.multiple = true
+      }
       input.onchange = async () => {
         if (input.files != null) {
-          resolve(
-            (
-              await (
-                await fetch(
-                  `/backend-api/uploadTempFile/${input.files[0].name}`,
-                  {
-                    method: 'POST',
-                    body: input.files[0],
-                  }
-                )
-              ).json()
-            ).path
+          const uploads: Promise<string>[] = [...input.files].map(file =>
+            fetch(`/backend-api/uploadTempFile/${file.name}`, {
+              method: 'POST',
+              body: file,
+            })
+              .then(r => r.json())
+              .then(r => r.path)
           )
+          const results = await Promise.allSettled(uploads)
+          this.log.debug('showOpenFileDialog upload - results', results)
+          const uploadedFiles = results
+            .filter(result => result.status == 'fulfilled')
+            .map(result => result.value)
+          const rejectedPromise = results.find(
+            result => result.status == 'rejected'
+          )
+          if (rejectedPromise) {
+            this.log.warn(
+              'some file failed to upload with error, removing other files now:',
+              rejectedPromise.reason
+            )
+            // remove other files on error
+            uploadedFiles.every(path => {
+              this.removeTempFile(path)
+            })
+            reject(rejectedPromise.reason)
+          } else {
+            resolve(uploadedFiles)
+          }
         } else {
-          resolve('')
+          resolve([])
         }
       }
 

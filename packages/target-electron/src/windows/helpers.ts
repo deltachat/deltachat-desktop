@@ -11,7 +11,12 @@ export function initMinWinDimensionHandling(
 ): () => void {
   const update_min_size = () => {
     const { workAreaSize } = screen.getPrimaryDisplay()
-    if (workAreaSize.width < minWidth || workAreaSize.height < minHeight) {
+    if (
+      // A multiplier to make space for the taskbar and the window header.
+      // Remember that the taskbar could also be placed vertically.
+      workAreaSize.width * 0.75 < minWidth ||
+      workAreaSize.height * 0.75 < minHeight
+    ) {
       main_window.setMinimumSize(0, 0)
     } else {
       main_window.setMinimumSize(minWidth, minHeight)

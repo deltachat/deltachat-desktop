@@ -31,6 +31,5 @@ export function getDefaultState(): DesktopSettingsType {
     enableRelatedChats: false,
     galleryImageKeepAspectRatio: false,
     useSystemUIFont: false,
-    enableCtrlUpToReplyShortcut: false,
   }
 }

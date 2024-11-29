@@ -21,6 +21,7 @@ import { VerifiedContactsRequiredDialog } from '../ProtectionStatusDialog'
 import InfiniteLoader from 'react-window-infinite-loader'
 import { AddMemberChip } from './AddMemberDialog'
 import styles from './styles.module.scss'
+import classNames from 'classnames'
 
 export function AddMemberInnerDialog({
   onCancel,
@@ -190,7 +191,7 @@ export function AddMemberInnerDialog({
         <PseudoListItemAddContact
           queryStr={queryStr}
           queryStrIsEmail={false}
-          onClick={() => {}}
+          onClick={undefined}
         />
       )
     }
@@ -229,14 +230,17 @@ export function AddMemberInnerDialog({
         <div className={styles.AddMemberChipsWrapper}>
           <div className={styles.AddMemberChips}>
             {contactIdsToAdd.map(contact => {
-              return AddMemberChip({
-                contact,
-                onRemoveClick: toggleMember,
-              })
+              return (
+                <AddMemberChip
+                  key={contact.id}
+                  contact={contact}
+                  onRemoveClick={toggleMember}
+                />
+              )
             })}
             <input
               ref={inputRef}
-              className={'search-input ' + styles.groupMemberSearch}
+              className={classNames('search-input', styles.groupMemberSearch)}
               onChange={onSearchChange}
               onKeyDown={event => {
                 addContactOnKeyDown(event)

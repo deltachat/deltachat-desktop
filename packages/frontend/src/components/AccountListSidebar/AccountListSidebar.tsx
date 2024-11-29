@@ -25,6 +25,11 @@ import useChat from '../../hooks/chat/useChat'
 import { Screens } from '../../ScreenController'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import {
+  RovingTabindexProvider,
+  useRovingTabindex,
+} from '../../contexts/RovingTabindex'
+import classNames from 'classnames'
 
 type Props = {
   onAddAccount: () => Promise<number>
@@ -41,6 +46,7 @@ export default function AccountListSidebar({
 }: Props) {
   const tx = useTranslationFunction()
 
+  const accountsListRef = useRef<HTMLDivElement>(null)
   const { openDialog } = useDialog()
   const [accounts, setAccounts] = useState<number[]>([])
   const [{ accounts: noficationSettings }] = useAccountNotificationStore()
@@ -135,26 +141,26 @@ export default function AccountListSidebar({
       {runtime.getRuntimeInfo().isMac && !smallScreenMode && (
         <div className={styles.macOSTrafficLightBackground} />
       )}
-      <div className={styles.accountList} onScroll={updateHoverInfoPosition}>
-        {accounts.map(id => (
-          <AccountItem
-            key={id}
-            accountId={id}
-            isSelected={selectedAccountId === id}
-            onSelectAccount={selectAccount}
-            openAccountDeletionScreen={openAccountDeletionScreen}
-            updateAccountForHoverInfo={updateAccountForHoverInfo}
-            syncAllAccounts={syncAllAccounts}
-            muted={noficationSettings[id]?.muted || false}
-          />
-        ))}
-        <button
-          aria-label={tx('add_account')}
-          className={styles.addButton}
-          onClick={onAddAccount}
-        >
-          +
-        </button>
+      <div
+        ref={accountsListRef}
+        className={styles.accountList}
+        onScroll={updateHoverInfoPosition}
+      >
+        <RovingTabindexProvider wrapperElementRef={accountsListRef}>
+          {accounts.map(id => (
+            <AccountItem
+              key={id}
+              accountId={id}
+              isSelected={selectedAccountId === id}
+              onSelectAccount={selectAccount}
+              openAccountDeletionScreen={openAccountDeletionScreen}
+              updateAccountForHoverInfo={updateAccountForHoverInfo}
+              syncAllAccounts={syncAllAccounts}
+              muted={noficationSettings[id]?.muted || false}
+            />
+          ))}
+          <AddAccountButton onClick={onAddAccount} />
+        </RovingTabindexProvider>
       </div>
       {/* The condition is the same as in https://github.com/deltachat/deltachat-desktop/blob/63af023437ff1828a27de2da37bf94ab180ec528/src/renderer/contexts/KeybindingsContext.tsx#L26 */}
       {window.__screen === Screens.Main && (
@@ -163,6 +169,7 @@ export default function AccountListSidebar({
             aria-label={tx('menu_settings')}
             className={styles.settingsButton}
             onClick={openSettings}
+            data-testid='open-settings-button'
           >
             <Icon
               size={38}
@@ -182,5 +189,28 @@ export default function AccountListSidebar({
         )}
       </div>
     </div>
+  )
+}
+
+function AddAccountButton(props: { onClick: () => void }) {
+  const tx = useTranslationFunction()
+
+  const ref = useRef<HTMLButtonElement>(null)
+  // This relies on the existence of `RovingTabindexProvider`.
+  // This is why this button is a separate component.
+  const rovingTabindex = useRovingTabindex(ref)
+
+  return (
+    <button
+      ref={ref}
+      aria-label={tx('add_account')}
+      className={classNames(styles.addButton, rovingTabindex.className)}
+      tabIndex={rovingTabindex.tabIndex}
+      onKeyDown={rovingTabindex.onKeydown}
+      onFocus={rovingTabindex.setAsActiveElement}
+      {...props}
+    >
+      +
+    </button>
   )
 }

@@ -94,25 +94,28 @@ function ReactionsDialogList({ reactionsByContact, onClose }: Props) {
       {contacts.map(contact => {
         const notFromSelf = C.DC_CONTACT_ID_SELF !== contact.id
         return (
-          <li
-            key={contact.id}
-            className={classNames(styles.reactionsDialogListItem, {
-              [styles.reactionsDialogListClickable]: notFromSelf,
-            })}
-            onClick={() => {
-              if (notFromSelf) {
-                openViewProfileDialog(accountId, contact.id)
-              }
-            }}
-            role='button'
-          >
-            <div className={styles.reactionsDialogAvatar}>
-              <AvatarFromContact contact={contact} />
-            </div>
-            <div className={styles.reactionsDialogContactName}>
-              <ContactName displayName={contact.displayName} />
-            </div>
-            <div className={styles.reactionsDialogEmoji}>{contact.emoji}</div>
+          <li key={contact.id}>
+            <button
+              onClick={() => {
+                if (notFromSelf) {
+                  openViewProfileDialog(accountId, contact.id)
+                }
+              }}
+              // `aria-disabled` instead of just `disabled` because we probably
+              // still want to keep it focusable for screen-readers.
+              aria-disabled={!notFromSelf}
+              className={classNames(styles.reactionsDialogListItem, {
+                [styles.reactionsDialogListClickable]: notFromSelf,
+              })}
+            >
+              <div className={styles.reactionsDialogAvatar}>
+                <AvatarFromContact contact={contact} />
+              </div>
+              <div className={styles.reactionsDialogContactName}>
+                <ContactName displayName={contact.displayName} />
+              </div>
+              <div className={styles.reactionsDialogEmoji}>{contact.emoji}</div>
+            </button>
           </li>
         )
       })}

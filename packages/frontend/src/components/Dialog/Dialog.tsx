@@ -15,6 +15,7 @@ type Props = React.PropsWithChildren<{
   width?: number
   // takes full screen and is transparent
   unstyled?: boolean
+  dataTestid?: string
 }>
 
 const Dialog = React.memo<Props>(
@@ -89,10 +90,11 @@ const Dialog = React.memo<Props>(
         onClose={onClose}
         onCancel={onCancel}
         ref={dialog}
-        className={classNames(styles.dialog, props.className, {
+        className={classNames(styles.dialog, props.className, 'no-drag', {
           [styles.unstyled]: unstyled,
         })}
         style={style}
+        data-testid={props['dataTestid']}
       >
         {children}
       </dialog>

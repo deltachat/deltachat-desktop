@@ -238,6 +238,14 @@ export function getKeybindings(
         keyBindings: [['Control', 'N']],
       },
       {
+        title: tx('menu_reply'),
+        keyBindings: [
+          ['Control', 'ArrowUp'],
+          ['Control', 'ArrowDown'],
+          ['Esc'],
+        ],
+      },
+      {
         title: tx('menu_help'),
         keyBindings: [['F1']],
       },

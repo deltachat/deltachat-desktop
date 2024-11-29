@@ -3,6 +3,7 @@ import React, {
   CSSProperties,
   useState,
   useEffect,
+  useRef,
 } from 'react'
 
 import { PseudoContact } from '../contact/Contact'
@@ -13,6 +14,7 @@ import useProcessQR from '../../hooks/useProcessQr'
 import { BackendRemote } from '../../backend-com'
 import { T } from '@deltachat/jsonrpc-client'
 import { ContactListItem } from '../contact/ContactListItem'
+import { useRovingTabindex } from '../../contexts/RovingTabindex'
 
 export function PseudoListItem(
   props: PropsWithChildren<{
@@ -21,22 +23,31 @@ export function PseudoListItem(
     cutoff?: string
     text: string
     subText?: string
-    onClick?: (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+    onClick?: (ev: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
     style?: CSSProperties
   }>
 ) {
   const { id, cutoff, text, subText, onClick, style } = props
+
+  const buttonRef = useRef(null)
+  const rovingTabindex = useRovingTabindex(buttonRef)
+
   return (
-    <div
-      className='contact-list-item'
-      id={id}
-      key={id}
-      onClick={onClick}
-      style={style}
-    >
-      <PseudoContact cutoff={cutoff} text={text} subText={subText}>
-        {props.children}
-      </PseudoContact>
+    <div className='contact-list-item' id={id} key={id}>
+      <button
+        ref={buttonRef}
+        className={'contact-list-item-button ' + rovingTabindex.className}
+        onClick={onClick}
+        disabled={!onClick}
+        style={style}
+        tabIndex={rovingTabindex.tabIndex}
+        onFocus={rovingTabindex.setAsActiveElement}
+        onKeyDown={rovingTabindex.onKeydown}
+      >
+        <PseudoContact cutoff={cutoff} text={text} subText={subText}>
+          {props.children}
+        </PseudoContact>
+      </button>
     </div>
   )
 }
@@ -62,7 +73,7 @@ export const PseudoListItemNoSearchResults = ({
 export const PseudoListItemShowQrCode = ({
   onClick,
 }: {
-  onClick: (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  onClick: (ev: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
 }) => {
   const tx = useTranslationFunction()
   return (
@@ -76,7 +87,7 @@ export const PseudoListItemAddMember = ({
   onClick,
   isBroadcast = false,
 }: {
-  onClick: (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  onClick: (ev: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
   isBroadcast?: boolean
 }) => {
   const tx = useTranslationFunction()
@@ -97,7 +108,9 @@ export const PseudoListItemAddContact = ({
 }: {
   queryStr: string
   queryStrIsEmail: boolean
-  onClick: (ev: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+  onClick:
+    | undefined
+    | ((ev: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void)
 }) => {
   const tx = window.static_translate // static_translate because the context method produced sometimes an 'Invalid hook call' crash
 

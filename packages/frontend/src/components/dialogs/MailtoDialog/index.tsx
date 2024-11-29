@@ -55,7 +55,7 @@ export default function MailtoDialog(props: Props & DialogProps) {
         <div className='mailto-dialog'>
           <div className='select-chat-chat-list'>
             <input
-              className='search-input'
+              className='search-input no-drag'
               onChange={onSearchChange}
               value={queryStr}
               placeholder={tx('search')}

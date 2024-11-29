@@ -26,7 +26,7 @@ export default function OutgoingMediaQuality(props: {
       values: options.map(
         ({ label, value }) => [String(value), label] as SelectDialogOption
       ),
-      selectedValue: String(Number(settings['media_quality'])),
+      initialSelectedValue: String(Number(settings['media_quality'])),
       title: tx('pref_outgoing_media_quality'),
       onSave: async (option: string) => {
         SettingsStoreInstance.effect.setCoreSetting(

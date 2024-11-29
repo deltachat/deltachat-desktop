@@ -2,7 +2,9 @@
   display: flex;
   background-color: var(--globalBackground);
 
-  p {
+  button {
+    @include button-reset;
+
     width: 50%;
     cursor: pointer;
 

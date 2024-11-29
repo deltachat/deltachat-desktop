@@ -70,7 +70,7 @@ export interface Runtime {
    * @param link
    */
   openLink(link: string): void
-  showOpenFileDialog(options: RuntimeOpenDialogOptions): Promise<string | null>
+  showOpenFileDialog(options: RuntimeOpenDialogOptions): Promise<string[]>
   downloadFile(pathToSource: string, filename: string): Promise<void>
   transformBlobURL(blob: string): string
   readClipboardText(): Promise<string>
@@ -130,7 +130,6 @@ export interface Runtime {
     theme: Theme
     data: string
   } | null>
-  resolveThemeAddress(address: string): Promise<string>
   saveBackgroundImage(file: string, isDefaultPicture: boolean): Promise<string>
 
   /** only support this if you have a real implementation for `isDroppedFileFromOutside`  */
@@ -142,6 +141,8 @@ export interface Runtime {
 
   // callbacks to set
   onChooseLanguage: ((locale: string) => Promise<void>) | undefined
+  /** backend notifies ui to reload theme,
+   * either because system theme changed or the theme changed that was watched by --theme-watch  */
   onThemeUpdate: (() => void) | undefined
   onShowDialog:
     | ((kind: 'about' | 'keybindings' | 'settings') => void)

@@ -33,6 +33,17 @@ export function ReceiveBackupDialog({ onClose }: Props & DialogProps) {
     processingQrCode.current = false
   }, [onClose])
 
+  const handleError = useCallback(
+    (error: any) => {
+      log.errorWithoutStackTrace('QrReader process error: ', error)
+      const errorMessage = error?.message || error.toString()
+      openAlertDialog({
+        message: `${tx('qrscan_failed')} ${errorMessage}`,
+      })
+    },
+    [openAlertDialog, tx]
+  )
+
   const handleScan = useCallback(
     async (data: string) => {
       if (data && !processingQrCode.current) {
@@ -41,21 +52,15 @@ export function ReceiveBackupDialog({ onClose }: Props & DialogProps) {
           await processQr(accountId, data, onDone)
         } catch (error: any) {
           log.errorWithoutStackTrace('QrReader process error: ', error)
-          openAlertDialog({
-            message: error.message || error.toString(),
-          })
+          handleError(error)
         }
         processingQrCode.current = false
       } else if (processingQrCode.current === true) {
         log.debug('Already processing a qr code')
       }
     },
-    [accountId, processQr, onDone, openAlertDialog]
+    [accountId, processQr, onDone, handleError]
   )
-
-  const handleError = (err: string) => {
-    log.error('QrReader error: ' + err)
-  }
 
   return (
     <DialogWithHeader
@@ -68,7 +73,7 @@ export function ReceiveBackupDialog({ onClose }: Props & DialogProps) {
           <br />
           {tx('multidevice_experimental_hint')}
         </p>
-        <QrReader onScan={handleScan} onError={handleError} />
+        <QrReader onScanSuccess={handleScan} onError={handleError} />
       </DialogBody>
       <DialogFooter>
         <FooterActions align='spaceBetween'>

@@ -6,6 +6,7 @@ import styles from './style.module.scss'
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   active?: boolean
   styling?: 'primary' | 'secondary' | 'danger'
+  dataTestid?: string
 }
 
 export default function Button({

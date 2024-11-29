@@ -21,6 +21,8 @@ const hostRules = 'MAP * ~NOTFOUND, EXCLUDE *.openstreetmap.org'
 rawApp.commandLine.appendSwitch('host-resolver-rules', hostRules)
 rawApp.commandLine.appendSwitch('host-rules', hostRules)
 
+rawApp.commandLine.appendSwitch('disable-features', 'IsolateSandboxedIframes')
+
 if (rc['version'] === true || rc['v'] === true) {
   /* ignore-console-log */
   console.info(BuildInfo.VERSION)
@@ -72,7 +74,11 @@ app.rc = rc
 // requestSingleInstanceLock always returns false on mas (mac app store) builds
 // due to electron issue https://github.com/electron/electron/issues/35540
 // dc-desktop issue: https://github.com/deltachat/deltachat-desktop/issues/3938
-if (!process.mas && !app.requestSingleInstanceLock()) {
+if (
+  !process.mas &&
+  !app.requestSingleInstanceLock() &&
+  !process.env.DC_TEST_DIR
+) {
   /* ignore-console-log */
   console.error('Only one instance allowed. Quitting.')
   app.quit()

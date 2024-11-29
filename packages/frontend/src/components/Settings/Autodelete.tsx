@@ -97,7 +97,7 @@ export default function Autodelete({
       values: fromServer
         ? AUTODELETE_DURATION_OPTIONS_SERVER
         : AUTODELETE_DURATION_OPTIONS_DEVICE,
-      selectedValue: fromServer
+      initialSelectedValue: fromServer
         ? settingsStore.settings['delete_server_after']
         : settingsStore.settings['delete_device_after'],
       title: fromServer

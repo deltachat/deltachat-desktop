@@ -1,5 +1,5 @@
 import React, { useCallback, useContext } from 'react'
-import { dirname } from 'path'
+import { dirname, basename } from 'path'
 
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { useStore } from '../../stores/store'
@@ -19,6 +19,9 @@ import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import { BackendRemote } from '../../backend-com'
+import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
+import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
+import useMessage from '../../hooks/chat/useMessage'
 
 type Props = {
   addFileToDraft: (file: string, viewType: T.Viewtype) => void
@@ -36,28 +39,62 @@ export default function MenuAttachment({
   const openConfirmationDialog = useConfirmationDialog()
   const { sendVideoChatInvitation } = useVideoChat()
   const { openDialog, closeDialog } = useDialog()
+  const { sendMessage } = useMessage()
   const [settings] = useStore(SettingsStoreInstance)
   const accountId = selectedAccountId()
+
+  const confirmSendMultipleFiles = (
+    filePaths: string[],
+    msgViewType: Viewtype
+  ) => {
+    if (!selectedChat) {
+      throw new Error('no chat selected')
+    }
+    openDialog(ConfirmSendingFiles, {
+      sanitizedFileList: filePaths.map(path => ({ name: basename(path) })),
+      chatName: selectedChat.name,
+      onClick: async (isConfirmed: boolean) => {
+        if (!isConfirmed) {
+          return
+        }
+
+        for (const filePath of filePaths) {
+          sendMessage(accountId, selectedChat.id, {
+            file: filePath,
+            viewtype: msgViewType,
+          }).then(() => {
+            // start sending other files, don't wait until last file is sent
+            if (runtime.getRuntimeInfo().target === 'browser') {
+              // browser created temp files during upload that can now be cleaned up
+              runtime.removeTempFile(filePath)
+            }
+          })
+        }
+      },
+    })
+  }
 
   const addFilenameFile = async () => {
     // function for files
     const { defaultPath, setLastPath } = rememberLastUsedPath(
       LastUsedSlot.Attachment
     )
-    const file = await runtime.showOpenFileDialog({
+    const files = await runtime.showOpenFileDialog({
       filters: [
         {
           name: 'All Files',
           extensions: ['*'],
         },
       ],
-      properties: ['openFile'],
+      properties: ['openFile', 'multiSelections'],
       defaultPath,
     })
 
-    if (file) {
-      setLastPath(dirname(file))
-      addFileToDraft(file, 'File')
+    if (files.length === 1) {
+      setLastPath(dirname(files[0]))
+      addFileToDraft(files[0], 'File')
+    } else if (files.length > 1) {
+      confirmSendMultipleFiles(files, 'File')
     }
   }
 
@@ -66,20 +103,22 @@ export default function MenuAttachment({
     const { defaultPath, setLastPath } = rememberLastUsedPath(
       LastUsedSlot.Attachment
     )
-    const file = await runtime.showOpenFileDialog({
+    const files = await runtime.showOpenFileDialog({
       filters: [
         {
           name: tx('image'),
           extensions: IMAGE_EXTENSIONS,
         },
       ],
-      properties: ['openFile'],
+      properties: ['openFile', 'multiSelections'],
       defaultPath,
     })
 
-    if (file) {
-      setLastPath(dirname(file))
-      addFileToDraft(file, 'Image')
+    if (files.length === 1) {
+      setLastPath(dirname(files[0]))
+      addFileToDraft(files[0], 'Image')
+    } else if (files.length > 1) {
+      confirmSendMultipleFiles(files, 'Image')
     }
   }
 
@@ -165,12 +204,12 @@ export default function MenuAttachment({
 
     const boundingBox = attachmentMenuButtonElement.getBoundingClientRect()
 
-    const [cursorX, cursorY] = [boundingBox.x, boundingBox.y]
+    const [x, y] = [boundingBox.x, boundingBox.y]
     event.preventDefault() // prevent default runtime context menu from opening
 
     openContextMenu({
-      cursorX,
-      cursorY,
+      x,
+      y,
       items: menu,
     })
   }

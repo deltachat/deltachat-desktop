@@ -154,6 +154,10 @@ export function ViewProfileInner({
     onChatClick(dmChatId)
   }
 
+  const onUnblockContact = async () => {
+    await BackendRemote.rpc.unblockContact(accountId, contact.id)
+  }
+
   useEffect(() => {
     if (isSelfChat) {
       ;(async () => {
@@ -229,6 +233,8 @@ export function ViewProfileInner({
     CHATLISTITEM_CHAT_HEIGHT *
     Math.max(Math.min(maxMinHeightItems, chatListIds.length), 1)
 
+  const VerificationTag = verifier?.action ? 'button' : 'div'
+
   return (
     <>
       <DialogContent>
@@ -243,19 +249,25 @@ export function ViewProfileInner({
         {!isSelfChat && (
           <div className='contact-attributes'>
             {verifier && (
-              <div
-                className={verifier.action && 'clickable'}
+              <VerificationTag
+                className='verification'
                 onClick={verifier.action}
                 style={{ display: 'flex' }}
               >
                 <InlineVerifiedIcon />
                 {verifier.label}
-              </div>
+              </VerificationTag>
             )}
             {contact.lastSeen !== 0 && (
               <div>
                 <i className='material-svg-icon material-icon-schedule' />
                 <LastSeen timestamp={contact.lastSeen} />
+              </div>
+            )}
+            {contact.isBlocked && (
+              <div>
+                <i className='material-svg-icon material-icon-blocked' />
+                {tx('contact_is_blocked')}
               </div>
             )}
           </div>
@@ -268,13 +280,14 @@ export function ViewProfileInner({
           justifyContent: 'center',
         }}
       >
-        {!isDeviceChat && (
-          <Button
-            styling='primary'
-            aria-label={tx('send_message')}
-            onClick={onSendMessage}
-          >
+        {!isDeviceChat && !contact.isBlocked && (
+          <Button styling='primary' onClick={onSendMessage}>
             {tx('send_message')}
+          </Button>
+        )}
+        {!isDeviceChat && contact.isBlocked && (
+          <Button styling='primary' onClick={onUnblockContact}>
+            {tx('menu_unblock_contact')}
           </Button>
         )}
       </div>
