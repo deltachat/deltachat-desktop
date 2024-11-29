@@ -49,16 +49,23 @@ const DisplayedStickerPack = ({
       <div className='title'>{stickerPackName}</div>
       <div className='container'>
         {stickerPackImages.map((filePath, index) => (
-          <button
-            className='sticker'
+          <StickersListItem
             key={index}
+            filePath={filePath}
             onClick={() => onClickSticker(filePath)}
-          >
-            <img src={filePath} />
-          </button>
+          />
         ))}
       </div>
     </div>
+  )
+}
+
+function StickersListItem(props: { filePath: string; onClick: () => void }) {
+  const { filePath, onClick } = props
+  return (
+    <button className='sticker' onClick={onClick}>
+      <img src={filePath} />
+    </button>
   )
 }
 
