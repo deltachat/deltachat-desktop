@@ -91,34 +91,48 @@ function ReactionsDialogList({ reactionsByContact, onClose }: Props) {
 
   return (
     <ul className={styles.reactionsDialogList}>
-      {contacts.map(contact => {
-        const notFromSelf = C.DC_CONTACT_ID_SELF !== contact.id
-        return (
-          <li key={contact.id}>
-            <button
-              onClick={() => {
-                if (notFromSelf) {
-                  openViewProfileDialog(accountId, contact.id)
-                }
-              }}
-              // `aria-disabled` instead of just `disabled` because we probably
-              // still want to keep it focusable for screen-readers.
-              aria-disabled={!notFromSelf}
-              className={classNames(styles.reactionsDialogListItem, {
-                [styles.reactionsDialogListClickable]: notFromSelf,
-              })}
-            >
-              <div className={styles.reactionsDialogAvatar}>
-                <AvatarFromContact contact={contact} />
-              </div>
-              <div className={styles.reactionsDialogContactName}>
-                <ContactName displayName={contact.displayName} />
-              </div>
-              <div className={styles.reactionsDialogEmoji}>{contact.emoji}</div>
-            </button>
-          </li>
-        )
-      })}
+      {contacts.map(contact => (
+        <li key={contact.id}>
+          <ReactionsDialogListItem
+            contact={contact}
+            onClickNonSelf={contactId =>
+              openViewProfileDialog(accountId, contactId)
+            }
+          />
+        </li>
+      ))}
     </ul>
+  )
+}
+
+function ReactionsDialogListItem(props: {
+  contact: ContactWithReaction
+  onClickNonSelf: (contactId: number) => void
+}) {
+  const { contact, onClickNonSelf } = props
+  const notFromSelf = C.DC_CONTACT_ID_SELF !== contact.id
+
+  return (
+    <button
+      onClick={() => {
+        if (notFromSelf) {
+          onClickNonSelf(contact.id)
+        }
+      }}
+      // `aria-disabled` instead of just `disabled` because we probably
+      // still want to keep it focusable for screen-readers.
+      aria-disabled={!notFromSelf}
+      className={classNames(styles.reactionsDialogListItem, {
+        [styles.reactionsDialogListClickable]: notFromSelf,
+      })}
+    >
+      <div className={styles.reactionsDialogAvatar}>
+        <AvatarFromContact contact={contact} />
+      </div>
+      <div className={styles.reactionsDialogContactName}>
+        <ContactName displayName={contact.displayName} />
+      </div>
+      <div className={styles.reactionsDialogEmoji}>{contact.emoji}</div>
+    </button>
   )
 }
