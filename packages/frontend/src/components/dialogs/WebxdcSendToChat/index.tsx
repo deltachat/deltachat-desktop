@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import classNames from 'classnames'
@@ -26,6 +26,7 @@ import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import styles from './styles.module.scss'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
+import { RovingTabindexProvider } from '../../../contexts/RovingTabindex'
 
 type Props = {
   messageText: string | null
@@ -44,6 +45,8 @@ export default function WebxdcSaveToChatDialog(props: Props) {
   const { chatListIds } = useChatList(LIST_FLAGS, queryStr)
   const { isChatLoaded, loadChats, chatCache } =
     useLogicVirtualChatList(chatListIds)
+
+  const resultsRef = useRef<HTMLDivElement>(null)
 
   const onChatClick = async (chatId: number) => {
     let path = null
@@ -103,32 +106,38 @@ export default function WebxdcSaveToChatDialog(props: Props) {
         {noResults && queryStr && (
           <PseudoListItemNoSearchResults queryStr={queryStr} />
         )}
-        <div className='results' style={{ height: noResults ? '0px' : '100%' }}>
-          <AutoSizer>
-            {({ width, height }) => (
-              <ChatListPart
-                isRowLoaded={isChatLoaded}
-                loadMoreRows={loadChats}
-                rowCount={chatListIds.length}
-                width={width}
-                height={height}
-                itemKey={index => 'key' + chatListIds[index]}
-                itemHeight={CHATLISTITEM_CHAT_HEIGHT}
-              >
-                {({ index, style }) => {
-                  const chatId = chatListIds[index]
-                  return (
-                    <div style={style}>
-                      <ChatListItem
-                        chatListItem={chatCache[chatId] || undefined}
-                        onClick={onChatClick.bind(null, chatId)}
-                      />
-                    </div>
-                  )
-                }}
-              </ChatListPart>
-            )}
-          </AutoSizer>
+        <div
+          ref={resultsRef}
+          className='results'
+          style={{ height: noResults ? '0px' : '100%' }}
+        >
+          <RovingTabindexProvider wrapperElementRef={resultsRef}>
+            <AutoSizer>
+              {({ width, height }) => (
+                <ChatListPart
+                  isRowLoaded={isChatLoaded}
+                  loadMoreRows={loadChats}
+                  rowCount={chatListIds.length}
+                  width={width}
+                  height={height}
+                  itemKey={index => 'key' + chatListIds[index]}
+                  itemHeight={CHATLISTITEM_CHAT_HEIGHT}
+                >
+                  {({ index, style }) => {
+                    const chatId = chatListIds[index]
+                    return (
+                      <div style={style}>
+                        <ChatListItem
+                          chatListItem={chatCache[chatId] || undefined}
+                          onClick={onChatClick.bind(null, chatId)}
+                        />
+                      </div>
+                    )
+                  }}
+                </ChatListPart>
+              )}
+            </AutoSizer>
+          </RovingTabindexProvider>
         </div>
       </DialogBody>
       <DialogFooter>
