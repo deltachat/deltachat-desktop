@@ -99,6 +99,11 @@ type ProviderProps = PropsWithChildren<{
    * @default 'roving-tabindex'
    */
   classNameOfTargetElements?: string
+  /**
+   * 'both' will handle both ArrowUp/Down and ArrowLeft/Right.
+   * @default 'vertical'
+   */
+  direction?: 'vertical' | 'horizontal' | 'both'
 }>
 
 export const RovingTabindexContext = createContext<ContextValue>({
@@ -113,9 +118,13 @@ export function RovingTabindexProvider({
   children,
   wrapperElementRef,
   classNameOfTargetElements,
+  direction,
 }: ProviderProps) {
   if (classNameOfTargetElements == undefined) {
     classNameOfTargetElements = 'roving-tabindex'
+  }
+  if (direction == undefined) {
+    direction = 'vertical'
   }
 
   const [activeElement, setActiveElement] = useState<HTMLElement | null>(null)
@@ -166,8 +175,9 @@ export function RovingTabindexProvider({
         return
       }
 
-      const keyCode = event.code
-      if (keyCode !== 'ArrowDown' && keyCode !== 'ArrowUp') {
+      const indexChange: -1 | 1 | undefined =
+        indexChangeTable[direction][event.code]
+      if (indexChange == undefined) {
         return
       }
 
@@ -199,9 +209,7 @@ export function RovingTabindexProvider({
       }
 
       const newActiveElement =
-        eligibleElements[
-          oldActiveElementInd + (keyCode === 'ArrowDown' ? 1 : -1)
-        ]
+        eligibleElements[oldActiveElementInd + indexChange]
       // `newActiveElement` could be `undefined` if the active element is either
       // the last or the first.
       if (newActiveElement != undefined) {
@@ -213,7 +221,7 @@ export function RovingTabindexProvider({
         newActiveElement_.focus()
       }
     },
-    [activeElement, classNameOfTargetElements, wrapperElementRef]
+    [activeElement, classNameOfTargetElements, direction, wrapperElementRef]
   )
 
   return (
@@ -229,3 +237,20 @@ export function RovingTabindexProvider({
     </RovingTabindexContext.Provider>
   )
 }
+
+const indexChangeTable = {
+  vertical: {
+    ArrowUp: -1,
+    ArrowDown: 1,
+  } as { [key: string]: -1 | 1 },
+  horizontal: {
+    ArrowLeft: -1,
+    ArrowRight: 1,
+  } as { [key: string]: -1 | 1 },
+  both: {
+    ArrowUp: -1,
+    ArrowLeft: -1,
+    ArrowDown: 1,
+    ArrowRight: 1,
+  } as { [key: string]: -1 | 1 },
+} as const
