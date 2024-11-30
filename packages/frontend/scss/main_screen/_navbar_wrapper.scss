@@ -56,9 +56,7 @@
   -webkit-app-region: drag;
 }
 
-.no-drag,
-input,
-button {
+.no-drag {
   -webkit-app-region: no-drag;
 }
 
