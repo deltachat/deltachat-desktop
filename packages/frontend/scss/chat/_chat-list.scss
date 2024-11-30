@@ -16,9 +16,7 @@
   overflow: hidden;
 
   .search-result-divider {
-    line-height: 43px;
-    height: 40px;
-    padding-left: 15px;
+    padding: 11px 15px;
     font-weight: 200;
     color: var(--globaltext);
     background: var(--cli-search-result-divider);
