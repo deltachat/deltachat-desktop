@@ -26,6 +26,7 @@
 - fix mac drag window issues #4300
 - the main window overflowing small screens, or/and if zoom level is high #4156
 - do not clear the draft if sending failed. #4340
+- "Search in \<chat name\>" divider overflowing for long chat names #4375
 
 
 <a id="1_48_0"></a>
