@@ -1,38 +1,19 @@
 use anyhow::Context;
-use deltachat::accounts::Accounts;
 use log::{error, info, trace};
 use tauri::{Manager, UriSchemeContext, UriSchemeResponder};
+use tokio::fs;
 
 use crate::AppState;
 
-#[tauri::command]
-pub(crate) fn on_webxdc_message_changed(account_id: u32, instance_id: u32) {
-    info!("TODO: handle on_webxdc_message_changed handler {account_id} {instance_id}")
-}
-
-#[tauri::command]
-pub(crate) fn on_webxdc_message_deleted(account_id: u32, instance_id: u32) {
-    info!("TODO: handle on_webxdc_message_deleted event handler: {account_id} {instance_id}")
-}
-
-#[tauri::command]
-pub(crate) fn on_webxdc_status_update(account_id: u32, instance_id: u32) {
-    info!("TODO: handle on_webxdc_status_update handler {account_id} {instance_id}")
-}
-
-#[tauri::command]
-pub(crate) fn on_webxdc_realtime_data(account_id: u32, instance_id: u32, payload: Vec<u8>) {
-    info!("TODO: handle on_webxdc_status_update handler {account_id} {instance_id} {payload:?}")
-}
-
-
-pub(crate) fn webxdc_icon_protocol<R: tauri::Runtime>(
+pub(crate) fn delta_blobs_protocol<R: tauri::Runtime>(
     ctx: UriSchemeContext<'_, R>,
     request: http::Request<Vec<u8>>,
     responder: UriSchemeResponder,
 ) {
     let path = request.uri();
-    info!("webxdc-icon {path}");
+    info!("dcblob {path}");
+
+    // URI format is dcblob://<account folder name>/<blob filename>
 
     let app_state_deltachat = { ctx.app_handle().state::<AppState>().deltachat.clone() };
 
@@ -40,15 +21,33 @@ pub(crate) fn webxdc_icon_protocol<R: tauri::Runtime>(
         // workaround for not yet available try_blocks feature
         // https://doc.rust-lang.org/beta/unstable-book/language-features/try-blocks.html
         let result: anyhow::Result<()> = async {
-            // parse url (account & instance id)
-            if let (Some(account_id), Some(instance_id)) =
+            // parse url (account folder name & blob filename)
+            if let (Some(account_folder), Some(file_name)) =
                 (request.uri().host(), request.uri().path().split('/').nth(1))
             {
-                trace!("webxdc-icon {account_id} {instance_id}");
+                trace!("dcblob {account_folder} {file_name}");
                 // get delta chat
                 let dc = app_state_deltachat.read().await;
 
-                match get_webxdc_icon(&dc, account_id, instance_id).await {
+                let account = dc
+                    .get_all()
+                    .into_iter()
+                    .find_map(|id| {
+                        dc.get_account(id).filter(|account| {
+                            account
+                                .get_blobdir()
+                                .parent()
+                                .map(|p| p.ends_with(account_folder))
+                                .is_some()
+                        })
+                    })
+                    .context("account not found")?;
+
+                // TODO:
+                // - [ ] check for ".."
+                // - [ ] test if decode uri of filename will be nessesary
+
+                match fs::read(account.get_blobdir().join(file_name)).await {
                     Ok(blob) => {
                         responder.respond(
                             http::Response::builder()
@@ -57,7 +56,7 @@ pub(crate) fn webxdc_icon_protocol<R: tauri::Runtime>(
                         );
                     }
                     Err(err) => {
-                        error!("webxdc-icon loading error: {err:#}");
+                        error!("dcblob loading error: {err:#}");
                         responder.respond(
                             http::Response::builder()
                                 .status(http::StatusCode::INTERNAL_SERVER_ERROR)
@@ -79,27 +78,10 @@ pub(crate) fn webxdc_icon_protocol<R: tauri::Runtime>(
                 );
             }
             Ok(())
-        }.await;
+        }
+        .await;
         if let Err(err) = result {
-            error!("Failed to build reply for webxdc-icon protocol: {err:#}")
+            error!("Failed to build reply for dcblob protocol: {err:#}")
         }
     });
-}
-
-pub(crate) async fn get_webxdc_icon(
-    dc: &Accounts,
-    account_id: &str,
-    instance_id: &str,
-) -> anyhow::Result<Vec<u8>> {
-    let account = dc
-        .get_account(account_id.parse::<u32>()?)
-        .context("account not found")?;
-    let message = deltachat::message::Message::load_from_db(
-        &account,
-        deltachat::message::MsgId::new(instance_id.parse::<u32>()?),
-    )
-    .await?;
-    let webxdc_info = message.get_webxdc_info(&account).await?;
-    let icon_blob = message.get_webxdc_blob(&account, &webxdc_info.icon).await?;
-    Ok(icon_blob)
 }

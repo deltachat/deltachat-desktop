@@ -302,22 +302,24 @@ class TauriRuntime implements Runtime {
   downloadFile(pathToSource: string, filename: string): Promise<void> {
     throw new Error('Method not implemented.15')
   }
-  transformBlobURL(blob: string): string {
-    // for now file scheme like electron, could be custom scheme in future
-    // need to use custom protocol like the asset: protocol of convertFileSrc
-    if (!blob) {
-      return blob
+  transformBlobURL(blob_path: string): string {
+    const matches = blob_path.match(/.*(:?\\|\/)(.+?)\1dc.db-blobs\1(.*)/)
+    // this.log.info({ transformBlobURL: blob_path, matches })
+    
+    if (matches) {
+      let filename = matches[3];
+      if (decodeURIComponent(filename) === filename) {
+        // if it is not already encoded then encode it.
+        filename= encodeURIComponent(filename)
+      }
+      return `dcblob://${matches[2]}/${matches[3]}`
     }
-    const path_components = blob.replace(/\\/g, '/').split('/')
-    const filename2 = path_components[path_components.length - 1]
-
-    let new_blob_path
-
-    if (decodeURIComponent(filename2) === filename2) {
-      // if it is not already encoded then encode it.
-      new_blob_path = blob.replace(filename2, encodeURIComponent(filename2))
+    if (blob_path !== '') {
+      this.log.error('transformBlobURL wrong url format', blob_path)
+    } else {
+      this.log.debug('transformBlobURL called with empty string for blob_path')
     }
-    return `file://${new_blob_path}`
+    return ''
   }
   readClipboardText(): Promise<string> {
     throw new Error('Method not implemented.17')
