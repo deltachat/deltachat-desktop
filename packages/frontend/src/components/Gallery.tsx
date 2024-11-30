@@ -19,6 +19,7 @@ import FullscreenMedia, {
   NeighboringMediaMode,
 } from './dialogs/FullscreenMedia'
 import { DialogContext } from '../contexts/DialogContext'
+import { RovingTabindexProvider } from '../contexts/RovingTabindex'
 
 const log = getLogger('renderer/Gallery')
 
@@ -74,6 +75,7 @@ export default class Gallery extends Component<
   }
 > {
   dateHeader = createRef<HTMLDivElement>()
+  galleryItemsRef = createRef<HTMLDivElement>()
   constructor(props: Props) {
     super(props)
 
@@ -281,6 +283,7 @@ export default class Gallery extends Component<
           style={{ flexGrow: 1 }}
         >
           <div
+            ref={this.galleryItemsRef}
             className={`gallery gallery-image-object-fit_${
               galleryImageKeepAspectRatio ? 'contain' : 'cover'
             }`}
@@ -296,13 +299,18 @@ export default class Gallery extends Component<
               <>
                 <AutoSizer>
                   {({ width, height }) => (
-                    <FileTable
-                      width={width}
-                      height={height}
-                      mediaLoadResult={mediaLoadResult}
-                      mediaMessageIds={filteredMediaMessageIds}
-                      queryText={queryText}
-                    ></FileTable>
+                    <RovingTabindexProvider
+                      wrapperElementRef={this.galleryItemsRef}
+                      direction='vertical'
+                    >
+                      <FileTable
+                        width={width}
+                        height={height}
+                        mediaLoadResult={mediaLoadResult}
+                        mediaMessageIds={filteredMediaMessageIds}
+                        queryText={queryText}
+                      ></FileTable>
+                    </RovingTabindexProvider>
                   )}
                 </AutoSizer>
                 {filteredMediaMessageIds.length === 0 && (
@@ -348,54 +356,64 @@ export default class Gallery extends Component<
                   }
 
                   return (
-                    <FixedSizeGrid
-                      width={width}
-                      height={height}
-                      columnWidth={itemWidth}
-                      rowHeight={itemHeight}
-                      columnCount={itemsPerRow}
-                      rowCount={rowCount}
-                      overscanRowCount={10}
-                      onItemsRendered={({
-                        visibleColumnStartIndex,
-                        visibleRowStartIndex,
-                      }) => {
-                        const msgId =
-                          mediaMessageIds[
-                            visibleRowStartIndex * itemsPerRow +
-                              visibleColumnStartIndex
-                          ]
-                        const message = mediaLoadResult[msgId]
-                        if (!message) {
-                          return
-                        }
-                        this.updateFirstVisibleMessage(message)
-                      }}
+                    <RovingTabindexProvider
+                      wrapperElementRef={this.galleryItemsRef}
+                      // TODO improvement: perhaps we can easily write
+                      // proper grid navigation,
+                      // since grid dimensions are known.
+                      direction='both'
                     >
-                      {({ columnIndex, rowIndex, style }) => {
-                        const msgId =
-                          mediaMessageIds[rowIndex * itemsPerRow + columnIndex]
-                        const message = mediaLoadResult[msgId]
-                        if (!message) {
-                          return null
-                        }
-                        return (
-                          <div
-                            style={{ ...style }}
-                            className='item'
-                            key={msgId}
-                          >
-                            <this.state.element
-                              messageId={msgId}
-                              loadResult={message}
-                              openFullscreenMedia={this.openFullscreenMedia.bind(
-                                this
-                              )}
-                            />
-                          </div>
-                        )
-                      }}
-                    </FixedSizeGrid>
+                      <FixedSizeGrid
+                        width={width}
+                        height={height}
+                        columnWidth={itemWidth}
+                        rowHeight={itemHeight}
+                        columnCount={itemsPerRow}
+                        rowCount={rowCount}
+                        overscanRowCount={10}
+                        onItemsRendered={({
+                          visibleColumnStartIndex,
+                          visibleRowStartIndex,
+                        }) => {
+                          const msgId =
+                            mediaMessageIds[
+                              visibleRowStartIndex * itemsPerRow +
+                                visibleColumnStartIndex
+                            ]
+                          const message = mediaLoadResult[msgId]
+                          if (!message) {
+                            return
+                          }
+                          this.updateFirstVisibleMessage(message)
+                        }}
+                      >
+                        {({ columnIndex, rowIndex, style }) => {
+                          const msgId =
+                            mediaMessageIds[
+                              rowIndex * itemsPerRow + columnIndex
+                            ]
+                          const message = mediaLoadResult[msgId]
+                          if (!message) {
+                            return null
+                          }
+                          return (
+                            <div
+                              style={{ ...style }}
+                              className='item'
+                              key={msgId}
+                            >
+                              <this.state.element
+                                messageId={msgId}
+                                loadResult={message}
+                                openFullscreenMedia={this.openFullscreenMedia.bind(
+                                  this
+                                )}
+                              />
+                            </div>
+                          )
+                        }}
+                      </FixedSizeGrid>
+                    </RovingTabindexProvider>
                   )
                 }}
               </AutoSizer>
