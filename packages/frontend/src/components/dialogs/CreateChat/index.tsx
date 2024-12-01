@@ -419,6 +419,8 @@ export function CreateGroup(props: CreateGroupProps) {
   const [errorMissingGroupName, setErrorMissingGroupName] = useState(false)
   const [groupContacts, setGroupContacts] = useState<Type.Contact[]>([])
 
+  const groupMemberContactListWrapperRef = useRef<HTMLDivElement>(null)
+
   useMemo(() => {
     BackendRemote.rpc
       .getContactsByIds(accountId, groupMembers)
@@ -459,18 +461,25 @@ export function CreateGroup(props: CreateGroupProps) {
             quantity: groupMembers.length,
           })}
         </div>
-        <div className='group-member-contact-list-wrapper'>
-          <PseudoListItemAddMember
-            onClick={showAddMemberDialog}
-            isBroadcast={false}
-          />
-          <ContactList
-            contacts={groupContacts}
-            showRemove
-            onRemoveClick={c => {
-              removeGroupMember(c)
-            }}
-          />
+        <div
+          className='group-member-contact-list-wrapper'
+          ref={groupMemberContactListWrapperRef}
+        >
+          <RovingTabindexProvider
+            wrapperElementRef={groupMemberContactListWrapperRef}
+          >
+            <PseudoListItemAddMember
+              onClick={showAddMemberDialog}
+              isBroadcast={false}
+            />
+            <ContactList
+              contacts={groupContacts}
+              showRemove
+              onRemoveClick={c => {
+                removeGroupMember(c)
+              }}
+            />
+          </RovingTabindexProvider>
         </div>
       </DialogBody>
       <DialogFooter>
@@ -524,6 +533,8 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
   )
 
   const [broadcastContacts, setBroadcastContacts] = useState<Type.Contact[]>([])
+
+  const groupMemberContactListWrapperRef = useRef<HTMLDivElement>(null)
 
   useMemo(() => {
     BackendRemote.rpc
@@ -585,18 +596,25 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
               })}
             </div>
           )}
-          <div className='group-member-contact-list-wrapper'>
-            <PseudoListItemAddMember
-              onClick={showAddMemberDialog}
-              isBroadcast
-            />
-            <ContactList
-              contacts={broadcastContacts}
-              showRemove
-              onRemoveClick={c => {
-                removeBroadcastRecipient(c)
-              }}
-            />
+          <div
+            className='group-member-contact-list-wrapper'
+            ref={groupMemberContactListWrapperRef}
+          >
+            <RovingTabindexProvider
+              wrapperElementRef={groupMemberContactListWrapperRef}
+            >
+              <PseudoListItemAddMember
+                onClick={showAddMemberDialog}
+                isBroadcast
+              />
+              <ContactList
+                contacts={broadcastContacts}
+                showRemove
+                onRemoveClick={c => {
+                  removeBroadcastRecipient(c)
+                }}
+              />
+            </RovingTabindexProvider>
           </div>
         </DialogContent>
       </DialogBody>

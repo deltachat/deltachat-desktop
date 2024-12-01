@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { C } from '@deltachat/jsonrpc-client'
 
@@ -15,6 +15,7 @@ import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import styles from './styles.module.scss'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
+import { RovingTabindexProvider } from '../../../contexts/RovingTabindex'
 
 type Props = {
   messageText: string
@@ -31,6 +32,8 @@ export default function MailtoDialog(props: Props & DialogProps) {
   const { chatListIds } = useChatList(listFlags, queryStr)
   const { isChatLoaded, loadChats, chatCache } =
     useLogicVirtualChatList(chatListIds)
+
+  const resultsRef = useRef<HTMLDivElement>(null)
 
   const onChatClick = async (chatId: number) => {
     createDraftMessage(accountId, chatId, messageText)
@@ -65,32 +68,38 @@ export default function MailtoDialog(props: Props & DialogProps) {
             {noResults && queryStr && (
               <PseudoListItemNoSearchResults queryStr={queryStr} />
             )}
-            <div style={noResults ? { height: '0px' } : {}} className='results'>
-              <AutoSizer>
-                {({ width, height }) => (
-                  <ChatListPart
-                    isRowLoaded={isChatLoaded}
-                    loadMoreRows={loadChats}
-                    rowCount={chatListIds.length}
-                    width={width}
-                    height={height}
-                    itemKey={index => 'key' + chatListIds[index]}
-                    itemHeight={CHATLISTITEM_CHAT_HEIGHT}
-                  >
-                    {({ index, style }) => {
-                      const chatId = chatListIds[index]
-                      return (
-                        <div style={style}>
-                          <ChatListItem
-                            chatListItem={chatCache[chatId] || undefined}
-                            onClick={onChatClick.bind(null, chatId)}
-                          />
-                        </div>
-                      )
-                    }}
-                  </ChatListPart>
-                )}
-              </AutoSizer>
+            <div
+              ref={resultsRef}
+              style={noResults ? { height: '0px' } : {}}
+              className='results'
+            >
+              <RovingTabindexProvider wrapperElementRef={resultsRef}>
+                <AutoSizer>
+                  {({ width, height }) => (
+                    <ChatListPart
+                      isRowLoaded={isChatLoaded}
+                      loadMoreRows={loadChats}
+                      rowCount={chatListIds.length}
+                      width={width}
+                      height={height}
+                      itemKey={index => 'key' + chatListIds[index]}
+                      itemHeight={CHATLISTITEM_CHAT_HEIGHT}
+                    >
+                      {({ index, style }) => {
+                        const chatId = chatListIds[index]
+                        return (
+                          <div style={style}>
+                            <ChatListItem
+                              chatListItem={chatCache[chatId] || undefined}
+                              onClick={onChatClick.bind(null, chatId)}
+                            />
+                          </div>
+                        )
+                      }}
+                    </ChatListPart>
+                  )}
+                </AutoSizer>
+              </RovingTabindexProvider>
             </div>
           </div>
         </div>

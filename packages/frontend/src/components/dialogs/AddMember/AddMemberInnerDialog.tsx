@@ -22,6 +22,7 @@ import InfiniteLoader from 'react-window-infinite-loader'
 import { AddMemberChip } from './AddMemberDialog'
 import styles from './styles.module.scss'
 import classNames from 'classnames'
+import { RovingTabindexProvider } from '../../../contexts/RovingTabindex'
 
 export function AddMemberInnerDialog({
   onCancel,
@@ -275,58 +276,61 @@ export function AddMemberInnerDialog({
                 // minimumBatchSize={100}
               >
                 {({ onItemsRendered, ref }) => (
-                  // Not using 'react-window' results in ~5 second rendering time
-                  // if the user has 5000 contacts.
-                  // (see https://github.com/deltachat/deltachat-desktop/issues/1830)
-                  <FixedSizeList
-                    itemData={contactIds}
-                    itemCount={itemCount}
-                    itemKey={(index, contactIds) => {
-                      const isExtraItem = index >= contactIds.length
-                      return isExtraItem ? 'addContact' : contactIds[index]
-                    }}
-                    onItemsRendered={onItemsRendered}
-                    ref={ref}
-                    height={height}
-                    width='100%'
-                    // TODO fix: The size of each item is determined
-                    // by `--local-avatar-size` and `--local-avatar-vertical-margin`,
-                    // which might be different, e.g. currently they're smaller for
-                    // "Rocket Theme", which results in gaps between the elements.
-                    itemSize={64}
-                  >
-                    {({ index, style, data: contactIds }) => {
-                      const isExtraItem = index >= contactIds.length
-                      if (isExtraItem) {
-                        return renderAddContact()
-                      }
+                  <RovingTabindexProvider wrapperElementRef={contactListRef}>
+                    {/* Not using 'react-window' results in ~5 second rendering time
+                    if the user has 5000 contacts.
+                    (see https://github.com/deltachat/deltachat-desktop/issues/1830) */}
+                    <FixedSizeList
+                      itemData={contactIds}
+                      itemCount={itemCount}
+                      itemKey={(index, contactIds) => {
+                        const isExtraItem = index >= contactIds.length
+                        return isExtraItem ? 'addContact' : contactIds[index]
+                      }}
+                      onItemsRendered={onItemsRendered}
+                      ref={ref}
+                      height={height}
+                      width='100%'
+                      // TODO fix: The size of each item is determined
+                      // by `--local-avatar-size` and `--local-avatar-vertical-margin`,
+                      // which might be different, e.g. currently they're smaller for
+                      // "Rocket Theme", which results in gaps between the elements.
+                      itemSize={64}
+                    >
+                      {({ index, style, data: contactIds }) => {
+                        const isExtraItem = index >= contactIds.length
+                        if (isExtraItem) {
+                          return renderAddContact()
+                        }
 
-                      const contact = contactCache[contactIds[index]]
-                      if (!contact) {
-                        // Not loaded yet
-                        return <div style={style}></div>
-                      }
+                        const contact = contactCache[contactIds[index]]
+                        if (!contact) {
+                          // Not loaded yet
+                          return <div style={style}></div>
+                        }
 
-                      return (
-                        <div style={style}>
-                          <ContactListItem
-                            contact={contact}
-                            showCheckbox
-                            checked={
-                              contactIdsToAdd.some(c => c.id === contact.id) ||
-                              contactIdsInGroup.includes(contact.id)
-                            }
-                            disabled={
-                              contactIdsInGroup.includes(contact.id) ||
-                              contact.id === C.DC_CONTACT_ID_SELF
-                            }
-                            onCheckboxClick={toggleMember}
-                            showRemove={false}
-                          />
-                        </div>
-                      )
-                    }}
-                  </FixedSizeList>
+                        return (
+                          <div style={style}>
+                            <ContactListItem
+                              contact={contact}
+                              showCheckbox
+                              checked={
+                                contactIdsToAdd.some(
+                                  c => c.id === contact.id
+                                ) || contactIdsInGroup.includes(contact.id)
+                              }
+                              disabled={
+                                contactIdsInGroup.includes(contact.id) ||
+                                contact.id === C.DC_CONTACT_ID_SELF
+                              }
+                              onCheckboxClick={toggleMember}
+                              showRemove={false}
+                            />
+                          </div>
+                        )
+                      }}
+                    </FixedSizeList>
+                  </RovingTabindexProvider>
                 )}
               </InfiniteLoader>
             )}

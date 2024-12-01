@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import classNames from 'classnames'
 
 import Dialog, {
@@ -21,6 +21,10 @@ import type { DialogProps } from '../../../contexts/DialogContext'
 import { type T, C } from '@deltachat/jsonrpc-client'
 
 import useOpenViewProfileDialog from '../../../hooks/dialog/useOpenViewProfileDialog'
+import {
+  RovingTabindexProvider,
+  useRovingTabindex,
+} from '../../../contexts/RovingTabindex'
 
 export type Props = {
   reactionsByContact: T.Reactions['reactionsByContact']
@@ -62,6 +66,8 @@ function ReactionsDialogList({ reactionsByContact, onClose }: Props) {
   const [contacts, setContacts] = useState<ContactWithReaction[]>([])
   const openViewProfileDialog = useOpenViewProfileDialog({ onAction: onClose })
 
+  const ref = useRef<HTMLUListElement>(null)
+
   useEffect(() => {
     const resolveContacts = async () => {
       const contactIds = Object.keys(reactionsByContact).map(contactId =>
@@ -90,35 +96,62 @@ function ReactionsDialogList({ reactionsByContact, onClose }: Props) {
   }, [accountId, reactionsByContact])
 
   return (
-    <ul className={styles.reactionsDialogList}>
-      {contacts.map(contact => {
-        const notFromSelf = C.DC_CONTACT_ID_SELF !== contact.id
-        return (
+    <ul ref={ref} className={styles.reactionsDialogList}>
+      <RovingTabindexProvider wrapperElementRef={ref}>
+        {contacts.map(contact => (
           <li key={contact.id}>
-            <button
-              onClick={() => {
-                if (notFromSelf) {
-                  openViewProfileDialog(accountId, contact.id)
-                }
-              }}
-              // `aria-disabled` instead of just `disabled` because we probably
-              // still want to keep it focusable for screen-readers.
-              aria-disabled={!notFromSelf}
-              className={classNames(styles.reactionsDialogListItem, {
-                [styles.reactionsDialogListClickable]: notFromSelf,
-              })}
-            >
-              <div className={styles.reactionsDialogAvatar}>
-                <AvatarFromContact contact={contact} />
-              </div>
-              <div className={styles.reactionsDialogContactName}>
-                <ContactName displayName={contact.displayName} />
-              </div>
-              <div className={styles.reactionsDialogEmoji}>{contact.emoji}</div>
-            </button>
+            <ReactionsDialogListItem
+              contact={contact}
+              onClickNonSelf={contactId =>
+                openViewProfileDialog(accountId, contactId)
+              }
+            />
           </li>
-        )
-      })}
+        ))}
+      </RovingTabindexProvider>
     </ul>
+  )
+}
+
+function ReactionsDialogListItem(props: {
+  contact: ContactWithReaction
+  onClickNonSelf: (contactId: number) => void
+}) {
+  const { contact, onClickNonSelf } = props
+  const notFromSelf = C.DC_CONTACT_ID_SELF !== contact.id
+
+  const ref = useRef<HTMLButtonElement>(null)
+  const rovingTabindex = useRovingTabindex(ref)
+
+  return (
+    <button
+      ref={ref}
+      onClick={() => {
+        if (notFromSelf) {
+          onClickNonSelf(contact.id)
+        }
+      }}
+      // `aria-disabled` instead of just `disabled` because we probably
+      // still want to keep it focusable for screen-readers.
+      aria-disabled={!notFromSelf}
+      className={classNames(
+        styles.reactionsDialogListItem,
+        rovingTabindex.className,
+        {
+          [styles.reactionsDialogListClickable]: notFromSelf,
+        }
+      )}
+      tabIndex={rovingTabindex.tabIndex}
+      onKeyDown={rovingTabindex.onKeydown}
+      onFocus={rovingTabindex.setAsActiveElement}
+    >
+      <div className={styles.reactionsDialogAvatar}>
+        <AvatarFromContact contact={contact} />
+      </div>
+      <div className={styles.reactionsDialogContactName}>
+        <ContactName displayName={contact.displayName} />
+      </div>
+      <div className={styles.reactionsDialogEmoji}>{contact.emoji}</div>
+    </button>
   )
 }

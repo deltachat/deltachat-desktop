@@ -36,6 +36,7 @@ import type { DialogProps } from '../../contexts/DialogContext'
 import ImageCropper from '../ImageCropper'
 import { AddMemberDialog } from './AddMember/AddMemberDialog'
 import AutoSizer from 'react-virtualized-auto-sizer'
+import { RovingTabindexProvider } from '../../contexts/RovingTabindex'
 
 export default function ViewGroup(
   props: {
@@ -120,6 +121,9 @@ function ViewGroupInner(
     useLogicVirtualChatList(chatListIds)
 
   const chatDisabled = !chat.canSend
+
+  const groupMemberContactListWrapperRef = useRef<HTMLDivElement>(null)
+  const relatedChatsListWrapperRef = useRef<HTMLDivElement>(null)
 
   const {
     group,
@@ -233,34 +237,41 @@ function ViewGroupInner(
             {isRelatedChatsEnabled && (
               <>
                 <div className='group-separator'>{tx('related_chats')}</div>
-                <div className='group-related-chats-list-wrapper'>
-                  <AutoSizer disableHeight>
-                    {({ width }) => (
-                      <ChatListPart
-                        isRowLoaded={isChatLoaded}
-                        loadMoreRows={loadChats}
-                        rowCount={chatListIds.length}
-                        // We cannot just set the width to the width
-                        // of the dialog, because scrollbars might have width.
-                        width={width}
-                        height={CHATLISTITEM_CHAT_HEIGHT * chatListIds.length}
-                        itemKey={index => 'key' + chatListIds[index]}
-                        itemHeight={CHATLISTITEM_CHAT_HEIGHT}
-                      >
-                        {({ index, style }) => {
-                          const chatId = chatListIds[index]
-                          return (
-                            <div style={style}>
-                              <ChatListItem
-                                chatListItem={chatCache[chatId] || undefined}
-                                onClick={onChatClick.bind(null, chatId)}
-                              />
-                            </div>
-                          )
-                        }}
-                      </ChatListPart>
-                    )}
-                  </AutoSizer>
+                <div
+                  ref={relatedChatsListWrapperRef}
+                  className='group-related-chats-list-wrapper'
+                >
+                  <RovingTabindexProvider
+                    wrapperElementRef={relatedChatsListWrapperRef}
+                  >
+                    <AutoSizer disableHeight>
+                      {({ width }) => (
+                        <ChatListPart
+                          isRowLoaded={isChatLoaded}
+                          loadMoreRows={loadChats}
+                          rowCount={chatListIds.length}
+                          // We cannot just set the width to the width
+                          // of the dialog, because scrollbars might have width.
+                          width={width}
+                          height={CHATLISTITEM_CHAT_HEIGHT * chatListIds.length}
+                          itemKey={index => 'key' + chatListIds[index]}
+                          itemHeight={CHATLISTITEM_CHAT_HEIGHT}
+                        >
+                          {({ index, style }) => {
+                            const chatId = chatListIds[index]
+                            return (
+                              <div style={style}>
+                                <ChatListItem
+                                  chatListItem={chatCache[chatId] || undefined}
+                                  onClick={onChatClick.bind(null, chatId)}
+                                />
+                              </div>
+                            )
+                          }}
+                        </ChatListPart>
+                      )}
+                    </AutoSizer>
+                  </RovingTabindexProvider>
                 </div>
               </>
             )}
@@ -273,29 +284,38 @@ function ViewGroupInner(
                     quantity: groupMembers.length,
                   })}
             </div>
-            <div className='group-member-contact-list-wrapper'>
-              {!chatDisabled && (
-                <>
-                  <PseudoListItemAddMember
-                    onClick={() => showAddMemberDialog()}
-                    isBroadcast={isBroadcast}
-                  />
-                  {!isBroadcast && (
-                    <PseudoListItemShowQrCode onClick={() => showQRDialog()} />
-                  )}
-                </>
-              )}
-              <ContactList
-                contacts={group.contacts}
-                showRemove={!chatDisabled}
-                onClick={contact => {
-                  if (contact.id === C.DC_CONTACT_ID_SELF) {
-                    return
-                  }
-                  setProfileContact(contact)
-                }}
-                onRemoveClick={showRemoveGroupMemberConfirmationDialog}
-              />
+            <div
+              className='group-member-contact-list-wrapper'
+              ref={groupMemberContactListWrapperRef}
+            >
+              <RovingTabindexProvider
+                wrapperElementRef={groupMemberContactListWrapperRef}
+              >
+                {!chatDisabled && (
+                  <>
+                    <PseudoListItemAddMember
+                      onClick={() => showAddMemberDialog()}
+                      isBroadcast={isBroadcast}
+                    />
+                    {!isBroadcast && (
+                      <PseudoListItemShowQrCode
+                        onClick={() => showQRDialog()}
+                      />
+                    )}
+                  </>
+                )}
+                <ContactList
+                  contacts={group.contacts}
+                  showRemove={!chatDisabled}
+                  onClick={contact => {
+                    if (contact.id === C.DC_CONTACT_ID_SELF) {
+                      return
+                    }
+                    setProfileContact(contact)
+                  }}
+                  onRemoveClick={showRemoveGroupMemberConfirmationDialog}
+                />
+              </RovingTabindexProvider>
             </div>
           </DialogBody>
         </>

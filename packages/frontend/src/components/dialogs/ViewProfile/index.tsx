@@ -1,5 +1,5 @@
 import AutoSizer from 'react-virtualized-auto-sizer'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import moment from 'moment'
 import { C } from '@deltachat/jsonrpc-client'
 
@@ -28,6 +28,7 @@ import styles from './styles.module.scss'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
 import type { T } from '@deltachat/jsonrpc-client'
+import { RovingTabindexProvider } from '../../../contexts/RovingTabindex'
 
 const log = getLogger('renderer/dialogs/ViewProfile')
 
@@ -137,6 +138,8 @@ export function ViewProfileInner({
     label: string
     action?: () => void
   }>(null)
+
+  const mutualChatsListRef = useRef<HTMLDivElement>(null)
 
   const isDeviceChat = contact.id === C.DC_CONTACT_ID_DEVICE
   const isSelfChat = contact.id === C.DC_CONTACT_ID_SELF
@@ -313,34 +316,37 @@ export function ViewProfileInner({
         <>
           <div className='group-separator'>{tx('profile_shared_chats')}</div>
           <div
+            ref={mutualChatsListRef}
             className='mutual-chats'
             style={{ flexGrow: 1, minHeight: mutualChatsMinHeight }}
           >
-            <AutoSizer>
-              {({ width, height }) => (
-                <ChatListPart
-                  isRowLoaded={isChatLoaded}
-                  loadMoreRows={loadChats}
-                  rowCount={chatListIds.length}
-                  width={width}
-                  height={height}
-                  itemKey={index => 'key' + chatListIds[index]}
-                  itemHeight={CHATLISTITEM_CHAT_HEIGHT}
-                >
-                  {({ index, style }) => {
-                    const chatId = chatListIds[index]
-                    return (
-                      <div style={style}>
-                        <ChatListItem
-                          chatListItem={chatCache[chatId] || undefined}
-                          onClick={onChatClick.bind(null, chatId)}
-                        />
-                      </div>
-                    )
-                  }}
-                </ChatListPart>
-              )}
-            </AutoSizer>
+            <RovingTabindexProvider wrapperElementRef={mutualChatsListRef}>
+              <AutoSizer>
+                {({ width, height }) => (
+                  <ChatListPart
+                    isRowLoaded={isChatLoaded}
+                    loadMoreRows={loadChats}
+                    rowCount={chatListIds.length}
+                    width={width}
+                    height={height}
+                    itemKey={index => 'key' + chatListIds[index]}
+                    itemHeight={CHATLISTITEM_CHAT_HEIGHT}
+                  >
+                    {({ index, style }) => {
+                      const chatId = chatListIds[index]
+                      return (
+                        <div style={style}>
+                          <ChatListItem
+                            chatListItem={chatCache[chatId] || undefined}
+                            onClick={onChatClick.bind(null, chatId)}
+                          />
+                        </div>
+                      )
+                    }}
+                  </ChatListPart>
+                )}
+              </AutoSizer>
+            </RovingTabindexProvider>
           </div>
         </>
       )}

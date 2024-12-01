@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import debounce from 'debounce'
 
 import { ContactList } from '../contact/ContactList'
@@ -9,6 +9,7 @@ import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+import { RovingTabindexProvider } from '../../contexts/RovingTabindex'
 
 export default function UnblockContacts({ onClose }: DialogProps) {
   const [blockedContacts, setBlockedContacts] = useState<Type.Contact[] | null>(
@@ -41,6 +42,8 @@ export default function UnblockContacts({ onClose }: DialogProps) {
     }
   }
 
+  const wrapperRef = useRef<HTMLDivElement>(null)
+
   if (blockedContacts === null) return null
   return (
     <DialogWithHeader
@@ -53,16 +56,19 @@ export default function UnblockContacts({ onClose }: DialogProps) {
           {blockedContacts.length === 0 && <p>{tx('blocked_empty_hint')}</p>}
           {blockedContacts.length > 0 && (
             <div
+              ref={wrapperRef}
               style={{
                 overflow: 'scroll',
                 height: '100%',
                 backgroundColor: 'var(--bp4DialogBgPrimary)',
               }}
             >
-              <ContactList
-                contacts={blockedContacts}
-                onClick={onUnblockContact}
-              />
+              <RovingTabindexProvider wrapperElementRef={wrapperRef}>
+                <ContactList
+                  contacts={blockedContacts}
+                  onClick={onUnblockContact}
+                />
+              </RovingTabindexProvider>
             </div>
           )}
         </DialogContent>
