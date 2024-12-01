@@ -19,6 +19,7 @@ import FullscreenMedia, {
   NeighboringMediaMode,
 } from './dialogs/FullscreenMedia'
 import { DialogContext } from '../contexts/DialogContext'
+import type { getMessageFunction } from '@deltachat-desktop/shared/localize'
 
 const log = getLogger('renderer/Gallery')
 
@@ -237,18 +238,12 @@ export default class Gallery extends Component<
             const tabId = realId as MediaTabKey
             return (
               <li key={tabId}>
-                <button
-                  className={`tab-item ${
-                    currentTab === tabId ? 'selected' : ''
-                  }`}
-                  role='tab'
-                  aria-selected={currentTab === tabId}
-                  id={`gallery-tab-${tabId}`}
-                  aria-controls={`gallery-tabpanel-${tabId}`}
+                <GalleryTab
+                  tabId={tabId}
                   onClick={() => this.onSelect(tabId)}
-                >
-                  {tx(tabId)}
-                </button>
+                  tx={tx}
+                  isSelected={currentTab === tabId}
+                />
               </li>
             )
           })}
@@ -405,6 +400,27 @@ export default class Gallery extends Component<
       </div>
     )
   }
+}
+
+function GalleryTab(props: {
+  tabId: MediaTabKey
+  isSelected: boolean
+  onClick: () => void
+  tx: getMessageFunction
+}) {
+  const { tabId, isSelected, tx, onClick } = props
+  return (
+    <button
+      className={`tab-item ${isSelected ? 'selected' : ''}`}
+      role='tab'
+      aria-selected={isSelected}
+      id={`gallery-tab-${tabId}`}
+      aria-controls={`gallery-tabpanel-${tabId}`}
+      onClick={onClick}
+    >
+      {tx(tabId)}
+    </button>
+  )
 }
 
 Gallery.contextType = DialogContext
