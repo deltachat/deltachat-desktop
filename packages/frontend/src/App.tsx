@@ -106,7 +106,11 @@ export function startBackendLogging() {
     log2.error(`Unhandled Error: ${event?.error?.message}`, event.error)
   })
   window.addEventListener('unhandledrejection', event => {
-    log2.error(`Unhandled Rejection: ${event?.reason?.message}`, event, event.reason)
+    log2.error(
+      `Unhandled Rejection: ${event?.reason?.message}`,
+      event,
+      event.reason
+    )
   })
 
   const rc = runtime.getRC_Config()
