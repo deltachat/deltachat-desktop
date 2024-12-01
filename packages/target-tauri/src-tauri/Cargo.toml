@@ -42,3 +42,6 @@ tauri-plugin-window-state = "2"
 
 [features]
 crabnebula_extras = ["tauri-plugin-devtools"]
+# on macOS this uses private apis, so can't be uploaded to Mac Appstore with this enabled.
+inspector_in_production = ["tauri/devtools"]
+default = ["inspector_in_production"]
