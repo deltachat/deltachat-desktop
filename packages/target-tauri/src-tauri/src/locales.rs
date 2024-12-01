@@ -5,6 +5,7 @@ use std::{
     collections::HashMap,
     path::{Path, PathBuf},
 };
+use tauri::{AppHandle, Manager};
 
 // preperation for RTL pr : https://github.com/deltachat/deltachat-desktop/pull/4168/files#diff-3b1f1ef99e1e3ea3c7a50a48159dbc1c11b582f5af7b8cf9daf1548fdc04c894
 #[derive(Default, Serialize, Deserialize, Debug, Clone, Copy)]
@@ -29,7 +30,7 @@ fn is_valid_locale_directory(path: &Path) -> bool {
         && path.join("_untranslated_en.json").exists()
 }
 
-async fn get_locales_dir() -> anyhow::Result<PathBuf> {
+async fn get_locales_dir(resource_dir: &Path) -> anyhow::Result<PathBuf> {
     let alternative_directory = std::env::var("DELTACHAT_LOCALE_DIR").ok();
 
     if let Some(directory) = alternative_directory {
@@ -49,15 +50,15 @@ Path to the invalid directory: {directory}",
     }
 
     let places = vec![
-        "../_locales",       // packaged - TODO test
-        "../../../_locales", // development
+        resource_dir.join("_locales"), // TODO - test on windows and linux
+        PathBuf::from("../../../_locales"), // development
     ];
 
     if let Some(place) = places
         .into_iter()
         .find(|p| is_valid_locale_directory(&PathBuf::from(p)))
     {
-        Ok(PathBuf::from(place))
+        Ok(place)
     } else {
         Err(anyhow!("No valid Locales Directory found"))
     }
@@ -73,8 +74,8 @@ pub enum Language {
     },
 }
 
-async fn inner_get_locale_data(locale: &str) -> anyhow::Result<LocaleData> {
-    let locales_dir = get_locales_dir().await?;
+async fn inner_get_locale_data(resource_dir: &Path, locale: &str) -> anyhow::Result<LocaleData> {
+    let locales_dir = get_locales_dir(resource_dir).await?;
 
     let languages: HashMap<String, Language> = serde_json::from_str(
         &tokio::fs::read_to_string(locales_dir.join("_languages.json")).await?,
@@ -117,8 +118,10 @@ async fn inner_get_locale_data(locale: &str) -> anyhow::Result<LocaleData> {
 }
 
 #[tauri::command]
-pub(crate) async fn get_locale_data(locale: &str) -> Result<LocaleData, String> {
-    inner_get_locale_data(locale)
+pub(crate) async fn get_locale_data(locale: &str, app: AppHandle) -> Result<LocaleData, String> {
+    let resource_dir = app.path().resource_dir().map_err(|e| format!("{e:#}"))?;
+
+    inner_get_locale_data(&resource_dir, locale)
         .await
         .map_err(|e| format!("{e:#}"))
 }
