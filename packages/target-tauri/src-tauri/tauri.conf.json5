@@ -28,8 +28,8 @@
         "script-src": "'self' 'wasm-unsafe-eval'",
         "worker-src": "blob: ",
         "child-src": "blob: ",
-        "img-src": "'self' data: blob: file: webxdc-icon: ",
-        "media-src": "'self' file: "
+        "img-src": "'self' data: blob: dcblob: webxdc-icon: ",
+        "media-src": "'self' dcblob:"
       },
       // TODO postponed to later
       // "pattern": {
