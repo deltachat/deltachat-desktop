@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Component, createRef } from 'react'
+import React, { ChangeEvent, Component, createRef, useRef } from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { FixedSizeGrid, FixedSizeList } from 'react-window'
 import moment from 'moment'
@@ -20,6 +20,10 @@ import FullscreenMedia, {
 } from './dialogs/FullscreenMedia'
 import { DialogContext } from '../contexts/DialogContext'
 import type { getMessageFunction } from '@deltachat-desktop/shared/localize'
+import {
+  RovingTabindexProvider,
+  useRovingTabindex,
+} from '../contexts/RovingTabindex'
 
 const log = getLogger('renderer/Gallery')
 
@@ -75,6 +79,7 @@ export default class Gallery extends Component<
   }
 > {
   dateHeader = createRef<HTMLDivElement>()
+  tabListRef = createRef<HTMLUListElement>()
   constructor(props: Props) {
     super(props)
 
@@ -233,20 +238,25 @@ export default class Gallery extends Component<
 
     return (
       <div className='media-view'>
-        <ul className='tab-list .modifier' role='tablist'>
-          {Object.keys(MediaTabs).map(realId => {
-            const tabId = realId as MediaTabKey
-            return (
-              <li key={tabId}>
-                <GalleryTab
-                  tabId={tabId}
-                  onClick={() => this.onSelect(tabId)}
-                  tx={tx}
-                  isSelected={currentTab === tabId}
-                />
-              </li>
-            )
-          })}
+        <ul ref={this.tabListRef} className='tab-list .modifier' role='tablist'>
+          <RovingTabindexProvider
+            wrapperElementRef={this.tabListRef}
+            direction='horizontal'
+          >
+            {Object.keys(MediaTabs).map(realId => {
+              const tabId = realId as MediaTabKey
+              return (
+                <li key={tabId}>
+                  <GalleryTab
+                    tabId={tabId}
+                    onClick={() => this.onSelect(tabId)}
+                    tx={tx}
+                    isSelected={currentTab === tabId}
+                  />
+                </li>
+              )
+            })}
+          </RovingTabindexProvider>
           {showDateHeader && (
             <div className='tab-item big-date' ref={this.dateHeader}></div>
           )}
@@ -409,14 +419,24 @@ function GalleryTab(props: {
   tx: getMessageFunction
 }) {
   const { tabId, isSelected, tx, onClick } = props
+
+  const ref = useRef<HTMLButtonElement>(null)
+  const rovingTabindex = useRovingTabindex(ref)
+
   return (
     <button
-      className={`tab-item ${isSelected ? 'selected' : ''}`}
+      ref={ref}
+      className={`tab-item ${isSelected ? 'selected' : ''} ${
+        rovingTabindex.className
+      }`}
       role='tab'
       aria-selected={isSelected}
       id={`gallery-tab-${tabId}`}
       aria-controls={`gallery-tabpanel-${tabId}`}
       onClick={onClick}
+      tabIndex={rovingTabindex.tabIndex}
+      onFocus={rovingTabindex.setAsActiveElement}
+      onKeyDown={rovingTabindex.onKeydown}
     >
       {tx(tabId)}
     </button>
