@@ -59,7 +59,7 @@ const contextMenuFactory = (
     },
     viewType === 'Webxdc' && {
       label: tx('start_app'),
-      action: openWebxdc.bind(null, message.id),
+      action: openWebxdc.bind(null, message),
     },
     {
       label: tx('save_as'),
@@ -577,7 +577,7 @@ export function WebxdcAttachment({
       <button
         className='media-attachment-webxdc'
         onContextMenu={openContextMenu}
-        onClick={openWebxdc.bind(null, loadResult.id)}
+        onClick={openWebxdc.bind(null, loadResult)}
       >
         <img
           className='icon'

@@ -358,7 +358,6 @@ export default function Message(props: {
   const privateReply = usePrivateReply()
   const { openContextMenu } = useContext(ContextMenuContext)
   const openViewProfileDialog = useOpenViewProfileDialog()
-  const { jumpToMessage } = useMessage()
   const { joinVideoChat } = useVideoChat()
 
   const showContextMenu = useCallback(
@@ -459,15 +458,9 @@ export default function Message(props: {
     let onClick
     if (isInteractive) {
       onClick = async () => {
-        if (isWebxdcInfo && message.parentId) {
-          jumpToMessage({
-            accountId,
-            msgId: message.parentId,
-            msgChatId: undefined,
-            highlight: true,
-            msgParentId: message.id,
-            scrollIntoViewArg: { block: 'center' },
-          })
+        if (isWebxdcInfo) {
+          // open or focus the webxdc app
+          openWebxdc(message)
         } else if (isProtectionBrokenMsg) {
           const { name } = await BackendRemote.rpc.getBasicChatInfo(
             selectedAccountId(),
@@ -850,7 +843,7 @@ function WebxdcMessageContent({ message }: { message: T.Message }) {
       <img
         src={runtime.getWebxdcIconURL(selectedAccountId(), message.id)}
         alt={`icon of ${info.name}`}
-        onClick={() => openWebxdc(message.id)}
+        onClick={() => openWebxdc(message)}
       />
       <div
         className='name'
@@ -869,7 +862,7 @@ function WebxdcMessageContent({ message }: { message: T.Message }) {
       <Button
         className={styles.startWebxdcButton}
         styling='primary'
-        onClick={() => openWebxdc(message.id)}
+        onClick={() => openWebxdc(message)}
       >
         {tx('start_app')}
       </Button>

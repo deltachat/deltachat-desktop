@@ -94,7 +94,8 @@ export default class DCWebxdc extends SplitOut {
       msg_id: number,
       p: DcOpenWebxdcParameters
     ) => {
-      const { webxdcInfo, chatName, displayname, addr, accountId } = p
+      const { webxdcInfo, chatName, displayname, accountId } = p
+      const addr = webxdcInfo.selfAddr || ''
       if (open_apps[`${accountId}.${msg_id}`]) {
         log.warn(
           'webxdc instance for this app is already open, trying to focus it',
@@ -115,7 +116,6 @@ export default class DCWebxdc extends SplitOut {
         await this.rpc.getWebxdcBlob(accountId, msg_id, icon),
         'base64'
       )
-
       const ses = sessionFromAccountId(accountId)
       const appURL = `webxdc://${accountId}.${msg_id}.webxdc`
 

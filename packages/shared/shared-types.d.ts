@@ -109,9 +109,9 @@ export interface DcNotification {
 export interface DcOpenWebxdcParameters {
   accountId: number
   displayname: string | null
-  addr: string | null
   webxdcInfo: T.WebxdcMessageInfo
   chatName: string
+  href: string
 }
 
 export interface RuntimeOpenDialogOptions {
