@@ -215,3 +215,7 @@ samp {
   flex-grow: 1;
   overflow: hidden;
 }
+
+:root {
+  overscroll-behavior: none;
+}
