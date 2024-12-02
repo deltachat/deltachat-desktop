@@ -89,3 +89,6 @@ deltachat-rpc-server-aarch64-macos
 .direnv
 .envrc
 default.nix
+
+packages/target-tauri/src-tauri/target
+packages/target-tauri/src-tauri/gen/schemas
