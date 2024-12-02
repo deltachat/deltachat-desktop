@@ -15,6 +15,9 @@ catalogs:
     '@types/mime-types':
       specifier: ^2.1.4
       version: 2.1.4
+    '@webxdc/types':
+      specifier: ^2.1.2
+      version: 2.1.2
     mime-types:
       specifier: ^2.1.35
       version: 2.1.35
@@ -27,9 +30,6 @@ catalogs:
     typescript-plugin-css-modules:
       specifier: ^5.1.0
       version: 5.1.0
-    webxdc-types:
-      specifier: ^1.0.1
-      version: 1.0.1
 
 importers:
 
@@ -366,6 +366,9 @@ importers:
       '@types/rc':
         specifier: ^1.2.4
         version: 1.2.4
+      '@webxdc/types':
+        specifier: 'catalog:'
+        version: 2.1.2
       adm-zip:
         specifier: 0.5.14
         version: 0.5.14
@@ -399,9 +402,6 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 5.5.4
-      webxdc-types:
-        specifier: 'catalog:'
-        version: 1.0.1
 
   packages/target-tauri: {}
 
@@ -1444,6 +1444,9 @@ packages:
 
   '@ungap/structured-clone@1.2.0':
     resolution: {integrity: sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==}
+
+  '@webxdc/types@2.1.2':
+    resolution: {integrity: sha512-oklcyHvUXqCS5JwbPVaN8tt7nSB8ffRmyrUlVt0HeSn4kDyNE46oKSbw3KtrDzl530KHnm67LfcK/AjWbBoXUA==}
 
   '@xmldom/xmldom@0.8.10':
     resolution: {integrity: sha512-2WALfTl4xo2SkGCYRt6rDTFfk9R1czmBvUQy12gK2KuRKIpWEhcbbzy8EZXtz/jkRqHX8bFEc6FC1HjX4TUWYw==}
@@ -3403,9 +3406,6 @@ packages:
     resolution: {integrity: sha512-veufcmxri4e3XSrT0xwfUR7kguIkaxBeosDg00yDWhk49wdwkSUrvvsm7nc75e1PUyvIeZj6nS8VQRYz2/S4Xg==}
     engines: {node: '>=0.6.0'}
 
-  webxdc-types@1.0.1:
-    resolution: {integrity: sha512-voocssWnUiMoJoicPWmCKnjd6OG8TNuUq+5n9+0gMSBMg0h1KxapnN9Vq6WssK0jhKcGBSZvcQf8tGK+X88IaQ==}
-
   which@2.0.2:
     resolution: {integrity: sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA==}
     engines: {node: '>= 8'}
@@ -4409,6 +4409,8 @@ snapshots:
       eslint-visitor-keys: 3.4.3
 
   '@ungap/structured-clone@1.2.0': {}
+
+  '@webxdc/types@2.1.2': {}
 
   '@xmldom/xmldom@0.8.10': {}
 
@@ -6604,8 +6606,6 @@ snapshots:
       core-util-is: 1.0.2
       extsprintf: 1.4.1
     optional: true
-
-  webxdc-types@1.0.1: {}
 
   which@2.0.2:
     dependencies:

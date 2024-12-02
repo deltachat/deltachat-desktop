@@ -1,5 +1,5 @@
 /**
- * @typedef {import('webxdc-types').RealtimeListener} RT
+ * @typedef {import('@webxdc/types').RealtimeListener} RT
  * @type {RT}
  */
 class RealtimeListener {
@@ -49,7 +49,7 @@ class RealtimeListener {
   let is_ready = false
 
   /**
-   * @type {Parameters<import('webxdc-types').Webxdc["setUpdateListener"]>[0]|null}
+   * @type {Parameters<import('@webxdc/types').Webxdc["setUpdateListener"]>[0]|null}
    */
   let callback = null
   /** @type {RT | null} */
@@ -100,7 +100,7 @@ class RealtimeListener {
   })
 
   /**
-   * @type {import('webxdc-types').Webxdc}
+   * @type {import('@webxdc/types').Webxdc}
    */
   const api = {
     selfAddr: '?Setup Missing?',

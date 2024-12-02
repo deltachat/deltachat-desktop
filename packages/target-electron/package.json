@@ -81,6 +81,6 @@
     "mocha": "^10.7.0",
     "rc": "^1.2.8",
     "typescript": "catalog:",
-    "webxdc-types": "catalog:"
+    "@webxdc/types": "catalog:"
   }
 }

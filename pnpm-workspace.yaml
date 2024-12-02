@@ -4,7 +4,7 @@ catalog:
   # deltachat specific
   '@deltachat/jsonrpc-client': v1.151.2
   '@deltachat/stdio-rpc-server': v1.151.2
-  webxdc-types: ^1.0.1
+  '@webxdc/types': ^2.1.2
 
   # dependencies
   '@types/mime-types': ^2.1.4
