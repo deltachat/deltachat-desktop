@@ -45,7 +45,7 @@ const open_apps: {
   }
 } = {}
 
-// account sessions that have the webxdc scheme registered
+// holds all accounts which have a session with webxdc scheme registered
 const accounts_sessions: number[] = []
 
 // TODO:
@@ -89,13 +89,25 @@ export default class DCWebxdc extends SplitOut {
         }
       })
     })
+
+    /**
+     * ipcMain handler for 'open-webxdc' event invoked by the renderer
+     */
     const openWebxdc = async (
       _ev: IpcMainInvokeEvent,
       msg_id: number,
       p: DcOpenWebxdcParameters
     ) => {
-      const { webxdcInfo, chatName, displayname, accountId } = p
+      const { webxdcInfo, chatName, displayname, accountId, href } = p
       const addr = webxdcInfo.selfAddr || ''
+      let locationHref = ''
+      if (href && href !== '') {
+        const url = new URL(href, 'http://localhost')
+        // make sure url is relative and eval safe
+        locationHref = Buffer.from(
+          url.toString().replace(url.origin, '')
+        ).toString('base64')
+      }
       if (open_apps[`${accountId}.${msg_id}`]) {
         log.warn(
           'webxdc instance for this app is already open, trying to focus it',
@@ -104,6 +116,12 @@ export default class DCWebxdc extends SplitOut {
         const window = open_apps[`${accountId}.${msg_id}`].win
         if (window.isMinimized()) {
           window.restore()
+        }
+        if (locationHref !== '') {
+          // passed from a WebxdcInfoMessage
+          window.webContents.executeJavaScript(
+            `window.webxdc_internal.setLocationUrl("${locationHref}")`
+          )
         }
         window.focus()
         return
@@ -369,7 +387,14 @@ export default class DCWebxdc extends SplitOut {
         setLastBounds(this, accountId, msg_id, lastBounds)
       })
 
-      webxdcWindow.once('ready-to-show', () => {})
+      webxdcWindow.once('ready-to-show', () => {
+        if (locationHref !== '') {
+          // passed from a WebxdcInfoMessage
+          webxdcWindow.webContents.executeJavaScript(
+            `window.webxdc_internal.setLocationUrl("${locationHref}")`
+          )
+        }
+      })
 
       webxdcWindow.webContents.loadURL(appURL + '/' + WRAPPER_PATH, {
         extraHeaders: 'Content-Security-Policy: ' + CSP,
@@ -703,10 +728,10 @@ If you think that's a bug and you need that permission, then please open an issu
           if (messageWithMap && messageWithMap.webxdcInfo) {
             openWebxdc(evt, msgId, {
               accountId,
-              addr: '',
               displayname: '',
               chatName,
               webxdcInfo: messageWithMap.webxdcInfo,
+              href: '',
             })
           }
         }

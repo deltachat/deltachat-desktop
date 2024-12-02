@@ -32,9 +32,10 @@ export async function internalOpenWebxdc(
   let href = ''
   let messageId = message.id
   if (message.systemMessageType === 'WebxdcInfoMessage' && message.parentId) {
-    // if we have a webxdc info message, the webxdc app is attached to the parent message
     href = message.webxdcHref ?? ''
+    // if we have a webxdc info message, the webxdcInfo is attached to the parent message
     messageId = message.parentId
+    message = await BackendRemote.rpc.getMessage(accountId, messageId)
   }
   if (!message.webxdcInfo) {
     // we can open only messages with webxdc info
