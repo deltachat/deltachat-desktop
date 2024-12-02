@@ -7,19 +7,22 @@ import { supportedURISchemes } from './application-constants.js'
 import { showDeltaChat } from './tray.js'
 import { ExtendedAppMainProcess } from './types.js'
 import { send, window } from './windows/main.js'
+import { platform } from 'os'
 
 const log = getLogger('main/open_url')
 const app = rawApp as ExtendedAppMainProcess
 
 // Define custom protocol handler. Deep linking works on packaged versions of the application!
 // These calls are for mac and windows, on linux it uses the desktop file.
-app.setAsDefaultProtocolClient('openpgp4fpr')
-app.setAsDefaultProtocolClient('OPENPGP4FPR')
-app.setAsDefaultProtocolClient('dcaccount')
-app.setAsDefaultProtocolClient('DCACCOUNT')
-app.setAsDefaultProtocolClient('dclogin')
-app.setAsDefaultProtocolClient('DCLOGIN')
-// do not forcefully set DC as standard email handler to not annoy users
+if (platform() !== 'linux'){
+  app.setAsDefaultProtocolClient('openpgp4fpr')
+  app.setAsDefaultProtocolClient('OPENPGP4FPR')
+  app.setAsDefaultProtocolClient('dcaccount')
+  app.setAsDefaultProtocolClient('DCACCOUNT')
+  app.setAsDefaultProtocolClient('dclogin')
+  app.setAsDefaultProtocolClient('DCLOGIN')
+  // do not forcefully set DC as standard email handler to not annoy users
+}
 
 let frontend_ready = false
 ipcMain.once('frontendReady', () => {
