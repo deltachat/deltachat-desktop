@@ -14,7 +14,7 @@ const app = rawApp as ExtendedAppMainProcess
 
 // Define custom protocol handler. Deep linking works on packaged versions of the application!
 // These calls are for mac and windows, on linux it uses the desktop file.
-if (platform() !== 'linux'){
+if (platform() !== 'linux') {
   app.setAsDefaultProtocolClient('openpgp4fpr')
   app.setAsDefaultProtocolClient('OPENPGP4FPR')
   app.setAsDefaultProtocolClient('dcaccount')
