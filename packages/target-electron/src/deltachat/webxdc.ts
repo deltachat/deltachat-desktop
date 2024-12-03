@@ -72,7 +72,7 @@ export default class DCWebxdc extends SplitOut {
     // icon protocol
     app.whenReady().then(() => {
       protocol.handle('webxdc-icon', async request => {
-        const [a, m] = request.url.substr(12).split('.')
+        const [a, m] = request.url.substring(12).split('.')
         const [accountId, messageId] = [Number(a), Number(m)]
         try {
           const { icon } = await this.rpc.getWebxdcInfo(accountId, messageId)
@@ -99,6 +99,12 @@ export default class DCWebxdc extends SplitOut {
       p: DcOpenWebxdcParameters
     ) => {
       const { webxdcInfo, chatName, displayname, accountId, href } = p
+      const removeLeadingSlash = (s: string) => {
+        if (s.startsWith('/')) {
+          return s.substring(1)
+        }
+        return s
+      }
       const addr = webxdcInfo.selfAddr
       let base64EncodedHref = ''
       const appURL = `webxdc://${accountId}.${msg_id}.webxdc`
@@ -110,9 +116,9 @@ export default class DCWebxdc extends SplitOut {
           log.warn('href is not relative, ignoring', { href })
         } else {
           // make href eval safe
-          base64EncodedHref = Buffer.from(appURL + '/' + href).toString(
-            'base64'
-          )
+          base64EncodedHref = Buffer.from(
+            appURL + '/' + removeLeadingSlash(href)
+          ).toString('base64')
         }
       }
       if (open_apps[`${accountId}.${msg_id}`]) {
@@ -193,11 +199,9 @@ export default class DCWebxdc extends SplitOut {
           let filename = url.pathname
           // remove leading / trailing "/"
           if (filename.endsWith('/')) {
-            filename = filename.substr(0, filename.length - 1)
+            filename = filename.substring(0, filename.length - 1)
           }
-          if (filename.startsWith('/')) {
-            filename = filename.substr(1)
-          }
+          filename = removeLeadingSlash(filename)
 
           let mimeType: string | undefined = Mime.lookup(filename) || ''
           // Make sure that the browser doesn't open files in the PDF viewer.
