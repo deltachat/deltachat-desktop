@@ -835,7 +835,6 @@ function WebxdcMessageContent({ message }: { message: T.Message }) {
     name: 'INFO MISSING!',
     document: undefined,
     summary: 'INFO MISSING!',
-    internetAccess: false,
   }
 
   return (
@@ -853,12 +852,6 @@ function WebxdcMessageContent({ message }: { message: T.Message }) {
         {truncateText(info.name, 42)}
       </div>
       <div>{info.summary}</div>
-      {info.internetAccess && (
-        <div className='experimental'>
-          <b>EXPERIMENTAL</b> Webxdc that has full internet access, be careful!
-          (only works in saved messages)
-        </div>
-      )}
       <Button
         className={styles.startWebxdcButton}
         styling='primary'
