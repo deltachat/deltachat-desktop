@@ -313,8 +313,8 @@ class RealtimeListener {
     /**
      * called via webContents.executeJavaScript
      */
-    setLocationUrl(href) {
-      locationUrl = Buffer.from(href, 'base64').toString('utf8')
+    setLocationUrl(base64EncodedHref) {
+      locationUrl = Buffer.from(base64EncodedHref, 'base64').toString('utf8')
       if (locationUrl && locationUrl !== '' && connectionsFilled) {
         // if connectionsFilled is false, the url is loaded after
         // the connections are filled

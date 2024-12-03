@@ -99,14 +99,21 @@ export default class DCWebxdc extends SplitOut {
       p: DcOpenWebxdcParameters
     ) => {
       const { webxdcInfo, chatName, displayname, accountId, href } = p
-      const addr = webxdcInfo.selfAddr || ''
-      let locationHref = ''
+      const addr = webxdcInfo.selfAddr
+      let base64EncodedHref = ''
+      const appURL = `webxdc://${accountId}.${msg_id}.webxdc`
       if (href && href !== '') {
-        const url = new URL(href, 'http://localhost')
-        // make sure url is relative and eval safe
-        locationHref = Buffer.from(
-          url.toString().replace(url.origin, '')
-        ).toString('base64')
+        // href is user provided content, so we want to be sure it's relative
+        if (
+          new URL(href, 'http://dummy.local').origin !== 'http://dummy.local'
+        ) {
+          log.warn('href is not relative, ignoring', { href })
+        } else {
+          // make href eval safe
+          base64EncodedHref = Buffer.from(appURL + '/' + href).toString(
+            'base64'
+          )
+        }
       }
       if (open_apps[`${accountId}.${msg_id}`]) {
         log.warn(
@@ -117,10 +124,10 @@ export default class DCWebxdc extends SplitOut {
         if (window.isMinimized()) {
           window.restore()
         }
-        if (locationHref !== '') {
+        if (base64EncodedHref !== '') {
           // passed from a WebxdcInfoMessage
           window.webContents.executeJavaScript(
-            `window.webxdc_internal.setLocationUrl("${locationHref}")`
+            `window.webxdc_internal.setLocationUrl("${base64EncodedHref}")`
           )
         }
         window.focus()
@@ -135,7 +142,6 @@ export default class DCWebxdc extends SplitOut {
         'base64'
       )
       const ses = sessionFromAccountId(accountId)
-      const appURL = `webxdc://${accountId}.${msg_id}.webxdc`
 
       // TODO intercept / deny network access - CSP should probably be disabled for testing
 
@@ -388,10 +394,10 @@ export default class DCWebxdc extends SplitOut {
       })
 
       webxdcWindow.once('ready-to-show', () => {
-        if (locationHref !== '') {
+        if (base64EncodedHref !== '') {
           // passed from a WebxdcInfoMessage
           webxdcWindow.webContents.executeJavaScript(
-            `window.webxdc_internal.setLocationUrl("${locationHref}")`
+            `window.webxdc_internal.setLocationUrl("${base64EncodedHref}")`
           )
         }
       })
