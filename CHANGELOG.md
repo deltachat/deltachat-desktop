@@ -17,6 +17,7 @@
 - dev: inviteCode doesn't needs conversion any more #4363
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.151.2`
 - description parameter in webxdc.sendUpdate is deprecated now #4359
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.151.3`
 
 ## Fixed
 - "Disappearing Messages" dialog not reflecting the actual current value #4327
