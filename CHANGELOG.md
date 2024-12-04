@@ -22,6 +22,7 @@
 - click on WebxdcInfo Message immediately opens webxdc app #4380
 - href can be passed to webxdc sendStatusUpdate to show event related content
 - dev: move responsibility for updating account list to core through the `AccountsChanged` and `AccountsItemChanged` event
+- add dc version, os name and cpu architecture to fatal errors for better error reports #4384
 
 ## Fixed
 - "Disappearing Messages" dialog not reflecting the actual current value #4327
