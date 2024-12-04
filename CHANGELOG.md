@@ -18,6 +18,7 @@
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.151.2`
 - description parameter in webxdc.sendUpdate is deprecated now #4359
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.151.3`
+- add dc version to fatal errors for better error reports #4384
 
 ## Fixed
 - "Disappearing Messages" dialog not reflecting the actual current value #4327

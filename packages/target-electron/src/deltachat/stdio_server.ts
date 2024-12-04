@@ -1,6 +1,7 @@
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { ChildProcessWithoutNullStreams, spawn } from 'child_process'
 import { app, dialog } from 'electron/main'
+import { BuildInfo } from '../get-build-info'
 
 const log = getLogger('DC-RPC')
 
@@ -57,7 +58,7 @@ export class StdioServer {
           log.critical('Fatal: The Delta Chat Core exited unexpectedly', code)
           dialog.showErrorBox(
             'Fatal Error',
-            `The Delta Chat Core exited unexpectedly with code ${code}\n${errorLog}`
+            `[DC Version: ${BuildInfo.VERSION}]\nThe Delta Chat Core exited unexpectedly with code ${code}\n${errorLog}`
           )
           app.exit(1)
         }

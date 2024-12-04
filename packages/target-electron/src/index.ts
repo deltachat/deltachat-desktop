@@ -149,9 +149,10 @@ Promise.all([
     log.critical('Fatal Error during init', error)
     dialog.showErrorBox(
       'Fatal Error during init',
-      '' +
-        error +
-        '\n\nAlso make sure you are not trying to run multiple instances of deltachat.'
+      `[DC Version: ${BuildInfo.VERSION}]
+${error}
+
+Also make sure you are not trying to run multiple instances of deltachat.`
     )
     process.exit(1)
   })
