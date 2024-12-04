@@ -29,6 +29,14 @@
   padding: 5px;
 }
 
+.attachment-view-drag-bar {
+  background-color: transparent;
+  position: absolute;
+  top: 0px;
+  width: 100vw;
+  height: 50px;
+}
+
 .media-previous-button,
 .media-next-button {
   position: absolute;
