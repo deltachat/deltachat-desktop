@@ -6,6 +6,7 @@
   align-items: center;
   justify-content: center;
   background-color: rgba(49, 49, 49, 1);
+  overflow: hidden;
 
   img,
   video {
@@ -27,6 +28,14 @@
   right: 8px;
   top: 6px;
   padding: 5px;
+}
+
+.attachment-view-drag-bar {
+  background-color: transparent;
+  position: absolute;
+  top: 0px;
+  width: 100vw;
+  height: 50px;
 }
 
 .media-previous-button,
