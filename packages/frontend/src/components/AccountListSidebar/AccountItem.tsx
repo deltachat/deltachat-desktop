@@ -20,10 +20,12 @@ import styles from './styles.module.scss'
 
 import { C, type T } from '@deltachat/jsonrpc-client'
 import { openMapWebxdc } from '../../system-integration/webxdc'
+import useDialog from '../../hooks/dialog/useDialog'
+import { EditPrivateTagDialog } from './EditPrivateTagDialog'
 import { useRovingTabindex } from '../../contexts/RovingTabindex'
 
 type Props = {
-  account: T.Account
+  accountId: number
   isSelected: boolean
   onSelectAccount: (accountId: number) => Promise<void>
   openAccountDeletionScreen: (accountId: number) => Promise<void>
@@ -35,7 +37,7 @@ type Props = {
 const log = getLogger('AccountsSidebar/AccountItem')
 
 export default function AccountItem({
-  account,
+  accountId,
   isSelected,
   onSelectAccount,
   updateAccountForHoverInfo,
@@ -45,31 +47,42 @@ export default function AccountItem({
 }: Props) {
   const tx = useTranslationFunction()
   const [unreadCount, setUnreadCount] = useState<number>(0)
+  const [account, setAccount] = useState<T.Account | null>(null)
+  const { openDialog } = useDialog()
 
   useEffect(() => {
-    const update = debounce(() => {
+    const updateAccount = debounce(() => {
       BackendRemote.rpc
-        .getFreshMsgs(account.id)
+        .getAccountInfo(accountId)
+        .then(setAccount)
+        .catch(log.error)
+    }, 200)
+    const updateUnread = debounce(() => {
+      BackendRemote.rpc
+        .getFreshMsgs(accountId)
         .then(u => setUnreadCount(u?.length || 0))
         .catch(log.error)
     }, 200)
 
-    update()
+    updateAccount()
+    updateUnread()
 
     const cleanup = [
-      onDCEvent(account.id, 'IncomingMsg', update),
+      onDCEvent(accountId, 'AccountsItemChanged', updateAccount),
+
+      onDCEvent(accountId, 'IncomingMsg', updateUnread),
       // IncomingMsg doesn't listen for added device messages,
       // so we also listen to `ChatlistChanged` because it is a good indicator and not emitted too often
       // https://github.com/deltachat/deltachat-desktop/issues/4013
-      onDCEvent(account.id, 'ChatlistChanged', update),
+      onDCEvent(accountId, 'ChatlistChanged', updateUnread),
 
-      onDCEvent(account.id, 'MsgsNoticed', update),
+      onDCEvent(accountId, 'MsgsNoticed', updateUnread),
       // when muting or unmuting a chat
-      onDCEvent(account.id, 'ChatModified', update),
+      onDCEvent(accountId, 'ChatModified', updateUnread),
     ]
 
     return () => cleanup.forEach(off => off())
-  }, [account.id])
+  }, [accountId])
 
   const bgSyncDisabled = syncAllAccounts === false && !isSelected
 
@@ -78,19 +91,19 @@ export default function AccountItem({
       ? {
           label: tx('menu_unmute'),
           action: () => {
-            AccountNotificationStoreInstance.effect.setMuted(account.id, false)
+            AccountNotificationStoreInstance.effect.setMuted(accountId, false)
           },
         }
       : {
           label: tx('menu_mute'),
           action: () => {
-            AccountNotificationStoreInstance.effect.setMuted(account.id, true)
+            AccountNotificationStoreInstance.effect.setMuted(accountId, true)
           },
         },
     {
       label: tx('menu_all_media'),
       action: async () => {
-        await onSelectAccount(account.id)
+        await onSelectAccount(accountId)
         // set Timeout forces it to be run after react update
         setTimeout(() => {
           ActionEmitter.emitAction(KeybindAction.GlobalGallery_Open)
@@ -103,20 +116,20 @@ export default function AccountItem({
     {
       label: tx('menu_global_map'),
       action: async () => {
-        await onSelectAccount(account.id)
-        openMapWebxdc(account.id)
+        await onSelectAccount(accountId)
+        openMapWebxdc(accountId)
       },
     },
     {
       label: tx('mark_all_as_read'),
       action: () => {
-        markAccountAsRead(account.id)
+        markAccountAsRead(accountId)
       },
     },
     {
       label: tx('menu_settings'),
       action: async () => {
-        await onSelectAccount(account.id)
+        await onSelectAccount(accountId)
         // set Timeout forces it to be run after react update
         setTimeout(() => {
           ActionEmitter.emitAction(KeybindAction.Settings_Open)
@@ -125,8 +138,20 @@ export default function AccountItem({
       dataTestid: 'open-settings-menu-item',
     },
     {
+      label: tx('profile_tag'),
+      action: async () => {
+        openDialog(EditPrivateTagDialog, {
+          accountId,
+          currentTag: await BackendRemote.rpc.getConfig(
+            accountId,
+            'private_tag'
+          ),
+        })
+      },
+    },
+    {
       label: tx('delete_account'),
-      action: openAccountDeletionScreen.bind(null, account.id),
+      action: openAccountDeletionScreen.bind(null, accountId),
       dataTestid: 'delete-account-menu-item',
     },
   ])
@@ -193,17 +218,31 @@ export default function AccountItem({
   // gets switched, e.g. via clicking on a message notification
   // for a different account, and upon initial render.
 
+  if (!account) {
+    return (
+      <button
+        className={classNames(styles.account, {
+          [styles.active]: isSelected,
+          [styles['context-menu-active']]: isContextMenuActive,
+        })}
+        disabled
+        aria-busy
+        ref={ref}
+      ></button>
+    )
+  }
+
   return (
     <button
       className={classNames(styles.account, rovingTabindex.className, {
         [styles.active]: isSelected,
         [styles['context-menu-active']]: isContextMenuActive,
       })}
-      onClick={() => onSelectAccount(account.id)}
+      onClick={() => onSelectAccount(accountId)}
       onContextMenu={onContextMenu}
       onMouseEnter={() => updateAccountForHoverInfo(account, true)}
       onMouseLeave={() => updateAccountForHoverInfo(account, false)}
-      x-account-sidebar-account-id={account.id}
+      x-account-sidebar-account-id={accountId}
       data-testid={`account-item-${account.id}`}
       ref={ref}
       tabIndex={rovingTabindex.tabIndex}

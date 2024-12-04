@@ -104,10 +104,6 @@ export default function useInstantOnboarding(): InstantOnboarding {
         openDialog(ConfigureProgressDialog, {
           onSuccess: async () => {
             try {
-              // Hacky workaround to make the sidebar component aware of these
-              // recent profile changes
-              window.__updateAccountListSidebar?.()
-
               // 4. If the user created a new account from trying to contact
               // another user or joining the group we continue with this now
               let chatId: number | null = null

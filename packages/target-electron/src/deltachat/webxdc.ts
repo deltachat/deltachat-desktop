@@ -45,7 +45,7 @@ const open_apps: {
   }
 } = {}
 
-// account sessions that have the webxdc scheme registered
+// holds all accounts which have a session with webxdc scheme registered
 const accounts_sessions: number[] = []
 
 // TODO:
@@ -72,7 +72,7 @@ export default class DCWebxdc extends SplitOut {
     // icon protocol
     app.whenReady().then(() => {
       protocol.handle('webxdc-icon', async request => {
-        const [a, m] = request.url.substr(12).split('.')
+        const [a, m] = request.url.substring(12).split('.')
         const [accountId, messageId] = [Number(a), Number(m)]
         try {
           const { icon } = await this.rpc.getWebxdcInfo(accountId, messageId)
@@ -89,12 +89,27 @@ export default class DCWebxdc extends SplitOut {
         }
       })
     })
+
+    /**
+     * ipcMain handler for 'open-webxdc' event invoked by the renderer
+     */
     const openWebxdc = async (
       _ev: IpcMainInvokeEvent,
       msg_id: number,
       p: DcOpenWebxdcParameters
     ) => {
-      const { webxdcInfo, chatName, displayname, addr, accountId } = p
+      const { webxdcInfo, chatName, displayname, accountId, href } = p
+      const addr = webxdcInfo.selfAddr
+      let base64EncodedHref = ''
+      const appURL = `webxdc://${accountId}.${msg_id}.webxdc`
+      if (href && href !== '') {
+        // href is user provided content, so we want to be sure it's relative
+        // relative href needs a base to construct URL
+        const url = new URL(href, 'http://dummy')
+        const relativeUrl = url.pathname + url.search + url.hash
+        // make href eval safe
+        base64EncodedHref = Buffer.from(appURL + relativeUrl).toString('base64')
+      }
       if (open_apps[`${accountId}.${msg_id}`]) {
         log.warn(
           'webxdc instance for this app is already open, trying to focus it',
@@ -103,6 +118,12 @@ export default class DCWebxdc extends SplitOut {
         const window = open_apps[`${accountId}.${msg_id}`].win
         if (window.isMinimized()) {
           window.restore()
+        }
+        if (base64EncodedHref !== '') {
+          // passed from a WebxdcInfoMessage
+          window.webContents.executeJavaScript(
+            `window.webxdc_internal.setLocationUrl("${base64EncodedHref}")`
+          )
         }
         window.focus()
         return
@@ -115,9 +136,7 @@ export default class DCWebxdc extends SplitOut {
         await this.rpc.getWebxdcBlob(accountId, msg_id, icon),
         'base64'
       )
-
       const ses = sessionFromAccountId(accountId)
-      const appURL = `webxdc://${accountId}.${msg_id}.webxdc`
 
       // TODO intercept / deny network access - CSP should probably be disabled for testing
 
@@ -169,10 +188,10 @@ export default class DCWebxdc extends SplitOut {
           let filename = url.pathname
           // remove leading / trailing "/"
           if (filename.endsWith('/')) {
-            filename = filename.substr(0, filename.length - 1)
+            filename = filename.substring(0, filename.length - 1)
           }
           if (filename.startsWith('/')) {
-            filename = filename.substr(1)
+            filename = filename.substring(1)
           }
 
           let mimeType: string | undefined = Mime.lookup(filename) || ''
@@ -369,7 +388,14 @@ export default class DCWebxdc extends SplitOut {
         setLastBounds(this, accountId, msg_id, lastBounds)
       })
 
-      webxdcWindow.once('ready-to-show', () => {})
+      webxdcWindow.once('ready-to-show', () => {
+        if (base64EncodedHref !== '') {
+          // passed from a WebxdcInfoMessage
+          webxdcWindow.webContents.executeJavaScript(
+            `window.webxdc_internal.setLocationUrl("${base64EncodedHref}")`
+          )
+        }
+      })
 
       webxdcWindow.webContents.loadURL(appURL + '/' + WRAPPER_PATH, {
         extraHeaders: 'Content-Security-Policy: ' + CSP,
@@ -703,10 +729,10 @@ If you think that's a bug and you need that permission, then please open an issu
           if (messageWithMap && messageWithMap.webxdcInfo) {
             openWebxdc(evt, msgId, {
               accountId,
-              addr: '',
               displayname: '',
               chatName,
               webxdcInfo: messageWithMap.webxdcInfo,
+              href: '',
             })
           }
         }

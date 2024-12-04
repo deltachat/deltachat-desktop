@@ -46,7 +46,14 @@ class RealtimeListener {
 //@ts-check
 ;(() => {
   const { contextBridge, ipcRenderer } = require('electron')
+  // setup is finished
   let is_ready = false
+
+  // used to replace the location.href of the iframe if
+  // setLocation was called before all connections were filled
+  let locationUrl = ''
+
+  let connectionsFilled = false
 
   /**
    * @type {Parameters<import('@webxdc/types').Webxdc["setUpdateListener"]>[0]|null}
@@ -291,15 +298,27 @@ class RealtimeListener {
           ipcRenderer.invoke('webxdc.exit')
         } catch (error) {
           loadingDiv.remove()
-          iframe.src = 'index.html'
+          iframe.src = locationUrl !== '' ? locationUrl : 'index.html'
           iframe.contentWindow.window.addEventListener(
             'keydown',
             keydown_handler
           )
+          connectionsFilled = true
         }
       } catch (error) {
         console.log('error loading, should crash/close window', error)
         ipcRenderer.invoke('webxdc.exit')
+      }
+    },
+    /**
+     * called via webContents.executeJavaScript
+     */
+    setLocationUrl(base64EncodedHref) {
+      locationUrl = Buffer.from(base64EncodedHref, 'base64').toString('utf8')
+      if (locationUrl && locationUrl !== '' && connectionsFilled) {
+        // if connectionsFilled is false, the url is loaded after
+        // the connections are filled
+        window.frames[0].window.location = locationUrl
       }
     },
   })
@@ -313,9 +332,11 @@ class RealtimeListener {
   window.addEventListener('keydown', keydown_handler)
   window.onload = () => {
     const frame = document.getElementById('frame')
-    if (frame)
+    if (frame) {
       frame.contentWindow.window.addEventListener('keydown', keydown_handler)
-    else console.log('attaching F12 handler failed, frame not found')
+    } else {
+      console.log('attaching F12 handler failed, frame not found')
+    }
   }
 
   contextBridge.exposeInMainWorld('webxdc_custom', {
