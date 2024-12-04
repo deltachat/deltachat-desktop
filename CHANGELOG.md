@@ -31,7 +31,7 @@
 - do not clear the draft if sending failed. #4340
 - "Search in \<chat name\>" divider overflowing for long chat names #4375
 - fix startup delay on linux #4379
-- fix: remove visible scrollbars in fullscreen media view 
+- fix: remove visible scrollbars in fullscreen media view #4385
 
 
 <a id="1_48_0"></a>
