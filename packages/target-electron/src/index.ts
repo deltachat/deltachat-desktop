@@ -149,7 +149,7 @@ Promise.all([
     log.critical('Fatal Error during init', error)
     dialog.showErrorBox(
       'Fatal Error during init',
-      `[DC Version: ${BuildInfo.VERSION}]
+      `[DC Version: ${BuildInfo.VERSION} | ${platform()} | ${arch()}]]
 ${error}
 
 Also make sure you are not trying to run multiple instances of deltachat.`
@@ -357,6 +357,7 @@ import { openUrlsAndFilesFromArgv, open_url } from './open_url.js'
 import { getLocaleDirectoryPath } from './getLocaleDirectory.js'
 import { join } from 'path'
 import { BuildInfo } from './get-build-info.js'
+import { arch, platform } from 'os'
 openUrlsAndFilesFromArgv(process.argv)
 
 ipcMain.handle('restart_app', async _ev => {
