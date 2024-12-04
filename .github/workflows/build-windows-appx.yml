@@ -1,4 +1,4 @@
-name: Preview Builds
+name: Build for windows store (appx unsigned)
 
 on: # todo make it only on tag
   pull_request:
