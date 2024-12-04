@@ -8,6 +8,7 @@
 - new icon for Mac users
 - smooth-scroll to newly arriving messages instead of jumping instantly #4125
 - make backup and key export work in browser #4303
+- add ability to add private tags to accounts
 
 ## Changed
 - enable Telegram-style Ctrl + ArrowUp to reply by default #4333
@@ -20,6 +21,7 @@
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.151.3`
 - click on WebxdcInfo Message immediately opens webxdc app #4380
 - href can be passed to webxdc sendStatusUpdate to show event related content
+- dev: move responsibility for updating account list to core through the `AccountsChanged` and `AccountsItemChanged` event
 
 ## Fixed
 - "Disappearing Messages" dialog not reflecting the actual current value #4327

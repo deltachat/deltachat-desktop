@@ -41,7 +41,6 @@ export default function AccountSetupScreen({
         credentials,
         onSuccess: () => {
           selectAccount(accountId)
-          window.__updateAccountListSidebar?.()
         },
         onFail: (error: string) =>
           setPromptDialogId(

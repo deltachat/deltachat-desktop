@@ -202,9 +202,6 @@ class SettingsStore extends Store<SettingsStoreState | null> {
           String(value)
         )
         this.reducer.setCoreSetting(key, value)
-        if (key === 'addr' || key === 'displayname') {
-          window.__updateAccountListSidebar?.()
-        }
       } catch (error) {
         this.log.warn('setConfig failed:', error)
       }
@@ -221,7 +218,6 @@ onReady(() => {
       )
       SettingsStoreInstance.reducer.setSelfContact(selfContact)
     }
-    window.__updateAccountListSidebar?.()
   }
   // SelfavatarChanged is marked as deprecated in jsonrpc api, but ConfigSynced does not have selfavatar yet
   // will probably change with https://github.com/deltachat/deltachat-core-rust/pull/5158
@@ -229,9 +225,6 @@ onReady(() => {
   BackendRemote.on('ConfigSynced', (accountId, { key }) => {
     if (key === 'selfavatar') {
       updateSelfAvatar(accountId)
-    }
-    if (key === 'addr' || key === 'displayname') {
-      window.__updateAccountListSidebar?.()
     }
     SettingsStoreInstance.effect.loadCoreKey(accountId, key as any)
   })

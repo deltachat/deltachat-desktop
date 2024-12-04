@@ -54,7 +54,6 @@ export function ReceiveBackupProgressDialog({
       }
       onClose()
       window.__selectAccount(accountId)
-      window.__updateAccountListSidebar?.()
     })()
 
     const emitter = BackendRemote.getContextEvents(accountId)
