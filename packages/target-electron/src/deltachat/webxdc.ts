@@ -99,27 +99,16 @@ export default class DCWebxdc extends SplitOut {
       p: DcOpenWebxdcParameters
     ) => {
       const { webxdcInfo, chatName, displayname, accountId, href } = p
-      const removeLeadingSlash = (s: string) => {
-        if (s.startsWith('/')) {
-          return s.substring(1)
-        }
-        return s
-      }
       const addr = webxdcInfo.selfAddr
       let base64EncodedHref = ''
       const appURL = `webxdc://${accountId}.${msg_id}.webxdc`
       if (href && href !== '') {
         // href is user provided content, so we want to be sure it's relative
-        if (
-          new URL(href, 'http://dummy.local').origin !== 'http://dummy.local'
-        ) {
-          log.warn('href is not relative, ignoring', { href })
-        } else {
-          // make href eval safe
-          base64EncodedHref = Buffer.from(
-            appURL + '/' + removeLeadingSlash(href)
-          ).toString('base64')
-        }
+        // relative href needs a base to construct URL
+        const url = new URL(href, 'http://dummy')
+        const relativeUrl = url.pathname + url.search + url.hash
+        // make href eval safe
+        base64EncodedHref = Buffer.from(appURL + relativeUrl).toString('base64')
       }
       if (open_apps[`${accountId}.${msg_id}`]) {
         log.warn(
@@ -201,7 +190,9 @@ export default class DCWebxdc extends SplitOut {
           if (filename.endsWith('/')) {
             filename = filename.substring(0, filename.length - 1)
           }
-          filename = removeLeadingSlash(filename)
+          if (filename.startsWith('/')) {
+            filename = filename.substring(1)
+          }
 
           let mimeType: string | undefined = Mime.lookup(filename) || ''
           // Make sure that the browser doesn't open files in the PDF viewer.
