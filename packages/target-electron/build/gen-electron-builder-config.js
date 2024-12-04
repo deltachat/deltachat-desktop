@@ -171,11 +171,6 @@ build['win'] = {
   files: [...files, PREBUILD_FILTERS.NOT_MAC, PREBUILD_FILTERS.NOT_LINUX],
 }
 
-build['appx'] = {
-  // TODO: find out why this is not working
-  artifactName: '${productName}-${version}-Package.${arch}.${ext}',
-}
-
 build['portable'] = {
   artifactName: '${productName}-${version}-Portable.${arch}.${ext}',
 }
@@ -242,6 +237,7 @@ build['appx'] = {
   publisherDisplayName: 'merlinux',
   identityName: 'merlinux.DeltaChat',
   languages,
+  artifactName: '${productName}-${version}-Package.${arch}.${ext}',
 }
 
 // see https://www.electron.build/configuration/nsis
