@@ -1,5 +1,5 @@
 /**
- * @typedef {import('webxdc-types').RealtimeListener} RT
+ * @typedef {import('@webxdc/types').RealtimeListener} RT
  * @type {RT}
  */
 class RealtimeListener {
@@ -46,15 +46,22 @@ class RealtimeListener {
 //@ts-check
 ;(() => {
   const { contextBridge, ipcRenderer } = require('electron')
+  // setup is finished
   let is_ready = false
 
+  // used to replace the location.href of the iframe if
+  // setLocation was called before all connections were filled
+  let locationUrl = ''
+
+  let connectionsFilled = false
+
   /**
-   * @type {Parameters<import('webxdc-types').Webxdc["setUpdateListener"]>[0]|null}
+   * @type {Parameters<import('@webxdc/types').Webxdc["setUpdateListener"]>[0]|null}
    */
   let callback = null
   /** @type {RT | null} */
   let realtimeListener = null
-  var last_serial = 0
+  let last_serial = 0
   let setUpdateListenerPromise = null
   let is_running = false
   let scheduled = false
@@ -62,7 +69,7 @@ class RealtimeListener {
     const updates = JSON.parse(
       await ipcRenderer.invoke('webxdc.getAllUpdates', last_serial)
     )
-    for (let update of updates) {
+    for (const update of updates) {
       last_serial = update.max_serial
       callback(update)
     }
@@ -100,7 +107,7 @@ class RealtimeListener {
   })
 
   /**
-   * @type {import('webxdc-types').Webxdc}
+   * @type {import('@webxdc/types').Webxdc}
    */
   const api = {
     selfAddr: '?Setup Missing?',
@@ -138,12 +145,14 @@ class RealtimeListener {
       )
       return Promise.resolve([])
     },
-    sendUpdate: (update, description) =>
-      ipcRenderer.invoke(
-        'webxdc.sendUpdate',
-        JSON.stringify(update),
-        description
-      ),
+    sendUpdate: (update, description) => {
+      if (description) {
+        console.error(
+          'parameter description in sendUpdate is deprecated and will be removed in the future'
+        )
+      }
+      ipcRenderer.invoke('webxdc.sendUpdate', JSON.stringify(update))
+    },
     sendToChat: async content => {
       if (!content.file && !content.text) {
         return Promise.reject(
@@ -159,7 +168,7 @@ class RealtimeListener {
           reader.onload = () => {
             /** @type {string} */
             //@ts-ignore
-            let data = reader.result
+            const data = reader.result
             resolve(data.slice(data.indexOf(data_start) + data_start.length))
           }
           reader.onerror = () => reject(reader.error)
@@ -212,7 +221,7 @@ class RealtimeListener {
       await ipcRenderer.invoke('webxdc.sendToChat', file, content.text)
     },
     importFiles: filters => {
-      var element = document.createElement('input')
+      const element = document.createElement('input')
       element.type = 'file'
       element.accept = [
         ...(filters.extensions || []),
@@ -289,15 +298,27 @@ class RealtimeListener {
           ipcRenderer.invoke('webxdc.exit')
         } catch (error) {
           loadingDiv.remove()
-          iframe.src = 'index.html'
+          iframe.src = locationUrl !== '' ? locationUrl : 'index.html'
           iframe.contentWindow.window.addEventListener(
             'keydown',
             keydown_handler
           )
+          connectionsFilled = true
         }
       } catch (error) {
         console.log('error loading, should crash/close window', error)
         ipcRenderer.invoke('webxdc.exit')
+      }
+    },
+    /**
+     * called via webContents.executeJavaScript
+     */
+    setLocationUrl(base64EncodedHref) {
+      locationUrl = Buffer.from(base64EncodedHref, 'base64').toString('utf8')
+      if (locationUrl && locationUrl !== '' && connectionsFilled) {
+        // if connectionsFilled is false, the url is loaded after
+        // the connections are filled
+        window.frames[0].window.location = locationUrl
       }
     },
   })
@@ -311,9 +332,11 @@ class RealtimeListener {
   window.addEventListener('keydown', keydown_handler)
   window.onload = () => {
     const frame = document.getElementById('frame')
-    if (frame)
+    if (frame) {
       frame.contentWindow.window.addEventListener('keydown', keydown_handler)
-    else console.log('attaching F12 handler failed, frame not found')
+    } else {
+      console.log('attaching F12 handler failed, frame not found')
+    }
   }
 
   contextBridge.exposeInMainWorld('webxdc_custom', {

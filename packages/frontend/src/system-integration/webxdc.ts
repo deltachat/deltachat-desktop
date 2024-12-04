@@ -2,7 +2,7 @@
 // because it opens new "independent" windows
 // and heavily uses the events
 
-import { BackendRemote } from '../backend-com'
+import { BackendRemote, Type } from '../backend-com'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 
 export function initWebxdc() {
@@ -20,24 +20,41 @@ export function initWebxdc() {
   })
 }
 
-export async function internalOpenWebxdc(accountId: number, messageId: number) {
-  const message = await BackendRemote.rpc.getMessage(accountId, messageId)
+/**
+ * open a webxdc window or focus to an existing one
+ * parameter "message" might be of viewType Webxdc or
+ * systemMessageType WebxdcInfoMessage
+ */
+export async function internalOpenWebxdc(
+  accountId: number,
+  message: Type.Message
+) {
+  let href = ''
+  let messageId = message.id
+  if (message.systemMessageType === 'WebxdcInfoMessage' && message.parentId) {
+    href = message.webxdcHref ?? ''
+    // if we have a webxdc info message, the webxdcInfo is attached to the parent message
+    messageId = message.parentId
+    message = await BackendRemote.rpc.getMessage(accountId, messageId)
+  }
   if (!message.webxdcInfo) {
-    throw new Error('no webxdc info for message ' + messageId)
+    // we can open only messages with webxdc info
+    throw new Error('no webxdc info for message ' + message)
   }
   const chatName = (
     await BackendRemote.rpc.getBasicChatInfo(accountId, message.chatId)
   ).name
-  const { addr, displayname } = await BackendRemote.rpc.batchGetConfig(
+  const displayname = await BackendRemote.rpc.getConfig(
     accountId,
-    ['addr', 'displayname']
+    'displayname'
   )
+
   runtime.openWebxdc(messageId, {
     accountId,
-    addr,
     displayname,
     chatName,
     webxdcInfo: message.webxdcInfo,
+    href,
   })
 }
 

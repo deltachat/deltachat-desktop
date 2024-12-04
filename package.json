@@ -17,6 +17,7 @@
     "start:electron": "pnpm --filter=@deltachat-desktop/target-electron start",
     "build:electron": "pnpm --filter=@deltachat-desktop/target-electron build",
     "dev:electron": "pnpm --filter=@deltachat-desktop/target-electron dev",
+    "debug:electron": "pnpm --filter=@deltachat-desktop/target-electron dev-inspect",
     "watch:electron": "pnpm --filter=@deltachat-desktop/target-electron watch",
     "start:browser": "pnpm --filter=@deltachat-desktop/target-browser start",
     "build:browser": "pnpm --filter=@deltachat-desktop/target-browser build",

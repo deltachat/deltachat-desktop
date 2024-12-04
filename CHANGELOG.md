@@ -3,7 +3,7 @@
 ## [Unreleased][unreleased]
 
 ## Added
-- accessibility: arrow-key navigation for the list of chats, list of accounts, list of contacts in the "New Chat" dialog #4224, #4291, #4361, #4362
+- accessibility: arrow-key navigation for the list of chats, list of accounts, lists of contacts #4224, #4291, #4361, #4362, #4369
 - Add "Learn More" button to "Disappearing Messages" dialog #4330
 - new icon for Mac users
 - smooth-scroll to newly arriving messages instead of jumping instantly #4125
@@ -16,6 +16,11 @@
 - extend image max-height in messages
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.151.1`
 - dev: inviteCode doesn't needs conversion any more #4363
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.151.2`
+- description parameter in webxdc.sendUpdate is deprecated now #4359
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.151.3`
+- click on WebxdcInfo Message immediately opens webxdc app #4380
+- href can be passed to webxdc sendStatusUpdate to show event related content
 - dev: move responsibility for updating account list to core through the `AccountsChanged` and `AccountsItemChanged` event
 
 ## Fixed
@@ -25,9 +30,11 @@
 - fix missing linebreaks in quotes #4360
 - avoid showing wrong menu items for blocked users #4353
 - fix: save message draft every 200ms if message text changed #3733
-- fix mac drag window issues #4300
+- fix mac drag window issues #4300 #4385
 - the main window overflowing small screens, or/and if zoom level is high #4156
 - do not clear the draft if sending failed. #4340
+- "Search in \<chat name\>" divider overflowing for long chat names #4375
+- fix startup delay on linux #4379
 
 
 <a id="1_48_0"></a>

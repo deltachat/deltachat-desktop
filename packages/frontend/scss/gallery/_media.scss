@@ -10,16 +10,6 @@ $tab-height: 46px;
   display: flex;
   flex-direction: column;
 
-  .big-date {
-    flex-grow: 1;
-    text-align: end;
-    align-self: center;
-    margin-right: 12px;
-    font-size: 18px;
-    color: var(--summary-text-color);
-    white-space: nowrap;
-  }
-
   .tab-list {
     display: flex;
     justify-content: space-between;
@@ -38,10 +28,19 @@ $tab-height: 46px;
         border-bottom: 3px solid var(--globalLinkColor);
         cursor: pointer;
       }
-      &.big-date:hover {
+      &.big-date {
+        flex-grow: 1;
+        text-align: end;
+        align-self: center;
+        margin-right: 12px;
+        font-size: 18px;
         color: var(--summary-text-color);
-        border-bottom: none;
-        cursor: default;
+        white-space: nowrap;
+        &:hover {
+          color: var(--summary-text-color);
+          border-bottom: none;
+          cursor: default;
+        }
       }
     }
   }
@@ -87,6 +86,7 @@ $tab-height: 46px;
       border-bottom: 1px solid grey;
       background: transparent;
       color: var(--textPrimary);
+      outline: none;
     }
   }
 }
