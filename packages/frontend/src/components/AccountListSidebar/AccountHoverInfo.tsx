@@ -55,11 +55,7 @@ export default function AccountHoverInfo({
         <b>{account.displayName ? account.displayName : account.addr}</b>
         {account.privateTag && (
           <HoverInfoProperty>
-            <Icon
-              icon='sell'
-              size={12}
-              className={styles.hoverInfoMuteIcon}
-            />{' '}
+            <Icon icon='sell' size={12} className={styles.hoverInfoMuteIcon} />{' '}
             {account.privateTag}
           </HoverInfoProperty>
         )}
