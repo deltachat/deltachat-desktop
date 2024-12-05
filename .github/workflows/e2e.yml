@@ -31,6 +31,7 @@ jobs:
     - name: Install dependencies
       run: npm install -g pnpm && pnpm install
     - name: Install Playwright Browsers
+      working-directory: ./packages/e2e-tests
       run: npx playwright install --with-deps
     - name: save secret to file
       run: mkdir -p ${{ env.CERTIFICATE_PATH }} && echo $PRIVATE_CERTIFICATE_KEY > ${{ env.CERTIFICATE_PATH }}/cert.key.pem
