@@ -21,6 +21,7 @@ jobs:
       PRIVATE_CERTIFICATE_KEY: ${{ secrets.PRIVATE_CERTIFICATE_KEY }}
       PRIVATE_CERTIFICATE_CERT: ${{ secrets.PRIVATE_CERTIFICATE_CERT }}
       VERSION_INFO_GIT_REF: ${{ github.ref }}
+      DC_ACCOUNTS_DIR: ../../e2e-tests/data/accounts
     timeout-minutes: 60
     runs-on: ${{ matrix.os }}
     strategy:
