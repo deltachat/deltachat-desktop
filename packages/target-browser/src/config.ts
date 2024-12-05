@@ -45,7 +45,10 @@ if (!existsSync(DATA_DIR)) {
 
 mkdirSync(LOGS_DIR, { recursive: true })
 
-if (!existsSync(PRIVATE_CERTIFICATE_KEY)) {
+if (
+  !existsSync(PRIVATE_CERTIFICATE_KEY) &&
+  !process.env['PRIVATE_CERTIFICATE_KEY']
+) {
   /* ignore-console-log */
   console.log(
     `\n[ERROR]: Certificate at "${PRIVATE_CERTIFICATE_KEY}" not exist, make sure you follow the steps in the Readme file\n`
