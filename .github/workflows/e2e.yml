@@ -1,13 +1,16 @@
 name: e2e Tests
 on:
   push:
-    branches: [e2e-github-action]
-    paths-ignore:
+    branches: [main, e2e-github-action]
+    paths-ignore: &paths-ignore
       - 'docs/**'  # only trigger build if a file outside of /docs was changed
       - '_locales/*.xml'
       - '.vscode/**'
       - 'README_ASSETS/**'
       - 'README.md'
+  pull_request:
+    paths-ignore:
+      *paths-ignore
 
 
 
@@ -41,7 +44,7 @@ jobs:
     - name: create data dir
       run: mkdir -p packages/target-browser/data
     - name: Run e2e tests
-      run: pnpm e2e --project chromium
+      run: pnpm e2e
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
