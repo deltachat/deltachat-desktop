@@ -3,6 +3,16 @@
 ## [Unreleased][unreleased]
 
 ## Added
+
+## Changed
+
+## Fixed
+
+<a id="1_49_0"></a>
+
+## [1.49.0] - 2024-12-05
+
+## Added
 - accessibility: arrow-key navigation for the list of chats, list of accounts, lists of contacts, gallery tabs #4224, #4291, #4361, #4362, #4369, #4377
 - Add "Learn More" button to "Disappearing Messages" dialog #4330
 - new icon for Mac users
@@ -2994,7 +3004,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.48.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.49.0...HEAD
+
+[1.49.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.48.0...v1.49.0
 
 [1.48.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.47.1...v1.48.0
 
