@@ -1,7 +1,7 @@
 name: e2e Tests
 on:
   push:
-    branches: [main, e2e-github-action]
+    branches: [main]
     paths-ignore:
       - 'docs/**'  # only trigger build if a file outside of /docs was changed
       - '_locales/*.xml'
@@ -48,7 +48,7 @@ jobs:
     - name: create data dir
       run: mkdir -p packages/target-browser/data
     - name: Run e2e tests
-      run: pnpm e2e
+      run: pnpm e2e --project Chrome
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
