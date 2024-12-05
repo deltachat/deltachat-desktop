@@ -193,8 +193,8 @@ app.get('/themes.json', async (req, res) => {
 
 const sslserver = https.createServer(
   {
-    key: await readFile(PRIVATE_CERTIFICATE_KEY),
-    cert: await readFile(PRIVATE_CERTIFICATE_CERT),
+    key: process.env.PRIVATE_CERTIFICATE_KEY,
+    cert: process.env.PRIVATE_CERTIFICATE_CERT,
   },
   app
 )
