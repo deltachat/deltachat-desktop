@@ -191,10 +191,24 @@ app.get('/themes.json', async (req, res) => {
   res.json(await readThemeDir())
 })
 
+let certificate = ''
+if (process.env.PRIVATE_CERTIFICATE_CERT) {
+  certificate = process.env.PRIVATE_CERTIFICATE_CERT
+} else {
+  certificate = await readFile(PRIVATE_CERTIFICATE_CERT, 'utf8')
+}
+
+let certificateKey = ''
+if (process.env.PRIVATE_CERTIFICATE_KEY) {
+  certificateKey = process.env.PRIVATE_CERTIFICATE_KEY
+} else {
+  certificateKey = await readFile(PRIVATE_CERTIFICATE_KEY, 'utf8')
+}
+
 const sslserver = https.createServer(
   {
-    key: process.env.PRIVATE_CERTIFICATE_KEY,
-    cert: process.env.PRIVATE_CERTIFICATE_CERT,
+    key: certificateKey,
+    cert: certificate,
   },
   app
 )

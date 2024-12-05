@@ -145,6 +145,7 @@ export async function loadExistingProfiles(page: Page): Promise<User[]> {
   const existingProfiles: User[] = []
   const accountList = page.locator('.styles_module_account')
   const existingAccountItems = await accountList.count()
+  console.log('existingAccountItems', existingAccountItems)
   if (existingAccountItems > 0) {
     if (existingAccountItems === 1) {
       const welcomeDialog = await page
