@@ -38,6 +38,8 @@ jobs:
       run: mkdir -p ${{ env.CERTIFICATE_PATH }} && echo $PRIVATE_CERTIFICATE_KEY > ${{ env.CERTIFICATE_PATH }}/cert.key.pem
     - name: save certificate to file
       run: echo $PRIVATE_CERTIFICATE_CERT > ${{ env.CERTIFICATE_PATH }}/cert.pem
+    - name: check certfiles exist
+      run: ls -la ${{ env.CERTIFICATE_PATH }}
     - name: Run e2e tests
       run: pnpm e2e --project chromium
     - uses: actions/upload-artifact@v4
