@@ -21,6 +21,7 @@ jobs:
       CERTIFICATE_PATH: packages/target-browser/data/certificate
       PRIVATE_CERTIFICATE_KEY: ${{ secrets.PRIVATE_CERTIFICATE_KEY }}
       PRIVATE_CERTIFICATE_CERT: ${{ secrets.PRIVATE_CERTIFICATE_CERT }}
+      VERSION_INFO_GIT_REF: ${{ github.ref }}
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
