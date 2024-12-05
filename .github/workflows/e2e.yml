@@ -1,0 +1,46 @@
+name: e2e Tests
+on:
+  push:
+    branches: [e2e-github-action]
+    paths-ignore:
+      - 'docs/**'  # only trigger build if a file outside of /docs was changed
+      - '_locales/*.xml'
+      - '.vscode/**'
+      - 'README_ASSETS/**'
+      - 'README.md'
+
+
+
+jobs:
+  test:
+    name: E2E Tests
+    environment: test
+    env:
+      CI: true
+      NODE_ENV: test
+      CERTIFICATE_PATH: packages/target-browser/data/certificate
+      PRIVATE_CERTIFICATE_KEY: ${{ secrets.PRIVATE_CERTIFICATE_KEY }}
+      PRIVATE_CERTIFICATE_CERT: ${{ secrets.PRIVATE_CERTIFICATE_CERT }}
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+    - name: Install dependencies
+      run: npm install -g pnpm && pnpm install
+    - name: Install Playwright Browsers
+      run: pnpm exec playwright install --with-deps
+    - name: save secret to file
+      run: mkdir -p ${{ env.CERTIFICATE_PATH }} && echo $PRIVATE_CERTIFICATE_KEY > ${{ env.CERTIFICATE_PATH }}/cert.key.pem
+    - name: save certificate to file
+      run: echo $PRIVATE_CERTIFICATE_CERT > ${{ env.CERTIFICATE_PATH }}/cert.pem
+    - name: Run e2e tests
+      run: pnpm e2e --project chromium
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: e2e-report
+        path: e2e-report/
+        retention-days: 30
