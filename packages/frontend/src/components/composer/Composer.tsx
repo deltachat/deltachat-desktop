@@ -444,7 +444,8 @@ export function useDraft(
 
   const loadDraft = useCallback(
     (chatId: number) => {
-      if (!canSend) {
+      if (chatId === null || !canSend) {
+        clearDraft()
         return
       }
       BackendRemote.rpc.getDraft(selectedAccountId(), chatId).then(newDraft => {
@@ -477,16 +478,13 @@ export function useDraft(
 
   useEffect(() => {
     log.debug('reloading chat because id changed', chatId)
-    if (!canSend) {
-      return
-    }
     //load
     loadDraft(chatId || 0)
     window.__reloadDraft = loadDraft.bind(null, chatId || 0)
     return () => {
       window.__reloadDraft = null
     }
-  }, [chatId, loadDraft, canSend, isContactRequest, isProtectionBroken])
+  }, [chatId, loadDraft, isContactRequest, isProtectionBroken])
 
   const saveDraft = useCallback(async () => {
     if (chatId === null || !canSend) {
