@@ -7,6 +7,7 @@
 ## Changed
 
 ## Fixed
+- handle double escape on Dialog #4365
 
 <a id="1_49_0"></a>
 

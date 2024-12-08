@@ -1,13 +1,10 @@
 import React from 'react'
 
-import AlertDialog from '../../dialogs/AlertDialog'
 import AlternativeSetupsDialog from './AlternativeSetupsDialog'
 import Button from '../../Button'
 import useDialog from '../../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
-import { BackendRemote, EffectfulBackendActions } from '../../../backend-com'
 import { DialogBody, DialogContent, DialogHeader } from '../../Dialog'
-import { getLogger } from '../../../../../shared/logger'
 
 import styles from './styles.module.scss'
 
@@ -15,12 +12,11 @@ type Props = {
   onExitWelcomeScreen: () => Promise<void>
   onNextStep: () => void
   onUnSelectAccount: () => Promise<void>
+  onClickBackButton: () => Promise<void>
   selectedAccountId: number
   showBackButton: boolean
   hasConfiguredAccounts: boolean
 }
-
-const log = getLogger('renderer/components/OnboardingScreen')
 
 export default function OnboardingScreen(props: Props) {
   const tx = useTranslationFunction()
@@ -32,34 +28,10 @@ export default function OnboardingScreen(props: Props) {
     })
   }
 
-  const onClickBackButton = async () => {
-    try {
-      const acInfo = await BackendRemote.rpc.getAccountInfo(
-        props.selectedAccountId
-      )
-      if (acInfo.kind === 'Unconfigured') {
-        await props.onUnSelectAccount()
-        await EffectfulBackendActions.removeAccount(props.selectedAccountId)
-      }
-
-      props.onExitWelcomeScreen()
-    } catch (error) {
-      if (error instanceof Error) {
-        openDialog(AlertDialog, {
-          message: error?.message,
-          cb: () => {},
-        })
-      } else {
-        log.error('unexpected error type', error)
-        throw error
-      }
-    }
-  }
-
   return (
     <>
       <DialogHeader
-        onClickBack={props.showBackButton ? onClickBackButton : undefined}
+        onClickBack={props.showBackButton ? props.onClickBackButton : undefined}
         title={
           props.hasConfiguredAccounts
             ? tx('add_account')
