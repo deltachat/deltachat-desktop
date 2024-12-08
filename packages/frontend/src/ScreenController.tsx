@@ -191,7 +191,16 @@ export default class ScreenController extends Component {
         this.changeScreen(Screens.NoAccountSelected)
       }
     } else {
-      this.changeScreen(Screens.NoAccountSelected)
+      const accounts = await BackendRemote.rpc.getAllAccountIds()
+      if (accounts.length > 0) {
+        this.changeScreen(Screens.NoAccountSelected)
+      } else {
+        // special case: there is no account at all
+        // we should avoid a state with no selected
+        // account, since instant onboarding expects
+        // at least an unconfigured account to exist
+        this.addAndSelectAccount()
+      }
     }
     this.lastAccountBeforeAddingNewAccount = null
   }
