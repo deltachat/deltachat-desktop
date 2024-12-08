@@ -1,0 +1,57 @@
+name: e2e Tests
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'docs/**'  # only trigger build if a file outside of /docs was changed
+      - '_locales/*.xml'
+      - '.vscode/**'
+      - 'README_ASSETS/**'
+      - 'README.md'
+  pull_request:
+    paths-ignore:
+      - 'docs/**'  # only trigger build if a file outside of /docs was changed
+      - '_locales/*.xml'
+      - '.vscode/**'
+      - 'README_ASSETS/**'
+      - 'README.md'
+
+
+
+jobs:
+  test:
+    name: E2E Tests
+    environment: test
+    env:
+      CI: true
+      NODE_ENV: test
+      PRIVATE_CERTIFICATE_KEY: ${{ secrets.PRIVATE_CERTIFICATE_KEY }}
+      PRIVATE_CERTIFICATE_CERT: ${{ secrets.PRIVATE_CERTIFICATE_CERT }}
+      VERSION_INFO_GIT_REF: ${{ github.ref }}
+      DC_ACCOUNTS_DIR: ../../e2e-tests/data/accounts
+    timeout-minutes: 60
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+      fail-fast: false
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+    - name: Install dependencies
+      run: npm install -g pnpm && pnpm install
+    - name: Install Playwright Browsers
+      working-directory: ./packages/e2e-tests
+      run: npx playwright install --with-deps
+    - name: create data dir
+      run: mkdir -p packages/target-browser/data
+    - name: Run e2e tests
+      run: pnpm e2e --project Chrome
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: e2e-report
+        path: packages/e2e-tests/playwright-report/ packages/e2e-tests/test-results/
+        retention-days: 30
