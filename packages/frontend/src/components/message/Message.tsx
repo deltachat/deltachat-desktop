@@ -792,15 +792,18 @@ export const Quote = ({
               )}
             </>
           )}
-          <div className='quoted-text'>
-            <MessageBody
-              text={
-                quote.text.slice(0, 3000 /* limit quoted message size */) || ''
-              }
-              disableJumbomoji
-              nonInteractiveContent
-            />
-          </div>
+          {hasMessage && quote.text && (
+            <div className='quoted-text'>
+              <MessageBody
+                text={
+                  quote.text.slice(0, 3000 /* limit quoted message size */) ||
+                  ''
+                }
+                disableJumbomoji
+                nonInteractiveContent
+              />
+            </div>
+          )}
         </div>
         {hasMessage && quote.image && (
           <img

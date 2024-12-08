@@ -7,6 +7,7 @@
 ## Changed
 
 ## Fixed
+- fix random crashes on quote reply #4337
 
 <a id="1_49_0"></a>
 
