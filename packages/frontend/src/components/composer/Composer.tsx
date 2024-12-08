@@ -424,6 +424,7 @@ export function useDraft(
   chatId: number | null,
   isContactRequest: boolean,
   isProtectionBroken: boolean,
+  canSend: boolean, // no draft needed in chats we can't send messages
   inputRef: React.MutableRefObject<ComposerMessageInput | null>
 ): {
   draftState: DraftObject
@@ -443,6 +444,10 @@ export function useDraft(
 
   const loadDraft = useCallback(
     (chatId: number) => {
+      if (chatId === null || !canSend) {
+        clearDraft()
+        return
+      }
       BackendRemote.rpc.getDraft(selectedAccountId(), chatId).then(newDraft => {
         if (!newDraft) {
           log.debug('no draft')
@@ -468,7 +473,7 @@ export function useDraft(
         })
       })
     },
-    [clearDraft, inputRef]
+    [clearDraft, inputRef, canSend]
   )
 
   useEffect(() => {
@@ -482,7 +487,7 @@ export function useDraft(
   }, [chatId, loadDraft, isContactRequest, isProtectionBroken])
 
   const saveDraft = useCallback(async () => {
-    if (chatId === null) {
+    if (chatId === null || !canSend) {
       return
     }
     if (inputRef.current?.textareaRef.current?.disabled) {
@@ -533,7 +538,7 @@ export function useDraft(
     } else {
       clearDraft()
     }
-  }, [chatId, clearDraft, inputRef])
+  }, [chatId, clearDraft, canSend, inputRef])
 
   const updateDraftText = (text: string, InputChatId: number) => {
     if (chatId !== InputChatId) {
@@ -586,7 +591,7 @@ export function useDraft(
       | KeybindAction.Composer_SelectReplyToUp
       | KeybindAction.Composer_SelectReplyToDown
   ) => {
-    if (chatId == undefined) {
+    if (chatId == undefined || !canSend) {
       return
     }
     const quoteMessage = (messageId: number) => {
