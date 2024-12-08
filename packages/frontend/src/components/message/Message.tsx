@@ -792,7 +792,7 @@ export const Quote = ({
               )}
             </>
           )}
-          {hasMessage && quote.text && (
+          {quote.text && (
             <div className='quoted-text'>
               <MessageBody
                 text={
