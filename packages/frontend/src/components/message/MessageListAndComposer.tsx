@@ -91,6 +91,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     chat.id,
     chat.isContactRequest,
     chat.isProtectionBroken,
+    chat.canSend,
     messageInputRef
   )
 

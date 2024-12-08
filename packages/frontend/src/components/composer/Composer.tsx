@@ -424,6 +424,7 @@ export function useDraft(
   chatId: number | null,
   isContactRequest: boolean,
   isProtectionBroken: boolean,
+  canSend: boolean, // no draft needed in chats we can't send messages
   inputRef: React.MutableRefObject<ComposerMessageInput | null>
 ): {
   draftState: DraftObject
@@ -443,6 +444,9 @@ export function useDraft(
 
   const loadDraft = useCallback(
     (chatId: number) => {
+      if (!canSend) {
+        return
+      }
       BackendRemote.rpc.getDraft(selectedAccountId(), chatId).then(newDraft => {
         if (!newDraft) {
           log.debug('no draft')
@@ -468,21 +472,24 @@ export function useDraft(
         })
       })
     },
-    [clearDraft, inputRef]
+    [clearDraft, inputRef, canSend]
   )
 
   useEffect(() => {
     log.debug('reloading chat because id changed', chatId)
+    if (!canSend) {
+      return
+    }
     //load
     loadDraft(chatId || 0)
     window.__reloadDraft = loadDraft.bind(null, chatId || 0)
     return () => {
       window.__reloadDraft = null
     }
-  }, [chatId, loadDraft, isContactRequest, isProtectionBroken])
+  }, [chatId, loadDraft, canSend, isContactRequest, isProtectionBroken])
 
   const saveDraft = useCallback(async () => {
-    if (chatId === null) {
+    if (chatId === null || !canSend) {
       return
     }
     if (inputRef.current?.textareaRef.current?.disabled) {
@@ -533,7 +540,7 @@ export function useDraft(
     } else {
       clearDraft()
     }
-  }, [chatId, clearDraft, inputRef])
+  }, [chatId, clearDraft, canSend, inputRef])
 
   const updateDraftText = (text: string, InputChatId: number) => {
     if (chatId !== InputChatId) {
