@@ -593,7 +593,7 @@ export function useDraft(
       | KeybindAction.Composer_SelectReplyToUp
       | KeybindAction.Composer_SelectReplyToDown
   ) => {
-    if (chatId == undefined) {
+    if (chatId == undefined || !canSend) {
       return
     }
     const quoteMessage = (messageId: number) => {
