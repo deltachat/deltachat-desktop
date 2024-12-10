@@ -191,9 +191,15 @@ class ElectronRuntime implements Runtime {
     accountId: number
     chatId: number
     msgId: number
+    isWebxdcInfo: boolean
   }) => void = () => {}
   setNotificationCallback(
-    cb: (data: { accountId: number; chatId: number; msgId: number }) => void
+    cb: (data: {
+      accountId: number
+      chatId: number
+      msgId: number
+      isWebxdcInfo: boolean
+    }) => void
   ): void {
     this.notificationCallback = cb
   }

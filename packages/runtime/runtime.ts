@@ -14,7 +14,8 @@ import type { getLogger as getLoggerFunction } from '@deltachat-desktop/shared/l
 import type { setLogHandler as setLogHandlerFunction } from '@deltachat-desktop/shared/logger.js'
 
 /**
- * Offers an abstraction Layer to make it easier to make browser client in the future
+ * Offers an abstraction Layer to make it easier to capsulate
+ * context specific functions (like electron, browser, tauri, etc)
  */
 export interface Runtime {
   emitUIFullyReady(): void
@@ -112,8 +113,14 @@ export interface Runtime {
   showNotification(data: DcNotification): void
   clearAllNotifications(): void
   clearNotifications(chatId: number): void
+  // enables to set a callback (used in frontend RuntimeAdapter)
   setNotificationCallback(
-    cb: (data: { accountId: number; chatId: number; msgId: number }) => void
+    cb: (data: {
+      accountId: number
+      chatId: number
+      msgId: number
+      isWebxdcInfo: boolean
+    }) => void
   ): void
   /** @param name optional name needed for browser */
   writeClipboardToTempFile(name?: string): Promise<string>
