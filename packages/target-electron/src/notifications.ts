@@ -14,7 +14,9 @@ const isMac = platform() === 'darwin'
 
 function createNotification(data: DcNotification): Notification {
   let icon: NativeImage | undefined = data.icon
-    ? nativeImage.createFromPath(data.icon)
+    ? data.icon.indexOf('base64') > -1
+      ? nativeImage.createFromDataURL(data.icon)
+      : nativeImage.createFromPath(data.icon)
     : undefined
 
   if (!icon || icon.isEmpty()) {
@@ -51,9 +53,15 @@ function onClickNotification(
   accountId: number,
   chatId: number,
   msgId: number,
+  isWebxdcInfo: boolean,
   _ev: Electron.Event
 ) {
-  mainWindow.send('ClickOnNotification', { accountId, chatId, msgId })
+  mainWindow.send('ClickOnNotification', {
+    accountId,
+    chatId,
+    msgId,
+    isWebxdcInfo,
+  })
   mainWindow.show()
   app.focus()
   mainWindow.window?.focus()
@@ -73,7 +81,13 @@ function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
     const notify = createNotification(data)
 
     notify.on('click', Event => {
-      onClickNotification(data.accountId, chatId, data.messageId, Event)
+      onClickNotification(
+        data.accountId,
+        chatId,
+        data.messageId,
+        data.isWebxdcInfo,
+        Event
+      )
       notifications[chatId] =
         notifications[chatId]?.filter(n => n !== notify) || []
       notify.close()
