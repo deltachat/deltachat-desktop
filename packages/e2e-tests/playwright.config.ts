@@ -88,7 +88,7 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: `NODE_ENV=test DC_ACCOUNTS_DIR=../../e2e-tests/data/accounts node ../target-browser/dist/server.js`,
+    command: `node ../target-browser/dist/server.js`,
     url: baseURL,
     timeout: 120 * 1000,
     ignoreHTTPSErrors: true,
