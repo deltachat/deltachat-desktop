@@ -17,6 +17,7 @@ function isMuted(accountId: number, chatId: number) {
 type queuedNotification = {
   chatId: number
   messageId: number
+  isWebxdcInfo?: boolean
 }
 
 let queuedNotifications: {
@@ -26,7 +27,8 @@ let queuedNotifications: {
 function incomingMessageHandler(
   accountId: number,
   chatId: number,
-  messageId: number
+  messageId: number,
+  isWebxdcInfo: boolean = false
 ) {
   log.debug('incomingMessageHandler: ', { chatId, messageId })
 
@@ -58,13 +60,23 @@ function incomingMessageHandler(
   if (typeof queuedNotifications[accountId] === 'undefined') {
     queuedNotifications[accountId] = []
   }
-  queuedNotifications[accountId].push({ chatId, messageId })
+  queuedNotifications[accountId].push({ chatId, messageId, isWebxdcInfo })
+}
+
+async function incomingWebxdcEventHandler(
+  accountId: number,
+  messageId: number
+) {
+  const message = await BackendRemote.rpc.getMessage(accountId, messageId)
+  const chatId = message.chatId
+  incomingMessageHandler(accountId, chatId, messageId, true)
 }
 
 async function showNotification(
   accountId: number,
   chatId: number,
-  messageId: number
+  messageId: number,
+  isWebxdcInfo: boolean
 ) {
   const tx = window.static_translate
 
@@ -76,19 +88,62 @@ async function showNotification(
       chatId,
       messageId,
       accountId,
+      isWebxdcInfo,
     })
   } else {
     try {
-      const notificationInfo =
-        await BackendRemote.rpc.getMessageNotificationInfo(accountId, messageId)
-      const { chatName, summaryPrefix, summaryText } = notificationInfo
+      let chatName = ''
+      let summaryPrefix = ''
+      let summaryText = ''
+      let notificationInfo: T.MessageNotificationInfo | undefined
+      let icon: string | null = null
+      if (isWebxdcInfo) {
+        const relatedMessage = await BackendRemote.rpc.getMessage(
+          accountId,
+          messageId
+        )
+        if (
+          relatedMessage.systemMessageType === 'WebxdcInfoMessage' &&
+          relatedMessage.parentId
+        ) {
+          summaryText = relatedMessage.text
+          const webxdcMessage = await BackendRemote.rpc.getMessage(
+            accountId,
+            relatedMessage.parentId
+          )
+          if (webxdcMessage.webxdcInfo) {
+            summaryPrefix = `${webxdcMessage.webxdcInfo.name}`
+            if (webxdcMessage.webxdcInfo.icon) {
+              const iconName = webxdcMessage.webxdcInfo.icon
+              const iconBlob = await BackendRemote.rpc.getWebxdcBlob(
+                accountId,
+                webxdcMessage.id,
+                iconName
+              )
+              // needed for valid dataUrl
+              const imageExtension = iconName.split('.').pop()
+              icon = `data:image/${imageExtension};base64, ${iconBlob}`
+            }
+          }
+        }
+      } else {
+        notificationInfo = await BackendRemote.rpc.getMessageNotificationInfo(
+          accountId,
+          messageId
+        )
+        chatName = notificationInfo.chatName
+        summaryPrefix = notificationInfo.summaryPrefix ?? ''
+        summaryText = notificationInfo.summaryText ?? ''
+        icon = getNotificationIcon(notificationInfo)
+      }
       runtime.showNotification({
         title: chatName,
         body: summaryPrefix ? `${summaryPrefix}: ${summaryText}` : summaryText,
-        icon: getNotificationIcon(notificationInfo),
+        icon,
         chatId,
         messageId,
         accountId,
+        isWebxdcInfo,
       })
     } catch (error) {
       log.error('failed to create notification for message: ', messageId, error)
@@ -110,6 +165,7 @@ async function showGroupedNotification(
       chatId: 0,
       messageId: 0,
       accountId,
+      isWebxdcInfo: false,
     })
   } else {
     const chatIds = [...new Set(notifications.map(({ chatId }) => chatId))]
@@ -136,6 +192,7 @@ async function showGroupedNotification(
           chatId: chatIds[0],
           messageId: 0, // just select chat on click, no specific message
           accountId,
+          isWebxdcInfo: false, // no way handle webxdcInfo in grouped notifications
         })
       } else {
         // messages from diffent chats
@@ -152,6 +209,7 @@ async function showGroupedNotification(
           chatId: 0,
           messageId: 0,
           accountId,
+          isWebxdcInfo: false,
         })
       }
     } catch (error) {
@@ -202,8 +260,13 @@ async function flushNotifications(accountId: number) {
   if (notifications.length > notificationLimit) {
     showGroupedNotification(accountId, notifications)
   } else {
-    for (const { chatId, messageId } of notifications) {
-      await showNotification(accountId, chatId, messageId)
+    for (const { chatId, messageId, isWebxdcInfo } of notifications) {
+      await showNotification(
+        accountId,
+        chatId,
+        messageId,
+        isWebxdcInfo ?? false
+      )
     }
   }
   notificationLimit = NORMAL_LIMIT
@@ -235,6 +298,9 @@ function getNotificationIcon(
 export function initNotifications() {
   BackendRemote.on('IncomingMsg', (accountId, { chatId, msgId }) => {
     incomingMessageHandler(accountId, chatId, msgId)
+  })
+  BackendRemote.on('IncomingWebxdcNotify', (accountId, { msgId }) => {
+    incomingWebxdcEventHandler(accountId, msgId)
   })
   BackendRemote.on('IncomingMsgBunch', accountId => {
     flushNotifications(accountId)

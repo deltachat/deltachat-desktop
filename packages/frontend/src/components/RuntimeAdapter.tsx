@@ -11,6 +11,8 @@ import useDialog from '../hooks/dialog/useDialog'
 import WebxdcSaveToChatDialog from './dialogs/WebxdcSendToChat'
 import { saveLastChatId } from '../backend/chat'
 import useChat from '../hooks/chat/useChat'
+import { internalOpenWebxdc } from '../system-integration/webxdc'
+import { BackendRemote } from '../backend-com'
 
 type Props = {
   accountId?: number
@@ -42,7 +44,12 @@ export default function RuntimeAdapter({
     }
 
     runtime.setNotificationCallback(
-      async ({ accountId: notificationAccountId, msgId, chatId }) => {
+      async ({
+        accountId: notificationAccountId,
+        msgId,
+        chatId,
+        isWebxdcInfo,
+      }) => {
         if (accountId !== notificationAccountId) {
           closeAllDialogs()
           // selectAccount always loads the last used chat
@@ -52,6 +59,10 @@ export default function RuntimeAdapter({
           await window.__selectAccount(notificationAccountId)
         } else if (chatId !== 0) {
           await selectChat(accountId, chatId)
+          if (isWebxdcInfo) {
+            const message = await BackendRemote.rpc.getMessage(accountId, msgId)
+            internalOpenWebxdc(accountId, message)
+          }
           clearNotificationsForChat(notificationAccountId, chatId)
         }
         if (msgId) {

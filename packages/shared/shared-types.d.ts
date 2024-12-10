@@ -104,6 +104,7 @@ export interface DcNotification {
   messageId: number
   // for future
   accountId: number
+  isWebxdcInfo: boolean
 }
 
 export interface DcOpenWebxdcParameters {
