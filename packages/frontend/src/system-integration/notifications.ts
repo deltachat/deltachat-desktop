@@ -192,7 +192,7 @@ async function showGroupedNotification(
           chatId: chatIds[0],
           messageId: 0, // just select chat on click, no specific message
           accountId,
-          isWebxdcInfo: false, // no way handle webxdcInfo in grouped notifications
+          isWebxdcInfo: false, // no way to handle webxdcInfo in grouped notifications
         })
       } else {
         // messages from diffent chats
