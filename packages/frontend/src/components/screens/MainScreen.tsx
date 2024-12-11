@@ -360,7 +360,7 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
           </div>
         </div>
         {subtitle && subtitle.length && (
-          <div className='navbar-chat-subtitle'>{chatSubtitle(chat)}</div>
+          <div className='navbar-chat-subtitle'>{subtitle}</div>
         )}
       </div>
     </button>
