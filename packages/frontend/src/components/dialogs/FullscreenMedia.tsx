@@ -143,7 +143,14 @@ export default function FullscreenMedia(props: Props & DialogProps) {
                   onContextMenu={openMenu}
                   tabIndex={0}
                 >
-                  <img src={runtime.transformBlobURL(file)} />
+                  <img
+                    // Otherwise it's 'inline' and the parent gets
+                    // stretched a few pixels taller than the image itself,
+                    // resulting in the image overflowing the window.
+                    // See https://github.com/deltachat/deltachat-desktop/issues/4320
+                    style={{ display: 'block' }}
+                    src={runtime.transformBlobURL(file)}
+                  />
                 </div>
               </TransformComponent>
             )
