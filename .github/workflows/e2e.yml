@@ -109,5 +109,5 @@ jobs:
       if: ${{ !cancelled() }}
       with:
         name: e2e-report
-        path: packages/e2e-tests/README.md packages/e2e-tests/playwright-report packages/e2e-tests/test-results
+        path: packages/e2e-tests/playwright-report
         retention-days: 10
