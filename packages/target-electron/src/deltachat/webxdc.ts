@@ -100,6 +100,7 @@ export default class DCWebxdc extends SplitOut {
     ) => {
       const { webxdcInfo, chatName, displayname, accountId, href } = p
       const addr = webxdcInfo.selfAddr
+      const { sendUpdateInterval, sendUpdateMaxSize } = webxdcInfo
       let base64EncodedHref = ''
       const appURL = `webxdc://${accountId}.${msg_id}.webxdc`
       if (href && href !== '') {
@@ -222,7 +223,9 @@ export default class DCWebxdc extends SplitOut {
             // initializes the preload script, the actual implementation of `window.webxdc` is found there: static/webxdc-preload.js
             return makeResponse(
               Buffer.from(
-                `window.parent.webxdc_internal.setup("${selfAddr}","${displayName}")
+                `window.parent.webxdc_internal.setup("${selfAddr}","${displayName}", ${Number(
+                  sendUpdateInterval
+                )}, ${Number(sendUpdateMaxSize)})
                 window.webxdc = window.parent.webxdc
                 window.webxdc_custom = window.parent.webxdc_custom`
               ),

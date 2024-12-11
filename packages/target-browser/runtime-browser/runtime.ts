@@ -384,12 +384,7 @@ class BrowserRuntime implements Runtime {
   }
 
   setNotificationCallback(
-    cb: (data: {
-      accountId: number
-      chatId: number
-      msgId: number
-      isWebxdcInfo: boolean
-    }) => void
+    cb: (data: { accountId: number; chatId: number; msgId: number }) => void
   ): void {
     this.notificationCB = cb
   }

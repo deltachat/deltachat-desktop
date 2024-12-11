@@ -38,7 +38,7 @@ if (Notification.isSupported()) {
 
 function createNotification(data: DcNotification): Notification {
   let icon: NativeImage | undefined = data.icon
-    ? data.icon.indexOf('base64') > -1
+    ? data.icon.startsWith('data:')
       ? nativeImage.createFromDataURL(data.icon)
       : nativeImage.createFromPath(data.icon)
     : undefined
