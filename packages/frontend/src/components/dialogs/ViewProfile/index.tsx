@@ -90,7 +90,7 @@ export default function ViewProfile(
       className={styles.viewProfileDialog}
     >
       <DialogHeader
-        title={tx('contact')}
+        title={contact.isBot ? tx('bot') : tx('contact')}
         onClose={onClose}
         onClickBack={onBack}
       >
