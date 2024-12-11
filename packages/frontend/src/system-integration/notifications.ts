@@ -10,6 +10,28 @@ import type { T } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/notifications')
 
+/**
+ * Notification handling:
+ *
+ * - listens for incoming notifications
+ * - reflects notification settings
+ * - prepares notification data (DcNotification)
+ * - queues notifications if needed to avoid "mass" notifications
+ * - sends notifications to runtime (which invokes ipcBackend)
+ */
+
+export function initNotifications() {
+  BackendRemote.on('IncomingMsg', (accountId, { chatId, msgId }) => {
+    incomingMessageHandler(accountId, chatId, msgId)
+  })
+  BackendRemote.on('IncomingWebxdcNotify', (accountId, { msgId }) => {
+    incomingWebxdcEventHandler(accountId, msgId)
+  })
+  BackendRemote.on('IncomingMsgBunch', accountId => {
+    flushNotifications(accountId)
+  })
+}
+
 function isMuted(accountId: number, chatId: number) {
   return BackendRemote.rpc.isChatMuted(accountId, chatId)
 }
@@ -293,16 +315,4 @@ function getNotificationIcon(
   } else {
     return null
   }
-}
-
-export function initNotifications() {
-  BackendRemote.on('IncomingMsg', (accountId, { chatId, msgId }) => {
-    incomingMessageHandler(accountId, chatId, msgId)
-  })
-  BackendRemote.on('IncomingWebxdcNotify', (accountId, { msgId }) => {
-    incomingWebxdcEventHandler(accountId, msgId)
-  })
-  BackendRemote.on('IncomingMsgBunch', accountId => {
-    flushNotifications(accountId)
-  })
 }

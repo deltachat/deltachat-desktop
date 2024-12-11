@@ -8,9 +8,33 @@ import { getLogger } from '../../shared/logger.js'
 
 import type { NativeImage, IpcMainInvokeEvent } from 'electron'
 
+/**
+ * Notification related functions to:
+ * - show notifications in operating system
+ * - handle click on notification
+ *
+ * is triggered from renderer process (!)
+ * by handling events (ipcMain.handle)
+ *
+ * see: frontend/src/system-integration/notifications.ts
+ */
+
 const log = getLogger('main/notifications')
 
 const isMac = platform() === 'darwin'
+
+if (Notification.isSupported()) {
+  ipcMain.handle('notifications.show', showNotification)
+  ipcMain.handle('notifications.clear', clearNotificationsForChat)
+  ipcMain.handle('notifications.clearAll', clearAll)
+  process.on('beforeExit', clearAll)
+} else {
+  // Register no-op handlers for notifications to silently fail when
+  // no notifications are supported
+  ipcMain.handle('notifications.show', () => {})
+  ipcMain.handle('notifications.clear', () => {})
+  ipcMain.handle('notifications.clearAll', () => {})
+}
 
 function createNotification(data: DcNotification): Notification {
   let icon: NativeImage | undefined = data.icon
@@ -69,6 +93,12 @@ function onClickNotification(
 
 const notifications: { [chatId: number]: Notification[] } = {}
 
+/**
+ * triggers creation of a notification, adds appropriate
+ * callbacks and shows it via electron Notification API
+ *
+ * @param data is passed from renderer process
+ */
 function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
   const chatId = data.chatId
 
@@ -133,19 +163,6 @@ function clearAll() {
       clearNotificationsForChat(null, Number(chatId))
     }
   }
-}
-
-if (Notification.isSupported()) {
-  ipcMain.handle('notifications.show', showNotification)
-  ipcMain.handle('notifications.clear', clearNotificationsForChat)
-  ipcMain.handle('notifications.clearAll', clearAll)
-  process.on('beforeExit', clearAll)
-} else {
-  // Register no-op handlers for notifications to silently fail when
-  // no notifications are supported
-  ipcMain.handle('notifications.show', () => {})
-  ipcMain.handle('notifications.clear', () => {})
-  ipcMain.handle('notifications.clearAll', () => {})
 }
 
 // Thanks to Signal for this function
