@@ -249,15 +249,7 @@ function BackgroundSelector({
     <div>
       <div className={'bg-option-wrap'}>
         <div
-          style={{
-            ...(desktopSettings.chatViewBgImg?.startsWith('img: ')
-              ? getBackgroundImageStyle(desktopSettings)
-              : {
-                  backgroundColor: desktopSettings.chatViewBgImg?.slice(7),
-                  backgroundImage: 'unset',
-                }),
-            backgroundSize: 'cover',
-          }}
+          style={getBackgroundImageStyle(desktopSettings)}
           aria-label={tx('a11y_background_preview_label')}
           className={'background-preview'}
         />
