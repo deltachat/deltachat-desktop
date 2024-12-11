@@ -3,6 +3,8 @@
 ## [Unreleased][unreleased]
 
 ## Added
+- show specific notifications for webxdc events #4400
+- expose sendUpdateInterval & sendUpdateMaxSize in webxdc
 
 ## Changed
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.151.5`
