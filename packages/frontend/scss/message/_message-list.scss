@@ -5,9 +5,13 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+
+  // If you want to update this, don't forget to update
+  // the `.background-preview` element as well.
   background-image: var(--chatViewBgImgPath);
   background-size: cover;
   background-color: var(--chatViewBg);
+
   overflow: hidden;
 
   .jump-down-button {
