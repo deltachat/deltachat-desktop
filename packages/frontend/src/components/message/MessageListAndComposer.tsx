@@ -267,6 +267,8 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
   }, [onMouseUp])
 
   const settingsStore = useSettingsStore()[0]
+  // If you want to update this, don't forget to update
+  // the `.background-preview` element as well.
   const style = settingsStore
     ? getBackgroundImageStyle(settingsStore.desktopSettings)
     : {}
