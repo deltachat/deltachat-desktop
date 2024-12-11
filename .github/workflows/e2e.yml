@@ -81,8 +81,6 @@ jobs:
     env:
       CI: true
       NODE_ENV: test
-      PRIVATE_CERTIFICATE_KEY: ${{ env.PRIVATE_CERTIFICATE_KEY }}
-      PRIVATE_CERTIFICATE_CERT: ${{ env.PRIVATE_CERTIFICATE_CERT }}
       VERSION_INFO_GIT_REF: ${{ github.ref }}
       DC_ACCOUNTS_DIR: ../../e2e-tests/data/accounts
     timeout-minutes: 60
