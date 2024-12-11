@@ -1,7 +1,7 @@
 name: e2e Tests
 on:
   push:
-    branches: [main, e2e-github-action]
+    branches: [main]
     paths-ignore:
       - 'docs/**'  # only trigger build if a file outside of /docs was changed
       - '_locales/*.xml'
@@ -104,7 +104,7 @@ jobs:
     - name: Run e2e tests
       run: pnpm e2e --project Chrome
     - uses: actions/upload-artifact@v4
-      if: ${{ failure() }}
+      if: ${{ failure() && !cancelled() }}
       with:
         name: e2e-report
         path: packages/e2e-tests/playwright-report
