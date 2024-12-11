@@ -77,14 +77,12 @@ function onClickNotification(
   accountId: number,
   chatId: number,
   msgId: number,
-  isWebxdcInfo: boolean,
   _ev: Electron.Event
 ) {
   mainWindow.send('ClickOnNotification', {
     accountId,
     chatId,
     msgId,
-    isWebxdcInfo,
   })
   mainWindow.show()
   app.focus()
@@ -111,13 +109,7 @@ function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
     const notify = createNotification(data)
 
     notify.on('click', Event => {
-      onClickNotification(
-        data.accountId,
-        chatId,
-        data.messageId,
-        data.isWebxdcInfo,
-        Event
-      )
+      onClickNotification(data.accountId, chatId, data.messageId, Event)
       notifications[chatId] =
         notifications[chatId]?.filter(n => n !== notify) || []
       notify.close()

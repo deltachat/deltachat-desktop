@@ -253,8 +253,8 @@ class RealtimeListener {
       }
       api.selfAddr = Buffer.from(selfAddr, 'base64').toString('utf-8')
       api.selfName = Buffer.from(selfName, 'base64').toString('utf-8')
-      api.sendUpdateInterval = sendUpdateInterval ? sendUpdateInterval : 1000
-      api.sendUpdateMaxSize = sendUpdateMaxSize ? sendUpdateMaxSize : 18874368
+      api.sendUpdateInterval = sendUpdateInterval
+      api.sendUpdateMaxSize = sendUpdateMaxSize
 
       // be sure that webxdc.js was included
       contextBridge.exposeInMainWorld('webxdc', api)

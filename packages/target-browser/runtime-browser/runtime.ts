@@ -378,7 +378,6 @@ class BrowserRuntime implements Runtime {
     accountId: number
     chatId: number
     msgId: number
-    isWebxdcInfo: boolean
   }) => void = () => {
     this.log.critical('notification click handler not initialized yet')
   }
@@ -402,7 +401,6 @@ class BrowserRuntime implements Runtime {
       title,
       icon: notificationIcon,
       messageId,
-      isWebxdcInfo,
     } = data
     this.log.debug('showNotification', { accountId, chatId, messageId })
 
@@ -449,7 +447,6 @@ class BrowserRuntime implements Runtime {
       accountId,
       chatId,
       msgId: messageId,
-      isWebxdcInfo,
     })
 
     if (this.activeNotifications[chatId]) {
