@@ -280,6 +280,11 @@ function chatSubtitle(chat: Type.FullChat) {
       return tx('n_members', [String(chat.contacts.length)], {
         quantity: chat.contacts.length,
       })
+    } else if (
+      chat.chatType === C.DC_CHAT_TYPE_SINGLE &&
+      chat.contacts[0]?.isBot
+    ) {
+      return tx('bot')
     } else if (chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST) {
       if (chat.mailingListAddress) {
         return `${tx('mailing_list')} – ${chat.mailingListAddress}`

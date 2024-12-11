@@ -6,6 +6,7 @@
 
 ## Changed
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.151.5`
+- mark bots as such in chat header and in contact view dialog #4405
 
 ## Fixed
 - handle double escape on Dialog #4365
