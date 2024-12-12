@@ -20,9 +20,12 @@
   & > .attachment-content {
     object-fit: scale-down;
     object-position: center;
-    max-height: 600px;
+    height: 200px;
     max-width: 100%;
     min-width: 80px;
+    &.portrait {
+      height: 300px;
+    }
 
     // The padding on the bottom of the bubble produces 4 extra pixels of space at the
     //   bottom, so this doesn't match up with the padding numbers above.
@@ -76,7 +79,7 @@
 .message.type-sticker {
   .message-attachment-media {
     & > .attachment-content {
-      max-height: 300px;
+      max-height: 200px;
       max-width: 80%;
     }
   }

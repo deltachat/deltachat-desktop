@@ -22,6 +22,7 @@ import FullscreenMedia, {
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/dialog/useDialog'
 import AudioPlayer from '../AudioPlayer'
+import { T } from '@deltachat/jsonrpc-client'
 
 type AttachmentProps = {
   text?: string
@@ -54,6 +55,22 @@ export default function Attachment({
       openAttachmentInShell(message)
     }
   }
+  /**
+   * we need a fix height for images to prevent reflow when the image loads
+   * till we have a better solution we allow a maximum height of 200px for
+   * all images in landscape mode and 300px for portrait mode
+   *
+   * for higher values we have to add media queries otherwise messages with
+   * images get strange paddings on small windows
+   */
+  const isPortrait = (
+    message: Pick<T.Message, 'dimensionsHeight' | 'dimensionsWidth'>
+  ) => {
+    if (message.dimensionsHeight == null || message.dimensionsWidth == null) {
+      return false
+    }
+    return message.dimensionsWidth / message.dimensionsHeight <= 3 / 4
+  }
   const withCaption = Boolean(text)
   // For attachments which aren't full-frame
   const withContentBelow = withCaption
@@ -84,7 +101,10 @@ export default function Attachment({
         )}
       >
         <img
-          className='attachment-content'
+          className={classNames(
+            'attachment-content',
+            isPortrait(message) ? 'portrait' : null
+          )}
           src={runtime.transformBlobURL(message.file)}
         />
       </button>
