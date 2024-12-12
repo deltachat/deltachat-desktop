@@ -166,13 +166,13 @@ export default function MainScreen({ accountId }: Props) {
         !messageSectionShouldBeHidden ? 'chat-view-open' : ''
       }`}
     >
-      <div className='navbar-wrapper drag'>
+      <div className='navbar-wrapper' data-drag>
         <Navbar>
           {!chatListShouldBeHidden && (
             <NavbarGroupLeft>
               {showArchivedChats && (
                 <>
-                  <span className='no-drag'>
+                  <span data-no-drag>
                     <Button
                       aria-label={tx('back')}
                       onClick={() => setArchivedChatsSelected(false)}
@@ -181,7 +181,7 @@ export default function MainScreen({ accountId }: Props) {
                       <Icon icon='arrow-left' className='backButtonIcon'></Icon>
                     </Button>
                   </span>
-                  <div className='archived-chats-title no-drag'>
+                  <div className='archived-chats-title' data-no-drag>
                     {tx('chat_archived_chats_title')}
                   </div>
                 </>
@@ -200,7 +200,7 @@ export default function MainScreen({ accountId }: Props) {
           {!messageSectionShouldBeHidden && (
             <NavbarGroupRight>
               {smallScreenMode && (
-                <span className='no-drag'>
+                <span data-no-drag>
                   <Button
                     aria-label={tx('back')}
                     onClick={onBackButton}
@@ -227,7 +227,7 @@ export default function MainScreen({ accountId }: Props) {
                       ? { opacity: 0, pointerEvents: 'none' }
                       : {}),
                   }}
-                  className='no-drag'
+                  data-no-drag
                   aria-disabled={threeDotMenuHidden}
                 >
                   <Button
@@ -341,7 +341,8 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
 
   return (
     <button
-      className='navbar-heading navbar-heading__button no-drag'
+      className='navbar-heading navbar-heading__button'
+      data-no-drag
       onClick={onTitleClick}
     >
       <Avatar
@@ -379,7 +380,7 @@ function ChatNavButtons() {
 
   return (
     <>
-      <span className='views no-drag'>
+      <span className='views' data-no-drag>
         <Button
           onClick={() => setChatView(ChatView.MessageList)}
           active={activeView === ChatView.MessageList}

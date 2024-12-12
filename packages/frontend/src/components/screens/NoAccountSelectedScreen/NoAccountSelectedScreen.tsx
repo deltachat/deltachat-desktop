@@ -3,15 +3,14 @@ import React from 'react'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 
 import styles from './styles.module.scss'
-import classNames from 'classnames'
 
 export function NoAccountSelectedScreen() {
   const tx = useTranslationFunction()
 
   return (
-    <div className={classNames(styles.noAccountSelectedScreen, 'drag')}>
+    <div data-drag className={styles.noAccountSelectedScreen}>
       <div className={styles.background}>
-        <div className={classNames(styles.infoBox, 'no-drag')}>
+        <div data-no-drag className={styles.infoBox}>
           {tx('no_account_selected')}
         </div>
       </div>

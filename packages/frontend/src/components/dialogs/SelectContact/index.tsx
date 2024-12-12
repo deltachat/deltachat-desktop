@@ -60,7 +60,8 @@ export default function SelectContactDialog({
     <Dialog width={400} onClose={onClose} fixed>
       <DialogHeader>
         <input
-          className='search-input no-drag'
+          data-no-drag
+          className='search-input'
           onChange={e => setQueryStr(e.target.value)}
           value={queryStr}
           placeholder={tx('search')}

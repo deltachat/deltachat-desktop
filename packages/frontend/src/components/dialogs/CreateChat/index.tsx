@@ -248,7 +248,8 @@ function CreateChatMain(props: CreateChatMainProps) {
     <>
       <DialogHeader>
         <input
-          className='search-input no-drag'
+          data-no-drag
+          className='search-input'
           onChange={e => setQueryStr(e.target.value)}
           value={queryStr}
           placeholder={

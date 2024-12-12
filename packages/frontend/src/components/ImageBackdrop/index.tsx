@@ -14,7 +14,10 @@ export default function ImageBackdrop({
   variant = 'welcome',
 }: PropsWithChildren<Props>) {
   return (
-    <div className={classNames(styles.imageBackdrop, styles[variant], 'drag')}>
+    <div
+      data-drag
+      className={classNames(styles.imageBackdrop, styles[variant])}
+    >
       {children}
     </div>
   )

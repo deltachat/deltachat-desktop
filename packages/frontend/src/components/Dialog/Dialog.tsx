@@ -90,7 +90,8 @@ const Dialog = React.memo<Props>(
         onClose={onClose}
         onCancel={onCancel}
         ref={dialog}
-        className={classNames(styles.dialog, props.className, 'no-drag', {
+        data-no-drag
+        className={classNames(styles.dialog, props.className, {
           [styles.unstyled]: unstyled,
         })}
         style={style}

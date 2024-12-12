@@ -1,3 +1,8 @@
+import { runtime } from '@deltachat-desktop/runtime-interface'
+import { getLogger } from '@deltachat-desktop/shared/logger'
+
+const log = getLogger('runtime/debug-tools')
+
 const countCalls: { [key: string]: number } = {}
 export function countCall(label: string) {
   if (countCalls[label]) {
@@ -20,6 +25,12 @@ export function printCallCounterResult() {
 export class DragRegionOverlay {
   debugDragAreaUpdateInterval: ReturnType<typeof setInterval> | null = null
   toggle() {
+    if (runtime.getRuntimeInfo().target !== 'electron') {
+      log.warn(
+        'DragRegionOverlay currently is based on a css attribute (`-webkit-app-region`), so might only work in the elctron version'
+      )
+    }
+
     let element: HTMLCanvasElement | undefined = document.getElementById(
       'drag-area-visualisation'
     ) as HTMLCanvasElement

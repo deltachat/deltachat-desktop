@@ -51,12 +51,16 @@
   }
 }
 
-.drag {
+// used on electron and tauri runtime
+// means element is non-Intractable and area can be used to window drag around
+*[data-drag] {
   // so it can be used to drag the window around
   -webkit-app-region: drag;
 }
 
-.no-drag {
+// used on electron and tauri runtime
+// means element is interactable and area can not be used to window drag around
+*[data-no-drag] {
   -webkit-app-region: no-drag;
 }
 
