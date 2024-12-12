@@ -22,6 +22,7 @@ import FullscreenMedia, {
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/dialog/useDialog'
 import AudioPlayer from '../AudioPlayer'
+import { T } from '@deltachat/jsonrpc-client'
 
 type AttachmentProps = {
   text?: string
@@ -86,6 +87,11 @@ export default function Attachment({
         <img
           className='attachment-content'
           src={runtime.transformBlobURL(message.file)}
+          // Pre-set width and height to prevent layout shifts
+          // when the image finally loads.
+          // This is not supposed to affect the rendered dimensions
+          // of the media _after_ it has been loaded.
+          style={getDimensions(message)}
         />
       </button>
     )
@@ -114,6 +120,11 @@ export default function Attachment({
           className='attachment-content video-content'
           src={runtime.transformBlobURL(message.file)}
           controls={true}
+          // Pre-set width and height to prevent layout shifts
+          // when the video finally loads.
+          // This is not supposed to affect the rendered dimensions
+          // of the media _after_ it has been loaded.
+          style={getDimensions(message)}
         />
       </div>
     )
@@ -215,5 +226,22 @@ export function DraftAttachment({
         </div>
       </div>
     )
+  }
+}
+
+function getDimensions(
+  message: Pick<T.Message, 'dimensionsHeight' | 'dimensionsWidth'>
+): { height: number | undefined; width: number | undefined } {
+  // With some sanity checks, in case core couldn't determine dimensions
+  // for whatever reason, but the browser might.
+  return {
+    height:
+      message.dimensionsHeight > 0 && message.dimensionsHeight < 100_000
+        ? message.dimensionsHeight
+        : undefined,
+    width:
+      message.dimensionsWidth > 0 && message.dimensionsWidth < 100_000
+        ? message.dimensionsWidth
+        : undefined,
   }
 }

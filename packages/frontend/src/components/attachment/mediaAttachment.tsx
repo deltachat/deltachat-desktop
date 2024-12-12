@@ -231,6 +231,11 @@ export function ImageAttachment({
             className='attachment-content'
             src={runtime.transformBlobURL(file)}
             loading='lazy'
+            // Pre-setting `height` and `width` from
+            // `message.dimensionsHeight`, as we do in the message list,
+            // could be used here
+            // to prevent layout shifts, but it's not needed,
+            // because this is fixed-size anyway.
           />
         )}
       </button>
@@ -301,6 +306,11 @@ export function VideoAttachment({
               className='attachment-content'
               src={runtime.transformBlobURL(file)}
               controls={false}
+              // Pre-setting `height` and `width` from
+              // `message.dimensionsHeight`, as we do in the message list,
+              // could be used here
+              // to prevent layout shifts, but it's not needed,
+              // because this is fixed-size anyway.
             />
             <div className='video-play-btn'>
               <div className='video-play-btn-icon' />

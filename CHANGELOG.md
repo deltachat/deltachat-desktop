@@ -11,6 +11,7 @@
 ## Fixed
 - handle double escape on Dialog #4365
 - fix random crashes on quote reply #4337
+- chat not being scrolled to the very bottom upon getting opened due to images loading slowly #4406
 - avoid drafts in readonly chats #4349
 - fullscreen images getting cropped a little #4402, #4385
 
