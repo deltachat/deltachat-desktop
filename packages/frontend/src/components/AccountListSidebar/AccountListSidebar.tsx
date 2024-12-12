@@ -139,7 +139,9 @@ export default function AccountListSidebar({
   return (
     <div className={styles.accountListSidebar}>
       {runtime.getRuntimeInfo().isMac && !smallScreenMode && (
-        <div className={classNames(styles.macOSTrafficLightBackground, 'drag')} />
+        <div
+          className={classNames(styles.macOSTrafficLightBackground, 'drag')}
+        />
       )}
       <div
         ref={accountsListRef}
