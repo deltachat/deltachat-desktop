@@ -264,7 +264,9 @@ class TauriRuntime implements Runtime {
     this.currentLogFileLocation = await invoke('get_current_logfile')
   }
   reloadWebContent(): void {
-    throw new Error('Method not implemented.7')
+    // for now use the browser method as long as it is sufficient
+    // this method is used for reload button on crash screen
+    location.reload()
   }
   openLogFile(): void {
     throw new Error('Method not implemented.8')
