@@ -49,7 +49,7 @@ export default function SearchInput(props: Props) {
         onChange={onChange}
         value={value}
         className={styles.searchInput}
-        data-no-drag
+        data-no-drag-region
         ref={props.inputRef}
         spellCheck={false}
         aria-keyshortcuts='Control+K'

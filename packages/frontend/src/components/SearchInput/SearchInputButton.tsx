@@ -28,7 +28,7 @@ export default function SearchInputButton({
       aria-label={props['aria-label']}
       data-testid={props['dataTestid']}
       className={classNames(styles.searchInputButton, className)}
-      data-no-drag
+      data-no-drag-region
       onClick={onClick}
     >
       <Icon className={styles.searchInputButtonIcon} icon={icon} size={size} />

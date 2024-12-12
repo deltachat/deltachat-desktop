@@ -78,6 +78,7 @@ export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
         fixed
         width={400}
         canEscapeKeyClose={false}
+        backdropDragAreaOnTauriRuntime
         canOutsideClickClose={false}
         onClose={onClickBackButton}
       >

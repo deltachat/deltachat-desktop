@@ -11,7 +11,7 @@ use deltachat_jsonrpc::{
 };
 use futures_lite::stream::StreamExt;
 
-use tauri::{async_runtime::JoinHandle, AppHandle, Emitter, EventTarget, Manager};
+use tauri::{async_runtime::JoinHandle, window::{Color, Effect, EffectState, EffectsBuilder}, AppHandle, Emitter, EventTarget, Manager};
 use tauri_plugin_store::StoreExt;
 use tokio::sync::RwLock;
 
@@ -238,6 +238,15 @@ pub fn run() {
             // depends on whether we can remove it from the context menu and make it dependent on --devmode?
             #[cfg(debug_assertions)]
             app.get_webview_window("main").unwrap().open_devtools();
+
+            let webview = app.get_webview_window("main").unwrap();
+
+            #[cfg(target_os = "macos")]{
+                webview.set_title_bar_style(tauri::TitleBarStyle::Overlay)?;
+                webview.set_title("")?;
+            }
+
+
             Ok(())
         })
         .run(tauri::generate_context!())

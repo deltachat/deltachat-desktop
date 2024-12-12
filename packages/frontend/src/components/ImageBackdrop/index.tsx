@@ -15,7 +15,7 @@ export default function ImageBackdrop({
 }: PropsWithChildren<Props>) {
   return (
     <div
-      data-drag
+      data-tauri-drag-region
       className={classNames(styles.imageBackdrop, styles[variant])}
     >
       {children}

@@ -68,7 +68,7 @@ export default function FullscreenAvatar(
           </TransformWrapper>
         </div>
       </div>
-      <div data-no-drag className='btn-wrapper'>
+      <div data-no-drag-region className='btn-wrapper'>
         <IconButton
           onClick={saveAs}
           icon='download'

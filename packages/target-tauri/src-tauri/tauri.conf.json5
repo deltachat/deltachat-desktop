@@ -56,7 +56,10 @@
             "store:allow-get-store",
             "store:allow-entries",
             "store:allow-save",
-            "store:allow-set"
+            "store:allow-set",
+            // borderless titlebar
+            "core:window:allow-toggle-maximize",
+            "core:window:allow-start-dragging"
           ]
         }
       ]

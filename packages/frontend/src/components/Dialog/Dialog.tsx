@@ -2,6 +2,7 @@ import classNames from 'classnames'
 import React, { useEffect, useRef } from 'react'
 
 import styles from './styles.module.scss'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 const DEFAULT_WIDTH = 500
 
@@ -9,6 +10,8 @@ type Props = React.PropsWithChildren<{
   onClose?: (result?: any) => void
   canEscapeKeyClose?: boolean
   canOutsideClickClose?: boolean
+  /** whether backdrop can be used to drag window around on tauri, used on onboarding screen and deletion screen  */
+  backdropDragAreaOnTauriRuntime?: boolean
   className?: string
   fixed?: boolean
   height?: number
@@ -23,6 +26,7 @@ const Dialog = React.memo<Props>(
     children,
     canOutsideClickClose = true,
     canEscapeKeyClose = true,
+    backdropDragAreaOnTauriRuntime,
     width = DEFAULT_WIDTH,
     height,
     unstyled = false,
@@ -90,7 +94,11 @@ const Dialog = React.memo<Props>(
         onClose={onClose}
         onCancel={onCancel}
         ref={dialog}
-        data-no-drag
+        data-no-drag-region
+        data-tauri-drag-region={
+          backdropDragAreaOnTauriRuntime &&
+          runtime.getRuntimeInfo().target === 'tauri'
+        }
         className={classNames(styles.dialog, props.className, {
           [styles.unstyled]: unstyled,
         })}

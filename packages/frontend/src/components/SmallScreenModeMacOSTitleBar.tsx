@@ -30,7 +30,7 @@ export function SmallScreenModeMacOSTitleBar() {
         color: hasFocus ? '#d2d2d2' : '#565656',
         fontWeight: 'bold',
       }}
-      data-drag
+      data-tauri-drag-region
     >
       {appWindowTitle}
     </div>

@@ -53,6 +53,7 @@ export default function AccountDeletionScreen({
       <ImageBackdrop variant='deletion'>
         <Dialog
           canEscapeKeyClose={true}
+          backdropDragAreaOnTauriRuntime
           fixed={true}
           onClose={() => {}}
           width={400}

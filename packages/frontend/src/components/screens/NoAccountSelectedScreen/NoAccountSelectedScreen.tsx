@@ -8,9 +8,9 @@ export function NoAccountSelectedScreen() {
   const tx = useTranslationFunction()
 
   return (
-    <div data-drag className={styles.noAccountSelectedScreen}>
-      <div className={styles.background}>
-        <div data-no-drag className={styles.infoBox}>
+    <div data-tauri-drag-region className={styles.noAccountSelectedScreen}>
+      <div data-tauri-drag-region className={styles.background}>
+        <div data-no-drag-region className={styles.infoBox}>
           {tx('no_account_selected')}
         </div>
       </div>

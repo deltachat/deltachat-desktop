@@ -47,7 +47,7 @@ export default function SelectChat(props: Props) {
         <div className='select-chat-account-input'>
           <input
             className='search-input'
-            data-no-drag
+            data-no-drag-region
             onChange={onSearchChange}
             value={queryStr}
             placeholder={tx('search')}

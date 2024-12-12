@@ -7,11 +7,11 @@ type Props = PropsWithChildren<{
 }>
 
 export function NavbarGroupLeft({ children }: Props) {
-  return <div className={styles.navbarGroupLeft}>{children}</div>
+  return <div className={styles.navbarGroupLeft} data-tauri-drag-region>{children}</div>
 }
 
 export function NavbarGroupRight({ children }: Props) {
-  return <div className={styles.navbarGroupRight}>{children}</div>
+  return <div className={styles.navbarGroupRight} data-tauri-drag-region>{children}</div>
 }
 
 export function Navbar({ children }: Props) {
