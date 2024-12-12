@@ -269,7 +269,7 @@ class TauriRuntime implements Runtime {
   openLogFile(): void {
     throw new Error('Method not implemented.8')
   }
-  currentLogFileLocation:string|null = null
+  currentLogFileLocation: string | null = null
   getCurrentLogLocation(): string {
     if (this.currentLogFileLocation === null) {
       throw new Error('this.currentLogFileLocation is not set')
@@ -305,12 +305,12 @@ class TauriRuntime implements Runtime {
   transformBlobURL(blob_path: string): string {
     const matches = blob_path.match(/.*(:?\\|\/)(.+?)\1dc.db-blobs\1(.*)/)
     // this.log.info({ transformBlobURL: blob_path, matches })
-    
+
     if (matches) {
-      let filename = matches[3];
+      let filename = matches[3]
       if (decodeURIComponent(filename) === filename) {
         // if it is not already encoded then encode it.
-        filename= encodeURIComponent(filename)
+        filename = encodeURIComponent(filename)
       }
       return `dcblob://${matches[2]}/${matches[3]}`
     }
@@ -358,27 +358,27 @@ class TauriRuntime implements Runtime {
     throw new Error('Method not implemented.28')
   }
   notifyWebxdcStatusUpdate(accountId: number, instanceId: number): void {
-    invoke('on_webxdc_status_update', {accountId, instanceId})
+    invoke('on_webxdc_status_update', { accountId, instanceId })
   }
   notifyWebxdcRealtimeData(
     accountId: number,
     instanceId: number,
     payload: number[]
   ): void {
-    invoke('on_webxdc_realtime_data', {accountId, instanceId, payload})
+    invoke('on_webxdc_realtime_data', { accountId, instanceId, payload })
   }
   notifyWebxdcMessageChanged(accountId: number, instanceId: number): void {
-    invoke('on_webxdc_message_changed', {accountId, instanceId})
+    invoke('on_webxdc_message_changed', { accountId, instanceId })
   }
   notifyWebxdcInstanceDeleted(accountId: number, instanceId: number): void {
-    invoke('on_webxdc_message_deleted', {accountId, instanceId})
+    invoke('on_webxdc_message_deleted', { accountId, instanceId })
   }
   restartApp(): void {
     throw new Error('Method not implemented.33')
   }
   async getLocaleData(locale?: string): Promise<LocaleData> {
     return await invoke('get_locale_data', {
-      locale: locale || (await this.getDesktopSettings()).locale || "en",
+      locale: locale || (await this.getDesktopSettings()).locale || 'en',
     })
   }
   setLocale(locale: string): Promise<void> {
