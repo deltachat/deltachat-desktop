@@ -152,7 +152,8 @@
 }
 
 .macOSTrafficLightBackground {
-  height: 56px;
+  height: 20px;
+  flex-shrink: 0;
 }
 
 .buttonsContainer {
