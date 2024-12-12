@@ -13,6 +13,7 @@
 - fix random crashes on quote reply #4337
 - avoid drafts in readonly chats #4349
 - fullscreen images getting cropped a little #4402, #4385
+- macOS: make area under traffic lights dragable and slightly larger
 
 <a id="1_49_0"></a>
 
