@@ -14,6 +14,7 @@
 - avoid drafts in readonly chats #4349
 - fullscreen images getting cropped a little #4402, #4385
 - macOS: make area under traffic lights dragable and fix the bug that its size changed based on profile acount and window height #4408
+- fix chat "scrolls up" right after switching #4404
 
 <a id="1_49_0"></a>
 
