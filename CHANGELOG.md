@@ -27,6 +27,7 @@
 - smooth-scroll to newly arriving messages instead of jumping instantly #4125
 - make backup and key export work in browser #4303
 - add ability to add private tags to accounts
+- dev: run e2e tests in CI
 
 ## Changed
 - enable Telegram-style Ctrl + ArrowUp to reply by default #4333
