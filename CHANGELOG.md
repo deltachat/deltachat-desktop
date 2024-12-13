@@ -5,7 +5,7 @@
 ## Added
 
 ## Changed
-- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.151.5`
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.152.0`
 - mark bots as such in chat header and in contact view dialog #4405
 
 ## Fixed
