@@ -55,7 +55,7 @@ export default function AccountDeletionScreen({
           canEscapeKeyClose={true}
           backdropDragAreaOnTauriRuntime
           fixed={true}
-          onClose={() => {}}
+          onClose={onCancel}
           width={400}
           dataTestid='account-deletion-dialog'
         >

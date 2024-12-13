@@ -8,6 +8,7 @@
 - add some missing translations
 
 ### Fixed
+- fix cancelation of account deletion when canceling clicking outside of the dialog
 
 <a id="1_51_0"></a>
 
