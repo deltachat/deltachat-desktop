@@ -417,7 +417,11 @@ class BrowserRuntime implements Runtime {
       // IDEA: alternatively we could make another route that exposes the file with a random hash without authentification?
       // Concern: Also the current method could run into size limits because it loads the whole image, which can be large? like high ram usage in browser?
       try {
-        const response = await fetch(this.transformBlobURL(notificationIcon))
+        const response = await fetch(
+          notificationIcon.startsWith('data:')
+            ? notificationIcon
+            : this.transformBlobURL(notificationIcon)
+        )
         if (!response.ok) {
           throw new Error('request failed: code' + response.status)
         }
