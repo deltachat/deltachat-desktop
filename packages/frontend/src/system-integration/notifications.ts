@@ -284,12 +284,18 @@ async function flushNotifications(accountId: number) {
   if (notifications.length > notificationLimit) {
     showGroupedNotification(accountId, notifications)
   } else {
-    for (const { chatId, messageId, isWebxdcInfo } of notifications) {
+    for (const {
+      chatId,
+      messageId,
+      isWebxdcInfo,
+      eventText,
+    } of notifications) {
       await showNotification(
         accountId,
         chatId,
         messageId,
-        isWebxdcInfo ?? false
+        isWebxdcInfo ?? false,
+        eventText
       )
     }
   }
