@@ -25,6 +25,10 @@ pub(crate) fn on_webxdc_realtime_data(account_id: u32, instance_id: u32, payload
     info!("TODO: handle on_webxdc_status_update handler {account_id} {instance_id} {payload:?}")
 }
 
+#[tauri::command]
+pub(crate) fn delete_webxdc_account_data(account_id: u32) {
+    info!("TODO: handle delete_webxdc_account_data handler {account_id}")
+}
 
 pub(crate) fn webxdc_icon_protocol<R: tauri::Runtime>(
     ctx: UriSchemeContext<'_, R>,
@@ -79,7 +83,8 @@ pub(crate) fn webxdc_icon_protocol<R: tauri::Runtime>(
                 );
             }
             Ok(())
-        }.await;
+        }
+        .await;
         if let Err(err) = result {
             error!("Failed to build reply for webxdc-icon protocol: {err:#}")
         }

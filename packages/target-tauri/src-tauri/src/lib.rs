@@ -199,6 +199,7 @@ pub fn run() {
             webxdc::on_webxdc_message_deleted,
             webxdc::on_webxdc_status_update,
             webxdc::on_webxdc_realtime_data,
+            webxdc::delete_webxdc_account_data,
         ])
         .register_asynchronous_uri_scheme_protocol("webxdc-icon", webxdc::webxdc_icon_protocol)
         .register_asynchronous_uri_scheme_protocol("dcblob", blobs::delta_blobs_protocol)

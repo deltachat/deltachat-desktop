@@ -354,7 +354,7 @@ class TauriRuntime implements Runtime {
     return `webxdc-icon://${accountId}/${msgId}`
   }
   deleteWebxdcAccountData(accountId: number): Promise<void> {
-    throw new Error('Method not implemented.27')
+    return invoke('on_webxdc_realtime_data', { accountId })
   }
   closeAllWebxdcInstances(): void {
     throw new Error('Method not implemented.28')
