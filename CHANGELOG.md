@@ -13,6 +13,7 @@
 - fix random crashes on quote reply #4337
 - avoid drafts in readonly chats #4349
 - fullscreen images getting cropped a little #4402, #4385
+- fix chat "scrolls up" right after switching #4404
 
 <a id="1_49_0"></a>
 

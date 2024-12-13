@@ -22,6 +22,7 @@ import FullscreenMedia, {
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/dialog/useDialog'
 import AudioPlayer from '../AudioPlayer'
+import { T } from '@deltachat/jsonrpc-client'
 
 type AttachmentProps = {
   text?: string
@@ -54,6 +55,15 @@ export default function Attachment({
       openAttachmentInShell(message)
     }
   }
+
+  const isPortrait = (
+    message: Pick<T.Message, 'dimensionsHeight' | 'dimensionsWidth'>
+  ) => {
+    if (message.dimensionsHeight === 0 || message.dimensionsWidth === 0) {
+      return false
+    }
+    return message.dimensionsWidth / message.dimensionsHeight <= 3 / 4
+  }
   const withCaption = Boolean(text)
   // For attachments which aren't full-frame
   const withContentBelow = withCaption
@@ -84,7 +94,10 @@ export default function Attachment({
         )}
       >
         <img
-          className='attachment-content'
+          className={classNames(
+            'attachment-content',
+            isPortrait(message) ? 'portrait' : null
+          )}
           src={runtime.transformBlobURL(message.file)}
         />
       </button>

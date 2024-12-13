@@ -16,13 +16,23 @@
   overflow: hidden;
 
   background-color: var(--messageAttachmentIconBg);
-
+  /**
+   * we need a fix height for images to prevent reflow when the image loads
+   * till we have a better solution (more flexible) we allow a maximum height
+   * of 200px for all images in landscape mode and 300px for portrait mode
+   *
+   * for higher values (than 200px) we have to add media queries otherwise
+   * messages with images get strange paddings on small windows
+   */
   & > .attachment-content {
     object-fit: scale-down;
     object-position: center;
-    max-height: 600px;
+    height: 200px;
     max-width: 100%;
     min-width: 80px;
+    &.portrait {
+      height: 300px;
+    }
 
     // The padding on the bottom of the bubble produces 4 extra pixels of space at the
     //   bottom, so this doesn't match up with the padding numbers above.
@@ -76,7 +86,7 @@
 .message.type-sticker {
   .message-attachment-media {
     & > .attachment-content {
-      max-height: 300px;
+      max-height: 200px;
       max-width: 80%;
     }
   }
