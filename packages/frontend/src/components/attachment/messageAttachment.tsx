@@ -55,18 +55,11 @@ export default function Attachment({
       openAttachmentInShell(message)
     }
   }
-  /**
-   * we need a fix height for images to prevent reflow when the image loads
-   * till we have a better solution we allow a maximum height of 200px for
-   * all images in landscape mode and 300px for portrait mode
-   *
-   * for higher values we have to add media queries otherwise messages with
-   * images get strange paddings on small windows
-   */
+
   const isPortrait = (
     message: Pick<T.Message, 'dimensionsHeight' | 'dimensionsWidth'>
   ) => {
-    if (message.dimensionsHeight == null || message.dimensionsWidth == null) {
+    if (message.dimensionsHeight === 0 || message.dimensionsWidth === 0) {
       return false
     }
     return message.dimensionsWidth / message.dimensionsHeight <= 3 / 4

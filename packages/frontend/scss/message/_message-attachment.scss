@@ -16,7 +16,14 @@
   overflow: hidden;
 
   background-color: var(--messageAttachmentIconBg);
-
+  /**
+   * we need a fix height for images to prevent reflow when the image loads
+   * till we have a better solution (more flexible) we allow a maximum height
+   * of 200px for all images in landscape mode and 300px for portrait mode
+   *
+   * for higher values (than 200px) we have to add media queries otherwise
+   * messages with images get strange paddings on small windows
+   */
   & > .attachment-content {
     object-fit: scale-down;
     object-position: center;
