@@ -20,90 +20,16 @@ const log = getLogger('renderer/notifications')
  * - sends notifications to runtime (which invokes ipcBackend)
  */
 
-/**
- * Event handler queue to avoid race conditions when a new event
- * is triggered while another event is still being processed
- *
- * Mainly to avoid, that flushNotifications is called while
- * notifications are still in creation process
- */
-class EventHandlerQueue {
-  _pendingPromise: boolean
-  _eventHandler: {
-    handlerPromise: () => Promise<void>
-  }[] = []
-  constructor() {
-    this._pendingPromise = false
-  }
-
-  add(handler: (args: any) => Promise<void>, args: any) {
-    // wrap the handler in a promise and add it to the queue
-    const p = (): Promise<void> =>
-      new Promise(resolve => {
-        handler(args).then(res => {
-          log.debug('promise resolved!', handler.name)
-          resolve(res)
-        })
-      })
-    this.enqueue(p)
-  }
-
-  /**
-   * add an event handler to the queue
-   * and immediately try to dequeue again
-   */
-  private enqueue(handlerPromise: () => Promise<void>) {
-    this._eventHandler.push({ handlerPromise })
-    this.dequeue()
-  }
-
-  /**
-   * here the actual event handler is called
-   * if there is no other handler still processing
-   */
-  private async dequeue() {
-    if (this._pendingPromise) {
-      // already processing a handler
-      // do nothing (dequeue is called again in finally block)
-      return
-    }
-    const item = this._eventHandler.shift()
-    if (!item) {
-      return
-    }
-
-    try {
-      this._pendingPromise = true
-      // now the wrapped Promise holding the final handler is called
-      await item.handlerPromise()
-      this._pendingPromise = false
-    } catch (e) {
-      this._pendingPromise = false
-    } finally {
-      this.dequeue()
-    }
-  }
-}
-
-const queue = new EventHandlerQueue()
-
 export function initNotifications() {
   BackendRemote.on('IncomingMsg', (accountId, { chatId, msgId }) => {
-    log.debug('IncomingMsg received')
-    queue.add(incomingMessageHandler, {
-      accountId,
-      chatId,
-      msgId,
-      isWebxdcInfo: false,
-    })
+    incomingMessageHandler(accountId, chatId, msgId, false)
   })
   BackendRemote.on('IncomingWebxdcNotify', (accountId, { msgId, text }) => {
-    log.debug(`IncomingWebxdcNotify received ${text}`)
-    queue.add(incomingWebxdcEventHandler, { accountId, msgId, text })
+    // we don't have the chatId yet, but it will be fetched in flushNotifications
+    incomingMessageHandler(accountId, -1, msgId, true, text)
   })
   BackendRemote.on('IncomingMsgBunch', accountId => {
-    log.debug('IncomingMsgBunch received')
-    queue.add(flushNotifications, accountId)
+    flushNotifications(accountId)
   })
 }
 
@@ -113,7 +39,7 @@ function isMuted(accountId: number, chatId: number) {
 
 type queuedNotification = {
   chatId: number
-  msgId: number
+  messageId: number
   isWebxdcInfo: boolean
   eventText?: string
 }
@@ -122,16 +48,14 @@ let queuedNotifications: {
   [accountId: number]: queuedNotification[]
 } = {}
 
-async function incomingMessageHandler(arg: {
-  accountId: number
-  chatId: number
-  msgId: number
-  isWebxdcInfo: boolean
+function incomingMessageHandler(
+  accountId: number,
+  chatId: number,
+  messageId: number,
+  isWebxdcInfo: boolean,
   eventText?: string
-}) {
-  const { accountId, chatId, msgId, isWebxdcInfo, eventText } = arg
-
-  log.debug('incomingMessageHandler: ', { chatId, msgId })
+) {
+  log.debug('incomingMessageHandler: ', { chatId, messageId })
 
   if (
     SettingsStoreInstance.state &&
@@ -163,27 +87,8 @@ async function incomingMessageHandler(arg: {
   }
   queuedNotifications[accountId].push({
     chatId,
-    msgId,
+    messageId,
     isWebxdcInfo,
-    eventText,
-  })
-  return
-}
-
-async function incomingWebxdcEventHandler(arg: {
-  accountId: number
-  msgId: number
-  eventText: string
-}) {
-  const { accountId, msgId, eventText } = arg
-  // await new Promise(resolve => setTimeout(resolve, 2000)) // for testing
-  const message = await BackendRemote.rpc.getMessage(accountId, msgId)
-  const chatId = message.chatId
-  return incomingMessageHandler({
-    accountId,
-    chatId,
-    msgId,
-    isWebxdcInfo: true,
     eventText,
   })
 }
@@ -214,7 +119,7 @@ async function showNotification(
       const summaryText = eventText ?? notificationInfo.summaryText
       const chatName = notificationInfo.chatName
       let icon = getNotificationIcon(notificationInfo)
-      if (isWebxdcInfo) {
+      if (isWebxdcInfo && chatId === -1) {
         /**
          * messageId may refer to a webxdc message OR a wexdc-info-message!
          *
@@ -234,7 +139,7 @@ async function showNotification(
           )
         }
         if (message.webxdcInfo) {
-          summaryPrefix = message.webxdcInfo.name
+          summaryPrefix = `${message.webxdcInfo.name}`
           if (message.webxdcInfo.icon) {
             const iconName = message.webxdcInfo.icon
             const iconBlob = await BackendRemote.rpc.getWebxdcBlob(
@@ -292,7 +197,7 @@ async function showGroupedNotification(
         const notificationInfo =
           await BackendRemote.rpc.getMessageNotificationInfo(
             accountId,
-            notifications[0].msgId
+            notifications[0].messageId
           )
         const { chatName, chatProfileImage } = notificationInfo
         runtime.showNotification({
@@ -342,6 +247,14 @@ async function flushNotifications(accountId: number) {
   let notifications = [...queuedNotifications[accountId]]
   queuedNotifications = []
 
+  for await (const n of notifications) {
+    if (n.isWebxdcInfo) {
+      // get real chatId of the webxdc message
+      const message = await BackendRemote.rpc.getMessage(accountId, n.messageId)
+      n.chatId = message.chatId
+    }
+  }
+
   // filter out muted chats:
   const uniqueChats = [...new Set(notifications.map(n => n.chatId))]
   const mutedChats = (
@@ -366,22 +279,26 @@ async function flushNotifications(accountId: number) {
       return true
     }
   })
-  log.debug(`flushing notifications (${notifications.length})`, notifications)
+
   if (notifications.length > notificationLimit) {
     showGroupedNotification(accountId, notifications)
   } else {
-    for (const { chatId, msgId, isWebxdcInfo, eventText } of notifications) {
+    for (const {
+      chatId,
+      messageId,
+      isWebxdcInfo,
+      eventText,
+    } of notifications) {
       await showNotification(
         accountId,
         chatId,
-        msgId,
+        messageId,
         isWebxdcInfo ?? false,
         eventText
       )
     }
   }
   notificationLimit = NORMAL_LIMIT
-  return
 }
 
 export function clearNotificationsForChat(accountId: number, chatId: number) {
