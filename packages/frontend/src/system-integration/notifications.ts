@@ -97,9 +97,8 @@ async function incomingWebxdcEventHandler(
   messageId: number,
   eventText: string
 ) {
-  const message = await BackendRemote.rpc.getMessage(accountId, messageId)
-  const chatId = message.chatId
-  incomingMessageHandler(accountId, chatId, messageId, true, eventText)
+  // we don't have the chatId yet, but it will be fetched in flushNotifications
+  incomingMessageHandler(accountId, -1, messageId, true, eventText)
 }
 
 async function showNotification(
@@ -128,7 +127,7 @@ async function showNotification(
       const summaryText = eventText ?? notificationInfo.summaryText
       const chatName = notificationInfo.chatName
       let icon = getNotificationIcon(notificationInfo)
-      if (isWebxdcInfo) {
+      if (isWebxdcInfo && chatId === -1) {
         /**
          * messageId may refer to a webxdc message OR a wexdc-info-message!
          *
@@ -255,6 +254,14 @@ async function flushNotifications(accountId: number) {
   }
   let notifications = [...queuedNotifications[accountId]]
   queuedNotifications = []
+
+  for await (const n of notifications) {
+    if (n.isWebxdcInfo) {
+      // get real chatId of the webxdc message
+      const message = await BackendRemote.rpc.getMessage(accountId, n.messageId)
+      n.chatId = message.chatId
+    }
+  }
 
   // filter out muted chats:
   const uniqueChats = [...new Set(notifications.map(n => n.chatId))]
