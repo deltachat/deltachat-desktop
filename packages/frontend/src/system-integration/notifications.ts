@@ -119,7 +119,7 @@ async function showNotification(
       const summaryText = eventText ?? notificationInfo.summaryText
       const chatName = notificationInfo.chatName
       let icon = getNotificationIcon(notificationInfo)
-      if (isWebxdcInfo && chatId === -1) {
+      if (isWebxdcInfo) {
         /**
          * messageId may refer to a webxdc message OR a wexdc-info-message!
          *
@@ -248,7 +248,7 @@ async function flushNotifications(accountId: number) {
   queuedNotifications = []
 
   for await (const n of notifications) {
-    if (n.isWebxdcInfo) {
+    if (n.chatId === -1) {
       // get real chatId of the webxdc message
       const message = await BackendRemote.rpc.getMessage(accountId, n.messageId)
       n.chatId = message.chatId
@@ -293,7 +293,7 @@ async function flushNotifications(accountId: number) {
         accountId,
         chatId,
         messageId,
-        isWebxdcInfo ?? false,
+        isWebxdcInfo,
         eventText
       )
     }
