@@ -98,7 +98,10 @@ export interface BuildInfo {
 export interface DcNotification {
   title: string
   body: string
-  /** path to image that should be shown instead of icon */
+  /**
+   * path to image that should be shown instead of icon
+   * (or a data url with base64 encoded data)
+   */
   icon: string | null
   chatId: number
   messageId: number

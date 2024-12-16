@@ -10,6 +10,29 @@ import type { T } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/notifications')
 
+/**
+ * Notification handling:
+ *
+ * - listens for incoming notifications
+ * - reflects notification settings
+ * - prepares notification data (DcNotification)
+ * - queues notifications if needed to avoid "mass" notifications
+ * - sends notifications to runtime (which invokes ipcBackend)
+ */
+
+export function initNotifications() {
+  BackendRemote.on('IncomingMsg', (accountId, { chatId, msgId }) => {
+    incomingMessageHandler(accountId, chatId, msgId, false)
+  })
+  BackendRemote.on('IncomingWebxdcNotify', (accountId, { msgId, text }) => {
+    // we don't have the chatId yet, but it will be fetched in flushNotifications
+    incomingMessageHandler(accountId, -1, msgId, true, text)
+  })
+  BackendRemote.on('IncomingMsgBunch', accountId => {
+    flushNotifications(accountId)
+  })
+}
+
 function isMuted(accountId: number, chatId: number) {
   return BackendRemote.rpc.isChatMuted(accountId, chatId)
 }
@@ -17,6 +40,8 @@ function isMuted(accountId: number, chatId: number) {
 type queuedNotification = {
   chatId: number
   messageId: number
+  isWebxdcInfo: boolean
+  eventText?: string
 }
 
 let queuedNotifications: {
@@ -26,7 +51,9 @@ let queuedNotifications: {
 function incomingMessageHandler(
   accountId: number,
   chatId: number,
-  messageId: number
+  messageId: number,
+  isWebxdcInfo: boolean,
+  eventText?: string
 ) {
   log.debug('incomingMessageHandler: ', { chatId, messageId })
 
@@ -58,13 +85,20 @@ function incomingMessageHandler(
   if (typeof queuedNotifications[accountId] === 'undefined') {
     queuedNotifications[accountId] = []
   }
-  queuedNotifications[accountId].push({ chatId, messageId })
+  queuedNotifications[accountId].push({
+    chatId,
+    messageId,
+    isWebxdcInfo,
+    eventText,
+  })
 }
 
 async function showNotification(
   accountId: number,
   chatId: number,
-  messageId: number
+  messageId: number,
+  isWebxdcInfo: boolean,
+  eventText?: string
 ) {
   const tx = window.static_translate
 
@@ -81,11 +115,50 @@ async function showNotification(
     try {
       const notificationInfo =
         await BackendRemote.rpc.getMessageNotificationInfo(accountId, messageId)
-      const { chatName, summaryPrefix, summaryText } = notificationInfo
+      let summaryPrefix = notificationInfo.summaryPrefix
+      const summaryText = eventText ?? notificationInfo.summaryText
+      const chatName = notificationInfo.chatName
+      let icon = getNotificationIcon(notificationInfo)
+      if (isWebxdcInfo) {
+        /**
+         * messageId may refer to a webxdc message OR a wexdc-info-message!
+         *
+         * a notification might be sent even when no webxdc-info-message was
+         * added to the chat; in that case the msg_id refers to the webxdc instance
+         */
+        let message = await BackendRemote.rpc.getMessage(accountId, messageId)
+        if (
+          message.systemMessageType === 'WebxdcInfoMessage' &&
+          message.parentId
+        ) {
+          // we have to get the parent message
+          // (the webxdc message which holds the webxdcInfo)
+          message = await BackendRemote.rpc.getMessage(
+            accountId,
+            message.parentId
+          )
+        }
+        if (message.webxdcInfo) {
+          summaryPrefix = `${message.webxdcInfo.name}`
+          if (message.webxdcInfo.icon) {
+            const iconName = message.webxdcInfo.icon
+            const iconBlob = await BackendRemote.rpc.getWebxdcBlob(
+              accountId,
+              message.id,
+              iconName
+            )
+            // needed for valid dataUrl
+            const imageExtension = iconName.split('.').pop()
+            icon = `data:image/${imageExtension};base64,${iconBlob}`
+          }
+        } else {
+          throw new Error(`no webxdcInfo in message with id ${message.id}`)
+        }
+      }
       runtime.showNotification({
         title: chatName,
         body: summaryPrefix ? `${summaryPrefix}: ${summaryText}` : summaryText,
-        icon: getNotificationIcon(notificationInfo),
+        icon,
         chatId,
         messageId,
         accountId,
@@ -174,6 +247,14 @@ async function flushNotifications(accountId: number) {
   let notifications = [...queuedNotifications[accountId]]
   queuedNotifications = []
 
+  for await (const n of notifications) {
+    if (n.chatId === -1) {
+      // get real chatId of the webxdc message
+      const message = await BackendRemote.rpc.getMessage(accountId, n.messageId)
+      n.chatId = message.chatId
+    }
+  }
+
   // filter out muted chats:
   const uniqueChats = [...new Set(notifications.map(n => n.chatId))]
   const mutedChats = (
@@ -202,8 +283,19 @@ async function flushNotifications(accountId: number) {
   if (notifications.length > notificationLimit) {
     showGroupedNotification(accountId, notifications)
   } else {
-    for (const { chatId, messageId } of notifications) {
-      await showNotification(accountId, chatId, messageId)
+    for (const {
+      chatId,
+      messageId,
+      isWebxdcInfo,
+      eventText,
+    } of notifications) {
+      await showNotification(
+        accountId,
+        chatId,
+        messageId,
+        isWebxdcInfo,
+        eventText
+      )
     }
   }
   notificationLimit = NORMAL_LIMIT
@@ -230,13 +322,4 @@ function getNotificationIcon(
   } else {
     return null
   }
-}
-
-export function initNotifications() {
-  BackendRemote.on('IncomingMsg', (accountId, { chatId, msgId }) => {
-    incomingMessageHandler(accountId, chatId, msgId)
-  })
-  BackendRemote.on('IncomingMsgBunch', accountId => {
-    flushNotifications(accountId)
-  })
 }
