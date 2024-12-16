@@ -113,7 +113,7 @@ export interface Runtime {
   showNotification(data: DcNotification): void
   clearAllNotifications(): void
   clearNotifications(chatId: number): void
-  // enables to set a callback (used in frontend RuntimeAdapter)
+  /** enables to set a callback (used in frontend RuntimeAdapter) */
   setNotificationCallback(
     cb: (data: { accountId: number; chatId: number; msgId: number }) => void
   ): void
