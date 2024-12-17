@@ -3,6 +3,14 @@
 ## [Unreleased][unreleased]
 
 ## Added
+
+## Changed
+
+## Fixed
+
+## [1.50.0] - 17.12.2024
+
+## Added
 - show specific notifications for webxdc events #4400
 - expose sendUpdateInterval & sendUpdateMaxSize in webxdc
 
@@ -3016,7 +3024,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.49.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.50.0...HEAD
+
+[1.50.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.49.0...v1.50.0
 
 [1.49.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.48.0...v1.49.0
 
