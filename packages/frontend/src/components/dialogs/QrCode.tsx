@@ -165,8 +165,8 @@ export function QrCodeShowQrInner({
 
   return (
     <>
-      <DialogBody>
-        <DialogContent>
+      <DialogBody className='show-qr-dialog-body'>
+        <DialogContent className='show-qr-dialog-content'>
           {svgUrl && (
             <img
               style={{
@@ -175,6 +175,7 @@ export function QrCodeShowQrInner({
                 userSelect: 'none',
                 paddingTop: '16px',
               }}
+              className='show-qr-dialog-qr-image'
               src={svgUrl}
               onContextMenu={imageContextMenu}
               tabIndex={0}
