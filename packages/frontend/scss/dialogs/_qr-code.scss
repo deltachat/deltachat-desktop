@@ -27,3 +27,18 @@
     }
   }
 }
+
+// Ensure that the QR code image is always shown in full,
+// and doesn't cause scroll.
+.show-qr-dialog-body {
+  display: flex;
+  flex-direction: column;
+  .show-qr-dialog-content {
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  img.show-qr-dialog-qr-image {
+    min-height: 0;
+  }
+}
