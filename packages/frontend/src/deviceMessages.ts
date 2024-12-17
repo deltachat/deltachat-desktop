@@ -32,7 +32,7 @@ export async function updateDeviceChat(
 🎹 Improved keyboard navigation
 📤 Select and send multiple files at once
 🎮 Enhanced in-chat apps: Get notifications and open supporting apps in context, i.e. open an added calendar entry directly
-🚀 In-chat apps can be really fast now by the "realtime" support
+🚀 In-chat apps can be really fast now, thanks to the "realtime" support
 📋 Add private tags for accounts
 
 MORE ✨ improvements and 🐜 bug fixes see [Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/main/CHANGELOG.md#1_50_0)`,
