@@ -29,13 +29,13 @@ export async function updateDeviceChat(
   await addDeviceMessage('changelog-version-1.50.0', {
     text: `What's new in 1.50.0?
 
-🐣 Many accessibility improvements for keyboard navigation
-📋 Select and send multiple files at once
-📌 Webxdc apps can send notifications now
-🚀 Enable Webxdc realtime by default
-✨ Lots of UI improvements and bug fixes
+🎹 Improved keyboard navigation
+📤 Select and send multiple files at once
+🎮 Enhanced in-chat apps: Get notifications and open supporting apps in context, i.e. open an added calendar entry directly
+🚀 In-chat apps can be really fast now by the "realtime" support
+📋 Private label for accounts
 
-[Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/main/CHANGELOG.md#1_50_0)`,
+MORE ✨ improvements and 🐜 bug fixes see [Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/main/CHANGELOG.md#1_50_0)`,
   })
 }
 
