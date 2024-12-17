@@ -24,10 +24,12 @@ export function initNotifications() {
   BackendRemote.on('IncomingMsg', (accountId, { chatId, msgId }) => {
     incomingMessageHandler(accountId, chatId, msgId, false)
   })
-  BackendRemote.on('IncomingWebxdcNotify', (accountId, { msgId, text }) => {
-    // we don't have the chatId yet, but it will be fetched in flushNotifications
-    incomingMessageHandler(accountId, -1, msgId, true, text)
-  })
+  BackendRemote.on(
+    'IncomingWebxdcNotify',
+    (accountId, { msgId, text, chatId }) => {
+      incomingMessageHandler(accountId, chatId, msgId, true, text)
+    }
+  )
   BackendRemote.on('IncomingMsgBunch', accountId => {
     flushNotifications(accountId)
   })
@@ -246,14 +248,6 @@ async function flushNotifications(accountId: number) {
   }
   let notifications = [...queuedNotifications[accountId]]
   queuedNotifications = []
-
-  for await (const n of notifications) {
-    if (n.chatId === -1) {
-      // get real chatId of the webxdc message
-      const message = await BackendRemote.rpc.getMessage(accountId, n.messageId)
-      n.chatId = message.chatId
-    }
-  }
 
   // filter out muted chats:
   const uniqueChats = [...new Set(notifications.map(n => n.chatId))]
