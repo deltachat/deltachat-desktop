@@ -5,8 +5,10 @@
 ## Added
 
 ## Changed
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.152.1`
 
 ## Fixed
+- downgrade rust in core to avoid wrong Windows malware detection https://github.com/deltachat/deltachat-core-rust/issues/6338
 
 ## [1.50.0] - 17.12.2024
 
