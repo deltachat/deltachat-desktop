@@ -18,6 +18,7 @@
 - settings: chat background preview element not working for the default background image #4403
 - macOS: make area under traffic lights dragable and fix the bug that its size changed based on profile acount and window height #4408
 - fix chat "scrolls up" right after switching #4404
+- quote text being unreadable for sticker replies in light theme #4417
 
 <a id="1_49_0"></a>
 
