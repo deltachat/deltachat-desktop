@@ -5,12 +5,18 @@
 ## Added
 
 ## Changed
+
+## Fixed
+
+## [1.50.1] - 2024-12-18
+
+## Changed
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.152.1`
 
 ## Fixed
 - downgrade rust in core to avoid wrong Windows malware detection https://github.com/deltachat/deltachat-core-rust/issues/6338
 
-## [1.50.0] - 17.12.2024
+## [1.50.0] - 2024-12-17
 
 ## Added
 - show specific notifications for webxdc events #4400
@@ -3027,7 +3033,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.50.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.50.1...HEAD
+
+[1.50.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.50.0...v1.50.1
 
 [1.50.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.49.0...v1.50.0
 
