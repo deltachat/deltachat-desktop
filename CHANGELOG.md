@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ## Added
+- accessibility: arrow-key navigation for gallery #4376
 
 ## Changed
 - dev: upgrade react to v18 and react pinch pan zoom to v3

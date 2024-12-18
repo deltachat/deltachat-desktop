@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useRef } from 'react'
 import { filesize } from 'filesize'
 
 import {
@@ -30,6 +30,7 @@ import AudioPlayer from '../AudioPlayer'
 import type { T } from '@deltachat/jsonrpc-client'
 import type { OpenDialog } from '../../contexts/DialogContext'
 import type { JumpToMessage, DeleteMessage } from '../../hooks/chat/useMessage'
+import { useRovingTabindex } from '../../contexts/RovingTabindex'
 
 const log = getLogger('mediaAttachment')
 
@@ -181,6 +182,17 @@ export function ImageAttachment({
   const { jumpToMessage, deleteMessage } = useMessage()
   const accountId = selectedAccountId()
 
+  // `<any>` because TypeScript and React don't like
+  // `HTMLButtonElement | HTMLDivElement`.
+  // Same goes for other occurences in this file.
+  const interactiveElRef = useRef<any>(null)
+  const rovingTabindex = useRovingTabindex(interactiveElRef)
+  const rovingTabindexProps = {
+    onKeyDown: rovingTabindex.onKeydown,
+    onFocus: rovingTabindex.setAsActiveElement,
+    tabIndex: rovingTabindex.tabIndex,
+  } as const
+
   if (loadResult.kind === 'loadingError') {
     const onContextMenu = getBrokenMediaContextMenu(
       contextMenu.openContextMenu,
@@ -192,10 +204,11 @@ export function ImageAttachment({
 
     return (
       <div
-        className={'media-attachment-media broken'}
+        ref={interactiveElRef}
+        className={'media-attachment-media broken ' + rovingTabindex.className}
         title={loadResult.error}
         onContextMenu={onContextMenu}
-        tabIndex={0}
+        {...rovingTabindexProps}
       >
         <div className='attachment-content'>
           {tx('attachment_failed_to_load')}
@@ -218,11 +231,15 @@ export function ImageAttachment({
 
     return (
       <button
-        className={`media-attachment-media${isBroken ? ` broken` : ''}`}
+        ref={interactiveElRef}
+        className={`media-attachment-media${isBroken ? ` broken` : ''} ${
+          rovingTabindex.className
+        }`}
         onClick={
           isBroken ? openInShell : openFullscreenMedia.bind(null, message)
         }
         onContextMenu={openContextMenu}
+        {...rovingTabindexProps}
       >
         {isBroken ? (
           squareBrokenMediaContent(hasSupportedFormat, fileMime)
@@ -251,6 +268,14 @@ export function VideoAttachment({
   const { deleteMessage, jumpToMessage } = useMessage()
   const accountId = selectedAccountId()
 
+  const interactiveElRef = useRef<any>(null)
+  const rovingTabindex = useRovingTabindex(interactiveElRef)
+  const rovingTabindexProps = {
+    onKeyDown: rovingTabindex.onKeydown,
+    onFocus: rovingTabindex.setAsActiveElement,
+    tabIndex: rovingTabindex.tabIndex,
+  } as const
+
   if (loadResult.kind === 'loadingError') {
     const onContextMenu = getBrokenMediaContextMenu(
       contextMenu.openContextMenu,
@@ -262,10 +287,11 @@ export function VideoAttachment({
 
     return (
       <div
-        className={'media-attachment-media broken'}
+        ref={interactiveElRef}
+        className={'media-attachment-media broken ' + rovingTabindex.className}
         title={loadResult.error}
         onContextMenu={onContextMenu}
-        tabIndex={0}
+        {...rovingTabindexProps}
       >
         <div className='attachment-content'>
           {tx('attachment_failed_to_load')}
@@ -287,11 +313,15 @@ export function VideoAttachment({
     const isBroken = !file || !hasSupportedFormat
     return (
       <button
-        className={`media-attachment-media${isBroken ? ` broken` : ''}`}
+        ref={interactiveElRef}
+        className={`media-attachment-media${isBroken ? ` broken` : ''} ${
+          rovingTabindex.className
+        }`}
         onClick={
           isBroken ? openInShell : openFullscreenMedia.bind(null, message)
         }
         onContextMenu={openContextMenu}
+        {...rovingTabindexProps}
       >
         {isBroken ? (
           squareBrokenMediaContent(hasSupportedFormat, fileMime || '')
@@ -322,6 +352,14 @@ export function AudioAttachment({
   const { deleteMessage, jumpToMessage } = useMessage()
   const accountId = selectedAccountId()
 
+  const interactiveElRef = useRef<any>(null)
+  const rovingTabindex = useRovingTabindex(interactiveElRef)
+  const rovingTabindexProps = {
+    onKeyDown: rovingTabindex.onKeydown,
+    onFocus: rovingTabindex.setAsActiveElement,
+    tabIndex: rovingTabindex.tabIndex,
+  } as const
+
   if (loadResult.kind === 'loadingError') {
     const onContextMenu = getBrokenMediaContextMenu(
       contextMenu.openContextMenu,
@@ -332,10 +370,11 @@ export function AudioAttachment({
     )
     return (
       <div
-        className={'media-attachment-audio broken'}
+        ref={interactiveElRef}
+        className={'media-attachment-audio broken ' + rovingTabindex.className}
         title={loadResult.error}
         onContextMenu={onContextMenu}
-        tabIndex={0}
+        {...rovingTabindexProps}
       >
         <div className='heading'>
           <div className='name'>? Error ?</div>
@@ -361,8 +400,37 @@ export function AudioAttachment({
     const isBroken = !file || !hasSupportedFormat
     return (
       <div
-        className={`media-attachment-audio${isBroken ? ` broken` : ''}`}
+        ref={interactiveElRef}
+        className={`media-attachment-audio${isBroken ? ` broken` : ''} ${
+          rovingTabindex.className
+        }`}
         onContextMenu={openContextMenu}
+        onKeyDown={e => {
+          // Audio elements have controls that utilize
+          // arrows. That is seeking, changing volume.
+          // So we don't want to switch focus if all user wanted to do
+          // is to seek the element.
+          // So, let's only switch focus when this element
+          // (and not one of its children) is focused.
+          //
+          // However, FYI, onKeyDown event doesn't appear to get triggered
+          // when a sub-element of the <audio> element
+          // (seek bar, volume slider), and not the <audio> element itself,
+          // is focused. At least on Chromium.
+          //
+          // But, when the root (`<audio>`) element (and not on of its
+          // sub-elements) is focused, it still listens for arrows
+          // and performs seeking and volume changes,
+          // so, still, let's only switch focus when this wrapper element
+          // is focused (and not one of its children).
+          if (e.target !== e.currentTarget) {
+            return
+          }
+
+          rovingTabindex.onKeydown(e)
+        }}
+        onFocus={rovingTabindex.setAsActiveElement}
+        tabIndex={rovingTabindex.tabIndex}
       >
         <div className='heading'>
           <div className='name'>
@@ -377,7 +445,12 @@ export function AudioAttachment({
           />
         </div>
         {hasSupportedFormat ? (
-          <AudioPlayer src={runtime.transformBlobURL(file || '')} />
+          <AudioPlayer
+            src={runtime.transformBlobURL(file || '')}
+            // Despite the element having multiple interactive
+            // (pseudo?) elements inside of it, tabindex applies to all of them.
+            tabIndex={rovingTabindex.tabIndex}
+          />
         ) : (
           <div>
             {window.static_translate(
@@ -402,6 +475,14 @@ export function FileAttachmentRow({
   const { deleteMessage, jumpToMessage } = useMessage()
   const accountId = selectedAccountId()
 
+  const interactiveElRef = useRef<any>(null)
+  const rovingTabindex = useRovingTabindex(interactiveElRef)
+  const rovingTabindexProps = {
+    onKeyDown: rovingTabindex.onKeydown,
+    onFocus: rovingTabindex.setAsActiveElement,
+    tabIndex: rovingTabindex.tabIndex,
+  } as const
+
   if (loadResult.kind === 'loadingError') {
     const onContextMenu = getBrokenMediaContextMenu(
       contextMenu.openContextMenu,
@@ -413,10 +494,13 @@ export function FileAttachmentRow({
 
     return (
       <div
-        className={'media-attachment-generic broken'}
+        ref={interactiveElRef}
+        className={
+          'media-attachment-generic broken ' + rovingTabindex.className
+        }
         title={loadResult.error}
         onContextMenu={onContextMenu}
-        tabIndex={0}
+        {...rovingTabindexProps}
       >
         <div className='file-icon'>
           <div className='file-extension'>?</div>
@@ -442,12 +526,14 @@ export function FileAttachmentRow({
     const extension = getExtension(message)
     return (
       <button
-        className='media-attachment-generic'
+        ref={interactiveElRef}
+        className={'media-attachment-generic ' + rovingTabindex.className}
         onClick={ev => {
           ev.stopPropagation()
           openInShell()
         }}
         onContextMenu={openContextMenu}
+        {...rovingTabindexProps}
       >
         <div
           className='file-icon'
@@ -512,6 +598,14 @@ export function WebxdcAttachment({
   const { jumpToMessage, deleteMessage } = useMessage()
   const accountId = selectedAccountId()
 
+  const interactiveElRef = useRef<any>(null)
+  const rovingTabindex = useRovingTabindex(interactiveElRef)
+  const rovingTabindexProps = {
+    onKeyDown: rovingTabindex.onKeydown,
+    onFocus: rovingTabindex.setAsActiveElement,
+    tabIndex: rovingTabindex.tabIndex,
+  } as const
+
   if (loadResult.kind === 'loadingError') {
     const onContextMenu = getBrokenMediaContextMenu(
       contextMenu.openContextMenu,
@@ -523,10 +617,11 @@ export function WebxdcAttachment({
 
     return (
       <div
-        className={'media-attachment-webxdc broken'}
+        ref={interactiveElRef}
+        className={'media-attachment-webxdc broken ' + rovingTabindex.className}
         title={loadResult.error}
         onContextMenu={onContextMenu}
-        tabIndex={0}
+        {...rovingTabindexProps}
       >
         <div className='icon'></div>
         <div className='text-part'>
@@ -547,9 +642,10 @@ export function WebxdcAttachment({
     log.error('message.webxdcInfo is undefined, msgid:', messageId)
     return (
       <div
-        className='media-attachment-webxdc'
+        ref={interactiveElRef}
+        className={'media-attachment-webxdc ' + rovingTabindex.className}
         onContextMenu={onContextMenu}
-        tabIndex={0}
+        {...rovingTabindexProps}
       >
         <img
           className='icon'
@@ -575,9 +671,11 @@ export function WebxdcAttachment({
     const { summary, name, document } = loadResult.webxdcInfo
     return (
       <button
-        className='media-attachment-webxdc'
+        ref={interactiveElRef}
+        className={'media-attachment-webxdc ' + rovingTabindex.className}
         onContextMenu={openContextMenu}
         onClick={openWebxdc.bind(null, loadResult)}
+        {...rovingTabindexProps}
       >
         <img
           className='icon'
