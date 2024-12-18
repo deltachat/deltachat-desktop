@@ -1,15 +1,20 @@
 import React from 'react'
 
 import styles from './styles.module.scss'
+import classNames from 'classnames'
 
-type Props = {
+type Props = React.AudioHTMLAttributes<HTMLAudioElement> & {
   src: string
 }
 
-export default function AudioPlayer(props: Props) {
+export default function AudioPlayer({ src, className, ...restProps }: Props) {
   return (
-    <audio controls className={styles.audioPlayer}>
-      <source src={props.src} />
+    <audio
+      controls
+      className={classNames(styles.audioPlayer, className)}
+      {...restProps}
+    >
+      <source src={src} />
     </audio>
   )
 }
