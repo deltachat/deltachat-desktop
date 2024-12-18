@@ -30,9 +30,6 @@
     height: 200px;
     max-width: 100%;
     min-width: 80px;
-    &.portrait {
-      height: 300px;
-    }
 
     // The padding on the bottom of the bubble produces 4 extra pixels of space at the
     //   bottom, so this doesn't match up with the padding numbers above.
@@ -41,6 +38,9 @@
     // redundant with attachment-container, but we get cursor flashing on move otherwise
     cursor: pointer;
 
+    &.portrait {
+      height: 300px;
+    }
     &.video-content {
       min-width: 300px;
       background-color: black;
