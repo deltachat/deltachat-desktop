@@ -27,7 +27,7 @@ export function ContextMenuProvider({ children }: PropsWithChildren<{}>) {
     }
   )
 
-  const setShowFunction = useCallback(showFn => {
+  const setShowFunction = useCallback((showFn: OpenContextMenu) => {
     setOpenContextMenuFn(
       // Similar to above we need to wrap this into a function, otherwise React
       // would call `showFn` thinking this is the method creating the next
