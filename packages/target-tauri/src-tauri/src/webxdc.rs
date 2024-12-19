@@ -35,8 +35,7 @@ pub(crate) fn webxdc_icon_protocol<R: tauri::Runtime>(
     request: http::Request<Vec<u8>>,
     responder: UriSchemeResponder,
 ) {
-    let path = request.uri();
-    info!("webxdc-icon {path}");
+    // info!("webxdc-icon {}", request.uri());
 
     let app_state_deltachat = { ctx.app_handle().state::<AppState>().deltachat.clone() };
 
@@ -48,7 +47,7 @@ pub(crate) fn webxdc_icon_protocol<R: tauri::Runtime>(
             if let (Some(account_id), Some(instance_id)) =
                 (request.uri().host(), request.uri().path().split('/').nth(1))
             {
-                trace!("webxdc-icon {account_id} {instance_id}");
+                // trace!("webxdc-icon {account_id} {instance_id}");
                 // get delta chat
                 let dc = app_state_deltachat.read().await;
 

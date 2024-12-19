@@ -11,7 +11,7 @@ pub(crate) fn delta_blobs_protocol<R: tauri::Runtime>(
     responder: UriSchemeResponder,
 ) {
     let path = request.uri();
-    info!("dcblob {path}");
+    // info!("dcblob {path}");
 
     // URI format is dcblob://<account folder name>/<blob filename>
 
@@ -25,7 +25,7 @@ pub(crate) fn delta_blobs_protocol<R: tauri::Runtime>(
             if let (Some(account_folder), Some(file_name)) =
                 (request.uri().host(), request.uri().path().split('/').nth(1))
             {
-                trace!("dcblob {account_folder} {file_name}");
+                // trace!("dcblob {account_folder} {file_name}");
                 // get delta chat
                 let dc = app_state_deltachat.read().await;
 
@@ -44,7 +44,7 @@ pub(crate) fn delta_blobs_protocol<R: tauri::Runtime>(
                     .context("account not found")?;
 
                 let file_path = account.get_blobdir().join(file_name);
-                trace!("file_path: {file_path:?}");
+                // trace!("file_path: {file_path:?}");
 
                 match fs::read(file_path).await {
                     Ok(blob) => {

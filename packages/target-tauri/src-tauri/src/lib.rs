@@ -11,7 +11,11 @@ use deltachat_jsonrpc::{
 };
 use futures_lite::stream::StreamExt;
 
-use tauri::{async_runtime::JoinHandle, window::{Color, Effect, EffectState, EffectsBuilder}, AppHandle, Emitter, EventTarget, Manager};
+use tauri::{
+    async_runtime::JoinHandle,
+    window::{Color, Effect, EffectState, EffectsBuilder},
+    AppHandle, Emitter, EventTarget, Manager,
+};
 use tauri_plugin_store::StoreExt;
 use tokio::sync::RwLock;
 
@@ -209,6 +213,18 @@ pub fn run() {
                 .max_file_size(5_000_000 /* bytes */)
                 .rotation_strategy(tauri_plugin_log::RotationStrategy::KeepAll) // TODO: only keep last 10
                 .timezone_strategy(tauri_plugin_log::TimezoneStrategy::UseLocal)
+                .level_for("pgp", log::LevelFilter::Warn)
+                .level_for("async_imap", log::LevelFilter::Warn)
+                .level_for("async_smtp", log::LevelFilter::Warn)
+                .level_for("rustls", log::LevelFilter::Warn)
+                .level_for("iroh_net", log::LevelFilter::Warn)
+                // also emitted by tauri
+                .level_for("tracing", log::LevelFilter::Warn)
+                .level_for("igd_next", log::LevelFilter::Warn)
+                // why do we use debug here at the moment?
+                // because the message "[DEBUG][portmapper] failed to get a port mapping deadline has elapsed" looks like important
+                // info for debugging add backup transfer feature. - so better be safe and set it to debug for now.
+                .level_for("portmapper", log::LevelFilter::Debug)
                 .split(app.handle())?;
 
             #[cfg(feature = "crabnebula_extras")]
@@ -242,11 +258,11 @@ pub fn run() {
 
             let webview = app.get_webview_window("main").unwrap();
 
-            #[cfg(target_os = "macos")]{
+            #[cfg(target_os = "macos")]
+            {
                 webview.set_title_bar_style(tauri::TitleBarStyle::Overlay)?;
                 webview.set_title("")?;
             }
-
 
             Ok(())
         })
