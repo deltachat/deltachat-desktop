@@ -28,6 +28,10 @@ import EmptyChatMessage from './EmptyChatMessage'
 const log = getLogger('render/components/message/MessageList')
 
 import type { T } from '@deltachat/jsonrpc-client'
+import {
+  RovingTabindexProvider,
+  useRovingTabindex,
+} from '../../contexts/RovingTabindex'
 
 type ChatTypes =
   | C.DC_CHAT_TYPE_SINGLE
@@ -795,64 +799,69 @@ export const MessageListInner = React.memo(
     return (
       <div id='message-list' ref={messageListRef} onScroll={onScroll2}>
         <ul>
-          {messageListItems.length === 0 && <EmptyChatMessage chat={chat} />}
-          {activeView.map(messageId => {
-            if (messageId.kind === 'dayMarker') {
-              return (
-                <DayMarker
-                  key={`daymarker-${messageId.timestamp}`}
-                  timestamp={messageId.timestamp}
-                />
-              )
-            }
-
-            if (messageId.kind === 'message') {
-              const message = messageCache[messageId.msg_id]
-              if (message?.kind === 'message') {
+          <RovingTabindexProvider wrapperElementRef={messageListRef}>
+            {messageListItems.length === 0 && <EmptyChatMessage chat={chat} />}
+            {activeView.map(messageId => {
+              if (messageId.kind === 'dayMarker') {
                 return (
-                  <MessageWrapper
-                    key={messageId.msg_id}
-                    key2={`${messageId.msg_id}`}
-                    chat={chat}
-                    message={message}
-                    conversationType={conversationType}
-                    unreadMessageInViewIntersectionObserver={
-                      unreadMessageInViewIntersectionObserver
-                    }
+                  <DayMarker
+                    key={`daymarker-${messageId.timestamp}`}
+                    timestamp={messageId.timestamp}
                   />
                 )
-              } else if (message?.kind === 'loadingError') {
-                return (
-                  <div className='info-message' id={String(messageId.msg_id)}>
-                    <div
-                      className='bubble'
-                      style={{
-                        backgroundColor: 'rgba(55,0,0,0.5)',
-                      }}
-                    >
-                      loading message {messageId.msg_id} failed: {message.error}
-                    </div>
-                  </div>
-                )
-              } else {
-                // setTimeout tells it to call method in next event loop iteration, so after rendering
-                // it is debounced later so we can call it here multiple times and it's ok
-                setTimeout(loadMissingMessages)
-                return (
-                  <div className='info-message' id={String(messageId.msg_id)}>
-                    <div
-                      className='bubble'
-                      style={{
-                        backgroundColor: 'rgba(55,0,0,0.5)',
-                      }}
-                    >
-                      Loading Message {messageId.msg_id}
-                    </div>
-                  </div>
-                )
               }
-            }
-          })}
+
+              if (messageId.kind === 'message') {
+                const message = messageCache[messageId.msg_id]
+                if (message?.kind === 'message') {
+                  return (
+                    <MessageWrapper
+                      key={messageId.msg_id}
+                      key2={`${messageId.msg_id}`}
+                      chat={chat}
+                      message={message}
+                      conversationType={conversationType}
+                      unreadMessageInViewIntersectionObserver={
+                        unreadMessageInViewIntersectionObserver
+                      }
+                    />
+                  )
+                } else if (message?.kind === 'loadingError') {
+                  // TODO shall we add `useRovingTabindex` here as well?
+                  return (
+                    <div className='info-message' id={String(messageId.msg_id)}>
+                      <div
+                        className='bubble'
+                        style={{
+                          backgroundColor: 'rgba(55,0,0,0.5)',
+                        }}
+                      >
+                        loading message {messageId.msg_id} failed:{' '}
+                        {message.error}
+                      </div>
+                    </div>
+                  )
+                } else {
+                  // setTimeout tells it to call method in next event loop iteration, so after rendering
+                  // it is debounced later so we can call it here multiple times and it's ok
+                  setTimeout(loadMissingMessages)
+                  // TODO shall we add `useRovingTabindex` here as well?
+                  return (
+                    <div className='info-message' id={String(messageId.msg_id)}>
+                      <div
+                        className='bubble'
+                        style={{
+                          backgroundColor: 'rgba(55,0,0,0.5)',
+                        }}
+                      >
+                        Loading Message {messageId.msg_id}
+                      </div>
+                    </div>
+                  )
+                }
+              }
+            })}
+          </RovingTabindexProvider>
         </ul>
       </div>
     )
@@ -926,9 +935,24 @@ function JumpDownButton({
 export function DayMarker(props: { timestamp: number }) {
   const { timestamp } = props
   const tx = useTranslationFunction()
+
+  const ref = useRef<HTMLDivElement>(null)
+  // Yes, we want daymakers to be focusable.
+  // See https://github.com/deltachat/deltachat-desktop/issues/2141
+  // > Also make the divider items proper list items that can be focused,
+  // > so users know when they traverse to the next/previous date.
+  const rovingTabindex = useRovingTabindex(ref)
+
   return (
     <div className='info-message daymarker'>
-      <div className='bubble' style={{ textTransform: 'capitalize' }}>
+      <div
+        ref={ref}
+        className={`bubble ${rovingTabindex.className}`}
+        style={{ textTransform: 'capitalize' }}
+        tabIndex={rovingTabindex.tabIndex}
+        onKeyDown={rovingTabindex.onKeydown}
+        onFocus={rovingTabindex.setAsActiveElement}
+      >
         {moment.unix(timestamp).calendar(null, {
           sameDay: `[${tx('today')}]`,
           lastDay: `[${tx('yesterday')}]`,

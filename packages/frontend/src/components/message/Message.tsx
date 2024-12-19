@@ -1,4 +1,10 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import reactStringReplace from 'react-string-replace'
 import classNames from 'classnames'
 import { C, T } from '@deltachat/jsonrpc-client'
@@ -51,13 +57,16 @@ import styles from './styles.module.scss'
 import type { OpenDialog } from '../../contexts/DialogContext'
 import type { PrivateReply } from '../../hooks/chat/usePrivateReply'
 import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
+import { useRovingTabindex } from '../../contexts/RovingTabindex'
 
 const Avatar = ({
   contact,
   onContactClick,
+  tabIndex,
 }: {
   contact: T.Contact
   onContactClick: (contact: T.Contact) => void
+  tabIndex: -1 | 0
 }) => {
   const { profileImage, color, displayName } = contact
 
@@ -65,7 +74,7 @@ const Avatar = ({
 
   if (profileImage) {
     return (
-      <button className='author-avatar' onClick={onClick}>
+      <button className='author-avatar' onClick={onClick} tabIndex={tabIndex}>
         <img alt={displayName} src={runtime.transformBlobURL(profileImage)} />
       </button>
     )
@@ -79,6 +88,7 @@ const Avatar = ({
         className='author-avatar default'
         aria-label={displayName}
         onClick={onClick}
+        tabIndex={tabIndex}
       >
         <div style={{ backgroundColor: color }} className='label'>
           {initial}
@@ -92,10 +102,12 @@ const AuthorName = ({
   contact,
   onContactClick,
   overrideSenderName,
+  tabIndex,
 }: {
   contact: T.Contact
   onContactClick: (contact: T.Contact) => void
   overrideSenderName: string | null
+  tabIndex: -1 | 0
 }) => {
   const accountId = selectedAccountId()
   const { color, id } = contact
@@ -121,6 +133,7 @@ const AuthorName = ({
       className='author'
       style={{ color }}
       onClick={() => onContactClick(contact)}
+      tabIndex={tabIndex}
     >
       {getAuthorName(displayName, overrideSenderName)}
     </button>
@@ -133,12 +146,14 @@ const ForwardedTitle = ({
   direction,
   conversationType,
   overrideSenderName,
+  tabIndex,
 }: {
   contact: T.Contact
   onContactClick: (contact: T.Contact) => void
   direction: 'incoming' | 'outgoing'
   conversationType: ConversationType
   overrideSenderName: string | null
+  tabIndex: -1 | 0
 }) => {
   const tx = useTranslationFunction()
 
@@ -154,6 +169,7 @@ const ForwardedTitle = ({
             <button
               className='forwarded-indicator-button'
               onClick={() => onContactClick(contact)}
+              tabIndex={tabIndex}
               key='displayname'
               style={{ color: color }}
             >
@@ -165,6 +181,7 @@ const ForwardedTitle = ({
         <button
           onClick={() => onContactClick(contact)}
           className='forwarded-indicator-button'
+          tabIndex={tabIndex}
         >
           {tx('forwarded_message')}
         </button>
@@ -348,6 +365,7 @@ export default function Message(props: {
   chat: T.FullChat
   message: T.Message
   conversationType: ConversationType
+  // tabindexForInteractiveContents: -1 | 0
 }) {
   const { message, conversationType } = props
   const { id, viewType, text, hasLocation, isSetupmessage, hasHtml } = message
@@ -439,6 +457,26 @@ export default function Message(props: {
     ]
   )
 
+  const ref = useRef<any>(null)
+  const rovingTabindex = useRovingTabindex(ref)
+  const rovingTabindexAttrs = {
+    ref,
+    tabIndex: rovingTabindex.tabIndex,
+    onKeyDown: rovingTabindex.onKeydown,
+    onFocus: rovingTabindex.setAsActiveElement,
+  }
+  // When the message is not the active one
+  // `rovingTabindex.tabIndex === -1`, we need to set `tabindex="-1"`
+  // to all its interactive (otherwise "Tabbable to") elements,
+  // such as links, attachments, "view reactions" button, etc.
+  // Only the contents of the "active" (selected) message
+  // should have tab stops.
+  // See https://github.com/deltachat/deltachat-desktop/issues/2141
+  // WhatsApp appears to behave similarly.
+  // The implementation is similar to the "Grid" pattern:
+  // https://www.w3.org/WAI/ARIA/apg/patterns/grid/#gridNav_inside
+  const tabindexForInteractiveContents = rovingTabindex.tabIndex
+
   // Info Message
   if (message.isInfo) {
     const isWebxdcInfo = message.systemMessageType === 'WebxdcInfoMessage'
@@ -500,7 +538,12 @@ export default function Message(props: {
             }
           />
         )}
-        <Tag className='bubble' onClick={onClick}>
+        <Tag
+          // TODO shouldn't we make the parent focusable.
+          className={'bubble ' + rovingTabindex.className}
+          onClick={onClick}
+          {...rovingTabindexAttrs}
+        >
           {isWebxdcInfo && message.parentId && (
             <img
               src={runtime.getWebxdcIconURL(
@@ -537,23 +580,35 @@ export default function Message(props: {
   let content
   if (message.viewType === 'VideochatInvitation') {
     return (
-      <div className='videochat-invitation' id={message.id.toString()}>
+      <div
+        className={`videochat-invitation ${rovingTabindex.className}`}
+        id={message.id.toString()}
+        onContextMenu={showContextMenu}
+        {...rovingTabindexAttrs}
+      >
         <div className='videochat-icon'>
           <span className='icon videocamera' />
         </div>
         {/* FYI the clickable element is not a semantic button.
-        Here it's probably fine. */}
-        <AvatarFromContact contact={message.sender} onClick={onContactClick} />
+        Here it's probably fine. So there is also no need
+        to specify tabindex.*/}
+        <AvatarFromContact
+          contact={message.sender}
+          onClick={onContactClick}
+          // tabindexForInteractiveContents={tabindexForInteractiveContents}
+        />
         <div className='break' />
         <div
           className='info-button'
-          onContextMenu={showContextMenu}
           onClick={() => joinVideoChat(accountId, id)}
         >
           {direction === 'incoming'
             ? tx('videochat_contact_invited_hint', message.sender.displayName)
             : tx('videochat_you_invited_hint')}
-          <button className='join-button'>
+          <button
+            className='join-button'
+            tabIndex={tabindexForInteractiveContents}
+          >
             {direction === 'incoming'
               ? tx('videochat_tap_to_join')
               : tx('rejoin')}
@@ -571,6 +626,7 @@ export default function Message(props: {
             padlock={message.showPadlock}
             onClickError={openMessageInfo.bind(null, openDialog, message)}
             viewType={'VideochatInvitation'}
+            tabindexForInteractiveContents={tabindexForInteractiveContents}
           />
         </div>
       </div>
@@ -581,7 +637,10 @@ export default function Message(props: {
         {message.isSetupmessage ? (
           tx('autocrypt_asm_click_body')
         ) : text !== null ? (
-          <MessageBody text={text} />
+          <MessageBody
+            text={text}
+            tabindexForInteractiveContents={tabindexForInteractiveContents}
+          />
         ) : null}
       </div>
     )
@@ -602,7 +661,10 @@ export default function Message(props: {
           <span key='downloading'>{tx('downloading')}</span>
         )}
         {(downloadState == 'Failure' || downloadState === 'Available') && (
-          <button onClick={downloadFullMessage.bind(null, message.id)}>
+          <button
+            onClick={downloadFullMessage.bind(null, message.id)}
+            tabIndex={tabindexForInteractiveContents}
+          >
             {tx('download')}
           </button>
         )}
@@ -626,17 +688,31 @@ export default function Message(props: {
   return (
     <div
       onContextMenu={showContextMenu}
-      className={classNames('message', direction, styles.message, {
-        [styles.withReactions]: message.reactions && !isSetupmessage,
-        'type-sticker': viewType === 'Sticker',
-        error: status === 'error',
-        forwarded: message.isForwarded,
-        'has-html': hasHtml,
-      })}
+      className={classNames(
+        'message',
+        direction,
+        styles.message,
+        rovingTabindex.className,
+        {
+          [styles.withReactions]: message.reactions && !isSetupmessage,
+          'type-sticker': viewType === 'Sticker',
+          error: status === 'error',
+          forwarded: message.isForwarded,
+          'has-html': hasHtml,
+        }
+      )}
       id={message.id.toString()}
+      {...rovingTabindexAttrs}
     >
       {showAuthor && direction === 'incoming' && (
-        <Avatar contact={message.sender} onContactClick={onContactClick} />
+        <Avatar
+          contact={message.sender}
+          onContactClick={onContactClick}
+          // The avatar doesn't need to be a tab stop, because
+          // the author name is a tab stop and clicking on it does the same.
+          tabIndex={-1}
+          // tabIndex={tabindexForInteractiveContents}
+        />
       )}
       <div
         onContextMenu={showContextMenu}
@@ -650,6 +726,7 @@ export default function Message(props: {
             direction={direction}
             conversationType={conversationType}
             overrideSenderName={message.overrideSenderName}
+            tabIndex={tabindexForInteractiveContents}
           />
         )}
         {!message.isForwarded && (
@@ -664,6 +741,7 @@ export default function Message(props: {
               contact={message.sender}
               onContactClick={onContactClick}
               overrideSenderName={message.overrideSenderName}
+              tabIndex={tabindexForInteractiveContents}
             />
           </div>
         )}
@@ -672,11 +750,17 @@ export default function Message(props: {
             'msg-body--clickable': onClickMessageBody,
           })}
           onClick={onClickMessageBody}
+          tabIndex={onClickMessageBody ? tabindexForInteractiveContents : -1}
         >
           {message.quote !== null && (
-            <Quote quote={message.quote} msgParentId={message.id} />
+            <Quote
+              quote={message.quote}
+              msgParentId={message.id}
+              tabIndex={tabindexForInteractiveContents}
+            />
           )}
           {showAttachment(message) && (
+            // TODO tabindex here.
             <Attachment
               text={text || undefined}
               conversationType={conversationType}
@@ -685,7 +769,10 @@ export default function Message(props: {
             />
           )}
           {message.viewType === 'Webxdc' && (
-            <WebxdcMessageContent message={message}></WebxdcMessageContent>
+            <WebxdcMessageContent
+              tabindexForInteractiveContents={tabindexForInteractiveContents}
+              message={message}
+            ></WebxdcMessageContent>
           )}
           {message.viewType === 'Vcard' && (
             <VCardComponent message={message}></VCardComponent>
@@ -695,6 +782,7 @@ export default function Message(props: {
             <button
               onClick={openMessageHTML.bind(null, message.id)}
               className='show-html'
+              tabIndex={tabindexForInteractiveContents}
             >
               {tx('show_full_message')}
             </button>
@@ -715,9 +803,13 @@ export default function Message(props: {
               padlock={message.showPadlock}
               onClickError={openMessageInfo.bind(null, openDialog, message)}
               viewType={message.viewType}
+              tabindexForInteractiveContents={tabindexForInteractiveContents}
             />
             {message.reactions && !isSetupmessage && (
-              <Reactions reactions={message.reactions} />
+              <Reactions
+                reactions={message.reactions}
+                tabindexForInteractiveContents={tabindexForInteractiveContents}
+              />
             )}
           </footer>
         </MessageTag>
@@ -735,9 +827,11 @@ export default function Message(props: {
 export const Quote = ({
   quote,
   msgParentId,
+  tabIndex,
 }: {
   quote: T.MessageQuote
   msgParentId?: number
+  tabIndex: -1 | 0
 }) => {
   const tx = useTranslationFunction()
   const accountId = selectedAccountId()
@@ -772,7 +866,9 @@ export const Quote = ({
   const Tag = onClick ? 'button' : 'div'
 
   return (
-    <Tag className='quote-background' onClick={onClick}>
+    // TODO should tabindex depend on tag??
+    // Or should we just rename it to `tabindexForInteractiveContent`?
+    <Tag className='quote-background' onClick={onClick} tabIndex={tabIndex}>
       <div
         className={`quote ${hasMessage && 'has-message'}`}
         style={borderStyle}
@@ -814,6 +910,7 @@ export const Quote = ({
                 }
                 disableJumbomoji
                 nonInteractiveContent
+                tabindexForInteractiveContents={-1}
               />
             </div>
           )}
@@ -842,7 +939,13 @@ export function getAuthorName(
   return overrideSenderName ? `~${overrideSenderName}` : displayName
 }
 
-function WebxdcMessageContent({ message }: { message: T.Message }) {
+function WebxdcMessageContent({
+  message,
+  tabindexForInteractiveContents,
+}: {
+  message: T.Message
+  tabindexForInteractiveContents: -1 | 0
+}) {
   const tx = useTranslationFunction()
   if (message.viewType !== 'Webxdc') {
     return null
@@ -861,6 +964,8 @@ function WebxdcMessageContent({ message }: { message: T.Message }) {
         // No need to turn this element into a `<button>` for a11y,
         // because there is a button below that does the same.
         onClick={() => openWebxdc(message)}
+        // Not setting `tabIndex={tabindexForInteractiveContents}` here
+        // because there is a button below that does the same
       />
       <div
         className='name'
@@ -874,6 +979,7 @@ function WebxdcMessageContent({ message }: { message: T.Message }) {
         className={styles.startWebxdcButton}
         styling='primary'
         onClick={() => openWebxdc(message)}
+        tabIndex={tabindexForInteractiveContents}
       >
         {tx('start_app')}
       </Button>
