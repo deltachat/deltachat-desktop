@@ -64,8 +64,13 @@
     padding-bottom: 10px;
 
     .msg-body {
-      &.msg-body--clickable > .text {
-        cursor: pointer;
+      &.msg-body--clickable {
+        @include button-reset;
+        display: block;
+
+        > .text {
+          cursor: pointer;
+        }
       }
 
       & > .text {
