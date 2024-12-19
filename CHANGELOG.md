@@ -8,6 +8,7 @@
 - dev: upgrade react to v18 and react pinch pan zoom to v3
 
 ## Fixed
+- accessibility: make more items in messages list keyboard-accessible #4429
 
 ## [1.50.1] - 2024-12-18
 
