@@ -30,7 +30,8 @@
         margin: 4px;
       }
 
-      button {
+      // The "remove attachment / quote" buttons.
+      button:not(.quote-background) {
         margin-left: auto;
       }
 
