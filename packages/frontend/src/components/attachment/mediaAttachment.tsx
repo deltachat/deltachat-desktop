@@ -423,6 +423,8 @@ export function AudioAttachment({
           // and performs seeking and volume changes,
           // so, still, let's only switch focus when this wrapper element
           // is focused (and not one of its children).
+          //
+          // The same goes for the `onKeyDown` code in `Message.tsx`.
           if (e.target !== e.currentTarget) {
             return
           }

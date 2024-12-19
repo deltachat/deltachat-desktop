@@ -16,6 +16,7 @@ type Props = {
   timestamp: number
   hasLocation?: boolean
   onClickError?: () => void
+  tabindexForInteractiveContents: -1 | 0
   viewType: T.Viewtype
 }
 
@@ -31,6 +32,7 @@ export default function MessageMetaData(props: Props) {
     timestamp,
     hasLocation,
     onClickError,
+    tabindexForInteractiveContents,
     viewType,
   } = props
 
@@ -63,6 +65,7 @@ export default function MessageMetaData(props: Props) {
           className={classNames('status-icon', status)}
           aria-label={tx(`a11y_delivery_status_${status}`)}
           disabled={status !== 'error'}
+          tabIndex={status === 'error' ? tabindexForInteractiveContents : -1}
           onClick={status === 'error' ? onClickError : undefined}
         />
       )}
