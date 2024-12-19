@@ -59,9 +59,10 @@ export default function MessageMetaData(props: Props) {
       />
       <span className='spacer' />
       {direction === 'outgoing' && (
-        <div
+        <button
           className={classNames('status-icon', status)}
           aria-label={tx(`a11y_delivery_status_${status}`)}
+          disabled={status !== 'error'}
           onClick={status === 'error' ? onClickError : undefined}
         />
       )}
