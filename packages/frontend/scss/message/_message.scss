@@ -27,6 +27,9 @@
       border-radius: 18px;
       object-fit: cover;
       cursor: pointer;
+
+      // Ensure there is no weird line-height extra height.
+      display: block;
     }
 
     &.default {
