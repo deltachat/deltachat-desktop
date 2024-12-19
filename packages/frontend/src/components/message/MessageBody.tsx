@@ -10,6 +10,7 @@ function MessageBody({
   text,
   disableJumbomoji,
   nonInteractiveContent = false,
+  tabindexForInteractiveContents,
 }: {
   text: string
   disableJumbomoji?: boolean
@@ -18,6 +19,10 @@ function MessageBody({
    * display them as regular text.
    */
   nonInteractiveContent?: boolean
+  /**
+   * Has no effect when {@link nonInteractiveContent} === true.
+   */
+  tabindexForInteractiveContents?: -1 | 0
 }): JSX.Element {
   if (text.length >= UPPER_LIMIT_FOR_PARSED_MESSAGES) {
     return <>{text}</>
@@ -34,7 +39,11 @@ function MessageBody({
       )
     }
   }
-  return message2React(emojifiedText, nonInteractiveContent)
+  return message2React(
+    emojifiedText,
+    nonInteractiveContent,
+    tabindexForInteractiveContents ?? 0
+  )
 }
 const trimRegex = /^[\s\uFEFF\xA0\n\t]+|[\s\uFEFF\xA0\n\t]+$/g
 

@@ -42,9 +42,11 @@ function isDomainTrusted(domain: string): boolean {
 export const LabeledLink = ({
   label,
   destination,
+  tabIndex,
 }: {
   label: string | JSX.Element | JSX.Element[]
   destination: LinkDestination
+  tabIndex: -1 | 0
 }) => {
   const { openDialog } = useDialog()
   const openLinkSafely = useOpenLinkSafely()
@@ -84,6 +86,7 @@ export const LabeledLink = ({
       x-target-url={target}
       title={realUrl}
       onClick={onClick}
+      tabIndex={tabIndex}
       onContextMenu={ev => ((ev as any).t = ev.currentTarget)}
     >
       {label}
@@ -164,7 +167,13 @@ function LabeledLinkConfirmationDialog(
   )
 }
 
-export const Link = ({ destination }: { destination: LinkDestination }) => {
+export const Link = ({
+  destination,
+  tabIndex,
+}: {
+  destination: LinkDestination
+  tabIndex: -1 | 0
+}) => {
   const { openDialog } = useDialog()
   const openLinkSafely = useOpenLinkSafely()
   const accountId = selectedAccountId()
@@ -193,7 +202,13 @@ export const Link = ({ destination }: { destination: LinkDestination }) => {
   }
 
   return (
-    <a href='#' x-target-url={asciiUrl} title={asciiUrl} onClick={onClick}>
+    <a
+      href='#'
+      x-target-url={asciiUrl}
+      title={asciiUrl}
+      onClick={onClick}
+      tabIndex={tabIndex}
+    >
       {target}
     </a>
   )
