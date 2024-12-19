@@ -530,9 +530,11 @@ export default function Message(props: {
   }
 
   let onClickMessageBody
+  let MessageTag: 'div' | 'button' = 'div'
   if (isSetupmessage) {
     onClickMessageBody = () =>
       openDialog(EnterAutocryptSetupMessage, { message })
+    MessageTag = 'button'
   }
 
   let content
@@ -666,7 +668,7 @@ export default function Message(props: {
             />
           </div>
         )}
-        <div
+        <MessageTag
           className={classNames('msg-body', {
             'msg-body--clickable': onClickMessageBody,
           })}
@@ -719,7 +721,7 @@ export default function Message(props: {
               <Reactions reactions={message.reactions} />
             )}
           </footer>
-        </div>
+        </MessageTag>
       </div>
       <ShortcutMenu
         chat={props.chat}
