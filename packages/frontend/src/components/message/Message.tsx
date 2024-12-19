@@ -65,9 +65,9 @@ const Avatar = ({
 
   if (profileImage) {
     return (
-      <div className='author-avatar' onClick={onClick}>
+      <button className='author-avatar' onClick={onClick}>
         <img alt={displayName} src={runtime.transformBlobURL(profileImage)} />
-      </div>
+      </button>
     )
   } else {
     const codepoint = displayName && displayName.codePointAt(0)
@@ -75,7 +75,7 @@ const Avatar = ({
       ? String.fromCodePoint(codepoint).toUpperCase()
       : '#'
     return (
-      <div
+      <button
         className='author-avatar default'
         aria-label={displayName}
         onClick={onClick}
@@ -83,7 +83,7 @@ const Avatar = ({
         <div style={{ backgroundColor: color }} className='label'>
           {initial}
         </div>
-      </div>
+      </button>
     )
   }
 }
@@ -116,14 +116,14 @@ const AuthorName = ({
   }, [accountId, id])
 
   return (
-    <span
+    <button
       key='author'
       className='author'
       style={{ color }}
       onClick={() => onContactClick(contact)}
     >
       {getAuthorName(displayName, overrideSenderName)}
-    </span>
+    </button>
   )
 }
 
@@ -151,19 +151,23 @@ const ForwardedTitle = ({
           tx('forwarded_by', '$$forwarder$$'),
           '$$forwarder$$',
           () => (
-            <span
+            <button
+              className='forwarded-indicator-button'
               onClick={() => onContactClick(contact)}
               key='displayname'
               style={{ color: color }}
             >
               {overrideSenderName ? `~${overrideSenderName}` : displayName}
-            </span>
+            </button>
           )
         )
       ) : (
-        <span onClick={() => onContactClick(contact)}>
+        <button
+          onClick={() => onContactClick(contact)}
+          className='forwarded-indicator-button'
+        >
           {tx('forwarded_message')}
-        </span>
+        </button>
       )}
     </div>
   )

@@ -19,6 +19,7 @@
   - Allow empty `To` field for self-sent messages.
 
 ## Fixed
+- accessibility: make more items in messages list keyboard-accessible #4429
 - fix "incoming message background color" being used for quotes of outgoing sticker messages #4456
 
 ## [1.50.1] - 2024-12-18
