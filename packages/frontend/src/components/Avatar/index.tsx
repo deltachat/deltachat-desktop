@@ -43,6 +43,7 @@ export function Avatar(props: {
   wasSeenRecently?: boolean
   style?: htmlDivProps['style']
   onClick?: () => void
+  tabIndex?: -1 | 0
   className?: string
 }) {
   const {
@@ -54,6 +55,7 @@ export function Avatar(props: {
     small,
     wasSeenRecently,
     onClick,
+    tabIndex,
     className,
   } = props
 
@@ -73,6 +75,7 @@ export function Avatar(props: {
         className
       )}
       onClick={onClick}
+      tabIndex={tabIndex}
     >
       {content}
     </div>
@@ -80,11 +83,15 @@ export function Avatar(props: {
 }
 
 export function AvatarFromContact(
-  props: { contact: Type.Contact; onClick?: (contact: Type.Contact) => void },
+  props: {
+    contact: Type.Contact
+    onClick?: (contact: Type.Contact) => void
+    tabIndex?: -1 | 0
+  },
   large?: boolean,
   small?: boolean
 ) {
-  const { contact, onClick } = props
+  const { contact, onClick, tabIndex } = props
   return (
     <Avatar
       avatarPath={contact.profileImage || undefined}
@@ -94,6 +101,7 @@ export function AvatarFromContact(
       large={large === true}
       small={small === true}
       onClick={() => onClick && onClick(contact)}
+      tabIndex={tabIndex}
     />
   )
 }

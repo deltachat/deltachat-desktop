@@ -29,6 +29,7 @@ type AttachmentProps = {
   conversationType: ConversationType
   message: Type.Message
   hasQuote: boolean
+  tabindexForInteractiveContents: -1 | 0
 }
 
 export default function Attachment({
@@ -36,6 +37,7 @@ export default function Attachment({
   conversationType,
   message,
   hasQuote,
+  tabindexForInteractiveContents,
 }: AttachmentProps) {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
@@ -87,6 +89,7 @@ export default function Attachment({
     return (
       <button
         onClick={onClickAttachment}
+        tabIndex={tabindexForInteractiveContents}
         className={classNames(
           'message-attachment-media',
           withCaption ? 'content-below' : null,
@@ -107,6 +110,7 @@ export default function Attachment({
       return (
         <button
           onClick={onClickAttachment}
+          tabIndex={tabindexForInteractiveContents}
           style={{ cursor: 'pointer' }}
           className={classNames('message-attachment-broken-media', direction)}
         >
@@ -127,6 +131,9 @@ export default function Attachment({
           className='attachment-content video-content'
           src={runtime.transformBlobURL(message.file)}
           controls={true}
+          // Despite the element having multiple interactive
+          // (pseudo?) elements inside of it, tabindex applies to all of them.
+          tabIndex={tabindexForInteractiveContents}
         />
       </div>
     )
@@ -139,7 +146,12 @@ export default function Attachment({
           withContentAbove ? 'content-above' : null
         )}
       >
-        <AudioPlayer src={runtime.transformBlobURL(message.file)} />
+        <AudioPlayer
+          src={runtime.transformBlobURL(message.file)}
+          // Despite the element having multiple interactive
+          // (pseudo?) elements inside of it, tabindex applies to all of them.
+          tabIndex={tabindexForInteractiveContents}
+        />
       </div>
     )
   } else {
@@ -153,6 +165,7 @@ export default function Attachment({
           withContentAbove ? 'content-above' : null
         )}
         onClick={onClickAttachment}
+        tabIndex={tabindexForInteractiveContents}
       >
         <div
           className='file-icon'
