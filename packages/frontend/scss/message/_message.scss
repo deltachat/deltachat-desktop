@@ -432,6 +432,8 @@
 // quote
 
 .quote-background {
+  @include button-reset;
+
   overflow: hidden;
   max-width: 100%;
 }
