@@ -18,6 +18,7 @@ const SHOW_MAX_DIFFERENT_EMOJIS = 5
 
 type Props = {
   reactions: T.Reactions
+  tabindexForInteractiveContents: -1 | 0
 }
 
 export default function Reactions(props: Props) {
@@ -56,6 +57,7 @@ export default function Reactions(props: Props) {
         className={styles.openReactionsListDialogButton}
         aria-label={tx('more_info_desktop')}
         onClick={handleClick}
+        tabIndex={props.tabindexForInteractiveContents}
       ></button>
     </div>
   )
