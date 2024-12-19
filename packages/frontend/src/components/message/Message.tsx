@@ -747,23 +747,28 @@ export const Quote = ({
       ? {}
       : { borderLeftColor: quote.authorDisplayColor }
 
+  let onClick = undefined
+  if (quote.kind === 'WithMessage') {
+    onClick = () => {
+      jumpToMessage({
+        accountId,
+        msgId: quote.messageId,
+        msgChatId: undefined,
+        highlight: true,
+        msgParentId,
+        // Often times the quoted message is already in view,
+        // so let's not scroll at all if so.
+        scrollIntoViewArg: { block: 'nearest' },
+      })
+    }
+  }
+  // TODO a11y: we probably want a separate button
+  // with `aria-label="Jump to message"`.
+  // Having a button with so much content is probably not good.
+  const Tag = onClick ? 'button' : 'div'
+
   return (
-    <div
-      className='quote-background'
-      onClick={() => {
-        quote.kind === 'WithMessage' &&
-          jumpToMessage({
-            accountId,
-            msgId: quote.messageId,
-            msgChatId: undefined,
-            highlight: true,
-            msgParentId,
-            // Often times the quoted message is already in view,
-            // so let's not scroll at all if so.
-            scrollIntoViewArg: { block: 'nearest' },
-          })
-      }}
-    >
+    <Tag className='quote-background' onClick={onClick}>
       <div
         className={`quote ${hasMessage && 'has-message'}`}
         style={borderStyle}
@@ -822,7 +827,7 @@ export const Quote = ({
           />
         )}
       </div>
-    </div>
+    </Tag>
   )
 }
 
