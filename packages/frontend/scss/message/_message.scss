@@ -15,6 +15,8 @@
   align-items: stretch;
 
   & > .author-avatar {
+    @include button-reset;
+
     align-self: flex-end;
     bottom: 0px;
     position: static;
@@ -300,7 +302,9 @@
     margin-bottom: 3px;
     opacity: 0.86;
 
-    span {
+    .forwarded-indicator-button {
+      @include button-reset;
+
       cursor: pointer;
     }
   }
@@ -504,6 +508,8 @@
     display: none;
   }
   .author {
+    @include button-reset;
+
     display: inline-block;
     max-width: 40vw;
     font-size: 13px;
