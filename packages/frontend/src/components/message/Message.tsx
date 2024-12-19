@@ -479,6 +479,7 @@ export default function Message(props: {
       }
     }
 
+    const TagName = onClick ? 'button' : 'div'
     return (
       <div
         className={classNames(
@@ -488,7 +489,6 @@ export default function Message(props: {
         )}
         id={String(message.id)}
         onContextMenu={showContextMenu}
-        onClick={onClick}
       >
         {(isProtectionBrokenMsg || isProtectionEnabledMsg) && (
           <img
@@ -500,7 +500,7 @@ export default function Message(props: {
             }
           />
         )}
-        <div className='bubble'>
+        <TagName className='bubble' onClick={onClick}>
           {isWebxdcInfo && message.parentId && (
             <img
               src={runtime.getWebxdcIconURL(
@@ -517,7 +517,7 @@ export default function Message(props: {
                 aria-label={tx(`a11y_delivery_status_${status}`)}
               />
             )}
-        </div>
+        </TagName>
       </div>
     )
   }
@@ -549,11 +549,11 @@ export default function Message(props: {
           {direction === 'incoming'
             ? tx('videochat_contact_invited_hint', message.sender.displayName)
             : tx('videochat_you_invited_hint')}
-          <div className='join-button'>
+          <button className='join-button'>
             {direction === 'incoming'
               ? tx('videochat_tap_to_join')
               : tx('rejoin')}
-          </div>
+          </button>
         </div>
         <div className='break' />
         <div className='meta-data-container'>
@@ -688,12 +688,12 @@ export default function Message(props: {
           )}
           {content}
           {hasHtml && (
-            <div
+            <button
               onClick={openMessageHTML.bind(null, message.id)}
               className='show-html'
             >
               {tx('show_full_message')}
-            </div>
+            </button>
           )}
           <footer
             className={classNames(styles.messageFooter, {

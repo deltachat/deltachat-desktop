@@ -115,6 +115,8 @@
   }
 
   .show-html {
+    @include button-reset;
+
     border: none;
     background-color: transparent;
     padding-left: 0;
@@ -373,6 +375,8 @@
   }
 
   .bubble {
+    @include button-reset;
+
     display: inline-block;
     text-align: center;
     padding: 7px 14px;
@@ -396,7 +400,9 @@
   &.interactive > .bubble {
     cursor: pointer;
 
-    &:hover {
+    &:hover,
+    &:focus,
+    &:focus-within {
       opacity: 1;
     }
   }
@@ -562,6 +568,8 @@
 
     cursor: pointer;
     .join-button {
+      @include button-reset;
+
       font-weight: 100;
       margin-top: 5px;
     }
