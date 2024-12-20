@@ -7,6 +7,7 @@ import ReactionsDialog from '../dialogs/ReactionsDialog'
 import styles from './styles.module.scss'
 
 import type { T } from '@deltachat/jsonrpc-client'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 // With this constant we define how many max. different emojis we display
 // under each message.
@@ -20,6 +21,8 @@ type Props = {
 }
 
 export default function Reactions(props: Props) {
+  const tx = useTranslationFunction()
+
   const { openDialog } = useDialog()
   const { reactionsByContact, reactions } = props.reactions
 
@@ -30,7 +33,7 @@ export default function Reactions(props: Props) {
   }
 
   return (
-    <div className={styles.reactions} onClick={handleClick}>
+    <div className={styles.reactions}>
       {reactions
         .slice(0, SHOW_MAX_DIFFERENT_EMOJIS)
         .map(({ emoji, isFromSelf, count }) => {
@@ -49,6 +52,11 @@ export default function Reactions(props: Props) {
       {reactions.length > SHOW_MAX_DIFFERENT_EMOJIS && (
         <span className={classNames(styles.emoji, styles.showMore)} />
       )}
+      <button
+        className={styles.openReactionsListDialogButton}
+        aria-label={tx('more_info_desktop')}
+        onClick={handleClick}
+      ></button>
     </div>
   )
 }
