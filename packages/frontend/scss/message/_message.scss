@@ -15,6 +15,8 @@
   align-items: stretch;
 
   & > .author-avatar {
+    @include button-reset;
+
     align-self: flex-end;
     bottom: 0px;
     position: static;
@@ -62,8 +64,13 @@
     padding-bottom: 10px;
 
     .msg-body {
-      &.msg-body--clickable > .text {
-        cursor: pointer;
+      &.msg-body--clickable {
+        @include button-reset;
+        display: block;
+
+        > .text {
+          cursor: pointer;
+        }
       }
 
       & > .text {
@@ -113,6 +120,8 @@
   }
 
   .show-html {
+    @include button-reset;
+
     border: none;
     background-color: transparent;
     padding-left: 0;
@@ -300,7 +309,9 @@
     margin-bottom: 3px;
     opacity: 0.86;
 
-    span {
+    .forwarded-indicator-button {
+      @include button-reset;
+
       cursor: pointer;
     }
   }
@@ -364,6 +375,8 @@
   }
 
   .bubble {
+    @include button-reset;
+
     display: inline-block;
     text-align: center;
     padding: 7px 14px;
@@ -387,7 +400,7 @@
   &.interactive > .bubble {
     cursor: pointer;
 
-    &:hover {
+    &:hover, &:focus, &:focus-within {
       opacity: 1;
     }
   }
@@ -417,6 +430,8 @@
 // quote
 
 .quote-background {
+  @include button-reset;
+
   overflow: hidden;
   max-width: 100%;
 }
@@ -504,6 +519,8 @@
     display: none;
   }
   .author {
+    @include button-reset;
+
     display: inline-block;
     max-width: 40vw;
     font-size: 13px;
@@ -551,6 +568,8 @@
 
     cursor: pointer;
     .join-button {
+      @include button-reset;
+
       font-weight: 100;
       margin-top: 5px;
     }
