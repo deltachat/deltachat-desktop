@@ -126,7 +126,7 @@ const Message = React.memo<
             }}
           />
         )}
-        {message2React(summaryText2 || '', true)}
+        {message2React(summaryText2 || '', true, -1)}
       </div>
       {isContactRequest && (
         <div className='label'>
