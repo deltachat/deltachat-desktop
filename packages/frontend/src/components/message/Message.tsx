@@ -541,6 +541,8 @@ export default function Message(props: {
         <div className='videochat-icon'>
           <span className='icon videocamera' />
         </div>
+        {/* FYI the clickable element is not a semantic button.
+        Here it's probably fine. */}
         <AvatarFromContact contact={message.sender} onClick={onContactClick} />
         <div className='break' />
         <div
