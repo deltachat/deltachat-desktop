@@ -41,3 +41,11 @@
   margin-right: 1px;
   position: relative;
 }
+
+.openReactionsListDialogButton {
+  // Fill the parent.
+  position: absolute;
+  inset: 0;
+  border: none;
+  background: transparent;
+}
