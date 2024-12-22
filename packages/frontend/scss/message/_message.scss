@@ -495,8 +495,21 @@
   }
 
   img.quoted-image {
+    // Remember that width and height need to be set prior to the image
+    // getting actually loaded by the browser, to avoid content shifts.
+    // Same goes for messages' `.attachment-content`.
+    // See https://github.com/deltachat/deltachat-desktop/issues/4404.
+    //
+    // Setting just the height is not enough, because there might be text
+    // displayed beside the image, which might wrap and thus change height.
+    //
+    // In addition, really short and wide images could make the message
+    // overflow the chat container, for non-self-sent messages at least.
     height: var(--quote-img-size);
-    // do not set width, to keep the aspect ratio (see https://github.com/deltachat/deltachat-desktop/issues/3931)
+    width: var(--quote-img-size);
+    object-fit: scale-down;
+    object-position: center;
+
     margin-left: 6px;
   }
 
