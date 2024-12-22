@@ -23,6 +23,8 @@
    *
    * for higher values (than 200px) we have to add media queries otherwise
    * messages with images get strange paddings on small windows
+   *
+   * The same goes for `.quoted-image`.
    */
   & > .attachment-content {
     object-fit: scale-down;

@@ -20,6 +20,7 @@
   - Allow empty `To` field for self-sent messages.
 
 ## Fixed
+- fix chat "scrolls up" right after switching (rev 2) #4431
 - when deleting a message from gallery, update gallery items to remove the respective item #4457
 - accessibility: make more items in messages list keyboard-accessible #4429
 - fix "incoming message background color" being used for quotes of outgoing sticker messages #4456
