@@ -83,15 +83,6 @@
   }
 }
 
-.message.type-sticker {
-  .message-attachment-media {
-    & > .attachment-content {
-      max-height: 200px;
-      max-width: 80%;
-    }
-  }
-}
-
 .message-attachment-broken-media {
   @include button-reset;
   display: block;
