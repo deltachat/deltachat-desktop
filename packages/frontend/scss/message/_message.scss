@@ -259,7 +259,11 @@
   .message-attachment-media {
     background-color: transparent;
     & > .attachment-content {
-      margin-bottom: 20px;
+      // Make space for the footer, which is `position: absolute;`.
+      // However, this does not account for the case
+      // where the footer text wraps.
+      margin-bottom: 26px;
+
       cursor: default;
     }
   }
@@ -267,7 +271,6 @@
   .metadata {
     float: right;
     padding: 4px 8px 1px 8px;
-    margin-bottom: -7px;
     background-color: #01010159;
     border-radius: 4px;
     color: black;
