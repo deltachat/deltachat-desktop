@@ -21,6 +21,7 @@
 ## Fixed
 - accessibility: make more items in messages list keyboard-accessible #4429
 - fix "incoming message background color" being used for quotes of outgoing sticker messages #4456
+- fix stickers being smaller than they're supposed to be #4432
 
 ## [1.50.1] - 2024-12-18
 
