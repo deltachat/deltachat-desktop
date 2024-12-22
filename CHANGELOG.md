@@ -8,6 +8,7 @@
 - dev: upgrade react to v18 and react pinch pan zoom to v3
 
 ## Fixed
+- fix chat "scrolls up" right after switching (rev 2) #4431
 
 ## [1.50.1] - 2024-12-18
 
