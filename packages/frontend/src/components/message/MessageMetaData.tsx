@@ -9,7 +9,6 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 type Props = {
   padlock: boolean
-  username?: string
   fileMime: string | null
   direction?: 'incoming' | 'outgoing'
   status: msgStatus
@@ -25,7 +24,6 @@ export default function MessageMetaData(props: Props) {
 
   const {
     padlock,
-    username,
     fileMime,
     direction,
     status,
@@ -46,7 +44,6 @@ export default function MessageMetaData(props: Props) {
         ),
       })}
     >
-      {username && <div className='username'>{username}</div>}
       {padlock && (
         <div
           aria-label={tx('a11y_encryption_padlock')}
