@@ -23,6 +23,7 @@ use log::{error, info};
 
 mod blobs;
 mod locales;
+mod runtime_info;
 mod webxdc;
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
@@ -212,6 +213,7 @@ pub fn run() {
             webxdc::on_webxdc_status_update,
             webxdc::on_webxdc_realtime_data,
             webxdc::delete_webxdc_account_data,
+            runtime_info::get_runtime_info,
         ])
         .register_asynchronous_uri_scheme_protocol("webxdc-icon", webxdc::webxdc_icon_protocol)
         .register_asynchronous_uri_scheme_protocol("dcblob", blobs::delta_blobs_protocol)

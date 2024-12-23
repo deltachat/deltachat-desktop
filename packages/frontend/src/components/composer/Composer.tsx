@@ -398,15 +398,17 @@ const Composer = forwardRef<
               onPaste={handlePaste}
             />
           )}
-          <button
-            type='button'
-            className='emoji-button'
-            ref={pickerButtonRef}
-            onClick={onEmojiIconClick}
-            aria-label={tx('emoji')}
-          >
-            <span />
-          </button>
+          {!runtime.getRuntimeInfo().hideEmojiAndStickerPicker && (
+            <button
+              type='button'
+              className='emoji-button'
+              ref={pickerButtonRef}
+              onClick={onEmojiIconClick}
+              aria-label={tx('emoji')}
+            >
+              <span />
+            </button>
+          )}
           <div className='send-button-wrapper' onClick={composerSendMessage}>
             <button
               aria-label={tx('menu_send')}

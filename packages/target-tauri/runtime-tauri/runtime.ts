@@ -186,17 +186,7 @@ class TauriRuntime implements Runtime {
     }
     this.rc_config = rc_config
     // - runtime info
-    const runtime_info: RuntimeInfo = {
-      // TODO
-      buildInfo: { VERSION: 'TODO', GIT_REF: 'todo', BUILD_TIMESTAMP: 0 },
-      isAppx: false,
-      isMac: false,
-      versions: [],
-      runningUnderARM64Translation: false,
-      // static
-      target: 'tauri',
-      rpcServerPath: 'statically linked',
-    }
+    const runtime_info: RuntimeInfo = await invoke('get_runtime_info')
     this.runtime_info = runtime_info
 
     type TauriLogVariants = Parameters<

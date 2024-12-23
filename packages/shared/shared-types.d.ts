@@ -93,6 +93,10 @@ export type RuntimeInfo = {
   rpcServerPath?: string
   buildInfo: BuildInfo
   isContentProtectionSupported: boolean
+  /** whether to hide emoji & sticker picker -> this is the case for mobile ios/android because they have their own sticker picker
+   * and sticker picker currently would open a folder, which is inside of the pp container, so too much work to make work for now
+   */
+  hideEmojiAndStickerPicker?: boolean
 }
 
 export interface BuildInfo {
