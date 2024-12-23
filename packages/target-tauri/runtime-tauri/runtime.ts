@@ -121,7 +121,6 @@ class TauriRuntime implements Runtime {
       notifications: true,
       showNotificationContent: true,
       enterKeySends: false,
-      enableCtrlUpToReplyShortcut: false,
       enableAVCalls: false,
       enableBroadcastLists: false,
       enableChatAuditLog: false,
