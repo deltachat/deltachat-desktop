@@ -1,5 +1,4 @@
 import React from 'react'
-import classNames from 'classnames'
 
 import QrCode from '../dialogs/QrCode'
 import SearchInputButton from './SearchInputButton'
