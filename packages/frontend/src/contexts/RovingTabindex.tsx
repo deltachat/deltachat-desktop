@@ -175,7 +175,7 @@ export function RovingTabindexProvider({
         return
       }
 
-      const indexChange: -1 | 1 | undefined =
+      const indexChange: -1 | 1 | 'first' | 'last' | undefined =
         indexChangeTable[direction][event.code]
       if (indexChange == undefined) {
         return
@@ -192,34 +192,42 @@ export function RovingTabindexProvider({
         classNameOfTargetElements
       )
 
-      let oldActiveElementInd: number | undefined
-      for (let i = 0; i < eligibleElements.length; i++) {
-        const eligibleEl = eligibleElements[i]
-        if (eligibleEl === activeElement) {
-          oldActiveElementInd = i
-          break
+      let newActiveElement: Element
+      if (indexChange === 'first') {
+        newActiveElement = eligibleElements[0]
+      } else if (indexChange === 'last') {
+        newActiveElement = eligibleElements[eligibleElements.length - 1]
+      } else {
+        let oldActiveElementInd: number | undefined
+        for (let i = 0; i < eligibleElements.length; i++) {
+          const eligibleEl = eligibleElements[i]
+          if (eligibleEl === activeElement) {
+            oldActiveElementInd = i
+            break
+          }
+        }
+        if (oldActiveElementInd == undefined) {
+          log.warn(
+            'Could not find the currently active element in DOM',
+            activeElement
+          )
+          return
+        }
+
+        newActiveElement = eligibleElements[oldActiveElementInd + indexChange]
+        // `newActiveElement` could be `undefined` if the active element
+        // is either the last or the first.
+        if (newActiveElement == undefined) {
+          return
         }
       }
-      if (oldActiveElementInd == undefined) {
-        log.warn(
-          'Could not find the currently active element in DOM',
-          activeElement
-        )
-        return
-      }
 
-      const newActiveElement =
-        eligibleElements[oldActiveElementInd + indexChange]
-      // `newActiveElement` could be `undefined` if the active element is either
-      // the last or the first.
-      if (newActiveElement != undefined) {
-        const newActiveElement_ = newActiveElement as HTMLElement
-        setActiveElement(newActiveElement_)
-        // It is fine to `.focus()` here without wating for a render
-        // or `useEffect`, because elements with `tabindex="-1"`
-        // are still programmatically focusable.
-        newActiveElement_.focus()
-      }
+      const newActiveElement_ = newActiveElement as HTMLElement
+      setActiveElement(newActiveElement_)
+      // It is fine to `.focus()` here without wating for a render
+      // or `useEffect`, because elements with `tabindex="-1"`
+      // are still programmatically focusable.
+      newActiveElement_.focus()
     },
     [activeElement, classNameOfTargetElements, direction, wrapperElementRef]
   )
@@ -238,19 +246,26 @@ export function RovingTabindexProvider({
   )
 }
 
+type IndexChange = -1 | 1 | 'first' | 'last'
 const indexChangeTable = {
   vertical: {
+    Home: 'first',
+    End: 'last',
     ArrowUp: -1,
     ArrowDown: 1,
-  } as { [key: string]: -1 | 1 },
+  } as { [key: string]: IndexChange },
   horizontal: {
+    Home: 'first',
+    End: 'last',
     ArrowLeft: -1,
     ArrowRight: 1,
-  } as { [key: string]: -1 | 1 },
+  } as { [key: string]: IndexChange },
   both: {
+    Home: 'first',
+    End: 'last',
     ArrowUp: -1,
     ArrowLeft: -1,
     ArrowDown: 1,
     ArrowRight: 1,
-  } as { [key: string]: -1 | 1 },
+  } as { [key: string]: IndexChange },
 } as const
