@@ -8,6 +8,8 @@
 }
 
 .status-icon {
+  @include button-reset;
+
   width: 18px; // respect the 1.5:1 aspect ratio (dictated by delivered & seen icon)
   height: 12px;
   display: inline-block;

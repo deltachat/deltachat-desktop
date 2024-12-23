@@ -65,9 +65,9 @@ const Avatar = ({
 
   if (profileImage) {
     return (
-      <div className='author-avatar' onClick={onClick}>
+      <button className='author-avatar' onClick={onClick}>
         <img alt={displayName} src={runtime.transformBlobURL(profileImage)} />
-      </div>
+      </button>
     )
   } else {
     const codepoint = displayName && displayName.codePointAt(0)
@@ -75,7 +75,7 @@ const Avatar = ({
       ? String.fromCodePoint(codepoint).toUpperCase()
       : '#'
     return (
-      <div
+      <button
         className='author-avatar default'
         aria-label={displayName}
         onClick={onClick}
@@ -83,7 +83,7 @@ const Avatar = ({
         <div style={{ backgroundColor: color }} className='label'>
           {initial}
         </div>
-      </div>
+      </button>
     )
   }
 }
@@ -116,14 +116,14 @@ const AuthorName = ({
   }, [accountId, id])
 
   return (
-    <span
+    <button
       key='author'
       className='author'
       style={{ color }}
       onClick={() => onContactClick(contact)}
     >
       {getAuthorName(displayName, overrideSenderName)}
-    </span>
+    </button>
   )
 }
 
@@ -151,19 +151,23 @@ const ForwardedTitle = ({
           tx('forwarded_by', '$$forwarder$$'),
           '$$forwarder$$',
           () => (
-            <span
+            <button
+              className='forwarded-indicator-button'
               onClick={() => onContactClick(contact)}
               key='displayname'
               style={{ color: color }}
             >
               {overrideSenderName ? `~${overrideSenderName}` : displayName}
-            </span>
+            </button>
           )
         )
       ) : (
-        <span onClick={() => onContactClick(contact)}>
+        <button
+          onClick={() => onContactClick(contact)}
+          className='forwarded-indicator-button'
+        >
           {tx('forwarded_message')}
-        </span>
+        </button>
       )}
     </div>
   )
@@ -475,6 +479,7 @@ export default function Message(props: {
       }
     }
 
+    const Tag = onClick ? 'button' : 'div'
     return (
       <div
         className={classNames(
@@ -484,7 +489,6 @@ export default function Message(props: {
         )}
         id={String(message.id)}
         onContextMenu={showContextMenu}
-        onClick={onClick}
       >
         {(isProtectionBrokenMsg || isProtectionEnabledMsg) && (
           <img
@@ -496,7 +500,7 @@ export default function Message(props: {
             }
           />
         )}
-        <div className='bubble'>
+        <Tag className='bubble' onClick={onClick}>
           {isWebxdcInfo && message.parentId && (
             <img
               src={runtime.getWebxdcIconURL(
@@ -513,7 +517,7 @@ export default function Message(props: {
                 aria-label={tx(`a11y_delivery_status_${status}`)}
               />
             )}
-        </div>
+        </Tag>
       </div>
     )
   }
@@ -523,9 +527,11 @@ export default function Message(props: {
   }
 
   let onClickMessageBody
+  let MessageTag: 'div' | 'button' = 'div'
   if (isSetupmessage) {
     onClickMessageBody = () =>
       openDialog(EnterAutocryptSetupMessage, { message })
+    MessageTag = 'button'
   }
 
   let content
@@ -535,6 +541,8 @@ export default function Message(props: {
         <div className='videochat-icon'>
           <span className='icon videocamera' />
         </div>
+        {/* FYI the clickable element is not a semantic button.
+        Here it's probably fine. */}
         <AvatarFromContact contact={message.sender} onClick={onContactClick} />
         <div className='break' />
         <div
@@ -545,11 +553,11 @@ export default function Message(props: {
           {direction === 'incoming'
             ? tx('videochat_contact_invited_hint', message.sender.displayName)
             : tx('videochat_you_invited_hint')}
-          <div className='join-button'>
+          <button className='join-button'>
             {direction === 'incoming'
               ? tx('videochat_tap_to_join')
               : tx('rejoin')}
-          </div>
+          </button>
         </div>
         <div className='break' />
         <div className='meta-data-container'>
@@ -659,7 +667,7 @@ export default function Message(props: {
             />
           </div>
         )}
-        <div
+        <MessageTag
           className={classNames('msg-body', {
             'msg-body--clickable': onClickMessageBody,
           })}
@@ -684,12 +692,12 @@ export default function Message(props: {
           )}
           {content}
           {hasHtml && (
-            <div
+            <button
               onClick={openMessageHTML.bind(null, message.id)}
               className='show-html'
             >
               {tx('show_full_message')}
-            </div>
+            </button>
           )}
           <footer
             className={classNames(styles.messageFooter, {
@@ -712,7 +720,7 @@ export default function Message(props: {
               <Reactions reactions={message.reactions} />
             )}
           </footer>
-        </div>
+        </MessageTag>
       </div>
       <ShortcutMenu
         chat={props.chat}
@@ -743,23 +751,28 @@ export const Quote = ({
       ? {}
       : { borderLeftColor: quote.authorDisplayColor }
 
+  let onClick = undefined
+  if (quote.kind === 'WithMessage') {
+    onClick = () => {
+      jumpToMessage({
+        accountId,
+        msgId: quote.messageId,
+        msgChatId: undefined,
+        highlight: true,
+        msgParentId,
+        // Often times the quoted message is already in view,
+        // so let's not scroll at all if so.
+        scrollIntoViewArg: { block: 'nearest' },
+      })
+    }
+  }
+  // TODO a11y: we probably want a separate button
+  // with `aria-label="Jump to message"`.
+  // Having a button with so much content is probably not good.
+  const Tag = onClick ? 'button' : 'div'
+
   return (
-    <div
-      className='quote-background'
-      onClick={() => {
-        quote.kind === 'WithMessage' &&
-          jumpToMessage({
-            accountId,
-            msgId: quote.messageId,
-            msgChatId: undefined,
-            highlight: true,
-            msgParentId,
-            // Often times the quoted message is already in view,
-            // so let's not scroll at all if so.
-            scrollIntoViewArg: { block: 'nearest' },
-          })
-      }}
-    >
+    <Tag className='quote-background' onClick={onClick}>
       <div
         className={`quote ${hasMessage && 'has-message'}`}
         style={borderStyle}
@@ -818,7 +831,7 @@ export const Quote = ({
           />
         )}
       </div>
-    </div>
+    </Tag>
   )
 }
 
@@ -845,6 +858,8 @@ function WebxdcMessageContent({ message }: { message: T.Message }) {
       <img
         src={runtime.getWebxdcIconURL(selectedAccountId(), message.id)}
         alt={`icon of ${info.name}`}
+        // No need to turn this element into a `<button>` for a11y,
+        // because there is a button below that does the same.
         onClick={() => openWebxdc(message)}
       />
       <div
