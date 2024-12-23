@@ -77,6 +77,11 @@
     ],
     "resources": {
       "../../../_locales/*.json" : "_locales"
+    },
+    "iOS": {
+      "minimumSystemVersion": "13.0",
+      "developmentTeam": "8Y86453UA8", // merlinux,
+      "frameworks": ["SystemConfiguration"] // needed for system configuration crate, which is used by iroh-net
     }
   }
 }

@@ -64,6 +64,8 @@ impl AppState {
         let (client, mut out_receiver) = RpcClient::new();
         let session = RpcSession::new(client.clone(), state.clone());
 
+        info!("account manager created");
+
         let handle = app.handle().clone();
 
         let send_task: JoinHandle<anyhow::Result<()>> = tauri::async_runtime::spawn(async move {
@@ -90,6 +92,12 @@ impl AppState {
         })
     }
 
+    #[cfg(target_os = "ios")]
+    async fn get_current_log_file(app: AppHandle) -> anyhow::Result<String> {
+        Ok("does not exist on ios - because iOS uses the system os-log api".to_owned())
+    }
+
+    #[cfg(not(target_os = "ios"))]
     async fn get_current_log_file(app: AppHandle) -> anyhow::Result<String> {
         let mut log_files: Vec<(PathBuf, std::time::Duration)> =
             std::fs::read_dir(app.path().app_log_dir()?)?
@@ -208,6 +216,18 @@ pub fn run() {
         .register_asynchronous_uri_scheme_protocol("webxdc-icon", webxdc::webxdc_icon_protocol)
         .register_asynchronous_uri_scheme_protocol("dcblob", blobs::delta_blobs_protocol)
         .setup(move |app| {
+            // Create missing directories for iOS (quick fix, better fix this upstream in tauri)
+            #[cfg(target_os = "ios")]
+            {
+                // app_data_dir should be custom for iOS
+                // should be sth like private/var/mobile/Containers/Data/Application/1348A16B-81C7-46C4-9441-0E2A31D362D9/
+                // currently is private/var/mobile/Containers/Data/Application/1348A16B-81C7-46C4-9441-0E2A31D362D9/Library/Application Support/chat.delta.desktop.tauri
+                // the latter is a problem, becuase the directories don't exist, so as quick fix we create them here
+                std::fs::create_dir_all(app.path().app_data_dir()?)?;
+                // same for app_log_dir and probably all other dirs
+                std::fs::create_dir_all(app.path().app_log_dir()?)?; // though log dir is not used because it uses os-log on iOS
+            }
+
             let (tauri_plugin_log, max_level, logger) = tauri_plugin_log::Builder::new()
                 // default targets are file and stdout
                 .max_file_size(5_000_000 /* bytes */)
