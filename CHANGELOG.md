@@ -8,6 +8,8 @@
 - dev: upgrade react to v18 and react pinch pan zoom to v3
 
 ## Fixed
+- fix stickers being smaller than they're supposed to #4432
+- fix reactions to sticker messages overlapping with next message #4433
 
 ## [1.50.1] - 2024-12-18
 
