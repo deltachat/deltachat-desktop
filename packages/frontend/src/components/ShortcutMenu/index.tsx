@@ -16,6 +16,7 @@ type Props = {
   direction: 'incoming' | 'outgoing'
   message: T.Message
   showContextMenu: (event: OnButtonClick) => Promise<void>
+  tabindexForInteractiveContents: -1 | 0
 }
 
 export default function ShortcutMenu(props: Props) {
@@ -30,9 +31,13 @@ export default function ShortcutMenu(props: Props) {
         <ReactButton
           messageId={props.message.id}
           reactions={props.message.reactions}
+          tabIndex={props.tabindexForInteractiveContents}
         />
       )}
-      <ContextMenuButton onClick={props.showContextMenu} />
+      <ContextMenuButton
+        onClick={props.showContextMenu}
+        tabIndex={props.tabindexForInteractiveContents}
+      />
     </div>
   )
 }
@@ -40,6 +45,7 @@ export default function ShortcutMenu(props: Props) {
 function ReactButton(props: {
   messageId: number
   reactions: T.Message['reactions']
+  tabIndex: -1 | 0
 }) {
   const tx = useTranslationFunction()
 
@@ -67,13 +73,17 @@ function ReactButton(props: {
       aria-label={tx('react')}
       className={styles.shortcutMenuButton}
       onClick={onClick}
+      tabIndex={props.tabIndex}
     >
       <Icon className={styles.shortcutMenuIcon} icon='reaction' />
     </button>
   )
 }
 
-function ContextMenuButton(props: { onClick: (event: OnButtonClick) => void }) {
+function ContextMenuButton(props: {
+  onClick: (event: OnButtonClick) => void
+  tabIndex: -1 | 0
+}) {
   const tx = useTranslationFunction()
 
   return (
@@ -81,6 +91,7 @@ function ContextMenuButton(props: { onClick: (event: OnButtonClick) => void }) {
       aria-label={tx('a11y_message_context_menu_btn_label')}
       className={styles.shortcutMenuButton}
       onClick={props.onClick}
+      tabIndex={props.tabIndex}
     >
       <Icon className={styles.shortcutMenuIcon} icon='more' />
     </button>
