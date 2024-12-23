@@ -4,6 +4,7 @@
 
 ## Added
 - accessibility: arrow-key navigation for gallery #4376
+- accessibility: arrow-key navigation: handle "End" and "Home" keys to go to last / first item #4438
 
 ## Changed
 - dev: upgrade react to v18 and react pinch pan zoom to v3
