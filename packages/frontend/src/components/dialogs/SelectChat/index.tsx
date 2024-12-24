@@ -1,82 +1,37 @@
 import AutoSizer from 'react-virtualized-auto-sizer'
 import React, { useRef, useState } from 'react'
-import { C } from '@deltachat/jsonrpc-client'
 
 import ChatListItem from '../../chat/ChatListItem'
 import { PseudoListItemNoSearchResults } from '../../helpers/PseudoListItem'
 import { ChatListPart, useLogicVirtualChatList } from '../../chat/ChatList'
 import { useChatList } from '../../chat/ChatListHelpers'
 import { useThemeCssVar } from '../../../ThemeManager'
-import { BackendRemote } from '../../../backend-com'
-import { selectedAccountId } from '../../../ScreenController'
-import { confirmForwardMessage } from '../../message/messageFunctions'
 import Dialog, { DialogBody, DialogHeader } from '../../Dialog'
-import useChat from '../../../hooks/chat/useChat'
-import useDialog from '../../../hooks/dialog/useDialog'
-import useMessage from '../../../hooks/chat/useMessage'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 
 import styles from './styles.module.scss'
 
-import type { T } from '@deltachat/jsonrpc-client'
 import type { DialogProps } from '../../../contexts/DialogContext'
 import { RovingTabindexProvider } from '../../../contexts/RovingTabindex'
 
 type Props = {
-  message: T.Message
   onClose: DialogProps['onClose']
+  headerTitle: string
+  onChatClick: (chatId: number) => void
+  listFlags: number
+  footer?: React.JSX.Element
 }
 
-const LIST_FLAGS = C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS
-
-export default function ForwardMessage(props: Props) {
-  const { message, onClose } = props
-
-  const accountId = selectedAccountId()
+export default function SelectChat(props: Props) {
   const tx = useTranslationFunction()
-  const { openDialog } = useDialog()
-  const { selectChat } = useChat()
-  const { forwardMessage, jumpToMessage } = useMessage()
 
   const [queryStr, setQueryStr] = useState('')
-  const { chatListIds } = useChatList(LIST_FLAGS, queryStr)
+  const { chatListIds } = useChatList(props.listFlags, queryStr)
   const { isChatLoaded, loadChats, chatCache } =
     useLogicVirtualChatList(chatListIds)
 
   const chatListRef = useRef<HTMLDivElement>(null)
 
-  const onChatClick = async (chatId: number) => {
-    const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
-    onClose()
-    if (!chat.isSelfTalk) {
-      // show the target chat to avoid unintended forwarding to the wrong chat
-      selectChat(accountId, chat.id)
-      const yes = await confirmForwardMessage(
-        openDialog,
-        accountId,
-        message,
-        chat
-      )
-      if (yes) {
-        // get the id of forwarded message
-        // to jump to the message
-        const messageIds = await BackendRemote.rpc.getMessageIds(
-          accountId,
-          chatId,
-          false,
-          true
-        )
-        const lastMessage = messageIds[messageIds.length - 1]
-        if (lastMessage) {
-          jumpToMessage({ accountId, msgId: lastMessage, msgChatId: chatId })
-        }
-      } else {
-        selectChat(accountId, message.chatId)
-      }
-    } else {
-      await forwardMessage(accountId, message.id, chat.id)
-    }
-  }
   const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setQueryStr(e.target.value)
 
@@ -86,10 +41,10 @@ export default function ForwardMessage(props: Props) {
     Number(useThemeCssVar('--SPECIAL-chatlist-item-chat-height')) || 64
 
   return (
-    <Dialog className={styles.forwardMessageDialog} onClose={onClose} fixed>
-      <DialogHeader onClose={onClose} title={tx('forward_to')} />
-      <DialogBody className={styles.forwardMessageDialogBody}>
-        <div className='forward-message-account-input'>
+    <Dialog className={styles.selectChatDialog} onClose={props.onClose} fixed>
+      <DialogHeader onClose={props.onClose} title={props.headerTitle} />
+      <DialogBody className={styles.selectChatDialogBody}>
+        <div className='select-chat-account-input'>
           <input
             className='search-input no-drag'
             onChange={onSearchChange}
@@ -99,7 +54,7 @@ export default function ForwardMessage(props: Props) {
             spellCheck={false}
           />
         </div>
-        <div className='forward-message-list-chat-list' ref={chatListRef}>
+        <div className='select-chat-list-chat-list' ref={chatListRef}>
           <RovingTabindexProvider wrapperElementRef={chatListRef}>
             {noResults && queryStr && (
               <PseudoListItemNoSearchResults queryStr={queryStr} />
@@ -122,7 +77,7 @@ export default function ForwardMessage(props: Props) {
                         <div style={style}>
                           <ChatListItem
                             chatListItem={chatCache[chatId] || undefined}
-                            onClick={onChatClick.bind(null, chatId)}
+                            onClick={props.onChatClick.bind(null, chatId)}
                           />
                         </div>
                       )
@@ -134,6 +89,7 @@ export default function ForwardMessage(props: Props) {
           </RovingTabindexProvider>
         </div>
       </DialogBody>
+      {props.footer}
     </Dialog>
   )
 }
