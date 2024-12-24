@@ -3,7 +3,6 @@ import React, { useState, useEffect, useRef } from 'react'
 import moment from 'moment'
 import { C } from '@deltachat/jsonrpc-client'
 
-import ChatListItem from '../../chat/ChatListItem'
 import { useChatList } from '../../chat/ChatListHelpers'
 import { useLogicVirtualChatList, ChatListPart } from '../../chat/ChatList'
 import MessageBody from '../../message/MessageBody'
@@ -29,6 +28,7 @@ import styles from './styles.module.scss'
 import type { DialogProps } from '../../../contexts/DialogContext'
 import type { T } from '@deltachat/jsonrpc-client'
 import { RovingTabindexProvider } from '../../../contexts/RovingTabindex'
+import { ChatListItemRowChat } from '../../chat/ChatListItemRow'
 
 const log = getLogger('renderer/dialogs/ViewProfile')
 
@@ -331,18 +331,17 @@ export function ViewProfileInner({
                     height={height}
                     itemKey={index => 'key' + chatListIds[index]}
                     itemHeight={CHATLISTITEM_CHAT_HEIGHT}
-                  >
-                    {({ index, style }) => {
-                      const chatId = chatListIds[index]
-                      return (
-                        <div style={style}>
-                          <ChatListItem
-                            chatListItem={chatCache[chatId] || undefined}
-                            onClick={onChatClick.bind(null, chatId)}
-                          />
-                        </div>
-                      )
+                    itemData={{
+                      chatCache,
+                      chatListIds,
+                      onChatClick,
+
+                      selectedChatId: null,
+                      activeContextMenuChatId: null,
+                      openContextMenu: async () => {},
                     }}
+                  >
+                    {ChatListItemRowChat}
                   </ChatListPart>
                 )}
               </AutoSizer>
