@@ -1,9 +1,0 @@
-// We need to force the dialog to full height to make `AutoSizer` work
-.sendToChatDialog {
-  height: 100%;
-}
-
-.sendToChatDialogBody {
-  display: flex;
-  flex-direction: column;
-}

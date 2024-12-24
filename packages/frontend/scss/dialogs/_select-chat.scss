@@ -1,6 +1,6 @@
 $side-padding: 30px;
 
-.forward-message-account-input {
+.select-chat-account-input {
   padding-right: $side-padding;
   padding-left: $side-padding;
   padding-bottom: 10px;
@@ -10,7 +10,7 @@ $side-padding: 30px;
   }
 }
 
-.forward-message-list-chat-list {
+.select-chat-list-chat-list {
   height: 100%;
 
   .chat-list-item {

@@ -1,9 +1,10 @@
 // We need to force the dialog to full height to make `AutoSizer` work
-.forwardMessageDialog {
+.selectChatDialog {
   height: 100%;
 }
 
-.forwardMessageDialogBody {
+.selectChatDialogBody {
   display: flex;
   flex-direction: column;
+  padding-bottom: 0px;
 }

@@ -32,13 +32,11 @@
 @import 'dialogs/_about';
 @import 'dialogs/_audit_log';
 @import 'dialogs/_autocrypt_setup.scss';
-@import 'dialogs/_forward-message';
+@import 'dialogs/_select-chat';
 @import 'dialogs/_group-styles';
 @import 'dialogs/_settings';
 @import 'dialogs/_view_profile';
-@import 'dialogs/_mailto-dialog';
 @import 'dialogs/_qr-code';
-@import 'dialogs/webxdc_send_to_chat.scss';
 
 // Login
 @import 'login/_login.scss';
