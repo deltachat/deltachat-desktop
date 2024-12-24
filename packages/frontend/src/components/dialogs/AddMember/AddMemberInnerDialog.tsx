@@ -200,9 +200,10 @@ export function AddMemberInnerDialog({
 
   const addContactOnKeyDown = (ev: React.KeyboardEvent<HTMLInputElement>) => {
     if (ev.code == 'Enter') {
+      // TODO refactor: this is fragile.
       ;(
-        document.querySelector<HTMLDivElement>(
-          '.delta-checkbox'
+        contactListRef.current?.querySelector(
+          'input[type="checkbox"]'
         ) as HTMLDivElement
       ).click()
     }
