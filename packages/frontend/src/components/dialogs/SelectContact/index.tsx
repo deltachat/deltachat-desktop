@@ -90,6 +90,11 @@ export default function SelectContactDialog({
                   >
                     <FixedSizeList
                       itemCount={contactIds.length}
+                      itemData={{
+                        onContactClick: onOk,
+                        contactIds,
+                        contactCache,
+                      }}
                       itemKey={index => contactIds[index]}
                       onItemsRendered={onItemsRendered}
                       ref={ref}
@@ -97,27 +102,13 @@ export default function SelectContactDialog({
                       width='100%'
                       itemSize={64}
                     >
-                      {({ index, style }) => {
-                        const el = (() => {
-                          const item = contactCache[contactIds[index]]
-                          if (!item) {
-                            // It's not loaded yet
-                            return null
-                          }
-                          const contact: T.Contact = item
-                          return (
-                            <ContactListItem
-                              contact={contact}
-                              onClick={onOk}
-                              showCheckbox={false}
-                              checked={false}
-                              showRemove={false}
-                            />
-                          )
-                        })()
-
-                        return <div style={style}>{el}</div>
-                      }}
+                      {/* Remember that the renderer function
+                      must not be defined _inline_.
+                      Otherwise when the component re-renders,
+                      item elements get replaces with fresh ones,
+                      and we lose focus.
+                      See https://github.com/bvaughn/react-window/issues/420#issuecomment-585813335 */}
+                      {SelectContactDialogRow}
                     </FixedSizeList>
                   </RovingTabindexProvider>
                 )}
@@ -135,4 +126,40 @@ export default function SelectContactDialog({
       </DialogFooter>
     </Dialog>
   )
+}
+
+function SelectContactDialogRow({
+  index,
+  style,
+  data,
+}: {
+  index: number
+  style: React.CSSProperties
+  data: {
+    onContactClick: (contact: T.Contact) => void
+    contactIds: Array<T.Contact['id']>
+    contactCache: ReturnType<typeof useLazyLoadedContacts>['contactCache']
+  }
+}) {
+  const { onContactClick, contactIds, contactCache } = data
+
+  const el = (() => {
+    const item = contactCache[contactIds[index]]
+    if (!item) {
+      // It's not loaded yet
+      return null
+    }
+    const contact: T.Contact = item
+    return (
+      <ContactListItem
+        contact={contact}
+        onClick={onContactClick}
+        showCheckbox={false}
+        checked={false}
+        showRemove={false}
+      />
+    )
+  })()
+
+  return <div style={style}>{el}</div>
 }
