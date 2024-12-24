@@ -422,32 +422,16 @@ export default class Gallery extends Component<
                           }
                           this.updateFirstVisibleMessage(message)
                         }}
-                      >
-                        {({ columnIndex, rowIndex, style }) => {
-                          const msgId =
-                            mediaMessageIds[
-                              rowIndex * itemsPerRow + columnIndex
-                            ]
-                          const message = mediaLoadResult[msgId]
-                          if (!message) {
-                            return null
-                          }
-                          return (
-                            <div
-                              style={{ ...style }}
-                              className='item'
-                              key={msgId}
-                            >
-                              <this.state.element
-                                messageId={msgId}
-                                loadResult={message}
-                                openFullscreenMedia={this.openFullscreenMedia.bind(
-                                  this
-                                )}
-                              />
-                            </div>
-                          )
+                        itemData={{
+                          Component: this.state.element,
+                          mediaMessageIds,
+                          mediaLoadResult,
+                          openFullscreenMedia:
+                            this.openFullscreenMedia.bind(this),
+                          itemsPerRow,
                         }}
+                      >
+                        {GalleryGridCell}
                       </FixedSizeGrid>
                     </RovingTabindexProvider>
                   )
@@ -459,6 +443,46 @@ export default class Gallery extends Component<
       </div>
     )
   }
+}
+function GalleryGridCell({
+  columnIndex,
+  rowIndex,
+  style,
+  data,
+}: {
+  columnIndex: number
+  rowIndex: number
+  style: React.CSSProperties
+  data: {
+    Component: GalleryElement
+    mediaMessageIds: number[]
+    mediaLoadResult: Record<number, Type.MessageLoadResult>
+    openFullscreenMedia: (message: Type.Message) => void
+    itemsPerRow: number
+  }
+}) {
+  const {
+    Component,
+    mediaMessageIds,
+    mediaLoadResult,
+    openFullscreenMedia,
+    itemsPerRow,
+  } = data
+
+  const msgId = mediaMessageIds[rowIndex * itemsPerRow + columnIndex]
+  const message = mediaLoadResult[msgId]
+  if (!message) {
+    return null
+  }
+  return (
+    <div style={{ ...style }} className='item' key={msgId}>
+      <Component
+        messageId={msgId}
+        loadResult={message}
+        openFullscreenMedia={openFullscreenMedia}
+      />
+    </div>
+  )
 }
 
 function GalleryTab(props: {
