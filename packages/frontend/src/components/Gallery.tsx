@@ -512,24 +512,43 @@ function FileTable({
       itemSize={60}
       itemCount={mediaMessageIds.length}
       overscanCount={10}
-      itemData={mediaMessageIds}
-    >
-      {({ index, style, data }) => {
-        const msgId = data[index]
-        const message = mediaLoadResult[msgId]
-        if (!message) {
-          return null
-        }
-        return (
-          <div style={style} className='item' key={msgId}>
-            <FileAttachmentRow
-              messageId={msgId}
-              loadResult={message}
-              queryText={queryText}
-            />
-          </div>
-        )
+      itemData={{
+        mediaMessageIds,
+        mediaLoadResult,
+        queryText,
       }}
+    >
+      {FileAttachmentRowWrapper}
     </FixedSizeList>
+  )
+}
+
+function FileAttachmentRowWrapper({
+  index,
+  style,
+  data,
+}: {
+  index: number
+  style: React.CSSProperties
+  data: {
+    mediaMessageIds: number[]
+    mediaLoadResult: Record<number, Type.MessageLoadResult>
+    queryText: string
+  }
+}) {
+  const { mediaMessageIds, mediaLoadResult, queryText } = data
+  const msgId = mediaMessageIds[index]
+  const message = mediaLoadResult[msgId]
+  if (!message) {
+    return null
+  }
+  return (
+    <div style={style} className='item' key={msgId}>
+      <FileAttachmentRow
+        messageId={msgId}
+        loadResult={message}
+        queryText={queryText}
+      />
+    </div>
   )
 }
