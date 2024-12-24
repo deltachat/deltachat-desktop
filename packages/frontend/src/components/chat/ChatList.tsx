@@ -71,10 +71,7 @@ export function ChatListPart({
   height: number
   itemKey: ListItemKeySelector<any>
   setListRef?: (ref: List<any> | null) => void
-  itemData?:
-    | ChatListItemData
-    | ContactChatListItemData
-    | MessageChatListItemData
+  itemData: ChatListItemData | ContactChatListItemData | MessageChatListItemData
   itemHeight: number
 }) {
   const infiniteLoaderRef = useRef<InfiniteLoader | null>(null)

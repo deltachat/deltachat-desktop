@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
-import ChatListItem from '../chat/ChatListItem'
 import { QrCodeShowQrInner } from './QrCode'
 import { useThemeCssVar } from '../../ThemeManager'
 import { ContactList } from '../contact/ContactList'
@@ -37,6 +36,7 @@ import ImageCropper from '../ImageCropper'
 import { AddMemberDialog } from './AddMember/AddMemberDialog'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { RovingTabindexProvider } from '../../contexts/RovingTabindex'
+import { ChatListItemRowChat } from '../chat/ChatListItemRow'
 
 export default function ViewGroup(
   props: {
@@ -256,18 +256,17 @@ function ViewGroupInner(
                           height={CHATLISTITEM_CHAT_HEIGHT * chatListIds.length}
                           itemKey={index => 'key' + chatListIds[index]}
                           itemHeight={CHATLISTITEM_CHAT_HEIGHT}
-                        >
-                          {({ index, style }) => {
-                            const chatId = chatListIds[index]
-                            return (
-                              <div style={style}>
-                                <ChatListItem
-                                  chatListItem={chatCache[chatId] || undefined}
-                                  onClick={onChatClick.bind(null, chatId)}
-                                />
-                              </div>
-                            )
+                          itemData={{
+                            chatCache,
+                            chatListIds,
+                            onChatClick,
+
+                            selectedChatId: null,
+                            activeContextMenuChatId: null,
+                            openContextMenu: async () => {},
                           }}
+                        >
+                          {ChatListItemRowChat}
                         </ChatListPart>
                       )}
                     </AutoSizer>
