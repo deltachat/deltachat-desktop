@@ -8,6 +8,7 @@
 - dev: upgrade react to v18 and react pinch pan zoom to v3
 
 ## Fixed
+- accessibility: fix arrow-key navigation stopping working after ~10 key presses #4441
 
 ## [1.50.1] - 2024-12-18
 
