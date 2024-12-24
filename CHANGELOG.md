@@ -8,6 +8,7 @@
 - dev: upgrade react to v18 and react pinch pan zoom to v3
 
 ## Fixed
+- fix: "Enter" not adding the first contact in "Add Members" dialog #4439
 
 ## [1.50.1] - 2024-12-18
 
