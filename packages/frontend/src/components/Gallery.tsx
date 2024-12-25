@@ -430,6 +430,11 @@ export default class Gallery extends Component<
                             this.openFullscreenMedia.bind(this),
                           itemsPerRow,
                         }}
+                        itemKey={({ rowIndex, columnIndex, data }) =>
+                          data.mediaMessageIds[
+                            rowIndex * itemsPerRow + columnIndex
+                          ]
+                        }
                       >
                         {GalleryGridCell}
                       </FixedSizeGrid>
@@ -475,7 +480,7 @@ function GalleryGridCell({
     return null
   }
   return (
-    <div style={{ ...style }} className='item' key={msgId}>
+    <div style={{ ...style }} className='item'>
       <Component
         messageId={msgId}
         loadResult={message}
@@ -541,6 +546,7 @@ function FileTable({
         mediaLoadResult,
         queryText,
       }}
+      itemKey={(index, data) => data.mediaMessageIds[index]}
     >
       {FileAttachmentRowWrapper}
     </FixedSizeList>
@@ -567,7 +573,7 @@ function FileAttachmentRowWrapper({
     return null
   }
   return (
-    <div style={style} className='item' key={msgId}>
+    <div style={style} className='item'>
       <FileAttachmentRow
         messageId={msgId}
         loadResult={message}
