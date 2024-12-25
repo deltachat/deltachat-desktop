@@ -169,15 +169,30 @@ function CreateChatMain(props: CreateChatMainProps) {
     ADD_BROADCAST_LIST,
     ADD_CONTACT,
   }
-  const contactsAndExtraItems = [
-    ...(needToRenderAddContactQRScan
-      ? [ExtraItemType.ADD_CONTACT_QR_SCAN]
-      : []),
-    ...(needToRenderAddGroup ? [ExtraItemType.ADD_GROUP] : []),
-    ...(needToRenderAddBroadcastList ? [ExtraItemType.ADD_BROADCAST_LIST] : []),
-    ...contactIds,
-    ...(needToRenderAddContact ? [ExtraItemType.ADD_CONTACT] : []),
-  ]
+  const contactsAndExtraItems = useMemo(
+    () => [
+      ...(needToRenderAddContactQRScan
+        ? [ExtraItemType.ADD_CONTACT_QR_SCAN]
+        : []),
+      ...(needToRenderAddGroup ? [ExtraItemType.ADD_GROUP] : []),
+      ...(needToRenderAddBroadcastList
+        ? [ExtraItemType.ADD_BROADCAST_LIST]
+        : []),
+      ...contactIds,
+      ...(needToRenderAddContact ? [ExtraItemType.ADD_CONTACT] : []),
+    ],
+    [
+      ExtraItemType.ADD_BROADCAST_LIST,
+      ExtraItemType.ADD_CONTACT,
+      ExtraItemType.ADD_CONTACT_QR_SCAN,
+      ExtraItemType.ADD_GROUP,
+      contactIds,
+      needToRenderAddBroadcastList,
+      needToRenderAddContact,
+      needToRenderAddContactQRScan,
+      needToRenderAddGroup,
+    ]
+  )
 
   const openQRScan = async () => {
     const [qrCode, qrCodeSVG] =
