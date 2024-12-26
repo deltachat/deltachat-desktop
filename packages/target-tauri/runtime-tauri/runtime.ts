@@ -331,8 +331,10 @@ class TauriRuntime implements Runtime {
   writeClipboardImage(path: string): Promise<void> {
     throw new Error('Method not implemented.20')
   }
-  getAppPath(name: RuntimeAppPath): string {
-    throw new Error('Method not implemented.21')
+  getAppPath(name: RuntimeAppPath): Promise<string> {
+    // defined in packages/target-tauri/src-tauri/src/app_path.rs
+    // look there if some path is not implemented
+    return invoke('get_app_path', { name })
   }
   openMapsWebxdc(accountId: number, chatId?: number): void {
     throw new Error('Method not implemented.22')

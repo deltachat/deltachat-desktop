@@ -21,6 +21,7 @@ use tokio::sync::RwLock;
 
 use log::{error, info};
 
+mod app_path;
 mod blobs;
 mod help_window;
 mod locales;
@@ -217,6 +218,7 @@ pub fn run() {
             webxdc::close_all_webxdc_instances,
             runtime_info::get_runtime_info,
             help_window::open_help_window,
+            app_path::get_app_path,
         ])
         .register_asynchronous_uri_scheme_protocol("webxdc-icon", webxdc::webxdc_icon_protocol)
         .register_asynchronous_uri_scheme_protocol("dcblob", blobs::delta_blobs_protocol)

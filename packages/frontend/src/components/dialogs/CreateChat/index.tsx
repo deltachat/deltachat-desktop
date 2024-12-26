@@ -845,7 +845,7 @@ export function useGroupImage(image: string | null) {
   const tx = window.static_translate
 
   const onSetGroupImage = async () => {
-    const { defaultPath, setLastPath } = rememberLastUsedPath(
+    const { defaultPath, setLastPath } = await rememberLastUsedPath(
       LastUsedSlot.GroupImage
     )
     const [file] = await runtime.showOpenFileDialog({
