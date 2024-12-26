@@ -30,6 +30,11 @@ pub(crate) fn delete_webxdc_account_data(account_id: u32) {
     info!("TODO: handle delete_webxdc_account_data handler {account_id}")
 }
 
+#[tauri::command]
+pub(crate) fn close_all_webxdc_instances() {
+    info!("TODO: handle close_all_webxdc_instances handler")
+}
+
 pub(crate) fn webxdc_icon_protocol<R: tauri::Runtime>(
     ctx: UriSchemeContext<'_, R>,
     request: http::Request<Vec<u8>>,

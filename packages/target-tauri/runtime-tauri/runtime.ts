@@ -350,10 +350,10 @@ class TauriRuntime implements Runtime {
     return `webxdc-icon://${accountId}/${msgId}`
   }
   deleteWebxdcAccountData(accountId: number): Promise<void> {
-    return invoke('on_webxdc_realtime_data', { accountId })
+    return invoke('delete_webxdc_account_data', { accountId })
   }
   closeAllWebxdcInstances(): void {
-    throw new Error('Method not implemented.28')
+    invoke('close_all_webxdc_instances')
   }
   notifyWebxdcStatusUpdate(accountId: number, instanceId: number): void {
     invoke('on_webxdc_status_update', { accountId, instanceId })
@@ -372,7 +372,8 @@ class TauriRuntime implements Runtime {
     invoke('on_webxdc_message_deleted', { accountId, instanceId })
   }
   restartApp(): void {
-    throw new Error('Method not implemented.33')
+    // will not be implemented in tauri for now, as this method is currently unused
+    this.log.error('Method not implemented: restartApp')
   }
   async getLocaleData(locale?: string): Promise<LocaleData> {
     return await invoke('get_locale_data', {
@@ -414,11 +415,14 @@ class TauriRuntime implements Runtime {
     throw new Error('Method not implemented.44')
   }
   getWebxdcDiskUsage(
-    accountId: number
+    _accountId: number
   ): Promise<{ total_size: number; data_size: number }> {
-    throw new Error('Method not implemented.45')
+    // will not be implemented in tauri for now, as this method is currently unused
+    throw new Error('Method not implemented: runtime.getWebxdcDiskUsage')
   }
   clearWebxdcDOMStorage(accountId: number): Promise<void> {
+    // will not be implemented in tauri for now, as this method is currently unused
+    // Also isn't this function essentially a duplicate of `this.deleteWebxdcAccountData`?
     throw new Error('Method not implemented.46')
   }
   getAvailableThemes(): Promise<Theme[]> {

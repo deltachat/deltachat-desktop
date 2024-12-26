@@ -214,6 +214,7 @@ pub fn run() {
             webxdc::on_webxdc_status_update,
             webxdc::on_webxdc_realtime_data,
             webxdc::delete_webxdc_account_data,
+            webxdc::close_all_webxdc_instances,
             runtime_info::get_runtime_info,
             help_window::open_help_window,
         ])
