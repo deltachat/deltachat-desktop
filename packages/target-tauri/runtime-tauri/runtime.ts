@@ -7,6 +7,11 @@ import type { attachLogger } from '@tauri-apps/plugin-log'
 import { getStore } from '@tauri-apps/plugin-store'
 import type { Store } from '@tauri-apps/plugin-store'
 import { open } from '@tauri-apps/plugin-shell'
+import {
+  writeText,
+  readText,
+  readImage,
+} from '@tauri-apps/plugin-clipboard-manager'
 
 import {
   DcNotification,
@@ -320,13 +325,22 @@ class TauriRuntime implements Runtime {
     return ''
   }
   readClipboardText(): Promise<string> {
-    throw new Error('Method not implemented.17')
+    return readText()
   }
-  readClipboardImage(): Promise<string | null> {
-    throw new Error('Method not implemented.18')
+  async readClipboardImage(): Promise<string | null> {
+    try {
+      const clipboardImage = await readImage()
+      const blob = new Blob([await clipboardImage.rbga()], { type: 'image' })
+      //TODO blob to base64
+
+      throw new Error('Method not implemented.18')
+    } catch (error) {
+      this.log.warn('readClipboardImage', error)
+      return null
+    }
   }
   writeClipboardText(text: string): Promise<void> {
-    throw new Error('Method not implemented.19')
+    return writeText(text)
   }
   writeClipboardImage(path: string): Promise<void> {
     throw new Error('Method not implemented.20')
