@@ -1,12 +1,11 @@
 use serde::Serialize;
-use tauri::webview;
 
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "lowercase")]
 enum RuntimeTarget {
     Tauri,
-    Browser,
-    Electron,
+    // Browser,
+    // Electron,
 }
 
 #[derive(Debug, Serialize)]
