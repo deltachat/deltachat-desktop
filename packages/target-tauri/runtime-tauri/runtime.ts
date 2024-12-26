@@ -6,6 +6,7 @@ import { listen } from '@tauri-apps/api/event'
 import type { attachLogger } from '@tauri-apps/plugin-log'
 import { getStore } from '@tauri-apps/plugin-store'
 import type { Store } from '@tauri-apps/plugin-store'
+import { open } from '@tauri-apps/plugin-shell'
 
 import {
   DcNotification,
@@ -258,7 +259,7 @@ class TauriRuntime implements Runtime {
     location.reload()
   }
   openLogFile(): void {
-    throw new Error('Method not implemented.8')
+    open(this.getCurrentLogLocation())
   }
   currentLogFileLocation: string | null = null
   getCurrentLogLocation(): string {
@@ -285,7 +286,13 @@ class TauriRuntime implements Runtime {
     return this.runtime_info
   }
   openLink(link: string): void {
-    throw new Error('Method not implemented.13')
+    if (link.startsWith('http:') || link.startsWith('https:')) {
+      open(link)
+    } else {
+      this.log.error('tried to open a non http/https external link', {
+        link,
+      })
+    }
   }
   showOpenFileDialog(options: RuntimeOpenDialogOptions): Promise<string[]> {
     throw new Error('Method not implemented.14')

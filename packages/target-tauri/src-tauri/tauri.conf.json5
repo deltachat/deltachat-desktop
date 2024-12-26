@@ -59,7 +59,9 @@
             "store:allow-set",
             // borderless titlebar
             "core:window:allow-toggle-maximize",
-            "core:window:allow-start-dragging"
+            "core:window:allow-start-dragging",
+            // open current logfile & open links
+            "shell:allow-open"
           ]
         }
       ]
