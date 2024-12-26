@@ -269,7 +269,7 @@ class TauriRuntime implements Runtime {
     return this.currentLogFileLocation
   }
   openHelpWindow(anchor?: string): void {
-    throw new Error('Method not implemented.10')
+    invoke('open_help_window', { locale: window.localeData.locale, anchor })
   }
   private rc_config: RC_Config | null = null
   getRC_Config(): RC_Config {
