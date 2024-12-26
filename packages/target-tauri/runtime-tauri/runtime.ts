@@ -353,8 +353,14 @@ class TauriRuntime implements Runtime {
   openMapsWebxdc(accountId: number, chatId?: number): void {
     throw new Error('Method not implemented.22')
   }
-  openPath(path: string): Promise<string> {
-    throw new Error('Method not implemented.23')
+  async openPath(path: string): Promise<string> {
+    try {
+      await open(path)
+      return ''
+    } catch (error: any) {
+      this.log.error('openPath', path, error)
+      return error?.message || error.toString()
+    }
   }
   getConfigPath(): string {
     throw new Error('Method not implemented.24')

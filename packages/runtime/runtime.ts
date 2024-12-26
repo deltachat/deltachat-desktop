@@ -83,6 +83,7 @@ export interface Runtime {
   writeClipboardImage(path: string): Promise<void>
   getAppPath(name: RuntimeAppPath): Promise<string>
   openMapsWebxdc(accountId: number, chatId?: number): void
+  /** return value is error (this comes from electron: TODO convert to real error) */
   openPath(path: string): Promise<string>
   getConfigPath(): string
 
