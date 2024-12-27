@@ -25,6 +25,7 @@
     "@deltachat/jsonrpc-client": "catalog:",
     "@tauri-apps/cli": "^2",
     "@tauri-apps/plugin-clipboard-manager": "^2.2.0",
+    "@tauri-apps/plugin-dialog": "^2.2.0",
     "esbuild": "^0.24.0",
     "typescript": "^5.2.2"
   }

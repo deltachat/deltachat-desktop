@@ -302,8 +302,8 @@ class TauriRuntime implements Runtime {
   showOpenFileDialog(options: RuntimeOpenDialogOptions): Promise<string[]> {
     throw new Error('Method not implemented.14')
   }
-  downloadFile(pathToSource: string, filename: string): Promise<void> {
-    throw new Error('Method not implemented.15')
+  async downloadFile(pathToSource: string, filename: string): Promise<void> {
+    await invoke('download_file', { pathToSource, filename })
   }
   transformBlobURL(blob_path: string): string {
     const matches = blob_path.match(/.*(:?\\|\/)(.+?)\1dc.db-blobs\1(.*)/)
