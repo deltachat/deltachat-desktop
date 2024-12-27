@@ -85,7 +85,7 @@ export interface Runtime {
   openMapsWebxdc(accountId: number, chatId?: number): void
   /** return value is error (this comes from electron: TODO convert to real error) */
   openPath(path: string): Promise<string>
-  getConfigPath(): string
+  getConfigPath(): string // TODO: rename -> this is for app data directory, it should include the scheme - seems to be only used for bg path right now
 
   // webxdc
   openWebxdc(msgId: number, params: DcOpenWebxdcParameters): void
