@@ -125,18 +125,25 @@ pub(crate) async fn show_open_file_dialog(
             });
         }
     } else if properties.contains(&OpenProperties::OpenDirectory) {
-        if properties.contains(&OpenProperties::MultiSelections) {
-            dialog.pick_folders(|path| {
-                if tx.send(path).is_err() {
-                    warn!("download_file: receiver dropped");
-                }
-            });
-        } else {
-            dialog.pick_folder(|path| {
-                if tx.send(path.map(|folder: FilePath| vec![folder])).is_err() {
-                    warn!("download_file: receiver dropped");
-                }
-            });
+        #[cfg(target_os = "ios")]
+        {
+            return Err("opening folders is not supported by tauri on ios".to_owned());
+        }
+        #[cfg(not(target_os = "ios"))]
+        {
+            if properties.contains(&OpenProperties::MultiSelections) {
+                dialog.pick_folders(|path| {
+                    if tx.send(path).is_err() {
+                        warn!("download_file: receiver dropped");
+                    }
+                });
+            } else {
+                dialog.pick_folder(|path| {
+                    if tx.send(path.map(|folder: FilePath| vec![folder])).is_err() {
+                        warn!("download_file: receiver dropped");
+                    }
+                });
+            }
         }
     } else {
         return Err(

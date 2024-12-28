@@ -16,7 +16,14 @@ pub(crate) fn open_help_window(
             .build()
             .map_err(|err| format!("{err:#}"))?
     };
+    #[cfg(target_os = "ios")]
+    {
+        return Err("show() function does not compile yet".to_owned());
+    }
+    #[cfg(not(target_os = "ios"))]
+    {
     help_window.show().map_err(|err| format!("{err:#}"))?;
+    }
 
     let mut url = help_window.url().map_err(|err| format!("{err:#}"))?;
     url.set_fragment(anchor);

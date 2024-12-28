@@ -93,7 +93,7 @@ impl AppState {
     }
 
     #[cfg(target_os = "ios")]
-    async fn get_current_log_file(app: AppHandle) -> anyhow::Result<String> {
+    async fn get_current_log_file(_app: AppHandle) -> anyhow::Result<String> {
         Ok("does not exist on ios - because iOS uses the system os-log api".to_owned())
     }
 
