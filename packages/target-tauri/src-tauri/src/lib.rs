@@ -1,5 +1,4 @@
 use std::{
-    fs,
     path::PathBuf,
     sync::{Arc, Mutex},
     time::SystemTime,
@@ -13,14 +12,14 @@ use deltachat_jsonrpc::{
 use futures_lite::stream::StreamExt;
 
 use tauri::{async_runtime::JoinHandle, AppHandle, Emitter, EventTarget, Manager};
-use tauri_plugin_dialog::FilePath;
 use tauri_plugin_store::StoreExt;
 use tokio::sync::RwLock;
 
-use log::{info, warn};
+use log::info;
 
 mod app_path;
 mod blobs;
+mod file_dialogs;
 mod help_window;
 mod locales;
 mod runtime_info;
@@ -177,38 +176,6 @@ fn get_current_logfile(state: tauri::State<AppState>) -> String {
     state.current_log_file_path.clone()
 }
 
-#[tauri::command]
-async fn download_file(app: AppHandle, path_to_source: &str, filename: &str) -> Result<(), String> {
-    use tauri_plugin_dialog::DialogExt;
-
-    let (tx, rx) = tokio::sync::oneshot::channel::<Option<FilePath>>();
-
-    app.dialog()
-        .file()
-        .set_file_name(filename)
-        .save_file(|path| {
-            if tx.send(path).is_err() {
-                warn!("download_file: receiver dropped");
-            }
-        });
-
-    let file_path = rx
-        .await
-        .context("the sender dropped")
-        .map_err(|err| format!("{err:#}"))?;
-
-    if let Some(file_path) = file_path {
-        fs::copy(
-            path_to_source,
-            file_path.into_path().map_err(|err| format!("{err:#}"))?,
-        )
-        .map_err(|err| format!("{err:#}"))?;
-    } else {
-        info!("User aborted save-file dialog");
-    }
-    Ok(())
-}
-
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let startup_timestamp = SystemTime::now();
@@ -239,7 +206,9 @@ pub fn run() {
             ui_ready,
             ui_frontend_ready,
             get_current_logfile,
-            download_file,
+            app_path::get_app_path,
+            file_dialogs::download_file,
+            file_dialogs::show_open_file_dialog,
             locales::get_locale_data,
             webxdc::on_webxdc_message_changed,
             webxdc::on_webxdc_message_deleted,
@@ -249,7 +218,6 @@ pub fn run() {
             webxdc::close_all_webxdc_instances,
             runtime_info::get_runtime_info,
             help_window::open_help_window,
-            app_path::get_app_path,
         ])
         .register_asynchronous_uri_scheme_protocol("webxdc-icon", webxdc::webxdc_icon_protocol)
         .register_asynchronous_uri_scheme_protocol("dcblob", blobs::delta_blobs_protocol)

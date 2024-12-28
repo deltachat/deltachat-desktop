@@ -5,7 +5,6 @@ use tauri::{AppHandle, Manager};
 /// as in RuntimeAppPath in packages/runtime/runtime.ts (keep this in sync manually)
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "lowercase")]
-#[non_exhaustive]
 pub(crate) enum AppPathName {
     Home,
     Desktop,
@@ -23,7 +22,6 @@ impl AppPathName {
             AppPathName::Documents => p.document_dir()?,
             AppPathName::Downloads => p.download_dir()?,
             AppPathName::Pictures => p.picture_dir()?,
-            _ => bail!("Path not implemented"),
         }
         .to_str()
         .context("path to string conversion failed")?

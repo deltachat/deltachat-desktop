@@ -299,8 +299,16 @@ class TauriRuntime implements Runtime {
       })
     }
   }
-  showOpenFileDialog(options: RuntimeOpenDialogOptions): Promise<string[]> {
-    throw new Error('Method not implemented.14')
+  async showOpenFileDialog(
+    options: RuntimeOpenDialogOptions
+  ): Promise<string[]> {
+    return await invoke('show_open_file_dialog', {
+      title: options.title,
+      filters: options.filters,
+      properties: options.properties,
+      defaultPath: options.defaultPath,
+      // buttonLabel: options.buttonLabel, // not supported by tauri
+    })
   }
   async downloadFile(pathToSource: string, filename: string): Promise<void> {
     await invoke('download_file', { pathToSource, filename })
