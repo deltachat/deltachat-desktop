@@ -199,7 +199,7 @@ Read [docs/LOGGING.md](docs/LOGGING.md) for an explanation about our logging sys
 
 Licensed under `GPL-3.0-or-later`, see [LICENSE](./LICENSE) file for details.
 
-> Copyright © 2019 `DeltaChat` contributors.
+> Copyright © DeltaChat contributors.
 
 > This program is free software: you can redistribute it and/or modify
 > it under the terms of the GNU General Public License as published by
