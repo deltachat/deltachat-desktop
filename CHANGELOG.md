@@ -10,6 +10,12 @@
   - rpc-client: Add INCOMING_REACTION to const.EventType
   - Add IncomingWebxdcNotify.chat_id
   - Update shadowsocks crate to 1.22.0 to avoid panic when parsing some QR codes
+  - Never change Viewtype::Sticker to Image if file has non-image extension
+  - Change BccSelf default to 0 for chatmail
+  - Don't treat location-only and sync messages as bot ones
+  - Update shadowsocks crate to 1.22.0 to avoid panic when parsing some QR codes.
+  - Prefer to encrypt if E2eeEnabled even if peers have EncryptPreference::NoPreference.
+  - Allow empty `To` field for self-sent messages.
 
 ## Fixed
 
