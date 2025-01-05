@@ -6,6 +6,10 @@
 
 ## Changed
 - dev: upgrade react to v18 and react pinch pan zoom to v3
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.153.0`
+  - rpc-client: Add INCOMING_REACTION to const.EventType
+  - Add IncomingWebxdcNotify.chat_id
+  - Update shadowsocks crate to 1.22.0 to avoid panic when parsing some QR codes
 
 ## Fixed
 
