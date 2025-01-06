@@ -12,7 +12,7 @@ import {
   WebxdcAttachment,
 } from './attachment/mediaAttachment'
 import { getLogger } from '../../../shared/logger'
-import { BackendRemote, Type } from '../backend-com'
+import { BackendRemote, onDCEvent, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
 import SettingsStoreInstance, { SettingsStoreState } from '../stores/settings'
 import FullscreenMedia, {
@@ -84,6 +84,7 @@ export default class Gallery extends Component<
   dateHeader = createRef<HTMLDivElement>()
   tabListRef = createRef<HTMLUListElement>()
   galleryItemsRef = createRef<HTMLDivElement>()
+  cleanup: Array<() => void> = []
   constructor(props: Props) {
     super(props)
 
@@ -121,10 +122,38 @@ export default class Gallery extends Component<
         SettingsStoreInstance.state?.desktopSettings
           .galleryImageKeepAspectRatio,
     })
+
+    // It's possible to delete messages right from the gallery,
+    // so let's handle this.
+    // If we also want to handle newly arriving messages, `MsgsChanged`
+    // is probably the way to go.
+    const toCleanup = onDCEvent(
+      selectedAccountId(),
+      'MsgDeleted',
+      ({ chatId, msgId: deletedMsgId }) => {
+        if (chatId !== this.props.chatId) {
+          return
+        }
+
+        // There is not really a point to also delete it from
+        // `mediaLoadResult` except for removing it from RAM, but let's do it.
+        const newMediaLoadResult = { ...this.state.mediaLoadResult }
+        delete newMediaLoadResult[deletedMsgId]
+
+        this.setState({
+          mediaMessageIds: this.state.mediaMessageIds.filter(
+            id => id !== deletedMsgId
+          ),
+          mediaLoadResult: newMediaLoadResult,
+        })
+      }
+    )
+    this.cleanup.push(toCleanup)
   }
 
   componentWillUnmount() {
     SettingsStoreInstance.unsubscribe(this.settingsStoreListener)
+    this.cleanup.forEach(f => f())
   }
 
   settingsStoreListener(state: SettingsStoreState | null) {
