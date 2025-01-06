@@ -167,6 +167,7 @@
 
   .msg-container {
     background-color: var(--messageIncomingBg);
+    --messageBg: var(--messageIncomingBg);
 
     &,
     .message-attachment-media {
@@ -213,6 +214,7 @@
 
   .msg-container {
     background-color: var(--messageOutgoingBg);
+    --messageBg: var(--messageOutgoingBg);
 
     &,
     .message-attachment-media {
@@ -231,7 +233,10 @@
     }
 
     .quote-background {
-      background: var(--messageIncomingBg);
+      // `.msg-container` background is transparent,
+      // so let's explicitly apply the color just for the quote.
+      background: var(--messageBg);
+
       padding: 5px;
       padding-left: 6px;
       border-radius: 7px;

@@ -18,6 +18,7 @@
   - Allow empty `To` field for self-sent messages.
 
 ## Fixed
+- fix "incoming message background color" being used for quotes of outgoing sticker messages #4456
 
 ## [1.50.1] - 2024-12-18
 
