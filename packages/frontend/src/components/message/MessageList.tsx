@@ -827,7 +827,6 @@ export const MessageListInner = React.memo(
                     />
                   )
                 } else if (message?.kind === 'loadingError') {
-                  // TODO shall we add `useRovingTabindex` here as well?
                   return (
                     <MessageLoadingError
                       messageId={messageId}
@@ -838,7 +837,6 @@ export const MessageListInner = React.memo(
                   // setTimeout tells it to call method in next event loop iteration, so after rendering
                   // it is debounced later so we can call it here multiple times and it's ok
                   setTimeout(loadMissingMessages)
-                  // TODO shall we add `useRovingTabindex` here as well?
                   return <MessageLoading messageId={messageId} />
                 }
               }
@@ -866,13 +864,20 @@ function MessageLoadingError({
   messageId: T.MessageListItem & { kind: 'message' }
   message: T.MessageLoadResult
 }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const rovingTabindex = useRovingTabindex(ref)
+
   return (
     <div className='info-message' id={String(messageId.msg_id)}>
       <div
-        className='bubble'
+        ref={ref}
+        className={'bubble ' + rovingTabindex.className}
         style={{
           backgroundColor: 'rgba(55,0,0,0.5)',
         }}
+        tabIndex={rovingTabindex.tabIndex}
+        onKeyDown={rovingTabindex.onKeydown}
+        onFocus={rovingTabindex.setAsActiveElement}
       >
         loading message {messageId.msg_id} failed: {message.error}
       </div>
@@ -884,13 +889,20 @@ function MessageLoading({
 }: {
   messageId: T.MessageListItem & { kind: 'message' }
 }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const rovingTabindex = useRovingTabindex(ref)
+
   return (
     <div className='info-message' id={String(messageId.msg_id)}>
       <div
-        className='bubble'
+        ref={ref}
+        className={'bubble ' + rovingTabindex.className}
         style={{
           backgroundColor: 'rgba(55,0,0,0.5)',
         }}
+        tabIndex={rovingTabindex.tabIndex}
+        onKeyDown={rovingTabindex.onKeydown}
+        onFocus={rovingTabindex.setAsActiveElement}
       >
         Loading Message {messageId.msg_id}
       </div>
