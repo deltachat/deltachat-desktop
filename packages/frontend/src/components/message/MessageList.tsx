@@ -829,35 +829,17 @@ export const MessageListInner = React.memo(
                 } else if (message?.kind === 'loadingError') {
                   // TODO shall we add `useRovingTabindex` here as well?
                   return (
-                    <div className='info-message' id={String(messageId.msg_id)}>
-                      <div
-                        className='bubble'
-                        style={{
-                          backgroundColor: 'rgba(55,0,0,0.5)',
-                        }}
-                      >
-                        loading message {messageId.msg_id} failed:{' '}
-                        {message.error}
-                      </div>
-                    </div>
+                    <MessageLoadingError
+                      messageId={messageId}
+                      message={message}
+                    />
                   )
                 } else {
                   // setTimeout tells it to call method in next event loop iteration, so after rendering
                   // it is debounced later so we can call it here multiple times and it's ok
                   setTimeout(loadMissingMessages)
                   // TODO shall we add `useRovingTabindex` here as well?
-                  return (
-                    <div className='info-message' id={String(messageId.msg_id)}>
-                      <div
-                        className='bubble'
-                        style={{
-                          backgroundColor: 'rgba(55,0,0,0.5)',
-                        }}
-                      >
-                        Loading Message {messageId.msg_id}
-                      </div>
-                    </div>
-                  )
+                  return <MessageLoading messageId={messageId} />
                 }
               }
             })}
@@ -876,6 +858,45 @@ export const MessageListInner = React.memo(
     return areEqual
   }
 )
+
+function MessageLoadingError({
+  messageId,
+  message,
+}: {
+  messageId: T.MessageListItem & { kind: 'message' }
+  message: T.MessageLoadResult
+}) {
+  return (
+    <div className='info-message' id={String(messageId.msg_id)}>
+      <div
+        className='bubble'
+        style={{
+          backgroundColor: 'rgba(55,0,0,0.5)',
+        }}
+      >
+        loading message {messageId.msg_id} failed: {message.error}
+      </div>
+    </div>
+  )
+}
+function MessageLoading({
+  messageId,
+}: {
+  messageId: T.MessageListItem & { kind: 'message' }
+}) {
+  return (
+    <div className='info-message' id={String(messageId.msg_id)}>
+      <div
+        className='bubble'
+        style={{
+          backgroundColor: 'rgba(55,0,0,0.5)',
+        }}
+      >
+        Loading Message {messageId.msg_id}
+      </div>
+    </div>
+  )
+}
 
 function JumpDownButton({
   countUnreadMessages,
