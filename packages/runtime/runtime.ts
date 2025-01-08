@@ -23,7 +23,6 @@ export interface Runtime {
   createDeltaChatConnection(
     callCounterFunction: (label: string) => void
   ): BaseDeltaChat<any>
-  setLogJsonrpcConnection(enabled: boolean): void
   /**
    * open html message, in dedicated window or in system browser
    * @param window_id unique id that we know if it's already open, should be accountid+"-"+msgid
