@@ -50,6 +50,7 @@ import styles from './styles.module.scss'
 
 import type { OpenDialog } from '../../contexts/DialogContext'
 import type { PrivateReply } from '../../hooks/chat/usePrivateReply'
+import type { JumpToMessage } from '../../hooks/chat/useMessage'
 import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
 
 const Avatar = ({
@@ -183,6 +184,7 @@ function buildContextMenu(
     privateReply,
     handleReactClick,
     chat,
+    jumpToMessage,
   }: {
     accountId: number
     message: T.Message | null
@@ -192,6 +194,7 @@ function buildContextMenu(
     privateReply: PrivateReply
     handleReactClick: (event: React.MouseEvent<Element, MouseEvent>) => void
     chat: T.FullChat
+    jumpToMessage: JumpToMessage
   },
   clickTarget: HTMLAnchorElement | null
 ): (false | ContextMenuItem)[] {
@@ -200,6 +203,7 @@ function buildContextMenu(
     throw new Error('cannot show context menu for undefined message')
   }
 
+  const isWebxdcInfo = message.systemMessageType === 'WebxdcInfoMessage'
   const isLink = Boolean(
     clickTarget && !clickTarget.getAttribute('x-not-a-link')
   )
@@ -331,6 +335,24 @@ function buildContextMenu(
         BackendRemote.rpc.resendMessages(selectedAccountId(), [message.id])
       },
     },
+    // Webxdc Info message: jump to app message
+    Boolean(isWebxdcInfo && message.parentId) && {
+      label: tx('show_app_in_chat'),
+      action: () => {
+        if (message.parentId) {
+          jumpToMessage({
+            accountId,
+            msgId: message.parentId,
+            // Currently the info message is always in the same chat
+            // as the message with `message.parentId`,
+            // but let's not pass `chatId` here, for future-proofing.
+            msgChatId: undefined,
+            highlight: true,
+            scrollIntoViewArg: { block: 'center' },
+          })
+        }
+      },
+    },
     // Message Info
     {
       label: tx('info'),
@@ -363,6 +385,7 @@ export default function Message(props: {
   const { openContextMenu } = useContext(ContextMenuContext)
   const openViewProfileDialog = useOpenViewProfileDialog()
   const { joinVideoChat } = useVideoChat()
+  const { jumpToMessage } = useMessage()
 
   const showContextMenu = useCallback(
     async (
@@ -418,6 +441,7 @@ export default function Message(props: {
           privateReply,
           handleReactClick,
           chat,
+          jumpToMessage,
         },
         target
       )
@@ -436,6 +460,7 @@ export default function Message(props: {
       privateReply,
       showReactionsBar,
       text,
+      jumpToMessage,
     ]
   )
 
