@@ -26,11 +26,10 @@ import { MessageToBackend } from '../src/runtime-ws-protocol.js'
 
 const { WebsocketTransport } = yerpc
 
+let logJsonrpcConnection = false
+
 class BrowserTransport extends WebsocketTransport {
-  constructor(
-    private hasDebugEnabled: boolean,
-    private callCounterFunction: (label: string) => void
-  ) {
+  constructor(private callCounterFunction: (label: string) => void) {
     super('wss://localhost:3000/ws/dc')
   }
 
@@ -45,7 +44,7 @@ class BrowserTransport extends WebsocketTransport {
         'connection inactive: error other client stole dc connection, please reload page'
       )
     }
-    if (this.hasDebugEnabled) {
+    if (logJsonrpcConnection) {
       /* ignore-console-log */
       console.debug('%c▼ %c[JSONRPC]', 'color: red', 'color:grey', message)
     }
@@ -54,7 +53,7 @@ class BrowserTransport extends WebsocketTransport {
 
   _send(message: yerpc.Message): void {
     super._send(message)
-    if (this.hasDebugEnabled) {
+    if (logJsonrpcConnection) {
       /* ignore-console-log */
       console.debug('%c▲ %c[JSONRPC]', 'color: green', 'color:grey', message)
       if ((message as any)['method']) {
@@ -69,11 +68,8 @@ class BrowserDeltachat extends BaseDeltaChat<BrowserTransport> {
   close() {
     /** noop */
   }
-  constructor(
-    hasDebugEnabled: boolean,
-    callCounterFunction: (label: string) => void
-  ) {
-    super(new BrowserTransport(hasDebugEnabled, callCounterFunction), true)
+  constructor(callCounterFunction: (label: string) => void) {
+    super(new BrowserTransport(callCounterFunction), true)
   }
 }
 
@@ -162,10 +158,9 @@ class BrowserRuntime implements Runtime {
     this.sendToBackendOverWS({ type: 'UIReady' })
   }
   createDeltaChatConnection(
-    hasDebugEnabled: boolean,
     callCounterFunction: (label: string) => void
   ): BaseDeltaChat<any> {
-    return new BrowserDeltachat(hasDebugEnabled, callCounterFunction)
+    return new BrowserDeltachat(callCounterFunction)
   }
   openMessageHTML(
     _window_id: string,
@@ -718,6 +713,11 @@ class BrowserRuntime implements Runtime {
     }
 
     const config: RC_Config = (this.rc_config = await RCConfigRequest.json())
+
+    if (config['log-debug']) {
+      logJsonrpcConnection = true
+    }
+
     /* ignore-console-log */
     console.info('RC_Config', config)
     this.runtime_info = await RuntimeInfoRequest.json()

@@ -21,7 +21,6 @@ export interface Runtime {
   emitUIFullyReady(): void
   emitUIReady(): void
   createDeltaChatConnection(
-    hasDebugEnabled: boolean,
     callCounterFunction: (label: string) => void
   ): BaseDeltaChat<any>
   /**

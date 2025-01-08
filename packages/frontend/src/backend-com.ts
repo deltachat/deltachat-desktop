@@ -1,13 +1,12 @@
 import { BaseDeltaChat, DcEvent } from '@deltachat/jsonrpc-client'
 import { runtime } from '@deltachat-desktop/runtime-interface'
-import { hasDebugEnabled } from '../../shared/logger'
 import { clearNotificationsForChat } from './system-integration/notifications'
 import { countCall } from './debug-tools'
 
 export { T as Type } from '@deltachat/jsonrpc-client'
 
 export const BackendRemote: BaseDeltaChat<any> =
-  runtime.createDeltaChatConnection(hasDebugEnabled(), countCall)
+  runtime.createDeltaChatConnection(countCall)
 
 /** Functions with side-effects */
 export namespace EffectfulBackendActions {

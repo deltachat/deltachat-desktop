@@ -81,10 +81,6 @@ export function setLogHandler(
   rc = rcObject
 }
 
-export function hasDebugEnabled() {
-  return rc['log-debug']
-}
-
 function log(
   { channel, isMainProcess }: Logger,
   level: number,
