@@ -237,7 +237,10 @@ export default class ScreenController extends Component {
   }
 
   updateSmallScreenMode() {
-    this.setState({ smallScreenMode: isSmallScreenMode() })
+    const newIsSmallScreen = isSmallScreenMode()
+    if (this.state.smallScreenMode !== newIsSmallScreen) {
+      this.setState({ smallScreenMode: newIsSmallScreen })
+    }
   }
 
   componentDidMount() {
