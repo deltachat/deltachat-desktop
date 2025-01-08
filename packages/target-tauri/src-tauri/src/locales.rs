@@ -1,5 +1,5 @@
 use anyhow::{anyhow, bail, Ok};
-use log::error;
+use log::{debug, error};
 use serde::{Deserialize, Serialize};
 use std::{
     collections::HashMap,
@@ -120,6 +120,11 @@ async fn inner_get_locale_data(resource_dir: &Path, locale: &str) -> anyhow::Res
 #[tauri::command]
 pub(crate) async fn get_locale_data(locale: &str, app: AppHandle) -> Result<LocaleData, String> {
     let resource_dir = app.path().resource_dir().map_err(|e| format!("{e:#}"))?;
+
+    debug!("get_locale_data {resource_dir:?}");
+    // android has sth. different it seems -> get_locale_data "asset://localhost/"
+    // can maybe be reolved by tauri filesystem plugin??
+
 
     inner_get_locale_data(&resource_dir, locale)
         .await

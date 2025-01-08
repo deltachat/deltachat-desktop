@@ -17,3 +17,45 @@ This currently doens't work for me, it shows a runtime error, but installing the
 ```
 pnpm tauri ios build
 ```
+
+### Android
+
+Note that this was just a fun sidequest for simon at the time, so don't expect it to work.
+
+```
+npm run tauri android init
+```
+
+```
+pnpm tauri android build
+```
+
+## you might need older java on macOS, if so here is how I solved it
+
+`export JAVA_HOME=$(/usr/libexec/java_home -v 21)` after installing with homebrew and running 
+
+```
+brew install openjdk@21                                                                                       
+sudo ln -sfn /opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-21.jdk
+```
+
+### needs to be signed to be able to be installed
+```
+keytool -genkey -v -keystore ~/sign-tauri-android-keystore.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+```
+then create file: `gen/android/keystore.properties`:
+```
+password=<password defined when keytool was executed>
+keyAlias=upload
+storeFile=~/sign-tauri-android-keystore.jks
+```
+
+and modify `[project]/src-tauri/gen/android/app/build.gradle.kts` according to <https://v2.tauri.app/distribute/sign/android/>.
+
+### logging
+We were unable to find logs in first try, but we managed to get some with https://devtools.crabnebula.dev/ (over adb forward) and chrome remote webview debugging.
+```
+pnpm tauri android build --target aarch64 --features crabnebula_extras,inspector_in_production
+# install apk manually
+adb forward tcp:3000 tcp:3000
+```

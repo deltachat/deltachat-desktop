@@ -9,3 +9,6 @@
 
 # xcode projects
 /gen/apple
+
+# android project
+/gen/android

@@ -16,13 +16,10 @@ pub(crate) fn open_help_window(
             .build()
             .map_err(|err| format!("{err:#}"))?
     };
-    #[cfg(target_os = "ios")]
+    #[cfg(not(any(target_os = "ios", target_os = "android")))]
     {
-        return Err("show() function does not compile yet".to_owned());
-    }
-    #[cfg(not(target_os = "ios"))]
-    {
-    help_window.show().map_err(|err| format!("{err:#}"))?;
+        // on android and iOS this does not exist, there the window is opened automatically
+        help_window.show().map_err(|err| format!("{err:#}"))?;
     }
 
     let mut url = help_window.url().map_err(|err| format!("{err:#}"))?;
@@ -30,8 +27,6 @@ pub(crate) fn open_help_window(
     help_window
         .navigate(url)
         .map_err(|err| format!("{err:#}"))?;
-
-
 
     Ok(())
 }

@@ -18,7 +18,16 @@ impl AppPathName {
         let p = app.path();
         Ok(match self {
             AppPathName::Home => p.home_dir()?,
-            AppPathName::Desktop => p.desktop_dir()?,
+            AppPathName::Desktop => {
+                #[cfg(target_os = "android")]
+                {
+                    bail!("desktop dir not available on android")
+                }
+                #[cfg(not(target_os = "android"))]
+                {
+                    p.desktop_dir()?
+                }
+            }
             AppPathName::Documents => p.document_dir()?,
             AppPathName::Downloads => p.download_dir()?,
             AppPathName::Pictures => p.picture_dir()?,

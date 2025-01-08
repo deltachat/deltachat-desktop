@@ -125,11 +125,11 @@ pub(crate) async fn show_open_file_dialog(
             });
         }
     } else if properties.contains(&OpenProperties::OpenDirectory) {
-        #[cfg(target_os = "ios")]
+        #[cfg(any(target_os = "ios", target_os = "android"))]
         {
-            return Err("opening folders is not supported by tauri on ios".to_owned());
+            return Err("opening folders is not supported by tauri on ios and android".to_owned());
         }
-        #[cfg(not(target_os = "ios"))]
+        #[cfg(not(any(target_os = "ios", target_os = "android")))]
         {
             if properties.contains(&OpenProperties::MultiSelections) {
                 dialog.pick_folders(|path| {

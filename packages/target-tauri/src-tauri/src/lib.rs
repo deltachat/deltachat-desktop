@@ -97,7 +97,12 @@ impl AppState {
         Ok("does not exist on ios - because iOS uses the system os-log api".to_owned())
     }
 
-    #[cfg(not(target_os = "ios"))]
+    #[cfg(target_os = "android")]
+    async fn get_current_log_file(_app: AppHandle) -> anyhow::Result<String> {
+        Ok("does not exist on andoid - because android uses the system log api".to_owned())
+    }
+
+    #[cfg(not(any(target_os = "ios", target_os = "android")))]
     async fn get_current_log_file(app: AppHandle) -> anyhow::Result<String> {
         let mut log_files: Vec<(PathBuf, std::time::Duration)> =
             std::fs::read_dir(app.path().app_log_dir()?)?
