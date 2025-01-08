@@ -32,15 +32,14 @@ const {
 
 const { BaseTransport } = yerpc
 
+let logJsonrpcConnection = false
+
 class ElectronTransport extends BaseTransport {
-  constructor(
-    private hasDebugEnabled: boolean,
-    private callCounterFunction: (label: string) => void
-  ) {
+  constructor(private callCounterFunction: (label: string) => void) {
     super()
     ipcBackend.on('json-rpc-message', (_ev: any, response: any) => {
       const message: yerpc.Message = JSON.parse(response)
-      if (hasDebugEnabled) {
+      if (logJsonrpcConnection) {
         /* ignore-console-log */
         console.debug('%c▼ %c[JSONRPC]', 'color: red', 'color:grey', message)
       }
@@ -50,7 +49,7 @@ class ElectronTransport extends BaseTransport {
   _send(message: yerpc.Message): void {
     const serialized = JSON.stringify(message)
     ipcBackend.invoke('json-rpc-request', serialized)
-    if (this.hasDebugEnabled) {
+    if (logJsonrpcConnection) {
       /* ignore-console-log */
       console.debug('%c▲ %c[JSONRPC]', 'color: green', 'color:grey', message)
       if ((message as any)['method']) {
@@ -65,11 +64,8 @@ class ElectronDeltachat extends BaseDeltaChat<ElectronTransport> {
   close() {
     /** noop */
   }
-  constructor(
-    hasDebugEnabled: boolean,
-    callCounterFunction: (label: string) => void
-  ) {
-    super(new ElectronTransport(hasDebugEnabled, callCounterFunction), true)
+  constructor(callCounterFunction: (label: string) => void) {
+    super(new ElectronTransport(callCounterFunction), true)
   }
 }
 
@@ -102,10 +98,9 @@ class ElectronRuntime implements Runtime {
     ipcBackend.send('ipcReady')
   }
   createDeltaChatConnection(
-    hasDebugEnabled: boolean,
     callCounterFunction: (label: string) => void
   ): BaseDeltaChat<any> {
-    return new ElectronDeltachat(hasDebugEnabled, callCounterFunction)
+    return new ElectronDeltachat(callCounterFunction)
   }
   openMessageHTML(
     window_id: string,
@@ -310,8 +305,12 @@ class ElectronRuntime implements Runtime {
     this.log = getLogger('runtime/electron')
 
     // fetch vars
-    this.rc_config = ipcBackend.sendSync('get-rc-config')
+    const config = (this.rc_config = ipcBackend.sendSync('get-rc-config'))
     this.runtime_info = ipcBackend.sendSync('get-runtime-info')
+
+    if (config['log-debug']) {
+      logJsonrpcConnection = true
+    }
 
     // set log handler
     setLogHandler((...args: any[]) => {

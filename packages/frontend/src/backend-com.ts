@@ -7,7 +7,7 @@ import { countCall } from './debug-tools'
 export { T as Type } from '@deltachat/jsonrpc-client'
 
 export const BackendRemote: BaseDeltaChat<any> =
-  runtime.createDeltaChatConnection(hasDebugEnabled(), countCall)
+  runtime.createDeltaChatConnection(countCall)
 
 /** Functions with side-effects */
 export namespace EffectfulBackendActions {
