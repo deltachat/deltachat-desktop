@@ -1721,6 +1721,7 @@ dependencies = [
  "http 1.2.0",
  "log",
  "mime",
+ "percent-encoding",
  "serde",
  "serde_json",
  "tauri",

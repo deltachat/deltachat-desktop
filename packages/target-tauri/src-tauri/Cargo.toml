@@ -46,6 +46,7 @@ tauri-plugin-log = "2"
 tauri-plugin-store = "2"
 http = "1.1.0"
 mime = "0.3.17"
+percent-encoding = "2"
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-single-instance = "2"

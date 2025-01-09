@@ -1,5 +1,6 @@
 use anyhow::Context;
 use log::{error, info, trace};
+use percent_encoding::percent_decode_str;
 use tauri::{Manager, UriSchemeContext, UriSchemeResponder};
 use tokio::fs;
 
@@ -48,10 +49,11 @@ pub(crate) fn delta_blobs_protocol<R: tauri::Runtime>(
                     })
                     .context("account not found")?;
 
-                let file_path = account.get_blobdir().join(file_name);
+                let decoded_filename = percent_decode_str(file_name).decode_utf8()?.into_owned();
+                let file_path = account.get_blobdir().join(decoded_filename);
                 // trace!("file_path: {file_path:?}");
 
-                match fs::read(file_path).await {
+                match fs::read(&file_path).await {
                     Ok(blob) => {
                         responder.respond(
                             http::Response::builder()
@@ -60,7 +62,7 @@ pub(crate) fn delta_blobs_protocol<R: tauri::Runtime>(
                         );
                     }
                     Err(err) => {
-                        error!("dcblob loading error: {err:#}");
+                        error!("dcblob loading error: {err:#} {file_path:?}");
                         responder.respond(
                             http::Response::builder()
                                 .status(http::StatusCode::INTERNAL_SERVER_ERROR)
