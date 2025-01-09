@@ -4,7 +4,15 @@
 
 **Desktop Application for [delta.chat](https://delta.chat)**
 
-<center><img src="README_ASSETS/screenshot.png"/></center>
+<center><img src="README_ASSETS/desktop.png"/></center>
+
+## Editions
+
+| Electron :electron:                                                                                | Tauri <img src="README_ASSETS/TAURI_Glyph_Color.svg" style="max-width:1rem;vertical-align:middle" />                                                                                                  | Browser 🦊🧭🏐                                                                                                                     |
+| -------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| <img src="README_ASSETS/desktop.png" style="max-width:256px" />                                    | <img src="README_ASSETS/desktop.png" style="max-width:256px" />                                                                                                                                       | <img src="README_ASSETS/browser-screenshot.png" style="max-width:256px" />                                                         |
+| The default, currently deployed in appstore and used by most users                                 | WIP client using tauri instead of electron <br /> tauri is a modern electron alternative: less disk usage, less ram usage, better performance rust backend                                            | Highly experimental version with a webserver and ui in the browser, at the moment only meant for developers and automated testing. |
+| [Go to project folder](./packages/target-electron) <br /> [Download Links](https://get.delta.chat) | [Go to project folder](./packages/target-tauri) <br /> [Fediverse thread](https://fosstodon.org/@treefit/113578409177635057) <br /> [nlnet project: Delta Tauri](https://nlnet.nl/project/DeltaTauri) | [Go to project folder](./packages/target-browser) <br /> [Fediverse thread](https://fosstodon.org/@treefit/113116480883632874)     |
 
 ## Documentation Links <a id="docs"></a>
 
