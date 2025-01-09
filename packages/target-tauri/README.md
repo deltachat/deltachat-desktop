@@ -5,10 +5,11 @@ Delta Chat desktop with tauri as runtime instead of electron.
 ## Start
 
 Requirements
+
 - rust (install it via https://rustup.rs)
 - nodejs (use your favorite node version manager like [fnm](https://github.com/Schniz/fnm)) and [pnpm](https://pnpm.io) package manager
 - on linux you need a few system dependencies:
-    - debian/ubuntu `sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf`
+  - debian/ubuntu `sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf`
 
 ```
 pnpm i
@@ -18,11 +19,13 @@ pnpm tauri dev # or pnpm start
 ## Check code
 
 Check javascript (same command as the rest of the project):
+
 ```
 pnpm -w check
 ```
 
 Format rust code:
+
 ```
 pnpm fmt
 # or
@@ -30,6 +33,7 @@ cd src-tauri && cargo fmt
 ```
 
 Lint rust code:
+
 ```
 pnpm lint
 # or
@@ -76,6 +80,5 @@ pnpm tauri dev -f=crabnebula_extras
 | linux    | ~/.config/chat.delta.desktop.tauri                     |
 | macOS    | ~/Library/Application Support/chat.delta.desktop.tauri |
 | windows  | %AppData%\chat.delta.desktop.tauri                     |
-
 
 This is part of the nlnet funded [Delta Tauri](https://nlnet.nl/project/DeltaTauri) project.
