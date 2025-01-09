@@ -4,7 +4,7 @@
 
 **Desktop Application for [delta.chat](https://delta.chat)**
 
-<center><img src="README_ASSETS/desktop.png" style="height:760px" /></center>
+<center><img src="README_ASSETS/desktop.png" style="min-height: 600px;" /></center>
 
 ## Editions
 
