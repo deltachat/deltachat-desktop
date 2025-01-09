@@ -4,7 +4,7 @@ version = "1.50.1"
 description = "Delta Chat Desktop Tauri Edition"
 authors = ["DeltaChat Contributors"]
 edition = "2021"
-rust-version = "1.77"
+rust-version = "1.84"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
