@@ -12,7 +12,9 @@
     "build:locales": "pnpm -w translations:convert",
     "build:runtime-impl": "pnpm esbuild --bundle --minify --keep-names --sourcemap --outdir=./html-dist runtime-tauri/runtime.ts",
     "build:compose-frontend": "node ../../bin/copy.js ../frontend/html-dist ./html-dist && node ../../bin/copy.js ./static ./html-dist && pnpm build:runtime-impl",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "fmt": "cd src-tauri && cargo fmt",
+    "lint": "cd src-tauri && cargo clippy"
   },
   "dependencies": {
     "@tauri-apps/api": "^2",
