@@ -3,7 +3,7 @@ use deltachat::accounts::Accounts;
 use log::{error, info, trace};
 use tauri::{Manager, UriSchemeContext, UriSchemeResponder};
 
-use crate::AppState;
+use crate::state::deltachat::DeltaChatAppState;
 
 #[tauri::command]
 pub(crate) fn on_webxdc_message_changed(account_id: u32, instance_id: u32) {
@@ -42,7 +42,12 @@ pub(crate) fn webxdc_icon_protocol<R: tauri::Runtime>(
 ) {
     // info!("webxdc-icon {}", request.uri());
 
-    let app_state_deltachat = { ctx.app_handle().state::<AppState>().deltachat.clone() };
+    let app_state_deltachat = {
+        ctx.app_handle()
+            .state::<DeltaChatAppState>()
+            .deltachat
+            .clone()
+    };
 
     tauri::async_runtime::spawn(async move {
         // workaround for not yet available try_blocks feature

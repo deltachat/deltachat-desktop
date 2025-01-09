@@ -3,7 +3,7 @@ use log::{error, info, trace};
 use tauri::{Manager, UriSchemeContext, UriSchemeResponder};
 use tokio::fs;
 
-use crate::AppState;
+use crate::state::deltachat::DeltaChatAppState;
 
 pub(crate) fn delta_blobs_protocol<R: tauri::Runtime>(
     ctx: UriSchemeContext<'_, R>,
@@ -15,7 +15,12 @@ pub(crate) fn delta_blobs_protocol<R: tauri::Runtime>(
 
     // URI format is dcblob://<account folder name>/<blob filename>
 
-    let app_state_deltachat = { ctx.app_handle().state::<AppState>().deltachat.clone() };
+    let app_state_deltachat = {
+        ctx.app_handle()
+            .state::<DeltaChatAppState>()
+            .deltachat
+            .clone()
+    };
 
     tauri::async_runtime::spawn(async move {
         // workaround for not yet available try_blocks feature

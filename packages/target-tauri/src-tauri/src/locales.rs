@@ -50,7 +50,7 @@ Path to the invalid directory: {directory}",
     }
 
     let places = vec![
-        resource_dir.join("_locales"), // TODO - test on windows and linux
+        resource_dir.join("_locales"),      // TODO - test on windows and linux
         PathBuf::from("../../../_locales"), // development
     ];
 
@@ -124,7 +124,6 @@ pub(crate) async fn get_locale_data(locale: &str, app: AppHandle) -> Result<Loca
     debug!("get_locale_data {resource_dir:?}");
     // android has sth. different it seems -> get_locale_data "asset://localhost/"
     // can maybe be reolved by tauri filesystem plugin??
-
 
     inner_get_locale_data(&resource_dir, locale)
         .await
