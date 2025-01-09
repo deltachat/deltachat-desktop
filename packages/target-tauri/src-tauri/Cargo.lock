@@ -1712,7 +1712,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat-tauri"
-version = "1.47.1"
+version = "1.50.1"
 dependencies = [
  "anyhow",
  "deltachat",
