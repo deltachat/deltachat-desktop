@@ -17,7 +17,6 @@ import {
   DcNotification,
   DcOpenWebxdcParameters,
   DesktopSettingsType,
-  PromiseType,
   RC_Config,
   RuntimeInfo,
   RuntimeOpenDialogOptions,
@@ -34,16 +33,15 @@ import type {
 } from '@deltachat-desktop/shared/logger.js'
 import type { setLogHandler as setLogHandlerFunction } from '@deltachat-desktop/shared/logger.js'
 
+let logJsonrpcConnection = false
+
 class TauriTransport extends yerpc.BaseTransport {
-  constructor(
-    private hasDebugEnabled: boolean,
-    private callCounterFunction: (label: string) => void
-  ) {
+  constructor(private callCounterFunction: (label: string) => void) {
     super()
 
     listen<string>('dc-jsonrpc-message', event => {
       const message: yerpc.Message = JSON.parse(event.payload)
-      if (hasDebugEnabled) {
+      if (logJsonrpcConnection) {
         /* ignore-console-log */
         console.debug('%c▼ %c[JSONRPC]', 'color: red', 'color:grey', message)
       }
@@ -53,7 +51,7 @@ class TauriTransport extends yerpc.BaseTransport {
   _send(message: yerpc.Message): void {
     const serialized = JSON.stringify(message)
     invoke('deltachat_jsonrpc_request', { message: serialized })
-    if (this.hasDebugEnabled) {
+    if (logJsonrpcConnection) {
       /* ignore-console-log */
       console.debug('%c▲ %c[JSONRPC]', 'color: green', 'color:grey', message)
       if ((message as any)['method']) {
@@ -65,11 +63,8 @@ class TauriTransport extends yerpc.BaseTransport {
 }
 
 export class TauriDeltaChat extends BaseDeltaChat<TauriTransport> {
-  constructor(
-    hasDebugEnabled: boolean,
-    callCounterFunction: (label: string) => void
-  ) {
-    super(new TauriTransport(hasDebugEnabled, callCounterFunction), true)
+  constructor(callCounterFunction: (label: string) => void) {
+    super(new TauriTransport(callCounterFunction), true)
   }
 }
 
@@ -81,10 +76,9 @@ class TauriRuntime implements Runtime {
     invoke('ui_ready')
   }
   createDeltaChatConnection(
-    hasDebugEnabled: boolean,
     callCounterFunction: (label: string) => void
   ): BaseDeltaChat<any> {
-    return new TauriDeltaChat(hasDebugEnabled, callCounterFunction)
+    return new TauriDeltaChat(callCounterFunction)
   }
   openMessageHTML(
     window_id: string,
@@ -191,6 +185,9 @@ class TauriRuntime implements Runtime {
       h: false,
     }
     this.rc_config = rc_config
+    if (rc_config['log-debug']) {
+      logJsonrpcConnection = true
+    }
     // - runtime info
     const runtime_info: RuntimeInfo = await invoke('get_runtime_info')
     this.runtime_info = runtime_info
@@ -338,7 +335,7 @@ class TauriRuntime implements Runtime {
   async readClipboardImage(): Promise<string | null> {
     try {
       const clipboardImage = await readImage()
-      const blob = new Blob([await clipboardImage.rbga()], { type: 'image' })
+      const blob = new Blob([await clipboardImage.rgba()], { type: 'image' })
       //TODO blob to base64
 
       throw new Error('Method not implemented.18')

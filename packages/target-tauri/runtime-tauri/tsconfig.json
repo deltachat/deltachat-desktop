@@ -3,11 +3,11 @@
     "declaration": true,
     "sourceMap": true,
     "noImplicitAny": true,
-    "module": "NodeNext",
+    "module": "es2015",
     "target": "es2018",
     "allowJs": false,
     "strictNullChecks": true,
     "strict": true,
-    "moduleResolution": "NodeNext"
+    "moduleResolution": "bundler"
   }
 }

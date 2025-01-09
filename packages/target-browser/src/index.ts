@@ -229,7 +229,7 @@ wssBackend.on('connection', function connection(ws) {
         const [channel, level, stackTrace, ...data] = msg.data
         // /* ignore-console-log */
         // console.debug("frontend", channel, level, data[0], '[..]')
-        logHandler.log(channel, level, stackTrace, ...data)
+        logHandler.log(channel, level as any, stackTrace, ...data)
       } else {
         log.debug('[recv on backend ws]', msg)
       }

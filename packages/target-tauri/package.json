@@ -5,6 +5,7 @@
   "type": "module",
   "license": "GPL-3.0-or-later",
   "scripts": {
+    "check:types": "tsc --noEmit -p runtime-tauri",
     "start": "tauri dev",
     "build4production": "NODE_ENV=production pnpm build",
     "build": "pnpm build:locales && pnpm --filter=@deltachat-desktop/frontend build && pnpm build:compose-frontend",
