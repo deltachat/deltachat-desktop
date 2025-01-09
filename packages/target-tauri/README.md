@@ -12,7 +12,7 @@ Requirements
 
 ```
 pnpm i
-pnpm tauri dev
+pnpm tauri dev # or pnpm start
 ```
 
 ## Check code
