@@ -1,7 +1,7 @@
 name: Code Checks for rust part of delta tauri
 
 on:
-  commit:
+  pull_request:
     paths:
       - packages/target-tauri/**
 
@@ -18,8 +18,8 @@ jobs:
           override: true
       - run: rustup component add rustfmt
       - uses: actions-rs/cargo@v1
-        working-directory: packages/target-tauri/src-tauri
         with:
+          working-directory: packages/target-tauri/src-tauri
           command: fmt
           args: --all -- --check
 
@@ -33,7 +33,7 @@ jobs:
           components: clippy
           override: true
       - uses: actions-rs/clippy-check@v1
-        working-directory: packages/target-tauri/src-tauri
         with:
+          working-directory: packages/target-tauri/src-tauri
           token: ${{ secrets.GITHUB_TOKEN }}
           args: --workspace --tests --examples
