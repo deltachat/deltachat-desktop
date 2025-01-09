@@ -58,7 +58,8 @@ pub fn get_runtime_info() -> RuntimeInfo {
         ],
         build_info: BuildInfo {
             version: env!("CARGO_PKG_VERSION"),
-            git_ref: "?", // TODO: set this in build.rs
+            // this is set in build.rs
+            git_ref: env!("BUILD_INFO_GIT"),
             // this is set in build.rs
             build_timestamp: env!("BUILD_TIME_STAMP").parse().unwrap_or(1), // 1 instead of 0, ss that we can identify the issue
         },
