@@ -1,7 +1,7 @@
 name: Code Checks for rust part of delta tauri
 
 on:
-  pull_request:
+  commit:
     paths:
       - packages/target-tauri/**
 

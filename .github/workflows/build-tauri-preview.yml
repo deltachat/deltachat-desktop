@@ -1,7 +1,7 @@
 name: 'build tauri preview'
 
 on:
-  pull_request:
+  commit:
     paths:
       - packages/target-tauri/**
     paths-ignore:
