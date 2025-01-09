@@ -1,4 +1,4 @@
-name: 'build tauri preview'
+name: Build Tauri Preview
 
 on:
   pull_request:
