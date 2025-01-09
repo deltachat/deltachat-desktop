@@ -2,6 +2,8 @@ name: 'build tauri preview'
 
 on:
   pull_request:
+    paths:
+      - packages/target-tauri
     paths-ignore:
       - 'docs/**'  # only trigger build if a file outside of /docs was changed
       - 'README_ASSETS/**'
@@ -9,6 +11,7 @@ on:
       - '*.md'
       - '.prettierrc.yml'
       - '.vscode/**'
+    
 
 jobs:
   build-tauri:
