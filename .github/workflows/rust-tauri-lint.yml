@@ -19,12 +19,15 @@ jobs:
       - run: rustup component add rustfmt
       - uses: actions-rs/cargo@v1
         with:
-          working-directory: packages/target-tauri/src-tauri
+          cwd: packages/target-tauri/src-tauri
           command: fmt
           args: --all -- --check
 
   run_clippy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/target-tauri/src-tauri
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
@@ -34,6 +37,5 @@ jobs:
           override: true
       - uses: actions-rs/clippy-check@v1
         with:
-          working-directory: packages/target-tauri/src-tauri
           token: ${{ secrets.GITHUB_TOKEN }}
           args: --workspace --tests --examples
