@@ -18,6 +18,7 @@ jobs:
           override: true
       - run: rustup component add rustfmt
       - uses: actions-rs/cargo@v1
+        working-directory: packages/target-tauri/src-tauri
         with:
           command: fmt
           args: --all -- --check
@@ -32,6 +33,7 @@ jobs:
           components: clippy
           override: true
       - uses: actions-rs/clippy-check@v1
+        working-directory: packages/target-tauri/src-tauri
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           args: --workspace --tests --examples
