@@ -22,6 +22,7 @@
     "start:browser": "pnpm --filter=@deltachat-desktop/target-browser start",
     "build:browser": "pnpm --filter=@deltachat-desktop/target-browser build",
     "start:webserver": "pnpm --filter=@deltachat-desktop/target-browser start:server",
+    "dev:tauri": "pnpm --filter=@deltachat-desktop/target-tauri start",
     "translations:pull": "tx pull -s -f && tx pull -f -a",
     "translations:convert": "node ./bin/build-shared-convert-translations.mjs ./_locales",
     "translations:update": "pnpm translations:pull && pnpm translations:convert && ./bin/find_complete_translations.sh",

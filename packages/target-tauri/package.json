@@ -1,5 +1,5 @@
 {
-  "name": "deltachat-desktop-tauri",
+  "name": "@deltachat-desktop/target-tauri",
   "private": true,
   "version": "1.51.0",
   "type": "module",
