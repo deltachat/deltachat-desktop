@@ -81,13 +81,13 @@ class TauriRuntime implements Runtime {
     return new TauriDeltaChat(callCounterFunction)
   }
   openMessageHTML(
-    window_id: string,
-    accountId: number,
-    isContactRequest: boolean,
-    subject: string,
-    sender: string,
-    receiveTime: string,
-    content: string
+    _window_id: string,
+    _accountId: number,
+    _isContactRequest: boolean,
+    _subject: string,
+    _sender: string,
+    _receiveTime: string,
+    _content: string
   ): void {
     throw new Error('Method not implemented. 3')
   }
@@ -335,7 +335,7 @@ class TauriRuntime implements Runtime {
   async readClipboardImage(): Promise<string | null> {
     try {
       const clipboardImage = await readImage()
-      const blob = new Blob([await clipboardImage.rgba()], { type: 'image' })
+      const _blob = new Blob([await clipboardImage.rgba()], { type: 'image' })
       //TODO blob to base64
 
       throw new Error('Method not implemented.18')
@@ -347,7 +347,7 @@ class TauriRuntime implements Runtime {
   writeClipboardText(text: string): Promise<void> {
     return writeText(text)
   }
-  writeClipboardImage(path: string): Promise<void> {
+  writeClipboardImage(_path: string): Promise<void> {
     throw new Error('Method not implemented.20')
   }
   getAppPath(name: RuntimeAppPath): Promise<string> {
@@ -355,7 +355,7 @@ class TauriRuntime implements Runtime {
     // look there if some path is not implemented
     return invoke('get_app_path', { name })
   }
-  openMapsWebxdc(accountId: number, chatId?: number): void {
+  openMapsWebxdc(_accountId: number, _chatId?: number): void {
     throw new Error('Method not implemented.22')
   }
   async openPath(path: string): Promise<string> {
@@ -370,7 +370,7 @@ class TauriRuntime implements Runtime {
   getConfigPath(): string {
     throw new Error('Method not implemented.24')
   }
-  openWebxdc(msgId: number, params: DcOpenWebxdcParameters): void {
+  openWebxdc(_msgId: number, _params: DcOpenWebxdcParameters): void {
     throw new Error('Method not implemented.25')
   }
   getWebxdcIconURL(accountId: number, msgId: number): string {
@@ -407,38 +407,38 @@ class TauriRuntime implements Runtime {
       locale: locale || (await this.getDesktopSettings()).locale || 'en',
     })
   }
-  setLocale(locale: string): Promise<void> {
+  setLocale(_locale: string): Promise<void> {
     throw new Error('Method not implemented.35')
   }
-  setBadgeCounter(value: number): void {
+  setBadgeCounter(_value: number): void {
     this.log.error(
       'setBadgeCounter: Method not implemented (36) -> this will come in one of the next tauri releases'
     )
   }
-  showNotification(data: DcNotification): void {
+  showNotification(_data: DcNotification): void {
     throw new Error('Method not implemented.37')
   }
   clearAllNotifications(): void {
     throw new Error('Method not implemented.38')
   }
-  clearNotifications(chatId: number): void {
+  clearNotifications(_chatId: number): void {
     this.log.error('Method not implemented.39 - clearNotifications')
   }
   setNotificationCallback(
-    cb: (data: { accountId: number; chatId: number; msgId: number }) => void
+    _cb: (data: { accountId: number; chatId: number; msgId: number }) => void
   ): void {
     this.log.error('Method not implemented.40')
   }
-  writeClipboardToTempFile(name?: string): Promise<string> {
+  writeClipboardToTempFile(_name?: string): Promise<string> {
     throw new Error('Method not implemented.41')
   }
-  writeTempFileFromBase64(name: string, content: string): Promise<string> {
+  writeTempFileFromBase64(_name: string, _content: string): Promise<string> {
     throw new Error('Method not implemented.42')
   }
-  writeTempFile(name: string, content: string): Promise<string> {
+  writeTempFile(_name: string, _content: string): Promise<string> {
     throw new Error('Method not implemented.43')
   }
-  removeTempFile(path: string): Promise<void> {
+  removeTempFile(_path: string): Promise<void> {
     throw new Error('Method not implemented.44')
   }
   getWebxdcDiskUsage(
@@ -447,7 +447,7 @@ class TauriRuntime implements Runtime {
     // will not be implemented in tauri for now, as this method is currently unused
     throw new Error('Method not implemented: runtime.getWebxdcDiskUsage')
   }
-  clearWebxdcDOMStorage(accountId: number): Promise<void> {
+  clearWebxdcDOMStorage(_accountId: number): Promise<void> {
     // will not be implemented in tauri for now, as this method is currently unused
     // Also isn't this function essentially a duplicate of `this.deleteWebxdcAccountData`?
     throw new Error('Method not implemented.46')
@@ -460,15 +460,15 @@ class TauriRuntime implements Runtime {
     return null
   }
   saveBackgroundImage(
-    file: string,
-    isDefaultPicture: boolean
+    _file: string,
+    _isDefaultPicture: boolean
   ): Promise<string> {
     throw new Error('Method not implemented.49')
   }
-  onDragFileOut(file: string): void {
+  onDragFileOut(_file: string): void {
     throw new Error('Method not implemented.50')
   }
-  isDroppedFileFromOutside(file: File): boolean {
+  isDroppedFileFromOutside(_file: File): boolean {
     throw new Error('Method not implemented.51')
   }
   onChooseLanguage: ((locale: string) => Promise<void>) | undefined
