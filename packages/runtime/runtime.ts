@@ -180,7 +180,7 @@ export type RuntimeAppPath =
   | 'downloads'
   // | 'music'
   | 'pictures'
-  // | 'videos'
-  // | 'recent' - exists in electron, but not yet in tauri - anyways we don't use it yet
-  // | 'logs'
-  // | 'crashDumps'
+// | 'videos'
+// | 'recent' - exists in electron, but not yet in tauri - anyways we don't use it yet
+// | 'logs'
+// | 'crashDumps'

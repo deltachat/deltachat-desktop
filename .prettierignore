@@ -9,3 +9,4 @@ packages/e2e-tests/test-results/*
 
 packages/target-browser/dist
 packages/target-tauri/target
+packages/target-tauri/src-tauri/gen
