@@ -1,6 +1,6 @@
 use std::fs;
 
-use anyhow::{bail, Context};
+use anyhow::Context;
 
 use serde::Deserialize;
 use tauri::AppHandle;

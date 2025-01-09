@@ -3,7 +3,7 @@ use tauri::{Manager, WebviewWindow};
 #[tauri::command]
 pub(crate) fn open_help_window(
     app: tauri::AppHandle,
-    locale: &str,
+    #[allow(unused_variables)] locale: &str,
     anchor: Option<&str>,
 ) -> Result<(), String> {
     // TODO: support for languages (if help file/directory for language code exists open it, otherwise open english version)

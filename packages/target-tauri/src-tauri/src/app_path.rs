@@ -1,4 +1,4 @@
-use anyhow::{bail, Context};
+use anyhow::Context;
 use serde::Deserialize;
 use tauri::{AppHandle, Manager};
 
@@ -21,7 +21,7 @@ impl AppPathName {
             AppPathName::Desktop => {
                 #[cfg(target_os = "android")]
                 {
-                    bail!("desktop dir not available on android")
+                    anyhow::bail!("desktop dir not available on android")
                 }
                 #[cfg(not(target_os = "android"))]
                 {

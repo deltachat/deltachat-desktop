@@ -1,6 +1,6 @@
 use anyhow::Context;
 use deltachat::accounts::Accounts;
-use log::{error, info, trace};
+use log::{error, info};
 use tauri::{Manager, UriSchemeContext, UriSchemeResponder};
 
 use crate::state::deltachat::DeltaChatAppState;

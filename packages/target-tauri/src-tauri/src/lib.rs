@@ -157,7 +157,6 @@ pub fn run() {
             ))?);
             app.manage(tauri::async_runtime::block_on(DeltaChatAppState::try_new(
                 app,
-                startup_timestamp,
             ))?);
             app.state::<AppState>()
                 .log_duration_since_startup("setup done");

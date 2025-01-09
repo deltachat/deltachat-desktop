@@ -1,5 +1,5 @@
 use anyhow::Context;
-use log::{error, info, trace};
+use log::error;
 use percent_encoding::percent_decode_str;
 use tauri::{Manager, UriSchemeContext, UriSchemeResponder};
 use tokio::fs;
@@ -11,8 +11,7 @@ pub(crate) fn delta_blobs_protocol<R: tauri::Runtime>(
     request: http::Request<Vec<u8>>,
     responder: UriSchemeResponder,
 ) {
-    let path = request.uri();
-    // info!("dcblob {path}");
+    // info!("dcblob {}", request.uri());
 
     // URI format is dcblob://<account folder name>/<blob filename>
 

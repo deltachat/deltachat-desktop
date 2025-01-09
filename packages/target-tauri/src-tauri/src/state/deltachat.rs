@@ -1,18 +1,12 @@
-use std::{
-    path::PathBuf,
-    sync::{Arc, Mutex},
-    time::SystemTime,
-};
+use std::sync::Arc;
 
-use anyhow::{bail, Context};
 use deltachat_jsonrpc::{
     api::{Accounts, CommandApi},
     yerpc::{RpcClient, RpcSession},
 };
 use futures_lite::stream::StreamExt;
 
-use tauri::{async_runtime::JoinHandle, AppHandle, Emitter, EventTarget, Manager};
-use tauri_plugin_store::StoreExt;
+use tauri::{async_runtime::JoinHandle, Emitter, EventTarget, Manager};
 use tokio::sync::RwLock;
 
 use log::info;
@@ -20,15 +14,12 @@ use log::info;
 pub(crate) struct DeltaChatAppState {
     pub(crate) deltachat: Arc<RwLock<Accounts>>,
     pub(crate) deltachat_rpc_session: RpcSession<CommandApi>,
+    #[allow(dead_code)]
     pub(crate) deltachat_rpc_send_task: JoinHandle<anyhow::Result<()>>,
 }
 
 impl DeltaChatAppState {
-    pub(crate) async fn try_new(
-        app: &tauri::App,
-        startup_timestamp: SystemTime,
-    ) -> anyhow::Result<Self> {
-        let handle = app.handle().clone();
+    pub(crate) async fn try_new(app: &tauri::App) -> anyhow::Result<Self> {
         let data_dir = app.path().app_data_dir()?;
         info!("Data directory is {data_dir:?}");
 
