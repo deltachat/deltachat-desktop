@@ -29,6 +29,7 @@
 - fix reactions to sticker messages overlapping with next message #4433
 - fix: "Enter" not adding the first contact in "Add Members" dialog #4439
 - fix: devmode: fix logging and counting jsonrpc requests #4458
+- fix: validate proxy_url before enabling proxy #4470
 
 ## [1.50.1] - 2024-12-18
 
