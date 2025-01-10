@@ -64,10 +64,10 @@ function EditProfileDialogInner({
   }
 
   const onConfirm = async () => {
-    // Display name needs to be set when setting up an user account for the
-    // first time after scanning an QRCode with DCACCOUNT scheme (for example
-    // via chatmail server invite code)
-    if (firstSetup && displayname.length === 0) {
+    // Display name should not be empty and needs to be set when setting up an
+    // user account for the first time after scanning an QRCode with DCACCOUNT scheme
+    // (for example via chatmail server invite code)
+    if (displayname.length === 0) {
       await openAlertDialog({ message: tx('please_enter_name') })
       return
     }
