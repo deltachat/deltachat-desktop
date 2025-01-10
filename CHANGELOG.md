@@ -19,6 +19,7 @@
   - Update shadowsocks crate to 1.22.0 to avoid panic when parsing some QR codes.
   - Prefer to encrypt if E2eeEnabled even if peers have EncryptPreference::NoPreference.
   - Allow empty `To` field for self-sent messages.
+  - displayname may not be empty anymore #4471
 
 ## Fixed
 - fix chat "scrolls up" right after switching (rev 2) #4431
