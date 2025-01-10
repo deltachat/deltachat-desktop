@@ -229,7 +229,6 @@ class TauriRuntime implements Runtime {
       // and the location in file is bundled,
       // so the shown file location is not very helpful most of the time,
       // still for errors the stack trace is appended
-      console.log({ location })
       const onlyFnName = location?.split('@')[0]
       location = `JS ${channel}${onlyFnName ? `::${onlyFnName}` : ''}`
 
