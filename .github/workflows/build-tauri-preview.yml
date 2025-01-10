@@ -62,6 +62,8 @@ jobs:
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_HEAD_REF: ${{ env.GITHUB_HEAD_REF }}
+          GITHUB_REF: ${{ env.GITHUB_REF }}
         with:
           projectPath: packages/target-tauri
           args: ${{ matrix.args }}
