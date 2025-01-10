@@ -3,7 +3,7 @@
 ## [Unreleased][unreleased]
 
 ## Added
-- accessibility: arrow-key navigation for gallery #4376
+- accessibility: arrow-key navigation for gallery and sticker picker #4376, #4372
 - accessibility: arrow-key navigation: handle "End" and "Home" keys to go to last / first item #4438
 - add show_app_in_chat option to webxdc info message context menu #4459
 
@@ -19,6 +19,7 @@
   - Update shadowsocks crate to 1.22.0 to avoid panic when parsing some QR codes.
   - Prefer to encrypt if E2eeEnabled even if peers have EncryptPreference::NoPreference.
   - Allow empty `To` field for self-sent messages.
+  - displayname may not be empty anymore #4471
 
 ## Fixed
 - fix chat "scrolls up" right after switching (rev 2) #4431
@@ -30,6 +31,8 @@
 - fix: "Enter" not adding the first contact in "Add Members" dialog #4439
 - fix: devmode: fix logging and counting jsonrpc requests #4458
 - fix: validate proxy_url before enabling proxy #4470
+- performance: don't re-render every time the window is resized #4460
+- rename language "Luri Bakhtiari" to the local name #4472
 
 ## [1.50.1] - 2024-12-18
 

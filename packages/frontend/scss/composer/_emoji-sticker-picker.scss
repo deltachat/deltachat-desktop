@@ -61,12 +61,19 @@ $emojimart-search-height: 31px + 6px;
     overflow: auto;
     flex-direction: column;
 
+    $pack-title-vertical-padding: 8px;
+    $pack-title-font-size: 16px;
+    $pack-title-line-height: 1.15;
     .sticker-container {
       display: flex;
       flex-direction: column;
       flex: 1;
       padding: 0px 12px 12px;
       overflow-y: auto;
+
+      // To account for the `position: sticky` title.
+      scroll-padding-top: $pack-title-font-size * $pack-title-line-height +
+        $pack-title-vertical-padding * 2;
 
       .no-stickers {
         display: flex;
@@ -83,13 +90,14 @@ $emojimart-search-height: 31px + 6px;
 
       .sticker-pack {
         & > .title {
-          padding: 8px 0px;
+          padding: $pack-title-vertical-padding 0px;
           color: grey;
           font-size: large;
           font-weight: 500;
           text-transform: capitalize;
           font-family: var(--font-family);
-          font-size: 16px;
+          font-size: $pack-title-font-size;
+          line-height: $pack-title-line-height;
           font-weight: 500;
           position: sticky;
           top: -1px;

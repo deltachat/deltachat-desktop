@@ -3,6 +3,7 @@ import React, {
   useEffect,
   forwardRef,
   PropsWithChildren,
+  useRef,
 } from 'react'
 import classNames from 'classnames'
 
@@ -17,6 +18,10 @@ import useMessage from '../../hooks/chat/useMessage'
 import styles from './styles.module.scss'
 
 import type { EmojiData } from 'emoji-mart/index'
+import {
+  RovingTabindexProvider,
+  useRovingTabindex,
+} from '../../contexts/RovingTabindex'
 
 type Props = {
   stickerPackName: string
@@ -34,6 +39,8 @@ const DisplayedStickerPack = ({
   const { jumpToMessage } = useMessage()
   const accountId = selectedAccountId()
 
+  const listRef = useRef<HTMLDivElement>(null)
+
   const onClickSticker = (fileName: string) => {
     const stickerPath = fileName.replace('file://', '')
     BackendRemote.rpc
@@ -47,18 +54,42 @@ const DisplayedStickerPack = ({
   return (
     <div className='sticker-pack'>
       <div className='title'>{stickerPackName}</div>
-      <div className='container'>
-        {stickerPackImages.map((filePath, index) => (
-          <button
-            className='sticker'
-            key={index}
-            onClick={() => onClickSticker(filePath)}
-          >
-            <img src={filePath} />
-          </button>
-        ))}
+      <div ref={listRef} className='container'>
+        {/* Yes, we have separate `RovingTabindexProvider` for each
+        sticker pack, instead of having one for all stickers.
+        Users probably want to switch between sticker packs with Tab. */}
+        <RovingTabindexProvider
+          wrapperElementRef={listRef}
+          direction='horizontal'
+        >
+          {stickerPackImages.map((filePath, index) => (
+            <StickersListItem
+              key={index}
+              filePath={filePath}
+              onClick={() => onClickSticker(filePath)}
+            />
+          ))}
+        </RovingTabindexProvider>
       </div>
     </div>
+  )
+}
+
+function StickersListItem(props: { filePath: string; onClick: () => void }) {
+  const { filePath, onClick } = props
+  const ref = useRef<HTMLButtonElement>(null)
+  const rovingTabindex = useRovingTabindex(ref)
+  return (
+    <button
+      ref={ref}
+      className={'sticker ' + rovingTabindex.className}
+      onClick={onClick}
+      tabIndex={rovingTabindex.tabIndex}
+      onKeyDown={rovingTabindex.onKeydown}
+      onFocus={rovingTabindex.setAsActiveElement}
+    >
+      <img src={filePath} />
+    </button>
   )
 }
 
