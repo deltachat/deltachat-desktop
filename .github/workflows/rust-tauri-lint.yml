@@ -55,5 +55,7 @@ jobs:
           override: true
       - uses: actions-rs/clippy-check@v1
         with:
+          env:
+            VERSION_INFO_GIT_REF: ${{ github.ref }}
           token: ${{ secrets.GITHUB_TOKEN }}
           args: --manifest-path packages/target-tauri/src-tauri/Cargo.toml --workspace --tests --examples
