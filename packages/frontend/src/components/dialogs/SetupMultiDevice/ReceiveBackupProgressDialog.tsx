@@ -86,7 +86,7 @@ export function ReceiveBackupProgressDialog({
           )}
           <p>
             {importProgress === 0
-              ? tx('multidevice_connecting')
+              ? tx('connectivity_connecting')
               : tx('transferring')}
           </p>
           <DeltaProgressBar
