@@ -97,6 +97,7 @@ jobs:
               Write-Host "copy $fn"
               Copy-Item $fn -Destination out
             }
+          }
         shell: pwsh
 
       - uses: actions/upload-artifact@v4
