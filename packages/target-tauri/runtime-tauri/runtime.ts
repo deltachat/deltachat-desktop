@@ -2,6 +2,7 @@
 
 import { invoke } from '@tauri-apps/api/core'
 import { listen } from '@tauri-apps/api/event'
+import { getCurrentWindow } from '@tauri-apps/api/window'
 
 import type { attachLogger } from '@tauri-apps/plugin-log'
 import { getStore } from '@tauri-apps/plugin-store'
@@ -409,10 +410,8 @@ class TauriRuntime implements Runtime {
   setLocale(_locale: string): Promise<void> {
     throw new Error('Method not implemented.35')
   }
-  setBadgeCounter(_value: number): void {
-    this.log.error(
-      'setBadgeCounter: Method not implemented (36) -> this will come in one of the next tauri releases'
-    )
+  setBadgeCounter(value: number): void {
+    getCurrentWindow().setBadgeCount(value === 0 ? undefined : value)
   }
   showNotification(_data: DcNotification): void {
     throw new Error('Method not implemented.37')

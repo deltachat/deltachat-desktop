@@ -61,7 +61,9 @@
             "core:window:allow-toggle-maximize",
             "core:window:allow-start-dragging",
             // open current logfile & open links
-            "shell:allow-open"
+            "shell:allow-open",
+            // Badge counter
+            "core:window:allow-set-badge-count"
           ]
         }
       ]
