@@ -14,12 +14,16 @@ jobs:
       matrix:
         include:
           - platform: 'macos-latest' # for Arm based macs (M1 and above).
+            label: "aarch64"
             args: '--target aarch64-apple-darwin'
           - platform: 'macos-latest' # for Intel based macs.
+            label: "x86_64"
             args: '--target x86_64-apple-darwin'
           - platform: 'ubuntu-22.04' # for Tauri v1 you could replace this with ubuntu-20.04.
+            label: "x86_64"
             args: ''
           - platform: 'windows-latest'
+            label: "x86_64"
             args: ''
 
     runs-on: ${{ matrix.platform }}
@@ -73,5 +77,5 @@ jobs:
       
       - uses: actions/upload-artifact@v4
         with:
-          name: {{ matrix.os }}-${{ matrix.version }}
+          name: {{ matrix.platform }}-${{ matrix.label }}
           path: ${{ steps.build.artifactPaths }}
