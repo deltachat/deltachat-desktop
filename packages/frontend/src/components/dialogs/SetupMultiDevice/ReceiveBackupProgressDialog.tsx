@@ -16,7 +16,6 @@ import {
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
-import Button from '../../Button'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 
 const log = getLogger('renderer/receive_backup')
@@ -99,7 +98,9 @@ export function ReceiveBackupProgressDialog({
         </DialogContent>
         <DialogFooter>
           <FooterActions align='spaceBetween'>
-            <FooterActionButton onClick={()=>runtime.openHelpWindow('multiclient')}>
+            <FooterActionButton
+              onClick={() => runtime.openHelpWindow('multiclient')}
+            >
               {tx('troubleshooting')}
             </FooterActionButton>
             <FooterActionButton onClick={cancel}>
