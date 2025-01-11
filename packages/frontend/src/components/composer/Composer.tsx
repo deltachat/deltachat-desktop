@@ -41,6 +41,9 @@ import { KeybindAction } from '../../keybindings'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
 import { CloseButton } from '../Dialog'
 import { enterKeySendsKeyboardShortcuts } from '../KeyboardShortcutHint'
+import { AppPickerWrapper } from './AppPickerWrapper'
+import { AppInfo } from '../AppPicker'
+import OutsideClickHelper from '../OutsideClickHelper'
 
 const log = getLogger('renderer/composer')
 
@@ -73,6 +76,7 @@ const Composer = forwardRef<
 
   const chatId = selectedChat.id
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
+  const [showAppPicker, setShowAppPicker] = useState(false)
 
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
   const pickerButtonRef = useRef<HTMLButtonElement>(null)
@@ -210,6 +214,10 @@ const Composer = forwardRef<
       document.removeEventListener('click', onClick)
     }
   }, [showEmojiPicker, emojiAndStickerRef])
+
+  const onAppSelected = (appInfo: AppInfo) => {
+    log.debug('App selected', appInfo)
+  }
 
   // Paste file functionality
   // https://github.com/deltachat/deltachat-desktop/issues/2108
@@ -362,6 +370,7 @@ const Composer = forwardRef<
         <div className='lower-bar'>
           <MenuAttachment
             addFileToDraft={addFileToDraft}
+            showAppPicker={setShowAppPicker}
             selectedChat={selectedChat}
           />
           {settingsStore && (
@@ -390,6 +399,11 @@ const Composer = forwardRef<
             />
           </div>
         </div>
+        {showAppPicker && (
+          <OutsideClickHelper onClick={() => setShowAppPicker(false)}>
+            <AppPickerWrapper onAppSelected={onAppSelected} />
+          </OutsideClickHelper>
+        )}
         {showEmojiPicker && (
           <EmojiAndStickerPicker
             chatId={chatId}

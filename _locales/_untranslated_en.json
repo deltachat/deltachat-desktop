@@ -80,5 +80,17 @@
   },
   "contact_is_blocked": {
     "message": "This contact is blocked"
+  },
+  "app": {
+    "message": "App"
+  },
+  "tool": {
+    "message": "Tools"
+  },
+  "game": {
+    "message": "Games"
+  },
+  "search": {
+    "message": "Search..."
   }
 }

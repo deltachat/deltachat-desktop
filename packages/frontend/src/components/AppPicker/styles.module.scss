@@ -1,0 +1,116 @@
+.appPickerList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  flex-grow: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: calc(70vH - 70px);
+  padding-bottom: 48px;
+}
+
+
+.appItem {
+  display: flex;
+  align-items: center;
+  width: 236px;
+  height: 90px;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--picker-border-and-hover-color);
+  }
+}
+
+.searchInput {
+  width: 100%;
+  color: var(--navBarText);
+  padding: 10px;
+  background: var(--bgPrimary);
+  border: none;
+  border-bottom: 1px solid var(--picker-border-and-hover-color);
+  font-size: 14px;
+  &:focus, &:active {
+    outline: none;
+  }
+}
+
+.appIcon {
+  width: 64px;
+  height: 64px;
+  margin-right: 16px;
+  border-radius: 5px;
+}
+
+.appDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.appName {
+  font-size: 16px;
+  font-weight: bold;
+  padding: 4px 0;
+}
+
+.appDescription {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 48px;
+  text-overflow: "... ";
+}
+
+.tabBar {
+  position: sticky;
+  bottom: 0px;
+  display: flex;
+  width: 100%;
+  background: var(--bgPrimary);
+  border-top: 1px solid var(--picker-border-and-hover-color);
+  button {
+    color: var(--picker-text-rgb);
+    flex-grow: 1;
+    padding: 8px;
+    border: none;
+    border-right: 1px solid var(--picker-border-and-hover-color);
+    background: var(--bgPrimary);
+    cursor: pointer;
+    &.activeTab {
+      font-weight: bold;
+      background-color: var(--picker-border-and-hover-color);
+    }
+    &:last-child {
+      border-right: none;
+    }
+    &:hover {
+      background-color: var(--picker-border-and-hover-color);
+    }
+  }
+}
+
+
+
+.categoryIcon {
+  width: 36px;
+  height: 36px;
+  margin: auto;
+}
+
+.categoryTitle {
+  padding: 6px 0;
+}
+
+/**
+should style the svg icons but doesn't?
+
+.category-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.icon-path {
+  fill: #999;
+}
+*/
