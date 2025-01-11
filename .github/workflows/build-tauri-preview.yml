@@ -77,7 +77,8 @@ jobs:
         id: paths
         run: |
           paths=$( echo '${{ steps.build.outputs.artifactPaths }}' | jq '.[]' | sed 's/"//g' )
-          echo "artifactPaths={paths}" >> $GITHUB_OUTPUT
+          echo artifactPaths='$paths'
+          echo artifactPaths='$paths' >> $GITHUB_OUTPUT
 
       - uses: actions/upload-artifact@v4
         if: matrix.platform != 'windows-latest'
@@ -90,7 +91,8 @@ jobs:
         id: pathsWin
         run: |
           $paths = ($env:steps_build_outputs_artifactPaths | jq '.[]' | ForEach-Object { $_ -replace '"', '' })
-          echo "artifactPaths={paths}" >> $GITHUB_OUTPUT
+          echo artifactPaths='$paths'
+          echo artifactPaths='$paths' >> $GITHUB_OUTPUT
         shell: pwsh
 
       - uses: actions/upload-artifact@v4
