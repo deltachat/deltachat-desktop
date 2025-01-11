@@ -80,5 +80,11 @@
   },
   "contact_is_blocked": {
     "message": "This contact is blocked"
+  },
+  "multidevice_connecting": {
+    "message": "Connecting devices"
+  },
+  "multidevice_connection_takes_too_long": {
+    "message": "Devices are taking too long to connect - Please ensure they are on the same network and follow the troubleshooting steps."
   }
 }

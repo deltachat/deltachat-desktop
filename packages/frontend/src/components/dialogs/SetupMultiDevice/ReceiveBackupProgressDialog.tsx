@@ -16,6 +16,8 @@ import {
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
+import Button from '../../Button'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 const log = getLogger('renderer/receive_backup')
 
@@ -23,12 +25,16 @@ type Props = {
   QrWithToken: string
 }
 
+// time it takes on progress === 0 to show the rouble shooting button in ms
+const TROUBLESHOOTING_TIMEOUT = 4000
+
 export function ReceiveBackupProgressDialog({
   onClose,
   QrWithToken,
 }: Props & DialogProps) {
   const [importProgress, setImportProgress] = useState(0.0)
   const [error, setError] = useState<string | null>(null)
+  const [troubleTimerFired, setTroubleTimerFired] = useState(false)
   const tx = useTranslationFunction()
 
   const onImexProgress = ({ progress }: DcEventType<'ImexProgress'>) => {
@@ -56,6 +62,8 @@ export function ReceiveBackupProgressDialog({
       window.__selectAccount(accountId)
     })()
 
+    setTimeout(() => setTroubleTimerFired(true), TROUBLESHOOTING_TIMEOUT)
+
     const emitter = BackendRemote.getContextEvents(accountId)
     emitter.on('ImexProgress', onImexProgress)
     return () => {
@@ -76,13 +84,24 @@ export function ReceiveBackupProgressDialog({
               {tx('error')}: {error}
             </p>
           )}
+          <p>
+            {importProgress === 0
+              ? tx('multidevice_connecting')
+              : tx('transferring')}
+          </p>
           <DeltaProgressBar
             progress={importProgress}
             intent={error ? 'danger' : 'success'}
           />
+          {troubleTimerFired && importProgress === 0 && (
+            <p>{tx('multidevice_connection_takes_too_long')}</p>
+          )}
         </DialogContent>
         <DialogFooter>
-          <FooterActions align='end'>
+          <FooterActions align='spaceBetween'>
+            <FooterActionButton onClick={()=>runtime.openHelpWindow('multiclient')}>
+              {tx('troubleshooting')}
+            </FooterActionButton>
             <FooterActionButton onClick={cancel}>
               {tx('cancel')}
             </FooterActionButton>
