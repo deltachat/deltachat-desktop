@@ -10,7 +10,7 @@ type Props = React.PropsWithChildren<{
   onClose?: (result?: any) => void
   canEscapeKeyClose?: boolean
   canOutsideClickClose?: boolean
-  /** whether backdrop can be used to drag window around on tauri, used on onboarding screen and deletion screen  */
+  /** whether backdrop can be used to drag window around on tauri, used on onboarding screen and deletion screen */
   backdropDragAreaOnTauriRuntime?: boolean
   className?: string
   fixed?: boolean

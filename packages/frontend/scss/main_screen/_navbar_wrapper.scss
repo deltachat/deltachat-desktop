@@ -52,7 +52,7 @@
 }
 
 // used on electron and tauri runtime (it is handled by tauri, this class is for electron)
-// means element is non-Intractable and area can be used to window drag around
+// means element is non-interactable and area can be used to window drag around
 *[data-tauri-drag-region] {
   // so it can be used to drag the window around
   -webkit-app-region: drag;

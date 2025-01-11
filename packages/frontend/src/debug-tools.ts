@@ -27,7 +27,7 @@ export class DragRegionOverlay {
   toggle() {
     if (runtime.getRuntimeInfo().target !== 'electron') {
       log.warn(
-        'DragRegionOverlay currently is based on a css attribute (`-webkit-app-region`), so might only work in the elctron version'
+        'DragRegionOverlay currently is based on a css attribute (`-webkit-app-region`), so might only work in the electron version'
       )
     }
 
