@@ -94,8 +94,8 @@ jobs:
           $filePaths = ConvertFrom-Json $jsonString
           foreach ($path in $filePaths) {
             if (Test-Path $path -PathType Leaf) {
-              Write-Host "copy $fn"
-              Copy-Item $fn -Destination out
+              Write-Host "copy $path"
+              Copy-Item $path -Destination out
             }
           }
         shell: pwsh
