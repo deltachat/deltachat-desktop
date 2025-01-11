@@ -53,11 +53,10 @@ jobs:
           toolchain: 1.84
           components: clippy
           override: true
-      - name: ensure js part is there
+      - name: fake html dist dir to make it build
         run: |
-          npm i -g pnpm
-          pnpm i
-          pnpm --filter=@deltachat-desktop/target-tauri build
+          mkdir packages/target-tauri/html-dist
+          touch packages/target-tauri/html-dist/tauri_main.html
       - uses: actions-rs/clippy-check@v1
         env:
           VERSION_INFO_GIT_REF: ${{ github.ref }}
