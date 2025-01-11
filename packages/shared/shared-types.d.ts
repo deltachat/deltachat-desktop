@@ -45,6 +45,11 @@ export interface DesktopSettingsType {
   galleryImageKeepAspectRatio: boolean
   /** whether to use system ui font */
   useSystemUIFont: boolean
+  /**
+   * Tell the operating system to prevent screen recoding and screenshots for delta chat
+   * also called screen_security
+   */
+  contentProtectionEnabled: boolean
 }
 
 export interface RC_Config {
@@ -87,6 +92,7 @@ export type RuntimeInfo = {
   runningUnderARM64Translation?: boolean
   rpcServerPath?: string
   buildInfo: BuildInfo
+  isContentProtectionSupported: boolean
 }
 
 export interface BuildInfo {
