@@ -72,10 +72,22 @@ jobs:
           projectPath: packages/target-tauri
           args: ${{ matrix.args }}
       
-      - name: run log artifactPaths
-        run: echo ${{ steps.build.artifactPaths }}
+      - name: run convert artifactPaths
+        if: matrix.platform != 'windows-latest'
+        id: paths
+        run: |
+          paths=$( echo "${{ steps.build.outputs.artifactPaths }}" | jq '.[]' | sed 's/"//g' )
+          echo "::set-output name=artifactPaths::$token"
+
+      - name: run convert artifactPaths
+        if: matrix.platform == 'windows-latest'
+        id: paths
+        run: |
+          $paths = ($env:steps_build_outputs_artifactPaths | jq '.[]' | ForEach-Object { $_ -replace '"', '' })
+          echo "::set-output name=artifactPaths::$paths"
+        shell: pwsh
       
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.platform }}-${{ matrix.label }}
-          path: ${{ steps.build.outputs.artifactPaths }}
+          path: ${{ steps.paths.outputs.artifactPaths }}
