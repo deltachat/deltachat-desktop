@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- added experimental tauri version (`packages/target-tauri`) #4462
 
 ### Changed
 - add some missing translations
