@@ -72,31 +72,34 @@ jobs:
           projectPath: packages/target-tauri
           args: ${{ matrix.args }}
 
-      - name: run convert artifactPaths
+      - name: run move artifacts
         if: matrix.platform != 'windows-latest'
         id: paths
         run: |
-          paths=$( echo '${{ steps.build.outputs.artifactPaths }}' | jq '.[]' | sed 's/"//g' )
-          echo "artifactPaths='$paths'"
-          echo "artifactPaths='$paths'" >> $GITHUB_OUTPUT
+          mkdir out
+          paths=$(echo '${{ steps.build.outputs.artifactPaths }}' | jq -c '.[]' | sed 's/"//g')
+          for fn in $paths; do
+            if [[ -f $fn ]]; then
+              echo "copy $fn"
+              cp -r $fn out
+            fi
+          done
 
-      - uses: actions/upload-artifact@v4
-        if: matrix.platform != 'windows-latest'
-        with:
-          name: ${{ matrix.platform }}-${{ matrix.label }}
-          path: ${{ steps.paths.outputs.artifactPaths }}
-
-      - name: run convert artifactPaths
+      - name: run move artifacts
         if: matrix.platform == 'windows-latest'
         id: pathsWin
         run: |
-          $paths = ($env:steps_build_outputs_artifactPaths | jq '.[]' | ForEach-Object { $_ -replace '"', '' })
-          echo "artifactPaths='$paths'"
-          echo "artifactPaths='$paths'" >> $GITHUB_OUTPUT
+          mkdir out
+          $jsonString = '${{ steps.build.outputs.artifactPaths }}'
+          $filePaths = ConvertFrom-Json $jsonString
+          foreach ($path in $filePaths) {
+            if (Test-Path $path -PathType Leaf) {
+              Write-Host "copy $fn"
+              Copy-Item $fn -Destination out
+            }
         shell: pwsh
 
       - uses: actions/upload-artifact@v4
-        if: matrix.platform == 'windows-latest'
         with:
           name: ${{ matrix.platform }}-${{ matrix.label }}
-          path: ${{ steps.pathsWin.outputs.artifactPaths }}
+          path: out/*
