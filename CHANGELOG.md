@@ -49,13 +49,9 @@
 - accessibility: arrow-key navigation for message list, gallery and sticker picker #4294, #4376, #4372,
 - accessibility: arrow-key navigation: handle "End" and "Home" keys to go to last / first item #4438
 - add show_app_in_chat option to webxdc info message context menu #4459
-<<<<<<< HEAD
 - add experimental content protection option (to prevent screenshots and screenrecording the app) #4475
 - app picker for webxdc apps in attachement menu #4485
-- add special error dialog for the case that deltachat-rpc-server is not found
-=======
 - add special error dialog for the case that deltachat-rpc-server is not found #4479
->>>>>>> cf5337ce0 (add pr number to changelog)
 
 ### Changed
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.154.1`
