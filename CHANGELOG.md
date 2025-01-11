@@ -6,6 +6,7 @@
 - accessibility: arrow-key navigation for message list, gallery and sticker picker #4294, #4376, #4372,
 - accessibility: arrow-key navigation: handle "End" and "Home" keys to go to last / first item #4438
 - add show_app_in_chat option to webxdc info message context menu #4459
+- add experimental content protection option (to prevent screenshots and screenrecording the app) #4475
 
 ## Changed
 - dev: upgrade react to v18 and react pinch pan zoom to v3
