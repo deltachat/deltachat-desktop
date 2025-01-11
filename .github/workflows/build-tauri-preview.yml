@@ -71,8 +71,7 @@ jobs:
       - name: run log artifactPaths
         run: echo ${{ steps.build.artifactPaths }}
       
-      - name: Upload
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: {{ matrix.os }}-${{ matrix.version }}
           path: ${{ steps.build.artifactPaths }}
