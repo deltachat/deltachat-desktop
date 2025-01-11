@@ -60,9 +60,19 @@ jobs:
           pnpm install
 
       - uses: tauri-apps/tauri-action@v0
+        id: build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION_INFO_GIT_REF: ${{ github.ref }}
         with:
           projectPath: packages/target-tauri
           args: ${{ matrix.args }}
+      
+      - name: run log artifactPaths
+        run: echo ${{ steps.build.artifactPaths }}
+      
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: {{ matrix.os }}-${{ matrix.version }}
+          path: ${{ steps.build.artifactPaths }}
