@@ -18,7 +18,7 @@ jobs:
             ~/.cargo/registry/index/
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
-            packages/target-tauri/src-tauri/target/
+            target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - uses: actions-rs/toolchain@v1
         with:
@@ -29,7 +29,7 @@ jobs:
       - uses: actions-rs/cargo@v1
         with:
           command: fmt
-          args: --manifest-path packages/target-tauri/src-tauri/Cargo.toml --all -- --check
+          args: --all -- --check
 
   run_clippy:
     runs-on: ubuntu-22.04
@@ -46,7 +46,7 @@ jobs:
             ~/.cargo/registry/index/
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
-            packages/target-tauri/src-tauri/target/
+            target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - uses: actions-rs/toolchain@v1
         with:
@@ -58,4 +58,4 @@ jobs:
           VERSION_INFO_GIT_REF: ${{ github.ref }}
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          args: --manifest-path packages/target-tauri/src-tauri/Cargo.toml --workspace --tests --examples
+          args: --workspace --tests --examples
