@@ -25,7 +25,7 @@ type Props = {
   QrWithToken: string
 }
 
-// time it takes on progress === 0 to show the rouble shooting button in ms
+// time it takes on progress === 0 to show the trouble shooting button in ms
 const TROUBLESHOOTING_TIMEOUT = 4000
 
 export function ReceiveBackupProgressDialog({

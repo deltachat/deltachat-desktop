@@ -20,7 +20,7 @@
   - Prefer to encrypt if E2eeEnabled even if peers have EncryptPreference::NoPreference.
   - Allow empty `To` field for self-sent messages.
   - displayname may not be empty anymore #4471
-- improve backup transfer dialog (different message for connection step, timed message to tell user to checkout troubleshooting, button to link to trouble shooting) #4476
+- Improve backup transfer dialog (different message for connection step, timed message to tell user to check out troubleshooting, button to link to trouble shooting) #4476
 
 ## Fixed
 - fix chat "scrolls up" right after switching (rev 2) #4431
