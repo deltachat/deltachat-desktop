@@ -3,6 +3,7 @@ import { ChildProcessWithoutNullStreams, spawn } from 'child_process'
 import { app, dialog } from 'electron/main'
 import { BuildInfo } from '../get-build-info'
 import { arch, platform } from 'os'
+import { getLogsPath } from '../application-constants'
 
 const log = getLogger('DC-RPC')
 
@@ -16,12 +17,50 @@ export class StdioServer {
     this.serverProcess = null
   }
 
-  async start() {
+  start() {
     this.serverProcess = spawn(this.cmd_path, {
       env: {
         DC_ACCOUNTS_PATH: this.accounts_path,
         RUST_LOG: process.env.RUST_LOG,
       },
+    })
+
+    this.serverProcess.on('error', err => {
+      // The 'error' event is emitted whenever:
+      // - The process could not be spawned.
+      // - The process could not be killed.
+      // - Sending a message to the child process failed.
+      // - The child process was aborted via the signal option.
+      // ~ https://nodejs.org/api/child_process.html#event-error
+
+      if (err.message.endsWith('ENOENT')) {
+        dialog.showErrorBox(
+          'Fatal Error: Core Library Missing',
+          `The DeltaChat Module is missing! It should be located at "${
+            this.cmd_path
+          }".
+    
+This could be due to your antivirus program. Please check the quarantine to restore it and notify the developer about this issue.
+You can reach us on delta@merlinux.eu or on github.com/deltachat/deltachat-desktop/issues .
+
+The Log file is located in this folder: ${getLogsPath()}
+--------------------
+Error: ${err.message}
+`
+        )
+      } else {
+        dialog.showErrorBox(
+          'Fatal Error',
+          `Error with core has been detected, please contact developers: You can reach us on delta@merlinux.eu or on github.com/deltachat/deltachat-desktop/issues .
+
+          ${err.name}: ${err.message}
+
+          The Log file is located in this folder: ${getLogsPath()}\n
+          `
+        )
+      }
+      // I think we can exit in all the cases, because all errors here are serious
+      app.exit(1)
     })
 
     let buffer = ''

@@ -141,7 +141,7 @@ export default class DeltaChatController extends EventEmitter {
       serverPath
     )
 
-    await this.account_manager.start()
+    this.account_manager.start()
     log.info('HI')
 
     //todo? multiple instances, accounts is always writable
