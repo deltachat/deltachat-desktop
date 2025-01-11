@@ -53,6 +53,11 @@ jobs:
           toolchain: 1.84
           components: clippy
           override: true
+      - name: ensure js part is there
+        run: |
+          npm i -g pnpm
+          pnpm i
+          pnpm --filter=@deltachat-desktop/target-tauri build
       - uses: actions-rs/clippy-check@v1
         env:
           VERSION_INFO_GIT_REF: ${{ github.ref }}
