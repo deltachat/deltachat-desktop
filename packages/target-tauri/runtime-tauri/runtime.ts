@@ -179,7 +179,7 @@ class TauriRuntime implements Runtime {
 
       // does not exist in delta tauri
       'allow-unsafe-core-replacement': false,
-      // these are not relevant for frontend (--version, --help and theur shorthand forms)
+      // these are not relevant for frontend (--version, --help and their shorthand forms)
       version: false,
       v: false,
       help: false,
@@ -214,7 +214,7 @@ class TauriRuntime implements Runtime {
       const traces = new Error().stack
         ?.split('\n')
         .map(line => line.split('@'))
-        .slice(3) // removes non interessting stackframes
+        .slice(3) // removes non interesting stackframes
 
       const filtered = traces?.filter(([name, location]) => {
         return name.length > 0 && location !== '[native code]'
