@@ -78,4 +78,4 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.platform }}-${{ matrix.label }}
-          path: ${{ steps.build.artifactPaths }}
+          path: ${{ steps.build.outputs.artifactPaths }}
