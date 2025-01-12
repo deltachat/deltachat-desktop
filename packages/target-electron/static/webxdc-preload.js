@@ -106,6 +106,7 @@ class RealtimeListener {
   const api = {
     selfAddr: '?Setup Missing?',
     selfName: '?Setup Missing?',
+    getMemberList: () => ipcRenderer.invoke('webxdc.getMemberList'),
     setUpdateListener: (cb, start_serial = 0) => {
       last_serial = start_serial
       callback = cb
