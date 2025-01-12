@@ -77,6 +77,7 @@ const Composer = forwardRef<
   const chatId = selectedChat.id
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const [showAppPicker, setShowAppPicker] = useState(false)
+  const [apps, setApps] = useState<AppInfo[]>([])
 
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
   const pickerButtonRef = useRef<HTMLButtonElement>(null)
@@ -414,7 +415,11 @@ const Composer = forwardRef<
         </div>
         {showAppPicker && (
           <OutsideClickHelper onClick={() => setShowAppPicker(false)}>
-            <AppPickerWrapper onAppSelected={onAppSelected} />
+            <AppPickerWrapper
+              onAppSelected={onAppSelected}
+              apps={apps}
+              setApps={setApps}
+            />
           </OutsideClickHelper>
         )}
         {showEmojiPicker && (

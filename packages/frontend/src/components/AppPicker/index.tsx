@@ -41,6 +41,8 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
   const [icons, setIcons] = useState<{ [key: string]: string }>({})
   const categories = [AppCategoryEnum.tool, AppCategoryEnum.game]
 
+  console.log('apps')
+
   useEffect(() => {
     const loadIcons = async () => {
       const newIcons: { [key: string]: string } = {}

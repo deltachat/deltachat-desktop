@@ -182,6 +182,9 @@ class ElectronRuntime implements Runtime {
   removeTempFile(path: string): Promise<void> {
     return ipcBackend.invoke('app.removeTempFile', path)
   }
+  getJsonFromBase64(base64: string): any {
+    return ipcBackend.invoke('app.getJsonFromBase64', base64)
+  }
   private notificationCallback: (data: {
     accountId: number
     chatId: number

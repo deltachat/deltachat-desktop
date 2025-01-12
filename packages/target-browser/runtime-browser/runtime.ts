@@ -367,6 +367,9 @@ class BrowserRuntime implements Runtime {
       body: name,
     })
   }
+  async getJsonFromBase64(): Promise<any> {
+    this.log.critical('Method not implemented.')
+  }
 
   activeNotifications: { [chatId: number]: Notification[] } = {}
   notificationCB: (data: {
