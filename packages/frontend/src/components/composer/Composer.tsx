@@ -215,8 +215,21 @@ const Composer = forwardRef<
     }
   }, [showEmojiPicker, emojiAndStickerRef])
 
-  const onAppSelected = (appInfo: AppInfo) => {
+  const onAppSelected = async (appInfo: AppInfo) => {
     log.debug('App selected', appInfo)
+    const response = await BackendRemote.rpc.getHttpResponse(
+      selectedAccountId(),
+      'https://apps.testrun.org/' + appInfo.cache_relname
+    )
+    if (response?.blob?.length) {
+      const path = await runtime.writeTempFileFromBase64(
+        appInfo.cache_relname,
+        response.blob
+      )
+      await addFileToDraft(path, 'File')
+      await runtime.removeTempFile(path)
+      setShowAppPicker(false)
+    }
   }
 
   // Paste file functionality
