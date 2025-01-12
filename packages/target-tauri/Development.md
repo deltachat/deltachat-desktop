@@ -32,7 +32,6 @@ Sometimes there are dependency conflicts, if there are you need to edit `package
 
 run `cargo update` in `packages/target-tauri/src-tauri`.
 
-
 ## Quirks
 
 - When you edit runtime or frontend code you need to restart the "tauri dev" command, otherwise the changes might not be picked up.
