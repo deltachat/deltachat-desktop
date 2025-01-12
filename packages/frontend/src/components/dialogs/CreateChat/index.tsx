@@ -161,31 +161,19 @@ function CreateChatMain(props: CreateChatMainProps) {
       contactCache[contactIds[0]]?.address.toLowerCase() ===
         queryStr.trim().toLowerCase())
   )
-  const enum ExtraItemType {
-    // Negative number so that we can differentiate these from
-    // contact IDs, which (I assume) are always non-negative.
-    ADD_CONTACT_QR_SCAN = -999,
-    ADD_GROUP,
-    ADD_BROADCAST_LIST,
-    ADD_CONTACT,
-  }
   const contactsAndExtraItems = useMemo(
     () => [
       ...(needToRenderAddContactQRScan
-        ? [ExtraItemType.ADD_CONTACT_QR_SCAN]
+        ? [CreateChatExtraItemType.ADD_CONTACT_QR_SCAN]
         : []),
-      ...(needToRenderAddGroup ? [ExtraItemType.ADD_GROUP] : []),
+      ...(needToRenderAddGroup ? [CreateChatExtraItemType.ADD_GROUP] : []),
       ...(needToRenderAddBroadcastList
-        ? [ExtraItemType.ADD_BROADCAST_LIST]
+        ? [CreateChatExtraItemType.ADD_BROADCAST_LIST]
         : []),
       ...contactIds,
-      ...(needToRenderAddContact ? [ExtraItemType.ADD_CONTACT] : []),
+      ...(needToRenderAddContact ? [CreateChatExtraItemType.ADD_CONTACT] : []),
     ],
     [
-      ExtraItemType.ADD_BROADCAST_LIST,
-      ExtraItemType.ADD_CONTACT,
-      ExtraItemType.ADD_CONTACT_QR_SCAN,
-      ExtraItemType.ADD_GROUP,
       contactIds,
       needToRenderAddBroadcastList,
       needToRenderAddContact,
@@ -304,6 +292,17 @@ function CreateChatMain(props: CreateChatMainProps) {
                   (see https://github.com/deltachat/deltachat-desktop/issues/1830) */}
                   <FixedSizeList
                     itemCount={contactsAndExtraItems.length}
+                    itemData={{
+                      contactsAndExtraItems,
+                      contactCache,
+                      onContactClick: chooseContact,
+                      addContactOnClick,
+                      onContactContextMenu,
+                      setViewMode,
+                      openQRScan,
+                      queryStrIsValidEmail,
+                      queryStr,
+                    }}
                     itemKey={index => contactsAndExtraItems[index]}
                     onItemsRendered={onItemsRendered}
                     ref={ref}
@@ -316,80 +315,13 @@ function CreateChatMain(props: CreateChatMainProps) {
                     // "Rocket Theme", which results in gaps between the elements.
                     itemSize={64}
                   >
-                    {({ index, style }) => {
-                      const item = contactsAndExtraItems[index]
-
-                      const el = (() => {
-                        switch (item) {
-                          case ExtraItemType.ADD_GROUP: {
-                            return (
-                              <PseudoListItem
-                                id='newgroup'
-                                cutoff='+'
-                                text={tx('menu_new_group')}
-                                onClick={() => setViewMode('createGroup')}
-                              />
-                            )
-                          }
-                          case ExtraItemType.ADD_BROADCAST_LIST: {
-                            return (
-                              <PseudoListItem
-                                id='newbroadcastlist'
-                                cutoff='+'
-                                text={tx('new_broadcast_list')}
-                                onClick={() =>
-                                  setViewMode('createBroadcastList')
-                                }
-                              />
-                            )
-                          }
-                          case ExtraItemType.ADD_CONTACT_QR_SCAN: {
-                            return (
-                              <PseudoListItem
-                                id='showqrcode'
-                                text={tx('menu_new_contact')}
-                                onClick={openQRScan}
-                              >
-                                <QRAvatar />
-                              </PseudoListItem>
-                            )
-                          }
-                          case ExtraItemType.ADD_CONTACT: {
-                            return (
-                              <PseudoListItemAddContact
-                                queryStr={queryStr.trim()}
-                                queryStrIsEmail={queryStrIsValidEmail}
-                                onClick={addContactOnClick}
-                              />
-                            )
-                          }
-                          default: {
-                            const contact: Type.Contact | undefined =
-                              contactCache[item]
-                            if (!contact) {
-                              // It's not loaded yet
-                              return null
-                            }
-                            return (
-                              <ContactListItem
-                                contact={contact}
-                                onClick={chooseContact}
-                                onContextMenu={
-                                  contact.id !== C.DC_CONTACT_ID_SELF
-                                    ? ev => onContactContextMenu(contact, ev)
-                                    : undefined
-                                }
-                                showCheckbox={false}
-                                checked={false}
-                                showRemove={false}
-                              />
-                            )
-                          }
-                        }
-                      })()
-
-                      return <div style={style}>{el}</div>
-                    }}
+                    {/* Remember that the renderer function
+                    must not be defined _inline_.
+                    Otherwise when the component re-renders,
+                    item elements get replaces with fresh ones,
+                    and we lose focus.
+                    See https://github.com/bvaughn/react-window/issues/420#issuecomment-585813335 */}
+                    {CreateChatMainRow}
                   </FixedSizeList>
                 </RovingTabindexProvider>
               )}
@@ -406,6 +338,116 @@ function CreateChatMain(props: CreateChatMainProps) {
       </DialogFooter>
     </>
   )
+}
+function CreateChatMainRow({
+  index,
+  style,
+  data,
+}: {
+  index: number
+  style: React.CSSProperties
+  data: {
+    contactsAndExtraItems: (CreateChatExtraItemType | T.Contact['id'])[]
+    contactCache: ReturnType<typeof useLazyLoadedContacts>['contactCache']
+    onContactClick: (contact: Type.Contact) => void
+    addContactOnClick: () => void
+    onContactContextMenu: (contact: Type.Contact, ev: MouseEvent) => void
+    setViewMode: (viewMode: ViewMode) => void
+    openQRScan: () => Promise<void>
+    queryStrIsValidEmail: boolean
+    queryStr: string
+  }
+}) {
+  const {
+    contactsAndExtraItems,
+    contactCache,
+    onContactClick,
+    addContactOnClick,
+    onContactContextMenu,
+    setViewMode,
+    openQRScan,
+    queryStrIsValidEmail,
+    queryStr,
+  } = data
+  const item = contactsAndExtraItems[index]
+
+  const tx = useTranslationFunction()
+
+  const el = (() => {
+    switch (item) {
+      case CreateChatExtraItemType.ADD_GROUP: {
+        return (
+          <PseudoListItem
+            id='newgroup'
+            cutoff='+'
+            text={tx('menu_new_group')}
+            onClick={() => setViewMode('createGroup')}
+          />
+        )
+      }
+      case CreateChatExtraItemType.ADD_BROADCAST_LIST: {
+        return (
+          <PseudoListItem
+            id='newbroadcastlist'
+            cutoff='+'
+            text={tx('new_broadcast_list')}
+            onClick={() => setViewMode('createBroadcastList')}
+          />
+        )
+      }
+      case CreateChatExtraItemType.ADD_CONTACT_QR_SCAN: {
+        return (
+          <PseudoListItem
+            id='showqrcode'
+            text={tx('menu_new_contact')}
+            onClick={openQRScan}
+          >
+            <QRAvatar />
+          </PseudoListItem>
+        )
+      }
+      case CreateChatExtraItemType.ADD_CONTACT: {
+        return (
+          <PseudoListItemAddContact
+            queryStr={queryStr.trim()}
+            queryStrIsEmail={queryStrIsValidEmail}
+            onClick={addContactOnClick}
+          />
+        )
+      }
+      default: {
+        const contact: Type.Contact | undefined = contactCache[item]
+        if (!contact) {
+          // It's not loaded yet
+          return null
+        }
+        return (
+          <ContactListItem
+            contact={contact}
+            onClick={onContactClick}
+            onContextMenu={
+              contact.id !== C.DC_CONTACT_ID_SELF
+                ? ev => onContactContextMenu(contact, ev)
+                : undefined
+            }
+            showCheckbox={false}
+            checked={false}
+            showRemove={false}
+          />
+        )
+      }
+    }
+  })()
+
+  return <div style={style}>{el}</div>
+}
+const enum CreateChatExtraItemType {
+  // Negative number so that we can differentiate these from
+  // contact IDs, which (I assume) are always non-negative.
+  ADD_CONTACT_QR_SCAN = -999,
+  ADD_GROUP,
+  ADD_BROADCAST_LIST,
+  ADD_CONTACT,
 }
 
 type CreateGroupProps = {
