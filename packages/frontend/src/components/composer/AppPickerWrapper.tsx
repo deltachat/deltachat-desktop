@@ -16,7 +16,6 @@ type Props = {
 }
 
 export const AppPickerWrapper = ({ onAppSelected, apps, setApps }: Props) => {
-
   useEffect(() => {
     const fetchApps = async () => {
       try {
