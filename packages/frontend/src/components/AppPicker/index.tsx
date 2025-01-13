@@ -91,6 +91,7 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
     <div className={classNames(styles.appPickerContainer, className)}>
       <input
         type='text'
+        autoFocus
         placeholder={tx('search')}
         value={searchQuery}
         onChange={e => setSearchQuery(e.target.value)}
@@ -98,7 +99,7 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
       />
       <div className={styles.appPickerList}>
         {filteredApps.map(app => (
-          <div
+          <button
             key={app.app_id}
             className={styles.appItem}
             onClick={() => onSelect && onSelect(app)}
@@ -110,11 +111,11 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
             />
             <div className={styles.appDetails}>
               <div className={styles.appName}>{app.name}</div>
-              <div className={styles.appDescription}>
+              <div className={styles.appShortDescription}>
                 {app.short_description}
               </div>
             </div>
-          </div>
+          </button>
         ))}
       </div>
       <div className={styles.tabBar}>
@@ -126,10 +127,14 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
             })}
             onClick={() => handleCategoryClick(category)}
           >
-            <div className={styles.categoryIcon}>
-              <img src={`./images/${category}.svg`} alt={category} />
-            </div>
+            <div className={styles.category}>
+            <img
+              className={styles.categoryIcon}
+              src={`./images/${category}.svg`}
+              alt={category}
+            />
             <div className={styles.categoryTitle}>{tx(category)}</div>
+            </div>
           </button>
         ))}
       </div>

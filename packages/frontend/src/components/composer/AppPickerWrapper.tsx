@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react'
+import React, { useEffect } from 'react'
 import { AppPicker, AppInfo } from '../AppPicker'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { getLogger } from '../../../../shared/logger'
@@ -17,7 +17,7 @@ type Props = {
 
 export const AppPickerWrapper = ({ onAppSelected, apps, setApps }: Props) => {
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const fetchApps = async () => {
       try {
         const response = await BackendRemote.rpc.getHttpResponse(

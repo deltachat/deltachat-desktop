@@ -1,24 +1,27 @@
 .appPickerList {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 6px;
   flex-grow: 1;
   overflow-x: hidden;
   overflow-y: auto;
   height: calc(70vH - 70px);
-  padding-bottom: 48px;
+  padding: 8px 0 32px 8px;
 }
-
 
 .appItem {
   display: flex;
   align-items: center;
-  width: 236px;
-  height: 90px;
-  padding: 8px;
+  width: 256px;
+  height: 76px;
   border-radius: 8px;
   cursor: pointer;
-  &:hover {
+  background: none;
+  border: none;
+  color: var(--picker-text-rgb);
+  text-align: left;
+  outline: none;
+  &:hover, &:focus {
     background-color: var(--picker-border-and-hover-color);
   }
 }
@@ -55,13 +58,6 @@
   padding: 4px 0;
 }
 
-.appDescription {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  height: 48px;
-  text-overflow: "... ";
-}
-
 .tabBar {
   position: sticky;
   bottom: 0px;
@@ -70,6 +66,9 @@
   background: var(--bgPrimary);
   border-top: 1px solid var(--picker-border-and-hover-color);
   button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: var(--picker-text-rgb);
     flex-grow: 1;
     padding: 8px;
@@ -90,7 +89,12 @@
   }
 }
 
-
+.category {
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
 .categoryIcon {
   width: 36px;

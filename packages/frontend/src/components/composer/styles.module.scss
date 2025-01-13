@@ -16,6 +16,14 @@ $esp-header-height: 40px;
   border-radius: var(--picker-BorderRadius);
   overflow: hidden;
   box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, .0901960784);
+  @media (max-width: 900px) {
+    width: 40%;
+  }
+
+  @media (max-width: 720px) {
+    width: 100%;
+    right: 0px;
+  }
 }
 
 .appPicker {
