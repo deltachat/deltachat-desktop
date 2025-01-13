@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import classNames from 'classnames'
+import { C } from '@deltachat/jsonrpc-client'
 
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
@@ -37,14 +38,21 @@ type Props = {
 export function AppPicker({ className, onSelect, apps = [] }: Props) {
   const tx = useTranslationFunction()
   const [searchQuery, setSearchQuery] = useState('')
+  const [isOffline, setIsOffline] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState(AppCategoryEnum.all)
   const [icons, setIcons] = useState<{ [key: string]: string }>({})
   const categories = [AppCategoryEnum.tool, AppCategoryEnum.game]
 
-  console.log('apps')
-
   useEffect(() => {
     const loadIcons = async () => {
+      if (!apps.length) {
+        const connectivity =
+          await BackendRemote.rpc.getConnectivity(selectedAccountId())
+        if (connectivity !== C.DC_CONNECTIVITY_CONNECTED) {
+          setIsOffline(true)
+          return
+        }
+      }
       const newIcons: { [key: string]: string } = {}
       let count = 0
       for (const app of apps) {
@@ -53,7 +61,7 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
           'https://apps.testrun.org/' + app.icon_relname // TODO: make URL configurable in settings
         )) as { blob: string }
         if (response?.blob !== undefined) {
-          newIcons[app.app_id] = response.blob
+          newIcons[app.app_id] = `data:image/png;base64,${response.blob}`
         }
         app.short_description = app.description.split('\n')[0]
         count++
@@ -64,7 +72,7 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
       setIcons({ ...newIcons })
     }
     loadIcons()
-  }, [apps])
+  }, [apps, isOffline])
 
   const handleCategoryClick = useCallback(
     (category: AppCategoryEnum) => {
@@ -98,25 +106,31 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
         className={styles.searchInput}
       />
       <div className={styles.appPickerList}>
-        {filteredApps.map(app => (
-          <button
-            key={app.app_id}
-            className={styles.appItem}
-            onClick={() => onSelect && onSelect(app)}
-          >
-            <img
-              src={`data:image/png;base64,${icons[app.app_id]}`}
-              alt={`${app.name} icon`}
-              className={styles.appIcon}
-            />
-            <div className={styles.appDetails}>
-              <div className={styles.appName}>{app.name}</div>
-              <div className={styles.appShortDescription}>
-                {app.short_description}
-              </div>
-            </div>
-          </button>
-        ))}
+        {!isOffline && Object.keys(icons).length > 0 ? (
+          <>
+            {filteredApps.map(app => (
+              <button
+                key={app.app_id}
+                className={styles.appItem}
+                onClick={() => onSelect && onSelect(app)}
+              >
+                <img
+                  src={icons[app.app_id] ?? ''}
+                  alt={`${app.name} icon`}
+                  className={styles.appIcon}
+                />
+                <div className={styles.appDetails}>
+                  <div className={styles.appName}>{app.name}</div>
+                  <div className={styles.appShortDescription}>
+                    {app.short_description}
+                  </div>
+                </div>
+              </button>
+            ))}
+          </>
+        ) : (
+          <div className={styles.offlineMessage}>{tx('offline')}</div>
+        )}
       </div>
       <div className={styles.tabBar}>
         {categories.map(category => (
@@ -128,12 +142,12 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
             onClick={() => handleCategoryClick(category)}
           >
             <div className={styles.category}>
-            <img
-              className={styles.categoryIcon}
-              src={`./images/${category}.svg`}
-              alt={category}
-            />
-            <div className={styles.categoryTitle}>{tx(category)}</div>
+              <img
+                className={styles.categoryIcon}
+                src={`./images/${category}.svg`}
+                alt={category}
+              />
+              <div className={styles.categoryTitle}>{tx(category)}</div>
             </div>
           </button>
         ))}

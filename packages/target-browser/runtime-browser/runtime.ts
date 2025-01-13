@@ -367,8 +367,20 @@ class BrowserRuntime implements Runtime {
       body: name,
     })
   }
-  async getJsonFromBase64(): Promise<any> {
-    this.log.critical('Method not implemented.')
+  async getJsonFromBase64(base64: string): Promise<any> {
+    try {
+      const text = atob(base64)
+      const length = text.length
+      const bytes = new Uint8Array(length)
+      for (let i = 0; i < length; i++) {
+        bytes[i] = text.charCodeAt(i)
+      }
+      const decoder = new TextDecoder()
+      return JSON.parse(decoder.decode(bytes))
+    } catch (error) {
+      this.log.critical('String could not de decoded or parsed')
+      return null
+    }
   }
 
   activeNotifications: { [chatId: number]: Notification[] } = {}

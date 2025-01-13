@@ -25,12 +25,14 @@ export const AppPickerWrapper = ({ onAppSelected, apps, setApps }: Props) => {
           'https://apps.testrun.org/xdcget-lock.json'
         )
         const apps = await runtime.getJsonFromBase64(response.blob)
-        setApps(apps)
+        if (apps) {
+          setApps(apps)
+        }
       } catch (error) {
         log.error('Failed to fetch apps:', error)
       }
     }
-    if (!apps.length) {
+    if (!apps?.length) {
       fetchApps()
     }
   }, [apps, setApps])
