@@ -5,14 +5,12 @@
   flex-grow: 1;
   overflow-x: hidden;
   overflow-y: auto;
-  height: calc(70vH - 70px);
+  height: calc(70vh - 70px);
   padding: 8px 0 32px 8px;
 }
 
-.appItem {
-  display: flex;
-  align-items: center;
-  width: 256px;
+.appListItem {
+  width: 300px;
   height: 76px;
   border-radius: 8px;
   cursor: pointer;
@@ -21,20 +19,28 @@
   color: var(--picker-text-rgb);
   text-align: left;
   outline: none;
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     background-color: var(--picker-border-and-hover-color);
   }
 }
 
+.appItem {
+  display: flex;
+  align-items: center;
+  color: var(--picker-text-rgb);
+  text-align: left;
+}
+
 .searchInput {
   width: 100%;
-  color: var(--navBarText);
   padding: 10px;
   background: var(--bgPrimary);
   border: none;
   border-bottom: 1px solid var(--picker-border-and-hover-color);
   font-size: 14px;
-  &:focus, &:active {
+  &:focus,
+  &:active {
     outline: none;
   }
 }
@@ -46,16 +52,31 @@
   border-radius: 5px;
 }
 
-.appDetails {
+.appInfo {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  p {
+    margin: 2px 0;
+  }
+}
+
+.appDetails {
+  p {
+    margin: 6px 0;
+    span {
+      font-weight: bold;
+    }
+  }
+}
+
+.appDescription {
+  margin: 8px 0;
 }
 
 .appName {
   font-size: 16px;
   font-weight: bold;
-  padding: 4px 0;
 }
 
 .tabBar {

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
-import { AppPicker, AppInfo } from '../AppPicker'
-import { runtime } from '@deltachat-desktop/runtime-interface'
+import { AppPicker, AppInfo, AppStoreUrl } from '../AppPicker'
 import { getLogger } from '../../../../shared/logger'
 
 import styles from './styles.module.scss'
@@ -8,6 +7,22 @@ import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 
 const log = getLogger('renderer/components/composer/AppPickerWrapper')
+
+const getJsonFromBase64 = (base64: string): any => {
+  try {
+    const text = atob(base64)
+    const length = text.length
+    const bytes = new Uint8Array(length)
+    for (let i = 0; i < length; i++) {
+      bytes[i] = text.charCodeAt(i)
+    }
+    const decoder = new TextDecoder()
+    return JSON.parse(decoder.decode(bytes))
+  } catch (error) {
+    log.critical('String could not de decoded or parsed')
+    return null
+  }
+}
 
 type Props = {
   onAppSelected?: (app: AppInfo) => void
@@ -21,9 +36,9 @@ export const AppPickerWrapper = ({ onAppSelected, apps, setApps }: Props) => {
       try {
         const response = await BackendRemote.rpc.getHttpResponse(
           selectedAccountId(),
-          'https://apps.testrun.org/xdcget-lock.json'
+          AppStoreUrl + 'xdcget-lock.json'
         )
-        const apps = await runtime.getJsonFromBase64(response.blob)
+        const apps = getJsonFromBase64(response.blob)
         if (apps) {
           setApps(apps)
         }

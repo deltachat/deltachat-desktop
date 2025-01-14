@@ -221,9 +221,6 @@ ${error instanceof Error ? error.message : inspect(error, { depth: null })}`
   ipcMain.handle('app.writeTempFileFromBase64', (_ev, name, content) =>
     writeTempFileFromBase64(name, content)
   )
-  ipcMain.handle('app.getJsonFromBase64', (_ev, content) =>
-    getJsonFromBase64(content)
-  )
   ipcMain.handle('app.writeTempFile', (_ev, name, content) =>
     writeTempFile(name, content)
   )
@@ -339,16 +336,6 @@ export async function writeTempFileFromBase64(
   log.debug(`Writing base64 encoded file ${pathToFile}`)
   await writeFile(pathToFile, Buffer.from(content, 'base64'), 'binary')
   return pathToFile
-}
-
-export async function getJsonFromBase64(content: string): Promise<any> {
-  const buf = Buffer.from(content, 'base64')
-  try {
-    return JSON.parse(buf.toString('utf8'))
-  } catch (error) {
-    log.error('Error parsing JSON from base64', error)
-    return null
-  }
 }
 
 /**

@@ -121,7 +121,6 @@ export interface Runtime {
   writeTempFileFromBase64(name: string, content: string): Promise<string>
   writeTempFile(name: string, content: string): Promise<string>
   removeTempFile(path: string): Promise<void>
-  getJsonFromBase64(base64: string): Promise<any>
   getWebxdcDiskUsage(accountId: number): Promise<{
     total_size: number
     data_size: number

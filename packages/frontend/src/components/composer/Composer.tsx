@@ -180,6 +180,7 @@ const Composer = forwardRef<
       shiftPressed.current = ev.shiftKey
       if (ev.type === 'keydown' && ev.code === 'Escape') {
         setShowEmojiPicker(false)
+        setShowAppPicker(false)
       }
     }
     // these options are needed, otherwise emoji mart sometimes eats the keydown event

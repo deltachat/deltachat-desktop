@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import classNames from 'classnames'
+import moment from 'moment'
+import { filesize } from 'filesize'
 import { C } from '@deltachat/jsonrpc-client'
 
 import useTranslationFunction from '../../hooks/useTranslationFunction'
@@ -8,8 +10,18 @@ import styles from './styles.module.scss'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 
+import {
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogWithHeader,
+  FooterActionButton,
+  FooterActions,
+} from '../Dialog'
+
 export interface AppInfo {
   app_id: string
+  author?: string
   tag_name: string
   url: string
   date: string
@@ -22,6 +34,8 @@ export interface AppInfo {
   size: number
   icon_relname: string
 }
+
+export const AppStoreUrl = 'https://apps.testrun.org/'
 
 const enum AppCategoryEnum {
   all = 'all',
@@ -40,6 +54,7 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
   const [searchQuery, setSearchQuery] = useState('')
   const [isOffline, setIsOffline] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState(AppCategoryEnum.all)
+  const [selectedAppInfo, setSelectedAppInfo] = useState<AppInfo | null>(null)
   const [icons, setIcons] = useState<{ [key: string]: string }>({})
   const categories = [AppCategoryEnum.tool, AppCategoryEnum.game]
 
@@ -58,12 +73,15 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
       for (const app of apps) {
         const response = (await BackendRemote.rpc.getHttpResponse(
           selectedAccountId(),
-          'https://apps.testrun.org/' + app.icon_relname // TODO: make URL configurable in settings
+          AppStoreUrl + app.icon_relname
         )) as { blob: string }
         if (response?.blob !== undefined) {
           newIcons[app.app_id] = `data:image/png;base64,${response.blob}`
         }
         app.short_description = app.description.split('\n')[0]
+        const url = new URL(app.source_code_url)
+        app.author = url.pathname.split('/')[1]
+        app.date = moment(app.date).format('LL')
         count++
         if (count % 10 === 0) {
           setIcons({ ...newIcons })
@@ -95,6 +113,75 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
     })
   }, [apps, searchQuery, selectedCategory])
 
+  const AppInfoOverlay = (props: {
+    app: AppInfo
+    setSelectedAppInfo: (app: AppInfo | null) => void
+    onSelect?: (app: AppInfo) => void
+  }) => {
+    const { app, setSelectedAppInfo, onSelect } = props
+    const onClose = () => {
+      setSelectedAppInfo(null)
+    }
+    if (!app) {
+      return null
+    }
+    return (
+      <DialogWithHeader
+        title={tx('app_info')}
+        className='app-info-dialog'
+        onClose={onClose}
+      >
+        <DialogBody>
+          <DialogContent>
+            {renderAppInfo(app)}
+            <div className={styles.appDetails}>
+              <div className={styles.appDescription}>{app.description}</div>
+              <p>
+                <span>{tx('app_date_published')}:</span> {app.date}
+              </p>
+              <p>
+                <span>{tx('app_size')}:</span> {filesize(app.size)}
+              </p>
+              <p>
+                <span>{tx('app_source')}:</span>{' '}
+                <a href='${app.source_code_url}' target='_blank'>
+                  {app.source_code_url}
+                </a>
+              </p>
+              <p>
+                <span>{tx('app_author')}:</span> {app.author}
+              </p>
+            </div>
+          </DialogContent>
+          <DialogFooter>
+            <FooterActions>
+              <FooterActionButton onClick={() => onSelect && onSelect(app)}>
+                {tx('add_to_chat')}
+              </FooterActionButton>
+            </FooterActions>
+          </DialogFooter>
+        </DialogBody>
+      </DialogWithHeader>
+    )
+  }
+
+  const renderAppInfo = (app: AppInfo) => {
+    return (
+      <div className={styles.appItem}>
+        <img
+          src={icons[app.app_id] ?? ''}
+          alt={`${app.name} icon`}
+          className={styles.appIcon}
+        />
+        <div className={styles.appInfo}>
+          <div className={styles.appName}>{app.name}</div>
+          <p>{app.short_description}</p>
+          <p>{app.author}</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className={classNames(styles.appPickerContainer, className)}>
       <input
@@ -108,28 +195,25 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
       <div className={styles.appPickerList}>
         {!isOffline && Object.keys(icons).length > 0 ? (
           <>
+            {selectedAppInfo && (
+              <AppInfoOverlay
+                app={selectedAppInfo}
+                setSelectedAppInfo={setSelectedAppInfo}
+                onSelect={onSelect}
+              />
+            )}
             {filteredApps.map(app => (
               <button
                 key={app.app_id}
-                className={styles.appItem}
-                onClick={() => onSelect && onSelect(app)}
+                className={styles.appListItem}
+                onClick={() => setSelectedAppInfo(app)}
               >
-                <img
-                  src={icons[app.app_id] ?? ''}
-                  alt={`${app.name} icon`}
-                  className={styles.appIcon}
-                />
-                <div className={styles.appDetails}>
-                  <div className={styles.appName}>{app.name}</div>
-                  <div className={styles.appShortDescription}>
-                    {app.short_description}
-                  </div>
-                </div>
+                {renderAppInfo(app)}
               </button>
             ))}
           </>
         ) : (
-          <div className={styles.offlineMessage}>{tx('offline')}</div>
+          <div className={styles.offlineMessage}>{tx('loading')}</div>
         )}
       </div>
       <div className={styles.tabBar}>

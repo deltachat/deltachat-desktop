@@ -92,5 +92,23 @@
   },
   "search": {
     "message": "Search..."
+  },
+  "app_info": {
+    "message": "App Info"
+  },
+  "app_author": {
+    "message": "Author"
+  },
+  "app_size": {
+    "message": "Size"
+  },
+  "app_source": {
+    "message": "Source"
+  },
+  "app_date_published": {
+    "message": "Published"
+  },
+  "add_to_chat": {
+    "message": "Add to Chat"
   }
 }
