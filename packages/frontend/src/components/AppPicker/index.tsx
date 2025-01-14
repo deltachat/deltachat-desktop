@@ -155,7 +155,10 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
           </DialogContent>
           <DialogFooter>
             <FooterActions>
-              <FooterActionButton onClick={() => onSelect && onSelect(app)}>
+              <FooterActionButton
+                data-testid='add-app-to-chat'
+                onClick={() => onSelect && onSelect(app)}
+              >
                 {tx('add_to_chat')}
               </FooterActionButton>
             </FooterActions>

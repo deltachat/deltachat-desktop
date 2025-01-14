@@ -205,6 +205,7 @@ export default function MenuAttachment({
       icon: 'apps',
       label: tx('app'),
       action: selectAppPicker.bind(null),
+      dataTestid: 'open-app-picker',
     },
   ]
 
@@ -229,6 +230,7 @@ export default function MenuAttachment({
     <button
       aria-label={tx('menu_add_attachment')}
       id='attachment-menu-button'
+      data-testid='open-attachment-menu'
       className='attachment-button'
       onClick={onClickAttachmentMenu}
     >
