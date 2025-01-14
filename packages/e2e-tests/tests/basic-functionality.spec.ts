@@ -180,8 +180,8 @@ test('add app from picker to chat', async ({ page }) => {
   await chatListItem.click()
   await page.getByTestId('open-attachment-menu').click()
   await page.getByTestId('open-app-picker').click()
-  const firstApp = page.locator('.styles_module_appPickerList button').first()
-  await expect(firstApp).toBeVisible()
+  const apps = page.locator('.styles_module_appPickerList button').first()
+  await apps.waitFor({ state: 'visible' })
   const appsCount = await page
     .locator('.styles_module_appPickerList')
     .locator('button')
