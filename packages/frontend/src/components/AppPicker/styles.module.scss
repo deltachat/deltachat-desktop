@@ -1,5 +1,4 @@
 .appPickerList {
-  display: flex;
   flex-wrap: wrap;
   gap: 6px;
   flex-grow: 1;
@@ -33,6 +32,7 @@
 }
 
 .searchInput {
+   color: var(--picker-text-rgb);
   width: 100%;
   padding: 10px;
   background: var(--bgPrimary);
