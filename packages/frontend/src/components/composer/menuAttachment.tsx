@@ -202,8 +202,7 @@ export default function MenuAttachment({
       action: selectContact.bind(null),
     },
     {
-      // TODO: add (webxdc?) icon
-      icon: 'map',
+      icon: 'apps',
       label: tx('app'),
       action: selectAppPicker.bind(null),
     },
