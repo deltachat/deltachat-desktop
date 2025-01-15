@@ -15,6 +15,7 @@ import {
   refresh as refreshTitleMenu,
 } from '../menu.js'
 import { initMinWinDimensionHandling } from './helpers.js'
+import { setContentProtection } from '../content-protection.js'
 
 const log = getLogger('main/help')
 
@@ -75,6 +76,8 @@ export async function openHelpWindow(locale: string, anchor?: string) {
     },
     alwaysOnTop: main_window?.isAlwaysOnTop(),
   }))
+
+  setContentProtection(help_window)
 
   const removeScreenChangeListeners = initMinWinDimensionHandling(
     help_window,

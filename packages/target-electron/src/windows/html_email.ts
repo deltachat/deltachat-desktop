@@ -31,6 +31,7 @@ import {
   refresh as refreshTitleMenu,
 } from '../menu.js'
 import { initMinWinDimensionHandling } from './helpers.js'
+import { setContentProtection } from '../content-protection.js'
 
 const log = getLogger('html_email')
 
@@ -91,6 +92,8 @@ export function openHtmlEmailWindow(
     alwaysOnTop: mainWindow?.isAlwaysOnTop(),
   }))
   window.webContents.setZoomFactor(DesktopSettings.state.zoomFactor)
+
+  setContentProtection(window)
 
   const removeScreenChangeListeners = initMinWinDimensionHandling(
     window,

@@ -33,6 +33,7 @@ import { openHtmlEmailWindow } from './windows/html_email.js'
 import { appx, mapPackagePath } from './isAppx.js'
 import DeltaChatController from './deltachat/controller.js'
 import { BuildInfo } from './get-build-info.js'
+import { updateContentProtectionOnAllActiveWindows } from './content-protection.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -129,6 +130,8 @@ ${error instanceof Error ? error.message : inspect(error, { depth: null })}`
       runningUnderARM64Translation: app.runningUnderARM64Translation,
       rpcServerPath: dcController.rpcServerPath,
       buildInfo: BuildInfo,
+      isContentProtectionSupported:
+        platform() === 'darwin' || platform() === 'win32',
     }
     ev.returnValue = info
   })
@@ -201,7 +204,11 @@ ${error instanceof Error ? error.message : inspect(error, { depth: null })}`
     ) => {
       DesktopSettings.update({ [key]: value })
 
-      if (key === 'minimizeToTray') updateTrayIcon()
+      if (key === 'minimizeToTray') {
+        updateTrayIcon()
+      } else if (key === 'contentProtectionEnabled') {
+        updateContentProtectionOnAllActiveWindows(Boolean(value))
+      }
 
       return true
     }

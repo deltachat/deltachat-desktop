@@ -31,6 +31,7 @@ import {
   refresh as refreshTitleMenu,
 } from '../menu.js'
 import { T } from '@deltachat/jsonrpc-client'
+import { setContentProtection } from '../content-protection.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -271,6 +272,7 @@ export default class DCWebxdc extends SplitOut {
         alwaysOnTop: main_window?.isAlwaysOnTop(),
         show: false,
       })
+      setContentProtection(webxdcWindow)
       // reposition the window to last position (or default)
       webxdcWindow.setBounds(lastBounds, true)
       // show after repositioning to avoid blinking
