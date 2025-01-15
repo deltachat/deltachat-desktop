@@ -26,7 +26,7 @@ export const DeltaSelect = React.memo(
           <select
             name={props.id}
             id={props.id}
-            value={props.value}
+            value={props.value === null ? '' : props.value}
             onChange={props.onChange}
             onFocus={onFocus}
             onBlur={onBlur}
@@ -133,7 +133,7 @@ export const DeltaInput = React.memo(
         <input
           id={props.id}
           type={props.type}
-          value={props.value}
+          value={props.value === null ? '' : props.value}
           onChange={props.onChange}
           placeholder={props.placeholder}
           min={props.min}
@@ -186,7 +186,7 @@ export const DeltaPasswordInput = React.memo(
         id={props.id}
         type={showPassword ? 'text' : 'password'}
         label={props.label ? props.label : ''}
-        value={password}
+        value={password === null ? '' : password}
         onChange={props.onChange}
         placeholder={props.placeholder}
         rightElement={rightElement}

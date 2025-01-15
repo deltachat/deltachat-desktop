@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useState } from 'react'
+import React, { PropsWithChildren, useEffect, useState } from 'react'
 
 import classNames from 'classnames'
 
@@ -13,6 +13,10 @@ type Props = {
 }
 export default function Switch({ ...props }: PropsWithChildren<Props>) {
   const [checked, setChecked] = useState(props.checked)
+
+  useEffect(() => {
+    setChecked(props.checked)
+  }, [props.checked])
 
   const toggle = (event: React.ChangeEvent<HTMLInputElement>) => {
     const v = event.target.checked

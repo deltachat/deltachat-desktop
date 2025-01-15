@@ -34,6 +34,7 @@
 - fix reactions to sticker messages overlapping with next message #4433
 - fix: "Enter" not adding the first contact in "Add Members" dialog #4439
 - fix: devmode: fix logging and counting jsonrpc requests #4458
+- fix: validate proxy_url before enabling proxy #4470
 - performance: don't re-render every time the window is resized #4460
 - rename language "Luri Bakhtiari" to the local name #4472
 

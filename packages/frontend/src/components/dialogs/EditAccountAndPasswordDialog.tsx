@@ -18,6 +18,7 @@ import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 import AlertDialog from './AlertDialog'
+import { selectedAccountId } from '../../ScreenController'
 
 export default function EditAccountAndPasswordDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
@@ -102,15 +103,38 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
         ]),
       })
 
-      if (confirmed) {
-        update()
+      if (!confirmed) {
+        return
       }
-    } else {
-      update()
+    } else if (
+      initial_settings.proxy_enabled !== accountSettings.proxy_enabled &&
+      accountSettings.proxy_enabled === '1'
+    ) {
+      try {
+        const qr = await BackendRemote.rpc.checkQr(
+          selectedAccountId(),
+          accountSettings.proxy_url
+        )
+        if (qr.kind !== 'proxy') {
+          openDialog(AlertDialog, {
+            message: tx('proxy_invalid'),
+          })
+          return
+        }
+      } catch (error) {
+        const errorStr =
+          error instanceof Error ? error.message : JSON.stringify(error)
+        openDialog(AlertDialog, {
+          message: tx('proxy_invalid') + '\n' + errorStr,
+        })
+        return
+      }
     }
+    update()
   }, [
     accountSettings,
     initial_settings.addr,
+    initial_settings.proxy_enabled,
     onClose,
     openConfirmationDialog,
     openDialog,
