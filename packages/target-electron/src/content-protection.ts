@@ -5,16 +5,16 @@ import { getLogger } from '@deltachat-desktop/shared/logger'
 
 const log = getLogger('contentProtection')
 
-function updateContentProtection(windows: BrowserWindow, enabled: boolean) {
-  windows.setContentProtection(enabled)
-  if (platform() !== 'darwin' && platform() !== 'win32') {
+function updateContentProtection(window: BrowserWindow, enabled: boolean) {
+  window.setContentProtection(enabled)
+  if (enabled && platform() !== 'darwin' && platform() !== 'win32') {
     log.warn('setContentProtection not available on your platform', platform())
   }
 }
 
-export function setContentProtection(windows: BrowserWindow) {
+export function setContentProtection(window: BrowserWindow) {
   updateContentProtection(
-    windows,
+    window,
     DesktopSettings.state.contentProtectionEnabled
   )
 }
