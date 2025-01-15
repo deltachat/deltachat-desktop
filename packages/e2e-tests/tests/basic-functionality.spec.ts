@@ -12,21 +12,6 @@ test.describe.configure({ mode: 'serial' })
 
 let existingProfiles: User[] = []
 
-test.beforeAll(async ({ browser }) => {
-  const context = await browser.newContext()
-  const page = await context.newPage()
-
-  await page.goto('https://localhost:3000/')
-
-  existingProfiles = (await loadExistingProfiles(page)) ?? []
-
-  await context.close()
-})
-
-test.beforeEach(async ({ page }) => {
-  await page.goto('https://localhost:3000/')
-})
-
 // uncomment to debug single steps
 // existingProfiles = [
 //   {
@@ -41,7 +26,32 @@ test.beforeEach(async ({ page }) => {
 //   },
 // ]
 
+test.beforeAll(async ({ browser }) => {
+  const context = await browser.newContext()
+  const page = await context.newPage()
+
+  await page.goto('https://localhost:3000/')
+
+  existingProfiles = (await loadExistingProfiles(page)) ?? existingProfiles
+
+  await context.close()
+})
+
+test.beforeEach(async ({ page }) => {
+  await page.goto('https://localhost:3000/')
+})
+
 const userNames = ['Alice', 'Bob', 'Chris', 'Denis', 'Eve']
+
+const getUser = (index: number) => {
+  if (!existingProfiles || existingProfiles.length < index + 1) {
+    throw new Error('Not enough profiles for test!')
+  }
+  if (existingProfiles.length < 2) {
+    throw new Error('Not enough profiles for chat test!')
+  }
+  return existingProfiles[index]
+}
 
 /**
  * covers creating a profile with standard
@@ -76,12 +86,8 @@ test('start chat with user', async ({ page, context, browserName }) => {
   if (browserName.toLowerCase().indexOf('chrom') > -1) {
     await context.grantPermissions(['clipboard-read', 'clipboard-write'])
   }
-  // const existingProfiles = await loadProfiles(page)
-  if (!existingProfiles || existingProfiles.length < 2) {
-    throw new Error('Not enough profiles for chat test!')
-  }
-  const userA = existingProfiles[0]
-  const userB = existingProfiles[1]
+  const userA = getUser(0)
+  const userB = getUser(1)
   await switchToProfile(page, userA.id)
 
   await page.getByTestId('qr-scan-button').click()
@@ -117,15 +123,8 @@ test('start chat with user', async ({ page, context, browserName }) => {
 })
 
 test('send message', async ({ page }) => {
-  // const existingProfiles = await loadProfiles(page)
-  if (!existingProfiles || existingProfiles.length < 2) {
-    throw new Error('Not enough profiles for chat test!')
-  }
-  if (existingProfiles.length < 2) {
-    throw new Error('Not enough profiles for chat test!')
-  }
-  const userA = existingProfiles[0]
-  const userB = existingProfiles[1]
+  const userA = getUser(0)
+  const userB = getUser(1)
   // prepare last open chat for receiving user
   await switchToProfile(page, userB.id)
   // the chat that receives the message should not be selected
@@ -169,6 +168,40 @@ test('send message', async ({ page }) => {
     .locator(`.msg-body .text`)
     .textContent()
   expect(receivedMessageText).toEqual(messageText)
+})
+
+test('add app from picker to chat', async ({ page }) => {
+  const userA = existingProfiles[0]
+  const userB = existingProfiles[1]
+  await switchToProfile(page, userA.id)
+  const chatListItem = page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: userB.name })
+  await chatListItem.click()
+  await page.getByTestId('open-attachment-menu').click()
+  await page.getByTestId('open-app-picker').click()
+  const apps = page.locator('.styles_module_appPickerList button').first()
+  await apps.waitFor({ state: 'visible' })
+  const appsCount = await page
+    .locator('.styles_module_appPickerList')
+    .locator('button')
+    .count()
+  expect(appsCount).toBeGreaterThan(0)
+  await page.locator('.styles_module_searchInput').fill('Cal')
+  const calendarApp = page
+    .locator('.styles_module_appPickerList button')
+    .getByText('Calendar')
+    .first()
+  expect(calendarApp).toBeVisible()
+  calendarApp.click()
+  const appInfoDialog = page.locator('.styles_module_dialogContent')
+  await expect(appInfoDialog).toBeVisible()
+  await page.getByTestId('add-app-to-chat').click()
+  const appDraft = page.locator('.attachment-quote-section .text-part')
+  await expect(appDraft).toContainText('webxdc-calendar')
+  await page.locator('.send-button-wrapper button').click()
+  const webxdcMessage = await page.locator('.msg-body .webxdc')
+  expect(webxdcMessage).toContainText('Calendar')
 })
 
 test('delete profiles', async ({ page }) => {

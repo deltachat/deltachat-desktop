@@ -1,7 +1,7 @@
 import AutoSizer from 'react-virtualized-auto-sizer'
 import React, { useRef, useState } from 'react'
 
-import ChatListItem from '../../chat/ChatListItem'
+import { ChatListItemRowChat } from '../../chat/ChatListItemRow'
 import { PseudoListItemNoSearchResults } from '../../helpers/PseudoListItem'
 import { ChatListPart, useLogicVirtualChatList } from '../../chat/ChatList'
 import { useChatList } from '../../chat/ChatListHelpers'
@@ -70,18 +70,17 @@ export default function SelectChat(props: Props) {
                     height={height}
                     itemKey={index => 'key' + chatListIds[index]}
                     itemHeight={CHATLISTITEM_CHAT_HEIGHT}
-                  >
-                    {({ index, style }) => {
-                      const chatId = chatListIds[index]
-                      return (
-                        <div style={style}>
-                          <ChatListItem
-                            chatListItem={chatCache[chatId] || undefined}
-                            onClick={props.onChatClick.bind(null, chatId)}
-                          />
-                        </div>
-                      )
+                    itemData={{
+                      chatCache,
+                      chatListIds,
+                      onChatClick: props.onChatClick,
+
+                      selectedChatId: null,
+                      activeContextMenuChatId: null,
+                      openContextMenu: async () => {},
                     }}
+                  >
+                    {ChatListItemRowChat}
                   </ChatListPart>
                 )}
               </AutoSizer>

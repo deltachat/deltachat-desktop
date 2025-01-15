@@ -81,6 +81,36 @@
   "contact_is_blocked": {
     "message": "This contact is blocked"
   },
+  "app": {
+    "message": "App"
+  },
+  "tool": {
+    "message": "Tools"
+  },
+  "game": {
+    "message": "Games"
+  },
+  "search": {
+    "message": "Search..."
+  },
+  "app_info": {
+    "message": "App Info"
+  },
+  "app_author": {
+    "message": "Author"
+  },
+  "app_size": {
+    "message": "Size"
+  },
+  "app_source": {
+    "message": "Source"
+  },
+  "app_date_published": {
+    "message": "Published"
+  },
+  "add_to_chat": {
+    "message": "Add to Chat"
+  }
   "multidevice_connection_takes_too_long": {
     "message": "This takes longer than expected 🐌 make sure both devices are on the same Wi-Fi or network and check troubleshooting"
   }

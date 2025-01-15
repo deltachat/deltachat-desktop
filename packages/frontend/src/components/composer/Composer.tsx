@@ -41,6 +41,9 @@ import { KeybindAction } from '../../keybindings'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
 import { CloseButton } from '../Dialog'
 import { enterKeySendsKeyboardShortcuts } from '../KeyboardShortcutHint'
+import { AppPickerWrapper } from './AppPickerWrapper'
+import { AppInfo } from '../AppPicker'
+import OutsideClickHelper from '../OutsideClickHelper'
 
 const log = getLogger('renderer/composer')
 
@@ -73,6 +76,8 @@ const Composer = forwardRef<
 
   const chatId = selectedChat.id
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
+  const [showAppPicker, setShowAppPicker] = useState(false)
+  const [apps, setApps] = useState<AppInfo[]>([])
 
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
   const pickerButtonRef = useRef<HTMLButtonElement>(null)
@@ -175,6 +180,7 @@ const Composer = forwardRef<
       shiftPressed.current = ev.shiftKey
       if (ev.type === 'keydown' && ev.code === 'Escape') {
         setShowEmojiPicker(false)
+        setShowAppPicker(false)
       }
     }
     // these options are needed, otherwise emoji mart sometimes eats the keydown event
@@ -210,6 +216,23 @@ const Composer = forwardRef<
       document.removeEventListener('click', onClick)
     }
   }, [showEmojiPicker, emojiAndStickerRef])
+
+  const onAppSelected = async (appInfo: AppInfo) => {
+    log.debug('App selected', appInfo)
+    const response = await BackendRemote.rpc.getHttpResponse(
+      selectedAccountId(),
+      'https://apps.testrun.org/' + appInfo.cache_relname
+    )
+    if (response?.blob?.length) {
+      const path = await runtime.writeTempFileFromBase64(
+        appInfo.cache_relname,
+        response.blob
+      )
+      await addFileToDraft(path, 'File')
+      await runtime.removeTempFile(path)
+      setShowAppPicker(false)
+    }
+  }
 
   // Paste file functionality
   // https://github.com/deltachat/deltachat-desktop/issues/2108
@@ -362,6 +385,7 @@ const Composer = forwardRef<
         <div className='lower-bar'>
           <MenuAttachment
             addFileToDraft={addFileToDraft}
+            showAppPicker={setShowAppPicker}
             selectedChat={selectedChat}
           />
           {settingsStore && (
@@ -390,6 +414,15 @@ const Composer = forwardRef<
             />
           </div>
         </div>
+        {showAppPicker && (
+          <OutsideClickHelper onClick={() => setShowAppPicker(false)}>
+            <AppPickerWrapper
+              onAppSelected={onAppSelected}
+              apps={apps}
+              setApps={setApps}
+            />
+          </OutsideClickHelper>
+        )}
         {showEmojiPicker && (
           <EmojiAndStickerPicker
             chatId={chatId}
