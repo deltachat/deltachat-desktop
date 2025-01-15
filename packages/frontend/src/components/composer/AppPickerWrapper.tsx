@@ -5,6 +5,7 @@ import { getLogger } from '../../../../shared/logger'
 import styles from './styles.module.scss'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import moment from 'moment'
 
 const log = getLogger('renderer/components/composer/AppPickerWrapper')
 
@@ -38,13 +39,20 @@ export const AppPickerWrapper = ({ onAppSelected, apps, setApps }: Props) => {
           selectedAccountId(),
           AppStoreUrl + 'xdcget-lock.json'
         )
-        const apps = getJsonFromBase64(response.blob)
-        if (apps && Array.isArray(apps)) {
-          apps.sort((a: AppInfo, b: AppInfo) => {
-            const dateA = new Date(a.date)
-            const dateB = new Date(b.date)
-            return dateB.getTime() - dateA.getTime() // Show newest first
-          })
+        const apps = getJsonFromBase64(response.blob) as AppInfo[]
+        apps.sort((a: AppInfo, b: AppInfo) => {
+          const dateA = new Date(a.date)
+          const dateB = new Date(b.date)
+          return dateB.getTime() - dateA.getTime() // Show newest first
+        })
+        for (const app of apps) {
+          app.short_description = app.description.split('\n')[0]
+          app.description = app.description.split('\n').slice(1).join('\n')
+          const url = new URL(app.source_code_url)
+          app.author = url.pathname.split('/')[1]
+          app.date = moment(app.date).format('LL')
+        }
+        if (apps) {
           setApps(apps)
         }
       } catch (error) {
