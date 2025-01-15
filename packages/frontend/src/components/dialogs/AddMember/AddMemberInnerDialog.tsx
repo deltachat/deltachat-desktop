@@ -157,46 +157,6 @@ export function AddMemberInnerDialog({
 
   const needToRenderAddContact = queryStr !== '' && contactIds.length === 0
   const itemCount = contactIds.length + (needToRenderAddContact ? 1 : 0)
-  const renderAddContact = () => {
-    if (queryStrIsValidEmail) {
-      const pseudoContact: Type.Contact = {
-        address: queryStr,
-        color: 'lightgrey',
-        authName: '',
-        status: '',
-        displayName: queryStr,
-        id: -1,
-        lastSeen: -1,
-        name: queryStr,
-        profileImage: '',
-        nameAndAddr: '',
-        isBlocked: false,
-        isVerified: false,
-        verifierId: null,
-        wasSeenRecently: false,
-        isProfileVerified: false,
-        isBot: false,
-        e2eeAvail: false,
-      }
-      return (
-        <ContactListItem
-          contact={pseudoContact}
-          showCheckbox={true}
-          checked={false}
-          showRemove={false}
-          onCheckboxClick={createNewContact}
-        />
-      )
-    } else {
-      return (
-        <PseudoListItemAddContact
-          queryStr={queryStr}
-          queryStrIsEmail={false}
-          onClick={undefined}
-        />
-      )
-    }
-  }
 
   const addContactOnKeyDown = (ev: React.KeyboardEvent<HTMLInputElement>) => {
     if (ev.code == 'Enter') {
@@ -282,9 +242,18 @@ export function AddMemberInnerDialog({
                     if the user has 5000 contacts.
                     (see https://github.com/deltachat/deltachat-desktop/issues/1830) */}
                     <FixedSizeList
-                      itemData={contactIds}
+                      itemData={{
+                        contactIds,
+                        contactIdsInGroup,
+                        contactIdsToAdd,
+                        contactCache,
+                        onCheckboxClick: toggleMember,
+                        onCreateContactCheckboxClick: createNewContact,
+                        queryStr,
+                        queryStrIsValidEmail,
+                      }}
                       itemCount={itemCount}
-                      itemKey={(index, contactIds) => {
+                      itemKey={(index, { contactIds }) => {
                         const isExtraItem = index >= contactIds.length
                         return isExtraItem ? 'addContact' : contactIds[index]
                       }}
@@ -298,38 +267,13 @@ export function AddMemberInnerDialog({
                       // "Rocket Theme", which results in gaps between the elements.
                       itemSize={64}
                     >
-                      {({ index, style, data: contactIds }) => {
-                        const isExtraItem = index >= contactIds.length
-                        if (isExtraItem) {
-                          return renderAddContact()
-                        }
-
-                        const contact = contactCache[contactIds[index]]
-                        if (!contact) {
-                          // Not loaded yet
-                          return <div style={style}></div>
-                        }
-
-                        return (
-                          <div style={style}>
-                            <ContactListItem
-                              contact={contact}
-                              showCheckbox
-                              checked={
-                                contactIdsToAdd.some(
-                                  c => c.id === contact.id
-                                ) || contactIdsInGroup.includes(contact.id)
-                              }
-                              disabled={
-                                contactIdsInGroup.includes(contact.id) ||
-                                contact.id === C.DC_CONTACT_ID_SELF
-                              }
-                              onCheckboxClick={toggleMember}
-                              showRemove={false}
-                            />
-                          </div>
-                        )
-                      }}
+                      {/* Remember that the renderer function
+                      must not be defined _inline_.
+                      Otherwise when the component re-renders,
+                      item elements get replaces with fresh ones,
+                      and we lose focus.
+                      See https://github.com/bvaughn/react-window/issues/420#issuecomment-585813335 */}
+                      {AddMemberInnerDialogRow}
                     </FixedSizeList>
                   </RovingTabindexProvider>
                 )}
@@ -344,5 +288,105 @@ export function AddMemberInnerDialog({
         disableOK={contactIdsToAdd.length === 0 ? true : false}
       />
     </>
+  )
+}
+
+function AddMemberInnerDialogRow({
+  index,
+  style,
+  data,
+}: {
+  index: number
+  style: React.CSSProperties
+  data: {
+    contactIds: Array<T.Contact['id']>
+    contactIdsInGroup: Array<T.Contact['id']>
+    contactIdsToAdd: Type.Contact[]
+    contactCache: Parameters<typeof AddMemberInnerDialog>[0]['contactCache']
+    onCheckboxClick: (contact: T.Contact) => void
+    onCreateContactCheckboxClick: (contact: T.Contact) => void
+    queryStr: string
+    queryStrIsValidEmail: boolean
+  }
+}) {
+  const {
+    contactIds,
+    contactIdsInGroup,
+    contactIdsToAdd,
+    contactCache,
+    onCheckboxClick,
+    onCreateContactCheckboxClick,
+    queryStr,
+    queryStrIsValidEmail,
+  } = data
+
+  const renderAddContact = () => {
+    if (queryStrIsValidEmail) {
+      const pseudoContact: Type.Contact = {
+        address: queryStr,
+        color: 'lightgrey',
+        authName: '',
+        status: '',
+        displayName: queryStr,
+        id: -1,
+        lastSeen: -1,
+        name: queryStr,
+        profileImage: '',
+        nameAndAddr: '',
+        isBlocked: false,
+        isVerified: false,
+        verifierId: null,
+        wasSeenRecently: false,
+        isProfileVerified: false,
+        isBot: false,
+        e2eeAvail: false,
+      }
+      return (
+        <ContactListItem
+          contact={pseudoContact}
+          showCheckbox={true}
+          checked={false}
+          showRemove={false}
+          onCheckboxClick={onCreateContactCheckboxClick}
+        />
+      )
+    } else {
+      return (
+        <PseudoListItemAddContact
+          queryStr={queryStr}
+          queryStrIsEmail={false}
+          onClick={undefined}
+        />
+      )
+    }
+  }
+  const isExtraItem = index >= contactIds.length
+  if (isExtraItem) {
+    return renderAddContact()
+  }
+
+  const contact = contactCache[contactIds[index]]
+  if (!contact) {
+    // Not loaded yet
+    return <div style={style}></div>
+  }
+
+  return (
+    <div style={style}>
+      <ContactListItem
+        contact={contact}
+        showCheckbox
+        checked={
+          contactIdsToAdd.some(c => c.id === contact.id) ||
+          contactIdsInGroup.includes(contact.id)
+        }
+        disabled={
+          contactIdsInGroup.includes(contact.id) ||
+          contact.id === C.DC_CONTACT_ID_SELF
+        }
+        onCheckboxClick={onCheckboxClick}
+        showRemove={false}
+      />
+    </div>
   )
 }

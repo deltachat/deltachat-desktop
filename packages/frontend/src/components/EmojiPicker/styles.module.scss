@@ -3,16 +3,16 @@
     em-emoji-picker {
       --border-radius: 0px;
       // unknown effect?
-      --background-rgb: var(--emoji-picker-background-rgb);
+      --background-rgb: var(--picker-background-rgb);
       // background
-      --rgb-background: var(--emoji-picker-background-rgb);
+      --rgb-background: var(--picker-background-rgb);
       // base color for text, seach placeholder an icons
-      --rgb-color: var(--emoji-picker-text-rgb);
-      --rgb-accent: var(--emoji-picker-accent-rgb);
+      --rgb-color: var(--picker-text-rgb);
+      --rgb-accent: var(--picker-accent-rgb);
       // selected input field bg
-      --rgb-input: var(--emoji-picker-selected-input-bg-rgb);
+      --rgb-input: var(--picker-selected-input-bg-rgb);
       // border, scrollbar, in-active search input, emoji hover background
-      --color-border: var(--emoji-picker-border-and-hover-color);
+      --color-border: var(--picker-border-and-hover-color);
       --font-family: var(--font-family);
       --color-border-over: rgba(0, 0, 0, 0);
       --shadow: none;

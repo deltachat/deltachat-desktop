@@ -25,12 +25,14 @@ import useMessage from '../../hooks/chat/useMessage'
 
 type Props = {
   addFileToDraft: (file: string, viewType: T.Viewtype) => void
+  showAppPicker: (show: boolean) => void
   selectedChat: T.FullChat | null
 }
 
 // Main component that creates the menu and popover
 export default function MenuAttachment({
   addFileToDraft,
+  showAppPicker,
   selectedChat,
 }: Props) {
   const { openContextMenu } = useContext(ContextMenuContext)
@@ -173,6 +175,10 @@ export default function MenuAttachment({
     dialogId = openDialog(SelectContactDialog, { onOk: addContactAsVcard })
   }
 
+  const selectAppPicker = async () => {
+    showAppPicker(true)
+  }
+
   // item array used to populate menu
   const menu: (ContextMenuItem | false)[] = [
     !!settings?.settings.webrtc_instance && {
@@ -194,6 +200,12 @@ export default function MenuAttachment({
       icon: 'person',
       label: tx('contact'),
       action: selectContact.bind(null),
+    },
+    {
+      icon: 'apps',
+      label: tx('app'),
+      action: selectAppPicker.bind(null),
+      dataTestid: 'open-app-picker',
     },
   ]
 
@@ -218,6 +230,7 @@ export default function MenuAttachment({
     <button
       aria-label={tx('menu_add_attachment')}
       id='attachment-menu-button'
+      data-testid='open-attachment-menu'
       className='attachment-button'
       onClick={onClickAttachmentMenu}
     >

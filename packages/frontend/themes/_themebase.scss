@@ -192,19 +192,19 @@ $hover-contrast-change: 2%;
   --galleryFileRowHover: #{changeContrast($bgPrimary, 7%)};
   --recently-seen-indicator-color: #34c759;
 
-  /* Emoji & Sticker picker overwrites */
-  --emojiStickerPicker-Background: #{$bgPrimary};
-  --emojiStickerPicker-BorderRadius: 5px;
+  /* Emoji, Sticker & App picker overwrites */
+  --picker-Background: #{$bgPrimary};
+  --picker-BorderRadius: 5px;
   // emoji picker
-  --emoji-picker-background-rgb: #{colorToRGB($bgPrimary)};
+  --picker-background-rgb: #{colorToRGB($bgPrimary)};
   // base color for text, seach placeholder an icons
-  --emoji-picker-text-rgb: #{colorToRGB($textPrimary)};
+  --picker-text-rgb: #{colorToRGB($textPrimary)};
   //  accent color
-  --emoji-picker-accent-rgb: #{colorToRGB($colorPrimary)};
+  --picker-accent-rgb: #{colorToRGB($colorPrimary)};
   //  selected input field bg
-  --emoji-picker-selected-input-bg-rgb: #{colorToRGB($bgSecondary)};
+  --picker-selected-input-bg-rgb: #{colorToRGB($bgSecondary)};
   //  border, scrollbar, in-active search input, emoji hover background
-  --emoji-picker-border-and-hover-color: rgb(
+  --picker-border-and-hover-color: rgb(
     #{colorToRGB(changeContrast($bgSecondary, 8%))}
   );
 

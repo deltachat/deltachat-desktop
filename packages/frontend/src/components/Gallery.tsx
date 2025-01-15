@@ -422,32 +422,21 @@ export default class Gallery extends Component<
                           }
                           this.updateFirstVisibleMessage(message)
                         }}
-                      >
-                        {({ columnIndex, rowIndex, style }) => {
-                          const msgId =
-                            mediaMessageIds[
-                              rowIndex * itemsPerRow + columnIndex
-                            ]
-                          const message = mediaLoadResult[msgId]
-                          if (!message) {
-                            return null
-                          }
-                          return (
-                            <div
-                              style={{ ...style }}
-                              className='item'
-                              key={msgId}
-                            >
-                              <this.state.element
-                                messageId={msgId}
-                                loadResult={message}
-                                openFullscreenMedia={this.openFullscreenMedia.bind(
-                                  this
-                                )}
-                              />
-                            </div>
-                          )
+                        itemData={{
+                          Component: this.state.element,
+                          mediaMessageIds,
+                          mediaLoadResult,
+                          openFullscreenMedia:
+                            this.openFullscreenMedia.bind(this),
+                          itemsPerRow,
                         }}
+                        itemKey={({ rowIndex, columnIndex, data }) =>
+                          data.mediaMessageIds[
+                            rowIndex * itemsPerRow + columnIndex
+                          ]
+                        }
+                      >
+                        {GalleryGridCell}
                       </FixedSizeGrid>
                     </RovingTabindexProvider>
                   )
@@ -459,6 +448,46 @@ export default class Gallery extends Component<
       </div>
     )
   }
+}
+function GalleryGridCell({
+  columnIndex,
+  rowIndex,
+  style,
+  data,
+}: {
+  columnIndex: number
+  rowIndex: number
+  style: React.CSSProperties
+  data: {
+    Component: GalleryElement
+    mediaMessageIds: number[]
+    mediaLoadResult: Record<number, Type.MessageLoadResult>
+    openFullscreenMedia: (message: Type.Message) => void
+    itemsPerRow: number
+  }
+}) {
+  const {
+    Component,
+    mediaMessageIds,
+    mediaLoadResult,
+    openFullscreenMedia,
+    itemsPerRow,
+  } = data
+
+  const msgId = mediaMessageIds[rowIndex * itemsPerRow + columnIndex]
+  const message = mediaLoadResult[msgId]
+  if (!message) {
+    return null
+  }
+  return (
+    <div style={{ ...style }} className='item'>
+      <Component
+        messageId={msgId}
+        loadResult={message}
+        openFullscreenMedia={openFullscreenMedia}
+      />
+    </div>
+  )
 }
 
 function GalleryTab(props: {
@@ -512,24 +541,44 @@ function FileTable({
       itemSize={60}
       itemCount={mediaMessageIds.length}
       overscanCount={10}
-      itemData={mediaMessageIds}
-    >
-      {({ index, style, data }) => {
-        const msgId = data[index]
-        const message = mediaLoadResult[msgId]
-        if (!message) {
-          return null
-        }
-        return (
-          <div style={style} className='item' key={msgId}>
-            <FileAttachmentRow
-              messageId={msgId}
-              loadResult={message}
-              queryText={queryText}
-            />
-          </div>
-        )
+      itemData={{
+        mediaMessageIds,
+        mediaLoadResult,
+        queryText,
       }}
+      itemKey={(index, data) => data.mediaMessageIds[index]}
+    >
+      {FileAttachmentRowWrapper}
     </FixedSizeList>
+  )
+}
+
+function FileAttachmentRowWrapper({
+  index,
+  style,
+  data,
+}: {
+  index: number
+  style: React.CSSProperties
+  data: {
+    mediaMessageIds: number[]
+    mediaLoadResult: Record<number, Type.MessageLoadResult>
+    queryText: string
+  }
+}) {
+  const { mediaMessageIds, mediaLoadResult, queryText } = data
+  const msgId = mediaMessageIds[index]
+  const message = mediaLoadResult[msgId]
+  if (!message) {
+    return null
+  }
+  return (
+    <div style={style} className='item'>
+      <FileAttachmentRow
+        messageId={msgId}
+        loadResult={message}
+        queryText={queryText}
+      />
+    </div>
   )
 }

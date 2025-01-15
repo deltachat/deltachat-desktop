@@ -7,6 +7,7 @@
 - accessibility: arrow-key navigation: handle "End" and "Home" keys to go to last / first item #4438
 - add show_app_in_chat option to webxdc info message context menu #4459
 - add experimental content protection option (to prevent screenshots and screenrecording the app) #4475
+- app picker for webxdc apps in attachement menu #4485
 
 ## Changed
 - dev: upgrade react to v18 and react pinch pan zoom to v3
@@ -25,6 +26,7 @@
 ## Fixed
 - fix chat "scrolls up" right after switching (rev 2) #4431
 - when deleting a message from gallery, update gallery items to remove the respective item #4457
+- accessibility: fix arrow-key navigation stopping working after ~10 key presses #4441
 - accessibility: make more items in messages list keyboard-accessible #4429
 - fix "incoming message background color" being used for quotes of outgoing sticker messages #4456
 - fix stickers being smaller than they're supposed to be #4432
