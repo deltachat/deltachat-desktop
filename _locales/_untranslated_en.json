@@ -80,8 +80,5 @@
   },
   "contact_is_blocked": {
     "message": "This contact is blocked"
-  },
-  "invalid_proxy_url": {
-    "message": "Invalid Proxy Url!"
   }
 }

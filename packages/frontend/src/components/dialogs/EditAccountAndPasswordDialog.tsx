@@ -116,7 +116,7 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
       )
       if (qr.kind !== 'proxy') {
         openDialog(AlertDialog, {
-          message: tx('invalid_proxy_url'),
+          message: tx('proxy_invalid'),
         })
         return
       }
