@@ -12,8 +12,8 @@ $emojimart-search-height: 31px + 6px;
   height: $esp-height;
   right: 13px;
   bottom: 50px;
-  background-color: var(--emojiStickerPicker-Background);
-  border-radius: var(--emojiStickerPicker-BorderRadius);
+  background-color: var(--picker-Background);
+  border-radius: var(--picker-BorderRadius);
   overflow: hidden;
   box-shadow: 0px 0px 0px 1px $esp-border-color;
 
@@ -101,7 +101,7 @@ $emojimart-search-height: 31px + 6px;
           font-weight: 500;
           position: sticky;
           top: -1px;
-          background-color: var(--emojiStickerPicker-Background);
+          background-color: var(--picker-Background);
         }
         & > .container {
           display: flex;
