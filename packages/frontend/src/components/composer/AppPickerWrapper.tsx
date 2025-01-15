@@ -39,7 +39,12 @@ export const AppPickerWrapper = ({ onAppSelected, apps, setApps }: Props) => {
           AppStoreUrl + 'xdcget-lock.json'
         )
         const apps = getJsonFromBase64(response.blob)
-        if (apps) {
+        if (apps && Array.isArray(apps)) {
+          apps.sort((a: AppInfo, b: AppInfo) => {
+            const dateA = new Date(a.date)
+            const dateB = new Date(b.date)
+            return dateB.getTime() - dateA.getTime() // Show newest first
+          })
           setApps(apps)
         }
       } catch (error) {

@@ -42,7 +42,7 @@ import useKeyBindingAction from '../../hooks/useKeyBindingAction'
 import { CloseButton } from '../Dialog'
 import { enterKeySendsKeyboardShortcuts } from '../KeyboardShortcutHint'
 import { AppPickerWrapper } from './AppPickerWrapper'
-import { AppInfo } from '../AppPicker'
+import { AppInfo, AppStoreUrl } from '../AppPicker'
 import OutsideClickHelper from '../OutsideClickHelper'
 
 const log = getLogger('renderer/composer')
@@ -221,7 +221,7 @@ const Composer = forwardRef<
     log.debug('App selected', appInfo)
     const response = await BackendRemote.rpc.getHttpResponse(
       selectedAccountId(),
-      'https://apps.testrun.org/' + appInfo.cache_relname
+      AppStoreUrl + appInfo.cache_relname
     )
     if (response?.blob?.length) {
       const path = await runtime.writeTempFileFromBase64(

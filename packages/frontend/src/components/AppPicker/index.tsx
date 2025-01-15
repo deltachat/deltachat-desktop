@@ -79,6 +79,9 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
           newIcons[app.app_id] = `data:image/png;base64,${response.blob}`
         }
         app.short_description = app.description.split('\n')[0]
+        app.description = app.description.substring(
+          app.short_description.length + 1
+        )
         const url = new URL(app.source_code_url)
         app.author = url.pathname.split('/')[1]
         app.date = moment(app.date).format('LL')
