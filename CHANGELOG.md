@@ -22,6 +22,7 @@
   - Prefer to encrypt if E2eeEnabled even if peers have EncryptPreference::NoPreference.
   - Allow empty `To` field for self-sent messages.
   - displayname may not be empty anymore #4471
+- update `@deltachat/message_parser_wasm` from `0.11.0` to `0.12.0` #4477
 
 ## Fixed
 - fix chat "scrolls up" right after switching (rev 2) #4431
