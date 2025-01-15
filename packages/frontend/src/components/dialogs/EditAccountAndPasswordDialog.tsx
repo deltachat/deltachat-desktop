@@ -110,13 +110,22 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
       initial_settings.proxy_enabled !== accountSettings.proxy_enabled &&
       accountSettings.proxy_enabled === '1'
     ) {
-      const qr = await BackendRemote.rpc.checkQr(
-        selectedAccountId(),
-        accountSettings.proxy_url
-      )
-      if (qr.kind !== 'proxy') {
+      try {
+        const qr = await BackendRemote.rpc.checkQr(
+          selectedAccountId(),
+          accountSettings.proxy_url
+        )
+        if (qr.kind !== 'proxy') {
+          openDialog(AlertDialog, {
+            message: tx('proxy_invalid'),
+          })
+          return
+        }
+      } catch (error) {
+        const errorStr =
+          error instanceof Error ? error.message : JSON.stringify(error)
         openDialog(AlertDialog, {
-          message: tx('proxy_invalid'),
+          message: tx('proxy_invalid') + '\n' + errorStr,
         })
         return
       }
