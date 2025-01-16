@@ -10,6 +10,9 @@
 - app picker for webxdc apps in attachement menu #4485
 
 ## Changed
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.154.1`
+  - New group consistency algorithm
+  - fix: Migration: Set bcc_self=1 if it's unset and delete_server_after!=1
 - dev: upgrade react to v18 and react pinch pan zoom to v3
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.153.0`
   - rpc-client: Add INCOMING_REACTION to const.EventType
