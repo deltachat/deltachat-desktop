@@ -4,10 +4,11 @@ mergeable:
   - when: pull_request.*
     name: 'Changelog check'
     filter:
-      - do: condition
-        must_exclude:
-          regex: '\\s*skip changelog check\\s*'
-          target: description
+      - do: payload
+        pull_request:
+          description:
+            must_exclude:
+              regex: '\\s*skip changelog check\\s*'
     validate:
       - do: and
         validate:
