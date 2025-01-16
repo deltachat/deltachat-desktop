@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import classNames from 'classnames'
-import moment from 'moment'
 import { filesize } from 'filesize'
 import { C } from '@deltachat/jsonrpc-client'
 
@@ -38,7 +37,7 @@ export interface AppInfo {
 export const AppStoreUrl = 'https://apps.testrun.org/'
 
 const enum AppCategoryEnum {
-  all = 'all',
+  home = 'home',
   tool = 'tool',
   game = 'game',
 }
@@ -53,10 +52,14 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
   const tx = useTranslationFunction()
   const [searchQuery, setSearchQuery] = useState('')
   const [isOffline, setIsOffline] = useState(false)
-  const [selectedCategory, setSelectedCategory] = useState(AppCategoryEnum.all)
+  const [selectedCategory, setSelectedCategory] = useState(AppCategoryEnum.home)
   const [selectedAppInfo, setSelectedAppInfo] = useState<AppInfo | null>(null)
   const [icons, setIcons] = useState<{ [key: string]: string }>({})
-  const categories = [AppCategoryEnum.tool, AppCategoryEnum.game]
+  const categories = [
+    AppCategoryEnum.home,
+    AppCategoryEnum.tool,
+    AppCategoryEnum.game,
+  ]
 
   useEffect(() => {
     const loadIcons = async () => {
@@ -78,10 +81,6 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
         if (response?.blob !== undefined) {
           newIcons[app.app_id] = `data:image/png;base64,${response.blob}`
         }
-        app.short_description = app.description.split('\n')[0]
-        const url = new URL(app.source_code_url)
-        app.author = url.pathname.split('/')[1]
-        app.date = moment(app.date).format('LL')
         count++
         if (count % 10 === 0) {
           setIcons({ ...newIcons })
@@ -92,22 +91,13 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
     loadIcons()
   }, [apps, isOffline])
 
-  const handleCategoryClick = useCallback(
-    (category: AppCategoryEnum) => {
-      setSelectedCategory(
-        category === selectedCategory ? AppCategoryEnum.all : category
-      )
-    },
-    [selectedCategory, setSelectedCategory]
-  )
-
   const filteredApps = useMemo(() => {
     return apps.filter(app => {
       const matchesSearch = app.name
         .toLowerCase()
         .includes(searchQuery.toLowerCase())
       const matchesCategory =
-        selectedCategory === AppCategoryEnum.all ||
+        selectedCategory === AppCategoryEnum.home ||
         app.category === selectedCategory
       return matchesSearch && matchesCategory
     })
@@ -226,7 +216,7 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
             className={classNames(styles.tab, {
               [styles.activeTab]: selectedCategory === category,
             })}
-            onClick={() => handleCategoryClick(category)}
+            onClick={() => setSelectedCategory(category)}
           >
             <div className={styles.category}>
               <img

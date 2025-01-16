@@ -110,5 +110,8 @@
   },
   "add_to_chat": {
     "message": "Add to Chat"
+  },
+  "home": {
+    "message": "Home"
   }
 }
