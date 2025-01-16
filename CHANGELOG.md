@@ -3,6 +3,14 @@
 ## [Unreleased][unreleased]
 
 ## Added
+
+## Changed
+
+## Fixed
+
+## [1.51.0] - 2025-01-16
+
+## Added
 - accessibility: arrow-key navigation for message list, gallery and sticker picker #4294, #4376, #4372,
 - accessibility: arrow-key navigation: handle "End" and "Home" keys to go to last / first item #4438
 - add show_app_in_chat option to webxdc info message context menu #4459
@@ -3069,7 +3077,10 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.50.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.51.0.1...HEAD
+
+[1.51.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.50.1...v1.51.0
+
 
 [1.50.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.50.0...v1.50.1
 
