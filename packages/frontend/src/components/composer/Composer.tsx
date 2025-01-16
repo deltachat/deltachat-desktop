@@ -440,12 +440,13 @@ export default Composer
 
 export type DraftObject = { chatId: number } & Pick<
   Type.Message,
-  'text' | 'file' | 'quote' | 'viewType' | 'vcardContact'
+  'id' | 'text' | 'file' | 'quote' | 'viewType' | 'vcardContact' | 'webxdcInfo'
 > &
   MessageTypeAttachmentSubset
 
 function emptyDraft(chatId: number | null): DraftObject {
   return {
+    id: 0,
     chatId: chatId || 0,
     text: '',
     file: null,
@@ -455,6 +456,7 @@ function emptyDraft(chatId: number | null): DraftObject {
     quote: null,
     viewType: 'Text',
     vcardContact: null,
+    webxdcInfo: null,
   }
 }
 
@@ -495,6 +497,7 @@ export function useDraft(
         } else {
           _setDraft(old => ({
             ...old,
+            id: newDraft.id,
             text: newDraft.text || '',
             file: newDraft.file,
             fileBytes: newDraft.fileBytes,
@@ -503,6 +506,7 @@ export function useDraft(
             viewType: newDraft.viewType,
             quote: newDraft.quote,
             vcardContact: newDraft.vcardContact,
+            webxdcInfo: newDraft.webxdcInfo,
           }))
           inputRef.current?.setText(newDraft.text)
         }
@@ -565,6 +569,7 @@ export function useDraft(
     if (newDraft) {
       _setDraft(old => ({
         ...old,
+        id: newDraft.id,
         file: newDraft.file,
         fileBytes: newDraft.fileBytes,
         fileMime: newDraft.fileMime,
@@ -572,6 +577,7 @@ export function useDraft(
         viewType: newDraft.viewType,
         quote: newDraft.quote,
         vcardContact: newDraft.vcardContact,
+        webxdcInfo: newDraft.webxdcInfo,
       }))
       // don't load text to prevent bugging back
     } else {
