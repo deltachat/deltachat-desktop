@@ -105,7 +105,7 @@ This command in turn splits up into the following commands:
 
 If you're unsure it's always safe to run `pnpm -w fix` to fix everything. If you know what you're doing you can run the lower level commands for a more fine grained fix.
 
-### CI github actions ###
+### CI github actions
 
 We have several [github actions](../.github/workflows/) configured to be executed for each PR. These include code validation, tests and preview builds which are downloadable from the artifacts and from https://download.delta.chat/desktop/preview/
 
