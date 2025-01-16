@@ -3,15 +3,14 @@ mergeable:
   # see https://mergeable.readthedocs.io/en/latest/configuration.html
   - when: pull_request.*
     name: 'Changelog check'
-    filter:
-      - do: payload
-        pull_request:
-          description:
-            must_exclude:
-              regex: '\\s*skip changelog check\\s*'
     validate:
-      - do: and
+      - do: or
         validate:
+        - do: description
+          must_include:
+            regex: '#skip-changelog'
+        - do: and
+          validate:
           - do: dependent
             changed:
               file: 'packages/frontend/**'
