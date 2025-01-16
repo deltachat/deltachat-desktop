@@ -32,7 +32,7 @@ export default class ComposerMessageInput extends React.Component<
   composerSize: number
   setCursorPosition: number | false
   textareaRef: React.RefObject<HTMLTextAreaElement>
-  saveDraft: ReturnType<typeof throttle>
+  throttledSaveDraft: ReturnType<typeof throttle>
   constructor(props: ComposerMessageInputProps) {
     super(props)
     this.state = {
@@ -49,7 +49,7 @@ export default class ComposerMessageInput extends React.Component<
     this.insertStringAtCursorPosition =
       this.insertStringAtCursorPosition.bind(this)
 
-    this.saveDraft = throttle((text, chatId) => {
+    this.throttledSaveDraft = throttle((text, chatId) => {
       if (this.state.chatId === chatId) {
         this.props.updateDraftText(text.trim() === '' ? '' : text, chatId)
       }
@@ -132,7 +132,7 @@ export default class ComposerMessageInput extends React.Component<
   onChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     const text = e.target.value
     this.setState({ text /*error: false*/ })
-    this.saveDraft(text, this.state.chatId)
+    this.throttledSaveDraft(text, this.state.chatId)
   }
 
   keyEventToAction(e: React.KeyboardEvent<HTMLTextAreaElement>) {
