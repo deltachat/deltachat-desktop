@@ -106,6 +106,7 @@ function EditProfileDialogInner({
             ) => {
               setDisplayname(event.target.value)
             }}
+            autoFocus={true}
           />
         </DialogContent>
         {firstSetup && <Callout>{tx('set_name_and_avatar_explain')}</Callout>}
