@@ -217,6 +217,7 @@ export default class ComposerMessageInput extends React.Component<
     this.setCursorPosition = textareaElem.selectionStart + str.length
 
     this.setState({ text: updatedText })
+    this.throttledSaveDraft(updatedText, this.state.chatId)
   }
 
   render() {

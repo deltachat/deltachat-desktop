@@ -26,6 +26,7 @@
 
 ## Fixed
 - fix draft not getting cleared after sending the message #4493
+- fix draft not getting saved after inserting an emoji #4493
 - fix chat "scrolls up" right after switching (rev 2) #4431
 - when deleting a message from gallery, update gallery items to remove the respective item #4457
 - accessibility: fix arrow-key navigation stopping working after ~10 key presses #4441
