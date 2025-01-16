@@ -96,10 +96,6 @@ export default class ComposerMessageInput extends React.Component<
     return this.state.text
   }
 
-  clearText() {
-    this.setState({ text: '' })
-  }
-
   componentDidUpdate(
     _prevProps: ComposerMessageInputProps,
     prevState: ComposerMessageInputState
