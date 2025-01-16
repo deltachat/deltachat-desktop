@@ -11,6 +11,7 @@
     - [Code Style ](#code-style-)
       - [Checking Code Style](#checking-code-style)
       - [Fixing Code Style](#fixing-code-style)
+    - [CI github actions](#ci-github-actions)
     - [Tests ](#tests-)
       - [E2E testing ](#e2e-testing-)
     - [Translations ](#translations-)
@@ -103,6 +104,12 @@ This command in turn splits up into the following commands:
 - `pnpm -w fix:format` -> Runs [`Prettier`](https://prettier.io/) to attempt fixing formatting in all `.scss`, `.js`, `.ts`, `.tsx`, `.json` and `.md` files
 
 If you're unsure it's always safe to run `pnpm -w fix` to fix everything. If you know what you're doing you can run the lower level commands for a more fine grained fix.
+
+### CI github actions ###
+
+We have several [github actions](../.github/workflows/) configured to be executed for each PR. These include code validation, tests and preview builds which are downloadable from the artifacts and from https://download.delta.chat/desktop/preview/
+
+The code validation includes a check if the Changelog has a new entry for the PR. That can be skipped (if reasonable) by adding the keyword "skip changelog check" in the description, ideally followed by a reason for skipping
 
 ### Tests <a id="tests"></a>
 
