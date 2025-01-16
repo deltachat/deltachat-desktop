@@ -3077,7 +3077,7 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.51.0.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.51.0...HEAD
 
 [1.51.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.50.1...v1.51.0
 
