@@ -25,6 +25,7 @@
 - update `@deltachat/message_parser_wasm` from `0.11.0` to `0.12.0` #4477
 
 ## Fixed
+- fix draft not getting cleared after sending the message #4493
 - fix chat "scrolls up" right after switching (rev 2) #4431
 - when deleting a message from gallery, update gallery items to remove the respective item #4457
 - accessibility: fix arrow-key navigation stopping working after ~10 key presses #4441

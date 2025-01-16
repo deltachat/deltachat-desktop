@@ -22,7 +22,7 @@ export function throttle<R, A extends any[]>(
   let inThrottle: boolean,
     timeout: ReturnType<typeof setTimeout>,
     lastTime: number
-  return (...args: A) => {
+  const ret = (...args: A) => {
     if (!inThrottle) {
       fn(...args)
       lastTime = performance.now()
@@ -38,4 +38,8 @@ export function throttle<R, A extends any[]>(
       )
     }
   }
+  ret.cancel = () => {
+    clearTimeout(timeout)
+  }
+  return ret
 }
