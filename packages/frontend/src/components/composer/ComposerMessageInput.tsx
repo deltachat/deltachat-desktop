@@ -49,6 +49,11 @@ export default class ComposerMessageInput extends React.Component<
     this.insertStringAtCursorPosition =
       this.insertStringAtCursorPosition.bind(this)
 
+    // Remember that the draft might be updated from the outside
+    // of this component (with the `setText` method,
+    // e.g. when the draft gets cleared after sending a message).
+    // This can happen _after_ an `onChange` event but _before_
+    // the unrelying throttled function invokation.
     this.throttledSaveDraft = throttle((text, chatId) => {
       if (this.state.chatId === chatId) {
         this.props.updateDraftText(text.trim() === '' ? '' : text, chatId)
@@ -77,8 +82,16 @@ export default class ComposerMessageInput extends React.Component<
     return null
   }
 
+  /**
+   * Sets the text area value, and ensures that `updateDraftText`
+   * does not get invoked until the next change to the draft text.
+   *
+   * Useful for setting / clearing draft text afer loading it from core,
+   * e.g. after sending the message or opening a chat with a.
+   */
   setText(text: string | null) {
     this.setState({ text: text || '', loadingDraft: false })
+    this.throttledSaveDraft.cancel()
   }
 
   setComposerSize(size: number) {
