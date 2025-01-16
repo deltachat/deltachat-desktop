@@ -4,8 +4,6 @@
     <string name="app_name">Delta Chat</string>
     <string name="ok">OK</string>
     <string name="cancel">Отмена</string>
-   <!-- deprecated, the word "or" to separate blocks in the user interface that are mutually exclusive -->
-    <string name="or_separator">или</string>
     <string name="clear_search">Очистить поиск</string>
     <!-- a noun, used on a button, short for "show link" -->
     <string name="link">Ссылка</string>
@@ -202,6 +200,8 @@
     <string name="webxdc_app">Приложение</string>
     <!-- plural of "App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
     <string name="webxdc_apps">Приложения</string>
+    <string name="webxdc_store_url">URL селектора приложений</string>
+    <string name="webxdc_store_url_explain">Если установлено, URL будет использоваться в качестве селектора приложений вместо стандартного</string>
     <string name="unknown">Неизвестно</string>
 
     <string name="green">Зелёный</string>
@@ -567,10 +567,6 @@
     <string name="multidevice_transfer_done_devicemsg">ℹ️ Профиль перенесен на ваше второе устройство.</string>
     <!-- Shown beside progress bar, stay short -->
     <string name="preparing_account">Подготовка профиля...</string>
-    <!-- deprecated, shown beside progress bar, stay short -->
-    <string name="waiting_for_receiver">Ожидаем получателя...</string>
-    <!-- deprecated, shown beside progress bar, stay short -->
-    <string name="receiver_connected">Получатель подключён...</string>
     <!-- Shown beside progress bar, stay short -->
     <string name="transferring">Передача...</string>
     <string name="troubleshooting">Устранение неполадок</string>
@@ -689,6 +685,8 @@
     <string name="profile_tag">Личный тег</string>
     <string name="profile_tag_hint">Например: Работа, Семья</string>
     <string name="profile_tag_explain">Тег, видимый только вам, помогает различать ваши профили.</string>
+    <!-- Menu entry to sort an item to the beginning of a list. Only "To Top" may do as well in some translations, if that helps to stay shorter. -->
+    <string name="move_to_top">Переместить вверх</string>
     <string name="delete_account">Удалить профиль</string>
     <string name="delete_account_ask">Вы уверены, что хотите удалить данные своего профиля?</string>
     <string name="delete_account_explain_with_name">Все данные профиля \"%s\" на этом устройстве будут безвозвратно удалены, включая настройки сквозного шифрования, контакты, чаты, сообщения и медиафайлы. Это действие не может быть отменено.</string>
@@ -770,8 +768,6 @@
     <string name="pref_app_access">Доступ приложения</string>
     <string name="pref_chats">Чаты</string>
     <string name="pref_in_chat_sounds">Звуки в чате</string>
-    <!-- deprecated -->
-    <string name="pref_message_text_size">Размер шрифта сообщения</string>
     <string name="pref_view_log">Открыть журнал</string>
     <string name="pref_saved_log">Журнал сохранён в папку \"Загрузки\"</string>
     <string name="pref_save_log_failed">Не удалось сохранить журнал</string>
@@ -1057,8 +1053,6 @@
     <string name="mailto_link_could_not_be_decoded">ссылка mailto не может быть обработана: %1$s</string>
 
     <!-- notifications  -->
-    <!-- deprecated, use mark_as_read or mark_as_read_short -->
-    <string name="notify_dismiss">Отклонить</string>
     <string name="notify_reply_button">Ответить</string>
     <string name="notify_new_message">Новое сообщение</string>
     <string name="notify_background_connection_enabled">Соединение в фоновом режиме включено</string>
@@ -1187,11 +1181,20 @@
     <string name="notifications_avg_minutes">В среднем каждые %1$d минут(ы)</string>
     <string name="notifications_avg_hours">В среднем каждые %1$d часа(ов)</string>
     <string name="last_check_at">Проверено в %1$s</string>
+    <string name="system_settings">Настройки системы</string>
+    <!-- shown below the button "System Settings" on the notification screen. this is a hint about what can be edited on System Settings' Notification page - eg. the notification type (banner, lock screen, notification centre), sound, badges and so on. no need to be exhaustive here, it is only to give the user an idea. -->
+    <string name="system_settings_notify_explain_ios">Редактировать тип, значки, предпросмотр и другое</string>
     <!-- iOS webxdc selector -->
     <string name="webxdc_selector_empty_hint">Здесь можно просмотреть приложения, полученные или отправленные в любом чате. \"Файлы\" показывает только загруженные приложения.</string>
-    <!-- iOS webxdc shortcut page -->
-    <string name="shortcut_step1_tap_share_btn">Нажмите кнопку \"Поделиться\"</string>
-    <string name="shortcut_step2_tap_add_to_home_screen">Выберите \"Добавить на главный экран\", чтобы добавить приложение на главный экран.</string>
+    <!-- iOS shortcut widget -->
+    <!-- use the same translation for "Shortcuts" as the system is using, often the term "Shortcut" stays untranslated; check eg. how the "Shortcuts" system app is called in your locale -->
+    <string name="shortcuts_widget_title">Ярлыки</string>
+    <!-- use the same translation for "Widget" as the system is using; often the term "Widget" stays untranslated -->
+    <string name="shortcuts_widget_description">Используйте \"Добавить в виджет\" Delta Chat, чтобы добавить элементы</string>
+    <!-- use the same translation for "Widget" as the system is using; often the term "Widget" stays untranslated -->
+    <string name="remove_from_widget">Удалить из виджета</string>
+    <!-- use the same translation for "Widget" as the system is using; often the term "Widget" stays untranslated -->
+    <string name="add_to_widget">Добавить в виджет</string>
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Delta Chat использует вашу камеру для фото- и видеосъёмки, и сканирования QR-кодов.</string>
     <string name="InfoPlist_NSContactsUsageDescription">Delta Chat использует ваши контакты для отображения списка адресов электронной почты, которым вы можете написать. Delta Chat не имеет сервера, ваши контакты никуда не будут отправлены.</string>
@@ -1200,6 +1203,7 @@
     <string name="InfoPlist_NSMicrophoneUsageDescription">Delta Chat использует микрофон для записи и отправки голосовых сообщений, а также видео со звуком.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Delta Chat предоставит вам возможность выбирать какие фотографии и из какой галереи отправлять.</string>
     <string name="InfoPlist_NSPhotoLibraryAddUsageDescription">Delta Chat хочет сохранить изображения в вашей галерее.</string>
+    <string name="InfoPlist_NSFaceIDUsageDescription">Delta Chat поддерживает использование Face ID для защиты локального профиля, создания резервных копий и настройки второго устройства.</string>
 
 
     <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->

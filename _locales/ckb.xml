@@ -4,7 +4,7 @@
     <string name="app_name">دێڵتا چات</string>
     <string name="ok">باشە</string>
     <string name="cancel">وازبێنە</string>
-   <string name="yes">بەڵێ</string>
+    <string name="yes">بەڵێ</string>
     <string name="no">نا</string>
     <string name="select">هەڵبژاردن</string>
     <string name="on">چالاک</string>
@@ -420,7 +420,6 @@
     <string name="pref_app_access">ڕێگەپێدان</string>
     <string name="pref_chats">وتووێژەکان</string>
     <string name="pref_in_chat_sounds">دەنگەکانی نێو-وتووێژی</string>
-    <string name="pref_message_text_size">قەبارەی فۆنتی پەیامەکان</string>
     <string name="pref_other">کەسانی دی</string>
     <string name="pref_backup">یەدەک</string>
     <string name="pref_backup_explain">یەدەک گرتن لە وتووێژەکان و دانانی لەسەر بیرگەی دەرەکی</string>
@@ -523,6 +522,7 @@
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
     <string name="contact_setup_changed">ڕێکخستن بۆ %1$s گۆڕا.</string>
     <string name="copy_qr_data_success">ناونیشانی وێبی QRەکە ڕوونووس کرا.</string>
+    <!-- notifications  -->
     <string name="notify_reply_button">وەڵام دانەوە</string>
     <string name="notify_new_message">پەیامی نوێ</string>
     <string name="notify_background_connection_enabled">پەیوەندی پشتخان چالاک کرا</string>
@@ -587,8 +587,6 @@
     <string name="InfoPlist_NSMicrophoneUsageDescription">دێڵتا چات بۆ تۆمار کردن و هەناردنی دەنگ و هەروەها ڤیدیۆی دەنگدار، مایکەکەت بەکاردەهێنێت.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">دێڵتا چات ڕێگە دەدات خۆت هەڵیبژێری کە کام وێنە لە پیشانگاکەتەوە بنێردرێت.</string>
     <string name="InfoPlist_NSPhotoLibraryAddUsageDescription">دێڵتا چات دەیەوێت وێنە پاشەکەوت بکاتە نێو پیشانگاکەت.</string>
-
-
     <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
     <string name="perm_enable_bg_reminder_title">بۆ وەرگرتنی پەیامەکان لەو کاتانەدا کە دێڵتا چات لە پشتخانەوەیە، لێرە کرتە بکە.</string>
     <string name="perm_enable_bg_already_done">تۆ ئێستا ڕێگەت بە دێڵتا چات دا کە لە پشتخانەوە پەیامەکان وەربگرێت.\n\n ئەگەر هێشتا لە پشخاندا پەیامەکان نایەن، سەرنجێکیش لە ڕێکخستنەکانی سیستەم بدەوە.</string>
