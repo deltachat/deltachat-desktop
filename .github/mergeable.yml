@@ -9,7 +9,7 @@ mergeable:
           - do: condition
             must_include:
               regex: 'skip changelog check'
-              target: description
+              target: body
             exclude: true
           - do: dependent
             changed:
