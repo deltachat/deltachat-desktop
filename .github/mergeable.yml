@@ -8,7 +8,7 @@ mergeable:
         validate:
           - do: condition
             must_include:
-              regex: 'skip changelog check'
+              regex: '\\s*skip changelog check\\s*'
               target: body
             exclude: true
           - do: dependent
