@@ -99,6 +99,7 @@ export const DeltaInput = React.memo(
       max?: string
       rightElement?: JSX.Element
       disabled?: boolean
+      autoFocus?: boolean
       onChange: (
         event: React.FormEvent<HTMLElement> &
           React.ChangeEvent<HTMLInputElement>
@@ -141,6 +142,7 @@ export const DeltaInput = React.memo(
           disabled={props.disabled}
           onFocus={onFocus}
           onBlur={onBlur}
+          autoFocus={props.autoFocus}
         />
         {props.rightElement && (
           <div className='right-element'>{props.rightElement}</div>

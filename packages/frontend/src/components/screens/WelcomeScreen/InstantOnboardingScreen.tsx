@@ -147,6 +147,7 @@ export default function InstantOnboardingScreen({
             value={displayName}
             onChange={onChangeDisplayName}
             onBlur={saveDisplayName}
+            autoFocus={true}
           />
           {showMissingNameError && (
             <p className={styles.inputError}>{tx('please_enter_name')}</p>
