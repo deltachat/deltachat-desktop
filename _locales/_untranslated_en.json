@@ -30,12 +30,6 @@
   "reset": {
     "message": "Reset"
   },
-  "all_chats_map_title": {
-    "message": "Map for all chats (Profile '%1')"
-  },
-  "chat_map_title": {
-    "message": "Map for chat '%1'"
-  },
   "pref_use_system_ui_font": {
     "message": "Use System UI Font"
   },

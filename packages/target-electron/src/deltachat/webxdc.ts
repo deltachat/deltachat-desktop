@@ -708,20 +708,20 @@ If you think that's a bug and you need that permission, then please open an issu
           )
         }
         if (msgId) {
-          let chatName = tx('all_chats_map_title', [accountId.toString()])
+          let chatName = tx('menu_show_global_map')
           if (chatId) {
             const relatedChatInfo = await this.rpc.getBasicChatInfo(
               accountId,
               chatId
             )
-            chatName = tx('chat_map_title', [relatedChatInfo.name])
+            chatName = tx('locations') + ' - ' + relatedChatInfo.name
           } else {
             const accountInfo = await this.rpc.getAccountInfo(accountId)
             if (
               'displayName' in accountInfo &&
               accountInfo.displayName !== null
             ) {
-              chatName = tx('all_chats_map_title', accountInfo.displayName)
+              chatName = tx('menu_show_global_map') + ' - ' + accountInfo.displayName
             }
           }
           // if map is already (or still) open, close it
