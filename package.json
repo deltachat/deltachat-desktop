@@ -35,7 +35,7 @@
   "engineStrict": true,
   "engines": {
     "node": "^20",
-    "pnpm": "^9.6.0"
+    "pnpm": ">=9.6.0"
   },
   "pnpm": {
     "supportedArchitectures": {
