@@ -721,7 +721,8 @@ If you think that's a bug and you need that permission, then please open an issu
               'displayName' in accountInfo &&
               accountInfo.displayName !== null
             ) {
-              chatName = tx('menu_show_global_map') + ' - ' + accountInfo.displayName
+              chatName =
+                tx('menu_show_global_map') + ' - ' + accountInfo.displayName
             }
           }
           // if map is already (or still) open, close it
