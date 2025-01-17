@@ -114,6 +114,7 @@ class TauriRuntime implements Runtime {
       enableWebxdcDevTools: false, // likely impossible in mac appstore version, either hide setting there or use sth like eruda js to fill the gap?
       HTMLEmailAskForRemoteLoadingConfirmation: true,
       HTMLEmailAlwaysLoadRemoteContent: false,
+      contentProtectionEnabled: false,
     } satisfies Partial<DesktopSettingsType>
 
     const frontendOnly = {
