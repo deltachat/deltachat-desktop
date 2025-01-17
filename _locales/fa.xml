@@ -4,8 +4,6 @@
     <string name="app_name">دلتاچت</string>
     <string name="ok">تأیید</string>
     <string name="cancel">لغو</string>
-   <!-- deprecated, the word "or" to separate blocks in the user interface that are mutually exclusive -->
-    <string name="or_separator">یا</string>
     <string name="clear_search">پاک کردن جست‌وجو</string>
     <!-- a noun, used on a button, short for "show link" -->
     <string name="link">پیوند</string>
@@ -541,10 +539,6 @@ https://meet.jit.si/$ROOM
     <string name="multidevice_transfer_done_devicemsg">ℹ️ حساب به دستگاه دوم شما منتقل شد.</string>
     <!-- Shown beside progress bar, stay short -->
     <string name="preparing_account">در حال آماده سازی حساب…</string>
-    <!-- deprecated, shown beside progress bar, stay short -->
-    <string name="waiting_for_receiver">در انتظار گیرنده…</string>
-    <!-- deprecated, shown beside progress bar, stay short -->
-    <string name="receiver_connected">گیرنده متصل شد…</string>
     <!-- Shown beside progress bar, stay short -->
     <string name="transferring">در حال انتقال…</string>
     <string name="troubleshooting">عیب‌یابی</string>
@@ -743,8 +737,6 @@ https://meet.jit.si/$ROOM
     <string name="pref_app_access">دسترسی نرم‌افزار</string>
     <string name="pref_chats">گپ‌ها</string>
     <string name="pref_in_chat_sounds">صداهای درون‌گپی</string>
-    <!-- deprecated -->
-    <string name="pref_message_text_size">اندازه نوشته‌های پیام</string>
     <string name="pref_view_log">نمایش گزارش</string>
     <string name="pref_saved_log">گزارش را در پوشه\"دانلودها\" ذخیره کن </string>
     <string name="pref_save_log_failed">ذخیره گزارش ناموفق بود</string>
@@ -1030,8 +1022,6 @@ https://meet.jit.si/$ROOM
     <string name="mailto_link_could_not_be_decoded">امکان کدگشایی پیوند mailto وجود ندارد: %1$s</string>
 
     <!-- notifications  -->
-    <!-- deprecated, use mark_as_read or mark_as_read_short -->
-    <string name="notify_dismiss">صرف نظر</string>
     <string name="notify_reply_button">پاسخ</string>
     <string name="notify_new_message">پیام جدید</string>
     <string name="notify_background_connection_enabled">اتصال‌ها پیش زمینه فعال شد</string>
@@ -1178,9 +1168,6 @@ GNU GPL ورژن ۳
     <string name="last_check_at">بررسی شده در %1$s</string>
     <!-- iOS webxdc selector -->
     <string name="webxdc_selector_empty_hint">برنامه‌های دریافت‌شده یا ارسال‌شده از همه چت‌ها در این‌جا نمایش داده می‌شود. «پرونده‌ها» تنها برنامه‌های اخیرا دریافت‌شده را نمایش می‌دهد.</string>
-    <!-- iOS webxdc shortcut page -->
-    <string name="shortcut_step1_tap_share_btn">روی دکمه اشتراک کلیک کنید</string>
-    <string name="shortcut_step2_tap_add_to_home_screen">برای افزودن برنامه به صفحه اصلی خود، «افزودن به صفحه اصلی» را انتخاب کنید.</string>
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">دلتاچت برای گرفتن و ارسال عکس و فیلم و برای اسکن کردن کیوآر کد از دوربین شما استفاده می‌کند. </string>
     <string name="InfoPlist_NSContactsUsageDescription">دلتاچت از مخاطبین شما برای نمایش فهرست رایانامه‌هایی که می‌توانید برایشان پیام ارسال کنید استفاده می‌کند. دلتاچت کارساز ندارد، مخاطبین شما به جایی ارسال نمی‌شوند. </string>
@@ -1189,8 +1176,6 @@ GNU GPL ورژن ۳
     <string name="InfoPlist_NSMicrophoneUsageDescription">دلتاچت از میکروفون برای ذخیره و ارسال پیام صوتی یا فیلم دارای صدا استفاده می‌کند.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">دلتاچت به شما اجازه می دهد تصویر موردنظر برای ارسال را انتخاب کنید.</string>
     <string name="InfoPlist_NSPhotoLibraryAddUsageDescription">دلتاچت میخواهد تصاویر را در آلبوم شما ذخیره کند.</string>
-
-
     <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
     <string name="pref_instant_delivery">تحویل آنی</string>
     <string name="pref_background_notifications">استفاده از اتصال پس‌زمینه</string>
@@ -1203,7 +1188,4 @@ GNU GPL ورژن ۳
     <string name="perm_enable_bg_reminder_title">برای دریافت پیام‌ها به صورت پس زمینه در دلتاچت این جا را ضربه بزنید. </string>
     <string name="perm_enable_bg_already_done">قبلا اجازه دسترسی به فعالیت در پس زمینه را به دلتاچت داده‌اید. \n\n اگر پیام‌ها هنوز هم در شرایط پس زمینه نمی‌آمد لطفا تنظیم‌های سیستم را نیز بررسی نمایید. </string>
 
-    <!-- device messages for updates -->
-    <string name="update_1_50_android">چه چیز تازه است؟\n\n❤️‍🔥 منوی انتخاب ایموجی جدید با ایموجی‌های جدید\🎮n\n بهبود برنامه‌های چت: دریافت اعلان و بازکردن برنامه‌های پشتیبانی‌کننده در محتوا. مثلا یک خط جدید در تقویم را مستقیم باز کنید.\👍n\n زمانی که به پیام شما واکنشی داده می‌شود، خبردار می‌شوید.\n\n 🛠️ همچنین رفع اشکال‌ها و دیگر چیز‌ها در 
-%1$s</string>
     </resources>

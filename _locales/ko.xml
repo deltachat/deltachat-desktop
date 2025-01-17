@@ -4,7 +4,7 @@
     <string name="app_name">Delta Chat</string>
     <string name="ok">확인</string>
     <string name="cancel">취소</string>
-   <string name="clear_search">검색 지우기</string>
+    <string name="clear_search">검색 지우기</string>
     <string name="yes">예</string>
     <string name="no">아니오</string>
     <string name="select">선택</string>
@@ -560,7 +560,6 @@
     <string name="pref_app_access">앱 접근</string>
     <string name="pref_chats">채팅</string>
     <string name="pref_in_chat_sounds">앱 내 알림</string>
-    <string name="pref_message_text_size">메시지 폰트 크기</string>
     <string name="pref_view_log">로그 보기</string>
     <string name="pref_saved_log">로그를 \"다운로드\" 폴더에 저장했습니다.</string>
     <string name="pref_save_log_failed">로그 저장을 실패했습니다.</string>
@@ -789,8 +788,6 @@
     <string name="mailto_link_could_not_be_decoded">링크로 보내는 메일을 디코딩할 수 없습니다: %1$s</string>
 
     <!-- notifications  -->
-    <!-- deprecated, use mark_as_read or mark_as_read_short -->
-    <string name="notify_dismiss">무시하기</string>
     <string name="notify_reply_button">답장하기</string>
     <string name="notify_new_message">새 메시지</string>
     <string name="notify_background_connection_enabled">백그라운드 연결 사용</string>
@@ -902,9 +899,6 @@
     <string name="last_check_at">%1$s에 확인됨</string>
     <!-- iOS webxdc selector -->
     <string name="webxdc_selector_empty_hint">채팅에서 보내거나 받은 개인 앱들이 여기에 나타납니다. \"파일\"에서 방금 다운로드 받은 개인 앱들을 보여줍니다.</string>
-    <!-- iOS webxdc shortcut page -->
-    <string name="shortcut_step1_tap_share_btn">공유 버튼을 누르시오</string>
-    <string name="shortcut_step2_tap_add_to_home_screen">홈 화면에 앱을 추가하려면 \"홈 화면에 추가\"를 선택합니다.</string>
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Delta Chat은 카메라를 사용하여 사진과 비디오를 찍고 전송하고 QR 코드를 스캔합니다.</string>
     <string name="InfoPlist_NSContactsUsageDescription">Delta Chat 은 연락처를 사용하여 쓸 수 있는 이메일 주소 목록을 표시합니다. Delta Chat 에는 서버가 없으며 연락처는 아무 곳에도 전송되지 않습니다.</string>
@@ -913,8 +907,6 @@
     <string name="InfoPlist_NSMicrophoneUsageDescription">Delta Chat 은 마이크를 사용하여 음성 메시지와 비디오를 소리와 함께 녹음하고 전송합니다.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Delta Chat 을 통해 라이브러리에서 보낼 사진을 선택할 수 있습니다.</string>
     <string name="InfoPlist_NSPhotoLibraryAddUsageDescription">Delta Chat 에서 사진 라이브러리에 이미지를 저장하려고 합니다.</string>
-
-
     <string name="pref_background_notifications_rationale">이메일 서버에 대한 연결을 유지하고 백그라운드에서 메시지를 수신하려면 다음 단계에서 배터리 최적화를 무시하십시오.\n\nDelta Chat은 리소스를 거의 사용하지 않으며 배터리가 소모되지 않도록 주의합니다.</string>
     <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
     <string name="perm_enable_bg_reminder_title">Delta Chat이 백그라운드에 있는 동안 메시지를 받으려면 여기를 누르십시오.</string>

@@ -4,8 +4,6 @@
     <string name="app_name">Delta Chat</string>
     <string name="ok">OK</string>
     <string name="cancel">Anuloje</string>
-   <!-- deprecated, the word "or" to separate blocks in the user interface that are mutually exclusive -->
-    <string name="or_separator">ose</string>
     <string name="clear_search">Spastroje Kërkimin</string>
     <!-- a noun, used on a button, short for "show link" -->
     <string name="link">Lidhje</string>
@@ -182,6 +180,12 @@
     <string name="webxdc_app">Aplikacion</string>
     <!-- plural of "App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
     <string name="webxdc_apps">Aplikacione</string>
+    <string name="webxdc_store_url">URL Marrësi Aplikacioni</string>
+    <string name="webxdc_store_url_explain">Në u ujdistë, URL-ja do të përdoret si Marrës Aplikacioni, në vend të atij parazgjedhje</string>
+    <string name="games">Lojëra</string>
+    <string name="tools">Mjete</string>
+    <string name="app_size">Madhësi</string>
+    <string name="add_to_chat">Shtoje te Fjalosje</string>
     <string name="unknown">E panjohur</string>
 
     <string name="green">E gjelbër</string>
@@ -530,10 +534,6 @@
     <string name="multidevice_transfer_done_devicemsg">ℹ️ Llogaria u shpërngul te pajisja juaj e dytë.</string>
     <!-- Shown beside progress bar, stay short -->
     <string name="preparing_account">Po përgatitet llogaria…</string>
-    <!-- deprecated, shown beside progress bar, stay short -->
-    <string name="waiting_for_receiver">Po pritet për marrës…</string>
-    <!-- deprecated, shown beside progress bar, stay short -->
-    <string name="receiver_connected">Marrësi u lidh…</string>
     <!-- Shown beside progress bar, stay short -->
     <string name="transferring">Po shpërngulet…</string>
     <string name="troubleshooting">Diagnostikim</string>
@@ -652,6 +652,8 @@
     <string name="profile_tag">Etiketë Private</string>
     <string name="profile_tag_hint">p.sh., Pune, Familjeje</string>
     <string name="profile_tag_explain">Ajo etiketë është e dukshme vetëm për ju; për t’ju ndihmuar ju të bëni dallimin mes profileve tuaja.</string>
+    <!-- Menu entry to sort an item to the beginning of a list. Only "To Top" may do as well in some translations, if that helps to stay shorter. -->
+    <string name="move_to_top">Shpjere Në Krye</string>
     <string name="delete_account">Fshije Llogarinë</string>
     <string name="delete_account_ask">Jeni i sigurt se doni të fshihen të dhënat e llogarisë tuaj?</string>
     <string name="delete_account_explain_with_name">Krejt të dhënat e llogarisë për “%s” në këtë pajisje do të fshihen, përfshi ato të ujdisjes tuaj për fshehtëzim skaj-më-skaj, kontakte, fjalosje, mesazhe dhe media. Ky veprim s’mund të zhbëhet.</string>
@@ -716,6 +718,7 @@
     <string name="pref_appearance">Dukje</string>
     <string name="pref_theme">Temë</string>
     <string name="pref_language">Gjuhë</string>
+    <string name="pref_use_system_ui_font">Përdor Shkronja Sistemi</string>
     <string name="pref_incognito_keyboard">Tastierë Incognito</string>
     <!-- Translators: Must indicate that there is no guarantee as the system may not honor our request. -->
     <string name="pref_incognito_keyboard_explain">Kërkoji tastierës të çaktivizojë nxënie të personalizuar</string>
@@ -732,8 +735,6 @@
     <string name="pref_show_system_contacts_explain">Ofro krijim fjalosjesh me kontakte prej libri adresash. Disa shërbime lypin ujdisje fshehtëzimi skaj-më-skaj së pari.</string>
     <string name="pref_chats">Fjalosje</string>
     <string name="pref_in_chat_sounds">Tinguj Brenda Fjalosjeje</string>
-    <!-- deprecated -->
-    <string name="pref_message_text_size">Madhësi Shkronjash Mesazhi</string>
     <string name="pref_view_log">Shihni Regjistrin</string>
     <string name="pref_saved_log">Regjistri u ruajt te dosja “Shkarkime”</string>
     <string name="pref_save_log_failed">Dështoi ruajtja e regjistrit</string>
@@ -1018,8 +1019,6 @@
     <string name="mailto_link_could_not_be_decoded">s’u shkodua dot lidhje mailto: %1$s</string>
 
     <!-- notifications  -->
-    <!-- deprecated, use mark_as_read or mark_as_read_short -->
-    <string name="notify_dismiss">Hidhe tej</string>
     <string name="notify_reply_button">Përgjigjuni</string>
     <string name="notify_new_message">Mesazh i ri</string>
     <string name="notify_background_connection_enabled">U vendos lidhje në prapaskenë</string>
@@ -1146,11 +1145,20 @@
     <string name="notifications_avg_minutes">Mesatarisht çdo %1$d minuta</string>
     <string name="notifications_avg_hours">Mesatarisht %1$d orë</string>
     <string name="last_check_at">Kontrolluar më %1$s</string>
+    <string name="system_settings">Rregullime Sistemi</string>
+    <!-- shown below the button "System Settings" on the notification screen. this is a hint about what can be edited on System Settings' Notification page - eg. the notification type (banner, lock screen, notification centre), sound, badges and so on. no need to be exhaustive here, it is only to give the user an idea. -->
+    <string name="system_settings_notify_explain_ios">Përpunoni lloje, stema, bëni paraparje, etj</string>
     <!-- iOS webxdc selector -->
     <string name="webxdc_selector_empty_hint">Këtu do të duken aplikacione private të dërguar apo të marrë në cilëndo fjalosje. “Kartela” shfaq aplikacione private të saposhkarkuara.</string>
-    <!-- iOS webxdc shortcut page -->
-    <string name="shortcut_step1_tap_share_btn">Klikoni butonin për ndarje</string>
-    <string name="shortcut_step2_tap_add_to_home_screen">Që ta shtoni aplikacionin te skena juaj e kreut, përzgjidhni “Shtoje te Skena e Kreut”.</string>
+    <!-- iOS shortcut widget -->
+    <!-- use the same translation for "Shortcuts" as the system is using, often the term "Shortcut" stays untranslated; check eg. how the "Shortcuts" system app is called in your locale -->
+    <string name="shortcuts_widget_title">Shkurtore</string>
+    <!-- use the same translation for "Widget" as the system is using; often the term "Widget" stays untranslated -->
+    <string name="shortcuts_widget_description">Që të shtoni objekte, përdorni “Shtoje në Widget” të Delta Chat-it</string>
+    <!-- use the same translation for "Widget" as the system is using; often the term "Widget" stays untranslated -->
+    <string name="remove_from_widget">Hiqe prej Widget-i</string>
+    <!-- use the same translation for "Widget" as the system is using; often the term "Widget" stays untranslated -->
+    <string name="add_to_widget">Shtoje në Widget</string>
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Lejimi i përdorimi të kamerës ju bën të mundur të bëni foto dhe video.</string>
     <string name="InfoPlist_NSContactsUsageDescription">Lejimi i përdorimi të librit tuaj të adresave ju bën të mundur të bisedoni me kontakte prej pajisjes tuaj.</string>
@@ -1159,6 +1167,7 @@
     <string name="InfoPlist_NSMicrophoneUsageDescription">Delta Chat-i përdor mikrofonin tuaj për të incizuar dhe dërguar mesazhe zanorë dhe video me zë.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Delta Chat-i do t’ju lejojë të zgjidhni cilat foto të dërgohen nga fototeka juaj.</string>
     <string name="InfoPlist_NSPhotoLibraryAddUsageDescription">Delta Chat dëshiron të ruajë figura në fototekën tuaj.</string>
+    <string name="InfoPlist_NSFaceIDUsageDescription">Delta Chat mund të përdorë Face ID që të mbrojë profilin tuaj vendor, krijim kopjeruajtjesh dhe ujdisje pajisjeje të dytë.</string>
 
 
     <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
@@ -1173,6 +1182,8 @@
     <string name="perm_enable_bg_reminder_title">Prekeni këtu që të merrni mesazhe, teksa Delta Chat rri në prapaskenë.</string>
     <string name="perm_enable_bg_already_done">E keni lejuar tashmë Delta Chat-in të marrë mesazhe në prapaskenë.\n\nNëse mesazhet prapë nuk mbërrijnë në prapaskenë, ju lutemi, kontrolloni edhe rregullimet e sistemit tuaj.</string>
 
+    <!-- device messages for updates -->
+    <string name="update_1_50_android">Ç’ka të re?\n\n❤️‍🔥 Zgjedhës i ri emoji-sh, me më shumë të tillë\n\n🎮 Zgjerim aplikacionesh brenda fjalosjesh: Merrni njoftim dhe hapni aplikacionet përkatës sipas kontekstit, p.sh., hapni drejtpërdrejt një zë të saposhtuar kalendari\n\n👍 Merrni njoftim mbi reagime te mesazhet tuaj\n\n… 🛠️ NDREQJE DHE MË TEPËR te %1$s</string>
     <string name="update_1_46_ios">Hapa të Rinj Mirëseardhjeje 🐣 dhe të Tjera:\n\n⚡️ Regjistrohuni te shërbyes të siguruar, të shpejtë chatmail-i (https://delta.chat/chatmail), ose përdorni shërbyes klasikë email-i\n\n👉 Njoftime PUSH për çfarëdo shërbyesish “chatmail”\n\n👤 Merrni “Kontakte bashkëmgjitur” dhe lidhuni me shokët tuaj\n\n🥰 Përzgjedhje më e shpejtë reagimesh…ETJ, te %1$s</string>
     <string name="update_switch_profile_placement">ℹ️ Mundësia “Ndërroni Profil” u hoq: Që të shtoni, ose ndërroni profile, prekni figurën e profilit tuaj në cepin e sipërm të skenës kryesore 💡</string>
 </resources>

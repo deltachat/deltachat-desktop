@@ -172,6 +172,12 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
     )
   }
 
+  const categoryTitle = (selectedCategory: AppCategoryEnum) => {
+    return selectedCategory === AppCategoryEnum.home
+      ? tx('home')
+      : tx(selectedCategory + 's')
+  }
+
   return (
     <div className={classNames(styles.appPickerContainer, className)}>
       <input
@@ -221,7 +227,9 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
                 src={`./images/${category}.svg`}
                 alt={category}
               />
-              <div className={styles.categoryTitle}>{tx(category)}</div>
+              <div className={styles.categoryTitle}>
+                {categoryTitle(category)}
+              </div>
             </div>
           </button>
         ))}
