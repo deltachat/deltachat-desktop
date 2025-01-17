@@ -23,7 +23,7 @@ export default function ManageKeys() {
   const { openDialog } = useDialog()
 
   const onKeysImport = useCallback(async () => {
-    const { defaultPath, setLastPath } = rememberLastUsedPath(
+    const { defaultPath, setLastPath } = await rememberLastUsedPath(
       LastUsedSlot.KeyImport
     )
     const opts: RuntimeOpenDialogOptions = {
@@ -65,7 +65,7 @@ export default function ManageKeys() {
     if (runtime.getRuntimeInfo().target === 'browser') {
       destination = '<BROWSER>' // gets replaced internally by browser runtime
     } else {
-      const { defaultPath, setLastPath } = rememberLastUsedPath(
+      const { defaultPath, setLastPath } = await rememberLastUsedPath(
         LastUsedSlot.KeyExport
       )
       const opts: RuntimeOpenDialogOptions = {

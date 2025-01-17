@@ -48,7 +48,9 @@ export default function ImageCropper({
   desiredHeight: number
 }) {
   const tx = useTranslationFunction()
-  const { setLastPath } = rememberLastUsedPath(LastUsedSlot.ProfileImage)
+  const rememberLastUsedPathPromise = rememberLastUsedPath(
+    LastUsedSlot.ProfileImage
+  )
 
   // cut pattern from the full image
   const cutImage = useRef<HTMLImageElement>(null)
@@ -130,7 +132,9 @@ export default function ImageCropper({
       canvas.toDataURL('image/png').split(';base64,')[1]
     )
 
-    setLastPath(dirname(filepath))
+    rememberLastUsedPathPromise.then(({ setLastPath }) =>
+      setLastPath(dirname(filepath))
+    )
     onResult(tempfilepath)
     onClose()
   }

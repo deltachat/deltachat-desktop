@@ -1,7 +1,35 @@
 {
+  "name": "@deltachat-desktop/target-tauri",
   "private": true,
-  "name": "deltachat-desktop-tauri",
+  "version": "1.51.0",
   "type": "module",
   "license": "GPL-3.0-or-later",
-  "version": "1.51.0"
+  "scripts": {
+    "check:types": "tsc --noEmit -p runtime-tauri",
+    "start": "tauri dev",
+    "build4production": "NODE_ENV=production pnpm build",
+    "build": "pnpm build:locales && pnpm --filter=@deltachat-desktop/frontend build && pnpm build:compose-frontend",
+    "build:locales": "pnpm -w translations:convert",
+    "build:runtime-impl": "pnpm esbuild --bundle --minify --keep-names --sourcemap --outdir=./html-dist runtime-tauri/runtime.ts",
+    "build:compose-frontend": "node ../../bin/copy.js ../frontend/html-dist ./html-dist && node ../../bin/copy.js ./static ./html-dist && pnpm build:runtime-impl",
+    "tauri": "tauri",
+    "fmt": "cd src-tauri && cargo fmt",
+    "lint": "cd src-tauri && cargo clippy"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.2.0",
+    "@tauri-apps/plugin-log": "^2.2.0",
+    "@tauri-apps/plugin-shell": "^2.2.0",
+    "@tauri-apps/plugin-store": "^2.2.0"
+  },
+  "devDependencies": {
+    "@deltachat-desktop/runtime-interface": "link:../runtime",
+    "@deltachat-desktop/shared": "link:../shared",
+    "@deltachat/jsonrpc-client": "catalog:",
+    "@tauri-apps/cli": "^2",
+    "@tauri-apps/plugin-clipboard-manager": "^2.2.0",
+    "@tauri-apps/plugin-dialog": "^2.2.0",
+    "esbuild": "^0.24.0",
+    "typescript": "^5.2.2"
+  }
 }

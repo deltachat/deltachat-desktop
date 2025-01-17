@@ -526,7 +526,7 @@ class BrowserRuntime implements Runtime {
       )
     }
   }
-  getAppPath(_name: string): string {
+  async getAppPath(_name: string): Promise<string> {
     this.log.critical('Method not implemented.')
     return 'not-implemented'
   }

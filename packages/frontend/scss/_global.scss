@@ -215,3 +215,12 @@ samp {
   flex-grow: 1;
   overflow: hidden;
 }
+
+:root {
+  overscroll-behavior: none;
+}
+
+// tauri: normalization fix, because user stylesheet of chrome sets audio elements to 300px
+audio {
+  width: 300px;
+}

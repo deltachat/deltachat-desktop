@@ -1,4 +1,4 @@
-type PromiseType<T> = T extends Promise<infer U> ? U : any
+export type PromiseType<T> = T extends Promise<infer U> ? U : any
 
 type Bounds = {
   height: number
@@ -80,7 +80,7 @@ export type Theme = {
 
 /** Additional info about the runtime the ui might need */
 export type RuntimeInfo = {
-  /** used to determine wether to use command key in shortcuts or not */
+  /** used to determine wether to use borderless design and to use command key in shortcuts or not */
   isMac: boolean
   /** currently used to check for an additional device message */
   isAppx: boolean
@@ -93,6 +93,10 @@ export type RuntimeInfo = {
   rpcServerPath?: string
   buildInfo: BuildInfo
   isContentProtectionSupported: boolean
+  /** whether to hide emoji & sticker picker -> this is the case for mobile ios/android because they have their own sticker picker
+   * and sticker picker currently would open a folder, which is inside of the pp container, so too much work to make work for now
+   */
+  hideEmojiAndStickerPicker?: boolean
 }
 
 export interface BuildInfo {

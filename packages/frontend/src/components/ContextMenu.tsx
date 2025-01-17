@@ -311,6 +311,7 @@ export function ContextMenu(props: {
           ref={el => (menuLevelEls.current[levelIdx] = el as HTMLDivElement)}
           key={levelIdx}
           className='dc-context-menu'
+          data-no-drag-region
           role='menu'
           tabIndex={-1}
           style={{

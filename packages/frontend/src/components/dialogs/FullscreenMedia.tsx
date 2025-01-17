@@ -269,10 +269,10 @@ export default function FullscreenMedia(props: Props & DialogProps) {
     <Dialog unstyled onClose={onClose}>
       <div className='attachment-view'>{elm}</div>
       {runtime.getRuntimeInfo().isMac && (
-        <div className='attachment-view-drag-bar drag'></div>
+        <div className='attachment-view-drag-bar' data-tauri-drag-region></div>
       )}
       {elm && (
-        <div className='btn-wrapper no-drag'>
+        <div className='btn-wrapper' data-no-drag-region>
           <IconButton
             onClick={onDownload.bind(null, msg)}
             icon='download'
