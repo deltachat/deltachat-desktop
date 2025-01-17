@@ -30,26 +30,11 @@
   "reset": {
     "message": "Reset"
   },
-  "crop_image": {
-    "message": "Crop Image"
-  },
-  "flip_image_horizontally": {
-    "message": "Flip image horizontally"
-  },
-  "flip_image_vertically": {
-    "message": "Flip image vertically"
-  },
-  "menu_global_map": {
-    "message": "Open global map"
-  },
   "all_chats_map_title": {
     "message": "Map for all chats (Profile '%1')"
   },
   "chat_map_title": {
     "message": "Map for chat '%1'"
-  },
-  "menu_edit_broadcast_list": {
-    "message": "Edit Broadcast List"
   },
   "pref_use_system_ui_font": {
     "message": "Use System UI Font"
@@ -60,12 +45,6 @@
   "read_by": {
     "message": "Read by"
   },
-  "edit_name_explain": {
-    "message": "Set a nickname that will be shown to you instead of '%1'. Leave empty to use the contact's chosen name."
-  },
-  "edit_name_placeholder": {
-    "message": "Nickname for '%1'"
-  },
   "join_group": {
     "message": "Join Group"
   },
@@ -75,14 +54,8 @@
   "react_more_emojis": {
     "message": "More emojis…"
   },
-  "paste": {
-    "message": "Paste"
-  },
   "contact_is_blocked": {
     "message": "This contact is blocked"
-  },
-  "app": {
-    "message": "App"
   },
   "tool": {
     "message": "Tools"
@@ -90,20 +63,11 @@
   "game": {
     "message": "Games"
   },
-  "search": {
-    "message": "Search..."
-  },
-  "app_info": {
-    "message": "App Info"
-  },
   "app_author": {
     "message": "Author"
   },
   "app_size": {
     "message": "Size"
-  },
-  "app_source": {
-    "message": "Source"
   },
   "app_date_published": {
     "message": "Published"

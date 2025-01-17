@@ -268,7 +268,7 @@ export function QrCodeScanQrInner({
       <DialogFooter>
         <FooterActions align='spaceBetween'>
           <FooterActionButton onClick={pasteClipboard} data-testid='paste'>
-            {tx('paste')}
+            {tx('global_menu_edit_paste_desktop')}
           </FooterActionButton>
           <FooterActionButton onClick={onClose} data-testid='close'>
             {tx('close')}
