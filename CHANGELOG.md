@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+- fix unread counter on "jump to bottom" button showing incorrect count (taking the count from other chats) #4500
 
 <a id="1_51_0"></a>
 
