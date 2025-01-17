@@ -15,9 +15,6 @@
   "background_sync_disabled_explaination": {
     "message": "Background sync disabled, profile is only synced when selected"
   },
-  "muted": {
-    "message": "Muted"
-  },
   "pref_all_accounts": {
     "message": "All Profiles"
   },
@@ -26,12 +23,6 @@
   },
   "camera_access_failed": {
     "message": "Could not access video camera. You might want to check your video permissions or if the camera is used already by another program"
-  },
-  "reset": {
-    "message": "Reset"
-  },
-  "pref_use_system_ui_font": {
-    "message": "Use System UI Font"
   },
   "search_in": {
     "message": "Search in %1$s"
@@ -50,23 +41,5 @@
   },
   "contact_is_blocked": {
     "message": "This contact is blocked"
-  },
-  "tool": {
-    "message": "Tools"
-  },
-  "game": {
-    "message": "Games"
-  },
-  "app_size": {
-    "message": "Size"
-  },
-  "app_date_published": {
-    "message": "Published"
-  },
-  "add_to_chat": {
-    "message": "Add to Chat"
-  },
-  "home": {
-    "message": "Home"
   }
 }
