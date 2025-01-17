@@ -5,6 +5,7 @@
 ### Added
 
 ### Changed
+- add some missing translations
 
 ### Fixed
 

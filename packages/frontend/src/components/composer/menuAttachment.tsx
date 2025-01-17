@@ -203,7 +203,7 @@ export default function MenuAttachment({
     },
     {
       icon: 'apps',
-      label: tx('app'),
+      label: tx('webxdc_app'),
       action: selectAppPicker.bind(null),
       dataTestid: 'open-app-picker',
     },

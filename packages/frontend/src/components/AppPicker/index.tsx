@@ -117,7 +117,7 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
     }
     return (
       <DialogWithHeader
-        title={tx('app_info')}
+        title={tx('webxdc_app')}
         className='app-info-dialog'
         onClose={onClose}
       >
@@ -130,16 +130,13 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
                 <span>{tx('app_date_published')}:</span> {app.date}
               </p>
               <p>
-                <span>{tx('app_size')}:</span> {filesize(app.size)}
-              </p>
-              <p>
-                <span>{tx('app_source')}:</span>{' '}
+                <span>{tx('source_code')}:</span>{' '}
                 <a href='${app.source_code_url}' target='_blank'>
                   {app.source_code_url}
                 </a>
               </p>
               <p>
-                <span>{tx('app_author')}:</span> {app.author}
+                <span>{tx('app_size')}:</span> {filesize(app.size)}
               </p>
             </div>
           </DialogContent>

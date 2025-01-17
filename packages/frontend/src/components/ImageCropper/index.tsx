@@ -386,7 +386,7 @@ export default function ImageCropper({
   })
   return (
     <Dialog canEscapeKeyClose onClose={onClose} canOutsideClickClose={false}>
-      <DialogHeader title={tx('crop_image')} />
+      <DialogHeader title={tx('ImageEditorHud_crop')} />
       <DialogBody className={styles.imageCropperDialogBody}>
         <DialogContent className={styles.imageCropperDialogContent}>
           <div ref={container} className={styles.imageCropperContainer}>
@@ -428,7 +428,7 @@ export default function ImageCropper({
             <button
               className={styles.imageCropperControlsButton}
               onClick={onFlipX}
-              aria-label={tx('flip_image_horizontally')}
+              aria-label={tx('ImageEditorHud_flip')}
             >
               <Icon coloring='navbar' icon='swap_hor' size={24} />
             </button>
