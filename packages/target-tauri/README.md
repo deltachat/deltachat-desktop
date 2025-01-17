@@ -81,7 +81,6 @@ pnpm tauri dev -f=crabnebula_extras
 | macOS    | ~/Library/Application Support/chat.delta.desktop.tauri |
 | windows  | %AppData%\chat.delta.desktop.tauri                     |
 
-
 ## Funding
 
 This project is funded through [NGI0 Entrust](https://nlnet.nl/entrust), a fund established by [NLnet](https://nlnet.nl) with financial support from the European Commission's [Next Generation Internet](https://ngi.eu) program. Learn more at the [NLnet project page](https://nlnet.nl/project/DeltaTauri).
