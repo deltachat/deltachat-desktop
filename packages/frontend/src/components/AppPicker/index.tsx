@@ -95,31 +95,30 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
   const filteredApps = useMemo(() => {
     const lowerCaseQuery = searchQuery.toLowerCase()
     const findByRelevance = (apps: AppInfo[]) => {
-      const startsWithQuery = apps.filter(app =>
-        app.name.toLowerCase().startsWith(lowerCaseQuery)
+      const queryEqualsAuthor = apps.filter(
+        app => app.author && app.author.toLowerCase() === lowerCaseQuery
+      )
+
+      const startsWithQuery = apps.filter(
+        app =>
+          !queryEqualsAuthor.includes(app) &&
+          app.name.toLowerCase().startsWith(lowerCaseQuery)
       )
 
       const queryInTitle = apps.filter(
         app =>
+          !queryEqualsAuthor.includes(app) &&
           !startsWithQuery.includes(app) &&
           app.name.toLowerCase().includes(lowerCaseQuery)
       )
 
       const queryInShortDescription = apps.filter(
         app =>
+          !queryEqualsAuthor.includes(app) &&
           !startsWithQuery.includes(app) &&
           !queryInTitle.includes(app) &&
           app.short_description &&
           app.short_description.toLowerCase().includes(lowerCaseQuery)
-      )
-
-      const queryEqualsAuthor = apps.filter(
-        app =>
-          !startsWithQuery.includes(app) &&
-          !queryInTitle.includes(app) &&
-          !queryInShortDescription.includes(app) &&
-          app.author &&
-          app.author.toLowerCase() === lowerCaseQuery
       )
 
       return [
