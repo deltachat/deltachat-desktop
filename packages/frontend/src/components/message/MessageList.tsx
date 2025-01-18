@@ -80,10 +80,14 @@ function useUnreadCount(
   const [freshMessageCounter, setFreshMessageCounter] = useState(initialValue)
 
   useEffect(() => {
+    let outdated = false
+
     const update = async ({ chatId: eventChatId }: { chatId: number }) => {
       if (chatId === eventChatId) {
         const count = await BackendRemote.rpc.getFreshMsgCnt(accountId, chatId)
-        setFreshMessageCounter(count)
+        if (!outdated) {
+          setFreshMessageCounter(count)
+        }
       }
     }
 
@@ -91,6 +95,7 @@ function useUnreadCount(
       onDCEvent(accountId, 'IncomingMsg', update),
       onDCEvent(accountId, 'MsgRead', update),
       onDCEvent(accountId, 'MsgsNoticed', update),
+      () => (outdated = true),
     ]
     return () => cleanup.forEach(off => off())
   }, [accountId, chatId])
