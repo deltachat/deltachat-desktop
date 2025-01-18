@@ -211,12 +211,9 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
     }
   }, [])
 
-  useEffect(() => {
-    window.__internal_jump_to_message = jumpToMessage
-    return () => {
-      window.__internal_jump_to_message = undefined
-    }
-  }, [jumpToMessage])
+  // TODO perf: to save memory, maybe set to `undefined` when unmounting,
+  // but be sure not to unset it if the new component render already set it.
+  window.__internal_jump_to_message = jumpToMessage
 
   const pendingProgrammaticSmoothScrollTo = useRef<null | number>(null)
   const pendingProgrammaticSmoothScrollTimeout = useRef<number>(-1)
