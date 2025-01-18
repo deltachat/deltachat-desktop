@@ -1,5 +1,4 @@
 import React from 'react'
-import classNames from 'classnames'
 
 import QrCode from '../dialogs/QrCode'
 import SearchInputButton from './SearchInputButton'
@@ -48,7 +47,8 @@ export default function SearchInput(props: Props) {
         autoFocus
         onChange={onChange}
         value={value}
-        className={classNames(styles.searchInput, 'no-drag')}
+        className={styles.searchInput}
+        data-no-drag-region
         ref={props.inputRef}
         spellCheck={false}
         aria-keyshortcuts='Control+K'

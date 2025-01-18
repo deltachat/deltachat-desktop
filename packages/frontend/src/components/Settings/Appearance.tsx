@@ -188,7 +188,7 @@ function BackgroundSelector({
     type: SetBackgroundAction,
     ev: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    const { defaultPath, setLastPath } = rememberLastUsedPath(
+    const { defaultPath, setLastPath } = await rememberLastUsedPath(
       LastUsedSlot.BackgroundImage
     )
     let url

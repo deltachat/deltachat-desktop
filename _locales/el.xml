@@ -4,7 +4,7 @@
     <string name="app_name">Delta Chat</string>
     <string name="ok">Εντάξει</string>
     <string name="cancel">Ακύρωση</string>
-   <string name="clear_search">Αναζήτηση</string>
+    <string name="clear_search">Αναζήτηση</string>
     <string name="yes">Ναι</string>
     <string name="no">Όχι</string>
     <string name="select">Επιλογή</string>
@@ -584,7 +584,6 @@
     <string name="pref_app_access">Πρόσβαση εφαρμογής</string>
     <string name="pref_chats">Συνομιλίες</string>
     <string name="pref_in_chat_sounds">Ήχοι μέσα στη συνομιλία</string>
-    <string name="pref_message_text_size">Μέγεθος γραμματοσειράς μηνύματος</string>
     <string name="pref_view_log">Προβολή Αρχείου Καταγραφής</string>
     <string name="pref_saved_log">ΤΟ αρχείο καταγραφής αποθηκεύτηκε στο φάκελο \"Λήψεις\".</string>
     <string name="pref_save_log_failed">Αποτυχία αποθήκευσης του αρχείου καταγραφής</string>
@@ -827,8 +826,6 @@
     <string name="mailto_link_could_not_be_decoded">Αδυναμία αποκωδικοποίησης του συνδέσμου mailto: %1$s</string>
 
     <!-- notifications  -->
-    <!-- deprecated, use mark_as_read or mark_as_read_short -->
-    <string name="notify_dismiss">Απόρριψη</string>
     <string name="notify_reply_button">Απάντηση</string>
     <string name="notify_new_message">Νέο μήνυμα</string>
     <string name="notify_background_connection_enabled">Η σύνδεση στο παρασκήνιο ενεργοποιήθηκε</string>
@@ -950,9 +947,6 @@
     <string name="last_check_at">Έλεγχος στις %1$s</string>
     <!-- iOS webxdc selector -->
     <string name="webxdc_selector_empty_hint">Οι ιδιωτικές εφαρμογές που λαμβάνονται ή αποστέλλονται σε οποιαδήποτε συνομιλία θα εμφανίζονται εδώ. Το \"Αρχεία\" εμφανίζει ιδιωτικές εφαρμογές που μόλις κατεβάσατε.</string>
-    <!-- iOS webxdc shortcut page -->
-    <string name="shortcut_step1_tap_share_btn">Κάντε κλικ στο κουμπί κοινής χρήσης</string>
-    <string name="shortcut_step2_tap_add_to_home_screen">Επιλέξτε \"Προσθήκη στην αρχική οθόνη\" για να προσθέσετε την εφαρμογή στην αρχική σας οθόνη.</string>
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Το Delta Chat χρησιμοποιεί την κάμερά σας για λήψη και αποστολή φωτογραφιών και βίντεο και για σάρωση κωδικών QR.</string>
     <string name="InfoPlist_NSContactsUsageDescription">Το Delta Chat χρησιμοποιεί τις επαφές σας για να εμφανίσει μια λίστα με διευθύνσεις e-mail στις οποίες μπορείτε να γράψετε. Το Delta Chat δεν έχει διακομιστή, οι επαφές σας δεν αποστέλλονται πουθενά.</string>
@@ -961,8 +955,6 @@
     <string name="InfoPlist_NSMicrophoneUsageDescription">Το Delta Chat χρησιμοποιεί το μικρόφωνό σας για εγγραφή και αποστολή φωνητικών μηνυμάτων και βίντεο με ήχο.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Το Delta Chat θα σας επιτρέψει να επιλέξετε ποιες φωτογραφίες από τη βιβλιοθήκη σας θα στείλετε.</string>
     <string name="InfoPlist_NSPhotoLibraryAddUsageDescription">Το Delta Chat θέλει να αποθηκεύσει εικόνες στη συλλογή φωτογραφιών σας.</string>
-
-
     <string name="pref_background_notifications_rationale">Για να διατηρήσετε τη σύνδεση με τον διακομιστή e-mail σας και να λαμβάνετε μηνύματα στο παρασκήνιο, αγνοήστε τις βελτιστοποιήσεις μπαταρίας στο επόμενο βήμα.\n\nΤο Delta Chat χρησιμοποιεί λίγους πόρους και φροντίζει να μην εξαντλήσει την μπαταρία σας.</string>
     <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
     <string name="perm_enable_bg_reminder_title">Πατήστε εδώ για να λαμβάνετε μηνύματα ενώ το Delta Chat είναι στο παρασκήνιο.</string>

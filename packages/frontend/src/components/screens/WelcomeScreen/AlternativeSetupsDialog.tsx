@@ -46,7 +46,7 @@ export default function AlternativeSetupsDialog({
   async function onClickImportBackup() {
     await resetAccount()
 
-    const { defaultPath, setLastPath } = rememberLastUsedPath(
+    const { defaultPath, setLastPath } = await rememberLastUsedPath(
       LastUsedSlot.Backup
     )
 

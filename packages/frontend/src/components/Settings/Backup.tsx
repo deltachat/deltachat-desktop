@@ -46,7 +46,7 @@ export default function Backup() {
       if (runtime.getRuntimeInfo().target === 'browser') {
         destination = '<BROWSER>' // gets replaced internally by browser runtime
       } else {
-        const { defaultPath, setLastPath } = rememberLastUsedPath(
+        const { defaultPath, setLastPath } = await rememberLastUsedPath(
           LastUsedSlot.Backup
         )
         const opts: RuntimeOpenDialogOptions = {

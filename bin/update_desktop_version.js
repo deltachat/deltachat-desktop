@@ -31,6 +31,27 @@ packageDirectories
     }
   })
 
+// check Cargo.toml
+
+const cargoFilePath = "./packages/target-tauri/src-tauri/Cargo.toml"
+const configFile = readFileSync(cargoFilePath, 'utf8')
+
+const currentVersionInCargo = /^version = "(.*?)"/m.exec(configFile)[1]
+
+if (checkOnly){
+  if (currentVersionInCargo !== version) {
+    checkFailed = true
+    console.log(
+      `- delta tauri has incorrect version: (expected ${version}) (actual ${currentVersionInCargo})`
+    )
+  }
+} else {
+  writeFileSync(cargoFilePath, configFile.replace(/^version = "(.*?)"/m, `version = "${version}"`), 'utf8')
+}
+
+
+// TODO
+
 if (checkFailed) {
   console.log("\nCheck failed, make sure you have run 'update:target-versions'")
   process.exit(1)

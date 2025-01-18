@@ -16,24 +16,42 @@ export const cyan = colorize(1, 36)
 const emojiFontCss =
   'font-family: Roboto, "Apple Color Emoji", NotoEmoji, "Helvetica Neue", Arial, Helvetica, NotoMono, sans-serif !important;'
 
+export const enum LogLevelString {
+  DEBUG = 'DEBUG',
+  WARNING = 'WARNING',
+  INFO = 'INFO',
+  ERROR = 'ERROR',
+  CRITICAL = 'CRITICAL',
+}
+
 const LoggerVariants = [
-  { log: console.debug, level: 'DEBUG', emoji: '🕸️', symbol: '[D]' },
-  { log: console.info, level: 'INFO', emoji: 'ℹ️', symbol: blue('[i]') },
+  {
+    log: console.debug,
+    level: LogLevelString.DEBUG,
+    emoji: '🕸️',
+    symbol: '[D]',
+  },
+  {
+    log: console.info,
+    level: LogLevelString.INFO,
+    emoji: 'ℹ️',
+    symbol: blue('[i]'),
+  },
   {
     log: console.warn,
-    level: 'WARNING',
+    level: LogLevelString.WARNING,
     emoji: '⚠️',
     symbol: yellow('[w]'),
   },
   {
     log: console.error,
-    level: 'ERROR',
+    level: LogLevelString.ERROR,
     emoji: '🚨',
     symbol: red('[E]'),
   },
   {
     log: console.error,
-    level: 'CRITICAL',
+    level: LogLevelString.CRITICAL,
     emoji: '🚨🚨',
     symbol: red('[C]'),
   },
@@ -65,7 +83,7 @@ Start deltachat with --devmode (or --log-debug and --log-to-console) argument to
 
 export type LogHandlerFunction = (
   channel: string,
-  level: string,
+  level: LogLevelString,
   stacktrace: ReturnType<typeof getStackTrace>,
   ...args: any[]
 ) => void
@@ -148,7 +166,7 @@ export class Logger {
     }
   }
 
-  getStackTrace(): StackFrame[] | string {
+  private getStackTrace(): StackFrame[] | string {
     const rawStack: StackFrame[] = errorStackParser.parse(
       new Error('Get Stacktrace')
     )

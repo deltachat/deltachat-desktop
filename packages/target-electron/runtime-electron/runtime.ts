@@ -232,7 +232,9 @@ class ElectronRuntime implements Runtime {
   openPath(path: string): Promise<string> {
     return ipcBackend.invoke('electron.shell.openPath', path)
   }
-  getAppPath(name: Parameters<Runtime['getAppPath']>[0]): string {
+  async getAppPath(
+    name: Parameters<Runtime['getAppPath']>[0]
+  ): Promise<string> {
     return app_getPath(name)
   }
   async downloadFile(pathToSource: string, filename: string): Promise<void> {

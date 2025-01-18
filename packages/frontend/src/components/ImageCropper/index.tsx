@@ -48,7 +48,9 @@ export default function ImageCropper({
   desiredHeight: number
 }) {
   const tx = useTranslationFunction()
-  const { setLastPath } = rememberLastUsedPath(LastUsedSlot.ProfileImage)
+  const rememberLastUsedPathPromise = rememberLastUsedPath(
+    LastUsedSlot.ProfileImage
+  )
 
   // cut pattern from the full image
   const cutImage = useRef<HTMLImageElement>(null)
@@ -130,7 +132,9 @@ export default function ImageCropper({
       canvas.toDataURL('image/png').split(';base64,')[1]
     )
 
-    setLastPath(dirname(filepath))
+    rememberLastUsedPathPromise.then(({ setLastPath }) =>
+      setLastPath(dirname(filepath))
+    )
     onResult(tempfilepath)
     onClose()
   }
@@ -386,7 +390,7 @@ export default function ImageCropper({
   })
   return (
     <Dialog canEscapeKeyClose onClose={onClose} canOutsideClickClose={false}>
-      <DialogHeader title={tx('crop_image')} />
+      <DialogHeader title={tx('ImageEditorHud_crop')} />
       <DialogBody className={styles.imageCropperDialogBody}>
         <DialogContent className={styles.imageCropperDialogContent}>
           <div ref={container} className={styles.imageCropperContainer}>
@@ -428,7 +432,7 @@ export default function ImageCropper({
             <button
               className={styles.imageCropperControlsButton}
               onClick={onFlipX}
-              aria-label={tx('flip_image_horizontally')}
+              aria-label={tx('ImageEditorHud_flip')}
             >
               <Icon coloring='navbar' icon='swap_hor' size={24} />
             </button>

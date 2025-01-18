@@ -114,7 +114,7 @@ export default function AccountItem({
       },
     },
     {
-      label: tx('menu_global_map'),
+      label: tx('menu_show_global_map'),
       action: async () => {
         await onSelectAccount(accountId)
         openMapWebxdc(accountId)

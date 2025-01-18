@@ -4,7 +4,7 @@
     <string name="app_name">Delta Chat</string>
     <string name="ok">У реду</string>
     <string name="cancel">Откажи</string>
-   <string name="clear_search">Избриши претрагу</string>
+    <string name="clear_search">Избриши претрагу</string>
     <string name="yes">Да</string>
     <string name="no">Не</string>
     <string name="select">Изабери</string>
@@ -610,7 +610,6 @@
     <string name="pref_app_access">Приступ апликацији</string>
     <string name="pref_chats">Ћаскања</string>
     <string name="pref_in_chat_sounds">Звуци ћаскања</string>
-    <string name="pref_message_text_size">Величина слова поруке</string>
     <string name="pref_view_log">Погледај дневник</string>
     <string name="pref_saved_log">Дневник је снимљен у „Downloads“ директоријум</string>
     <string name="pref_save_log_failed">Снимање дневника је било неуспешно</string>
@@ -855,8 +854,6 @@
     <string name="mailto_link_could_not_be_decoded">mailto веза не може бити декодирана: %1$s</string>
 
     <!-- notifications  -->
-    <!-- deprecated, use mark_as_read or mark_as_read_short -->
-    <string name="notify_dismiss">Одбаци</string>
     <string name="notify_reply_button">Одговори</string>
     <string name="notify_new_message">Нова порука</string>
     <string name="notify_background_connection_enabled">Веза у позадини је омогућена</string>
@@ -978,9 +975,6 @@
     <string name="last_check_at">Проверено у %1$s</string>
     <!-- iOS webxdc selector -->
     <string name="webxdc_selector_empty_hint">Приватне апликације примљене или послате у било ком ћаскању ће се појавити овде. „Фајлови“ приказује приватне апликације које су управо преузете.</string>
-    <!-- iOS webxdc shortcut page -->
-    <string name="shortcut_step1_tap_share_btn">Кликните на дугме за дељење</string>
-    <string name="shortcut_step2_tap_add_to_home_screen">Изаберите „Додај на почетни екран“ да бисте апликацију додали на почетни екран.</string>
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Delta Chat користи вашу камеру за снимање и слање фотографија и видео записа и за очитавање бар-кôда.</string>
     <string name="InfoPlist_NSContactsUsageDescription">Delta Chat користи ваше контакте да прикаже листу е-адреса на које можете слати поруке. Delta Chat нема сервер и ваши контакти се не шаљу нигде.</string>
@@ -989,8 +983,6 @@
     <string name="InfoPlist_NSMicrophoneUsageDescription">Delta Chat користи микрофон да снима и шаље звучне поруке и видео записе са звуком.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Delta Chat ће вам дозволити да изаберете које од слика из вашег фото албума желите да пошаљете.</string>
     <string name="InfoPlist_NSPhotoLibraryAddUsageDescription">Delta Chat жели да сними слике у ваш фото албум.</string>
-
-
     <string name="pref_background_notifications_rationale">Да би сте одржавали везу са вашим сервером за е-пошту и да би сте примали поруке у позадини, игноришите оптимизације ефикасности батерије у следећем кораку.\n\nDelta Chat не користи много енергије и води рачуна да вам не испразни батерију.</string>
     <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
     <string name="perm_enable_bg_reminder_title">Додирните овде да би примали поруке када је Delta Chat у позадини.</string>

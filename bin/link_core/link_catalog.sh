@@ -12,3 +12,6 @@ pnpm add @deltachat/jsonrpc-client@catalog:
 
 cd ../runtime
 pnpm add @deltachat/jsonrpc-client@catalog:
+
+cd ../target-tauri
+pnpm add --save @deltachat/jsonrpc-client@catalog:
