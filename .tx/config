@@ -1,10 +1,12 @@
 [main]
-host = https://www.transifex.com
+host = https://app.transifex.com
 
 [o:delta-chat:p:delta-chat-app:r:stringsxml]
-file_filter  = _locales/<lang>.xml
-source_file  = _locales/en.xml
-source_lang  = en
-type         = ANDROID
-minimum_perc = 0
+file_filter            = _locales/<lang>.xml
+source_file            = _locales/en.xml
+type                   = ANDROID
+minimum_perc           = 0
+resource_name          = strings.xml
+replace_edited_strings = false
+keep_translations      = false
 
