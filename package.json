@@ -50,7 +50,10 @@
         "ia32",
         "arm64"
       ]
-    }
+    },
+    "onlyBuiltDependencies": [
+      "electron"
+    ]
   },
   "devDependencies": {
     "@types/ignore-walk": "^4.0.3",
