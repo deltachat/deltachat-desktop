@@ -87,7 +87,7 @@ export default class ComposerMessageInput extends React.Component<
    * does not get invoked until the next change to the draft text.
    *
    * Useful for setting / clearing draft text afer loading it from core,
-   * e.g. after sending the message or opening a chat with a.
+   * e.g. after sending the message or opening a chat with an existing draft.
    */
   setText(text: string | null) {
     this.setState({ text: text || '', loadingDraft: false })
