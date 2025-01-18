@@ -11,6 +11,7 @@
 ### Fixed
 - fix cancelation of account deletion when canceling clicking outside of the dialog
 - fix unread counter on "jump to bottom" button showing incorrect count (taking the count from other chats) #4500
+- fix clicking on message search result or "reply privately" quote not jumping to the message on first click #4510
 
 <a id="1_51_0"></a>
 
