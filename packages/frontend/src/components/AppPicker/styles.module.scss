@@ -45,6 +45,12 @@
   }
 }
 
+.searchInputButton {
+  position: absolute;
+  top: 2px;
+  right: 0;
+}
+
 .appIcon {
   width: 64px;
   height: 64px;
@@ -58,6 +64,14 @@
   justify-content: center;
   p {
     margin: 2px 0;
+  }
+  button {
+    border: none;
+    background: none;
+    color: var(--globalLinkColor);
+    text-align: left;
+    margin: 2px 0;
+    padding: 0;
   }
 }
 

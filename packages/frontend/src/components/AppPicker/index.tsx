@@ -17,6 +17,7 @@ import {
   FooterActionButton,
   FooterActions,
 } from '../Dialog'
+import SearchInputButton from '../SearchInput/SearchInputButton'
 
 export interface AppInfo {
   app_id: string
@@ -92,15 +93,47 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
   }, [apps, isOffline])
 
   const filteredApps = useMemo(() => {
-    return apps.filter(app => {
-      const matchesSearch = app.name
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase())
-      const matchesCategory =
+    const lowerCaseQuery = searchQuery.toLowerCase()
+    const findByRelevance = (apps: AppInfo[]) => {
+      const startsWithQuery = apps.filter(app =>
+        app.name.toLowerCase().startsWith(lowerCaseQuery)
+      )
+
+      const queryInTitle = apps.filter(
+        app =>
+          !startsWithQuery.includes(app) &&
+          app.name.toLowerCase().includes(lowerCaseQuery)
+      )
+
+      const queryInShortDescription = apps.filter(
+        app =>
+          !startsWithQuery.includes(app) &&
+          !queryInTitle.includes(app) &&
+          app.short_description &&
+          app.short_description.toLowerCase().includes(lowerCaseQuery)
+      )
+
+      const queryEqualsAuthor = apps.filter(
+        app =>
+          !startsWithQuery.includes(app) &&
+          !queryInTitle.includes(app) &&
+          !queryInShortDescription.includes(app) &&
+          app.author &&
+          app.author.toLowerCase() === lowerCaseQuery
+      )
+
+      return [
+        ...queryEqualsAuthor,
+        ...startsWithQuery,
+        ...queryInTitle,
+        ...queryInShortDescription,
+      ]
+    }
+    return findByRelevance(apps).filter(
+      app =>
         selectedCategory === AppCategoryEnum.home ||
         app.category === selectedCategory
-      return matchesSearch && matchesCategory
-    })
+    )
   }, [apps, searchQuery, selectedCategory])
 
   const AppInfoOverlay = (props: {
@@ -123,7 +156,7 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
       >
         <DialogBody>
           <DialogContent>
-            {renderAppInfo(app)}
+            {renderAppInfo(app, setSearchQuery, setSelectedAppInfo)}
             <div className={styles.appDetails}>
               <div className={styles.appDescription}>{app.description}</div>
               <p>
@@ -155,7 +188,11 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
     )
   }
 
-  const renderAppInfo = (app: AppInfo) => {
+  const renderAppInfo = (
+    app: AppInfo,
+    setSearchQuery?: (query: string) => void,
+    setSelectedAppInfo?: (app: AppInfo | null) => void
+  ) => {
     return (
       <div className={styles.appItem}>
         <img
@@ -166,7 +203,21 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
         <div className={styles.appInfo}>
           <div className={styles.appName}>{app.name}</div>
           <p>{app.short_description}</p>
-          <p>{app.author}</p>
+          {setSearchQuery && app.author && (
+            <button
+              onClick={() => {
+                if (setSearchQuery && app.author) {
+                  setSearchQuery(app.author)
+                  if (setSelectedAppInfo) {
+                    setSelectedAppInfo(null)
+                  }
+                }
+              }}
+            >
+              {app.author}
+            </button>
+          )}
+          {!setSearchQuery && app.author && <p>{app.author}</p>}
         </div>
       </div>
     )
@@ -188,6 +239,14 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
         onChange={e => setSearchQuery(e.target.value)}
         className={styles.searchInput}
       />
+      {searchQuery && (
+        <SearchInputButton
+          className={styles.searchInputButton}
+          aria-label={tx('delete')}
+          icon='cross'
+          onClick={() => setSearchQuery('')}
+        />
+      )}
       <div className={styles.appPickerList}>
         {!isOffline && Object.keys(icons).length > 0 ? (
           <>
