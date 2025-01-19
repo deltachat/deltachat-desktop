@@ -18,6 +18,16 @@ export type JumpToMessage = (params: {
    */
   msgChatId?: number
   highlight?: boolean
+  /**
+   * The ID of the message to remember,
+   * to later go back to it, using the "jump down" button.
+   *
+   * This has no effect if `msgId` and `msgParentId` belong to different chats.
+   * Because otherwise if the user pops the stack
+   * by clicking the "jump down" button,
+   * we'll erroneously show messages from the previous chat
+   * without actually switching to that chat.
+   */
   msgParentId?: number
   /**
    * `behavior: 'smooth'` should not be used due to "scroll locking":
@@ -79,6 +89,9 @@ export default function useMessage() {
       // Check if target message is in same chat, if not switch first
       if (msgChatId !== chatId) {
         await selectChat(accountId, msgChatId)
+
+        // See `msgParentId` docstring.
+        msgParentId = undefined
       }
       setChatView(ChatView.MessageList)
 
