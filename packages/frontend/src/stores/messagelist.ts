@@ -412,6 +412,13 @@ class MessageListStore extends Store<MessageListState> {
      *
      * @param msgId - when `undefined`, pop the jump stack, or,
      * if the stack is empty, jump to last message.
+     * @param addMessageIdToStack the ID of the message to remember,
+     * to later go back to it, using the "jump down" button.
+     * The message with the specified ID must belong to the chat with ID
+     * `MessageListStore.chatId`.
+     * For example, this must be ensured for message quotes,
+     * because they might belong to a different chat due to the
+     * "Reply Privately" feature.
      */
     jumpToMessage: this.scheduler.lockedQueuedEffect(
       'scroll',
