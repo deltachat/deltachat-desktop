@@ -1,3 +1,4 @@
+@use 'sass:map';
 @use '../mixins';
 @use '../variables';
 
@@ -505,6 +506,10 @@ $info-text-max-width: 400px;
   }
 
   &.daymarker {
+    position: sticky;
+    top: 0.5rem;
+    z-index: map.get(variables.$z-index, chat-list-scope-daymarker);
+
     // Be careful with overriding margins on messages, see
     // commit c56a78595df073bada81e1f769407990e37d8d57
     // (https://github.com/deltachat/deltachat-desktop/pull/5244).
@@ -512,6 +517,16 @@ $info-text-max-width: 400px;
     margin-top: 1.5rem;
 
     .bubble {
+      // Since daymarkers are `position: sticky;`,
+      // they stack on top of each other. Let's make sure that other
+      // daymarker's text is not visible.
+      // This is not 100% fool-proof, and is based on dates formatted as
+      // "December 01, 2025"
+      min-width: 18ch;
+      // So that several daymarkers aren't visible through each other.
+      opacity: unset;
+      background-color: var(--infoMessageBubbleBgNonTransparent);
+
       font-weight: bold;
     }
   }
