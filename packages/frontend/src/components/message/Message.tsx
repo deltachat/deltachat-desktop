@@ -365,6 +365,7 @@ function buildContextMenu(
             // but let's not pass `chatId` here, for future-proofing.
             msgChatId: undefined,
             highlight: true,
+            msgParentId: message.id,
             scrollIntoViewArg: { block: 'center' },
           })
         }
