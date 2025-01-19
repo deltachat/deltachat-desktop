@@ -115,11 +115,11 @@ class TauriRuntime implements Runtime {
       HTMLEmailAskForRemoteLoadingConfirmation: true,
       HTMLEmailAlwaysLoadRemoteContent: false,
       contentProtectionEnabled: false,
+      locale: null, // if this is null, the system chooses the system language that electron reports
     } satisfies Partial<DesktopSettingsType>
 
     const frontendOnly = {
       // TODO field 2
-      locale: null, // if this is null, the system chooses the system language that electron reports
       notifications: true,
       showNotificationContent: true,
       enterKeySends: false,
