@@ -401,9 +401,15 @@ class MessageListStore extends Store<MessageListState> {
     ),
     /**
      * Loads and shows the message in the messages list.
-     * It can handle showing the message in a chat other than `this.chatId`,
-     * loading the message if it is missing from `this.state.messageCache`,
-     * and reloading `messageListItems` if the message is missing from there.
+     * It can handle loading the message if it is missing
+     * from `this.state.messageCache`,
+     * reloading `messageListItems` if the message is missing from there,
+     * and showing the message in a chat other than `this.chatId`.
+     *
+     * The latter (showing the message from a different chat), however,
+     * should not be used, because, as of 2025-01-19, we re-create
+     * `MessageListStore` when `chatId` or `accountId` changes.
+     *
      * @param msgId - when `undefined`, pop the jump stack, or,
      * if the stack is empty, jump to last message.
      */
@@ -492,6 +498,15 @@ class MessageListStore extends Store<MessageListState> {
 
         const isMessageInCurrentChat =
           this.accountId === accountId && this.chatId === chatId
+        if (!isMessageInCurrentChat) {
+          this.log.error(
+            'Tried to show messages from a different chat.\n' +
+              `this.accountId === ${this.accountId}, ` +
+              `this.chatId === ${this.chatId}, ` +
+              `target IDs: ${accountId}, ${chatId}. ` +
+              `jumpToMessageId === ${jumpToMessageId}`
+          )
+        }
 
         let messageListItems = this.state.messageListItems
         const findMessageIndex = (): number =>
