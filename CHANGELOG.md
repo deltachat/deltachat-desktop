@@ -9,6 +9,7 @@
 
 ### Fixed
 - message list being empty when double-clicking the chat before it has loaded (again) #4647
+- improve performance a little #4512
 
 <a id="1_54_1"></a>
 
