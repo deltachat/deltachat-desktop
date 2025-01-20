@@ -90,6 +90,8 @@ export default function SelectContactDialog({
                     wrapperElementRef={selectContactListRef}
                   >
                     <FixedSizeList
+                      innerElementType={'ol'}
+                      className='react-window-list-reset'
                       itemCount={contactIds.length}
                       itemData={{
                         onContactClick: onOk,
@@ -144,23 +146,22 @@ function SelectContactDialogRow({
 }) {
   const { onContactClick, contactIds, contactCache } = data
 
-  const el = (() => {
-    const item = contactCache[contactIds[index]]
-    if (!item) {
-      // It's not loaded yet
-      return null
-    }
-    const contact: T.Contact = item
-    return (
-      <ContactListItem
-        contact={contact}
-        onClick={onContactClick}
-        showCheckbox={false}
-        checked={false}
-        showRemove={false}
-      />
-    )
-  })()
+  const item = contactCache[contactIds[index]]
+  if (!item) {
+    // It's not loaded yet
+    return <li style={style}></li>
+  }
 
-  return <div style={style}>{el}</div>
+  const contact: T.Contact = item
+  return (
+    <ContactListItem
+      tagName='li'
+      style={style}
+      contact={contact}
+      onClick={onContactClick}
+      showCheckbox={false}
+      checked={false}
+      showRemove={false}
+    />
+  )
 }

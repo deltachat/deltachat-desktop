@@ -57,7 +57,7 @@ export const ChatListItemRowChat = React.memo<{
   const chatId = chatListIds[index]
 
   return (
-    <div style={style}>
+    <li style={style}>
       <ChatListItem
         isSelected={selectedChatId === chatId}
         chatListItem={chatCache[chatId] || undefined}
@@ -70,7 +70,7 @@ export const ChatListItemRowChat = React.memo<{
         }}
         isContextMenuActive={activeContextMenuChatId === chatId}
       />
-    </div>
+    </li>
   )
 }, areEqual)
 
@@ -85,22 +85,22 @@ export const ChatListItemRowContact = React.memo<{
   const accountId = selectedAccountId()
   const openViewProfileDialog = useOpenViewProfileDialog()
 
-  return (
-    <div style={style}>
-      {contact ? (
-        <ContactListItem
-          contact={contact}
-          showCheckbox={false}
-          checked={false}
-          showRemove={false}
-          onClick={async _ => {
-            openViewProfileDialog(accountId, contactId)
-          }}
-        />
-      ) : (
-        <PlaceholderChatListItem />
-      )}
-    </div>
+  return contact ? (
+    <ContactListItem
+      tagName='li'
+      style={style}
+      contact={contact}
+      showCheckbox={false}
+      checked={false}
+      showRemove={false}
+      onClick={async _ => {
+        openViewProfileDialog(accountId, contactId)
+      }}
+    />
+  ) : (
+    <li style={style}>
+      <PlaceholderChatListItem />
+    </li>
   )
 }, areEqual)
 
@@ -116,7 +116,7 @@ export const ChatListItemRowMessage = React.memo<{
   const accountId = selectedAccountId()
 
   return (
-    <div style={style}>
+    <li style={style}>
       {messageSearchResult ? (
         <ChatListItemMessageResult
           queryStr={queryStr || ''}
@@ -134,6 +134,6 @@ export const ChatListItemRowMessage = React.memo<{
       ) : (
         <div className='pseudo-chat-list-item skeleton' />
       )}
-    </div>
+    </li>
   )
 }, areEqual)
