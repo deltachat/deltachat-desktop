@@ -19,14 +19,14 @@
 
 ## [1.51.0] - 2025-01-16
 
-## Added
+### Added
 - accessibility: arrow-key navigation for message list, gallery and sticker picker #4294, #4376, #4372,
 - accessibility: arrow-key navigation: handle "End" and "Home" keys to go to last / first item #4438
 - add show_app_in_chat option to webxdc info message context menu #4459
 - add experimental content protection option (to prevent screenshots and screenrecording the app) #4475
 - app picker for webxdc apps in attachement menu #4485
 
-## Changed
+### Changed
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.154.1`
   - New group consistency algorithm
   - fix: Migration: Set bcc_self=1 if it's unset and delete_server_after!=1
@@ -44,7 +44,7 @@
   - displayname may not be empty anymore #4471
 - update `@deltachat/message_parser_wasm` from `0.11.0` to `0.12.0` #4477
 
-## Fixed
+### Fixed
 - fix draft not getting cleared after sending the message #4493
 - fix draft not getting saved after inserting an emoji #4493
 - fix chat "scrolls up" right after switching (rev 2) #4431
@@ -62,23 +62,23 @@
 
 ## [1.50.1] - 2024-12-18
 
-## Changed
+### Changed
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.152.1`
 
-## Fixed
+### Fixed
 - downgrade rust in core to avoid wrong Windows malware detection https://github.com/deltachat/deltachat-core-rust/issues/6338
 
 ## [1.50.0] - 2024-12-17
 
-## Added
+### Added
 - show specific notifications for webxdc events #4400
 - expose sendUpdateInterval & sendUpdateMaxSize in webxdc
 
-## Changed
+### Changed
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.152.0`
 - mark bots as such in chat header and in contact view dialog #4405
 
-## Fixed
+### Fixed
 - handle double escape on Dialog #4365
 - fix random crashes on quote reply #4337
 - avoid drafts in readonly chats #4349
@@ -93,7 +93,7 @@
 
 ## [1.49.0] - 2024-12-05
 
-## Added
+### Added
 - accessibility: arrow-key navigation for the list of chats, list of accounts, lists of contacts, gallery tabs #4224, #4291, #4361, #4362, #4369, #4377
 - Add "Learn More" button to "Disappearing Messages" dialog #4330
 - new icon for Mac users
@@ -102,7 +102,7 @@
 - add ability to add private tags to accounts
 - dev: run e2e tests in CI
 
-## Changed
+### Changed
 - enable Telegram-style Ctrl + ArrowUp to reply by default #4333
 - improve performance a little #4334
 - extend image max-height in messages
@@ -116,7 +116,7 @@
 - dev: move responsibility for updating account list to core through the `AccountsChanged` and `AccountsItemChanged` event
 - add dc version, os name and cpu architecture to fatal errors for better error reports #4384
 
-## Fixed
+### Fixed
 - "Disappearing Messages" dialog not reflecting the actual current value #4327
 - accessibility: make settings keyboard-navigable #4319
 - Fix documentation for --allow-unsafe-core-replacement #4341
@@ -135,7 +135,7 @@
 
 ## [1.48.0] - 2024-11-08
 
-## Changed
+### Changed
 - Update translations (2024-11-08)
 - Update local help (2024-11-08)
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.148.7`
@@ -143,7 +143,7 @@
   - send_msg_to_smtp: Do not fail if the message does not exist anymore
 - move the "Realtime Webxdc Channels" setting out of the "Experimental" section #4316
 
-## Fixed
+### Fixed
 - image attachments not being centered within a message #4313
 
 
@@ -151,14 +151,14 @@
 
 ## [1.47.1] - 2024-11-01
 
-## Added
+### Added
 - Added support for selecting multiple files in the attachment file picker. #4278
 - browser edition:
   - support for selecting custom chat wallpaper #4306
   - support for themes #4304
 - improve keyboard and screen-reader accessibility #4210
 
-## Changed
+### Changed
 - style: avoid scrolling to account list items such that they're at the very edge of the list #4252
 - Update local help (2024-10-25) #4264
 - Update translations (2024-27-10) #4281
@@ -173,7 +173,7 @@
 - Dropping multiple files onto deltachat now sends images as compressed images instead of uncompressed files #4278
 
 
-## Fixed
+### Fixed
 - image thumbnails not showing in chat list #4247
 - progress bar not working #4248
 - avoid showing horizontal scrollbars in chat list #4253
@@ -1700,7 +1700,7 @@ Also make opening devtools with F12 more reliable.
 - Keeping `Alt + ArrowUp/ArrowDown` pressed now keeps selecting the next chat until the key is released
 - Download on Demand
 
-## Changed
+### Changed
 - update `filesize` dependency to version `8.0.6`
 - update deltachat-node to v1.70.0
 
