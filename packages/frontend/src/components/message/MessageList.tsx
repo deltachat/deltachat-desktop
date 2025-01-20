@@ -1023,7 +1023,7 @@ export function DayMarker(props: { timestamp: number }) {
   const rovingTabindex = useRovingTabindex(ref)
 
   return (
-    <div className='info-message daymarker'>
+    <li className='info-message daymarker'>
       <div
         ref={ref}
         className={`bubble ${rovingTabindex.className}`}
@@ -1039,6 +1039,6 @@ export function DayMarker(props: { timestamp: number }) {
           sameElse: 'LL',
         })}
       </div>
-    </div>
+    </li>
   )
 }
