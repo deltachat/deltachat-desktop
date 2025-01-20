@@ -101,7 +101,8 @@ export function ChatListPart({
     >
       {({ onItemsRendered, ref }) => (
         <List
-          className=''
+          innerElementType={'ol'}
+          className='react-window-list-reset'
           height={height}
           itemCount={rowCount}
           itemSize={itemHeight}

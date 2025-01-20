@@ -34,7 +34,7 @@ export function ContactList(props: {
     onContactContextMenu,
   } = props
   return (
-    <div>
+    <ol style={{ margin: 0, padding: 0, listStyle: 'none' }}>
       {contacts.map(contact => {
         let checked = false
         if (showCheckbox && typeof isChecked === 'function') {
@@ -46,6 +46,7 @@ export function ContactList(props: {
         }
         return (
           <ContactListItem
+            tagName='li'
             key={contact.id}
             contact={contact}
             onClick={onClick}
@@ -59,7 +60,7 @@ export function ContactList(props: {
           />
         )
       })}
-    </div>
+    </ol>
   )
 }
 

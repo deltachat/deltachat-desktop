@@ -545,6 +545,8 @@ function FileTable({
 }) {
   return (
     <FixedSizeList
+      innerElementType={'ol'}
+      className='react-window-list-reset'
       width={width}
       height={height}
       itemSize={60}
@@ -582,12 +584,12 @@ function FileAttachmentRowWrapper({
     return null
   }
   return (
-    <div style={style} className='item'>
+    <li style={style} className='item'>
       <FileAttachmentRow
         messageId={msgId}
         loadResult={message}
         queryText={queryText}
       />
-    </div>
+    </li>
   )
 }

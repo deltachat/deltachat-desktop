@@ -292,6 +292,8 @@ function CreateChatMain(props: CreateChatMainProps) {
                   if the user has 5000 contacts.
                   (see https://github.com/deltachat/deltachat-desktop/issues/1830) */}
                   <FixedSizeList
+                    innerElementType={'ol'}
+                    className='react-window-list-reset'
                     itemCount={contactsAndExtraItems.length}
                     itemData={{
                       contactsAndExtraItems,
@@ -424,6 +426,7 @@ function CreateChatMainRow({
         }
         return (
           <ContactListItem
+            tagName='div'
             contact={contact}
             onClick={onContactClick}
             onContextMenu={
@@ -440,7 +443,7 @@ function CreateChatMainRow({
     }
   })()
 
-  return <div style={style}>{el}</div>
+  return <li style={style}>{el}</li>
 }
 const enum CreateChatExtraItemType {
   // Negative number so that we can differentiate these from
