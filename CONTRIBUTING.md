@@ -60,6 +60,7 @@ Otherwise fork the repository and create a branch in your fork.
 Please add a meaningful description to your PR
 so that reviewers get an idea about what the modifications are supposed to do.
 Add a meaningful line to CHANGELOG.md that is at least roughly understandable by the end user.
+If you added changes, that have no impact on the end user or are not visible to the end user you should add a line in the PR description, starting with #skip-changelog followed by a short explanation why to skip the CHNANGELOG change
 
 If the changes affect the user interface,
 screenshots are very helpful,
