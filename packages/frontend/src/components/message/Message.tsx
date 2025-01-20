@@ -832,7 +832,10 @@ export default function Message(props: {
             ></WebxdcMessageContent>
           )}
           {message.viewType === 'Vcard' && (
-            <VCardComponent message={message}></VCardComponent>
+            <VCardComponent
+              message={message}
+              tabindexForInteractiveContents={tabindexForInteractiveContents}
+            ></VCardComponent>
           )}
           {content}
           {hasHtml && (
