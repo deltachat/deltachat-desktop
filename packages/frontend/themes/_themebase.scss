@@ -89,6 +89,7 @@ $hover-contrast-change: 2%;
   /* same as message text */
   --setupMessageText: #ed824e;
   --infoMessageBubbleBg: #0000008c;
+  --infoMessageBubbleBgNonTransparent: #080808;
   --infoMessageBubbleText: white;
   --messageIncomingBg: #{$bgMessageBubbleIncoming};
   --messageIncomingDate: #{$textPrimary};

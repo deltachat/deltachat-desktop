@@ -400,7 +400,21 @@
   }
 
   &.daymarker {
+    position: sticky;
+    top: 0.5rem;
+    z-index: map-get($z-index, chat-list-scope-daymarker);
+
     .bubble {
+      // Since daymarkers are `position: sticky;`,
+      // they stack on top of each other. Let's make sure that other
+      // daymarker's text is not visible.
+      // This is not 100% fool-proof, and is based on dates formatted as
+      // "December 01, 2025"
+      min-width: 18ch;
+      // So that several daymarkers aren't visible through each other.
+      opacity: unset;
+      background-color: var(--infoMessageBubbleBgNonTransparent);
+
       font-weight: bold;
     }
   }
