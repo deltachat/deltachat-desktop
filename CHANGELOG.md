@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- settings: explain "Read Receipts" and adjust "Enter Key Sends" title #4524
 
 ### Changed
 
