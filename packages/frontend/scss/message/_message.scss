@@ -507,6 +507,13 @@
     // overflow the chat container, for non-self-sent messages at least.
     height: var(--quote-img-size);
     width: var(--quote-img-size);
+    // For some reason the image element can get shrunk
+    // while it's being loaded.
+    // This, however, is not the case for images with no `src` at all,
+    // god knows why.
+    // See https://github.com/deltachat/deltachat-desktop/issues/4404#issuecomment-2602438175
+    flex-shrink: 0;
+
     object-fit: scale-down;
     object-position: center;
 
@@ -514,8 +521,11 @@
   }
 
   img.quoted-webxdc-icon {
+    // The dimensions need to be fixed, same as for `.quoted-image`.
     height: var(--quote-img-size);
     width: var(--quote-img-size);
+    flex-shrink: 0;
+
     margin-left: 6px;
     border-radius: 7%;
   }
