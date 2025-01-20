@@ -214,7 +214,7 @@ test('create group', async ({ page, context, browserName }) => {
   expect(confirmText).toContain(groupName)
   await page.getByTestId('confirm-join-group').getByTestId('confirm').click()
   // userA invited you to group message
-  expect(page.locator('#message-list li').first()).toContainText(userA.address)
+  expect(page.locator('#message-list li').nth(1)).toContainText(userA.address)
   // verified chat after response from userA
   await expect(page.locator('.verified-icon-info-msg')).toBeVisible()
   // userB has 2 new notifications now
