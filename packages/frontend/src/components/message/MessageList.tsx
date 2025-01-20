@@ -831,14 +831,14 @@ export const MessageListInner = React.memo(
     if (!loaded) {
       return (
         <div id='message-list' ref={messageListRef} onScroll={onScroll2}>
-          <ul></ul>
+          <ol></ol>
         </div>
       )
     }
 
     return (
       <div id='message-list' ref={messageListRef} onScroll={onScroll2}>
-        <ul>
+        <ol>
           <RovingTabindexProvider wrapperElementRef={messageListRef}>
             {messageListItems.length === 0 && <EmptyChatMessage chat={chat} />}
             {activeView.map(messageId => {
@@ -882,7 +882,7 @@ export const MessageListInner = React.memo(
               }
             })}
           </RovingTabindexProvider>
-        </ul>
+        </ol>
       </div>
     )
   },

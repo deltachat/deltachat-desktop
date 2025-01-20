@@ -208,7 +208,7 @@ export default function ChatAuditLogDialog(
                   <div>{tx('chat_audit_log_empty_message')}</div>
                 </div>
               )}
-              <ul key='info-message-list'>
+              <ol key='info-message-list'>
                 {msgEntries.map(entry => {
                   if (entry.kind === 'dayMarker') {
                     const key = 'magic' + entry.timestamp
@@ -277,7 +277,7 @@ export default function ChatAuditLogDialog(
                     </li>
                   )
                 })}
-              </ul>
+              </ol>
             </div>
           )}
         </DialogContent>

@@ -48,6 +48,7 @@
 - memory leak when opening and closing emoji picker #4567
 - fix selected account not getting scrolled into view in accounts bar on app start #4542
 - message list being empty sometimes when a chat gets opened #4556
+- accessibility: improve chat list and message list semantics #4518
 - improve performance a little #4561, #4552, #4584
 - fix "Empty Hints" in "All Media" view #4609
 
