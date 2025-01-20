@@ -8,6 +8,7 @@
 ### Changed
 - add some missing translations
 - order search results by relevance in App Picker #4506
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.154.3`
 
 ### Fixed
 - fix cancelation of account deletion when canceling clicking outside of the dialog
