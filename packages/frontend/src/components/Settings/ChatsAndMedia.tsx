@@ -42,7 +42,8 @@ export default function ChatsAndMedia({
       <DownloadOnDemand settings={settingsStore.settings} />
       <DesktopSettingsSwitch
         settingsKey='enterKeySends'
-        label={tx('pref_enter_sends_explain')}
+        label={tx('pref_enter_sends')}
+        description={tx('pref_enter_sends_explain')}
       />
       <DialogContent>
         <KeybordShortcutHintInSettings
@@ -56,6 +57,7 @@ export default function ChatsAndMedia({
       <CoreSettingsSwitch
         settingsKey='mdns_enabled'
         label={tx('pref_read_receipts')}
+        description={tx('pref_read_receipts_explain')}
       />
       <SettingsSeparator />
       <SettingsHeading>{tx('delete_old_messages')}</SettingsHeading>
