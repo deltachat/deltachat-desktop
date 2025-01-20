@@ -157,7 +157,7 @@ div.delta-form-group {
       border-radius: unset;
       background: none;
       box-shadow: none;
-      border-bottom: 2px solid var(--deltaChatPrimaryFgLight);
+      border-bottom: 1px solid var(--deltaChatPrimaryFgLight);
 
       &:focus {
         border-bottom-color: var(--loginInputFocusColor);
@@ -166,9 +166,6 @@ div.delta-form-group {
 
       &:focus::placeholder {
         color: transparent;
-      }
-      &::placeholder {
-        color: var(--deltaChatPrimaryFgLight);
       }
     }
   }
@@ -179,7 +176,7 @@ div.delta-form-group {
     margin-top: 5px;
     border: none;
     border-radius: 0px;
-    border-bottom: 2px solid;
+    border-bottom: 1px solid;
     border-bottom-color: var(--deltaChatPrimaryFgLight);
     background-color: transparent;
     color: var(--bp4InputText);
