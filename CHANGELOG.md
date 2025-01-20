@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- highlight the first unread message upon opening a chat #4525
 
 ### Changed
 - Improve backup transfer dialog (different message for connection step, timed message to tell user to check out troubleshooting, button to link to trouble shooting) #4476
