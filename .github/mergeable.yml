@@ -1,10 +1,16 @@
 version: 2
 mergeable:
+  # see https://mergeable.readthedocs.io/en/latest/configuration.html
   - when: pull_request.*
     name: 'Changelog check'
     validate:
-      - do: and
+      - do: or
         validate:
+        - do: description
+          must_include:
+            regex: '#skip-changelog'
+        - do: and
+          validate:
           - do: dependent
             changed:
               file: 'packages/frontend/**'
