@@ -120,6 +120,7 @@ function ViewGroupInner(
   const chatDisabled = !chat.canSend
 
   const groupMemberContactListWrapperRef = useRef<HTMLDivElement>(null)
+  const groupPastMemberContactListWrapperRef = useRef<HTMLDivElement>(null)
   const relatedChatsListWrapperRef = useRef<HTMLDivElement>(null)
 
   const {
@@ -133,7 +134,15 @@ function ViewGroupInner(
     setGroupImage,
   } = useGroup(accountId, chat)
 
+  const [pastContacts, setPastContacts] = useState<T.Contact[]>([])
+
   useEffect(() => {
+    BackendRemote.rpc
+      .getContactsByIds(accountId, group.pastContactIds)
+      .then(pastContacts => {
+        setPastContacts(Object.values(pastContacts))
+      })
+
     return onDCEvent(accountId, 'ContactsChanged', () => {
       BackendRemote.rpc
         .getContactsByIds(accountId, group.contactIds)
@@ -141,6 +150,12 @@ function ViewGroupInner(
           // update contacts in case a contact changed
           // while this dialog is open (e.g. contact got blocked)
           group.contacts = Object.values(contacts)
+        })
+
+      BackendRemote.rpc
+        .getContactsByIds(accountId, group.pastContactIds)
+        .then(pastContacts => {
+          setPastContacts(Object.values(pastContacts))
         })
     })
   }, [accountId, group])
@@ -308,6 +323,30 @@ function ViewGroupInner(
                 />
               </RovingTabindexProvider>
             </div>
+            {pastContacts.length > 0 && (
+              <>
+                <div className='group-separator'>{tx('past_members')}</div>
+                <div
+                  className='group-member-contact-list-wrapper'
+                  ref={groupPastMemberContactListWrapperRef}
+                >
+                  <RovingTabindexProvider
+                    wrapperElementRef={groupPastMemberContactListWrapperRef}
+                  >
+                    <ContactList
+                      contacts={pastContacts}
+                      showRemove={false}
+                      onClick={contact => {
+                        if (contact.id === C.DC_CONTACT_ID_SELF) {
+                          return
+                        }
+                        setProfileContact(contact)
+                      }}
+                    />
+                  </RovingTabindexProvider>
+                </div>
+              </>
+            )}
           </DialogBody>
         </>
       )}
