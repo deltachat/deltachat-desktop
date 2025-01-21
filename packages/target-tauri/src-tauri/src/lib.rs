@@ -1,6 +1,10 @@
-use std::time::SystemTime;
+use std::{
+    path::{Path, PathBuf},
+    time::SystemTime,
+};
 
-use tauri::Manager;
+use tauri::{image::Image, AppHandle, Manager};
+use tauri_plugin_clipboard_manager::ClipboardExt;
 use tauri_plugin_store::StoreExt;
 
 use state::{app::AppState, deltachat::DeltaChatAppState};
@@ -64,6 +68,16 @@ fn get_current_logfile(state: tauri::State<AppState>) -> String {
     state.current_log_file_path.clone()
 }
 
+#[tauri::command]
+fn copy_image_to_clipboard(app: AppHandle, path: &Path) -> Result<(), String> {
+    println!("copy_image_to_clipboard: {:?}", path);
+    let image = Image::from_path(path).map_err(|e| format!("failed to load image: {:#}", e))?;
+    app.clipboard()
+        .write_image(&image)
+        .map_err(|e| format!("failed to copy image to clipboard: {:#}", e))?;
+    Ok(())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let startup_timestamp = SystemTime::now();
@@ -94,6 +108,7 @@ pub fn run() {
             ui_ready,
             ui_frontend_ready,
             get_current_logfile,
+            copy_image_to_clipboard,
             app_path::get_app_path,
             clipboard::get_clipboard_image_as_data_uri,
             file_dialogs::download_file,
