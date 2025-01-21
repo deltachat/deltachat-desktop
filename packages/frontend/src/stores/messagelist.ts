@@ -938,6 +938,24 @@ class MessageListStore extends Store<MessageListState> {
             return
           }
         } else {
+          // The draft message does not affect the return value of
+          // `getMessageListItems()`.
+          // The main purpose of this check is not just reduced resource usage,
+          // but to fix the messages list "scrolling up"
+          // when you quote a message. See
+          // https://github.com/deltachat/deltachat-desktop/issues/3763#issuecomment-2602630507
+          //
+          // A more correct solution would perhaps be to reduce the delay
+          // between `getLastKnownScrollPosition()` and the actual scroll,
+          // perhaps by moving `getLastKnownScrollPosition()`
+          // to the render function of `MessageList`.
+          if (
+            (await BackendRemote.rpc.getMessage(this.accountId, messageId))
+              .state === C.DC_STATE_OUT_DRAFT
+          ) {
+            return
+          }
+
           this.log.debug(
             'DC_EVENT_MSGS_CHANGED',
             'changed message seems to be a new message, refetching messageIds'

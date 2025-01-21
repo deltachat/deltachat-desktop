@@ -11,6 +11,7 @@
 
 ### Fixed
 - fix chat being scrolled up a little right after you switch to it (rev 3) #4521
+- fix chat scrolling up a bit when quoting a message or adding attachment to draft (rev 2) #4529
 - fix cancelation of account deletion when canceling clicking outside of the dialog
 - fix unread counter on "jump to bottom" button showing incorrect count (taking the count from other chats) #4500
 - fix clicking on message search result or "reply privately" quote not jumping to the message on first click #4510
