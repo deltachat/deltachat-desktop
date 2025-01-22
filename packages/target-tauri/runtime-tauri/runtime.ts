@@ -334,17 +334,8 @@ class TauriRuntime implements Runtime {
   readClipboardText(): Promise<string> {
     return readText()
   }
-  async readClipboardImage(): Promise<string | null> {
-    try {
-      const clipboardImage = await readImage()
-      const _blob = new Blob([await clipboardImage.rgba()], { type: 'image' })
-      //TODO blob to base64
-
-      throw new Error('Method not implemented.18')
-    } catch (error) {
-      this.log.warn('readClipboardImage', error)
-      return null
-    }
+  readClipboardImage(): Promise<string | null> {
+    return invoke("get_clipboard_image_as_data_uri")
   }
   writeClipboardText(text: string): Promise<void> {
     return writeText(text)
