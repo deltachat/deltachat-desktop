@@ -18,6 +18,7 @@
 - fix clicking on message search result or "reply privately" quote not jumping to the message on first click #4510
 - fix messages from wrong chat being shown after clicking on "jump down" button after revealing a message from a "Reply Privately" quote #4511
 - accessibility: fix VCards (share contact) being tab-stops even in inactive messages #4519
+- fix flickering in "Send to..." appearing on some zoom levels #4534
 
 <a id="1_51_0"></a>
 
