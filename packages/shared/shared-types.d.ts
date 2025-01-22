@@ -25,6 +25,7 @@ export interface DesktopSettingsType {
   locale: string | null
   notifications: boolean
   showNotificationContent: boolean
+  isMentionsEnabled: boolean
   /** @deprecated isn't used anymore since the move to jsonrpc */
   lastChats: { [accountId: number]: number }
   zoomFactor: number
@@ -69,6 +70,7 @@ export interface RC_Config {
 }
 
 import type { T } from '@deltachat/jsonrpc-client'
+import { NOTIFICATION_TYPE } from './constants.ts'
 
 export type Theme = {
   name: string
@@ -117,6 +119,7 @@ export interface DcNotification {
   messageId: number
   // for future
   accountId: number
+  notificationType: NOTIFICATION_TYPE
 }
 
 export interface DcOpenWebxdcParameters {
