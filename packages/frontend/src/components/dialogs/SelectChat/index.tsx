@@ -61,13 +61,13 @@ export default function SelectChat(props: Props) {
               <PseudoListItemNoSearchResults queryStr={queryStr} />
             )}
             <div style={{ height: noResults ? '0px' : '100%' }}>
-              <AutoSizer>
-                {({ width, height }) => (
+              <AutoSizer disableWidth>
+                {({ height }) => (
                   <ChatListPart
                     isRowLoaded={isChatLoaded}
                     loadMoreRows={loadChats}
                     rowCount={chatListIds.length}
-                    width={width}
+                    width={'100%'}
                     height={height}
                     itemKey={index => 'key' + chatListIds[index]}
                     itemHeight={CHATLISTITEM_CHAT_HEIGHT}

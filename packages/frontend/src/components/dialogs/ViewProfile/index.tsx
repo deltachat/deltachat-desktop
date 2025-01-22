@@ -321,13 +321,13 @@ export function ViewProfileInner({
             style={{ flexGrow: 1, minHeight: mutualChatsMinHeight }}
           >
             <RovingTabindexProvider wrapperElementRef={mutualChatsListRef}>
-              <AutoSizer>
-                {({ width, height }) => (
+              <AutoSizer disableWidth>
+                {({ height }) => (
                   <ChatListPart
                     isRowLoaded={isChatLoaded}
                     loadMoreRows={loadChats}
                     rowCount={chatListIds.length}
-                    width={width}
+                    width={'100%'}
                     height={height}
                     itemKey={index => 'key' + chatListIds[index]}
                     itemHeight={CHATLISTITEM_CHAT_HEIGHT}

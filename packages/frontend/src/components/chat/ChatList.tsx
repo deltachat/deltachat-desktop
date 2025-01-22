@@ -66,7 +66,7 @@ export function ChatListPart({
   isRowLoaded: (index: number) => boolean
   loadMoreRows: (startIndex: number, stopIndex: number) => Promise<any>
   rowCount: number
-  width: number
+  width: number | string
   children: ComponentType<ListChildComponentProps<any>>
   height: number
   itemKey: ListItemKeySelector<any>
@@ -342,10 +342,10 @@ export default function ChatList(props: {
     return (
       <>
         <div className='chat-list'>
-          <AutoSizer>
-            {({ width, height }) => (
+          <AutoSizer disableWidth>
+            {({ height }) => (
               <div ref={tabindexWrapperElement}>
-                <div className='search-result-divider' style={{ width: width }}>
+                <div className='search-result-divider'>
                   {tx('search_in', searchChatInfo.name)}
                   {messageResultIds.length !== 0 &&
                     ': ' + translate_n('n_messages', messageResultIds.length)}
@@ -357,7 +357,7 @@ export default function ChatList(props: {
                     isRowLoaded={isMessageLoaded}
                     loadMoreRows={loadMessages}
                     rowCount={messageResultIds.length}
-                    width={width}
+                    width={'100%'}
                     height={
                       /* take remaining space */
                       height - DIVIDER_HEIGHT
@@ -380,11 +380,11 @@ export default function ChatList(props: {
   return (
     <>
       <div className='chat-list'>
-        <AutoSizer>
-          {({ width, height }) => (
+        <AutoSizer disableWidth>
+          {({ height }) => (
             <div ref={tabindexWrapperElement}>
               {isSearchActive && (
-                <div className='search-result-divider' style={{ width: width }}>
+                <div className='search-result-divider'>
                   {translate_n('n_chats', chatListIds.length)}
                 </div>
               )}
@@ -398,7 +398,7 @@ export default function ChatList(props: {
                   isRowLoaded={isChatLoaded}
                   loadMoreRows={loadChats}
                   rowCount={chatListIds.length}
-                  width={width}
+                  width={'100%'}
                   height={chatsHeight(height)}
                   setListRef={(ref: List<any> | null) =>
                     ((listRefRef.current as any) = ref)
@@ -411,17 +411,14 @@ export default function ChatList(props: {
                 </ChatListPart>
                 {isSearchActive && (
                   <>
-                    <div
-                      className='search-result-divider'
-                      style={{ width: width }}
-                    >
+                    <div className='search-result-divider'>
                       {translate_n('n_contacts', contactIds.length)}
                     </div>
                     <ChatListPart
                       isRowLoaded={isContactLoaded}
                       loadMoreRows={loadContact}
                       rowCount={contactIds.length}
-                      width={width}
+                      width={'100%'}
                       height={contactsHeight(height)}
                       itemKey={index => 'key' + contactIds[index]}
                       itemData={contactlistData}
@@ -432,26 +429,19 @@ export default function ChatList(props: {
                     {contactIds.length === 0 &&
                       chatListIds.length === 0 &&
                       queryStrIsValidEmail && (
-                        <div style={{ width: width }}>
-                          <PseudoListItemAddContact
-                            queryStr={queryStr?.trim() || ''}
-                            queryStrIsEmail={queryStrIsValidEmail}
-                            onClick={addContactOnClick}
-                          />
-                        </div>
+                        <PseudoListItemAddContact
+                          queryStr={queryStr?.trim() || ''}
+                          queryStrIsEmail={queryStrIsValidEmail}
+                          onClick={addContactOnClick}
+                        />
                       )}
                     {showPseudoListItemAddContactFromInviteLink && (
-                      <div style={{ width: width }}>
-                        <PseudoListItemAddContactOrGroupFromInviteLink
-                          inviteLink={queryStr!}
-                          accountId={accountId}
-                        />
-                      </div>
+                      <PseudoListItemAddContactOrGroupFromInviteLink
+                        inviteLink={queryStr!}
+                        accountId={accountId}
+                      />
                     )}
-                    <div
-                      className='search-result-divider'
-                      style={{ width: width }}
-                    >
+                    <div className='search-result-divider'>
                       {translated_messages_label(messageResultIds.length)}
                     </div>
 
@@ -459,7 +449,7 @@ export default function ChatList(props: {
                       isRowLoaded={isMessageLoaded}
                       loadMoreRows={loadMessages}
                       rowCount={messageResultIds.length}
-                      width={width}
+                      width={'100%'}
                       height={
                         // take remaining space
                         messagesHeight(height)
