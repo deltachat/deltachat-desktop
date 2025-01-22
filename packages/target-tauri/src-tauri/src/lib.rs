@@ -7,6 +7,7 @@ use state::{app::AppState, deltachat::DeltaChatAppState};
 
 mod app_path;
 mod blobs;
+mod clipboard;
 mod file_dialogs;
 mod help_window;
 mod locales;
@@ -93,6 +94,7 @@ pub fn run() {
             ui_frontend_ready,
             get_current_logfile,
             app_path::get_app_path,
+            clipboard::get_clipboard_image_as_data_uri,
             file_dialogs::download_file,
             file_dialogs::show_open_file_dialog,
             locales::get_locale_data,
