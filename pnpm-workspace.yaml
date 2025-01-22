@@ -2,8 +2,8 @@ packages:
   - packages/*
 catalog:
   # deltachat specific
-  '@deltachat/jsonrpc-client': v1.154.1
-  '@deltachat/stdio-rpc-server': v1.154.1
+  '@deltachat/jsonrpc-client': v1.154.3
+  '@deltachat/stdio-rpc-server': v1.154.3
   '@webxdc/types': ^2.1.2
 
   # dependencies

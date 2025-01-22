@@ -8,6 +8,7 @@
 ### Changed
 - add some missing translations
 - order search results by relevance in App Picker #4506
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.154.3`
 
 ### Fixed
 - fix chat being scrolled up a little right after you switch to it (rev 3) #4521
