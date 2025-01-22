@@ -333,14 +333,14 @@ export default class Gallery extends Component<
 
             {currentTab === 'files' && (
               <>
-                <AutoSizer>
-                  {({ width, height }) => (
+                <AutoSizer disableWidth>
+                  {({ height }) => (
                     <RovingTabindexProvider
                       wrapperElementRef={this.galleryItemsRef}
                       direction='vertical'
                     >
                       <FileTable
-                        width={width}
+                        width={'100%'}
                         height={height}
                         mediaLoadResult={mediaLoadResult}
                         mediaMessageIds={filteredMediaMessageIds}
@@ -528,7 +528,7 @@ function FileTable({
   mediaLoadResult,
   queryText,
 }: {
-  width: number
+  width: number | string
   height: number
   mediaMessageIds: number[]
   mediaLoadResult: Record<number, Type.MessageLoadResult>

@@ -34,7 +34,6 @@ import type { T } from '@deltachat/jsonrpc-client'
 import type { DialogProps } from '../../contexts/DialogContext'
 import ImageCropper from '../ImageCropper'
 import { AddMemberDialog } from './AddMember/AddMemberDialog'
-import AutoSizer from 'react-virtualized-auto-sizer'
 import { RovingTabindexProvider } from '../../contexts/RovingTabindex'
 import { ChatListItemRowChat } from '../chat/ChatListItemRow'
 
@@ -244,32 +243,26 @@ function ViewGroupInner(
                   <RovingTabindexProvider
                     wrapperElementRef={relatedChatsListWrapperRef}
                   >
-                    <AutoSizer disableHeight>
-                      {({ width }) => (
-                        <ChatListPart
-                          isRowLoaded={isChatLoaded}
-                          loadMoreRows={loadChats}
-                          rowCount={chatListIds.length}
-                          // We cannot just set the width to the width
-                          // of the dialog, because scrollbars might have width.
-                          width={width}
-                          height={CHATLISTITEM_CHAT_HEIGHT * chatListIds.length}
-                          itemKey={index => 'key' + chatListIds[index]}
-                          itemHeight={CHATLISTITEM_CHAT_HEIGHT}
-                          itemData={{
-                            chatCache,
-                            chatListIds,
-                            onChatClick,
+                    <ChatListPart
+                      isRowLoaded={isChatLoaded}
+                      loadMoreRows={loadChats}
+                      rowCount={chatListIds.length}
+                      width={'100%'}
+                      height={CHATLISTITEM_CHAT_HEIGHT * chatListIds.length}
+                      itemKey={index => 'key' + chatListIds[index]}
+                      itemHeight={CHATLISTITEM_CHAT_HEIGHT}
+                      itemData={{
+                        chatCache,
+                        chatListIds,
+                        onChatClick,
 
-                            selectedChatId: null,
-                            activeContextMenuChatId: null,
-                            openContextMenu: async () => {},
-                          }}
-                        >
-                          {ChatListItemRowChat}
-                        </ChatListPart>
-                      )}
-                    </AutoSizer>
+                        selectedChatId: null,
+                        activeContextMenuChatId: null,
+                        openContextMenu: async () => {},
+                      }}
+                    >
+                      {ChatListItemRowChat}
+                    </ChatListPart>
                   </RovingTabindexProvider>
                 </div>
               </>
