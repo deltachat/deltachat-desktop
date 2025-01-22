@@ -36,12 +36,10 @@ export class StdioServer {
       if (err.message.endsWith('ENOENT')) {
         dialog.showErrorBox(
           'Fatal Error: Core Library Missing',
-          `The DeltaChat Module is missing! It should be located at "${
-            this.cmd_path
-          }".
-    
-This could be due to your antivirus program. Please check the quarantine to restore it and notify the developer about this issue.
-You can reach us on delta@merlinux.eu or on github.com/deltachat/deltachat-desktop/issues .
+          `The DeltaChat Module is missing! This could be due to your antivirus program. Please check the quarantine to restore it and notify the developers about this issue.
+You can reach us on delta@merlinux.eu or on github.com/deltachat/deltachat-desktop/issues.
+
+The missing module should be located at "${this.cmd_path}".
 
 The Log file is located in this folder: ${getLogsPath()}
 --------------------
