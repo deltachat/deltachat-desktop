@@ -22,6 +22,12 @@ export default function Notifications({ desktopSettings }: Props) {
     <>
       <SettingsHeading>{tx('pref_current_account')}</SettingsHeading>
       <AccountNotificationMutedSwitch label={tx('menu_mute')} />
+      <DesktopSettingsSwitch
+        settingsKey='isMentionsEnabled'
+        label={tx('pref_mention_notifications')}
+        description={tx('pref_mention_notifications_explain')}
+        disabled={!desktopSettings['notifications']}
+      />
       <SettingsSeparator></SettingsSeparator>
       <SettingsHeading>{tx('pref_all_accounts')}</SettingsHeading>
       <DesktopSettingsSwitch
