@@ -184,6 +184,8 @@ export default function AccountItem({
     )
   }
 
+  const isSticky = unreadCount > 0
+
   const ref = useRef<HTMLButtonElement>(null)
   useLayoutEffect(() => {
     if (!isSelected) {
@@ -216,8 +218,13 @@ export default function AccountItem({
     // TODO refactor: maybe just use `ResizeObserver`,
     // as we do with messages list:
     // https://github.com/deltachat/deltachat-desktop/pull/4119
+    //
+    // Also watching `isSticky` because the selected account might stop
+    // being sticky when the user reads its messages,
+    // and it would get out of view, so we'd want to get it back in view.
+    //
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSelected, window.__screen])
+  }, [isSelected, isSticky, window.__screen])
 
   const rovingTabindex = useRovingTabindex(ref)
   // TODO `rovingTabindex.setAsActiveElement()` when the active account
@@ -229,6 +236,7 @@ export default function AccountItem({
       className={classNames(styles.account, rovingTabindex.className, {
         [styles.active]: isSelected,
         [styles['context-menu-active']]: isContextMenuActive,
+        [styles.isSticky]: isSticky,
       })}
       aria-busy={!account}
       onClick={() => onSelectAccount(accountId)}
