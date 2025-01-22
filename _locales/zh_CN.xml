@@ -1083,6 +1083,8 @@
     <string name="timestamp_format_m_desktop">MMM D</string>
     <string name="remove_desktop">移除</string>
     <string name="save_desktop">保存</string>
+    <!-- Opposite of "Save". Undo a "Save" action. Similar to "Unmute", "Unpin". Could also be worded as "Save no longer" or so. -->
+    <string name="unsave">取消保存</string>
     <string name="name_desktop">名称</string>
     <string name="select_group_image_desktop">选择群组图像</string>
     <string name="export_backup_desktop">导出备份</string>

@@ -1115,6 +1115,8 @@
     <string name="timestamp_format_m_desktop">D MMM</string>
     <string name="remove_desktop">Rimuovi</string>
     <string name="save_desktop">Salva</string>
+    <!-- Opposite of "Save". Undo a "Save" action. Similar to "Unmute", "Unpin". Could also be worded as "Save no longer" or so. -->
+    <string name="unsave">Non Salvare</string>
     <string name="name_desktop">Nome</string>
     <string name="select_group_image_desktop">Seleziona Immagine Gruppo</string>
     <string name="export_backup_desktop">Esporta Backup</string>
