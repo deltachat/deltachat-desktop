@@ -70,6 +70,12 @@ export default function AccountItem({
     const cleanup = [
       onDCEvent(accountId, 'AccountsItemChanged', updateAccount),
 
+      // FYI we have 3 places where we watch the number of unread messages:
+      // - App's badge counter
+      // - Per-account badge counter in accounts list
+      // - useUnreadCount
+      // Make sure to update all the places if you update one of them.
+
       onDCEvent(accountId, 'IncomingMsg', updateUnread),
       // IncomingMsg doesn't listen for added device messages,
       // so we also listen to `ChatlistChanged` because it is a good indicator and not emitted too often

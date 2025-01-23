@@ -34,7 +34,18 @@ export const debouncedUpdateBadgeCounter = debounce(
 )
 
 export function initBadgeCounter() {
+  // FYI we have 3 places where we watch the number of unread messages:
+  // - App's badge counter
+  // - Per-account badge counter in accounts list
+  // - useUnreadCount
+  // Make sure to update all the places if you update one of them.
   BackendRemote.on('IncomingMsg', _ => {
+    debouncedUpdateBadgeCounter()
+  })
+  BackendRemote.on('ChatlistChanged', _ => {
+    debouncedUpdateBadgeCounter()
+  })
+  BackendRemote.on('MsgsNoticed', _ => {
     debouncedUpdateBadgeCounter()
   })
   BackendRemote.on('ChatModified', _ => {
