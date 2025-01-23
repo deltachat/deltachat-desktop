@@ -8,6 +8,7 @@
 ### Changed
 
 ### Fixed
+- fix pasting of (non image) files into composer #4533
 
 <a id="1_52_0"></a>
 
