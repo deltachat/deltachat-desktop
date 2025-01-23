@@ -43,11 +43,15 @@ const DisplayedStickerPack = ({
 
   const onClickSticker = (fileName: string) => {
     const stickerPath = fileName.replace('file://', '')
-    BackendRemote.rpc
-      .sendSticker(accountId, chatId, stickerPath)
-      .then(msgId =>
-        jumpToMessage({ accountId, msgId, msgChatId: chatId, highlight: false })
-      )
+    BackendRemote.rpc.sendSticker(accountId, chatId, stickerPath).then(msgId =>
+      jumpToMessage({
+        accountId,
+        msgId,
+        msgChatId: chatId,
+        highlight: false,
+        focus: false,
+      })
+    )
     setShowEmojiPicker(false)
   }
 

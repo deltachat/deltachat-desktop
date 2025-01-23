@@ -51,6 +51,7 @@ function buildContextMenu(
             msgId: message.id,
             msgChatId: message.chatId,
             highlight: true,
+            focus: true,
             scrollIntoViewArg: { block: 'center' },
           })
         )
@@ -70,6 +71,7 @@ function buildContextMenu(
             // but let's not pass `chatId` here, for future-proofing.
             msgChatId: undefined,
             highlight: true,
+            focus: true,
             scrollIntoViewArg: { block: 'center' },
           })
         }

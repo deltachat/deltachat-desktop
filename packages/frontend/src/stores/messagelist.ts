@@ -349,6 +349,7 @@ class MessageListStore extends Store<MessageListState> {
             this.effect.jumpToMessage({
               msgId: firstUnreadMsgId,
               highlight: false,
+              focus: false,
               // 'center' so that old messages are also shown, for context.
               // See https://github.com/deltachat/deltachat-desktop/issues/4284
               scrollIntoViewArg: { block: 'center' },
@@ -425,11 +426,13 @@ class MessageListStore extends Store<MessageListState> {
       async ({
         msgId: jumpToMessageId,
         highlight = true,
+        focus,
         addMessageIdToStack,
         scrollIntoViewArg,
       }: {
         msgId: number | undefined
         highlight?: boolean
+        focus: boolean
         addMessageIdToStack?: undefined | number
         scrollIntoViewArg?: Parameters<HTMLElement['scrollIntoView']>[0]
       }) => {
@@ -649,6 +652,7 @@ class MessageListStore extends Store<MessageListState> {
             this.state.viewState,
             jumpToMessageId,
             highlight,
+            focus,
             scrollIntoViewArg
           ),
           jumpToMessageStack,

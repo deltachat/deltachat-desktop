@@ -52,6 +52,7 @@ export default function useVideoChat() {
           msgId: messageId,
           msgChatId: chatId,
           highlight: false,
+          focus: false,
         })
         await joinVideoChat(accountId, messageId)
       } catch (error: todo) {

@@ -655,6 +655,7 @@ export function useDraft(
         msgId: messageId,
         msgChatId: chatId,
         highlight: true,
+        focus: false,
         // The message is usually already in view,
         // so let's not scroll at all if so.
         scrollIntoViewArg: { block: 'nearest' },

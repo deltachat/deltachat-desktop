@@ -119,6 +119,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
           accountId,
           msgId: msg.id,
           msgChatId: msg.chatId,
+          focus: true,
           scrollIntoViewArg: { block: 'center' },
         })
         onClose()
