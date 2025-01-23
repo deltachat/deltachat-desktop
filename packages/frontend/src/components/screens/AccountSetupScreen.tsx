@@ -57,7 +57,7 @@ export default function AccountSetupScreen({
   // and not an explicit keyboard handling
   const onKeyDown = useCallback(
     (ev: KeyboardEvent) => {
-      if (ev.code === 'Enter') {
+      if (ev.key === 'Enter') {
         ev.stopPropagation()
         ev.preventDefault()
         if (hasOpenDialogs) {
