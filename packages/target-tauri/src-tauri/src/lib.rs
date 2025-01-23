@@ -13,6 +13,7 @@ mod help_window;
 mod locales;
 mod runtime_info;
 mod state;
+mod temp_file;
 mod webxdc;
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
@@ -98,6 +99,9 @@ pub fn run() {
             file_dialogs::download_file,
             file_dialogs::show_open_file_dialog,
             locales::get_locale_data,
+            temp_file::write_temp_file_from_base64,
+            temp_file::write_temp_file,
+            temp_file::remove_temp_file,
             webxdc::on_webxdc_message_changed,
             webxdc::on_webxdc_message_deleted,
             webxdc::on_webxdc_status_update,

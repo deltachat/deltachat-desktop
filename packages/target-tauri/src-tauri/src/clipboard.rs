@@ -1,10 +1,9 @@
 use std::io::Cursor;
 
-use base64::encode;
+use base64::Engine;
 use tauri::AppHandle;
 use tauri_plugin_clipboard_manager::ClipboardExt;
 
-// create the error type that represents all errors possible in our program
 #[derive(Debug, thiserror::Error)]
 pub(crate) enum Error {
     #[error(transparent)]
@@ -36,11 +35,9 @@ pub(crate) fn get_clipboard_image_as_data_uri(app: AppHandle) -> Result<String, 
 
     let data = bytes.into_inner();
 
-    let base64_data = encode(&data);
+    let base64_data = base64::prelude::BASE64_STANDARD.encode(&data);
     let mime_type = "image/png";
     let data_uri = format!("data:{};base64,{}", mime_type, base64_data);
 
     Ok(data_uri)
 }
-
-// Later: figgure out a way to get clipboard image in orginal format and bit depth? is that needed?

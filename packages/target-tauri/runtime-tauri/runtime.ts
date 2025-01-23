@@ -334,7 +334,7 @@ class TauriRuntime implements Runtime {
     return readText()
   }
   readClipboardImage(): Promise<string | null> {
-    return invoke("get_clipboard_image_as_data_uri")
+    return invoke('get_clipboard_image_as_data_uri')
   }
   writeClipboardText(text: string): Promise<void> {
     return writeText(text)
@@ -419,14 +419,14 @@ class TauriRuntime implements Runtime {
   ): void {
     this.log.error('Method not implemented.40')
   }
-  writeTempFileFromBase64(_name: string, _content: string): Promise<string> {
-    throw new Error('Method not implemented.42')
+  writeTempFileFromBase64(name: string, content: string): Promise<string> {
+    return invoke('write_temp_file_from_base64', { name, content })
   }
-  writeTempFile(_name: string, _content: string): Promise<string> {
-    throw new Error('Method not implemented.43')
+  writeTempFile(name: string, content: string): Promise<string> {
+    return invoke('write_temp_file', { name, content })
   }
-  removeTempFile(_path: string): Promise<void> {
-    throw new Error('Method not implemented.44')
+  removeTempFile(path: string): Promise<void> {
+    return invoke('remove_temp_file', { path })
   }
   getWebxdcDiskUsage(
     _accountId: number
