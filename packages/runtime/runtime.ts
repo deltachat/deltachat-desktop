@@ -117,8 +117,6 @@ export interface Runtime {
   setNotificationCallback(
     cb: (data: { accountId: number; chatId: number; msgId: number }) => void
   ): void
-  /** @param name optional name needed for browser */
-  writeClipboardToTempFile(name?: string): Promise<string>
   writeTempFileFromBase64(name: string, content: string): Promise<string>
   writeTempFile(name: string, content: string): Promise<string>
   copyFileToInternalTmpDir(

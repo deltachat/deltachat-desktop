@@ -420,9 +420,6 @@ class TauriRuntime implements Runtime {
   ): void {
     this.log.error('Method not implemented.40')
   }
-  writeClipboardToTempFile(_name?: string): Promise<string> {
-    throw new Error('Method not implemented.41')
-  }
   writeTempFileFromBase64(_name: string, _content: string): Promise<string> {
     throw new Error('Method not implemented.42')
   }
