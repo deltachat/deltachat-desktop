@@ -308,10 +308,7 @@ async function flushNotifications(accountId: number) {
   )
     .filter(e => e.muted)
     .map(e => e.id)
-  if (mutedChats.length > 0) {
-    // some chats are muted
-    log.debug(`ignoring notifications of ${mutedChats.length} muted chats`)
-  }
+
   const filteredNotifications = (
     await Promise.all(
       notifications.map(async notification => {
@@ -385,6 +382,7 @@ async function notificationIsMention(
         return true
       }
     }
+    log.debug('ignoring notification on muted chat')
     return false
   }
 }
