@@ -50,6 +50,7 @@
 - message list being empty sometimes when a chat gets opened #4556
 - improve performance a little #4561, #4552, #4584
 - fix "Empty Hints" in "All Media" view #4609
+- fix pasting of (non image) files into composer #4533
 
 <a id="1_52_1"></a>
 
