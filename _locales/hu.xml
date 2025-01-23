@@ -37,6 +37,7 @@
     <string name="close_window">Ablak bezárása</string>
     <string name="forward">Továbbítás</string>
     <string name="create">Létrehozás</string>
+    <string name="reset">Visszaállítás</string>
     <string name="later">Később</string>
     <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
     <string name="resend">Újraküldés</string>
@@ -45,6 +46,7 @@
     <!-- Verb "to unarchive", as in "remove a chat from the archive", opposite of the previous string -->
     <string name="unarchive">Archiválás visszavonása</string>
     <string name="mute">Némítás</string>
+    <string name="muted">Némított</string>
     <string name="ephemeral_messages">Eltűnő üzenetek</string>
     <string name="ephemeral_messages_hint">A csevegés összes tagjára vonatkozik, ha a Delta Chatet használják; az üzeneteket továbbra is másolhatják, menthetik és továbbíthatják, vagy más e-mail klienseket használhatnak.</string>
     <string name="save">Mentés</string>
@@ -184,6 +186,12 @@
     <string name="webxdc_apps">Alkalmazások</string>
     <string name="webxdc_store_url">Alkalmazás-választó-webcím</string>
     <string name="webxdc_store_url_explain">Ha be van állítva, akkor a webcím lesz használva mint alkalmazás-választó az alapértelmezett helyett</string>
+    <string name="home">Főoldal</string>
+    <string name="games">Játékok</string>
+    <string name="tools">Eszközök</string>
+    <string name="app_size">Méret</string>
+    <string name="app_date_published">Közzétéve</string>
+    <string name="add_to_chat">Hozzáadás csevegéshez</string>
     <string name="unknown">Ismeretlen</string>
 
     <string name="green">Zöld</string>
@@ -719,6 +727,7 @@
     <string name="pref_appearance">Megjelenés</string>
     <string name="pref_theme">Téma</string>
     <string name="pref_language">Nyelv</string>
+    <string name="pref_use_system_ui_font">Rendszer betűtípusának használata</string>
     <string name="pref_incognito_keyboard">Inkognitó-billentyűzet</string>
     <!-- Translators: Must indicate that there is no guarantee as the system may not honor our request. -->
     <string name="pref_incognito_keyboard_explain">Tanulás letiltásának kérése a billentyűzettől</string>
@@ -946,6 +955,7 @@
     <string name="chat_protection_broken_explanation">A végpontok közötti titkosítás már nem garantálható, valószínűleg azért, mert %1$s újratelepítette a Delta Chatet, vagy egy másik eszközről küldött üzenetet.\n\n Személyesen találkozhat vele, és újra beolvashatja a QR-kódját a garantált végpontok közötti titkosítás visszaállításához.</string>
     <string name="invalid_unencrypted_tap_to_learn_more">⚠️ A(z) %1$s végpontok közötti titkosítást igényel, ami még nincs beállítva erre a csevegésre. Koppintson, ha többet szeretne megtudni.</string>
     <string name="invalid_unencrypted_explanation">A végpontok közötti titkosítás létrehozásához személyesen is találkozhat az ismerőseivel, és a QR-kódjukat beolvasva bemutathatja őket.</string>
+    <!-- deprecated -->
     <string name="encryption_required_for_new_contact">A végpontok közötti titkosítás beállítása szükséges, de a(z) %1$s nevű ismerőse esetében az még nincs beállítva.\n\nMegoszthatja a meghívó-hivatkozását, vagy személyesen is találkozhat vele, és beolvashatja a QR-kódját.</string>
     <string name="learn_more">Tudjon meg többet</string>
 
@@ -1076,7 +1086,9 @@
     <string name="global_menu_view_developer_desktop">Fejlesztő</string>
     <string name="global_menu_view_developer_tools_desktop">Fejlesztői eszközök</string>
     <string name="global_menu_help_desktop">Súgó</string>
+    <!-- deprecated, use delta_chat_homepage instead -->
     <string name="global_menu_help_learn_desktop">Tudjon meg többet a Delta Chatről</string>
+    <!-- deprecated, use contribute instead -->
     <string name="global_menu_help_contribute_desktop">Hozzájárulás a GitHubon</string>
     <string name="global_menu_help_report_desktop">Jelentsen egy problémát</string>
     <string name="global_menu_help_about_desktop">A Delta Chatről</string>
