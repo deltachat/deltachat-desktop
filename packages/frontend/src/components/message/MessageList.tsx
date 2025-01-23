@@ -66,6 +66,9 @@ const onWindowFocus = (accountId: number) => {
       `window was focused: marking ${messageIdsToMarkAsRead.length} visible messages as read`,
       messageIdsToMarkAsRead
     )
+    // FYI we also listen for `MsgsNoticed` event
+    // to update the badge counter,
+    // so `.then(debouncedUpdateBadgeCounter)` is probably not necessary.
     BackendRemote.rpc
       .markseenMsgs(accountId, messageIdsToMarkAsRead)
       .then(debouncedUpdateBadgeCounter)
@@ -91,6 +94,11 @@ function useUnreadCount(
       }
     }
 
+    // FYI we have 3 places where we watch the number of unread messages:
+    // - App's badge counter
+    // - Per-account badge counter in accounts list
+    // - useUnreadCount
+    // Make sure to update all the places if you update one of them.
     const cleanup = [
       onDCEvent(accountId, 'IncomingMsg', update),
       onDCEvent(accountId, 'MsgRead', update),
@@ -182,6 +190,9 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
       if (messageIdsToMarkAsRead.length > 0) {
         const chatId = chat?.id
         if (!chatId) return
+        // FYI we also listen for `MsgsNoticed` event
+        // to update the badge counter,
+        // so `.then(debouncedUpdateBadgeCounter)` is probably not necessary.
         BackendRemote.rpc
           .markseenMsgs(accountId, messageIdsToMarkAsRead)
           .then(debouncedUpdateBadgeCounter)
