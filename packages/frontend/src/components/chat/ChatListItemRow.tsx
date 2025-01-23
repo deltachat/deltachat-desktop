@@ -126,6 +126,7 @@ export const ChatListItemRowMessage = React.memo<{
               accountId,
               msgId: msrId,
               msgChatId: messageSearchResult.chatId,
+              focus: false,
               scrollIntoViewArg: { block: 'center' },
             })
           }}

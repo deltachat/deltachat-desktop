@@ -4,6 +4,7 @@
 
 ### Added
 - settings: explain "Read Receipts" and adjust "Enter Key Sends" title #4524
+- accessibility: focus message when jumping to it in some cases (e.g. when clicking on a quote) #4547
 
 ### Changed
 

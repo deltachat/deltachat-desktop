@@ -18,6 +18,7 @@ export type JumpToMessage = (params: {
    */
   msgChatId?: number
   highlight?: boolean
+  focus: boolean
   /**
    * The ID of the message to remember,
    * to later go back to it, using the "jump down" button.
@@ -77,6 +78,7 @@ export default function useMessage() {
       msgId,
       msgChatId,
       highlight = true,
+      focus,
       msgParentId,
       scrollIntoViewArg,
     }) => {
@@ -100,6 +102,7 @@ export default function useMessage() {
         window.__internal_jump_to_message?.({
           msgId,
           highlight,
+          focus,
           addMessageIdToStack: msgParentId,
           scrollIntoViewArg,
         })
@@ -120,7 +123,13 @@ export default function useMessage() {
       })
 
       // Jump down on sending
-      jumpToMessage({ accountId, msgId, msgChatId: chatId, highlight: false })
+      jumpToMessage({
+        accountId,
+        msgId,
+        msgChatId: chatId,
+        highlight: false,
+        focus: false,
+      })
     },
     [jumpToMessage]
   )
