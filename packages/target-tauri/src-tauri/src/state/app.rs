@@ -9,6 +9,8 @@ use tauri::{AppHandle, Manager};
 
 use log::info;
 
+use crate::temp_file::{clear_tmp_folder, create_tmp_folder};
+
 #[derive(Default)]
 pub(crate) struct InnerAppState {
     pub(crate) ui_ready: bool,
@@ -31,6 +33,9 @@ impl AppState {
             tauri::async_runtime::spawn(async move { Self::get_current_log_file(handle).await });
 
         let current_log_file_path = get_current_log_file_task.await??;
+
+        create_tmp_folder(app.handle()).await?;
+        clear_tmp_folder(app.handle()).await?;
 
         Ok(Self {
             inner: Arc::new(Mutex::new(InnerAppState::default())),

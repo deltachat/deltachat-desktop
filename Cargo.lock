@@ -1738,7 +1738,7 @@ name = "deltachat-tauri"
 version = "1.52.1"
 dependencies = [
  "anyhow",
- "base64 0.11.0",
+ "base64 0.22.1",
  "deltachat",
  "deltachat-jsonrpc",
  "futures-lite",
@@ -1761,6 +1761,7 @@ dependencies = [
  "tauri-plugin-window-state",
  "thiserror 2.0.11",
  "tokio",
+ "uuid",
 ]
 
 [[package]]
