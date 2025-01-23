@@ -8,6 +8,7 @@
 ### Changed
 
 ### Fixed
+- numpad "Enter" not working as regular "Enter" #4546
 
 <a id="1_52_0"></a>
 
