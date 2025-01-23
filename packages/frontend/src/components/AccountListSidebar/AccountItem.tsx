@@ -224,38 +224,29 @@ export default function AccountItem({
   // gets switched, e.g. via clicking on a message notification
   // for a different account, and upon initial render.
 
-  if (!account) {
-    return (
-      <button
-        className={classNames(styles.account, {
-          [styles.active]: isSelected,
-          [styles['context-menu-active']]: isContextMenuActive,
-        })}
-        disabled
-        aria-busy
-        ref={ref}
-      ></button>
-    )
-  }
-
   return (
     <button
       className={classNames(styles.account, rovingTabindex.className, {
         [styles.active]: isSelected,
         [styles['context-menu-active']]: isContextMenuActive,
       })}
+      aria-busy={!account}
       onClick={() => onSelectAccount(accountId)}
       onContextMenu={onContextMenu}
-      onMouseEnter={() => updateAccountForHoverInfo(account, true)}
-      onMouseLeave={() => updateAccountForHoverInfo(account, false)}
+      onMouseEnter={() => account && updateAccountForHoverInfo(account, true)}
+      onMouseLeave={() => account && updateAccountForHoverInfo(account, false)}
       x-account-sidebar-account-id={accountId}
-      data-testid={`account-item-${account.id}`}
+      data-testid={`account-item-${accountId}`}
       ref={ref}
       tabIndex={rovingTabindex.tabIndex}
       onFocus={rovingTabindex.setAsActiveElement}
       onKeyDown={rovingTabindex.onKeydown}
     >
-      {account.kind == 'Configured' ? (
+      {!account ? (
+        <div className={styles.avatar}>
+          <div className={styles.content}>⏳</div>
+        </div>
+      ) : account.kind == 'Configured' ? (
         <div className={styles.avatar}>
           {' '}
           {account.profileImage ? (
