@@ -222,9 +222,6 @@ ${error instanceof Error ? error.message : inspect(error, { depth: null })}`
     }
   )
 
-  ipcMain.handle('app.writeClipboardToTempFile', () =>
-    writeClipboardToTempFile()
-  )
   ipcMain.handle('app.writeTempFileFromBase64', (_ev, name, content) =>
     writeTempFileFromBase64(name, content)
   )
@@ -312,26 +309,6 @@ ${error instanceof Error ? error.message : inspect(error, { depth: null })}`
     // the shutdown function
     dcController.jsonrpcRemote.rpc.stopIoForAllAccounts()
   }
-}
-
-async function writeClipboardToTempFile(): Promise<string> {
-  await mkdir(getDraftTempDir(), { recursive: true })
-  const formats = clipboard.availableFormats().sort()
-  log.debug('Clipboard available formats:', formats)
-  if (formats.length <= 0) {
-    throw new Error('No files to write')
-  }
-  const pathToFile = join(
-    getDraftTempDir(),
-    `paste.${mimeTypes.extension(formats[0]) || 'bin'}`
-  )
-  const buf =
-    mimeTypes.extension(formats[0]) === 'png'
-      ? clipboard.readImage().toPNG()
-      : clipboard.readBuffer(formats[0])
-  log.debug(`Writing clipboard ${formats[0]} to file ${pathToFile}`)
-  await writeFile(pathToFile, buf, 'binary')
-  return pathToFile
 }
 
 export async function writeTempFileFromBase64(
