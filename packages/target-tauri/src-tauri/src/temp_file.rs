@@ -65,9 +65,9 @@ async fn create_tmp_file(app: &AppHandle, name: &str) -> Result<(File, PathBuf),
 
 // create tmp folder
 pub(crate) async fn create_tmp_folder(app: &AppHandle) -> Result<(), Error> {
-    let tmp_folder = get_temp_folder_path(&app)?;
+    let tmp_folder = get_temp_folder_path(app)?;
     info!("using temp folder at {:?}", tmp_folder);
-    create_dir_all(get_temp_folder_path(&app)?).await?;
+    create_dir_all(get_temp_folder_path(app)?).await?;
     Ok(())
 }
 
@@ -133,7 +133,6 @@ pub(crate) async fn write_temp_file(
 // removeTempFile
 #[tauri::command]
 pub(crate) async fn remove_temp_file(app: AppHandle, path: &str) -> Result<(), Error> {
-    
     // TODO
 
     Ok(())
