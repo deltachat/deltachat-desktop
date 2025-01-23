@@ -3,6 +3,16 @@
 ## [Unreleased][unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+<a id="1_52_0"></a>
+
+## [1.52.0] - 2025-01-23
+
+### Added
 - added experimental tauri version (`packages/target-tauri`) #4462
 
 ### Changed
@@ -3092,10 +3102,11 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.51.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.52.0...HEAD
+
+[1.52.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.51.0...v1.52.0
 
 [1.51.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.50.1...v1.51.0
-
 
 [1.50.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.50.0...v1.50.1
 
