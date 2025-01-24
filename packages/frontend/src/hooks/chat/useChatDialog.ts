@@ -60,7 +60,9 @@ export default function useChatDialog() {
   )
 
   const openChatAuditDialog = useCallback(
-    (selectedChat: T.FullChat) => {
+    (
+      selectedChat: Parameters<typeof ChatAuditLogDialog>[0]['selectedChat']
+    ) => {
       openDialog(ChatAuditLogDialog, { selectedChat })
     },
     [openDialog]
@@ -96,7 +98,7 @@ export default function useChatDialog() {
   const openDeleteChatDialog = useCallback(
     async (
       accountId: number,
-      chat: T.FullChat | ChatListItem,
+      chat: Pick<T.BasicChat | ChatListItem, 'id' | 'name'>,
       selectedChatId: number | null
     ) => {
       const hasUserConfirmed = await openConfirmationDialog({

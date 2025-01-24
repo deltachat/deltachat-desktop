@@ -12,7 +12,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 type OnButtonClick = React.MouseEvent<HTMLButtonElement, MouseEvent>
 
 type Props = {
-  chat: T.FullChat
+  chat: Parameters<typeof showReactionsUi>[1]
   direction: 'incoming' | 'outgoing'
   message: T.Message
   showContextMenu: (event: OnButtonClick) => Promise<void>

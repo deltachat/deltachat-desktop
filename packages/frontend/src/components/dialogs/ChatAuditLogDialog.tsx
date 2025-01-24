@@ -111,7 +111,7 @@ function buildContextMenu(
 
 export default function ChatAuditLogDialog(
   props: {
-    selectedChat: Type.FullChat
+    selectedChat: Pick<Type.BasicChat, 'id' | 'name' | 'chatType'>
   } & DialogProps
 ) {
   const { selectedChat, onClose } = props

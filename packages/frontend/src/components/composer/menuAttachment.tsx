@@ -26,7 +26,7 @@ import useMessage from '../../hooks/chat/useMessage'
 type Props = {
   addFileToDraft: (file: string, viewType: T.Viewtype) => void
   showAppPicker: (show: boolean) => void
-  selectedChat: T.FullChat | null
+  selectedChat: Pick<T.BasicChat, 'name' | 'id'> | null
 }
 
 // Main component that creates the menu and popover

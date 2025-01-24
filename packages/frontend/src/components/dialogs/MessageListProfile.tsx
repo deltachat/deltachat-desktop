@@ -16,7 +16,7 @@ import type { DialogProps } from '../../contexts/DialogContext'
 
 export default function MailingListProfile(
   props: {
-    chat: T.FullChat
+    chat: T.BasicChat
   } & DialogProps
 ) {
   const { onClose, chat } = props
