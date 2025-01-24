@@ -4,11 +4,11 @@
   "type": "module",
   "license": "GPL-3.0-or-later",
   "devDependencies": {
-    "@playwright/test": "^1.48.1",
+    "@playwright/test": "^1.50.0",
     "@types/node": "^20.14.13"
   },
   "scripts": {
-    "e2e": "pnpm exec playwright test"
+    "e2e": "pnpm exec playwright test --workers=1"
   },
   "dependencies": {
     "playwright": "1.50"
