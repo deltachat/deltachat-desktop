@@ -8,6 +8,7 @@
 ### Changed
 
 ### Fixed
+- improve performance a little
 
 <a id="1_52_0"></a>
 
