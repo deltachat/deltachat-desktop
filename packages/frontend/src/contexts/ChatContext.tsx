@@ -27,7 +27,12 @@ export type UnselectChat = () => void
 
 export type ChatContextValue = {
   activeView: ChatView
-  chat?: T.FullChat
+  /**
+   * `withLinger` means that after `selectChat()` the value of `chatWithLinger`
+   * does not change immediately (unlike `chatId`),
+   * until the new chat's info gets loaded.
+   */
+  chatWithLinger?: T.FullChat
   chatId?: number
   alternativeView: AlternativeView
   selectChat: SelectChat
@@ -52,7 +57,7 @@ export const ChatProvider = ({
   unselectChatRef,
 }: PropsWithChildren<Props>) => {
   const [activeView, setActiveView] = useState(ChatView.MessageList)
-  const [chat, setChat] = useState<T.FullChat | undefined>()
+  const [chatWithLinger, setChatWithLinger] = useState<T.FullChat | undefined>()
   const [chatId, setChatId] = useState<number | undefined>()
   const [alternativeView, setAlternativeView] = useState<AlternativeView>(null)
 
@@ -101,7 +106,7 @@ export const ChatProvider = ({
         accountId,
         nextChatId
       )
-      setChat(nextChat)
+      setChatWithLinger(nextChat)
 
       // Switch to "archived" view if selected chat is there
       // @TODO: We probably want this to be part of the UI logic instead
@@ -119,14 +124,16 @@ export const ChatProvider = ({
       return
     }
 
-    setChat(await BackendRemote.rpc.getFullChatById(accountId, chatId))
+    setChatWithLinger(
+      await BackendRemote.rpc.getFullChatById(accountId, chatId)
+    )
   }, [accountId, chatId])
 
   const unselectChat = useCallback<UnselectChat>(() => {
     setAlternativeView(null)
     setActiveView(ChatView.MessageList)
     setChatId(undefined)
-    setChat(undefined)
+    setChatWithLinger(undefined)
   }, [])
 
   unselectChatRef.current = unselectChat
@@ -161,7 +168,7 @@ export const ChatProvider = ({
         return
       }
 
-      if (!chat) {
+      if (!chatWithLinger) {
         return
       }
 
@@ -169,7 +176,7 @@ export const ChatProvider = ({
         return
       }
 
-      if (!chat.contactIds.includes(contactId)) {
+      if (!chatWithLinger.contactIds.includes(contactId)) {
         return
       }
 
@@ -185,11 +192,11 @@ export const ChatProvider = ({
       BackendRemote.off('ChatEphemeralTimerModified', onChatModified)
       BackendRemote.off('ContactsChanged', onContactsModified)
     }
-  }, [accountId, chat, chatId, refreshChat])
+  }, [accountId, chatWithLinger, chatId, refreshChat])
 
   const value: ChatContextValue = {
     activeView,
-    chat,
+    chatWithLinger,
     chatId,
     alternativeView,
     selectChat,

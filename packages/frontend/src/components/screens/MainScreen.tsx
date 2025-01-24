@@ -52,7 +52,7 @@ export default function MainScreen({ accountId }: Props) {
   const {
     activeView,
     chatId,
-    chat,
+    chatWithLinger,
     alternativeView,
     selectChat,
     unselectChat,
@@ -112,10 +112,10 @@ export default function MainScreen({ accountId }: Props) {
 
     // If we've searched a non-archive chat while being in archive mode
     // previously we want to get back to normal mode after cancelling
-    if (!chat?.archived && archivedChatsSelected) {
+    if (!chatWithLinger?.archived && archivedChatsSelected) {
       setArchivedChatsSelected(false)
     }
-  }, [archivedChatsSelected, chat?.archived, searchChats])
+  }, [archivedChatsSelected, chatWithLinger?.archived, searchChats])
 
   window.__chatlistSetSearch = searchChats
 
@@ -135,7 +135,7 @@ export default function MainScreen({ accountId }: Props) {
   }, [])
 
   const onClickThreeDotMenu = useThreeDotMenu(
-    chat,
+    chatWithLinger,
     alternativeView === 'global-gallery' || activeView === ChatView.Media
       ? 'gallery'
       : 'chat'
@@ -216,9 +216,9 @@ export default function MainScreen({ accountId }: Props) {
                   <span className='views' />
                 </>
               )}
-              {chat && <ChatHeading chat={chat} />}
-              {chat && <ChatNavButtons />}
-              {(chat || alternativeView === 'global-gallery') && (
+              {chatWithLinger && <ChatHeading chat={chatWithLinger} />}
+              {chatWithLinger && <ChatNavButtons />}
+              {(chatWithLinger || alternativeView === 'global-gallery') && (
                 <span
                   style={{
                     marginLeft: 0,
