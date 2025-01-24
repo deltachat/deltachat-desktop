@@ -53,9 +53,7 @@ export default function ViewGroup(
 export const useGroup = (accountId: number, chat: T.FullChat) => {
   const [group, setGroup] = useState(chat)
   const [groupName, setGroupName] = useState(chat.name)
-  const [groupMembers, setGroupMembers] = useState(
-    chat.contacts?.map(({ id }) => id)
-  )
+  const [groupMembers, setGroupMembers] = useState(chat.contactIds)
   const [groupImage, setGroupImage] = useState(chat.profileImage)
   const firstLoad = useRef(true)
 

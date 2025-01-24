@@ -277,8 +277,8 @@ function chatSubtitle(chat: Type.FullChat) {
   const tx = window.static_translate
   if (chat.id && chat.id > C.DC_CHAT_ID_LAST_SPECIAL) {
     if (chat.chatType === C.DC_CHAT_TYPE_GROUP) {
-      return tx('n_members', [String(chat.contacts.length)], {
-        quantity: chat.contacts.length,
+      return tx('n_members', [String(chat.contactIds.length)], {
+        quantity: chat.contactIds.length,
       })
     } else if (
       chat.chatType === C.DC_CHAT_TYPE_SINGLE &&
@@ -292,10 +292,10 @@ function chatSubtitle(chat: Type.FullChat) {
         return tx('mailing_list')
       }
     } else if (chat.chatType === C.DC_CHAT_TYPE_BROADCAST) {
-      return tx('n_recipients', [String(chat.contacts.length)], {
-        quantity: chat.contacts.length,
+      return tx('n_recipients', [String(chat.contactIds.length)], {
+        quantity: chat.contactIds.length,
       })
-    } else if (chat.contacts.length >= 1) {
+    } else if (chat.contactIds.length >= 1) {
       if (chat.isSelfTalk) {
         return tx('chat_self_talk_subtitle')
       } else if (chat.isDeviceChat) {
