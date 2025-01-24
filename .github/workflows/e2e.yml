@@ -98,7 +98,7 @@ jobs:
       run: npm install -g pnpm && pnpm install
     - name: Install Playwright Browsers
       working-directory: ./packages/e2e-tests
-      run: npx playwright install --only-shell
+      run: npx playwright install --only-shell --with-deps
     - name: create data dir
       run: mkdir -p packages/target-browser/data
     - name: Run e2e tests
