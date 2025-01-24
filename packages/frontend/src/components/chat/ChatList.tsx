@@ -323,11 +323,11 @@ export default function ChatList(props: {
     return { messageResultIds, messageCache, queryStr }
   }, [messageResultIds, messageCache, queryStr])
 
-  const [searchChatInfo, setSearchChatInfo] = useState<T.FullChat | null>(null)
+  const [searchChatInfo, setSearchChatInfo] = useState<T.BasicChat | null>(null)
   useEffect(() => {
     if (queryChatId) {
       BackendRemote.rpc
-        .getFullChatById(accountId, queryChatId)
+        .getBasicChatInfo(accountId, queryChatId)
         .then(setSearchChatInfo)
         .catch(console.error)
     } else {
