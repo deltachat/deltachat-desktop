@@ -55,12 +55,19 @@ export default function RuntimeAdapter({
           clearNotificationsForChat(notificationAccountId, chatId)
         }
         if (msgId) {
-          window.__internal_jump_to_message?.({
-            msgId,
-            scrollIntoViewArg: { block: 'center' },
-            // We probably want the composer to be focused.
-            focus: false,
-          })
+          window.__internal_jump_to_message_asap = {
+            accountId: notificationAccountId,
+            chatId,
+            jumpToMessageArgs: [
+              {
+                msgId,
+                scrollIntoViewArg: { block: 'center' },
+                // We probably want the composer to be focused.
+                focus: false,
+              },
+            ],
+          }
+          window.__internal_check_jump_to_message?.()
         }
       }
     )
