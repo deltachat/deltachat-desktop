@@ -69,7 +69,7 @@ export async function confirmForwardMessage(
   openDialog: OpenDialog,
   accountId: number,
   message: Type.Message,
-  chat: Type.FullChat
+  chat: Pick<Type.BasicChat, 'name' | 'id'>
 ) {
   const tx = window.static_translate
   const yes = await confirmDialog(
