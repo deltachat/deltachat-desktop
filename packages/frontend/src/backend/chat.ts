@@ -121,7 +121,7 @@ export async function getDeviceChatId(
   )
 
   for (const chatId of chatIds) {
-    const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
+    const chat = await BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
     if (chat.isDeviceChat) {
       return chatId
     }
