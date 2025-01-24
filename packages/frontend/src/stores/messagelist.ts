@@ -922,6 +922,7 @@ class MessageListStore extends Store<MessageListState> {
     onEventMessagesChanged: this.scheduler.queuedEffect(
       async (messageId: number) => {
         if (
+          messageId > C.DC_MSG_ID_LAST_SPECIAL &&
           this.state.messageListItems.findIndex(
             m => m.kind === 'message' && m.msg_id === messageId
           ) !== -1
@@ -954,6 +955,7 @@ class MessageListStore extends Store<MessageListState> {
           // perhaps by moving `getLastKnownScrollPosition()`
           // to the render function of `MessageList`.
           if (
+            messageId > C.DC_MSG_ID_LAST_SPECIAL &&
             (await BackendRemote.rpc.getMessage(this.accountId, messageId))
               .state === C.DC_STATE_OUT_DRAFT
           ) {
