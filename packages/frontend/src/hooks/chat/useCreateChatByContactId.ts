@@ -10,7 +10,7 @@ export default function useCreateChatByContactId() {
   return useCallback(
     async (accountId: number, contactId: number) => {
       const chatId = await createChatByContactId(accountId, contactId)
-      const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
+      const chat = await BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
 
       // Unarchive chat if it's been in archive and gets activated again
       if (chat.archived) {
