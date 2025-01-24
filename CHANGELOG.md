@@ -4,10 +4,12 @@
 
 ### Added
 - settings: explain "Read Receipts" and adjust "Enter Key Sends" title #4524
+- accessibility: focus message when jumping to it in some cases (e.g. when clicking on a quote) #4547
 
 ### Changed
 
 ### Fixed
+- numpad "Enter" not working as regular "Enter" #4546
 - improve performance a little
 
 <a id="1_52_0"></a>

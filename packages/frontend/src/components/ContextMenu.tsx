@@ -279,7 +279,7 @@ export function ContextMenu(props: {
             keyboardFocus.current = 0
           }
         }
-      } else if (ev.code == 'Enter') {
+      } else if (ev.key == 'Enter') {
         if (current) {
           ;(current as HTMLDivElement)?.click()
         }

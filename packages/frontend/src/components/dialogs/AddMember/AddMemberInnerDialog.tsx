@@ -159,7 +159,7 @@ export function AddMemberInnerDialog({
   const itemCount = contactIds.length + (needToRenderAddContact ? 1 : 0)
 
   const addContactOnKeyDown = (ev: React.KeyboardEvent<HTMLInputElement>) => {
-    if (ev.code == 'Enter') {
+    if (ev.key == 'Enter') {
       // TODO refactor: this is fragile.
       ;(
         contactListRef.current?.querySelector(

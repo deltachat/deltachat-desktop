@@ -386,6 +386,21 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
 
       domElement.scrollIntoView(scrollTo.scrollIntoViewArg)
 
+      if (scrollTo.focus) {
+        const focusEl = domElement.getElementsByClassName(
+          'roving-tabindex'
+        )[0] as HTMLElement | undefined
+        if (!focusEl) {
+          log.error(
+            'scrollTo: failed to focus element:' +
+              'no child element with class "roving-tabindex" found',
+            domElement
+          )
+        } else {
+          focusEl.focus()
+        }
+      }
+
       if (scrollTo.highlight === true) {
         // Trigger highlight animation
 
@@ -934,6 +949,7 @@ function JumpDownButton({
     highlight?: boolean
     addMessageIdToStack?: undefined | number
     scrollIntoViewArg?: Parameters<HTMLElement['scrollIntoView']>[0]
+    focus: boolean
   }) => Promise<void>
   jumpToMessageStack: number[]
 }) {
@@ -964,6 +980,7 @@ function JumpDownButton({
               // When the stack is empty, we'll jump to last message,
               // and 'center' will make the chat scroll down all the way.
               scrollIntoViewArg: { block: 'center' },
+              focus: false,
             })
           }}
         >

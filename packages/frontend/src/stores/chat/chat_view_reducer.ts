@@ -10,6 +10,9 @@ interface ScrollToMessage {
   msgId: number
   scrollIntoViewArg?: Parameters<HTMLElement['scrollIntoView']>[0]
   highlight: boolean
+  focus: boolean
+  // TODO improvement: also add an option to make the message the "active" one
+  // in the "roving tabindex" widget, but not focus it.
 }
 
 /**
@@ -142,6 +145,7 @@ export class ChatViewReducer {
     prevState: ChatViewState,
     jumpToMessageId: number,
     highlight: boolean,
+    focus: boolean,
     scrollIntoViewArg: ScrollToMessage['scrollIntoViewArg']
   ): ChatViewState {
     return {
@@ -150,6 +154,7 @@ export class ChatViewReducer {
         type: 'scrollToMessage',
         msgId: jumpToMessageId,
         highlight,
+        focus,
         scrollIntoViewArg,
       },
     }

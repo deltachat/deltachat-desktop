@@ -25,6 +25,7 @@ declare global {
       | undefined
       | ((params: {
           msgId: number | undefined
+          focus: boolean
           highlight?: boolean
           addMessageIdToStack?: undefined | number
           scrollIntoViewArg?: Parameters<HTMLElement['scrollIntoView']>[0]

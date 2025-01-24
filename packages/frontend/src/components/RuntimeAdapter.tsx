@@ -58,6 +58,8 @@ export default function RuntimeAdapter({
           window.__internal_jump_to_message?.({
             msgId,
             scrollIntoViewArg: { block: 'center' },
+            // We probably want the composer to be focused.
+            focus: false,
           })
         }
       }

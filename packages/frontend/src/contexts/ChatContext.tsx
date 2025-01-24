@@ -78,6 +78,7 @@ export const ChatProvider = ({
         window.__internal_jump_to_message?.({
           msgId: undefined,
           highlight: false,
+          focus: false,
           addMessageIdToStack: undefined,
           // `scrollIntoViewArg:` doesn't really have effect when
           // jumping to the last message.
