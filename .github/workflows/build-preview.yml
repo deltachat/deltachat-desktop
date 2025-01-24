@@ -2,7 +2,7 @@
 name: Preview Builds
 
 on: 
-  pull_request:
+  release:
     paths-ignore:
       - 'docs/**'  # only trigger build if a file outside of /docs was changed
       - 'README_ASSETS/**'

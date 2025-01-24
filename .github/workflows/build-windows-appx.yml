@@ -1,7 +1,7 @@
 name: Build for windows store (appx unsigned)
 
 on: # todo make it only on tag
-  pull_request:
+  release:
     paths-ignore:
       - 'docs/**'  # only trigger build if a file outside of /docs was changed
       - 'README_ASSETS/**'
