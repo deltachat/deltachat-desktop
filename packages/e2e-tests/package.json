@@ -9,8 +9,5 @@
   },
   "scripts": {
     "e2e": "pnpm exec playwright test --workers=1"
-  },
-  "dependencies": {
-    "playwright": "1.50"
   }
 }
