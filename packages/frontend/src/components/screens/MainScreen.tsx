@@ -254,7 +254,7 @@ export default function MainScreen({ accountId }: Props) {
           queryStr={queryStr}
           showArchivedChats={showArchivedChats}
           onChatClick={onChatClick}
-          selectedChatId={chat ? chat.id : null}
+          selectedChatId={chatId ?? null}
           queryChatId={queryChatId}
           onExitSearch={() => {
             setQueryStr('')

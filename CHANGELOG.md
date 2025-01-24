@@ -10,6 +10,7 @@
 
 ### Fixed
 - numpad "Enter" not working as regular "Enter" #4546
+- improve performance a little
 
 <a id="1_52_0"></a>
 
