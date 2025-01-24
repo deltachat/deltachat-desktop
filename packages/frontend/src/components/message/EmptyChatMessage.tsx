@@ -7,7 +7,7 @@ import type { T } from '@deltachat/jsonrpc-client'
 import { useRovingTabindex } from '../../contexts/RovingTabindex'
 
 type Props = {
-  chat: T.FullChat
+  chat: T.BasicChat
 }
 
 export default function EmptyChatMessage({ chat }: Props) {
