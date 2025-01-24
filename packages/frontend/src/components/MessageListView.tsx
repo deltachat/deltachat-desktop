@@ -22,23 +22,26 @@ export default function MessageListView({
   alternativeView,
   onUpdateGalleryView,
 }: Props) {
-  const { activeView, chat } = useChat()
+  const { activeView, chatWithLinger } = useChat()
 
-  if (chat && accountId) {
+  if (chatWithLinger && accountId) {
     switch (activeView) {
       case ChatView.Media:
         return (
           <Gallery
             ref={galleryRef}
-            chatId={chat.id}
+            chatId={chatWithLinger.id}
             onUpdateView={onUpdateGalleryView}
           />
         )
       case ChatView.MessageList:
       default:
         return (
-          <RecoverableCrashScreen reset_on_change_key={chat.id}>
-            <MessageListAndComposer accountId={accountId} chat={chat} />
+          <RecoverableCrashScreen reset_on_change_key={chatWithLinger.id}>
+            <MessageListAndComposer
+              accountId={accountId}
+              chat={chatWithLinger}
+            />
           </RecoverableCrashScreen>
         )
     }
