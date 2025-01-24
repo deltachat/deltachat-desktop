@@ -9,6 +9,7 @@
 ### Changed
 
 ### Fixed
+- message list being empty when opening a chat in some cases #4555
 - numpad "Enter" not working as regular "Enter" #4546
 - improve performance a little
 
