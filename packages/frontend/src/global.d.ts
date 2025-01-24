@@ -1,6 +1,7 @@
 import { userFeedback, Screens } from './ScreenController'
 
 import '@deltachat-desktop/shared/global.d.ts'
+import type { useMessageList } from './stores/messagelist'
 
 declare global {
   interface Window {
@@ -21,15 +22,49 @@ declare global {
       | ((searchTerm: string, chatId: number | null) => void)
       | undefined
     __refetchChatlist: undefined | (() => void)
-    __internal_jump_to_message:
-      | undefined
-      | ((params: {
-          msgId: number | undefined
-          focus: boolean
-          highlight?: boolean
-          addMessageIdToStack?: undefined | number
-          scrollIntoViewArg?: Parameters<HTMLElement['scrollIntoView']>[0]
-        }) => Promise<void>)
+    /**
+     * Setting this will make the MessageList component `jumpToMessage`
+     * as soon as it renders with the chat for `accountId` and `chatId`,
+     * or upon the `__internal_check_jump_to_message` call.
+     * After jumping to message it will immediately reset
+     * `__internal_jump_to_message_asap` to `undefined`.
+     *
+     * You should not access this property unless necessary,
+     * e.g. it's useful if you need to switch account.
+     * Prefer `jumpToMessage` from `useMessage()` instead.
+     *
+     * Ensuring that MessageList _will_ load the chat with the specified
+     * `accountId` and `chatId` is the responsibility of whoever
+     * accesses this property.
+     */
+    __internal_jump_to_message_asap?: {
+      accountId: number
+      chatId: number
+      jumpToMessageArgs: Parameters<
+        ReturnType<typeof useMessageList>['store']['effect']['jumpToMessage']
+      >
+    }
+    /**
+     * Makes the MessageList component check the value of
+     * {@link __internal_jump_to_message_asap},
+     * and jump to the specified message,
+     * as long as it is ready to do so, i.e. as long as it has loaded
+     * the chat with `accountId` and `chatId` specified in
+     * `__internal_jump_to_message_asap`.
+     * See {@link __internal_jump_to_message_asap} for more details.
+     *
+     * This should be called after assigning
+     * to `__internal_jump_to_message_asap`,
+     * but not necessary if the MessageList component is guaranteed to
+     * re-render soon, in which case it will
+     * read `__internal_jump_to_message_asap` itself automatically.
+     * Calling this when the MessageList has not loaded the specified chat
+     * will do nothing.
+     *
+     * This property is managed by the MessageList component instance,
+     * it gets assigned when the component gets rendered.
+     */
+    __internal_check_jump_to_message?: () => void
     __updateAccountListSidebar: (() => void) | undefined
   }
 }

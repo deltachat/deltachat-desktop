@@ -80,14 +80,21 @@ export const ChatProvider = ({
       // Jump to last message if user clicked chat twice
       // @TODO: We probably want this to be part of the UI logic instead
       if (nextChatId === chatId) {
-        window.__internal_jump_to_message?.({
-          msgId: undefined,
-          highlight: false,
-          focus: false,
-          addMessageIdToStack: undefined,
-          // `scrollIntoViewArg:` doesn't really have effect when
-          // jumping to the last message.
-        })
+        window.__internal_jump_to_message_asap = {
+          accountId,
+          chatId: nextChatId,
+          jumpToMessageArgs: [
+            {
+              msgId: undefined,
+              highlight: false,
+              focus: false,
+              addMessageIdToStack: undefined,
+              // `scrollIntoViewArg:` doesn't really have effect when
+              // jumping to the last message.
+            },
+          ],
+        }
+        window.__internal_check_jump_to_message?.()
       }
 
       // Already set known state

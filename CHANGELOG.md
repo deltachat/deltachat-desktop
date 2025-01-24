@@ -12,6 +12,7 @@
 ### Fixed
 - fix changelog message left unread not in the selected account as it should be but in another account. #4569
 - accessibility: some context menu items not working with keyboard navigation #4578
+- fix clicking on message search result or "Reply Privately" quote not jumping to the message on first click sometimes, again #4554
 - fix log format for logging core events #4572
 - fix dragging files out
 - memory leak when opening and closing emoji picker #4567

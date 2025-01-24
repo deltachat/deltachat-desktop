@@ -222,9 +222,19 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
     }
   }, [])
 
+  const maybeJumpToMessageHack = () => {
+    if (
+      window.__internal_jump_to_message_asap?.accountId === accountId &&
+      window.__internal_jump_to_message_asap.chatId === chat.id
+    ) {
+      jumpToMessage(...window.__internal_jump_to_message_asap.jumpToMessageArgs)
+      window.__internal_jump_to_message_asap = undefined
+    }
+  }
+  maybeJumpToMessageHack()
   // TODO perf: to save memory, maybe set to `undefined` when unmounting,
   // but be sure not to unset it if the new component render already set it.
-  window.__internal_jump_to_message = jumpToMessage
+  window.__internal_check_jump_to_message = maybeJumpToMessageHack
 
   const pendingProgrammaticSmoothScrollTo = useRef<null | number>(null)
   const pendingProgrammaticSmoothScrollTimeout = useRef<number>(-1)

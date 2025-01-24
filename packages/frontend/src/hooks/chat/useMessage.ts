@@ -98,15 +98,20 @@ export default function useMessage() {
       setChatView(ChatView.MessageList)
 
       // Workaround to actual jump to message in regarding mounted component view
-      setTimeout(() => {
-        window.__internal_jump_to_message?.({
-          msgId,
-          highlight,
-          focus,
-          addMessageIdToStack: msgParentId,
-          scrollIntoViewArg,
-        })
-      }, 0)
+      window.__internal_jump_to_message_asap = {
+        accountId,
+        chatId: msgChatId,
+        jumpToMessageArgs: [
+          {
+            msgId,
+            highlight,
+            focus,
+            addMessageIdToStack: msgParentId,
+            scrollIntoViewArg,
+          },
+        ],
+      }
+      window.__internal_check_jump_to_message?.()
     },
     [chatId, selectChat, setChatView]
   )
