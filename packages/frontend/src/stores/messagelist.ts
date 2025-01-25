@@ -329,10 +329,6 @@ class MessageListStore extends Store<MessageListState> {
           false,
           true
         )
-        const chatP = BackendRemote.rpc.getBasicChatInfo(
-          this.accountId,
-          this.chatId
-        )
 
         const firstUnreadMsgId = await firstUnreadMsgIdP
         if (firstUnreadMsgId !== null) {
@@ -352,13 +348,21 @@ class MessageListStore extends Store<MessageListState> {
               scrollIntoViewArg: { block: 'center' },
             })
           })
-          chatP.then(chat => {
-            ActionEmitter.emitAction(
-              chat.archived
-                ? KeybindAction.ChatList_SwitchToArchiveView
-                : KeybindAction.ChatList_SwitchToNormalView
-            )
-          })
+
+          // TODO why do we only do this when `firstUnreadMsgId !== null`?
+          // This piece of code is here since
+          // fe035bd2c124d4bdbdd2039850047c5628638262
+          // (https://github.com/deltachat/deltachat-desktop/pull/2750)
+          BackendRemote.rpc
+            .getBasicChatInfo(this.accountId, this.chatId)
+            .then(chat => {
+              ActionEmitter.emitAction(
+                chat.archived
+                  ? KeybindAction.ChatList_SwitchToArchiveView
+                  : KeybindAction.ChatList_SwitchToNormalView
+              )
+            })
+
           // Since we haven't changed `viewState`, `MessageList` won't
           // call `unlockScroll()`, so let's unlock it now.
           // `jumpToMessage` (above) will take care
