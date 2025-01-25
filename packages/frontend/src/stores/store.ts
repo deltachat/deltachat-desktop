@@ -6,7 +6,10 @@ export function useStore<T extends Store<any>>(
 ): [T extends Store<infer S> ? S : any, T['dispatch']] {
   const [state, setState] = useState(StoreInstance.getState())
 
-  useEffect(() => StoreInstance.subscribe(setState), [StoreInstance])
+  useEffect(() => {
+    setState(StoreInstance.getState())
+    return StoreInstance.subscribe(setState)
+  }, [StoreInstance])
   // TODO: better return an object to allow destructuring
   return [state, StoreInstance.dispatch.bind(StoreInstance)]
 }
