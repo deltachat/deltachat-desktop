@@ -4,7 +4,7 @@
   "type": "module",
   "license": "GPL-3.0-or-later",
   "devDependencies": {
-    "@playwright/test": "^1.50.0",
+    "@playwright/test": "^1.49.0",
     "@types/node": "^20.14.13"
   },
   "scripts": {
