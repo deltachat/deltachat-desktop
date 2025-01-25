@@ -333,14 +333,6 @@ class MessageListStore extends Store<MessageListState> {
           this.accountId,
           this.chatId
         )
-        chatP.then(chat => {
-          if (chat.id === null) {
-            this.log.debug(
-              'SELECT CHAT chat does not exist, id is null. chatId:',
-              chat.id
-            )
-          }
-        })
 
         const firstUnreadMsgId = await firstUnreadMsgIdP
         if (firstUnreadMsgId !== null) {
