@@ -101,7 +101,7 @@ jobs:
       run: npx playwright install --only-shell --with-deps
     - name: create data dir
       run: mkdir -p packages/target-browser/data
-    - name: Run e2e tests
+    - name: Run e2e tests --project Chrome
       run: pnpm e2e
     - uses: actions/upload-artifact@v4
       if: ${{ failure() && !cancelled() }}

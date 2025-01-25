@@ -39,18 +39,21 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'firefox',
-      use: {
-        ...devices['Desktop Firefox'],
-      },
-    },
-    {
       name: 'Chrome', // Google Chrome
       use: {
         ...devices['Desktop Chrome'],
       },
     },
 
+    // fails with downloadable font: no supported glyph data table(s) error
+    // {
+    //   name: 'firefox',
+    //   use: {
+    //     ...devices['Desktop Firefox'],
+    //   },
+    // },
+
+    // fails with clipboard access error
     // {
     //   name: 'webkit',
     //   use: {
