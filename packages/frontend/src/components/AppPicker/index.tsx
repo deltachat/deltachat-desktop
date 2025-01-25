@@ -72,6 +72,7 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
           return
         }
       }
+
       const newIcons: { [key: string]: string } = {}
       let count = 0
       for (const app of apps) {
@@ -85,6 +86,7 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
         count++
         if (count % 10 === 0) {
           setIcons({ ...newIcons })
+          break
         }
       }
       setIcons({ ...newIcons })
