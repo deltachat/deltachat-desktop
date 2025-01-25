@@ -1,0 +1,20 @@
+FROM node:20.11
+
+# Update the dependencies to get the latest and greatest (and safest!) packages.
+RUN apt update && apt upgrade -y
+
+RUN mkdir -p /app
+
+COPY . /app/
+
+RUN git config --global --add safe.directory /app
+
+WORKDIR /app
+
+RUN mkdir -p packages/target-browser/data
+
+RUN npm install -g pnpm
+
+RUN pnpm install
+
+RUN cd packages/e2e-tests && npx playwright install --with-deps --only-shell chromium
