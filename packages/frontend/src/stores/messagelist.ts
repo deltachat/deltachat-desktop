@@ -336,8 +336,10 @@ class MessageListStore extends Store<MessageListState> {
 
         const firstUnreadMsgId = await firstUnreadMsgIdP
         if (firstUnreadMsgId !== null) {
-          setTimeout(async () => {
-            const chat = await chatP
+          // Not entirely sure if `queueMicrotask` (or `setTimeout`)
+          // is requred. It is to return from this `effect`
+          // prior to entering another one (`jumpToMessage()`)
+          queueMicrotask(() => {
             this.effect.jumpToMessage({
               msgId: firstUnreadMsgId,
               // Until we have an "unread messages" separator,
@@ -349,6 +351,8 @@ class MessageListStore extends Store<MessageListState> {
               // See https://github.com/deltachat/deltachat-desktop/issues/4284
               scrollIntoViewArg: { block: 'center' },
             })
+          })
+          chatP.then(chat => {
             ActionEmitter.emitAction(
               chat.archived
                 ? KeybindAction.ChatList_SwitchToArchiveView
