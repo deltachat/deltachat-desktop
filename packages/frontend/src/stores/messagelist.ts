@@ -322,6 +322,23 @@ class MessageListStore extends Store<MessageListState> {
       async () => {
         const startTime = performance.now()
 
+        // FYI there is similar code in `MessageList.tsx`.
+        if (
+          window.__internal_jump_to_message_asap?.accountId ===
+            this.accountId &&
+          window.__internal_jump_to_message_asap.chatId === this.chatId
+        ) {
+          const jumpArgs =
+            window.__internal_jump_to_message_asap.jumpToMessageArgs
+          // Not entirely sure if `queueMicrotask` (or `setTimeout`),
+          // same as below
+          queueMicrotask(() => {
+            this.effect.jumpToMessage(...jumpArgs)
+          })
+          window.__internal_jump_to_message_asap = undefined
+          return false
+        }
+
         const firstUnreadMsgIdP = BackendRemote.rpc.getFirstUnreadMessageOfChat(
           this.accountId,
           this.chatId
@@ -337,7 +354,8 @@ class MessageListStore extends Store<MessageListState> {
         if (firstUnreadMsgId !== null) {
           // Not entirely sure if `queueMicrotask` (or `setTimeout`)
           // is requred. It is to return from this `effect`
-          // prior to entering another one (`jumpToMessage()`)
+          // prior to entering another one (`jumpToMessage()`).
+          // Same as above.
           queueMicrotask(() => {
             this.effect.jumpToMessage({
               msgId: firstUnreadMsgId,

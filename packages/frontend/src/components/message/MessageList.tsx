@@ -223,6 +223,7 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
   }, [])
 
   const maybeJumpToMessageHack = () => {
+    // FYI there is similar code in `messagelist.ts`.
     if (
       window.__internal_jump_to_message_asap?.accountId === accountId &&
       window.__internal_jump_to_message_asap.chatId === chat.id
