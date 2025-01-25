@@ -14,6 +14,7 @@
 - fix log format for logging core events #4572
 - fix dragging files out
 - memory leak when opening and closing emoji picker #4567
+- improve performance a little #4561
 
 <a id="1_52_1"></a>
 
