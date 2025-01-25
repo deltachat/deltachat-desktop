@@ -1,0 +1,4 @@
+# Needed for docker
+# set your user UID & GID to avoid root-owned files in WORKDIR
+UID=1000
+GID=1000
