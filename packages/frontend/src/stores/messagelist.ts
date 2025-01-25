@@ -106,6 +106,7 @@ export function useMessageList(accountId: number, chatId: number) {
   const [state, setState] = useState(store.getState())
 
   useEffect(() => {
+    setState(store.getState())
     store.subscribe(setState)
     return () => store.unsubscribe(setState)
   }, [store])
