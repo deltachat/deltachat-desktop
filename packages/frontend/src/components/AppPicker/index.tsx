@@ -68,12 +68,18 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
         const connectivity =
           await BackendRemote.rpc.getConnectivity(selectedAccountId())
         if (connectivity !== C.DC_CONNECTIVITY_CONNECTED) {
-          setIsOffline(true)
+          if (!isOffline) {
+            setIsOffline(true)
+          }
           return
         }
       }
 
       const newIcons: { [key: string]: string } = {}
+      for (const app of apps) {
+        newIcons[app.app_id] = `./images/icons/image_search.svg`
+      }
+      setIcons({ ...newIcons })
       let count = 0
       for (const app of apps) {
         const response = (await BackendRemote.rpc.getHttpResponse(
@@ -86,7 +92,6 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
         count++
         if (count % 10 === 0) {
           setIcons({ ...newIcons })
-          break
         }
       }
       setIcons({ ...newIcons })

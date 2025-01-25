@@ -219,10 +219,11 @@ const Composer = forwardRef<
 
   const onAppSelected = async (appInfo: AppInfo) => {
     log.debug('App selected', appInfo)
-    const response = await BackendRemote.rpc.getHttpResponse(
-      selectedAccountId(),
-      AppStoreUrl + appInfo.cache_relname
-    )
+    const response = await BackendRemote.rpc
+      .getHttpResponse(selectedAccountId(), AppStoreUrl + appInfo.cache_relname)
+      .catch(err => {
+        console.log('App could not be downloaded', err)
+      })
     if (response?.blob?.length) {
       const path = await runtime.writeTempFileFromBase64(
         appInfo.cache_relname,
