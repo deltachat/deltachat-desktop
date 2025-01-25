@@ -1,7 +1,7 @@
 import { useCallback, useContext, useEffect } from 'react'
 
 import useChat from './useChat'
-import useHasChanged from '../useHasChanged'
+import { useHasChanged } from '../useHasChanged'
 import { BackendRemote } from '../../backend-com'
 import { getLastChatId } from '../../backend/chat'
 import { ScreenContext } from '../../contexts/ScreenContext'

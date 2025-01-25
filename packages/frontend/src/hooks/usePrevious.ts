@@ -9,10 +9,28 @@ import { useEffect, useRef } from 'react'
  * - https://legacy.reactjs.org/docs/hooks-faq.html#how-to-get-the-previous-props-or-state
  * - https://stackoverflow.com/questions/53446020/how-to-compare-oldvalues-and-newvalues-on-react-hooks-useeffect
  */
-export default function usePrevious(value: any) {
+export function usePrevious(value: any) {
   const ref = useRef()
   useEffect(() => {
     ref.current = value
   })
   return ref.current
+}
+
+/**
+ * Like {@link usePrevious}, but the returned value is from the previous
+ * execution of this hook (i.e. previous render function execution),
+ * and not from the previous actual render (not `useEffect`).
+ *
+ * It is this pattern:
+ * https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
+ *
+ * @returns `undefined` on initial run,
+ * otherwise the `val` from the previous run of the hook.
+ */
+export function usePrevious2<T>(val: T): T | undefined {
+  const prevRef = useRef<T>(undefined)
+  const prev = prevRef.current
+  prevRef.current = val
+  return prev
 }

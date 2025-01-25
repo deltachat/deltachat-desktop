@@ -21,7 +21,7 @@ import { debouncedUpdateBadgeCounter } from '../../system-integration/badge-coun
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
-import useHasChanged from '../../hooks/useHasChanged'
+import { useHasChanged2 } from '../../hooks/useHasChanged'
 import { useReactionsBar } from '../ReactionsBar'
 import EmptyChatMessage from './EmptyChatMessage'
 
@@ -804,13 +804,11 @@ export const MessageListInner = React.memo(
 
       onScroll(...args)
     }
-    const hasChatChanged = useHasChanged(chat)
+    const hasChatChanged = useHasChanged2(chat)
     const switchedChatAt = useRef(0)
-    useEffect(() => {
-      if (hasChatChanged) {
-        switchedChatAt.current = Date.now()
-      }
-    }, [hasChatChanged])
+    if (hasChatChanged) {
+      switchedChatAt.current = Date.now()
+    }
 
     // onScrollend is not defined in React, let's attach manually...
     useEffect(() => {
