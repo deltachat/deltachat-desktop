@@ -320,6 +320,8 @@ class MessageListStore extends Store<MessageListState> {
     loadChat: this.scheduler.lockedQueuedEffect(
       'scroll',
       async () => {
+        const startTime = performance.now()
+
         const firstUnreadMsgIdP = BackendRemote.rpc.getFirstUnreadMessageOfChat(
           this.accountId,
           this.chatId
@@ -393,6 +395,8 @@ class MessageListStore extends Store<MessageListState> {
               newestFetchedMessageListItemIndex
             ).catch(err => this.log.error('loadMessages failed', err))) || {}
         }
+
+        this.log.debug('loadChat took', performance.now() - startTime)
 
         this.reducer.selectedChat({
           messageCache,
