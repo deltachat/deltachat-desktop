@@ -7,6 +7,11 @@
 - accessibility: focus message when jumping to it in some cases (e.g. when clicking on a quote) #4547
 
 ### Changed
+ - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.155.1`
+   - feat: Set BccSelf to true when receiving a sync message
+   - improvement: file deduplication
+   - fix: Don't accidentally remove Self from groups
+   - only accept SetContacts sync messages for broadcast lists
 
 ### Fixed
 - message list being empty when opening a chat in some cases #4555
