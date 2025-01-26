@@ -792,7 +792,7 @@ export const MessageListInner = React.memo(
       [onScrolledRecentlyChange]
     )
     const onScroll2 = (...args: Parameters<typeof onScroll>) => {
-      const switchedChatRecently = Date.now() - switchedChatAt < 200
+      const switchedChatRecently = Date.now() - switchedChatAt.current < 200
       // Ignore scrolls that are not caused by the user, because this
       // gives no indication as to whether they're gonna scroll soon.
       // Maybe they're just jumping between chats.
@@ -805,10 +805,10 @@ export const MessageListInner = React.memo(
       onScroll(...args)
     }
     const hasChatChanged = useHasChanged(chat)
-    const [switchedChatAt, setSwitchedChatAt] = useState(0)
+    const switchedChatAt = useRef(0)
     useEffect(() => {
       if (hasChatChanged) {
-        setSwitchedChatAt(Date.now())
+        switchedChatAt.current = Date.now()
       }
     }, [hasChatChanged])
 
