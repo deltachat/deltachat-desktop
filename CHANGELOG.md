@@ -3,6 +3,16 @@
 ## [Unreleased][unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+<a id="1_52_1"></a>
+
+## [1.52.1] - 2025-01-27
+
+### Added
 - settings: explain "Read Receipts" and adjust "Enter Key Sends" title #4524
 - accessibility: focus message when jumping to it in some cases (e.g. when clicking on a quote) #4547
 
@@ -3113,7 +3123,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.52.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.52.1...HEAD
+
+[1.52.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.52.0...v1.52.1
 
 [1.52.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.51.0...v1.52.0
 
