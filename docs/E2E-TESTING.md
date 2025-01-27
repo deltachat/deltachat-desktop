@@ -38,7 +38,7 @@ It can be deleted after running tests and will be recreated in the next run.
 
 ## Run e2e tests in docker
 
-Requirements: docker & docker-compose
+Requirements: docker
 
 > ⚠ To avoid having data belonging to root in your working dir
 > you have to add you local user UID & GID to a .env file in packages/e2e-tests

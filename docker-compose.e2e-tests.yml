@@ -1,5 +1,3 @@
-version: '3.7'
-
 services:
   e2e_playwright:
     build:
@@ -15,12 +13,12 @@ services:
     volumes:
       - ./:/app
     container_name: dc-desktop-e2e-tests
-    entrypoint: ['/bin/sh', '-c']
+    entrypoint: ['/bin/bash', '-c']
     user: ${UID}:${GID}
     ports:
       - 3000:3000
     command:
       - |
         pnpm install
-        pnpm run e2e --project Chrome
+        pnpm run e2e
         
