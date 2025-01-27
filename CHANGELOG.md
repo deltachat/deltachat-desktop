@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+- fix dragging files out
 
 <a id="1_52_1"></a>
 
