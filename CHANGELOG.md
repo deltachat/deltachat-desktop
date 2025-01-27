@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+> Due to the Electron update, macOS 10.15 (Catalina)
+> is no longer supported, macOS 11 (Big Sur) or later
+> is the new requirement.
+
 ### Added
 - highlight the first unread message upon opening a chat #4525
 - enable notifications on mentions in muted chats #4538
@@ -22,6 +26,7 @@
 - Improve backup transfer dialog (different message for connection step, timed message to tell user to check out troubleshooting, button to link to trouble shooting) #4476
 - store last used account in accounts.toml managed by core #4569
 - update help menu URLs #4598
+- upgrade Electron from `32.1.0` to `34.0.1` #4568
 
 ### Fixed
 - fix changelog message left unread not in the selected account as it should be but in another account. #4569
