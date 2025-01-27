@@ -5,8 +5,10 @@
 ### Added
 
 ### Changed
+- store last used account in accounts.toml managed by core #4569
 
 ### Fixed
+- fix changelog message left unread not in the selected account as it should be but in another account. #4569
 
 <a id="1_52_1"></a>
 
@@ -23,13 +25,11 @@
    - improvement: file deduplication
    - fix: Don't accidentally remove Self from groups
    - only accept SetContacts sync messages for broadcast lists
-- store last used account in accounts.toml managed by core #4569
 
 ### Fixed
 - message list being empty when opening a chat in some cases #4555
 - numpad "Enter" not working as regular "Enter" #4546
 - improve performance a little
-- fix changelog message left unread not in the selected account as it should be but in another account. #4569
 
 <a id="1_52_0"></a>
 
