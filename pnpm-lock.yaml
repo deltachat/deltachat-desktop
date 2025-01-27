@@ -102,11 +102,11 @@ importers:
         specifier: ^0.12.0
         version: 0.12.0
       '@emoji-mart/data':
-        specifier: 1.1.2
-        version: 1.1.2
+        specifier: ^1.2.1
+        version: 1.2.1
       '@emoji-mart/react':
-        specifier: 1.1.1
-        version: 1.1.1(emoji-mart@5.5.2)(react@18.3.1)
+        specifier: ^1.1.1
+        version: 1.1.1(emoji-mart@5.6.0)(react@18.3.1)
       classnames:
         specifier: ^2.5.1
         version: 2.5.1
@@ -117,8 +117,8 @@ importers:
         specifier: ^4.0.0
         version: 4.0.0
       emoji-mart:
-        specifier: 5.5.2
-        version: 5.5.2
+        specifier: ^5.6.0
+        version: 5.6.0
       filesize:
         specifier: ^10.1.4
         version: 10.1.4
@@ -557,8 +557,8 @@ packages:
     resolution: {integrity: sha512-kbgXxyEauPJiQQUNG2VgUeyfQNFk6hBF11ISN2PNI6agUgPl55pv4eQmaqHzTAzchBvqZ2tQuRVaPStGf0mxGw==}
     engines: {node: '>=8.6'}
 
-  '@emoji-mart/data@1.1.2':
-    resolution: {integrity: sha512-1HP8BxD2azjqWJvxIaWAMyTySeZY0Osr83ukYjltPVkNXeJvTz7yDrPLBtnrD5uqJ3tg4CcLuuBW09wahqL/fg==}
+  '@emoji-mart/data@1.2.1':
+    resolution: {integrity: sha512-no2pQMWiBy6gpBEiqGeU77/bFejDqUTRY7KX+0+iur13op3bqUsXdnwoZs6Xb1zbv0gAj5VvS1PWoUUckSr5Dw==}
 
   '@emoji-mart/react@1.1.1':
     resolution: {integrity: sha512-NMlFNeWgv1//uPsvLxvGQoIerPuVdXwK/EUek8OOkJ6wVOWPUizRBJU0hDqWZCOROVpfBgCemaC3m6jDOXi03g==}
@@ -2074,8 +2074,8 @@ packages:
   emoji-js-clean@4.0.0:
     resolution: {integrity: sha512-6WZ/WH61ABR/s3TZpRW+nXBSRu6xMTdZSGjNTHo1ptv1vRjwOfbzEPQp9mtgbCi1vkFsFi1SZYz/UIliVxvLwg==}
 
-  emoji-mart@5.5.2:
-    resolution: {integrity: sha512-Sqc/nso4cjxhOwWJsp9xkVm8OF5c+mJLZJFoFfzRuKO+yWiN7K8c96xmtughYb0d/fZ8UC6cLIQ/p4BR6Pv3/A==}
+  emoji-mart@5.6.0:
+    resolution: {integrity: sha512-eJp3QRe79pjwa+duv+n7+5YsNhRcMl812EcFVwrnRvYKoNPoQb5qxU8DG6Bgwji0akHdp6D4Ln6tYLG58MFSow==}
 
   emoji-regex@8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
@@ -3802,11 +3802,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@emoji-mart/data@1.1.2': {}
+  '@emoji-mart/data@1.2.1': {}
 
-  '@emoji-mart/react@1.1.1(emoji-mart@5.5.2)(react@18.3.1)':
+  '@emoji-mart/react@1.1.1(emoji-mart@5.6.0)(react@18.3.1)':
     dependencies:
-      emoji-mart: 5.5.2
+      emoji-mart: 5.6.0
       react: 18.3.1
 
   '@esbuild/aix-ppc64@0.23.0':
@@ -5180,7 +5180,7 @@ snapshots:
 
   emoji-js-clean@4.0.0: {}
 
-  emoji-mart@5.5.2: {}
+  emoji-mart@5.6.0: {}
 
   emoji-regex@8.0.0: {}
 

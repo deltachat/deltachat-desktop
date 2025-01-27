@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+- memory leak when opening and closing emoji picker #4567
 
 <a id="1_52_1"></a>
 
