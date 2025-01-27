@@ -51,6 +51,7 @@
 - add show_app_in_chat option to webxdc info message context menu #4459
 - add experimental content protection option (to prevent screenshots and screenrecording the app) #4475
 - app picker for webxdc apps in attachement menu #4485
+- add special error dialog for the case that deltachat-rpc-server is not found #4479
 
 ### Changed
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.154.1`

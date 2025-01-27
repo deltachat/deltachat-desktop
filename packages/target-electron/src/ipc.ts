@@ -65,14 +65,16 @@ export async function init(cwd: string, logHandler: LogHandler) {
       error,
       dcController.rpcServerPath
     )
+
     dialog.showErrorBox(
       'Fatal Error',
       `The DeltaChat Module couldn't be loaded.
-Please check if all dependencies for deltachat-core are installed!
-The Log file is located in this folder: ${getLogsPath()}\n
-${dcController.rpcServerPath}\n
-${error instanceof Error ? error.message : inspect(error, { depth: null })}`
+  Please check if all dependencies for deltachat-core are installed!
+  The Log file is located in this folder: ${getLogsPath()}\n
+  ${dcController.rpcServerPath}\n
+  ${error instanceof Error ? error.message : inspect(error, { depth: null })}`
     )
+
     rawApp.exit(1)
   }
 
