@@ -15,7 +15,10 @@ export interface DesktopSettingsType {
    * @deprecated replaced by lastAccount,
    * not used since ages, still here so we are reminded to delete it should it exist */
   credentials?: never
-  /** path to last used/selected Account */
+  /** path to last used/selected Account
+   * 
+   * @deprecated in favor of storing selected account over core account manager in accounts.toml
+   */
   lastAccount?: number
   enableAVCalls: boolean
   enableBroadcastLists: boolean
