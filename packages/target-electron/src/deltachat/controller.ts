@@ -129,7 +129,7 @@ export default class DeltaChatController extends EventEmitter {
                   typeof event
                 >
                 delete event_clone.kind
-                logCoreEvent.debug(event.kind, contextId, event)
+                logCoreEvent.debug(contextId, event.kind, event)
               }
             }
           } catch (error) {

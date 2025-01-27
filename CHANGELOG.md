@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+- fix log format for logging core events
 
 <a id="1_52_1"></a>
 
