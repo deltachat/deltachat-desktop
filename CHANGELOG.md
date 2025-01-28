@@ -3,8 +3,10 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- highlight the first unread message upon opening a chat #4525
 
 ### Changed
+- Improve backup transfer dialog (different message for connection step, timed message to tell user to check out troubleshooting, button to link to trouble shooting) #4476
 - store last used account in accounts.toml managed by core #4569
 
 ### Fixed
