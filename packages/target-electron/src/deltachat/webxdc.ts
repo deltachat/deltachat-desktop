@@ -272,7 +272,21 @@ export default class DCWebxdc extends SplitOut {
         alwaysOnTop: main_window?.isAlwaysOnTop(),
         show: false,
       })
+      // This is an additional hardening measure against WebRTC (see
+      // https://delta.chat/en/2023-05-22-webxdc-security#webrtc-breaks-the-sandbox-and-its-hard-to-fix-it).
+      // This alone, however, does _not_ prevent exfiltration,
+      // or the exposure of the real IP address,
+      // because a malicious app could still use malicious TURN servers.
+      //
+      // TODO but if WebRTC really is available to the app,
+      // our test app will not detect that because it does not use
+      // any TURN servers:
+      // https://github.com/webxdc/webxdc-test/blob/1e496b3bdf240533c48da1517592484496527f17/js/webrtc.js#L21-L28
+      webxdcWindow.webContents.setWebRTCIPHandlingPolicy(
+        'disable_non_proxied_udp'
+      )
       setContentProtection(webxdcWindow)
+
       // reposition the window to last position (or default)
       webxdcWindow.setBounds(lastBounds, true)
       // show after repositioning to avoid blinking
