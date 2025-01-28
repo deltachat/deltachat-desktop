@@ -7,8 +7,10 @@
 
 ### Changed
 - Improve backup transfer dialog (different message for connection step, timed message to tell user to check out troubleshooting, button to link to trouble shooting) #4476
+- store last used account in accounts.toml managed by core #4569
 
 ### Fixed
+- fix changelog message left unread not in the selected account as it should be but in another account. #4569
 - fix log format for logging core events #4572
 - fix dragging files out
 - memory leak when opening and closing emoji picker #4567

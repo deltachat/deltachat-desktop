@@ -99,8 +99,15 @@ export default class ScreenController extends Component {
   }
 
   private async _getLastUsedAccount(): Promise<number | undefined> {
-    const lastLoggedInAccountId = (await runtime.getDesktopSettings())
+    let lastLoggedInAccountId
+    const desktopSettingsLastAccount = (await runtime.getDesktopSettings())
       .lastAccount
+    if (desktopSettingsLastAccount != undefined) {
+      lastLoggedInAccountId = desktopSettingsLastAccount
+      runtime.setDesktopSetting('lastAccount', undefined)
+    } else {
+      lastLoggedInAccountId = await BackendRemote.rpc.getSelectedAccountId()
+    }
     try {
       if (lastLoggedInAccountId) {
         await BackendRemote.rpc.getAccountInfo(lastLoggedInAccountId)
@@ -149,7 +156,7 @@ export default class ScreenController extends Component {
       log.info('system_info', info)
     })
 
-    await runtime.setDesktopSetting('lastAccount', accountId)
+    await BackendRemote.rpc.selectAccount(accountId)
   }
 
   async unSelectAccount() {
