@@ -102,7 +102,7 @@ export default class ScreenController extends Component {
     let lastLoggedInAccountId
     const desktopSettingsLastAccount = (await runtime.getDesktopSettings())
       .lastAccount
-    if (desktopSettingsLastAccount) {
+    if (desktopSettingsLastAccount != undefined) {
       lastLoggedInAccountId = desktopSettingsLastAccount
       runtime.setDesktopSetting('lastAccount', undefined)
     } else {
