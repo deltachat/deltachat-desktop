@@ -348,7 +348,10 @@ class MessageListStore extends Store<MessageListState> {
             const chat = await chatP
             this.effect.jumpToMessage({
               msgId: firstUnreadMsgId,
-              highlight: false,
+              // Until we have an "unread messages" separator,
+              // like, say, in Telegram,
+              // let's just highlight the first unread.
+              highlight: true,
               focus: false,
               // 'center' so that old messages are also shown, for context.
               // See https://github.com/deltachat/deltachat-desktop/issues/4284
