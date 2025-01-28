@@ -48,7 +48,7 @@ type ContextMenuLevel = {
  */
 export type OpenContextMenu = (args: showFnArguments) => Promise<void>
 
-const ScrollKeysToBlock = ['Space', 'PageUp', 'PageDown', 'End', 'Home']
+const ScrollKeysToBlock = ['PageUp', 'PageDown', 'End', 'Home']
 
 export function ContextMenuLayer({
   setShowFunction,
@@ -279,10 +279,6 @@ export function ContextMenu(props: {
             keyboardFocus.current = 0
           }
         }
-      } else if (ev.key == 'Enter') {
-        if (current) {
-          ;(current as HTMLDivElement)?.click()
-        }
       } else if (ev.code == 'Escape') {
         closeCallback()
         keyboardFocus.current = -1
@@ -320,7 +316,7 @@ export function ContextMenu(props: {
           }}
         >
           {level.items.map((item, index) => (
-            <div
+            <button
               className={classNames({
                 item: true,
                 selected: index === openSublevels[levelIdx],
@@ -354,7 +350,7 @@ export function ContextMenu(props: {
               {item.icon && <Icon className='left-icon' icon={item.icon} />}
               {item.label}
               {item.subitems && <div className='right-icon'></div>}
-            </div>
+            </button>
           ))}
         </div>
       ))}

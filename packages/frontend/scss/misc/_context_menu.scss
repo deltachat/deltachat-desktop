@@ -42,6 +42,8 @@
     0 8px 24px rgba(16, 22, 26, 0.2);
 
   .item {
+    @include button-reset;
+    width: 100%;
     line-height: 20px;
     padding: 5px 12px;
     white-space: nowrap;
