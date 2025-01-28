@@ -8,6 +8,16 @@ import { getLogger } from '../../../../shared/logger'
 import type { T } from '@deltachat/jsonrpc-client'
 
 export type JumpToMessage = (params: {
+  // "not from a different account" because apparently
+  // `selectAccount` throws if `nextAccountId` is not the same
+  // as the current account ID.
+  //
+  // TODO refactor: can't we just remove this property then?
+  /**
+   * The ID of the currently selected account.
+   * jumpToMessage from `useMessage()` _cannot_ jump to messages
+   * of different accounts.
+   */
   accountId: number
   msgId: number
   /**
@@ -154,6 +164,14 @@ export default function useMessage() {
   )
 
   return {
+    /**
+     * Makes the currently rendered MessageList component instance
+     * load and scroll the message with the specified `msgId` into view.
+     *
+     * The specified message may be a message from a different chat,
+     * but _not_ from a different account,
+     * see {@link JumpToMessage['accountId']}.
+     */
     jumpToMessage,
     sendMessage,
     forwardMessage,
