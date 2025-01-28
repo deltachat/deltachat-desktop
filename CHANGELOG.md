@@ -9,6 +9,7 @@
 - Improve backup transfer dialog (different message for connection step, timed message to tell user to check out troubleshooting, button to link to trouble shooting) #4476
 
 ### Fixed
+- memory leak when opening and closing emoji picker #4567
 - fix log format for logging core events
 
 <a id="1_52_1"></a>
