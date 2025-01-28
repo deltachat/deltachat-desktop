@@ -272,7 +272,16 @@ export default class DCWebxdc extends SplitOut {
         alwaysOnTop: main_window?.isAlwaysOnTop(),
         show: false,
       })
+      webxdcWindow.webContents.setWebRTCIPHandlingPolicy(
+        'disable_non_proxied_udp'
+      )
+      console.log(webxdcWindow.webContents.getWebRTCUDPPortRange())
+      webxdcWindow.webContents.setWebRTCUDPPortRange({
+        min: 1025,
+        max: 65535,
+      })
       setContentProtection(webxdcWindow)
+
       // reposition the window to last position (or default)
       webxdcWindow.setBounds(lastBounds, true)
       // show after repositioning to avoid blinking

@@ -270,6 +270,9 @@ class RealtimeListener {
       const loadingDiv = document.getElementById('loading')
       const iframe = document.getElementById('frame')
 
+      /**
+       * @type {RTCConfiguration}
+       */
       const cert = {
         certificates: [
           await RTCPeerConnection.generateCertificate({
@@ -277,6 +280,7 @@ class RealtimeListener {
             namedCurve: 'P-256',
           }),
         ],
+        iceTransportPolicy: 'relay'
       }
 
       try {
