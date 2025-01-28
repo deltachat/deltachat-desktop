@@ -6,6 +6,7 @@ import {
   ipcMain,
   nativeImage,
   shell,
+  NativeImage,
 } from 'electron'
 import path, { basename, extname, join, posix, sep, dirname } from 'path'
 import { inspect } from 'util'
@@ -91,9 +92,31 @@ export async function init(cwd: string, logHandler: LogHandler) {
   )
 
   ipcMain.on('ondragstart', (event, filePath) => {
+    let icon: NativeImage
+    try {
+      icon = nativeImage.createFromPath(
+        join(htmlDistDir(), 'images/electron-file-drag-out.png')
+      )
+      if (icon.isEmpty()) {
+        throw new Error('load failed')
+      }
+    } catch (error) {
+      log.warn('drag out icon could not be loaded', error)
+      // create dummy black image
+      const size = 64 ** 2 * 4
+      const buffer = Buffer.alloc(size)
+      for (let i = 0; i < size; i += 4) {
+        buffer[i] = 0
+        buffer[i + 1] = 0
+        buffer[i + 2] = 0
+        buffer[i + 3] = 255
+      }
+      icon = nativeImage.createFromBitmap(buffer, { height: 64, width: 64 })
+    }
+
     event.sender.startDrag({
       file: filePath,
-      icon: join(htmlDistDir(), 'electron-file-drag-out.png'),
+      icon,
     })
   })
 
