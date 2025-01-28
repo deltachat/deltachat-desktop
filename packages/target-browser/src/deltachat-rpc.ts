@@ -132,7 +132,7 @@ export async function startDeltaChat(): Promise<
               typeof event
             >
             delete event_clone.kind
-            logCoreEvent.debug(event.kind, contextId, event)
+            logCoreEvent.debug(contextId, event.kind, event)
           }
         }
       } catch (error) {

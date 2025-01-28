@@ -9,6 +9,7 @@
 
 ### Fixed
 - fix changelog message left unread not in the selected account as it should be but in another account. #4569
+- fix log format for logging core events
 
 <a id="1_52_1"></a>
 
