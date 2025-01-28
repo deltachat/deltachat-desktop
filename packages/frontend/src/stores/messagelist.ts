@@ -410,6 +410,13 @@ class MessageListStore extends Store<MessageListState> {
      * reloading `messageListItems` if the message is missing from there,
      * and showing the message in a chat other than `this.chatId`.
      *
+     * Currently this function (as well as the MessageListStore)
+     * is only directly used by the MessageList component.
+     * To jump to a message without having a reference to the
+     * `MessageListStore`, and with an option to jump to message
+     * from a different chat, use `const { jumpToMessage } = useMessage()`,
+     * (it will internally casue this function to be invoked).
+     *
      * The latter (showing the message from a different chat), however,
      * should not be used, because, as of 2025-01-19, we re-create
      * `MessageListStore` when `chatId` or `accountId` changes.
