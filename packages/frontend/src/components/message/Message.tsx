@@ -365,6 +365,8 @@ function buildContextMenu(
             // but let's not pass `chatId` here, for future-proofing.
             msgChatId: undefined,
             highlight: true,
+            focus: true,
+            msgParentId: message.id,
             scrollIntoViewArg: { block: 'center' },
           })
         }
@@ -831,7 +833,10 @@ export default function Message(props: {
             ></WebxdcMessageContent>
           )}
           {message.viewType === 'Vcard' && (
-            <VCardComponent message={message}></VCardComponent>
+            <VCardComponent
+              message={message}
+              tabindexForInteractiveContents={tabindexForInteractiveContents}
+            ></VCardComponent>
           )}
           {content}
           {hasHtml && (
@@ -910,6 +915,7 @@ export const Quote = ({
         msgId: quote.messageId,
         msgChatId: undefined,
         highlight: true,
+        focus: true,
         msgParentId,
         // Often times the quoted message is already in view,
         // so let's not scroll at all if so.

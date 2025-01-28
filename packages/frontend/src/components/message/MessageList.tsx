@@ -66,6 +66,9 @@ const onWindowFocus = (accountId: number) => {
       `window was focused: marking ${messageIdsToMarkAsRead.length} visible messages as read`,
       messageIdsToMarkAsRead
     )
+    // FYI we also listen for `MsgsNoticed` event
+    // to update the badge counter,
+    // so `.then(debouncedUpdateBadgeCounter)` is probably not necessary.
     BackendRemote.rpc
       .markseenMsgs(accountId, messageIdsToMarkAsRead)
       .then(debouncedUpdateBadgeCounter)
@@ -80,17 +83,27 @@ function useUnreadCount(
   const [freshMessageCounter, setFreshMessageCounter] = useState(initialValue)
 
   useEffect(() => {
+    let outdated = false
+
     const update = async ({ chatId: eventChatId }: { chatId: number }) => {
       if (chatId === eventChatId) {
         const count = await BackendRemote.rpc.getFreshMsgCnt(accountId, chatId)
-        setFreshMessageCounter(count)
+        if (!outdated) {
+          setFreshMessageCounter(count)
+        }
       }
     }
 
+    // FYI we have 3 places where we watch the number of unread messages:
+    // - App's badge counter
+    // - Per-account badge counter in accounts list
+    // - useUnreadCount
+    // Make sure to update all the places if you update one of them.
     const cleanup = [
       onDCEvent(accountId, 'IncomingMsg', update),
       onDCEvent(accountId, 'MsgRead', update),
       onDCEvent(accountId, 'MsgsNoticed', update),
+      () => (outdated = true),
     ]
     return () => cleanup.forEach(off => off())
   }, [accountId, chatId])
@@ -177,6 +190,9 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
       if (messageIdsToMarkAsRead.length > 0) {
         const chatId = chat?.id
         if (!chatId) return
+        // FYI we also listen for `MsgsNoticed` event
+        // to update the badge counter,
+        // so `.then(debouncedUpdateBadgeCounter)` is probably not necessary.
         BackendRemote.rpc
           .markseenMsgs(accountId, messageIdsToMarkAsRead)
           .then(debouncedUpdateBadgeCounter)
@@ -206,12 +222,9 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
     }
   }, [])
 
-  useEffect(() => {
-    window.__internal_jump_to_message = jumpToMessage
-    return () => {
-      window.__internal_jump_to_message = undefined
-    }
-  }, [jumpToMessage])
+  // TODO perf: to save memory, maybe set to `undefined` when unmounting,
+  // but be sure not to unset it if the new component render already set it.
+  window.__internal_jump_to_message = jumpToMessage
 
   const pendingProgrammaticSmoothScrollTo = useRef<null | number>(null)
   const pendingProgrammaticSmoothScrollTimeout = useRef<number>(-1)
@@ -372,6 +385,21 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
       }
 
       domElement.scrollIntoView(scrollTo.scrollIntoViewArg)
+
+      if (scrollTo.focus) {
+        const focusEl = domElement.getElementsByClassName(
+          'roving-tabindex'
+        )[0] as HTMLElement | undefined
+        if (!focusEl) {
+          log.error(
+            'scrollTo: failed to focus element:' +
+              'no child element with class "roving-tabindex" found',
+            domElement
+          )
+        } else {
+          focusEl.focus()
+        }
+      }
 
       if (scrollTo.highlight === true) {
         // Trigger highlight animation
@@ -921,6 +949,7 @@ function JumpDownButton({
     highlight?: boolean
     addMessageIdToStack?: undefined | number
     scrollIntoViewArg?: Parameters<HTMLElement['scrollIntoView']>[0]
+    focus: boolean
   }) => Promise<void>
   jumpToMessageStack: number[]
 }) {
@@ -951,6 +980,7 @@ function JumpDownButton({
               // When the stack is empty, we'll jump to last message,
               // and 'center' will make the chat scroll down all the way.
               scrollIntoViewArg: { block: 'center' },
+              focus: false,
             })
           }}
         >

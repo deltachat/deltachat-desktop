@@ -7,11 +7,11 @@ settings:
 catalogs:
   default:
     '@deltachat/jsonrpc-client':
-      specifier: v1.153.0
-      version: 1.153.0
+      specifier: v1.155.1
+      version: 1.155.1
     '@deltachat/stdio-rpc-server':
-      specifier: v1.153.0
-      version: 1.153.0
+      specifier: v1.155.1
+      version: 1.155.1
     '@types/mime-types':
       specifier: ^2.1.4
       version: 2.1.4
@@ -97,10 +97,10 @@ importers:
         version: link:../shared
       '@deltachat/jsonrpc-client':
         specifier: 'catalog:'
-        version: 1.153.0(ws@7.5.10)
+        version: 1.155.1(ws@7.5.10)
       '@deltachat/message_parser_wasm':
-        specifier: ^0.11.0
-        version: 0.11.0
+        specifier: ^0.12.0
+        version: 0.12.0
       '@emoji-mart/data':
         specifier: 1.1.2
         version: 1.1.2
@@ -236,13 +236,13 @@ importers:
         version: link:../shared
       '@deltachat/jsonrpc-client':
         specifier: 'catalog:'
-        version: 1.153.0(ws@8.18.0)
+        version: 1.155.1(ws@8.18.0)
 
   packages/shared:
     dependencies:
       '@deltachat/jsonrpc-client':
         specifier: 'catalog:'
-        version: 1.153.0(ws@8.18.0)
+        version: 1.155.1(ws@8.18.0)
       error-stack-parser:
         specifier: ^2.1.4
         version: 2.1.4
@@ -276,10 +276,10 @@ importers:
         version: link:../shared
       '@deltachat/jsonrpc-client':
         specifier: 'catalog:'
-        version: 1.153.0(ws@8.18.0)
+        version: 1.155.1(ws@8.18.0)
       '@deltachat/stdio-rpc-server':
         specifier: 'catalog:'
-        version: 1.153.0(@deltachat/jsonrpc-client@1.153.0(ws@8.18.0))
+        version: 1.155.1(@deltachat/jsonrpc-client@1.155.1(ws@8.18.0))
       '@types/express-session':
         specifier: ^1.18.0
         version: 1.18.0
@@ -325,10 +325,10 @@ importers:
     dependencies:
       '@deltachat/jsonrpc-client':
         specifier: 'catalog:'
-        version: 1.153.0(ws@7.5.10)
+        version: 1.155.1(ws@7.5.10)
       '@deltachat/stdio-rpc-server':
         specifier: 'catalog:'
-        version: 1.153.0(@deltachat/jsonrpc-client@1.153.0(ws@7.5.10))
+        version: 1.155.1(@deltachat/jsonrpc-client@1.155.1(ws@7.5.10))
       mime-types:
         specifier: 'catalog:'
         version: 2.1.35
@@ -403,7 +403,45 @@ importers:
         specifier: 'catalog:'
         version: 5.5.4
 
-  packages/target-tauri: {}
+  packages/target-tauri:
+    dependencies:
+      '@tauri-apps/api':
+        specifier: ^2.2.0
+        version: 2.2.0
+      '@tauri-apps/plugin-log':
+        specifier: ^2.2.0
+        version: 2.2.0
+      '@tauri-apps/plugin-shell':
+        specifier: ^2.2.0
+        version: 2.2.0
+      '@tauri-apps/plugin-store':
+        specifier: ^2.2.0
+        version: 2.2.0
+    devDependencies:
+      '@deltachat-desktop/runtime-interface':
+        specifier: link:../runtime
+        version: link:../runtime
+      '@deltachat-desktop/shared':
+        specifier: link:../shared
+        version: link:../shared
+      '@deltachat/jsonrpc-client':
+        specifier: 'catalog:'
+        version: 1.155.1(ws@8.18.0)
+      '@tauri-apps/cli':
+        specifier: ^2
+        version: 2.0.4
+      '@tauri-apps/plugin-clipboard-manager':
+        specifier: ^2.2.0
+        version: 2.2.0
+      '@tauri-apps/plugin-dialog':
+        specifier: ^2.2.0
+        version: 2.2.0
+      esbuild:
+        specifier: ^0.24.0
+        version: 0.24.2
+      typescript:
+        specifier: ^5.2.2
+        version: 5.5.4
 
 packages:
 
@@ -425,64 +463,64 @@ packages:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
 
-  '@deltachat/jsonrpc-client@1.153.0':
-    resolution: {integrity: sha512-tlQwScxUU/sSSUkQPs/zClqRH3dafIZDX1x5e8yBMBXPFwjKF2xieploYlgCd04aQXywAKwXrD+CjWF2gP1N7Q==}
+  '@deltachat/jsonrpc-client@1.155.1':
+    resolution: {integrity: sha512-m5mNHrySrvD3tWjjVB7nZIRt8vJFk91z378pTycxvAsbfX0m4m6gMPp7nXcolsU0qLVzNtmi1fAfVbRCc23Qfw==}
 
-  '@deltachat/message_parser_wasm@0.11.0':
-    resolution: {integrity: sha512-8GpJ+JO36jrH80kWqDo3+f+jaTgJJo+2x9IK2n0AUhwm5DzVw9TZKAZU7tuiYlXpN/a56BJvfzwmRTLjYFSMCg==}
+  '@deltachat/message_parser_wasm@0.12.0':
+    resolution: {integrity: sha512-B90ThVMCtB2zefYZb4RXmfIdG9Z+1kyhw1bvL7meWWKA+qxt35fI9H+Hk+vw9QLxBrCm054QUIkRx9uV0bSViw==}
 
-  '@deltachat/stdio-rpc-server-android-arm64@1.153.0':
-    resolution: {integrity: sha512-u1wRVapBw1fPw1o/kYebF9loyegSDP853ohziWneie2D09HP5jDjjDCARQbAj/ys8KG9mOc4dYHll0GKrziR7Q==}
+  '@deltachat/stdio-rpc-server-android-arm64@1.155.1':
+    resolution: {integrity: sha512-wdxFXSupTuqa1LMoeG4kiygEpubjKgGf6ry40VDIv0JMKZuCD5dvZ9Am7IDLomWEfms+0rhGIWP3D1CacaijxA==}
     cpu: [arm64]
     os: [android]
 
-  '@deltachat/stdio-rpc-server-android-arm@1.153.0':
-    resolution: {integrity: sha512-PvpsBksaULUryFe94NxpTBb3rHLuv9VWIQDbXAjBinppNwE1Ga4HCiAIh1OpQTwpE+3dYes2UZClWb/UU5rauA==}
+  '@deltachat/stdio-rpc-server-android-arm@1.155.1':
+    resolution: {integrity: sha512-Vlkamw28j3+KzKAxgZlnLtDxPHG619AezB9cUFD9mYxZk1ZASNPzFzG6JavKc1U1sqW0qg5e/pDqMO9em80xEw==}
     cpu: [arm]
     os: [android]
 
-  '@deltachat/stdio-rpc-server-darwin-arm64@1.153.0':
-    resolution: {integrity: sha512-xDCb9I4g7MJYlXJ/3qQTVDxLNn17jAFFkaJU90HKHDA7zeEHBHP67439yWird8CDoKwQgHZlZi6NBuh2IchSvQ==}
+  '@deltachat/stdio-rpc-server-darwin-arm64@1.155.1':
+    resolution: {integrity: sha512-S1G0+41TkyokbD/uWsKUaelTsxqwZZNDaPHqaYs5FCSwZ7RtfApyVs8Zx2vLkGLWWwbW/R4594Bfj0LnbxNszg==}
     cpu: [arm64]
     os: [darwin]
 
-  '@deltachat/stdio-rpc-server-darwin-x64@1.153.0':
-    resolution: {integrity: sha512-wwMJxdp7CmjN0kd7AYZm/x8wnDeDj5QbR9CHdugqal5VPZbir6g7g3kEpNY8Hxoh0OYye8zEffkGJRqXiWPYNw==}
+  '@deltachat/stdio-rpc-server-darwin-x64@1.155.1':
+    resolution: {integrity: sha512-UyO3W+/9kv7jSWEJAqrzR328GiSMC+lmj5GwfP8uk+QaE2729dkNwn32feto5Wl2DMICtvYFuuGKxunOK04XNQ==}
     cpu: [x64]
     os: [darwin]
 
-  '@deltachat/stdio-rpc-server-linux-arm64@1.153.0':
-    resolution: {integrity: sha512-C95mHQu+pofqC6BfxMvmaAIrGJ4I2DQNwQavKlsyD43QuJVI3LXd+XR8vjGTxnJcg3Y7qpbtumdFrOo3yzbmcw==}
+  '@deltachat/stdio-rpc-server-linux-arm64@1.155.1':
+    resolution: {integrity: sha512-vgkx5uuEJYKvRCcsPu6GSjLLfpymzJjnghso1DWhL+wRlAUGUJM2bod60ybzTNvzyxT2IHuhE83VZwqsV8C4FQ==}
     cpu: [arm64]
     os: [linux]
 
-  '@deltachat/stdio-rpc-server-linux-arm@1.153.0':
-    resolution: {integrity: sha512-2knQipM3Z/V3IVGB9MYnDNWnrum8MvX8f3/ImlV2C/dSozeD+6F1GfKsq+0D0m2IZ11QSkiwLnoMSNpiWlFGnA==}
+  '@deltachat/stdio-rpc-server-linux-arm@1.155.1':
+    resolution: {integrity: sha512-cV69FwXHDNn6kfY9uPoh3hig19EaaXXFS6YuaGpMgx82mwnMG5UkVG/fHzKUxIWoFnMLXIBZErWGnxLVlwEqEQ==}
     cpu: [arm]
     os: [linux]
 
-  '@deltachat/stdio-rpc-server-linux-ia32@1.153.0':
-    resolution: {integrity: sha512-/jvWUyA9uaTiTNrV/gdTIO9rwnQDoD17qyPcX2zwTC2psDPoXu1g07IxCzM8TByqkuaez22b984yjf2J3VtTSQ==}
+  '@deltachat/stdio-rpc-server-linux-ia32@1.155.1':
+    resolution: {integrity: sha512-jm8VH2DaB4efKrwJGGYNBGHH7CmcVIWWKRN35bQ0UYUYG+6WMAWpHHxWH7s1b7mLlnAVEb+c5Ma9cxUYO/2Q/Q==}
     cpu: [ia32]
     os: [linux]
 
-  '@deltachat/stdio-rpc-server-linux-x64@1.153.0':
-    resolution: {integrity: sha512-ZHKL1P1zI0Xk6ZOQp6wHp9mpbZNh56GCRFijnmr+ffmlVyGfHfuS24Xpa1eOrxvzAq5liMxef1d+L4TkOAfcWQ==}
+  '@deltachat/stdio-rpc-server-linux-x64@1.155.1':
+    resolution: {integrity: sha512-hYxCkEp30vEn+je/Yb8CaW6TtrtZ5N3dKEYk7RoNwRWM1TzGSJy4AmJXGO5wPEmJ3m1rwgaWGdtU+iZao6tLdg==}
     cpu: [x64]
     os: [linux]
 
-  '@deltachat/stdio-rpc-server-win32-ia32@1.153.0':
-    resolution: {integrity: sha512-ow0i7s2n583s/98GQ7esFUyjfoqIXYEMsFEZBIh0Qj0LCZC1bhz+xdY3IZjkWp5LXkRvTDKTXJ0qDGlgXrwNFA==}
+  '@deltachat/stdio-rpc-server-win32-ia32@1.155.1':
+    resolution: {integrity: sha512-pHWOyN30eotTUw692PgnmZWww8URCjkIs4HXzvxOUVu64Pjjb++ywx3hjRDHcTpInycmTkOmeveHuBtpICOKeA==}
     cpu: [ia32]
     os: [win32]
 
-  '@deltachat/stdio-rpc-server-win32-x64@1.153.0':
-    resolution: {integrity: sha512-2ImrDaDqZ/ABje8TYgsoUfIL6Dl4lD8+T7nr9DWT3h0nk6VpYEqt3hMkfaNj7TE06uIc2N64BZ5qhG4F0sz9Qw==}
+  '@deltachat/stdio-rpc-server-win32-x64@1.155.1':
+    resolution: {integrity: sha512-K5N2xxUsXQjUFqCvBalYq1nl9sUb6x/22gpvixNrMKo3/9YX8QblXXTIPocj1ZuYyCEkMFBzqfFkXHdCngSIHA==}
     cpu: [x64]
     os: [win32]
 
-  '@deltachat/stdio-rpc-server@1.153.0':
-    resolution: {integrity: sha512-ZGFyGihUBNFr/WJkSjnbLUgRJ3m33cVJwqUAVG8lxGJr/okkPzbtFU1LKk/QSidZqrcvJIw2+FblIzPsJZMrMA==}
+  '@deltachat/stdio-rpc-server@1.155.1':
+    resolution: {integrity: sha512-+qNbrwHOIdWFQQqJoKGWDk6xeZtECHFvQj5s3+sHBO6nK9E3D2KnNyTjbwuoJyYKEa6lXcgBMVsuA+3vDbOqqA==}
     peerDependencies:
       '@deltachat/jsonrpc-client': '*'
 
@@ -1183,6 +1221,89 @@ packages:
   '@szmarczak/http-timer@4.0.6':
     resolution: {integrity: sha512-4BAffykYOgO+5nzBWYwE3W90sBgLJoUPRWWcL8wlyiM8IB8ipJz3UMJ9KXQd1RKQXpKp8Tutn80HZtWsu2u76w==}
     engines: {node: '>=10'}
+
+  '@tauri-apps/api@2.2.0':
+    resolution: {integrity: sha512-R8epOeZl1eJEl603aUMIGb4RXlhPjpgxbGVEaqY+0G5JG9vzV/clNlzTeqc+NLYXVqXcn8mb4c5b9pJIUDEyAg==}
+
+  '@tauri-apps/cli-darwin-arm64@2.0.4':
+    resolution: {integrity: sha512-siH7rOHobb16rPbc11k64p1mxIpiRCkWmzs2qmL5IX21Gx9K5onI3Tk67Oqpf2uNupbYzItrOttaDT4NHFC7tw==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@tauri-apps/cli-darwin-x64@2.0.4':
+    resolution: {integrity: sha512-zIccfbCoZMfmUpnk6PFCV0keFyfVj1A9XV3Oiiitj/dkTZ9CQvzjhX3XC0XcK4rsTWegfr2PjSrK06aiPAROAw==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [darwin]
+
+  '@tauri-apps/cli-linux-arm-gnueabihf@2.0.4':
+    resolution: {integrity: sha512-fgQqJzefOGWCBNg4yrVA82Rg4s1XQr5K0dc2rCxBhJfa696e8dQ1LDrnWq/AiO5r+uHfVaoQTIUvxxpFicYRSA==}
+    engines: {node: '>= 10'}
+    cpu: [arm]
+    os: [linux]
+
+  '@tauri-apps/cli-linux-arm64-gnu@2.0.4':
+    resolution: {integrity: sha512-u8wbt5tPA9pI6j+d7jGrfOz9UVCiTp+IYzKNiIqlrDsAjqAUFaNXYHKqOUboeFWEmI4zoCWj6LgpS2OJTQ5FKg==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@tauri-apps/cli-linux-arm64-musl@2.0.4':
+    resolution: {integrity: sha512-hntF1V8e3V1hlrESm93PsghDhf3lA5pbvFrRfYxU1c+fVD/jRXGVw8BH3O1lW8MWwhEg1YdhKk01oAgsuHLuig==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@tauri-apps/cli-linux-x64-gnu@2.0.4':
+    resolution: {integrity: sha512-Iq1GGJb+oT1T0ZV8izrgf0cBtlzPCJaWcNueRbf1ZXquMf+FSTyQv+/Lo8rq5T6buOIJOH7cAOTuEWWqiCZteg==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [linux]
+
+  '@tauri-apps/cli-linux-x64-musl@2.0.4':
+    resolution: {integrity: sha512-9NTk6Pf0bSwXqCBdAA+PDYts9HeHebZzIo8mbRzRyUbER6QngG5HZb9Ka36Z1QWtJjdRy6uxSb4zb/9NuTeHfA==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [linux]
+
+  '@tauri-apps/cli-win32-arm64-msvc@2.0.4':
+    resolution: {integrity: sha512-OF2e9oxiBFR8A8wVMOhUx9QGN/I1ZkquWC7gVQBnA56nx9PabJlDT08QBy5UD8USqZFVznnfNr2ehlheQahb3g==}
+    engines: {node: '>= 10'}
+    cpu: [arm64]
+    os: [win32]
+
+  '@tauri-apps/cli-win32-ia32-msvc@2.0.4':
+    resolution: {integrity: sha512-T+hCKB3rFP6q0saHHtR02hm6wr1ZPJ0Mkii3oRTxjPG6BBXoVzHNCYzvdgEGJPTA2sFuAQtJH764NRtNlDMifw==}
+    engines: {node: '>= 10'}
+    cpu: [ia32]
+    os: [win32]
+
+  '@tauri-apps/cli-win32-x64-msvc@2.0.4':
+    resolution: {integrity: sha512-GVaiI3KWRFLomjJmApHqihhYlkJ+7FqhumhVfBO6Z2tWzZjQyVQgTdNp0kYEuW2WoAYEj0dKY6qd4YM33xYcUA==}
+    engines: {node: '>= 10'}
+    cpu: [x64]
+    os: [win32]
+
+  '@tauri-apps/cli@2.0.4':
+    resolution: {integrity: sha512-Hl9eFXz+O366+6su9PfaSzu2EJdFe1p8K8ghkWmi40dz8VmSE7vsMTaOStD0I71ckSOkh2ICDX7FQTBgjlpjWw==}
+    engines: {node: '>= 10'}
+    hasBin: true
+
+  '@tauri-apps/plugin-clipboard-manager@2.2.0':
+    resolution: {integrity: sha512-sIBrW/HioKq2vqomwwcU/Y8ygAv3DlS32yKPBX5XijCc0IyQKiDxYpGqmvE9DC5Y0lNJ/G53dfS961B31wjJ1g==}
+
+  '@tauri-apps/plugin-dialog@2.2.0':
+    resolution: {integrity: sha512-6bLkYK68zyK31418AK5fNccCdVuRnNpbxquCl8IqgFByOgWFivbiIlvb79wpSXi0O+8k8RCSsIpOquebusRVSg==}
+
+  '@tauri-apps/plugin-log@2.2.0':
+    resolution: {integrity: sha512-g6CsQAR1lsm5ABSZZxpM/iCn86GrMDTTlhj7GPkZkYBRSm3+WczfOAl7SV7HDn77tOKCzhZffwI5uHfRoHutrw==}
+
+  '@tauri-apps/plugin-shell@2.2.0':
+    resolution: {integrity: sha512-iC3Ic1hLmasoboG7BO+7p+AriSoqAwKrIk+Hpk+S/bjTQdXqbl2GbdclghI4gM32X0bls7xHzIFqhRdrlvJeaA==}
+
+  '@tauri-apps/plugin-store@2.2.0':
+    resolution: {integrity: sha512-hJTRtuJis4w5fW1dkcgftsYxKXK0+DbAqurZ3CURHG5WkAyyZgbxpeYctw12bbzF9ZbZREXZklPq8mocCC3Sgg==}
 
   '@tootallnate/once@2.0.0':
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
@@ -3533,7 +3654,7 @@ snapshots:
       '@jridgewell/trace-mapping': 0.3.9
     optional: true
 
-  '@deltachat/jsonrpc-client@1.153.0(ws@7.5.10)':
+  '@deltachat/jsonrpc-client@1.155.1(ws@7.5.10)':
     dependencies:
       '@deltachat/tiny-emitter': 3.0.0
       isomorphic-ws: 4.0.1(ws@7.5.10)
@@ -3543,7 +3664,7 @@ snapshots:
       - utf-8-validate
       - ws
 
-  '@deltachat/jsonrpc-client@1.153.0(ws@8.18.0)':
+  '@deltachat/jsonrpc-client@1.155.1(ws@8.18.0)':
     dependencies:
       '@deltachat/tiny-emitter': 3.0.0
       isomorphic-ws: 4.0.1(ws@8.18.0)
@@ -3553,67 +3674,67 @@ snapshots:
       - utf-8-validate
       - ws
 
-  '@deltachat/message_parser_wasm@0.11.0': {}
+  '@deltachat/message_parser_wasm@0.12.0': {}
 
-  '@deltachat/stdio-rpc-server-android-arm64@1.153.0':
+  '@deltachat/stdio-rpc-server-android-arm64@1.155.1':
     optional: true
 
-  '@deltachat/stdio-rpc-server-android-arm@1.153.0':
+  '@deltachat/stdio-rpc-server-android-arm@1.155.1':
     optional: true
 
-  '@deltachat/stdio-rpc-server-darwin-arm64@1.153.0':
+  '@deltachat/stdio-rpc-server-darwin-arm64@1.155.1':
     optional: true
 
-  '@deltachat/stdio-rpc-server-darwin-x64@1.153.0':
+  '@deltachat/stdio-rpc-server-darwin-x64@1.155.1':
     optional: true
 
-  '@deltachat/stdio-rpc-server-linux-arm64@1.153.0':
+  '@deltachat/stdio-rpc-server-linux-arm64@1.155.1':
     optional: true
 
-  '@deltachat/stdio-rpc-server-linux-arm@1.153.0':
+  '@deltachat/stdio-rpc-server-linux-arm@1.155.1':
     optional: true
 
-  '@deltachat/stdio-rpc-server-linux-ia32@1.153.0':
+  '@deltachat/stdio-rpc-server-linux-ia32@1.155.1':
     optional: true
 
-  '@deltachat/stdio-rpc-server-linux-x64@1.153.0':
+  '@deltachat/stdio-rpc-server-linux-x64@1.155.1':
     optional: true
 
-  '@deltachat/stdio-rpc-server-win32-ia32@1.153.0':
+  '@deltachat/stdio-rpc-server-win32-ia32@1.155.1':
     optional: true
 
-  '@deltachat/stdio-rpc-server-win32-x64@1.153.0':
+  '@deltachat/stdio-rpc-server-win32-x64@1.155.1':
     optional: true
 
-  '@deltachat/stdio-rpc-server@1.153.0(@deltachat/jsonrpc-client@1.153.0(ws@7.5.10))':
+  '@deltachat/stdio-rpc-server@1.155.1(@deltachat/jsonrpc-client@1.155.1(ws@7.5.10))':
     dependencies:
-      '@deltachat/jsonrpc-client': 1.153.0(ws@7.5.10)
+      '@deltachat/jsonrpc-client': 1.155.1(ws@7.5.10)
     optionalDependencies:
-      '@deltachat/stdio-rpc-server-android-arm': 1.153.0
-      '@deltachat/stdio-rpc-server-android-arm64': 1.153.0
-      '@deltachat/stdio-rpc-server-darwin-arm64': 1.153.0
-      '@deltachat/stdio-rpc-server-darwin-x64': 1.153.0
-      '@deltachat/stdio-rpc-server-linux-arm': 1.153.0
-      '@deltachat/stdio-rpc-server-linux-arm64': 1.153.0
-      '@deltachat/stdio-rpc-server-linux-ia32': 1.153.0
-      '@deltachat/stdio-rpc-server-linux-x64': 1.153.0
-      '@deltachat/stdio-rpc-server-win32-ia32': 1.153.0
-      '@deltachat/stdio-rpc-server-win32-x64': 1.153.0
+      '@deltachat/stdio-rpc-server-android-arm': 1.155.1
+      '@deltachat/stdio-rpc-server-android-arm64': 1.155.1
+      '@deltachat/stdio-rpc-server-darwin-arm64': 1.155.1
+      '@deltachat/stdio-rpc-server-darwin-x64': 1.155.1
+      '@deltachat/stdio-rpc-server-linux-arm': 1.155.1
+      '@deltachat/stdio-rpc-server-linux-arm64': 1.155.1
+      '@deltachat/stdio-rpc-server-linux-ia32': 1.155.1
+      '@deltachat/stdio-rpc-server-linux-x64': 1.155.1
+      '@deltachat/stdio-rpc-server-win32-ia32': 1.155.1
+      '@deltachat/stdio-rpc-server-win32-x64': 1.155.1
 
-  '@deltachat/stdio-rpc-server@1.153.0(@deltachat/jsonrpc-client@1.153.0(ws@8.18.0))':
+  '@deltachat/stdio-rpc-server@1.155.1(@deltachat/jsonrpc-client@1.155.1(ws@8.18.0))':
     dependencies:
-      '@deltachat/jsonrpc-client': 1.153.0(ws@8.18.0)
+      '@deltachat/jsonrpc-client': 1.155.1(ws@8.18.0)
     optionalDependencies:
-      '@deltachat/stdio-rpc-server-android-arm': 1.153.0
-      '@deltachat/stdio-rpc-server-android-arm64': 1.153.0
-      '@deltachat/stdio-rpc-server-darwin-arm64': 1.153.0
-      '@deltachat/stdio-rpc-server-darwin-x64': 1.153.0
-      '@deltachat/stdio-rpc-server-linux-arm': 1.153.0
-      '@deltachat/stdio-rpc-server-linux-arm64': 1.153.0
-      '@deltachat/stdio-rpc-server-linux-ia32': 1.153.0
-      '@deltachat/stdio-rpc-server-linux-x64': 1.153.0
-      '@deltachat/stdio-rpc-server-win32-ia32': 1.153.0
-      '@deltachat/stdio-rpc-server-win32-x64': 1.153.0
+      '@deltachat/stdio-rpc-server-android-arm': 1.155.1
+      '@deltachat/stdio-rpc-server-android-arm64': 1.155.1
+      '@deltachat/stdio-rpc-server-darwin-arm64': 1.155.1
+      '@deltachat/stdio-rpc-server-darwin-x64': 1.155.1
+      '@deltachat/stdio-rpc-server-linux-arm': 1.155.1
+      '@deltachat/stdio-rpc-server-linux-arm64': 1.155.1
+      '@deltachat/stdio-rpc-server-linux-ia32': 1.155.1
+      '@deltachat/stdio-rpc-server-linux-x64': 1.155.1
+      '@deltachat/stdio-rpc-server-win32-ia32': 1.155.1
+      '@deltachat/stdio-rpc-server-win32-x64': 1.155.1
 
   '@deltachat/tiny-emitter@3.0.0': {}
 
@@ -4068,6 +4189,71 @@ snapshots:
   '@szmarczak/http-timer@4.0.6':
     dependencies:
       defer-to-connect: 2.0.1
+
+  '@tauri-apps/api@2.2.0': {}
+
+  '@tauri-apps/cli-darwin-arm64@2.0.4':
+    optional: true
+
+  '@tauri-apps/cli-darwin-x64@2.0.4':
+    optional: true
+
+  '@tauri-apps/cli-linux-arm-gnueabihf@2.0.4':
+    optional: true
+
+  '@tauri-apps/cli-linux-arm64-gnu@2.0.4':
+    optional: true
+
+  '@tauri-apps/cli-linux-arm64-musl@2.0.4':
+    optional: true
+
+  '@tauri-apps/cli-linux-x64-gnu@2.0.4':
+    optional: true
+
+  '@tauri-apps/cli-linux-x64-musl@2.0.4':
+    optional: true
+
+  '@tauri-apps/cli-win32-arm64-msvc@2.0.4':
+    optional: true
+
+  '@tauri-apps/cli-win32-ia32-msvc@2.0.4':
+    optional: true
+
+  '@tauri-apps/cli-win32-x64-msvc@2.0.4':
+    optional: true
+
+  '@tauri-apps/cli@2.0.4':
+    optionalDependencies:
+      '@tauri-apps/cli-darwin-arm64': 2.0.4
+      '@tauri-apps/cli-darwin-x64': 2.0.4
+      '@tauri-apps/cli-linux-arm-gnueabihf': 2.0.4
+      '@tauri-apps/cli-linux-arm64-gnu': 2.0.4
+      '@tauri-apps/cli-linux-arm64-musl': 2.0.4
+      '@tauri-apps/cli-linux-x64-gnu': 2.0.4
+      '@tauri-apps/cli-linux-x64-musl': 2.0.4
+      '@tauri-apps/cli-win32-arm64-msvc': 2.0.4
+      '@tauri-apps/cli-win32-ia32-msvc': 2.0.4
+      '@tauri-apps/cli-win32-x64-msvc': 2.0.4
+
+  '@tauri-apps/plugin-clipboard-manager@2.2.0':
+    dependencies:
+      '@tauri-apps/api': 2.2.0
+
+  '@tauri-apps/plugin-dialog@2.2.0':
+    dependencies:
+      '@tauri-apps/api': 2.2.0
+
+  '@tauri-apps/plugin-log@2.2.0':
+    dependencies:
+      '@tauri-apps/api': 2.2.0
+
+  '@tauri-apps/plugin-shell@2.2.0':
+    dependencies:
+      '@tauri-apps/api': 2.2.0
+
+  '@tauri-apps/plugin-store@2.2.0':
+    dependencies:
+      '@tauri-apps/api': 2.2.0
 
   '@tootallnate/once@2.0.0': {}
 

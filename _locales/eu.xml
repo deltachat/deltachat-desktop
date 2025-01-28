@@ -4,7 +4,7 @@
     <string name="app_name">Delta Chat</string>
     <string name="ok">Ados</string>
     <string name="cancel">Utzi</string>
-   <string name="yes">Bai</string>
+    <string name="yes">Bai</string>
     <string name="no">Ez</string>
     <string name="on">Bai</string>
     <string name="off">Ez</string>
@@ -365,7 +365,6 @@
     <string name="pref_app_access">Aplikazio sarbidea</string>
     <string name="pref_chats">Txatak</string>
     <string name="pref_in_chat_sounds">Txat bitarteko soinuak</string>
-    <string name="pref_message_text_size">Mezuen letra tamaina</string>
     <string name="pref_view_log">Ikusi egunkaria</string>
     <string name="pref_saved_log">Egunkaria deskargen karpetan gorde da</string>
     <string name="pref_save_log_failed">Huts egin du egunkaria gordetzean</string>
@@ -481,6 +480,7 @@
     <string name="contact_not_verified">Ezin da %1$s egiaztatu</string>
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
     <string name="contact_setup_changed">Aldatu %1$s(r)en ezarpena</string>
+    <!-- notifications  -->
     <string name="notify_reply_button">Erantzun</string>
     <string name="notify_new_message">Mezu berria</string>
     <string name="notify_background_connection_enabled">Bigarren planoko konexioa gaituta</string>
@@ -514,7 +514,9 @@
     <string name="global_menu_view_developer_desktop">Garatzailea</string>
     <string name="global_menu_view_developer_tools_desktop">Garatzaile-tresnak</string>
     <string name="global_menu_help_desktop">Laguntza</string>
+    <!-- deprecated, use delta_chat_homepage instead -->
     <string name="global_menu_help_learn_desktop">Ikasi gehiago Delta Chat-i buruz</string>
+    <!-- deprecated, use contribute instead -->
     <string name="global_menu_help_contribute_desktop">Hartu parte GitHub-en</string>
     <string name="global_menu_help_report_desktop">Eman arazo baten berri</string>
     <string name="global_menu_help_about_desktop">Delta Chat-i buruz</string>

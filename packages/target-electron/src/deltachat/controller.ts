@@ -129,7 +129,7 @@ export default class DeltaChatController extends EventEmitter {
                   typeof event
                 >
                 delete event_clone.kind
-                logCoreEvent.debug(event.kind, contextId, event)
+                logCoreEvent.debug(contextId, event.kind, event)
               }
             }
           } catch (error) {
@@ -141,7 +141,7 @@ export default class DeltaChatController extends EventEmitter {
       serverPath
     )
 
-    await this.account_manager.start()
+    this.account_manager.start()
     log.info('HI')
 
     //todo? multiple instances, accounts is always writable

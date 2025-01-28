@@ -349,6 +349,7 @@ class MessageListStore extends Store<MessageListState> {
             this.effect.jumpToMessage({
               msgId: firstUnreadMsgId,
               highlight: false,
+              focus: false,
               // 'center' so that old messages are also shown, for context.
               // See https://github.com/deltachat/deltachat-desktop/issues/4284
               scrollIntoViewArg: { block: 'center' },
@@ -401,22 +402,37 @@ class MessageListStore extends Store<MessageListState> {
     ),
     /**
      * Loads and shows the message in the messages list.
-     * It can handle showing the message in a chat other than `this.chatId`,
-     * loading the message if it is missing from `this.state.messageCache`,
-     * and reloading `messageListItems` if the message is missing from there.
+     * It can handle loading the message if it is missing
+     * from `this.state.messageCache`,
+     * reloading `messageListItems` if the message is missing from there,
+     * and showing the message in a chat other than `this.chatId`.
+     *
+     * The latter (showing the message from a different chat), however,
+     * should not be used, because, as of 2025-01-19, we re-create
+     * `MessageListStore` when `chatId` or `accountId` changes.
+     *
      * @param msgId - when `undefined`, pop the jump stack, or,
      * if the stack is empty, jump to last message.
+     * @param addMessageIdToStack the ID of the message to remember,
+     * to later go back to it, using the "jump down" button.
+     * The message with the specified ID must belong to the chat with ID
+     * `MessageListStore.chatId`.
+     * For example, this must be ensured for message quotes,
+     * because they might belong to a different chat due to the
+     * "Reply Privately" feature.
      */
     jumpToMessage: this.scheduler.lockedQueuedEffect(
       'scroll',
       async ({
         msgId: jumpToMessageId,
         highlight = true,
+        focus,
         addMessageIdToStack,
         scrollIntoViewArg,
       }: {
         msgId: number | undefined
         highlight?: boolean
+        focus: boolean
         addMessageIdToStack?: undefined | number
         scrollIntoViewArg?: Parameters<HTMLElement['scrollIntoView']>[0]
       }) => {
@@ -492,6 +508,15 @@ class MessageListStore extends Store<MessageListState> {
 
         const isMessageInCurrentChat =
           this.accountId === accountId && this.chatId === chatId
+        if (!isMessageInCurrentChat) {
+          this.log.error(
+            'Tried to show messages from a different chat.\n' +
+              `this.accountId === ${this.accountId}, ` +
+              `this.chatId === ${this.chatId}, ` +
+              `target IDs: ${accountId}, ${chatId}. ` +
+              `jumpToMessageId === ${jumpToMessageId}`
+          )
+        }
 
         let messageListItems = this.state.messageListItems
         const findMessageIndex = (): number =>
@@ -627,6 +652,7 @@ class MessageListStore extends Store<MessageListState> {
             this.state.viewState,
             jumpToMessageId,
             highlight,
+            focus,
             scrollIntoViewArg
           ),
           jumpToMessageStack,
@@ -896,6 +922,7 @@ class MessageListStore extends Store<MessageListState> {
     onEventMessagesChanged: this.scheduler.queuedEffect(
       async (messageId: number) => {
         if (
+          messageId > C.DC_MSG_ID_LAST_SPECIAL &&
           this.state.messageListItems.findIndex(
             m => m.kind === 'message' && m.msg_id === messageId
           ) !== -1
@@ -916,6 +943,25 @@ class MessageListStore extends Store<MessageListState> {
             return
           }
         } else {
+          // The draft message does not affect the return value of
+          // `getMessageListItems()`.
+          // The main purpose of this check is not just reduced resource usage,
+          // but to fix the messages list "scrolling up"
+          // when you quote a message. See
+          // https://github.com/deltachat/deltachat-desktop/issues/3763#issuecomment-2602630507
+          //
+          // A more correct solution would perhaps be to reduce the delay
+          // between `getLastKnownScrollPosition()` and the actual scroll,
+          // perhaps by moving `getLastKnownScrollPosition()`
+          // to the render function of `MessageList`.
+          if (
+            messageId > C.DC_MSG_ID_LAST_SPECIAL &&
+            (await BackendRemote.rpc.getMessage(this.accountId, messageId))
+              .state === C.DC_STATE_OUT_DRAFT
+          ) {
+            return
+          }
+
           this.log.debug(
             'DC_EVENT_MSGS_CHANGED',
             'changed message seems to be a new message, refetching messageIds'

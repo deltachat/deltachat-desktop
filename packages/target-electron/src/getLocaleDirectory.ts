@@ -32,7 +32,7 @@ export function getLocaleDirectoryPath() {
       - _untranslated_en.json  // for untranslated strings
       - en.json                // for fallback
       
-      Path to the ivalid directory: ${alternativeDirectory}`
+      Path to the invalid directory: ${alternativeDirectory}`
     )
   }
 

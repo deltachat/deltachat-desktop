@@ -42,7 +42,7 @@ import useKeyBindingAction from '../../hooks/useKeyBindingAction'
 import { CloseButton } from '../Dialog'
 import { enterKeySendsKeyboardShortcuts } from '../KeyboardShortcutHint'
 import { AppPickerWrapper } from './AppPickerWrapper'
-import { AppInfo } from '../AppPicker'
+import { AppInfo, AppStoreUrl } from '../AppPicker'
 import OutsideClickHelper from '../OutsideClickHelper'
 
 const log = getLogger('renderer/composer')
@@ -221,7 +221,7 @@ const Composer = forwardRef<
     log.debug('App selected', appInfo)
     const response = await BackendRemote.rpc.getHttpResponse(
       selectedAccountId(),
-      'https://apps.testrun.org/' + appInfo.cache_relname
+      AppStoreUrl + appInfo.cache_relname
     )
     if (response?.blob?.length) {
       const path = await runtime.writeTempFileFromBase64(
@@ -398,15 +398,17 @@ const Composer = forwardRef<
               onPaste={handlePaste}
             />
           )}
-          <button
-            type='button'
-            className='emoji-button'
-            ref={pickerButtonRef}
-            onClick={onEmojiIconClick}
-            aria-label={tx('emoji')}
-          >
-            <span />
-          </button>
+          {!runtime.getRuntimeInfo().hideEmojiAndStickerPicker && (
+            <button
+              type='button'
+              className='emoji-button'
+              ref={pickerButtonRef}
+              onClick={onEmojiIconClick}
+              aria-label={tx('emoji')}
+            >
+              <span />
+            </button>
+          )}
           <div className='send-button-wrapper' onClick={composerSendMessage}>
             <button
               aria-label={tx('menu_send')}
@@ -440,12 +442,13 @@ export default Composer
 
 export type DraftObject = { chatId: number } & Pick<
   Type.Message,
-  'text' | 'file' | 'quote' | 'viewType' | 'vcardContact'
+  'id' | 'text' | 'file' | 'quote' | 'viewType' | 'vcardContact' | 'webxdcInfo'
 > &
   MessageTypeAttachmentSubset
 
 function emptyDraft(chatId: number | null): DraftObject {
   return {
+    id: 0,
     chatId: chatId || 0,
     text: '',
     file: null,
@@ -455,6 +458,7 @@ function emptyDraft(chatId: number | null): DraftObject {
     quote: null,
     viewType: 'Text',
     vcardContact: null,
+    webxdcInfo: null,
   }
 }
 
@@ -495,6 +499,7 @@ export function useDraft(
         } else {
           _setDraft(old => ({
             ...old,
+            id: newDraft.id,
             text: newDraft.text || '',
             file: newDraft.file,
             fileBytes: newDraft.fileBytes,
@@ -503,6 +508,7 @@ export function useDraft(
             viewType: newDraft.viewType,
             quote: newDraft.quote,
             vcardContact: newDraft.vcardContact,
+            webxdcInfo: newDraft.webxdcInfo,
           }))
           inputRef.current?.setText(newDraft.text)
         }
@@ -565,6 +571,7 @@ export function useDraft(
     if (newDraft) {
       _setDraft(old => ({
         ...old,
+        id: newDraft.id,
         file: newDraft.file,
         fileBytes: newDraft.fileBytes,
         fileMime: newDraft.fileMime,
@@ -572,6 +579,7 @@ export function useDraft(
         viewType: newDraft.viewType,
         quote: newDraft.quote,
         vcardContact: newDraft.vcardContact,
+        webxdcInfo: newDraft.webxdcInfo,
       }))
       // don't load text to prevent bugging back
     } else {
@@ -647,6 +655,7 @@ export function useDraft(
         msgId: messageId,
         msgChatId: chatId,
         highlight: true,
+        focus: false,
         // The message is usually already in view,
         // so let's not scroll at all if so.
         scrollIntoViewArg: { block: 'nearest' },

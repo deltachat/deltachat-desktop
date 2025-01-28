@@ -24,6 +24,7 @@ import { refreshTrayContextMenu } from '../tray.js'
 import { DesktopSettings } from '../desktop_settings.js'
 import { refresh as refreshTitleMenu } from '../menu.js'
 import { initMinWinDimensionHandling } from './helpers.js'
+import { setContentProtection } from '../content-protection.js'
 
 const log = getLogger('/mainWindow')
 
@@ -78,6 +79,8 @@ export function init(options: { hidden: boolean }) {
   mainWindow.filePathWhiteList = []
 
   initMinWinDimensionHandling(mainWindow, defaults.minWidth, defaults.minHeight)
+
+  setContentProtection(window)
 
   // disable network request to fetch dictionary
   // issue: https://github.com/electron/electron/issues/22995

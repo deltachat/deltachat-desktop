@@ -51,12 +51,17 @@
   }
 }
 
-.drag {
+// used on electron and tauri runtime (it is handled by tauri, this class is for electron)
+// means element is non-interactable and area can be used to window drag around
+*[data-tauri-drag-region] {
   // so it can be used to drag the window around
   -webkit-app-region: drag;
 }
 
-.no-drag {
+// used on electron and tauri runtime
+// (on tauri this is not nessesary, as tauri does not have the issue that all child elements also become drag areas
+// means element is interactable and area can not be used to window drag around
+*[data-no-drag-region] {
   -webkit-app-region: no-drag;
 }
 

@@ -24,7 +24,8 @@ export default function HeaderButton({
 }: Props) {
   return (
     <button
-      className={classNames(styles.headerButton, 'no-drag', className)}
+      data-no-drag-region
+      className={classNames(styles.headerButton, className)}
       {...props}
     >
       <Icon

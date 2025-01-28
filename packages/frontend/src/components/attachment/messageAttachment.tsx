@@ -23,6 +23,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/dialog/useDialog'
 import AudioPlayer from '../AudioPlayer'
 import { T } from '@deltachat/jsonrpc-client'
+import { selectedAccountId } from '../../ScreenController'
 
 type AttachmentProps = {
   text?: string
@@ -217,6 +218,19 @@ export function DraftAttachment({
     )
   } else if (isAudio(attachment.fileMime)) {
     return <AudioPlayer src={runtime.transformBlobURL(attachment.file || '')} />
+  } else if (attachment.webxdcInfo) {
+    const iconUrl = runtime.getWebxdcIconURL(selectedAccountId(), attachment.id)
+    return (
+      <div className='media-attachment-webxdc'>
+        <img className='icon' src={iconUrl} alt='app icon' />
+        <div className='text-part'>
+          <div className='name'>{attachment.webxdcInfo.name}</div>
+          <div className='size'>
+            {attachment.fileBytes ? filesize(attachment.fileBytes) : '?'}
+          </div>
+        </div>
+      </div>
+    )
   } else {
     const { file, fileName, fileBytes, fileMime } = attachment
     const extension = getExtension(attachment)

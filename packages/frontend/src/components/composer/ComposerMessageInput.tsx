@@ -32,7 +32,7 @@ export default class ComposerMessageInput extends React.Component<
   composerSize: number
   setCursorPosition: number | false
   textareaRef: React.RefObject<HTMLTextAreaElement>
-  saveDraft: ReturnType<typeof throttle>
+  throttledSaveDraft: ReturnType<typeof throttle>
   constructor(props: ComposerMessageInputProps) {
     super(props)
     this.state = {
@@ -49,7 +49,12 @@ export default class ComposerMessageInput extends React.Component<
     this.insertStringAtCursorPosition =
       this.insertStringAtCursorPosition.bind(this)
 
-    this.saveDraft = throttle((text, chatId) => {
+    // Remember that the draft might be updated from the outside
+    // of this component (with the `setText` method,
+    // e.g. when the draft gets cleared after sending a message).
+    // This can happen _after_ an `onChange` event but _before_
+    // the unrelying throttled function invokation.
+    this.throttledSaveDraft = throttle((text, chatId) => {
       if (this.state.chatId === chatId) {
         this.props.updateDraftText(text.trim() === '' ? '' : text, chatId)
       }
@@ -77,8 +82,16 @@ export default class ComposerMessageInput extends React.Component<
     return null
   }
 
+  /**
+   * Sets the text area value, and ensures that `updateDraftText`
+   * does not get invoked until the next change to the draft text.
+   *
+   * Useful for setting / clearing draft text afer loading it from core,
+   * e.g. after sending the message or opening a chat with an existing draft.
+   */
   setText(text: string | null) {
     this.setState({ text: text || '', loadingDraft: false })
+    this.throttledSaveDraft.cancel()
   }
 
   setComposerSize(size: number) {
@@ -94,10 +107,6 @@ export default class ComposerMessageInput extends React.Component<
 
   getText() {
     return this.state.text
-  }
-
-  clearText() {
-    this.setState({ text: '' })
   }
 
   componentDidUpdate(
@@ -132,17 +141,17 @@ export default class ComposerMessageInput extends React.Component<
   onChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     const text = e.target.value
     this.setState({ text /*error: false*/ })
-    this.saveDraft(text, this.state.chatId)
+    this.throttledSaveDraft(text, this.state.chatId)
   }
 
   keyEventToAction(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     const enterKeySends = this.props.enterKeySends
 
     // ENTER + CTRL
-    if (e.code === 'Enter' && (e.ctrlKey || e.metaKey)) {
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
       return 'SEND'
       // ENTER
-    } else if (e.code === 'Enter' && !e.shiftKey) {
+    } else if (e.key === 'Enter' && !e.shiftKey) {
       return enterKeySends ? 'SEND' : undefined
     }
   }
@@ -208,6 +217,7 @@ export default class ComposerMessageInput extends React.Component<
     this.setCursorPosition = textareaElem.selectionStart + str.length
 
     this.setState({ text: updatedText })
+    this.throttledSaveDraft(updatedText, this.state.chatId)
   }
 
   render() {

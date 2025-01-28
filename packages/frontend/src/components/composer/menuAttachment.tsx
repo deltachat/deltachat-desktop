@@ -78,7 +78,7 @@ export default function MenuAttachment({
 
   const addFilenameFile = async () => {
     // function for files
-    const { defaultPath, setLastPath } = rememberLastUsedPath(
+    const { defaultPath, setLastPath } = await rememberLastUsedPath(
       LastUsedSlot.Attachment
     )
     const files = await runtime.showOpenFileDialog({
@@ -102,7 +102,7 @@ export default function MenuAttachment({
 
   const addFilenameMedia = async () => {
     // function for media
-    const { defaultPath, setLastPath } = rememberLastUsedPath(
+    const { defaultPath, setLastPath } = await rememberLastUsedPath(
       LastUsedSlot.Attachment
     )
     const files = await runtime.showOpenFileDialog({
@@ -203,7 +203,7 @@ export default function MenuAttachment({
     },
     {
       icon: 'apps',
-      label: tx('app'),
+      label: tx('webxdc_app'),
       action: selectAppPicker.bind(null),
       dataTestid: 'open-app-picker',
     },

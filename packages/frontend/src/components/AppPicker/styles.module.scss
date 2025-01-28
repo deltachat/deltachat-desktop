@@ -45,6 +45,12 @@
   }
 }
 
+.searchInputButton {
+  position: absolute;
+  top: 2px;
+  right: 0;
+}
+
 .appIcon {
   width: 64px;
   height: 64px;
@@ -59,11 +65,19 @@
   p {
     margin: 2px 0;
   }
+  button {
+    border: none;
+    background: none;
+    color: var(--globalLinkColor);
+    text-align: left;
+    margin: 2px 0;
+    padding: 0;
+  }
 }
 
 .appDetails {
   p {
-    margin: 6px 0;
+    margin: 8px 0;
     span {
       font-weight: bold;
     }
@@ -71,7 +85,8 @@
 }
 
 .appDescription {
-  margin: 8px 0;
+  margin: 12px 0;
+  line-height: 20px;
 }
 
 .appName {

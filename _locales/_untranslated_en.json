@@ -15,9 +15,6 @@
   "background_sync_disabled_explaination": {
     "message": "Background sync disabled, profile is only synced when selected"
   },
-  "muted": {
-    "message": "Muted"
-  },
   "pref_all_accounts": {
     "message": "All Profiles"
   },
@@ -27,44 +24,11 @@
   "camera_access_failed": {
     "message": "Could not access video camera. You might want to check your video permissions or if the camera is used already by another program"
   },
-  "reset": {
-    "message": "Reset"
-  },
-  "crop_image": {
-    "message": "Crop Image"
-  },
-  "flip_image_horizontally": {
-    "message": "Flip image horizontally"
-  },
-  "flip_image_vertically": {
-    "message": "Flip image vertically"
-  },
-  "menu_global_map": {
-    "message": "Open global map"
-  },
-  "all_chats_map_title": {
-    "message": "Map for all chats (Profile '%1')"
-  },
-  "chat_map_title": {
-    "message": "Map for chat '%1'"
-  },
-  "menu_edit_broadcast_list": {
-    "message": "Edit Broadcast List"
-  },
-  "pref_use_system_ui_font": {
-    "message": "Use System UI Font"
-  },
   "search_in": {
     "message": "Search in %1$s"
   },
   "read_by": {
     "message": "Read by"
-  },
-  "edit_name_explain": {
-    "message": "Set a nickname that will be shown to you instead of '%1'. Leave empty to use the contact's chosen name."
-  },
-  "edit_name_placeholder": {
-    "message": "Nickname for '%1'"
   },
   "join_group": {
     "message": "Join Group"
@@ -75,41 +39,8 @@
   "react_more_emojis": {
     "message": "More emojis…"
   },
-  "paste": {
-    "message": "Paste"
-  },
   "contact_is_blocked": {
     "message": "This contact is blocked"
-  },
-  "app": {
-    "message": "App"
-  },
-  "tool": {
-    "message": "Tools"
-  },
-  "game": {
-    "message": "Games"
-  },
-  "search": {
-    "message": "Search..."
-  },
-  "app_info": {
-    "message": "App Info"
-  },
-  "app_author": {
-    "message": "Author"
-  },
-  "app_size": {
-    "message": "Size"
-  },
-  "app_source": {
-    "message": "Source"
-  },
-  "app_date_published": {
-    "message": "Published"
-  },
-  "add_to_chat": {
-    "message": "Add to Chat"
   }
   "multidevice_connection_takes_too_long": {
     "message": "This takes longer than expected 🐌 make sure both devices are on the same Wi-Fi or network and check troubleshooting"

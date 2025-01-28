@@ -61,17 +61,6 @@ $tab-height: 46px;
       }
     }
 
-    & > .loading-errors {
-      background-color: rgb(255, 90, 90);
-      color: black;
-      padding: 14px;
-      font-size: larger;
-      ul {
-        font-size: medium;
-        margin: 0;
-      }
-    }
-
     &.gallery-image-object-fit_contain {
       --gallery-image-object-fit: contain;
     }

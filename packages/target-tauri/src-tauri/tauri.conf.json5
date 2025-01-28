@@ -1,0 +1,91 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "deltachat-tauri",
+  "identifier": "chat.delta.desktop.tauri",
+  "build": {
+    "devUrl": null,
+    "beforeDevCommand": "pnpm build",
+    "beforeBuildCommand": "pnpm build4production",
+    "frontendDist": "../html-dist"
+  },
+  "app": {
+    "withGlobalTauri": false,
+    "windows": [
+      {
+        "label": "main",
+        "title": "Delta Chat Tauri",
+        "width": 800,
+        "height": 600,
+        "url": "tauri_main.html"
+      }
+    ],
+    "security": {
+      "csp": {
+        "default-src": "none",
+        "connect-src": "'self' ipc: http://ipc.localhost",
+        "style-src": "'self' 'unsafe-inline'",
+        "font-src": "'self'",
+        "script-src": "'self' 'wasm-unsafe-eval'",
+        "worker-src": "blob: ",
+        "child-src": "blob: ",
+        "img-src": "'self' data: blob: dcblob: webxdc-icon: ",
+        "media-src": "'self' dcblob:"
+      },
+      // TODO postponed to later
+      // "pattern": {
+      //   "use": "isolation",
+      //   "options": {
+      //     "dir": "../isolation"
+      //   }
+      // },
+      "capabilities": [
+        {
+          "identifier": "Main window",
+          "windows": ["main"],
+          "permissions": [
+            "log:allow-log",
+            // list of core permissions can be found under https://github.com/tauri-apps/tauri/tree/dev/crates/tauri/permissions
+            // or when running `pnpm tauri permission list`
+            "core:event:allow-emit",
+            "core:event:allow-listen",
+            "clipboard-manager:allow-read-image",
+            "clipboard-manager:allow-read-text",
+            "clipboard-manager:allow-write-image",
+            "clipboard-manager:allow-write-text",
+            // TODO dialog permissions
+            "store:allow-get-store",
+            "store:allow-entries",
+            "store:allow-save",
+            "store:allow-set",
+            // borderless titlebar
+            "core:window:allow-toggle-maximize",
+            "core:window:allow-start-dragging",
+            // open current logfile & open links
+            "shell:allow-open",
+            // Badge counter
+            "core:window:allow-set-badge-count"
+          ]
+        }
+      ]
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "resources": {
+      "../../../_locales/*.json" : "_locales"
+    },
+    "iOS": {
+      "minimumSystemVersion": "13.0",
+      "developmentTeam": "8Y86453UA8", // merlinux,
+      "frameworks": ["SystemConfiguration"] // needed for system configuration crate, which is used by iroh-net
+    }
+  }
+}

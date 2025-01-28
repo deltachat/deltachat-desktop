@@ -81,10 +81,11 @@ export interface Runtime {
   readClipboardImage(): Promise<string | null>
   writeClipboardText(text: string): Promise<void>
   writeClipboardImage(path: string): Promise<void>
-  getAppPath(name: RuntimeAppPath): string
+  getAppPath(name: RuntimeAppPath): Promise<string>
   openMapsWebxdc(accountId: number, chatId?: number): void
+  /** return value is error (this comes from electron: TODO convert to real error) */
   openPath(path: string): Promise<string>
-  getConfigPath(): string
+  getConfigPath(): string // TODO: rename -> this is for app data directory, it should include the scheme - seems to be only used for bg path right now
 
   // webxdc
   openWebxdc(msgId: number, params: DcOpenWebxdcParameters): void
@@ -165,21 +166,21 @@ export const runtime: Runtime = (window as any).r
 delete (window as any).r
 
 // copied the ones from electron
-// TODO: remove the ones that we don't use / plan on using to make it simpler to implement for other targets/runtimes
+// commented out the ones that we don't use, to make it simpler to implement for other targets/runtimes
 export type RuntimeAppPath =
   | 'home'
-  | 'appData'
-  | 'userData'
-  | 'sessionData'
-  | 'temp'
-  | 'exe'
-  | 'module'
+  // | 'appData'
+  // | 'userData'
+  // | 'sessionData'
+  // | 'temp'
+  // | 'exe'
+  // | 'module'
   | 'desktop'
   | 'documents'
   | 'downloads'
-  | 'music'
+  // | 'music'
   | 'pictures'
-  | 'videos'
-  | 'recent'
-  | 'logs'
-  | 'crashDumps'
+// | 'videos'
+// | 'recent' - exists in electron, but not yet in tauri - anyways we don't use it yet
+// | 'logs'
+// | 'crashDumps'

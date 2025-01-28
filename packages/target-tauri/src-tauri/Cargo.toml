@@ -1,0 +1,49 @@
+[package]
+name = "deltachat-tauri"
+version = "1.52.1"
+description = "Delta Chat Desktop Tauri Edition"
+authors = ["DeltaChat Contributors"]
+edition = "2021"
+rust-version = "1.84"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[lib]
+# The `_lib` suffix may seem redundant but it is necessary
+# to make the lib name unique and wouldn't conflict with the bin name.
+# This seems to be only an issue on Windows, see https://github.com/rust-lang/cargo/issues/8519
+name = "deltachat_tauri_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [ "config-json5"] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+tauri-plugin-shell = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = "1.38.1"
+deltachat = { git = "https://github.com/deltachat/deltachat-core-rust", tag = "v1.154.1", version = "1.154.1" }
+deltachat-jsonrpc = { git = "https://github.com/deltachat/deltachat-core-rust", tag = "v1.154.1", version = "1.154.1" }
+tauri-plugin-dialog = "2"
+tauri-plugin-clipboard-manager = "2.0.2"
+log = "0.4.22"
+anyhow = "1.0.93"
+futures-lite = "2.5.0"
+tauri-plugin-devtools = {version = "2.0.0", optional = true}
+tauri-plugin-log = "2"
+tauri-plugin-store = "2"
+http = "1.1.0"
+mime = "0.3.17"
+percent-encoding = "2"
+
+[target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+tauri-plugin-single-instance = "2"
+tauri-plugin-window-state = "2"
+
+[features]
+crabnebula_extras = ["tauri-plugin-devtools"]
+# on macOS this uses private apis, so can't be uploaded to Mac Appstore with this enabled.
+inspector_in_production = ["tauri/devtools"]
+default = ["inspector_in_production"]

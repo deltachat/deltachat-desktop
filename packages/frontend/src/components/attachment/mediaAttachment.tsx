@@ -79,6 +79,7 @@ const contextMenuFactory = (
           accountId,
           msgId: message.id,
           msgChatId: message.chatId,
+          focus: true,
           scrollIntoViewArg: { block: 'center' },
         }),
     },

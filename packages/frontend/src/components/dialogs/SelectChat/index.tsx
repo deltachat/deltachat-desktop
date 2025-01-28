@@ -46,7 +46,8 @@ export default function SelectChat(props: Props) {
       <DialogBody className={styles.selectChatDialogBody}>
         <div className='select-chat-account-input'>
           <input
-            className='search-input no-drag'
+            className='search-input'
+            data-no-drag-region
             onChange={onSearchChange}
             value={queryStr}
             placeholder={tx('search')}

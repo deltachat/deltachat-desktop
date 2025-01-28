@@ -113,7 +113,7 @@ export function keyDownEvent2Action(
         return KeybindAction.Composer_CancelReply
       }
     } else if (
-      ev.code === 'Enter' &&
+      ev.key === 'Enter' &&
       (ev.target as any).id === 'chat-list-search'
     ) {
       return KeybindAction.ChatList_SearchSelectFirstChat

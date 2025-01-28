@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import classNames from 'classnames'
-import moment from 'moment'
 import { filesize } from 'filesize'
 import { C } from '@deltachat/jsonrpc-client'
 
@@ -18,6 +17,7 @@ import {
   FooterActionButton,
   FooterActions,
 } from '../Dialog'
+import SearchInputButton from '../SearchInput/SearchInputButton'
 
 export interface AppInfo {
   app_id: string
@@ -38,7 +38,7 @@ export interface AppInfo {
 export const AppStoreUrl = 'https://apps.testrun.org/'
 
 const enum AppCategoryEnum {
-  all = 'all',
+  home = 'home',
   tool = 'tool',
   game = 'game',
 }
@@ -53,10 +53,14 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
   const tx = useTranslationFunction()
   const [searchQuery, setSearchQuery] = useState('')
   const [isOffline, setIsOffline] = useState(false)
-  const [selectedCategory, setSelectedCategory] = useState(AppCategoryEnum.all)
+  const [selectedCategory, setSelectedCategory] = useState(AppCategoryEnum.home)
   const [selectedAppInfo, setSelectedAppInfo] = useState<AppInfo | null>(null)
   const [icons, setIcons] = useState<{ [key: string]: string }>({})
-  const categories = [AppCategoryEnum.tool, AppCategoryEnum.game]
+  const categories = [
+    AppCategoryEnum.home,
+    AppCategoryEnum.tool,
+    AppCategoryEnum.game,
+  ]
 
   useEffect(() => {
     const loadIcons = async () => {
@@ -78,10 +82,6 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
         if (response?.blob !== undefined) {
           newIcons[app.app_id] = `data:image/png;base64,${response.blob}`
         }
-        app.short_description = app.description.split('\n')[0]
-        const url = new URL(app.source_code_url)
-        app.author = url.pathname.split('/')[1]
-        app.date = moment(app.date).format('LL')
         count++
         if (count % 10 === 0) {
           setIcons({ ...newIcons })
@@ -92,25 +92,47 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
     loadIcons()
   }, [apps, isOffline])
 
-  const handleCategoryClick = useCallback(
-    (category: AppCategoryEnum) => {
-      setSelectedCategory(
-        category === selectedCategory ? AppCategoryEnum.all : category
-      )
-    },
-    [selectedCategory, setSelectedCategory]
-  )
-
   const filteredApps = useMemo(() => {
-    return apps.filter(app => {
-      const matchesSearch = app.name
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase())
-      const matchesCategory =
-        selectedCategory === AppCategoryEnum.all ||
+    const lowerCaseQuery = searchQuery.toLowerCase()
+    const findByRelevance = (apps: AppInfo[]) => {
+      const queryEqualsAuthor = apps.filter(
+        app => app.author && app.author.toLowerCase() === lowerCaseQuery
+      )
+
+      const startsWithQuery = apps.filter(
+        app =>
+          !queryEqualsAuthor.includes(app) &&
+          app.name.toLowerCase().startsWith(lowerCaseQuery)
+      )
+
+      const queryInTitle = apps.filter(
+        app =>
+          !queryEqualsAuthor.includes(app) &&
+          !startsWithQuery.includes(app) &&
+          app.name.toLowerCase().includes(lowerCaseQuery)
+      )
+
+      const queryInShortDescription = apps.filter(
+        app =>
+          !queryEqualsAuthor.includes(app) &&
+          !startsWithQuery.includes(app) &&
+          !queryInTitle.includes(app) &&
+          app.short_description &&
+          app.short_description.toLowerCase().includes(lowerCaseQuery)
+      )
+
+      return [
+        ...queryEqualsAuthor,
+        ...startsWithQuery,
+        ...queryInTitle,
+        ...queryInShortDescription,
+      ]
+    }
+    return findByRelevance(apps).filter(
+      app =>
+        selectedCategory === AppCategoryEnum.home ||
         app.category === selectedCategory
-      return matchesSearch && matchesCategory
-    })
+    )
   }, [apps, searchQuery, selectedCategory])
 
   const AppInfoOverlay = (props: {
@@ -127,29 +149,26 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
     }
     return (
       <DialogWithHeader
-        title={tx('app_info')}
+        title={tx('webxdc_app')}
         className='app-info-dialog'
         onClose={onClose}
       >
         <DialogBody>
           <DialogContent>
-            {renderAppInfo(app)}
+            {renderAppInfo(app, setSearchQuery, setSelectedAppInfo)}
             <div className={styles.appDetails}>
               <div className={styles.appDescription}>{app.description}</div>
               <p>
                 <span>{tx('app_date_published')}:</span> {app.date}
               </p>
               <p>
-                <span>{tx('app_size')}:</span> {filesize(app.size)}
-              </p>
-              <p>
-                <span>{tx('app_source')}:</span>{' '}
+                <span>{tx('source_code')}:</span>{' '}
                 <a href='${app.source_code_url}' target='_blank'>
                   {app.source_code_url}
                 </a>
               </p>
               <p>
-                <span>{tx('app_author')}:</span> {app.author}
+                <span>{tx('app_size')}:</span> {filesize(app.size)}
               </p>
             </div>
           </DialogContent>
@@ -168,7 +187,11 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
     )
   }
 
-  const renderAppInfo = (app: AppInfo) => {
+  const renderAppInfo = (
+    app: AppInfo,
+    setSearchQuery?: (query: string) => void,
+    setSelectedAppInfo?: (app: AppInfo | null) => void
+  ) => {
     return (
       <div className={styles.appItem}>
         <img
@@ -179,10 +202,30 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
         <div className={styles.appInfo}>
           <div className={styles.appName}>{app.name}</div>
           <p>{app.short_description}</p>
-          <p>{app.author}</p>
+          {setSearchQuery && app.author && (
+            <button
+              onClick={() => {
+                if (setSearchQuery && app.author) {
+                  setSearchQuery(app.author)
+                  if (setSelectedAppInfo) {
+                    setSelectedAppInfo(null)
+                  }
+                }
+              }}
+            >
+              {app.author}
+            </button>
+          )}
+          {!setSearchQuery && app.author && <p>{app.author}</p>}
         </div>
       </div>
     )
+  }
+
+  const categoryTitle = (selectedCategory: AppCategoryEnum) => {
+    return selectedCategory === AppCategoryEnum.home
+      ? tx('home')
+      : tx(selectedCategory + 's')
   }
 
   return (
@@ -195,6 +238,14 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
         onChange={e => setSearchQuery(e.target.value)}
         className={styles.searchInput}
       />
+      {searchQuery && (
+        <SearchInputButton
+          className={styles.searchInputButton}
+          aria-label={tx('delete')}
+          icon='cross'
+          onClick={() => setSearchQuery('')}
+        />
+      )}
       <div className={styles.appPickerList}>
         {!isOffline && Object.keys(icons).length > 0 ? (
           <>
@@ -226,7 +277,7 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
             className={classNames(styles.tab, {
               [styles.activeTab]: selectedCategory === category,
             })}
-            onClick={() => handleCategoryClick(category)}
+            onClick={() => setSelectedCategory(category)}
           >
             <div className={styles.category}>
               <img
@@ -234,7 +285,9 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
                 src={`./images/${category}.svg`}
                 alt={category}
               />
-              <div className={styles.categoryTitle}>{tx(category)}</div>
+              <div className={styles.categoryTitle}>
+                {categoryTitle(category)}
+              </div>
             </div>
           </button>
         ))}

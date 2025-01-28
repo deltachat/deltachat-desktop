@@ -4,7 +4,7 @@
     <string name="app_name">Delta Chat</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancelar</string>
-   <string name="clear_search">Eliminar busca</string>
+    <string name="clear_search">Eliminar busca</string>
     <string name="yes">Si</string>
     <string name="no">Non</string>
     <string name="select">Seleccionar</string>
@@ -591,7 +591,6 @@
     <string name="pref_app_access">Acceso a app</string>
     <string name="pref_chats">Conversas</string>
     <string name="pref_in_chat_sounds">Sons na conversa</string>
-    <string name="pref_message_text_size">Tamaño da letra na mensaxe</string>
     <string name="pref_view_log">Ver rexistro</string>
     <string name="pref_saved_log">Gardouse o rexistro no cartafol \"Descargas\"</string>
     <string name="pref_save_log_failed">Non se puido gardar o rexistro</string>
@@ -803,8 +802,6 @@
     <string name="mailto_link_could_not_be_decoded">a ligazón mailto non se puido descodificar: %1$s</string>
 
     <!-- notifications  -->
-    <!-- deprecated, use mark_as_read or mark_as_read_short -->
-    <string name="notify_dismiss">Desbotar</string>
     <string name="notify_reply_button">Responder</string>
     <string name="notify_new_message">Nova mensaxe</string>
     <string name="notify_background_connection_enabled">Conexión en segundo plano establecida</string>
@@ -851,7 +848,9 @@
     <string name="global_menu_view_developer_desktop">Desenvolvedora</string>
     <string name="global_menu_view_developer_tools_desktop">Ferramentas de desenvolvedora</string>
     <string name="global_menu_help_desktop">Axuda</string>
+    <!-- deprecated, use delta_chat_homepage instead -->
     <string name="global_menu_help_learn_desktop">Coñece máis sobre Delta Chat</string>
+    <!-- deprecated, use contribute instead -->
     <string name="global_menu_help_contribute_desktop">Contribúe en GitHub</string>
     <string name="global_menu_help_report_desktop">Informa dun fallo</string>
     <string name="global_menu_help_about_desktop">Acerca de Delta Chat</string>
@@ -932,8 +931,6 @@
     <string name="InfoPlist_NSMicrophoneUsageDescription">Permitindo o acceso ao micrófono poderás gravar audio.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Permitindo o acceso a galería de fotos poderás subir imaxes desde ela.</string>
     <string name="InfoPlist_NSPhotoLibraryAddUsageDescription">Delta Chat quere gardar imaxes na galería de fotos.</string>
-
-
     <string name="pref_background_notifications_rationale">Para manter a conexión co servidor de correo e recibir mensaxes en segundo plano, ignora as optimizacións de batería no seguinte paso.\n\nDelta Chat utiliza moi poucos recursos e preocúpase de non esgotar a batería.</string>
     <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
     <string name="perm_enable_bg_reminder_title">Toca aquí para recibir mensaxes mentras Delta Chat está en segundo plano.</string>

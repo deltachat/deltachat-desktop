@@ -4,8 +4,6 @@
     <string name="app_name">Delta Chat</string>
     <string name="ok">OK</string>
     <string name="cancel">Peruuta</string>
-   <!-- deprecated, the word "or" to separate blocks in the user interface that are mutually exclusive -->
-    <string name="or_separator">tai</string>
     <string name="clear_search">Tyhjennä haku</string>
     <string name="yes">Kyllä</string>
     <string name="no">Ei</string>
@@ -427,9 +425,6 @@
     <string name="send_file_to">Lähetä \"%1$s\" kohteeseen...</string>
     <!-- title shown above a list contacts where one should be selected (eg. when a webxdc attempts to send a message to a chat) -->
     <string name="send_message_to">Lähetä viesti kohteeseen...</string>
-    <string name="enable_realtime">Reaaliaikaiset Webxdc -kanavat</string>
-    <string name="enable_realtime_explain">Ota Webxdc:n reaaliaikaiset ohjelmointirajapinnat käyttöön niin voit luoda suoria yhteyksiä laitteiden välillä.</string>
-
     <!-- map -->
     <string name="filter_map_on_time">Näytä sijainnit aikajanalla</string>
     <string name="show_location_traces">Näytä jäljet</string>
@@ -512,10 +507,6 @@
     <string name="multidevice_transfer_done_devicemsg">ℹ️ Profiili siirretty toiselle laitteellesi.</string>
     <!-- Shown beside progress bar, stay short -->
     <string name="preparing_account">Valmistellaan profiilia...</string>
-    <!-- deprecated, shown beside progress bar, stay short -->
-    <string name="waiting_for_receiver">Odotetaan vastaanottajaa...</string>
-    <!-- deprecated, shown beside progress bar, stay short -->
-    <string name="receiver_connected">Vastaanottaja yhdistetty...</string>
     <!-- Shown beside progress bar, stay short -->
     <string name="transferring">Siirretään...</string>
     <string name="troubleshooting">Vianetsintä</string>
@@ -693,7 +684,6 @@
     <string name="pref_app_access">Sovelluksen pääsy</string>
     <string name="pref_chats">Keskustelut</string>
     <string name="pref_in_chat_sounds">Keskustelunaikaiset äänet</string>
-    <string name="pref_message_text_size">Viestin fonttikoko</string>
     <string name="pref_view_log">Näytä loki</string>
     <string name="pref_saved_log">Tallenna loki \"Lataukset\" -kansioon</string>
     <string name="pref_save_log_failed">Lokin tallennus epäonnistui</string>
@@ -976,8 +966,6 @@
     <string name="mailto_link_could_not_be_decoded">mailto-linkkiä ei voitu selvittää: %1$s</string>
 
     <!-- notifications  -->
-    <!-- deprecated, use mark_as_read or mark_as_read_short -->
-    <string name="notify_dismiss">Hylkää</string>
     <string name="notify_reply_button">Vastaa</string>
     <string name="notify_new_message">Uusi viesti</string>
     <string name="notify_background_connection_enabled">Yhteys käynnissä taustalla</string>
@@ -1033,7 +1021,9 @@
     <string name="global_menu_view_developer_desktop">Kehittäjä</string>
     <string name="global_menu_view_developer_tools_desktop">Kehittäjätyökalut</string>
     <string name="global_menu_help_desktop">Ohje</string>
+    <!-- deprecated, use delta_chat_homepage instead -->
     <string name="global_menu_help_learn_desktop">Lisätietoja Delta Chatista</string>
+    <!-- deprecated, use contribute instead -->
     <string name="global_menu_help_contribute_desktop">Osallistu GitHubissa</string>
     <string name="global_menu_help_report_desktop">Ilmoita ongelma</string>
     <string name="global_menu_help_about_desktop">Tietoja Delta Chatista</string>
@@ -1108,9 +1098,6 @@
     <string name="last_check_at">Tarkistettu %1$s</string>
     <!-- iOS webxdc selector -->
     <string name="webxdc_selector_empty_hint">Kaikissa keskusteluissa jaetut yksityiset sovellukset näkyvät tässä. \"Tiedostot\" näyttää ladatut yksityiset sovellukset.</string>
-    <!-- iOS webxdc shortcut page -->
-    <string name="shortcut_step1_tap_share_btn">Napauta jakamispainiketta.</string>
-    <string name="shortcut_step2_tap_add_to_home_screen">Valitse \"Lisää aloitusnäytölle\" lisätäksesi sovelluksen puhelimesi aloitusnäytölle.</string>
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Delta Chat käyttää kameraa kuvien ja videoiden kuvaamiseen ja lähettämiseen sekä QR-koodien skannaamiseen.</string>
     <string name="InfoPlist_NSContactsUsageDescription">Delta Chat käyttää yhteystietojasi näyttämään listan sähköpostiosoitteista, joihin voit kirjoittaa. Delta Chatilla ei ole palvelimia, eikä yhteystietojasi lähetetä mihinkään.</string>
@@ -1119,8 +1106,6 @@
     <string name="InfoPlist_NSMicrophoneUsageDescription">Delta Chat käyttää mikrofonia ääniviestien ja äänellisten videoiden tallentamiseen ja lähettämiseen.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Delta Chat antaa sinun valita, mitkä kuvat kirjastostasi haluat lähettää.</string>
     <string name="InfoPlist_NSPhotoLibraryAddUsageDescription">Delta Chat haluaa tallentaa kuvia kirjastoosi.</string>
-
-
     <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
     <string name="pref_instant_delivery">Välitön toimitus</string>
     <string name="pref_background_notifications">Käytä taustayhteyttä</string>

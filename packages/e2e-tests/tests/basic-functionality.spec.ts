@@ -188,9 +188,10 @@ test('add app from picker to chat', async ({ page }) => {
     .count()
   expect(appsCount).toBeGreaterThan(0)
   await page.locator('.styles_module_searchInput').fill('Cal')
+  const appName = 'Calendar'
   const calendarApp = page
     .locator('.styles_module_appPickerList button')
-    .getByText('Calendar')
+    .getByText(appName)
     .first()
   expect(calendarApp).toBeVisible()
   calendarApp.click()
@@ -198,10 +199,11 @@ test('add app from picker to chat', async ({ page }) => {
   await expect(appInfoDialog).toBeVisible()
   await page.getByTestId('add-app-to-chat').click()
   const appDraft = page.locator('.attachment-quote-section .text-part')
-  await expect(appDraft).toContainText('webxdc-calendar')
+  await expect(appDraft).toContainText(appName)
   await page.locator('.send-button-wrapper button').click()
-  const webxdcMessage = await page.locator('.msg-body .webxdc')
-  expect(webxdcMessage).toContainText('Calendar')
+  const webxdcMessage = page.locator('.msg-body .webxdc')
+  await webxdcMessage.isVisible()
+  expect(webxdcMessage).toContainText(appName)
 })
 
 test('delete profiles', async ({ page }) => {

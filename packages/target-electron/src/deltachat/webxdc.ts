@@ -31,6 +31,7 @@ import {
   refresh as refreshTitleMenu,
 } from '../menu.js'
 import { T } from '@deltachat/jsonrpc-client'
+import { setContentProtection } from '../content-protection.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -271,6 +272,7 @@ export default class DCWebxdc extends SplitOut {
         alwaysOnTop: main_window?.isAlwaysOnTop(),
         show: false,
       })
+      setContentProtection(webxdcWindow)
       // reposition the window to last position (or default)
       webxdcWindow.setBounds(lastBounds, true)
       // show after repositioning to avoid blinking
@@ -706,20 +708,21 @@ If you think that's a bug and you need that permission, then please open an issu
           )
         }
         if (msgId) {
-          let chatName = tx('all_chats_map_title', [accountId.toString()])
+          let chatName = tx('menu_show_global_map')
           if (chatId) {
             const relatedChatInfo = await this.rpc.getBasicChatInfo(
               accountId,
               chatId
             )
-            chatName = tx('chat_map_title', [relatedChatInfo.name])
+            chatName = tx('locations') + ' - ' + relatedChatInfo.name
           } else {
             const accountInfo = await this.rpc.getAccountInfo(accountId)
             if (
               'displayName' in accountInfo &&
               accountInfo.displayName !== null
             ) {
-              chatName = tx('all_chats_map_title', accountInfo.displayName)
+              chatName =
+                tx('menu_show_global_map') + ' - ' + accountInfo.displayName
             }
           }
           // if map is already (or still) open, close it

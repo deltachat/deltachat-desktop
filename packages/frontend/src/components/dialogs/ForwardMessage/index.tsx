@@ -50,7 +50,12 @@ export default function ForwardMessage(props: ForwardMessageProps) {
         )
         const lastMessage = messageIds[messageIds.length - 1]
         if (lastMessage) {
-          jumpToMessage({ accountId, msgId: lastMessage, msgChatId: chatId })
+          jumpToMessage({
+            accountId,
+            msgId: lastMessage,
+            msgChatId: chatId,
+            focus: false,
+          })
         }
       } else {
         selectChat(accountId, message.chatId)
