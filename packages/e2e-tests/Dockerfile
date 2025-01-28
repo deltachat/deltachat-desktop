@@ -3,6 +3,7 @@ FROM node:20.11-bullseye-slim
 ARG uid
 ARG gid
 
+# git is needed for gatherBuildInfo.js in build process
 RUN apt update && apt upgrade -y && apt install -y git
 
 # add a user "noone" with the same uid and gid as the host user

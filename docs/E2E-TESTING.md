@@ -43,7 +43,7 @@ Requirements: docker
 > ⚠ To avoid having data belonging to root in your working dir
 > you have to add you local user UID & GID to a .env file in packages/e2e-tests
 >
-> To get your UID/GID run `id`in a terminal
+> To get your UID/GID run `id` in a terminal
 
 If you run `pnpm e2e:docker` a container based on a linux/node image will be started and the tests will be executed there
 
