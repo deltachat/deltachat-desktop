@@ -34,6 +34,7 @@ import type {
 } from '@deltachat-desktop/shared/logger.js'
 import type { setLogHandler as setLogHandlerFunction } from '@deltachat-desktop/shared/logger.js'
 
+
 let logJsonrpcConnection = false
 
 class TauriTransport extends yerpc.BaseTransport {
@@ -256,6 +257,10 @@ class TauriRuntime implements Runtime {
     }
     this.store = store
     this.currentLogFileLocation = await invoke('get_current_logfile')
+
+    listen<string>('locale_reloaded', (event) => {
+      this.onChooseLanguage?.(event.payload)
+    });
   }
   reloadWebContent(): void {
     // for now use the browser method as long as it is sufficient
@@ -400,8 +405,8 @@ class TauriRuntime implements Runtime {
       locale: locale || (await this.getDesktopSettings()).locale || 'en',
     })
   }
-  setLocale(_locale: string): Promise<void> {
-    throw new Error('Method not implemented.35')
+  setLocale(locale: string): Promise<void> {
+    return invoke('change_lang', {locale});
   }
   setBadgeCounter(value: number): void {
     getCurrentWindow().setBadgeCount(value === 0 ? undefined : value)
