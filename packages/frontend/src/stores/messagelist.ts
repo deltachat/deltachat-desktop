@@ -493,8 +493,6 @@ class MessageListStore extends Store<MessageListState> {
 
         this.log.debug('jumpToMessage with messageId: ', jumpToMessageId)
         const accountId = selectedAccountId()
-        // these methods were called in backend before
-        // might be an issue if DeltaBackend.call has a significant delay
 
         if (!accountId) {
           throw new Error('no account set')
