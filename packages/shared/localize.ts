@@ -47,7 +47,7 @@ export function translate(
     // Before you ask, yes, _all_ languages have 'other' (source?)
     log.errorWithoutStackTrace(err)
 
-    pluralRules = new Intl.PluralRules('en_US')
+    pluralRules = new Intl.PluralRules('en')
   }
 
   function getMessage(
