@@ -498,7 +498,14 @@ class MessageListStore extends Store<MessageListState> {
           throw new Error('no account set')
         }
 
+        // As was said in this function's docstring,
+        // it should not be called for messages that are in a different chat,
+        // so we know the chatId in advance.
+        // However, let's keep the code that supports arbitrary chatId,
+        // which can be "enabled" by setting `chatIdPreset = undefined`.
+        const chatIdPreset: number | undefined = this.chatId
         let chatId: number | undefined = undefined
+
         let jumpToMessageStack: number[] = []
         if (jumpToMessageId === undefined) {
           // jump down
@@ -510,9 +517,10 @@ class MessageListStore extends Store<MessageListState> {
             )
             jumpToMessageId =
               this.state.jumpToMessageStack[jumpToMessageStackLength - 1]
-            chatId = (
-              await BackendRemote.rpc.getMessage(accountId, jumpToMessageId)
-            ).chatId
+            chatId =
+              chatIdPreset ??
+              (await BackendRemote.rpc.getMessage(accountId, jumpToMessageId))
+                .chatId
           } else {
             const items = this.state.messageListItems
               .map(m =>
@@ -520,19 +528,21 @@ class MessageListStore extends Store<MessageListState> {
               )
               .filter(msgId => msgId !== C.DC_MSG_ID_LAST_SPECIAL)
             jumpToMessageId = items[items.length - 1]
-            chatId = (
-              await BackendRemote.rpc.getMessage(accountId, jumpToMessageId)
-            ).chatId
+            chatId =
+              chatIdPreset ??
+              (await BackendRemote.rpc.getMessage(accountId, jumpToMessageId))
+                .chatId
             jumpToMessageStack = []
             highlight = false
           }
         } else {
           const fromCache = this.state.messageCache[jumpToMessageId]
-          chatId = (
-            fromCache?.kind === 'message'
+          chatId =
+            chatIdPreset ??
+            (fromCache?.kind === 'message'
               ? fromCache
               : await BackendRemote.rpc.getMessage(accountId, jumpToMessageId)
-          ).chatId
+            ).chatId
 
           if (addMessageIdToStack === undefined) {
             // reset jumpToMessageStack
