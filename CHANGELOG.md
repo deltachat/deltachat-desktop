@@ -51,6 +51,7 @@
 - improve performance a little #4561, #4552, #4584
 - fix "Empty Hints" in "All Media" view #4609
 - fix pasting of (non image) files into composer #4533
+- fix translation PluralRules fallback to 'en' not to 'en-US' (en-US isnt valid) #4585
 
 <a id="1_52_1"></a>
 
