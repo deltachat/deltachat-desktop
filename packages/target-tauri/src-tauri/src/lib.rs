@@ -1,14 +1,9 @@
-use std::{
-    path::{Path, PathBuf},
-    time::SystemTime,
-};
-
-use tauri::{image::Image, AppHandle, Manager};
-use tauri_plugin_clipboard_manager::ClipboardExt;
+use clipboard::copy_image_to_clipboard;
+use std::time::SystemTime;
+use tauri::Manager;
 use tauri_plugin_store::StoreExt;
 
 use state::{app::AppState, deltachat::DeltaChatAppState};
-
 mod app_path;
 mod blobs;
 mod clipboard;
@@ -66,16 +61,6 @@ fn ui_frontend_ready(state: tauri::State<AppState>) -> Result<(), String> {
 #[tauri::command]
 fn get_current_logfile(state: tauri::State<AppState>) -> String {
     state.current_log_file_path.clone()
-}
-
-#[tauri::command]
-fn copy_image_to_clipboard(app: AppHandle, path: &Path) -> Result<(), String> {
-    println!("copy_image_to_clipboard: {:?}", path);
-    let image = Image::from_path(path).map_err(|e| format!("failed to load image: {:#}", e))?;
-    app.clipboard()
-        .write_image(&image)
-        .map_err(|e| format!("failed to copy image to clipboard: {:#}", e))?;
-    Ok(())
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
