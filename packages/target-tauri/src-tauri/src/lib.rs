@@ -15,6 +15,7 @@ mod runtime_info;
 mod state;
 mod temp_file;
 mod webxdc;
+mod localize;
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
@@ -110,6 +111,7 @@ pub fn run() {
             webxdc::close_all_webxdc_instances,
             runtime_info::get_runtime_info,
             help_window::open_help_window,
+            localize::change_lang
         ])
         .register_asynchronous_uri_scheme_protocol("webxdc-icon", webxdc::webxdc_icon_protocol)
         .register_asynchronous_uri_scheme_protocol("dcblob", blobs::delta_blobs_protocol)
