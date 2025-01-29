@@ -10,12 +10,11 @@ mod blobs;
 mod clipboard;
 mod file_dialogs;
 mod help_window;
-mod locales;
+mod i18n;
 mod runtime_info;
 mod state;
 mod temp_file;
 mod webxdc;
-mod localize;
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
@@ -99,7 +98,8 @@ pub fn run() {
             clipboard::get_clipboard_image_as_data_uri,
             file_dialogs::download_file,
             file_dialogs::show_open_file_dialog,
-            locales::get_locale_data,
+            i18n::commands::get_locale_data,
+            i18n::commands::change_lang,
             temp_file::write_temp_file_from_base64,
             temp_file::write_temp_file,
             temp_file::remove_temp_file,
@@ -111,7 +111,6 @@ pub fn run() {
             webxdc::close_all_webxdc_instances,
             runtime_info::get_runtime_info,
             help_window::open_help_window,
-            localize::change_lang
         ])
         .register_asynchronous_uri_scheme_protocol("webxdc-icon", webxdc::webxdc_icon_protocol)
         .register_asynchronous_uri_scheme_protocol("dcblob", blobs::delta_blobs_protocol)
