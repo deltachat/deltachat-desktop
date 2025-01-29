@@ -590,9 +590,12 @@ class MessageListStore extends Store<MessageListState> {
             oldestFetchedMessageListItemIndex,
             newestFetchedMessageListItemIndex
           ).every(item => {
-            if (item.kind !== 'message') {
+            if (item.kind === 'dayMarker') {
               return true
             }
+            // Just for type-safety.
+            const _kind: 'message' = item.kind
+
             return this.state.messageCache[item.msg_id] != undefined
           })
 
