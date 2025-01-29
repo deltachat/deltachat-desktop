@@ -1,27 +1,11 @@
-use anyhow::bail;
 use log::{debug, error};
-use std::{collections::HashMap, path::Path};
+use std::collections::HashMap;
 use tauri::{AppHandle, Manager};
 use tauri_plugin_store::StoreExt;
 
+use crate::i18n::errors::Error;
+
 use super::{load::get_locales_dir, Language, LocaleData};
-
-#[derive(Debug, thiserror::Error)]
-pub(crate) enum Error {
-    #[error(transparent)]
-    Store(#[from] tauri_plugin_store::Error),
-    #[error(transparent)]
-    Tauri(#[from] tauri::Error),
-}
-
-impl serde::Serialize for Error {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: serde::ser::Serializer,
-    {
-        serializer.serialize_str(self.to_string().as_ref())
-    }
-}
 
 #[tauri::command]
 pub fn change_lang(app: AppHandle, locale: &str) -> Result<(), Error> {
@@ -32,20 +16,14 @@ pub fn change_lang(app: AppHandle, locale: &str) -> Result<(), Error> {
 }
 
 #[tauri::command]
-pub(crate) async fn get_locale_data(locale: &str, app: AppHandle) -> Result<LocaleData, String> {
-    let resource_dir = app.path().resource_dir().map_err(|e| format!("{e:#}"))?;
+pub(crate) async fn get_locale_data(locale: &str, app: AppHandle) -> Result<LocaleData, Error> {
+    let resource_dir = app.path().resource_dir()?;
 
     debug!("get_locale_data {resource_dir:?}");
     // android has sth. different it seems -> get_locale_data "asset://localhost/"
     // can maybe be reolved by tauri filesystem plugin??
 
-    inner_get_locale_data(&resource_dir, locale)
-        .await
-        .map_err(|e| format!("{e:#}"))
-}
-
-async fn inner_get_locale_data(resource_dir: &Path, locale: &str) -> anyhow::Result<LocaleData> {
-    let locales_dir = get_locales_dir(resource_dir).await?;
+    let locales_dir = get_locales_dir(&resource_dir).await?;
 
     let languages: HashMap<String, Language> = serde_json::from_str(
         &tokio::fs::read_to_string(locales_dir.join("_languages.json")).await?,
@@ -54,9 +32,7 @@ async fn inner_get_locale_data(resource_dir: &Path, locale: &str) -> anyhow::Res
     let (locale_name, locale_dir) = match languages.get(locale) {
         Some(Language::String(name)) => (name.to_owned(), None),
         Some(Language::Object { name, dir }) => (name.to_owned(), Some(dir.to_owned())),
-        None => {
-            bail!("Locale {locale} was not found in _languages.json")
-        }
+        None => return Err(Error::LocaleNotFound(locale.to_owned())),
     };
 
     let untranslated_data: HashMap<String, HashMap<String, String>> = serde_json::from_str(
