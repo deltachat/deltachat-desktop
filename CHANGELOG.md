@@ -9,6 +9,7 @@
 
 ### Fixed
 - fix pasting of (non image) files into composer #4533
+- fix translation PluralRules fallback to 'en' not to 'en-US' (en-US isnt valid) #4585
 
 <a id="1_52_0"></a>
 
