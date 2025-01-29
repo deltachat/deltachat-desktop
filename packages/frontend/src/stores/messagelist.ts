@@ -520,11 +520,9 @@ class MessageListStore extends Store<MessageListState> {
               )
               .filter(msgId => msgId !== C.DC_MSG_ID_LAST_SPECIAL)
             jumpToMessageId = items[items.length - 1]
-            const message = await BackendRemote.rpc.getMessage(
-              accountId,
-              jumpToMessageId
-            )
-            chatId = message.chatId
+            chatId = (
+              await BackendRemote.rpc.getMessage(accountId, jumpToMessageId)
+            ).chatId
             jumpToMessageStack = []
             highlight = false
           }
