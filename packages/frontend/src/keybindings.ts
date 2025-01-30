@@ -94,7 +94,7 @@ export function keyDownEvent2Action(
       //   return KeybindAction.ChatList_ScrollToSelectedChat
     } else if (ev.ctrlKey && ev.code === 'KeyF') {
       return KeybindAction.ChatList_FocusSearchInput
-    } else if (ev.ctrlKey && ev.code === 'KeyN') {
+    } else if (ev.ctrlKey && ev.code === 'KeyM') {
       return KeybindAction.Composer_Focus
     } else if (
       // Also consider adding this to `ev.repeat` when it stops being so sluggish
