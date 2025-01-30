@@ -13,6 +13,7 @@ export enum KeybindAction {
   ChatList_FocusItems = 'chatlist:focus-items',
   // ChatList_SelectFirstChat = 'chatlist:select-first-chat',
   ChatList_FocusSearchInput = 'chatlist:focus-search',
+  ChatList_SearchInChat = 'chatlist:search-in-chat',
   ChatList_ClearSearchInput = 'chatlist:clear-search',
   Composer_Focus = 'composer:focus',
   Composer_SelectReplyToUp = 'composer:select-reply-to-up',
@@ -94,6 +95,10 @@ export function keyDownEvent2Action(
       // disabled until we find a better keycombination (see https://github.com/deltachat/deltachat-desktop/issues/1796)
       //   return KeybindAction.ChatList_ScrollToSelectedChat
     } else if (ev.ctrlKey && ev.code === 'KeyF') {
+      // https://github.com/deltachat/deltachat-desktop/issues/4579
+      if (ev.shiftKey) {
+        return KeybindAction.ChatList_SearchInChat
+      }
       return KeybindAction.ChatList_FocusSearchInput
     } else if (ev.ctrlKey && ev.code === 'KeyN') {
       return KeybindAction.NewChat_Open

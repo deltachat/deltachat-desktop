@@ -126,6 +126,16 @@ export default function MainScreen({ accountId }: Props) {
     searchRef.current?.focus()
   })
 
+  useKeyBindingAction(KeybindAction.ChatList_SearchInChat, () => {
+    // Also see `search_in_chat` item in ThreeDotMenu.tsx
+    searchRef.current?.focus()
+    if (chatId == undefined) {
+      return
+    }
+    // Yes, preserve the search string. This might be nice.
+    searchChats(queryStr, chatId)
+  })
+
   useKeyBindingAction(KeybindAction.ChatList_ClearSearchInput, () => {
     handleSearchClear()
   })

@@ -234,6 +234,10 @@ export function getKeybindings(
         keyBindings: [['Control', 'F']],
       },
       {
+        title: tx('search_in_chat'),
+        keyBindings: [['Control', 'Shift', 'F']],
+      },
+      {
         title: tx('menu_new_chat'),
         keyBindings: [['Control', 'N']],
       },

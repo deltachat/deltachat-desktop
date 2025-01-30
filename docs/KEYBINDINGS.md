@@ -10,6 +10,8 @@ Scroll active chat into view ~~`alt + arrow left`~~ _(disabled until we find a b
 
 Search contact list: `ctrl + f`
 
+Search in chat: `ctrl + f`
+
 Open "Create Chat" dialog: `ctrl + n`
 
 Focus message composer: `ctrl + m`
