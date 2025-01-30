@@ -9,6 +9,7 @@
 - shortcut improvements:
   - Ctrl + F now focuses search, instead of Ctrl + K
   - Ctrl + M now focuses composer, instead of Ctrl + N
+  - Ctrl + N now opens "New Chat" dialog
   - Pressing "Enter" or "Arrow Down" in the search focuses the first item
     (from which point arrow keys can be used to navigate items)
     instead of opening the first chat

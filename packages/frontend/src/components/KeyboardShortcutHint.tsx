@@ -234,6 +234,10 @@ export function getKeybindings(
         keyBindings: [['Control', 'F']],
       },
       {
+        title: tx('menu_new_chat'),
+        keyBindings: [['Control', 'N']],
+      },
+      {
         title: tx('focus_message_input'),
         keyBindings: [['Control', 'M']],
       },

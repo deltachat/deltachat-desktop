@@ -35,6 +35,7 @@ import { ChatView } from '../../contexts/ChatContext'
 import { ScreenContext } from '../../contexts/ScreenContext'
 
 import type { T } from '@deltachat/jsonrpc-client'
+import CreateChat from '../dialogs/CreateChat'
 
 type Props = {
   accountId?: number
@@ -127,6 +128,12 @@ export default function MainScreen({ accountId }: Props) {
 
   useKeyBindingAction(KeybindAction.ChatList_ClearSearchInput, () => {
     handleSearchClear()
+  })
+
+  const { openDialog } = useDialog()
+  useKeyBindingAction(KeybindAction.NewChat_Open, () => {
+    // Same as `onCreateChat` in ChatList.
+    openDialog(CreateChat)
   })
 
   useEffect(() => {
