@@ -18,6 +18,7 @@ export enum KeybindAction {
   Composer_SelectReplyToUp = 'composer:select-reply-to-up',
   Composer_SelectReplyToDown = 'composer:select-reply-to-down',
   Composer_CancelReply = 'composer:cancel-reply',
+  NewChat_Open = 'new-chat:open',
   Settings_Open = 'settings:open',
   KeybindingCheatSheet_Open = 'keybindinginfo:open',
   MessageList_PageUp = 'msglist:pageup',
@@ -94,6 +95,8 @@ export function keyDownEvent2Action(
       //   return KeybindAction.ChatList_ScrollToSelectedChat
     } else if (ev.ctrlKey && ev.code === 'KeyF') {
       return KeybindAction.ChatList_FocusSearchInput
+    } else if (ev.ctrlKey && ev.code === 'KeyN') {
+      return KeybindAction.NewChat_Open
     } else if (ev.ctrlKey && ev.code === 'KeyM') {
       return KeybindAction.Composer_Focus
     } else if (

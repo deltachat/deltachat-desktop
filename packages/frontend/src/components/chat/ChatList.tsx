@@ -178,6 +178,7 @@ export default function ChatList(props: {
   const { openDialog } = useDialog()
 
   const onCreateChat = () => {
+    // Same as `KeybindAction.NewChat_Open`.
     openDialog(CreateChat)
   }
 
@@ -481,6 +482,7 @@ export default function ChatList(props: {
                 onClick={onCreateChat}
                 id='new-chat-button'
                 aria-label={tx('menu_new_chat')}
+                aria-keyshortcuts='Control+N'
               >
                 <div
                   className='Icon'
