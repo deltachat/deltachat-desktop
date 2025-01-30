@@ -231,7 +231,7 @@ export function getKeybindings(
       },
       {
         title: tx('focus_search_input'),
-        keyBindings: [['Control', 'K']],
+        keyBindings: [['Control', 'F']],
       },
       {
         title: tx('focus_message_input'),

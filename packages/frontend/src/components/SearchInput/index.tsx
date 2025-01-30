@@ -51,7 +51,7 @@ export default function SearchInput(props: Props) {
         data-no-drag-region
         ref={props.inputRef}
         spellCheck={false}
-        aria-keyshortcuts='Control+K'
+        aria-keyshortcuts='Control+F'
       />
       {hasValue && (
         <SearchInputButton
