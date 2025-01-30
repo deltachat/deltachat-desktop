@@ -87,7 +87,7 @@ export function keyDownEvent2Action(
       // } else if (ev.altKey && ev.code === 'ArrowLeft') {
       // disabled until we find a better keycombination (see https://github.com/deltachat/deltachat-desktop/issues/1796)
       //   return KeybindAction.ChatList_ScrollToSelectedChat
-    } else if (ev.ctrlKey && ev.code === 'KeyK') {
+    } else if (ev.ctrlKey && ev.code === 'KeyF') {
       return KeybindAction.ChatList_FocusAndClearSearchInput
     } else if (ev.ctrlKey && ev.code === 'KeyN') {
       return KeybindAction.Composer_Focus
