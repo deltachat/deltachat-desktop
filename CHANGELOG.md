@@ -11,6 +11,7 @@
   - Pressing "Enter" or "Arrow Down" in the search focuses the first item
     (from which point arrow keys can be used to navigate items)
     instead of opening the first chat
+  - Focusing the search input with a shortcut now doesn't clear it
 - Improve backup transfer dialog (different message for connection step, timed message to tell user to check out troubleshooting, button to link to trouble shooting) #4476
 - store last used account in accounts.toml managed by core #4569
 
