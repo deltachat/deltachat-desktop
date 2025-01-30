@@ -6,7 +6,12 @@ export enum KeybindAction {
   ChatList_SelectNextChat = 'chatlist:select-next-chat',
   ChatList_SelectPreviousChat = 'chatlist:select-previous-chat',
   ChatList_ScrollToSelectedChat = 'chatlist:scroll-to-selected-chat',
-  ChatList_SelectFirstChat = 'chatlist:select-first-chat',
+  /**
+   * "Items" instead of "Chats" because searching might show
+   * messages and contacts and not just chats.
+   */
+  ChatList_FocusItems = 'chatlist:focus-items',
+  // ChatList_SelectFirstChat = 'chatlist:select-first-chat',
   ChatList_FocusSearchInput = 'chatlist:focus-search',
   ChatList_ClearSearchInput = 'chatlist:clear-search',
   Composer_Focus = 'composer:focus',
@@ -27,7 +32,7 @@ export enum KeybindAction {
   // Composite Actions (actions that trigger other actions)
   ChatList_FocusAndClearSearchInput = 'chatlist:focus-and-clear-search',
   ChatList_ExitSearch = 'chatlist:exit-search',
-  ChatList_SearchSelectFirstChat = 'chatlist:search-select-first-chat',
+  // ChatList_SearchSelectFirstChat = 'chatlist:search-select-first-chat',
 
   // Debug
   Debug_MaybeNetwork = 'debug:maybe_network',
@@ -113,10 +118,11 @@ export function keyDownEvent2Action(
         return KeybindAction.Composer_CancelReply
       }
     } else if (
-      ev.key === 'Enter' &&
-      (ev.target as any).id === 'chat-list-search'
+      (ev.target as any).id === 'chat-list-search' &&
+      (ev.key === 'Enter' || ev.code === 'ArrowDown')
     ) {
-      return KeybindAction.ChatList_SearchSelectFirstChat
+      // return KeybindAction.ChatList_SearchSelectFirstChat
+      return KeybindAction.ChatList_FocusItems
     } else if (ev.code === 'F5') {
       return KeybindAction.Debug_MaybeNetwork
     } else if (ev.code === 'PageUp') {
@@ -167,10 +173,10 @@ ActionEmitter.registerHandler(KeybindAction.ChatList_ExitSearch, () => {
   ActionEmitter.emitAction(KeybindAction.Composer_Focus)
 })
 
-ActionEmitter.registerHandler(
-  KeybindAction.ChatList_SearchSelectFirstChat,
-  () => {
-    ActionEmitter.emitAction(KeybindAction.ChatList_SelectFirstChat)
-    ActionEmitter.emitAction(KeybindAction.Composer_Focus)
-  }
-)
+// ActionEmitter.registerHandler(
+//   KeybindAction.ChatList_SearchSelectFirstChat,
+//   () => {
+//     ActionEmitter.emitAction(KeybindAction.ChatList_SelectFirstChat)
+//     ActionEmitter.emitAction(KeybindAction.Composer_Focus)
+//   }
+// )

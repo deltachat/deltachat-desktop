@@ -6,7 +6,11 @@
 - highlight the first unread message upon opening a chat #4525
 
 ### Changed
-- Ctrl + F now focuses search, instead of Ctrl + K
+- shortcut improvements:
+  - Ctrl + F now focuses search, instead of Ctrl + K
+  - Pressing "Enter" or "Arrow Down" in the search focuses the first item
+    (from which point arrow keys can be used to navigate items)
+    instead of opening the first chat
 - Improve backup transfer dialog (different message for connection step, timed message to tell user to check out troubleshooting, button to link to trouble shooting) #4476
 - store last used account in accounts.toml managed by core #4569
 
