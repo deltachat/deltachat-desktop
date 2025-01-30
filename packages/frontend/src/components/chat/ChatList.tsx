@@ -161,6 +161,7 @@ export default function ChatList(props: {
   const createChatByContactId = useCreateChatByContactId()
   const { selectChat } = useChat()
 
+  const rovingTabindexItemsClassName = 'roving-tabindex'
   const tabindexWrapperElement = useRef<HTMLDivElement>(null)
 
   const addContactOnClick = async () => {
@@ -285,9 +286,19 @@ export default function ChatList(props: {
     }
   })
 
-  useKeyBindingAction(KeybindAction.ChatList_SelectFirstChat, () =>
-    selectFirstChat()
-  )
+  useKeyBindingAction(KeybindAction.ChatList_FocusItems, () => {
+    ;(
+      tabindexWrapperElement.current?.querySelector(
+        // Not just the first element, but the active one, i.e.
+        // if the user already interacted with the list we should not reset
+        // the current selection.
+        '.' + rovingTabindexItemsClassName + ':not([tabindex="-1"])'
+      ) as HTMLElement
+    )?.focus()
+  })
+  // useKeyBindingAction(KeybindAction.ChatList_SelectFirstChat, () =>
+  //   selectFirstChat()
+  // )
 
   const chatlistData = useMemo(() => {
     return {
@@ -352,6 +363,7 @@ export default function ChatList(props: {
                 </div>
                 <RovingTabindexProvider
                   wrapperElementRef={tabindexWrapperElement}
+                  classNameOfTargetElements={rovingTabindexItemsClassName}
                 >
                   <ChatListPart
                     isRowLoaded={isMessageLoaded}
@@ -393,6 +405,7 @@ export default function ChatList(props: {
               from DOM if scrolled out of view. */}
               <RovingTabindexProvider
                 wrapperElementRef={tabindexWrapperElement}
+                classNameOfTargetElements={rovingTabindexItemsClassName}
               >
                 <ChatListPart
                   isRowLoaded={isChatLoaded}
