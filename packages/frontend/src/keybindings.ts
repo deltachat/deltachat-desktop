@@ -30,7 +30,7 @@ export enum KeybindAction {
   AboutDialog_Open = 'about:open',
 
   // Composite Actions (actions that trigger other actions)
-  ChatList_FocusAndClearSearchInput = 'chatlist:focus-and-clear-search',
+  // ChatList_FocusAndClearSearchInput = 'chatlist:focus-and-clear-search',
   ChatList_ExitSearch = 'chatlist:exit-search',
   // ChatList_SearchSelectFirstChat = 'chatlist:search-select-first-chat',
 
@@ -93,7 +93,7 @@ export function keyDownEvent2Action(
       // disabled until we find a better keycombination (see https://github.com/deltachat/deltachat-desktop/issues/1796)
       //   return KeybindAction.ChatList_ScrollToSelectedChat
     } else if (ev.ctrlKey && ev.code === 'KeyF') {
-      return KeybindAction.ChatList_FocusAndClearSearchInput
+      return KeybindAction.ChatList_FocusSearchInput
     } else if (ev.ctrlKey && ev.code === 'KeyN') {
       return KeybindAction.Composer_Focus
     } else if (
@@ -160,13 +160,13 @@ export function keyDownEvent2Action(
 
 // Implementation of Composite Actions (actions that trigger other actions)
 
-ActionEmitter.registerHandler(
-  KeybindAction.ChatList_FocusAndClearSearchInput,
-  () => {
-    ActionEmitter.emitAction(KeybindAction.ChatList_FocusSearchInput)
-    ActionEmitter.emitAction(KeybindAction.ChatList_ClearSearchInput)
-  }
-)
+// ActionEmitter.registerHandler(
+//   KeybindAction.ChatList_FocusAndClearSearchInput,
+//   () => {
+//     ActionEmitter.emitAction(KeybindAction.ChatList_FocusSearchInput)
+//     ActionEmitter.emitAction(KeybindAction.ChatList_ClearSearchInput)
+//   }
+// )
 
 ActionEmitter.registerHandler(KeybindAction.ChatList_ExitSearch, () => {
   ActionEmitter.emitAction(KeybindAction.ChatList_ClearSearchInput)
