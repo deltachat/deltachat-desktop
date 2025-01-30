@@ -34,14 +34,51 @@ const { BaseTransport } = yerpc
 
 let logJsonrpcConnection = false
 
+const idToRequestMap = new Map<
+  yerpc.Message['id'],
+  { message: yerpc.Message; sentAt: number }
+>()
+
 class ElectronTransport extends BaseTransport {
   constructor(private callCounterFunction: (label: string) => void) {
     super()
     ipcBackend.on('json-rpc-message', (_ev: any, response: any) => {
       const message: yerpc.Message = JSON.parse(response)
       if (logJsonrpcConnection) {
+        const responseAt = performance.now()
+        const request = idToRequestMap.get(message.id)
+        idToRequestMap.delete(message.id)
+
+        const duration =
+          request != undefined
+            ? (responseAt - request.sentAt).toFixed(3)
+            : undefined
+
+        let requestToLog = undefined
+        const responseToLog = { ...message }
+        delete responseToLog.jsonrpc
+        if (request != undefined) {
+          delete responseToLog.id
+
+          requestToLog = { ...request.message }
+          delete requestToLog.jsonrpc
+          // Let's keep the ID so that the respective console log
+          // for the "request sent" can be found.
+          // delete requestToLog.id
+        }
+
         /* ignore-console-log */
-        console.debug('%c▼ %c[JSONRPC]', 'color: red', 'color:grey', message)
+        console.debug(
+          '%c▼ %c[JSONRPC]',
+          'color: red',
+          'color:grey',
+          `${duration} ms`,
+          requestToLog,
+          '->\n',
+          (responseToLog as yerpc.Response)?.result ??
+            (responseToLog as yerpc.Response)?.error ??
+            responseToLog
+        )
       }
       this._onmessage(message)
     })
@@ -50,6 +87,14 @@ class ElectronTransport extends BaseTransport {
     const serialized = JSON.stringify(message)
     ipcBackend.invoke('json-rpc-request', serialized)
     if (logJsonrpcConnection) {
+      const sentAt = performance.now()
+      idToRequestMap.set(message.id, { message, sentAt })
+      // Just in case we don't receive the response within 60 seconds,
+      // to avoid a memory leak.
+      setTimeout(() => {
+        idToRequestMap.delete(message.id)
+      }, 60000)
+
       /* ignore-console-log */
       console.debug('%c▲ %c[JSONRPC]', 'color: green', 'color:grey', message)
       if ((message as any)['method']) {
