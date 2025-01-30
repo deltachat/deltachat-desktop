@@ -51,6 +51,7 @@ export default function SearchInput(props: Props) {
         data-no-drag-region
         ref={props.inputRef}
         spellCheck={false}
+        // FYI there is also Ctrl + Shift + F to search in chat.
         aria-keyshortcuts='Control+F'
       />
       {hasValue && (

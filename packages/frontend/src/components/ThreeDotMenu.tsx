@@ -70,6 +70,10 @@ export function useThreeDotMenu(
       {
         label: tx('search_in_chat'),
         action: () => {
+          // Same as in with `KeybindAction.ChatList_SearchInChat`
+          //
+          // TODO improvement a11y: maybe we can add `aria-keyshortcuts=`
+          // to this menu item?
           window.__chatlistSetSearch?.('', selectedChat.id)
           setTimeout(
             () =>
