@@ -235,7 +235,7 @@ export function getKeybindings(
       },
       {
         title: tx('focus_message_input'),
-        keyBindings: [['Control', 'N']],
+        keyBindings: [['Control', 'M']],
       },
       {
         title: tx('menu_reply'),
