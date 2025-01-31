@@ -199,9 +199,19 @@ function Shortcut(action: ShortcutAction): CheatSheetEntryType {
 
 export function CheatSheetKeyboardShortcut() {
   if (runtime.getRuntimeInfo().isMac) {
-    return <KeyboardShortcut elements={['Meta', '/']} />
+    return (
+      <>
+        <KeyboardShortcut elements={['Meta', '/']} />
+        <KeyboardShortcut elements={['Meta', '-']} />
+      </>
+    )
   } else {
-    return <KeyboardShortcut elements={['Control', '/']} />
+    return (
+      <>
+        <KeyboardShortcut elements={['Control', '/']} />
+        <KeyboardShortcut elements={['Control', '-']} />
+      </>
+    )
   }
 }
 
