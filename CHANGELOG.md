@@ -6,6 +6,9 @@
 - highlight the first unread message upon opening a chat #4525
 
 ### Changed
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.155.2`
+  - Deduplicate blob files in chat.rs, config.rs, and integration.rs.
+  - Upgrade to iroh@0.30.0.
 - shortcut improvements:
   - Ctrl + F now focuses search, instead of Ctrl + K
   - Ctrl + Shift + F to search in chat
