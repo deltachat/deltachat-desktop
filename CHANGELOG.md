@@ -12,6 +12,7 @@
 ### Fixed
 - fix changelog message left unread not in the selected account as it should be but in another account. #4569
 - accessibility: some context menu items not working with keyboard navigation #4578
+- fix messages sent to "Saved Messages" not being displayed sometimes #4582
 - fix clicking on message search result or "Reply Privately" quote not jumping to the message on first click sometimes, again #4554
 - fix jumping to message in a different chat momentarily opening the new chat scrolled to bottom before scrolling it to the desired message #4562
 - fix log format for logging core events #4572
