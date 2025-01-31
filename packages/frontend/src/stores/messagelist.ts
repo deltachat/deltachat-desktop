@@ -277,7 +277,7 @@ class MessageListStore extends Store<MessageListState> {
     },
     setMessageState: (messageId: number, messageState: number) => {
       const messageLoaded = this.state.messageCache[messageId] != undefined
-      if (!messageLoaded) {
+      if (this.state.messageCache[messageId] === undefined) {
         // This may happen when sending a message to "Saved Messages"
         // on a new Chatmail account, where `MsgDelivered` would fire
         // almost instantly after the send, even before `jumpToMessage`
