@@ -316,6 +316,7 @@ async function flushNotifications(accountId: number) {
           return notification
         }
         // muted chat - only show if it's a mention and mentions are enabled
+        // see  https://github.com/deltachat/interface/pull/78#issuecomment-2536719734
         if (SettingsStoreInstance.state?.desktopSettings.isMentionsEnabled) {
           const isMention = await notificationIsMention(accountId, notification)
           if (isMention) {
