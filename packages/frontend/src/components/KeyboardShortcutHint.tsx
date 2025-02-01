@@ -222,19 +222,10 @@ export function getKeybindings(
   const tx = window.static_translate
 
   return [
+    // Title(tx('desktop_keybindings_composer')),
+    ...enterKeySendsKeyboardShortcuts(settings['enterKeySends']).map(Shortcut),
     // Title(tx('desktop_keybindings_global')),
     ...[
-      {
-        title: tx('switch_between_chats'),
-        keyBindings: [
-          ['Alt', 'ArrowUp'],
-          ['Alt', 'ArrowDown'],
-          ['Control', 'PageUp'],
-          ['Control', 'PageDown'],
-          ['Control', 'Tab'],
-          ['Control', 'Shift', 'Tab'],
-        ],
-      },
       {
         title: tx('scroll_messages'),
         keyBindings: [['PageUp'], ['PageDown']],
@@ -256,14 +247,6 @@ export function getKeybindings(
         keyBindings: [['Control', 'M']],
       },
       {
-        title: tx('menu_reply'),
-        keyBindings: [
-          ['Control', 'ArrowUp'],
-          ['Control', 'ArrowDown'],
-          ['Esc'],
-        ],
-      },
-      {
         title: tx('menu_help'),
         keyBindings: [['F1']],
       },
@@ -275,8 +258,25 @@ export function getKeybindings(
         title: tx('force_refresh_network'),
         keyBindings: [['F5']],
       },
+      {
+        title: tx('switch_between_chats'),
+        keyBindings: [
+          ['Alt', 'ArrowUp'],
+          ['Alt', 'ArrowDown'],
+          ['Control', 'PageUp'],
+          ['Control', 'PageDown'],
+          ['Control', 'Tab'],
+          ['Control', 'Shift', 'Tab'],
+        ],
+      },
+      {
+        title: tx('menu_reply'),
+        keyBindings: [
+          ['Control', 'ArrowUp'],
+          ['Control', 'ArrowDown'],
+          ['Esc'],
+        ],
+      },
     ].map(Shortcut),
-    // Title(tx('desktop_keybindings_composer')),
-    ...enterKeySendsKeyboardShortcuts(settings['enterKeySends']).map(Shortcut),
   ]
 }
