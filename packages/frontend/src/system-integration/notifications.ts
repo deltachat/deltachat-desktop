@@ -312,19 +312,24 @@ async function flushNotifications(accountId: number) {
   const filteredNotifications = (
     await Promise.all(
       notifications.map(async notification => {
-        if (mutedChats.includes(notification.chatId)) {
-          // muted chat - only show if it's a mention and mentions are enabled
-          if (SettingsStoreInstance.state?.desktopSettings.isMentionsEnabled) {
-            const isMention = await notificationIsMention(
-              accountId,
-              notification
-            )
-            return isMention ? notification : null
-          }
-          return null
-        } else {
+        if (!mutedChats.includes(notification.chatId)) {
           return notification
         }
+        // muted chat - only show if it's a mention and mentions are enabled
+        if (SettingsStoreInstance.state?.desktopSettings.isMentionsEnabled) {
+          const isMention = await notificationIsMention(accountId, notification)
+          if (isMention) {
+            const chat = await BackendRemote.rpc.getBasicChatInfo(
+              accountId,
+              notification.chatId
+            )
+            if (chat.chatType === C.DC_CHAT_TYPE_GROUP) {
+              // only show mentions for group chats
+              return notification
+            }
+          }
+        }
+        return null
       })
     )
   ).filter(notification => notification !== null)
