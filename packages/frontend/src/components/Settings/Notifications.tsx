@@ -21,26 +21,6 @@ export default function Notifications({ desktopSettings }: Props) {
   const { accounts } = useAccountNotificationStore()[0]!
   const isMuted = accounts[accountId]?.muted || false
 
-  function AccountNotificationMutedSwitch({
-    label,
-    description,
-  }: {
-    label: string
-    description?: string
-  }) {
-    return (
-      <SettingsSwitch
-        label={label}
-        value={isMuted}
-        description={description}
-        disabled={!desktopSettings['notifications']}
-        onChange={() => {
-          AccountNotificationStoreInstance.effect.setMuted(accountId, !isMuted)
-        }}
-      />
-    )
-  }
-
   return (
     <>
       <SettingsHeading>{tx('pref_all_accounts')}</SettingsHeading>
@@ -55,7 +35,14 @@ export default function Notifications({ desktopSettings }: Props) {
       />
       <SettingsSeparator></SettingsSeparator>
       <SettingsHeading>{tx('pref_current_account')}</SettingsHeading>
-      <AccountNotificationMutedSwitch label={tx('menu_mute')} />
+      <SettingsSwitch
+        label={tx('menu_mute')}
+        value={isMuted}
+        disabled={!desktopSettings['notifications']}
+        onChange={() => {
+          AccountNotificationStoreInstance.effect.setMuted(accountId, !isMuted)
+        }}
+      />
       <DesktopSettingsSwitch
         settingsKey='isMentionsEnabled'
         label={tx('pref_mention_notifications')}
