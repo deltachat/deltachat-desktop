@@ -314,10 +314,15 @@ async function flushNotifications(accountId: number) {
       notifications.map(async notification => {
         if (mutedChats.includes(notification.chatId)) {
           // muted chat - only show if it's a mention and mentions are enabled
-          const isMention = await notificationIsMention(accountId, notification)
-          return isMention ? notification : null
+          if (SettingsStoreInstance.state?.desktopSettings.isMentionsEnabled) {
+            const isMention = await notificationIsMention(
+              accountId,
+              notification
+            )
+            return isMention ? notification : null
+          }
+          return null
         } else {
-          log.debug('notification on not muted chat:', notification)
           return notification
         }
       })
@@ -355,36 +360,33 @@ async function notificationIsMention(
   accountId: number,
   notification: QueuedNotification
 ) {
-  if (!SettingsStoreInstance.state?.desktopSettings.isMentionsEnabled) {
-    log.info('allowIfMention: mentions are disabled')
-    return false
-  } else if (notification.notificationType === NOTIFICATION_TYPE.WEBXDC_INFO) {
+  if (notification.notificationType === NOTIFICATION_TYPE.WEBXDC_INFO) {
     log.info('mention detected: webxdc-info notification')
     return true
-  } else {
-    const message = await BackendRemote.rpc.getMessage(
-      accountId,
-      notification.messageId
-    )
-    if (notification.notificationType === NOTIFICATION_TYPE.REACTION) {
-      if (message.sender.id === C.DC_CONTACT_ID_SELF) {
-        log.info('mention detected: reaction to own message')
-        return true
-      }
-    }
-    if (message.quote && message.quote.kind === 'WithMessage') {
-      const quote = await BackendRemote.rpc.getMessage(
-        accountId,
-        message.quote.messageId
-      )
-      if (quote.sender.id === C.DC_CONTACT_ID_SELF) {
-        log.info('mention detected: answer to own message')
-        return true
-      }
-    }
-    log.debug('ignoring notification on muted chat')
-    return false
   }
+
+  if (notification.notificationType === NOTIFICATION_TYPE.REACTION) {
+    log.info('mention detected: reaction to own message')
+    return true
+  }
+
+  const message = await BackendRemote.rpc.getMessage(
+    accountId,
+    notification.messageId
+  )
+
+  if (message.quote && message.quote.kind === 'WithMessage') {
+    const quote = await BackendRemote.rpc.getMessage(
+      accountId,
+      message.quote.messageId
+    )
+    if (quote.sender.id === C.DC_CONTACT_ID_SELF) {
+      log.info('mention detected: answer to own message')
+      return true
+    }
+  }
+  log.debug('ignoring notification on muted chat')
+  return false
 }
 
 export function clearNotificationsForChat(accountId: number, chatId: number) {
