@@ -29,15 +29,17 @@ export function onDownload(msg: Type.Message) {
 }
 
 export function openAttachmentInShell(msg: Type.Message) {
-  if (!msg.file) {
+  if (!msg.file || !msg.fileName) {
     log.error('message has no file to open:', msg)
     throw new Error('message has no file to open')
   }
-  if (!runtime.openPath(msg.file)) {
-    log.info(
-      "file couldn't be opened, try saving it in a different place and try to open it from there"
-    )
-  }
+  runtime.copyFileToInternalTmpDir(msg.fileName, msg.file).then(tmpFile => {
+    if (!runtime.openPath(tmpFile)) {
+      log.info(
+        "file couldn't be opened, try saving it in a different place and try to open it from there"
+      )
+    }
+  })
 }
 
 export function openForwardDialog(
