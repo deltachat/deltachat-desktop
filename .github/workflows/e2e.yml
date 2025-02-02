@@ -76,10 +76,6 @@ env: # dummy certificates for testing
 
 jobs:
   test:
-    # Disable temporarily because they're not working
-    # at least 90% of the time.
-    if: false
-
     name: E2E Tests
     environment: test
     env:
