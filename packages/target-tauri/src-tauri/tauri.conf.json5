@@ -62,7 +62,9 @@
             // open current logfile & open links
             "shell:allow-open",
             // Badge counter
-            "core:window:allow-set-badge-count"
+            "core:window:allow-set-badge-count",
+            "core:menu:default",
+            "core:menu:allow-new"
           ]
         }
       ]
@@ -79,7 +81,7 @@
       "icons/icon.ico"
     ],
     "resources": {
-      "../../../_locales/*.json" : "_locales"
+      "../../../_locales/*.json": "_locales"
     },
     "iOS": {
       "minimumSystemVersion": "13.0",

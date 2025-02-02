@@ -2,6 +2,7 @@ use std::time::SystemTime;
 
 use clipboard::copy_image_to_clipboard;
 use settings::load_and_apply_desktop_settings_on_startup;
+use menus::main_menu::create_main_menu;
 use state::{app::AppState, deltachat::DeltaChatAppState};
 use tauri::Manager;
 mod app_path;
@@ -10,6 +11,7 @@ mod clipboard;
 mod file_dialogs;
 mod help_window;
 mod i18n;
+mod menus;
 mod runtime_info;
 mod settings;
 mod state;
@@ -86,6 +88,8 @@ pub fn run() {
                     .set_focus();
             }));
     }
+
+    builder = create_main_menu(builder);
 
     builder
         .invoke_handler(tauri::generate_handler![
