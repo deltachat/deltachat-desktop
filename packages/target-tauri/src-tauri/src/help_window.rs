@@ -1,5 +1,5 @@
 use log::warn;
-use tauri::{Manager, WebviewWindow};
+use tauri::{Manager, Runtime};
 
 use crate::settings::apply_content_protection;
 
@@ -19,8 +19,8 @@ impl serde::Serialize for Error {
 }
 
 #[tauri::command]
-pub(crate) fn open_help_window(
-    app: tauri::AppHandle,
+pub(crate) fn open_help_window<A: Runtime>(
+    app: tauri::AppHandle<A>,
     locale: &str,
     anchor: Option<&str>,
 ) -> Result<(), Error> {
@@ -32,7 +32,7 @@ pub(crate) fn open_help_window(
 
     let app_url = tauri::WebviewUrl::App(url.into());
 
-    let help_window: WebviewWindow = if let Some(help_window) = app.get_webview_window("help") {
+    let mut help_window = if let Some(help_window) = app.get_webview_window("help") {
         help_window
     } else {
         tauri::WebviewWindowBuilder::new(&app, "help", app_url.clone()).build()?

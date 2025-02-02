@@ -64,7 +64,7 @@
             "opener:allow-open-path",
             "opener:allow-open-url",
             // Badge counter
-            "core:window:allow-set-badge-count"
+            "core:window:allow-set-badge-count",
           ]
         }
       ]
@@ -81,7 +81,7 @@
       "icons/icon.ico"
     ],
     "resources": {
-      "../../../_locales/*.json" : "_locales"
+      "../../../_locales/*.json": "_locales"
     },
     "iOS": {
       "minimumSystemVersion": "13.0",
