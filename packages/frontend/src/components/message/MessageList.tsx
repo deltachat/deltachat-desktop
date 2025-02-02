@@ -108,7 +108,6 @@ function useUnreadCount(
     // Make sure to update all the places if you update one of them.
     const cleanup = [
       onDCEvent(accountId, 'IncomingMsg', update),
-      onDCEvent(accountId, 'MsgRead', update),
       onDCEvent(accountId, 'MsgsNoticed', update),
       () => (outdated = true),
     ]
