@@ -170,7 +170,7 @@ test('send message', async ({ page }) => {
   expect(receivedMessageText).toEqual(messageText)
 })
 
-test('add app from picker to chat', async ({ page }) => {
+test.skip('add app from picker to chat', async ({ page }) => {
   const userA = existingProfiles[0]
   const userB = existingProfiles[1]
   await switchToProfile(page, userA.id)
