@@ -147,8 +147,6 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
   } = useMessageList(accountId, chat.id)
   const { hideReactionsBar, isReactionsBarShown } = useReactionsBar()
 
-  const countUnreadMessages = useUnreadCount(accountId, chat)
-
   const messageListRef = useRef<HTMLDivElement | null>(null)
   const [showJumpDownButton, setShowJumpDownButton] = useState(false)
 
@@ -674,7 +672,8 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
       />
       {showJumpDownButton && (
         <JumpDownButton
-          countUnreadMessages={countUnreadMessages}
+          accountId={accountId}
+          chat={chat}
           jumpToMessage={jumpToMessage}
           jumpToMessageStack={jumpToMessageStack}
         />
@@ -952,11 +951,13 @@ function MessageLoading({
 }
 
 function JumpDownButton({
-  countUnreadMessages,
+  accountId,
+  chat,
   jumpToMessage,
   jumpToMessageStack,
 }: {
-  countUnreadMessages: number
+  accountId: number
+  chat: Parameters<typeof useUnreadCount>[1]
   jumpToMessage: (params: {
     msgId: number | undefined
     highlight?: boolean
@@ -966,6 +967,8 @@ function JumpDownButton({
   }) => Promise<void>
   jumpToMessageStack: number[]
 }) {
+  const countUnreadMessages = useUnreadCount(accountId, chat)
+
   let countToShow: string = countUnreadMessages.toString()
   if (countUnreadMessages > 99) {
     countToShow = '99+'
