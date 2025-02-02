@@ -1,12 +1,14 @@
 use std::time::SystemTime;
 
 use clipboard::copy_image_to_clipboard;
-use settings::load_and_apply_desktop_settings_on_startup;
-use state::{
-    app::AppState, deltachat::DeltaChatAppState, html_email_instances::HtmlEmailInstancesState,
-};
-use tauri::Manager;
+
+use menus::{handle_menu_event, main_menu::create_main_menu, set_zoom};
+use settings::{load_and_apply_desktop_settings_on_startup, ZOOM_FACTOR_KEY};
+use state::{app::AppState, deltachat::DeltaChatAppState, html_email_instances::HtmlEmailInstancesState,};
 use util::csp::add_custom_schemes_to_csp_for_window_and_android;
+use tauri::Manager;
+use tauri_plugin_store::StoreExt;
+
 mod app_path;
 mod blobs;
 mod clipboard;
@@ -14,6 +16,7 @@ mod file_dialogs;
 mod help_window;
 mod html_window;
 mod i18n;
+mod menus;
 mod runtime_info;
 mod settings;
 mod state;
@@ -202,6 +205,9 @@ pub fn run() {
                 webview.set_title_bar_style(tauri::TitleBarStyle::Overlay)?;
                 webview.set_title("")?;
             }
+
+            app.set_menu(create_main_menu(app.handle())?)?;
+            app.on_menu_event(handle_menu_event);
 
             Ok(())
         })
