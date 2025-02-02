@@ -199,19 +199,9 @@ function Shortcut(action: ShortcutAction): CheatSheetEntryType {
 
 export function CheatSheetKeyboardShortcut() {
   if (runtime.getRuntimeInfo().isMac) {
-    return (
-      <>
-        <KeyboardShortcut elements={['Meta', '/']} />
-        <KeyboardShortcut elements={['Meta', '-']} />
-      </>
-    )
+    return <KeyboardShortcut elements={['Meta', '/']} />
   } else {
-    return (
-      <>
-        <KeyboardShortcut elements={['Control', '/']} />
-        <KeyboardShortcut elements={['Control', '-']} />
-      </>
-    )
+    return <KeyboardShortcut elements={['Control', '/']} />
   }
 }
 
@@ -222,9 +212,7 @@ export function getKeybindings(
   const tx = window.static_translate
 
   return [
-    // Title(tx('desktop_keybindings_composer')),
     ...enterKeySendsKeyboardShortcuts(settings['enterKeySends']).map(Shortcut),
-    // Title(tx('desktop_keybindings_global')),
     ...[
       {
         title: tx('scroll_messages'),
