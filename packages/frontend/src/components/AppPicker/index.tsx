@@ -73,21 +73,26 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
         }
       }
       const newIcons: { [key: string]: string } = {}
+      for (const app of apps) {
+        newIcons[app.app_id] = `./images/icons/image_outline.svg`
+      }
+      setIcons(newIcons)
       let count = 0
       for (const app of apps) {
-        const response = (await BackendRemote.rpc.getHttpResponse(
-          selectedAccountId(),
-          AppStoreUrl + app.icon_relname
-        )) as { blob: string }
-        if (response?.blob !== undefined) {
-          newIcons[app.app_id] = `data:image/png;base64,${response.blob}`
-        }
-        count++
-        if (count % 10 === 0) {
-          setIcons({ ...newIcons })
-        }
+        BackendRemote.rpc
+          .getHttpResponse(selectedAccountId(), AppStoreUrl + app.icon_relname)
+          .then((response: { blob: string }) => {
+            if (response?.blob !== undefined) {
+              newIcons[app.app_id] = `data:image/png;base64,${response.blob}`
+            }
+            count++
+            if (count === apps.length) {
+              setIcons({ ...newIcons })
+            } else if (count % 10 === 0) {
+              setIcons({ ...newIcons })
+            }
+          })
       }
-      setIcons({ ...newIcons })
     }
     loadIcons()
   }, [apps, isOffline])
