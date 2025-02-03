@@ -1,5 +1,7 @@
 import { expect, Locator, Page } from '@playwright/test'
 
+const chatmailServer = 'https://ci-chatmail.testrun.org'
+
 type LocatorWithSelector = Locator & {
   _selector: string
 }
@@ -68,6 +70,14 @@ export async function createNewProfile(
       .first()
       .click()
   }
+
+  page.evaluate("navigator.clipboard.writeText('dcaccount:" + chatmailServer + "/new')")
+
+  await page.getByTestId('other-login-button').click()
+
+  await page.getByTestId('scan-qr-login').click()
+
+  await page.getByTestId('paste').click()
 
   const nameInput = page.locator('#displayName')
 

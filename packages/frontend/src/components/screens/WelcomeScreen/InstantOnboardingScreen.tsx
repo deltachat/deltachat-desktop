@@ -165,6 +165,7 @@ export default function InstantOnboardingScreen({
               className={styles.welcomeScreenButton}
               styling='primary'
               onClick={onConfirm}
+              data-testid='login-button'
             >
               {welcomeQr?.qr.kind === 'login'
                 ? tx('login')
@@ -174,6 +175,7 @@ export default function InstantOnboardingScreen({
               className={styles.welcomeScreenButton}
               styling='secondary'
               onClick={showOtherOptions}
+              data-testid='other-login-button'
             >
               {tx('instant_onboarding_show_more_instances')}
             </Button>
