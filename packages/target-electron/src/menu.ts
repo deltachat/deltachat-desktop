@@ -289,6 +289,9 @@ export function getHelpMenu(
         accelerator: isMac ? 'Cmd+/' : 'Ctrl+/',
       },
       {
+        type: 'separator',
+      },
+      {
         label: tx('delta_chat_homepage'),
         click: () => {
           shell.openExternal(homePageUrl)
@@ -301,13 +304,13 @@ export function getHelpMenu(
         },
       },
       {
-        type: 'separator',
-      },
-      {
         label: tx('global_menu_help_report_desktop'),
         click: () => {
           shell.openExternal(gitHubIssuesUrl)
         },
+      },
+      {
+        type: 'separator',
       },
       {
         label: tx('global_menu_help_about_desktop'),
