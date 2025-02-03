@@ -310,6 +310,17 @@
   }
 }
 
+.message {
+  transition: background-color 2s;
+  &.status_in_fresh {
+    background-color: #88ff8860;
+  }
+  &.status_in_noticed {
+    background-color: #8888ff30;
+  }
+  // &.status_in_seen {}
+}
+
 .message.forwarded {
   .forwarded-indicator {
     font-weight: bold;

@@ -754,6 +754,7 @@ export default function Message(props: {
           [styles.withReactions]: message.reactions && !isSetupmessage,
           'type-sticker': viewType === 'Sticker',
           error: status === 'error',
+          [`status_${status}`]: true,
           forwarded: message.isForwarded,
           'has-html': hasHtml,
         }
