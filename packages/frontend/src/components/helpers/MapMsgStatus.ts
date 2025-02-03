@@ -16,11 +16,11 @@ export function mapCoreMsgStatus2String(state: number): msgStatus {
     case C.DC_STATE_OUT_MDN_RCVD:
       return 'read'
     case C.DC_STATE_IN_FRESH:
-      return 'delivered'
+      return 'in_fresh'
     case C.DC_STATE_IN_SEEN:
-      return 'delivered'
+      return 'in_seen'
     case C.DC_STATE_IN_NOTICED:
-      return 'read'
+      return 'in_noticed'
     default:
       return '' // to display no icon on unknown state
   }
