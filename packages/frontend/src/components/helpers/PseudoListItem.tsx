@@ -38,6 +38,8 @@ export function PseudoListItem(
         ref={buttonRef}
         className={'contact-list-item-button ' + rovingTabindex.className}
         onClick={onClick}
+        // Keep in mind that `tabIndex="0"` will _not_
+        // make the element focusable.
         disabled={!onClick}
         style={style}
         tabIndex={rovingTabindex.tabIndex}

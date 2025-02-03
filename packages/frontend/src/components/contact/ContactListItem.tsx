@@ -103,10 +103,10 @@ export function ContactListItem(props: {
         // still want to keep it focusable so that the context menu can be
         // activated, and for screen-readers.
         aria-disabled={disabled}
+        // Keep in mind that we have to be careful with disabled elements
+        // that are also part of the roving tabindex widget,
+        // because `tabindex="0"` does _not_ make disabled elements focusable.
         disabled={disabled && !onContextMenu}
-        // FYI this makes this element keyboard-navigarble
-        // regardless of whether it is disabled.
-        // This is probably fine.
         tabIndex={rovingTabindex.tabIndex}
         onClick={() => {
           if (disabled) return
