@@ -17,7 +17,7 @@ This package depends on the target-browser so make sure you prepared that to run
 But don't run the browser at the same time, it will be started inside the test routine.
 
 ```sh
-pnpm -w e2e --project <chromium | firefox | Chrome>
+pnpm -w e2e
 ```
 
 for headless usage
@@ -25,7 +25,7 @@ for headless usage
 or
 
 ```sh
-pnpm -w e2e --project <chromium | firefox | Chrome> --ui
+pnpm -w e2e --ui
 ```
 
 for [UI mode](https://playwright.dev/docs/test-ui-mode)

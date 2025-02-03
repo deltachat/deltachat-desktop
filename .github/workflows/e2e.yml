@@ -76,10 +76,6 @@ env: # dummy certificates for testing
 
 jobs:
   test:
-    # Disable temporarily because they're not working
-    # at least 90% of the time.
-    if: false
-
     name: E2E Tests
     environment: test
     env:
@@ -91,7 +87,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest]
       fail-fast: false
     steps:
     - uses: actions/checkout@v4
@@ -102,7 +98,7 @@ jobs:
       run: npm install -g pnpm && pnpm install
     - name: Install Playwright Browsers
       working-directory: ./packages/e2e-tests
-      run: npx playwright install --with-deps
+      run: npx playwright install --with-deps --only-shell chromium
     - name: create data dir
       run: mkdir -p packages/target-browser/data
     - name: Run e2e tests
