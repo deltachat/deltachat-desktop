@@ -4,7 +4,6 @@ import { join } from 'path'
 
 import {
   gitHubIssuesUrl,
-  gitHubUrl,
   homePageUrl,
   appWindowTitle,
 } from '../../shared/constants.js'
