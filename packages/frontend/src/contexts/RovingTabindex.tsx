@@ -18,6 +18,12 @@ import React, {
  * https://developer.mozilla.org/en-US/docs/Web/Accessibility/Keyboard-navigable_JavaScript_widgets#technique_1_roving_tabindex
  * ).
  *
+ * You may apply this to disabled elements (such as buttons),
+ * but they will be excluded from the list, as with regular Tab
+ * behavior.
+ * Exercise caution when dealing with otherwise non-focusable elements,
+ * such as `display: none`, hidden.
+ *
  * It is OK to use this outside of `RovingTabindexContext`.
  * In this case it will simply always return `tabIndex === 0`.
  *
@@ -186,10 +192,16 @@ export function RovingTabindexProvider({
       // but it might have other benefits.
       event.preventDefault()
 
-      // TODO perf: `getElementsByClassName` returns a live range.
-      // Perhaps we could cache it so as to not re-make it on every key press.
-      const eligibleElements = wrapperElementRef.current.getElementsByClassName(
-        classNameOfTargetElements
+      // `:not(:disabled)` ensures that the element
+      // is actually focusable.
+      // Otherwise we'd attempt to `.focus()`, but this won't work,
+      // and the user will get stuck.
+      //
+      // This does _not_ cover all cases of unfocusable elements,
+      // e.g. `display: none;` See e.g.
+      // https://stackoverflow.com/questions/1599660/which-html-elements-can-receive-focus
+      const eligibleElements = wrapperElementRef.current.querySelectorAll(
+        `.${classNameOfTargetElements}:not(:disabled)`
       )
 
       let newActiveElement: Element
@@ -228,6 +240,16 @@ export function RovingTabindexProvider({
       // or `useEffect`, because elements with `tabindex="-1"`
       // are still programmatically focusable.
       newActiveElement_.focus()
+
+      // See above, about whether the element is focusable.
+      if (document.activeElement !== newActiveElement_) {
+        log.error(
+          'Tried to focus element but it did not get focused.\n' +
+            'You might want to explude this element ' +
+            'from the roving tabindex widget:',
+          newActiveElement_
+        )
+      }
     },
     [activeElement, classNameOfTargetElements, direction, wrapperElementRef]
   )
