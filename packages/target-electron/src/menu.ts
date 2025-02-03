@@ -289,15 +289,15 @@ export function getHelpMenu(
         accelerator: isMac ? 'Cmd+/' : 'Ctrl+/',
       },
       {
-        label: tx('global_menu_help_learn_desktop'),
+        label: tx('delta_chat_homepage'),
         click: () => {
           shell.openExternal(homePageUrl)
         },
       },
       {
-        label: tx('global_menu_help_contribute_desktop'),
+        label: tx('contribute'),
         click: () => {
-          shell.openExternal(gitHubUrl)
+          shell.openExternal('https://delta.chat/contribute')
         },
       },
       {
