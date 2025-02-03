@@ -47,10 +47,9 @@
 }
 
 .keyboard-hint-cheatsheet-dialog {
-  width: 100% !important;
-  max-width: 840px !important;
+  width: 80% !important;
+  max-width: 560px !important;
   .keybinding {
-    flex-grow: 1;
     font-size: 0.84em;
   }
   h4 .keybinding {
@@ -63,13 +62,12 @@
   .keyboard-hint-dialog-body {
     display: flex;
     flex-wrap: wrap;
-    padding: 4px;
-    max-height: 80vh;
-
+    padding-left: 10px;
+    padding-bottom: 10px;
     .action {
       width: 260px;
-      margin: 7px;
-      padding: 10px;
+      margin: 4px;
+      padding: 7px;
     }
 
     h2 {
