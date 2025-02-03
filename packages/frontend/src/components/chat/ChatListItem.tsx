@@ -84,12 +84,12 @@ const Message = React.memo<
   summaryPreviewImage,
   lastMessageId,
 }) {
-  const wasReceived =
+  const isIncoming =
     summaryStatus === C.DC_STATE_IN_FRESH ||
     summaryStatus === C.DC_STATE_IN_SEEN ||
     summaryStatus === C.DC_STATE_IN_NOTICED
 
-  const status = wasReceived ? '' : mapCoreMsgStatus2String(summaryStatus)
+  const status = isIncoming ? '' : mapCoreMsgStatus2String(summaryStatus)
 
   const iswebxdc = summaryPreviewImage === 'webxdc-icon://last-msg-id'
 
