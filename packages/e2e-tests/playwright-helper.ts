@@ -71,7 +71,9 @@ export async function createNewProfile(
       .click()
   }
 
-  page.evaluate("navigator.clipboard.writeText('dcaccount:" + chatmailServer + "/new')")
+  page.evaluate(
+    `navigator.clipboard.writeText('dcaccount:${chatmailServer}/new')`
+  )
 
   await page.getByTestId('other-login-button').click()
 
