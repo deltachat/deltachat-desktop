@@ -32,5 +32,6 @@ export function getDefaultState(): DesktopSettingsType {
     galleryImageKeepAspectRatio: false,
     useSystemUIFont: false,
     contentProtectionEnabled: false,
+    isMentionsEnabled: false,
   }
 }
