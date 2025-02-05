@@ -133,7 +133,10 @@ import { updateTrayIcon, hideDeltaChat, showDeltaChat } from './tray.js'
 import './notifications.js'
 import { acceptThemeCLI } from './themes.js'
 import { webxdcStartUpCleanup } from './deltachat/webxdc.js'
-import { cleanupDraftTempDir } from './cleanup_temp_dir.js'
+import {
+  cleanupDraftTempDir,
+  cleanupInternalTempDirs,
+} from './cleanup_temp_dir.js'
 
 app.ipcReady = false
 app.isQuitting = false
@@ -198,7 +201,7 @@ async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
     log.error('Cleanup of old logfiles failed: ', err)
   )
   cleanupDraftTempDir()
-
+  cleanupInternalTempDirs()
   // NOTE: Make sure to use `powerMonitor` only when electron signals it is ready
   initialisePowerMonitor()
 }

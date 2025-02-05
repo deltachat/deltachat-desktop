@@ -4,6 +4,7 @@
 
 ### Added
 - highlight the first unread message upon opening a chat #4525
+- copy files to internal tmp dir before opening attachements #4498
 
 ### Changed
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.155.2`
