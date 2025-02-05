@@ -48,7 +48,7 @@
 
 .keyboard-hint-cheatsheet-dialog {
   width: 80% !important;
-  max-width: 560px !important;
+  max-width: 570px !important;
   .keybinding {
     font-size: 0.84em;
   }
@@ -62,8 +62,8 @@
   .keyboard-hint-dialog-body {
     display: flex;
     flex-wrap: wrap;
-    padding-left: 10px;
     padding-bottom: 10px;
+    justify-content: space-evenly;
     .action {
       width: 260px;
       margin: 4px;
