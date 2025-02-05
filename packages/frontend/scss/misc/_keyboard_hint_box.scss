@@ -3,7 +3,7 @@
 .keyboard-hint-cheatsheet-dialog {
   .keybinding {
     display: block;
-    margin-bottom: 7px;
+    padding: 7px 0;
 
     .key {
       background: var(--keybindingKeyBackground);
@@ -47,29 +47,31 @@
 }
 
 .keyboard-hint-cheatsheet-dialog {
+  width: 80% !important;
+  max-width: 570px !important;
   .keybinding {
-    display: block;
-    flex-grow: 1;
     font-size: 0.84em;
-    margin-bottom: 0;
+  }
+  h4 .keybinding {
+    flex: none;
+    margin-left: 20px;
+  }
+  .dialog-body {
+    padding-bottom: 0;
   }
   .keyboard-hint-dialog-body {
     display: flex;
     flex-wrap: wrap;
-    flex-direction: column;
-    padding: 4px;
-    max-height: 600px;
+    padding-bottom: 10px;
     justify-content: space-evenly;
-    padding: 20px;
-
     .action {
-      max-width: 240px;
-      width: calc(50% - 7px);
-      margin-right: 7px;
+      width: 260px;
+      margin: 4px;
+      padding: 7px;
     }
 
     h2 {
-      max-width: 240px;
+      max-width: 280px;
       font-size: 1.4em;
     }
   }
