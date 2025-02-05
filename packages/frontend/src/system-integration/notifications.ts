@@ -359,8 +359,8 @@ async function flushNotifications(accountId: number) {
 }
 
 /**
- * if isMentionsEnabled returns true
- * if the notification is a mention
+ * returns true if the notification is a mention. See
+ * https://github.com/deltachat/deltachat-desktop/issues/4461
  */
 async function notificationIsMention(
   accountId: number,
