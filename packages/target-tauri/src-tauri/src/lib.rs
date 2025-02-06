@@ -1,10 +1,9 @@
+use clipboard::copy_image_to_clipboard;
 use std::time::SystemTime;
-
 use tauri::Manager;
 use tauri_plugin_store::StoreExt;
 
 use state::{app::AppState, deltachat::DeltaChatAppState};
-
 mod app_path;
 mod blobs;
 mod clipboard;
@@ -94,6 +93,7 @@ pub fn run() {
             ui_ready,
             ui_frontend_ready,
             get_current_logfile,
+            copy_image_to_clipboard,
             app_path::get_app_path,
             clipboard::get_clipboard_image_as_data_uri,
             file_dialogs::download_file,

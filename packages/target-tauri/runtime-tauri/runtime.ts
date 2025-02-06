@@ -340,8 +340,8 @@ class TauriRuntime implements Runtime {
   writeClipboardText(text: string): Promise<void> {
     return writeText(text)
   }
-  writeClipboardImage(_path: string): Promise<void> {
-    throw new Error('Method not implemented.20')
+  writeClipboardImage(path: string): Promise<void> {
+    return invoke('copy_image_to_clipboard', { path })
   }
   getAppPath(name: RuntimeAppPath): Promise<string> {
     // defined in packages/target-tauri/src-tauri/src/app_path.rs
