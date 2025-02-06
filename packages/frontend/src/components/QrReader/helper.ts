@@ -50,7 +50,7 @@ export async function base64ToImageData(base64: string): Promise<ImageData> {
         reject(error)
       }
     })
-    image.addEventListener('error', (err)=>{
+    image.addEventListener('error', err => {
       reject(err)
     })
     image.src = base64
