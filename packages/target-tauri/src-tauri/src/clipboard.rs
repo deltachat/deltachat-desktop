@@ -9,7 +9,7 @@ pub(crate) enum Error {
     #[error(transparent)]
     Clipboard(#[from] tauri_plugin_clipboard_manager::Error),
     #[error(transparent)]
-    EncodingError(#[from] png::EncodingError),
+    Encoding(#[from] png::EncodingError),
     #[error(transparent)]
     Tauri(#[from] tauri::Error),
 }
