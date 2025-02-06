@@ -29,7 +29,7 @@ pub(crate) async fn get_locale_data(locale: &str, app: AppHandle) -> Result<Loca
         &tokio::fs::read_to_string(locales_dir.join("_languages.json")).await?,
     )?;
 
-    let (locale_name, locale_dir) = match languages.get(locale) {
+    let (_locale_name, locale_dir) = match languages.get(locale) {
         Some(Language::String(name)) => (name.to_owned(), None),
         Some(Language::Object { name, dir }) => (name.to_owned(), Some(dir.to_owned())),
         None => return Err(Error::LocaleNotFound(locale.to_owned())),
@@ -57,7 +57,7 @@ pub(crate) async fn get_locale_data(locale: &str, app: AppHandle) -> Result<Loca
     language_data.extend(untranslated_data.into_iter());
 
     Ok(LocaleData {
-        locale: locale_name,
+        locale: locale.to_owned(),
         dir: locale_dir.unwrap_or_default(),
         messages: language_data,
     })
