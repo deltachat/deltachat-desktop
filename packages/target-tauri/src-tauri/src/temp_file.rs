@@ -2,7 +2,7 @@ use std::{fmt::Display, fs::exists, path::PathBuf};
 
 use base64::Engine;
 use log::{info, warn};
-use tauri::{AppHandle, Manager};
+use tauri::{path::SafePathBuf, AppHandle, Manager};
 use tokio::{
     fs::{create_dir, create_dir_all, read_dir, remove_dir_all, remove_file, File},
     io::AsyncWriteExt,
@@ -20,6 +20,7 @@ pub(crate) enum Error {
     Base64Decode(#[from] base64::DecodeError),
     InvalidFileName,
     PathNotValidUtf8,
+    PathToDeleteOutsideOfTempDir,
 }
 impl serde::Serialize for Error {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -40,7 +41,7 @@ fn get_temp_folder_path(app: &AppHandle) -> Result<PathBuf, Error> {
     Ok(app.path().temp_dir()?.join(TMP_FOLDER_NAME))
 }
 
-// create tmp file
+/// creates a temporary file in a temporary directory in the temp folder specied by [get_temp_folder_path]
 async fn create_tmp_file(app: &AppHandle, name: &str) -> Result<(File, PathBuf), Error> {
     // (make sure filename can not escape)
     let dir = get_temp_folder_path(app)?.join(uuid::Uuid::new_v4().to_string());
@@ -59,7 +60,18 @@ async fn create_tmp_file(app: &AppHandle, name: &str) -> Result<(File, PathBuf),
 }
 
 // delete tmp file
-// (make sure it can not escape)
+async fn delete_tmp_file(app: &AppHandle, path: SafePathBuf) -> Result<(), Error> {
+    let tmpdir = get_temp_folder_path(app)?.canonicalize()?;
+    let resolved_path = path.as_ref().canonicalize()?;
+    if !resolved_path.starts_with(tmpdir) {
+        return Err(Error::PathToDeleteOutsideOfTempDir);
+    }
+    if resolved_path.try_exists()? {
+        remove_file(resolved_path).await?
+        // empty directory remains, but that is not a problem as the name is random and they are cleared on restart.
+    }
+    Ok(())
+}
 
 // normalize/resolve path, then take absolute path and check if it starts with tmp folder path
 
@@ -96,9 +108,10 @@ pub(crate) async fn clear_tmp_folder(app: &AppHandle) -> Result<(), Error> {
     Ok(())
 }
 
-// tauri commands:
-// writeTempFileFromBase64
+// Tauri Commands
+// ==============
 
+// writeTempFileFromBase64
 // just accepts the raw base64 string, not data urls
 #[tauri::command]
 pub(crate) async fn write_temp_file_from_base64(
@@ -115,6 +128,7 @@ pub(crate) async fn write_temp_file_from_base64(
         .ok_or(Error::PathNotValidUtf8)?
         .to_owned())
 }
+
 // writeTempFile
 #[tauri::command]
 pub(crate) async fn write_temp_file(
@@ -130,10 +144,9 @@ pub(crate) async fn write_temp_file(
         .ok_or(Error::PathNotValidUtf8)?
         .to_owned())
 }
+
 // removeTempFile
 #[tauri::command]
-pub(crate) async fn remove_temp_file(app: AppHandle, path: &str) -> Result<(), Error> {
-    // TODO
-
-    Ok(())
+pub(crate) async fn remove_temp_file(app: AppHandle, path: SafePathBuf) -> Result<(), Error> {
+    delete_tmp_file(&app, path).await
 }
