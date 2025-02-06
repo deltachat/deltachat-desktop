@@ -46,7 +46,6 @@ pub(crate) fn get_clipboard_image_as_data_uri(app: AppHandle) -> Result<String, 
 
 #[tauri::command]
 pub(crate) fn copy_image_to_clipboard(app: AppHandle, path: &Path) -> Result<(), Error> {
-    println!("copy_image_to_clipboard: {:?}", path);
     let image = Image::from_path(path)?;
     app.clipboard().write_image(&image)?;
     Ok(())
