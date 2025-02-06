@@ -11,7 +11,6 @@ import { open } from '@tauri-apps/plugin-shell'
 import {
   writeText,
   readText,
-  readImage,
 } from '@tauri-apps/plugin-clipboard-manager'
 
 import {
@@ -33,7 +32,6 @@ import type {
   LogLevelString,
 } from '@deltachat-desktop/shared/logger.js'
 import type { setLogHandler as setLogHandlerFunction } from '@deltachat-desktop/shared/logger.js'
-
 
 let logJsonrpcConnection = false
 

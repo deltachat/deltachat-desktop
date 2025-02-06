@@ -269,7 +269,7 @@ const Composer = forwardRef<
 
       const path = await runtime.writeTempFileFromBase64(
         file.name || `file.${extension(file.type)}`,
-        file_content.split(";base64,")[1]
+        file_content.split(';base64,')[1]
       )
       await addFileToDraft(path, msgType)
       // delete file again after it was sucessfuly added
