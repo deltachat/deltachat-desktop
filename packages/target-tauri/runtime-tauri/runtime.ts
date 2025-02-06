@@ -155,7 +155,7 @@ class TauriRuntime implements Runtime {
     // 1. set values in key value store
     await this.store.set(key, value)
     // 2. if supported in tauri settings, then also notifiy tauri (like tray_icon, but not experimental ui options)
-    // IDEA: if there is a way to listen for changes in rust code, then that would be preferably?
+    await invoke('change_desktop_settings_apply_side_effects', { key })
   }
   private log!: ReturnType<typeof getLoggerFunction>
   private store!: Store

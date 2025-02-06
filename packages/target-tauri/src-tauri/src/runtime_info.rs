@@ -34,6 +34,7 @@ pub(crate) struct RuntimeInfo {
     // runningUnderARM64Translation - not used by tauri runtime and is optional
     // rpcServerPath - not used by tauri runtime and is optional
     build_info: BuildInfo,
+    is_content_protection_supported: bool,
     hide_emoji_and_sticker_picker: bool,
 }
 
@@ -63,6 +64,8 @@ pub fn get_runtime_info() -> RuntimeInfo {
             // this is set in build.rs
             build_timestamp: env!("BUILD_TIME_STAMP").parse().unwrap_or(1), // 1 instead of 0, ss that we can identify the issue
         },
+        is_content_protection_supported: cfg!(target_os = "macos")
+            || cfg!(target_os = "windows"),
         hide_emoji_and_sticker_picker: cfg!(target_os = "ios"),
     }
 }

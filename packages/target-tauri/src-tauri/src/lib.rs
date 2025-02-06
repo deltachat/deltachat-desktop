@@ -1,7 +1,7 @@
 use clipboard::copy_image_to_clipboard;
+use settings::load_and_apply_desktop_settings_on_startup;
 use std::time::SystemTime;
 use tauri::Manager;
-use tauri_plugin_store::StoreExt;
 
 use state::{app::AppState, deltachat::DeltaChatAppState};
 mod app_path;
@@ -11,6 +11,7 @@ mod file_dialogs;
 mod help_window;
 mod i18n;
 mod runtime_info;
+mod settings;
 mod state;
 mod temp_file;
 mod webxdc;
@@ -110,6 +111,7 @@ pub fn run() {
             webxdc::delete_webxdc_account_data,
             webxdc::close_all_webxdc_instances,
             runtime_info::get_runtime_info,
+            settings::change_desktop_settings_apply_side_effects,
             help_window::open_help_window,
         ])
         .register_asynchronous_uri_scheme_protocol("webxdc-icon", webxdc::webxdc_icon_protocol)
@@ -168,8 +170,7 @@ pub fn run() {
             app.state::<AppState>()
                 .log_duration_since_startup("setup done");
 
-            let _store = app.store("config.json")?;
-            // todo: activate tray icon based on minimizeToTray
+            load_and_apply_desktop_settings_on_startup(app.handle())?;
 
             // we can only do this in debug mode, macOS doesn't not allow this in the appstore, because it uses private apis
             // we should think about wether we want it on other production builds (except store),
