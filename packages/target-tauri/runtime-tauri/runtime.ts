@@ -8,10 +8,7 @@ import type { attachLogger } from '@tauri-apps/plugin-log'
 import { getStore } from '@tauri-apps/plugin-store'
 import type { Store } from '@tauri-apps/plugin-store'
 import { open } from '@tauri-apps/plugin-shell'
-import {
-  writeText,
-  readText,
-} from '@tauri-apps/plugin-clipboard-manager'
+import { writeText, readText } from '@tauri-apps/plugin-clipboard-manager'
 
 import {
   DcNotification,
