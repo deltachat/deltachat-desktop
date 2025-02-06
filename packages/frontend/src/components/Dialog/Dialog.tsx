@@ -87,7 +87,6 @@ const Dialog = React.memo<Props>(
         height: height && `${height}px`,
       }
     }
-
     return (
       <dialog
         onClick={onClick}

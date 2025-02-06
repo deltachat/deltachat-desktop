@@ -361,6 +361,7 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
       className='navbar-heading navbar-heading__button'
       data-no-drag-region
       onClick={onTitleClick}
+      data-testid='chat-info-button'
     >
       <Avatar
         displayName={chat.name}

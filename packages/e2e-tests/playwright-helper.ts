@@ -30,6 +30,21 @@ export async function switchToProfile(
   )
 }
 
+export async function createUser(
+  userName: string,
+  page: Page,
+  existingProfiles: User[]
+): Promise<User> {
+  const user = await createNewProfile(page, userName)
+
+  expect(user.id).toBeDefined()
+
+  existingProfiles.push(user)
+  /* ignore-console-log */
+  console.log(`User ${user.name} wurde angelegt!`, user)
+  return user
+}
+
 export async function createNewProfile(
   page: Page,
   name: string
@@ -42,34 +57,26 @@ export async function createNewProfile(
   await page.waitForSelector('.styles_module_account')
   const accountList = page.locator('.styles_module_account')
 
-  const addAccountSelector =
-    '.styles_module_accountList .styles_module_addButton'
-  const welcomeButtonsSelector = '.styles_module_welcomeScreenButtonGroup'
+  const addAccountSelector = 'add-account-button'
+  const onboardingDialogSelector = 'onboarding-dialog'
 
   const returnedLocator = await Promise.race([
-    // first login without account
-    waitForLocator(page.locator(welcomeButtonsSelector)),
-    waitForLocator(page.locator(addAccountSelector)),
+    // no account yet so onboarding screen is shown immediately
+    waitForLocator(page.locator(`[data-testid="${onboardingDialogSelector}"]`)),
+    // already an existing account
+    waitForLocator(page.locator(`[data-testid="${addAccountSelector}"]`)),
   ])
 
   if (
     returnedLocator &&
     _hasSelector(returnedLocator) &&
-    returnedLocator['_selector'] === welcomeButtonsSelector
+    returnedLocator['_selector'].indexOf(addAccountSelector) > -1
   ) {
-    // no account yet
-    await page
-      .locator('.styles_module_welcomeScreenButtonGroup button')
-      .first()
-      .click()
-  } else {
-    // create a new account
-    returnedLocator.click()
-    await page
-      .locator('.styles_module_welcomeScreenButtonGroup button')
-      .first()
-      .click()
+    // add account to show onboarding screen
+    await returnedLocator.click()
   }
+  // create a new account
+  await page.getByTestId('create-account-button').click()
 
   page.evaluate(
     `navigator.clipboard.writeText('dcaccount:${chatmailServer}/new')`
@@ -87,17 +94,15 @@ export async function createNewProfile(
 
   await nameInput.fill(name)
 
-  await page
-    .locator('.styles_module_welcomeScreenButtonGroup button')
-    .first()
-    .click()
+  await page.getByTestId('login-button').click()
 
   const newAccountList = page.locator('.styles_module_account')
-  await expect(newAccountList.last()).toHaveClass(/styles_module_active/)
-
-  const settingsButton = page.locator(
-    '.styles_module_accountListSidebar .styles_module_settingsButtonIcon'
+  await expect(newAccountList.last()).toHaveClass(
+    /(^|\s)styles_module_active(\s|$)/
   )
+  // open settings to validate the name and to get
+  // the (randomly) created mail address
+  const settingsButton = page.getByTestId('open-settings-button')
   await settingsButton.click()
 
   await expect(page.locator('.styles_module_profileDisplayName')).toHaveText(
@@ -109,7 +114,7 @@ export async function createNewProfile(
 
   expect(address).not.toBeNull()
 
-  await page.locator('.styles_module_headerButton').click()
+  await page.getByTestId('settings-close').click()
 
   const newId = await accountList
     .last()
@@ -131,15 +136,13 @@ export async function createNewProfile(
 export async function getProfile(page: Page, accountId: string): Promise<User> {
   await page.getByTestId(`account-item-${accountId}`).click({ button: 'right' })
   await page.getByTestId('open-settings-menu-item').click()
-  // await page.getByTestId(`account-item-${accountId}`).click()
-  // await page.getByTestId('open-settings-button').click()
   const name = await page
     .locator('.styles_module_profileDisplayName')
     .textContent()
   const address = await page
     .locator('.styles_module_profileAddress')
     .textContent()
-  await page.getByTestId('close-settings').click()
+  await page.getByTestId('settings-close').click()
 
   return {
     id: accountId,
@@ -155,7 +158,8 @@ export async function getProfile(page: Page, accountId: string): Promise<User> {
 export async function loadExistingProfiles(page: Page): Promise<User[]> {
   // await page.goto('https://localhost:3000/')
   const existingProfiles: User[] = []
-  const accountList = page.locator('.styles_module_account')
+  expect(page.locator('.main-container')).toBeVisible()
+  const accountList = page.locator('button.styles_module_account')
   const existingAccountItems = await accountList.count()
   /* ignore-console-log */
   console.log('existingAccountItems', existingAccountItems)

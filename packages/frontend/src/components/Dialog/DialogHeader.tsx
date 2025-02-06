@@ -20,15 +20,19 @@ type Props = PropsWithChildren<{
 
 export default function DialogHeader(props: Props) {
   const { onClickBack, title, onClose, onClickEdit, children } = props
-
+  const dataTestid = props.dataTestid ?? 'dialog-header'
   return (
     <header className={classNames(styles.dialogHeader)}>
-      {onClickBack && <BackButton onClick={onClickBack} />}
+      {onClickBack && (
+        <BackButton onClick={onClickBack} data-testid={dataTestid + '-back'} />
+      )}
       {title && <DialogHeading>{title}</DialogHeading>}
       {children}
-      {onClickEdit && <EditButton onClick={onClickEdit} />}
+      {onClickEdit && (
+        <EditButton onClick={onClickEdit} data-testid={dataTestid + '-edit'} />
+      )}
       {onClose && (
-        <CloseButton onClick={onClose} data-testid={props.dataTestid} />
+        <CloseButton onClick={onClose} data-testid={dataTestid + '-close'} />
       )}
     </header>
   )

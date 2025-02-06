@@ -31,6 +31,7 @@ export default function useSecureJoin() {
       return await openConfirmationDialog({
         message: tx('ask_start_chat_with', contact.nameAndAddr),
         confirmLabel: tx('ok'),
+        dataTestid: 'confirm-start-chat',
       })
     },
     [openConfirmationDialog, tx]
@@ -48,6 +49,7 @@ export default function useSecureJoin() {
       return await openConfirmationDialog({
         message: tx('qrscan_ask_join_group', qr.grpname),
         confirmLabel: tx('ok'),
+        dataTestid: 'confirm-join-group',
       })
     },
     [openConfirmationDialog, tx]

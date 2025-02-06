@@ -44,7 +44,7 @@ export default function ViewGroup(
 ) {
   const { chat, onClose } = props
   return (
-    <Dialog width={400} onClose={onClose} fixed>
+    <Dialog width={400} onClose={onClose} fixed dataTestid='view-group-dialog'>
       <ViewGroupInner onClose={onClose} chat={chat} />
     </Dialog>
   )
@@ -221,6 +221,7 @@ function ViewGroupInner(
             title={!isBroadcast ? tx('tab_group') : tx('broadcast_list')}
             onClickEdit={onClickEdit}
             onClose={onClose}
+            dataTestid='view-group-dialog-header'
           />
           <DialogBody>
             <DialogContent paddingBottom>
@@ -330,7 +331,12 @@ export function ShowQRDialog({
   const tx = useTranslationFunction()
 
   return (
-    <Dialog onClose={onClose} canOutsideClickClose={false} fixed>
+    <Dialog
+      onClose={onClose}
+      canOutsideClickClose={false}
+      fixed
+      dataTestid='group-invite-qr'
+    >
       <DialogHeader title={tx('qrshow_title')} onClose={onClose} />
       <QrCodeShowQrInner
         qrCode={qrCode}

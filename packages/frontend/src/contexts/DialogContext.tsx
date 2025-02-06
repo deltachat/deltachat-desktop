@@ -63,6 +63,9 @@ export const DialogContextProvider = ({ children }: PropsWithChildren<{}>) => {
             closeDialog(newDialogId)
           },
           ...additionalProps,
+          // dataTestid: additionalProps?.dataTestid
+          //   ? additionalProps?.dataTestid
+          //   : `dialog-${newDialogId}`,
         }
       )
 

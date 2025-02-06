@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 
 import {
-  createNewProfile,
+  createUser,
   deleteProfile,
   switchToProfile,
   User,
@@ -43,6 +43,8 @@ test.beforeEach(async ({ page }) => {
 
 const userNames = ['Alice', 'Bob', 'Chris', 'Denis', 'Eve']
 
+const groupName = 'TestGroup'
+
 const getUser = (index: number) => {
   if (!existingProfiles || existingProfiles.length < index + 1) {
     throw new Error('Not enough profiles for test!')
@@ -67,21 +69,13 @@ test('create profiles', async ({ page, context, browserName }) => {
   if (browserName.toLowerCase().indexOf('chrom') > -1) {
     await context.grantPermissions(['clipboard-read', 'clipboard-write'])
   }
-  const userA = await createNewProfile(page, userNames[0])
+  await createUser(userNames[0], page, existingProfiles)
 
-  expect(userA.id).toBeDefined()
+  await createUser(userNames[1], page, existingProfiles)
 
-  existingProfiles.push(userA)
-  /* ignore-console-log */
-  console.log(`User ${userA.name} wurde angelegt!`, userA)
+  await createUser(userNames[2], page, existingProfiles)
 
-  const userB = await createNewProfile(page, userNames[1])
-
-  expect(userB.id).toBeDefined()
-
-  existingProfiles.push(userB)
-  /* ignore-console-log */
-  console.log(`User ${userB.name} wurde angelegt!`, userB)
+  await createUser(userNames[3], page, existingProfiles)
 })
 
 test('start chat with user', async ({ page, context, browserName }) => {
@@ -91,32 +85,22 @@ test('start chat with user', async ({ page, context, browserName }) => {
   const userA = getUser(0)
   const userB = getUser(1)
   await switchToProfile(page, userA.id)
-
+  // copy invite link from user A
   await page.getByTestId('qr-scan-button').click()
   await page.getByTestId('copy-qr-code').click()
   await page.getByTestId('qr-dialog').getByTestId('close').click()
 
   await switchToProfile(page, userB.id)
-
+  // paste invite link in account of userB
   await page.getByTestId('qr-scan-button').click()
-
   await page.getByTestId('show-qr-scan').click()
-
   await page.getByTestId('paste').click()
-
-  const t = await page
-    .locator('.styles_module_dialog')
-    .last()
-    .locator('.styles_module_dialogContent p')
+  const confirmDialogText = await page
+    .getByTestId('confirm-start-chat')
     .textContent()
+  expect(confirmDialogText).toContain(userA.name)
 
-  expect(t).toContain(userA.name)
-
-  await page
-    .locator('.styles_module_dialog')
-    .last() // 2 dialogs are open! data-testid can't be added to ConfirmationDialog so far!
-    .getByTestId('confirm')
-    .click()
+  await page.getByTestId('confirm-start-chat').getByTestId('confirm').click()
   await expect(
     page.locator('.chat-list .chat-list-item').filter({ hasText: userA.name })
   ).toHaveCount(1)
@@ -170,6 +154,76 @@ test('send message', async ({ page }) => {
     .locator(`.msg-body .text`)
     .textContent()
   expect(receivedMessageText).toEqual(messageText)
+})
+
+test('create group', async ({ page, context, browserName }) => {
+  if (browserName.toLowerCase().indexOf('chrom') > -1) {
+    await context.grantPermissions(['clipboard-read', 'clipboard-write'])
+  }
+  const userA = getUser(0)
+  const userB = getUser(1)
+  const userC = getUser(2)
+  await switchToProfile(page, userA.id)
+  await page.locator('#new-chat-button').click()
+  await page.locator('#newgroup button').click()
+  await page.locator('.group-name-input').fill(groupName)
+  await page.locator('#addmember button').click()
+  const addMemberDialog = page.getByTestId('add-member-dialog')
+  await page
+    .locator('.contact-list-item')
+    .filter({ hasText: userB.address })
+    .click()
+  // add new member by mail address (not working yet)
+  // await page.getByTestId('add-member-search').fill(userC.address)
+  // await page.keyboard.up('Enter')
+  // only one (pseudo) user is shown
+  // await addMemberDialog.locator('.contact-list-item buttom ').click()
+
+  await addMemberDialog.getByTestId('ok').click()
+
+  await page.getByTestId('group-create-button').click()
+  const chatListItem = page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: groupName })
+  await expect(chatListItem).toBeVisible()
+  page.locator('#composer-textarea').fill(`Hello group members!`)
+  page.locator('.send-button-wrapper button').click()
+  const badgeNumber = await page
+    .getByTestId(`account-item-${userB.id}`)
+    .locator('.styles_module_accountBadgeIcon')
+    .textContent()
+  expect(badgeNumber).toBe('1')
+  // copy group invite link
+  await page.getByTestId('chat-info-button').click()
+  await page.locator('#showqrcode button').click()
+  await page.getByTestId('copy-qr-code').click()
+  await page
+    .getByTestId('group-invite-qr')
+    .getByTestId('dialog-header-close')
+    .click()
+  await page.getByTestId('view-group-dialog-header-close').click()
+  // paste invite link in account of userC
+  await switchToProfile(page, userC.id)
+  await page.getByTestId('qr-scan-button').click()
+  await page.getByTestId('show-qr-scan').click()
+  await page.getByTestId('paste').click()
+  const confirmDialog = page.getByTestId('confirm-join-group')
+  await expect(confirmDialog).toBeVisible()
+  // confirm dialog should contain group name
+  const confirmText = await confirmDialog.textContent()
+  expect(confirmText).toContain(groupName)
+  await page.getByTestId('confirm-join-group').getByTestId('confirm').click()
+  // userA invited you to group message
+  expect(page.locator('#message-list li').first()).toContainText(userA.address)
+  // verified chat after response from userA
+  await expect(page.locator('.verified-icon-info-msg')).toBeVisible()
+  // userB has 2 new notifications now
+  const badge = page
+    .getByTestId(`account-item-${userB.id}`)
+    .locator('.styles_module_accountBadgeIcon')
+    .getByText('2')
+
+  await expect(badge).toBeVisible()
 })
 
 test('add app from picker to chat', async ({ page }) => {

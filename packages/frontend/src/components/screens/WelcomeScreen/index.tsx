@@ -81,6 +81,7 @@ export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
         backdropDragAreaOnTauriRuntime
         canOutsideClickClose={false}
         onClose={onClickBackButton}
+        dataTestid='onboarding-dialog'
       >
         {!showInstantOnboarding ? (
           <OnboardingScreen

@@ -211,6 +211,7 @@ export function AddMemberInnerDialog({
               placeholder={tx('search')}
               autoFocus
               spellCheck={false}
+              data-testid='add-member-search'
             />
           </div>
         </div>
@@ -348,6 +349,7 @@ function AddMemberInnerDialogRow({
           checked={false}
           showRemove={false}
           onCheckboxClick={onCreateContactCheckboxClick}
+          data-testid='add-pseudo-contact'
         />
       )
     } else {
