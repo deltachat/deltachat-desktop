@@ -257,9 +257,9 @@ class TauriRuntime implements Runtime {
     this.store = store
     this.currentLogFileLocation = await invoke('get_current_logfile')
 
-    listen<string>('locale_reloaded', (event) => {
+    listen<string>('locale_reloaded', event => {
       this.onChooseLanguage?.(event.payload)
-    });
+    })
   }
   reloadWebContent(): void {
     // for now use the browser method as long as it is sufficient
@@ -405,7 +405,7 @@ class TauriRuntime implements Runtime {
     })
   }
   setLocale(locale: string): Promise<void> {
-    return invoke('change_lang', {locale});
+    return invoke('change_lang', { locale })
   }
   setBadgeCounter(value: number): void {
     getCurrentWindow().setBadgeCount(value === 0 ? undefined : value)
