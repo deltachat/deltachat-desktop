@@ -12,7 +12,6 @@ import path, { basename, extname, join, posix, sep, dirname } from 'path'
 import { inspect } from 'util'
 import { platform } from 'os'
 import { existsSync } from 'fs'
-import mimeTypes from 'mime-types'
 import { versions } from 'process'
 import { fileURLToPath } from 'url'
 
