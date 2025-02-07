@@ -6,7 +6,7 @@ Delta Chat desktop with tauri as runtime instead of electron.
 
 Requirements
 
-- rust (install it via https://rustup.rs) -> both `stable` and `nightly` (nightly is used for code formatting)
+- rust (install it via https://rustup.rs)
 - nodejs (use your favorite node version manager like [fnm](https://github.com/Schniz/fnm)) and [pnpm](https://pnpm.io) package manager
 - on linux you need a few system dependencies:
   - debian/ubuntu `sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf`
