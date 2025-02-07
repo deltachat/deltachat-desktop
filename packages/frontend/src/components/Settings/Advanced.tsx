@@ -11,6 +11,7 @@ import Communication from './Communication'
 import EditAccountAndPasswordDialog from '../dialogs/EditAccountAndPasswordDialog'
 import useDialog from '../../hooks/dialog/useDialog'
 import SettingsButton from './SettingsButton'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 type Props = {
   settingsStore: SettingsStoreState
@@ -22,6 +23,9 @@ export default function Advanced({ settingsStore }: Props) {
 
   return (
     <>
+      <SettingsButton onClick={() => runtime.openLogFile()}>
+        {tx('pref_view_log')}
+      </SettingsButton>
       <Communication settingsStore={settingsStore} />
       <SettingsSeparator />
 
