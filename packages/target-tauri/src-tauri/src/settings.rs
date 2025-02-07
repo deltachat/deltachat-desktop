@@ -26,7 +26,7 @@ pub(crate) fn load_and_apply_desktop_settings_on_startup(app: &AppHandle) -> any
 
 pub(crate) fn apply_zoom_factor(app: &AppHandle) -> anyhow::Result<()> {
     let store = app.store("config.json")?;
-    let zoom_factor:f64 = store
+    let zoom_factor: f64 = store
         .get("ZOOM_FACTOR_KEY")
         .and_then(|f| f.as_f64())
         .unwrap_or(1.0);
