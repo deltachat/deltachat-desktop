@@ -28,6 +28,7 @@
 - store last used account in accounts.toml managed by core #4569
 - update help menu URLs #4598
 - upgrade Electron from `32.1.0` to `34.0.1` #4568
+- Update translations (2025-02-07)
 
 ### Fixed
 - fix changelog message left unread not in the selected account as it should be but in another account. #4569
