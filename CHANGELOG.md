@@ -13,6 +13,11 @@
 - e2e test for group creation #4614
 - always show accounts with unread messages, even when they're normally scrolled out of view #4536
 - make log additionally available at "Settings / Advanced / View Log" #4610
+- improvements to tauri version #4528 #4585 #4533:
+  - read images from clipboard, write images to clipboard, write/delete temporary files
+  - implement experimental setting: content protection
+  - api to change language
+  - help window localisation
 
 ### Changed
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.155.3`
