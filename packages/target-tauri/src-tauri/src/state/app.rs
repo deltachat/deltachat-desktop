@@ -5,9 +5,8 @@ use std::{
 };
 
 use anyhow::{bail, Context};
-use tauri::{AppHandle, Manager};
-
 use log::info;
+use tauri::{AppHandle, Manager};
 
 use crate::temp_file::{clear_tmp_folder, create_tmp_folder};
 

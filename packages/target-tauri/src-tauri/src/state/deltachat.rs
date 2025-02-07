@@ -5,11 +5,9 @@ use deltachat_jsonrpc::{
     yerpc::{RpcClient, RpcSession},
 };
 use futures_lite::stream::StreamExt;
-
+use log::info;
 use tauri::{async_runtime::JoinHandle, Emitter, EventTarget, Manager};
 use tokio::sync::RwLock;
-
-use log::info;
 
 pub(crate) struct DeltaChatAppState {
     pub(crate) deltachat: Arc<RwLock<Accounts>>,

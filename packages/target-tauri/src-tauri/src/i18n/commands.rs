@@ -1,11 +1,11 @@
-use log::{debug, error};
 use std::collections::HashMap;
+
+use log::{debug, error};
 use tauri::{AppHandle, Manager};
 use tauri_plugin_store::StoreExt;
 
-use crate::i18n::errors::Error;
-
 use super::{load::get_locales_dir, Language, LocaleData};
+use crate::i18n::errors::Error;
 
 #[tauri::command]
 pub fn change_lang(app: AppHandle, locale: &str) -> Result<(), Error> {
