@@ -26,10 +26,10 @@ pub(crate) fn load_and_apply_desktop_settings_on_startup(app: &AppHandle) -> any
 
 pub(crate) fn apply_zoom_factor(app: &AppHandle) -> anyhow::Result<()> {
     let store = app.store("config.json")?;
-    let zoom_factor = store
-        .get(ZOOM_FACTOR_KEY)
-        .map_or_else(|| Some(1f64), |f| f.as_f64())
-        .unwrap_or(1f64);
+    let zoom_factor:f64 = store
+        .get("ZOOM_FACTOR_KEY")
+        .and_then(|f| f.as_f64())
+        .unwrap_or(1.0);
 
     // at the moment this only affect the main window like in the electron version
     let webview = app
