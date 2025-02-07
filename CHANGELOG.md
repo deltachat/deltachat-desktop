@@ -10,6 +10,7 @@
 - highlight the first unread message upon opening a chat #4525
 - enable notifications on mentions in muted chats #4538
 - always show accounts with unread messages, even when they're normally scrolled out of view #4536
+- make log additionally available at "Settings / Advanced / View Log" #4610
 
 ### Changed
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.155.2`
