@@ -26,7 +26,7 @@ impl serde::Serialize for Error {
 #[tauri::command]
 pub(crate) fn get_clipboard_image_as_data_uri(app: AppHandle) -> Result<String, Error> {
     let img = app.clipboard().read_image()?;
-    let mut bytes: Cursor<Vec<u8>> = Cursor::new(Vec::new());
+    let mut bytes = Cursor::new(Vec::new());
 
     let mut encoder = png::Encoder::new(&mut bytes, img.width(), img.height());
     encoder.set_color(png::ColorType::Rgba);
@@ -39,7 +39,7 @@ pub(crate) fn get_clipboard_image_as_data_uri(app: AppHandle) -> Result<String, 
 
     let base64_data = base64::prelude::BASE64_STANDARD.encode(&data);
     let mime_type = "image/png";
-    let data_uri = format!("data:{};base64,{}", mime_type, base64_data);
+    let data_uri = format!("data:{mime_type};base64,{base64_data}");
 
     Ok(data_uri)
 }
