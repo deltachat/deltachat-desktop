@@ -768,7 +768,9 @@
     <string name="pref_manage_keys">Управление ключами</string>
     <string name="pref_use_system_emoji">Использовать системные эмодзи</string>
     <string name="pref_use_system_emoji_explain">Отключить поддержку встроенных эмодзи Delta Chat</string>
+    <!-- deprecated -->
     <string name="pref_use_inapp_camera">Использовать камеру приложения</string>
+    <!-- deprecated -->
     <string name="pref_use_inapp_camera_explain">Камера приложения обычно имеет меньше функций, чем системная</string>
     <string name="pref_show_system_contacts">Чтение системной адресной книги</string>
     <string name="pref_show_system_contacts_explain">Предлагать создать чаты с контактами из адресной книги. Некоторые провайдеры требуют предварительной настройки сквозного шифрования.</string>

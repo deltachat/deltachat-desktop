@@ -11,7 +11,7 @@
     <string name="scan">Escaneja</string>
     <string name="yes">Si</string>
     <string name="no">No</string>
-    <string name="select">Trieu</string>
+    <string name="select">Selecciona</string>
     <string name="on">Activat</string>
     <string name="off">Desactivat</string>
     <string name="def">Per defecte</string>
@@ -22,8 +22,8 @@
     <string name="automatic">Automàtic</string>
     <string name="strict">Estricte</string>
     <string name="open">Obre</string>
-    <string name="download">Descarrega</string>
-    <string name="downloading">Descarregant...</string>
+    <string name="download">Baixa</string>
+    <string name="downloading">S\'està baixant...</string>
     <string name="open_attachment">Obre l\'adjunt</string>
     <string name="join">Uneix-te</string>
     <string name="rejoin">Torna a unir-te</string>
@@ -37,6 +37,7 @@
     <string name="close_window">Tanca la finestra</string>
     <string name="forward">Reenvia</string>
     <string name="create">Crea</string>
+    <string name="reset">Reinicialitza</string>
     <string name="later">Després</string>
     <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
     <string name="resend">Torna-ho a enviar</string>
@@ -44,10 +45,11 @@
     <string name="archive">Arxiva</string>
     <!-- Verb "to unarchive", as in "remove a chat from the archive", opposite of the previous string -->
     <string name="unarchive">Treu de l\'arxiu</string>
-    <string name="mute">Emmudeix</string>
+    <string name="mute">Silencia</string>
+    <string name="muted">Silenciat</string>
     <string name="ephemeral_messages">Missatges efímers</string>
-    <string name="ephemeral_messages_hint">Aquestes opcions són d\'aplicació per tots els integrants que usin Delta Chat. Tot i això, poden copiar, guardar o reenviar missatges o usar altres clients de correu.</string>
-    <string name="save">Guarda</string>
+    <string name="ephemeral_messages_hint">Aquestes opcions s\'apliquen a tots els integrants del xat que utilitzin Delta Chat. Tot i això, poden copiar, desar o reenviar missatges o utilitzar altres clients de correu.</string>
+    <string name="save">Desa</string>
     <string name="chat">Xat</string>
     <string name="media">Multimèdia</string>
     <string name="profile">Perfil</string>
@@ -154,6 +156,7 @@
     <!-- "Stickers" as known from other messengers; in some languages, the English "Sticker" is fine. -->
     <string name="sticker">Adhesiu</string>
     <string name="add_to_sticker_collection">Afegeix a la Col·lecció d\'adhesius</string>
+    <string name="add_stickers_instructions">Per afegir stickers, premeu \"Obre la carpeta d\'stickers\", creeu una subcarpeta pel vostre conjunt d\'stickers, i arrossegueu la imatge i els fitxers d\'stickers allà</string>
     <string name="open_sticker_folder">Obre la carpeta dels adhesius</string>
     <string name="images">Imatges</string>
     <string name="audio">Àudio</string>
@@ -165,6 +168,7 @@
     <string name="video">Vídeo</string>
     <string name="documents">Documents</string>
     <string name="contact">Contacte</string>
+    <string name="bot">Bot</string>
     <string name="camera">Càmera</string>
     <!-- As in "start a video recording" or "take a photo"; eg. the description of the "shutter button" in cameras -->
     <string name="capture">Captura</string>
@@ -180,6 +184,13 @@
     <string name="webxdc_app">App</string>
     <!-- plural of "App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
     <string name="webxdc_apps">Apps</string>
+    <string name="home">Inici</string>
+    <string name="games">Jocs</string>
+    <string name="tools">Eines</string>
+    <string name="app_size">Mida</string>
+    <string name="add_to_chat">Afegeix al xat</string>
+    <!-- short for "Browse through the App Picker/Store/Catalogue"; could also be translated as "Discover" or "Search" -->
+    <string name="browse">Explora</string>
     <string name="unknown">Desconegut</string>
 
     <string name="green">Verd</string>

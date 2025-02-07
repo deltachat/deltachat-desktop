@@ -503,6 +503,8 @@
     <string name="profile_encryption">Versleuteling</string>
     <string name="profile_shared_chats">Gedeelde gesprekken</string>
     <string name="related_chats">Verwante gesprekken</string>
+    <!-- Separator between the list of actual members and past members -->
+    <string name="past_members">Voormalige deelnemers</string>
     <string name="tab_contact">Contactpersoon</string>
     <string name="tab_group">Groep</string>
     <string name="tab_gallery">Galerij</string>
@@ -736,7 +738,9 @@
     <string name="pref_manage_keys">Sleutels beheren</string>
     <string name="pref_use_system_emoji">Systeememoji gebruiken</string>
     <string name="pref_use_system_emoji_explain">Schakel Delta Chats ingebouwde emojiondersteuning uit</string>
+    <!-- deprecated -->
     <string name="pref_use_inapp_camera">Ingebouwde camera gebruiken</string>
+    <!-- deprecated -->
     <string name="pref_use_inapp_camera_explain">Let op: de ingebouwde camera beschikt over minder functies dan de systeemcamera</string>
     <string name="pref_show_system_contacts">Adresboek uitlezen</string>
     <string name="pref_show_system_contacts_explain">Bied aan om gesprekken te beginnen met contactpersonen uit het adresboek. Let op: voor sommige providers is eind-tot-eindversleuteling benodigd.</string>

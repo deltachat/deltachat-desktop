@@ -734,7 +734,9 @@
     <string name="pref_manage_keys">Anahtarları Yönet</string>
     <string name="pref_use_system_emoji">Sistem Emojisini Kullan</string>
     <string name="pref_use_system_emoji_explain">Delta Chat\'in gömülü emoji desteğini kapat</string>
+    <!-- deprecated -->
     <string name="pref_use_inapp_camera">Uygulama İçi Kamerayı Kullan</string>
+    <!-- deprecated -->
     <string name="pref_use_inapp_camera_explain">Uygulama içi kameranın genellikle sistem kamerasından daha az özelliği vardır</string>
     <string name="pref_show_system_contacts">Sistem Adres Defterini Oku</string>
     <string name="pref_show_system_contacts_explain">Adres defterinden gelen kişilerle sohbet oluşturmayı teklif edin. Bazı sağlayıcılara önce uçtan uca şifreleme ayarlaması gerekir.</string>
