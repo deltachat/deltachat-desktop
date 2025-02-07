@@ -43,6 +43,7 @@
 - fix selected account not getting scrolled into view in accounts bar on app start #4542
 - message list being empty sometimes when a chat gets opened #4556
 - improve performance a little #4561, #4552, #4584
+- fix "Empty Hints" in "All Media" view
 
 <a id="1_52_1"></a>
 
