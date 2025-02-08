@@ -75,21 +75,28 @@ const onWindowFocus = (accountId: number) => {
   }
 }
 
+/**
+ * Returns a "live" version of `FullChat.freshMessageCounter`.
+ * When the `chat` reference updates, we consider it to be the most up-to-date
+ * version. Otherwise we listen for relevant events and return the value of
+ * `BackendRemote.rpc.getFreshMsgCnt()`.
+ */
 function useUnreadCount(
   accountId: number,
-  chatId: number,
-  initialValue: number
+  chat: Pick<T.FullChat, 'freshMessageCounter' | 'id'>
 ) {
-  const [freshMessageCounter, setFreshMessageCounter] = useState(initialValue)
+  const [updatedValue, setUpdatedValue] = useState<number | null>(null)
+  const updatedValueForChat = useRef<typeof chat>()
 
   useEffect(() => {
     let outdated = false
 
     const update = async ({ chatId: eventChatId }: { chatId: number }) => {
-      if (chatId === eventChatId) {
-        const count = await BackendRemote.rpc.getFreshMsgCnt(accountId, chatId)
+      if (chat.id === eventChatId) {
+        const count = await BackendRemote.rpc.getFreshMsgCnt(accountId, chat.id)
         if (!outdated) {
-          setFreshMessageCounter(count)
+          setUpdatedValue(count)
+          updatedValueForChat.current = chat
         }
       }
     }
@@ -101,14 +108,15 @@ function useUnreadCount(
     // Make sure to update all the places if you update one of them.
     const cleanup = [
       onDCEvent(accountId, 'IncomingMsg', update),
-      onDCEvent(accountId, 'MsgRead', update),
       onDCEvent(accountId, 'MsgsNoticed', update),
       () => (outdated = true),
     ]
     return () => cleanup.forEach(off => off())
-  }, [accountId, chatId])
+  }, [accountId, chat])
 
-  return freshMessageCounter
+  return updatedValueForChat.current === chat && updatedValue != null
+    ? updatedValue
+    : chat.freshMessageCounter
 }
 
 type Props = {
@@ -138,12 +146,6 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
     fetchMoreTop,
   } = useMessageList(accountId, chat.id)
   const { hideReactionsBar, isReactionsBarShown } = useReactionsBar()
-
-  const countUnreadMessages = useUnreadCount(
-    accountId,
-    chat.id,
-    chat.freshMessageCounter
-  )
 
   const messageListRef = useRef<HTMLDivElement | null>(null)
   const [showJumpDownButton, setShowJumpDownButton] = useState(false)
@@ -670,7 +672,8 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
       />
       {showJumpDownButton && (
         <JumpDownButton
-          countUnreadMessages={countUnreadMessages}
+          accountId={accountId}
+          chat={chat}
           jumpToMessage={jumpToMessage}
           jumpToMessageStack={jumpToMessageStack}
         />
@@ -948,11 +951,13 @@ function MessageLoading({
 }
 
 function JumpDownButton({
-  countUnreadMessages,
+  accountId,
+  chat,
   jumpToMessage,
   jumpToMessageStack,
 }: {
-  countUnreadMessages: number
+  accountId: number
+  chat: Parameters<typeof useUnreadCount>[1]
   jumpToMessage: (params: {
     msgId: number | undefined
     highlight?: boolean
@@ -962,6 +967,8 @@ function JumpDownButton({
   }) => Promise<void>
   jumpToMessageStack: number[]
 }) {
+  const countUnreadMessages = useUnreadCount(accountId, chat)
+
   let countToShow: string = countUnreadMessages.toString()
   if (countUnreadMessages > 99) {
     countToShow = '99+'

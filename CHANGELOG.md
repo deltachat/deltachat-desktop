@@ -2,10 +2,15 @@
 
 ## [Unreleased][unreleased]
 
+> Due to the Electron update, macOS 10.15 (Catalina)
+> is no longer supported, macOS 11 (Big Sur) or later
+> is the new requirement.
+
 ### Added
 - highlight the first unread message upon opening a chat #4525
 - enable notifications on mentions in muted chats #4538
 - e2e test for group creation #4614
+- always show accounts with unread messages, even when they're normally scrolled out of view #4536
 
 ### Changed
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.155.2`
@@ -23,11 +28,14 @@
 - Improve backup transfer dialog (different message for connection step, timed message to tell user to check out troubleshooting, button to link to trouble shooting) #4476
 - store last used account in accounts.toml managed by core #4569
 - update help menu URLs #4598
+- upgrade Electron from `32.1.0` to `34.0.1` #4568
+- Update translations (2025-02-07)
 
 ### Fixed
 - fix changelog message left unread not in the selected account as it should be but in another account. #4569
 - accessibility: some context menu items not working with keyboard navigation #4578
 - fix messages sent to "Saved Messages" not being displayed sometimes #4582
+- fix "jump down" button displaying incorrect unread count (the value from another chat) #4593
 - fix clicking on message search result or "Reply Privately" quote not jumping to the message on first click sometimes, again #4554
 - accessibility: not being able to focus arrow-key navigable widgets that contain disabled items with disabled elements (such as in the "add contacts to group" widget)
 - fix jumping to message in a different chat momentarily opening the new chat scrolled to bottom before scrolling it to the desired message #4562
