@@ -5,6 +5,7 @@
 ### Added
 - highlight the first unread message upon opening a chat #4525
 - enable notifications on mentions in muted chats #4538
+- e2e test for group creation #4614
 
 ### Changed
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.155.2`
