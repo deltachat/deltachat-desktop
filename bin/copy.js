@@ -9,10 +9,10 @@ async function copyRecursive(source, destination) {
     mkdir(destination, { recursive: true })
     const files = await readdir(source)
     for (const file of files) {
-      copyRecursive(join(source, file), join(destination, file))
+      await copyRecursive(join(source, file), join(destination, file))
     }
   } else {
-    copyFile(source, destination)
+    await copyFile(source, destination)
   }
 }
 
