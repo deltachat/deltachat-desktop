@@ -121,6 +121,10 @@ export interface Runtime {
   writeClipboardToTempFile(name?: string): Promise<string>
   writeTempFileFromBase64(name: string, content: string): Promise<string>
   writeTempFile(name: string, content: string): Promise<string>
+  copyFileToInternalTmpDir(
+    fileName: string,
+    sourcePath: string
+  ): Promise<string>
   removeTempFile(path: string): Promise<void>
   getWebxdcDiskUsage(accountId: number): Promise<{
     total_size: number

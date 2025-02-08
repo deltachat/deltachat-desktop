@@ -224,6 +224,16 @@ class ElectronRuntime implements Runtime {
   writeTempFile(name: string, content: string): Promise<string> {
     return ipcBackend.invoke('app.writeTempFile', name, content)
   }
+  copyFileToInternalTmpDir(
+    fileName: string,
+    sourcePath: string
+  ): Promise<string> {
+    return ipcBackend.invoke(
+      'app.copyFileToInternalTmpDir',
+      fileName,
+      sourcePath
+    )
+  }
   removeTempFile(path: string): Promise<void> {
     return ipcBackend.invoke('app.removeTempFile', path)
   }

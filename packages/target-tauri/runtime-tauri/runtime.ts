@@ -438,6 +438,12 @@ class TauriRuntime implements Runtime {
   writeTempFile(_name: string, _content: string): Promise<string> {
     throw new Error('Method not implemented.43')
   }
+  copyFileToInternalTmpDir(
+    _fileName: string,
+    _sourcePath: string
+  ): Promise<string> {
+    throw new Error('Method not implemented.44b')
+  }
   removeTempFile(_path: string): Promise<void> {
     throw new Error('Method not implemented.44')
   }
