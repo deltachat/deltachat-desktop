@@ -133,6 +133,7 @@ class TauriRuntime implements Runtime {
       experimentalEnableMarkdownInMessages: false,
       enableRelatedChats: false,
       galleryImageKeepAspectRatio: false,
+      isMentionsEnabled: false,
       useSystemUIFont: false,
     } satisfies Partial<DesktopSettingsType>
 

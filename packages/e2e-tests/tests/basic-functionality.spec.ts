@@ -57,14 +57,16 @@ const getUser = (index: number) => {
  * covers creating a profile with standard
  * chatmail server on first start or after
  */
-test('create profiles', async ({ page }) => {
+test('create profiles', async ({ page, context, browserName }) => {
   if (existingProfiles.length > 0) {
     // this test should only run on a fresh start
     throw new Error(
       'Existing profiles found in create profiles test! Aborting!'
     )
   }
-
+  if (browserName.toLowerCase().indexOf('chrom') > -1) {
+    await context.grantPermissions(['clipboard-read', 'clipboard-write'])
+  }
   const userA = await createNewProfile(page, userNames[0])
 
   expect(userA.id).toBeDefined()
