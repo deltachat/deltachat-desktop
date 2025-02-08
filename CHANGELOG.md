@@ -12,9 +12,10 @@
 - always show accounts with unread messages, even when they're normally scrolled out of view #4536
 
 ### Changed
-- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.155.2`
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.155.3`
+  - Store device token in IMAP METADATA on each connection
   - Deduplicate blob files in chat.rs, config.rs, and integration.rs.
-  - Upgrade to iroh@0.30.0.
+  - Upgrade to iroh@0.32.0 & pgp to 0.15.
 - shortcut improvements:
   - Ctrl + F now focuses search, instead of Ctrl + K
   - Ctrl + Shift + F to search in chat
@@ -27,6 +28,7 @@
 - Improve backup transfer dialog (different message for connection step, timed message to tell user to check out troubleshooting, button to link to trouble shooting) #4476
 - store last used account in accounts.toml managed by core #4569
 - update help menu URLs #4598
+- tauri: update dependencies #4607
 - upgrade Electron from `32.1.0` to `34.0.1` #4568
 - Update translations (2025-02-07)
 
