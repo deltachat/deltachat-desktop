@@ -8,6 +8,7 @@
 
 ### Added
 - highlight the first unread message upon opening a chat #4525
+- copy files to internal tmp dir before opening attachements #4498
 - enable notifications on mentions in muted chats #4538
 - always show accounts with unread messages, even when they're normally scrolled out of view #4536
 

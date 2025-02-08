@@ -28,12 +28,13 @@ export function onDownload(msg: Type.Message) {
   }
 }
 
-export function openAttachmentInShell(msg: Type.Message) {
-  if (!msg.file) {
+export async function openAttachmentInShell(msg: Type.Message) {
+  if (!msg.file || !msg.fileName) {
     log.error('message has no file to open:', msg)
     throw new Error('message has no file to open')
   }
-  if (!runtime.openPath(msg.file)) {
+  const tmpFile = await runtime.copyFileToInternalTmpDir(msg.fileName, msg.file)
+  if (!runtime.openPath(tmpFile)) {
     log.info(
       "file couldn't be opened, try saving it in a different place and try to open it from there"
     )

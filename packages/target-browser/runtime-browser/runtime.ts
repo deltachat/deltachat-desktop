@@ -361,6 +361,12 @@ class BrowserRuntime implements Runtime {
       ).json()
     ).path
   }
+  async copyFileToInternalTmpDir(
+    _fileName: string,
+    _sourcePath: string
+  ): Promise<string> {
+    throw new Error('Method not implemented')
+  }
   async removeTempFile(name: string): Promise<void> {
     await fetch(`/backend-api/removeTempFile`, {
       method: 'POST',

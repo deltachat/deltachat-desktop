@@ -100,3 +100,8 @@ export const ALLOWED_ACCOUNT_FOLDERS = [
   'dc.db-blobs',
   'stickers',
 ]
+
+// folder inside account dir to store files
+// temporary when opened in another application
+// cleared on app start
+export const INTERNAL_TMP_DIR_NAME = 'tmp'

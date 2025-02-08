@@ -21,6 +21,7 @@ import {
   getDraftTempDir,
   getLogsPath,
   htmlDistDir,
+  INTERNAL_TMP_DIR_NAME,
 } from './application-constants.js'
 import { LogHandler } from './log-handler.js'
 import { ExtendedAppMainProcess } from './types.js'
@@ -256,6 +257,9 @@ export async function init(cwd: string, logHandler: LogHandler) {
   ipcMain.handle('app.writeTempFile', (_ev, name, content) =>
     writeTempFile(name, content)
   )
+  ipcMain.handle('app.copyFileToInternalTmpDir', (_ev, name, pathToFile) => {
+    return copyFileToInternalTmpDir(name, pathToFile)
+  })
   ipcMain.handle('app.removeTempFile', (_ev, path) => removeTempFile(path))
 
   ipcMain.handle('electron.shell.openExternal', (_ev, url) =>
@@ -386,6 +390,24 @@ export async function writeTempFile(
   log.debug(`Writing tmp file ${pathToFile}`)
   await writeFile(pathToFile, Buffer.from(content, 'utf8'), 'binary')
   return pathToFile
+}
+
+export async function copyFileToInternalTmpDir(
+  fileName: string,
+  sourcePath: string
+): Promise<string> {
+  const sourceFileName = basename(sourcePath)
+  const sourceDir = dirname(sourcePath)
+  let destinationDir = join(sourceDir, '..', INTERNAL_TMP_DIR_NAME)
+  if (sourceFileName !== fileName) {
+    // this is the case, when we copy a file that has an identifier
+    //  as name (given during the file deduplications process)
+    destinationDir = join(destinationDir, sourceFileName)
+  }
+  await mkdir(destinationDir, { recursive: true })
+  const targetPath = join(destinationDir, fileName)
+  await copyFile(sourcePath, targetPath)
+  return targetPath
 }
 
 async function removeTempFile(path: string) {
