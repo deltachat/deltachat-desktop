@@ -54,6 +54,7 @@ export default function OnboardingScreen(props: Props) {
               className={styles.welcomeScreenButton}
               styling='primary'
               onClick={props.onNextStep}
+              data-testid='create-account-button'
             >
               {tx('onboarding_create_instant_account')}
             </Button>
@@ -61,6 +62,7 @@ export default function OnboardingScreen(props: Props) {
               className={styles.welcomeScreenButton}
               styling='secondary'
               onClick={onAlreadyHaveAccount}
+              data-testid='have-account-button'
             >
               {tx('onboarding_alternative_logins')}
             </Button>

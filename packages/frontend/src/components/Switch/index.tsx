@@ -37,6 +37,7 @@ export default function Switch({ ...props }: PropsWithChildren<Props>) {
       <span
         className={classNames(styles.switchIndicator, {
           [styles.switchIndicatorOn]: checked,
+          [styles.disabled]: props.disabled,
         })}
       ></span>
     </div>

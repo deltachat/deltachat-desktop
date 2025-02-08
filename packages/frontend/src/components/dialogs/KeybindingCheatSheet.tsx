@@ -33,7 +33,7 @@ export default function KeybindingCheatSheet(props: DialogProps) {
           <CheatSheetKeyboardShortcut />
         </DialogHeading>
       </DialogHeader>
-      <DialogBody>
+      <DialogBody className='dialog-body'>
         <div className='keyboard-hint-dialog-body'>
           {settingsStore &&
             getKeybindings(settingsStore.desktopSettings).map(entry => {
