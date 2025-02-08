@@ -535,6 +535,8 @@
     <string name="profile_encryption">Шифрование</string>
     <string name="profile_shared_chats">Общие чаты</string>
     <string name="related_chats">Похожие чаты</string>
+    <!-- Separator between the list of actual members and past members -->
+    <string name="past_members">Прошлые участники</string>
     <string name="tab_contact">Контакты</string>
     <string name="tab_group">Группа</string>
     <string name="tab_gallery">Галерея</string>

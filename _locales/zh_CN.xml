@@ -487,6 +487,8 @@
     <string name="profile_encryption">加密</string>
     <string name="profile_shared_chats">共有聊天</string>
     <string name="related_chats">相关聊天</string>
+    <!-- Separator between the list of actual members and past members -->
+    <string name="past_members">过去成员</string>
     <string name="tab_contact">联系人</string>
     <string name="tab_group">群组</string>
     <string name="tab_gallery">图库</string>

@@ -519,6 +519,8 @@
     <string name="profile_encryption">Crittografia</string>
     <string name="profile_shared_chats">Chats Condivise</string>
     <string name="related_chats">Chats Correlate</string>
+    <!-- Separator between the list of actual members and past members -->
+    <string name="past_members">Membri Passati</string>
     <string name="tab_contact">Contatto</string>
     <string name="tab_group">Gruppo</string>
     <string name="tab_gallery">Galleria</string>
