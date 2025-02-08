@@ -51,6 +51,7 @@
 - fix log format for logging core events #4572
 - fix dragging files out
 - memory leak when opening and closing emoji picker #4567
+- fix chat list showing the chat that is different from the currently selected chat when switching chats rapidly #4615
 - fix selected account not getting scrolled into view in accounts bar on app start #4542
 - message list being empty sometimes when a chat gets opened #4556
 - accessibility: improve chat list, message list and contact list semantics #4518
