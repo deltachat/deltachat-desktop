@@ -36,7 +36,7 @@ export function AddMemberDialog({
       canOutsideClickClose={false}
       fixed
       onClose={onClose}
-      data-testid='add-member-dialog'
+      dataTestid='add-member-dialog'
     >
       {AddMemberInnerDialog({
         onOk: addMembers => {

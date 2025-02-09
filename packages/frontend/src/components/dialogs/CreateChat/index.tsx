@@ -561,6 +561,7 @@ export function CreateGroup(props: CreateGroupProps) {
                 })
                 .finally(onClose)
             }}
+            data-testid='group-create-button'
           >
             {tx('group_create_button')}
           </FooterActionButton>

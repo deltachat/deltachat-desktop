@@ -91,6 +91,7 @@ export default function useProcessQR() {
         const userConfirmed = await openConfirmationDialog({
           message: tx('instant_onboarding_confirm_group', qr.grpname),
           confirmLabel: tx('ok'),
+          dataTestid: 'ask-join-group',
         })
 
         if (!userConfirmed) {
@@ -110,6 +111,7 @@ export default function useProcessQR() {
             contact.nameAndAddr
           ),
           confirmLabel: tx('ok'),
+          dataTestid: 'ask-create-profile-and-join-chat',
         })
 
         if (!userConfirmed) {
@@ -168,6 +170,7 @@ export default function useProcessQR() {
           const userConfirmed = await openConfirmationDialog({
             message: tx('qraccount_ask_create_and_login_another', qr.domain),
             confirmLabel: tx('login_title'),
+            dataTestid: 'ask-create-account',
           })
 
           if (!userConfirmed) {
@@ -311,6 +314,7 @@ export default function useProcessQR() {
           message: tx('withdraw_verifygroup_explain', qr.grpname),
           header: tx('withdraw_qr_code'),
           confirmLabel: tx('ok'),
+          dataTestid: 'withdraw-verify-group',
         })
 
         if (userConfirmed) {

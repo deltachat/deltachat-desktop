@@ -33,7 +33,7 @@ export default function CopyContentAlertDialog({
   }
 
   return (
-    <Dialog onClose={onClose}>
+    <Dialog onClose={onClose} dataTestid='copy-content-alert-dialog'>
       <DialogBody>
         <DialogContent paddingTop>
           <p>{message}</p>
