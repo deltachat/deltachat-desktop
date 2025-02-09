@@ -958,13 +958,9 @@ function JumpDownButton({
 }: {
   accountId: number
   chat: Parameters<typeof useUnreadCount>[1]
-  jumpToMessage: (params: {
-    msgId: number | undefined
-    highlight?: boolean
-    addMessageIdToStack?: undefined | number
-    scrollIntoViewArg?: Parameters<HTMLElement['scrollIntoView']>[0]
-    focus: boolean
-  }) => Promise<void>
+  jumpToMessage: ReturnType<
+    typeof useMessageList
+  >['store']['effect']['jumpToMessage']
   jumpToMessageStack: number[]
 }) {
   const countUnreadMessages = useUnreadCount(accountId, chat)
