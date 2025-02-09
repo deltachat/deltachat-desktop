@@ -287,7 +287,7 @@ app.on('activate', () => {
   }
 })
 app.on('before-quit', e => quit(e))
-app.on('window-all-closed', (e: Electron.Event) => quit(e))
+app.on('window-all-closed', () => quit())
 
 app.on('web-contents-created', (_ev, contents) => {
   const is_webxdc =
