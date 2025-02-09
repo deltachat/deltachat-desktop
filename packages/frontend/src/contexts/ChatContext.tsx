@@ -78,6 +78,7 @@ export const ChatProvider = ({
       }
 
       // Jump to last message if user clicked chat twice
+      // Remember that there might be no messages in the chat.
       // @TODO: We probably want this to be part of the UI logic instead
       if (nextChatId === chatId) {
         window.__internal_jump_to_message_asap = {
