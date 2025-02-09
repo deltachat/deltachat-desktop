@@ -465,7 +465,8 @@ class MessageListStore extends Store<MessageListState> {
      * `MessageListStore` when `chatId` or `accountId` changes.
      *
      * @param msgId - when `undefined`, pop the jump stack, or,
-     * if the stack is empty, jump to last message.
+     * if the stack is empty, jump to last message
+     * if there _is_ a last message.
      * @param addMessageIdToStack the ID of the message to remember,
      * to later go back to it, using the "jump down" button.
      * The message with the specified ID must belong to the chat with ID
@@ -527,6 +528,16 @@ class MessageListStore extends Store<MessageListState> {
                 m.kind === 'message' ? m.msg_id : C.DC_MSG_ID_LAST_SPECIAL
               )
               .filter(msgId => msgId !== C.DC_MSG_ID_LAST_SPECIAL)
+
+            if (items.length <= 0) {
+              // This can happen when clicking the chat in the chat list twice,
+              // which is supposed to jump to the last message.
+
+              // Since we haven't changed `viewState`, `MessageList` won't
+              // call `unlockScroll()`, so let's unlock it now.
+              return false
+            }
+
             jumpToMessageId = items[items.length - 1]
             chatId =
               chatIdPreset ??
