@@ -8,30 +8,30 @@
 
 ## Editions
 
-| [`Electron`](https://www.electronjs.org/) :electron:                                                                                | [`Tauri`](https://tauri.app/) <img src="README_ASSETS/TAURI_Glyph_Color.svg" width="16px" height="16px" style="vertical-align:middle" />                                                                                      | Browser 🦊🧭🏐                                                                                                                                   |
-| -------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| <img src="README_ASSETS/desktop.png" style="max-width:256px;min-hight:200px" />                    | <img src="README_ASSETS/desktop.png" style="max-width:256px" />                                                                                                                                       | <img src="README_ASSETS/browser-screenshot.png" style="max-width:256px;min-hight:200px" />                                                       |
-| The default application. Based on Electron. Currently deployed in appstore and used by most users. | WIP client using Tauri instead of Electron. <br /> Tauri is a modern alternative to Electron: Less disk usage, less ram usage and better performance rust backend.                                            | Highly experimental version with a webserver component and web-ui in the browser. At the moment only meant for developers and automated testing. |
-| [Project Folder](./packages/target-electron) <br /> [Download Links](https://get.delta.chat) | [Project Folder](./packages/target-tauri) <br /> [Fediverse Thread](https://fosstodon.org/@treefit/113578409177635057) <br /> [Delta Tauri - nlnet project](https://nlnet.nl/project/DeltaTauri) | [Project Folder](./packages/target-browser) <br /> [Fediverse Thread](https://fosstodon.org/@treefit/113116480883632874)                   |
+| [`Electron`](https://www.electronjs.org/) :electron:                                               | [`Tauri`](https://tauri.app/) <img src="README_ASSETS/TAURI_Glyph_Color.svg" width="16px" height="16px" style="vertical-align:middle" />                                                         | Browser 🦊🧭🏐                                                                                                                                   |
+| -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| <img src="README_ASSETS/desktop.png" style="max-width:256px;min-hight:200px" />                    | <img src="README_ASSETS/desktop.png" style="max-width:256px" />                                                                                                                                  | <img src="README_ASSETS/browser-screenshot.png" style="max-width:256px;min-hight:200px" />                                                       |
+| The default application. Based on Electron. Currently deployed in appstore and used by most users. | WIP client using Tauri instead of Electron. <br /> Tauri is a modern alternative to Electron: Less disk usage, less ram usage and better performance rust backend.                               | Highly experimental version with a webserver component and web-ui in the browser. At the moment only meant for developers and automated testing. |
+| [Project Folder](./packages/target-electron) <br /> [Download Links](https://get.delta.chat)       | [Project Folder](./packages/target-tauri) <br /> [Fediverse Thread](https://fosstodon.org/@treefit/113578409177635057) <br /> [Delta Tauri - nlnet project](https://nlnet.nl/project/DeltaTauri) | [Project Folder](./packages/target-browser) <br /> [Fediverse Thread](https://fosstodon.org/@treefit/113116480883632874)                         |
 
 ## Documentation Links <a id="docs"></a>
 
 ### For Users
 
-* [Troubleshooting](./docs/TROUBLESHOOTING.md)
-* [CLI flags](./docs/CLI_FLAGS.md)
-* [Keybindings](./docs/KEYBINDINGS.md)
-* [How to make custom Themes](./docs/THEMES.md)
+- [Troubleshooting](./docs/TROUBLESHOOTING.md)
+- [CLI flags](./docs/CLI_FLAGS.md)
+- [Keybindings](./docs/KEYBINDINGS.md)
+- [How to make custom Themes](./docs/THEMES.md)
 
 ### For Developers
 
-* [Contribution Guidelines](./CONTRIBUTING.md)
-* [Logging](./docs/LOGGING.md)
-* [Documentation for Developers](./docs/DEVELOPMENT.md)
-* [Styling Guidelines](./docs/STYLES.md)
-* [How to update core](./docs/UPDATE_CORE.md)
-* [How to do end to end testing](./docs/E2E-TESTING.md)
-* [How to do a release](./RELEASE.md)
+- [Contribution Guidelines](./CONTRIBUTING.md)
+- [Logging](./docs/LOGGING.md)
+- [Documentation for Developers](./docs/DEVELOPMENT.md)
+- [Styling Guidelines](./docs/STYLES.md)
+- [How to update core](./docs/UPDATE_CORE.md)
+- [How to do end to end testing](./docs/E2E-TESTING.md)
+- [How to do a release](./RELEASE.md)
 
 ## Table of Contents
 
@@ -59,8 +59,8 @@
 
 ## Install <a id="install"></a>
 
-The application can be downloaded from **<https://get.delta.chat>**. 
-Here you'll find binary releases for all supported platforms. 
+The application can be downloaded from **<https://get.delta.chat>**.
+Here you'll find binary releases for all supported platforms.
 See below for platform specific instructions. If you run into any
 problems please consult the [`Troubleshooting`](#troubleshooting) section below.
 
@@ -130,8 +130,8 @@ Simply install the `.dmg` file as you do it with all other software on Mac.
 
 ### Windows <a id="windows"></a>
 
-You can find the downloads for windows on <https://get.delta.chat>. 
-However, we recommend using the release from [Microsoft Store](https://www.microsoft.com/en-us/p/deltachat/9pjtxx7hn3pk?activetab=pivot:overviewtab), 
+You can find the downloads for windows on <https://get.delta.chat>.
+However, we recommend using the release from [Microsoft Store](https://www.microsoft.com/en-us/p/deltachat/9pjtxx7hn3pk?activetab=pivot:overviewtab),
 because there you get automatic updates.
 
 ### From Source <a id="source"></a>
@@ -163,11 +163,11 @@ For development with local `deltachat-core-rust` read [`docs/UPDATE_CORE.md`](do
 
 ### Troubleshooting <a id="troubleshooting"></a>
 
-* This module builds on top of [`deltachat-core-rust`](https://github.com/deltachat/deltachat-core-rust),
-which in turn has external dependencies. The instructions below assume a Linux system (e.g. Ubuntu 18.10).
-* Read the error, maybe it already tells you what you need to do. If not feel free to file an issue in this github repo.
-* Make sure that your nodejs version is `20.0.0` or newer.
-* If you still get errors look at the instructions in [`docs/UPDATE_CORE.md`](docs/UPDATE_CORE.md) to set things up or [write an issue](https://github.com/deltachat/deltachat-desktop/issues/new/choose).
+- This module builds on top of [`deltachat-core-rust`](https://github.com/deltachat/deltachat-core-rust),
+  which in turn has external dependencies. The instructions below assume a Linux system (e.g. Ubuntu 18.10).
+- Read the error, maybe it already tells you what you need to do. If not feel free to file an issue in this github repo.
+- Make sure that your nodejs version is `20.0.0` or newer.
+- If you still get errors look at the instructions in [`docs/UPDATE_CORE.md`](docs/UPDATE_CORE.md) to set things up or [write an issue](https://github.com/deltachat/deltachat-desktop/issues/new/choose).
 
 ## Configuration and Databases <a id="config-and-db"></a>
 
@@ -177,9 +177,9 @@ Each database is a SQLite file that represents the account for a given email add
 
 ## How to Contribute <a id="how-to-contribute"></a>
 
-* Read [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md)
-* For translations see our transifex page: https://www.transifex.com/delta-chat/public/
-* For other ways to contribute: https://delta.chat/en/contribute
+- Read [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md)
+- For translations see our transifex page: https://www.transifex.com/delta-chat/public/
+- For other ways to contribute: https://delta.chat/en/contribute
 
 ## Logging <a id="logging"></a>
 
