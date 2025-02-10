@@ -21,6 +21,7 @@
 - Improve backup transfer dialog (different message for connection step, timed message to tell user to check out troubleshooting, button to link to trouble shooting) #4476
 - store last used account in accounts.toml managed by core #4569
 - update help menu URLs #4598
+- Update local help (2025-02-10)
 
 ### Fixed
 - fix changelog message left unread not in the selected account as it should be but in another account. #4569
