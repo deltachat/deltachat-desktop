@@ -18,6 +18,7 @@
   - implement experimental setting: content protection
   - api to change language
   - help window localisation
+- display past members in the group member list #4531
 
 ### Changed
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.155.3`
