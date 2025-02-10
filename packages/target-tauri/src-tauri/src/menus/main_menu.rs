@@ -1,6 +1,6 @@
 use log::info;
 use tauri::{
-    menu::{Menu, MenuItem, PredefinedMenuItem, Submenu},
+    menu::{CheckMenuItem, Menu, MenuItem, PredefinedMenuItem, Submenu},
     AppHandle, Builder, Emitter, Manager, Runtime,
 };
 use tauri_plugin_opener::OpenerExt;
@@ -10,6 +10,13 @@ use crate::help_window::open_help_window;
 
 pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
     let builder = builder.menu(|handle| {
+
+        let store = handle.store("config.json").unwrap();
+
+        let zoom_factor = store
+            .get(ZOOM_FACTOR_KEY)
+            .map_or_else(|| Some(1f64), |f| f.as_f64())
+            .unwrap_or(1f64);
         Menu::with_items(
             handle,
             &[
@@ -54,40 +61,45 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                             "Zoom",
                             true,
                             &[
-                                &MenuItem::with_id(
+                                [0.6, 0.8, 1.0, 1.2, 1.4, 1.6].map(|factor| )
+                                &CheckMenuItem::with_id(
                                     handle,
                                     "zoom_06",
                                     "0.6x Extra Small",
                                     true,
+                                    false,
                                     None::<&str>,
                                 )?,
-                                // Also use with_id here:
-                                &MenuItem::with_id(
+                                &CheckMenuItem::with_id(
                                     handle,
                                     "zoom_08",
                                     "0.8x Small",
                                     true,
+                                    false,
                                     None::<&str>,
                                 )?,
-                                &MenuItem::with_id(
+                                &CheckMenuItem::with_id(
                                     handle,
                                     "zoom_10",
                                     "1.0x Normal",
                                     true,
+                                    false,
                                     None::<&str>,
                                 )?,
-                                &MenuItem::with_id(
+                                &CheckMenuItem::with_id(
                                     handle,
                                     "zoom_12",
                                     "1.2x Large",
                                     true,
+                                    false,
                                     None::<&str>,
                                 )?,
-                                &MenuItem::with_id(
+                                &CheckMenuItem::with_id(
                                     handle,
                                     "zoom_14",
                                     "1.4x Extra Large",
                                     true,
+                                    false,
                                     None::<&str>,
                                 )?,
                             ],
@@ -129,11 +141,42 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                     true,
                     &[
                         &MenuItem::with_id(handle, "help", "Help", true, None::<&str>)?,
-                        &MenuItem::new(handle, "keybindings", true, None::<&str>)?,
-                        &MenuItem::new(handle, "learn", true, None::<&str>)?,
-                        &MenuItem::new(handle, "contribute", true, None::<&str>)?,
-                        &MenuItem::new(handle, "report", true, None::<&str>)?,
-                        &MenuItem::new(handle, "about", true, None::<&str>)?,
+                        &MenuItem::with_id(
+                            handle,
+                            "keybindings",
+                            "Keybindings",
+                            true,
+                            None::<&str>,
+                        )?,
+                        &MenuItem::with_id(
+                            handle,
+                            "learn",
+                            "Learn more about Delta Chat",
+                            true,
+                            None::<&str>,
+                        )?,
+                        &MenuItem::with_id(
+                            handle,
+                            "contribute",
+                            "Contribute on Github",
+                            true,
+                            None::<&str>,
+                        )?,
+                        &PredefinedMenuItem::separator(handle)?,
+                        &MenuItem::with_id(
+                            handle,
+                            "report",
+                            "Report an Issue",
+                            true,
+                            None::<&str>,
+                        )?,
+                        &MenuItem::with_id(
+                            handle,
+                            "about",
+                            "About Delta Chat",
+                            true,
+                            None::<&str>,
+                        )?,
                     ],
                 )?,
             ],
@@ -168,7 +211,6 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
             "zoom_12" => {
                 set_zoom(app, 1.2);
             }
-
             "zoom_14" => {
                 set_zoom(app, 1.4);
             }
@@ -178,12 +220,11 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
             "log_folder" => {
                 // app.get_store()
             }
-            "current_log_file" => {}
+            "current_log_file" => {
+                // app.get_store()
+            }
             "keybindings" => {
                 app.emit("open:keybindings", None::<String>).unwrap();
-            }
-            "learn" => {
-                app.opener();
             }
             "contribute" => {
                 app.opener()
@@ -201,10 +242,13 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                     )
                     .unwrap();
             }
-            "about" => {
+            "learn" => {
                 app.opener()
                     .open_url("https://delta.chat/de/", None::<String>)
                     .unwrap();
+            }
+            "about" => {
+                app.emit("open:about", None::<String>).unwrap();
             }
             _ => {
                 info!("menu event not handled: {:?}", event.id());
