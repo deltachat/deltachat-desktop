@@ -1738,6 +1738,7 @@ name = "deltachat-tauri"
 version = "1.52.1"
 dependencies = [
  "anyhow",
+ "base64 0.22.1",
  "deltachat",
  "deltachat-jsonrpc",
  "futures-lite",
@@ -1745,6 +1746,7 @@ dependencies = [
  "log",
  "mime",
  "percent-encoding",
+ "png",
  "serde",
  "serde_json",
  "tauri",
@@ -1757,7 +1759,9 @@ dependencies = [
  "tauri-plugin-single-instance",
  "tauri-plugin-store",
  "tauri-plugin-window-state",
+ "thiserror 2.0.11",
  "tokio",
+ "uuid",
 ]
 
 [[package]]
@@ -8190,6 +8194,7 @@ dependencies = [
  "gtk",
  "heck 0.5.0",
  "http 1.2.0",
+ "image",
  "jni",
  "libc",
  "log",

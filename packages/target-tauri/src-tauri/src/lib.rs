@@ -1,17 +1,19 @@
 use std::time::SystemTime;
 
-use tauri::Manager;
-use tauri_plugin_store::StoreExt;
-
+use clipboard::copy_image_to_clipboard;
+use settings::load_and_apply_desktop_settings_on_startup;
 use state::{app::AppState, deltachat::DeltaChatAppState};
-
+use tauri::Manager;
 mod app_path;
 mod blobs;
+mod clipboard;
 mod file_dialogs;
 mod help_window;
-mod locales;
+mod i18n;
 mod runtime_info;
+mod settings;
 mod state;
+mod temp_file;
 mod webxdc;
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
@@ -92,10 +94,16 @@ pub fn run() {
             ui_ready,
             ui_frontend_ready,
             get_current_logfile,
+            copy_image_to_clipboard,
             app_path::get_app_path,
+            clipboard::get_clipboard_image_as_data_uri,
             file_dialogs::download_file,
             file_dialogs::show_open_file_dialog,
-            locales::get_locale_data,
+            i18n::commands::get_locale_data,
+            i18n::commands::change_lang,
+            temp_file::write_temp_file_from_base64,
+            temp_file::write_temp_file,
+            temp_file::remove_temp_file,
             webxdc::on_webxdc_message_changed,
             webxdc::on_webxdc_message_deleted,
             webxdc::on_webxdc_status_update,
@@ -103,6 +111,7 @@ pub fn run() {
             webxdc::delete_webxdc_account_data,
             webxdc::close_all_webxdc_instances,
             runtime_info::get_runtime_info,
+            settings::change_desktop_settings_apply_side_effects,
             help_window::open_help_window,
         ])
         .register_asynchronous_uri_scheme_protocol("webxdc-icon", webxdc::webxdc_icon_protocol)
@@ -161,8 +170,7 @@ pub fn run() {
             app.state::<AppState>()
                 .log_duration_since_startup("setup done");
 
-            let _store = app.store("config.json")?;
-            // todo: activate tray icon based on minimizeToTray
+            load_and_apply_desktop_settings_on_startup(app.handle())?;
 
             // we can only do this in debug mode, macOS doesn't not allow this in the appstore, because it uses private apis
             // we should think about wether we want it on other production builds (except store),

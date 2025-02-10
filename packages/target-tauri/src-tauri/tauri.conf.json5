@@ -48,7 +48,6 @@
             // or when running `pnpm tauri permission list`
             "core:event:allow-emit",
             "core:event:allow-listen",
-            "clipboard-manager:allow-read-image",
             "clipboard-manager:allow-read-text",
             "clipboard-manager:allow-write-image",
             "clipboard-manager:allow-write-text",

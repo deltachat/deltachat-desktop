@@ -13,6 +13,11 @@
 - e2e test for group creation #4614
 - always show accounts with unread messages, even when they're normally scrolled out of view #4536
 - make log additionally available at "Settings / Advanced / View Log" #4610
+- improvements to tauri version #4528 #4585 #4533:
+  - read images from clipboard, write images to clipboard, write/delete temporary files
+  - implement experimental setting: content protection
+  - api to change language
+  - help window localisation
 
 ### Changed
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.155.3`
@@ -51,6 +56,8 @@
 - accessibility: improve chat list, message list and contact list semantics #4518
 - improve performance a little #4561, #4552, #4584
 - fix "Empty Hints" in "All Media" view #4609
+- fix pasting of (non image) files into composer #4533
+- fix translation PluralRules fallback to 'en' not to 'en-US' (en-US isnt valid) #4585
 
 <a id="1_52_1"></a>
 

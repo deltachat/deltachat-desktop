@@ -314,30 +314,6 @@ class BrowserRuntime implements Runtime {
     // not applicable in browser
     throw new Error('getWebxdcDiskUsage method does not exist in browser.')
   }
-  async writeClipboardToTempFile(name: string | undefined): Promise<string> {
-    const clipboardItems = await navigator.clipboard.read()
-    for (const clipboardItem of clipboardItems) {
-      for (const type of clipboardItem.types) {
-        if (type === 'text/html') {
-          /* ignores html. Needed for images copied from web */
-          continue
-        }
-        const blob = await clipboardItem.getType(type)
-        if (!name) {
-          throw new Error('writeClipboardToTempFile: Browser needs a filename')
-        }
-        return (
-          await (
-            await fetch(`/backend-api/uploadTempFile/${name}`, {
-              method: 'POST',
-              body: blob,
-            })
-          ).json()
-        ).path
-      }
-    }
-    throw new Error('No supported clipboard item found')
-  }
   async writeTempFileFromBase64(
     name: string,
     content: string

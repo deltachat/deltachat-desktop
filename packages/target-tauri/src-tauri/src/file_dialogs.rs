@@ -1,12 +1,10 @@
 use std::fs;
 
 use anyhow::Context;
-
+use log::{info, warn};
 use serde::Deserialize;
 use tauri::AppHandle;
 use tauri_plugin_dialog::{DialogExt, FilePath};
-
-use log::{info, warn};
 
 #[tauri::command]
 pub(crate) async fn download_file(
