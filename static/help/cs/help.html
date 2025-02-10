@@ -99,6 +99,7 @@
       <li><a href="#lze-delta-chat-používat-s-protonmail--tutanota--criptext">Lze Delta Chat používat s Protonmail / Tutanota / Criptext?</a></li>
       <li><a href="#remove-account">How can I delete my account?</a></li>
       <li><a href="#mám-zájem-o-technické-podrobnosti-kde-najdu-víc">Mám zájem o technické podrobnosti. Kde najdu víc?</a></li>
+      <li><a href="#where-can-my-friends-find-delta-chat">Where can my friends find Delta Chat?</a></li>
       <li><a href="#jak-je-financován-vývoj-delta-chatu">Jak je financován vývoj Delta Chatu?</a></li>
     </ul>
   </li>
@@ -297,8 +298,7 @@ Archived chats remain accessible above the chat list or via search.</p>
   </li>
 </ul>
 
-<p>To archive or pin a chat, long tap (Android), use the chat’s menu (Android/Desktop) or swipe to the left (iOS);
-to mute a chat, use the chat’s menu (Android/Desktop) or the chat’s profile (iOS).</p>
+<p>To use the functions, long tap or right click a chat in the chat list.</p>
     
       <h3 id="what-does-the-green-dot-mean">
         
@@ -599,16 +599,16 @@ to any system involved in the delivery of Push Notifications.</p>
 
 <ul>
   <li>
-    <p>A Delta Chat app obtains a “device token” locally and stores it
+    <p>A Delta Chat app obtains a “device token” locally, encrypts it and stores it
 on the <a href="https://delta.chat/chatmail">chatmail</a> server.</p>
   </li>
   <li>
     <p>When a <a href="https://delta.chat/chatmail">chatmail</a> server receives an e-mail for a Delta Chat user
-it forwards the “device token” to the central Delta Chat notification proxy.</p>
+it forwards the encrypted device token to the central Delta Chat notification proxy.</p>
   </li>
   <li>
-    <p>The central Delta Chat notification proxy forwards
-the “device token” to the respective Push service (Apple, Google, etc.),
+    <p>The central Delta Chat notification proxy decrypts the device token
+and forwards it to the respective Push service (Apple, Google, etc.),
 without ever knowing the IP or e-mail address of Delta Chat users.</p>
   </li>
   <li>
@@ -621,13 +621,14 @@ and also never see any message content (also not in encrypted forms).</p>
   </li>
 </ul>
 
-<p>As of May 2024, chatmail servers know about “device tokens”
-but we plan to encrypt this information to the notification proxy
-such that the chatmail server never learns the device token.</p>
-
 <p>The central Delta Chat notification proxy <a href="https://github.com/deltachat/notifiers">is small and fully implemented in Rust</a>
 and forgets about device-tokens as soon as Apple/Google/etc processed them,
 usually in a matter of milliseconds.</p>
+
+<p>Note that the device token is encrypted between apps and notification proxy
+but it is not signed. 
+The notification proxy thus never sees e-mail addresses, IP-addresses or
+any cryptographic identity information associated with a user’s device (token).</p>
 
 <p>Resulting from this overall privacy design, even the seizure of a chatmail server,
 or the full seizure of the central Delta Chat notification proxy
@@ -889,7 +890,7 @@ and GnuPG (GPG), a command line tool implementing OpenPGP.
 Many public critiques of OpenPGP actually discuss GnuPG which Delta Chat has never used. 
 Delta Chat rather uses the OpenPGP Rust implementation <a href="https://github.com/rpgp/rpgp">rPGP</a>,
 available as <a href="https://crates.io/crates/pgp">an independent “pgp” package</a>,
-and <a href="https://delta.chat/assets/blog/2019-first-security-review.pdf">security-audited in 2019</a>.</p>
+and <a href="#security-audits">security-audited in 2019 and 2024</a>.</p>
 
 <p>We aim, along with other OpenPGP implementors, 
 to further improve security characteristics by implementing the
@@ -1197,10 +1198,25 @@ Pro ostatní programy by mělo jít nalézt řešení na Interentu.</p>
         
       </h3>
 
-<p>The Delta Chat project underwent four independent security audits and one
-independent security analysis, from most recent to older:</p>
+<p>Yes, multiple times. 
+The Delta Chat project continuously undergoes independent security audits and analysis,
+from most recent to older:</p>
 
 <ul>
+  <li>
+    <p>2024 December, an <a href="https://github.com/rpgp/docs/blob/main/audits/NGI%20Core%20rPGP%20penetration%20test%20report%202024%201.0.pdf">NLNET-commissioned Evaluation of
+rPGP</a> by <a href="https://www.radicallyopensecurity.com/">Radically Open Security</a> took place.
+rPGP serves as the end-to-end encyption <a href="https://openpgp.org">OpenPGP</a> engine of Delta Chat. 
+Two advisories were released related to the findings of this audit:</p>
+
+    <ul>
+      <li><a href="https://github.com/rpgp/rpgp/security/advisories/GHSA-9rmp-2568-59rv">“Panics on Malformed Untrusted Input”</a> CVE-2024-53856</li>
+      <li><a href="https://github.com/rpgp/rpgp/security/advisories/GHSA-4grw-m28r-q285">“Potential Resource Exhaustion when handling Untrusted Messages”</a> CVE-2024-53857</li>
+    </ul>
+
+    <p>The issues outlined in these advisories have been fixed and are part of Delta Chat 
+releases on all appstores since December 2024.</p>
+  </li>
   <li>
     <p>2024 March, we received a deep security analysis from the Applied Cryptography
 research group at ETH Zuerich and addressed all raised issues. 
@@ -1308,6 +1324,12 @@ One device is not needed for the other to work.</p>
     <p>On <strong>Windows</strong>, go to <strong>Control Panel / Network and Internet</strong>
 and make sure, <strong>Private Network</strong> is selected as “Network profile type”
 (after transfer, you can change back to the original value)</p>
+  </li>
+  <li>
+    <p>On <strong>iOS</strong>, make sure “System Settings / Apps / Delta Chat / <strong>Local Network</strong>” access is granted</p>
+  </li>
+  <li>
+    <p>On <strong>macOS</strong>, enable “System Settings / Privacy &amp; Security / <strong>Local Network</strong> / Delta Chat”</p>
   </li>
   <li>
     <p>Your system might have a “personal firewall”,
@@ -1873,6 +1895,35 @@ Otherwise you might receive undecryptable messages from those group chats.</p>
 
 <ul>
   <li>Dobrý začátek je <a href="https://github.com/deltachat/deltachat-core-rust/blob/master/standards.md#standards-used-in-delta-chat">Standards used in Delta Chat</a>.</li>
+</ul>
+    
+      <h3 id="where-can-my-friends-find-delta-chat">
+        
+        
+          Where can my friends find Delta Chat? <a href="#where-can-my-friends-find-delta-chat" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Delta Chat is available for all major and some minor platforms:</p>
+
+<ul>
+  <li>
+    <p>The <strong>official website</strong>, <a href="https://delta.chat/download">https://delta.chat/download</a> shows all options in detail</p>
+  </li>
+  <li>
+    <p>If unavailable, use the <strong>mirror</strong> at <a href="https://deltachat.github.io/deltachat-pages">https://deltachat.github.io/deltachat-pages</a></p>
+  </li>
+  <li>
+    <p>Open one of the following <strong>app stores and search for “Delta Chat”:</strong>
+Google Play Store, F-Droid, Huawei App Gallery, Amazon App Store, iOS and macOS App Store, Microsoft Store</p>
+  </li>
+  <li>
+    <p>Check the <strong>package manager</strong> of your Linux distributions</p>
+  </li>
+  <li>
+    <p><strong>Android APKs</strong> are also available on <a href="https://github.com/deltachat/deltachat-android/releases">https://github.com/deltachat/deltachat-android/releases</a></p>
+  </li>
 </ul>
     
       <h3 id="jak-je-financován-vývoj-delta-chatu">

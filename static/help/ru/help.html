@@ -99,6 +99,7 @@
       <li><a href="#совместим-ли-delta-chat-с-protonmail--tutanota--criptext">Совместим ли Delta Chat с Protonmail / Tutanota / Criptext?</a></li>
       <li><a href="#remove-account">Как я могу удалить свой аккаунт?</a></li>
       <li><a href="#меня-интересуют-технические-детали-можете-рассказать-больше">Меня интересуют технические детали. Можете рассказать больше?</a></li>
+      <li><a href="#где-мои-друзья-могут-найти-delta-chat">Где мои друзья могут найти Delta Chat?</a></li>
       <li><a href="#как-финансируются-разработки-delta-chat">Как финансируются разработки Delta Chat?</a></li>
     </ul>
   </li>
@@ -117,7 +118,7 @@
 <p>Delta Chat — надежное, децентрализованное и безопасное приложение для обмена сообщениями,
 доступное для мобильных и настольных платформ.</p>
 
-<p>Delta Chat напоминает Whatsapp или Telegram, но его можно использовать и приложение электронной почты. 
+<p>Delta Chat напоминает Whatsapp или Telegram, но его можно использовать и как приложение электронной почты. 
 Вы можете анонимно зарегистрироваться на различных <a href="https://delta.chat/chatmail">совместимых с chatmail серверах</a>,
 которые представляют собой минимальные почтовые серверы, оптимизированные для быстрой и безопасной работы. 
 Или вы можете использовать обычные почтовые серверы и существующий почтовый аккаунт,
@@ -133,7 +134,7 @@
         
       </h3>
 
-<p>Чтобы безопасно настроить связь с другими <a href="#howtoe2ee">отсканируйте QR-код приглашения 
+<p>Чтобы безопасно настроить связь с другими, <a href="#howtoe2ee">отсканируйте QR-код приглашения 
 или поделитесь ссылкой-приглашением</a>.
 Это необходимо при использовании профиля чата на основе почты chatmail (по умолчанию), 
 потому что серверы chatmail отклоняют незашифрованные исходящие сообщения.</p>
@@ -301,8 +302,7 @@
   </li>
 </ul>
 
-<p>Чтобы архивировать или закрепить чат, нажмите на него долгим нажатием (Android), воспользуйтесь меню чата (Android/Desktop) или проведите пальцем влево (iOS);
-чтобы отключить уведомления, воспользуйтесь меню чата (Android/Desktop) или профиль чата (iOS).</p>
+<p>Чтобы использовать функции, нажмите долгим нажатием или щелкните правой кнопкой мыши по чату в списке чатов.</p>
     
       <h3 id="что-означает-зеленая-точка">
         
@@ -600,16 +600,16 @@ Push-уведомления недоступны.</p>
 
 <ul>
   <li>
-    <p>Приложение Delta Chat локально получает “токен устройства” и сохраняет его
+    <p>Приложение Delta Chat локально получает “токен устройства” шифрует его и сохраняет
 на сервере <a href="https://delta.chat/chatmail">chatmail</a>.</p>
   </li>
   <li>
     <p>Когда сервер <a href="https://delta.chat/chatmail">chatmail</a> получает электронную почту для пользователя Delta Chat
-он пересылает “токен устройства” центральному прокси-серверу уведомлений Delta Chat.</p>
+он пересылает “зашифрованный токен устройства” центральному прокси-серверу уведомлений Delta Chat.</p>
   </li>
   <li>
-    <p>Центральный прокси-сервер уведомлений Delta Chat пересылает
-“токен устройства” в соответствующую службу Push (Apple, Google и т. д.),
+    <p>Центральный прокси-сервер уведомлений Delta Chat расшифровывает “токен устройства” и
+пересылает его в соответствующую службу Push (Apple, Google и т. д.),
 даже не зная IP-адрес или адрес электронной почты пользователей Delta Chat.</p>
   </li>
   <li>
@@ -622,13 +622,14 @@ Push-уведомления недоступны.</p>
   </li>
 </ul>
 
-<p>По состоянию на май 2024 года серверы chatmail знают о “токенах устройства”,
-но мы планируем зашифровать эту информацию для прокси-сервера уведомлений
-так, чтобы сервер chatmail не смог получить доступ к токену устройства.</p>
-
 <p>Центральный прокси-сервер уведомлений Delta Chat <a href="https://github.com/deltachat/notifiers">небольшой и полностью реализован на Rust</a>
 забывает о токенах устройств, как только Apple/Google/и т. д. обработали их,
 обычно за несколько миллисекунд.</p>
+
+<p>Обратите внимание, что токен устройства шифруется между приложениями и прокси-сервером уведомлений,
+но не подписывается. 
+Прокси-сервер уведомлений не получает доступ к адресам электронной почты, IP-адресам
+или криптографическим идентификационным данным устройства пользователя (токену).</p>
 
 <p>В результате такого общего подхода к обеспечению конфиденциальности, даже захват почтового сервера chatmail,
 или полный захват центрального прокси-сервера уведомлений Delta Chat
@@ -882,15 +883,15 @@ Autocrypt использует ограниченное и <a href="#openpgp-sec
 если всё сообщение правильно зашифровано и подписано.
 Например, “Отдельные подписи” не считаются безопасными.</p>
 
-<p>OpenPGP сам по себе не является небезопасным.
-Большинство обсуждаемых в публичной сфере проблем безопасности OpenPGP
-на самом деле возникают из-за плохого удобства использования или плохой реализации инструментов или приложений (или того и другого).
-Особенно важно различать OpenPGP, стандарт шифрования IETF,
-и GnuPG (GPG), инструмент командной строки, реализующий OpenPGP. 
-Многие публичные критические замечания по OpenPGP фактически касаются GnuPG, который Delta Chat никогда не использовал.
-Delta Chat вместо этого использует реализацию OpenPGP на Rust <a href="https://github.com/rpgp/rpgp">rPGP</a>,
-доступную как <a href="https://crates.io/crates/pgp">независимый пакет “pgp”</a>,
-и <a href="https://delta.chat/assets/blog/2019-first-security-review.pdf">проверенную на безопасность в 2019 году</a>.</p>
+<p>OpenPGP is not insecure by itself.
+Most publically discussed OpenPGP security problems
+actually stem from bad usability or bad implementations of tools or apps (or both).
+It is particularly important to distinguish between OpenPGP, the IETF encryption standard, 
+and GnuPG (GPG), a command line tool implementing OpenPGP. 
+Many public critiques of OpenPGP actually discuss GnuPG which Delta Chat has never used. 
+Delta Chat rather uses the OpenPGP Rust implementation <a href="https://github.com/rpgp/rpgp">rPGP</a>,
+available as <a href="https://crates.io/crates/pgp">an independent “pgp” package</a>,
+and <a href="#security-audits">security-audited in 2019 and 2024</a>.</p>
 
 <p>Вместе с другими разработчиками OpenPGP мы стремимся, 
 повысить характеристики безопасности путём реализации
@@ -1200,10 +1201,25 @@ Delta Chat не будут иметь никакого ключа, прежде 
         
       </h3>
 
-<p>Проект Delta Chat прошёл четыре независимых аудита безопасности и один
-независимый анализ безопасности, от самого последнего к более старому:</p>
+<p>Да, множество раз. 
+Проект Delta Chat находится в постоянном режиме аудита безопасности и анализа,
+от последних до более ранних:</p>
 
 <ul>
+  <li>
+    <p>Декабрь 2024 года, <a href="https://github.com/rpgp/docs/blob/main/audits/NGI%20Core%20rPGP%20penetration%20test%20report%202024%201.0.pdf">экспертиза rPGP, организованная
+ NLNET</a> выполненная <a href="https://www.radicallyopensecurity.com/">Radically Open Security</a>.
+rPGP является движком сквозного шифрования OpenPGP <a href="https://openpgp.org">OpenPGP</a> в Delta Chat. 
+В результате этого аудита были подготовлены два отчета по безопасности:</p>
+
+    <ul>
+      <li><a href="https://github.com/rpgp/rpgp/security/advisories/GHSA-9rmp-2568-59rv">“Паника при обработке некорректных, недоверенных входных данных”</a> CVE-2024-53856</li>
+      <li><a href="https://github.com/rpgp/rpgp/security/advisories/GHSA-4grw-m28r-q285">“Возможная нехватка ресурсов при обработке непроверенных сообщений”</a> CVE-2024-53857</li>
+    </ul>
+
+    <p>Проблемы, описанные в этих рекомендациях, были исправлены и включены в релизы Delta Chat, 
+во всех магазинах приложений с декабря 2024 года.</p>
+  </li>
   <li>
     <p>В марте 2024 года мы получили подробный анализ безопасности от исследовательской группы
 Applied Cryptography в ETH Цюрихе и устранили все выявленные проблемы. 
@@ -1311,6 +1327,12 @@ Chat <a href="https://github.com/rpgp/rpgp">PGP</a> и
     <p>В <strong>Windows</strong> перейдите в <strong>Панель управления / Сеть и Интернет</strong>
 и убедитесь, что в качестве “Типа сетевого профиля” выбрана <strong>Частная сеть</strong>.
 (после передачи, вы можете изменить обратно на исходное значение)</p>
+  </li>
+  <li>
+    <p>На <strong>iOS</strong>, убедитесь, что предоставлен доступ “Настройки системы / Приложения / Delta Chat / <strong>Локальная сеть</strong>”</p>
+  </li>
+  <li>
+    <p>На <strong>macOS</strong>, включите “Системные настройки / Конфиденциальность и безопасность / <strong>Локальная сеть</strong> / Delta Chat”</p>
   </li>
   <li>
     <p>В вашей системе может быть установлен “персональный брандмауэр”,
@@ -1877,6 +1899,35 @@ Chat.</li>
 
 <ul>
   <li>Смотрите <a href="https://github.com/deltachat/deltachat-core-rust/blob/master/standards.md#standards-used-in-delta-chat">Стандарты, используемые в Delta Chat</a>.</li>
+</ul>
+    
+      <h3 id="где-мои-друзья-могут-найти-delta-chat">
+        
+        
+          Где мои друзья могут найти Delta Chat? <a href="#где-мои-друзья-могут-найти-delta-chat" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Delta Chat доступен на всех популярных и некоторых менее известных платформах:</p>
+
+<ul>
+  <li>
+    <p>На <strong>официальной странице загрузки</strong>, <a href="https://delta.chat/download">https://delta.chat/download</a> можно найти подробную информацию о всех вариантах</p>
+  </li>
+  <li>
+    <p>Если основной сайт недоступен, используйте <strong>зеркало</strong> <a href="https://deltachat.github.io/deltachat-pages">https://deltachat.github.io/deltachat-pages</a></p>
+  </li>
+  <li>
+    <p>Откройте один из следующих <strong>онлайн-магазинов приложений и введите запрос “Delta Chat”:</strong>
+ Google Play Store, F-Droid, Huawei App Gallery, Amazon App Store, App Store для iOS и macOS, Microsoft Store</p>
+  </li>
+  <li>
+    <p>Проверьте <strong>менеджер пакетов</strong> вашего дистрибутива Linux</p>
+  </li>
+  <li>
+    <p>Файлы <strong>APK для Android</strong> доступны на <a href="https://github.com/deltachat/deltachat-android/releases">https://github.com/deltachat/deltachat-android/releases</a></p>
+  </li>
 </ul>
     
       <h3 id="как-финансируются-разработки-delta-chat">
