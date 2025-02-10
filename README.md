@@ -8,49 +8,30 @@
 
 ## Editions
 
-| Electron :electron:                                                                                | Tauri <img src="README_ASSETS/TAURI_Glyph_Color.svg" width="16px" height="16px" style="vertical-align:middle" />                                                                                      | Browser 🦊🧭🏐                                                                                                                                   |
-| -------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| <img src="README_ASSETS/desktop.png" style="max-width:256px;min-hight:200px" />                    | <img src="README_ASSETS/desktop.png" style="max-width:256px" />                                                                                                                                       | <img src="README_ASSETS/browser-screenshot.png" style="max-width:256px;min-hight:200px" />                                                       |
-| The default, currently deployed in appstore and used by most users                                 | WIP client using tauri instead of electron <br /> tauri is a modern electron alternative: less disk usage, less ram usage, better performance rust backend                                            | Highly experimental version with a webserver component and web-ui in the browser, at the moment only meant for developers and automated testing. |
-| [Go to project folder](./packages/target-electron) <br /> [Download Links](https://get.delta.chat) | [Go to project folder](./packages/target-tauri) <br /> [Fediverse thread](https://fosstodon.org/@treefit/113578409177635057) <br /> [nlnet project: Delta Tauri](https://nlnet.nl/project/DeltaTauri) | [Go to project folder](./packages/target-browser) <br /> [Fediverse thread](https://fosstodon.org/@treefit/113116480883632874)                   |
+| [`Electron`](https://www.electronjs.org/) :electron:                                               | [`Tauri`](https://tauri.app/) <img src="README_ASSETS/TAURI_Glyph_Color.svg" width="16px" height="16px" style="vertical-align:middle" />                                                         | Browser 🦊🧭🏐                                                                                                                                   |
+| -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| <img src="README_ASSETS/desktop.png" style="max-width:256px;min-hight:200px" />                    | <img src="README_ASSETS/desktop.png" style="max-width:256px" />                                                                                                                                  | <img src="README_ASSETS/browser-screenshot.png" style="max-width:256px;min-hight:200px" />                                                       |
+| The default application. Based on Electron. Currently deployed in appstore and used by most users. | WIP client using Tauri instead of Electron. <br /> Tauri is a modern alternative to Electron: Less disk usage, less ram usage and better performance rust backend.                               | Highly experimental version with a webserver component and web-ui in the browser. At the moment only meant for developers and automated testing. |
+| [Project Folder](./packages/target-electron) <br /> [Download Links](https://get.delta.chat)       | [Project Folder](./packages/target-tauri) <br /> [Fediverse Thread](https://fosstodon.org/@treefit/113578409177635057) <br /> [Delta Tauri - nlnet project](https://nlnet.nl/project/DeltaTauri) | [Project Folder](./packages/target-browser) <br /> [Fediverse Thread](https://fosstodon.org/@treefit/113116480883632874)                         |
 
 ## Documentation Links <a id="docs"></a>
 
-<table>
-  <thead>
-    <tr><th>For Users</th><th>For Developers</th></tr>
-  </thead>
-<tbody>
-<tr><td>
+### For Users
 
-[TROUBLESHOOTING](./docs/TROUBLESHOOTING.md)
+- [Troubleshooting](./docs/TROUBLESHOOTING.md)
+- [CLI flags](./docs/CLI_FLAGS.md)
+- [Keybindings](./docs/KEYBINDINGS.md)
+- [How to make custom Themes](./docs/THEMES.md)
 
-[CLI flags](./docs/CLI_FLAGS.md)
+### For Developers
 
-[Keybindings](./docs/KEYBINDINGS.md)
-
-[How to make custom Themes](./docs/THEMES.md)
-
-</td><td>
-
-[Contribution Guidelines](./CONTRIBUTING.md)
-
-[Logging](./docs/LOGGING.md)
-
-[Documentation for Developers](./docs/DEVELOPMENT.md)
-
-[Styling Guidelines](./docs/STYLES.md)
-
-[How to update core](./docs/UPDATE_CORE.md)
-
-[How to do end to end testing](./docs/E2E-TESTING.md)
-
-[How to do a release](./RELEASE.md)
-
-</td>
-</tr>
-</tbody>
-</table>
+- [Contribution Guidelines](./CONTRIBUTING.md)
+- [Logging](./docs/LOGGING.md)
+- [Documentation for Developers](./docs/DEVELOPMENT.md)
+- [Styling Guidelines](./docs/STYLES.md)
+- [How to update core](./docs/UPDATE_CORE.md)
+- [How to do end to end testing](./docs/E2E-TESTING.md)
+- [How to do a release](./RELEASE.md)
 
 ## Table of Contents
 
@@ -78,7 +59,10 @@
 
 ## Install <a id="install"></a>
 
-The application can be downloaded from **<https://get.delta.chat>**. Here you'll find binary releases for all supported platforms. See below for platform specific instructions. If you run into any problems please consult the [Troubleshooting](#troubleshooting) section below.
+The application can be downloaded from **<https://get.delta.chat>**.
+Here you'll find binary releases for all supported platforms.
+See below for platform specific instructions. If you run into any
+problems please consult the [`Troubleshooting`](#troubleshooting) section below.
 
 [![Packaging status](https://repology.org/badge/vertical-allrepos/deltachat-desktop.svg)](https://repology.org/project/deltachat-desktop/versions)
 
@@ -86,12 +70,12 @@ The application can be downloaded from **<https://get.delta.chat>**. Here you'll
 
 #### Flatpak <a id="flatpak"></a>
 
-The primary distribution-independed way to install is to use the
+The primary distribution-independent way to install is to use the
 flatpak build.
-This is maintained in [it's own
-repository](https://github.com/flathub/chat.delta.desktop), however a
+This is maintained in [its own
+repository](https://github.com/flathub/chat.delta.desktop). However, a
 pre-built binary can be downloaded and installed from
-[flathub](https://flathub.org/apps/details/chat.delta.desktop) which
+[`Flathub`](https://flathub.org/apps/details/chat.delta.desktop) which
 also has a setup guide for many Linux platforms.
 
 #### Arch Linux <a id="arch-linux"></a>
@@ -100,9 +84,13 @@ Run `pacman -S deltachat-desktop` to install Delta Chat Desktop on Arch Linux.
 
 Alternatively, build `deltachat-desktop-git` package from Arch User Repository.
 
-> **WARNING: Currently the AUR package compiles from latest master. This can be more recent as the latest release, introduce new features but also new bugs.**
+> **WARNING: Currently the AUR package compiles from latest master.
+> This can be more recent as the latest release, introduce new features
+> but also new bugs.**
 
-If you have a AUR helper like yay or paru installed, you can install it by running `yay -S deltachat-desktop-git` and following the instruction in your terminal.
+If you have a AUR helper like yay or paru installed, you can install it
+by running `yay -S deltachat-desktop-git` and following the instruction
+in your terminal.
 
 Otherwise you can still do it manually:
 
@@ -138,11 +126,13 @@ $ brew install --cask deltachat
 
 #### DMG
 
-Simply install the `.dmg` file as you do it with all other software on mac.
+Simply install the `.dmg` file as you do it with all other software on Mac.
 
 ### Windows <a id="windows"></a>
 
-You can find the downloads for windows on <https://get.delta.chat>, though we recomend using the [Microsoft Store release](https://www.microsoft.com/en-us/p/deltachat/9pjtxx7hn3pk?activetab=pivot:overviewtab), because there you get automatic updates.
+You can find the downloads for windows on <https://get.delta.chat>.
+However, we recommend using the release from [Microsoft Store](https://www.microsoft.com/en-us/p/deltachat/9pjtxx7hn3pk?activetab=pivot:overviewtab),
+because there you get automatic updates.
 
 ### From Source <a id="source"></a>
 
@@ -169,17 +159,15 @@ $ pnpm -w start:electron
 
 > `-w` means workspace root package, with this you don't need to have your current working directory at the repo-root to run those scripts.
 
-For development with local deltachat-core read the [docs](docs/UPDATE_CORE.md)
+For development with local `deltachat-core-rust` read [`docs/UPDATE_CORE.md`](docs/UPDATE_CORE.md).
 
 ### Troubleshooting <a id="troubleshooting"></a>
 
-This module builds on top of [`deltachat-core-rust`](https://github.com/deltachat/deltachat-core-rust), which in turn has external dependencies. The instructions below assume a Linux system (e.g. Ubuntu 18.10).
-
-Read the error, maybe it already tells you what you need to do. If not feel free to file an issue in this github repo.
-
-Make sure that your nodejs version is `20.0.0` or newer.
-
-If you still get errors look at the instructions in [UPDATE_CORE Readme](./docs/UPDATE_CORE.md) to set things up [`or write an issue`](https://github.com/deltachat/deltachat-desktop/issues/new/choose).
+- This module builds on top of [`deltachat-core-rust`](https://github.com/deltachat/deltachat-core-rust),
+  which in turn has external dependencies. The instructions below assume a Linux system (e.g. Ubuntu 18.10).
+- Read the error, maybe it already tells you what you need to do. If not feel free to file an issue in this github repo.
+- Make sure that your nodejs version is `20.0.0` or newer.
+- If you still get errors look at the instructions in [`docs/UPDATE_CORE.md`](docs/UPDATE_CORE.md) to set things up or [write an issue](https://github.com/deltachat/deltachat-desktop/issues/new/choose).
 
 ## Configuration and Databases <a id="config-and-db"></a>
 
@@ -189,11 +177,9 @@ Each database is a SQLite file that represents the account for a given email add
 
 ## How to Contribute <a id="how-to-contribute"></a>
 
-Read [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md)
-
-For translations see our transifex page: https://www.transifex.com/delta-chat/public/
-
-For other ways to contribute: https://delta.chat/en/contribute
+- Read [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md)
+- For translations see our transifex page: https://www.transifex.com/delta-chat/public/
+- For other ways to contribute: https://delta.chat/en/contribute
 
 ## Logging <a id="logging"></a>
 
@@ -201,11 +187,11 @@ You can access the log folder and the current log file under the `View->Develope
 
 <center><img src="README_ASSETS/devMenu.png"/></center>
 
-Read [docs/LOGGING.md](docs/LOGGING.md) for an explanation about our logging system. (available **options**, log **location** and information about the used Log-**Format**)
+For more details on how the logging system works, read [`docs/LOGGING.md`](docs/LOGGING.md).
 
 ## License <a id="license"></a>
 
-Licensed under `GPL-3.0-or-later`, see [LICENSE](./LICENSE) file for details.
+Licensed under `GPL-3.0-or-later`, see [`LICENSE`](./LICENSE) file for details.
 
 > Copyright © DeltaChat contributors.
 
