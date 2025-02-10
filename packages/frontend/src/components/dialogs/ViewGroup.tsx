@@ -142,7 +142,9 @@ function ViewGroupInner(
       .then(pastContacts => {
         setPastContacts(Object.values(pastContacts))
       })
+  }, [accountId, group.pastContactIds])
 
+  useEffect(() => {
     return onDCEvent(accountId, 'ContactsChanged', () => {
       BackendRemote.rpc
         .getContactsByIds(accountId, group.contactIds)
