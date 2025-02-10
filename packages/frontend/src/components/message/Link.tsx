@@ -106,7 +106,7 @@ function LabeledLinkConfirmationDialog(
   const openLinkSafely = useOpenLinkSafely()
   const [isChecked, setIsChecked] = useState(false)
   const toggleIsChecked = () => setIsChecked(checked => !checked)
-
+  const url = new URL(props.target)
   return (
     <Dialog onClose={props.onClose}>
       <DialogBody>
@@ -119,7 +119,7 @@ function LabeledLinkConfirmationDialog(
               maxHeight: '50vh',
             }}
           >
-            {props.realUrl}
+            {url.href}
           </p>
           <div style={{ display: 'flex' }}>
             <DeltaCheckbox checked={isChecked} onClick={toggleIsChecked} />
@@ -128,7 +128,7 @@ function LabeledLinkConfirmationDialog(
                 tx('open_external_url_trust_domain', '$$hostname$$'),
                 '$$hostname$$',
                 () => (
-                  <i>{props.hostName}</i>
+                  <i>{url.hostname}</i>
                 )
               )}
             </div>
@@ -181,6 +181,7 @@ export const Link = ({
   const processQr = useProcessQr()
   const asciiUrl = punycode ? punycode.punycode_encoded_url : target
 
+  const constructedUrl = new URL(target)
   const onClick = (ev: any) => {
     ev.preventDefault()
     ev.stopPropagation()
@@ -195,6 +196,15 @@ export const Link = ({
         originalHostname: punycode.original_hostname,
         asciiHostname: punycode.ascii_hostname,
         asciiUrl: punycode.punycode_encoded_url,
+      })
+    } else if (
+      destination.hostname?.toLowerCase() !==
+      constructedUrl.hostname.toLowerCase()
+    ) {
+      openDialog(PunycodeUrlConfirmationDialog, {
+        originalHostname: destination.hostname ?? '',
+        asciiHostname: constructedUrl.hostname,
+        asciiUrl: constructedUrl.href,
       })
     } else {
       openLinkSafely(accountId, target)
