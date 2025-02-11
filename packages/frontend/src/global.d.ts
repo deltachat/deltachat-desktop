@@ -65,6 +65,11 @@ declare global {
      * it gets assigned when the component gets rendered.
      */
     __internal_check_jump_to_message?: () => void
+    /**
+     * This is used by MessageList to see if another, newer instance
+     * of a MessageList exists.
+     */
+    __internal_current_message_list_instance_id?: symbol
     __updateAccountListSidebar: (() => void) | undefined
   }
 }
