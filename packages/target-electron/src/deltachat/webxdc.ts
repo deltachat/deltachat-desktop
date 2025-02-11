@@ -62,6 +62,18 @@ const CSP =
   media-src 'self' data: blob: ;\
   webrtc 'block'"
 
+/**
+ * Allowed permissions for webxdc applications.
+ * https://www.electronjs.org/docs/latest/api/session#sessetpermissioncheckhandlerhandler
+ * https://www.electronjs.org/docs/latest/api/session#sessetpermissionrequesthandlerhandler
+ */
+const ALLOWED_PERMISSIONS: string[] = [
+  // Games might lock the pointer
+  'pointerLock',
+  // Games might do that too
+  'fullscreen',
+]
+
 const WRAPPER_PATH = 'webxdc-wrapper.45870014933640136498.html'
 
 const BOUNDS_UI_CONFIG_PREFIX = 'ui.desktop.webxdcBounds'
@@ -425,31 +437,25 @@ export default class DCWebxdc extends SplitOut {
         Exclude<Parameters<setPermissionRequestHandler>[0], null>
       >[1]
       const loggedPermissionRequests: { [K in permission_arg]?: true } = {}
-      /** prevents webxdcs from spamming the log */
-      const logPermissionRequest = (permission: permission_arg) => {
-        if (loggedPermissionRequests[permission]) {
-          return
-        }
-        loggedPermissionRequests[permission] = true
-        log.info(
-          `webxdc '${webxdcInfo.name}' requested "${permission}" permission, but we denied it.
-If you think that's a bug and you need that permission, then please open an issue on github`
-        )
-      }
+
       const permission_handler = (permission: permission_arg) => {
-        if (permission == 'pointerLock') {
-          log.info(`allowed webxdc '${webxdcInfo.name}' to lock the pointer`)
-          // because games might lock the pointer
-          return true
-        }
-        if (permission == 'fullscreen') {
-          log.info(`allowed webxdc '${webxdcInfo.name}' to go into fullscreen`)
-          // games might do that too
-          return true
+        const isAllowed: boolean = ALLOWED_PERMISSIONS.includes(permission)
+
+        // Prevent webxdcs from spamming the log
+        if (!loggedPermissionRequests[permission]) {
+          loggedPermissionRequests[permission] = true
+          if (isAllowed) {
+            log.info(
+              `ALLOWED permission '${permission}' to webxdc '${webxdcInfo.name}'`
+            )
+          } else {
+            log.info(
+              `DENIED permission '${permission}' to webxdc '${webxdcInfo.name}'. If you think that's a bug and you need that permission, then please open an issue on github.`
+            )
+          }
         }
 
-        logPermissionRequest(permission)
-        return false
+        return isAllowed
       }
 
       webxdcWindow.webContents.session.setPermissionCheckHandler(
