@@ -138,10 +138,11 @@ export const ChatProvider = ({
       // where the previous `selectChat()` finishes _after_ the new one.
       cancelPendingSetChat.current?.()
       let cancelled = false
-      cancelPendingSetChat.current = () => {
+      const cancel = () => {
         cancelled = true
         resolveRetPromise(false)
       }
+      cancelPendingSetChat.current = cancel
 
       BackendRemote.rpc
         .getFullChatById(accountId, nextChatId)
@@ -167,7 +168,13 @@ export const ChatProvider = ({
           resolveRetPromise(false)
         })
         .finally(() => {
-          cancelPendingSetChat.current = undefined
+          // Yes, need to check if the current pendingSetChat
+          // is this one, because this one might take longer
+          // than the next one.
+          if (cancelPendingSetChat.current === cancel) {
+            // This is not necessary. Just to clean up the state.
+            cancelPendingSetChat.current = undefined
+          }
         })
 
       return retPromise
