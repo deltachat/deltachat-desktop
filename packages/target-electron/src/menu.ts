@@ -245,11 +245,11 @@ export function getEditMenu(): Electron.MenuItemConstructorOptions {
         role: 'cut',
       },
       {
-        label: tx('global_menu_edit_copy_desktop'),
+        label: tx('copy'),
         role: 'copy',
       },
       {
-        label: tx('global_menu_edit_paste_desktop'),
+        label: tx('paste'),
         role: 'paste',
       },
       {

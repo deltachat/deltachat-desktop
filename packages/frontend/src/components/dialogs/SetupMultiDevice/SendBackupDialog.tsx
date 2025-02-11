@@ -185,7 +185,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
                 </FooterActionButton>
                 {stage === 'awaiting_scan' && svgUrl && qrContent && (
                   <FooterActionButton onClick={copyQrToClipboard}>
-                    {tx('global_menu_edit_copy_desktop')}
+                    {tx('copy')}
                   </FooterActionButton>
                 )}
               </span>

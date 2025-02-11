@@ -100,7 +100,7 @@ const create = (win: BrowserWindow) => {
       }),
       copy: () => ({
         id: 'copy',
-        label: tx('global_menu_edit_copy_desktop'),
+        label: tx('copy'),
         enabled: can('Copy'),
         visible: props.isEditable || hasText,
         click() {
@@ -114,7 +114,7 @@ const create = (win: BrowserWindow) => {
       }),
       paste: () => ({
         id: 'paste',
-        label: tx('global_menu_edit_paste_desktop'),
+        label: tx('paste'),
         enabled: editFlags.canPaste,
         visible: props.isEditable,
         click() {

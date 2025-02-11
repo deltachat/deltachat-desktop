@@ -96,7 +96,7 @@ function buildContextMenu(
       },
     // Copy to clipboard
     {
-      label: tx('global_menu_edit_copy_desktop'),
+      label: tx('copy'),
       action: () => {
         navigator.clipboard.writeText(message.text || '')
       },

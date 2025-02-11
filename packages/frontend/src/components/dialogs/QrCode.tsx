@@ -186,7 +186,7 @@ export function QrCodeShowQrInner({
       <DialogFooter>
         <FooterActions align={!onClose && !onBack ? 'center' : 'spaceBetween'}>
           <FooterActionButton data-testid='copy-qr-code' onClick={onCopy}>
-            {tx('global_menu_edit_copy_desktop')}
+            {tx('copy')}
           </FooterActionButton>
           {onClose && (
             <FooterActionButton onClick={onClose} data-testid='close'>
@@ -268,7 +268,7 @@ export function QrCodeScanQrInner({
       <DialogFooter>
         <FooterActions align='spaceBetween'>
           <FooterActionButton onClick={pasteClipboard} data-testid='paste'>
-            {tx('global_menu_edit_paste_desktop')}
+            {tx('paste')}
           </FooterActionButton>
           <FooterActionButton onClick={onClose} data-testid='close'>
             {tx('close')}
