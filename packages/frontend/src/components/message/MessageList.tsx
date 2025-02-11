@@ -236,16 +236,27 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
   }
   maybeJumpToMessageHack()
   window.__internal_check_jump_to_message = maybeJumpToMessageHack
+  const thisMessageListIntanceId = useRef(Symbol())
+  window.__internal_current_message_list_instance_id =
+    thisMessageListIntanceId.current
   useEffect(() => {
-    // Unset this when unmounting, so that it's the next component instance
+    // Unset `__internal_check_jump_to_message` when unmounting,
+    // so that it's the next component instance
     // that handles the `__internal_jump_to_message_asap` value.
     // This is important e.g. for "Show in Chat" in the gallery.
     // The gallery is displayed when the MessageList component
     // is not displayed.
-    //
-    // TODO we probably need to ensure that the next component instance
-    // didn't already set it itself.
     return () => {
+      if (
+        window.__internal_current_message_list_instance_id !==
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        thisMessageListIntanceId.current
+      ) {
+        // This means that another component has already set
+        // `__internal_check_jump_to_message`.
+        // No need to clean it up.
+        return
+      }
       window.__internal_check_jump_to_message = undefined
     }
   }, [])
