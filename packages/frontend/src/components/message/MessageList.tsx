@@ -235,9 +235,20 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
     }
   }
   maybeJumpToMessageHack()
-  // TODO perf: to save memory, maybe set to `undefined` when unmounting,
-  // but be sure not to unset it if the new component render already set it.
   window.__internal_check_jump_to_message = maybeJumpToMessageHack
+  useEffect(() => {
+    // Unset this when unmounting, so that it's the next component instance
+    // that handles the `__internal_jump_to_message_asap` value.
+    // This is important e.g. for "Show in Chat" in the gallery.
+    // The gallery is displayed when the MessageList component
+    // is not displayed.
+    //
+    // TODO we probably need to ensure that the next component instance
+    // didn't already set it itself.
+    return () => {
+      window.__internal_check_jump_to_message = undefined
+    }
+  }, [])
 
   const pendingProgrammaticSmoothScrollTo = useRef<null | number>(null)
   const pendingProgrammaticSmoothScrollTimeout = useRef<number>(-1)
