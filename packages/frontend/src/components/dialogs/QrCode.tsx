@@ -186,6 +186,7 @@ export function QrCodeShowQrInner({
       <DialogFooter>
         <FooterActions align={!onClose && !onBack ? 'center' : 'spaceBetween'}>
           <FooterActionButton data-testid='copy-qr-code' onClick={onCopy}>
+            <img className='copy-link-icon' src='./images/icons/link.svg' />{' '}
             {tx('global_menu_edit_copy_desktop')}
           </FooterActionButton>
           {onClose && (
