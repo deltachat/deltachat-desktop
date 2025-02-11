@@ -431,19 +431,14 @@ export default class DCWebxdc extends SplitOut {
         ev.preventDefault()
       })
 
-      type setPermissionRequestHandler =
-        typeof webxdcWindow.webContents.session.setPermissionRequestHandler
-      type permission_arg = Parameters<
-        Exclude<Parameters<setPermissionRequestHandler>[0], null>
-      >[1]
-      const loggedPermissionRequests: { [K in permission_arg]?: true } = {}
+      const loggedPermissionRequests = new Set<string>()
 
-      const permission_handler = (permission: permission_arg) => {
+      const permission_handler = (permission: string) => {
         const isAllowed: boolean = ALLOWED_PERMISSIONS.includes(permission)
 
         // Prevent webxdcs from spamming the log
-        if (!loggedPermissionRequests[permission]) {
-          loggedPermissionRequests[permission] = true
+        if (!loggedPermissionRequests.has(permission)) {
+          loggedPermissionRequests.add(permission)
           if (isAllowed) {
             log.info(
               `ALLOWED permission '${permission}' to webxdc '${webxdcInfo.name}'`
@@ -460,7 +455,7 @@ export default class DCWebxdc extends SplitOut {
 
       webxdcWindow.webContents.session.setPermissionCheckHandler(
         (_wc, permission) => {
-          return permission_handler(permission as any)
+          return permission_handler(permission)
         }
       )
       webxdcWindow.webContents.session.setPermissionRequestHandler(
