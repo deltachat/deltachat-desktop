@@ -37,6 +37,7 @@
 - Improve backup transfer dialog (different message for connection step, timed message to tell user to check out troubleshooting, button to link to trouble shooting) #4476
 - store last used account in accounts.toml managed by core #4569
 - update help menu URLs #4598
+- Update local help (2025-02-10)
 - tauri: update dependencies #4607
 - upgrade Electron from `32.1.0` to `34.0.1` #4568
 - Update translations (2025-02-07)
