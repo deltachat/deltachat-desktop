@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+- fix chat list showing the chat that is different from the currently selected chat when switching chats rapidly, again #4628
 
 <a id="1_53_0"></a>
 
