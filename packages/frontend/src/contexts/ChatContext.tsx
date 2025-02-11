@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import { ActionEmitter, KeybindAction } from '../keybindings'
 import useKeyBindingAction from '../hooks/useKeyBindingAction'
@@ -21,7 +21,7 @@ export type SetView = (nextView: ChatView) => void
 export type SelectChat = (
   nextAccountId: number,
   chatId: number
-) => Promise<void>
+) => Promise<boolean>
 
 export type UnselectChat = () => void
 
@@ -35,6 +35,22 @@ export type ChatContextValue = {
   chatWithLinger?: T.FullChat
   chatId?: number
   alternativeView: AlternativeView
+  // The resolve value of the promise is unused at the time of writing.
+  // And the Promise itself doesn't seem to be used that much.
+  // Maybe we can make it just return `void`, or need to reconsider
+  // the correctness of the code that uses it.
+  /**
+   * Changes the active chat.
+   * Returns a Promise that resolves with `true`
+   * when we're done loading the chat
+   * and setting the state (`chatWithLinger`) accordingly.
+   *
+   * If this function gets called another time before the Promise
+   * from the previous call resolves,
+   * the previous call's Promise will immediately resolve to `false`.
+   *
+   * @throws if `nextAccountId` is not the currently selected account.
+   */
   selectChat: SelectChat
   setChatView: SetView
   unselectChat: UnselectChat
@@ -57,7 +73,10 @@ export const ChatProvider = ({
   unselectChatRef,
 }: PropsWithChildren<Props>) => {
   const [activeView, setActiveView] = useState(ChatView.MessageList)
+
   const [chatWithLinger, setChatWithLinger] = useState<T.FullChat | undefined>()
+  const cancelPendingSetChat = useRef<() => void>()
+
   const [chatId, setChatId] = useState<number | undefined>()
   const [alternativeView, setAlternativeView] = useState<AlternativeView>(null)
 
@@ -66,7 +85,7 @@ export const ChatProvider = ({
   }, [])
 
   const selectChat = useCallback<SelectChat>(
-    async (nextAccountId: number, nextChatId: number) => {
+    (nextAccountId: number, nextChatId: number) => {
       if (!accountId) {
         throw new Error('can not select chat when no `accountId` is given')
       }
@@ -78,6 +97,7 @@ export const ChatProvider = ({
       }
 
       // Jump to last message if user clicked chat twice
+      // Remember that there might be no messages in the chat.
       // @TODO: We probably want this to be part of the UI logic instead
       if (nextChatId === chatId) {
         window.__internal_jump_to_message_asap = {
@@ -108,20 +128,49 @@ export const ChatProvider = ({
       // Remember that user selected this chat to open it again when they come back
       saveLastChatId(accountId, nextChatId)
 
-      // Load all chat data we need to get started
-      const nextChat = await BackendRemote.rpc.getFullChatById(
-        accountId,
-        nextChatId
-      )
-      setChatWithLinger(nextChat)
+      // Make sure that this gets called eventually.
+      let resolveRetPromise: (result: boolean) => void
+      const retPromise = new Promise<boolean>(r => {
+        resolveRetPromise = r
+      })
 
-      // Switch to "archived" view if selected chat is there
-      // @TODO: We probably want this to be part of the UI logic instead
-      ActionEmitter.emitAction(
-        nextChat.archived
-          ? KeybindAction.ChatList_SwitchToArchiveView
-          : KeybindAction.ChatList_SwitchToNormalView
-      )
+      // `cancelPendingSetChat` is mostly to resolve race conditions
+      // where the previous `selectChat()` finishes _after_ the new one.
+      cancelPendingSetChat.current?.()
+      let cancelled = false
+      cancelPendingSetChat.current = () => {
+        cancelled = true
+        resolveRetPromise(false)
+      }
+
+      BackendRemote.rpc
+        .getFullChatById(accountId, nextChatId)
+        .then(nextChat => {
+          if (cancelled) {
+            throw new Error('cancelled')
+          }
+
+          setChatWithLinger(nextChat)
+
+          // Switch to "archived" view if selected chat is there
+          // @TODO: We probably want this to be part of the UI logic instead
+          ActionEmitter.emitAction(
+            nextChat.archived
+              ? KeybindAction.ChatList_SwitchToArchiveView
+              : KeybindAction.ChatList_SwitchToNormalView
+          )
+        })
+        .then(() => {
+          resolveRetPromise(true)
+        })
+        .catch(_err => {
+          resolveRetPromise(false)
+        })
+        .finally(() => {
+          cancelPendingSetChat.current = undefined
+        })
+
+      return retPromise
     },
     [accountId, chatId]
   )

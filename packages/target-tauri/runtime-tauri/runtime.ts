@@ -8,11 +8,7 @@ import type { attachLogger } from '@tauri-apps/plugin-log'
 import { getStore } from '@tauri-apps/plugin-store'
 import type { Store } from '@tauri-apps/plugin-store'
 import { open } from '@tauri-apps/plugin-shell'
-import {
-  writeText,
-  readText,
-  readImage,
-} from '@tauri-apps/plugin-clipboard-manager'
+import { writeText, readText } from '@tauri-apps/plugin-clipboard-manager'
 
 import {
   DcNotification,
@@ -115,11 +111,11 @@ class TauriRuntime implements Runtime {
       HTMLEmailAskForRemoteLoadingConfirmation: true,
       HTMLEmailAlwaysLoadRemoteContent: false,
       contentProtectionEnabled: false,
+      locale: null, // if this is null, the system chooses the system language that electron reports
     } satisfies Partial<DesktopSettingsType>
 
     const frontendOnly = {
       // TODO field 2
-      locale: null, // if this is null, the system chooses the system language that electron reports
       notifications: true,
       showNotificationContent: true,
       enterKeySends: false,
@@ -133,6 +129,7 @@ class TauriRuntime implements Runtime {
       experimentalEnableMarkdownInMessages: false,
       enableRelatedChats: false,
       galleryImageKeepAspectRatio: false,
+      isMentionsEnabled: false,
       useSystemUIFont: false,
     } satisfies Partial<DesktopSettingsType>
 
@@ -158,7 +155,7 @@ class TauriRuntime implements Runtime {
     // 1. set values in key value store
     await this.store.set(key, value)
     // 2. if supported in tauri settings, then also notifiy tauri (like tray_icon, but not experimental ui options)
-    // IDEA: if there is a way to listen for changes in rust code, then that would be preferably?
+    await invoke('change_desktop_settings_apply_side_effects', { key })
   }
   private log!: ReturnType<typeof getLoggerFunction>
   private store!: Store
@@ -255,6 +252,10 @@ class TauriRuntime implements Runtime {
     }
     this.store = store
     this.currentLogFileLocation = await invoke('get_current_logfile')
+
+    listen<string>('locale_reloaded', event => {
+      this.onChooseLanguage?.(event.payload)
+    })
   }
   reloadWebContent(): void {
     // for now use the browser method as long as it is sufficient
@@ -333,23 +334,14 @@ class TauriRuntime implements Runtime {
   readClipboardText(): Promise<string> {
     return readText()
   }
-  async readClipboardImage(): Promise<string | null> {
-    try {
-      const clipboardImage = await readImage()
-      const _blob = new Blob([await clipboardImage.rgba()], { type: 'image' })
-      //TODO blob to base64
-
-      throw new Error('Method not implemented.18')
-    } catch (error) {
-      this.log.warn('readClipboardImage', error)
-      return null
-    }
+  readClipboardImage(): Promise<string | null> {
+    return invoke('get_clipboard_image_as_data_uri')
   }
   writeClipboardText(text: string): Promise<void> {
     return writeText(text)
   }
-  writeClipboardImage(_path: string): Promise<void> {
-    throw new Error('Method not implemented.20')
+  writeClipboardImage(path: string): Promise<void> {
+    return invoke('copy_image_to_clipboard', { path })
   }
   getAppPath(name: RuntimeAppPath): Promise<string> {
     // defined in packages/target-tauri/src-tauri/src/app_path.rs
@@ -408,8 +400,8 @@ class TauriRuntime implements Runtime {
       locale: locale || (await this.getDesktopSettings()).locale || 'en',
     })
   }
-  setLocale(_locale: string): Promise<void> {
-    throw new Error('Method not implemented.35')
+  setLocale(locale: string): Promise<void> {
+    return invoke('change_lang', { locale })
   }
   setBadgeCounter(value: number): void {
     getCurrentWindow().setBadgeCount(value === 0 ? undefined : value)
@@ -428,17 +420,21 @@ class TauriRuntime implements Runtime {
   ): void {
     this.log.error('Method not implemented.40')
   }
-  writeClipboardToTempFile(_name?: string): Promise<string> {
-    throw new Error('Method not implemented.41')
+  writeTempFileFromBase64(name: string, content: string): Promise<string> {
+    return invoke('write_temp_file_from_base64', { name, content })
   }
-  writeTempFileFromBase64(_name: string, _content: string): Promise<string> {
-    throw new Error('Method not implemented.42')
+  writeTempFile(name: string, content: string): Promise<string> {
+    return invoke('write_temp_file', { name, content })
   }
-  writeTempFile(_name: string, _content: string): Promise<string> {
-    throw new Error('Method not implemented.43')
-  }
-  removeTempFile(_path: string): Promise<void> {
+  copyFileToInternalTmpDir(
+    _fileName: string,
+    _sourcePath: string
+  ): Promise<string> {
     throw new Error('Method not implemented.44')
+  }
+
+  removeTempFile(path: string): Promise<void> {
+    return invoke('remove_temp_file', { path })
   }
   getWebxdcDiskUsage(
     _accountId: number

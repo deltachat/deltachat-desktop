@@ -28,8 +28,6 @@ Format rust code:
 
 ```
 pnpm fmt
-# or
-cd src-tauri && cargo fmt
 ```
 
 Lint rust code:

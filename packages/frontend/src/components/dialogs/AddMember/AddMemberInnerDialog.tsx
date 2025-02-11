@@ -211,6 +211,7 @@ export function AddMemberInnerDialog({
               placeholder={tx('search')}
               autoFocus
               spellCheck={false}
+              data-testid='add-member-search'
             />
           </div>
         </div>
@@ -242,6 +243,8 @@ export function AddMemberInnerDialog({
                     if the user has 5000 contacts.
                     (see https://github.com/deltachat/deltachat-desktop/issues/1830) */}
                     <FixedSizeList
+                      innerElementType={'ol'}
+                      className='react-window-list-reset'
                       itemData={{
                         contactIds,
                         contactIdsInGroup,
@@ -343,20 +346,25 @@ function AddMemberInnerDialogRow({
       }
       return (
         <ContactListItem
+          tagName='li'
+          style={style}
           contact={pseudoContact}
           showCheckbox={true}
           checked={false}
           showRemove={false}
           onCheckboxClick={onCreateContactCheckboxClick}
+          data-testid='add-pseudo-contact'
         />
       )
     } else {
       return (
-        <PseudoListItemAddContact
-          queryStr={queryStr}
-          queryStrIsEmail={false}
-          onClick={undefined}
-        />
+        <li style={style}>
+          <PseudoListItemAddContact
+            queryStr={queryStr}
+            queryStrIsEmail={false}
+            onClick={undefined}
+          />
+        </li>
       )
     }
   }
@@ -368,25 +376,25 @@ function AddMemberInnerDialogRow({
   const contact = contactCache[contactIds[index]]
   if (!contact) {
     // Not loaded yet
-    return <div style={style}></div>
+    return <li style={style}></li>
   }
 
   return (
-    <div style={style}>
-      <ContactListItem
-        contact={contact}
-        showCheckbox
-        checked={
-          contactIdsToAdd.some(c => c.id === contact.id) ||
-          contactIdsInGroup.includes(contact.id)
-        }
-        disabled={
-          contactIdsInGroup.includes(contact.id) ||
-          contact.id === C.DC_CONTACT_ID_SELF
-        }
-        onCheckboxClick={onCheckboxClick}
-        showRemove={false}
-      />
-    </div>
+    <ContactListItem
+      tagName='li'
+      style={style}
+      contact={contact}
+      showCheckbox
+      checked={
+        contactIdsToAdd.some(c => c.id === contact.id) ||
+        contactIdsInGroup.includes(contact.id)
+      }
+      disabled={
+        contactIdsInGroup.includes(contact.id) ||
+        contact.id === C.DC_CONTACT_ID_SELF
+      }
+      onCheckboxClick={onCheckboxClick}
+      showRemove={false}
+    />
   )
 }

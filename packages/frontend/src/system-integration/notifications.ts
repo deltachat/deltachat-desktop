@@ -1,12 +1,13 @@
 import { appName } from '../../../shared/constants'
 import { getLogger } from '../../../shared/logger'
+import { NOTIFICATION_TYPE } from '../../../shared/constants'
 import { BackendRemote } from '../backend-com'
 import { isImage } from '../components/attachment/Attachment'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import SettingsStoreInstance from '../stores/settings'
 import AccountNotificationStoreInstance from '../stores/accountNotifications'
 
-import type { T } from '@deltachat/jsonrpc-client'
+import { C, type T } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/notifications')
 
@@ -22,14 +23,38 @@ const log = getLogger('renderer/notifications')
 
 export function initNotifications() {
   BackendRemote.on('IncomingMsg', (accountId, { chatId, msgId }) => {
-    incomingMessageHandler(accountId, chatId, msgId, false)
+    log.debug('IncomingMsg', { accountId, msgId, chatId })
+    incomingMessageHandler(accountId, chatId, msgId, NOTIFICATION_TYPE.MESSAGE)
   })
+
   BackendRemote.on(
     'IncomingWebxdcNotify',
     (accountId, { msgId, text, chatId }) => {
-      incomingMessageHandler(accountId, chatId, msgId, true, text)
+      incomingMessageHandler(
+        accountId,
+        chatId,
+        msgId,
+        NOTIFICATION_TYPE.WEBXDC_INFO,
+        text
+      )
     }
   )
+
+  BackendRemote.on(
+    'IncomingReaction',
+    (accountId, { contactId, chatId, msgId, reaction }) => {
+      log.debug('IncomingReaction', { contactId, chatId, msgId, reaction })
+      incomingMessageHandler(
+        accountId,
+        chatId,
+        msgId,
+        NOTIFICATION_TYPE.REACTION,
+        reaction,
+        contactId
+      )
+    }
+  )
+
   BackendRemote.on('IncomingMsgBunch', accountId => {
     flushNotifications(accountId)
   })
@@ -39,23 +64,25 @@ function isMuted(accountId: number, chatId: number) {
   return BackendRemote.rpc.isChatMuted(accountId, chatId)
 }
 
-type queuedNotification = {
+type QueuedNotification = {
   chatId: number
   messageId: number
-  isWebxdcInfo: boolean
-  eventText?: string
+  notificationType: NOTIFICATION_TYPE
+  eventText: string // for webxdc-info notifications or reactions
+  contactId?: number // for reactions
 }
 
 let queuedNotifications: {
-  [accountId: number]: queuedNotification[]
+  [accountId: number]: QueuedNotification[]
 } = {}
 
 function incomingMessageHandler(
   accountId: number,
   chatId: number,
   messageId: number,
-  isWebxdcInfo: boolean,
-  eventText?: string
+  notificationType: NOTIFICATION_TYPE,
+  eventText = '',
+  contactId?: number
 ) {
   log.debug('incomingMessageHandler: ', { chatId, messageId })
 
@@ -90,8 +117,9 @@ function incomingMessageHandler(
   queuedNotifications[accountId].push({
     chatId,
     messageId,
-    isWebxdcInfo,
+    notificationType,
     eventText,
+    contactId,
   })
 }
 
@@ -99,8 +127,9 @@ async function showNotification(
   accountId: number,
   chatId: number,
   messageId: number,
-  isWebxdcInfo: boolean,
-  eventText?: string
+  notificationType: NOTIFICATION_TYPE,
+  eventText: string,
+  contactId?: number
 ) {
   const tx = window.static_translate
 
@@ -112,16 +141,17 @@ async function showNotification(
       chatId,
       messageId,
       accountId,
+      notificationType,
     })
   } else {
     try {
       const notificationInfo =
         await BackendRemote.rpc.getMessageNotificationInfo(accountId, messageId)
-      let summaryPrefix = notificationInfo.summaryPrefix
-      const summaryText = eventText ?? notificationInfo.summaryText
+      let summaryPrefix = notificationInfo.summaryPrefix ?? ''
+      let summaryText = notificationInfo.summaryText ?? ''
       const chatName = notificationInfo.chatName
       let icon = getNotificationIcon(notificationInfo)
-      if (isWebxdcInfo) {
+      if (notificationType === NOTIFICATION_TYPE.WEBXDC_INFO) {
         /**
          * messageId may refer to a webxdc message OR a wexdc-info-message!
          *
@@ -141,6 +171,7 @@ async function showNotification(
           )
         }
         if (message.webxdcInfo) {
+          summaryText = eventText
           summaryPrefix = `${message.webxdcInfo.name}`
           if (message.webxdcInfo.icon) {
             const iconName = message.webxdcInfo.icon
@@ -156,6 +187,19 @@ async function showNotification(
         } else {
           throw new Error(`no webxdcInfo in message with id ${message.id}`)
         }
+      } else if (notificationType === NOTIFICATION_TYPE.REACTION) {
+        if (contactId) {
+          const reactionSender = await BackendRemote.rpc.getContact(
+            accountId,
+            contactId
+          )
+          summaryText = `${tx('reaction_by_other', [
+            reactionSender.displayName,
+            eventText,
+            summaryText,
+          ])}`
+          summaryPrefix = '' // not needed, sender name is included in summaryText
+        }
       }
       runtime.showNotification({
         title: chatName,
@@ -164,6 +208,7 @@ async function showNotification(
         chatId,
         messageId,
         accountId,
+        notificationType,
       })
     } catch (error) {
       log.error('failed to create notification for message: ', messageId, error)
@@ -173,7 +218,7 @@ async function showNotification(
 
 async function showGroupedNotification(
   accountId: number,
-  notifications: queuedNotification[]
+  notifications: QueuedNotification[]
 ) {
   const tx = window.static_translate
 
@@ -185,6 +230,7 @@ async function showGroupedNotification(
       chatId: 0,
       messageId: 0,
       accountId,
+      notificationType: NOTIFICATION_TYPE.MESSAGE,
     })
   } else {
     const chatIds = [...new Set(notifications.map(({ chatId }) => chatId))]
@@ -211,6 +257,7 @@ async function showGroupedNotification(
           chatId: chatIds[0],
           messageId: 0, // just select chat on click, no specific message
           accountId,
+          notificationType: NOTIFICATION_TYPE.MESSAGE,
         })
       } else {
         // messages from diffent chats
@@ -227,6 +274,7 @@ async function showGroupedNotification(
           chatId: 0,
           messageId: 0,
           accountId,
+          notificationType: NOTIFICATION_TYPE.MESSAGE,
         })
       }
     } catch (error) {
@@ -246,7 +294,7 @@ async function flushNotifications(accountId: number) {
     // make it work even if there is nothing
     queuedNotifications[accountId] = []
   }
-  let notifications = [...queuedNotifications[accountId]]
+  const notifications = [...queuedNotifications[accountId]]
   queuedNotifications = []
 
   // filter out muted chats:
@@ -260,39 +308,91 @@ async function flushNotifications(accountId: number) {
   )
     .filter(e => e.muted)
     .map(e => e.id)
-  if (mutedChats.length > 0) {
-    // some chats are muted
-    log.debug(`ignoring notifications of ${mutedChats.length} muted chats`)
-  }
-  notifications = notifications.filter(notification => {
-    if (mutedChats.includes(notification.chatId)) {
-      // muted chat
-      log.debug('notification ignored: chat muted', notification)
-      return false
-    } else {
-      return true
-    }
-  })
 
-  if (notifications.length > notificationLimit) {
+  const filteredNotifications = (
+    await Promise.all(
+      notifications.map(async notification => {
+        if (!mutedChats.includes(notification.chatId)) {
+          return notification
+        }
+        // muted chat - only show if it's a mention and mentions are enabled
+        // see  https://github.com/deltachat/interface/pull/78#issuecomment-2536719734
+        if (SettingsStoreInstance.state?.desktopSettings.isMentionsEnabled) {
+          const isMention = await notificationIsMention(accountId, notification)
+          if (isMention) {
+            const chat = await BackendRemote.rpc.getBasicChatInfo(
+              accountId,
+              notification.chatId
+            )
+            if (chat.chatType === C.DC_CHAT_TYPE_GROUP) {
+              // only show mentions for group chats
+              return notification
+            }
+          }
+        }
+        return null
+      })
+    )
+  ).filter(notification => notification !== null)
+
+  if (filteredNotifications.length > notificationLimit) {
     showGroupedNotification(accountId, notifications)
   } else {
     for (const {
       chatId,
       messageId,
-      isWebxdcInfo,
+      notificationType,
       eventText,
-    } of notifications) {
+      contactId,
+    } of filteredNotifications) {
       await showNotification(
         accountId,
         chatId,
         messageId,
-        isWebxdcInfo,
-        eventText
+        notificationType,
+        eventText,
+        contactId
       )
     }
   }
   notificationLimit = NORMAL_LIMIT
+}
+
+/**
+ * returns true if the notification is a mention. See
+ * https://github.com/deltachat/deltachat-desktop/issues/4461
+ */
+async function notificationIsMention(
+  accountId: number,
+  notification: QueuedNotification
+) {
+  if (notification.notificationType === NOTIFICATION_TYPE.WEBXDC_INFO) {
+    log.info('mention detected: webxdc-info notification')
+    return true
+  }
+
+  if (notification.notificationType === NOTIFICATION_TYPE.REACTION) {
+    log.info('mention detected: reaction to own message')
+    return true
+  }
+
+  const message = await BackendRemote.rpc.getMessage(
+    accountId,
+    notification.messageId
+  )
+
+  if (message.quote && message.quote.kind === 'WithMessage') {
+    const quote = await BackendRemote.rpc.getMessage(
+      accountId,
+      message.quote.messageId
+    )
+    if (quote.sender.id === C.DC_CONTACT_ID_SELF) {
+      log.info('mention detected: answer to own message')
+      return true
+    }
+  }
+  log.debug('ignoring notification on muted chat')
+  return false
 }
 
 export function clearNotificationsForChat(accountId: number, chatId: number) {

@@ -44,7 +44,7 @@ export default function ViewGroup(
 ) {
   const { chat, onClose } = props
   return (
-    <Dialog width={400} onClose={onClose} fixed>
+    <Dialog width={400} onClose={onClose} fixed dataTestid='view-group-dialog'>
       <ViewGroupInner onClose={onClose} chat={chat} />
     </Dialog>
   )
@@ -120,6 +120,7 @@ function ViewGroupInner(
   const chatDisabled = !chat.canSend
 
   const groupMemberContactListWrapperRef = useRef<HTMLDivElement>(null)
+  const groupPastMemberContactListWrapperRef = useRef<HTMLDivElement>(null)
   const relatedChatsListWrapperRef = useRef<HTMLDivElement>(null)
 
   const {
@@ -133,6 +134,16 @@ function ViewGroupInner(
     setGroupImage,
   } = useGroup(accountId, chat)
 
+  const [pastContacts, setPastContacts] = useState<T.Contact[]>([])
+
+  useEffect(() => {
+    BackendRemote.rpc
+      .getContactsByIds(accountId, group.pastContactIds)
+      .then(pastContacts => {
+        setPastContacts(Object.values(pastContacts))
+      })
+  }, [accountId, group.pastContactIds])
+
   useEffect(() => {
     return onDCEvent(accountId, 'ContactsChanged', () => {
       BackendRemote.rpc
@@ -141,6 +152,12 @@ function ViewGroupInner(
           // update contacts in case a contact changed
           // while this dialog is open (e.g. contact got blocked)
           group.contacts = Object.values(contacts)
+        })
+
+      BackendRemote.rpc
+        .getContactsByIds(accountId, group.pastContactIds)
+        .then(pastContacts => {
+          setPastContacts(Object.values(pastContacts))
         })
     })
   }, [accountId, group])
@@ -221,6 +238,7 @@ function ViewGroupInner(
             title={!isBroadcast ? tx('tab_group') : tx('broadcast_list')}
             onClickEdit={onClickEdit}
             onClose={onClose}
+            dataTestid='view-group-dialog-header'
           />
           <DialogBody>
             <DialogContent paddingBottom>
@@ -307,6 +325,30 @@ function ViewGroupInner(
                 />
               </RovingTabindexProvider>
             </div>
+            {pastContacts.length > 0 && (
+              <>
+                <div className='group-separator'>{tx('past_members')}</div>
+                <div
+                  className='group-member-contact-list-wrapper'
+                  ref={groupPastMemberContactListWrapperRef}
+                >
+                  <RovingTabindexProvider
+                    wrapperElementRef={groupPastMemberContactListWrapperRef}
+                  >
+                    <ContactList
+                      contacts={pastContacts}
+                      showRemove={false}
+                      onClick={contact => {
+                        if (contact.id === C.DC_CONTACT_ID_SELF) {
+                          return
+                        }
+                        setProfileContact(contact)
+                      }}
+                    />
+                  </RovingTabindexProvider>
+                </div>
+              </>
+            )}
           </DialogBody>
         </>
       )}
@@ -330,7 +372,12 @@ export function ShowQRDialog({
   const tx = useTranslationFunction()
 
   return (
-    <Dialog onClose={onClose} canOutsideClickClose={false} fixed>
+    <Dialog
+      onClose={onClose}
+      canOutsideClickClose={false}
+      fixed
+      dataTestid='group-invite-qr'
+    >
       <DialogHeader title={tx('qrshow_title')} onClose={onClose} />
       <QrCodeShowQrInner
         qrCode={qrCode}

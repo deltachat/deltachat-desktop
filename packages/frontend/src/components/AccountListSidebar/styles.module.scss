@@ -70,10 +70,27 @@
     text-align: start; // To align the "active" indicator
 
     height: var(--als-avatar-size);
+
     margin-bottom: var(--als-avatar-margin);
     margin-top: var(--als-avatar-margin);
-    scroll-margin-bottom: var(--als-avatar-margin);
-    scroll-margin-top: var(--als-avatar-margin);
+    // Adding extra `var(--als-avatar-size) + 2 * var(--als-avatar-margin)`
+    // to the margins so that
+    // if there is another `.isSticky` account, then that account does not
+    // cover the account that we want to scroll into view.
+    // And another extra `2 * var(--als-avatar-margin)` so that it's obvious that
+    // the other sticky account really is sticky, to make it obviously overlay
+    // on top of another account, and be positioned perfectly on top of it.
+    //
+    // TODO improvement: perhaps it makes sense to keep these at just
+    // `var(--als-avatar-margin)` in case there is no sticky account above.
+    // This should be achievable with CSS.
+    scroll-margin-bottom: calc(
+      5 * var(--als-avatar-margin) + var(--als-avatar-size)
+    );
+    scroll-margin-top: calc(
+      5 * var(--als-avatar-margin) + var(--als-avatar-size)
+    );
+
     position: relative;
     z-index: $z-index-new-local-scope;
 
@@ -87,6 +104,21 @@
       div.content,
       img.content {
         border-radius: 10%;
+      }
+    }
+
+    &.isSticky {
+      position: sticky;
+      bottom: var(--als-avatar-margin);
+      top: var(--als-avatar-margin);
+      // Only needed when this account is scrolled _above_ the visible region.
+      z-index: map-get($z-index, account-list-sidebar-scope-sticky-account);
+
+      .avatar {
+        opacity: 1;
+        .content {
+          box-shadow: 0px 0px 4px 2px #00000040;
+        }
       }
     }
 

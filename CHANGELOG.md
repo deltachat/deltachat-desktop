@@ -2,13 +2,29 @@
 
 ## [Unreleased][unreleased]
 
+> Due to the Electron update, macOS 10.15 (Catalina)
+> is no longer supported, macOS 11 (Big Sur) or later
+> is the new requirement.
+
 ### Added
 - highlight the first unread message upon opening a chat #4525
+- copy files to internal tmp dir before opening attachements #4498
+- enable notifications on mentions in muted chats #4538
+- e2e test for group creation #4614
+- always show accounts with unread messages, even when they're normally scrolled out of view #4536
+- make log additionally available at "Settings / Advanced / View Log" #4610
+- improvements to tauri version #4528 #4585 #4533:
+  - read images from clipboard, write images to clipboard, write/delete temporary files
+  - implement experimental setting: content protection
+  - api to change language
+  - help window localisation
+- display past members in the group member list #4531
 
 ### Changed
-- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.155.2`
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.155.3`
+  - Store device token in IMAP METADATA on each connection
   - Deduplicate blob files in chat.rs, config.rs, and integration.rs.
-  - Upgrade to iroh@0.30.0.
+  - Upgrade to iroh@0.32.0 & pgp to 0.15.
 - shortcut improvements:
   - Ctrl + F now focuses search, instead of Ctrl + K
   - Ctrl + Shift + F to search in chat
@@ -22,20 +38,29 @@
 - store last used account in accounts.toml managed by core #4569
 - update help menu URLs #4598
 - Update local help (2025-02-10)
+- tauri: update dependencies #4607
+- upgrade Electron from `32.1.0` to `34.0.1` #4568
+- Update translations (2025-02-07)
 
 ### Fixed
 - fix changelog message left unread not in the selected account as it should be but in another account. #4569
 - accessibility: some context menu items not working with keyboard navigation #4578
 - fix messages sent to "Saved Messages" not being displayed sometimes #4582
+- fix "jump down" button displaying incorrect unread count (the value from another chat) #4593
 - fix clicking on message search result or "Reply Privately" quote not jumping to the message on first click sometimes, again #4554
 - accessibility: not being able to focus arrow-key navigable widgets that contain disabled items with disabled elements (such as in the "add contacts to group" widget)
 - fix jumping to message in a different chat momentarily opening the new chat scrolled to bottom before scrolling it to the desired message #4562
 - fix log format for logging core events #4572
 - fix dragging files out
 - memory leak when opening and closing emoji picker #4567
+- fix chat list showing the chat that is different from the currently selected chat when switching chats rapidly #4615
 - fix selected account not getting scrolled into view in accounts bar on app start #4542
 - message list being empty sometimes when a chat gets opened #4556
+- accessibility: improve chat list, message list and contact list semantics #4518
 - improve performance a little #4561, #4552, #4584
+- fix "Empty Hints" in "All Media" view #4609
+- fix pasting of (non image) files into composer #4533
+- fix translation PluralRules fallback to 'en' not to 'en-US' (en-US isnt valid) #4585
 
 <a id="1_52_1"></a>
 

@@ -257,8 +257,19 @@ const Composer = forwardRef<
 
     try {
       // Write clipboard to file then attach it to the draft
-      const path = await runtime.writeClipboardToTempFile(
-        file.name || `file.${extension(file.type)}`
+      const file_content = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onloadend = () => {
+          resolve(reader.result as any)
+        }
+        reader.onabort = reject
+        reader.onerror = reject
+        reader.readAsDataURL(file)
+      })
+
+      const path = await runtime.writeTempFileFromBase64(
+        file.name || `file.${extension(file.type)}`,
+        file_content.split(';base64,')[1]
       )
       await addFileToDraft(path, msgType)
       // delete file again after it was sucessfuly added

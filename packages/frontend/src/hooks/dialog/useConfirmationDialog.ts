@@ -13,6 +13,7 @@ type OpenConfirmationDialog = Pick<
   | 'isConfirmDanger'
   | 'message'
   | 'noMargin'
+  | 'dataTestid'
 >
 
 export default function useConfirmationDialog() {

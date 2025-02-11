@@ -12,7 +12,6 @@ import path, { basename, extname, join, posix, sep, dirname } from 'path'
 import { inspect } from 'util'
 import { platform } from 'os'
 import { existsSync } from 'fs'
-import mimeTypes from 'mime-types'
 import { versions } from 'process'
 import { fileURLToPath } from 'url'
 
@@ -21,6 +20,7 @@ import {
   getDraftTempDir,
   getLogsPath,
   htmlDistDir,
+  INTERNAL_TMP_DIR_NAME,
 } from './application-constants.js'
 import { LogHandler } from './log-handler.js'
 import { ExtendedAppMainProcess } from './types.js'
@@ -247,15 +247,15 @@ export async function init(cwd: string, logHandler: LogHandler) {
     }
   )
 
-  ipcMain.handle('app.writeClipboardToTempFile', () =>
-    writeClipboardToTempFile()
-  )
   ipcMain.handle('app.writeTempFileFromBase64', (_ev, name, content) =>
     writeTempFileFromBase64(name, content)
   )
   ipcMain.handle('app.writeTempFile', (_ev, name, content) =>
     writeTempFile(name, content)
   )
+  ipcMain.handle('app.copyFileToInternalTmpDir', (_ev, name, pathToFile) => {
+    return copyFileToInternalTmpDir(name, pathToFile)
+  })
   ipcMain.handle('app.removeTempFile', (_ev, path) => removeTempFile(path))
 
   ipcMain.handle('electron.shell.openExternal', (_ev, url) =>
@@ -339,26 +339,6 @@ export async function init(cwd: string, logHandler: LogHandler) {
   }
 }
 
-async function writeClipboardToTempFile(): Promise<string> {
-  await mkdir(getDraftTempDir(), { recursive: true })
-  const formats = clipboard.availableFormats().sort()
-  log.debug('Clipboard available formats:', formats)
-  if (formats.length <= 0) {
-    throw new Error('No files to write')
-  }
-  const pathToFile = join(
-    getDraftTempDir(),
-    `paste.${mimeTypes.extension(formats[0]) || 'bin'}`
-  )
-  const buf =
-    mimeTypes.extension(formats[0]) === 'png'
-      ? clipboard.readImage().toPNG()
-      : clipboard.readBuffer(formats[0])
-  log.debug(`Writing clipboard ${formats[0]} to file ${pathToFile}`)
-  await writeFile(pathToFile, buf, 'binary')
-  return pathToFile
-}
-
 export async function writeTempFileFromBase64(
   name: string,
   content: string
@@ -386,6 +366,24 @@ export async function writeTempFile(
   log.debug(`Writing tmp file ${pathToFile}`)
   await writeFile(pathToFile, Buffer.from(content, 'utf8'), 'binary')
   return pathToFile
+}
+
+export async function copyFileToInternalTmpDir(
+  fileName: string,
+  sourcePath: string
+): Promise<string> {
+  const sourceFileName = basename(sourcePath)
+  const sourceDir = dirname(sourcePath)
+  let destinationDir = join(sourceDir, '..', INTERNAL_TMP_DIR_NAME)
+  if (sourceFileName !== fileName) {
+    // this is the case, when we copy a file that has an identifier
+    //  as name (given during the file deduplications process)
+    destinationDir = join(destinationDir, sourceFileName)
+  }
+  await mkdir(destinationDir, { recursive: true })
+  const targetPath = join(destinationDir, fileName)
+  await copyFile(sourcePath, targetPath)
+  return targetPath
 }
 
 async function removeTempFile(path: string) {

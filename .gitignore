@@ -5,7 +5,6 @@ dist/
 _locales/*.json
 !_locales/_languages.json
 !_locales/_untranslated_en.json
-:
 # Logs
 logs
 *.log
@@ -86,9 +85,10 @@ stub.js
 .test_tmp_data
 
 deltachat-rpc-server-aarch64-macos
-.direnv
-.envrc
+
+# nix files
 default.nix
+flake.*
 
 target
 packages/target-tauri/src-tauri/target

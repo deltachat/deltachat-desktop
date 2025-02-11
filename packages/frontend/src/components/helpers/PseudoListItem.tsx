@@ -195,6 +195,7 @@ export const PseudoListItemAddContactOrGroupFromInviteLink = ({
 
   return contact ? (
     <ContactListItem
+      tagName='div'
       showCheckbox={false}
       checked={false}
       showRemove={false}

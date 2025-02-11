@@ -210,19 +210,28 @@ export default class Gallery extends Component<
   }
 
   emptyTabMessage(tab: MediaTabKey): string {
+    const allMedia = this.props.chatId === 'all'
     const tx = window.static_translate // static because dynamic isn't too important here
     switch (tab) {
       case 'images':
-        return tx('tab_image_empty_hint')
+        return allMedia
+          ? tx('tab_all_media_empty_hint')
+          : tx('tab_image_empty_hint')
       case 'video':
-        return tx('tab_video_empty_hint')
+        return allMedia
+          ? tx('tab_all_media_empty_hint')
+          : tx('tab_video_empty_hint')
       case 'audio':
-        return tx('tab_audio_empty_hint')
+        return allMedia
+          ? tx('tab_all_media_empty_hint')
+          : tx('tab_audio_empty_hint')
       case 'webxdc_apps':
-        return tx('tab_webxdc_empty_hint')
+        return allMedia
+          ? tx('all_apps_empty_hint')
+          : tx('tab_webxdc_empty_hint')
       case 'files':
       default:
-        return tx('tab_docs_empty_hint')
+        return allMedia ? tx('all_files_empty_hint') : tx('tab_docs_empty_hint')
     }
   }
 
@@ -536,6 +545,8 @@ function FileTable({
 }) {
   return (
     <FixedSizeList
+      innerElementType={'ol'}
+      className='react-window-list-reset'
       width={width}
       height={height}
       itemSize={60}
@@ -573,12 +584,12 @@ function FileAttachmentRowWrapper({
     return null
   }
   return (
-    <div style={style} className='item'>
+    <li style={style} className='item'>
       <FileAttachmentRow
         messageId={msgId}
         loadResult={message}
         queryText={queryText}
       />
-    </div>
+    </li>
   )
 }

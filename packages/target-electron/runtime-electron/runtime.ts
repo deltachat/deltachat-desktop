@@ -215,14 +215,21 @@ class ElectronRuntime implements Runtime {
   }> {
     return ipcBackend.invoke('webxdc.getWebxdcDiskUsage', accountId)
   }
-  async writeClipboardToTempFile(_name: string | undefined): Promise<string> {
-    return ipcBackend.invoke('app.writeClipboardToTempFile')
-  }
   writeTempFileFromBase64(name: string, content: string): Promise<string> {
     return ipcBackend.invoke('app.writeTempFileFromBase64', name, content)
   }
   writeTempFile(name: string, content: string): Promise<string> {
     return ipcBackend.invoke('app.writeTempFile', name, content)
+  }
+  copyFileToInternalTmpDir(
+    fileName: string,
+    sourcePath: string
+  ): Promise<string> {
+    return ipcBackend.invoke(
+      'app.copyFileToInternalTmpDir',
+      fileName,
+      sourcePath
+    )
   }
   removeTempFile(path: string): Promise<void> {
     return ipcBackend.invoke('app.removeTempFile', path)

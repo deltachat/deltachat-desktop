@@ -40,6 +40,8 @@ export const DeltaCheckbox = (props: {
   )
 }
 export function ContactListItem(props: {
+  tagName: 'li' | 'div'
+  style?: React.CSSProperties
   contact: Type.Contact
   onClick?: (contact: Type.Contact) => void
   showCheckbox: boolean
@@ -84,8 +86,9 @@ export function ContactListItem(props: {
   const rovingTabindex = useRovingTabindex(refMain)
 
   return (
-    <div
+    <props.tagName
       className={classNames('contact-list-item', { disabled })}
+      style={props.style}
       key={contact.id}
       // Apply these to the wrapper element,
       // because there may be several interactive elements in this component.
@@ -143,6 +146,6 @@ export function ContactListItem(props: {
           <Icon icon='cross' coloring='remove' />
         </button>
       )}
-    </div>
+    </props.tagName>
   )
 }

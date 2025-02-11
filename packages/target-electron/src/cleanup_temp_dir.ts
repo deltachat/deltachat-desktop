@@ -2,7 +2,12 @@ import { app } from 'electron'
 import { mkdir, readdir, rm, rmdir } from 'fs/promises'
 import { join } from 'path'
 import { getLogger } from '../../shared/logger.js'
-import { getDraftTempDir } from './application-constants.js'
+import {
+  getDraftTempDir,
+  getAccountsPath,
+  INTERNAL_TMP_DIR_NAME,
+} from './application-constants.js'
+import { readdirSync } from 'fs'
 
 const log = getLogger('main/cleanup_temp_dir')
 
@@ -37,5 +42,41 @@ export async function cleanupDraftTempDir() {
     await rmdir(path)
   } catch (error) {
     log.error('Cleanup of old temp files failed: ', error)
+  }
+}
+
+/**
+ * clean tmp directory in all accounts
+ */
+export async function cleanupInternalTempDirs() {
+  try {
+    let deletedTmpDirs = 0
+    const tmpDirents = readdirSync(getAccountsPath(), {
+      withFileTypes: true,
+    })
+      .filter(dirent => dirent.isDirectory())
+      .flatMap(accountDir => {
+        return readdirSync(join(accountDir.parentPath, accountDir.name), {
+          withFileTypes: true,
+        }).filter(
+          tmpDir =>
+            tmpDir.isDirectory() && tmpDir.name === INTERNAL_TMP_DIR_NAME
+        )
+      })
+    if (tmpDirents.length > 0) {
+      deletedTmpDirs = (
+        await Promise.all(
+          tmpDirents.map(tmpDir =>
+            rm(join(tmpDir.parentPath, tmpDir.name), {
+              recursive: true,
+              force: true,
+            })
+          )
+        )
+      ).length
+    }
+    log.info(`Deleted ${deletedTmpDirs} internal tmp directories`)
+  } catch (error) {
+    log.error('Cleanup of internal temp dirs failed: ', error)
   }
 }
