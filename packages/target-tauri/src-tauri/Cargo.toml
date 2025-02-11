@@ -1,6 +1,6 @@
 [package]
 name = "deltachat-tauri"
-version = "1.52.1"
+version = "1.53.0"
 description = "Delta Chat Desktop Tauri Edition"
 authors = ["DeltaChat Contributors"]
 edition = "2021"

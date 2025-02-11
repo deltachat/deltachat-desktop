@@ -2,9 +2,19 @@
 
 ## [Unreleased][unreleased]
 
-> Due to the Electron update, macOS 10.15 (Catalina)
-> is no longer supported, macOS 11 (Big Sur) or later
-> is the new requirement.
+### Added
+
+### Changed
+
+### Fixed
+
+<a id="1_53_0"></a>
+
+## [1.53.0] - 2025-02-10
+
+### Breaking
+
+ - Due to the Electron update, macOS 10.15 (Catalina) is no longer supported, macOS 11 (Big Sur) or later is the new requirement.
 
 ### Added
 - highlight the first unread message upon opening a chat #4525
@@ -3179,7 +3189,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.52.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.53.0...HEAD
+
+[1.53.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.52.1...v1.53.0
 
 [1.52.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.52.0...v1.52.1
 
