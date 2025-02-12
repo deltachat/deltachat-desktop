@@ -30,7 +30,10 @@ export async function updateDeviceChat(
     text: `What's new in 1.53.0?
 
     🚀 Notifications on mentions in muted chats (configurable)
-    🎹 New shortcuts for search & new chats
+    🎹 New shortcuts for search & new chats:
+       - Search: Ctrl/Cmd + F
+       - Search in Chat: Ctrl/Cmd + Shift + F
+       - New Chat: Ctrl/Cmd + N
     💥 Highlight the first unread message on opening chat
 
 MORE ✨ improvements and 🐜 bug fixes see [Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/main/CHANGELOG.md#1_53_0)`,
