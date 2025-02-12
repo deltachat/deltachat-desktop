@@ -69,7 +69,7 @@
 - fix selected account not getting scrolled into view in accounts bar on app start #4542
 - message list being empty sometimes when a chat gets opened #4556
 - accessibility: improve chat list, message list and contact list semantics #4518
-- improve performance a little #4561, #4552, #4584
+- improve performance a little #4561, #4552, #4584, #4512
 - fix "Empty Hints" in "All Media" view #4609
 - fix pasting of (non image) files into composer #4533
 - fix translation PluralRules fallback to 'en' not to 'en-US' (en-US isnt valid) #4585
