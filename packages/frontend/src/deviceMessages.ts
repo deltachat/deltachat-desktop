@@ -26,13 +26,14 @@ export async function updateDeviceChat(
     }
   }
 
-  await addDeviceMessage('changelog-version-1.52.0', {
-    text: `What's new in 1.52.0?
+  await addDeviceMessage('changelog-version-1.53.0', {
+    text: `What's new in 1.53.0?
 
-    🚀 New App Picker available in attachment menu! Shows apps from https://webxdc.org
-    🎹 Improved keyboard navigation
+    🚀 Notifications on mentions in muted chats (configurable)
+    🎹 New shortcuts for search & new chats
+    💥 Highlight the first unread message on opening chat
 
-MORE ✨ improvements and 🐜 bug fixes see [Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/main/CHANGELOG.md#1_52_0)`,
+MORE ✨ improvements and 🐜 bug fixes see [Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/main/CHANGELOG.md#1_53_0)`,
   })
 }
 
