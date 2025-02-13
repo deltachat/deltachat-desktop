@@ -9,6 +9,7 @@ mod blobs;
 mod clipboard;
 mod file_dialogs;
 mod help_window;
+mod html_window;
 mod i18n;
 mod runtime_info;
 mod settings;
@@ -114,6 +115,7 @@ pub fn run() {
             runtime_info::get_runtime_info,
             settings::change_desktop_settings_apply_side_effects,
             help_window::open_help_window,
+            html_window::open_html_window,
         ])
         .register_asynchronous_uri_scheme_protocol("webxdc-icon", webxdc::webxdc_icon_protocol)
         .register_asynchronous_uri_scheme_protocol("dcblob", blobs::delta_blobs_protocol)

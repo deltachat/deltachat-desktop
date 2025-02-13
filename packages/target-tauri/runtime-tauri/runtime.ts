@@ -78,15 +78,23 @@ class TauriRuntime implements Runtime {
     return new TauriDeltaChat(callCounterFunction)
   }
   openMessageHTML(
-    _window_id: string,
-    _accountId: number,
-    _isContactRequest: boolean,
-    _subject: string,
-    _sender: string,
-    _receiveTime: string,
-    _content: string
+    windowId: string,
+    accountId: number,
+    isContactRequest: boolean,
+    subject: string,
+    sender: string,
+    receiveTime: string,
+    content: string
   ): void {
-    throw new Error('Method not implemented. 3')
+    invoke('open_html_window', {
+      windowId,
+      accountId,
+      isContactRequest,
+      subject,
+      sender,
+      receiveTime,
+      content,
+    })
   }
   async getDesktopSettings(): Promise<DesktopSettingsType> {
     // static not saved - not needed anymore besides cleaning up values in electron version
