@@ -8,7 +8,15 @@ import {
   shell,
   NativeImage,
 } from 'electron'
-import path, { basename, extname, join, posix, sep, dirname } from 'path'
+import path, {
+  basename,
+  extname,
+  join,
+  posix,
+  sep,
+  dirname,
+  normalize,
+} from 'path'
 import { inspect } from 'util'
 import { platform } from 'os'
 import { existsSync } from 'fs'
@@ -374,6 +382,8 @@ export async function copyFileToInternalTmpDir(
 ): Promise<string> {
   const sourceFileName = basename(sourcePath)
   const sourceDir = dirname(sourcePath)
+  // make sure fileName includes only a file name, no path or whatever
+  fileName = basename(normalize(fileName))
   let destinationDir = join(sourceDir, '..', INTERNAL_TMP_DIR_NAME)
   if (sourceFileName !== fileName) {
     // this is the case, when we copy a file that has an identifier
