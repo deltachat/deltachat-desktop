@@ -340,6 +340,11 @@ class MessageListStore extends Store<MessageListState> {
   }
 
   effect = {
+    /**
+     * This must be called prior to any other `effect`s,
+     * because other `effect`s don't work well if the state is not properly
+     * initialized.
+     */
     loadChat: this.scheduler.lockedQueuedEffect(
       'scroll',
       async () => {
@@ -353,13 +358,19 @@ class MessageListStore extends Store<MessageListState> {
         ) {
           const jumpArgs =
             window.__internal_jump_to_message_asap.jumpToMessageArgs
-          // Not entirely sure if `queueMicrotask` (or `setTimeout`),
-          // same as below
-          queueMicrotask(() => {
-            this.effect.jumpToMessage(...jumpArgs)
-          })
           window.__internal_jump_to_message_asap = undefined
-          return false
+          // Instead of calling `this.effect.jumpToMessage()`,
+          // we need to call the bare version and await it
+          // prior to returning from this function,
+          // such that no other queued effect (e.g. `fetchMoreMessagesTop`)
+          // gets executed before we're done with `loadChat`.
+          //
+          // Bacause those other effects rely on the state being
+          // initialized, namely on
+          // `this.state.oldestFetchedMessageListItemIndex`.
+          //
+          // The same applies to the other `this.__jumpToMessage()` below
+          return await this.__jumpToMessage(...jumpArgs)
         }
 
         const firstUnreadMsgIdP = BackendRemote.rpc.getFirstUnreadMessageOfChat(
@@ -375,22 +386,17 @@ class MessageListStore extends Store<MessageListState> {
 
         const firstUnreadMsgId = await firstUnreadMsgIdP
         if (firstUnreadMsgId !== null) {
-          // Not entirely sure if `queueMicrotask` (or `setTimeout`)
-          // is requred. It is to return from this `effect`
-          // prior to entering another one (`jumpToMessage()`).
-          // Same as above.
-          queueMicrotask(() => {
-            this.effect.jumpToMessage({
-              msgId: firstUnreadMsgId,
-              // Until we have an "unread messages" separator,
-              // like, say, in Telegram,
-              // let's just highlight the first unread.
-              highlight: true,
-              focus: false,
-              // 'center' so that old messages are also shown, for context.
-              // See https://github.com/deltachat/deltachat-desktop/issues/4284
-              scrollIntoViewArg: { block: 'center' },
-            })
+          // See the comments about `this.__jumpToMessage()` above.
+          const jumpToMessageP = this.__jumpToMessage({
+            msgId: firstUnreadMsgId,
+            // Until we have an "unread messages" separator,
+            // like, say, in Telegram,
+            // let's just highlight the first unread.
+            highlight: true,
+            focus: false,
+            // 'center' so that old messages are also shown, for context.
+            // See https://github.com/deltachat/deltachat-desktop/issues/4284
+            scrollIntoViewArg: { block: 'center' },
           })
 
           // TODO why do we only do this when `firstUnreadMsgId !== null`?
@@ -407,11 +413,7 @@ class MessageListStore extends Store<MessageListState> {
               )
             })
 
-          // Since we haven't changed `viewState`, `MessageList` won't
-          // call `unlockScroll()`, so let's unlock it now.
-          // `jumpToMessage` (above) will take care
-          // of the future locking / unlocking.
-          return false
+          return await jumpToMessageP
         }
 
         let oldestFetchedMessageListItemIndex = -1
@@ -450,289 +452,11 @@ class MessageListStore extends Store<MessageListState> {
       'selectChat'
     ),
     /**
-     * Loads and shows the message in the messages list.
-     * It can handle loading the message if it is missing
-     * from `this.state.messageCache`,
-     * reloading `messageListItems` if the message is missing from there,
-     * and showing the message in a chat other than `this.chatId`.
-     * The latter (showing the message from a different chat), however,
-     * should not be used, because, as of 2025-01-19, we re-create
-     * `MessageListStore` when `chatId` or `accountId` changes.
-     *
-     * Currently this function (as well as the MessageListStore)
-     * is only directly used by the MessageList component.
-     * To jump to a message without having a reference to the
-     * `MessageListStore`, and with an option to jump to message
-     * from a different chat, use `const { jumpToMessage } = useMessage()`,
-     * (it will internally casue this function to be invoked).
-     *
-     * @param msgId - when `undefined`, pop the jump stack, or,
-     * if the stack is empty, jump to last message
-     * if there _is_ a last message.
-     * @param addMessageIdToStack the ID of the message to remember,
-     * to later go back to it, using the "jump down" button.
-     * The message with the specified ID must belong to the chat with ID
-     * `MessageListStore.chatId`.
-     * For example, this must be ensured for message quotes,
-     * because they might belong to a different chat due to the
-     * "Reply Privately" feature.
+     * @see {@link MessageListStore.__jumpToMessage} for docs.
      */
     jumpToMessage: this.scheduler.lockedQueuedEffect(
       'scroll',
-      async ({
-        msgId: jumpToMessageId,
-        highlight = true,
-        focus,
-        addMessageIdToStack,
-        scrollIntoViewArg,
-      }: {
-        msgId: number | undefined
-        highlight?: boolean
-        focus: boolean
-        addMessageIdToStack?: undefined | number
-        scrollIntoViewArg?: Parameters<HTMLElement['scrollIntoView']>[0]
-      }) => {
-        const startTime = performance.now()
-
-        this.log.debug('jumpToMessage with messageId: ', jumpToMessageId)
-        const accountId = selectedAccountId()
-
-        if (!accountId) {
-          throw new Error('no account set')
-        }
-
-        // As was said in this function's docstring,
-        // it should not be called for messages that are in a different chat,
-        // so we know the chatId in advance.
-        // However, let's keep the code that supports arbitrary chatId,
-        // which can be "enabled" by setting `chatIdPreset = undefined`.
-        const chatIdPreset: number | undefined = this.chatId
-        let chatId: number | undefined = undefined
-
-        let jumpToMessageStack: number[] = []
-        if (jumpToMessageId === undefined) {
-          // jump down
-          const jumpToMessageStackLength = this.state.jumpToMessageStack.length
-          if (jumpToMessageStackLength !== 0) {
-            jumpToMessageStack = this.state.jumpToMessageStack.slice(
-              0,
-              jumpToMessageStackLength - 1
-            )
-            jumpToMessageId =
-              this.state.jumpToMessageStack[jumpToMessageStackLength - 1]
-            chatId =
-              chatIdPreset ??
-              (await BackendRemote.rpc.getMessage(accountId, jumpToMessageId))
-                .chatId
-          } else {
-            const items = this.state.messageListItems
-              .map(m =>
-                m.kind === 'message' ? m.msg_id : C.DC_MSG_ID_LAST_SPECIAL
-              )
-              .filter(msgId => msgId !== C.DC_MSG_ID_LAST_SPECIAL)
-
-            if (items.length <= 0) {
-              // This can happen when clicking the chat in the chat list twice,
-              // which is supposed to jump to the last message.
-
-              // Since we haven't changed `viewState`, `MessageList` won't
-              // call `unlockScroll()`, so let's unlock it now.
-              return false
-            }
-
-            jumpToMessageId = items[items.length - 1]
-            chatId =
-              chatIdPreset ??
-              (await BackendRemote.rpc.getMessage(accountId, jumpToMessageId))
-                .chatId
-            jumpToMessageStack = []
-            highlight = false
-          }
-        } else {
-          const fromCache = this.state.messageCache[jumpToMessageId]
-          chatId =
-            chatIdPreset ??
-            (fromCache?.kind === 'message'
-              ? fromCache
-              : await BackendRemote.rpc.getMessage(accountId, jumpToMessageId)
-            ).chatId
-
-          if (addMessageIdToStack === undefined) {
-            // reset jumpToMessageStack
-            jumpToMessageStack = []
-          } else {
-            // If we are not switching chats, add current jumpToMessageId to the stack
-            const currentChatId = this.chatId || -1
-            if (chatId !== currentChatId) {
-              jumpToMessageStack = []
-            } else if (
-              this.state.jumpToMessageStack.indexOf(addMessageIdToStack) !== -1
-            ) {
-              jumpToMessageStack = this.state.jumpToMessageStack
-            } else {
-              jumpToMessageStack = [
-                ...this.state.jumpToMessageStack,
-                addMessageIdToStack,
-              ]
-            }
-          }
-        }
-
-        const isMessageInCurrentChat =
-          this.accountId === accountId && this.chatId === chatId
-        if (!isMessageInCurrentChat) {
-          this.log.error(
-            'Tried to show messages from a different chat.\n' +
-              `this.accountId === ${this.accountId}, ` +
-              `this.chatId === ${this.chatId}, ` +
-              `target IDs: ${accountId}, ${chatId}. ` +
-              `jumpToMessageId === ${jumpToMessageId}`
-          )
-        }
-
-        let messageListItems = this.state.messageListItems
-        const findMessageIndex = (): number =>
-          messageListItems.findIndex(
-            m => m.kind === 'message' && m.msg_id === jumpToMessageId
-          )
-
-        let jumpToMessageIndex = findMessageIndex()
-        const currentMessageListContainsTheMessage = jumpToMessageIndex >= 0
-        // Even if the message is in the current chat, it could still
-        // be missing from `this.state.messageListItems` in these cases:
-        // - `this.state.messageListItems` is still unloaded,
-        //   e.g. when `loadChat` interrupts itself and calls `jumpToMessage`.
-        // - A new message has just been sent to the chat and we want to jump
-        //   to it.
-        if (!isMessageInCurrentChat || !currentMessageListContainsTheMessage) {
-          messageListItems = await BackendRemote.rpc.getMessageListItems(
-            accountId,
-            chatId,
-            false,
-            true
-          )
-          jumpToMessageIndex = findMessageIndex()
-        }
-
-        // calculate page indexes, so that jumpToMessageId is in the middle of the page
-        let oldestFetchedMessageListItemIndex = -1
-        let newestFetchedMessageListItemIndex = -1
-        let newMessageCache: MessageListState['messageCache'] = {}
-        const half_page_size = Math.ceil(PAGE_SIZE / 2)
-        if (messageListItems.length !== 0) {
-          oldestFetchedMessageListItemIndex = Math.max(
-            jumpToMessageIndex - half_page_size,
-            0
-          )
-          newestFetchedMessageListItemIndex = Math.min(
-            jumpToMessageIndex + half_page_size,
-            messageListItems.length - 1
-          )
-
-          const countMessagesOnNewerSide =
-            newestFetchedMessageListItemIndex - jumpToMessageIndex
-          const countMessagesOnOlderSide =
-            jumpToMessageIndex - oldestFetchedMessageListItemIndex
-          if (countMessagesOnNewerSide < half_page_size) {
-            oldestFetchedMessageListItemIndex = Math.max(
-              oldestFetchedMessageListItemIndex -
-                (half_page_size - countMessagesOnNewerSide),
-              0
-            )
-          } else if (countMessagesOnOlderSide < half_page_size) {
-            newestFetchedMessageListItemIndex = Math.min(
-              newestFetchedMessageListItemIndex +
-                (half_page_size - countMessagesOnOlderSide),
-              messageListItems.length - 1
-            )
-          }
-
-          const messagesAlreadyLoaded = getView(
-            messageListItems,
-            oldestFetchedMessageListItemIndex,
-            newestFetchedMessageListItemIndex
-          ).every(item => {
-            if (item.kind === 'dayMarker') {
-              return true
-            }
-            // Just for type-safety.
-            const _kind: 'message' = item.kind
-
-            return this.state.messageCache[item.msg_id] != undefined
-          })
-
-          this.log.debug(
-            'messagesAlreadyLoaded:',
-            messagesAlreadyLoaded,
-            messagesAlreadyLoaded
-              ? 'Using the existing cache'
-              : 'Resetting the messageCache'
-          )
-
-          if (messagesAlreadyLoaded) {
-            newMessageCache = this.state.messageCache
-
-            // Why do we need `Math.min` / `Math.max` here, instead of simply
-            // keeping `this.state.oldestFetchedMessageListItemIndex`
-            // and `this.state.newestFetchedMessageListItemIndex` as they are?
-            // Because some other code might update the state in such a way
-            // that `messageCache` and these
-            // `(oldest|newest)FetchedMessageListItemIndex` are out of sync:
-            // `messageCache` actually has a message, but
-            // these integers say that the message is not yet fetched.
-            // Namely, this can happen inside of `messageChanged` when
-            // it gets invoked for a not yet fetched message, and it gets
-            // added `messageCache` instead of getting updated.
-            // This, in turn, can happen when you send a message.
-            //
-            // The result would be that we'd fail to jump to message inside of
-            // `MessageList.tsx`, because the message wouldn't be rendered,
-            // because we only render messages that are between
-            // `oldestFetchedMessageListItemIndex` and
-            // `newestFetchedMessageListItemIndex` (see `activeView`).
-            //
-            // TODO it would be ideal to get ensure that we don't corrupt
-            // the state in the first place, but let's make
-            // this workaround for now.
-            oldestFetchedMessageListItemIndex = Math.min(
-              this.state.oldestFetchedMessageListItemIndex,
-              oldestFetchedMessageListItemIndex
-            )
-            newestFetchedMessageListItemIndex = Math.max(
-              this.state.newestFetchedMessageListItemIndex,
-              newestFetchedMessageListItemIndex
-            )
-          } else {
-            newMessageCache =
-              (await loadMessages(
-                accountId,
-                messageListItems,
-                oldestFetchedMessageListItemIndex,
-                newestFetchedMessageListItemIndex
-              ).catch(err => this.log.error('loadMessages failed', err))) || {}
-          }
-        }
-
-        this.log.debug('jumpToMessage took', performance.now() - startTime)
-        // TODO perf: it could so happen that nothing except `viewState` (which
-        // is only responsible for scrolling)
-        // has changed after this function has run.
-        // It woud be great to not re-render the message list in that case.
-        this.reducer.selectedChat({
-          messageCache: newMessageCache,
-          messageListItems,
-          oldestFetchedMessageListItemIndex,
-          newestFetchedMessageListItemIndex: newestFetchedMessageListItemIndex,
-          viewState: ChatViewReducer.jumpToMessage(
-            this.state.viewState,
-            jumpToMessageId,
-            highlight,
-            focus,
-            scrollIntoViewArg
-          ),
-          jumpToMessageStack,
-        })
-      },
+      this.__jumpToMessage.bind(this),
       'jumpToMessage'
     ),
     loadMissingMessages: debounce(
@@ -1052,6 +776,290 @@ class MessageListStore extends Store<MessageListState> {
       },
       'onEventMessagesChanged'
     ),
+  }
+
+  /**
+   * Loads and shows the message in the messages list.
+   * It can handle loading the message if it is missing
+   * from `this.state.messageCache`,
+   * reloading `messageListItems` if the message is missing from there,
+   * and showing the message in a chat other than `this.chatId`.
+   * The latter (showing the message from a different chat), however,
+   * should not be used, because, as of 2025-01-19, we re-create
+   * `MessageListStore` when `chatId` or `accountId` changes.
+   *
+   * Currently this function (wrapped in `effect`),
+   * as well as the MessageListStore itself
+   * is only directly used by the MessageList component.
+   * To jump to a message without having a reference to the
+   * `MessageListStore`, and with an option to jump to message
+   * from a different chat, use `const { jumpToMessage } = useMessage()`,
+   * (it will internally casue this function to be invoked).
+   *
+   * @param msgId - when `undefined`, pop the jump stack, or,
+   * if the stack is empty, jump to last message
+   * if there _is_ a last message.
+   * @param addMessageIdToStack the ID of the message to remember,
+   * to later go back to it, using the "jump down" button.
+   * The message with the specified ID must belong to the chat with ID
+   * `MessageListStore.chatId`.
+   * For example, this must be ensured for message quotes,
+   * because they might belong to a different chat due to the
+   * "Reply Privately" feature.
+   */
+  private async __jumpToMessage({
+    msgId: jumpToMessageId,
+    highlight = true,
+    focus,
+    addMessageIdToStack,
+    scrollIntoViewArg,
+  }: {
+    msgId: number | undefined
+    highlight?: boolean
+    focus: boolean
+    addMessageIdToStack?: undefined | number
+    scrollIntoViewArg?: Parameters<HTMLElement['scrollIntoView']>[0]
+  }) {
+    const startTime = performance.now()
+
+    this.log.debug('jumpToMessage with messageId: ', jumpToMessageId)
+    const accountId = selectedAccountId()
+
+    if (!accountId) {
+      throw new Error('no account set')
+    }
+
+    // As was said in this function's docstring,
+    // it should not be called for messages that are in a different chat,
+    // so we know the chatId in advance.
+    // However, let's keep the code that supports arbitrary chatId,
+    // which can be "enabled" by setting `chatIdPreset = undefined`.
+    const chatIdPreset: number | undefined = this.chatId
+    let chatId: number | undefined = undefined
+
+    let jumpToMessageStack: number[] = []
+    if (jumpToMessageId === undefined) {
+      // jump down
+      const jumpToMessageStackLength = this.state.jumpToMessageStack.length
+      if (jumpToMessageStackLength !== 0) {
+        jumpToMessageStack = this.state.jumpToMessageStack.slice(
+          0,
+          jumpToMessageStackLength - 1
+        )
+        jumpToMessageId =
+          this.state.jumpToMessageStack[jumpToMessageStackLength - 1]
+        chatId =
+          chatIdPreset ??
+          (await BackendRemote.rpc.getMessage(accountId, jumpToMessageId))
+            .chatId
+      } else {
+        const items = this.state.messageListItems
+          .map(m =>
+            m.kind === 'message' ? m.msg_id : C.DC_MSG_ID_LAST_SPECIAL
+          )
+          .filter(msgId => msgId !== C.DC_MSG_ID_LAST_SPECIAL)
+
+        if (items.length <= 0) {
+          // This can happen when clicking the chat in the chat list twice,
+          // which is supposed to jump to the last message.
+
+          // Since we haven't changed `viewState`, `MessageList` won't
+          // call `unlockScroll()`, so let's unlock it now.
+          return false
+        }
+
+        jumpToMessageId = items[items.length - 1]
+        chatId =
+          chatIdPreset ??
+          (await BackendRemote.rpc.getMessage(accountId, jumpToMessageId))
+            .chatId
+        jumpToMessageStack = []
+        highlight = false
+      }
+    } else {
+      const fromCache = this.state.messageCache[jumpToMessageId]
+      chatId =
+        chatIdPreset ??
+        (fromCache?.kind === 'message'
+          ? fromCache
+          : await BackendRemote.rpc.getMessage(accountId, jumpToMessageId)
+        ).chatId
+
+      if (addMessageIdToStack === undefined) {
+        // reset jumpToMessageStack
+        jumpToMessageStack = []
+      } else {
+        // If we are not switching chats, add current jumpToMessageId to the stack
+        const currentChatId = this.chatId || -1
+        if (chatId !== currentChatId) {
+          jumpToMessageStack = []
+        } else if (
+          this.state.jumpToMessageStack.indexOf(addMessageIdToStack) !== -1
+        ) {
+          jumpToMessageStack = this.state.jumpToMessageStack
+        } else {
+          jumpToMessageStack = [
+            ...this.state.jumpToMessageStack,
+            addMessageIdToStack,
+          ]
+        }
+      }
+    }
+
+    const isMessageInCurrentChat =
+      this.accountId === accountId && this.chatId === chatId
+    if (!isMessageInCurrentChat) {
+      this.log.error(
+        'Tried to show messages from a different chat.\n' +
+          `this.accountId === ${this.accountId}, ` +
+          `this.chatId === ${this.chatId}, ` +
+          `target IDs: ${accountId}, ${chatId}. ` +
+          `jumpToMessageId === ${jumpToMessageId}`
+      )
+    }
+
+    let messageListItems = this.state.messageListItems
+    const findMessageIndex = (): number =>
+      messageListItems.findIndex(
+        m => m.kind === 'message' && m.msg_id === jumpToMessageId
+      )
+
+    let jumpToMessageIndex = findMessageIndex()
+    const currentMessageListContainsTheMessage = jumpToMessageIndex >= 0
+    // Even if the message is in the current chat, it could still
+    // be missing from `this.state.messageListItems` in these cases:
+    // - `this.state.messageListItems` is still unloaded,
+    //   e.g. when `loadChat` interrupts itself and calls `jumpToMessage`.
+    // - A new message has just been sent to the chat and we want to jump
+    //   to it.
+    if (!isMessageInCurrentChat || !currentMessageListContainsTheMessage) {
+      messageListItems = await BackendRemote.rpc.getMessageListItems(
+        accountId,
+        chatId,
+        false,
+        true
+      )
+      jumpToMessageIndex = findMessageIndex()
+    }
+
+    // calculate page indexes, so that jumpToMessageId is in the middle of the page
+    let oldestFetchedMessageListItemIndex = -1
+    let newestFetchedMessageListItemIndex = -1
+    let newMessageCache: MessageListState['messageCache'] = {}
+    const half_page_size = Math.ceil(PAGE_SIZE / 2)
+    if (messageListItems.length !== 0) {
+      oldestFetchedMessageListItemIndex = Math.max(
+        jumpToMessageIndex - half_page_size,
+        0
+      )
+      newestFetchedMessageListItemIndex = Math.min(
+        jumpToMessageIndex + half_page_size,
+        messageListItems.length - 1
+      )
+
+      const countMessagesOnNewerSide =
+        newestFetchedMessageListItemIndex - jumpToMessageIndex
+      const countMessagesOnOlderSide =
+        jumpToMessageIndex - oldestFetchedMessageListItemIndex
+      if (countMessagesOnNewerSide < half_page_size) {
+        oldestFetchedMessageListItemIndex = Math.max(
+          oldestFetchedMessageListItemIndex -
+            (half_page_size - countMessagesOnNewerSide),
+          0
+        )
+      } else if (countMessagesOnOlderSide < half_page_size) {
+        newestFetchedMessageListItemIndex = Math.min(
+          newestFetchedMessageListItemIndex +
+            (half_page_size - countMessagesOnOlderSide),
+          messageListItems.length - 1
+        )
+      }
+
+      const messagesAlreadyLoaded = getView(
+        messageListItems,
+        oldestFetchedMessageListItemIndex,
+        newestFetchedMessageListItemIndex
+      ).every(item => {
+        if (item.kind === 'dayMarker') {
+          return true
+        }
+        // Just for type-safety.
+        const _kind: 'message' = item.kind
+
+        return this.state.messageCache[item.msg_id] != undefined
+      })
+
+      this.log.debug(
+        'messagesAlreadyLoaded:',
+        messagesAlreadyLoaded,
+        messagesAlreadyLoaded
+          ? 'Using the existing cache'
+          : 'Resetting the messageCache'
+      )
+
+      if (messagesAlreadyLoaded) {
+        newMessageCache = this.state.messageCache
+
+        // Why do we need `Math.min` / `Math.max` here, instead of simply
+        // keeping `this.state.oldestFetchedMessageListItemIndex`
+        // and `this.state.newestFetchedMessageListItemIndex` as they are?
+        // Because some other code might update the state in such a way
+        // that `messageCache` and these
+        // `(oldest|newest)FetchedMessageListItemIndex` are out of sync:
+        // `messageCache` actually has a message, but
+        // these integers say that the message is not yet fetched.
+        // Namely, this can happen inside of `messageChanged` when
+        // it gets invoked for a not yet fetched message, and it gets
+        // added `messageCache` instead of getting updated.
+        // This, in turn, can happen when you send a message.
+        //
+        // The result would be that we'd fail to jump to message inside of
+        // `MessageList.tsx`, because the message wouldn't be rendered,
+        // because we only render messages that are between
+        // `oldestFetchedMessageListItemIndex` and
+        // `newestFetchedMessageListItemIndex` (see `activeView`).
+        //
+        // TODO it would be ideal to get ensure that we don't corrupt
+        // the state in the first place, but let's make
+        // this workaround for now.
+        oldestFetchedMessageListItemIndex = Math.min(
+          this.state.oldestFetchedMessageListItemIndex,
+          oldestFetchedMessageListItemIndex
+        )
+        newestFetchedMessageListItemIndex = Math.max(
+          this.state.newestFetchedMessageListItemIndex,
+          newestFetchedMessageListItemIndex
+        )
+      } else {
+        newMessageCache =
+          (await loadMessages(
+            accountId,
+            messageListItems,
+            oldestFetchedMessageListItemIndex,
+            newestFetchedMessageListItemIndex
+          ).catch(err => this.log.error('loadMessages failed', err))) || {}
+      }
+    }
+
+    this.log.debug('jumpToMessage took', performance.now() - startTime)
+    // TODO perf: it could so happen that nothing except `viewState` (which
+    // is only responsible for scrolling)
+    // has changed after this function has run.
+    // It woud be great to not re-render the message list in that case.
+    this.reducer.selectedChat({
+      messageCache: newMessageCache,
+      messageListItems,
+      oldestFetchedMessageListItemIndex,
+      newestFetchedMessageListItemIndex: newestFetchedMessageListItemIndex,
+      viewState: ChatViewReducer.jumpToMessage(
+        this.state.viewState,
+        jumpToMessageId,
+        highlight,
+        focus,
+        scrollIntoViewArg
+      ),
+      jumpToMessageStack,
+    })
   }
 
   stateToHumanReadable(state: MessageListState): any {
