@@ -13,6 +13,9 @@ import { ChatStoreScheduler } from './chat/chat_scheduler'
 import { useEffect, useMemo, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import { debounce } from 'debounce'
+import { getLogger } from '@deltachat-desktop/shared/logger'
+
+const log = getLogger('messagelist')
 
 const PAGE_SIZE = 11
 
@@ -1071,5 +1074,13 @@ async function loadMessages(
   )
     .map(m => (m.kind === 'message' ? m.msg_id : C.DC_MSG_ID_LAST_SPECIAL))
     .filter(msgId => msgId !== C.DC_MSG_ID_LAST_SPECIAL)
+
+  if (view.length > 100) {
+    log.error(
+      `loadMessages is loading too many (${view.length}) messages. ` +
+        'This is bad for performance.'
+    )
+  }
+
   return await BackendRemote.rpc.getMessages(accountId, view)
 }
