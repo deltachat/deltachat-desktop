@@ -8,6 +8,7 @@
 
 ### Fixed
 - "Show in Chat" in Gallery not working #4629
+- Fix ~3 second freeze after switching the chat #4638
 - fix chat list showing the chat that is different from the currently selected chat when switching chats rapidly, again #4628
 - fix source code links in app picker #4637
 - fix a resource leak accumulating when opening media in full screen #4634
