@@ -119,6 +119,7 @@ export interface Runtime {
   ): void
   writeTempFileFromBase64(name: string, content: string): Promise<string>
   writeTempFile(name: string, content: string): Promise<string>
+  /** make sure to sanitize filename to avoid stuff like ../../ */
   copyFileToInternalTmpDir(
     fileName: string,
     sourcePath: string
