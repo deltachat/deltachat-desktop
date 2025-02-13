@@ -656,7 +656,7 @@ class BrowserRuntime implements Runtime {
               rejectedPromise.reason
             )
             // remove other files on error
-            uploadedFiles.every(path => {
+            uploadedFiles.forEach(path => {
               this.removeTempFile(path)
             })
             reject(rejectedPromise.reason)
