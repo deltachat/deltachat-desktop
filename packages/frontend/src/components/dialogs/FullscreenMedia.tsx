@@ -90,7 +90,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
       onDCEvent(accountId, 'MsgDeleted', debouncedUpdate),
     ]
     return () => {
-      listeners.every(cleanup => cleanup())
+      listeners.forEach(cleanup => cleanup())
     }
   }, [props.msg, props.neighboringMedia, accountId])
 
