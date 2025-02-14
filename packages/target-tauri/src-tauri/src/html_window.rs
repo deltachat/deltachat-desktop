@@ -61,7 +61,7 @@ pub(crate) fn open_html_window(
 
     let header_view = window.add_child(
         WebviewBuilder::new(
-            &format!("{window_id}-1"),
+            &format!("{window_id}-header"),
             WebviewUrl::External("https://github.com/tauri-apps/tauri".parse().unwrap()),
         ),
         LogicalPosition::new(0., 0.),
@@ -69,7 +69,7 @@ pub(crate) fn open_html_window(
     )?;
 
     let mut mail_view_builder = tauri::webview::WebviewBuilder::new(
-        "main3",
+        &format!("{window_id}-mail"),
         WebviewUrl::External("https://tauri.app".parse().unwrap()),
     );
 
