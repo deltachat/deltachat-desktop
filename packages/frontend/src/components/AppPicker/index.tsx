@@ -18,6 +18,7 @@ import {
   FooterActions,
 } from '../Dialog'
 import SearchInputButton from '../SearchInput/SearchInputButton'
+import { ClickableLink } from '../helpers/ClickableLink'
 
 export interface AppInfo {
   app_id: string
@@ -168,9 +169,9 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
               </p>
               <p>
                 <span>{tx('source_code')}:</span>{' '}
-                <a href='${app.source_code_url}' target='_blank'>
+                <ClickableLink href={app.source_code_url}>
                   {app.source_code_url}
-                </a>
+                </ClickableLink>
               </p>
               <p>
                 <span>{tx('app_size')}:</span> {filesize(app.size)}
