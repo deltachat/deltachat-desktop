@@ -7,6 +7,8 @@ use tauri::{
     WindowSizeConstraints,
 };
 
+use crate::settings::get_content_protection;
+
 #[derive(Debug, thiserror::Error)]
 pub(crate) enum Error {
     #[error(transparent)]
@@ -151,26 +153,31 @@ pub(crate) fn open_html_window(
         }
     }
 
-    // TODO: resize
-
     let header_view_arc = Arc::new(header_view);
     let mail_view_arc = Arc::new(mail_view);
     let window_arc = Arc::new(window);
     let window = window_arc.clone();
 
+    // resize
     window.on_window_event(move |event| {
         if let WindowEvent::Resized(_) | WindowEvent::ScaleFactorChanged { .. } = event {
             update_webview_bounds(&window_arc, &header_view_arc, &mail_view_arc);
         }
     });
 
-    // TODO: read preference from user
-    //    TODO: content protection
+    // content protection
+    #[cfg(not(any(target_os = "ios", target_os = "android")))]
+    {
+        if get_content_protection(&app) {
+            window.set_content_protected(true)?;
+        }
+    }
+
     //    TODO: read preference about loading remote content
 
     // TODO: serve html content
 
-    // TODO: implement header
+    // TODO: implement header view
 
     // TODO: prevent access to web (toggle-able)
 
