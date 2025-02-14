@@ -1,11 +1,13 @@
 use std::{str::FromStr, sync::Arc};
 
-use log::warn;
+use log::{error, info, warn};
 use tauri::{
     webview::WebviewBuilder, LogicalPosition, LogicalSize, Manager, PhysicalSize, Url, Webview,
     WebviewUrl, WebviewWindow, WebviewWindowBuilder, Window, WindowBuilder, WindowEvent,
     WindowSizeConstraints,
 };
+use tauri_plugin_dialog::DialogExt;
+use tauri_plugin_opener::OpenerExt;
 
 use crate::settings::get_content_protection;
 
@@ -68,11 +70,29 @@ pub(crate) fn open_html_window(
         LogicalSize::new(width, HEADER_HEIGHT),
     )?;
 
+    let app_arc = Arc::new(app);
+    let app = app_arc.clone();
+
     let mut mail_view_builder = tauri::webview::WebviewBuilder::new(
         &format!("{window_id}-mail"),
-        WebviewUrl::External("https://tauri.app".parse().unwrap()),
-    );
+        WebviewUrl::CustomProtocol(Url::from_str("about:blank").unwrap()),
+    )
+    .on_navigation(move |url| {
+        if url.to_string() == "about:blank" {
+            // allow navigating to the email
+            return true;
+        }
+        // prevent navigation - open in system browser instead
+        if let Err(error) = app_arc.opener().open_url(url.to_string(), None::<&str>) {
+            error!("Failed to open Link: {error:?}");
+            app_arc
+                .dialog()
+                .message("Failed to open Link: {url}\n{error:?}");
+        }
+        false
+    });
 
+    // TODO
     // mail_view_builder.data_directory(data_directory) -> makes sense to point to tmp dir
     // mail_view_builder.data_store_identifier(data_store_identifier)
 
@@ -80,7 +100,6 @@ pub(crate) fn open_html_window(
     {
         mail_view_builder = mail_view_builder.incognito(true);
     }
-
     let mail_view = window.add_child(
         mail_view_builder,
         LogicalPosition::new(0., HEADER_HEIGHT),
@@ -175,8 +194,6 @@ pub(crate) fn open_html_window(
     // TODO: prevent access to web (toggle-able)
 
     // TODO: disable JS in mailview
-
-    // TODO: disable navigation - open in system browser instead
 
     window.set_title(&format!(
         "{} - {}",
