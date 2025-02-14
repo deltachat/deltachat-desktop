@@ -1,9 +1,10 @@
-use std::str::FromStr;
+use std::{str::FromStr, sync::Arc};
 
 use log::warn;
 use tauri::{
-    webview::WebviewBuilder, LogicalPosition, LogicalSize, Manager, Url, WebviewUrl, WebviewWindow,
-    WebviewWindowBuilder, WindowBuilder, WindowSizeConstraints,
+    webview::WebviewBuilder, LogicalPosition, LogicalSize, Manager, PhysicalSize, Url, Webview,
+    WebviewUrl, WebviewWindow, WebviewWindowBuilder, Window, WindowBuilder, WindowEvent,
+    WindowSizeConstraints,
 };
 
 #[derive(Debug, thiserror::Error)]
@@ -23,6 +24,8 @@ impl serde::Serialize for Error {
     }
 }
 
+const HEADER_HEIGHT: f64 = 100.;
+
 #[tauri::command]
 pub(crate) fn open_html_window(
     app: tauri::AppHandle,
@@ -30,7 +33,7 @@ pub(crate) fn open_html_window(
     account_id: u32,
     is_contact_request: bool,
     subject: &str,
-    sender: &str,
+    sender: &str, // this is called "from" in electron edition
     receive_time: &str,
     content: &str,
 ) -> Result<(), Error> {
@@ -56,19 +59,18 @@ pub(crate) fn open_html_window(
 
     let width = 800.;
     let height = 600.;
-    let header_height = 42.;
 
     let window = WindowBuilder::new(&app, &window_id)
         .inner_size(width, height)
         .build()?;
 
-    let _webview1 = window.add_child(
+    let header_view = window.add_child(
         WebviewBuilder::new(
             &format!("{window_id}-1"),
             WebviewUrl::External("https://github.com/tauri-apps/tauri".parse().unwrap()),
         ),
         LogicalPosition::new(0., 0.),
-        LogicalSize::new(width, header_height),
+        LogicalSize::new(width, HEADER_HEIGHT),
     )?;
 
     let mut mail_view_builder = tauri::webview::WebviewBuilder::new(
@@ -86,30 +88,51 @@ pub(crate) fn open_html_window(
 
     let mail_view = window.add_child(
         mail_view_builder,
-        LogicalPosition::new(0., header_height),
-        LogicalSize::new(width, height - header_height),
+        LogicalPosition::new(0., HEADER_HEIGHT),
+        LogicalSize::new(width, height - HEADER_HEIGHT),
     )?;
 
-    // disable javascript
+    // disable javascript & load from string on macOS
     // TODO/IDEA: try to upstream into wry
     // TODO: get rid of the unwrap/expect here
-    mail_view.with_webview(|w| {
+    {
         #[cfg(any(target_os = "macos", target_os = "ios"))]
         {
             // TODO test
-            w.inner();
-            //TODO
+            use objc2::rc::Retained;
+            use objc2_foundation;
+            let content = objc2_foundation::NSString::from_str(content);
+            unsafe {
+                mail_view.with_webview(move |w| {
+                    // meeeds to be done inside of the webview builder inside of tauri:
+                    // https://stackoverflow.com/questions/34404481/swift-wkwebview-disable-javascript
+                    // or nowerdays in the navigation delegate
+
+                    let view: &objc2_web_kit::WKWebView = &*w.inner().cast();
+                    let controller: &objc2_web_kit::WKUserContentController =
+                        &*w.controller().cast();
+
+                    //WKWebpagePreferences
+                    //  WKWebpagePreferences.allowsContentJavaScript
+
+                    view.loadHTMLString_baseURL(&content, None);
+
+                    controller.removeAllUserScripts();
+                })?;
+            }
         }
         #[cfg(windows)]
         {
-            // TODO test
-            w.controller()
-                .CoreWebView2()
-                .expect("get CoreWebView2")
-                .Settings()
-                .expect("get Settings")
-                .SetIsScriptEnabled(false)
-                .expect("SetIsScriptEnabled failed");
+            mail_view.with_webview(|w| {
+                // TODO test
+                w.controller()
+                    .CoreWebView2()
+                    .expect("get CoreWebView2")
+                    .Settings()
+                    .expect("get Settings")
+                    .SetIsScriptEnabled(false)
+                    .expect("SetIsScriptEnabled failed");
+            })?;
         }
         #[cfg(any(
             target_os = "linux",
@@ -119,16 +142,31 @@ pub(crate) fn open_html_window(
             target_os = "openbsd"
         ))]
         {
-            // TODO test
-            use webkit2gtk::{SettingsExt, WebViewExt};
-            let settings = WebViewExt::settings(&w.inner()).unwrap();
-            settings.set_enable_javascript(false);
+            mail_view.with_webview(|w| {
+                // TODO test
+                use webkit2gtk::{SettingsExt, WebViewExt};
+                let settings = WebViewExt::settings(&w.inner()).unwrap();
+                settings.set_enable_javascript(false);
+            })?;
         }
-    })?;
+    }
 
     // TODO: resize
 
-    // TODO: content protection
+    let header_view_arc = Arc::new(header_view);
+    let mail_view_arc = Arc::new(mail_view);
+    let window_arc = Arc::new(window);
+    let window = window_arc.clone();
+
+    window.on_window_event(move |event| {
+        if let WindowEvent::Resized(_) | WindowEvent::ScaleFactorChanged { .. } = event {
+            update_webview_bounds(&window_arc, &header_view_arc, &mail_view_arc);
+        }
+    });
+
+    // TODO: read preference from user
+    //    TODO: content protection
+    //    TODO: read preference about loading remote content
 
     // TODO: serve html content
 
@@ -136,13 +174,47 @@ pub(crate) fn open_html_window(
 
     // TODO: prevent access to web (toggle-able)
 
-    // TODO: read preference from user
-
     // TODO: disable JS in mailview
 
-    // webview.set_visible(true)?;
+    // TODO: disable navigation - open in system browser instead
 
-    window.set_title("Delta Chat Tauri - Help")?; // TODO:
+    window.set_title(&format!(
+        "{} - {}",
+        truncate_text(subject, 42),
+        truncate_text(sender, 40)
+    ))?;
 
     Ok(())
+}
+
+fn update_webview_bounds(
+    window: &Arc<Window>,
+    header_view: &Arc<Webview>,
+    mail_view: &Arc<Webview>,
+) {
+    let LogicalSize { width, height } = window
+        .inner_size()
+        .expect("window size accessible")
+        .to_logical(window.scale_factor().unwrap_or(1.));
+    header_view
+        .set_bounds(tauri::Rect {
+            position: LogicalPosition::new(0., 0.).into(),
+            size: LogicalSize::new(width, HEADER_HEIGHT).into(),
+        })
+        .unwrap();
+    mail_view
+        .set_bounds(tauri::Rect {
+            position: LogicalPosition::new(0., HEADER_HEIGHT).into(),
+            size: LogicalSize::new(width, height - HEADER_HEIGHT).into(),
+        })
+        .unwrap();
+}
+
+fn truncate_text(text: &str, max_len: usize) -> String {
+    let truncated: String = text.chars().take(max_len).collect();
+    if truncated.len() < text.len() {
+        format!("{}…", truncated)
+    } else {
+        truncated
+    }
 }
