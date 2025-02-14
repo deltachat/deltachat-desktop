@@ -797,7 +797,7 @@ class MessageListStore extends Store<MessageListState> {
    * (it will internally casue this function to be invoked).
    *
    * @param msgId - when `undefined`, pop the jump stack, or,
-   * if the stack is empty, jump to last message
+   * if the stack is empty, jump to last message of the `this.chatId` chat
    * if there _is_ a last message.
    * @param addMessageIdToStack the ID of the message to remember,
    * to later go back to it, using the "jump down" button.
@@ -869,10 +869,11 @@ class MessageListStore extends Store<MessageListState> {
         }
 
         jumpToMessageId = items[items.length - 1]
-        chatId =
-          chatIdPreset ??
-          (await BackendRemote.rpc.getMessage(accountId, jumpToMessageId))
-            .chatId
+        // Since `jumpToMessageId` is coming from
+        // `this.state.messageListItems`, it's guaranteed to belong
+        // to the current chat. No need to
+        // `(await rpc.getMessage(accountId, jumpToMessageId)).chatId`
+        chatId = chatIdPreset ?? this.chatId
         jumpToMessageStack = []
         highlight = false
       }
