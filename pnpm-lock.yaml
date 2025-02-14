@@ -417,6 +417,9 @@ importers:
       '@tauri-apps/plugin-store':
         specifier: ^2.2.0
         version: 2.2.0
+      plugin-opener@~2:
+        specifier: link:tauri-apps/plugin-opener@~2
+        version: link:tauri-apps/plugin-opener@~2
     devDependencies:
       '@deltachat-desktop/runtime-interface':
         specifier: link:../runtime

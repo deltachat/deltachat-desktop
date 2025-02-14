@@ -256,6 +256,16 @@ class TauriRuntime implements Runtime {
     listen<string>('locale_reloaded', event => {
       this.onChooseLanguage?.(event.payload)
     })
+
+    listen<string>('showAboutDialog', () => {
+      this.onShowDialog?.("about")
+    });
+    listen<string>('showSettingsDialog', () => {
+      this.onShowDialog?.("settings")
+    });
+    listen<string>('showKeybindingsDialog', () => {
+      this.onShowDialog?.("keybindings")
+    });
   }
   reloadWebContent(): void {
     // for now use the browser method as long as it is sufficient
