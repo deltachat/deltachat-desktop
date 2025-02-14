@@ -49,12 +49,9 @@ pub(crate) fn apply_content_protection(app: &AppHandle) -> anyhow::Result<()> {
 
 #[cfg(not(any(target_os = "ios", target_os = "android")))]
 pub(crate) fn apply_content_protection(app: &AppHandle) -> anyhow::Result<()> {
-    use log::info;
-
     let protected = get_content_protection(app);
 
     for (_label, window) in app.windows().iter() {
-        info!("{_label:?}");
         window.set_content_protected(protected)?;
     }
 
