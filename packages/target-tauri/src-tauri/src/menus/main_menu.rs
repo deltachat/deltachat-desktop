@@ -1,3 +1,5 @@
+use std::{borrow::BorrowMut, path::PathBuf};
+
 use log::info;
 use tauri::{
     menu::{CheckMenuItem, Menu, MenuItem, PredefinedMenuItem, Submenu},
@@ -6,17 +8,18 @@ use tauri::{
 use tauri_plugin_opener::OpenerExt;
 use tauri_plugin_store::StoreExt;
 
-use crate::help_window::open_help_window;
+use crate::{help_window::open_help_window, settings::ZOOM_FACTOR_KEY, state::app::AppState};
 
 pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
     let builder = builder.menu(|handle| {
+        // let store = handle.get_store("config.json").unwrap();
 
-        let store = handle.store("config.json").unwrap();
+        // let zoom_factor: f64 = store
+        //     .get(ZOOM_FACTOR_KEY)
+        //     .and_then(|f| f.as_f64())
+        //     .unwrap_or(10.0);
 
-        let zoom_factor = store
-            .get(ZOOM_FACTOR_KEY)
-            .map_or_else(|| Some(1f64), |f| f.as_f64())
-            .unwrap_or(1f64);
+        let zoom_factor = 1.0;
         Menu::with_items(
             handle,
             &[
@@ -53,7 +56,7 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                             handle,
                             "float_on_top",
                             "Float on Top",
-                            true,
+                            false,
                             None::<&str>,
                         )?,
                         &Submenu::with_items(
@@ -61,13 +64,12 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                             "Zoom",
                             true,
                             &[
-                                [0.6, 0.8, 1.0, 1.2, 1.4, 1.6].map(|factor| )
                                 &CheckMenuItem::with_id(
                                     handle,
                                     "zoom_06",
                                     "0.6x Extra Small",
                                     true,
-                                    false,
+                                    zoom_factor == 0.6,
                                     None::<&str>,
                                 )?,
                                 &CheckMenuItem::with_id(
@@ -75,7 +77,7 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                                     "zoom_08",
                                     "0.8x Small",
                                     true,
-                                    false,
+                                    zoom_factor == 0.8,
                                     None::<&str>,
                                 )?,
                                 &CheckMenuItem::with_id(
@@ -83,7 +85,7 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                                     "zoom_10",
                                     "1.0x Normal",
                                     true,
-                                    false,
+                                    zoom_factor == 1.0,
                                     None::<&str>,
                                 )?,
                                 &CheckMenuItem::with_id(
@@ -91,7 +93,7 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                                     "zoom_12",
                                     "1.2x Large",
                                     true,
-                                    false,
+                                    zoom_factor == 1.2,
                                     None::<&str>,
                                 )?,
                                 &CheckMenuItem::with_id(
@@ -99,7 +101,7 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                                     "zoom_14",
                                     "1.4x Extra Large",
                                     true,
-                                    false,
+                                    zoom_factor == 1.4,
                                     None::<&str>,
                                 )?,
                             ],
@@ -183,23 +185,33 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
         )
     });
     builder.on_menu_event(|app, event| {
-        println!("menu event: {:?}", event);
-
         match event.id().as_ref() {
             "settings" => {
-                app.emit("open:settings", None::<String>);
+                app.emit("showSettingsDialog", None::<String>).ok();
             }
             "help" => {
-                open_help_window(app.clone(), "", None);
+                open_help_window(app.clone(), "", None).ok();
             }
             "quit" => {
                 app.exit(0);
             }
             "delete" => {
-                app.emit("delete", None::<()>);
+                app.emit("delete", None::<()>).ok();
             }
-            "float_on_top" => {}
+            "float_on_top" => {
+                /* Not supported by Tauri
+                https://docs.rs/tauri/latest/tauri/window/struct.Window.html#method.set_visible_on_all_workspaces
+                */
+            }
             "zoom_06" => {
+                app.menu()
+                    .unwrap()
+                    .get("zoom_06")
+                    .unwrap()
+                    .as_check_menuitem()
+                    .unwrap()
+                    .set_checked(true)
+                    .unwrap();
                 set_zoom(app, 0.6);
             }
             "zoom_08" => {
@@ -218,13 +230,18 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                 app.get_webview_window("main").unwrap().open_devtools();
             }
             "log_folder" => {
-                // app.get_store()
+                if let Ok(path) = &app.path().app_log_dir() {
+                    if let Some(path) = path.to_str() {
+                        app.opener().open_path(path, None::<String>).ok();
+                    }
+                }
             }
             "current_log_file" => {
-                // app.get_store()
+                let path = || app.state::<AppState>().current_log_file_path.clone();
+                app.opener().open_path(path(), None::<String>).ok();
             }
             "keybindings" => {
-                app.emit("open:keybindings", None::<String>).unwrap();
+                app.emit("showKeybindingsDialog", None::<String>).unwrap();
             }
             "contribute" => {
                 app.opener()
@@ -248,7 +265,7 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                     .unwrap();
             }
             "about" => {
-                app.emit("open:about", None::<String>).unwrap();
+                app.emit("showAboutDialog", None::<String>).unwrap();
             }
             _ => {
                 info!("menu event not handled: {:?}", event.id());
