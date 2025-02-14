@@ -195,9 +195,7 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
             "quit" => {
                 app.exit(0);
             }
-            "delete" => {
-                app.emit("delete", None::<()>).ok();
-            }
+            "delete" => { /* Not supported by Tauri */ }
             "float_on_top" => {
                 /* Not supported by Tauri
                 https://docs.rs/tauri/latest/tauri/window/struct.Window.html#method.set_visible_on_all_workspaces
