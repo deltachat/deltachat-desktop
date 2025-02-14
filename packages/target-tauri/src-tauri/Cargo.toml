@@ -22,7 +22,6 @@ tauri-build = { version = "2", features = ["config-json5"] }
 # 'unstable' feature, because of multiple webviews in html email window
 tauri = { version = "2.2", features = ["image-png", "unstable"] }
 wry = "0.48.1"
-webkit2gtk = "2.0"
 tauri-plugin-shell = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
@@ -44,6 +43,14 @@ thiserror = "2.0.11"
 png = "0.*"
 base64 = "0.22.1"
 uuid = { version = "1", features = ["v4"] }
+
+[target.'cfg(any(target_os = "linux", target_os = "dragonfly", target_os = "freebsd", target_os = "netbsd", target_os = "openbsd"))'.dependencies]
+webkit2gtk = "2.0"
+
+[target.'cfg(any(target_os = "macos", target_os = "ios"))'.dependencies]
+objc2-web-kit = { version = "0.2", features = ["WKWebpagePreferences"] }
+objc2-foundation = { version = "0.2.2" }
+objc2 = { version = "0.5", features = ["exception"] }
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-single-instance = "2"
