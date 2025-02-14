@@ -44,7 +44,9 @@
 }
 
 .copy-link-icon {
-  width: 30px;
+  width: 32px;
+  height: 32px;
   transform: rotate(135deg);
-  margin-right: 5px;
+  margin-right: 8px;
+  @include color-svg('./images/icons/link.svg', var(--buttonText), 100%);
 }
