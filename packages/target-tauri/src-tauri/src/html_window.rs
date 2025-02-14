@@ -2,9 +2,8 @@ use std::{str::FromStr, sync::Arc};
 
 use log::{error, info, warn};
 use tauri::{
-    webview::WebviewBuilder, LogicalPosition, LogicalSize, Manager, PhysicalSize, Url, Webview,
-    WebviewUrl, WebviewWindow, WebviewWindowBuilder, Window, WindowBuilder, WindowEvent,
-    WindowSizeConstraints,
+    webview::WebviewBuilder, LogicalPosition, LogicalSize, Manager, Url, Webview, WebviewUrl,
+    WebviewWindow, WebviewWindowBuilder, Window, WindowBuilder, WindowEvent, WindowSizeConstraints,
 };
 use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_opener::OpenerExt;
@@ -82,14 +81,59 @@ pub(crate) fn open_html_window(
             // allow navigating to the email
             return true;
         }
-        // prevent navigation - open in system browser instead
-        if let Err(error) = app_arc.opener().open_url(url.to_string(), None::<&str>) {
-            error!("Failed to open Link: {error:?}");
-            app_arc
-                .dialog()
-                .message("Failed to open Link: {url}\n{error:?}");
+
+        if let Some(orginal_host_name) = url.host_str() {
+            info!("{orginal_host_name}");
+            if puny_code_encode_host(orginal_host_name) != puny_code_decode_host(orginal_host_name)
+            {
+                info!(
+                    "{orginal_host_name} -- {}:{}",
+                    puny_code_encode_host(orginal_host_name),
+                    puny_code_decode_host(orginal_host_name)
+                );
+                let app_arc2 = app_arc.clone();
+                let url2 = url.clone();
+                app_arc
+                    .dialog()
+                    .message(
+                        "Punycode detected: tx('puny_code_warning_question', '$$asciiHostname$$')",
+                    )
+                    .title("tx('puny_code_warning_header')")
+                    .kind(tauri_plugin_dialog::MessageDialogKind::Warning)
+                    .buttons(tauri_plugin_dialog::MessageDialogButtons::OkCancelCustom(
+                        // TODO use translation strings, as soon as translations are avaialble in rust backend
+                        "Continue".to_owned(),
+                        "cancel".to_owned(),
+                    ))
+                    .show(move |ok| {
+                        if ok {
+                            if let Err(error) =
+                                app_arc2.opener().open_url(url2.to_string(), None::<&str>)
+                            {
+                                error!("Failed to open Link: {error:?}");
+                                app_arc2
+                                    .dialog()
+                                    .message("Failed to open Link: {url2}\n{error:?}")
+                                    .show(|_| {});
+                            }
+                        }
+                    });
+                return false;
+            }
+
+            // prevent navigation - open in system browser instead
+            if let Err(error) = app_arc.opener().open_url(url.to_string(), None::<&str>) {
+                error!("Failed to open Link: {error:?}");
+                app_arc
+                    .dialog()
+                    .message("Failed to open Link: {url}\n{error:?}")
+                    .show(|_| {});
+            }
+            false
+        } else {
+            warn!("link url has no host");
+            false
         }
-        false
     });
 
     // TODO
@@ -234,4 +278,49 @@ fn truncate_text(text: &str, max_len: usize) -> String {
     } else {
         truncated
     }
+}
+
+/// Returns true if host string contains non ASCII characters
+fn is_puny(host: &str) -> bool {
+    for ch in host.chars() {
+        if !(ch.is_ascii_alphanumeric() || matches!(ch, '.' | '-')) {
+            return true;
+        }
+    }
+    false
+}
+
+/// Returns host as punycode encoded string
+fn puny_code_encode_host(host: &str) -> String {
+    host.to_owned()
+        .split('.')
+        .map(|sub| {
+            if is_puny(sub) {
+                format!(
+                    "xn--{}",
+                    unic_idna_punycode::encode_str(sub)
+                        .unwrap_or_else(|| "[punycode encode failed]".to_owned())
+                )
+            } else {
+                sub.to_owned()
+            }
+        })
+        .collect::<Vec<String>>()
+        .join(".")
+}
+
+/// Returns host as decoded string
+fn puny_code_decode_host(host: &str) -> String {
+    host.to_owned()
+        .split('.')
+        .map(|sub| {
+            if let Some(sub) = sub.strip_prefix("xn--") {
+                unic_idna_punycode::decode_to_string(sub)
+                    .unwrap_or_else(|| "[punycode decode failed]".to_owned())
+            } else {
+                sub.to_owned()
+            }
+        })
+        .collect::<Vec<String>>()
+        .join(".")
 }

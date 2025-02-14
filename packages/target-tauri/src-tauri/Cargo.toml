@@ -44,6 +44,7 @@ png = "0.*"
 base64 = "0.22.1"
 uuid = { version = "1", features = ["v4"] }
 tauri-plugin-opener = "2.2.5"
+unic-idna-punycode = "0.9.0"
 
 [target.'cfg(any(target_os = "linux", target_os = "dragonfly", target_os = "freebsd", target_os = "netbsd", target_os = "openbsd"))'.dependencies]
 webkit2gtk = "2.0"
