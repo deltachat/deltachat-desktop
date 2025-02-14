@@ -42,22 +42,15 @@ pub(crate) fn open_html_window(
     let window_id = format!("html-window:{window_id}").replace(".", "-");
     warn!("{window_id}");
 
-    // let mut window: WebviewWindow = if let Some(window) = app.get_webview_window(&window_id) {
-    //     window
-    // } else {
-    //     WebviewWindowBuilder::new(
-    //         &app,
-    //         &window_id,
-    //         WebviewUrl::External(Url::from_str("https://delta.chat").unwrap()),
-    //     )
-    //     .build()?
-    // };
-
-    // #[cfg(not(any(target_os = "ios", target_os = "android")))]
-    // {
-    //     // on android and iOS this does not exist, there the window is opened automatically
-    //     window.show()?;
-    // }
+    #[cfg(not(any(target_os = "ios", target_os = "android")))]
+    {
+        if let Some(window) = app.get_window(&window_id) {
+            // window already exists focus it - android and iOS don't have have the function
+            // and those platforms also don't have multiple windows
+            window.show()?;
+            return Ok(());
+        }
+    }
 
     let width = 800.;
     let height = 600.;
