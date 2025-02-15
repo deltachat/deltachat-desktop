@@ -5,6 +5,12 @@
 ### Added
 
 ### Changed
+
+<a id="1_54_0"></a>
+
+## [1.54.0] - 2025-02-15
+
+### Changed
   - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.155.5`
   - set mentionsEnabled in muted chats to true by default #4633
 
@@ -3196,7 +3202,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.53.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.54.0...HEAD
+
+[1.54.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.53.0...v1.54.0
 
 [1.53.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.52.1...v1.53.0
 
