@@ -920,17 +920,23 @@ class MessageListStore extends Store<MessageListState> {
     }
 
     let messageListItems = this.state.messageListItems
-    const findMessageIndex = (): number =>
-      messageListItems.findIndex(
+    const findMessageIndex = (): number | undefined => {
+      const ind = messageListItems.findIndex(
         m => m.kind === 'message' && m.msg_id === jumpToMessageId
       )
+      return ind === -1 ? undefined : ind
+    }
 
     let jumpToMessageIndex = findMessageIndex()
-    const currentMessageListContainsTheMessage = jumpToMessageIndex >= 0
+    const currentMessageListContainsTheMessage = jumpToMessageIndex != undefined
     // Even if the message is in the current chat, it could still
     // be missing from `this.state.messageListItems` in these cases:
     // - `this.state.messageListItems` is still unloaded,
     //   e.g. when `loadChat` interrupts itself and calls `jumpToMessage`.
+    // - `this.state.messageListItems` is loaded, but there are actually
+    //   no messages in the chat.
+    //   FYI in this case we perhaps don't have to `getMessageListItems()`,
+    //   but whatever.
     // - A new message has just been sent to the chat and we want to jump
     //   to it.
     if (!isMessageInCurrentChat || !currentMessageListContainsTheMessage) {
@@ -941,6 +947,9 @@ class MessageListStore extends Store<MessageListState> {
         true
       )
       jumpToMessageIndex = findMessageIndex()
+      // Yes, `jumpToMessageIndex` could stil be `undefined` here,
+      // but only if the chat actually contains no messages
+      // (or if something went horribly wrong).
     }
 
     // calculate page indexes, so that jumpToMessageId is in the middle of the page
@@ -949,6 +958,19 @@ class MessageListStore extends Store<MessageListState> {
     let newMessageCache: MessageListState['messageCache'] = {}
     const half_page_size = Math.ceil(PAGE_SIZE / 2)
     if (messageListItems.length !== 0) {
+      if (jumpToMessageIndex == undefined) {
+        // To be fair, it's expected that we could jump to a message
+        // that is now deleted, e.g. if it got deleted just recently
+        // and not all state has updated, but this is super rare.
+        this.log.error(
+          `messageListItems is not empty, but jumpToMessageIndex ` +
+            `is still undefined? Does msgId ${jumpToMessageId} ` +
+            `even belong to chat ${chatId}? Or did the message get deleted?\n` +
+            `Anyways, falling back to jumping to the last message.`
+        )
+        jumpToMessageIndex = messageListItems.length - 1
+      }
+
       oldestFetchedMessageListItemIndex = Math.max(
         jumpToMessageIndex - half_page_size,
         0
