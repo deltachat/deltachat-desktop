@@ -6,6 +6,8 @@
 
 ### Changed
 
+- keep the order of contacts when calling getContactsByIds #4651
+
 <a id="1_54_0"></a>
 
 ## [1.54.0] - 2025-02-15
