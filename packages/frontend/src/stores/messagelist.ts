@@ -956,7 +956,6 @@ class MessageListStore extends Store<MessageListState> {
     let oldestFetchedMessageListItemIndex = -1
     let newestFetchedMessageListItemIndex = -1
     let newMessageCache: MessageListState['messageCache'] = {}
-    const half_page_size = Math.ceil(PAGE_SIZE / 2)
     if (messageListItems.length !== 0) {
       if (jumpToMessageIndex == undefined) {
         // To be fair, it's expected that we could jump to a message
@@ -970,6 +969,8 @@ class MessageListStore extends Store<MessageListState> {
         )
         jumpToMessageIndex = messageListItems.length - 1
       }
+
+      const half_page_size = Math.ceil(PAGE_SIZE / 2)
 
       oldestFetchedMessageListItemIndex = Math.max(
         jumpToMessageIndex - half_page_size,
