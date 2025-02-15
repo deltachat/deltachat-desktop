@@ -140,7 +140,7 @@ function ViewGroupInner(
     BackendRemote.rpc
       .getContactsByIds(accountId, group.pastContactIds)
       .then(pastContacts => {
-        setPastContacts(Object.values(pastContacts))
+        setPastContacts(group.pastContactIds.map(id => pastContacts[id]))
       })
   }, [accountId, group.pastContactIds])
 
@@ -151,13 +151,13 @@ function ViewGroupInner(
         .then(contacts => {
           // update contacts in case a contact changed
           // while this dialog is open (e.g. contact got blocked)
-          group.contacts = Object.values(contacts)
+          group.contacts = group.contactIds.map(id => contacts[id])
         })
 
       BackendRemote.rpc
         .getContactsByIds(accountId, group.pastContactIds)
         .then(pastContacts => {
-          setPastContacts(Object.values(pastContacts))
+          setPastContacts(group.pastContactIds.map(id => pastContacts[id]))
         })
     })
   }, [accountId, group])
