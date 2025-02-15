@@ -692,14 +692,18 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
         }
         loadMissingMessages={loadMissingMessages}
       />
-      {showJumpDownButton && (
-        <JumpDownButton
-          accountId={accountId}
-          chat={chat}
-          jumpToMessage={jumpToMessage}
-          jumpToMessageStack={jumpToMessageStack}
-        />
-      )}
+      <JumpDownButton
+        // We're using `hidden` prop instead of simply not rendering
+        // the component because it's stateful,
+        // namely, its `useUnreadCount()` is stateful
+        // (it keeps track of `chat` changes).
+        // It could show incorrect unread count otherwise.
+        hidden={!showJumpDownButton}
+        accountId={accountId}
+        chat={chat}
+        jumpToMessage={jumpToMessage}
+        jumpToMessageStack={jumpToMessageStack}
+      />
     </MessagesDisplayContext.Provider>
   )
 }
@@ -973,11 +977,13 @@ function MessageLoading({
 }
 
 function JumpDownButton({
+  hidden,
   accountId,
   chat,
   jumpToMessage,
   jumpToMessageStack,
 }: {
+  hidden: boolean
   accountId: number
   chat: Parameters<typeof useUnreadCount>[1]
   jumpToMessage: ReturnType<
@@ -986,6 +992,10 @@ function JumpDownButton({
   jumpToMessageStack: number[]
 }) {
   const countUnreadMessages = useUnreadCount(accountId, chat)
+
+  if (hidden) {
+    return null
+  }
 
   let countToShow: string = countUnreadMessages.toString()
   if (countUnreadMessages > 99) {

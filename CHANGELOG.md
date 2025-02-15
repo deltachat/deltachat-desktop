@@ -6,6 +6,9 @@
 
 ### Changed
 
+### Fixed
+- fix unread count on "jump down" button not clearing when all messages are read
+
 <a id="1_54_0"></a>
 
 ## [1.54.0] - 2025-02-15
