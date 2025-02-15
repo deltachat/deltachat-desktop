@@ -780,7 +780,9 @@ class MessageListStore extends Store<MessageListState> {
 
   /**
    * Loads and shows the message in the messages list.
-   * It can handle loading the message if it is missing
+   * It can handle initializing MessageListStore
+   * (loading `messageListItems` and `messageCache`, etc),
+   * loading the message if it is missing
    * from `this.state.messageCache`,
    * reloading `messageListItems` if the message is missing from there,
    * and showing the message in a chat other than `this.chatId`.
@@ -853,22 +855,6 @@ class MessageListStore extends Store<MessageListState> {
           (await BackendRemote.rpc.getMessage(accountId, jumpToMessageId))
             .chatId
       } else {
-        const items = this.state.messageListItems
-          .map(m =>
-            m.kind === 'message' ? m.msg_id : C.DC_MSG_ID_LAST_SPECIAL
-          )
-          .filter(msgId => msgId !== C.DC_MSG_ID_LAST_SPECIAL)
-
-        if (items.length <= 0) {
-          // This can happen when clicking the chat in the chat list twice,
-          // which is supposed to jump to the last message.
-
-          // Since we haven't changed `viewState`, `MessageList` won't
-          // call `unlockScroll()`, so let's unlock it now.
-          return false
-        }
-
-        jumpToMessageId = items[items.length - 1]
         // Since `jumpToMessageId` is coming from
         // `this.state.messageListItems`, it's guaranteed to belong
         // to the current chat. No need to
@@ -876,6 +862,7 @@ class MessageListStore extends Store<MessageListState> {
         chatId = chatIdPreset ?? this.chatId
         jumpToMessageStack = []
         highlight = false
+        // We will determine `jumpToMessageId` below
       }
     } else {
       const fromCache = this.state.messageCache[jumpToMessageId]
@@ -921,6 +908,16 @@ class MessageListStore extends Store<MessageListState> {
 
     let messageListItems = this.state.messageListItems
     const findMessageIndex = (): number | undefined => {
+      if (jumpToMessageId == undefined) {
+        return messageListItems.length > 0
+          ? // The last `messageListItems` item is guaranteed to be _not_
+            // a daymarker, so we can safely return it without checking
+            // `m.kind === 'message'`.
+            messageListItems.length - 1
+          : undefined
+        // Maybe it would make sense to also set `jumpToMessageId` here.
+      }
+
       const ind = messageListItems.findIndex(
         m => m.kind === 'message' && m.msg_id === jumpToMessageId
       )
@@ -956,7 +953,18 @@ class MessageListStore extends Store<MessageListState> {
     let oldestFetchedMessageListItemIndex = -1
     let newestFetchedMessageListItemIndex = -1
     let newMessageCache: MessageListState['messageCache'] = {}
-    if (messageListItems.length !== 0) {
+    let newViewState: ChatViewState
+    if (messageListItems.length === 0) {
+      if (jumpToMessageId != undefined) {
+        this.log.error(
+          `Tried to jumpToMessage ${jumpToMessageId}, but messageListItems ` +
+            `is empty. Anyways, proceeding.`
+        )
+      }
+
+      // Same as in `loadChat()`
+      newViewState = ChatViewReducer.selectChat(this.state.viewState)
+    } else {
       if (jumpToMessageIndex == undefined) {
         // To be fair, it's expected that we could jump to a message
         // that is now deleted, e.g. if it got deleted just recently
@@ -1063,6 +1071,30 @@ class MessageListStore extends Store<MessageListState> {
             newestFetchedMessageListItemIndex
           ).catch(err => this.log.error('loadMessages failed', err))) || {}
       }
+
+      if (jumpToMessageId == undefined) {
+        const item = messageListItems[jumpToMessageIndex]
+        if (item.kind !== 'message') {
+          // This should never happen, but let's write it to make
+          // TypeScript happy, and juuuuuust in case.
+          // Maybe we could refactor things, so that types guarantee this.
+          this.log.error(
+            'messageListItems[jumpToMessageIndex] is not of type "message"??',
+            item,
+            messageListItems,
+            jumpToMessageIndex
+          )
+          throw new Error()
+        }
+        jumpToMessageId = item.msg_id
+      }
+      newViewState = ChatViewReducer.jumpToMessage(
+        this.state.viewState,
+        jumpToMessageId,
+        highlight,
+        focus,
+        scrollIntoViewArg
+      )
     }
 
     this.log.debug('jumpToMessage took', performance.now() - startTime)
@@ -1075,13 +1107,7 @@ class MessageListStore extends Store<MessageListState> {
       messageListItems,
       oldestFetchedMessageListItemIndex,
       newestFetchedMessageListItemIndex: newestFetchedMessageListItemIndex,
-      viewState: ChatViewReducer.jumpToMessage(
-        this.state.viewState,
-        jumpToMessageId,
-        highlight,
-        focus,
-        scrollIntoViewArg
-      ),
+      viewState: newViewState,
       jumpToMessageStack,
     })
   }
