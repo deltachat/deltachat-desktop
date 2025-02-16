@@ -146,7 +146,7 @@ class MessageListStore extends Store<MessageListState> {
     private readonly accountId: number,
     private readonly chatId: number
   ) {
-    super(defaultState())
+    super(defaultState(), 'MessageListStore')
   }
 
   get activeView() {
