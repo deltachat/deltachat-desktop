@@ -8,6 +8,9 @@
 
 - keep the order of contacts when calling getContactsByIds #4651
 
+### Fixed
+- accessibility: add `aria-label`s to unread counters
+
 <a id="1_54_0"></a>
 
 ## [1.54.0] - 2025-02-15
