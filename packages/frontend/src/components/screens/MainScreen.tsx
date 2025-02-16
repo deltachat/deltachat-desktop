@@ -369,6 +369,10 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
         avatarPath={chat.profileImage || undefined}
         small
         wasSeenRecently={chat.wasSeenRecently}
+        // Avatar is purely decorative here,
+        // and is redundant accessibility-wise,
+        // because we display the chat name below.
+        aria-hidden={true}
       />
       <div style={{ marginLeft: '7px', overflow: 'hidden' }}>
         <div className='navbar-chat-name'>

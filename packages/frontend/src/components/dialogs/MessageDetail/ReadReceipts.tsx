@@ -71,6 +71,10 @@ function ReadReceipt(props: { receipt: T.MessageReadReceipt }) {
         avatarPath={contact.profileImage}
         addr={contact.address}
         color={contact.color}
+        // Avatar is purely decorative here,
+        // and is redundant accessibility-wise,
+        // because we display the contact name below.
+        aria-hidden={true}
       />
       <div className={styles.ReadReceiptContactLabel}>
         <div>
