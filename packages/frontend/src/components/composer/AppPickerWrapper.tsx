@@ -40,6 +40,7 @@ export const AppPickerWrapper = ({ onAppSelected }: Props) => {
           AppStoreUrl + 'xdcget-lock.json'
         )
         const apps = getJsonFromBase64(response.blob) as AppInfo[]
+        if (apps === null) return
         apps.sort((a: AppInfo, b: AppInfo) => {
           const dateA = new Date(a.date)
           const dateB = new Date(b.date)
