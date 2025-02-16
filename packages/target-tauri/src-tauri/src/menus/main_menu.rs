@@ -1,14 +1,44 @@
-use std::{borrow::BorrowMut, path::PathBuf};
+use std::str::FromStr;
 
 use log::info;
+use strum_macros::{AsRefStr, EnumString};
 use tauri::{
-    menu::{CheckMenuItem, Menu, MenuItem, PredefinedMenuItem, Submenu},
+    menu::{CheckMenuItem, Menu, MenuId, MenuItem, PredefinedMenuItem, Submenu},
     AppHandle, Builder, Emitter, Manager, Runtime,
 };
 use tauri_plugin_opener::OpenerExt;
-use tauri_plugin_store::StoreExt;
 
-use crate::{help_window::open_help_window, settings::ZOOM_FACTOR_KEY, state::app::AppState};
+use crate::{help_window::open_help_window, AppState};
+
+#[derive(Debug, AsRefStr, EnumString)]
+enum MenuAction {
+    Settings,
+    Help,
+    Quit,
+    Delete,
+    FloatOnTop,
+    Zoom(f64),
+    DevTools,
+    LogFolder,
+    CurrentLogFile,
+    Keybindings,
+    Contribute,
+    Report,
+    Learn,
+    About,
+}
+
+impl From<MenuAction> for MenuId {
+    fn from(action: MenuAction) -> Self {
+        MenuId::new(action.as_ref())
+    }
+}
+
+impl From<&MenuId> for MenuAction {
+    fn from(item: &MenuId) -> Self {
+        MenuAction::from_str(item.as_ref()).expect("conversion error")
+    }
+}
 
 pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
     let builder = builder.menu(|handle| {
@@ -28,8 +58,20 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                     "File",
                     true,
                     &[
-                        &MenuItem::with_id(handle, "quit", "Quit", true, None::<&str>)?,
-                        &MenuItem::with_id(handle, "settings", "Settings", true, None::<&str>)?,
+                        &MenuItem::with_id(
+                            handle,
+                            MenuAction::Quit,
+                            MenuAction::Quit.as_ref(),
+                            true,
+                            None::<&str>,
+                        )?,
+                        &MenuItem::with_id(
+                            handle,
+                            MenuAction::Settings,
+                            MenuAction::Settings.as_ref(),
+                            true,
+                            None::<&str>,
+                        )?,
                     ],
                 )?,
                 &Submenu::with_items(
@@ -43,7 +85,13 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                         &PredefinedMenuItem::cut(handle, Some("Cut"))?,
                         &PredefinedMenuItem::copy(handle, Some("Copy"))?,
                         &PredefinedMenuItem::paste(handle, Some("Paste"))?,
-                        &MenuItem::with_id(handle, "delete", "Delete", true, None::<&str>)?,
+                        &MenuItem::with_id(
+                            handle,
+                            MenuAction::Delete.as_ref(),
+                            "Delete",
+                            true,
+                            None::<&str>,
+                        )?,
                         &PredefinedMenuItem::select_all(handle, Some("Select All"))?,
                     ],
                 )?,
@@ -185,23 +233,23 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
         )
     });
     builder.on_menu_event(|app, event| {
-        match event.id().as_ref() {
-            "settings" => {
+        match MenuAction::from(event.id()) {
+            MenuAction::Settings => {
                 app.emit("showSettingsDialog", None::<String>).ok();
             }
-            "help" => {
+            MenuAction::Help => {
                 open_help_window(app.clone(), "", None).ok();
             }
-            "quit" => {
+            MenuAction::Quit => {
                 app.exit(0);
             }
-            "delete" => { /* Not supported by Tauri */ }
-            "float_on_top" => {
+            MenuAction::Delete => { /* Not supported by Tauri */ }
+            MenuAction::FloatOnTop => {
                 /* Not supported by Tauri
                 https://docs.rs/tauri/latest/tauri/window/struct.Window.html#method.set_visible_on_all_workspaces
                 */
             }
-            "zoom_06" => {
+            MenuAction::Zoom(0.6) => {
                 app.menu()
                     .unwrap()
                     .get("zoom_06")
@@ -212,36 +260,36 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                     .unwrap();
                 set_zoom(app, 0.6);
             }
-            "zoom_08" => {
+            MenuAction::Zoom(0.8) => {
                 set_zoom(app, 0.8);
             }
-            "zoom_10" => {
+            MenuAction::Zoom(1.0) => {
                 set_zoom(app, 1.0);
             }
-            "zoom_12" => {
+            MenuAction::Zoom(1.2) => {
                 set_zoom(app, 1.2);
             }
-            "zoom_14" => {
+            MenuAction::Zoom(1.4) => {
                 set_zoom(app, 1.4);
             }
-            "dev_tools" => {
+            MenuAction::DevTools => {
                 app.get_webview_window("main").unwrap().open_devtools();
             }
-            "log_folder" => {
+            MenuAction::LogFolder => {
                 if let Ok(path) = &app.path().app_log_dir() {
                     if let Some(path) = path.to_str() {
                         app.opener().open_path(path, None::<String>).ok();
                     }
                 }
             }
-            "current_log_file" => {
+            MenuAction::CurrentLogFile => {
                 let path = || app.state::<AppState>().current_log_file_path.clone();
                 app.opener().open_path(path(), None::<String>).ok();
             }
-            "keybindings" => {
+            MenuAction::Keybindings => {
                 app.emit("showKeybindingsDialog", None::<String>).unwrap();
             }
-            "contribute" => {
+            MenuAction::Contribute => {
                 app.opener()
                     .open_url(
                         "https://github.com/deltachat/deltachat-desktop",
@@ -249,7 +297,7 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                     )
                     .unwrap();
             }
-            "report" => {
+            MenuAction::Report => {
                 app.opener()
                     .open_url(
                         "https://github.com/deltachat/deltachat-desktop/issues",
@@ -257,12 +305,12 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                     )
                     .unwrap();
             }
-            "learn" => {
+            MenuAction::Learn => {
                 app.opener()
                     .open_url("https://delta.chat/de/", None::<String>)
                     .unwrap();
             }
-            "about" => {
+            MenuAction::About => {
                 app.emit("showAboutDialog", None::<String>).unwrap();
             }
             _ => {
