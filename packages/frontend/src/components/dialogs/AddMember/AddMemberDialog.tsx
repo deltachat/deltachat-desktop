@@ -76,6 +76,10 @@ export const AddMemberChip = (props: {
           avatarPath={contact.profileImage}
           color={contact.color}
           small={true}
+          // Avatar is purely decorative here,
+          // and is redundant accessibility-wise,
+          // because we display the contact name below.
+          aria-hidden={true}
         />
       </div>
       <div className={styles.DisplayName}>

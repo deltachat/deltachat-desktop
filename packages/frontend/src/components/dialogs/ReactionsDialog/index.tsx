@@ -146,7 +146,13 @@ function ReactionsDialogListItem(props: {
       onFocus={rovingTabindex.setAsActiveElement}
     >
       <div className={styles.reactionsDialogAvatar}>
-        <AvatarFromContact contact={contact} />
+        <AvatarFromContact
+          contact={contact}
+          // Avatar is purely decorative here,
+          // and is redundant accessibility-wise,
+          // because we display the contact name below.
+          aria-hidden={true}
+        />
       </div>
       <div className={styles.reactionsDialogContactName}>
         <ContactName displayName={contact.displayName} />

@@ -51,6 +51,10 @@ export default function Contact(props: {
           displayName,
           addr: address,
           wasSeenRecently,
+          // Avatar is purely decorative here,
+          // and is redundant accessibility-wise,
+          // because we display the contact name below.
+          'aria-hidden': true,
         }}
       />
       <ContactName
@@ -76,6 +80,10 @@ export function PseudoContact(
           avatarPath={undefined}
           color={'#505050'}
           displayName={cutoff || ''}
+          // Avatar is purely decorative here,
+          // and is redundant accessibility-wise,
+          // because we display the "contact name" below.
+          aria-hidden={true}
         />
       )}
       {!subText && (
