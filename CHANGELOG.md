@@ -32,6 +32,7 @@
 - fix member list is not refreshed if it changes while you look at the group profile #4894
 - remove unexpected horizontal scroll in gallery #4891
 - i18n: fix wrong order of substitutions for some strings #4889
+- accessibility: don't announce "padlock" on messages
 - fix double escape bypasses dialog attribute `canEscapeKeyClose={false}`
 
 <a id="1_56_0"></a>
