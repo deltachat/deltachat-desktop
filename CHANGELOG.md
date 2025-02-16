@@ -6,7 +6,7 @@
 
 ### Changed
 
-- keep the order of contacts when calling getContactsByIds #4651
+- keep the order of contacts when calling getContactsByIds #4651, #4652
 
 <a id="1_54_0"></a>
 
