@@ -88,7 +88,7 @@ export function CloneChat(props: { chatTemplateId: number } & DialogProps) {
 
   const [chat, setChat] = useState<T.FullChat | null>(null)
 
-  useMemo(() => {
+  useEffect(() => {
     BackendRemote.rpc
       .getFullChatById(accountId, chatTemplateId)
       .then(c => setChat(c))
@@ -482,7 +482,7 @@ export function CreateGroup(props: CreateGroupProps) {
 
   const groupMemberContactListWrapperRef = useRef<HTMLDivElement>(null)
 
-  useMemo(() => {
+  useEffect(() => {
     BackendRemote.rpc
       .getContactsByIds(accountId, groupMembers)
       .then(records => {
@@ -598,7 +598,7 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
 
   const groupMemberContactListWrapperRef = useRef<HTMLDivElement>(null)
 
-  useMemo(() => {
+  useEffect(() => {
     BackendRemote.rpc
       .getContactsByIds(accountId, broadcastRecipients)
       .then(records => {
