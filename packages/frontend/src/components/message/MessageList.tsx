@@ -991,6 +991,8 @@ function JumpDownButton({
   >['store']['effect']['jumpToMessage']
   jumpToMessageStack: number[]
 }) {
+  const tx = useTranslationFunction()
+
   const countUnreadMessages = useUnreadCount(accountId, chat)
 
   if (hidden) {
@@ -1010,6 +1012,11 @@ function JumpDownButton({
             'counter',
             countToShow.length === 3 && 'counter-3digits'
           )}
+          // Even though this is not focusable as of the time of writing,
+          // let's still apply label, for future-proofing.
+          aria-label={tx('chat_n_new_messages', String(countUnreadMessages), {
+            quantity: countUnreadMessages,
+          })}
           style={countUnreadMessages === 0 ? { visibility: 'hidden' } : {}}
         >
           {countToShow}
