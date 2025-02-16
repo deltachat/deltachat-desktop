@@ -56,7 +56,7 @@ export default function SearchInput(props: Props) {
       />
       {hasValue && (
         <SearchInputButton
-          aria-label={tx('delete')}
+          aria-label={tx('clear_search')}
           icon='cross'
           onClick={handleClear}
         />
