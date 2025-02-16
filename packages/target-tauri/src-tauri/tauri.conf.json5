@@ -63,8 +63,6 @@
             "shell:allow-open",
             // Badge counter
             "core:window:allow-set-badge-count",
-            "core:menu:default",
-            "core:menu:allow-new"
           ]
         }
       ]
