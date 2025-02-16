@@ -104,7 +104,10 @@ jobs:
     - name: Run e2e tests
       run: pnpm e2e --project Chrome
     - uses: actions/upload-artifact@v4
-      if: ${{ failure() && !cancelled() }}
+      # We may want to not upload artifacts if tests pass,
+      # (`if: ${{ failure() && !cancelled() }}`)
+      # but we want to debug flaky tests, so let's always upload them.
+      if: ${{ !cancelled() }}
       with:
         name: e2e-report
         path: packages/e2e-tests/playwright-report
