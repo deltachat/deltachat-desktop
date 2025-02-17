@@ -1,0 +1,115 @@
+@import '../../../../scss/mixins';
+
+// FYI there is also `_main_screen.scss`.
+
+:global(.main-screen.small-screen.chat-view-open) {
+  .chatListAndNavbar {
+    display: none;
+  }
+}
+:global(.main-screen.small-screen:not(.chat-view-open)) {
+  .chatAndNavbar {
+    display: none;
+  }
+}
+
+@mixin navbar {
+  height: var(--navBarHeight);
+  background-color: var(--navBarBackground);
+  color: var(--navBarText);
+  border-bottom: var(--outlineProperties);
+  // Just in case the "main" section below the navbar decides
+  // to do something like `height: 100%` instead of `flex-grow: 1`.
+  flex-shrink: 0;
+}
+
+.chatListAndNavbar {
+  display: flex;
+  flex-direction: column;
+
+  // See below, `.chatAndNavbar`'s flex-grow.
+  width: 0;
+  flex-grow: 3;
+
+  min-width: 295px;
+
+  .chatListNavbar {
+    @include navbar;
+    display: flex;
+    align-items: center;
+    padding: 0px 10px;
+
+    .archived-chats-title {
+      flex: 1 1 auto;
+      overflow-x: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-size: 18px;
+    }
+  }
+}
+.chatAndNavbar {
+  // Otherwise e.g. the contents of the gallery view
+  // (tabs, sepcifically) will refuse to shrink,
+  // and this element (`.chatAndNavbar`) will overflow the parent.
+  // Also this ensures that `.chatListAndNavbar` and `.chatAndNavbar`
+  // take respectively 3 and 8 parts of the width of the parent
+  // on wide screens.
+  width: 0;
+  flex-grow: 8;
+
+  display: flex;
+  flex-direction: column;
+
+  .chatNavbar {
+    @include navbar;
+    display: flex;
+    align-items: center;
+    padding: 0px;
+
+    .chatNavbarHeadingWrapper {
+      // Otherwise it will refuse to truncate the chat name
+      // and will make the parent overflow instead.
+      width: 0;
+      flex-grow: 1;
+    }
+    :global(.navbar-heading--button) {
+      @include button-reset;
+    }
+    :global(.navbar-heading) {
+      // See `.chatNavbarHeadingWrapper`.
+      max-width: 100%;
+
+      display: flex;
+      align-items: center;
+      padding-left: 5px;
+      margin-right: 0px;
+      overflow-x: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-size: 18px;
+      font-weight: bold;
+      overflow: hidden;
+    }
+
+    :global(.views) {
+      margin-right: 15px;
+      display: flex;
+      height: 100%;
+    }
+
+    :global(.navbar-button) {
+      padding: 0;
+      width: 40px;
+      border-radius: 0;
+      &:hover {
+        background-color: var(--navBarButtonHover);
+      }
+    }
+
+    :global(#three-dot-menu-button) {
+      height: 40px;
+      border-radius: 100%;
+    }
+  }
+}

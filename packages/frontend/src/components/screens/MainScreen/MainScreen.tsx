@@ -1,3 +1,4 @@
+import styles from './styles.module.scss'
 import React, {
   useState,
   useRef,
@@ -11,7 +12,6 @@ import Gallery from '../../Gallery'
 import { useThreeDotMenu } from '../../ThreeDotMenu'
 import ChatList from '../../chat/ChatList'
 import { Avatar } from '../../Avatar'
-import { Navbar, NavbarGroupLeft, NavbarGroupRight } from '../../Navbar'
 import ConnectivityToast from '../../ConnectivityToast'
 import MailingListProfile from '../../dialogs/MessageListProfile'
 import SettingsStoreInstance, {
@@ -185,90 +185,34 @@ export default function MainScreen({ accountId }: Props) {
         !messageSectionShouldBeHidden ? 'chat-view-open' : ''
       }`}
     >
-      <div className='navbar-wrapper' data-tauri-drag-region>
-        <Navbar>
-          {!chatListShouldBeHidden && (
-            <NavbarGroupLeft>
-              {showArchivedChats && (
-                <>
-                  <span data-no-drag-region>
-                    <Button
-                      aria-label={tx('back')}
-                      onClick={() => setArchivedChatsSelected(false)}
-                      className='backButton'
-                    >
-                      <Icon icon='arrow-left' className='backButtonIcon'></Icon>
-                    </Button>
-                  </span>
-                  <div className='archived-chats-title' data-no-drag-region>
-                    {tx('chat_archived_chats_title')}
-                  </div>
-                </>
-              )}
-              {!showArchivedChats && (
-                <SearchInput
-                  id='chat-list-search'
-                  inputRef={searchRef}
-                  onChange={handleSearchChange}
-                  onClear={queryChatId ? () => handleSearchClear() : undefined}
-                  value={queryStr}
-                />
-              )}
-            </NavbarGroupLeft>
-          )}
-          {!messageSectionShouldBeHidden && (
-            <NavbarGroupRight>
-              {smallScreenMode && (
-                <span data-no-drag-region>
-                  <Button
-                    aria-label={tx('back')}
-                    onClick={onBackButton}
-                    className='backButton'
-                  >
-                    <Icon icon='arrow-left' className='backButtonIcon'></Icon>
-                  </Button>
-                </span>
-              )}
-              {alternativeView === 'global-gallery' && (
-                <>
-                  <div className='navbar-heading'>{tx('menu_all_media')}</div>
-                  <span className='views' />
-                </>
-              )}
-              {chatWithLinger && <ChatHeading chat={chatWithLinger} />}
-              {chatWithLinger && <ChatNavButtons />}
-              {(chatWithLinger || alternativeView === 'global-gallery') && (
-                <span
-                  style={{
-                    marginLeft: 0,
-                    marginRight: '3px',
-                    ...(threeDotMenuHidden
-                      ? { opacity: 0, pointerEvents: 'none' }
-                      : {}),
-                  }}
-                  data-no-drag-region
-                  aria-disabled={threeDotMenuHidden}
+      <section className={styles.chatListAndNavbar}>
+        <nav className={styles.chatListNavbar} data-tauri-drag-region>
+          {showArchivedChats && (
+            <>
+              <span data-no-drag-region>
+                <Button
+                  aria-label={tx('back')}
+                  onClick={() => setArchivedChatsSelected(false)}
+                  className='backButton'
                 >
-                  <Button
-                    id='three-dot-menu-button'
-                    className='navbar-button'
-                    aria-label={tx('main_menu')}
-                    onClick={onClickThreeDotMenu}
-                  >
-                    <Icon
-                      coloring='navbar'
-                      icon='more'
-                      rotation={90}
-                      size={24}
-                    />
-                  </Button>
-                </span>
-              )}
-            </NavbarGroupRight>
+                  <Icon icon='arrow-left' className='backButtonIcon'></Icon>
+                </Button>
+              </span>
+              <div className='archived-chats-title' data-no-drag-region>
+                {tx('chat_archived_chats_title')}
+              </div>
+            </>
           )}
-        </Navbar>
-      </div>
-      <div className='main-app-content'>
+          {!showArchivedChats && (
+            <SearchInput
+              id='chat-list-search'
+              inputRef={searchRef}
+              onChange={handleSearchChange}
+              onClear={queryChatId ? () => handleSearchClear() : undefined}
+              value={queryStr}
+            />
+          )}
+        </nav>
         <ChatList
           queryStr={queryStr}
           showArchivedChats={showArchivedChats}
@@ -280,13 +224,60 @@ export default function MainScreen({ accountId }: Props) {
             setQueryChatId(null)
           }}
         />
+      </section>
+      <section className={styles.chatAndNavbar}>
+        <nav className={styles.chatNavbar} data-tauri-drag-region>
+          {smallScreenMode && (
+            <span data-no-drag-region>
+              <Button
+                aria-label={tx('back')}
+                onClick={onBackButton}
+                className='backButton'
+              >
+                <Icon icon='arrow-left' className='backButtonIcon'></Icon>
+              </Button>
+            </span>
+          )}
+          <div className={styles.chatNavbarHeadingWrapper}>
+            {alternativeView === 'global-gallery' && (
+              <>
+                <div className='navbar-heading'>{tx('menu_all_media')}</div>
+                <span className='views' />
+              </>
+            )}
+            {chatWithLinger && <ChatHeading chat={chatWithLinger} />}
+          </div>
+          {chatWithLinger && <ChatNavButtons />}
+          {(chatWithLinger || alternativeView === 'global-gallery') && (
+            <span
+              style={{
+                marginLeft: 0,
+                marginRight: '3px',
+                ...(threeDotMenuHidden
+                  ? { opacity: 0, pointerEvents: 'none' }
+                  : {}),
+              }}
+              data-no-drag-region
+              aria-disabled={threeDotMenuHidden}
+            >
+              <Button
+                id='three-dot-menu-button'
+                className='navbar-button'
+                aria-label={tx('main_menu')}
+                onClick={onClickThreeDotMenu}
+              >
+                <Icon coloring='navbar' icon='more' rotation={90} size={24} />
+              </Button>
+            </span>
+          )}
+        </nav>
         <MessageListView
           accountId={accountId}
           alternativeView={alternativeView}
           galleryRef={galleryRef}
           onUpdateGalleryView={updatethreeDotMenuHidden}
         />
-      </div>
+      </section>
       {!chatListShouldBeHidden && <ConnectivityToast />}
     </div>
   )
