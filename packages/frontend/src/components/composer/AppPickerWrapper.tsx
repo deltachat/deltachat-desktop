@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AppPicker, AppInfo, AppStoreUrl } from '../AppPicker'
 import { getLogger } from '../../../../shared/logger'
 
@@ -27,11 +27,11 @@ const getJsonFromBase64 = (base64: string): any => {
 
 type Props = {
   onAppSelected?: (app: AppInfo) => void
-  apps: AppInfo[]
-  setApps: (apps: AppInfo[]) => void
 }
 
-export const AppPickerWrapper = ({ onAppSelected, apps, setApps }: Props) => {
+export const AppPickerWrapper = ({ onAppSelected }: Props) => {
+  const [apps, setApps] = useState<AppInfo[]>([])
+
   useEffect(() => {
     const fetchApps = async () => {
       try {
@@ -40,6 +40,7 @@ export const AppPickerWrapper = ({ onAppSelected, apps, setApps }: Props) => {
           AppStoreUrl + 'xdcget-lock.json'
         )
         const apps = getJsonFromBase64(response.blob) as AppInfo[]
+        if (apps === null) return
         apps.sort((a: AppInfo, b: AppInfo) => {
           const dateA = new Date(a.date)
           const dateB = new Date(b.date)
@@ -52,17 +53,13 @@ export const AppPickerWrapper = ({ onAppSelected, apps, setApps }: Props) => {
           app.author = url.pathname.split('/')[1]
           app.date = moment(app.date).format('LL')
         }
-        if (apps) {
-          setApps(apps)
-        }
+        setApps(apps)
       } catch (error) {
         log.error('Failed to fetch apps:', error)
       }
     }
-    if (!apps?.length) {
-      fetchApps()
-    }
-  }, [apps, setApps])
+    fetchApps()
+  }, [setApps])
 
   return (
     <div className={styles.appPickerContainer}>

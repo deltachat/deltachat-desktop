@@ -13,12 +13,24 @@ import { InlineVerifiedIcon } from '../VerifiedIcon'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { message2React } from '../message/MessageMarkdown'
 import { useRovingTabindex } from '../../contexts/RovingTabindex'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 const log = getLogger('renderer/chatlist/item')
 
 function FreshMessageCounter({ counter }: { counter: number }) {
+  const tx = useTranslationFunction()
+
   if (counter === 0) return null
-  return <div className='fresh-message-counter'>{counter}</div>
+  return (
+    <span
+      className='fresh-message-counter'
+      aria-label={tx('chat_n_new_messages', String(counter), {
+        quantity: counter,
+      })}
+    >
+      {counter}
+    </span>
+  )
 }
 
 type ChatListItemType = Type.ChatListItemFetchResult & {

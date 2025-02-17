@@ -6,10 +6,10 @@
 
 ### Changed
 
-- keep the order of contacts when calling getContactsByIds #4651
-
 ### Fixed
-- accessibility: add `aria-label` to the composer (message input), to clarify which chat is open
+- fix unread count on "jump down" button not clearing when all messages are read #4648
+- keep the order of contacts when calling getContactsByIds #4651
+- improve accessibility #4655, #4656, #4662
 
 <a id="1_54_0"></a>
 
