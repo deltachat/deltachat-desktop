@@ -7,6 +7,7 @@
 - tauri: add support for sticker picker
 
 ### Changed
+- tauri: replace `tauri-plugin-shell` with `tauri-plugin-opener`
 
 ### Fixed
 - tauri: fix blobs and webxdc-icon scheme under windows #4705

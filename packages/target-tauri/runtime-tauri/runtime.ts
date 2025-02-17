@@ -7,7 +7,7 @@ import { getCurrentWindow } from '@tauri-apps/api/window'
 import type { attachLogger } from '@tauri-apps/plugin-log'
 import { getStore } from '@tauri-apps/plugin-store'
 import type { Store } from '@tauri-apps/plugin-store'
-import { open } from '@tauri-apps/plugin-shell'
+import { openPath, openUrl } from '@tauri-apps/plugin-opener'
 import { writeText, readText } from '@tauri-apps/plugin-clipboard-manager'
 
 import {
@@ -271,7 +271,7 @@ class TauriRuntime implements Runtime {
     location.reload()
   }
   openLogFile(): void {
-    open(this.getCurrentLogLocation())
+    openPath(this.getCurrentLogLocation())
   }
   currentLogFileLocation: string | null = null
   getCurrentLogLocation(): string {
@@ -299,7 +299,7 @@ class TauriRuntime implements Runtime {
   }
   openLink(link: string): void {
     if (link.startsWith('http:') || link.startsWith('https:')) {
-      open(link)
+      openUrl(link)
     } else {
       this.log.error('tried to open a non http/https external link', {
         link,
@@ -382,7 +382,7 @@ class TauriRuntime implements Runtime {
   }
   async openPath(path: string): Promise<string> {
     try {
-      await open(path)
+      await openPath(path)
       return ''
     } catch (error: any) {
       this.log.error('openPath', path, error)
