@@ -18,7 +18,7 @@ you can report there directly.
 Please search both open and closed issues to make sure your bug report is not a duplicate.
 
 For community interactions around Delta Chat
-please read our [Community Standards](https://delta.chat/community-standards).
+please read our [Community Standards](https://delta.chat/en/community-standards).
 
 ## Proposing Features
 
