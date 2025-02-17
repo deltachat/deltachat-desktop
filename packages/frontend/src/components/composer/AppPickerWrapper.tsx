@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { AppPicker, AppInfo, AppStoreUrl } from '../AppPicker'
 import { getLogger } from '../../../../shared/logger'
 
-import styles from './styles.module.scss'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import moment from 'moment'
@@ -61,9 +60,5 @@ export const AppPickerWrapper = ({ onAppSelected }: Props) => {
     fetchApps()
   }, [setApps])
 
-  return (
-    <div className={styles.appPickerContainer}>
-      <AppPicker apps={apps} onSelect={onAppSelected} />
-    </div>
-  )
+  return <AppPicker apps={apps} onSelect={onAppSelected} />
 }

@@ -234,70 +234,72 @@ export function AppPicker({ onSelect, apps = [] }: Props) {
   }
 
   return (
-    <div className={styles.appPicker}>
-      <input
-        type='text'
-        autoFocus
-        placeholder={tx('search')}
-        value={searchQuery}
-        onChange={e => setSearchQuery(e.target.value)}
-        className={styles.searchInput}
-      />
-      {searchQuery && (
-        <SearchInputButton
-          className={styles.searchInputButton}
-          aria-label={tx('delete')}
-          icon='cross'
-          onClick={() => setSearchQuery('')}
+    <div className={styles.appPickerContainer}>
+      <div className={styles.appPicker}>
+        <input
+          type='text'
+          autoFocus
+          placeholder={tx('search')}
+          value={searchQuery}
+          onChange={e => setSearchQuery(e.target.value)}
+          className={styles.searchInput}
         />
-      )}
-      <div className={styles.appPickerList}>
-        {!isOffline && Object.keys(icons).length > 0 ? (
-          <>
-            {selectedAppInfo && (
-              <AppInfoOverlay
-                app={selectedAppInfo}
-                setSelectedAppInfo={setSelectedAppInfo}
-                onSelect={onSelect}
-              />
-            )}
-            {filteredApps.map(app => (
-              <button
-                key={app.app_id}
-                className={styles.appListItem}
-                onClick={() => setSelectedAppInfo(app)}
-              >
-                {renderAppInfo(app)}
-              </button>
-            ))}
-          </>
-        ) : (
-          <div className={styles.offlineMessage}>
-            {tx(isOffline ? 'offline' : 'loading')}
-          </div>
+        {searchQuery && (
+          <SearchInputButton
+            className={styles.searchInputButton}
+            aria-label={tx('delete')}
+            icon='cross'
+            onClick={() => setSearchQuery('')}
+          />
         )}
-      </div>
-      <div className={styles.tabBar}>
-        {categories.map(category => (
-          <button
-            key={category}
-            className={classNames(styles.tab, {
-              [styles.activeTab]: selectedCategory === category,
-            })}
-            onClick={() => setSelectedCategory(category)}
-          >
-            <div className={styles.category}>
-              <img
-                className={styles.categoryIcon}
-                src={`./images/${category}.svg`}
-                alt={category}
-              />
-              <div className={styles.categoryTitle}>
-                {categoryTitle(category)}
-              </div>
+        <div className={styles.appPickerList}>
+          {!isOffline && Object.keys(icons).length > 0 ? (
+            <>
+              {selectedAppInfo && (
+                <AppInfoOverlay
+                  app={selectedAppInfo}
+                  setSelectedAppInfo={setSelectedAppInfo}
+                  onSelect={onSelect}
+                />
+              )}
+              {filteredApps.map(app => (
+                <button
+                  key={app.app_id}
+                  className={styles.appListItem}
+                  onClick={() => setSelectedAppInfo(app)}
+                >
+                  {renderAppInfo(app)}
+                </button>
+              ))}
+            </>
+          ) : (
+            <div className={styles.offlineMessage}>
+              {tx(isOffline ? 'offline' : 'loading')}
             </div>
-          </button>
-        ))}
+          )}
+        </div>
+        <div className={styles.tabBar}>
+          {categories.map(category => (
+            <button
+              key={category}
+              className={classNames(styles.tab, {
+                [styles.activeTab]: selectedCategory === category,
+              })}
+              onClick={() => setSelectedCategory(category)}
+            >
+              <div className={styles.category}>
+                <img
+                  className={styles.categoryIcon}
+                  src={`./images/${category}.svg`}
+                  alt={category}
+                />
+                <div className={styles.categoryTitle}>
+                  {categoryTitle(category)}
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   )
