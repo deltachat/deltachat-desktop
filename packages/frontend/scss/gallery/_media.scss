@@ -1,12 +1,11 @@
 $tab-height: 46px;
 
 .media-view {
-  width: calc(100% - var(--chat-list-width, 30%));
   background-color: var(--galleryBg);
   padding-left: 10px;
   overflow: hidden;
   min-width: 200px;
-  height: 100%;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
 
