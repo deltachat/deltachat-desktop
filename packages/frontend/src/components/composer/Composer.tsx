@@ -404,6 +404,7 @@ const Composer = forwardRef<
               enterKeySends={settingsStore?.desktopSettings.enterKeySends}
               sendMessage={composerSendMessage}
               chatId={chatId}
+              chatName={selectedChat.name}
               updateDraftText={updateDraftText}
               onPaste={handlePaste}
             />

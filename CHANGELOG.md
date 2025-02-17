@@ -9,9 +9,7 @@
 ### Fixed
 - fix unread count on "jump down" button not clearing when all messages are read #4648
 - keep the order of contacts when calling getContactsByIds #4651
-
-### Fixed
-- accessibility: add `aria-label`s to unread counters
+- improve accessibility #4655, #4656, #4662
 
 <a id="1_54_0"></a>
 

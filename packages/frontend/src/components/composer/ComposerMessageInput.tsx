@@ -9,6 +9,7 @@ const log = getLogger('renderer/composer/ComposerMessageInput')
 
 type ComposerMessageInputProps = {
   chatId: number
+  chatName: string
   sendMessage: () => void
   enterKeySends: boolean
   onPaste?: (e: React.ClipboardEvent<HTMLTextAreaElement>) => void
@@ -234,6 +235,13 @@ export default class ComposerMessageInput extends React.Component<
         onChange={this.onChange}
         onPaste={this.props.onPaste}
         placeholder={window.static_translate('write_message_desktop')}
+        aria-label={
+          window.static_translate('write_message_desktop') +
+          // Make it clear which chat we're in.
+          // TODO probably need a proper string, with interpolation.
+          ': ' +
+          this.props.chatName
+        }
         disabled={this.state.loadingDraft}
         dir='auto'
         spellCheck={true}
