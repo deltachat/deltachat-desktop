@@ -7,6 +7,12 @@
 ### Changed
 
 ### Fixed
+
+<a id="1_54_1"></a>
+
+## [1.54.1] - 2025-02-17
+
+### Fixed
 - fix unread count on "jump down" button not clearing when all messages are read #4648
 - keep the order of contacts when calling getContactsByIds #4651, #4652
 - improve accessibility #4655, #4656, #4661, #4662
@@ -3207,7 +3213,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.54.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.54.1...HEAD
+
+[1.54.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.54.0...v1.54.1
 
 [1.54.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.53.0...v1.54.0
 
