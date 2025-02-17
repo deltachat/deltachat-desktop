@@ -42,3 +42,11 @@
     min-height: 0;
   }
 }
+
+.copy-link-icon {
+  width: 32px;
+  height: 32px;
+  transform: rotate(135deg);
+  margin-inline-end: 8px;
+  @include color-svg('./images/icons/link.svg', var(--buttonText), 100%);
+}
