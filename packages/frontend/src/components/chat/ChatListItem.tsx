@@ -13,12 +13,24 @@ import { InlineVerifiedIcon } from '../VerifiedIcon'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { message2React } from '../message/MessageMarkdown'
 import { useRovingTabindex } from '../../contexts/RovingTabindex'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 const log = getLogger('renderer/chatlist/item')
 
 function FreshMessageCounter({ counter }: { counter: number }) {
+  const tx = useTranslationFunction()
+
   if (counter === 0) return null
-  return <div className='fresh-message-counter'>{counter}</div>
+  return (
+    <span
+      className='fresh-message-counter'
+      aria-label={tx('chat_n_new_messages', String(counter), {
+        quantity: counter,
+      })}
+    >
+      {counter}
+    </span>
+  )
 }
 
 type ChatListItemType = Type.ChatListItemFetchResult & {
@@ -249,6 +261,7 @@ function ChatListItemError({
         {...{
           displayName: 'E',
           color: '',
+          'aria-hidden': true,
         }}
       />
       <div className='content'>
@@ -320,6 +333,10 @@ function ChatListItemNormal({
           avatarPath: chatListItem.avatarPath || undefined,
           color: chatListItem.color,
           wasSeenRecently: chatListItem.wasSeenRecently,
+          // Avatar is purely decorative here,
+          // and is redundant accessibility-wise,
+          // because we display the chat name below.
+          'aria-hidden': true,
         }}
       />
       <div className='content'>
@@ -433,7 +450,9 @@ export const ChatListItemMessageResult = React.memo<{
       onFocus={tabindexSetAsActiveElement}
       className={`pseudo-chat-list-item message-search-result ${tabindexClassName}`}
     >
-      <div className='avatars'>
+      {/* Avatars are purely decorative here, and are redundant
+      accessibility-wise, because we display the chat and author name below. */}
+      <div className='avatars' aria-hidden='true'>
         <Avatar
           className='big'
           avatarPath={msr.chatProfileImage}

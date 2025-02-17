@@ -692,14 +692,18 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
         }
         loadMissingMessages={loadMissingMessages}
       />
-      {showJumpDownButton && (
-        <JumpDownButton
-          accountId={accountId}
-          chat={chat}
-          jumpToMessage={jumpToMessage}
-          jumpToMessageStack={jumpToMessageStack}
-        />
-      )}
+      <JumpDownButton
+        // We're using `hidden` prop instead of simply not rendering
+        // the component because it's stateful.
+        // Namely, its `useUnreadCount()` is stateful
+        // (it keeps track of `chat` changes).
+        // It could show incorrect unread count otherwise.
+        hidden={!showJumpDownButton}
+        accountId={accountId}
+        chat={chat}
+        jumpToMessage={jumpToMessage}
+        jumpToMessageStack={jumpToMessageStack}
+      />
     </MessagesDisplayContext.Provider>
   )
 }
@@ -973,11 +977,13 @@ function MessageLoading({
 }
 
 function JumpDownButton({
+  hidden,
   accountId,
   chat,
   jumpToMessage,
   jumpToMessageStack,
 }: {
+  hidden: boolean
   accountId: number
   chat: Parameters<typeof useUnreadCount>[1]
   jumpToMessage: ReturnType<
@@ -985,7 +991,13 @@ function JumpDownButton({
   >['store']['effect']['jumpToMessage']
   jumpToMessageStack: number[]
 }) {
+  const tx = useTranslationFunction()
+
   const countUnreadMessages = useUnreadCount(accountId, chat)
+
+  if (hidden) {
+    return null
+  }
 
   let countToShow: string = countUnreadMessages.toString()
   if (countUnreadMessages > 99) {
@@ -1000,6 +1012,11 @@ function JumpDownButton({
             'counter',
             countToShow.length === 3 && 'counter-3digits'
           )}
+          // Even though this is not focusable as of the time of writing,
+          // let's still apply label, for future-proofing.
+          aria-label={tx('chat_n_new_messages', String(countUnreadMessages), {
+            quantity: countUnreadMessages,
+          })}
           style={countUnreadMessages === 0 ? { visibility: 'hidden' } : {}}
         >
           {countToShow}

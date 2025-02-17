@@ -43,6 +43,12 @@ export function Avatar(props: {
   wasSeenRecently?: boolean
   style?: htmlDivProps['style']
   onClick?: () => void
+  /**
+   * Consider setting this to `true` if the name
+   * of whoever the avatar belongs to is displayed somewhere near.
+   * Has no effect when `onClick` is set.
+   */
+  'aria-hidden'?: boolean
   tabIndex?: -1 | 0
   className?: string
 }) {
@@ -71,10 +77,16 @@ export function Avatar(props: {
     <div
       className={classNames(
         'avatar',
+        // Since `wasSeenRecently` is not exposed to accessibility API,
+        // it is safe to apply aria-hidden to the entire component.
+        // If at some point we make `wasSeenRecently` accessible,
+        // we should only apply `aria-hidden` to the avatar / initial itself
+        // (and perhaps rename the prop).
         { large, small, wasSeenRecently },
         className
       )}
       onClick={onClick}
+      aria-hidden={onClick ? undefined : props['aria-hidden']}
       tabIndex={tabIndex}
     >
       {content}
@@ -87,6 +99,10 @@ export function AvatarFromContact(
     contact: Type.Contact
     onClick?: (contact: Type.Contact) => void
     tabIndex?: -1 | 0
+    /**
+     * @see {@link Avatar}'s aria-hidden prop.
+     */
+    'aria-hidden'?: boolean
   },
   large?: boolean,
   small?: boolean

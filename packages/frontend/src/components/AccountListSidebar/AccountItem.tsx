@@ -178,6 +178,13 @@ export default function AccountItem({
         className={classNames(styles.accountBadgeIcon, {
           [styles.muted]: muted,
         })}
+        // Looking at the string key, this might be interprented that
+        // it only applies to a single chat.
+        // But it's good enough I guess.
+        // Maybe we could also use `n_messages_in_m_chats` instead.
+        aria-label={tx('chat_n_new_messages', String(unreadCount), {
+          quantity: unreadCount,
+        })}
       >
         {unreadCount}
       </div>

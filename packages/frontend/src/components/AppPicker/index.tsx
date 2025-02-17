@@ -273,7 +273,9 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
             ))}
           </>
         ) : (
-          <div className={styles.offlineMessage}>{tx('loading')}</div>
+          <div className={styles.offlineMessage}>
+            {tx(isOffline ? 'offline' : 'loading')}
+          </div>
         )}
       </div>
       <div className={styles.tabBar}>

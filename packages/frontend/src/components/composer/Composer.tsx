@@ -77,7 +77,6 @@ const Composer = forwardRef<
   const chatId = selectedChat.id
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const [showAppPicker, setShowAppPicker] = useState(false)
-  const [apps, setApps] = useState<AppInfo[]>([])
 
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
   const pickerButtonRef = useRef<HTMLButtonElement>(null)
@@ -405,6 +404,7 @@ const Composer = forwardRef<
               enterKeySends={settingsStore?.desktopSettings.enterKeySends}
               sendMessage={composerSendMessage}
               chatId={chatId}
+              chatName={selectedChat.name}
               updateDraftText={updateDraftText}
               onPaste={handlePaste}
             />
@@ -429,11 +429,7 @@ const Composer = forwardRef<
         </div>
         {showAppPicker && (
           <OutsideClickHelper onClick={() => setShowAppPicker(false)}>
-            <AppPickerWrapper
-              onAppSelected={onAppSelected}
-              apps={apps}
-              setApps={setApps}
-            />
+            <AppPickerWrapper onAppSelected={onAppSelected} />
           </OutsideClickHelper>
         )}
         {showEmojiPicker && (
