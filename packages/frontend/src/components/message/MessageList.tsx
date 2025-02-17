@@ -694,8 +694,8 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
       />
       <JumpDownButton
         // We're using `hidden` prop instead of simply not rendering
-        // the component because it's stateful,
-        // namely, its `useUnreadCount()` is stateful
+        // the component because it's stateful.
+        // Namely, its `useUnreadCount()` is stateful
         // (it keeps track of `chat` changes).
         // It could show incorrect unread count otherwise.
         hidden={!showJumpDownButton}
