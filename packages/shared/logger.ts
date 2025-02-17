@@ -67,16 +67,27 @@ export function printProcessLogLevelInfo() {
   )
   /* ignore-console-log */
   console.info(
-    `# Tips and Tricks for working with the browser console:
-## Use the search to filter the output like:
-space separate terms, exclude with -, if your term contains spaces you should exape it with "
+    `# Tips and Tricks for using the search filter in the browser console:
 
--👻                 don't show events from background accounts (not selected accounts)
--📡                 don't show any events
--[JSONRPC]   don't show jsonrpc messages
-[JSONRPC]    show only jsonrpc messages
+• Use space to separate search terms
+• Exclude search terms using -
+• If the search term contains spaces you should escape it with ""
+
+Examples:
+
+🕸️          only show debug messages
+-🕸️         don't show debug messages
+ℹ️          only show info messages
+-ℹ️         don't show info messages
+👻          only show events from background accounts (not selected accounts)
+-👻         don't show events from background accounts (not selected accounts)
+📡          only show events
+-📡         don't show any events
+[JSONRPC]   only show jsonrpc messages
+-[JSONRPC]  don't show jsonrpc messages
 
 Start deltachat with --devmode (or --log-debug and --log-to-console) argument to show full log output.
+If the log seems quiet, make sure the 'All levels' drop down has 'Verbose' checked.
   `
   )
 }
