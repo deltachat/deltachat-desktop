@@ -63,11 +63,7 @@ export const AppPickerWrapper = ({ onAppSelected }: Props) => {
 
   return (
     <div className={styles.appPickerContainer}>
-      <AppPicker
-        className={styles.appPicker}
-        apps={apps}
-        onSelect={onAppSelected}
-      ></AppPicker>
+      <AppPicker apps={apps} onSelect={onAppSelected} />
     </div>
   )
 }

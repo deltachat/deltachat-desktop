@@ -45,12 +45,11 @@ const enum AppCategoryEnum {
 }
 
 type Props = {
-  className?: string
   onSelect?: (app: AppInfo) => void
   apps?: AppInfo[]
 }
 
-export function AppPicker({ className, onSelect, apps = [] }: Props) {
+export function AppPicker({ onSelect, apps = [] }: Props) {
   const tx = useTranslationFunction()
   const [searchQuery, setSearchQuery] = useState('')
   const [isOffline, setIsOffline] = useState(false)
@@ -235,7 +234,7 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
   }
 
   return (
-    <div className={classNames(styles.appPickerContainer, className)}>
+    <div className={styles.appPicker}>
       <input
         type='text'
         autoFocus
