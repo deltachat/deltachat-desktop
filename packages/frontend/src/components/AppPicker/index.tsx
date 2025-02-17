@@ -1,7 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import classNames from 'classnames'
 import { filesize } from 'filesize'
+import moment from 'moment'
 import { C } from '@deltachat/jsonrpc-client'
+import { getLogger } from '../../../../shared/logger'
 
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
@@ -19,6 +21,8 @@ import {
 } from '../Dialog'
 import SearchInputButton from '../SearchInput/SearchInputButton'
 import { ClickableLink } from '../helpers/ClickableLink'
+
+const log = getLogger('renderer/components/AppPicker')
 
 export interface AppInfo {
   app_id: string
@@ -44,13 +48,29 @@ const enum AppCategoryEnum {
   game = 'game',
 }
 
-type Props = {
-  onSelect?: (app: AppInfo) => void
-  apps?: AppInfo[]
+const getJsonFromBase64 = (base64: string): any => {
+  try {
+    const text = atob(base64)
+    const length = text.length
+    const bytes = new Uint8Array(length)
+    for (let i = 0; i < length; i++) {
+      bytes[i] = text.charCodeAt(i)
+    }
+    const decoder = new TextDecoder()
+    return JSON.parse(decoder.decode(bytes))
+  } catch (error) {
+    log.critical('String could not de decoded or parsed')
+    return null
+  }
 }
 
-export function AppPicker({ onSelect, apps = [] }: Props) {
+type Props = {
+  onSelect?: (app: AppInfo) => void
+}
+
+export function AppPicker({ onSelect }: Props) {
   const tx = useTranslationFunction()
+  const [apps, setApps] = useState<AppInfo[]>([])
   const [searchQuery, setSearchQuery] = useState('')
   const [isOffline, setIsOffline] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState(AppCategoryEnum.home)
@@ -61,6 +81,35 @@ export function AppPicker({ onSelect, apps = [] }: Props) {
     AppCategoryEnum.tool,
     AppCategoryEnum.game,
   ]
+
+  useEffect(() => {
+    const fetchApps = async () => {
+      try {
+        const response = await BackendRemote.rpc.getHttpResponse(
+          selectedAccountId(),
+          AppStoreUrl + 'xdcget-lock.json'
+        )
+        const apps = getJsonFromBase64(response.blob) as AppInfo[]
+        if (apps === null) return
+        apps.sort((a: AppInfo, b: AppInfo) => {
+          const dateA = new Date(a.date)
+          const dateB = new Date(b.date)
+          return dateB.getTime() - dateA.getTime() // Show newest first
+        })
+        for (const app of apps) {
+          app.short_description = app.description.split('\n')[0]
+          app.description = app.description.split('\n').slice(1).join('\n')
+          const url = new URL(app.source_code_url)
+          app.author = url.pathname.split('/')[1]
+          app.date = moment(app.date).format('LL')
+        }
+        setApps(apps)
+      } catch (error) {
+        log.error('Failed to fetch apps:', error)
+      }
+    }
+    fetchApps()
+  }, [setApps])
 
   useEffect(() => {
     const loadIcons = async () => {
