@@ -486,7 +486,7 @@ export function CreateGroup(props: CreateGroupProps) {
     BackendRemote.rpc
       .getContactsByIds(accountId, groupMembers)
       .then(records => {
-        setGroupContacts(Object.entries(records).map(([_, contact]) => contact))
+        setGroupContacts(groupMembers.map(id => records[id]))
       })
   }, [accountId, groupMembers])
 
@@ -602,9 +602,7 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
     BackendRemote.rpc
       .getContactsByIds(accountId, broadcastRecipients)
       .then(records => {
-        setBroadcastContacts(
-          Object.entries(records).map(([_, contact]) => contact)
-        )
+        setBroadcastContacts(broadcastRecipients.map(id => records[id]))
       })
   }, [accountId, broadcastRecipients])
 
