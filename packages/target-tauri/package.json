@@ -19,7 +19,7 @@
   "dependencies": {
     "@tauri-apps/api": "^2.2.0",
     "@tauri-apps/plugin-log": "^2.2.0",
-    "@tauri-apps/plugin-shell": "^2.2.0",
+    "@tauri-apps/plugin-opener": "^2.2.5",
     "@tauri-apps/plugin-store": "^2.2.0"
   },
   "devDependencies": {

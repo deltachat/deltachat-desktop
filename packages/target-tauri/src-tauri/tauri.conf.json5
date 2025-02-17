@@ -60,7 +60,8 @@
             "core:window:allow-toggle-maximize",
             "core:window:allow-start-dragging",
             // open current logfile & open links
-            "shell:allow-open",
+            "opener:allow-open-path",
+            "opener:allow-open-url",
             // Badge counter
             "core:window:allow-set-badge-count"
           ]
