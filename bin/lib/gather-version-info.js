@@ -21,7 +21,7 @@ async function getGitRef() {
 
   let git_describe, git_branch
   try {
-    git_describe = gatherProcessStdout('git', ['describe'])
+    git_describe = gatherProcessStdout('git', ['describe', '--tags'])
     try {
       const git_symbolic_ref =
         process.env.GITHUB_HEAD_REF ||

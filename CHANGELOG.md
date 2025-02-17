@@ -7,7 +7,8 @@
 ### Changed
 
 ### Fixed
-- fix unread count on "jump down" button not clearing when all messages are read
+- fix unread count on "jump down" button not clearing when all messages are read #4648
+- keep the order of contacts when calling getContactsByIds #4651
 
 <a id="1_54_0"></a>
 
