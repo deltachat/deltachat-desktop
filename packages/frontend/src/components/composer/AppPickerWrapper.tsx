@@ -2,9 +2,9 @@ import React from 'react'
 import { AppPicker, AppInfo } from '../AppPicker'
 
 type Props = {
-  onAppSelected?: (app: AppInfo) => void
+  onAppSelected: (app: AppInfo) => void
 }
 
 export const AppPickerWrapper = ({ onAppSelected }: Props) => {
-  return <AppPicker onSelect={onAppSelected} />
+  return <AppPicker onAppSelected={onAppSelected} />
 }

@@ -65,10 +65,10 @@ const getJsonFromBase64 = (base64: string): any => {
 }
 
 type Props = {
-  onSelect?: (app: AppInfo) => void
+  onAppSelected: (app: AppInfo) => void
 }
 
-export function AppPicker({ onSelect }: Props) {
+export function AppPicker({ onAppSelected }: Props) {
   const tx = useTranslationFunction()
   const [apps, setApps] = useState<AppInfo[]>([])
   const [searchQuery, setSearchQuery] = useState('')
@@ -192,7 +192,7 @@ export function AppPicker({ onSelect }: Props) {
   const AppInfoOverlay = (props: {
     app: AppInfo
     setSelectedAppInfo: (app: AppInfo | null) => void
-    onSelect?: (app: AppInfo) => void
+    onSelect: (app: AppInfo) => void
   }) => {
     const { app, setSelectedAppInfo, onSelect } = props
     const onClose = () => {
@@ -230,7 +230,7 @@ export function AppPicker({ onSelect }: Props) {
             <FooterActions>
               <FooterActionButton
                 data-testid='add-app-to-chat'
-                onClick={() => onSelect && onSelect(app)}
+                onClick={() => onSelect(app)}
               >
                 {tx('add_to_chat')}
               </FooterActionButton>
@@ -308,7 +308,7 @@ export function AppPicker({ onSelect }: Props) {
                 <AppInfoOverlay
                   app={selectedAppInfo}
                   setSelectedAppInfo={setSelectedAppInfo}
-                  onSelect={onSelect}
+                  onSelect={onAppSelected}
                 />
               )}
               {filteredApps.map(app => (
