@@ -72,43 +72,12 @@ $scrollbarTransparency: 0.5;
 
 /* overwrite css */
 
-.bp4-button.bp4-minimal:active,
-.bp4-button.bp4-minimal.bp4-active,
-.bp4-button.bp4-minimal:hover {
-  background: $navbarBgLight;
-}
-
-.bp4-button.bp4-minimal:hover {
-  font-weight: normal;
-}
-
 .main-screen .navbar-chat-name {
   font-weight: normal;
 }
 
 .main-screen .navbar-chat-subtitle {
   font-weight: normal;
-}
-
-.navbar-wrapper {
-  .bp4-icon > svg:not([fill]) {
-    fill: var(--globalText);
-  }
-  .bp4-align-left {
-    border-right: solid 1px $borderColor;
-    border-bottom: solid 1px $borderColor;
-  }
-
-  span.views {
-    .bp4-button {
-      background: unset;
-      border-bottom: 3px solid transparent;
-      padding-top: 10px;
-      &.bp4-active {
-        border-bottom-color: black;
-      }
-    }
-  }
 }
 
 .chat-list {
@@ -120,41 +89,11 @@ $scrollbarTransparency: 0.5;
   }
 }
 
-.bp4-navbar {
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-
-.bp4-navbar .avatar.small {
-  display: none;
-}
-
-.navbar-wrapper .bp4-align-right {
-  border-bottom: solid 1px $borderColor;
-}
-
 .composer {
   border-left: unset;
   border-top: 1px solid $borderColor;
 }
 
-.bp4-overlay-backdrop {
-  backdrop-filter: blur(0.7px) grayscale(1);
-  background-color: transparent;
-}
-
-.bp4-dialog {
-  box-shadow:
-    0 0 0 1px rgba(16, 22, 26, 0.1),
-    0 4px 8px rgba(16, 22, 26, 0.2),
-    0 0 30px 0px rgba(16, 22, 26, 0.2);
-  transition: none;
-}
-
-.bp4-dialog-header,
-.bp4-dialog-footer {
-  border-radius: 0px;
-}
 .message .msg-container {
   border-radius: 0px;
   padding: 0px;
@@ -193,9 +132,6 @@ $scrollbarTransparency: 0.5;
   top: 9px;
   background-color: unset;
   padding: 0px;
-}
-.attachment-overlay .bp4-icon > svg {
-  fill: rgb(160, 160, 160);
 }
 
 .message-attachment-media {
@@ -339,23 +275,8 @@ $scrollbarTransparency: 0.5;
   background-color: transparent;
 }
 
-.bp4-button .bp4-icon,
-.bp4-button .bp4-icon-standard,
-.bp4-button .bp4-icon-large {
-  color: var(--globalText);
-}
-
 .selected .status-icon {
   background-color: var(--chatListItemSelectedText);
-}
-
-.bp4-tab[aria-selected='true'] {
-  box-shadow: inset 0 -3px 0 black;
-}
-
-.bp4-tab:not([aria-disabled='true']):hover,
-.bp4-tab[aria-selected='true'] {
-  color: black;
 }
 
 .avatar div.content,
@@ -451,7 +372,4 @@ div.group-image-wrapper div.group-image-edit-button {
       cursor: pointer;
     }
   }
-}
-.attachment-overlay .bp4-icon > svg {
-  fill: black;
 }
