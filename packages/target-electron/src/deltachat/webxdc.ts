@@ -15,7 +15,6 @@ import { platform } from 'os'
 import { readdir, stat, rmdir, writeFile, readFile } from 'fs/promises'
 import { existsSync } from 'fs'
 import type DeltaChatController from './controller.js'
-import SplitOut from './splitout.js'
 import { getLogger } from '../../../shared/logger.js'
 import { getConfigPath, htmlDistDir } from '../application-constants.js'
 import { truncateText } from '@deltachat-desktop/shared/util.js'
@@ -78,10 +77,8 @@ const WRAPPER_PATH = 'webxdc-wrapper.45870014933640136498.html'
 
 const BOUNDS_UI_CONFIG_PREFIX = 'ui.desktop.webxdcBounds'
 
-export default class DCWebxdc extends SplitOut {
-  constructor(controller: DeltaChatController) {
-    super(controller)
-
+export default class DCWebxdc {
+  constructor(private controller: DeltaChatController) {
     // icon protocol
     app.whenReady().then(() => {
       protocol.handle('webxdc-icon', async request => {
@@ -266,7 +263,7 @@ export default class DCWebxdc extends SplitOut {
 
       const app_icon = icon_blob && nativeImage?.createFromBuffer(icon_blob)
 
-      const lastBounds = await getLastBounds(this, accountId, msg_id)
+      const lastBounds = await this.getLastBounds(accountId, msg_id)
       const webxdcWindow = new BrowserWindow({
         webPreferences: {
           partition: partitionFromAccountId(accountId),
@@ -402,7 +399,7 @@ export default class DCWebxdc extends SplitOut {
 
       webxdcWindow.once('close', () => {
         const lastBounds = webxdcWindow.getBounds()
-        setLastBounds(this, accountId, msg_id, lastBounds)
+        this.setLastBounds(accountId, msg_id, lastBounds)
       })
 
       webxdcWindow.once('ready-to-show', () => {
@@ -679,7 +676,7 @@ export default class DCWebxdc extends SplitOut {
         if (instance) {
           instance.win.close()
         }
-        removeLastBounds(this, accountId, instanceId)
+        this.removeLastBounds(accountId, instanceId)
         const s = sessionFromAccountId(accountId)
         const appURL = `webxdc://${webxdcId}.webxdc`
         s.clearStorageData({ origin: appURL })
@@ -747,6 +744,48 @@ export default class DCWebxdc extends SplitOut {
     )
   }
 
+  get rpc() {
+    return this.controller.jsonrpcRemote.rpc
+  }
+
+  async getLastBounds(
+    accountId: number,
+    msgId: number
+  ): Promise<Partial<Bounds>> {
+    let bounds = {
+      width: 375,
+      height: 667,
+    }
+    try {
+      const raw = await this.rpc.getConfig(
+        accountId,
+        `${BOUNDS_UI_CONFIG_PREFIX}.${msgId}`
+      )
+      if (raw) {
+        bounds = JSON.parse(raw)
+      }
+    } catch (error) {
+      log.debug('failed to retrieve bounds for webxdc', error)
+    }
+    return bounds
+  }
+
+  setLastBounds(accountId: number, msgId: number, bounds: Bounds) {
+    return this.rpc.setConfig(
+      accountId,
+      `${BOUNDS_UI_CONFIG_PREFIX}.${msgId}`,
+      JSON.stringify(bounds)
+    )
+  }
+
+  removeLastBounds(accountId: number, msgId: number) {
+    return this.rpc.setConfig(
+      accountId,
+      `${BOUNDS_UI_CONFIG_PREFIX}.${msgId}`,
+      null
+    )
+  }
+
   _closeAll() {
     for (const open_app of Object.keys(open_apps)) {
       open_apps[open_app].win.close()
@@ -768,54 +807,6 @@ function sessionFromAccountId(accountId: number) {
   return session.fromPartition(partitionFromAccountId(accountId), {
     cache: false,
   })
-}
-
-async function getLastBounds(
-  splitOut: SplitOut,
-  accountId: number,
-  msgId: number
-): Promise<Partial<Bounds>> {
-  let bounds = {
-    width: 375,
-    height: 667,
-  }
-  try {
-    const raw = await splitOut.rpc.getConfig(
-      accountId,
-      `${BOUNDS_UI_CONFIG_PREFIX}.${msgId}`
-    )
-    if (raw) {
-      bounds = JSON.parse(raw)
-    }
-  } catch (error) {
-    log.debug('failed to retrieve bounds for webxdc', error)
-  }
-  return bounds
-}
-
-function setLastBounds(
-  splitOut: SplitOut,
-  accountId: number,
-  msgId: number,
-  bounds: Bounds
-) {
-  return splitOut.rpc.setConfig(
-    accountId,
-    `${BOUNDS_UI_CONFIG_PREFIX}.${msgId}`,
-    JSON.stringify(bounds)
-  )
-}
-
-function removeLastBounds(
-  splitOut: SplitOut,
-  accountId: number,
-  msgId: number
-) {
-  return splitOut.rpc.setConfig(
-    accountId,
-    `${BOUNDS_UI_CONFIG_PREFIX}.${msgId}`,
-    null
-  )
 }
 
 ipcMain.handle('webxdc.clearWebxdcDOMStorage', async (_, accountId: number) => {
