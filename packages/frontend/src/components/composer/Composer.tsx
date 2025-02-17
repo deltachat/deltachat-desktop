@@ -41,7 +41,7 @@ import { KeybindAction } from '../../keybindings'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
 import { CloseButton } from '../Dialog'
 import { enterKeySendsKeyboardShortcuts } from '../KeyboardShortcutHint'
-import { AppPickerWrapper } from './AppPickerWrapper'
+import { AppPicker } from '../AppPicker'
 import { AppInfo, AppStoreUrl } from '../AppPicker'
 import OutsideClickHelper from '../OutsideClickHelper'
 
@@ -429,7 +429,7 @@ const Composer = forwardRef<
         </div>
         {showAppPicker && (
           <OutsideClickHelper onClick={() => setShowAppPicker(false)}>
-            <AppPickerWrapper onAppSelected={onAppSelected} />
+            <AppPicker onAppSelected={onAppSelected} />
           </OutsideClickHelper>
         )}
         {showEmojiPicker && (
