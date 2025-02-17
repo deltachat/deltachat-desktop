@@ -372,6 +372,12 @@ function buildContextMenu(
         }
       },
     },
+    // Save Message
+    {
+      label: tx('save'),
+      action: () =>
+        BackendRemote.rpc.saveMsgs(selectedAccountId(), [message.id]),
+    },
     // Message Info
     {
       label: tx('info'),
@@ -414,7 +420,6 @@ export default function Message(props: {
       >
     ) => {
       event.preventDefault() // prevent default runtime context menu from opening
-
       const chat = await BackendRemote.rpc.getFullChatById(
         accountId,
         message.chatId
