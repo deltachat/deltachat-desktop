@@ -1,3 +1,29 @@
+.appPickerContainer {
+  position: absolute;
+  z-index: 10;
+  width: 56%;
+  max-width: 640px;
+  height: 70vh;
+  margin-left: 8px;
+  bottom: 50px;
+  background-color: var(--bgPrimary);
+  border-radius: var(--picker-BorderRadius);
+  overflow: hidden;
+  box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.0901960784);
+  @media (max-width: 900px) {
+    width: 50%;
+  }
+
+  @media (max-width: 720px) {
+    width: calc(100% - 18px);
+    min-width: 300px;
+  }
+}
+
+.appPicker {
+  position: relative;
+}
+
 .appPickerList {
   flex-wrap: wrap;
   gap: 6px;

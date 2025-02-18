@@ -1,7 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import classNames from 'classnames'
 import { filesize } from 'filesize'
+import moment from 'moment'
 import { C } from '@deltachat/jsonrpc-client'
+import { getLogger } from '../../../../shared/logger'
 
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
@@ -19,6 +21,8 @@ import {
 } from '../Dialog'
 import SearchInputButton from '../SearchInput/SearchInputButton'
 import { ClickableLink } from '../helpers/ClickableLink'
+
+const log = getLogger('renderer/components/AppPicker')
 
 export interface AppInfo {
   app_id: string
@@ -44,14 +48,29 @@ const enum AppCategoryEnum {
   game = 'game',
 }
 
-type Props = {
-  className?: string
-  onSelect?: (app: AppInfo) => void
-  apps?: AppInfo[]
+const getJsonFromBase64 = (base64: string): any => {
+  try {
+    const text = atob(base64)
+    const length = text.length
+    const bytes = new Uint8Array(length)
+    for (let i = 0; i < length; i++) {
+      bytes[i] = text.charCodeAt(i)
+    }
+    const decoder = new TextDecoder()
+    return JSON.parse(decoder.decode(bytes))
+  } catch (error) {
+    log.critical('String could not de decoded or parsed')
+    return null
+  }
 }
 
-export function AppPicker({ className, onSelect, apps = [] }: Props) {
+type Props = {
+  onAppSelected: (app: AppInfo) => void
+}
+
+export function AppPicker({ onAppSelected }: Props) {
   const tx = useTranslationFunction()
+  const [apps, setApps] = useState<AppInfo[]>([])
   const [searchQuery, setSearchQuery] = useState('')
   const [isOffline, setIsOffline] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState(AppCategoryEnum.home)
@@ -62,6 +81,35 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
     AppCategoryEnum.tool,
     AppCategoryEnum.game,
   ]
+
+  useEffect(() => {
+    const fetchApps = async () => {
+      try {
+        const response = await BackendRemote.rpc.getHttpResponse(
+          selectedAccountId(),
+          AppStoreUrl + 'xdcget-lock.json'
+        )
+        const apps = getJsonFromBase64(response.blob) as AppInfo[]
+        if (apps === null) return
+        apps.sort((a: AppInfo, b: AppInfo) => {
+          const dateA = new Date(a.date)
+          const dateB = new Date(b.date)
+          return dateB.getTime() - dateA.getTime() // Show newest first
+        })
+        for (const app of apps) {
+          app.short_description = app.description.split('\n')[0]
+          app.description = app.description.split('\n').slice(1).join('\n')
+          const url = new URL(app.source_code_url)
+          app.author = url.pathname.split('/')[1]
+          app.date = moment(app.date).format('LL')
+        }
+        setApps(apps)
+      } catch (error) {
+        log.error('Failed to fetch apps:', error)
+      }
+    }
+    fetchApps()
+  }, [setApps])
 
   useEffect(() => {
     const loadIcons = async () => {
@@ -144,7 +192,7 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
   const AppInfoOverlay = (props: {
     app: AppInfo
     setSelectedAppInfo: (app: AppInfo | null) => void
-    onSelect?: (app: AppInfo) => void
+    onSelect: (app: AppInfo) => void
   }) => {
     const { app, setSelectedAppInfo, onSelect } = props
     const onClose = () => {
@@ -182,7 +230,7 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
             <FooterActions>
               <FooterActionButton
                 data-testid='add-app-to-chat'
-                onClick={() => onSelect && onSelect(app)}
+                onClick={() => onSelect(app)}
               >
                 {tx('add_to_chat')}
               </FooterActionButton>
@@ -235,70 +283,72 @@ export function AppPicker({ className, onSelect, apps = [] }: Props) {
   }
 
   return (
-    <div className={classNames(styles.appPickerContainer, className)}>
-      <input
-        type='text'
-        autoFocus
-        placeholder={tx('search')}
-        value={searchQuery}
-        onChange={e => setSearchQuery(e.target.value)}
-        className={styles.searchInput}
-      />
-      {searchQuery && (
-        <SearchInputButton
-          className={styles.searchInputButton}
-          aria-label={tx('delete')}
-          icon='cross'
-          onClick={() => setSearchQuery('')}
+    <div className={styles.appPickerContainer}>
+      <div className={styles.appPicker}>
+        <input
+          type='text'
+          autoFocus
+          placeholder={tx('search')}
+          value={searchQuery}
+          onChange={e => setSearchQuery(e.target.value)}
+          className={styles.searchInput}
         />
-      )}
-      <div className={styles.appPickerList}>
-        {!isOffline && Object.keys(icons).length > 0 ? (
-          <>
-            {selectedAppInfo && (
-              <AppInfoOverlay
-                app={selectedAppInfo}
-                setSelectedAppInfo={setSelectedAppInfo}
-                onSelect={onSelect}
-              />
-            )}
-            {filteredApps.map(app => (
-              <button
-                key={app.app_id}
-                className={styles.appListItem}
-                onClick={() => setSelectedAppInfo(app)}
-              >
-                {renderAppInfo(app)}
-              </button>
-            ))}
-          </>
-        ) : (
-          <div className={styles.offlineMessage}>
-            {tx(isOffline ? 'offline' : 'loading')}
-          </div>
+        {searchQuery && (
+          <SearchInputButton
+            className={styles.searchInputButton}
+            aria-label={tx('delete')}
+            icon='cross'
+            onClick={() => setSearchQuery('')}
+          />
         )}
-      </div>
-      <div className={styles.tabBar}>
-        {categories.map(category => (
-          <button
-            key={category}
-            className={classNames(styles.tab, {
-              [styles.activeTab]: selectedCategory === category,
-            })}
-            onClick={() => setSelectedCategory(category)}
-          >
-            <div className={styles.category}>
-              <img
-                className={styles.categoryIcon}
-                src={`./images/${category}.svg`}
-                alt={category}
-              />
-              <div className={styles.categoryTitle}>
-                {categoryTitle(category)}
-              </div>
+        <div className={styles.appPickerList}>
+          {!isOffline && Object.keys(icons).length > 0 ? (
+            <>
+              {selectedAppInfo && (
+                <AppInfoOverlay
+                  app={selectedAppInfo}
+                  setSelectedAppInfo={setSelectedAppInfo}
+                  onSelect={onAppSelected}
+                />
+              )}
+              {filteredApps.map(app => (
+                <button
+                  key={app.app_id}
+                  className={styles.appListItem}
+                  onClick={() => setSelectedAppInfo(app)}
+                >
+                  {renderAppInfo(app)}
+                </button>
+              ))}
+            </>
+          ) : (
+            <div className={styles.offlineMessage}>
+              {tx(isOffline ? 'offline' : 'loading')}
             </div>
-          </button>
-        ))}
+          )}
+        </div>
+        <div className={styles.tabBar}>
+          {categories.map(category => (
+            <button
+              key={category}
+              className={classNames(styles.tab, {
+                [styles.activeTab]: selectedCategory === category,
+              })}
+              onClick={() => setSelectedCategory(category)}
+            >
+              <div className={styles.category}>
+                <img
+                  className={styles.categoryIcon}
+                  src={`./images/${category}.svg`}
+                  alt={category}
+                />
+                <div className={styles.categoryTitle}>
+                  {categoryTitle(category)}
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   )
