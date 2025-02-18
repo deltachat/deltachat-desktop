@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+  - Feature: save messages in self chat and show a bookmark icon #4674
 
 ### Changed
 
