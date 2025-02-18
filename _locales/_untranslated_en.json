@@ -47,5 +47,8 @@
   },
   "search_result_for_x":  {
     "message":"Result for \"%s\""
+  },
+  "saved_message": {
+    "message": "Saved Message"
   }
 }

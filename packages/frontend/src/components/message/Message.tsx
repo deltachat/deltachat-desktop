@@ -687,6 +687,7 @@ export default function Message(props: {
             hasLocation={hasLocation}
             timestamp={message.timestamp * 1000}
             padlock={message.showPadlock}
+            isSavedMessage={message.originalMsgId > 0}
             onClickError={openMessageInfo.bind(null, openDialog, message)}
             viewType={'VideochatInvitation'}
             tabindexForInteractiveContents={tabindexForInteractiveContents}
@@ -737,7 +738,9 @@ export default function Message(props: {
 
   /** Whether to show author name and avatar */
   const showAuthor =
-    conversationType.hasMultipleParticipants || message?.overrideSenderName
+    conversationType.hasMultipleParticipants ||
+    message?.overrideSenderName ||
+    message?.originalMsgId
 
   const hasText = text !== null && text !== ''
   const fileMime = (!isSetupmessage && message.fileMime) || null
@@ -869,6 +872,7 @@ export default function Message(props: {
               hasLocation={hasLocation}
               timestamp={message.timestamp * 1000}
               padlock={message.showPadlock}
+              isSavedMessage={message.originalMsgId > 0}
               onClickError={openMessageInfo.bind(null, openDialog, message)}
               viewType={message.viewType}
               tabindexForInteractiveContents={tabindexForInteractiveContents}
