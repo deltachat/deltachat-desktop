@@ -639,6 +639,12 @@ export default function Message(props: {
     MessageTagName = 'button'
   }
 
+  // Check if the message is saved or has a saved message
+  // in both cases we display the bookmark icon
+  const isOrHasSavedMessage = message.originalMsgId
+    ? true
+    : !!message.savedMessageId
+
   let content
   if (message.viewType === 'VideochatInvitation') {
     return (
@@ -687,7 +693,7 @@ export default function Message(props: {
             hasLocation={hasLocation}
             timestamp={message.timestamp * 1000}
             padlock={message.showPadlock}
-            isSavedMessage={message.originalMsgId > 0}
+            isSavedMessage={isOrHasSavedMessage}
             onClickError={openMessageInfo.bind(null, openDialog, message)}
             viewType={'VideochatInvitation'}
             tabindexForInteractiveContents={tabindexForInteractiveContents}
@@ -872,7 +878,7 @@ export default function Message(props: {
               hasLocation={hasLocation}
               timestamp={message.timestamp * 1000}
               padlock={message.showPadlock}
-              isSavedMessage={message.originalMsgId > 0}
+              isSavedMessage={isOrHasSavedMessage}
               onClickError={openMessageInfo.bind(null, openDialog, message)}
               viewType={message.viewType}
               tabindexForInteractiveContents={tabindexForInteractiveContents}
