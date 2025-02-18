@@ -395,24 +395,41 @@ function ChatNavButtons() {
 
   return (
     <>
-      <span className='views' data-no-drag-region>
+      <span
+        role='tablist'
+        aria-orientation='horizontal'
+        className='views'
+        data-no-drag-region
+      >
         <Button
+          role='tab'
+          id='tab-message-list-view'
           onClick={() => setChatView(ChatView.MessageList)}
           active={activeView === ChatView.MessageList}
+          aria-selected={activeView === ChatView.MessageList}
+          // FYI there are 2 components that use this ID,
+          // but they're not supposed to be rendered at the same time.
+          aria-controls='message-list-and-composer'
           aria-label={tx('chat')}
           className='navbar-button'
         >
           <Icon coloring='navbar' icon='chats' size={18} />
         </Button>
         <Button
+          role='tab'
+          id='tab-media-view'
           onClick={() => setChatView(ChatView.Media)}
           active={activeView === ChatView.Media}
+          aria-selected={activeView === ChatView.Media}
+          aria-controls='media-view'
           aria-label={tx('media')}
           className='navbar-button'
         >
           <Icon coloring='navbar' icon='image' size={18} />
         </Button>
         {settingsStore?.desktopSettings.enableOnDemandLocationStreaming && (
+          // Yes, this is not marked as `role='tab'`.
+          // I'm not sure if this is alright.
           <Button
             onClick={() => openMapWebxdc(selectedAccountId(), chatId)}
             aria-label={tx('tab_map')}
