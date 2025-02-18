@@ -418,7 +418,6 @@ function ChatNavButtons() {
         {settingsStore?.desktopSettings.enableOnDemandLocationStreaming && (
           <Button
             onClick={() => openMapWebxdc(selectedAccountId(), chatId)}
-            active={activeView === ChatView.Map}
             aria-label={tx('tab_map')}
             className='navbar-button'
           >
