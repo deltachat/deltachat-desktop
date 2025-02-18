@@ -11,7 +11,6 @@ import type { T } from '@deltachat/jsonrpc-client'
 export type AlternativeView = 'global-gallery' | null
 
 export enum ChatView {
-  Map,
   Media,
   MessageList,
 }
