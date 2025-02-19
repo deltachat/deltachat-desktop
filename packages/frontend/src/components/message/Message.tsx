@@ -301,6 +301,12 @@ function buildContextMenu(
       label: tx('react'),
       action: handleReactClick,
     },
+    // Save Message
+    {
+      label: tx('save'),
+      action: () =>
+        BackendRemote.rpc.saveMsgs(selectedAccountId(), [message.id]),
+    },
     // copy link
     link !== '' &&
       isLink && {
@@ -371,12 +377,6 @@ function buildContextMenu(
           })
         }
       },
-    },
-    // Save Message
-    {
-      label: tx('save'),
-      action: () =>
-        BackendRemote.rpc.saveMsgs(selectedAccountId(), [message.id]),
     },
     // Message Info
     {
