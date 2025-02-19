@@ -160,6 +160,7 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                             true,
                             &[
                                 // Use `with_id` instead of new, add new parameter after `handle`
+                                #[cfg(feature = "crabnebula_extras")]
                                 &MenuItem::with_id(
                                     handle,
                                     "dev_tools",
@@ -245,9 +246,10 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
             }
             MenuAction::Delete => { /* Not supported by Tauri */ }
             MenuAction::FloatOnTop => {
-                /* Not supported by Tauri
-                https://docs.rs/tauri/latest/tauri/window/struct.Window.html#method.set_visible_on_all_workspaces
-                */
+                app.get_webview_window("main")
+                    .unwrap()
+                    .set_always_on_top(true)
+                    .ok();
             }
             MenuAction::Zoom(0.6) => {
                 app.menu()
