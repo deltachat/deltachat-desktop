@@ -224,9 +224,14 @@ export default class ScreenController extends Component {
     this.changeScreen(Screens.NoAccountSelected)
   }
 
-  userFeedback(message: userFeedback | false) {
+  userFeedback(message: userFeedback | false, clickToClose = false) {
     if (message !== false && this.state.message === message) return // one at a time, cowgirl
     this.setState({ message })
+    if (!clickToClose && message && message.type !== 'error') {
+      window.setTimeout(() => {
+        this.userFeedback(false)
+      }, 3000)
+    }
   }
 
   userFeedbackClick() {
