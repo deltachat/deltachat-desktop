@@ -1109,7 +1109,7 @@ class MessageListStore extends Store<MessageListState> {
       messageCache: newMessageCache,
       messageListItems,
       oldestFetchedMessageListItemIndex,
-      newestFetchedMessageListItemIndex: newestFetchedMessageListItemIndex,
+      newestFetchedMessageListItemIndex,
       viewState: newViewState,
       jumpToMessageStack,
     })
