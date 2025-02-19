@@ -50,5 +50,8 @@
   },
   "saved_message": {
     "message": "Saved Message"
+  },
+  "jump_to_original_message": {
+    "message": "Jump to original message"
   }
 }
