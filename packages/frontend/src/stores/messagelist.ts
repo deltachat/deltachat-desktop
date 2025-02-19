@@ -950,8 +950,8 @@ class MessageListStore extends Store<MessageListState> {
     }
 
     // calculate page indexes, so that jumpToMessageId is in the middle of the page
-    let oldestFetchedMessageListItemIndex = -1
-    let newestFetchedMessageListItemIndex = -1
+    let oldestFetchedMessageListItemIndex: number
+    let newestFetchedMessageListItemIndex: number
     let newMessageCache: MessageListState['messageCache']
     let newViewState: ChatViewState
     if (messageListItems.length === 0) {
@@ -962,6 +962,8 @@ class MessageListStore extends Store<MessageListState> {
         )
       }
 
+      oldestFetchedMessageListItemIndex = -1
+      newestFetchedMessageListItemIndex = -1
       newMessageCache = {}
       // Same as in `loadChat()`
       newViewState = ChatViewReducer.selectChat(this.state.viewState)
