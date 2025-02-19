@@ -107,12 +107,13 @@ export function QrCodeShowQrInner({
   const tx = useTranslationFunction()
 
   const onCopy = () => {
-    runtime.writeClipboardText(qrCode).then(_ =>
+    runtime.writeClipboardText(qrCode).then(_ => {
       userFeedback({
         type: 'success',
         text: tx('copy_qr_data_success'),
       })
-    )
+      onClose()
+    })
   }
 
   const [svgUrl, setSvgUrl] = useState<string | undefined>(undefined)
