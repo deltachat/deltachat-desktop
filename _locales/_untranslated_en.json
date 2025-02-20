@@ -44,5 +44,11 @@
   },
   "multidevice_connection_takes_too_long": {
     "message": "This takes longer than expected 🐌 make sure both devices are on the same Wi-Fi or network and check troubleshooting"
+  },
+  "saved_message": {
+    "message": "Saved Message"
+  },
+  "jump_to_original_message": {
+    "message": "Jump to original message"
   }
 }

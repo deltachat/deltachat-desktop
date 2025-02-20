@@ -169,6 +169,14 @@
       );
     }
 
+    & > .saved-message-icon {
+      @include color-svg(
+        './images/icons/bookmark-filled.svg',
+        var(--messagePadlockIncoming),
+        100%
+      );
+    }
+
     & > .date {
       color: var(--messageMetadataIncoming);
     }
@@ -207,6 +215,14 @@
     & > .location-icon {
       @include color-svg(
         './images/map-marker.svg',
+        var(--messagePadlockOutgoing),
+        100%
+      );
+    }
+
+    & > .saved-message-icon {
+      @include color-svg(
+        './images/icons/bookmark-filled.svg',
         var(--messagePadlockOutgoing),
         100%
       );
@@ -289,6 +305,14 @@
 
     & > .location-icon {
       @include color-svg('./images/map-marker.svg', white, 100%);
+    }
+
+    & > .saved-message-icon {
+      @include color-svg(
+        './images/icons/bookmark-filled.svg',
+        white,
+        100%
+      );
     }
   }
 
@@ -624,6 +648,14 @@
 
       & > .location-icon {
         @include color-svg('./images/map-marker.svg', white, 100%);
+      }
+
+      & > .saved-message-icon {
+        @include color-svg(
+          './images/icons/bookmark-filled.svg',
+          white,
+          100%
+        );
       }
 
       & > .date {

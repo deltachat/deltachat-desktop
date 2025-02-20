@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+  - Feature: save messages in self chat and show a bookmark icon #4674
 
 ### Changed
 - update `esbuild` from `0.23.0` to `0.25.0`
