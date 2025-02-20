@@ -102,11 +102,8 @@ module.exports = async context => {
 
   // copy map xdc
   // ---------------------------------------------------------------------------------
-  if (env['NO_ASAR']) {
-    await copyMapXdc(resources_dir, source_dir, false)
-  } else {
-    await copyMapXdc(resources_dir, source_dir, true)
-  }
+  const asar = env['NO_ASAR'] ? false : true
+  await copyMapXdc(resources_dir, source_dir, asar)
 }
 
 async function packageMSVCRedist(context) {
