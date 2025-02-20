@@ -94,15 +94,15 @@ export function keyDownEvent2Action(
       // } else if (ev.altKey && ev.code === 'ArrowLeft') {
       // disabled until we find a better keycombination (see https://github.com/deltachat/deltachat-desktop/issues/1796)
       //   return KeybindAction.ChatList_ScrollToSelectedChat
-    } else if (ev.ctrlKey && ev.code === 'KeyF') {
+    } else if (ev.ctrlKey && (ev.key === 'f' || ev.code === 'KeyF')) {
       // https://github.com/deltachat/deltachat-desktop/issues/4579
       if (ev.shiftKey) {
         return KeybindAction.ChatList_SearchInChat
       }
       return KeybindAction.ChatList_FocusSearchInput
-    } else if (ev.ctrlKey && ev.code === 'KeyN') {
+    } else if (ev.ctrlKey && (ev.key === 'n' || ev.code === 'KeyN')) {
       return KeybindAction.NewChat_Open
-    } else if (ev.ctrlKey && ev.code === 'KeyM') {
+    } else if (ev.ctrlKey && (ev.key === 'm' || ev.code === 'KeyM')) {
       return KeybindAction.Composer_Focus
     } else if (
       // Also consider adding this to `ev.repeat` when it stops being so sluggish
@@ -117,7 +117,10 @@ export function keyDownEvent2Action(
       !(ev.ctrlKey && ev.metaKey) // Both at the same time
     ) {
       return KeybindAction.Composer_SelectReplyToDown
-    } else if ((ev.metaKey || ev.ctrlKey) && ev.code === 'Comma') {
+    } else if (
+      (ev.metaKey || ev.ctrlKey) &&
+      (ev.key === ',' || ev.code === 'Comma')
+    ) {
       return KeybindAction.Settings_Open
     } else if (ev.code === 'Escape') {
       if ((ev.target as any).id === 'chat-list-search') {
@@ -141,7 +144,10 @@ export function keyDownEvent2Action(
       if ((ev.target as HTMLElement)?.id === 'composer-textarea') {
         return KeybindAction.MessageList_PageDown
       }
-    } else if ((ev.metaKey || ev.ctrlKey) && ev.code === 'Slash') {
+    } else if (
+      (ev.metaKey || ev.ctrlKey) &&
+      (ev.key === '/' || ev.code === 'Slash')
+    ) {
       return KeybindAction.KeybindingCheatSheet_Open
     }
   } else {
