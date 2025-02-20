@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- add "learn more"-button to manage-key section that links to local help #4684
 
 ### Changed
 - update `esbuild` from `0.23.0` to `0.25.0`

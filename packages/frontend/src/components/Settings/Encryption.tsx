@@ -20,6 +20,7 @@ import useDialog from '../../hooks/dialog/useDialog'
 import type { DialogProps } from '../../contexts/DialogContext'
 import ManageKeys from './ManageKeys'
 import { SettingsStoreState } from '../../stores/settings'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 type Props = {
   settingsStore: SettingsStoreState
@@ -40,6 +41,9 @@ export default function Encryption({ settingsStore }: Props) {
       <ManageKeys />
       <SettingsButton onClick={() => openDialog(SendAutocryptSetupMessage)}>
         {tx('autocrypt_send_asm_button')}
+      </SettingsButton>
+      <SettingsButton onClick={() => runtime.openHelpWindow('importkey')}>
+        {tx('learn_more')}
       </SettingsButton>
     </>
   )
