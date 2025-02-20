@@ -102,8 +102,10 @@ module.exports = async context => {
 
   // copy map xdc
   // ---------------------------------------------------------------------------------
-  if (!env['NO_ASAR']) {
-    await copyMapXdcToUnpackedASAR(resources_dir, source_dir)
+  if (env['NO_ASAR']) {
+    await copyMapXdc(resources_dir, source_dir, false)
+  } else {
+    await copyMapXdc(resources_dir, source_dir, true)
   }
 }
 
@@ -134,10 +136,10 @@ async function packageMSVCRedist(context) {
   )
 }
 
-async function copyMapXdcToUnpackedASAR(resources_dir, source_dir) {
+async function copyMapXdc(resources_dir, source_dir, asar) {
   const destination = join(
     resources_dir,
-    'app.asar.unpacked',
+    asar ? 'app.asar.unpacked' : 'app',
     'html-dist',
     'xdcs'
   )

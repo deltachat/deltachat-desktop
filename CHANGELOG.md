@@ -5,10 +5,11 @@
 ### Added
 
 ### Changed
-- update `esbuild` from `0.23.0` to `0.25.0`
+- update `esbuild` from `0.23.0` to `0.25.0` #4643
 
 ### Fixed
 - message list being empty when double-clicking the chat before it has loaded (again) #4647
+- fix missing maps.xdc in flatpak build #4682
 
 <a id="1_54_1"></a>
 
