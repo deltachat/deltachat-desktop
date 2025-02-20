@@ -102,6 +102,7 @@ module.exports = async context => {
 
   // copy map xdc
   // ---------------------------------------------------------------------------------
+  // asar is electrons archive format, flatpak doesn't use it. read more about what asar is on https://www.electronjs.org/docs/latest/glossary#asar
   const asar = env['NO_ASAR'] ? false : true
   await copyMapXdc(resources_dir, source_dir, asar)
 }
