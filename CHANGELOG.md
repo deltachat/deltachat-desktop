@@ -7,6 +7,7 @@
 ### Changed
 - update `esbuild` from `0.23.0` to `0.25.0` #4643
 - extend some shortcuts to listen to key OR code #4685
+- update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.155.6`
 
 ### Fixed
 - message list being empty when double-clicking the chat before it has loaded (again) #4647
