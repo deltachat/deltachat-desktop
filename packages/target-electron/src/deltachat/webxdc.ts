@@ -86,16 +86,16 @@ const BOUNDS_UI_CONFIG_PREFIX = 'ui.desktop.webxdcBounds'
 
 type Size = { width: number; height: number }
 
-export default class DCWebxdc {
-  private DEFAULT_SIZE_WEBXDC: Size = defaultSize({
-    width: 375,
-    height: 667,
-  })
-  private DEFAULT_SIZE_MAP: Size = defaultSize({
-    width: 1000,
-    height: 800,
-  })
+const DEFAULT_SIZE_WEBXDC: Size = {
+  width: 375,
+  height: 667,
+}
+const DEFAULT_SIZE_MAP: Size = {
+  width: 1000,
+  height: 800,
+}
 
+export default class DCWebxdc {
   constructor(private controller: DeltaChatController) {
     // icon protocol
     app.whenReady().then(() => {
@@ -125,7 +125,7 @@ export default class DCWebxdc {
       _ev: IpcMainInvokeEvent,
       msg_id: number,
       p: DcOpenWebxdcParameters,
-      defaultSize: Size = this.DEFAULT_SIZE_WEBXDC
+      defaultSize: Size = DEFAULT_SIZE_WEBXDC
     ) => {
       const { webxdcInfo, chatName, displayname, accountId, href } = p
       const addr = webxdcInfo.selfAddr
@@ -302,7 +302,8 @@ export default class DCWebxdc {
       })
       setContentProtection(webxdcWindow)
       // reposition the window to last position (or default)
-      webxdcWindow.setBounds(lastBounds || defaultSize, true)
+      const bounds = lastBounds || adjustDefaultSize(defaultSize)
+      webxdcWindow.setBounds(bounds, true)
       // show after repositioning to avoid blinking
       webxdcWindow.show()
       open_apps[`${accountId}.${msg_id}`] = {
@@ -762,7 +763,7 @@ export default class DCWebxdc {
               },
               // special behaviour for the map dc integration,
               // (in this case bigger landscape window)
-              this.DEFAULT_SIZE_MAP
+              DEFAULT_SIZE_MAP
             )
           }
         }
@@ -921,12 +922,16 @@ export async function webxdcStartUpCleanup() {
   }
 }
 
-function defaultSize(default_size: Size): Size {
+/**
+ * Make sure a default size doesn't extend the size
+ * of the primary display work area.
+ */
+function adjustDefaultSize(size: Size): Size {
   const { height: screenHeight, width: screenWidth } =
     screen.getPrimaryDisplay().workAreaSize
   return {
-    width: Math.min(default_size.width, screenWidth),
-    height: Math.min(default_size.height, screenHeight),
+    width: Math.min(size.width, screenWidth),
+    height: Math.min(size.height, screenHeight),
   }
 }
 
