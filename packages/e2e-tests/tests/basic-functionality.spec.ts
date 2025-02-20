@@ -88,7 +88,7 @@ test('start chat with user', async ({ page, context, browserName }) => {
   // copy invite link from user A
   await page.getByTestId('qr-scan-button').click()
   await page.getByTestId('copy-qr-code').click()
-  await page.getByTestId('qr-dialog').getByTestId('close').click()
+  // await page.getByTestId('qr-dialog').getByTestId('close').click()
 
   await switchToProfile(page, userB.id)
   // paste invite link in account of userB
