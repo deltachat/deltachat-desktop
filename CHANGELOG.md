@@ -620,7 +620,7 @@
 ## [1.45.1] - 2024-06-04
 
 ### Added
-- Added a Small Screen Mode, when you rezise the window to be small it will only show the chatlist with account sidebar or the Chat View with a back button.
+- Added a Small Screen Mode, when you resize the window to be small it will only show the chatlist with account sidebar or the Chat View with a back button.
 - show VCard attachment as VCard in message list #3840
 - add contact from VCard & start chat on click #3840
 - Webxdc realtime support #3741
