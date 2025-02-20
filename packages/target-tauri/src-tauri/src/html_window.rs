@@ -1,14 +1,32 @@
-use std::{str::FromStr, sync::Arc};
+use std::{path::PathBuf, str::FromStr, sync::Arc};
 
-use log::{error, info, warn};
+use log::{debug, error, info, warn};
+use serde::Serialize;
 use tauri::{
-    webview::WebviewBuilder, LogicalPosition, LogicalSize, Manager, Url, Webview, WebviewUrl,
-    WebviewWindow, WebviewWindowBuilder, Window, WindowBuilder, WindowEvent, WindowSizeConstraints,
+    async_runtime::block_on,
+    menu::{CheckMenuItem, Menu, MenuItem},
+    webview::WebviewBuilder,
+    LogicalPosition, LogicalSize, Manager, PhysicalPosition, Url, Webview, WebviewUrl, Window,
+    WindowBuilder, WindowEvent,
 };
 use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_opener::OpenerExt;
+use tauri_plugin_store::StoreExt;
 
-use crate::settings::get_content_protection;
+use crate::{
+    settings::{
+        get_content_protection, get_setting_bool_or, CONFIG_FILE,
+        HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_DEFAULT, HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_KEY,
+        HTML_EMAIL_WARNING_DEFAULT, HTML_EMAIL_WARNING_KEY,
+    },
+    state::html_email_instances::InnerHtmlEmailInstanceData,
+    temp_file::get_temp_folder_path,
+    HtmlEmailInstancesState,
+};
+
+const HEADER_HEIGHT: f64 = 100.;
+const DEFAULT_WINDOW_WIDTH: f64 = 800.;
+const DEFAULT_WINDOW_HEIGHT: f64 = 600.;
 
 #[derive(Debug, thiserror::Error)]
 pub(crate) enum Error {
@@ -16,6 +34,14 @@ pub(crate) enum Error {
     Tauri(#[from] tauri::Error),
     // #[error(transparent)]
     // Wry(#[from] wry::Error),
+    #[error("window label not found in HtmlEmailInstancesState")]
+    WindowNotFoundInState,
+    #[error(transparent)]
+    Store(#[from] tauri_plugin_store::Error),
+    #[error("user canceled")]
+    UserCanceled,
+    #[error(transparent)]
+    TokioOneshotRecv(#[from] tokio::sync::oneshot::error::RecvError),
 }
 
 impl serde::Serialize for Error {
@@ -27,11 +53,148 @@ impl serde::Serialize for Error {
     }
 }
 
-const HEADER_HEIGHT: f64 = 100.;
+async fn set_load_remote_content(webview: &tauri::Webview, new_state: bool) -> Result<(), Error> {
+    let instance_state = webview.state::<HtmlEmailInstancesState>();
+    instance_state
+        .set_network_allow_state(webview.window().label(), new_state)
+        .await;
+
+    // reload header & html email webviews to apply changes
+    for mut webview in webview.window().webviews() {
+        if webview.label().ends_with("-mail") {
+            // TODO: wry webview.reload is missing
+            // this is a hack to emulate reload
+            // IDEA: better error handling
+            let url = webview.url().unwrap();
+            webview
+                .navigate(Url::from_str("about:blank").unwrap())
+                .unwrap();
+            webview.navigate(url).unwrap();
+        }
+    }
+    Ok(())
+}
+
+#[tauri::command]
+pub(crate) async fn html_email_set_load_remote_content(
+    app: tauri::AppHandle,
+    webview: tauri::Webview,
+    load_remote_content: bool,
+) -> Result<(), Error> {
+    let desktop_settings = app.store(CONFIG_FILE)?;
+    let warning = get_setting_bool_or(
+        desktop_settings.get(HTML_EMAIL_WARNING_KEY),
+        HTML_EMAIL_WARNING_DEFAULT,
+    );
+
+    if warning && load_remote_content {
+        let (tx, rx) = tokio::sync::oneshot::channel::<bool>();
+
+        app.dialog()
+            .message("tx('load_remote_content_ask')")
+            .parent(&webview.window())
+            .buttons(tauri_plugin_dialog::MessageDialogButtons::OkCancelCustom(
+                // TODO use translation strings, as soon as translations are avaialble in rust backend
+                "Yes".to_owned(),
+                "No".to_owned(),
+            ))
+            .show(|answer| tx.send(answer).unwrap());
+        if !rx.await? {
+            return Err(Error::UserCanceled);
+        }
+    }
+
+    set_load_remote_content(&webview, load_remote_content).await
+}
+
+#[tauri::command]
+pub(crate) fn html_email_open_menu(
+    app: tauri::AppHandle,
+    webview: tauri::Webview,
+    html_instances_state: tauri::State<HtmlEmailInstancesState>,
+) -> Result<(), Error> {
+    let desktop_settings = app.store(CONFIG_FILE)?;
+    let always_load = get_setting_bool_or(
+        desktop_settings.get(HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_KEY),
+        HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_DEFAULT,
+    );
+    let warning = get_setting_bool_or(
+        desktop_settings.get(HTML_EMAIL_WARNING_KEY),
+        HTML_EMAIL_WARNING_DEFAULT,
+    );
+
+    let instance_state = block_on(html_instances_state.get(webview.window().label()))
+        .ok_or(Error::WindowNotFoundInState)?;
+
+    let always_load_remote_images = CheckMenuItem::new(
+        &app,
+        "tx('always_load_remote_images')",
+        true,
+        always_load,
+        None::<&str>,
+    )?;
+    let show_warning = CheckMenuItem::new(&app, "tx('show_warning')", true, warning, None::<&str>)?;
+
+    let menu = if instance_state.is_contact_request {
+        Menu::with_items(&app, &[&show_warning])
+    } else {
+        Menu::with_items(&app, &[&always_load_remote_images, &show_warning])
+    }?;
+
+    // treefit: I haven't found an easy way to get the title bar offset,
+    // so now we just spawn it at mouse position
+    webview.window().popup_menu(&menu)?;
+    webview.window().on_menu_event(move |window, event| {
+        // IDEA: better error handling
+        let desktop_settings = window.store(CONFIG_FILE).expect("config file not found");
+        if event.id() == always_load_remote_images.id() {
+            let new_always_load = !always_load;
+            desktop_settings.set(HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_KEY, new_always_load);
+            block_on(set_load_remote_content(&webview, new_always_load)).unwrap();
+
+            // TODO: implement reload in tauri
+            webview.eval("location.reload()").unwrap();
+        }
+        if event.id() == show_warning.id() {
+            desktop_settings.set(HTML_EMAIL_WARNING_KEY, !warning);
+        }
+    });
+    Ok(())
+}
+
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct HtmlEmailInfo {
+    subject: String,
+    sender: String, // this is called "from" in electron edition
+    receive_time: String,
+    toggle_network: bool,
+    network_button_label_text: String,
+}
+
+#[tauri::command]
+pub(crate) fn get_html_window_info(
+    webview: tauri::Webview,
+    html_instances_state: tauri::State<HtmlEmailInstancesState>,
+) -> Result<HtmlEmailInfo, Error> {
+    let label = webview.window().label().to_owned();
+    // IDEA: can we make this function async without getting an error on html_instances_state
+    let instance =
+        block_on(html_instances_state.get(&label)).ok_or(Error::WindowNotFoundInState)?;
+
+    Ok(HtmlEmailInfo {
+        subject: instance.subject,
+        sender: instance.sender,
+        receive_time: instance.receive_time,
+        toggle_network: instance.network_allow_state,
+        network_button_label_text: format!("tx(\"load_remote_content\")"),
+    })
+}
 
 #[tauri::command]
 pub(crate) fn open_html_window(
     app: tauri::AppHandle,
+    html_instances_state: tauri::State<HtmlEmailInstancesState>,
     window_id: &str,
     account_id: u32,
     is_contact_request: bool,
@@ -53,20 +216,40 @@ pub(crate) fn open_html_window(
         }
     }
 
-    let width = 800.;
-    let height = 600.;
+    let store = app.store(CONFIG_FILE)?;
+    let always_load_remote_content = get_setting_bool_or(
+        store.get(HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_KEY),
+        HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_DEFAULT,
+    );
+    let toggle_network_initial_state = always_load_remote_content && !is_contact_request;
+
+    block_on(html_instances_state.add(
+        &window_id,
+        InnerHtmlEmailInstanceData {
+            account_id,
+            is_contact_request,
+            subject: subject.to_owned(),
+            sender: sender.to_owned(),
+            receive_time: receive_time.to_owned(),
+            html_content: Arc::new(content.to_owned()),
+            network_allow_state: toggle_network_initial_state,
+        },
+    ));
 
     let window = WindowBuilder::new(&app, &window_id)
-        .inner_size(width, height)
+        .inner_size(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT)
         .build()?;
 
     let header_view = window.add_child(
         WebviewBuilder::new(
             &format!("{window_id}-header"),
-            WebviewUrl::External("https://github.com/tauri-apps/tauri".parse().unwrap()),
+            WebviewUrl::App(
+                PathBuf::from_str("tauri_html_email_view/html_email_view.html")
+                    .expect("path conversion failed"),
+            ),
         ),
         LogicalPosition::new(0., 0.),
-        LogicalSize::new(width, HEADER_HEIGHT),
+        LogicalSize::new(DEFAULT_WINDOW_WIDTH, HEADER_HEIGHT),
     )?;
 
     let app_arc = Arc::new(app);
@@ -136,10 +319,21 @@ pub(crate) fn open_html_window(
         }
     });
 
-    // TODO
-    // mail_view_builder.data_directory(data_directory) -> makes sense to point to tmp dir
-    // mail_view_builder.data_store_identifier(data_store_identifier)
-
+    // change data directory and enable incognito mode, so html email gets different browsing context.
+    #[cfg(target_vendor = "apple")]
+    {
+        // for now using this well known id, but later we should really change it to use `nonPersistent` data store
+        mail_view_builder = mail_view_builder
+            .data_store_identifier([2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]);
+        // IDEA: add `WKWebsiteDataStore.nonPersistent()` to tauri & wry
+        // https://developer.apple.com/documentation/webkit/wkwebsitedatastore
+    }
+    #[allow(unused_variables)]
+    let tmp_data_dir = get_temp_folder_path(&app)?.join(uuid::Uuid::new_v4().to_string());
+    #[cfg(not(target_vendor = "apple"))]
+    {
+        let data_dir = mail_view_builder.data_directory(&tmp_data_dir);
+    }
     #[cfg(not(target_os = "android"))]
     {
         mail_view_builder = mail_view_builder.incognito(true);
@@ -147,7 +341,7 @@ pub(crate) fn open_html_window(
     let mail_view = window.add_child(
         mail_view_builder,
         LogicalPosition::new(0., HEADER_HEIGHT),
-        LogicalSize::new(width, height - HEADER_HEIGHT),
+        LogicalSize::new(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT - HEADER_HEIGHT),
     )?;
 
     // disable javascript & load from string on macOS
@@ -219,6 +413,24 @@ pub(crate) fn open_html_window(
         if let WindowEvent::Resized(_) | WindowEvent::ScaleFactorChanged { .. } = event {
             update_webview_bounds(&window_arc, &header_view_arc, &mail_view_arc);
         }
+        if let WindowEvent::Destroyed = event {
+            if let Err(err) = mail_view_arc.clear_all_browsing_data() {
+                error!("failed to clear browsing data after html email window closed: {err:?}");
+            }
+            #[cfg(not(target_vendor = "apple"))]
+            {
+                let tmp_data_dir = tmp_data_dir.clone();
+                let _ = spawn(async {
+                    if let Err(err) = remove_dir(tmp_data_dir).await {
+                        error!(
+                            "failed to remove tmp_data_dir after html email window closed: {err:?}"
+                        )
+                    }
+                });
+            }
+            let html_instances_state = window_arc.app_handle().state::<HtmlEmailInstancesState>();
+            block_on(html_instances_state.remove(&window_id));
+        }
     });
 
     // content protection
@@ -228,8 +440,6 @@ pub(crate) fn open_html_window(
             window.set_content_protected(true)?;
         }
     }
-
-    //    TODO: read preference about loading remote content
 
     // TODO: serve html content
 

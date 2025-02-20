@@ -2,7 +2,9 @@ use std::time::SystemTime;
 
 use clipboard::copy_image_to_clipboard;
 use settings::load_and_apply_desktop_settings_on_startup;
-use state::{app::AppState, deltachat::DeltaChatAppState};
+use state::{
+    app::AppState, deltachat::DeltaChatAppState, html_email_instances::HtmlEmailInstancesState,
+};
 use tauri::Manager;
 mod app_path;
 mod blobs;
@@ -116,6 +118,9 @@ pub fn run() {
             settings::change_desktop_settings_apply_side_effects,
             help_window::open_help_window,
             html_window::open_html_window,
+            html_window::get_html_window_info,
+            html_window::html_email_open_menu,
+            html_window::html_email_set_load_remote_content,
         ])
         .register_asynchronous_uri_scheme_protocol("webxdc-icon", webxdc::webxdc_icon_protocol)
         .register_asynchronous_uri_scheme_protocol("dcblob", blobs::delta_blobs_protocol)
@@ -171,6 +176,7 @@ pub fn run() {
             app.manage(tauri::async_runtime::block_on(DeltaChatAppState::try_new(
                 app,
             ))?);
+            app.manage(HtmlEmailInstancesState::new());
             app.state::<AppState>()
                 .log_duration_since_startup("setup done");
 

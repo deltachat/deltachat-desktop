@@ -3,9 +3,16 @@ use log::warn;
 use tauri::{AppHandle, Manager};
 use tauri_plugin_store::StoreExt;
 
+pub(crate) const CONFIG_FILE: &str = "config.json";
+
 pub(crate) const ZOOM_FACTOR_KEY: &str = "zoomFactor";
 pub(crate) const CONTENT_PROTECTION_KEY: &str = "contentProtectionEnabled";
 pub(crate) const CONTENT_PROTECTION_DEFAULT: bool = false;
+pub(crate) const HTML_EMAIL_WARNING_KEY: &str = "HTMLEmailAskForRemoteLoadingConfirmation";
+pub(crate) const HTML_EMAIL_WARNING_DEFAULT: bool = true;
+pub(crate) const HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_KEY: &str =
+    "HTMLEmailAlwaysLoadRemoteContent";
+pub(crate) const HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_DEFAULT: bool = false;
 
 // runtime calls this when desktop settings change
 #[tauri::command]
@@ -27,7 +34,7 @@ pub(crate) fn load_and_apply_desktop_settings_on_startup(app: &AppHandle) -> any
 }
 
 pub(crate) fn apply_zoom_factor(app: &AppHandle) -> anyhow::Result<()> {
-    let store = app.store("config.json")?;
+    let store = app.store(CONFIG_FILE)?;
     let zoom_factor: f64 = store
         .get("ZOOM_FACTOR_KEY")
         .and_then(|f| f.as_f64())
@@ -59,7 +66,7 @@ pub(crate) fn apply_content_protection(app: &AppHandle) -> anyhow::Result<()> {
 }
 
 pub(crate) fn get_content_protection(app: &AppHandle) -> bool {
-    match app.store("config.json") {
+    match app.store(CONFIG_FILE) {
         Ok(store) => store
             .get(CONTENT_PROTECTION_KEY)
             .map_or(Some(CONTENT_PROTECTION_DEFAULT), |f| f.as_bool())
@@ -69,4 +76,14 @@ pub(crate) fn get_content_protection(app: &AppHandle) -> bool {
             CONTENT_PROTECTION_DEFAULT
         }
     }
+}
+
+pub(crate) fn get_setting_bool_or(
+    setting_load_result: Option<serde_json::Value>,
+    default_value: bool,
+) -> bool {
+    setting_load_result
+        .map(|v| v.as_bool())
+        .flatten()
+        .unwrap_or(default_value)
 }
