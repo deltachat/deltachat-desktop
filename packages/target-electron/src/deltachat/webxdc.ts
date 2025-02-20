@@ -23,10 +23,7 @@ import { readdir, stat, rmdir, writeFile, readFile } from 'fs/promises'
 import { existsSync } from 'fs'
 import type DeltaChatController from './controller.js'
 import { getLogger } from '../../../shared/logger.js'
-import {
-  getConfigPath,
-  htmlDistDir,
-} from '../application-constants.js'
+import { getConfigPath, htmlDistDir } from '../application-constants.js'
 import { truncateText } from '@deltachat-desktop/shared/util.js'
 import { tx } from '../load-translations.js'
 import { Bounds, DcOpenWebxdcParameters } from '../../../shared/shared-types.js'
@@ -87,17 +84,18 @@ const WRAPPER_PATH = 'webxdc-wrapper.45870014933640136498.html'
 
 const BOUNDS_UI_CONFIG_PREFIX = 'ui.desktop.webxdcBounds'
 
-const DEFAULT_BOUNDS_WEBXDC = {
-  width: 375,
-  height: 667,
-}
-
-const DEFAULT_BOUNDS_MAP = {
-  width: 1000,
-  height: 800,
-}
+type Size = { width: number; height: number }
 
 export default class DCWebxdc {
+  private DEFAULT_SIZE_WEBXDC: Size = defaultSize({
+    width: 375,
+    height: 667,
+  })
+  private DEFAULT_SIZE_MAP: Size = defaultSize({
+    width: 1000,
+    height: 800,
+  })
+
   constructor(private controller: DeltaChatController) {
     // icon protocol
     app.whenReady().then(() => {
@@ -127,7 +125,7 @@ export default class DCWebxdc {
       _ev: IpcMainInvokeEvent,
       msg_id: number,
       p: DcOpenWebxdcParameters,
-      is_maps_xdc = false // special behaviour for the map dc integration (in this case bigger landscape window)
+      defaultSize: Size = this.DEFAULT_SIZE_WEBXDC
     ) => {
       const { webxdcInfo, chatName, displayname, accountId, href } = p
       const addr = webxdcInfo.selfAddr
@@ -284,11 +282,7 @@ export default class DCWebxdc {
 
       const app_icon = icon_blob && nativeImage?.createFromBuffer(icon_blob)
 
-      const lastBounds = await this.getLastBounds(
-        accountId,
-        msg_id,
-        is_maps_xdc ? DEFAULT_BOUNDS_MAP : DEFAULT_BOUNDS_WEBXDC
-      )
+      const lastBounds = await this.getLastBounds(accountId, msg_id)
       const webxdcWindow = new BrowserWindow({
         webPreferences: {
           partition: partitionFromAccountId(accountId),
@@ -308,7 +302,7 @@ export default class DCWebxdc {
       })
       setContentProtection(webxdcWindow)
       // reposition the window to last position (or default)
-      webxdcWindow.setBounds(lastBounds, true)
+      webxdcWindow.setBounds(lastBounds || defaultSize, true)
       // show after repositioning to avoid blinking
       webxdcWindow.show()
       open_apps[`${accountId}.${msg_id}`] = {
@@ -766,7 +760,7 @@ export default class DCWebxdc {
                 webxdcInfo: messageWithMap.webxdcInfo,
                 href: '',
               },
-              true
+              this.DEFAULT_SIZE_MAP
             )
           }
         }
@@ -780,28 +774,20 @@ export default class DCWebxdc {
 
   async getLastBounds(
     accountId: number,
-    msgId: number,
-    default_bounds: { width: number; height: number }
-  ): Promise<Partial<Bounds>> {
-    const { height: screenHeight, width: screenWidth } =
-      screen.getPrimaryDisplay().workAreaSize
-    let bounds = {
-      width: Math.min(default_bounds.width, screenWidth),
-      height: Math.min(default_bounds.height, screenHeight),
-    }
-
+    msgId: number
+  ): Promise<Bounds | null> {
     try {
       const raw = await this.rpc.getConfig(
         accountId,
         `${BOUNDS_UI_CONFIG_PREFIX}.${msgId}`
       )
       if (raw) {
-        bounds = JSON.parse(raw)
+        return JSON.parse(raw)
       }
     } catch (error) {
       log.debug('failed to retrieve bounds for webxdc', error)
     }
-    return bounds
+    return null
   }
 
   setLastBounds(accountId: number, msgId: number, bounds: Bounds) {
@@ -930,6 +916,15 @@ export async function webxdcStartUpCleanup() {
     }
   } catch (error) {
     log.warn('webxdc cleanup failed', error)
+  }
+}
+
+function defaultSize(default_size: Size): Size {
+  const { height: screenHeight, width: screenWidth } =
+    screen.getPrimaryDisplay().workAreaSize
+  return {
+    width: Math.min(default_size.width, screenWidth),
+    height: Math.min(default_size.height, screenHeight),
   }
 }
 
