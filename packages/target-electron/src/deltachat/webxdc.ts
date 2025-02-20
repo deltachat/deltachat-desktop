@@ -929,7 +929,7 @@ export async function webxdcStartUpCleanup() {
 }
 
 /**
- * Make sure a default size doesn't extend the primary display work area.
+ * Make sure a size doesn't extend the primary display work area.
  */
 function adjustSize(size: Size): Size {
   const { height: screenHeight, width: screenWidth } =
