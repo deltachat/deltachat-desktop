@@ -5,6 +5,7 @@
 ### Added
 
 ### Changed
+- extend some shortcuts to listen to key OR code #4685
 - update `esbuild` from `0.23.0` to `0.25.0`
 
 ### Fixed
