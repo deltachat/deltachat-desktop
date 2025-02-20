@@ -1,7 +1,8 @@
+// FYI there is also `MainScreen/styles.module.scss`.
+
 .main-screen {
   flex-grow: 1;
   display: flex;
-  flex-direction: column;
   position: relative;
   overflow: hidden;
 
@@ -14,32 +15,6 @@
     &:hover {
       background-color: rgba(143, 153, 168, 0.15);
     }
-  }
-
-  &.small-screen {
-    .message-list-and-composer,
-    .chat-list,
-    .media-view {
-      width: unset;
-      flex-grow: 1;
-    }
-
-    &.chat-view-open {
-      .chat-list {
-        display: none;
-      }
-    }
-
-    &:not(.chat-view-open) {
-      .message-list-and-composer {
-        display: none;
-      }
-    }
-  }
-
-  .main-app-content {
-    display: flex;
-    flex-grow: 1;
   }
 
   .navbar-chat-name {

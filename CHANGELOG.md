@@ -6,9 +6,13 @@
 
 ### Changed
 - extend some shortcuts to listen to key OR code #4685
+- update `esbuild` from `0.23.0` to `0.25.0`
 
 ### Fixed
 - message list being empty when double-clicking the chat before it has loaded (again) #4647
+- accessibility: improve tab order of the app #4672
+- other minor accessibility improvements #4675
+- improve performance a little #4512
 
 <a id="1_54_1"></a>
 
@@ -620,7 +624,7 @@
 ## [1.45.1] - 2024-06-04
 
 ### Added
-- Added a Small Screen Mode, when you rezise the window to be small it will only show the chatlist with account sidebar or the Chat View with a back button.
+- Added a Small Screen Mode, when you resize the window to be small it will only show the chatlist with account sidebar or the Chat View with a back button.
 - show VCard attachment as VCard in message list #3840
 - add contact from VCard & start chat on click #3840
 - Webxdc realtime support #3741

@@ -3,7 +3,7 @@ import { Component } from 'react'
 import { DcEventType } from '@deltachat/jsonrpc-client'
 import { debounce } from 'debounce'
 
-import MainScreen from './components/screens/MainScreen'
+import MainScreen from './components/screens/MainScreen/MainScreen'
 import { getLogger } from '../../shared/logger'
 import AccountSetupScreen from './components/screens/AccountSetupScreen'
 import WelcomeScreen from './components/screens/WelcomeScreen'
@@ -224,9 +224,14 @@ export default class ScreenController extends Component {
     this.changeScreen(Screens.NoAccountSelected)
   }
 
-  userFeedback(message: userFeedback | false) {
+  userFeedback(message: userFeedback | false, clickToClose = false) {
     if (message !== false && this.state.message === message) return // one at a time, cowgirl
     this.setState({ message })
+    if (!clickToClose && message && message.type !== 'error') {
+      window.setTimeout(() => {
+        this.userFeedback(false)
+      }, 3000)
+    }
   }
 
   userFeedbackClick() {

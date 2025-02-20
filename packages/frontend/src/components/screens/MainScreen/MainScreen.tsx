@@ -1,3 +1,4 @@
+import styles from './styles.module.scss'
 import React, {
   useState,
   useRef,
@@ -7,35 +8,36 @@ import React, {
 } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
-import Gallery from '../Gallery'
-import { useThreeDotMenu } from '../ThreeDotMenu'
-import ChatList from '../chat/ChatList'
-import { Avatar } from '../Avatar'
-import { Navbar, NavbarGroupLeft, NavbarGroupRight } from '../Navbar'
-import ConnectivityToast from '../ConnectivityToast'
-import MailingListProfile from '../dialogs/MessageListProfile'
-import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
-import { Type } from '../../backend-com'
-import { InlineVerifiedIcon } from '../VerifiedIcon'
-import Button from '../Button'
-import Icon from '../Icon'
-import SearchInput from '../SearchInput'
-import MessageListView from '../MessageListView'
-import useChat from '../../hooks/chat/useChat'
-import useDialog from '../../hooks/dialog/useDialog'
-import useKeyBindingAction from '../../hooks/useKeyBindingAction'
-import useOpenViewGroupDialog from '../../hooks/dialog/useOpenViewGroupDialog'
-import useOpenViewProfileDialog from '../../hooks/dialog/useOpenViewProfileDialog'
-import useSelectLastChat from '../../hooks/chat/useSelectLastChat'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import { KeybindAction } from '../../keybindings'
-import { selectedAccountId } from '../../ScreenController'
-import { openMapWebxdc } from '../../system-integration/webxdc'
-import { ChatView } from '../../contexts/ChatContext'
-import { ScreenContext } from '../../contexts/ScreenContext'
+import Gallery from '../../Gallery'
+import { useThreeDotMenu } from '../../ThreeDotMenu'
+import ChatList from '../../chat/ChatList'
+import { Avatar } from '../../Avatar'
+import ConnectivityToast from '../../ConnectivityToast'
+import MailingListProfile from '../../dialogs/MessageListProfile'
+import SettingsStoreInstance, {
+  useSettingsStore,
+} from '../../../stores/settings'
+import { Type } from '../../../backend-com'
+import { InlineVerifiedIcon } from '../../VerifiedIcon'
+import Button from '../../Button'
+import Icon from '../../Icon'
+import SearchInput from '../../SearchInput'
+import MessageListView from '../../MessageListView'
+import useChat from '../../../hooks/chat/useChat'
+import useDialog from '../../../hooks/dialog/useDialog'
+import useKeyBindingAction from '../../../hooks/useKeyBindingAction'
+import useOpenViewGroupDialog from '../../../hooks/dialog/useOpenViewGroupDialog'
+import useOpenViewProfileDialog from '../../../hooks/dialog/useOpenViewProfileDialog'
+import useSelectLastChat from '../../../hooks/chat/useSelectLastChat'
+import useTranslationFunction from '../../../hooks/useTranslationFunction'
+import { KeybindAction } from '../../../keybindings'
+import { selectedAccountId } from '../../../ScreenController'
+import { openMapWebxdc } from '../../../system-integration/webxdc'
+import { ChatView } from '../../../contexts/ChatContext'
+import { ScreenContext } from '../../../contexts/ScreenContext'
 
 import type { T } from '@deltachat/jsonrpc-client'
-import CreateChat from '../dialogs/CreateChat'
+import CreateChat from '../../dialogs/CreateChat'
 
 type Props = {
   accountId?: number
@@ -183,90 +185,34 @@ export default function MainScreen({ accountId }: Props) {
         !messageSectionShouldBeHidden ? 'chat-view-open' : ''
       }`}
     >
-      <div className='navbar-wrapper' data-tauri-drag-region>
-        <Navbar>
-          {!chatListShouldBeHidden && (
-            <NavbarGroupLeft>
-              {showArchivedChats && (
-                <>
-                  <span data-no-drag-region>
-                    <Button
-                      aria-label={tx('back')}
-                      onClick={() => setArchivedChatsSelected(false)}
-                      className='backButton'
-                    >
-                      <Icon icon='arrow-left' className='backButtonIcon'></Icon>
-                    </Button>
-                  </span>
-                  <div className='archived-chats-title' data-no-drag-region>
-                    {tx('chat_archived_chats_title')}
-                  </div>
-                </>
-              )}
-              {!showArchivedChats && (
-                <SearchInput
-                  id='chat-list-search'
-                  inputRef={searchRef}
-                  onChange={handleSearchChange}
-                  onClear={queryChatId ? () => handleSearchClear() : undefined}
-                  value={queryStr}
-                />
-              )}
-            </NavbarGroupLeft>
-          )}
-          {!messageSectionShouldBeHidden && (
-            <NavbarGroupRight>
-              {smallScreenMode && (
-                <span data-no-drag-region>
-                  <Button
-                    aria-label={tx('back')}
-                    onClick={onBackButton}
-                    className='backButton'
-                  >
-                    <Icon icon='arrow-left' className='backButtonIcon'></Icon>
-                  </Button>
-                </span>
-              )}
-              {alternativeView === 'global-gallery' && (
-                <>
-                  <div className='navbar-heading'>{tx('menu_all_media')}</div>
-                  <span className='views' />
-                </>
-              )}
-              {chatWithLinger && <ChatHeading chat={chatWithLinger} />}
-              {chatWithLinger && <ChatNavButtons />}
-              {(chatWithLinger || alternativeView === 'global-gallery') && (
-                <span
-                  style={{
-                    marginLeft: 0,
-                    marginRight: '3px',
-                    ...(threeDotMenuHidden
-                      ? { opacity: 0, pointerEvents: 'none' }
-                      : {}),
-                  }}
-                  data-no-drag-region
-                  aria-disabled={threeDotMenuHidden}
+      <section className={styles.chatListAndNavbar}>
+        <nav className={styles.chatListNavbar} data-tauri-drag-region>
+          {showArchivedChats && (
+            <>
+              <span data-no-drag-region>
+                <Button
+                  aria-label={tx('back')}
+                  onClick={() => setArchivedChatsSelected(false)}
+                  className='backButton'
                 >
-                  <Button
-                    id='three-dot-menu-button'
-                    className='navbar-button'
-                    aria-label={tx('main_menu')}
-                    onClick={onClickThreeDotMenu}
-                  >
-                    <Icon
-                      coloring='navbar'
-                      icon='more'
-                      rotation={90}
-                      size={24}
-                    />
-                  </Button>
-                </span>
-              )}
-            </NavbarGroupRight>
+                  <Icon icon='arrow-left' className='backButtonIcon'></Icon>
+                </Button>
+              </span>
+              <div className='archived-chats-title' data-no-drag-region>
+                {tx('chat_archived_chats_title')}
+              </div>
+            </>
           )}
-        </Navbar>
-      </div>
-      <div className='main-app-content'>
+          {!showArchivedChats && (
+            <SearchInput
+              id='chat-list-search'
+              inputRef={searchRef}
+              onChange={handleSearchChange}
+              onClear={queryChatId ? () => handleSearchClear() : undefined}
+              value={queryStr}
+            />
+          )}
+        </nav>
         <ChatList
           queryStr={queryStr}
           showArchivedChats={showArchivedChats}
@@ -278,13 +224,60 @@ export default function MainScreen({ accountId }: Props) {
             setQueryChatId(null)
           }}
         />
+      </section>
+      <section className={styles.chatAndNavbar}>
+        <nav className={styles.chatNavbar} data-tauri-drag-region>
+          {smallScreenMode && (
+            <span data-no-drag-region>
+              <Button
+                aria-label={tx('back')}
+                onClick={onBackButton}
+                className='backButton'
+              >
+                <Icon icon='arrow-left' className='backButtonIcon'></Icon>
+              </Button>
+            </span>
+          )}
+          <div className={styles.chatNavbarHeadingWrapper}>
+            {alternativeView === 'global-gallery' && (
+              <>
+                <div className='navbar-heading'>{tx('menu_all_media')}</div>
+                <span className='views' />
+              </>
+            )}
+            {chatWithLinger && <ChatHeading chat={chatWithLinger} />}
+          </div>
+          {chatWithLinger && <ChatNavButtons />}
+          {(chatWithLinger || alternativeView === 'global-gallery') && (
+            <span
+              style={{
+                marginLeft: 0,
+                marginRight: '3px',
+                ...(threeDotMenuHidden
+                  ? { opacity: 0, pointerEvents: 'none' }
+                  : {}),
+              }}
+              data-no-drag-region
+              aria-disabled={threeDotMenuHidden}
+            >
+              <Button
+                id='three-dot-menu-button'
+                className='navbar-button'
+                aria-label={tx('main_menu')}
+                onClick={onClickThreeDotMenu}
+              >
+                <Icon coloring='navbar' icon='more' rotation={90} size={24} />
+              </Button>
+            </span>
+          )}
+        </nav>
         <MessageListView
           accountId={accountId}
           alternativeView={alternativeView}
           galleryRef={galleryRef}
           onUpdateGalleryView={updatethreeDotMenuHidden}
         />
-      </div>
+      </section>
       {!chatListShouldBeHidden && <ConnectivityToast />}
     </div>
   )
@@ -358,7 +351,7 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
 
   return (
     <button
-      className='navbar-heading navbar-heading__button'
+      className='navbar-heading navbar-heading--button'
       data-no-drag-region
       onClick={onTitleClick}
       data-testid='chat-info-button'
@@ -402,24 +395,41 @@ function ChatNavButtons() {
 
   return (
     <>
-      <span className='views' data-no-drag-region>
+      <span
+        role='tablist'
+        aria-orientation='horizontal'
+        className='views'
+        data-no-drag-region
+      >
         <Button
+          role='tab'
+          id='tab-message-list-view'
           onClick={() => setChatView(ChatView.MessageList)}
           active={activeView === ChatView.MessageList}
+          aria-selected={activeView === ChatView.MessageList}
+          // FYI there are 2 components that use this ID,
+          // but they're not supposed to be rendered at the same time.
+          aria-controls='message-list-and-composer'
           aria-label={tx('chat')}
           className='navbar-button'
         >
           <Icon coloring='navbar' icon='chats' size={18} />
         </Button>
         <Button
+          role='tab'
+          id='tab-media-view'
           onClick={() => setChatView(ChatView.Media)}
           active={activeView === ChatView.Media}
+          aria-selected={activeView === ChatView.Media}
+          aria-controls='media-view'
           aria-label={tx('media')}
           className='navbar-button'
         >
           <Icon coloring='navbar' icon='image' size={18} />
         </Button>
         {settingsStore?.desktopSettings.enableOnDemandLocationStreaming && (
+          // Yes, this is not marked as `role='tab'`.
+          // I'm not sure if this is alright.
           <Button
             onClick={() => openMapWebxdc(selectedAccountId(), chatId)}
             aria-label={tx('tab_map')}
