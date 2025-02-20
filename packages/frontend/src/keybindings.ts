@@ -94,6 +94,8 @@ export function keyDownEvent2Action(
       // } else if (ev.altKey && ev.code === 'ArrowLeft') {
       // disabled until we find a better keycombination (see https://github.com/deltachat/deltachat-desktop/issues/1796)
       //   return KeybindAction.ChatList_ScrollToSelectedChat
+      // }
+      // fallback to KeyF code for keyboard layouts without f key
     } else if (ev.ctrlKey && (ev.key === 'f' || ev.code === 'KeyF')) {
       // https://github.com/deltachat/deltachat-desktop/issues/4579
       if (ev.shiftKey) {

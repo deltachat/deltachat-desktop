@@ -12,26 +12,6 @@ const keySymbols: { [key: string]: string } = {
   ArrowUp: '↑',
 }
 
-// this would be the approach to show users how to access
-// certain keyboard codes according to their layout
-
-// const codeKeyMap: { [key: string]: string } = {
-//   Slash: '/',
-//   Comma: ',',
-//   KeyF: 'F',
-//   KeyM: 'M',
-//   KeyN: 'N',
-// }
-
-// const navigator = window.navigator as any
-
-// navigator.keyboard.getLayoutMap().then((layoutMap: any) => {
-//   for (const key of Object.keys(codeKeyMap)) {
-//     const v = layoutMap.get(key) || codeKeyMap[key]
-//     codeKeyMap[key] = v as string
-//   }
-// })
-
 const showOnlySymbolOn = ['ArrowDown', 'ArrowUp']
 
 function getLabel(keyboardKey: string) {

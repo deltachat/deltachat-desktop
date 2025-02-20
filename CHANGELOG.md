@@ -5,6 +5,7 @@
 ### Added
 
 ### Changed
+- extend some shortcuts to listen to key OR code #4685
 
 ### Fixed
 - message list being empty when double-clicking the chat before it has loaded (again) #4647
