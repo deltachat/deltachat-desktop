@@ -302,7 +302,7 @@ export default class DCWebxdc {
       })
       setContentProtection(webxdcWindow)
       // reposition the window to last position (or default)
-      const bounds = lastBounds || adjustDefaultSize(defaultSize)
+      const bounds = adjustBounds(lastBounds || defaultSize)
       webxdcWindow.setBounds(bounds, true)
       // show after repositioning to avoid blinking
       webxdcWindow.show()
@@ -926,7 +926,7 @@ export async function webxdcStartUpCleanup() {
  * Make sure a default size doesn't extend the size
  * of the primary display work area.
  */
-function adjustDefaultSize(size: Size): Size {
+function adjustBounds(size: Size): Size {
   const { height: screenHeight, width: screenWidth } =
     screen.getPrimaryDisplay().workAreaSize
   return {
