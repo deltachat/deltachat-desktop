@@ -3,13 +3,25 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- add "learn more"-button to manage-key section that links to local help #4684
 
 ### Changed
-- update `esbuild` from `0.23.0` to `0.25.0`
 - open map in landscape orientation and with a bigger window #4683
+- update `esbuild` from `0.23.0` to `0.25.0` #4643
+- extend some shortcuts to listen to key OR code #4685
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.155.6`
+  - Sort past members by the timestamp of removal.
+  - Use UUID v4 to generate Message-IDs.
+  - Use dedicated ID for sync messages affecting device chat.
+  - Do not allow non-members to change ephemeral timer settings.
+  - Show padlock when the message is not sent over the network.
 
 ### Fixed
 - message list being empty when double-clicking the chat before it has loaded (again) #4647
+- accessibility: improve tab order of the app #4672
+- other minor accessibility improvements #4675
+- improve performance a little #4512
+- fix missing maps.xdc in flatpak build #4682
 - constrain size of webxdc window by available screen-workarea-space #4683
 
 <a id="1_54_1"></a>

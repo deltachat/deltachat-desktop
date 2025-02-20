@@ -3,7 +3,7 @@ import { Component } from 'react'
 import { DcEventType } from '@deltachat/jsonrpc-client'
 import { debounce } from 'debounce'
 
-import MainScreen from './components/screens/MainScreen'
+import MainScreen from './components/screens/MainScreen/MainScreen'
 import { getLogger } from '../../shared/logger'
 import AccountSetupScreen from './components/screens/AccountSetupScreen'
 import WelcomeScreen from './components/screens/WelcomeScreen'

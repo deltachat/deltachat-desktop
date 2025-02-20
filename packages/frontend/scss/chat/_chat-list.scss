@@ -1,8 +1,6 @@
 .chat-list {
   z-index: $z-index-new-local-scope; // needed for .floating-action-button
-  width: 30%;
-  min-width: 295px; /* don't forget to update navbar, .navbarGroupLeft */
-  height: 100%;
+  flex-grow: 1;
   overflow-y: auto;
   box-shadow:
     0 0 4px 1px rgba(16, 22, 26, 0.1),

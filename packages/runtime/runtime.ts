@@ -56,6 +56,8 @@ export interface Runtime {
   reloadWebContent(): void
   openLogFile(): void
   getCurrentLogLocation(): string
+  /** Opens the help window at the specified anchor.
+   *  Anchor needs to be written without the prefixed `#` */
   openHelpWindow(anchor?: string): void
   /**
    * get the commandline arguments
