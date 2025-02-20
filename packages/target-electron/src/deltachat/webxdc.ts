@@ -760,6 +760,8 @@ export default class DCWebxdc {
                 webxdcInfo: messageWithMap.webxdcInfo,
                 href: '',
               },
+              // special behaviour for the map dc integration,
+              // (in this case bigger landscape window)
               this.DEFAULT_SIZE_MAP
             )
           }
