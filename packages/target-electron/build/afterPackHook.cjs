@@ -102,9 +102,10 @@ module.exports = async context => {
 
   // copy map xdc
   // ---------------------------------------------------------------------------------
-  if (!env['NO_ASAR']) {
-    await copyMapXdcToUnpackedASAR(resources_dir, source_dir)
-  }
+  // asar is electrons archive format, flatpak doesn't use it. read more about what asar is on https://www.electronjs.org/docs/latest/glossary#asar
+  // asar is electrons archive format, flatpak doesn't use it. read more about what asar is on https://www.electronjs.org/docs/latest/glossary#asar
+  const asar = env['NO_ASAR'] ? false : true
+  await copyMapXdc(resources_dir, source_dir, asar)
 }
 
 async function packageMSVCRedist(context) {
@@ -134,10 +135,10 @@ async function packageMSVCRedist(context) {
   )
 }
 
-async function copyMapXdcToUnpackedASAR(resources_dir, source_dir) {
+async function copyMapXdc(resources_dir, source_dir, asar) {
   const destination = join(
     resources_dir,
-    'app.asar.unpacked',
+    asar ? 'app.asar.unpacked' : 'app',
     'html-dist',
     'xdcs'
   )
