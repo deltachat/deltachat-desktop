@@ -913,7 +913,7 @@ export const Quote = ({
       jumpToMessage({
         accountId,
         msgId: quote.messageId,
-        msgChatId: undefined,
+        msgChatId: quote.chatId,
         highlight: true,
         focus: true,
         msgParentId,

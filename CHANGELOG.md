@@ -6,9 +6,13 @@
 
 ### Changed
 - update `esbuild` from `0.23.0` to `0.25.0` #4643
+- extend some shortcuts to listen to key OR code #4685
 
 ### Fixed
 - message list being empty when double-clicking the chat before it has loaded (again) #4647
+- accessibility: improve tab order of the app #4672
+- other minor accessibility improvements #4675
+- improve performance a little #4512
 - fix missing maps.xdc in flatpak build #4682
 
 <a id="1_54_1"></a>

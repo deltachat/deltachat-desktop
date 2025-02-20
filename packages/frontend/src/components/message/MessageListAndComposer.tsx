@@ -275,6 +275,10 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
 
   return (
     <div
+      role='tabpanel'
+      aria-labelledby='tab-message-list-view'
+      // NoChatSelected also has this ID and class.
+      id='message-list-and-composer'
       className='message-list-and-composer'
       style={style}
       ref={conversationRef}
