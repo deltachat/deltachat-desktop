@@ -1613,8 +1613,8 @@ dependencies = [
 
 [[package]]
 name = "deltachat"
-version = "1.155.3"
-source = "git+https://github.com/deltachat/deltachat-core-rust?tag=v1.155.3#4ef6788ffd245b53120908020dbb1204a947287b"
+version = "1.155.6"
+source = "git+https://github.com/deltachat/deltachat-core-rust?tag=v1.155.6#48fcf660026bd0436653e7fa4d0d65ce3274a0c9"
 dependencies = [
  "anyhow",
  "async-broadcast",
@@ -1700,7 +1700,7 @@ dependencies = [
 [[package]]
 name = "deltachat-contact-tools"
 version = "0.0.0"
-source = "git+https://github.com/deltachat/deltachat-core-rust?tag=v1.155.3#4ef6788ffd245b53120908020dbb1204a947287b"
+source = "git+https://github.com/deltachat/deltachat-core-rust?tag=v1.155.6#48fcf660026bd0436653e7fa4d0d65ce3274a0c9"
 dependencies = [
  "anyhow",
  "chrono",
@@ -1711,8 +1711,8 @@ dependencies = [
 
 [[package]]
 name = "deltachat-jsonrpc"
-version = "1.155.3"
-source = "git+https://github.com/deltachat/deltachat-core-rust?tag=v1.155.3#4ef6788ffd245b53120908020dbb1204a947287b"
+version = "1.155.6"
+source = "git+https://github.com/deltachat/deltachat-core-rust?tag=v1.155.6#48fcf660026bd0436653e7fa4d0d65ce3274a0c9"
 dependencies = [
  "anyhow",
  "async-channel 2.3.1",
@@ -1767,12 +1767,12 @@ dependencies = [
 [[package]]
 name = "deltachat-time"
 version = "1.0.0"
-source = "git+https://github.com/deltachat/deltachat-core-rust?tag=v1.155.3#4ef6788ffd245b53120908020dbb1204a947287b"
+source = "git+https://github.com/deltachat/deltachat-core-rust?tag=v1.155.6#48fcf660026bd0436653e7fa4d0d65ce3274a0c9"
 
 [[package]]
 name = "deltachat_derive"
 version = "2.0.0"
-source = "git+https://github.com/deltachat/deltachat-core-rust?tag=v1.155.3#4ef6788ffd245b53120908020dbb1204a947287b"
+source = "git+https://github.com/deltachat/deltachat-core-rust?tag=v1.155.6#48fcf660026bd0436653e7fa4d0d65ce3274a0c9"
 dependencies = [
  "quote",
  "syn 2.0.98",
@@ -2703,7 +2703,7 @@ dependencies = [
 [[package]]
 name = "format-flowed"
 version = "1.0.0"
-source = "git+https://github.com/deltachat/deltachat-core-rust?tag=v1.155.3#4ef6788ffd245b53120908020dbb1204a947287b"
+source = "git+https://github.com/deltachat/deltachat-core-rust?tag=v1.155.6#48fcf660026bd0436653e7fa4d0d65ce3274a0c9"
 
 [[package]]
 name = "funty"
@@ -4629,9 +4629,9 @@ checksum = "c41e0c4fef86961ac6d6f8a82609f55f31b05e4fce149ac5710e439df7619ba4"
 
 [[package]]
 name = "mailparse"
-version = "0.15.0"
+version = "0.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3da03d5980411a724e8aaf7b61a7b5e386ec55a7fb49ee3d0ff79efc7e5e7c7e"
+checksum = "cdd4a624f609f8ea7366324724b7ff41cb0f982eb665a54ac825bc1c0efc07a3"
 dependencies = [
  "charset",
  "data-encoding",
@@ -6685,7 +6685,7 @@ dependencies = [
 [[package]]
 name = "ratelimit"
 version = "1.0.0"
-source = "git+https://github.com/deltachat/deltachat-core-rust?tag=v1.155.3#4ef6788ffd245b53120908020dbb1204a947287b"
+source = "git+https://github.com/deltachat/deltachat-core-rust?tag=v1.155.6#48fcf660026bd0436653e7fa4d0d65ce3274a0c9"
 
 [[package]]
 name = "raw-cpuid"
