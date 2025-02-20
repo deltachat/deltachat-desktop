@@ -282,7 +282,6 @@ export default class DCWebxdc {
 
       const app_icon = icon_blob && nativeImage?.createFromBuffer(icon_blob)
 
-      const lastBounds = await this.getLastBounds(accountId, msg_id)
       const webxdcWindow = new BrowserWindow({
         webPreferences: {
           partition: partitionFromAccountId(accountId),
@@ -301,9 +300,16 @@ export default class DCWebxdc {
         show: false,
       })
       setContentProtection(webxdcWindow)
+
       // reposition the window to last position (or default)
-      const bounds = adjustBounds(lastBounds || defaultSize)
+      const lastBounds: Bounds | null = await this.getLastBounds(
+        accountId,
+        msg_id
+      )
+      const size: Size = adjustSize(lastBounds || defaultSize)
+      const bounds: Partial<Bounds> = { ...(lastBounds || {}), ...size }
       webxdcWindow.setBounds(bounds, true)
+
       // show after repositioning to avoid blinking
       webxdcWindow.show()
       open_apps[`${accountId}.${msg_id}`] = {
@@ -923,10 +929,9 @@ export async function webxdcStartUpCleanup() {
 }
 
 /**
- * Make sure a default size doesn't extend the size
- * of the primary display work area.
+ * Make sure a default size doesn't extend the primary display work area.
  */
-function adjustBounds(size: Size): Size {
+function adjustSize(size: Size): Size {
   const { height: screenHeight, width: screenWidth } =
     screen.getPrimaryDisplay().workAreaSize
   return {
