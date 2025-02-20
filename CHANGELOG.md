@@ -6,6 +6,7 @@
 - add "learn more"-button to manage-key section that links to local help #4684
 
 ### Changed
+- open map in landscape orientation and with a bigger window #4683
 - update `esbuild` from `0.23.0` to `0.25.0` #4643
 - extend some shortcuts to listen to key OR code #4685
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.155.6`
@@ -21,6 +22,7 @@
 - other minor accessibility improvements #4675
 - improve performance a little #4512
 - fix missing maps.xdc in flatpak build #4682
+- constrain size of webxdc window by available screen-workarea-space #4683
 
 <a id="1_54_1"></a>
 
