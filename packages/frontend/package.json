@@ -58,7 +58,7 @@
     "@types/react-window-infinite-loader": "^1.0.9",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
-    "esbuild": "^0.23.0",
+    "esbuild": "^0.25.0",
     "esbuild-plugin-inline-worker": "^0.1.1",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",

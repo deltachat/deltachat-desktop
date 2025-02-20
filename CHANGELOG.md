@@ -25,6 +25,7 @@
 ### Changed
   - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.155.5`
   - set mentionsEnabled in muted chats to true by default #4633
+  - update `esbuild` from `0.23.0` to `0.25.0`
 
 ### Fixed
 - "Show in Chat" in Gallery not working #4629
