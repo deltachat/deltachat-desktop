@@ -1,4 +1,11 @@
-import { app, BrowserWindow, protocol, ipcMain, session } from 'electron/main'
+import {
+  app,
+  BrowserWindow,
+  protocol,
+  ipcMain,
+  session,
+  screen,
+} from 'electron/main'
 import Mime from 'mime-types'
 import {
   Menu,
@@ -16,7 +23,10 @@ import { readdir, stat, rmdir, writeFile, readFile } from 'fs/promises'
 import { existsSync } from 'fs'
 import type DeltaChatController from './controller.js'
 import { getLogger } from '../../../shared/logger.js'
-import { getConfigPath, htmlDistDir } from '../application-constants.js'
+import {
+  getConfigPath,
+  htmlDistDir,
+} from '../application-constants.js'
 import { truncateText } from '@deltachat-desktop/shared/util.js'
 import { tx } from '../load-translations.js'
 import { Bounds, DcOpenWebxdcParameters } from '../../../shared/shared-types.js'
@@ -77,6 +87,16 @@ const WRAPPER_PATH = 'webxdc-wrapper.45870014933640136498.html'
 
 const BOUNDS_UI_CONFIG_PREFIX = 'ui.desktop.webxdcBounds'
 
+const DEFAULT_BOUNDS_WEBXDC = {
+  width: 375,
+  height: 667,
+}
+
+const DEFAULT_BOUNDS_MAP = {
+  width: 1000,
+  height: 800,
+}
+
 export default class DCWebxdc {
   constructor(private controller: DeltaChatController) {
     // icon protocol
@@ -106,7 +126,8 @@ export default class DCWebxdc {
     const openWebxdc = async (
       _ev: IpcMainInvokeEvent,
       msg_id: number,
-      p: DcOpenWebxdcParameters
+      p: DcOpenWebxdcParameters,
+      is_maps_xdc = false // special behaviour for the map dc integration (in this case bigger landscape window)
     ) => {
       const { webxdcInfo, chatName, displayname, accountId, href } = p
       const addr = webxdcInfo.selfAddr
@@ -263,7 +284,11 @@ export default class DCWebxdc {
 
       const app_icon = icon_blob && nativeImage?.createFromBuffer(icon_blob)
 
-      const lastBounds = await this.getLastBounds(accountId, msg_id)
+      const lastBounds = await this.getLastBounds(
+        accountId,
+        msg_id,
+        is_maps_xdc ? DEFAULT_BOUNDS_MAP : DEFAULT_BOUNDS_WEBXDC
+      )
       const webxdcWindow = new BrowserWindow({
         webPreferences: {
           partition: partitionFromAccountId(accountId),
@@ -731,13 +756,18 @@ export default class DCWebxdc {
           }
           const messageWithMap = await this.rpc.getMessage(accountId, msgId)
           if (messageWithMap && messageWithMap.webxdcInfo) {
-            openWebxdc(evt, msgId, {
-              accountId,
-              displayname: '',
-              chatName,
-              webxdcInfo: messageWithMap.webxdcInfo,
-              href: '',
-            })
+            openWebxdc(
+              evt,
+              msgId,
+              {
+                accountId,
+                displayname: '',
+                chatName,
+                webxdcInfo: messageWithMap.webxdcInfo,
+                href: '',
+              },
+              true
+            )
           }
         }
       }
@@ -750,12 +780,16 @@ export default class DCWebxdc {
 
   async getLastBounds(
     accountId: number,
-    msgId: number
+    msgId: number,
+    default_bounds: { width: number; height: number }
   ): Promise<Partial<Bounds>> {
+    const { height: screenHeight, width: screenWidth } =
+      screen.getPrimaryDisplay().workAreaSize
     let bounds = {
-      width: 375,
-      height: 667,
+      width: Math.min(default_bounds.width, screenWidth),
+      height: Math.min(default_bounds.height, screenHeight),
     }
+
     try {
       const raw = await this.rpc.getConfig(
         accountId,

@@ -6,9 +6,11 @@
 
 ### Changed
 - update `esbuild` from `0.23.0` to `0.25.0`
+- open map in landscape orientation and with a bigger window #4683
 
 ### Fixed
 - message list being empty when double-clicking the chat before it has loaded (again) #4647
+- constrain size of webxdc window by available screen-workarea-space #4683
 
 <a id="1_54_1"></a>
 
