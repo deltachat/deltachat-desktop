@@ -535,12 +535,32 @@ const Composer = forwardRef<
           // (`id='chat-section-heading'`) is probably enough.
         }
       >
-        <div className='upper-bar'>
+        <section
+          // Keep in mind that this element also changes when switching
+          // between chats.
+          // We probably want such changes to be announced still.
+          aria-live='polite'
+          // Announce quote / editing / attachment _removals_
+          // as well as text changes and node insertions.
+          aria-relevant='all'
+          className='upper-bar'
+        >
           {!messageEditing.isEditingModeActive ? (
             <>
               {draftState.quote !== null && (
                 <div className='attachment-quote-section is-quote'>
-                  <Quote quote={draftState.quote} tabIndex={0} />
+                  <div
+                    // When changing the quoted message, e.g. with the Ctrl + Up
+                    // shortcut, we should read the author's name
+                    // even if it didn't change.
+                    //
+                    // Note that `aria-atomic` doesn't appear to work,
+                    // at least with NVDA, when it's a _descendant_ of the
+                    // `aria-live` element.
+                    aria-atomic='true'
+                  >
+                    <Quote quote={draftState.quote} tabIndex={0} />
+                  </div>
                   <CloseButton onClick={removeQuote} />
                 </div>
               )}
@@ -605,7 +625,7 @@ const Composer = forwardRef<
               />
             </div>
           )}
-        </div>
+        </section>
         <div className='lower-bar'>
           {!messageEditing.isEditingModeActive && !recording && (
             <MenuAttachment
