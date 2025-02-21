@@ -15,6 +15,7 @@
   - Use dedicated ID for sync messages affecting device chat.
   - Do not allow non-members to change ephemeral timer settings.
   - Show padlock when the message is not sent over the network.
+- when searching for messages in a single chat, do not show the redundant chat name in each search result #4696
 - html email view: migrate from deprecated `BrowserView` to `WebContentsView` #4689
 
 ### Fixed
