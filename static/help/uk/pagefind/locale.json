@@ -1,0 +1,10 @@
+{
+  "search": "Пошук",
+  "clear_search": "Очистити пошук",
+  "search_no_result_for_x": "Запит \"%s\" не дав результатів",
+  "one_result": "Result for \"[SEARCH_TERM]\"",
+  "menu_help": "Допомога",
+  "app_name": "Delta Chat",
+  "placeholder": "Пошук",
+  "zero_results": "Запит \"[SEARCH_TERM]\" не дав результатів"
+}

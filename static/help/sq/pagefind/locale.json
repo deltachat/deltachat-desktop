@@ -1,0 +1,10 @@
+{
+  "search": "Kërko",
+  "clear_search": "Spastroje Kërkimin",
+  "search_no_result_for_x": "S’u gjetën përfundime për “%s”",
+  "one_result": "Result for \"[SEARCH_TERM]\"",
+  "menu_help": "Ndihmë",
+  "app_name": "Delta Chat",
+  "placeholder": "Kërko",
+  "zero_results": "S’u gjetën përfundime për “%s”"
+}
