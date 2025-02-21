@@ -1,5 +1,4 @@
 import electron, {
-  BrowserView,
   BrowserWindow,
   dialog,
   Menu,
@@ -9,6 +8,7 @@ import electron, {
   session,
   shell,
   WebContents,
+  WebContentsView,
 } from 'electron'
 import { clipboard } from 'electron/common'
 import { join } from 'path'
@@ -211,13 +211,13 @@ export function openHtmlEmailWindow(
     }
   })
 
-  let sandboxedView: BrowserView = makeBrowserView(
+  let sandboxedView: WebContentsView = makeBrowserView(
     account_id,
     loadRemoteContentAtStart,
     htmlEmail,
     window
   )
-  window.setBrowserView(sandboxedView)
+  window.contentView.addChildView(sandboxedView)
   sandboxedView.webContents.setZoomFactor(
     DesktopSettings.state.zoomFactor *
       Math.pow(1.2, window.webContents.getZoomLevel())
@@ -359,7 +359,7 @@ export function openHtmlEmailWindow(
     }
 
     const bounds = sandboxedView?.getBounds()
-    window.removeBrowserView(sandboxedView)
+    window.contentView.removeChildView(sandboxedView)
     context_menu_handle()
     sandboxedView.webContents.close()
     sandboxedView = makeBrowserView(
@@ -368,7 +368,7 @@ export function openHtmlEmailWindow(
       htmlEmail,
       window
     )
-    window.setBrowserView(sandboxedView)
+    window.contentView.addChildView(sandboxedView)
     context_menu_handle = createContextMenu(window, sandboxedView.webContents)
     if (bounds) sandboxedView.setBounds(bounds)
 
@@ -467,7 +467,7 @@ function makeBrowserView(
     ses.protocol.handle('https', callback)
   }
 
-  const sandboxedView = new BrowserView({
+  const sandboxedView = new WebContentsView({
     webPreferences: {
       accessibleTitle: 'email content',
       contextIsolation: true,
