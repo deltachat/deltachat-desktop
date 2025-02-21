@@ -1,6 +1,6 @@
-use std::str::FromStr;
-
+use crate::{help_window::open_help_window, AppState};
 use log::info;
+use std::str::FromStr;
 use strum_macros::{AsRefStr, EnumString};
 use tauri::{
     menu::{CheckMenuItem, Menu, MenuEvent, MenuId, MenuItem, PredefinedMenuItem, Submenu},
@@ -8,14 +8,13 @@ use tauri::{
 };
 use tauri_plugin_opener::OpenerExt;
 
-use crate::{help_window::open_help_window, AppState};
+use super::help_menu::create_help_menu;
 
 #[derive(Debug, AsRefStr, EnumString)]
 enum MenuAction {
     Settings,
     Help,
     Quit,
-    Delete,
     FloatOnTop,
     Zoom(f64),
     DevTools,
@@ -87,13 +86,6 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                         &PredefinedMenuItem::cut(handle, Some("Cut"))?,
                         &PredefinedMenuItem::copy(handle, Some("Copy"))?,
                         &PredefinedMenuItem::paste(handle, Some("Paste"))?,
-                        &MenuItem::with_id(
-                            handle,
-                            MenuAction::Delete,
-                            MenuAction::Delete,
-                            true,
-                            None::<&str>,
-                        )?,
                         &PredefinedMenuItem::select_all(handle, Some("Select All"))?,
                     ],
                 )?,
@@ -193,7 +185,13 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                     "Help",
                     true,
                     &[
-                        &MenuItem::with_id(handle, "help", "Help", true, None::<&str>)?,
+                        &MenuItem::with_id(
+                            handle,
+                            MenuAction::Help,
+                            MenuAction::Help,
+                            true,
+                            None::<&str>,
+                        )?,
                         &MenuItem::with_id(
                             handle,
                             MenuAction::Keybindings,
@@ -257,11 +255,16 @@ fn handle_event<A: Runtime>(app: &AppHandle<A>, event: MenuEvent) -> anyhow::Res
         }
         MenuAction::Help => {
             open_help_window(app.clone(), "", None).ok();
+
+            let window = app
+                .get_webview_window("help")
+                .ok_or(anyhow::anyhow!("help window not found"))?;
+
+            window.set_menu(create_help_menu(app)?)?;
         }
         MenuAction::Quit => {
             app.exit(0);
         }
-        MenuAction::Delete => { /* Not supported by Tauri */ }
         MenuAction::FloatOnTop => {
             get_main_window(app)?.set_always_on_top(true).ok();
         }
@@ -323,7 +326,7 @@ fn handle_event<A: Runtime>(app: &AppHandle<A>, event: MenuEvent) -> anyhow::Res
     Ok(())
 }
 
-fn get_main_window<A: Runtime>(app: &AppHandle<A>) -> anyhow::Result<WebviewWindow<A>> {
+pub(crate) fn get_main_window<A: Runtime>(app: &AppHandle<A>) -> anyhow::Result<WebviewWindow<A>> {
     app.get_webview_window("main")
         .ok_or(anyhow::anyhow!("main window not found"))
 }
