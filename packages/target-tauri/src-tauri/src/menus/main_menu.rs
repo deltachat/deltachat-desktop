@@ -1,45 +1,8 @@
-use crate::{help_window::open_help_window, AppState};
-use log::info;
-use std::str::FromStr;
-use strum_macros::{AsRefStr, EnumString};
+use super::{handle_event, MainMenuAction};
 use tauri::{
-    menu::{CheckMenuItem, Menu, MenuEvent, MenuId, MenuItem, PredefinedMenuItem, Submenu},
-    AppHandle, Builder, Emitter, Manager, Runtime, WebviewWindow,
+    menu::{CheckMenuItem, Menu, MenuItem, PredefinedMenuItem, Submenu},
+    Builder, Runtime,
 };
-use tauri_plugin_opener::OpenerExt;
-
-use super::help_menu::create_help_menu;
-
-#[derive(Debug, AsRefStr, EnumString)]
-enum MenuAction {
-    Settings,
-    Help,
-    Quit,
-    FloatOnTop,
-    Zoom(f64),
-    DevTools,
-    LogFolder,
-    CurrentLogFile,
-    Keybindings,
-    Contribute,
-    Report,
-    Learn,
-    About,
-}
-
-impl From<MenuAction> for MenuId {
-    fn from(action: MenuAction) -> Self {
-        MenuId::new(action)
-    }
-}
-
-impl TryFrom<&MenuId> for MenuAction {
-    type Error = anyhow::Error;
-
-    fn try_from(item: &MenuId) -> Result<Self, Self::Error> {
-        MenuAction::from_str(item.as_ref()).map_err(|e| e.into())
-    }
-}
 
 pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
     let builder = builder.menu(|handle| {
@@ -61,15 +24,15 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                     &[
                         &MenuItem::with_id(
                             handle,
-                            MenuAction::Quit,
-                            MenuAction::Quit,
+                            MainMenuAction::Quit,
+                            MainMenuAction::Quit,
                             true,
                             None::<&str>,
                         )?,
                         &MenuItem::with_id(
                             handle,
-                            MenuAction::Settings,
-                            MenuAction::Settings,
+                            MainMenuAction::Settings,
+                            MainMenuAction::Settings,
                             true,
                             None::<&str>,
                         )?,
@@ -96,7 +59,7 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                     &[
                         &MenuItem::with_id(
                             handle,
-                            "float_on_top",
+                            MainMenuAction::FloatOnTop,
                             "Float on Top",
                             false,
                             None::<&str>,
@@ -108,7 +71,7 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                             &[
                                 &CheckMenuItem::with_id(
                                     handle,
-                                    "zoom_06",
+                                    MainMenuAction::Zoom06,
                                     "0.6x Extra Small",
                                     true,
                                     zoom_factor == 0.6,
@@ -116,7 +79,7 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                                 )?,
                                 &CheckMenuItem::with_id(
                                     handle,
-                                    "zoom_08",
+                                    MainMenuAction::Zoom08,
                                     "0.8x Small",
                                     true,
                                     zoom_factor == 0.8,
@@ -124,7 +87,7 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                                 )?,
                                 &CheckMenuItem::with_id(
                                     handle,
-                                    "zoom_10",
+                                    MainMenuAction::Zoom10,
                                     "1.0x Normal",
                                     true,
                                     zoom_factor == 1.0,
@@ -132,7 +95,7 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                                 )?,
                                 &CheckMenuItem::with_id(
                                     handle,
-                                    "zoom_12",
+                                    MainMenuAction::Zoom12,
                                     "1.2x Large",
                                     true,
                                     zoom_factor == 1.2,
@@ -140,7 +103,7 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                                 )?,
                                 &CheckMenuItem::with_id(
                                     handle,
-                                    "zoom_14",
+                                    MainMenuAction::Zoom14,
                                     "1.4x Extra Large",
                                     true,
                                     zoom_factor == 1.4,
@@ -157,21 +120,21 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                                 #[cfg(feature = "crabnebula_extras")]
                                 &MenuItem::with_id(
                                     handle,
-                                    MenuAction::DevTools,
+                                    MainMenuAction::DevTools,
                                     "Open Developer Tools",
                                     true,
                                     None::<&str>,
                                 )?,
                                 &MenuItem::with_id(
                                     handle,
-                                    MenuAction::LogFolder,
+                                    MainMenuAction::LogFolder,
                                     "Open the Log Folder",
                                     true,
                                     None::<&str>,
                                 )?,
                                 &MenuItem::with_id(
                                     handle,
-                                    MenuAction::CurrentLogFile,
+                                    MainMenuAction::CurrentLogFile,
                                     "Open Current Log File",
                                     true,
                                     None::<&str>,
@@ -187,28 +150,28 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                     &[
                         &MenuItem::with_id(
                             handle,
-                            MenuAction::Help,
-                            MenuAction::Help,
+                            MainMenuAction::Help,
+                            MainMenuAction::Help,
                             true,
                             None::<&str>,
                         )?,
                         &MenuItem::with_id(
                             handle,
-                            MenuAction::Keybindings,
+                            MainMenuAction::Keybindings,
                             "Keybindings",
                             true,
                             None::<&str>,
                         )?,
                         &MenuItem::with_id(
                             handle,
-                            MenuAction::Learn,
+                            MainMenuAction::Learn,
                             "Learn more about Delta Chat",
                             true,
                             None::<&str>,
                         )?,
                         &MenuItem::with_id(
                             handle,
-                            MenuAction::Contribute,
+                            MainMenuAction::Contribute,
                             "Contribute on Github",
                             true,
                             None::<&str>,
@@ -216,14 +179,14 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                         &PredefinedMenuItem::separator(handle)?,
                         &MenuItem::with_id(
                             handle,
-                            MenuAction::Report,
+                            MainMenuAction::Report,
                             "Report an Issue",
                             true,
                             None::<&str>,
                         )?,
                         &MenuItem::with_id(
                             handle,
-                            MenuAction::About,
+                            MainMenuAction::About,
                             "About Delta Chat",
                             true,
                             None::<&str>,
@@ -233,100 +196,10 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
             ],
         )
     });
+
     builder.on_menu_event(|app, event| {
         if let Err(e) = handle_event(&app, event) {
             log::error!("Error handling menu event: {:?}", e);
         }
     })
-}
-
-fn set_zoom<A: Runtime>(app: &AppHandle<A>, zoom: f64) -> anyhow::Result<()> {
-    let webview = app
-        .get_webview_window("main")
-        .ok_or(anyhow::anyhow!("webview not found"))?;
-    webview.set_zoom(zoom)?;
-    Ok(())
-}
-
-fn handle_event<A: Runtime>(app: &AppHandle<A>, event: MenuEvent) -> anyhow::Result<()> {
-    match MenuAction::try_from(event.id())? {
-        MenuAction::Settings => {
-            app.emit("showSettingsDialog", None::<String>).ok();
-        }
-        MenuAction::Help => {
-            open_help_window(app.clone(), "", None).ok();
-
-            let window = app
-                .get_webview_window("help")
-                .ok_or(anyhow::anyhow!("help window not found"))?;
-
-            window.set_menu(create_help_menu(app)?)?;
-        }
-        MenuAction::Quit => {
-            app.exit(0);
-        }
-        MenuAction::FloatOnTop => {
-            get_main_window(app)?.set_always_on_top(true).ok();
-        }
-        MenuAction::Zoom(0.6) => {
-            set_zoom(app, 0.6)?;
-        }
-        MenuAction::Zoom(0.8) => {
-            set_zoom(app, 0.8)?;
-        }
-        MenuAction::Zoom(1.0) => {
-            set_zoom(app, 1.0)?;
-        }
-        MenuAction::Zoom(1.2) => {
-            set_zoom(app, 1.2)?;
-        }
-        MenuAction::Zoom(1.4) => {
-            set_zoom(app, 1.4)?;
-        }
-        MenuAction::DevTools => {
-            get_main_window(&app)?.open_devtools();
-        }
-        MenuAction::LogFolder => {
-            if let Ok(path) = &app.path().app_log_dir() {
-                if let Some(path) = path.to_str() {
-                    app.opener().open_path(path, None::<String>).ok();
-                }
-            }
-        }
-        MenuAction::CurrentLogFile => {
-            let path = || app.state::<AppState>().current_log_file_path.clone();
-            app.opener().open_path(path(), None::<String>).ok();
-        }
-        MenuAction::Keybindings => {
-            app.emit("showKeybindingsDialog", None::<String>)?;
-        }
-        MenuAction::Contribute => {
-            app.opener().open_url(
-                "https://github.com/deltachat/deltachat-desktop",
-                None::<String>,
-            )?;
-        }
-        MenuAction::Report => {
-            app.opener().open_url(
-                "https://github.com/deltachat/deltachat-desktop/issues",
-                None::<String>,
-            )?;
-        }
-        MenuAction::Learn => {
-            app.opener()
-                .open_url("https://delta.chat/de/", None::<String>)?;
-        }
-        MenuAction::About => {
-            app.emit("showAboutDialog", None::<String>)?;
-        }
-        _ => {
-            info!("menu event not handled: {:?}", event.id());
-        }
-    }
-    Ok(())
-}
-
-pub(crate) fn get_main_window<A: Runtime>(app: &AppHandle<A>) -> anyhow::Result<WebviewWindow<A>> {
-    app.get_webview_window("main")
-        .ok_or(anyhow::anyhow!("main window not found"))
 }

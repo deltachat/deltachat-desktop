@@ -1,8 +1,8 @@
 use std::time::SystemTime;
 
 use clipboard::copy_image_to_clipboard;
-use settings::load_and_apply_desktop_settings_on_startup;
 use menus::main_menu::create_main_menu;
+use settings::load_and_apply_desktop_settings_on_startup;
 use state::{app::AppState, deltachat::DeltaChatAppState};
 use tauri::Manager;
 mod app_path;
