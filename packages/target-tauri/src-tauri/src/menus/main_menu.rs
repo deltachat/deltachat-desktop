@@ -104,8 +104,8 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                     &[
                         &MenuItem::with_id(
                             handle,
-                            MenuAction::FloatOnTop,
-                            MenuAction::FloatOnTop,
+                            "float_on_top",
+                            "Float on Top",
                             false,
                             None::<&str>,
                         )?,
@@ -116,7 +116,7 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                             &[
                                 &CheckMenuItem::with_id(
                                     handle,
-                                    MenuAction::Zoom(0.6),
+                                    "zoom_06",
                                     "0.6x Extra Small",
                                     true,
                                     zoom_factor == 0.6,
@@ -124,7 +124,7 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                                 )?,
                                 &CheckMenuItem::with_id(
                                     handle,
-                                    MenuAction::Zoom(0.8),
+                                    "zoom_08",
                                     "0.8x Small",
                                     true,
                                     zoom_factor == 0.8,
@@ -132,7 +132,7 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                                 )?,
                                 &CheckMenuItem::with_id(
                                     handle,
-                                    MenuAction::Zoom(1.0),
+                                    "zoom_10",
                                     "1.0x Normal",
                                     true,
                                     zoom_factor == 1.0,
@@ -140,7 +140,7 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                                 )?,
                                 &CheckMenuItem::with_id(
                                     handle,
-                                    MenuAction::Zoom(1.2),
+                                    "zoom_12",
                                     "1.2x Large",
                                     true,
                                     zoom_factor == 1.2,
@@ -148,7 +148,7 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                                 )?,
                                 &CheckMenuItem::with_id(
                                     handle,
-                                    MenuAction::Zoom(1.4),
+                                    "zoom_14",
                                     "1.4x Extra Large",
                                     true,
                                     zoom_factor == 1.4,
@@ -166,21 +166,21 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                                 &MenuItem::with_id(
                                     handle,
                                     MenuAction::DevTools,
-                                    MenuAction::DevTools,
+                                    "Open Developer Tools",
                                     true,
                                     None::<&str>,
                                 )?,
                                 &MenuItem::with_id(
                                     handle,
                                     MenuAction::LogFolder,
-                                    MenuAction::LogFolder,
+                                    "Open the Log Folder",
                                     true,
                                     None::<&str>,
                                 )?,
                                 &MenuItem::with_id(
                                     handle,
                                     MenuAction::CurrentLogFile,
-                                    MenuAction::CurrentLogFile,
+                                    "Open Current Log File",
                                     true,
                                     None::<&str>,
                                 )?,
@@ -193,31 +193,25 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                     "Help",
                     true,
                     &[
-                        &MenuItem::with_id(
-                            handle,
-                            MenuAction::Help,
-                            MenuAction::Help,
-                            true,
-                            None::<&str>,
-                        )?,
+                        &MenuItem::with_id(handle, "help", "Help", true, None::<&str>)?,
                         &MenuItem::with_id(
                             handle,
                             MenuAction::Keybindings,
-                            MenuAction::Keybindings,
+                            "Keybindings",
                             true,
                             None::<&str>,
                         )?,
                         &MenuItem::with_id(
                             handle,
                             MenuAction::Learn,
-                            MenuAction::Learn,
+                            "Learn more about Delta Chat",
                             true,
                             None::<&str>,
                         )?,
                         &MenuItem::with_id(
                             handle,
                             MenuAction::Contribute,
-                            MenuAction::Contribute,
+                            "Contribute on Github",
                             true,
                             None::<&str>,
                         )?,
@@ -225,14 +219,14 @@ pub(crate) fn create_main_menu<A: Runtime>(builder: Builder<A>) -> Builder<A> {
                         &MenuItem::with_id(
                             handle,
                             MenuAction::Report,
-                            MenuAction::Report,
+                            "Report an Issue",
                             true,
                             None::<&str>,
                         )?,
                         &MenuItem::with_id(
                             handle,
                             MenuAction::About,
-                            MenuAction::About,
+                            "About Delta Chat",
                             true,
                             None::<&str>,
                         )?,
