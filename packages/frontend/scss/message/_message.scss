@@ -169,7 +169,8 @@
       );
     }
 
-    & > .date {
+    & > .date,
+    & > .edited {
       color: var(--messageMetadataIncoming);
     }
   }
@@ -192,7 +193,8 @@
   margin-right: 0;
 
   .metadata:not(.with-image-no-caption) {
-    & > .date {
+    & > .date,
+    & > .edited {
       color: var(--messageOutgoingStatusColor);
     }
 
@@ -278,7 +280,8 @@
   }
 
   .metadata {
-    & > .date {
+    & > .date,
+    & > .edited {
       font-size: 11px;
       color: white;
     }
@@ -626,7 +629,8 @@
         @include color-svg('./images/map-marker.svg', white, 100%);
       }
 
-      & > .date {
+      & > .date,
+      & > .edited {
         color: white;
       }
     }
