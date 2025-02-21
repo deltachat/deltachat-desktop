@@ -333,8 +333,13 @@ export default function ChatList(props: {
   }, [contactCache, contactIds])
 
   const messagelistData = useMemo(() => {
-    return { messageResultIds, messageCache, queryStr }
-  }, [messageResultIds, messageCache, queryStr])
+    return {
+      messageResultIds,
+      messageCache,
+      queryStr,
+      isSingleChatSearch: queryChatId != null,
+    }
+  }, [messageResultIds, messageCache, queryStr, queryChatId])
 
   const [searchChatInfo, setSearchChatInfo] = useState<T.BasicChat | null>(null)
   useEffect(() => {

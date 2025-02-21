@@ -427,8 +427,21 @@ export const ChatListItemMessageResult = React.memo<{
   msr: T.MessageSearchResult
   onClick: () => void
   queryStr: string
+  /**
+   * Whether the user is searching for messages in just a single chat.
+   */
+  isSingleChatSearch: boolean
 }>(props => {
-  const { msr, onClick, queryStr } = props
+  const {
+    msr,
+    onClick,
+    queryStr,
+    /**
+     * When the user is searching for messages in just a single chat,
+     * we don't need to specify here which chat it belongs to.
+     */
+    isSingleChatSearch,
+  } = props
 
   const ref = useRef<HTMLButtonElement>(null)
 
@@ -453,18 +466,29 @@ export const ChatListItemMessageResult = React.memo<{
       {/* Avatars are purely decorative here, and are redundant
       accessibility-wise, because we display the chat and author name below. */}
       <div className='avatars' aria-hidden='true'>
-        <Avatar
-          className='big'
-          avatarPath={msr.chatProfileImage}
-          color={msr.chatColor}
-          displayName={msr.chatName}
-        />
-        {!(
-          msr.chatType === C.DC_CHAT_TYPE_SINGLE &&
-          msr.authorId !== C.DC_CONTACT_ID_SELF
-        ) && (
+        {!isSingleChatSearch ? (
+          <>
+            <Avatar
+              className='big'
+              avatarPath={msr.chatProfileImage}
+              color={msr.chatColor}
+              displayName={msr.chatName}
+            />
+            {!(
+              msr.chatType === C.DC_CHAT_TYPE_SINGLE &&
+              msr.authorId !== C.DC_CONTACT_ID_SELF
+            ) && (
+              <Avatar
+                className='small'
+                avatarPath={msr.authorProfileImage}
+                color={msr.authorColor}
+                displayName={msr.authorName}
+              />
+            )}
+          </>
+        ) : (
           <Avatar
-            className='small'
+            className='big'
             avatarPath={msr.authorProfileImage}
             color={msr.authorColor}
             displayName={msr.authorName}
@@ -475,8 +499,12 @@ export const ChatListItemMessageResult = React.memo<{
         <div className='header'>
           <div className='name'>
             <span>
-              <span className='truncated'>{msr.chatName}</span>
-              {msr.isChatProtected && <InlineVerifiedIcon />}
+              <span className='truncated'>
+                {!isSingleChatSearch ? msr.chatName : msr.authorName}
+              </span>
+              {!isSingleChatSearch && msr.isChatProtected && (
+                <InlineVerifiedIcon />
+              )}
             </span>
           </div>
           <div>
@@ -487,19 +515,21 @@ export const ChatListItemMessageResult = React.memo<{
             />
           </div>
         </div>
-        <div className='message-result-author-line'>
-          <div className='author-name'>{msr.authorName}</div>
-          {msr.isChatContactRequest && (
-            <div className='label'>
-              {window.static_translate('chat_request_label')}
-            </div>
-          )}
-          {msr.isChatArchived && (
-            <div className='label'>
-              {window.static_translate('chat_archived_label')}
-            </div>
-          )}
-        </div>
+        {!isSingleChatSearch && (
+          <div className='message-result-author-line'>
+            <div className='author-name'>{msr.authorName}</div>
+            {msr.isChatContactRequest && (
+              <div className='label'>
+                {window.static_translate('chat_request_label')}
+              </div>
+            )}
+            {msr.isChatArchived && (
+              <div className='label'>
+                {window.static_translate('chat_archived_label')}
+              </div>
+            )}
+          </div>
+        )}
         <div className='chat-list-item-message'>
           <div className='text'>{rMessage(msr.message, queryStr)}</div>
         </div>

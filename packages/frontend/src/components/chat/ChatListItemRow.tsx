@@ -32,6 +32,10 @@ export type MessageChatListItemData = {
     [id: number]: T.MessageSearchResult | undefined
   }
   queryStr: string | undefined
+  /**
+   * Whether the user is searching for messages in just a single chat.
+   */
+  isSingleChatSearch: boolean
 }
 
 export type ContactChatListItemData = {
@@ -109,7 +113,7 @@ export const ChatListItemRowMessage = React.memo<{
   data: MessageChatListItemData
   style: React.CSSProperties
 }>(({ index, data, style }) => {
-  const { messageResultIds, messageCache, queryStr } = data
+  const { messageResultIds, messageCache, queryStr, isSingleChatSearch } = data
   const msrId = messageResultIds[index]
   const messageSearchResult = messageCache[msrId]
   const { jumpToMessage } = useMessage()
@@ -121,6 +125,7 @@ export const ChatListItemRowMessage = React.memo<{
         <ChatListItemMessageResult
           queryStr={queryStr || ''}
           msr={messageSearchResult}
+          isSingleChatSearch={isSingleChatSearch}
           onClick={() => {
             jumpToMessage({
               accountId,
