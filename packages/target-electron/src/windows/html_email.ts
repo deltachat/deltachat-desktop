@@ -516,6 +516,28 @@ function makeBrowserView(
       // before our drag-and-drop handlers have been initialized.
       // Also handle clicking links inside of the message.
       e.preventDefault()
+      const prefix = 'email://index.html'
+      if (url.startsWith(prefix)) {
+        let urlWithoutPrefix = url.slice(prefix.length)
+        if (url.slice(prefix.length)[0] == '/') {
+          urlWithoutPrefix = urlWithoutPrefix.slice(1)
+        }
+        if (urlWithoutPrefix.startsWith('#')) {
+          // double fragment issue workaround
+          // the issue is that when clicking on the same anchor multiple times,
+          // only the first time it jumps to it - the times after it just appends it to the url without jumping,
+          // might be an issue in electopn/chromium
+          // like this `email://index.html#anchor#anchor`
+          let lastFragment = urlWithoutPrefix.split('#').reverse()[0]
+          sandboxedView.webContents
+            .loadURL(`email://index.html/${Math.random()}/#${lastFragment}`)
+            .catch(log.error.bind(log, 'error'))
+          return
+        } else {
+          // assume it is a https weblink
+          return openLink('https://' + urlWithoutPrefix)
+        }
+      }
       openLink(url)
     }
   )
