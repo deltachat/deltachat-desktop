@@ -855,7 +855,32 @@ export const MessageListInner = React.memo(
     })
 
     return (
-      <div id='message-list' ref={messageListRef} onScroll={onScroll2}>
+      <div
+        id='message-list'
+        ref={messageListRef}
+        onScroll={onScroll2}
+        // 'log' is appropriate for message lists.
+        // See https://www.w3.org/WAI/WCAG21/Techniques/aria/ARIA23.
+        role='log'
+        // `aria-live="polite"` is implied by `role="log"`.
+
+        // Otherwise screen readers will try to read
+        // the entire list of messages every time you switch the chat.
+        aria-busy={!loaded}
+        // Do not announce timestamp updates (see `updateTimestamps()`).
+        // We might want to reconsider this line
+        // when message editing gets implemented.
+        aria-relevant='additions'
+        // TODO how do we _not_ announce messages that get loaded
+        // due to scrolling / jumping to messages?
+        // Add `aria-hidden` for just one render cycle to such messages?
+        // Or apply `aria-busy` to this element when inserting such messages?
+
+        // TODO don't announce
+        // - the menu that shows when you hover over a message.
+        // - the "React" menu.
+        // - Maybe don't read the entire message that you just sent?
+      >
         <ol>
           {loaded && (
             <RovingTabindexProvider wrapperElementRef={messageListRef}>

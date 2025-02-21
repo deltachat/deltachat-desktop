@@ -19,6 +19,7 @@
 ### Fixed
 - message list being empty when double-clicking the chat before it has loaded (again) #4647
 - accessibility: improve tab order of the app #4672
+- accessibility: announce new messages in the currently selected chat (make the chat a "live region")
 - other minor accessibility improvements #4675
 - improve performance a little #4512
 - fix missing maps.xdc in flatpak build #4682
