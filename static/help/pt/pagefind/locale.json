@@ -1,0 +1,10 @@
+{
+  "search": "Pesquisar",
+  "clear_search": "Clear",
+  "search_no_result_for_x": "Nenhum resultado encontrado para \"%s\"",
+  "one_result": "Result for \"[SEARCH_TERM]\"",
+  "menu_help": "Ajuda",
+  "app_name": "Delta Chat",
+  "placeholder": "Pesquisar",
+  "zero_results": "Nenhum resultado encontrado para \"[SEARCH_TERM]\""
+}

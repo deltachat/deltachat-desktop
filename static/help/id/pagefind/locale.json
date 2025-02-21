@@ -1,0 +1,10 @@
+{
+  "search": "Cari",
+  "clear_search": "Hapus pencarian",
+  "search_no_result_for_x": "Tak ada hasil dari \"%s\"",
+  "one_result": "Result for \"[SEARCH_TERM]\"",
+  "menu_help": "Bantuan",
+  "app_name": "Delta Chat",
+  "placeholder": "Cari",
+  "zero_results": "Tak ada hasil dari \"[SEARCH_TERM]\""
+}

@@ -7,8 +7,8 @@ import { existsSync} from 'fs'
 const translations = {
     "search": "Search",
     "clear_search": "Clear",
-    "search_no_result_for_x": "No results for [SEARCH_TERM]",
-    "one_result": "Result for [SEARCH_TERM]",
+    "search_no_result_for_x": "No results for \"[SEARCH_TERM]\"",
+    "one_result": "Result for \"[SEARCH_TERM]\"",
     "menu_help": "Help",
     "app_name": "Delta Chat",
 }
@@ -26,7 +26,7 @@ async function main() {
                 }
             }
             helpLabel['placeholder'] = helpLabel['search']
-            helpLabel['zero_results'] = helpLabel['search_no_result_for_x'].replace('"%s"', '[SEARCH_TERM]')
+            helpLabel['zero_results'] = helpLabel['search_no_result_for_x'].replace('"%s"', '"[SEARCH_TERM]"')
             await writeFile(`static/help/${file}/pagefind/locale.json`, JSON.stringify(helpLabel, null, 2))
         }
     }

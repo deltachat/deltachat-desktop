@@ -1,0 +1,10 @@
+{
+  "search": "Search",
+  "clear_search": "Clear",
+  "search_no_result_for_x": "No results for \"[SEARCH_TERM]\"",
+  "one_result": "Result for \"[SEARCH_TERM]\"",
+  "menu_help": "Help",
+  "app_name": "Delta Chat",
+  "placeholder": "Search",
+  "zero_results": "No results for \"[SEARCH_TERM]\""
+}

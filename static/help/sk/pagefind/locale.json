@@ -1,0 +1,10 @@
+{
+  "search": "Vyhľadávanie",
+  "clear_search": "Zrušiť hľadanie",
+  "search_no_result_for_x": "Neboli nájdené žiadne výsledky pre \"%s\"",
+  "one_result": "Result for \"[SEARCH_TERM]\"",
+  "menu_help": "Pomocník",
+  "app_name": "Delta Chat",
+  "placeholder": "Vyhľadávanie",
+  "zero_results": "Neboli nájdené žiadne výsledky pre \"[SEARCH_TERM]\""
+}
