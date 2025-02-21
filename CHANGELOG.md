@@ -4,6 +4,8 @@
 
 ### Added
 - add "learn more"-button to manage-key section that links to local help #4684
+- add a search field to help page
+- update local help (2025-02-21)
 
 ### Changed
 - update `esbuild` from `0.23.0` to `0.25.0` #4643
