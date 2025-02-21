@@ -15,6 +15,7 @@
   - Use dedicated ID for sync messages affecting device chat.
   - Do not allow non-members to change ephemeral timer settings.
   - Show padlock when the message is not sent over the network.
+- html email view: migrate from deprecated `BrowserView` to `WebContentsView` #4689
 
 ### Fixed
 - message list being empty when double-clicking the chat before it has loaded (again) #4647
