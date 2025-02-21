@@ -12,6 +12,7 @@ type Props = {
   fileMime: string | null
   direction?: 'incoming' | 'outgoing'
   status: msgStatus
+  isEdited: boolean
   hasText: boolean
   timestamp: number
   hasLocation?: boolean
@@ -28,6 +29,7 @@ export default function MessageMetaData(props: Props) {
     fileMime,
     direction,
     status,
+    isEdited,
     hasText,
     timestamp,
     hasLocation,
@@ -53,6 +55,7 @@ export default function MessageMetaData(props: Props) {
         />
       )}
       {hasLocation && <span className={'location-icon'} />}
+      {isEdited && <span className='edited'>{tx('edited')}</span>}
       <Timestamp
         timestamp={timestamp}
         extended
