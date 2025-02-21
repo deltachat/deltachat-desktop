@@ -854,60 +854,56 @@ export const MessageListInner = React.memo(
       // over the lifetime of this component.
     })
 
-    if (!loaded) {
-      return (
-        <div id='message-list' ref={messageListRef} onScroll={onScroll2}>
-          <ol></ol>
-        </div>
-      )
-    }
-
     return (
       <div id='message-list' ref={messageListRef} onScroll={onScroll2}>
         <ol>
-          <RovingTabindexProvider wrapperElementRef={messageListRef}>
-            {messageListItems.length === 0 && <EmptyChatMessage chat={chat} />}
-            {activeView.map(messageId => {
-              if (messageId.kind === 'dayMarker') {
-                return (
-                  <DayMarker
-                    key={`daymarker-${messageId.timestamp}`}
-                    timestamp={messageId.timestamp}
-                  />
-                )
-              }
-
-              if (messageId.kind === 'message') {
-                const message = messageCache[messageId.msg_id]
-                if (message?.kind === 'message') {
+          {loaded && (
+            <RovingTabindexProvider wrapperElementRef={messageListRef}>
+              {messageListItems.length === 0 && (
+                <EmptyChatMessage chat={chat} />
+              )}
+              {activeView.map(messageId => {
+                if (messageId.kind === 'dayMarker') {
                   return (
-                    <MessageWrapper
-                      key={messageId.msg_id}
-                      key2={`${messageId.msg_id}`}
-                      chat={chat}
-                      message={message}
-                      conversationType={conversationType}
-                      unreadMessageInViewIntersectionObserver={
-                        unreadMessageInViewIntersectionObserver
-                      }
+                    <DayMarker
+                      key={`daymarker-${messageId.timestamp}`}
+                      timestamp={messageId.timestamp}
                     />
                   )
-                } else if (message?.kind === 'loadingError') {
-                  return (
-                    <MessageLoadingError
-                      messageId={messageId}
-                      message={message}
-                    />
-                  )
-                } else {
-                  // setTimeout tells it to call method in next event loop iteration, so after rendering
-                  // it is debounced later so we can call it here multiple times and it's ok
-                  setTimeout(loadMissingMessages)
-                  return <MessageLoading messageId={messageId} />
                 }
-              }
-            })}
-          </RovingTabindexProvider>
+
+                if (messageId.kind === 'message') {
+                  const message = messageCache[messageId.msg_id]
+                  if (message?.kind === 'message') {
+                    return (
+                      <MessageWrapper
+                        key={messageId.msg_id}
+                        key2={`${messageId.msg_id}`}
+                        chat={chat}
+                        message={message}
+                        conversationType={conversationType}
+                        unreadMessageInViewIntersectionObserver={
+                          unreadMessageInViewIntersectionObserver
+                        }
+                      />
+                    )
+                  } else if (message?.kind === 'loadingError') {
+                    return (
+                      <MessageLoadingError
+                        messageId={messageId}
+                        message={message}
+                      />
+                    )
+                  } else {
+                    // setTimeout tells it to call method in next event loop iteration, so after rendering
+                    // it is debounced later so we can call it here multiple times and it's ok
+                    setTimeout(loadMissingMessages)
+                    return <MessageLoading messageId={messageId} />
+                  }
+                }
+              })}
+            </RovingTabindexProvider>
+          )}
         </ol>
       </div>
     )
