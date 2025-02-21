@@ -528,7 +528,7 @@ function makeBrowserView(
           // only the first time it jumps to it - the times after it just appends it to the url without jumping,
           // might be an issue in electopn/chromium
           // like this `email://index.html#anchor#anchor`
-          let lastFragment = urlWithoutPrefix.split('#').reverse()[0]
+          const lastFragment = urlWithoutPrefix.split('#').reverse()[0]
           sandboxedView.webContents
             .loadURL(`email://index.html/${Math.random()}/#${lastFragment}`)
             .catch(log.error.bind(log, 'error'))
