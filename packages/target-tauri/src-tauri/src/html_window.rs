@@ -31,6 +31,7 @@ pub(crate) mod commands;
 mod error;
 mod punycode;
 
+#[allow(clippy::too_many_arguments)]
 #[tauri::command]
 pub(crate) fn open_html_window(
     app: tauri::AppHandle,
@@ -82,7 +83,7 @@ pub(crate) fn open_html_window(
 
     let header_view = window.add_child(
         WebviewBuilder::new(
-            &format!("{window_id}-header"),
+            format!("{window_id}-header"),
             WebviewUrl::App(
                 PathBuf::from_str("tauri_html_email_view/html_email_view.html")
                     .expect("path conversion failed"),
@@ -96,7 +97,7 @@ pub(crate) fn open_html_window(
     let app = app_arc.clone();
 
     let mut mail_view_builder = tauri::webview::WebviewBuilder::new(
-        &format!("{window_id}-mail"),
+        format!("{window_id}-mail"),
         WebviewUrl::CustomProtocol(Url::from_str("about:blank").unwrap()),
     )
     .on_navigation(move |url| {

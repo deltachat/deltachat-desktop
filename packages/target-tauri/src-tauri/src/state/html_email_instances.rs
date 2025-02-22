@@ -39,7 +39,7 @@ impl HtmlEmailInstancesState {
     }
 
     pub(crate) async fn get(&self, id: &str) -> Option<InnerHtmlEmailInstanceData> {
-        self.inner.read().await.get(id).map(|data| data.clone())
+        self.inner.read().await.get(id).cloned()
     }
 
     pub(crate) async fn set_network_allow_state(&self, id: &str, allow_network: bool) {
