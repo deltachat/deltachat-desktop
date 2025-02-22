@@ -83,7 +83,6 @@ pub(crate) fn get_setting_bool_or(
     default_value: bool,
 ) -> bool {
     setting_load_result
-        .map(|v| v.as_bool())
-        .flatten()
+        .and_then(|v| v.as_bool())
         .unwrap_or(default_value)
 }

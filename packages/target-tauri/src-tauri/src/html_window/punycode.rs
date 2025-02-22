@@ -10,8 +10,7 @@ pub(super) fn is_puny(host: &str) -> bool {
 
 /// Returns host as punycode encoded string
 pub(super) fn puny_code_encode_host(host: &str) -> String {
-    host.to_owned()
-        .split('.')
+    host.split('.')
         .map(|sub| {
             if is_puny(sub) {
                 format!(
@@ -29,8 +28,7 @@ pub(super) fn puny_code_encode_host(host: &str) -> String {
 
 /// Returns host as decoded string
 pub(super) fn puny_code_decode_host(host: &str) -> String {
-    host.to_owned()
-        .split('.')
+    host.split('.')
         .map(|sub| {
             if let Some(sub) = sub.strip_prefix("xn--") {
                 unic_idna_punycode::decode_to_string(sub)
