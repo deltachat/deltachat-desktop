@@ -45,7 +45,7 @@
   "multidevice_connection_takes_too_long": {
     "message": "This takes longer than expected 🐌 make sure both devices are on the same Wi-Fi or network and check troubleshooting"
   },
-  "one_result":  {
-    "message":"Result for \"[SEARCH_TERM]\""
+  "search_result_for_x":  {
+    "message":"Result for \"%s\""
   }
 }
