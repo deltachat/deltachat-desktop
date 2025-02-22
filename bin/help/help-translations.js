@@ -4,11 +4,12 @@
 import { readdir, readFile, writeFile } from 'fs/promises'
 import { existsSync} from 'fs'
 
+// keys as used in _locales
 const translations = {
     "search": "Search",
     "clear_search": "Clear",
     "search_no_result_for_x": "No results for \"[SEARCH_TERM]\"",
-    "one_result": "Result for \"[SEARCH_TERM]\"",
+    "search_result_for_x": "Result for \"%s\"",
     "menu_help": "Help",
     "app_name": "Delta Chat",
 }
@@ -25,7 +26,9 @@ async function main() {
                     helpLabel[key] = json[key]?.message || fallback[key].message
                 }
             }
+            // keys used by pagefind
             helpLabel['placeholder'] = helpLabel['search']
+            helpLabel['one_result'] = helpLabel['search_result_for_x'].replace('"%s"', '"[SEARCH_TERM]"')
             helpLabel['zero_results'] = helpLabel['search_no_result_for_x'].replace('"%s"', '"[SEARCH_TERM]"')
             await writeFile(`static/help/${file}/pagefind/locale.json`, JSON.stringify(helpLabel, null, 2))
         }
