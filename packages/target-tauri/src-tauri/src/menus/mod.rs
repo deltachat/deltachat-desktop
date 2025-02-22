@@ -5,8 +5,11 @@ use strum_macros::{AsRefStr, EnumString};
 use tauri::menu::MenuId;
 use tauri::{menu::MenuEvent, AppHandle, Emitter, Manager, Runtime, WebviewWindow};
 use tauri_plugin_opener::OpenerExt;
+use tauri_plugin_store::StoreExt;
 pub mod help_menu;
 pub(crate) mod main_menu;
+
+const HELP_ZOOM_FACTOR_KEY: &str = "helpZoomFactor";
 
 #[derive(Debug, AsRefStr, EnumString)]
 pub(crate) enum MainMenuAction {
@@ -148,10 +151,44 @@ fn handle_event<A: Runtime>(app: &AppHandle<A>, event: MenuEvent) -> anyhow::Res
                     .ok_or(anyhow::anyhow!("help window not found"))?;
                 window.close().ok();
             }
-            HelpMenuAction::ZoomIn => {}
-            HelpMenuAction::ZoomOut => {}
-            HelpMenuAction::ResetZoom => {}
-            HelpMenuAction::HelpFloatOnTop => {}
+            HelpMenuAction::ZoomIn => {
+                let store = app
+                    .get_store("config.json")
+                    .ok_or(anyhow::anyhow!("store not found"))?;
+                let curr_zoom = store
+                    .get(HELP_ZOOM_FACTOR_KEY)
+                    .and_then(|f| f.as_f64())
+                    .unwrap_or(1.0);
+                let new_zoom = curr_zoom * 1.2;
+                store.set(HELP_ZOOM_FACTOR_KEY, new_zoom);
+                if let Some(window) = app.get_webview_window("help") {
+                    window.set_zoom(new_zoom)?;
+                }
+            }
+            HelpMenuAction::ZoomOut => {
+                let store = app
+                    .get_store("config.json")
+                    .ok_or(anyhow::anyhow!("store not found"))?;
+                let curr_zoom = store
+                    .get(HELP_ZOOM_FACTOR_KEY)
+                    .and_then(|f| f.as_f64())
+                    .unwrap_or(1.0);
+                let new_zoom = curr_zoom * 0.8;
+                store.set(HELP_ZOOM_FACTOR_KEY, new_zoom);
+                if let Some(window) = app.get_webview_window("help") {
+                    window.set_zoom(new_zoom)?;
+                }
+            }
+            HelpMenuAction::ResetZoom => {
+                if let Some(window) = app.get_webview_window("help") {
+                    window.set_zoom(1.0)?;
+                }
+            }
+            HelpMenuAction::HelpFloatOnTop => {
+                if let Some(window) = app.get_webview_window("help") {
+                    window.set_always_on_top(true)?;
+                }
+            }
         }
     }
 
