@@ -2,9 +2,10 @@
   "search": "Buscar",
   "clear_search": "Borrar búsqueda",
   "search_no_result_for_x": "No se encontraron resultados para \"%s\"",
-  "one_result": "Result for \"[SEARCH_TERM]\"",
+  "search_result_for_x": "Result for \"%s\"",
   "menu_help": "Ayuda",
   "app_name": "Delta Chat",
   "placeholder": "Buscar",
+  "one_result": "Result for \"[SEARCH_TERM]\"",
   "zero_results": "No se encontraron resultados para \"[SEARCH_TERM]\""
 }

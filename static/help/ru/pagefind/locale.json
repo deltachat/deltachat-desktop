@@ -2,9 +2,10 @@
   "search": "Поиск",
   "clear_search": "Очистить поиск",
   "search_no_result_for_x": "Ничего не найдено по запросу \"%s\"",
-  "one_result": "Result for \"[SEARCH_TERM]\"",
+  "search_result_for_x": "Result for \"%s\"",
   "menu_help": "Справка",
   "app_name": "Delta Chat",
   "placeholder": "Поиск",
+  "one_result": "Result for \"[SEARCH_TERM]\"",
   "zero_results": "Ничего не найдено по запросу \"[SEARCH_TERM]\""
 }
