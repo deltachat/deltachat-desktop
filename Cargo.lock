@@ -1730,9 +1730,6 @@ dependencies = [
  "http 1.2.0",
  "log",
  "mime",
- "objc2",
- "objc2-foundation",
- "objc2-web-kit",
  "percent-encoding",
  "png",
  "serde",
@@ -1752,7 +1749,6 @@ dependencies = [
  "tokio",
  "unic-idna-punycode",
  "uuid",
- "webkit2gtk",
  "wry",
 ]
 

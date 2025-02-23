@@ -185,65 +185,6 @@ pub(crate) fn open_html_window(
         LogicalSize::new(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT - HEADER_HEIGHT),
     )?;
 
-    // disable javascript & load from string on macOS
-    // TODO/IDEA: try to upstream into wry
-    // TODO: get rid of the unwrap/expect here
-    {
-        #[cfg(any(target_os = "macos", target_os = "ios"))]
-        {
-            // TODO test
-            use objc2::rc::Retained;
-            use objc2_foundation;
-            let content = objc2_foundation::NSString::from_str(content);
-            unsafe {
-                mail_view.with_webview(move |w| {
-                    // meeeds to be done inside of the webview builder inside of tauri:
-                    // https://stackoverflow.com/questions/34404481/swift-wkwebview-disable-javascript
-                    // or nowerdays in the navigation delegate
-
-                    let view: &objc2_web_kit::WKWebView = &*w.inner().cast();
-                    let controller: &objc2_web_kit::WKUserContentController =
-                        &*w.controller().cast();
-
-                    //WKWebpagePreferences
-                    //  WKWebpagePreferences.allowsContentJavaScript
-
-                    // view.loadHTMLString_baseURL(&content, None);
-
-                    controller.removeAllUserScripts();
-                })?;
-            }
-        }
-        #[cfg(windows)]
-        {
-            mail_view.with_webview(|w| {
-                // TODO test
-                w.controller()
-                    .CoreWebView2()
-                    .expect("get CoreWebView2")
-                    .Settings()
-                    .expect("get Settings")
-                    .SetIsScriptEnabled(false)
-                    .expect("SetIsScriptEnabled failed");
-            })?;
-        }
-        #[cfg(any(
-            target_os = "linux",
-            target_os = "dragonfly",
-            target_os = "freebsd",
-            target_os = "netbsd",
-            target_os = "openbsd"
-        ))]
-        {
-            mail_view.with_webview(|w| {
-                // TODO test
-                use webkit2gtk::{SettingsExt, WebViewExt};
-                let settings = WebViewExt::settings(&w.inner()).unwrap();
-                settings.set_enable_javascript(false);
-            })?;
-        }
-    }
-
     let header_view_arc = Arc::new(header_view);
     let mail_view_arc = Arc::new(mail_view);
     let window_arc = Arc::new(window);
@@ -282,9 +223,9 @@ pub(crate) fn open_html_window(
         }
     }
 
-    // TODO: prevent access to web (toggle-able)
-
     // TODO: disable JS in mailview
+
+    // TODO: load remote content in mailview over dc core http api to respect users proxy settings
 
     window.set_title(&format!(
         "{} - {}",
