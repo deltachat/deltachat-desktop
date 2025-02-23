@@ -125,6 +125,10 @@ pub fn run() {
         .register_asynchronous_uri_scheme_protocol("webxdc-icon", webxdc::webxdc_icon_protocol)
         .register_asynchronous_uri_scheme_protocol("dcblob", blobs::delta_blobs_protocol)
         .register_asynchronous_uri_scheme_protocol("dcsticker", stickers::delta_stickers_protocol)
+        .register_asynchronous_uri_scheme_protocol(
+            "email",
+            html_window::email_scheme::email_protocol,
+        )
         .setup(move |app| {
             // Create missing directories for iOS (quick fix, better fix this upstream in tauri)
             #[cfg(target_os = "ios")]

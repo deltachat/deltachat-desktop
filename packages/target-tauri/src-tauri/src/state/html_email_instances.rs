@@ -10,7 +10,7 @@ use tokio::sync::RwLock;
 
 #[derive(Clone)]
 pub(crate) struct InnerHtmlEmailInstanceData {
-    pub(crate) account_id: u32,
+    // pub(crate) account_id: u32,
     pub(crate) is_contact_request: bool,
     pub(crate) subject: String,
     pub(crate) sender: String, // this is called "from" in electron edition

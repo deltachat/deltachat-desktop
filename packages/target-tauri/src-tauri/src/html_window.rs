@@ -27,7 +27,7 @@ const DEFAULT_WINDOW_WIDTH: f64 = 800.;
 const DEFAULT_WINDOW_HEIGHT: f64 = 600.;
 
 pub(crate) mod commands;
-// mod email_scheme;
+pub(crate) mod email_scheme;
 mod error;
 mod punycode;
 
@@ -37,7 +37,7 @@ pub(crate) fn open_html_window(
     app: tauri::AppHandle,
     html_instances_state: tauri::State<HtmlEmailInstancesState>,
     window_id: &str,
-    account_id: u32,
+    account_id: u32, // TODO needs to be used later for fetching webrequests over dc core
     is_contact_request: bool,
     subject: &str,
     sender: &str, // this is called "from" in electron edition
@@ -67,7 +67,7 @@ pub(crate) fn open_html_window(
     block_on(html_instances_state.add(
         &window_id,
         InnerHtmlEmailInstanceData {
-            account_id,
+            // account_id,
             is_contact_request,
             subject: subject.to_owned(),
             sender: sender.to_owned(),
@@ -98,10 +98,10 @@ pub(crate) fn open_html_window(
 
     let mut mail_view_builder = tauri::webview::WebviewBuilder::new(
         format!("{window_id}-mail"),
-        WebviewUrl::CustomProtocol(Url::from_str("about:blank").unwrap()),
+        WebviewUrl::CustomProtocol(Url::from_str("email://dummy.host/index.html").unwrap()),
     )
     .on_navigation(move |url| {
-        if url.to_string() == "about:blank" {
+        if url.to_string() == "about:blank" || url.scheme() == "email" {
             // allow navigating to the email
             return true;
         }
@@ -208,7 +208,7 @@ pub(crate) fn open_html_window(
                     //WKWebpagePreferences
                     //  WKWebpagePreferences.allowsContentJavaScript
 
-                    view.loadHTMLString_baseURL(&content, None);
+                    // view.loadHTMLString_baseURL(&content, None);
 
                     controller.removeAllUserScripts();
                 })?;
@@ -281,10 +281,6 @@ pub(crate) fn open_html_window(
             window.set_content_protected(true)?;
         }
     }
-
-    // TODO: serve html content
-
-    // TODO: implement header view
 
     // TODO: prevent access to web (toggle-able)
 

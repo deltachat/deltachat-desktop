@@ -1,10 +1,8 @@
-use std::str::FromStr;
-
 use serde::Serialize;
 use tauri::{
     async_runtime::block_on,
     menu::{CheckMenuItem, Menu},
-    Manager, Url,
+    Manager,
 };
 use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_store::StoreExt;
@@ -27,16 +25,11 @@ async fn set_load_remote_content(webview: &tauri::Webview, new_state: bool) -> R
         .await;
 
     // reload header & html email webviews to apply changes
-    for mut webview in webview.window().webviews() {
+    for webview in webview.window().webviews() {
         if webview.label().ends_with("-mail") {
             // TODO: wry webview.reload is missing
-            // this is a hack to emulate reload
             // IDEA: better error handling
-            let url = webview.url().unwrap();
-            webview
-                .navigate(Url::from_str("about:blank").unwrap())
-                .unwrap();
-            webview.navigate(url).unwrap();
+            webview.eval("location.reload()").unwrap();
         }
     }
     Ok(())
