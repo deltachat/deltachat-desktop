@@ -1,5 +1,5 @@
 use anyhow::anyhow;
-use log::{error, info};
+use log::error;
 use tauri::{Manager, UriSchemeContext, UriSchemeResponder};
 
 use crate::HtmlEmailInstancesState;
