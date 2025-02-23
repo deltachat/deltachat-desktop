@@ -27,6 +27,7 @@
 - constrain size of webxdc window by available screen-workarea-space #4683
 - fix that in html email view links without schema didn't open in browser #4690
 - fix clicking on the same anchor multiple timed disn't work in html email view #4690
+- tauri: replace `tauri-plugin-shell` with `tauri-plugin-opener`
 
 <a id="1_54_1"></a>
 
