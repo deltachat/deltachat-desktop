@@ -369,9 +369,34 @@ const Composer = forwardRef<
   } else {
     return (
       <div className='composer' ref={ref}>
-        <div className='upper-bar'>
+        <section
+          // Or should it be 'assetive'? Because it's kind of like
+          // changing the value of an input.
+          //
+          // Keep in mind that this element also changes when switching
+          // between chats.
+          // We probably want such changes to be announced still.
+          aria-live='polite'
+          // Announce quote / attachment _removals_ as well as text changes
+          // and node insertions.
+          aria-relevant='all'
+          className='upper-bar'
+        >
           {draftState.quote !== null && (
-            <div className='attachment-quote-section is-quote'>
+            <div
+              className='attachment-quote-section is-quote'
+              // When changing the quoted message, e.g. with the Ctrl + Up
+              // shortcut, we should read the author's name
+              // even if it didn't change.
+              //
+              // TODO this makes it read the "close" button as well,
+              // which is not desirable.
+              //
+              // TODO is it fine to apply `aria-atomic='true'` to _descendants_
+              // of `aria-live`, or does it have to be the `aria-live`
+              // element itself?
+              aria-atomic='true'
+            >
               <Quote quote={draftState.quote} tabIndex={0} />
               <CloseButton onClick={removeQuote} />
             </div>
@@ -391,7 +416,7 @@ const Composer = forwardRef<
               <CloseButton onClick={removeFile} />
             </div>
           )}
-        </div>
+        </section>
         <div className='lower-bar'>
           <MenuAttachment
             addFileToDraft={addFileToDraft}
