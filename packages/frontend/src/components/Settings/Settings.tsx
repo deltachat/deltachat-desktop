@@ -36,11 +36,13 @@ export default function Settings({ onClose }: DialogProps) {
 
   useEffect(() => {
     document.onkeydown = (evt: KeyboardEvent) => {
-      if (evt.key === 'Escape') {
-        if (settingsMode !== 'main') {
-          evt.preventDefault()
-          setSettingsMode('main')
-        }
+      if (
+        window.__settingsOpened &&
+        evt.key === 'Escape' &&
+        settingsMode !== 'main'
+      ) {
+        evt.preventDefault()
+        setSettingsMode('main')
       }
     }
   }, [settingsMode])
