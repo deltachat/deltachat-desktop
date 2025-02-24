@@ -63,6 +63,7 @@
    <https://github.com/deltachat/deltachat-desktop/issues?q=is%3Aopen+is%3Aissue+label%3Ablocker>
 2. Pull translations via `pnpm -w translations:update` in a separate PR
 3. Update the local help files if necessary in a separate PR:
+   Run `./bin/help/create-local-help.sh` with an updated checkout of deltachat-pages on the same level ../
    <https://github.com/deltachat/deltachat-pages/blob/master/tools/create-local-help.py>
 4. If you've updated any translations or local help files, make sure that the
    date of your update is mentioned in the `CHANGELOG.md`
