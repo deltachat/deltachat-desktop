@@ -18,7 +18,7 @@ for LANGUAGE in "${dirs[@]}"; do
     rm ./static/help/$LANGUAGE/pagefind/*.css
     rm ./static/help/$LANGUAGE/pagefind/pagefind-*.js
   else
-    echo "Datei $FILE nicht gefunden"
+    echo "File $FILE not found"
   fi
 done
 
