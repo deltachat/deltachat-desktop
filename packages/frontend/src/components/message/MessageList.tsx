@@ -854,60 +854,81 @@ export const MessageListInner = React.memo(
       // over the lifetime of this component.
     })
 
-    if (!loaded) {
-      return (
-        <div id='message-list' ref={messageListRef} onScroll={onScroll2}>
-          <ol></ol>
-        </div>
-      )
-    }
-
     return (
-      <div id='message-list' ref={messageListRef} onScroll={onScroll2}>
-        <ol>
-          <RovingTabindexProvider wrapperElementRef={messageListRef}>
-            {messageListItems.length === 0 && <EmptyChatMessage chat={chat} />}
-            {activeView.map(messageId => {
-              if (messageId.kind === 'dayMarker') {
-                return (
-                  <DayMarker
-                    key={`daymarker-${messageId.timestamp}`}
-                    timestamp={messageId.timestamp}
-                  />
-                )
-              }
+      <div
+        id='message-list'
+        ref={messageListRef}
+        onScroll={onScroll2}
+        // 'log' is appropriate for message lists.
+        // See https://www.w3.org/WAI/WCAG21/Techniques/aria/ARIA23.
+        role='log'
+        // `aria-live="polite"` is implied by `role="log"`.
 
-              if (messageId.kind === 'message') {
-                const message = messageCache[messageId.msg_id]
-                if (message?.kind === 'message') {
+        // Otherwise screen readers will try to read
+        // the entire list of messages every time you switch the chat.
+        aria-busy={!loaded}
+        // Do not announce timestamp updates (see `updateTimestamps()`).
+        // We might want to reconsider this line
+        // when message editing gets implemented.
+        aria-relevant='additions'
+        // TODO how do we _not_ announce messages that get loaded
+        // due to scrolling / jumping to messages?
+        // Add `aria-hidden` for just one render cycle to such messages?
+        // Or apply `aria-busy` to this element when inserting such messages?
+
+        // TODO don't announce
+        // - the menu that shows when you hover over a message.
+        // - the "React" menu.
+        // - Maybe don't read the entire message that you just sent?
+      >
+        <ol>
+          {loaded && (
+            <RovingTabindexProvider wrapperElementRef={messageListRef}>
+              {messageListItems.length === 0 && (
+                <EmptyChatMessage chat={chat} />
+              )}
+              {activeView.map(messageId => {
+                if (messageId.kind === 'dayMarker') {
                   return (
-                    <MessageWrapper
-                      key={messageId.msg_id}
-                      key2={`${messageId.msg_id}`}
-                      chat={chat}
-                      message={message}
-                      conversationType={conversationType}
-                      unreadMessageInViewIntersectionObserver={
-                        unreadMessageInViewIntersectionObserver
-                      }
+                    <DayMarker
+                      key={`daymarker-${messageId.timestamp}`}
+                      timestamp={messageId.timestamp}
                     />
                   )
-                } else if (message?.kind === 'loadingError') {
-                  return (
-                    <MessageLoadingError
-                      messageId={messageId}
-                      message={message}
-                    />
-                  )
-                } else {
-                  // setTimeout tells it to call method in next event loop iteration, so after rendering
-                  // it is debounced later so we can call it here multiple times and it's ok
-                  setTimeout(loadMissingMessages)
-                  return <MessageLoading messageId={messageId} />
                 }
-              }
-            })}
-          </RovingTabindexProvider>
+
+                if (messageId.kind === 'message') {
+                  const message = messageCache[messageId.msg_id]
+                  if (message?.kind === 'message') {
+                    return (
+                      <MessageWrapper
+                        key={messageId.msg_id}
+                        key2={`${messageId.msg_id}`}
+                        chat={chat}
+                        message={message}
+                        conversationType={conversationType}
+                        unreadMessageInViewIntersectionObserver={
+                          unreadMessageInViewIntersectionObserver
+                        }
+                      />
+                    )
+                  } else if (message?.kind === 'loadingError') {
+                    return (
+                      <MessageLoadingError
+                        messageId={messageId}
+                        message={message}
+                      />
+                    )
+                  } else {
+                    // setTimeout tells it to call method in next event loop iteration, so after rendering
+                    // it is debounced later so we can call it here multiple times and it's ok
+                    setTimeout(loadMissingMessages)
+                    return <MessageLoading messageId={messageId} />
+                  }
+                }
+              })}
+            </RovingTabindexProvider>
+          )}
         </ol>
       </div>
     )
