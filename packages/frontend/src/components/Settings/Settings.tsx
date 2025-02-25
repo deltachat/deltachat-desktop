@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { useSettingsStore } from '../../stores/settings'
 import { SendBackupDialog } from '../dialogs/SetupMultiDevice'
@@ -34,44 +34,19 @@ export default function Settings({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
   const [settingsMode, setSettingsMode] = useState<SettingsView>('main')
 
-  const abortControllerRef = useRef<AbortController | null>(null)
-
   useEffect(() => {
-    if (settingsMode !== 'main' && window.__settingsOpened) {
-      // a second layer of settings form was opened
-      abortControllerRef.current = new AbortController()
-      document.addEventListener(
-        'keydown',
-        (evt: KeyboardEvent) => {
-          if (!window.__settingsOpened) {
-            // the dialog was closed before switching to another settingsMode
-            abortControllerRef?.current?.abort()
-            abortControllerRef.current = null
-          } else if (evt.key === 'Escape') {
-            evt.preventDefault()
-            setSettingsMode('main')
-            abortControllerRef?.current?.abort()
-            abortControllerRef.current = null
-          }
-        },
-        { signal: abortControllerRef.current.signal }
-      )
-    } else {
-      abortControllerRef?.current?.abort()
-    }
-  }, [settingsMode])
-
-  useEffect(() => {
-    document.onkeydown = (evt: KeyboardEvent) => {
+    const handler = (evt: KeyboardEvent) => {
       if (
+        settingsMode !== 'main' &&
         window.__settingsOpened &&
-        evt.key === 'Escape' &&
-        settingsMode !== 'main'
+        evt.key === 'Escape'
       ) {
         evt.preventDefault()
         setSettingsMode('main')
       }
     }
+    document.addEventListener('keydown', handler)
+    return () => document.removeEventListener('keydown', handler)
   }, [settingsMode])
 
   useEffect(() => {
