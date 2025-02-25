@@ -4,3 +4,44 @@ $esp-header-height: 40px;
 .emojiPicker {
   height: calc(#{$esp-height} - #{$esp-header-height});
 }
+
+.microphoneButton {
+  height: 40px;
+  padding-right: 3px;
+  padding-left: 0px;
+  padding-bottom: 8px;
+  background-color: var(--composerBg);
+  border: none;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:focus {
+    outline: none;
+  }
+  &:active:enabled {
+    span {
+      background-color: red;
+    }
+  }
+  span {
+    display: block;
+    width: 25px;
+    height: 25px;
+    margin-top: calc((40px - 25px) / 2);
+    -webkit-mask-image: url(../images/microphone.svg);
+    -webkit-mask-size: contain;
+    background-color: var(--composerPlaceholderText);
+  }
+
+  & > svg.cross {
+    display: none;
+  }
+
+  &:disabled > svg.cross {
+    display: block;
+    position: relative;
+    top: -25px;
+  }
+}

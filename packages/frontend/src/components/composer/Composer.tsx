@@ -45,6 +45,7 @@ import { AppPicker } from '../AppPicker'
 import { AppInfo, AppStoreUrl } from '../AppPicker'
 import OutsideClickHelper from '../OutsideClickHelper'
 import { basename } from 'path'
+import classNames from 'classnames'
 
 const log = getLogger('renderer/composer')
 
@@ -82,6 +83,7 @@ const Composer = forwardRef<
   const chatId = selectedChat.id
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const [showAppPicker, setShowAppPicker] = useState(false)
+  const [voiceMessageDisabled, setVoiceMessageDisabled] = useState(false)
 
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
   const pickerButtonRef = useRef<HTMLButtonElement>(null)
@@ -112,14 +114,35 @@ const Composer = forwardRef<
     })
   }, [accountId])
 
+  const saveVoiceAsDraft = (voiceData: Blob) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(voiceData)
+    reader.onloadend = async () => {
+      if (!reader.result) {
+        log.error('Cannot convert blob to base64. reader.result is null')
+        return
+      }
+      const b64 = reader.result.toString().split(',')[1]
+      const filename = b64.slice(0, 12).toString() + '.weba'
+      const path = await runtime.writeTempFileFromBase64(filename, b64)
+      addFileToDraft(path, basename(path), 'Voice').catch((reason: any) => {
+        log.error('Cannot send message:', reason)
+        // show some error dialogue
+      })
+    }
+  }
+
   const composerSendMessage = async () => {
     if (chatId === null) {
       throw new Error('chat id is undefined')
     }
-    if (!messageInputRef.current) {
+    if (
+      !messageInputRef.current &&
+      !(draftState.file && draftState.viewType === 'Voice')
+    ) {
       throw new Error('messageInputRef is undefined')
     }
-    const textareaRef = messageInputRef.current.textareaRef.current
+    const textareaRef = messageInputRef.current?.textareaRef.current
     if (textareaRef) {
       if (textareaRef.disabled) {
         throw new Error(
@@ -129,8 +152,8 @@ const Composer = forwardRef<
       textareaRef.disabled = true
     }
     try {
-      const message = messageInputRef.current.getText()
-      if (message.match(/^\s*$/) && !draftState.file) {
+      const message = messageInputRef.current?.getText() || ''
+      if (!messageInputRef.current?.hasText() && !draftState.file) {
         log.debug(`Empty message: don't send it...`)
         return
       }
@@ -162,7 +185,7 @@ const Composer = forwardRef<
       if (textareaRef) {
         textareaRef.disabled = false
       }
-      messageInputRef.current.focus()
+      messageInputRef.current?.focus()
     }
   }
 
@@ -199,6 +222,15 @@ const Composer = forwardRef<
       document.removeEventListener('keyup', onKey, opt)
     }
   }, [shiftPressed])
+
+  useEffect(() => {
+    if (draftState.file || draftState.text) {
+      setVoiceMessageDisabled(true)
+    } else {
+      setVoiceMessageDisabled(false)
+    }
+  }, [draftState])
+
   useEffect(() => {
     if (!showEmojiPicker) return
     const onClick = (e: MouseEvent) => {
@@ -404,6 +436,25 @@ const Composer = forwardRef<
             showAppPicker={setShowAppPicker}
             selectedChat={selectedChat}
           />
+          {!voiceMessageDisabled && (
+            <button
+              className={classNames(
+                'microphone-button',
+                draftState.file && 'disabled'
+              )}
+              onClick={() => {
+                messageInputRef.current?.startRecording()
+              }}
+              aria-label={
+                voiceMessageDisabled
+                  ? tx('voice_send_cannot')
+                  : tx('voice_send')
+              }
+              disabled={voiceMessageDisabled}
+            >
+              <span />
+            </button>
+          )}
           {settingsStore && (
             <ComposerMessageInput
               ref={messageInputRef}
@@ -413,6 +464,7 @@ const Composer = forwardRef<
               chatName={selectedChat.name}
               updateDraftText={updateDraftText}
               onPaste={handlePaste}
+              saveVoiceAsDraft={saveVoiceAsDraft}
             />
           )}
           {!runtime.getRuntimeInfo().hideEmojiAndStickerPicker && (
