@@ -1,5 +1,7 @@
+use crate::settings::ZOOM_FACTOR_KEY;
 use crate::{help_window::open_help_window, AppState};
 use help_menu::create_help_menu;
+use main_menu::create_main_menu;
 use std::str::FromStr;
 use strum_macros::{AsRefStr, EnumString};
 use tauri::menu::MenuId;
@@ -69,7 +71,7 @@ impl From<HelpMenuAction> for MenuId {
     }
 }
 
-fn handle_event<A: Runtime>(app: &AppHandle<A>, event: MenuEvent) -> anyhow::Result<()> {
+pub fn handle_event<A: Runtime>(app: &AppHandle<A>, event: MenuEvent) -> anyhow::Result<()> {
     if let Ok(action) = MainMenuAction::try_from(event.id()) {
         match action {
             MainMenuAction::Settings => {
@@ -195,15 +197,33 @@ fn handle_event<A: Runtime>(app: &AppHandle<A>, event: MenuEvent) -> anyhow::Res
     Ok(())
 }
 
+pub(crate) fn handle_menu_event<A: Runtime>(app: &AppHandle<A>, event: MenuEvent) {
+    if let Err(e) = handle_event(app, event) {
+        log::error!("{:?}", e);
+    }
+}
+
 pub(crate) fn get_main_window<A: Runtime>(app: &AppHandle<A>) -> anyhow::Result<WebviewWindow<A>> {
     app.get_webview_window("main")
         .ok_or(anyhow::anyhow!("main window not found"))
 }
 
-fn set_zoom<A: Runtime>(app: &AppHandle<A>, zoom: f64, window: &str) -> anyhow::Result<()> {
+pub(crate) fn set_zoom<A: Runtime>(
+    app: &AppHandle<A>,
+    zoom: f64,
+    window: &str,
+) -> anyhow::Result<()> {
     let webview = app
         .get_webview_window(window)
         .ok_or(anyhow::anyhow!("webview not found"))?;
     webview.set_zoom(zoom)?;
+
+    let store = app
+        .get_store("config.json")
+        .ok_or(anyhow::anyhow!("store not found"))?;
+    store.set(ZOOM_FACTOR_KEY, zoom);
+
+    app.set_menu(create_main_menu(app)?)?;
+
     Ok(())
 }

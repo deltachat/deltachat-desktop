@@ -1,10 +1,11 @@
 use std::time::SystemTime;
 
 use clipboard::copy_image_to_clipboard;
-use menus::main_menu::create_main_menu;
-use settings::load_and_apply_desktop_settings_on_startup;
+use menus::{handle_menu_event, main_menu::create_main_menu, set_zoom};
+use settings::{load_and_apply_desktop_settings_on_startup, ZOOM_FACTOR_KEY};
 use state::{app::AppState, deltachat::DeltaChatAppState};
 use tauri::Manager;
+use tauri_plugin_store::StoreExt;
 mod app_path;
 mod blobs;
 mod clipboard;
@@ -89,8 +90,6 @@ pub fn run() {
                     .set_focus();
             }));
     }
-
-    builder = create_main_menu(builder);
 
     builder
         .invoke_handler(tauri::generate_handler![
@@ -191,6 +190,17 @@ pub fn run() {
                 webview.set_title_bar_style(tauri::TitleBarStyle::Overlay)?;
                 webview.set_title("")?;
             }
+
+            let zoom_factor = app
+                .handle()
+                .get_store("config.json")
+                .and_then(|store| store.get(ZOOM_FACTOR_KEY))
+                .and_then(|f| f.as_f64())
+                .unwrap_or(1.0);
+
+            set_zoom(&app.handle(), zoom_factor, "main")?;
+            app.set_menu(create_main_menu(app.handle())?)?;
+            app.on_menu_event(handle_menu_event);
 
             Ok(())
         })
