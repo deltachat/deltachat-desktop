@@ -48,6 +48,7 @@ import OutsideClickHelper from '../OutsideClickHelper'
 import { basename } from 'path'
 import { useHasChanged2 } from '../../hooks/useHasChanged'
 import { ScreenContext } from '../../contexts/ScreenContext'
+import classNames from 'classnames'
 
 const log = getLogger('renderer/composer')
 
@@ -92,6 +93,7 @@ const Composer = forwardRef<
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const [showAppPicker, setShowAppPicker] = useState(false)
   const [currentEditText, setCurrentEditText] = useState('')
+  const [voiceMessageDisabled, setVoiceMessageDisabled] = useState(false)
 
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
   const pickerButtonRef = useRef<HTMLButtonElement>(null)
@@ -129,6 +131,24 @@ const Composer = forwardRef<
     ? editMessageInputRef
     : regularMessageInputRef
 
+  const saveVoiceAsDraft = (voiceData: Blob) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(voiceData)
+    reader.onloadend = async () => {
+      if (!reader.result) {
+        log.error('Cannot convert blob to base64. reader.result is null')
+        return
+      }
+      const b64 = reader.result.toString().split(',')[1]
+      const filename = b64.slice(0, 12).toString() + '.weba'
+      const path = await runtime.writeTempFileFromBase64(filename, b64)
+      addFileToDraft(path, basename(path), 'Voice').catch((reason: any) => {
+        log.error('Cannot send message:', reason)
+        // show some error dialogue
+      })
+    }
+  }
+
   const hasSecureJoinEnded = useRef<boolean>(false)
   useEffect(() => {
     if (hasSecureJoinEnded) {
@@ -157,10 +177,13 @@ const Composer = forwardRef<
         if (chatId === null) {
           throw new Error('chat id is undefined')
         }
-        if (!regularMessageInputRef.current) {
+        if (
+          !regularMessageInputRef.current &&
+          !(draftState.file && draftState.viewType === 'Voice')
+        ) {
           throw new Error('messageInputRef is undefined')
         }
-        const textareaRef = regularMessageInputRef.current.textareaRef.current
+        const textareaRef = regularMessageInputRef.current?.textareaRef.current
         if (textareaRef) {
           if (textareaRef.disabled) {
             throw new Error(
@@ -170,8 +193,8 @@ const Composer = forwardRef<
           textareaRef.disabled = true
         }
         try {
-          const message = regularMessageInputRef.current.getText()
-          if (message.match(/^\s*$/) && !draftState.file) {
+          const message = regularMessageInputRef.current?.getText() || ''
+          if (!regularMessageInputRef.current?.hasText() && !draftState.file) {
             log.debug(`Empty message: don't send it...`)
             return
           }
@@ -203,7 +226,7 @@ const Composer = forwardRef<
           if (textareaRef) {
             textareaRef.disabled = false
           }
-          regularMessageInputRef.current.focus()
+          regularMessageInputRef.current?.focus()
         }
       }
 
@@ -213,6 +236,7 @@ const Composer = forwardRef<
     }
     onSelectReplyToShortcut(KeybindAction.Composer_SelectReplyToUp)
   })
+
   useKeyBindingAction(KeybindAction.Composer_SelectReplyToDown, () => {
     if (messageEditing.isEditingModeActive) {
       return
@@ -259,6 +283,15 @@ const Composer = forwardRef<
       document.removeEventListener('keyup', onKey, opt)
     }
   }, [shiftPressed])
+
+  useEffect(() => {
+    if (draftState.file || draftState.text) {
+      setVoiceMessageDisabled(true)
+    } else {
+      setVoiceMessageDisabled(false)
+    }
+  }, [draftState])
+
   useEffect(() => {
     if (!showEmojiPicker) return
     const onClick = (e: MouseEvent) => {
@@ -522,6 +555,25 @@ const Composer = forwardRef<
               selectedChat={selectedChat}
             />
           )}
+          {!voiceMessageDisabled && (
+            <button
+              className={classNames(
+                'microphone-button',
+                draftState.file && 'disabled'
+              )}
+              onClick={() => {
+                editMessageInputRef.current?.startRecording()
+              }}
+              aria-label={
+                voiceMessageDisabled
+                  ? tx('voice_send_cannot')
+                  : tx('voice_send')
+              }
+              disabled={voiceMessageDisabled}
+            >
+              <span />
+            </button>
+          )}
           {settingsStore && (
             <>
               <ComposerMessageInput
@@ -551,6 +603,7 @@ const Composer = forwardRef<
                 updateDraftText={updateDraftText}
                 onPaste={handlePaste ?? undefined}
                 onChange={setCurrentEditText}
+                saveVoiceAsDraft={saveVoiceAsDraft}
               />
               <ComposerMessageInput
                 isMessageEditingMode={true}
@@ -569,6 +622,7 @@ const Composer = forwardRef<
                 // Message editing mode doesn't support file pasting.
                 // onPaste={handlePaste}
                 onChange={setCurrentEditText}
+                saveVoiceAsDraft={saveVoiceAsDraft}
               />
             </>
           )}

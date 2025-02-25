@@ -4,6 +4,7 @@ import { throttle } from '@deltachat-desktop/shared/util.js'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 import { getLogger } from '../../../../shared/logger'
 import { DialogContext } from '../../contexts/DialogContext'
+import moment from 'moment'
 
 const log = getLogger('renderer/composer/ComposerMessageInput')
 
@@ -21,6 +22,7 @@ type ComposerMessageInputProps = {
   updateDraftText: (text: string, InputChatId: number) => void
   // used to show/hide send button
   onChange: (text: string) => void
+  saveVoiceAsDraft: (voiceData: Blob) => void
 }
 
 type ComposerMessageInputState = {
@@ -28,6 +30,7 @@ type ComposerMessageInputState = {
   chatId: number
   // error?:boolean|Error
   loadingDraft: boolean
+  recordedDuration: moment.Duration | null
 }
 
 export default class ComposerMessageInput extends React.Component<
@@ -36,6 +39,10 @@ export default class ComposerMessageInput extends React.Component<
 > {
   static contextType = DialogContext
   declare context: React.ContextType<typeof DialogContext>
+
+  recorder: MediaRecorder | null = null
+  updateRecordedDurationInterval: number | null = null
+  voiceData: Blob[] = []
 
   composerSize: number
   setCursorPosition: number | false
@@ -47,6 +54,7 @@ export default class ComposerMessageInput extends React.Component<
       text: '',
       chatId: props.chatId,
       loadingDraft: true,
+      recordedDuration: null,
     }
 
     this.composerSize = 48
@@ -116,6 +124,81 @@ export default class ComposerMessageInput extends React.Component<
 
   getText() {
     return this.state.text
+  }
+
+  startRecording() {
+    navigator.mediaDevices
+      .getUserMedia({ audio: true, video: false })
+      .then(stream => {
+        this.recorder = new MediaRecorder(stream, {
+          mimeType: 'audio/webm;codecs=opus',
+        })
+        this.recorder.onstart = () => {
+          this.updateRecordedDurationInterval = window.setInterval(
+            () =>
+              this.setState(prevState => {
+                const recordedDuration =
+                  prevState.recordedDuration?.clone() || moment.duration()
+                recordedDuration.add(0.1, 's')
+                return { recordedDuration: recordedDuration }
+              }),
+            100
+          )
+        }
+        this.recorder.ondataavailable = (evt: BlobEvent) => {
+          this.voiceData.push(evt.data)
+          if (this.recorder?.state !== 'inactive') {
+            return
+          }
+          const voiceData = this.getVoiceData()
+          if (!voiceData) {
+            log.error('No voice data available after recording')
+            // show alert dialogue
+            return
+          }
+          if (voiceData.size === 0) {
+            log.error('voice data is available but size of blob is zero')
+            // show alert dialogue
+            return
+          }
+          this.props.saveVoiceAsDraft(voiceData)
+        }
+        this.recorder.onstop = () => {
+          const duration = this.state.recordedDuration?.asSeconds() || 0
+          if (duration === 0)
+            log.error(
+              'duration of voice is zero while the mediarecorder has stopped. this must not happen'
+            )
+          this.setState({ recordedDuration: null })
+
+          this.updateRecordedDurationInterval &&
+            window.clearInterval(this.updateRecordedDurationInterval)
+        }
+        this.recorder.start()
+      })
+      .catch((_reason: any) => {
+        // Show alert dialog with reason. say that you cannot capture mic
+      })
+  }
+
+  stopRecording() {
+    if (this.recorder?.state === 'recording') {
+      this.recorder?.stop()
+    }
+  }
+
+  isRecording() {
+    return Boolean(this.recorder?.state === 'recording')
+  }
+
+  getVoiceData(): Blob {
+    const voiceData = new Blob(this.voiceData)
+    this.voiceData = []
+    return voiceData
+  }
+
+  hasText(): boolean {
+    return !this.getText().match(/^\s*$/)
   }
 
   componentDidUpdate(
@@ -254,6 +337,14 @@ export default class ComposerMessageInput extends React.Component<
   }
 
   render() {
+    if (this.state.recordedDuration && this.recorder) {
+      return (
+        <RecordingDuration
+          duration={this.state.recordedDuration}
+          recorder={this.recorder}
+        />
+      )
+    }
     if (this.props.hidden) {
       return null
     }
@@ -290,4 +381,28 @@ export default class ComposerMessageInput extends React.Component<
       />
     )
   }
+}
+
+function RecordingDuration({
+  duration,
+  recorder,
+}: {
+  duration: moment.Duration
+  recorder: MediaRecorder
+}) {
+  const minutes = duration.asMinutes()
+  const secondsDisplay = Math.ceil((minutes - Math.floor(minutes)) * 60)
+    .toString()
+    .padStart(2, '0')
+  const minutesDisplay = Math.floor(minutes).toString().padStart(2, '0')
+  return (
+    <div className='recording-duration'>
+      <p>
+        {minutesDisplay} : {secondsDisplay}
+      </p>
+      <button className='stop-recording' onClick={() => recorder.stop()}>
+        Stop
+      </button>
+    </div>
+  )
 }
