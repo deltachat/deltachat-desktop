@@ -35,6 +35,21 @@ export default function Settings({ onClose }: DialogProps) {
   const [settingsMode, setSettingsMode] = useState<SettingsView>('main')
 
   useEffect(() => {
+    const handler = (evt: KeyboardEvent) => {
+      if (
+        settingsMode !== 'main' &&
+        window.__settingsOpened &&
+        evt.key === 'Escape'
+      ) {
+        evt.preventDefault()
+        setSettingsMode('main')
+      }
+    }
+    document.addEventListener('keydown', handler)
+    return () => document.removeEventListener('keydown', handler)
+  }, [settingsMode])
+
+  useEffect(() => {
     if (window.__settingsOpened) {
       throw new Error(
         'Settings window was already open - this should not happen, please file a bug'
