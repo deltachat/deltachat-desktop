@@ -115,7 +115,6 @@ pub(crate) fn create_main_menu<A: Runtime>(handle: &AppHandle<A>) -> anyhow::Res
                         "Developer",
                         true,
                         &[
-                            // Use `with_id` instead of new, add new parameter after `handle`
                             #[cfg(feature = "crabnebula_extras")]
                             &MenuItem::with_id(
                                 handle,
