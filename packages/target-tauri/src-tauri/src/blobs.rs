@@ -13,7 +13,13 @@ pub(crate) fn delta_blobs_protocol<R: tauri::Runtime>(
 ) {
     // info!("dcblob {}", request.uri());
 
-    // URI format is dcblob://<account folder name>/<blob filename>
+    // URI format is
+    //
+    // on MacOS, iOS and Linux:
+    // dcblob://<account folder name>/<blob filename>
+    //
+    // on Windows and Android:
+    // http://dcblob.localhost/<account folder name>/<blob filename>
 
     let app_state_deltachat = {
         ctx.app_handle()
@@ -27,9 +33,20 @@ pub(crate) fn delta_blobs_protocol<R: tauri::Runtime>(
         // https://doc.rust-lang.org/beta/unstable-book/language-features/try-blocks.html
         let result: anyhow::Result<()> = async {
             // parse url (account folder name & blob filename)
-            if let (Some(account_folder), Some(file_name)) =
-                (request.uri().host(), request.uri().path().split('/').nth(1))
-            {
+
+            let parsed = {
+                #[cfg(not(any(target_os = "windows", target_os = "android")))]
+                {
+                    (request.uri().host(), request.uri().path().split('/').nth(1))
+                }
+                #[cfg(any(target_os = "windows", target_os = "android"))]
+                {
+                    let mut splited = request.uri().path().split('/');
+                    (splited.nth(1), splited.next())
+                }
+            };
+
+            if let (Some(account_folder), Some(file_name)) = parsed {
                 // trace!("dcblob {account_folder} {file_name}");
                 // get delta chat
                 let dc = app_state_deltachat.read().await;

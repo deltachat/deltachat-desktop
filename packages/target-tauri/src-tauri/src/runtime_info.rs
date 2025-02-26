@@ -22,6 +22,19 @@ struct BuildInfo {
     build_timestamp: u64,
 }
 
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct TauriSpecificScheme {
+    blobs: &'static str,
+    webxdc_icon: &'static str,
+}
+
+#[derive(Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub(crate) struct TauriSpecific {
+    scheme: TauriSpecificScheme,
+}
+
 /// information about the runtime as defined in packages/shared/shared-types.d.ts - make sure to look there to keep it in sync
 #[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -36,12 +49,26 @@ pub(crate) struct RuntimeInfo {
     build_info: BuildInfo,
     is_content_protection_supported: bool,
     hide_emoji_and_sticker_picker: bool,
+    tauri_specific: TauriSpecific,
 }
 
 #[tauri::command]
 pub fn get_runtime_info() -> RuntimeInfo {
     let webview_version =
         tauri::webview_version().unwrap_or("Error calling tauri::webview_version()".to_string());
+
+    let tauri_specific = TauriSpecific {
+        #[cfg(not(any(target_os = "windows", target_os = "android")))]
+        scheme: TauriSpecificScheme {
+            blobs: "dcblob://",
+            webxdc_icon: "webxdc-icon://",
+        },
+        #[cfg(any(target_os = "windows", target_os = "android"))]
+        scheme: TauriSpecificScheme {
+            blobs_scheme: "http://dcblob.localhost/",
+            webxdc_icon_scheme: "http://webxdc-icon.localhost/",
+        },
+    };
 
     RuntimeInfo {
         is_mac: cfg!(target_os = "macos"),
@@ -66,5 +93,6 @@ pub fn get_runtime_info() -> RuntimeInfo {
         },
         is_content_protection_supported: cfg!(target_os = "macos") || cfg!(target_os = "windows"),
         hide_emoji_and_sticker_picker: cfg!(target_os = "ios"),
+        tauri_specific,
     }
 }

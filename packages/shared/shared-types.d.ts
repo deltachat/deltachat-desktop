@@ -102,6 +102,12 @@ export type RuntimeInfo = {
    * and sticker picker currently would open a folder, which is inside of the pp container, so too much work to make work for now
    */
   hideEmojiAndStickerPicker?: boolean
+  tauriSpecific?: {
+    scheme: {
+      blobs: string,
+      webxdcIcon: string
+    }
+  }
 }
 
 export interface BuildInfo {

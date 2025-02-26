@@ -322,7 +322,7 @@ class TauriRuntime implements Runtime {
         // if it is not already encoded then encode it.
         filename = encodeURIComponent(filename)
       }
-      return `dcblob://${matches[2]}/${matches[3]}`
+      return `${this.runtime_info?.tauriSpecific?.scheme.blobs}${matches[2]}/${matches[3]}`
     }
     if (blob_path !== '') {
       this.log.error('transformBlobURL wrong url format', blob_path)
@@ -367,7 +367,7 @@ class TauriRuntime implements Runtime {
     throw new Error('Method not implemented.25')
   }
   getWebxdcIconURL(accountId: number, msgId: number): string {
-    return `webxdc-icon://${accountId}/${msgId}`
+    return `${this.runtime_info?.tauriSpecific?.scheme.webxdcIcon}${accountId}/${msgId}`
   }
   deleteWebxdcAccountData(accountId: number): Promise<void> {
     return invoke('delete_webxdc_account_data', { accountId })
