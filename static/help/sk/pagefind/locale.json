@@ -1,8 +1,5 @@
 {
-  "search": "Vyhľadávanie",
   "clear_search": "Zrušiť hľadanie",
-  "search_no_result_for_x": "Neboli nájdené žiadne výsledky pre \"%s\"",
-  "search_result_for_x": "Result for \"%s\"",
   "menu_help": "Pomocník",
   "app_name": "Delta Chat",
   "placeholder": "Vyhľadávanie",

@@ -1,8 +1,5 @@
 {
-  "search": "Cari",
   "clear_search": "Hapus pencarian",
-  "search_no_result_for_x": "Tak ada hasil dari \"%s\"",
-  "search_result_for_x": "Result for \"%s\"",
   "menu_help": "Bantuan",
   "app_name": "Delta Chat",
   "placeholder": "Cari",

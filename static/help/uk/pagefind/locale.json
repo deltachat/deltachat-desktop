@@ -1,8 +1,5 @@
 {
-  "search": "Пошук",
   "clear_search": "Очистити пошук",
-  "search_no_result_for_x": "Запит \"%s\" не дав результатів",
-  "search_result_for_x": "Result for \"%s\"",
   "menu_help": "Допомога",
   "app_name": "Delta Chat",
   "placeholder": "Пошук",

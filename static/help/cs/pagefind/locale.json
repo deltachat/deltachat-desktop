@@ -1,8 +1,5 @@
 {
-  "search": "Hledej",
   "clear_search": "Vyčistit vyhledávání",
-  "search_no_result_for_x": "Žádný výsledek pro \"%s\"",
-  "search_result_for_x": "Result for \"%s\"",
   "menu_help": "Nápověda",
   "app_name": "Delta Chat",
   "placeholder": "Hledej",

@@ -1,8 +1,5 @@
 {
-  "search": "Buscar",
   "clear_search": "Borrar búsqueda",
-  "search_no_result_for_x": "No se encontraron resultados para \"%s\"",
-  "search_result_for_x": "Result for \"%s\"",
   "menu_help": "Ayuda",
   "app_name": "Delta Chat",
   "placeholder": "Buscar",
