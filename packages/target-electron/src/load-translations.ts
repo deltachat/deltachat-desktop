@@ -10,7 +10,6 @@ import {
 } from '../../shared/localize.js'
 import { refresh as refreshMenu } from './menu.js'
 import { getLocaleDirectoryPath } from './getLocaleDirectory.js'
-import { htmlDistDir } from './application-constants.js'
 
 const log = getLogger('load-translations')
 
@@ -74,8 +73,6 @@ export function loadTranslations(locale: string) {
     log.debug(`No experimental language file (${experimentalFile}) found`)
   }
 
-  copyHelpFiles(locale)
-
   log.debug(messages['no_chat_selected_suggestion_desktop'])
   return { messages, locale }
 }
@@ -83,30 +80,6 @@ export function loadTranslations(locale: string) {
 function retrieveLocaleFile(locale: string) {
   const onDiskLocale = locale.replace('-', '_')
   return path.join(getLocaleDirectoryPath(), onDiskLocale + '.json')
-}
-
-/**
- * workaround for pagefind help files
- *
- * to avoid shipping redundant javascript files for each locale,
- * we copy the help files to the current locale pagefind folder
- * at runtime, when a locale is selected
- */
-function copyHelpFiles(locale: string) {
-  const filesToCopy = ['pagefind-ui.js', 'pagefind.js']
-  const distDir = htmlDistDir()
-  const targetDir = path.join(distDir, 'help', locale, 'pagefind')
-  if (fs.existsSync(path.join(targetDir, filesToCopy[0]))) {
-    return
-  }
-  filesToCopy.forEach((file: string) => {
-    const source = path.join(distDir, 'help', file)
-    fs.copyFile(source, path.join(targetDir, file), err => {
-      if (err) {
-        log.error('Error copying help file', err)
-      }
-    })
-  })
 }
 
 function getLocaleMessages(file: string) {

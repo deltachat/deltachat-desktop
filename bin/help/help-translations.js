@@ -7,7 +7,6 @@ import { existsSync} from 'fs'
 // keys as used in _locales
 const translations = {
     "search": "Search",
-    "clear_search": "Clear",
     "search_no_result_for_x": "No results for \"%s\"",
     "search_result_for_x": "Result for \"%s\"",
     "menu_help": "Help",
@@ -33,7 +32,8 @@ async function main() {
             delete helpLabel['search_result_for_x']
             helpLabel['zero_results'] = helpLabel['search_no_result_for_x'].replace('%s', '[SEARCH_TERM]')
             delete helpLabel['search_no_result_for_x']
-            await writeFile(`static/help/${file}/pagefind/locale.json`, JSON.stringify(helpLabel, null, 2))
+            helpLabel['clear_search'] = "🞫"
+            await writeFile(`static/help/${file}/locale.json`, JSON.stringify(helpLabel, null, 2))
         }
     }
 }
