@@ -100,6 +100,7 @@ pub(crate) fn open_html_window(
         format!("{window_id}-mail"),
         WebviewUrl::CustomProtocol(Url::from_str("email://dummy.host/index.html").unwrap()),
     )
+    .disable_javascript()
     .on_navigation(move |url| {
         if url.to_string() == "about:blank" || url.scheme() == "email" {
             // allow navigating to the email

@@ -27,9 +27,7 @@ async fn set_load_remote_content(webview: &tauri::Webview, new_state: bool) -> R
     // reload header & html email webviews to apply changes
     for webview in webview.window().webviews() {
         if webview.label().ends_with("-mail") {
-            // TODO: wry webview.reload is missing
-            // IDEA: better error handling
-            webview.eval("location.reload()").unwrap();
+            webview.reload()?;
         }
     }
     Ok(())
