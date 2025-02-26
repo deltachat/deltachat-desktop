@@ -20,6 +20,15 @@ use super::error::Error;
 
 async fn set_load_remote_content(webview: &tauri::Webview, new_state: bool) -> Result<(), Error> {
     let instance_state = webview.state::<HtmlEmailInstancesState>();
+    let instance = instance_state
+        .get(webview.window().label())
+        .await
+        .ok_or(Error::WindowNotFoundInState)?;
+
+    if instance.blocked_by_proxy {
+        return Err(Error::BlockedByProxy);
+    }
+
     instance_state
         .set_network_allow_state(webview.window().label(), new_state)
         .await;
@@ -128,6 +137,7 @@ pub(crate) struct HtmlEmailInfo {
     receive_time: String,
     toggle_network: bool,
     network_button_label_text: String,
+    blocked_by_proxy: bool,
 }
 
 #[tauri::command]
@@ -140,11 +150,18 @@ pub(crate) fn get_html_window_info(
     let instance =
         block_on(html_instances_state.get(&label)).ok_or(Error::WindowNotFoundInState)?;
 
+    let network_button_label_text = if instance.blocked_by_proxy {
+        format!("tx(\"load_remote_content_blocked_by_proxy\")")
+    } else {
+        format!("tx(\"load_remote_content\")")
+    };
+
     Ok(HtmlEmailInfo {
         subject: instance.subject,
         sender: instance.sender,
         receive_time: instance.receive_time,
         toggle_network: instance.network_allow_state,
-        network_button_label_text: format!("tx(\"load_remote_content\")"),
+        network_button_label_text,
+        blocked_by_proxy: instance.blocked_by_proxy,
     })
 }

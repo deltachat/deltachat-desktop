@@ -7,7 +7,9 @@ const networkCheckbox = document.getElementById(
   'toggle_network'
 )! as HTMLInputElement
 const networkButtonLabel = document.getElementById('toggle_network_label')!
-const networkMoreButton = document.getElementById('toggle_network_more_button')!
+const networkMoreButton = document.getElementById(
+  'toggle_network_more_button'
+)! as HTMLButtonElement
 
 let network_enabled = false
 
@@ -17,10 +19,23 @@ type HtmlInfoType = {
   receiveTime: string
   toggleNetwork: boolean
   networkButtonLabelText: string
+  blockedByProxy: boolean
 }
 
 invoke<HtmlInfoType>('get_html_window_info').then(
-  ({ subject, sender, receiveTime, toggleNetwork, networkButtonLabelText }) => {
+  ({
+    subject,
+    sender,
+    receiveTime,
+    toggleNetwork,
+    networkButtonLabelText,
+    blockedByProxy,
+  }) => {
+    if (blockedByProxy) {
+      networkMoreButton.disabled = true
+      networkCheckbox.disabled = true
+    }
+
     subjectElement.innerText = subject
     fromElement.innerText = sender
     networkButtonLabel.innerText = networkButtonLabelText

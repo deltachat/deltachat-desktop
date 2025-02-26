@@ -6,6 +6,7 @@ so it can be served from the special scheme.
 
 use std::{collections::HashMap, sync::Arc};
 
+use log::warn;
 use tokio::sync::RwLock;
 
 #[derive(Clone)]
@@ -17,6 +18,7 @@ pub(crate) struct InnerHtmlEmailInstanceData {
     pub(crate) receive_time: String,
     pub(crate) network_allow_state: bool,
     pub(crate) html_content: Arc<String>,
+    pub(crate) blocked_by_proxy: bool,
 }
 
 pub(crate) struct HtmlEmailInstancesState {
@@ -45,6 +47,11 @@ impl HtmlEmailInstancesState {
     pub(crate) async fn set_network_allow_state(&self, id: &str, allow_network: bool) {
         let mut inner = self.inner.write().await;
         if let Some(instance) = inner.get_mut(id) {
+            if instance.blocked_by_proxy {
+                warn!("set_network_allow_state was blocked because proxy is active");
+                return;
+            }
+
             instance.network_allow_state = allow_network
         }
         // IDEA: return an error if not found

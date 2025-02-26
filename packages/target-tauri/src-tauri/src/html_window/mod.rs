@@ -1,25 +1,30 @@
 use std::{path::PathBuf, str::FromStr, sync::Arc};
 
+use anyhow::anyhow;
 use log::{error, info, warn};
 
 use tauri::{
-    async_runtime::block_on, webview::WebviewBuilder, LogicalPosition, LogicalSize, Manager, Url,
-    Webview, WebviewUrl, Window, WindowBuilder, WindowEvent,
+    async_runtime::{block_on, handle},
+    webview::WebviewBuilder,
+    LogicalPosition, LogicalSize, Manager, Url, Webview, WebviewUrl, Window, WindowBuilder,
+    WindowEvent,
 };
 use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_opener::OpenerExt;
 use tauri_plugin_store::StoreExt;
 
 use crate::{
-    html_window::error::Error,
-    html_window::punycode::{puny_code_decode_host, puny_code_encode_host},
+    html_window::{
+        error::Error,
+        punycode::{puny_code_decode_host, puny_code_encode_host},
+    },
     settings::{
         get_content_protection, get_setting_bool_or, CONFIG_FILE,
         HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_DEFAULT, HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_KEY,
     },
     state::html_email_instances::InnerHtmlEmailInstanceData,
     temp_file::get_temp_folder_path,
-    HtmlEmailInstancesState,
+    DeltaChatAppState, HtmlEmailInstancesState,
 };
 
 const HEADER_HEIGHT: f64 = 100.;
@@ -36,6 +41,7 @@ mod punycode;
 pub(crate) fn open_html_window(
     app: tauri::AppHandle,
     html_instances_state: tauri::State<HtmlEmailInstancesState>,
+    dc: tauri::State<DeltaChatAppState>,
     window_id: &str,
     account_id: u32, // TODO needs to be used later for fetching webrequests over dc core
     is_contact_request: bool,
@@ -57,12 +63,25 @@ pub(crate) fn open_html_window(
         }
     }
 
+    let blocked_by_proxy = handle()
+        .block_on(async {
+            let dc = dc.deltachat.read().await;
+            let account: deltachat::context::Context = dc
+                .get_account(account_id)
+                .ok_or(Error::DeltaChat(anyhow!("account not found")))?;
+            account
+                .get_config_bool(deltachat::config::Config::ProxyEnabled)
+                .await
+        })
+        .map_err(|err| Error::DeltaChat(err))?;
+
     let store = app.store(CONFIG_FILE)?;
     let always_load_remote_content = get_setting_bool_or(
         store.get(HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_KEY),
         HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_DEFAULT,
     );
-    let toggle_network_initial_state = always_load_remote_content && !is_contact_request;
+    let toggle_network_initial_state =
+        !blocked_by_proxy && always_load_remote_content && !is_contact_request;
 
     block_on(html_instances_state.add(
         &window_id,
@@ -74,6 +93,7 @@ pub(crate) fn open_html_window(
             receive_time: receive_time.to_owned(),
             html_content: Arc::new(content.to_owned()),
             network_allow_state: toggle_network_initial_state,
+            blocked_by_proxy,
         },
     ));
 

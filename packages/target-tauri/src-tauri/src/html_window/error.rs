@@ -10,6 +10,10 @@ pub(crate) enum Error {
     UserCanceled,
     #[error(transparent)]
     TokioOneshotRecv(#[from] tokio::sync::oneshot::error::RecvError),
+    #[error(transparent)]
+    DeltaChat(anyhow::Error),
+    #[error("you can not load remote content when you have proxy enabled")]
+    BlockedByProxy,
 }
 
 impl serde::Serialize for Error {
