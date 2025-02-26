@@ -75,6 +75,7 @@ export interface Runtime {
   showOpenFileDialog(options: RuntimeOpenDialogOptions): Promise<string[]>
   downloadFile(pathToSource: string, filename: string): Promise<void>
   transformBlobURL(blob: string): string
+  transformStickerURL(sticker_path: string): string
   readClipboardText(): Promise<string>
   /**
    * @returns promise that resolves into base64 encoded image string

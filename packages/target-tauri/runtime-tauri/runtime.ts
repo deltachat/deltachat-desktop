@@ -331,6 +331,27 @@ class TauriRuntime implements Runtime {
     }
     return ''
   }
+  transformStickerURL(sticker_path: string): string {
+    const matches = sticker_path.match(/.*(:?\\|\/)(.+?)\1stickers\1(.*)/)
+    // this.log.info({ transformStickerURL: sticker_path, matches })
+
+    if (matches) {
+      let filename = matches[3]
+      if (decodeURIComponent(filename) === filename) {
+        // if it is not already encoded then encode it.
+        filename = encodeURIComponent(filename)
+      }
+      return `${this.runtime_info?.tauriSpecific?.scheme.stickers}${matches[2]}/${matches[3]}`
+    }
+    if (sticker_path !== '') {
+      this.log.error('transformStickerURL wrong url format', sticker_path)
+    } else {
+      this.log.debug(
+        'transformStickerURL called with empty string for sticker_path'
+      )
+    }
+    return ''
+  }
   readClipboardText(): Promise<string> {
     return readText()
   }

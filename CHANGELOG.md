@@ -4,6 +4,7 @@
 
 ### Added
 - add "learn more"-button to manage-key section that links to local help #4684
+- tauri: add support for sticker picker
 
 ### Changed
 - open map in landscape orientation and with a bigger window #4683

@@ -27,6 +27,7 @@ struct BuildInfo {
 pub(crate) struct TauriSpecificScheme {
     blobs: &'static str,
     webxdc_icon: &'static str,
+    stickers: &'static str,
 }
 
 #[derive(Debug, Serialize)]
@@ -62,11 +63,13 @@ pub fn get_runtime_info() -> RuntimeInfo {
         scheme: TauriSpecificScheme {
             blobs: "dcblob://",
             webxdc_icon: "webxdc-icon://",
+            stickers: "dcsticker://",
         },
         #[cfg(any(target_os = "windows", target_os = "android"))]
         scheme: TauriSpecificScheme {
             blobs: "http://dcblob.localhost/",
             webxdc_icon: "http://webxdc-icon.localhost/",
+            stickers: "http://dcsticker.localhost/",
         },
     };
 
