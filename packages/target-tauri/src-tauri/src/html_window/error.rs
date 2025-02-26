@@ -2,8 +2,6 @@
 pub(crate) enum Error {
     #[error(transparent)]
     Tauri(#[from] tauri::Error),
-    // #[error(transparent)]
-    // Wry(#[from] wry::Error),
     #[error("window label not found in HtmlEmailInstancesState")]
     WindowNotFoundInState,
     #[error(transparent)]

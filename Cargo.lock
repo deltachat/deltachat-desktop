@@ -1749,7 +1749,6 @@ dependencies = [
  "tokio",
  "unic-idna-punycode",
  "uuid",
- "wry",
 ]
 
 [[package]]
