@@ -96,9 +96,20 @@ pub(crate) fn open_html_window(
     let app_arc = Arc::new(app);
     let app = app_arc.clone();
 
+    let url = {
+        #[cfg(not(any(target_os = "windows", target_os = "android")))]
+        {
+            Url::from_str("email://dummy.host/index.html").unwrap()
+        }
+        #[cfg(any(target_os = "windows", target_os = "android"))]
+        {
+            Url::from_str("http://email.localhost/index.html").unwrap()
+        }
+    };
+
     let mut mail_view_builder = tauri::webview::WebviewBuilder::new(
         format!("{window_id}-mail"),
-        WebviewUrl::CustomProtocol(Url::from_str("email://dummy.host/index.html").unwrap()),
+        WebviewUrl::CustomProtocol(url),
     )
     .disable_javascript()
     .on_navigation(move |url| {
