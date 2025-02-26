@@ -1,0 +1,8 @@
+{
+  "menu_help": "Справка",
+  "app_name": "Delta Chat",
+  "placeholder": "Поиск",
+  "one_result": "Result for \"[SEARCH_TERM]\"",
+  "zero_results": "Ничего не найдено по запросу \"[SEARCH_TERM]\"",
+  "clear_search": "🞫"
+}

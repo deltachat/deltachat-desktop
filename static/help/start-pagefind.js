@@ -1,6 +1,6 @@
 
 window.addEventListener('DOMContentLoaded', async event => {
-  const r = await fetch("./pagefind/locale.json");
+  const r = await fetch("./locale.json");
   const translations = await r.json();
   document.title = translations.app_name + ' ' + translations.menu_help;
   document.body.insertAdjacentHTML('afterbegin', '<span id="search"></span>');

@@ -1,0 +1,8 @@
+{
+  "menu_help": "Допомога",
+  "app_name": "Delta Chat",
+  "placeholder": "Пошук",
+  "one_result": "Result for \"[SEARCH_TERM]\"",
+  "zero_results": "Запит \"[SEARCH_TERM]\" не дав результатів",
+  "clear_search": "🞫"
+}

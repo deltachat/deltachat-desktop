@@ -78,11 +78,18 @@ ul#top li > ul > li::before {
 
 .pagefind-ui__search-input {
   padding: 8px;
+  padding-right: 24px;
 }
 
 .pagefind-ui__search-clear {
-  padding: 10px 20px;
   border: none;
+  margin-left: -34px;
+  background: none;
+  cursor: pointer;
+}
+
+.pagefind-ui__suppressed {
+  display: none;
 }
 
 mark {

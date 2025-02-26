@@ -1,0 +1,8 @@
+{
+  "menu_help": "Ajuda",
+  "app_name": "Delta Chat",
+  "placeholder": "Pesquisar",
+  "one_result": "Result for \"[SEARCH_TERM]\"",
+  "zero_results": "Nenhum resultado encontrado para \"[SEARCH_TERM]\"",
+  "clear_search": "🞫"
+}

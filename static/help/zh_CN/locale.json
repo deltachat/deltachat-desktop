@@ -1,0 +1,8 @@
+{
+  "menu_help": "帮助",
+  "app_name": "Delta Chat",
+  "placeholder": "搜索",
+  "one_result": "Result for \"[SEARCH_TERM]\"",
+  "zero_results": "没有找到有关\"[SEARCH_TERM]\"的结果",
+  "clear_search": "🞫"
+}
