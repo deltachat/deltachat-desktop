@@ -160,15 +160,7 @@ pub(crate) fn open_html_window(
         }
     });
 
-    // change data directory and enable incognito mode, so html email gets different browsing context.
-    #[cfg(target_vendor = "apple")]
-    {
-        // for now using this well known id, but later we should really change it to use `nonPersistent` data store
-        mail_view_builder = mail_view_builder
-            .data_store_identifier([2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]);
-        // IDEA: add `WKWebsiteDataStore.nonPersistent()` to tauri & wry
-        // https://developer.apple.com/documentation/webkit/wkwebsitedatastore
-    }
+    // enable incognito mode, so html email gets different browsing context.
     #[allow(unused_variables)]
     let tmp_data_dir = get_temp_folder_path(&app)?.join(uuid::Uuid::new_v4().to_string());
     #[cfg(not(target_vendor = "apple"))]
@@ -178,6 +170,7 @@ pub(crate) fn open_html_window(
     #[cfg(not(target_os = "android"))]
     {
         mail_view_builder = mail_view_builder.incognito(true);
+        // on apple this uses nonPersistent WKWebsiteDataStore
     }
     let mail_view = window.add_child(
         mail_view_builder,
