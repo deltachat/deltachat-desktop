@@ -6,7 +6,7 @@ import { watch as _watch } from 'chokidar'
 
 async function copyRecursive(source, destination) {
   if ((await stat(source)).isDirectory()) {
-    mkdir(destination, { recursive: true })
+    await mkdir(destination, { recursive: true })
     const files = await readdir(source)
     for (const file of files) {
       await copyRecursive(join(source, file), join(destination, file))
