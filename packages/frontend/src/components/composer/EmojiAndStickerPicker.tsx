@@ -92,7 +92,7 @@ function StickersListItem(props: { filePath: string; onClick: () => void }) {
       onKeyDown={rovingTabindex.onKeydown}
       onFocus={rovingTabindex.setAsActiveElement}
     >
-      <img src={filePath} />
+      <img src={runtime.transformStickerURL(filePath)} />
     </button>
   )
 }

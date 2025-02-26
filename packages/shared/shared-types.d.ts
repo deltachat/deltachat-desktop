@@ -106,6 +106,7 @@ export type RuntimeInfo = {
     scheme: {
       blobs: string
       webxdcIcon: string
+      stickers: string
     }
   }
 }
