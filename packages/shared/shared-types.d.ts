@@ -104,7 +104,7 @@ export type RuntimeInfo = {
   hideEmojiAndStickerPicker?: boolean
   tauriSpecific?: {
     scheme: {
-      blobs: string,
+      blobs: string
       webxdcIcon: string
     }
   }

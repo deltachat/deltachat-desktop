@@ -65,8 +65,8 @@ pub fn get_runtime_info() -> RuntimeInfo {
         },
         #[cfg(any(target_os = "windows", target_os = "android"))]
         scheme: TauriSpecificScheme {
-            blobs_scheme: "http://dcblob.localhost/",
-            webxdc_icon_scheme: "http://webxdc-icon.localhost/",
+            blobs: "http://dcblob.localhost/",
+            webxdc_icon: "http://webxdc-icon.localhost/",
         },
     };
 
