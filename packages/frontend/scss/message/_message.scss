@@ -311,11 +311,7 @@
     }
 
     & > .saved-message-icon {
-      @include color-svg(
-        './images/icons/bookmark-filled.svg',
-        white,
-        100%
-      );
+      @include color-svg('./images/icons/bookmark-filled.svg', white, 100%);
     }
   }
 
@@ -658,11 +654,7 @@
       & > .edited {
 =======
       & > .saved-message-icon {
-        @include color-svg(
-          './images/icons/bookmark-filled.svg',
-          white,
-          100%
-        );
+        @include color-svg('./images/icons/bookmark-filled.svg', white, 100%);
       }
 
       & > .date {
