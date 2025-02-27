@@ -1,5 +1,8 @@
 import scanQrCode, { QRCode } from 'jsqr'
 import { Runtime } from '@deltachat-desktop/runtime-interface'
+import { getLogger } from '@deltachat-desktop/shared/logger'
+
+const log = getLogger('renderer/QrReader/helper')
 
 /**
  * Convert file data to base64 encoded data URL string.
@@ -62,7 +65,12 @@ export async function base64ToImageData(base64: string): Promise<ImageData> {
  */
 export async function qrCodeFromClipboard(runtime: Runtime): Promise<string> {
   // Try interpreting the clipboard data as an image
-  const base64 = await runtime.readClipboardImage()
+  let base64: string | null = null
+  try {
+    base64 = await runtime.readClipboardImage()
+  } catch (error) {
+    log.warn('qrCodeFromClipboard: readClipboardImage', error)
+  }
   if (base64) {
     const imageData = await base64ToImageData(base64)
     const result = scanQrCode(imageData.data, imageData.width, imageData.height)
