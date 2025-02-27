@@ -5,6 +5,7 @@ $transitionDuration: 50ms;
   align-items: center;
   display: flex;
   flex: 0 0 $shortcutMenuWidth;
+  column-gap: 4px;
   justify-content: space-between;
   width: $shortcutMenuWidth;
 
