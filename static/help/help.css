@@ -92,6 +92,19 @@ ul#top li > ul > li::before {
   display: none;
 }
 
+.pagefind-ui {
+  text-align: right;
+}
+
+.pagefind-ui__drawer {
+  text-align: left;
+  border-bottom: 2px solid #333;
+}
+
+.pagefind-ui__drawer.pagefind-ui__hidden {
+  display: none;
+}
+
 mark {
   background-color: rgb(230, 179, 84);
 }

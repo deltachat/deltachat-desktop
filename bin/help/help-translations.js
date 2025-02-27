@@ -16,6 +16,7 @@ const translations = {
 async function main() {
     const files = await readdir('static/help/')
     const fallback = JSON.parse(await readFile(`_locales/_untranslated_en.json`, 'utf-8'))
+    const allHelpLabel = {}
     for (const file of files) {
         if (existsSync(`_locales/${file}.json`)) {
             const json = JSON.parse(await readFile(`_locales/${file}.json`, 'utf-8'))
@@ -33,9 +34,10 @@ async function main() {
             helpLabel['zero_results'] = helpLabel['search_no_result_for_x'].replace('%s', '[SEARCH_TERM]')
             delete helpLabel['search_no_result_for_x']
             helpLabel['clear_search'] = "🞫"
-            await writeFile(`static/help/${file}/locale.json`, JSON.stringify(helpLabel, null, 2))
+            allHelpLabel[file] = helpLabel
         }
     }
+    await writeFile(`static/help/pagefind/locales.json`, JSON.stringify(allHelpLabel, null, 2))
 }
 
 main()
