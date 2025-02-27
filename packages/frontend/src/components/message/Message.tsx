@@ -231,6 +231,8 @@ function buildContextMenu(
   const selectedText = window.getSelection()?.toString()
   const textSelected: boolean = selectedText !== null && selectedText !== ''
 
+  const isSavedMessage = message.savedMessageId !== null
+
   /** Copy action, is one of the following, (in that order):
    *
    * - Copy [selection] to clipboard
@@ -302,7 +304,7 @@ function buildContextMenu(
       action: handleReactClick,
     },
     // Save Message
-    {
+    !isSavedMessage && {
       label: tx('save'),
       action: () =>
         BackendRemote.rpc.saveMsgs(selectedAccountId(), [message.id]),
