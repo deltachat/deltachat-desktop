@@ -33,7 +33,7 @@ async function main() {
             delete helpLabel['search_result_for_x']
             helpLabel['zero_results'] = helpLabel['search_no_result_for_x'].replace('%s', '[SEARCH_TERM]')
             delete helpLabel['search_no_result_for_x']
-            helpLabel['clear_search'] = "🞫"
+            helpLabel['clear_search'] = "×"
             allHelpLabel[file] = helpLabel
         }
     }

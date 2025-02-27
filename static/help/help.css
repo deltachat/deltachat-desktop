@@ -86,6 +86,9 @@ ul#top li > ul > li::before {
   margin-left: -34px;
   background: none;
   cursor: pointer;
+  font-size: x-large;
+  vertical-align: middle;
+  font-family: 'Roboto';
 }
 
 .pagefind-ui__suppressed {
