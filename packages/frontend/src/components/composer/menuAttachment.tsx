@@ -63,6 +63,7 @@ export default function MenuAttachment({
         for (const filePath of filePaths) {
           sendMessage(accountId, selectedChat.id, {
             file: filePath,
+            filename: basename(filePath),
             viewtype: msgViewType,
           }).then(() => {
             // start sending other files, don't wait until last file is sent

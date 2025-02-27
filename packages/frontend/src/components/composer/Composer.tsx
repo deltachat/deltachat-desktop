@@ -138,6 +138,7 @@ const Composer = forwardRef<
       const sendMessagePromise = sendMessage(accountId, chatId, {
         text: replaceColonsSafe(message),
         file: draftState.file || undefined,
+        filename: draftState.fileName || undefined,
         quotedMessageId:
           draftState.quote?.kind === 'WithMessage'
             ? draftState.quote.messageId

@@ -187,6 +187,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
             : 'File'
           sendMessage(accountId, chat.id, {
             file: path,
+            filename: basename(path),
             viewtype: msgViewType,
           }).then(() => {
             // start sending other files, don't wait until last file is sent
