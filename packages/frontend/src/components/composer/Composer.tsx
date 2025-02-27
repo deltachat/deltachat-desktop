@@ -44,6 +44,7 @@ import { enterKeySendsKeyboardShortcuts } from '../KeyboardShortcutHint'
 import { AppPicker } from '../AppPicker'
 import { AppInfo, AppStoreUrl } from '../AppPicker'
 import OutsideClickHelper from '../OutsideClickHelper'
+import { basename } from 'path'
 
 const log = getLogger('renderer/composer')
 
@@ -57,7 +58,11 @@ const Composer = forwardRef<
     draftState: DraftObject
     removeQuote: () => void
     updateDraftText: (text: string, InputChatId: number) => void
-    addFileToDraft: (file: string, viewType: T.Viewtype) => Promise<void>
+    addFileToDraft: (
+      file: string,
+      fileName: string,
+      viewType: T.Viewtype
+    ) => Promise<void>
     removeFile: () => void
     clearDraft: () => void
   }
@@ -133,6 +138,7 @@ const Composer = forwardRef<
       const sendMessagePromise = sendMessage(accountId, chatId, {
         text: replaceColonsSafe(message),
         file: draftState.file || undefined,
+        filename: draftState.fileName || undefined,
         quotedMessageId:
           draftState.quote?.kind === 'WithMessage'
             ? draftState.quote.messageId
@@ -227,7 +233,7 @@ const Composer = forwardRef<
         appInfo.cache_relname,
         response.blob
       )
-      await addFileToDraft(path, 'File')
+      await addFileToDraft(path, appInfo.cache_relname, 'File')
       await runtime.removeTempFile(path)
       setShowAppPicker(false)
     }
@@ -265,12 +271,12 @@ const Composer = forwardRef<
         reader.onerror = reject
         reader.readAsDataURL(file)
       })
-
+      const fileName = file.name || `file.${extension(file.type)}`
       const path = await runtime.writeTempFileFromBase64(
-        file.name || `file.${extension(file.type)}`,
+        fileName,
         file_content.split(';base64,')[1]
       )
-      await addFileToDraft(path, msgType)
+      await addFileToDraft(path, fileName, msgType)
       // delete file again after it was sucessfuly added
       await runtime.removeTempFile(path)
     } catch (err) {
@@ -480,7 +486,11 @@ export function useDraft(
   draftState: DraftObject
   removeQuote: () => void
   updateDraftText: (text: string, InputChatId: number) => void
-  addFileToDraft: (file: string, viewType: T.Viewtype) => Promise<void>
+  addFileToDraft: (
+    file: string,
+    fileName: string,
+    viewType: T.Viewtype
+  ) => Promise<void>
   removeFile: () => void
   clearDraft: () => void
 } {
@@ -556,11 +566,14 @@ export function useDraft(
       (draft.file && draft.file != '') ||
       !!draft.quote
     ) {
+      const fileName =
+        draft.fileName ?? (draft.file ? basename(draft.file) : null)
       await BackendRemote.rpc.miscSetDraft(
         accountId,
         chatId,
         draft.text,
         draft.file !== '' ? draft.file : null,
+        fileName ?? null,
         draft.quote?.kind === 'WithMessage' ? draft.quote.messageId : null,
         draft.viewType
       )
@@ -621,8 +634,9 @@ export function useDraft(
   }, [inputRef, saveDraft])
 
   const addFileToDraft = useCallback(
-    async (file: string, viewType: Viewtype) => {
+    async (file: string, fileName: string, viewType: Viewtype) => {
       draftRef.current.file = file
+      draftRef.current.fileName = fileName
       draftRef.current.viewType = viewType
       inputRef.current?.focus()
       return saveDraft()

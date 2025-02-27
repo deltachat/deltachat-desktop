@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useCallback } from 'react'
-import { join, parse } from 'path'
+import { basename, join, parse } from 'path'
 import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 
 import Composer, { useDraft } from '../composer/Composer'
@@ -166,7 +166,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
         : 'File'
 
       const path = await writeTempFileFromFile(sanitizedFileList[0])
-      await addFileToDraft(path, msgViewType)
+      await addFileToDraft(path, basename(path), msgViewType)
       await runtime.removeTempFile(path)
       return
     }
@@ -187,6 +187,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
             : 'File'
           sendMessage(accountId, chat.id, {
             file: path,
+            filename: basename(path),
             viewtype: msgViewType,
           }).then(() => {
             // start sending other files, don't wait until last file is sent

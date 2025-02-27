@@ -70,6 +70,7 @@ const log = getLogger('hooks/useMessage')
 
 const MESSAGE_DEFAULT: T.MessageData = {
   file: null,
+  filename: null,
   viewtype: null,
   html: null,
   location: null,

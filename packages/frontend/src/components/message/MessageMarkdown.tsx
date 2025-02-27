@@ -330,6 +330,7 @@ function BotCommandSuggestion({
       suggestion,
       null,
       null,
+      null,
       'Text'
     )
 

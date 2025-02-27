@@ -17,6 +17,7 @@ export async function updateDeviceChat(
         html: null,
         viewtype: null,
         file: null,
+        filename: null,
         location: null,
         overrideSenderName: null,
         quotedMessageId: null,

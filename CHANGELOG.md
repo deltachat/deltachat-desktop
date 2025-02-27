@@ -9,7 +9,10 @@
 - open map in landscape orientation and with a bigger window #4683
 - update `esbuild` from `0.23.0` to `0.25.0` #4643
 - extend some shortcuts to listen to key OR code #4685
-- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.155.6`
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.156.0`
+  - Don't send a notification when a group member left (#6575).
+  - Fail on too new backups (#6580)
+  - When reactions are seen, remove notification from second device (#6480).
   - Sort past members by the timestamp of removal.
   - Use UUID v4 to generate Message-IDs.
   - Use dedicated ID for sync messages affecting device chat.

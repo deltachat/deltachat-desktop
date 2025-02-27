@@ -197,12 +197,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7c02d123df017efcdfbd739ef81735b36c5ba83ec3c59c80a9d7ecc718f92e50"
 
 [[package]]
-name = "ascii_utils"
-version = "0.9.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "71938f30533e4d95a6d17aa530939da3842c2ab6f4f84b9dae68447e4129f74a"
-
-[[package]]
 name = "ashpd"
 version = "0.10.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -236,7 +230,7 @@ dependencies = [
  "num-traits",
  "rusticata-macros",
  "thiserror 1.0.69",
- "time 0.3.37",
+ "time",
 ]
 
 [[package]]
@@ -653,12 +647,6 @@ name = "base16ct"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4c7f02d4ea65f2c1853089ffd8d2787bdbc63de2f0d29dedbcf8ccdfa0ccd4cf"
-
-[[package]]
-name = "base64"
-version = "0.11.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b41b7ea54a0c9d92199de89e20e58d49f02f8e699814ef3fdf266f6f748d15c7"
 
 [[package]]
 name = "base64"
@@ -1127,10 +1115,8 @@ checksum = "7e36cc9d416881d2e24f9a963be5fb1cd90966419ac844274161d10488b3e825"
 dependencies = [
  "android-tzdata",
  "iana-time-zone",
- "js-sys",
  "num-traits",
  "serde",
- "wasm-bindgen",
  "windows-targets 0.52.6",
 ]
 
@@ -1266,7 +1252,7 @@ version = "0.18.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4ddef33a339a91ea89fb53151bd0a4689cfce27055c291dfa69945475d22c747"
 dependencies = [
- "time 0.3.37",
+ "time",
  "version_check",
 ]
 
@@ -1613,8 +1599,8 @@ dependencies = [
 
 [[package]]
 name = "deltachat"
-version = "1.155.6"
-source = "git+https://github.com/deltachat/deltachat-core-rust?tag=v1.155.6#48fcf660026bd0436653e7fa4d0d65ce3274a0c9"
+version = "1.156.0"
+source = "git+https://github.com/deltachat/deltachat-core-rust?tag=v1.156.0#08be98f69373f121f0b2c017e81366180f73eaea"
 dependencies = [
  "anyhow",
  "async-broadcast",
@@ -1632,7 +1618,6 @@ dependencies = [
  "deltachat-contact-tools",
  "deltachat-time",
  "deltachat_derive",
- "email",
  "encoded-words",
  "escaper",
  "fast-socks5",
@@ -1650,8 +1635,8 @@ dependencies = [
  "iroh",
  "iroh-gossip",
  "kamadak-exif",
- "lettre_email",
  "libc",
+ "mail-builder",
  "mailparse",
  "mime",
  "num-derive",
@@ -1700,7 +1685,7 @@ dependencies = [
 [[package]]
 name = "deltachat-contact-tools"
 version = "0.0.0"
-source = "git+https://github.com/deltachat/deltachat-core-rust?tag=v1.155.6#48fcf660026bd0436653e7fa4d0d65ce3274a0c9"
+source = "git+https://github.com/deltachat/deltachat-core-rust?tag=v1.156.0#08be98f69373f121f0b2c017e81366180f73eaea"
 dependencies = [
  "anyhow",
  "chrono",
@@ -1711,8 +1696,8 @@ dependencies = [
 
 [[package]]
 name = "deltachat-jsonrpc"
-version = "1.155.6"
-source = "git+https://github.com/deltachat/deltachat-core-rust?tag=v1.155.6#48fcf660026bd0436653e7fa4d0d65ce3274a0c9"
+version = "1.156.0"
+source = "git+https://github.com/deltachat/deltachat-core-rust?tag=v1.156.0#08be98f69373f121f0b2c017e81366180f73eaea"
 dependencies = [
  "anyhow",
  "async-channel 2.3.1",
@@ -1767,12 +1752,12 @@ dependencies = [
 [[package]]
 name = "deltachat-time"
 version = "1.0.0"
-source = "git+https://github.com/deltachat/deltachat-core-rust?tag=v1.155.6#48fcf660026bd0436653e7fa4d0d65ce3274a0c9"
+source = "git+https://github.com/deltachat/deltachat-core-rust?tag=v1.156.0#08be98f69373f121f0b2c017e81366180f73eaea"
 
 [[package]]
 name = "deltachat_derive"
 version = "2.0.0"
-source = "git+https://github.com/deltachat/deltachat-core-rust?tag=v1.155.6#48fcf660026bd0436653e7fa4d0d65ce3274a0c9"
+source = "git+https://github.com/deltachat/deltachat-core-rust?tag=v1.156.0#08be98f69373f121f0b2c017e81366180f73eaea"
 dependencies = [
  "quote",
  "syn 2.0.98",
@@ -2230,20 +2215,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "email"
-version = "0.0.20"
-source = "git+https://github.com/deltachat/rust-email?branch=master#ba176ca31ae000203368eb9baacc7eb469fd7692"
-dependencies = [
- "base64 0.11.0",
- "chrono",
- "encoded-words",
- "encoding",
- "lazy_static",
- "rand 0.7.3",
- "version_check",
-]
-
-[[package]]
 name = "embed-resource"
 version = "2.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2289,70 +2260,6 @@ dependencies = [
  "regex",
  "thiserror 1.0.69",
 ]
-
-[[package]]
-name = "encoding"
-version = "0.2.33"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6b0d943856b990d12d3b55b359144ff341533e516d94098b1d3fc1ac666d36ec"
-dependencies = [
- "encoding-index-japanese",
- "encoding-index-korean",
- "encoding-index-simpchinese",
- "encoding-index-singlebyte",
- "encoding-index-tradchinese",
-]
-
-[[package]]
-name = "encoding-index-japanese"
-version = "1.20141219.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "04e8b2ff42e9a05335dbf8b5c6f7567e5591d0d916ccef4e0b1710d32a0d0c91"
-dependencies = [
- "encoding_index_tests",
-]
-
-[[package]]
-name = "encoding-index-korean"
-version = "1.20141219.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4dc33fb8e6bcba213fe2f14275f0963fd16f0a02c878e3095ecfdf5bee529d81"
-dependencies = [
- "encoding_index_tests",
-]
-
-[[package]]
-name = "encoding-index-simpchinese"
-version = "1.20141219.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d87a7194909b9118fc707194baa434a4e3b0fb6a5a757c73c3adb07aa25031f7"
-dependencies = [
- "encoding_index_tests",
-]
-
-[[package]]
-name = "encoding-index-singlebyte"
-version = "1.20141219.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3351d5acffb224af9ca265f435b859c7c01537c0849754d3db3fdf2bfe2ae84a"
-dependencies = [
- "encoding_index_tests",
-]
-
-[[package]]
-name = "encoding-index-tradchinese"
-version = "1.20141219.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fd0e20d5688ce3cab59eb3ef3a2083a5c77bf496cb798dc6fcdb75f323890c18"
-dependencies = [
- "encoding_index_tests",
-]
-
-[[package]]
-name = "encoding_index_tests"
-version = "0.1.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a246d82be1c9d791c5dfde9a2bd045fc3cbba3fa2b11ad558f27d01712f00569"
 
 [[package]]
 name = "encoding_rs"
@@ -2528,15 +2435,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "fast_chemail"
-version = "0.9.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "495a39d30d624c2caabe6312bfead73e7717692b44e0b32df168c275a2e8e9e4"
-dependencies = [
- "ascii_utils",
-]
-
-[[package]]
 name = "fastrand"
 version = "2.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2703,7 +2601,7 @@ dependencies = [
 [[package]]
 name = "format-flowed"
 version = "1.0.0"
-source = "git+https://github.com/deltachat/deltachat-core-rust?tag=v1.155.6#48fcf660026bd0436653e7fa4d0d65ce3274a0c9"
+source = "git+https://github.com/deltachat/deltachat-core-rust?tag=v1.156.0#08be98f69373f121f0b2c017e81366180f73eaea"
 
 [[package]]
 name = "funty"
@@ -4429,30 +4327,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "lettre"
-version = "0.9.2"
-source = "git+https://github.com/deltachat/lettre?branch=master#2ffdb5347f1255b4aed51cf87cda1f8207160f36"
-dependencies = [
- "fast_chemail",
- "log",
-]
-
-[[package]]
-name = "lettre_email"
-version = "0.9.2"
-source = "git+https://github.com/deltachat/lettre?branch=master#2ffdb5347f1255b4aed51cf87cda1f8207160f36"
-dependencies = [
- "base64 0.11.0",
- "email",
- "lazy_static",
- "lettre",
- "mime",
- "regex",
- "time 0.1.45",
- "uuid",
-]
-
-[[package]]
 name = "libappindicator"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4626,6 +4500,11 @@ name = "mac"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c41e0c4fef86961ac6d6f8a82609f55f31b05e4fce149ac5710e439df7619ba4"
+
+[[package]]
+name = "mail-builder"
+version = "0.4.1"
+source = "git+https://github.com/stalwartlabs/mail-builder?branch=main#b86e558d54d43c1c1991fbda84109268815abcac"
 
 [[package]]
 name = "mailparse"
@@ -5019,7 +4898,7 @@ dependencies = [
  "serde",
  "socket2",
  "thiserror 2.0.11",
- "time 0.3.37",
+ "time",
  "tokio",
  "tokio-util",
  "tracing",
@@ -6084,7 +5963,7 @@ dependencies = [
  "indexmap 2.7.1",
  "quick-xml 0.32.0",
  "serde",
- "time 0.3.37",
+ "time",
 ]
 
 [[package]]
@@ -6208,7 +6087,7 @@ dependencies = [
  "smallvec",
  "socket2",
  "thiserror 2.0.11",
- "time 0.3.37",
+ "time",
  "tokio",
  "tokio-util",
  "tracing",
@@ -6685,7 +6564,7 @@ dependencies = [
 [[package]]
 name = "ratelimit"
 version = "1.0.0"
-source = "git+https://github.com/deltachat/deltachat-core-rust?tag=v1.155.6#48fcf660026bd0436653e7fa4d0d65ce3274a0c9"
+source = "git+https://github.com/deltachat/deltachat-core-rust?tag=v1.156.0#08be98f69373f121f0b2c017e81366180f73eaea"
 
 [[package]]
 name = "raw-cpuid"
@@ -6711,7 +6590,7 @@ dependencies = [
  "pem",
  "ring",
  "rustls-pki-types",
- "time 0.3.37",
+ "time",
  "yasna",
 ]
 
@@ -7509,7 +7388,7 @@ dependencies = [
  "serde_derive",
  "serde_json",
  "serde_with_macros",
- "time 0.3.37",
+ "time",
 ]
 
 [[package]]
@@ -8272,7 +8151,7 @@ dependencies = [
  "syn 2.0.98",
  "tauri-utils",
  "thiserror 2.0.11",
- "time 0.3.37",
+ "time",
  "url",
  "uuid",
  "walkdir",
@@ -8411,7 +8290,7 @@ dependencies = [
  "tauri",
  "tauri-plugin",
  "thiserror 2.0.11",
- "time 0.3.37",
+ "time",
 ]
 
 [[package]]
@@ -8676,17 +8555,6 @@ dependencies = [
  "flate2",
  "jpeg-decoder",
  "weezl",
-]
-
-[[package]]
-name = "time"
-version = "0.1.45"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1b797afad3f312d1c66a56d11d0316f916356d11bd158fbc6ca6389ff6bf805a"
-dependencies = [
- "libc",
- "wasi 0.10.0+wasi-snapshot-preview1",
- "winapi",
 ]
 
 [[package]]
@@ -9534,12 +9402,6 @@ name = "wasi"
 version = "0.9.0+wasi-snapshot-preview1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cccddf32554fecc6acb585f82a32a72e28b48f8c4c1883ddfeeeaa96f7d8e519"
-
-[[package]]
-name = "wasi"
-version = "0.10.0+wasi-snapshot-preview1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1a143597ca7c7793eff794def352d41792a93c481eb1042423ff7ff72ba2c31f"
 
 [[package]]
 name = "wasi"
@@ -10509,7 +10371,7 @@ dependencies = [
  "oid-registry",
  "rusticata-macros",
  "thiserror 1.0.69",
- "time 0.3.37",
+ "time",
 ]
 
 [[package]]
@@ -10554,7 +10416,7 @@ version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e17bb3549cc1321ae1296b9cdc2698e2b6cb1992adfa19a8c72e5b7a738f44cd"
 dependencies = [
- "time 0.3.37",
+ "time",
 ]
 
 [[package]]
