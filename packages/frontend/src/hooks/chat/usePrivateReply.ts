@@ -23,7 +23,8 @@ export default function usePrivateReply() {
 
       // retrieve existing draft to append the quotedMessageId
       const oldDraft = await BackendRemote.rpc.getDraft(accountId, chatId)
-      const fileName = oldDraft?.file ? basename(oldDraft?.file) : null
+      const fileName =
+        oldDraft?.fileName ?? (oldDraft?.file ? basename(oldDraft?.file) : null)
       await BackendRemote.rpc.miscSetDraft(
         accountId,
         chatId,

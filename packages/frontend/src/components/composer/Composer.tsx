@@ -566,7 +566,8 @@ export function useDraft(
       (draft.file && draft.file != '') ||
       !!draft.quote
     ) {
-      const fileName = draft.file ? basename(draft.file) : null
+      const fileName =
+        draft.fileName ?? (draft.file ? basename(draft.file) : null)
       await BackendRemote.rpc.miscSetDraft(
         accountId,
         chatId,
