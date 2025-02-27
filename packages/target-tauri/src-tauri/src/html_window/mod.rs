@@ -1,7 +1,7 @@
 use std::{path::PathBuf, str::FromStr, sync::Arc};
 
 use anyhow::anyhow;
-use log::{error, info, warn};
+use log::{error, info, trace, warn};
 
 use tauri::{
     async_runtime::{block_on, handle},
@@ -51,7 +51,7 @@ pub(crate) fn open_html_window(
     content: &str,
 ) -> Result<(), Error> {
     let window_id = format!("html-window:{window_id}").replace(".", "-");
-    warn!("{window_id}");
+    trace!("open_html_window: {window_id}");
 
     #[cfg(not(any(target_os = "ios", target_os = "android")))]
     {
@@ -251,9 +251,9 @@ pub(crate) fn open_html_window(
         }
     }
 
-    // TODO: disable JS in mailview
-
-    // TODO: load remote content in mailview over dc core http api to respect users proxy settings
+    // IDEA: load remote content in mailview over dc core http api to respect users proxy settings
+    // For now we choose to disable the feature when user set a proxy,
+    // because there is currently no easy way to acomplish this.
 
     window.set_title(&format!(
         "{} - {}",
