@@ -78,7 +78,7 @@ ul#top li > ul > li::before {
 
 .pagefind-ui__search-input {
   padding: 8px;
-  padding-right: 24px;
+  padding-right: 23px;
 }
 
 .pagefind-ui__search-clear {
@@ -92,12 +92,7 @@ ul#top li > ul > li::before {
   display: none;
 }
 
-.pagefind-ui {
-  text-align: right;
-}
-
 .pagefind-ui__drawer {
-  text-align: left;
   border-bottom: 2px solid #333;
 }
 
