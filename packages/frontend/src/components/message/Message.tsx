@@ -309,6 +309,16 @@ function buildContextMenu(
       action: () =>
         BackendRemote.rpc.saveMsgs(selectedAccountId(), [message.id]),
     },
+    isSavedMessage && {
+      label: tx('unsave'),
+      action: () => {
+        if (message.savedMessageId !== null) {
+          BackendRemote.rpc.deleteMessages(selectedAccountId(), [
+            message.savedMessageId,
+          ])
+        }
+      },
+    },
     // copy link
     link !== '' &&
       isLink && {
