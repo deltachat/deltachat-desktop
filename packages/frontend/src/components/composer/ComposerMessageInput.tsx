@@ -10,7 +10,7 @@ const log = getLogger('renderer/composer/ComposerMessageInput')
 type ComposerMessageInputProps = {
   chatId: number
   chatName: string
-  sendMessage: () => void
+  sendMessageOrEditRequest: () => void
   enterKeySends: boolean
   onPaste?: (e: React.ClipboardEvent<HTMLTextAreaElement>) => void
   updateDraftText: (text: string, InputChatId: number) => void
@@ -161,7 +161,7 @@ export default class ComposerMessageInput extends React.Component<
     const action = this.keyEventToAction(e)
 
     if (action === 'SEND') {
-      this.props.sendMessage()
+      this.props.sendMessageOrEditRequest()
       e.preventDefault()
       e.stopPropagation()
     }
