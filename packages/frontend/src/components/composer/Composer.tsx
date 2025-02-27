@@ -408,7 +408,7 @@ const Composer = forwardRef<
             <ComposerMessageInput
               ref={messageInputRef}
               enterKeySends={settingsStore?.desktopSettings.enterKeySends}
-              sendMessage={composerSendMessage}
+              sendMessageOrEditRequest={composerSendMessage}
               chatId={chatId}
               chatName={selectedChat.name}
               updateDraftText={updateDraftText}
