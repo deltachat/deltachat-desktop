@@ -61,9 +61,9 @@ $scrollbarTransparency: 0.5;
   --navBarGroupSubtitle: var(--globalText);
   --messageStatusIcon: var(--globalText);
   --messageMetadataIncoming: var(--globalText);
-  --messagePadlockIncoming: var(--globalText);
+  --messageMetadataIconColorIncoming: var(--globalText);
 
-  --messageOutgoingBg: var(--messagePadlockOutgoing);
+  --messageOutgoingBg: var(--messageMetadataIconColorOutgoing);
   --messageQuotedText: var(--globalText);
 
   --settingsIconColor: black;
@@ -209,7 +209,7 @@ $scrollbarTransparency: 0.5;
 
 .message.forwarded .forwarded-indicator {
   font-weight: 100;
-  color: var(--messagePadlockIncoming);
+  color: var(--messageMetadataIconColorIncoming);
   opacity: 1;
   margin-bottom: 22px;
   margin-left: calc(#{$AUTHOR_WIDTH} + #{$AUTHOR_MESSAGE_SPACING});

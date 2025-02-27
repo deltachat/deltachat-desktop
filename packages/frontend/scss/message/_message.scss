@@ -156,7 +156,7 @@
     & > .padlock-icon {
       @include color-svg(
         './images/padlock.svg',
-        var(--messagePadlockIncoming),
+        var(--messageMetadataIconColorIncoming),
         125%
       );
     }
@@ -164,7 +164,7 @@
     & > .location-icon {
       @include color-svg(
         './images/map-marker.svg',
-        var(--messagePadlockIncoming),
+        var(--messageMetadataIconColorIncoming),
         100%
       );
     }
@@ -172,7 +172,7 @@
     & > .saved-message-icon {
       @include color-svg(
         './images/icons/bookmark-filled.svg',
-        var(--messagePadlockIncoming),
+        var(--messageMetadataIconColorIncoming),
         100%
       );
     }
@@ -209,7 +209,7 @@
     & > .padlock-icon {
       @include color-svg(
         './images/padlock.svg',
-        var(--messagePadlockOutgoing),
+        var(--messageMetadataIconColorOutgoing),
         125%
       );
     }
@@ -217,7 +217,7 @@
     & > .location-icon {
       @include color-svg(
         './images/map-marker.svg',
-        var(--messagePadlockOutgoing),
+        var(--messageMetadataIconColorOutgoing),
         100%
       );
     }
@@ -225,7 +225,7 @@
     & > .saved-message-icon {
       @include color-svg(
         './images/icons/bookmark-filled.svg',
-        var(--messagePadlockOutgoing),
+        var(--messageMetadataIconColorOutgoing),
         100%
       );
     }
