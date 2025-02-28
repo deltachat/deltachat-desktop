@@ -57,10 +57,7 @@ export default function MessageMetaData(props: Props) {
         />
       )}
       {isSavedMessage && (
-        <div
-          aria-label={tx('saved_message')}
-          className={'saved-message-icon'}
-        />
+        <div aria-label={tx('saved')} className={'saved-message-icon'} />
       )}
       {hasLocation && <span className={'location-icon'} />}
       {isEdited && <span className='edited'>{tx('edited')}</span>}
