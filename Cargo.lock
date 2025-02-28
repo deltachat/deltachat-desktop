@@ -1742,6 +1742,7 @@ dependencies = [
  "thiserror 2.0.12",
  "tokio",
  "unic-idna-punycode",
+ "url",
  "uuid",
 ]
 

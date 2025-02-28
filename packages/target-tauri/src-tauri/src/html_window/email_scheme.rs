@@ -72,7 +72,7 @@ pub(crate) fn email_protocol<R: tauri::Runtime>(
         .await;
         match response_result {
             Err(err) => {
-                error!("Failed to build reply for dcblob protocol: {err:#}");
+                error!("Failed to build reply for email protocol: {err:#}");
                 responder.respond(
                     http::Response::builder()
                         .status(http::StatusCode::INTERNAL_SERVER_ERROR)
