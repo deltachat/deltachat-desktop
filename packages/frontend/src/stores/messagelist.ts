@@ -292,6 +292,9 @@ class MessageListStore extends Store<MessageListState> {
         // TODO should we handle it differently? Should we
         // schedule a full message list re-fetch, or would it always
         // be loaded later by other event listeners?
+        //
+        // TODO refactor: this warning triggers for "edit request" messages.
+        // Those are actual messages, but we don't render them
         this.log.warn(
           `setMessageState called for message ${messageId}, ` +
             `state ${messageState}, but it's not loaded. ` +
