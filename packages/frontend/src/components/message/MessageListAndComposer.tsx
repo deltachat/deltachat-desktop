@@ -83,6 +83,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
   const {
     draftState,
     updateDraftText,
+    onSelectReplyToShortcut,
     removeQuote,
     addFileToDraft,
     removeFile,
@@ -318,6 +319,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
         editMessageInputRef={editMessageInputRef}
         draftState={draftState}
         updateDraftText={updateDraftText}
+        onSelectReplyToShortcut={onSelectReplyToShortcut}
         removeQuote={removeQuote}
         addFileToDraft={addFileToDraft}
         removeFile={removeFile}
