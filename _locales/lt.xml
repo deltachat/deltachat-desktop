@@ -31,6 +31,7 @@
     <string name="close_window">Užverti langą</string>
     <string name="forward">Persiųsti</string>
     <string name="create">Sukurti</string>
+    <string name="reset">Atstatyti</string>
     <string name="later">Vėliau</string>
     <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
     <string name="resend">Siųsti iš naujo</string>
@@ -169,6 +170,10 @@
     <string name="webxdc_app">Privati programėlė</string>
     <!-- plural of "App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
     <string name="webxdc_apps">Privačios programėlės</string>
+    <string name="games">Žaidimai</string>
+    <string name="app_size">Dydis</string>
+    <!-- short for "Browse through the App Picker/Store/Catalogue"; could also be translated as "Discover" or "Search" -->
+    <string name="browse">Naršyti</string>
     <string name="unknown">Nežinoma</string>
 
     <string name="green">Žalia</string>
@@ -208,6 +213,7 @@
     <string name="menu_delete_chat">Ištrinti pokalbį</string>
     <!-- Command to delete all messages in a chat. The chat itself will not be deleted but will be empty afterwards, so make sure to be different from "Delete Chat" here. "Clear" is a verb here, "Empty Chat" would also be fine (eg. in German "Chat leeren") -->
     <string name="clear_chat">Išvalyti pokalbį</string>
+    <!-- deprecated -->
     <string name="menu_delete_messages">Ištrinti žinutes</string>
     <string name="delete_contact">Ištrinti adresatą</string>
     <string name="menu_delete_location">Ištrinti šią vietą?</string>
@@ -309,13 +315,7 @@
         <item quantity="other">Ištrinti %d pokalbį? Jis daugiau nebebus rodomas pokalbių sąraše, jo žinutės liks serveryje.</item>
     </plurals>
     <string name="ask_delete_named_chat">Ar tikrai norite ištrinti „%1$s“?</string>
-    <string name="ask_delete_message">Ar tikrai norite ištrinti šią žinutę?</string>
-    <plurals name="ask_delete_messages">
-        <item quantity="one">Ištrinti %d žinutę čia ir serveryje?</item>
-        <item quantity="few">Ištrinti %d žinutes čia ir serveryje?</item>
-        <item quantity="many">Ištrinti %d žinučių čia ir serveryje?</item>
-        <item quantity="other">Ištrinti %d žinutę čia ir serveryje?</item>
-    </plurals>
+    <!-- deprecated, use ask_delete_messages -->
     <plurals name="ask_delete_messages_simple">
         <item quantity="one">Ištrinti %d žinutę?</item>
         <item quantity="few">Ištrinti %d žinutes?</item>
@@ -327,6 +327,7 @@
     <string name="ask_block_contact">Užblokuoti šį adresatą? Jūs daugiau nebegausite žinučių nuo šio adresato.</string>
     <string name="ask_unblock_contact">Atblokuoti šį adresatą? Jūs ir vėl galėsite gauti žinutes nuo šio adresato.</string>
     <string name="ask_start_chat_with">Pradėti pokalbį su %1$s?</string>
+    <!-- deprecated -->
     <string name="ask_delete_value">Ištrinti %s?</string>
     <!-- %1$s is replaced by a comma-separated list of names -->
     <string name="ask_remove_members">Pašalinti %1$s iš grupės?</string>

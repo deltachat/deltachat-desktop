@@ -22,6 +22,7 @@
   - Show padlock when the message is not sent over the network.
 - when searching for messages in a single chat, do not show the redundant chat name in each search result #4696
 - html email view: migrate from deprecated `BrowserView` to `WebContentsView` #4689
+- update translations (2025-02-28)
 
 ### Fixed
 - message list being empty when double-clicking the chat before it has loaded (again) #4647

@@ -28,6 +28,8 @@
     <string name="join">Присоединиться</string>
     <string name="rejoin">Присоединиться снова</string>
     <string name="delete">Удалить</string>
+    <string name="delete_for_me">Удалить для меня</string>
+    <string name="delete_for_everyone">Удалить для всех</string>
     <string name="info">Информация</string>
     <string name="update">Обновить</string>
     <string name="emoji">Эмодзи</string>
@@ -41,6 +43,8 @@
     <string name="later">Позже</string>
     <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
     <string name="resend">Отправить повторно</string>
+    <string name="edited">Отредактировано</string>
+    <string name="edit_message">Редактировать сообщение</string>
     <!-- Verb "to archive", as in "put a chat in the archive", not a noun "The Archive". -->
     <string name="archive">Отправить в архив</string>
     <!-- Verb "to unarchive", as in "remove a chat from the archive", opposite of the previous string -->
@@ -262,6 +266,7 @@
     <string name="menu_delete_chat">Удалить чат</string>
     <!-- Command to delete all messages in a chat. The chat itself will not be deleted but will be empty afterwards, so make sure to be different from "Delete Chat" here. "Clear" is a verb here, "Empty Chat" would also be fine (eg. in German "Chat leeren") -->
     <string name="clear_chat">Очистить чат</string>
+    <!-- deprecated -->
     <string name="menu_delete_messages">Удалить сообщения</string>
     <string name="delete_contact">Удалить контакт</string>
     <string name="menu_delete_location">Удалить местоположение?</string>
@@ -382,19 +387,20 @@
     <!-- get confirmations -->
     <string name="ask_leave_group">Вы уверены, что хотите покинуть эту группу?</string>
     <plurals name="ask_delete_chat">
-        <item quantity="one">Удалить %d чат? Он больше не будет виден в списке чатов, его сообщения останутся на сервере.</item>
-        <item quantity="few">Удалить %d чата? Они больше не будут видны в списке чатов, их сообщения останутся на сервере.</item>
-        <item quantity="many">Удалить %d чатов? Они больше не будут видны в списке чатов, их сообщения останутся на сервере.</item>
-        <item quantity="other">Удалить %d чатов? Они больше не будут видны в списке чатов, их сообщения останутся на сервере.</item>
+        <item quantity="one">Удалить %d чат?</item>
+        <item quantity="few">Удалить %d чата?</item>
+        <item quantity="many">Удалить %d чатов?</item>
+        <item quantity="other">Удалить %d чатов?</item>
     </plurals>
-    <string name="ask_delete_named_chat">Удалить чат \"%1$s\"?? Он больше не будет виден в списке чатов, его сообщения останутся на сервере.</string>
-    <string name="ask_delete_message">Вы уверены, что хотите удалить это сообщение?</string>
+    <string name="ask_delete_named_chat">Удалить чат \"%1$s\"?</string>
+    <string name="ask_delete_message">Удалить это сообщение на всех ваших устройствах?</string>
     <plurals name="ask_delete_messages">
-        <item quantity="one">Удалить %d сообщение локально и на сервере?</item>
-        <item quantity="few">Удалить %d сообщения локально и на сервере?</item>
-        <item quantity="many">Удалить %d сообщений локально и на сервере?</item>
-        <item quantity="other">Удалить %d сообщений локально и на сервере?</item>
+        <item quantity="one">Удалить %d сообщение на всех ваших устройствах?</item>
+        <item quantity="few">Удалить %d сообщения на всех ваших устройствах?</item>
+        <item quantity="many">Удалить %d сообщений на всех ваших устройствах?</item>
+        <item quantity="other">Удалить %d сообщений на всех ваших устройствах?</item>
     </plurals>
+    <!-- deprecated, use ask_delete_messages -->
     <plurals name="ask_delete_messages_simple">
         <item quantity="one">Удалить %d сообщение?</item>
         <item quantity="few">Удалить %d сообщения?</item>
@@ -410,6 +416,7 @@
     <string name="ask_delete_contact">Удалить контакт %1$s?\n\nКонтакты из действующих чатов или из системной адресной книги не могут быть удалены навсегда.</string>
     <string name="cannot_delete_contacts_in_use">Невозможно удалить контакты, с которыми имеются действующие чаты.</string>
     <string name="ask_start_chat_with">Создать чат с %1$s?</string>
+    <!-- deprecated -->
     <string name="ask_delete_value">Удалить %s?</string>
     <!-- %1$s is replaced by a comma-separated list of names -->
     <string name="ask_remove_members">Удалить %1$s из группы?</string>
@@ -568,7 +575,7 @@
     <!-- "Second Device" can also be translated as "Another Device", if that is catchier in the destination language. However, make sure to use the term consistently. -->
     <string name="multidevice_title">Добавить второе устройство</string>
     <string name="multidevice_same_network_hint">Убедитесь, что оба устройства подключены к одной и той же локальной или Wi-Fi сети.</string>
-    <string name="multidevice_this_creates_a_qr_code">Это создает QR-код, который можно отсканировать на втором устройстве, чтобы скопировать профиль.</string>
+    <string name="multidevice_this_creates_a_qr_code">Это позволяет создать QR-код, который можно отсканировать на втором устройстве, чтобы скопировать профиль.\n\nУбедитесь, что посторонние люди или камера не видят следующий экран.</string>
     <string name="multidevice_install_dc_on_other_device">Установите Delta Chat на другом устройстве (https://get.delta.chat)</string>
     <!-- "I Already Have a Profile / Add as Second Device” should be the same text as defined by the keys onboarding_alternative_logins and multidevice_receiver_title -->
     <string name="multidevice_tap_scan_on_other_device">Запустите Delta Chat, выберите \"У меня уже есть профиль / Добавить как второе устройство\" и отсканируйте код, показанный здесь</string>
@@ -577,6 +584,7 @@
     <string name="multidevice_receiver_title">Добавить как второе устройство</string>
     <string name="multidevice_open_settings_on_other_device">На первом устройстве, откройте \"Настройки / Добавить второе устройство\" и отсканируйте код, показанный там</string>
     <string name="multidevice_receiver_scanning_ask">Скопировать профиль с другого устройства на это устройство?</string>
+    <string name="multidevice_receiver_needs_update">Профиль, который вы хотите импортировать, создан в более новой версии Delta Chat. Чтобы продолжить настройку второго устройства, пожалуйста, обновите это устройство до последней версии Delta Chat.</string>
     <string name="multidevice_abort">Прервать настройку второго устройства?</string>
     <string name="multidevice_abort_will_invalidate_copied_qr">Это сделает недействительным QR-код, скопированный в буфер обмена.</string>
     <string name="multidevice_experimental_hint">(экспериментально, требуется версия 1.36)</string>
@@ -770,10 +778,6 @@
     <string name="pref_manage_keys">Управление ключами</string>
     <string name="pref_use_system_emoji">Использовать системные эмодзи</string>
     <string name="pref_use_system_emoji_explain">Отключить поддержку встроенных эмодзи Delta Chat</string>
-    <!-- deprecated -->
-    <string name="pref_use_inapp_camera">Использовать камеру приложения</string>
-    <!-- deprecated -->
-    <string name="pref_use_inapp_camera_explain">Камера приложения обычно имеет меньше функций, чем системная</string>
     <string name="pref_show_system_contacts">Чтение системной адресной книги</string>
     <string name="pref_show_system_contacts_explain">Предлагать создать чаты с контактами из адресной книги. Некоторые провайдеры требуют предварительной настройки сквозного шифрования.</string>
     <string name="pref_app_access">Доступ приложения</string>

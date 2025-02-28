@@ -28,6 +28,8 @@
     <string name="join">Dołącz</string>
     <string name="rejoin">Dołącz ponownie</string>
     <string name="delete">Usuń</string>
+    <string name="delete_for_me">Usuń u mnie</string>
+    <string name="delete_for_everyone">Usuń u wszystkich</string>
     <string name="info">Informacje</string>
     <string name="update">Aktualizacja</string>
     <string name="emoji">Emoji</string>
@@ -41,6 +43,8 @@
     <string name="later">Później</string>
     <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
     <string name="resend">Wyślij ponownie</string>
+    <string name="edited">Edytowana</string>
+    <string name="edit_message">Edytuj wiadomość</string>
     <!-- Verb "to archive", as in "put a chat in the archive", not a noun "The Archive". -->
     <string name="archive">Archiwizuj</string>
     <!-- Verb "to unarchive", as in "remove a chat from the archive", opposite of the previous string -->
@@ -262,6 +266,7 @@
     <string name="menu_delete_chat">Usuń czat</string>
     <!-- Command to delete all messages in a chat. The chat itself will not be deleted but will be empty afterwards, so make sure to be different from "Delete Chat" here. "Clear" is a verb here, "Empty Chat" would also be fine (eg. in German "Chat leeren") -->
     <string name="clear_chat">Wyczyść czat</string>
+    <!-- deprecated -->
     <string name="menu_delete_messages">Usuń wiadomości</string>
     <string name="delete_contact">Usuń kontakt</string>
     <string name="menu_delete_location">Usunąć tę lokalizację?</string>
@@ -388,13 +393,13 @@
         <item quantity="other">Usunąć %d czatów? Nie będą już wyświetlane na liście czatów, ich wiadomości pozostaną na serwerze.</item>
     </plurals>
     <string name="ask_delete_named_chat">Usunąć czat „%1$s”? Nie będzie on już wyświetlany na liście czatów. Jego wiadomości pozostaną na serwerze.</string>
-    <string name="ask_delete_message">Czy na pewno chcesz usunąć tę wiadomość?</string>
     <plurals name="ask_delete_messages">
-        <item quantity="one">Usunąć %d wiadomość tutaj i na serwerze?</item>
-        <item quantity="few">Usunąć %d wiadomości tutaj i na serwerze?</item>
-        <item quantity="many">Usunąć %d wiadomości tutaj i na serwerze?</item>
-        <item quantity="other">Usunąć %d wiadomości tutaj i na serwerze?</item>
+        <item quantity="one">Usunąć %d wiadomość ze wszystkich urządzeń?</item>
+        <item quantity="few">Usunąć %d wiadomości ze wszystkich urządzeń?</item>
+        <item quantity="many">Usunąć %d wiadomości ze wszystkich urządzeń?</item>
+        <item quantity="other">Usunąć %d wiadomości ze wszystkich urządzeń?</item>
     </plurals>
+    <!-- deprecated, use ask_delete_messages -->
     <plurals name="ask_delete_messages_simple">
         <item quantity="one">Usunąć %d wiadomość?</item>
         <item quantity="few">Usunąć %d wiadomości?</item>
@@ -410,6 +415,7 @@
     <string name="ask_delete_contact">Usunąć trwale kontakt %1$s?\n\nKontaktów z trwającymi czatami i kontaktów z książki adresowej systemu nie można trwale usunąć.</string>
     <string name="cannot_delete_contacts_in_use">Nie można usunąć kontaktów z trwającymi czatami.</string>
     <string name="ask_start_chat_with">Rozpocząć czat z %1$s?</string>
+    <!-- deprecated -->
     <string name="ask_delete_value">Usunąć %s?</string>
     <!-- %1$s is replaced by a comma-separated list of names -->
     <string name="ask_remove_members">Usunąć %1$s z grupy?</string>
@@ -535,6 +541,8 @@
     <string name="profile_encryption">Szyfrowanie</string>
     <string name="profile_shared_chats">Wspólne czaty</string>
     <string name="related_chats">Powiązane czaty</string>
+    <!-- Separator between the list of actual members and past members -->
+    <string name="past_members">Byli członkowie</string>
     <string name="tab_contact">Kontakt</string>
     <string name="tab_group">Grupa</string>
     <string name="tab_gallery">Galeria</string>
@@ -768,10 +776,6 @@
     <string name="pref_manage_keys">Zarządzaj prywatnymi kluczami</string>
     <string name="pref_use_system_emoji">Użyj emoji systemowych</string>
     <string name="pref_use_system_emoji_explain">Wyłącza wbudowaną obsługę emoji Delta Chat</string>
-    <!-- deprecated -->
-    <string name="pref_use_inapp_camera">Użyj aparatu w aplikacji</string>
-    <!-- deprecated -->
-    <string name="pref_use_inapp_camera_explain">Aparat w aplikacji ma zwykle mniej funkcji niż aparat systemowy</string>
     <string name="pref_show_system_contacts">Odczytaj systemową książkę adresową</string>
     <string name="pref_show_system_contacts_explain">Zaproponuj tworzenie czatów z kontaktami z książki adresowej. Niektórzy dostawcy wymagają najpierw szyfrowania end-to-end.</string>
     <string name="pref_app_access">Dostęp do aplikacji</string>
@@ -1147,7 +1151,7 @@
     <!-- command to put the cursor to the search input field -->
     <string name="focus_search_input">Szukaj</string>
     <!-- command to put the cursor to the message input field -->
-    <string name="focus_message_input">Wpisz wiadomość</string>
+    <string name="focus_message_input">Napisz wiadomość</string>
     <string name="force_refresh_network">Wymuś odświeżenie sieci</string>
     <string name="insert_newline">Wstaw nową linię</string>
 

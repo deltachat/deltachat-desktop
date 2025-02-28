@@ -28,6 +28,8 @@
     <string name="join">Partecipa</string>
     <string name="rejoin">Ripartecipa</string>
     <string name="delete">Elimina</string>
+    <string name="delete_for_me">Cancella per Me</string>
+    <string name="delete_for_everyone">Cancella per Tutti</string>
     <string name="info">Informazioni</string>
     <string name="update">Aggiorna</string>
     <string name="emoji">Emoji</string>
@@ -41,6 +43,8 @@
     <string name="later">Dopo</string>
     <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
     <string name="resend">Reinvia</string>
+    <string name="edited">Modificato</string>
+    <string name="edit_message">Modifica Messaggio</string>
     <!-- Verb "to archive", as in "put a chat in the archive", not a noun "The Archive". -->
     <string name="archive">Archivia</string>
     <!-- Verb "to unarchive", as in "remove a chat from the archive", opposite of the previous string -->
@@ -253,6 +257,7 @@
     <string name="menu_delete_chat">Elimina Chat</string>
     <!-- Command to delete all messages in a chat. The chat itself will not be deleted but will be empty afterwards, so make sure to be different from "Delete Chat" here. "Clear" is a verb here, "Empty Chat" would also be fine (eg. in German "Chat leeren") -->
     <string name="clear_chat">Cancella Messaggi</string>
+    <!-- deprecated -->
     <string name="menu_delete_messages">Elimina Messaggi</string>
     <string name="delete_contact">Elimina Contatto</string>
     <string name="menu_delete_location">Elimino questa Posizione?</string>
@@ -374,15 +379,15 @@
     <plurals name="ask_delete_chat">
         <item quantity="one">Eliminare %d chat? Essa non verrà più mostrata nella lista delle chat; i suoi messaggi rimarranno sul server.</item>
         <item quantity="many">Eliminare %d chats? Esse non verranno più mostrate nella lista delle chat; i loro messaggi rimarranno sul server.</item>
-        <item quantity="other">Eliminare %d chats? Esse non verranno più mostrate nella lista delle chat; i loro messaggi rimarranno sul server.</item>
+        <item quantity="other">Eliminare %d chats?</item>
     </plurals>
-    <string name="ask_delete_named_chat">Elimina chat \"%1$s\"? Essa non verrà più mostrata nell\'elenco delle chat; i suoi messaggi rimarranno sul server.</string>
-    <string name="ask_delete_message">Sei sicuro di voler eliminare questo messaggio?</string>
+    <string name="ask_delete_named_chat">Elimina chat \"%1$s\"?</string>
     <plurals name="ask_delete_messages">
-        <item quantity="one">Eliminare %d messaggio qui e sul sever?</item>
-        <item quantity="many">Eliminare %d messaggi qui e sul sever?</item>
-        <item quantity="other">Eliminare %d messaggi qui e sul sever?</item>
+        <item quantity="one">Cancella %d messaggio su tutti i tuoi dispositivi?</item>
+        <item quantity="many">Cancella %d messaggi su tutti i tuoi dispositivi?</item>
+        <item quantity="other">Cancella %d messaggi su tutti i tuoi dispositivi?</item>
     </plurals>
+    <!-- deprecated, use ask_delete_messages -->
     <plurals name="ask_delete_messages_simple">
         <item quantity="one">Eliminare %d messaggio?</item>
         <item quantity="many">Eliminare %d messaggi?</item>
@@ -397,6 +402,7 @@
     <string name="ask_delete_contact">Eliminare il contatto %1$s?\n\nI contatti con chat in corso o in rubrica di sistema non possono essere eliminati definitivamente.</string>
     <string name="cannot_delete_contacts_in_use">Impossibile eliminare contatti con chat in corso.</string>
     <string name="ask_start_chat_with">Chattare con %1$s?</string>
+    <!-- deprecated -->
     <string name="ask_delete_value">Elimina %s?</string>
     <!-- %1$s is replaced by a comma-separated list of names -->
     <string name="ask_remove_members">Rimuovere %1$s dal gruppo?</string>
@@ -552,7 +558,7 @@
     <!-- "Second Device" can also be translated as "Another Device", if that is catchier in the destination language. However, make sure to use the term consistently. -->
     <string name="multidevice_title">Aggiungi Secondo Dispositivo</string>
     <string name="multidevice_same_network_hint">Assicurati che entrambi i dispositivi siano sulla stessa rete o Wi-Fi.</string>
-    <string name="multidevice_this_creates_a_qr_code">Questo crea un codice QR che il secondo dispositivo può scansionare per copiare il profilo.</string>
+    <string name="multidevice_this_creates_a_qr_code">Questo crea un codice QR che il secondo dispositivo può scansionare per copiare il profilo.\n\nAssicurati che nessun osservatore o telecamera indesiderata possa vedere la schermata seguente.</string>
     <string name="multidevice_install_dc_on_other_device">Installa Delta Chat sull\'altro tuo dispositivo (https://get.delta.chat)</string>
     <!-- "I Already Have a Profile / Add as Second Device” should be the same text as defined by the keys onboarding_alternative_logins and multidevice_receiver_title -->
     <string name="multidevice_tap_scan_on_other_device">Avvia Delta Chat, tocca \"Ho già un Profilo / Aggiungi come Secondo Dispositivo\" e scansiona il codice mostrato qui</string>
@@ -754,10 +760,6 @@
     <string name="pref_manage_keys">Gestisci Chiavi</string>
     <string name="pref_use_system_emoji">Usa Emoji di Sistema</string>
     <string name="pref_use_system_emoji_explain">Disattiva il supporto delle emoji integrato in Delta Chat</string>
-    <!-- deprecated -->
-    <string name="pref_use_inapp_camera">Usa Fotocamera App</string>
-    <!-- deprecated -->
-    <string name="pref_use_inapp_camera_explain">La fotocamera dell\'app di solito ha meno funzionalità della fotocamera di sistema</string>
     <string name="pref_show_system_contacts">Leggi Rubrica di Sistema</string>
     <string name="pref_show_system_contacts_explain">Offri la possibilità di creare chats con i contatti della rubrica. Alcuni provider necessitano prima della configurazione della crittografia end-to-end.</string>
     <string name="pref_app_access">Accesso App</string>
@@ -791,7 +793,7 @@
     <string name="pref_imap_folder_handling">Gestione Cartella IMAP</string>
     <string name="pref_imap_folder_warn_disable_defaults">Se modifichi questa opzione, assicurati che il tuo server e gli altri client siano configurati di conseguenza.\n\nAltrimenti le cose potrebbero non funzionare affatto.</string>
     <string name="pref_watch_sent_folder">Controlla Cartella Inviata</string>
-    <string name="pref_send_copy_to_self">Invia Copia a Me</string>
+    <string name="pref_send_copy_to_self">Invia Copia a Te Stesso</string>
     <!-- for classic email, we use the classical term "Account" -->
     <string name="pref_send_copy_to_self_explain">Richiesto quando si utilizza questo profilo su più dispositivi.</string>
     <string name="pref_auto_folder_moves">Sposta nella Cartella DeltaChat</string>

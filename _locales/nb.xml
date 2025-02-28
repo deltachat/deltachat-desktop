@@ -142,6 +142,7 @@
     <string name="menu_add_attachment">Legg ved filer</string>
     <string name="menu_leave_group">Forlat gruppe</string>
     <string name="menu_delete_chat">Slett sludring</string>
+    <!-- deprecated -->
     <string name="menu_delete_messages">Slett meldinger</string>
     <string name="menu_delete_location">Slett på dette stedet?</string>
     <string name="menu_message_details">Meldingsdetaljer</string>
@@ -213,10 +214,6 @@
     <plurals name="ask_delete_chat">
         <item quantity="one">Slett %d chat? Den vil ikke lenger vises</item>
         <item quantity="other">Slett %d chatter? De vil ikke lenger vises i chattelisten, meldingene vil fortsatt være lagret tjeneren.</item>
-    </plurals>
-    <plurals name="ask_delete_messages">
-        <item quantity="one">Slett %d melding? Den vil også bli slettet fra tjeneren?</item>
-        <item quantity="other">Slett %d meldinger? De vil også bli slettet fra tjeneren.</item>
     </plurals>
     <string name="ask_forward">Videresend meldinger til %1$s?</string>
     <string name="ask_forward_multiple">Videresend meldinger til %1$d chatter?</string>
