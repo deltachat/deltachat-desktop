@@ -649,16 +649,12 @@
         @include color-svg('./images/map-marker.svg', white, 100%);
       }
 
-<<<<<<< HEAD
-      & > .date,
-      & > .edited {
-=======
       & > .saved-message-icon {
         @include color-svg('./images/icons/bookmark-filled.svg', white, 100%);
       }
 
-      & > .date {
->>>>>>> 54bd7b3a6 (Show bookmark icon for saved messages)
+      & > .date,
+      & > .edited {
         color: white;
       }
     }
