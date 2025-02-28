@@ -78,7 +78,8 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
   const { openDialog, hasOpenDialogs } = useDialog()
   const { sendMessage } = useMessage()
 
-  const messageInputRef = useRef<ComposerMessageInput>(null)
+  const regularMessageInputRef = useRef<ComposerMessageInput>(null)
+  const editMessageInputRef = useRef<ComposerMessageInput>(null)
   const {
     draftState,
     updateDraftText,
@@ -92,7 +93,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     chat.isContactRequest,
     chat.isProtectionBroken,
     chat.canSend,
-    messageInputRef
+    regularMessageInputRef
   )
 
   const onDrop = async (e: React.DragEvent<any>) => {
@@ -230,7 +231,11 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
 
       e.preventDefault()
       e.stopPropagation()
-      messageInputRef?.current?.focus()
+
+      // Only one of these is actually rendered at any given moment.
+      regularMessageInputRef.current?.focus()
+      editMessageInputRef.current?.focus()
+
       return false
     },
     [hasOpenDialogs]
@@ -245,12 +250,16 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     )
       return
 
-    messageInputRef?.current?.focus()
+    // Only one of these is actually rendered at any given moment.
+    regularMessageInputRef.current?.focus()
+    editMessageInputRef.current?.focus()
   }
 
   const onEscapeKeyUp = (ev: KeyboardEvent) => {
     if (ev.code === 'Escape') {
-      messageInputRef?.current?.focus()
+      // Only one of these is actually rendered at any given moment.
+      regularMessageInputRef.current?.focus()
+      editMessageInputRef.current?.focus()
     }
   }
 
@@ -258,7 +267,10 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     window.addEventListener('mouseup', onMouseUp)
     document.addEventListener('selectionchange', onSelectionChange)
     window.addEventListener('keyup', onEscapeKeyUp)
-    messageInputRef?.current?.focus()
+
+    // Only one of these is actually rendered at any given moment.
+    regularMessageInputRef.current?.focus()
+    editMessageInputRef.current?.focus()
 
     return () => {
       window.removeEventListener('mouseup', onMouseUp)
@@ -302,7 +314,8 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
         selectedChat={chat}
         isContactRequest={chat.isContactRequest}
         isProtectionBroken={chat.isProtectionBroken}
-        messageInputRef={messageInputRef}
+        regularMessageInputRef={regularMessageInputRef}
+        editMessageInputRef={editMessageInputRef}
         draftState={draftState}
         updateDraftText={updateDraftText}
         removeQuote={removeQuote}

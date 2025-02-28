@@ -149,6 +149,11 @@
       &.scroll {
         overflow-y: scroll;
       }
+
+      // The "edit message" mode hides the .attachment-button.
+      &:first-child {
+        margin-left: 1rem;
+      }
     }
   }
 }

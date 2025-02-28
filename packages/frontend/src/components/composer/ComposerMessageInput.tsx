@@ -8,6 +8,11 @@ import { DialogContext } from '../../contexts/DialogContext'
 const log = getLogger('renderer/composer/ComposerMessageInput')
 
 type ComposerMessageInputProps = {
+  /**
+   * Whether to render the HTML or to return `null`.
+   */
+  hidden?: boolean
+  isMessageEditingMode: boolean
   chatId: number
   chatName: string
   sendMessageOrEditRequest: () => void
@@ -222,6 +227,9 @@ export default class ComposerMessageInput extends React.Component<
   }
 
   render() {
+    if (this.props.hidden) {
+      return null
+    }
     return (
       <textarea
         className='message-input-area'
@@ -234,9 +242,15 @@ export default class ComposerMessageInput extends React.Component<
         onKeyDown={this.onKeyDown}
         onChange={this.onChange}
         onPaste={this.props.onPaste}
-        placeholder={window.static_translate('write_message_desktop')}
+        placeholder={
+          this.props.isMessageEditingMode
+            ? window.static_translate('edit_message')
+            : window.static_translate('write_message_desktop')
+        }
         aria-label={
-          window.static_translate('write_message_desktop') +
+          (this.props.isMessageEditingMode
+            ? window.static_translate('edit_message')
+            : window.static_translate('write_message_desktop')) +
           // Make it clear which chat we're in.
           // TODO probably need a proper string, with interpolation.
           ': ' +

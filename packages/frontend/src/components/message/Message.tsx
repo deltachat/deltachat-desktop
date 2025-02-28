@@ -21,6 +21,7 @@ import {
   confirmDeleteMessage,
   downloadFullMessage,
   openWebxdc,
+  enterEditMessageMode,
 } from './messageFunctions'
 import Attachment from '../attachment/messageAttachment'
 import { isGenericAttachment } from '../attachment/Attachment'
@@ -271,6 +272,16 @@ function buildContextMenu(
   // Do not show "reply" in read-only chats
   const showReply = chat.canSend
 
+  // See https://github.com/deltachat/deltachat-desktop/issues/4695.
+  const showEdit =
+    runtime.getRC_Config().devmode &&
+    message.fromId === C.DC_CONTACT_ID_SELF &&
+    message.text !== '' &&
+    chat.canSend &&
+    !message.isInfo &&
+    message.viewType !== 'VideochatInvitation' &&
+    !message.hasHtml
+
   // Do not show "react" for system messages
   const showSendReaction = showReactionsUi(message, chat)
 
@@ -302,6 +313,12 @@ function buildContextMenu(
     showSendReaction && {
       label: tx('react'),
       action: handleReactClick,
+    },
+    showEdit && {
+      // Not `tx('edit_message')`.
+      // See https://github.com/deltachat/deltachat-desktop/issues/4695#issuecomment-2688716592
+      label: tx('global_menu_edit_desktop'),
+      action: enterEditMessageMode.bind(null, message),
     },
     // Save Message
     !chat.isSelfTalk &&
@@ -920,10 +937,15 @@ export default function Message(props: {
 export const Quote = ({
   quote,
   msgParentId,
+  isEditMessage,
   tabIndex,
 }: {
   quote: T.MessageQuote
   msgParentId?: number
+  /**
+   * Whether this component is passed the message that the user is editing.
+   */
+  isEditMessage?: boolean
   tabIndex: -1 | 0
 }) => {
   const tx = useTranslationFunction()
@@ -966,32 +988,38 @@ export const Quote = ({
         style={borderStyle}
       >
         <div className='quote-text'>
-          {hasMessage && (
-            <>
-              {quote.isForwarded ? (
-                <div className='quote-author'>
-                  {reactStringReplace(
-                    tx('forwarded_by', '$$forwarder$$'),
-                    '$$forwarder$$',
-                    () => (
-                      <span key='displayname'>
-                        {getAuthorName(
-                          quote.authorDisplayName as string,
-                          quote.overrideSenderName || undefined
-                        )}
-                      </span>
-                    )
-                  )}
-                </div>
-              ) : (
-                <div className='quote-author' style={authorStyle}>
-                  {getAuthorName(
-                    quote.authorDisplayName,
-                    quote.overrideSenderName || undefined
-                  )}
-                </div>
-              )}
-            </>
+          {isEditMessage ? (
+            <div className='quote-author' style={authorStyle}>
+              {tx('edit_message')}
+            </div>
+          ) : (
+            hasMessage && (
+              <>
+                {quote.isForwarded ? (
+                  <div className='quote-author'>
+                    {reactStringReplace(
+                      tx('forwarded_by', '$$forwarder$$'),
+                      '$$forwarder$$',
+                      () => (
+                        <span key='displayname'>
+                          {getAuthorName(
+                            quote.authorDisplayName as string,
+                            quote.overrideSenderName || undefined
+                          )}
+                        </span>
+                      )
+                    )}
+                  </div>
+                ) : (
+                  <div className='quote-author' style={authorStyle}>
+                    {getAuthorName(
+                      quote.authorDisplayName,
+                      quote.overrideSenderName || undefined
+                    )}
+                  </div>
+                )}
+              </>
+            )
           )}
           {quote.text && (
             <div className='quoted-text'>

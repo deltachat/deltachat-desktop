@@ -6,6 +6,7 @@ import React, {
   useLayoutEffect,
   useCallback,
   useMemo,
+  useContext,
 } from 'react'
 import { C, T } from '@deltachat/jsonrpc-client'
 import { extension } from 'mime-types'
@@ -45,6 +46,8 @@ import { AppPicker } from '../AppPicker'
 import { AppInfo, AppStoreUrl } from '../AppPicker'
 import OutsideClickHelper from '../OutsideClickHelper'
 import { basename } from 'path'
+import { useHasChanged2 } from '../../hooks/useHasChanged'
+import { ScreenContext } from '../../contexts/ScreenContext'
 
 const log = getLogger('renderer/composer')
 
@@ -54,7 +57,8 @@ const Composer = forwardRef<
     isContactRequest: boolean
     isProtectionBroken: boolean
     selectedChat: Type.FullChat
-    messageInputRef: React.MutableRefObject<ComposerMessageInput | null>
+    regularMessageInputRef: React.MutableRefObject<ComposerMessageInput | null>
+    editMessageInputRef: React.MutableRefObject<ComposerMessageInput | null>
     draftState: DraftObject
     removeQuote: () => void
     updateDraftText: (text: string, InputChatId: number) => void
@@ -71,7 +75,8 @@ const Composer = forwardRef<
     isContactRequest,
     isProtectionBroken,
     selectedChat,
-    messageInputRef,
+    regularMessageInputRef,
+    editMessageInputRef,
     draftState,
     removeQuote,
     updateDraftText,
@@ -91,6 +96,33 @@ const Composer = forwardRef<
   const { openDialog } = useDialog()
   const { sendMessage } = useMessage()
   const { unselectChat } = useChat()
+
+  // The philosophy of the editing mode is as follows.
+  // The edit mode can be thought of as a dialog,
+  // even though it does not like one visually.
+  // The "edit message" dialog has a separate textarea,
+  // a separate "send" button, and a separate emoji picker.
+  // When the "edit" dialog opens, it does not modify the "normal" input,
+  // i.e. the normal draft state.
+  // It follows that when the "edit" dialog closes,
+  // the original draft state remains the same.
+  //
+  // From the development (coding) perspective,
+  // thinking of the "edit" mode as such (as a separate dialog)
+  // makes it easier to ensure that there are no weird collisions
+  // between the regular draft mode and the editing mode.
+  const messageEditing = useMessageEditing(
+    accountId,
+    chatId,
+    editMessageInputRef
+  )
+  /**
+   * Use this only if you're sure that what you want to do with the ref
+   * applies to both the editing mode and to the regular mode.
+   */
+  const currentComposerMessageInputRef = messageEditing.isEditingModeActive
+    ? editMessageInputRef
+    : regularMessageInputRef
 
   const hasSecureJoinEnded = useRef<boolean>(false)
   useEffect(() => {
@@ -112,70 +144,72 @@ const Composer = forwardRef<
     })
   }, [accountId])
 
-  const composerSendMessage = async () => {
-    if (chatId === null) {
-      throw new Error('chat id is undefined')
-    }
-    if (!messageInputRef.current) {
-      throw new Error('messageInputRef is undefined')
-    }
-    const textareaRef = messageInputRef.current.textareaRef.current
-    if (textareaRef) {
-      if (textareaRef.disabled) {
-        throw new Error(
-          'text area is disabled, this means it is either already sending or loading the draft'
-        )
-      }
-      textareaRef.disabled = true
-    }
-    try {
-      const message = messageInputRef.current.getText()
-      if (message.match(/^\s*$/) && !draftState.file) {
-        log.debug(`Empty message: don't send it...`)
-        return
-      }
+  const composerSendMessage = messageEditing.isEditingModeActive
+    ? null
+    : async () => {
+        if (chatId === null) {
+          throw new Error('chat id is undefined')
+        }
+        if (!regularMessageInputRef.current) {
+          throw new Error('messageInputRef is undefined')
+        }
+        const textareaRef = regularMessageInputRef.current.textareaRef.current
+        if (textareaRef) {
+          if (textareaRef.disabled) {
+            throw new Error(
+              'text area is disabled, this means it is either already sending or loading the draft'
+            )
+          }
+          textareaRef.disabled = true
+        }
+        try {
+          const message = regularMessageInputRef.current.getText()
+          if (message.match(/^\s*$/) && !draftState.file) {
+            log.debug(`Empty message: don't send it...`)
+            return
+          }
 
-      const sendMessagePromise = sendMessage(accountId, chatId, {
-        text: replaceColonsSafe(message),
-        file: draftState.file || undefined,
-        filename: draftState.fileName || undefined,
-        quotedMessageId:
-          draftState.quote?.kind === 'WithMessage'
-            ? draftState.quote.messageId
-            : null,
-        viewtype: draftState.viewType,
-      })
+          const sendMessagePromise = sendMessage(accountId, chatId, {
+            text: replaceColonsSafe(message),
+            file: draftState.file || undefined,
+            filename: draftState.fileName || undefined,
+            quotedMessageId:
+              draftState.quote?.kind === 'WithMessage'
+                ? draftState.quote.messageId
+                : null,
+            viewtype: draftState.viewType,
+          })
 
-      await sendMessagePromise
+          await sendMessagePromise
 
-      // Ensure that the draft is cleared
-      // and the state is reflected in the UI.
-      //
-      // At this point we know that sending has succeeded,
-      // so we do not accidentally remove the draft
-      // if the core fails to send.
-      await BackendRemote.rpc.removeDraft(selectedAccountId(), chatId)
-      window.__reloadDraft && window.__reloadDraft()
-    } catch (error) {
-      log.error(error)
-    } finally {
-      if (textareaRef) {
-        textareaRef.disabled = false
+          // Ensure that the draft is cleared
+          // and the state is reflected in the UI.
+          //
+          // At this point we know that sending has succeeded,
+          // so we do not accidentally remove the draft
+          // if the core fails to send.
+          await BackendRemote.rpc.removeDraft(selectedAccountId(), chatId)
+          window.__reloadDraft && window.__reloadDraft()
+        } catch (error) {
+          log.error(error)
+        } finally {
+          if (textareaRef) {
+            textareaRef.disabled = false
+          }
+          regularMessageInputRef.current.focus()
+        }
       }
-      messageInputRef.current.focus()
-    }
-  }
 
   const onEmojiIconClick = () => setShowEmojiPicker(!showEmojiPicker)
   const shiftPressed = useRef(false)
   const onEmojiSelect = (emoji: EmojiData) => {
     log.debug(`EmojiPicker: Selected ${emoji.id}`)
-    messageInputRef.current?.insertStringAtCursorPosition(
+    currentComposerMessageInputRef.current?.insertStringAtCursorPosition(
       (emoji as BaseEmoji).native
     )
     if (!shiftPressed.current) {
       setShowEmojiPicker(false)
-      messageInputRef.current?.focus()
+      currentComposerMessageInputRef.current?.focus()
     }
   }
   // track shift key -> update [shiftPressed]
@@ -222,74 +256,82 @@ const Composer = forwardRef<
     }
   }, [showEmojiPicker, emojiAndStickerRef])
 
-  const onAppSelected = async (appInfo: AppInfo) => {
-    log.debug('App selected', appInfo)
-    const response = await BackendRemote.rpc.getHttpResponse(
-      selectedAccountId(),
-      AppStoreUrl + appInfo.cache_relname
-    )
-    if (response?.blob?.length) {
-      const path = await runtime.writeTempFileFromBase64(
-        appInfo.cache_relname,
-        response.blob
-      )
-      await addFileToDraft(path, appInfo.cache_relname, 'File')
-      await runtime.removeTempFile(path)
-      setShowAppPicker(false)
-    }
-  }
+  const onAppSelected = messageEditing.isEditingModeActive
+    ? null
+    : async (appInfo: AppInfo) => {
+        log.debug('App selected', appInfo)
+        const response = await BackendRemote.rpc.getHttpResponse(
+          selectedAccountId(),
+          AppStoreUrl + appInfo.cache_relname
+        )
+        if (response?.blob?.length) {
+          const path = await runtime.writeTempFileFromBase64(
+            appInfo.cache_relname,
+            response.blob
+          )
+          await addFileToDraft(path, appInfo.cache_relname, 'File')
+          await runtime.removeTempFile(path)
+          setShowAppPicker(false)
+        }
+      }
 
   // Paste file functionality
   // https://github.com/deltachat/deltachat-desktop/issues/2108
-  const handlePaste = async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
-    // Skip if no file
-    if (!e.clipboardData.files.length) {
-      return
-    }
-    // when there is a file then don't paste text
-    // https://github.com/deltachat/deltachat-desktop/issues/3261
-    e.preventDefault()
-
-    // File object
-    const file = e.clipboardData.files[0]
-
-    log.debug(
-      `paste: received file: "${file.name}" ${file.type}`,
-      e.clipboardData.files
-    )
-
-    const msgType: Viewtype = file.type.startsWith('image') ? 'Image' : 'File'
-
-    try {
-      // Write clipboard to file then attach it to the draft
-      const file_content = await new Promise<string>((resolve, reject) => {
-        const reader = new FileReader()
-        reader.onloadend = () => {
-          resolve(reader.result as any)
+  const handlePaste = messageEditing.isEditingModeActive
+    ? null
+    : async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+        // Skip if no file
+        if (!e.clipboardData.files.length) {
+          return
         }
-        reader.onabort = reject
-        reader.onerror = reject
-        reader.readAsDataURL(file)
-      })
-      const fileName = file.name || `file.${extension(file.type)}`
-      const path = await runtime.writeTempFileFromBase64(
-        fileName,
-        file_content.split(';base64,')[1]
-      )
-      await addFileToDraft(path, fileName, msgType)
-      // delete file again after it was sucessfuly added
-      await runtime.removeTempFile(path)
-    } catch (err) {
-      log.error('Failed to paste file.', err)
-    }
-  }
+        // when there is a file then don't paste text
+        // https://github.com/deltachat/deltachat-desktop/issues/3261
+        e.preventDefault()
+
+        // File object
+        const file = e.clipboardData.files[0]
+
+        log.debug(
+          `paste: received file: "${file.name}" ${file.type}`,
+          e.clipboardData.files
+        )
+
+        const msgType: Viewtype = file.type.startsWith('image')
+          ? 'Image'
+          : 'File'
+
+        try {
+          // Write clipboard to file then attach it to the draft
+          const file_content = await new Promise<string>((resolve, reject) => {
+            const reader = new FileReader()
+            reader.onloadend = () => {
+              resolve(reader.result as any)
+            }
+            reader.onabort = reject
+            reader.onerror = reject
+            reader.readAsDataURL(file)
+          })
+          const fileName = file.name || `file.${extension(file.type)}`
+          const path = await runtime.writeTempFileFromBase64(
+            fileName,
+            file_content.split(';base64,')[1]
+          )
+          await addFileToDraft(path, fileName, msgType)
+          // delete file again after it was sucessfuly added
+          await runtime.removeTempFile(path)
+        } catch (err) {
+          log.error('Failed to paste file.', err)
+        }
+      }
 
   const settingsStore = useSettingsStore()[0]
 
   useLayoutEffect(() => {
     // focus composer on chat change
-    messageInputRef.current?.focus()
-  }, [chatId, messageInputRef])
+    // Only one of these is actually rendered at any given moment.
+    regularMessageInputRef.current?.focus()
+    editMessageInputRef.current?.focus()
+  }, [chatId, editMessageInputRef, regularMessageInputRef])
 
   const ariaSendShortcut: string = useMemo(() => {
     if (settingsStore == undefined) {
@@ -376,44 +418,124 @@ const Composer = forwardRef<
     return (
       <div className='composer' ref={ref}>
         <div className='upper-bar'>
-          {draftState.quote !== null && (
+          {!messageEditing.isEditingModeActive ? (
+            <>
+              {draftState.quote !== null && (
+                <div className='attachment-quote-section is-quote'>
+                  <Quote quote={draftState.quote} tabIndex={0} />
+                  <CloseButton onClick={removeQuote} />
+                </div>
+              )}
+              {draftState.file && !draftState.vcardContact && (
+                <div className='attachment-quote-section is-attachment'>
+                  {/* TODO make this pretty: draft image/video/attachment */}
+                  {/* <p>file: {draftState.file}</p> */}
+                  {/* {draftState.viewType} */}
+                  <DraftAttachment attachment={draftState} />
+                  <CloseButton onClick={removeFile} />
+                </div>
+              )}
+              {draftState.vcardContact && (
+                <div className='attachment-quote-section is-attachment'>
+                  <VisualVCardComponent
+                    vcardContact={draftState.vcardContact}
+                  />
+                  <CloseButton onClick={removeFile} />
+                </div>
+              )}
+            </>
+          ) : (
             <div className='attachment-quote-section is-quote'>
-              <Quote quote={draftState.quote} tabIndex={0} />
-              <CloseButton onClick={removeQuote} />
-            </div>
-          )}
-          {draftState.file && !draftState.vcardContact && (
-            <div className='attachment-quote-section is-attachment'>
-              {/* TODO make this pretty: draft image/video/attachment */}
-              {/* <p>file: {draftState.file}</p> */}
-              {/* {draftState.viewType} */}
-              <DraftAttachment attachment={draftState} />
-              <CloseButton onClick={removeFile} />
-            </div>
-          )}
-          {draftState.vcardContact && (
-            <div className='attachment-quote-section is-attachment'>
-              <VisualVCardComponent vcardContact={draftState.vcardContact} />
-              <CloseButton onClick={removeFile} />
+              <Quote
+                quote={{
+                  // FYI most of these properties are not used
+                  // inside the `Quote` component.
+
+                  // `...messageEditing.originalMessage`, would also work,
+                  // but the `T.MessageQuote` type and the `T.Message` type
+                  // have some overlap, e.g. the `type` property,
+                  // so let's be explicit.
+                  messageId: messageEditing.originalMessage.id,
+                  chatId: messageEditing.originalMessage.chatId,
+                  isForwarded: messageEditing.originalMessage.isForwarded,
+                  text: messageEditing.originalMessage.text,
+                  overrideSenderName:
+                    messageEditing.originalMessage.overrideSenderName,
+                  viewType: messageEditing.originalMessage.viewType,
+
+                  kind: 'WithMessage',
+                  authorDisplayColor:
+                    messageEditing.originalMessage.sender.color,
+                  authorDisplayName:
+                    messageEditing.originalMessage.sender.displayName,
+                  // It's probably fine to skip image,
+                  // since it's only possible to edit message _text_.
+                  // We'd probably be fine if we only passed `message.text`.
+                  image: null,
+                }}
+                isEditMessage
+                tabIndex={0}
+              />
+              {/* TODO `aria-label={tx('cancel')}` */}
+              <CloseButton onClick={messageEditing.cancelEditing} />
             </div>
           )}
         </div>
         <div className='lower-bar'>
-          <MenuAttachment
-            addFileToDraft={addFileToDraft}
-            showAppPicker={setShowAppPicker}
-            selectedChat={selectedChat}
-          />
-          {settingsStore && (
-            <ComposerMessageInput
-              ref={messageInputRef}
-              enterKeySends={settingsStore?.desktopSettings.enterKeySends}
-              sendMessageOrEditRequest={composerSendMessage}
-              chatId={chatId}
-              chatName={selectedChat.name}
-              updateDraftText={updateDraftText}
-              onPaste={handlePaste}
+          {!messageEditing.isEditingModeActive && (
+            <MenuAttachment
+              addFileToDraft={addFileToDraft}
+              showAppPicker={setShowAppPicker}
+              selectedChat={selectedChat}
             />
+          )}
+          {settingsStore && (
+            <>
+              <ComposerMessageInput
+                // We use `hidden` instead of simply conditionally rendering
+                // because the source of truth for the draft text
+                // is stored inside the `ComposerMessageInput`,
+                // and not inside of `useDraft()`.
+                // That is at least between the `updateDraftText()` calls,
+                // but they are throttled / debounced.
+                // But we want to restore the draft text when we exit the
+                // "edit" mode. Hence `hidden` instead of conditional rendering.
+                hidden={messageEditing.isEditingModeActive}
+                isMessageEditingMode={false}
+                ref={regularMessageInputRef}
+                enterKeySends={settingsStore?.desktopSettings.enterKeySends}
+                sendMessageOrEditRequest={
+                  !messageEditing.isEditingModeActive
+                    ? composerSendMessage!
+                    : () => {
+                        log.error(
+                          'Tried to send a message while in message editing mode'
+                        )
+                      }
+                }
+                chatId={chatId}
+                chatName={selectedChat.name}
+                updateDraftText={updateDraftText}
+                onPaste={handlePaste ?? undefined}
+              />
+              <ComposerMessageInput
+                isMessageEditingMode={true}
+                hidden={!messageEditing.isEditingModeActive}
+                ref={editMessageInputRef}
+                enterKeySends={settingsStore?.desktopSettings.enterKeySends}
+                sendMessageOrEditRequest={
+                  messageEditing.doSendEditRequest ?? (() => {})
+                }
+                chatId={chatId}
+                chatName={selectedChat.name}
+                // We don't store the edits as "drafts" anywhere except
+                // inside the <ComposerMessageInput> component itself,
+                // so this can be a no-op.
+                updateDraftText={() => {}}
+                // Message editing mode doesn't support file pasting.
+                // onPaste={handlePaste}
+              />
+            </>
           )}
           {!runtime.getRuntimeInfo().hideEmojiAndStickerPicker && (
             <button
@@ -427,20 +549,45 @@ const Composer = forwardRef<
             </button>
           )}
           <button
+            // This ensures that the button loses focus as we switch between
+            // the editing mode and the regular mode,
+            // so that it's harder to accidentally send a normal message
+            // right after sending the draft by using the keyboard.
+            // Conceptually those are two different buttons.
+            key={messageEditing.isEditingModeActive.toString()}
             className='send-button'
-            onClick={composerSendMessage}
+            // TODO apply `disabled` if the textarea is empty
+            // or includes only whitespace.
+            // See `doSendEditRequest`.
+            onClick={
+              !messageEditing.isEditingModeActive
+                ? composerSendMessage!
+                : messageEditing.doSendEditRequest
+            }
             aria-label={tx('menu_send')}
             aria-keyshortcuts={ariaSendShortcut}
           >
             <div className='paper-plane'></div>
           </button>
         </div>
-        {showAppPicker && (
+        {/* We don't want to show the app picker when
+        `messageEditing.isEditingModeActive` because picking an app
+        modifies the regular message draft, but the draft is not visible
+        when the message editing mode is active.
+
+        Having another condition after `showAppPicker` is not nice,
+        but it shouldn't be really feasible anyway
+        to enter the message editing mode while the app picker is open,
+        and it shouldn't be possible to open the app picker
+        while the message editing mode is active. */}
+        {showAppPicker && !messageEditing.isEditingModeActive && (
           <OutsideClickHelper onClick={() => setShowAppPicker(false)}>
-            <AppPicker onAppSelected={onAppSelected} />
+            <AppPicker onAppSelected={onAppSelected!} />
           </OutsideClickHelper>
         )}
         {showEmojiPicker && (
+          // TODO sticker picker simply sends the sticker when clicked.
+          // Is this acceptable in edit message mode?
           <EmojiAndStickerPicker
             chatId={chatId}
             ref={emojiAndStickerRef}
@@ -748,5 +895,153 @@ export function useDraft(
     addFileToDraft,
     removeFile,
     clearDraft,
+  }
+}
+
+function useMessageEditing(
+  accountId: number,
+  chatId: T.BasicChat['id'],
+  editMessageInputRef: React.MutableRefObject<ComposerMessageInput | null>
+) {
+  const tx = useTranslationFunction()
+  const { userFeedback } = useContext(ScreenContext)
+
+  const [_originalMessage, setOriginalMessage] = useState<null | T.Message>(
+    null
+  )
+  // We unset `_originalMessage` when switching between chats below,
+  // but let's still make sure that it belongs to the current chat here.
+  const originalMessage =
+    _originalMessage?.chatId === chatId ? _originalMessage : null
+
+  // Should we also listen for `MsgsChanged` and update the message?
+  // E.g. if it got edited from another device.
+
+  const isEditingModeActive = originalMessage != null
+
+  const cancelEditing = useCallback(() => {
+    setOriginalMessage(null)
+    // This should be unnecessary because `setOriginalMessage(null)`
+    // should be enough, but let's sill clean up.
+    editMessageInputRef.current?.setText('')
+  }, [editMessageInputRef])
+
+  if (useHasChanged2(chatId)) {
+    // Yes, this means that the "edit draft" gets lost on chat change.
+    // Though maybe we can easily keep it between chat switches,
+    // at least for one chat?
+    // Because we do check if `_originalMessage` belongs to the current chat,
+    // so it's safe to not `setOriginalMessage(null)`
+    // when switching between chats.
+    cancelEditing()
+  }
+
+  useEffect(() => {
+    window.__enterEditMessageMode = (newOriginalMessage: T.Message) => {
+      if (newOriginalMessage.chatId !== chatId) {
+        log.error(
+          'Tried to start editing message',
+          newOriginalMessage,
+          `but the message doesn't belong to the current chat=${chatId}.`
+        )
+        return
+      }
+
+      const prevOriginalMessageId = originalMessage?.id
+      setOriginalMessage(newOriginalMessage)
+      // Let's not reset the text if we're already editing this message.
+      if (newOriginalMessage.id !== prevOriginalMessageId) {
+        editMessageInputRef.current?.setText(newOriginalMessage.text)
+      }
+
+      // Wait until the new element is actually rendered, only then focus.
+      setTimeout(() => {
+        editMessageInputRef.current?.focus()
+      })
+    }
+    return () => {
+      window.__enterEditMessageMode = null
+    }
+  }, [chatId, editMessageInputRef, originalMessage?.id])
+
+  const doSendEditRequest = useCallback(() => {
+    if (editMessageInputRef.current == null) {
+      log.error('doEdit called, but editMessageInputRef is not present')
+      return
+    }
+
+    const newText = editMessageInputRef.current.getText()
+    if (newText.trim().length === 0) {
+      userFeedback({
+        type: 'error',
+        text: tx('chat_please_enter_message'),
+      })
+      log.error('doEdit called, but newText is empty')
+      return
+    }
+
+    if (originalMessage == null) {
+      // This should not happen, because we don't return
+      // `doSendEditRequest` if the message is null.
+      log.error('doEdit called, but originalMessage is', originalMessage)
+      return
+    }
+
+    // We could also check whether the text is unchanged,
+    // but let's leave it up to the core.
+
+    const originalMessage_ = originalMessage
+    BackendRemote.rpc
+      .sendEditRequest(accountId, originalMessage.id, newText)
+      .catch(err => {
+        log.error('Failed to edit a message', err)
+        // Restore the "editing" state.
+        //
+        // FYI yes, theoretically the user could start editing another message
+        // before the promise gets settled,
+        // but this backend call shouldn't take long,
+        // and it's rare that it would fail.
+        setOriginalMessage(originalMessage_)
+        editMessageInputRef.current?.setText(newText)
+
+        userFeedback({
+          type: 'error',
+          // Probably not worth translating, since it's rare.
+          text: 'Failed to edit the message',
+        })
+      })
+
+    // Otimistically exit the "edit" mode,
+    // without waiting for the backend call to finish.
+    setOriginalMessage(null)
+    editMessageInputRef.current.setText('')
+    // TODO focus the "regular message" input?
+    // Or is it not a bug but a feature,
+    // so that you don't accidentally send the draft
+    // right after editing a message?
+    // Though this doesn't apply if you send a message by clicking
+    // the "send" button with a pointer device (mouse).
+    //
+    // Maybe instead, to guard against this, we could simply disable
+    // the "send" function for ~1 second after the edit is done.
+  }, [accountId, editMessageInputRef, originalMessage, tx, userFeedback])
+
+  // An early return to help TypeScript.
+  if (!isEditingModeActive) {
+    return {
+      isEditingModeActive,
+      cancelEditing,
+    }
+  }
+
+  return {
+    isEditingModeActive,
+    originalMessage,
+    doSendEditRequest,
+    /**
+     * Exit the "edit" mode, without doing anything else.
+     * This is a no-op when the editing mode is already not active.
+     */
+    cancelEditing,
   }
 }

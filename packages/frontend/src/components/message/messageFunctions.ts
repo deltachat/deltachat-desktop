@@ -10,6 +10,7 @@ import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import MessageDetail from '../dialogs/MessageDetail/MessageDetail'
 
 import type { OpenDialog } from '../../contexts/DialogContext'
+import type { T } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('render/msgFunctions')
 
@@ -109,6 +110,16 @@ export function setQuoteInDraft(messageId: number) {
     window.__setQuoteInDraft(messageId)
   } else {
     throw new Error('window.__setQuoteInDraft undefined')
+  }
+}
+/**
+ * @throws if the composer is not rendered.
+ */
+export function enterEditMessageMode(messageToEdit: T.Message) {
+  if (window.__enterEditMessageMode) {
+    window.__enterEditMessageMode(messageToEdit)
+  } else {
+    throw new Error('window.__enterEditMessageMode undefined')
   }
 }
 
