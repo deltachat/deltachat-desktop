@@ -56,7 +56,7 @@
 - fix that in html email view links without schema didn't open in browser #4690
 - fix clicking on the same anchor multiple timed disn't work in html email view #4690
 - close second level settings form with Escape key #4128
-- tauri: fix: drag regions in navbar
+- tauri: fix: drag regions in navbar #4719
 
 <a id="1_54_1"></a>
 
