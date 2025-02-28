@@ -584,7 +584,8 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
       return
     }
 
-    const composerTextarea = refComposer.current.childNodes[1]
+    const composerTextarea =
+      refComposer.current.querySelector('#composer-textarea')
     composerTextarea && composerTextarea.focus()
   }, [refComposer, chat.id])
 
@@ -592,7 +593,8 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
     if (!messageListRef.current || !refComposer.current) {
       return
     }
-    const composerTextarea = refComposer.current.childNodes[1]
+    const composerTextarea =
+      refComposer.current.querySelector('#composer-textarea')
     composerTextarea && composerTextarea.focus()
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight
   }, [refComposer])
