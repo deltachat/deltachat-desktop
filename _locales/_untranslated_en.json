@@ -47,8 +47,5 @@
   },
   "search_result_for_x":  {
     "message":"Result for \"%s\""
-  },
-  "jump_to_original_message": {
-    "message": "Jump to original message"
   }
 }

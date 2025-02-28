@@ -54,9 +54,9 @@ export default function ShortcutMenu(props: Props) {
       {props.message.originalMsgId !== null && (
         <button
           className={classNames(styles.originalMessageButton)}
-          aria-label={tx('jump_to_original_message')}
+          aria-label={tx('show_in_chat')}
           onClick={onClick}
-          title={tx('jump_to_original_message')}
+          title={tx('show_in_chat')}
         >
           <div className={classNames(styles.originalMessageIcon)} />
         </button>
