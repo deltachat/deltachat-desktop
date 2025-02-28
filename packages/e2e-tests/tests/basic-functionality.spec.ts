@@ -95,10 +95,8 @@ test('start chat with user', async ({ page, context, browserName }) => {
   await page.getByTestId('qr-scan-button').click()
   await page.getByTestId('show-qr-scan').click()
   await page.getByTestId('paste').click()
-  const confirmDialogText = await page
-    .getByTestId('confirm-start-chat')
-    .textContent()
-  expect(confirmDialogText).toContain(userA.name)
+  const confirmDialog = page.getByTestId('confirm-start-chat')
+  await expect(confirmDialog).toContainText(userA.name)
 
   await page.getByTestId('confirm-start-chat').getByTestId('confirm').click()
   await expect(
@@ -122,19 +120,17 @@ test('send message', async ({ page }) => {
     .filter({ hasText: userB.name })
     .click()
   const messageText = `Hello ${userB.name}!`
-  page.locator('#composer-textarea').fill(messageText)
-  page.locator('button.send-button').click()
-  const badgeNumber = await page
+  await page.locator('#composer-textarea').fill(messageText)
+  await page.locator('button.send-button').click()
+  const badgeNumber = page
     .getByTestId(`account-item-${userB.id}`)
     .locator('.styles_module_accountBadgeIcon')
-    .textContent()
-  expect(badgeNumber).toBe('1')
-  const sentMessageText = await page
+  await expect(badgeNumber).toHaveText('1')
+  const sentMessageText = page
     .locator(`.message.outgoing`)
     .last()
     .locator('.msg-body .text')
-    .textContent()
-  expect(sentMessageText).toEqual(messageText)
+  await expect(sentMessageText).toHaveText(messageText)
   await switchToProfile(page, userB.id)
   const chatListItem = page
     .locator('.chat-list .chat-list-item')
@@ -152,8 +148,7 @@ test('send message', async ({ page }) => {
     .locator(`.message.incoming`)
     .last()
     .locator(`.msg-body .text`)
-    .textContent()
-  expect(receivedMessageText).toEqual(messageText)
+  await expect(receivedMessageText).toHaveText(messageText)
 })
 
 test('create group', async ({ page, context, browserName }) => {
@@ -210,11 +205,12 @@ test('create group', async ({ page, context, browserName }) => {
   const confirmDialog = page.getByTestId('confirm-join-group')
   await expect(confirmDialog).toBeVisible()
   // confirm dialog should contain group name
-  const confirmText = await confirmDialog.textContent()
-  expect(confirmText).toContain(groupName)
+  await expect(confirmDialog).toContainText(groupName)
   await page.getByTestId('confirm-join-group').getByTestId('confirm').click()
   // userA invited you to group message
-  expect(page.locator('#message-list li').nth(1)).toContainText(userA.address)
+  await expect(page.locator('#message-list li').nth(1)).toContainText(
+    userA.address
+  )
   // verified chat after response from userA
   await expect(page.locator('.verified-icon-info-msg')).toBeVisible()
   // userB has 2 new notifications now
@@ -249,7 +245,7 @@ test('add app from picker to chat', async ({ page }) => {
     .locator('.styles_module_appPickerList button')
     .getByText(appName)
     .first()
-  expect(calendarApp).toBeVisible()
+  await expect(calendarApp).toBeVisible()
   calendarApp.click()
   const appInfoDialog = page.locator('.styles_module_dialogContent')
   await expect(appInfoDialog).toBeVisible()
@@ -259,7 +255,7 @@ test('add app from picker to chat', async ({ page }) => {
   await page.locator('button.send-button').click()
   const webxdcMessage = page.locator('.msg-body .webxdc')
   await webxdcMessage.isVisible()
-  expect(webxdcMessage).toContainText(appName)
+  await expect(webxdcMessage).toContainText(appName)
 })
 
 test('delete profiles', async ({ page }) => {
