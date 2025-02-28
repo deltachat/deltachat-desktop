@@ -26,7 +26,8 @@ use crate::{
     },
     state::html_email_instances::InnerHtmlEmailInstanceData,
     temp_file::get_temp_folder_path,
-    DeltaChatAppState, HtmlEmailInstancesState, MenuManager, TranslationState,
+    util::truncate_text,
+    DeltaChatAppState, HtmlEmailInstancesState, MenuManger, TranslationState
 };
 
 const HEADER_HEIGHT: f64 = 100.;
@@ -328,13 +329,4 @@ fn update_webview_bounds(
             size: LogicalSize::new(width, height - HEADER_HEIGHT).into(),
         })
         .unwrap();
-}
-
-fn truncate_text(text: &str, max_len: usize) -> String {
-    let truncated: String = text.chars().take(max_len).collect();
-    if truncated.len() < text.len() {
-        format!("{}…", truncated)
-    } else {
-        truncated
-    }
 }

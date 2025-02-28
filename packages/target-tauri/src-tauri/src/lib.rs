@@ -7,7 +7,8 @@ use menus::{handle_menu_event, main_menu::create_main_menu};
 use settings::load_and_apply_desktop_settings_on_startup;
 use state::{
     app::AppState, deltachat::DeltaChatAppState, html_email_instances::HtmlEmailInstancesState,
-    menu_manager::MenuManager, translations::TranslationState,
+    menu_manager::MenuManger, translations::TranslationState,
+    webxdc_instances::WebxdcInstancesState,
 };
 use tauri::Manager;
 use util::csp::add_custom_schemes_to_csp_for_window_and_android;
@@ -121,12 +122,13 @@ pub fn run() {
             temp_file::write_temp_file,
             temp_file::remove_temp_file,
             temp_file::copy_blob_file_to_internal_tmp_dir,
-            webxdc::on_webxdc_message_changed,
-            webxdc::on_webxdc_message_deleted,
-            webxdc::on_webxdc_status_update,
-            webxdc::on_webxdc_realtime_data,
-            webxdc::delete_webxdc_account_data,
-            webxdc::close_all_webxdc_instances,
+            webxdc::commands::on_webxdc_message_changed,
+            webxdc::commands::on_webxdc_message_deleted,
+            webxdc::commands::on_webxdc_status_update,
+            webxdc::commands::on_webxdc_realtime_data,
+            webxdc::commands::delete_webxdc_account_data,
+            webxdc::commands::close_all_webxdc_instances,
+            webxdc::commands::open_webxdc,
             runtime_info::get_runtime_info,
             settings::change_desktop_settings_apply_side_effects,
             help_window::open_help_window,
@@ -135,7 +137,10 @@ pub fn run() {
             html_window::commands::html_email_open_menu,
             html_window::commands::html_email_set_load_remote_content,
         ])
-        .register_asynchronous_uri_scheme_protocol("webxdc-icon", webxdc::webxdc_icon_protocol)
+        .register_asynchronous_uri_scheme_protocol(
+            "webxdc-icon",
+            webxdc::icon_scheme::webxdc_icon_protocol,
+        )
         .register_asynchronous_uri_scheme_protocol("dcblob", blobs::delta_blobs_protocol)
         .register_asynchronous_uri_scheme_protocol("dcsticker", stickers::delta_stickers_protocol)
         .register_asynchronous_uri_scheme_protocol(
@@ -201,6 +206,7 @@ pub fn run() {
             app.manage(tauri::async_runtime::block_on(TranslationState::try_new(
                 app,
             ))?);
+            app.manage(WebxdcInstancesState::new());
             app.state::<AppState>()
                 .log_duration_since_startup("base setup done");
 

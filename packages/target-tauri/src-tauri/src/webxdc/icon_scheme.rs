@@ -1,39 +1,9 @@
 use anyhow::Context;
 use deltachat::accounts::Accounts;
-use log::{error, info};
+use log::error;
 use tauri::{Manager, UriSchemeContext, UriSchemeResponder};
 
 use crate::state::deltachat::DeltaChatAppState;
-
-#[tauri::command]
-pub(crate) fn on_webxdc_message_changed(account_id: u32, instance_id: u32) {
-    info!("TODO: handle on_webxdc_message_changed handler {account_id} {instance_id}")
-}
-
-#[tauri::command]
-pub(crate) fn on_webxdc_message_deleted(account_id: u32, instance_id: u32) {
-    info!("TODO: handle on_webxdc_message_deleted event handler: {account_id} {instance_id}")
-}
-
-#[tauri::command]
-pub(crate) fn on_webxdc_status_update(account_id: u32, instance_id: u32) {
-    info!("TODO: handle on_webxdc_status_update handler {account_id} {instance_id}")
-}
-
-#[tauri::command]
-pub(crate) fn on_webxdc_realtime_data(account_id: u32, instance_id: u32, payload: Vec<u8>) {
-    info!("TODO: handle on_webxdc_status_update handler {account_id} {instance_id} {payload:?}")
-}
-
-#[tauri::command]
-pub(crate) fn delete_webxdc_account_data(account_id: u32) {
-    info!("TODO: handle delete_webxdc_account_data handler {account_id}")
-}
-
-#[tauri::command]
-pub(crate) fn close_all_webxdc_instances() {
-    info!("TODO: handle close_all_webxdc_instances handler")
-}
 
 pub(crate) fn webxdc_icon_protocol<R: tauri::Runtime>(
     ctx: UriSchemeContext<'_, R>,
@@ -109,7 +79,7 @@ pub(crate) fn webxdc_icon_protocol<R: tauri::Runtime>(
     });
 }
 
-pub(crate) async fn get_webxdc_icon(
+async fn get_webxdc_icon(
     dc: &Accounts,
     account_id: &str,
     instance_id: &str,
