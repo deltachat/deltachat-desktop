@@ -498,7 +498,12 @@ const Composer = forwardRef<
                 tabIndex={0}
               />
               <CloseButton
-                onClick={messageEditing.cancelEditing}
+                onClick={() => {
+                  messageEditing.cancelEditing()
+                  setTimeout(() => {
+                    regularMessageInputRef.current?.focus()
+                  })
+                }}
                 aria-label={tx('cancel')}
               />
             </div>
