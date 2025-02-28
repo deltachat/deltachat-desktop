@@ -51,6 +51,9 @@ $emojimart-search-height: 31px + 6px;
   }
 
   div.sticker-picker {
+    height: $esp-height;
+  }
+  .emoji-or-sticker-header-nav ~ div.sticker-picker {
     height: calc(#{$esp-height} - #{$esp-header-height});
   }
 

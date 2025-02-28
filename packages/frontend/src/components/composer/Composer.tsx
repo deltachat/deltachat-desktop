@@ -611,13 +611,15 @@ const Composer = forwardRef<
           </OutsideClickHelper>
         )}
         {showEmojiPicker && (
-          // TODO sticker picker simply sends the sticker when clicked.
-          // Is this acceptable in edit message mode?
           <EmojiAndStickerPicker
             chatId={chatId}
             ref={emojiAndStickerRef}
             onEmojiSelect={onEmojiSelect}
             setShowEmojiPicker={setShowEmojiPicker}
+            // Message editing does not support stickers.
+            // The way the sticker picker currently works is that
+            // it simply sends a message when you click on a sticker.
+            hideStickerPicker={messageEditing.isEditingModeActive}
           />
         )}
       </div>
