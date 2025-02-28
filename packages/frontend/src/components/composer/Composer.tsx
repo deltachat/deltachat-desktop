@@ -476,8 +476,10 @@ const Composer = forwardRef<
                 isEditMessage
                 tabIndex={0}
               />
-              {/* TODO `aria-label={tx('cancel')}` */}
-              <CloseButton onClick={messageEditing.cancelEditing} />
+              <CloseButton
+                onClick={messageEditing.cancelEditing}
+                aria-label={tx('cancel')}
+              />
             </div>
           )}
         </div>
