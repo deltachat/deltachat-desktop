@@ -60,6 +60,9 @@ const Composer = forwardRef<
     regularMessageInputRef: React.MutableRefObject<ComposerMessageInput | null>
     editMessageInputRef: React.MutableRefObject<ComposerMessageInput | null>
     draftState: DraftObject
+    onSelectReplyToShortcut: ReturnType<
+      typeof useDraft
+    >['onSelectReplyToShortcut']
     removeQuote: () => void
     updateDraftText: (text: string, InputChatId: number) => void
     addFileToDraft: (
@@ -78,6 +81,7 @@ const Composer = forwardRef<
     regularMessageInputRef,
     editMessageInputRef,
     draftState,
+    onSelectReplyToShortcut,
     removeQuote,
     updateDraftText,
     addFileToDraft,
@@ -199,6 +203,25 @@ const Composer = forwardRef<
           regularMessageInputRef.current.focus()
         }
       }
+
+  useKeyBindingAction(KeybindAction.Composer_SelectReplyToUp, () => {
+    if (messageEditing.isEditingModeActive) {
+      return
+    }
+    onSelectReplyToShortcut(KeybindAction.Composer_SelectReplyToUp)
+  })
+  useKeyBindingAction(KeybindAction.Composer_SelectReplyToDown, () => {
+    if (messageEditing.isEditingModeActive) {
+      return
+    }
+    onSelectReplyToShortcut(KeybindAction.Composer_SelectReplyToDown)
+  })
+  useKeyBindingAction(KeybindAction.Composer_CancelReply, () => {
+    if (messageEditing.isEditingModeActive) {
+      return
+    }
+    removeQuote()
+  })
 
   const onEmojiIconClick = () => setShowEmojiPicker(!showEmojiPicker)
   const shiftPressed = useRef(false)
@@ -635,6 +658,11 @@ export function useDraft(
   inputRef: React.MutableRefObject<ComposerMessageInput | null>
 ): {
   draftState: DraftObject
+  onSelectReplyToShortcut: (
+    upOrDown:
+      | KeybindAction.Composer_SelectReplyToUp
+      | KeybindAction.Composer_SelectReplyToDown
+  ) => void
   removeQuote: () => void
   updateDraftText: (text: string, InputChatId: number) => void
   addFileToDraft: (
@@ -795,15 +823,6 @@ export function useDraft(
     [inputRef, saveDraft]
   )
 
-  useKeyBindingAction(KeybindAction.Composer_SelectReplyToUp, () => {
-    onSelectReplyToShortcut(KeybindAction.Composer_SelectReplyToUp)
-  })
-  useKeyBindingAction(KeybindAction.Composer_SelectReplyToDown, () => {
-    onSelectReplyToShortcut(KeybindAction.Composer_SelectReplyToDown)
-  })
-  useKeyBindingAction(KeybindAction.Composer_CancelReply, () => {
-    removeQuote()
-  })
   const { jumpToMessage } = useMessage()
   const onSelectReplyToShortcut = async (
     upOrDown:
@@ -892,6 +911,7 @@ export function useDraft(
 
   return {
     draftState,
+    onSelectReplyToShortcut,
     removeQuote,
     updateDraftText,
     addFileToDraft,
