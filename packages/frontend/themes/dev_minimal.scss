@@ -265,13 +265,13 @@ $scrollbarTransparency: 0.5;
   }
 }
 
-.composer .lower-bar .send-button-wrapper button {
+.composer .lower-bar .send-button .paper-plane {
   background-blend-mode: difference;
   background-repeat: no-repeat;
   background-color: white;
 }
 
-.composer .lower-bar .send-button-wrapper {
+.composer .lower-bar .send-button {
   background-color: transparent;
 }
 
