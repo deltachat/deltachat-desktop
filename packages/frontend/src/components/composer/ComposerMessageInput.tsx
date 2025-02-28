@@ -116,7 +116,7 @@ export default class ComposerMessageInput extends React.Component<
   }
 
   componentDidUpdate(
-    _prevProps: ComposerMessageInputProps,
+    prevProps: ComposerMessageInputProps,
     prevState: ComposerMessageInputState
   ) {
     if (this.setCursorPosition && this.textareaRef.current) {
@@ -138,10 +138,32 @@ export default class ComposerMessageInput extends React.Component<
       }
 
       this.setCursorPosition = false
+    } else {
+      // This is useful when entering / exiting the message editing mode.
+      if (
+        prevProps.hidden !== this.props.hidden &&
+        !this.props.hidden &&
+        this.state.text.length !== 0
+      ) {
+        this.moveCursorToTheEnd()
+      }
     }
     if (prevState.chatId === this.state.chatId) {
       this.resizeTextareaAndComposer()
     }
+  }
+
+  private moveCursorToTheEnd() {
+    if (this.textareaRef.current == null) {
+      log.warn(
+        'Tried to move the cursor position to the end, ' +
+          'but textareaRef.current is',
+        this.textareaRef.current
+      )
+      return
+    }
+    this.textareaRef.current.selectionStart = this.state.text.length
+    this.textareaRef.current.selectionEnd = this.state.text.length
   }
 
   onChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
