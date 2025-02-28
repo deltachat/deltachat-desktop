@@ -12,6 +12,8 @@ pub(crate) enum Error {
     AccountNotFound(u32),
     #[error("webxdc message not found acc:{0} msg:{1}")]
     WebxdcInstanceNotFound(u32, u32),
+    #[error(transparent)]
+    UrlParse(#[from] url::ParseError),
 }
 
 impl serde::Serialize for Error {
