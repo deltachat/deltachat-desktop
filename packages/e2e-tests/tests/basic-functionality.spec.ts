@@ -151,6 +151,48 @@ test('send message', async ({ page }) => {
   await expect(receivedMessageText).toHaveText(messageText)
 })
 
+test('edit message', async ({ page }) => {
+  const userA = getUser(0)
+  const userB = getUser(1)
+  await switchToProfile(page, userA.id)
+  await page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: userB.name })
+    .click()
+
+  const originalMessageText = `Original message textttt`
+  await page.locator('#composer-textarea').fill(originalMessageText)
+  await page.locator('button.send-button').click()
+  const lastMessageLocator = page
+    .locator(`.message.outgoing`)
+    .last()
+    .locator('.msg-body .text')
+  await expect(lastMessageLocator).toHaveText(originalMessageText)
+
+  await lastMessageLocator.click({ button: 'right' })
+  await page.locator('[role="menuitem"]').filter({ hasText: 'Edit ' }).click()
+  await expect(page.locator('#composer-textarea')).toHaveValue(
+    originalMessageText
+  )
+  const editedMessageText = `Edited message texttttt`
+  await page.locator('#composer-textarea').fill(editedMessageText)
+  await page.locator('button.send-button').click()
+  await expect(lastMessageLocator).toHaveText(editedMessageText)
+  await expect(page.locator('body')).not.toContainText(originalMessageText)
+
+  await switchToProfile(page, userB.id)
+  await page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: userA.name })
+    .click()
+  const lastReceivedMessage = page
+    .locator(`.message.incoming`)
+    .last()
+    .locator(`.msg-body .text`)
+  await expect(lastReceivedMessage).toHaveText(editedMessageText)
+  await expect(page.locator('body')).not.toContainText(originalMessageText)
+})
+
 test('create group', async ({ page, context, browserName }) => {
   if (browserName.toLowerCase().indexOf('chrom') > -1) {
     await context.grantPermissions(['clipboard-read', 'clipboard-write'])
