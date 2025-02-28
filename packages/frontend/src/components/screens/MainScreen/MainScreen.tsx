@@ -238,11 +238,11 @@ export default function MainScreen({ accountId }: Props) {
               </Button>
             </span>
           )}
-          <div className={styles.chatNavbarHeadingWrapper}>
+          <div className={styles.chatNavbarHeadingWrapper} data-tauri-drag-region>
             {alternativeView === 'global-gallery' && (
               <>
-                <div className='navbar-heading'>{tx('menu_all_media')}</div>
-                <span className='views' />
+                <div className='navbar-heading' data-tauri-drag-region>{tx('menu_all_media')}</div>
+                <span className='views' data-tauri-drag-region />
               </>
             )}
             {chatWithLinger && <ChatHeading chat={chatWithLinger} />}
