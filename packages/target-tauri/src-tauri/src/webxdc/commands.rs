@@ -209,21 +209,29 @@ pub(crate) async fn open_webxdc<'a>(
             &window_id,
             WebxdcInstance {
                 account_id,
-                message: webxdc_message,
+                message: webxdc_message.clone(),
             },
         )
         .await;
 
     // Contruct window
-    let url = {
+    let mut url = {
         #[cfg(not(any(target_os = "windows", target_os = "android")))]
         {
-            Url::from_str("webxdc:///index.html").unwrap()
+            Url::from_str("webxdc://dummy.host/index.html")?
         }
         #[cfg(any(target_os = "windows", target_os = "android"))]
         {
-            Url::from_str("webxdc://webxdc.localhost/index.html").unwrap()
+            Url::from_str("http://webxdc.localhost/index.html")?
         }
+    };
+
+    // TODO test href support
+    if let Some(href) = webxdc_message.get_webxdc_href() {
+        let url_with_href = Url::from_str(&format!("http://webxdc.localhost/{href}"))?;
+        url.set_path(url_with_href.path());
+        url.set_fragment(url_with_href.fragment());
+        url.set_query(url_with_href.fragment());
     };
 
     let mut window_builder = WebviewWindowBuilder::new(&app, &window_id, WebviewUrl::External(url))
