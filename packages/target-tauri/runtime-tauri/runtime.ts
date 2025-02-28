@@ -402,8 +402,12 @@ class TauriRuntime implements Runtime {
   getConfigPath(): string {
     throw new Error('Method not implemented.24')
   }
-  openWebxdc(_msgId: number, _params: DcOpenWebxdcParameters): void {
-    throw new Error('Method not implemented.25')
+  openWebxdc(messageId: number, params: DcOpenWebxdcParameters): void {
+    invoke('open_webxdc', {
+      messageId,
+      accountId: params.accountId,
+      href: params.href,
+    })
   }
   getWebxdcIconURL(accountId: number, msgId: number): string {
     return `${this.runtime_info?.tauriSpecific?.scheme.webxdcIcon}${accountId}/${msgId}`
