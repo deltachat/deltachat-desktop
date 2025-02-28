@@ -41,6 +41,8 @@
     <string name="later">Пізніше</string>
     <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
     <string name="resend">Відправити знову</string>
+    <string name="edited">Відредаговано</string>
+    <string name="edit_message">Редагувати повідомлення</string>
     <!-- Verb "to archive", as in "put a chat in the archive", not a noun "The Archive". -->
     <string name="archive">Архівувати</string>
     <!-- Verb "to unarchive", as in "remove a chat from the archive", opposite of the previous string -->
@@ -262,6 +264,7 @@
     <string name="menu_delete_chat">Видалити чат</string>
     <!-- Command to delete all messages in a chat. The chat itself will not be deleted but will be empty afterwards, so make sure to be different from "Delete Chat" here. "Clear" is a verb here, "Empty Chat" would also be fine (eg. in German "Chat leeren") -->
     <string name="clear_chat">Очистити чат</string>
+    <!-- deprecated -->
     <string name="menu_delete_messages">Видалити повідомлення</string>
     <string name="delete_contact">Видалити контакт</string>
     <string name="menu_delete_location">Видалити це місце?</string>
@@ -388,13 +391,7 @@
         <item quantity="other">Видалити %d чатів? Вони більше не будуть відображатися у списку чатів, їх повідомлення залишаться на сервері.</item>
     </plurals>
     <string name="ask_delete_named_chat">Видалити чат \"%1$s\"? Він більше не буде відображатися у списку чату, але його повідомлення залишаться на сервері.</string>
-    <string name="ask_delete_message">Ви впевнені, що хочете видалити це повідомлення?</string>
-    <plurals name="ask_delete_messages">
-        <item quantity="one">Видалити %d повідомлення тут і на сервері?</item>
-        <item quantity="few">Видалити %d повідомлення тут і на сервері?</item>
-        <item quantity="many">Видалити %d повідомлень тут і на сервері?</item>
-        <item quantity="other">Видалити %d повідомлень тут і на сервері?</item>
-    </plurals>
+    <!-- deprecated, use ask_delete_messages -->
     <plurals name="ask_delete_messages_simple">
         <item quantity="one">Видалити %d повідомлення?</item>
         <item quantity="few">Видалити %d повідомлення?</item>
@@ -410,6 +407,7 @@
     <string name="ask_delete_contact">Видалити %1$s?\n\nКонтакти з діючих чатів та з адресної книги системи не можна видалити назавжди.</string>
     <string name="cannot_delete_contacts_in_use">Неможливо видалити контакти, з якими є активні чати.</string>
     <string name="ask_start_chat_with">Створити чат з %1$s?</string>
+    <!-- deprecated -->
     <string name="ask_delete_value">Видалити %s?</string>
     <!-- %1$s is replaced by a comma-separated list of names -->
     <string name="ask_remove_members">Видалити %1$s із групи?</string>
@@ -770,10 +768,6 @@
     <string name="pref_manage_keys">Управління ключами</string>
     <string name="pref_use_system_emoji">Використовувати системні емодзі</string>
     <string name="pref_use_system_emoji_explain">Вимкнути вбудовану підтримку емодзі</string>
-    <!-- deprecated -->
-    <string name="pref_use_inapp_camera">Використовувати вбудовану в додаток камеру</string>
-    <!-- deprecated -->
-    <string name="pref_use_inapp_camera_explain">Вбудована в додаток камера зазвичай має менше функцій ніж системна.</string>
     <string name="pref_show_system_contacts">Прочитати адресну книгу системи</string>
     <string name="pref_show_system_contacts_explain">Пропозиція створювати чати з контактами з адресної книги. Деякі провайдери потребують попереднього налаштування наскрізного шифрування.</string>
     <string name="pref_app_access">Доступ додатку</string>

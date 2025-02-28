@@ -109,6 +109,7 @@
     <string name="menu_add_attachment">Juntar anexo</string>
     <string name="menu_leave_group">Deixar grupo</string>
     <string name="menu_delete_chat">Apagar convesa</string>
+    <!-- deprecated -->
     <string name="menu_delete_messages">Apagar mensagem</string>
     <string name="menu_message_details">Detalhe da mensagem</string>
     <string name="menu_copy_to_clipboard">Copiar para área de transferência</string>
@@ -146,11 +147,6 @@
         <item quantity="one">Apagar %d conversas? Elas não serão mais mostrados na lista, mas permanecerão no servidor.</item>
         <item quantity="many">Apagar %d conversas? Elas não serão mais mostrados na lista, mas permanecerão no servidor.</item>
         <item quantity="other">Apagar %d conversas? Elas não serão mais mostrados na lista, mas permanecerão no servidor.</item>
-    </plurals>
-    <plurals name="ask_delete_messages">
-        <item quantity="one">Apagar %d mensagens aqui e no servidor?</item>
-        <item quantity="many">Apagar %d mensagens aqui e no servidor?</item>
-        <item quantity="other">Apagar %d mensagens aqui e no servidor?</item>
     </plurals>
     <string name="ask_forward">Reencaminhar mensages para %1$s?</string>
     <string name="ask_export_attachment">Exportar anexo? A exportação de anexos permitirá o seu acesso a qualquer outra aplicação no seu dispositivo.\n\nContinuar?</string>

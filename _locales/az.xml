@@ -129,6 +129,7 @@
     <string name="menu_add_attachment">Fayl əlavə et</string>
     <string name="menu_leave_group">Qrupu tərk et</string>
     <string name="menu_delete_chat">Çatı sil</string>
+    <!-- deprecated -->
     <string name="menu_delete_messages">Mesajları sil</string>
     <string name="menu_delete_location">Bu yerləşməni silmək? </string>
     <string name="menu_message_details">Mesaj məlumatları</string>
@@ -174,10 +175,6 @@
     <plurals name="ask_delete_chat">
         <item quantity="one">%d çat silmək? Artıq chat siyahısında göstərilməyəcək, mesajlar serverdə qalacaq.</item>
         <item quantity="other">%d çat silmək? Artıq chat siyahısında göstərilməyəcək, mesajlar serverdə qalacaq.</item>
-    </plurals>
-    <plurals name="ask_delete_messages">
-        <item quantity="one">%dmesaj burada və serverdə silin?</item>
-        <item quantity="other">%dmesaj burada və serverdə silin?</item>
     </plurals>
     <string name="ask_forward">Mesajları yönləndirin %1$sə-?</string>
     <string name="ask_export_attachment">Faylı ixrac etmək? Faylların ixracı cihazınızdakı hər hansı digər tətbiqlərə daxil olmağa imkan verəcəkdir. \n\n Razısan?</string>

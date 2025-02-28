@@ -197,6 +197,7 @@
     <string name="menu_add_attachment">Προσθήκη συνημμένου</string>
     <string name="menu_leave_group">Αποχώρηση απ\' την ομάδα</string>
     <string name="menu_delete_chat">Διαγραφή Συνομιλίας</string>
+    <!-- deprecated -->
     <string name="menu_delete_messages">Διαγραφή Μηνυμάτων</string>
     <string name="delete_contact">Διαγραφή Επαφής</string>
     <string name="menu_delete_location">Διαγραφή αυτής της τοποθεσίας;</string>
@@ -303,11 +304,7 @@
         <item quantity="other">Διαγραφή %d συνομιλιών; Δεν θα εμφανίζονται πλέον στη λίστα συνομιλιών, αλλά τα μηνύματά τους θα παραμείνουν στον διακομιστή.</item>
     </plurals>
     <string name="ask_delete_named_chat">Είστε σίγουρος ότι θέλετε να διαγράψετε \"%1$s\";</string>
-    <string name="ask_delete_message">Είστε σίγουρος/-η ότι θέλετε να διαγράψετε αυτό το μήνυμα;</string>
-    <plurals name="ask_delete_messages">
-        <item quantity="one">Διαγραφή %d μηνύματος εδώ και στον διακομιστη;</item>
-        <item quantity="other">Διαγραφή %d μηνυμάτων εδώ και στον διακομιστη;</item>
-    </plurals>
+    <!-- deprecated, use ask_delete_messages -->
     <plurals name="ask_delete_messages_simple">
         <item quantity="one">Διαγραφή %d μηνύματος;</item>
         <item quantity="other">Διαγραφή %d μηνυμάτων;</item>
@@ -321,6 +318,7 @@
     <string name="ask_delete_contact">Διαγραφή επαφής %1$s;\n\nΟι επαφές με συνομιλίες που βρίσκονται σε εξέλιξη ή από το βιβλίο διευθύνσεων του συστήματος δεν μπορούν να διαγραφούν οριστικά.</string>
     <string name="cannot_delete_contacts_in_use">Δεν μπορούν αν διαγραφούν επαφές με συνομιλίες που βρίσκονται σε εξέλιξη.</string>
     <string name="ask_start_chat_with">Συνομιλία με %1$s;</string>
+    <!-- deprecated -->
     <string name="ask_delete_value">Διαφραφή %s;</string>
     <!-- %1$s is replaced by a comma-separated list of names -->
     <string name="ask_remove_members">Αφαίρεση του/της %1$s από την ομάδα;</string>
