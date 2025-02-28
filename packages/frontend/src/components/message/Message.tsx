@@ -304,11 +304,13 @@ function buildContextMenu(
       action: handleReactClick,
     },
     // Save Message
-    !isSavedMessage && {
-      label: tx('save'),
-      action: () =>
-        BackendRemote.rpc.saveMsgs(selectedAccountId(), [message.id]),
-    },
+    !chat.isSelfTalk &&
+      !isSavedMessage && {
+        label: tx('save'),
+        action: () =>
+          BackendRemote.rpc.saveMsgs(selectedAccountId(), [message.id]),
+      },
+    // Unsave
     isSavedMessage && {
       label: tx('unsave'),
       action: () => {
