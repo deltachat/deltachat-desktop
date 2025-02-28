@@ -27,6 +27,7 @@
 ### Fixed
 - message list being empty when double-clicking the chat before it has loaded (again) #4647
 - accessibility: improve tab order of the app #4672
+- accessibility: announce when the draft's quoted message and attachments change (as a result of user actions) (make it a live region) #4693
 - other minor accessibility improvements #4675
 - improve performance a little #4512
 - fix missing maps.xdc in flatpak build #4682
