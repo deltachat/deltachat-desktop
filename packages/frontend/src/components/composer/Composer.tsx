@@ -426,12 +426,14 @@ const Composer = forwardRef<
               <span />
             </button>
           )}
-          <div className='send-button-wrapper' onClick={composerSendMessage}>
-            <button
-              aria-label={tx('menu_send')}
-              aria-keyshortcuts={ariaSendShortcut}
-            />
-          </div>
+          <button
+            className='send-button'
+            onClick={composerSendMessage}
+            aria-label={tx('menu_send')}
+            aria-keyshortcuts={ariaSendShortcut}
+          >
+            <div className='paper-plane'></div>
+          </button>
         </div>
         {showAppPicker && (
           <OutsideClickHelper onClick={() => setShowAppPicker(false)}>

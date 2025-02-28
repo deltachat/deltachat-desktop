@@ -123,7 +123,7 @@ test('send message', async ({ page }) => {
     .click()
   const messageText = `Hello ${userB.name}!`
   page.locator('#composer-textarea').fill(messageText)
-  page.locator('.send-button-wrapper button').click()
+  page.locator('button.send-button').click()
   const badgeNumber = await page
     .getByTestId(`account-item-${userB.id}`)
     .locator('.styles_module_accountBadgeIcon')
@@ -187,7 +187,7 @@ test('create group', async ({ page, context, browserName }) => {
     .filter({ hasText: groupName })
   await expect(chatListItem).toBeVisible()
   page.locator('#composer-textarea').fill(`Hello group members!`)
-  page.locator('.send-button-wrapper button').click()
+  page.locator('button.send-button').click()
   const badgeNumber = await page
     .getByTestId(`account-item-${userB.id}`)
     .locator('.styles_module_accountBadgeIcon')
@@ -256,7 +256,7 @@ test('add app from picker to chat', async ({ page }) => {
   await page.getByTestId('add-app-to-chat').click()
   const appDraft = page.locator('.attachment-quote-section .text-part')
   await expect(appDraft).toContainText(appName)
-  await page.locator('.send-button-wrapper button').click()
+  await page.locator('button.send-button').click()
   const webxdcMessage = page.locator('.msg-body .webxdc')
   await webxdcMessage.isVisible()
   expect(webxdcMessage).toContainText(appName)
