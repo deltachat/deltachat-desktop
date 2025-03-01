@@ -19,6 +19,7 @@ type Props = {
   onClickError?: () => void
   tabindexForInteractiveContents: -1 | 0
   viewType: T.Viewtype
+  isSavedMessage: boolean
 }
 
 export default function MessageMetaData(props: Props) {
@@ -36,6 +37,7 @@ export default function MessageMetaData(props: Props) {
     onClickError,
     tabindexForInteractiveContents,
     viewType,
+    isSavedMessage,
   } = props
 
   return (
@@ -53,6 +55,9 @@ export default function MessageMetaData(props: Props) {
           aria-label={tx('a11y_encryption_padlock')}
           className={'padlock-icon'}
         />
+      )}
+      {isSavedMessage && (
+        <div aria-label={tx('saved')} className={'saved-message-icon'} />
       )}
       {hasLocation && <span className={'location-icon'} />}
       {isEdited && <span className='edited'>{tx('edited')}</span>}

@@ -8,6 +8,8 @@ import styles from './styles.module.scss'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useMessage from '../../hooks/chat/useMessage'
+import { selectedAccountId } from '../../ScreenController'
 
 type OnButtonClick = React.MouseEvent<HTMLButtonElement, MouseEvent>
 
@@ -20,6 +22,17 @@ type Props = {
 }
 
 export default function ShortcutMenu(props: Props) {
+  const tx = useTranslationFunction()
+  const { jumpToMessage } = useMessage()
+  const onClick = () => {
+    if (props.message.originalMsgId !== null) {
+      jumpToMessage({
+        accountId: selectedAccountId(),
+        msgId: props.message.originalMsgId,
+        focus: true,
+      })
+    }
+  }
   return (
     <div
       className={classNames(styles.shortcutMenu, {
@@ -38,6 +51,16 @@ export default function ShortcutMenu(props: Props) {
         onClick={props.showContextMenu}
         tabIndex={props.tabindexForInteractiveContents}
       />
+      {props.message.originalMsgId !== null && (
+        <button
+          className={classNames(styles.originalMessageButton)}
+          aria-label={tx('show_in_chat')}
+          onClick={onClick}
+          title={tx('show_in_chat')}
+        >
+          <div className={classNames(styles.originalMessageIcon)} />
+        </button>
+      )}
     </div>
   )
 }
