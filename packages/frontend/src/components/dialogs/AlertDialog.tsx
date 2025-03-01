@@ -35,7 +35,7 @@ export default function AlertDialog({
     <Dialog width={350} onClose={onClose}>
       <DialogBody>
         <DialogContent paddingTop>
-          <p>{message}</p>
+          <p className='whitespace'>{message}</p>
         </DialogContent>
       </DialogBody>
       <DialogFooter>
