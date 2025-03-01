@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- show error message if backup version is not compatible #4721
 - show "Edited" in the message's status line (if it's edited) #4697
 - add "learn more"-button to manage-key section that links to local help #4684
 - add a search field to help page #4691
