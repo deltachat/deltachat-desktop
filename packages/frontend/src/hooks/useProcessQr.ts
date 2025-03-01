@@ -149,6 +149,14 @@ export default function useProcessQR() {
 
       const { qr } = parsed
 
+      if (qr.kind === 'backupTooNew') {
+        await openAlertDialog({
+          message: tx('multidevice_receiver_needs_update'),
+        })
+        callback?.()
+        return
+      }
+
       // Some actions can only be executed when the user already has an account
       // and is logged in
       const isLoggedIn = await BackendRemote.rpc.isConfigured(accountId)
