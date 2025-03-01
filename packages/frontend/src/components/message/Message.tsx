@@ -321,6 +321,11 @@ function buildContextMenu(
         }
       },
     },
+    // Save attachment as
+    showAttachmentOptions && {
+      label: tx('save_as'),
+      action: onDownload.bind(null, message),
+    },
     // copy link
     link !== '' &&
       isLink && {
@@ -359,11 +364,6 @@ function buildContextMenu(
           message.id,
           tx('saved')
         ),
-    },
-    // Download attachment
-    showAttachmentOptions && {
-      label: tx('save_as'),
-      action: onDownload.bind(null, message),
     },
     // Resend Message
     showResend && {
