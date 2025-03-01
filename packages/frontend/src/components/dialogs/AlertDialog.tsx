@@ -9,12 +9,11 @@ import Dialog, {
 } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
-import type { ReactNode } from 'react'
 import type { DialogProps } from '../../contexts/DialogContext'
 
 export type Props = {
   cb?: () => void
-  message: string | ReactNode
+  message: string
   okBtnLabel?: string
 } & DialogProps
 
@@ -35,7 +34,7 @@ export default function AlertDialog({
     <Dialog width={350} onClose={onClose}>
       <DialogBody>
         <DialogContent paddingTop>
-          <p>{message}</p>
+          <p className='whitespace'>{message}</p>
         </DialogContent>
       </DialogBody>
       <DialogFooter>
