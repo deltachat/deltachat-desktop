@@ -29,6 +29,7 @@
 - html email view: migrate from deprecated `BrowserView` to `WebContentsView` #4689
 - update translations (2025-02-28)
 - Update local help (2025-03-01)
+- Make it possible to pass --allow-unsafe-core-replacement to `pnpm run dev:electron` #4733.
 
 ### Fixed
 - fix webxdc apps being unclosable, when using `beforeunload` event #4728
