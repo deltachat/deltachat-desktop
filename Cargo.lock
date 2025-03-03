@@ -1720,7 +1720,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat-tauri"
-version = "1.54.1"
+version = "1.54.2"
 dependencies = [
  "anyhow",
  "base64 0.22.1",
