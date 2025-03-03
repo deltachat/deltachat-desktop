@@ -30,6 +30,7 @@
 - Update local help (2025-03-01)
 
 ### Fixed
+- fix webxdc apps being unclosable, when using `beforeunload` event #4728
 - message list being empty when double-clicking the chat before it has loaded (again) #4647
 - accessibility: improve tab order of the app #4672
 - other minor accessibility improvements #4675

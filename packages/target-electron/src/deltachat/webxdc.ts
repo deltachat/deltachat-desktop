@@ -446,6 +446,27 @@ export default class DCWebxdc {
         ev.preventDefault()
       })
 
+      // Otherwise the app can make itself uncloseable.
+      // See https://github.com/deltachat/deltachat-desktop/issues/4726
+      // The code is taken from
+      // https://www.electronjs.org/docs/latest/api/web-contents#event-will-prevent-unload
+      webxdcWindow.webContents.on('will-prevent-unload', ev => {
+        const choice = dialog.showMessageBoxSync(webxdcWindow, {
+          type: 'question',
+          // Chromium shows "Close" and "Cancel",
+          // Gecko (Firefox) shows "Leave page" and "Stay on page".
+          buttons: [tx('close_window'), tx('cancel')],
+          title: tx('webxdc_beforeunload_dialog_title'),
+          message: tx('webxdc_beforeunload_dialog_message'),
+          defaultId: 0,
+          cancelId: 1,
+        })
+        const close = choice === 0
+        if (close) {
+          ev.preventDefault()
+        }
+      })
+
       // we would like to make `mailto:`-links work,
       // but https://github.com/electron/electron/pull/34418 is not merged yet.
 

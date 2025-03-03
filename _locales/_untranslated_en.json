@@ -21,6 +21,12 @@
   "pref_current_account": {
     "message": "Current Profile"
   },
+  "webxdc_beforeunload_dialog_title": {
+    "message": "Close app?"
+  },
+  "webxdc_beforeunload_dialog_message": {
+    "message": "This app is asking you to confirm that you want to close it.\nChanges you made may not be saved."
+  },
   "camera_access_failed": {
     "message": "Could not access video camera. You might want to check your video permissions or if the camera is used already by another program"
   },
