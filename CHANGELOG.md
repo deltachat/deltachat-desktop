@@ -2,6 +2,18 @@
 
 ## [Unreleased][unreleased]
 
+
+### Added
+
+### Changed
+
+### Fixed
+
+
+<a id="1_54_2"></a>
+
+## [1.54.2] - 2025-03-03
+
 ### Added
 - show error message if backup version is not compatible #4721
 - show "Edited" in the message's status line (if it's edited) #4697
@@ -3247,7 +3259,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.54.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.54.2...HEAD
+
+[1.54.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.54.1...v1.54.2
 
 [1.54.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.54.0...v1.54.1
 
