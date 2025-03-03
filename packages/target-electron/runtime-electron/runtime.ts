@@ -319,8 +319,12 @@ class ElectronRuntime implements Runtime {
     }
   }
   transformStickerURL(sticker_path: string): string {
-    return sticker_path
+    return encodeURI(`file://${sticker_path}`).replace(
+      /[?#]/g,
+      encodeURIComponent
+    )
   }
+
   async showOpenFileDialog(
     options: RuntimeOpenDialogOptions
   ): Promise<string[]> {
