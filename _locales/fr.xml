@@ -373,12 +373,6 @@
 
     <!-- get confirmations -->
     <string name="ask_leave_group">Voulez-vous vraiment quitter ce groupe ?</string>
-    <plurals name="ask_delete_chat">
-        <item quantity="one">Supprimer %d discussion ? Elle n\'apparaîtra plus dans la liste des discussions, mais les messages échangés resteront sur le serveur.</item>
-        <item quantity="many">Supprimer %d discussions ? Elles n\'apparaîtront plus dans la liste des discussions, mais les messages qu\'elles contiennent resteront sur le serveur.</item>
-        <item quantity="other">Supprimer %d discussions ? Elles n\'apparaîtront plus dans la liste des discussions, mais les messages qu\'elles contiennent resteront sur le serveur.</item>
-    </plurals>
-    <string name="ask_delete_named_chat">Voulez-vous vraiment supprimer « %1$s » ?</string>
     <plurals name="ask_delete_messages">
         <item quantity="one">Effacer %d message ici et sur le serveur ?</item>
         <item quantity="many">Effacer %d messages ici et sur le serveur ?</item>
@@ -397,6 +391,7 @@
     <string name="ask_unblock_contact">Débloquer ce contact ? Vous recevrez à nouveau ses messages.</string>
     <string name="ask_delete_contacts">Supprimer les contacts ?\n\nLes contacts avec qui vous avez des discussions en cours et ceux issus du carnet d\'adresses du système ne peuvent pas être supprimés définitivement.</string>
     <string name="ask_delete_contact">Supprimer le contact %1$s ?\n\nLes contacts avec qui vous avez des discussions en cours et ceux issus du carnet d\'adresses du système ne peuvent pas être supprimés définitivement.</string>
+    <!-- deprecated -->
     <string name="cannot_delete_contacts_in_use">Impossible de supprimer les contacts avec qui vous avez une discussion en cours.</string>
     <string name="ask_start_chat_with">Discuter avec %1$s ?</string>
     <!-- deprecated -->
