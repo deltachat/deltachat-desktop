@@ -307,6 +307,7 @@
     <string name="menu_learn_spelling">Yazımı Öğrenin</string>
     <string name="menu_chat_audit_log">Sohbet Denetim Günlüğü</string>
     <string name="jump_to_message">İletiye Atla</string>
+    <string name="jump_to_original_message">Özgün İletiye Atla</string>
     <string name="copy_json">JSON kopyala</string>
     <string name="replace_draft">Taslağı Değiştir</string>
     <string name="title_share_location">Tüm öbek üyeleriyle konum paylaş</string>
@@ -366,11 +367,7 @@
 
     <!-- get confirmations -->
     <string name="ask_leave_group">Bu öbekten ayrılmak istediğinizden emin misiniz?</string>
-    <plurals name="ask_delete_chat">
-        <item quantity="one">%d sohbet silinsin mi?</item>
-        <item quantity="other">%d sohbet silinsin mi?</item>
-    </plurals>
-    <string name="ask_delete_named_chat">“%1$s” sohbeti silinsin mi?</string>
+    <string name="ask_delete_message">Tüm aygıtlarınızdaki bu ileti silinsin mi?</string>
     <plurals name="ask_delete_messages">
         <item quantity="one">Tüm aygıtlarınızdaki %d ileti silinsin mi?</item>
         <item quantity="other">Tüm aygıtlarınızdaki %d ileti silinsin mi?</item>
@@ -387,6 +384,7 @@
     <string name="ask_unblock_contact">Bu kişi engellenmesin mi?</string>
     <string name="ask_delete_contacts">Kişiler silinsin mi?\n\nSohbetlerin sürdüğü ya da sistem adres defterinden gelen kişiler kalıcı olarak silinemez.</string>
     <string name="ask_delete_contact">%1$s kişisi silinsin mi?\n\nSohbetlerin sürdüğü ya da sistem adres defterinden gelen kişiler kalıcı olarak silinemez.</string>
+    <!-- deprecated -->
     <string name="cannot_delete_contacts_in_use">Sohbetlerin sürdüğü kişiler silinemez.</string>
     <string name="ask_start_chat_with">%1$s ile sohbet edilsin mi?</string>
     <!-- deprecated -->
@@ -551,6 +549,7 @@
     <string name="multidevice_receiver_title">İkinci Aygıt Olarak Ayarla</string>
     <string name="multidevice_open_settings_on_other_device">Birinci aygıtta “Ayarlar / İkinci Aygıt Ekle”ye gidin ve orada gösterilen kodu tarayın</string>
     <string name="multidevice_receiver_scanning_ask">Diğer aygıttan gelen profil bu aygıta kopyalansın mı?</string>
+    <string name="multidevice_receiver_needs_update">İçe aktarmak istediğiniz profil daha yeni bir Delta Chat sürümünden geliyor.\n\nİkinci aygıtı ayarlamayı sürdürmek için lütfen bu aygıtı Delta Chat\'in en son sürümüne güncelleştirin.</string>
     <string name="multidevice_abort">İkinci aygıtı ayarlamadan vazgeçilsin mi?</string>
     <string name="multidevice_abort_will_invalidate_copied_qr">Bu, panoya kopyalanan QR kodunu geçersizleştirecek.</string>
     <string name="multidevice_experimental_hint">(deneysel, sürüm 1.36 gerekli)</string>

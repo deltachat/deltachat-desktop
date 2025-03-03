@@ -8,6 +8,7 @@
 - add "learn more"-button to manage-key section that links to local help #4684
 - add a search field to help page #4691
 - update local help (2025-02-21)
+- update translations (2025-03-03)
 - feature: save messages in self chat and show a bookmark icon #4674
 
 ### Changed

@@ -317,10 +317,6 @@
 
     <!-- get confirmations -->
     <string name="ask_leave_group">Bạn có chắc chắn muốn rời khỏi nhóm này không?</string>
-    <plurals name="ask_delete_chat">
-        <item quantity="other">Xóa cuộc trò chuyện %d? Nó sẽ không còn được hiển thị trong danh sách trò chuyện nữa; tin nhắn của nó sẽ vẫn còn trên máy chủ.</item>
-    </plurals>
-    <string name="ask_delete_named_chat">Bạn có chắc chắn muốn xóa \"%1$s\" không?</string>
     <!-- deprecated, use ask_delete_messages -->
     <plurals name="ask_delete_messages_simple">
         <item quantity="other">Xóa %d tin nhắn?</item>
@@ -332,6 +328,7 @@
     <string name="ask_unblock_contact">Bỏ chặn liên hệ này? Sau đó bạn sẽ có thể nhận tin nhắn từ họ.</string>
     <string name="ask_delete_contacts">Xóa liên hệ?\n\nKhông thể xóa vĩnh viễn các liên hệ đang trò chuyện hoặc khỏi sổ địa chỉ hệ thống.</string>
     <string name="ask_delete_contact">Xóa liên hệ %1$s?\n\nKhông thể xóa vĩnh viễn các liên hệ đang trò chuyện hoặc khỏi sổ địa chỉ hệ thống.</string>
+    <!-- deprecated -->
     <string name="cannot_delete_contacts_in_use">Không thể xóa liên hệ với các cuộc trò chuyện đang diễn ra.</string>
     <string name="ask_start_chat_with">Trò chuyện với %1$s?</string>
     <!-- deprecated -->

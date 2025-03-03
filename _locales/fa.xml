@@ -354,11 +354,6 @@ https://meet.jit.si/$ROOM
 
     <!-- get confirmations -->
     <string name="ask_leave_group">مطمئن هستید می‌خواهید این گروه را ترک کنید؟</string>
-    <plurals name="ask_delete_chat">
-        <item quantity="one">پاک کردن %d گپ؟ دیگر در لیست گپ‌ها نشان داده نخواهد شد ولی پیام‌ها در سرور باقی می‌مانند. </item>
-        <item quantity="other">پاک کردن %d گپ؟ دیگر در فهرست گپ‌ها نشان داده نخواهند شد؛ ولی پیام‌ها در کارساز باقی می‌مانند. </item>
-    </plurals>
-    <string name="ask_delete_named_chat">اطمینان دارید می‌خواهید «%1$s» را پاک کنید؟</string>
     <!-- deprecated, use ask_delete_messages -->
     <plurals name="ask_delete_messages_simple">
         <item quantity="one">می‌خواهید %dپیام پاک شود؟</item>
@@ -371,6 +366,7 @@ https://meet.jit.si/$ROOM
     <string name="ask_unblock_contact">رفع مسدودیت مخاطب؟ دوباره قادر خواهید بود پیام‌های ارسال شده توسط این مخاطب را دریافت کنید.</string>
     <string name="ask_delete_contacts">مخاطبین حذف شوند؟\n\nمخاطبینی که گپ فعال دارند و مخاطبینی که در دفتر تلفن سامانه هستند را نمی‌توان به صورت دائمی حذف کرد. </string>
     <string name="ask_delete_contact">حذف مخاطب %1$s؟ \n\nمخاطبین با گپ فعال و مخاطبینی که در دفتر تلفن سامانه هستند را نمی‌توان به صورت دائمی حذف کرد. </string>
+    <!-- deprecated -->
     <string name="cannot_delete_contacts_in_use">نمی‌توان مخاطبین گپ‌های فعال را حذف کرد. </string>
     <string name="ask_start_chat_with">گپ زدن با %1$s؟</string>
     <!-- deprecated -->

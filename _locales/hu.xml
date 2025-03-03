@@ -364,11 +364,6 @@
 
     <!-- get confirmations -->
     <string name="ask_leave_group">Biztosan ki akar lépni a csoportból?</string>
-    <plurals name="ask_delete_chat">
-        <item quantity="one">Biztosan töröl %d csevegést? Többé nem jelenik meg a csevegőlistában; az üzenetek viszont a szerveren maradnak.</item>
-        <item quantity="other">Biztosan töröl %d csevegést? Többé nem jelennek meg a csevegőlistában; az üzeneteik viszont a kiszolgálón maradnak.</item>
-    </plurals>
-    <string name="ask_delete_named_chat">Biztosan törli a következőt: „%1$s”? Többé nem fog megjelenni a csevegőlistában; üzenetei a kiszolgálón maradnak.</string>
     <!-- deprecated, use ask_delete_messages -->
     <plurals name="ask_delete_messages_simple">
         <item quantity="one">%d üzenet törlése?</item>
@@ -381,6 +376,7 @@
     <string name="ask_unblock_contact">Feloldja ennek a partnerének a letiltását? Ezután képes lesz üzeneteket fogadni tőle.</string>
     <string name="ask_delete_contacts">Névjegy törlése?\n\nA folyamatban lévő csevegésekkel rendelkező vagy a rendszer névjegyzékéből származó névjegyek nem törölhetők véglegesen.</string>
     <string name="ask_delete_contact">Törli a(z) %1$s nevű partnerét?\n\nA folyamatban lévő csevegésekkel rendelkező vagy a rendszer névjegyzékéből származó partnerek nem törölhetők véglegesen.</string>
+    <!-- deprecated -->
     <string name="cannot_delete_contacts_in_use">A folyamatban lévő csevegésekkel rendelkező névjegyek nem törölhetők.</string>
     <string name="ask_start_chat_with">Csevegés vele: %1$s?</string>
     <!-- deprecated -->

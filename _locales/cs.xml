@@ -331,13 +331,6 @@
 
     <!-- get confirmations -->
     <string name="ask_leave_group">Opravdu opustit tuto skupinu?</string>
-    <plurals name="ask_delete_chat">
-        <item quantity="one">Vymazat %d hovor? Pak už jej neuvidíte v seznamu hovorů, ale jeho zprávy zůstanou na serveru.</item>
-        <item quantity="few">Vymazat %d hovory? Pak už je neuvidíte v seznamu hovorů, ale jejich zprávy zůstanou na serveru.</item>
-        <item quantity="many">Vymazat %d hovorů? Pak už je neuvidíte v seznamu hovorů, ale jejich zprávy zůstanou na serveru.</item>
-        <item quantity="other">Vymazat %d hovorů? Pak už je neuvidíte v seznamu hovorů, ale jejich zprávy zůstanou na serveru.</item>
-    </plurals>
-    <string name="ask_delete_named_chat">Skutečně úplně vymazat \"%1$s\"?</string>
     <string name="ask_forward">Přepošli zprávy na adresu %1$s?</string>
     <string name="ask_forward_multiple">Přepošli zprávy do %1$d chatů?</string>
     <string name="ask_export_attachment">Uložit přílohu? Uložení příloh je zpřístupní ostatním aplikacím na tomto přístroji.\n\nPokračovat?</string>
@@ -345,6 +338,7 @@
     <string name="ask_unblock_contact">Odblokovat tento kontakt? Zprávy od tohoto kontaktu budete opět přijímat.</string>
     <string name="ask_delete_contacts">Vymazat kontakty?\n\nKontakty v nastavených chatech a kontakty ze systémového adresáře nelze nadobro vymazat.</string>
     <string name="ask_delete_contact">Vymazat kontakt %1$s?\n\nKontakty v nastavených chatech a kontakty ze systémového adresáře nelze nadobro vymazat.</string>
+    <!-- deprecated -->
     <string name="cannot_delete_contacts_in_use">Kontakty v nastavených chatech nelze vymazat</string>
     <string name="ask_start_chat_with">Chat s %1$s?</string>
     <!-- deprecated -->

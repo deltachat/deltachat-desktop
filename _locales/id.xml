@@ -287,10 +287,6 @@
 
     <!-- get confirmations -->
     <string name="ask_leave_group">Apakah anda yakin untuk keluar dari grup ini?</string>
-    <plurals name="ask_delete_chat">
-        <item quantity="other">Hapus %d obrolan? Obrolan ini akan menghilang dari daftar tetapi pesan-pesannya akan tetap tersimpan di server.</item>
-    </plurals>
-    <string name="ask_delete_named_chat">Apakah anda yakin ingin menghapus \"%1$s\"?</string>
     <!-- deprecated, use ask_delete_messages -->
     <plurals name="ask_delete_messages_simple">
         <item quantity="other">Menghapus pesan %d?</item>
@@ -301,6 +297,7 @@
     <string name="ask_unblock_contact">Buka blokir kontak ini? Anda akan bisa kembali menerima pesan dari kontak ini.</string>
     <string name="ask_delete_contacts">Hapus kontak?\n\nKontak dengan obrolan yang sedang berlangsung dan dari buku alamat pada sistem tak bisa dihapus secara permanen.</string>
     <string name="ask_delete_contact">Hapus kontak %1$s?\n\nKontak dengan obrolan yang sedang berlangsung dan dari buku alamat pada sistem tak bisa dihapus secara permanen.</string>
+    <!-- deprecated -->
     <string name="cannot_delete_contacts_in_use">Tak bisa menghapus kontak yang sedang dalam obrolan.</string>
     <string name="ask_start_chat_with">Ngobrol dengan %1$s?</string>
     <!-- deprecated -->
