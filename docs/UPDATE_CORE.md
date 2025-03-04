@@ -37,7 +37,7 @@ DELTA_CHAT_RPC_SERVER=path/to/deltachat-rpc-server pnpm -w dev:electron --allow-
 You can easily get the deltachat-rpc-server binary for your pr by installing it with cargo install:
 
 ```
-cargo install --git https://github.com/chatmail/core.git --branch <your-branch> deltachat-rpc-server
+cargo install --git https://github.com/chatmail/core --branch <your-branch> deltachat-rpc-server
 ```
 
 Then you can run:
