@@ -8,9 +8,14 @@ import { DialogContext } from '../../contexts/DialogContext'
 const log = getLogger('renderer/composer/ComposerMessageInput')
 
 type ComposerMessageInputProps = {
+  /**
+   * Whether to render the HTML or to return `null`.
+   */
+  hidden?: boolean
+  isMessageEditingMode: boolean
   chatId: number
   chatName: string
-  sendMessage: () => void
+  sendMessageOrEditRequest: () => void
   enterKeySends: boolean
   onPaste?: (e: React.ClipboardEvent<HTMLTextAreaElement>) => void
   updateDraftText: (text: string, InputChatId: number) => void
@@ -111,7 +116,7 @@ export default class ComposerMessageInput extends React.Component<
   }
 
   componentDidUpdate(
-    _prevProps: ComposerMessageInputProps,
+    prevProps: ComposerMessageInputProps,
     prevState: ComposerMessageInputState
   ) {
     if (this.setCursorPosition && this.textareaRef.current) {
@@ -133,10 +138,32 @@ export default class ComposerMessageInput extends React.Component<
       }
 
       this.setCursorPosition = false
+    } else {
+      // This is useful when entering / exiting the message editing mode.
+      if (
+        prevProps.hidden !== this.props.hidden &&
+        !this.props.hidden &&
+        this.state.text.length !== 0
+      ) {
+        this.moveCursorToTheEnd()
+      }
     }
     if (prevState.chatId === this.state.chatId) {
       this.resizeTextareaAndComposer()
     }
+  }
+
+  private moveCursorToTheEnd() {
+    if (this.textareaRef.current == null) {
+      log.warn(
+        'Tried to move the cursor position to the end, ' +
+          'but textareaRef.current is',
+        this.textareaRef.current
+      )
+      return
+    }
+    this.textareaRef.current.selectionStart = this.state.text.length
+    this.textareaRef.current.selectionEnd = this.state.text.length
   }
 
   onChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
@@ -161,7 +188,7 @@ export default class ComposerMessageInput extends React.Component<
     const action = this.keyEventToAction(e)
 
     if (action === 'SEND') {
-      this.props.sendMessage()
+      this.props.sendMessageOrEditRequest()
       e.preventDefault()
       e.stopPropagation()
     }
@@ -222,6 +249,9 @@ export default class ComposerMessageInput extends React.Component<
   }
 
   render() {
+    if (this.props.hidden) {
+      return null
+    }
     return (
       <textarea
         className='message-input-area'
@@ -234,9 +264,15 @@ export default class ComposerMessageInput extends React.Component<
         onKeyDown={this.onKeyDown}
         onChange={this.onChange}
         onPaste={this.props.onPaste}
-        placeholder={window.static_translate('write_message_desktop')}
+        placeholder={
+          this.props.isMessageEditingMode
+            ? window.static_translate('edit_message')
+            : window.static_translate('write_message_desktop')
+        }
         aria-label={
-          window.static_translate('write_message_desktop') +
+          (this.props.isMessageEditingMode
+            ? window.static_translate('edit_message')
+            : window.static_translate('write_message_desktop')) +
           // Make it clear which chat we're in.
           // TODO probably need a proper string, with interpolation.
           ': ' +

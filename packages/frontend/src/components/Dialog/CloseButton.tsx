@@ -12,7 +12,7 @@ export default function CloseButton(
 
   return (
     <HeaderButton
-      aria-label={tx('close')}
+      aria-label={props['aria-label'] ?? tx('close')}
       icon='cross'
       iconSize={26}
       {...props}
