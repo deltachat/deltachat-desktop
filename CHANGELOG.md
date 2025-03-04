@@ -14,6 +14,7 @@
 - new button styles #4741
 
 ### Fixed
+- fix some webxdc apps showing the "Close app?" prompt unintentionally #4737
 - webxdc: fix menu bar hiding when pressing Escape #4753
 - tauri: fix blobs and webxdc-icon scheme under windows #4705
 - tauri: fix: drag regions in navbar #4719
