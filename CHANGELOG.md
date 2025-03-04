@@ -4,11 +4,12 @@
 
 
 ### Added
+- tauri: add support for sticker picker
 
 ### Changed
 
 ### Fixed
-
+- tauri: fix blobs and webxdc-icon scheme under windows #4705
 
 <a id="1_54_2"></a>
 
@@ -18,7 +19,6 @@
 - show error message if backup version is not compatible #4721
 - show "Edited" in the message's status line (if it's edited) #4697
 - add "learn more"-button to manage-key section that links to local help #4684
-- tauri: add support for sticker picker
 - add a search field to help page #4691
 - update local help (2025-02-21)
 - update translations (2025-03-03)
@@ -56,7 +56,6 @@
 - fix that in html email view links without schema didn't open in browser #4690
 - fix clicking on the same anchor multiple timed disn't work in html email view #4690
 - close second level settings form with Escape key #4128
-- tauri: fix blobs and webxdc-icon scheme under windows #4705
 
 <a id="1_54_1"></a>
 
