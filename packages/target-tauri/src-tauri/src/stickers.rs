@@ -13,7 +13,9 @@ pub(crate) fn delta_stickers_protocol<R: tauri::Runtime>(
 ) {
     // info!("dcsticker {}", request.uri());
 
-    // URI format is dcsticker://<account folder name>/<sticker pack>/<sticker filename>
+    // URI format is
+    // - Mac, linux, iOS: dcsticker://<account folder name>/<sticker pack>/<sticker filename>
+    // - windows, android: http://dcsticker.localhost/<account folder name>/<sticker pack>/<sticker filename>
 
     let app_state_deltachat = {
         ctx.app_handle()
