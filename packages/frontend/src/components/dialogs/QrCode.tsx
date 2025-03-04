@@ -167,7 +167,7 @@ export function QrCodeShowQrInner({
   return (
     <>
       <DialogBody className='show-qr-dialog-body'>
-        <DialogContent className='show-qr-dialog-content'>
+        <DialogContent paddingBottom className='show-qr-dialog-content'>
           {svgUrl && (
             <img
               style={{

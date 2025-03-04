@@ -68,7 +68,6 @@ $paddingVertical: 20px;
   flex: 1 1 auto;
   max-height: 90vh;
   overflow: overlay;
-  padding-bottom: $paddingVertical;
 
   &::-webkit-scrollbar-track {
     background: transparent;
@@ -78,6 +77,7 @@ $paddingVertical: 20px;
 .dialogContent {
   padding-left: $paddingHorizontal;
   padding-right: $paddingHorizontal;
+  line-height: 22px;
 
   &.paddingTop {
     padding-top: $paddingVertical;

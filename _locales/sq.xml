@@ -28,6 +28,8 @@
     <string name="join">Hyni</string>
     <string name="rejoin">Rihyni</string>
     <string name="delete">Fshije</string>
+    <string name="delete_for_me">Fshije për Mua</string>
+    <string name="delete_for_everyone">Fshije për Gjithkënd</string>
     <string name="info">Hollësi</string>
     <string name="update">Përditësoje</string>
     <string name="emoji">Emoji</string>
@@ -40,11 +42,14 @@
     <string name="later">Më vonë</string>
     <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
     <string name="resend">Ridërgoje</string>
+    <string name="edited">Të përpunuar</string>
+    <string name="edit_message">Përpunoni Mesazh</string>
     <!-- Verb "to archive", as in "put a chat in the archive", not a noun "The Archive". -->
     <string name="archive">Arkivoje</string>
     <!-- Verb "to unarchive", as in "remove a chat from the archive", opposite of the previous string -->
     <string name="unarchive">Çarkivoje</string>
     <string name="mute">Heshtoje</string>
+    <string name="muted">Heshtuar</string>
     <string name="ephemeral_messages">Mesazhe Që Zhduken</string>
     <string name="ephemeral_messages_hint">Këto rregullime zbatohen mbi krejt pjesëmarrësit që përdorin Delta Chat-in. Sidoqoftë, ata mund të kopjojnë, ruajnë dhe përcjellin mesazhe ose të përdorin klientë të tjerë email-i.</string>
     <string name="save">Ruaje</string>
@@ -216,6 +221,8 @@
     <string name="new_classic_contact_explain">Kontaktet e shtuar dorazi mund të përdoren për të dërguar tekst te email klasik dhe për ta s’garantohet fshehtëzim skaj-më-skaj.</string>
     <string name="menu_new_chat">Fjalosje e Re</string>
     <string name="menu_new_group">Grup i Ri</string>
+    <!-- "Chat" is a verb here, "Message to" would also fit. the string might be used in the "New Chat" screen above the contact list -->
+    <string name="chat_with">Bisedoni me… </string>
     <string name="clone_chat">Klononi Fjalosjen</string>
     <!-- consider keeping the term "broadcast" as in WhatsApp or Telegram -->
     <string name="broadcast_list">Listë Transmetimi</string>
@@ -237,6 +244,7 @@
     <string name="menu_delete_chat">Fshije Fjalosjen</string>
     <!-- Command to delete all messages in a chat. The chat itself will not be deleted but will be empty afterwards, so make sure to be different from "Delete Chat" here. "Clear" is a verb here, "Empty Chat" would also be fine (eg. in German "Chat leeren") -->
     <string name="clear_chat">Spastroje Fjalosjen</string>
+    <!-- deprecated -->
     <string name="menu_delete_messages">Fshiji Mesazhet</string>
     <string name="delete_contact">Fshije Kontaktin</string>
     <string name="menu_delete_location">Të fshihet kjo Vendndodhje?</string>
@@ -295,6 +303,7 @@
     <string name="menu_learn_spelling">Mëso Drejtshkrim</string>
     <string name="menu_chat_audit_log">Regjistër Auditimi Fjalosjeje</string>
     <string name="jump_to_message">Hidhu te Mesazh</string>
+    <string name="jump_to_original_message">Hidhu te Mesazhi Origjinal</string>
     <string name="copy_json">Kopjo JSON</string>
     <string name="replace_draft">Zëvendëso Skicë</string>
     <string name="title_share_location">Tregojua vendndodhjen krejt anëtarëve të grupit</string>
@@ -355,15 +364,16 @@
     <!-- get confirmations -->
     <string name="ask_leave_group">Jeni i sigurt se doni ta braktisni këtë grup?</string>
     <plurals name="ask_delete_chat">
-        <item quantity="one">Të fshihet %d fjalosje? S’do të duket më te lista e bisedave; mesazhet e saj do të mbeten te shërbyesi.</item>
-        <item quantity="other">Të fshihen %d fjalosje? S\’do të duken më te lista e fjalosjeve; mesazhet e tyre do të mbeten te shërbyesi.</item>
+        <item quantity="one">Të fshihet %d fjalosje në krejt pajisjet tuaja?</item>
+        <item quantity="other">Të fshihen %d fjalosje në krejt pajisjet tuaja?</item>
     </plurals>
-    <string name="ask_delete_named_chat">Jeni i sigurt se doni të fshihet “%1$s”?</string>
-    <string name="ask_delete_message">Jeni i sigurt se doni të fshihet ky mesazh?</string>
+    <string name="ask_delete_named_chat">Të fshihet fjalosja “%1$s” në krejt pajisjet tuaja?</string>
+    <string name="ask_delete_message">Të fshihet ky mesazh në krejt pajisjet tuaja?</string>
     <plurals name="ask_delete_messages">
-        <item quantity="one">Të fshihet %d mesazh këtu dhe te shërbyesi?</item>
-        <item quantity="other">Të fshihen %d mesazhe këtu dhe te shërbyesi?</item>
+        <item quantity="one">Të fshihet %d mesazh në krejt pajisjet tuaja?</item>
+        <item quantity="other">Të fshihen %d mesazhe në krejt pajisjet tuaja?</item>
     </plurals>
+    <!-- deprecated, use ask_delete_messages -->
     <plurals name="ask_delete_messages_simple">
         <item quantity="one">Të fshihet %d mesazh?</item>
         <item quantity="other">Të fshihen %d mesazhe?</item>
@@ -375,8 +385,10 @@
     <string name="ask_unblock_contact">Të zhbllokohet ky kontakt? Do të jeni sërish në gjendje të merrni mesazhe prej këtij kontakti.</string>
     <string name="ask_delete_contacts">Të fshihen kontaktet? Kjo do të bëjë të fshihen përgjithmonë kontaktet e përzgjedhur.\n\nKontaktet me fjalosje në zhvillim e sipër dhe kontaktet prej libri adresash të sistemit s\’mund të fshihen përgjithmonë.</string>
     <string name="ask_delete_contact">Të fshihet përgjithmonë kontakti %1$s? \n\nKontaktet me fjalosje në zhvillim e sipër dhe kontaktet prej libri adresash të sistemit s\’mund të fshihen përgjithmonë.</string>
+    <!-- deprecated -->
     <string name="cannot_delete_contacts_in_use">S\’mund të fshihen kontakte me fjalosje në zhvillim e sipër.</string>
     <string name="ask_start_chat_with">Të bisedohet me %1$s?</string>
+    <!-- deprecated -->
     <string name="ask_delete_value">Të fshihet %s?</string>
     <!-- %1$s is replaced by a comma-separated list of names -->
     <string name="ask_remove_members">Të hiqet %1$s nga grupi?</string>
@@ -495,6 +507,8 @@
     <string name="profile_encryption">Fshehtëzim</string>
     <string name="profile_shared_chats">Fjalosje të Përbashkëta</string>
     <string name="related_chats">Fjalosje të Afërta</string>
+    <!-- Separator between the list of actual members and past members -->
+    <string name="past_members">Anëtarë të Dikurshëm</string>
     <string name="tab_contact">Kontakt</string>
     <string name="tab_group">Grup</string>
     <string name="tab_gallery">Galeri</string>
@@ -535,6 +549,7 @@
     <string name="multidevice_receiver_title">Shtoni Pajisje të Dytë</string>
     <string name="multidevice_open_settings_on_other_device">Te pajisja e parë, kaloni te “Rregullime / Shtoje si Pajisje të Dytë” dhe skanoni kodin e treguar këtu</string>
     <string name="multidevice_receiver_scanning_ask">Të kopjohet llogaria nga pajisja tjetër te kjo pajisje?</string>
+    <string name="multidevice_receiver_needs_update">Profili që doni të importoni është prej një versioni më të ri të Delta Chat-it.\n\nQë të vazhdoni të ujdisni një pajisje të dytë, ju lutemi, përditësojeni këtë pajisje me versionin më të ri të Delta Chat-it.</string>
     <string name="multidevice_abort">Të ndërpritet ujdisja e pajisjes së dytë?</string>
     <string name="multidevice_abort_will_invalidate_copied_qr">Kjo do të bëjë të pavlefshëm kodin QR të kopjuar në të papastër.</string>
     <string name="multidevice_experimental_hint">(eksperimentale, lyp versionin 1.36)</string>
@@ -728,10 +743,6 @@
     <string name="pref_manage_keys">Administroni Kyçe</string>
     <string name="pref_use_system_emoji">Përdor Emoji Sistemi</string>
     <string name="pref_use_system_emoji_explain">Çaktivizo mbulimin e brendshëm Delta Chat për emoji-t</string>
-    <!-- deprecated -->
-    <string name="pref_use_inapp_camera">Përdor Kamerën e Vetë Aplikacionit</string>
-    <!-- deprecated -->
-    <string name="pref_use_inapp_camera_explain">Kamera e vetë aplikacionit, zakonisht, ka më pak veçori se kamera e sistemit</string>
     <string name="pref_show_system_contacts">Të Lexojë Libër Adresash Sistemi</string>
     <string name="pref_show_system_contacts_explain">Ofro krijim fjalosjesh me kontakte prej libri adresash. Disa shërbime lypin ujdisje fshehtëzimi skaj-më-skaj së pari.</string>
     <string name="pref_chats">Fjalosje</string>

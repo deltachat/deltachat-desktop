@@ -12,12 +12,14 @@ type Props = {
   fileMime: string | null
   direction?: 'incoming' | 'outgoing'
   status: msgStatus
+  isEdited: boolean
   hasText: boolean
   timestamp: number
   hasLocation?: boolean
   onClickError?: () => void
   tabindexForInteractiveContents: -1 | 0
   viewType: T.Viewtype
+  isSavedMessage: boolean
 }
 
 export default function MessageMetaData(props: Props) {
@@ -28,12 +30,14 @@ export default function MessageMetaData(props: Props) {
     fileMime,
     direction,
     status,
+    isEdited,
     hasText,
     timestamp,
     hasLocation,
     onClickError,
     tabindexForInteractiveContents,
     viewType,
+    isSavedMessage,
   } = props
 
   return (
@@ -52,7 +56,11 @@ export default function MessageMetaData(props: Props) {
           className={'padlock-icon'}
         />
       )}
+      {isSavedMessage && (
+        <div aria-label={tx('saved')} className={'saved-message-icon'} />
+      )}
       {hasLocation && <span className={'location-icon'} />}
+      {isEdited && <span className='edited'>{tx('edited')}</span>}
       <Timestamp
         timestamp={timestamp}
         extended

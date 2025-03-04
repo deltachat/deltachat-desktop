@@ -1,6 +1,8 @@
 use log::warn;
 use tauri::{Manager, WebviewWindow};
 
+use crate::settings::apply_content_protection;
+
 #[derive(Debug, thiserror::Error)]
 pub(crate) enum Error {
     #[error(transparent)]
@@ -46,6 +48,8 @@ pub(crate) fn open_help_window(
     help_window.navigate(url)?;
 
     help_window.set_title("Delta Chat Tauri - Help")?; // TODO: translate help in the title.
+
+    let _ = apply_content_protection(&app);
 
     Ok(())
 }

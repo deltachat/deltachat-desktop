@@ -51,6 +51,7 @@ export default function useCreateDraftMessage() {
         messageText,
         null,
         null,
+        null,
         'Text'
       )
 

@@ -28,6 +28,8 @@
     <string name="join">加入</string>
     <string name="rejoin">重新加入</string>
     <string name="delete">删除</string>
+    <string name="delete_for_me">为我删除</string>
+    <string name="delete_for_everyone">为所有人删除</string>
     <string name="info">信息</string>
     <string name="update">更新</string>
     <string name="emoji">Emoji</string>
@@ -41,6 +43,8 @@
     <string name="later">稍后</string>
     <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
     <string name="resend">重新发送</string>
+    <string name="edited">已编辑</string>
+    <string name="edit_message">编辑消息</string>
     <!-- Verb "to archive", as in "put a chat in the archive", not a noun "The Archive". -->
     <string name="archive">存档</string>
     <!-- Verb "to unarchive", as in "remove a chat from the archive", opposite of the previous string -->
@@ -235,6 +239,7 @@
     <string name="menu_delete_chat">删除聊天</string>
     <!-- Command to delete all messages in a chat. The chat itself will not be deleted but will be empty afterwards, so make sure to be different from "Delete Chat" here. "Clear" is a verb here, "Empty Chat" would also be fine (eg. in German "Chat leeren") -->
     <string name="clear_chat">清空聊天记录</string>
+    <!-- deprecated -->
     <string name="menu_delete_messages">删除消息</string>
     <string name="delete_contact">删除联系人</string>
     <string name="menu_delete_location">删除此位置？</string>
@@ -293,6 +298,7 @@
     <string name="menu_learn_spelling">学习拼写</string>
     <string name="menu_chat_audit_log">聊天审计日志</string>
     <string name="jump_to_message">跳转到消息</string>
+    <string name="jump_to_original_message">跳转到原始消息</string>
     <string name="copy_json">复制 JSON</string>
     <string name="replace_draft">替换草稿</string>
     <string name="title_share_location">与所有群组成员共享位置</string>
@@ -352,13 +358,14 @@
     <!-- get confirmations -->
     <string name="ask_leave_group">您确定要离开此群组吗？</string>
     <plurals name="ask_delete_chat">
-        <item quantity="other">删除 %d 个聊天？被删除的聊天不会再显示在聊天列表中；聊天消息仍将保留于服务器。</item>
+        <item quantity="other">是否删除所有设备上的 %d 个聊天？</item>
     </plurals>
-    <string name="ask_delete_named_chat">删除聊天“%1$s”？它将不再显示在聊天列表中，其消息将保留在服务器上。</string>
-    <string name="ask_delete_message">您确定要删除这条消息吗？</string>
+    <string name="ask_delete_named_chat">是否删除所有设备上的聊天“%1$s”？</string>
+    <string name="ask_delete_message">是否在所有设备上删除此消息？</string>
     <plurals name="ask_delete_messages">
-        <item quantity="other">在此处和服务器上删除 %d 条消息？</item>
+        <item quantity="other">是否删除所有设备上的 %d 条消息？</item>
     </plurals>
+    <!-- deprecated, use ask_delete_messages -->
     <plurals name="ask_delete_messages_simple">
         <item quantity="other">删除 %d 条消息吗？</item>
     </plurals>
@@ -369,8 +376,10 @@
     <string name="ask_unblock_contact">取消屏蔽此联系人？您将再次能收到此联系人的消息。</string>
     <string name="ask_delete_contacts">删除联系人？\n\n仍有在进行中的聊天的联系人和在系统通讯录中的联系人无法被永久删除。</string>
     <string name="ask_delete_contact">删除联系人 %1$s?\n\n仍有在进行中的聊天的联系人和在系统通讯录中的联系人无法被永久删除。</string>
+    <!-- deprecated -->
     <string name="cannot_delete_contacts_in_use">无法删除仍有在进行中的聊天的联系人。</string>
     <string name="ask_start_chat_with">与 %1$s 聊天？</string>
+    <!-- deprecated -->
     <string name="ask_delete_value">删除 %s？</string>
     <!-- %1$s is replaced by a comma-separated list of names -->
     <string name="ask_remove_members">将 %1$s 从群组中移除？</string>
@@ -529,6 +538,7 @@
     <string name="multidevice_receiver_title">添加为第二台设备</string>
     <string name="multidevice_open_settings_on_other_device">在第一台设备上，转到“设置/添加第二台设备”并扫描显示的二维码</string>
     <string name="multidevice_receiver_scanning_ask">是否将账号从其他设备复制到此设备？</string>
+    <string name="multidevice_receiver_needs_update">你想导入的配置文件来自较新的 Delta Chat 版本。\n\n要继续设置第二台设备，请更新此设备上的 Delta Chat 到最新版。</string>
     <string name="multidevice_abort">中止第二台设备的设置吗？</string>
     <string name="multidevice_abort_will_invalidate_copied_qr">这会让复制到剪贴板的二维码失效。</string>
     <string name="multidevice_experimental_hint">（实验性，需要 1.36 版本）</string>
@@ -722,10 +732,6 @@
     <string name="pref_manage_keys">管理密钥</string>
     <string name="pref_use_system_emoji">使用系统 emoji</string>
     <string name="pref_use_system_emoji_explain">关闭 Delta Chat 内置 emoji 支持</string>
-    <!-- deprecated -->
-    <string name="pref_use_inapp_camera">使用应用内相机</string>
-    <!-- deprecated -->
-    <string name="pref_use_inapp_camera_explain">应用内相机功能通常比系统相机少</string>
     <string name="pref_show_system_contacts">读取系统通讯录</string>
     <string name="pref_show_system_contacts_explain">从通讯录建立和联系人的聊天。一些邮件服务商需要先行设置才能进行端到端加密的聊天。</string>
     <string name="pref_app_access">应用程序访问</string>
@@ -964,7 +970,7 @@
     <string name="qrscan_fingerprint_label">指纹</string>
     <string name="withdraw_verifycontact_explain">其他人可以扫描此二维码与您联系。\n\n您可以在此处停用二维码并通过再次扫描来重新激活它。</string>
     <string name="withdraw_verifygroup_explain">其他人可以扫描此二维码加入群组 “%1$s”。\n\n您可以在此处停用二维码并通过再次扫描来重新激活它。</string>
-    <string name="withdraw_qr_code">停用二维码</string>
+    <string name="withdraw_qr_code">重置二维码</string>
     <string name="revive_verifycontact_explain">其他人可扫描此二维码以与您联系。\n\n此设备上的二维码未激活。</string>
     <string name="revive_verifygroup_explain">其他人可扫描此二维码加入群组“%1$s”。\n\n此设备上的二维码未激活。</string>
     <string name="revive_qr_code">激活二维码</string>
