@@ -8,6 +8,7 @@
 ### Changed
 
 ### Fixed
+- fix some webxdc apps showing the "Close app?" prompt unintentionally #4737
 
 
 <a id="1_54_2"></a>
