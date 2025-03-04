@@ -447,41 +447,90 @@ export default class DCWebxdc {
         ev.preventDefault()
       })
 
+      let denyPreventUnload = false
       // Otherwise the app can make itself uncloseable.
       // See https://github.com/deltachat/deltachat-desktop/issues/4726
       // The code is taken from
       // https://www.electronjs.org/docs/latest/api/web-contents#event-will-prevent-unload
       webxdcWindow.webContents.on('will-prevent-unload', ev => {
-        // Note that this will block this (main!) thread
-        // until the user has closed the dialog.
-        // The main app will be unresponsive until then,
-        // which is probably not nice in case e.g. the user pressed "close"
-        // on the webxdc app, but then left their PC
-        // without interacting with the dialog.
-        // However, this is pretty much in line with what regular browsers do,
-        // except they also don't let you interact
-        // with the rest of the browser until you close the dialog.
-        //
-        // We could use the async version (`showMessageBox()`),
-        // but this would let the app execute its code.
-        // If the app is actually malicious, it could try to do nasty stuff,
-        // e.g. something like preventing the user from interacting
-        // with the dialog, by entering fullscreen or something.
-        // So, let's probably just stay in line with regular browsers.
-        const choice = dialog.showMessageBoxSync(webxdcWindow, {
-          type: 'question',
-          // Chromium shows "Close" and "Cancel",
-          // Gecko (Firefox) shows "Leave page" and "Stay on page".
-          buttons: [tx('close_window'), tx('cancel')],
-          title: tx('webxdc_beforeunload_dialog_title'),
-          message: tx('webxdc_beforeunload_dialog_message'),
-          defaultId: 0,
-          cancelId: 1,
-        })
-        const close = choice === 0
-        if (close) {
+        if (denyPreventUnload) {
           ev.preventDefault()
         }
+        // This `setTimeout` is a workaround for the fact
+        // that some webxdc apps, as a result of
+        // https://github.com/deltachat/deltachat-desktop/issues/3321,
+        // came to rely on `beforeunload` in a not so nice way:
+        // They `preventDefault()` the `beforeunload` event,
+        // and `setTimeout(() => window.close())`,
+        // which is supposed to simply delay the closing of the window.
+        // See e.g. this code, which, in turn, is used by the Editor app.
+        // https://codeberg.org/webxdc/y-webxdc/src/commit/0b3cfe1196b1e4c1af4a14fc82b818310e4a67b3/index.mjs#L72-L96
+        // While that code used to work fine back in the day,
+        // with the introduction of this `will-prevent-unload` listener
+        // things changed: now Delta Chat works more similarly
+        // to actual browsers, i.e. it will pop up this "confirm close"
+        // dialog. But while the dialog is open,
+        // the app is not able to execute any code,
+        // thus it cannot close itself and the dialog, which results
+        // in the user always having to interact with the dialog.
+        //
+        // So, what we do with the `setTimeout` is we let the app
+        // close itself first, after it cancels the initial `beforeunload`.
+        //
+        // webxdc apps should stop using that hack, then we can remove
+        // this `setTimeout` (revert the commit that introduced it).
+        // Instead (besides us fixing the actual bug with `visibilitychange`),
+        // apps should `window.top.addEventListener('visibilitychange'...`
+        // (note the `.top`) instead of attaching the listener to just `window`.
+        // See
+        // https://github.com/deltachat/deltachat-desktop/issues/3321#issuecomment-1821024467.
+        setTimeout(() => {
+          if (webxdcWindow.isDestroyed()) {
+            return
+          }
+
+          // Note that this will block this (main!) thread
+          // until the user has closed the dialog.
+          // The main app will be unresponsive until then,
+          // which is probably not nice in case e.g. the user pressed "close"
+          // on the webxdc app, but then left their PC
+          // without interacting with the dialog.
+          // However, this is pretty much in line with what regular browsers do,
+          // except they also don't let you interact
+          // with the rest of the browser until you close the dialog.
+          //
+          // We could use the async version (`showMessageBox()`),
+          // but this would let the app execute its code.
+          // If the app is actually malicious, it could try to do nasty stuff,
+          // e.g. something like preventing the user from interacting
+          // with the dialog, by entering fullscreen or something.
+          // So, let's probably just stay in line with regular browsers.
+          const choice = dialog.showMessageBoxSync(webxdcWindow, {
+            type: 'question',
+            // Chromium shows "Close" and "Cancel",
+            // Gecko (Firefox) shows "Leave page" and "Stay on page".
+            buttons: [tx('close_window'), tx('cancel')],
+            title: tx('webxdc_beforeunload_dialog_title'),
+            message: tx('webxdc_beforeunload_dialog_message'),
+            defaultId: 0,
+            cancelId: 1,
+          })
+          const close = choice === 0
+          if (close) {
+            // `ev.preventDefault()` doesn't work here because
+            // here is not the top level of the event listener.
+
+            denyPreventUnload = true
+            // Yes, this will fire another `beforeunload` event
+            // inside the app. If this is a problem,
+            // consider `webxdcWindow.destroy()` instead.
+            // However, this shouldn't be too problematic,
+            // because this is practically equivalent
+            // to the user first picking "Stay on page",
+            // and then closing the app again and picking "Leave" this time.
+            webxdcWindow.close()
+          }
+        }, 150)
       })
 
       // we would like to make `mailto:`-links work,
