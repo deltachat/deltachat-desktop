@@ -10,6 +10,7 @@
 
 ### Fixed
 - tauri: fix blobs and webxdc-icon scheme under windows #4705
+- tauri: fix: drag regions in navbar #4719
 
 <a id="1_54_2"></a>
 
