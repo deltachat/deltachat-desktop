@@ -452,6 +452,22 @@ export default class DCWebxdc {
       // The code is taken from
       // https://www.electronjs.org/docs/latest/api/web-contents#event-will-prevent-unload
       webxdcWindow.webContents.on('will-prevent-unload', ev => {
+        // Note that this will block this (main!) thread
+        // until the user has closed the dialog.
+        // The main app will be unresponsive until then,
+        // which is probably not nice in case e.g. the user pressed "close"
+        // on the webxdc app, but then left their PC
+        // without interacting with the dialog.
+        // However, this is pretty much in line with what regular browsers do,
+        // except they also don't let you interact
+        // with the rest of the browser until you close the dialog.
+        //
+        // We could use the async version (`showMessageBox()`),
+        // but this would let the app execute its code.
+        // If the app is actually malicious, it could try to do nasty stuff,
+        // e.g. something like preventing the user from interacting
+        // with the dialog, by entering fullscreen or something.
+        // So, let's probably just stay in line with regular browsers.
         const choice = dialog.showMessageBoxSync(webxdcWindow, {
           type: 'question',
           // Chromium shows "Close" and "Cancel",
