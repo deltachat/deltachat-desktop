@@ -6,20 +6,16 @@ use tokio::fs;
 
 use crate::state::deltachat::DeltaChatAppState;
 
-pub(crate) fn delta_blobs_protocol<R: tauri::Runtime>(
+pub(crate) fn delta_stickers_protocol<R: tauri::Runtime>(
     ctx: UriSchemeContext<'_, R>,
     request: http::Request<Vec<u8>>,
     responder: UriSchemeResponder,
 ) {
-    // info!("dcblob {}", request.uri());
+    // info!("dcsticker {}", request.uri());
 
     // URI format is
-    //
-    // on MacOS, iOS and Linux:
-    // dcblob://<account folder name>/<blob filename>
-    //
-    // on Windows and Android:
-    // http://dcblob.localhost/<account folder name>/<blob filename>
+    // - Mac, linux, iOS: dcsticker://<account folder name>/<sticker pack>/<sticker filename>
+    // - windows, android: http://dcsticker.localhost/<account folder name>/<sticker pack>/<sticker filename>
 
     let app_state_deltachat = {
         ctx.app_handle()
@@ -32,22 +28,26 @@ pub(crate) fn delta_blobs_protocol<R: tauri::Runtime>(
         // workaround for not yet available try_blocks feature
         // https://doc.rust-lang.org/beta/unstable-book/language-features/try-blocks.html
         let result: anyhow::Result<()> = async {
-            // parse url (account folder name & blob filename)
-
+            // parse url (account folder name, sticker pack folder and sticker filename)
             let parsed = {
+                let mut splited = request.uri().path().split('/');
                 #[cfg(not(any(target_os = "windows", target_os = "android")))]
                 {
-                    (request.uri().host(), request.uri().path().split('/').nth(1))
+                    (request.uri().host(), splited.nth(1), splited.next())
                 }
                 #[cfg(any(target_os = "windows", target_os = "android"))]
                 {
-                    let mut splited = request.uri().path().split('/');
-                    (splited.nth(1), splited.next())
+                    (splited.nth(1), splited.next(), splited.next())
                 }
             };
 
-            if let (Some(account_folder), Some(file_name)) = parsed {
-                // trace!("dcblob {account_folder} {file_name}");
+            if let (Some(account_folder), Some(pack_folder), Some(file_name)) = parsed {
+                // trace!("dcsticker {account_folder} {pack_folder} {file_name}");
+
+                if matches!(pack_folder, ".." | "." | "") {
+                    anyhow::bail!("path escape attempt detected")
+                }
+
                 // get delta chat
                 let dc = app_state_deltachat.read().await;
 
@@ -65,8 +65,13 @@ pub(crate) fn delta_blobs_protocol<R: tauri::Runtime>(
                     })
                     .context("account not found")?;
 
+                let decoded_packname = percent_decode_str(pack_folder).decode_utf8()?.into_owned();
                 let decoded_filename = percent_decode_str(file_name).decode_utf8()?.into_owned();
-                let file_path = account.get_blobdir().join(decoded_filename);
+                let file_path = account
+                    .get_blobdir()
+                    .join("../stickers")
+                    .join(decoded_packname)
+                    .join(decoded_filename);
                 // trace!("file_path: {file_path:?}");
 
                 match fs::read(&file_path).await {
@@ -78,7 +83,7 @@ pub(crate) fn delta_blobs_protocol<R: tauri::Runtime>(
                         );
                     }
                     Err(err) => {
-                        error!("dcblob loading error: {err:#} {file_path:?}");
+                        error!("dcsticker loading error: {err:#} {file_path:?}");
                         responder.respond(
                             http::Response::builder()
                                 .status(http::StatusCode::INTERNAL_SERVER_ERROR)
@@ -103,7 +108,7 @@ pub(crate) fn delta_blobs_protocol<R: tauri::Runtime>(
         }
         .await;
         if let Err(err) = result {
-            error!("Failed to build reply for dcblob protocol: {err:#}")
+            error!("Failed to build reply for dcsticker protocol: {err:#}")
         }
     });
 }

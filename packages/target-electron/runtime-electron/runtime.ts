@@ -318,6 +318,9 @@ class ElectronRuntime implements Runtime {
       return blob
     }
   }
+  transformStickerURL(sticker_path: string): string {
+    return sticker_path
+  }
   async showOpenFileDialog(
     options: RuntimeOpenDialogOptions
   ): Promise<string[]> {

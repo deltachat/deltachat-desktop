@@ -53,10 +53,19 @@ pub(crate) fn webxdc_icon_protocol<R: tauri::Runtime>(
         // workaround for not yet available try_blocks feature
         // https://doc.rust-lang.org/beta/unstable-book/language-features/try-blocks.html
         let result: anyhow::Result<()> = async {
+            let parsed = {
+                #[cfg(not(any(target_os = "windows", target_os = "android")))]
+                {
+                    (request.uri().host(), request.uri().path().split('/').nth(1))
+                }
+                #[cfg(any(target_os = "windows", target_os = "android"))]
+                {
+                    let mut splited = request.uri().path().split('/');
+                    (splited.nth(1), splited.next())
+                }
+            };
             // parse url (account & instance id)
-            if let (Some(account_id), Some(instance_id)) =
-                (request.uri().host(), request.uri().path().split('/').nth(1))
-            {
+            if let (Some(account_id), Some(instance_id)) = parsed {
                 // trace!("webxdc-icon {account_id} {instance_id}");
                 // get delta chat
                 let dc = app_state_deltachat.read().await;
