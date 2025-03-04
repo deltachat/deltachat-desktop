@@ -154,7 +154,7 @@
     <p><a href="#security-audits">Audytowne szyfrowanie end-to-end</a> zabezpieczające przed atakami sieciowymi i serwerowymi.</p>
   </li>
   <li>
-    <p>Bezpłatne i otwartoźródłowe oprogramowanie zarówno po stronie aplikacji, jak i serwera. Stworzone w oparciu o <a href="https://github.com/deltachat/deltachat-core-rust/blob/master/standards.md">standardy e-mail i internetowe</a>, <a href="https://xkcd.com/927/">aby uniknąć „kolejnego standardowego syndromu (xkcd 927)”</a>.</p>
+    <p>Bezpłatne i otwartoźródłowe oprogramowanie zarówno po stronie aplikacji, jak i serwera. Stworzone w oparciu o <a href="https://github.com/chatmail/core/blob/master/standards.md">standardy e-mail i internetowe</a>, <a href="https://xkcd.com/927/">aby uniknąć „kolejnego standardowego syndromu (xkcd 927)”</a>.</p>
   </li>
 </ul>
     
@@ -892,7 +892,7 @@ od najnowszych do najstarszych:</p>
     <p>W marcu 2023 r. firma <a href="https://cure53.de">Cure53</a> przeanalizowała zarówno szyfrowanie transportu połączeń sieciowych Delta Chat, jak i powtarzalną konfigurację serwera pocztowego zgodnie z <a href="https://delta.chat/pl/serverguide">zaleceniami na tej stronie</a>. Możesz przeczytać więcej o audycie <a href="https://delta.chat/en/2023-03-27-third-independent-security-audit">na naszym blogu</a> lub przeczytać pełny raport <a href="https://delta.chat/assets/blog/MER-01-report.pdf">tutaj</a>.</p>
   </li>
   <li>
-    <p>W 2020 r. firma <a href="https://includesecurity.com">Include Security</a> przeanalizowała biblioteki Rust <a href="https://github.com/deltachat/deltachat-core-rust/">core</a>, <a href="https://github.com/async-email/async-imap">IMAP</a>, <a href="https://github.com/async-email/async-smtp">SMTP</a> i <a href="https://github.com/async-email/async-native-tls">TLS</a> Delta Chat. Nie znalazła żadnych problemów krytycznych ani poważnych. W raporcie zwrócono uwagę na kilka słabych punktów o średniej wadze – same w sobie nie stanowią zagrożenia dla użytkowników Delta Chat, ponieważ zależą od środowiska, w którym używany jest Delta Chat. Ze względu na użyteczność i kompatybilność nie możemy złagodzić wszystkich z nich i zdecydowaliśmy się przedstawić zalecenia dotyczące bezpieczeństwa zagrożonym użytkownikom. Pełny raport można przeczytać <a href="https://delta.chat/assets/blog/2020-second-security-review.pdf">tutaj</a>.</p>
+    <p>W 2020 r. firma <a href="https://includesecurity.com">Include Security</a> przeanalizowała biblioteki Rust <a href="https://github.com/chatmail/core/">core</a>, <a href="https://github.com/async-email/async-imap">IMAP</a>, <a href="https://github.com/async-email/async-smtp">SMTP</a> i <a href="https://github.com/async-email/async-native-tls">TLS</a> Delta Chat. Nie znalazła żadnych problemów krytycznych ani poważnych. W raporcie zwrócono uwagę na kilka słabych punktów o średniej wadze – same w sobie nie stanowią zagrożenia dla użytkowników Delta Chat, ponieważ zależą od środowiska, w którym używany jest Delta Chat. Ze względu na użyteczność i kompatybilność nie możemy złagodzić wszystkich z nich i zdecydowaliśmy się przedstawić zalecenia dotyczące bezpieczeństwa zagrożonym użytkownikom. Pełny raport można przeczytać <a href="https://delta.chat/assets/blog/2020-second-security-review.pdf">tutaj</a>.</p>
   </li>
   <li>
     <p>W 2019 r. firma <a href="https://includesecurity.com">Include Security</a> przeanalizowała biblioteki <a href="https://github.com/rpgp/rpgp">PGP</a> i <a href="https://github.com/RustCrypto/RSA">RSA</a> Delta Chat. Nie znaleziono żadnych krytycznych problemów, ale dwa poważne problemy, które później naprawiliśmy. Ujawniła również jeden problem o średniej wadze i kilka mniej poważnych, ale nie było możliwości wykorzystania tych luk w implementacji Delta Chat. Niektóre z nich jednak naprawiliśmy od czasu zakończenia kontroli. Pełny raport można przeczytać <a href="https://delta.chat/assets/blog/2019-first-security-review.pdf">tutaj</a>.</p>
@@ -1250,7 +1250,7 @@ Jednak niektórzy dostawcy potrzebują specjalnych opcji, aby działać poprawni
 
 <p>Podobnie jak w przypadku innych programów pocztowych, takich jak Thunderbird, K9-Mail lub Outlook, program potrzebuje hasła, aby można było go używać do wysyłania i odbierania e-maili. Oczywiście hasło jest przechowywane tylko na Twoim urządzeniu. Hasło jest przesyłane tylko do Twojego dostawcy poczty e-mail (po zalogowaniu), który i tak ma dostęp do Twojej poczty</p>
 
-<p>Ponieważ Delta Chat jest Open Source, możesz sprawdzić <a href="https://github.com/deltachat/deltachat-core-rust/blob/master/src/login_param.rs">Kod źródłowy</a>
+<p>Ponieważ Delta Chat jest Open Source, możesz sprawdzić <a href="https://github.com/chatmail/core/blob/master/src/login_param.rs">Kod źródłowy</a>
 jeśli chcesz sprawdzić, czy Twoje poświadczenia są przetwarzane w bezpieczny sposób. Cieszymy się z opinii, które sprawiają, że aplikacja jest bezpieczniejsza dla wszystkich naszych użytkowników.</p>
     
       <h3 id="jakie-wiadomości-pojawiają-się-w-delta-chat">
@@ -1371,7 +1371,7 @@ jeśli chcesz sprawdzić, czy Twoje poświadczenia są przetwarzane w bezpieczny
       </h3>
 
 <ul>
-  <li>Zobacz <a href="https://github.com/deltachat/deltachat-core-rust/blob/master/standards.md#standards-used-in-delta-chat">Standardy używane w Delta Chat</a>.</li>
+  <li>Zobacz <a href="https://github.com/chatmail/core/blob/master/standards.md#standards-used-in-delta-chat">Standardy używane w Delta Chat</a>.</li>
 </ul>
     
       <h3 id="gdzie-moi-znajomi-mogą-znaleźć-delta-chat">
