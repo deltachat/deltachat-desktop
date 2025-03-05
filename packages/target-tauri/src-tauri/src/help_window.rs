@@ -32,7 +32,7 @@ pub(crate) fn open_help_window(
 
     let app_url = tauri::WebviewUrl::App(url.into());
 
-    let mut help_window: WebviewWindow = if let Some(help_window) = app.get_webview_window("help") {
+    let help_window: WebviewWindow = if let Some(help_window) = app.get_webview_window("help") {
         help_window
     } else {
         tauri::WebviewWindowBuilder::new(&app, "help", app_url.clone()).build()?
