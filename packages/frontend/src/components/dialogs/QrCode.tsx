@@ -200,7 +200,7 @@ export function QrCodeShowQrInner({
               onClick={onClose}
               data-testid='close'
             >
-              {tx('cancel')}
+              {tx('close')}
             </FooterActionButton>
           )}
           {onBack && (
