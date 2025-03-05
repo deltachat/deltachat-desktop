@@ -94,6 +94,7 @@ export function confirmDeleteMessage(
   openDialog(ConfirmationDialog, {
     message: tx('ask_delete_message'),
     confirmLabel: tx('delete'),
+    isConfirmDanger: true,
     cb: (yes: boolean) =>
       yes && BackendRemote.rpc.deleteMessages(accountId, [msg.id]),
   })

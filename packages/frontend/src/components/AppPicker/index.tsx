@@ -231,6 +231,7 @@ export function AppPicker({ onAppSelected }: Props) {
               <FooterActionButton
                 data-testid='add-app-to-chat'
                 onClick={() => onSelect(app)}
+                styling='primary'
               >
                 {tx('add_to_chat')}
               </FooterActionButton>

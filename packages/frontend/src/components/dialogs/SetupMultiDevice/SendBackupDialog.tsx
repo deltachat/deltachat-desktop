@@ -138,10 +138,13 @@ export function SendBackupDialog({ onClose }: DialogProps) {
           </DialogBody>
           <DialogFooter>
             <FooterActions align='spaceBetween'>
-              <FooterActionButton onClick={cancel}>
+              <FooterActionButton styling='secondary' onClick={cancel}>
                 {tx('cancel')}
               </FooterActionButton>
-              <FooterActionButton onClick={startNetworkedTransfer}>
+              <FooterActionButton
+                styling='primary'
+                onClick={startNetworkedTransfer}
+              >
                 {tx('perm_continue')}
               </FooterActionButton>
             </FooterActions>
@@ -189,7 +192,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
                   </FooterActionButton>
                 )}
               </span>
-              <FooterActionButton onClick={cancel}>
+              <FooterActionButton onClick={cancel} styling='secondary'>
                 {tx('cancel')}
               </FooterActionButton>
             </FooterActions>

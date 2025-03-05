@@ -55,13 +55,14 @@ export default function ConfirmationDialog({
       <DialogFooter>
         <FooterActions>
           <FooterActionButton
+            styling='secondary'
             onClick={() => handleClick(false)}
             data-testid='cancel'
           >
             {cancelLabel || tx('cancel')}
           </FooterActionButton>
           <FooterActionButton
-            styling={isConfirmDanger ? 'danger' : undefined}
+            styling={isConfirmDanger ? 'danger' : 'primary'}
             onClick={() => handleClick(true)}
             data-testid='confirm'
           >
