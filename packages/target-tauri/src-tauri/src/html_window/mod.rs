@@ -197,7 +197,7 @@ pub(crate) fn open_html_window(
     let tmp_data_dir = get_temp_folder_path(&app)?.join(uuid::Uuid::new_v4().to_string());
     #[cfg(not(target_vendor = "apple"))]
     {
-        let data_dir = mail_view_builder.data_directory(tmp_data_dir.clone());
+        mail_view_builder = mail_view_builder.data_directory(tmp_data_dir.clone());
     }
     #[cfg(not(target_os = "android"))]
     {
