@@ -8,9 +8,10 @@
     "check:types": "tsc --noEmit -p runtime-tauri",
     "start": "tauri dev",
     "build4production": "NODE_ENV=production pnpm build",
-    "build": "pnpm build:locales && pnpm --filter=@deltachat-desktop/frontend build && pnpm build:compose-frontend",
+    "build": "pnpm build:locales && pnpm --filter=@deltachat-desktop/frontend build && pnpm build:compose-frontend && pnpm build:html-email-view",
     "build:locales": "pnpm -w translations:convert",
     "build:runtime-impl": "pnpm esbuild --bundle --minify --keep-names --sourcemap --outdir=./html-dist runtime-tauri/runtime.ts",
+    "build:html-email-view": "pnpm esbuild --bundle --minify --keep-names --sourcemap --outdir=./html-dist/tauri_html_email_view tauri-html-email-view/html_email_view.ts",
     "build:compose-frontend": "node ../../bin/copy.js ../frontend/html-dist ./html-dist && node ../../bin/copy.js ./static ./html-dist && pnpm build:runtime-impl",
     "tauri": "tauri",
     "fmt": "cd src-tauri && cargo fmt",
@@ -19,7 +20,7 @@
   "dependencies": {
     "@tauri-apps/api": "^2.2.0",
     "@tauri-apps/plugin-log": "^2.2.0",
-    "@tauri-apps/plugin-shell": "^2.2.0",
+    "@tauri-apps/plugin-opener": "^2.2.5",
     "@tauri-apps/plugin-store": "^2.2.0"
   },
   "devDependencies": {

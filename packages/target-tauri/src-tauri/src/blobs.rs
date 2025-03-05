@@ -28,6 +28,20 @@ pub(crate) fn delta_blobs_protocol<R: tauri::Runtime>(
             .clone()
     };
 
+    if ctx.webview_label().ends_with("-mail") {
+        error!(
+            "prevented html email from accessing dcblob:// scheme (webview label: {})",
+            ctx.webview_label()
+        );
+        return;
+    } else if ctx.webview_label() != "main" {
+        error!(
+            "prevented other window from accessing dcblob:// scheme (webview label: {})",
+            ctx.webview_label()
+        );
+        return;
+    }
+
     tauri::async_runtime::spawn(async move {
         // workaround for not yet available try_blocks feature
         // https://doc.rust-lang.org/beta/unstable-book/language-features/try-blocks.html

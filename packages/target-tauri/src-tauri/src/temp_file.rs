@@ -37,7 +37,7 @@ impl Display for Error {
     }
 }
 
-fn get_temp_folder_path(app: &AppHandle) -> Result<PathBuf, Error> {
+pub fn get_temp_folder_path(app: &AppHandle) -> Result<PathBuf, tauri::Error> {
     Ok(app.path().temp_dir()?.join(TMP_FOLDER_NAME))
 }
 

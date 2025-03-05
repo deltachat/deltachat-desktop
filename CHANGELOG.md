@@ -4,9 +4,11 @@
 
 
 ### Added
-- tauri: add support for sticker picker
+- tauri: add support for sticker picker #4707
+- tauri: add html email view #4699
 
 ### Changed
+- tauri: replace `tauri-plugin-shell` with `tauri-plugin-opener` #4699
 
 ### Fixed
 - tauri: fix blobs and webxdc-icon scheme under windows #4705
