@@ -163,7 +163,7 @@ For development with local `deltachat-core-rust` read [`docs/UPDATE_CORE.md`](do
 
 ### Troubleshooting <a id="troubleshooting"></a>
 
-- This module builds on top of [`deltachat-core-rust`](https://github.com/deltachat/deltachat-core-rust),
+- This module builds on top of [`deltachat-core-rust`](https://github.com/chatmail/core),
   which in turn has external dependencies. The instructions below assume a Linux system (e.g. Ubuntu 18.10).
 - Read the error, maybe it already tells you what you need to do. If not feel free to file an issue in this github repo.
 - Make sure that your nodejs version is `20.0.0` or newer.
