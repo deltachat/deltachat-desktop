@@ -8103,8 +8103,8 @@ checksum = "61c41af27dd6d1e27b1b16b489db798443478cef1f06a660c96db617ba5de3b1"
 
 [[package]]
 name = "tauri"
-version = "2.2.5"
-source = "git+https://github.com/Simon-Laux/tauri?branch=deltachat-branch#2fb1cb92da946c14a559b552eceafd0ec53c632f"
+version = "2.3.1"
+source = "git+https://github.com/tauri-apps/tauri?rev=2d029a9f53117f756f9d6783fab74b06a7ab3e8e#2d029a9f53117f756f9d6783fab74b06a7ab3e8e"
 dependencies = [
  "anyhow",
  "bytes",
@@ -8139,7 +8139,7 @@ dependencies = [
  "tauri-macros",
  "tauri-runtime",
  "tauri-runtime-wry",
- "tauri-utils 2.1.1",
+ "tauri-utils 2.2.0 (git+https://github.com/tauri-apps/tauri?rev=2d029a9f53117f756f9d6783fab74b06a7ab3e8e)",
  "thiserror 2.0.12",
  "tokio",
  "tracing",
@@ -8154,8 +8154,8 @@ dependencies = [
 
 [[package]]
 name = "tauri-build"
-version = "2.0.5"
-source = "git+https://github.com/Simon-Laux/tauri?branch=deltachat-branch#2fb1cb92da946c14a559b552eceafd0ec53c632f"
+version = "2.0.6"
+source = "git+https://github.com/tauri-apps/tauri?rev=2d029a9f53117f756f9d6783fab74b06a7ab3e8e#2d029a9f53117f756f9d6783fab74b06a7ab3e8e"
 dependencies = [
  "anyhow",
  "cargo_toml",
@@ -8167,7 +8167,7 @@ dependencies = [
  "semver",
  "serde",
  "serde_json",
- "tauri-utils 2.1.1",
+ "tauri-utils 2.2.0 (git+https://github.com/tauri-apps/tauri?rev=2d029a9f53117f756f9d6783fab74b06a7ab3e8e)",
  "tauri-winres",
  "toml",
  "walkdir",
@@ -8175,8 +8175,8 @@ dependencies = [
 
 [[package]]
 name = "tauri-codegen"
-version = "2.0.4"
-source = "git+https://github.com/Simon-Laux/tauri?branch=deltachat-branch#2fb1cb92da946c14a559b552eceafd0ec53c632f"
+version = "2.0.5"
+source = "git+https://github.com/tauri-apps/tauri?rev=2d029a9f53117f756f9d6783fab74b06a7ab3e8e#2d029a9f53117f756f9d6783fab74b06a7ab3e8e"
 dependencies = [
  "base64 0.22.1",
  "brotli",
@@ -8191,7 +8191,7 @@ dependencies = [
  "serde_json",
  "sha2",
  "syn 2.0.99",
- "tauri-utils 2.1.1",
+ "tauri-utils 2.2.0 (git+https://github.com/tauri-apps/tauri?rev=2d029a9f53117f756f9d6783fab74b06a7ab3e8e)",
  "thiserror 2.0.12",
  "time",
  "url",
@@ -8201,15 +8201,15 @@ dependencies = [
 
 [[package]]
 name = "tauri-macros"
-version = "2.0.4"
-source = "git+https://github.com/Simon-Laux/tauri?branch=deltachat-branch#2fb1cb92da946c14a559b552eceafd0ec53c632f"
+version = "2.0.5"
+source = "git+https://github.com/tauri-apps/tauri?rev=2d029a9f53117f756f9d6783fab74b06a7ab3e8e#2d029a9f53117f756f9d6783fab74b06a7ab3e8e"
 dependencies = [
  "heck 0.5.0",
  "proc-macro2",
  "quote",
  "syn 2.0.99",
  "tauri-codegen",
- "tauri-utils 2.1.1",
+ "tauri-utils 2.2.0 (git+https://github.com/tauri-apps/tauri?rev=2d029a9f53117f756f9d6783fab74b06a7ab3e8e)",
 ]
 
 [[package]]
@@ -8224,7 +8224,7 @@ dependencies = [
  "schemars",
  "serde",
  "serde_json",
- "tauri-utils 2.2.0",
+ "tauri-utils 2.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "toml",
  "walkdir",
 ]
@@ -8305,7 +8305,7 @@ dependencies = [
  "serde_repr",
  "tauri",
  "tauri-plugin",
- "tauri-utils 2.2.0",
+ "tauri-utils 2.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "thiserror 2.0.12",
  "toml",
  "url",
@@ -8425,8 +8425,8 @@ dependencies = [
 
 [[package]]
 name = "tauri-runtime"
-version = "2.3.0"
-source = "git+https://github.com/Simon-Laux/tauri?branch=deltachat-branch#2fb1cb92da946c14a559b552eceafd0ec53c632f"
+version = "2.4.0"
+source = "git+https://github.com/tauri-apps/tauri?rev=2d029a9f53117f756f9d6783fab74b06a7ab3e8e#2d029a9f53117f756f9d6783fab74b06a7ab3e8e"
 dependencies = [
  "dpi",
  "gtk",
@@ -8435,7 +8435,7 @@ dependencies = [
  "raw-window-handle",
  "serde",
  "serde_json",
- "tauri-utils 2.1.1",
+ "tauri-utils 2.2.0 (git+https://github.com/tauri-apps/tauri?rev=2d029a9f53117f756f9d6783fab74b06a7ab3e8e)",
  "thiserror 2.0.12",
  "url",
  "windows 0.60.0",
@@ -8443,8 +8443,8 @@ dependencies = [
 
 [[package]]
 name = "tauri-runtime-wry"
-version = "2.3.0"
-source = "git+https://github.com/Simon-Laux/tauri?branch=deltachat-branch#2fb1cb92da946c14a559b552eceafd0ec53c632f"
+version = "2.4.1"
+source = "git+https://github.com/tauri-apps/tauri?rev=2d029a9f53117f756f9d6783fab74b06a7ab3e8e#2d029a9f53117f756f9d6783fab74b06a7ab3e8e"
 dependencies = [
  "gtk",
  "http 1.2.0",
@@ -8453,55 +8453,19 @@ dependencies = [
  "objc2 0.6.0",
  "objc2-app-kit 0.3.0",
  "objc2-foundation 0.3.0",
+ "once_cell",
  "percent-encoding",
  "raw-window-handle",
  "softbuffer",
  "tao",
  "tauri-runtime",
- "tauri-utils 2.1.1",
+ "tauri-utils 2.2.0 (git+https://github.com/tauri-apps/tauri?rev=2d029a9f53117f756f9d6783fab74b06a7ab3e8e)",
  "tracing",
  "url",
  "webkit2gtk",
  "webview2-com",
  "windows 0.60.0",
  "wry",
-]
-
-[[package]]
-name = "tauri-utils"
-version = "2.1.1"
-source = "git+https://github.com/Simon-Laux/tauri?branch=deltachat-branch#2fb1cb92da946c14a559b552eceafd0ec53c632f"
-dependencies = [
- "brotli",
- "cargo_metadata",
- "ctor",
- "dunce",
- "glob",
- "html5ever",
- "http 1.2.0",
- "infer",
- "json-patch",
- "json5",
- "kuchikiki",
- "log",
- "memchr",
- "phf 0.11.3",
- "proc-macro2",
- "quote",
- "regex",
- "schemars",
- "semver",
- "serde",
- "serde-untagged",
- "serde_json",
- "serde_with",
- "swift-rs",
- "thiserror 2.0.12",
- "toml",
- "url",
- "urlpattern",
- "uuid",
- "walkdir",
 ]
 
 [[package]]
@@ -8537,6 +8501,43 @@ dependencies = [
  "url",
  "urlpattern",
  "uuid",
+]
+
+[[package]]
+name = "tauri-utils"
+version = "2.2.0"
+source = "git+https://github.com/tauri-apps/tauri?rev=2d029a9f53117f756f9d6783fab74b06a7ab3e8e#2d029a9f53117f756f9d6783fab74b06a7ab3e8e"
+dependencies = [
+ "brotli",
+ "cargo_metadata",
+ "ctor",
+ "dunce",
+ "glob",
+ "html5ever",
+ "http 1.2.0",
+ "infer",
+ "json-patch",
+ "json5",
+ "kuchikiki",
+ "log",
+ "memchr",
+ "phf 0.11.3",
+ "proc-macro2",
+ "quote",
+ "regex",
+ "schemars",
+ "semver",
+ "serde",
+ "serde-untagged",
+ "serde_json",
+ "serde_with",
+ "swift-rs",
+ "thiserror 2.0.12",
+ "toml",
+ "url",
+ "urlpattern",
+ "uuid",
+ "walkdir",
 ]
 
 [[package]]
@@ -10406,8 +10407,9 @@ checksum = "1e9df38ee2d2c3c5948ea468a8406ff0db0b29ae1ffde1bcf20ef305bcc95c51"
 
 [[package]]
 name = "wry"
-version = "0.50.0"
-source = "git+https://github.com/Simon-Laux/wry?branch=deltachat-branch#3b11eb79fada8ce94c37c134765045226b5377a2"
+version = "0.50.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d2ec139df5102db821f92a42033c3fa0467c5ab434511e79c65881d6bdf2b369"
 dependencies = [
  "base64 0.22.1",
  "block2 0.6.0",

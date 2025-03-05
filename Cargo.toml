@@ -15,5 +15,5 @@ codegen-units = 1
 strip = true
 
 [patch.crates-io]
-tauri = { git = "https://github.com/Simon-Laux/tauri", branch = "deltachat-branch" }
-tauri-build = { git = "https://github.com/Simon-Laux/tauri", branch = "deltachat-branch" }
+tauri = { git = "https://github.com/tauri-apps/tauri", rev = "2d029a9f53117f756f9d6783fab74b06a7ab3e8e" }
+tauri-build = { git = "https://github.com/tauri-apps/tauri", rev = "2d029a9f53117f756f9d6783fab74b06a7ab3e8e" }
