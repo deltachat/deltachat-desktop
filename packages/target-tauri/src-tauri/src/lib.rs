@@ -4,6 +4,7 @@ use clipboard::copy_image_to_clipboard;
 use settings::load_and_apply_desktop_settings_on_startup;
 use state::{
     app::AppState, deltachat::DeltaChatAppState, html_email_instances::HtmlEmailInstancesState,
+    webxdc_instances::WebxdcInstancesState,
 };
 use tauri::Manager;
 mod app_path;
@@ -18,6 +19,7 @@ mod settings;
 mod state;
 mod stickers;
 mod temp_file;
+mod util;
 mod webxdc;
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
@@ -108,12 +110,13 @@ pub fn run() {
             temp_file::write_temp_file_from_base64,
             temp_file::write_temp_file,
             temp_file::remove_temp_file,
-            webxdc::on_webxdc_message_changed,
-            webxdc::on_webxdc_message_deleted,
-            webxdc::on_webxdc_status_update,
-            webxdc::on_webxdc_realtime_data,
-            webxdc::delete_webxdc_account_data,
-            webxdc::close_all_webxdc_instances,
+            webxdc::commands::on_webxdc_message_changed,
+            webxdc::commands::on_webxdc_message_deleted,
+            webxdc::commands::on_webxdc_status_update,
+            webxdc::commands::on_webxdc_realtime_data,
+            webxdc::commands::delete_webxdc_account_data,
+            webxdc::commands::close_all_webxdc_instances,
+            webxdc::commands::open_webxdc,
             runtime_info::get_runtime_info,
             settings::change_desktop_settings_apply_side_effects,
             help_window::open_help_window,
@@ -122,13 +125,17 @@ pub fn run() {
             html_window::commands::html_email_open_menu,
             html_window::commands::html_email_set_load_remote_content,
         ])
-        .register_asynchronous_uri_scheme_protocol("webxdc-icon", webxdc::webxdc_icon_protocol)
+        .register_asynchronous_uri_scheme_protocol(
+            "webxdc-icon",
+            webxdc::icon_scheme::webxdc_icon_protocol,
+        )
         .register_asynchronous_uri_scheme_protocol("dcblob", blobs::delta_blobs_protocol)
         .register_asynchronous_uri_scheme_protocol("dcsticker", stickers::delta_stickers_protocol)
         .register_asynchronous_uri_scheme_protocol(
             "email",
             html_window::email_scheme::email_protocol,
         )
+        .register_asynchronous_uri_scheme_protocol("webxdc", webxdc::webxdc_scheme::webxdc_protocol)
         .setup(move |app| {
             // Create missing directories for iOS (quick fix, better fix this upstream in tauri)
             #[cfg(target_os = "ios")]
@@ -181,6 +188,7 @@ pub fn run() {
                 app,
             ))?);
             app.manage(HtmlEmailInstancesState::new());
+            app.manage(WebxdcInstancesState::new());
             app.state::<AppState>()
                 .log_duration_since_startup("setup done");
 
