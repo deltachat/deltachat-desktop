@@ -64,7 +64,7 @@ But be aware: there might be **migrations** that are applied to your accounts da
 
 If you already have a core git checkout, you can skip the first step.
 
-1. clone the core repo, right next to your desktop repo folder: `git clone git@github.com:chatmail/core.git`
+1. clone the core repo, right next to your desktop repo folder: `git clone git@github.com:chatmail/core.git deltachat-core-rust`
 2. go into your core checkout and run `git pull` to update it to the newest version, then create a branch for your changes
 3. run `python3 deltachat-rpc-server/npm-package/scripts/make_local_dev_version.py`
 4. run `npm i` and `npm run build` inside `../core/deltachat-jsonrpc/typescript/`
