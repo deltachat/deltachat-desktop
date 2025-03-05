@@ -28,6 +28,8 @@
     <string name="join">Join</string>
     <string name="rejoin">Rejoin</string>
     <string name="delete">Delete</string>
+    <string name="delete_for_me">Delete for Me</string>
+    <string name="delete_for_everyone">Delete for Everyone</string>
     <string name="info">Info</string>
     <string name="update">Update</string>
     <string name="emoji">Emoji</string>
@@ -41,6 +43,8 @@
     <string name="later">Later</string>
     <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
     <string name="resend">Resend</string>
+    <string name="edited">Edited</string>
+    <string name="edit_message">Edit Message</string>
     <!-- Verb "to archive", as in "put a chat in the archive", not a noun "The Archive". -->
     <string name="archive">Archive</string>
     <!-- Verb "to unarchive", as in "remove a chat from the archive", opposite of the previous string -->
@@ -244,6 +248,7 @@
     <string name="menu_delete_chat">Delete Chat</string>
     <!-- Command to delete all messages in a chat. The chat itself will not be deleted but will be empty afterwards, so make sure to be different from "Delete Chat" here. "Clear" is a verb here, "Empty Chat" would also be fine (eg. in German "Chat leeren") -->
     <string name="clear_chat">Clear Chat</string>
+    <!-- deprecated -->
     <string name="menu_delete_messages">Delete Messages</string>
     <string name="delete_contact">Delete Contact</string>
     <string name="menu_delete_location">Delete this Location?</string>
@@ -302,6 +307,7 @@
     <string name="menu_learn_spelling">Learn Spelling</string>
     <string name="menu_chat_audit_log">Chat Audit Log</string>
     <string name="jump_to_message">Jump to Message</string>
+    <string name="jump_to_original_message">Jump to Original Message</string>
     <string name="copy_json">Copy JSON</string>
     <string name="replace_draft">Replace Draft</string>
     <string name="title_share_location">Share location with all group members</string>
@@ -362,15 +368,16 @@
     <!-- get confirmations -->
     <string name="ask_leave_group">Are you sure you want to leave this group?</string>
     <plurals name="ask_delete_chat">
-        <item quantity="one">Delete %d chat? It will no longer be shown in the chat list; its messages will remain on the server.</item>
-        <item quantity="other">Delete %d chats? They will no longer be shown in the chat list; their messages will remain on the server.</item>
+        <item quantity="one">Delete %d chat on all your devices?</item>
+        <item quantity="other">Delete %d chats on all your devices?</item>
     </plurals>
-    <string name="ask_delete_named_chat">Delete chat \"%1$s\"? It will no longer be shown in the chat list; its messages will remain on the server.</string>
-    <string name="ask_delete_message">Are you sure you want to delete this message?</string>
+    <string name="ask_delete_named_chat">Delete chat \"%1$s\" on all your devices?</string>
+    <string name="ask_delete_message">Delete this message on all your devices?</string>
     <plurals name="ask_delete_messages">
-        <item quantity="one">Delete %d message here and on the server?</item>
-        <item quantity="other">Delete %d messages here and on the server?</item>
+        <item quantity="one">Delete %d message on all your devices?</item>
+        <item quantity="other">Delete %d messages on all your devices?</item>
     </plurals>
+    <!-- deprecated, use ask_delete_messages -->
     <plurals name="ask_delete_messages_simple">
         <item quantity="one">Delete %d message?</item>
         <item quantity="other">Delete %d messages?</item>
@@ -382,8 +389,10 @@
     <string name="ask_unblock_contact">Unblock this contact?</string>
     <string name="ask_delete_contacts">Delete contacts?\n\nContacts with ongoing chats or from the system address book cannot be deleted permanently.</string>
     <string name="ask_delete_contact">Delete contact %1$s?\n\nContacts with ongoing chats or from the system address book cannot be deleted permanently.</string>
+    <!-- deprecated -->
     <string name="cannot_delete_contacts_in_use">Cannot delete contacts with ongoing chats.</string>
     <string name="ask_start_chat_with">Chat with %1$s?</string>
+    <!-- deprecated -->
     <string name="ask_delete_value">Delete %s?</string>
     <!-- %1$s is replaced by a comma-separated list of names -->
     <string name="ask_remove_members">Remove %1$s from group?</string>
@@ -536,7 +545,7 @@
     <!-- "Second Device" can also be translated as "Another Device", if that is catchier in the destination language. However, make sure to use the term consistently. -->
     <string name="multidevice_title">Add Second Device</string>
     <string name="multidevice_same_network_hint">Make sure both devices are on the same Wi-Fi or network</string>
-    <string name="multidevice_this_creates_a_qr_code">This creates a QR code that the second device can scan to copy the profile.</string>
+    <string name="multidevice_this_creates_a_qr_code">This creates a QR code that the second device can scan to copy the profile.\n\nMake sure no unwanted observer or camera can see the following screen.</string>
     <string name="multidevice_install_dc_on_other_device">Install Delta Chat on your other device (https://get.delta.chat)</string>
     <!-- "I Already Have a Profile / Add as Second Device” should be the same text as defined by the keys onboarding_alternative_logins and multidevice_receiver_title -->
     <string name="multidevice_tap_scan_on_other_device">Start Delta Chat, tap “I Already Have a Profile / Add as Second Device” and scan the code shown here</string>
@@ -545,6 +554,7 @@
     <string name="multidevice_receiver_title">Add as Second Device</string>
     <string name="multidevice_open_settings_on_other_device">On the first device, go to “Settings / Add Second Device“ and scan the code shown there</string>
     <string name="multidevice_receiver_scanning_ask">Copy the profile from the other device to this device?</string>
+    <string name="multidevice_receiver_needs_update">The profile you want to import is from a newer Delta Chat version.\n\nTo continue setting up second device, please update this device to the latest version of Delta Chat.</string>
     <string name="multidevice_abort">Abort setting up second device?</string>
     <string name="multidevice_abort_will_invalidate_copied_qr">This will invalidate the QR code copied to clipboard.</string>
     <string name="multidevice_experimental_hint">(experimental, version 1.36 required)</string>
@@ -738,10 +748,6 @@
     <string name="pref_manage_keys">Manage Keys</string>
     <string name="pref_use_system_emoji">Use System Emoji</string>
     <string name="pref_use_system_emoji_explain">Turn off Delta Chat\'s built-in emoji support</string>
-    <!-- deprecated -->
-    <string name="pref_use_inapp_camera">Use In-App Camera</string>
-    <!-- deprecated -->
-    <string name="pref_use_inapp_camera_explain">In-app camera usually has less features than the system camera</string>
     <string name="pref_show_system_contacts">Read System Address Book</string>
     <string name="pref_show_system_contacts_explain">Offer to create chats with contacts from the address book. Some providers need end-to-end encryption setup first.</string>
     <string name="pref_app_access">App Access</string>

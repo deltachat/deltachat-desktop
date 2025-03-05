@@ -12,6 +12,7 @@ import useTranslationFunction from '../../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
 import SelectChat from '../SelectChat'
+import { basename } from 'path'
 
 type Props = {
   messageText: string | null
@@ -108,12 +109,13 @@ function useSendToChatAction() {
           return
         }
       }
-
+      const fileName = file ? basename(file) : null
       await BackendRemote.rpc.miscSetDraft(
         accountId,
         chatId,
         messageText,
         file,
+        fileName,
         null,
         file ? 'File' : 'Text'
       )

@@ -93,13 +93,15 @@
       }
     }
 
-    .send-button-wrapper {
+    .send-button {
       width: 32px;
       height: 32px;
+      padding: 0;
       margin-top: 4px;
       margin-bottom: 4px;
       margin-right: 5px;
       background-color: var(--composerSendButton);
+      border: none;
       border-radius: 180px;
       cursor: pointer;
 
@@ -107,7 +109,7 @@
         outline: none;
       }
 
-      button {
+      .paper-plane {
         height: 24px;
         width: 24px;
         margin: 4px;
@@ -118,10 +120,6 @@
         background-position: 3px 1px;
         background-size: contain;
         vertical-align: middle;
-
-        &:focus:not(:focus-visible) {
-          outline: none;
-        }
       }
     }
 

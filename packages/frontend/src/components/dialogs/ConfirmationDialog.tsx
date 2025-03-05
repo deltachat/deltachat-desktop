@@ -49,7 +49,7 @@ export default function ConfirmationDialog({
       {header && <DialogHeader title={header} />}
       <DialogBody>
         <DialogContent paddingTop={header === undefined}>
-          <p>{message}</p>
+          <p className='whitespace'>{message}</p>
         </DialogContent>
       </DialogBody>
       <DialogFooter>

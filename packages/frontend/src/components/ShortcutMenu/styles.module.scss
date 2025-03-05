@@ -5,6 +5,7 @@ $transitionDuration: 50ms;
   align-items: center;
   display: flex;
   flex: 0 0 $shortcutMenuWidth;
+  column-gap: 4px;
   justify-content: space-between;
   width: $shortcutMenuWidth;
 
@@ -54,4 +55,26 @@ $transitionDuration: 50ms;
   display: block;
   height: 20px;
   width: 20px;
+}
+
+.originalMessageButton {
+  background-color: var(--iconBackground);
+  border-radius: 100%;
+  height: 40px;
+  width: 40px;
+  border: none;
+  position: relative;
+  padding: 0;
+  cursor: pointer;
+}
+
+.originalMessageIcon {
+  mask-image: url(./images/icons/chevron-right.svg);
+  -webkit-mask: url(./images/icons/chevron-right.svg) no-repeat center;
+  mask-size: 100%;
+  -webkit-mask-size: 100%;
+  width: 40px;
+  height: 40px;
+  background-color: var(--buttonPrimaryText);
+  margin-left: 2px;
 }

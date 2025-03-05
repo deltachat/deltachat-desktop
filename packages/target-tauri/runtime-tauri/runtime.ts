@@ -7,7 +7,7 @@ import { getCurrentWindow } from '@tauri-apps/api/window'
 import type { attachLogger } from '@tauri-apps/plugin-log'
 import { getStore } from '@tauri-apps/plugin-store'
 import type { Store } from '@tauri-apps/plugin-store'
-import { open } from '@tauri-apps/plugin-shell'
+import { openPath, openUrl } from '@tauri-apps/plugin-opener'
 import { writeText, readText } from '@tauri-apps/plugin-clipboard-manager'
 
 import {
@@ -78,15 +78,23 @@ class TauriRuntime implements Runtime {
     return new TauriDeltaChat(callCounterFunction)
   }
   openMessageHTML(
-    _window_id: string,
-    _accountId: number,
-    _isContactRequest: boolean,
-    _subject: string,
-    _sender: string,
-    _receiveTime: string,
-    _content: string
+    windowId: string,
+    accountId: number,
+    isContactRequest: boolean,
+    subject: string,
+    sender: string,
+    receiveTime: string,
+    content: string
   ): void {
-    throw new Error('Method not implemented. 3')
+    invoke('open_html_window', {
+      windowId,
+      accountId,
+      isContactRequest,
+      subject,
+      sender,
+      receiveTime,
+      content,
+    })
   }
   async getDesktopSettings(): Promise<DesktopSettingsType> {
     // static not saved - not needed anymore besides cleaning up values in electron version
@@ -263,7 +271,7 @@ class TauriRuntime implements Runtime {
     location.reload()
   }
   openLogFile(): void {
-    open(this.getCurrentLogLocation())
+    openPath(this.getCurrentLogLocation())
   }
   currentLogFileLocation: string | null = null
   getCurrentLogLocation(): string {
@@ -291,7 +299,7 @@ class TauriRuntime implements Runtime {
   }
   openLink(link: string): void {
     if (link.startsWith('http:') || link.startsWith('https:')) {
-      open(link)
+      openUrl(link)
     } else {
       this.log.error('tried to open a non http/https external link', {
         link,
@@ -374,7 +382,7 @@ class TauriRuntime implements Runtime {
   }
   async openPath(path: string): Promise<string> {
     try {
-      await open(path)
+      await openPath(path)
       return ''
     } catch (error: any) {
       this.log.error('openPath', path, error)

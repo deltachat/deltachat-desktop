@@ -253,3 +253,8 @@ audio {
   padding: 0;
   border: 0;
 }
+
+// used in alert & confirmation dialogs
+p.whitespace {
+  white-space: break-spaces;
+}

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8" /><meta name="viewport" content="initial-scale=1.0" /><link rel="stylesheet" href="../help.css" /></head><body><ul id="top">
+<html lang="ru"><head><meta charset="UTF-8" /><meta name="viewport" content="initial-scale=1.0" /><link rel="stylesheet" href="../help.css" /><script src="../pagefind/pagefind-ui.js"></script><script src="../start-pagefind.js"></script></head><body><ul id="top">
   <li><a href="#что-такое-delta-chat">Что такое Delta Chat?</a>
     <ul>
       <li><a href="#как-мне-найти-людей-для-общения">Как мне найти людей для общения?</a></li>
@@ -883,15 +883,15 @@ Autocrypt использует ограниченное и <a href="#openpgp-sec
 если всё сообщение правильно зашифровано и подписано.
 Например, “Отдельные подписи” не считаются безопасными.</p>
 
-<p>OpenPGP is not insecure by itself.
-Most publically discussed OpenPGP security problems
-actually stem from bad usability or bad implementations of tools or apps (or both).
-It is particularly important to distinguish between OpenPGP, the IETF encryption standard, 
-and GnuPG (GPG), a command line tool implementing OpenPGP. 
-Many public critiques of OpenPGP actually discuss GnuPG which Delta Chat has never used. 
-Delta Chat rather uses the OpenPGP Rust implementation <a href="https://github.com/rpgp/rpgp">rPGP</a>,
-available as <a href="https://crates.io/crates/pgp">an independent “pgp” package</a>,
-and <a href="#security-audits">security-audited in 2019 and 2024</a>.</p>
+<p>OpenPGP сам по себе не является небезопасным.
+Большинство обсуждаемых в публичной сфере проблем безопасности OpenPGP
+на самом деле возникают из-за плохого удобства использования или плохой реализации инструментов или приложений (или того и другого).
+Особенно важно различать OpenPGP, стандарт шифрования IETF,
+и GnuPG (GPG), инструмент командной строки, реализующий OpenPGP. 
+Многие публичные критические замечания по OpenPGP фактически касаются GnuPG, который Delta Chat никогда не использовал.
+Delta Chat вместо этого использует реализацию OpenPGP на Rust <a href="https://github.com/rpgp/rpgp">rPGP</a>,
+доступную как <a href="https://crates.io/crates/pgp">независимый пакет “pgp”</a>,
+и <a href="#security-audits">проверенную на безопасность в 2019 и 2024 годах</a>.</p>
 
 <p>Вместе с другими разработчиками OpenPGP мы стремимся, 
 повысить характеристики безопасности путём реализации

@@ -156,7 +156,7 @@
     & > .padlock-icon {
       @include color-svg(
         './images/padlock.svg',
-        var(--messagePadlockIncoming),
+        var(--messageMetadataIconColorIncoming),
         125%
       );
     }
@@ -164,12 +164,21 @@
     & > .location-icon {
       @include color-svg(
         './images/map-marker.svg',
-        var(--messagePadlockIncoming),
+        var(--messageMetadataIconColorIncoming),
         100%
       );
     }
 
-    & > .date {
+    & > .saved-message-icon {
+      @include color-svg(
+        './images/icons/bookmark-filled.svg',
+        var(--messageMetadataIconColorIncoming),
+        100%
+      );
+    }
+
+    & > .date,
+    & > .edited {
       color: var(--messageMetadataIncoming);
     }
   }
@@ -192,14 +201,15 @@
   margin-right: 0;
 
   .metadata:not(.with-image-no-caption) {
-    & > .date {
+    & > .date,
+    & > .edited {
       color: var(--messageOutgoingStatusColor);
     }
 
     & > .padlock-icon {
       @include color-svg(
         './images/padlock.svg',
-        var(--messagePadlockOutgoing),
+        var(--messageMetadataIconColorOutgoing),
         125%
       );
     }
@@ -207,7 +217,15 @@
     & > .location-icon {
       @include color-svg(
         './images/map-marker.svg',
-        var(--messagePadlockOutgoing),
+        var(--messageMetadataIconColorOutgoing),
+        100%
+      );
+    }
+
+    & > .saved-message-icon {
+      @include color-svg(
+        './images/icons/bookmark-filled.svg',
+        var(--messageMetadataIconColorOutgoing),
         100%
       );
     }
@@ -278,7 +296,8 @@
   }
 
   .metadata {
-    & > .date {
+    & > .date,
+    & > .edited {
       font-size: 11px;
       color: white;
     }
@@ -289,6 +308,10 @@
 
     & > .location-icon {
       @include color-svg('./images/map-marker.svg', white, 100%);
+    }
+
+    & > .saved-message-icon {
+      @include color-svg('./images/icons/bookmark-filled.svg', white, 100%);
     }
   }
 
@@ -626,7 +649,12 @@
         @include color-svg('./images/map-marker.svg', white, 100%);
       }
 
-      & > .date {
+      & > .saved-message-icon {
+        @include color-svg('./images/icons/bookmark-filled.svg', white, 100%);
+      }
+
+      & > .date,
+      & > .edited {
         color: white;
       }
     }

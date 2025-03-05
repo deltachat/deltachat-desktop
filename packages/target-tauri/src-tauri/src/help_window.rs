@@ -1,6 +1,8 @@
 use log::warn;
 use tauri::{Manager, WebviewWindow};
 
+use crate::settings::apply_content_protection;
+
 #[derive(Debug, thiserror::Error)]
 pub(crate) enum Error {
     #[error(transparent)]
@@ -30,7 +32,7 @@ pub(crate) fn open_help_window(
 
     let app_url = tauri::WebviewUrl::App(url.into());
 
-    let mut help_window: WebviewWindow = if let Some(help_window) = app.get_webview_window("help") {
+    let help_window: WebviewWindow = if let Some(help_window) = app.get_webview_window("help") {
         help_window
     } else {
         tauri::WebviewWindowBuilder::new(&app, "help", app_url.clone()).build()?
@@ -46,6 +48,8 @@ pub(crate) fn open_help_window(
     help_window.navigate(url)?;
 
     help_window.set_title("Delta Chat Tauri - Help")?; // TODO: translate help in the title.
+
+    let _ = apply_content_protection(&app);
 
     Ok(())
 }

@@ -231,6 +231,8 @@ function buildContextMenu(
   const selectedText = window.getSelection()?.toString()
   const textSelected: boolean = selectedText !== null && selectedText !== ''
 
+  const isSavedMessage = message.savedMessageId !== null
+
   /** Copy action, is one of the following, (in that order):
    *
    * - Copy [selection] to clipboard
@@ -301,6 +303,29 @@ function buildContextMenu(
       label: tx('react'),
       action: handleReactClick,
     },
+    // Save Message
+    !chat.isSelfTalk &&
+      !isSavedMessage && {
+        label: tx('save'),
+        action: () =>
+          BackendRemote.rpc.saveMsgs(selectedAccountId(), [message.id]),
+      },
+    // Unsave
+    isSavedMessage && {
+      label: tx('unsave'),
+      action: () => {
+        if (message.savedMessageId !== null) {
+          BackendRemote.rpc.deleteMessages(selectedAccountId(), [
+            message.savedMessageId,
+          ])
+        }
+      },
+    },
+    // Save attachment as
+    showAttachmentOptions && {
+      label: tx('save_as'),
+      action: onDownload.bind(null, message),
+    },
     // copy link
     link !== '' &&
       isLink && {
@@ -339,11 +364,6 @@ function buildContextMenu(
           message.id,
           tx('saved')
         ),
-    },
-    // Download attachment
-    showAttachmentOptions && {
-      label: tx('save_as'),
-      action: onDownload.bind(null, message),
     },
     // Resend Message
     showResend && {
@@ -414,7 +434,6 @@ export default function Message(props: {
       >
     ) => {
       event.preventDefault() // prevent default runtime context menu from opening
-
       const chat = await BackendRemote.rpc.getFullChatById(
         accountId,
         message.chatId
@@ -634,6 +653,12 @@ export default function Message(props: {
     MessageTagName = 'button'
   }
 
+  // Check if the message is saved or has a saved message
+  // in both cases we display the bookmark icon
+  const isOrHasSavedMessage = message.originalMsgId
+    ? true
+    : !!message.savedMessageId
+
   let content
   if (message.viewType === 'VideochatInvitation') {
     return (
@@ -677,10 +702,12 @@ export default function Message(props: {
             fileMime={(!isSetupmessage && message.fileMime) || null}
             direction={direction}
             status={status}
+            isEdited={message.isEdited}
             hasText={text !== null && text !== ''}
             hasLocation={hasLocation}
             timestamp={message.timestamp * 1000}
             padlock={message.showPadlock}
+            isSavedMessage={isOrHasSavedMessage}
             onClickError={openMessageInfo.bind(null, openDialog, message)}
             viewType={'VideochatInvitation'}
             tabindexForInteractiveContents={tabindexForInteractiveContents}
@@ -731,7 +758,9 @@ export default function Message(props: {
 
   /** Whether to show author name and avatar */
   const showAuthor =
-    conversationType.hasMultipleParticipants || message?.overrideSenderName
+    conversationType.hasMultipleParticipants ||
+    message?.overrideSenderName ||
+    message?.originalMsgId
 
   const hasText = text !== null && text !== ''
   const fileMime = (!isSetupmessage && message.fileMime) || null
@@ -858,10 +887,12 @@ export default function Message(props: {
               fileMime={fileMime}
               direction={direction}
               status={status}
+              isEdited={message.isEdited}
               hasText={hasText}
               hasLocation={hasLocation}
               timestamp={message.timestamp * 1000}
               padlock={message.showPadlock}
+              isSavedMessage={isOrHasSavedMessage}
               onClickError={openMessageInfo.bind(null, openDialog, message)}
               viewType={message.viewType}
               tabindexForInteractiveContents={tabindexForInteractiveContents}

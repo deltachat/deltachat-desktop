@@ -24,7 +24,7 @@ import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 import useMessage from '../../hooks/chat/useMessage'
 
 type Props = {
-  addFileToDraft: (file: string, viewType: T.Viewtype) => void
+  addFileToDraft: (file: string, fileName: string, viewType: T.Viewtype) => void
   showAppPicker: (show: boolean) => void
   selectedChat: Pick<T.BasicChat, 'name' | 'id'> | null
 }
@@ -63,6 +63,7 @@ export default function MenuAttachment({
         for (const filePath of filePaths) {
           sendMessage(accountId, selectedChat.id, {
             file: filePath,
+            filename: basename(filePath),
             viewtype: msgViewType,
           }).then(() => {
             // start sending other files, don't wait until last file is sent
@@ -94,7 +95,7 @@ export default function MenuAttachment({
 
     if (files.length === 1) {
       setLastPath(dirname(files[0]))
-      addFileToDraft(files[0], 'File')
+      addFileToDraft(files[0], basename(files[0]), 'File')
     } else if (files.length > 1) {
       confirmSendMultipleFiles(files, 'File')
     }
@@ -118,7 +119,7 @@ export default function MenuAttachment({
 
     if (files.length === 1) {
       setLastPath(dirname(files[0]))
-      addFileToDraft(files[0], 'Image')
+      addFileToDraft(files[0], basename(files[0]), 'Image')
     } else if (files.length > 1) {
       confirmSendMultipleFiles(files, 'Image')
     }
@@ -164,11 +165,9 @@ export default function MenuAttachment({
         const cleanAuthname = (
           selectedContact.authName || selectedContact.address
         ).replace(/[^a-z_A-Z0-9]/gi, '')
-        const tmp_file = await runtime.writeTempFile(
-          `VCard-${cleanAuthname}.vcf`,
-          vCardContact
-        )
-        addFileToDraft(tmp_file, 'Vcard')
+        const fileName = `VCard-${cleanAuthname}.vcf`
+        const tmp_file = await runtime.writeTempFile(fileName, vCardContact)
+        addFileToDraft(tmp_file, fileName, 'Vcard')
         closeDialog(dialogId)
       }
     }

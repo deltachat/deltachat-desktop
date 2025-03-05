@@ -2,15 +2,41 @@
 
 ## [Unreleased][unreleased]
 
+
 ### Added
+- tauri: add support for sticker picker #4707
+- tauri: add html email view #4699
+
+### Changed
+- tauri: replace `tauri-plugin-shell` with `tauri-plugin-opener` #4699
+
+### Fixed
+- tauri: fix blobs and webxdc-icon scheme under windows #4705
+- tauri: fix: drag regions in navbar #4719
+
+<a id="1_54_2"></a>
+
+## [1.54.2] - 2025-03-03
+
+### Added
+- show error message if backup version is not compatible #4721
+- show "Edited" in the message's status line (if it's edited) #4697
 - add "learn more"-button to manage-key section that links to local help #4684
 - tauri: add support for sticker picker
+- add a search field to help page #4691
+- update local help (2025-02-21)
+- update translations (2025-03-03)
+- feature: save messages in self chat and show a bookmark icon #4674
 
 ### Changed
 - open map in landscape orientation and with a bigger window #4683
 - update `esbuild` from `0.23.0` to `0.25.0` #4643
 - extend some shortcuts to listen to key OR code #4685
-- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.155.6`
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.156.2`
+  - Update mailparse to 0.16.1 to fix panic when parsing a message
+  - Don't send a notification when a group member left (#6575).
+  - Fail on too new backups (#6580)
+  - When reactions are seen, remove notification from second device (#6480).
   - Sort past members by the timestamp of removal.
   - Use UUID v4 to generate Message-IDs.
   - Use dedicated ID for sync messages affecting device chat.
@@ -18,8 +44,12 @@
   - Show padlock when the message is not sent over the network.
 - when searching for messages in a single chat, do not show the redundant chat name in each search result #4696
 - html email view: migrate from deprecated `BrowserView` to `WebContentsView` #4689
+- update translations (2025-02-28)
+- Update local help (2025-03-01)
+- Make it possible to pass --allow-unsafe-core-replacement to `pnpm run dev:electron` #4733.
 
 ### Fixed
+- fix webxdc apps being unclosable, when using `beforeunload` event #4728
 - message list being empty when double-clicking the chat before it has loaded (again) #4647
 - accessibility: improve tab order of the app #4672
 - other minor accessibility improvements #4675
@@ -3236,7 +3266,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.54.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.54.2...HEAD
+
+[1.54.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.54.1...v1.54.2
 
 [1.54.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.54.0...v1.54.1
 
