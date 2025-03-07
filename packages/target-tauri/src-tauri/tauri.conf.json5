@@ -20,16 +20,17 @@
       }
     ],
     "security": {
+      // The CSP will be further adjusted in `run()`, see `context.config_mut()`.
       "csp": {
         "default-src": "none",
-        "connect-src": "'self' ipc: http://ipc.localhost",
+        "connect-src": "'self' ipc:",
         "style-src": "'self' 'unsafe-inline'",
         "font-src": "'self'",
         "script-src": "'self' 'wasm-unsafe-eval'",
-        "worker-src": "blob: http://blob.localhost",
-        "child-src": "blob: http://blob.localhost",
-        "img-src": "'self' data: blob: http://blob.localhost dcblob: http://dcblob.localhost webxdc-icon: http://webxdc-icon.localhost",
-        "media-src": "'self' dcblob: http://dcblob.localhost"
+        "worker-src": "blob:",
+        "child-src": "blob:",
+        "img-src": "'self' data: blob: dcblob: webxdc-icon:",
+        "media-src": "'self' dcblob:"
       },
       // TODO postponed to later
       // "pattern": {
