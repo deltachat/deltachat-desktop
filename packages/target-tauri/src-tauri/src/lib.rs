@@ -1,11 +1,13 @@
-use std::time::SystemTime;
+use std::{collections::HashMap, time::SystemTime};
 
 use clipboard::copy_image_to_clipboard;
+use log::kv::source;
 use settings::load_and_apply_desktop_settings_on_startup;
 use state::{
     app::AppState, deltachat::DeltaChatAppState, html_email_instances::HtmlEmailInstancesState,
 };
 use tauri::Manager;
+use util::csp::add_custom_schemes_to_csp_for_window;
 mod app_path;
 mod blobs;
 mod clipboard;
@@ -18,6 +20,7 @@ mod settings;
 mod state;
 mod stickers;
 mod temp_file;
+mod util;
 mod webxdc;
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
@@ -203,6 +206,19 @@ pub fn run() {
 
             Ok(())
         })
-        .run(tauri::generate_context!())
+        .run({
+            let mut context = tauri::generate_context!();
+
+            #[cfg(debug_assertions)]
+            {
+                let csp = context.config_mut().app.security.csp.clone();
+                if let Some(csp) = csp {
+                    context.config_mut().app.security.csp =
+                        Some(add_custom_schemes_to_csp_for_window(csp, false));
+                }
+            }
+
+            context
+        })
         .expect("error while running tauri application");
 }
