@@ -56,10 +56,11 @@ pub(crate) fn create_main_menu<A: Runtime>(handle: &AppHandle<A>) -> anyhow::Res
                 "View",
                 true,
                 &[
-                    &MenuItem::with_id(
+                    &CheckMenuItem::with_id(
                         handle,
                         MainMenuAction::FloatOnTop,
                         "Float on Top",
+                        true,
                         false,
                         None::<&str>,
                     )?,

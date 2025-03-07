@@ -3,6 +3,7 @@ use crate::{help_window::open_help_window, AppState};
 use help_menu::create_help_menu;
 use main_menu::create_main_menu;
 use std::str::FromStr;
+use std::sync::atomic::{AtomicBool, Ordering};
 use strum_macros::{AsRefStr, EnumString};
 use tauri::menu::MenuId;
 use tauri::{menu::MenuEvent, AppHandle, Emitter, Manager, Runtime, WebviewWindow};
@@ -12,6 +13,7 @@ pub mod help_menu;
 pub(crate) mod main_menu;
 
 const HELP_ZOOM_FACTOR_KEY: &str = "helpZoomFactor";
+static FLOATING: AtomicBool = AtomicBool::new(false);
 
 #[derive(Debug, AsRefStr, EnumString)]
 pub(crate) enum MainMenuAction {
@@ -188,7 +190,8 @@ pub fn handle_event<A: Runtime>(app: &AppHandle<A>, event: MenuEvent) -> anyhow:
             }
             HelpMenuAction::HelpFloatOnTop => {
                 if let Some(window) = app.get_webview_window("help") {
-                    window.set_always_on_top(true)?;
+                    let previous = FLOATING.fetch_xor(true, Ordering::SeqCst);
+                    window.set_always_on_top(previous)?;
                 }
             }
         }
