@@ -191,14 +191,6 @@ pub fn run() {
                 webview.set_title("")?;
             }
 
-            let zoom_factor = app
-                .handle()
-                .get_store("config.json")
-                .and_then(|store| store.get(ZOOM_FACTOR_KEY))
-                .and_then(|f| f.as_f64())
-                .unwrap_or(1.0);
-
-            set_zoom(&app.handle(), zoom_factor, "main")?;
             app.set_menu(create_main_menu(app.handle())?)?;
             app.on_menu_event(handle_menu_event);
 
