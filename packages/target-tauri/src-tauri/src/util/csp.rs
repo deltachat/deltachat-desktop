@@ -9,7 +9,7 @@ use tauri::utils::config::Csp;
 /// Schemes are different on those 2 platforms.
 /// E.g. `dcblob:` becomes `http://dcblob.localhost`,
 /// `ipc:` becomes `http://ipc.localhost`, etc.
-pub fn add_custom_schemes_to_csp_for_window(csp: Csp, is_https: bool) -> Csp {
+pub fn add_custom_schemes_to_csp_for_window_and_android(csp: Csp, is_https: bool) -> Csp {
     let mut map: HashMap<_, _> = csp.into();
     for (key, value) in map.iter_mut() {
         let sources: Vec<String> = value.to_owned().into();
@@ -23,7 +23,7 @@ pub fn add_custom_schemes_to_csp_for_window(csp: Csp, is_https: bool) -> Csp {
             }
         }
         // println!("custom_schemes: {key}: {custom_schemes:?}");
-        #[cfg(any(debug_assertions, target_os = "windows", target_os = "android"))]
+        #[cfg(any(target_os = "windows", target_os = "android"))]
         {
             let custom_sources = custom_schemes
                 .iter()
