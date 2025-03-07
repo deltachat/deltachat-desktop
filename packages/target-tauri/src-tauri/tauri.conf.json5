@@ -20,6 +20,7 @@
       }
     ],
     "security": {
+      // The CSP will be further adjusted in `run()`, see `context.config_mut()`.
       "csp": {
         "default-src": "none",
         "connect-src": "'self' ipc:",
