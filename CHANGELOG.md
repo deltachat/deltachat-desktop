@@ -13,6 +13,7 @@
 - `Cmd + N` shortcut to open new chat on macOS #4901
 - tauri: add cli interface: `--help`, `--version`, and developer options (like `--dev-mode`) #4908
 - tauri: add `--watch-translations` cli flag #4925
+- tauri: add autostart
 
 
 ### Changed
