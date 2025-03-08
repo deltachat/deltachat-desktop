@@ -524,7 +524,9 @@ export default class DCWebxdc {
 
     ipcMain.handle('webxdc.exitFullscreen', async event => {
       const app = lookupAppFromEvent(event)
-      if (app) app.win.setFullScreen(false)
+      if (app && app.win.isFullScreen()) {
+        app.win.setFullScreen(false)
+      }
     })
 
     ipcMain.handle('webxdc.exit', async event => {
