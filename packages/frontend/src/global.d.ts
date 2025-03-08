@@ -2,6 +2,7 @@ import { userFeedback, Screens } from './ScreenController'
 
 import '@deltachat-desktop/shared/global.d.ts'
 import type { useMessageList } from './stores/messagelist'
+import type { T } from '@deltachat/jsonrpc-client'
 
 declare global {
   interface Window {
@@ -17,6 +18,7 @@ declare global {
     __keybindingsDialogOpened: boolean
     __aboutDialogOpened: boolean
     __setQuoteInDraft: ((msgId: number) => void) | null
+    __enterEditMessageMode: ((messageToEdit: T.Message) => void) | null
     __reloadDraft: (() => void) | null
     __chatlistSetSearch:
       | ((searchTerm: string, chatId: number | null) => void)

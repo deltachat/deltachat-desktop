@@ -172,38 +172,49 @@ export const EmojiAndStickerPicker = forwardRef<
     onEmojiSelect: (emoji: EmojiData) => void
     chatId: number
     setShowEmojiPicker: React.Dispatch<React.SetStateAction<boolean>>
+    /**
+     * Whether the sticker functionality should be completely hidden.
+     * This is useful for the message editing mode.
+     */
+    hideStickerPicker?: boolean
   }
 >((props, ref) => {
   const accountId = selectedAccountId()
-  const { onEmojiSelect, chatId, setShowEmojiPicker } = props
+  const { onEmojiSelect, chatId, setShowEmojiPicker, hideStickerPicker } = props
 
-  const [showSticker, setShowSticker] = useState(false)
+  const [_showSticker, setShowSticker] = useState(false)
+  const showSticker = hideStickerPicker ? false : _showSticker
   const [stickers, setStickers] = useState<{
     [key: string]: string[]
   }>({})
 
   useEffect(() => {
+    if (hideStickerPicker) {
+      return
+    }
     BackendRemote.rpc
       .miscGetStickers(accountId)
       .then(stickers => setStickers(stickers))
-  }, [accountId])
+  }, [accountId, hideStickerPicker])
 
   return (
     <div className={'emoji-sticker-picker'} ref={ref}>
-      <div className='emoji-or-sticker-header-nav'>
-        <EmojiOrStickerSelectorButton
-          onClick={() => setShowSticker(false)}
-          isSelected={!showSticker}
-        >
-          Emoji
-        </EmojiOrStickerSelectorButton>
-        <EmojiOrStickerSelectorButton
-          onClick={() => setShowSticker(true)}
-          isSelected={showSticker}
-        >
-          Sticker
-        </EmojiOrStickerSelectorButton>
-      </div>
+      {!hideStickerPicker && (
+        <div className='emoji-or-sticker-header-nav'>
+          <EmojiOrStickerSelectorButton
+            onClick={() => setShowSticker(false)}
+            isSelected={!showSticker}
+          >
+            Emoji
+          </EmojiOrStickerSelectorButton>
+          <EmojiOrStickerSelectorButton
+            onClick={() => setShowSticker(true)}
+            isSelected={showSticker}
+          >
+            Sticker
+          </EmojiOrStickerSelectorButton>
+        </div>
+      )}
       {!showSticker && (
         <EmojiPicker
           className={styles.emojiPicker}
