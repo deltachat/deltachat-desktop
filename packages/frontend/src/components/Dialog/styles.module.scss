@@ -94,6 +94,7 @@ $paddingVertical: 20px;
   padding-bottom: $paddingVertical;
   padding-left: $paddingHorizontal;
   padding-right: $paddingHorizontal;
+  padding-top: $paddingVertical;
 }
 
 .headerButton {
@@ -147,9 +148,9 @@ $paddingVertical: 20px;
 }
 
 .footerActionButton {
-  letter-spacing: 2px;
-
+  min-width: 120px;
+  padding: 8px 12px !important;
   & + & {
-    margin-left: 1px;
+    margin-left: 20px;
   }
 }

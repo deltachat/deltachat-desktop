@@ -75,10 +75,11 @@ export default function SmallSelectDialog({
               onCancel && onCancel()
               onClose()
             }}
+            styling='secondary'
           >
             {tx('cancel')}
           </FooterActionButton>
-          <FooterActionButton onClick={saveAndClose}>
+          <FooterActionButton styling='primary' onClick={saveAndClose}>
             {tx('save_desktop')}
           </FooterActionButton>
         </FooterActions>

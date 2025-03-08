@@ -334,7 +334,7 @@ function CreateChatMain(props: CreateChatMainProps) {
       </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <FooterActionButton onClick={onClose}>
+          <FooterActionButton styling='primary' onClick={onClose}>
             {tx('close')}
           </FooterActionButton>
         </FooterActions>
@@ -545,7 +545,10 @@ export function CreateGroup(props: CreateGroupProps) {
       </DialogBody>
       <DialogFooter>
         <FooterActions align='spaceBetween'>
-          <FooterActionButton onClick={() => setViewMode('main')}>
+          <FooterActionButton
+            styling='secondary'
+            onClick={() => setViewMode('main')}
+          >
             {tx('cancel')}
           </FooterActionButton>
           <FooterActionButton
@@ -565,6 +568,7 @@ export function CreateGroup(props: CreateGroupProps) {
                 .finally(onClose)
             }}
             data-testid='group-create-button'
+            styling='primary'
           >
             {tx('group_create_button')}
           </FooterActionButton>

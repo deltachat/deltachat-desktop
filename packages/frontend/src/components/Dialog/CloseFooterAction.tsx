@@ -13,7 +13,9 @@ export default function CloseFooterAction({ onClose }: DialogProps) {
   return (
     <DialogFooter>
       <FooterActions>
-        <FooterActionButton onClick={onClose}>{tx('close')}</FooterActionButton>
+        <FooterActionButton styling='primary' onClick={onClose}>
+          {tx('close')}
+        </FooterActionButton>
       </FooterActions>
     </DialogFooter>
   )
