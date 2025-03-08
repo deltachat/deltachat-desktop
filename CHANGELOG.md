@@ -19,6 +19,7 @@
 - tauri: add taskbar icon "unread" badge on Windows
 - tauri: add `--minimized` flag #4922
 - tauri: add theming #4940
+- tauri: add autostart
 
 
 ### Changed

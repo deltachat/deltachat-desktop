@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 
 import type { SettingsStoreState } from '../../stores/settings'
 import Encryption from './Encryption'
@@ -12,6 +12,9 @@ import useDialog from '../../hooks/dialog/useDialog'
 import SettingsButton from './SettingsButton'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import CoreSettingsSwitch from './CoreSettingsSwitch'
+import DesktopSettingsSwitch from './DesktopSettingsSwitch'
+import { AutostartState } from '@deltachat-desktop/shared/shared-types'
+import Callout from '../Callout'
 
 type Props = {
   settingsStore: SettingsStoreState
@@ -31,6 +34,11 @@ export default function Advanced({ settingsStore }: Props) {
         settingsKey='webxdc_realtime_enabled'
         description={tx('enable_realtime_explain')}
       />
+
+      {/*
+        don't show it on electron yet, as the message "not available on this runtime/platform"
+        would confuse users as long as tauri is not the default */}
+      {runtime.getRuntimeInfo().target === 'tauri' && <SettingsAutoStart />}
 
       <SettingsSeparator />
 
@@ -55,6 +63,43 @@ export default function Advanced({ settingsStore }: Props) {
       </SettingsButton>
       {settingsStore.settings.is_chatmail === '0' && (
         <ImapFolderHandling settingsStore={settingsStore} />
+      )}
+    </>
+  )
+}
+
+function SettingsAutoStart() {
+  const tx = useTranslationFunction()
+
+  const [autostartState, setAutostartState] = useState<AutostartState | null>(
+    null
+  )
+  const update = useCallback(() => {
+    runtime.getAutostartState().then(setAutostartState)
+  }, [])
+
+  useEffect(() => {
+    update()
+  }, [update])
+
+  return (
+    <>
+      <DesktopSettingsSwitch
+        settingsKey='autostart'
+        label={tx('pref_autostart')}
+        description={
+          autostartState
+            ? autostartState.isRegistered
+              ? tx('pref_autostart_registered')
+              : tx('pref_autostart_not_registered')
+            : undefined // don't show description while it is loading
+        }
+        disabled={!autostartState?.isSupported}
+        disabledValue={false}
+        callback={update}
+      />
+      {autostartState && !autostartState.isSupported && (
+        <Callout>{tx('pref_autostart_not_supported')}</Callout>
       )}
     </>
   )

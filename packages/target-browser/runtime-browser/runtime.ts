@@ -1,6 +1,7 @@
 // This needs to be injected / imported before the frontend script
 
 import {
+  AutostartState,
   DcNotification,
   DcOpenWebxdcParameters,
   DesktopSettingsType,
@@ -754,6 +755,12 @@ class BrowserRuntime implements Runtime {
   getConfigPath(): string {
     this.log.warn('getConfigPath method does not exist in browser.')
     return ''
+  }
+  getAutostartState(): Promise<AutostartState> {
+    return Promise.resolve({
+      isSupported: false,
+      isRegistered: false,
+    })
   }
 }
 
