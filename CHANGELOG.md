@@ -11,6 +11,7 @@
 - tauri: replace `tauri-plugin-shell` with `tauri-plugin-opener` #4699
 
 ### Fixed
+- webxdc: fix menu bar hiding when pressing Escape #4753
 - tauri: fix blobs and webxdc-icon scheme under windows #4705
 - tauri: fix: drag regions in navbar #4719
 

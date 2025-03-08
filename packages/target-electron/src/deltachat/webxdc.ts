@@ -524,7 +524,12 @@ export default class DCWebxdc {
 
     ipcMain.handle('webxdc.exitFullscreen', async event => {
       const app = lookupAppFromEvent(event)
-      if (app) app.win.setFullScreen(false)
+      // On Linux Electron hides the menu bar if we call
+      // `setFullScreen(false)` and we're not already in full-screen,
+      // so let's check for this.
+      if (app && app.win.isFullScreen()) {
+        app.win.setFullScreen(false)
+      }
     })
 
     ipcMain.handle('webxdc.exit', async event => {
