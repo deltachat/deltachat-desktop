@@ -13,6 +13,7 @@
 ### Fixed
 - tauri: fix blobs and webxdc-icon scheme under windows #4705
 - tauri: fix: drag regions in navbar #4719
+- tauri: fall back to base locale if dialect/variant was not found
 
 <a id="1_54_2"></a>
 
