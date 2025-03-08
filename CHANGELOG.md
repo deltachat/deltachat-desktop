@@ -6,7 +6,7 @@
 ### Added
 - tauri: add support for sticker picker #4707
 - tauri: add html email view #4699
-- tauri: add autostart
+- tauri: add autostart #4754
 
 ### Changed
 - tauri: replace `tauri-plugin-shell` with `tauri-plugin-opener` #4699
@@ -14,7 +14,7 @@
 ### Fixed
 - tauri: fix blobs and webxdc-icon scheme under windows #4705
 - tauri: fix: drag regions in navbar #4719
-- settings: fix: wait for setting to be applied before calling callback
+- settings: fix: wait for setting to be applied before calling callback #4754
 
 <a id="1_54_2"></a>
 
