@@ -715,6 +715,7 @@ export default class DCWebxdc {
         }
       }
     )
+
     ipcMain.handle(
       'webxdc:instance-deleted',
       (_ev, accountId: number, instanceId: number) => {
@@ -732,6 +733,7 @@ export default class DCWebxdc {
         s.clearCache()
       }
     )
+
     ipcMain.handle(
       'open-maps-webxdc',
       async (evt, accountId: number, chatId?: number) => {
@@ -796,7 +798,7 @@ export default class DCWebxdc {
         }
       }
     )
-  }
+  } // end of DeltaChatController constructor
 
   get rpc() {
     return this.controller.jsonrpcRemote.rpc
