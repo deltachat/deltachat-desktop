@@ -1,6 +1,7 @@
 // This needs to be injected / imported before the frontend script
 
 import {
+  AutostartState,
   DcNotification,
   DcOpenWebxdcParameters,
   DesktopSettingsType,
@@ -435,6 +436,13 @@ class ElectronRuntime implements Runtime {
   }
   getConfigPath(): string {
     return ipcBackend.sendSync('get-config-path')
+  }
+  getAutostartState(): Promise<AutostartState> {
+    // TODO - see https://github.com/deltachat/deltachat-desktop/issues/2518
+    return Promise.resolve({
+      isSupported: false,
+      isRegistered: false,
+    })
   }
 }
 
