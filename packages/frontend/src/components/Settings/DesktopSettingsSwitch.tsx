@@ -36,8 +36,8 @@ export default function DesktopSettingsSwitch({
       label={label}
       description={description}
       value={value}
-      onChange={() => {
-        SettingsStoreInstance.effect.setDesktopSetting(
+      onChange={async () => {
+        await SettingsStoreInstance.effect.setDesktopSetting(
           settingsKey,
           !settingsStore.desktopSettings[settingsKey]
         )

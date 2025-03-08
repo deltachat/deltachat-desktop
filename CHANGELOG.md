@@ -13,6 +13,7 @@
 ### Fixed
 - tauri: fix blobs and webxdc-icon scheme under windows #4705
 - tauri: fix: drag regions in navbar #4719
+- settings: fix: wait for setting to be applied before calling callback
 
 <a id="1_54_2"></a>
 
