@@ -51,7 +51,19 @@
   "multidevice_connection_takes_too_long": {
     "message": "This takes longer than expected 🐌 make sure both devices are on the same Wi-Fi or network and check troubleshooting"
   },
-  "search_result_for_x":  {
-    "message":"Result for \"%s\""
+  "search_result_for_x": {
+    "message": "Result for \"%s\""
+  },
+  "pref_autostart": {
+    "message": "Autostart"
+  },
+  "pref_autostart_registered": {
+    "message": "Deltachat is currently registered to startup with the system"
+  },
+  "pref_autostart_not_registered": {
+    "message": "Deltachat is not registered to startup with the system"
+  },
+  "pref_autostart_not_supported": {
+    "message": "Autostart is not supported on this system"
   }
 }
