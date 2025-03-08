@@ -13,7 +13,7 @@
 - `Cmd + N` shortcut to open new chat on macOS #4901
 - tauri: add cli interface: `--help`, `--version`, and developer options (like `--dev-mode`) #4908
 - tauri: add `--watch-translations` cli flag #4925
-- tauri: add autostart
+- tauri: add autostart #4754
 
 
 ### Changed
@@ -50,7 +50,7 @@
 - accessibility: don't announce "padlock" on messages
 - fix double escape bypasses dialog attribute `canEscapeKeyClose={false}`
 - fix order when sending multiple files at once #4895
-- settings: fix: wait for setting to be applied before calling callback
+- settings: fix: wait for setting to be applied before calling callback #4754
 
 <a id="1_56_0"></a>
 
