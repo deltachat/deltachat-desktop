@@ -1744,7 +1744,6 @@ dependencies = [
  "serde",
  "serde_json",
  "strum 0.27.0",
- "strum_macros 0.27.0",
  "tauri",
  "tauri-build",
  "tauri-plugin-clipboard-manager",
@@ -7882,6 +7881,9 @@ name = "strum"
 version = "0.27.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ce1475c515a4f03a8a7129bb5228b81a781a86cb0b3fbbc19e1c556d491a401f"
+dependencies = [
+ "strum_macros 0.27.0",
+]
 
 [[package]]
 name = "strum_macros"
