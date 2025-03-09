@@ -1,10 +1,10 @@
 use super::HelpMenuAction;
 use tauri::{
     menu::{Menu, MenuItem, PredefinedMenuItem, Submenu},
-    AppHandle, Runtime,
+    AppHandle, Wry,
 };
 
-pub(crate) fn create_help_menu<A: Runtime>(handle: &AppHandle<A>) -> anyhow::Result<Menu<A>> {
+pub(crate) fn create_help_menu(handle: &AppHandle) -> anyhow::Result<Menu<Wry>> {
     let menu = Menu::with_items(
         handle,
         &[

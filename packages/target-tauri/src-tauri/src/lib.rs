@@ -2,12 +2,13 @@ use std::time::SystemTime;
 
 use clipboard::copy_image_to_clipboard;
 
-use menus::{handle_menu_event, main_menu::create_main_menu, set_zoom};
-use settings::{load_and_apply_desktop_settings_on_startup, ZOOM_FACTOR_KEY};
-use state::{app::AppState, deltachat::DeltaChatAppState, html_email_instances::HtmlEmailInstancesState,};
-use util::csp::add_custom_schemes_to_csp_for_window_and_android;
+use menus::{handle_menu_event, main_menu::create_main_menu};
+use settings::load_and_apply_desktop_settings_on_startup;
+use state::{
+    app::AppState, deltachat::DeltaChatAppState, html_email_instances::HtmlEmailInstancesState,
+};
 use tauri::Manager;
-use tauri_plugin_store::StoreExt;
+use util::csp::add_custom_schemes_to_csp_for_window_and_android;
 
 mod app_path;
 mod blobs;
