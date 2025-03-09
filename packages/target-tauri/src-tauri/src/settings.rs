@@ -1,5 +1,5 @@
 use anyhow::Context;
-use log::warn;
+use log::{error, warn};
 use tauri::{AppHandle, Manager};
 use tauri_plugin_store::StoreExt;
 
@@ -36,7 +36,7 @@ pub(crate) const THEME_DEFAULT: &str = "system";
 pub(crate) const AUTOSTART_KEY: &str = "autostart";
 // IDEA: maybe we need to have more advanced logic for the default,
 // if we have other builds like portable builds for example
-pub(crate) const AUTOSTART_DEFAULT: bool = true;
+pub(crate) const AUTOSTART_DEFAULT: bool = cfg!(not(debug_assertions));
 
 // runtime calls this when desktop settings change
 #[tauri::command]
@@ -72,6 +72,10 @@ pub(crate) async fn load_and_apply_desktop_settings_on_startup(
         .await?;
     apply_autostart(&app)?;
 
+    if let Err(err) = apply_autostart(&app).context("failed to apply autostart") {
+        // Not too critical, let's just log.
+        error!("{err}")
+    };
     Ok(())
 }
 
@@ -191,14 +195,30 @@ pub(crate) fn apply_autostart(app: &AppHandle) -> anyhow::Result<()> {
 pub(crate) fn apply_autostart(app: &AppHandle) -> anyhow::Result<()> {
     use tauri_plugin_autostart::ManagerExt;
     let store = app.store(CONFIG_FILE)?;
-    let enabled = get_setting_bool_or(store.get(AUTOSTART_KEY), AUTOSTART_DEFAULT);
+    if store.get(AUTOSTART_KEY).is_none() {
+        store.set(AUTOSTART_KEY, AUTOSTART_DEFAULT);
+    }
+    let enable = get_setting_bool_or(store.get(AUTOSTART_KEY), AUTOSTART_DEFAULT);
 
     let autostart_manager = app.autolaunch();
 
-    if enabled {
-        autostart_manager.enable()?;
+    let is_enabled = autostart_manager
+        .is_enabled()
+        .context("failed to check whether autostart is enabled")?;
+    if enable == is_enabled {
+        // If we don't return here, `autostart_manager.disable()` below
+        // will return an error, at least on Windows.
+        return Ok(());
+    }
+
+    if enable {
+        autostart_manager
+            .enable()
+            .context("failed to enable autostart")?;
     } else {
-        autostart_manager.disable()?;
+        autostart_manager
+            .disable()
+            .context("failed to disable autostart")?;
     }
     Ok(())
 }
