@@ -4,7 +4,7 @@ use help_menu::create_help_menu;
 use main_menu::create_main_menu;
 use std::str::FromStr;
 use std::sync::atomic::{AtomicBool, Ordering};
-use strum_macros::{AsRefStr, EnumString};
+use strum::{AsRefStr, EnumString};
 use tauri::menu::MenuId;
 use tauri::{menu::MenuEvent, AppHandle, Emitter, Manager, WebviewWindow};
 use tauri_plugin_opener::OpenerExt;
