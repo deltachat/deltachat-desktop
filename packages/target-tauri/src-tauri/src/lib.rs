@@ -2,6 +2,7 @@ use std::time::SystemTime;
 
 use clipboard::copy_image_to_clipboard;
 
+use log::error;
 use menus::{handle_menu_event, main_menu::create_main_menu};
 use settings::load_and_apply_desktop_settings_on_startup;
 use state::{
@@ -199,15 +200,35 @@ pub fn run() {
             #[cfg(debug_assertions)]
             app.get_webview_window("main").unwrap().open_devtools();
 
-            let webview = app.get_webview_window("main").unwrap();
+            let main_window = app.get_webview_window("main").unwrap();
+            #[cfg(not(target_os = "macos"))]
+            {
+                main_window.set_menu(create_main_menu(app.handle())?)?;
+            }
 
             #[cfg(target_os = "macos")]
             {
-                webview.set_title_bar_style(tauri::TitleBarStyle::Overlay)?;
-                webview.set_title("")?;
+                main_window.set_title_bar_style(tauri::TitleBarStyle::Overlay)?;
+                main_window.set_title("")?;
+
+                app.set_menu(create_main_menu(app.handle())?)?;
+                let app_clone = app.handle().clone();
+                main_window.on_window_event(move |e| {
+                    if let tauri::WindowEvent::Focused(_) = e {
+                        let main_menu = match create_main_menu(&app_clone) {
+                            Ok(menu) => menu,
+                            Err(err) => {
+                                error!("creating menu failed {err}");
+                                return;
+                            }
+                        };
+                        if let Err(err) = app_clone.set_menu(main_menu) {
+                            error!("setting menu failed {err}")
+                        }
+                    }
+                })
             }
 
-            app.set_menu(create_main_menu(app.handle())?)?;
             app.on_menu_event(handle_menu_event);
 
             Ok(())
