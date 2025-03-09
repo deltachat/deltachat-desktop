@@ -1,14 +1,14 @@
-use std::sync::atomic::Ordering;
+use std::{str::FromStr, sync::atomic::Ordering};
 
 use crate::{
     help_window::open_help_window,
-    settings::{apply_zoom_factor, CONFIG_FILE, ZOOM_FACTOR_KEY},
+    settings::{apply_zoom_factor, CONFIG_FILE, LOCALE_KEY, ZOOM_FACTOR_KEY},
     AppState,
 };
 use anyhow::Context;
 use strum::{AsRefStr, EnumString};
 use tauri::{
-    menu::{CheckMenuItem, Menu, MenuItem, PredefinedMenuItem, Submenu},
+    menu::{CheckMenuItem, IsMenuItem, Menu, MenuId, MenuItem, PredefinedMenuItem, Submenu},
     AppHandle, Emitter, Manager, Wry,
 };
 use tauri_plugin_opener::OpenerExt;
@@ -18,6 +18,8 @@ use super::{
     float_on_top::MAIN_FLOATING,
     menu_action::{impl_menu_conversion, MenuAction},
 };
+
+pub(crate) const SET_LOCALE_MENU_ID_PREFIX: &str = "set_language";
 
 #[derive(Debug, AsRefStr, EnumString)]
 pub(crate) enum MainMenuAction {
@@ -123,11 +125,17 @@ impl MenuAction<'static> for MainMenuAction {
 }
 
 pub(crate) fn create_main_menu(handle: &AppHandle) -> anyhow::Result<Menu<Wry>> {
-    let zoom_factor = handle
-        .get_store("config.json")
-        .and_then(|store| store.get(ZOOM_FACTOR_KEY))
+    let store = handle
+        .get_store(CONFIG_FILE)
+        .context("could not load store")?;
+    let zoom_factor = store
+        .get(ZOOM_FACTOR_KEY)
         .and_then(|f| f.as_f64())
         .unwrap_or(1.0);
+    let current_language_key = store
+        .get(LOCALE_KEY)
+        .and_then(|s| s.as_str().map(|s| s.to_owned()))
+        .unwrap_or("load_failed".to_owned());
 
     Menu::with_items(
         handle,
@@ -227,6 +235,7 @@ pub(crate) fn create_main_menu(handle: &AppHandle) -> anyhow::Result<Menu<Wry>> 
                             )?,
                         ],
                     )?,
+                    &get_locales_menu(&handle, &current_language_key)?,
                     &Submenu::with_items(
                         handle,
                         "Developer",
@@ -311,4 +320,34 @@ pub(crate) fn create_main_menu(handle: &AppHandle) -> anyhow::Result<Menu<Wry>> 
         ],
     )
     .map_err(|err| err.into())
+}
+
+fn get_locales_menu(
+    handle: &AppHandle,
+    current_language_key: &str,
+) -> anyhow::Result<Submenu<tauri::Wry>> {
+    let languages = handle.state::<AppState>().all_languages_for_menu.clone();
+
+    let languages_items: Vec<Box<dyn IsMenuItem<tauri::Wry>>> = languages
+        .iter()
+        .map(|(id, name)| {
+            Ok::<Box<dyn IsMenuItem<tauri::Wry>>, anyhow::Error>(Box::new(CheckMenuItem::with_id(
+                handle,
+                MenuId::from_str(&format!("{SET_LOCALE_MENU_ID_PREFIX}:{id}"))?,
+                name,
+                true,
+                id == current_language_key,
+                None::<&str>,
+            )?))
+        })
+        .collect::<Result<Vec<Box<dyn IsMenuItem<tauri::Wry>>>, anyhow::Error>>()?;
+
+    let languages_items: Vec<&dyn IsMenuItem<tauri::Wry>> =
+        languages_items.iter().map(|m| m.as_ref()).collect();
+
+    // TODO find way to transfer the locale name over menu action
+    // -> special id for locales?
+    //  (TODO find out whats possible)
+
+    Submenu::with_items(handle, "Locales", true, &languages_items).map_err(|err| err.into())
 }

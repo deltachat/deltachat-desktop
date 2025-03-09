@@ -1,33 +1,31 @@
 use std::collections::HashMap;
 
-use log::{debug, error};
-use tauri::{AppHandle, Manager};
+use log::error;
+use tauri::AppHandle;
 use tauri_plugin_store::StoreExt;
 use tokio::fs::read_to_string;
 
-use super::{load::get_locales_dir, Language, LocaleData};
-use crate::i18n::errors::Error;
+use super::{
+    load::{get_languages, get_locales_dir},
+    Language, LocaleData,
+};
+use crate::{
+    i18n::errors::Error,
+    settings::{CONFIG_FILE, LOCALE_KEY},
+};
 
 #[tauri::command]
 pub fn change_lang(app: AppHandle, locale: &str) -> Result<(), Error> {
-    let store = app.store("config.json")?;
-    store.set("locale", locale);
+    let store = app.store(CONFIG_FILE)?;
+    store.set(LOCALE_KEY, locale);
     // TODO: update locale in menu
     Ok(())
 }
 
 #[tauri::command]
 pub(crate) async fn get_locale_data(locale: &str, app: AppHandle) -> Result<LocaleData, Error> {
-    let resource_dir = app.path().resource_dir()?;
-
-    debug!("get_locale_data {resource_dir:?}");
-    // android has sth. different it seems -> get_locale_data "asset://localhost/"
-    // can maybe be resolved by tauri filesystem plugin??
-
-    let locales_dir = get_locales_dir(&resource_dir).await?;
-
-    let languages: HashMap<String, Language> =
-        serde_json::from_str(&read_to_string(locales_dir.join("_languages.json")).await?)?;
+    let locales_dir = get_locales_dir(&app).await?;
+    let languages: HashMap<String, Language> = get_languages(&locales_dir).await?;
 
     let (_locale_name, locale_dir) = match languages.get(locale) {
         Some(Language::String(name)) => (name.to_owned(), None),
