@@ -35,3 +35,8 @@ run `cargo update` in `packages/target-tauri/src-tauri`.
 ## Quirks
 
 - When you edit runtime or frontend code you need to restart the "tauri dev" command, otherwise the changes might not be picked up.
+
+
+## Differences between devmode and release mode
+
+- in devmode autostart is disabled by default, because the result would be unexpected for developers. In release mode this option is enabled by default.

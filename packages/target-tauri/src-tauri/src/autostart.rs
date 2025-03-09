@@ -30,7 +30,7 @@ pub(crate) fn get_autostart_state(app: AppHandle) -> Result<AutostartState, Stri
         .is_enabled()
         .map_err(|err| format!("{err}"))?;
     // IDEA: maybe this needs more complex logic for when there is a portable package for example
-    let is_supported = !cfg!(debug_assertions); // for now - only in release builds
+    let is_supported = true;
     Ok(AutostartState {
         is_supported,
         is_registered,
