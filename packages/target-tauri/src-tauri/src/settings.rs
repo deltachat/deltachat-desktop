@@ -5,6 +5,7 @@ use tauri_plugin_store::StoreExt;
 
 pub(crate) const CONFIG_FILE: &str = "config.json";
 
+pub(crate) const LOCALE_KEY: &str = "locale";
 pub(crate) const ZOOM_FACTOR_KEY: &str = "zoomFactor";
 pub(crate) const HELP_ZOOM_FACTOR_KEY: &str = "helpZoomFactor";
 pub(crate) const CONTENT_PROTECTION_KEY: &str = "contentProtectionEnabled";
