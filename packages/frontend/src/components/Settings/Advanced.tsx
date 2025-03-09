@@ -85,22 +85,22 @@ function SettingsAutoStart() {
   return (
     <>
       <DesktopSettingsSwitch
+        key={String(!autostartState) /* force react to rerender element, so that the switch does not animate */}
         settingsKey='autostart'
         label={tx('pref_autostart')}
         description={
           autostartState
-            ? autostartState.isRegistered
+            ? autostartState.isSupported?
+            autostartState.isRegistered
               ? tx('pref_autostart_registered')
-              : tx('pref_autostart_not_registered')
+              : tx('pref_autostart_not_registered'):
+              tx('pref_autostart_not_supported')
             : undefined // don't show description while it is loading
         }
         disabled={!autostartState?.isSupported}
         disabledValue={false}
         callback={update}
       />
-      {autostartState && !autostartState.isSupported && (
-        <Callout>{tx('pref_autostart_not_supported')}</Callout>
-      )}
     </>
   )
 }
