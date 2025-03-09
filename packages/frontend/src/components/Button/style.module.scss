@@ -39,8 +39,8 @@
   }
 
   &.danger {
-    color: var(--buttonPrimaryText);
-    background-color: var(--buttonDangerText);
+    color: var(--buttonDangerText);
+    background-color: var(--buttonDangerBackground);
   }
 
   &.active {
