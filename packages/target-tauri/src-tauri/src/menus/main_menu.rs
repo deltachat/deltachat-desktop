@@ -2,11 +2,11 @@ use super::MainMenuAction;
 use crate::settings::ZOOM_FACTOR_KEY;
 use tauri::{
     menu::{CheckMenuItem, Menu, MenuItem, PredefinedMenuItem, Submenu},
-    AppHandle, Runtime,
+    AppHandle, Wry,
 };
 use tauri_plugin_store::StoreExt;
 
-pub(crate) fn create_main_menu<A: Runtime>(handle: &AppHandle<A>) -> anyhow::Result<Menu<A>> {
+pub(crate) fn create_main_menu(handle: &AppHandle) -> anyhow::Result<Menu<Wry>> {
     let zoom_factor = handle
         .get_store("config.json")
         .and_then(|store| store.get(ZOOM_FACTOR_KEY))

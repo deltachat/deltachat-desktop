@@ -6,7 +6,7 @@ use std::str::FromStr;
 use std::sync::atomic::{AtomicBool, Ordering};
 use strum_macros::{AsRefStr, EnumString};
 use tauri::menu::MenuId;
-use tauri::{menu::MenuEvent, AppHandle, Emitter, Manager, Runtime, WebviewWindow};
+use tauri::{menu::MenuEvent, AppHandle, Emitter, Manager, WebviewWindow};
 use tauri_plugin_opener::OpenerExt;
 use tauri_plugin_store::StoreExt;
 pub mod help_menu;
@@ -73,7 +73,7 @@ impl From<HelpMenuAction> for MenuId {
     }
 }
 
-pub fn handle_event<A: Runtime>(app: &AppHandle<A>, event: MenuEvent) -> anyhow::Result<()> {
+pub fn handle_event(app: &AppHandle, event: MenuEvent) -> anyhow::Result<()> {
     if let Ok(action) = MainMenuAction::try_from(event.id()) {
         match action {
             MainMenuAction::Settings => {
@@ -200,22 +200,18 @@ pub fn handle_event<A: Runtime>(app: &AppHandle<A>, event: MenuEvent) -> anyhow:
     Ok(())
 }
 
-pub(crate) fn handle_menu_event<A: Runtime>(app: &AppHandle<A>, event: MenuEvent) {
+pub(crate) fn handle_menu_event(app: &AppHandle, event: MenuEvent) {
     if let Err(e) = handle_event(app, event) {
         log::error!("{:?}", e);
     }
 }
 
-pub(crate) fn get_main_window<A: Runtime>(app: &AppHandle<A>) -> anyhow::Result<WebviewWindow<A>> {
+pub(crate) fn get_main_window(app: &AppHandle) -> anyhow::Result<WebviewWindow> {
     app.get_webview_window("main")
         .ok_or(anyhow::anyhow!("main window not found"))
 }
 
-pub(crate) fn set_zoom<A: Runtime>(
-    app: &AppHandle<A>,
-    zoom: f64,
-    window: &str,
-) -> anyhow::Result<()> {
+pub(crate) fn set_zoom(app: &AppHandle, zoom: f64, window: &str) -> anyhow::Result<()> {
     let webview = app
         .get_webview_window(window)
         .ok_or(anyhow::anyhow!("webview not found"))?;
