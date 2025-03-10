@@ -51,6 +51,9 @@ impl MenuAction<'static> for HelpMenuAction {
 
                 store.set(HELP_ZOOM_FACTOR_KEY, new_zoom);
                 apply_zoom_factor_help_window(app)?;
+                // this is fast/effient enough, even though it updates all window
+                // if you want to implement sth else you need to take macOS behaviour into account
+                menu_manager.update_all(app);
             }
             HelpMenuAction::HelpFloatOnTop => {
                 let previous = HELP_FLOATING.fetch_xor(true, std::sync::atomic::Ordering::SeqCst);
