@@ -73,7 +73,7 @@ pub(crate) fn open_html_window(
                 .get_config_bool(deltachat::config::Config::ProxyEnabled)
                 .await
         })
-        .map_err(|err| Error::DeltaChat(err))?;
+        .map_err(Error::DeltaChat)?;
 
     let store = app.store(CONFIG_FILE)?;
     let always_load_remote_content = get_setting_bool_or(
