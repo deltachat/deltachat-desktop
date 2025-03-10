@@ -11,13 +11,15 @@ macro_rules! impl_menu_conversion {
 
             fn try_from(item: &tauri::menu::MenuId) -> Result<Self, Self::Error> {
                 use std::str::FromStr;
-                Self::from_str(item.as_ref()).map_err(|e| e.into())
+                let item_name = item.as_ref().split(':');
+                let variant = item_name.last().context("could not split menu item name")?;
+                Self::from_str(variant).map_err(|e| e.into())
             }
         }
 
         impl From<$enum_name> for tauri::menu::MenuId {
             fn from(action: $enum_name) -> Self {
-                tauri::menu::MenuId::new(action)
+                tauri::menu::MenuId::new(format!("{}:{}", stringify!($enum_name), action.as_ref()))
             }
         }
     };
