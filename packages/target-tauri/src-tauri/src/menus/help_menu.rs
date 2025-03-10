@@ -14,11 +14,11 @@ use tauri_plugin_store::StoreExt;
 
 #[derive(Debug, AsRefStr, EnumString)]
 pub(crate) enum HelpMenuAction {
-    HelpQuit,
+    Quit,
     ZoomIn,
     ZoomOut,
     ResetZoom,
-    HelpFloatOnTop,
+    FloatOnTop,
 }
 
 super::menu_action::impl_menu_conversion!(HelpMenuAction);
@@ -30,7 +30,7 @@ impl MenuAction<'static> for HelpMenuAction {
             .context("help window not found")?;
         let menu_manager = app.state::<MenuManger>();
         match self {
-            HelpMenuAction::HelpQuit => {
+            HelpMenuAction::Quit => {
                 help_window.close()?;
             }
             HelpMenuAction::ZoomIn | HelpMenuAction::ZoomOut | HelpMenuAction::ResetZoom => {
@@ -55,7 +55,7 @@ impl MenuAction<'static> for HelpMenuAction {
                 // if you want to implement sth else you need to take macOS behaviour into account
                 menu_manager.update_all(app);
             }
-            HelpMenuAction::HelpFloatOnTop => {
+            HelpMenuAction::FloatOnTop => {
                 let previous = HELP_FLOATING.fetch_xor(true, std::sync::atomic::Ordering::SeqCst);
                 help_window.set_always_on_top(previous)?;
                 // this is fast/effient enough, even though it updates all window
@@ -77,7 +77,7 @@ pub(crate) fn create_help_menu(app: &AppHandle) -> anyhow::Result<Menu<Wry>> {
                 true,
                 &[&MenuItem::with_id(
                     app,
-                    HelpMenuAction::HelpQuit,
+                    HelpMenuAction::Quit,
                     "Quit",
                     true,
                     None::<&str>,
@@ -115,7 +115,7 @@ pub(crate) fn create_help_menu(app: &AppHandle) -> anyhow::Result<Menu<Wry>> {
                     &PredefinedMenuItem::separator(app)?,
                     &CheckMenuItem::with_id(
                         app,
-                        HelpMenuAction::HelpFloatOnTop,
+                        HelpMenuAction::FloatOnTop,
                         "Float on Top",
                         true,
                         HELP_FLOATING.load(std::sync::atomic::Ordering::Relaxed),
