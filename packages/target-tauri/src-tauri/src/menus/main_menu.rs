@@ -133,10 +133,8 @@ impl MenuAction<'static> for MainMenuAction {
     }
 }
 
-pub(crate) fn create_main_menu(handle: &AppHandle) -> anyhow::Result<Menu<Wry>> {
-    let store = handle
-        .get_store(CONFIG_FILE)
-        .context("could not load store")?;
+pub(crate) fn create_main_menu(app: &AppHandle) -> anyhow::Result<Menu<Wry>> {
+    let store = app.get_store(CONFIG_FILE).context("could not load store")?;
     let zoom_factor = store
         .get(ZOOM_FACTOR_KEY)
         .and_then(|f| f.as_f64())
@@ -147,22 +145,22 @@ pub(crate) fn create_main_menu(handle: &AppHandle) -> anyhow::Result<Menu<Wry>> 
         .unwrap_or("load_failed".to_owned());
 
     Menu::with_items(
-        handle,
+        app,
         &[
             &Submenu::with_items(
-                handle,
+                app,
                 "File",
                 true,
                 &[
                     &MenuItem::with_id(
-                        handle,
+                        app,
                         MainMenuAction::Quit,
                         MainMenuAction::Quit,
                         true,
                         None::<&str>,
                     )?,
                     &MenuItem::with_id(
-                        handle,
+                        app,
                         MainMenuAction::Settings,
                         MainMenuAction::Settings,
                         true,
@@ -171,26 +169,26 @@ pub(crate) fn create_main_menu(handle: &AppHandle) -> anyhow::Result<Menu<Wry>> 
                 ],
             )?,
             &Submenu::with_items(
-                handle,
+                app,
                 "Edit",
                 true,
                 &[
-                    &PredefinedMenuItem::undo(handle, Some("Undo"))?,
-                    &PredefinedMenuItem::redo(handle, Some("Redo"))?,
-                    &PredefinedMenuItem::separator(handle)?,
-                    &PredefinedMenuItem::cut(handle, Some("Cut"))?,
-                    &PredefinedMenuItem::copy(handle, Some("Copy"))?,
-                    &PredefinedMenuItem::paste(handle, Some("Paste"))?,
-                    &PredefinedMenuItem::select_all(handle, Some("Select All"))?,
+                    &PredefinedMenuItem::undo(app, Some("Undo"))?,
+                    &PredefinedMenuItem::redo(app, Some("Redo"))?,
+                    &PredefinedMenuItem::separator(app)?,
+                    &PredefinedMenuItem::cut(app, Some("Cut"))?,
+                    &PredefinedMenuItem::copy(app, Some("Copy"))?,
+                    &PredefinedMenuItem::paste(app, Some("Paste"))?,
+                    &PredefinedMenuItem::select_all(app, Some("Select All"))?,
                 ],
             )?,
             &Submenu::with_items(
-                handle,
+                app,
                 "View",
                 true,
                 &[
                     &CheckMenuItem::with_id(
-                        handle,
+                        app,
                         MainMenuAction::FloatOnTop,
                         "Float on Top",
                         true,
@@ -198,12 +196,12 @@ pub(crate) fn create_main_menu(handle: &AppHandle) -> anyhow::Result<Menu<Wry>> 
                         None::<&str>,
                     )?,
                     &Submenu::with_items(
-                        handle,
+                        app,
                         "Zoom",
                         true,
                         &[
                             &CheckMenuItem::with_id(
-                                handle,
+                                app,
                                 MainMenuAction::Zoom06,
                                 "0.6x Extra Small",
                                 true,
@@ -211,7 +209,7 @@ pub(crate) fn create_main_menu(handle: &AppHandle) -> anyhow::Result<Menu<Wry>> 
                                 None::<&str>,
                             )?,
                             &CheckMenuItem::with_id(
-                                handle,
+                                app,
                                 MainMenuAction::Zoom08,
                                 "0.8x Small",
                                 true,
@@ -219,7 +217,7 @@ pub(crate) fn create_main_menu(handle: &AppHandle) -> anyhow::Result<Menu<Wry>> 
                                 None::<&str>,
                             )?,
                             &CheckMenuItem::with_id(
-                                handle,
+                                app,
                                 MainMenuAction::Zoom10,
                                 "1.0x Normal",
                                 true,
@@ -227,7 +225,7 @@ pub(crate) fn create_main_menu(handle: &AppHandle) -> anyhow::Result<Menu<Wry>> 
                                 None::<&str>,
                             )?,
                             &CheckMenuItem::with_id(
-                                handle,
+                                app,
                                 MainMenuAction::Zoom12,
                                 "1.2x Large",
                                 true,
@@ -235,7 +233,7 @@ pub(crate) fn create_main_menu(handle: &AppHandle) -> anyhow::Result<Menu<Wry>> 
                                 None::<&str>,
                             )?,
                             &CheckMenuItem::with_id(
-                                handle,
+                                app,
                                 MainMenuAction::Zoom14,
                                 "1.4x Extra Large",
                                 true,
@@ -244,30 +242,30 @@ pub(crate) fn create_main_menu(handle: &AppHandle) -> anyhow::Result<Menu<Wry>> 
                             )?,
                         ],
                     )?,
-                    &get_locales_menu(handle, &current_language_key)?,
-                    &PredefinedMenuItem::separator(handle)?,
+                    &get_locales_menu(app, &current_language_key)?,
+                    &PredefinedMenuItem::separator(app)?,
                     &Submenu::with_items(
-                        handle,
+                        app,
                         "Developer",
                         true,
                         &[
                             #[cfg(feature = "inspector_in_production")]
                             &MenuItem::with_id(
-                                handle,
+                                app,
                                 MainMenuAction::DevTools,
                                 "Open Developer Tools",
                                 true,
                                 None::<&str>,
                             )?,
                             &MenuItem::with_id(
-                                handle,
+                                app,
                                 MainMenuAction::LogFolder,
                                 "Open the Log Folder",
                                 true,
                                 None::<&str>,
                             )?,
                             &MenuItem::with_id(
-                                handle,
+                                app,
                                 MainMenuAction::CurrentLogFile,
                                 "Open Current Log File",
                                 true,
@@ -278,48 +276,48 @@ pub(crate) fn create_main_menu(handle: &AppHandle) -> anyhow::Result<Menu<Wry>> 
                 ],
             )?,
             &Submenu::with_items(
-                handle,
+                app,
                 "Help",
                 true,
                 &[
                     &MenuItem::with_id(
-                        handle,
+                        app,
                         MainMenuAction::Help,
                         MainMenuAction::Help,
                         true,
                         None::<&str>,
                     )?,
                     &MenuItem::with_id(
-                        handle,
+                        app,
                         MainMenuAction::Keybindings,
                         "Keybindings",
                         true,
                         None::<&str>,
                     )?,
                     &MenuItem::with_id(
-                        handle,
+                        app,
                         MainMenuAction::Learn,
                         "Learn more about Delta Chat",
                         true,
                         None::<&str>,
                     )?,
                     &MenuItem::with_id(
-                        handle,
+                        app,
                         MainMenuAction::Contribute,
                         "Contribute on Github",
                         true,
                         None::<&str>,
                     )?,
-                    &PredefinedMenuItem::separator(handle)?,
+                    &PredefinedMenuItem::separator(app)?,
                     &MenuItem::with_id(
-                        handle,
+                        app,
                         MainMenuAction::Report,
                         "Report an Issue",
                         true,
                         None::<&str>,
                     )?,
                     &MenuItem::with_id(
-                        handle,
+                        app,
                         MainMenuAction::About,
                         "About Delta Chat",
                         true,
@@ -333,16 +331,16 @@ pub(crate) fn create_main_menu(handle: &AppHandle) -> anyhow::Result<Menu<Wry>> 
 }
 
 fn get_locales_menu(
-    handle: &AppHandle,
+    app: &AppHandle,
     current_language_key: &str,
 ) -> anyhow::Result<Submenu<tauri::Wry>> {
-    let languages = handle.state::<AppState>().all_languages_for_menu.clone();
+    let languages = app.state::<AppState>().all_languages_for_menu.clone();
 
     let languages_items: Vec<Box<dyn IsMenuItem<tauri::Wry>>> = languages
         .iter()
         .map(|(id, name)| {
             Ok::<Box<dyn IsMenuItem<tauri::Wry>>, anyhow::Error>(Box::new(CheckMenuItem::with_id(
-                handle,
+                app,
                 MenuId::from_str(&format!("{SET_LOCALE_MENU_ID_PREFIX}:{id}"))?,
                 name,
                 true,
@@ -359,5 +357,5 @@ fn get_locales_menu(
     // -> special id for locales?
     //  (TODO find out whats possible)
 
-    Submenu::with_items(handle, "Language", true, &languages_items).map_err(|err| err.into())
+    Submenu::with_items(app, "Language", true, &languages_items).map_err(|err| err.into())
 }

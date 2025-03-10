@@ -67,16 +67,16 @@ impl MenuAction<'static> for HelpMenuAction {
     }
 }
 
-pub(crate) fn create_help_menu(handle: &AppHandle) -> anyhow::Result<Menu<Wry>> {
+pub(crate) fn create_help_menu(app: &AppHandle) -> anyhow::Result<Menu<Wry>> {
     let menu = Menu::with_items(
-        handle,
+        app,
         &[
             &Submenu::with_items(
-                handle,
+                app,
                 "File",
                 true,
                 &[&MenuItem::with_id(
-                    handle,
+                    app,
                     HelpMenuAction::HelpQuit,
                     "Quit",
                     true,
@@ -84,50 +84,44 @@ pub(crate) fn create_help_menu(handle: &AppHandle) -> anyhow::Result<Menu<Wry>> 
                 )?],
             )?,
             &Submenu::with_items(
-                handle,
+                app,
                 "Edit",
                 true,
                 &[
-                    &PredefinedMenuItem::copy(handle, Some("Copy"))?,
-                    &PredefinedMenuItem::select_all(handle, Some("Select All"))?,
+                    &PredefinedMenuItem::copy(app, Some("Copy"))?,
+                    &PredefinedMenuItem::select_all(app, Some("Select All"))?,
                 ],
             )?,
             &Submenu::with_items(
-                handle,
+                app,
                 "View",
                 true,
                 &[
                     &MenuItem::with_id(
-                        handle,
+                        app,
                         HelpMenuAction::ResetZoom,
                         "Actual Size",
                         true,
                         None::<&str>,
                     )?,
+                    &MenuItem::with_id(app, HelpMenuAction::ZoomIn, "Zoom In", true, None::<&str>)?,
                     &MenuItem::with_id(
-                        handle,
-                        HelpMenuAction::ZoomIn,
-                        "Zoom In",
-                        true,
-                        None::<&str>,
-                    )?,
-                    &MenuItem::with_id(
-                        handle,
+                        app,
                         HelpMenuAction::ZoomOut,
                         "Zoom Out",
                         true,
                         None::<&str>,
                     )?,
-                    &PredefinedMenuItem::separator(handle)?,
+                    &PredefinedMenuItem::separator(app)?,
                     &CheckMenuItem::with_id(
-                        handle,
+                        app,
                         HelpMenuAction::HelpFloatOnTop,
                         "Float on Top",
                         true,
                         HELP_FLOATING.load(std::sync::atomic::Ordering::Relaxed),
                         None::<&str>,
                     )?,
-                    &PredefinedMenuItem::fullscreen(handle, Some("Toggle Full Screen"))?,
+                    &PredefinedMenuItem::fullscreen(app, Some("Toggle Full Screen"))?,
                 ],
             )?,
         ],
