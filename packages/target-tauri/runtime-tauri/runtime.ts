@@ -266,14 +266,14 @@ class TauriRuntime implements Runtime {
     })
 
     listen<string>('showAboutDialog', () => {
-      this.onShowDialog?.("about")
-    });
+      this.onShowDialog?.('about')
+    })
     listen<string>('showSettingsDialog', () => {
-      this.onShowDialog?.("settings")
-    });
+      this.onShowDialog?.('settings')
+    })
     listen<string>('showKeybindingsDialog', () => {
-      this.onShowDialog?.("keybindings")
-    });
+      this.onShowDialog?.('keybindings')
+    })
   }
   reloadWebContent(): void {
     // for now use the browser method as long as it is sufficient
