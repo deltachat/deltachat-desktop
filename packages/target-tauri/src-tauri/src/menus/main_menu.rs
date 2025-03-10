@@ -92,7 +92,11 @@ impl MenuAction<'static> for MainMenuAction {
 
             MainMenuAction::DevTools => {
                 if cfg!(feature = "inspector_in_production") {
-                    main_window.open_devtools();
+                    if main_window.is_devtools_open() {
+                        main_window.close_devtools();
+                    } else {
+                        main_window.open_devtools();
+                    }
                 }
             }
             MainMenuAction::LogFolder => {
@@ -253,7 +257,7 @@ pub(crate) fn create_main_menu(app: &AppHandle) -> anyhow::Result<Menu<Wry>> {
                             &MenuItem::with_id(
                                 app,
                                 MainMenuAction::DevTools,
-                                "Open Developer Tools",
+                                "Developer Tools",
                                 true,
                                 None::<&str>,
                             )?,
