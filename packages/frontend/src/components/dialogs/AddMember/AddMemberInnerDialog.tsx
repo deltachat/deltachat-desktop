@@ -323,6 +323,9 @@ function AddMemberInnerDialogRow({
     queryStrIsValidEmail,
   } = data
 
+  // `+1` for the "extra item" thing
+  const ariaSetsize = contactIds.length + 1
+
   const renderAddContact = () => {
     if (queryStrIsValidEmail) {
       const pseudoContact: Type.Contact = {
@@ -358,7 +361,7 @@ function AddMemberInnerDialogRow({
       )
     } else {
       return (
-        <li style={style}>
+        <li style={style} aria-posinset={index + 1} aria-setsize={ariaSetsize}>
           <PseudoListItemAddContact
             queryStr={queryStr}
             queryStrIsEmail={false}
@@ -376,13 +379,22 @@ function AddMemberInnerDialogRow({
   const contact = contactCache[contactIds[index]]
   if (!contact) {
     // Not loaded yet
-    return <li style={style}></li>
+    return (
+      <li
+        style={style}
+        aria-posinset={index + 1}
+        aria-setsize={ariaSetsize}
+      ></li>
+    )
   }
 
   return (
     <ContactListItem
       tagName='li'
       style={style}
+      // TODO does this get applied to the underlying element?
+      aria-posinset={index + 1}
+      aria-setsize={ariaSetsize}
       contact={contact}
       showCheckbox
       checked={
