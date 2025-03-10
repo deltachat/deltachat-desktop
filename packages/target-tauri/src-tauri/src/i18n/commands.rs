@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use log::error;
-use tauri::AppHandle;
+use tauri::{AppHandle, State};
 use tauri_plugin_store::StoreExt;
 use tokio::fs::read_to_string;
 
@@ -12,13 +12,18 @@ use super::{
 use crate::{
     i18n::errors::Error,
     settings::{CONFIG_FILE, LOCALE_KEY},
+    state::menu_manager::MenuManger,
 };
 
 #[tauri::command]
-pub fn change_lang(app: AppHandle, locale: &str) -> Result<(), Error> {
+pub fn change_lang(
+    app: AppHandle,
+    menu_manager: State<MenuManger>,
+    locale: &str,
+) -> Result<(), Error> {
     let store = app.store(CONFIG_FILE)?;
     store.set(LOCALE_KEY, locale);
-    // TODO: update locale in menu
+    menu_manager.update_all(&app);
     Ok(())
 }
 

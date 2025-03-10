@@ -6,7 +6,7 @@ use std::{
 
 use anyhow::{bail, Context};
 use log::info;
-use tauri::{async_runtime::handle, AppHandle, Manager};
+use tauri::{AppHandle, Manager};
 
 use crate::{
     i18n::get_all_languages,

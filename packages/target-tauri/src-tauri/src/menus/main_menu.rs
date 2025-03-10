@@ -3,6 +3,7 @@ use std::{str::FromStr, sync::atomic::Ordering};
 use crate::{
     help_window::open_help_window,
     settings::{apply_zoom_factor, CONFIG_FILE, LOCALE_KEY, ZOOM_FACTOR_KEY},
+    state::menu_manager::MenuManger,
     AppState,
 };
 use anyhow::Context;
@@ -49,12 +50,14 @@ impl MenuAction<'static> for MainMenuAction {
         let main_window = app
             .get_webview_window("main")
             .context("main window not found")?;
+        let menu_manager = app.state::<MenuManger>();
+
         match self {
             MainMenuAction::Settings => {
                 app.emit("showSettingsDialog", None::<String>)?;
             }
             MainMenuAction::Help => {
-                open_help_window(app.clone(), "", None)?;
+                open_help_window(app.clone(), menu_manager, "", None)?;
             }
             MainMenuAction::Quit => {
                 app.exit(0);
@@ -62,6 +65,9 @@ impl MenuAction<'static> for MainMenuAction {
             MainMenuAction::FloatOnTop => {
                 let previous = MAIN_FLOATING.fetch_xor(true, std::sync::atomic::Ordering::SeqCst);
                 main_window.set_always_on_top(previous)?;
+                // this is fast/effient enough, even though it updates all window
+                // if you want to implement sth else you need to take macOS behaviour into account
+                menu_manager.update_all(app);
             }
             MainMenuAction::Zoom06
             | MainMenuAction::Zoom08
@@ -79,6 +85,9 @@ impl MenuAction<'static> for MainMenuAction {
                 let store = app.store(CONFIG_FILE)?;
                 store.set(ZOOM_FACTOR_KEY, zoom_factor);
                 apply_zoom_factor(app)?;
+                // this is fast/effient enough, even though it updates all window
+                // if you want to implement sth else you need to take macOS behaviour into account
+                menu_manager.update_all(app);
             }
 
             MainMenuAction::DevTools => {
@@ -350,5 +359,5 @@ fn get_locales_menu(
     // -> special id for locales?
     //  (TODO find out whats possible)
 
-    Submenu::with_items(handle, "Locales", true, &languages_items).map_err(|err| err.into())
+    Submenu::with_items(handle, "Language", true, &languages_items).map_err(|err| err.into())
 }

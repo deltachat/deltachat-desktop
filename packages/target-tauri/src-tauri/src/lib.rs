@@ -2,11 +2,11 @@ use std::time::SystemTime;
 
 use clipboard::copy_image_to_clipboard;
 
-use log::error;
 use menus::{handle_menu_event, main_menu::create_main_menu};
 use settings::load_and_apply_desktop_settings_on_startup;
 use state::{
     app::AppState, deltachat::DeltaChatAppState, html_email_instances::HtmlEmailInstancesState,
+    menu_manager::MenuManger,
 };
 use tauri::Manager;
 use util::csp::add_custom_schemes_to_csp_for_window_and_android;
@@ -188,8 +188,9 @@ pub fn run() {
                 app,
             ))?);
             app.manage(HtmlEmailInstancesState::new());
+            app.manage(MenuManger::new());
             app.state::<AppState>()
-                .log_duration_since_startup("setup done");
+                .log_duration_since_startup("base setup done");
 
             load_and_apply_desktop_settings_on_startup(app.handle())?;
 
@@ -201,36 +202,23 @@ pub fn run() {
             app.get_webview_window("main").unwrap().open_devtools();
 
             let main_window = app.get_webview_window("main").unwrap();
-            #[cfg(not(target_os = "macos"))]
-            {
-                main_window.set_menu(create_main_menu(app.handle())?)?;
-            }
-
             #[cfg(target_os = "macos")]
             {
                 main_window.set_title_bar_style(tauri::TitleBarStyle::Overlay)?;
                 main_window.set_title("")?;
-
-                app.set_menu(create_main_menu(app.handle())?)?;
-                let app_clone = app.handle().clone();
-                main_window.on_window_event(move |e| {
-                    if let tauri::WindowEvent::Focused(_) = e {
-                        let main_menu = match create_main_menu(&app_clone) {
-                            Ok(menu) => menu,
-                            Err(err) => {
-                                error!("creating menu failed {err}");
-                                return;
-                            }
-                        };
-                        if let Err(err) = app_clone.set_menu(main_menu) {
-                            error!("setting menu failed {err}")
-                        }
-                    }
-                })
             }
+
+            let menu_manager = app.state::<MenuManger>();
+            tauri::async_runtime::block_on(menu_manager.register_window(
+                &app.handle(),
+                &main_window,
+                Box::new(|app| create_main_menu(app)),
+            ))?;
 
             app.on_menu_event(handle_menu_event);
 
+            app.state::<AppState>()
+                .log_duration_since_startup("setup done");
             Ok(())
         })
         .run({

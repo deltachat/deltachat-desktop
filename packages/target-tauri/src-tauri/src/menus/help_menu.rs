@@ -1,4 +1,7 @@
-use crate::settings::{apply_zoom_factor_help_window, CONFIG_FILE, HELP_ZOOM_FACTOR_KEY};
+use crate::{
+    settings::{apply_zoom_factor_help_window, CONFIG_FILE, HELP_ZOOM_FACTOR_KEY},
+    state::menu_manager::MenuManger,
+};
 
 use super::{float_on_top::HELP_FLOATING, menu_action::MenuAction};
 use anyhow::Context;
@@ -25,6 +28,7 @@ impl MenuAction<'static> for HelpMenuAction {
         let help_window = app
             .get_webview_window("help")
             .context("help window not found")?;
+        let menu_manager = app.state::<MenuManger>();
         match self {
             HelpMenuAction::HelpQuit => {
                 help_window.close()?;
@@ -51,6 +55,9 @@ impl MenuAction<'static> for HelpMenuAction {
             HelpMenuAction::HelpFloatOnTop => {
                 let previous = HELP_FLOATING.fetch_xor(true, std::sync::atomic::Ordering::SeqCst);
                 help_window.set_always_on_top(previous)?;
+                // this is fast/effient enough, even though it updates all window
+                // if you want to implement sth else you need to take macOS behaviour into account
+                menu_manager.update_all(app);
             }
         }
         Ok(())
