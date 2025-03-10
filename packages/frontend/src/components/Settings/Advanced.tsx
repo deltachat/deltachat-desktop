@@ -14,7 +14,6 @@ import { runtime } from '@deltachat-desktop/runtime-interface'
 import CoreSettingsSwitch from './CoreSettingsSwitch'
 import DesktopSettingsSwitch from './DesktopSettingsSwitch'
 import { AutostartState } from '@deltachat-desktop/shared/shared-types'
-import Callout from '../Callout'
 
 type Props = {
   settingsStore: SettingsStoreState
@@ -85,16 +84,17 @@ function SettingsAutoStart() {
   return (
     <>
       <DesktopSettingsSwitch
-        key={String(!autostartState) /* force react to rerender element, so that the switch does not animate */}
+        // force react to rerender element, so that the switch does not animate
+        key={String(!autostartState)}
         settingsKey='autostart'
         label={tx('pref_autostart')}
         description={
           autostartState
-            ? autostartState.isSupported?
-            autostartState.isRegistered
-              ? tx('pref_autostart_registered')
-              : tx('pref_autostart_not_registered'):
-              tx('pref_autostart_not_supported')
+            ? autostartState.isSupported
+              ? autostartState.isRegistered
+                ? tx('pref_autostart_registered')
+                : tx('pref_autostart_not_registered')
+              : tx('pref_autostart_not_supported')
             : undefined // don't show description while it is loading
         }
         disabled={!autostartState?.isSupported}
