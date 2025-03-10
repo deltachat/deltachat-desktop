@@ -244,7 +244,7 @@ pub(crate) fn create_main_menu(handle: &AppHandle) -> anyhow::Result<Menu<Wry>> 
                             )?,
                         ],
                     )?,
-                    &get_locales_menu(&handle, &current_language_key)?,
+                    &get_locales_menu(handle, &current_language_key)?,
                     &PredefinedMenuItem::separator(handle)?,
                     &Submenu::with_items(
                         handle,

@@ -67,7 +67,7 @@ pub(crate) fn open_help_window(
     tauri::async_runtime::block_on(menu_manager.register_window(
         &app,
         &help_window,
-        Box::new(|app| create_help_menu(app)),
+        Box::new(create_help_menu),
     ))
     .map_err(|err| Error::MenuCreation(err.to_string()))?;
 

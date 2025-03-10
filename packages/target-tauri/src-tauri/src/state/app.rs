@@ -43,7 +43,7 @@ impl AppState {
         create_tmp_folder(app.handle()).await?;
         clear_tmp_folder(app.handle()).await?;
 
-        let all_languages_for_menu = get_all_languages(&app.handle()).await?;
+        let all_languages_for_menu = get_all_languages(app.handle()).await?;
 
         Ok(Self {
             inner: Arc::new(Mutex::new(InnerAppState::default())),

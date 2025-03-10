@@ -37,7 +37,7 @@ pub enum Language {
 
 // get all locales, returns tuple with id and name
 pub async fn get_all_languages(app: &AppHandle) -> Result<Vec<(String, String)>, Error> {
-    let locales_dir = get_locales_dir(&app).await?;
+    let locales_dir = get_locales_dir(app).await?;
     let languages: HashMap<String, Language> = get_languages(&locales_dir).await?;
     Ok(languages
         .into_iter()

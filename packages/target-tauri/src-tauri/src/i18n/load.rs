@@ -55,9 +55,7 @@ pub(super) async fn get_locales_dir(app: &AppHandle) -> Result<PathBuf, Error> {
     Ok(locales_dir)
 }
 
-pub(super) async fn get_languages(
-    locales_dir: &PathBuf,
-) -> Result<HashMap<String, Language>, Error> {
+pub(super) async fn get_languages(locales_dir: &Path) -> Result<HashMap<String, Language>, Error> {
     Ok(serde_json::from_str(
         &read_to_string(locales_dir.join("_languages.json")).await?,
     )?)

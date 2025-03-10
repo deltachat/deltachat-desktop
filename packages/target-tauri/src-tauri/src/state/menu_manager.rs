@@ -75,7 +75,7 @@ impl MenuManger {
             .get(id)
             .context("menu generator for window {id} not found")?;
 
-        Ok(menu_generator(app)?)
+        menu_generator(app)
     }
 
     pub(crate) async fn register_window(
@@ -90,7 +90,7 @@ impl MenuManger {
         self.add(window_id, menu_generator_arc.clone()).await;
 
         // #[cfg(not(target_os = "macos"))]
-        win.set_menu(menu_generator_arc(&app)?)?;
+        win.set_menu(menu_generator_arc(app)?)?;
 
         #[cfg(target_os = "macos")]
         {
