@@ -19,7 +19,7 @@ impl serde::Serialize for Error {
 }
 
 #[tauri::command]
-pub(crate) fn open_help_window(
+pub(crate) async fn open_help_window(
     app: tauri::AppHandle,
     locale: &str,
     anchor: Option<&str>,

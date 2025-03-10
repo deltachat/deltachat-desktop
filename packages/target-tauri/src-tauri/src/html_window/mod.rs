@@ -4,10 +4,8 @@ use anyhow::anyhow;
 use log::{error, info, trace, warn};
 
 use tauri::{
-    async_runtime::{block_on, handle},
-    webview::WebviewBuilder,
-    LogicalPosition, LogicalSize, Manager, Url, Webview, WebviewUrl, Window, WindowBuilder,
-    WindowEvent,
+    async_runtime::block_on, webview::WebviewBuilder, LogicalPosition, LogicalSize, Manager, Url,
+    Webview, WebviewUrl, Window, WindowBuilder, WindowEvent,
 };
 use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_opener::OpenerExt;
@@ -38,10 +36,10 @@ mod punycode;
 
 #[allow(clippy::too_many_arguments)]
 #[tauri::command]
-pub(crate) fn open_html_window(
+pub(crate) async fn open_html_window(
     app: tauri::AppHandle,
-    html_instances_state: tauri::State<HtmlEmailInstancesState>,
-    dc: tauri::State<DeltaChatAppState>,
+    html_instances_state: tauri::State<'_, HtmlEmailInstancesState>,
+    dc: tauri::State<'_, DeltaChatAppState>,
     window_id: &str,
     account_id: u32, // TODO needs to be used later for fetching webrequests over dc core
     is_contact_request: bool,
@@ -63,17 +61,16 @@ pub(crate) fn open_html_window(
         }
     }
 
-    let blocked_by_proxy = handle()
-        .block_on(async {
-            let dc = dc.deltachat.read().await;
-            let account: deltachat::context::Context = dc
-                .get_account(account_id)
-                .ok_or(Error::DeltaChat(anyhow!("account not found")))?;
-            account
-                .get_config_bool(deltachat::config::Config::ProxyEnabled)
-                .await
-        })
-        .map_err(Error::DeltaChat)?;
+    let blocked_by_proxy = {
+        let dc = dc.deltachat.read().await;
+        let account: deltachat::context::Context = dc
+            .get_account(account_id)
+            .ok_or(Error::DeltaChat(anyhow!("account not found")))?;
+        account
+            .get_config_bool(deltachat::config::Config::ProxyEnabled)
+            .await
+    }
+    .map_err(Error::DeltaChat)?;
 
     let store = app.store(CONFIG_FILE)?;
     let always_load_remote_content = get_setting_bool_or(
@@ -83,19 +80,21 @@ pub(crate) fn open_html_window(
     let toggle_network_initial_state =
         !blocked_by_proxy && always_load_remote_content && !is_contact_request;
 
-    block_on(html_instances_state.add(
-        &window_id,
-        InnerHtmlEmailInstanceData {
-            // account_id,
-            is_contact_request,
-            subject: subject.to_owned(),
-            sender: sender.to_owned(),
-            receive_time: receive_time.to_owned(),
-            html_content: Arc::new(content.to_owned()),
-            network_allow_state: toggle_network_initial_state,
-            blocked_by_proxy,
-        },
-    ));
+    html_instances_state
+        .add(
+            &window_id,
+            InnerHtmlEmailInstanceData {
+                // account_id,
+                is_contact_request,
+                subject: subject.to_owned(),
+                sender: sender.to_owned(),
+                receive_time: receive_time.to_owned(),
+                html_content: Arc::new(content.to_owned()),
+                network_allow_state: toggle_network_initial_state,
+                blocked_by_proxy,
+            },
+        )
+        .await;
 
     let window = WindowBuilder::new(&app, &window_id)
         .inner_size(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT)
