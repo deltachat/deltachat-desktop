@@ -147,30 +147,155 @@ pub(crate) fn create_main_menu(
         .and_then(|s| s.as_str().map(|s| s.to_owned()))
         .unwrap_or("load_failed".to_owned());
 
+    let quit = MenuItem::with_id(
+        app,
+        MainMenuAction::Quit,
+        "Quit", // TODO translate
+        true,
+        Some("CmdOrCtrl+Q"),
+    )?;
+    let settings = MenuItem::with_id(
+        app,
+        MainMenuAction::Settings,
+        "Settings",
+        true,
+        Some("CmdOrCtrl+,"),
+    )?;
+    let float_on_top = CheckMenuItem::with_id(
+        app,
+        MainMenuAction::FloatOnTop,
+        "Float on Top",
+        true,
+        main_window.is_always_on_top()?,
+        None::<&str>,
+    )?;
+    let zoom_menu = Submenu::with_items(
+        app,
+        "Zoom",
+        true,
+        &[
+            &CheckMenuItem::with_id(
+                app,
+                MainMenuAction::Zoom06,
+                "0.6x Extra Small",
+                true,
+                zoom_factor == 0.6,
+                None::<&str>,
+            )?,
+            &CheckMenuItem::with_id(
+                app,
+                MainMenuAction::Zoom08,
+                "0.8x Small",
+                true,
+                zoom_factor == 0.8,
+                None::<&str>,
+            )?,
+            &CheckMenuItem::with_id(
+                app,
+                MainMenuAction::Zoom10,
+                "1.0x Normal",
+                true,
+                zoom_factor == 1.0,
+                None::<&str>,
+            )?,
+            &CheckMenuItem::with_id(
+                app,
+                MainMenuAction::Zoom12,
+                "1.2x Large",
+                true,
+                zoom_factor == 1.2,
+                None::<&str>,
+            )?,
+            &CheckMenuItem::with_id(
+                app,
+                MainMenuAction::Zoom14,
+                "1.4x Extra Large",
+                true,
+                zoom_factor == 1.4,
+                None::<&str>,
+            )?,
+        ],
+    )?;
+    let developer_menu = Submenu::with_items(
+        app,
+        "Developer",
+        true,
+        &[
+            #[cfg(feature = "inspector_in_production")]
+            &MenuItem::with_id(
+                app,
+                MainMenuAction::DevTools,
+                "Developer Tools",
+                true,
+                if cfg!(target_os = "macos") {
+                    Some("Alt+Command+I")
+                } else {
+                    Some("Ctrl+Shift+I")
+                },
+            )?,
+            &MenuItem::with_id(
+                app,
+                MainMenuAction::LogFolder,
+                "Open the Log Folder",
+                true,
+                None::<&str>,
+            )?,
+            &MenuItem::with_id(
+                app,
+                MainMenuAction::CurrentLogFile,
+                "Open Current Log File",
+                true,
+                None::<&str>,
+            )?,
+        ],
+    )?;
+    let help = MenuItem::with_id(
+        app,
+        MainMenuAction::Help,
+        MainMenuAction::Help,
+        true,
+        Some("F1"),
+    )?;
+    let keybindings = MenuItem::with_id(
+        app,
+        MainMenuAction::Keybindings,
+        "Keybindings",
+        true,
+        Some("CmdOrCtrl+/"),
+    )?;
+    let learn_more = MenuItem::with_id(
+        app,
+        MainMenuAction::Learn,
+        "Learn more about Delta Chat",
+        true,
+        None::<&str>,
+    )?;
+    let contribute = MenuItem::with_id(
+        app,
+        MainMenuAction::Contribute,
+        "Contribute on Github",
+        true,
+        None::<&str>,
+    )?;
+    let report_issue = MenuItem::with_id(
+        app,
+        MainMenuAction::Report,
+        "Report an Issue",
+        true,
+        None::<&str>,
+    )?;
+    let about = MenuItem::with_id(
+        app,
+        MainMenuAction::About,
+        "About Delta Chat",
+        true,
+        None::<&str>,
+    )?;
+
     Menu::with_items(
         app,
         &[
-            &Submenu::with_items(
-                app,
-                "File",
-                true,
-                &[
-                    &MenuItem::with_id(
-                        app,
-                        MainMenuAction::Quit,
-                        MainMenuAction::Quit,
-                        true,
-                        None::<&str>,
-                    )?,
-                    &MenuItem::with_id(
-                        app,
-                        MainMenuAction::Settings,
-                        MainMenuAction::Settings,
-                        true,
-                        None::<&str>,
-                    )?,
-                ],
-            )?,
+            &Submenu::with_items(app, "File", true, &[&settings, &quit])?,
             &Submenu::with_items(
                 app,
                 "Edit",
@@ -190,92 +315,11 @@ pub(crate) fn create_main_menu(
                 "View",
                 true,
                 &[
-                    &CheckMenuItem::with_id(
-                        app,
-                        MainMenuAction::FloatOnTop,
-                        "Float on Top",
-                        true,
-                        main_window.is_always_on_top()?,
-                        None::<&str>,
-                    )?,
-                    &Submenu::with_items(
-                        app,
-                        "Zoom",
-                        true,
-                        &[
-                            &CheckMenuItem::with_id(
-                                app,
-                                MainMenuAction::Zoom06,
-                                "0.6x Extra Small",
-                                true,
-                                zoom_factor == 0.6,
-                                None::<&str>,
-                            )?,
-                            &CheckMenuItem::with_id(
-                                app,
-                                MainMenuAction::Zoom08,
-                                "0.8x Small",
-                                true,
-                                zoom_factor == 0.8,
-                                None::<&str>,
-                            )?,
-                            &CheckMenuItem::with_id(
-                                app,
-                                MainMenuAction::Zoom10,
-                                "1.0x Normal",
-                                true,
-                                zoom_factor == 1.0,
-                                None::<&str>,
-                            )?,
-                            &CheckMenuItem::with_id(
-                                app,
-                                MainMenuAction::Zoom12,
-                                "1.2x Large",
-                                true,
-                                zoom_factor == 1.2,
-                                None::<&str>,
-                            )?,
-                            &CheckMenuItem::with_id(
-                                app,
-                                MainMenuAction::Zoom14,
-                                "1.4x Extra Large",
-                                true,
-                                zoom_factor == 1.4,
-                                None::<&str>,
-                            )?,
-                        ],
-                    )?,
+                    &float_on_top,
+                    &zoom_menu,
                     &get_locales_menu(app, &current_language_key)?,
                     &PredefinedMenuItem::separator(app)?,
-                    &Submenu::with_items(
-                        app,
-                        "Developer",
-                        true,
-                        &[
-                            #[cfg(feature = "inspector_in_production")]
-                            &MenuItem::with_id(
-                                app,
-                                MainMenuAction::DevTools,
-                                "Developer Tools",
-                                true,
-                                None::<&str>,
-                            )?,
-                            &MenuItem::with_id(
-                                app,
-                                MainMenuAction::LogFolder,
-                                "Open the Log Folder",
-                                true,
-                                None::<&str>,
-                            )?,
-                            &MenuItem::with_id(
-                                app,
-                                MainMenuAction::CurrentLogFile,
-                                "Open Current Log File",
-                                true,
-                                None::<&str>,
-                            )?,
-                        ],
-                    )?,
+                    &developer_menu,
                 ],
             )?,
             &Submenu::with_items(
@@ -283,49 +327,14 @@ pub(crate) fn create_main_menu(
                 "Help",
                 true,
                 &[
-                    &MenuItem::with_id(
-                        app,
-                        MainMenuAction::Help,
-                        MainMenuAction::Help,
-                        true,
-                        None::<&str>,
-                    )?,
-                    &MenuItem::with_id(
-                        app,
-                        MainMenuAction::Keybindings,
-                        "Keybindings",
-                        true,
-                        None::<&str>,
-                    )?,
-                    &MenuItem::with_id(
-                        app,
-                        MainMenuAction::Learn,
-                        "Learn more about Delta Chat",
-                        true,
-                        None::<&str>,
-                    )?,
-                    &MenuItem::with_id(
-                        app,
-                        MainMenuAction::Contribute,
-                        "Contribute on Github",
-                        true,
-                        None::<&str>,
-                    )?,
+                    &help,
+                    &keybindings,
                     &PredefinedMenuItem::separator(app)?,
-                    &MenuItem::with_id(
-                        app,
-                        MainMenuAction::Report,
-                        "Report an Issue",
-                        true,
-                        None::<&str>,
-                    )?,
-                    &MenuItem::with_id(
-                        app,
-                        MainMenuAction::About,
-                        "About Delta Chat",
-                        true,
-                        None::<&str>,
-                    )?,
+                    &learn_more,
+                    &contribute,
+                    &report_issue,
+                    &PredefinedMenuItem::separator(app)?,
+                    &about,
                 ],
             )?,
         ],

@@ -14,7 +14,8 @@ use tauri_plugin_store::StoreExt;
 
 #[derive(Debug, AsRefStr, EnumString)]
 pub(crate) enum HelpMenuAction {
-    Quit,
+    QuitApp,
+    CloseHelp,
     ZoomIn,
     ZoomOut,
     ResetZoom,
@@ -30,7 +31,10 @@ impl MenuAction<'static> for HelpMenuAction {
             .context("help window not found")?;
         let menu_manager = app.state::<MenuManger>();
         match self {
-            HelpMenuAction::Quit => {
+            HelpMenuAction::QuitApp => {
+                app.exit(0);
+            }
+            HelpMenuAction::CloseHelp => {
                 help_window.close()?;
             }
             HelpMenuAction::ZoomIn | HelpMenuAction::ZoomOut | HelpMenuAction::ResetZoom => {
@@ -70,6 +74,13 @@ pub(crate) fn create_help_menu(
     app: &AppHandle,
     help_window: &WebviewWindow,
 ) -> anyhow::Result<Menu<Wry>> {
+    let quit = MenuItem::with_id(
+        app,
+        HelpMenuAction::QuitApp,
+        "Quit Delta Chat", // TODO translate
+        true,
+        Some("CmdOrCtrl+Q"),
+    )?;
     let menu = Menu::with_items(
         app,
         &[
@@ -77,13 +88,16 @@ pub(crate) fn create_help_menu(
                 app,
                 "File",
                 true,
-                &[&MenuItem::with_id(
-                    app,
-                    HelpMenuAction::Quit,
-                    "Quit",
-                    true,
-                    None::<&str>,
-                )?],
+                &[
+                    &MenuItem::with_id(
+                        app,
+                        HelpMenuAction::CloseHelp,
+                        "Close Help",
+                        true,
+                        Some("CmdOrCtrl+W"),
+                    )?,
+                    &quit,
+                ],
             )?,
             &Submenu::with_items(
                 app,
@@ -106,13 +120,27 @@ pub(crate) fn create_help_menu(
                         true,
                         None::<&str>,
                     )?,
-                    &MenuItem::with_id(app, HelpMenuAction::ZoomIn, "Zoom In", true, None::<&str>)?,
+                    &MenuItem::with_id(
+                        app,
+                        HelpMenuAction::ZoomIn,
+                        "Zoom In",
+                        true,
+                        if cfg!(target_os = "macos") {
+                            Some("Command++")
+                        } else {
+                            Some("Ctrl++")
+                        },
+                    )?,
                     &MenuItem::with_id(
                         app,
                         HelpMenuAction::ZoomOut,
                         "Zoom Out",
                         true,
-                        None::<&str>,
+                        if cfg!(target_os = "macos") {
+                            Some("Command+-")
+                        } else {
+                            Some("Ctrl+-")
+                        },
                     )?,
                     &PredefinedMenuItem::separator(app)?,
                     &CheckMenuItem::with_id(
