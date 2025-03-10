@@ -3,12 +3,12 @@ use crate::{
     state::menu_manager::MenuManger,
 };
 
-use super::{float_on_top::HELP_FLOATING, menu_action::MenuAction};
+use super::menu_action::MenuAction;
 use anyhow::Context;
 use strum::{AsRefStr, EnumString};
 use tauri::{
     menu::{CheckMenuItem, Menu, MenuItem, PredefinedMenuItem, Submenu},
-    AppHandle, Manager, Wry,
+    AppHandle, Manager, WebviewWindow, Wry,
 };
 use tauri_plugin_store::StoreExt;
 
@@ -56,8 +56,7 @@ impl MenuAction<'static> for HelpMenuAction {
                 menu_manager.update_all(app);
             }
             HelpMenuAction::FloatOnTop => {
-                let previous = HELP_FLOATING.fetch_xor(true, std::sync::atomic::Ordering::SeqCst);
-                help_window.set_always_on_top(previous)?;
+                help_window.set_always_on_top(!help_window.is_always_on_top()?)?;
                 // this is fast/effient enough, even though it updates all window
                 // if you want to implement sth else you need to take macOS behaviour into account
                 menu_manager.update_all(app);
@@ -67,7 +66,10 @@ impl MenuAction<'static> for HelpMenuAction {
     }
 }
 
-pub(crate) fn create_help_menu(app: &AppHandle) -> anyhow::Result<Menu<Wry>> {
+pub(crate) fn create_help_menu(
+    app: &AppHandle,
+    help_window: &WebviewWindow,
+) -> anyhow::Result<Menu<Wry>> {
     let menu = Menu::with_items(
         app,
         &[
@@ -118,7 +120,7 @@ pub(crate) fn create_help_menu(app: &AppHandle) -> anyhow::Result<Menu<Wry>> {
                         HelpMenuAction::FloatOnTop,
                         "Float on Top",
                         true,
-                        HELP_FLOATING.load(std::sync::atomic::Ordering::Relaxed),
+                        help_window.is_always_on_top()?,
                         None::<&str>,
                     )?,
                     &PredefinedMenuItem::fullscreen(app, Some("Toggle Full Screen"))?,

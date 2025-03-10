@@ -1,21 +1,13 @@
-use std::sync::atomic::AtomicBool;
+use anyhow::Context;
+use tauri::{Manager, WebviewWindow};
 
-use tauri::WebviewWindow;
-
-// TODO: there should also be an option in tauri to get current float on top state,
-// so that we don't need to track it ourselves
-// especially needed when we get other windows that can have multiple instances
-// (html window and webxdc)
-pub static MAIN_FLOATING: AtomicBool = AtomicBool::new(false);
-pub static HELP_FLOATING: AtomicBool = AtomicBool::new(false);
-
-pub fn set_float_on_top_based_on_main_window(
-    window: &WebviewWindow,
-    window_float_on_top_state: &AtomicBool,
-) {
-    // TODO: is relaxed the correct ordering
-    if MAIN_FLOATING.load(std::sync::atomic::Ordering::Relaxed) {
-        let _ = window.set_always_on_top(true);
-        window_float_on_top_state.store(true, std::sync::atomic::Ordering::Relaxed);
+pub fn set_float_on_top_based_on_main_window(window: &WebviewWindow) -> anyhow::Result<()> {
+    if window
+        .get_window("main")
+        .context("main window not found")?
+        .is_always_on_top()?
+    {
+        window.set_always_on_top(true)?;
     }
+    Ok(())
 }

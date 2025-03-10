@@ -1,4 +1,4 @@
-use std::{str::FromStr, sync::atomic::Ordering};
+use std::str::FromStr;
 
 use crate::{
     help_window::open_help_window,
@@ -10,15 +10,12 @@ use anyhow::Context;
 use strum::{AsRefStr, EnumString};
 use tauri::{
     menu::{CheckMenuItem, IsMenuItem, Menu, MenuId, MenuItem, PredefinedMenuItem, Submenu},
-    AppHandle, Emitter, Manager, Wry,
+    AppHandle, Emitter, Manager, WebviewWindow, Wry,
 };
 use tauri_plugin_opener::OpenerExt;
 use tauri_plugin_store::StoreExt;
 
-use super::{
-    float_on_top::MAIN_FLOATING,
-    menu_action::{impl_menu_conversion, MenuAction},
-};
+use super::menu_action::{impl_menu_conversion, MenuAction};
 
 pub(crate) const SET_LOCALE_MENU_ID_PREFIX: &str = "set_language";
 
@@ -63,8 +60,7 @@ impl MenuAction<'static> for MainMenuAction {
                 app.exit(0);
             }
             MainMenuAction::FloatOnTop => {
-                let previous = MAIN_FLOATING.fetch_xor(true, std::sync::atomic::Ordering::SeqCst);
-                main_window.set_always_on_top(previous)?;
+                main_window.set_always_on_top(!main_window.is_always_on_top()?)?;
                 // this is fast/effient enough, even though it updates all window
                 // if you want to implement sth else you need to take macOS behaviour into account
                 menu_manager.update_all(app);
@@ -137,7 +133,10 @@ impl MenuAction<'static> for MainMenuAction {
     }
 }
 
-pub(crate) fn create_main_menu(app: &AppHandle) -> anyhow::Result<Menu<Wry>> {
+pub(crate) fn create_main_menu(
+    app: &AppHandle,
+    main_window: &WebviewWindow,
+) -> anyhow::Result<Menu<Wry>> {
     let store = app.get_store(CONFIG_FILE).context("could not load store")?;
     let zoom_factor = store
         .get(ZOOM_FACTOR_KEY)
@@ -196,7 +195,7 @@ pub(crate) fn create_main_menu(app: &AppHandle) -> anyhow::Result<Menu<Wry>> {
                         MainMenuAction::FloatOnTop,
                         "Float on Top",
                         true,
-                        MAIN_FLOATING.load(Ordering::Relaxed),
+                        main_window.is_always_on_top()?,
                         None::<&str>,
                     )?,
                     &Submenu::with_items(

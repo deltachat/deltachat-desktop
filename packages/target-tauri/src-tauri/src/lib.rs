@@ -209,10 +209,11 @@ pub fn run() {
             }
 
             let menu_manager = app.state::<MenuManger>();
+            let main_window_clone = main_window.clone();
             tauri::async_runtime::block_on(menu_manager.register_window(
                 &app.handle(),
                 &main_window,
-                Box::new(|app| create_main_menu(app)),
+                Box::new(move |app| create_main_menu(app, &main_window_clone)),
             ))?;
 
             app.on_menu_event(handle_menu_event);

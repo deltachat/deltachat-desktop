@@ -2,10 +2,7 @@ use log::{error, warn};
 use tauri::{Manager, State};
 
 use crate::{
-    menus::{
-        float_on_top::{set_float_on_top_based_on_main_window, HELP_FLOATING},
-        help_menu::create_help_menu,
-    },
+    menus::{float_on_top::set_float_on_top_based_on_main_window, help_menu::create_help_menu},
     settings::{apply_content_protection, apply_zoom_factor_help_window},
     state::menu_manager::MenuManger,
 };
@@ -62,12 +59,13 @@ pub(crate) fn open_help_window(
     let _ = apply_content_protection(&app);
     let _ = apply_zoom_factor_help_window(&app);
 
-    set_float_on_top_based_on_main_window(&help_window, &HELP_FLOATING);
+    let _ = set_float_on_top_based_on_main_window(&help_window);
 
+    let help_window_clone = help_window.clone();
     tauri::async_runtime::block_on(menu_manager.register_window(
         &app,
         &help_window,
-        Box::new(create_help_menu),
+        Box::new(move |app| create_help_menu(app, &help_window_clone)),
     ))
     .map_err(|err| Error::MenuCreation(err.to_string()))?;
 
