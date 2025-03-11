@@ -14,6 +14,7 @@ mod file_dialogs;
 mod help_window;
 mod html_window;
 mod i18n;
+mod notifications;
 mod runtime_info;
 mod settings;
 mod state;
@@ -75,6 +76,7 @@ pub fn run() {
     let startup_timestamp = SystemTime::now();
 
     let mut builder = tauri::Builder::default()
+        .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_clipboard_manager::init())
@@ -116,6 +118,9 @@ pub fn run() {
             webxdc::on_webxdc_realtime_data,
             webxdc::delete_webxdc_account_data,
             webxdc::close_all_webxdc_instances,
+            notifications::show_notification,
+            notifications::clear_all_notifications,
+            notifications::clear_notifications,
             runtime_info::get_runtime_info,
             settings::change_desktop_settings_apply_side_effects,
             help_window::open_help_window,
