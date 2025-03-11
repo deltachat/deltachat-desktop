@@ -1,4 +1,5 @@
 import {
+  AutostartState,
   DcNotification,
   DcOpenWebxdcParameters,
   DesktopSettingsType,
@@ -147,6 +148,7 @@ export interface Runtime {
    */
   isDroppedFileFromOutside(file: File): boolean
 
+  getAutostartState(): Promise<AutostartState>
   // callbacks to set
   onChooseLanguage: ((locale: string) => Promise<void>) | undefined
   /** backend notifies ui to reload theme,
