@@ -160,7 +160,7 @@ impl MenuManger {
             }
         }
 
-        // but on macOS only call the callback for the focused window
+        // but on macOS only set the global menu for the focused window
         #[cfg(target_os = "macos")]
         {
             let win = app

@@ -123,7 +123,7 @@ impl MenuAction<'static> for MainMenuAction {
             }
             MainMenuAction::Learn => {
                 app.opener()
-                    .open_url("https://delta.chat/de/", None::<String>)?;
+                    .open_url("https://delta.chat", None::<String>)?;
             }
             MainMenuAction::About => {
                 app.emit("showAboutDialog", None::<String>)?;

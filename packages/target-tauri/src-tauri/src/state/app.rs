@@ -26,6 +26,7 @@ pub(crate) struct AppState {
 
     // caching here, becuase the menu building is sync,
     // but the function to get all languages is async
+    /// Vec of all supported languages: (language_code, language_display_name)
     pub(crate) all_languages_for_menu: Vec<(String, String)>,
 }
 
