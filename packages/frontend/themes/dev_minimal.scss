@@ -14,7 +14,7 @@ $navbarBgLight: $borderColor;
 $outlineColor: #b9b9b9;
 $accentColor: #000000;
 $bgChatView: #e6dcd4;
-$bgImage: url('./images/barckground_light.svg');
+$bgImage: url('./images/background_light.svg');
 $bgMessageBubbleIncoming: $navbarBgLight;
 $bgMessageBubbleOutgoing: #efffde;
 $bgNavBar: #fff;
@@ -33,6 +33,9 @@ $keybindingKeyShadow: rgba(0, 0, 0, 0.35);
 $textPrimary: #010101;
 $textSecondary: #62656a;
 $textNavBar: $textPrimary;
+$btnPrimaryText: #fff;
+$btnDangerText: #fff;
+$btnDangerBackground: $colorDanger;
 
 $scrollbarTransparency: 0.5;
 

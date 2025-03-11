@@ -82,7 +82,7 @@ export function ReceiveBackupDialog({ onClose }: Props & DialogProps) {
           >
             {tx('troubleshooting')}
           </FooterActionButton>
-          <FooterActionButton onClick={onClose}>
+          <FooterActionButton onClick={onClose} styling='primary'>
             {tx('close')}
           </FooterActionButton>
         </FooterActions>

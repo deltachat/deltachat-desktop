@@ -27,6 +27,9 @@ $scrollbarTransparency: 0.34;
 $textNavBar: #ddddf0;
 $textPrimary: #fff;
 $textSecondary: #ddd;
+$btnPrimaryText: #fff;
+$btnDangerText: #fff;
+$btnDangerBackground: $colorDanger;
 
 /* Derive the themedata from the theme variables */
 @import '_themebase.scss';

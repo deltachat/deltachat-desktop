@@ -25,7 +25,7 @@ impl serde::Serialize for Error {
 }
 
 #[tauri::command]
-pub(crate) fn open_help_window(
+pub(crate) async fn open_help_window(
     app: tauri::AppHandle,
     menu_manager: State<MenuManger>,
     locale: &str,
@@ -36,10 +36,19 @@ pub(crate) fn open_help_window(
         url = "help/en/help.html".to_owned();
         warn!("Did not find help file for language {locale}, falling back to english");
     }
-
+    if let Some(anchor) = anchor {
+        url.push('#');
+        url.push_str(anchor);
+    }
     let app_url = tauri::WebviewUrl::App(url.into());
 
-    let help_window = if let Some(help_window) = app.get_webview_window("help") {
+
+    let help_window: WebviewWindow = if let Some(help_window) = app.get_webview_window("help") {
+        // TODO theoretically the URL here could still be
+        // about:blank if it has not loaded yet.
+        let mut url = help_window.url()?;
+        url.set_fragment(anchor);
+        help_window.navigate(url)?;
         help_window
     } else {
         tauri::WebviewWindowBuilder::new(&app, "help", app_url.clone()).build()?
@@ -49,10 +58,6 @@ pub(crate) fn open_help_window(
         // on android and iOS this does not exist, there the window is opened automatically
         help_window.show()?;
     }
-
-    let mut url = help_window.url()?;
-    url.set_fragment(anchor);
-    help_window.navigate(url)?;
 
     help_window.set_title("Delta Chat Tauri - Help")?; // TODO: translate help in the title.
 

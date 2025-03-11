@@ -11,7 +11,6 @@
   justify-content: center;
   padding: 12px 15px;
   text-align: center;
-  text-transform: uppercase;
   user-select: none;
 
   &:hover {
@@ -36,10 +35,12 @@
   &.secondary {
     background-color: var(--buttonSecondaryBackground);
     color: var(--buttonSecondaryText);
+    border: 1px solid #ccc;
   }
 
   &.danger {
     color: var(--buttonDangerText);
+    background-color: var(--buttonDangerBackground);
   }
 
   &.active {

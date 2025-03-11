@@ -167,7 +167,7 @@ export function QrCodeShowQrInner({
   return (
     <>
       <DialogBody className='show-qr-dialog-body'>
-        <DialogContent paddingBottom className='show-qr-dialog-content'>
+        <DialogContent className='show-qr-dialog-content'>
           {svgUrl && (
             <img
               style={{
@@ -186,12 +186,20 @@ export function QrCodeShowQrInner({
       </DialogBody>
       <DialogFooter>
         <FooterActions align={!onClose && !onBack ? 'center' : 'spaceBetween'}>
-          <FooterActionButton data-testid='copy-qr-code' onClick={onCopy}>
+          <FooterActionButton
+            styling='secondary'
+            data-testid='copy-qr-code'
+            onClick={onCopy}
+          >
             <div className='copy-link-icon'></div>
             {tx('menu_copy_link_to_clipboard')}
           </FooterActionButton>
           {onClose && (
-            <FooterActionButton onClick={onClose} data-testid='close'>
+            <FooterActionButton
+              styling='secondary'
+              onClick={onClose}
+              data-testid='close'
+            >
               {tx('close')}
             </FooterActionButton>
           )}
@@ -269,11 +277,19 @@ export function QrCodeScanQrInner({
       </DialogBody>
       <DialogFooter>
         <FooterActions align='spaceBetween'>
-          <FooterActionButton onClick={pasteClipboard} data-testid='paste'>
+          <FooterActionButton
+            styling='secondary'
+            onClick={pasteClipboard}
+            data-testid='paste'
+          >
             {tx('global_menu_edit_paste_desktop')}
           </FooterActionButton>
-          <FooterActionButton onClick={onClose} data-testid='close'>
-            {tx('close')}
+          <FooterActionButton
+            styling='secondary'
+            onClick={onClose}
+            data-testid='close'
+          >
+            {tx('cancel')}
           </FooterActionButton>
         </FooterActions>
       </DialogFooter>
