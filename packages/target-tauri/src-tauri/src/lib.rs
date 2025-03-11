@@ -24,9 +24,11 @@ mod file_dialogs;
 mod help_window;
 mod html_window;
 mod i18n;
+
 // menus are not available on mobile
 #[cfg(desktop)]
 mod menus;
+mod notifications;
 mod run_config;
 mod runtime_capabilities;
 mod runtime_info;
@@ -95,6 +97,7 @@ pub fn run() {
     let run_config = RunConfig::default();
 
     let mut builder = tauri::Builder::default()
+        .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_clipboard_manager::init())
@@ -165,6 +168,9 @@ pub fn run() {
             webxdc::commands::webxdc_send_to_chat,
             #[cfg(target_vendor = "apple")]
             webxdc::data_storage::debug_get_datastore_ids,
+            notifications::show_notification,
+            notifications::clear_all_notifications,
+            notifications::clear_notifications,
             runtime_info::get_runtime_info,
             settings::change_desktop_settings_apply_side_effects,
             help_window::open_help_window,
