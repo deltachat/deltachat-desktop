@@ -127,9 +127,14 @@ export interface DcNotification {
   icon: string | null
   chatId: number
   messageId: number
-  // for future
   accountId: number
   notificationType: NOTIFICATION_TYPE
+}
+
+export interface NotificationClickedEventPayload {
+  accountId: number
+  chatId: number
+  msgId: number
 }
 
 export interface DcOpenWebxdcParameters {
