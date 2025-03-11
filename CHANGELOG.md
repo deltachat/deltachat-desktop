@@ -16,6 +16,7 @@
 - webxdc: fix menu bar hiding when pressing Escape #4753
 - tauri: fix blobs and webxdc-icon scheme under windows #4705
 - tauri: fix: drag regions in navbar #4719
+- tauri: fall back to base locale if dialect/variant was not found
 - tauri: entire app hanging after clicking "Show Full Message..." or the "Help" window on Windows
 
 <a id="1_54_2"></a>

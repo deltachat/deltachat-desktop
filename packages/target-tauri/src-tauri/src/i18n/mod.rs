@@ -35,7 +35,16 @@ pub enum Language {
     },
 }
 
-// get all locales, returns tuple with id and name
+impl Language {
+    pub(crate) fn to_tuple(&self) -> (String, Option<LocaleWritingDirection>) {
+        match self {
+            Language::String(name) => (name.to_owned(), None),
+            Language::Object { name, dir } => (name.to_owned(), Some(*dir)),
+        }
+    }
+}
+
+/// get all locales, returns tuple with id and name
 pub async fn get_all_languages(app: &AppHandle) -> Result<Vec<(String, String)>, Error> {
     let locales_dir = get_locales_dir(app).await?;
     let languages: HashMap<String, Language> = get_languages(&locales_dir).await?;

@@ -13,6 +13,7 @@ pub(crate) enum Error {
     IO(#[from] std::io::Error),
     #[error(transparent)]
     SerdeJSON(#[from] serde_json::Error),
+    BaseLocaleExtraction,
 }
 
 impl serde::Serialize for Error {
