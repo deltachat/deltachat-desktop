@@ -14,6 +14,7 @@ import type {
   DcNotification,
   DcOpenWebxdcParameters,
   DesktopSettingsType,
+  NotificationClickedEventPayload,
   RC_Config,
   RuntimeInfo,
   RuntimeOpenDialogOptions,
@@ -552,19 +553,36 @@ class TauriRuntime implements Runtime {
 
     invoke('update_tray_icon_badge', { counter: value })
   }
-  showNotification(_data: DcNotification): void {
-    throw new Error('Method not implemented.37')
+  showNotification({
+    title,
+    body,
+    icon,
+    chatId,
+    messageId,
+    accountId,
+  }: DcNotification): void {
+    invoke('show_notification', {
+      title,
+      body,
+      icon,
+      chatId,
+      messageId,
+      accountId,
+    })
   }
   clearAllNotifications(): void {
-    throw new Error('Method not implemented.38')
+    invoke('clear_all_notifications')
   }
-  clearNotifications(_chatId: number): void {
-    this.log.error('Method not implemented.39 - clearNotifications')
+  clearNotifications(chatId: number): void {
+    invoke('clear_notifications', { chatId })
   }
+
   setNotificationCallback(
-    _cb: (data: { accountId: number; chatId: number; msgId: number }) => void
+    cb: (data: NotificationClickedEventPayload) => void
   ): void {
-    this.log.error('Method not implemented.40')
+    listen<NotificationClickedEventPayload>('notification_clicked', event => {
+      cb(event.payload)
+    })
   }
   writeTempFileFromBase64(name: string, content: string): Promise<string> {
     return invoke('write_temp_file_from_base64', { name, content })
