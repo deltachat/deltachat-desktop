@@ -115,7 +115,7 @@ pub(crate) async fn open_html_window(
     let app_arc = Arc::new(app);
     let app = app_arc.clone();
 
-    let url = {
+    let initial_url = {
         #[cfg(not(any(target_os = "windows", target_os = "android")))]
         {
             Url::from_str("email://dummy.host/index.html").unwrap()
@@ -125,15 +125,28 @@ pub(crate) async fn open_html_window(
             Url::from_str("http://email.localhost/index.html").unwrap()
         }
     };
+    let initial_url_origin = initial_url.origin();
 
     let mut mail_view_builder = tauri::webview::WebviewBuilder::new(
         format!("{window_id}-mail"),
-        WebviewUrl::CustomProtocol(url),
+        WebviewUrl::CustomProtocol(initial_url.clone()),
     )
     .disable_javascript()
     .on_navigation(move |url| {
-        if url.to_string() == "about:blank" || url.scheme() == "email" {
-            // allow navigating to the email
+        if url.to_string() == "about:blank" {
+            return true;
+        }
+        // When this is `true`, the request is guaranteed
+        // to be intercepted by Tauri
+        // (see `register_asynchronous_uri_scheme_protocol("email"`).
+        // When `false`, it still _might_ get intercepted,
+        // but only if the message contains some weird links like
+        // `email://other.host/`.
+        // We only really care about navigating to `initial_url`:
+        // the HTML message viewer is not supposed to be multipage,
+        // so it's OK to handle such weird links as external, below.
+        let will_be_intercepted = url.origin() == initial_url_origin;
+        if will_be_intercepted {
             return true;
         }
 
