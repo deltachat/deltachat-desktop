@@ -39,7 +39,7 @@ pub enum Language {
 pub async fn get_all_languages(app: &AppHandle) -> Result<Vec<(String, String)>, Error> {
     let locales_dir = get_locales_dir(app).await?;
     let languages: HashMap<String, Language> = get_languages(&locales_dir).await?;
-    Ok(languages
+    let mut vec: Vec<(String, String)> = languages
         .into_iter()
         .map(|(id, lang_data)| {
             let name = match lang_data {
@@ -48,5 +48,7 @@ pub async fn get_all_languages(app: &AppHandle) -> Result<Vec<(String, String)>,
             };
             (id, name)
         })
-        .collect())
+        .collect();
+    vec.sort_unstable_by(|a, b| a.0.cmp(&b.0));
+    Ok(vec)
 }
