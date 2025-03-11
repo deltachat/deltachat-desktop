@@ -305,6 +305,7 @@ pub(crate) fn create_main_menu(
                     &PredefinedMenuItem::undo(app, Some("Undo"))?,
                     #[cfg(target_os = "macos")]
                     &PredefinedMenuItem::redo(app, Some("Redo"))?,
+                    #[cfg(target_os = "macos")]
                     &PredefinedMenuItem::separator(app)?,
                     &PredefinedMenuItem::cut(app, Some("Cut"))?,
                     &PredefinedMenuItem::copy(app, Some("Copy"))?,
