@@ -9,6 +9,7 @@
 
 ### Changed
 - tauri: replace `tauri-plugin-shell` with `tauri-plugin-opener` #4699
+- new button styles #4741
 
 ### Fixed
 - webxdc: fix menu bar hiding when pressing Escape #4753
