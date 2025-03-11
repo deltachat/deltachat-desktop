@@ -187,7 +187,7 @@ export function QrCodeShowQrInner({
       <DialogFooter>
         <FooterActions align={!onClose && !onBack ? 'center' : 'spaceBetween'}>
           <FooterActionButton
-            styling='primary'
+            styling='secondary'
             data-testid='copy-qr-code'
             onClick={onCopy}
           >
