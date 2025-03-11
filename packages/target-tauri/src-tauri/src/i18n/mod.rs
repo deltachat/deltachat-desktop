@@ -39,7 +39,7 @@ impl Language {
     pub(crate) fn to_tuple(&self) -> (String, Option<LocaleWritingDirection>) {
         match self {
             Language::String(name) => (name.to_owned(), None),
-            Language::Object { name, dir } => (name.to_owned(), Some(dir.clone())),
+            Language::Object { name, dir } => (name.to_owned(), Some(*dir)),
         }
     }
 }

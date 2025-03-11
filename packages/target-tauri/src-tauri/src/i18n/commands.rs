@@ -1,8 +1,7 @@
 use std::collections::HashMap;
 
-use log::{error, warn};
-use tauri::{AppHandle, Manager};
-use tauri::{AppHandle, State, Manager};
+use log::{error, info, warn};
+use tauri::{AppHandle, State};
 use tauri_plugin_store::StoreExt;
 use tokio::fs::read_to_string;
 

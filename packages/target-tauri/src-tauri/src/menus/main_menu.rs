@@ -7,8 +7,10 @@ use crate::{
     AppState,
 };
 use anyhow::Context;
+use log::error;
 use strum::{AsRefStr, EnumString};
 use tauri::{
+    async_runtime::spawn,
     menu::{CheckMenuItem, IsMenuItem, Menu, MenuId, MenuItem, PredefinedMenuItem, Submenu},
     AppHandle, Emitter, Manager, WebviewWindow, Wry,
 };
@@ -54,7 +56,15 @@ impl MenuAction<'static> for MainMenuAction {
                 app.emit("showSettingsDialog", None::<String>)?;
             }
             MainMenuAction::Help => {
-                open_help_window(app.clone(), menu_manager, "", None)?;
+                let app_clone = app.clone();
+                spawn(async move {
+                    let menu_manager = app_clone.state::<MenuManger>();
+                    if let Err(err) =
+                        open_help_window(app_clone.clone(), menu_manager, "", None).await
+                    {
+                        error!("failed to open help window: {err}");
+                    }
+                });
             }
             MainMenuAction::Quit => {
                 app.exit(0);

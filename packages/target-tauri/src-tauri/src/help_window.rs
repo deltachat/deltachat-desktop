@@ -1,5 +1,5 @@
 use log::{error, warn};
-use tauri::{Manager, State};
+use tauri::{Manager, State, WebviewWindow};
 
 use crate::{
     menus::{float_on_top::set_float_on_top_based_on_main_window, help_menu::create_help_menu},
@@ -27,7 +27,7 @@ impl serde::Serialize for Error {
 #[tauri::command]
 pub(crate) async fn open_help_window(
     app: tauri::AppHandle,
-    menu_manager: State<MenuManger>,
+    menu_manager: State<'_, MenuManger>,
     locale: &str,
     anchor: Option<&str>,
 ) -> Result<(), Error> {
