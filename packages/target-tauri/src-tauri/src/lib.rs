@@ -1,11 +1,16 @@
 use std::time::SystemTime;
 
 use clipboard::copy_image_to_clipboard;
+
+use menus::{handle_menu_event, main_menu::create_main_menu};
 use settings::load_and_apply_desktop_settings_on_startup;
 use state::{
     app::AppState, deltachat::DeltaChatAppState, html_email_instances::HtmlEmailInstancesState,
+    menu_manager::MenuManger,
 };
 use tauri::Manager;
+use util::csp::add_custom_schemes_to_csp_for_window_and_android;
+
 mod app_path;
 mod blobs;
 mod clipboard;
@@ -13,11 +18,13 @@ mod file_dialogs;
 mod help_window;
 mod html_window;
 mod i18n;
+mod menus;
 mod runtime_info;
 mod settings;
 mod state;
 mod stickers;
 mod temp_file;
+mod util;
 mod webxdc;
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
@@ -181,8 +188,9 @@ pub fn run() {
                 app,
             ))?);
             app.manage(HtmlEmailInstancesState::new());
+            app.manage(MenuManger::new());
             app.state::<AppState>()
-                .log_duration_since_startup("setup done");
+                .log_duration_since_startup("base setup done");
 
             load_and_apply_desktop_settings_on_startup(app.handle())?;
 
@@ -193,16 +201,40 @@ pub fn run() {
             #[cfg(debug_assertions)]
             app.get_webview_window("main").unwrap().open_devtools();
 
-            let webview = app.get_webview_window("main").unwrap();
-
+            let main_window = app.get_webview_window("main").unwrap();
             #[cfg(target_os = "macos")]
             {
-                webview.set_title_bar_style(tauri::TitleBarStyle::Overlay)?;
-                webview.set_title("")?;
+                main_window.set_title_bar_style(tauri::TitleBarStyle::Overlay)?;
+                main_window.set_title("")?;
             }
 
+            let menu_manager = app.state::<MenuManger>();
+            let main_window_clone = main_window.clone();
+            tauri::async_runtime::block_on(menu_manager.register_window(
+                &app.handle(),
+                &main_window,
+                Box::new(move |app| create_main_menu(app, &main_window_clone)),
+            ))?;
+
+            app.on_menu_event(handle_menu_event);
+
+            app.state::<AppState>()
+                .log_duration_since_startup("setup done");
             Ok(())
         })
-        .run(tauri::generate_context!())
+        .run({
+            let mut context = tauri::generate_context!();
+
+            #[cfg(any(debug_assertions, target_os = "windows", target_os = "android"))]
+            {
+                let csp = context.config_mut().app.security.csp.clone();
+                if let Some(csp) = csp {
+                    context.config_mut().app.security.csp =
+                        Some(add_custom_schemes_to_csp_for_window_and_android(csp, false));
+                }
+            }
+
+            context
+        })
         .expect("error while running tauri application");
 }

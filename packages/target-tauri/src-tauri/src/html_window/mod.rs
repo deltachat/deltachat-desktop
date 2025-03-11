@@ -4,10 +4,8 @@ use anyhow::anyhow;
 use log::{error, info, trace, warn};
 
 use tauri::{
-    async_runtime::{block_on, handle},
-    webview::WebviewBuilder,
-    LogicalPosition, LogicalSize, Manager, Url, Webview, WebviewUrl, Window, WindowBuilder,
-    WindowEvent,
+    async_runtime::block_on, webview::WebviewBuilder, LogicalPosition, LogicalSize, Manager, Url,
+    Webview, WebviewUrl, Window, WindowBuilder, WindowEvent,
 };
 use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_opener::OpenerExt;
@@ -38,10 +36,10 @@ mod punycode;
 
 #[allow(clippy::too_many_arguments)]
 #[tauri::command]
-pub(crate) fn open_html_window(
+pub(crate) async fn open_html_window(
     app: tauri::AppHandle,
-    html_instances_state: tauri::State<HtmlEmailInstancesState>,
-    dc: tauri::State<DeltaChatAppState>,
+    html_instances_state: tauri::State<'_, HtmlEmailInstancesState>,
+    dc: tauri::State<'_, DeltaChatAppState>,
     window_id: &str,
     account_id: u32, // TODO needs to be used later for fetching webrequests over dc core
     is_contact_request: bool,
@@ -63,17 +61,16 @@ pub(crate) fn open_html_window(
         }
     }
 
-    let blocked_by_proxy = handle()
-        .block_on(async {
-            let dc = dc.deltachat.read().await;
-            let account: deltachat::context::Context = dc
-                .get_account(account_id)
-                .ok_or(Error::DeltaChat(anyhow!("account not found")))?;
-            account
-                .get_config_bool(deltachat::config::Config::ProxyEnabled)
-                .await
-        })
-        .map_err(|err| Error::DeltaChat(err))?;
+    let blocked_by_proxy = {
+        let dc = dc.deltachat.read().await;
+        let account: deltachat::context::Context = dc
+            .get_account(account_id)
+            .ok_or(Error::DeltaChat(anyhow!("account not found")))?;
+        account
+            .get_config_bool(deltachat::config::Config::ProxyEnabled)
+            .await
+    }
+    .map_err(Error::DeltaChat)?;
 
     let store = app.store(CONFIG_FILE)?;
     let always_load_remote_content = get_setting_bool_or(
@@ -83,19 +80,21 @@ pub(crate) fn open_html_window(
     let toggle_network_initial_state =
         !blocked_by_proxy && always_load_remote_content && !is_contact_request;
 
-    block_on(html_instances_state.add(
-        &window_id,
-        InnerHtmlEmailInstanceData {
-            // account_id,
-            is_contact_request,
-            subject: subject.to_owned(),
-            sender: sender.to_owned(),
-            receive_time: receive_time.to_owned(),
-            html_content: Arc::new(content.to_owned()),
-            network_allow_state: toggle_network_initial_state,
-            blocked_by_proxy,
-        },
-    ));
+    html_instances_state
+        .add(
+            &window_id,
+            InnerHtmlEmailInstanceData {
+                // account_id,
+                is_contact_request,
+                subject: subject.to_owned(),
+                sender: sender.to_owned(),
+                receive_time: receive_time.to_owned(),
+                html_content: Arc::new(content.to_owned()),
+                network_allow_state: toggle_network_initial_state,
+                blocked_by_proxy,
+            },
+        )
+        .await;
 
     let window = WindowBuilder::new(&app, &window_id)
         .inner_size(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT)
@@ -116,7 +115,7 @@ pub(crate) fn open_html_window(
     let app_arc = Arc::new(app);
     let app = app_arc.clone();
 
-    let url = {
+    let initial_url = {
         #[cfg(not(any(target_os = "windows", target_os = "android")))]
         {
             Url::from_str("email://dummy.host/index.html").unwrap()
@@ -126,15 +125,28 @@ pub(crate) fn open_html_window(
             Url::from_str("http://email.localhost/index.html").unwrap()
         }
     };
+    let initial_url_origin = initial_url.origin();
 
     let mut mail_view_builder = tauri::webview::WebviewBuilder::new(
         format!("{window_id}-mail"),
-        WebviewUrl::CustomProtocol(url),
+        WebviewUrl::CustomProtocol(initial_url.clone()),
     )
     .disable_javascript()
     .on_navigation(move |url| {
-        if url.to_string() == "about:blank" || url.scheme() == "email" {
-            // allow navigating to the email
+        if url.to_string() == "about:blank" {
+            return true;
+        }
+        // When this is `true`, the request is guaranteed
+        // to be intercepted by Tauri
+        // (see `register_asynchronous_uri_scheme_protocol("email"`).
+        // When `false`, it still _might_ get intercepted,
+        // but only if the message contains some weird links like
+        // `email://other.host/`.
+        // We only really care about navigating to `initial_url`:
+        // the HTML message viewer is not supposed to be multipage,
+        // so it's OK to handle such weird links as external, below.
+        let will_be_intercepted = url.origin() == initial_url_origin;
+        if will_be_intercepted {
             return true;
         }
 

@@ -43,13 +43,14 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const log = getLogger('main/deltachat/webxdc')
 
+type AppInstance = {
+  win: BrowserWindow
+  msgId: number
+  accountId: number
+  internet_access: boolean
+}
 const open_apps: {
-  [instanceId: string]: {
-    win: BrowserWindow
-    msgId: number
-    accountId: number
-    internet_access: boolean
-  }
+  [instanceId: string]: AppInstance
 } = {}
 
 // holds all accounts which have a session with webxdc scheme registered
@@ -522,52 +523,51 @@ export default class DCWebxdc {
     ipcMain.handle('open-webxdc', openWebxdc)
 
     ipcMain.handle('webxdc.exitFullscreen', async event => {
-      const key = Object.keys(open_apps).find(
-        key => open_apps[key].win.webContents === event.sender
-      )
-      if (key) open_apps[key].win.setFullScreen(false)
+      const app = lookupAppFromEvent(event)
+      // On Linux Electron hides the menu bar if we call
+      // `setFullScreen(false)` and we're not already in full-screen,
+      // so let's check for this.
+      if (app && app.win.isFullScreen()) {
+        app.win.setFullScreen(false)
+      }
     })
 
     ipcMain.handle('webxdc.exit', async event => {
-      const key = Object.keys(open_apps).find(
-        key => open_apps[key].win.webContents === event.sender
-      )
-      if (key) {
-        open_apps[key].win.loadURL('about:blank')
-        open_apps[key].win.close()
+      const app = lookupAppFromEvent(event)
+      if (app) {
+        app.win.loadURL('about:blank')
+        app.win.close()
       }
     })
 
     ipcMain.handle('webxdc.getAllUpdates', async (event, serial = 0) => {
-      const key = Object.keys(open_apps).find(
-        key => open_apps[key].win.webContents === event.sender
-      )
-      if (!key) {
+      const app = lookupAppFromEvent(event)
+      if (!app) {
         log.error(
           'webxdc.getAllUpdates failed, app not found in list of open ones'
         )
         return []
       }
 
-      const { accountId, msgId } = open_apps[key]
-      return await this.rpc.getWebxdcStatusUpdates(accountId, msgId, serial)
+      return await this.rpc.getWebxdcStatusUpdates(
+        app.accountId,
+        app.msgId,
+        serial
+      )
     })
 
     ipcMain.handle('webxdc.sendUpdate', async (event, update) => {
-      const key = Object.keys(open_apps).find(
-        key => open_apps[key].win.webContents === event.sender
-      )
-      if (!key) {
+      const app = lookupAppFromEvent(event)
+      if (!app) {
         log.error(
           'webxdc.sendUpdate failed, app not found in list of open ones'
         )
         return
       }
-      const { accountId, msgId } = open_apps[key]
       try {
         return await this.rpc.sendWebxdcStatusUpdate(
-          accountId,
-          msgId,
+          app.accountId,
+          app.msgId,
           update,
           ''
         )
@@ -580,18 +580,19 @@ export default class DCWebxdc {
     ipcMain.handle(
       'webxdc.sendRealtimeData',
       async (event, update: number[]) => {
-        const key = Object.keys(open_apps).find(
-          key => open_apps[key].win.webContents === event.sender
-        )
-        if (!key) {
+        const app = lookupAppFromEvent(event)
+        if (!app) {
           log.error(
             'webxdc.sendRealtimeData failed, app not found in list of open ones'
           )
           return
         }
-        const { accountId, msgId } = open_apps[key]
         try {
-          return await this.rpc.sendWebxdcRealtimeData(accountId, msgId, update)
+          return await this.rpc.sendWebxdcRealtimeData(
+            app.accountId,
+            app.msgId,
+            update
+          )
         } catch (error) {
           log.error('webxdc.sendWebxdcRealtimeData failed:', error)
           throw error
@@ -600,31 +601,25 @@ export default class DCWebxdc {
     )
 
     ipcMain.handle('webxdc.sendRealtimeAdvertisement', async event => {
-      const key = Object.keys(open_apps).find(
-        key => open_apps[key].win.webContents === event.sender
-      )
-      if (!key) {
+      const app = lookupAppFromEvent(event)
+      if (!app) {
         log.error(
           'webxdc.sendRealtimeAdvertisement failed, app not found in list of open ones'
         )
         return
       }
-      const { accountId, msgId } = open_apps[key]
-      await this.rpc.sendWebxdcRealtimeAdvertisement(accountId, msgId)
+      await this.rpc.sendWebxdcRealtimeAdvertisement(app.accountId, app.msgId)
     })
 
     ipcMain.handle('webxdc.leaveRealtimeChannel', async event => {
-      const key = Object.keys(open_apps).find(
-        key => open_apps[key].win.webContents === event.sender
-      )
-      if (!key) {
+      const app = lookupAppFromEvent(event)
+      if (!app) {
         log.error(
           'webxdc.leaveRealtimeChannel, app not found in list of open ones'
         )
         return
       }
-      const { accountId, msgId } = open_apps[key]
-      this.rpc.leaveWebxdcRealtime(accountId, msgId)
+      this.rpc.leaveWebxdcRealtime(app.accountId, app.msgId)
     })
 
     ipcMain.handle(
@@ -634,10 +629,8 @@ export default class DCWebxdc {
         file: { file_name: string; file_content: string } | null,
         text: string | null
       ) => {
-        const key = Object.keys(open_apps).find(
-          key => open_apps[key].win.webContents === event.sender
-        )
-        if (!key) {
+        const app = lookupAppFromEvent(event)
+        if (!app) {
           log.error(
             'webxdc.sendToChat failed, app not found in list of open ones'
           )
@@ -715,6 +708,7 @@ export default class DCWebxdc {
         }
       }
     )
+
     ipcMain.handle(
       'webxdc:instance-deleted',
       (_ev, accountId: number, instanceId: number) => {
@@ -732,6 +726,7 @@ export default class DCWebxdc {
         s.clearCache()
       }
     )
+
     ipcMain.handle(
       'open-maps-webxdc',
       async (evt, accountId: number, chatId?: number) => {
@@ -796,7 +791,7 @@ export default class DCWebxdc {
         }
       }
     )
-  }
+  } // end of DeltaChatController constructor
 
   get rpc() {
     return this.controller.jsonrpcRemote.rpc
@@ -841,6 +836,16 @@ export default class DCWebxdc {
       open_apps[open_app].win.close()
     }
   }
+}
+
+function lookupAppFromEvent(event: IpcMainInvokeEvent): AppInstance | null {
+  for (const key of Object.keys(open_apps)) {
+    const app = open_apps[key]
+    if (app.win.webContents === event.sender) {
+      return app
+    }
+  }
+  return null
 }
 
 function makeTitle(webxdcInfo: T.WebxdcMessageInfo, chatName: string): string {

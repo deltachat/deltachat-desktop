@@ -6,14 +6,18 @@
 ### Added
 - tauri: add support for sticker picker #4707
 - tauri: add html email view #4699
+- tauri: add titlebar menu #4755
 
 ### Changed
 - tauri: replace `tauri-plugin-shell` with `tauri-plugin-opener` #4699
+- new button styles #4741
 
 ### Fixed
+- webxdc: fix menu bar hiding when pressing Escape #4753
 - tauri: fix blobs and webxdc-icon scheme under windows #4705
 - tauri: fix: drag regions in navbar #4719
 - tauri: fall back to base locale if dialect/variant was not found
+- tauri: entire app hanging after clicking "Show Full Message..." or the "Help" window on Windows
 
 <a id="1_54_2"></a>
 
@@ -946,7 +950,7 @@
 > If you are using DC on these platforms you have the following options:
 > - Keep using 1.40.4
 > - update windows to 10 or 11
-> - switch to linux (or dual boot it) 
+> - switch to linux (or dual boot it)
 > - contact delta@merlinux.eu if you have money and want to sponsor the development of a special legacy build of deltachat desktop 1.42 for windows 7/8/8.1.
 >
 > - Core is now built on Debian 10: now requires glibc 2.28, so ubuntu 18 is not supported anymore.
