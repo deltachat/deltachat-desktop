@@ -108,18 +108,26 @@ pub(crate) async fn clear_tmp_folder(app: &AppHandle) -> Result<(), Error> {
     Ok(())
 }
 
+const BASE64_ENGINE: base64::engine::GeneralPurpose = base64::engine::GeneralPurpose::new(
+    &base64::alphabet::STANDARD,
+    base64::engine::GeneralPurposeConfig::new()
+        .with_decode_padding_mode(base64::engine::DecodePaddingMode::Indifferent),
+);
 // Tauri Commands
 // ==============
 
 // writeTempFileFromBase64
-// just accepts the raw base64 string, not data urls
+/// just accepts the raw base64 string, not data urls
+///
+/// The base64 decoder used is padding-indifferent,
+/// i.e. different base64 strings may produce the same binary contents.
 #[tauri::command]
 pub(crate) async fn write_temp_file_from_base64(
     app: AppHandle,
     name: &str,
     content: &str,
 ) -> Result<String, Error> {
-    let base64_data = base64::prelude::BASE64_STANDARD.decode(content)?;
+    let base64_data = BASE64_ENGINE.decode(content)?;
     let (mut file_handle, file_path) = create_tmp_file(&app, name).await?;
     file_handle.write_all(&base64_data).await?;
 

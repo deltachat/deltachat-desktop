@@ -17,6 +17,7 @@
 - fix some webxdc apps showing the "Close app?" prompt unintentionally #4737
 - webxdc: fix menu bar hiding when pressing Escape #4753
 - tauri: fix blobs and webxdc-icon scheme under windows #4705
+- tauri: fix app picker not working for some apps
 - tauri: fix: drag regions in navbar #4719
 - tauri: fall back to base locale if dialect/variant was not found
 - tauri: entire app hanging after clicking "Show Full Message..." or the "Help" window on Windows
