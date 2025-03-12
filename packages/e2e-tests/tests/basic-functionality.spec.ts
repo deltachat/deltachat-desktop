@@ -113,7 +113,10 @@ test('send message', async ({ page }) => {
   await switchToProfile(page, userB.id)
   // the chat that receives the message should not be selected
   // when profile is selected
-  await page.locator('.chat-list .chat-list-item').last().click()
+  await page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: 'Saved Messages' })
+    .click()
   await switchToProfile(page, userA.id)
   await page
     .locator('.chat-list .chat-list-item')
