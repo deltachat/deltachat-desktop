@@ -42,7 +42,6 @@ pub(crate) async fn open_help_window(
     }
     let app_url = tauri::WebviewUrl::App(url.into());
 
-
     let help_window: WebviewWindow = if let Some(help_window) = app.get_webview_window("help") {
         // TODO theoretically the URL here could still be
         // about:blank if it has not loaded yet.
@@ -67,12 +66,14 @@ pub(crate) async fn open_help_window(
     let _ = set_float_on_top_based_on_main_window(&help_window);
 
     let help_window_clone = help_window.clone();
-    tauri::async_runtime::block_on(menu_manager.register_window(
-        &app,
-        &help_window,
-        Box::new(move |app| create_help_menu(app, &help_window_clone)),
-    ))
-    .map_err(|err| Error::MenuCreation(err.to_string()))?;
+    menu_manager
+        .register_window(
+            &app,
+            &help_window,
+            Box::new(move |app| create_help_menu(app, &help_window_clone)),
+        )
+        .await
+        .map_err(|err| Error::MenuCreation(err.to_string()))?;
 
     Ok(())
 }
