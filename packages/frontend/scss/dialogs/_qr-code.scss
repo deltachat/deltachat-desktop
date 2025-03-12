@@ -48,5 +48,5 @@
   height: 20px;
   transform: rotate(135deg);
   margin-inline-end: 8px;
-  @include color-svg('./images/icons/link.svg', var(--buttonPrimaryText), 100%);
+  @include color-svg('./images/icons/link.svg', currentcolor, 100%);
 }
