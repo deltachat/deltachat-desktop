@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-export CORE_REPO_CHECKOUT="../deltachat-core-rust"
+export CORE_REPO_CHECKOUT="../core"
 
 cd packages/target-electron
 pnpm add @deltachat/jsonrpc-client@link:../../$CORE_REPO_CHECKOUT/deltachat-jsonrpc/typescript \
