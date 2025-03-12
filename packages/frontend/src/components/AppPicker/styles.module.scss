@@ -75,6 +75,11 @@
   position: absolute;
   top: 2px;
   right: 0;
+
+  // For higher specificity, to ensure override.
+  &.searchInputButton {
+    color: var(--picker-text-rgb);
+  }
 }
 
 .appIcon {
