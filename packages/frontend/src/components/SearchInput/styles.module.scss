@@ -27,6 +27,7 @@ $closeButtonSize: 30px;
 .searchInputButton {
   align-items: center;
   background-color: transparent;
+  color: var(--navBarText);
   border-radius: $borderRadius;
   border: 0;
   display: flex;
@@ -44,5 +45,5 @@ $closeButtonSize: 30px;
 }
 
 .searchInputButtonIcon {
-  background-color: var(--navBarText);
+  background-color: currentcolor;
 }
