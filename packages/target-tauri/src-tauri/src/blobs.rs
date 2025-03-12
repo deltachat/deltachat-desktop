@@ -1,7 +1,7 @@
 use anyhow::Context;
 use log::error;
 use percent_encoding::percent_decode_str;
-use tauri::{Manager, UriSchemeContext, UriSchemeResponder};
+use tauri::{utils::mime_type::MimeType, Manager, UriSchemeContext, UriSchemeResponder};
 use tokio::fs;
 
 use crate::state::deltachat::DeltaChatAppState;
@@ -80,16 +80,25 @@ pub(crate) fn delta_blobs_protocol<R: tauri::Runtime>(
                     .context("account not found")?;
 
                 let decoded_filename = percent_decode_str(file_name).decode_utf8()?.into_owned();
-                let file_path = account.get_blobdir().join(decoded_filename);
+                let file_path = account.get_blobdir().join(&decoded_filename);
                 // trace!("file_path: {file_path:?}");
 
                 match fs::read(&file_path).await {
                     Ok(blob) => {
-                        responder.respond(
-                            http::Response::builder()
-                                .status(http::StatusCode::OK)
-                                .body(blob)?,
-                        );
+                        let res = http::Response::builder()
+                            .status(http::StatusCode::OK)
+                            // Otherwise e.g. SVG images don't get displayed
+                            // in the composer draft.
+                            .header(
+                                http::header::CONTENT_TYPE,
+                                MimeType::parse_with_fallback(
+                                    &blob,
+                                    &decoded_filename,
+                                    MimeType::OctetStream,
+                                ),
+                            )
+                            .body(blob)?;
+                        responder.respond(res);
                     }
                     Err(err) => {
                         error!("dcblob loading error: {err:#} {file_path:?}");

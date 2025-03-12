@@ -20,6 +20,7 @@
 - tauri: fix: drag regions in navbar #4719
 - tauri: fall back to base locale if dialect/variant was not found
 - tauri: entire app hanging after clicking "Show Full Message..." or the "Help" window on Windows
+- tauri: fix SVG images not being displayed in composer draft
 
 <a id="1_54_2"></a>
 
