@@ -34,7 +34,7 @@ execSync('./bin/link_core/link_catalog.sh', { stdio: 'inherit' })
 
 // cargo / tauri
 try {
-  execSync(`cargo add deltachat deltachat-jsonrpc --git https://github.com/deltachat/deltachat-core-rust --tag v${newVersion}`, {
+  execSync(`cargo add deltachat deltachat-jsonrpc --git https://github.com/chatmail/core --tag v${newVersion}`, {
     stdio: 'inherit',
     cwd: resolve('packages/target-tauri/src-tauri'),
   })

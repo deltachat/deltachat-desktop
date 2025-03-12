@@ -11,7 +11,7 @@ If you found a bug, [report it on Github](https://github.com/deltachat/deltachat
 
 Project maintainers may transfer bugs that are not UI specific
 (e.g. related to network, database or encryption)
-to [Delta Chat Core](https://github.com/deltachat/deltachat-core-rust/issues).
+to [Delta Chat Core](https://github.com/chatmail/core/issues).
 If you believe the bug belongs to Core, you can report it there directly.
 
 Please search both open and closed issues to make sure your bug report is not a duplicate.

@@ -1,6 +1,6 @@
 # Update core
 
-[DeltaChat core](https://github.com/deltachat/deltachat-core-rust) is the base library that all clients and bots build upon and is the heart of DeltaChat.
+[DeltaChat core](https://github.com/chatmail/core) is the base library that all clients and bots build upon and is the heart of DeltaChat.
 
 To update the desktop application to a new core you need to update the following dependencies:
 
@@ -16,7 +16,7 @@ Let's say the core version you want to upgrade to is `X.Y.Z`.
 
 If version `X.Y.Z` hasn't yet been published to `npm`, then ask another maintainer.
 
-GitHub CI builds and publishes [stdio-rpc-server](https://github.com/deltachat/deltachat-core-rust/actions/workflows/deltachat-rpc-server.yml) and [jsonrpc-client](https://github.com/deltachat/deltachat-core-rust/actions/workflows/jsonrpc-client-npm-package.yml) to npm.
+GitHub CI builds and publishes [stdio-rpc-server](https://github.com/chatmail/core/actions/workflows/deltachat-rpc-server.yml) and [jsonrpc-client](https://github.com/chatmail/core/actions/workflows/jsonrpc-client-npm-package.yml) to npm.
 
 > bash shortcut `node ./bin/link_core/link_version.js 1.142.2`
 
@@ -37,7 +37,7 @@ DELTA_CHAT_RPC_SERVER=path/to/deltachat-rpc-server pnpm -w dev:electron --allow-
 You can easily get the deltachat-rpc-server binary for your pr by installing it with cargo install:
 
 ```
-cargo install --git https://github.com/deltachat/deltachat-core-rust --branch <your-branch> deltachat-rpc-server
+cargo install --git https://github.com/chatmail/core --branch <your-branch> deltachat-rpc-server
 ```
 
 Then you can run:
@@ -62,12 +62,12 @@ very useful for development.
 
 But be aware: there might be **migrations** that are applied to your accounts databases and there is no way back, unless you have a **backup**!
 
-If you already have a core git checkout, you can skip the first step.
+If you already have a core git checkout, you can skip the first step. Set the environment variable CORE_REPO_CHECKOUT to point to your core repository (as a relative path to deltachat-desktop) if it's not "../core" or "../deltachat-core-rust".
 
-1. clone the core repo, right next to your desktop repo folder: `git clone git@github.com:deltachat/deltachat-core-rust.git`
+1. clone the core repo, right next to your desktop repo folder: `git clone git@github.com:chatmail/core.git`
 2. go into your core checkout and run `git pull` to update it to the newest version, then create a branch for your changes
 3. run `python3 deltachat-rpc-server/npm-package/scripts/make_local_dev_version.py`
-4. run `npm i` and `npm run build` inside `../deltachat-core-rust/deltachat-jsonrpc/typescript/`
+4. run `npm i` and `npm run build` inside `../core/deltachat-jsonrpc/typescript/`
 5. go into your desktop repo and run `./bin/link_core/link_local.sh` [^1]
 
 Note that you need to run step 3 and 4 again after each change to core sourcecode.

@@ -38,7 +38,10 @@
 <details><summary>Click to expand</summary>
 
 - [Delta Chat Desktop ](#delta-chat-desktop-)
+  - [Editions](#editions)
   - [Documentation Links ](#documentation-links-)
+    - [For Users](#for-users)
+    - [For Developers](#for-developers)
   - [Table of Contents](#table-of-contents)
   - [Install ](#install-)
     - [Linux ](#linux-)
@@ -159,11 +162,11 @@ $ pnpm -w start:electron
 
 > `-w` means workspace root package, with this you don't need to have your current working directory at the repo-root to run those scripts.
 
-For development with local `deltachat-core-rust` read [`docs/UPDATE_CORE.md`](docs/UPDATE_CORE.md).
+For development with local `deltachat core` read [`docs/UPDATE_CORE.md`](docs/UPDATE_CORE.md).
 
 ### Troubleshooting <a id="troubleshooting"></a>
 
-- This module builds on top of [`deltachat-core-rust`](https://github.com/deltachat/deltachat-core-rust),
+- This module builds on top of [`deltachat core`](https://github.com/chatmail/core),
   which in turn has external dependencies. The instructions below assume a Linux system (e.g. Ubuntu 18.10).
 - Read the error, maybe it already tells you what you need to do. If not feel free to file an issue in this github repo.
 - Make sure that your nodejs version is `20.0.0` or newer.
