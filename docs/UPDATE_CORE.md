@@ -62,7 +62,7 @@ very useful for development.
 
 But be aware: there might be **migrations** that are applied to your accounts databases and there is no way back, unless you have a **backup**!
 
-If you already have a core git checkout, you can skip the first step.
+If you already have a core git checkout, you can skip the first step. Set the environment variable CORE_REPO_CHECKOUT to point to your core repository (as a relative path to deltachat-desktop) if it's not "../core" or "../deltachat-core-rust".
 
 1. clone the core repo, right next to your desktop repo folder: `git clone git@github.com:chatmail/core.git`
 2. go into your core checkout and run `git pull` to update it to the newest version, then create a branch for your changes

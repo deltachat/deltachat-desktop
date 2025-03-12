@@ -1,7 +1,16 @@
 #!/bin/bash
 set -e
 
-export CORE_REPO_CHECKOUT="../core"
+if [ -z "$CORE_REPO_CHECKOUT" ]; then
+    if [ -d "../core" ]; then
+    CORE_REPO_CHECKOUT="../core"
+  elif [ -d "../deltachat-core-rust" ]; then
+    CORE_REPO_CHECKOUT="../deltachat-core-rust"
+  else
+    echo "No valid directory found for CORE_REPO_CHECKOUT"
+    exit 1
+  fi
+fi
 
 cd packages/target-electron
 pnpm add @deltachat/jsonrpc-client@link:../../$CORE_REPO_CHECKOUT/deltachat-jsonrpc/typescript \
