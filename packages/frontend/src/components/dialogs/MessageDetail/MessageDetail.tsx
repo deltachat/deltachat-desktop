@@ -20,6 +20,7 @@ class MessageInfo extends React.Component<
     content?: string
     receivedAt?: number
     sentAt?: number
+    isEdited?: boolean
   }
 > {
   constructor(props: MessageInfoProps) {
@@ -29,6 +30,7 @@ class MessageInfo extends React.Component<
       content: undefined,
       receivedAt: undefined,
       sentAt: undefined,
+      isEdited: false,
     }
   }
 
@@ -52,12 +54,13 @@ class MessageInfo extends React.Component<
       content: info,
       sentAt: (message?.timestamp || 0) * 1000,
       receivedAt: (message?.receivedTimestamp || 0) * 1000,
+      isEdited: message?.isEdited,
     })
     this.forceUpdate()
   }
 
   render() {
-    const { receivedAt, sentAt, content } = this.state
+    const { receivedAt, sentAt, content, isEdited } = this.state
     const tx = window.static_translate
 
     return (
@@ -99,6 +102,14 @@ class MessageInfo extends React.Component<
                 <tr>
                   <td className='module-message-detail__label'>messageId</td>
                   <td>{this.props.messageId}</td>
+                </tr>
+              )}
+              {isEdited && (
+                <tr>
+                  <td className='module-message-detail__label'>
+                    {tx('edited')}
+                  </td>
+                  <td>{tx('yes')}</td>
                 </tr>
               )}
             </tbody>
