@@ -208,6 +208,7 @@ export default function QrReader({ onError, onScanSuccess }: Props) {
 
         const stream = await navigator.mediaDevices.getUserMedia({
           video: videoConstraints,
+          audio: false,
         })
 
         if (unmounted) {
