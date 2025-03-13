@@ -88,6 +88,10 @@ export async function createNewProfile(
 
   await page.getByTestId('paste').click()
 
+  // Wait for the dialog to close, so that the underlying content
+  // becomes interactive, otherwise `fill()` might silently do nothing.
+  await expect(page.getByTestId('close')).not.toBeVisible()
+
   const nameInput = page.locator('#displayName')
 
   await expect(nameInput).toBeVisible()
