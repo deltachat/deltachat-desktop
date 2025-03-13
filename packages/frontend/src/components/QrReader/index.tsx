@@ -17,7 +17,7 @@ import { qrCodeFromImage, qrCodeFromClipboard } from './helper'
 
 // @ts-ignore:next-line: We're importing a worker here with the help of the
 // "esbuild-plugin-inline-worker" plugin
-import Worker from './qr.worker'
+import QrWorker from './qr.worker'
 
 import styles from './styles.module.scss'
 
@@ -31,7 +31,7 @@ type Props = {
 
 const SCAN_QR_INTERVAL_MS = 250
 
-const worker = new Worker()
+const worker = new QrWorker() as Worker
 
 export default function QrReader({ onError, onScanSuccess }: Props) {
   const tx = useTranslationFunction()
@@ -295,7 +295,7 @@ export default function QrReader({ onError, onScanSuccess }: Props) {
 
       const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
       try {
-        worker.postMessage(imageData)
+        worker.postMessage(imageData, { transfer: [imageData.data.buffer] })
       } catch (error: any) {
         handleError(error)
       }
