@@ -117,6 +117,7 @@ pub fn run() {
             temp_file::write_temp_file_from_base64,
             temp_file::write_temp_file,
             temp_file::remove_temp_file,
+            temp_file::copy_blob_file_to_internal_tmp_dir,
             webxdc::on_webxdc_message_changed,
             webxdc::on_webxdc_message_deleted,
             webxdc::on_webxdc_status_update,

@@ -4,7 +4,7 @@ use anyhow::Context;
 use serde::Serialize;
 use tauri::{ipc::CapabilityBuilder, AppHandle, Manager};
 
-use crate::{AppState, DeltaChatAppState};
+use crate::{temp_file::get_temp_folder_path, AppState, DeltaChatAppState};
 
 #[derive(Serialize)]
 struct OpenerPluginPathEntry {
@@ -20,6 +20,8 @@ pub(crate) fn add_runtime_capabilies(app: &AppHandle) -> anyhow::Result<()> {
 
     let sticker_folders = format!("{accounts_dir}/*/stickers");
 
+    let tmp_folder = get_temp_folder_path(app)?;
+
     app.add_capability(
         CapabilityBuilder::new("open-paths")
             .window("main")
@@ -32,7 +34,12 @@ pub(crate) fn add_runtime_capabilies(app: &AppHandle) -> anyhow::Result<()> {
                     OpenerPluginPathEntry {
                         path: log_folder.to_str().context("string conversion")?.to_owned(),
                     },
-                    // TODO: tmp folder
+                    OpenerPluginPathEntry {
+                        path: format!(
+                            "{}/**/*",
+                            tmp_folder.to_str().context("string conversion")?.to_owned()
+                        ),
+                    },
                     OpenerPluginPathEntry {
                         path: sticker_folders,
                     },

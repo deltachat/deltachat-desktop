@@ -2,11 +2,13 @@ use std::{fmt::Display, fs::exists, path::PathBuf};
 
 use base64::Engine;
 use log::{info, warn};
-use tauri::{path::SafePathBuf, AppHandle, Manager};
+use tauri::{path::SafePathBuf, AppHandle, Manager, State};
 use tokio::{
-    fs::{create_dir, create_dir_all, read_dir, remove_dir_all, remove_file, File},
+    fs::{copy, create_dir, create_dir_all, read_dir, remove_dir_all, remove_file, File},
     io::AsyncWriteExt,
 };
+
+use crate::DeltaChatAppState;
 
 const TMP_FOLDER_NAME: &str = "delta-tauri-tmp";
 
@@ -21,6 +23,7 @@ pub(crate) enum Error {
     InvalidFileName,
     PathNotValidUtf8,
     PathToDeleteOutsideOfTempDir,
+    SourcePathOutsideOfBlobsDir,
 }
 impl serde::Serialize for Error {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -157,4 +160,37 @@ pub(crate) async fn write_temp_file(
 #[tauri::command]
 pub(crate) async fn remove_temp_file(app: AppHandle, path: SafePathBuf) -> Result<(), Error> {
     delete_tmp_file(&app, path).await
+}
+
+//copyBlobFileToInternalTmpDir
+#[tauri::command]
+pub(crate) async fn copy_blob_file_to_internal_tmp_dir(
+    app: AppHandle,
+    dc: State<'_, DeltaChatAppState>,
+    file_name: &str,
+    source_path: PathBuf,
+) -> Result<String, Error> {
+    if !source_path.starts_with(&dc.accounts_dir)
+        || source_path
+            .components()
+            .find(|c| {
+                if let Some(c) = c.as_os_str().to_str() {
+                    c.ends_with("-blobs")
+                } else {
+                    false
+                }
+            })
+            .is_none()
+    {
+        return Err(Error::SourcePathOutsideOfBlobsDir);
+    }
+
+    let (file_handle, file_path) = create_tmp_file(&app, file_name).await?;
+    drop(file_handle);
+    copy(source_path, file_path.clone()).await?;
+
+    Ok(file_path
+        .to_str()
+        .ok_or(Error::PathNotValidUtf8)?
+        .to_owned())
 }
