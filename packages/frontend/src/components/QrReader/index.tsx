@@ -29,11 +29,6 @@ type Props = {
   onScanSuccess: (data: string) => void
 }
 
-type ImageDimensions = {
-  width: number
-  height: number
-}
-
 const SCAN_QR_INTERVAL_MS = 250
 
 const worker = new Worker()
@@ -43,17 +38,13 @@ export default function QrReader({ onError, onScanSuccess }: Props) {
   const { openContextMenu } = useContext(ContextMenuContext)
 
   const videoRef = useRef<HTMLVideoElement>(null)
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const canvasRef = useRef<OffscreenCanvas>(new OffscreenCanvas(640, 480))
   const inputRef = useRef<HTMLInputElement>(null)
 
   const [ready, setReady] = useState(false)
   const [cameraAccessError, setCameraAccessError] = useState(false)
   const [videoDevices, setVideoDevices] = useState<MediaDeviceInfo[]>([])
   const [deviceId, setDeviceId] = useState<string | undefined>(undefined)
-  const [dimensions, setDimensions] = useState<ImageDimensions>({
-    width: 640,
-    height: 480,
-  })
 
   // Get all current video devices available to the user.
   useEffect(() => {
@@ -236,10 +227,8 @@ export default function QrReader({ onError, onScanSuccess }: Props) {
         }
 
         if (settings.width && settings.height) {
-          setDimensions({
-            width: settings.width,
-            height: settings.height,
-          })
+          canvasRef.current.width = settings.width
+          canvasRef.current.height = settings.height
         }
 
         setReady(true)
@@ -324,12 +313,6 @@ export default function QrReader({ onError, onScanSuccess }: Props) {
       <div className={classNames(styles.qrReaderStatus, styles.info)}>
         <Spinner />
       </div>
-      <canvas
-        className={styles.qrReaderCanvas}
-        width={dimensions.width}
-        height={dimensions.height}
-        ref={canvasRef}
-      />
       <video
         className={classNames(styles.qrReaderVideo, {
           [styles.visible]: ready && !cameraAccessError,
