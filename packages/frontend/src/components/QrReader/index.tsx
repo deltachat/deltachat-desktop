@@ -29,7 +29,10 @@ type Props = {
   onScanSuccess: (data: string) => void
 }
 
-const SCAN_QR_INTERVAL_MS = 250
+/**
+ * How long to idle between scan operations
+ */
+const SCAN_QR_INTERVAL_MS = 1000 / 30
 
 const worker = new QrWorker() as Worker
 
@@ -262,14 +265,6 @@ export default function QrReader({ onError, onScanSuccess }: Props) {
     const canvas = canvasRef.current
     const video = videoRef.current
 
-    const handleWorkerMessage = (event: MessageEvent) => {
-      if (event.data) {
-        onScanSuccess(event.data)
-      }
-    }
-
-    worker.addEventListener('message', handleWorkerMessage)
-
     if (!canvas) {
       return
     }
@@ -284,6 +279,7 @@ export default function QrReader({ onError, onScanSuccess }: Props) {
       return
     }
 
+    let stopScanning = false
     const scan = async () => {
       context.drawImage(
         video as CanvasImageSource,
@@ -293,18 +289,51 @@ export default function QrReader({ onError, onScanSuccess }: Props) {
         canvas.height
       )
 
+      if (stopScanning) {
+        return
+      }
+
+      let scanResult: any
       const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
+
+      if (stopScanning) {
+        return
+      }
+
       try {
         worker.postMessage(imageData, { transfer: [imageData.data.buffer] })
+
+        const scanResultP = new Promise(r => {
+          worker.addEventListener(
+            'message',
+            event => {
+              r(event.data)
+            },
+            { once: true }
+          )
+        })
+        scanResult = await scanResultP
+
+        if (stopScanning) {
+          return
+        }
       } catch (error: any) {
         handleError(error)
       }
+      if (scanResult) {
+        onScanSuccess(scanResult)
+      }
     }
 
-    const interval = window.setInterval(scan, SCAN_QR_INTERVAL_MS)
+    ;(async () => {
+      while (!stopScanning) {
+        await scan()
+        await new Promise(r => setTimeout(r, SCAN_QR_INTERVAL_MS))
+      }
+    })()
+
     return () => {
-      worker.removeEventListener('message', handleWorkerMessage)
-      window.clearInterval(interval)
+      stopScanning = true
     }
   }, [handleError, onScanSuccess])
 
