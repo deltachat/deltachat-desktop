@@ -15,6 +15,7 @@
 
 ### Fixed
 - fix some webxdc apps showing the "Close app?" prompt unintentionally #4737
+- improve QR scanner performance
 - webxdc: fix menu bar hiding when pressing Escape #4753
 - tauri: fix blobs and webxdc-icon scheme under windows #4705
 - tauri: fix app picker not working for some apps
