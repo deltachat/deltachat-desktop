@@ -13,7 +13,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 
-import { qrCodeFromImage, qrCodeFromClipboard } from './helper'
+import { fileToBase64, base64ToImageData } from './helper'
 
 // @ts-ignore:next-line: We're importing a worker here with the help of the
 // "esbuild-plugin-inline-worker" plugin
@@ -23,6 +23,9 @@ import styles from './styles.module.scss'
 
 import type { ContextMenuItem } from '../ContextMenu'
 import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
+import { getLogger } from '@deltachat-desktop/shared/logger'
+
+const log = getLogger('renderer/QrCodeReader')
 
 type Props = {
   onError: (error: string) => void
@@ -34,7 +37,7 @@ type Props = {
  */
 const SCAN_QR_INTERVAL_MS = 1000 / 30
 
-const worker = new QrWorker() as Worker
+let worker: Worker
 
 export default function QrReader({ onError, onScanSuccess }: Props) {
   const tx = useTranslationFunction()
@@ -48,6 +51,14 @@ export default function QrReader({ onError, onScanSuccess }: Props) {
   const [cameraAccessError, setCameraAccessError] = useState(false)
   const [videoDevices, setVideoDevices] = useState<MediaDeviceInfo[]>([])
   const [deviceId, setDeviceId] = useState<string | undefined>(undefined)
+  const [processingFile, setProcessingFile] = useState(false)
+
+  useEffect(() => {
+    worker = new QrWorker() as Worker
+    return () => {
+      worker.terminate()
+    }
+  }, [])
 
   // Get all current video devices available to the user.
   useEffect(() => {
@@ -80,14 +91,67 @@ export default function QrReader({ onError, onScanSuccess }: Props) {
     [onError]
   )
 
+  const processQrCodeWithWorker = useCallback(
+    async (
+      imageData: ImageData,
+      onScanSuccess: (scanResult: string) => void,
+      handleError: (error: any) => void
+    ) => {
+      try {
+        worker.postMessage(imageData)
+
+        const scanResultP = new Promise(r => {
+          worker.addEventListener(
+            'message',
+            event => {
+              setProcessingFile(false)
+              r(event.data)
+            },
+            { once: true }
+          )
+        })
+        const scanResult = (await scanResultP) as string
+        if (scanResult) {
+          onScanSuccess(scanResult)
+        } else {
+          throw Error(`no data in image`)
+        }
+      } catch (error: any) {
+        setProcessingFile(false)
+        handleError(error)
+      }
+    },
+    []
+  )
+
   const handlePasteFromClipboard = useCallback(async () => {
     try {
-      const result = await qrCodeFromClipboard(runtime)
-      onScanSuccess(result)
+      // Try interpreting the clipboard data as an image
+      let base64: string | null = null
+      setProcessingFile(true)
+      try {
+        base64 = await runtime.readClipboardImage()
+      } catch (error) {
+        log.warn('qrCodeFromClipboard: readClipboardImage', error)
+      }
+      if (base64) {
+        const imageData = await base64ToImageData(base64)
+        processQrCodeWithWorker(imageData, onScanSuccess, handleError)
+      } else {
+        // .. otherwise return non-image data from clipboard directly
+        const data = await runtime.readClipboardText()
+        if (!data) {
+          throw new Error('no data in clipboard')
+        }
+        // trim whitespaces because user might copy them by accident when sending over other messengers
+        // see https://github.com/deltachat/deltachat-desktop/issues/4161#issuecomment-2390428338
+        onScanSuccess(data.trim())
+      }
     } catch (error) {
+      setProcessingFile(false)
       handleError(error)
     }
-  }, [onScanSuccess, handleError])
+  }, [processQrCodeWithWorker, onScanSuccess, handleError])
 
   // Read data from an external image file.
   //
@@ -106,17 +170,15 @@ export default function QrReader({ onError, onScanSuccess }: Props) {
         return
       }
       const file = event.target.files[0]
-
+      setProcessingFile(true)
       try {
-        // Convert file to correct image data and scan it
-        const result = await qrCodeFromImage(file)
+        // Convert file to correct image data
+        const base64 = await fileToBase64(file)
+        const imageData = await base64ToImageData(base64)
 
-        if (result) {
-          onScanSuccess(result.data)
-        } else {
-          throw Error(`no data in image`)
-        }
+        processQrCodeWithWorker(imageData, onScanSuccess, handleError)
       } catch (error: any) {
+        setProcessingFile(false)
         handleError(error)
       }
 
@@ -126,7 +188,7 @@ export default function QrReader({ onError, onScanSuccess }: Props) {
         inputRef.current.value = ''
       }
     },
-    [handleError, onScanSuccess]
+    [handleError, onScanSuccess, setProcessingFile, processQrCodeWithWorker]
   )
 
   // Show a context menu with different video input options to the user.
@@ -345,7 +407,7 @@ export default function QrReader({ onError, onScanSuccess }: Props) {
       </div>
       <video
         className={classNames(styles.qrReaderVideo, {
-          [styles.visible]: ready && !cameraAccessError,
+          [styles.visible]: ready && !cameraAccessError && !processingFile,
         })}
         autoPlay
         muted
@@ -353,16 +415,16 @@ export default function QrReader({ onError, onScanSuccess }: Props) {
         playsInline
         ref={videoRef}
       />
-      {cameraAccessError && (
+      {cameraAccessError && !processingFile && (
         <div className={classNames(styles.qrReaderStatus, styles.error)}>
           {tx('camera_access_failed')}
         </div>
       )}
-      <div className={styles.qrReaderOverlay} />
-      {ready && !cameraAccessError && (
+      {!processingFile && <div className={styles.qrReaderOverlay} />}
+      {ready && !cameraAccessError && !processingFile && (
         <div className={styles.qrReaderScanLine} />
       )}
-      {!cameraAccessError && (
+      {!cameraAccessError && !processingFile && (
         <div className={styles.qrReaderHint}>{tx('qrscan_hint_desktop')}</div>
       )}
       <button
