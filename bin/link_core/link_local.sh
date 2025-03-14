@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/nix/store/ki4if6b0w5bqv8dc5lrjp8xm7wjy9dlf-bash-5.2p37/bin/bash
 set -e
 
 export CORE_REPO_CHECKOUT="../deltachat-core-rust"

@@ -47,6 +47,7 @@ export default function ImageCropper({
   desiredWidth: number
   desiredHeight: number
 }) {
+  console.log("Image Cropper: ", filepath);
   const tx = useTranslationFunction()
   const rememberLastUsedPathPromise = rememberLastUsedPath(
     LastUsedSlot.ProfileImage
@@ -135,6 +136,7 @@ export default function ImageCropper({
     rememberLastUsedPathPromise.then(({ setLastPath }) =>
       setLastPath(dirname(filepath))
     )
+    console.log("tempfilepath: ", tempfilepath);
     onResult(tempfilepath)
     onClose()
   }
@@ -391,7 +393,7 @@ export default function ImageCropper({
   return (
     <Dialog canEscapeKeyClose onClose={onClose} canOutsideClickClose={false}>
       <DialogHeader title={tx('ImageEditorHud_crop')} />
-      <DialogBody className={styles.imageCropperDialogBody}>
+      <DialogBody>
         <DialogContent className={styles.imageCropperDialogContent}>
           <div ref={container} className={styles.imageCropperContainer}>
             <div ref={shade} className={styles.imageCropperShade}></div>

@@ -8,6 +8,6 @@
   },
   "dependencies": {
     "@deltachat-desktop/shared": "link:../shared",
-    "@deltachat/jsonrpc-client": "catalog:"
+    "@deltachat/jsonrpc-client": "link:../../../deltachat-core-rust/deltachat-jsonrpc/typescript"
   }
 }

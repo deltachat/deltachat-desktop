@@ -48,6 +48,7 @@ export default function ImageSelector({
       properties: ['openFile'],
       defaultPath,
     })
+    console.warn("Image Selector: ", file)
 
     if (file) {
       onChange(file)
