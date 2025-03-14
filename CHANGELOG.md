@@ -12,6 +12,12 @@
 ### Changed
 - tauri: replace `tauri-plugin-shell` with `tauri-plugin-opener` #4699
 - new button styles #4741
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.157.1`
+  - Ignore encryption preferences
+  - Delete messages on IMAP when deleting chat
+  - Allow doubled avatar resolution
+  - Update iroh to 0.33
+  - Ignore hidden headers in IMF section
 
 ### Fixed
 - fix some webxdc apps showing the "Close app?" prompt unintentionally #4737
