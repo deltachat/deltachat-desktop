@@ -171,15 +171,13 @@ pub(crate) async fn copy_blob_file_to_internal_tmp_dir(
     source_path: PathBuf,
 ) -> Result<String, Error> {
     if !source_path.starts_with(&dc.accounts_dir)
-        || !source_path
-            .components()
-            .any(|c| {
-                if let Some(c) = c.as_os_str().to_str() {
-                    c.ends_with("-blobs")
-                } else {
-                    false
-                }
-            })
+        || !source_path.components().any(|c| {
+            if let Some(c) = c.as_os_str().to_str() {
+                c.ends_with("-blobs")
+            } else {
+                false
+            }
+        })
     {
         return Err(Error::SourcePathOutsideOfBlobsDir);
     }

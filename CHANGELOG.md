@@ -8,6 +8,7 @@
 - tauri: add support for sticker picker #4707
 - tauri: add html email view #4699
 - tauri: add titlebar menu #4755
+- tauri: implement runtime.copyFileToInternalTmpDir and allow opening files in temp dir #4778
 
 ### Changed
 - tauri: replace `tauri-plugin-shell` with `tauri-plugin-opener` #4699
@@ -22,6 +23,7 @@
 - tauri: fall back to base locale if dialect/variant was not found
 - tauri: entire app hanging after clicking "Show Full Message..." or the "Help" window on Windows
 - tauri: fix SVG images not being displayed in composer draft
+- tauri: fix open logfile from settings, fix opening stickerfolder, fix opening weblinks #4778
 
 <a id="1_54_2"></a>
 
