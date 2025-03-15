@@ -50,3 +50,10 @@
   margin-inline-end: 8px;
   @include color-svg('./images/icons/link.svg', currentcolor, 100%);
 }
+
+.copy-content-preview {
+  background-color: var(--buttonSecondaryBackground);
+  word-wrap: break-word;
+  word-break: break-all;
+  padding: 10px;
+}

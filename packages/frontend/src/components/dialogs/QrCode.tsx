@@ -27,8 +27,10 @@ import useProcessQr from '../../hooks/useProcessQr'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { selectedAccountId } from '../../ScreenController'
 
+import useDialog from '../../hooks/dialog/useDialog'
 import type { DialogProps } from '../../contexts/DialogContext'
 import useAlertDialog from '../../hooks/dialog/useAlertDialog'
+import QrCodeCopyConfirmationDialog from './QrCodeCopyConfirmationDialog'
 
 const log = getLogger('renderer/dialogs/QrCode')
 
@@ -105,14 +107,21 @@ export function QrCodeShowQrInner({
 }) {
   const { userFeedback } = useContext(ScreenContext)
   const tx = useTranslationFunction()
+  const { openDialog } = useDialog()
 
   const onCopy = () => {
-    runtime.writeClipboardText(qrCode).then(_ => {
-      userFeedback({
-        type: 'success',
-        text: tx('copy_qr_data_success'),
-      })
-      onClose()
+    // Pop up confirmation dialog when clicked instead of copying the link directly
+    openDialog(QrCodeCopyConfirmationDialog, {
+      message: tx('share_invite_link_explain'),
+      content: qrCode,
+      copyCb: () => {
+        userFeedback({
+          type: 'success',
+          text: tx('copy_qr_data_success'),
+        })
+        onClose()
+      },
+      // no cancelCb; skip closing the window, maybe the user wants to use the QR code after all
     })
   }
 
