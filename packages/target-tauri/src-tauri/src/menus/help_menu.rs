@@ -82,7 +82,7 @@ pub(crate) fn create_help_menu(
         true,
         Some("CmdOrCtrl+Q"),
     )?;
-    let tx = app.state::<TranslationState>();
+    let tx: tauri::State<'_, TranslationState> = app.state::<TranslationState>();
     Menu::with_items(
         app,
         &[
@@ -163,7 +163,10 @@ pub(crate) fn create_help_menu(
                         help_window.is_always_on_top()?,
                         None::<&str>,
                     )?,
-                    &PredefinedMenuItem::fullscreen(app, Some("Toggle Full Screen"))?,
+                    &PredefinedMenuItem::fullscreen(
+                        app,
+                        Some(&tx.sync_translate("toggle_fullscreen")),
+                    )?,
                 ],
             )?,
         ],

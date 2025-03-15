@@ -366,7 +366,7 @@ pub(crate) fn get_help_menu(app: &AppHandle) -> anyhow::Result<Submenu<Wry>> {
     let help = MenuItem::with_id(
         app,
         MainMenuAction::Help,
-        tx.sync_translate("menu_help"),
+        tx.sync_translate("global_menu_help_desktop"),
         true,
         Some("F1"),
     )?;
@@ -408,7 +408,7 @@ pub(crate) fn get_help_menu(app: &AppHandle) -> anyhow::Result<Submenu<Wry>> {
 
     Ok(Submenu::with_items(
         app,
-        "Help",
+        tx.sync_translate("global_menu_help_desktop"),
         true,
         &[
             &help,
