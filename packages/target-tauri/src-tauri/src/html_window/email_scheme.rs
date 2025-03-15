@@ -29,7 +29,7 @@ pub(crate) fn email_protocol<R: tauri::Runtime>(
     _request: http::Request<Vec<u8>>,
     responder: UriSchemeResponder,
 ) {
-    error!("email {}", _request.uri());
+    // info!("email {}", _request.uri());
 
     // URI format is email://<anything>
     // (file path doesn't matter, because the html content is always returned)
