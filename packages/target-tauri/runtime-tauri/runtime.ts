@@ -466,10 +466,13 @@ class TauriRuntime implements Runtime {
     return invoke('write_temp_file', { name, content })
   }
   copyFileToInternalTmpDir(
-    _fileName: string,
-    _sourcePath: string
+    fileName: string,
+    sourcePath: string
   ): Promise<string> {
-    throw new Error('Method not implemented.44')
+    return invoke('copy_blob_file_to_internal_tmp_dir', {
+      fileName,
+      sourcePath,
+    })
   }
 
   removeTempFile(path: string): Promise<void> {
