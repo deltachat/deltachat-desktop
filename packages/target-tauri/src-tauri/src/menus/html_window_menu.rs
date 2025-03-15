@@ -1,6 +1,6 @@
 use crate::{
     settings::{apply_zoom_factor_html_window, CONFIG_FILE, HTML_EMAIL_ZOOM_FACTOR_KEY},
-    state::menu_manager::MenuManger,
+    state::menu_manager::MenuManager,
 };
 
 use super::menu_action::MenuAction;
@@ -72,7 +72,7 @@ impl MenuAction<'static> for HtmlWindowMenuAction {
         let win = app
             .get_window(&self.window_id)
             .context("window not found")?;
-        let menu_manager = app.state::<MenuManger>();
+        let menu_manager = app.state::<MenuManager>();
         match self.action {
             HtmlWindowMenuActionVariant::QuitApp => {
                 app.exit(0);
