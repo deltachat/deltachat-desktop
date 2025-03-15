@@ -26,7 +26,7 @@ use crate::{
     },
     state::html_email_instances::InnerHtmlEmailInstanceData,
     temp_file::get_temp_folder_path,
-    DeltaChatAppState, HtmlEmailInstancesState, TranslationState, MenuManager,
+    DeltaChatAppState, HtmlEmailInstancesState, MenuManager, TranslationState,
 };
 
 const HEADER_HEIGHT: f64 = 100.;
