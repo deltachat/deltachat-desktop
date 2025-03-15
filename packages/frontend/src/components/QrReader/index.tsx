@@ -15,6 +15,8 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 
+import useAlertDialog from '../../hooks/dialog/useAlertDialog'
+
 import { fileToBase64, base64ToImageData } from './helper'
 
 // @ts-ignore:next-line: We're importing a worker here with the help of the
@@ -59,6 +61,7 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
   ({ onError, onScanSuccess }: Props, ref) => {
     const tx = useTranslationFunction()
     const { openContextMenu } = useContext(ContextMenuContext)
+    const openAlertDialog = useAlertDialog()
 
     const videoRef = useRef<HTMLVideoElement>(null)
     const canvasRef = useRef<OffscreenCanvas>(new OffscreenCanvas(640, 480))
@@ -158,6 +161,13 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
 
     const handlePasteFromClipboard = useCallback(async () => {
       try {
+        if (processingFile) {
+          openAlertDialog({
+            message:
+              'Already processing a file. Please wait for the result or cancel it',
+          })
+          return
+        }
         // Try interpreting the clipboard data as an image
         let base64: string | null = null
         setProcessingFile(true)
@@ -170,6 +180,7 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
           const imageData = await base64ToImageData(base64)
           processQrCodeWithWorker(imageData, onScanSuccess, handleError)
         } else {
+          setProcessingFile(false)
           // .. otherwise return non-image data from clipboard directly
           const data = await runtime.readClipboardText()
           if (!data) {
@@ -180,10 +191,15 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
           onScanSuccess(data.trim())
         }
       } catch (error) {
-        setProcessingFile(false)
         handleError(error)
       }
-    }, [processQrCodeWithWorker, onScanSuccess, handleError])
+    }, [
+      processingFile,
+      openAlertDialog,
+      processQrCodeWithWorker,
+      onScanSuccess,
+      handleError,
+    ])
 
     // Read data from an external image file.
     //
@@ -199,6 +215,13 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
     const handleFileInputChange = useCallback(
       async (event: React.ChangeEvent<HTMLInputElement>) => {
         if (!event.target.files || event.target.files.length === 0) {
+          return
+        }
+        if (processingFile) {
+          openAlertDialog({
+            message:
+              'Already processing a file. Please wait for the result or cancel it',
+          })
           return
         }
         const file = event.target.files[0]
@@ -220,7 +243,13 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
           inputRef.current.value = ''
         }
       },
-      [handleError, onScanSuccess, processQrCodeWithWorker]
+      [
+        handleError,
+        onScanSuccess,
+        openAlertDialog,
+        processQrCodeWithWorker,
+        processingFile,
+      ]
     )
 
     // Show a context menu with different video input options to the user.
@@ -464,18 +493,20 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
         {!cameraAccessError && !processingFile && (
           <div className={styles.qrReaderHint}>{tx('qrscan_hint_desktop')}</div>
         )}
-        <button
-          className={styles.qrReaderButton}
-          onClick={handleSelectInput}
-          aria-label={tx('menu_settings')}
-          data-testid='qr-reader-settings'
-        >
-          <Icon
-            icon='settings'
-            size={24}
-            className={styles.qrReaderButtonIcon}
-          />
-        </button>
+        {!processingFile && (
+          <button
+            className={styles.qrReaderButton}
+            onClick={handleSelectInput}
+            aria-label={tx('menu_settings')}
+            data-testid='qr-reader-settings'
+          >
+            <Icon
+              icon='settings'
+              size={24}
+              className={styles.qrReaderButtonIcon}
+            />
+          </button>
+        )}
         <input
           className={styles.qrReaderFileInput}
           type='file'
