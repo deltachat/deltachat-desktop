@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use anyhow::Context;
 use deltachat_jsonrpc::{
     api::{Accounts, CommandApi},
     yerpc::{RpcClient, RpcSession},
@@ -14,6 +15,7 @@ pub(crate) struct DeltaChatAppState {
     pub(crate) deltachat_rpc_session: RpcSession<CommandApi>,
     #[allow(dead_code)]
     pub(crate) deltachat_rpc_send_task: JoinHandle<anyhow::Result<()>>,
+    pub(crate) accounts_dir: String,
 }
 
 impl DeltaChatAppState {
@@ -21,7 +23,8 @@ impl DeltaChatAppState {
         let data_dir = app.path().app_data_dir()?;
         info!("Data directory is {data_dir:?}");
 
-        let accounts = Accounts::new(data_dir.join("accounts"), true).await?;
+        let accounts_dir = data_dir.join("accounts");
+        let accounts = Accounts::new(accounts_dir.clone(), true).await?;
         let accounts = Arc::new(RwLock::new(accounts));
         let state = CommandApi::from_arc(accounts.clone()).await;
         let (client, mut out_receiver) = RpcClient::new();
@@ -47,6 +50,10 @@ impl DeltaChatAppState {
             deltachat: accounts,
             deltachat_rpc_session: session,
             deltachat_rpc_send_task: send_task,
+            accounts_dir: accounts_dir
+                .to_str()
+                .context("string conversion failed")?
+                .to_owned(),
         })
     }
 }

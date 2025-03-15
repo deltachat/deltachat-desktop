@@ -17,7 +17,7 @@ import { qrCodeFromImage, qrCodeFromClipboard } from './helper'
 
 // @ts-ignore:next-line: We're importing a worker here with the help of the
 // "esbuild-plugin-inline-worker" plugin
-import Worker from './qr.worker'
+import QrWorker from './qr.worker'
 
 import styles from './styles.module.scss'
 
@@ -29,31 +29,25 @@ type Props = {
   onScanSuccess: (data: string) => void
 }
 
-type ImageDimensions = {
-  width: number
-  height: number
-}
+/**
+ * How long to idle between scan operations
+ */
+const SCAN_QR_INTERVAL_MS = 1000 / 30
 
-const SCAN_QR_INTERVAL_MS = 250
-
-const worker = new Worker()
+const worker = new QrWorker() as Worker
 
 export default function QrReader({ onError, onScanSuccess }: Props) {
   const tx = useTranslationFunction()
   const { openContextMenu } = useContext(ContextMenuContext)
 
   const videoRef = useRef<HTMLVideoElement>(null)
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const canvasRef = useRef<OffscreenCanvas>(new OffscreenCanvas(640, 480))
   const inputRef = useRef<HTMLInputElement>(null)
 
   const [ready, setReady] = useState(false)
   const [cameraAccessError, setCameraAccessError] = useState(false)
   const [videoDevices, setVideoDevices] = useState<MediaDeviceInfo[]>([])
   const [deviceId, setDeviceId] = useState<string | undefined>(undefined)
-  const [dimensions, setDimensions] = useState<ImageDimensions>({
-    width: 640,
-    height: 480,
-  })
 
   // Get all current video devices available to the user.
   useEffect(() => {
@@ -214,6 +208,7 @@ export default function QrReader({ onError, onScanSuccess }: Props) {
 
         const stream = await navigator.mediaDevices.getUserMedia({
           video: videoConstraints,
+          audio: false,
         })
 
         if (unmounted) {
@@ -236,10 +231,8 @@ export default function QrReader({ onError, onScanSuccess }: Props) {
         }
 
         if (settings.width && settings.height) {
-          setDimensions({
-            width: settings.width,
-            height: settings.height,
-          })
+          canvasRef.current.width = settings.width
+          canvasRef.current.height = settings.height
         }
 
         setReady(true)
@@ -273,14 +266,6 @@ export default function QrReader({ onError, onScanSuccess }: Props) {
     const canvas = canvasRef.current
     const video = videoRef.current
 
-    const handleWorkerMessage = (event: MessageEvent) => {
-      if (event.data) {
-        onScanSuccess(event.data)
-      }
-    }
-
-    worker.addEventListener('message', handleWorkerMessage)
-
     if (!canvas) {
       return
     }
@@ -295,6 +280,7 @@ export default function QrReader({ onError, onScanSuccess }: Props) {
       return
     }
 
+    let stopScanning = false
     const scan = async () => {
       context.drawImage(
         video as CanvasImageSource,
@@ -304,18 +290,51 @@ export default function QrReader({ onError, onScanSuccess }: Props) {
         canvas.height
       )
 
+      if (stopScanning) {
+        return
+      }
+
+      let scanResult: any
       const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
+
+      if (stopScanning) {
+        return
+      }
+
       try {
-        worker.postMessage(imageData)
+        worker.postMessage(imageData, { transfer: [imageData.data.buffer] })
+
+        const scanResultP = new Promise(r => {
+          worker.addEventListener(
+            'message',
+            event => {
+              r(event.data)
+            },
+            { once: true }
+          )
+        })
+        scanResult = await scanResultP
+
+        if (stopScanning) {
+          return
+        }
       } catch (error: any) {
         handleError(error)
       }
+      if (scanResult) {
+        onScanSuccess(scanResult)
+      }
     }
 
-    const interval = window.setInterval(scan, SCAN_QR_INTERVAL_MS)
+    ;(async () => {
+      while (!stopScanning) {
+        await scan()
+        await new Promise(r => setTimeout(r, SCAN_QR_INTERVAL_MS))
+      }
+    })()
+
     return () => {
-      worker.removeEventListener('message', handleWorkerMessage)
-      window.clearInterval(interval)
+      stopScanning = true
     }
   }, [handleError, onScanSuccess])
 
@@ -324,12 +343,6 @@ export default function QrReader({ onError, onScanSuccess }: Props) {
       <div className={classNames(styles.qrReaderStatus, styles.info)}>
         <Spinner />
       </div>
-      <canvas
-        className={styles.qrReaderCanvas}
-        width={dimensions.width}
-        height={dimensions.height}
-        ref={canvasRef}
-      />
       <video
         className={classNames(styles.qrReaderVideo, {
           [styles.visible]: ready && !cameraAccessError,
