@@ -11,19 +11,15 @@ use super::{
 };
 use crate::{
     i18n::errors::Error,
-    settings::{CONFIG_FILE, LOCALE_KEY},
-    state::menu_manager::MenuManger,
+    settings::{apply_language_change, CONFIG_FILE, LOCALE_KEY},
+    state::menu_manager::MenuManager,
 };
 
 #[tauri::command]
-pub fn change_lang(
-    app: AppHandle,
-    menu_manager: State<MenuManger>,
-    locale: &str,
-) -> Result<(), Error> {
+pub async fn change_lang(app: AppHandle, locale: &str) -> Result<(), Error> {
     let store = app.store(CONFIG_FILE)?;
     store.set(LOCALE_KEY, locale);
-    menu_manager.update_all(&app);
+    apply_language_change(&app).await?;
     Ok(())
 }
 

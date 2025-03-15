@@ -14,6 +14,8 @@ pub(crate) enum Error {
     #[error(transparent)]
     SerdeJSON(#[from] serde_json::Error),
     BaseLocaleExtraction,
+    #[error(transparent)]
+    Anyhow(#[from] anyhow::Error),
 }
 
 impl serde::Serialize for Error {

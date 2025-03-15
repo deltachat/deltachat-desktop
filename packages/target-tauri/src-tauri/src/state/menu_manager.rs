@@ -45,14 +45,14 @@ impl<R: Runtime> WindowAbstraction<R> for Window<R> {
 }
 
 #[derive(Clone)]
-pub struct MenuManger {
+pub struct MenuManager {
     // {[window_id]: callbackToUpdateMenu}
     inner: Arc<RwLock<HashMap<String, Arc<GenerateMenuFn>>>>,
 }
 
-impl MenuManger {
+impl MenuManager {
     pub(crate) fn new() -> Self {
-        MenuManger {
+        MenuManager {
             inner: Arc::new(RwLock::new(HashMap::new())),
         }
     }

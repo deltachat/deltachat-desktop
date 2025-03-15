@@ -2,7 +2,7 @@ use serde::Serialize;
 use tauri::{
     async_runtime::block_on,
     menu::{CheckMenuItem, Menu},
-    Manager,
+    AppHandle, Manager,
 };
 use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_store::StoreExt;
@@ -13,7 +13,7 @@ use crate::{
         HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_KEY, HTML_EMAIL_WARNING_DEFAULT,
         HTML_EMAIL_WARNING_KEY,
     },
-    HtmlEmailInstancesState,
+    HtmlEmailInstancesState, TranslationState,
 };
 
 use super::error::Error;
@@ -48,6 +48,8 @@ pub(crate) async fn html_email_set_load_remote_content(
     webview: tauri::Webview,
     load_remote_content: bool,
 ) -> Result<(), Error> {
+    let tl = app.state::<TranslationState>();
+
     let desktop_settings = app.store(CONFIG_FILE)?;
     let warning = get_setting_bool_or(
         desktop_settings.get(HTML_EMAIL_WARNING_KEY),
@@ -58,7 +60,7 @@ pub(crate) async fn html_email_set_load_remote_content(
         let (tx, rx) = tokio::sync::oneshot::channel::<bool>();
 
         app.dialog()
-            .message("tx('load_remote_content_ask')")
+            .message(tl.sync_translate("load_remote_content_ask"))
             .parent(&webview.window())
             .buttons(tauri_plugin_dialog::MessageDialogButtons::OkCancelCustom(
                 // TODO use translation strings, as soon as translations are avaialble in rust backend
@@ -80,6 +82,8 @@ pub(crate) fn html_email_open_menu(
     webview: tauri::Webview,
     html_instances_state: tauri::State<HtmlEmailInstancesState>,
 ) -> Result<(), Error> {
+    let tx = app.state::<TranslationState>();
+
     let desktop_settings = app.store(CONFIG_FILE)?;
     let always_load = get_setting_bool_or(
         desktop_settings.get(HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_KEY),
@@ -95,12 +99,18 @@ pub(crate) fn html_email_open_menu(
 
     let always_load_remote_images = CheckMenuItem::new(
         &app,
-        "tx('always_load_remote_images')",
+        tx.sync_translate("always_load_remote_images"),
         true,
         always_load,
         None::<&str>,
     )?;
-    let show_warning = CheckMenuItem::new(&app, "tx('show_warning')", true, warning, None::<&str>)?;
+    let show_warning = CheckMenuItem::new(
+        &app,
+        tx.sync_translate("show_warning"),
+        true,
+        warning,
+        None::<&str>,
+    )?;
 
     let menu = if instance_state.is_contact_request {
         Menu::with_items(&app, &[&show_warning])
@@ -142,18 +152,21 @@ pub(crate) struct HtmlEmailInfo {
 
 #[tauri::command]
 pub(crate) fn get_html_window_info(
+    app: AppHandle,
     webview: tauri::Webview,
     html_instances_state: tauri::State<HtmlEmailInstancesState>,
 ) -> Result<HtmlEmailInfo, Error> {
+    let tx = app.state::<TranslationState>();
+
     let label = webview.window().label().to_owned();
     // IDEA: can we make this function async without getting an error on html_instances_state
     let instance =
         block_on(html_instances_state.get(&label)).ok_or(Error::WindowNotFoundInState)?;
 
     let network_button_label_text = if instance.blocked_by_proxy {
-        format!("tx(\"load_remote_content_blocked_by_proxy\")")
+        tx.sync_translate("load_remote_content_blocked_by_proxy")
     } else {
-        format!("tx(\"load_remote_content\")")
+        tx.sync_translate("load_remote_content")
     };
 
     Ok(HtmlEmailInfo {
