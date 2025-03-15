@@ -14,6 +14,8 @@ pub(crate) enum Error {
     DeltaChat(anyhow::Error),
     #[error("you can not load remote content when you have proxy enabled")]
     BlockedByProxy,
+    #[error("MenuCreation {0}")]
+    MenuCreation(String),
 }
 
 impl serde::Serialize for Error {

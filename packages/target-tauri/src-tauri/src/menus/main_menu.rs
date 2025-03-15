@@ -259,6 +259,77 @@ pub(crate) fn create_main_menu(
             )?,
         ],
     )?;
+
+    Menu::with_items(
+        app,
+        &[
+            &Submenu::with_items(app, "File", true, &[&settings, &quit])?,
+            &Submenu::with_items(
+                app,
+                "Edit",
+                true,
+                &[
+                    #[cfg(target_os = "macos")]
+                    &PredefinedMenuItem::undo(app, Some("Undo"))?,
+                    #[cfg(target_os = "macos")]
+                    &PredefinedMenuItem::redo(app, Some("Redo"))?,
+                    #[cfg(target_os = "macos")]
+                    &PredefinedMenuItem::separator(app)?,
+                    &PredefinedMenuItem::cut(app, Some("Cut"))?,
+                    &PredefinedMenuItem::copy(app, Some("Copy"))?,
+                    &PredefinedMenuItem::paste(app, Some("Paste"))?,
+                    &PredefinedMenuItem::select_all(app, Some("Select All"))?,
+                ],
+            )?,
+            &Submenu::with_items(
+                app,
+                "View",
+                true,
+                &[
+                    &float_on_top,
+                    &zoom_menu,
+                    &get_locales_menu(app, &current_language_key)?,
+                    &PredefinedMenuItem::separator(app)?,
+                    &developer_menu,
+                ],
+            )?,
+            &get_help_menu(app)?,
+        ],
+    )
+    .map_err(|err| err.into())
+}
+
+fn get_locales_menu(
+    app: &AppHandle,
+    current_language_key: &str,
+) -> anyhow::Result<Submenu<tauri::Wry>> {
+    let languages = app.state::<AppState>().all_languages_for_menu.clone();
+
+    let languages_items: Vec<Box<dyn IsMenuItem<tauri::Wry>>> = languages
+        .iter()
+        .map(|(id, name)| {
+            Ok::<Box<dyn IsMenuItem<tauri::Wry>>, anyhow::Error>(Box::new(CheckMenuItem::with_id(
+                app,
+                MenuId::from_str(&format!("{SET_LOCALE_MENU_ID_PREFIX}:{id}"))?,
+                name,
+                true,
+                id == current_language_key,
+                None::<&str>,
+            )?))
+        })
+        .collect::<Result<Vec<Box<dyn IsMenuItem<tauri::Wry>>>, anyhow::Error>>()?;
+
+    let languages_items: Vec<&dyn IsMenuItem<tauri::Wry>> =
+        languages_items.iter().map(|m| m.as_ref()).collect();
+
+    // TODO find way to transfer the locale name over menu action
+    // -> special id for locales?
+    //  (TODO find out whats possible)
+
+    Submenu::with_items(app, "Language", true, &languages_items).map_err(|err| err.into())
+}
+
+pub(crate) fn get_help_menu(app: &AppHandle) -> anyhow::Result<Submenu<Wry>> {
     let help = MenuItem::with_id(
         app,
         MainMenuAction::Help,
@@ -302,85 +373,19 @@ pub(crate) fn create_main_menu(
         None::<&str>,
     )?;
 
-    Menu::with_items(
+    Ok(Submenu::with_items(
         app,
+        "Help",
+        true,
         &[
-            &Submenu::with_items(app, "File", true, &[&settings, &quit])?,
-            &Submenu::with_items(
-                app,
-                "Edit",
-                true,
-                &[
-                    #[cfg(target_os = "macos")]
-                    &PredefinedMenuItem::undo(app, Some("Undo"))?,
-                    #[cfg(target_os = "macos")]
-                    &PredefinedMenuItem::redo(app, Some("Redo"))?,
-                    #[cfg(target_os = "macos")]
-                    &PredefinedMenuItem::separator(app)?,
-                    &PredefinedMenuItem::cut(app, Some("Cut"))?,
-                    &PredefinedMenuItem::copy(app, Some("Copy"))?,
-                    &PredefinedMenuItem::paste(app, Some("Paste"))?,
-                    &PredefinedMenuItem::select_all(app, Some("Select All"))?,
-                ],
-            )?,
-            &Submenu::with_items(
-                app,
-                "View",
-                true,
-                &[
-                    &float_on_top,
-                    &zoom_menu,
-                    &get_locales_menu(app, &current_language_key)?,
-                    &PredefinedMenuItem::separator(app)?,
-                    &developer_menu,
-                ],
-            )?,
-            &Submenu::with_items(
-                app,
-                "Help",
-                true,
-                &[
-                    &help,
-                    &keybindings,
-                    &PredefinedMenuItem::separator(app)?,
-                    &learn_more,
-                    &contribute,
-                    &report_issue,
-                    &PredefinedMenuItem::separator(app)?,
-                    &about,
-                ],
-            )?,
+            &help,
+            &keybindings,
+            &PredefinedMenuItem::separator(app)?,
+            &learn_more,
+            &contribute,
+            &report_issue,
+            &PredefinedMenuItem::separator(app)?,
+            &about,
         ],
-    )
-    .map_err(|err| err.into())
-}
-
-fn get_locales_menu(
-    app: &AppHandle,
-    current_language_key: &str,
-) -> anyhow::Result<Submenu<tauri::Wry>> {
-    let languages = app.state::<AppState>().all_languages_for_menu.clone();
-
-    let languages_items: Vec<Box<dyn IsMenuItem<tauri::Wry>>> = languages
-        .iter()
-        .map(|(id, name)| {
-            Ok::<Box<dyn IsMenuItem<tauri::Wry>>, anyhow::Error>(Box::new(CheckMenuItem::with_id(
-                app,
-                MenuId::from_str(&format!("{SET_LOCALE_MENU_ID_PREFIX}:{id}"))?,
-                name,
-                true,
-                id == current_language_key,
-                None::<&str>,
-            )?))
-        })
-        .collect::<Result<Vec<Box<dyn IsMenuItem<tauri::Wry>>>, anyhow::Error>>()?;
-
-    let languages_items: Vec<&dyn IsMenuItem<tauri::Wry>> =
-        languages_items.iter().map(|m| m.as_ref()).collect();
-
-    // TODO find way to transfer the locale name over menu action
-    // -> special id for locales?
-    //  (TODO find out whats possible)
-
-    Submenu::with_items(app, "Language", true, &languages_items).map_err(|err| err.into())
+    )?)
 }

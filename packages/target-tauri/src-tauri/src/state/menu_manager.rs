@@ -65,6 +65,7 @@ impl MenuManger {
         let _ = self.inner.write().await.insert(id.to_owned(), data);
     }
 
+    #[cfg(target_os = "macos")]
     pub(crate) async fn get_menu_for_window(
         &self,
         app: &AppHandle,
@@ -117,6 +118,8 @@ impl MenuManger {
                     });
                 }
             });
+            // window was just opened so change menu to it
+            app.set_menu(menu_generator_arc(app)?)?;
         }
 
         let self_clone = self.clone();
