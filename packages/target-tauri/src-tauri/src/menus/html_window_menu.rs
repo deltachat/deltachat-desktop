@@ -180,7 +180,7 @@ pub(crate) fn create_html_window_menu(
             )?,
             &Submenu::with_items(
                 app,
-                "View",
+                tx.sync_translate("global_menu_view_desktop"),
                 true,
                 &[
                     &MenuItem::with_id(
