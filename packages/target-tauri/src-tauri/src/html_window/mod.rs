@@ -125,7 +125,8 @@ pub(crate) async fn open_html_window(
             Url::from_str("http://email.localhost/index.html").unwrap()
         }
     };
-    let initial_url_origin = initial_url.origin();
+    let initial_url_scheme = initial_url.scheme().to_owned();
+    let initial_url_host = initial_url.host_str().map(|o| o.to_owned());
 
     let mut mail_view_builder = tauri::webview::WebviewBuilder::new(
         format!("{window_id}-mail"),
@@ -145,7 +146,9 @@ pub(crate) async fn open_html_window(
         // We only really care about navigating to `initial_url`:
         // the HTML message viewer is not supposed to be multipage,
         // so it's OK to handle such weird links as external, below.
-        let will_be_intercepted = url.origin() == initial_url_origin;
+        let will_be_intercepted = url.scheme() == initial_url_scheme
+            && url.host_str().map(|o| o.to_owned()) == initial_url_host
+            && url.port() == initial_url.port();
         if will_be_intercepted {
             return true;
         }
