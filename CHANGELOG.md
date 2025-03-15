@@ -12,6 +12,7 @@
 ### Changed
 - tauri: replace `tauri-plugin-shell` with `tauri-plugin-opener` #4699
 - new button styles #4741
+- removed the option to import encryption keys #4783
 
 ### Fixed
 - fix some webxdc apps showing the "Close app?" prompt unintentionally #4737
