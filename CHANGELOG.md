@@ -7,7 +7,7 @@
 - add a way to edit messages (in development mode only) #4717
 - tauri: add support for sticker picker #4707
 - tauri: add html email view #4699
-- tauri: add titlebar menu #4755
+- tauri: add titlebar menu #4755 #4787
 
 ### Changed
 - tauri: replace `tauri-plugin-shell` with `tauri-plugin-opener` #4699
