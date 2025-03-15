@@ -13,6 +13,13 @@
 ### Changed
 - tauri: replace `tauri-plugin-shell` with `tauri-plugin-opener` #4699
 - new button styles #4741
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.157.2`
+  - Delete messages on IMAP when deleting chat
+  - Allow doubled avatar resolution
+  - Update iroh to 0.33
+  - Ignore hidden headers in IMF section
+  - Prefer hidden Message-ID header if any.
+  - Update async-compression to 0.4.21 to fix IMAP COMPRESS getting stuck
 
 ### Fixed
 - fix some webxdc apps showing the "Close app?" prompt unintentionally #4737
