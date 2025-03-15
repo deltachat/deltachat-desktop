@@ -159,6 +159,9 @@ pub fn run() {
                 .level_for("async_smtp", log::LevelFilter::Warn)
                 .level_for("rustls", log::LevelFilter::Warn)
                 .level_for("iroh_net", log::LevelFilter::Warn)
+                .level_for("iroh", log::LevelFilter::Warn)
+                .level_for("iroh_quinn", log::LevelFilter::Warn)
+                .level_for("iroh_quinn_proto", log::LevelFilter::Warn)
                 // also emitted by tauri
                 .level_for("tracing", log::LevelFilter::Warn)
                 .level_for("igd_next", log::LevelFilter::Warn)
