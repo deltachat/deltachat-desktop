@@ -49,7 +49,7 @@ export default function QrCodeCopyConfirmationDialog({
       </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <FooterActionButton onClick={onCopy}>
+          <FooterActionButton onClick={onCopy} data-testid='confirm-copy'>
             {tx('global_menu_edit_copy_desktop')}
           </FooterActionButton>
           <FooterActionButton onClick={onCancel}>

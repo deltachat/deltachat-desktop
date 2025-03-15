@@ -88,6 +88,7 @@ test('start chat with user', async ({ page, context, browserName }) => {
   // copy invite link from user A
   await page.getByTestId('qr-scan-button').click()
   await page.getByTestId('copy-qr-code').click()
+  await page.getByTestId('confirm-copy').click()
   // await page.getByTestId('qr-dialog').getByTestId('close').click()
 
   await switchToProfile(page, userB.id)
@@ -237,10 +238,7 @@ test('create group', async ({ page, context, browserName }) => {
   await page.getByTestId('chat-info-button').click()
   await page.locator('#showqrcode button').click()
   await page.getByTestId('copy-qr-code').click()
-  await page
-    .getByTestId('group-invite-qr')
-    .getByTestId('dialog-header-close')
-    .click()
+  await page.getByTestId('confirm-copy').click()
   await page.getByTestId('view-group-dialog-header-close').click()
   // paste invite link in account of userC
   await switchToProfile(page, userC.id)

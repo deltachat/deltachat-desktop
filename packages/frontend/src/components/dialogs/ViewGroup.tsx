@@ -382,6 +382,7 @@ export function ShowQRDialog({
       <QrCodeShowQrInner
         qrCode={qrCode}
         qrCodeSVG={qrCodeSVG}
+        onClose={onClose}
         description={tx('qrshow_join_group_hint', [groupName])}
       />
     </Dialog>
