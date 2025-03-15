@@ -12,6 +12,7 @@
 ### Changed
 - tauri: replace `tauri-plugin-shell` with `tauri-plugin-opener` #4699
 - new button styles #4741
+- remove end-to-end encryption preferences from settings (e2e encryption is always preferred when available) #4782
 
 ### Fixed
 - fix some webxdc apps showing the "Close app?" prompt unintentionally #4737
