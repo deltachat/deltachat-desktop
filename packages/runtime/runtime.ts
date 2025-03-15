@@ -75,12 +75,6 @@ export interface Runtime {
   showOpenFileDialog(options: RuntimeOpenDialogOptions): Promise<string[]>
   downloadFile(pathToSource: string, filename: string): Promise<void>
   transformBlobURL(blob: string): string
-  /**
-  * Copy and deduplicate a file to deltachat blob folder
-  * @param file file to copy
-  * @returns the path to the file in the deltachat blob folder
-  */
-  copyToBlobDir(file: string): Promise<string>
   transformStickerURL(sticker_path: string): string
   readClipboardText(): Promise<string>
   /**

@@ -6,7 +6,7 @@ import ImageCropper from '../../ImageCropper'
 import { LastUsedSlot } from '../../../utils/lastUsedPaths'
 import { avatarInitial } from '../../Avatar'
 import useDialog from '../../../hooks/dialog/useDialog'
-import { runtime } from '@deltachat-desktop/runtime-interface'
+import { BackendRemote } from '../../../backend-com'
 
 type Props = {
   addr?: string
@@ -39,11 +39,16 @@ export default function ProfileImageSelector({
         if (!filepath) {
           setProfilePicture(null)
         } else {
-          let blob_path = await runtime.copyToBlobDir(filepath) 
+          let acc = await BackendRemote.rpc.getSelectedAccountId()
+          if (acc === null) {
+            console.error("No account selected")
+            return
+          }
+          const blob_path = await BackendRemote.rpc.copyToBlobdir(acc, filepath)
 
           console.log("blob_path: ", blob_path)
           openDialog(ImageCropper, {
-            filepath,
+            filepath: blob_path,
             shape: 'circle',
             onResult: setProfilePicture,
             onCancel: () => {},

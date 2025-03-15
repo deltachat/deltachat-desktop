@@ -339,10 +339,7 @@ class TauriRuntime implements Runtime {
     }
     return ''
   }
-  copyToBlobDir(path: string): Promise<string> {
-    return invoke("copy_to_blobdir", { path })
-    
-  }
+
   transformStickerURL(sticker_path: string): string {
     const matches = sticker_path.match(/.*(:?\\|\/)(.+?)\1stickers\1(.*)/)
     // this.log.info({ transformStickerURL: sticker_path, matches })
