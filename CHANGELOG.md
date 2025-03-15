@@ -14,6 +14,7 @@
 - tauri: replace `tauri-plugin-shell` with `tauri-plugin-opener` #4699
 - new button styles #4741
 - remove end-to-end encryption preferences from settings (e2e encryption is always preferred when available) #4782
+- add dialog with hints about invite link #4667
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.157.2`
   - Delete messages on IMAP when deleting chat
   - Allow doubled avatar resolution
