@@ -9,7 +9,7 @@
 - tauri: add html email view #4699
 - tauri: add titlebar menu #4755 #4787
 - tauri: implement runtime.copyFileToInternalTmpDir and allow opening files in temp dir #4778
-- add option to reset encryption state for contact in encryption info dialog
+- add option to reset encryption state for contact in encryption info dialog #4797
 
 ### Changed
 - tauri: replace `tauri-plugin-shell` with `tauri-plugin-opener` #4699
