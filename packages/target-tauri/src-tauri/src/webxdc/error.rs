@@ -14,6 +14,8 @@ pub(crate) enum Error {
     WebxdcInstanceNotFound(u32, u32),
     #[error(transparent)]
     UrlParse(#[from] url::ParseError),
+    #[error("MenuCreation {0}")]
+    MenuCreation(String),
 }
 
 impl serde::Serialize for Error {
