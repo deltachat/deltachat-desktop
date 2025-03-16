@@ -102,6 +102,9 @@ pub fn run() {
 
     builder
         .invoke_handler(tauri::generate_handler![
+            // When adding a command, don't forget to also add it
+            // to `.commands()` in `build.rs`, and to `permissions`
+            // in `capabilities`.
             greet,
             deltachat_jsonrpc_request,
             ui_ready,

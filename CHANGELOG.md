@@ -33,6 +33,7 @@
 - tauri: entire app hanging after clicking "Show Full Message..." or the "Help" window on Windows
 - tauri: fix SVG images not being displayed in composer draft
 - tauri: fix open logfile from settings, fix opening stickerfolder, fix opening weblinks #4778
+- tauri: hardening: allow commands for windows in a white-list manner #4795
 
 <a id="1_54_2"></a>
 
