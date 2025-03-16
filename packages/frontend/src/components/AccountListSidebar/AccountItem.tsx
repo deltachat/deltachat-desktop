@@ -244,6 +244,7 @@ export default function AccountItem({
         [styles.active]: isSelected,
         [styles['context-menu-active']]: isContextMenuActive,
         [styles.isSticky]: isSticky,
+        'unconfigured-account': account?.kind !== 'Configured',
       })}
       aria-busy={!account}
       onClick={() => onSelectAccount(accountId)}
