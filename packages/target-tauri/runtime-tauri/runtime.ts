@@ -512,6 +512,11 @@ class TauriRuntime implements Runtime {
   isDroppedFileFromOutside(_file: File): boolean {
     throw new Error('Method not implemented.51')
   }
+  // only works on macOS and iOS
+  // exp.runtime.debug_get_datastore_ids()
+  async debug_get_datastore_ids() {
+    return await invoke('debug_get_datastore_ids')
+  }
   onChooseLanguage: ((locale: string) => Promise<void>) | undefined
   onThemeUpdate: (() => void) | undefined
   onShowDialog:
