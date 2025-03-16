@@ -161,7 +161,11 @@ class TauriRuntime implements Runtime {
     value: string | number | boolean | undefined
   ): Promise<void> {
     // 1. set values in key value store
-    await this.store.set(key, value)
+    if (typeof value === "undefined") {
+      await this.store.delete(key)
+    } else {
+      await this.store.set(key, value)
+    }
     // 2. if supported in tauri settings, then also notifiy tauri (like tray_icon, but not experimental ui options)
     await invoke('change_desktop_settings_apply_side_effects', { key })
   }
