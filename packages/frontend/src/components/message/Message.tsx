@@ -274,7 +274,6 @@ function buildContextMenu(
 
   // See https://github.com/deltachat/deltachat-desktop/issues/4695.
   const showEdit =
-    runtime.getRC_Config().devmode &&
     message.fromId === C.DC_CONTACT_ID_SELF &&
     message.text !== '' &&
     chat.canSend &&
