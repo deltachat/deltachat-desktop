@@ -88,6 +88,11 @@ $paddingVertical: 20px;
   }
 }
 
+// if there is no footer we need a bottom margin
+.dialogBody:last-child {
+  margin-bottom: 20px;
+}
+
 .dialogFooter {
   width: 100%;
   background-color: var(--bp4DialogBgPrimary);
