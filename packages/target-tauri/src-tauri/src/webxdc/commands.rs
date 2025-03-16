@@ -8,13 +8,17 @@ use deltachat::{
 use log::{error, info, trace, warn};
 
 use tauri::{
-    async_runtime::block_on, AppHandle, Manager, State, Url, WebviewUrl, WebviewWindowBuilder,
-    WindowEvent,
+    async_runtime::block_on, image::Image, AppHandle, Manager, State, Url, WebviewUrl,
+    WebviewWindowBuilder, WindowEvent,
 };
 
 use crate::{
+    menus::webxdc_menu::create_webxdc_window_menu,
     settings::get_content_protection,
-    state::webxdc_instances::{WebxdcInstance, WebxdcInstancesState},
+    state::{
+        menu_manager::MenuManger,
+        webxdc_instances::{WebxdcInstance, WebxdcInstancesState},
+    },
     util::truncate_text,
     webxdc::data_storage::{
         delete_webxdc_data_for_account, delete_webxdc_data_for_instance, set_data_store,
@@ -167,6 +171,7 @@ pub(crate) async fn open_webxdc<'a>(
     app: AppHandle,
     webxdc_instances: State<'a, WebxdcInstancesState>,
     deltachat_state: State<'a, DeltaChatAppState>,
+    menu_manager: State<'_, MenuManger>,
     account_id: u32,
     message_id: u32,
     href: String,
@@ -242,8 +247,7 @@ pub(crate) async fn open_webxdc<'a>(
 
     let window = window_builder.build()?;
 
-    let window_arc = Arc::new(window);
-    let window = window_arc.clone();
+    let window_arc = Arc::new(window.clone());
 
     window.on_window_event(move |event| {
         if let WindowEvent::Destroyed = event {
@@ -251,7 +255,6 @@ pub(crate) async fn open_webxdc<'a>(
             warn!("webxdc window destroyed {account_id} {message_id}");
 
             // remove from "running instances"-state
-
             let webxdc_instances = window_arc.state::<WebxdcInstancesState>();
             block_on(webxdc_instances.remove(&window_id));
         }
@@ -268,6 +271,34 @@ pub(crate) async fn open_webxdc<'a>(
             window.set_content_protected(true)?;
         }
     }
+
+    let icon = {
+        let webxdc_info = webxdc_message
+            .get_webxdc_info(&account)
+            .await
+            .map_err(|err| Error::DeltaChat(err))?;
+        let blob: Vec<u8> = webxdc_message
+            .get_webxdc_blob(&account, &webxdc_info.icon)
+            .await
+            .map_err(|err| Error::DeltaChat(err))?;
+
+        // IDEA also support jpg, at the moment only png is supported
+        let image = Image::from_bytes(&blob);
+        if let Err(err) = &image {
+            error!("failed to read webxdc icon as png image: {err}")
+        }
+        image.ok()
+    };
+
+    let window_clone = window.clone();
+    menu_manager
+        .register_window(
+            &app,
+            &window,
+            Box::new(move |app| create_webxdc_window_menu(app, &window_clone, icon.clone())),
+        )
+        .await
+        .map_err(|err| Error::MenuCreation(err.to_string()))?;
 
     Ok(())
 }
