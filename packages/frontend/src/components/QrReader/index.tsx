@@ -41,10 +41,6 @@ type Props = {
  */
 const SCAN_QR_INTERVAL_MS = 1000 / 30
 
-let worker: Worker
-
-let workerClipBoard: Worker
-
 export type QrCodeScanRef = {
   handlePasteFromClipboard: () => void
 }
@@ -73,15 +69,19 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
     const [deviceId, setDeviceId] = useState<string | undefined>(undefined)
     const [processingFile, setProcessingFile] = useState(false)
 
+    const worker = useRef<Worker>(new QrWorker() as Worker)
+    const workerClipBoard = useRef<Worker>(new QrWorker() as Worker)
+
     useEffect(() => {
-      worker = new QrWorker() as Worker
-      workerClipBoard = new QrWorker() as Worker
+      const currentWorker = worker.current
+      const currentWorkerClipBoard = workerClipBoard.current
+
       return () => {
         // terminate worker if component is unmounted,
         // otherwise we might get a delayed error message
         // if scan fails, even after closing the QR dialog
-        worker.terminate()
-        workerClipBoard.terminate()
+        currentWorker.terminate()
+        currentWorkerClipBoard.terminate()
       }
     }, [])
 
@@ -128,9 +128,9 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
         handleError: (error: any) => void
       ) => {
         try {
-          workerClipBoard.postMessage(imageData)
+          workerClipBoard.current.postMessage(imageData)
           const scanResultP = new Promise(r => {
-            workerClipBoard.addEventListener(
+            workerClipBoard.current.addEventListener(
               'message',
               event => {
                 setProcessingFile(false)
@@ -430,10 +430,12 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
         }
 
         try {
-          worker.postMessage(imageData, { transfer: [imageData.data.buffer] })
+          worker.current.postMessage(imageData, {
+            transfer: [imageData.data.buffer],
+          })
 
           const scanResultP = new Promise(r => {
-            worker.addEventListener(
+            worker.current.addEventListener(
               'message',
               event => {
                 r(event.data)
