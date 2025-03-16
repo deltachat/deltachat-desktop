@@ -129,6 +129,8 @@ pub fn run() {
             webxdc::commands::delete_webxdc_account_data,
             webxdc::commands::close_all_webxdc_instances,
             webxdc::commands::open_webxdc,
+            #[cfg(target_vendor = "apple")]
+            webxdc::data_storage::debug_get_datastore_ids,
             runtime_info::get_runtime_info,
             settings::change_desktop_settings_apply_side_effects,
             help_window::open_help_window,

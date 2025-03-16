@@ -1001,9 +1001,9 @@ dependencies = [
 
 [[package]]
 name = "cargo_toml"
-version = "0.21.0"
+version = "0.22.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5fbd1fe9db3ebf71b89060adaf7b0504c2d6a425cf061313099547e382c2e472"
+checksum = "02260d489095346e5cafd04dea8e8cb54d1d74fcd759022a9b72986ebe9a1257"
 dependencies = [
  "serde",
  "toml",
@@ -7976,7 +7976,7 @@ checksum = "61c41af27dd6d1e27b1b16b489db798443478cef1f06a660c96db617ba5de3b1"
 [[package]]
 name = "tauri"
 version = "2.3.1"
-source = "git+https://github.com/Simon-Laux/tauri?branch=add-is-always-on-top#223bbdf8b8563d866ec753c1c7ec77729f1e3526"
+source = "git+https://github.com/tauri-apps/tauri?rev=51bcafe3232344cc8e4e413576cb8ee87887ab2b#51bcafe3232344cc8e4e413576cb8ee87887ab2b"
 dependencies = [
  "anyhow",
  "bytes",
@@ -8011,7 +8011,7 @@ dependencies = [
  "tauri-macros",
  "tauri-runtime",
  "tauri-runtime-wry",
- "tauri-utils 2.2.0 (git+https://github.com/Simon-Laux/tauri?branch=add-is-always-on-top)",
+ "tauri-utils 2.2.0 (git+https://github.com/tauri-apps/tauri?rev=51bcafe3232344cc8e4e413576cb8ee87887ab2b)",
  "thiserror 2.0.12",
  "tokio",
  "tracing",
@@ -8027,7 +8027,7 @@ dependencies = [
 [[package]]
 name = "tauri-build"
 version = "2.0.6"
-source = "git+https://github.com/Simon-Laux/tauri?branch=add-is-always-on-top#223bbdf8b8563d866ec753c1c7ec77729f1e3526"
+source = "git+https://github.com/tauri-apps/tauri?rev=51bcafe3232344cc8e4e413576cb8ee87887ab2b#51bcafe3232344cc8e4e413576cb8ee87887ab2b"
 dependencies = [
  "anyhow",
  "cargo_toml",
@@ -8039,7 +8039,7 @@ dependencies = [
  "semver",
  "serde",
  "serde_json",
- "tauri-utils 2.2.0 (git+https://github.com/Simon-Laux/tauri?branch=add-is-always-on-top)",
+ "tauri-utils 2.2.0 (git+https://github.com/tauri-apps/tauri?rev=51bcafe3232344cc8e4e413576cb8ee87887ab2b)",
  "tauri-winres",
  "toml",
  "walkdir",
@@ -8048,7 +8048,7 @@ dependencies = [
 [[package]]
 name = "tauri-codegen"
 version = "2.0.5"
-source = "git+https://github.com/Simon-Laux/tauri?branch=add-is-always-on-top#223bbdf8b8563d866ec753c1c7ec77729f1e3526"
+source = "git+https://github.com/tauri-apps/tauri?rev=51bcafe3232344cc8e4e413576cb8ee87887ab2b#51bcafe3232344cc8e4e413576cb8ee87887ab2b"
 dependencies = [
  "base64 0.22.1",
  "brotli",
@@ -8063,7 +8063,7 @@ dependencies = [
  "serde_json",
  "sha2",
  "syn 2.0.99",
- "tauri-utils 2.2.0 (git+https://github.com/Simon-Laux/tauri?branch=add-is-always-on-top)",
+ "tauri-utils 2.2.0 (git+https://github.com/tauri-apps/tauri?rev=51bcafe3232344cc8e4e413576cb8ee87887ab2b)",
  "thiserror 2.0.12",
  "time",
  "url",
@@ -8074,14 +8074,14 @@ dependencies = [
 [[package]]
 name = "tauri-macros"
 version = "2.0.5"
-source = "git+https://github.com/Simon-Laux/tauri?branch=add-is-always-on-top#223bbdf8b8563d866ec753c1c7ec77729f1e3526"
+source = "git+https://github.com/tauri-apps/tauri?rev=51bcafe3232344cc8e4e413576cb8ee87887ab2b#51bcafe3232344cc8e4e413576cb8ee87887ab2b"
 dependencies = [
  "heck 0.5.0",
  "proc-macro2",
  "quote",
  "syn 2.0.99",
  "tauri-codegen",
- "tauri-utils 2.2.0 (git+https://github.com/Simon-Laux/tauri?branch=add-is-always-on-top)",
+ "tauri-utils 2.2.0 (git+https://github.com/tauri-apps/tauri?rev=51bcafe3232344cc8e4e413576cb8ee87887ab2b)",
 ]
 
 [[package]]
@@ -8277,8 +8277,9 @@ dependencies = [
 [[package]]
 name = "tauri-runtime"
 version = "2.4.0"
-source = "git+https://github.com/Simon-Laux/tauri?branch=add-is-always-on-top#223bbdf8b8563d866ec753c1c7ec77729f1e3526"
+source = "git+https://github.com/tauri-apps/tauri?rev=51bcafe3232344cc8e4e413576cb8ee87887ab2b#51bcafe3232344cc8e4e413576cb8ee87887ab2b"
 dependencies = [
+ "cookie",
  "dpi",
  "gtk",
  "http 1.2.0",
@@ -8286,7 +8287,7 @@ dependencies = [
  "raw-window-handle",
  "serde",
  "serde_json",
- "tauri-utils 2.2.0 (git+https://github.com/Simon-Laux/tauri?branch=add-is-always-on-top)",
+ "tauri-utils 2.2.0 (git+https://github.com/tauri-apps/tauri?rev=51bcafe3232344cc8e4e413576cb8ee87887ab2b)",
  "thiserror 2.0.12",
  "url",
  "windows 0.60.0",
@@ -8295,7 +8296,7 @@ dependencies = [
 [[package]]
 name = "tauri-runtime-wry"
 version = "2.4.1"
-source = "git+https://github.com/Simon-Laux/tauri?branch=add-is-always-on-top#223bbdf8b8563d866ec753c1c7ec77729f1e3526"
+source = "git+https://github.com/tauri-apps/tauri?rev=51bcafe3232344cc8e4e413576cb8ee87887ab2b#51bcafe3232344cc8e4e413576cb8ee87887ab2b"
 dependencies = [
  "gtk",
  "http 1.2.0",
@@ -8310,7 +8311,7 @@ dependencies = [
  "softbuffer",
  "tao",
  "tauri-runtime",
- "tauri-utils 2.2.0 (git+https://github.com/Simon-Laux/tauri?branch=add-is-always-on-top)",
+ "tauri-utils 2.2.0 (git+https://github.com/tauri-apps/tauri?rev=51bcafe3232344cc8e4e413576cb8ee87887ab2b)",
  "tracing",
  "url",
  "webkit2gtk",
@@ -8357,8 +8358,9 @@ dependencies = [
 [[package]]
 name = "tauri-utils"
 version = "2.2.0"
-source = "git+https://github.com/Simon-Laux/tauri?branch=add-is-always-on-top#223bbdf8b8563d866ec753c1c7ec77729f1e3526"
+source = "git+https://github.com/tauri-apps/tauri?rev=51bcafe3232344cc8e4e413576cb8ee87887ab2b#51bcafe3232344cc8e4e413576cb8ee87887ab2b"
 dependencies = [
+ "anyhow",
  "brotli",
  "cargo_metadata",
  "ctor",
@@ -10239,9 +10241,9 @@ checksum = "1e9df38ee2d2c3c5948ea468a8406ff0db0b29ae1ffde1bcf20ef305bcc95c51"
 
 [[package]]
 name = "wry"
-version = "0.50.3"
+version = "0.50.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d2ec139df5102db821f92a42033c3fa0467c5ab434511e79c65881d6bdf2b369"
+checksum = "b19b78efae8b853c6c817e8752fc1dbf9cab8a8ffe9c30f399bd750ccf0f0730"
 dependencies = [
  "base64 0.22.1",
  "block2 0.6.0",

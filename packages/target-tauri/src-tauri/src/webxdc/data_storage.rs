@@ -8,8 +8,10 @@
 // - On other platforms it uses a seperate folder
 //   in the data folder that contains the accound id and a folder for each app (named by instance id)
 
+#[cfg(not(target_vendor = "apple"))]
 use std::path::PathBuf;
 
+use log::trace;
 use tauri::{AppHandle, Manager, Runtime, WebviewWindowBuilder};
 
 use super::error::Error;
@@ -57,16 +59,11 @@ pub(super) async fn set_data_store<'a, R: Runtime, M: Manager<R>>(
 ) -> Result<WebviewWindowBuilder<'a, R, M>, Error> {
     #[cfg(target_vendor = "apple")]
     {
-        println!(
+        trace!(
             "build_data_store_id: {:?}",
             build_data_store_id(account_id, instance_id)
         );
-        // Ok(builder.data_store_identifier(build_data_store_id(account_id, instance_id)))
-        // Ok(builder.data_store_identifier([0; 16]))
-        // crashes, so skip for now: https://github.com/tauri-apps/tauri/issues/12843
-        Ok(builder)
-
-        // TODO test if this works
+        Ok(builder.data_store_identifier(build_data_store_id(account_id, instance_id)))
     }
 
     #[cfg(not(target_vendor = "apple"))]
@@ -88,12 +85,8 @@ pub(super) async fn delete_webxdc_data_for_instance(
 ) -> Result<(), Error> {
     #[cfg(target_vendor = "apple")]
     {
-        // TODO
-
-        // todo wry & tauri api for
-        // https://developer.apple.com/documentation/webkit/wkwebsitedatastore/remove(foridentifier:completionhandler:)
-
-        // TODO test if this works
+        app.remove_data_store(build_data_store_id(account_id, instance_id))
+            .await?;
     }
 
     #[cfg(not(target_vendor = "apple"))]
@@ -114,18 +107,13 @@ pub(super) async fn delete_webxdc_data_for_account(
 ) -> Result<(), Error> {
     #[cfg(target_vendor = "apple")]
     {
-        // todo wry & tauri api for
-        // https://developer.apple.com/documentation/webkit/wkwebsitedatastore/fetchalldatastoreidentifiers(_:)
-
-        let all_data_stores: Vec<[u8; 16]> = todo!("");
+        let all_data_stores: Vec<[u8; 16]> = app.fetch_data_store_identifiers().await?;
         for data_store_id in all_data_stores
             .iter()
             .filter(|id| account_id_from_store_id(id) == account_id)
         {
-            todo!("delete")
+            app.remove_data_store(*data_store_id).await?
         }
-
-        // TODO test if this works
     }
 
     #[cfg(not(target_vendor = "apple"))]
@@ -137,4 +125,12 @@ pub(super) async fn delete_webxdc_data_for_account(
     }
 
     Ok(())
+}
+
+#[cfg(target_vendor = "apple")]
+#[tauri::command]
+pub(crate) async fn debug_get_datastore_ids(app: AppHandle) -> Result<Vec<[u8; 16]>, String> {
+    app.fetch_data_store_identifiers()
+        .await
+        .map_err(|err| format!("{:?}", err))
 }

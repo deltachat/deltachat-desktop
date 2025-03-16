@@ -1,5 +1,5 @@
 use anyhow::anyhow;
-use log::{debug, error, trace};
+use log::{error, trace};
 use tauri::{Manager, UriSchemeContext, UriSchemeResponder};
 
 use crate::{state::webxdc_instances::WebxdcInstance, DeltaChatAppState, WebxdcInstancesState};
