@@ -1,6 +1,7 @@
 use crate::{
     settings::{apply_zoom_factor_html_window, CONFIG_FILE, HTML_EMAIL_ZOOM_FACTOR_KEY},
-    state::menu_manager::MenuManger,
+    state::menu_manager::MenuManager,
+    TranslationState,
 };
 
 use super::menu_action::MenuAction;
@@ -72,7 +73,7 @@ impl MenuAction<'static> for HtmlWindowMenuAction {
         let win = app
             .get_window(&self.window_id)
             .context("window not found")?;
-        let menu_manager = app.state::<MenuManger>();
+        let menu_manager = app.state::<MenuManager>();
         match self.action {
             HtmlWindowMenuActionVariant::QuitApp => {
                 app.exit(0);
@@ -120,6 +121,8 @@ pub(crate) fn create_html_window_menu(
     app: &AppHandle,
     html_email_window: &Window,
 ) -> anyhow::Result<Menu<Wry>> {
+    let tx = app.state::<TranslationState>();
+
     let window_id = html_email_window.label().to_owned();
     let action = |action: HtmlWindowMenuActionVariant| HtmlWindowMenuAction {
         window_id: window_id.clone(),
@@ -129,7 +132,11 @@ pub(crate) fn create_html_window_menu(
     let quit = MenuItem::with_id(
         app,
         action(HtmlWindowMenuActionVariant::QuitApp),
-        "Quit Delta Chat", // TODO translate
+        format!(
+            "{} {}",
+            tx.sync_translate("global_menu_file_quit_desktop"),
+            tx.sync_translate("app_name")
+        ),
         true,
         Some("CmdOrCtrl+Q"),
     )?;
@@ -141,13 +148,13 @@ pub(crate) fn create_html_window_menu(
             &Submenu::with_items(app, "App", true, &[&quit])?,
             &Submenu::with_items(
                 app,
-                "File",
+                tx.sync_translate("file"),
                 true,
                 &[
                     &MenuItem::with_id(
                         app,
                         action(HtmlWindowMenuActionVariant::CloseHtmlWindow),
-                        "Close HTML Email",
+                        tx.sync_translate("close_window"),
                         true,
                         Some("CmdOrCtrl+W"),
                     )?,
@@ -158,29 +165,35 @@ pub(crate) fn create_html_window_menu(
             )?,
             &Submenu::with_items(
                 app,
-                "Edit",
+                tx.sync_translate("global_menu_edit_desktop"),
                 true,
                 &[
-                    &PredefinedMenuItem::copy(app, Some("Copy"))?,
-                    &PredefinedMenuItem::select_all(app, Some("Select All"))?,
+                    &PredefinedMenuItem::copy(
+                        app,
+                        Some(&tx.sync_translate("global_menu_edit_copy_desktop")),
+                    )?,
+                    &PredefinedMenuItem::select_all(
+                        app,
+                        Some(&tx.sync_translate("menu_select_all")),
+                    )?,
                 ],
             )?,
             &Submenu::with_items(
                 app,
-                "View",
+                tx.sync_translate("global_menu_view_desktop"),
                 true,
                 &[
                     &MenuItem::with_id(
                         app,
                         action(HtmlWindowMenuActionVariant::ResetZoom),
-                        "Actual Size",
+                        tx.sync_translate("actual_size"),
                         true,
                         None::<&str>,
                     )?,
                     &MenuItem::with_id(
                         app,
                         action(HtmlWindowMenuActionVariant::ZoomIn),
-                        "Zoom In",
+                        tx.sync_translate("menu_zoom_in"),
                         true,
                         if cfg!(target_os = "macos") {
                             Some("Command++")
@@ -191,7 +204,7 @@ pub(crate) fn create_html_window_menu(
                     &MenuItem::with_id(
                         app,
                         action(HtmlWindowMenuActionVariant::ZoomOut),
-                        "Zoom Out",
+                        tx.sync_translate("menu_zoom_out"),
                         true,
                         if cfg!(target_os = "macos") {
                             Some("Command+-")
@@ -203,12 +216,15 @@ pub(crate) fn create_html_window_menu(
                     &CheckMenuItem::with_id(
                         app,
                         action(HtmlWindowMenuActionVariant::FloatOnTop),
-                        "Float on Top",
+                        tx.sync_translate("global_menu_view_floatontop_desktop"),
                         true,
                         html_email_window.is_always_on_top()?,
                         None::<&str>,
                     )?,
-                    &PredefinedMenuItem::fullscreen(app, Some("Toggle Full Screen"))?,
+                    &PredefinedMenuItem::fullscreen(
+                        app,
+                        Some(&tx.sync_translate("toggle_fullscreen")),
+                    )?,
                 ],
             )?,
         ],
