@@ -72,8 +72,6 @@ pub(super) async fn set_data_store<'a, R: Runtime, M: Manager<R>>(
             path_to_webxdc_browser_data_dir(app, account_id)?.join(instance_id.to_string());
         create_dir_all(&browser_data_dir).await?;
         Ok(builder.data_directory(browser_data_dir))
-
-        // TODO test if this works
     }
 }
 
@@ -93,8 +91,6 @@ pub(super) async fn delete_webxdc_data_for_instance(
     {
         let path = path_to_webxdc_browser_data_dir(app, account_id)?.join(instance_id.to_string());
         remove_dir_all(path).await?;
-
-        // TODO test if this works
     }
 
     Ok(())
@@ -120,8 +116,6 @@ pub(super) async fn delete_webxdc_data_for_account(
     {
         let path = path_to_webxdc_browser_data_dir(app, account_id)?;
         remove_dir_all(path).await?;
-
-        // TODO test if this works
     }
 
     Ok(())
