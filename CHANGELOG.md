@@ -9,6 +9,7 @@
 - tauri: add html email view #4699
 - tauri: add titlebar menu #4755 #4787
 - tauri: implement runtime.copyFileToInternalTmpDir and allow opening files in temp dir #4778
+- add withdraw qr code context menu option #4798
 
 ### Changed
 - tauri: replace `tauri-plugin-shell` with `tauri-plugin-opener` #4699

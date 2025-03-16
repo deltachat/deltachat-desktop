@@ -146,7 +146,14 @@ export function QrCodeShowQrInner({
     }
   }, [qrCodeSVG])
 
+  const processQr = useProcessQr()
+  const accountId = selectedAccountId()
+
   const imageContextMenu = useContextMenu([
+    {
+      label: tx('withdraw_qr_code'),
+      action: () => processQr(accountId, qrCode, onBack || onClose),
+    },
     {
       label: tx('menu_copy_image_to_clipboard'),
       action: async () => {
