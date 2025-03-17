@@ -70,8 +70,6 @@ export function ReceiveBackupDialog({ onClose }: Props & DialogProps) {
       <DialogBody>
         <p className={styles.receiveSteps}>
           {tx('multidevice_open_settings_on_other_device')}
-          <br />
-          {tx('multidevice_experimental_hint')}
         </p>
         <QrReader onScanSuccess={handleScan} onError={handleError} />
       </DialogBody>
