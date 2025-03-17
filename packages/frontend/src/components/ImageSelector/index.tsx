@@ -31,7 +31,7 @@ export default function ImageSelector({
   titleLabel,
 }: Props) {
   const tx = useTranslationFunction()
-  const imageUrl = filePath ? `file://${filePath}` : undefined
+  const imageUrl = filePath ? runtime.transformBlobURL(filePath) : undefined
 
   const handleSelect = async () => {
     const { defaultPath, setLastPath } =

@@ -101,6 +101,7 @@ pub(crate) fn delta_blobs_protocol<R: tauri::Runtime>(
                                     MimeType::OctetStream,
                                 ),
                             )
+                            .header(http::header::ACCESS_CONTROL_ALLOW_ORIGIN, "*")
                             .body(blob)?;
                         responder.respond(res);
                     }
