@@ -12,6 +12,7 @@
 - add option to reset encryption state for contact in encryption info dialog #4797
 - tauri: implement backend translation fn and use it in tauri files as needed #4790
 - add withdraw qr code context menu option #4798
+- mute chat for 8 hours
 
 
 ### Changed
@@ -26,6 +27,7 @@
   - Ignore hidden headers in IMF section
   - Prefer hidden Message-ID header if any.
   - Update async-compression to 0.4.21 to fix IMAP COMPRESS getting stuck
+- update translations (2025-03-17)
 
 ### Fixed
 - fix some webxdc apps showing the "Close app?" prompt unintentionally #4737

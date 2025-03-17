@@ -27,6 +27,10 @@ export default function MuteChat({ onClose, chatId }: Props & DialogProps) {
       tx('mute_for_two_hours'),
     ],
     [
+      { kind: 'Until', duration: Timespans.ONE_HOUR_IN_SECONDS * 8 },
+      tx('mute_for_eight_hours'),
+    ],
+    [
       { kind: 'Until', duration: Timespans.ONE_DAY_IN_SECONDS },
       tx('mute_for_one_day'),
     ],

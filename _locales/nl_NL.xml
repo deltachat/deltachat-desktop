@@ -332,7 +332,9 @@
     <string name="donate">Doneren</string>
 
     <string name="mute_for_one_hour">1 uur lang uitschakelen</string>
+    <!-- deprecated -->
     <string name="mute_for_two_hours">2 uur lang uitschakelen</string>
+    <string name="mute_for_eight_hours">8 uur lang uitschakelen</string>
     <string name="mute_for_one_day">1 dag lang uitschakelen</string>
     <string name="mute_for_seven_days">7 dagen lang uitschakelen</string>
     <string name="mute_forever">Permanent uitschakelen</string>
@@ -377,7 +379,7 @@
         <item quantity="one">Wil je %d bericht verwijderen van al je apparaten?</item>
         <item quantity="other">Wil je %d berichten verwijderen van al je apparaten?</item>
     </plurals>
-    <!-- deprecated, use ask_delete_messages -->
+    <!-- Used for the deletion of Device messages -->
     <plurals name="ask_delete_messages_simple">
         <item quantity="one">Wil je %d bericht verwijderen?</item>
         <item quantity="other">Wil je %d berichten verwijderen?</item>
@@ -668,9 +670,10 @@
     <string name="accept_invalid_certificates">Ongeldige certificaten accepteren</string>
     <string name="switch_account">Ander account kiezen</string>
     <string name="add_account">Account toevoegen</string>
-    <string name="profile_tag">Privélabel</string>
+    <!-- for translations, you can also think of "Profile Tag" or "Profile Description" as the source string -->
+    <string name="profile_tag">Profielbeschrijving</string>
     <string name="profile_tag_hint">bijv. werk, familie</string>
-    <string name="profile_tag_explain">Een label dat alleen jij kan zien, om profielen van elkaar te onderscheiden.</string>
+    <string name="profile_tag_explain">Een beschrijving die alleen jij kan zien, om profielen van elkaar te onderscheiden.</string>
     <!-- Menu entry to sort an item to the beginning of a list. Only "To Top" may do as well in some translations, if that helps to stay shorter. -->
     <string name="move_to_top">Bovenaan tonen</string>
     <string name="delete_account">Account verwijderen</string>

@@ -316,6 +316,7 @@
     <string name="donate">حمایت مالی</string>
 
     <string name="mute_for_one_hour">ساکت کردن به مدت۱ ساعت</string>
+    <!-- deprecated -->
     <string name="mute_for_two_hours">ساکت کردن به مدت ۲ ساعت</string>
     <string name="mute_for_one_day">ساکت کردن به مدت ۱ روز</string>
     <string name="mute_for_seven_days">ساکت کردن به مدت۷ روز</string>
@@ -354,7 +355,7 @@ https://meet.jit.si/$ROOM
 
     <!-- get confirmations -->
     <string name="ask_leave_group">مطمئن هستید می‌خواهید این گروه را ترک کنید؟</string>
-    <!-- deprecated, use ask_delete_messages -->
+    <!-- Used for the deletion of Device messages -->
     <plurals name="ask_delete_messages_simple">
         <item quantity="one">می‌خواهید %dپیام پاک شود؟</item>
         <item quantity="other">می‌خواهید %d پیام پاک شود؟</item>
@@ -642,9 +643,7 @@ https://meet.jit.si/$ROOM
     <string name="accept_invalid_certificates">پذیرش گواهینامه‌های نامعتبر</string>
     <string name="switch_account">تغییر حساب کاربری</string>
     <string name="add_account">افزودن حساب کاربری</string>
-    <string name="profile_tag">پرچسب شخصی</string>
     <string name="profile_tag_hint">مثل «کار» یا «خانواده»</string>
-    <string name="profile_tag_explain">این برچسب تنها به شما نمایش داده می‌شود تا برای تشخیص دادن نمایه‌ها از یک دیگر کمک کند.</string>
     <string name="delete_account">حذف حساب کاربری</string>
     <string name="delete_account_ask">آیا از حذف حساب کاربری اطمینان دارید؟</string>
     <string name="delete_account_explain_with_name">همه اطلاعات حساب مربوط به «%s» روی این دستگاه پاک می‌شود. این شامل تنظیم‌های رمزگذاری سراسری، مخاطبین، گفتگوها، پیام‌ها و رسانه‌ها می‌شود. این عمل قابل بازگردانی نیست.</string>
