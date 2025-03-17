@@ -99,6 +99,7 @@ pub fn run() {
                     .set_focus();
             }));
     }
+
     builder
         .invoke_handler(tauri::generate_handler![
             greet,
@@ -209,11 +210,11 @@ pub fn run() {
             #[cfg(debug_assertions)]
             app.get_webview_window("main").unwrap().open_devtools();
 
+            let main_window = app.get_webview_window("main").unwrap();
             #[cfg(target_os = "macos")]
             {
-                let webview = app.get_webview_window("main").unwrap();
-                webview.set_title_bar_style(tauri::TitleBarStyle::Overlay)?;
-                webview.set_title("")?;
+                main_window.set_title_bar_style(tauri::TitleBarStyle::Overlay)?;
+                main_window.set_title("")?;
             }
 
             let menu_manager = app.state::<MenuManager>();
