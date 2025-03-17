@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- delete message for all chat members #4716
 
 ### Changed
 
