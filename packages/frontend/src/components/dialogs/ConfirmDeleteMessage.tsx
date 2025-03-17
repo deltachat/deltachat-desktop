@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 
 import Dialog, {
   DialogBody,
@@ -12,6 +12,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import type { DialogProps } from '../../contexts/DialogContext'
 import { BackendRemote, Type } from '../../backend-com'
 import { C } from '@deltachat/jsonrpc-client'
+import { ScreenContext } from '../../contexts/ScreenContext'
 
 export type Props = {
   accountId: number
@@ -21,6 +22,7 @@ export type Props = {
 
 export default function ConfirmDeleteMessageDialog(props: Props) {
   const tx = useTranslationFunction()
+  const { userFeedback } = useContext(ScreenContext)
 
   const { accountId, msg, chat, onClose } = props
 
@@ -32,9 +34,23 @@ export default function ConfirmDeleteMessageDialog(props: Props) {
 
   const deleteMessage = (deleteForEveryone: boolean) => {
     if (deleteForEveryone) {
-      BackendRemote.rpc.deleteMessagesForAll(accountId, [msg.id])
+      BackendRemote.rpc
+        .deleteMessagesForAll(accountId, [msg.id])
+        .catch((err: Error) => {
+          userFeedback({
+            type: 'error',
+            text: err.message,
+          })
+        })
     } else {
-      BackendRemote.rpc.deleteMessages(accountId, [msg.id])
+      BackendRemote.rpc
+        .deleteMessages(accountId, [msg.id])
+        .catch((err: Error) => {
+          userFeedback({
+            type: 'error',
+            text: err.message,
+          })
+        })
     }
     onClose()
   }
