@@ -136,9 +136,9 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
         handleError: (error: any) => void
       ) => {
         try {
-          workerClipBoard.current.postMessage(imageData)
+          workerClipBoard.current?.postMessage(imageData)
           const scanResultP = new Promise(r => {
-            workerClipBoard.current.addEventListener(
+            workerClipBoard.current?.addEventListener(
               'message',
               event => {
                 setProcessingFile(false)
@@ -438,12 +438,12 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
         }
 
         try {
-          worker.current.postMessage(imageData, {
+          worker.current?.postMessage(imageData, {
             transfer: [imageData.data.buffer],
           })
 
           const scanResultP = new Promise(r => {
-            worker.current.addEventListener(
+            worker.current?.addEventListener(
               'message',
               event => {
                 r(event.data)
