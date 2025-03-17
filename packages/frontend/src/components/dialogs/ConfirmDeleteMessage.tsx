@@ -16,16 +16,19 @@ import { C } from '@deltachat/jsonrpc-client'
 export type Props = {
   accountId: number
   msg: Type.Message
-  canSend: boolean
+  chat: Type.FullChat
 } & DialogProps
 
 export default function ConfirmDeleteMessageDialog(props: Props) {
   const tx = useTranslationFunction()
 
-  const { accountId, msg, onClose } = props
+  const { accountId, msg, chat, onClose } = props
 
   const deleteForAllPossible =
-    msg.sender.id === C.DC_CONTACT_ID_SELF && props.canSend
+    msg.sender.id === C.DC_CONTACT_ID_SELF &&
+    !msg.isInfo &&
+    chat.canSend &&
+    !chat.isSelfTalk
 
   const deleteMessage = (deleteForEveryone: boolean) => {
     if (deleteForEveryone) {
