@@ -11,6 +11,7 @@
 - tauri: implement runtime.copyFileToInternalTmpDir and allow opening files in temp dir #4778
 - tauri: implement backend translation fn and use it in tauri files as needed #4790
 - add withdraw qr code context menu option #4798
+- delete message for all chat members #4716
 
 
 ### Changed
