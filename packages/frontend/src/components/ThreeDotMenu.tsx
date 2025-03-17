@@ -111,19 +111,6 @@ export function useThreeDotMenu(
                 },
               },
               {
-                label: tx('mute_for_two_hours'),
-                action: () => {
-                  BackendRemote.rpc.setChatMuteDuration(
-                    accountId,
-                    selectedChat.id,
-                    {
-                      kind: 'Until',
-                      duration: Timespans.ONE_HOUR_IN_SECONDS * 2,
-                    }
-                  )
-                },
-              },
-              {
                 label: tx('mute_for_eight_hours'),
                 action: () => {
                   BackendRemote.rpc.setChatMuteDuration(
