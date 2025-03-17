@@ -11,6 +11,7 @@ import MessageDetail from '../dialogs/MessageDetail/MessageDetail'
 
 import type { OpenDialog } from '../../contexts/DialogContext'
 import type { T } from '@deltachat/jsonrpc-client'
+import ConfirmDeleteMessageDialog from '../dialogs/ConfirmDeleteMessage'
 
 const log = getLogger('render/msgFunctions')
 
@@ -88,16 +89,13 @@ export async function confirmForwardMessage(
 export function confirmDeleteMessage(
   openDialog: OpenDialog,
   accountId: number,
-  msg: Type.Message
+  msg: Type.Message,
+  canSend: boolean
 ) {
-  const tx = window.static_translate
-
-  openDialog(ConfirmationDialog, {
-    message: tx('ask_delete_message'),
-    confirmLabel: tx('delete'),
-    isConfirmDanger: true,
-    cb: (yes: boolean) =>
-      yes && BackendRemote.rpc.deleteMessages(accountId, [msg.id]),
+  openDialog(ConfirmDeleteMessageDialog, {
+    accountId,
+    msg,
+    canSend,
   })
 }
 
