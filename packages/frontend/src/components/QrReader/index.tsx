@@ -69,8 +69,16 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
     const [deviceId, setDeviceId] = useState<string | undefined>(undefined)
     const [processingFile, setProcessingFile] = useState(false)
 
-    const worker = useRef<Worker>(new QrWorker() as Worker)
-    const workerClipBoard = useRef<Worker>(new QrWorker() as Worker)
+    const worker = useRef<Worker | null>(null)
+    const workerClipBoard = useRef<Worker | null>(null)
+
+    if (worker.current === null) {
+      worker.current = new QrWorker() as Worker
+    }
+
+    if (workerClipBoard.current === null) {
+      workerClipBoard.current = new QrWorker() as Worker
+    }
 
     useEffect(() => {
       const currentWorker = worker.current
@@ -80,8 +88,8 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
         // terminate worker if component is unmounted,
         // otherwise we might get a delayed error message
         // if scan fails, even after closing the QR dialog
-        currentWorker.terminate()
-        currentWorkerClipBoard.terminate()
+        currentWorker?.terminate()
+        currentWorkerClipBoard?.terminate()
       }
     }, [])
 
