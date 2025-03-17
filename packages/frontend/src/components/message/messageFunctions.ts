@@ -90,12 +90,12 @@ export function confirmDeleteMessage(
   openDialog: OpenDialog,
   accountId: number,
   msg: Type.Message,
-  canSend: boolean
+  chat: Type.FullChat
 ) {
   openDialog(ConfirmDeleteMessageDialog, {
     accountId,
     msg,
-    canSend,
+    chat,
   })
 }
 

@@ -421,7 +421,7 @@ function buildContextMenu(
         openDialog,
         accountId,
         message,
-        chat.canSend
+        chat
       ),
     },
   ]

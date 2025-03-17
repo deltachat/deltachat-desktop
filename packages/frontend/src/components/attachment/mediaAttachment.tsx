@@ -100,7 +100,7 @@ const contextMenuFactory = (
         openDialog(ConfirmDeleteMessageDialog, {
           accountId,
           msg: message,
-          canSend: chat.canSend,
+          chat,
         })
       },
     },
