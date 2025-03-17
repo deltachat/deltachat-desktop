@@ -20,9 +20,9 @@ pub enum LocaleWritingDirection {
 
 #[derive(Default, Serialize)]
 pub struct LocaleData {
-    locale: String,
-    dir: LocaleWritingDirection,
-    messages: HashMap<String, HashMap<String, String>>,
+    pub locale: String,
+    pub dir: LocaleWritingDirection,
+    pub messages: HashMap<String, HashMap<String, String>>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

@@ -49,31 +49,25 @@ export async function createNewProfile(
   page: Page,
   name: string
 ): Promise<User> {
-  const waitForLocator = async (locator: Locator): Promise<Locator> => {
-    await locator.waitFor()
-    return locator
-  }
-
   await page.waitForSelector('.styles_module_account')
   const accountList = page.locator('.styles_module_account')
 
-  const addAccountSelector = 'add-account-button'
-  const onboardingDialogSelector = 'onboarding-dialog'
+  let isFirstOnboarding = false
+  const numberOfAccounts = await accountList.count()
 
-  const returnedLocator = await Promise.race([
-    // no account yet so onboarding screen is shown immediately
-    waitForLocator(page.locator(`[data-testid="${onboardingDialogSelector}"]`)),
-    // already an existing account
-    waitForLocator(page.locator(`[data-testid="${addAccountSelector}"]`)),
-  ])
-
-  if (
-    returnedLocator &&
-    _hasSelector(returnedLocator) &&
-    returnedLocator['_selector'].indexOf(addAccountSelector) > -1
-  ) {
+  if (numberOfAccounts === 1) {
+    const accountClassNames = await accountList.first().getAttribute('class')
+    // on first onboarding an account is created but it's unconfigured
+    if (
+      accountClassNames &&
+      accountClassNames.indexOf('unconfigured-account') > -1
+    ) {
+      isFirstOnboarding = true
+    }
+  }
+  if (!isFirstOnboarding) {
     // add account to show onboarding screen
-    await returnedLocator.click()
+    await page.getByTestId('add-account-button').click()
   }
   // create a new account
   await page.getByTestId('create-account-button').click()

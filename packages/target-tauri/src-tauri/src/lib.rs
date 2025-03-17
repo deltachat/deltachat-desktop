@@ -7,7 +7,7 @@ use menus::{handle_menu_event, main_menu::create_main_menu};
 use settings::load_and_apply_desktop_settings_on_startup;
 use state::{
     app::AppState, deltachat::DeltaChatAppState, html_email_instances::HtmlEmailInstancesState,
-    menu_manager::MenuManger,
+    menu_manager::MenuManager, translations::TranslationState,
 };
 use tauri::Manager;
 use util::csp::add_custom_schemes_to_csp_for_window_and_android;
@@ -102,6 +102,9 @@ pub fn run() {
 
     builder
         .invoke_handler(tauri::generate_handler![
+            // When adding a command, don't forget to also add it
+            // to `.commands()` in `build.rs`, and to `permissions`
+            // in `capabilities`.
             greet,
             deltachat_jsonrpc_request,
             ui_ready,
@@ -194,7 +197,10 @@ pub fn run() {
                 app,
             ))?);
             app.manage(HtmlEmailInstancesState::new());
-            app.manage(MenuManger::new());
+            app.manage(MenuManager::new());
+            app.manage(tauri::async_runtime::block_on(TranslationState::try_new(
+                app,
+            ))?);
             app.state::<AppState>()
                 .log_duration_since_startup("base setup done");
 
@@ -214,7 +220,7 @@ pub fn run() {
                 main_window.set_title("")?;
             }
 
-            let menu_manager = app.state::<MenuManger>();
+            let menu_manager = app.state::<MenuManager>();
             let main_window_clone = main_window.clone();
             tauri::async_runtime::block_on(menu_manager.register_window(
                 app.handle(),

@@ -4,17 +4,21 @@
 
 
 ### Added
-- add a way to edit messages (in development mode only) #4717
+- add a way to edit messages #4717
 - tauri: add support for sticker picker #4707
 - tauri: add html email view #4699
 - tauri: add titlebar menu #4755 #4787
 - tauri: implement runtime.copyFileToInternalTmpDir and allow opening files in temp dir #4778
 - add option to reset encryption state for contact in encryption info dialog #4797
+- tauri: implement backend translation fn and use it in tauri files as needed #4790
+- add withdraw qr code context menu option #4798
+
 
 ### Changed
 - tauri: replace `tauri-plugin-shell` with `tauri-plugin-opener` #4699
 - new button styles #4741
 - remove end-to-end encryption preferences from settings (e2e encryption is always preferred when available) #4782
+- add dialog with hints about invite link #4667
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.157.2`
   - Delete messages on IMAP when deleting chat
   - Allow doubled avatar resolution
@@ -25,6 +29,7 @@
 
 ### Fixed
 - fix some webxdc apps showing the "Close app?" prompt unintentionally #4737
+- fixed some intermittent e2e test issues
 - improve QR scanner performance
 - webxdc: fix menu bar hiding when pressing Escape #4753
 - tauri: fix blobs and webxdc-icon scheme under windows #4705
@@ -34,6 +39,7 @@
 - tauri: entire app hanging after clicking "Show Full Message..." or the "Help" window on Windows
 - tauri: fix SVG images not being displayed in composer draft
 - tauri: fix open logfile from settings, fix opening stickerfolder, fix opening weblinks #4778
+- tauri: hardening: allow commands for windows in a white-list manner #4795
 
 <a id="1_54_2"></a>
 

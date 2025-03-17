@@ -228,10 +228,7 @@ function SendBackupSteps() {
   return (
     <div className={styles.sendBackupSteps}>
       <ol className={styles.sendBackupStepsList}>
-        <li>
-          {tx('multidevice_install_dc_on_other_device')}{' '}
-          {tx('multidevice_experimental_hint')}
-        </li>
+        <li>{tx('multidevice_install_dc_on_other_device')}</li>
         <li>{tx('multidevice_same_network_hint')}</li>
         <li>{tx('multidevice_tap_scan_on_other_device')}</li>
       </ol>

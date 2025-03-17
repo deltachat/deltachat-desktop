@@ -14,7 +14,7 @@ type Props = {
 
 export default function Profile({ settingsStore }: Props) {
   const initials = avatarInitial(
-    settingsStore.settings.displayname || '',
+    settingsStore.settings?.displayname || '',
     settingsStore.selfContact.address
   )
 
