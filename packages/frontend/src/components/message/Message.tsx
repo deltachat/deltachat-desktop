@@ -416,7 +416,13 @@ function buildContextMenu(
     // Delete message
     {
       label: tx('delete_message_desktop'),
-      action: confirmDeleteMessage.bind(null, openDialog, accountId, message),
+      action: confirmDeleteMessage.bind(
+        null,
+        openDialog,
+        accountId,
+        message,
+        chat.canSend
+      ),
     },
   ]
 }

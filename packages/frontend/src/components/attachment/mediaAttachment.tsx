@@ -31,6 +31,8 @@ import type { T } from '@deltachat/jsonrpc-client'
 import type { OpenDialog } from '../../contexts/DialogContext'
 import type { JumpToMessage, DeleteMessage } from '../../hooks/chat/useMessage'
 import { useRovingTabindex } from '../../contexts/RovingTabindex'
+import ConfirmDeleteMessageDialog from '../dialogs/ConfirmDeleteMessage'
+import { BackendRemote } from '../../backend-com'
 
 const log = getLogger('mediaAttachment')
 
@@ -47,8 +49,7 @@ const contextMenuFactory = (
   message: T.Message,
   accountId: number,
   openDialog: OpenDialog,
-  jumpToMessage: JumpToMessage,
-  deleteMessage: DeleteMessage
+  jumpToMessage: JumpToMessage
 ) => {
   const showCopyImage = message.viewType === 'Image'
   const tx = window.static_translate
@@ -91,12 +92,17 @@ const contextMenuFactory = (
     },
     {
       label: tx('delete'),
-      action: () =>
-        openDialog(ConfirmationDialog, {
-          message: tx('ask_delete_message'),
-          confirmLabel: tx('delete'),
-          cb: (yes: boolean) => yes && deleteMessage(accountId, msgId),
-        }),
+      action: async () => {
+        const chat = await BackendRemote.rpc.getFullChatById(
+          accountId,
+          message.chatId
+        )
+        openDialog(ConfirmDeleteMessageDialog, {
+          accountId,
+          msg: message,
+          canSend: chat.canSend,
+        })
+      },
     },
   ]
 }
@@ -106,7 +112,6 @@ const getMediaActions = (
   openContextMenu: OpenContextMenu,
   openDialog: OpenDialog,
   jumpToMessage: JumpToMessage,
-  deleteMessage: DeleteMessage,
   message: T.Message,
   accountId: number
 ) => {
@@ -117,8 +122,7 @@ const getMediaActions = (
         message,
         accountId,
         openDialog,
-        jumpToMessage,
-        deleteMessage
+        jumpToMessage
       ),
       openContextMenu
     ),
@@ -222,7 +226,6 @@ export function ImageAttachment({
       contextMenu.openContextMenu,
       openDialog,
       jumpToMessage,
-      deleteMessage,
       message,
       accountId
     )
@@ -305,7 +308,6 @@ export function VideoAttachment({
       contextMenu.openContextMenu,
       openDialog,
       jumpToMessage,
-      deleteMessage,
       message,
       accountId
     )
@@ -392,7 +394,6 @@ export function AudioAttachment({
       contextMenu.openContextMenu,
       openDialog,
       jumpToMessage,
-      deleteMessage,
       message,
       accountId
     )
@@ -520,7 +521,6 @@ export function FileAttachmentRow({
       contextMenu.openContextMenu,
       openDialog,
       jumpToMessage,
-      deleteMessage,
       message,
       accountId
     )
@@ -667,7 +667,6 @@ export function WebxdcAttachment({
       contextMenu.openContextMenu,
       openDialog,
       jumpToMessage,
-      deleteMessage,
       loadResult,
       accountId
     )
