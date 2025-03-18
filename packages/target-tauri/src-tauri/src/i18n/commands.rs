@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use log::{error, info, warn};
-use tauri::{AppHandle, State};
+use tauri::AppHandle;
 use tauri_plugin_store::StoreExt;
 use tokio::fs::read_to_string;
 
@@ -12,7 +12,6 @@ use super::{
 use crate::{
     i18n::errors::Error,
     settings::{apply_language_change, CONFIG_FILE, LOCALE_KEY},
-    state::menu_manager::MenuManager,
 };
 
 #[tauri::command]
