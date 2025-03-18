@@ -13,6 +13,8 @@ pub(crate) enum Error {
     Tauri(#[from] tauri::Error),
     #[error("MenuCreation {0}")]
     MenuCreation(String),
+    #[error("Sanitization {0}")]
+    Sanitization(String)
 }
 
 impl serde::Serialize for Error {
@@ -31,6 +33,17 @@ pub(crate) async fn open_help_window(
     locale: &str,
     anchor: Option<&str>,
 ) -> Result<(), Error> {
+    // Tauri itself should guard against path traversal and stuff,
+    // but let's also do it ourselves for good measure.
+    if !is_alphanumeric_with_dashes_and_underscores(locale) {
+        return Err(Error::Sanitization("locale uses unsafe characters".into()));
+    }
+    if let Some(anchor) = anchor {
+        if !is_alphanumeric_with_dashes_and_underscores(anchor) {
+            return Err(Error::Sanitization("anchor uses unsafe characters".into()));
+        }
+    }
+
     let mut url: String = format!("help/{locale}/help.html");
     if app.asset_resolver().get(url.clone()).is_none() {
         url = "help/en/help.html".to_owned();
@@ -76,4 +89,10 @@ pub(crate) async fn open_help_window(
         .map_err(|err| Error::MenuCreation(err.to_string()))?;
 
     Ok(())
+}
+
+fn is_alphanumeric_with_dashes_and_underscores(string: &str) -> bool {
+    string
+        .chars()
+        .all(|c| c.is_ascii_alphanumeric() || c == '-' || c == '_')
 }
