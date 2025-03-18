@@ -27,6 +27,7 @@
 - remove unexpected horizontal scroll in gallery #4891
 - i18n: fix wrong order of substitutions for some strings #4889
 - fix double escape bypasses dialog attribute `canEscapeKeyClose={false}`
+- tauri: improve performance a little #4812
 
 <a id="1_56_0"></a>
 
