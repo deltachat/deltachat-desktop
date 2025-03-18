@@ -55,10 +55,13 @@ fn greet(name: &str) -> String {
 }
 
 #[tauri::command]
-fn deltachat_jsonrpc_request(message: String, state: tauri::State<DeltaChatAppState>) {
+fn deltachat_jsonrpc_request(
+    message: deltachat_jsonrpc::yerpc::Message,
+    state: tauri::State<DeltaChatAppState>,
+) {
     let session = state.deltachat_rpc_session.clone();
     tauri::async_runtime::spawn(async move {
-        session.handle_incoming(&message).await;
+        session.handle_incoming_parsed(message).await;
     });
 }
 

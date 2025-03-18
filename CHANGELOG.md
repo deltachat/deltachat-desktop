@@ -68,6 +68,7 @@
 - tauri: fix launching a second instance of Delta Chat not focusing the main window if it's closed
 - fix chatlist items sometimes not updating #4975
 - fix sticker folder not resolved on windows #4939
+- tauri: improve performance a little #4812
 
 <a id="1_56_0"></a>
 
