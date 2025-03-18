@@ -19,7 +19,6 @@ import { QrReader, QrCodeScanRef } from '../QrReader'
 
 import { BackendRemote } from '../../backend-com'
 import { getLogger } from '../../../../shared/logger'
-import { runtime } from '@deltachat-desktop/runtime-interface'
 import { ScreenContext } from '../../contexts/ScreenContext'
 import useContextMenu from '../../hooks/useContextMenu'
 import useProcessQr from '../../hooks/useProcessQr'
