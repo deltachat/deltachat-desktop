@@ -2,6 +2,16 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+
+### Changed
+
+### Fixed
+
+
+<a id="1_55_0"></a>
+
+## [1.55.0] - 2025-03-18
 
 ### Added
 - add a way to edit messages #4717
@@ -3297,7 +3307,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.54.2...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.55.0...HEAD
+
+[1.55.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.54.2...v1.55.0
 
 [1.54.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.54.1...v1.54.2
 
