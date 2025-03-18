@@ -148,8 +148,8 @@ class ElectronRuntime implements Runtime {
     return new ElectronDeltachat(callCounterFunction)
   }
   openMessageHTML(
-    window_id: string,
     accountId: number,
+    messageId: number,
     isContactRequest: boolean,
     subject: string,
     sender: string,
@@ -158,8 +158,8 @@ class ElectronRuntime implements Runtime {
   ): void {
     ipcBackend.invoke(
       'openMessageHTML',
-      window_id,
       accountId,
+      messageId,
       isContactRequest,
       subject,
       sender,

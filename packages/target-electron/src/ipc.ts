@@ -321,8 +321,8 @@ export async function init(cwd: string, logHandler: LogHandler) {
     'openMessageHTML',
     async (
       _ev,
-      window_id: string,
       accountId: number,
+      messageId: number,
       isContactRequest: boolean,
       subject: string,
       sender: string,
@@ -330,8 +330,8 @@ export async function init(cwd: string, logHandler: LogHandler) {
       content: string
     ) => {
       openHtmlEmailWindow(
-        window_id,
         accountId,
+        messageId,
         isContactRequest,
         subject,
         sender,

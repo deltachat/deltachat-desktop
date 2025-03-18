@@ -78,8 +78,8 @@ class TauriRuntime implements Runtime {
     return new TauriDeltaChat(callCounterFunction)
   }
   openMessageHTML(
-    windowId: string,
     accountId: number,
+    messageId: number,
     isContactRequest: boolean,
     subject: string,
     sender: string,
@@ -87,8 +87,8 @@ class TauriRuntime implements Runtime {
     content: string
   ): void {
     invoke('open_html_window', {
-      windowId,
       accountId,
+      messageId,
       isContactRequest,
       subject,
       sender,

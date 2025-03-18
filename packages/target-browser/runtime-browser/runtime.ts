@@ -163,8 +163,8 @@ class BrowserRuntime implements Runtime {
     return new BrowserDeltachat(callCounterFunction)
   }
   openMessageHTML(
-    _window_id: string,
     _accountId: number,
+    _message_id: number,
     _isContactRequest: boolean,
     _subject: string,
     _sender: string,
