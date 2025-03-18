@@ -52,6 +52,7 @@ fn main() {
             "on_webxdc_realtime_data",
             "delete_webxdc_account_data",
             "close_all_webxdc_instances",
+            "open_webxdc",
             "get_runtime_info",
             "change_desktop_settings_apply_side_effects",
             "open_help_window",

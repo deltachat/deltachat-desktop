@@ -1,7 +1,7 @@
 use crate::{
     settings::{apply_zoom_factor_webxdc, CONFIG_FILE, WEBXDC_ZOOM_FACTOR_KEY},
     state::menu_manager::MenuManager,
-    DeltaChatAppState, WebxdcInstancesState,
+    DeltaChatAppState, TranslationState, WebxdcInstancesState,
 };
 
 use super::menu_action::MenuAction;
@@ -126,6 +126,7 @@ impl MenuAction<'static> for WebxdcMenuAction {
                     // in the function use the try operator this would make it easier to read
                     let instances = app.state::<WebxdcInstancesState>();
                     let dc = app.state::<DeltaChatAppState>();
+                    let tx = app.state::<TranslationState>();
                     if let Some(instance) = instances.get(win.label()).await {
                         let dc = dc.deltachat.read().await;
                         if let Some(account) = dc.get_account(instance.account_id) {
@@ -143,10 +144,15 @@ impl MenuAction<'static> for WebxdcMenuAction {
                                 } else {
                                     let cloned_app = app.clone();
                                     app.dialog()
-                                        .message("tx(ask_copy_unopenable_link_to_clipboard)")
+                                        .message(
+                                            tx.sync_translate(
+                                                "ask_copy_unopenable_link_to_clipboard",
+                                            )
+                                            .replace("%1$d", &source_code_url),
+                                        )
                                         .buttons(MessageDialogButtons::OkCancelCustom(
-                                            "tx('menu_copy_link_to_clipboard')".to_owned(),
-                                            "tx('no')".to_owned(),
+                                            tx.sync_translate("menu_copy_link_to_clipboard"),
+                                            tx.sync_translate("no"),
                                         ))
                                         .parent(&win)
                                         .show(move |answer| {
@@ -189,11 +195,12 @@ pub(crate) fn create_webxdc_window_menu(
         window_id: window_id.clone(),
         action,
     };
+    let tx = app.state::<TranslationState>();
 
     let quit = MenuItem::with_id(
         app,
         action(WebxdcMenuActionVariant::QuitApp),
-        "Quit Delta Chat", // TODO translate
+        tx.sync_translate("global_menu_file_quit_desktop"),
         true,
         Some("CmdOrCtrl+Q"),
     )?;
@@ -201,7 +208,7 @@ pub(crate) fn create_webxdc_window_menu(
     let source_code = IconMenuItem::with_id(
         app,
         action(WebxdcMenuActionVariant::WebxdcSourceCode),
-        "tx('source_code')",
+        tx.sync_translate("source_code"),
         true,
         icon,
         None::<&str>,
@@ -212,10 +219,15 @@ pub(crate) fn create_webxdc_window_menu(
         &[
             // MacOS has an app menu
             #[cfg(target_os = "macos")]
-            &Submenu::with_items(app, "App", true, &[&quit])?,
             &Submenu::with_items(
                 app,
-                "File",
+                "App", /*this text will be relaced by macos anyway */
+                true,
+                &[&quit],
+            )?,
+            &Submenu::with_items(
+                app,
+                tx.sync_translate("global_menu_file_desktop"),
                 true,
                 &[
                     &MenuItem::with_id(
@@ -232,37 +244,55 @@ pub(crate) fn create_webxdc_window_menu(
             )?,
             &Submenu::with_items(
                 app,
-                "Edit",
+                tx.sync_translate("global_menu_edit_desktop"),
                 true,
                 &[
                     #[cfg(target_os = "macos")]
-                    &PredefinedMenuItem::undo(app, Some("Undo"))?,
+                    &PredefinedMenuItem::undo(
+                        app,
+                        Some(&tx.sync_translate("global_menu_edit_undo_desktop")),
+                    )?,
                     #[cfg(target_os = "macos")]
-                    &PredefinedMenuItem::redo(app, Some("Redo"))?,
+                    &PredefinedMenuItem::redo(
+                        app,
+                        Some(&tx.sync_translate("global_menu_edit_redo_desktop")),
+                    )?,
                     #[cfg(target_os = "macos")]
                     &PredefinedMenuItem::separator(app)?,
-                    &PredefinedMenuItem::cut(app, Some("Cut"))?,
-                    &PredefinedMenuItem::copy(app, Some("Copy"))?,
-                    &PredefinedMenuItem::paste(app, Some("Paste"))?,
-                    &PredefinedMenuItem::select_all(app, Some("Select All"))?,
+                    &PredefinedMenuItem::cut(
+                        app,
+                        Some(&tx.sync_translate("global_menu_edit_cut_desktop")),
+                    )?,
+                    &PredefinedMenuItem::copy(
+                        app,
+                        Some(&tx.sync_translate("global_menu_edit_copy_desktop")),
+                    )?,
+                    &PredefinedMenuItem::paste(
+                        app,
+                        Some(&tx.sync_translate("global_menu_edit_paste_desktop")),
+                    )?,
+                    &PredefinedMenuItem::select_all(
+                        app,
+                        Some(&tx.sync_translate("menu_select_all")),
+                    )?,
                 ],
             )?,
             &Submenu::with_items(
                 app,
-                "View",
+                tx.sync_translate("global_menu_view_desktop"),
                 true,
                 &[
                     &MenuItem::with_id(
                         app,
                         action(WebxdcMenuActionVariant::ResetZoom),
-                        "Actual Size",
+                        tx.sync_translate("actual_size"),
                         true,
                         None::<&str>,
                     )?,
                     &MenuItem::with_id(
                         app,
                         action(WebxdcMenuActionVariant::ZoomIn),
-                        "Zoom In",
+                        tx.sync_translate("menu_zoom_in"),
                         true,
                         if cfg!(target_os = "macos") {
                             Some("Command++")
@@ -273,7 +303,7 @@ pub(crate) fn create_webxdc_window_menu(
                     &MenuItem::with_id(
                         app,
                         action(WebxdcMenuActionVariant::ZoomOut),
-                        "Zoom Out",
+                        tx.sync_translate("menu_zoom_out"),
                         true,
                         if cfg!(target_os = "macos") {
                             Some("Command+-")
@@ -285,17 +315,20 @@ pub(crate) fn create_webxdc_window_menu(
                     &CheckMenuItem::with_id(
                         app,
                         action(WebxdcMenuActionVariant::FloatOnTop),
-                        "Float on Top",
+                        tx.sync_translate("global_menu_view_floatontop_desktop"),
                         true,
                         html_email_window.is_always_on_top()?,
                         None::<&str>,
                     )?,
-                    &PredefinedMenuItem::fullscreen(app, Some("Toggle Full Screen"))?,
+                    &PredefinedMenuItem::fullscreen(
+                        app,
+                        Some(&tx.sync_translate("toggle_fullscreen")),
+                    )?,
                 ],
             )?,
             &Submenu::with_items(
                 app,
-                "Help",
+                tx.sync_translate("menu_help"),
                 true,
                 &[
                     &source_code,
@@ -303,7 +336,7 @@ pub(crate) fn create_webxdc_window_menu(
                     &MenuItem::with_id(
                         app,
                         action(WebxdcMenuActionVariant::WhatIsWebxdc),
-                        "tx('what_is_webxdc')",
+                        tx.sync_translate("what_is_webxdc"),
                         true,
                         None::<&str>,
                     )?,
@@ -324,13 +357,13 @@ mod tests {
     #[test]
     fn test_decoding_id() -> anyhow::Result<()> {
         let r = WebxdcMenuAction::try_from(&MenuId::new(
-            "HtmlWindowMenuAction||html-window:1-13027|CloseWindow",
+            "WebxdcMenuAction||webxdc:1:13027|CloseWindow",
         ))?;
 
         assert_eq!(
             r,
             WebxdcMenuAction {
-                window_id: "html-window:1-13027".to_owned(),
+                window_id: "webxdc:1:13027".to_owned(),
                 action: WebxdcMenuActionVariant::CloseWindow
             }
         );

@@ -50,6 +50,7 @@ permissions = [
   "allow-on-webxdc-realtime-data",
   "allow-delete-webxdc-account-data",
   "allow-close-all-webxdc-instances",
+  "allow-open-webxdc",
 
   "allow-get-runtime-info",
   "allow-change-desktop-settings-apply-side-effects",
