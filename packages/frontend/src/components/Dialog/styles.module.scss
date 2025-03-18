@@ -4,6 +4,10 @@ $paddingVertical: 20px;
 
 .dialog {
   padding: 0;
+  @media (width < 500px){
+    width: 100vw !important;
+    min-width: 100vw !important;
+  }
 
   &.unstyled {
     background: none;
@@ -134,6 +138,9 @@ $paddingVertical: 20px;
 
 .footerActions {
   display: flex;
+  @media (width <= 500px) {
+    flex-direction: column;
+  }
 
   &.spaceBetween {
     justify-content: space-between;
@@ -153,9 +160,15 @@ $paddingVertical: 20px;
 }
 
 .footerActionButton {
-  min-width: 120px;
+  min-width: 100px;
   padding: 8px 12px !important;
   & + & {
     margin-left: 20px;
+  }
+  @media (width <= 500px) {
+    & + & {
+      margin-left: 0px;
+      margin-top: 20px;
+    }
   }
 }
