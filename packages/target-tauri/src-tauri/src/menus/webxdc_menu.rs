@@ -1,8 +1,6 @@
-use std::f64::consts::PI;
-
 use crate::{
     settings::{apply_zoom_factor_webxdc, CONFIG_FILE, WEBXDC_ZOOM_FACTOR_KEY},
-    state::menu_manager::MenuManger,
+    state::menu_manager::MenuManager,
     DeltaChatAppState, WebxdcInstancesState,
 };
 
@@ -11,7 +9,7 @@ use anyhow::Context;
 use log::error;
 use strum::{AsRefStr, EnumString};
 use tauri::{
-    async_runtime::{block_on, spawn},
+    async_runtime::spawn,
     image::Image,
     menu::{CheckMenuItem, IconMenuItem, Menu, MenuItem, PredefinedMenuItem, Submenu},
     AppHandle, Manager, WebviewWindow, Wry,
@@ -83,7 +81,7 @@ impl MenuAction<'static> for WebxdcMenuAction {
         let win = app
             .get_window(&self.window_id)
             .context("window not found")?;
-        let menu_manager = app.state::<MenuManger>();
+        let menu_manager = app.state::<MenuManager>();
         match self.action {
             WebxdcMenuActionVariant::QuitApp => {
                 app.exit(0);

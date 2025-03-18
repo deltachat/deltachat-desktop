@@ -16,7 +16,7 @@ use crate::{
     menus::webxdc_menu::create_webxdc_window_menu,
     settings::get_content_protection,
     state::{
-        menu_manager::MenuManger,
+        menu_manager::MenuManager,
         webxdc_instances::{WebxdcInstance, WebxdcInstancesState},
     },
     util::truncate_text,
@@ -171,7 +171,7 @@ pub(crate) async fn open_webxdc<'a>(
     app: AppHandle,
     webxdc_instances: State<'a, WebxdcInstancesState>,
     deltachat_state: State<'a, DeltaChatAppState>,
-    menu_manager: State<'_, MenuManger>,
+    menu_manager: State<'_, MenuManager>,
     account_id: u32,
     message_id: u32,
     href: String,
