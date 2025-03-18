@@ -20,10 +20,6 @@ import { QrReader, QrCodeScanRef } from '../QrReader'
 import { BackendRemote } from '../../backend-com'
 import { getLogger } from '../../../../shared/logger'
 
-// the following line is needed to avoid a false positive from eslint
-// not capable of detecting that this variable is used later on
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { runtime } from '@deltachat-desktop/runtime-interface'
 import { ScreenContext } from '../../contexts/ScreenContext'
 import useContextMenu from '../../hooks/useContextMenu'
 import useProcessQr from '../../hooks/useProcessQr'
