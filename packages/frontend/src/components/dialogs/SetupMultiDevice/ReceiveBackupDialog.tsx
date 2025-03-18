@@ -2,7 +2,7 @@ import React, { useRef, useCallback } from 'react'
 
 import { DialogBody, DialogFooter, FooterActions } from '../../Dialog'
 import FooterActionButton from '../../Dialog/FooterActionButton'
-import QrReader from '../../QrReader'
+import { QrReader } from '../../QrReader'
 import useProcessQr from '../../../hooks/useProcessQr'
 import { selectedAccountId } from '../../../ScreenController'
 import { DialogWithHeader } from '../../Dialog'

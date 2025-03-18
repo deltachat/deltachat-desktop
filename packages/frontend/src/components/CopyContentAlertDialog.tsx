@@ -41,10 +41,12 @@ export default function CopyContentAlertDialog({
       </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <FooterActionButton onClick={onCopy}>
+          <FooterActionButton onClick={onCopy} styling='secondary'>
             {tx('global_menu_edit_copy_desktop')}
           </FooterActionButton>
-          <FooterActionButton onClick={onCancel}>{tx('ok')}</FooterActionButton>
+          <FooterActionButton styling='secondary' onClick={onCancel}>
+            {tx('ok')}
+          </FooterActionButton>
         </FooterActions>
       </DialogFooter>
     </Dialog>
