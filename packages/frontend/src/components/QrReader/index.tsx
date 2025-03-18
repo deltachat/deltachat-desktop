@@ -69,29 +69,27 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
     const [deviceId, setDeviceId] = useState<string | undefined>(undefined)
     const [processingFile, setProcessingFile] = useState(false)
 
-    const worker = useRef<Worker | null>(null)
-    const workerClipBoard = useRef<Worker | null>(null)
-
-    if (worker.current === null) {
-      worker.current = new QrWorker() as Worker
+    const workerRef = useRef<Worker | null>(null)
+    const workerClipBoardRef = useRef<Worker | null>(null)
+    // Only create the worker once per component instance.
+    if (workerRef.current === null) {
+      workerRef.current = new QrWorker() as Worker
     }
-
-    if (workerClipBoard.current === null) {
-      workerClipBoard.current = new QrWorker() as Worker
+    const worker = workerRef.current
+    if (workerClipBoardRef.current === null) {
+      workerClipBoardRef.current = new QrWorker() as Worker
     }
+    const workerClipBoard = workerClipBoardRef.current
 
     useEffect(() => {
-      const currentWorker = worker.current
-      const currentWorkerClipBoard = workerClipBoard.current
-
       return () => {
         // terminate worker if component is unmounted,
         // otherwise we might get a delayed error message
         // if scan fails, even after closing the QR dialog
-        currentWorker?.terminate()
-        currentWorkerClipBoard?.terminate()
+        worker.terminate()
+        workerClipBoard.terminate()
       }
-    }, [])
+    }, [worker, workerClipBoard])
 
     // Get all current video devices available to the user.
     useEffect(() => {
@@ -136,9 +134,9 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
         handleError: (error: any) => void
       ) => {
         try {
-          workerClipBoard.current?.postMessage(imageData)
+          workerClipBoard.postMessage(imageData)
           const scanResultP = new Promise(r => {
-            workerClipBoard.current?.addEventListener(
+            workerClipBoard.addEventListener(
               'message',
               event => {
                 setProcessingFile(false)
@@ -158,7 +156,7 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
           handleError(error)
         }
       },
-      []
+      [workerClipBoard]
     )
 
     useImperativeHandle(ref, () => ({
@@ -438,12 +436,12 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
         }
 
         try {
-          worker.current?.postMessage(imageData, {
+          worker.postMessage(imageData, {
             transfer: [imageData.data.buffer],
           })
 
           const scanResultP = new Promise(r => {
-            worker.current?.addEventListener(
+            worker.addEventListener(
               'message',
               event => {
                 r(event.data)
@@ -474,7 +472,7 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
       return () => {
         stopScanning = true
       }
-    }, [handleError, onScanSuccess])
+    }, [handleError, onScanSuccess, worker])
 
     return (
       <div className={styles.qrReader}>
