@@ -15,8 +15,7 @@ import Dialog, {
   FooterActions,
 } from '../Dialog'
 import FooterActionButton from '../Dialog/FooterActionButton'
-import QrReader from '../QrReader'
-import { qrCodeFromClipboard } from '../QrReader/helper'
+import { QrReader, QrCodeScanRef } from '../QrReader'
 
 import { BackendRemote } from '../../backend-com'
 import { getLogger } from '../../../../shared/logger'
@@ -27,8 +26,10 @@ import useProcessQr from '../../hooks/useProcessQr'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { selectedAccountId } from '../../ScreenController'
 
+import useDialog from '../../hooks/dialog/useDialog'
 import type { DialogProps } from '../../contexts/DialogContext'
 import useAlertDialog from '../../hooks/dialog/useAlertDialog'
+import QrCodeCopyConfirmationDialog from './QrCodeCopyConfirmationDialog'
 
 const log = getLogger('renderer/dialogs/QrCode')
 
@@ -39,7 +40,9 @@ type Props = {
 }
 
 /**
- * dialog to show a qr code and scan a qr code
+ * dialog showing 2 components in two tabs:
+ * one that displays a qr code and one that
+ * provides a QR code reader
  */
 export default function QrCode({
   qrCodeSVG,
@@ -105,14 +108,21 @@ export function QrCodeShowQrInner({
 }) {
   const { userFeedback } = useContext(ScreenContext)
   const tx = useTranslationFunction()
+  const { openDialog } = useDialog()
 
   const onCopy = () => {
-    runtime.writeClipboardText(qrCode).then(_ => {
-      userFeedback({
-        type: 'success',
-        text: tx('copy_qr_data_success'),
-      })
-      onClose()
+    // Pop up confirmation dialog when clicked instead of copying the link directly
+    openDialog(QrCodeCopyConfirmationDialog, {
+      message: tx('share_invite_link_explain'),
+      content: qrCode,
+      copyCb: () => {
+        userFeedback({
+          type: 'success',
+          text: tx('copy_qr_data_success'),
+        })
+        onClose()
+      },
+      // no cancelCb; skip closing the window, maybe the user wants to use the QR code after all
     })
   }
 
@@ -137,7 +147,14 @@ export function QrCodeShowQrInner({
     }
   }, [qrCodeSVG])
 
+  const processQr = useProcessQr()
+  const accountId = selectedAccountId()
+
   const imageContextMenu = useContextMenu([
+    {
+      label: tx('withdraw_qr_code'),
+      action: () => processQr(accountId, qrCode, onBack || onClose),
+    },
     {
       label: tx('menu_copy_image_to_clipboard'),
       action: async () => {
@@ -224,6 +241,7 @@ export function QrCodeScanQrInner({
   const processQr = useProcessQr()
   const processingQrCode = useRef(false)
   const openAlertDialog = useAlertDialog()
+  const qrReaderRef = useRef<QrCodeScanRef | null>(null)
 
   const onDone = useCallback(() => {
     onClose()
@@ -258,22 +276,19 @@ export function QrCodeScanQrInner({
   )
 
   const pasteClipboard = useCallback(async () => {
-    try {
-      const result = await qrCodeFromClipboard(runtime)
-      handleScan(result)
-    } catch (error: any) {
-      if (typeof error === 'string') {
-        handleError(error)
-      } else {
-        handleError(error.toString())
-      }
+    if (qrReaderRef.current) {
+      qrReaderRef.current.handlePasteFromClipboard()
     }
-  }, [handleError, handleScan])
+  }, [])
 
   return (
     <>
       <DialogBody>
-        <QrReader onScanSuccess={handleScan} onError={handleError} />
+        <QrReader
+          onScanSuccess={handleScan}
+          onError={handleError}
+          ref={qrReaderRef}
+        />
       </DialogBody>
       <DialogFooter>
         <FooterActions align='spaceBetween'>

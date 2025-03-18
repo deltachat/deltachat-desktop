@@ -2,7 +2,7 @@ import React, { useRef, useCallback } from 'react'
 
 import { DialogBody, DialogFooter, FooterActions } from '../../Dialog'
 import FooterActionButton from '../../Dialog/FooterActionButton'
-import QrReader from '../../QrReader'
+import { QrReader } from '../../QrReader'
 import useProcessQr from '../../../hooks/useProcessQr'
 import { selectedAccountId } from '../../../ScreenController'
 import { DialogWithHeader } from '../../Dialog'
@@ -70,8 +70,6 @@ export function ReceiveBackupDialog({ onClose }: Props & DialogProps) {
       <DialogBody>
         <p className={styles.receiveSteps}>
           {tx('multidevice_open_settings_on_other_device')}
-          <br />
-          {tx('multidevice_experimental_hint')}
         </p>
         <QrReader onScanSuccess={handleScan} onError={handleError} />
       </DialogBody>

@@ -171,14 +171,14 @@ export function useChatListContextMenu(): {
                       },
                     },
                     {
-                      label: tx('mute_for_two_hours'),
+                      label: tx('mute_for_eight_hours'),
                       action: () => {
                         BackendRemote.rpc.setChatMuteDuration(
                           accountId,
                           chatListItem.id,
                           {
                             kind: 'Until',
-                            duration: Timespans.ONE_HOUR_IN_SECONDS * 2,
+                            duration: Timespans.ONE_HOUR_IN_SECONDS * 8,
                           }
                         )
                       },

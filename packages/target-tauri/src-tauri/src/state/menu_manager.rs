@@ -45,14 +45,14 @@ impl<R: Runtime> WindowAbstraction<R> for Window<R> {
 }
 
 #[derive(Clone)]
-pub struct MenuManger {
+pub struct MenuManager {
     // {[window_id]: callbackToUpdateMenu}
     inner: Arc<RwLock<HashMap<String, Arc<GenerateMenuFn>>>>,
 }
 
-impl MenuManger {
+impl MenuManager {
     pub(crate) fn new() -> Self {
-        MenuManger {
+        MenuManager {
             inner: Arc::new(RwLock::new(HashMap::new())),
         }
     }
@@ -65,6 +65,7 @@ impl MenuManger {
         let _ = self.inner.write().await.insert(id.to_owned(), data);
     }
 
+    #[cfg(target_os = "macos")]
     pub(crate) async fn get_menu_for_window(
         &self,
         app: &AppHandle,
@@ -117,6 +118,8 @@ impl MenuManger {
                     });
                 }
             });
+            // window was just opened so change menu to it
+            app.set_menu(menu_generator_arc(app)?)?;
         }
 
         let self_clone = self.clone();

@@ -17,7 +17,51 @@ fn main() {
     println!("cargo:rustc-env=BUILD_TIME_STAMP={build_time_stamp}");
     println!("cargo:rustc-env=BUILD_INFO_GIT={}", get_git_ref());
 
-    tauri_build::build()
+    tauri_build::try_build(tauri_build::Attributes::default().app_manifest(
+        // By default, Tauri enables all commands in all windows
+        // (source: https://github.com/tauri-apps/tauri/pull/9008).
+        // Adding `.commands()` explicitly here makes it generate
+        // permissions for the commands, and makes it require to specify
+        // the permissions for our commands in capabilities explicitly
+        // for each window / webview.
+        // see also https://docs.rs/tauri-build/latest/tauri_build/struct.AppManifest.html
+        // and https://v2.tauri.app/security/permissions/
+        tauri_build::AppManifest::default().commands(&[
+            // When adding a command, don't forget to also add it
+            // to `invoke_handler()` in `lib.rs`, and to `permissions`
+            // in `capabilities`.
+            "greet",
+            "deltachat_jsonrpc_request",
+            "ui_ready",
+            "ui_frontend_ready",
+            "get_current_logfile",
+            "copy_image_to_clipboard",
+            "get_app_path",
+            "get_clipboard_image_as_data_uri",
+            "download_file",
+            "show_open_file_dialog",
+            "get_locale_data",
+            "change_lang",
+            "write_temp_file_from_base64",
+            "write_temp_file",
+            "remove_temp_file",
+            "copy_blob_file_to_internal_tmp_dir",
+            "on_webxdc_message_changed",
+            "on_webxdc_message_deleted",
+            "on_webxdc_status_update",
+            "on_webxdc_realtime_data",
+            "delete_webxdc_account_data",
+            "close_all_webxdc_instances",
+            "get_runtime_info",
+            "change_desktop_settings_apply_side_effects",
+            "open_help_window",
+            "open_html_window",
+            "get_html_window_info",
+            "html_email_open_menu",
+            "html_email_set_load_remote_content",
+        ]),
+    ))
+    .expect("failed to run tauri-build");
 }
 
 fn gather_process_stdout(command: &str, args: &[&str]) -> Result<String, String> {

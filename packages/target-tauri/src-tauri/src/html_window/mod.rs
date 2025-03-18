@@ -4,8 +4,8 @@ use anyhow::anyhow;
 use log::{error, info, trace, warn};
 
 use tauri::{
-    async_runtime::block_on, webview::WebviewBuilder, LogicalPosition, LogicalSize, Manager, Url,
-    Webview, WebviewUrl, Window, WindowBuilder, WindowEvent,
+    async_runtime::block_on, webview::WebviewBuilder, LogicalPosition, LogicalSize, Manager, State,
+    Url, Webview, WebviewUrl, Window, WindowBuilder, WindowEvent,
 };
 use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_opener::OpenerExt;
@@ -16,13 +16,17 @@ use crate::{
         error::Error,
         punycode::{puny_code_decode_host, puny_code_encode_host},
     },
+    menus::{
+        float_on_top::set_window_float_on_top_based_on_main_window,
+        html_window_menu::create_html_window_menu,
+    },
     settings::{
-        get_content_protection, get_setting_bool_or, CONFIG_FILE,
+        apply_zoom_factor_html_window, get_content_protection, get_setting_bool_or, CONFIG_FILE,
         HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_DEFAULT, HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_KEY,
     },
     state::html_email_instances::InnerHtmlEmailInstanceData,
     temp_file::get_temp_folder_path,
-    DeltaChatAppState, HtmlEmailInstancesState,
+    DeltaChatAppState, HtmlEmailInstancesState, MenuManager, TranslationState,
 };
 
 const HEADER_HEIGHT: f64 = 100.;
@@ -38,8 +42,9 @@ mod punycode;
 #[tauri::command]
 pub(crate) async fn open_html_window(
     app: tauri::AppHandle,
-    html_instances_state: tauri::State<'_, HtmlEmailInstancesState>,
-    dc: tauri::State<'_, DeltaChatAppState>,
+    html_instances_state: State<'_, HtmlEmailInstancesState>,
+    dc: State<'_, DeltaChatAppState>,
+    menu_manager: State<'_, MenuManager>,
     window_id: &str,
     account_id: u32, // TODO needs to be used later for fetching webrequests over dc core
     is_contact_request: bool,
@@ -114,6 +119,7 @@ pub(crate) async fn open_html_window(
 
     let app_arc = Arc::new(app);
     let app = app_arc.clone();
+    let app_for_nav = app_arc.clone();
 
     let initial_url = {
         #[cfg(not(any(target_os = "windows", target_os = "android")))]
@@ -125,7 +131,8 @@ pub(crate) async fn open_html_window(
             Url::from_str("http://email.localhost/index.html").unwrap()
         }
     };
-    let initial_url_origin = initial_url.origin();
+    let initial_url_scheme = initial_url.scheme().to_owned();
+    let initial_url_host = initial_url.host_str().map(|o| o.to_owned());
 
     let mut mail_view_builder = tauri::webview::WebviewBuilder::new(
         format!("{window_id}-mail"),
@@ -133,6 +140,7 @@ pub(crate) async fn open_html_window(
     )
     .disable_javascript()
     .on_navigation(move |url| {
+        let tx: tauri::State<'_, TranslationState> = app_for_nav.state::<TranslationState>();
         if url.to_string() == "about:blank" {
             return true;
         }
@@ -142,10 +150,12 @@ pub(crate) async fn open_html_window(
         // When `false`, it still _might_ get intercepted,
         // but only if the message contains some weird links like
         // `email://other.host/`.
-        // We only really care about navigating to `initial_url`:
+        // We only really care about  navigating to `initial_url`:
         // the HTML message viewer is not supposed to be multipage,
         // so it's OK to handle such weird links as external, below.
-        let will_be_intercepted = url.origin() == initial_url_origin;
+        let will_be_intercepted = url.scheme() == initial_url_scheme
+            && url.host_str().map(|o| o.to_owned()) == initial_url_host
+            && url.port() == initial_url.port();
         if will_be_intercepted {
             return true;
         }
@@ -164,12 +174,12 @@ pub(crate) async fn open_html_window(
                 app_arc
                     .dialog()
                     .message(
-                        "Punycode detected: tx('puny_code_warning_question', '$$asciiHostname$$')",
+                        format!("Punycode detected: {}", tx.sync_translate("puny_code_warning_question", /*"puny_code_decode_host(orginal_host_name)"*/)),
                     )
-                    .title("tx('puny_code_warning_header')")
+                    .title(tx.sync_translate("puny_code_warning_header"))
                     .kind(tauri_plugin_dialog::MessageDialogKind::Warning)
                     .buttons(tauri_plugin_dialog::MessageDialogButtons::OkCancelCustom(
-                        // TODO use translation strings, as soon as translations are avaialble in rust backend
+                        // Todo: use tx function here (Problems with Lifetime)
                         "Continue".to_owned(),
                         "cancel".to_owned(),
                     ))
@@ -224,8 +234,7 @@ pub(crate) async fn open_html_window(
 
     let header_view_arc = Arc::new(header_view);
     let mail_view_arc = Arc::new(mail_view);
-    let window_arc = Arc::new(window);
-    let window = window_arc.clone();
+    let window_arc = Arc::new(window.clone());
 
     // resize
     window.on_window_event(move |event| {
@@ -272,6 +281,23 @@ pub(crate) async fn open_html_window(
         truncate_text(subject, 42),
         truncate_text(sender, 40)
     ))?;
+
+    if let Err(err) = apply_zoom_factor_html_window(&app) {
+        error!("failed to apply zoom factor: {err}")
+    }
+    if let Err(err) = set_window_float_on_top_based_on_main_window(&window) {
+        error!("failed to apply float on top: {err}")
+    }
+
+    let window_clone = window.clone();
+    menu_manager
+        .register_window(
+            &app,
+            &window,
+            Box::new(move |app| create_html_window_menu(app, &window_clone)),
+        )
+        .await
+        .map_err(|err| Error::MenuCreation(err.to_string()))?;
 
     Ok(())
 }

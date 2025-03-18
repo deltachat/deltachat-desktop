@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import SettingsButton from './SettingsButton'
-import CoreSettingsSwitch from './CoreSettingsSwitch'
 import InputTransferKey from '../InputTransferKey'
 import {
   DialogBody,
@@ -19,25 +18,14 @@ import useDialog from '../../hooks/dialog/useDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 import ManageKeys from './ManageKeys'
-import { SettingsStoreState } from '../../stores/settings'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 
-type Props = {
-  settingsStore: SettingsStoreState
-}
-
-export default function Encryption({ settingsStore }: Props) {
+export default function Encryption() {
   const { openDialog } = useDialog()
   const tx = useTranslationFunction()
 
   return (
     <>
-      {settingsStore.settings.is_chatmail == '0' && (
-        <CoreSettingsSwitch
-          settingsKey='e2ee_enabled'
-          label={tx('autocrypt_prefer_e2ee')}
-        />
-      )}
       <ManageKeys />
       <SettingsButton onClick={() => openDialog(SendAutocryptSetupMessage)}>
         {tx('autocrypt_send_asm_button')}

@@ -51,7 +51,13 @@
   "multidevice_connection_takes_too_long": {
     "message": "This takes longer than expected 🐌 make sure both devices are on the same Wi-Fi or network and check troubleshooting"
   },
-  "search_result_for_x":  {
-    "message":"Result for \"%s\""
+  "search_result_for_x": {
+    "message": "Result for \"%s\""
+  },
+  "reset_encryption": {
+    "message": "Reset Encryption"
+  },
+  "reset_encryption_confirm": {
+    "message": "Forget encryption key for this contact."
   }
 }

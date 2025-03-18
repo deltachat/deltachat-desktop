@@ -34,7 +34,7 @@ export default function Advanced({ settingsStore }: Props) {
       <SettingsSeparator />
 
       <SettingsHeading>{tx('pref_encryption')}</SettingsHeading>
-      <Encryption settingsStore={settingsStore} />
+      <Encryption />
       <SettingsSeparator />
 
       <SettingsHeading>{tx('pref_server')}</SettingsHeading>

@@ -3,10 +3,11 @@ use std::time::SystemTime;
 use clipboard::copy_image_to_clipboard;
 
 use menus::{handle_menu_event, main_menu::create_main_menu};
+
 use settings::load_and_apply_desktop_settings_on_startup;
 use state::{
     app::AppState, deltachat::DeltaChatAppState, html_email_instances::HtmlEmailInstancesState,
-    menu_manager::MenuManger,
+    menu_manager::MenuManager, translations::TranslationState,
 };
 use tauri::Manager;
 use util::csp::add_custom_schemes_to_csp_for_window_and_android;
@@ -19,6 +20,7 @@ mod help_window;
 mod html_window;
 mod i18n;
 mod menus;
+mod runtime_capabilities;
 mod runtime_info;
 mod settings;
 mod state;
@@ -100,6 +102,9 @@ pub fn run() {
 
     builder
         .invoke_handler(tauri::generate_handler![
+            // When adding a command, don't forget to also add it
+            // to `.commands()` in `build.rs`, and to `permissions`
+            // in `capabilities`.
             greet,
             deltachat_jsonrpc_request,
             ui_ready,
@@ -115,6 +120,7 @@ pub fn run() {
             temp_file::write_temp_file_from_base64,
             temp_file::write_temp_file,
             temp_file::remove_temp_file,
+            temp_file::copy_blob_file_to_internal_tmp_dir,
             webxdc::on_webxdc_message_changed,
             webxdc::on_webxdc_message_deleted,
             webxdc::on_webxdc_status_update,
@@ -159,6 +165,9 @@ pub fn run() {
                 .level_for("async_smtp", log::LevelFilter::Warn)
                 .level_for("rustls", log::LevelFilter::Warn)
                 .level_for("iroh_net", log::LevelFilter::Warn)
+                .level_for("iroh", log::LevelFilter::Warn)
+                .level_for("iroh_quinn", log::LevelFilter::Warn)
+                .level_for("iroh_quinn_proto", log::LevelFilter::Warn)
                 // also emitted by tauri
                 .level_for("tracing", log::LevelFilter::Warn)
                 .level_for("igd_next", log::LevelFilter::Warn)
@@ -188,7 +197,10 @@ pub fn run() {
                 app,
             ))?);
             app.manage(HtmlEmailInstancesState::new());
-            app.manage(MenuManger::new());
+            app.manage(MenuManager::new());
+            app.manage(tauri::async_runtime::block_on(TranslationState::try_new(
+                app,
+            ))?);
             app.state::<AppState>()
                 .log_duration_since_startup("base setup done");
 
@@ -208,7 +220,7 @@ pub fn run() {
                 main_window.set_title("")?;
             }
 
-            let menu_manager = app.state::<MenuManger>();
+            let menu_manager = app.state::<MenuManager>();
             let main_window_clone = main_window.clone();
             tauri::async_runtime::block_on(menu_manager.register_window(
                 app.handle(),
@@ -218,12 +230,15 @@ pub fn run() {
 
             app.on_menu_event(handle_menu_event);
 
+            runtime_capabilities::add_runtime_capabilies(app.handle())?;
+
             app.state::<AppState>()
                 .log_duration_since_startup("setup done");
+
             Ok(())
         })
         .run({
-            let mut context = tauri::generate_context!();
+            let mut context = tauri::generate_context!("tauri.conf.json5");
 
             #[cfg(any(debug_assertions, target_os = "windows", target_os = "android"))]
             {

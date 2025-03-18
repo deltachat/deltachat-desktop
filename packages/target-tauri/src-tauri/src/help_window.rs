@@ -4,7 +4,7 @@ use tauri::{Manager, State, WebviewWindow};
 use crate::{
     menus::{float_on_top::set_float_on_top_based_on_main_window, help_menu::create_help_menu},
     settings::{apply_content_protection, apply_zoom_factor_help_window},
-    state::menu_manager::MenuManger,
+    state::menu_manager::MenuManager,
 };
 
 #[derive(Debug, thiserror::Error)]
@@ -27,7 +27,7 @@ impl serde::Serialize for Error {
 #[tauri::command]
 pub(crate) async fn open_help_window(
     app: tauri::AppHandle,
-    menu_manager: State<'_, MenuManger>,
+    menu_manager: State<'_, MenuManager>,
     locale: &str,
     anchor: Option<&str>,
 ) -> Result<(), Error> {
