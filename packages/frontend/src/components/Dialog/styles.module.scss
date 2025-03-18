@@ -1,12 +1,14 @@
+@import '../../../scss/variables.scss';
+
 $headerButtonSize: 30px;
 $paddingHorizontal: 30px;
 $paddingVertical: 20px;
 
 .dialog {
   padding: 0;
-  @media (width < 500px){
-    width: 100vw !important;
-    min-width: 100vw !important;
+  @media (width < $default-dialog-width){
+    max-width: 100vw !important;
+    min-width: calc(100vw - 1rem) !important;
   }
 
   &.unstyled {
@@ -138,7 +140,7 @@ $paddingVertical: 20px;
 
 .footerActions {
   display: flex;
-  @media (width <= 500px) {
+  @media (width <= $default-dialog-width) {
     flex-direction: column;
   }
 
@@ -165,7 +167,7 @@ $paddingVertical: 20px;
   & + & {
     margin-left: 20px;
   }
-  @media (width <= 500px) {
+  @media (width <= $default-dialog-width) {
     & + & {
       margin-left: 0px;
       margin-top: 20px;
