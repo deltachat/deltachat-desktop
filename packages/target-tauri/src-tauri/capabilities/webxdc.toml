@@ -3,5 +3,12 @@
 identifier = "webxdc"
 webviews = ["webxdc:*"]
 permissions = [
-
+    "allow-send-webxdc-update",
+    "allow-get-webxdc-updates",
+    # IDEA: maybe implement scopes for the event plugin in tauri,
+    # so that you can specify the allowed events
+    #
+    # event list for this would be:
+    # - "webxdc_status_update"
+    "core:event:allow-listen",
 ]

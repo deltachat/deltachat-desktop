@@ -436,6 +436,9 @@ importers:
       '@tauri-apps/plugin-dialog':
         specifier: ^2.2.0
         version: 2.2.0
+      '@webxdc/types':
+        specifier: 'catalog:'
+        version: 2.1.2
       esbuild:
         specifier: ^0.24.0
         version: 0.24.2

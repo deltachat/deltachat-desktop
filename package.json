@@ -52,7 +52,8 @@
       ]
     },
     "onlyBuiltDependencies": [
-      "electron"
+      "electron",
+      "esbuild"
     ]
   },
   "devDependencies": {

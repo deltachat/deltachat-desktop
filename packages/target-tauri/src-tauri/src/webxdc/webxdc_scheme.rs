@@ -1,5 +1,8 @@
-use anyhow::anyhow;
+use std::str;
+
+use anyhow::{anyhow, Context};
 use log::{error, trace};
+use serde_json::Value;
 use tauri::{Manager, UriSchemeContext, UriSchemeResponder};
 
 use crate::{state::webxdc_instances::WebxdcInstance, DeltaChatAppState, WebxdcInstancesState};
@@ -45,21 +48,45 @@ pub(crate) fn webxdc_protocol<R: tauri::Runtime>(
             let path = request.uri().path();
 
             if path == "/webxdc.js" {
-                // TODO: match against webxdc.js to inject it
-            }
+                let webxdc_info =  message.get_webxdc_info(&account).await?;
+                let bytes =app_handle
+                    .asset_resolver()
+                    .get("webxdc/webxdc.js".to_owned())
+                    .context("webxdc.js not found in assets, this should not happen, please contact developers")?
+                    .bytes;
+                let webxdc_js = str::from_utf8(&bytes)?;
 
-            Ok(match message.get_webxdc_blob(&account, path).await {
-                Ok(blob) => http::Response::builder()
+                let display_name = account
+                    .get_config(deltachat::config::Config::Displayname).await?
+                    .unwrap_or(webxdc_info.self_addr.clone());
+                let webxdc_js = webxdc_js
+                    .replace("[SELFADDR]", &serde_json::to_string(
+                        &Value::try_from(webxdc_info.self_addr.as_bytes().to_vec())?
+                    )?)
+                    .replace(
+                        "[SELFNAME]",
+                        &serde_json::to_string(
+                            &Value::try_from(display_name.as_bytes().to_vec())?
+                        )?
+                    );
+
+                Ok(http::Response::builder()
                     .status(http::StatusCode::OK)
-                    .body(blob)?,
-                Err(err) => {
-                    error!("get_webxdc_blob: {err:#}");
-                    http::Response::builder()
-                        .status(http::StatusCode::NOT_FOUND)
-                        .header(http::header::CONTENT_TYPE, mime::TEXT_PLAIN.essence_str())
-                        .body("404 not found".as_bytes().to_vec())?
-                }
-            })
+                    .body(webxdc_js.into_bytes())?)
+            } else {
+                Ok(match message.get_webxdc_blob(&account, path).await {
+                    Ok(blob) => http::Response::builder()
+                        .status(http::StatusCode::OK)
+                        .body(blob)?,
+                    Err(err) => {
+                        error!("get_webxdc_blob: {err:#}");
+                        http::Response::builder()
+                            .status(http::StatusCode::NOT_FOUND)
+                            .header(http::header::CONTENT_TYPE, mime::TEXT_PLAIN.essence_str())
+                            .body("404 not found".as_bytes().to_vec())?
+                    }
+                })
+            }
         }
         .await;
         match response_result {

@@ -3,13 +3,14 @@ use std::{str::FromStr, sync::Arc};
 use deltachat::{
     chat::Chat,
     message::{Message, MsgId},
-    webxdc::WebxdcInfo,
+    webxdc::{StatusUpdateItem, StatusUpdateSerial, WebxdcInfo},
 };
-use log::{error, info, trace, warn};
+use log::{error, trace, warn};
 
+use serde_json::Value;
 use tauri::{
-    async_runtime::block_on, image::Image, AppHandle, Manager, State, Url, WebviewUrl,
-    WebviewWindowBuilder, WindowEvent,
+    async_runtime::block_on, image::Image, AppHandle, Emitter, EventTarget, Manager, State, Url,
+    WebviewUrl, WebviewWindow, WebviewWindowBuilder, WindowEvent,
 };
 
 use crate::{
@@ -113,9 +114,11 @@ pub(crate) async fn on_webxdc_status_update<'a>(
         .get_webxdc_for_instance(account_id, instance_id)
         .await
     {
-        if let Some(window) = app.get_window(&window_label) {
-            info!("TODO: handle on_webxdc_status_update handler {account_id} {instance_id}");
-        }
+        app.emit_to(
+            EventTarget::window(window_label),
+            "webxdc_status_update",
+            Value::Null,
+        )?;
     }
     Ok(())
 }
@@ -132,11 +135,11 @@ pub(crate) async fn on_webxdc_realtime_data<'a>(
         .get_webxdc_for_instance(account_id, instance_id)
         .await
     {
-        if let Some(window) = app.get_window(&window_label) {
-            info!(
-            "TODO: handle on_webxdc_status_update handler {account_id} {instance_id} {payload:?}"
-        );
-        }
+        app.emit_to(
+            EventTarget::window(window_label),
+            "webxdc_realtime_data",
+            payload,
+        )?;
     }
     Ok(())
 }
@@ -202,10 +205,10 @@ pub(crate) async fn open_webxdc<'a>(
     let webxdc_info = webxdc_message
         .get_webxdc_info(&account)
         .await
-        .map_err(|err| Error::DeltaChat(err))?;
+        .map_err(Error::DeltaChat)?;
     let chat_name = Chat::load_from_db(&account, webxdc_message.get_chat_id())
         .await
-        .map_err(|err| Error::DeltaChat(err))?
+        .map_err(Error::DeltaChat)?
         .name;
 
     // add to a state so we can access account id and msg faster without parsing window id
@@ -276,11 +279,11 @@ pub(crate) async fn open_webxdc<'a>(
         let webxdc_info = webxdc_message
             .get_webxdc_info(&account)
             .await
-            .map_err(|err| Error::DeltaChat(err))?;
+            .map_err(Error::DeltaChat)?;
         let blob: Vec<u8> = webxdc_message
             .get_webxdc_blob(&account, &webxdc_info.icon)
             .await
-            .map_err(|err| Error::DeltaChat(err))?;
+            .map_err(Error::DeltaChat)?;
 
         // IDEA also support jpg, at the moment only png is supported
         let image = Image::from_bytes(&blob);
@@ -312,3 +315,67 @@ fn make_title(webxdc_info: &WebxdcInfo, chat_name: &str) -> String {
     let webxdc_name = truncate_text(&webxdc_info.name, 42);
     format!("{document}{webxdc_name} – {chat_name}")
 }
+
+#[tauri::command]
+pub(crate) async fn send_webxdc_update<'a>(
+    window: WebviewWindow,
+    webxdc_instances: State<'a, WebxdcInstancesState>,
+    dc: State<'a, DeltaChatAppState>,
+    status_update: StatusUpdateItem,
+) -> Result<(), Error> {
+    let WebxdcInstance {
+        account_id,
+        message,
+        ..
+    } = webxdc_instances
+        .get(window.label())
+        .await
+        .ok_or(Error::WebxdcInstanceNotFoundByLabel(
+            window.label().to_owned(),
+        ))?;
+    let dc = dc.deltachat.read().await;
+    let account = dc
+        .get_account(account_id)
+        .ok_or(Error::AccountNotFound(account_id))?;
+
+    account
+        .send_webxdc_status_update_struct(message.get_id(), status_update)
+        .await
+        .map_err(Error::DeltaChat)?;
+
+    Ok(())
+}
+
+#[tauri::command]
+pub(crate) async fn get_webxdc_updates<'a>(
+    window: WebviewWindow,
+    webxdc_instances: State<'a, WebxdcInstancesState>,
+    dc: State<'a, DeltaChatAppState>,
+    last_known_serial: u32,
+) -> Result<String, Error> {
+    let WebxdcInstance {
+        account_id,
+        message,
+        ..
+    } = webxdc_instances
+        .get(window.label())
+        .await
+        .ok_or(Error::WebxdcInstanceNotFoundByLabel(
+            window.label().to_owned(),
+        ))?;
+    let dc = dc.deltachat.read().await;
+    let account = dc
+        .get_account(account_id)
+        .ok_or(Error::AccountNotFound(account_id))?;
+
+    account
+        .get_webxdc_status_updates(message.get_id(), StatusUpdateSerial::new(last_known_serial))
+        .await
+        .map_err(Error::DeltaChat)
+}
+
+// TODO join realtime channel
+
+// TODO leave realtime channel - also on closing webxdc in the create function
+
+// TODO send realtime message
