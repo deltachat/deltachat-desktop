@@ -7,7 +7,7 @@
 ### Changed
 
 ### Fixed
-
+- tauri: improve security a little
 
 <a id="1_55_0"></a>
 
