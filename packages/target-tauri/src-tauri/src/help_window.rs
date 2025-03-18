@@ -14,7 +14,7 @@ pub(crate) enum Error {
     #[error("MenuCreation {0}")]
     MenuCreation(String),
     #[error("Sanitization {0}")]
-    Sanitization(String)
+    Sanitization(String),
 }
 
 impl serde::Serialize for Error {
