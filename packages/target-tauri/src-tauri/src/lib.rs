@@ -7,7 +7,7 @@ use menus::{handle_menu_event, main_menu::create_main_menu};
 use settings::load_and_apply_desktop_settings_on_startup;
 use state::{
     app::AppState, deltachat::DeltaChatAppState, html_email_instances::HtmlEmailInstancesState,
-    menu_manager::MenuManger, translations::TranslationState,
+    menu_manager::MenuManager, translations::TranslationState,
     webxdc_instances::WebxdcInstancesState,
 };
 use tauri::Manager;
