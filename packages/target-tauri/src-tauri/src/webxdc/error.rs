@@ -16,6 +16,8 @@ pub(crate) enum Error {
     UrlParse(#[from] url::ParseError),
     #[error("MenuCreation {0}")]
     MenuCreation(String),
+    #[error("webxdc message not found by window label:{0}")]
+    WebxdcInstanceNotFoundByLabel(String),
 }
 
 impl serde::Serialize for Error {

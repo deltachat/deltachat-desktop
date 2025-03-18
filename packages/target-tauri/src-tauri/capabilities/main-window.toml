@@ -51,6 +51,7 @@ permissions = [
   "allow-delete-webxdc-account-data",
   "allow-close-all-webxdc-instances",
   "allow-open-webxdc",
+  "allow-debug-get-datastore-ids",
 
   "allow-get-runtime-info",
   "allow-change-desktop-settings-apply-side-effects",
