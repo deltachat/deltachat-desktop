@@ -58,6 +58,8 @@
 - tauri: fix: sticker picker previews not working
 - tauri: fix emoji picker being super ugly
 - tauri: fix launching a second instance of Delta Chat not focusing the main window if it's closed
+- tauri: improve performance a little #4812
+
 
 <a id="1_56_0"></a>
 
