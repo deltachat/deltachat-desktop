@@ -116,9 +116,9 @@ pub(crate) fn get_content_protection(app: &AppHandle) -> bool {
 
 pub(crate) async fn apply_language_change(app: &AppHandle) -> anyhow::Result<()> {
     app.state::<TranslationState>()
-        .reload_from_config(&app)
+        .reload_from_config(app)
         .await?;
-    app.state::<MenuManager>().update_all(&app);
+    app.state::<MenuManager>().update_all(app);
     Ok(())
 }
 
