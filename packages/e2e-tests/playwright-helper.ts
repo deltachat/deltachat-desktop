@@ -40,7 +40,6 @@ export async function createUser(
   expect(user.id).toBeDefined()
 
   existingProfiles.push(user)
-  /* ignore-console-log */
   console.log(`User ${user.name} wurde angelegt!`, user)
   return user
 }
@@ -166,7 +165,6 @@ export async function loadExistingProfiles(page: Page): Promise<User[]> {
   // page.waitForSelector('button.styles_module_account[aria-busy=false]')
   const accountList = page.locator('button.styles_module_account')
   const existingAccountItems = await accountList.count()
-  /* ignore-console-log */
   console.log('existingAccountItems', existingAccountItems)
   if (existingAccountItems > 0) {
     if (existingAccountItems === 1) {
