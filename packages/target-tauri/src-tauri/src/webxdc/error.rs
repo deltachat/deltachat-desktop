@@ -18,6 +18,8 @@ pub(crate) enum Error {
     MenuCreation(String),
     #[error("webxdc message not found by window label:{0}")]
     WebxdcInstanceNotFoundByLabel(String),
+    #[error("anyhow {0:?}")]
+    Anyhow(anyhow::Error),
 }
 
 impl serde::Serialize for Error {
