@@ -139,7 +139,7 @@ export default function AccountItem({
         // set Timeout forces it to be run after react update
         setTimeout(() => {
           ActionEmitter.emitAction(KeybindAction.Settings_Open)
-        }, 0)
+        }, 100)
       },
       dataTestid: 'open-settings-menu-item',
     },
