@@ -68,6 +68,14 @@ pub(crate) fn webxdc_protocol<R: tauri::Runtime>(
                         &serde_json::to_string(
                             &Value::try_from(display_name.as_bytes().to_vec())?
                         )?
+                    )
+                    .replace(
+                        "SEND_UPDATE_INTERVAL",
+                        &webxdc_info.send_update_interval.to_string()
+                    )
+                    .replace(
+                        "SEND_UPDATE_MAX_SIZE",
+                        &webxdc_info.send_update_max_size.to_string()
                     );
 
                 Ok(http::Response::builder()

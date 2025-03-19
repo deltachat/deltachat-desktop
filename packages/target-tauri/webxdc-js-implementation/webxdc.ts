@@ -102,6 +102,10 @@ class RealtimeListener implements RealtimeListenerType {
     selfAddr: utf8decoder.decode(new Uint8Array([SELFADDR])),
     //@ts-expect-error
     selfName: utf8decoder.decode(new Uint8Array([SELFNAME])),
+    //@ts-expect-error
+    sendUpdateInterval: SEND_UPDATE_INTERVAL,
+    //@ts-expect-error
+    sendUpdateMaxSize: SEND_UPDATE_MAX_SIZE,
     sendUpdate(update, description) {
       if (description) {
         console.warn('sendUpdate: the description parameter is deprecated')
