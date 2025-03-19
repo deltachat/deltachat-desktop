@@ -54,6 +54,7 @@ export async function createNewProfile(
 
   let isFirstOnboarding = false
   const numberOfAccounts = await accountList.count()
+  console.log(`numberOfAccounts: ${numberOfAccounts}`)
 
   if (numberOfAccounts === 1) {
     const accountClassNames = await accountList.first().getAttribute('class')
@@ -156,7 +157,13 @@ export async function getProfile(page: Page, accountId: string): Promise<User> {
 export async function loadExistingProfiles(page: Page): Promise<User[]> {
   // await page.goto('https://localhost:3000/')
   const existingProfiles: User[] = []
+  page.waitForSelector('.main-container')
   expect(page.locator('.main-container')).toBeVisible()
+  page.waitForSelector('button.styles_module_account')
+  // TODO: the next waitFor calls is needed when loading existing profiles
+  // and skipping the createProfiles step, but will never succeed if there
+  // are no profiles yet
+  page.waitForSelector('button.styles_module_account[aria-busy=false]')
   const accountList = page.locator('button.styles_module_account')
   const existingAccountItems = await accountList.count()
   /* ignore-console-log */
@@ -176,6 +183,7 @@ export async function loadExistingProfiles(page: Page): Promise<User[]> {
     for (let i = 0; i < existingAccountItems; i++) {
       const account = accountList.nth(i)
       const id = await account.getAttribute('x-account-sidebar-account-id')
+      console.log(`Found account ${id}`)
       if (id) {
         const p = await getProfile(page, id)
         existingProfiles.push(p)
