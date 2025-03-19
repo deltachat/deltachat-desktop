@@ -1,11 +1,57 @@
 import { invoke } from '@tauri-apps/api/core'
 import { listen } from '@tauri-apps/api/event'
-import { ReceivedStatusUpdate } from '@webxdc/types'
+import type {
+  ReceivedStatusUpdate,
+  RealtimeListener as RealtimeListenerType,
+} from '@webxdc/types'
 import '@webxdc/types/global'
+
+type SR = (data: number[]) => void
+type LR = () => void
+
+class RealtimeListener implements RealtimeListenerType {
+  listener: Parameters<RealtimeListenerType['setListener']>[0] | null = null
+  trashed = false
+
+  constructor(
+    private sendRealtime: SR,
+    private leaveRealtime: LR
+  ) {
+    this.setListener = this.setListener.bind(this)
+    this.send = this.send.bind(this)
+    this.leave = this.leave.bind(this)
+    this.is_trashed = this.is_trashed.bind(this)
+  }
+
+  is_trashed() {
+    return this.trashed
+  }
+
+  setListener(listener: Parameters<RealtimeListenerType['setListener']>[0]) {
+    this.listener = listener
+  }
+
+  send(data: Uint8Array) {
+    if (!(data instanceof Uint8Array)) {
+      throw new Error('realtime listener data must be a Uint8Array')
+    }
+    if (this.trashed) {
+      throw new Error('realtime listener is trashed and can no longer be used')
+    }
+    this.sendRealtime(Array.from(data))
+  }
+
+  leave() {
+    this.trashed = true
+    this.leaveRealtime()
+  }
+}
+
 ;(() => {
   const utf8decoder = new TextDecoder()
 
   let callback: ((update: ReceivedStatusUpdate<unknown>) => void) | null = null
+  let realtimeListener: RealtimeListener | null = null
   let last_serial = 0
   let setUpdateListenerPromise: (() => void) | null = null
   let is_running = false
@@ -45,6 +91,11 @@ import '@webxdc/types/global'
   }
 
   listen<null>('webxdc_status_update', onStatusUpdate)
+  listen<number[]>('webxdc_realtime_data', ({ payload: data }) => {
+    if (realtimeListener && !realtimeListener.is_trashed()) {
+      realtimeListener.listener?.(Uint8Array.from(data))
+    }
+  })
 
   window.webxdc = {
     //@ts-expect-error
@@ -67,6 +118,19 @@ import '@webxdc/types/global'
       })
       onStatusUpdate()
       return promise
+    },
+    joinRealtimeChannel: () => {
+      if (realtimeListener && !realtimeListener.is_trashed()) {
+        throw new Error('realtime listener already exists')
+      }
+
+      realtimeListener = new RealtimeListener(
+        data => invoke('send_webxdc_realtime_data', { data }),
+        () => invoke('leave_webxdc_realtime_channel')
+      )
+      invoke('join_webxdc_realtime_channel')
+
+      return realtimeListener
     },
   }
 })()
