@@ -88,7 +88,7 @@ export default defineConfig({
   webServer: {
     command: `node ../target-browser/dist/server.js`,
     url: baseURL,
-    timeout: 30 * 1000,
+    timeout: 120 * 1000,
     ignoreHTTPSErrors: true,
     reuseExistingServer: !process.env.CI,
     stdout: 'pipe',
