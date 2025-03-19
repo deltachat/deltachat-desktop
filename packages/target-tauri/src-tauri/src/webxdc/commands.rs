@@ -171,6 +171,28 @@ pub(crate) async fn close_all_webxdc_instances<'a>(
 const DEFAULT_WINDOW_WIDTH: f64 = 375.;
 const DEFAULT_WINDOW_HEIGHT: f64 = 667.;
 
+fn webxdc_base_url() -> Result<Url, Error> {
+    #[cfg(not(any(target_os = "windows", target_os = "android")))]
+    {
+        Ok(Url::from_str("webxdc://dummy.host/index.html")?)
+    }
+    #[cfg(any(target_os = "windows", target_os = "android"))]
+    {
+        Ok(Url::from_str("http://webxdc.localhost/index.html")?)
+    }
+}
+
+fn href_to_webxdc_url(href: String) -> Result<Url, Error> {
+    let mut url = webxdc_base_url()?;
+    let url_with_href = Url::from_str(&format!("http://webxdc.localhost/{href}"))?;
+    if !url_with_href.path().is_empty() {
+        url.set_path(url_with_href.path());
+    }
+    url.set_fragment(url_with_href.fragment());
+    url.set_query(url_with_href.fragment());
+    Ok(url)
+}
+
 #[tauri::command]
 pub(crate) async fn open_webxdc<'a>(
     app: AppHandle,
@@ -190,6 +212,17 @@ pub(crate) async fn open_webxdc<'a>(
             // window already exists focus it - android and iOS don't have have the function
             // and those platforms also don't have multiple windows
             window.show()?;
+
+            if !href.is_empty() {
+                window
+                    .webviews()
+                    .iter()
+                    .next()
+                    .context("did not find webview, this should not happen, contact devs")
+                    .map_err(Error::Anyhow)?
+                    .navigate(href_to_webxdc_url(href)?)?;
+            }
+
             return Ok(());
         }
     }
@@ -225,23 +258,10 @@ pub(crate) async fn open_webxdc<'a>(
         .await;
 
     // Contruct window
-    let mut url = {
-        #[cfg(not(any(target_os = "windows", target_os = "android")))]
-        {
-            Url::from_str("webxdc://dummy.host/index.html")?
-        }
-        #[cfg(any(target_os = "windows", target_os = "android"))]
-        {
-            Url::from_str("http://webxdc.localhost/index.html")?
-        }
-    };
-
-    // TODO test href support
-    if let Some(href) = webxdc_message.get_webxdc_href() {
-        let url_with_href = Url::from_str(&format!("http://webxdc.localhost/{href}"))?;
-        url.set_path(url_with_href.path());
-        url.set_fragment(url_with_href.fragment());
-        url.set_query(url_with_href.fragment());
+    let url = if href.is_empty() {
+        webxdc_base_url()?
+    } else {
+        href_to_webxdc_url(href)?
     };
 
     let mut window_builder = WebviewWindowBuilder::new(&app, &window_id, WebviewUrl::External(url))
