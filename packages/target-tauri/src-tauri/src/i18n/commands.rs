@@ -48,6 +48,8 @@ pub(crate) async fn get_locale_data(locale: &str, app: AppHandle) -> Result<Loca
 
     let untranslated_data: HashMap<String, HashMap<String, String>> =
         serde_json::from_str(&read_to_string(locales_dir.join("_untranslated_en.json")).await?)?;
+    let data_en: HashMap<String, HashMap<String, String>> =
+        serde_json::from_str(&read_to_string(locales_dir.join("en.json")).await?)?;
 
     let language_file = {
         let file_path = locales_dir.join(format!("{locale_key}.json"));
@@ -61,9 +63,10 @@ pub(crate) async fn get_locale_data(locale: &str, app: AppHandle) -> Result<Loca
         }
     };
 
-    let mut language_data: HashMap<String, HashMap<String, String>> =
-        serde_json::from_str(&read_to_string(language_file).await?)?;
+    let mut language_data: HashMap<String, HashMap<String, String>> = data_en;
+    let loaded_language_data: HashMap<String, HashMap<String, String>> = serde_json::from_str(&read_to_string(language_file).await?)?;
 
+    language_data.extend(loaded_language_data.into_iter());
     language_data.extend(untranslated_data.into_iter());
 
     Ok(LocaleData {
