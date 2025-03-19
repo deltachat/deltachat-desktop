@@ -23,8 +23,8 @@
 - add option to reset encryption state for contact in encryption info dialog #4797
 - tauri: implement backend translation fn and use it in tauri files as needed #4790
 - add withdraw qr code context menu option #4798
+- adapt dialogs for small screens
 - mute chat for 8 hours
-
 
 ### Changed
 - tauri: replace `tauri-plugin-shell` with `tauri-plugin-opener` #4699

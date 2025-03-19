@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from 'react'
 import styles from './styles.module.scss'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 
+// same as $default-dialog-width variable in styles
 const DEFAULT_WIDTH = 500
 
 type Props = React.PropsWithChildren<{
