@@ -332,7 +332,9 @@
     <string name="donate">Donate</string>
 
     <string name="mute_for_one_hour">Mute for 1 hour</string>
+    <!-- deprecated -->
     <string name="mute_for_two_hours">Mute for 2 hours</string>
+    <string name="mute_for_eight_hours">Mute for 8 hours</string>
     <string name="mute_for_one_day">Mute for 1 day</string>
     <string name="mute_for_seven_days">Mute for 7 days</string>
     <string name="mute_forever">Mute forever</string>
@@ -377,7 +379,7 @@
         <item quantity="one">Delete %d message on all your devices?</item>
         <item quantity="other">Delete %d messages on all your devices?</item>
     </plurals>
-    <!-- deprecated, use ask_delete_messages -->
+    <!-- Used for the deletion of Device messages -->
     <plurals name="ask_delete_messages_simple">
         <item quantity="one">Delete %d message?</item>
         <item quantity="other">Delete %d messages?</item>
@@ -668,9 +670,10 @@
     <string name="accept_invalid_certificates">Accept invalid certificates</string>
     <string name="switch_account">Switch Profile</string>
     <string name="add_account">Add Profile</string>
-    <string name="profile_tag">Private Tag</string>
+    <!-- for translations, you can also think of "Profile Tag" or "Profile Description" as the source string -->
+    <string name="profile_tag">Profile Label</string>
     <string name="profile_tag_hint">eg. Work, Family</string>
-    <string name="profile_tag_explain">Tag that is visible only for you; helping you to differ between your profiles.</string>
+    <string name="profile_tag_explain">Set a label that is visible only for you; helping you to differ between your profiles.</string>
     <!-- Menu entry to sort an item to the beginning of a list. Only "To Top" may do as well in some translations, if that helps to stay shorter. -->
     <string name="move_to_top">Move to Top</string>
     <string name="delete_account">Delete Profile</string>

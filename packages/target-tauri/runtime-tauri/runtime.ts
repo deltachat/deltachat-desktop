@@ -36,8 +36,8 @@ class TauriTransport extends yerpc.BaseTransport {
   constructor(private callCounterFunction: (label: string) => void) {
     super()
 
-    listen<string>('dc-jsonrpc-message', event => {
-      const message: yerpc.Message = JSON.parse(event.payload)
+    listen<yerpc.Message>('dc-jsonrpc-message', event => {
+      const message: yerpc.Message = event.payload
       if (logJsonrpcConnection) {
         /* ignore-console-log */
         console.debug('%c▼ %c[JSONRPC]', 'color: red', 'color:grey', message)

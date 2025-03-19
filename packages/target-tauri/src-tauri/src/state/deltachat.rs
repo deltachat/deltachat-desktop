@@ -38,10 +38,10 @@ impl DeltaChatAppState {
             loop {
                 let message = match out_receiver.next().await {
                     None => break,
-                    Some(message) => serde_json::to_string(&message)?,
+                    Some(message) => message,
                 };
                 // TODO fail will drop out of loop, do we want that here? or do we just want to log and ignore the error
-                handle.emit_to(EventTarget::labeled("main"), "dc-jsonrpc-message", message)?;
+                handle.emit_to(EventTarget::labeled("main"), "dc-jsonrpc-message", &message)?;
             }
             Ok(())
         });

@@ -31,7 +31,7 @@
         "child-src": "blob:",
         "img-src": "'self' data: blob: dcblob: webxdc-icon:",
         "media-src": "'self' dcblob:"
-      },
+      }
       // TODO postponed to later
       // "pattern": {
       //   "use": "isolation",
@@ -39,36 +39,6 @@
       //     "dir": "../isolation"
       //   }
       // },
-      "capabilities": [
-        {
-          "identifier": "Main window",
-          "windows": ["main"],
-          "permissions": [
-            "log:allow-log",
-            // list of core permissions can be found under https://github.com/tauri-apps/tauri/tree/dev/crates/tauri/permissions
-            // or when running `pnpm tauri permission list`
-            "core:event:allow-emit",
-            "core:event:allow-listen",
-            "clipboard-manager:allow-read-text",
-            "clipboard-manager:allow-write-image",
-            "clipboard-manager:allow-write-text",
-            // TODO dialog permissions
-            "store:allow-get-store",
-            "store:allow-entries",
-            "store:allow-save",
-            "store:allow-set",
-            // borderless titlebar
-            "core:window:allow-toggle-maximize",
-            "core:window:allow-start-dragging",
-            // open current logfile & open links
-            // "opener:allow-open-path" is defined in src/runtime_capabilities.rs
-            "opener:allow-open-url",
-            "opener:allow-default-urls",
-            // Badge counter
-            "core:window:allow-set-badge-count",
-          ]
-        }
-      ]
     }
   },
   "bundle": {

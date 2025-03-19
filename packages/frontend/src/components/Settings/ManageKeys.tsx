@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { dirname, basename } from 'path'
+import { basename } from 'path'
 
 import { BackendRemote } from '../../backend-com'
 import { runtime } from '@deltachat-desktop/runtime-interface'
@@ -21,42 +21,6 @@ export default function ManageKeys() {
   const tx = useTranslationFunction()
   const openConfirmationDialog = useConfirmationDialog()
   const { openDialog } = useDialog()
-
-  const onKeysImport = useCallback(async () => {
-    const { defaultPath, setLastPath } = await rememberLastUsedPath(
-      LastUsedSlot.KeyImport
-    )
-    const opts: RuntimeOpenDialogOptions = {
-      title: tx('pref_managekeys_import_secret_keys'),
-      defaultPath,
-      properties: ['openFile'],
-      filters: [{ extensions: ['asc'], name: 'PGP Key' }],
-    }
-
-    const [filename] = await runtime.showOpenFileDialog(opts)
-    if (!filename) {
-      return
-    }
-    setLastPath(dirname(filename))
-
-    const confirmed = await openConfirmationDialog({
-      message: tx('pref_managekeys_import_explain', filename),
-      confirmLabel: tx('yes'),
-      cancelLabel: tx('no'),
-    })
-
-    if (confirmed) {
-      const text = tx('pref_managekeys_secret_keys_imported_from_x', filename)
-
-      await BackendRemote.rpc.importSelfKeys(
-        selectedAccountId(),
-        filename,
-        null
-      )
-
-      window.__userFeedback({ type: 'success', text })
-    }
-  }, [openConfirmationDialog, tx])
 
   const onKeysExport = useCallback(async () => {
     // TODO: ask for the user's password and check it
@@ -148,9 +112,6 @@ export default function ManageKeys() {
     <>
       <SettingsButton onClick={onKeysExport}>
         {tx('pref_managekeys_export_secret_keys')}
-      </SettingsButton>
-      <SettingsButton onClick={onKeysImport}>
-        {tx('pref_managekeys_import_secret_keys')}
       </SettingsButton>
     </>
   )

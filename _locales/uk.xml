@@ -347,6 +347,7 @@
     <string name="donate">Пожертвувати</string>
 
     <string name="mute_for_one_hour">Відключити сповіщення на 1 годину</string>
+    <!-- deprecated -->
     <string name="mute_for_two_hours">Відключити сповіщення на 2 години</string>
     <string name="mute_for_one_day">Відключити сповіщення на 1 день</string>
     <string name="mute_for_seven_days">Відключити сповіщення на 7 днів</string>
@@ -384,7 +385,7 @@
 
     <!-- get confirmations -->
     <string name="ask_leave_group">Ви впевнені, що хочете залишити цю групу?</string>
-    <!-- deprecated, use ask_delete_messages -->
+    <!-- Used for the deletion of Device messages -->
     <plurals name="ask_delete_messages_simple">
         <item quantity="one">Видалити %d повідомлення?</item>
         <item quantity="few">Видалити %d повідомлення?</item>
@@ -682,9 +683,7 @@
     <string name="accept_invalid_certificates">Приймати недійсні сертифікати</string>
     <string name="switch_account">Перемкнути обліковий запис</string>
     <string name="add_account">Додати обліковий запис</string>
-    <string name="profile_tag">Особистий тег</string>
     <string name="profile_tag_hint">наприклад \"Робота\", \"Сім\'я\"</string>
-    <string name="profile_tag_explain">Тег, видимий тільки для вас; допомагає розрізняти ваші профілі.</string>
     <!-- Menu entry to sort an item to the beginning of a list. Only "To Top" may do as well in some translations, if that helps to stay shorter. -->
     <string name="move_to_top">Перемістити на початок</string>
     <string name="delete_account">Видалити обліковий запис</string>

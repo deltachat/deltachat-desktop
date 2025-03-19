@@ -143,9 +143,9 @@ impl MenuAction<'static> for MainMenuAction {
     }
 }
 
-pub(crate) fn create_main_menu<'a, 'b>(
-    app: &'a AppHandle,
-    main_window: &'b WebviewWindow,
+pub(crate) fn create_main_menu(
+    app: &AppHandle,
+    main_window: &WebviewWindow,
 ) -> anyhow::Result<Menu<Wry>> {
     let store = app.get_store(CONFIG_FILE).context("could not load store")?;
     let tx = app.state::<TranslationState>();

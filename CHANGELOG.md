@@ -2,6 +2,17 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+
+### Changed
+
+### Fixed
+- tauri: improve security a little
+- tauri: improve performance a little #4810
+
+<a id="1_55_0"></a>
+
+## [1.55.0] - 2025-03-18
 
 ### Added
 - add a way to edit messages #4717
@@ -9,13 +20,16 @@
 - tauri: add html email view #4699
 - tauri: add titlebar menu #4755 #4787
 - tauri: implement runtime.copyFileToInternalTmpDir and allow opening files in temp dir #4778
+- add option to reset encryption state for contact in encryption info dialog #4797
 - tauri: implement backend translation fn and use it in tauri files as needed #4790
 - add withdraw qr code context menu option #4798
 - adapt dialogs for small screens
+- mute chat for 8 hours
 
 ### Changed
 - tauri: replace `tauri-plugin-shell` with `tauri-plugin-opener` #4699
 - new button styles #4741
+- removed the option to import encryption keys #4783
 - remove end-to-end encryption preferences from settings (e2e encryption is always preferred when available) #4782
 - add dialog with hints about invite link #4667
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.157.2`
@@ -25,11 +39,13 @@
   - Ignore hidden headers in IMF section
   - Prefer hidden Message-ID header if any.
   - Update async-compression to 0.4.21 to fix IMAP COMPRESS getting stuck
+- update translations (2025-03-17)
 
 ### Fixed
 - fix some webxdc apps showing the "Close app?" prompt unintentionally #4737
 - fixed some intermittent e2e test issues
 - improve QR scanner performance
+- avoid UI freeze when processing QR code from clipboard #4639
 - webxdc: fix menu bar hiding when pressing Escape #4753
 - tauri: fix blobs and webxdc-icon scheme under windows #4705
 - tauri: fix app picker not working for some apps
@@ -38,6 +54,7 @@
 - tauri: entire app hanging after clicking "Show Full Message..." or the "Help" window on Windows
 - tauri: fix SVG images not being displayed in composer draft
 - tauri: fix open logfile from settings, fix opening stickerfolder, fix opening weblinks #4778
+- tauri: hardening: allow commands for windows in a white-list manner #4795
 
 <a id="1_54_2"></a>
 
@@ -3291,7 +3308,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.54.2...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.55.0...HEAD
+
+[1.55.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.54.2...v1.55.0
 
 [1.54.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.54.1...v1.54.2
 

@@ -12,6 +12,8 @@ import Dialog, {
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+import { useSettingsStore } from '../../stores/settings'
+import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
 
 export type Props = {
   chatId: number | null
@@ -37,8 +39,36 @@ export function EncryptionInfo({
         )
     ).then(setEncryptionInfo)
   }, [dmChatContact, chatId])
+  const settings = useSettingsStore()[0]
+  const openConfirmationDialog = useConfirmationDialog()
 
   const tx = useTranslationFunction()
+
+  if (!settings) {
+    throw new Error('settings store missing')
+  }
+
+  const isChatmail = settings?.settings.is_chatmail === '1'
+  const accountId = settings?.accountId
+  const onResetEncryption = async () => {
+    if (!dmChatContact) {
+      throw new Error('contact id missing')
+    }
+    if (
+      await openConfirmationDialog({
+        header: tx('reset_encryption'),
+        message: tx('reset_encryption_confirm'),
+      })
+    ) {
+      await BackendRemote.rpc.resetContactEncryption(accountId, dmChatContact)
+      setEncryptionInfo(
+        await BackendRemote.rpc.getContactEncryptionInfo(
+          selectedAccountId(),
+          dmChatContact
+        )
+      )
+    }
+  }
 
   return (
     <Dialog onClose={onClose}>
@@ -52,7 +82,14 @@ export function EncryptionInfo({
       </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <FooterActionButton onClick={onClose}>{tx('ok')}</FooterActionButton>
+          {dmChatContact && !isChatmail && (
+            <FooterActionButton onClick={onResetEncryption} styling='secondary'>
+              {tx('reset_encryption')}
+            </FooterActionButton>
+          )}
+          <FooterActionButton styling='primary' onClick={onClose}>
+            {tx('ok')}
+          </FooterActionButton>
         </FooterActions>
       </DialogFooter>
     </Dialog>
