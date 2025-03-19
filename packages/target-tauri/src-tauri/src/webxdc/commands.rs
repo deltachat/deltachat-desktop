@@ -31,6 +31,23 @@ use crate::{
 
 use super::error::Error;
 
+const INIT_SCRIPT: &'static str = r#"
+console.log("hello from INIT_SCRIPT")
+// this is only run once, not in every iframe, we need an api that is run in every iframe
+// so documentation for this is wrong
+// atleast on macOS
+
+// attempt to remove peer connection on macOS
+try {
+window.RTCPeerConnection = ()=>{};
+RTCPeerConnection = ()=>{};
+} catch (e){console.error("failed to overwrite RTCPeerConnection apis",e)}
+try {
+    window.webkitRTCPeerConnection = ()=>{};
+    webkitRTCPeerConnection = ()=>{};
+} catch (e){}
+"#;
+
 #[tauri::command]
 pub(crate) async fn on_webxdc_message_changed<'a>(
     app: AppHandle,
@@ -266,6 +283,7 @@ pub(crate) async fn open_webxdc<'a>(
 
     let mut window_builder = WebviewWindowBuilder::new(&app, &window_id, WebviewUrl::External(url))
         .inner_size(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT)
+        .initialization_script(INIT_SCRIPT)
         .on_navigation(move |url| url.scheme() == "webxdc");
 
     window_builder = set_data_store(&app, window_builder, account_id, message_id).await?;
