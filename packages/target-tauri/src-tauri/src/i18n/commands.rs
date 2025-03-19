@@ -64,7 +64,8 @@ pub(crate) async fn get_locale_data(locale: &str, app: AppHandle) -> Result<Loca
     };
 
     let mut language_data: HashMap<String, HashMap<String, String>> = data_en;
-    let loaded_language_data: HashMap<String, HashMap<String, String>> = serde_json::from_str(&read_to_string(language_file).await?)?;
+    let loaded_language_data: HashMap<String, HashMap<String, String>> =
+        serde_json::from_str(&read_to_string(language_file).await?)?;
 
     language_data.extend(loaded_language_data.into_iter());
     language_data.extend(untranslated_data.into_iter());

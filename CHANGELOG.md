@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- tauri: added fallback to en when a key doesn't exist in a particular language #4818
 
 ### Changed
 
