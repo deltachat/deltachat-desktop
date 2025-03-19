@@ -45,14 +45,14 @@ export default function ProfileImageSelector({
             return
           }
           const blob_path = await BackendRemote.rpc.copyToBlobDir(acc, filepath)
-          const transformed = runtime.transformBlobURL(blob_path);
+          const transformed = runtime.transformBlobURL(blob_path)
 
           openDialog(ImageCropper, {
             filepath: transformed,
             shape: 'circle',
             onCancel: () => {},
-            onResult: async (path) => {
-              let blob_path = await BackendRemote.rpc.copyToBlobDir(acc, path)
+            onResult: async path => {
+              const blob_path = await BackendRemote.rpc.copyToBlobDir(acc, path)
               setProfilePicture(blob_path)
             },
             desiredWidth: 256,

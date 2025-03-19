@@ -182,7 +182,7 @@ export default function ImageCropper({
       targetHeight.current,
       targetWidth.current,
     ]
-      ;[flipDirX.current, flipDirY.current] = [flipDirY.current, flipDirX.current]
+    ;[flipDirX.current, flipDirY.current] = [flipDirY.current, flipDirX.current]
 
     moveImages(posX.current, posY.current)
   }
@@ -280,9 +280,11 @@ export default function ImageCropper({
     // now we compensate for origin with -nX, -nY, rotate and scale
     const imgX = container.current.clientWidth / 2 - nX
     const imgY = container.current.clientHeight / 2 - nY
-    const transformValue = `translate(${imgX}px, ${imgY}px) rotate(${rotation.current
-      }deg) scale(${zoom.current * flipDirX.current}, ${zoom.current * flipDirY.current
-      })`
+    const transformValue = `translate(${imgX}px, ${imgY}px) rotate(${
+      rotation.current
+    }deg) scale(${zoom.current * flipDirX.current}, ${
+      zoom.current * flipDirY.current
+    })`
 
     cutImage.current.style.transform = transformValue
     fullImage.current.style.transform = transformValue
@@ -312,13 +314,13 @@ export default function ImageCropper({
       ev.preventDefault()
 
       dragging.current = true
-        ;[startX.current, startY.current] = rotate(
-          ev.clientX,
-          ev.clientY,
-          -(rotation.current * Math.PI) / 180,
-          window.innerWidth / 2,
-          window.innerHeight / 2
-        )
+      ;[startX.current, startY.current] = rotate(
+        ev.clientX,
+        ev.clientY,
+        -(rotation.current * Math.PI) / 180,
+        window.innerWidth / 2,
+        window.innerHeight / 2
+      )
     }
 
     const handleMouseCoords = (ev: MouseEvent) => {
@@ -341,11 +343,11 @@ export default function ImageCropper({
       const [dx, dy] = handleMouseCoords(ev)
       const scaleFactor = zoom.current * containerScale.current
 
-        // we update position only when mouse movement stops
-        ;[posX.current, posY.current] = moveImages(
-          posX.current - (dx * flipDirX.current) / scaleFactor,
-          posY.current - (dy * flipDirY.current) / scaleFactor
-        )
+      // we update position only when mouse movement stops
+      ;[posX.current, posY.current] = moveImages(
+        posX.current - (dx * flipDirX.current) / scaleFactor,
+        posY.current - (dy * flipDirY.current) / scaleFactor
+      )
     }
 
     const onMouseMove = (ev: MouseEvent) => {
