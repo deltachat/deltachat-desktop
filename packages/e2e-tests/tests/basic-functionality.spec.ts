@@ -63,7 +63,7 @@ const getUser = (index: number) => {
  * covers creating a profile with standard
  * chatmail server on first start or after
  */
-test.skip('create profiles', async ({ page, context, browserName }) => {
+test('create profiles', async ({ page, context, browserName }) => {
   test.setTimeout(120_000)
   if (existingProfiles.length > 0) {
     // this test should only run on a fresh start
