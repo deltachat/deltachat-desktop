@@ -159,11 +159,11 @@ export async function loadExistingProfiles(page: Page): Promise<User[]> {
   const existingProfiles: User[] = []
   page.waitForSelector('.main-container')
   expect(page.locator('.main-container')).toBeVisible()
-  page.waitForSelector('button.styles_module_account')
-  // TODO: the next waitFor calls is needed when loading existing profiles
+  // TODO: the next waitFor calls are needed when loading existing profiles
   // and skipping the createProfiles step, but will never succeed if there
   // are no profiles yet
-  page.waitForSelector('button.styles_module_account[aria-busy=false]')
+  // page.waitForSelector('button.styles_module_account')
+  // page.waitForSelector('button.styles_module_account[aria-busy=false]')
   const accountList = page.locator('button.styles_module_account')
   const existingAccountItems = await accountList.count()
   /* ignore-console-log */
