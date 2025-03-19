@@ -7,8 +7,9 @@
 ### Changed
 
 ### Fixed
-- tauri: improve security a little
+- tauri: improve security a little #4813
 - tauri: improve performance a little #4810
+
 
 <a id="1_55_0"></a>
 

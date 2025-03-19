@@ -45,15 +45,15 @@ pub(crate) async fn open_html_window(
     html_instances_state: State<'_, HtmlEmailInstancesState>,
     dc: State<'_, DeltaChatAppState>,
     menu_manager: State<'_, MenuManager>,
-    window_id: &str,
     account_id: u32, // TODO needs to be used later for fetching webrequests over dc core
+    message_id: u32,
     is_contact_request: bool,
     subject: &str,
     sender: &str, // this is called "from" in electron edition
     receive_time: &str,
     content: &str,
 ) -> Result<(), Error> {
-    let window_id = format!("html-window:{window_id}").replace(".", "-");
+    let window_id = format!("html-window:{account_id}-{message_id}");
     trace!("open_html_window: {window_id}");
 
     #[cfg(not(any(target_os = "ios", target_os = "android")))]

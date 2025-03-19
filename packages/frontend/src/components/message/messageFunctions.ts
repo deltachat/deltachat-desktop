@@ -140,8 +140,8 @@ export async function openMessageHTML(messageId: number) {
   const { isContactRequest, isProtectionBroken } =
     await BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
   runtime.openMessageHTML(
-    `${accountId}.${messageId}`,
     accountId,
+    messageId,
     isContactRequest || isProtectionBroken,
     subject,
     displayName,

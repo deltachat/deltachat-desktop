@@ -47,14 +47,15 @@ const open_windows: { [window_id: string]: BrowserWindow } = {}
  * @param htmlEmail
  */
 export function openHtmlEmailWindow(
-  window_id: string,
   account_id: number,
+  message_id: number,
   isContactRequest: boolean,
   subject: string,
   from: string,
   receiveTime: string,
   htmlEmail: string
 ) {
+  const window_id = `${account_id}.${message_id}`
   if (open_windows[window_id]) {
     // window already exists, focus it
     open_windows[window_id].focus()
