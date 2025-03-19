@@ -6,7 +6,7 @@ $paddingVertical: 20px;
 
 .dialog {
   padding: 0;
-  @media (width < $default-dialog-width){
+  @media (width < $default-dialog-width) {
     max-width: 100vw !important;
     min-width: calc(100vw - 1rem) !important;
   }
