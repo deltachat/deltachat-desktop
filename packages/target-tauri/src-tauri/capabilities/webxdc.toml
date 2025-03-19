@@ -5,6 +5,9 @@ webviews = ["webxdc:*"]
 permissions = [
     "allow-send-webxdc-update",
     "allow-get-webxdc-updates",
+    "allow-join-webxdc-realtime-channel",
+    "allow-leave-webxdc-realtime-channel",
+    "allow-send-webxdc-realtime-data",
     # IDEA: maybe implement scopes for the event plugin in tauri,
     # so that you can specify the allowed events
     #

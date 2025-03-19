@@ -131,6 +131,9 @@ pub fn run() {
             webxdc::commands::open_webxdc,
             webxdc::commands::send_webxdc_update,
             webxdc::commands::get_webxdc_updates,
+            webxdc::commands::join_webxdc_realtime_channel,
+            webxdc::commands::leave_webxdc_realtime_channel,
+            webxdc::commands::send_webxdc_realtime_data,
             #[cfg(target_vendor = "apple")]
             webxdc::data_storage::debug_get_datastore_ids,
             runtime_info::get_runtime_info,

@@ -77,6 +77,12 @@ pub(crate) fn webxdc_protocol<R: tauri::Runtime>(
                 Ok(match message.get_webxdc_blob(&account, path).await {
                     Ok(blob) => http::Response::builder()
                         .status(http::StatusCode::OK)
+                        .header(
+                            http::header::CONTENT_TYPE,
+                            mime_guess::from_path(path)
+                                .first()
+                                .unwrap_or(mime::APPLICATION_OCTET_STREAM).essence_str()
+                        )
                         .body(blob)?,
                     Err(err) => {
                         error!("get_webxdc_blob: {err:#}");
