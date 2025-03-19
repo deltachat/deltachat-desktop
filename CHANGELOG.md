@@ -3,13 +3,13 @@
 ## [Unreleased][unreleased]
 
 ### Added
-- tauri: added fallback to en when a key doesn't exist in a particular language #4818
 
 ### Changed
 
 ### Fixed
 - tauri: improve security a little
 - tauri: improve performance a little #4810
+- tauri: translation fn: added fallback to en when a key doesn't exist in a particular language #4818
 
 <a id="1_55_0"></a>
 
