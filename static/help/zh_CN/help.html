@@ -10,7 +10,9 @@
       <li><a href="#谁会看见我的个人资料图片">谁会看见我的个人资料图片？</a></li>
       <li><a href="#signature">我可以为 Delta Chat 设置签名文本/状态/格言吗？</a></li>
       <li><a href="#固定静音归档是什么意思">固定、静音、归档是什么意思？</a></li>
+      <li><a href="#save">How do “Saved Messages” work?</a></li>
       <li><a href="#绿色圆点代表什么">绿色圆点代表什么？</a></li>
+      <li><a href="#edit">Correct typos and delete messages after sending</a></li>
       <li><a href="#ephemeralmsgs">消息定时销毁是如何工作的？</a></li>
     </ul>
   </li>
@@ -56,7 +58,6 @@
       <li><a href="#pfs">Delta Chat 是否支持完美前向保密？</a></li>
       <li><a href="#delta-chat-的端到端加密是否与-signal-一样安全">Delta Chat 的端到端加密是否与 Signal 一样安全？</a></li>
       <li><a href="#importkey">我可以重复使用现有的私钥吗？</a></li>
-      <li><a href="#我无法将现有的-pgp-密钥导入-delta-chat">我无法将现有的 PGP 密钥导入 Delta Chat。</a></li>
       <li><a href="#security-audits">Delta Chat 是否已进行独立的安全漏洞审计？</a></li>
     </ul>
   </li>
@@ -65,6 +66,7 @@
       <li><a href="#我能同时在多个设备上使用-delta-chat-吗">我能同时在多个设备上使用 Delta Chat 吗?</a></li>
       <li><a href="#故障排除">故障排除</a></li>
       <li><a href="#backup">手动传输</a></li>
+      <li><a href="#is-deletion-pinning-archiving-saving-muting-etc-synced-to-all-devices">Is Deletion, Pinning, Archiving, Saving, Muting etc. synced to all devices?</a></li>
       <li><a href="#有推出-delta-chat-web-客户端的计划吗">有推出 Delta Chat Web 客户端的计划吗？</a></li>
     </ul>
   </li>
@@ -169,7 +171,7 @@
   </li>
   <li>
     <p>免费开源软件，包括应用程序和服务器端。 
-基于<a href="https://github.com/chatmail/core/blob/master/standards.md">电子邮件和网络互联网标准</a>、 
+基于<a href="https://github.com/deltachat/deltachat-core-rust/blob/master/standards.md">电子邮件和网络互联网标准</a>、 
 <a href="https://xkcd.com/927/">避免 “又一个标准综合症（xkcd 927）”</a></p>
   </li>
 </ul>
@@ -182,10 +184,20 @@
         
       </h3>
 
+<p>If a message comes from an unknown contact, it appears as a <strong>request</strong>.</p>
+
 <ul>
-  <li>来自未知联系人的消息会作为<strong>请求</strong>出现。您需要在回复之前先接收他的请求。</li>
-  <li>如果现在不想和他聊天，您也可以“删除”请求。这只会在设备上而 <em>不会</em> 在服务器上删除这条消息。所以您仍可以使用其他电子邮件应用来处理它。</li>
-  <li>删除了请求后，来自同一联系人的后续消息仍会作为聊天请求出现，所以您有机会来改变主意。如果您真的不想收到那个人的消息，那么可以考虑 <em>屏蔽</em> 他。</li>
+  <li>
+    <p>You need to <strong>accept</strong> the request before you can reply.</p>
+  </li>
+  <li>
+    <p>You can also <strong>delete</strong> it if you don’t want to chat with them for now.</p>
+  </li>
+  <li>
+    <p>If you delete a request, future messages from that contact will still appear
+as message request, so you can change your mind. If you really don’t want to
+receive messages from this person, consider <strong>blocking</strong> them.</p>
+  </li>
 </ul>
     
       <h3 id="delta-chat-支持图像视频和其他附件吗">
@@ -198,7 +210,7 @@
 
 <ul>
   <li>
-    <p>是的。除纯文本外，所有电子邮件附件均显示为单独的消息。发出消息会根据需要自动获得附件。</p>
+    <p>是的。 Images, videos, files, voice messages etc. are handled as usual.</p>
   </li>
   <li>
     <p>为了提高性能，默认情况下会对图像进行优化并以较小的尺寸发送，但您也可以将其作为 “文件 “发送，以保留原始图像。</p>
@@ -295,6 +307,41 @@
 <p>要归档或固定一个聊天，可以长按（Android）、使用聊天内部的菜单（Android/桌面版）或者左滑（iOS）；
 要静音一个聊天，可以使用聊天内部的菜单（Android/桌面版）或者通过聊天概要（iOS）。</p>
     
+      <h3 id="save">
+        
+        
+          How do “Saved Messages” work? <a href="#save" class="anchor"></a>
+        
+        
+      </h3>
+
+<p><strong>Saved Messages</strong> is a chat that you can use to easily remember and find messages.</p>
+
+<ul>
+  <li>
+    <p>In any chat, long tap or right click a message and select <strong>Save</strong></p>
+  </li>
+  <li>
+    <p>Saved messages are marked by the symbol
+<img style="vertical-align:middle; width:1.2em; margin:1px" src="../saved-icon.png" alt="Saved icon" />
+next to the timestamp</p>
+  </li>
+  <li>
+    <p>Later, open the “Saved Messages” chat - and you will see the saved messages there.
+By tapping <img style="vertical-align:middle; width:1.2em; margin:1px" src="../go-to-original.png" alt="Arrow-right icon" />,
+you can go back to the original message in the original chat</p>
+  </li>
+  <li>
+    <p>Finally, you can also use “Save Messages” to take <strong>personal notes</strong> - open the chat, type something, add a photo or a voice message etc.</p>
+  </li>
+  <li>
+    <p>As “Saved Message” are synced, they can become very handy for transferring data between devices</p>
+  </li>
+</ul>
+
+<p>Messages stay saved even if they are edited or deleted -
+may it be by <a href="#edit">sender</a>, by <a href="#delold">device cleanup</a> or by <a href="#ephemeralmsgs">disappearing messages of other chats</a>.</p>
+    
       <h3 id="绿色圆点代表什么">
         
         
@@ -303,20 +350,47 @@
         
       </h3>
 
+<p>您有时可以在联系人头像旁看到一个 “绿点”。
+绿点。这意味着他们 “最近被看到”。<img style="vertical-align:middle; width:1.2em; margin:1px" src="../green-dot.png" alt="" /> 
+具体来说：这意味着在过去 10 分钟内，Delta Chat 看到过他们：</p>
+
 <ul>
-  <li>自 Delta Chat 1.34 版起，您有时可以在联系人头像旁看到一个 “绿点”。
-绿点。这意味着他们 “最近被看到”。</li>
-  <li>具体来说：这意味着在过去 10 分钟内，Delta Chat 看到过他们：
-    <ul>
-      <li>因为他们直接给你发了消息、</li>
-      <li>因为他们在你们都是成员的群组里写了什么、</li>
-      <li>因为他们向您发送了您所写信息的读取回执、</li>
-    </ul>
-  </li>
+  <li>因为他们直接给你发了消息、</li>
+  <li>因为他们在你们都是成员的群组里写了什么、</li>
+  <li>因为他们向您发送了您所写信息的读取回执、</li>
   <li>或者因为他们通过使用 <a href="#webxdc">webxdc 应用程序</a> 向您的 Delta Chat 应用发送数据。</li>
-  <li>因此，这并不是实时在线状态 – 如果有人没有立即回复，即使他们看起来是在线的，也不要担心，给他们一些空间 ;-)</li>
-  <li>另一方面，别人也不会总是 “看到你在线”。如果您关闭了读取收据功能，他们就不会看到绿点，直到您给他们发消息或给他们所在的群组写信。</li>
 </ul>
+
+<p>因此，这并不是实时在线状态 – 如果有人没有立即回复，即使他们看起来是在线的，也不要担心，给他们一些空间 :)</p>
+
+<p>另一方面，别人也不会总是 “看到你在线”。如果您关闭了读取收据功能，他们就不会看到绿点，直到您给他们发消息或给他们所在的群组写信。</p>
+    
+      <h3 id="edit">
+        
+        
+          Correct typos and delete messages after sending <a href="#edit" class="anchor"></a>
+        
+        
+      </h3>
+
+<ul>
+  <li>
+    <p>You can edit the text of your messages after sending.
+For that, long tap or right click the message and select <strong>Edit</strong>
+or <img style="vertical-align:middle; width:1.2em; margin:1px" src="../edit-icon.png" alt="Edit icon" />.</p>
+  </li>
+  <li>
+    <p>If you have sent a message accidentally,
+from the same menu, select <strong>Delete</strong> and then <strong>Delete for Everyone</strong>.</p>
+  </li>
+</ul>
+
+<p>While edited messages will have the word “Edited” next to the timestamp,
+deleted messages will be removed without a marker in the chat.
+Notifications are not sent and there is no time limit.</p>
+
+<p>Note, that the original message may still be received by chat members
+who could have already replied, forwarded, saved, screenshotted or otherwise copied the message.</p>
     
       <h3 id="ephemeralmsgs">
         
@@ -1102,32 +1176,14 @@ Signal 和大多数其他支持 PFS 的即时通讯应用
         
       </h3>
 
-<p>是的。
-The best way is to send an Autocrypt Setup Message from the other e-mail client.
-Look for something like <strong>Start Autocrypt Setup Transfer</strong> in the settings of the other client and follow the instructions shown there.</p>
+<p>No.</p>
 
-<p>或者，你可以在“设置 -&gt; 高级设置 -&gt; 导入私钥”中手动导入密钥。
-注意：确保密钥未受密码保护，或事先删除密码。</p>
+<p>Delta Chat generates secure OpenPGP keys according to the Autocrypt specification 1.1. 
+You can export your private key but you can not import additional private keys.</p>
 
-<p>如果你没有密钥，甚至不知道你需要密钥 - 不用担心：Delta Chat 会根据需要生成密钥，你无需点击按钮。</p>
-    
-      <h3 id="我无法将现有的-pgp-密钥导入-delta-chat">
-        
-        
-          我无法将现有的 PGP 密钥导入 Delta Chat。 <a href="#我无法将现有的-pgp-密钥导入-delta-chat" class="anchor"></a>
-        
-        
-      </h3>
-
-<p>最可能的原因是您的密钥被加密了和/或使用了密码。Delta Chat 不支持这样的密钥。您可以移除密码，之后再尝试导入。如果想保留密码，您
-需要创建电子邮件别名来使用 Delta Chat ，这样 Delta Chat 的密钥是绑定到这个电子邮件别名上的</p>
-
-<p>另一个常见错误是文件扩展名错误。
-使用 ASCII 编码格式和 <code class="language-plaintext highlighter-rouge">.asc</code> 文件扩展名。</p>
-
-<p>Delta Chat 支持常见的 OpenPGP 私钥格式。然而，不可能使每种来源的私钥都被完整支持。这不是 Delta Chat 的主要目标。实际上，大多数新用户在使用 Delta Chat 之前根本没有密钥。不过，我们确实在尝试支持尽可能多的私钥来源。</p>
-
-<p>移除私钥密码的操作取决于您用于管理 PGP 密钥的软件。对于 Enigmail，您可以在密钥管理窗口中将密码设为空值。 对于 GnuPG，您可以<a href="https://github.com/deltachat/deltachat-android/issues/98#issuecomment-378383429">通过命令行</a>来进行设置。对于其他程序，您应该能在网上找到解决方案。</p>
+<p>In general, we do not recommend or offer users to perform manual key management. 
+We want to ensure that security audits can focus on a few proven cryptographic algorithms 
+instead of the full breath of possible algorithms allowed with OpenPGP.</p>
     
       <h3 id="security-audits">
         
@@ -1176,7 +1232,7 @@ releases on all appstores since December 2024.</p>
 ，或在此处阅读 <a href="https://delta.chat/assets/blog/MER-01-report.pdf">完整报告</a>。</p>
   </li>
   <li>
-    <p>2020 年，<a href="https://includesecurity.com">Include Security</a> 分析了 Delta Chat 的 Rust <a href="https://github.com/chatmail/core/">核心</a>、
+    <p>2020 年，<a href="https://includesecurity.com">Include Security</a> 分析了 Delta Chat 的 Rust <a href="https://github.com/deltachat/deltachat-core-rust/">核心</a>、
 <a href="https://github.com/async-email/async-imap">IMAP</a>、
 <a href="https://github.com/async-email/async-smtp">SMTP</a> 和
 <a href="https://github.com/async-email/async-native-tls">TLS</a> 库。
@@ -1218,7 +1274,7 @@ Chat 的 <a href="https://github.com/rpgp/rpgp">PGP</a> 和
         
       </h3>
 
-<p>是的。 Delta Chat 1.36 comes with a new, experimental function for using the same profile on different devices:</p>
+<p>是的。 You can use the same profile on different devices:</p>
 
 <ul>
   <li>
@@ -1277,6 +1333,10 @@ Chat 的 <a href="https://github.com/rpgp/rpgp">PGP</a> 和
 如果可能，请使用非访客网络。</p>
   </li>
   <li>
+    <p>If you still have troubles using the same network,
+try to open <strong>Mobile Hotspot</strong> on one device and join that Wi-Fi from the other one</p>
+  </li>
+  <li>
     <p>确保目标设备上有<strong>足够的存储空间</strong></p>
   </li>
   <li>
@@ -1318,6 +1378,23 @@ Chat 的 <a href="https://github.com/rpgp/rpgp">PGP</a> 和
   <li>你现在已同步，并且可以使用两台设备与你的通信伙伴发送和接收
 端到端加密消息。</li>
 </ul>
+    
+      <h3 id="is-deletion-pinning-archiving-saving-muting-etc-synced-to-all-devices">
+        
+        
+          Is Deletion, Pinning, Archiving, Saving, Muting etc. synced to all devices? <a href="#is-deletion-pinning-archiving-saving-muting-etc-synced-to-all-devices" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>是的。</p>
+
+<p>If you e.g. delete a chat or a message from your phone,
+it will be deleted on your desktop as soon as it comes online again.</p>
+
+<p>Notable exceptions are <a href="#delold">Delete old messages from Device</a>,
+as different devices may have different storage capacities,
+and system specific settings as notification sounds.</p>
     
       <h3 id="有推出-delta-chat-web-客户端的计划吗">
         
@@ -1603,7 +1680,7 @@ mailcow 和 mailadm 的组合，如 <a href="https://delta.chat/en/2023-01-27-up
 
 <p>与其他电子邮件程序（比如 Thunderbird、K9-Mail 或 Outlook）一样，本程序需要您的密码来允许您通过它发送邮件。当然，密码仅储存在您的设备上，并只会在登录时发送给您的电子邮件提供商（无论如何，您的提供商总是能够访问您的邮件）。</p>
 
-<p>由于 Delta Chat 是开源的，要验证您的凭据是否被安全地处理了，可以检查<a href="https://github.com/chatmail/core/blob/master/src/login_param.rs">源代码</a>。我们很高兴能收到使本应用对我们的所有用户更加安全的反馈。</p>
+<p>由于 Delta Chat 是开源的，要验证您的凭据是否被安全地处理了，可以检查<a href="https://github.com/deltachat/deltachat-core-rust/blob/master/src/login_param.rs">源代码</a>。我们很高兴能收到使本应用对我们的所有用户更加安全的反馈。</p>
     
       <h3 id="哪些消息会在-delta-chat-中出现">
         
@@ -1755,7 +1832,7 @@ Delta Chat 使用的 <a href="https://autocrypt.org/">Autocrypt</a> 不兼容。
       </h3>
 
 <ul>
-  <li>请参阅 <a href="https://github.com/chatmail/core/blob/master/standards.md#standards-used-in-delta-chat">Delta Chat 中使用的标准</a>。</li>
+  <li>请参阅 <a href="https://github.com/deltachat/deltachat-core-rust/blob/master/standards.md#standards-used-in-delta-chat">Delta Chat 中使用的标准</a>。</li>
 </ul>
     
       <h3 id="我的朋友在哪里可以找到-delta-chat">
