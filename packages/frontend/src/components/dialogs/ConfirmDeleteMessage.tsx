@@ -76,7 +76,7 @@ export default function ConfirmDeleteMessageDialog(props: Props) {
             onClick={() => deleteMessage(false)}
             data-testid='delete_for_me'
           >
-            {tx('delete_for_me')}
+            {chat.isSelfTalk ? tx('delete') : tx('delete_for_me')}
           </FooterActionButton>
           {deleteForAllPossible && (
             <FooterActionButton
