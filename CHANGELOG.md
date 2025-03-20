@@ -40,6 +40,7 @@
   - Prefer hidden Message-ID header if any.
   - Update async-compression to 0.4.21 to fix IMAP COMPRESS getting stuck
 - update translations (2025-03-17)
+- remove handling for receiving autocrypt setup message #4822
 
 ### Fixed
 - fix some webxdc apps showing the "Close app?" prompt unintentionally #4737
