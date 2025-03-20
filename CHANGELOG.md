@@ -6,6 +6,7 @@
 - delete message for all chat members #4716
 
 ### Changed
+- Update local help (2025-03-20)
 
 ### Fixed
 - tauri: improve security a little #4813

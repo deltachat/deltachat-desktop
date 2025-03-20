@@ -10,7 +10,9 @@
       <li><a href="#хто-бачить-моє-зображення-профілю">Хто бачить моє зображення профілю?</a></li>
       <li><a href="#signature">Чи можу я встановити текст підпису/статусу/девізу у Delta Chat?</a></li>
       <li><a href="#що-значить-закріплення-приглушення-архівування">Що значить Закріплення, Приглушення, Архівування?</a></li>
+      <li><a href="#save">How do “Saved Messages” work?</a></li>
       <li><a href="#що-означає-зелена-точка">Що означає зелена точка?</a></li>
+      <li><a href="#edit">Correct typos and delete messages after sending</a></li>
       <li><a href="#ephemeralmsgs">Як працюють повідомлення, що зникають?</a></li>
     </ul>
   </li>
@@ -56,7 +58,6 @@
       <li><a href="#pfs">Чи підтримує Delta Chat цілковиту пряму секретність (Perfect Forward Secrecy)?</a></li>
       <li><a href="#чи-є-наскрізне-шифрування-delta-chat-таким-же-безпечним-як-signal">Чи є наскрізне шифрування Delta Chat таким же безпечним, як Signal?</a></li>
       <li><a href="#importkey">Чи можна повторно використовувати існуючий закритий ключ?</a></li>
-      <li><a href="#я-не-можу-імпортувати-свій-існуючий-pgp-ключ-у-delta-chat">Я не можу імпортувати свій існуючий PGP ключ у Delta Chat.</a></li>
       <li><a href="#security-audits">Чи проходив Delta Chat незалежний аудит на наявність вразливостей у безпеці?</a></li>
     </ul>
   </li>
@@ -65,6 +66,7 @@
       <li><a href="#чи-можна-використовувати-delta-chat-на-декількох-пристроях-одночасно">Чи можна використовувати Delta Chat на декількох пристроях одночасно?</a></li>
       <li><a href="#вирішення-проблем">Вирішення проблем</a></li>
       <li><a href="#backup">Ручне перенесення</a></li>
+      <li><a href="#is-deletion-pinning-archiving-saving-muting-etc-synced-to-all-devices">Is Deletion, Pinning, Archiving, Saving, Muting etc. synced to all devices?</a></li>
       <li><a href="#чи-планується-впровадження-веб-клієнта-delta-chat">Чи планується впровадження веб-клієнта Delta Chat?</a></li>
     </ul>
   </li>
@@ -155,7 +157,7 @@
     <p><a href="#security-audits">Аудитоване наскрізне шифрування</a> захищене від мережевих та серверних атак.</p>
   </li>
   <li>
-    <p>Вільне програмне забезпечення з відкритим вихідним кодом, як для додатків, так і для сервера. Побудовано на основі <a href="https://github.com/chatmail/core/blob/master/standards.md">Стандартів електронної пошти та інтернету</a>, <a href="https://xkcd.com/927/">щоб уникнути “синдрому ще одного стандарту (xkcd 927)”</a></p>
+    <p>Вільне програмне забезпечення з відкритим вихідним кодом, як для додатків, так і для сервера. Побудовано на основі <a href="https://github.com/deltachat/deltachat-core-rust/blob/master/standards.md">Стандартів електронної пошти та інтернету</a>, <a href="https://xkcd.com/927/">щоб уникнути “синдрому ще одного стандарту (xkcd 927)”</a></p>
   </li>
 </ul>
     
@@ -167,10 +169,20 @@
         
       </h3>
 
+<p>If a message comes from an unknown contact, it appears as a <strong>request</strong>.</p>
+
 <ul>
-  <li>Якщо повідомлення приходить від невідомого контакту, воно відображається як <strong>запит</strong>. ви потрібно прийняти запит, перш ніж ви зможете відповісти.</li>
-  <li>Ви також можете “видалити” його, якщо ви не хочете зараз спілкуватися з ними. Це <em>не</em> видаляє повідомлення на сервері, лише на вашому пристрої. Отже, ви можете як і раніше обробляти повідомлення в іншій поштовій програмі.</li>
-  <li>Якщо ви видалите запит, майбутні повідомлення від цього контакту все одно відображатимуться як запит на повідомлення, щоб ви могли змінити свою думку. Якщо дуже не хочеться отримувати повідомлення від цієї особи, подумайте про її <em>блокування</em>.</li>
+  <li>
+    <p>You need to <strong>accept</strong> the request before you can reply.</p>
+  </li>
+  <li>
+    <p>You can also <strong>delete</strong> it if you don’t want to chat with them for now.</p>
+  </li>
+  <li>
+    <p>If you delete a request, future messages from that contact will still appear
+as message request, so you can change your mind. If you really don’t want to
+receive messages from this person, consider <strong>blocking</strong> them.</p>
+  </li>
 </ul>
     
       <h3 id="чи-підтримує-delta-chat-вкладення-у-вигляді-фото-відео-тощо">
@@ -183,7 +195,7 @@
 
 <ul>
   <li>
-    <p>Так. Крім звичайного тексту, всі вкладення електронної пошти відображаються у вигляді окремих повідомлень. Вихідні повідомлення автоматично отримують вкладення.</p>
+    <p>Так. Images, videos, files, voice messages etc. are handled as usual.</p>
   </li>
   <li>
     <p>З міркувань продуктивності, зображення оптимізовані та надсилаються в меншому розмірі за замовчуванням, але ви можете надіслати їх як «файл», щоб зберегти оригінал.</p>
@@ -270,6 +282,41 @@
 
 <p>Щоб скористатися функціями, утримуйте натиснутою клавішу або клацніть правою кнопкою миші на чаті у списку чатів.</p>
     
+      <h3 id="save">
+        
+        
+          How do “Saved Messages” work? <a href="#save" class="anchor"></a>
+        
+        
+      </h3>
+
+<p><strong>Saved Messages</strong> is a chat that you can use to easily remember and find messages.</p>
+
+<ul>
+  <li>
+    <p>In any chat, long tap or right click a message and select <strong>Save</strong></p>
+  </li>
+  <li>
+    <p>Saved messages are marked by the symbol
+<img style="vertical-align:middle; width:1.2em; margin:1px" src="../saved-icon.png" alt="Saved icon" />
+next to the timestamp</p>
+  </li>
+  <li>
+    <p>Later, open the “Saved Messages” chat - and you will see the saved messages there.
+By tapping <img style="vertical-align:middle; width:1.2em; margin:1px" src="../go-to-original.png" alt="Arrow-right icon" />,
+you can go back to the original message in the original chat</p>
+  </li>
+  <li>
+    <p>Finally, you can also use “Save Messages” to take <strong>personal notes</strong> - open the chat, type something, add a photo or a voice message etc.</p>
+  </li>
+  <li>
+    <p>As “Saved Message” are synced, they can become very handy for transferring data between devices</p>
+  </li>
+</ul>
+
+<p>Messages stay saved even if they are edited or deleted -
+may it be by <a href="#edit">sender</a>, by <a href="#delold">device cleanup</a> or by <a href="#ephemeralmsgs">disappearing messages of other chats</a>.</p>
+    
       <h3 id="що-означає-зелена-точка">
         
         
@@ -278,16 +325,53 @@
         
       </h3>
 
+<p>You can sometimes see a <strong>green dot</strong> <img style="vertical-align:middle; width:1.2em; margin:1px" src="../green-dot.png" alt="" />
+next to the avatar of a contact.
+It means they were <strong>recently seen</strong> in the last 10 minutes:</p>
+
 <ul>
-  <li>Починаючи з Delta Chat 1.34, ви іноді можете бачити “зелену крапку” поруч із аватаром контакту. Це означає, що контакт «нещодавно бачили».</li>
-  <li>Детально: це означає, що за останні 10 хвилин Delta Chat бачив їх:</li>
-  <li>або тому, що вони надіслали вам повідомлення безпосередньо,</li>
-  <li>тому що вони написали щось групі, учасником якої є ви обоє,</li>
-  <li>тому що вони надіслали вам сповіщення про прочитання повідомлення, яке ви написали,</li>
-  <li>або тому, що вони надіслали дані до вашої програми Delta Chat за допомогою a <a href="#webxdc">приватна програма</a>. 
-– Отже, це не онлайн-статус у реальному часі – і якщо хтось не відповідає відразу, навіть якщо вони, здаються, онлайн, не хвилюйтесь і дайте їм трохи простору ;-) 
-– З іншого боку, інші не завжди «побачать, що ви онлайн». Якщо ви вимкнули сповіщення про прочитання, вони не побачать зелену крапку, доки ви не надішлете їм повідомлення або напишете у групу, до якої вони входять.</li>
+  <li>either because they messaged you directly,</li>
+  <li>because they wrote something to a group you are both a member of,</li>
+  <li>because they sent you a read receipt for a message you wrote,</li>
+  <li>because they edit or delete a message in a chat shared with you,</li>
+  <li>or because they use an <a href="#webxdc">app</a> in a chat shared with you.</li>
 </ul>
+
+<p>So this is not a real time online status -
+and if someone doesn’t answer right away even though they seem to be online,
+don’t worry and give them some space :)</p>
+
+<p>On the other hand, others will not always “see that you are online”.
+If you have turned off read receipts,
+they will not see the green dot
+until one of the above conditions are met.</p>
+    
+      <h3 id="edit">
+        
+        
+          Correct typos and delete messages after sending <a href="#edit" class="anchor"></a>
+        
+        
+      </h3>
+
+<ul>
+  <li>
+    <p>You can edit the text of your messages after sending.
+For that, long tap or right click the message and select <strong>Edit</strong>
+or <img style="vertical-align:middle; width:1.2em; margin:1px" src="../edit-icon.png" alt="Edit icon" />.</p>
+  </li>
+  <li>
+    <p>If you have sent a message accidentally,
+from the same menu, select <strong>Delete</strong> and then <strong>Delete for Everyone</strong>.</p>
+  </li>
+</ul>
+
+<p>While edited messages will have the word “Edited” next to the timestamp,
+deleted messages will be removed without a marker in the chat.
+Notifications are not sent and there is no time limit.</p>
+
+<p>Note, that the original message may still be received by chat members
+who could have already replied, forwarded, saved, screenshotted or otherwise copied the message.</p>
     
       <h3 id="ephemeralmsgs">
         
@@ -843,29 +927,14 @@ Delta Chat скоріше використовує реалізацію OpenPGP 
         
       </h3>
 
-<p>Так.
-The best way is to send an Autocrypt Setup Message from the other e-mail client.
-Look for something like <strong>Start Autocrypt Setup Transfer</strong> in the settings of the other client and follow the instructions shown there.</p>
+<p>No.</p>
 
-<p>Крім того, ви можете імпортувати ключ вручну в “Налаштування -&gt; Додаткові налаштування -&gt; Імпорт секретних ключів”. Застереження: Переконайтеся, що ключ не захищено паролем, або видаліть його заздалегідь.</p>
+<p>Delta Chat generates secure OpenPGP keys according to the Autocrypt specification 1.1. 
+You can export your private key but you can not import additional private keys.</p>
 
-<p>Якщо у вас немає ключа або ви навіть не знаєте, що він вам знадобиться – не хвилюйтеся: Delta Chat генерує ключі в міру необхідності, вам не потрібно натискати кнопку для цього.</p>
-    
-      <h3 id="я-не-можу-імпортувати-свій-існуючий-pgp-ключ-у-delta-chat">
-        
-        
-          Я не можу імпортувати свій існуючий PGP ключ у Delta Chat. <a href="#я-не-можу-імпортувати-свій-існуючий-pgp-ключ-у-delta-chat" class="anchor"></a>
-        
-        
-      </h3>
-
-<p>Найімовірнішою причиною є те, що ваш ключ зашифрований та/або використовується пароль. Такі ключі не підтримуються Delta Chat. Ви можете видалити шифрування парольної фрази та пароль і спробувати імпорт знову.</p>
-
-<p>Ще одна поширена помилка – неправильне закінчення файлу. Використовуйте захищений формат ASCII і закінчення файлу <code class="language-plaintext highlighter-rouge">.asc</code>.</p>
-
-<p>Delta Chat підтримує поширені формати приватних ключів OpenPGP, однак навряд чи приватні ключі з усіх джерел будуть повністю підтримуватися. Це не головна мета Delta Chat. Фактично, більшість нових користувачів не матимуть жодного ключа до використання Delta Chat. Однак ми намагаємось підтримувати приватні ключі з якомога більшої кількості джерел.</p>
-
-<p>Видалення пароля з приватного ключа буде залежати від програмного забезпечення, яке використовується для управління ключами PGP. За допомогою Enigmail ви можете встановити для порожній пароль у вікні Керування ключами. За допомогою GnuPG ви можете встановити його <a href="https://github.com/deltachat/deltachat-android/issues/98#issuecomment-378383429">через командний рядок</a>. Для інших програм ви зможете знайти рішення в інтернеті.</p>
+<p>In general, we do not recommend or offer users to perform manual key management. 
+We want to ensure that security audits can focus on a few proven cryptographic algorithms 
+instead of the full breath of possible algorithms allowed with OpenPGP.</p>
     
       <h3 id="security-audits">
         
@@ -898,7 +967,7 @@ Look for something like <strong>Start Autocrypt Setup Transfer</strong> in the s
     <p>Починаючи з 2023 року <a href="https://cure53.de">Cure53</a> проаналізував транспортне шифрування мережевих з’єднань Delta Chat і відтворюване налаштування поштового сервера як <a href="https://delta.chat/uk/serverguide">рекомендовано на цьому сайті</a>. Ви можете прочитати більше про аудит <a href="https://delta.chat/en/2023-03-27-third-independent-security-audit">у нашому блозі</a> або прочитайте <a href="https://delta.chat/assets/blog/MER-01-report.pdf">повний звіт тут</a>.</p>
   </li>
   <li>
-    <p>У 2020 році <a href="https://includesecurity.com">Include Security</a> проаналізувала Rust-<a href="https://github.com/chatmail/core/">ядро</a> Delta Chat і бібліотеки <a href="https://github.com/async-email/async-imap">IMAP</a>, <a href="https://github.com/async-email/async-smtp">SMTP</a> та <a href="https://github.com/async-email/async-native-tls">TLS</a>. Він не виявив критичних або серйозних проблем. У звіті виявлено кілька слабких місць середнього ступеня тяжкості – вони самі по собі не становлять загрози для користувачів Delta Chat оскільки вони залежать від середовища, у якому використовується Delta Chat. З міркувань зручності використання та сумісності ми не можемо пом’якшити їх усі тому вирішили надати рекомендації щодо безпеки користувачам, яким загрожує небезпека. Ви можете прочитати <a href="https://delta.chat/assets/blog/2020-second-security-review.pdf">повний звіт тут</a>.</p>
+    <p>У 2020 році <a href="https://includesecurity.com">Include Security</a> проаналізувала Rust-<a href="https://github.com/deltachat/deltachat-core-rust/">ядро</a> Delta Chat і бібліотеки <a href="https://github.com/async-email/async-imap">IMAP</a>, <a href="https://github.com/async-email/async-smtp">SMTP</a> та <a href="https://github.com/async-email/async-native-tls">TLS</a>. Він не виявив критичних або серйозних проблем. У звіті виявлено кілька слабких місць середнього ступеня тяжкості – вони самі по собі не становлять загрози для користувачів Delta Chat оскільки вони залежать від середовища, у якому використовується Delta Chat. З міркувань зручності використання та сумісності ми не можемо пом’якшити їх усі тому вирішили надати рекомендації щодо безпеки користувачам, яким загрожує небезпека. Ви можете прочитати <a href="https://delta.chat/assets/blog/2020-second-security-review.pdf">повний звіт тут</a>.</p>
   </li>
   <li>
     <p>У 2019 році <a href="https://includesecurity.com">Include Security</a> проаналізувала бібліотеки <a href="https://github.com/rpgp/rpgp">PGP</a> і <a href="https://github.com/RustCrypto/RSA">RSA</a> із Delta Chat. Він не виявив критичних проблем, лише дві серйозні проблеми, які ми згодом виправили. Він також виявив одну проблему середньої тяжкості та кілька менш серйозних, але не було можливості використати ці вразливості в реалізації Delta Chat. Деякі з них ми все ж усунули після завершення аудиту. Ви можете прочитати <a href="https://delta.chat/assets/blog/2019-first-security-review.pdf">повний звіт тут</a>.</p>
@@ -921,7 +990,7 @@ Look for something like <strong>Start Autocrypt Setup Transfer</strong> in the s
         
       </h3>
 
-<p>Так. Delta Chat 1.36 comes with a new, experimental function for using the same profile on different devices:</p>
+<p>Так. You can use the same profile on different devices:</p>
 
 <ul>
   <li>
@@ -971,6 +1040,10 @@ Look for something like <strong>Start Autocrypt Setup Transfer</strong> in the s
     <p><strong>Гостьові мережі</strong> можуть не дозволяти пристроям зв’язуватися один з одним. Якщо можливо, використовуйте негостьову мережу.</p>
   </li>
   <li>
+    <p>If you still have troubles using the same network,
+try to open <strong>Mobile Hotspot</strong> on one device and join that Wi-Fi from the other one</p>
+  </li>
+  <li>
     <p>Переконайтеся, що на цільовому пристрої <strong>достатньо пам’яті</strong></p>
   </li>
   <li>
@@ -1003,6 +1076,23 @@ Look for something like <strong>Start Autocrypt Setup Transfer</strong> in the s
   </li>
   <li>Тепер ви синхронізовані і можете використовувати обидва пристрої для надсилання та отримання наскрізно зашифрованих повідомлень зі своїми партнерами по спілкуванню.</li>
 </ul>
+    
+      <h3 id="is-deletion-pinning-archiving-saving-muting-etc-synced-to-all-devices">
+        
+        
+          Is Deletion, Pinning, Archiving, Saving, Muting etc. synced to all devices? <a href="#is-deletion-pinning-archiving-saving-muting-etc-synced-to-all-devices" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Так.</p>
+
+<p>If you e.g. delete a chat or a message from your phone,
+it will be deleted on your desktop as soon as it comes online again.</p>
+
+<p>Notable exceptions are <a href="#delold">Delete old messages from Device</a>,
+as different devices may have different storage capacities,
+and system specific settings as notification sounds.</p>
     
       <h3 id="чи-планується-впровадження-веб-клієнта-delta-chat">
         
@@ -1272,7 +1362,7 @@ Look for something like <strong>Start Autocrypt Setup Transfer</strong> in the s
 
 <p>Як і інші поштові програми, такі як Thunderbird, K9-Mail або Outlook, програма програма потребує пароля, щоб ви могли використовувати її для надсилання листів. Звичайно, пароль пароль зберігається лише на вашому пристрої. Пароль передається лише вашому поштовому провайдеру (коли ви входите в систему), який і так має доступ до вашої пошти.</p>
 
-<p>Оскільки Delta Chat має відкритий код, ви можете ознайомитись із <a href="https://github.com/chatmail/core/blob/master/src/login_param.rs">початковим кодом</a> якщо бажаєте перевірити що ваші дані для авторизації надійно зберігаються. Ми будемо раді вашим пропозиціям, які зроблять додаток більш безпечним для всіх користувачів.</p>
+<p>Оскільки Delta Chat має відкритий код, ви можете ознайомитись із <a href="https://github.com/deltachat/deltachat-core-rust/blob/master/src/login_param.rs">початковим кодом</a> якщо бажаєте перевірити що ваші дані для авторизації надійно зберігаються. Ми будемо раді вашим пропозиціям, які зроблять додаток більш безпечним для всіх користувачів.</p>
     
       <h3 id="які-повідомлення-відображаються-у-delta-chat">
         
@@ -1393,7 +1483,7 @@ Look for something like <strong>Start Autocrypt Setup Transfer</strong> in the s
       </h3>
 
 <ul>
-  <li>Дивіться <a href="https://github.com/chatmail/core/blob/master/standards.md#standards-used-in-delta-chat">Стандарти, що використовуються у Delta Chat</a>.</li>
+  <li>Дивіться <a href="https://github.com/deltachat/deltachat-core-rust/blob/master/standards.md#standards-used-in-delta-chat">Стандарти, що використовуються у Delta Chat</a>.</li>
 </ul>
     
       <h3 id="де-мої-друзі-можуть-знайти-delta-chat">
