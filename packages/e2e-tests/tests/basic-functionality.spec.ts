@@ -47,10 +47,14 @@ const groupName = 'TestGroup'
 
 const getUser = (index: number) => {
   if (!existingProfiles || existingProfiles.length < index + 1) {
-    throw new Error('Not enough profiles for test!')
+    throw new Error(
+      `Not enough profiles for test! Found ${existingProfiles?.length}`
+    )
   }
   if (existingProfiles.length < 2) {
-    throw new Error('Not enough profiles for chat test!')
+    throw new Error(
+      `Not enough profiles for chat test! Found ${existingProfiles?.length}`
+    )
   }
   return existingProfiles[index]
 }
@@ -61,22 +65,27 @@ const getUser = (index: number) => {
  */
 test('create profiles', async ({ page, context, browserName }) => {
   test.setTimeout(120_000)
-  if (existingProfiles.length > 0) {
-    // this test should only run on a fresh start
-    throw new Error(
-      'Existing profiles found in create profiles test! Aborting!'
-    )
+  const hasProfileWithName = (name: string): boolean => {
+    let hasProfile = false
+    if (existingProfiles.length > 0) {
+      existingProfiles.forEach(user => {
+        if (user.name === name) {
+          hasProfile = true
+        }
+      })
+    }
+    return hasProfile
   }
   if (browserName.toLowerCase().indexOf('chrom') > -1) {
     await context.grantPermissions(['clipboard-read', 'clipboard-write'])
   }
-  await createUser(userNames[0], page, existingProfiles)
-
-  await createUser(userNames[1], page, existingProfiles)
-
-  await createUser(userNames[2], page, existingProfiles)
-
-  await createUser(userNames[3], page, existingProfiles)
+  for (let n = 0; n < 4; n++) {
+    if (!hasProfileWithName(userNames[n])) {
+      await createUser(userNames[n], page, existingProfiles, n === 0)
+    } else {
+      console.log('User already exists')
+    }
+  }
 })
 
 test('start chat with user', async ({ page, context, browserName }) => {
@@ -108,6 +117,9 @@ test('start chat with user', async ({ page, context, browserName }) => {
   console.log(`Chat with ${userA.name} created!`)
 })
 
+/**
+ * user A sends two messages to user B
+ */
 test('send message', async ({ page }) => {
   const userA = getUser(0)
   const userB = getUser(1)
@@ -127,35 +139,97 @@ test('send message', async ({ page }) => {
   const messageText = `Hello ${userB.name}!`
   await page.locator('#composer-textarea').fill(messageText)
   await page.locator('button.send-button').click()
+  await page.locator('#composer-textarea').fill(`${messageText} 2`)
+  await page.locator('button.send-button').click()
+
   const badgeNumber = page
     .getByTestId(`account-item-${userB.id}`)
     .locator('.styles_module_accountBadgeIcon')
-  await expect(badgeNumber).toHaveText('1')
+  await expect(badgeNumber).toHaveText('2')
   const sentMessageText = page
     .locator(`.message.outgoing`)
     .last()
     .locator('.msg-body .text')
-  await expect(sentMessageText).toHaveText(messageText)
+  await expect(sentMessageText).toHaveText(messageText + ' 2')
   await switchToProfile(page, userB.id)
   const chatListItem = page
     .locator('.chat-list .chat-list-item')
     .filter({ hasText: userB.name })
   await expect(
     chatListItem.locator('.chat-list-item-message .text')
-  ).toHaveText(messageText)
+  ).toHaveText(messageText + ' 2')
   await expect(
     chatListItem
       .locator('.chat-list-item-message')
       .locator('.fresh-message-counter')
-  ).toHaveText('1')
+  ).toHaveText('2')
   await chatListItem.click()
-  const receivedMessageText = await page
+  const receivedMessageText = page
     .locator(`.message.incoming`)
-    .last()
+    .first()
     .locator(`.msg-body .text`)
   await expect(receivedMessageText).toHaveText(messageText)
 })
 
+/**
+ * user A deletes one message for himself
+ */
+test('delete message', async ({ page }) => {
+  const userA = getUser(0)
+  const userB = getUser(1)
+  await switchToProfile(page, userA.id)
+  await page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: userB.name })
+    .click()
+  await page.locator('.message-wrapper').last().hover()
+  const menuButtons = page.locator('.styles_module_shortcutMenuButton')
+  expect(menuButtons.last()).toBeVisible()
+  await menuButtons.last().click()
+  await page.locator('.dc-context-menu button').last().click()
+  const deleteButton = page.getByTestId('delete_for_me')
+  expect(deleteButton).toBeVisible()
+  await deleteButton.click()
+  await switchToProfile(page, userB.id)
+  await page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: userA.name })
+    .click()
+  const messageCount = await page.locator('.message.incoming').count()
+  expect(messageCount).toEqual(2)
+})
+
+/**
+ * user A deletes one message for all
+ */
+test('delete message for all', async ({ page }) => {
+  const userA = getUser(0)
+  const userB = getUser(1)
+  await switchToProfile(page, userA.id)
+  await page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: userB.name })
+    .click()
+  await page.locator('.message-wrapper').last().hover()
+  const menuButtons = page.locator('.styles_module_shortcutMenuButton')
+  expect(menuButtons.last()).toBeVisible()
+  await menuButtons.last().click()
+  await page.locator('.dc-context-menu button').last().click()
+  const deleteButton = page.getByTestId('delete_for_everyone')
+  expect(deleteButton).toBeVisible()
+  await deleteButton.click()
+  await switchToProfile(page, userB.id)
+  await page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: userA.name })
+    .click()
+  const messageCount = await page.locator('.message.incoming').count()
+  expect(messageCount).toEqual(1)
+})
+
+/**
+ * user A sends and edits a message
+ */
 test('edit message', async ({ page }) => {
   const userA = getUser(0)
   const userB = getUser(1)
