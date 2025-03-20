@@ -61,10 +61,8 @@ async fn create_tmp_file(app: &AppHandle, name: &str) -> Result<(File, PathBuf),
 
     let file_name = file_as_path
         .as_ref()
-        .components()
-        .last()
-        .ok_or(Error::InvalidFileName)?
-        .as_os_str();
+        .file_name()
+        .ok_or(Error::InvalidFileName)?;
     let file_path = dir.join(file_name);
     let file_handle = File::create(&file_path).await?;
 
