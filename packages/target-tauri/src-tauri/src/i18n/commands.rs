@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, path::PathBuf};
 
 use log::{error, info, warn};
 use tauri::AppHandle;
@@ -51,7 +51,11 @@ pub(crate) async fn get_locale_data(locale: &str, app: AppHandle) -> Result<Loca
         serde_json::from_str(&read_to_string(locales_dir.join("en.json")).await?)?;
 
     let language_file = {
-        let file_path = locales_dir.join(format!("{locale_key}.json"));
+        let file_path = locales_dir.join(
+            PathBuf::from(format!("{locale_key}.json"))
+                .file_name()
+                .ok_or(Error::LocaleNotFound(locale_key.to_owned()))?,
+        );
         if file_path.exists() {
             file_path
         } else {
