@@ -176,6 +176,8 @@ pub(crate) async fn remove_temp_file(app: AppHandle, path: SafePathBuf) -> Resul
 }
 
 //copyBlobFileToInternalTmpDir
+/// It fails if `file_name` is not a plain name (e.g. includes parent dir);
+/// if `source_path` is not a file inside of one of accounts' blobs dir.
 #[tauri::command]
 pub(crate) async fn copy_blob_file_to_internal_tmp_dir(
     app: AppHandle,
