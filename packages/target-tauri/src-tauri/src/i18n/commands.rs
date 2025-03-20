@@ -12,10 +12,15 @@ use super::{
 use crate::{
     i18n::errors::Error,
     settings::{apply_language_change, CONFIG_FILE, LOCALE_KEY},
+    util::sanitization::is_alphanumeric_with_dashes_and_underscores,
 };
 
 #[tauri::command]
 pub async fn change_lang(app: AppHandle, locale: &str) -> Result<(), Error> {
+    if !is_alphanumeric_with_dashes_and_underscores(locale) {
+        return Err(Error::Sanitization(locale.to_owned()));
+    }
+
     let store = app.store(CONFIG_FILE)?;
     store.set(LOCALE_KEY, locale);
     apply_language_change(&app).await?;
@@ -24,6 +29,10 @@ pub async fn change_lang(app: AppHandle, locale: &str) -> Result<(), Error> {
 
 #[tauri::command]
 pub(crate) async fn get_locale_data(locale: &str, app: AppHandle) -> Result<LocaleData, Error> {
+    if !is_alphanumeric_with_dashes_and_underscores(locale) {
+        return Err(Error::Sanitization(locale.to_owned()));
+    }
+
     let locales_dir = get_locales_dir(&app).await?;
     let languages: HashMap<String, Language> = get_languages(&locales_dir).await?;
 
