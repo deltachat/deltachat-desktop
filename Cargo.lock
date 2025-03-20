@@ -649,12 +649,6 @@ checksum = "4c7f02d4ea65f2c1853089ffd8d2787bdbc63de2f0d29dedbcf8ccdfa0ccd4cf"
 
 [[package]]
 name = "base64"
-version = "0.12.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3441f0f7b02788e948e47f457ca01f1d7e6d92c693bc132c22b087d3141c03ff"
-
-[[package]]
-name = "base64"
 version = "0.13.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9e1b586273c5702936fe7b7d6896644d8be71e6314cfe09d3167c95f712589e8"
@@ -1593,8 +1587,8 @@ dependencies = [
 
 [[package]]
 name = "deltachat"
-version = "1.157.2"
-source = "git+https://github.com/chatmail/core?tag=v1.157.2#03b0185b8ece2e25969807cdb5f06cfd40d6d603"
+version = "1.157.3"
+source = "git+https://github.com/chatmail/core?tag=v1.157.3#73095bcaff9d7127592fb12ce8aa2fcf367c1f8b"
 dependencies = [
  "anyhow",
  "async-broadcast",
@@ -1612,7 +1606,6 @@ dependencies = [
  "deltachat-contact-tools",
  "deltachat-time",
  "deltachat_derive",
- "encoded-words",
  "escaper",
  "fast-socks5",
  "fd-lock",
@@ -1659,8 +1652,8 @@ dependencies = [
  "sha2",
  "shadowsocks",
  "smallvec",
- "strum 0.26.3",
- "strum_macros 0.26.4",
+ "strum 0.27.0",
+ "strum_macros 0.27.0",
  "tagger",
  "textwrap",
  "thiserror 2.0.12",
@@ -1679,7 +1672,7 @@ dependencies = [
 [[package]]
 name = "deltachat-contact-tools"
 version = "0.0.0"
-source = "git+https://github.com/chatmail/core?tag=v1.157.2#03b0185b8ece2e25969807cdb5f06cfd40d6d603"
+source = "git+https://github.com/chatmail/core?tag=v1.157.3#73095bcaff9d7127592fb12ce8aa2fcf367c1f8b"
 dependencies = [
  "anyhow",
  "chrono",
@@ -1690,8 +1683,8 @@ dependencies = [
 
 [[package]]
 name = "deltachat-jsonrpc"
-version = "1.157.2"
-source = "git+https://github.com/chatmail/core?tag=v1.157.2#03b0185b8ece2e25969807cdb5f06cfd40d6d603"
+version = "1.157.3"
+source = "git+https://github.com/chatmail/core?tag=v1.157.3#73095bcaff9d7127592fb12ce8aa2fcf367c1f8b"
 dependencies = [
  "anyhow",
  "async-channel 2.3.1",
@@ -1748,12 +1741,12 @@ dependencies = [
 [[package]]
 name = "deltachat-time"
 version = "1.0.0"
-source = "git+https://github.com/chatmail/core?tag=v1.157.2#03b0185b8ece2e25969807cdb5f06cfd40d6d603"
+source = "git+https://github.com/chatmail/core?tag=v1.157.3#73095bcaff9d7127592fb12ce8aa2fcf367c1f8b"
 
 [[package]]
 name = "deltachat_derive"
 version = "2.0.0"
-source = "git+https://github.com/chatmail/core?tag=v1.157.2#03b0185b8ece2e25969807cdb5f06cfd40d6d603"
+source = "git+https://github.com/chatmail/core?tag=v1.157.3#73095bcaff9d7127592fb12ce8aa2fcf367c1f8b"
 dependencies = [
  "quote",
  "syn 2.0.99",
@@ -2222,21 +2215,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "edd0f118536f44f5ccd48bcb8b111bdc3de888b58c74639dfb034a357d0f206d"
 
 [[package]]
-name = "encoded-words"
-version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9c1693107e6084e2b9444d34a985697f56c8832d314924d5cfb1fb7793154bef"
-dependencies = [
- "base64 0.12.3",
- "charset",
- "encoding_rs",
- "hex",
- "lazy_static",
- "regex",
- "thiserror 1.0.69",
-]
-
-[[package]]
 name = "encoding_rs"
 version = "0.8.35"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2576,7 +2554,7 @@ dependencies = [
 [[package]]
 name = "format-flowed"
 version = "1.0.0"
-source = "git+https://github.com/chatmail/core?tag=v1.157.2#03b0185b8ece2e25969807cdb5f06cfd40d6d603"
+source = "git+https://github.com/chatmail/core?tag=v1.157.3#73095bcaff9d7127592fb12ce8aa2fcf367c1f8b"
 
 [[package]]
 name = "funty"
@@ -6519,7 +6497,7 @@ dependencies = [
 [[package]]
 name = "ratelimit"
 version = "1.0.0"
-source = "git+https://github.com/chatmail/core?tag=v1.157.2#03b0185b8ece2e25969807cdb5f06cfd40d6d603"
+source = "git+https://github.com/chatmail/core?tag=v1.157.3#73095bcaff9d7127592fb12ce8aa2fcf367c1f8b"
 
 [[package]]
 name = "raw-window-handle"

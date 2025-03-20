@@ -34,7 +34,7 @@
 - removed the option to import encryption keys #4783
 - remove end-to-end encryption preferences from settings (e2e encryption is always preferred when available) #4782
 - add dialog with hints about invite link #4667
-- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.157.2`
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.157.3`
   - Delete messages on IMAP when deleting chat
   - Allow doubled avatar resolution
   - Update iroh to 0.33
