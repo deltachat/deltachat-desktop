@@ -34,6 +34,7 @@ pub(crate) fn webxdc_protocol<R: tauri::Runtime>(
             let WebxdcInstance {
                 account_id,
                 message,
+                ..
             } = instances
                 .get(&webview_label)
                 .await

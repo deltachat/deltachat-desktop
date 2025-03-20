@@ -6,7 +6,10 @@ to give the webxdc schemes and the commands the context
 use std::{collections::HashMap, sync::Arc};
 
 use deltachat::message::Message;
+use tauri::ipc::Channel;
 use tokio::sync::RwLock;
+
+use crate::webxdc::commands::WebxdcUpdate;
 
 #[derive(Clone)]
 pub(crate) struct WebxdcInstance {
@@ -15,6 +18,8 @@ pub(crate) struct WebxdcInstance {
     // at the time of writing there is nothing changing in the message that we are interessted in,
     // so it is fine that this snapshot could be out of date
     pub(crate) message: Message,
+
+    pub(crate) channel: Option<Channel<WebxdcUpdate>>,
 }
 
 pub(crate) struct WebxdcInstancesState {
@@ -43,6 +48,20 @@ impl WebxdcInstancesState {
 
     pub(crate) async fn get(&self, window_label: &str) -> Option<WebxdcInstance> {
         self.inner.read().await.get(window_label).cloned()
+    }
+
+    pub(crate) async fn set_channel(
+        &self,
+        window_label: &str,
+        channel: Channel<WebxdcUpdate>,
+    ) -> Result<(), String> {
+        let mut writer = self.inner.write().await;
+        if let Some(m) = writer.get_mut(window_label) {
+            m.channel = Some(channel);
+            Ok(())
+        } else {
+            Err("instance not found".to_owned())
+        }
     }
 
     pub(crate) async fn get_all_webxdc_window_labels(&self) -> Vec<String> {

@@ -1,5 +1,4 @@
-import { invoke } from '@tauri-apps/api/core'
-import { listen } from '@tauri-apps/api/event'
+import { Channel, invoke } from '@tauri-apps/api/core'
 import type {
   ReceivedStatusUpdate,
   RealtimeListener as RealtimeListenerType,
@@ -90,12 +89,35 @@ class RealtimeListener implements RealtimeListenerType {
     }
   }
 
-  listen<null>('webxdc_status_update', onStatusUpdate)
-  listen<number[]>('webxdc_realtime_data', ({ payload: data }) => {
-    if (realtimeListener && !realtimeListener.is_trashed()) {
-      realtimeListener.listener?.(Uint8Array.from(data))
+  // listen<null>('webxdc_status_update', onStatusUpdate)
+  // listen<number[]>('webxdc_realtime_data', ({ payload: data }) => {
+  //   if (realtimeListener && !realtimeListener.is_trashed()) {
+  //     realtimeListener.listener?.(Uint8Array.from(data))
+  //   }
+  // })
+
+  type ChannelWebxdcUpdate =
+    | {
+        event: 'status'
+      }
+    | {
+        event: 'realtimePacket'
+        data: number[]
+      }
+
+  const onEvent = new Channel<ChannelWebxdcUpdate>()
+  invoke('register_webxdc_channel', { channel: onEvent })
+  onEvent.onmessage = message => {
+    console.log(`got event ${message.event}`, message)
+
+    if (message.event === 'status') {
+      onStatusUpdate()
+    } else if (message.event === 'realtimePacket') {
+      if (realtimeListener && !realtimeListener.is_trashed()) {
+        realtimeListener.listener?.(Uint8Array.from(message.data))
+      }
     }
-  })
+  }
 
   window.webxdc = {
     //@ts-expect-error

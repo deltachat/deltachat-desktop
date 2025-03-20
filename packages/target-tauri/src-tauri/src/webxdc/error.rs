@@ -20,6 +20,8 @@ pub(crate) enum Error {
     WebxdcInstanceNotFoundByLabel(String),
     #[error("anyhow {0:?}")]
     Anyhow(anyhow::Error),
+    #[error("channel not initialized yet")]
+    ChannelNotInitializedYet,
 }
 
 impl serde::Serialize for Error {
