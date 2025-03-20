@@ -5,6 +5,7 @@ use crate::{
     menus::{float_on_top::set_float_on_top_based_on_main_window, help_menu::create_help_menu},
     settings::{apply_content_protection, apply_zoom_factor_help_window},
     state::menu_manager::MenuManager,
+    util::sanitization::is_alphanumeric_with_dashes_and_underscores,
 };
 
 #[derive(Debug, thiserror::Error)]
@@ -89,10 +90,4 @@ pub(crate) async fn open_help_window(
         .map_err(|err| Error::MenuCreation(err.to_string()))?;
 
     Ok(())
-}
-
-fn is_alphanumeric_with_dashes_and_underscores(string: &str) -> bool {
-    string
-        .chars()
-        .all(|c| c.is_ascii_alphanumeric() || c == '-' || c == '_')
 }
