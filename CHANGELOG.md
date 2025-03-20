@@ -3,23 +3,19 @@
 ## [Unreleased][unreleased]
 
 ### Added
-- delete message for all chat members #4716
 
 ### Changed
 - Update local help (2025-03-20)
 
 ### Fixed
-- tauri: improve security a little #4813
-- tauri: improve performance a little #4810
-- tauri: translation fn: added fallback to en when a key doesn't exist in a particular language #4818
 
+<a id="1_56_0"></a>
 
-<a id="1_55_0"></a>
-
-## [1.55.0] - 2025-03-18
+## [1.56.0] - 2025-03-21
 
 ### Added
 - add a way to edit messages #4717
+- delete message for all chat members #4716
 - tauri: add support for sticker picker #4707
 - tauri: add html email view #4699
 - tauri: add titlebar menu #4755 #4787
@@ -60,6 +56,9 @@
 - tauri: fix SVG images not being displayed in composer draft
 - tauri: fix open logfile from settings, fix opening stickerfolder, fix opening weblinks #4778
 - tauri: hardening: allow commands for windows in a white-list manner #4795
+- tauri: improve security a little #4813
+- tauri: improve performance a little #4810
+- tauri: translation fn: added fallback to en when a key doesn't exist in a particular language #4818
 
 <a id="1_54_2"></a>
 
@@ -3313,9 +3312,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.55.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.56.0...HEAD
 
-[1.55.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.54.2...v1.55.0
+[1.56.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.54.2...v1.56.0
 
 [1.54.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.54.1...v1.54.2
 
