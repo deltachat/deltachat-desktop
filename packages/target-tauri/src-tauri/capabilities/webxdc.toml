@@ -8,10 +8,6 @@ permissions = [
     "allow-join-webxdc-realtime-channel",
     "allow-leave-webxdc-realtime-channel",
     "allow-send-webxdc-realtime-data",
-    # IDEA: maybe implement scopes for the event plugin in tauri,
-    # so that you can specify the allowed events
-    #
-    # event list for this would be:
-    # - "webxdc_status_update"
-    "core:event:allow-listen",
+    "allow-register-webxdc-channel",
+    "core:__TAURI_CHANNEL__:allow-fetch",
 ]

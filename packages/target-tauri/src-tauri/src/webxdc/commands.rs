@@ -9,9 +9,9 @@ use deltachat::{
 };
 use log::{error, info, trace, warn};
 
-use serde_json::Value;
+use serde::Serialize;
 use tauri::{
-    async_runtime::block_on, image::Image, AppHandle, Emitter, EventTarget, Manager, State, Url,
+    async_runtime::block_on, image::Image, ipc::Channel, AppHandle, Manager, State, Url,
     WebviewUrl, WebviewWindow, WebviewWindowBuilder, WindowEvent,
 };
 
@@ -122,43 +122,56 @@ pub(crate) async fn delete_webxdc_account_data<'a>(
     delete_webxdc_data_for_account(&app, account_id).await
 }
 
+#[derive(Clone, Serialize)]
+#[serde(rename_all = "camelCase", tag = "event", content = "data")]
+pub enum WebxdcUpdate {
+    Status,
+    RealtimePacket(Vec<u8>),
+}
+
+#[tauri::command]
+pub(crate) async fn register_webxdc_channel<'a>(
+    window: WebviewWindow,
+    webxdc_instances: State<'a, WebxdcInstancesState>,
+    channel: Channel<WebxdcUpdate>,
+) -> Result<(), Error> {
+    // set it
+    webxdc_instances
+        .set_channel(window.label(), channel)
+        .await
+        .map_err(|_| Error::WebxdcInstanceNotFoundByLabel(window.label().to_owned()))?;
+    Ok(())
+}
+
 #[tauri::command]
 pub(crate) async fn on_webxdc_status_update<'a>(
-    app: AppHandle,
     webxdc_instances: State<'a, WebxdcInstancesState>,
     account_id: u32,
     instance_id: u32,
 ) -> Result<(), Error> {
-    if let Some((window_label, _instance)) = webxdc_instances
+    if let Some((_window_label, instance)) = webxdc_instances
         .get_webxdc_for_instance(account_id, instance_id)
         .await
     {
-        app.emit_to(
-            EventTarget::window(window_label),
-            "webxdc_status_update",
-            Value::Null,
-        )?;
+        let channel = instance.channel.ok_or(Error::ChannelNotInitializedYet)?;
+        channel.send(WebxdcUpdate::Status)?;
     }
     Ok(())
 }
 
 #[tauri::command]
 pub(crate) async fn on_webxdc_realtime_data<'a>(
-    app: AppHandle,
     webxdc_instances: State<'a, WebxdcInstancesState>,
     account_id: u32,
     instance_id: u32,
     payload: Vec<u8>,
 ) -> Result<(), Error> {
-    if let Some((window_label, _instance)) = webxdc_instances
+    if let Some((_window_label, instance)) = webxdc_instances
         .get_webxdc_for_instance(account_id, instance_id)
         .await
     {
-        app.emit_to(
-            EventTarget::window(window_label),
-            "webxdc_realtime_data",
-            payload,
-        )?;
+        let channel = instance.channel.ok_or(Error::ChannelNotInitializedYet)?;
+        channel.send(WebxdcUpdate::RealtimePacket(payload))?;
     }
     Ok(())
 }
@@ -270,6 +283,7 @@ pub(crate) async fn open_webxdc<'a>(
             WebxdcInstance {
                 account_id,
                 message: webxdc_message.clone(),
+                channel: None,
             },
         )
         .await;
