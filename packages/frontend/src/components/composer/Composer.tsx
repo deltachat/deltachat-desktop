@@ -91,7 +91,7 @@ const Composer = forwardRef<
   const chatId = selectedChat.id
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const [showAppPicker, setShowAppPicker] = useState(false)
-  const [canSendMessage, setCanSendMessage] = useState(false)
+  const [showSendButton, setShowSendButton] = useState(false)
 
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
   const pickerButtonRef = useRef<HTMLButtonElement>(null)
@@ -143,9 +143,9 @@ const Composer = forwardRef<
       currentComposerMessageInputRef.current?.getText() === '' &&
       !draftState.file
     ) {
-      setCanSendMessage(false)
+      setShowSendButton(false)
     } else {
-      setCanSendMessage(true)
+      setShowSendButton(true)
     }
   }, [currentComposerMessageInputRef, draftState])
 
@@ -590,7 +590,7 @@ const Composer = forwardRef<
               <span />
             </button>
           )}
-          {canSendMessage && (
+          {showSendButton && (
             <button
               // This ensures that the button loses focus as we switch between
               // the editing mode and the regular mode,
