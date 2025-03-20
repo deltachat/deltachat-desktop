@@ -45,7 +45,6 @@ import usePrivateReply from '../../hooks/chat/usePrivateReply'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useVideoChat from '../../hooks/useVideoChat'
 import { useReactionsBar, showReactionsUi } from '../ReactionsBar'
-import EnterAutocryptSetupMessage from '../dialogs/EnterAutocryptSetupMessage'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import Reactions from '../Reactions'
 import ShortcutMenu from '../ShortcutMenu'
@@ -265,7 +264,7 @@ function buildContextMenu(
     copy_item = false
   }
 
-  const showAttachmentOptions = !!message.file && !message.isSetupmessage
+  const showAttachmentOptions = !!message.file
   const showCopyImage = !!message.file && message.viewType === 'Image'
   const showResend = message.sender.id === C.DC_CONTACT_ID_SELF
 
@@ -433,7 +432,7 @@ export default function Message(props: {
   conversationType: ConversationType
 }) {
   const { message, conversationType } = props
-  const { id, viewType, text, hasLocation, isSetupmessage, hasHtml } = message
+  const { id, viewType, text, hasLocation, hasHtml } = message
   const direction = getDirection(message)
   const status = mapCoreMsgStatus2String(message.state)
 
@@ -668,12 +667,6 @@ export default function Message(props: {
   }
 
   let onClickMessageBody
-  let MessageTagName: 'div' | 'button' = 'div'
-  if (isSetupmessage) {
-    onClickMessageBody = () =>
-      openDialog(EnterAutocryptSetupMessage, { message })
-    MessageTagName = 'button'
-  }
 
   // Check if the message is saved or has a saved message
   // in both cases we display the bookmark icon
@@ -721,7 +714,7 @@ export default function Message(props: {
         <div className='break' />
         <div className='meta-data-container'>
           <MessageMetaData
-            fileMime={(!isSetupmessage && message.fileMime) || null}
+            fileMime={message.fileMime || null}
             direction={direction}
             status={status}
             isEdited={message.isEdited}
@@ -740,9 +733,7 @@ export default function Message(props: {
   } else {
     content = (
       <div dir='auto' className='text'>
-        {message.isSetupmessage ? (
-          tx('autocrypt_asm_click_body')
-        ) : text !== null ? (
+        {text !== null ? (
           <MessageBody
             text={text}
             tabindexForInteractiveContents={tabindexForInteractiveContents}
@@ -785,11 +776,10 @@ export default function Message(props: {
     message?.originalMsgId
 
   const hasText = text !== null && text !== ''
-  const fileMime = (!isSetupmessage && message.fileMime) || null
+  const fileMime = message.fileMime || null
   const isWithoutText = isMediaWithoutText(fileMime, hasText, message.viewType)
   const showAttachment = (message: T.Message) =>
     message.file &&
-    !message.isSetupmessage &&
     message.viewType !== 'Webxdc' &&
     message.viewType !== 'Vcard'
 
@@ -802,7 +792,7 @@ export default function Message(props: {
         styles.message,
         rovingTabindex.className,
         {
-          [styles.withReactions]: message.reactions && !isSetupmessage,
+          [styles.withReactions]: message.reactions,
           'type-sticker': viewType === 'Sticker',
           error: status === 'error',
           forwarded: message.isForwarded,
@@ -852,7 +842,7 @@ export default function Message(props: {
             />
           </div>
         )}
-        <MessageTagName
+        <div
           className={classNames('msg-body', {
             'msg-body--clickable': onClickMessageBody,
           })}
@@ -919,14 +909,14 @@ export default function Message(props: {
               viewType={message.viewType}
               tabindexForInteractiveContents={tabindexForInteractiveContents}
             />
-            {message.reactions && !isSetupmessage && (
+            {message.reactions && (
               <Reactions
                 reactions={message.reactions}
                 tabindexForInteractiveContents={tabindexForInteractiveContents}
               />
             )}
           </footer>
-        </MessageTagName>
+        </div>
       </div>
       <ShortcutMenu
         chat={props.chat}
