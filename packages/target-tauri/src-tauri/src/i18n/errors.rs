@@ -6,6 +6,7 @@ pub(crate) enum Error {
     Store(#[from] tauri_plugin_store::Error),
     #[error(transparent)]
     Tauri(#[from] tauri::Error),
+    Sanitization(String),
     LocaleNotFound(String),
     InvalidLocaleDir(String),
     NoValidLocaleDirFound,
@@ -30,6 +31,9 @@ impl serde::Serialize for Error {
 impl Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
+            Error::Sanitization(locale) => f.write_fmt(format_args!(
+                "Error: {locale} is not a valid locale"
+            )),
             Error::LocaleNotFound(locale) => f.write_fmt(format_args!(
                 "Error: Locale {locale} was not found in _languages.json"
             )),
