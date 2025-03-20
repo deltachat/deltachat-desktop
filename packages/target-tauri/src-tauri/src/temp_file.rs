@@ -75,7 +75,13 @@ async fn create_tmp_file(app: &AppHandle, name: &str) -> Result<(File, PathBuf),
 async fn delete_tmp_file(app: &AppHandle, path: SafePathBuf) -> Result<(), Error> {
     let tmpdir = get_temp_folder_path(app)?.canonicalize()?;
     let resolved_path = path.as_ref().canonicalize()?;
-    if !resolved_path.starts_with(tmpdir) {
+    // Checking `resolved_path.parent()` and not `resolved_path` itself
+    // because `tmpdir.starts_with(tmpdir) == true`.
+    if !resolved_path
+        .parent()
+        .ok_or(Error::PathToDeleteOutsideOfTempDir)?
+        .starts_with(tmpdir)
+    {
         return Err(Error::PathToDeleteOutsideOfTempDir);
     }
     if resolved_path.try_exists()? {
