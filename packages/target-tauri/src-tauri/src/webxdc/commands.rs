@@ -31,7 +31,7 @@ use crate::{
 
 use super::error::Error;
 
-const INIT_SCRIPT: &'static str = r#"
+const INIT_SCRIPT: &str = r#"
 console.log("hello from INIT_SCRIPT")
 // this is only run once, not in every iframe, we need an api that is run in every iframe
 // so documentation for this is wrong
@@ -74,10 +74,10 @@ pub(crate) async fn on_webxdc_message_changed<'a>(
                 })?
                 .get_webxdc_info(&account)
                 .await
-                .map_err(|err| Error::DeltaChat(err))?;
+                .map_err(Error::DeltaChat)?;
             let chat_name = Chat::load_from_db(&account, instance.message.get_chat_id())
                 .await
-                .map_err(|err| Error::DeltaChat(err))?
+                .map_err(Error::DeltaChat)?
                 .name;
             window.set_title(&make_title(&webxdc_info, &chat_name))?;
         }
@@ -87,9 +87,9 @@ pub(crate) async fn on_webxdc_message_changed<'a>(
 }
 
 #[tauri::command]
-pub(crate) async fn on_webxdc_message_deleted<'a>(
+pub(crate) async fn on_webxdc_message_deleted(
     app: AppHandle,
-    webxdc_instances: State<'a, WebxdcInstancesState>,
+    webxdc_instances: State<'_, WebxdcInstancesState>,
     account_id: u32,
     instance_id: u32,
 ) -> Result<(), Error> {
@@ -106,9 +106,9 @@ pub(crate) async fn on_webxdc_message_deleted<'a>(
 }
 
 #[tauri::command]
-pub(crate) async fn delete_webxdc_account_data<'a>(
+pub(crate) async fn delete_webxdc_account_data(
     app: AppHandle,
-    webxdc_instances: State<'a, WebxdcInstancesState>,
+    webxdc_instances: State<'_, WebxdcInstancesState>,
     account_id: u32,
 ) -> Result<(), Error> {
     for window_label in webxdc_instances
@@ -130,9 +130,9 @@ pub enum WebxdcUpdate {
 }
 
 #[tauri::command]
-pub(crate) async fn register_webxdc_channel<'a>(
+pub(crate) async fn register_webxdc_channel(
     window: WebviewWindow,
-    webxdc_instances: State<'a, WebxdcInstancesState>,
+    webxdc_instances: State<'_, WebxdcInstancesState>,
     channel: Channel<WebxdcUpdate>,
 ) -> Result<(), Error> {
     // set it
@@ -144,8 +144,8 @@ pub(crate) async fn register_webxdc_channel<'a>(
 }
 
 #[tauri::command]
-pub(crate) async fn on_webxdc_status_update<'a>(
-    webxdc_instances: State<'a, WebxdcInstancesState>,
+pub(crate) async fn on_webxdc_status_update(
+    webxdc_instances: State<'_, WebxdcInstancesState>,
     account_id: u32,
     instance_id: u32,
 ) -> Result<(), Error> {
@@ -160,8 +160,8 @@ pub(crate) async fn on_webxdc_status_update<'a>(
 }
 
 #[tauri::command]
-pub(crate) async fn on_webxdc_realtime_data<'a>(
-    webxdc_instances: State<'a, WebxdcInstancesState>,
+pub(crate) async fn on_webxdc_realtime_data(
+    webxdc_instances: State<'_, WebxdcInstancesState>,
     account_id: u32,
     instance_id: u32,
     payload: Vec<u8>,
@@ -177,9 +177,9 @@ pub(crate) async fn on_webxdc_realtime_data<'a>(
 }
 
 #[tauri::command]
-pub(crate) async fn close_all_webxdc_instances<'a>(
+pub(crate) async fn close_all_webxdc_instances(
     app: AppHandle,
-    webxdc_instances: State<'a, WebxdcInstancesState>,
+    webxdc_instances: State<'_, WebxdcInstancesState>,
 ) -> Result<(), Error> {
     let results = webxdc_instances
         .get_all_webxdc_window_labels()
@@ -188,8 +188,8 @@ pub(crate) async fn close_all_webxdc_instances<'a>(
         .map(|window_label| app.get_window(&window_label).map(|window| window.destroy()));
 
     let mut last_error_result = Ok(());
-    for result in results {
-        if let Some(Err(err)) = result {
+    for result in results.flatten() {
+        if let Err(err) = result {
             error!("wee {err:?}");
             last_error_result = Err(err);
         }
@@ -246,8 +246,7 @@ pub(crate) async fn open_webxdc<'a>(
             if !href.is_empty() {
                 window
                     .webviews()
-                    .iter()
-                    .next()
+                    .first()
                     .context("did not find webview, this should not happen, contact devs")
                     .map_err(Error::Anyhow)?
                     .navigate(href_to_webxdc_url(href)?)?;

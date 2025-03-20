@@ -62,12 +62,12 @@ pub(crate) fn webxdc_protocol<R: tauri::Runtime>(
                     .unwrap_or(webxdc_info.self_addr.clone());
                 let webxdc_js = webxdc_js
                     .replace("[SELFADDR]", &serde_json::to_string(
-                        &Value::try_from(webxdc_info.self_addr.as_bytes().to_vec())?
+                        &Value::from(webxdc_info.self_addr.as_bytes().to_vec())
                     )?)
                     .replace(
                         "[SELFNAME]",
                         &serde_json::to_string(
-                            &Value::try_from(display_name.as_bytes().to_vec())?
+                            &Value::from(display_name.as_bytes().to_vec())
                         )?
                     )
                     .replace(
