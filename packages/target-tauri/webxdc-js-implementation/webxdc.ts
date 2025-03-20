@@ -108,14 +108,13 @@ class RealtimeListener implements RealtimeListenerType {
   const onEvent = new Channel<ChannelWebxdcUpdate>()
   invoke('register_webxdc_channel', { channel: onEvent })
   onEvent.onmessage = message => {
-    console.log(`got event ${message.event}`, message)
-
-    if (message.event === 'status') {
-      onStatusUpdate()
-    } else if (message.event === 'realtimePacket') {
+    // console.log(`got event ${message.event}`, message)
+    if (message.event === 'realtimePacket') {
       if (realtimeListener && !realtimeListener.is_trashed()) {
         realtimeListener.listener?.(Uint8Array.from(message.data))
       }
+    } else if (message.event === 'status') {
+      onStatusUpdate()
     }
   }
 
