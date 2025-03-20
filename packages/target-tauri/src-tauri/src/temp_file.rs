@@ -185,16 +185,30 @@ pub(crate) async fn copy_blob_file_to_internal_tmp_dir(
 ) -> Result<String, Error> {
     let source_path = source_path.as_ref();
 
-    if !source_path.starts_with(&dc.accounts_dir)
-        || !source_path.components().any(|c| {
-            if let Some(c) = c.as_os_str().to_str() {
-                c.ends_with("-blobs")
-            } else {
-                false
-            }
-        })
     {
-        return Err(Error::SourcePathOutsideOfBlobsDir);
+        let maybe_blobs_dir = source_path
+            .parent()
+            .ok_or(Error::SourcePathOutsideOfBlobsDir)?;
+        if maybe_blobs_dir
+            .file_name()
+            .ok_or(Error::SourcePathOutsideOfBlobsDir)?
+            != "dc.db-blobs"
+        {
+            return Err(Error::SourcePathOutsideOfBlobsDir);
+        }
+
+        let maybe_accounts_dir = maybe_blobs_dir
+            .parent()
+            .ok_or(Error::SourcePathOutsideOfBlobsDir)?
+            .parent()
+            .ok_or(Error::SourcePathOutsideOfBlobsDir)?;
+        if maybe_accounts_dir
+            .to_str()
+            .ok_or(Error::SourcePathOutsideOfBlobsDir)?
+            != dc.accounts_dir
+        {
+            return Err(Error::SourcePathOutsideOfBlobsDir);
+        }
     }
 
     let (file_handle, file_path) = create_tmp_file(&app, file_name).await?;
