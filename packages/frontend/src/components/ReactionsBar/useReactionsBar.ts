@@ -49,7 +49,6 @@ export function showReactionsUi(message: T.Message, chat: T.FullChat): boolean {
   return (
     chat.canSend &&
     !message.isInfo &&
-    !message.isSetupmessage &&
     message.viewType !== 'VideochatInvitation'
   )
 }
