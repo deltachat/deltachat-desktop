@@ -183,8 +183,10 @@ pub(crate) async fn copy_blob_file_to_internal_tmp_dir(
     app: AppHandle,
     dc: State<'_, DeltaChatAppState>,
     file_name: &str,
-    source_path: PathBuf,
+    source_path: SafePathBuf,
 ) -> Result<String, Error> {
+    let source_path = source_path.as_ref();
+
     if !source_path.starts_with(&dc.accounts_dir)
         || !source_path.components().any(|c| {
             if let Some(c) = c.as_os_str().to_str() {

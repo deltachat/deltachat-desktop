@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+- tauri: improve security #4826
 
 <a id="1_56_0"></a>
 
