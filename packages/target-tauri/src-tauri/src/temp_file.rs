@@ -50,12 +50,17 @@ pub fn get_temp_folder_path(app: &AppHandle) -> Result<PathBuf, tauri::Error> {
 /// and ensures that the file won't override any other files,
 /// by creating a separate directory for it.
 async fn create_tmp_file(app: &AppHandle, name: &str) -> Result<(File, PathBuf), Error> {
+    // Technically `SafePathBuf` is not necessary here,
+    // since we take the last component anyway, but let's still use it
+    // for good measure.
+    let file_as_path = SafePathBuf::new(name.into()).map_err(|_| Error::InvalidFileName)?;
+
     // (make sure filename can not escape)
     let dir = get_temp_folder_path(app)?.join(uuid::Uuid::new_v4().to_string());
     create_dir(&dir).await?;
 
-    let file_as_path = PathBuf::from(name);
     let file_name = file_as_path
+        .as_ref()
         .components()
         .last()
         .ok_or(Error::InvalidFileName)?
