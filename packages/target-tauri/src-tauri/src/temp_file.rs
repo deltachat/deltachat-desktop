@@ -45,6 +45,10 @@ pub fn get_temp_folder_path(app: &AppHandle) -> Result<PathBuf, tauri::Error> {
 }
 
 /// creates a temporary file in a temporary directory in the temp folder specied by [get_temp_folder_path]
+///
+/// It sanitizes the file name, to prevent path traversal,
+/// and ensures that the file won't override any other files,
+/// by creating a separate directory for it.
 async fn create_tmp_file(app: &AppHandle, name: &str) -> Result<(File, PathBuf), Error> {
     // (make sure filename can not escape)
     let dir = get_temp_folder_path(app)?.join(uuid::Uuid::new_v4().to_string());
