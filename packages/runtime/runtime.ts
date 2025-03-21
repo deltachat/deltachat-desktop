@@ -158,7 +158,8 @@ export interface Runtime {
   onWebxdcSendToChat:
     | ((
         file: { file_name: string; file_content: string } | null,
-        text: string | null
+        text: string | null,
+        account?: number
       ) => void)
     | undefined
   onResumeFromSleep: (() => void) | undefined

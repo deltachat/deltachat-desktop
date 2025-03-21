@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "module": "es2015",
+    "target": "es2018",
+    "allowJs": false,
+    "strictNullChecks": true,
+    "strict": true,
+    "moduleResolution": "bundler"
+  }
+}

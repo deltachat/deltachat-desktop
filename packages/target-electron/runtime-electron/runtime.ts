@@ -119,7 +119,8 @@ class ElectronRuntime implements Runtime {
   onWebxdcSendToChat:
     | ((
         file: { file_name: string; file_content: string } | null,
-        text: string | null
+        text: string | null,
+        account?: number
       ) => void)
     | undefined
   onOpenQrUrl: ((url: string) => void) | undefined
@@ -414,8 +415,9 @@ class ElectronRuntime implements Runtime {
       (
         _ev,
         file: { file_name: string; file_content: string } | null,
-        text: string | null
-      ) => this.onWebxdcSendToChat?.(file, text)
+        text: string | null,
+        account?: number
+      ) => this.onWebxdcSendToChat?.(file, text, account)
     )
     ipcBackend.on('onResumeFromSleep', () => this.onResumeFromSleep?.())
 

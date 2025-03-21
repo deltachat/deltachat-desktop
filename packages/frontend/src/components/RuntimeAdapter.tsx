@@ -84,10 +84,14 @@ export default function RuntimeAdapter({
   }, [accountId, jumpToMessage, processQr, selectChat, closeAllDialogs])
 
   useEffect(() => {
-    runtime.onWebxdcSendToChat = (file, text) => {
+    runtime.onWebxdcSendToChat = async (file, text, account) => {
       if (openSendToDialogId.current) {
         closeDialog(openSendToDialogId.current)
         openSendToDialogId.current = undefined
+      }
+
+      if (account && account !== accountId) {
+        await window.__selectAccount(account)
       }
 
       openSendToDialogId.current = openDialog(WebxdcSaveToChatDialog, {
@@ -95,7 +99,7 @@ export default function RuntimeAdapter({
         file,
       })
     }
-  }, [closeDialog, openDialog])
+  }, [closeDialog, openDialog, accountId])
 
   return <>{children}</>
 }

@@ -702,7 +702,12 @@ export default class DCWebxdc {
           return
         }
         // forward to main window
-        main_window?.webContents.send('webxdc.sendToChat', file, text)
+        main_window?.webContents.send(
+          'webxdc.sendToChat',
+          file,
+          text,
+          app.accountId
+        )
         main_window?.focus()
       }
     )

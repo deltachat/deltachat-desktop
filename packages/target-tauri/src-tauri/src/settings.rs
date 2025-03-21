@@ -11,6 +11,7 @@ pub(crate) const LOCALE_KEY: &str = "locale";
 pub(crate) const ZOOM_FACTOR_KEY: &str = "zoomFactor";
 pub(crate) const HELP_ZOOM_FACTOR_KEY: &str = "helpZoomFactor";
 pub(crate) const HTML_EMAIL_ZOOM_FACTOR_KEY: &str = "htmlEmailZoomFactor";
+pub(crate) const WEBXDC_ZOOM_FACTOR_KEY: &str = "webxdcZoomFactor";
 pub(crate) const CONTENT_PROTECTION_KEY: &str = "contentProtectionEnabled";
 pub(crate) const CONTENT_PROTECTION_DEFAULT: bool = false;
 pub(crate) const HTML_EMAIL_WARNING_KEY: &str = "HTMLEmailAskForRemoteLoadingConfirmation";
@@ -80,6 +81,20 @@ pub(crate) fn apply_zoom_factor_html_window(app: &AppHandle) -> anyhow::Result<(
             for webview in window.webviews() {
                 webview.set_zoom(zoom_factor)?;
             }
+        }
+    }
+    Ok(())
+}
+
+pub(crate) fn apply_zoom_factor_webxdc(app: &AppHandle) -> anyhow::Result<()> {
+    let store = app.store(CONFIG_FILE)?;
+    let zoom_factor: f64 = store
+        .get(WEBXDC_ZOOM_FACTOR_KEY)
+        .and_then(|f| f.as_f64())
+        .unwrap_or(1.0);
+    for (label, webview_window) in app.webview_windows().iter() {
+        if label.starts_with("webxdc:") {
+            webview_window.set_zoom(zoom_factor)?;
         }
     }
     Ok(())

@@ -161,7 +161,11 @@ class TauriRuntime implements Runtime {
     value: string | number | boolean | undefined
   ): Promise<void> {
     // 1. set values in key value store
-    await this.store.set(key, value)
+    if (typeof value === 'undefined') {
+      await this.store.delete(key)
+    } else {
+      await this.store.set(key, value)
+    }
     // 2. if supported in tauri settings, then also notifiy tauri (like tray_icon, but not experimental ui options)
     await invoke('change_desktop_settings_apply_side_effects', { key })
   }
@@ -273,6 +277,29 @@ class TauriRuntime implements Runtime {
     })
     listen<string>('showKeybindingsDialog', () => {
       this.onShowDialog?.('keybindings')
+    })
+
+    type sendToChatArguments = {
+      options: {
+        text: string | null | undefined
+        file: { fileName: string; fileContent: string } | null
+      }
+      account: number | null
+    }
+
+    listen<sendToChatArguments>('event_webxdc_send_to_chat', event => {
+      console.log({ event })
+      const { options, account } = event.payload
+      this.onWebxdcSendToChat?.(
+        options.file
+          ? {
+              file_name: options.file.fileName,
+              file_content: options.file.fileContent,
+            }
+          : null,
+        options.text || null,
+        account || undefined
+      )
     })
   }
   reloadWebContent(): void {
@@ -402,8 +429,12 @@ class TauriRuntime implements Runtime {
   getConfigPath(): string {
     throw new Error('Method not implemented.24')
   }
-  openWebxdc(_msgId: number, _params: DcOpenWebxdcParameters): void {
-    throw new Error('Method not implemented.25')
+  openWebxdc(messageId: number, params: DcOpenWebxdcParameters): void {
+    invoke('open_webxdc', {
+      messageId,
+      accountId: params.accountId,
+      href: params.href,
+    })
   }
   getWebxdcIconURL(accountId: number, msgId: number): string {
     return `${this.runtime_info?.tauriSpecific?.scheme.webxdcIcon}${accountId}/${msgId}`
@@ -508,6 +539,11 @@ class TauriRuntime implements Runtime {
   isDroppedFileFromOutside(_file: File): boolean {
     throw new Error('Method not implemented.51')
   }
+  // only works on macOS and iOS
+  // exp.runtime.debug_get_datastore_ids()
+  async debug_get_datastore_ids() {
+    return await invoke('debug_get_datastore_ids')
+  }
   onChooseLanguage: ((locale: string) => Promise<void>) | undefined
   onThemeUpdate: (() => void) | undefined
   onShowDialog:
@@ -517,7 +553,8 @@ class TauriRuntime implements Runtime {
   onWebxdcSendToChat:
     | ((
         file: { file_name: string; file_content: string } | null,
-        text: string | null
+        text: string | null,
+        account_id?: number
       ) => void)
     | undefined
   onResumeFromSleep: (() => void) | undefined
