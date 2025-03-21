@@ -1,6 +1,6 @@
 use std::{str::FromStr, sync::Arc};
 
-use anyhow::{anyhow, Context};
+use anyhow::Context;
 use deltachat::{
     chat::Chat,
     message::{Message, MsgId},
@@ -9,10 +9,10 @@ use deltachat::{
 };
 use log::{error, info, trace, warn};
 
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 use tauri::{
-    async_runtime::block_on, image::Image, ipc::Channel, path::SafePathBuf, AppHandle, Emitter,
-    EventTarget, Manager, State, Url, WebviewUrl, WebviewWindow, WebviewWindowBuilder, WindowEvent,
+    async_runtime::block_on, image::Image, ipc::Channel, AppHandle, Manager, State, Url,
+    WebviewUrl, WebviewWindow, WebviewWindowBuilder, WindowEvent,
 };
 
 use crate::{
@@ -537,9 +537,9 @@ pub(crate) async fn send_webxdc_realtime_data<'a>(
 }
 
 #[tauri::command]
-pub(crate) async fn webxdc_send_to_chat<'a>(
+pub(crate) async fn webxdc_send_to_chat(
     window: WebviewWindow,
-    webxdc_instances: State<'a, WebxdcInstancesState>,
+    webxdc_instances: State<'_, WebxdcInstancesState>,
     options: SendToChatOptions,
 ) -> Result<(), Error> {
     let WebxdcInstance { account_id, .. } =
