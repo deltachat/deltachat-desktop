@@ -14,6 +14,7 @@ use tauri::{
     async_runtime::block_on, image::Image, ipc::Channel, AppHandle, Manager, State, Url,
     WebviewUrl, WebviewWindow, WebviewWindowBuilder, WindowEvent,
 };
+use uuid::Uuid;
 
 use crate::{
     menus::webxdc_menu::create_webxdc_window_menu,
@@ -234,8 +235,9 @@ pub(crate) async fn open_webxdc<'a>(
     message_id: u32,
     href: String,
 ) -> Result<(), Error> {
-    let window_id = format!("webxdc:{account_id}:{message_id}");
-    trace!("open webxdc '{window_id}': href: {href}");
+    let uuid = Uuid::new_v4().to_string();
+    let window_id = format!("webxdc:{uuid}");
+    trace!("open webxdc '{window_id}', ({account_id}, {message_id}): href: {href}");
 
     #[cfg(not(any(target_os = "ios", target_os = "android")))]
     {
