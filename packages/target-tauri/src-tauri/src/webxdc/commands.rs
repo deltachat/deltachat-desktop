@@ -298,7 +298,16 @@ pub(crate) async fn open_webxdc<'a>(
     let mut window_builder = WebviewWindowBuilder::new(&app, &window_id, WebviewUrl::External(url))
         .inner_size(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT)
         .initialization_script(INIT_SCRIPT)
-        .on_navigation(move |url| url.scheme() == "webxdc");
+        .on_navigation(move |url| {
+            #[cfg(not(any(target_os = "windows", target_os = "android")))]
+            {
+                url.scheme() == "webxdc"
+            }
+            #[cfg(any(target_os = "windows", target_os = "android"))]
+            {
+                url.host() == Some(url::Host::Domain("webxdc.localhost")) && url.port() == None
+            }
+        });
 
     window_builder = set_data_store(&app, window_builder, account_id, message_id).await?;
 
