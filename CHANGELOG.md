@@ -5,7 +5,6 @@
 ### Added
 
 ### Changed
-- Update local help (2025-03-20)
 
 ### Fixed
 
@@ -40,6 +39,7 @@
   - Prefer hidden Message-ID header if any.
   - Update async-compression to 0.4.21 to fix IMAP COMPRESS getting stuck
 - update translations (2025-03-17)
+- update local help (2025-03-20)
 - remove handling for receiving autocrypt setup message #4822
 
 ### Fixed

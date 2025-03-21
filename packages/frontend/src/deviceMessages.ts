@@ -27,18 +27,16 @@ export async function updateDeviceChat(
     }
   }
 
-  await addDeviceMessage('changelog-version-1.54.0', {
-    text: `What's new in 1.54.0?
+  await addDeviceMessage('changelog-version-1.56.0', {
+    text: `What's new in 1.56.0?
 
-    🚀 Notifications on mentions in muted chats (enabled by default)
-    💥 Highlight the first unread message on opening chat
-    🎹 New shortcuts for search & new chats:
-       - Search: Ctrl/Cmd + F
-       - Search in Chat: Ctrl/Cmd + Shift + F
-       - New Chat: Ctrl/Cmd + N
-    You can find all Shortcuts in the Help menu or with Ctrl + /
+    📝 Edit messages: already sent messages can be edited now
+    ❌ Delete messages for all chat members as a new option
+    🔒 E2e encryption is always preferred when available (and preferences are removed from setting)
+    ⚠️ Import of encryption keys is removed (to avoid various related [limitations](https://github.com/deltachat/interface/issues/80) )
 
-MORE ✨ improvements and 🐜 bug fixes see [Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/main/CHANGELOG.md#1_54_0)`,
+
+MORE ✨ improvements and 🐜 bug fixes see [Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/main/CHANGELOG.md#1_56_0)`,
   })
 }
 
