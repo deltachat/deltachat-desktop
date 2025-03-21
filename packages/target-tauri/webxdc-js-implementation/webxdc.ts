@@ -144,6 +144,12 @@ class RealtimeListener implements RealtimeListenerType {
       onStatusUpdate()
       return promise
     },
+    getAllUpdates: () => {
+      console.error(
+        'getAllUpdates is deprecated and will be removed in the future, it also returns an empty array now, so you really should use setUpdateListener instead.'
+      )
+      return Promise.resolve([])
+    },
     joinRealtimeChannel: () => {
       if (realtimeListener && !realtimeListener.is_trashed()) {
         throw new Error('realtime listener already exists')
@@ -156,6 +162,72 @@ class RealtimeListener implements RealtimeListenerType {
       invoke('join_webxdc_realtime_channel')
 
       return realtimeListener
+    },
+    sendToChat: async content => {
+      if (!content.file && !content.text) {
+        return Promise.reject(
+          'Error from sendToChat: Invalid empty message, at least one of text or file should be provided'
+        )
+      }
+      const blob_to_base64: (file: Blob) => Promise<string> = file => {
+        const data_start = ';base64,'
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader()
+          reader.readAsDataURL(file)
+          reader.onload = () => {
+            //@ts-ignore
+            const data: string = reader.result
+            resolve(data.slice(data.indexOf(data_start) + data_start.length))
+          }
+          reader.onerror = () => reject(reader.error)
+        })
+      }
+
+      let file: { fileName: string; fileContent: string } | null = null
+      if (content.file) {
+        let base64Content: string
+        if (!content.file.name) {
+          return Promise.reject('file name is missing')
+        }
+        if (
+          Object.keys(content.file).filter(key =>
+            ['blob', 'base64', 'plainText'].includes(key)
+          ).length > 1
+        ) {
+          return Promise.reject(
+            'you can only set one of `blob`, `base64` or `plainText`, not multiple ones'
+          )
+        }
+
+        // @ts-ignore - needed because typescript imagines that blob would not exist
+        if (content.file.blob instanceof Blob) {
+          // @ts-ignore - needed because typescript imagines that blob would not exist
+          base64Content = await blob_to_base64(content.file.blob)
+          // @ts-ignore - needed because typescript imagines that base64 would not exist
+        } else if (typeof content.file.base64 === 'string') {
+          // @ts-ignore - needed because typescript imagines that base64 would not exist
+          base64Content = content.file.base64
+          // @ts-ignore - needed because typescript imagines that plainText would not exist
+        } else if (typeof content.file.plainText === 'string') {
+          base64Content = await blob_to_base64(
+            // @ts-ignore - needed because typescript imagines that plainText would not exist
+            new Blob([content.file.plainText])
+          )
+        } else {
+          return Promise.reject(
+            'data is not set or wrong format, set one of `blob`, `base64` or `plainText`, see webxdc documentation for sendToChat'
+          )
+        }
+
+        file = {
+          fileName: content.file.name,
+          fileContent: base64Content,
+        }
+      }
+
+      await invoke('webxdc_send_to_chat', {
+        options: { file, text: content.text },
+      })
     },
     importFiles: filters => {
       const element = document.createElement('input')
