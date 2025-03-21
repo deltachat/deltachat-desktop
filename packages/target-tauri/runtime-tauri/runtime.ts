@@ -161,7 +161,7 @@ class TauriRuntime implements Runtime {
     value: string | number | boolean | undefined
   ): Promise<void> {
     // 1. set values in key value store
-    if (typeof value === "undefined") {
+    if (typeof value === 'undefined') {
       await this.store.delete(key)
     } else {
       await this.store.set(key, value)
@@ -277,6 +277,29 @@ class TauriRuntime implements Runtime {
     })
     listen<string>('showKeybindingsDialog', () => {
       this.onShowDialog?.('keybindings')
+    })
+
+    type sendToChatArguments = {
+      options: {
+        text: string | null | undefined
+        file: { fileName: string; fileContent: string } | null
+      }
+      account: number | null
+    }
+
+    listen<sendToChatArguments>('event_webxdc_send_to_chat', event => {
+      console.log({ event })
+      const { options, account } = event.payload
+      this.onWebxdcSendToChat?.(
+        options.file
+          ? {
+              file_name: options.file.fileName,
+              file_content: options.file.fileContent,
+            }
+          : null,
+        options.text || null,
+        account || undefined
+      )
     })
   }
   reloadWebContent(): void {
@@ -530,7 +553,8 @@ class TauriRuntime implements Runtime {
   onWebxdcSendToChat:
     | ((
         file: { file_name: string; file_content: string } | null,
-        text: string | null
+        text: string | null,
+        account_id?: number
       ) => void)
     | undefined
   onResumeFromSleep: (() => void) | undefined

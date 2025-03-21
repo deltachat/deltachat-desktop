@@ -1,6 +1,6 @@
 use std::{str::FromStr, sync::Arc};
 
-use anyhow::Context;
+use anyhow::{anyhow, Context};
 use deltachat::{
     chat::Chat,
     message::{Message, MsgId},
@@ -9,14 +9,15 @@ use deltachat::{
 };
 use log::{error, info, trace, warn};
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use tauri::{
-    async_runtime::block_on, image::Image, ipc::Channel, AppHandle, Manager, State, Url,
-    WebviewUrl, WebviewWindow, WebviewWindowBuilder, WindowEvent,
+    async_runtime::block_on, image::Image, ipc::Channel, path::SafePathBuf, AppHandle, Emitter,
+    EventTarget, Manager, State, Url, WebviewUrl, WebviewWindow, WebviewWindowBuilder, WindowEvent,
 };
 
 use crate::{
     menus::webxdc_menu::create_webxdc_window_menu,
+    send_to_chat::{send_to_chat, SendToChatOptions},
     settings::get_content_protection,
     state::{
         menu_manager::MenuManager,
@@ -532,5 +533,25 @@ pub(crate) async fn send_webxdc_realtime_data<'a>(
         .await
         .map_err(Error::DeltaChat)?;
 
+    Ok(())
+}
+
+#[tauri::command]
+pub(crate) async fn webxdc_send_to_chat<'a>(
+    window: WebviewWindow,
+    webxdc_instances: State<'a, WebxdcInstancesState>,
+    options: SendToChatOptions,
+) -> Result<(), Error> {
+    let WebxdcInstance { account_id, .. } =
+        webxdc_instances
+            .get(window.label())
+            .await
+            .ok_or(Error::WebxdcInstanceNotFoundByLabel(
+                window.label().to_owned(),
+            ))?;
+
+    send_to_chat(window.app_handle(), options, Some(account_id))
+        .await
+        .map_err(Error::Anyhow)?;
     Ok(())
 }

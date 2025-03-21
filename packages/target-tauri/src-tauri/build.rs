@@ -60,6 +60,7 @@ fn main() {
             "leave_webxdc_realtime_channel",
             "send_webxdc_realtime_data",
             "register_webxdc_channel",
+            "webxdc_send_to_chat",
             "get_runtime_info",
             "change_desktop_settings_apply_side_effects",
             "open_help_window",

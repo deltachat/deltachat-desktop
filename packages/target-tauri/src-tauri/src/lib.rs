@@ -23,6 +23,7 @@ mod i18n;
 mod menus;
 mod runtime_capabilities;
 mod runtime_info;
+mod send_to_chat;
 mod settings;
 mod state;
 mod stickers;
@@ -135,6 +136,7 @@ pub fn run() {
             webxdc::commands::leave_webxdc_realtime_channel,
             webxdc::commands::send_webxdc_realtime_data,
             webxdc::commands::register_webxdc_channel,
+            webxdc::commands::webxdc_send_to_chat,
             #[cfg(target_vendor = "apple")]
             webxdc::data_storage::debug_get_datastore_ids,
             runtime_info::get_runtime_info,
