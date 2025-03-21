@@ -41,7 +41,7 @@ pub(crate) async fn get_locale_data(locale: &str, app: AppHandle) -> Result<Loca
         locale_key = base_locale;
     }
 
-    let (_locale_name, locale_dir) = get_result
+    let (_locale_name, locale_direction) = get_result
         .ok_or(Error::LocaleNotFound(locale_key.to_owned()))?
         .to_tuple();
 
@@ -71,7 +71,7 @@ pub(crate) async fn get_locale_data(locale: &str, app: AppHandle) -> Result<Loca
 
     Ok(LocaleData {
         locale: locale_key.to_owned(),
-        dir: locale_dir.unwrap_or_default(),
+        dir: locale_direction.unwrap_or_default(),
         messages: language_data,
     })
 }
