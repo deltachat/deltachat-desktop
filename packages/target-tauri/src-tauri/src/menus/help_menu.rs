@@ -12,6 +12,7 @@ use tauri::{
     AppHandle, Manager, WebviewWindow, Wry,
 };
 use tauri_plugin_store::StoreExt;
+use translationfn::Substitution;
 
 #[derive(Debug, AsRefStr, EnumString)]
 pub(crate) enum HelpMenuAction {
@@ -88,7 +89,7 @@ pub(crate) fn create_help_menu(
         &[
             &Submenu::with_items(
                 app,
-                tx.sync_translate("file"),
+                tx.sync_translate("file", Substitution::None),
                 true,
                 &[
                     &MenuItem::with_id(
@@ -96,8 +97,8 @@ pub(crate) fn create_help_menu(
                         HelpMenuAction::CloseHelp,
                         format!(
                             "{} {}",
-                            tx.sync_translate("close"),
-                            tx.sync_translate("menu_help")
+                            tx.sync_translate("close", Substitution::None),
+                            tx.sync_translate("menu_help", Substitution::None)
                         ),
                         true,
                         Some("CmdOrCtrl+W"),
@@ -107,35 +108,37 @@ pub(crate) fn create_help_menu(
             )?,
             &Submenu::with_items(
                 app,
-                tx.sync_translate("global_menu_edit_desktop"),
+                tx.sync_translate("global_menu_edit_desktop", Substitution::None),
                 true,
                 &[
                     &PredefinedMenuItem::copy(
                         app,
-                        Some(&tx.sync_translate("global_menu_edit_copy_desktop")),
+                        Some(
+                            &tx.sync_translate("global_menu_edit_copy_desktop", Substitution::None),
+                        ),
                     )?,
                     &PredefinedMenuItem::select_all(
                         app,
-                        Some(&tx.sync_translate("menu_select_all")),
+                        Some(&tx.sync_translate("menu_select_all", Substitution::None)),
                     )?,
                 ],
             )?,
             &Submenu::with_items(
                 app,
-                tx.sync_translate("global_menu_view_desktop"),
+                tx.sync_translate("global_menu_view_desktop", Substitution::None),
                 true,
                 &[
                     &MenuItem::with_id(
                         app,
                         HelpMenuAction::ResetZoom,
-                        tx.sync_translate("actual_size"),
+                        tx.sync_translate("actual_size", Substitution::None),
                         true,
                         None::<&str>,
                     )?,
                     &MenuItem::with_id(
                         app,
                         HelpMenuAction::ZoomIn,
-                        tx.sync_translate("menu_zoom_in"),
+                        tx.sync_translate("menu_zoom_in", Substitution::None),
                         true,
                         if cfg!(target_os = "macos") {
                             Some("Command++")
@@ -146,7 +149,7 @@ pub(crate) fn create_help_menu(
                     &MenuItem::with_id(
                         app,
                         HelpMenuAction::ZoomOut,
-                        tx.sync_translate("menu_zoom_out"),
+                        tx.sync_translate("menu_zoom_out", Substitution::None),
                         true,
                         if cfg!(target_os = "macos") {
                             Some("Command+-")
@@ -158,14 +161,17 @@ pub(crate) fn create_help_menu(
                     &CheckMenuItem::with_id(
                         app,
                         HelpMenuAction::FloatOnTop,
-                        tx.sync_translate("global_menu_view_floatontop_desktop"),
+                        tx.sync_translate(
+                            "global_menu_view_floatontop_desktop",
+                            Substitution::None,
+                        ),
                         true,
                         help_window.is_always_on_top()?,
                         None::<&str>,
                     )?,
                     &PredefinedMenuItem::fullscreen(
                         app,
-                        Some(&tx.sync_translate("toggle_fullscreen")),
+                        Some(&tx.sync_translate("toggle_fullscreen", Substitution::None)),
                     )?,
                 ],
             )?,

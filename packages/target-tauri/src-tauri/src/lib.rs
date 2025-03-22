@@ -199,7 +199,7 @@ pub fn run() {
             app.manage(HtmlEmailInstancesState::new());
             app.manage(MenuManager::new());
             app.manage(tauri::async_runtime::block_on(TranslationState::try_new(
-                app,
+                app.handle(),
             ))?);
             app.state::<AppState>()
                 .log_duration_since_startup("base setup done");

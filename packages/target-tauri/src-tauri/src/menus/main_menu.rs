@@ -16,6 +16,7 @@ use tauri::{
 };
 use tauri_plugin_opener::OpenerExt;
 use tauri_plugin_store::StoreExt;
+use translationfn::Substitution;
 
 use super::menu_action::{impl_menu_conversion, MenuAction};
 
@@ -161,34 +162,34 @@ pub(crate) fn create_main_menu<'a, 'b>(
     let quit = MenuItem::with_id(
         app,
         MainMenuAction::Quit,
-        tx.sync_translate("global_menu_file_quit_desktop"),
+        tx.sync_translate("global_menu_file_quit_desktop", Substitution::None),
         true,
         Some("CmdOrCtrl+Q"),
     )?;
     let settings = MenuItem::with_id(
         app,
         MainMenuAction::Settings,
-        tx.sync_translate("menu_settings"),
+        tx.sync_translate("menu_settings", Substitution::None),
         true,
         Some("CmdOrCtrl+,"),
     )?;
     let float_on_top = CheckMenuItem::with_id(
         app,
         MainMenuAction::FloatOnTop,
-        tx.sync_translate("global_menu_view_floatontop_desktop"),
+        tx.sync_translate("global_menu_view_floatontop_desktop", Substitution::None),
         true,
         main_window.is_always_on_top()?,
         None::<&str>,
     )?;
     let zoom_menu = Submenu::with_items(
         app,
-        tx.sync_translate("zoom"),
+        tx.sync_translate("zoom", Substitution::None),
         true,
         &[
             &CheckMenuItem::with_id(
                 app,
                 MainMenuAction::Zoom06,
-                tx.sync_translate("extra_small"),
+                tx.sync_translate("extra_small", Substitution::None),
                 true,
                 zoom_factor == 0.6,
                 None::<&str>,
@@ -196,7 +197,7 @@ pub(crate) fn create_main_menu<'a, 'b>(
             &CheckMenuItem::with_id(
                 app,
                 MainMenuAction::Zoom08,
-                format!("0.8x {}", tx.sync_translate("small")),
+                format!("0.8x {}", tx.sync_translate("small", Substitution::None)),
                 true,
                 zoom_factor == 0.8,
                 None::<&str>,
@@ -204,7 +205,7 @@ pub(crate) fn create_main_menu<'a, 'b>(
             &CheckMenuItem::with_id(
                 app,
                 MainMenuAction::Zoom10,
-                format!("1.0x {}", tx.sync_translate("normal")),
+                format!("1.0x {}", tx.sync_translate("normal", Substitution::None)),
                 true,
                 zoom_factor == 1.0,
                 None::<&str>,
@@ -212,7 +213,7 @@ pub(crate) fn create_main_menu<'a, 'b>(
             &CheckMenuItem::with_id(
                 app,
                 MainMenuAction::Zoom12,
-                format!("1.2x {}", tx.sync_translate("large")),
+                format!("1.2x {}", tx.sync_translate("large", Substitution::None)),
                 true,
                 zoom_factor == 1.2,
                 None::<&str>,
@@ -220,7 +221,10 @@ pub(crate) fn create_main_menu<'a, 'b>(
             &CheckMenuItem::with_id(
                 app,
                 MainMenuAction::Zoom14,
-                format!("1.4x {}", tx.sync_translate("extra_large")),
+                format!(
+                    "1.4x {}",
+                    tx.sync_translate("extra_large", Substitution::None)
+                ),
                 true,
                 zoom_factor == 1.4,
                 None::<&str>,
@@ -229,14 +233,17 @@ pub(crate) fn create_main_menu<'a, 'b>(
     )?;
     let developer_menu = Submenu::with_items(
         app,
-        tx.sync_translate("global_menu_view_developer_desktop"),
+        tx.sync_translate("global_menu_view_developer_desktop", Substitution::None),
         true,
         &[
             #[cfg(feature = "inspector_in_production")]
             &MenuItem::with_id(
                 app,
                 MainMenuAction::DevTools,
-                tx.sync_translate("global_menu_view_developer_tools_desktop"),
+                tx.sync_translate(
+                    "global_menu_view_developer_tools_desktop",
+                    Substitution::None,
+                ),
                 true,
                 if cfg!(target_os = "macos") {
                     Some("Alt+Command+I")
@@ -247,14 +254,17 @@ pub(crate) fn create_main_menu<'a, 'b>(
             &MenuItem::with_id(
                 app,
                 MainMenuAction::LogFolder,
-                tx.sync_translate("menu.view.developer.open.log.folder"),
+                tx.sync_translate("menu.view.developer.open.log.folder", Substitution::None),
                 true,
                 None::<&str>,
             )?,
             &MenuItem::with_id(
                 app,
                 MainMenuAction::CurrentLogFile,
-                tx.sync_translate("menu.view.developer.open.current.log.file"),
+                tx.sync_translate(
+                    "menu.view.developer.open.current.log.file",
+                    Substitution::None,
+                ),
                 true,
                 None::<&str>,
             )?,
@@ -266,48 +276,61 @@ pub(crate) fn create_main_menu<'a, 'b>(
         &[
             &Submenu::with_items(
                 app,
-                tx.sync_translate("global_menu_file_desktop"),
+                tx.sync_translate("global_menu_file_desktop", Substitution::None),
                 true,
                 &[&settings, &quit],
             )?,
             &Submenu::with_items(
                 app,
-                tx.sync_translate("global_menu_edit_desktop"),
+                tx.sync_translate("global_menu_edit_desktop", Substitution::None),
                 true,
                 &[
                     #[cfg(target_os = "macos")]
                     &PredefinedMenuItem::undo(
                         app,
-                        Some(&tx.sync_translate("global_menu_edit_undo_desktop")),
+                        Some(
+                            &tx.sync_translate("global_menu_edit_undo_desktop", Substitution::None),
+                        ),
                     )?,
                     #[cfg(target_os = "macos")]
                     &PredefinedMenuItem::redo(
                         app,
-                        Some(&tx.sync_translate("global_menu_edit_redo_desktop")),
+                        Some(
+                            &tx.sync_translate("global_menu_edit_redo_desktop", Substitution::None),
+                        ),
                     )?,
                     #[cfg(target_os = "macos")]
                     &PredefinedMenuItem::separator(app)?,
                     &PredefinedMenuItem::cut(
                         app,
-                        Some(&tx.sync_translate("global_menu_edit_cut_desktop")),
+                        Some(
+                            &tx.sync_translate("global_menu_edit_cut_desktop", Substitution::None),
+                        ),
                     )?,
                     &PredefinedMenuItem::copy(
                         app,
-                        Some(&tx.sync_translate("global_menu_edit_copy_desktop")),
+                        Some(
+                            &tx.sync_translate("global_menu_edit_copy_desktop", Substitution::None),
+                        ),
                     )?,
                     &PredefinedMenuItem::paste(
                         app,
-                        Some(&tx.sync_translate("global_menu_edit_paste_desktop")),
+                        Some(
+                            &tx.sync_translate(
+                                "global_menu_edit_paste_desktop",
+                                Substitution::None,
+                            ),
+                        ),
                     )?,
                     &PredefinedMenuItem::select_all(
                         app,
-                        Some(&tx.sync_translate("menu_select_all")),
+                        Some(&tx.sync_translate("menu_select_all", Substitution::None)),
                     )?,
                 ],
             )?,
             &Submenu::with_items(
                 app,
-                tx.sync_translate("global_menu_view_desktop"),
+                tx.sync_translate("global_menu_view_desktop", Substitution::None),
                 true,
                 &[
                     &float_on_top,
@@ -353,7 +376,7 @@ fn get_locales_menu(
 
     Submenu::with_items(
         app,
-        tx.sync_translate("pref_language"),
+        tx.sync_translate("pref_language", Substitution::None),
         true,
         &languages_items,
     )
@@ -366,49 +389,49 @@ pub(crate) fn get_help_menu(app: &AppHandle) -> anyhow::Result<Submenu<Wry>> {
     let help = MenuItem::with_id(
         app,
         MainMenuAction::Help,
-        tx.sync_translate("global_menu_help_desktop"),
+        tx.sync_translate("global_menu_help_desktop", Substitution::None),
         true,
         Some("F1"),
     )?;
     let keybindings = MenuItem::with_id(
         app,
         MainMenuAction::Keybindings,
-        tx.sync_translate("keybindings"),
+        tx.sync_translate("keybindings", Substitution::None),
         true,
         Some("CmdOrCtrl+/"),
     )?;
     let learn_more = MenuItem::with_id(
         app,
         MainMenuAction::Learn,
-        tx.sync_translate("learn_more"),
+        tx.sync_translate("learn_more", Substitution::None),
         true,
         None::<&str>,
     )?;
     let contribute = MenuItem::with_id(
         app,
         MainMenuAction::Contribute,
-        tx.sync_translate("contribute"),
+        tx.sync_translate("contribute", Substitution::None),
         true,
         None::<&str>,
     )?;
     let report_issue = MenuItem::with_id(
         app,
         MainMenuAction::Report,
-        tx.sync_translate("global_menu_help_report_desktop"),
+        tx.sync_translate("global_menu_help_report_desktop", Substitution::None),
         true,
         None::<&str>,
     )?;
     let about = MenuItem::with_id(
         app,
         MainMenuAction::About,
-        tx.sync_translate("global_menu_help_about_desktop"),
+        tx.sync_translate("global_menu_help_about_desktop", Substitution::None),
         true,
         None::<&str>,
     )?;
 
     Ok(Submenu::with_items(
         app,
-        tx.sync_translate("global_menu_help_desktop"),
+        tx.sync_translate("global_menu_help_desktop", Substitution::None),
         true,
         &[
             &help,

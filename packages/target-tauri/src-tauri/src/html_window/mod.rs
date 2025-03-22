@@ -10,6 +10,7 @@ use tauri::{
 use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_opener::OpenerExt;
 use tauri_plugin_store::StoreExt;
+use translationfn::Substitution;
 
 use crate::{
     html_window::{
@@ -173,10 +174,14 @@ pub(crate) async fn open_html_window(
                 let url2 = url.clone();
                 app_arc
                     .dialog()
-                    .message(
-                        format!("Punycode detected: {}", tx.sync_translate("puny_code_warning_question", /*"puny_code_decode_host(orginal_host_name)"*/)),
-                    )
-                    .title(tx.sync_translate("puny_code_warning_header"))
+                    .message(format!(
+                        "Punycode detected: {}",
+                        tx.sync_translate(
+                            "puny_code_warning_question",
+                            Substitution::String(vec![&puny_code_encode_host(orginal_host_name)])
+                        )
+                    ))
+                    .title(tx.sync_translate("puny_code_warning_header", Substitution::None))
                     .kind(tauri_plugin_dialog::MessageDialogKind::Warning)
                     .buttons(tauri_plugin_dialog::MessageDialogButtons::OkCancelCustom(
                         // Todo: use tx function here (Problems with Lifetime)
