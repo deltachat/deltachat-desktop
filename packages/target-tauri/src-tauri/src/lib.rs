@@ -92,7 +92,11 @@ pub fn run() {
     #[cfg(desktop)]
     {
         builder = builder
-            .plugin(tauri_plugin_window_state::Builder::new().build())
+            .plugin(
+                tauri_plugin_window_state::Builder::new()
+                    .with_filter(|label| !label.starts_with("webxdc:"))
+                    .build(),
+            )
             .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
                 // TODO: handle open url case
                 let _ = app
