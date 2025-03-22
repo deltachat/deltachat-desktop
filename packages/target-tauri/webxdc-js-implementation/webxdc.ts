@@ -239,7 +239,7 @@ class RealtimeListener implements RealtimeListenerType {
       element.multiple = filters.multiple || false
       const promise = new Promise<File[]>((resolve, _reject) => {
         element.onchange = _ev => {
-          console.log('element.files', element.files)
+          // console.log('element.files', element.files)
           const files = Array.from(element.files || [])
           document.body.removeChild(element)
           resolve(files)
@@ -248,7 +248,7 @@ class RealtimeListener implements RealtimeListenerType {
       element.style.display = 'none'
       document.body.appendChild(element)
       element.click()
-      console.log(element)
+      // console.log(element)
       return promise
     },
   }
