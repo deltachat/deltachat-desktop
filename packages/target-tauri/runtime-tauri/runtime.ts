@@ -1,7 +1,6 @@
 // This needs to be injected / imported before the frontend script
 
-import { invoke } from '@tauri-apps/api/core'
-import { listen } from '@tauri-apps/api/event'
+import { Channel, invoke } from '@tauri-apps/api/core'
 import { getCurrentWindow } from '@tauri-apps/api/window'
 
 import type { attachLogger } from '@tauri-apps/plugin-log'
@@ -32,18 +31,46 @@ import type { setLogHandler as setLogHandlerFunction } from '@deltachat-desktop/
 
 let logJsonrpcConnection = false
 
+type MainWindowEvents =
+  | {
+      event: 'sendToChat'
+      data: {
+        options: {
+          text: string | null | undefined
+          file: { fileName: string; fileContent: string } | null
+        }
+        account: number | null
+      }
+    }
+  | {
+      event: 'localeReloaded'
+      data: string
+    }
+  | {
+      event: 'showAboutDialog'
+    }
+  | {
+      event: 'showSettingsDialog'
+    }
+  | {
+      event: 'showKeybindingsDialog'
+    }
+
+const events = new Channel<MainWindowEvents>()
+const jsonrpc = new Channel<yerpc.Message>()
+invoke('set_main_window_channels', { jsonrpc, events })
+
 class TauriTransport extends yerpc.BaseTransport {
   constructor(private callCounterFunction: (label: string) => void) {
     super()
 
-    listen<yerpc.Message>('dc-jsonrpc-message', event => {
-      const message: yerpc.Message = event.payload
+    jsonrpc.onmessage = (message: yerpc.Message) => {
       if (logJsonrpcConnection) {
         /* ignore-console-log */
         console.debug('%c▼ %c[JSONRPC]', 'color: red', 'color:grey', message)
       }
       this._onmessage(message)
-    })
+    }
   }
   _send(message: yerpc.Message): void {
     const serialized = JSON.stringify(message)
@@ -265,42 +292,30 @@ class TauriRuntime implements Runtime {
     this.store = store
     this.currentLogFileLocation = await invoke('get_current_logfile')
 
-    listen<string>('locale_reloaded', event => {
-      this.onChooseLanguage?.(event.payload)
-    })
-
-    listen<string>('showAboutDialog', () => {
-      this.onShowDialog?.('about')
-    })
-    listen<string>('showSettingsDialog', () => {
-      this.onShowDialog?.('settings')
-    })
-    listen<string>('showKeybindingsDialog', () => {
-      this.onShowDialog?.('keybindings')
-    })
-
-    type sendToChatArguments = {
-      options: {
-        text: string | null | undefined
-        file: { fileName: string; fileContent: string } | null
-      }
-      account: number | null
-    }
-
-    listen<sendToChatArguments>('event_webxdc_send_to_chat', event => {
+    events.onmessage = event => {
       console.log({ event })
-      const { options, account } = event.payload
-      this.onWebxdcSendToChat?.(
-        options.file
-          ? {
-              file_name: options.file.fileName,
-              file_content: options.file.fileContent,
-            }
-          : null,
-        options.text || null,
-        account || undefined
-      )
-    })
+      if (event.event === 'sendToChat') {
+        const { options, account } = event.data
+        this.onWebxdcSendToChat?.(
+          options.file
+            ? {
+                file_name: options.file.fileName,
+                file_content: options.file.fileContent,
+              }
+            : null,
+          options.text || null,
+          account || undefined
+        )
+      } else if (event.event === 'localeReloaded') {
+        this.onChooseLanguage?.(event.data)
+      } else if (event.event === 'showAboutDialog') {
+        this.onShowDialog?.('about')
+      } else if (event.event === 'showSettingsDialog') {
+        this.onShowDialog?.('settings')
+      } else if (event.event === 'showKeybindingsDialog') {
+        this.onShowDialog?.('keybindings')
+      }
+    }
   }
   reloadWebContent(): void {
     // for now use the browser method as long as it is sufficient
