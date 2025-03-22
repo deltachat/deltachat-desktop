@@ -293,7 +293,6 @@ class TauriRuntime implements Runtime {
     this.currentLogFileLocation = await invoke('get_current_logfile')
 
     events.onmessage = event => {
-      console.log({ event })
       if (event.event === 'sendToChat') {
         const { options, account } = event.data
         this.onWebxdcSendToChat?.(
