@@ -1,11 +1,87 @@
-use std::str;
+use std::{collections::HashMap, str};
 
 use anyhow::{anyhow, Context};
 use log::{error, trace};
 use serde_json::Value;
-use tauri::{Manager, UriSchemeContext, UriSchemeResponder};
+use tauri::{
+    utils::config::{Csp, CspDirectiveSources},
+    Manager, UriSchemeContext, UriSchemeResponder,
+};
 
-use crate::{state::webxdc_instances::WebxdcInstance, DeltaChatAppState, WebxdcInstancesState};
+use crate::{
+    state::webxdc_instances::WebxdcInstance,
+    util::csp::add_custom_schemes_to_csp_for_window_and_android, DeltaChatAppState,
+    WebxdcInstancesState,
+};
+
+use once_cell::sync::Lazy;
+
+static CSP: Lazy<String> = Lazy::new(|| {
+    let mut m: HashMap<String, _> = HashMap::new();
+    m.insert(
+        "default-src".to_owned(),
+        CspDirectiveSources::List(vec!["'self'".to_owned(), "webxdc:".to_owned()]),
+    );
+    m.insert(
+        "style-src".to_string(),
+        CspDirectiveSources::List(vec![
+            "'self'".to_owned(),
+            "'unsafe-inline'".to_owned(),
+            "blob:".to_owned(),
+        ]),
+    );
+    m.insert(
+        "font-src".to_string(),
+        CspDirectiveSources::List(vec![
+            "'self'".to_owned(),
+            "data:".to_owned(),
+            "blob:".to_owned(),
+        ]),
+    );
+    m.insert(
+        "script-src".to_string(),
+        CspDirectiveSources::List(vec![
+            "'self'".to_owned(),
+            "'unsafe-inline'".to_owned(),
+            "'unsafe-eval'".to_owned(),
+            "blob:".to_owned(),
+        ]),
+    );
+    m.insert(
+        "connect-src".to_string(),
+        CspDirectiveSources::List(vec![
+            "'self'".to_owned(),
+            "ipc:".to_owned(),
+            "data:".to_owned(),
+            "blob:".to_owned(),
+        ]),
+    );
+    m.insert(
+        "img-src".to_string(),
+        CspDirectiveSources::List(vec![
+            "'self'".to_owned(),
+            "data:".to_owned(),
+            "blob:".to_owned(),
+        ]),
+    );
+    m.insert(
+        "media-src".to_string(),
+        CspDirectiveSources::List(vec![
+            "'self'".to_owned(),
+            "data:".to_owned(),
+            "blob:".to_owned(),
+        ]),
+    );
+    // CSP “WEBRTC: block” directive is specified, but not yet implemented by browsers
+    // - see https://delta.chat/en/2023-05-22-webxdc-security#browsers-please-implement-the-w3c-webrtc-block-directive
+    m.insert(
+        "webrtc".to_string(),
+        CspDirectiveSources::List(vec!["'block'".to_owned()]),
+    );
+
+    let csp = Csp::DirectiveMap(m);
+    add_custom_schemes_to_csp_for_window_and_android(csp, false).to_string()
+});
 
 pub(crate) fn webxdc_protocol<R: tauri::Runtime>(
     ctx: UriSchemeContext<'_, R>,
@@ -81,11 +157,13 @@ pub(crate) fn webxdc_protocol<R: tauri::Runtime>(
 
                 Ok(http::Response::builder()
                     .status(http::StatusCode::OK)
+                    .header(http::header::CONTENT_SECURITY_POLICY, CSP.as_str())
                     .body(webxdc_js.into_bytes())?)
             } else {
                 Ok(match message.get_webxdc_blob(&account, path).await {
                     Ok(blob) => http::Response::builder()
                         .status(http::StatusCode::OK)
+                        .header(http::header::CONTENT_SECURITY_POLICY, CSP.as_str())
                         .header(
                             http::header::CONTENT_TYPE,
                             mime_guess::from_path(path)
@@ -97,6 +175,7 @@ pub(crate) fn webxdc_protocol<R: tauri::Runtime>(
                         error!("get_webxdc_blob: {err:#}");
                         http::Response::builder()
                             .status(http::StatusCode::NOT_FOUND)
+                            .header(http::header::CONTENT_SECURITY_POLICY, CSP.as_str())
                             .header(http::header::CONTENT_TYPE, mime::TEXT_PLAIN.essence_str())
                             .body("404 not found".as_bytes().to_vec())?
                     }
@@ -111,6 +190,7 @@ pub(crate) fn webxdc_protocol<R: tauri::Runtime>(
                     http::Response::builder()
                         .status(http::StatusCode::INTERNAL_SERVER_ERROR)
                         .header(http::header::CONTENT_TYPE, mime::TEXT_PLAIN.essence_str())
+                        .header(http::header::CONTENT_SECURITY_POLICY, CSP.as_str())
                         .body("Error".as_bytes().to_owned())
                         .unwrap(),
                 );
