@@ -46,8 +46,7 @@ class TauriTransport extends yerpc.BaseTransport {
     })
   }
   _send(message: yerpc.Message): void {
-    const serialized = JSON.stringify(message)
-    invoke('deltachat_jsonrpc_request', { message: serialized })
+    invoke('deltachat_jsonrpc_request', { message })
     if (logJsonrpcConnection) {
       /* ignore-console-log */
       console.debug('%c▲ %c[JSONRPC]', 'color: green', 'color:grey', message)
