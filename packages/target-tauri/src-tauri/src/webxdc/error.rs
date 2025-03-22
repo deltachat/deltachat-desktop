@@ -22,6 +22,8 @@ pub(crate) enum Error {
     Anyhow(anyhow::Error),
     #[error("channel not initialized yet")]
     ChannelNotInitializedYet,
+    #[error("instance exists, but window missing")]
+    InstanceExistsButWindowMissing,
 }
 
 impl serde::Serialize for Error {

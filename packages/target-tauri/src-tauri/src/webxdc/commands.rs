@@ -241,21 +241,31 @@ pub(crate) async fn open_webxdc<'a>(
 
     #[cfg(not(any(target_os = "ios", target_os = "android")))]
     {
-        if let Some(window) = app.get_window(&window_id) {
-            // window already exists focus it - android and iOS don't have have the function
-            // and those platforms also don't have multiple windows
-            window.show()?;
+        if let Some((window_label, _instance)) = webxdc_instances
+            .get_webxdc_for_instance(account_id, message_id)
+            .await
+        {
+            if let Some(window) = app.get_window(&window_label) {
+                // window already exists focus it - android and iOS don't have have the function
+                // and those platforms also don't have multiple windows
+                window.show()?;
 
-            if !href.is_empty() {
-                window
-                    .webviews()
-                    .first()
-                    .context("did not find webview, this should not happen, contact devs")
-                    .map_err(Error::Anyhow)?
-                    .navigate(href_to_webxdc_url(href)?)?;
+                if !href.is_empty() {
+                    window
+                        .webviews()
+                        .first()
+                        .context("did not find webview, this should not happen, contact devs")
+                        .map_err(Error::Anyhow)?
+                        .navigate(href_to_webxdc_url(href)?)?;
+                }
+
+                return Ok(());
+            } else {
+                // this case should never happen, this is an attempt to autorecover in production
+                warn!("instance exists, but window missing, we now remove the instance as workaround so the next open will work again");
+                webxdc_instances.remove(&window_label).await;
+                return Err(Error::InstanceExistsButWindowMissing);
             }
-
-            return Ok(());
         }
     }
 
