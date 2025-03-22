@@ -37,11 +37,10 @@ pub enum MainWindowEvents {
 
 pub(crate) struct InnerMainWindowChannelsState {
     pub(crate) events: Channel<MainWindowEvents>,
-    // extra channel for jsonrpc in hope that it will be a tiny bit faster
-    // without an extra if statement in frontend
     pub(crate) jsonrpc: Channel<deltachat_jsonrpc::yerpc::Message>,
 }
 
+/// Channels to communicate with the front-end's Runtime class (see `runtime.ts`).
 pub(crate) struct MainWindowChannels {
     inner: Arc<RwLock<Option<InnerMainWindowChannelsState>>>,
 }
@@ -53,6 +52,10 @@ impl MainWindowChannels {
         }
     }
 
+    /// Makes this struct's methods direct all data to the specified channels.
+    ///
+    /// This method is supposed to be called when the front-end `Runtime` class
+    /// gets initialized.
     async fn set(
         &self,
         events: Channel<MainWindowEvents>,
@@ -112,6 +115,8 @@ impl MainWindowChannels {
     }
 }
 
+/// Makes the back-end send JSON-RCP responses and some other events
+/// to the channels specified in this command's arguments.
 #[tauri::command]
 pub async fn set_main_window_channels(
     window: WebviewWindow,

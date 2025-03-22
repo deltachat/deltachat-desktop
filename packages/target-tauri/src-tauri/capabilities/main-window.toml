@@ -6,6 +6,10 @@ permissions = [
     "log:allow-log",
     # list of core permissions can be found under https://github.com/tauri-apps/tauri/tree/dev/crates/tauri/permissions
     # or when running `pnpm tauri permission list`
+    # Apparently channels are supposed to be always allowed,
+    # but they aren't, so we have to add this line to be able to use channels.
+    # See https://github.com/tauri-apps/tauri/pull/13032.
+    # TODO remove this after Tauri upgrade.
     "core:__TAURI_CHANNEL__:allow-fetch",
     "clipboard-manager:allow-read-text",
     "clipboard-manager:allow-write-image",
