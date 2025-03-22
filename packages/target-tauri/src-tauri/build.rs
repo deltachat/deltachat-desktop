@@ -31,6 +31,7 @@ fn main() {
             // to `invoke_handler()` in `lib.rs`, and to `permissions`
             // in `capabilities`.
             "greet",
+            "set_main_window_channels",
             "deltachat_jsonrpc_request",
             "ui_ready",
             "ui_frontend_ready",

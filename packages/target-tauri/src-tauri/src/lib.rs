@@ -7,8 +7,8 @@ use menus::{handle_menu_event, main_menu::create_main_menu};
 use settings::load_and_apply_desktop_settings_on_startup;
 use state::{
     app::AppState, deltachat::DeltaChatAppState, html_email_instances::HtmlEmailInstancesState,
-    menu_manager::MenuManager, translations::TranslationState,
-    webxdc_instances::WebxdcInstancesState,
+    main_window_channels::MainWindowChannels, menu_manager::MenuManager,
+    translations::TranslationState, webxdc_instances::WebxdcInstancesState,
 };
 use tauri::Manager;
 use util::csp::add_custom_schemes_to_csp_for_window_and_android;
@@ -23,7 +23,6 @@ mod i18n;
 mod menus;
 mod runtime_capabilities;
 mod runtime_info;
-mod send_to_chat;
 mod settings;
 mod state;
 mod stickers;
@@ -112,6 +111,7 @@ pub fn run() {
             // to `.commands()` in `build.rs`, and to `permissions`
             // in `capabilities`.
             greet,
+            state::main_window_channels::set_main_window_channels,
             deltachat_jsonrpc_request,
             ui_ready,
             ui_frontend_ready,
@@ -227,6 +227,7 @@ pub fn run() {
                 app,
             ))?);
             app.manage(WebxdcInstancesState::new());
+            app.manage(MainWindowChannels::new());
             app.state::<AppState>()
                 .log_duration_since_startup("base setup done");
 

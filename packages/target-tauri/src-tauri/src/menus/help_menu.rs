@@ -26,7 +26,7 @@ pub(crate) enum HelpMenuAction {
 super::menu_action::impl_menu_conversion!(HelpMenuAction);
 
 impl MenuAction<'static> for HelpMenuAction {
-    fn execute(self, app: &AppHandle) -> anyhow::Result<()> {
+    async fn execute(self, app: &AppHandle) -> anyhow::Result<()> {
         let help_window = app
             .get_webview_window("help")
             .context("help window not found")?;

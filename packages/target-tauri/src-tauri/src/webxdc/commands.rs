@@ -18,9 +18,9 @@ use uuid::Uuid;
 
 use crate::{
     menus::webxdc_menu::create_webxdc_window_menu,
-    send_to_chat::{send_to_chat, SendToChatOptions},
     settings::get_content_protection,
     state::{
+        main_window_channels::{self, SendToChatOptions},
         menu_manager::MenuManager,
         webxdc_instances::{WebxdcInstance, WebxdcInstancesState},
     },
@@ -28,7 +28,7 @@ use crate::{
     webxdc::data_storage::{
         delete_webxdc_data_for_account, delete_webxdc_data_for_instance, set_data_store,
     },
-    DeltaChatAppState,
+    DeltaChatAppState, MainWindowChannels,
 };
 
 use super::error::Error;
@@ -561,6 +561,7 @@ pub(crate) async fn send_webxdc_realtime_data<'a>(
 pub(crate) async fn webxdc_send_to_chat(
     window: WebviewWindow,
     webxdc_instances: State<'_, WebxdcInstancesState>,
+    main_window_channels: State<'_, MainWindowChannels>,
     options: SendToChatOptions,
 ) -> Result<(), Error> {
     let WebxdcInstance { account_id, .. } =
@@ -571,7 +572,8 @@ pub(crate) async fn webxdc_send_to_chat(
                 window.label().to_owned(),
             ))?;
 
-    send_to_chat(window.app_handle(), options, Some(account_id))
+    main_window_channels
+        .send_to_chat(window.app_handle(), options, Some(account_id))
         .await
         .map_err(Error::Anyhow)?;
     Ok(())
