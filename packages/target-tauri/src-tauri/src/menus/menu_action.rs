@@ -1,7 +1,7 @@
 use tauri::{menu::MenuId, AppHandle};
 
 pub trait MenuAction<'a>: TryFrom<&'a MenuId> + Into<MenuId> {
-    fn execute(self, app: &AppHandle) -> anyhow::Result<()>;
+    async fn execute(self, app: &AppHandle) -> anyhow::Result<()>;
 }
 
 macro_rules! impl_menu_conversion {

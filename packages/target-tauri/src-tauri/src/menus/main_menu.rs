@@ -3,8 +3,8 @@ use std::str::FromStr;
 use crate::{
     help_window::open_help_window,
     settings::{apply_zoom_factor, CONFIG_FILE, LOCALE_KEY, ZOOM_FACTOR_KEY},
-    state::menu_manager::MenuManager,
-    AppState, TranslationState,
+    state::{main_window_channels::MainWindowEvents, menu_manager::MenuManager},
+    AppState, MainWindowChannels, TranslationState,
 };
 use anyhow::Context;
 use log::error;
@@ -45,15 +45,18 @@ pub(crate) enum MainMenuAction {
 impl_menu_conversion!(MainMenuAction);
 
 impl MenuAction<'static> for MainMenuAction {
-    fn execute(self, app: &AppHandle) -> anyhow::Result<()> {
+    async fn execute(self, app: &AppHandle) -> anyhow::Result<()> {
         let main_window = app
             .get_webview_window("main")
             .context("main window not found")?;
         let menu_manager = app.state::<MenuManager>();
+        let channels = app.state::<MainWindowChannels>();
 
         match self {
             MainMenuAction::Settings => {
-                app.emit("showSettingsDialog", None::<String>)?;
+                channels
+                    .emit_event(MainWindowEvents::ShowSettingsDialog)
+                    .await?;
             }
             MainMenuAction::Help => {
                 let app_clone = app.clone();
@@ -117,7 +120,9 @@ impl MenuAction<'static> for MainMenuAction {
                 app.opener().open_path(path, None::<String>)?;
             }
             MainMenuAction::Keybindings => {
-                app.emit("showKeybindingsDialog", None::<String>)?;
+                channels
+                    .emit_event(MainWindowEvents::ShowKeybindingsDialog)
+                    .await?;
             }
             MainMenuAction::Contribute => {
                 app.opener().open_url(
@@ -136,7 +141,9 @@ impl MenuAction<'static> for MainMenuAction {
                     .open_url("https://delta.chat", None::<String>)?;
             }
             MainMenuAction::About => {
-                app.emit("showAboutDialog", None::<String>)?;
+                channels
+                    .emit_event(MainWindowEvents::ShowAboutDialog)
+                    .await?;
             }
         }
         Ok(())

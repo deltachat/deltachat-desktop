@@ -69,7 +69,7 @@ impl From<HtmlWindowMenuAction> for tauri::menu::MenuId {
 }
 
 impl MenuAction<'static> for HtmlWindowMenuAction {
-    fn execute(self, app: &AppHandle) -> anyhow::Result<()> {
+    async fn execute(self, app: &AppHandle) -> anyhow::Result<()> {
         let win = app
             .get_window(&self.window_id)
             .context("window not found")?;

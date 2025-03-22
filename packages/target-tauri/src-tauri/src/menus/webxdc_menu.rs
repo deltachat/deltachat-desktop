@@ -77,7 +77,7 @@ impl From<WebxdcMenuAction> for tauri::menu::MenuId {
 }
 
 impl MenuAction<'static> for WebxdcMenuAction {
-    fn execute(self, app: &AppHandle) -> anyhow::Result<()> {
+    async fn execute(self, app: &AppHandle) -> anyhow::Result<()> {
         let win = app
             .get_window(&self.window_id)
             .context("window not found")?;

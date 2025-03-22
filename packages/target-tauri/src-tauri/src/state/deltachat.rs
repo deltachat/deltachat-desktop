@@ -6,9 +6,11 @@ use deltachat_jsonrpc::{
     yerpc::{RpcClient, RpcSession},
 };
 use futures_lite::stream::StreamExt;
-use log::info;
+use log::{error, info};
 use tauri::{async_runtime::JoinHandle, Emitter, EventTarget, Manager};
 use tokio::sync::RwLock;
+
+use crate::MainWindowChannels;
 
 pub(crate) struct DeltaChatAppState {
     pub(crate) deltachat: Arc<RwLock<Accounts>>,
@@ -41,7 +43,11 @@ impl DeltaChatAppState {
                     Some(message) => message,
                 };
                 // TODO fail will drop out of loop, do we want that here? or do we just want to log and ignore the error
-                handle.emit_to(EventTarget::labeled("main"), "dc-jsonrpc-message", &message)?;
+
+                let state = handle.state::<MainWindowChannels>();
+                if let Err(err) = state.send_jsonrpc_response(message).await {
+                    error!("send_jsonrpc_response failed: {err}");
+                }
             }
             Ok(())
         });
