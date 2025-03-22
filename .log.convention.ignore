@@ -20,6 +20,8 @@ test/
 *.html
 *.yaml
 
+packages/e2e-tests/
+
 packages/target-electron/tests/
 packages/target-electron/static/
 packages/target-electron/build/

@@ -1,21 +1,11 @@
-import { expect, Locator, Page } from '@playwright/test'
+import { expect, Page } from '@playwright/test'
 
 const chatmailServer = 'https://ci-chatmail.testrun.org'
-
-type LocatorWithSelector = Locator & {
-  _selector: string
-}
 
 export type User = {
   name: string
   id: string
   address: string
-}
-
-function _hasSelector(
-  arg: Locator | LocatorWithSelector
-): arg is LocatorWithSelector {
-  return '_selector' in arg
 }
 
 export async function switchToProfile(
@@ -33,38 +23,26 @@ export async function switchToProfile(
 export async function createUser(
   userName: string,
   page: Page,
-  existingProfiles: User[]
+  existingProfiles: User[],
+  isFirstOnboarding: boolean
 ): Promise<User> {
-  const user = await createNewProfile(page, userName)
+  const user = await createNewProfile(page, userName, isFirstOnboarding)
 
   expect(user.id).toBeDefined()
 
   existingProfiles.push(user)
-  /* ignore-console-log */
   console.log(`User ${user.name} wurde angelegt!`, user)
   return user
 }
 
 export async function createNewProfile(
   page: Page,
-  name: string
+  name: string,
+  isFirstOnboarding: boolean
 ): Promise<User> {
   await page.waitForSelector('.styles_module_account')
   const accountList = page.locator('.styles_module_account')
 
-  let isFirstOnboarding = false
-  const numberOfAccounts = await accountList.count()
-
-  if (numberOfAccounts === 1) {
-    const accountClassNames = await accountList.first().getAttribute('class')
-    // on first onboarding an account is created but it's unconfigured
-    if (
-      accountClassNames &&
-      accountClassNames.indexOf('unconfigured-account') > -1
-    ) {
-      isFirstOnboarding = true
-    }
-  }
   if (!isFirstOnboarding) {
     // add account to show onboarding screen
     await page.getByTestId('add-account-button').click()
@@ -156,10 +134,15 @@ export async function getProfile(page: Page, accountId: string): Promise<User> {
 export async function loadExistingProfiles(page: Page): Promise<User[]> {
   // await page.goto('https://localhost:3000/')
   const existingProfiles: User[] = []
+  page.waitForSelector('.main-container')
   expect(page.locator('.main-container')).toBeVisible()
+  // TODO: the next waitFor calls are needed when loading existing profiles
+  // and skipping the createProfiles step, but will never succeed if there
+  // are no profiles yet
+  await page.waitForSelector('button.styles_module_account')
+  await page.waitForSelector('button.styles_module_account[aria-busy=false]')
   const accountList = page.locator('button.styles_module_account')
   const existingAccountItems = await accountList.count()
-  /* ignore-console-log */
   console.log('existingAccountItems', existingAccountItems)
   if (existingAccountItems > 0) {
     if (existingAccountItems === 1) {
@@ -176,6 +159,7 @@ export async function loadExistingProfiles(page: Page): Promise<User[]> {
     for (let i = 0; i < existingAccountItems; i++) {
       const account = accountList.nth(i)
       const id = await account.getAttribute('x-account-sidebar-account-id')
+      console.log(`Found account ${id}`)
       if (id) {
         const p = await getProfile(page, id)
         existingProfiles.push(p)

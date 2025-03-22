@@ -136,10 +136,11 @@ export default function AccountItem({
       label: tx('menu_settings'),
       action: async () => {
         await onSelectAccount(accountId)
-        // set Timeout forces it to be run after react update
         setTimeout(() => {
+          // set Timeout forces it to be run after react update
+          // without the small delay the app crashed randomly in the e2e tests
           ActionEmitter.emitAction(KeybindAction.Settings_Open)
-        }, 0)
+        }, 100)
       },
       dataTestid: 'open-settings-menu-item',
     },
