@@ -160,58 +160,63 @@ pub(crate) async fn open_html_window(
             return true;
         }
 
-        if let Some(orginal_host_name) = url.host_str() {
-            info!("{orginal_host_name}");
-            if puny_code_encode_host(orginal_host_name) != puny_code_decode_host(orginal_host_name)
-            {
-                info!(
-                    "{orginal_host_name} -- {}:{}",
-                    puny_code_encode_host(orginal_host_name),
-                    puny_code_decode_host(orginal_host_name)
-                );
-                let app_arc2 = app_arc.clone();
-                let url2 = url.clone();
-                app_arc
-                    .dialog()
-                    .message(
-                        format!("Punycode detected: {}", tx.sync_translate("puny_code_warning_question", /*"puny_code_decode_host(orginal_host_name)"*/)),
-                    )
-                    .title(tx.sync_translate("puny_code_warning_header"))
-                    .kind(tauri_plugin_dialog::MessageDialogKind::Warning)
-                    .buttons(tauri_plugin_dialog::MessageDialogButtons::OkCancelCustom(
-                        // Todo: use tx function here (Problems with Lifetime)
-                        "Continue".to_owned(),
-                        "cancel".to_owned(),
-                    ))
-                    .show(move |ok| {
-                        if ok {
-                            if let Err(error) =
-                                app_arc2.opener().open_url(url2.to_string(), None::<&str>)
-                            {
-                                error!("Failed to open Link: {error:?}");
-                                app_arc2
-                                    .dialog()
-                                    .message("Failed to open Link: {url2}\n{error:?}")
-                                    .show(|_| {});
-                            }
-                        }
-                    });
+        let orginal_host_name = match url.host_str() {
+            None => {
+                warn!("link url has no host");
                 return false;
             }
+            Some(h) => h,
+        };
 
-            // prevent navigation - open in system browser instead
-            if let Err(error) = app_arc.opener().open_url(url.to_string(), None::<&str>) {
-                error!("Failed to open Link: {error:?}");
-                app_arc
-                    .dialog()
-                    .message("Failed to open Link: {url}\n{error:?}")
-                    .show(|_| {});
-            }
-            false
-        } else {
-            warn!("link url has no host");
-            false
+        info!("{orginal_host_name}");
+        if puny_code_encode_host(orginal_host_name) != puny_code_decode_host(orginal_host_name) {
+            info!(
+                "{orginal_host_name} -- {}:{}",
+                puny_code_encode_host(orginal_host_name),
+                puny_code_decode_host(orginal_host_name)
+            );
+            let app_arc2 = app_arc.clone();
+            let url2 = url.clone();
+            app_arc
+                .dialog()
+                .message(format!(
+                    "Punycode detected: {}",
+                    tx.sync_translate(
+                        "puny_code_warning_question", /*"puny_code_decode_host(orginal_host_name)"*/
+                    )
+                ))
+                .title(tx.sync_translate("puny_code_warning_header"))
+                .kind(tauri_plugin_dialog::MessageDialogKind::Warning)
+                .buttons(tauri_plugin_dialog::MessageDialogButtons::OkCancelCustom(
+                    // Todo: use tx function here (Problems with Lifetime)
+                    "Continue".to_owned(),
+                    "cancel".to_owned(),
+                ))
+                .show(move |ok| {
+                    if ok {
+                        if let Err(error) =
+                            app_arc2.opener().open_url(url2.to_string(), None::<&str>)
+                        {
+                            error!("Failed to open Link: {error:?}");
+                            app_arc2
+                                .dialog()
+                                .message("Failed to open Link: {url2}\n{error:?}")
+                                .show(|_| {});
+                        }
+                    }
+                });
+            return false;
         }
+
+        // prevent navigation - open in system browser instead
+        if let Err(error) = app_arc.opener().open_url(url.to_string(), None::<&str>) {
+            error!("Failed to open Link: {error:?}");
+            app_arc
+                .dialog()
+                .message("Failed to open Link: {url}\n{error:?}")
+                .show(|_| {});
+        }
+        false
     });
 
     // enable incognito mode, so html email gets different browsing context.
