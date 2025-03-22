@@ -80,6 +80,7 @@
     .emoji-button {
       height: 40px;
       padding: 0px 3px;
+      margin-inline-end: 5px;
       &:focus:not(:focus-visible) {
         outline: none;
       }
