@@ -6,6 +6,7 @@ use tauri::{
 };
 use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_store::StoreExt;
+use translationfn::Substitution;
 
 use crate::{
     settings::{
@@ -58,7 +59,7 @@ pub(crate) async fn html_email_set_load_remote_content(
         let (tx, rx) = tokio::sync::oneshot::channel::<bool>();
 
         app.dialog()
-            .message(tl.sync_translate("load_remote_content_ask"))
+            .message(tl.sync_translate("load_remote_content_ask", Substitution::None))
             .parent(&webview.window())
             .buttons(tauri_plugin_dialog::MessageDialogButtons::OkCancel)
             .show(|answer| tx.send(answer).unwrap());
@@ -90,14 +91,14 @@ pub(crate) fn html_email_open_menu(
 
     let always_load_remote_images = CheckMenuItem::new(
         &app,
-        tx.sync_translate("always_load_remote_images"),
+        tx.sync_translate("always_load_remote_images", Substitution::None),
         true,
         always_load,
         None::<&str>,
     )?;
     let show_warning = CheckMenuItem::new(
         &app,
-        tx.sync_translate("show_warning"),
+        tx.sync_translate("show_warning", Substitution::None),
         true,
         warning,
         None::<&str>,
@@ -155,9 +156,9 @@ pub(crate) fn get_html_window_info(
         block_on(html_instances_state.get(&label)).ok_or(Error::WindowNotFoundInState)?;
 
     let network_button_label_text = if instance.blocked_by_proxy {
-        tx.sync_translate("load_remote_content_blocked_by_proxy")
+        tx.sync_translate("load_remote_content_blocked_by_proxy", Substitution::None)
     } else {
-        tx.sync_translate("load_remote_content")
+        tx.sync_translate("load_remote_content", Substitution::None)
     };
 
     Ok(HtmlEmailInfo {

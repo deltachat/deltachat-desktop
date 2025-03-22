@@ -4,6 +4,7 @@ use anyhow::Context;
 use log::{error, warn};
 use tauri::{Manager, State, WebviewWindow};
 use tauri_plugin_store::StoreExt;
+use translationfn::Substitution;
 
 use crate::{
     settings::{apply_content_protection, apply_zoom_factor_help_window, LOCALE_KEY},
@@ -105,8 +106,8 @@ pub(crate) async fn open_help_window(
     #[cfg(desktop)]
     help_window.set_title(&format!(
         "{} - {}",
-        tx.sync_translate("app_name"),
-        tx.sync_translate("menu_help"),
+        tx.sync_translate("app_name", Substitution::None),
+        tx.sync_translate("menu_help", Substitution::None),
     ))?;
 
     let _ = apply_content_protection(&app);

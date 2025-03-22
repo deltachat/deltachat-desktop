@@ -18,6 +18,7 @@ use tauri_plugin_clipboard_manager::ClipboardExt;
 use tauri_plugin_dialog::{DialogExt, MessageDialogButtons};
 use tauri_plugin_opener::OpenerExt;
 use tauri_plugin_store::StoreExt;
+use translationfn::Substitution;
 
 #[derive(Debug, PartialEq, Eq)]
 pub(crate) struct WebxdcMenuAction {
@@ -152,13 +153,17 @@ impl MenuAction<'static> for WebxdcMenuAction {
                         let mut dialog_builder = app
                             .dialog()
                             .message(
-                                tx.translate("ask_copy_unopenable_link_to_clipboard")
-                                    .await
-                                    .replace("%1$d", &source_code_url),
+                                tx.translate(
+                                    "ask_copy_unopenable_link_to_clipboard",
+                                    Substitution::None,
+                                )
+                                .await
+                                .replace("%1$d", &source_code_url),
                             )
                             .buttons(MessageDialogButtons::OkCancelCustom(
-                                tx.translate("menu_copy_link_to_clipboard").await,
-                                tx.translate("no").await,
+                                tx.translate("menu_copy_link_to_clipboard", Substitution::None)
+                                    .await,
+                                tx.translate("no", Substitution::None).await,
                             ));
                         #[cfg(desktop)]
                         {
@@ -205,7 +210,7 @@ pub(crate) fn create_webxdc_window_menu(
     let quit = MenuItem::with_id(
         app,
         action(WebxdcMenuActionVariant::QuitApp),
-        tx.sync_translate("global_menu_file_quit_desktop"),
+        tx.sync_translate("global_menu_file_quit_desktop", Substitution::None),
         true,
         Some("CmdOrCtrl+Q"),
     )?;
@@ -213,7 +218,7 @@ pub(crate) fn create_webxdc_window_menu(
     let source_code = IconMenuItem::with_id(
         app,
         action(WebxdcMenuActionVariant::WebxdcSourceCode),
-        tx.sync_translate("source_code"),
+        tx.sync_translate("source_code", Substitution::None),
         true,
         icon,
         None::<&str>,
@@ -232,13 +237,13 @@ pub(crate) fn create_webxdc_window_menu(
             )?,
             &Submenu::with_items(
                 app,
-                tx.sync_translate("global_menu_file_desktop"),
+                tx.sync_translate("global_menu_file_desktop", Substitution::None),
                 true,
                 &[
                     &MenuItem::with_id(
                         app,
                         action(WebxdcMenuActionVariant::CloseWindow),
-                        tx.sync_translate("close_window"),
+                        tx.sync_translate("close_window", Substitution::None),
                         true,
                         Some("CmdOrCtrl+W"),
                     )?,
@@ -249,7 +254,7 @@ pub(crate) fn create_webxdc_window_menu(
             )?,
             &Submenu::with_items(
                 app,
-                tx.sync_translate("global_menu_edit_desktop"),
+                tx.sync_translate("global_menu_edit_desktop", Substitution::None),
                 true,
                 &[
                     #[cfg(target_os = "macos")]
@@ -266,38 +271,47 @@ pub(crate) fn create_webxdc_window_menu(
                     &PredefinedMenuItem::separator(app)?,
                     &PredefinedMenuItem::cut(
                         app,
-                        Some(&tx.sync_translate("global_menu_edit_cut_desktop")),
+                        Some(
+                            &tx.sync_translate("global_menu_edit_cut_desktop", Substitution::None),
+                        ),
                     )?,
                     &PredefinedMenuItem::copy(
                         app,
-                        Some(&tx.sync_translate("global_menu_edit_copy_desktop")),
+                        Some(
+                            &tx.sync_translate("global_menu_edit_copy_desktop", Substitution::None),
+                        ),
                     )?,
                     &PredefinedMenuItem::paste(
                         app,
-                        Some(&tx.sync_translate("global_menu_edit_paste_desktop")),
+                        Some(
+                            &tx.sync_translate(
+                                "global_menu_edit_paste_desktop",
+                                Substitution::None,
+                            ),
+                        ),
                     )?,
                     &PredefinedMenuItem::select_all(
                         app,
-                        Some(&tx.sync_translate("menu_select_all")),
+                        Some(&tx.sync_translate("menu_select_all", Substitution::None)),
                     )?,
                 ],
             )?,
             &Submenu::with_items(
                 app,
-                tx.sync_translate("global_menu_view_desktop"),
+                tx.sync_translate("global_menu_view_desktop", Substitution::None),
                 true,
                 &[
                     &MenuItem::with_id(
                         app,
                         action(WebxdcMenuActionVariant::ResetZoom),
-                        tx.sync_translate("actual_size"),
+                        tx.sync_translate("actual_size", Substitution::None),
                         true,
                         None::<&str>,
                     )?,
                     &MenuItem::with_id(
                         app,
                         action(WebxdcMenuActionVariant::ZoomIn),
-                        tx.sync_translate("menu_zoom_in"),
+                        tx.sync_translate("menu_zoom_in", Substitution::None),
                         true,
                         if cfg!(target_os = "macos") {
                             Some("Command++")
@@ -308,7 +322,7 @@ pub(crate) fn create_webxdc_window_menu(
                     &MenuItem::with_id(
                         app,
                         action(WebxdcMenuActionVariant::ZoomOut),
-                        tx.sync_translate("menu_zoom_out"),
+                        tx.sync_translate("menu_zoom_out", Substitution::None),
                         true,
                         if cfg!(target_os = "macos") {
                             Some("Command+-")
@@ -320,20 +334,23 @@ pub(crate) fn create_webxdc_window_menu(
                     &CheckMenuItem::with_id(
                         app,
                         action(WebxdcMenuActionVariant::FloatOnTop),
-                        tx.sync_translate("global_menu_view_floatontop_desktop"),
+                        tx.sync_translate(
+                            "global_menu_view_floatontop_desktop",
+                            Substitution::None,
+                        ),
                         true,
                         webxdc_window.is_always_on_top()?,
                         None::<&str>,
                     )?,
                     &PredefinedMenuItem::fullscreen(
                         app,
-                        Some(&tx.sync_translate("toggle_fullscreen")),
+                        Some(&tx.sync_translate("toggle_fullscreen", Substitution::None)),
                     )?,
                 ],
             )?,
             &Submenu::with_items(
                 app,
-                tx.sync_translate("menu_help"),
+                tx.sync_translate("menu_help", Substitution::None),
                 true,
                 &[
                     &source_code,
@@ -341,7 +358,7 @@ pub(crate) fn create_webxdc_window_menu(
                     &MenuItem::with_id(
                         app,
                         action(WebxdcMenuActionVariant::WhatIsWebxdc),
-                        tx.sync_translate("what_is_webxdc"),
+                        tx.sync_translate("what_is_webxdc", Substitution::None),
                         true,
                         None::<&str>,
                     )?,

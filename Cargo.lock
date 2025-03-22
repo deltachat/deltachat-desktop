@@ -2031,6 +2031,7 @@ dependencies = [
  "tauri-plugin-window-state",
  "thiserror 2.0.17",
  "tokio",
+ "translationfn",
  "unic-idna-punycode",
  "url",
  "user-notify",
@@ -3948,7 +3949,7 @@ checksum = "edba7861004dd3714265b4db54a3c390e880ab658fec5f7db895fae2046b5bb6"
 dependencies = [
  "displaydoc",
  "litemap",
- "tinystr",
+ "tinystr 0.8.2",
  "writeable",
  "zerovec",
 ]
@@ -4215,6 +4216,15 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.111",
+]
+
+[[package]]
+name = "intl_pluralrules"
+version = "7.0.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "078ea7b7c29a2b4df841a7f6ac8775ff6074020c6776d48491ce2268e068f972"
+dependencies = [
+ "unic-langid",
 ]
 
 [[package]]
@@ -9428,6 +9438,15 @@ dependencies = [
 
 [[package]]
 name = "tinystr"
+version = "0.7.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9117f5d4db391c1cf6927e7bea3db74b9a1c1add8f7eda9ffd5364f40f57b82f"
+dependencies = [
+ "displaydoc",
+]
+
+[[package]]
+name = "tinystr"
 version = "0.8.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "42d3e9c45c09de15d06dd8acf5f4e0e399e85927b7f00711024eb7ae10fa4869"
@@ -9879,6 +9898,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "translationfn"
+version = "0.1.0"
+dependencies = [
+ "intl_pluralrules",
+ "log",
+ "regex",
+ "serde_json",
+ "thiserror 2.0.17",
+ "unic-langid",
+]
+
+[[package]]
 name = "tray-icon"
 version = "0.21.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -10014,6 +10045,24 @@ name = "unic-idna-punycode"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "06feaedcbf9f1fc259144d833c0d630b8b15207b0486ab817d29258bc89f2f8a"
+
+[[package]]
+name = "unic-langid"
+version = "0.9.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "23dd9d1e72a73b25e07123a80776aae3e7b0ec461ef94f9151eed6ec88005a44"
+dependencies = [
+ "unic-langid-impl",
+]
+
+[[package]]
+name = "unic-langid-impl"
+version = "0.9.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0a5422c1f65949306c99240b81de9f3f15929f5a8bfe05bb44b034cc8bf593e5"
+dependencies = [
+ "tinystr 0.7.6",
+]
 
 [[package]]
 name = "unic-ucd-ident"
