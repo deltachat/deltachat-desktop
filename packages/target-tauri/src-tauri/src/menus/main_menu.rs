@@ -188,7 +188,7 @@ pub(crate) fn create_main_menu(
             &CheckMenuItem::with_id(
                 app,
                 MainMenuAction::Zoom06,
-                tx.sync_translate("extra_small"),
+                format!("0.6x {}", tx.sync_translate("extra_small")),
                 true,
                 zoom_factor == 0.6,
                 None::<&str>,
