@@ -7,7 +7,10 @@ use tauri_plugin_store::StoreExt;
 use tokio::sync::RwLock;
 use translationfn::{Substitution, TranslationEngine};
 
-use crate::settings::{CONFIG_FILE, LOCALE_KEY};
+use crate::{
+    i18n::commands::get_locale_data,
+    settings::{CONFIG_FILE, LOCALE_KEY},
+};
 
 pub struct TranslationStateInner {
     tx_engine: TranslationEngine,

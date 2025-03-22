@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- tauri: created translationfn library & added pluralisation functionality #4834
 
 ### Changed
 
