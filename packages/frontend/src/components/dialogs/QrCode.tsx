@@ -118,7 +118,7 @@ export function QrCodeShowQrInner({
       copyCb: () => {
         userFeedback({
           type: 'success',
-          text: tx('copy_qr_data_success'),
+          text: tx('copied_to_clipboard'),
         })
         onClose()
       },
