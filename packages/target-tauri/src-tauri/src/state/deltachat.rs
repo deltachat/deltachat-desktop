@@ -56,4 +56,11 @@ impl DeltaChatAppState {
                 .to_owned(),
         })
     }
+
+    /// Must be called when exiting the app.
+    pub(crate) async fn destroy(&self) {
+        self.deltachat.read().await.stop_io().await;
+        log::info!("core IO stopped");
+        // TODO verify that this is all we need to stop core.
+    }
 }

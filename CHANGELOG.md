@@ -8,6 +8,7 @@
 
 ### Fixed
 - tauri: improve security #4826
+- tauri: clear temp folder on exit
 
 <a id="1_56_0"></a>
 
