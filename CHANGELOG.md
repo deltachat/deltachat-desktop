@@ -8,6 +8,7 @@
 
 ### Fixed
 - tauri: improve security #4826
+- improve fatal error dialog readability by removing color from deltachat-rpc-server errors
 
 <a id="1_56_0"></a>
 
