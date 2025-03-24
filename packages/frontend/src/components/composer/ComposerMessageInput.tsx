@@ -19,6 +19,7 @@ type ComposerMessageInputProps = {
   enterKeySends: boolean
   onPaste?: (e: React.ClipboardEvent<HTMLTextAreaElement>) => void
   updateDraftText: (text: string, InputChatId: number) => void
+  onChange: (text: string) => void
 }
 
 type ComposerMessageInputState = {
@@ -168,6 +169,7 @@ export default class ComposerMessageInput extends React.Component<
 
   onChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     const text = e.target.value
+    this.props.onChange(text)
     this.setState({ text /*error: false*/ })
     this.throttledSaveDraft(text, this.state.chatId)
   }
@@ -245,6 +247,7 @@ export default class ComposerMessageInput extends React.Component<
     this.setCursorPosition = textareaElem.selectionStart + str.length
 
     this.setState({ text: updatedText })
+    this.props.onChange(updatedText)
     this.throttledSaveDraft(updatedText, this.state.chatId)
   }
 

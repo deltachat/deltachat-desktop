@@ -92,6 +92,7 @@ const Composer = forwardRef<
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const [showAppPicker, setShowAppPicker] = useState(false)
   const [showSendButton, setShowSendButton] = useState(false)
+  const [currentEditText, setCurrentEditText] = useState('')
 
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
   const pickerButtonRef = useRef<HTMLButtonElement>(null)
@@ -139,15 +140,12 @@ const Composer = forwardRef<
   }, [selectedChat.canSend])
 
   useEffect(() => {
-    if (
-      currentComposerMessageInputRef.current?.getText() === '' &&
-      !draftState.file
-    ) {
+    if (currentEditText === '' && !draftState.file) {
       setShowSendButton(false)
     } else {
       setShowSendButton(true)
     }
-  }, [currentComposerMessageInputRef, draftState])
+  }, [draftState, currentEditText])
 
   useEffect(() => {
     return onDCEvent(accountId, 'SecurejoinJoinerProgress', ({ progress }) => {
@@ -559,6 +557,7 @@ const Composer = forwardRef<
                 chatName={selectedChat.name}
                 updateDraftText={updateDraftText}
                 onPaste={handlePaste ?? undefined}
+                onChange={setCurrentEditText}
               />
               <ComposerMessageInput
                 isMessageEditingMode={true}
@@ -576,6 +575,7 @@ const Composer = forwardRef<
                 updateDraftText={() => {}}
                 // Message editing mode doesn't support file pasting.
                 // onPaste={handlePaste}
+                onChange={setCurrentEditText}
               />
             </>
           )}
