@@ -198,9 +198,7 @@ export async function deleteProfile(
     await deleteButton.click()
     await expect(page.locator('.styles_module_infoBox')).toBeVisible()
     if (accountId) {
-      expect(
-        await page.getByTestId(`account-item-${accountId}`).count()
-      ).toEqual(0)
+      await expect(page.getByTestId(`account-item-${accountId}`)).toHaveCount(0)
     }
     return userName
   }

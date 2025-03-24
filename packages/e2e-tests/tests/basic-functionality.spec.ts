@@ -195,8 +195,7 @@ test('delete message', async ({ page }) => {
     .locator('.chat-list .chat-list-item')
     .filter({ hasText: userA.name })
     .click()
-  const messageCount = await page.locator('.message.incoming').count()
-  expect(messageCount).toEqual(2)
+  await expect(page.locator('.message.incoming')).toHaveCount(2)
 })
 
 /**
@@ -223,8 +222,7 @@ test('delete message for all', async ({ page }) => {
     .locator('.chat-list .chat-list-item')
     .filter({ hasText: userA.name })
     .click()
-  const messageCount = await page.locator('.message.incoming').count()
-  expect(messageCount).toEqual(1)
+  await expect(page.locator('.message.incoming')).toHaveCount(1)
 })
 
 /**
