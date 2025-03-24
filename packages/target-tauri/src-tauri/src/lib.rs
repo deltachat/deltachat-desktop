@@ -101,7 +101,7 @@ pub fn run() {
             }));
     }
 
-    builder
+    let app = builder
         .invoke_handler(tauri::generate_handler![
             // When adding a command, don't forget to also add it
             // to `.commands()` in `build.rs`, and to `permissions`
@@ -252,17 +252,44 @@ pub fn run() {
 
             context
         })
-        .expect("error while building tauri application")
-        .run(|app_handle, run_event| match run_event {
-            #[allow(clippy::single_match)]
-            // tauri::RunEvent::ExitRequested { code, api, .. } =>
-            tauri::RunEvent::Exit => {
-                log::info!("Exiting: starting cleanup...");
-                tauri::async_runtime::block_on(cleanup(app_handle));
-                log::info!("Cleanup done. Quitting now. Bye.");
-            }
-            _ => {}
+        .expect("error while building tauri application");
+
+    let app_handle = app.handle().clone();
+    tauri::async_runtime::spawn(async move {
+        tokio::signal::ctrl_c()
+            .await
+            .inspect(|_| log::info!("Received Ctrl+C. Exiting gracefully."))
+            .inspect_err(|err| log::error!("Failed to listen on Ctrl+C: {err}"))
+            .ok();
+        // https://tokio.rs/tokio/topics/shutdown says
+        // that we should shut down regardless of the Result.
+        // Is it always appropriate though?
+
+        // [`tokio::signal::ctrl_c`] docs say that on Unix,
+        // normal OS signal handling will not be restored,
+        // so we have to listen for another Ctrl+C manually.
+        //
+        // Spawning this prior to calling `app_handle.exit(0)`
+        // in case that blocks.
+        tauri::async_runtime::spawn(async move {
+            tokio::signal::ctrl_c().await.ok();
+            log::error!("Received a second Ctrl+C, exiting forcefully");
+            std::process::exit(1);
         });
+
+        app_handle.exit(0);
+    });
+
+    #[allow(clippy::single_match)]
+    app.run(|app_handle, run_event| match run_event {
+        // tauri::RunEvent::ExitRequested { code, api, .. } =>
+        tauri::RunEvent::Exit => {
+            log::info!("Exiting: starting cleanup...");
+            tauri::async_runtime::block_on(cleanup(app_handle));
+            log::info!("Cleanup done. Quitting now. Bye.");
+        }
+        _ => {}
+    });
 }
 
 async fn cleanup(app_handle: &tauri::AppHandle) {
