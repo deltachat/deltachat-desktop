@@ -191,6 +191,7 @@ export default class ComposerMessageInput extends React.Component<
 
     if (action === 'SEND') {
       this.props.sendMessageOrEditRequest()
+      this.props.onChange('')
       e.preventDefault()
       e.stopPropagation()
     }
