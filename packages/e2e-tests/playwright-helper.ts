@@ -135,7 +135,7 @@ export async function loadExistingProfiles(page: Page): Promise<User[]> {
   // await page.goto('https://localhost:3000/')
   const existingProfiles: User[] = []
   page.waitForSelector('.main-container')
-  expect(page.locator('.main-container')).toBeVisible()
+  await expect(page.locator('.main-container')).toBeVisible()
   // TODO: the next waitFor calls are needed when loading existing profiles
   // and skipping the createProfiles step, but will never succeed if there
   // are no profiles yet

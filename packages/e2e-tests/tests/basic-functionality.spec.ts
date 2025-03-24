@@ -190,11 +190,11 @@ test('delete message', async ({ page }) => {
     .click()
   await page.locator('.message-wrapper').last().hover()
   const menuButtons = page.locator('.styles_module_shortcutMenuButton')
-  expect(menuButtons.last()).toBeVisible()
+  await expect(menuButtons.last()).toBeVisible()
   await menuButtons.last().click()
   await page.locator('.dc-context-menu button').last().click()
   const deleteButton = page.getByTestId('delete_for_me')
-  expect(deleteButton).toBeVisible()
+  await expect(deleteButton).toBeVisible()
   await deleteButton.click()
   await switchToProfile(page, userB.id)
   await page
@@ -217,11 +217,11 @@ test('delete message for all', async ({ page }) => {
     .click()
   await page.locator('.message-wrapper').last().hover()
   const menuButtons = page.locator('.styles_module_shortcutMenuButton')
-  expect(menuButtons.last()).toBeVisible()
+  await expect(menuButtons.last()).toBeVisible()
   await menuButtons.last().click()
   await page.locator('.dc-context-menu button').last().click()
   const deleteButton = page.getByTestId('delete_for_everyone')
-  expect(deleteButton).toBeVisible()
+  await expect(deleteButton).toBeVisible()
   await deleteButton.click()
   await switchToProfile(page, userB.id)
   await page
@@ -308,11 +308,10 @@ test('create group', async ({ page, context, browserName }) => {
   await expect(chatListItem).toBeVisible()
   page.locator('#composer-textarea').fill(`Hello group members!`)
   page.locator('button.send-button').click()
-  const badgeNumber = await page
+  const badgeNumber = page
     .getByTestId(`account-item-${userB.id}`)
     .locator('.styles_module_accountBadgeIcon')
-    .textContent()
-  expect(badgeNumber).toBe('1')
+  await expect(badgeNumber).toHaveText('1')
   // copy group invite link
   await page.getByTestId('chat-info-button').click()
   await page.locator('#showqrcode button').click()
