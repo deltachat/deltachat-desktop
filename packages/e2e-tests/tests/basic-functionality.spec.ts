@@ -136,21 +136,27 @@ test('send message', async ({ page }) => {
     .locator('.chat-list .chat-list-item')
     .filter({ hasText: userB.name })
     .click()
+
   const messageText = `Hello ${userB.name}!`
   await page.locator('#composer-textarea').fill(messageText)
-  await page.locator('button.send-button').click()
-  await page.locator('#composer-textarea').fill(`${messageText} 2`)
   await page.locator('button.send-button').click()
 
   const badgeNumber = page
     .getByTestId(`account-item-${userB.id}`)
     .locator('.styles_module_accountBadgeIcon')
-  await expect(badgeNumber).toHaveText('2')
   const sentMessageText = page
     .locator(`.message.outgoing`)
     .last()
     .locator('.msg-body .text')
+  await expect(sentMessageText).toHaveText(messageText)
+  await expect(badgeNumber).toHaveText('1')
+
+  await page.locator('#composer-textarea').fill(`${messageText} 2`)
+  await page.locator('button.send-button').click()
+
   await expect(sentMessageText).toHaveText(messageText + ' 2')
+  await expect(badgeNumber).toHaveText('2')
+
   await switchToProfile(page, userB.id)
   const chatListItem = page
     .locator('.chat-list .chat-list-item')
