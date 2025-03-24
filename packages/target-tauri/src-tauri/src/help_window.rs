@@ -6,6 +6,7 @@ use crate::{
     settings::{apply_content_protection, apply_zoom_factor_help_window},
     state::menu_manager::MenuManager,
     util::sanitization::is_alphanumeric_with_dashes_and_underscores,
+    TranslationState,
 };
 
 #[derive(Debug, thiserror::Error)]
@@ -56,6 +57,8 @@ pub(crate) async fn open_help_window(
     }
     let app_url = tauri::WebviewUrl::App(url.into());
 
+    let tx = app.state::<TranslationState>();
+
     let help_window: WebviewWindow = if let Some(help_window) = app.get_webview_window("help") {
         // TODO theoretically the URL here could still be
         // about:blank if it has not loaded yet.
@@ -72,7 +75,11 @@ pub(crate) async fn open_help_window(
         help_window.show()?;
     }
 
-    help_window.set_title("Delta Chat Tauri - Help")?; // TODO: translate help in the title.
+    help_window.set_title(&format!(
+        "{} - {}",
+        tx.sync_translate("app_name"),
+        tx.sync_translate("menu_help"),
+    ))?;
 
     let _ = apply_content_protection(&app);
     let _ = apply_zoom_factor_help_window(&app);

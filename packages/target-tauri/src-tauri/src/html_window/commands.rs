@@ -62,11 +62,7 @@ pub(crate) async fn html_email_set_load_remote_content(
         app.dialog()
             .message(tl.sync_translate("load_remote_content_ask"))
             .parent(&webview.window())
-            .buttons(tauri_plugin_dialog::MessageDialogButtons::OkCancelCustom(
-                // TODO use translation strings, as soon as translations are avaialble in rust backend
-                "Yes".to_owned(),
-                "No".to_owned(),
-            ))
+            .buttons(tauri_plugin_dialog::MessageDialogButtons::OkCancel)
             .show(|answer| tx.send(answer).unwrap());
         if !rx.await? {
             return Err(Error::UserCanceled);

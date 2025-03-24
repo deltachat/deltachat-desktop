@@ -75,14 +75,20 @@ pub(crate) fn create_help_menu(
     app: &AppHandle,
     help_window: &WebviewWindow,
 ) -> anyhow::Result<Menu<Wry>> {
+    let tx: tauri::State<'_, TranslationState> = app.state::<TranslationState>();
     let quit = MenuItem::with_id(
         app,
         HelpMenuAction::QuitApp,
-        "Quit Delta Chat", // TODO translate
+        // Same as in html_window_menu.
+        // TODO for some languages this is not quite correct.
+        format!(
+            "{} {}",
+            tx.sync_translate("global_menu_file_quit_desktop"),
+            tx.sync_translate("app_name")
+        ),
         true,
         Some("CmdOrCtrl+Q"),
     )?;
-    let tx: tauri::State<'_, TranslationState> = app.state::<TranslationState>();
     Menu::with_items(
         app,
         &[
