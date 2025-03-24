@@ -98,7 +98,7 @@ Error: ${err.message}
           log.critical('Fatal: The Delta Chat Core exited unexpectedly', code)
           dialog.showErrorBox(
             'Fatal Error',
-            `[DC Version: ${
+            `[Version: ${
               BuildInfo.VERSION
             } | ${platform()} | ${arch()}]\nThe Delta Chat Core exited unexpectedly with code ${code}\n${errorLog}`
           )
