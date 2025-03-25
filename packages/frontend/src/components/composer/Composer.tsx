@@ -91,6 +91,7 @@ const Composer = forwardRef<
   const chatId = selectedChat.id
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const [showAppPicker, setShowAppPicker] = useState(false)
+  const [currentEditText, setCurrentEditText] = useState('')
 
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
   const pickerButtonRef = useRef<HTMLButtonElement>(null)
@@ -136,6 +137,8 @@ const Composer = forwardRef<
       hasSecureJoinEnded.current = false
     }
   }, [selectedChat.canSend])
+
+  const showSendButton = currentEditText !== '' || !!draftState.file
 
   useEffect(() => {
     return onDCEvent(accountId, 'SecurejoinJoinerProgress', ({ progress }) => {
@@ -547,6 +550,7 @@ const Composer = forwardRef<
                 chatName={selectedChat.name}
                 updateDraftText={updateDraftText}
                 onPaste={handlePaste ?? undefined}
+                onChange={setCurrentEditText}
               />
               <ComposerMessageInput
                 isMessageEditingMode={true}
@@ -564,6 +568,7 @@ const Composer = forwardRef<
                 updateDraftText={() => {}}
                 // Message editing mode doesn't support file pasting.
                 // onPaste={handlePaste}
+                onChange={setCurrentEditText}
               />
             </>
           )}
@@ -578,27 +583,29 @@ const Composer = forwardRef<
               <span />
             </button>
           )}
-          <button
-            // This ensures that the button loses focus as we switch between
-            // the editing mode and the regular mode,
-            // so that it's harder to accidentally send a normal message
-            // right after sending the draft by using the keyboard.
-            // Conceptually those are two different buttons.
-            key={messageEditing.isEditingModeActive.toString()}
-            className='send-button'
-            // TODO apply `disabled` if the textarea is empty
-            // or includes only whitespace.
-            // See `doSendEditRequest`.
-            onClick={
-              !messageEditing.isEditingModeActive
-                ? composerSendMessage!
-                : messageEditing.doSendEditRequest
-            }
-            aria-label={tx('menu_send')}
-            aria-keyshortcuts={ariaSendShortcut}
-          >
-            <div className='paper-plane'></div>
-          </button>
+          {showSendButton && (
+            <button
+              // This ensures that the button loses focus as we switch between
+              // the editing mode and the regular mode,
+              // so that it's harder to accidentally send a normal message
+              // right after sending the draft by using the keyboard.
+              // Conceptually those are two different buttons.
+              key={messageEditing.isEditingModeActive.toString()}
+              className='send-button'
+              // TODO apply `disabled` if the textarea is empty
+              // or includes only whitespace.
+              // See `doSendEditRequest`.
+              onClick={
+                !messageEditing.isEditingModeActive
+                  ? composerSendMessage!
+                  : messageEditing.doSendEditRequest
+              }
+              aria-label={tx('menu_send')}
+              aria-keyshortcuts={ariaSendShortcut}
+            >
+              <div className='paper-plane'></div>
+            </button>
+          )}
         </div>
         {/* We don't want to show the app picker when
         `messageEditing.isEditingModeActive` because picking an app

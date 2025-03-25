@@ -132,6 +132,8 @@ pub(crate) fn create_html_window_menu(
     let quit = MenuItem::with_id(
         app,
         action(HtmlWindowMenuActionVariant::QuitApp),
+        // Same as in help_menu.
+        // TODO for some languages this is not quite correct.
         format!(
             "{} {}",
             tx.sync_translate("global_menu_file_quit_desktop"),
