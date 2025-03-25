@@ -152,7 +152,7 @@ Promise.all([
     log.critical('Fatal Error during init', error)
     dialog.showErrorBox(
       'Fatal Error during init',
-      `[DC Version: ${BuildInfo.VERSION} | ${platform()} | ${arch()}]]
+      `[Version: ${BuildInfo.VERSION} | ${platform()} | ${arch()}]]
 ${error}
 
 Also make sure you are not trying to run multiple instances of deltachat.`

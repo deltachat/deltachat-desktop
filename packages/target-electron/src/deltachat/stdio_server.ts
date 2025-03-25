@@ -22,6 +22,8 @@ export class StdioServer {
       env: {
         DC_ACCOUNTS_PATH: this.accounts_path,
         RUST_LOG: process.env.RUST_LOG,
+        // remove color from errors, see https://github.com/deltachat/deltachat-desktop/issues/4832
+        NO_COLOR: '1',
       },
     })
 
@@ -96,7 +98,7 @@ Error: ${err.message}
           log.critical('Fatal: The Delta Chat Core exited unexpectedly', code)
           dialog.showErrorBox(
             'Fatal Error',
-            `[DC Version: ${
+            `[Version: ${
               BuildInfo.VERSION
             } | ${platform()} | ${arch()}]\nThe Delta Chat Core exited unexpectedly with code ${code}\n${errorLog}`
           )
