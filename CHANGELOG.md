@@ -3,12 +3,15 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- tauri: support for webxdc #4740
 
 ### Changed
+- switch to account the webxdc is from when sending to chat (tauri and electron edition) #4740
 
 ### Fixed
 - tauri: improve security #4826
 - improve fatal error dialog readability by removing color from deltachat-rpc-server errors
+- prevent dragging around of webxdc icon #4740
 
 <a id="1_56_0"></a>
 
