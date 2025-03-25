@@ -23,7 +23,7 @@ export class StdioServer {
         DC_ACCOUNTS_PATH: this.accounts_path,
         RUST_LOG: process.env.RUST_LOG,
         // remove color from errors, see https://github.com/deltachat/deltachat-desktop/issues/4832
-        NO_COLOR: "1",
+        NO_COLOR: '1',
       },
     })
 
