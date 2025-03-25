@@ -91,7 +91,6 @@ const Composer = forwardRef<
   const chatId = selectedChat.id
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const [showAppPicker, setShowAppPicker] = useState(false)
-  const [showSendButton, setShowSendButton] = useState(false)
   const [currentEditText, setCurrentEditText] = useState('')
 
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
@@ -139,13 +138,7 @@ const Composer = forwardRef<
     }
   }, [selectedChat.canSend])
 
-  useEffect(() => {
-    if (currentEditText === '' && !draftState.file) {
-      setShowSendButton(false)
-    } else {
-      setShowSendButton(true)
-    }
-  }, [draftState, currentEditText])
+  const showSendButton = currentEditText !== '' || !!draftState.file
 
   useEffect(() => {
     return onDCEvent(accountId, 'SecurejoinJoinerProgress', ({ progress }) => {
