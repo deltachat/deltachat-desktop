@@ -181,17 +181,18 @@ pub(crate) async fn open_html_window(
             app_arc
                 .dialog()
                 .message(format!(
-                    "Punycode detected: {}",
+                    "{}\n\n{}",
                     tx.sync_translate(
                         "puny_code_warning_question", /*"puny_code_decode_host(orginal_host_name)"*/
-                    )
+                    ),
+                    // TODO substitution
+                    tx.sync_translate("puny_code_warning_description"),
                 ))
                 .title(tx.sync_translate("puny_code_warning_header"))
                 .kind(tauri_plugin_dialog::MessageDialogKind::Warning)
                 .buttons(tauri_plugin_dialog::MessageDialogButtons::OkCancelCustom(
-                    // Todo: use tx function here (Problems with Lifetime)
-                    "Continue".to_owned(),
-                    "cancel".to_owned(),
+                    tx.sync_translate("open"),
+                    tx.sync_translate("cancel"),
                 ))
                 .show(move |ok| {
                     if ok {

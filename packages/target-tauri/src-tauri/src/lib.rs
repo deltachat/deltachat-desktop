@@ -1,5 +1,6 @@
 use std::time::SystemTime;
 
+use anyhow::Context;
 use clipboard::copy_image_to_clipboard;
 
 use menus::{handle_menu_event, main_menu::create_main_menu};
@@ -264,7 +265,7 @@ pub fn run() {
 
             Ok(())
         })
-        .run({
+        .build({
             let mut context = tauri::generate_context!("tauri.conf.json5");
 
             #[cfg(any(debug_assertions, target_os = "windows", target_os = "android"))]
@@ -278,5 +279,24 @@ pub fn run() {
 
             context
         })
-        .expect("error while running tauri application");
+        .expect("error while building tauri application")
+        .run(|app_handle, run_event| match run_event {
+            #[allow(clippy::single_match)]
+            // tauri::RunEvent::ExitRequested { code, api, .. } =>
+            tauri::RunEvent::Exit => {
+                log::info!("Exiting: starting cleanup...");
+                tauri::async_runtime::block_on(cleanup(app_handle));
+                log::info!("Cleanup done. Quitting now. Bye.");
+            }
+            _ => {}
+        });
+}
+
+async fn cleanup(app_handle: &tauri::AppHandle) {
+    app_handle.state::<DeltaChatAppState>().destroy().await;
+
+    let _ = temp_file::clear_tmp_folder(app_handle)
+        .await
+        .context("cleanup: failed to clear tmp folder")
+        .inspect_err(|err| log::error!("{err}"));
 }

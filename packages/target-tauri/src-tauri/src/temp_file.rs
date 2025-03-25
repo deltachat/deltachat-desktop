@@ -99,8 +99,8 @@ pub(crate) async fn create_tmp_folder(app: &AppHandle) -> Result<(), Error> {
     Ok(())
 }
 
-// remove all tmp files on app startup
-// todo: also call this on shutdown
+// Used on app startup and shutdown.
+/// remove all tmp files
 pub(crate) async fn clear_tmp_folder(app: &AppHandle) -> Result<(), Error> {
     let tmp_folder = get_temp_folder_path(app)?;
     if !exists(&tmp_folder)? {
