@@ -309,7 +309,7 @@ pub(crate) async fn open_webxdc<'a>(
         &window_id,
         WebviewUrl::CustomProtocol(initial_url.clone()),
     )
-    .initialization_script(INIT_SCRIPT)
+    .initialization_script(INIT_SCRIPT, true)
     // Use a non-working proxy to almost(!) isolate the app
     // from the internet.
     // "Almost" because there are still cases where the webview
