@@ -24,7 +24,7 @@ pub(crate) struct AppState {
     pub(crate) startup_timestamp: SystemTime,
     pub(crate) current_log_file_path: String,
 
-    // caching here, becuase the menu building is sync,
+    // caching here, because the menu building is sync,
     // but the function to get all languages is async
     /// Vec of all supported languages: (language_code, language_display_name)
     pub(crate) all_languages_for_menu: Vec<(String, String)>,

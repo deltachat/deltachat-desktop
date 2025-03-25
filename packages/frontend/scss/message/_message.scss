@@ -94,6 +94,9 @@
         height: 171px;
         border-radius: 7%;
         cursor: pointer;
+        user-select: none;
+        // firefox does not support this, but chromium and webkit do https://caniuse.com/?search=user-drag
+        -webkit-user-drag: none;
       }
       div.name {
         font-size: medium;

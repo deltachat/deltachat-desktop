@@ -1,7 +1,6 @@
 // This needs to be injected / imported before the frontend script
 
-import { invoke } from '@tauri-apps/api/core'
-import { listen } from '@tauri-apps/api/event'
+import { Channel, invoke } from '@tauri-apps/api/core'
 import { getCurrentWindow } from '@tauri-apps/api/window'
 
 import type { attachLogger } from '@tauri-apps/plugin-log'
@@ -32,18 +31,46 @@ import type { setLogHandler as setLogHandlerFunction } from '@deltachat-desktop/
 
 let logJsonrpcConnection = false
 
+type MainWindowEvents =
+  | {
+      event: 'sendToChat'
+      data: {
+        options: {
+          text: string | null | undefined
+          file: { fileName: string; fileContent: string } | null
+        }
+        account: number | null
+      }
+    }
+  | {
+      event: 'localeReloaded'
+      data: string
+    }
+  | {
+      event: 'showAboutDialog'
+    }
+  | {
+      event: 'showSettingsDialog'
+    }
+  | {
+      event: 'showKeybindingsDialog'
+    }
+
+const events = new Channel<MainWindowEvents>()
+const jsonrpc = new Channel<yerpc.Message>()
+invoke('set_main_window_channels', { jsonrpc, events })
+
 class TauriTransport extends yerpc.BaseTransport {
   constructor(private callCounterFunction: (label: string) => void) {
     super()
 
-    listen<yerpc.Message>('dc-jsonrpc-message', event => {
-      const message: yerpc.Message = event.payload
+    jsonrpc.onmessage = (message: yerpc.Message) => {
       if (logJsonrpcConnection) {
         /* ignore-console-log */
         console.debug('%c▼ %c[JSONRPC]', 'color: red', 'color:grey', message)
       }
       this._onmessage(message)
-    })
+    }
   }
   _send(message: yerpc.Message): void {
     const serialized = JSON.stringify(message)
@@ -161,7 +188,11 @@ class TauriRuntime implements Runtime {
     value: string | number | boolean | undefined
   ): Promise<void> {
     // 1. set values in key value store
-    await this.store.set(key, value)
+    if (typeof value === 'undefined') {
+      await this.store.delete(key)
+    } else {
+      await this.store.set(key, value)
+    }
     // 2. if supported in tauri settings, then also notifiy tauri (like tray_icon, but not experimental ui options)
     await invoke('change_desktop_settings_apply_side_effects', { key })
   }
@@ -261,19 +292,29 @@ class TauriRuntime implements Runtime {
     this.store = store
     this.currentLogFileLocation = await invoke('get_current_logfile')
 
-    listen<string>('locale_reloaded', event => {
-      this.onChooseLanguage?.(event.payload)
-    })
-
-    listen<string>('showAboutDialog', () => {
-      this.onShowDialog?.('about')
-    })
-    listen<string>('showSettingsDialog', () => {
-      this.onShowDialog?.('settings')
-    })
-    listen<string>('showKeybindingsDialog', () => {
-      this.onShowDialog?.('keybindings')
-    })
+    events.onmessage = event => {
+      if (event.event === 'sendToChat') {
+        const { options, account } = event.data
+        this.onWebxdcSendToChat?.(
+          options.file
+            ? {
+                file_name: options.file.fileName,
+                file_content: options.file.fileContent,
+              }
+            : null,
+          options.text || null,
+          account || undefined
+        )
+      } else if (event.event === 'localeReloaded') {
+        this.onChooseLanguage?.(event.data)
+      } else if (event.event === 'showAboutDialog') {
+        this.onShowDialog?.('about')
+      } else if (event.event === 'showSettingsDialog') {
+        this.onShowDialog?.('settings')
+      } else if (event.event === 'showKeybindingsDialog') {
+        this.onShowDialog?.('keybindings')
+      }
+    }
   }
   reloadWebContent(): void {
     // for now use the browser method as long as it is sufficient
@@ -402,8 +443,12 @@ class TauriRuntime implements Runtime {
   getConfigPath(): string {
     throw new Error('Method not implemented.24')
   }
-  openWebxdc(_msgId: number, _params: DcOpenWebxdcParameters): void {
-    throw new Error('Method not implemented.25')
+  openWebxdc(messageId: number, params: DcOpenWebxdcParameters): void {
+    invoke('open_webxdc', {
+      messageId,
+      accountId: params.accountId,
+      href: params.href,
+    })
   }
   getWebxdcIconURL(accountId: number, msgId: number): string {
     return `${this.runtime_info?.tauriSpecific?.scheme.webxdcIcon}${accountId}/${msgId}`
@@ -508,6 +553,11 @@ class TauriRuntime implements Runtime {
   isDroppedFileFromOutside(_file: File): boolean {
     throw new Error('Method not implemented.51')
   }
+  // only works on macOS and iOS
+  // exp.runtime.debug_get_datastore_ids()
+  async debug_get_datastore_ids() {
+    return await invoke('debug_get_datastore_ids')
+  }
   onChooseLanguage: ((locale: string) => Promise<void>) | undefined
   onThemeUpdate: (() => void) | undefined
   onShowDialog:
@@ -517,7 +567,8 @@ class TauriRuntime implements Runtime {
   onWebxdcSendToChat:
     | ((
         file: { file_name: string; file_content: string } | null,
-        text: string | null
+        text: string | null,
+        account_id?: number
       ) => void)
     | undefined
   onResumeFromSleep: (() => void) | undefined

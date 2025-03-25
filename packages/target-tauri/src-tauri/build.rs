@@ -31,6 +31,7 @@ fn main() {
             // to `invoke_handler()` in `lib.rs`, and to `permissions`
             // in `capabilities`.
             "greet",
+            "set_main_window_channels",
             "deltachat_jsonrpc_request",
             "ui_ready",
             "ui_frontend_ready",
@@ -52,6 +53,15 @@ fn main() {
             "on_webxdc_realtime_data",
             "delete_webxdc_account_data",
             "close_all_webxdc_instances",
+            "debug_get_datastore_ids",
+            "open_webxdc",
+            "send_webxdc_update",
+            "get_webxdc_updates",
+            "join_webxdc_realtime_channel",
+            "leave_webxdc_realtime_channel",
+            "send_webxdc_realtime_data",
+            "register_webxdc_channel",
+            "webxdc_send_to_chat",
             "get_runtime_info",
             "change_desktop_settings_apply_side_effects",
             "open_help_window",
