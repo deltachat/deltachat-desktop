@@ -129,9 +129,11 @@ class RealtimeListener implements RealtimeListenerType {
     sendUpdateMaxSize: SEND_UPDATE_MAX_SIZE,
     sendUpdate(update, description) {
       if (description) {
+        /* ignore-console-log */
         console.warn('sendUpdate: the description parameter is deprecated')
       }
       invoke('send_webxdc_update', { statusUpdate: update }).catch(
+        /* ignore-console-log */
         console.error.bind(null, 'sendUpdate failed:')
       )
     },
@@ -145,6 +147,7 @@ class RealtimeListener implements RealtimeListenerType {
       return promise
     },
     getAllUpdates: () => {
+      /* ignore-console-log */
       console.error(
         'getAllUpdates is deprecated and will be removed in the future, it also returns an empty array now, so you really should use setUpdateListener instead.'
       )
