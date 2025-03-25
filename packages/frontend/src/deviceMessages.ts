@@ -32,8 +32,6 @@ export async function updateDeviceChat(
 
     📝 Edit messages: already sent messages can be edited now
     ❌ Delete messages for all chat members as a new option
-    🔒 E2e encryption is always preferred when available (and preferences are removed from setting)
-    ⚠️ Import of encryption keys is removed (to avoid various related [limitations](https://github.com/deltachat/interface/issues/80) )
 
 
 MORE ✨ improvements and 🐜 bug fixes see [Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/main/CHANGELOG.md#1_56_0)`,
