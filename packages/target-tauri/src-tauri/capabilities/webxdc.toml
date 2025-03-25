@@ -10,5 +10,5 @@ permissions = [
     "allow-send-webxdc-realtime-data",
     "allow-register-webxdc-channel",
     "allow-webxdc-send-to-chat",
-    "core:__TAURI_CHANNEL__:allow-fetch",
+    # "core:__TAURI_CHANNEL__:allow-fetch",
 ]
