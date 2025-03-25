@@ -19,6 +19,7 @@ type ComposerMessageInputProps = {
   enterKeySends: boolean
   onPaste?: (e: React.ClipboardEvent<HTMLTextAreaElement>) => void
   updateDraftText: (text: string, InputChatId: number) => void
+  // used to show/hide send button
   onChange: (text: string) => void
 }
 
@@ -99,6 +100,7 @@ export default class ComposerMessageInput extends React.Component<
   setText(text: string | null) {
     this.setState({ text: text || '', loadingDraft: false })
     this.throttledSaveDraft.cancel()
+    this.props.onChange(text || '')
   }
 
   setComposerSize(size: number) {
