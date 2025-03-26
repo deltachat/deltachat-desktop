@@ -303,6 +303,16 @@ pub(crate) async fn open_webxdc<'a>(
             }
         });
 
+    // This is only for Chromium (i.e. Windows).
+    // Note that this will make `WebviewWindowBuilder::proxy_url`
+    // (which we don't currently use), and potentially some other,
+    // future options, have no effect.
+    #[cfg(target_os = "windows")]
+    {
+        window_builder =
+            window_builder.additional_browser_args(&get_chromium_hardening_browser_args());
+    }
+
     window_builder = set_data_store(&app, window_builder, account_id, message_id).await?;
 
     let window = window_builder.build()?;
@@ -390,4 +400,65 @@ fn make_title(webxdc_info: &WebxdcInfo, chat_name: &str) -> String {
     };
     let webxdc_name = truncate_text(&webxdc_info.name, 42);
     format!("{document}{webxdc_name} – {chat_name}")
+}
+
+#[cfg(target_os = "windows")]
+fn get_chromium_hardening_browser_args() -> String {
+    // Hardening: (partially?) disable WebRTC, prohibit all DNS queries,
+    // and practically almost (or completely?) disable internet access.
+    // See https://delta.chat/en/2023-05-22-webxdc-security.
+    //
+    // We also have something like this in the Electron version, see
+    // https://github.com/deltachat/deltachat-desktop/pull/3179
+
+    // These are default parameters from
+    // https://github.com/tauri-apps/wry/blob/dev/src/webview2/mod.rs#L284-L287
+    // TODO refactior: probably need to DRY this, make a Tauri MR.
+    let default_tauri_browser_args = "--disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection --enable-features=RemoveRedirectionBitmap";
+
+    // The `~NOTFOUND` string is here:
+    // https://chromium.googlesource.com/chromium/src/+/6459548ee396bbe1104978b01e19fcb1bb68d0e5/net/dns/mapped_host_resolver.cc#46
+    let host_rules = "MAP * ~NOTFOUND";
+
+    // `host-resolver-rules` and `host-rules` primarily block
+    // DNS prefetching. But they also block `fetch()` requests.
+    //
+    // Chromium docs that touch on `--host-resolver-rules` and DNS:
+    // https://www.chromium.org/developers/design-documents/network-stack/socks-proxy/
+    // https://www.chromium.org/developers/design-documents/dns-prefetching/
+    //
+    // Specifying `--proxy-url` should make WebRTC try to use this proxy,
+    // since IP handling policy is `disable_non_proxied_udp`.
+    // However, since the proxy won't work, this should, in theory,
+    // effectively disable WebRTC.
+    //
+    // Thanks to the fact that we specify `host-rules`,
+    // no connection attempt to the proxy should occur at all.
+    // See https://www.chromium.org/developers/design-documents/network-stack/socks-proxy/ :
+    // > The "EXCLUDE" clause make an exception for "myproxy",
+    // > because otherwise Chrome would be unable to resolve
+    // > the address of the SOCKS proxy server itself,
+    // > and all requests would necessarily fail
+    // > with PROXY_CONNECTION_FAILED.
+    //
+    // TODO it's not clear, however, why the WebView doesn't try
+    // to connect to the proxy even when `host-rules` and
+    // `host-resolver-rules` are omitted.
+    // Maybe it has to do with Tauri intercepting requests?
+    //
+    // Docs on command line args:
+    // - https://peter.sh/experiments/chromium-command-line-switches/
+    // - https://learn.microsoft.com/en-us/microsoft-edge/webview2/concepts/webview-features-flags#available-webview2-browser-flags
+    [
+        default_tauri_browser_args,
+        &format!("--host-resolver-rules=\"{host_rules}\""),
+        &format!("--host-rules=\"{host_rules}\""),
+        "--webrtc-ip-handling-policy=disable_non_proxied_udp",
+        "--force-webrtc-ip-handling-policy=disable_non_proxied_udp",
+        // Use a non-private address and a reserved port, juuust in case
+        // the browser actually tries to connect to the proxy.
+        // https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.txt
+        "--proxy-url=\"socks5://example.com:1024\"",
+    ]
+    .join(" ")
 }
