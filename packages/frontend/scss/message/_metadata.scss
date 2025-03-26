@@ -22,6 +22,10 @@
       @include color-svg('./images/padlock.svg', white, 125%);
     }
 
+    & > .saved-message-icon {
+      @include color-svg('./images/icons/bookmark-filled.svg', white, 100%);
+    }
+
     .status-icon.sending {
       background-color: white;
     }
