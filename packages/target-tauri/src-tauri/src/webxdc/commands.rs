@@ -12,7 +12,7 @@ use log::{error, info, trace, warn};
 use serde::Serialize;
 use tauri::{
     async_runtime::block_on, image::Image, ipc::Channel, AppHandle, Manager, State, Url,
-    WebviewBuilder, WebviewUrl, WebviewWindow, WebviewWindowBuilder, WindowEvent,
+    WebviewUrl, WebviewWindow, WebviewWindowBuilder, WindowEvent,
 };
 use uuid::Uuid;
 
@@ -20,7 +20,7 @@ use crate::{
     menus::webxdc_menu::create_webxdc_window_menu,
     settings::get_content_protection,
     state::{
-        main_window_channels::{self, SendToChatOptions},
+        main_window_channels::SendToChatOptions,
         menu_manager::MenuManager,
         webxdc_instances::{WebxdcInstance, WebxdcInstancesState},
     },
@@ -309,7 +309,7 @@ pub(crate) async fn open_webxdc<'a>(
 
     let mut window_builder = WebviewWindowBuilder::new(&app, &window_id, WebviewUrl::External(url))
         .inner_size(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT)
-        .initialization_script(INIT_SCRIPT, false)
+        .initialization_script_for_all_frames(INIT_SCRIPT)
         .on_navigation(move |url| {
             #[cfg(not(any(target_os = "windows", target_os = "android")))]
             {

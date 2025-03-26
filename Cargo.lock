@@ -7988,7 +7988,7 @@ checksum = "61c41af27dd6d1e27b1b16b489db798443478cef1f06a660c96db617ba5de3b1"
 [[package]]
 name = "tauri"
 version = "2.4.0"
-source = "git+https://github.com/Simon-Laux/tauri?branch=change_initialization_scripts_to_allow_to_run_in_all_frames#18795ad5157a973df844f671a4505aba3283ff79"
+source = "git+https://github.com/Simon-Laux/tauri?branch=change_initialization_scripts_to_allow_to_run_in_all_frames#e2989d15fe7584398738c44d0751e868743b4243"
 dependencies = [
  "anyhow",
  "bytes",
@@ -8039,7 +8039,7 @@ dependencies = [
 [[package]]
 name = "tauri-build"
 version = "2.1.0"
-source = "git+https://github.com/Simon-Laux/tauri?branch=change_initialization_scripts_to_allow_to_run_in_all_frames#18795ad5157a973df844f671a4505aba3283ff79"
+source = "git+https://github.com/Simon-Laux/tauri?branch=change_initialization_scripts_to_allow_to_run_in_all_frames#e2989d15fe7584398738c44d0751e868743b4243"
 dependencies = [
  "anyhow",
  "cargo_toml",
@@ -8060,7 +8060,7 @@ dependencies = [
 [[package]]
 name = "tauri-codegen"
 version = "2.1.0"
-source = "git+https://github.com/Simon-Laux/tauri?branch=change_initialization_scripts_to_allow_to_run_in_all_frames#18795ad5157a973df844f671a4505aba3283ff79"
+source = "git+https://github.com/Simon-Laux/tauri?branch=change_initialization_scripts_to_allow_to_run_in_all_frames#e2989d15fe7584398738c44d0751e868743b4243"
 dependencies = [
  "base64 0.22.1",
  "brotli",
@@ -8086,7 +8086,7 @@ dependencies = [
 [[package]]
 name = "tauri-macros"
 version = "2.1.0"
-source = "git+https://github.com/Simon-Laux/tauri?branch=change_initialization_scripts_to_allow_to_run_in_all_frames#18795ad5157a973df844f671a4505aba3283ff79"
+source = "git+https://github.com/Simon-Laux/tauri?branch=change_initialization_scripts_to_allow_to_run_in_all_frames#e2989d15fe7584398738c44d0751e868743b4243"
 dependencies = [
  "heck 0.5.0",
  "proc-macro2",
@@ -8289,7 +8289,7 @@ dependencies = [
 [[package]]
 name = "tauri-runtime"
 version = "2.5.0"
-source = "git+https://github.com/Simon-Laux/tauri?branch=change_initialization_scripts_to_allow_to_run_in_all_frames#18795ad5157a973df844f671a4505aba3283ff79"
+source = "git+https://github.com/Simon-Laux/tauri?branch=change_initialization_scripts_to_allow_to_run_in_all_frames#e2989d15fe7584398738c44d0751e868743b4243"
 dependencies = [
  "cookie",
  "dpi",
@@ -8308,7 +8308,7 @@ dependencies = [
 [[package]]
 name = "tauri-runtime-wry"
 version = "2.5.0"
-source = "git+https://github.com/Simon-Laux/tauri?branch=change_initialization_scripts_to_allow_to_run_in_all_frames#18795ad5157a973df844f671a4505aba3283ff79"
+source = "git+https://github.com/Simon-Laux/tauri?branch=change_initialization_scripts_to_allow_to_run_in_all_frames#e2989d15fe7584398738c44d0751e868743b4243"
 dependencies = [
  "gtk",
  "http 1.2.0",
@@ -8370,7 +8370,7 @@ dependencies = [
 [[package]]
 name = "tauri-utils"
 version = "2.3.0"
-source = "git+https://github.com/Simon-Laux/tauri?branch=change_initialization_scripts_to_allow_to_run_in_all_frames#18795ad5157a973df844f671a4505aba3283ff79"
+source = "git+https://github.com/Simon-Laux/tauri?branch=change_initialization_scripts_to_allow_to_run_in_all_frames#e2989d15fe7584398738c44d0751e868743b4243"
 dependencies = [
  "anyhow",
  "brotli",

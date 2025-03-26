@@ -7,7 +7,7 @@ use deltachat_jsonrpc::{
 };
 use futures_lite::stream::StreamExt;
 use log::{error, info};
-use tauri::{async_runtime::JoinHandle, Emitter, EventTarget, Manager};
+use tauri::{async_runtime::JoinHandle, Manager};
 use tokio::sync::RwLock;
 
 use crate::MainWindowChannels;
