@@ -3,7 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
-- tauri: support for webxdc #4740
+- tauri: support for webxdc #4740, #4852
 
 ### Changed
 - switch to account the webxdc is from when sending to chat (tauri and electron edition) #4740
