@@ -292,7 +292,7 @@ function buildContextMenu(
   return [
     // Reply
     showReply && {
-      label: tx('reply_noun'),
+      label: tx('notify_reply_button'),
       action: setQuoteInDraft.bind(null, message.id),
     },
     // Reply privately
