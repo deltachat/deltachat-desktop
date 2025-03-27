@@ -38,11 +38,7 @@
     letter-spacing: 0.3px;
     color: var(--messageMetadataDate);
   }
-  & > .date {
-    text-transform: uppercase;
-  }
   & > .edited {
-    text-transform: lowercase;
     // Assumes that there is always a date after it.
     margin-inline-end: 0.5ch;
   }
