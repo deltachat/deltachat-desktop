@@ -111,7 +111,11 @@ pub(crate) fn webxdc_protocol<R: tauri::Runtime>(
         // "XDC-01-002 WP1: Full CSP bypass via desktop app webxdc.js"
         // https://public.opentech.fund/documents/XDC-01-report_2_1.pdf
         let make_response_builder = || {
-            http::Response::builder().header(http::header::CONTENT_SECURITY_POLICY, CSP.as_str())
+            http::Response::builder()
+                .header(http::header::CONTENT_SECURITY_POLICY, CSP.as_str())
+                // Ensure that the browser doesn't try to interpret the file
+                // as a PDF file. See below about PDF, `CONTENT_TYPE`.
+                .header(http::header::X_CONTENT_TYPE_OPTIONS, "nosniff")
         };
 
         // workaround for not yet available try_blocks feature
@@ -171,6 +175,7 @@ pub(crate) fn webxdc_protocol<R: tauri::Runtime>(
 
                 Ok(response_builder
                     .status(http::StatusCode::OK)
+                    .header(http::header::CONTENT_TYPE, mime::TEXT_JAVASCRIPT.essence_str())
                     .body(webxdc_js.into_bytes())?)
             } else {
                 Ok(match message.get_webxdc_blob(&account, path).await {
@@ -180,6 +185,19 @@ pub(crate) fn webxdc_protocol<R: tauri::Runtime>(
                             http::header::CONTENT_TYPE,
                             mime_guess::from_path(path)
                                 .first()
+                                // Make sure that the browser doesn't open files in the PDF viewer.
+                                // The PDF viewer allows the app to bypass CSP,
+                                // at least on Chromium.
+                                // See https://delta.chat/en/2023-05-22-webxdc-security,
+                                // "XDC-01-005 WP1: Full CSP bypass via desktop app PDF embed".
+                                //
+                                // This way if a PDF file gets opened in an iframe,
+                                // it will go to "Downloads" instead.
+                                .map(|original| if original == mime::APPLICATION_PDF {
+                                    mime::APPLICATION_OCTET_STREAM
+                                } else {
+                                    original
+                                })
                                 .unwrap_or(mime::APPLICATION_OCTET_STREAM).essence_str()
                         )
                         .body(blob)?,
