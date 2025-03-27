@@ -119,14 +119,17 @@ class RealtimeListener implements RealtimeListenerType {
   }
 
   window.webxdc = {
+    // The `__TEMPLATE` values will be substituted
+    // in our webxdc protocol handler.
     //@ts-expect-error
-    selfAddr: utf8decoder.decode(new Uint8Array([SELFADDR])),
+    selfAddr: utf8decoder.decode(new Uint8Array([__TEMPLATE_SELFADDR__])),
     //@ts-expect-error
-    selfName: utf8decoder.decode(new Uint8Array([SELFNAME])),
+    selfName: utf8decoder.decode(new Uint8Array([__TEMPLATE_SELFNAME__])),
     //@ts-expect-error
-    sendUpdateInterval: SEND_UPDATE_INTERVAL,
+    sendUpdateInterval: __TEMPLATE_SEND_UPDATE_INTERVAL__,
     //@ts-expect-error
-    sendUpdateMaxSize: SEND_UPDATE_MAX_SIZE,
+    sendUpdateMaxSize: __TEMPLATE_SEND_UPDATE_MAX_SIZE__,
+
     sendUpdate(update, description) {
       if (description) {
         /* ignore-console-log */

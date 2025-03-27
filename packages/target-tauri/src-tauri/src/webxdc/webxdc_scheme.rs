@@ -137,21 +137,21 @@ pub(crate) fn webxdc_protocol<R: tauri::Runtime>(
                     .get_config(deltachat::config::Config::Displayname).await?
                     .unwrap_or(webxdc_info.self_addr.clone());
                 let webxdc_js = webxdc_js
-                    .replace("[SELFADDR]", &serde_json::to_string(
+                    .replace("[__TEMPLATE_SELFADDR__]", &serde_json::to_string(
                         &Value::from(webxdc_info.self_addr.as_bytes().to_vec())
                     )?)
                     .replace(
-                        "[SELFNAME]",
+                        "[__TEMPLATE_SELFNAME__]",
                         &serde_json::to_string(
                             &Value::from(display_name.as_bytes().to_vec())
                         )?
                     )
                     .replace(
-                        "SEND_UPDATE_INTERVAL",
+                        "__TEMPLATE_SEND_UPDATE_INTERVAL__",
                         &webxdc_info.send_update_interval.to_string()
                     )
                     .replace(
-                        "SEND_UPDATE_MAX_SIZE",
+                        "__TEMPLATE_SEND_UPDATE_MAX_SIZE__",
                         &webxdc_info.send_update_max_size.to_string()
                     );
 
