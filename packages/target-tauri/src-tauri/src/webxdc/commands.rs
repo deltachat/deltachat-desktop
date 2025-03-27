@@ -421,12 +421,7 @@ pub(crate) async fn send_webxdc_update<'a>(
         account_id,
         message,
         ..
-    } = webxdc_instances
-        .get(&window)
-        .await
-        .ok_or(Error::WebxdcInstanceNotFoundByLabel(
-            window.label().to_owned(),
-        ))?;
+    } = get_this_webxdc_instance(&webxdc_instances, &window).await?;
     let dc = dc.deltachat.read().await;
     let account = dc
         .get_account(account_id)
@@ -451,12 +446,7 @@ pub(crate) async fn get_webxdc_updates<'a>(
         account_id,
         message,
         ..
-    } = webxdc_instances
-        .get(&window)
-        .await
-        .ok_or(Error::WebxdcInstanceNotFoundByLabel(
-            window.label().to_owned(),
-        ))?;
+    } = get_this_webxdc_instance(&webxdc_instances, &window).await?;
     let dc = dc.deltachat.read().await;
     let account = dc
         .get_account(account_id)
@@ -478,12 +468,7 @@ pub(crate) async fn join_webxdc_realtime_channel<'a>(
         account_id,
         message,
         ..
-    } = webxdc_instances
-        .get(&window)
-        .await
-        .ok_or(Error::WebxdcInstanceNotFoundByLabel(
-            window.label().to_owned(),
-        ))?;
+    } = get_this_webxdc_instance(&webxdc_instances, &window).await?;
     let dc = dc.deltachat.read().await;
     let account = dc
         .get_account(account_id)
@@ -511,12 +496,7 @@ pub(crate) async fn leave_webxdc_realtime_channel<'a>(
         account_id,
         message,
         ..
-    } = webxdc_instances
-        .get(&window)
-        .await
-        .ok_or(Error::WebxdcInstanceNotFoundByLabel(
-            window.label().to_owned(),
-        ))?;
+    } = get_this_webxdc_instance(&webxdc_instances, &window).await?;
     let dc = dc.deltachat.read().await;
     let account = dc
         .get_account(account_id)
@@ -539,12 +519,7 @@ pub(crate) async fn send_webxdc_realtime_data<'a>(
         account_id,
         message,
         ..
-    } = webxdc_instances
-        .get(&window)
-        .await
-        .ok_or(Error::WebxdcInstanceNotFoundByLabel(
-            window.label().to_owned(),
-        ))?;
+    } = get_this_webxdc_instance(&webxdc_instances, &window).await?;
     let dc = dc.deltachat.read().await;
     let account = dc
         .get_account(account_id)
@@ -565,16 +540,24 @@ pub(crate) async fn webxdc_send_to_chat(
     options: SendToChatOptions,
 ) -> Result<(), Error> {
     let WebxdcInstance { account_id, .. } =
-        webxdc_instances
-            .get(&window)
-            .await
-            .ok_or(Error::WebxdcInstanceNotFoundByLabel(
-                window.label().to_owned(),
-            ))?;
+        get_this_webxdc_instance(&webxdc_instances, &window).await?;
 
     main_window_channels
         .send_to_chat(window.app_handle(), options, Some(account_id))
         .await
         .map_err(Error::Anyhow)?;
     Ok(())
+}
+
+/// Returns the [`WebxdcInstance`] that corresponds to the window.
+async fn get_this_webxdc_instance(
+    webxdc_instances: &State<'_, WebxdcInstancesState>,
+    window: &WebviewWindow,
+) -> Result<WebxdcInstance, Error> {
+    webxdc_instances
+        .get(window)
+        .await
+        .ok_or(Error::WebxdcInstanceNotFoundByLabel(
+            window.label().to_owned(),
+        ))
 }
