@@ -24,7 +24,7 @@
     "@deltachat-desktop/runtime-interface": "link:../runtime",
     "@deltachat-desktop/shared": "link:../shared",
     "@deltachat/jsonrpc-client": "catalog:",
-    "@deltachat/message_parser_wasm": "^0.12.0",
+    "@deltachat/message_parser_wasm": "^0.13.0",
     "@emoji-mart/data": "^1.2.1",
     "@emoji-mart/react": "^1.1.1",
     "classnames": "^2.5.1",
