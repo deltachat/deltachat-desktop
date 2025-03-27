@@ -20,7 +20,7 @@ static CSP: Lazy<String> = Lazy::new(|| {
     let mut m: HashMap<String, _> = HashMap::new();
     m.insert(
         "default-src".to_owned(),
-        CspDirectiveSources::List(vec!["'self'".to_owned(), "webxdc:".to_owned()]),
+        CspDirectiveSources::List(vec!["'self'".to_owned()]),
     );
     m.insert(
         "style-src".to_string(),
