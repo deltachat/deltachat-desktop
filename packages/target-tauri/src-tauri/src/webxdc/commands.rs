@@ -221,7 +221,7 @@ fn href_to_webxdc_url(href: String) -> Result<Url, Error> {
         url.set_path(url_with_href.path());
     }
     url.set_fragment(url_with_href.fragment());
-    url.set_query(url_with_href.fragment());
+    url.set_query(url_with_href.query());
     Ok(url)
 }
 
