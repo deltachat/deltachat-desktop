@@ -139,7 +139,7 @@ pub(crate) async fn register_webxdc_channel(
 ) -> Result<(), Error> {
     // set it
     webxdc_instances
-        .set_channel(window.label(), channel)
+        .set_channel(&window, channel)
         .await
         .map_err(|_| Error::WebxdcInstanceNotFoundByLabel(window.label().to_owned()))?;
     Ok(())
@@ -263,7 +263,7 @@ pub(crate) async fn open_webxdc<'a>(
             } else {
                 // this case should never happen, this is an attempt to autorecover in production
                 warn!("instance exists, but window missing, we now remove the instance as workaround so the next open will work again");
-                webxdc_instances.remove(&window_label).await;
+                webxdc_instances.remove_by_window_label(&window_label).await;
                 return Err(Error::InstanceExistsButWindowMissing);
             }
         }
@@ -290,7 +290,7 @@ pub(crate) async fn open_webxdc<'a>(
 
     // add to a state so we can access account id and msg faster without parsing window id
     webxdc_instances
-        .add(
+        .add_by_window_label(
             &window_id,
             WebxdcInstance {
                 account_id,
@@ -335,7 +335,7 @@ pub(crate) async fn open_webxdc<'a>(
 
             // remove from "running instances"-state
             let webxdc_instances = window_arc.state::<WebxdcInstancesState>();
-            block_on(webxdc_instances.remove(&window_id));
+            block_on(webxdc_instances.remove_by_window_label(&window_id));
 
             // leave realtime channel
             // IDEA: track in WebxdcInstancesState whether webxdc joined and only call this method if it did
@@ -422,7 +422,7 @@ pub(crate) async fn send_webxdc_update<'a>(
         message,
         ..
     } = webxdc_instances
-        .get(window.label())
+        .get(&window)
         .await
         .ok_or(Error::WebxdcInstanceNotFoundByLabel(
             window.label().to_owned(),
@@ -452,7 +452,7 @@ pub(crate) async fn get_webxdc_updates<'a>(
         message,
         ..
     } = webxdc_instances
-        .get(window.label())
+        .get(&window)
         .await
         .ok_or(Error::WebxdcInstanceNotFoundByLabel(
             window.label().to_owned(),
@@ -479,7 +479,7 @@ pub(crate) async fn join_webxdc_realtime_channel<'a>(
         message,
         ..
     } = webxdc_instances
-        .get(window.label())
+        .get(&window)
         .await
         .ok_or(Error::WebxdcInstanceNotFoundByLabel(
             window.label().to_owned(),
@@ -512,7 +512,7 @@ pub(crate) async fn leave_webxdc_realtime_channel<'a>(
         message,
         ..
     } = webxdc_instances
-        .get(window.label())
+        .get(&window)
         .await
         .ok_or(Error::WebxdcInstanceNotFoundByLabel(
             window.label().to_owned(),
@@ -540,7 +540,7 @@ pub(crate) async fn send_webxdc_realtime_data<'a>(
         message,
         ..
     } = webxdc_instances
-        .get(window.label())
+        .get(&window)
         .await
         .ok_or(Error::WebxdcInstanceNotFoundByLabel(
             window.label().to_owned(),
@@ -566,7 +566,7 @@ pub(crate) async fn webxdc_send_to_chat(
 ) -> Result<(), Error> {
     let WebxdcInstance { account_id, .. } =
         webxdc_instances
-            .get(window.label())
+            .get(&window)
             .await
             .ok_or(Error::WebxdcInstanceNotFoundByLabel(
                 window.label().to_owned(),
