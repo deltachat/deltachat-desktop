@@ -102,9 +102,23 @@ pub(crate) fn webxdc_protocol<R: tauri::Runtime>(
     let app_handle = ctx.app_handle().clone();
 
     tauri::async_runtime::spawn(async move {
+        // Make sure to set the headers on _all_ responses, because
+        // they are important for security, namely `Content-Security-Policy`.
+        // Failing to set CSP might result in the app being able to create
+        // an <iframe> with no CSP, e.g. `<iframe src="/no_such_file.lol">`
+        // within which they can then do whatever
+        // through the parent frame, see
+        // "XDC-01-002 WP1: Full CSP bypass via desktop app webxdc.js"
+        // https://public.opentech.fund/documents/XDC-01-report_2_1.pdf
+        let make_response_builder = || {
+            http::Response::builder().header(http::header::CONTENT_SECURITY_POLICY, CSP.as_str())
+        };
+
         // workaround for not yet available try_blocks feature
         // https://doc.rust-lang.org/beta/unstable-book/language-features/try-blocks.html
         let response_result: anyhow::Result<_> = async {
+            let response_builder = make_response_builder();
+
             // TODO: get open webxdc window handle and message
             let instances = app_handle.state::<WebxdcInstancesState>();
             let WebxdcInstance {
@@ -155,15 +169,13 @@ pub(crate) fn webxdc_protocol<R: tauri::Runtime>(
                         &webxdc_info.send_update_max_size.to_string()
                     );
 
-                Ok(http::Response::builder()
+                Ok(response_builder
                     .status(http::StatusCode::OK)
-                    .header(http::header::CONTENT_SECURITY_POLICY, CSP.as_str())
                     .body(webxdc_js.into_bytes())?)
             } else {
                 Ok(match message.get_webxdc_blob(&account, path).await {
-                    Ok(blob) => http::Response::builder()
+                    Ok(blob) => response_builder
                         .status(http::StatusCode::OK)
-                        .header(http::header::CONTENT_SECURITY_POLICY, CSP.as_str())
                         .header(
                             http::header::CONTENT_TYPE,
                             mime_guess::from_path(path)
@@ -173,9 +185,8 @@ pub(crate) fn webxdc_protocol<R: tauri::Runtime>(
                         .body(blob)?,
                     Err(err) => {
                         error!("get_webxdc_blob: {err:#}");
-                        http::Response::builder()
+                        response_builder
                             .status(http::StatusCode::NOT_FOUND)
-                            .header(http::header::CONTENT_SECURITY_POLICY, CSP.as_str())
                             .header(http::header::CONTENT_TYPE, mime::TEXT_PLAIN.essence_str())
                             .body("404 not found".as_bytes().to_vec())?
                     }
@@ -187,10 +198,9 @@ pub(crate) fn webxdc_protocol<R: tauri::Runtime>(
             Err(err) => {
                 error!("Failed to build reply for webxdc protocol: {err:#}");
                 responder.respond(
-                    http::Response::builder()
+                    make_response_builder()
                         .status(http::StatusCode::INTERNAL_SERVER_ERROR)
                         .header(http::header::CONTENT_TYPE, mime::TEXT_PLAIN.essence_str())
-                        .header(http::header::CONTENT_SECURITY_POLICY, CSP.as_str())
                         .body("Error".as_bytes().to_owned())
                         .unwrap(),
                 );
