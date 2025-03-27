@@ -14,6 +14,7 @@
 - improve fatal error dialog readability by removing color from deltachat-rpc-server errors
 - prevent dragging around of webxdc icon #4740
 - tauri: clear temp folder on exit #4839
+- fix wrong punycode warnings in links #4864
 
 <a id="1_56_0"></a>
 
