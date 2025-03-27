@@ -79,7 +79,7 @@ impl From<WebxdcMenuAction> for tauri::menu::MenuId {
 impl MenuAction<'static> for WebxdcMenuAction {
     async fn execute(self, app: &AppHandle) -> anyhow::Result<()> {
         let win = app
-            .get_window(&self.window_id)
+            .get_webview_window(&self.window_id)
             .context("window not found")?;
         let menu_manager = app.state::<MenuManager>();
         match self.action {
@@ -127,7 +127,7 @@ impl MenuAction<'static> for WebxdcMenuAction {
                     let instances = app.state::<WebxdcInstancesState>();
                     let dc = app.state::<DeltaChatAppState>();
                     let tx = app.state::<TranslationState>();
-                    if let Some(instance) = instances.get(win.label()).await {
+                    if let Some(instance) = instances.get(&win).await {
                         let dc = dc.deltachat.read().await;
                         if let Some(account) = dc.get_account(instance.account_id) {
                             if let Ok(info) = instance.message.get_webxdc_info(&account).await {

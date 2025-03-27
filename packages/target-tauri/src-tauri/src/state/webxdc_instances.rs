@@ -34,29 +34,47 @@ impl WebxdcInstancesState {
         }
     }
 
-    pub(crate) async fn remove(&self, window_label: &str) {
-        let _ = self.inner.write().await.remove(window_label);
+    #[allow(dead_code)]
+    pub(crate) async fn remove(&self, webxdc_window: &tauri::WebviewWindow) {
+        self.remove_by_window_label(webxdc_window.label()).await
+    }
+    pub(crate) async fn remove_by_window_label(&self, webxdc_window_label: &str) {
+        let _ = self.inner.write().await.remove(webxdc_window_label);
     }
 
-    pub(crate) async fn add(&self, window_label: &str, data: WebxdcInstance) {
+    #[allow(dead_code)]
+    pub(crate) async fn add(&self, webxdc_window: &tauri::WebviewWindow, data: WebxdcInstance) {
+        self.add_by_window_label(webxdc_window.label(), data).await
+    }
+    pub(crate) async fn add_by_window_label(
+        &self,
+        webxdc_window_label: &str,
+        data: WebxdcInstance,
+    ) {
         let _ = self
             .inner
             .write()
             .await
-            .insert(window_label.to_owned(), data);
+            .insert(webxdc_window_label.to_string(), data);
     }
 
-    pub(crate) async fn get(&self, window_label: &str) -> Option<WebxdcInstance> {
-        self.inner.read().await.get(window_label).cloned()
+    pub(crate) async fn get(&self, webxdc_window: &tauri::WebviewWindow) -> Option<WebxdcInstance> {
+        self.get_by_window_label(webxdc_window.label()).await
+    }
+    pub(crate) async fn get_by_window_label(
+        &self,
+        webxdc_window_label: &str,
+    ) -> Option<WebxdcInstance> {
+        self.inner.read().await.get(webxdc_window_label).cloned()
     }
 
     pub(crate) async fn set_channel(
         &self,
-        window_label: &str,
+        webxdc_window: &tauri::WebviewWindow,
         channel: Channel<WebxdcUpdate>,
     ) -> Result<(), String> {
         let mut writer = self.inner.write().await;
-        if let Some(m) = writer.get_mut(window_label) {
+        if let Some(m) = writer.get_mut(webxdc_window.label()) {
             m.channel = Some(channel);
             Ok(())
         } else {

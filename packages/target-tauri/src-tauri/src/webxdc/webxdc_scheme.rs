@@ -112,7 +112,7 @@ pub(crate) fn webxdc_protocol<R: tauri::Runtime>(
                 message,
                 ..
             } = instances
-                .get(&webview_label)
+                .get_by_window_label(&webview_label)
                 .await
                 .ok_or(anyhow!("webxdc instance not found in open instances"))?;
 
