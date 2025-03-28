@@ -292,6 +292,7 @@ pub(crate) async fn open_webxdc<'a>(
     let mut window_builder = WebviewWindowBuilder::new(&app, &window_id, WebviewUrl::External(url))
         .inner_size(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT)
         .initialization_script(INIT_SCRIPT)
+        .allow_link_preview(false)
         .on_navigation(move |url| {
             #[cfg(not(any(target_os = "windows", target_os = "android")))]
             {
