@@ -120,7 +120,8 @@ pub(crate) async fn open_html_window(
                 PathBuf::from_str("tauri_html_email_view/html_email_view.html")
                     .expect("path conversion failed"),
             ),
-        ),
+        )
+        .allow_link_preview(false),
         LogicalPosition::new(0., 0.),
         LogicalSize::new(DEFAULT_WINDOW_WIDTH, HEADER_HEIGHT),
     )?;
@@ -145,6 +146,7 @@ pub(crate) async fn open_html_window(
         WebviewUrl::CustomProtocol(initial_url.clone()),
     )
     .disable_javascript()
+    .allow_link_preview(false)
     .on_navigation(move |url| {
         let tx: tauri::State<'_, TranslationState> = app_for_nav.state::<TranslationState>();
         if url.to_string() == "about:blank" {

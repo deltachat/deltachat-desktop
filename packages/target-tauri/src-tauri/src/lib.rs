@@ -18,9 +18,11 @@ use state::{
     webxdc_instances::WebxdcInstancesState,
 };
 use tauri::{async_runtime::block_on, Manager};
+use tauri::{Manager, WebviewUrl, WebviewWindowBuilder};
 use tauri_plugin_log::{Target, TargetKind};
 
 use tray::is_tray_icon_active;
+use util::csp::add_custom_schemes_to_csp_for_window_and_android;
 
 mod app_path;
 mod autostart;
@@ -48,6 +50,9 @@ mod themes;
 mod tray;
 mod util;
 mod webxdc;
+
+const DEFAULT_WINDOW_WIDTH: f64 = 800.;
+const DEFAULT_WINDOW_HEIGHT: f64 = 600.;
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
@@ -228,6 +233,13 @@ pub fn run() {
         .setup(move |app| {
             app.manage(run_config.clone());
 
+            let main_window =
+                WebviewWindowBuilder::new(app, "main", WebviewUrl::App("tauri_main.html".into()))
+                    .allow_link_preview(false)
+                    .title("Delta Chat Tauri")
+                    .inner_size(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT)
+                    .build()?;
+
             // Create missing directories for iOS (quick fix, better fix this upstream in tauri)
             #[cfg(target_os = "ios")]
             {
@@ -344,7 +356,6 @@ pub fn run() {
                 app.get_webview_window("main").unwrap().open_devtools();
             }
 
-            let main_window = app.get_webview_window("main").unwrap();
             #[cfg(target_os = "macos")]
             {
                 main_window.set_title_bar_style(tauri::TitleBarStyle::Overlay)?;
@@ -403,6 +414,7 @@ pub fn run() {
 
             themes::cli::run_cli(app.handle(), &run_config)?;
 
+            main_window.show()?;
             Ok(())
         })
         .build({

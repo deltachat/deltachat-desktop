@@ -10,15 +10,6 @@
   },
   "app": {
     "withGlobalTauri": false,
-    "windows": [
-      {
-        "label": "main",
-        "title": "Delta Chat Tauri",
-        "width": 800,
-        "height": 600,
-        "url": "tauri_main.html"
-      }
-    ],
     "security": {
       // The CSP will be further adjusted in `run()`, see `context.config_mut()`.
       "csp": {

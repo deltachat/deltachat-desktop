@@ -85,7 +85,9 @@ pub(crate) async fn open_help_window(
         help_window.navigate(url)?;
         help_window
     } else {
-        tauri::WebviewWindowBuilder::new(&app, "help", app_url.clone()).build()?
+        tauri::WebviewWindowBuilder::new(&app, "help", app_url.clone())
+            .allow_link_preview(false)
+            .build()?
     };
     #[cfg(not(any(target_os = "ios", target_os = "android")))]
     {
