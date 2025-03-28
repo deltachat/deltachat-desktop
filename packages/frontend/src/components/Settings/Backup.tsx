@@ -38,7 +38,7 @@ export default function Backup() {
 
     const confirmed = await openConfirmationDialog({
       message: tx('pref_backup_export_explain'),
-      confirmLabel: tx('ok'),
+      confirmLabel: tx('pref_backup_export_start_button'),
     })
 
     if (confirmed) {
