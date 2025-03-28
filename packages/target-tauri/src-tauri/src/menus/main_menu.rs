@@ -12,7 +12,7 @@ use strum::{AsRefStr, EnumString};
 use tauri::{
     async_runtime::spawn,
     menu::{CheckMenuItem, IsMenuItem, Menu, MenuId, MenuItem, PredefinedMenuItem, Submenu},
-    AppHandle, Emitter, Manager, WebviewWindow, Wry,
+    AppHandle, Manager, WebviewWindow, Wry,
 };
 use tauri_plugin_opener::OpenerExt;
 use tauri_plugin_store::StoreExt;
