@@ -3,7 +3,7 @@ use help_menu::HelpMenuAction;
 use html_window_menu::HtmlWindowMenuAction;
 use main_menu::{MainMenuAction, SET_LOCALE_MENU_ID_PREFIX};
 use menu_action::MenuAction;
-use tauri::{async_runtime::spawn, menu::MenuEvent, AppHandle, Emitter, Manager};
+use tauri::{async_runtime::spawn, menu::MenuEvent, AppHandle, Manager};
 use webxdc_menu::WebxdcMenuAction;
 
 use crate::MainWindowChannels;
