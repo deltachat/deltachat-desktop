@@ -466,21 +466,21 @@ function GridGallery({
 
   const isMessageLoaded: (index: number) => boolean = index =>
     !!messageLoadState[mediaMessageIds[index]]
-  const loadMessages: (
-    startIndex: number,
-    stopIndex: number
-  ) => Promise<void> = async (startIndex, stopIndex) => {
+  const loadMessages: (startIndex: number, stopIndex: number) => void = (
+    startIndex,
+    stopIndex
+  ) => {
     const ids = mediaMessageIds.slice(startIndex, stopIndex + 1)
-
     setMessageLoading(state => {
       ids.forEach(id => (state[id] = LoadStatus.FETCHING))
       return state
     })
-    const messages = await BackendRemote.rpc.getMessages(accountId, ids)
-    setMessageCache(cache => ({ ...cache, ...messages }))
-    setMessageLoading(state => {
-      ids.forEach(id => (state[id] = LoadStatus.LOADED))
-      return state
+    BackendRemote.rpc.getMessages(accountId, ids).then(messages => {
+      setMessageCache(cache => ({ ...cache, ...messages }))
+      setMessageLoading(state => {
+        ids.forEach(id => (state[id] = LoadStatus.LOADED))
+        return state
+      })
     })
   }
 
@@ -535,7 +535,7 @@ function GridGallery({
                   rowHeight={itemHeight}
                   columnCount={itemsPerRow}
                   rowCount={rowCount}
-                  overscanRowCount={10}
+                  overscanRowCount={itemsPerRow * 10}
                   ref={ref}
                   onItemsRendered={props => {
                     const { visibleColumnStartIndex, visibleRowStartIndex } =
