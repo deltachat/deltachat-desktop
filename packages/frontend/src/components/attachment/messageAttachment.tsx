@@ -70,12 +70,20 @@ export default function Attachment({
    * by css rules: max-width/max-height with object-fit: cover
    */
   const calculateHeight = (
-    message: Pick<T.Message, 'dimensionsHeight' | 'dimensionsWidth'>
+    message: Pick<
+      T.Message,
+      'dimensionsHeight' | 'dimensionsWidth' | 'viewType'
+    >
   ): number => {
     const minWidth = 200 // needed for readable footer & reactions
     const minHeight = 50 // needed for readable footer
     const maxLandscapeWidth = 450 // also set by css
     const maxPortraitHeight = 450 // also set by css
+    const stickerHeight = 200
+
+    if (message.viewType === 'Sticker') {
+      return stickerHeight
+    }
 
     const height = message.dimensionsHeight
     const width = message.dimensionsWidth
@@ -120,9 +128,6 @@ export default function Attachment({
     message.overrideSenderName != null ||
     hasQuote ||
     (conversationType.hasMultipleParticipants && direction === 'incoming')
-  // const dimensions = message.msg.dimensions || {}
-  // Calculating height to prevent reflow when image loads
-  // const height = Math.max(MINIMUM_IMG_HEIGHT, (dimensions as any).height || 0)
   if (isImage(message.fileMime) || message.viewType === 'Sticker') {
     if (!message.file) {
       return (
