@@ -70,6 +70,7 @@
 - fix chatlist items sometimes not updating #4975
 - fix sticker folder not resolved on windows #4939
 - tauri: improve performance a little #4812
+- settings: fix: wait for setting to be applied before calling callback
 
 <a id="1_56_0"></a>
 
