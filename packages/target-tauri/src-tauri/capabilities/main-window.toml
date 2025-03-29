@@ -42,6 +42,7 @@ permissions = [
 
     "allow-get-current-logfile",
     "allow-copy-image-to-clipboard",
+    "allow-get-autostart-state",
     "allow-get-app-path",
     "allow-get-clipboard-image-as-data-uri",
     "allow-download-file",
