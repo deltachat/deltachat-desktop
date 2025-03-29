@@ -4,10 +4,12 @@
 
 ### Added
 - tauri: support for webxdc #4740
+- tauri: experimental: make it compile for android #4871
 
 ### Changed
 - switch to account the webxdc is from when sending to chat (tauri and electron edition) #4740
 - change the Reply button for messages to be a verb rather than a noun #4853
+- change script format and imports to esm/module #4871
 
 ### Fixed
 - tauri: improve security #4826

@@ -62,15 +62,35 @@ pub(super) async fn get_languages(locales_dir: &Path) -> Result<HashMap<String, 
 }
 
 #[cfg(target_os = "android")]
+use include_dir::{include_dir, Dir};
+#[cfg(target_os = "android")]
+pub static PROJECT_DIR: Dir<'_> = include_dir!("$CARGO_MANIFEST_DIR/../../../_locales");
+
+#[cfg(target_os = "android")]
 pub(super) async fn get_languages(app: &AppHandle) -> Result<HashMap<String, Language>, Error> {
     use anyhow::Context;
 
-    let languages_json = app
-        .asset_resolver()
-        .get("_locales/_languages.json".to_string())
-        .ok_or(Error::NoValidLocaleDirFound)?;
-    let string = String::from_utf8(languages_json.bytes)
-        .context("failed to read bytes as utf8 string")
+    // these paths do not work
+    // "asset://localhost/_locales/_languages.json"
+    // "_locales/_languages.json"
+    // ../../../_locales/_languages.json
+    // ./
+    //
+    // std::fs::File::open()
+    // app.asset_resolver().get()
+    // both don't work
+
+    // so let's hardcode it
+
+    let file = PROJECT_DIR
+        .get_file("_languages.json")
+        .context("file not found")
         .map_err(Error::Anyhow)?;
+
+    let string = file
+        .contents_utf8()
+        .context("load failed")
+        .map_err(Error::Anyhow)?;
+
     Ok(serde_json::from_str(&string)?)
 }
