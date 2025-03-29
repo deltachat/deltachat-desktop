@@ -28,7 +28,7 @@ type SettingsView =
   | 'advanced'
 
 export default function Settings({ onClose }: DialogProps) {
-  const { openDialog } = useDialog()
+  const { openDialog, closeDialog, openDialogs: openDialogIds } = useDialog()
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const settingsStore = useSettingsStore()[0]!
   const tx = useTranslationFunction()
@@ -42,12 +42,19 @@ export default function Settings({ onClose }: DialogProps) {
         evt.key === 'Escape'
       ) {
         evt.preventDefault()
-        setSettingsMode('main')
+        if (openDialogIds.length > 1) {
+          // if there is an open dialog on top of settings dialog
+          // (like Backup or Password & Account dialog) close that
+          closeDialog(openDialogIds[openDialogIds.length - 1].toString())
+        } else {
+          // switch back to main Settings dialog
+          setSettingsMode('main')
+        }
       }
     }
     document.addEventListener('keydown', handler)
     return () => document.removeEventListener('keydown', handler)
-  }, [settingsMode])
+  }, [settingsMode, openDialogIds, closeDialog])
 
   useEffect(() => {
     if (window.__settingsOpened) {

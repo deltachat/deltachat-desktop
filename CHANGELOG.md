@@ -16,6 +16,7 @@
 - prevent dragging around of webxdc icon #4740
 - tauri: clear temp folder on exit #4839
 - fix wrong punycode warnings in links #4864
+- fix esc key closing wrong dialog in settings #4865
 
 <a id="1_56_0"></a>
 
