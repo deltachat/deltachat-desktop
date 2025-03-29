@@ -23,11 +23,9 @@ let parseMessage: (message: string) => ParsedElement[] = m =>
   parse_desktop_set(m)
 
 SettingsStoreInstance.subscribe(newState => {
-  if (newState?.desktopSettings.experimentalEnableMarkdownInMessages) {
-    parseMessage = m => parse_text(m, true)
-  } else {
-    parseMessage = m => parse_desktop_set(m)
-  }
+  const markDownEnabled =
+    !!newState?.desktopSettings.experimentalEnableMarkdownInMessages
+  parseMessage = m => parse_text(m, markDownEnabled)
 })
 
 function renderElement(
