@@ -253,7 +253,7 @@ pub(crate) fn webxdc_protocol<R: tauri::Runtime>(
 // https://github.com/w3c/webappsec-permissions-policy/blob/main/features.md.
 //
 // We make sure that this list is up to date using the
-// `/bin/webxdc-check-permissions-policy-count.sh` script.
+// `/bin/webxdc-check-permissions-policy-count.js` script.
 const PERMISSIONS_POLICY_DENY_ALL: &'static str = concat!(
     "accelerometer=(), ",
     "ambient-light-sensor=(), ",
