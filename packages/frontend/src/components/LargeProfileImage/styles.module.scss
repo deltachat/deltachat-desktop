@@ -9,7 +9,24 @@ $imageSize: 100px;
 
 .largeProfileImageArea {
   align-items: center;
-  background-color: #bcbac9;
+  --local-avatar-color: #bcbac9;
+  background-color: var(--local-avatar-color);
+  @supports (
+    // text-wrap was introduced in 2023 slightly after color-mix,
+    // since we can't test for color-mix support directly we use this instead.
+    text-wrap: wrap
+  ) {
+    // make avatars look slightly 3D
+    background: linear-gradient(
+      45deg,
+      var(--local-avatar-color),
+      color-mix(
+        in srgb,
+        var(--local-avatar-color) var(--avatarGradientMixFactor),
+        white
+      )
+    );
+  }
   border-radius: 100%;
   color: white;
   display: flex;
