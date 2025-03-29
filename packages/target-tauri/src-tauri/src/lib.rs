@@ -186,7 +186,7 @@ pub fn run() {
                 std::fs::create_dir_all(app.path().app_log_dir()?)?; // though log dir is not used because it uses os-log on iOS
             }
 
-            let (tauri_plugin_log, max_level, logger) = tauri_plugin_log::Builder::new()
+            let mut logger_builder = tauri_plugin_log::Builder::new()
                 // default targets are file and stdout
                 .max_file_size(5_000_000 /* bytes */)
                 .rotation_strategy(tauri_plugin_log::RotationStrategy::KeepAll) // TODO: only keep last 10
@@ -210,8 +210,17 @@ pub fn run() {
                 // why do we use debug here at the moment?
                 // because the message "[DEBUG][portmapper] failed to get a port mapping deadline has elapsed" looks like important
                 // info for debugging add backup transfer feature. - so better be safe and set it to debug for now.
-                .level_for("portmapper", log::LevelFilter::Debug)
-                .split(app.handle())?;
+                .level_for("portmapper", log::LevelFilter::Debug);
+
+            #[cfg(target_os = "android")]
+            {
+                // logs on android
+                logger_builder = logger_builder.target(tauri_plugin_log::Target::new(
+                    tauri_plugin_log::TargetKind::Stdout,
+                ));
+            }
+
+            let (tauri_plugin_log, max_level, logger) = logger_builder.split(app.handle())?;
 
             #[cfg(feature = "crabnebula_extras")]
             {
