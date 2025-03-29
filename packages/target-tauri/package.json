@@ -8,7 +8,7 @@
     "check:types": "tsc --noEmit -p runtime-tauri",
     "start": "tauri dev",
     "build4production": "NODE_ENV=production pnpm build",
-    "build": "pnpm build:locales && pnpm --filter=@deltachat-desktop/frontend build && pnpm build:compose-frontend && pnpm build:html-email-view && pnpm build:webxdc-js",
+    "build": "node ../../bin/webxdc-check-permissions-policy-count.js && pnpm build:locales && pnpm --filter=@deltachat-desktop/frontend build && pnpm build:compose-frontend && pnpm build:html-email-view && pnpm build:webxdc-js",
     "build:locales": "pnpm -w translations:convert",
     "build:runtime-impl": "pnpm esbuild --bundle --minify --keep-names --sourcemap --outdir=./html-dist runtime-tauri/runtime.ts",
     "build:html-email-view": "pnpm esbuild --bundle --minify --keep-names --sourcemap --outdir=./html-dist/tauri_html_email_view tauri-html-email-view/html_email_view.ts",

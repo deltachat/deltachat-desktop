@@ -116,6 +116,24 @@ pub(crate) fn webxdc_protocol<R: tauri::Runtime>(
                 // Ensure that the browser doesn't try to interpret the file
                 // as a PDF file. See below about PDF, `CONTENT_TYPE`.
                 .header(http::header::X_CONTENT_TYPE_OPTIONS, "nosniff")
+                // Make sure that the webxdc app cannot even request
+                // any of the permissions, such as camera, geolocation, etc.
+                //
+                // Currently on Windows, if an app tries to request
+                // a permission, the WebView will show a popup
+                // for the user, much like in regular browsers,
+                // which is probably the way we want it to be in the end,
+                // but we have not tested extensively
+                // whether it is guaranteed that the permission is granted
+                // per-app, and we don't know how to revoke it later.
+                // So, let's play it safe for now.
+                //
+                // On our Electron version we also deny most (but not all!)
+                // of the permissions, see `setPermissionRequestHandler`.
+                //
+                // More about webxdc apps and permissions:
+                // https://support.delta.chat/t/allow-access-to-camera-geolocation-other-web-apis/2446
+                .header("Permissions-Policy", PERMISSIONS_POLICY_DENY_ALL)
         };
 
         // workaround for not yet available try_blocks feature
@@ -227,3 +245,87 @@ pub(crate) fn webxdc_protocol<R: tauri::Runtime>(
         }
     });
 }
+
+// Yep, there is no way to "disable all by default", see
+// https://github.com/w3c/webappsec-permissions-policy/issues/189.
+//
+// The list is taken from
+// https://github.com/w3c/webappsec-permissions-policy/blob/main/features.md.
+//
+// We make sure that this list is up to date using the
+// `/bin/webxdc-check-permissions-policy-count.sh` script.
+const PERMISSIONS_POLICY_DENY_ALL: &'static str = concat!(
+    "accelerometer=(), ",
+    "ambient-light-sensor=(), ",
+    "attribution-reporting=(), ",
+    "autoplay=(), ",
+    "battery=(), ",
+    "bluetooth=(), ",
+    "camera=(), ",
+    "ch-ua=(), ",
+    "ch-ua-arch=(), ",
+    "ch-ua-bitness=(), ",
+    "ch-ua-full-version=(), ",
+    "ch-ua-full-version-list=(), ",
+    "ch-ua-high-entropy-values=(), ",
+    "ch-ua-mobile=(), ",
+    "ch-ua-model=(), ",
+    "ch-ua-platform=(), ",
+    "ch-ua-platform-version=(), ",
+    "ch-ua-wow64=(), ",
+    "compute-pressure=(), ",
+    "cross-origin-isolated=(), ",
+    "direct-sockets=(), ",
+    "display-capture=(), ",
+    "encrypted-media=(), ",
+    "execution-while-not-rendered=(), ",
+    "execution-while-out-of-viewport=(), ",
+    // TODO we probably need to enable fullscreen, as we do on Electron,
+    // but on Electron we also have explicit handling of `exitFullscreen`.
+    "fullscreen=(), ",
+    "geolocation=(), ",
+    "gyroscope=(), ",
+    "hid=(), ",
+    "identity-credentials-get=(), ",
+    "idle-detection=(), ",
+    "keyboard-map=(), ",
+    "magnetometer=(), ",
+    "mediasession=(), ",
+    "microphone=(), ",
+    "midi=(), ",
+    "navigation-override=(), ",
+    "otp-credentials=(), ",
+    "payment=(), ",
+    "picture-in-picture=(), ",
+    "publickey-credentials-get=(), ",
+    "screen-wake-lock=(), ",
+    "serial=(), ",
+    "sync-xhr=(), ",
+    "storage-access=(), ",
+    "usb=(), ",
+    "web-share=(), ",
+    "window-management=(), ",
+    "xr-spatial-tracking=(), ",
+    "clipboard-read=(), ",
+    "clipboard-write=(), ",
+    "deferred-fetch=(), ",
+    "gamepad=(), ",
+    "shared-autofill=(), ",
+    "speaker-selection=(), ",
+    "all-screens-capture=(), ",
+    "browsing-topics=(), ",
+    "captured-surface-control=(), ",
+    "conversion-measurement=(), ",
+    "digital-credentials-get=(), ",
+    "focus-without-user-activation=(), ",
+    "join-ad-interest-group=(), ",
+    "local-fonts=(), ",
+    "run-ad-auction=(), ",
+    "smart-card=(), ",
+    "sync-script=(), ",
+    "trust-token-redemption=(), ",
+    "unload=(), ",
+    "vertical-scroll=(), ",
+    "document-domain=(), ",
+    "window-placement=()",
+);
