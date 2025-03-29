@@ -44,8 +44,11 @@ impl AppState {
 
         let current_log_file_path = get_current_log_file_task.await??;
 
-        create_tmp_folder(app.handle()).await?;
-        clear_tmp_folder(app.handle()).await?;
+        #[cfg(not(target_os = "android"))]
+        {
+            create_tmp_folder(app.handle()).await?;
+            clear_tmp_folder(app.handle()).await?;
+        }
 
         let all_languages_for_menu = get_all_languages(app.handle()).await?;
 
