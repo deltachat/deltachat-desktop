@@ -26,7 +26,7 @@ function config(options) {
   return {
     entryPoints: ['src/main.tsx'],
     bundle: true,
-    minify: isMinify,
+    minify: false,
     sourcemap: true,
     outfile: 'html-dist/bundle.js',
     platform: 'browser',
@@ -35,9 +35,10 @@ function config(options) {
     },
     plugins,
     external: ['*.jpg', '*.png', '*.webp', '*.svg'],
+    format: 'esm',
     alias: {
-      'path': 'path-browserify'
-    }
+      path: 'path-browserify',
+    },
   }
 }
 

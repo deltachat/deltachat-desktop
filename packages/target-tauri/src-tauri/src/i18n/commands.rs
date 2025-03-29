@@ -92,36 +92,36 @@ pub(crate) async fn get_locale_data(locale: &str, app: AppHandle) -> Result<Loca
     };
     #[cfg(target_os = "android")]
     let language_data: HashMap<String, HashMap<String, String>> = {
+        use crate::i18n::load::PROJECT_DIR;
         use anyhow::Context;
 
         type Language = HashMap<String, HashMap<String, String>>;
-        let untranslated_file = app
-            .asset_resolver()
-            .get("_locales/_untranslated_en.json".to_string())
-            .context("untranslated could not be loaded")
-            .map_err(Error::Anyhow)?;
-        let untranslated_file_string = String::from_utf8(untranslated_file.bytes)
-            .context("failed to read bytes as utf8 string")
-            .map_err(Error::Anyhow)?;
-        let untranslated_data: Language = serde_json::from_str(&untranslated_file_string)?;
+        let untranslated_data: Language = serde_json::from_str(
+            &PROJECT_DIR
+                .get_file("_untranslated_en.json")
+                .context("file not found")
+                .map_err(Error::Anyhow)?
+                .contents_utf8()
+                .context("load failed")
+                .map_err(Error::Anyhow)?,
+        )?;
 
-        let data_en_file = app
-            .asset_resolver()
-            .get("_locales/en.json".to_string())
-            .context("en.json could not be loaded")
-            .map_err(Error::Anyhow)?;
-        let data_en_file_string = String::from_utf8(data_en_file.bytes)
-            .context("failed to read bytes as utf8 string")
-            .map_err(Error::Anyhow)?;
-
-        let data_en: Language = serde_json::from_str(&data_en_file_string)?;
+        let data_en: Language = serde_json::from_str(
+            &PROJECT_DIR
+                .get_file("en.json")
+                .context("file not found")
+                .map_err(Error::Anyhow)?
+                .contents_utf8()
+                .context("load failed")
+                .map_err(Error::Anyhow)?,
+        )?;
 
         let mut language_data: Language = data_en;
 
-        if let Some(file) = app.asset_resolver().get(format!("{locale_key}.json")) {
+        if let Some(file) = PROJECT_DIR.get_file(format!("{locale_key}.json")) {
             let loaded_language_data: Language = serde_json::from_str(
-                &String::from_utf8(file.bytes)
-                    .context("failed to read bytes as utf8 string")
+                file.contents_utf8()
+                    .context("load failed")
                     .map_err(Error::Anyhow)?,
             )?;
             language_data.extend(loaded_language_data.into_iter());

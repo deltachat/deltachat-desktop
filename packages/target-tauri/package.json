@@ -10,7 +10,7 @@
     "build4production": "NODE_ENV=production pnpm build",
     "build": "node ../../bin/webxdc-check-permissions-policy-count.js && pnpm build:locales && pnpm --filter=@deltachat-desktop/frontend build && pnpm build:compose-frontend && pnpm build:html-email-view && pnpm build:webxdc-js",
     "build:locales": "pnpm -w translations:convert",
-    "build:runtime-impl": "pnpm esbuild --bundle --minify --keep-names --sourcemap --outdir=./html-dist runtime-tauri/runtime.ts",
+    "build:runtime-impl": "pnpm esbuild --format=esm --bundle --minify --keep-names --sourcemap --outdir=./html-dist runtime-tauri/runtime.ts",
     "build:html-email-view": "pnpm esbuild --bundle --minify --keep-names --sourcemap --outdir=./html-dist/tauri_html_email_view tauri-html-email-view/html_email_view.ts",
     "build:webxdc-js": "pnpm esbuild --bundle --minify --keep-names --outdir=./html-dist/webxdc webxdc-js-implementation/webxdc.ts",
     "build:compose-frontend": "node ../../bin/copy.js ../frontend/html-dist ./html-dist && node ../../bin/copy.js ./static ./html-dist && pnpm build:runtime-impl",

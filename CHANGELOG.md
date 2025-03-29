@@ -3,12 +3,14 @@
 ## [Unreleased][unreleased]
 
 ### Added
+<<<<<<< HEAD
 - tauri: support for webxdc #4740, #4852
 - create chat: add context menu option to view profile #4880
 - focuses first visible item on arrow down key on input in create chat dialog #4892
 - create chat: add support for invite links to search bar #4893
 - add separators to the context menu #4883
 - add button to share contact from profile view dialog #4886
+- tauri: experimental: make it compile for android #4871
 
 ### Changed
 - switch to account the webxdc is from when sending to chat (tauri and electron edition) #4740
@@ -19,6 +21,7 @@
 - change usage of `nameAndAddr` to `displayName` #4882
 - remove addresses from contact list items unless they are not verified. #4880
 - migrate account mute state to new is_muted config option #4888
+- change script format and imports to esm/module #4871
 
 ### Fixed
 - tauri: improve security #4826
