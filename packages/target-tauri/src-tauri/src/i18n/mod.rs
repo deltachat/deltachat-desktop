@@ -1,9 +1,12 @@
 use std::collections::HashMap;
 
 use errors::Error;
-use load::{get_languages, get_locales_dir};
+use load::get_languages;
 use serde::{Deserialize, Serialize};
 use tauri::AppHandle;
+
+#[cfg(desktop)]
+use load::get_locales_dir;
 
 pub mod commands;
 mod errors;
@@ -46,8 +49,12 @@ impl Language {
 
 /// get all locales, returns tuple with id and name
 pub async fn get_all_languages(app: &AppHandle) -> Result<Vec<(String, String)>, Error> {
+    #[cfg(not(target_os = "android"))]
     let locales_dir = get_locales_dir(app).await?;
+    #[cfg(not(target_os = "android"))]
     let languages: HashMap<String, Language> = get_languages(&locales_dir).await?;
+    #[cfg(target_os = "android")]
+    let languages: HashMap<String, Language> = get_languages(&app).await?;
     let mut vec: Vec<(String, String)> = languages
         .into_iter()
         .map(|(id, lang_data)| {

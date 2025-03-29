@@ -11,6 +11,7 @@
 #[cfg(not(target_vendor = "apple"))]
 use std::path::PathBuf;
 
+#[cfg(target_vendor = "apple")]
 use log::trace;
 use tauri::{AppHandle, Manager, Runtime, WebviewWindowBuilder};
 
