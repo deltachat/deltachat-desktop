@@ -391,7 +391,7 @@ export default function ImageCropper({
   return (
     <Dialog canEscapeKeyClose onClose={onClose} canOutsideClickClose={false}>
       <DialogHeader title={tx('ImageEditorHud_crop')} />
-      <DialogBody className={styles.imageCropperDialogBody}>
+      <DialogBody>
         <DialogContent className={styles.imageCropperDialogContent}>
           <div ref={container} className={styles.imageCropperContainer}>
             <div ref={shade} className={styles.imageCropperShade}></div>
@@ -400,11 +400,13 @@ export default function ImageCropper({
               className={styles.imageCropperCutImage}
               src={filepath}
               onLoad={setupImages}
+              crossOrigin='anonymous'
             />
             <img
               ref={fullImage}
               className={styles.imageCropperFullImage}
               src={filepath}
+              crossOrigin='anonymous'
             />
           </div>
           <div className={styles.imageCropperControls}>
