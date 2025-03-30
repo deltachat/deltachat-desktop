@@ -330,7 +330,7 @@ test('create group', async ({ page, context, browserName }) => {
   await page.getByTestId('confirm-join-group').getByTestId('confirm').click()
   // userA invited you to group message
   await expect(page.locator('#message-list li').nth(1)).toContainText(
-    userA.name
+    userA.address
   )
   // verified chat after response from userA
   await expect(page.locator('.verified-icon-info-msg')).toBeVisible()
