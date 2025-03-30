@@ -1,4 +1,5 @@
 import React, {
+  CSSProperties,
   useCallback,
   useContext,
   useEffect,
@@ -60,6 +61,10 @@ import type { JumpToMessage } from '../../hooks/chat/useMessage'
 import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
 import { useRovingTabindex } from '../../contexts/RovingTabindex'
 
+interface CssWithAvatarColor extends CSSProperties {
+  '--local-avatar-color': string
+}
+
 const Avatar = ({
   contact,
   onContactClick,
@@ -91,7 +96,10 @@ const Avatar = ({
         onClick={onClick}
         tabIndex={tabIndex}
       >
-        <div style={{ backgroundColor: color }} className='label'>
+        <div
+          style={{ '--local-avatar-color': color } as CssWithAvatarColor}
+          className='label'
+        >
           {initial}
         </div>
       </button>

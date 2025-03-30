@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { CSSProperties } from 'react'
 
 import Icon from '../Icon'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
@@ -10,6 +10,10 @@ type Props = {
   color?: string
   imageUrl?: string
   initials: string
+}
+
+interface CssWithAvatarColor extends CSSProperties {
+  '--local-avatar-color': string
 }
 
 export default function LargeProfileImage({
@@ -32,7 +36,7 @@ export default function LargeProfileImage({
       ) : (
         <span
           className={styles.largeProfileImageArea}
-          style={{ backgroundColor: color }}
+          style={{ '--local-avatar-color': color } as CssWithAvatarColor}
         >
           {initials ? (
             initials

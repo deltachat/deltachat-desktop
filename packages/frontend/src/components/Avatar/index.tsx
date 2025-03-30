@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { CSSProperties } from 'react'
 import classNames from 'classnames'
 
 import useDialog from '../../hooks/dialog/useDialog'
@@ -32,6 +32,10 @@ export function avatarInitial(name: string, addr?: string) {
 }
 
 type htmlDivProps = React.HTMLAttributes<HTMLDivElement>
+
+interface CssWithAvatarColor extends CSSProperties {
+  '--local-avatar-color': string
+}
 
 export function Avatar(props: {
   avatarPath?: string | null
@@ -68,7 +72,10 @@ export function Avatar(props: {
   const content = avatarPath ? (
     <img className='content' src={runtime.transformBlobURL(avatarPath)} />
   ) : (
-    <div className='content' style={{ backgroundColor: color }}>
+    <div
+      className='content'
+      style={{ '--local-avatar-color': color } as CssWithAvatarColor}
+    >
       {avatarInitial(displayName, addr)}
     </div>
   )
