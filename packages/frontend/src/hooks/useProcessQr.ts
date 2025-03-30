@@ -108,7 +108,7 @@ export default function useProcessQR() {
         const userConfirmed = await openConfirmationDialog({
           message: tx(
             'instant_onboarding_confirm_contact',
-            contact.nameAndAddr
+            contact.displayName
           ),
           confirmLabel: tx('ok'),
           dataTestid: 'ask-create-profile-and-join-chat',

@@ -29,7 +29,7 @@ export default function useSecureJoin() {
       )
 
       return await openConfirmationDialog({
-        message: tx('ask_start_chat_with', contact.nameAndAddr),
+        message: tx('ask_start_chat_with', contact.displayName),
         confirmLabel: tx('ok'),
         dataTestid: 'confirm-start-chat',
       })
