@@ -41,6 +41,14 @@
     0 2px 4px rgba(16, 22, 26, 0.2),
     0 8px 24px rgba(16, 22, 26, 0.2);
 
+  hr.seperator {
+    width: 100%;
+    border-width: 0;
+    color: gray;
+    background-color: gray;
+    // TODO styling
+  }
+
   .item {
     @include button-reset;
     width: 100%;
