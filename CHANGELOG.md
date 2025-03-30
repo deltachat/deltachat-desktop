@@ -14,6 +14,7 @@
 - slight gradients for avatars for a more modern look #4877
 - change usage of `nameAndAddr` to `displayName` #4882
 - remove addresses from contact list items unless they are not verified. #4880
+- migrate account mute state to new is_muted config option #4888
 
 ### Fixed
 - tauri: improve security #4826
