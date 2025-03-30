@@ -10,6 +10,7 @@
 - change the Reply button for messages to be a verb rather than a noun #4853
 - Update message-parser to v0.13.0
 - slight gradients for avatars for a more modern look #4877
+- change usage of `nameAndAddr` to `displayName` #4882
 
 ### Fixed
 - tauri: improve security #4826
