@@ -291,7 +291,7 @@ test('create group', async ({ page, context, browserName }) => {
   const addMemberDialog = page.getByTestId('add-member-dialog')
   await page
     .locator('.contact-list-item')
-    .filter({ hasText: userB.address })
+    .filter({ hasText: userB.name })
     .click()
   // add new member by mail address (not working yet)
   // await page.getByTestId('add-member-search').fill(userC.address)
@@ -330,7 +330,7 @@ test('create group', async ({ page, context, browserName }) => {
   await page.getByTestId('confirm-join-group').getByTestId('confirm').click()
   // userA invited you to group message
   await expect(page.locator('#message-list li').nth(1)).toContainText(
-    userA.address
+    userA.name
   )
   // verified chat after response from userA
   await expect(page.locator('.verified-icon-info-msg')).toBeVisible()
