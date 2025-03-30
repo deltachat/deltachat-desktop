@@ -18,7 +18,7 @@ $imageSize: 100px;
   ) {
     // make avatars look slightly 3D
     background: linear-gradient(
-      45deg,
+      var(--avatarGradientAngle),
       var(--local-avatar-color),
       color-mix(
         in srgb,

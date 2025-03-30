@@ -47,7 +47,7 @@
         ) {
           // make avatars look slightly 3D
           background: linear-gradient(
-            45deg,
+            var(--avatarGradientAngle),
             var(--local-avatar-color),
             color-mix(
               in srgb,
@@ -583,7 +583,7 @@
   }
 }
 
-/* This is for making links in quoted texts unclickable and 
+/* This is for making links in quoted texts unclickable and
    have an appereance like the rest of text in there */
 .quoted-text > a {
   pointer-events: none;
