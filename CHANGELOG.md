@@ -3,18 +3,20 @@
 ## [Unreleased][unreleased]
 
 ### Added
-- tauri: support for webxdc #4740
+- tauri: support for webxdc #4740, #4852
 
 ### Changed
 - switch to account the webxdc is from when sending to chat (tauri and electron edition) #4740
 - change the Reply button for messages to be a verb rather than a noun #4853
 - only render markdown links when enabled in settings #4875
+- Update message-parser to v0.13.0
 
 ### Fixed
 - tauri: improve security #4826
 - improve fatal error dialog readability by removing color from deltachat-rpc-server errors
 - prevent dragging around of webxdc icon #4740
 - tauri: clear temp folder on exit #4839
+- fix wrong punycode warnings in links #4864
 
 <a id="1_56_0"></a>
 
