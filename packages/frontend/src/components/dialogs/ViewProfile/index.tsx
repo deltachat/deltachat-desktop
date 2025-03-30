@@ -29,6 +29,9 @@ import type { DialogProps } from '../../../contexts/DialogContext'
 import type { T } from '@deltachat/jsonrpc-client'
 import { RovingTabindexProvider } from '../../../contexts/RovingTabindex'
 import { ChatListItemRowChat } from '../../chat/ChatListItemRow'
+import useCreateDraftMessage from '../../../hooks/chat/useCreateDraftMesssage'
+import { runtime } from '@deltachat-desktop/runtime-interface'
+import SelectChat from '../SelectChat'
 
 const log = getLogger('renderer/dialogs/ViewProfile')
 
@@ -82,6 +85,15 @@ export default function ViewProfile(
 
   const onClickViewProfileMenu = useViewProfileMenu(contact)
 
+  const { openDialog } = useDialog()
+
+  const onClickShareContact = () => {
+    onClose()
+    openDialog(ShareProfileDialog, {
+      contact,
+    })
+  }
+
   return (
     <Dialog
       width={400}
@@ -95,14 +107,24 @@ export default function ViewProfile(
         onClickBack={onBack}
       >
         {showMenu && (
-          <HeaderButton
-            id='view-profile-menu'
-            onClick={onClickViewProfileMenu}
-            icon='more'
-            iconSize={24}
-            rotation={90}
-            aria-label='Profile Menu'
-          ></HeaderButton>
+          <>
+            <HeaderButton
+              id='view-profile-share-contact'
+              onClick={onClickShareContact}
+              icon={
+                runtime.getRuntimeInfo().isMac ? 'ios_share_modified' : 'share'
+              }
+              iconSize={24}
+              aria-label='Share Contact'
+            />
+            <HeaderButton
+              id='view-profile-menu'
+              onClick={onClickViewProfileMenu}
+              icon='more_vert'
+              iconSize={24}
+              aria-label='Profile Menu'
+            />
+          </>
         )}
       </DialogHeader>
       <DialogBody className={styles.viewProfileDialogBody}>
@@ -350,5 +372,40 @@ export function ViewProfileInner({
         </>
       )}
     </>
+  )
+}
+
+function ShareProfileDialog(props: { contact: T.Contact } & DialogProps) {
+  const { onClose, contact } = props
+
+  const tx = useTranslationFunction()
+  const accountId = selectedAccountId()
+  const createDraftMessage = useCreateDraftMessage()
+
+  const onChatClick = async (chatId: number) => {
+    const vcard = await BackendRemote.rpc.makeVcard(accountId, [contact.id])
+
+    const filePath = await runtime.writeTempFile('contact.vcard', vcard)
+    // treefit: I would like to use setDraftVcard here, but it requires a draft message, which we may now have:
+    // BackendRemote.rpc.setDraftVcard(accountId, msgId, contacts)
+    // and there is no way to create an empty draft message with the current api as far as I know
+    //
+    // why is this better? because we then only would need to ask to replace draft when there is a file
+
+    onClose()
+    await createDraftMessage(accountId, chatId, '', {
+      name: `${contact.displayName}.vcard`,
+      path: filePath,
+    })
+    runtime.removeTempFile(filePath)
+  }
+
+  return (
+    <SelectChat
+      headerTitle={tx('chat_share_with_title')}
+      onChatClick={onChatClick}
+      onClose={onClose}
+      listFlags={C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS}
+    />
   )
 }
