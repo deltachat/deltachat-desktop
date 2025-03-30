@@ -9,6 +9,7 @@
 ### Changed
 - switch to account the webxdc is from when sending to chat (tauri and electron edition) #4740
 - change the Reply button for messages to be a verb rather than a noun #4853
+- only render markdown links when enabled in settings #4875
 - Update message-parser to v0.13.0
 - slight gradients for avatars for a more modern look #4877
 - change usage of `nameAndAddr` to `displayName` #4882
