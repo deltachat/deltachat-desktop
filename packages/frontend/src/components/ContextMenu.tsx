@@ -30,7 +30,7 @@ export type ContextMenuItem =
       | ContextMenuItemActionable
       | ContextMenuItemExpandable
     ))
-  | { type: 'seperator' }
+  | { type: 'separator' }
 
 type showFnArguments = {
   x: number
@@ -191,7 +191,7 @@ export function ContextMenu(props: {
     let items = props.items.filter(val => val !== false) as ContextMenuItem[]
     const levelItems = [{ items }]
     for (const idx of openSublevels) {
-      if (items[idx].type === 'seperator') {
+      if (items[idx].type === 'separator') {
         // this should never happen, as a seperator can not have a sub menu
         continue
       }
@@ -277,7 +277,7 @@ export function ContextMenu(props: {
         const skipIfSeperator: (
           nextCurrent: HTMLElement
         ) => HTMLDivElement = nextCurrent => {
-          if (nextCurrent.classList.contains('seperator')) {
+          if (nextCurrent.classList.contains('separator')) {
             return getNeighborElementWithoutSeperator(
               parent,
               nextCurrent,
@@ -367,8 +367,8 @@ export function ContextMenu(props: {
           }}
         >
           {level.items.map((item, index) => {
-            if (item.type === 'seperator') {
-              return <hr className='seperator' />
+            if (item.type === 'separator') {
+              return <hr className='separator' />
             }
             return (
               <button
