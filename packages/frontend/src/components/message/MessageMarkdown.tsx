@@ -1,6 +1,5 @@
 import React, { useContext } from 'react'
 import {
-  parse_desktop_set,
   parse_text,
   ParsedElement,
 } from '@deltachat/message_parser_wasm/message_parser_wasm'
@@ -20,7 +19,7 @@ import { ChatView } from '../../contexts/ChatContext'
 const log = getLogger('renderer/message-markdown')
 
 let parseMessage: (message: string) => ParsedElement[] = m =>
-  parse_desktop_set(m)
+  parse_text(m, false)
 
 SettingsStoreInstance.subscribe(newState => {
   const markDownEnabled =
