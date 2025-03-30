@@ -22,6 +22,7 @@
 - tauri: clear temp folder on exit #4839
 - fix wrong punycode warnings in links #4864
 - improve image display #4410
+- hide additional reactions behind button #4322
 
 <a id="1_56_0"></a>
 
