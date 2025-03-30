@@ -4,6 +4,7 @@
 
 ### Added
 - tauri: support for webxdc #4740, #4852
+- create chat: add context menu option to view profile #4880
 
 ### Changed
 - switch to account the webxdc is from when sending to chat (tauri and electron edition) #4740
@@ -11,6 +12,7 @@
 - Update message-parser to v0.13.0
 - slight gradients for avatars for a more modern look #4877
 - change usage of `nameAndAddr` to `displayName` #4882
+- remove addresses from contact list items unless they are not verified. #4880
 
 ### Fixed
 - tauri: improve security #4826

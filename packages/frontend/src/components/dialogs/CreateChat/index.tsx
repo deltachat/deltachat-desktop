@@ -56,6 +56,7 @@ import { makeContextMenu } from '../../ContextMenu'
 import { ContextMenuContext } from '../../../contexts/ContextMenuContext'
 import ImageCropper from '../../ImageCropper'
 import { RovingTabindexProvider } from '../../../contexts/RovingTabindex'
+import ViewProfile from '../ViewProfile'
 
 type ViewMode = 'main' | 'createGroup' | 'createBroadcastList'
 
@@ -207,6 +208,12 @@ function CreateChatMain(props: CreateChatMainProps) {
       makeContextMenu(
         [
           {
+            label: tx('menu_view_profile'),
+            action: () => {
+              openDialog(ViewProfile, { contact })
+            },
+          },
+          {
             label: tx('delete_contact'),
             action: async () => {
               const confirmed = await openConfirmationDialog({
@@ -225,7 +232,14 @@ function CreateChatMain(props: CreateChatMainProps) {
         openContextMenu
       )(ev)
     },
-    [accountId, openConfirmationDialog, refreshContacts, tx, openContextMenu]
+    [
+      accountId,
+      openDialog,
+      openConfirmationDialog,
+      refreshContacts,
+      tx,
+      openContextMenu,
+    ]
   )
 
   const infiniteLoaderRef = useRef<InfiniteLoader | null>(null)

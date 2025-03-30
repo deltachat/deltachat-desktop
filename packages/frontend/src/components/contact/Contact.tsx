@@ -1,8 +1,8 @@
-import React, { PropsWithChildren } from 'react'
+import React, { type PropsWithChildren } from 'react'
 import { Avatar } from '../Avatar'
 import { InlineVerifiedIcon } from '../VerifiedIcon'
 
-export function ContactName(props: {
+function ContactName(props: {
   displayName: string
   address: string
   isVerified?: boolean
@@ -17,7 +17,7 @@ export function ContactName(props: {
           <i className='material-svg-icon material-icon-blocked' />
         )}
       </div>
-      <div className='email'>{props.address}</div>
+      {!props.isVerified && <div className='email'>{props.address}</div>}
     </div>
   )
 }
