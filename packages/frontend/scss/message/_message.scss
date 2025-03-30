@@ -40,6 +40,16 @@
         color: var(--avatarLabelColor);
         --local-avatar-color: #bcbac9;
         background-color: var(--local-avatar-color);
+
+        top: -121px;
+        left: -10px;
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        font-size: 25px;
+        line-height: 36px;
+        cursor: pointer;
+
         @supports (
           // text-wrap was introduced in 2023 slightly after color-mix,
           // since we can't test for color-mix support directly we use this instead.
@@ -56,15 +66,6 @@
             )
           );
         }
-
-        top: -121px;
-        left: -10px;
-        border-radius: 50%;
-        width: 36px;
-        height: 36px;
-        font-size: 25px;
-        line-height: 36px;
-        cursor: pointer;
       }
     }
   }
