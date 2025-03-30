@@ -291,7 +291,7 @@ test('create group', async ({ page, context, browserName }) => {
   const addMemberDialog = page.getByTestId('add-member-dialog')
   await page
     .locator('.contact-list-item')
-    .filter({ hasText: userB.address })
+    .filter({ hasText: userB.name })
     .click()
   // add new member by mail address (not working yet)
   // await page.getByTestId('add-member-search').fill(userC.address)
