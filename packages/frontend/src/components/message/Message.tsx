@@ -326,6 +326,7 @@ function buildContextMenu(
       label: tx('global_menu_edit_desktop'),
       action: enterEditMessageMode.bind(null, message),
     },
+    { type: 'seperator' },
     // Save Message
     !chat.isSelfTalk &&
       !isSavedMessage && {
@@ -420,6 +421,7 @@ function buildContextMenu(
       label: tx('info'),
       action: openMessageInfo.bind(null, openDialog, message),
     },
+    { type: 'seperator' },
     // Delete message
     {
       label: tx('delete_message_desktop'),

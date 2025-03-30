@@ -42,11 +42,12 @@
     0 8px 24px rgba(16, 22, 26, 0.2);
 
   hr.seperator {
-    width: 100%;
-    border-width: 0;
-    color: gray;
-    background-color: gray;
-    // TODO styling
+    background-color: #8080804a;
+    height: 2px;
+    border: 0;
+    margin: 2px;
+    margin-inline: 7px;
+    border-radius: 1px;
   }
 
   .item {

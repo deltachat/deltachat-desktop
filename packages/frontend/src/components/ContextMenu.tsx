@@ -264,19 +264,55 @@ export function ContextMenu(props: {
     const onKeyDown = (ev: KeyboardEvent) => {
       const current = parent?.querySelector(':focus')
 
-      // TODO skip seperators
-      if (ev.code === 'ArrowDown') {
-        if (current?.nextElementSibling) {
-          ;(current.nextElementSibling as HTMLDivElement)?.focus()
-        } else {
-          ;(parent?.firstElementChild as HTMLDivElement).focus()
+      enum Direction {
+        Next = 0,
+        Previous = 1,
+      }
+
+      const getNeighborElementWithoutSeperator = (
+        parent: HTMLDivElement,
+        current: Element | null,
+        direction: Direction
+      ) => {
+        const skipIfSeperator: (
+          nextCurrent: HTMLElement
+        ) => HTMLDivElement = nextCurrent => {
+          if (nextCurrent.classList.contains('seperator')) {
+            return getNeighborElementWithoutSeperator(
+              parent,
+              nextCurrent,
+              direction
+            )
+          }
+          return nextCurrent as HTMLDivElement
         }
-      } else if (ev.code === 'ArrowUp') {
+
+        if (direction === Direction.Next) {
+          if (current?.nextElementSibling) {
+            return skipIfSeperator(current.nextElementSibling as HTMLElement)
+          }
+          return skipIfSeperator(parent?.firstElementChild as HTMLDivElement)
+        }
         if (current?.previousElementSibling) {
-          ;(current.previousElementSibling as HTMLDivElement)?.focus()
-        } else {
-          ;(parent?.lastElementChild as HTMLDivElement).focus()
+          return skipIfSeperator(
+            current.previousElementSibling as HTMLDivElement
+          )
         }
+        return skipIfSeperator(parent?.lastElementChild as HTMLDivElement)
+      }
+
+      if (ev.code === 'ArrowDown') {
+        getNeighborElementWithoutSeperator(
+          parent,
+          current,
+          Direction.Next
+        )?.focus()
+      } else if (ev.code === 'ArrowUp') {
+        getNeighborElementWithoutSeperator(
+          parent,
+          current,
+          Direction.Previous
+        )?.focus()
       } else if (ev.code === 'ArrowLeft') {
         setSublevels(l => l.slice(0, Math.max(0, l.length - 1)))
         keyboardFocus.current = openSublevels[openSublevels.length - 1]
