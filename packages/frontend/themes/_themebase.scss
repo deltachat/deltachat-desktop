@@ -170,7 +170,7 @@ $hover-contrast-change: 2%;
   --galleryBg: #{$bgPrimary};
   --avatarLabelColor: #ffffff; // Manual value: This will not get generated in the future
   --avatarGradientMixFactor: 80%;
-  --avatarGradientAngle: 45deg;
+  --avatarGradientAngle: -45deg;
   --brokenMediaText: #070c14;
   --brokenMediaBg: #ffffff;
   --unreadCountBg: #{$accentColor};
