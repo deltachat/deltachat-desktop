@@ -166,8 +166,8 @@ function ViewGroupInner(
     async (contact: T.Contact) => {
       const confirmed = await openConfirmationDialog({
         message: !isBroadcast
-          ? tx('ask_remove_members', contact.nameAndAddr)
-          : tx('ask_remove_from_broadcast', contact.nameAndAddr),
+          ? tx('ask_remove_members', contact.displayName)
+          : tx('ask_remove_from_broadcast', contact.displayName),
         confirmLabel: tx('delete'),
       })
 
