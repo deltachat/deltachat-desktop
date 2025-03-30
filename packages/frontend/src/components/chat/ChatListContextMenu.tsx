@@ -225,12 +225,23 @@ export function useChatListContextMenu(): {
                   label: tx('menu_unmute'),
                   action: onUnmuteChat,
                 },
+            { type: 'separator' },
+            // View Profile
+            !chatListItem.isGroup && {
+              label: tx('menu_view_profile'),
+              action: onViewProfile,
+            },
             // Edit Group
             chatListItem.isGroup &&
               chatListItem.isSelfInGroup && {
                 label: tx('menu_edit_group'),
                 action: onViewGroup,
               },
+            // Edit Broadcast List
+            chatListItem.isBroadcast && {
+              label: tx('edit_broadcast_list'),
+              action: onViewGroup,
+            },
             // Clone Group
             chatListItem.isGroup && {
               label: tx('clone_chat'),
@@ -241,22 +252,14 @@ export function useChatListContextMenu(): {
                 })
               },
             },
-            // Edit Broadcast List
-            chatListItem.isBroadcast && {
-              label: tx('edit_broadcast_list'),
-              action: onViewGroup,
-            },
-            // View Profile
-            !chatListItem.isGroup && {
-              label: tx('menu_view_profile'),
-              action: onViewProfile,
-            },
+
             // Encryption Info
             !chatListItem.isDeviceTalk &&
               !chatListItem.isSelfTalk && {
                 label: tx('encryption_info_title_desktop'),
                 action: onEncrInfo,
               },
+            { type: 'separator' },
             // Leave group
             chatListItem.isGroup &&
               chatListItem.isSelfInGroup && {
