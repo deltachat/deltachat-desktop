@@ -28,7 +28,7 @@ type SettingsView =
   | 'advanced'
 
 export default function Settings({ onClose }: DialogProps) {
-  const { openDialog, closeDialog, openDialogs: openDialogIds } = useDialog()
+  const { openDialog, closeDialog, openDialogIds } = useDialog()
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const settingsStore = useSettingsStore()[0]!
   const tx = useTranslationFunction()

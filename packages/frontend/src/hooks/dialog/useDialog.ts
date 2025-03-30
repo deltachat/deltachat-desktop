@@ -8,7 +8,7 @@ export default function useDialog() {
     closeDialog,
     hasOpenDialogs,
     closeAllDialogs,
-    openDialogIds: openDialogs,
+    openDialogIds,
   } = useContext(DialogContext)
 
   return {
@@ -16,6 +16,6 @@ export default function useDialog() {
     closeDialog,
     hasOpenDialogs,
     closeAllDialogs,
-    openDialogs,
+    openDialogIds,
   }
 }
