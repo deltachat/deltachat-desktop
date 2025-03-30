@@ -146,7 +146,7 @@ export function ViewProfileInner({
 
   const onChatClick = (chatId: number) => {
     selectChat(accountId, chatId)
-    onAction && onAction()
+    onAction?.()
     onClose()
   }
   const onSendMessage = async () => {
@@ -294,7 +294,7 @@ export function ViewProfileInner({
           </Button>
         )}
       </div>
-      {statusText != '' && (
+      {statusText !== '' && (
         <>
           <div className='group-separator'>
             {tx('pref_default_status_label')}
