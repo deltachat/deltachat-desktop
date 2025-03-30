@@ -27,6 +27,7 @@ type DialogContextValue = {
   openDialog: OpenDialog
   closeDialog: CloseDialog
   closeAllDialogs: CloseAllDialogs
+  openDialogIds: String[] // IDs of currently opened dialogs
 }
 
 const initialValues: DialogContextValue = {
@@ -34,6 +35,7 @@ const initialValues: DialogContextValue = {
   openDialog: _ => '',
   closeDialog: _ => {},
   closeAllDialogs: () => {},
+  openDialogIds: [],
 }
 
 export const DialogContext =
@@ -63,9 +65,6 @@ export const DialogContextProvider = ({ children }: PropsWithChildren<{}>) => {
             closeDialog(newDialogId)
           },
           ...additionalProps,
-          // dataTestid: additionalProps?.dataTestid
-          //   ? additionalProps?.dataTestid
-          //   : `dialog-${newDialogId}`,
         }
       )
 
@@ -85,11 +84,16 @@ export const DialogContextProvider = ({ children }: PropsWithChildren<{}>) => {
     return Object.keys(dialogs).length > 0
   }, [dialogs])
 
+  const openDialogIds = useMemo(() => {
+    return Object.keys(dialogs)
+  }, [dialogs])
+
   const value = {
     hasOpenDialogs,
     openDialog,
     closeDialog,
     closeAllDialogs,
+    openDialogIds,
   }
 
   return (
