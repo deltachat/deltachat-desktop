@@ -261,8 +261,7 @@ function CreateChatMain(props: CreateChatMainProps) {
   const onKeyDown = (ev: React.KeyboardEvent) => {
     if (ev.code === 'ArrowDown') {
       ;(
-        fixedSizeListOuterRef.current?.firstElementChild?.firstElementChild
-          ?.firstElementChild?.firstElementChild as HTMLElement
+        fixedSizeListOuterRef.current?.querySelector('button') as HTMLElement
       )?.focus()
       // prevent scrolling down the list
       ev.preventDefault()
