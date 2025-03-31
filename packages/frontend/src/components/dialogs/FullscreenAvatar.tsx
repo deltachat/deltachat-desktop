@@ -59,7 +59,7 @@ export default function FullscreenAvatar(
                       // resulting in the image overflowing the window.
                       // See https://github.com/deltachat/deltachat-desktop/issues/4320
                       style={{ display: 'block' }}
-                      src={runtime.transformBlobURL(imagePath)}
+                      src={imagePath}
                     />
                   </div>
                 </TransformComponent>
