@@ -23,6 +23,7 @@
 - fix wrong punycode warnings in links #4864
 - scroll to top when search query changes
 - fix esc key closing wrong dialog in settings #4865
+- remove unexpected horizontal scroll in gallery #4891
 
 <a id="1_56_0"></a>
 
