@@ -137,9 +137,11 @@ export const PseudoListItemAddContact = ({
 export const PseudoListItemAddContactOrGroupFromInviteLink = ({
   inviteLink,
   accountId,
+  callback,
 }: {
   inviteLink: string
   accountId: number
+  callback?: () => void
 }) => {
   const tx = useTranslationFunction()
   const processQr = useProcessQR()
@@ -191,7 +193,10 @@ export const PseudoListItemAddContactOrGroupFromInviteLink = ({
     }
   }, [accountId, parsedQr])
 
-  const onClick = () => processQr(accountId, inviteLinkTrimmed)
+  const onClick = () => {
+    processQr(accountId, inviteLinkTrimmed)
+    callback?.()
+  }
 
   return contact ? (
     <ContactListItem

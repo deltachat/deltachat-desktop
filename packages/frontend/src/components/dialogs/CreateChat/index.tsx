@@ -327,6 +327,7 @@ function CreateChatMain(props: CreateChatMainProps) {
                       openQRScan,
                       queryStrIsValidEmail,
                       queryStr,
+                      onClose,
                     }}
                     itemKey={index => contactsAndExtraItems[index]}
                     onItemsRendered={onItemsRendered}
@@ -381,6 +382,7 @@ function CreateChatMainRow({
     openQRScan: () => Promise<void>
     queryStrIsValidEmail: boolean
     queryStr: string
+    onClose: () => void
   }
 }) {
   const {
@@ -393,6 +395,7 @@ function CreateChatMainRow({
     openQRScan,
     queryStrIsValidEmail,
     queryStr,
+    onClose,
   } = data
   const item = contactsAndExtraItems[index]
 
@@ -446,6 +449,7 @@ function CreateChatMainRow({
           <PseudoListItemAddContactOrGroupFromInviteLink
             inviteLink={queryStr!}
             accountId={accountId}
+            callback={onClose}
           />
         )
       }
