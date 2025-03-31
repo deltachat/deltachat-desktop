@@ -116,16 +116,27 @@ export function translate(
         substitutions = [substitutions]
       }
 
-      let c = 0
-      return message.replace(/(?:%\d\$[\w\d])|(?:%[\w\d])/g, () => {
+      return message.replace(/(?:%\d\$[\w\d])|(?:%[\w\d])/g, f => {
+        if (f.length > 2) {
+          const index = Number.parseInt(f[1]) - 1
+          if (
+            substitutions === undefined ||
+            typeof substitutions[index] === 'undefined'
+          ) {
+            log.error(`Missing ${index} argument for key %c'${translationKey}'`)
+            return ''
+          }
+          return substitutions[index].toString()
+        }
+        // TODO find out if there is a case with multiple substitutionsand quantity
         if (
           substitutions === undefined ||
-          typeof substitutions[c] === 'undefined'
+          typeof substitutions?.[0] === 'undefined'
         ) {
-          log.error(`Missing ${c} argument for key %c'${translationKey}'`)
+          log.error(`Missing ${0} argument for key %c'${translationKey}'`)
           return ''
         }
-        return substitutions[c++].toString()
+        return substitutions[0].toString()
       })
     }
 
