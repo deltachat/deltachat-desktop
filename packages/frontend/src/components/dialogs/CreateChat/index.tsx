@@ -258,6 +258,17 @@ function CreateChatMain(props: CreateChatMainProps) {
 
   const fixedSizeListOuterRef = useRef<HTMLElement>(null)
 
+  const onKeyDown = (ev: React.KeyboardEvent) => {
+    if (ev.code === 'ArrowDown') {
+      ;(
+        fixedSizeListOuterRef.current?.firstElementChild?.firstElementChild
+          ?.firstElementChild?.firstElementChild as HTMLElement
+      )?.focus()
+      // prevent scrolling down the list
+      ev.preventDefault()
+    }
+  }
+
   return (
     <>
       <DialogHeader>
@@ -269,6 +280,7 @@ function CreateChatMain(props: CreateChatMainProps) {
           placeholder={
             isChatmail ? tx('search') : tx('contacts_enter_name_or_email')
           }
+          onKeyDown={onKeyDown}
           autoFocus
           spellCheck={false}
         />
