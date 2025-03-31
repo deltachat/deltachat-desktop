@@ -25,6 +25,7 @@
 - fix wrong punycode warnings in links #4864
 - scroll to top when search query changes
 - fix esc key closing wrong dialog in settings #4865
+- fix member list is not refreshed if it changes while you look at the group profile #4894
 - remove unexpected horizontal scroll in gallery #4891
 - i18n: fix wrong order of substitutions for some strings #4889
 - fix double escape bypasses dialog attribute `canEscapeKeyClose={false}`
