@@ -23,6 +23,7 @@
 - fix wrong punycode warnings in links #4864
 - scroll to top when search query changes
 - fix esc key closing wrong dialog in settings #4865
+- fix member list is not refreshed if it changes while you look at the group profile
 
 <a id="1_56_0"></a>
 
