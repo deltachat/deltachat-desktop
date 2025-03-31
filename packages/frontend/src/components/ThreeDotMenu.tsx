@@ -93,6 +93,7 @@ export function useThreeDotMenu(
           label: tx('menu_chat_audit_log'),
           action: onChatAudit,
         },
+      { type: 'separator' },
       !selectedChat.isMuted
         ? {
             label: tx('menu_mute'),
@@ -180,6 +181,7 @@ export function useThreeDotMenu(
               unselectChat()
             },
           },
+      { type: 'separator' },
       !isGroup &&
         !(isSelfTalk || isDeviceChat) && {
           label: tx('menu_block_contact'),

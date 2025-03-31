@@ -5,6 +5,7 @@
 ### Added
 - tauri: support for webxdc #4740, #4852
 - create chat: add context menu option to view profile #4880
+- add separators to the context menu #4883
 - add button to share contact from profile view dialog #4886
 
 ### Changed

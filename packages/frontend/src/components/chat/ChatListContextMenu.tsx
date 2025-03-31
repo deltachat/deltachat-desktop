@@ -26,7 +26,7 @@ function archiveStateMenu(
   chat: T.ChatListItemFetchResult & { kind: 'ChatListItem' },
   tx: ReturnType<typeof useTranslationFunction>,
   isTheSelectedChat: boolean
-): ContextMenuItem[] {
+): { pin: ContextMenuItem; archive: ContextMenuItem } {
   const archive: ContextMenuItem = {
     label: tx('menu_archive_chat'),
     action: () => {
@@ -69,12 +69,12 @@ function archiveStateMenu(
   */
 
   if (chat.isPinned) {
-    return [unPin, archive]
+    return { pin: unPin, archive }
   } else if (chat.isArchived) {
-    return [pin, unArchive]
+    return { pin, archive: unArchive }
   } else {
     // normal
-    return [pin, archive]
+    return { pin, archive }
   }
 }
 
@@ -142,16 +142,18 @@ export function useChatListContextMenu(): {
         openBlockFirstContactOfChatDialog(accountId, chatListItem)
       const onUnmuteChat = () => unmuteChat(accountId, chatListItem.id)
 
+      const { pin, archive } = archiveStateMenu(
+        unselectChat,
+        accountId,
+        chatListItem,
+        tx,
+        selectedChatId === chatListItem.id
+      )
+
       const menu: (ContextMenuItem | false)[] = chatListItem
         ? [
-            // Archive & Pin
-            ...archiveStateMenu(
-              unselectChat,
-              accountId,
-              chatListItem,
-              tx,
-              selectedChatId === chatListItem.id
-            ),
+            // Pin
+            pin,
             // Mute
             !chatListItem.isMuted
               ? {
@@ -225,12 +227,25 @@ export function useChatListContextMenu(): {
                   label: tx('menu_unmute'),
                   action: onUnmuteChat,
                 },
+            // Archive
+            archive,
+            { type: 'separator' },
+            // View Profile
+            !chatListItem.isGroup && {
+              label: tx('menu_view_profile'),
+              action: onViewProfile,
+            },
             // Edit Group
             chatListItem.isGroup &&
               chatListItem.isSelfInGroup && {
                 label: tx('menu_edit_group'),
                 action: onViewGroup,
               },
+            // Edit Broadcast List
+            chatListItem.isBroadcast && {
+              label: tx('edit_broadcast_list'),
+              action: onViewGroup,
+            },
             // Clone Group
             chatListItem.isGroup && {
               label: tx('clone_chat'),
@@ -241,22 +256,14 @@ export function useChatListContextMenu(): {
                 })
               },
             },
-            // Edit Broadcast List
-            chatListItem.isBroadcast && {
-              label: tx('edit_broadcast_list'),
-              action: onViewGroup,
-            },
-            // View Profile
-            !chatListItem.isGroup && {
-              label: tx('menu_view_profile'),
-              action: onViewProfile,
-            },
+
             // Encryption Info
             !chatListItem.isDeviceTalk &&
               !chatListItem.isSelfTalk && {
                 label: tx('encryption_info_title_desktop'),
                 action: onEncrInfo,
               },
+            { type: 'separator' },
             // Leave group
             chatListItem.isGroup &&
               chatListItem.isSelfInGroup && {
