@@ -65,6 +65,28 @@ const MediaTabs: Readonly<{
 
 type Props = { chatId: number | 'all'; onUpdateView?: () => void }
 
+const getCurrentDocumentVerticalScrollbarWidth = () => {
+  const outer = document.createElement('div')
+  outer.style.height = '10px'
+  outer.style.width = '100%'
+  outer.style.display = 'hidden'
+  outer.style.overflowY = 'scroll'
+
+  document.body.appendChild(outer)
+  const inner = document.createElement('div')
+  inner.style.height = '100px'
+  inner.style.width = '100%'
+  outer.appendChild(inner)
+  const outerWidth = Number(
+    getComputedStyle(outer).width.replace(/[^\d\.]/g, '')
+  )
+  const innerWidth = Number(
+    getComputedStyle(inner).width.replace(/[^\d\.]/g, '')
+  )
+  document.body.removeChild(outer)
+  return outerWidth - innerWidth
+}
+
 export default class Gallery extends Component<
   Props,
   {
@@ -85,6 +107,7 @@ export default class Gallery extends Component<
   tabListRef = createRef<HTMLUListElement>()
   galleryItemsRef = createRef<HTMLDivElement>()
   cleanup: Array<() => void> = []
+  scrollbarWidth = getCurrentDocumentVerticalScrollbarWidth()
   constructor(props: Props) {
     super(props)
 
@@ -381,7 +404,7 @@ export default class Gallery extends Component<
             {currentTab !== 'files' && (
               <AutoSizer>
                 {({ width, height }) => {
-                  const widthWithoutScrollbar = width - 6
+                  const widthWithoutScrollbar = width - this.scrollbarWidth
 
                   let minWidth = 160
 
