@@ -128,4 +128,16 @@ describe('/shared/localize', () => {
     expect(tx('test_2', ['1', '2'])).to.eq('foo 2 1 blubb')
     expect(tx('test_3', ['1', '2', '3'])).to.eq('foo 2 3 1 blubb')
   })
+  it('correct substitution order: quantity and without position', () => {
+    const tx = translate('en', {
+      ask_send_following_n_files_to: {
+        one: 'Send the following file to %s?',
+        other: 'Send the following %d files to %s?',
+      },
+    })
+
+    expect(
+      tx('ask_send_following_n_files_to', ['5', 'alice'], { quantity: 5 })
+    ).to.eq('Send the following 5 files to alice?')
+  })
 })

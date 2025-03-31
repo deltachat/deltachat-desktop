@@ -116,7 +116,9 @@ export function translate(
         substitutions = [substitutions]
       }
 
+      let counter = -1
       return message.replace(/(?:%\d\$[\w\d])|(?:%[\w\d])/g, f => {
+        counter++
         if (f.length > 2) {
           const index = Number.parseInt(f[1]) - 1
           if (
@@ -131,12 +133,12 @@ export function translate(
         // TODO find out if there is a case with multiple substitutionsand quantity
         if (
           substitutions === undefined ||
-          typeof substitutions?.[0] === 'undefined'
+          typeof substitutions?.[counter] === 'undefined'
         ) {
           log.error(`Missing ${0} argument for key %c'${translationKey}'`)
           return ''
         }
-        return substitutions[0].toString()
+        return substitutions[counter].toString()
       })
     }
 
