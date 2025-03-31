@@ -4,6 +4,7 @@ import React, {
   useLayoutEffect,
   useRef,
   useCallback,
+  useMemo,
 } from 'react'
 import classNames from 'classnames'
 import Icon from './Icon'
@@ -24,10 +25,12 @@ type ContextMenuItemExpandable = {
   subitems: (ContextMenuItem | undefined)[]
 }
 
-export type ContextMenuItem = { label: string; dataTestid?: string } & (
-  | ContextMenuItemActionable
-  | ContextMenuItemExpandable
-)
+export type ContextMenuItem =
+  | ({ type?: 'item'; label: string; dataTestid?: string } & (
+      | ContextMenuItemActionable
+      | ContextMenuItemExpandable
+    ))
+  | { type: 'separator' }
 
 type showFnArguments = {
   x: number
@@ -111,8 +114,8 @@ export function ContextMenuLayer({
     }
 
     // Place at cursor first
-    let top = cursorY.current,
-      left = cursorX.current
+    let top = cursorY.current
+    let left = cursorX.current
 
     // If doesn't fit move to the left
     if (left + menu.width > layerWidth) {
@@ -173,6 +176,8 @@ export function ContextMenu(props: {
   openCallback: (el: HTMLDivElement | null) => void
   closeCallback: () => void
 }) {
+  const { closeCallback } = props
+
   const didOpen = useRef<boolean>(false)
   // References to each level menu element
   const menuLevelEls = useRef<HTMLDivElement[]>([])
@@ -182,32 +187,36 @@ export function ContextMenu(props: {
   // Which one of the last sublevel items the keyboard is focused on
   const keyboardFocus = useRef<number>(-1)
 
-  let items = props.items.filter(val => val !== false) as ContextMenuItem[]
+  const levelItems: ContextMenuLevel[] = useMemo(() => {
+    let items = props.items.filter(val => val !== false) as ContextMenuItem[]
+    const levelItems = [{ items }]
+    for (const idx of openSublevels) {
+      if (items[idx].type === 'separator') {
+        // this should never happen, as a seperator can not have a sub menu
+        continue
+      }
+      items = items[idx].subitems as ContextMenuItem[]
+      levelItems.push({
+        items,
+      })
+    }
+    return levelItems
+  }, [openSublevels, props.items])
 
-  const { closeCallback } = props
-
-  const levelItems: ContextMenuLevel[] = [{ items }]
-
-  for (const idx of openSublevels) {
-    items = items[idx].subitems as ContextMenuItem[]
-    levelItems.push({
-      items,
-    })
-  }
-  const expandMenu = (index: number, fromLevel?: number) => {
+  const expandMenu = useCallback((index: number, fromLevel?: number) => {
     if (fromLevel !== undefined) {
       setSublevels(l => [...l.slice(0, fromLevel), index])
     } else {
       setSublevels(l => [...l, index])
     }
-  }
+  }, [])
 
   const collapseMenu = (toLevel: number) => {
     setSublevels(l => l.slice(0, toLevel))
   }
 
   useLayoutEffect(() => {
-    if (menuLevelEls.current.length == 0) {
+    if (menuLevelEls.current.length === 0) {
       throw new Error('No context menu elements available to display')
     }
     let prevOffset = props.left
@@ -226,8 +235,8 @@ export function ContextMenu(props: {
       if (nextOffset > props.rightLimit) {
         curOffset = prevOffset - curElement.clientWidth
       }
-      curElement.style.top = bounds.top + 'px'
-      curElement.style.left = curOffset + 'px'
+      curElement.style.top = `${bounds.top}px`
+      curElement.style.left = `${curOffset}px`
 
       prevOffset = nextOffset
     }
@@ -255,31 +264,71 @@ export function ContextMenu(props: {
     const onKeyDown = (ev: KeyboardEvent) => {
       const current = parent?.querySelector(':focus')
 
-      if (ev.code == 'ArrowDown') {
-        if (current && current.nextElementSibling) {
-          ;(current.nextElementSibling as HTMLDivElement)?.focus()
-        } else {
-          ;(parent?.firstElementChild as HTMLDivElement).focus()
+      enum Direction {
+        Next = 0,
+        Previous = 1,
+      }
+
+      const getNeighborElementWithoutSeperator = (
+        parent: HTMLDivElement,
+        current: Element | null,
+        direction: Direction
+      ) => {
+        const skipIfSeperator: (
+          nextCurrent: HTMLElement
+        ) => HTMLDivElement = nextCurrent => {
+          if (nextCurrent.classList.contains('separator')) {
+            return getNeighborElementWithoutSeperator(
+              parent,
+              nextCurrent,
+              direction
+            )
+          }
+          return nextCurrent as HTMLDivElement
         }
-      } else if (ev.code == 'ArrowUp') {
-        if (current && current.previousElementSibling) {
-          ;(current.previousElementSibling as HTMLDivElement)?.focus()
-        } else {
-          ;(parent?.lastElementChild as HTMLDivElement).focus()
+
+        if (direction === Direction.Next) {
+          if (current?.nextElementSibling) {
+            return skipIfSeperator(current.nextElementSibling as HTMLElement)
+          }
+          return skipIfSeperator(parent?.firstElementChild as HTMLDivElement)
         }
-      } else if (ev.code == 'ArrowLeft') {
+        if (current?.previousElementSibling) {
+          return skipIfSeperator(
+            current.previousElementSibling as HTMLDivElement
+          )
+        }
+        return skipIfSeperator(parent?.lastElementChild as HTMLDivElement)
+      }
+
+      if (ev.code === 'ArrowDown') {
+        getNeighborElementWithoutSeperator(
+          parent,
+          current,
+          Direction.Next
+        )?.focus()
+      } else if (ev.code === 'ArrowUp') {
+        getNeighborElementWithoutSeperator(
+          parent,
+          current,
+          Direction.Previous
+        )?.focus()
+      } else if (ev.code === 'ArrowLeft') {
         setSublevels(l => l.slice(0, Math.max(0, l.length - 1)))
         keyboardFocus.current = openSublevels[openSublevels.length - 1]
-      } else if (ev.code == 'ArrowRight') {
+      } else if (ev.code === 'ArrowRight') {
         if (current) {
           const el = current as HTMLDivElement
-          const index = parseInt(el.dataset.expandableIndex as string, 10)
-          if (!isNaN(index)) {
+          const index = Number.parseInt(
+            el.dataset.expandableIndex as string,
+            10
+          )
+          if (!Number.isNaN(index)) {
             expandMenu(index)
             keyboardFocus.current = 0
           }
         }
-      } else if (ev.code == 'Escape') {
+      } else if (ev.code === 'Escape') {
         closeCallback()
         keyboardFocus.current = -1
       }
@@ -298,13 +347,15 @@ export function ContextMenu(props: {
       document.removeEventListener('keydown', onKeyDown)
       window.removeEventListener('resize', onResize)
     }
-  }, [openSublevels, menuLevelEls, closeCallback])
+  }, [openSublevels, closeCallback, expandMenu])
 
   return (
     <div>
       {levelItems.map((level, levelIdx) => (
         <div
-          ref={el => (menuLevelEls.current[levelIdx] = el as HTMLDivElement)}
+          ref={el => {
+            menuLevelEls.current[levelIdx] = el as HTMLDivElement
+          }}
           key={levelIdx}
           className='dc-context-menu'
           data-no-drag-region
@@ -315,43 +366,48 @@ export function ContextMenu(props: {
             left: `${props.left}px`,
           }}
         >
-          {level.items.map((item, index) => (
-            <button
-              className={classNames({
-                item: true,
-                selected: index === openSublevels[levelIdx],
-              })}
-              onClick={(ev: React.MouseEvent) => {
-                if (item.subitems) {
-                  expandMenu(index, levelIdx)
-                  keyboardFocus.current = 0
-                  ev.stopPropagation()
-                } else {
-                  collapseMenu(levelIdx)
-                  keyboardFocus.current = -1
-                  didOpen.current = false
-                  closeCallback()
-                  item.action(ev)
-                }
-              }}
-              onMouseOver={() => {
-                if (item.subitems) {
-                  expandMenu(index, levelIdx)
-                } else {
-                  collapseMenu(levelIdx)
-                }
-              }}
-              tabIndex={-1}
-              data-testid={item.dataTestid}
-              role='menuitem'
-              key={index}
-              {...(item.subitems && { 'data-expandable-index': index })}
-            >
-              {item.icon && <Icon className='left-icon' icon={item.icon} />}
-              {item.label}
-              {item.subitems && <div className='right-icon'></div>}
-            </button>
-          ))}
+          {level.items.map((item, index) => {
+            if (item.type === 'separator') {
+              return <hr className='separator' />
+            }
+            return (
+              <button
+                className={classNames({
+                  item: true,
+                  selected: index === openSublevels[levelIdx],
+                })}
+                onClick={(ev: React.MouseEvent) => {
+                  if (item.subitems) {
+                    expandMenu(index, levelIdx)
+                    keyboardFocus.current = 0
+                    ev.stopPropagation()
+                  } else {
+                    collapseMenu(levelIdx)
+                    keyboardFocus.current = -1
+                    didOpen.current = false
+                    closeCallback()
+                    item.action(ev)
+                  }
+                }}
+                onMouseOver={() => {
+                  if (item.subitems) {
+                    expandMenu(index, levelIdx)
+                  } else {
+                    collapseMenu(levelIdx)
+                  }
+                }}
+                tabIndex={-1}
+                data-testid={item.dataTestid}
+                role='menuitem'
+                key={index}
+                {...(item.subitems && { 'data-expandable-index': index })}
+              >
+                {item.icon && <Icon className='left-icon' icon={item.icon} />}
+                {item.label}
+                {item.subitems && <div className='right-icon' />}
+              </button>
+            )
+          })}
         </div>
       ))}
     </div>

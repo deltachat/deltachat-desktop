@@ -107,6 +107,12 @@ export default function AccountItem({
           },
         },
     {
+      label: tx('mark_all_as_read'),
+      action: () => {
+        markAccountAsRead(accountId)
+      },
+    },
+    {
       label: tx('menu_all_media'),
       action: async () => {
         await onSelectAccount(accountId)
@@ -126,12 +132,7 @@ export default function AccountItem({
         openMapWebxdc(accountId)
       },
     },
-    {
-      label: tx('mark_all_as_read'),
-      action: () => {
-        markAccountAsRead(accountId)
-      },
-    },
+    { type: 'separator' },
     {
       label: tx('menu_settings'),
       action: async () => {
@@ -156,6 +157,7 @@ export default function AccountItem({
         })
       },
     },
+    { type: 'separator' },
     {
       label: tx('delete_account'),
       action: openAccountDeletionScreen.bind(null, accountId),

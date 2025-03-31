@@ -5,7 +5,9 @@
 ### Added
 - tauri: support for webxdc #4740, #4852
 - create chat: add context menu option to view profile #4880
-- create chat: add support for invite links to search bar
+- create chat: add support for invite links to search bar #4893
+- add separators to the context menu #4883
+- add button to share contact from profile view dialog #4886
 
 ### Changed
 - switch to account the webxdc is from when sending to chat (tauri and electron edition) #4740
@@ -15,6 +17,7 @@
 - slight gradients for avatars for a more modern look #4877
 - change usage of `nameAndAddr` to `displayName` #4882
 - remove addresses from contact list items unless they are not verified. #4880
+- migrate account mute state to new is_muted config option #4888
 
 ### Fixed
 - tauri: improve security #4826
@@ -24,6 +27,10 @@
 - fix wrong punycode warnings in links #4864
 - scroll to top when search query changes
 - fix esc key closing wrong dialog in settings #4865
+- fix member list is not refreshed if it changes while you look at the group profile #4894
+- remove unexpected horizontal scroll in gallery #4891
+- i18n: fix wrong order of substitutions for some strings #4889
+- fix double escape bypasses dialog attribute `canEscapeKeyClose={false}`
 
 <a id="1_56_0"></a>
 
