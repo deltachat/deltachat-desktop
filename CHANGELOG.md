@@ -5,6 +5,7 @@
 ### Added
 - tauri: support for webxdc #4740, #4852
 - create chat: add context menu option to view profile #4880
+- focuses first visible item on arrow down key on input in create chat dialog #4892
 
 ### Changed
 - switch to account the webxdc is from when sending to chat (tauri and electron edition) #4740
