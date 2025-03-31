@@ -23,7 +23,7 @@
 - fix wrong punycode warnings in links #4864
 - scroll to top when search query changes
 - fix esc key closing wrong dialog in settings #4865
-- i18n: fix wrong order of substitutions for some strings
+- i18n: fix wrong order of substitutions for some strings #4889
 
 <a id="1_56_0"></a>
 
