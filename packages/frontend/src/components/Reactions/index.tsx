@@ -9,9 +9,6 @@ import styles from './styles.module.scss'
 import type { T } from '@deltachat/jsonrpc-client'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
-// With this constant we define how many max. different emojis we display
-// under each message.
-//
 // Reactions are sorted by their frequencies in the core, that is, the
 // most used emojis come first in this list.
 
@@ -23,7 +20,10 @@ type Props = {
 
 export default function Reactions(props: Props) {
   const tx = useTranslationFunction()
-  const [numberOfReactions, setNumberOfReactions] = useState(4)
+  // number of different emojis we display under each message
+  const [visibleEmojis, setVisibleEmojis] = useState(4)
+  // total number of hidden reactions (including counts)
+  const [hiddenReactionsCount, setHiddenReactionsCount] = useState(0)
 
   const { messageWidth } = props
 
@@ -31,17 +31,27 @@ export default function Reactions(props: Props) {
   const { reactionsByContact, reactions } = props.reactions
 
   useEffect(() => {
-    if (messageWidth <= 200) {
+    let emojiSpaces = 0
+    if (messageWidth <= 234) {
       if (reactions.length <= 2) {
-        setNumberOfReactions(2)
+        emojiSpaces = 2
       } else {
         // we need space for the bubble showing +n
-        setNumberOfReactions(1)
+        emojiSpaces = 1
       }
     } else {
-      const r = Math.round((messageWidth - 200) / 34)
-      setNumberOfReactions(r)
+      emojiSpaces = Math.round((messageWidth - 200) / 34)
     }
+    const totalReactionsCount = reactions.reduce(
+      (sum, item) => sum + item.count,
+      0
+    )
+    const visibleReactionsCount = reactions
+      .slice(0, emojiSpaces)
+      .reduce((sum, item) => sum + item.count, 0)
+
+    setHiddenReactionsCount(totalReactionsCount - visibleReactionsCount)
+    setVisibleEmojis(emojiSpaces)
   }, [messageWidth, reactions])
 
   const handleClick = () => {
@@ -52,24 +62,22 @@ export default function Reactions(props: Props) {
 
   return (
     <div className={styles.reactions}>
-      {reactions
-        .slice(0, numberOfReactions)
-        .map(({ emoji, isFromSelf, count }) => {
-          return (
-            <span
-              className={classNames(styles.emoji, {
-                [styles.isFromSelf]: isFromSelf,
-              })}
-              key={emoji}
-            >
-              {emoji}
-              {count > 1 && <span className={styles.emojiCount}>{count}</span>}
-            </span>
-          )
-        })}
-      {reactions.length > numberOfReactions && (
-        <span className={classNames(styles.emoji)}>
-          +{reactions.length - numberOfReactions}
+      {reactions.slice(0, visibleEmojis).map(({ emoji, isFromSelf, count }) => {
+        return (
+          <span
+            className={classNames(styles.emoji, {
+              [styles.isFromSelf]: isFromSelf,
+            })}
+            key={emoji}
+          >
+            {emoji}
+            {count > 1 && <span className={styles.emojiCount}>{count}</span>}
+          </span>
+        )
+      })}
+      {reactions.length > visibleEmojis && (
+        <span className={classNames(styles.emoji, styles.emojiCount)}>
+          +{hiddenReactionsCount}
         </span>
       )}
       <button
