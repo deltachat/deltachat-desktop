@@ -73,6 +73,11 @@ const Dialog = React.memo<Props>(
         ev.preventDefault()
       }
     }
+    const onKeyDown = (ev: React.KeyboardEvent) => {
+      if (ev.code === 'Escape') {
+        onCancel(ev)
+      }
+    }
 
     useEffect(() => {
       // calling showModal is "only" the way to have ::backdrop
@@ -93,6 +98,7 @@ const Dialog = React.memo<Props>(
         onClick={onClick}
         onClose={onClose}
         onCancel={onCancel}
+        onKeyDown={onKeyDown}
         ref={dialog}
         data-no-drag-region
         data-tauri-drag-region={
