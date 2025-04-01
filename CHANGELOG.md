@@ -35,6 +35,7 @@
 - i18n: fix wrong order of substitutions for some strings #4889
 - accessibility: don't announce "padlock" on messages
 - fix double escape bypasses dialog attribute `canEscapeKeyClose={false}`
+- fix order when sending multiple files at once #4895
 
 <a id="1_56_0"></a>
 

@@ -187,14 +187,13 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
           const msgViewType: Viewtype = file.type.startsWith('image')
             ? 'Image'
             : 'File'
-          sendMessage(accountId, chat.id, {
+          await sendMessage(accountId, chat.id, {
             file: path,
             filename: basename(path),
             viewtype: msgViewType,
-          }).then(() => {
-            // start sending other files, don't wait until last file is sent
-            runtime.removeTempFile(path)
           })
+          // start sending other files, don't wait until last file is sent
+          runtime.removeTempFile(path)
         }
       },
     })

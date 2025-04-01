@@ -20,7 +20,7 @@ import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import type { T } from '@deltachat/jsonrpc-client'
 import { BackendRemote } from '../../backend-com'
 import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
-import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
+import type { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 import useMessage from '../../hooks/chat/useMessage'
 
 type Props = {
@@ -61,17 +61,16 @@ export default function MenuAttachment({
         }
 
         for (const filePath of filePaths) {
-          sendMessage(accountId, selectedChat.id, {
+          await sendMessage(accountId, selectedChat.id, {
             file: filePath,
             filename: basename(filePath),
             viewtype: msgViewType,
-          }).then(() => {
-            // start sending other files, don't wait until last file is sent
-            if (runtime.getRuntimeInfo().target === 'browser') {
-              // browser created temp files during upload that can now be cleaned up
-              runtime.removeTempFile(filePath)
-            }
           })
+          // start sending other files, don't wait until last file is sent
+          if (runtime.getRuntimeInfo().target === 'browser') {
+            // browser created temp files during upload that can now be cleaned up
+            runtime.removeTempFile(filePath)
+          }
         }
       },
     })
