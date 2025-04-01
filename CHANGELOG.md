@@ -11,6 +11,7 @@
 - add button to share contact from profile view dialog #4886
 - tauri: experimental: make it compile for android #4871
 - `Cmd + N` shortcut to open new chat on macOS #4901
+- tauri: add cli interface: `--help`, `--version`, and developer options (like `--dev-mode`) #4908
 
 
 ### Changed
