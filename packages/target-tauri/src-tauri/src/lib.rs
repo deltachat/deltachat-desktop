@@ -22,6 +22,7 @@ mod file_dialogs;
 mod help_window;
 mod html_window;
 mod i18n;
+// menus are not available on mobile
 #[cfg(desktop)]
 mod menus;
 mod runtime_capabilities;
@@ -130,14 +131,19 @@ pub fn run() {
             temp_file::write_temp_file,
             temp_file::remove_temp_file,
             temp_file::copy_blob_file_to_internal_tmp_dir,
+            // not yet available on mobile
             #[cfg(desktop)]
             webxdc::commands_main_window::on_webxdc_message_changed,
+            // not yet available on mobile
             #[cfg(desktop)]
             webxdc::commands_main_window::on_webxdc_message_deleted,
             webxdc::commands_main_window::on_webxdc_status_update,
             webxdc::commands_main_window::on_webxdc_realtime_data,
+            // not yet available on mobile
             #[cfg(desktop)]
             webxdc::commands_main_window::delete_webxdc_account_data,
+            // not yet available on mobile,
+            // also curretly you can not switch or delete an account on mobile while there is a webxdc open
             #[cfg(desktop)]
             webxdc::commands_main_window::close_all_webxdc_instances,
             webxdc::commands_main_window::open_webxdc,
@@ -153,12 +159,16 @@ pub fn run() {
             runtime_info::get_runtime_info,
             settings::change_desktop_settings_apply_side_effects,
             help_window::open_help_window,
+            // not yet available on mobile
             #[cfg(desktop)]
             html_window::open_html_window,
+            // not yet available on mobile
             #[cfg(desktop)]
             html_window::commands::get_html_window_info,
+            // not yet available on mobile
             #[cfg(desktop)]
             html_window::commands::html_email_open_menu,
+            // not yet available on mobile
             #[cfg(desktop)]
             html_window::commands::html_email_set_load_remote_content,
         ])
