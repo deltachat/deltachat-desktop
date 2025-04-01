@@ -9,6 +9,7 @@
 - create chat: add support for invite links to search bar #4893
 - add separators to the context menu #4883
 - add button to share contact from profile view dialog #4886
+- `Cmd + N` shortcut to open new chat on macOS
 
 ### Changed
 - switch to account the webxdc is from when sending to chat (tauri and electron edition) #4740
