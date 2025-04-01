@@ -36,8 +36,8 @@ function config(options) {
     plugins,
     external: ['*.jpg', '*.png', '*.webp', '*.svg'],
     alias: {
-      'path': 'path-browserify'
-    }
+      path: 'path-browserify',
+    },
   }
 }
 
@@ -164,6 +164,10 @@ async function bundle(options) {
   await copyFile(
     'node_modules/@deltachat/message_parser_wasm/message_parser_wasm_bg.wasm',
     'html-dist/message_parser_wasm_bg.wasm'
+  )
+  await copyFile(
+    'node_modules/libheif-js/libheif-wasm/libheif.wasm',
+    'html-dist/libheif.wasm'
   )
 }
 

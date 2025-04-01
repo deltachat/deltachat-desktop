@@ -11,6 +11,7 @@ import {
   setLogHandler,
 } from '../../shared/logger'
 import { runtime } from '@deltachat-desktop/runtime-interface'
+import { initLibHeif } from './utils/heif'
 
 async function main() {
   exp.help //make sure experimental.ts is used
@@ -19,6 +20,7 @@ async function main() {
     printProcessLogLevelInfo()
 
     await initWasm('./message_parser_wasm_bg.wasm')
+    await initLibHeif('./libheif.wasm')
 
     initSystemIntegration()
     const domNode = document.querySelector('#root')

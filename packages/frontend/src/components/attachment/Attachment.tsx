@@ -1,5 +1,5 @@
 import mimeTypes from 'mime-types'
-import { Type } from '../../backend-com'
+import type { Type } from '../../backend-com'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 
 /* Section - Data Copied in part from Signal */
@@ -23,6 +23,8 @@ const SUPPORTED_IMAGE_MIME_TYPES = Object.freeze([
   'image/png',
   // for opening avatars
   'image/x',
+  // heic
+  'image/heic',
 ])
 // See: https://www.chromium.org/audio-video
 const SUPPORTED_VIDEO_MIME_TYPES = Object.freeze([

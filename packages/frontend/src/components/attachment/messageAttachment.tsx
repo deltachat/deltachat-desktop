@@ -13,17 +13,18 @@ import {
   MessageTypeAttachmentSubset,
 } from './Attachment'
 import { runtime } from '@deltachat-desktop/runtime-interface'
-import { ConversationType } from '../message/MessageList'
+import type { ConversationType } from '../message/MessageList'
 import { getDirection } from '../../utils/getDirection'
-import { Type } from '../../backend-com'
+import type { Type } from '../../backend-com'
 import FullscreenMedia, {
   NeighboringMediaMode,
 } from '../dialogs/FullscreenMedia'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/dialog/useDialog'
 import AudioPlayer from '../AudioPlayer'
-import { T } from '@deltachat/jsonrpc-client'
+import type { T } from '@deltachat/jsonrpc-client'
 import { selectedAccountId } from '../../ScreenController'
+import { HeifImage } from './heifImage'
 
 type AttachmentProps = {
   text?: string
@@ -138,6 +139,7 @@ export default function Attachment({
         </div>
       )
     }
+
     return (
       <button
         onClick={onClickAttachment}
@@ -148,14 +150,27 @@ export default function Attachment({
           withContentAbove ? 'content-above' : null
         )}
       >
-        <img
-          className={classNames(
-            'attachment-content',
-            isPortrait(message) ? 'portrait' : null
-          )}
-          src={runtime.transformBlobURL(message.file)}
-          height={calculateHeight(message)}
-        />
+        {/* idea one component that also supports heic, instead of these 2 components*/}
+        {message.fileMime === 'image/heic' ? (
+          <HeifImage
+            className={classNames(
+              'attachment-content',
+              isPortrait(message) ? 'portrait' : null
+            )}
+            src={runtime.transformBlobURL(message.file)}
+            height={calculateHeight(message)}
+            updateHeight={calculateHeight}
+          />
+        ) : (
+          <img
+            className={classNames(
+              'attachment-content',
+              isPortrait(message) ? 'portrait' : null
+            )}
+            src={runtime.transformBlobURL(message.file)}
+            height={calculateHeight(message)}
+          />
+        )}
       </button>
     )
   } else if (isVideo(message.fileMime)) {
