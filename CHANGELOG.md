@@ -26,6 +26,7 @@
 - tauri: clear temp folder on exit #4839
 - fix wrong punycode warnings in links #4864
 - improve image display #4410
+- hide additional reactions behind button #4322
 - scroll to top when search query changes
 - fix esc key closing wrong dialog in settings #4865
 - fix member list is not refreshed if it changes while you look at the group profile #4894
