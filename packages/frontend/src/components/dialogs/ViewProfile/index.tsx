@@ -299,7 +299,7 @@ export function ViewProfileInner({
           </Button>
         )}
         {!isDeviceChat && contact.isBlocked && (
-          <Button styling='primary' onClick={onUnblockContact}>
+          <Button styling='secondary' onClick={onUnblockContact}>
             {tx('menu_unblock_contact')}
           </Button>
         )}
