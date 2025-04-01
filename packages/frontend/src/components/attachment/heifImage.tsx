@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { libheif } from '../../utils/heif'
+import { libheif, loadAndConvertToPngDataUrl } from '../../utils/heif'
 import { T } from '@deltachat/jsonrpc-client'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 
@@ -28,35 +28,16 @@ export function HeifImage({
   useEffect(() => {
     ;(async () => {
       try {
-        const buffer = await (await fetch(src)).arrayBuffer()
-        const decoder = new libheif!.HeifDecoder()
-        // console.log({ libheif, decoder })
-        const data = decoder.decode(buffer)
-        const image = data[0]
-        const width = image.get_width()
-        const height = image.get_height()
+        const { height, width, dataUrl } = await loadAndConvertToPngDataUrl(src)
         if (updateHeight) {
-          setHeight(updateHeight(height))
+          setHeight(
+            updateHeight({
+              dimensionsHeight: height,
+              dimensionsWidth: width,
+              viewType: 'Image',
+            })
+          )
         }
-        // console.log({ image, width, height })
-        const canvas = document.createElement('canvas')
-        canvas.width = width
-        canvas.height = height
-        const context = canvas.getContext('2d')!
-        const imageData = context.createImageData(width, height)
-        await new Promise<void>((resolve, reject) => {
-          image.display(imageData, (displayData: unknown) => {
-            if (!displayData) {
-              setError('HEIF processing error')
-              return reject(new Error('HEIF processing error'))
-            }
-
-            resolve()
-          })
-        })
-        context.putImageData(imageData, 0, 0)
-        const dataUrl = canvas.toDataURL()
-        // console.log({ dataUrl })
         setImgSrc(dataUrl)
       } catch (e: unknown) {
         log.error('failed to convert/load heif image', e)
