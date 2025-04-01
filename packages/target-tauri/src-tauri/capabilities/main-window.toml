@@ -30,6 +30,7 @@ permissions = [
     "core:window:allow-set-badge-count",
 
     "allow-set-main-window-channels",
+    "allow-get-frontend-run-config",
     "allow-deltachat-jsonrpc-request",
 
     "allow-ui-ready",

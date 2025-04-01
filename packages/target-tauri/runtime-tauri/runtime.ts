@@ -203,19 +203,25 @@ class TauriRuntime implements Runtime {
     getLogger: typeof getLoggerFunction
   ): Promise<void> {
     // fetch vars
-    // - rc config // TODO - get real values // todo also cli interface?
+    const config = await invoke<{
+      log_debug: boolean
+      log_to_console: boolean
+      devtools: boolean
+      dev_mode: boolean
+    }>('get_frontend_run_config')
     const rc_config: RC_Config = {
-      'log-debug': true,
-      'log-to-console': true,
-      'machine-readable-stacktrace': true,
+      'log-debug': config.log_debug,
+      'log-to-console': config.log_to_console,
+      devmode: config.dev_mode,
+
       theme: undefined,
       'theme-watch': false,
-      devmode: true,
       'translation-watch': false,
       minimized: false,
 
       // does not exist in delta tauri
       'allow-unsafe-core-replacement': false,
+      'machine-readable-stacktrace': true,
       // these are not relevant for frontend (--version, --help and their shorthand forms)
       version: false,
       v: false,

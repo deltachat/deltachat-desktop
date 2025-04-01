@@ -13,10 +13,12 @@ use state::{
     translations::TranslationState, webxdc_instances::WebxdcInstancesState,
 };
 use tauri::Manager;
-use util::csp::add_custom_schemes_to_csp_for_window_and_android;
+use tauri_plugin_log::{Target, TargetKind};
 
 mod app_path;
 mod blobs;
+#[cfg(desktop)]
+mod cli;
 mod clipboard;
 mod file_dialogs;
 mod help_window;
@@ -25,6 +27,7 @@ mod i18n;
 // menus are not available on mobile
 #[cfg(desktop)]
 mod menus;
+mod run_config;
 mod runtime_capabilities;
 mod runtime_info;
 mod settings;
@@ -86,6 +89,11 @@ fn get_current_logfile(state: tauri::State<AppState>) -> String {
 pub fn run() {
     let startup_timestamp = SystemTime::now();
 
+    #[cfg(desktop)]
+    let run_config = cli::parse_cli_options();
+    #[cfg(not(desktop))]
+    let run_config = RunConfig::default();
+
     let mut builder = tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_store::Builder::new().build())
@@ -116,6 +124,7 @@ pub fn run() {
             // in `capabilities`.
             greet,
             state::main_window_channels::set_main_window_channels,
+            run_config::get_frontend_run_config,
             deltachat_jsonrpc_request,
             ui_ready,
             ui_frontend_ready,
@@ -196,8 +205,15 @@ pub fn run() {
                 std::fs::create_dir_all(app.path().app_log_dir()?)?; // though log dir is not used because it uses os-log on iOS
             }
 
+            let mut log_targets = vec![Target::new(TargetKind::LogDir { file_name: None })];
+            if run_config.log_to_console {
+                log_targets.push(Target::new(TargetKind::Stdout))
+            }
+
             #[allow(unused_mut)]
             let mut logger_builder = tauri_plugin_log::Builder::new()
+                .clear_targets()
+                .targets(log_targets)
                 // default targets are file and stdout
                 .max_file_size(5_000_000 /* bytes */)
                 .rotation_strategy(tauri_plugin_log::RotationStrategy::KeepAll) // TODO: only keep last 10
@@ -222,6 +238,12 @@ pub fn run() {
                 // because the message "[DEBUG][portmapper] failed to get a port mapping deadline has elapsed" looks like important
                 // info for debugging add backup transfer feature. - so better be safe and set it to debug for now.
                 .level_for("portmapper", log::LevelFilter::Debug);
+
+            if run_config.log_debug {
+                logger_builder = logger_builder.level(log::LevelFilter::Debug);
+            } else {
+                logger_builder = logger_builder.level(log::LevelFilter::Info);
+            }
 
             #[cfg(target_os = "android")]
             {
@@ -270,8 +292,12 @@ pub fn run() {
             // we should think about wether we want it on other production builds (except store),
             // because having that console in production can be useful for fixing bugs..
             // depends on whether we can remove it from the context menu and make it dependent on --devmode?
-            #[cfg(debug_assertions)]
-            app.get_webview_window("main").unwrap().open_devtools();
+            if run_config.devtools {
+                #[cfg(debug_assertions)]
+                app.get_webview_window("main").unwrap().open_devtools();
+            }
+
+            app.manage(run_config);
 
             let main_window = app.get_webview_window("main").unwrap();
             #[cfg(target_os = "macos")]
@@ -301,10 +327,13 @@ pub fn run() {
             Ok(())
         })
         .build({
+            #[allow(unused_mut)]
             let mut context = tauri::generate_context!("tauri.conf.json5");
 
             #[cfg(any(debug_assertions, target_os = "windows", target_os = "android"))]
             {
+                use util::csp::add_custom_schemes_to_csp_for_window_and_android;
+
                 let csp = context.config_mut().app.security.csp.clone();
                 if let Some(csp) = csp {
                     context.config_mut().app.security.csp =
