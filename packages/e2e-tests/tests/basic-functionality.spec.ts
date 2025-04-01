@@ -379,9 +379,6 @@ test('add app from picker to chat', async ({ page }) => {
   await expect(webxdcMessage).toContainText(appName)
 })
 
-/**
- * focuses first visible item on arrow down key on input in create chat dialog
- */
 test('focuses first visible item on arrow down key on input in create chat dialog', async ({
   page,
 }) => {
