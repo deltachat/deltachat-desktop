@@ -37,6 +37,8 @@ impl DeltaChatAppState {
         let handle = app.handle().clone();
 
         let send_task: JoinHandle<anyhow::Result<()>> = tauri::async_runtime::spawn(async move {
+            let state = handle.state::<MainWindowChannels>();
+
             loop {
                 let message = match out_receiver.next().await {
                     None => break,
@@ -44,7 +46,6 @@ impl DeltaChatAppState {
                 };
                 // TODO fail will drop out of loop, do we want that here? or do we just want to log and ignore the error
 
-                let state = handle.state::<MainWindowChannels>();
                 if let Err(err) = state.send_jsonrpc_response(message).await {
                     error!("send_jsonrpc_response failed: {err}");
                 }
