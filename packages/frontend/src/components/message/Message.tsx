@@ -25,7 +25,7 @@ import {
   enterEditMessageMode,
 } from './messageFunctions'
 import Attachment from '../attachment/messageAttachment'
-import { isGenericAttachment } from '../attachment/Attachment'
+import { isGenericAttachment, isImage } from '../attachment/Attachment'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { AvatarFromContact } from '../Avatar'
 import { ConversationType } from './MessageList'
@@ -589,9 +589,22 @@ export default function Message(props: {
   useEffect(() => {
     const resizeHandler = () => {
       if (messageContainerRef.current) {
+        let messageWidth = 0
         // set message width which is used by reaction component
         // to adapt the number of visible reactions
-        setMessageWidth(messageContainerRef.current.clientWidth)
+        if (
+          (message.fileMime && isImage(message.fileMime)) ||
+          window.innerWidth < 900
+        ) {
+          // image messages have a defined width
+          messageWidth = messageContainerRef.current.clientWidth
+        } else {
+          // text messages might be smaller than min width but
+          // they can be extended to at least max image width
+          // so we pass that value to the reaction calculation
+          messageWidth = 450
+        }
+        setMessageWidth(messageWidth)
       }
     }
     window.addEventListener('resize', resizeHandler)
