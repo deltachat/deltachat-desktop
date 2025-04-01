@@ -159,13 +159,17 @@ export function AddMemberInnerDialog({
   const itemCount = contactIds.length + (needToRenderAddContact ? 1 : 0)
 
   const addContactOnKeyDown = (ev: React.KeyboardEvent<HTMLInputElement>) => {
-    if (ev.key == 'Enter') {
+    if (ev.key === 'Enter') {
       // TODO refactor: this is fragile.
       ;(
         contactListRef.current?.querySelector(
           'input[type="checkbox"]'
         ) as HTMLDivElement
       ).click()
+    } else if (ev.code === 'ArrowDown') {
+      ;(contactListRef.current?.querySelector('button') as HTMLElement)?.focus()
+      // prevent scrolling down the list
+      ev.preventDefault()
     }
   }
 
