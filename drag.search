@@ -1,0 +1,7 @@
+packages/frontend/src/components/attachment/mediaAttachment.tsx
+543:          draggable='true'
+
+
+packages/frontend/src/components/attachment/messageAttachment.tsx
+225:          draggable='true'
+294:          draggable='true'

@@ -8,6 +8,7 @@ import { getStore } from '@tauri-apps/plugin-store'
 import type { Store } from '@tauri-apps/plugin-store'
 import { openPath, openUrl } from '@tauri-apps/plugin-opener'
 import { writeText, readText } from '@tauri-apps/plugin-clipboard-manager'
+import { listen } from '@tauri-apps/api/event'
 
 import {
   DcNotification,
@@ -315,6 +316,10 @@ class TauriRuntime implements Runtime {
         this.onShowDialog?.('keybindings')
       }
     }
+
+    listen('tauri://file-drop', event => {
+      console.log(event)
+    })
   }
   reloadWebContent(): void {
     // for now use the browser method as long as it is sufficient
