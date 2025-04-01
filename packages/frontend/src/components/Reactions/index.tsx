@@ -33,12 +33,7 @@ export default function Reactions(props: Props) {
   useEffect(() => {
     let emojiSpaces = 0
     if (messageWidth <= 234) {
-      if (reactions.length <= 2) {
-        emojiSpaces = 2
-      } else {
-        // we need space for the bubble showing +n
-        emojiSpaces = 1
-      }
+      emojiSpaces = 1
     } else {
       emojiSpaces = Math.round((messageWidth - 200) / 34)
     }
@@ -49,8 +44,12 @@ export default function Reactions(props: Props) {
     const visibleReactionsCount = reactions
       .slice(0, emojiSpaces)
       .reduce((sum, item) => sum + item.count, 0)
-
-    setHiddenReactionsCount(totalReactionsCount - visibleReactionsCount)
+    if (reactions.length - emojiSpaces <= 1) {
+      emojiSpaces++
+      setHiddenReactionsCount(0)
+    } else {
+      setHiddenReactionsCount(totalReactionsCount - visibleReactionsCount)
+    }
     setVisibleEmojis(emojiSpaces)
   }, [messageWidth, reactions])
 
