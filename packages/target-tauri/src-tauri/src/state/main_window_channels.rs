@@ -1,5 +1,3 @@
-use std::sync::Arc;
-
 use deltachat_jsonrpc::yerpc;
 use std::str::FromStr;
 use tauri::{ipc::Channel, State, WebviewWindow};
@@ -42,13 +40,13 @@ pub(crate) struct InnerMainWindowChannelsState {
 
 /// Channels to communicate with the front-end's Runtime class (see `runtime.ts`).
 pub(crate) struct MainWindowChannels {
-    inner: Arc<RwLock<Option<InnerMainWindowChannelsState>>>,
+    inner: RwLock<Option<InnerMainWindowChannelsState>>,
 }
 
 impl MainWindowChannels {
     pub fn new() -> Self {
         Self {
-            inner: Arc::new(RwLock::new(None)),
+            inner: RwLock::new(None),
         }
     }
 

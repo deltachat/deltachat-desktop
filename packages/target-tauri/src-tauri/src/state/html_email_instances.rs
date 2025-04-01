@@ -4,7 +4,7 @@ in essence its the metadata and content,
 so it can be served from the special scheme.
 */
 
-use std::{collections::HashMap, sync::Arc};
+use std::collections::HashMap;
 
 use log::warn;
 use tokio::sync::RwLock;
@@ -17,18 +17,18 @@ pub(crate) struct InnerHtmlEmailInstanceData {
     pub(crate) sender: String, // this is called "from" in electron edition
     pub(crate) receive_time: String,
     pub(crate) network_allow_state: bool,
-    pub(crate) html_content: Arc<String>,
+    pub(crate) html_content: String,
     pub(crate) blocked_by_proxy: bool,
 }
 
 pub(crate) struct HtmlEmailInstancesState {
-    pub(crate) inner: Arc<RwLock<HashMap<String, InnerHtmlEmailInstanceData>>>,
+    pub(crate) inner: RwLock<HashMap<String, InnerHtmlEmailInstanceData>>,
 }
 
 impl HtmlEmailInstancesState {
     pub(crate) fn new() -> Self {
         HtmlEmailInstancesState {
-            inner: Arc::new(RwLock::new(HashMap::new())),
+            inner: RwLock::new(HashMap::new()),
         }
     }
 
