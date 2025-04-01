@@ -85,15 +85,6 @@ export default function ViewProfile(
 
   const onClickViewProfileMenu = useViewProfileMenu(contact)
 
-  const { openDialog } = useDialog()
-
-  const onClickShareContact = () => {
-    onClose()
-    openDialog(ShareProfileDialog, {
-      contact,
-    })
-  }
-
   return (
     <Dialog
       width={400}
@@ -108,15 +99,6 @@ export default function ViewProfile(
       >
         {showMenu && (
           <>
-            <HeaderButton
-              id='view-profile-share-contact'
-              onClick={onClickShareContact}
-              icon={
-                runtime.getRuntimeInfo().isMac ? 'ios_share_modified' : 'share'
-              }
-              iconSize={24}
-              aria-label='Share Contact'
-            />
             <HeaderButton
               id='view-profile-menu'
               onClick={onClickViewProfileMenu}
@@ -260,11 +242,17 @@ export function ViewProfileInner({
 
   const VerificationTag = verifier?.action ? 'button' : 'div'
 
+  const onClickShareContact = () => {
+    onClose()
+    openDialog(ShareProfileDialog, {
+      contact,
+    })
+  }
+
   return (
     <>
       <DialogContent>
         <ProfileInfoHeader
-          address={addressLine}
           avatarPath={avatarPath ? avatarPath : undefined}
           color={contact.color}
           displayName={displayName}
@@ -295,26 +283,29 @@ export function ViewProfileInner({
                 {tx('contact_is_blocked')}
               </div>
             )}
+            {contact.address && (
+              <div className={styles.addressLine}>
+                <i className='material-svg-icon material-icon-email-at' />
+                {addressLine}
+              </div>
+            )}
           </div>
         )}
       </DialogContent>
-      <div
-        style={{
-          display: 'flex',
-          margin: '20px 0px',
-          justifyContent: 'center',
-        }}
-      >
+      <div className={styles.buttonWrap}>
         {!isDeviceChat && !contact.isBlocked && (
-          <Button styling='primary' onClick={onSendMessage}>
+          <Button styling='secondary' onClick={onSendMessage}>
             {tx('send_message')}
           </Button>
         )}
         {!isDeviceChat && contact.isBlocked && (
-          <Button styling='primary' onClick={onUnblockContact}>
+          <Button styling='secondary' onClick={onUnblockContact}>
             {tx('menu_unblock_contact')}
           </Button>
         )}
+        <Button styling='secondary' onClick={onClickShareContact}>
+          {tx('menu_share')}
+        </Button>
       </div>
       {statusText !== '' && (
         <>

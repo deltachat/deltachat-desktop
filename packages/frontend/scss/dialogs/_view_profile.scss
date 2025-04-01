@@ -5,7 +5,7 @@
 }
 
 .contact-attributes {
-  margin-top: 20px;
+  margin-top: 10px;
   margin-bottom: 20px;
   font-size: 1.08em;
 
@@ -22,5 +22,8 @@
 
   .verification {
     @include button-reset;
+    img {
+      margin-right: 7px;
+    }
   }
 }
