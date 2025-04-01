@@ -219,6 +219,9 @@ pub fn run() {
                 app,
                 startup_timestamp,
             ))?);
+            app.manage(MainWindowChannels::new());
+            // Note that `DeltaChatAppState::try_new` depends on
+            // `MainWindowChannels` to be managed already.
             app.manage(tauri::async_runtime::block_on(DeltaChatAppState::try_new(
                 app,
             ))?);
@@ -228,7 +231,6 @@ pub fn run() {
                 app,
             ))?);
             app.manage(WebxdcInstancesState::new());
-            app.manage(MainWindowChannels::new());
             app.state::<AppState>()
                 .log_duration_since_startup("base setup done");
 
