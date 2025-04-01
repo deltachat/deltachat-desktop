@@ -1,6 +1,8 @@
 .profileInfoHeader {
   display: flex;
+  flex-direction: column;
   --local-avatar-vertical-margin: 0;
+  text-align: center;
 }
 
 .infoContainer {

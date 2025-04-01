@@ -95,9 +95,17 @@
   --local-avatar-vertical-margin: 0;
 }
 
+// contact list, search results etc.
 .avatar.large {
   --local-avatar-size: 64px;
   --local-avatar-font-size: 39px;
+}
+
+// for profile view
+.avatar.very-large {
+  --local-avatar-size: 128px;
+  --local-avatar-font-size: 78px;
+  margin: auto;
 }
 
 .avatar.no-search-results {

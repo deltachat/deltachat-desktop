@@ -46,6 +46,13 @@ i.material-icon-schedule {
   transform: translate(0px, -0.07em);
 }
 
+i.material-icon-email-at {
+  mask-image: url(./images/icons/alternate-email.svg);
+  -webkit-mask-image: url(./images/icons/alternate-email.svg);
+  transform: translate(0px, -0.07em);
+  background-color: #999;
+}
+
 i.material-icon-blocked {
   mask-image: url(./images/icons/blocked.svg);
   -webkit-mask-image: url(./images/icons/blocked.svg);

@@ -22,5 +22,8 @@
 
   .verification {
     @include button-reset;
+    img {
+      margin-right: 7px;
+    }
   }
 }

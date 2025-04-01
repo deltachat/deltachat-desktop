@@ -15,3 +15,17 @@
   white-space: pre-wrap;
   overflow-y: scroll;
 }
+
+.buttonWrap {
+  display: flex;
+  margin: 20px 0px;
+  justify-content: center;
+  gap: 30px;
+  button {
+    min-width: 150px;
+  }
+}
+
+.addressLine {
+  color: #666;
+}
