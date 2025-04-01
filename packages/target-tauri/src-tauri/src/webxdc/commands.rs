@@ -34,12 +34,11 @@ use crate::{
 use super::error::Error;
 
 const INIT_SCRIPT: &str = r#"
+// keep this log line as long as we are testing
+// to easily see that it is called from every frame
 console.log("hello from INIT_SCRIPT")
-// this is only run once, not in every iframe, we need an api that is run in every iframe
-// so documentation for this is wrong
-// atleast on macOS
 
-// attempt to remove peer connection on macOS
+// remove peer connection by overwriting api
 try {
 window.RTCPeerConnection = ()=>{};
 RTCPeerConnection = ()=>{};
