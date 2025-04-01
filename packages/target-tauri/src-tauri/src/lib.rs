@@ -196,6 +196,7 @@ pub fn run() {
                 std::fs::create_dir_all(app.path().app_log_dir()?)?; // though log dir is not used because it uses os-log on iOS
             }
 
+            #[allow(unused_mut)]
             let mut logger_builder = tauri_plugin_log::Builder::new()
                 // default targets are file and stdout
                 .max_file_size(5_000_000 /* bytes */)

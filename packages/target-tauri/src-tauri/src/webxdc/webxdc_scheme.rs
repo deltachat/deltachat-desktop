@@ -254,7 +254,7 @@ pub(crate) fn webxdc_protocol<R: tauri::Runtime>(
 //
 // We make sure that this list is up to date using the
 // `/bin/webxdc-check-permissions-policy-count.js` script.
-const PERMISSIONS_POLICY_DENY_ALL: &'static str = concat!(
+const PERMISSIONS_POLICY_DENY_ALL: &str = concat!(
     "accelerometer=(), ",
     "ambient-light-sensor=(), ",
     "attribution-reporting=(), ",
