@@ -102,7 +102,10 @@ export function keyDownEvent2Action(
         return KeybindAction.ChatList_SearchInChat
       }
       return KeybindAction.ChatList_FocusSearchInput
-    } else if (ev.ctrlKey && (ev.key === 'n' || ev.code === 'KeyN')) {
+    } else if (
+      (ev.metaKey || ev.ctrlKey) &&
+      (ev.key === 'n' || ev.code === 'KeyN')
+    ) {
       return KeybindAction.NewChat_Open
     } else if (ev.ctrlKey && (ev.key === 'm' || ev.code === 'KeyM')) {
       return KeybindAction.Composer_Focus

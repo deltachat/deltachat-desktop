@@ -228,7 +228,7 @@ export function getKeybindings(
       },
       {
         title: tx('menu_new_chat'),
-        keyBindings: [['Control', 'N']],
+        keyBindings: [[isMac ? 'Meta' : 'Control', 'N']],
       },
       {
         title: tx('focus_message_input'),
