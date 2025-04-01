@@ -1,8 +1,4 @@
-use std::{
-    path::PathBuf,
-    sync::{Arc, Mutex},
-    time::SystemTime,
-};
+use std::{path::PathBuf, sync::Mutex, time::SystemTime};
 
 use anyhow::{bail, Context};
 use log::info;
@@ -20,7 +16,7 @@ pub(crate) struct InnerAppState {
 }
 
 pub(crate) struct AppState {
-    pub(crate) inner: Arc<Mutex<InnerAppState>>,
+    pub(crate) inner: Mutex<InnerAppState>,
     pub(crate) startup_timestamp: SystemTime,
     pub(crate) current_log_file_path: String,
 
@@ -47,7 +43,7 @@ impl AppState {
         let all_languages_for_menu = get_all_languages(app.handle()).await?;
 
         Ok(Self {
-            inner: Arc::new(Mutex::new(InnerAppState::default())),
+            inner: Mutex::new(InnerAppState::default()),
             startup_timestamp,
             current_log_file_path,
             all_languages_for_menu,
