@@ -8,7 +8,8 @@ import { BackendRemote } from '../../backend-com'
 export type CreateDraftMessage = (
   accountId: number,
   chatId: number,
-  messageText: string
+  messageText: string,
+  file?: { path: string; name: string }
 ) => Promise<void>
 
 /**
@@ -23,7 +24,7 @@ export default function useCreateDraftMessage() {
   const { selectChat } = useChat()
 
   return useCallback<CreateDraftMessage>(
-    async (accountId, chatId, messageText) => {
+    async (accountId, chatId, messageText, file) => {
       const draft = await BackendRemote.rpc.getDraft(accountId, chatId)
 
       selectChat(accountId, chatId)
@@ -49,13 +50,13 @@ export default function useCreateDraftMessage() {
         accountId,
         chatId,
         messageText,
+        file?.path || null,
+        file?.name || null,
         null,
-        null,
-        null,
-        'Text'
+        file ? 'File' : 'Text'
       )
 
-      window.__reloadDraft && window.__reloadDraft()
+      window.__reloadDraft?.()
     },
     [tx, openConfirmationDialog, selectChat]
   )
