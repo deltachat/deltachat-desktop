@@ -29,7 +29,6 @@ export default function ProfileInfoHeader({
           avatarPath={avatarPath}
           color={color}
           wasSeenRecently={wasSeenRecently}
-          large
           className='very-large'
         />
       </ClickForFullscreenAvatarWrapper>
