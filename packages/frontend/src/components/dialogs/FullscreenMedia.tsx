@@ -130,6 +130,8 @@ export default function FullscreenMedia(props: Props & DialogProps) {
   let elm = null
 
   if (isImage(fileMime)) {
+    const imageHeight =
+      msg.dimensionsHeight < 300 ? 2 * msg.dimensionsHeight : ''
     elm = (
       <div className='image-container'>
         <TransformWrapper initialScale={1}>
@@ -151,6 +153,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
                     // See https://github.com/deltachat/deltachat-desktop/issues/4320
                     style={{ display: 'block' }}
                     src={runtime.transformBlobURL(file)}
+                    height={imageHeight}
                   />
                 </div>
               </TransformComponent>

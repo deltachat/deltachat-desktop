@@ -3,7 +3,7 @@ State that is attached to webxdc windows.
 to give the webxdc schemes and the commands the context
 */
 
-use std::{collections::HashMap, sync::Arc};
+use std::collections::HashMap;
 
 use deltachat::message::Message;
 use tauri::ipc::Channel;
@@ -24,13 +24,13 @@ pub(crate) struct WebxdcInstance {
 
 pub(crate) struct WebxdcInstancesState {
     // key of hashmap is window label
-    pub(crate) inner: Arc<RwLock<HashMap<String, WebxdcInstance>>>,
+    pub(crate) inner: RwLock<HashMap<String, WebxdcInstance>>,
 }
 
 impl WebxdcInstancesState {
     pub(crate) fn new() -> Self {
         WebxdcInstancesState {
-            inner: Arc::new(RwLock::new(HashMap::new())),
+            inner: RwLock::new(HashMap::new()),
         }
     }
 

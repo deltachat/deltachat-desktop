@@ -99,7 +99,7 @@ pub(crate) async fn open_html_window(
                 subject: subject.to_owned(),
                 sender: sender.to_owned(),
                 receive_time: receive_time.to_owned(),
-                html_content: Arc::new(content.to_owned()),
+                html_content: content.to_owned(),
                 network_allow_state: toggle_network_initial_state,
                 blocked_by_proxy,
             },

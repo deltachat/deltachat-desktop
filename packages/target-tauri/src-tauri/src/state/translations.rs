@@ -1,5 +1,3 @@
-use std::sync::Arc;
-
 use log::error;
 
 use tauri::AppHandle;
@@ -16,7 +14,7 @@ pub struct TranslationStateInner {
 }
 
 pub(crate) struct TranslationState {
-    inner: Arc<RwLock<TranslationStateInner>>,
+    inner: RwLock<TranslationStateInner>,
 }
 
 impl TranslationState {
@@ -27,7 +25,7 @@ impl TranslationState {
             .and_then(|s| s.as_str().map(|s| s.to_owned()))
             .unwrap_or("en".to_owned());
         let locale_data = get_locale_data(&locale, app.handle().clone()).await?;
-        let locale_data = Arc::new(RwLock::new(TranslationStateInner { data: locale_data }));
+        let locale_data = RwLock::new(TranslationStateInner { data: locale_data });
 
         Ok(Self { inner: locale_data })
     }
