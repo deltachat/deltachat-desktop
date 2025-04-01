@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import { libheif, loadAndConvertToPngDataUrl } from '../../utils/heif'
-import { T } from '@deltachat/jsonrpc-client'
+import React, { useLayoutEffect, useState } from 'react'
+import { loadAndConvertToPngDataUrl } from '../../utils/heif'
+import type { T } from '@deltachat/jsonrpc-client'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 
 const log = getLogger('renderer/heifImage')
@@ -25,10 +25,11 @@ export function HeifImage({
   const [height, setHeight] = useState<number | undefined>(originalHeight)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     ;(async () => {
       try {
-        const { height, width, dataUrl } = await loadAndConvertToPngDataUrl(src)
+        const { height, width, objectUrl } =
+          await loadAndConvertToPngDataUrl(src)
         if (updateHeight) {
           setHeight(
             updateHeight({
@@ -38,7 +39,7 @@ export function HeifImage({
             })
           )
         }
-        setImgSrc(dataUrl)
+        setImgSrc(objectUrl)
       } catch (e: unknown) {
         log.error('failed to convert/load heif image', e)
         setError(`failed to convert/load heif image: ${(e as any)?.message}`)
