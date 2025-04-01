@@ -17,6 +17,7 @@ import {
   PseudoListItem,
   PseudoListItemAddMember,
   PseudoListItemAddContact,
+  PseudoListItemAddContactOrGroupFromInviteLink,
 } from '../../helpers/PseudoListItem'
 import GroupImage from '../../GroupImage'
 import { runtime } from '@deltachat-desktop/runtime-interface'
@@ -57,6 +58,7 @@ import { ContextMenuContext } from '../../../contexts/ContextMenuContext'
 import ImageCropper from '../../ImageCropper'
 import { RovingTabindexProvider } from '../../../contexts/RovingTabindex'
 import ViewProfile from '../ViewProfile'
+import { isInviteLink } from '@deltachat-desktop/shared/util'
 
 type ViewMode = 'main' | 'createGroup' | 'createBroadcastList'
 
@@ -162,8 +164,13 @@ function CreateChatMain(props: CreateChatMainProps) {
       contactCache[contactIds[0]]?.address.toLowerCase() ===
         queryStr.trim().toLowerCase())
   )
+  const showPseudoListItemAddContactFromInviteLink =
+    queryStr && isInviteLink(queryStr)
   const contactsAndExtraItems = useMemo(
     () => [
+      ...(showPseudoListItemAddContactFromInviteLink
+        ? [CreateChatExtraItemType.INVITE_LINK]
+        : []),
       ...(needToRenderAddContactQRScan
         ? [CreateChatExtraItemType.ADD_CONTACT_QR_SCAN]
         : []),
@@ -180,6 +187,7 @@ function CreateChatMain(props: CreateChatMainProps) {
       needToRenderAddContact,
       needToRenderAddContactQRScan,
       needToRenderAddGroup,
+      showPseudoListItemAddContactFromInviteLink,
     ]
   )
 
@@ -330,6 +338,7 @@ function CreateChatMain(props: CreateChatMainProps) {
                       openQRScan,
                       queryStrIsValidEmail,
                       queryStr,
+                      onClose,
                     }}
                     itemKey={index => contactsAndExtraItems[index]}
                     onItemsRendered={onItemsRendered}
@@ -384,6 +393,7 @@ function CreateChatMainRow({
     openQRScan: () => Promise<void>
     queryStrIsValidEmail: boolean
     queryStr: string
+    onClose: () => void
   }
 }) {
   const {
@@ -396,10 +406,12 @@ function CreateChatMainRow({
     openQRScan,
     queryStrIsValidEmail,
     queryStr,
+    onClose,
   } = data
   const item = contactsAndExtraItems[index]
 
   const tx = useTranslationFunction()
+  const accountId = selectedAccountId()
 
   const el = (() => {
     switch (item) {
@@ -443,6 +455,15 @@ function CreateChatMainRow({
           />
         )
       }
+      case CreateChatExtraItemType.INVITE_LINK: {
+        return (
+          <PseudoListItemAddContactOrGroupFromInviteLink
+            inviteLink={queryStr!}
+            accountId={accountId}
+            callback={onClose}
+          />
+        )
+      }
       default: {
         const contact: Type.Contact | undefined = contactCache[item]
         if (!contact) {
@@ -477,6 +498,7 @@ const enum CreateChatExtraItemType {
   ADD_GROUP,
   ADD_BROADCAST_LIST,
   ADD_CONTACT,
+  INVITE_LINK,
 }
 
 type CreateGroupProps = {

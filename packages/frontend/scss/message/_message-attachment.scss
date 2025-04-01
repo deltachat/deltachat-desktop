@@ -27,11 +27,10 @@
    * The same goes for `.quoted-image`.
    */
   & > .attachment-content {
-    object-fit: scale-down;
+    object-fit: cover;
     object-position: center;
-    height: 200px;
-    max-width: 100%;
-    min-width: 80px;
+    max-width: 450px;
+    min-width: 200px;
 
     // The padding on the bottom of the bubble produces 4 extra pixels of space at the
     //   bottom, so this doesn't match up with the padding numbers above.
@@ -41,11 +40,13 @@
     cursor: pointer;
 
     &.portrait {
-      height: 300px;
+      max-width: 350px;
     }
     &.video-content {
+      height: 350px;
       min-width: 300px;
       background-color: black;
+      object-fit: scale-down;
     }
   }
 
@@ -82,6 +83,17 @@
     margin-top: 4px;
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
+  }
+}
+
+@media (max-width: 900px) {
+  .message-attachment-media {
+    & > .attachment-content {
+      max-width: 100%;
+      &.portrait {
+        max-width: 100%;
+      }
+    }
   }
 }
 

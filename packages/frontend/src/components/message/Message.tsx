@@ -326,6 +326,7 @@ function buildContextMenu(
       label: tx('global_menu_edit_desktop'),
       action: enterEditMessageMode.bind(null, message),
     },
+    { type: 'separator' },
     // Save Message
     !chat.isSelfTalk &&
       !isSavedMessage && {
@@ -420,6 +421,7 @@ function buildContextMenu(
       label: tx('info'),
       action: openMessageInfo.bind(null, openDialog, message),
     },
+    { type: 'separator' },
     // Delete message
     {
       label: tx('delete_message_desktop'),
@@ -454,6 +456,7 @@ export default function Message(props: {
   const openViewProfileDialog = useOpenViewProfileDialog()
   const { joinVideoChat } = useVideoChat()
   const { jumpToMessage } = useMessage()
+  const [messageWidth, setMessageWidth] = useState(0)
 
   const showContextMenu = useCallback(
     async (
@@ -530,7 +533,6 @@ export default function Message(props: {
       jumpToMessage,
     ]
   )
-
   const ref = useRef<any>(null)
   const rovingTabindex = useRovingTabindex(ref)
   const rovingTabindexAttrs = {
@@ -582,6 +584,23 @@ export default function Message(props: {
   // The implementation is similar to the "Grid" pattern:
   // https://www.w3.org/WAI/ARIA/apg/patterns/grid/#gridNav_inside
   const tabindexForInteractiveContents = rovingTabindex.tabIndex
+
+  const messageContainerRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const resizeHandler = () => {
+      if (messageContainerRef.current) {
+        // set message width which is used by reaction component
+        // to adapt the number of visible reactions
+        setMessageWidth(messageContainerRef.current.clientWidth)
+      }
+    }
+    window.addEventListener('resize', resizeHandler)
+    // call once on first render
+    resizeHandler()
+    return () => {
+      window.removeEventListener('resize', resizeHandler)
+    }
+  }, [])
 
   // Info Message
   if (message.isInfo) {
@@ -823,6 +842,7 @@ export default function Message(props: {
         onContextMenu={showContextMenu}
         className='msg-container'
         style={{ borderColor: message.sender.color }}
+        ref={messageContainerRef}
       >
         {message.isForwarded && (
           <ForwardedTitle
@@ -921,6 +941,7 @@ export default function Message(props: {
               <Reactions
                 reactions={message.reactions}
                 tabindexForInteractiveContents={tabindexForInteractiveContents}
+                messageWidth={messageWidth}
               />
             )}
           </footer>

@@ -53,6 +53,13 @@ export default function MessageMetaData(props: Props) {
       {padlock && (
         <div
           aria-label={tx('a11y_encryption_padlock')}
+          // We should not announce this for _every_ message.
+          // This is available in the "Message info" dialog.
+          // In addition, if the message is not encerypted,
+          // we simply don't display the padlock,
+          // but arguably "not encrypted" is more important of a status
+          // than "encrypted".
+          aria-hidden={true}
           className={'padlock-icon'}
         />
       )}

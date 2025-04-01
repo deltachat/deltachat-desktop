@@ -78,6 +78,28 @@ export const useGroup = (accountId: number, chat: T.FullChat) => {
   const addGroupMembers = async (newGroupMembers: number[]) => {
     setGroupMembers(members => [...members, ...newGroupMembers])
   }
+
+  const reloadGroupContacts = async () => {
+    BackendRemote.rpc
+      .getContactsByIds(accountId, group.contactIds)
+      .then(contacts => {
+        // update contacts in case a contact changed
+        // while this dialog is open (e.g. contact got blocked)
+        setGroup(group => ({
+          ...group,
+          contacts: group.contactIds.map(id => contacts[id]),
+        }))
+      })
+  }
+
+  useEffect(() => {
+    return onDCEvent(accountId, 'ChatModified', ({ chatId }) => {
+      if (chatId === group.id) {
+        BackendRemote.rpc.getFullChatById(accountId, group.id).then(setGroup)
+      }
+    })
+  })
+
   return {
     group,
     groupName,
@@ -88,6 +110,7 @@ export const useGroup = (accountId: number, chat: T.FullChat) => {
     removeGroupMember,
     groupImage,
     setGroupImage,
+    reloadGroupContacts,
   }
 }
 
@@ -132,6 +155,7 @@ function ViewGroupInner(
     removeGroupMember,
     groupImage,
     setGroupImage,
+    reloadGroupContacts,
   } = useGroup(accountId, chat)
 
   const [pastContacts, setPastContacts] = useState<T.Contact[]>([])
@@ -146,21 +170,14 @@ function ViewGroupInner(
 
   useEffect(() => {
     return onDCEvent(accountId, 'ContactsChanged', () => {
-      BackendRemote.rpc
-        .getContactsByIds(accountId, group.contactIds)
-        .then(contacts => {
-          // update contacts in case a contact changed
-          // while this dialog is open (e.g. contact got blocked)
-          group.contacts = group.contactIds.map(id => contacts[id])
-        })
-
+      reloadGroupContacts()
       BackendRemote.rpc
         .getContactsByIds(accountId, group.pastContactIds)
         .then(pastContacts => {
           setPastContacts(group.pastContactIds.map(id => pastContacts[id]))
         })
     })
-  }, [accountId, group])
+  }, [accountId, group, reloadGroupContacts])
 
   const showRemoveGroupMemberConfirmationDialog = useCallback(
     async (contact: T.Contact) => {
