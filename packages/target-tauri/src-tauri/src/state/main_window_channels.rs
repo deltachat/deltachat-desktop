@@ -67,6 +67,7 @@ impl MainWindowChannels {
     }
 
     // used by webxdc send to chat and will be used also by open webxdc file with deltachat
+    #[cfg(desktop)]
     pub(crate) async fn send_to_chat(
         &self,
         app: &AppHandle,
@@ -82,6 +83,23 @@ impl MainWindowChannels {
         app.get_window("main")
             .context("could not get main window to focus")?
             .set_focus()?;
+        Ok(())
+    }
+
+    #[cfg(not(desktop))]
+    pub(crate) async fn send_to_chat(
+        &self,
+        _app: &AppHandle,
+        options: SendToChatOptions,
+        account: Option<u32>,
+    ) -> anyhow::Result<()> {
+        if let Some(SendToChatFile { file_name, .. }) = &options.file {
+            SafePathBuf::from_str(file_name)
+                .map_err(|_| anyhow!("invalid file_name '{file_name}'"))?;
+        }
+        self.emit_event(MainWindowEvents::SendToChat { options, account })
+            .await?;
+        //IDEA: mobile would need to close the webxdc view
         Ok(())
     }
 

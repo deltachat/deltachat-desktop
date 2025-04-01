@@ -35,9 +35,10 @@ function config(options) {
     },
     plugins,
     external: ['*.jpg', '*.png', '*.webp', '*.svg'],
+    format: 'esm',
     alias: {
-      'path': 'path-browserify'
-    }
+      path: 'path-browserify',
+    },
   }
 }
 

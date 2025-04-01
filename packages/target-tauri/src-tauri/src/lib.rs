@@ -3,6 +3,7 @@ use std::time::SystemTime;
 use anyhow::Context;
 use clipboard::copy_image_to_clipboard;
 
+#[cfg(desktop)]
 use menus::{handle_menu_event, main_menu::create_main_menu};
 
 use settings::load_and_apply_desktop_settings_on_startup;
@@ -21,6 +22,8 @@ mod file_dialogs;
 mod help_window;
 mod html_window;
 mod i18n;
+// menus are not available on mobile
+#[cfg(desktop)]
 mod menus;
 mod runtime_capabilities;
 mod runtime_info;
@@ -128,11 +131,20 @@ pub fn run() {
             temp_file::write_temp_file,
             temp_file::remove_temp_file,
             temp_file::copy_blob_file_to_internal_tmp_dir,
+            // not yet available on mobile
+            #[cfg(desktop)]
             webxdc::commands_main_window::on_webxdc_message_changed,
+            // not yet available on mobile
+            #[cfg(desktop)]
             webxdc::commands_main_window::on_webxdc_message_deleted,
             webxdc::commands_main_window::on_webxdc_status_update,
             webxdc::commands_main_window::on_webxdc_realtime_data,
+            // not yet available on mobile
+            #[cfg(desktop)]
             webxdc::commands_main_window::delete_webxdc_account_data,
+            // not yet available on mobile,
+            // also curretly you can not switch or delete an account on mobile while there is a webxdc open
+            #[cfg(desktop)]
             webxdc::commands_main_window::close_all_webxdc_instances,
             webxdc::commands_main_window::open_webxdc,
             webxdc::commands::send_webxdc_update,
@@ -147,9 +159,17 @@ pub fn run() {
             runtime_info::get_runtime_info,
             settings::change_desktop_settings_apply_side_effects,
             help_window::open_help_window,
+            // not yet available on mobile
+            #[cfg(desktop)]
             html_window::open_html_window,
+            // not yet available on mobile
+            #[cfg(desktop)]
             html_window::commands::get_html_window_info,
+            // not yet available on mobile
+            #[cfg(desktop)]
             html_window::commands::html_email_open_menu,
+            // not yet available on mobile
+            #[cfg(desktop)]
             html_window::commands::html_email_set_load_remote_content,
         ])
         .register_asynchronous_uri_scheme_protocol(
@@ -176,7 +196,7 @@ pub fn run() {
                 std::fs::create_dir_all(app.path().app_log_dir()?)?; // though log dir is not used because it uses os-log on iOS
             }
 
-            let (tauri_plugin_log, max_level, logger) = tauri_plugin_log::Builder::new()
+            let mut logger_builder = tauri_plugin_log::Builder::new()
                 // default targets are file and stdout
                 .max_file_size(5_000_000 /* bytes */)
                 .rotation_strategy(tauri_plugin_log::RotationStrategy::KeepAll) // TODO: only keep last 10
@@ -200,8 +220,17 @@ pub fn run() {
                 // why do we use debug here at the moment?
                 // because the message "[DEBUG][portmapper] failed to get a port mapping deadline has elapsed" looks like important
                 // info for debugging add backup transfer feature. - so better be safe and set it to debug for now.
-                .level_for("portmapper", log::LevelFilter::Debug)
-                .split(app.handle())?;
+                .level_for("portmapper", log::LevelFilter::Debug);
+
+            #[cfg(target_os = "android")]
+            {
+                // logs on android
+                logger_builder = logger_builder.target(tauri_plugin_log::Target::new(
+                    tauri_plugin_log::TargetKind::Stdout,
+                ));
+            }
+
+            let (tauri_plugin_log, max_level, logger) = logger_builder.split(app.handle())?;
 
             #[cfg(feature = "crabnebula_extras")]
             {
@@ -248,15 +277,18 @@ pub fn run() {
                 main_window.set_title("")?;
             }
 
-            let menu_manager = app.state::<MenuManager>();
-            let main_window_clone = main_window.clone();
-            tauri::async_runtime::block_on(menu_manager.register_window(
-                app.handle(),
-                &main_window,
-                Box::new(move |app| create_main_menu(app, &main_window_clone)),
-            ))?;
+            #[cfg(desktop)]
+            {
+                let menu_manager = app.state::<MenuManager>();
+                let main_window_clone = main_window.clone();
+                tauri::async_runtime::block_on(menu_manager.register_window(
+                    app.handle(),
+                    &main_window,
+                    Box::new(move |app| create_main_menu(app, &main_window_clone)),
+                ))?;
 
-            app.on_menu_event(handle_menu_event);
+                app.on_menu_event(handle_menu_event);
+            }
 
             runtime_capabilities::add_runtime_capabilies(app.handle())?;
 

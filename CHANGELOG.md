@@ -9,7 +9,9 @@
 - create chat: add support for invite links to search bar #4893
 - add separators to the context menu #4883
 - add button to share contact from profile view dialog #4886
+- tauri: experimental: make it compile for android #4871
 - `Cmd + N` shortcut to open new chat on macOS #4901
+
 
 ### Changed
 - switch to account the webxdc is from when sending to chat (tauri and electron edition) #4740
@@ -20,6 +22,7 @@
 - change usage of `nameAndAddr` to `displayName` #4882
 - remove addresses from contact list items unless they are not verified. #4880
 - migrate account mute state to new is_muted config option #4888
+- technical: change script format and imports to esm/module #4871
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.158.0`
   - Simplify e2ee decision logic, remove majority vote
   - Stop saving txt_raw

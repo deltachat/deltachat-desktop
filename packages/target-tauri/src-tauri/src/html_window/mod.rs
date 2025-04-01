@@ -16,10 +16,6 @@ use crate::{
         error::Error,
         punycode::{puny_code_decode_host, puny_code_encode_host},
     },
-    menus::{
-        float_on_top::set_window_float_on_top_based_on_main_window,
-        html_window_menu::create_html_window_menu,
-    },
     settings::{
         apply_zoom_factor_html_window, get_content_protection, get_setting_bool_or, CONFIG_FILE,
         HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_DEFAULT, HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_KEY,
@@ -30,15 +26,23 @@ use crate::{
     DeltaChatAppState, HtmlEmailInstancesState, MenuManager, TranslationState,
 };
 
+#[cfg(desktop)]
+use crate::menus::{
+    float_on_top::set_window_float_on_top_based_on_main_window,
+    html_window_menu::create_html_window_menu,
+};
+
 const HEADER_HEIGHT: f64 = 100.;
 const DEFAULT_WINDOW_WIDTH: f64 = 800.;
 const DEFAULT_WINDOW_HEIGHT: f64 = 600.;
 
+#[cfg(desktop)]
 pub(crate) mod commands;
 pub(crate) mod email_scheme;
 mod error;
 mod punycode;
 
+#[cfg(desktop)]
 #[allow(clippy::too_many_arguments)]
 #[tauri::command]
 pub(crate) async fn open_html_window(
@@ -309,6 +313,7 @@ pub(crate) async fn open_html_window(
     Ok(())
 }
 
+#[cfg(desktop)]
 fn update_webview_bounds(
     window: &Arc<Window>,
     header_view: &Arc<Webview>,
