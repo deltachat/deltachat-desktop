@@ -1,8 +1,9 @@
 import React from 'react'
 
-import { SettingsStoreState } from '../../stores/settings'
+import type { SettingsStoreState } from '../../stores/settings'
 import CoreSettingsSwitch from './CoreSettingsSwitch'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import ShowClassicEmail from './ShowClassicEmail'
 
 type Props = {
   settingsStore: SettingsStoreState
@@ -15,6 +16,7 @@ export default function ImapFolderHandling({ settingsStore }: Props) {
 
   return (
     <>
+      <ShowClassicEmail settingsStore={settingsStore} />
       <CoreSettingsSwitch
         label={tx('pref_watch_sent_folder')}
         settingsKey='sentbox_watch'
