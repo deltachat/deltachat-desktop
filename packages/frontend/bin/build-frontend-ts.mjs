@@ -26,7 +26,7 @@ function config(options) {
   return {
     entryPoints: ['src/main.tsx'],
     bundle: true,
-    minify: false,
+    minify: isMinify,
     sourcemap: true,
     outfile: 'html-dist/bundle.js',
     platform: 'browser',
