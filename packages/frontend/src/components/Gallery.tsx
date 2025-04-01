@@ -78,10 +78,12 @@ const getCurrentDocumentVerticalScrollbarWidth = () => {
   inner.style.width = '100%'
   outer.appendChild(inner)
   const outerWidth = Number(
-    getComputedStyle(outer).width.replace(/[^\d\.]/g, '')
+    // remove "px" from value
+    getComputedStyle(outer).width.replace(/[^\d]+$/g, '')
   )
   const innerWidth = Number(
-    getComputedStyle(inner).width.replace(/[^\d\.]/g, '')
+    // remove "px" from value
+    getComputedStyle(inner).width.replace(/[^\d]+$/g, '')
   )
   document.body.removeChild(outer)
   return outerWidth - innerWidth
