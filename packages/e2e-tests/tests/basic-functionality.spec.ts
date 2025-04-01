@@ -379,6 +379,22 @@ test('add app from picker to chat', async ({ page }) => {
   await expect(webxdcMessage).toContainText(appName)
 })
 
+/**
+ * focuses first visible item on arrow down key on input in create chat dialog
+ */
+test('focuses first visible item on arrow down key on input in create chat dialog', async ({
+  page,
+}) => {
+  const userA = getUser(0)
+  await switchToProfile(page, userA.id)
+  await page.locator('#new-chat-button').click()
+  await page.locator('dialog *:focus').waitFor({ state: 'visible' })
+  await page.locator('*:focus').press('ArrowDown')
+
+  // check if moved the focus down
+  expect(page.locator('*:focus')).toContainText('New Contact')
+})
+
 test('delete profiles', async ({ page }) => {
   if (existingProfiles.length < 1) {
     throw new Error('Not existing profiles to delete!')
