@@ -25,6 +25,7 @@
   - Do not fail to send the message if some keys are missing
   - Synchronize contact name changes
 - hide 'show classic email' for chatmail, move down otherwise #4902
+- profile view redesign #4897
 
 ### Fixed
 - tauri: improve security #4826

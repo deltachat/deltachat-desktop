@@ -15,7 +15,6 @@ type Props = {
 }
 
 export default function ProfileInfoHeader({
-  address,
   avatarPath,
   color,
   displayName,
@@ -30,7 +29,7 @@ export default function ProfileInfoHeader({
           avatarPath={avatarPath}
           color={color}
           wasSeenRecently={wasSeenRecently}
-          large
+          className='very-large'
         />
       </ClickForFullscreenAvatarWrapper>
       <div className={styles.infoContainer}>
@@ -40,7 +39,6 @@ export default function ProfileInfoHeader({
             {isVerified && <InlineVerifiedIcon />}
           </span>
         </p>
-        {address && <div className={styles.address}>{address}</div>}
       </div>
     </div>
   )
