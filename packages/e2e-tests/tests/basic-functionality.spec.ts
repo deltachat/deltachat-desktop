@@ -392,7 +392,7 @@ test('focuses first visible item on arrow down key on input in create chat dialo
   await page.locator('*:focus').press('ArrowDown')
 
   // check if moved the focus down
-  expect(page.locator('*:focus')).toContainText('New Contact')
+  await expect(page.locator('*:focus')).toContainText('New Contact')
 })
 
 test('delete profiles', async ({ page }) => {
