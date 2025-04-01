@@ -60,6 +60,7 @@ export default function FullscreenAvatar(
                       // See https://github.com/deltachat/deltachat-desktop/issues/4320
                       style={{ display: 'block' }}
                       src={runtime.transformBlobURL(imagePath)}
+                      height={600}
                     />
                   </div>
                 </TransformComponent>
