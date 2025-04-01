@@ -3,6 +3,7 @@ use std::time::SystemTime;
 use anyhow::Context;
 use clipboard::copy_image_to_clipboard;
 
+#[cfg(desktop)]
 use menus::{handle_menu_event, main_menu::create_main_menu};
 
 use settings::load_and_apply_desktop_settings_on_startup;
@@ -21,6 +22,7 @@ mod file_dialogs;
 mod help_window;
 mod html_window;
 mod i18n;
+#[cfg(desktop)]
 mod menus;
 mod runtime_capabilities;
 mod runtime_info;
@@ -128,11 +130,15 @@ pub fn run() {
             temp_file::write_temp_file,
             temp_file::remove_temp_file,
             temp_file::copy_blob_file_to_internal_tmp_dir,
+            #[cfg(desktop)]
             webxdc::commands_main_window::on_webxdc_message_changed,
+            #[cfg(desktop)]
             webxdc::commands_main_window::on_webxdc_message_deleted,
             webxdc::commands_main_window::on_webxdc_status_update,
             webxdc::commands_main_window::on_webxdc_realtime_data,
+            #[cfg(desktop)]
             webxdc::commands_main_window::delete_webxdc_account_data,
+            #[cfg(desktop)]
             webxdc::commands_main_window::close_all_webxdc_instances,
             webxdc::commands_main_window::open_webxdc,
             webxdc::commands::send_webxdc_update,
@@ -147,9 +153,13 @@ pub fn run() {
             runtime_info::get_runtime_info,
             settings::change_desktop_settings_apply_side_effects,
             help_window::open_help_window,
+            #[cfg(desktop)]
             html_window::open_html_window,
+            #[cfg(desktop)]
             html_window::commands::get_html_window_info,
+            #[cfg(desktop)]
             html_window::commands::html_email_open_menu,
+            #[cfg(desktop)]
             html_window::commands::html_email_set_load_remote_content,
         ])
         .register_asynchronous_uri_scheme_protocol(
@@ -248,15 +258,18 @@ pub fn run() {
                 main_window.set_title("")?;
             }
 
-            let menu_manager = app.state::<MenuManager>();
-            let main_window_clone = main_window.clone();
-            tauri::async_runtime::block_on(menu_manager.register_window(
-                app.handle(),
-                &main_window,
-                Box::new(move |app| create_main_menu(app, &main_window_clone)),
-            ))?;
+            #[cfg(desktop)]
+            {
+                let menu_manager = app.state::<MenuManager>();
+                let main_window_clone = main_window.clone();
+                tauri::async_runtime::block_on(menu_manager.register_window(
+                    app.handle(),
+                    &main_window,
+                    Box::new(move |app| create_main_menu(app, &main_window_clone)),
+                ))?;
 
-            app.on_menu_event(handle_menu_event);
+                app.on_menu_event(handle_menu_event);
+            }
 
             runtime_capabilities::add_runtime_capabilies(app.handle())?;
 

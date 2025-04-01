@@ -143,7 +143,8 @@ impl MenuAction<'static> for WebxdcMenuAction {
                                     }
                                 } else {
                                     let cloned_app = app.clone();
-                                    app.dialog()
+                                    let mut dialog_builder = app
+                                        .dialog()
                                         .message(
                                             tx.translate("ask_copy_unopenable_link_to_clipboard")
                                                 .await
@@ -152,18 +153,20 @@ impl MenuAction<'static> for WebxdcMenuAction {
                                         .buttons(MessageDialogButtons::OkCancelCustom(
                                             tx.translate("menu_copy_link_to_clipboard").await,
                                             tx.translate("no").await,
-                                        ))
-                                        .parent(&win)
-                                        .show(move |answer| {
-                                            if answer {
-                                                if let Err(err) = cloned_app
-                                                    .clipboard()
-                                                    .write_text(source_code_url)
-                                                {
-                                                    error!("failed to copy source_code_url {err}");
-                                                }
+                                        ));
+                                    #[cfg(desktop)]
+                                    {
+                                        dialog_builder = dialog_builder.parent(&win);
+                                    }
+                                    dialog_builder.show(move |answer| {
+                                        if answer {
+                                            if let Err(err) =
+                                                cloned_app.clipboard().write_text(source_code_url)
+                                            {
+                                                error!("failed to copy source_code_url {err}");
                                             }
-                                        });
+                                        }
+                                    });
                                 }
                             }
                         } else {

@@ -6,7 +6,10 @@ use std::{
 
 use anyhow::{bail, Context};
 use log::info;
-use tauri::{AppHandle, Manager};
+use tauri::AppHandle;
+
+#[cfg(desktop)]
+use tauri::Manager;
 
 use crate::{
     i18n::get_all_languages,

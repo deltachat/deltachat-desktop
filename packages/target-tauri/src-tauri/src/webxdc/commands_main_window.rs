@@ -20,9 +20,10 @@ use tauri::{
 };
 use uuid::Uuid;
 
+#[cfg(desktop)]
+use crate::{menus::webxdc_menu::create_webxdc_window_menu, settings::get_content_protection};
+
 use crate::{
-    menus::webxdc_menu::create_webxdc_window_menu,
-    settings::get_content_protection,
     state::{
         menu_manager::MenuManager,
         webxdc_instances::{WebxdcInstance, WebxdcInstancesState},
@@ -53,6 +54,7 @@ try {
 } catch (e){}
 "#;
 
+#[cfg(desktop)]
 #[tauri::command]
 pub(crate) async fn on_webxdc_message_changed<'a>(
     app: AppHandle,
@@ -91,6 +93,7 @@ pub(crate) async fn on_webxdc_message_changed<'a>(
     Ok(())
 }
 
+#[cfg(desktop)]
 #[tauri::command]
 pub(crate) async fn on_webxdc_message_deleted(
     app: AppHandle,
@@ -120,8 +123,11 @@ pub(crate) async fn delete_webxdc_account_data(
         .get_all_webxdc_windows_for_account_id(account_id)
         .await
     {
-        if let Some(window) = app.get_window(&window_label) {
-            window.destroy()?;
+        #[cfg(desktop)]
+        {
+            if let Some(window) = app.get_window(&window_label) {
+                window.destroy()?;
+            }
         }
     }
     delete_webxdc_data_for_account(&app, account_id).await
@@ -160,6 +166,7 @@ pub(crate) async fn on_webxdc_realtime_data(
     Ok(())
 }
 
+#[cfg(desktop)]
 #[tauri::command]
 pub(crate) async fn close_all_webxdc_instances(
     app: AppHandle,
@@ -290,7 +297,6 @@ pub(crate) async fn open_webxdc<'a>(
     };
 
     let mut window_builder = WebviewWindowBuilder::new(&app, &window_id, WebviewUrl::External(url))
-        .inner_size(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT)
         .initialization_script(INIT_SCRIPT)
         .on_navigation(move |url| {
             #[cfg(not(any(target_os = "windows", target_os = "android")))]
@@ -311,6 +317,10 @@ pub(crate) async fn open_webxdc<'a>(
     {
         window_builder =
             window_builder.additional_browser_args(&get_chromium_hardening_browser_args());
+    }
+    #[cfg(desktop)]
+    {
+        window_builder = window_builder.inner_size(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
     }
 
     window_builder = set_data_store(&app, window_builder, account_id, message_id).await?;
@@ -350,7 +360,7 @@ pub(crate) async fn open_webxdc<'a>(
     });
 
     // window.set_icon(icon) - IDEA
-
+    #[cfg(desktop)]
     window.set_title(&make_title(&webxdc_info, &chat_name))?;
 
     // content protection
@@ -379,15 +389,18 @@ pub(crate) async fn open_webxdc<'a>(
         image.ok()
     };
 
-    let window_clone = window.clone();
-    menu_manager
-        .register_window(
-            &app,
-            &window,
-            Box::new(move |app| create_webxdc_window_menu(app, &window_clone, icon.clone())),
-        )
-        .await
-        .map_err(|err| Error::MenuCreation(err.to_string()))?;
+    #[cfg(desktop)]
+    {
+        let window_clone = window.clone();
+        menu_manager
+            .register_window(
+                &app,
+                &window,
+                Box::new(move |app| create_webxdc_window_menu(app, &window_clone, icon.clone())),
+            )
+            .await
+            .map_err(|err| Error::MenuCreation(err.to_string()))?;
+    }
 
     Ok(())
 }

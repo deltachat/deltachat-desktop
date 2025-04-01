@@ -3,15 +3,19 @@ use std::{collections::HashMap, sync::Arc};
 use anyhow::Context;
 use log::error;
 use tauri::{
-    async_runtime::spawn, menu::Menu, AppHandle, Manager, Runtime, WebviewWindow, Window,
-    WindowEvent, Wry,
+    async_runtime::spawn, AppHandle, Manager, Runtime, WebviewWindow, Window, WindowEvent, Wry,
 };
 use tokio::sync::RwLock;
 
+#[cfg(desktop)]
+use tauri::menu::Menu;
+
+#[cfg(desktop)]
 type GenerateMenuFn = Box<dyn Fn(&AppHandle) -> anyhow::Result<Menu<Wry>> + Send + Sync>;
 
 pub(crate) trait WindowAbstraction<R: Runtime> {
     fn label(&self) -> &str;
+    #[cfg(desktop)]
     fn set_menu(&self, menu: Menu<R>) -> tauri::Result<Option<Menu<R>>>;
     fn on_window_event<F: Fn(&WindowEvent) + Send + 'static>(&self, f: F);
 }
@@ -21,6 +25,7 @@ impl<R: Runtime> WindowAbstraction<R> for WebviewWindow<R> {
         self.label()
     }
 
+    #[cfg(desktop)]
     fn set_menu(&self, menu: Menu<R>) -> tauri::Result<Option<Menu<R>>> {
         self.set_menu(menu)
     }
@@ -35,6 +40,7 @@ impl<R: Runtime> WindowAbstraction<R> for Window<R> {
         self.label()
     }
 
+    #[cfg(desktop)]
     fn set_menu(&self, menu: Menu<R>) -> tauri::Result<Option<Menu<R>>> {
         self.set_menu(menu)
     }
@@ -46,6 +52,7 @@ impl<R: Runtime> WindowAbstraction<R> for Window<R> {
 
 #[derive(Clone)]
 pub struct MenuManager {
+    #[cfg(desktop)]
     // {[window_id]: callbackToUpdateMenu}
     inner: Arc<RwLock<HashMap<String, Arc<GenerateMenuFn>>>>,
 }
@@ -53,10 +60,14 @@ pub struct MenuManager {
 impl MenuManager {
     pub(crate) fn new() -> Self {
         MenuManager {
+            #[cfg(desktop)]
             inner: Arc::new(RwLock::new(HashMap::new())),
         }
     }
+}
 
+#[cfg(desktop)]
+impl MenuManager {
     async fn remove(&self, id: &str) {
         let _ = self.inner.write().await.remove(id);
     }

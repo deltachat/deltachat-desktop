@@ -101,7 +101,7 @@ pub(crate) fn apply_zoom_factor_webxdc(app: &AppHandle) -> anyhow::Result<()> {
 }
 
 #[cfg(any(target_os = "ios", target_os = "android"))]
-pub(crate) fn apply_content_protection(app: &AppHandle) -> anyhow::Result<()> {
+pub(crate) fn apply_content_protection(_app: &AppHandle) -> anyhow::Result<()> {
     Ok(())
 }
 
@@ -133,6 +133,7 @@ pub(crate) async fn apply_language_change(app: &AppHandle) -> anyhow::Result<()>
     app.state::<TranslationState>()
         .reload_from_config(app)
         .await?;
+    #[cfg(desktop)]
     app.state::<MenuManager>().update_all(app);
     Ok(())
 }

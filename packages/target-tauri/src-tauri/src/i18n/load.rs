@@ -16,6 +16,7 @@ fn is_valid_locale_directory(path: &Path) -> bool {
         && path.join("_untranslated_en.json").exists()
 }
 
+#[cfg(not(target_os = "android"))]
 pub(super) async fn get_locales_dir_from_resource_dir(
     resource_dir: &Path,
 ) -> Result<PathBuf, Error> {
@@ -44,19 +45,32 @@ pub(super) async fn get_locales_dir_from_resource_dir(
     }
 }
 
+#[cfg(not(target_os = "android"))]
 pub(super) async fn get_locales_dir(app: &AppHandle) -> Result<PathBuf, Error> {
     let resource_dir = app.path().resource_dir()?;
-
     debug!("get_locale_data {resource_dir:?}");
-    // android has sth. different it seems -> get_locale_data "asset://localhost/"
-    // can maybe be resolved by tauri filesystem plugin??
 
     let locales_dir = get_locales_dir_from_resource_dir(&resource_dir).await?;
     Ok(locales_dir)
 }
 
+#[cfg(not(target_os = "android"))]
 pub(super) async fn get_languages(locales_dir: &Path) -> Result<HashMap<String, Language>, Error> {
     Ok(serde_json::from_str(
         &read_to_string(locales_dir.join("_languages.json")).await?,
     )?)
+}
+
+#[cfg(target_os = "android")]
+pub(super) async fn get_languages(app: &AppHandle) -> Result<HashMap<String, Language>, Error> {
+    use anyhow::Context;
+
+    let languages_json = app
+        .asset_resolver()
+        .get("_locales/_languages.json".to_string())
+        .ok_or(Error::NoValidLocaleDirFound)?;
+    let string = String::from_utf8(languages_json.bytes)
+        .context("failed to read bytes as utf8 string")
+        .map_err(Error::Anyhow)?;
+    Ok(serde_json::from_str(&string)?)
 }
