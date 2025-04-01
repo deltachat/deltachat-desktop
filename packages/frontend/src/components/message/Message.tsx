@@ -613,7 +613,7 @@ export default function Message(props: {
     return () => {
       window.removeEventListener('resize', resizeHandler)
     }
-  }, [])
+  }, [message.fileMime])
 
   // Info Message
   if (message.isInfo) {
