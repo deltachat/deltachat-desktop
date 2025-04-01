@@ -67,6 +67,7 @@ adb forward tcp:3000 tcp:3000
 ```
 
 Update: We made it log to logcat, read it with:
+
 ```sh
 # if you have ripgrep
 adb logcat | rg delta
