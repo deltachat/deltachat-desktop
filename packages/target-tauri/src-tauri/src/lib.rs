@@ -6,7 +6,10 @@ use clipboard::copy_image_to_clipboard;
 #[cfg(desktop)]
 use menus::{handle_menu_event, main_menu::create_main_menu};
 
-use settings::load_and_apply_desktop_settings_on_startup;
+use settings::{
+    get_setting_bool_or, load_and_apply_desktop_settings_on_startup, CONFIG_FILE, MINIMIZE_TO_TRAY,
+    MINIMIZE_TO_TRAY_DEFAULT,
+};
 use state::{
     app::AppState, deltachat::DeltaChatAppState, html_email_instances::HtmlEmailInstancesState,
     main_window_channels::MainWindowChannels, menu_manager::MenuManager,
@@ -14,6 +17,7 @@ use state::{
 };
 use tauri::Manager;
 use tauri_plugin_log::{Target, TargetKind};
+use tauri_plugin_store::StoreExt;
 
 mod app_path;
 mod blobs;
@@ -306,6 +310,32 @@ pub fn run() {
                 main_window.set_title("")?;
             }
 
+            let main_window_clone = main_window.clone();
+            main_window.on_window_event(move |ev| {
+                if let tauri::WindowEvent::CloseRequested { api, .. } = ev {
+                    let res = || {
+                        let minimize_to_tray = get_setting_bool_or(
+                            main_window_clone
+                                .app_handle()
+                                .get_store(CONFIG_FILE)
+                                .context("failed to load config")?
+                                .get(MINIMIZE_TO_TRAY),
+                            MINIMIZE_TO_TRAY_DEFAULT,
+                        );
+                        if cfg!(target_os = "macos") || minimize_to_tray {
+                            api.prevent_close();
+                            let _ = main_window_clone.hide();
+                        } else {
+                            main_window_clone.app_handle().exit(0);
+                        }
+                        Ok::<(), anyhow::Error>(())
+                    };
+                    if let Err(err) = res() {
+                        log::error!("CloseRequested: failed to execute: {err}");
+                    }
+                }
+            });
+
             #[cfg(desktop)]
             {
                 let menu_manager = app.state::<MenuManager>();
@@ -380,7 +410,15 @@ pub fn run() {
 
     #[allow(clippy::single_match)]
     app.run(|app_handle, run_event| match run_event {
-        // tauri::RunEvent::ExitRequested { code, api, .. } =>
+        // tauri::RunEvent::ExitRequested { code, api, .. } => {}
+        tauri::RunEvent::Reopen { .. } => {
+            // handle clicks on dock on macOS (because on macOS main window never really closes)
+            app_handle
+                .get_webview_window("main")
+                .unwrap()
+                .show()
+                .unwrap();
+        }
         tauri::RunEvent::Exit => {
             log::info!("Exiting: starting cleanup...");
             tauri::async_runtime::block_on(cleanup(app_handle));
