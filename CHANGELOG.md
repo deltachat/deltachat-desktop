@@ -41,6 +41,7 @@
 - profile view redesign #4897
 - update translations (2025-04-09)
 - show signature/bio in settings #4984
+- change to new transport API #4849
 
 ### Fixed
 - tauri: improve security #4826, #4936, #4937, #4944

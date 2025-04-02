@@ -57,7 +57,7 @@ export default function useProcessQR() {
   const setConfigFromQrCatchingErrorInAlert = useCallback(
     async (accountId: number, qrContent: string) => {
       try {
-        await BackendRemote.rpc.setConfigFromQr(accountId, qrContent)
+        await BackendRemote.rpc.addTransportFromQr(accountId, qrContent)
       } catch (error) {
         if (error instanceof Error) {
           openAlertDialog({
