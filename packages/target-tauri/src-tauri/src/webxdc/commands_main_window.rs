@@ -15,8 +15,9 @@ use deltachat::{
 use log::{error, trace, warn};
 
 use tauri::{
-    async_runtime::block_on, image::Image, AppHandle, Manager, State, Url, WebviewUrl,
-    WebviewWindowBuilder, WindowEvent,
+    async_runtime::{block_on, spawn},
+    image::Image,
+    AppHandle, Manager, State, Url, WebviewUrl, WebviewWindowBuilder, WindowEvent,
 };
 use uuid::Uuid;
 
@@ -225,7 +226,7 @@ pub(crate) async fn open_webxdc<'a>(
     href: String,
 ) -> Result<(), Error> {
     let uuid = Uuid::new_v4().to_string();
-    let window_id = format!("webxdc:{uuid}");
+    let window_id = Arc::new(format!("webxdc:{uuid}"));
     trace!("open webxdc '{window_id}', ({account_id}, {message_id}): href: {href}");
 
     #[cfg(not(any(target_os = "ios", target_os = "android")))]
@@ -259,23 +260,19 @@ pub(crate) async fn open_webxdc<'a>(
     }
 
     let dc_accounts = deltachat_state.deltachat.read().await;
-    let account = dc_accounts
-        .get_account(account_id)
-        .ok_or(Error::AccountNotFound(account_id))?;
-    let webxdc_message = Message::load_from_db(&account, MsgId::new(message_id))
-        .await
-        .map_err(|err| {
-            error!("failed to load webxdc message: {err:?}");
-            Error::WebxdcInstanceNotFound(account_id, message_id)
-        })?;
-    let webxdc_info = webxdc_message
-        .get_webxdc_info(&account)
-        .await
-        .map_err(Error::DeltaChat)?;
-    let chat_name = Chat::load_from_db(&account, webxdc_message.get_chat_id())
-        .await
-        .map_err(Error::DeltaChat)?
-        .name;
+    let account = Arc::new(
+        dc_accounts
+            .get_account(account_id)
+            .ok_or(Error::AccountNotFound(account_id))?,
+    );
+    let webxdc_message = Arc::new(
+        Message::load_from_db(&account, MsgId::new(message_id))
+            .await
+            .map_err(|err| {
+                error!("failed to load webxdc message: {err:?}");
+                Error::WebxdcInstanceNotFound(account_id, message_id)
+            })?,
+    );
 
     // add to a state so we can access account id and msg faster without parsing window id
     webxdc_instances
@@ -283,7 +280,7 @@ pub(crate) async fn open_webxdc<'a>(
             &window_id,
             WebxdcInstance {
                 account_id,
-                message: webxdc_message.clone(),
+                message: (*webxdc_message).clone(),
                 channel: None,
             },
         )
@@ -296,18 +293,19 @@ pub(crate) async fn open_webxdc<'a>(
         href_to_webxdc_url(href)?
     };
 
-    let mut window_builder = WebviewWindowBuilder::new(&app, &window_id, WebviewUrl::External(url))
-        .initialization_script(INIT_SCRIPT)
-        .on_navigation(move |url| {
-            #[cfg(not(any(target_os = "windows", target_os = "android")))]
-            {
-                url.scheme() == "webxdc"
-            }
-            #[cfg(any(target_os = "windows", target_os = "android"))]
-            {
-                url.host() == Some(url::Host::Domain("webxdc.localhost")) && url.port() == None
-            }
-        });
+    let mut window_builder =
+        WebviewWindowBuilder::new(&app, window_id.as_str(), WebviewUrl::External(url))
+            .initialization_script(INIT_SCRIPT)
+            .on_navigation(move |url| {
+                #[cfg(not(any(target_os = "windows", target_os = "android")))]
+                {
+                    url.scheme() == "webxdc"
+                }
+                #[cfg(any(target_os = "windows", target_os = "android"))]
+                {
+                    url.host() == Some(url::Host::Domain("webxdc.localhost")) && url.port() == None
+                }
+            });
 
     // This is only for Chromium (i.e. Windows).
     // Note that this will make `WebviewWindowBuilder::proxy_url`
@@ -329,6 +327,7 @@ pub(crate) async fn open_webxdc<'a>(
 
     let window_clone = Arc::clone(&window);
     let messge_id_to_leave = webxdc_message.get_id();
+    let window_id_clone = Arc::clone(&window_id);
     window.on_window_event(move |event| {
         if let WindowEvent::Destroyed = event {
             //TODO test if this fires when account is deleted
@@ -336,7 +335,7 @@ pub(crate) async fn open_webxdc<'a>(
 
             // remove from "running instances"-state
             let webxdc_instances = window_clone.state::<WebxdcInstancesState>();
-            block_on(webxdc_instances.remove_by_window_label(&window_id));
+            block_on(webxdc_instances.remove_by_window_label(window_id_clone.as_str()));
 
             // leave realtime channel
             // IDEA: track in WebxdcInstancesState whether webxdc joined and only call this method if it did
@@ -360,7 +359,33 @@ pub(crate) async fn open_webxdc<'a>(
 
     // window.set_icon(icon) - IDEA
     #[cfg(desktop)]
-    window.set_title(&make_title(&webxdc_info, &chat_name))?;
+    {
+        let window_clone = Arc::clone(&window);
+        let webxdc_message_clone = Arc::clone(&webxdc_message);
+        let account_clone = Arc::clone(&account);
+        let set_title = async move || -> Result<(), Error> {
+            let webxdc_info = webxdc_message_clone
+                .get_webxdc_info(&account_clone)
+                .await
+                .map_err(Error::DeltaChat)?;
+            let chat_name = Chat::load_from_db(&account_clone, webxdc_message_clone.get_chat_id())
+                .await
+                .map_err(Error::DeltaChat)?
+                .name;
+            window_clone.set_title(&make_title(&webxdc_info, &chat_name))?;
+            Ok(())
+        };
+        let window_id_clone = window_id.clone();
+
+        spawn(async move {
+            set_title()
+                .await
+                .inspect_err(|err| {
+                    error!("Failed to set title on {window_id_clone}: {err}");
+                })
+                .ok();
+        });
+    }
 
     // content protection
     #[cfg(not(any(target_os = "ios", target_os = "android")))]
