@@ -19,6 +19,8 @@ pub(crate) const HTML_EMAIL_WARNING_DEFAULT: bool = true;
 pub(crate) const HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_KEY: &str =
     "HTMLEmailAlwaysLoadRemoteContent";
 pub(crate) const HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_DEFAULT: bool = false;
+pub(crate) const MINIMIZE_TO_TRAY: &str = "minimizeToTray";
+pub(crate) const MINIMIZE_TO_TRAY_DEFAULT: bool = true;
 
 // runtime calls this when desktop settings change
 #[tauri::command]
