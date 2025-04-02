@@ -17,7 +17,8 @@ use state::{
 };
 use tauri::Manager;
 use tauri_plugin_log::{Target, TargetKind};
-use tauri_plugin_store::StoreExt;
+
+use tray::{init_tray_icon, is_tray_icon_active};
 
 mod app_path;
 mod blobs;
@@ -38,6 +39,7 @@ mod settings;
 mod state;
 mod stickers;
 mod temp_file;
+mod tray;
 mod util;
 mod webxdc;
 
@@ -314,14 +316,7 @@ pub fn run() {
             main_window.on_window_event(move |ev| {
                 if let tauri::WindowEvent::CloseRequested { api, .. } = ev {
                     let res = || {
-                        let minimize_to_tray = get_setting_bool_or(
-                            main_window_clone
-                                .app_handle()
-                                .get_store(CONFIG_FILE)
-                                .context("failed to load config")?
-                                .get(MINIMIZE_TO_TRAY),
-                            MINIMIZE_TO_TRAY_DEFAULT,
-                        );
+                        let minimize_to_tray = is_tray_icon_active(main_window_clone.app_handle())?;
                         if cfg!(target_os = "macos") || minimize_to_tray {
                             api.prevent_close();
                             let _ = main_window_clone.hide();
@@ -357,6 +352,8 @@ pub fn run() {
                     i18n::watch_translations(app.handle().clone());
                 }
             }
+            
+            init_tray_icon(&app.handle())?;
 
             app.state::<AppState>()
                 .log_duration_since_startup("setup done");
