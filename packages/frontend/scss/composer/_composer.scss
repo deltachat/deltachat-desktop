@@ -95,44 +95,6 @@
       }
     }
 
-    .microphone-button {
-      height: 40px;
-      padding: 0px 6px 0px 0px;
-      &:focus:not(:focus-visible) {
-        outline: none;
-      }
-
-      span {
-        display: block;
-        width: 25px;
-        height: 25px;
-        background-image: url(./images/microphone.svg);
-        background-size: contain;
-      }
-    }
-
-    .recording-duration {
-      display: flex;
-      flex: 1;
-      flex-direction: row;
-      align-items: stretch;
-      flex-grow: 1;
-      height: 4vh !important;
-      margin-bottom: 12px;
-    }
-
-    button.stop-recording {
-      padding: 4px;
-      background-color: #e84b4b;
-      color: #fff;
-      height: 32px;
-      margin-top: 4px;
-      width: 85px;
-      border-radius: 5px;
-      border: none;
-      margin-left: 16px;
-    }
-
     .send-button {
       width: 32px;
       height: 32px;

@@ -48,7 +48,7 @@ import OutsideClickHelper from '../OutsideClickHelper'
 import { basename } from 'path'
 import { useHasChanged2 } from '../../hooks/useHasChanged'
 import { ScreenContext } from '../../contexts/ScreenContext'
-import classNames from 'classnames'
+import { AudioRecorder } from '../AudioRecorder/AudioRecorder'
 
 const log = getLogger('renderer/composer')
 
@@ -94,6 +94,7 @@ const Composer = forwardRef<
   const [showAppPicker, setShowAppPicker] = useState(false)
   const [currentEditText, setCurrentEditText] = useState('')
   const [voiceMessageDisabled, setVoiceMessageDisabled] = useState(false)
+  const [recording, setRecording] = useState(false)
 
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
   const pickerButtonRef = useRef<HTMLButtonElement>(null)
@@ -140,8 +141,9 @@ const Composer = forwardRef<
         return
       }
       const b64 = reader.result.toString().split(',')[1]
-      const filename = b64.slice(0, 12).toString() + '.weba'
+      const filename = b64.slice(3, 12).toString() + '.mp3'
       const path = await runtime.writeTempFileFromBase64(filename, b64)
+      currentComposerMessageInputRef.current?.setState({ loadingDraft: false })
       addFileToDraft(path, basename(path), 'Voice').catch((reason: any) => {
         log.error('Cannot send message:', reason)
         // show some error dialogue
@@ -548,7 +550,7 @@ const Composer = forwardRef<
           )}
         </div>
         <div className='lower-bar'>
-          {!messageEditing.isEditingModeActive && (
+          {!messageEditing.isEditingModeActive && !recording && (
             <MenuAttachment
               addFileToDraft={addFileToDraft}
               showAppPicker={setShowAppPicker}
@@ -556,25 +558,13 @@ const Composer = forwardRef<
             />
           )}
           {!voiceMessageDisabled && (
-            <button
-              className={classNames(
-                'microphone-button',
-                draftState.file && 'disabled'
-              )}
-              onClick={() => {
-                editMessageInputRef.current?.startRecording()
-              }}
-              aria-label={
-                voiceMessageDisabled
-                  ? tx('voice_send_cannot')
-                  : tx('voice_send')
-              }
-              disabled={voiceMessageDisabled}
-            >
-              <span />
-            </button>
+            <AudioRecorder
+              recording={recording}
+              setRecording={setRecording}
+              saveVoiceAsDraft={saveVoiceAsDraft}
+            />
           )}
-          {settingsStore && (
+          {settingsStore && !recording && (
             <>
               <ComposerMessageInput
                 // We use `hidden` instead of simply conditionally rendering
@@ -603,7 +593,6 @@ const Composer = forwardRef<
                 updateDraftText={updateDraftText}
                 onPaste={handlePaste ?? undefined}
                 onChange={setCurrentEditText}
-                saveVoiceAsDraft={saveVoiceAsDraft}
               />
               <ComposerMessageInput
                 isMessageEditingMode={true}
@@ -622,7 +611,6 @@ const Composer = forwardRef<
                 // Message editing mode doesn't support file pasting.
                 // onPaste={handlePaste}
                 onChange={setCurrentEditText}
-                saveVoiceAsDraft={saveVoiceAsDraft}
               />
             </>
           )}
@@ -799,7 +787,10 @@ export function useDraft(
     if (chatId === null || !canSend) {
       return
     }
-    if (inputRef.current?.textareaRef.current?.disabled) {
+    if (
+      inputRef.current?.textareaRef.current?.disabled &&
+      draftRef.current.viewType !== 'Voice'
+    ) {
       // Guard against strange races
       log.warn('Do not save draft while sending')
       return
