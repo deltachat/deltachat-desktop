@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use log::{error, warn};
 use tauri::{Manager, State, WebviewWindow};
 
@@ -93,11 +95,12 @@ pub(crate) async fn open_help_window(
     {
         let _ = set_float_on_top_based_on_main_window(&help_window);
 
-        let help_window_clone = help_window.clone();
+        let help_window_arc = Arc::new(help_window);
+        let help_window_clone = Arc::clone(&help_window_arc);
         menu_manager
             .register_window(
                 &app,
-                &help_window,
+                &help_window_arc,
                 Box::new(move |app| create_help_menu(app, &help_window_clone)),
             )
             .await

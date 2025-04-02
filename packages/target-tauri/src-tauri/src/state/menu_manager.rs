@@ -50,6 +50,34 @@ impl<R: Runtime> WindowAbstraction<R> for Window<R> {
     }
 }
 
+impl<R: Runtime> WindowAbstraction<R> for Arc<WebviewWindow<R>> {
+    fn label(&self) -> &str {
+        (**self).label()
+    }
+
+    fn set_menu(&self, menu: Menu<R>) -> tauri::Result<Option<Menu<R>>> {
+        (**self).set_menu(menu)
+    }
+
+    fn on_window_event<F: Fn(&WindowEvent) + Send + 'static>(&self, f: F) {
+        (**self).on_window_event(f);
+    }
+}
+
+impl<R: Runtime> WindowAbstraction<R> for Arc<Window<R>> {
+    fn label(&self) -> &str {
+        (**self).label()
+    }
+
+    fn set_menu(&self, menu: Menu<R>) -> tauri::Result<Option<Menu<R>>> {
+        (**self).set_menu(menu)
+    }
+
+    fn on_window_event<F: Fn(&WindowEvent) + Send + 'static>(&self, f: F) {
+        (**self).on_window_event(f);
+    }
+}
+
 #[derive(Clone)]
 pub struct MenuManager {
     #[cfg(desktop)]

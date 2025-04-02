@@ -245,12 +245,13 @@ pub(crate) async fn open_html_window(
 
     let header_view_arc = Arc::new(header_view);
     let mail_view_arc = Arc::new(mail_view);
-    let window_arc = Arc::new(window.clone());
+    let window_arc = Arc::new(window);
 
     // resize
-    window.on_window_event(move |event| {
+    let window_clone = Arc::clone(&window_arc);
+    window_arc.on_window_event(move |event| {
         if let WindowEvent::Resized(_) | WindowEvent::ScaleFactorChanged { .. } = event {
-            update_webview_bounds(&window_arc, &header_view_arc, &mail_view_arc);
+            update_webview_bounds(&window_clone, &header_view_arc, &mail_view_arc);
         }
         if let WindowEvent::Destroyed = event {
             if let Err(err) = mail_view_arc.clear_all_browsing_data() {
@@ -270,7 +271,7 @@ pub(crate) async fn open_html_window(
                     }
                 });
             }
-            let html_instances_state = window_arc.app_handle().state::<HtmlEmailInstancesState>();
+            let html_instances_state = window_clone.app_handle().state::<HtmlEmailInstancesState>();
             block_on(html_instances_state.remove(&window_id));
         }
     });
@@ -279,7 +280,7 @@ pub(crate) async fn open_html_window(
     #[cfg(not(any(target_os = "ios", target_os = "android")))]
     {
         if get_content_protection(&app) {
-            window.set_content_protected(true)?;
+            window_arc.set_content_protected(true)?;
         }
     }
 
@@ -287,7 +288,7 @@ pub(crate) async fn open_html_window(
     // For now we choose to disable the feature when user set a proxy,
     // because there is currently no easy way to acomplish this.
 
-    window.set_title(&format!(
+    window_arc.set_title(&format!(
         "{} - {}",
         truncate_text(subject, 42),
         truncate_text(sender, 40)
@@ -296,15 +297,15 @@ pub(crate) async fn open_html_window(
     if let Err(err) = apply_zoom_factor_html_window(&app) {
         error!("failed to apply zoom factor: {err}")
     }
-    if let Err(err) = set_window_float_on_top_based_on_main_window(&window) {
+    if let Err(err) = set_window_float_on_top_based_on_main_window(&window_arc) {
         error!("failed to apply float on top: {err}")
     }
 
-    let window_clone = window.clone();
+    let window_clone = Arc::clone(&window_arc);
     menu_manager
         .register_window(
             &app,
-            &window,
+            &window_arc,
             Box::new(move |app| create_html_window_menu(app, &window_clone)),
         )
         .await
