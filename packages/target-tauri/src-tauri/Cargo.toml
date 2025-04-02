@@ -1,7 +1,7 @@
 [package]
 name = "deltachat-tauri"
 version = "1.56.0"
-description = "Delta Chat Desktop Tauri Edition"
+description = "Delta Chat Desktop: Tauri Edition. Secure, cross-platform, decentralized super-app messenger."
 authors = ["DeltaChat Contributors"]
 edition = "2021"
 rust-version = "1.84"
@@ -47,6 +47,8 @@ strum = { version = "0.27", features = ["derive"] }
 url = "*"
 mime_guess = "2.0.5"
 once_cell = "1.21.1"
+clap = { version = "4.5.35", features = ["derive"] }
+chrono = { version = "0.4.40", default-features = false }
 
 [target.'cfg(target_os = "android")'.dependencies]
 include_dir = "0.7.4"

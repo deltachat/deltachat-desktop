@@ -32,6 +32,7 @@ fn main() {
             // in `capabilities`.
             "greet",
             "set_main_window_channels",
+            "get_frontend_run_config",
             "deltachat_jsonrpc_request",
             "ui_ready",
             "ui_frontend_ready",
