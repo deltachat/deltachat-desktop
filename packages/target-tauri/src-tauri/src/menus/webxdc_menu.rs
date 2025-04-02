@@ -235,7 +235,7 @@ pub(crate) fn create_webxdc_window_menu(
                     &MenuItem::with_id(
                         app,
                         action(WebxdcMenuActionVariant::CloseWindow),
-                        "Close HTML Email",
+                        tx.sync_translate("close_window"),
                         true,
                         Some("CmdOrCtrl+W"),
                     )?,
