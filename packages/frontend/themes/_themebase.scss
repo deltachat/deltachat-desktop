@@ -25,10 +25,13 @@ $hover-contrast-change: 2%;
   --buttonHover: #{$bgSecondary};
   --buttonPrimaryBackground: #{$colorPrimary};
   --buttonPrimaryText: #{$btnPrimaryText};
+  --buttonPrimaryHover: #{changeContrast($colorPrimary, 10%)};
   --buttonSecondaryBackground: #{$bgSecondary};
   --buttonSecondaryText: #{$textSecondary};
+  --buttonSecondaryHover: #{changeContrast($bgSecondary, 10%)};
   --buttonDangerText: #{$btnDangerText};
   --buttonDangerBackground: #{$btnDangerBackground};
+  --buttonDangerHover: #{changeContrast($btnDangerBackground, 10%)};
   --buttonDisabledBackground: #{$bgSecondary};
   --buttonDisabledText: #{changeContrast($textSecondary, 45%)};
   /* Icons */

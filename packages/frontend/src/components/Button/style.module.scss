@@ -30,17 +30,26 @@
   &.primary {
     background-color: var(--buttonPrimaryBackground);
     color: var(--buttonPrimaryText);
+    &:hover {
+      background-color: var(--buttonPrimaryHover);
+    }
   }
 
   &.secondary {
     background-color: var(--buttonSecondaryBackground);
     color: var(--buttonSecondaryText);
     border: 1px solid #ccc;
+    &:hover {
+      background-color: var(--buttonSecondaryHover);
+    }
   }
 
   &.danger {
     color: var(--buttonDangerText);
     background-color: var(--buttonDangerBackground);
+    &:hover {
+      background-color: var(--buttonDangerHover);
+    }
   }
 
   &.active {
