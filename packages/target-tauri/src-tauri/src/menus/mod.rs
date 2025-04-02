@@ -4,6 +4,7 @@ use html_window_menu::HtmlWindowMenuAction;
 use main_menu::{MainMenuAction, SET_LOCALE_MENU_ID_PREFIX};
 use menu_action::MenuAction;
 use tauri::{async_runtime::spawn, menu::MenuEvent, AppHandle, Manager};
+use tray_menu::TrayMenuAction;
 use webxdc_menu::WebxdcMenuAction;
 
 use crate::MainWindowChannels;
@@ -13,6 +14,7 @@ pub(crate) mod help_menu;
 pub(crate) mod html_window_menu;
 pub(crate) mod main_menu;
 mod menu_action;
+pub(crate) mod tray_menu;
 pub(crate) mod webxdc_menu;
 
 pub async fn handle_event(app: &AppHandle, event: MenuEvent) -> anyhow::Result<()> {
@@ -37,6 +39,8 @@ pub async fn handle_event(app: &AppHandle, event: MenuEvent) -> anyhow::Result<(
     } else if let Ok(action) = HtmlWindowMenuAction::try_from(event.id()) {
         action.execute(app).await?;
     } else if let Ok(action) = WebxdcMenuAction::try_from(event.id()) {
+        action.execute(app).await?;
+    } else if let Ok(action) = TrayMenuAction::try_from(event.id()) {
         action.execute(app).await?;
     }
 
