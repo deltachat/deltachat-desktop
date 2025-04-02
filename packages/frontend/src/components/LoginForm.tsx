@@ -395,8 +395,6 @@ export function ConfigureProgressDialog({
           }
           await BackendRemote.rpc.batchSetConfig(accountId, initialConfig)
 
-          // Configure user account _after_ setting the credentials
-          await BackendRemote.rpc.configure(accountId)
           if (wasCanceled.current) {
             onClose()
             onUserCancellation?.()

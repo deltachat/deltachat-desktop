@@ -93,7 +93,7 @@ export default function useInstantOnboarding(): InstantOnboarding {
         }
       }
 
-      await BackendRemote.rpc.setConfigFromQr(accountId, configurationQR)
+      await BackendRemote.rpc.addTransportFromQr(accountId, configurationQR)
 
       // 2. ~~Additionally we set the `selfavatar` / profile picture~~
       // ~~and `displayname` configuration for this account~~ -> this is now done before calling this method.
