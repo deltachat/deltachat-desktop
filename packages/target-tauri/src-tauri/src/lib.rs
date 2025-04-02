@@ -1,4 +1,4 @@
-use std::time::SystemTime;
+use std::{sync::Arc, time::SystemTime};
 
 use anyhow::Context;
 use clipboard::copy_image_to_clipboard;
@@ -283,11 +283,12 @@ pub fn run() {
             #[cfg(desktop)]
             {
                 let menu_manager = app.state::<MenuManager>();
-                let main_window_clone = main_window.clone();
+                let main_window_arc = Arc::new(main_window);
+                let main_window_clone = Arc::clone(&main_window_arc);
                 tauri::async_runtime::block_on(menu_manager.register_window(
                     app.handle(),
-                    &main_window,
-                    Box::new(move |app| create_main_menu(app, &main_window_clone)),
+                    &*main_window_arc,
+                    Box::new(move |app| create_main_menu(app, &*main_window_clone)),
                 ))?;
 
                 app.on_menu_event(handle_menu_event);
