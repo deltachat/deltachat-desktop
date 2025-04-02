@@ -92,7 +92,7 @@ fn get_git_ref() -> String {
         return git_ref;
     }
 
-    let git_describe = gather_process_stdout("git", &["describe"])
+    let git_describe = gather_process_stdout("git", &["describe", "--tags"])
         .expect("git describe failed;Hint: you could also set VERSION_INFO_GIT_REF manually");
     let git_branch;
 
