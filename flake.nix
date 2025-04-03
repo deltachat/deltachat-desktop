@@ -66,6 +66,8 @@
           [
             rustToolchain
             rust-analyzer
+            typescript-language-server
+            vscode-extensions.esbenp.prettier-vscode
           ]
           ++ nativeBuildInputs
           ++ buildInputs;
