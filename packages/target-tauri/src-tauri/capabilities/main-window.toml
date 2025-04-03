@@ -15,6 +15,9 @@ permissions = [
     "store:allow-get",
     "store:allow-set",
     "store:allow-delete",
+    # events
+    "core:event:allow-listen",
+    "core:event:default",
     # borderless titlebar
     "core:window:allow-toggle-maximize",
     "core:window:allow-start-dragging",
