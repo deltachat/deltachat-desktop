@@ -9,6 +9,8 @@ use tokio::sync::RwLock;
 #[cfg(desktop)]
 use tauri::menu::Menu;
 
+use crate::TrayManager;
+
 #[cfg(desktop)]
 type GenerateMenuFn = Box<dyn Fn(&AppHandle) -> anyhow::Result<Menu<Wry>> + Send + Sync>;
 
@@ -154,6 +156,9 @@ impl MenuManager {
         spawn(async move {
             if let Err(err) = cloned_self.inner_update_all(&app).await {
                 error!("error while updating all menus: {err:?}");
+            }
+            if let Err(err) = app.state::<TrayManager>().update_menu(&app).await {
+                error!("error while updating tray menu: {err:?}");
             }
         });
     }

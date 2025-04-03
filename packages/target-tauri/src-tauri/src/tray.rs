@@ -21,17 +21,7 @@ pub fn is_tray_icon_active(app: &AppHandle) -> anyhow::Result<bool> {
     Ok(minimize_to_tray)
 }
 
-pub fn init_tray_icon(app: &AppHandle) -> anyhow::Result<()> {
-    if is_tray_icon_active(app)? {
-        let tray = build_tray_icon(app)?;
-
-        // TODO tray.set_icon(icon) - to update for badge on non macOS
-        // todo register it that we can later unregister it
-    }
-    Ok(())
-}
-
-fn build_tray_icon(app: &AppHandle) -> anyhow::Result<TrayIcon> {
+pub(crate) fn build_tray_icon(app: &AppHandle) -> anyhow::Result<TrayIcon> {
     let menu = create_tray_menu(app)?;
 
     let mut tray_builder = TrayIconBuilder::new()

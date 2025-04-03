@@ -13,12 +13,13 @@ use settings::{
 use state::{
     app::AppState, deltachat::DeltaChatAppState, html_email_instances::HtmlEmailInstancesState,
     main_window_channels::MainWindowChannels, menu_manager::MenuManager,
-    translations::TranslationState, webxdc_instances::WebxdcInstancesState,
+    translations::TranslationState, tray_manager::TrayManager,
+    webxdc_instances::WebxdcInstancesState,
 };
-use tauri::Manager;
+use tauri::{async_runtime::block_on, Manager};
 use tauri_plugin_log::{Target, TargetKind};
 
-use tray::{init_tray_icon, is_tray_icon_active};
+use tray::is_tray_icon_active;
 
 mod app_path;
 mod blobs;
@@ -289,10 +290,11 @@ pub fn run() {
                 app,
             ))?);
             app.manage(WebxdcInstancesState::new());
+            app.manage(TrayManager::new());
             app.state::<AppState>()
                 .log_duration_since_startup("base setup done");
 
-            load_and_apply_desktop_settings_on_startup(app.handle())?;
+            block_on(load_and_apply_desktop_settings_on_startup(app.handle()))?;
 
             // we can only do this in debug mode, macOS doesn't not allow this in the appstore, because it uses private apis
             // we should think about wether we want it on other production builds (except store),
@@ -345,8 +347,6 @@ pub fn run() {
             }
 
             runtime_capabilities::add_runtime_capabilies(app.handle())?;
-
-            init_tray_icon(&app.handle())?;
 
             app.state::<AppState>()
                 .log_duration_since_startup("setup done");
