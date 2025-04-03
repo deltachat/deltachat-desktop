@@ -13,7 +13,6 @@ use super::menu_action::{impl_menu_conversion, MenuAction};
 pub(crate) enum TrayMenuAction {
     Quit,
     Show,
-    Hide,
 }
 impl_menu_conversion!(TrayMenuAction);
 
@@ -26,7 +25,6 @@ impl MenuAction<'static> for TrayMenuAction {
                 app.exit(0);
             }
             TrayMenuAction::Show => main_window.show()?,
-            TrayMenuAction::Hide => main_window.hide()?,
         }
         Ok(())
     }
@@ -34,8 +32,6 @@ impl MenuAction<'static> for TrayMenuAction {
 
 pub(crate) fn create_tray_menu(app: &AppHandle) -> anyhow::Result<Menu<Wry>> {
     let tx = app.state::<TranslationState>();
-    let main_window = app.get_window("main").context("main window not found")?;
-    let main_window_visible = main_window.is_visible()?;
     let quit = MenuItem::with_id(
         app,
         TrayMenuAction::Quit,
@@ -50,15 +46,5 @@ pub(crate) fn create_tray_menu(app: &AppHandle) -> anyhow::Result<Menu<Wry>> {
         true,
         None::<&str>,
     )?;
-    let hide = MenuItem::with_id(
-        app,
-        TrayMenuAction::Hide,
-        tx.sync_translate("hide"),
-        true,
-        None::<&str>,
-    )?;
-    Ok(Menu::with_items(
-        app,
-        &[if main_window_visible { &hide } else { &show }, &quit],
-    )?)
+    Ok(Menu::with_items(app, &[&show, &quit])?)
 }
