@@ -3,7 +3,7 @@ use log::warn;
 use tauri::{AppHandle, Manager};
 use tauri_plugin_store::StoreExt;
 
-use crate::{state::menu_manager::MenuManager, TranslationState};
+use crate::{state::menu_manager::MenuManager, TranslationState, TrayManager};
 
 pub(crate) const CONFIG_FILE: &str = "config.json";
 
@@ -30,18 +30,27 @@ pub async fn change_desktop_settings_apply_side_effects(
 ) -> Result<(), String> {
     match key {
         ZOOM_FACTOR_KEY => apply_zoom_factor(&app),
-        // "minimizeToTray" => // TODO
         CONTENT_PROTECTION_KEY => apply_content_protection(&app),
         LOCALE_KEY => apply_language_change(&app).await,
+        MINIMIZE_TO_TRAY => {
+            app.state::<TrayManager>()
+                .apply_wanted_active_state(&app)
+                .await
+        }
         _ => Ok(()),
     }
     .map_err(|err| format!("{err:#}"))
 }
 
-pub(crate) fn load_and_apply_desktop_settings_on_startup(app: &AppHandle) -> anyhow::Result<()> {
+pub(crate) async fn load_and_apply_desktop_settings_on_startup(
+    app: &AppHandle,
+) -> anyhow::Result<()> {
     apply_zoom_factor(app)?;
-    // TODO: activate tray icon based on `minimizeToTray`
     apply_content_protection(app)?;
+    app.state::<TrayManager>()
+        .apply_wanted_active_state(app)
+        .await?;
+
     Ok(())
 }
 
