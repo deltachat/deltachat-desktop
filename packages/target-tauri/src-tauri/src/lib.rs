@@ -408,6 +408,7 @@ pub fn run() {
     #[allow(clippy::single_match)]
     app.run(|app_handle, run_event| match run_event {
         // tauri::RunEvent::ExitRequested { code, api, .. } => {}
+        #[cfg(target_os = "macos")]
         tauri::RunEvent::Reopen { .. } => {
             // handle clicks on dock on macOS (because on macOS main window never really closes)
             app_handle
