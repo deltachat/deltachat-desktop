@@ -31,6 +31,7 @@ pub enum MainWindowEvents {
     ShowAboutDialog,
     ShowSettingsDialog,
     ShowKeybindingsDialog,
+    ToggleNotifications,
 }
 
 pub(crate) struct InnerMainWindowChannelsState {

@@ -21,6 +21,8 @@ pub(crate) const HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_KEY: &str =
 pub(crate) const HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_DEFAULT: bool = false;
 pub(crate) const MINIMIZE_TO_TRAY: &str = "minimizeToTray";
 pub(crate) const MINIMIZE_TO_TRAY_DEFAULT: bool = true;
+pub(crate) const NOTIFICATIONS: &str = "notifications";
+pub(crate) const NOTIFICATIONS_DEFAULT: bool = true;
 
 // runtime calls this when desktop settings change
 #[tauri::command]
@@ -37,6 +39,8 @@ pub async fn change_desktop_settings_apply_side_effects(
                 .apply_wanted_active_state(&app)
                 .await
         }
+        // update "mute notification" menu item with new state
+        NOTIFICATIONS => app.state::<TrayManager>().update_menu(&app).await,
         _ => Ok(()),
     }
     .map_err(|err| format!("{err:#}"))

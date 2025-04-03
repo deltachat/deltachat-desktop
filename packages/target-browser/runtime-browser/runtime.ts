@@ -137,6 +137,7 @@ class BrowserRuntime implements Runtime {
   // not used in browser - other reasons
   onResumeFromSleep: (() => void) | undefined
   onOpenQrUrl: ((url: string) => void) | undefined
+  onToggleNotifications: (() => void) | undefined
 
   // #endregion
 
