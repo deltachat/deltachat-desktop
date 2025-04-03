@@ -6,19 +6,20 @@ use tauri::{
 use tauri_plugin_store::StoreExt;
 
 use crate::{
-    get_setting_bool_or, menus::tray_menu::create_tray_menu, CONFIG_FILE, MINIMIZE_TO_TRAY,
-    MINIMIZE_TO_TRAY_DEFAULT,
+    get_setting_bool_or, menus::tray_menu::create_tray_menu, run_config::RunConfig, CONFIG_FILE,
+    MINIMIZE_TO_TRAY, MINIMIZE_TO_TRAY_DEFAULT,
 };
 
 pub fn is_tray_icon_active(app: &AppHandle) -> anyhow::Result<bool> {
-    // TODO test for --minimized flag or --autostart flag
+    let rc = app.state::<RunConfig>();
     let minimize_to_tray = get_setting_bool_or(
         app.get_store(CONFIG_FILE)
             .context("failed to load config")?
             .get(MINIMIZE_TO_TRAY),
         MINIMIZE_TO_TRAY_DEFAULT,
     );
-    Ok(minimize_to_tray)
+
+    Ok(rc.forced_tray_icon || minimize_to_tray)
 }
 
 pub(crate) fn build_tray_icon(app: &AppHandle) -> anyhow::Result<TrayIcon> {

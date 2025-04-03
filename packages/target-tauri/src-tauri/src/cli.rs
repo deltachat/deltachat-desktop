@@ -8,6 +8,15 @@ use crate::run_config::RunConfig;
 #[derive(Parser)]
 #[command(about, long_about = None)]
 pub struct Cli {
+    #[cfg(target_os = "macos")]
+    /// Start deltachat in minimized mode
+    #[arg(short, long)]
+    minimized: bool,
+    #[cfg(not(target_os = "macos"))]
+    /// Start deltachat in minimized mode with tray icon
+    /// (tray icon will be activated for this session regardless whether it's disabled)
+    #[arg(short, long)]
+    minimized: bool,
     /// opens devtools and activates --log-debug & --log-to-console
     #[arg(long)]
     dev_mode: bool,
@@ -60,5 +69,9 @@ Webview: {:?}",
         devtools: cli.dev_mode,
         dev_mode: cli.dev_mode,
         translation_watch: cli.dev_mode || cli.watch_translations,
+        minimized_window: cli.minimized,
+        // Tray icon is not forced on macOS because the app icon is still in the Dock,
+        // even when Delta Chat has no visible window
+        forced_tray_icon: cli.minimized && !cfg!(target_os = "macos"),
     }
 }

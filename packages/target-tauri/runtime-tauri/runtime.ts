@@ -211,16 +211,17 @@ class TauriRuntime implements Runtime {
       log_to_console: boolean
       devtools: boolean
       dev_mode: boolean
+      forced_tray_icon: boolean
     }>('get_frontend_run_config')
     const rc_config: RC_Config = {
       'log-debug': config.log_debug,
       'log-to-console': config.log_to_console,
       devmode: config.dev_mode,
+      minimized: config.forced_tray_icon,
 
       theme: undefined,
       'theme-watch': false,
       'translation-watch': false,
-      minimized: false,
 
       // does not exist in delta tauri
       'allow-unsafe-core-replacement': false,
