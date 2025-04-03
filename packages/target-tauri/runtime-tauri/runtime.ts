@@ -502,6 +502,7 @@ class TauriRuntime implements Runtime {
   }
   setBadgeCounter(value: number): void {
     getCurrentWindow().setBadgeCount(value === 0 ? undefined : value)
+    invoke('update_tray_icon_badge', { counter: value })
   }
   showNotification(_data: DcNotification): void {
     throw new Error('Method not implemented.37')
