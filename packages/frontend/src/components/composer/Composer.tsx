@@ -614,17 +614,18 @@ const Composer = forwardRef<
               />
             </>
           )}
-          {!runtime.getRuntimeInfo().hideEmojiAndStickerPicker && (
-            <button
-              type='button'
-              className='emoji-button'
-              ref={pickerButtonRef}
-              onClick={onEmojiIconClick}
-              aria-label={tx('emoji')}
-            >
-              <span />
-            </button>
-          )}
+          {!runtime.getRuntimeInfo().hideEmojiAndStickerPicker &&
+            !recording && (
+              <button
+                type='button'
+                className='emoji-button'
+                ref={pickerButtonRef}
+                onClick={onEmojiIconClick}
+                aria-label={tx('emoji')}
+              >
+                <span />
+              </button>
+            )}
           {showSendButton && (
             <button
               // This ensures that the button loses focus as we switch between
