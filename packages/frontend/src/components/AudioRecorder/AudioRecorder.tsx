@@ -2,12 +2,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import MicRecorder from './MicRecorder'
 import styles from './styles.module.scss'
 
-type MicRecorderType = {
-  start: () => Promise<MediaStream>
-  stop: () => MicRecorderType
-  getMp3: () => Promise<[buffer: any, blob: any]>
-}
-
 export const AudioRecorder = ({
   recording,
   setRecording,
@@ -17,11 +11,13 @@ export const AudioRecorder = ({
   setRecording: (f: boolean) => void
   saveVoiceAsDraft: (blob: Blob) => void
 }) => {
-  const recorder = useRef<MicRecorderType>(
-    new MicRecorder({
+  const recorder = useRef<MicRecorder | null>(null)
+  if (!recorder.current) {
+    recorder.current = new MicRecorder({
       bitRate: 128,
     })
-  )
+  }
+
   const [recordingTime, setRecordingTime] = useState(0)
 
   const minutes = recordingTime / 60

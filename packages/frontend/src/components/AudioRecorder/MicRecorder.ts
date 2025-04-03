@@ -1,3 +1,9 @@
+/**
+ * This file is based on https://github.com/closeio/mic-recorder-to-mp3/blob/master/src/mic-recorder.js
+ *
+ * @license MIT Copyright (c) 2017 Elastic Inc. (Close.io) see ./LICENSE
+ */
+
 import Encoder from './Encoder'
 
 interface MicRecorderConfig {

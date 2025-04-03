@@ -1,3 +1,9 @@
+/**
+ * This file is based on https://github.com/closeio/mic-recorder-to-mp3/blob/master/src/encoder.js
+ *
+ * @license MIT Copyright (c) 2017 Elastic Inc. (Close.io) see ./LICENSE
+ */
+
 import { Mp3Encoder } from '@breezystack/lamejs'
 
 interface EncoderConfig {
