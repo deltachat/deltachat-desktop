@@ -31,8 +31,9 @@ pub(super) async fn get_locales_dir_from_resource_dir(
     }
 
     let places = vec![
-        resource_dir.join("_locales"),      // TODO - test on windows and linux
-        PathBuf::from("../../../_locales"), // development
+        #[cfg(debug_assertions)]
+        PathBuf::from("../../_locales"), // development
+        resource_dir.join("_locales"),
     ];
 
     if let Some(place) = places

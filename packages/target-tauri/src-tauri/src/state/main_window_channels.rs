@@ -27,7 +27,7 @@ pub enum MainWindowEvents {
         options: SendToChatOptions,
         account: Option<u32>,
     },
-    LocaleReloaded(String),
+    LocaleReloaded(Option<String>),
     ShowAboutDialog,
     ShowSettingsDialog,
     ShowKeybindingsDialog,
