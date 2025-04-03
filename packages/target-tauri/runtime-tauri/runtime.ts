@@ -55,6 +55,9 @@ type MainWindowEvents =
   | {
       event: 'showKeybindingsDialog'
     }
+  | {
+      event: 'toggleNotifications'
+    }
 
 const events = new Channel<MainWindowEvents>()
 const jsonrpc = new Channel<yerpc.Message>()
@@ -299,6 +302,7 @@ class TauriRuntime implements Runtime {
     this.currentLogFileLocation = await invoke('get_current_logfile')
 
     events.onmessage = event => {
+      // this.log.info({ event })
       if (event.event === 'sendToChat') {
         const { options, account } = event.data
         this.onWebxdcSendToChat?.(
@@ -320,6 +324,8 @@ class TauriRuntime implements Runtime {
         this.onShowDialog?.('settings')
       } else if (event.event === 'showKeybindingsDialog') {
         this.onShowDialog?.('keybindings')
+      } else if (event.event === 'toggleNotifications') {
+        this.onToggleNotifications?.()
       }
     }
   }
@@ -579,6 +585,7 @@ class TauriRuntime implements Runtime {
       ) => void)
     | undefined
   onResumeFromSleep: (() => void) | undefined
+  onToggleNotifications: (() => void) | undefined
 }
 
 ;(window as any).r = new TauriRuntime()
