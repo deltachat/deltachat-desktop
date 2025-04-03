@@ -20,7 +20,7 @@ pub struct Cli {
     /// enable auto-reload for translations.
     /// You can use it in combination with the env var `DELTACHAT_LOCALE_DIR`.
     #[arg(long)]
-    translation_watch: bool,
+    watch_translations: bool,
     /// Print version
     #[arg(short = 'V', long)]
     version: bool,
@@ -59,6 +59,6 @@ Webview: {:?}",
         log_to_console: cli.dev_mode || cli.log_to_console,
         devtools: cli.dev_mode,
         dev_mode: cli.dev_mode,
-        translation_watch: cli.dev_mode || cli.translation_watch,
+        translation_watch: cli.dev_mode || cli.watch_translations,
     }
 }
