@@ -10,7 +10,7 @@ import { Store, useStore } from './store'
  *
  * `"1"` means muted, anything else is interpreted as not muted
  */
-const UI_CONFIG_MUTED = 'ui.id_muted'
+const UI_CONFIG_MUTED = 'ui.is_muted'
 const UI_CONFIG_DESKTOP_MUTED_OLD = 'ui.desktop.muted'
 
 interface AccountNotificationState {
