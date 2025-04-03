@@ -187,6 +187,9 @@ pub fn run() {
             // not yet available on mobile
             #[cfg(desktop)]
             html_window::commands::html_email_set_load_remote_content,
+            // not available on mobile
+            #[cfg(desktop)]
+            state::tray_manager::update_tray_icon_badge,
         ])
         .register_asynchronous_uri_scheme_protocol(
             "webxdc-icon",
