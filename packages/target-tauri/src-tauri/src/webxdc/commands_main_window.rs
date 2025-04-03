@@ -305,7 +305,7 @@ pub(crate) async fn open_webxdc<'a>(
             }
             #[cfg(any(target_os = "windows", target_os = "android"))]
             {
-                url.host() == Some(url::Host::Domain("webxdc.localhost")) && url.port() == None
+                url.host() == Some(url::Host::Domain("webxdc.localhost")) && url.port().is_none()
             }
         });
 
