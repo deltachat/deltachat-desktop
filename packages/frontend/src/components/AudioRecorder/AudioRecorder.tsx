@@ -77,6 +77,12 @@ export const AudioRecorder = ({
   } else {
     return (
       <div className={styles.recordingDuration}>
+        <button
+          className={styles.microphoneButton}
+          onClick={() => onRecordingStop()}
+        >
+          <span />
+        </button>
         <p>
           {minutesDisplay} : {secondsDisplay}
         </p>
