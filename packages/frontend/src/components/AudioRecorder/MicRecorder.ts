@@ -13,6 +13,11 @@ interface MicRecorderConfig {
   sampleRate?: number
 }
 
+/**
+ * This class does not use MediaRecorder API since at
+ * the time of writing Chrome only supported the audio
+ * codec weba (Web Audio) which is not supported by iOS
+ */
 class MicRecorder {
   private config: MicRecorderConfig
   private activeStream: MediaStream | null
