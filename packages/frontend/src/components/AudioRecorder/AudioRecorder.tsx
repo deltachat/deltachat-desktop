@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import MicRecorder from './MicRecorder'
 import styles from './styles.module.scss'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 export const AudioRecorder = ({
   recording,
@@ -11,6 +12,7 @@ export const AudioRecorder = ({
   setRecording: (f: boolean) => void
   saveVoiceAsDraft: (blob: Blob) => void
 }) => {
+  const tx = useTranslationFunction()
   const recorder = useRef<MicRecorder | null>(null)
   if (!recorder.current) {
     recorder.current = new MicRecorder({
@@ -65,6 +67,11 @@ export const AudioRecorder = ({
       })
   }
 
+  const onRecordingCancel = () => {
+    setRecording(false)
+    recorder.current?.stop()
+  }
+
   if (!recording) {
     return (
       <button
@@ -90,7 +97,10 @@ export const AudioRecorder = ({
           className={styles.stopRecording}
           onClick={() => onRecordingStop()}
         >
-          Stop
+          {tx('ok')}
+        </button>
+        <button className={styles.cancel} onClick={() => onRecordingCancel()}>
+          {tx('cancel')}
         </button>
       </div>
     )

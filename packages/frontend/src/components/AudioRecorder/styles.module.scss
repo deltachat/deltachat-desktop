@@ -49,19 +49,30 @@
       }
     }
   }
-}
+  button:not(.microphoneButton) {
+    padding: 4px;
+    height: 32px;
+    margin-top: 4px;
+    width: 85px;
+    border-radius: 5px;
+    border: none;
+    margin-left: 16px;
 
-.stopRecording {
-  padding: 4px;
-  background-color: #e84b4b;
-  color: #fff;
-  height: 32px;
-  margin-top: 4px;
-  width: 85px;
-  border-radius: 5px;
-  border: none;
-  margin-left: 16px;
-  &:hover {
-    background-color: #ed3333;
+    &.stopRecording {
+      background-color: #e84b4b;
+      color: #fff;
+      &:hover {
+        background-color: #ed3333;
+      }
+    }
+
+    &.cancel {
+      background-color: var(--buttonSecondaryBackground);
+      color: var(--buttonSecondaryText);
+      border: 1px solid #ccc;
+      &:hover {
+        background-color: var(--buttonSecondaryHover);
+      }
+    }
   }
 }
