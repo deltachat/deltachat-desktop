@@ -1,7 +1,7 @@
 use std::{
     future::Future,
     path::Path,
-    time::{Duration, SystemTime},
+    time::{Duration, Instant},
 };
 
 use notify::{Config, Event, RecommendedWatcher, RecursiveMode, Watcher};
@@ -37,7 +37,7 @@ where
     // below will be monitored for changes.
     watcher.watch(path.as_ref(), RecursiveMode::Recursive)?;
 
-    let mut last_action = SystemTime::now();
+    let mut last_action = Instant::now();
 
     while let Some(res) = rx.recv().await {
         match res {
@@ -45,21 +45,13 @@ where
             Ok(event) => {
                 log::trace!("changed: {:?}", event);
                 if event.kind.is_create() || event.kind.is_modify() || event.kind.is_remove() {
-                    let now = SystemTime::now();
-                    match now.duration_since(last_action) {
-                        Err(err) => {
-                            log::error!("debounce: system time error: duration_since {err:?}");
-                            continue;
-                        }
-                        Ok(elapsed) => {
-                            if elapsed < delay {
-                                continue;
-                            }
-                            log::trace!("callback triggered");
-                            callback().await;
-                            last_action = now;
-                        }
+                    let now = Instant::now();
+                    if now.saturating_duration_since(last_action) < delay {
+                        continue;
                     }
+                    log::trace!("callback triggered");
+                    callback().await;
+                    last_action = now;
                 }
             }
         }
