@@ -51,6 +51,10 @@ mod chat_background_image;
 #[cfg(desktop)]
 mod menus;
 mod network_isolation_dummy_proxy;
+// currently we have no mobile support for notifications
+// but then there would also be the question if they would even work
+// with the current architecture where everything is controled by the frontend
+// (so the main window needs to be running to send notifications)
 mod notifications;
 mod resume_from_sleep;
 mod run_config;
@@ -140,7 +144,6 @@ pub fn run() -> i32 {
     let run_config = RunConfig::default();
 
     let mut builder = tauri::Builder::default()
-        .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_clipboard_manager::init())
@@ -250,8 +253,11 @@ pub fn run() -> i32 {
             webxdc::commands::webxdc_send_to_chat,
             #[cfg(target_vendor = "apple")]
             webxdc::data_storage::debug_get_datastore_ids,
+            #[cfg(desktop)]
             notifications::show_notification,
+            #[cfg(desktop)]
             notifications::clear_all_notifications,
+            #[cfg(desktop)]
             notifications::clear_notifications,
             runtime_info::get_runtime_info,
             settings::change_desktop_settings_apply_side_effects,
@@ -476,6 +482,14 @@ pub fn run() -> i32 {
                 if run_config.translation_watch {
                     i18n::watch_translations(app.handle().clone());
                 }
+            }
+            #[cfg(target_os = "macos")]
+            {
+                // remove all notifications that are still there from previous sessions,
+                // as they probably don't work anymore and are just stuck
+                //
+                // https://github.com/deltachat/deltachat-desktop/issues/2438#issuecomment-1090735045
+                user_notify::mac_os::remove_all_delivered_notifications()?;
             }
 
             app.state::<AppState>()

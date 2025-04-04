@@ -1,0 +1,12 @@
+#[cfg(target_os = "macos")]
+pub mod mac_os;
+#[cfg(target_os = "windows")]
+pub mod windows;
+#[cfg(any(
+    target_os = "linux",
+    target_os = "dragonfly",
+    target_os = "freebsd",
+    target_os = "openbsd",
+    target_os = "netbsd"
+))]
+pub mod xdg;
