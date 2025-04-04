@@ -81,7 +81,7 @@ pub fn watch_translations(app: AppHandle) {
 
     let app_clone = app.clone();
     let callback = Box::new(move || {
-        let app_clone = app_clone.clone(); // Shadows arc
+        let app_clone = app_clone.clone();
         async move {
             if let Err(err) = app_clone
                 .state::<MainWindowChannels>()

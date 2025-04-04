@@ -312,7 +312,7 @@ class TauriRuntime implements Runtime {
           account || undefined
         )
       } else if (event.event === 'localeReloaded') {
-        // event.data is only null in case of reloading via --transation-watch
+        // event.data is only null in case of reloading via --watch-translations
         this.onChooseLanguage?.(event.data || window.localeData.locale)
       } else if (event.event === 'showAboutDialog') {
         this.onShowDialog?.('about')
