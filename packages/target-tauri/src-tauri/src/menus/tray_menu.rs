@@ -34,7 +34,7 @@ impl MenuAction<'static> for TrayMenuAction {
             TrayMenuAction::Show => {
                 main_window.show()?;
                 main_window.set_focus()?;
-            },
+            }
             TrayMenuAction::MuteNotifications => {
                 // set checkmark to real state in case it didn't change
                 app.state::<TrayManager>().update_menu(app).await?;
