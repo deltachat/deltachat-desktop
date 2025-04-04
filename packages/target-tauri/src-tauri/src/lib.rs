@@ -6,6 +6,7 @@ use clipboard::copy_image_to_clipboard;
 #[cfg(desktop)]
 use menus::{handle_menu_event, main_menu::create_main_menu};
 
+use resume_from_sleep::start_resume_after_sleep_detector;
 use settings::load_and_apply_desktop_settings_on_startup;
 use state::{
     app::AppState, deltachat::DeltaChatAppState, html_email_instances::HtmlEmailInstancesState,
@@ -27,6 +28,7 @@ mod i18n;
 // menus are not available on mobile
 #[cfg(desktop)]
 mod menus;
+mod resume_from_sleep;
 mod run_config;
 mod runtime_capabilities;
 mod runtime_info;
@@ -320,6 +322,8 @@ pub fn run() {
             }
 
             runtime_capabilities::add_runtime_capabilies(app.handle())?;
+
+            start_resume_after_sleep_detector(app.handle());
 
             app.state::<AppState>()
                 .log_duration_since_startup("setup done");

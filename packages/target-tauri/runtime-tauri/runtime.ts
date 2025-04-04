@@ -55,6 +55,9 @@ type MainWindowEvents =
   | {
       event: 'showKeybindingsDialog'
     }
+  | {
+      event: 'resumeFromSleep'
+    }
 
 const events = new Channel<MainWindowEvents>()
 const jsonrpc = new Channel<yerpc.Message>()
@@ -319,6 +322,8 @@ class TauriRuntime implements Runtime {
         this.onShowDialog?.('settings')
       } else if (event.event === 'showKeybindingsDialog') {
         this.onShowDialog?.('keybindings')
+      } else if (event.event === 'resumeFromSleep') {
+        this.onResumeFromSleep?.()
       }
     }
   }
