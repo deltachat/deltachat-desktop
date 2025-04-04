@@ -551,13 +551,6 @@ const Composer = forwardRef<
               selectedChat={selectedChat}
             />
           )}
-          {!voiceMessageDisabled && (
-            <AudioRecorder
-              recording={recording}
-              setRecording={setRecording}
-              saveVoiceAsDraft={saveVoiceAsDraft}
-            />
-          )}
           {settingsStore && !recording && (
             <>
               <ComposerMessageInput
@@ -620,6 +613,13 @@ const Composer = forwardRef<
                 <span />
               </button>
             )}
+          {!voiceMessageDisabled && (
+            <AudioRecorder
+              recording={recording}
+              setRecording={setRecording}
+              saveVoiceAsDraft={saveVoiceAsDraft}
+            />
+          )}
           {showSendButton && (
             <button
               // This ensures that the button loses focus as we switch between

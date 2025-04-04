@@ -1,7 +1,7 @@
 .microphoneButton {
   height: 40px;
-  padding-right: 3px;
-  padding-left: 0px;
+  width: 40px;
+  padding-left: 2px;
   padding-bottom: 8px;
   background-color: var(--composerBg);
   border: none;
@@ -17,6 +17,9 @@
     -webkit-mask-image: url(./images/microphone.svg);
     -webkit-mask-size: contain;
     background-color: var(--composerPlaceholderText);
+    &:hover {
+      background-color: var(--buttonSecondaryText);
+    }
   }
 }
 
@@ -28,8 +31,7 @@
   flex-grow: 1;
   margin-left: 10px;
   p {
-    font-size: 1.1rem;
-    margin: 10px 0 0 3px;
+    margin: 12px 0 0 3px;
   }
   .microphoneButton {
     span {
