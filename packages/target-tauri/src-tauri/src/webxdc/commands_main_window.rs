@@ -24,6 +24,7 @@ use uuid::Uuid;
 use crate::{menus::webxdc_menu::create_webxdc_window_menu, settings::get_content_protection};
 
 use crate::{
+    network_isolation_dummy_proxy,
     state::{
         menu_manager::MenuManager,
         webxdc_instances::{WebxdcInstance, WebxdcInstancesState},
@@ -297,8 +298,21 @@ pub(crate) async fn open_webxdc<'a>(
         href_to_webxdc_url(href)?
     };
 
+    let dummy_localhost_proxy_url = network_isolation_dummy_proxy::DUMMY_LOCALHOST_PROXY_URL
+        .as_ref()
+        .map_err(|_err| Error::BlackholeProxyUnavailable)?;
+
     let mut window_builder = WebviewWindowBuilder::new(&app, &window_id, WebviewUrl::External(url))
         .initialization_script(INIT_SCRIPT)
+        // Use a non-working proxy to almost(!) isolate the app
+        // from the internet.
+        // "Almost" because there are still cases where the webview
+        // will bypass the proxy, such as with WebRTC.
+        // To disable WebRTC, we take separate measures.
+        //
+        // Note that `additional_browser_args` might make `proxy_url`
+        // have no effect (see below).
+        .proxy_url(dummy_localhost_proxy_url.clone())
         .on_navigation(move |url| {
             #[cfg(not(any(target_os = "windows", target_os = "android")))]
             {
@@ -311,13 +325,14 @@ pub(crate) async fn open_webxdc<'a>(
         });
 
     // This is only for Chromium (i.e. Windows).
-    // Note that this will make `WebviewWindowBuilder::proxy_url`
-    // (which we don't currently use), and potentially some other,
-    // future options, have no effect.
+    // Note that this will make `WebviewWindowBuilder::proxy_url`,
+    // and potentially some other, future options, have no effect:
+    // we will have to manually specify `dummy_proxy_url` in args.
     #[cfg(target_os = "windows")]
     {
-        window_builder =
-            window_builder.additional_browser_args(&get_chromium_hardening_browser_args());
+        window_builder = window_builder.additional_browser_args(
+            &get_chromium_hardening_browser_args(dummy_localhost_proxy_url),
+        );
     }
     #[cfg(desktop)]
     {
@@ -417,7 +432,7 @@ fn make_title(webxdc_info: &WebxdcInfo, chat_name: &str) -> String {
 }
 
 #[cfg(target_os = "windows")]
-fn get_chromium_hardening_browser_args() -> String {
+fn get_chromium_hardening_browser_args(dummy_proxy_url: &Url) -> String {
     // Hardening: (partially?) disable WebRTC, prohibit all DNS queries,
     // and practically almost (or completely?) disable internet access.
     // See https://delta.chat/en/2023-05-22-webxdc-security.
@@ -447,13 +462,17 @@ fn get_chromium_hardening_browser_args() -> String {
     // effectively disable WebRTC.
     //
     // Thanks to the fact that we specify `host-rules`,
-    // no connection attempt to the proxy should occur at all.
+    // no connection attempt to the proxy should occur at all,
+    // at least as of now.
     // See https://www.chromium.org/developers/design-documents/network-stack/socks-proxy/ :
     // > The "EXCLUDE" clause make an exception for "myproxy",
     // > because otherwise Chrome would be unable to resolve
     // > the address of the SOCKS proxy server itself,
     // > and all requests would necessarily fail
     // > with PROXY_CONNECTION_FAILED.
+    //
+    // However, let's still use our dummy TCP listener
+    // (`dummy_proxy_url`), just in case.
     //
     // Docs on command line args:
     // - https://peter.sh/experiments/chromium-command-line-switches/
@@ -464,10 +483,7 @@ fn get_chromium_hardening_browser_args() -> String {
         &format!("--host-rules=\"{host_rules}\""),
         "--webrtc-ip-handling-policy=disable_non_proxied_udp",
         "--force-webrtc-ip-handling-policy=disable_non_proxied_udp",
-        // Use a non-private address and a reserved port, juuust in case
-        // the browser actually tries to connect to the proxy.
-        // https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.txt
-        "--proxy-server=\"socks5://example.com:1024\"",
+        &format!("--proxy-server=\"{dummy_proxy_url}\""),
     ]
     .join(" ")
 }
