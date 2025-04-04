@@ -28,6 +28,11 @@ mod i18n;
 // menus are not available on mobile
 #[cfg(desktop)]
 mod menus;
+// currently we have no mobile support for notifications
+// but then there would also be the question if they would even work
+// with the current architecture where everything is controled by the frontend
+// (so the main menu needs to be running to send notifications)
+#[cfg(desktop)]
 mod notifications;
 mod run_config;
 mod runtime_capabilities;
@@ -97,7 +102,6 @@ pub fn run() {
     let run_config = RunConfig::default();
 
     let mut builder = tauri::Builder::default()
-        .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_clipboard_manager::init())
@@ -168,8 +172,11 @@ pub fn run() {
             webxdc::commands::webxdc_send_to_chat,
             #[cfg(target_vendor = "apple")]
             webxdc::data_storage::debug_get_datastore_ids,
+            #[cfg(desktop)]
             notifications::show_notification,
+            #[cfg(desktop)]
             notifications::clear_all_notifications,
+            #[cfg(desktop)]
             notifications::clear_notifications,
             runtime_info::get_runtime_info,
             settings::change_desktop_settings_apply_side_effects,
@@ -326,6 +333,15 @@ pub fn run() {
             }
 
             runtime_capabilities::add_runtime_capabilies(app.handle())?;
+
+            #[cfg(target_os = "macos")]
+            {
+                // remove all notifications that are still there from previous sessions,
+                // as they probably don't work anymore and are just stuck
+                //
+                // https://github.com/deltachat/deltachat-desktop/issues/2438#issuecomment-1090735045
+                user_notify::mac_os::remove_all_delivered_notifications()?;
+            }
 
             app.state::<AppState>()
                 .log_duration_since_startup("setup done");

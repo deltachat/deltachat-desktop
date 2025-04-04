@@ -1,8 +1,10 @@
 use std::str::FromStr;
 
+use futures_lite::stream::block_on;
 use serde::{Deserialize, Serialize};
 use tauri::{Runtime, Url};
-use tauri_plugin_notification::{Attachment, NotificationExt};
+use tokio::{spawn, task::spawn_local};
+use user_notify::NotificationBuilder;
 
 #[derive(Debug, thiserror::Error)]
 pub(crate) enum Error {
@@ -12,6 +14,8 @@ pub(crate) enum Error {
     NotMainWindow,
     #[error("url parse error: {0}")]
     Parse(String),
+    #[error(transparent)]
+    Notify(#[from] user_notify::Error),
 }
 impl serde::Serialize for Error {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -44,39 +48,69 @@ pub(crate) async fn show_notification<R: Runtime>(
         return Err(Error::NotMainWindow);
     }
 
-    let mut notification_builder = app
-        .notification()
-        .builder()
+    let mut notification_builder = {
+        #[cfg(target_os = "macos")]
+        {
+            user_notify::mac_os::NotificationBuilderMacOS::new()
+        }
+        #[cfg(target_os = "windows")]
+        {
+            todo!();
+        }
+        #[cfg(any(
+            target_os = "linux",
+            target_os = "dragonfly",
+            target_os = "freebsd",
+            target_os = "openbsd",
+            target_os = "netbsd"
+        ))]
+        {
+            user_notify::xdg::NotificationBuilderXdg::new()
+                .category_hint(user_notify::xdg::NotificationCategory::ImReceived)
+                .appname("Delta Chat")
+        }
+    };
+
+    let mut notification_builder = notification_builder
         .title(title)
         .body(body)
-        .group(format!("{account_id}-{chat_id}"))
-        // IDEA: should we use .auto_cancel() ?
-        // - not for now because we want to know that the clear callbacks work, but maybe later
-        .extra(
-            "data",
-            NotificationClickedEventPayload {
-                chat_id,
-                message_id,
-                account_id,
-            },
-        );
+        .set_thread_id(&format!("{account_id}-{chat_id}"));
 
-    if let Some(icon) = icon {
-        // file could be
-        // - data uri - webxdc icon
-        // - absolute path to file in blobdir - chat avatar, image in message
-        let url = if icon.starts_with("data:") {
-            Url::from_str(icon).map_err(|err| Error::Parse(format!("{err:?}")))?
-        } else {
-            Url::from_file_path(icon).map_err(|err| Error::Parse(format!("{err:?}")))?
-        };
-        notification_builder = notification_builder.attachment(Attachment::new(
-            format!("attachment:{account_id}-{chat_id}-{message_id}"),
-            url,
-        ))
-    }
+    // .extra(
+    //     "data",
+    //     NotificationClickedEventPayload {
+    //         chat_id,
+    //         message_id,
+    //         account_id,
+    //     },
+    // );
 
-    notification_builder.show();
+    // // TODO images -> need to all be temporarely written to disk
+    // // (atleast until notification is clicked, so maybe reuse ecxisiting temp file system?)
+    //
+    // if let Some(icon) = icon {
+    //     // file could be
+    //     // - data uri - webxdc icon
+    //     // - absolute path to file in blobdir - chat avatar, image in message
+    //     let url = if icon.starts_with("data:") {
+    //         Url::from_str(icon).map_err(|err| Error::Parse(format!("{err:?}")))?
+    //     } else {
+    //         Url::from_file_path(icon).map_err(|err| Error::Parse(format!("{err:?}")))?
+    //     };
+    //     notification_builder = notification_builder.attachment(Attachment::new(
+    //         format!("attachment:{account_id}-{chat_id}-{message_id}"),
+    //         url,
+    //     ))
+    // }
+
+    // MacOS needs this to be run on main thread
+    app.run_on_main_thread(move || {
+        // TODO find way to make this async
+        // by doing conversion to async here and not in user_notify crate
+        let notification = block_on(notification_builder.show())?;
+    });
+
+    // notification.clo
 
     // let _ = app.emit(
     //     "notification_clicked",
@@ -112,7 +146,16 @@ pub(crate) async fn clear_all_notifications<R: Runtime>(
     }
 
     // there seems to be no api for this in https://docs.rs/tauri-plugin-notification/latest/tauri_plugin_notification/struct.NotificationBuilder.html
-    todo!();
+    todo!("loop through all notifications we hold in the manager and call close on them");
+
+    #[cfg(target_os = "macos")]
+    {
+        app.run_on_main_thread(|| {
+            if let Err(err) = user_notify::mac_os::remove_all_delivered_notifications() {
+                log::error!("remove_all_delivered_notifications failed: {err}");
+            }
+        })?;
+    }
 
     Ok(())
 }

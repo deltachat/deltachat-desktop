@@ -1,0 +1,47 @@
+[package]
+name = "user-notify"
+description = "notifications for end users on linux, macos and windows"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+thiserror = "2.0.12"
+
+
+[target.'cfg(any(target_os = "linux", target_os = "dragonfly", target_os = "freebsd", target_os = "openbsd", target_os = "netbsd"))'.dependencies]
+notify-rust = "4.11.6"
+
+[target.'cfg(target_os = "macos")'.dependencies]
+block2 = "0.6"
+objc2 = { version = "0.6", features = ["exception"] }
+objc2-foundation = { version = "0.3.0", default-features = false, features = [
+    # TODO remove what we don't need
+    "std",
+    "objc2-core-foundation",
+    "NSURLRequest",
+    "NSURL",
+    "NSKeyValueCoding",
+    "NSStream",
+    "NSDictionary",
+    "NSObject",
+    "NSData",
+    "NSEnumerator",
+    "NSKeyValueObserving",
+    "NSDate",
+    "NSValue",
+    "NSRange",
+    # used
+    "NSString",
+    "NSBundle",
+] }
+objc2-user-notifications = { version = "0.3.0", default-features = false, features = [
+    "std",
+    "block2",
+    "UNNotificationContent",
+    "UNNotificationTrigger",
+    "UNNotificationRequest",
+    "UNNotificationResponse",
+    "UNUserNotificationCenter",
+] }
+[target.'cfg(target_os = "windows")'.dependencies]
+tauri-winrt-notification = "0.7.1"
