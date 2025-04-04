@@ -32,7 +32,9 @@ pub(super) async fn get_locales_dir_from_resource_dir(
 
     let places = vec![
         #[cfg(debug_assertions)]
-        PathBuf::from("../../_locales"), // development
+        PathBuf::from("../../../_locales"), // development (pnpm tauri dev)
+        #[cfg(debug_assertions)]
+        PathBuf::from("../../_locales"), // development (cargo run)
         resource_dir.join("_locales"),
     ];
 
