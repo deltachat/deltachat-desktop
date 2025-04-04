@@ -358,8 +358,6 @@ pub fn run() {
                 }
             }
 
-            init_tray_icon(&app.handle())?;
-
             app.state::<AppState>()
                 .log_duration_since_startup("setup done");
 
