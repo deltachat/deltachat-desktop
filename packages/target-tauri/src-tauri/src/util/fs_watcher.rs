@@ -41,24 +41,27 @@ where
 
     while let Some(res) = rx.recv().await {
         match res {
+            Err(e) => log::error!("watch error: {:?}", e),
             Ok(event) => {
                 log::trace!("changed: {:?}", event);
                 if event.kind.is_create() || event.kind.is_modify() || event.kind.is_remove() {
                     let now = SystemTime::now();
-                    if let Ok(elapsed) = now.duration_since(last_action) {
-                        if elapsed < delay {
+                    match now.duration_since(last_action) {
+                        Err(err) => {
+                            log::error!("debounce: system time error: duration_since {err:?}");
                             continue;
                         }
-                        log::trace!("callback triggered");
-                        callback().await;
-                        last_action = now;
-                    } else {
-                        log::error!("debounce: system time error: duration_since");
-                        return Ok(());
+                        Ok(elapsed) => {
+                            if elapsed < delay {
+                                continue;
+                            }
+                            log::trace!("callback triggered");
+                            callback().await;
+                            last_action = now;
+                        }
                     }
                 }
             }
-            Err(e) => log::error!("watch error: {:?}", e),
         }
     }
 
