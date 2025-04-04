@@ -1,3 +1,4 @@
+use once_cell::sync::OnceCell;
 use tauri::{image::Image, tray::TrayIcon, Manager, State};
 use tokio::sync::RwLock;
 
@@ -88,16 +89,46 @@ impl TrayManager {
 
         let lock = self.tray.read().await;
         if let Some(tray) = lock.as_ref() {
-            let asset = match counter {
-                0 => "images/tray/deltachat.png",
-                _ => "images/tray/deltachat-unread.png",
-            }
-            .to_string();
+            static LOGO: OnceCell<Option<Image>> = OnceCell::new();
+            static LOGO_UNREAD: OnceCell<Option<Image>> = OnceCell::new();
 
-            if let Some(icon) = app.asset_resolver().get(asset.clone()) {
-                tray.set_icon(Some(Image::from_bytes(&icon.bytes)?))?;
+            let image = match counter {
+                0 => LOGO.get_or_init(|| {
+                    let asset = "images/tray/deltachat.png".to_string();
+                    match app.asset_resolver().get(asset.clone()) {
+                        None => None,
+                        Some(icon) => {
+                            match Image::from_bytes(&icon.bytes){
+                                Err(err) => {
+                                    log::error!("tray icon asset {asset} found, but failed to convert bytes to image");
+                                    None
+                                },
+                                Ok(image)=> Some(image)
+                            }
+                        }
+                    }
+                }),
+                _ => LOGO_UNREAD.get_or_init(|| {
+                    let asset = "images/tray/deltachat-unread.png".to_string();
+                    match app.asset_resolver().get(asset.clone()) {
+                        None => None,
+                        Some(icon) => {
+                            match Image::from_bytes(&icon.bytes){
+                                Err(err) => {
+                                    log::error!("tray icon asset {asset} found, but failed to convert bytes to image");
+                                    None
+                                },
+                                Ok(image)=> Some(image)
+                            }
+                        }
+                    }
+                }),
+            };
+
+            if let Some(icon) = image {
+                tray.set_icon(Some(icon.clone()))?;
             } else {
-                log::error!("tray icon asset {asset} not found!")
+                log::error!("tray icon image is None: counter: {counter}")
             }
         }
         Ok(())
