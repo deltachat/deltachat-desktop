@@ -44,7 +44,7 @@ type MainWindowEvents =
     }
   | {
       event: 'localeReloaded'
-      data: string
+      data: string | null
     }
   | {
       event: 'showAboutDialog'
@@ -312,7 +312,8 @@ class TauriRuntime implements Runtime {
           account || undefined
         )
       } else if (event.event === 'localeReloaded') {
-        this.onChooseLanguage?.(event.data)
+        // event.data is only null in case of reloading via --watch-translations
+        this.onChooseLanguage?.(event.data || window.localeData.locale)
       } else if (event.event === 'showAboutDialog') {
         this.onShowDialog?.('about')
       } else if (event.event === 'showSettingsDialog') {

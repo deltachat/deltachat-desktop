@@ -68,3 +68,41 @@ pub async fn get_all_languages(app: &AppHandle) -> Result<Vec<(String, String)>,
     vec.sort_unstable_by(|a, b| a.0.cmp(&b.0));
     Ok(vec)
 }
+
+#[cfg(desktop)]
+pub fn watch_translations(app: AppHandle) {
+    use std::time::Duration;
+    use tauri::Manager;
+
+    use crate::{
+        state::main_window_channels::MainWindowEvents, util::fs_watcher::async_watch_debounced,
+        MainWindowChannels,
+    };
+
+    let app_clone = app.clone();
+    let callback = Box::new(move || {
+        let app_clone = app_clone.clone();
+        async move {
+            if let Err(err) = app_clone
+                .state::<MainWindowChannels>()
+                .emit_event(MainWindowEvents::LocaleReloaded(None))
+                .await
+            {
+                log::error!("watch_translations: failed notify frontend: {err}:?");
+            }
+        }
+    });
+
+    tauri::async_runtime::spawn(async move {
+        if let Ok(watch_dir) = get_locales_dir(&app).await {
+            log::info!("watch_translations: watching for changes in {watch_dir:?}");
+            if let Err(err) =
+                async_watch_debounced(watch_dir, callback, Duration::from_millis(400)).await
+            {
+                log::error!("watch_translations: failed to watch locales dir: {err:?}");
+            }
+        } else {
+            log::error!("watch_translations: failed to get locales dir");
+        }
+    });
+}

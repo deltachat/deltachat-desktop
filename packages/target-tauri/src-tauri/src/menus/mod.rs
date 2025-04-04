@@ -31,7 +31,9 @@ pub async fn handle_event(app: &AppHandle, event: MenuEvent) -> anyhow::Result<(
             .context("no language found in id")?;
 
         mwc.emit_event(
-            crate::state::main_window_channels::MainWindowEvents::LocaleReloaded(id.to_owned()),
+            crate::state::main_window_channels::MainWindowEvents::LocaleReloaded(Some(
+                id.to_owned(),
+            )),
         )
         .await?;
     } else if let Ok(action) = HtmlWindowMenuAction::try_from(event.id()) {

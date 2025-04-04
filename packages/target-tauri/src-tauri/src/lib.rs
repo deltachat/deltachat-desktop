@@ -321,6 +321,13 @@ pub fn run() {
 
             runtime_capabilities::add_runtime_capabilies(app.handle())?;
 
+            #[cfg(desktop)]
+            {
+                if run_config.translation_watch {
+                    i18n::watch_translations(app.handle().clone());
+                }
+            }
+
             app.state::<AppState>()
                 .log_duration_since_startup("setup done");
 
