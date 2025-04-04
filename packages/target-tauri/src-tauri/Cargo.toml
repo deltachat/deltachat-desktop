@@ -63,12 +63,13 @@ register-default-handler = { version = "0.1.0", path = "../crates/register-defau
 
 [target.'cfg(target_os = "android")'.dependencies]
 include_dir = "0.7.4"
-tauri-plugin-notification = "2"
 
+# desktop
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-autostart = "2"
 tauri-plugin-single-instance = "2"
 tauri-plugin-window-state = "2"
+user-notify = { version = "0.1.0", path = "../crates/user-notify" }
 
 [features]
 crabnebula_extras = ["tauri-plugin-devtools"]
