@@ -1,6 +1,5 @@
 use std::{collections::HashMap, sync::Arc};
 
-use anyhow::Context;
 use log::error;
 use tauri::{
     async_runtime::spawn, AppHandle, Manager, Runtime, WebviewWindow, Window, WindowEvent, Wry,
@@ -82,6 +81,8 @@ impl MenuManager {
         app: &AppHandle,
         id: &str,
     ) -> anyhow::Result<Menu<Wry>> {
+        use anyhow::Context;
+
         let inner = self.inner.read().await;
         let menu_generator = inner
             .get(id)
@@ -177,6 +178,8 @@ impl MenuManager {
         // but on macOS only set the global menu for the focused window
         #[cfg(target_os = "macos")]
         {
+            use anyhow::Context;
+
             let win = app
                 .get_focused_window()
                 .or(app.get_window("main"))
