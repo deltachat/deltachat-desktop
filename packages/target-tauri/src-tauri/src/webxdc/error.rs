@@ -20,6 +20,8 @@ pub(crate) enum Error {
     WebxdcInstanceNotFoundByLabel(String),
     #[error("anyhow {0:?}")]
     Anyhow(anyhow::Error),
+    #[error("failed to make a dummy blackhole proxy, webxdc network isolation might not work")]
+    BlackholeProxyUnavailable,
     #[error("channel not initialized yet")]
     ChannelNotInitializedYet,
     #[error("instance exists, but window missing")]

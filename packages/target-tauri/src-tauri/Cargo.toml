@@ -20,6 +20,8 @@ tauri-build = { version = "2", features = ["config-json5"] }
 
 [dependencies]
 tauri = { version = "2", features = [
+    # for `proxy_url()` for webxdc.
+    "macos-proxy",
     "image-png",
     "image-ico",
     # 'unstable' feature, because of multiple webviews in html email window
