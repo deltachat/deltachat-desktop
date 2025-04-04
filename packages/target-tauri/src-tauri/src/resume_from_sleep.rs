@@ -27,11 +27,11 @@ pub(crate) fn start_resume_after_sleep_detector(app: &AppHandle) {
         loop {
             sleep(PROBE_INTERVAL).await;
             let now = SystemTime::now();
-            log::debug!(
-                "{:?}",
-                now.duration_since(last_time)
-                    .unwrap_or(Duration::from_secs(1))
-            );
+            // log::debug!(
+            //     "{:?}",
+            //     now.duration_since(last_time)
+            //         .unwrap_or(Duration::from_secs(1))
+            // );
             if now
                 .duration_since(last_time)
                 .unwrap_or(Duration::from_secs(1))
