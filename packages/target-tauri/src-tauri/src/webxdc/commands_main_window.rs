@@ -455,11 +455,6 @@ fn get_chromium_hardening_browser_args() -> String {
     // > and all requests would necessarily fail
     // > with PROXY_CONNECTION_FAILED.
     //
-    // TODO it's not clear, however, why the WebView doesn't try
-    // to connect to the proxy even when `host-rules` and
-    // `host-resolver-rules` are omitted.
-    // Maybe it has to do with Tauri intercepting requests?
-    //
     // Docs on command line args:
     // - https://peter.sh/experiments/chromium-command-line-switches/
     // - https://learn.microsoft.com/en-us/microsoft-edge/webview2/concepts/webview-features-flags#available-webview2-browser-flags
@@ -472,7 +467,7 @@ fn get_chromium_hardening_browser_args() -> String {
         // Use a non-private address and a reserved port, juuust in case
         // the browser actually tries to connect to the proxy.
         // https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.txt
-        "--proxy-url=\"socks5://example.com:1024\"",
+        "--proxy-server=\"socks5://example.com:1024\"",
     ]
     .join(" ")
 }
