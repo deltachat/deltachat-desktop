@@ -86,13 +86,18 @@ impl TrayManager {
             return Ok(());
         }
 
+        #[cfg(target_os = "windows")]
+        let ending = "ico";
+        #[cfg(not(target_os = "windows"))]
+        let ending = "png";
+
         let lock = self.tray.read().await;
         if let Some(tray) = lock.as_ref() {
-            let asset = match counter {
-                0 => "images/tray/deltachat.png",
-                _ => "images/tray/deltachat-unread.png",
-            }
-            .to_string();
+            let image_name = match counter {
+                0 => "deltachat",
+                _ => "deltachat-unread",
+            };
+            let asset = format!("images/tray/{image_name}.{ending}");
 
             if let Some(icon) = app.asset_resolver().get(asset.clone()) {
                 tray.set_icon(Some(Image::from_bytes(&icon.bytes)?))?;
