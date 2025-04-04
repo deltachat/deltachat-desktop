@@ -27,6 +27,7 @@ mod i18n;
 // menus are not available on mobile
 #[cfg(desktop)]
 mod menus;
+mod network_isolation_dummy_proxy;
 mod run_config;
 mod runtime_capabilities;
 mod runtime_info;
