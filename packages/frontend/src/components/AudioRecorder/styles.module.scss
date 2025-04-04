@@ -1,0 +1,78 @@
+.microphoneButton {
+  height: 40px;
+  width: 40px;
+  padding-left: 2px;
+  padding-bottom: 8px;
+  background-color: var(--composerBg);
+  border: none;
+
+  &:focus {
+    outline: none;
+  }
+  span {
+    display: block;
+    width: 25px;
+    height: 25px;
+    margin-top: calc((40px - 25px) / 2);
+    -webkit-mask-image: url(./images/microphone.svg);
+    -webkit-mask-size: contain;
+    background-color: var(--composerPlaceholderText);
+    &:hover {
+      background-color: var(--buttonSecondaryText);
+    }
+  }
+}
+
+.recordingDuration {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  align-items: stretch;
+  flex-grow: 1;
+  margin-left: 10px;
+  p {
+    margin: 12px 0 0 3px;
+  }
+  .microphoneButton {
+    span {
+      animation: pulse 1.5s infinite ease-in-out;
+      @keyframes pulse {
+        0% {
+          background-color: #eb4c4c58;
+        }
+        50% {
+          background-color: #d70b0b;
+        }
+        100% {
+          background-color: #eb4c4c58;
+        }
+      }
+    }
+  }
+  button:not(.microphoneButton) {
+    padding: 4px;
+    height: 32px;
+    margin-top: 4px;
+    width: 85px;
+    border-radius: 5px;
+    border: none;
+    margin-left: 16px;
+
+    &.stopRecording {
+      background-color: #e84b4b;
+      color: #fff;
+      &:hover {
+        background-color: #ed3333;
+      }
+    }
+
+    &.cancel {
+      background-color: var(--buttonSecondaryBackground);
+      color: var(--buttonSecondaryText);
+      border: 1px solid #ccc;
+      &:hover {
+        background-color: var(--buttonSecondaryHover);
+      }
+    }
+  }
+}

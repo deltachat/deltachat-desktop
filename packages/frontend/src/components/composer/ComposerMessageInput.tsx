@@ -118,6 +118,10 @@ export default class ComposerMessageInput extends React.Component<
     return this.state.text
   }
 
+  hasText(): boolean {
+    return !this.getText().match(/^\s*$/)
+  }
+
   componentDidUpdate(
     prevProps: ComposerMessageInputProps,
     prevState: ComposerMessageInputState

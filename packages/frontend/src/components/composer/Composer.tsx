@@ -48,6 +48,7 @@ import OutsideClickHelper from '../OutsideClickHelper'
 import { basename } from 'path'
 import { useHasChanged2 } from '../../hooks/useHasChanged'
 import { ScreenContext } from '../../contexts/ScreenContext'
+import { AudioRecorder } from '../AudioRecorder/AudioRecorder'
 
 const log = getLogger('renderer/composer')
 
@@ -92,6 +93,7 @@ const Composer = forwardRef<
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const [showAppPicker, setShowAppPicker] = useState(false)
   const [currentEditText, setCurrentEditText] = useState('')
+  const [recording, setRecording] = useState(false)
 
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
   const pickerButtonRef = useRef<HTMLButtonElement>(null)
@@ -101,6 +103,8 @@ const Composer = forwardRef<
   const { openDialog } = useDialog()
   const { sendMessage } = useMessage()
   const { unselectChat } = useChat()
+
+  const voiceMessageDisabled = !!draftState.file || !!draftState.text
 
   // The philosophy of the editing mode is as follows.
   // The edit mode can be thought of as a dialog,
@@ -128,6 +132,26 @@ const Composer = forwardRef<
   const currentComposerMessageInputRef = messageEditing.isEditingModeActive
     ? editMessageInputRef
     : regularMessageInputRef
+
+  const saveVoiceAsDraft = (voiceData: Blob) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(voiceData)
+    reader.onloadend = async () => {
+      if (!reader.result) {
+        log.error('Cannot convert blob to base64. reader.result is null')
+        return
+      }
+      const b64 = reader.result.toString().split(',')[1]
+      // random filename
+      const filename = Math.random().toString(36).substring(2, 10) + '.mp3'
+      const path = await runtime.writeTempFileFromBase64(filename, b64)
+      currentComposerMessageInputRef.current?.setState({ loadingDraft: false })
+      addFileToDraft(path, basename(path), 'Voice').catch((reason: any) => {
+        log.error('Cannot send message:', reason)
+        // show some error dialogue
+      })
+    }
+  }
 
   const hasSecureJoinEnded = useRef<boolean>(false)
   useEffect(() => {
@@ -157,10 +181,13 @@ const Composer = forwardRef<
         if (chatId === null) {
           throw new Error('chat id is undefined')
         }
-        if (!regularMessageInputRef.current) {
+        if (
+          !regularMessageInputRef.current &&
+          !(draftState.file && draftState.viewType === 'Voice')
+        ) {
           throw new Error('messageInputRef is undefined')
         }
-        const textareaRef = regularMessageInputRef.current.textareaRef.current
+        const textareaRef = regularMessageInputRef.current?.textareaRef.current
         if (textareaRef) {
           if (textareaRef.disabled) {
             throw new Error(
@@ -170,8 +197,8 @@ const Composer = forwardRef<
           textareaRef.disabled = true
         }
         try {
-          const message = regularMessageInputRef.current.getText()
-          if (message.match(/^\s*$/) && !draftState.file) {
+          const message = regularMessageInputRef.current?.getText() || ''
+          if (!regularMessageInputRef.current?.hasText() && !draftState.file) {
             log.debug(`Empty message: don't send it...`)
             return
           }
@@ -203,7 +230,7 @@ const Composer = forwardRef<
           if (textareaRef) {
             textareaRef.disabled = false
           }
-          regularMessageInputRef.current.focus()
+          regularMessageInputRef.current?.focus()
         }
       }
 
@@ -213,6 +240,7 @@ const Composer = forwardRef<
     }
     onSelectReplyToShortcut(KeybindAction.Composer_SelectReplyToUp)
   })
+
   useKeyBindingAction(KeybindAction.Composer_SelectReplyToDown, () => {
     if (messageEditing.isEditingModeActive) {
       return
@@ -259,6 +287,7 @@ const Composer = forwardRef<
       document.removeEventListener('keyup', onKey, opt)
     }
   }, [shiftPressed])
+
   useEffect(() => {
     if (!showEmojiPicker) return
     const onClick = (e: MouseEvent) => {
@@ -515,14 +544,14 @@ const Composer = forwardRef<
           )}
         </div>
         <div className='lower-bar'>
-          {!messageEditing.isEditingModeActive && (
+          {!messageEditing.isEditingModeActive && !recording && (
             <MenuAttachment
               addFileToDraft={addFileToDraft}
               showAppPicker={setShowAppPicker}
               selectedChat={selectedChat}
             />
           )}
-          {settingsStore && (
+          {settingsStore && !recording && (
             <>
               <ComposerMessageInput
                 // We use `hidden` instead of simply conditionally rendering
@@ -572,16 +601,24 @@ const Composer = forwardRef<
               />
             </>
           )}
-          {!runtime.getRuntimeInfo().hideEmojiAndStickerPicker && (
-            <button
-              type='button'
-              className='emoji-button'
-              ref={pickerButtonRef}
-              onClick={onEmojiIconClick}
-              aria-label={tx('emoji')}
-            >
-              <span />
-            </button>
+          {!runtime.getRuntimeInfo().hideEmojiAndStickerPicker &&
+            !recording && (
+              <button
+                type='button'
+                className='emoji-button'
+                ref={pickerButtonRef}
+                onClick={onEmojiIconClick}
+                aria-label={tx('emoji')}
+              >
+                <span />
+              </button>
+            )}
+          {!voiceMessageDisabled && (
+            <AudioRecorder
+              recording={recording}
+              setRecording={setRecording}
+              saveVoiceAsDraft={saveVoiceAsDraft}
+            />
           )}
           {showSendButton && (
             <button
@@ -745,7 +782,10 @@ export function useDraft(
     if (chatId === null || !canSend) {
       return
     }
-    if (inputRef.current?.textareaRef.current?.disabled) {
+    if (
+      inputRef.current?.textareaRef.current?.disabled &&
+      draftRef.current.viewType !== 'Voice'
+    ) {
       // Guard against strange races
       log.warn('Do not save draft while sending')
       return
