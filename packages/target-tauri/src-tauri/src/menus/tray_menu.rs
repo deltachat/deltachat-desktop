@@ -31,9 +31,12 @@ impl MenuAction<'static> for TrayMenuAction {
             TrayMenuAction::Quit => {
                 app.exit(0);
             }
-            TrayMenuAction::Show => main_window.show()?,
+            TrayMenuAction::Show => {
+                main_window.show()?;
+                main_window.set_focus()?;
+            },
             TrayMenuAction::MuteNotifications => {
-                // set check to real state in case it didn't change
+                // set checkmark to real state in case it didn't change
                 app.state::<TrayManager>().update_menu(app).await?;
                 // tell frontend to change it
                 app.state::<MainWindowChannels>()
