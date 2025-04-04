@@ -93,7 +93,6 @@ const Composer = forwardRef<
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const [showAppPicker, setShowAppPicker] = useState(false)
   const [currentEditText, setCurrentEditText] = useState('')
-  const [voiceMessageDisabled, setVoiceMessageDisabled] = useState(false)
   const [recording, setRecording] = useState(false)
 
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
@@ -104,6 +103,8 @@ const Composer = forwardRef<
   const { openDialog } = useDialog()
   const { sendMessage } = useMessage()
   const { unselectChat } = useChat()
+
+  const voiceMessageDisabled = !!draftState.file || !!draftState.text
 
   // The philosophy of the editing mode is as follows.
   // The edit mode can be thought of as a dialog,
@@ -141,7 +142,8 @@ const Composer = forwardRef<
         return
       }
       const b64 = reader.result.toString().split(',')[1]
-      const filename = b64.slice(3, 12).toString() + '.mp3'
+      // random filename
+      const filename = Math.random().toString(36).substring(2, 10) + '.mp3'
       const path = await runtime.writeTempFileFromBase64(filename, b64)
       currentComposerMessageInputRef.current?.setState({ loadingDraft: false })
       addFileToDraft(path, basename(path), 'Voice').catch((reason: any) => {
@@ -285,14 +287,6 @@ const Composer = forwardRef<
       document.removeEventListener('keyup', onKey, opt)
     }
   }, [shiftPressed])
-
-  useEffect(() => {
-    if (draftState.file || draftState.text) {
-      setVoiceMessageDisabled(true)
-    } else {
-      setVoiceMessageDisabled(false)
-    }
-  }, [draftState])
 
   useEffect(() => {
     if (!showEmojiPicker) return
