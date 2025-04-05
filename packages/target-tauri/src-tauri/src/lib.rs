@@ -418,8 +418,16 @@ pub fn run() {
         #[cfg(target_os = "macos")]
         tauri::RunEvent::Reopen { .. } => {
             // handle clicks on dock on macOS (because on macOS main window never really closes)
-            let main_window = app_handle.get_webview_window("main").unwrap();
-            if let Err(err) = main_window.show().and_then(|_| main_window.set_focus()) {
+            if let Err(err) = app_handle
+                .get_webview_window("main")
+                .context("main window not found")
+                .and_then(|main_window| {
+                    main_window
+                        .show()
+                        .and_then(|_| main_window.set_focus())
+                        .context("failed to call show or set_focus")
+                })
+            {
                 log::error!("failed to focus and show main_window {err:?}");
             }
         }
