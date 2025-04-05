@@ -23,6 +23,8 @@ pub(crate) fn start_resume_after_sleep_detector(app: &AppHandle) {
     let cloned_app = app.clone();
     spawn(async move {
         let threshold = PROBE_INTERVAL + JUMP_DETECTION_THRESHOLD;
+        // Using `SystemTime` instead of `Instant` because instant pauses on sleep in my tests,
+        // it is also documented in `Instant` that it doesn't measure time linearly.
         let mut last_time = SystemTime::now();
         loop {
             sleep(PROBE_INTERVAL).await;
