@@ -14,7 +14,7 @@ import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
 import { ReactionsBarProvider } from '../ReactionsBar'
 import useDialog from '../../hooks/dialog/useDialog'
 import useMessage from '../../hooks/chat/useMessage'
-
+import { getCurrentWebview } from "@tauri-apps/api/webview";
 import type { T } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/MessageListAndComposer')
@@ -46,10 +46,10 @@ export function getBackgroundImageStyle(
         runtime.getRuntimeInfo().target === 'browser'
           ? `url("/${join('background/', filePath)}")`
           : `url("file://${join(
-              runtime.getConfigPath(),
-              'background/',
-              filePath
-            )}")`
+            runtime.getConfigPath(),
+            'background/',
+            filePath
+          )}")`
     } else if (bgImg.startsWith('color: ')) {
       style.backgroundColor = bgImg.slice(7)
       style.backgroundImage = 'none'
@@ -97,19 +97,26 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     regularMessageInputRef
   )
 
-  const onDrop = async (e: React.DragEvent<any>) => {
+  runtime.setDragListener((e) => {
+    if (e.payload.type == "drop") {
+      handleDrop(e.payload.paths)
+    }
+  });
+
+  const onDrop = (e: React.DragEvent<any> ) => {
+    e.preventDefault()
+    e.stopPropagation()
+    handleDrop(e.dataTransfer.files)
+  }
+  const handleDrop = async (fileList: FileList) => {
     if (chat === null) {
       log.warn('dropped something, but no chat is selected')
       return
     }
 
-    e.preventDefault()
-    e.stopPropagation()
 
     const sanitizedFileList: File[] = []
     {
-      const fileList: FileList =
-        /* (e.target as any).files */ e.dataTransfer.files
       for (let i = 0; i < fileList.length; i++) {
         const file = fileList[i]
         if (runtime.isDroppedFileFromOutside(file)) {
