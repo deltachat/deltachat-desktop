@@ -70,6 +70,7 @@ fn main() {
             "get_html_window_info",
             "html_email_open_menu",
             "html_email_set_load_remote_content",
+            "update_tray_icon_badge",
         ]),
     ))
     .expect("failed to run tauri-build");

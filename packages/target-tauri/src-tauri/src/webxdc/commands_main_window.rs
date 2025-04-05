@@ -238,6 +238,7 @@ pub(crate) async fn open_webxdc<'a>(
                 // window already exists focus it - android and iOS don't have have the function
                 // and those platforms also don't have multiple windows
                 window.show()?;
+                window.set_focus()?;
 
                 if !href.is_empty() {
                     window

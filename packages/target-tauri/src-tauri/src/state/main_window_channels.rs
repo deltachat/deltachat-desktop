@@ -32,6 +32,7 @@ pub enum MainWindowEvents {
     ShowSettingsDialog,
     ShowKeybindingsDialog,
     ResumeFromSleep,
+    ToggleNotifications,
 }
 
 pub(crate) struct InnerMainWindowChannelsState {

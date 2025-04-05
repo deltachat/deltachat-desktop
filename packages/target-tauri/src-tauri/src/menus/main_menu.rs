@@ -26,6 +26,7 @@ pub(crate) enum MainMenuAction {
     Settings,
     Help,
     Quit,
+    CloseWindow,
     FloatOnTop,
     Zoom06,
     Zoom08,
@@ -71,6 +72,9 @@ impl MenuAction<'static> for MainMenuAction {
             }
             MainMenuAction::Quit => {
                 app.exit(0);
+            }
+            MainMenuAction::CloseWindow => {
+                main_window.close()?;
             }
             MainMenuAction::FloatOnTop => {
                 main_window.set_always_on_top(!main_window.is_always_on_top()?)?;
@@ -172,6 +176,13 @@ pub(crate) fn create_main_menu(
         true,
         Some("CmdOrCtrl+Q"),
     )?;
+    let close_window = MenuItem::with_id(
+        app,
+        MainMenuAction::CloseWindow,
+        tx.sync_translate("close_window"),
+        true,
+        Some("CmdOrCtrl+W"),
+    )?;
     let settings = MenuItem::with_id(
         app,
         MainMenuAction::Settings,
@@ -271,11 +282,26 @@ pub(crate) fn create_main_menu(
     Menu::with_items(
         app,
         &[
+            #[cfg(target_os = "macos")]
             &Submenu::with_items(
                 app,
                 tx.sync_translate("global_menu_file_desktop"),
                 true,
                 &[&settings, &quit],
+            )?,
+            &Submenu::with_items(
+                app,
+                tx.sync_translate("global_menu_file_desktop"),
+                true,
+                &[
+                    // macOS has this in the app menu already
+                    #[cfg(not(target_os = "macos"))]
+                    &settings,
+                    &close_window,
+                    // macOS has this in the app menu already
+                    #[cfg(not(target_os = "macos"))]
+                    &quit,
+                ],
             )?,
             &Submenu::with_items(
                 app,

@@ -14,6 +14,8 @@
 - tauri: add cli interface: `--help`, `--version`, and developer options (like `--dev-mode`) #4908
 - tauri: handle resume from sleep #4926
 - tauri: add `--watch-translations` cli flag #4925
+- tauri: add tray icon #4922
+- tauri: add `--minimized` flag #4922
 
 
 ### Changed

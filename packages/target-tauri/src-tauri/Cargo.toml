@@ -19,8 +19,13 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 tauri-build = { version = "2", features = ["config-json5"] }
 
 [dependencies]
-# 'unstable' feature, because of multiple webviews in html email window
-tauri = { version = "2", features = ["image-png", "unstable"] }
+tauri = { version = "2", features = [
+    "image-png",
+    "image-ico",
+    # 'unstable' feature, because of multiple webviews in html email window
+    "unstable",
+    "tray-icon",
+] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tokio = "1.38.1"
