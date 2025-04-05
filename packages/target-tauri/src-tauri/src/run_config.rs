@@ -10,6 +10,8 @@ pub struct RunConfig {
     pub devtools: bool,
     /// enables additional developer apis
     pub dev_mode: bool,
+    /// watch locales dir and reload on changes
+    pub translation_watch: bool,
 }
 
 // Information about cli args that are also relevant for frontend

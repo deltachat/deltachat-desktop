@@ -325,6 +325,13 @@ pub fn run() {
 
             start_resume_after_sleep_detector(app.handle());
 
+            #[cfg(desktop)]
+            {
+                if run_config.translation_watch {
+                    i18n::watch_translations(app.handle().clone());
+                }
+            }
+
             app.state::<AppState>()
                 .log_duration_since_startup("setup done");
 
