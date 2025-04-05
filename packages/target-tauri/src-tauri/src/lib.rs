@@ -308,8 +308,7 @@ pub fn run() {
 
                 app.handle().plugin(tauri_plugin_autostart::init(
                     MacosLauncher::LaunchAgent,
-                    Some(vec!["--minimized", "--autostart"]),
-                    // TODO: note that cli arguments are not implemented yet
+                    Some(vec!["--autostart"]),
                     // TODO: `--autostart` should show a different message why the tray option is disabled
                 ))?;
             }
