@@ -1,7 +1,7 @@
+use deltachat::config::Config;
+use tauri::AppHandle;
 use tauri::{image::Image, tray::TrayIcon, Manager, State};
 use tokio::sync::RwLock;
-
-use tauri::AppHandle;
 
 use crate::{
     menus::tray_menu::create_tray_menu,
@@ -63,7 +63,7 @@ impl TrayManager {
             let mut counter = 0;
             for account_id in accounts.get_all() {
                 if let Some(account) = accounts.get_account(account_id) {
-                    if let Ok(mute_state) = account.get_ui_config("ui.is_muted").await {
+                    if let Ok(mute_state) = account.get_config(Config::IsMuted).await {
                         if mute_state != Some("1".to_owned()) {
                             // account not muted
                             counter += account.get_fresh_msgs().await?.len();
