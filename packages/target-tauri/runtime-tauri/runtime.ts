@@ -8,7 +8,6 @@ import { getStore } from '@tauri-apps/plugin-store'
 import type { Store } from '@tauri-apps/plugin-store'
 import { openPath, openUrl } from '@tauri-apps/plugin-opener'
 import { writeText, readText } from '@tauri-apps/plugin-clipboard-manager'
-import { listen } from '@tauri-apps/api/event'
 
 import {
   DcNotification,
@@ -29,6 +28,9 @@ import type {
   LogLevelString,
 } from '@deltachat-desktop/shared/logger.js'
 import type { setLogHandler as setLogHandlerFunction } from '@deltachat-desktop/shared/logger.js'
+import { Z_VERSION_ERROR } from 'zlib'
+import { DragDropEvent, getCurrentWebview } from '@tauri-apps/api/webview'
+import { Event, UnlistenFn } from '@tauri-apps/api/event'
 
 let logJsonrpcConnection = false
 
@@ -96,6 +98,11 @@ export class TauriDeltaChat extends BaseDeltaChat<TauriTransport> {
 class TauriRuntime implements Runtime {
   emitUIFullyReady(): void {
     invoke('ui_frontend_ready')
+  }
+  async setDragListener(fn: (event: Event<DragDropEvent>) => void): Promise<UnlistenFn> {
+    return await getCurrentWebview().onDragDropEvent((event) => {
+      fn(event)
+    });
   }
   emitUIReady(): void {
     invoke('ui_ready')
@@ -316,10 +323,6 @@ class TauriRuntime implements Runtime {
         this.onShowDialog?.('keybindings')
       }
     }
-
-    listen('tauri://file-drop', event => {
-      console.log(event)
-    })
   }
   reloadWebContent(): void {
     // for now use the browser method as long as it is sufficient
