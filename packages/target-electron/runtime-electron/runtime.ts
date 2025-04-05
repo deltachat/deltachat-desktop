@@ -137,6 +137,7 @@ class ElectronRuntime implements Runtime {
   }
   onThemeUpdate: (() => void) | undefined
   onChooseLanguage: ((locale: string) => Promise<void>) | undefined
+  onToggleNotifications: (() => void) | undefined
   emitUIFullyReady(): void {
     ipcBackend.send('frontendReady')
   }

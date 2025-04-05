@@ -55,6 +55,9 @@ type MainWindowEvents =
   | {
       event: 'showKeybindingsDialog'
     }
+  | {
+      event: 'toggleNotifications'
+    }
 
 const events = new Channel<MainWindowEvents>()
 const jsonrpc = new Channel<yerpc.Message>()
@@ -208,16 +211,17 @@ class TauriRuntime implements Runtime {
       log_to_console: boolean
       devtools: boolean
       dev_mode: boolean
+      forced_tray_icon: boolean
     }>('get_frontend_run_config')
     const rc_config: RC_Config = {
       'log-debug': config.log_debug,
       'log-to-console': config.log_to_console,
       devmode: config.dev_mode,
+      minimized: config.forced_tray_icon,
 
       theme: undefined,
       'theme-watch': false,
       'translation-watch': false,
-      minimized: false,
 
       // does not exist in delta tauri
       'allow-unsafe-core-replacement': false,
@@ -320,6 +324,8 @@ class TauriRuntime implements Runtime {
         this.onShowDialog?.('settings')
       } else if (event.event === 'showKeybindingsDialog') {
         this.onShowDialog?.('keybindings')
+      } else if (event.event === 'toggleNotifications') {
+        this.onToggleNotifications?.()
       }
     }
   }
@@ -496,6 +502,7 @@ class TauriRuntime implements Runtime {
   }
   setBadgeCounter(value: number): void {
     getCurrentWindow().setBadgeCount(value === 0 ? undefined : value)
+    invoke('update_tray_icon_badge', { counter: value })
   }
   showNotification(_data: DcNotification): void {
     throw new Error('Method not implemented.37')
@@ -579,6 +586,7 @@ class TauriRuntime implements Runtime {
       ) => void)
     | undefined
   onResumeFromSleep: (() => void) | undefined
+  onToggleNotifications: (() => void) | undefined
 }
 
 ;(window as any).r = new TauriRuntime()
