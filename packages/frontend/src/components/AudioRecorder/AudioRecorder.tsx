@@ -93,14 +93,14 @@ export const AudioRecorder = ({
         <p>
           {minutesDisplay} : {secondsDisplay}
         </p>
+        <button className={styles.cancel} onClick={() => onRecordingCancel()}>
+          {tx('cancel')}
+        </button>
         <button
           className={styles.stopRecording}
           onClick={() => onRecordingStop()}
         >
           {tx('ok')}
-        </button>
-        <button className={styles.cancel} onClick={() => onRecordingCancel()}>
-          {tx('cancel')}
         </button>
       </div>
     )

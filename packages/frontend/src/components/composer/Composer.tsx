@@ -613,13 +613,6 @@ const Composer = forwardRef<
                 <span />
               </button>
             )}
-          {!voiceMessageDisabled && (
-            <AudioRecorder
-              recording={recording}
-              setRecording={setRecording}
-              saveVoiceAsDraft={saveVoiceAsDraft}
-            />
-          )}
           {showSendButton && (
             <button
               // This ensures that the button loses focus as we switch between
@@ -642,6 +635,13 @@ const Composer = forwardRef<
             >
               <div className='paper-plane'></div>
             </button>
+          )}
+          {!showSendButton && !voiceMessageDisabled && (
+            <AudioRecorder
+              recording={recording}
+              setRecording={setRecording}
+              saveVoiceAsDraft={saveVoiceAsDraft}
+            />
           )}
         </div>
         {/* We don't want to show the app picker when

@@ -59,10 +59,10 @@
     margin-left: 16px;
 
     &.stopRecording {
-      background-color: #e84b4b;
+      background-color: var(--buttonPrimaryBackground);
       color: #fff;
       &:hover {
-        background-color: #ed3333;
+        background-color: var(--buttonPrimaryHover);
       }
     }
 
