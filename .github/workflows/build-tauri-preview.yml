@@ -104,3 +104,12 @@ jobs:
         with:
           name: ${{ matrix.platform }}-${{ matrix.label }}
           path: out/*
+
+  check-webxdc-denied-permissions:
+    name: check the list of denied web permissions for webxdc
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: check the list of denied web permissions for webxdc
+        working-directory: packages/target-tauri
+        run: node ../../bin/webxdc-check-permissions-policy-count.js
