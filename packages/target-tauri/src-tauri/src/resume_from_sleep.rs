@@ -21,7 +21,7 @@ const JUMP_DETECTION_THRESHOLD: Duration = Duration::from_secs(3);
 
 pub(crate) fn start_resume_after_sleep_detector(app: &AppHandle) {
     let cloned_app = app.clone();
-    let _ = spawn(async move {
+    spawn(async move {
         let threshold = PROBE_INTERVAL + JUMP_DETECTION_THRESHOLD;
         let mut last_time = SystemTime::now();
         loop {
