@@ -56,6 +56,9 @@ type MainWindowEvents =
       event: 'showKeybindingsDialog'
     }
   | {
+      event: 'resumeFromSleep'
+    }
+  | {
       event: 'toggleNotifications'
     }
 
@@ -324,6 +327,8 @@ class TauriRuntime implements Runtime {
         this.onShowDialog?.('settings')
       } else if (event.event === 'showKeybindingsDialog') {
         this.onShowDialog?.('keybindings')
+      } else if (event.event === 'resumeFromSleep') {
+        this.onResumeFromSleep?.()
       } else if (event.event === 'toggleNotifications') {
         this.onToggleNotifications?.()
       }

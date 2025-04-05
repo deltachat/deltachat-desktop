@@ -6,6 +6,7 @@ use clipboard::copy_image_to_clipboard;
 #[cfg(desktop)]
 use menus::{handle_menu_event, main_menu::create_main_menu};
 
+use resume_from_sleep::start_resume_after_sleep_detector;
 use settings::{
     get_setting_bool_or, load_and_apply_desktop_settings_on_startup, CONFIG_FILE, MINIMIZE_TO_TRAY,
     MINIMIZE_TO_TRAY_DEFAULT,
@@ -33,6 +34,7 @@ mod i18n;
 // menus are not available on mobile
 #[cfg(desktop)]
 mod menus;
+mod resume_from_sleep;
 mod run_config;
 mod runtime_capabilities;
 mod runtime_info;
@@ -350,6 +352,8 @@ pub fn run() {
             }
 
             runtime_capabilities::add_runtime_capabilies(app.handle())?;
+
+            start_resume_after_sleep_detector(app.handle());
 
             #[cfg(desktop)]
             {
