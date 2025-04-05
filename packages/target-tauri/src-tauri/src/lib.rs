@@ -419,8 +419,9 @@ pub fn run() {
         tauri::RunEvent::Reopen { .. } => {
             // handle clicks on dock on macOS (because on macOS main window never really closes)
             let main_window = app_handle.get_webview_window("main").unwrap();
-            main_window.show().unwrap();
-            main_window.set_focus().unwrap();
+            if let Err(err) = main_window.show().and_then(|_| main_window.set_focus()) {
+                log::error!("failed to focus and show main_window {err:?}");
+            }
         }
         tauri::RunEvent::Exit => {
             log::info!("Exiting: starting cleanup...");
