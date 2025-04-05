@@ -23,7 +23,7 @@
   }
 }
 
-.recordingDuration {
+.audioRecorder {
   display: flex;
   flex: 1;
   flex-direction: row;
@@ -74,5 +74,52 @@
         background-color: var(--buttonSecondaryHover);
       }
     }
+  }
+}
+
+.timer {
+  margin-top: 12px;
+}
+
+.volumeBar {
+  display: flex;
+  flex: 1;
+  position: relative;
+  display: flex;
+  margin: 15px 20px 0 15px;
+  height: 12px;
+  max-width: 250px;
+  min-width: 60px;
+
+  .mask {
+    display: flex;
+    width: 100%;
+    z-index: 10;
+    height: 12px;
+    position: absolute;
+    left: 0;
+
+    .step {
+      display: flex;
+      width: 10%;
+      height: 10px;
+      border: 1px solid #666;
+    }
+  }
+
+  .level {
+    width: 100%;
+    background-color: var(--composerBg);
+    height: 10px;
+    position: absolute;
+    right: 0;
+    z-index: 5;
+  }
+
+  .colorBackground {
+    width: 100%;
+    background: linear-gradient(to right,rgb(52, 237, 52),rgb(52, 237, 52) 60%, orange 80%,red) 90%;
+    height: 10px;
+    position: absolute;
   }
 }

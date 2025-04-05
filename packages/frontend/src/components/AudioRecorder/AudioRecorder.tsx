@@ -3,6 +3,59 @@ import MicRecorder from './MicRecorder'
 import styles from './styles.module.scss'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
+/**
+ * shows a timer in format seconds:minutes
+ */
+const Timer = () => {
+  const [recordingTime, setRecordingTime] = useState(0)
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setRecordingTime(prevTime => prevTime + 1)
+    }, 1000)
+    return () => window.clearInterval(timer)
+  }, [])
+
+  const minutes = Math.floor(recordingTime / 60)
+    .toString()
+    .padStart(2, '0')
+  const seconds = (recordingTime % 60).toString().padStart(2, '0')
+
+  return (
+    <div>
+      <p>
+        {minutes}:{seconds}
+      </p>
+    </div>
+  )
+}
+
+/**
+ * Show a volume meter by stacking 3 div layers
+ * 1. a mask to show a grid of steps
+ * 2. a level layer to show/hide the coloured background
+ * 3. a coloured background with a color gradient from green to red
+ */
+const VolumeMeter = (prop: { volume: number }) => {
+  const steps = 10
+  const volumeBarRef = useRef<HTMLDivElement>(null)
+  const totalWidth = Number(volumeBarRef.current?.clientWidth) || 0
+  // doubling the volume shows a more realistic volume level
+  const level = Math.min(totalWidth * prop.volume * 2, totalWidth)
+  const levelWidth = totalWidth > 0 ? `${totalWidth - level}px` : '100%'
+  console.debug(`volume: ${(prop.volume * 100).toFixed(2)}%`)
+  return (
+    <div ref={volumeBarRef} className={styles.volumeBar}>
+      <div className={styles.mask}>
+        {Array.from({ length: steps }).map((_, index) => (
+          <div key={index} className={styles.step} />
+        ))}
+      </div>
+      <div className={styles.level} style={{ width: `${levelWidth}` }} />
+      <div className={styles.colorBackground} />
+    </div>
+  )
+}
+
 export const AudioRecorder = ({
   recording,
   setRecording,
@@ -13,49 +66,24 @@ export const AudioRecorder = ({
   saveVoiceAsDraft: (blob: Blob) => void
 }) => {
   const tx = useTranslationFunction()
+  const [volume, setVolume] = useState(0)
   const recorder = useRef<MicRecorder | null>(null)
-  if (!recorder.current) {
-    recorder.current = new MicRecorder({
-      bitRate: 128,
-    })
-  }
-
-  const [recordingTime, setRecordingTime] = useState(0)
-
-  const minutes = recordingTime / 60
-  const secondsDisplay = Math.ceil((minutes - Math.floor(minutes)) * 60)
-    .toString()
-    .padStart(2, '0')
-  const minutesDisplay = Math.floor(minutes).toString().padStart(2, '0')
-
-  useEffect(() => {
-    let timer: number | undefined
-
-    if (recording) {
-      timer = window.setInterval(() => {
-        setRecordingTime((prevTime: number) => prevTime + 1)
-      }, 1000)
-    } else {
-      setRecordingTime(0)
-    }
-
-    return () => {
-      if (timer) {
-        window.clearInterval(timer)
-      }
-    }
-  }, [recording])
 
   const onRecordingStart = () => {
+    if (!recorder.current) {
+      recorder.current = new MicRecorder(setVolume, {
+        bitRate: 128,
+      })
+      window.setTimeout(() => {
+        if (!recorder.current?.audioSignalDetected) {
+          console.error('No sound detected')
+        }
+      }, 1000)
+    }
     setRecording(true)
-    recorder.current
-      ?.start()
-      .then(() => {
-        // something else
-      })
-      .catch((err: any) => {
-        console.error(err)
-      })
+    recorder.current?.start().catch((err: any) => {
+      console.error(err)
+    })
   }
   const onRecordingStop = () => {
     setRecording(false)
@@ -83,16 +111,14 @@ export const AudioRecorder = ({
     )
   } else {
     return (
-      <div className={styles.recordingDuration}>
+      <div className={styles.audioRecorder}>
         <button
           className={styles.microphoneButton}
           onClick={() => onRecordingStop()}
         >
           <span />
         </button>
-        <p>
-          {minutesDisplay} : {secondsDisplay}
-        </p>
+        <Timer />
         <button className={styles.cancel} onClick={() => onRecordingCancel()}>
           {tx('cancel')}
         </button>
@@ -102,6 +128,7 @@ export const AudioRecorder = ({
         >
           {tx('ok')}
         </button>
+        <VolumeMeter volume={volume} />
       </div>
     )
   }

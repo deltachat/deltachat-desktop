@@ -19,6 +19,8 @@ interface MicRecorderConfig {
  * codec weba (Web Audio) which is not supported by iOS
  */
 class MicRecorder {
+  public audioSignalDetected: boolean = false
+  private onVolumeChange: (volume: number) => void
   private config: MicRecorderConfig
   private activeStream: MediaStream | null
   private context: AudioContext | null
@@ -28,14 +30,17 @@ class MicRecorder {
   private timerToStart?: number
   private lameEncoder: Encoder | null
 
-  constructor(config: MicRecorderConfig = {}) {
+  constructor(
+    onVolumeChange: (volume: number) => void,
+    config: MicRecorderConfig = {}
+  ) {
     this.config = {
       bitRate: 128,
       startRecordingAt: 300,
       deviceId: null,
       ...config,
     }
-
+    this.onVolumeChange = onVolumeChange
     this.activeStream = null
     this.context = null
     this.microphone = null
@@ -76,6 +81,7 @@ class MicRecorder {
         // Send microphone data to LAME for MP3 encoding while recording.
         this.lameEncoder.encode(event.inputBuffer.getChannelData(0))
       }
+      this.calculateVolume(event.inputBuffer.getChannelData(0))
     }
 
     // Begin retrieving microphone data.
@@ -154,6 +160,22 @@ class MicRecorder {
         this.lameEncoder?.clearBuffer()
       }
     })
+  }
+
+  /**
+   * Return the volume of the microphone
+   * @return {number}
+   */
+  calculateVolume(input: any) {
+    let i
+    let sum = 0.0
+    for (i = 0; i < input.length; ++i) {
+      sum += input[i] * input[i]
+    }
+    if (sum > 0) {
+      this.audioSignalDetected = true
+    }
+    this.onVolumeChange(Math.sqrt(sum / input.length))
   }
 }
 
