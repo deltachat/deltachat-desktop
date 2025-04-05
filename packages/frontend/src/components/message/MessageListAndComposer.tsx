@@ -111,19 +111,26 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     regularMessageInputRef
   )
 
-  const onDrop = async (e: React.DragEvent<any>) => {
+  runtime.setDragListener((e) => {
+    if (e.payload.type == "drop") {
+      handleDrop(e.payload.paths)
+    }
+  });
+
+  const onDrop = (e: React.DragEvent<any> ) => {
+    e.preventDefault()
+    e.stopPropagation()
+    handleDrop(e.dataTransfer.files)
+  }
+  const handleDrop = async (fileList: FileList) => {
     if (chat === null) {
       log.warn('dropped something, but no chat is selected')
       return
     }
 
-    e.preventDefault()
-    e.stopPropagation()
 
     const sanitizedFileList: File[] = []
     {
-      const fileList: FileList =
-        /* (e.target as any).files */ e.dataTransfer.files
       for (let i = 0; i < fileList.length; i++) {
         const file = fileList[i]
         if (runtime.isDroppedFileFromOutside(file)) {
