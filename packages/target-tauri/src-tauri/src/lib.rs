@@ -205,7 +205,7 @@ pub fn run() {
         )
         .register_asynchronous_uri_scheme_protocol("webxdc", webxdc::webxdc_scheme::webxdc_protocol)
         .setup(move |app| {
-            app.manage(run_config.clone());
+            app.manage(run_config);
 
             // Create missing directories for iOS (quick fix, better fix this upstream in tauri)
             #[cfg(target_os = "ios")]

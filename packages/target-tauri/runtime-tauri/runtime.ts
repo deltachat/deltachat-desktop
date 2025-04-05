@@ -153,6 +153,7 @@ class TauriRuntime implements Runtime {
       contentProtectionEnabled: false,
       locale: null, // if this is null, the system chooses the system language that electron reports
       notifications: true,
+      syncAllAccounts: true,
     } satisfies Partial<DesktopSettingsType>
 
     const frontendOnly = {
@@ -164,7 +165,6 @@ class TauriRuntime implements Runtime {
       enableOnDemandLocationStreaming: false,
       chatViewBgImg: undefined,
       activeTheme: 'system',
-      syncAllAccounts: true,
       experimentalEnableMarkdownInMessages: false,
       enableRelatedChats: false,
       galleryImageKeepAspectRatio: false,
