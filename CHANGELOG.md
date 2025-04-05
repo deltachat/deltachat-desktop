@@ -12,7 +12,7 @@
 - tauri: experimental: make it compile for android #4871
 - `Cmd + N` shortcut to open new chat on macOS #4901
 - tauri: add cli interface: `--help`, `--version`, and developer options (like `--dev-mode`) #4908
-- tauri: resume from sleep #4926
+- tauri: handle resume from sleep #4926
 
 
 ### Changed
