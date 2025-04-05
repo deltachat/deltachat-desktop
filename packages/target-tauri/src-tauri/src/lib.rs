@@ -418,11 +418,9 @@ pub fn run() {
         #[cfg(target_os = "macos")]
         tauri::RunEvent::Reopen { .. } => {
             // handle clicks on dock on macOS (because on macOS main window never really closes)
-            app_handle
-                .get_webview_window("main")
-                .unwrap()
-                .show()
-                .unwrap();
+            let main_window = app_handle.get_webview_window("main").unwrap();
+            main_window.show().unwrap();
+            main_window.set_focus().unwrap();
         }
         tauri::RunEvent::Exit => {
             log::info!("Exiting: starting cleanup...");

@@ -58,6 +58,9 @@ pub(crate) fn build_tray_icon(app: &AppHandle) -> anyhow::Result<TrayIcon> {
                         if let Err(err) = main_window.show() {
                             log::error!("failed to restore window after click on tray icon: {err}")
                         }
+                        if let Err(err) = main_window.set_focus() {
+                            log::error!("failed to focus window after click on tray icon: {err}")
+                        }
                     }
                 }
             });
