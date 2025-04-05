@@ -33,5 +33,6 @@ export function getDefaultState(): DesktopSettingsType {
     useSystemUIFont: false,
     contentProtectionEnabled: false,
     isMentionsEnabled: true,
+    autostart: true,
   }
 }

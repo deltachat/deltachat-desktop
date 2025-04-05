@@ -59,5 +59,17 @@
   },
   "reset_encryption_confirm": {
     "message": "Forget encryption key for this contact."
+  },
+  "pref_autostart": {
+    "message": "Autostart"
+  },
+  "pref_autostart_registered": {
+    "message": "Delta Chat is currently registered to startup with the system"
+  },
+  "pref_autostart_not_registered": {
+    "message": "Delta Chat is not registered to startup with the system"
+  },
+  "pref_autostart_not_supported": {
+    "message": "Autostart is not supported on this system"
   }
 }

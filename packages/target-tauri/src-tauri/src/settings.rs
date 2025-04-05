@@ -1,5 +1,5 @@
 use anyhow::Context;
-use log::warn;
+use log::{error, warn};
 use tauri::{AppHandle, Manager};
 use tauri_plugin_store::StoreExt;
 
@@ -19,6 +19,10 @@ pub(crate) const HTML_EMAIL_WARNING_DEFAULT: bool = true;
 pub(crate) const HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_KEY: &str =
     "HTMLEmailAlwaysLoadRemoteContent";
 pub(crate) const HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_DEFAULT: bool = false;
+pub(crate) const AUTOSTART_KEY: &str = "autostart";
+// IDEA: maybe we need to have more advanced logic for the default,
+// if we have other builds like portable builds for example
+pub(crate) const AUTOSTART_DEFAULT: bool = cfg!(not(debug_assertions));
 
 // runtime calls this when desktop settings change
 #[tauri::command]
@@ -31,6 +35,7 @@ pub async fn change_desktop_settings_apply_side_effects(
         // "minimizeToTray" => // TODO
         CONTENT_PROTECTION_KEY => apply_content_protection(&app),
         LOCALE_KEY => apply_language_change(&app).await,
+        AUTOSTART_KEY => apply_autostart(&app),
         _ => Ok(()),
     }
     .map_err(|err| format!("{err:#}"))
@@ -40,6 +45,10 @@ pub(crate) fn load_and_apply_desktop_settings_on_startup(app: &AppHandle) -> any
     apply_zoom_factor(app)?;
     // TODO: activate tray icon based on `minimizeToTray`
     apply_content_protection(app)?;
+    if let Err(err) = apply_autostart(&app).context("failed to apply autostart") {
+        // Not too critical, let's just log.
+        error!("{err}")
+    };
     Ok(())
 }
 
@@ -145,4 +154,41 @@ pub(crate) fn get_setting_bool_or(
     setting_load_result
         .and_then(|v| v.as_bool())
         .unwrap_or(default_value)
+}
+
+#[cfg(not(desktop))]
+pub(crate) fn apply_autostart(app: &AppHandle) -> anyhow::Result<()> {
+    Ok(())
+}
+
+#[cfg(desktop)]
+pub(crate) fn apply_autostart(app: &AppHandle) -> anyhow::Result<()> {
+    use tauri_plugin_autostart::ManagerExt;
+    let store = app.store(CONFIG_FILE)?;
+    if store.get(AUTOSTART_KEY).is_none() {
+        store.set(AUTOSTART_KEY, AUTOSTART_DEFAULT);
+    }
+    let enable = get_setting_bool_or(store.get(AUTOSTART_KEY), AUTOSTART_DEFAULT);
+
+    let autostart_manager = app.autolaunch();
+
+    let is_enabled = autostart_manager
+        .is_enabled()
+        .context("failed to check whether autostart is enabled")?;
+    if enable == is_enabled {
+        // If we don't return here, `autostart_manager.disable()` below
+        // will return an error, at least on Windows.
+        return Ok(());
+    }
+
+    if enable {
+        autostart_manager
+            .enable()
+            .context("failed to enable autostart")?;
+    } else {
+        autostart_manager
+            .disable()
+            .context("failed to disable autostart")?;
+    }
+    Ok(())
 }
