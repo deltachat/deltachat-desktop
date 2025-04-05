@@ -1,12 +1,12 @@
-// Detector to find out whether computer resumed from sleep
-//
-// Why?
-// internet connection and imap connection gets broken by sleep
-// and needs to be reconnected
-//
-// How?
-// While we could have looked into talking with system apis (like https://github.com/pewsheen/psp),
-// For now we choose a much simpler solution: check for jumps in system time
+//! Detector to find out whether computer resumed from sleep
+//!
+//! Why?
+//! internet connection and imap connection gets broken by sleep
+//! and needs to be reconnected
+//!
+//! How?
+//! While we could have looked into talking with system apis (like https://github.com/pewsheen/psp),
+//! For now we choose a much simpler solution: check for jumps in system time
 
 use std::time::{Duration, SystemTime};
 
@@ -43,10 +43,10 @@ pub(crate) fn start_resume_after_sleep_detector(app: &AppHandle) {
                     .emit_event(MainWindowEvents::ResumeFromSleep)
                     .await
                 {
-                    log::error!("failed to call inform frontend about resume from sleep: {err:?}");
+                    log::error!("failed to inform frontend about resume from sleep: {err:?}");
                 }
             }
-            last_time = now;
+            last_time = SystemTime::now();
         }
     });
 }
