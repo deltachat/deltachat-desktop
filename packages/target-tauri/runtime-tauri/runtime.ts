@@ -506,7 +506,16 @@ class TauriRuntime implements Runtime {
     return invoke('change_lang', { locale })
   }
   setBadgeCounter(value: number): void {
-    getCurrentWindow().setBadgeCount(value === 0 ? undefined : value)
+    const window = getCurrentWindow()
+
+    // According to the docs, `setBadgeCount` is unsupported on Windows,
+    // and we should use `setOverlayIcon` instead.
+    window.setBadgeCount(value === 0 ? undefined : value)
+    // Yes, this won't show the count.
+    window.setOverlayIcon?.(
+      value === 0 ? undefined : 'images/tray/unread-badge.png'
+    )
+
     invoke('update_tray_icon_badge', { counter: value })
   }
   showNotification(_data: DcNotification): void {
