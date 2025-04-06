@@ -1,4 +1,5 @@
 import { invoke } from '@tauri-apps/api/core'
+import type { Theme } from '@deltachat-desktop/shared/shared-types'
 
 const subjectElement = document.getElementById('subject')!
 const fromElement = document.getElementById('sender')!
@@ -59,3 +60,30 @@ networkMoreButton.onclick = _ => {
   // const { x, y } = event
   invoke('html_email_open_menu')
 }
+;(window as any).updateTheme = async () => {
+  let themeAddress = await invoke<string>('get_current_active_theme')
+  if (themeAddress === 'system') {
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      themeAddress = 'dc:dark'
+    } else {
+      themeAddress = 'dc:light'
+    }
+  }
+  const [_theme, theme_content] = await invoke<
+    [theme: Theme, theme_content: string]
+  >('load_theme', { themeAddress })
+
+  const themeVars = window.document.getElementById('theme-vars')
+  if (!themeVars) {
+    throw new Error('#theme-vars element not found')
+  }
+  themeVars.innerText = theme_content
+}
+window
+  .matchMedia('(prefers-color-scheme: dark)')
+  .addEventListener('change', event => {
+    // ignore-console-log
+    console.debug('system theme changed:', { dark_theme: event.matches })
+    ;(window as any).updateTheme()
+  })
+;(window as any).updateTheme()

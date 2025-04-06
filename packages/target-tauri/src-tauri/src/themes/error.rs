@@ -6,6 +6,8 @@ pub enum Error {
     Tauri(#[from] tauri::Error),
     #[error(transparent)]
     Io(#[from] std::io::Error),
+    #[error(transparent)]
+    Store(#[from] tauri_plugin_store::Error),
     #[error("theme file does not have the css extension")]
     NoCssExtension,
     #[error("Invalid RegEx Pattern")]
@@ -20,7 +22,7 @@ pub enum Error {
     AssetLoadFailed,
     #[error("Not a valid theme address '{0}'")]
     InvalidAddress(String),
-    #[error("Not a valid theme address prefix '{0}' in '{1}'")]
+    #[error("Not a valid theme address prefix `{0}` in `{1}`")]
     InvalidAddressPrefixUnknown(String, String),
     #[error(transparent)]
     Utf8(#[from] Utf8Error),
