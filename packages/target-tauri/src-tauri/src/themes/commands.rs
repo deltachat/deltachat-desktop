@@ -35,7 +35,7 @@ pub async fn get_available_themes(app: AppHandle) -> Result<Vec<Theme>, Error> {
             #[cfg(debug_assertions)]
             {
                 read_theme_dir(
-                    BUILT_IN_THEMES_PREFIX,
+                    crate::themes::themes::BUILT_IN_THEMES_PREFIX,
                     &app.path()
                         .resource_dir()?
                         .join("../../packages/target-tauri/html-dist/themes"),
