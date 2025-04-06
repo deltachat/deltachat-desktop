@@ -35,6 +35,7 @@
   - Synchronize contact name changes
 - hide 'show classic email' for chatmail, move down otherwise #4902
 - profile view redesign #4897
+- update `sass` from `1.77.8` to `1.86.3`
 
 ### Fixed
 - tauri: improve security #4826, #4936

@@ -1,15 +1,19 @@
+@use 'sass:color';
+
 $hover-contrast-change: 2%;
 
 @function changeContrast($color, $factor) {
-  @if lightness($color) < 50 {
-    @return lighten($color, $factor);
+  @if color.channel($color, 'lightness', $space: hsl) < 50 {
+    @return color.adjust($color, $lightness: $factor);
   } @else {
-    @return darken($color, $factor);
+    @return color.adjust($color, $lightness: -$factor);
   }
 }
 
 @function colorToRGB($color) {
-  @return red($color), green($color), blue($color);
+  @return color.channel($color, 'red', $space: rgb),
+    color.channel($color, 'green', $space: rgb),
+    color.channel($color, 'blue', $space: rgb);
 }
 
 :root {
@@ -232,7 +236,7 @@ $hover-contrast-change: 2%;
   --textPrimary: #{$textPrimary};
   --textSecondary: #{$textSecondary};
 
-  @if lightness($bgPrimary) < 50 {
+  @if color.channel($bgPrimary, 'lightness', $space: hsl) < 50 {
     // dark theme
     --scrollbarThumb: #{rgba(white, $scrollbarTransparency)};
     --scrollbarThumbHover: #{rgba(white, $scrollbarTransparency + 0.14)};
