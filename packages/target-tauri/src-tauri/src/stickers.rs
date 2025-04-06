@@ -1,3 +1,5 @@
+use std::path::Path;
+
 use anyhow::Context;
 use log::error;
 use percent_encoding::percent_decode_str;
@@ -52,9 +54,15 @@ pub(crate) fn delta_stickers_protocol<R: tauri::Runtime>(
             if let (Some(account_folder), Some(pack_folder), Some(file_name)) = parsed {
                 // trace!("dcsticker {account_folder} {pack_folder} {file_name}");
 
-                if matches!(pack_folder, ".." | "." | "") {
-                    anyhow::bail!("path escape attempt detected")
-                }
+                let pack_folder = percent_decode_str(pack_folder).decode_utf8()?;
+                let file_name = percent_decode_str(file_name).decode_utf8()?;
+                // Sanitize path: prevent path traversal and absolute paths.
+                let pack_folder = Path::new(pack_folder.as_ref())
+                    .file_name()
+                    .context(format!("invalid pack folder {pack_folder}"))?;
+                let file_name = Path::new(file_name.as_ref())
+                    .file_name()
+                    .context(format!("invalid file name {file_name}"))?;
 
                 // get delta chat
                 let dc = app_state_deltachat.read().await;
@@ -73,13 +81,11 @@ pub(crate) fn delta_stickers_protocol<R: tauri::Runtime>(
                     })
                     .context("account not found")?;
 
-                let decoded_packname = percent_decode_str(pack_folder).decode_utf8()?.into_owned();
-                let decoded_filename = percent_decode_str(file_name).decode_utf8()?.into_owned();
                 let file_path = account
                     .get_blobdir()
                     .join("../stickers")
-                    .join(decoded_packname)
-                    .join(decoded_filename);
+                    .join(pack_folder)
+                    .join(file_name);
                 // trace!("file_path: {file_path:?}");
 
                 match fs::read(&file_path).await {
