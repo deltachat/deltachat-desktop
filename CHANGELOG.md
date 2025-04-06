@@ -17,6 +17,7 @@
 - tauri: add `--watch-translations` cli flag #4925
 - tauri: add tray icon #4922
 - tauri: add `--minimized` flag #4922
+- tauri: add theming #4940
 
 
 ### Changed
@@ -42,7 +43,7 @@
 - update translations (2025-04-09)
 - show signature/bio in settings #4984
 - change to new transport API #4849
-- update `sass` from `1.77.8` to `1.86.3`
+- update `sass` from `1.77.8` to `1.86.3` #4940
 
 ### Fixed
 - tauri: improve security #4826, #4936, #4937, #4944
