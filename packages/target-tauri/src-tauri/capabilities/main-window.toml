@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 "$schema" = "../gen/schemas/desktop-schema.json"
 
 identifier = "main-window"
