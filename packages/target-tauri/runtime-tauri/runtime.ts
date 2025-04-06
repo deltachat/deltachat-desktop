@@ -144,7 +144,6 @@ class TauriRuntime implements Runtime {
     } satisfies Partial<DesktopSettingsType>
 
     const frontendAndTauri = {
-      // TODO field 1
       zoomFactor: 1, // ? not sure yet
       minimizeToTray: true,
       lastSaveDialogLocation: undefined,
@@ -153,11 +152,11 @@ class TauriRuntime implements Runtime {
       HTMLEmailAlwaysLoadRemoteContent: false,
       contentProtectionEnabled: false,
       locale: null, // if this is null, the system chooses the system language that electron reports
+      notifications: true,
+      syncAllAccounts: true,
     } satisfies Partial<DesktopSettingsType>
 
     const frontendOnly = {
-      // TODO field 2
-      notifications: true,
       showNotificationContent: true,
       enterKeySends: false,
       enableAVCalls: false,
@@ -166,7 +165,6 @@ class TauriRuntime implements Runtime {
       enableOnDemandLocationStreaming: false,
       chatViewBgImg: undefined,
       activeTheme: 'system',
-      syncAllAccounts: true,
       experimentalEnableMarkdownInMessages: false,
       enableRelatedChats: false,
       galleryImageKeepAspectRatio: false,

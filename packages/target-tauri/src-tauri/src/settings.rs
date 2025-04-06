@@ -23,6 +23,8 @@ pub(crate) const MINIMIZE_TO_TRAY: &str = "minimizeToTray";
 pub(crate) const MINIMIZE_TO_TRAY_DEFAULT: bool = true;
 pub(crate) const NOTIFICATIONS: &str = "notifications";
 pub(crate) const NOTIFICATIONS_DEFAULT: bool = true;
+pub(crate) const SYNC_ALL_ACCOUNTS: &str = "syncAllAccounts";
+pub(crate) const SYNC_ALL_ACCOUNTS_DEFAULT: bool = true;
 
 // runtime calls this when desktop settings change
 #[tauri::command]
