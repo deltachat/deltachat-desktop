@@ -28,13 +28,7 @@ pub(crate) fn delta_blobs_protocol<R: tauri::Runtime>(
             .clone()
     };
 
-    if ctx.webview_label().ends_with("-mail") {
-        error!(
-            "prevented html email from accessing dcblob:// scheme (webview label: {})",
-            ctx.webview_label()
-        );
-        return;
-    } else if ctx.webview_label() != "main" {
+    if ctx.webview_label() != "main" {
         error!(
             "prevented other window from accessing dcblob:// scheme (webview label: {})",
             ctx.webview_label()
