@@ -414,7 +414,7 @@ class TauriRuntime implements Runtime {
 
     if (matches) {
       // Keep in mind that the sticker pack folder and sticker name
-      // are basically arbitrary.
+      // can include arbitrary characters.
       const packName = encodeURIComponent(matches[3])
       const filename = encodeURIComponent(matches[4])
       return `${this.runtime_info?.tauriSpecific?.scheme.stickers}${matches[2]}/${packName}/${filename}`
