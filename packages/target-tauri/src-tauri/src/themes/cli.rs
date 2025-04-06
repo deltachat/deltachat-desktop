@@ -1,6 +1,7 @@
 use std::time::Duration;
 
 use tauri::{AppHandle, Manager};
+use tokio::time::sleep;
 
 use crate::{
     run_config::RunConfig, state::main_window_channels::MainWindowEvents,
@@ -17,6 +18,8 @@ pub fn run_cli(app: &AppHandle, run_config: &RunConfig) -> Result<(), Error> {
         let callback = Box::new(move || {
             let app_clone = app_clone.clone();
             async move {
+                // wait until it is really saved
+                sleep(Duration::from_millis(160)).await;
                 if let Err(err) = app_clone
                     .state::<MainWindowChannels>()
                     .emit_event(MainWindowEvents::OnThemeUpdate)
