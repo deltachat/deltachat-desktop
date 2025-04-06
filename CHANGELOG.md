@@ -53,6 +53,7 @@
 - fix double escape bypasses dialog attribute `canEscapeKeyClose={false}`
 - fix order when sending multiple files at once #4895
 - tauri: fix: sticker picker previews not working
+- tauri: fix emoji picker being super ugly
 
 <a id="1_56_0"></a>
 
