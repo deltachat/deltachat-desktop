@@ -27,6 +27,8 @@ pub(crate) const NOTIFICATIONS: &str = "notifications";
 pub(crate) const NOTIFICATIONS_DEFAULT: bool = true;
 pub(crate) const SYNC_ALL_ACCOUNTS: &str = "syncAllAccounts";
 pub(crate) const SYNC_ALL_ACCOUNTS_DEFAULT: bool = true;
+pub(crate) const THEME: &str = "activeTheme";
+pub(crate) const THEME_DEFAULT: &str = "system";
 
 // runtime calls this when desktop settings change
 #[tauri::command]

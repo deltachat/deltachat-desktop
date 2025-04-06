@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 "$schema" = "../gen/schemas/desktop-schema.json"
 
 identifier = "main-window"
@@ -17,6 +18,7 @@ permissions = [
     "store:allow-get-store",
     "store:allow-entries",
     "store:allow-save",
+    "store:allow-get",
     "store:allow-set",
     "store:allow-delete",
     # borderless titlebar
@@ -65,4 +67,8 @@ permissions = [
     "allow-open-html-window",
 
     "allow-update-tray-icon-badge",
+
+    "allow-get-available-themes",
+    "allow-get-current-active-theme",
+    "allow-get-theme",
 ]

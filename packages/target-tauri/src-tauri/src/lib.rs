@@ -43,6 +43,7 @@ mod settings;
 mod state;
 mod stickers;
 mod temp_file;
+mod themes;
 mod tray;
 mod util;
 mod webxdc;
@@ -204,6 +205,8 @@ pub fn run() {
             // not available on mobile
             #[cfg(desktop)]
             state::tray_manager::update_tray_icon_badge,
+            themes::commands::get_available_themes,
+            themes::commands::load_theme,
         ])
         .register_asynchronous_uri_scheme_protocol(
             "webxdc-icon",
