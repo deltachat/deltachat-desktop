@@ -68,5 +68,6 @@ permissions = [
     "allow-update-tray-icon-badge",
 
     "allow-get-available-themes",
+    "allow-get-current-active-theme",
     "allow-load-theme",
 ]
