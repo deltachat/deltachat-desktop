@@ -16,7 +16,7 @@
 - tauri: add `--watch-translations` cli flag #4925
 - tauri: add tray icon #4922
 - tauri: add `--minimized` flag #4922
-
+- tauri: add theming #4940
 
 ### Changed
 - switch to account the webxdc is from when sending to chat (tauri and electron edition) #4740
@@ -35,7 +35,7 @@
   - Synchronize contact name changes
 - hide 'show classic email' for chatmail, move down otherwise #4902
 - profile view redesign #4897
-- update `sass` from `1.77.8` to `1.86.3`
+- update `sass` from `1.77.8` to `1.86.3` #4940
 
 ### Fixed
 - tauri: improve security #4826, #4936
