@@ -221,7 +221,7 @@ pub fn run() {
         )
         .register_asynchronous_uri_scheme_protocol("webxdc", webxdc::webxdc_scheme::webxdc_protocol)
         .setup(move |app| {
-            app.manage(run_config);
+            app.manage(run_config.clone());
 
             // Create missing directories for iOS (quick fix, better fix this upstream in tauri)
             #[cfg(target_os = "ios")]
@@ -384,6 +384,8 @@ pub fn run() {
             if run_config.minimized_window {
                 let _ = main_window.hide();
             }
+
+            themes::cli::run_cli(&app.handle(), &run_config)?;
 
             Ok(())
         })
