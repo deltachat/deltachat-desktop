@@ -17,6 +17,14 @@ pub(crate) fn delta_stickers_protocol<R: tauri::Runtime>(
     // - Mac, linux, iOS: dcsticker://<account folder name>/<sticker pack>/<sticker filename>
     // - windows, android: http://dcsticker.localhost/<account folder name>/<sticker pack>/<sticker filename>
 
+    if ctx.webview_label() != "main" {
+        error!(
+            "prevented other window from accessing dcsticker:// scheme (webview label: {})",
+            ctx.webview_label()
+        );
+        return;
+    }
+
     let app_state_deltachat = {
         ctx.app_handle()
             .state::<DeltaChatAppState>()
