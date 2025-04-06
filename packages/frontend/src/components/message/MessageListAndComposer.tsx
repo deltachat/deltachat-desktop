@@ -111,13 +111,43 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     regularMessageInputRef
   )
 
-  runtime.setDragListener((e) => {
-    if (e.payload.type == "drop") {
-      handleDrop(e.payload.paths)
+  runtime.setDragListener(async (e) => {
+    if (e.payload.type != "drop") {
+      return
+    }
+    if (chat === null) {
+      log.warn('dropped something, but no chat is selected')
+      return
+    }
+
+    const paths = e.payload.paths
+    const forbiddenPathRegEx = /DeltaChat\/.+?\.sqlite-blobs\//gi
+    const sanitized = paths.filter((path) => {
+      let val = !forbiddenPathRegEx.test(path.replace('\\', '/'))
+      if (!val) {
+        log.warn('Prevented a file from being send again while dragging it out', path)
+      }
+      return val
+    })
+
+    if (sanitized.length == 1) {
+      const acc = await BackendRemote.rpc.getSelectedAccountId()
+      if (acc === null) {
+        console.error('No account selected')
+        return
+      }
+      const blob_path = await BackendRemote.rpc.copyToBlobDir(acc, sanitized[0])
+
+      const msgViewType: Viewtype = blob_path.endsWith('png')
+        ? 'Image'
+        : 'File'
+      await addFileToDraft(blob_path, sanitized[0].split('/').pop() as string /* check this */, msgViewType)
+    } else if (sanitized.length > 1) {
+
     }
   });
 
-  const onDrop = (e: React.DragEvent<any> ) => {
+  const onDrop = (e: React.DragEvent<any>) => {
     e.preventDefault()
     e.stopPropagation()
     handleDrop(e.dataTransfer.files)
