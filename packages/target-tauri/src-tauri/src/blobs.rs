@@ -1,3 +1,5 @@
+use std::path::Path;
+
 use anyhow::Context;
 use log::error;
 use percent_encoding::percent_decode_str;
@@ -56,6 +58,13 @@ pub(crate) fn delta_blobs_protocol<R: tauri::Runtime>(
 
             if let (Some(account_folder), Some(file_name)) = parsed {
                 // trace!("dcblob {account_folder} {file_name}");
+
+                let file_name = percent_decode_str(file_name).decode_utf8()?;
+                // Sanitize file name: prevent path traversal and absolute paths.
+                let file_name = Path::new(file_name.as_ref())
+                    .file_name()
+                    .context(format!("invalid file name {file_name}"))?;
+
                 // get delta chat
                 let dc = app_state_deltachat.read().await;
 
@@ -73,8 +82,7 @@ pub(crate) fn delta_blobs_protocol<R: tauri::Runtime>(
                     })
                     .context("account not found")?;
 
-                let decoded_filename = percent_decode_str(file_name).decode_utf8()?.into_owned();
-                let file_path = account.get_blobdir().join(&decoded_filename);
+                let file_path = account.get_blobdir().join(file_name);
                 // trace!("file_path: {file_path:?}");
 
                 match fs::read(&file_path).await {
@@ -87,7 +95,9 @@ pub(crate) fn delta_blobs_protocol<R: tauri::Runtime>(
                                 http::header::CONTENT_TYPE,
                                 MimeType::parse_with_fallback(
                                     &blob,
-                                    &decoded_filename,
+                                    file_name.to_str().context(format!(
+                                        "failed to convert blob file name {file_name:?} to str"
+                                    ))?,
                                     MimeType::OctetStream,
                                 ),
                             )
