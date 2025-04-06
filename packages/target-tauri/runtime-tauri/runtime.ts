@@ -99,6 +99,9 @@ export class TauriDeltaChat extends BaseDeltaChat<TauriTransport> {
 }
 
 class TauriRuntime implements Runtime {
+  constructor() {
+    this.getActiveTheme = this.getActiveTheme.bind(this)
+  }
   emitUIFullyReady(): void {
     invoke('ui_frontend_ready')
   }
@@ -151,6 +154,7 @@ class TauriRuntime implements Runtime {
       HTMLEmailAskForRemoteLoadingConfirmation: true,
       HTMLEmailAlwaysLoadRemoteContent: false,
       contentProtectionEnabled: false,
+      activeTheme: 'system',
       locale: null, // if this is null, the system chooses the system language that electron reports
       notifications: true,
       syncAllAccounts: true,
@@ -164,7 +168,6 @@ class TauriRuntime implements Runtime {
       enableChatAuditLog: false,
       enableOnDemandLocationStreaming: false,
       chatViewBgImg: undefined,
-      activeTheme: 'system',
       experimentalEnableMarkdownInMessages: false,
       enableRelatedChats: false,
       galleryImageKeepAspectRatio: false,
@@ -213,6 +216,8 @@ class TauriRuntime implements Runtime {
       devtools: boolean
       dev_mode: boolean
       forced_tray_icon: boolean
+      theme: string | null
+      theme_watch: boolean
     }>('get_frontend_run_config')
     const rc_config: RC_Config = {
       'log-debug': config.log_debug,
@@ -220,8 +225,8 @@ class TauriRuntime implements Runtime {
       devmode: config.dev_mode,
       minimized: config.forced_tray_icon,
 
-      theme: undefined,
-      'theme-watch': false,
+      theme: config.theme || undefined,
+      'theme-watch': config.theme_watch,
       'translation-watch': false,
 
       // does not exist in delta tauri
@@ -331,6 +336,12 @@ class TauriRuntime implements Runtime {
         this.onToggleNotifications?.()
       }
     }
+    window
+      .matchMedia('(prefers-color-scheme: dark)')
+      .addEventListener('change', event => {
+        this.log.debug('system theme changed:', { dark_theme: event.matches })
+        this.onThemeUpdate?.()
+      })
   }
   reloadWebContent(): void {
     // for now use the browser method as long as it is sufficient
@@ -552,11 +563,26 @@ class TauriRuntime implements Runtime {
     throw new Error('Method not implemented.46')
   }
   getAvailableThemes(): Promise<Theme[]> {
-    throw new Error('Method not implemented.47')
+    return invoke<Theme[]>('get_available_themes')
   }
   async getActiveTheme(): Promise<{ theme: Theme; data: string } | null> {
-    this.log.error('Method not implemented.48')
-    return null
+    let themeAddress = await this.store.get('activeTheme')
+    if (themeAddress === 'system') {
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        themeAddress = 'dc:dark'
+      } else {
+        themeAddress = 'dc:light'
+      }
+    }
+    try {
+      const [theme, theme_content] = await invoke<
+        [theme: Theme, theme_content: string]
+      >('load_theme', { themeAddress })
+      return { theme, data: theme_content }
+    } catch (err) {
+      this.log.error('failed to getActiveTheme:', err)
+      return null
+    }
   }
   saveBackgroundImage(
     _file: string,
