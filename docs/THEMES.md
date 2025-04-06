@@ -172,7 +172,6 @@ Now build your theme (see sections above on how to do that), select your custom 
 
 <img src="./doc-assets/emoji-picker-with-noto-mono-color-emoji.png" width="200px" />
 
-
 ### Paths on delta tauri:
 
 - macOS:`~/Library/Application Support/chat.delta.desktop.tauri/custom-themes`
