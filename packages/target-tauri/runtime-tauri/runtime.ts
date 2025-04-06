@@ -61,6 +61,9 @@ type MainWindowEvents =
   | {
       event: 'toggleNotifications'
     }
+  | {
+      event: 'onThemeUpdate'
+    }
 
 const events = new Channel<MainWindowEvents>()
 const jsonrpc = new Channel<yerpc.Message>()
@@ -334,6 +337,9 @@ class TauriRuntime implements Runtime {
         this.onResumeFromSleep?.()
       } else if (event.event === 'toggleNotifications') {
         this.onToggleNotifications?.()
+      } else if (event.event === 'onThemeUpdate') {
+        this.log.debug('on theme update')
+        this.onThemeUpdate?.()
       }
     }
     window

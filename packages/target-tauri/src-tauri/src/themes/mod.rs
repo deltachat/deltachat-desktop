@@ -3,6 +3,7 @@ use std::path::PathBuf;
 use error::Error;
 use tauri::{AppHandle, Manager};
 
+pub mod cli;
 pub mod commands;
 mod error;
 mod themes;

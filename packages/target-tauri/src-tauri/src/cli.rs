@@ -29,9 +29,9 @@ pub struct Cli {
     /// set a specific theme (see THEMES.md)
     #[arg(long)]
     theme: Option<String>,
-    /// enable auto-reload for the active theme
+    /// enable auto-reload when themes change
     #[arg(long)]
-    theme_watch: bool,
+    watch_themes: bool,
     /// enable auto-reload for translations.
     /// You can use it in combination with the env var `DELTACHAT_LOCALE_DIR`.
     #[arg(long)]
@@ -80,6 +80,6 @@ Webview: {:?}",
         // even when Delta Chat has no visible window
         forced_tray_icon: cli.minimized && !cfg!(target_os = "macos"),
         theme: cli.theme,
-        theme_watch: cli.theme_watch,
+        theme_watch: cli.watch_themes,
     }
 }
