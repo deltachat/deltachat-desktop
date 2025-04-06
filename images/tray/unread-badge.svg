@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<!-- And later adjusted by hand, based on ./deltachat-unread.svg -->
+
+<svg
+   width="64px"
+   height="64px"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+   <path
+      style="fill:#42a5f5;fill-opacity:1;stroke:#ffffff;stroke-width:2;scale:2.4;"
+      id="path915"
+      d="m 25.5,17.3 a 8.182107,8.182107 0 0 1 -8.177002,8.182106 8.182107,8.182107 0 0 1 -8.187205,-8.171895 8.182107,8.182107 0 0 1 8.166785,-8.192303 8.182107,8.182107 0 0 1 8.197397,8.161671" />
+</svg>
