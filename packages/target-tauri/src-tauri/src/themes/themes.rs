@@ -135,6 +135,7 @@ pub(super) async fn load_builtin_themes(app: &AppHandle) -> Result<Vec<Theme>, E
         .filter(|(path, _content)| path.starts_with("/themes"))
         .map(|(path, _)| path.to_string())
         .collect();
+    log::debug!("potential theme candidates: {assets:?}");
     let mut themes = Vec::new();
     for asset_path in assets {
         let asset_bytes = app
@@ -148,7 +149,7 @@ pub(super) async fn load_builtin_themes(app: &AppHandle) -> Result<Vec<Theme>, E
             .ok_or(Error::AssetPathParse)?
             .to_string_lossy()
             .to_string();
-        if !file_name.ends_with(".css") || file_name.chars().next() != Some('_') {
+        if !file_name.ends_with(".css") || file_name.starts_with('_') {
             continue;
         }
 

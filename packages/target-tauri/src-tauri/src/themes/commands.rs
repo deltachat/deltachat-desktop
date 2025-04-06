@@ -1,12 +1,17 @@
 use std::str::FromStr;
 
 use tauri::{path::SafePathBuf, AppHandle, Manager};
+use tauri_plugin_store::StoreExt;
 use tokio::fs::{create_dir_all, read_to_string};
 
-use crate::themes::{
-    custom_theme_dir,
-    error::Error,
-    themes::{load_builtin_themes, read_theme_dir, Theme, BUILT_IN_THEMES_PREFIX},
+use crate::{
+    settings::{THEME, THEME_DEFAULT},
+    themes::{
+        custom_theme_dir,
+        error::Error,
+        themes::{load_builtin_themes, read_theme_dir, Theme, BUILT_IN_THEMES_PREFIX},
+    },
+    CONFIG_FILE,
 };
 
 #[tauri::command]
@@ -15,10 +20,18 @@ pub async fn get_available_themes(app: AppHandle) -> Result<Vec<Theme>, Error> {
     let custom_themes_dir = custom_theme_dir(app)?;
     create_dir_all(&custom_themes_dir).await?;
     log::info!("Custom themes dir is: {custom_themes_dir:?}");
+    // let assets: Vec<String> = app
+    //     .asset_resolver()
+    //     .iter()
+    //     .map(|(n, _)| n.to_string())
+    //     .collect();
+    // log::warn!("test: {assets:?}");
+
     // look at the common places for themes
     Ok([
         // fix when dev server is running (pnpm tauri dev)
         if app.asset_resolver().iter().count() == 0 {
+            log::warn!("no assets found, this is normal in development mode");
             #[cfg(debug_assertions)]
             {
                 read_theme_dir(
@@ -46,6 +59,8 @@ pub async fn get_available_themes(app: AppHandle) -> Result<Vec<Theme>, Error> {
 
 #[tauri::command]
 pub async fn load_theme(app: AppHandle, theme_address: String) -> Result<(Theme, String), Error> {
+    log::debug!("load_theme: {theme_address:?}");
+
     let (prefix, name) = if theme_address == "system" {
         return Err(Error::SystemThemeNotAllowed);
     } else {
@@ -74,10 +89,11 @@ pub async fn load_theme(app: AppHandle, theme_address: String) -> Result<(Theme,
                 .join("../../packages/target-tauri/html-dist/themes");
             read_to_string(themes_dir.join(&file_name)).await?
         } else {
+            let filename = format!("/themes/{file_name}");
             // search in assets
             core::str::from_utf8(
                 app.asset_resolver()
-                    .get(format!("/themes/{file_name}"))
+                    .get(filename)
                     .ok_or(Error::AssetLoadFailed)?
                     .bytes(),
             )?
@@ -97,6 +113,16 @@ pub async fn load_theme(app: AppHandle, theme_address: String) -> Result<(Theme,
     let theme = Theme::load_from_file_content(prefix, &file_name, &theme_content)?;
 
     Ok((theme, theme_content))
+}
+
+#[tauri::command]
+pub fn get_current_active_theme(app: AppHandle) -> Result<String, Error> {
+    let active_theme = app
+        .store(CONFIG_FILE)?
+        .get(THEME)
+        .and_then(|v| v.as_str().map(|s| s.to_owned()))
+        .unwrap_or(THEME_DEFAULT.to_owned());
+    Ok(active_theme)
 }
 
 // TODO: resolveThemeAddress

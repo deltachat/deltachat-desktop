@@ -73,6 +73,7 @@ fn main() {
             "update_tray_icon_badge",
             "get_available_themes",
             "load_theme",
+            "get_current_active_theme",
         ]),
     ))
     .expect("failed to run tauri-build");
