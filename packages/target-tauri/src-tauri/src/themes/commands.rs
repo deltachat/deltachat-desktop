@@ -9,7 +9,7 @@ use crate::{
     themes::{
         custom_theme_dir,
         error::Error,
-        themes::{load_builtin_themes, read_theme_dir, Theme, BUILT_IN_THEMES_PREFIX},
+        themes::{load_builtin_themes, read_theme_dir, Theme},
     },
     CONFIG_FILE,
 };
