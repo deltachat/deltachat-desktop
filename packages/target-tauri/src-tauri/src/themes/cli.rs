@@ -1,17 +1,33 @@
-use std::time::Duration;
+use std::{process::exit, time::Duration};
 
-use tauri::{AppHandle, Manager};
+use serde_json::Value;
+use tauri::{async_runtime::block_on, AppHandle, Manager};
+use tauri_plugin_store::StoreExt;
 use tokio::time::sleep;
 
 use crate::{
-    run_config::RunConfig, state::main_window_channels::MainWindowEvents,
-    util::fs_watcher::async_watch_debounced, MainWindowChannels,
+    run_config::RunConfig, settings::THEME, state::main_window_channels::MainWindowEvents,
+    util::fs_watcher::async_watch_debounced, MainWindowChannels, CONFIG_FILE,
 };
 
-use super::{custom_theme_dir, error::Error};
+use super::{commands::load_theme, custom_theme_dir, error::Error};
 
 pub fn run_cli(app: &AppHandle, run_config: &RunConfig) -> Result<(), Error> {
-    if let Some(theme) = &run_config.theme {};
+    if let Some(theme) = &run_config.theme {
+        log::info!(
+            "Hint: Your custom themes directory is: {}",
+            custom_theme_dir(app)?.to_string_lossy()
+        );
+
+        // try to load theme
+        if let Err(_) = block_on(load_theme(app.clone(), theme.to_owned())) {
+            eprintln!("theme with address {theme} was not found or failed to load");
+            exit(2)
+        }
+
+        app.store(CONFIG_FILE)?
+            .set(THEME, Value::String(theme.to_owned()));
+    };
 
     if run_config.theme_watch {
         let app_clone = app.clone();
