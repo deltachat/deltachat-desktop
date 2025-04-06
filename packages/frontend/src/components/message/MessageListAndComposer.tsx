@@ -14,7 +14,6 @@ import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
 import { ReactionsBarProvider } from '../ReactionsBar'
 import useDialog from '../../hooks/dialog/useDialog'
 import useMessage from '../../hooks/chat/useMessage'
-import { getCurrentWebview } from "@tauri-apps/api/webview";
 import type { T } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/MessageListAndComposer')
