@@ -26,6 +26,12 @@ pub struct Cli {
     /// Output the log to stdout / Browser dev console
     #[arg(long)]
     log_to_console: bool,
+    /// set a specific theme (see THEMES.md)
+    #[arg(long)]
+    theme: Option<String>,
+    /// enable auto-reload for the active theme
+    #[arg(long)]
+    theme_watch: bool,
     /// enable auto-reload for translations.
     /// You can use it in combination with the env var `DELTACHAT_LOCALE_DIR`.
     #[arg(long)]
@@ -61,7 +67,7 @@ Webview: {:?}",
     }
 
     // enable devmode automatically when running via `pnpm tauri dev`
-    cli.dev_mode = cfg!(debug_assertions);
+    cli.dev_mode = cli.dev_mode || cfg!(debug_assertions);
 
     RunConfig {
         log_debug: cli.dev_mode || cli.log_debug,
@@ -73,5 +79,7 @@ Webview: {:?}",
         // Tray icon is not forced on macOS because the app icon is still in the Dock,
         // even when Delta Chat has no visible window
         forced_tray_icon: cli.minimized && !cfg!(target_os = "macos"),
+        theme: cli.theme,
+        theme_watch: cli.theme_watch,
     }
 }
