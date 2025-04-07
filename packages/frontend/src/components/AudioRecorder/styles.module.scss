@@ -118,7 +118,14 @@
 
   .colorBackground {
     width: 100%;
-    background: linear-gradient(to right,rgb(52, 237, 52),rgb(52, 237, 52) 60%, orange 80%,red) 90%;
+    background: linear-gradient(
+        to right,
+        rgb(52, 237, 52),
+        rgb(52, 237, 52) 60%,
+        orange 80%,
+        red
+      )
+      90%;
     height: 10px;
     position: absolute;
   }

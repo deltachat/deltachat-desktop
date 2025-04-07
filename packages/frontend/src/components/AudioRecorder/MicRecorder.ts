@@ -26,7 +26,6 @@ class MicRecorder {
   private context: AudioContext | null
   private microphone: MediaStreamAudioSourceNode | null
   private processor: ScriptProcessorNode | null
-  private startTime: number
   private timerToStart?: number
   private lameEncoder: Encoder | null
 
@@ -45,7 +44,6 @@ class MicRecorder {
     this.context = null
     this.microphone = null
     this.processor = null
-    this.startTime = 0
     this.lameEncoder = null
   }
 

@@ -48,7 +48,12 @@ import OutsideClickHelper from '../OutsideClickHelper'
 import { basename } from 'path'
 import { useHasChanged2 } from '../../hooks/useHasChanged'
 import { ScreenContext } from '../../contexts/ScreenContext'
-import { AudioRecorder } from '../AudioRecorder/AudioRecorder'
+import {
+  AudioErrorType,
+  AudioRecorder,
+  AudioRecorderError,
+} from '../AudioRecorder/AudioRecorder'
+import AlertDialog from '../dialogs/AlertDialog'
 
 const log = getLogger('renderer/composer')
 
@@ -151,6 +156,18 @@ const Composer = forwardRef<
         // show some error dialogue
       })
     }
+  }
+
+  const onAudioError = (err: AudioRecorderError) => {
+    console.error('onAudioError', err)
+    let message = err.message
+    if (err.errorType === AudioErrorType.NO_INPUT) {
+      message =
+        'No sound input! Please check your mic settings & permissions! ⚠️'
+    }
+    openDialog(AlertDialog, {
+      message,
+    })
   }
 
   const hasSecureJoinEnded = useRef<boolean>(false)
@@ -641,6 +658,7 @@ const Composer = forwardRef<
               recording={recording}
               setRecording={setRecording}
               saveVoiceAsDraft={saveVoiceAsDraft}
+              onError={onAudioError}
             />
           )}
         </div>

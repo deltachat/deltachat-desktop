@@ -3,6 +3,19 @@ import MicRecorder from './MicRecorder'
 import styles from './styles.module.scss'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
+export enum AudioErrorType {
+  'NO_INPUT',
+  'OTHER_ERROR',
+}
+
+export class AudioRecorderError extends Error {
+  public errorType: AudioErrorType
+  constructor(message: string, type = AudioErrorType.OTHER_ERROR) {
+    super(message)
+    this.errorType = type
+  }
+}
+
 /**
  * shows a timer in format seconds:minutes
  */
@@ -60,10 +73,12 @@ export const AudioRecorder = ({
   recording,
   setRecording,
   saveVoiceAsDraft,
+  onError,
 }: {
   recording: boolean
   setRecording: (f: boolean) => void
   saveVoiceAsDraft: (blob: Blob) => void
+  onError: (error: AudioRecorderError) => void
 }) => {
   const tx = useTranslationFunction()
   const [volume, setVolume] = useState(0)
@@ -76,13 +91,15 @@ export const AudioRecorder = ({
       })
       window.setTimeout(() => {
         if (!recorder.current?.audioSignalDetected) {
-          console.error('No sound detected')
+          onError(new AudioRecorderError('No input', AudioErrorType.NO_INPUT))
+          onRecordingCancel()
         }
       }, 1000)
     }
     setRecording(true)
     recorder.current?.start().catch((err: any) => {
       console.error(err)
+      onError(new AudioRecorderError(err.message))
     })
   }
   const onRecordingStop = () => {
@@ -92,6 +109,10 @@ export const AudioRecorder = ({
       .getMp3()
       .then(([buffer, _blob]) => {
         saveVoiceAsDraft(new Blob(buffer, { type: 'audio/mp3' }))
+      })
+      .catch((err: any) => {
+        console.error(err)
+        onError(new AudioRecorderError(err.message))
       })
   }
 
