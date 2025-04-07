@@ -120,6 +120,9 @@ class ElectronDeltachat extends BaseDeltaChat<ElectronTransport> {
 }
 
 class ElectronRuntime implements Runtime {
+  setDragListener(_fn: (event: any) => void): Promise<any> {
+    return Promise.resolve()
+  }
   onResumeFromSleep: (() => void) | undefined
   onWebxdcSendToChat:
     | ((
