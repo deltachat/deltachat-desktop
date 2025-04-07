@@ -119,11 +119,19 @@ pub fn run() {
                     .build(),
             )
             .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
+                log::info!("second instance launched, focusing the original instance instead");
                 // TODO: handle open url case
-                let _ = app
-                    .get_webview_window("main")
-                    .expect("no main window")
-                    .set_focus();
+                let window = app.get_webview_window("main").expect("no main window");
+                window
+                    .show()
+                    .context("failed to show window after second instance launch attempt")
+                    .inspect_err(|err| log::error!("{err}"))
+                    .ok();
+                window
+                    .set_focus()
+                    .context("failed to focus window after second instance launch attempt")
+                    .inspect_err(|err| log::error!("{err}"))
+                    .ok();
             }));
     }
 
