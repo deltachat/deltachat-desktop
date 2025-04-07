@@ -29,7 +29,7 @@ use crate::{
         menu_manager::MenuManager,
         webxdc_instances::{WebxdcInstance, WebxdcInstancesState},
     },
-    util::truncate_text,
+    util::{truncate_text, url_origin::UrlOriginExtension},
     webxdc::data_storage::{
         delete_webxdc_data_for_account, delete_webxdc_data_for_instance, set_data_store,
     },
@@ -292,7 +292,7 @@ pub(crate) async fn open_webxdc<'a>(
         .await;
 
     // Contruct window
-    let url = if href.is_empty() {
+    let initial_url = if href.is_empty() {
         webxdc_base_url()?
     } else {
         href_to_webxdc_url(href)?
@@ -302,27 +302,19 @@ pub(crate) async fn open_webxdc<'a>(
         .as_ref()
         .map_err(|_err| Error::BlackholeProxyUnavailable)?;
 
-    let mut window_builder = WebviewWindowBuilder::new(&app, &window_id, WebviewUrl::External(url))
-        .initialization_script(INIT_SCRIPT)
-        // Use a non-working proxy to almost(!) isolate the app
-        // from the internet.
-        // "Almost" because there are still cases where the webview
-        // will bypass the proxy, such as with WebRTC.
-        // To disable WebRTC, we take separate measures.
-        //
-        // Note that `additional_browser_args` might make `proxy_url`
-        // have no effect (see below).
-        .proxy_url(dummy_localhost_proxy_url.clone())
-        .on_navigation(move |url| {
-            #[cfg(not(any(target_os = "windows", target_os = "android")))]
-            {
-                url.scheme() == "webxdc"
-            }
-            #[cfg(any(target_os = "windows", target_os = "android"))]
-            {
-                url.host() == Some(url::Host::Domain("webxdc.localhost")) && url.port().is_none()
-            }
-        });
+    let mut window_builder =
+        WebviewWindowBuilder::new(&app, &window_id, WebviewUrl::External(initial_url.clone()))
+            .initialization_script(INIT_SCRIPT)
+            // Use a non-working proxy to almost(!) isolate the app
+            // from the internet.
+            // "Almost" because there are still cases where the webview
+            // will bypass the proxy, such as with WebRTC.
+            // To disable WebRTC, we take separate measures.
+            //
+            // Note that `additional_browser_args` might make `proxy_url`
+            // have no effect (see below).
+            .proxy_url(dummy_localhost_proxy_url.clone())
+            .on_navigation(move |url| url.origin_no_opaque() == initial_url.origin_no_opaque());
 
     // This is only for Chromium (i.e. Windows).
     // Note that this will make `WebviewWindowBuilder::proxy_url`,
