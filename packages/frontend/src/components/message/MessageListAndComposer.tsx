@@ -85,7 +85,9 @@ type Props = {
   accountId: number
 }
 
-function fullPath(file: ParsedPath) { return file.dir + "/" + file.name + file.ext }
+function fullPath(file: ParsedPath) {
+  return file.dir + '/' + file.name + file.ext
+}
 function isImage(file: ParsedPath) {
   const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif']
   return imageExtensions.includes(file.ext)
@@ -117,8 +119,8 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     regularMessageInputRef
   )
 
-  runtime.setDragListener(async (e) => {
-    if (e.payload.type != "drop") {
+  runtime.setDragListener(async e => {
+    if (e.payload.type != 'drop') {
       return
     }
     if (chat === null) {
@@ -129,13 +131,18 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     // sanitize files
     const paths = e.payload.paths
     const forbiddenPathRegEx = /DeltaChat\/.+?\.sqlite-blobs\//gi
-    const sanitized = paths.filter((path) => {
-      let val = !forbiddenPathRegEx.test(path.replace('\\', '/'))
-      if (!val) {
-        log.warn('Prevented a file from being send again while dragging it out', path)
-      }
-      return val
-    }).map((path) => parse(path))
+    const sanitized = paths
+      .filter(path => {
+        const val = !forbiddenPathRegEx.test(path.replace('\\', '/'))
+        if (!val) {
+          log.warn(
+            'Prevented a file from being send again while dragging it out',
+            path
+          )
+        }
+        return val
+      })
+      .map(path => parse(path))
 
     // get account
     const acc = await BackendRemote.rpc.getSelectedAccountId()
@@ -144,20 +151,18 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
       return
     }
 
-
     // send single file
     if (sanitized.length == 1) {
       const file = sanitized[0]
       const msgViewType: Viewtype = isImage(file) ? 'Image' : 'File'
-      await addFileToDraft(fullPath(file), file.name,
-        msgViewType)
+      await addFileToDraft(fullPath(file), file.name, msgViewType)
     }
     // send multiple files
     else if (sanitized.length > 1) {
       openDialog(ConfirmSendingFiles, {
-        sanitizedFileList: sanitized.map((path => ({
-          name: path.name
-        }))),
+        sanitizedFileList: sanitized.map(path => ({
+          name: path.name,
+        })),
         chatName: chat.name,
         onClick: async (isConfirmed: boolean) => {
           if (!isConfirmed) {
@@ -175,7 +180,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
         },
       })
     }
-  });
+  })
 
   const onDrop = (e: React.DragEvent<any>) => {
     e.preventDefault()

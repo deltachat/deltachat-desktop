@@ -10,7 +10,7 @@ import {
 } from '@deltachat-desktop/shared/shared-types.js'
 import { LocaleData } from '@deltachat-desktop/shared/localize.js'
 import { BaseDeltaChat } from '@deltachat/jsonrpc-client'
-import { DragDropEvent, getCurrentWebview } from '@tauri-apps/api/webview'
+import { DragDropEvent } from '@tauri-apps/api/webview'
 import { Event, UnlistenFn } from '@tauri-apps/api/event'
 
 import type { getLogger as getLoggerFunction } from '@deltachat-desktop/shared/logger.js'
@@ -155,7 +155,9 @@ export interface Runtime {
   /** guard function that checks if it is a file from `onDragFileOut`, if so it denies the drop.
    * It checks by checking if file path contains references to the deltachat bob dir,
    */
-  setDragListener(fn: (event: Event<DragDropEvent>) => void): Promise<UnlistenFn>
+  setDragListener(
+    fn: (event: Event<DragDropEvent>) => void
+  ): Promise<UnlistenFn>
   isDroppedFileFromOutside(file: File): boolean
 
   getAutostartState(): Promise<AutostartState>
