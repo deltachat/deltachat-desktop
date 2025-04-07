@@ -150,7 +150,6 @@ const Composer = forwardRef<
       // random filename
       const filename = Math.random().toString(36).substring(2, 10) + '.mp3'
       const path = await runtime.writeTempFileFromBase64(filename, b64)
-      currentComposerMessageInputRef.current?.setState({ loadingDraft: false })
       addFileToDraft(path, basename(path), 'Voice').catch((reason: any) => {
         log.error('Cannot send message:', reason)
         // show some error dialogue
@@ -756,6 +755,7 @@ export function useDraft(
         clearDraft()
         return
       }
+      inputRef.current?.setState({ loadingDraft: true })
       BackendRemote.rpc.getDraft(selectedAccountId(), chatId).then(newDraft => {
         if (!newDraft) {
           log.debug('no draft')
@@ -856,6 +856,7 @@ export function useDraft(
     } else {
       clearDraft()
     }
+    inputRef.current?.setState({ loadingDraft: false })
   }, [chatId, clearDraft, canSend, inputRef])
 
   const updateDraftText = (text: string, InputChatId: number) => {

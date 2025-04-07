@@ -126,13 +126,12 @@
       width: 100%;
       background: none;
       background: linear-gradient(
-          to right,
-          rgb(52, 237, 52),
-          rgb(52, 237, 52) 50%,
-          orange 80%,
-          red
-        )
-        90%;
+        to right,
+        rgb(52, 237, 52),
+        rgb(52, 237, 52) 50%,
+        orange 75%,
+        red 90%
+      );
       height: 10px;
       position: absolute;
     }
