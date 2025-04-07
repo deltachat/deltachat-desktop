@@ -165,9 +165,8 @@ class MicRecorder {
    * @return {number}
    */
   calculateVolume(input: any) {
-    let i
     let sum = 0.0
-    for (i = 0; i < input.length; ++i) {
+    for (let i = 0; i < input.length; ++i) {
       sum += input[i] * input[i]
     }
     if (sum > 0) {

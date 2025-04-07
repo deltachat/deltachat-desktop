@@ -57,14 +57,16 @@ const VolumeMeter = (prop: { volume: number }) => {
   const levelWidth = totalWidth > 0 ? `${totalWidth - level}px` : '100%'
   console.debug(`volume: ${(prop.volume * 100).toFixed(2)}%`)
   return (
-    <div ref={volumeBarRef} className={styles.volumeBar}>
-      <div className={styles.mask}>
-        {Array.from({ length: steps }).map((_, index) => (
-          <div key={index} className={styles.step} />
-        ))}
+    <div className={styles.volumeBarContainer}>
+      <div className={styles.volumeBar}>
+        <div ref={volumeBarRef} className={styles.mask}>
+          {Array.from({ length: steps }).map((_, index) => (
+            <div key={index} className={styles.step} />
+          ))}
+        </div>
+        <div className={styles.level} style={{ width: `${levelWidth}` }} />
+        <div className={styles.colorBackground} />
       </div>
-      <div className={styles.level} style={{ width: `${levelWidth}` }} />
-      <div className={styles.colorBackground} />
     </div>
   )
 }
@@ -129,6 +131,7 @@ export const AudioRecorder = ({
   if (!recording) {
     return (
       <button
+        aria-label={tx('voice_send')}
         className={styles.microphoneButton}
         onClick={() => onRecordingStart()}
       >
@@ -145,6 +148,7 @@ export const AudioRecorder = ({
           <span />
         </button>
         <Timer />
+        <VolumeMeter volume={volume} />
         <button className={styles.cancel} onClick={() => onRecordingCancel()}>
           {tx('cancel')}
         </button>
@@ -154,7 +158,6 @@ export const AudioRecorder = ({
         >
           {tx('ok')}
         </button>
-        <VolumeMeter volume={volume} />
       </div>
     )
   }

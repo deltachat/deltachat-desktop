@@ -1,14 +1,11 @@
 .microphoneButton {
   height: 40px;
   width: 40px;
-  padding-left: 2px;
+  padding-left: 6px;
   padding-bottom: 8px;
   background-color: var(--composerBg);
   border: none;
 
-  &:focus {
-    outline: none;
-  }
   span {
     display: block;
     width: 25px;
@@ -61,6 +58,7 @@
     &.stopRecording {
       background-color: var(--buttonPrimaryBackground);
       color: #fff;
+      margin-right: 40px;
       &:hover {
         background-color: var(--buttonPrimaryHover);
       }
@@ -81,52 +79,62 @@
   margin-top: 12px;
 }
 
-.volumeBar {
-  display: flex;
+.volumeBarContainer {
   flex: 1;
-  position: relative;
-  display: flex;
-  margin: 15px 20px 0 15px;
-  height: 12px;
-  max-width: 250px;
-  min-width: 60px;
-
-  .mask {
+  padding-right: 10px;
+  .volumeBar {
     display: flex;
-    width: 100%;
-    z-index: 10;
+    position: relative;
+    display: flex;
+    margin: 15px 20px 0 15px;
     height: 12px;
-    position: absolute;
-    left: 0;
+    width: 100%;
+    max-width: 250px;
+    min-width: 60px;
 
-    .step {
+    .mask {
       display: flex;
-      width: 10%;
-      height: 10px;
-      border: 1px solid #666;
+      width: 100%;
+      z-index: 10;
+      height: 12px;
+      position: absolute;
+      left: 0;
+
+      .step {
+        display: flex;
+        width: 10%;
+        height: 10px;
+        border-left: 1px solid #bbb;
+        border-top: 1px solid #bbb;
+        border-bottom: 1px solid #bbb;
+      }
+      .step:last-child {
+        border-right: 1px solid #bbb;
+      }
     }
-  }
 
-  .level {
-    width: 100%;
-    background-color: var(--composerBg);
-    height: 10px;
-    position: absolute;
-    right: 0;
-    z-index: 5;
-  }
+    .level {
+      width: 100%;
+      background-color: var(--composerBg);
+      height: 10px;
+      position: absolute;
+      right: 0;
+      z-index: 5;
+    }
 
-  .colorBackground {
-    width: 100%;
-    background: linear-gradient(
-        to right,
-        rgb(52, 237, 52),
-        rgb(52, 237, 52) 60%,
-        orange 80%,
-        red
-      )
-      90%;
-    height: 10px;
-    position: absolute;
+    .colorBackground {
+      width: 100%;
+      background: none;
+      background: linear-gradient(
+          to right,
+          rgb(52, 237, 52),
+          rgb(52, 237, 52) 50%,
+          orange 80%,
+          red
+        )
+        90%;
+      height: 10px;
+      position: absolute;
+    }
   }
 }
