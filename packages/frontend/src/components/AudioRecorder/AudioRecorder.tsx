@@ -89,18 +89,23 @@ export const AudioRecorder = ({
       recorder.current = new MicRecorder(setVolume, {
         bitRate: 128,
       })
-      window.setTimeout(() => {
-        if (!recorder.current?.audioSignalDetected) {
-          onError(new AudioRecorderError('No input', AudioErrorType.NO_INPUT))
-          onRecordingCancel()
-        }
-      }, 1000)
     }
     setRecording(true)
-    recorder.current?.start().catch((err: any) => {
-      console.error(err)
-      onError(new AudioRecorderError(err.message))
-    })
+    recorder.current
+      ?.start()
+      .then(() => {
+        window.setTimeout(() => {
+          if (!recorder.current?.audioSignalDetected) {
+            onError(new AudioRecorderError('No input', AudioErrorType.NO_INPUT))
+            onRecordingCancel()
+          }
+        }, 1000)
+      })
+      .catch((err: any) => {
+        console.error(err)
+        onError(new AudioRecorderError(err.message))
+        setRecording(false)
+      })
   }
   const onRecordingStop = () => {
     setRecording(false)
