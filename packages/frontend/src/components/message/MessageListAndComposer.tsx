@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useCallback } from 'react'
 import { basename, join, parse } from 'path'
+import type { ParsedPath } from 'path'
 import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 
 import Composer, { useDraft } from '../composer/Composer'
@@ -14,6 +15,7 @@ import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
 import { ReactionsBarProvider } from '../ReactionsBar'
 import useDialog from '../../hooks/dialog/useDialog'
 import useMessage from '../../hooks/chat/useMessage'
+
 import type { T } from '@deltachat/jsonrpc-client'
 import { BackendRemote } from '../../backend-com'
 
