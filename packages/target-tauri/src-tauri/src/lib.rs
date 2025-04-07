@@ -8,7 +8,7 @@ use menus::{handle_menu_event, main_menu::create_main_menu};
 
 use resume_from_sleep::start_resume_after_sleep_detector;
 use settings::{
-    get_setting_bool_or, load_and_apply_desktop_settings_on_startup, CONFIG_FILE, MINIMIZE_TO_TRAY,
+    load_and_apply_desktop_settings_on_startup, CONFIG_FILE, MINIMIZE_TO_TRAY,
     MINIMIZE_TO_TRAY_DEFAULT,
 };
 use state::{

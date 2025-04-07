@@ -157,11 +157,14 @@ pub(crate) async fn apply_language_change(app: &AppHandle) -> anyhow::Result<()>
     Ok(())
 }
 
-pub(crate) fn get_setting_bool_or(
-    setting_load_result: Option<serde_json::Value>,
-    default_value: bool,
-) -> bool {
-    setting_load_result
-        .and_then(|v| v.as_bool())
-        .unwrap_or(default_value)
+pub trait StoreExtBoolExt {
+    fn get_bool_or(&self, settings_key: impl AsRef<str>, default_value: bool) -> bool;
+}
+
+impl<R: tauri::Runtime> StoreExtBoolExt for tauri_plugin_store::Store<R> {
+    fn get_bool_or(&self, settings_key: impl AsRef<str>, default_value: bool) -> bool {
+        self.get(settings_key)
+            .and_then(|v| v.as_bool())
+            .unwrap_or(default_value)
+    }
 }

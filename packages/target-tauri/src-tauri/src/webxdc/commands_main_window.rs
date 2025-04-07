@@ -25,8 +25,8 @@ use uuid::Uuid;
 use crate::{menus::webxdc_menu::create_webxdc_window_menu, settings::get_content_protection};
 
 use crate::{
-    get_setting_bool_or, network_isolation_dummy_proxy,
-    settings::{ENABLE_WEBXDC_DEV_TOOLS_DEFAULT, ENABLE_WEBXDC_DEV_TOOLS_KEY},
+    network_isolation_dummy_proxy,
+    settings::{StoreExtBoolExt, ENABLE_WEBXDC_DEV_TOOLS_DEFAULT, ENABLE_WEBXDC_DEV_TOOLS_KEY},
     state::{
         menu_manager::MenuManager,
         webxdc_instances::{WebxdcInstance, WebxdcInstancesState},
@@ -329,10 +329,7 @@ pub(crate) async fn open_webxdc<'a>(
                 ))
                 .inspect_err(|err| log::error!("{err}"))
                 .map(|store| {
-                    get_setting_bool_or(
-                        store.get(ENABLE_WEBXDC_DEV_TOOLS_KEY),
-                        ENABLE_WEBXDC_DEV_TOOLS_DEFAULT,
-                    )
+                    store.get_bool_or(ENABLE_WEBXDC_DEV_TOOLS_KEY, ENABLE_WEBXDC_DEV_TOOLS_DEFAULT)
                 })
                 .unwrap_or(false)
         })

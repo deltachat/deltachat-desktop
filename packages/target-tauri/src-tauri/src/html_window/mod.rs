@@ -17,7 +17,7 @@ use crate::{
         punycode::{puny_code_decode_host, puny_code_encode_host},
     },
     settings::{
-        apply_zoom_factor_html_window, get_content_protection, get_setting_bool_or, CONFIG_FILE,
+        apply_zoom_factor_html_window, get_content_protection, CONFIG_FILE,
         HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_DEFAULT, HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_KEY,
     },
     state::html_email_instances::InnerHtmlEmailInstanceData,
@@ -58,6 +58,8 @@ pub(crate) async fn open_html_window(
     receive_time: &str,
     content: &str,
 ) -> Result<(), Error> {
+    use crate::settings::StoreExtBoolExt;
+
     let window_id = format!("html-window:{account_id}-{message_id}");
     trace!("open_html_window: {window_id}");
 
@@ -83,9 +85,8 @@ pub(crate) async fn open_html_window(
     }
     .map_err(Error::DeltaChat)?;
 
-    let store = app.store(CONFIG_FILE)?;
-    let always_load_remote_content = get_setting_bool_or(
-        store.get(HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_KEY),
+    let always_load_remote_content = app.store(CONFIG_FILE)?.get_bool_or(
+        HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_KEY,
         HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_DEFAULT,
     );
     let toggle_network_initial_state =
