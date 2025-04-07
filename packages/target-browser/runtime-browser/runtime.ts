@@ -104,6 +104,9 @@ class BrowserRuntime implements Runtime {
       console.error('WebSocket error:', event)
     })
   }
+    setDragListener(_fn: (event: any) => void): Promise<any> {
+      return Promise.resolve()
+    }
 
   sendToBackendOverWS(message: MessageToBackend.AllTypes) {
     if (this.socket.readyState != this.socket.OPEN) {
