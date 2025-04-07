@@ -18,13 +18,15 @@ use tauri::{
     async_runtime::block_on, image::Image, AppHandle, Manager, State, Url, WebviewUrl,
     WebviewWindowBuilder, WindowEvent,
 };
+use tauri_plugin_store::StoreExt;
 use uuid::Uuid;
 
 #[cfg(desktop)]
 use crate::{menus::webxdc_menu::create_webxdc_window_menu, settings::get_content_protection};
 
 use crate::{
-    network_isolation_dummy_proxy,
+    get_setting_bool_or, network_isolation_dummy_proxy,
+    settings::{ENABLE_WEBXDC_DEV_TOOLS_DEFAULT, ENABLE_WEBXDC_DEV_TOOLS_KEY},
     state::{
         menu_manager::MenuManager,
         webxdc_instances::{WebxdcInstance, WebxdcInstancesState},
@@ -33,7 +35,7 @@ use crate::{
     webxdc::data_storage::{
         delete_webxdc_data_for_account, delete_webxdc_data_for_instance, set_data_store,
     },
-    DeltaChatAppState,
+    DeltaChatAppState, CONFIG_FILE,
 };
 
 use super::{commands::WebxdcUpdate, error::Error};
@@ -314,6 +316,28 @@ pub(crate) async fn open_webxdc<'a>(
             // Note that `additional_browser_args` might make `proxy_url`
             // have no effect (see below).
             .proxy_url(dummy_localhost_proxy_url.clone())
+            .devtools({
+                // Dev tools might not work on macOS in production,
+                // see comments around `enableWebxdcDevTools`.
+                //
+                // TODO check whether opening dev tools is an exfiltration risk
+                // on WebKit (see comments about `enableWebxdcDevTools`),
+                // otherwise we need no special treatment
+                // for webxdc windows' dev tools and just use
+                // the same behavior as we use for the main window.
+                app.store(CONFIG_FILE)
+                    .context(format!(
+                    "failed to load config.json to read the value of {ENABLE_WEBXDC_DEV_TOOLS_KEY}"
+                ))
+                    .inspect_err(|err| log::error!("{err}"))
+                    .map(|store| {
+                        get_setting_bool_or(
+                            store.get(ENABLE_WEBXDC_DEV_TOOLS_KEY),
+                            ENABLE_WEBXDC_DEV_TOOLS_DEFAULT,
+                        )
+                    })
+                    .unwrap_or(false)
+            })
             .on_navigation(move |url| url.origin_no_opaque() == initial_url.origin_no_opaque());
 
     // This is only for Chromium (i.e. Windows).

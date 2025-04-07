@@ -3,7 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
-- tauri: support for webxdc #4740, #4852
+- tauri: support for webxdc #4740, #4852, #4949
 - create chat: add context menu option to view profile #4880
 - focuses first visible item on arrow down key on input in create chat dialog #4892
 - create chat: add support for invite links to search bar #4893
