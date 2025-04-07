@@ -85,6 +85,12 @@ type Props = {
   accountId: number
 }
 
+function fullPath(file: ParsedPath) { return file.dir + "/" + file.name + file.ext }
+function isImage(file: ParsedPath) {
+  const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif']
+  return imageExtensions.includes(file.ext)
+}
+
 export default function MessageListAndComposer({ accountId, chat }: Props) {
   const conversationRef = useRef(null)
   const refComposer = useRef(null)
@@ -120,6 +126,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
       return
     }
 
+    // sanitize files
     const paths = e.payload.paths
     const forbiddenPathRegEx = /DeltaChat\/.+?\.sqlite-blobs\//gi
     const sanitized = paths.filter((path) => {
@@ -128,22 +135,45 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
         log.warn('Prevented a file from being send again while dragging it out', path)
       }
       return val
-    })
+    }).map((path) => parse(path))
 
+    // get account
+    const acc = await BackendRemote.rpc.getSelectedAccountId()
+    if (acc === null) {
+      console.error('No account selected')
+      return
+    }
+
+
+    // send single file
     if (sanitized.length == 1) {
-      const acc = await BackendRemote.rpc.getSelectedAccountId()
-      if (acc === null) {
-        console.error('No account selected')
-        return
-      }
-      const blob_path = await BackendRemote.rpc.copyToBlobDir(acc, sanitized[0])
+      const file = sanitized[0]
+      const msgViewType: Viewtype = isImage(file) ? 'Image' : 'File'
+      await addFileToDraft(fullPath(file), file.name,
+        msgViewType)
+    }
+    // send multiple files
+    else if (sanitized.length > 1) {
+      openDialog(ConfirmSendingFiles, {
+        sanitizedFileList: sanitized.map((path => ({
+          name: path.name
+        }))),
+        chatName: chat.name,
+        onClick: async (isConfirmed: boolean) => {
+          if (!isConfirmed) {
+            return
+          }
 
-      const msgViewType: Viewtype = blob_path.endsWith('png')
-        ? 'Image'
-        : 'File'
-      await addFileToDraft(blob_path, sanitized[0].split('/').pop() as string /* check this */, msgViewType)
-    } else if (sanitized.length > 1) {
-
+          for (const file of sanitized) {
+            const msgViewType: Viewtype = isImage(file) ? 'Image' : 'File'
+            sendMessage(accountId, chat.id, {
+              file: fullPath(file),
+              filename: file.name,
+              viewtype: msgViewType,
+            })
+          }
+        },
+      })
     }
   });
 
@@ -157,8 +187,6 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
       log.warn('dropped something, but no chat is selected')
       return
     }
-
-
     const sanitizedFileList: File[] = []
     {
       for (let i = 0; i < fileList.length; i++) {
