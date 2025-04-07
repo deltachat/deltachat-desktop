@@ -63,4 +63,6 @@ permissions = [
 
     "allow-open-help-window",
     "allow-open-html-window",
+
+    "allow-update-tray-icon-badge",
 ]

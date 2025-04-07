@@ -6,14 +6,21 @@ use clipboard::copy_image_to_clipboard;
 #[cfg(desktop)]
 use menus::{handle_menu_event, main_menu::create_main_menu};
 
-use settings::load_and_apply_desktop_settings_on_startup;
+use resume_from_sleep::start_resume_after_sleep_detector;
+use settings::{
+    get_setting_bool_or, load_and_apply_desktop_settings_on_startup, CONFIG_FILE, MINIMIZE_TO_TRAY,
+    MINIMIZE_TO_TRAY_DEFAULT,
+};
 use state::{
     app::AppState, deltachat::DeltaChatAppState, html_email_instances::HtmlEmailInstancesState,
     main_window_channels::MainWindowChannels, menu_manager::MenuManager,
-    translations::TranslationState, webxdc_instances::WebxdcInstancesState,
+    translations::TranslationState, tray_manager::TrayManager,
+    webxdc_instances::WebxdcInstancesState,
 };
-use tauri::Manager;
+use tauri::{async_runtime::block_on, Manager};
 use tauri_plugin_log::{Target, TargetKind};
+
+use tray::is_tray_icon_active;
 
 mod app_path;
 mod blobs;
@@ -27,6 +34,8 @@ mod i18n;
 // menus are not available on mobile
 #[cfg(desktop)]
 mod menus;
+mod network_isolation_dummy_proxy;
+mod resume_from_sleep;
 mod run_config;
 mod runtime_capabilities;
 mod runtime_info;
@@ -34,6 +43,7 @@ mod settings;
 mod state;
 mod stickers;
 mod temp_file;
+mod tray;
 mod util;
 mod webxdc;
 
@@ -180,6 +190,9 @@ pub fn run() {
             // not yet available on mobile
             #[cfg(desktop)]
             html_window::commands::html_email_set_load_remote_content,
+            // not available on mobile
+            #[cfg(desktop)]
+            state::tray_manager::update_tray_icon_badge,
         ])
         .register_asynchronous_uri_scheme_protocol(
             "webxdc-icon",
@@ -193,6 +206,8 @@ pub fn run() {
         )
         .register_asynchronous_uri_scheme_protocol("webxdc", webxdc::webxdc_scheme::webxdc_protocol)
         .setup(move |app| {
+            app.manage(run_config);
+
             // Create missing directories for iOS (quick fix, better fix this upstream in tauri)
             #[cfg(target_os = "ios")]
             {
@@ -283,10 +298,11 @@ pub fn run() {
                 app,
             ))?);
             app.manage(WebxdcInstancesState::new());
+            app.manage(TrayManager::new());
             app.state::<AppState>()
                 .log_duration_since_startup("base setup done");
 
-            load_and_apply_desktop_settings_on_startup(app.handle())?;
+            block_on(load_and_apply_desktop_settings_on_startup(app.handle()))?;
 
             // we can only do this in debug mode, macOS doesn't not allow this in the appstore, because it uses private apis
             // we should think about wether we want it on other production builds (except store),
@@ -297,14 +313,31 @@ pub fn run() {
                 app.get_webview_window("main").unwrap().open_devtools();
             }
 
-            app.manage(run_config);
-
             let main_window = app.get_webview_window("main").unwrap();
             #[cfg(target_os = "macos")]
             {
                 main_window.set_title_bar_style(tauri::TitleBarStyle::Overlay)?;
                 main_window.set_title("")?;
             }
+
+            let main_window_clone = main_window.clone();
+            main_window.on_window_event(move |ev| {
+                if let tauri::WindowEvent::CloseRequested { api, .. } = ev {
+                    let res = || {
+                        let minimize_to_tray = is_tray_icon_active(main_window_clone.app_handle())?;
+                        if cfg!(target_os = "macos") || minimize_to_tray {
+                            api.prevent_close();
+                            let _ = main_window_clone.hide();
+                        } else {
+                            main_window_clone.app_handle().exit(0);
+                        }
+                        Ok::<(), anyhow::Error>(())
+                    };
+                    if let Err(err) = res() {
+                        log::error!("CloseRequested: failed to execute: {err}");
+                    }
+                }
+            });
 
             #[cfg(desktop)]
             {
@@ -321,8 +354,21 @@ pub fn run() {
 
             runtime_capabilities::add_runtime_capabilies(app.handle())?;
 
+            start_resume_after_sleep_detector(app.handle());
+
+            #[cfg(desktop)]
+            {
+                if run_config.translation_watch {
+                    i18n::watch_translations(app.handle().clone());
+                }
+            }
+
             app.state::<AppState>()
                 .log_duration_since_startup("setup done");
+
+            if run_config.minimized_window {
+                let _ = main_window.hide();
+            }
 
             Ok(())
         })
@@ -373,7 +419,23 @@ pub fn run() {
 
     #[allow(clippy::single_match)]
     app.run(|app_handle, run_event| match run_event {
-        // tauri::RunEvent::ExitRequested { code, api, .. } =>
+        // tauri::RunEvent::ExitRequested { code, api, .. } => {}
+        #[cfg(target_os = "macos")]
+        tauri::RunEvent::Reopen { .. } => {
+            // handle clicks on dock on macOS (because on macOS main window never really closes)
+            if let Err(err) = app_handle
+                .get_webview_window("main")
+                .context("main window not found")
+                .and_then(|main_window| {
+                    main_window
+                        .show()
+                        .and_then(|_| main_window.set_focus())
+                        .context("failed to call show or set_focus")
+                })
+            {
+                log::error!("failed to focus and show main_window {err:?}");
+            }
+        }
         tauri::RunEvent::Exit => {
             log::info!("Exiting: starting cleanup...");
             tauri::async_runtime::block_on(cleanup(app_handle));

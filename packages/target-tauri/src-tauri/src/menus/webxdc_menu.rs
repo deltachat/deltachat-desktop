@@ -189,10 +189,10 @@ impl MenuAction<'static> for WebxdcMenuAction {
 
 pub(crate) fn create_webxdc_window_menu(
     app: &AppHandle,
-    html_email_window: &WebviewWindow,
+    webxdc_window: &WebviewWindow,
     icon: Option<Image>,
 ) -> anyhow::Result<Menu<Wry>> {
-    let window_id = html_email_window.label().to_owned();
+    let window_id = webxdc_window.label().to_owned();
     let action = |action: WebxdcMenuActionVariant| WebxdcMenuAction {
         window_id: window_id.clone(),
         action,
@@ -235,7 +235,7 @@ pub(crate) fn create_webxdc_window_menu(
                     &MenuItem::with_id(
                         app,
                         action(WebxdcMenuActionVariant::CloseWindow),
-                        "Close HTML Email",
+                        tx.sync_translate("close_window"),
                         true,
                         Some("CmdOrCtrl+W"),
                     )?,
@@ -319,7 +319,7 @@ pub(crate) fn create_webxdc_window_menu(
                         action(WebxdcMenuActionVariant::FloatOnTop),
                         tx.sync_translate("global_menu_view_floatontop_desktop"),
                         true,
-                        html_email_window.is_always_on_top()?,
+                        webxdc_window.is_always_on_top()?,
                         None::<&str>,
                     )?,
                     &PredefinedMenuItem::fullscreen(

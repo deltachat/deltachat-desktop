@@ -44,7 +44,7 @@ type MainWindowEvents =
     }
   | {
       event: 'localeReloaded'
-      data: string
+      data: string | null
     }
   | {
       event: 'showAboutDialog'
@@ -54,6 +54,12 @@ type MainWindowEvents =
     }
   | {
       event: 'showKeybindingsDialog'
+    }
+  | {
+      event: 'resumeFromSleep'
+    }
+  | {
+      event: 'toggleNotifications'
     }
 
 const events = new Channel<MainWindowEvents>()
@@ -138,7 +144,6 @@ class TauriRuntime implements Runtime {
     } satisfies Partial<DesktopSettingsType>
 
     const frontendAndTauri = {
-      // TODO field 1
       zoomFactor: 1, // ? not sure yet
       minimizeToTray: true,
       lastSaveDialogLocation: undefined,
@@ -147,11 +152,11 @@ class TauriRuntime implements Runtime {
       HTMLEmailAlwaysLoadRemoteContent: false,
       contentProtectionEnabled: false,
       locale: null, // if this is null, the system chooses the system language that electron reports
+      notifications: true,
+      syncAllAccounts: true,
     } satisfies Partial<DesktopSettingsType>
 
     const frontendOnly = {
-      // TODO field 2
-      notifications: true,
       showNotificationContent: true,
       enterKeySends: false,
       enableAVCalls: false,
@@ -160,7 +165,6 @@ class TauriRuntime implements Runtime {
       enableOnDemandLocationStreaming: false,
       chatViewBgImg: undefined,
       activeTheme: 'system',
-      syncAllAccounts: true,
       experimentalEnableMarkdownInMessages: false,
       enableRelatedChats: false,
       galleryImageKeepAspectRatio: false,
@@ -208,16 +212,17 @@ class TauriRuntime implements Runtime {
       log_to_console: boolean
       devtools: boolean
       dev_mode: boolean
+      forced_tray_icon: boolean
     }>('get_frontend_run_config')
     const rc_config: RC_Config = {
       'log-debug': config.log_debug,
       'log-to-console': config.log_to_console,
       devmode: config.dev_mode,
+      minimized: config.forced_tray_icon,
 
       theme: undefined,
       'theme-watch': false,
       'translation-watch': false,
-      minimized: false,
 
       // does not exist in delta tauri
       'allow-unsafe-core-replacement': false,
@@ -312,13 +317,18 @@ class TauriRuntime implements Runtime {
           account || undefined
         )
       } else if (event.event === 'localeReloaded') {
-        this.onChooseLanguage?.(event.data)
+        // event.data is only null in case of reloading via --watch-translations
+        this.onChooseLanguage?.(event.data || window.localeData.locale)
       } else if (event.event === 'showAboutDialog') {
         this.onShowDialog?.('about')
       } else if (event.event === 'showSettingsDialog') {
         this.onShowDialog?.('settings')
       } else if (event.event === 'showKeybindingsDialog') {
         this.onShowDialog?.('keybindings')
+      } else if (event.event === 'resumeFromSleep') {
+        this.onResumeFromSleep?.()
+      } else if (event.event === 'toggleNotifications') {
+        this.onToggleNotifications?.()
       }
     }
   }
@@ -495,6 +505,7 @@ class TauriRuntime implements Runtime {
   }
   setBadgeCounter(value: number): void {
     getCurrentWindow().setBadgeCount(value === 0 ? undefined : value)
+    invoke('update_tray_icon_badge', { counter: value })
   }
   showNotification(_data: DcNotification): void {
     throw new Error('Method not implemented.37')
@@ -578,6 +589,7 @@ class TauriRuntime implements Runtime {
       ) => void)
     | undefined
   onResumeFromSleep: (() => void) | undefined
+  onToggleNotifications: (() => void) | undefined
 }
 
 ;(window as any).r = new TauriRuntime()

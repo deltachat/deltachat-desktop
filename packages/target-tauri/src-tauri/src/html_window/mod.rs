@@ -67,6 +67,7 @@ pub(crate) async fn open_html_window(
             // window already exists focus it - android and iOS don't have have the function
             // and those platforms also don't have multiple windows
             window.show()?;
+            window.set_focus()?;
             return Ok(());
         }
     }
@@ -262,7 +263,7 @@ pub(crate) async fn open_html_window(
                 use tokio::fs::remove_dir;
 
                 let tmp_data_dir = tmp_data_dir.clone();
-                let _ = spawn(async {
+                spawn(async {
                     if let Err(err) = remove_dir(tmp_data_dir).await {
                         error!(
                             "failed to remove tmp_data_dir after html email window closed: {err:?}"

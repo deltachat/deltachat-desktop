@@ -13,6 +13,10 @@
 - `Cmd + N` shortcut to open new chat on macOS #4901
 - tauri: add cli interface: `--help`, `--version`, and developer options (like `--dev-mode`) #4908
 - enable support for recording audio messages
+- tauri: handle resume from sleep #4926
+- tauri: add `--watch-translations` cli flag #4925
+- tauri: add tray icon #4922
+- tauri: add `--minimized` flag #4922
 
 
 ### Changed
@@ -23,7 +27,7 @@
 - slight gradients for avatars for a more modern look #4877
 - change usage of `nameAndAddr` to `displayName` #4882
 - remove addresses from contact list items unless they are not verified. #4880
-- migrate account mute state to new is_muted config option #4888
+- migrate account mute state to new is_muted config option #4888 #4924
 - technical: change script format and imports to esm/module #4871
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.158.0`
   - Simplify e2ee decision logic, remove majority vote
@@ -34,7 +38,7 @@
 - profile view redesign #4897
 
 ### Fixed
-- tauri: improve security #4826
+- tauri: improve security #4826, #4936, #4937
 - improve fatal error dialog readability by removing color from deltachat-rpc-server errors
 - prevent dragging around of webxdc icon #4740
 - tauri: clear temp folder on exit #4839
@@ -49,6 +53,8 @@
 - accessibility: don't announce "padlock" on messages
 - fix double escape bypasses dialog attribute `canEscapeKeyClose={false}`
 - fix order when sending multiple files at once #4895
+- tauri: fix: sticker picker previews not working
+- tauri: fix emoji picker being super ugly
 
 <a id="1_56_0"></a>
 

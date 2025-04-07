@@ -163,6 +163,7 @@ export interface Runtime {
       ) => void)
     | undefined
   onResumeFromSleep: (() => void) | undefined
+  onToggleNotifications: (() => void) | undefined
 }
 
 export const runtime: Runtime = (window as any).r

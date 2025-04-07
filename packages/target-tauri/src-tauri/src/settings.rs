@@ -3,7 +3,7 @@ use log::warn;
 use tauri::{AppHandle, Manager};
 use tauri_plugin_store::StoreExt;
 
-use crate::{state::menu_manager::MenuManager, TranslationState};
+use crate::{state::menu_manager::MenuManager, TranslationState, TrayManager};
 
 pub(crate) const CONFIG_FILE: &str = "config.json";
 
@@ -19,6 +19,12 @@ pub(crate) const HTML_EMAIL_WARNING_DEFAULT: bool = true;
 pub(crate) const HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_KEY: &str =
     "HTMLEmailAlwaysLoadRemoteContent";
 pub(crate) const HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_DEFAULT: bool = false;
+pub(crate) const MINIMIZE_TO_TRAY: &str = "minimizeToTray";
+pub(crate) const MINIMIZE_TO_TRAY_DEFAULT: bool = true;
+pub(crate) const NOTIFICATIONS: &str = "notifications";
+pub(crate) const NOTIFICATIONS_DEFAULT: bool = true;
+pub(crate) const SYNC_ALL_ACCOUNTS: &str = "syncAllAccounts";
+pub(crate) const SYNC_ALL_ACCOUNTS_DEFAULT: bool = true;
 
 // runtime calls this when desktop settings change
 #[tauri::command]
@@ -28,18 +34,29 @@ pub async fn change_desktop_settings_apply_side_effects(
 ) -> Result<(), String> {
     match key {
         ZOOM_FACTOR_KEY => apply_zoom_factor(&app),
-        // "minimizeToTray" => // TODO
         CONTENT_PROTECTION_KEY => apply_content_protection(&app),
         LOCALE_KEY => apply_language_change(&app).await,
+        MINIMIZE_TO_TRAY => {
+            app.state::<TrayManager>()
+                .apply_wanted_active_state(&app)
+                .await
+        }
+        // update "mute notification" menu item with new state
+        NOTIFICATIONS => app.state::<TrayManager>().update_menu(&app).await,
         _ => Ok(()),
     }
     .map_err(|err| format!("{err:#}"))
 }
 
-pub(crate) fn load_and_apply_desktop_settings_on_startup(app: &AppHandle) -> anyhow::Result<()> {
+pub(crate) async fn load_and_apply_desktop_settings_on_startup(
+    app: &AppHandle,
+) -> anyhow::Result<()> {
     apply_zoom_factor(app)?;
-    // TODO: activate tray icon based on `minimizeToTray`
     apply_content_protection(app)?;
+    app.state::<TrayManager>()
+        .apply_wanted_active_state(app)
+        .await?;
+
     Ok(())
 }
 

@@ -27,10 +27,12 @@ pub enum MainWindowEvents {
         options: SendToChatOptions,
         account: Option<u32>,
     },
-    LocaleReloaded(String),
+    LocaleReloaded(Option<String>),
     ShowAboutDialog,
     ShowSettingsDialog,
     ShowKeybindingsDialog,
+    ResumeFromSleep,
+    ToggleNotifications,
 }
 
 pub(crate) struct InnerMainWindowChannelsState {

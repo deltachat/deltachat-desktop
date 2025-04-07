@@ -10,6 +10,12 @@ pub struct RunConfig {
     pub devtools: bool,
     /// enables additional developer apis
     pub dev_mode: bool,
+    /// watch locales dir and reload on changes
+    pub translation_watch: bool,
+    /// Start deltachat in minimized mode without visible window
+    pub minimized_window: bool,
+    /// Force tray icon active, because started in minimized mode without visible window
+    pub forced_tray_icon: bool,
 }
 
 // Information about cli args that are also relevant for frontend
