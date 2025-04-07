@@ -28,8 +28,6 @@ export async function updateCoreStrings() {
   strings[C.DC_STR_CANTDECRYPT_MSG_BODY] = tx('systemmsg_cannot_decrypt')
   strings[C.DC_STR_E2E_PREFERRED] = tx('autocrypt_prefer_e2ee')
   strings[C.DC_STR_ARCHIVEDCHATS] = tx('chat_archived_chats_title')
-  strings[C.DC_STR_AC_SETUP_MSG_SUBJECT] = tx('autocrypt_asm_subject')
-  strings[C.DC_STR_AC_SETUP_MSG_BODY] = tx('autocrypt_asm_general_body')
   strings[C.DC_STR_CANNOT_LOGIN] = tx('login_error_cannot_login')
   strings[C.DC_STR_DEVICE_MESSAGES] = tx('device_talk')
   strings[C.DC_STR_NEW_GROUP_SEND_FIRST_MESSAGE] = tx('chat_new_group_hint')
