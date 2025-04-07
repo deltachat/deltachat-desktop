@@ -237,6 +237,9 @@ importers:
       '@deltachat/jsonrpc-client':
         specifier: 'catalog:'
         version: 1.158.0(ws@8.18.0)
+      '@tauri-apps/api':
+        specifier: ^2.2.0
+        version: 2.2.0
 
   packages/shared:
     dependencies:
