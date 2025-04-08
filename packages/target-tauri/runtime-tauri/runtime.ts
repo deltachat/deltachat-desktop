@@ -56,6 +56,10 @@ type MainWindowEvents =
   | {
       event: 'showKeybindingsDialog'
     }
+  | {
+      event: 'notificationClick'
+      data: NotificationClickedEventPayload
+    }
 
 const events = new Channel<MainWindowEvents>()
 const jsonrpc = new Channel<yerpc.Message>()
@@ -320,6 +324,8 @@ class TauriRuntime implements Runtime {
         this.onShowDialog?.('settings')
       } else if (event.event === 'showKeybindingsDialog') {
         this.onShowDialog?.('keybindings')
+      } else if (event.event === 'notificationClick') {
+        this.notificationCallback?.(event.data)
       }
     }
   }
@@ -521,12 +527,11 @@ class TauriRuntime implements Runtime {
     invoke('clear_notifications', { chatId })
   }
 
+  notificationCallback?: (data: NotificationClickedEventPayload) => void
   setNotificationCallback(
     cb: (data: NotificationClickedEventPayload) => void
   ): void {
-    listen<NotificationClickedEventPayload>('notification_clicked', event => {
-      cb(event.payload)
-    })
+    this.notificationCallback = cb
   }
   writeTempFileFromBase64(name: string, content: string): Promise<string> {
     return invoke('write_temp_file_from_base64', { name, content })

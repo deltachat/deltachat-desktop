@@ -4523,9 +4523,9 @@ dependencies = [
 
 [[package]]
 name = "log"
-version = "0.4.26"
+version = "0.4.27"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "30bde2b3dc3671ae49d8e2e9f044c7c005836e7a023ee57cffa25ab82764bb9e"
+checksum = "13dc2df351e3202783a1fe0d44375f7295ffb4049267b0f3018346dc122a1d94"
 dependencies = [
  "value-bag",
 ]
@@ -8825,9 +8825,9 @@ checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
 
 [[package]]
 name = "tokio"
-version = "1.43.0"
+version = "1.44.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3d61fa4ffa3de412bfea335c6ecff681de2b609ba3c77ef3e00e521813a9ed9e"
+checksum = "e6b88822cbe49de4185e3a4cbf8321dd487cf5fe0c5c65695fef6346371e9c48"
 dependencies = [
  "backtrace",
  "bytes",
@@ -9485,13 +9485,17 @@ dependencies = [
 name = "user-notify"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "block2 0.6.0",
+ "log",
  "notify-rust",
  "objc2 0.6.0",
  "objc2-foundation 0.3.0",
  "objc2-user-notifications",
  "tauri-winrt-notification 0.7.1",
  "thiserror 2.0.12",
+ "tokio",
+ "url",
 ]
 
 [[package]]

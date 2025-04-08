@@ -1,9 +1,5 @@
-use std::str::FromStr;
-
-use futures_lite::stream::block_on;
 use serde::{Deserialize, Serialize};
-use tauri::{Runtime, Url};
-use tokio::{spawn, task::spawn_local};
+use tauri::{async_runtime::block_on, Runtime};
 use user_notify::NotificationBuilder;
 
 #[derive(Debug, thiserror::Error)]
@@ -37,9 +33,9 @@ struct NotificationClickedEventPayload {
 pub(crate) async fn show_notification<R: Runtime>(
     app: tauri::AppHandle<R>,
     window: tauri::Window<R>,
-    title: &str,
-    body: &str,
-    icon: Option<&str>,
+    title: String,
+    body: String,
+    icon: Option<String>,
     chat_id: u32,
     message_id: u32,
     account_id: u32,
@@ -47,34 +43,6 @@ pub(crate) async fn show_notification<R: Runtime>(
     if window.label() != "main" {
         return Err(Error::NotMainWindow);
     }
-
-    let mut notification_builder = {
-        #[cfg(target_os = "macos")]
-        {
-            user_notify::mac_os::NotificationBuilderMacOS::new()
-        }
-        #[cfg(target_os = "windows")]
-        {
-            todo!();
-        }
-        #[cfg(any(
-            target_os = "linux",
-            target_os = "dragonfly",
-            target_os = "freebsd",
-            target_os = "openbsd",
-            target_os = "netbsd"
-        ))]
-        {
-            user_notify::xdg::NotificationBuilderXdg::new()
-                .category_hint(user_notify::xdg::NotificationCategory::ImReceived)
-                .appname("Delta Chat")
-        }
-    };
-
-    let mut notification_builder = notification_builder
-        .title(title)
-        .body(body)
-        .set_thread_id(&format!("{account_id}-{chat_id}"));
 
     // .extra(
     //     "data",
@@ -103,12 +71,49 @@ pub(crate) async fn show_notification<R: Runtime>(
     //     ))
     // }
 
+    let app_clone = app.clone();
     // MacOS needs this to be run on main thread
     app.run_on_main_thread(move || {
         // TODO find way to make this async
         // by doing conversion to async here and not in user_notify crate
-        let notification = block_on(notification_builder.show())?;
-    });
+        let notification = match block_on(async {
+            let mut notification_builder = {
+                #[cfg(target_os = "macos")]
+                {
+                    user_notify::mac_os::NotificationBuilderMacOS::new()
+                }
+                #[cfg(target_os = "windows")]
+                {
+                    todo!();
+                }
+                #[cfg(any(
+                    target_os = "linux",
+                    target_os = "dragonfly",
+                    target_os = "freebsd",
+                    target_os = "openbsd",
+                    target_os = "netbsd"
+                ))]
+                {
+                    user_notify::xdg::NotificationBuilderXdg::new()
+                        .category_hint(user_notify::xdg::NotificationCategory::ImReceived)
+                        .appname("Delta Chat")
+                }
+            };
+
+            let notification_builder = notification_builder
+                .title(&title)
+                .body(&body)
+                .set_thread_id(&format!("{account_id}-{chat_id}"));
+
+            notification_builder.show().await
+        }) {
+            Ok(notification) => notification,
+            Err(err) => {
+                log::error!("show notification failed {err:?}");
+                return;
+            }
+        };
+    })?;
 
     // notification.clo
 
@@ -130,8 +135,7 @@ pub(crate) async fn clear_notifications<R: Runtime>(
         return Err(Error::NotMainWindow);
     }
 
-    // there seems to be no api for this in https://docs.rs/tauri-plugin-notification/latest/tauri_plugin_notification/struct.NotificationBuilder.html
-    todo!();
+    // todo!();
 
     Ok(())
 }
@@ -145,8 +149,11 @@ pub(crate) async fn clear_all_notifications<R: Runtime>(
         return Err(Error::NotMainWindow);
     }
 
-    // there seems to be no api for this in https://docs.rs/tauri-plugin-notification/latest/tauri_plugin_notification/struct.NotificationBuilder.html
-    todo!("loop through all notifications we hold in the manager and call close on them");
+    #[cfg(not(target_os = "macos"))]
+    {
+        // there seems to be no api for this in https://docs.rs/tauri-plugin-notification/latest/tauri_plugin_notification/struct.NotificationBuilder.html
+        todo!("loop through all notifications we hold in the manager and call close on them");
+    }
 
     #[cfg(target_os = "macos")]
     {

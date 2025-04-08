@@ -3,7 +3,10 @@ use std::path::PathBuf;
 use crate::Error;
 
 // This is what every notification on all platforms has
-pub trait NotificationBuilder {
+pub trait NotificationBuilder
+where
+    Self: Sized,
+{
     fn new() -> Self;
     /// main content of notification
     ///
@@ -36,7 +39,7 @@ pub trait NotificationBuilder {
     /// - MacOS: passed by file path, must be gif, jpg, or png
     /// - For linux the file is read and transfered over dbus (in case you are in a flatpak and it can't read from files) ["image-data"](https://specifications.freedesktop.org/notification-spec/latest/icons-and-images.html#icons-and-images-formats)
     /// - Windows: passed by file path. [image](https://docs.rs/tauri-winrt-notification/latest/tauri_winrt_notification/struct.Toast.html#method.image)
-    fn set_image(self, path: PathBuf) -> Self;
+    fn set_image(self, path: PathBuf) -> Result<Self, Error>;
 
     /// Set App icon
     ///
@@ -44,7 +47,7 @@ pub trait NotificationBuilder {
     /// - MacOS: not supported to change the app icon?
     /// - For linux the file is read and transfered over dbus (in case you are in a flatpak and it can't read from files) [app_icon](https://specifications.freedesktop.org/notification-spec/latest/icons-and-images.html#icons-and-images-formats)
     /// - Windows not implemented yet because it already uses the app icon
-    fn set_icon(self, path: PathBuf) -> Self;
+    fn set_icon(self, path: PathBuf) -> Result<Self, Error>;
 
     /// Set Thread id, this is used to group related notifications
     ///
@@ -54,18 +57,18 @@ pub trait NotificationBuilder {
     /// - Windows: not implemented
     fn set_thread_id(self, thread_id: &str) -> Self;
 
-    fn on_click(self, cb: Box<dyn Fn() -> () + Send + Sync>) -> Self;
+    fn on_click(self, cb: Box<dyn Fn() + Send + Sync>) -> Self;
 
-    fn on_close(self, cb: Box<dyn Fn() -> () + Send + Sync>) -> Self;
+    fn on_close(self, cb: Box<dyn Fn() + Send + Sync>) -> Self;
 
     /// Shows notification and returns Notification handle
-    async fn show(self) -> Result<impl NotificationHandle, Error>;
+    fn show(self) -> impl std::future::Future<Output = Result<impl NotificationHandle, Error>>;
 }
 
 // Handle to a sent notification
 pub trait NotificationHandle {
     /// close the notification
-    fn close(&self);
+    fn close(&self) -> Result<(), Error>;
 }
 
 // https://developer.apple.com/documentation/usernotifications/unnotificationcontent/targetcontentidentifier

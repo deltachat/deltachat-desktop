@@ -12,7 +12,7 @@ use state::{
     main_window_channels::MainWindowChannels, menu_manager::MenuManager,
     translations::TranslationState, webxdc_instances::WebxdcInstancesState,
 };
-use tauri::Manager;
+use tauri::{async_runtime::spawn, AppHandle, Manager};
 use tauri_plugin_log::{Target, TargetKind};
 
 mod app_path;
@@ -74,7 +74,7 @@ fn ui_ready(state: tauri::State<AppState>) -> Result<(), String> {
 }
 
 #[tauri::command]
-fn ui_frontend_ready(state: tauri::State<AppState>) -> Result<(), String> {
+fn ui_frontend_ready(app: AppHandle, state: tauri::State<'_, AppState>) -> Result<(), String> {
     // TODO: deeplinking: -> send url to frontend
 
     match state.inner.lock() {
@@ -84,6 +84,26 @@ fn ui_frontend_ready(state: tauri::State<AppState>) -> Result<(), String> {
         Err(err) => return Err(format!("failed to aquire lock {err:#}")),
     };
     state.log_duration_since_startup("ui_frontend_ready");
+
+    #[cfg(target_os = "macos")]
+    {
+        app.run_on_main_thread(|| {
+            match user_notify::mac_os::first_time_ask_for_notification_permission() {
+                Err(err) => {
+                    log::error!("failed to ask for notification permission: {err:?}");
+                }
+                Ok(rx) => {
+                    spawn(async {
+                        if let Err(err) = rx.await {
+                            println!("failed to ask for notification permission: {err:?}");
+                        }
+                    });
+                }
+            }
+        })
+        .map_err(|err| err.to_string())?;
+    }
+
     Ok(())
 }
 
@@ -340,7 +360,9 @@ pub fn run() {
                 // as they probably don't work anymore and are just stuck
                 //
                 // https://github.com/deltachat/deltachat-desktop/issues/2438#issuecomment-1090735045
-                user_notify::mac_os::remove_all_delivered_notifications()?;
+                if let Err(err) = user_notify::mac_os::remove_all_delivered_notifications() {
+                    log::error!("remove_all_delivered_notifications: {err:?}");
+                }
             }
 
             app.state::<AppState>()

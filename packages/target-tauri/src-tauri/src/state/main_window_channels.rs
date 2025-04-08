@@ -31,6 +31,11 @@ pub enum MainWindowEvents {
     ShowAboutDialog,
     ShowSettingsDialog,
     ShowKeybindingsDialog,
+    NotificationClick {
+        account_id: u32,
+        chat_id: u32,
+        msg_id: u32,
+    },
 }
 
 pub(crate) struct InnerMainWindowChannelsState {

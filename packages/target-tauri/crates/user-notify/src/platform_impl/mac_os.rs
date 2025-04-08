@@ -1,7 +1,11 @@
-use objc2::{MainThreadMarker, rc::Retained};
-use objc2_foundation::{NSBundle, NSString};
+use std::cell::RefCell;
+
+use objc2::{MainThreadMarker, rc::Retained, runtime::Bool};
+use objc2_foundation::{NSArray, NSBundle, NSError, NSString, NSURL, ns_string};
 use objc2_user_notifications::{
-    UNMutableNotificationContent, UNNotificationRequest, UNUserNotificationCenter,
+    UNAuthorizationOptions, UNAuthorizationStatus, UNMutableNotificationContent,
+    UNNotificationAttachment, UNNotificationRequest, UNNotificationSettings,
+    UNUserNotificationCenter,
 };
 
 use crate::{Error, NotificationBuilder, NotificationHandle};
@@ -39,13 +43,33 @@ impl NotificationBuilder for NotificationBuilderMacOS {
         self
     }
 
-    fn set_image(self, path: std::path::PathBuf) -> Self {
-        unsafe {}
-        self
+    fn set_image(self, path: std::path::PathBuf) -> Result<Self, Error> {
+        unsafe {
+            let url = url::Url::from_file_path(&path)
+                .map_err(|_| Error::ParseUrlFromPath(path.clone()))?;
+            let ns_url = NSURL::fileURLWithPath(&NSString::from_str(url.path()));
+
+            let attachment = UNNotificationAttachment::attachmentWithIdentifier_URL_options_error(
+                ns_string!(""),
+                &ns_url,
+                None,
+            )
+            .map_err(|ns_err| {
+                let description = ns_err.localizedDescription();
+                Error::NSError(description.to_string())
+            })?;
+
+            let ns_array: Retained<NSArray<UNNotificationAttachment>> =
+                NSArray::from_retained_slice(&[attachment]);
+
+            self.notification.setAttachments(&ns_array);
+        }
+        Ok(self)
     }
 
-    fn set_icon(self, path: std::path::PathBuf) -> Self {
-        todo!()
+    fn set_icon(self, _path: std::path::PathBuf) -> Result<Self, Error> {
+        log::debug!("notification set_icon is not supported on MacOS");
+        Ok(self)
     }
 
     fn set_thread_id(self, thread_id: &str) -> Self {
@@ -66,39 +90,89 @@ impl NotificationBuilder for NotificationBuilderMacOS {
 
     #[allow(refining_impl_trait)]
     async fn show(self) -> Result<NotificationHandleMacOS, Error> {
-        unsafe {
-            MainThreadMarker::new().ok_or(Error::NotMainThread)?;
-            let bundle_id = NSBundle::mainBundle()
-                .bundleIdentifier()
-                .ok_or(Error::NoBundleId)?;
+        MainThreadMarker::new().ok_or(Error::NotMainThread)?;
 
-            let request = UNNotificationRequest::requestWithIdentifier_content_trigger(
+        let request = unsafe {
+            let bundle = NSBundle::mainBundle();
+            let bundle_id = bundle.bundleIdentifier().ok_or(Error::NoBundleId)?;
+            println!("bundle_id: {bundle_id:?}");
+
+            UNNotificationRequest::requestWithIdentifier_content_trigger(
                 &bundle_id,
                 &self.notification,
                 None,
-            );
+            )
+        };
 
-            // UNUserNotificationCenter::currentNotificationCenter()
-            //     .addNotificationRequest_withCompletionHandler(&request, completion_handler);
-        }
+        let (tx, rx) = tokio::sync::oneshot::channel::<Result<(), Error>>();
+        add_notification(&request, move |result| {
+            if let Err(err) = tx.send(result) {
+                log::error!("add_notification tx.send error {err:?}");
+            }
+        });
+        rx.await??;
 
-        todo!();
+        let id = unsafe { request.identifier() };
 
-        Ok(NotificationHandleMacOS::new())
+        log::info!("identifier: {id:?}");
+
+        Ok(NotificationHandleMacOS::new(id))
+    }
+}
+/// adds a notification to the notification center
+/// needs to be called from main thread
+fn add_notification<F: FnOnce(Result<(), Error>) + Send + 'static>(
+    request: &UNNotificationRequest,
+    cb: F,
+) {
+    unsafe {
+        // make the RcBlock callback be a FnOnce
+        let cb = RefCell::new(Some(cb));
+        let block = block2::RcBlock::new(move |error: *mut NSError| {
+            if error.is_null() {
+                if let Some(cb) = cb.take() {
+                    cb(Ok(()));
+                }
+            } else if let Some(cb) = cb.take() {
+                let Some(err_ref) = error.as_ref() else {
+                    return cb(Err(Error::NSError("Failed to read error".to_string())));
+                };
+                let description = err_ref.localizedDescription();
+                cb(Err(Error::NSError(description.to_string())));
+            }
+        });
+
+        UNUserNotificationCenter::currentNotificationCenter()
+            .addNotificationRequest_withCompletionHandler(request, Some(&block));
     }
 }
 
-pub struct NotificationHandleMacOS {}
+pub struct NotificationHandleMacOS {
+    id: Retained<NSString>, // idea use normal rust string
+}
 
 impl NotificationHandleMacOS {
-    fn new() -> Self {
-        Self {}
+    fn new(id: Retained<NSString>) -> Self {
+        Self { id }
     }
 }
 
 impl NotificationHandle for NotificationHandleMacOS {
-    fn close(&self) {
-        todo!()
+    fn close(&self) -> Result<(), Error> {
+        MainThreadMarker::new().ok_or(Error::NotMainThread)?;
+
+        let id = self.id.clone();
+        let array: Retained<NSArray<NSString>> = NSArray::from_retained_slice(&[id]);
+
+        unsafe {
+            NSBundle::mainBundle()
+                .bundleIdentifier()
+                .ok_or(Error::NoBundleId)?;
+
+            UNUserNotificationCenter::currentNotificationCenter()
+                .removeDeliveredNotificationsWithIdentifiers(&array);
+        }
+        Ok(())
     }
 }
 
@@ -117,13 +191,78 @@ impl NotificationHandle for NotificationHandleMacOS {
 pub fn remove_all_delivered_notifications() -> Result<(), Error> {
     unsafe {
         MainThreadMarker::new().ok_or(Error::NotMainThread)?;
+        NSBundle::mainBundle()
+            .bundleIdentifier()
+            .ok_or(Error::NoBundleId)?;
+
         UNUserNotificationCenter::currentNotificationCenter().removeAllDeliveredNotifications();
     }
     Ok(())
 }
 
-// TODO: method to get notification setting state:
-// https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/getnotificationsettings(completionhandler:)
-
-// TODO: method to request notification permission:
 // https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/requestauthorization(options:completionhandler:)
+pub fn first_time_ask_for_notification_permission()
+-> Result<tokio::sync::oneshot::Receiver<Result<bool, Error>>, Error> {
+    unsafe {
+        MainThreadMarker::new().ok_or(Error::NotMainThread)?;
+        NSBundle::mainBundle()
+            .bundleIdentifier()
+            .ok_or(Error::NoBundleId)?;
+
+        let notification_settings = UNNotificationSettings::new();
+        let auth_status = notification_settings.authorizationStatus();
+        if auth_status == UNAuthorizationStatus::NotDetermined {
+            log::info!("first time asking for notification permission");
+        }
+        println!("1 {auth_status:?}");
+        let (tx, rx) = tokio::sync::oneshot::channel::<Result<bool, Error>>();
+
+        let cb = RefCell::new(Some(tx));
+        let block = block2::RcBlock::new(move |authorized: Bool, error: *mut NSError| {
+            if let Some(cb) = cb.take() {
+                let result: Result<bool, Error> = if error.is_null() {
+                    Ok(authorized.as_bool())
+                } else {
+                    if let Some(err_ref) = error.as_ref() {
+                        let description = err_ref.localizedDescription();
+                        Err(Error::NSError(description.to_string()))
+                    } else {
+                        Err(Error::NSError("Failed to read error".to_string()))
+                    }
+                };
+                if let Err(_) = cb.send(result) {
+                    log::error!("the receiver dropped");
+                }
+            }
+        });
+
+        let mut options = UNAuthorizationOptions::empty();
+        options.set(UNAuthorizationOptions::Alert, true);
+        options.set(UNAuthorizationOptions::Sound, true);
+        options.set(UNAuthorizationOptions::Badge, true);
+        UNUserNotificationCenter::currentNotificationCenter()
+            .requestAuthorizationWithOptions_completionHandler(options, &block);
+        Ok(rx)
+    }
+}
+
+// https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/getnotificationsettings(completionhandler:)
+pub fn get_notification_permission_state() -> Result<bool, Error> {
+    let auth_status = unsafe {
+        MainThreadMarker::new().ok_or(Error::NotMainThread)?;
+        NSBundle::mainBundle()
+            .bundleIdentifier()
+            .ok_or(Error::NoBundleId)?;
+        UNNotificationSettings::new().authorizationStatus()
+    };
+    Ok(match auth_status {
+        UNAuthorizationStatus::Authorized
+        | UNAuthorizationStatus::Provisional
+        | UNAuthorizationStatus::Ephemeral => true,
+        UNAuthorizationStatus::Denied | UNAuthorizationStatus::NotDetermined => false,
+        _ => {
+            log::error!("Unknown Authorisation status: {auth_status:?}");
+            false
+        }
+    })
+}

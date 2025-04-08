@@ -63,4 +63,8 @@ permissions = [
 
     "allow-open-help-window",
     "allow-open-html-window",
+
+    "allow-show-notification",
+    "allow-clear-notifications",
+    "allow-clear-all-notifications",
 ]
