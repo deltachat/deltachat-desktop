@@ -10,14 +10,14 @@ use tauri::{path::SafePathBuf, AppHandle, Manager};
 #[derive(Debug, Deserialize, Serialize, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct SendToChatFile {
-    file_name: String,
-    file_content: String,
+    pub(crate) file_name: String,
+    pub(crate) file_content: String,
 }
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct SendToChatOptions {
-    file: Option<SendToChatFile>,
-    text: Option<String>,
+    pub(crate) file: Option<SendToChatFile>,
+    pub(crate) text: Option<String>,
 }
 
 #[derive(Debug, Serialize, Clone)]
@@ -34,6 +34,7 @@ pub enum MainWindowEvents {
     ResumeFromSleep,
     ToggleNotifications,
     OnThemeUpdate,
+    DeepLinkOpened(String),
 }
 
 pub(crate) struct InnerMainWindowChannelsState {
