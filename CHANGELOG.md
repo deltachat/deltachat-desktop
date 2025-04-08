@@ -54,6 +54,7 @@
 - fix order when sending multiple files at once #4895
 - tauri: fix: sticker picker previews not working
 - tauri: fix emoji picker being super ugly
+- tauri: fix launching a second instance of Delta Chat not focusing the main window if it's closed
 
 <a id="1_56_0"></a>
 
