@@ -100,7 +100,7 @@ export default function useInstantOnboarding(): InstantOnboarding {
 
       return new Promise((resolve, reject) => {
         // 3. Kick-off the actual account creation process by calling
-        // `configure`. This happens inside of this dialog
+        // `addTransport`. This happens inside of this dialog
         openDialog(ConfigureProgressDialog, {
           onSuccess: async () => {
             try {
