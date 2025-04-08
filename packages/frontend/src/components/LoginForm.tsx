@@ -33,24 +33,25 @@ import SettingsSwitch from './Settings/SettingsSwitch'
 const log = getLogger('renderer/loginForm')
 
 export type Credentials = EnteredLoginParam & ProxySettings
-export type ProxySettings = {
+
+type ProxySettings = {
   proxyEnabled: boolean
   proxyUrl: string
 }
 
-export enum Proxy {
+enum Proxy {
   DISABLED = '0',
   ENABLED = '1',
 }
 
-export enum Socket {
+enum Socket {
   AUTOMATIC = 'automatic',
   SSL = 'ssl',
   STARTTLS = 'starttls',
   PLAIN = 'plain',
 }
 
-export enum CertificateChecks {
+enum CertificateChecks {
   AUTOMATIC = 'automatic',
   STRICT = 'strict',
   ACCEPT_INVALID_CERTIFICATES = 'acceptInvalidCertificates',
