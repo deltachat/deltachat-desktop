@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react'
 
-import { Credentials } from '../../types-app'
 import ImageBackdrop from '../ImageBackdrop'
 import LoginForm, {
+  Credentials,
   defaultCredentials,
   ConfigureProgressDialog,
 } from '../LoginForm'
@@ -49,6 +49,7 @@ export default function AccountSetupScreen({
               cb: () => setPromptDialogId(null),
             })
           ),
+        proxyUpdated: credentials.proxyEnabled,
       }),
     [accountId, openDialog, selectAccount, credentials]
   )
