@@ -104,7 +104,7 @@ fn ui_frontend_ready(
         Ok(mut lock) => {
             if !lock.ui_frontend_ready {
                 // don't run again on reload
-                if let Some(deeplink_or_xdc) = &rc.deeplink {
+                if let Some(deeplink_or_xdc) = lock.deeplink.take().or(rc.deeplink.clone()) {
                     let app_clone = app.clone();
                     let deeplink_or_xdc = deeplink_or_xdc.to_owned();
                     spawn(async move {
@@ -545,6 +545,30 @@ pub fn run() -> i32 {
     #[allow(clippy::single_match)]
     let exit_code = app.run_return(|app_handle, run_event| match run_event {
         // tauri::RunEvent::ExitRequested { code, api, .. } => {}
+        #[cfg(target_os = "macos")]
+        tauri::RunEvent::Opened { urls } => {
+            if let Some(url) = urls.get(0).map(|s| s.to_string()) {
+                let app_state = app_handle.state::<AppState>();
+                match app_state.inner().inner.lock() {
+                    Ok(mut lock) => {
+                        if !lock.ui_frontend_ready {
+                            lock.deeplink.replace(url);
+                        } else {
+                            drop(lock);
+                            let app_clone = app_handle.clone();
+                            spawn(async move {
+                                if let Err(err) = handle_deep_link(&app_clone, None, url).await {
+                                    log::error!("error handling deeplink: {err:?}");
+                                }
+                            });
+                        }
+                    }
+                    Err(err) => {
+                        log::error!("failed to aquire lock on AppState:{err:?}")
+                    }
+                }
+            }
+        }
         #[cfg(target_os = "macos")]
         tauri::RunEvent::Reopen { .. } => {
             // handle clicks on dock on macOS (because on macOS main window never really closes)
