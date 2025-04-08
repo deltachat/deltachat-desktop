@@ -7,8 +7,7 @@ use tauri::{
 use tauri_plugin_store::StoreExt;
 
 use crate::{
-    get_setting_bool_or,
-    settings::{NOTIFICATIONS, NOTIFICATIONS_DEFAULT},
+    settings::{StoreExtBoolExt, NOTIFICATIONS, NOTIFICATIONS_DEFAULT},
     state::main_window_channels::MainWindowEvents,
     MainWindowChannels, TranslationState, TrayManager, CONFIG_FILE,
 };
@@ -50,10 +49,9 @@ impl MenuAction<'static> for TrayMenuAction {
 
 pub(crate) fn create_tray_menu(app: &AppHandle) -> anyhow::Result<Menu<Wry>> {
     let tx = app.state::<TranslationState>();
-    let notifications_enabled = get_setting_bool_or(
-        app.store(CONFIG_FILE)?.get(NOTIFICATIONS),
-        NOTIFICATIONS_DEFAULT,
-    );
+    let notifications_enabled = app
+        .store(CONFIG_FILE)?
+        .get_bool_or(NOTIFICATIONS, NOTIFICATIONS_DEFAULT);
 
     let quit = MenuItem::with_id(
         app,
