@@ -304,6 +304,11 @@ pub(crate) async fn open_webxdc<'a>(
         .as_ref()
         .map_err(|_err| Error::BlackholeProxyUnavailable)?;
 
+    assert!(
+        initial_url.origin_no_opaque() == ("webxdc", Some(url::Host::Domain("dummy.host")), None)
+            || initial_url.origin_no_opaque()
+                == ("http", Some(url::Host::Domain("webxdc.localhost")), None)
+    );
     let mut window_builder =
         WebviewWindowBuilder::new(&app, &window_id, WebviewUrl::External(initial_url.clone()))
             .initialization_script(INIT_SCRIPT)
