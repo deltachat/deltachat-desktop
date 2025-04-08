@@ -138,6 +138,10 @@ const Composer = forwardRef<
     ? editMessageInputRef
     : regularMessageInputRef
 
+  if (useHasChanged2(chatId) && recording) {
+    setRecording(false)
+  }
+
   const saveVoiceAsDraft = (voiceData: Blob) => {
     const reader = new FileReader()
     reader.readAsDataURL(voiceData)
