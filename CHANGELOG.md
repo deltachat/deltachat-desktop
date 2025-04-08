@@ -37,7 +37,7 @@
 - profile view redesign #4897
 
 ### Fixed
-- tauri: improve security #4826, #4936, #4937
+- tauri: improve security #4826, #4936, #4937, #4944
 - improve fatal error dialog readability by removing color from deltachat-rpc-server errors
 - prevent dragging around of webxdc icon #4740
 - tauri: clear temp folder on exit #4839
