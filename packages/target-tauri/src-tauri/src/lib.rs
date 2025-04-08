@@ -126,6 +126,25 @@ async fn ui_frontend_ready(
 
     deeplink::register();
 
+    #[cfg(target_os = "macos")]
+    {
+        app.run_on_main_thread(|| {
+            match user_notify::mac_os::first_time_ask_for_notification_permission() {
+                Err(err) => {
+                    log::error!("failed to ask for notification permission: {err:?}");
+                }
+                Ok(rx) => {
+                    spawn(async {
+                        if let Err(err) = rx.await {
+                            println!("failed to ask for notification permission: {err:?}");
+                        }
+                    });
+                }
+            }
+        })
+        .map_err(|err| err.to_string())?;
+    }
+
     Ok(())
 }
 
@@ -489,7 +508,9 @@ pub fn run() -> i32 {
                 // as they probably don't work anymore and are just stuck
                 //
                 // https://github.com/deltachat/deltachat-desktop/issues/2438#issuecomment-1090735045
-                user_notify::mac_os::remove_all_delivered_notifications()?;
+                if let Err(err) = user_notify::mac_os::remove_all_delivered_notifications() {
+                    log::error!("remove_all_delivered_notifications: {err:?}");
+                }
             }
 
             app.state::<AppState>()

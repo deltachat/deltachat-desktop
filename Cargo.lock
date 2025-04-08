@@ -9513,13 +9513,17 @@ dependencies = [
 name = "user-notify"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "block2 0.6.1",
+ "log",
  "notify-rust",
  "objc2 0.6.1",
  "objc2-foundation 0.3.1",
  "objc2-user-notifications",
  "tauri-winrt-notification",
  "thiserror 2.0.12",
+ "tokio",
+ "url",
 ]
 
 [[package]]
