@@ -1,4 +1,4 @@
-use std::cell::RefCell;
+use std::{cell::RefCell, ptr::NonNull};
 
 use objc2::{MainThreadMarker, rc::Retained, runtime::Bool};
 use objc2_foundation::{NSArray, NSBundle, NSError, NSString, NSURL, ns_string};
@@ -45,10 +45,9 @@ impl NotificationBuilder for NotificationBuilderMacOS {
 
     fn set_image(self, path: std::path::PathBuf) -> Result<Self, Error> {
         unsafe {
-            let url = url::Url::from_file_path(&path)
-                .map_err(|_| Error::ParseUrlFromPath(path.clone()))?;
-            let ns_url = NSURL::fileURLWithPath(&NSString::from_str(url.path()));
-
+            let ns_url =
+                NSURL::fileURLWithPath(&NSString::from_str(&path.to_string_lossy().to_string()));
+            log::info!("{ns_url:?}");
             let attachment = UNNotificationAttachment::attachmentWithIdentifier_URL_options_error(
                 ns_string!(""),
                 &ns_url,
@@ -174,6 +173,10 @@ impl NotificationHandle for NotificationHandleMacOS {
         }
         Ok(())
     }
+
+    fn get_id(&self) -> String {
+        self.id.to_string()
+    }
 }
 
 // /// Get all deliverd notifications from UNUserNotificationCenter that are still active,
@@ -184,6 +187,31 @@ impl NotificationHandle for NotificationHandleMacOS {
 //     todo!();
 // }
 //
+
+pub fn remove_delivered_notifications(ids: Vec<&str>) -> Result<(), Error> {
+    MainThreadMarker::new().ok_or(Error::NotMainThread)?;
+
+    let ids: Vec<_> = ids.iter().map(|s| NSString::from_str(s)).collect();
+    let array: Retained<NSArray<NSString>> = NSArray::from_retained_slice(ids.as_slice());
+
+    unsafe {
+        NSBundle::mainBundle()
+            .bundleIdentifier()
+            .ok_or(Error::NoBundleId)?;
+
+        UNUserNotificationCenter::currentNotificationCenter()
+            .removeDeliveredNotificationsWithIdentifiers(&array);
+    }
+    unsafe {
+        MainThreadMarker::new().ok_or(Error::NotMainThread)?;
+        NSBundle::mainBundle()
+            .bundleIdentifier()
+            .ok_or(Error::NoBundleId)?;
+
+        UNUserNotificationCenter::currentNotificationCenter().removeAllDeliveredNotifications();
+    }
+    Ok(())
+}
 
 /// Removes all of your app’s delivered notifications from Notification Center.
 ///
@@ -209,12 +237,15 @@ pub fn first_time_ask_for_notification_permission()
             .bundleIdentifier()
             .ok_or(Error::NoBundleId)?;
 
-        let notification_settings = UNNotificationSettings::new();
-        let auth_status = notification_settings.authorizationStatus();
-        if auth_status == UNAuthorizationStatus::NotDetermined {
-            log::info!("first time asking for notification permission");
-        }
-        println!("1 {auth_status:?}");
+        // this needs to be fetched async instead via
+        //  UNUserNotificationCenter::currentNotificationCenter().getNotificationSettingsWithCompletionHandler(completion_handler);
+        // let notification_settings = UNNotificationSettings::new();
+        // let auth_status = notification_settings.authorizationStatus();
+        // if auth_status == UNAuthorizationStatus::NotDetermined {
+        //     log::info!("first time asking for notification permission");
+        // }
+        // println!("1 {auth_status:?}");
+
         let (tx, rx) = tokio::sync::oneshot::channel::<Result<bool, Error>>();
 
         let cb = RefCell::new(Some(tx));
@@ -247,22 +278,33 @@ pub fn first_time_ask_for_notification_permission()
 }
 
 // https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/getnotificationsettings(completionhandler:)
-pub fn get_notification_permission_state() -> Result<bool, Error> {
-    let auth_status = unsafe {
+pub fn get_notification_permission_state<F: FnOnce(bool) + Send + 'static>(
+    cb: F,
+) -> Result<(), Error> {
+    unsafe {
         MainThreadMarker::new().ok_or(Error::NotMainThread)?;
         NSBundle::mainBundle()
             .bundleIdentifier()
             .ok_or(Error::NoBundleId)?;
-        UNNotificationSettings::new().authorizationStatus()
-    };
-    Ok(match auth_status {
-        UNAuthorizationStatus::Authorized
-        | UNAuthorizationStatus::Provisional
-        | UNAuthorizationStatus::Ephemeral => true,
-        UNAuthorizationStatus::Denied | UNAuthorizationStatus::NotDetermined => false,
-        _ => {
-            log::error!("Unknown Authorisation status: {auth_status:?}");
-            false
-        }
-    })
+        let cb = RefCell::new(Some(cb));
+        let block = block2::RcBlock::new(move |settings: NonNull<UNNotificationSettings>| {
+            if let Some(cb) = cb.take() {
+                let auth_status = settings.as_ref().authorizationStatus();
+                let authorized = match auth_status {
+                    UNAuthorizationStatus::Authorized
+                    | UNAuthorizationStatus::Provisional
+                    | UNAuthorizationStatus::Ephemeral => true,
+                    UNAuthorizationStatus::Denied | UNAuthorizationStatus::NotDetermined => false,
+                    _ => {
+                        log::error!("Unknown Authorisation status: {auth_status:?}");
+                        false
+                    }
+                };
+                cb(authorized)
+            }
+        });
+        UNUserNotificationCenter::currentNotificationCenter()
+            .getNotificationSettingsWithCompletionHandler(&block);
+    }
+    Ok(())
 }

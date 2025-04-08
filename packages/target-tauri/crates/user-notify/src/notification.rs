@@ -69,6 +69,8 @@ where
 pub trait NotificationHandle {
     /// close the notification
     fn close(&self) -> Result<(), Error>;
+
+    fn get_id(&self) -> String;
 }
 
 // https://developer.apple.com/documentation/usernotifications/unnotificationcontent/targetcontentidentifier
