@@ -11,7 +11,6 @@ import {
   DeltaProgressBar,
 } from './Login-Styles'
 import { ClickableLink } from './helpers/ClickableLink'
-import { Credentials } from '../types-app'
 import { getLogger } from '../../../shared/logger'
 import { BackendRemote, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
@@ -26,30 +25,56 @@ import Collapse from './Collapse'
 import { I18nContext } from '../contexts/I18nContext'
 import useTranslationFunction from '../hooks/useTranslationFunction'
 import { getDeviceChatId, saveLastChatId } from '../backend/chat'
+import { EnteredLoginParam } from '@deltachat/jsonrpc-client/dist/generated/types'
 
 import type { DialogProps } from '../contexts/DialogContext'
 import SettingsSwitch from './Settings/SettingsSwitch'
 
 const log = getLogger('renderer/loginForm')
 
+export type Credentials = EnteredLoginParam & ProxySettings
+export type ProxySettings = {
+  proxyEnabled: boolean
+  proxyUrl: string
+}
+
+export enum Proxy {
+  DISABLED = '0',
+  ENABLED = '1',
+}
+
+export enum Socket {
+  AUTOMATIC = 'automatic',
+  SSL = 'ssl',
+  STARTTLS = 'starttls',
+  PLAIN = 'plain',
+}
+
+export enum CertificateChecks {
+  AUTOMATIC = 'automatic',
+  STRICT = 'strict',
+  ACCEPT_INVALID_CERTIFICATES = 'acceptInvalidCertificates',
+}
+
 export function defaultCredentials(credentials?: Credentials): Credentials {
   const defaultCredentials: Credentials = {
     addr: '',
-    mail_user: '',
-    mail_pw: '',
-    mail_server: '',
-    mail_port: '',
-    mail_security: '',
-    imap_certificate_checks: '',
-    send_user: '',
-    send_pw: '',
-    send_server: '',
-    send_port: '',
-    send_security: '',
-    smtp_certificate_checks: '',
-    proxy_enabled: '0',
-    proxy_url: '',
+    imapUser: null,
+    password: '',
+    imapServer: null,
+    imapPort: null,
+    imapSecurity: null,
+    certificateChecks: null,
+    smtpUser: null,
+    smtpPassword: null,
+    smtpServer: null,
+    smtpPort: null,
+    smtpSecurity: null,
+    oauth2: null,
+    proxyEnabled: false,
+    proxyUrl: '',
   }
+
   return { ...defaultCredentials, ...credentials }
 }
 
@@ -64,31 +89,28 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
     Type.ProviderInfo | undefined
   >()
 
-  const _handleCredentialsChange = (id: string, value: string) => {
-    let changeCredentials = {}
-    if (id === 'certificate_checks') {
-      // Change to certificate_checks updates certificate
-      // checks configuration for all protocols.
-
-      changeCredentials = {
-        imap_certificate_checks: value,
-        smtp_certificate_checks: value,
-      }
-    } else {
-      changeCredentials = {
-        [id]: value,
-      }
-    }
-
-    const updatedCredentials = { ...credentials, ...changeCredentials }
-    setCredentials(updatedCredentials)
+  // override existing credentials with new value
+  const _handleCredentialsChange = (
+    id: keyof Credentials,
+    value: string | boolean
+  ) => {
+    setCredentials({ ...credentials, [id]: value })
   }
 
   const handleCredentialsChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const { id, value } = event.target
-    _handleCredentialsChange(id, value)
+    if (!Object.keys(credentials).includes(id)) {
+      log.error('unknown credentials key', id)
+      return
+    }
+    // convert string values
+    let typeSafeValue: string | number | null = value === '' ? null : value
+    if ((id === 'smtpPort' || id === 'imapPort') && typeSafeValue !== null) {
+      typeSafeValue = Number(value)
+    }
+    setCredentials({ ...credentials, [id]: typeSafeValue })
   }
 
   const [debouncedGetProviderInfo] = useDebouncedCallback(
@@ -130,26 +152,20 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
 
   const {
     addr,
-    mail_user,
-    mail_pw,
-    mail_server,
-    mail_port,
-    mail_security,
-    imap_certificate_checks,
-    send_user,
-    send_pw,
-    send_server,
-    send_port,
-    send_security,
-    proxy_enabled,
-    proxy_url,
+    imapUser,
+    password,
+    imapServer,
+    imapPort,
+    imapSecurity,
+    certificateChecks,
+    smtpUser,
+    smtpPassword,
+    smtpServer,
+    smtpPort,
+    smtpSecurity,
+    proxyEnabled,
+    proxyUrl,
   } = credentials
-
-  // We assume that smtp_certificate_checks has the same value.
-  const certificate_checks =
-    imap_certificate_checks === C.DC_CERTCK_ACCEPT_INVALID_CERTIFICATES // deprecated value
-      ? C.DC_CERTCK_ACCEPT_INVALID
-      : imap_certificate_checks
 
   return (
     <I18nContext.Consumer>
@@ -165,10 +181,10 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
           />
 
           <DeltaPasswordInput
-            key='mail_pw'
-            id='mail_pw'
+            key='password'
+            id='password'
             placeholder={tx('existing_password')}
-            password={mail_pw || ''}
+            password={password || ''}
             onChange={handleCredentialsChange}
           />
 
@@ -202,117 +218,119 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
             <p className='delta-headline'>{tx('login_inbox')}</p>
 
             <DeltaInput
-              key='mail_user'
-              id='mail_user'
+              key='imapUser'
+              id='imapUser'
               placeholder={tx('default_value_as_above')}
               label={tx('login_imap_login')}
               type='text'
-              value={mail_user}
+              value={imapUser}
               onChange={handleCredentialsChange}
             />
 
             <DeltaInput
-              key='mail_server'
-              id='mail_server'
+              key='imapServer'
+              id='imapServer'
               placeholder={tx('automatic')}
               label={tx('login_imap_server')}
               type='text'
-              value={mail_server}
+              value={imapServer}
               onChange={handleCredentialsChange}
             />
             <DeltaInput
-              key='mail_port'
-              id='mail_port'
+              key='imapPort'
+              id='imapPort'
               label={tx('login_imap_port')}
               placeholder={tx('def')}
               type='number'
               min='0'
               max='65535'
-              value={mail_port}
+              value={imapPort}
               onChange={handleCredentialsChange}
             />
 
             <DeltaSelect
-              id='mail_security'
+              id='imapSecurity'
               label={tx('login_imap_security')}
-              value={mail_security}
+              value={imapSecurity}
               onChange={handleCredentialsChange as any}
             >
-              <option value={C.DC_SOCKET_AUTO}>{tx('automatic')}</option>
-              <option value={C.DC_SOCKET_SSL}>SSL/TLS</option>
-              <option value={C.DC_SOCKET_STARTTLS}>STARTTLS</option>
-              <option value={C.DC_SOCKET_PLAIN}>{tx('off')}</option>
+              <option value={Socket.AUTOMATIC}>{tx('automatic')}</option>
+              <option value={Socket.SSL}>SSL/TLS</option>
+              <option value={Socket.STARTTLS}>STARTTLS</option>
+              <option value={Socket.PLAIN}>{tx('off')}</option>
             </DeltaSelect>
 
             <p className='delta-headline'>{tx('login_outbox')}</p>
             <DeltaInput
-              key='send_user'
-              id='send_user'
+              key='smtpUser'
+              id='smtpUser'
               placeholder={tx('default_value_as_above')}
               label={tx('login_smtp_login')}
-              value={send_user}
+              value={smtpUser}
               onChange={handleCredentialsChange}
             />
             <DeltaPasswordInput
-              key='send_pw'
-              id='send_pw'
+              key='smtpPassword'
+              id='smtpPassword'
               label={tx('login_smtp_password')}
               placeholder={tx('default_value_as_above')}
-              password={send_pw || ''}
+              password={smtpPassword || ''}
               onChange={handleCredentialsChange}
             />
             <DeltaInput
-              key='send_server'
-              id='send_server'
+              key='smtpServer'
+              id='smtpServer'
               placeholder={tx('automatic')}
               label={tx('login_smtp_server')}
               type='text'
-              value={send_server}
+              value={smtpServer}
               onChange={handleCredentialsChange}
             />
             <DeltaInput
-              key='send_port'
-              id='send_port'
+              key='smtpPort'
+              id='smtpPort'
               placeholder={tx('def')}
               label={tx('login_smtp_port')}
               type='number'
               min='0'
               max='65535'
-              value={send_port}
+              value={smtpPort}
               onChange={handleCredentialsChange}
             />
             <DeltaSelect
-              id='send_security'
+              id='smtpSecurity'
               label={tx('login_smtp_security')}
-              value={send_security}
+              value={smtpSecurity}
               onChange={handleCredentialsChange as any}
             >
-              <option value={C.DC_SOCKET_AUTO}>{tx('automatic')}</option>
-              <option value={C.DC_SOCKET_SSL}>SSL/TLS</option>
-              <option value={C.DC_SOCKET_STARTTLS}>STARTTLS</option>
-              <option value={C.DC_SOCKET_PLAIN}>{tx('off')}</option>
+              <option value={Socket.AUTOMATIC}>{tx('automatic')}</option>
+              <option value={Socket.SSL}>SSL/TLS</option>
+              <option value={Socket.STARTTLS}>STARTTLS</option>
+              <option value={Socket.PLAIN}>{tx('off')}</option>
             </DeltaSelect>
 
             <DeltaSelect
-              id='certificate_checks'
+              id='certificateChecks'
               label={tx('login_certificate_checks')}
-              value={certificate_checks}
+              value={certificateChecks}
               onChange={handleCredentialsChange as any}
             >
-              <option value={C.DC_CERTCK_AUTO}>{tx('automatic')}</option>
-              <option value={C.DC_CERTCK_STRICT}>{tx('strict')}</option>
-              <option value={C.DC_CERTCK_ACCEPT_INVALID}>
+              <option value={CertificateChecks.AUTOMATIC}>
+                {tx('automatic')}
+              </option>
+              <option value={CertificateChecks.STRICT}>{tx('strict')}</option>
+              <option value={CertificateChecks.ACCEPT_INVALID_CERTIFICATES}>
                 {tx('accept_invalid_certificates')}
               </option>
             </DeltaSelect>
             <SettingsSwitch
               label={tx('proxy_use_proxy')}
-              value={proxy_enabled === '1'}
+              value={proxyEnabled}
               onChange={(isTrue: boolean) =>
-                _handleCredentialsChange('proxy_enabled', isTrue ? '1' : '0')
+                _handleCredentialsChange('proxyEnabled', isTrue)
               }
             />
-            {proxy_enabled === '1' && (
+            {proxyEnabled && (
               <>
                 <p className='text'>
                   Proxy support is currently experimental. Please use at your
@@ -321,10 +339,10 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
                 </p>
                 <p className='text'>{tx('proxy_add_explain')}</p>
                 <DeltaInput
-                  key='proxy_url'
-                  id='proxy_url'
+                  key='proxyUrl'
+                  id='proxyUrl'
                   label={tx('proxy_add_url_hint')}
-                  value={proxy_url}
+                  value={proxyUrl}
                   onChange={handleCredentialsChange}
                 />
               </>
@@ -339,17 +357,19 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
 }
 
 interface ConfigureProgressDialogProps {
-  credentials?: Partial<Credentials>
+  credentials?: Credentials
   onSuccess?: () => void
   onUserCancellation?: () => void
   onFail: (error: string) => void
+  proxyUpdated?: boolean
 }
 
 export function ConfigureProgressDialog({
-  credentials = {},
+  credentials = defaultCredentials(),
   onSuccess,
   onUserCancellation,
   onFail,
+  proxyUpdated = false,
   ...dialogProps
 }: ConfigureProgressDialogProps & DialogProps) {
   const { onClose } = dialogProps
@@ -389,11 +409,25 @@ export function ConfigureProgressDialog({
       ;(async () => {
         try {
           // Prepare initial configuration
-          const initialConfig: { [key: string]: string } = {
+          const initialConfig: Credentials = {
             ...credentials,
-            verified_one_on_one_chats: '1',
           }
-          await BackendRemote.rpc.batchSetConfig(accountId, initialConfig)
+          const { proxyEnabled, proxyUrl, ...transportConfig } = initialConfig
+          // Set proxy settings if changed!
+          if (proxyUpdated) {
+            await BackendRemote.rpc.batchSetConfig(accountId, {
+              proxy_enabled:
+                proxyEnabled === true ? Proxy.ENABLED : Proxy.DISABLED,
+              proxy_url: proxyUrl,
+              verified_one_on_one_chats: '1', // do we still need this?
+            })
+          }
+          if (
+            transportConfig.addr !== undefined &&
+            transportConfig.addr.length > 0
+          ) {
+            await BackendRemote.rpc.addTransport(accountId, transportConfig)
+          }
 
           if (wasCanceled.current) {
             onClose()
@@ -401,7 +435,7 @@ export function ConfigureProgressDialog({
             return
           }
 
-          // Select "Device Messages" chat as the initial one. This will serve
+          // Select 'Device Messages' chat as the initial one. This will serve
           // as a first introduction to the app after they've entered
           const deviceChatId = await getDeviceChatId(accountId)
           if (deviceChatId) {

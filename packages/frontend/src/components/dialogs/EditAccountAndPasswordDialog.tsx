@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react'
 
 import { BackendRemote } from '../../backend-com'
-import { Credentials } from '../../types-app'
 import LoginForm, {
+  Credentials,
   ConfigureProgressDialog,
   defaultCredentials,
+  Proxy,
 } from '../LoginForm'
 import Dialog, {
   DialogBody,
@@ -19,7 +20,12 @@ import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
 import type { DialogProps } from '../../contexts/DialogContext'
 import AlertDialog from './AlertDialog'
 import { selectedAccountId } from '../../ScreenController'
+import { EnteredLoginParam } from '@deltachat/jsonrpc-client/dist/generated/types'
 
+/**
+ * uses a prefilled LoginForm with existing credentials
+ * to edit transport & proxy settings
+ */
 export default function EditAccountAndPasswordDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
 
@@ -50,30 +56,23 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
     if (window.__selectedAccountId === undefined) {
       throw new Error('can not load settings when no account is selected')
     }
-    const accountSettings: Credentials =
-      (await BackendRemote.rpc.batchGetConfig(window.__selectedAccountId, [
-        'addr',
-        'mail_pw',
-        'sentbox_watch',
-        'mvbox_move',
-        'only_fetch_mvbox',
-        'e2ee_enabled',
-        'mail_server',
-        'mail_user',
-        'mail_port',
-        'mail_security',
-        'imap_certificate_checks',
-        'send_user',
-        'send_pw',
-        'send_server',
-        'send_port',
-        'send_security',
-        'smtp_certificate_checks',
-        'proxy_enabled',
-        'proxy_url',
-      ])) as unknown as Credentials
-    setInitialAccountSettings(accountSettings)
-    _setAccountSettings(accountSettings)
+    const accountId = window.__selectedAccountId
+    const transports = await BackendRemote.rpc.listTransports(accountId)
+    const accountSettings: EnteredLoginParam = transports[0]
+
+    const proxySettings = await BackendRemote.rpc.batchGetConfig(accountId, [
+      'proxy_enabled',
+      'proxy_url',
+    ])
+    const proxy = {
+      proxyEnabled: proxySettings.proxy_enabled === Proxy.ENABLED,
+      proxyUrl: proxySettings.proxy_url ?? '',
+    }
+    setInitialAccountSettings({
+      ...accountSettings,
+      ...proxy,
+    })
+    _setAccountSettings({ ...accountSettings, ...proxy })
   }
 
   useEffect(() => {
@@ -83,6 +82,9 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
   const onUpdate = useCallback(async () => {
     const onSuccess = () => onClose()
 
+    const proxyUpdated =
+      initial_settings.proxyEnabled !== accountSettings.proxyEnabled
+
     const update = () => {
       openDialog(ConfigureProgressDialog, {
         credentials: accountSettings,
@@ -90,6 +92,7 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
         onFail: error => {
           openDialog(AlertDialog, { message: error })
         },
+        proxyUpdated,
       })
     }
 
@@ -107,13 +110,19 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
         return
       }
     } else if (
-      initial_settings.proxy_enabled !== accountSettings.proxy_enabled &&
-      accountSettings.proxy_enabled === '1'
+      initial_settings.proxyEnabled !== accountSettings.proxyEnabled &&
+      accountSettings.proxyEnabled
     ) {
+      if (accountSettings.proxyUrl === null) {
+        openDialog(AlertDialog, {
+          message: tx('proxy_invalid') + '\n' + 'Empty Proxy Link!',
+        })
+        return
+      }
       try {
         const qr = await BackendRemote.rpc.checkQr(
           selectedAccountId(),
-          accountSettings.proxy_url
+          accountSettings.proxyUrl
         )
         if (qr.kind !== 'proxy') {
           openDialog(AlertDialog, {
@@ -134,7 +143,7 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
   }, [
     accountSettings,
     initial_settings.addr,
-    initial_settings.proxy_enabled,
+    initial_settings.proxyEnabled,
     onClose,
     openConfirmationDialog,
     openDialog,
