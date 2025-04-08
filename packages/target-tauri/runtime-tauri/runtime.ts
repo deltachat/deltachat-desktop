@@ -71,6 +71,9 @@ type MainWindowEvents =
     }
   | {
       event: 'onThemeUpdate'
+  | {
+      event: 'notificationClick'
+      data: NotificationClickedEventPayload
     }
   | {
       event: 'deepLinkOpened'
@@ -357,6 +360,8 @@ class TauriRuntime implements Runtime {
         this.onThemeUpdate?.()
       } else if (event.event === 'deepLinkOpened') {
         this.onOpenQrUrl?.(event.data)
+      } else if (event.event === 'notificationClick') {
+        this.notificationCallback?.(event.data)
       }
     }
     window
@@ -577,12 +582,11 @@ class TauriRuntime implements Runtime {
     invoke('clear_notifications', { chatId })
   }
 
+  notificationCallback?: (data: NotificationClickedEventPayload) => void
   setNotificationCallback(
     cb: (data: NotificationClickedEventPayload) => void
   ): void {
-    listen<NotificationClickedEventPayload>('notification_clicked', event => {
-      cb(event.payload)
-    })
+    this.notificationCallback = cb
   }
   writeTempFileFromBase64(name: string, content: string): Promise<string> {
     return invoke('write_temp_file_from_base64', { name, content })

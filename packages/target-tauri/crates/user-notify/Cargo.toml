@@ -5,7 +5,16 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+anyhow = "1.0.97"
+log = "0.4.27"
 thiserror = "2.0.12"
+tokio = { version = "1.44.2", features = [
+    "macros",
+    "rt",
+    "rt-multi-thread",
+    "sync",
+] }
+url = "2.5.4"
 
 
 [target.'cfg(any(target_os = "linux", target_os = "dragonfly", target_os = "freebsd", target_os = "openbsd", target_os = "netbsd"))'.dependencies]
@@ -19,7 +28,6 @@ objc2-foundation = { version = "0.3.0", default-features = false, features = [
     "std",
     "objc2-core-foundation",
     "NSURLRequest",
-    "NSURL",
     "NSKeyValueCoding",
     "NSStream",
     "NSDictionary",
@@ -33,6 +41,7 @@ objc2-foundation = { version = "0.3.0", default-features = false, features = [
     # used
     "NSString",
     "NSBundle",
+    "NSURL",
 ] }
 objc2-user-notifications = { version = "0.3.0", default-features = false, features = [
     "std",
@@ -42,6 +51,8 @@ objc2-user-notifications = { version = "0.3.0", default-features = false, featur
     "UNNotificationRequest",
     "UNNotificationResponse",
     "UNUserNotificationCenter",
+    "UNNotificationAttachment",
+    "UNNotificationSettings",
 ] }
 [target.'cfg(target_os = "windows")'.dependencies]
 tauri-winrt-notification = "0.7.1"
