@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useCallback } from 'react'
 import { basename, join, parse } from 'path'
+import type { ParsedPath } from 'path'
 import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 
 import Composer, { useDraft } from '../composer/Composer'
@@ -16,6 +17,7 @@ import useDialog from '../../hooks/dialog/useDialog'
 import useMessage from '../../hooks/chat/useMessage'
 
 import type { T } from '@deltachat/jsonrpc-client'
+import { BackendRemote } from '../../backend-com'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
@@ -71,6 +73,14 @@ type Props = {
   accountId: number
 }
 
+function fullPath(file: ParsedPath) {
+  return file.dir + '/' + file.name + file.ext
+}
+function isImage(file: ParsedPath) {
+  const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif']
+  return imageExtensions.includes(file.ext)
+}
+
 export default function MessageListAndComposer({ accountId, chat }: Props) {
   const conversationRef = useRef(null)
   const refComposer = useRef(null)
@@ -97,19 +107,81 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     regularMessageInputRef
   )
 
-  const onDrop = async (e: React.DragEvent<any>) => {
+  runtime.setDragListener(async e => {
+    if (e.payload.type != 'drop') {
+      return
+    }
     if (chat === null) {
       log.warn('dropped something, but no chat is selected')
       return
     }
 
+    // sanitize files
+    const paths = e.payload.paths
+    const forbiddenPathRegEx = /DeltaChat\/.+?\.sqlite-blobs\//gi
+    const sanitized = paths
+      .filter(path => {
+        const val = !forbiddenPathRegEx.test(path.replace('\\', '/'))
+        if (!val) {
+          log.warn(
+            'Prevented a file from being send again while dragging it out',
+            path
+          )
+        }
+        return val
+      })
+      .map(path => parse(path))
+
+    // get account
+    const acc = await BackendRemote.rpc.getSelectedAccountId()
+    if (acc === null) {
+      console.error('No account selected')
+      return
+    }
+
+    // send single file
+    if (sanitized.length == 1) {
+      const file = sanitized[0]
+      const msgViewType: Viewtype = isImage(file) ? 'Image' : 'File'
+      await addFileToDraft(fullPath(file), file.name, msgViewType)
+    }
+    // send multiple files
+    else if (sanitized.length > 1) {
+      openDialog(ConfirmSendingFiles, {
+        sanitizedFileList: sanitized.map(path => ({
+          name: path.name,
+        })),
+        chatName: chat.name,
+        onClick: async (isConfirmed: boolean) => {
+          if (!isConfirmed) {
+            return
+          }
+
+          for (const file of sanitized) {
+            const msgViewType: Viewtype = isImage(file) ? 'Image' : 'File'
+            sendMessage(accountId, chat.id, {
+              file: fullPath(file),
+              filename: file.name,
+              viewtype: msgViewType,
+            })
+          }
+        },
+      })
+    }
+  })
+
+  const onDrop = (e: React.DragEvent<any>) => {
     e.preventDefault()
     e.stopPropagation()
-
+    handleDrop(e.dataTransfer.files)
+  }
+  const handleDrop = async (fileList: FileList) => {
+    if (chat === null) {
+      log.warn('dropped something, but no chat is selected')
+      return
+    }
     const sanitizedFileList: File[] = []
     {
-      const fileList: FileList =
-        /* (e.target as any).files */ e.dataTransfer.files
       for (let i = 0; i < fileList.length; i++) {
         const file = fileList[i]
         if (runtime.isDroppedFileFromOutside(file)) {
