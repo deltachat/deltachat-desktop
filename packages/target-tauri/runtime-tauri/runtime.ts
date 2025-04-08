@@ -61,6 +61,10 @@ type MainWindowEvents =
   | {
       event: 'toggleNotifications'
     }
+  | {
+      event: 'deepLinkOpened'
+      data: string
+    }
 
 const events = new Channel<MainWindowEvents>()
 const jsonrpc = new Channel<yerpc.Message>()
@@ -304,6 +308,7 @@ class TauriRuntime implements Runtime {
     this.currentLogFileLocation = await invoke('get_current_logfile')
 
     events.onmessage = event => {
+      this.log.info({ event })
       if (event.event === 'sendToChat') {
         const { options, account } = event.data
         this.onWebxdcSendToChat?.(
@@ -329,6 +334,8 @@ class TauriRuntime implements Runtime {
         this.onResumeFromSleep?.()
       } else if (event.event === 'toggleNotifications') {
         this.onToggleNotifications?.()
+      } else if (event.event === 'deepLinkOpened') {
+        this.onOpenQrUrl?.(event.data)
       }
     }
   }
