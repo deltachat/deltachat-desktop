@@ -1,12 +1,15 @@
-use std::time::SystemTime;
+use std::{path::PathBuf, str::FromStr, time::SystemTime};
 
 use anyhow::Context;
+use cli::parse_cli_options_from_args;
 use clipboard::copy_image_to_clipboard;
 
+use deeplink::handle_deep_link;
 #[cfg(desktop)]
 use menus::{handle_menu_event, main_menu::create_main_menu};
 
 use resume_from_sleep::start_resume_after_sleep_detector;
+use run_config::RunConfig;
 use settings::{
     load_and_apply_desktop_settings_on_startup, CONFIG_FILE, MINIMIZE_TO_TRAY,
     MINIMIZE_TO_TRAY_DEFAULT,
@@ -17,7 +20,11 @@ use state::{
     translations::TranslationState, tray_manager::TrayManager,
     webxdc_instances::WebxdcInstancesState,
 };
-use tauri::{async_runtime::block_on, Manager, WebviewUrl, WebviewWindowBuilder};
+
+use tauri::{
+    async_runtime::{block_on, spawn},
+    AppHandle, Manager, WebviewUrl, WebviewWindowBuilder,
+};
 
 use tauri_plugin_log::{Target, TargetKind};
 
@@ -29,6 +36,7 @@ mod blobs;
 #[cfg(desktop)]
 mod cli;
 mod clipboard;
+mod deeplink;
 mod file_dialogs;
 mod help_window;
 mod html_window;
@@ -87,11 +95,27 @@ fn ui_ready(state: tauri::State<AppState>) -> Result<(), String> {
 }
 
 #[tauri::command]
-fn ui_frontend_ready(state: tauri::State<AppState>) -> Result<(), String> {
-    // TODO: deeplinking: -> send url to frontend
-
+fn ui_frontend_ready(
+    app: AppHandle,
+    rc: tauri::State<'_, RunConfig>,
+    state: tauri::State<'_, AppState>,
+) -> Result<(), String> {
     match state.inner.lock() {
         Ok(mut lock) => {
+            if !lock.ui_frontend_ready {
+                // don't run again on reload
+                if let Some(deeplink_or_xdc) = &rc.deeplink {
+                    let app_clone = app.clone();
+                    let deeplink_or_xdc = deeplink_or_xdc.to_owned();
+                    spawn(async move {
+                        if let Err(err) = handle_deep_link(&app_clone, None, deeplink_or_xdc).await
+                        {
+                            log::error!("error handling deeplink: {err:?}");
+                        }
+                    });
+                }
+            }
+
             lock.ui_frontend_ready = true;
         }
         Err(err) => return Err(format!("failed to aquire lock {err:#}")),
@@ -121,6 +145,10 @@ pub fn run() -> i32 {
         .plugin(tauri_plugin_dialog::init());
 
     #[cfg(desktop)]
+    let (deeplink_tx, deeplink_rx) =
+        std::sync::mpsc::sync_channel::<deeplink::DeepLinkInvocation>(4);
+
+    #[cfg(desktop)]
     {
         builder = builder
             .plugin(
@@ -131,9 +159,26 @@ pub fn run() -> i32 {
                     .with_filter(|label| !label.starts_with("webxdc:"))
                     .build(),
             )
-            .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
+            .plugin(tauri_plugin_single_instance::init(move |app, args, cwd| {
                 log::info!("second instance launched, focusing the original instance instead");
-                // TODO: handle open url case
+
+                let cwd = PathBuf::from_str(&cwd).unwrap();
+                log::debug!("tauri_plugin_single_instance {args:?} {cwd:?}");
+
+                let options = parse_cli_options_from_args(args);
+                if let Some(deeplink) = options.deeplink {
+                    // just calling the method here was unreliable, so using a channel now
+                    //
+                    // how unreliable was it?:
+                    // it did not react on the first call and then always took the data of the previous call
+                    if let Err(err) = deeplink_tx.send(deeplink::DeepLinkInvocation {
+                        content: deeplink,
+                        cwd: Some(cwd),
+                    }) {
+                        log::error!("deeplink_tx: send error: {err:?}");
+                    }
+                }
+
                 let window = app.get_webview_window("main").expect("no main window");
                 window
                     .show()
@@ -451,6 +496,25 @@ pub fn run() -> i32 {
             context
         })
         .expect("error while building tauri application");
+
+    #[cfg(desktop)]
+    {
+        let app_clone = app.handle().clone();
+        tauri::async_runtime::spawn_blocking(move || {
+            let deeplink_rx = deeplink_rx;
+            loop {
+                if let Ok(deeplink) = deeplink_rx.recv() {
+                    if let Err(err) =
+                        block_on(handle_deep_link(&app_clone, deeplink.cwd, deeplink.content))
+                    {
+                        log::error!("error handling deeplink: {err:?}");
+                    }
+                } else {
+                    break;
+                }
+            }
+        });
+    }
 
     let app_handle = app.handle().clone();
     tauri::async_runtime::spawn(async move {
