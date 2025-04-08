@@ -16,6 +16,7 @@ use crate::{
 pub(crate) struct InnerAppState {
     pub(crate) ui_ready: bool,
     pub(crate) ui_frontend_ready: bool,
+    pub(crate) deeplink: Option<String>,
 }
 
 pub(crate) struct AppState {
