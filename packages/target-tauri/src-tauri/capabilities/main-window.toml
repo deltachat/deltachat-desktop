@@ -15,7 +15,7 @@ permissions = [
     "store:allow-get",
     "store:allow-set",
     "store:allow-delete",
-    # events
+    # events - only used for drag and drop
     "core:event:allow-listen",
     "core:event:default",
     # borderless titlebar
