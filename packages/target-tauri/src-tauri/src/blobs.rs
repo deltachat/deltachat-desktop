@@ -83,8 +83,16 @@ pub(crate) fn delta_blobs_protocol<R: tauri::Runtime>(
                     .context("account not found")?;
 
                 let file_path = account.get_blobdir().join(file_name);
+
                 // trace!("file_path: {file_path:?}");
 
+                assert_eq!(
+                    file_path.components().last().unwrap().as_os_str(),
+                    file_name
+                );
+                assert!(file_path
+                    .components()
+                    .any(|c| c.as_os_str() == std::ffi::OsStr::new(account_folder)));
                 match fs::read(&file_path).await {
                     Ok(blob) => {
                         let res = http::Response::builder()
