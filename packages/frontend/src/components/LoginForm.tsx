@@ -39,7 +39,7 @@ type ProxySettings = {
   proxyUrl: string
 }
 
-enum Proxy {
+export enum Proxy {
   DISABLED = '0',
   ENABLED = '1',
 }

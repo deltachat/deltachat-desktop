@@ -58,6 +58,9 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
     }
     const accountId = window.__selectedAccountId
     const transports = await BackendRemote.rpc.listTransports(accountId)
+    if (transports.length === 0) {
+      throw new Error('no transport found')
+    }
     const accountSettings: EnteredLoginParam = transports[0]
 
     const proxySettings = await BackendRemote.rpc.batchGetConfig(accountId, [
