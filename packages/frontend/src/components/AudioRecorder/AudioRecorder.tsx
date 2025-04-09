@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import MicRecorder from './MicRecorder'
 import styles from './styles.module.scss'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
@@ -123,12 +123,20 @@ export const AudioRecorder = ({
       })
   }
 
-  const onRecordingCancel = () => {
+  const onRecordingCancel = useCallback(() => {
     setRecording(false)
     recorder.current?.stop()
-  }
+  }, [setRecording])
+
+  useEffect(() => {
+    return () => {
+      onRecordingCancel()
+    }
+  }, [onRecordingCancel])
 
   if (!recording) {
+    // make sure recorder is stopped when still running
+    recorder.current?.stop()
     return (
       <button
         aria-label={tx('voice_send')}
