@@ -152,6 +152,7 @@ export const AudioRecorder = ({
         <button
           className={styles.microphoneButton}
           onClick={() => onRecordingStop()}
+          aria-label={tx('stop_recording')}
         >
           <span />
         </button>
@@ -163,6 +164,7 @@ export const AudioRecorder = ({
         <button
           className={styles.stopRecording}
           onClick={() => onRecordingStop()}
+          aria-label={tx('stop_recording')}
         >
           {tx('ok')}
         </button>

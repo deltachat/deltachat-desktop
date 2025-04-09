@@ -109,8 +109,6 @@ const Composer = forwardRef<
   const { sendMessage } = useMessage()
   const { unselectChat } = useChat()
 
-  const voiceMessageDisabled = !!draftState.file || !!draftState.text
-
   // The philosophy of the editing mode is as follows.
   // The edit mode can be thought of as a dialog,
   // even though it does not like one visually.
@@ -138,6 +136,9 @@ const Composer = forwardRef<
     ? editMessageInputRef
     : regularMessageInputRef
 
+  const voiceMessageDisabled =
+    !!draftState.file || !!draftState.text || messageEditing.isEditingModeActive
+
   if (useHasChanged2(chatId) && recording) {
     setRecording(false)
   }
@@ -154,15 +155,17 @@ const Composer = forwardRef<
       // random filename
       const filename = Math.random().toString(36).substring(2, 10) + '.mp3'
       const path = await runtime.writeTempFileFromBase64(filename, b64)
-      addFileToDraft(path, basename(path), 'Voice').catch((reason: any) => {
+      addFileToDraft(path, filename, 'Voice').catch((reason: any) => {
         log.error('Cannot send message:', reason)
-        // show some error dialogue
+        openDialog(AlertDialog, {
+          message: `${tx('error')}: ${reason}`,
+        })
       })
     }
   }
 
   const onAudioError = (err: AudioRecorderError) => {
-    console.error('onAudioError', err)
+    log.error('onAudioError', err)
     let message = err.message
     if (err.errorType === AudioErrorType.NO_INPUT) {
       message =
@@ -201,10 +204,7 @@ const Composer = forwardRef<
         if (chatId === null) {
           throw new Error('chat id is undefined')
         }
-        if (
-          !regularMessageInputRef.current &&
-          !(draftState.file && draftState.viewType === 'Voice')
-        ) {
+        if (!regularMessageInputRef.current && !draftState.file) {
           throw new Error('messageInputRef is undefined')
         }
         const textareaRef = regularMessageInputRef.current?.textareaRef.current
@@ -804,10 +804,7 @@ export function useDraft(
     if (chatId === null || !canSend) {
       return
     }
-    if (
-      inputRef.current?.textareaRef.current?.disabled &&
-      draftRef.current.viewType !== 'Voice'
-    ) {
+    if (inputRef.current?.textareaRef.current?.disabled) {
       // Guard against strange races
       log.warn('Do not save draft while sending')
       return
