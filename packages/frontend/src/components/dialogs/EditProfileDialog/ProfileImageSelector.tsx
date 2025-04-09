@@ -6,8 +6,6 @@ import ImageCropper from '../../ImageCropper'
 import { LastUsedSlot } from '../../../utils/lastUsedPaths'
 import { avatarInitial } from '../../Avatar'
 import useDialog from '../../../hooks/dialog/useDialog'
-import { BackendRemote } from '../../../backend-com'
-import { runtime } from '@deltachat-desktop/runtime-interface'
 
 type Props = {
   addr?: string
@@ -35,15 +33,15 @@ export default function ProfileImageSelector({
       filePath={profilePicture}
       initials={initials}
       lastUsedSlot={LastUsedSlot.ProfileImage}
-      onChange={async filepath => {
+      onChange={filepath => {
         if (!filepath) {
           setProfilePicture(null)
         } else {
           openDialog(ImageCropper, {
             filepath,
             shape: 'circle',
-            onCancel: () => {},
             onResult: setProfilePicture,
+            onCancel: () => {},
             desiredWidth: 256,
             desiredHeight: 256,
           })
