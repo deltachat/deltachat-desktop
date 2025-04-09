@@ -19,6 +19,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
 
 import styles from './styles.module.scss'
+import { BackendRemote } from '../../backend-com'
 
 // Implementation notes:
 // * CSS-transforms for picking, canvas API to actually cut the result
@@ -30,7 +31,7 @@ import styles from './styles.module.scss'
 //   cursor (0, 0) is always at the top-left corner of non-rotated image
 //
 // * on export we just cut the bounding box (targetWidth, targetHeight) around cursor position and rotate/flip it
-export default function ImageCropper({
+export default async function ImageCropper({
   filepath,
   shape,
   onResult,
@@ -51,6 +52,15 @@ export default function ImageCropper({
   const rememberLastUsedPathPromise = rememberLastUsedPath(
     LastUsedSlot.ProfileImage
   )
+
+
+  const acc = await BackendRemote.rpc.getSelectedAccountId()
+  if (acc === null) {
+    console.error('No account selected')
+    return
+  }
+  const blob_path = await BackendRemote.rpc.copyToBlobDir(acc, filepath)
+  const transformed = runtime.transformBlobURL(blob_path)
 
   // cut pattern from the full image
   const cutImage = useRef<HTMLImageElement>(null)
@@ -135,7 +145,8 @@ export default function ImageCropper({
     rememberLastUsedPathPromise.then(({ setLastPath }) =>
       setLastPath(dirname(filepath))
     )
-    onResult(tempfilepath)
+    const blob_path = await BackendRemote.rpc.copyToBlobDir(acc, tempfilepath)
+    onResult(blob_path)
     onClose()
   }
 
@@ -398,14 +409,14 @@ export default function ImageCropper({
             <img
               ref={cutImage}
               className={styles.imageCropperCutImage}
-              src={filepath}
+              src={transformed}
               onLoad={setupImages}
               crossOrigin='anonymous'
             />
             <img
               ref={fullImage}
               className={styles.imageCropperFullImage}
-              src={filepath}
+              src={transformed}
               crossOrigin='anonymous'
             />
           </div>

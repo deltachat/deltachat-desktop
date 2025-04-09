@@ -39,22 +39,11 @@ export default function ProfileImageSelector({
         if (!filepath) {
           setProfilePicture(null)
         } else {
-          const acc = await BackendRemote.rpc.getSelectedAccountId()
-          if (acc === null) {
-            console.error('No account selected')
-            return
-          }
-          const blob_path = await BackendRemote.rpc.copyToBlobDir(acc, filepath)
-          const transformed = runtime.transformBlobURL(blob_path)
-
           openDialog(ImageCropper, {
-            filepath: transformed,
+            filepath,
             shape: 'circle',
             onCancel: () => {},
-            onResult: async path => {
-              const blob_path = await BackendRemote.rpc.copyToBlobDir(acc, path)
-              setProfilePicture(blob_path)
-            },
+            onResult: setProfilePicture,
             desiredWidth: 256,
             desiredHeight: 256,
           })
