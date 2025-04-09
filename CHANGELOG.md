@@ -28,11 +28,14 @@
 - remove addresses from contact list items unless they are not verified. #4880
 - migrate account mute state to new is_muted config option #4888 #4924
 - technical: change script format and imports to esm/module #4871
-- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.158.0`
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.159.0`
   - Simplify e2ee decision logic, remove majority vote
   - Stop saving txt_raw
   - Do not fail to send the message if some keys are missing
   - Synchronize contact name changes
+  - Remove email address from 'add second device' qr code
+  - Fix deadlock in get_all_accounts()
+  - Encrypt broadcast lists
 - hide 'show classic email' for chatmail, move down otherwise #4902
 - profile view redesign #4897
 
