@@ -54,7 +54,11 @@ export default function useProcessQR() {
 
   const { selectChat } = useChat()
 
-  const setConfigFromQrCatchingErrorInAlert = useCallback(
+  /**
+   * Processes various QR codes
+   * catched errors will be shown in an alert dialog
+   */
+  const processQrCode = useCallback(
     async (accountId: number, qrContent: string) => {
       try {
         await BackendRemote.rpc.addTransportFromQr(accountId, qrContent)
@@ -292,7 +296,7 @@ export default function useProcessQR() {
         })
 
         if (userConfirmed) {
-          await setConfigFromQrCatchingErrorInAlert(accountId, url)
+          await processQrCode(accountId, url)
         }
 
         callback?.()
@@ -309,7 +313,7 @@ export default function useProcessQR() {
         })
 
         if (userConfirmed) {
-          await setConfigFromQrCatchingErrorInAlert(accountId, url)
+          await processQrCode(accountId, url)
         }
 
         callback?.()
@@ -326,7 +330,7 @@ export default function useProcessQR() {
         })
 
         if (userConfirmed) {
-          await setConfigFromQrCatchingErrorInAlert(accountId, url)
+          await processQrCode(accountId, url)
         }
 
         callback?.()
@@ -343,7 +347,7 @@ export default function useProcessQR() {
         })
 
         if (userConfirmed) {
-          await setConfigFromQrCatchingErrorInAlert(accountId, url)
+          await processQrCode(accountId, url)
         }
 
         callback?.()
@@ -368,7 +372,7 @@ export default function useProcessQR() {
       openMailtoLink,
       secureJoinContact,
       secureJoinGroup,
-      setConfigFromQrCatchingErrorInAlert,
+      processQrCode,
       startInstantOnboarding,
       addAndSelectAccount,
       selectChat,
