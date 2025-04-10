@@ -36,7 +36,6 @@ import useMessage from '../../hooks/chat/useMessage'
 import useChat from '../../hooks/chat/useChat'
 
 import type { EmojiData, BaseEmoji } from 'emoji-mart/index'
-import type { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 import { VisualVCardComponent } from '../message/VCard'
 import { KeybindAction } from '../../keybindings'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
@@ -322,7 +321,7 @@ const Composer = forwardRef<
           e.clipboardData.files
         )
 
-        const msgType: Viewtype = file.type.startsWith('image')
+        const msgType: T.Viewtype = file.type.startsWith('image')
           ? 'Image'
           : 'File'
 
@@ -827,7 +826,7 @@ export function useDraft(
   }, [inputRef, saveDraft])
 
   const addFileToDraft = useCallback(
-    async (file: string, fileName: string, viewType: Viewtype) => {
+    async (file: string, fileName: string, viewType: T.Viewtype) => {
       draftRef.current.file = file
       draftRef.current.fileName = fileName
       draftRef.current.viewType = viewType

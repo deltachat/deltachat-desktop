@@ -20,7 +20,6 @@ import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import type { T } from '@deltachat/jsonrpc-client'
 import { BackendRemote } from '../../backend-com'
 import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
-import type { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 import useMessage from '../../hooks/chat/useMessage'
 
 type Props = {
@@ -47,7 +46,7 @@ export default function MenuAttachment({
 
   const confirmSendMultipleFiles = (
     filePaths: string[],
-    msgViewType: Viewtype
+    msgViewType: T.Viewtype
   ) => {
     if (!selectedChat) {
       throw new Error('no chat selected')

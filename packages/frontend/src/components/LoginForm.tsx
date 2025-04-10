@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 
-import { C, DcEventType } from '@deltachat/jsonrpc-client'
+import { C, T, DcEventType } from '@deltachat/jsonrpc-client'
 import React, { useEffect, useRef, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce/lib'
 
@@ -25,14 +25,13 @@ import Collapse from './Collapse'
 import { I18nContext } from '../contexts/I18nContext'
 import useTranslationFunction from '../hooks/useTranslationFunction'
 import { getDeviceChatId, saveLastChatId } from '../backend/chat'
-import { EnteredLoginParam } from '@deltachat/jsonrpc-client/dist/generated/types'
 
 import type { DialogProps } from '../contexts/DialogContext'
 import SettingsSwitch from './Settings/SettingsSwitch'
 
 const log = getLogger('renderer/loginForm')
 
-export type Credentials = EnteredLoginParam & ProxySettings
+export type Credentials = T.EnteredLoginParam & ProxySettings
 
 type ProxySettings = {
   proxyEnabled: boolean
@@ -44,6 +43,7 @@ export enum Proxy {
   ENABLED = '1',
 }
 
+// values of T.Socket
 enum Socket {
   AUTOMATIC = 'automatic',
   SSL = 'ssl',
@@ -51,6 +51,7 @@ enum Socket {
   PLAIN = 'plain',
 }
 
+// values of T.EnteredCertificateChecks
 enum CertificateChecks {
   AUTOMATIC = 'automatic',
   STRICT = 'strict',
