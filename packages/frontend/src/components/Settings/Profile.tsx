@@ -33,9 +33,6 @@ export default function Profile({ settingsStore }: Props) {
         <div className={styles.profileDisplayName}>
           {settingsStore.settings.displayname}
         </div>
-        <div className={styles.profileAddress}>
-          {settingsStore.selfContact.address}
-        </div>
       </div>
     </div>
   )
