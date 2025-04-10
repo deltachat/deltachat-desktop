@@ -3,7 +3,10 @@ use log::warn;
 use tauri::{AppHandle, Manager};
 use tauri_plugin_store::StoreExt;
 
-use crate::{state::menu_manager::MenuManager, TranslationState, TrayManager};
+use crate::{
+    state::menu_manager::MenuManager, themes::update_theme_in_other_windows, TranslationState,
+    TrayManager,
+};
 
 pub(crate) const CONFIG_FILE: &str = "config.json";
 
@@ -27,6 +30,8 @@ pub(crate) const NOTIFICATIONS: &str = "notifications";
 pub(crate) const NOTIFICATIONS_DEFAULT: bool = true;
 pub(crate) const SYNC_ALL_ACCOUNTS: &str = "syncAllAccounts";
 pub(crate) const SYNC_ALL_ACCOUNTS_DEFAULT: bool = true;
+pub(crate) const THEME: &str = "activeTheme";
+pub(crate) const THEME_DEFAULT: &str = "system";
 
 // runtime calls this when desktop settings change
 #[tauri::command]
@@ -45,6 +50,7 @@ pub async fn change_desktop_settings_apply_side_effects(
         }
         // update "mute notification" menu item with new state
         NOTIFICATIONS => app.state::<TrayManager>().update_menu(&app).await,
+        THEME => update_theme_in_other_windows(&app).context("update theme in other windows"),
         _ => Ok(()),
     }
     .map_err(|err| format!("{err:#}"))

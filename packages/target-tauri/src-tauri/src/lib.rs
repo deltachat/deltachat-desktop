@@ -43,6 +43,7 @@ mod settings;
 mod state;
 mod stickers;
 mod temp_file;
+mod themes;
 mod tray;
 mod util;
 mod webxdc;
@@ -201,6 +202,9 @@ pub fn run() {
             // not available on mobile
             #[cfg(desktop)]
             state::tray_manager::update_tray_icon_badge,
+            themes::commands::get_available_themes,
+            themes::commands::load_theme,
+            themes::commands::get_current_active_theme,
         ])
         .register_asynchronous_uri_scheme_protocol(
             "webxdc-icon",
@@ -214,7 +218,7 @@ pub fn run() {
         )
         .register_asynchronous_uri_scheme_protocol("webxdc", webxdc::webxdc_scheme::webxdc_protocol)
         .setup(move |app| {
-            app.manage(run_config);
+            app.manage(run_config.clone());
 
             // Create missing directories for iOS (quick fix, better fix this upstream in tauri)
             #[cfg(target_os = "ios")]
@@ -377,6 +381,8 @@ pub fn run() {
             if run_config.minimized_window {
                 let _ = main_window.hide();
             }
+
+            themes::cli::run_cli(&app.handle(), &run_config)?;
 
             Ok(())
         })
