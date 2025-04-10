@@ -38,6 +38,7 @@
   - Encrypt broadcast lists
 - hide 'show classic email' for chatmail, move down otherwise #4902
 - profile view redesign #4897
+- update translations (2025-04-09)
 
 ### Fixed
 - tauri: improve security #4826, #4936, #4937, #4944

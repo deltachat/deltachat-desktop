@@ -80,6 +80,7 @@ export async function updateCoreStrings() {
   strings[C.DC_STR_BROADCAST_LIST] = tx('broadcast_list')
   strings[C.DC_STR_PART_OF_TOTAL_USED] = tx('part_of_total_used')
   strings[C.DC_STR_SECURE_JOIN_STARTED] = tx('secure_join_started')
+  strings[C.DC_STR_SECUREJOIN_TAKES_LONGER] = tx('secure_join_takes_longer')
   strings[C.DC_STR_SECURE_JOIN_REPLIES] = tx('secure_join_replies')
   strings[C.DC_STR_SETUP_CONTACT_QR_DESC] = tx('qrshow_join_contact_hint')
   strings[C.DC_STR_SECURE_JOIN_GROUP_QR_DESC] = tx('qrshow_join_group_hint')
