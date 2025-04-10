@@ -12,12 +12,12 @@ use super::{load::get_languages, Language, LocaleData};
 use crate::{
     i18n::errors::Error,
     settings::{apply_language_change, CONFIG_FILE, LOCALE_KEY},
-    util::sanitization::is_alphanumeric_with_dashes_and_underscores,
+    util::sanitization::StrExt,
 };
 
 #[tauri::command]
 pub async fn change_lang(app: AppHandle, locale: &str) -> Result<(), Error> {
-    if !is_alphanumeric_with_dashes_and_underscores(locale) {
+    if !locale.is_ascii_alphanumeric_with_dashes_and_underscores() {
         return Err(Error::Sanitization(locale.to_owned()));
     }
 
@@ -29,7 +29,7 @@ pub async fn change_lang(app: AppHandle, locale: &str) -> Result<(), Error> {
 
 #[tauri::command]
 pub(crate) async fn get_locale_data(locale: &str, app: AppHandle) -> Result<LocaleData, Error> {
-    if !is_alphanumeric_with_dashes_and_underscores(locale) {
+    if !locale.is_ascii_alphanumeric_with_dashes_and_underscores() {
         return Err(Error::Sanitization(locale.to_owned()));
     }
 
