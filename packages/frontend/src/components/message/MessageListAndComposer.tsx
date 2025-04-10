@@ -15,8 +15,6 @@ import { ReactionsBarProvider } from '../ReactionsBar'
 import useDialog from '../../hooks/dialog/useDialog'
 import useMessage from '../../hooks/chat/useMessage'
 
-import type { T } from '@deltachat/jsonrpc-client'
-
 const log = getLogger('renderer/MessageListAndComposer')
 
 export function getBackgroundImageStyle(
