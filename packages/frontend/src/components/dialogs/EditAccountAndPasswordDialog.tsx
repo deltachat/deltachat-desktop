@@ -20,7 +20,7 @@ import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
 import type { DialogProps } from '../../contexts/DialogContext'
 import AlertDialog from './AlertDialog'
 import { selectedAccountId } from '../../ScreenController'
-import { EnteredLoginParam } from '@deltachat/jsonrpc-client/dist/generated/types'
+import { T } from '@deltachat/jsonrpc-client'
 
 /**
  * uses a prefilled LoginForm with existing credentials
@@ -61,7 +61,7 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
     if (transports.length === 0) {
       throw new Error('no transport found')
     }
-    const accountSettings: EnteredLoginParam = transports[0]
+    const accountSettings: T.EnteredLoginParam = transports[0]
 
     const proxySettings = await BackendRemote.rpc.batchGetConfig(accountId, [
       'proxy_enabled',
