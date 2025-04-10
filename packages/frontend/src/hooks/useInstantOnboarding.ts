@@ -135,6 +135,7 @@ export default function useInstantOnboarding(): InstantOnboarding {
           onFail: error => {
             openDialog(AlertDialog, { message: error })
           },
+          proxyUpdated: false, // TODO: should be configurable before onbarding
         })
       })
     },
