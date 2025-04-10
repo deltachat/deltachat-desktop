@@ -363,7 +363,7 @@ interface ConfigureProgressDialogProps {
   onSuccess?: () => void
   onUserCancellation?: () => void
   onFail: (error: string) => void
-  proxyUpdated?: boolean
+  proxyUpdated: boolean
 }
 
 export function ConfigureProgressDialog({
@@ -371,7 +371,7 @@ export function ConfigureProgressDialog({
   onSuccess,
   onUserCancellation,
   onFail,
-  proxyUpdated = false,
+  proxyUpdated,
   ...dialogProps
 }: ConfigureProgressDialogProps & DialogProps) {
   const { onClose } = dialogProps
@@ -410,24 +410,27 @@ export function ConfigureProgressDialog({
     () => {
       ;(async () => {
         try {
-          // Prepare initial configuration
-          const initialConfig: Credentials = {
+          let isFirstOnboarding = true
+          const configuration: Credentials = {
             ...credentials,
           }
-          const { proxyEnabled, proxyUrl, ...transportConfig } = initialConfig
-          // Set proxy settings if changed!
+          const { proxyEnabled, proxyUrl, ...transportConfig } = configuration
+          // Set proxy settings only if neccessary!
           if (proxyUpdated) {
             await BackendRemote.rpc.batchSetConfig(accountId, {
               proxy_enabled:
                 proxyEnabled === true ? Proxy.ENABLED : Proxy.DISABLED,
               proxy_url: proxyUrl,
-              verified_one_on_one_chats: '1', // do we still need this?
             })
           }
           if (
             transportConfig.addr !== undefined &&
             transportConfig.addr.length > 0
           ) {
+            // On first time onboarding addr is empty here, since the new transport is created later
+            isFirstOnboarding = false
+            // If the address already exists the transport config is updated
+            // otherwise a new transport is added (not supported yet)
             await BackendRemote.rpc.addTransport(accountId, transportConfig)
           }
 
@@ -437,15 +440,21 @@ export function ConfigureProgressDialog({
             return
           }
 
-          // Select 'Device Messages' chat as the initial one. This will serve
-          // as a first introduction to the app after they've entered
-          const deviceChatId = await getDeviceChatId(accountId)
-          if (deviceChatId) {
-            await saveLastChatId(accountId, deviceChatId)
-            // SettingsStoreInstance is reloaded the first time the main screen is shown
+          if (isFirstOnboarding) {
+            // Select 'Device Messages' chat as the initial one. This will serve
+            // as a first introduction to the app after they've entered
+            const deviceChatId = await getDeviceChatId(accountId)
+            if (deviceChatId) {
+              await saveLastChatId(accountId, deviceChatId)
+              // SettingsStoreInstance is reloaded the first time the main screen is shown
+            }
+            await BackendRemote.rpc.setConfig(
+              accountId,
+              'verified_one_on_one_chats',
+              '1'
+            )
           }
 
-          // Yay! We're done and ready to go
           onClose()
           onSuccess && onSuccess()
         } catch (err: any) {

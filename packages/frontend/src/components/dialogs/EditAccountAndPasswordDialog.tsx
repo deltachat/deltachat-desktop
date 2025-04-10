@@ -38,7 +38,7 @@ export default function EditAccountAndPasswordDialog({ onClose }: DialogProps) {
 }
 
 function EditAccountInner(onClose: DialogProps['onClose']) {
-  const [initial_settings, setInitialAccountSettings] =
+  const [initialSettings, setInitialAccountSettings] =
     useState<Credentials>(defaultCredentials())
 
   const [accountSettings, _setAccountSettings] =
@@ -86,7 +86,8 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
     const onSuccess = () => onClose()
 
     const proxyUpdated =
-      initial_settings.proxyEnabled !== accountSettings.proxyEnabled
+      initialSettings.proxyEnabled !== accountSettings.proxyEnabled ||
+      initialSettings.proxyUrl !== accountSettings.proxyUrl
 
     const update = () => {
       openDialog(ConfigureProgressDialog, {
@@ -99,12 +100,12 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
       })
     }
 
-    if (initial_settings.addr !== accountSettings.addr) {
+    if (initialSettings.addr !== accountSettings.addr) {
       const confirmed = await openConfirmationDialog({
         confirmLabel: tx('perm_continue'),
         isConfirmDanger: true,
         message: tx('aeap_explanation', [
-          initial_settings.addr || '',
+          initialSettings.addr || '',
           accountSettings.addr || '',
         ]),
       })
@@ -112,10 +113,7 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
       if (!confirmed) {
         return
       }
-    } else if (
-      initial_settings.proxyEnabled !== accountSettings.proxyEnabled &&
-      accountSettings.proxyEnabled
-    ) {
+    } else if (accountSettings.proxyEnabled) {
       if (accountSettings.proxyUrl === null) {
         openDialog(AlertDialog, {
           message: tx('proxy_invalid') + '\n' + 'Empty Proxy Link!',
@@ -145,8 +143,7 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
     update()
   }, [
     accountSettings,
-    initial_settings.addr,
-    initial_settings.proxyEnabled,
+    initialSettings,
     onClose,
     openConfirmationDialog,
     openDialog,
