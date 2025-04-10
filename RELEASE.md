@@ -67,6 +67,11 @@
    <https://github.com/deltachat/deltachat-pages/blob/master/tools/create-local-help.py>
 4. If you've updated any translations or local help files, make sure that the
    date of your update is mentioned in the `CHANGELOG.md`
+5. Optional: from time to time, it's good to check
+   whether our webxdc implementation still properly isolates webxdc apps
+   from network.
+   Follow the instructions in
+   https://github.com/webxdc/webxdc-test?tab=readme-ov-file#testing-network-isolation.
 
 ## Releasing
 
