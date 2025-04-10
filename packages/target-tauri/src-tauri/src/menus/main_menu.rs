@@ -64,7 +64,7 @@ impl MenuAction<'static> for MainMenuAction {
                 spawn(async move {
                     let menu_manager = app_clone.state::<MenuManager>();
                     if let Err(err) =
-                        open_help_window(app_clone.clone(), menu_manager, "", None).await
+                        open_help_window(app_clone.clone(), menu_manager, None, None).await
                     {
                         error!("failed to open help window: {err}");
                     }
