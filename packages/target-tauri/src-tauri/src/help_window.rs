@@ -1,11 +1,13 @@
+use anyhow::Context;
 use log::{error, warn};
 use tauri::{Manager, State, WebviewWindow};
+use tauri_plugin_store::StoreExt;
 
 use crate::{
-    settings::{apply_content_protection, apply_zoom_factor_help_window},
+    settings::{apply_content_protection, apply_zoom_factor_help_window, LOCALE_KEY},
     state::menu_manager::MenuManager,
     util::sanitization::is_alphanumeric_with_dashes_and_underscores,
-    TranslationState,
+    TranslationState, CONFIG_FILE,
 };
 
 #[cfg(desktop)]
@@ -32,16 +34,28 @@ impl serde::Serialize for Error {
     }
 }
 
+/// If `locale` is `None`, the current locale set in settings will be used.
 #[tauri::command]
 pub(crate) async fn open_help_window(
     app: tauri::AppHandle,
     menu_manager: State<'_, MenuManager>,
-    locale: &str,
+    locale: Option<&str>,
     anchor: Option<&str>,
 ) -> Result<(), Error> {
+    let locale = (locale.map(|s| s.to_owned())).unwrap_or_else(|| {
+        log::info!("locale is not provided explicitly, will use the current locale");
+        app.store(CONFIG_FILE)
+            .context("failed to failed to load config.json to read the current locale")
+            .inspect_err(|err| log::error!("{err}"))
+            .ok()
+            .and_then(|store| store.get(LOCALE_KEY))
+            .and_then(|s| s.as_str().map(|s| s.to_owned()))
+            .unwrap_or("en".to_owned())
+    });
+
     // Tauri itself should guard against path traversal and stuff,
     // but let's also do it ourselves for good measure.
-    if !is_alphanumeric_with_dashes_and_underscores(locale) {
+    if !is_alphanumeric_with_dashes_and_underscores(&locale) {
         return Err(Error::Sanitization("locale uses unsafe characters".into()));
     }
     if let Some(anchor) = anchor {

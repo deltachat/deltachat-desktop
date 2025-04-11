@@ -39,6 +39,7 @@
 - hide 'show classic email' for chatmail, move down otherwise #4902
 - profile view redesign #4897
 - change to new transport API #4849
+- update translations (2025-04-09)
 
 ### Fixed
 - tauri: improve security #4826, #4936, #4937, #4944
@@ -58,6 +59,7 @@
 - fix order when sending multiple files at once #4895
 - tauri: fix: sticker picker previews not working
 - tauri: fix emoji picker being super ugly
+- tauri: use current locale in "Help" window when opening it through menu
 - tauri: fix launching a second instance of Delta Chat not focusing the main window if it's closed
 
 <a id="1_56_0"></a>
