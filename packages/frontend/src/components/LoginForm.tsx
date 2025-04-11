@@ -105,7 +105,7 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
       log.error('unknown credentials key', id)
       return
     }
-    // convert string values
+    // convert empty string values to null and some to numbers
     let typeSafeValue: string | number | null = value === '' ? null : value
     if ((id === 'smtpPort' || id === 'imapPort') && typeSafeValue !== null) {
       typeSafeValue = Number(value)
@@ -446,11 +446,6 @@ export function ConfigureProgressDialog({
               await saveLastChatId(accountId, deviceChatId)
               // SettingsStoreInstance is reloaded the first time the main screen is shown
             }
-            await BackendRemote.rpc.setConfig(
-              accountId,
-              'verified_one_on_one_chats',
-              '1'
-            )
           }
 
           onClose()
