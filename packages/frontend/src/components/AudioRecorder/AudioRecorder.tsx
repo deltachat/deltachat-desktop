@@ -55,7 +55,6 @@ const VolumeMeter = (prop: { volume: number }) => {
   // doubling the volume shows a more realistic volume level
   const level = Math.min(totalWidth * prop.volume * 2, totalWidth)
   const levelWidth = totalWidth > 0 ? `${totalWidth - level}px` : '100%'
-  console.debug(`volume: ${(prop.volume * 100).toFixed(2)}%`)
   return (
     <div
       role='meter'
@@ -110,7 +109,6 @@ export const AudioRecorder = ({
         }, 1000)
       })
       .catch((err: any) => {
-        console.error(err)
         onError(new AudioRecorderError(err.message))
         setRecording(false)
       })
@@ -124,7 +122,6 @@ export const AudioRecorder = ({
         saveVoiceAsDraft(new Blob(buffer, { type: 'audio/mp3' }))
       })
       .catch((err: any) => {
-        console.error(err)
         onError(new AudioRecorderError(err.message))
       })
   }

@@ -206,7 +206,7 @@ const Composer = forwardRef<
         if (chatId === null) {
           throw new Error('chat id is undefined')
         }
-        if (!regularMessageInputRef.current && !draftState.file) {
+        if (!regularMessageInputRef.current) {
           throw new Error('messageInputRef is undefined')
         }
         const textareaRef = regularMessageInputRef.current?.textareaRef.current
