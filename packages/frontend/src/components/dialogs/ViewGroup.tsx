@@ -36,6 +36,7 @@ import ImageCropper from '../ImageCropper'
 import { AddMemberDialog } from './AddMember/AddMemberDialog'
 import { RovingTabindexProvider } from '../../contexts/RovingTabindex'
 import { ChatListItemRowChat } from '../chat/ChatListItemRow'
+import { copyToBlobDir } from '../../utils/copyToBlobDir'
 
 export default function ViewGroup(
   props: {
@@ -509,12 +510,12 @@ export function GroupImageSelector(props: {
       filePath={props.groupImage}
       initials={initials}
       lastUsedSlot={LastUsedSlot.GroupImage}
-      onChange={filepath => {
+      onChange={async filepath => {
         if (!filepath) {
           props.setGroupImage(null)
         } else {
           openDialog(ImageCropper, {
-            filepath,
+            filepath: await copyToBlobDir(filepath),
             shape: 'circle',
             onResult: props.setGroupImage,
             onCancel: () => {},
