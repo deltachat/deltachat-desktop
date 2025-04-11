@@ -135,7 +135,9 @@ export default function useInstantOnboarding(): InstantOnboarding {
           onFail: error => {
             openDialog(AlertDialog, { message: error })
           },
-          proxyUpdated: false, // TODO: should be configurable before onbarding
+          // TODO: add a way to configure a proxy prior to making an account
+          // https://github.com/deltachat/deltachat-desktop/issues/4124#issuecomment-2788078788
+          proxyUpdated: false,
         })
       })
     },
