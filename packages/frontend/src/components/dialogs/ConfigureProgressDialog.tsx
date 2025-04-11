@@ -109,11 +109,6 @@ export function ConfigureProgressDialog({
               await saveLastChatId(accountId, deviceChatId)
               // SettingsStoreInstance is reloaded the first time the main screen is shown
             }
-            await BackendRemote.rpc.setConfig(
-              accountId,
-              'verified_one_on_one_chats',
-              '1'
-            )
           }
 
           onClose()
