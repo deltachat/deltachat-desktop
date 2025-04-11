@@ -12,6 +12,7 @@
 - tauri: experimental: make it compile for android #4871
 - `Cmd + N` shortcut to open new chat on macOS #4901
 - tauri: add cli interface: `--help`, `--version`, and developer options (like `--dev-mode`) #4908
+- enable support for recording audio messages
 - tauri: handle resume from sleep #4926
 - tauri: add `--watch-translations` cli flag #4925
 - tauri: add tray icon #4922
