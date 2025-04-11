@@ -169,6 +169,8 @@ const Composer = forwardRef<
     let message = err.message
     if (err.errorType === AudioErrorType.NO_INPUT) {
       message =
+        tx('chat_unable_to_record_audio') +
+        '\n\n' +
         'No sound input! Please check your mic settings & permissions! ⚠️'
     }
     openDialog(AlertDialog, {

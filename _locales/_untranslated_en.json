@@ -61,9 +61,9 @@
     "message": "Forget encryption key for this contact."
   },
   "voice_send": {
-    "message": "Send a voice message"
+    "message": "Record a voice message"
   },
   "stop_recording": {
-    "message": "Stop recording"
+    "message": "Finish recording"
   }
 }

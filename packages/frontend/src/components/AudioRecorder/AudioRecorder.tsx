@@ -17,7 +17,7 @@ export class AudioRecorderError extends Error {
 }
 
 /**
- * shows a timer in format seconds:minutes
+ * shows a timer in format MM:SS
  */
 const Timer = () => {
   const [recordingTime, setRecordingTime] = useState(0)
@@ -34,7 +34,7 @@ const Timer = () => {
   const seconds = (recordingTime % 60).toString().padStart(2, '0')
 
   return (
-    <div>
+    <div role='timer'>
       <p>
         {minutes}:{seconds}
       </p>
@@ -143,6 +143,7 @@ export const AudioRecorder = ({
   if (!recording) {
     // make sure recorder is stopped when still running
     recorder.current?.stop()
+
     return (
       <button
         aria-label={tx('voice_send')}
@@ -170,7 +171,7 @@ export const AudioRecorder = ({
         <button
           className={styles.stopRecording}
           onClick={() => onRecordingStop()}
-          aria-label={tx('stop_recording')}
+          aria-description={tx('stop_recording')}
         >
           {tx('ok')}
         </button>
