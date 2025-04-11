@@ -324,10 +324,10 @@ class ElectronRuntime implements Runtime {
     }
   }
   transformStickerURL(sticker_path: string): string {
-    return encodeURI(`file://${sticker_path}`).replace(
-      /[?#]/g,
-      encodeURIComponent
-    )
+    const a = encodeURI(`file://${sticker_path}`)
+    return a
+      .replace(/[?#]/g, encodeURIComponent) // special case # and ? are not encoded by encodeURI but "ignored" in URLs
+      .replace(/%5C/g, decodeURIComponent) // restore encoded backslashes (for Windows)
   }
 
   async showOpenFileDialog(
