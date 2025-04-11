@@ -35,7 +35,7 @@ export type Credentials = T.EnteredLoginParam & ProxySettings
 
 type ProxySettings = {
   proxyEnabled: boolean
-  proxyUrl: string
+  proxyUrl: string | null
 }
 
 export enum Proxy {
@@ -72,7 +72,7 @@ export function defaultCredentials(credentials?: Credentials): Credentials {
     smtpSecurity: null,
     oauth2: null,
     proxyEnabled: false,
-    proxyUrl: '',
+    proxyUrl: null,
   }
 
   return { ...defaultCredentials, ...credentials }
@@ -105,10 +105,14 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
       log.error('unknown credentials key', id)
       return
     }
-    // convert empty string values to null and some to numbers
+    // convert empty string values to null with some exceptions
     let typeSafeValue: string | number | null = value === '' ? null : value
     if ((id === 'smtpPort' || id === 'imapPort') && typeSafeValue !== null) {
       typeSafeValue = Number(value)
+    }
+    if ((id === 'addr' || id === 'password') && typeSafeValue === null) {
+      // these must be of type string
+      typeSafeValue = ''
     }
     setCredentials({ ...credentials, [id]: typeSafeValue })
   }
@@ -425,7 +429,7 @@ export function ConfigureProgressDialog({
             transportConfig.addr !== undefined &&
             transportConfig.addr.length > 0
           ) {
-            // On first time onboarding addr is empty here, since the new transport is created later
+            // On first time onboarding addr is empty here
             isFirstOnboarding = false
             // If the address already exists the transport config is updated
             // otherwise a new transport is added (not supported yet)
