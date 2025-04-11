@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react'
 
 import { BackendRemote } from '../../backend-com'
-import { Credentials } from '../../types-app'
 import LoginForm, {
+  Credentials,
   ConfigureProgressDialog,
   defaultCredentials,
+  Proxy,
 } from '../LoginForm'
 import Dialog, {
   DialogBody,
@@ -19,7 +20,12 @@ import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
 import type { DialogProps } from '../../contexts/DialogContext'
 import AlertDialog from './AlertDialog'
 import { selectedAccountId } from '../../ScreenController'
+import { T } from '@deltachat/jsonrpc-client'
 
+/**
+ * uses a prefilled LoginForm with existing credentials
+ * to edit transport & proxy settings
+ */
 export default function EditAccountAndPasswordDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
 
@@ -32,7 +38,7 @@ export default function EditAccountAndPasswordDialog({ onClose }: DialogProps) {
 }
 
 function EditAccountInner(onClose: DialogProps['onClose']) {
-  const [initial_settings, setInitialAccountSettings] =
+  const [initialSettings, setInitialAccountSettings] =
     useState<Credentials>(defaultCredentials())
 
   const [accountSettings, _setAccountSettings] =
@@ -50,30 +56,26 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
     if (window.__selectedAccountId === undefined) {
       throw new Error('can not load settings when no account is selected')
     }
-    const accountSettings: Credentials =
-      (await BackendRemote.rpc.batchGetConfig(window.__selectedAccountId, [
-        'addr',
-        'mail_pw',
-        'sentbox_watch',
-        'mvbox_move',
-        'only_fetch_mvbox',
-        'e2ee_enabled',
-        'mail_server',
-        'mail_user',
-        'mail_port',
-        'mail_security',
-        'imap_certificate_checks',
-        'send_user',
-        'send_pw',
-        'send_server',
-        'send_port',
-        'send_security',
-        'smtp_certificate_checks',
-        'proxy_enabled',
-        'proxy_url',
-      ])) as unknown as Credentials
-    setInitialAccountSettings(accountSettings)
-    _setAccountSettings(accountSettings)
+    const accountId = window.__selectedAccountId
+    const transports = await BackendRemote.rpc.listTransports(accountId)
+    if (transports.length === 0) {
+      throw new Error('no transport found')
+    }
+    const accountSettings: T.EnteredLoginParam = transports[0]
+
+    const proxySettings = await BackendRemote.rpc.batchGetConfig(accountId, [
+      'proxy_enabled',
+      'proxy_url',
+    ])
+    const proxy = {
+      proxyEnabled: proxySettings.proxy_enabled === Proxy.ENABLED,
+      proxyUrl: proxySettings.proxy_url ?? '',
+    }
+    setInitialAccountSettings({
+      ...accountSettings,
+      ...proxy,
+    })
+    _setAccountSettings({ ...accountSettings, ...proxy })
   }
 
   useEffect(() => {
@@ -83,6 +85,10 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
   const onUpdate = useCallback(async () => {
     const onSuccess = () => onClose()
 
+    const proxyUpdated =
+      initialSettings.proxyEnabled !== accountSettings.proxyEnabled ||
+      initialSettings.proxyUrl !== accountSettings.proxyUrl
+
     const update = () => {
       openDialog(ConfigureProgressDialog, {
         credentials: accountSettings,
@@ -90,15 +96,16 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
         onFail: error => {
           openDialog(AlertDialog, { message: error })
         },
+        proxyUpdated,
       })
     }
 
-    if (initial_settings.addr !== accountSettings.addr) {
+    if (initialSettings.addr !== accountSettings.addr) {
       const confirmed = await openConfirmationDialog({
         confirmLabel: tx('perm_continue'),
         isConfirmDanger: true,
         message: tx('aeap_explanation', [
-          initial_settings.addr || '',
+          initialSettings.addr || '',
           accountSettings.addr || '',
         ]),
       })
@@ -106,14 +113,17 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
       if (!confirmed) {
         return
       }
-    } else if (
-      initial_settings.proxy_enabled !== accountSettings.proxy_enabled &&
-      accountSettings.proxy_enabled === '1'
-    ) {
+    } else if (accountSettings.proxyEnabled) {
+      if (accountSettings.proxyUrl === null) {
+        openDialog(AlertDialog, {
+          message: tx('proxy_invalid') + '\n' + 'Empty Proxy Link!',
+        })
+        return
+      }
       try {
         const qr = await BackendRemote.rpc.checkQr(
           selectedAccountId(),
-          accountSettings.proxy_url
+          accountSettings.proxyUrl
         )
         if (qr.kind !== 'proxy') {
           openDialog(AlertDialog, {
@@ -133,8 +143,7 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
     update()
   }, [
     accountSettings,
-    initial_settings.addr,
-    initial_settings.proxy_enabled,
+    initialSettings,
     onClose,
     openConfirmationDialog,
     openDialog,

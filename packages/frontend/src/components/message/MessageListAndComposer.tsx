@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useCallback } from 'react'
 import { basename, join, parse } from 'path'
-import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
+import { T } from '@deltachat/jsonrpc-client'
 
 import Composer, { useDraft } from '../composer/Composer'
 import { getLogger } from '../../../../shared/logger'
@@ -14,8 +14,6 @@ import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
 import { ReactionsBarProvider } from '../ReactionsBar'
 import useDialog from '../../hooks/dialog/useDialog'
 import useMessage from '../../hooks/chat/useMessage'
-
-import type { T } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
@@ -163,7 +161,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     if (fileCount === 1) {
       const file = sanitizedFileList[0]
       log.debug(`dropped image of type ${file.type}`)
-      const msgViewType: Viewtype = file.type.startsWith('image')
+      const msgViewType: T.Viewtype = file.type.startsWith('image')
         ? 'Image'
         : 'File'
 
@@ -184,7 +182,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
 
         for (const file of sanitizedFileList) {
           const path = await writeTempFileFromFile(file)
-          const msgViewType: Viewtype = file.type.startsWith('image')
+          const msgViewType: T.Viewtype = file.type.startsWith('image')
             ? 'Image'
             : 'File'
           await sendMessage(accountId, chat.id, {

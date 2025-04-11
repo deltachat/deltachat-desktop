@@ -93,14 +93,14 @@ export default function useInstantOnboarding(): InstantOnboarding {
         }
       }
 
-      await BackendRemote.rpc.setConfigFromQr(accountId, configurationQR)
+      await BackendRemote.rpc.addTransportFromQr(accountId, configurationQR)
 
       // 2. ~~Additionally we set the `selfavatar` / profile picture~~
       // ~~and `displayname` configuration for this account~~ -> this is now done before calling this method.
 
       return new Promise((resolve, reject) => {
         // 3. Kick-off the actual account creation process by calling
-        // `configure`. This happens inside of this dialog
+        // `addTransport`. This happens inside of this dialog
         openDialog(ConfigureProgressDialog, {
           onSuccess: async () => {
             try {
@@ -135,6 +135,9 @@ export default function useInstantOnboarding(): InstantOnboarding {
           onFail: error => {
             openDialog(AlertDialog, { message: error })
           },
+          // TODO: add a way to configure a proxy prior to making an account
+          // https://github.com/deltachat/deltachat-desktop/issues/4124#issuecomment-2788078788
+          proxyUpdated: false,
         })
       })
     },
