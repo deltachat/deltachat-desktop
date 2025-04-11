@@ -57,7 +57,13 @@ const VolumeMeter = (prop: { volume: number }) => {
   const levelWidth = totalWidth > 0 ? `${totalWidth - level}px` : '100%'
   console.debug(`volume: ${(prop.volume * 100).toFixed(2)}%`)
   return (
-    <div className={styles.volumeBarContainer}>
+    <div
+      role='meter'
+      aria-valuemin={0}
+      aria-valuemax={totalWidth}
+      aria-valuenow={level}
+      className={styles.volumeBarContainer}
+    >
       <div className={styles.volumeBar}>
         <div ref={volumeBarRef} className={styles.mask}>
           {Array.from({ length: steps }).map((_, index) => (
