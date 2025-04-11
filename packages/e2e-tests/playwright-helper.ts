@@ -84,13 +84,13 @@ export async function createNewProfile(
   await expect(page.locator('.styles_module_profileDisplayName')).toHaveText(
     name
   )
-  const address = await page
-    .locator('.styles_module_profileAddress')
-    .textContent()
+  await page.getByTestId('open-advanced-settings').click()
+  await page.getByTestId('open-account-and-password').click()
+  const address = await page.locator('#addr').inputValue()
 
   expect(address).not.toBeNull()
-
-  await page.getByTestId('settings-close').click()
+  await page.getByTestId('cancel').click()
+  await page.getByTestId('settings-advanced-close').click()
 
   const newId = await accountList
     .last()
@@ -115,10 +115,11 @@ export async function getProfile(page: Page, accountId: string): Promise<User> {
   const name = await page
     .locator('.styles_module_profileDisplayName')
     .textContent()
-  const address = await page
-    .locator('.styles_module_profileAddress')
-    .textContent()
-  await page.getByTestId('settings-close').click()
+  await page.getByTestId('open-advanced-settings').click()
+  await page.getByTestId('open-account-and-password').click()
+  const address = await page.locator('#addr').inputValue()
+  await page.getByTestId('cancel').click()
+  await page.getByTestId('settings-advanced-close').click()
 
   return {
     id: accountId,
