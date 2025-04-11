@@ -3,7 +3,7 @@ import { useCallback, useContext } from 'react'
 import useDialog from './dialog/useDialog'
 import useSecureJoin from './useSecureJoin'
 import { BackendRemote } from '../backend-com'
-import { ConfigureProgressDialog } from '../components/LoginForm'
+import { ConfigureProgressDialog } from '../components/dialogs/ConfigureProgressDialog'
 import { DEFAULT_CHATMAIL_QR_URL } from '../components/screens/WelcomeScreen/chatmailInstances'
 import { InstantOnboardingContext } from '../contexts/InstantOnboardingContext'
 
