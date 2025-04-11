@@ -43,20 +43,18 @@ export enum Proxy {
   ENABLED = '1',
 }
 
-// values of T.Socket
-enum Socket {
-  AUTOMATIC = 'automatic',
-  SSL = 'ssl',
-  STARTTLS = 'starttls',
-  PLAIN = 'plain',
-}
+const Socket = {
+  automatic: 'automatic',
+  plain: 'plain',
+  ssl: 'ssl',
+  starttls: 'starttls',
+} as const satisfies { [P in T.Socket]: P }
 
-// values of T.EnteredCertificateChecks
-enum CertificateChecks {
-  AUTOMATIC = 'automatic',
-  STRICT = 'strict',
-  ACCEPT_INVALID_CERTIFICATES = 'acceptInvalidCertificates',
-}
+const CertificateChecks = {
+  automatic: 'automatic',
+  strict: 'strict',
+  acceptInvalidCertificates: 'acceptInvalidCertificates',
+} as const satisfies { [P in T.EnteredCertificateChecks]: P }
 
 export function defaultCredentials(credentials?: Credentials): Credentials {
   const defaultCredentials: Credentials = {
@@ -256,10 +254,10 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
               value={imapSecurity}
               onChange={handleCredentialsChange as any}
             >
-              <option value={Socket.AUTOMATIC}>{tx('automatic')}</option>
-              <option value={Socket.SSL}>SSL/TLS</option>
-              <option value={Socket.STARTTLS}>STARTTLS</option>
-              <option value={Socket.PLAIN}>{tx('off')}</option>
+              <option value={Socket.automatic}>{tx('automatic')}</option>
+              <option value={Socket.ssl}>SSL/TLS</option>
+              <option value={Socket.starttls}>STARTTLS</option>
+              <option value={Socket.plain}>{tx('off')}</option>
             </DeltaSelect>
 
             <p className='delta-headline'>{tx('login_outbox')}</p>
@@ -305,10 +303,10 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
               value={smtpSecurity}
               onChange={handleCredentialsChange as any}
             >
-              <option value={Socket.AUTOMATIC}>{tx('automatic')}</option>
-              <option value={Socket.SSL}>SSL/TLS</option>
-              <option value={Socket.STARTTLS}>STARTTLS</option>
-              <option value={Socket.PLAIN}>{tx('off')}</option>
+              <option value={Socket.automatic}>{tx('automatic')}</option>
+              <option value={Socket.ssl}>SSL/TLS</option>
+              <option value={Socket.starttls}>STARTTLS</option>
+              <option value={Socket.plain}>{tx('off')}</option>
             </DeltaSelect>
 
             <DeltaSelect
@@ -317,11 +315,11 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
               value={certificateChecks}
               onChange={handleCredentialsChange as any}
             >
-              <option value={CertificateChecks.AUTOMATIC}>
+              <option value={CertificateChecks.automatic}>
                 {tx('automatic')}
               </option>
-              <option value={CertificateChecks.STRICT}>{tx('strict')}</option>
-              <option value={CertificateChecks.ACCEPT_INVALID_CERTIFICATES}>
+              <option value={CertificateChecks.strict}>{tx('strict')}</option>
+              <option value={CertificateChecks.acceptInvalidCertificates}>
                 {tx('accept_invalid_certificates')}
               </option>
             </DeltaSelect>
