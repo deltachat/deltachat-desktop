@@ -17,9 +17,8 @@ import Icon from '../Icon'
 
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
-
 import styles from './styles.module.scss'
-import { BackendRemote } from '../../backend-com'
+import { copyToBlobDir } from '../../utils/copyToBlobDir'
 
 // Implementation notes:
 // * CSS-transforms for picking, canvas API to actually cut the result
@@ -31,7 +30,7 @@ import { BackendRemote } from '../../backend-com'
 //   cursor (0, 0) is always at the top-left corner of non-rotated image
 //
 // * on export we just cut the bounding box (targetWidth, targetHeight) around cursor position and rotate/flip it
-export default async function ImageCropper({
+export default function ImageCropper({
   filepath,
   shape,
   onResult,
@@ -53,15 +52,7 @@ export default async function ImageCropper({
     LastUsedSlot.ProfileImage
   )
 
-
-  const acc = await BackendRemote.rpc.getSelectedAccountId()
-  if (acc === null) {
-    console.error('No account selected')
-    return
-  }
-  const blob_path = await BackendRemote.rpc.copyToBlobDir(acc, filepath)
-  const transformed = runtime.transformBlobURL(blob_path)
-
+  const transformed = runtime.transformBlobURL(filepath)
   // cut pattern from the full image
   const cutImage = useRef<HTMLImageElement>(null)
   // full image in background
@@ -145,7 +136,7 @@ export default async function ImageCropper({
     rememberLastUsedPathPromise.then(({ setLastPath }) =>
       setLastPath(dirname(filepath))
     )
-    const blob_path = await BackendRemote.rpc.copyToBlobDir(acc, tempfilepath)
+    const blob_path = await copyToBlobDir(tempfilepath)
     onResult(blob_path)
     onClose()
   }
