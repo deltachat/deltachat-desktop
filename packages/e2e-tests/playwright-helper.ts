@@ -86,9 +86,10 @@ export async function createNewProfile(
   )
   await page.getByTestId('open-advanced-settings').click()
   await page.getByTestId('open-account-and-password').click()
-  const address = await page.locator('#addr').inputValue()
+  const addressLocator = page.locator('#addr')
+  await expect(addressLocator).toHaveValue(/.+@.+/)
+  const address = await addressLocator.inputValue()
 
-  expect(address).not.toBeNull()
   await page.getByTestId('cancel').click()
   await page.getByTestId('settings-advanced-close').click()
 
@@ -112,12 +113,14 @@ export async function createNewProfile(
 export async function getProfile(page: Page, accountId: string): Promise<User> {
   await page.getByTestId(`account-item-${accountId}`).click({ button: 'right' })
   await page.getByTestId('open-settings-menu-item').click()
-  const name = await page
-    .locator('.styles_module_profileDisplayName')
-    .textContent()
+  const nameLocator = page.locator('.styles_module_profileDisplayName')
+  await expect(nameLocator).not.toBeEmpty()
+  const name = await nameLocator.textContent()
   await page.getByTestId('open-advanced-settings').click()
   await page.getByTestId('open-account-and-password').click()
-  const address = await page.locator('#addr').inputValue()
+  const addressLocator = page.locator('#addr')
+  await expect(addressLocator).toHaveValue(/.+@.+/)
+  const address = await addressLocator.inputValue()
   await page.getByTestId('cancel').click()
   await page.getByTestId('settings-advanced-close').click()
 
