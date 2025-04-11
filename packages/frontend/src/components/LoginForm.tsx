@@ -91,7 +91,7 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
       log.error('unknown credentials key', id)
       return
     }
-    // convert string values
+    // convert empty string values to null and some to numbers
     let typeSafeValue: string | number | null = value === '' ? null : value
     if ((id === 'smtpPort' || id === 'imapPort') && typeSafeValue !== null) {
       typeSafeValue = Number(value)
