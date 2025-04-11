@@ -560,11 +560,6 @@ export function useLogicVirtualChatList(chatListIds: number[]) {
 
   useEffect(() => {
     let debouncingChatlistItemRequests: { [chatid: number]: number } = {}
-    const cleanup_interval = setInterval(() => {
-      // clean up debouncingChatlistItemRequests every half minute,
-      // so if there should ever be an error it auto recovers
-      debouncingChatlistItemRequests = {}
-    }, 30000)
 
     const updateChatListItem = async (chatId: number) => {
       debouncingChatlistItemRequests[chatId] = 1
@@ -639,7 +634,6 @@ export function useLogicVirtualChatList(chatListIds: number[]) {
     )
     return () => {
       removeListener()
-      clearInterval(cleanup_interval)
     }
   }, [accountId])
 
