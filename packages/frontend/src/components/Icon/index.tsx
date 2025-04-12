@@ -27,6 +27,7 @@ export type IconName =
   | 'ios_share_modified'
   | 'lead-pencil'
   | 'list'
+  | 'lock'
   | 'map'
   | 'minus'
   | 'more'

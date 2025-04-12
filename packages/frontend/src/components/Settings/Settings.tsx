@@ -19,10 +19,12 @@ import useDialog from '../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+import Privacy from './Privacy'
 
 type SettingsView =
   | 'main'
   | 'chats_and_media'
+  | 'privacy'
   | 'notifications'
   | 'appearance'
   | 'advanced'
@@ -97,6 +99,12 @@ export default function Settings({ onClose }: DialogProps) {
               {tx('pref_chats_and_media')}
             </SettingsIconButton>
             <SettingsIconButton
+              icon='lock'
+              onClick={() => setSettingsMode('privacy')}
+            >
+              {tx('pref_privacy')}
+            </SettingsIconButton>
+            <SettingsIconButton
               icon='bell'
               onClick={() => setSettingsMode('notifications')}
             >
@@ -156,6 +164,21 @@ export default function Settings({ onClose }: DialogProps) {
           />
           <DialogBody>
             <ChatsAndMedia
+              settingsStore={settingsStore}
+              desktopSettings={settingsStore.desktopSettings}
+            />
+          </DialogBody>
+        </>
+      )}
+      {settingsMode === 'privacy' && (
+        <>
+          <DialogHeader
+            title={tx('pref_privacy')}
+            onClickBack={() => setSettingsMode('main')}
+            onClose={onClose}
+          />
+          <DialogBody>
+            <Privacy
               settingsStore={settingsStore}
               desktopSettings={settingsStore.desktopSettings}
             />
