@@ -17,6 +17,7 @@
 - tauri: add `--watch-translations` cli flag #4925
 - tauri: add tray icon #4922
 - tauri: add `--minimized` flag #4922
+- add Privacy Settings screen
 
 
 ### Changed
