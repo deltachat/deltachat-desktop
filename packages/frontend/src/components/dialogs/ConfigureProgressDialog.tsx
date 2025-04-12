@@ -15,12 +15,12 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { getDeviceChatId, saveLastChatId } from '../../backend/chat'
 
 import type { DialogProps } from '../../contexts/DialogContext'
-import { Credentials, defaultCredentials, Proxy } from '../LoginForm'
+import { Credentials, Proxy } from '../LoginForm'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 const log = getLogger('renderer/loginForm')
 
 interface ConfigureProgressDialogProps {
-  credentials?: Credentials
+  credentials: Credentials
   onSuccess?: () => void
   onUserCancellation?: () => void
   onFail: (error: string) => void
@@ -28,7 +28,7 @@ interface ConfigureProgressDialogProps {
 }
 
 export function ConfigureProgressDialog({
-  credentials = defaultCredentials(),
+  credentials,
   onSuccess,
   onUserCancellation,
   onFail,
@@ -88,7 +88,7 @@ export function ConfigureProgressDialog({
             transportConfig.addr !== undefined &&
             transportConfig.addr.length > 0
           ) {
-            // On first time onboarding addr is empty here, since the new transport is created later
+            // On first time onboarding addr is empty here
             isFirstOnboarding = false
             // If the address already exists the transport config is updated
             // otherwise a new transport is added (not supported yet)
