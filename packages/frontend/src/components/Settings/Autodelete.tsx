@@ -149,7 +149,9 @@ export default function Autodelete({
       >
         {tx('autodel_server_title')}
       </SettingsSelector>
-      <p style={{ padding: '30px' }}>{tx('autodel_server_enabled_hint')}</p>
+      <p style={{ paddingInline: '30px' }}>
+        {tx('autodel_server_enabled_hint')}
+      </p>
     </>
   )
 }
