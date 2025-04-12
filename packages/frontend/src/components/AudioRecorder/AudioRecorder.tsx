@@ -102,7 +102,7 @@ export const AudioRecorder = ({
       ?.start()
       .then(() => {
         window.setTimeout(() => {
-          if (!recorder.current?.audioSignalDetected) {
+          if (!recorder.current?.audioSignalDetected && recording) {
             onError(new AudioRecorderError('No input', AudioErrorType.NO_INPUT))
             onRecordingCancel()
           }
