@@ -85,13 +85,6 @@ export function ExperimentalFeatures({ settingsStore }: Props) {
         settingsKey='experimentalEnableMarkdownInMessages'
         label='Render Markdown in Messages'
       />
-      {runtime.getRuntimeInfo().isContentProtectionSupported && (
-        <DesktopSettingsSwitch
-          settingsKey='contentProtectionEnabled'
-          label={tx('pref_screen_security')}
-          description={tx('pref_screen_security_explain')}
-        />
-      )}
       <CoreSettingsSwitch
         label={tx('disable_imap_idle')}
         settingsKey='disable_idle'
