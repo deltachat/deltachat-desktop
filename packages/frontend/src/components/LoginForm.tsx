@@ -361,7 +361,7 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
 }
 
 interface ConfigureProgressDialogProps {
-  credentials?: Credentials
+  credentials: Credentials
   onSuccess?: () => void
   onUserCancellation?: () => void
   onFail: (error: string) => void
@@ -369,7 +369,7 @@ interface ConfigureProgressDialogProps {
 }
 
 export function ConfigureProgressDialog({
-  credentials = defaultCredentials(),
+  credentials,
   onSuccess,
   onUserCancellation,
   onFail,
