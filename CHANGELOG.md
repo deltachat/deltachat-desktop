@@ -17,7 +17,7 @@
 - tauri: add `--watch-translations` cli flag #4925
 - tauri: add tray icon #4922
 - tauri: add `--minimized` flag #4922
-- add Privacy Settings screen
+- add Privacy Settings screen #4985
 
 
 ### Changed
@@ -62,7 +62,7 @@
 - tauri: fix emoji picker being super ugly
 - tauri: use current locale in "Help" window when opening it through menu
 - tauri: fix launching a second instance of Delta Chat not focusing the main window if it's closed
-- fix sticker folder not resolved on windows #4939 
+- fix sticker folder not resolved on windows #4939
 
 <a id="1_56_0"></a>
 
