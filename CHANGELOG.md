@@ -57,6 +57,7 @@
 - accessibility: don't announce "padlock" on messages
 - fix double escape bypasses dialog attribute `canEscapeKeyClose={false}`
 - fix order when sending multiple files at once #4895
+- show error message when QR scan action fails
 - tauri: fix: sticker picker previews not working
 - tauri: fix emoji picker being super ugly
 - tauri: use current locale in "Help" window when opening it through menu

@@ -59,11 +59,16 @@ export default function useProcessQR() {
       try {
         await BackendRemote.rpc.setConfigFromQr(accountId, qrContent)
       } catch (error) {
-        if (error instanceof Error) {
-          openAlertDialog({
-            message: error.message,
-          })
-        }
+        openAlertDialog({
+          message:
+            (typeof error === 'object' && error != null
+              ? 'message' in error
+                ? `${error.message}`
+                : 'toString' in error
+                  ? error.toString()
+                  : null
+              : null) ?? 'Failed to setConfigFromQr',
+        })
       }
     },
     [openAlertDialog]
