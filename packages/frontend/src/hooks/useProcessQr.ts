@@ -69,8 +69,12 @@ export default function useProcessQR() {
     [openAlertDialog]
   )
 
-  // Users can enter the "Instant Onboarding" flow by scanning a DCACCOUNT, DCLOGIN
-  // DC_ASK_VERIFYGROUP, or DC_ASK_VERIFYCONTACT code which essentially creates
+  // Users can enter the "Instant Onboarding" flow by scanning a QR code of these types:
+  // DCACCOUNT (new transport from the included chatmail instance)
+  // DCLOGIN ()
+  // DC_ASK_VERIFYGROUP
+  // DC_ASK_VERIFYCONTACT
+  // which essentially creates
   // a new "chatmail" profile for them and connects them with the regarding
   // contact or group if given.
   //
@@ -169,10 +173,18 @@ export default function useProcessQR() {
         })
         return callback?.()
       }
-
-      // DCACCOUNT:
-      // configured account: Ask the user if they want to create a new profile on the given chatmail instance
-      // unconfigured account: set instant onboarding chatmail instance
+      /**
+       * DCACCOUNT:
+       * Format is   DCACCOUNT:https://<CHATMAIL_INSTANCE>:<PORT>/new_email?t=<TOKEN>
+       *
+       * contains the url to a chatmail instance which will be used in the
+       * instant onboarding process initiated by this QR code scan
+       *
+       * Scenarios depending on the account status:
+       * 1. configured account: Ask the user if they want to create a new profile on the given chatmail instance
+       * 2. unconfigured account: set instant onboarding chatmail instance
+       *
+       */
       if (qr.kind === 'account') {
         if (isLoggedIn) {
           const userConfirmed = await openConfirmationDialog({
@@ -217,8 +229,19 @@ export default function useProcessQR() {
         return callback?.()
       }
 
-      // DC_ASK_VERIFYCONTACT: Ask whether to verify the contact; if so, start
-      // the protocol with secure join
+      /**
+       * DC_ASK_VERIFYCONTACT
+       * Format is https://i.delta.chat/#<TOKEN1??>&a=<TOKEN1??>@<CHATMAIL_INSTANCE>&n=<CONTACT_NAME>&i=<INVITE_NUMBER>&s=<AUTHCODE>
+       *
+       * typically based on an invite link (parsed from QR code)
+       * see https://securejoin.readthedocs.io/en/latest/new.html#setup-contact-protocol
+       *
+       * the parsed QR code also includes a local contact_id which is used to
+       * initiate the chat with this contact after onboarding
+       *
+       * Before creating an account the user will be asked if he agrees to
+       * create a new account and start chatting with the given contact
+       */
       if (qr.kind === 'askVerifyContact') {
         if (!isLoggedIn) {
           // Ask user to create a new account with instant onboarding flow before they
@@ -233,8 +256,12 @@ export default function useProcessQR() {
         return callback?.()
       }
 
-      // DC_ASK_VERIFYGROUP: Ask whether to join the group; if so, start the
-      // protocol with secure join
+      /**
+       * DC_ASK_VERIFYGROUP
+       *
+       * similar to DC_ASK_VERIFYCONTACT but for groups
+       *
+       */
       if (qr.kind === 'askVerifyGroup') {
         if (!isLoggedIn) {
           // Ask user to create a new account with instant onboarding flow before they
