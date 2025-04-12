@@ -8,6 +8,10 @@ type Props = {
   accountId: number
 }
 
+/**
+ * shows additional information about the instant onboarding process
+ * depending on the type of welcomeQr code that was scanned
+ */
 export default function AdditionalActionInfo(props: Props) {
   const tx = useTranslationFunction()
   const { welcomeQr } = useInstantOnboarding()

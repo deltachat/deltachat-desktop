@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react'
 
 import ImageBackdrop from '../ImageBackdrop'
-import LoginForm, { Credentials, defaultCredentials } from '../LoginForm'
-import { ConfigureProgressDialog } from '../dialogs/ConfigureProgressDialog'
+import LoginForm, { Credentials } from '../LoginForm'
+import {
+  ConfigureProgressDialog,
+  defaultCredentials,
+} from '../dialogs/ConfigureProgressDialog'
 import Dialog, {
   DialogBody,
   DialogContent,

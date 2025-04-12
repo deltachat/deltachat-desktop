@@ -23,6 +23,17 @@ type Props = {
   selectedAccountId: number
 }
 
+/**
+ * Sub component of WelcomeScreen to set a Displayname to create an account
+ * or open a dialog with some options to use another server
+ *
+ * This is part of the instantOnboarding flow, that means possibly
+ * the user comes here after having scanned a QR code of type
+ * DCACCOUNT
+ * DCLOGIN
+ * DC_ASK_VERIFYCONTACT
+ * DC_ASK_VERIFYGROUP
+ */
 export default function InstantOnboardingScreen({
   onCancel,
   selectedAccountId,

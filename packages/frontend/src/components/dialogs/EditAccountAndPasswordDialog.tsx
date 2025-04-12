@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react'
 
 import { BackendRemote } from '../../backend-com'
-import LoginForm, { Credentials, defaultCredentials, Proxy } from '../LoginForm'
-import { ConfigureProgressDialog } from './ConfigureProgressDialog'
+import LoginForm, { Credentials, Proxy } from '../LoginForm'
+import {
+  ConfigureProgressDialog,
+  defaultCredentials,
+} from './ConfigureProgressDialog'
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -11,7 +14,6 @@ import Dialog, {
 } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/dialog/useDialog'
-import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 import AlertDialog from './AlertDialog'
@@ -41,7 +43,6 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
     useState<Credentials>(defaultCredentials())
 
   const { openDialog } = useDialog()
-  const openConfirmationDialog = useConfirmationDialog()
   const tx = useTranslationFunction()
 
   const setAccountSettings = (value: Credentials) => {
@@ -97,18 +98,11 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
     }
 
     if (initialSettings.addr !== accountSettings.addr) {
-      const confirmed = await openConfirmationDialog({
-        confirmLabel: tx('perm_continue'),
-        isConfirmDanger: true,
-        message: tx('aeap_explanation', [
-          initialSettings.addr || '',
-          accountSettings.addr || '',
-        ]),
+      openDialog(AlertDialog, {
+        message:
+          'Changing your email address is not supported right now. Check back in a few months!',
       })
-
-      if (!confirmed) {
-        return
-      }
+      return
     } else if (accountSettings.proxyEnabled) {
       if (accountSettings.proxyUrl === null) {
         openDialog(AlertDialog, {
@@ -137,14 +131,7 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
       }
     }
     update()
-  }, [
-    accountSettings,
-    initialSettings,
-    onClose,
-    openConfirmationDialog,
-    openDialog,
-    tx,
-  ])
+  }, [accountSettings, initialSettings, onClose, openDialog, tx])
 
   const onOk = useCallback(async () => {
     await onUpdate()
