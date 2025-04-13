@@ -37,7 +37,7 @@ export default function Profile({ settingsStore }: Props) {
           {settingsStore.settings.displayname}
         </div>
         <div className={styles.profileBio}>
-          {settingsStore.settings.selfstatus.replace('\n', ' ') ||
+          {settingsStore.settings.selfstatus?.replace('\n', ' ') ||
             tx('pref_default_status_label')}
         </div>
       </div>
