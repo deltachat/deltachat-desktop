@@ -6,7 +6,7 @@ use tauri_plugin_store::StoreExt;
 use crate::{
     settings::{apply_content_protection, apply_zoom_factor_help_window, LOCALE_KEY},
     state::menu_manager::MenuManager,
-    util::sanitization::is_alphanumeric_with_dashes_and_underscores,
+    util::sanitization::StrExt,
     TranslationState, CONFIG_FILE,
 };
 
@@ -55,11 +55,11 @@ pub(crate) async fn open_help_window(
 
     // Tauri itself should guard against path traversal and stuff,
     // but let's also do it ourselves for good measure.
-    if !is_alphanumeric_with_dashes_and_underscores(&locale) {
+    if !locale.is_ascii_alphanumeric_with_dashes_and_underscores() {
         return Err(Error::Sanitization("locale uses unsafe characters".into()));
     }
     if let Some(anchor) = anchor {
-        if !is_alphanumeric_with_dashes_and_underscores(anchor) {
+        if !anchor.is_ascii_alphanumeric_with_dashes_and_underscores() {
             return Err(Error::Sanitization("anchor uses unsafe characters".into()));
         }
     }
