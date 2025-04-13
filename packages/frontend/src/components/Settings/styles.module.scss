@@ -169,9 +169,9 @@ $settingsHeight: 40px;
   font-weight: 200;
 }
 
-.profileAddress {
-  color: #969696;
+.profileBio {
   margin-top: 5px;
   overflow: hidden;
+  text-wrap-mode: nowrap;
   text-overflow: ellipsis;
 }

@@ -40,6 +40,7 @@
 - hide 'show classic email' for chatmail, move down otherwise #4902
 - profile view redesign #4897
 - update translations (2025-04-09)
+- show signature/bio in settings #4984
 
 ### Fixed
 - tauri: improve security #4826, #4936, #4937, #4944
@@ -61,7 +62,7 @@
 - tauri: fix emoji picker being super ugly
 - tauri: use current locale in "Help" window when opening it through menu
 - tauri: fix launching a second instance of Delta Chat not focusing the main window if it's closed
-- fix sticker folder not resolved on windows #4939 
+- fix sticker folder not resolved on windows #4939
 
 <a id="1_56_0"></a>
 
