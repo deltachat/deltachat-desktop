@@ -55,5 +55,11 @@
   },
   "reset_encryption_confirm": {
     "message": "Forget encryption key for this contact."
+  },
+  "voice_send": {
+    "message": "Record a voice message"
+  },
+  "stop_recording": {
+    "message": "Finish recording"
   }
 }

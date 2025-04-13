@@ -46,7 +46,7 @@ export default class ComposerMessageInput extends React.Component<
     this.state = {
       text: '',
       chatId: props.chatId,
-      loadingDraft: true,
+      loadingDraft: false,
     }
 
     this.composerSize = 48
@@ -116,6 +116,10 @@ export default class ComposerMessageInput extends React.Component<
 
   getText() {
     return this.state.text
+  }
+
+  hasText(): boolean {
+    return !this.getText().match(/^\s*$/)
   }
 
   componentDidUpdate(

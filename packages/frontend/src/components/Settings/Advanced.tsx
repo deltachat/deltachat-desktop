@@ -49,6 +49,7 @@ export default function Advanced({ settingsStore }: Props) {
             settingsStore,
           })
         }}
+        dataTestid='open-account-and-password'
       >
         {tx('pref_password_and_account_settings')}
       </SettingsButton>

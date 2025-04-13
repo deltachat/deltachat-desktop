@@ -12,6 +12,7 @@
 - tauri: experimental: make it compile for android #4871
 - `Cmd + N` shortcut to open new chat on macOS #4901
 - tauri: add cli interface: `--help`, `--version`, and developer options (like `--dev-mode`) #4908
+- enable support for recording audio messages
 - tauri: handle resume from sleep #4926
 - tauri: add `--watch-translations` cli flag #4925
 - tauri: add tray icon #4922
@@ -28,13 +29,18 @@
 - remove addresses from contact list items unless they are not verified. #4880
 - migrate account mute state to new is_muted config option #4888 #4924
 - technical: change script format and imports to esm/module #4871
-- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.158.0`
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.159.0`
   - Simplify e2ee decision logic, remove majority vote
   - Stop saving txt_raw
   - Do not fail to send the message if some keys are missing
   - Synchronize contact name changes
+  - Remove email address from 'add second device' qr code
+  - Fix deadlock in get_all_accounts()
+  - Encrypt broadcast lists
 - hide 'show classic email' for chatmail, move down otherwise #4902
 - profile view redesign #4897
+- update translations (2025-04-09)
+- show signature/bio in settings #4984
 
 ### Fixed
 - tauri: improve security #4826, #4936, #4937, #4944
@@ -54,8 +60,10 @@
 - fix order when sending multiple files at once #4895
 - tauri: fix: sticker picker previews not working
 - tauri: fix emoji picker being super ugly
+- tauri: use current locale in "Help" window when opening it through menu
 - tauri: fix launching a second instance of Delta Chat not focusing the main window if it's closed
 - fix chatlist items sometimes not updating #4975
+- fix sticker folder not resolved on windows #4939
 
 <a id="1_56_0"></a>
 

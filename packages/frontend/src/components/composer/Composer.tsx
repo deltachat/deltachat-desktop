@@ -48,6 +48,12 @@ import OutsideClickHelper from '../OutsideClickHelper'
 import { basename } from 'path'
 import { useHasChanged2 } from '../../hooks/useHasChanged'
 import { ScreenContext } from '../../contexts/ScreenContext'
+import {
+  AudioErrorType,
+  AudioRecorder,
+  AudioRecorderError,
+} from '../AudioRecorder/AudioRecorder'
+import AlertDialog from '../dialogs/AlertDialog'
 
 const log = getLogger('renderer/composer')
 
@@ -92,6 +98,7 @@ const Composer = forwardRef<
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const [showAppPicker, setShowAppPicker] = useState(false)
   const [currentEditText, setCurrentEditText] = useState('')
+  const [recording, setRecording] = useState(false)
 
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
   const pickerButtonRef = useRef<HTMLButtonElement>(null)
@@ -129,6 +136,48 @@ const Composer = forwardRef<
     ? editMessageInputRef
     : regularMessageInputRef
 
+  const voiceMessageDisabled =
+    !!draftState.file || !!draftState.text || messageEditing.isEditingModeActive
+
+  if (useHasChanged2(chatId) && recording) {
+    setRecording(false)
+  }
+
+  const saveVoiceAsDraft = (voiceData: Blob) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(voiceData)
+    reader.onloadend = async () => {
+      if (!reader.result) {
+        log.error('Cannot convert blob to base64. reader.result is null')
+        return
+      }
+      const b64 = reader.result.toString().split(',')[1]
+      // random filename
+      const filename = Math.random().toString(36).substring(2, 10) + '.mp3'
+      const path = await runtime.writeTempFileFromBase64(filename, b64)
+      addFileToDraft(path, filename, 'Voice').catch((reason: any) => {
+        log.error('Cannot send message:', reason)
+        openDialog(AlertDialog, {
+          message: `${tx('error')}: ${reason}`,
+        })
+      })
+    }
+  }
+
+  const onAudioError = (err: AudioRecorderError) => {
+    log.error('onAudioError', err)
+    let message = err.message
+    if (err.errorType === AudioErrorType.NO_INPUT) {
+      message =
+        tx('chat_unable_to_record_audio') +
+        '\n\n' +
+        'No sound input! Please check your mic settings & permissions! ⚠️'
+    }
+    openDialog(AlertDialog, {
+      message,
+    })
+  }
+
   const hasSecureJoinEnded = useRef<boolean>(false)
   useEffect(() => {
     if (hasSecureJoinEnded) {
@@ -160,7 +209,7 @@ const Composer = forwardRef<
         if (!regularMessageInputRef.current) {
           throw new Error('messageInputRef is undefined')
         }
-        const textareaRef = regularMessageInputRef.current.textareaRef.current
+        const textareaRef = regularMessageInputRef.current?.textareaRef.current
         if (textareaRef) {
           if (textareaRef.disabled) {
             throw new Error(
@@ -170,8 +219,8 @@ const Composer = forwardRef<
           textareaRef.disabled = true
         }
         try {
-          const message = regularMessageInputRef.current.getText()
-          if (message.match(/^\s*$/) && !draftState.file) {
+          const message = regularMessageInputRef.current?.getText() || ''
+          if (!regularMessageInputRef.current?.hasText() && !draftState.file) {
             log.debug(`Empty message: don't send it...`)
             return
           }
@@ -203,7 +252,7 @@ const Composer = forwardRef<
           if (textareaRef) {
             textareaRef.disabled = false
           }
-          regularMessageInputRef.current.focus()
+          regularMessageInputRef.current?.focus()
         }
       }
 
@@ -213,6 +262,7 @@ const Composer = forwardRef<
     }
     onSelectReplyToShortcut(KeybindAction.Composer_SelectReplyToUp)
   })
+
   useKeyBindingAction(KeybindAction.Composer_SelectReplyToDown, () => {
     if (messageEditing.isEditingModeActive) {
       return
@@ -259,6 +309,7 @@ const Composer = forwardRef<
       document.removeEventListener('keyup', onKey, opt)
     }
   }, [shiftPressed])
+
   useEffect(() => {
     if (!showEmojiPicker) return
     const onClick = (e: MouseEvent) => {
@@ -515,14 +566,14 @@ const Composer = forwardRef<
           )}
         </div>
         <div className='lower-bar'>
-          {!messageEditing.isEditingModeActive && (
+          {!messageEditing.isEditingModeActive && !recording && (
             <MenuAttachment
               addFileToDraft={addFileToDraft}
               showAppPicker={setShowAppPicker}
               selectedChat={selectedChat}
             />
           )}
-          {settingsStore && (
+          {settingsStore && !recording && (
             <>
               <ComposerMessageInput
                 // We use `hidden` instead of simply conditionally rendering
@@ -572,17 +623,18 @@ const Composer = forwardRef<
               />
             </>
           )}
-          {!runtime.getRuntimeInfo().hideEmojiAndStickerPicker && (
-            <button
-              type='button'
-              className='emoji-button'
-              ref={pickerButtonRef}
-              onClick={onEmojiIconClick}
-              aria-label={tx('emoji')}
-            >
-              <span />
-            </button>
-          )}
+          {!runtime.getRuntimeInfo().hideEmojiAndStickerPicker &&
+            !recording && (
+              <button
+                type='button'
+                className='emoji-button'
+                ref={pickerButtonRef}
+                onClick={onEmojiIconClick}
+                aria-label={tx('emoji')}
+              >
+                <span />
+              </button>
+            )}
           {showSendButton && (
             <button
               // This ensures that the button loses focus as we switch between
@@ -605,6 +657,14 @@ const Composer = forwardRef<
             >
               <div className='paper-plane'></div>
             </button>
+          )}
+          {!showSendButton && !voiceMessageDisabled && (
+            <AudioRecorder
+              recording={recording}
+              setRecording={setRecording}
+              saveVoiceAsDraft={saveVoiceAsDraft}
+              onError={onAudioError}
+            />
           )}
         </div>
         {/* We don't want to show the app picker when
@@ -701,6 +761,7 @@ export function useDraft(
         clearDraft()
         return
       }
+      inputRef.current?.setState({ loadingDraft: true })
       BackendRemote.rpc.getDraft(selectedAccountId(), chatId).then(newDraft => {
         if (!newDraft) {
           log.debug('no draft')
@@ -798,6 +859,7 @@ export function useDraft(
     } else {
       clearDraft()
     }
+    inputRef.current?.setState({ loadingDraft: false })
   }, [chatId, clearDraft, canSend, inputRef])
 
   const updateDraftText = (text: string, InputChatId: number) => {

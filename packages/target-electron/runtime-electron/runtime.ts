@@ -324,10 +324,18 @@ class ElectronRuntime implements Runtime {
     }
   }
   transformStickerURL(sticker_path: string): string {
-    return encodeURI(`file://${sticker_path}`).replace(
-      /[?#]/g,
-      encodeURIComponent
-    )
+    /**
+     * Some entities that are valid path parts but would be decoded by the browser (like %, #, ? ) etc.
+     * so we need to be encode them before passing the path to the browser:
+     * a path like "folder%20name/file" would be decoded to "folder name/file"
+     *
+     * Since Window paths have backslashes these will be encoded to %5C but since the browser on windows
+     * does not decode them back we have to decode those before passing the path to the browser
+     */
+    const a = encodeURI(`file://${sticker_path}`)
+    return a
+      .replace(/[?#]/g, encodeURIComponent) // special case # and ? are not encoded by encodeURI but "ignored" in URLs
+      .replace(/%5C/g, decodeURIComponent) // restore encoded backslashes (for Windows)
   }
 
   async showOpenFileDialog(

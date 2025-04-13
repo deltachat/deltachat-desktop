@@ -304,41 +304,41 @@ pub(crate) async fn open_webxdc<'a>(
         .as_ref()
         .map_err(|_err| Error::BlackholeProxyUnavailable)?;
 
-    let mut window_builder =
-        WebviewWindowBuilder::new(&app, &window_id, WebviewUrl::External(initial_url.clone()))
-            .initialization_script(INIT_SCRIPT)
-            // Use a non-working proxy to almost(!) isolate the app
-            // from the internet.
-            // "Almost" because there are still cases where the webview
-            // will bypass the proxy, such as with WebRTC.
-            // To disable WebRTC, we take separate measures.
-            //
-            // Note that `additional_browser_args` might make `proxy_url`
-            // have no effect (see below).
-            .proxy_url(dummy_localhost_proxy_url.clone())
-            .devtools({
-                // Dev tools might not work on macOS in production,
-                // see comments around `enableWebxdcDevTools`.
-                //
-                // TODO check whether opening dev tools is an exfiltration risk
-                // on WebKit (see comments about `enableWebxdcDevTools`),
-                // otherwise we need no special treatment
-                // for webxdc windows' dev tools and just use
-                // the same behavior as we use for the main window.
-                app.store(CONFIG_FILE)
-                    .context(format!(
-                    "failed to load config.json to read the value of {ENABLE_WEBXDC_DEV_TOOLS_KEY}"
-                ))
-                    .inspect_err(|err| log::error!("{err}"))
-                    .map(|store| {
-                        store.get_bool_or(
-                            ENABLE_WEBXDC_DEV_TOOLS_KEY,
-                            ENABLE_WEBXDC_DEV_TOOLS_DEFAULT,
-                        )
-                    })
-                    .unwrap_or(false)
+    let mut window_builder = WebviewWindowBuilder::new(
+        &app,
+        &window_id,
+        WebviewUrl::CustomProtocol(initial_url.clone()),
+    )
+    .initialization_script(INIT_SCRIPT)
+    // Use a non-working proxy to almost(!) isolate the app
+    // from the internet.
+    // "Almost" because there are still cases where the webview
+    // will bypass the proxy, such as with WebRTC.
+    // To disable WebRTC, we take separate measures.
+    //
+    // Note that `additional_browser_args` might make `proxy_url`
+    // have no effect (see below).
+    .proxy_url(dummy_localhost_proxy_url.clone())
+    .devtools({
+        // Dev tools might not work on macOS in production,
+        // see comments around `enableWebxdcDevTools`.
+        //
+        // TODO check whether opening dev tools is an exfiltration risk
+        // on WebKit (see comments about `enableWebxdcDevTools`),
+        // otherwise we need no special treatment
+        // for webxdc windows' dev tools and just use
+        // the same behavior as we use for the main window.
+        app.store(CONFIG_FILE)
+            .context(format!(
+                "failed to load config.json to read the value of {ENABLE_WEBXDC_DEV_TOOLS_KEY}"
+            ))
+            .inspect_err(|err| log::error!("{err}"))
+            .map(|store| {
+                store.get_bool_or(ENABLE_WEBXDC_DEV_TOOLS_KEY, ENABLE_WEBXDC_DEV_TOOLS_DEFAULT)
             })
-            .on_navigation(move |url| url.origin_no_opaque() == initial_url.origin_no_opaque());
+            .unwrap_or(false)
+    })
+    .on_navigation(move |url| url.origin_no_opaque() == initial_url.origin_no_opaque());
 
     // This is only for Chromium (i.e. Windows).
     // Note that this will make `WebviewWindowBuilder::proxy_url`,
