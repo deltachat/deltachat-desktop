@@ -10,7 +10,7 @@ const HIDDEN_THEME_PREFIX: &str = "dev_";
 pub const BUILT_IN_THEMES_PREFIX: &str = "dc";
 
 #[derive(Debug, Clone, Serialize)]
-pub struct Theme {
+pub struct ThemeMetadata {
     name: String,
     description: String,
     address: String,
@@ -18,7 +18,7 @@ pub struct Theme {
     is_prototype: bool,
 }
 
-impl Theme {
+impl ThemeMetadata {
     fn address(prefix: &str, file_name: &str) -> Result<String, Error> {
         let address = format!(
             "{prefix}:{}",
@@ -96,7 +96,10 @@ impl Theme {
     }
 }
 
-pub(super) async fn read_theme_dir(prefix: &str, directory: &PathBuf) -> Result<Vec<Theme>, Error> {
+pub(super) async fn read_theme_dir(
+    prefix: &str,
+    directory: &PathBuf,
+) -> Result<Vec<ThemeMetadata>, Error> {
     let mut files = read_dir(directory).await?;
     let mut themes = Vec::new();
     while let Some(file) = files.next_entry().await? {
@@ -114,7 +117,7 @@ pub(super) async fn read_theme_dir(prefix: &str, directory: &PathBuf) -> Result<
             Ok(content) => content,
         };
 
-        match Theme::load_from_file_content(prefix, &file_name, &content) {
+        match ThemeMetadata::load_from_file_content(prefix, &file_name, &content) {
             Err(err) => {
                 log::error!("load theme '{path_to_file:?}': {err}");
                 continue;
@@ -126,7 +129,7 @@ pub(super) async fn read_theme_dir(prefix: &str, directory: &PathBuf) -> Result<
     Ok(themes)
 }
 
-pub(super) async fn load_builtin_themes(app: &AppHandle) -> Result<Vec<Theme>, Error> {
+pub(super) async fn load_builtin_themes(app: &AppHandle) -> Result<Vec<ThemeMetadata>, Error> {
     let prefix = BUILT_IN_THEMES_PREFIX;
 
     let asset_resolver = app.asset_resolver();
@@ -161,7 +164,7 @@ pub(super) async fn load_builtin_themes(app: &AppHandle) -> Result<Vec<Theme>, E
             Ok(content) => content,
         };
 
-        match Theme::load_from_file_content(prefix, &file_name, &content) {
+        match ThemeMetadata::load_from_file_content(prefix, &file_name, &content) {
             Err(err) => {
                 log::error!("load theme '{asset_path}': {err}");
                 continue;
@@ -185,7 +188,7 @@ mod tests {
             --description: 'Our default dark theme.';
         }
         // some other comment";
-        let (name, description) = Theme::parse_theme_meta_data(raw_theme).unwrap();
+        let (name, description) = ThemeMetadata::parse_theme_meta_data(raw_theme).unwrap();
         assert_eq!(name, "Dark Theme");
         assert_eq!(description, "Our default dark theme.");
     }
@@ -194,7 +197,7 @@ mod tests {
     fn parse_meta_data_block_minified() {
         let raw_theme =
             r".theme-meta {--name: 'Dark Theme'; --description: 'Our default dark theme.';}";
-        let (name, description) = Theme::parse_theme_meta_data(raw_theme).unwrap();
+        let (name, description) = ThemeMetadata::parse_theme_meta_data(raw_theme).unwrap();
         assert_eq!(name, "Dark Theme");
         assert_eq!(description, "Our default dark theme.");
     }
@@ -202,7 +205,7 @@ mod tests {
     fn parse_meta_data_block_double_qoutes() {
         let raw_theme =
             r#".theme-meta {--name: "Dark Theme"; --description: "Our default dark theme.";}"#;
-        let (name, description) = Theme::parse_theme_meta_data(raw_theme).unwrap();
+        let (name, description) = ThemeMetadata::parse_theme_meta_data(raw_theme).unwrap();
         assert_eq!(name, "Dark Theme");
         assert_eq!(description, "Our default dark theme.");
     }

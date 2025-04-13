@@ -9,13 +9,13 @@ use crate::{
     themes::{
         custom_theme_dir,
         error::Error,
-        themes::{load_builtin_themes, read_theme_dir, Theme},
+        themes::{load_builtin_themes, read_theme_dir, ThemeMetadata},
     },
     CONFIG_FILE,
 };
 
 #[tauri::command]
-pub async fn get_available_themes(app: AppHandle) -> Result<Vec<Theme>, Error> {
+pub async fn get_available_themes(app: AppHandle) -> Result<Vec<ThemeMetadata>, Error> {
     let app = &app;
     let custom_themes_dir = custom_theme_dir(app)?;
     create_dir_all(&custom_themes_dir).await?;
@@ -58,7 +58,10 @@ pub async fn get_available_themes(app: AppHandle) -> Result<Vec<Theme>, Error> {
 }
 
 #[tauri::command]
-pub async fn get_theme(app: AppHandle, theme_address: String) -> Result<(Theme, String), Error> {
+pub async fn get_theme(
+    app: AppHandle,
+    theme_address: String,
+) -> Result<(ThemeMetadata, String), Error> {
     log::debug!("get_theme: {theme_address:?}");
 
     let (prefix, name) = if theme_address == "system" {
@@ -110,7 +113,7 @@ pub async fn get_theme(app: AppHandle, theme_address: String) -> Result<(Theme, 
         ));
     };
 
-    let theme = Theme::load_from_file_content(prefix, &file_name, &theme_content)?;
+    let theme = ThemeMetadata::load_from_file_content(prefix, &file_name, &theme_content)?;
 
     Ok((theme, theme_content))
 }
