@@ -572,7 +572,7 @@ class TauriRuntime implements Runtime {
     return invoke<Theme[]>('get_available_themes')
   }
   async getActiveTheme(): Promise<{ theme: Theme; data: string } | null> {
-    let themeAddress = await invoke<string>('get_current_active_theme')
+    let themeAddress = await invoke<string>('get_current_active_theme_address')
     if (themeAddress === 'system') {
       if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
         themeAddress = 'dc:dark'
