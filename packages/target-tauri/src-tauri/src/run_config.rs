@@ -16,7 +16,7 @@ pub struct RunConfig {
     pub minimized_window: bool,
     /// Force tray icon active, because started in minimized mode without visible window
     pub forced_tray_icon: bool,
-    /// the theme that was set via cli argument
+    /// the theme address that was set via cli argument
     pub theme: Option<String>,
     /// reloading the theme when it changes
     pub theme_watch: bool,
