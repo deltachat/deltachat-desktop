@@ -61,7 +61,7 @@ networkMoreButton.onclick = _ => {
   invoke('html_email_open_menu')
 }
 ;(window as any).updateTheme = async () => {
-  let themeAddress = await invoke<string>('get_current_active_theme')
+  let themeAddress = await invoke<string>('get_current_active_theme_address')
   if (themeAddress === 'system') {
     if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
       themeAddress = 'dc:dark'

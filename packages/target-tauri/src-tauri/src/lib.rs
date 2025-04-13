@@ -207,7 +207,7 @@ pub fn run() {
             state::tray_manager::update_tray_icon_badge,
             themes::commands::get_available_themes,
             themes::commands::get_theme,
-            themes::commands::get_current_active_theme,
+            themes::commands::get_current_active_theme_address,
         ])
         .register_asynchronous_uri_scheme_protocol(
             "webxdc-icon",

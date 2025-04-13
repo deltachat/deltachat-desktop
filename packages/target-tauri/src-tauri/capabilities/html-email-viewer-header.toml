@@ -9,6 +9,6 @@ permissions = [
     "allow-html-email-open-menu",
     "allow-get-html-window-info",
 
-    "allow-get-current-active-theme",
+    "allow-get-current-active-theme-address",
     "allow-get-theme",
 ]
