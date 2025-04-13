@@ -119,7 +119,7 @@ pub async fn get_theme(
 }
 
 #[tauri::command]
-pub fn get_current_active_theme(app: AppHandle) -> Result<String, Error> {
+pub fn get_current_active_theme_address(app: AppHandle) -> Result<String, Error> {
     let active_theme = app
         .store(CONFIG_FILE)?
         .get(THEME)
