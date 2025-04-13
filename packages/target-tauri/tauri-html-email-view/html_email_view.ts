@@ -71,7 +71,7 @@ networkMoreButton.onclick = _ => {
   }
   const [_theme, theme_content] = await invoke<
     [theme: Theme, theme_content: string]
-  >('load_theme', { themeAddress })
+  >('get_theme', { themeAddress })
 
   const themeVars = window.document.getElementById('theme-vars')
   if (!themeVars) {

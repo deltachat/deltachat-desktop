@@ -10,7 +10,7 @@ use crate::{
     util::fs_watcher::async_watch_debounced, MainWindowChannels, CONFIG_FILE,
 };
 
-use super::{commands::load_theme, custom_theme_dir, error::Error};
+use super::{commands::get_theme, custom_theme_dir, error::Error};
 
 pub fn run_cli(app: &AppHandle, run_config: &RunConfig) -> Result<(), Error> {
     if let Some(theme) = &run_config.theme {
@@ -20,7 +20,7 @@ pub fn run_cli(app: &AppHandle, run_config: &RunConfig) -> Result<(), Error> {
         );
 
         // try to load theme
-        if let Err(_) = block_on(load_theme(app.clone(), theme.to_owned())) {
+        if let Err(_) = block_on(get_theme(app.clone(), theme.to_owned())) {
             eprintln!("theme with address {theme} was not found or failed to load");
             exit(2)
         }

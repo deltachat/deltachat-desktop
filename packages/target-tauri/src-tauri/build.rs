@@ -72,7 +72,7 @@ fn main() {
             "html_email_set_load_remote_content",
             "update_tray_icon_badge",
             "get_available_themes",
-            "load_theme",
+            "get_theme",
             "get_current_active_theme",
         ]),
     ))

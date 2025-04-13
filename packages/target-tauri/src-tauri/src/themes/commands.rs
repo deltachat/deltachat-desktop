@@ -58,8 +58,8 @@ pub async fn get_available_themes(app: AppHandle) -> Result<Vec<Theme>, Error> {
 }
 
 #[tauri::command]
-pub async fn load_theme(app: AppHandle, theme_address: String) -> Result<(Theme, String), Error> {
-    log::debug!("load_theme: {theme_address:?}");
+pub async fn get_theme(app: AppHandle, theme_address: String) -> Result<(Theme, String), Error> {
+    log::debug!("get_theme: {theme_address:?}");
 
     let (prefix, name) = if theme_address == "system" {
         return Err(Error::SystemThemeNotAllowed);

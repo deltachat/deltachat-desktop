@@ -583,7 +583,7 @@ class TauriRuntime implements Runtime {
     try {
       const [theme, theme_content] = await invoke<
         [theme: Theme, theme_content: string]
-      >('load_theme', { themeAddress })
+      >('get_theme', { themeAddress })
       return { theme, data: theme_content }
     } catch (err) {
       this.log.error('failed to getActiveTheme:', err)

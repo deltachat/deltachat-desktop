@@ -206,7 +206,7 @@ pub fn run() {
             #[cfg(desktop)]
             state::tray_manager::update_tray_icon_badge,
             themes::commands::get_available_themes,
-            themes::commands::load_theme,
+            themes::commands::get_theme,
             themes::commands::get_current_active_theme,
         ])
         .register_asynchronous_uri_scheme_protocol(
