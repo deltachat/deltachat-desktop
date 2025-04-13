@@ -127,7 +127,3 @@ pub fn get_current_active_theme_address(app: AppHandle) -> Result<String, Error>
         .unwrap_or(THEME_DEFAULT.to_owned());
     Ok(active_theme)
 }
-
-// TODO: resolveThemeAddress
-
-// TODO: acceptThemeCLI
