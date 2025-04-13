@@ -165,16 +165,18 @@ export function init(options: { hidden: boolean }) {
   }
   window.webContents.session.setPermissionCheckHandler((_wc, permission) => {
     if (systemPreferences.getMediaAccessStatus && permission === 'media') {
-      return systemPreferences.getMediaAccessStatus('microphone') === 'granted'
+      return (
+        // TODO: handle the case that only one is granted
+        systemPreferences.getMediaAccessStatus('camera') === 'granted' &&
+        systemPreferences.getMediaAccessStatus('microphone') === 'granted'
+      )
     }
-    // if (systemPreferences.getMediaAccessStatus && permission === "microphone") {
-    //   return systemPreferences.getMediaAccessStatus("microphone") === "granted"
-    // }
     return permission_handler(permission as any)
   })
   window.webContents.session.setPermissionRequestHandler(
     (_wc, permission, callback) => {
       if (systemPreferences.askForMediaAccess && permission === 'media') {
+        systemPreferences.askForMediaAccess('camera').then(callback)
         systemPreferences.askForMediaAccess('microphone').then(callback)
       } else {
         callback(permission_handler(permission))
