@@ -62,6 +62,7 @@
 - tauri: fix emoji picker being super ugly
 - tauri: use current locale in "Help" window when opening it through menu
 - tauri: fix launching a second instance of Delta Chat not focusing the main window if it's closed
+- fix chatlist items sometimes not updating #4975
 - fix sticker folder not resolved on windows #4939
 
 <a id="1_56_0"></a>
