@@ -3,7 +3,7 @@ CHANGELOG.md
 node_modules
 
 packages/target-electron/bundle_out
-packages/target-electron/tests/compiled
+packages/target-electron/migration-tests/compiled
 packages/shared/ts-compiled-for-tests
 packages/e2e-tests/test-results/*
 
