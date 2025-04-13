@@ -16,6 +16,7 @@ import type {
   VerifyGroupQr,
 } from '../backend/qr'
 import AlertDialog from '../components/dialogs/AlertDialog'
+import { defaultCredentials } from '../components/LoginForm'
 
 type InstantOnboarding = {
   createInstantAccount: (accountId: number) => Promise<T.FullChat['id'] | null>
