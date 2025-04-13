@@ -64,6 +64,7 @@
           libayatana-appindicator
 
           # coding
+          pnpm
           rustToolchain
           rust-analyzer
           typescript-language-server
