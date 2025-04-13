@@ -3,7 +3,10 @@ import { useCallback, useContext } from 'react'
 import useDialog from './dialog/useDialog'
 import useSecureJoin from './useSecureJoin'
 import { BackendRemote } from '../backend-com'
-import { ConfigureProgressDialog } from '../components/LoginForm'
+import {
+  ConfigureProgressDialog,
+  defaultCredentials,
+} from '../components/LoginForm'
 import { DEFAULT_CHATMAIL_QR_URL } from '../components/screens/WelcomeScreen/chatmailInstances'
 import { InstantOnboardingContext } from '../contexts/InstantOnboardingContext'
 
@@ -93,15 +96,16 @@ export default function useInstantOnboarding(): InstantOnboarding {
         }
       }
 
-      await BackendRemote.rpc.setConfigFromQr(accountId, configurationQR)
+      await BackendRemote.rpc.addTransportFromQr(accountId, configurationQR)
 
       // 2. ~~Additionally we set the `selfavatar` / profile picture~~
       // ~~and `displayname` configuration for this account~~ -> this is now done before calling this method.
 
       return new Promise((resolve, reject) => {
         // 3. Kick-off the actual account creation process by calling
-        // `configure`. This happens inside of this dialog
+        // `addTransport`. This happens inside of this dialog
         openDialog(ConfigureProgressDialog, {
+          credentials: defaultCredentials(), // TODO: it is misleading to provide default credentials although the account is already created
           onSuccess: async () => {
             try {
               // 4. If the user created a new account from trying to contact
@@ -135,6 +139,9 @@ export default function useInstantOnboarding(): InstantOnboarding {
           onFail: error => {
             openDialog(AlertDialog, { message: error })
           },
+          // TODO: add a way to configure a proxy prior to making an account
+          // https://github.com/deltachat/deltachat-desktop/issues/4124#issuecomment-2788078788
+          proxyUpdated: false,
         })
       })
     },
