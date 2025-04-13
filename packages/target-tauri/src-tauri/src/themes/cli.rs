@@ -12,6 +12,11 @@ use crate::{
 
 use super::{commands::get_theme, custom_theme_dir, error::Error};
 
+/// If [`RunConfig::theme`] is `Some`, checks that the theme exists
+/// and saves its address to settings.
+///
+/// If [`RunConfig::theme_watch`] is `true`, watches the theme directories
+/// and emits [`MainWindowEvents::OnThemeUpdate`] on changes.
 pub fn run_cli(app: &AppHandle, run_config: &RunConfig) -> Result<(), Error> {
     if let Some(theme) = &run_config.theme {
         log::info!(
