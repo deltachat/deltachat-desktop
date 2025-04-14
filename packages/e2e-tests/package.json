@@ -8,6 +8,7 @@
     "@types/node": "^20.14.13"
   },
   "scripts": {
-    "e2e": "pnpm exec playwright test"
+    "e2e": "pnpm exec playwright test",
+    "e2e:report": "pnpm exec playwright show-report"
   }
 }

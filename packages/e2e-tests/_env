@@ -1,0 +1,2 @@
+DC_ACCOUNTS_DIR=../../e2e-tests/data/accounts
+NODE_ENV=test

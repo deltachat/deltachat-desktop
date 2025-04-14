@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test'
 
 import {
+  userNames,
   createUser,
   deleteProfile,
   switchToProfile,
@@ -8,23 +9,23 @@ import {
   loadExistingProfiles,
 } from '../playwright-helper'
 
+/**
+ * This test suite covers basic functionalities like
+ * creating profiles based on DCACCOUNT qr code
+ * invite a user
+ * start a chat
+ * send, edit, delete messages
+ * load and send webxdc app
+ * delete profile
+ *
+ * creating and deleting propfiles also
+ * happens in other tests in beforAll and afterAll
+ * so if this test fails the other ones will also
+ */
+
 test.describe.configure({ mode: 'serial' })
 
 let existingProfiles: User[] = []
-
-// uncomment to debug single steps
-// existingProfiles = [
-//   {
-//     id: '1',
-//     name: 'Alice',
-//     address: 'pscoqguj0@nine.testrun.org',
-//   },
-//   {
-//     id: '2',
-//     name: 'Bob',
-//     address: '5f6tjbd08@nine.testrun.org',
-//   },
-// ]
 
 test.beforeAll(async ({ browser }) => {
   const context = await browser.newContext()
@@ -41,10 +42,6 @@ test.beforeEach(async ({ page }) => {
   await page.goto('https://localhost:3000/')
 })
 
-const userNames = ['Alice', 'Bob', 'Chris', 'Denis', 'Eve']
-
-const groupName = 'TestGroup'
-
 const getUser = (index: number) => {
   if (!existingProfiles || existingProfiles.length < index + 1) {
     throw new Error(
@@ -60,7 +57,7 @@ const getUser = (index: number) => {
 }
 
 /**
- * covers creating a profile with standard
+ * covers creating a profile with preconfigured
  * chatmail server on first start or after
  */
 test('create profiles', async ({ page, context, browserName }) => {
@@ -274,73 +271,6 @@ test('edit message', async ({ page }) => {
     .locator(`.msg-body .text`)
   await expect(lastReceivedMessage).toHaveText(editedMessageText)
   await expect(page.locator('body')).not.toContainText(originalMessageText)
-})
-
-test('create group', async ({ page, context, browserName }) => {
-  if (browserName.toLowerCase().indexOf('chrom') > -1) {
-    await context.grantPermissions(['clipboard-read', 'clipboard-write'])
-  }
-  const userA = getUser(0)
-  const userB = getUser(1)
-  const userC = getUser(2)
-  await switchToProfile(page, userA.id)
-  await page.locator('#new-chat-button').click()
-  await page.locator('#newgroup button').click()
-  await page.locator('.group-name-input').fill(groupName)
-  await page.locator('#addmember button').click()
-  const addMemberDialog = page.getByTestId('add-member-dialog')
-  await page
-    .locator('.contact-list-item')
-    .filter({ hasText: userB.name })
-    .click()
-  // add new member by mail address (not working yet)
-  // await page.getByTestId('add-member-search').fill(userC.address)
-  // await page.keyboard.up('Enter')
-  // only one (pseudo) user is shown
-  // await addMemberDialog.locator('.contact-list-item buttom ').click()
-
-  await addMemberDialog.getByTestId('ok').click()
-
-  await page.getByTestId('group-create-button').click()
-  const chatListItem = page
-    .locator('.chat-list .chat-list-item')
-    .filter({ hasText: groupName })
-  await expect(chatListItem).toBeVisible()
-  await page.locator('#composer-textarea').fill(`Hello group members!`)
-  await page.locator('button.send-button').click()
-  const badgeNumber = page
-    .getByTestId(`account-item-${userB.id}`)
-    .locator('.styles_module_accountBadgeIcon')
-  await expect(badgeNumber).toHaveText('1')
-  // copy group invite link
-  await page.getByTestId('chat-info-button').click()
-  await page.locator('#showqrcode button').click()
-  await page.getByTestId('copy-qr-code').click()
-  await page.getByTestId('confirm-qr-code').click()
-  await page.getByTestId('view-group-dialog-header-close').click()
-  // paste invite link in account of userC
-  await switchToProfile(page, userC.id)
-  await page.getByTestId('qr-scan-button').click()
-  await page.getByTestId('show-qr-scan').click()
-  await page.getByTestId('paste').click()
-  const confirmDialog = page.getByTestId('confirm-join-group')
-  await expect(confirmDialog).toBeVisible()
-  // confirm dialog should contain group name
-  await expect(confirmDialog).toContainText(groupName)
-  await page.getByTestId('confirm-join-group').getByTestId('confirm').click()
-  // userA invited you to group message
-  await expect(page.locator('#message-list li').nth(1)).toContainText(
-    userA.address
-  )
-  // verified chat after response from userA
-  await expect(page.locator('.verified-icon-info-msg')).toBeVisible()
-  // userB has 2 new notifications now
-  const badge = page
-    .getByTestId(`account-item-${userB.id}`)
-    .locator('.styles_module_accountBadgeIcon')
-    .getByText('2')
-
-  await expect(badge).toBeVisible()
 })
 
 test('add app from picker to chat', async ({ page }) => {
