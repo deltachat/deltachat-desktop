@@ -63,7 +63,6 @@
 - accessibility: don't announce "padlock" on messages
 - fix double escape bypasses dialog attribute `canEscapeKeyClose={false}`
 - fix order when sending multiple files at once #4895
-<<<<<<< HEAD
 - show error message when QR scan action fails
 - tauri: fix: sticker picker previews not working
 - tauri: fix emoji picker being super ugly
@@ -72,10 +71,7 @@
 - fix chatlist items sometimes not updating #4975
 - fix sticker folder not resolved on windows #4939
 - tauri: improve performance a little #4812
-- settings: fix: wait for setting to be applied before calling callback
-=======
 - settings: fix: wait for setting to be applied before calling callback #4754
->>>>>>> f6fbcef49 (add pr number to changelog entry)
 
 <a id="1_56_0"></a>
 
