@@ -12,8 +12,7 @@ use tauri_plugin_store::StoreExt;
 use tokio::sync::RwLock;
 
 use crate::{
-    get_setting_bool_or,
-    settings::{SYNC_ALL_ACCOUNTS, SYNC_ALL_ACCOUNTS_DEFAULT},
+    settings::{StoreExtBoolExt, SYNC_ALL_ACCOUNTS, SYNC_ALL_ACCOUNTS_DEFAULT},
     MainWindowChannels, CONFIG_FILE,
 };
 
@@ -33,12 +32,11 @@ impl DeltaChatAppState {
         let accounts_dir = data_dir.join("accounts");
         let mut accounts = Accounts::new(accounts_dir.clone(), true).await?;
 
-        if get_setting_bool_or(
-            app.store(CONFIG_FILE)
-                .context("failed to load config.json")?
-                .get(SYNC_ALL_ACCOUNTS),
-            SYNC_ALL_ACCOUNTS_DEFAULT,
-        ) {
+        if app
+            .store(CONFIG_FILE)
+            .context("failed to load config.json")?
+            .get_bool_or(SYNC_ALL_ACCOUNTS, SYNC_ALL_ACCOUNTS_DEFAULT)
+        {
             accounts.start_io().await;
         }
 

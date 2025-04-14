@@ -21,6 +21,7 @@
     "path": "path-browserify"
   },
   "dependencies": {
+    "@breezystack/lamejs": "^1.2.7",
     "@deltachat-desktop/runtime-interface": "link:../runtime",
     "@deltachat-desktop/shared": "link:../shared",
     "@deltachat/jsonrpc-client": "catalog:",

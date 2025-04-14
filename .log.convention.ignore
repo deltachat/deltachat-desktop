@@ -22,7 +22,7 @@ test/
 
 packages/e2e-tests/
 
-packages/target-electron/tests/
+packages/target-electron/migration-tests/
 packages/target-electron/static/
 packages/target-electron/build/
 

@@ -681,15 +681,6 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
         <DialogContent>
           <div className='broadcast-list-hint'>
             <p>{tx('chat_new_broadcast_hint')}</p>
-            <p
-              style={{
-                marginTop: '3px',
-                color: 'var(--colorDanger)',
-                fontWeight: 'bold',
-              }}
-            >
-              ⚠️ {tx('broadcast_list_warning')}
-            </p>
           </div>
           <br />
           <ChatSettingsSetNameAndProfileImage

@@ -17,7 +17,7 @@ use crate::{
         punycode::{puny_code_decode_host, puny_code_encode_host},
     },
     settings::{
-        apply_zoom_factor_html_window, get_content_protection, get_setting_bool_or, CONFIG_FILE,
+        apply_zoom_factor_html_window, get_content_protection, CONFIG_FILE,
         HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_DEFAULT, HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_KEY,
     },
     state::html_email_instances::InnerHtmlEmailInstanceData,
@@ -58,6 +58,9 @@ pub(crate) async fn open_html_window(
     receive_time: &str,
     content: &str,
 ) -> Result<(), Error> {
+    use crate::settings::StoreExtBoolExt;
+    use crate::util::url_origin::UrlOriginExtension;
+
     let window_id = format!("html-window:{account_id}-{message_id}");
     trace!("open_html_window: {window_id}");
 
@@ -83,9 +86,8 @@ pub(crate) async fn open_html_window(
     }
     .map_err(Error::DeltaChat)?;
 
-    let store = app.store(CONFIG_FILE)?;
-    let always_load_remote_content = get_setting_bool_or(
-        store.get(HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_KEY),
+    let always_load_remote_content = app.store(CONFIG_FILE)?.get_bool_or(
+        HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_KEY,
         HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_DEFAULT,
     );
     let toggle_network_initial_state =
@@ -137,8 +139,6 @@ pub(crate) async fn open_html_window(
             Url::from_str("http://email.localhost/index.html").unwrap()
         }
     };
-    let initial_url_scheme = initial_url.scheme().to_owned();
-    let initial_url_host = initial_url.host_str().map(|o| o.to_owned());
 
     let mut mail_view_builder = tauri::webview::WebviewBuilder::new(
         format!("{window_id}-mail"),
@@ -159,9 +159,11 @@ pub(crate) async fn open_html_window(
         // We only really care about  navigating to `initial_url`:
         // the HTML message viewer is not supposed to be multipage,
         // so it's OK to handle such weird links as external, below.
-        let will_be_intercepted = url.scheme() == initial_url_scheme
-            && url.host_str().map(|o| o.to_owned()) == initial_url_host
-            && url.port() == initial_url.port();
+        //
+        // `initial_url.origin()` won't work, because it returns
+        // an opaque origin for `webxdc:` protocol,
+        // and no two opaque origins are equal.
+        let will_be_intercepted = url.origin_no_opaque() == initial_url.origin_no_opaque();
         if will_be_intercepted {
             return true;
         }

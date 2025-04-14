@@ -168,7 +168,7 @@ export default function InstantOnboardingScreen({
               data-testid='login-button'
             >
               {welcomeQr?.qr.kind === 'login'
-                ? tx('login')
+                ? tx('login_title')
                 : tx('instant_onboarding_create')}
             </Button>
             <Button

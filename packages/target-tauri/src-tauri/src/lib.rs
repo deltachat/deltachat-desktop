@@ -8,7 +8,7 @@ use menus::{handle_menu_event, main_menu::create_main_menu};
 
 use resume_from_sleep::start_resume_after_sleep_detector;
 use settings::{
-    get_setting_bool_or, load_and_apply_desktop_settings_on_startup, CONFIG_FILE, MINIMIZE_TO_TRAY,
+    load_and_apply_desktop_settings_on_startup, CONFIG_FILE, MINIMIZE_TO_TRAY,
     MINIMIZE_TO_TRAY_DEFAULT,
 };
 use state::{
@@ -43,6 +43,7 @@ mod settings;
 mod state;
 mod stickers;
 mod temp_file;
+mod themes;
 mod tray;
 mod util;
 mod webxdc;
@@ -115,15 +116,26 @@ pub fn run() {
         builder = builder
             .plugin(
                 tauri_plugin_window_state::Builder::new()
+                    // Disabled for webxdc, because we generate a new UUID label
+                    // every time we create a webxdc window,
+                    // so it doesn't make sense to store it. TODO (https://github.com/deltachat/deltachat-desktop/issues/4468)
                     .with_filter(|label| !label.starts_with("webxdc:"))
                     .build(),
             )
             .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
+                log::info!("second instance launched, focusing the original instance instead");
                 // TODO: handle open url case
-                let _ = app
-                    .get_webview_window("main")
-                    .expect("no main window")
-                    .set_focus();
+                let window = app.get_webview_window("main").expect("no main window");
+                window
+                    .show()
+                    .context("failed to show window after second instance launch attempt")
+                    .inspect_err(|err| log::error!("{err}"))
+                    .ok();
+                window
+                    .set_focus()
+                    .context("failed to focus window after second instance launch attempt")
+                    .inspect_err(|err| log::error!("{err}"))
+                    .ok();
             }));
     }
 
@@ -193,6 +205,9 @@ pub fn run() {
             // not available on mobile
             #[cfg(desktop)]
             state::tray_manager::update_tray_icon_badge,
+            themes::commands::get_available_themes,
+            themes::commands::get_theme,
+            themes::commands::get_current_active_theme_address,
         ])
         .register_asynchronous_uri_scheme_protocol(
             "webxdc-icon",
@@ -206,7 +221,7 @@ pub fn run() {
         )
         .register_asynchronous_uri_scheme_protocol("webxdc", webxdc::webxdc_scheme::webxdc_protocol)
         .setup(move |app| {
-            app.manage(run_config);
+            app.manage(run_config.clone());
 
             // Create missing directories for iOS (quick fix, better fix this upstream in tauri)
             #[cfg(target_os = "ios")]
@@ -369,6 +384,8 @@ pub fn run() {
             if run_config.minimized_window {
                 let _ = main_window.hide();
             }
+
+            themes::cli::run_cli(&app.handle(), &run_config)?;
 
             Ok(())
         })

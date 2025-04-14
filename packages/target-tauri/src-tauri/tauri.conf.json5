@@ -24,12 +24,20 @@
       "csp": {
         "default-src": "none",
         "connect-src": "'self' ipc:",
-        "style-src": "'self' 'unsafe-inline'",
+        // The sha256 value is for `emoji-mart`. We can't use 'unsafe-inline',
+        // because Tauri injects nonce values,
+        // (see https://tauri.app/security/csp/), and the browser complains:
+        // > Note that 'unsafe-inline' is ignored if either a hash
+        // > or nonce value is present in the source list.
+        //
+        // TODO if you look in dev tools console, we have more warnings
+        // about CSP. Figure out what these are.
+        "style-src": "'self' 'sha256-+A14ONesVdzkn6nr37Osn+rUqNz4oFGZFDbLXrlae04='",
         "font-src": "'self'",
         "script-src": "'self' 'wasm-unsafe-eval'",
         "worker-src": "blob:",
         "child-src": "blob:",
-        "img-src": "'self' data: blob: dcblob: webxdc-icon:",
+        "img-src": "'self' data: blob: dcblob: webxdc-icon: dcsticker:",
         "media-src": "'self' dcblob:"
       }
       // TODO postponed to later

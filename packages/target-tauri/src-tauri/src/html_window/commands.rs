@@ -9,7 +9,7 @@ use tauri_plugin_store::StoreExt;
 
 use crate::{
     settings::{
-        get_setting_bool_or, CONFIG_FILE, HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_DEFAULT,
+        StoreExtBoolExt, CONFIG_FILE, HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_DEFAULT,
         HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_KEY, HTML_EMAIL_WARNING_DEFAULT,
         HTML_EMAIL_WARNING_KEY,
     },
@@ -50,11 +50,9 @@ pub(crate) async fn html_email_set_load_remote_content(
 ) -> Result<(), Error> {
     let tl = app.state::<TranslationState>();
 
-    let desktop_settings = app.store(CONFIG_FILE)?;
-    let warning = get_setting_bool_or(
-        desktop_settings.get(HTML_EMAIL_WARNING_KEY),
-        HTML_EMAIL_WARNING_DEFAULT,
-    );
+    let warning = app
+        .store(CONFIG_FILE)?
+        .get_bool_or(HTML_EMAIL_WARNING_KEY, HTML_EMAIL_WARNING_DEFAULT);
 
     if warning && load_remote_content {
         let (tx, rx) = tokio::sync::oneshot::channel::<bool>();
@@ -81,14 +79,11 @@ pub(crate) fn html_email_open_menu(
     let tx = app.state::<TranslationState>();
 
     let desktop_settings = app.store(CONFIG_FILE)?;
-    let always_load = get_setting_bool_or(
-        desktop_settings.get(HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_KEY),
+    let always_load = desktop_settings.get_bool_or(
+        HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_KEY,
         HTML_EMAIL_ALWAYS_ALLOW_REMOTE_CONTENT_DEFAULT,
     );
-    let warning = get_setting_bool_or(
-        desktop_settings.get(HTML_EMAIL_WARNING_KEY),
-        HTML_EMAIL_WARNING_DEFAULT,
-    );
+    let warning = desktop_settings.get_bool_or(HTML_EMAIL_WARNING_KEY, HTML_EMAIL_WARNING_DEFAULT);
 
     let instance_state = block_on(html_instances_state.get(webview.window().label()))
         .ok_or(Error::WindowNotFoundInState)?;

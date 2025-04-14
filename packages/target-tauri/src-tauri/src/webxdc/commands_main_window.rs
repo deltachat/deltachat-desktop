@@ -18,6 +18,7 @@ use tauri::{
     async_runtime::block_on, image::Image, AppHandle, Manager, State, Url, WebviewUrl,
     WebviewWindowBuilder, WindowEvent,
 };
+use tauri_plugin_store::StoreExt;
 use uuid::Uuid;
 
 #[cfg(desktop)]
@@ -25,15 +26,16 @@ use crate::{menus::webxdc_menu::create_webxdc_window_menu, settings::get_content
 
 use crate::{
     network_isolation_dummy_proxy,
+    settings::{StoreExtBoolExt, ENABLE_WEBXDC_DEV_TOOLS_DEFAULT, ENABLE_WEBXDC_DEV_TOOLS_KEY},
     state::{
         menu_manager::MenuManager,
         webxdc_instances::{WebxdcInstance, WebxdcInstancesState},
     },
-    util::truncate_text,
+    util::{truncate_text, url_origin::UrlOriginExtension},
     webxdc::data_storage::{
         delete_webxdc_data_for_account, delete_webxdc_data_for_instance, set_data_store,
     },
-    DeltaChatAppState,
+    DeltaChatAppState, CONFIG_FILE,
 };
 
 use super::{commands::WebxdcUpdate, error::Error};
@@ -292,7 +294,7 @@ pub(crate) async fn open_webxdc<'a>(
         .await;
 
     // Contruct window
-    let url = if href.is_empty() {
+    let initial_url = if href.is_empty() {
         webxdc_base_url()?
     } else {
         href_to_webxdc_url(href)?
@@ -302,27 +304,41 @@ pub(crate) async fn open_webxdc<'a>(
         .as_ref()
         .map_err(|_err| Error::BlackholeProxyUnavailable)?;
 
-    let mut window_builder = WebviewWindowBuilder::new(&app, &window_id, WebviewUrl::External(url))
-        .initialization_script(INIT_SCRIPT)
-        // Use a non-working proxy to almost(!) isolate the app
-        // from the internet.
-        // "Almost" because there are still cases where the webview
-        // will bypass the proxy, such as with WebRTC.
-        // To disable WebRTC, we take separate measures.
+    let mut window_builder = WebviewWindowBuilder::new(
+        &app,
+        &window_id,
+        WebviewUrl::CustomProtocol(initial_url.clone()),
+    )
+    .initialization_script(INIT_SCRIPT)
+    // Use a non-working proxy to almost(!) isolate the app
+    // from the internet.
+    // "Almost" because there are still cases where the webview
+    // will bypass the proxy, such as with WebRTC.
+    // To disable WebRTC, we take separate measures.
+    //
+    // Note that `additional_browser_args` might make `proxy_url`
+    // have no effect (see below).
+    .proxy_url(dummy_localhost_proxy_url.clone())
+    .devtools({
+        // Dev tools might not work on macOS in production,
+        // see comments around `enableWebxdcDevTools`.
         //
-        // Note that `additional_browser_args` might make `proxy_url`
-        // have no effect (see below).
-        .proxy_url(dummy_localhost_proxy_url.clone())
-        .on_navigation(move |url| {
-            #[cfg(not(any(target_os = "windows", target_os = "android")))]
-            {
-                url.scheme() == "webxdc"
-            }
-            #[cfg(any(target_os = "windows", target_os = "android"))]
-            {
-                url.host() == Some(url::Host::Domain("webxdc.localhost")) && url.port().is_none()
-            }
-        });
+        // TODO check whether opening dev tools is an exfiltration risk
+        // on WebKit (see comments about `enableWebxdcDevTools`),
+        // otherwise we need no special treatment
+        // for webxdc windows' dev tools and just use
+        // the same behavior as we use for the main window.
+        app.store(CONFIG_FILE)
+            .context(format!(
+                "failed to load config.json to read the value of {ENABLE_WEBXDC_DEV_TOOLS_KEY}"
+            ))
+            .inspect_err(|err| log::error!("{err}"))
+            .map(|store| {
+                store.get_bool_or(ENABLE_WEBXDC_DEV_TOOLS_KEY, ENABLE_WEBXDC_DEV_TOOLS_DEFAULT)
+            })
+            .unwrap_or(false)
+    })
+    .on_navigation(move |url| url.origin_no_opaque() == initial_url.origin_no_opaque());
 
     // This is only for Chromium (i.e. Windows).
     // Note that this will make `WebviewWindowBuilder::proxy_url`,
