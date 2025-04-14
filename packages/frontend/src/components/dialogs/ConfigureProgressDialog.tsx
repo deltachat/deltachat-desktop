@@ -135,8 +135,12 @@ export function ConfigureProgressDialog({
               await BackendRemote.rpc.listTransports(accountId)
             if (existingTransports.length > 0) {
               const existingTransport = existingTransports[0]
-              // and multiple transports are not supported yet
-              if (existingTransport.addr !== transportConfig.addr) {
+              if (
+                // there is always a "default" transport with empty addr
+                existingTransport.addr !== '' &&
+                existingTransport.addr !== transportConfig.addr
+              ) {
+                // multiple transports are not supported yet
                 throw new Error(
                   tx(
                     'Multi transport is not supported right now. Check back in a few months!'
