@@ -16,6 +16,7 @@
 - tauri: handle resume from sleep #4926
 - tauri: add `--watch-translations` cli flag #4925
 - tauri: add tray icon #4922
+- tauri: add taskbar icon "unread" badge on Windows
 - tauri: add `--minimized` flag #4922
 - tauri: add theming #4940
 
