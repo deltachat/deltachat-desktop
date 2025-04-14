@@ -69,6 +69,9 @@
 - fix chatlist items sometimes not updating #4975
 - fix sticker folder not resolved on windows #4939
 
+### Removed
+- remove experimental option to disable IMAP IDLE
+
 <a id="1_56_0"></a>
 
 ## [1.56.0] - 2025-03-21

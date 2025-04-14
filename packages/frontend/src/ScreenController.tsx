@@ -96,6 +96,14 @@ export default class ScreenController extends Component {
       }
     }
     updateDeviceChats()
+
+    BackendRemote.rpc.getAllAccountIds().then(accountIds => {
+      for (const accountId of accountIds) {
+        BackendRemote.rpc
+          .setConfig(accountId, 'disable_idle', null)
+          .catch(() => log.error("failed to reset 'disable_idle' config key"))
+      }
+    })
   }
 
   private async _getLastUsedAccount(): Promise<number | undefined> {
