@@ -508,7 +508,10 @@ export default function ChatList(props: {
   )
 }
 
-function translate_n(key: string, quantity: number) {
+function translate_n(
+  key: Parameters<typeof window.static_translate>[0],
+  quantity: number
+) {
   return window
     .static_translate(key, String(quantity), { quantity })
     .toUpperCase()

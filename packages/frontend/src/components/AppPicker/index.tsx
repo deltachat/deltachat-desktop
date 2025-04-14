@@ -280,7 +280,7 @@ export function AppPicker({ onAppSelected }: Props) {
   const categoryTitle = (selectedCategory: AppCategoryEnum) => {
     return selectedCategory === AppCategoryEnum.home
       ? tx('home')
-      : tx(selectedCategory + 's')
+      : tx(`${selectedCategory}s`)
   }
 
   return (
