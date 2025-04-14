@@ -174,7 +174,7 @@ export default function useProcessQR() {
         !isLoggedIn
       ) {
         await openAlertDialog({
-          message: tx('Please login first'),
+          message: tx('need_to_be_logged_in'),
         })
         return callback?.()
       }
@@ -262,7 +262,7 @@ export default function useProcessQR() {
       if (qr.kind === 'backup2') {
         if (isLoggedIn) {
           await openAlertDialog({
-            message: tx('Please logout first'),
+            message: tx('need_to_be_logged_out'),
           })
           callback?.()
         } else {

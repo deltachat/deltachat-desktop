@@ -61,5 +61,11 @@
   },
   "stop_recording": {
     "message": "Finish recording"
+  },
+  "need_to_be_logged_in": {
+    "message": "Please log in first"
+  },
+  "need_to_be_logged_out": {
+    "message": "Please log out first"
   }
 }
