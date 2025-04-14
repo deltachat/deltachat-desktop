@@ -36,6 +36,8 @@ pub struct Cli {
     /// You can use it in combination with the env var `DELTACHAT_LOCALE_DIR`.
     #[arg(long)]
     watch_translations: bool,
+    #[arg(long)]
+    autostart: bool, // TODO: implement after merging tray icon
     /// Print version
     #[arg(short = 'V', long)]
     version: bool,

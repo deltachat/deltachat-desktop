@@ -23,6 +23,7 @@ use tauri_plugin_log::{Target, TargetKind};
 use tray::is_tray_icon_active;
 
 mod app_path;
+mod autostart;
 mod blobs;
 #[cfg(desktop)]
 mod cli;
@@ -155,6 +156,7 @@ pub fn run() {
             ui_frontend_ready,
             get_current_logfile,
             copy_image_to_clipboard,
+            autostart::get_autostart_state,
             app_path::get_app_path,
             clipboard::get_clipboard_image_as_data_uri,
             file_dialogs::download_file,
@@ -299,6 +301,17 @@ pub fn run() {
                 let _ = tauri_plugin_log::attach_logger(max_level, logger);
             }
             app.handle().plugin(tauri_plugin_log)?;
+
+            #[cfg(desktop)]
+            {
+                use tauri_plugin_autostart::MacosLauncher;
+
+                app.handle().plugin(tauri_plugin_autostart::init(
+                    MacosLauncher::LaunchAgent,
+                    Some(vec!["--autostart"]),
+                    // TODO: `--autostart` should show a different message why the tray option is disabled
+                ))?;
+            }
 
             app.manage(tauri::async_runtime::block_on(AppState::try_new(
                 app,

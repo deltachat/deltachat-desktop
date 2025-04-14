@@ -19,6 +19,7 @@
 - tauri: add taskbar icon "unread" badge on Windows
 - tauri: add `--minimized` flag #4922
 - tauri: add theming #4940
+- tauri: add autostart #4754
 
 
 ### Changed
@@ -70,6 +71,7 @@
 - fix chatlist items sometimes not updating #4975
 - fix sticker folder not resolved on windows #4939
 - tauri: improve performance a little #4812
+- settings: fix: wait for setting to be applied before calling callback #4754
 
 <a id="1_56_0"></a>
 

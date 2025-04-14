@@ -9,7 +9,8 @@ import type { Store } from '@tauri-apps/plugin-store'
 import { openPath, openUrl } from '@tauri-apps/plugin-opener'
 import { writeText, readText } from '@tauri-apps/plugin-clipboard-manager'
 
-import {
+import type {
+  AutostartState,
   DcNotification,
   DcOpenWebxdcParameters,
   DesktopSettingsType,
@@ -20,7 +21,10 @@ import {
 } from '@deltachat-desktop/shared/shared-types.js'
 import '@deltachat-desktop/shared/global.d.ts'
 
-import { Runtime, RuntimeAppPath } from '@deltachat-desktop/runtime-interface'
+import type {
+  Runtime,
+  RuntimeAppPath,
+} from '@deltachat-desktop/runtime-interface'
 import { BaseDeltaChat, yerpc } from '@deltachat/jsonrpc-client'
 import type { LocaleData } from '@deltachat-desktop/shared/localize.js'
 import type {
@@ -160,6 +164,7 @@ class TauriRuntime implements Runtime {
       locale: null, // if this is null, the system chooses the system language that electron reports
       notifications: true,
       syncAllAccounts: true,
+      autostart: true,
     } satisfies Partial<DesktopSettingsType>
 
     const frontendOnly = {
@@ -615,6 +620,9 @@ class TauriRuntime implements Runtime {
   // exp.runtime.debug_get_datastore_ids()
   async debug_get_datastore_ids() {
     return await invoke('debug_get_datastore_ids')
+  }
+  getAutostartState(): Promise<AutostartState> {
+    return invoke('get_autostart_state')
   }
   onChooseLanguage: ((locale: string) => Promise<void>) | undefined
   onThemeUpdate: (() => void) | undefined

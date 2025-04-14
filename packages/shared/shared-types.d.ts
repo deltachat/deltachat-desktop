@@ -54,6 +54,8 @@ export interface DesktopSettingsType {
    * also called screen_security
    */
   contentProtectionEnabled: boolean
+  /** whether to start with system on supported platforms */
+  autostart: boolean
 }
 
 export interface RC_Config {
@@ -154,4 +156,11 @@ export interface RuntimeOpenDialogOptions {
   )[]
   defaultPath?: string
   buttonLabel?: string
+}
+
+export interface AutostartState {
+  isSupported: boolean
+  // This is not the same as enabled in the desktop settings,
+  // this is the actual state not the desktop setting
+  isRegistered: boolean
 }
