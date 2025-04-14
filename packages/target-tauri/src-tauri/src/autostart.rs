@@ -1,8 +1,6 @@
 use serde::Serialize;
 use tauri::AppHandle;
 
-// TODO command to get autostart state : {isSupported, isRegistered}
-
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct AutostartState {
