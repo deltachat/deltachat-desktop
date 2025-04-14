@@ -54,7 +54,7 @@ for (const file of files) {
 
     const lineContainsConsoleLog =
       line.indexOf('console.') !== -1 &&
-      /console.(debug|log|info|error)\(/.test(line) === true
+      /console.(debug|log|info|warn|error)\(/.test(line) === true
 
     if (!lineContainsConsoleLog) continue
 
