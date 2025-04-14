@@ -15,31 +15,13 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { getDeviceChatId, saveLastChatId } from '../../backend/chat'
 
 import type { DialogProps } from '../../contexts/DialogContext'
-import { Credentials, Proxy } from '../LoginForm'
+import {
+  defaultCredentials,
+  Credentials,
+  Proxy,
+} from '../Settings/DefaultCredentials'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 const log = getLogger('renderer/loginForm')
-
-export function defaultCredentials(credentials?: Credentials): Credentials {
-  const defaultCredentials: Credentials = {
-    addr: '',
-    imapUser: null,
-    password: '',
-    imapServer: null,
-    imapPort: null,
-    imapSecurity: null,
-    certificateChecks: null,
-    smtpUser: null,
-    smtpPassword: null,
-    smtpServer: null,
-    smtpPort: null,
-    smtpSecurity: null,
-    oauth2: null,
-    proxyEnabled: false,
-    proxyUrl: null,
-  }
-
-  return { ...defaultCredentials, ...credentials }
-}
 
 interface ConfigureProgressDialogProps {
   credentials: Credentials | null

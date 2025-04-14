@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react'
 
 import { BackendRemote } from '../../backend-com'
-import LoginForm, { Credentials, Proxy } from '../LoginForm'
+import LoginForm from '../LoginForm'
 import {
-  ConfigureProgressDialog,
   defaultCredentials,
-} from './ConfigureProgressDialog'
+  Credentials,
+  Proxy,
+} from '../Settings/DefaultCredentials'
+import { ConfigureProgressDialog } from './ConfigureProgressDialog'
 import Dialog, {
   DialogBody,
   DialogContent,

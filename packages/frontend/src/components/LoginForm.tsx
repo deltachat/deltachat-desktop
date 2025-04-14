@@ -15,17 +15,7 @@ import SettingsSwitch from './Settings/SettingsSwitch'
 
 const log = getLogger('renderer/loginForm')
 
-export type Credentials = T.EnteredLoginParam & ProxySettings
-
-type ProxySettings = {
-  proxyEnabled: boolean
-  proxyUrl: string | null
-}
-
-export enum Proxy {
-  DISABLED = '0',
-  ENABLED = '1',
-}
+import type { Credentials } from './Settings/DefaultCredentials'
 
 const Socket = {
   automatic: 'automatic',
