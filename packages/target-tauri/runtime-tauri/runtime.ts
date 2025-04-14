@@ -409,12 +409,12 @@ class TauriRuntime implements Runtime {
     // this.log.info({ transformBlobURL: blob_path, matches })
 
     if (matches) {
-      let filename = matches[3]
-      if (decodeURIComponent(filename) === filename) {
-        // if it is not already encoded then encode it.
-        filename = encodeURIComponent(filename)
-      }
-      return `${this.runtime_info?.tauriSpecific?.scheme.blobs}${matches[2]}/${matches[3]}`
+      // Currently encoding is unnecessary, because file names are
+      // hex strings + file extension,
+      // but let's do it for consistency with `transformStickerURL`,
+      // and some future-proofing.
+      const filename = encodeURIComponent(matches[3])
+      return `${this.runtime_info?.tauriSpecific?.scheme.blobs}${matches[2]}/${filename}`
     }
     if (blob_path !== '') {
       this.log.error('transformBlobURL wrong url format', blob_path)
@@ -424,16 +424,17 @@ class TauriRuntime implements Runtime {
     return ''
   }
   transformStickerURL(sticker_path: string): string {
-    const matches = sticker_path.match(/.*(:?\\|\/)(.+?)\1stickers\1(.*)/)
+    const matches = sticker_path.match(
+      /.*(:?\\|\/)(.+?)\1stickers\1(.+?)\1(.+)/
+    )
     // this.log.info({ transformStickerURL: sticker_path, matches })
 
     if (matches) {
-      let filename = matches[3]
-      if (decodeURIComponent(filename) === filename) {
-        // if it is not already encoded then encode it.
-        filename = encodeURIComponent(filename)
-      }
-      return `${this.runtime_info?.tauriSpecific?.scheme.stickers}${matches[2]}/${matches[3]}`
+      // Keep in mind that the sticker pack folder and sticker name
+      // can include arbitrary characters.
+      const packName = encodeURIComponent(matches[3])
+      const filename = encodeURIComponent(matches[4])
+      return `${this.runtime_info?.tauriSpecific?.scheme.stickers}${matches[2]}/${packName}/${filename}`
     }
     if (sticker_path !== '') {
       this.log.error('transformStickerURL wrong url format', sticker_path)
