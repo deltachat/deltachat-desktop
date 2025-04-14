@@ -106,7 +106,7 @@ export function ConfigureProgressDialog({
             )
           }
           const configuration: Credentials = credentials || defaultCredentials()
-
+          let isInitialOnboarding = false
           const { proxyEnabled, proxyUrl, ...transportConfig } = configuration
           // Set proxy settings only if neccessary!
           // but before calling addTransport since it might be needed there (TODO)
@@ -120,13 +120,7 @@ export function ConfigureProgressDialog({
           if (qrCode) {
             // create a new transport for accountId based on the QR code
             await BackendRemote.rpc.addTransportFromQr(accountId, qrCode)
-            // Select 'Device Messages' chat as the initial one. This will serve
-            // as a first introduction to the app after they've entered
-            const deviceChatId = await getDeviceChatId(accountId)
-            if (deviceChatId) {
-              await saveLastChatId(accountId, deviceChatId)
-              // SettingsStoreInstance is reloaded the first time the main screen is shown
-            }
+            isInitialOnboarding = true
           } else if (
             transportConfig.addr !== undefined &&
             transportConfig.addr.length > 0
@@ -135,11 +129,10 @@ export function ConfigureProgressDialog({
               await BackendRemote.rpc.listTransports(accountId)
             if (existingTransports.length > 0) {
               const existingTransport = existingTransports[0]
-              if (
-                // there is always a "default" transport with empty addr
-                existingTransport.addr !== '' &&
-                existingTransport.addr !== transportConfig.addr
-              ) {
+              // there is always a "default" transport with empty addr
+              if (existingTransport.addr === '') {
+                isInitialOnboarding = true
+              } else if (existingTransport.addr !== transportConfig.addr) {
                 // multiple transports are not supported yet
                 throw new Error(
                   tx(
@@ -157,6 +150,15 @@ export function ConfigureProgressDialog({
             onClose()
             onUserCancellation?.()
             return
+          }
+          if (isInitialOnboarding) {
+            // Select 'Device Messages' chat as the initial one. This will serve
+            // as a first introduction to the app after they've entered
+            const deviceChatId = await getDeviceChatId(accountId)
+            if (deviceChatId) {
+              await saveLastChatId(accountId, deviceChatId)
+              // SettingsStoreInstance is reloaded the first time the main screen is shown
+            }
           }
 
           onClose()
