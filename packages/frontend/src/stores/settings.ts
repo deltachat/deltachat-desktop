@@ -25,7 +25,6 @@ export interface SettingsStoreState {
       webrtc_instance: string
       download_limit: string
       only_fetch_mvbox: string
-      disable_idle: string
       media_quality: string
       is_chatmail: '0' | '1'
       webxdc_realtime_enabled: string
@@ -50,7 +49,6 @@ const settingsKeys = [
   'webrtc_instance',
   'download_limit',
   'only_fetch_mvbox',
-  'disable_idle',
   'media_quality',
   'is_chatmail',
   'webxdc_realtime_enabled',

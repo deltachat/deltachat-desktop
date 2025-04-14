@@ -6,7 +6,6 @@ import SettingsStoreInstance, {
 } from '../../stores/settings'
 import SettingsSelector from './SettingsSelector'
 import DesktopSettingsSwitch from './DesktopSettingsSwitch'
-import CoreSettingsSwitch from './CoreSettingsSwitch'
 import EditVideochatInstanceDialog from '../dialogs/EditVideochatInstanceDialog'
 import {
   VIDEO_CHAT_INSTANCE_AUTISTICI,
