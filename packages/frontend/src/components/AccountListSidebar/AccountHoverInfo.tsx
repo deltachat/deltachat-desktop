@@ -44,9 +44,7 @@ export default function AccountHoverInfo({
     content = (
       <>
         <b>{tx('unconfigured_account')}</b>
-        <div className={styles.hoverInfoProperty}>
-          {tx('unconfigured_account_hint')}
-        </div>
+        <div className={styles.hoverInfoProperty}>{tx('foobar')}</div>
       </>
     )
   } else {
