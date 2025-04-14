@@ -198,7 +198,7 @@ pub(crate) fn apply_autostart(app: &AppHandle) -> anyhow::Result<()> {
     if store.get(AUTOSTART_KEY).is_none() {
         store.set(AUTOSTART_KEY, AUTOSTART_DEFAULT);
     }
-    let enable = get_setting_bool_or(store.get(AUTOSTART_KEY), AUTOSTART_DEFAULT);
+    let enable = store.get_bool_or(AUTOSTART_KEY, AUTOSTART_DEFAULT);
 
     let autostart_manager = app.autolaunch();
 
