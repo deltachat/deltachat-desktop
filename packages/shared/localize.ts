@@ -13,18 +13,12 @@ export interface LocaleData {
   }
 }
 
-// Solution to typescript thinking our variants can be just combined into the type string
-// adapted from https://github.com/sindresorhus/type-fest/blob/cabce984e5c19558f2f0061c3cd9488a945f60e6/source/literal-union.d.ts
-export type LiteralUnion<LiteralType> =
-  | LiteralType
-  | (string & Record<never, never>)
-
 // 'other' should exists for all languages (source?)
 // https://www.unicode.org/cldr/charts/43/supplemental/language_plural_rules.html
 type getMessageOptions = { quantity?: 'other' | number }
 
 export type getMessageFunction = (
-  key: LiteralUnion<TranslationKey>,
+  key: TranslationKey,
   substitutions?: string | string[],
   raw_opts?: 'other' | getMessageOptions
 ) => string
@@ -51,7 +45,7 @@ export function translate(
   }
 
   function getMessage(
-    key: LiteralUnion<TranslationKey>,
+    key: TranslationKey,
     substitutions?: string | string[],
     raw_opts?: 'other' | getMessageOptions
   ) {

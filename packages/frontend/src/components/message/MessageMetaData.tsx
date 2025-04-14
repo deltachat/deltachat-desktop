@@ -78,7 +78,20 @@ export default function MessageMetaData(props: Props) {
       {direction === 'outgoing' && (
         <button
           className={classNames('status-icon', status)}
-          aria-label={tx(`a11y_delivery_status_${status}`)}
+          aria-label={tx(
+            `a11y_delivery_status_${
+              status as Exclude<
+                typeof status,
+                // '' is not supposed to happen.
+                // The others are not supposed to happen
+                // as long as direction is outgoing.
+                | ''
+                | (typeof direction extends 'outgoing'
+                    ? 'in_fresh' | 'in_seen' | 'in_noticed'
+                    : never)
+              >
+            }`
+          )}
           disabled={status !== 'error'}
           tabIndex={status === 'error' ? tabindexForInteractiveContents : -1}
           onClick={status === 'error' ? onClickError : undefined}
