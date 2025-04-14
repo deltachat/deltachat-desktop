@@ -375,7 +375,6 @@ test('add app from picker to chat', async ({ page }) => {
   await expect(appDraft).toContainText(appName)
   await page.locator('button.send-button').click()
   const webxdcMessage = page.locator('.msg-body .webxdc')
-  await webxdcMessage.isVisible()
   await expect(webxdcMessage).toContainText(appName)
 })
 

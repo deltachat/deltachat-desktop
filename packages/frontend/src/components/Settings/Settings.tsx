@@ -121,6 +121,7 @@ export default function Settings({ onClose }: DialogProps) {
             <SettingsIconButton
               icon='code-tags'
               onClick={() => setSettingsMode('advanced')}
+              dataTestid='open-advanced-settings'
             >
               {tx('menu_advanced')}
             </SettingsIconButton>
@@ -195,6 +196,7 @@ export default function Settings({ onClose }: DialogProps) {
             title={tx('menu_advanced')}
             onClickBack={() => setSettingsMode('main')}
             onClose={onClose}
+            dataTestid='settings-advanced'
           />
           <DialogBody>
             <Advanced settingsStore={settingsStore} />

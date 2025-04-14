@@ -171,3 +171,7 @@ Then overwrite the `"EmojiMart"` font family at the end of your theme.scss file 
 Now build your theme (see sections above on how to do that), select your custom theme in detachat and then enjoy the new look of your emojis:
 
 <img src="./doc-assets/emoji-picker-with-noto-mono-color-emoji.png" width="200px" />
+
+### Paths on delta tauri:
+
+- macOS:`~/Library/Application Support/chat.delta.desktop.tauri/custom-themes`

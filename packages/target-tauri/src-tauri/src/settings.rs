@@ -3,7 +3,10 @@ use log::warn;
 use tauri::{AppHandle, Manager};
 use tauri_plugin_store::StoreExt;
 
-use crate::{state::menu_manager::MenuManager, TranslationState, TrayManager};
+use crate::{
+    state::menu_manager::MenuManager, themes::update_theme_in_other_windows, TranslationState,
+    TrayManager,
+};
 
 pub(crate) const CONFIG_FILE: &str = "config.json";
 
@@ -12,6 +15,8 @@ pub(crate) const ZOOM_FACTOR_KEY: &str = "zoomFactor";
 pub(crate) const HELP_ZOOM_FACTOR_KEY: &str = "helpZoomFactor";
 pub(crate) const HTML_EMAIL_ZOOM_FACTOR_KEY: &str = "htmlEmailZoomFactor";
 pub(crate) const WEBXDC_ZOOM_FACTOR_KEY: &str = "webxdcZoomFactor";
+pub(crate) const ENABLE_WEBXDC_DEV_TOOLS_KEY: &str = "enableWebxdcDevTools";
+pub(crate) const ENABLE_WEBXDC_DEV_TOOLS_DEFAULT: bool = false;
 pub(crate) const CONTENT_PROTECTION_KEY: &str = "contentProtectionEnabled";
 pub(crate) const CONTENT_PROTECTION_DEFAULT: bool = false;
 pub(crate) const HTML_EMAIL_WARNING_KEY: &str = "HTMLEmailAskForRemoteLoadingConfirmation";
@@ -23,6 +28,10 @@ pub(crate) const MINIMIZE_TO_TRAY: &str = "minimizeToTray";
 pub(crate) const MINIMIZE_TO_TRAY_DEFAULT: bool = true;
 pub(crate) const NOTIFICATIONS: &str = "notifications";
 pub(crate) const NOTIFICATIONS_DEFAULT: bool = true;
+pub(crate) const SYNC_ALL_ACCOUNTS: &str = "syncAllAccounts";
+pub(crate) const SYNC_ALL_ACCOUNTS_DEFAULT: bool = true;
+pub(crate) const THEME: &str = "activeTheme";
+pub(crate) const THEME_DEFAULT: &str = "system";
 
 // runtime calls this when desktop settings change
 #[tauri::command]
@@ -41,6 +50,7 @@ pub async fn change_desktop_settings_apply_side_effects(
         }
         // update "mute notification" menu item with new state
         NOTIFICATIONS => app.state::<TrayManager>().update_menu(&app).await,
+        THEME => update_theme_in_other_windows(&app).context("update theme in other windows"),
         _ => Ok(()),
     }
     .map_err(|err| format!("{err:#}"))
@@ -153,11 +163,14 @@ pub(crate) async fn apply_language_change(app: &AppHandle) -> anyhow::Result<()>
     Ok(())
 }
 
-pub(crate) fn get_setting_bool_or(
-    setting_load_result: Option<serde_json::Value>,
-    default_value: bool,
-) -> bool {
-    setting_load_result
-        .and_then(|v| v.as_bool())
-        .unwrap_or(default_value)
+pub trait StoreExtBoolExt {
+    fn get_bool_or(&self, settings_key: impl AsRef<str>, default_value: bool) -> bool;
+}
+
+impl<R: tauri::Runtime> StoreExtBoolExt for tauri_plugin_store::Store<R> {
+    fn get_bool_or(&self, settings_key: impl AsRef<str>, default_value: bool) -> bool {
+        self.get(settings_key)
+            .and_then(|v| v.as_bool())
+            .unwrap_or(default_value)
+    }
 }

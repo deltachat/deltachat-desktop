@@ -34,6 +34,15 @@ pub(crate) fn email_protocol<R: tauri::Runtime>(
     // URI format is email://<anything>
     // (file path doesn't matter, because the html content is always returned)
 
+    let webview_label = ctx.webview_label();
+    if !webview_label.starts_with("html-window:") || !webview_label.ends_with("-mail") {
+        error!(
+            "prevented other window from accessing email:// scheme (webview label: {})",
+            webview_label
+        );
+        return;
+    }
+
     let webview_label = ctx.webview_label().to_owned().replace("-mail", "");
     let app_handle = ctx.app_handle().clone();
 

@@ -18,21 +18,24 @@ use tauri::{
     async_runtime::block_on, image::Image, AppHandle, Manager, State, Url, WebviewUrl,
     WebviewWindowBuilder, WindowEvent,
 };
+use tauri_plugin_store::StoreExt;
 use uuid::Uuid;
 
 #[cfg(desktop)]
 use crate::{menus::webxdc_menu::create_webxdc_window_menu, settings::get_content_protection};
 
 use crate::{
+    network_isolation_dummy_proxy,
+    settings::{StoreExtBoolExt, ENABLE_WEBXDC_DEV_TOOLS_DEFAULT, ENABLE_WEBXDC_DEV_TOOLS_KEY},
     state::{
         menu_manager::MenuManager,
         webxdc_instances::{WebxdcInstance, WebxdcInstancesState},
     },
-    util::truncate_text,
+    util::{truncate_text, url_origin::UrlOriginExtension},
     webxdc::data_storage::{
         delete_webxdc_data_for_account, delete_webxdc_data_for_instance, set_data_store,
     },
-    DeltaChatAppState,
+    DeltaChatAppState, CONFIG_FILE,
 };
 
 use super::{commands::WebxdcUpdate, error::Error};
@@ -291,33 +294,61 @@ pub(crate) async fn open_webxdc<'a>(
         .await;
 
     // Contruct window
-    let url = if href.is_empty() {
+    let initial_url = if href.is_empty() {
         webxdc_base_url()?
     } else {
         href_to_webxdc_url(href)?
     };
 
-    let mut window_builder = WebviewWindowBuilder::new(&app, &window_id, WebviewUrl::External(url))
-        .initialization_script(INIT_SCRIPT)
-        .on_navigation(move |url| {
-            #[cfg(not(any(target_os = "windows", target_os = "android")))]
-            {
-                url.scheme() == "webxdc"
-            }
-            #[cfg(any(target_os = "windows", target_os = "android"))]
-            {
-                url.host() == Some(url::Host::Domain("webxdc.localhost")) && url.port().is_none()
-            }
-        });
+    let dummy_localhost_proxy_url = network_isolation_dummy_proxy::DUMMY_LOCALHOST_PROXY_URL
+        .as_ref()
+        .map_err(|_err| Error::BlackholeProxyUnavailable)?;
+
+    let mut window_builder = WebviewWindowBuilder::new(
+        &app,
+        &window_id,
+        WebviewUrl::CustomProtocol(initial_url.clone()),
+    )
+    .initialization_script(INIT_SCRIPT)
+    // Use a non-working proxy to almost(!) isolate the app
+    // from the internet.
+    // "Almost" because there are still cases where the webview
+    // will bypass the proxy, such as with WebRTC.
+    // To disable WebRTC, we take separate measures.
+    //
+    // Note that `additional_browser_args` might make `proxy_url`
+    // have no effect (see below).
+    .proxy_url(dummy_localhost_proxy_url.clone())
+    .devtools({
+        // Dev tools might not work on macOS in production,
+        // see comments around `enableWebxdcDevTools`.
+        //
+        // TODO check whether opening dev tools is an exfiltration risk
+        // on WebKit (see comments about `enableWebxdcDevTools`),
+        // otherwise we need no special treatment
+        // for webxdc windows' dev tools and just use
+        // the same behavior as we use for the main window.
+        app.store(CONFIG_FILE)
+            .context(format!(
+                "failed to load config.json to read the value of {ENABLE_WEBXDC_DEV_TOOLS_KEY}"
+            ))
+            .inspect_err(|err| log::error!("{err}"))
+            .map(|store| {
+                store.get_bool_or(ENABLE_WEBXDC_DEV_TOOLS_KEY, ENABLE_WEBXDC_DEV_TOOLS_DEFAULT)
+            })
+            .unwrap_or(false)
+    })
+    .on_navigation(move |url| url.origin_no_opaque() == initial_url.origin_no_opaque());
 
     // This is only for Chromium (i.e. Windows).
-    // Note that this will make `WebviewWindowBuilder::proxy_url`
-    // (which we don't currently use), and potentially some other,
-    // future options, have no effect.
+    // Note that this will make `WebviewWindowBuilder::proxy_url`,
+    // and potentially some other, future options, have no effect:
+    // we will have to manually specify `dummy_proxy_url` in args.
     #[cfg(target_os = "windows")]
     {
-        window_builder =
-            window_builder.additional_browser_args(&get_chromium_hardening_browser_args());
+        window_builder = window_builder.additional_browser_args(
+            &get_chromium_hardening_browser_args(dummy_localhost_proxy_url),
+        );
     }
     #[cfg(desktop)]
     {
@@ -417,7 +448,7 @@ fn make_title(webxdc_info: &WebxdcInfo, chat_name: &str) -> String {
 }
 
 #[cfg(target_os = "windows")]
-fn get_chromium_hardening_browser_args() -> String {
+fn get_chromium_hardening_browser_args(dummy_proxy_url: &Url) -> String {
     // Hardening: (partially?) disable WebRTC, prohibit all DNS queries,
     // and practically almost (or completely?) disable internet access.
     // See https://delta.chat/en/2023-05-22-webxdc-security.
@@ -447,7 +478,8 @@ fn get_chromium_hardening_browser_args() -> String {
     // effectively disable WebRTC.
     //
     // Thanks to the fact that we specify `host-rules`,
-    // no connection attempt to the proxy should occur at all.
+    // no connection attempt to the proxy should occur at all,
+    // at least as of now.
     // See https://www.chromium.org/developers/design-documents/network-stack/socks-proxy/ :
     // > The "EXCLUDE" clause make an exception for "myproxy",
     // > because otherwise Chrome would be unable to resolve
@@ -455,10 +487,8 @@ fn get_chromium_hardening_browser_args() -> String {
     // > and all requests would necessarily fail
     // > with PROXY_CONNECTION_FAILED.
     //
-    // TODO it's not clear, however, why the WebView doesn't try
-    // to connect to the proxy even when `host-rules` and
-    // `host-resolver-rules` are omitted.
-    // Maybe it has to do with Tauri intercepting requests?
+    // However, let's still use our dummy TCP listener
+    // (`dummy_proxy_url`), just in case.
     //
     // Docs on command line args:
     // - https://peter.sh/experiments/chromium-command-line-switches/
@@ -469,10 +499,7 @@ fn get_chromium_hardening_browser_args() -> String {
         &format!("--host-rules=\"{host_rules}\""),
         "--webrtc-ip-handling-policy=disable_non_proxied_udp",
         "--force-webrtc-ip-handling-policy=disable_non_proxied_udp",
-        // Use a non-private address and a reserved port, juuust in case
-        // the browser actually tries to connect to the proxy.
-        // https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.txt
-        "--proxy-url=\"socks5://example.com:1024\"",
+        &format!("--proxy-server=\"{dummy_proxy_url}\""),
     ]
     .join(" ")
 }

@@ -54,16 +54,25 @@ export default function useProcessQR() {
 
   const { selectChat } = useChat()
 
-  const setConfigFromQrCatchingErrorInAlert = useCallback(
+  /**
+   * Processes various QR codes
+   * catched errors will be shown in an alert dialog
+   */
+  const processQrCode = useCallback(
     async (accountId: number, qrContent: string) => {
       try {
         await BackendRemote.rpc.setConfigFromQr(accountId, qrContent)
       } catch (error) {
-        if (error instanceof Error) {
-          openAlertDialog({
-            message: error.message,
-          })
-        }
+        openAlertDialog({
+          message:
+            (typeof error === 'object' && error != null
+              ? 'message' in error
+                ? `${error.message}`
+                : 'toString' in error
+                  ? error.toString()
+                  : null
+              : null) ?? 'Failed to setConfigFromQr',
+        })
       }
     },
     [openAlertDialog]
@@ -292,7 +301,7 @@ export default function useProcessQR() {
         })
 
         if (userConfirmed) {
-          await setConfigFromQrCatchingErrorInAlert(accountId, url)
+          await processQrCode(accountId, url)
         }
 
         callback?.()
@@ -309,7 +318,7 @@ export default function useProcessQR() {
         })
 
         if (userConfirmed) {
-          await setConfigFromQrCatchingErrorInAlert(accountId, url)
+          await processQrCode(accountId, url)
         }
 
         callback?.()
@@ -326,7 +335,7 @@ export default function useProcessQR() {
         })
 
         if (userConfirmed) {
-          await setConfigFromQrCatchingErrorInAlert(accountId, url)
+          await processQrCode(accountId, url)
         }
 
         callback?.()
@@ -343,7 +352,7 @@ export default function useProcessQR() {
         })
 
         if (userConfirmed) {
-          await setConfigFromQrCatchingErrorInAlert(accountId, url)
+          await processQrCode(accountId, url)
         }
 
         callback?.()
@@ -368,7 +377,7 @@ export default function useProcessQR() {
       openMailtoLink,
       secureJoinContact,
       secureJoinGroup,
-      setConfigFromQrCatchingErrorInAlert,
+      processQrCode,
       startInstantOnboarding,
       addAndSelectAccount,
       selectChat,

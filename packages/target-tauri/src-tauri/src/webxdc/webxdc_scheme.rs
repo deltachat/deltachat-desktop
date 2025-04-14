@@ -99,6 +99,14 @@ pub(crate) fn webxdc_protocol<R: tauri::Runtime>(
     // windows/android:   webxdc://webxdc.localhost/<path>
 
     let webview_label = ctx.webview_label().to_owned();
+    if !webview_label.starts_with("webxdc:") {
+        error!(
+            "prevented other window from accessing webxdc:// scheme (webview label: {})",
+            webview_label
+        );
+        return;
+    }
+
     let app_handle = ctx.app_handle().clone();
 
     tauri::async_runtime::spawn(async move {

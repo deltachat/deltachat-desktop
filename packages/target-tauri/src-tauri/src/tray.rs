@@ -1,23 +1,21 @@
 use anyhow::Context;
 use tauri::{
-    tray::{MouseButton, TrayIcon, TrayIconBuilder},
+    tray::{MouseButton, MouseButtonState, TrayIcon, TrayIconBuilder},
     AppHandle, Manager,
 };
 use tauri_plugin_store::StoreExt;
 
 use crate::{
-    get_setting_bool_or, menus::tray_menu::create_tray_menu, run_config::RunConfig, CONFIG_FILE,
-    MINIMIZE_TO_TRAY, MINIMIZE_TO_TRAY_DEFAULT,
+    menus::tray_menu::create_tray_menu, run_config::RunConfig, settings::StoreExtBoolExt,
+    CONFIG_FILE, MINIMIZE_TO_TRAY, MINIMIZE_TO_TRAY_DEFAULT,
 };
 
 pub fn is_tray_icon_active(app: &AppHandle) -> anyhow::Result<bool> {
     let rc = app.state::<RunConfig>();
-    let minimize_to_tray = get_setting_bool_or(
-        app.get_store(CONFIG_FILE)
-            .context("failed to load config")?
-            .get(MINIMIZE_TO_TRAY),
-        MINIMIZE_TO_TRAY_DEFAULT,
-    );
+    let minimize_to_tray = app
+        .get_store(CONFIG_FILE)
+        .context("failed to load config")?
+        .get_bool_or(MINIMIZE_TO_TRAY, MINIMIZE_TO_TRAY_DEFAULT);
 
     Ok(rc.forced_tray_icon || minimize_to_tray)
 }
@@ -51,15 +49,36 @@ pub(crate) fn build_tray_icon(app: &AppHandle) -> anyhow::Result<TrayIcon> {
             .on_tray_icon_event(|tray, event| {
                 if let tauri::tray::TrayIconEvent::Click {
                     button: MouseButton::Left,
+                    // For a regular click, we'd get two `TrayIconEvent::Click`,
+                    // one for Down, the other for Up.
+                    // Let's only run the handler once per click.
+                    button_state: MouseButtonState::Up,
                     ..
                 } = event
                 {
                     if let Some(main_window) = tray.app_handle().get_window("main") {
-                        if let Err(err) = main_window.show() {
-                            log::error!("failed to restore window after click on tray icon: {err}")
-                        }
-                        if let Err(err) = main_window.set_focus() {
-                            log::error!("failed to focus window after click on tray icon: {err}")
+                        // It'd be nice to use `.is_focused()` instead,
+                        // but unfortunately, upon a tray icon click,
+                        // it always loses focus before the event fires.
+                        let is_visible = main_window.is_visible().unwrap_or(false);
+
+                        if is_visible {
+                            if let Err(err) = main_window.hide() {
+                                log::error!(
+                                    "failed to hide window after click on tray icon: {err}"
+                                );
+                            }
+                        } else {
+                            if let Err(err) = main_window.show() {
+                                log::error!(
+                                    "failed to restore window after click on tray icon: {err}"
+                                );
+                            }
+                            if let Err(err) = main_window.set_focus() {
+                                log::error!(
+                                    "failed to focus window after click on tray icon: {err}"
+                                );
+                            }
                         }
                     }
                 }

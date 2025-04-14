@@ -18,11 +18,11 @@ body {
   cursor: default;
 
   &:not(.system-fonts) {
-    --font-family: #{$fonts-default};
+    --font-family: var(--fonts-default);
     font-family: var(--font-family);
   }
   &.system-fonts {
-    --font-family: #{$fonts-system};
+    --font-family: var(--fonts-system);
     font-family: var(--font-family);
   }
 }
@@ -200,7 +200,7 @@ code {
 code,
 kbd,
 samp {
-  font-family: monospace, $emojifonts;
+  font-family: monospace, var(--emojifonts);
 }
 
 .main-container-container {

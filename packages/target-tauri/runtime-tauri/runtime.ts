@@ -61,6 +61,9 @@ type MainWindowEvents =
   | {
       event: 'toggleNotifications'
     }
+  | {
+      event: 'onThemeUpdate'
+    }
 
 const events = new Channel<MainWindowEvents>()
 const jsonrpc = new Channel<yerpc.Message>()
@@ -79,8 +82,7 @@ class TauriTransport extends yerpc.BaseTransport {
     }
   }
   _send(message: yerpc.Message): void {
-    const serialized = JSON.stringify(message)
-    invoke('deltachat_jsonrpc_request', { message: serialized })
+    invoke('deltachat_jsonrpc_request', { message })
     if (logJsonrpcConnection) {
       /* ignore-console-log */
       console.debug('%c▲ %c[JSONRPC]', 'color: green', 'color:grey', message)
@@ -99,6 +101,9 @@ export class TauriDeltaChat extends BaseDeltaChat<TauriTransport> {
 }
 
 class TauriRuntime implements Runtime {
+  constructor() {
+    this.getActiveTheme = this.getActiveTheme.bind(this)
+  }
   emitUIFullyReady(): void {
     invoke('ui_frontend_ready')
   }
@@ -144,7 +149,6 @@ class TauriRuntime implements Runtime {
     } satisfies Partial<DesktopSettingsType>
 
     const frontendAndTauri = {
-      // TODO field 1
       zoomFactor: 1, // ? not sure yet
       minimizeToTray: true,
       lastSaveDialogLocation: undefined,
@@ -152,12 +156,13 @@ class TauriRuntime implements Runtime {
       HTMLEmailAskForRemoteLoadingConfirmation: true,
       HTMLEmailAlwaysLoadRemoteContent: false,
       contentProtectionEnabled: false,
+      activeTheme: 'system',
       locale: null, // if this is null, the system chooses the system language that electron reports
+      notifications: true,
+      syncAllAccounts: true,
     } satisfies Partial<DesktopSettingsType>
 
     const frontendOnly = {
-      // TODO field 2
-      notifications: true,
       showNotificationContent: true,
       enterKeySends: false,
       enableAVCalls: false,
@@ -165,8 +170,6 @@ class TauriRuntime implements Runtime {
       enableChatAuditLog: false,
       enableOnDemandLocationStreaming: false,
       chatViewBgImg: undefined,
-      activeTheme: 'system',
-      syncAllAccounts: true,
       experimentalEnableMarkdownInMessages: false,
       enableRelatedChats: false,
       galleryImageKeepAspectRatio: false,
@@ -215,6 +218,8 @@ class TauriRuntime implements Runtime {
       devtools: boolean
       dev_mode: boolean
       forced_tray_icon: boolean
+      theme: string | null
+      theme_watch: boolean
     }>('get_frontend_run_config')
     const rc_config: RC_Config = {
       'log-debug': config.log_debug,
@@ -222,8 +227,8 @@ class TauriRuntime implements Runtime {
       devmode: config.dev_mode,
       minimized: config.forced_tray_icon,
 
-      theme: undefined,
-      'theme-watch': false,
+      theme: config.theme || undefined,
+      'theme-watch': config.theme_watch,
       'translation-watch': false,
 
       // does not exist in delta tauri
@@ -331,8 +336,17 @@ class TauriRuntime implements Runtime {
         this.onResumeFromSleep?.()
       } else if (event.event === 'toggleNotifications') {
         this.onToggleNotifications?.()
+      } else if (event.event === 'onThemeUpdate') {
+        this.log.debug('on theme update')
+        this.onThemeUpdate?.()
       }
     }
+    window
+      .matchMedia('(prefers-color-scheme: dark)')
+      .addEventListener('change', event => {
+        this.log.debug('system theme changed:', { dark_theme: event.matches })
+        this.onThemeUpdate?.()
+      })
   }
   reloadWebContent(): void {
     // for now use the browser method as long as it is sufficient
@@ -394,12 +408,12 @@ class TauriRuntime implements Runtime {
     // this.log.info({ transformBlobURL: blob_path, matches })
 
     if (matches) {
-      let filename = matches[3]
-      if (decodeURIComponent(filename) === filename) {
-        // if it is not already encoded then encode it.
-        filename = encodeURIComponent(filename)
-      }
-      return `${this.runtime_info?.tauriSpecific?.scheme.blobs}${matches[2]}/${matches[3]}`
+      // Currently encoding is unnecessary, because file names are
+      // hex strings + file extension,
+      // but let's do it for consistency with `transformStickerURL`,
+      // and some future-proofing.
+      const filename = encodeURIComponent(matches[3])
+      return `${this.runtime_info?.tauriSpecific?.scheme.blobs}${matches[2]}/${filename}`
     }
     if (blob_path !== '') {
       this.log.error('transformBlobURL wrong url format', blob_path)
@@ -409,16 +423,17 @@ class TauriRuntime implements Runtime {
     return ''
   }
   transformStickerURL(sticker_path: string): string {
-    const matches = sticker_path.match(/.*(:?\\|\/)(.+?)\1stickers\1(.*)/)
+    const matches = sticker_path.match(
+      /.*(:?\\|\/)(.+?)\1stickers\1(.+?)\1(.+)/
+    )
     // this.log.info({ transformStickerURL: sticker_path, matches })
 
     if (matches) {
-      let filename = matches[3]
-      if (decodeURIComponent(filename) === filename) {
-        // if it is not already encoded then encode it.
-        filename = encodeURIComponent(filename)
-      }
-      return `${this.runtime_info?.tauriSpecific?.scheme.stickers}${matches[2]}/${matches[3]}`
+      // Keep in mind that the sticker pack folder and sticker name
+      // can include arbitrary characters.
+      const packName = encodeURIComponent(matches[3])
+      const filename = encodeURIComponent(matches[4])
+      return `${this.runtime_info?.tauriSpecific?.scheme.stickers}${matches[2]}/${packName}/${filename}`
     }
     if (sticker_path !== '') {
       this.log.error('transformStickerURL wrong url format', sticker_path)
@@ -563,11 +578,26 @@ class TauriRuntime implements Runtime {
     throw new Error('Method not implemented.46')
   }
   getAvailableThemes(): Promise<Theme[]> {
-    throw new Error('Method not implemented.47')
+    return invoke<Theme[]>('get_available_themes')
   }
   async getActiveTheme(): Promise<{ theme: Theme; data: string } | null> {
-    this.log.error('Method not implemented.48')
-    return null
+    let themeAddress = await invoke<string>('get_current_active_theme_address')
+    if (themeAddress === 'system') {
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        themeAddress = 'dc:dark'
+      } else {
+        themeAddress = 'dc:light'
+      }
+    }
+    try {
+      const [theme, theme_content] = await invoke<
+        [theme: Theme, theme_content: string]
+      >('get_theme', { themeAddress })
+      return { theme, data: theme_content }
+    } catch (err) {
+      this.log.error('failed to getActiveTheme:', err)
+      return null
+    }
   }
   saveBackgroundImage(
     _file: string,

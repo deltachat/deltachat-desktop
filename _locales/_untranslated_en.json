@@ -1,8 +1,4 @@
 {
-  "broadcast_list_warning": {
-    "comment": "this won't be translated, as our goal is to have encrypted broadcast lists - simon & bjoern as of oct 2023",
-    "message": "Broadcast Lists are always unencrypted because they use blind copy (BCC)"
-  },
   "no_account_selected": {
     "message": "No profile selected"
   },
@@ -59,5 +55,11 @@
   },
   "reset_encryption_confirm": {
     "message": "Forget encryption key for this contact."
+  },
+  "voice_send": {
+    "message": "Record a voice message"
+  },
+  "stop_recording": {
+    "message": "Finish recording"
   }
 }

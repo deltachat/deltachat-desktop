@@ -25,5 +25,5 @@ index.js
 .eslintrc.js
 
 packages/shared/ts-compiled-for-tests
-packages/target-electron/tests/compiled
+packages/target-electron/migration-tests/compiled
 packages/e2e-tests/playwright-report

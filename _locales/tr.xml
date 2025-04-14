@@ -52,7 +52,7 @@
     <string name="mute">Sessize Al</string>
     <string name="muted">Sessize alındı</string>
     <string name="ephemeral_messages">Kaybolan İletiler</string>
-    <string name="ephemeral_messages_hint">Bu sohbetin tüm üyelerine onlar Delta Chat\'i kullanıyorsa uygulanır; onlar hâlâ iletileri kopyalayabilir, kaydedebilir ve iletebilir ya da diğer e-posta istemcilerini kullanabilir.</string>
+    <string name="ephemeral_messages_hint">Bu sohbetin tüm üyelerine uygulanır; onlar hâlâ iletileri kopyalayabilir, kaydedebilir ve iletebilir.</string>
     <string name="save">Kaydet</string>
     <string name="chat">Sohbet</string>
     <string name="media">Ortam</string>
@@ -167,7 +167,7 @@
     <string name="voice_message">Sesli İleti</string>
     <string name="forwarded">İletildi</string>
     <string name="forwarded_message">İletilen İleti</string>
-    <!-- %1$s will be replaced by the name or the e-mail address of the person who forwards the message -->
+    <!-- %1$s will be replaced by the name of the person who forwarded the message -->
     <string name="forwarded_by">%1$s tarafından iletildi</string>
     <string name="video">Video</string>
     <string name="documents">Belgeler</string>
@@ -291,9 +291,9 @@
     <string name="select_chat">Sohbet Seç</string>
     <string name="select_more">Daha fazlasını seç</string>
     <string name="menu_edit_name">Adı Düzenle</string>
-    <!-- The placeholder will be replaced by the name the contact gave themself (if any) or by an e-mail address. -->
+    <!-- The placeholder will be replaced by the name the contact gave themself -->
     <string name="edit_name_explain">“%1$s” yerine size gösterilecek bir takma ad ayarlayın. Kişinin seçilen adını kullanmak için boş bırakın.</string>
-    <!-- The placeholder will be replaced by the name the contact gave themself (if any) or by an e-mail address. -->
+    <!-- The placeholder will be replaced by the name the contact gave themself -->
     <string name="edit_name_placeholder">“%1$s” için Takma Ad</string>
     <string name="menu_settings">Ayarlar</string>
     <string name="menu_advanced">Gelişmiş</string>
@@ -529,9 +529,9 @@
     <!-- option to show images in the gallery as square (instead of using correct width/height) -->
     <string name="square_grid">Kare Izgara</string>
     <string name="send_message">İleti Gönder</string>
-    <!-- Placeholder %1$s will be replaced by the name of the contact changing their address. Placeholders %2$s and %3$s will be replaced by old/new email addresses. -->
+    <!-- Placeholder %1$s will be replaced by the name of the contact changing their address. Placeholders %2$s and %3$s will be replaced by old/new addresses. -->
     <string name="aeap_addr_changed">%1$s, %2$s adresini %3$s olarak değiştirdi</string>
-    <!-- the explanation is shown (1) as a modal dialog with the buttons "Cancel" and "Continue" as well as (2) as a device message -->
+    <!-- deprecated -->
     <string name="aeap_explanation">%1$s e-posta adresinizi %2$s olarak değiştirdiniz.\n\nŞimdi bir doğrulanan öbeğe ileti gönderirseniz, oradaki kişiler yeni adresinizle eskisini otomatik olarak değiştirecek.\n\nTüm e-postaları yeni e-posta adresinize iletmek için eski e-posta sağlayıcınızı ayarlamanız önemle önerilir. Yoksa henüz yeni adresinizi almamış olan kişilerin iletilerini kaçırabilirsiniz.</string>
 
 
@@ -563,7 +563,7 @@
     <string name="incoming_messages">Gelen İletiler</string>
     <!-- Headline for the "Outbox" eg. in the "Connectivity" view -->
     <string name="outgoing_messages">Giden İletiler</string>
-    <!-- Headline in the "Connectivity" view. Placeholder will be replaced by the domain of the configured email-address. -->
+    <!-- Headline in the "Connectivity" view. Placeholder will be replaced by a domain -->
     <string name="storage_on_domain">%1$s Üzerinde Depolama</string>
     <string name="connectivity">Bağlanabilirlik</string>
     <!-- Shown in the title bar if the app is "Not connected"; prefer short strings. -->
@@ -613,9 +613,7 @@
     <string name="welcome_chat_over_email">Güvenli Merkezi Olmayan Sohbet</string>
     <string name="scan_invitation_code">Çağrı Kodunu Tara</string>
     <string name="login_title">Giriş Yap</string>
-    <!-- for classic email, we use the classical term "Account" -->
     <string name="login_header">E-Posta Hesabınıza Giriş Yapın</string>
-    <!-- for classic email, we use the classical term "Account" -->
     <string name="login_explain">Varolan bir e-posta hesabıyla giriş yapın</string>
     <string name="login_subheader">Bilinen e-posta sağlayıcıları için ek ayarlar otomatik olarak ayarlanır. Bazen IMAP\'in web ayarlarından etkinleştirilmesi gerekir. Yardım için e-posta sağlayıcınıza ya da arkadaşlarınıza danışın.</string>
     <string name="login_no_servers_hint">Delta Chat kullanıcı verisi toplamaz; her şey aygıtınızda kalır.</string>
@@ -631,7 +629,7 @@
     <string name="login_smtp_port">SMTP Bağlantı Noktası</string>
     <string name="login_smtp_security">SMTP Güvenliği</string>
     <string name="login_auth_method">Yetkilendirme Yöntemi</string>
-    <!-- the word "Proxy" might be left untranslated unless the destination language has a well-known term for a "Proxy Server", acting intermediary between the app and the chatmail or email server -->
+    <!-- the word "Proxy" might be left untranslated unless the destination language has a well-known term for a "Proxy Server", acting intermediary between the app and the server -->
     <string name="proxy_settings">Proxy</string>
     <string name="proxy_use_proxy">Proxy Kullan</string>
     <string name="proxy_add">Proxy Ekle</string>
@@ -646,7 +644,7 @@
     <string name="proxy_share_link">Bağlantı Paylaş</string>
 
     <string name="login_info_oauth2_title">Basitleştirilen ayarlamayla sürdürülsün mü?</string>
-    <string name="login_info_oauth2_text">Girilen e-posta adresi basitleştirilen bir ayarlamayı (OAuth 2.0) destekliyor.\n\nSonraki adımda, lütfen Delta Chat\'in E-posta Üzerinden Sohbet uygulamanız olarak davranmasına izin verin.\n\nDelta Chat kullanıcı verisi toplamaz; her şey aygıtınızda kalır.</string>
+    <string name="login_info_oauth2_text">Girilen e-posta adresi basitleştirilen bir ayarlamayı (OAuth 2.0) destekliyor.\n\nSonraki adımda, lütfen Delta Chat\'e iletiler gönderme ve alma izni verin.\n\nDelta Chat kullanıcı verisi toplamaz; her şey aygıtınızda kalır.</string>
     <string name="login_certificate_checks">Sertifika Denetimleri</string>
     <string name="login_error_mail">Lütfen geçerli bir e-posta adresi girin</string>
     <string name="login_error_server">Lütfen geçerli bir sunucu / IP adresi girin</string>
@@ -655,8 +653,8 @@
     <string name="import_backup_title">Yedekten Geri Yükle</string>
     <string name="import_backup_ask">“%1$s” üzerinde yedek bulundu.\n\nİçe aktarmak ve ondan gelen tüm verileri ve ayarları kullanmak istiyor musunuz?</string>
     <string name="import_backup_no_backup_found">Yedek bulunamadı.\n\nYedeği “%1$s” üzerine kopyalayın ve yeniden deneyin. Ek olarak, normal ayarlama işlemiyle sürdürmek için “İletileşmeye başla”ya basın.</string>
-    <!-- Translators: %1$s will be replaced by the e-mail address -->
-    <string name="login_error_cannot_login">“%1$s” olarak giriş yapılamıyor. Lütfen e-posta adresinin ve parolanın doğru olup olmadığını denetleyin.</string>
+    <!-- %1$s will be replaced by the failing address -->
+    <string name="login_error_cannot_login">“%1$s” olarak giriş yapılamıyor. Lütfen adresin ve parolanın doğru olup olmadığını denetleyin.</string>
     <!-- TLS certificate checks -->
     <string name="accept_invalid_certificates">Geçersiz sertifikaları kabul et</string>
     <string name="switch_account">Profili Değiştir</string>
@@ -695,11 +693,10 @@
     <string name="pref_profile_photo">Profil Görseli</string>
     <string name="pref_blocked_contacts">Engellenen Kişiler</string>
     <string name="blocked_empty_hint">Engellenen kişiler burada görünecek.</string>
-    <!-- for classic email, we use the classical term "Account" -->
     <string name="pref_password_and_account_settings">Parola ve Hesap</string>
     <string name="pref_who_can_see_profile_explain">Profil görseliniz, adınız ve biyografiniz diğer kullanıcılarla iletişim kurulurken iletilerinizle birlikte gönderilecek.</string>
     <string name="pref_your_name">Adınız</string>
-    <!-- Translators: Visible only to recipients who DO NOT use Delta Chat, so it's the last line in an E-mail and not a "Status". -->
+    <!-- Label of the Bio/Signature/Status/Motto field -->
     <string name="pref_default_status_label">Biyografi</string>
     <string name="pref_enter_sends">Enter Tuşu Göndersin</string>
     <string name="pref_enter_sends_explain">Enter tuşuna basma, metin iletileri gönderecek</string>
@@ -743,7 +740,8 @@
     <string name="pref_use_system_emoji">Sistem Emojisini Kullan</string>
     <string name="pref_use_system_emoji_explain">Delta Chat\'in gömülü emoji desteğini kapat</string>
     <string name="pref_show_system_contacts">Sistem Adres Defterini Oku</string>
-    <string name="pref_show_system_contacts_explain">Adres defterinden gelen kişilerle sohbet oluşturmayı teklif edin. Bazı sağlayıcılara önce uçtan uca şifreleme ayarlaması gerekir.</string>
+    <string name="pref_show_system_contacts_explain">Adres defterinden gelen kişilerle sohbetler oluşturmayı teklif edin.</string>
+    <!-- deprecated -->
     <string name="pref_app_access">Uygulama Erişimi</string>
     <string name="pref_chats">Sohbetler</string>
     <string name="pref_in_chat_sounds">Sohbet İçi Sesler</string>
@@ -755,7 +753,7 @@
     <string name="pref_backup">Yedekleme</string>
     <string name="pref_backup_explain">Sohbetleri Dış Depolamaya Yedekle</string>
     <string name="pref_backup_export_explain">Bir yedek, bu ya da başka bir aygıtta yeni bir kurulum ayarlamanıza yardımcı olur.\n\nYedek; tüm iletileri, kişileri ve sohbetleri ve uçtan uca Autocrypt ayarlamanızı içerecek. Yedek dosyasını güvenli bir yerde tutun ya da olanaklıysa en kısa sürede silin.</string>
-    <!-- the placeholder will be replaced by the name of the profile's email address -->
+    <!-- the placeholder will be replaced by the profile name -->
     <string name="pref_backup_export_x">%1$s hesabını dışa aktar</string>
     <!-- the placeholder will be replaced by the number of profiles to export; the number is always larger than 1 -->
     <string name="pref_backup_export_all">Tüm %1$d profili dışa aktar</string>
@@ -776,7 +774,6 @@
     <string name="pref_imap_folder_warn_disable_defaults">Bu seçeneği değiştirirseniz, sunucunuzun ve diğer istemcilerinizin uygun olarak yapılandırıldığından emin olun.\n\nDeğilse özellikler hiç çalışmayabilir.</string>
     <string name="pref_watch_sent_folder">Gönderilen Klasörünü İzle</string>
     <string name="pref_send_copy_to_self">Kendime Kopya Gönder</string>
-    <!-- for classic email, we use the classical term "Account" -->
     <string name="pref_send_copy_to_self_explain">Bu hesap çoklu aygıtlarda kullanılırken gereklidir.</string>
     <string name="pref_auto_folder_moves">DeltaChat Klasörüne Otomatik Olarak Taşı</string>
     <string name="pref_auto_folder_moves_explain">Sohbet görüşmeleri, Gelen Kutusu\'ndaki dağınıklığı önlemek için taşınır</string>
@@ -844,9 +841,9 @@
     <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
     <string name="autodel_device_ask">%1$d iletiyi şimdi ve gelecekte yeni getirilen tüm iletileri “%2$s” silmek istiyor musunuz?\n\n• Bu, tüm ortamları kapsar\n\n• İletiler görülse de görülmese de silinecek\n\n• “Kaydedilen İletiler” yerel silmeden atlanacak</string>
     <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
-    <string name="autodel_server_ask">%1$d iletiyi şimdi ve gelecekte yeni getirilen tüm iletileri “%2$s” silmek istiyor musunuz?\n\n⚠️ Bu, tüm sunucu klasörlerindeki e-postaları, ortamları ve “Kaydedilen İletiler”i kapsar\n\n⚠️ Verileri sunucuda tutmak istiyorsanız bu işlevi kullanmayın\n\n⚠️ Delta Chat\'ten başka diğer e-posta istemcilerini kullanıyorsanız bu işlevi kullanmayın</string>
+    <string name="autodel_server_ask">%1$d iletiyi şimdi ve gelecekte yeni getirilen tüm iletileri “%2$s” silmek istiyor musunuz?\n\n⚠️ Bu, tüm sunucu klasörlerindeki e-postaları, ortamları ve “Kaydedilen İletiler”i kapsar\n\n⚠️ Verileri sunucuda tutmak istiyorsanız ya da klasik e-posta istemcilerini de kullanıyorsanız bu işlevi kullanmayın</string>
     <!-- shown below enabled autodel_server-option, should be a summary of autodel_server_ask and remind about the impact -->
-    <string name="autodel_server_enabled_hint">Bu, tüm sunucu klasörlerindeki e-postaları, ortamları ve “Kaydedilen İletiler”i kapsar. Verileri sunucuda tutmak istiyorsanız ya da Delta Chat\'ten başka diğer e-posta istemcilerini kullanıyorsanız bu işlevi kullanmayın.</string>
+    <string name="autodel_server_enabled_hint">Bu, tüm sunucu klasörlerindeki e-postaları, ortamları ve “Kaydedilen İletiler”i kapsar. Verileri sunucuda tutmak istiyorsanız ya da klasik e-posta istemcilerini de kullanıyorsanız bu işlevi kullanmayın</string>
     <string name="autodel_server_warn_multi_device_title">Bir kerede silmeyi aç</string>
     <string name="autodel_server_warn_multi_device">Bir kerede silmeyi etkinleştirirseniz, bu profilde çoklu aygıtları kullanamazsınız.</string>
     <string name="autodel_confirm">Anladım, tüm bu iletileri sil</string>
@@ -867,18 +864,11 @@
     <string name="autocrypt_send_asm_explain_before">Bir Autocrypt Ayarlama İletisi, uçtan uca ayarlamanızı diğer Autocrypt uyumlu uygulamalarla güvenli olarak paylaşır.\n\nAyarlama, burada görüntülenen ve diğer aygıtta yazılması gereken bir ayarlama kodu tarafından şifrelenecek.</string>
     <string name="autocrypt_send_asm_button">Autocrypt Ayarlama İletisi Gönder</string>
     <string name="autocrypt_send_asm_explain_after">Ayarlamanız kendinize gönderildi. Diğer aygıta geçin ve ayarlama iletisini açın. Size bir ayarlama kodu sorulmalı. Aşağıdaki sayıları girin:</string>
-    <!-- deprecated -->
     <string name="autocrypt_prefer_e2ee">Uçtan Uca Şifrelemeyi Yeğle</string>
+    <!-- deprecated -->
     <string name="autocrypt_asm_subject">Autocrypt Ayarlama İletisi</string>
+    <!-- deprecated -->
     <string name="autocrypt_asm_general_body">Bu, uçtan uca ayarlamanızı istemciler arasında aktarmak için kullanılan Autocrypt Ayarlama İletisi\'dir.\n\nŞifreyi çözmek ve ayarlamanızı kullanmak için iletiyi Autocrypt uyumlu bir istemcide açın ve oluşturan aygıtta sunulan ayarlama kodunu girin.</string>
-    <!-- deprecated -->
-    <string name="autocrypt_asm_click_body">Bu, uçtan uca ayarlamanızı istemciler arasında aktarmak için kullanılan Autocrypt Ayarlama İletisi\'dir.\n\nŞifreyi çözmek ve ayarlamanızı kullanmak için bu iletiye dokunun ya da tıklayın.</string>
-    <!-- deprecated -->
-    <string name="autocrypt_continue_transfer_title">Autocrypt Ayarlama İletisi</string>
-    <!-- deprecated -->
-    <string name="autocrypt_continue_transfer_please_enter_code">Lütfen diğer aygıtta görüntülenen ayarlama kodunu girin.</string>
-    <!-- deprecated -->
-    <string name="autocrypt_bad_setup_code">Yanlış ayarlama kodu. Lütfen yeniden deneyin.\n\nAyarlama kodunu anımsamıyorsanız, diğer aygıttan yeni bir Autocrypt Ayarlama İletisi gönderin.</string>
 
 
     <!-- system messages -->
@@ -951,7 +941,7 @@
     <!-- this may be shown instead of the chat's input field, with buttons "More Info" and "OK" -->
     <string name="chat_protection_broken">%1$s başka bir aygıttan bir ileti gönderdi.</string>
     <string name="chat_protection_enabled_tap_to_learn_more">Bundan böyle iletiler uçtan uca şifreleme güvencelidir. Daha fazlasını öğrenmek için dokunun.</string>
-    <string name="chat_protection_enabled_explanation">Artık bu sohbetteki tüm iletiler uçtan uca şifreleme güvencelidir.\n\nUçtan uca şifreleme, iletilerinizi sizin ve sohbet ortaklarınızın arasında özel tutar. E-posta sağlayıcınız bile onları okuyamaz.</string>
+    <string name="chat_protection_enabled_explanation">Artık bu sohbetteki tüm iletiler uçtan uca şifreleme güvencelidir.\n\nUçtan uca şifreleme, iletilerinizi sizin ve sohbet ortaklarınızın arasında özel tutar. Sunucular, sağlayıcılar ya da aktarıcılar bile onları okuyamaz.</string>
     <string name="chat_protection_broken_tap_to_learn_more">%1$s başka bir aygıttan bir ileti gönderdi. Daha fazlasını öğrenmek için dokunun.</string>
     <string name="chat_protection_broken_explanation">Uçtan uca şifreleme artık güvencelenemiyor; çünkü büyük olasılıkla %1$s Delta Chat\'i yeniden yükledi ya da başka bir aygıttan ileti gönderdi.\n\nOnlarla kişisel olarak tanışabilir ve güvenceli uçtan uca şifrelemeyi yeniden kurmak için onların QR kodunu yeniden tarayabilirsiniz.</string>
     <string name="invalid_unencrypted_tap_to_learn_more">⚠️ %1$s, bu sohbet için henüz ayarlanmayan uçtan uca şifrelemeyi gerektirir. Daha fazlasını öğrenmek için dokunun.</string>
@@ -977,7 +967,7 @@
     <string name="qrscan_failed">QR kodu çözülemedi</string>
     <string name="qrscan_ask_join_group">“%1$s” öbeğine katılmak istiyor musunuz?</string>
     <string name="qrscan_fingerprint_mismatch">Taranan parmak izi, %1$s için son görülenle eşleşmiyor.</string>
-    <string name="qrscan_no_addr_found">Bu QR kodu, bir parmak izi içeriyor; ama e-posta adresi yok.\n\nBir bant dışı doğrulama için lütfen önce alıcıya şifrelenen bir bağlantı kurun.</string>
+    <string name="qrscan_no_addr_found">Bu QR kodu bir parmak izi içeriyor ama adres yok.\n\nBir bant dışı doğrulama için lütfen önce alıcıya şifrelenen bir bağlantı kurun.</string>
     <string name="qrscan_contains_text">Taranan QR kodu metni:\n\n%1$s</string>
     <string name="qrscan_contains_url">Taranan QR kodu URL\'si:\n\n%1$s</string>
     <string name="qrscan_fingerprint_label">Parmak izi</string>
@@ -1003,16 +993,18 @@
     <string name="set_name_and_avatar_explain">Kişilerinizin tanıyacağı bir ad ayarlayın. Bir profil görseli de ayarlayabilirsiniz.</string>
     <string name="please_enter_name">Lütfen bir ad girin.</string>
     <string name="qraccount_qr_code_cannot_be_used">Taranan QR kodu, yeni bir profil ayarlamak için kullanılamıyor.</string>
-    <!-- the placeholder will be replaced by the e-mail address of the profile -->
+    <!-- the placeholder will be replaced by the address of the profile -->
     <string name="qrlogin_ask_login">“%1$s” adresine giriş yapılsın mı?</string>
-    <!-- the placeholder will be replaced by the e-mail address of the profile -->
+    <!-- the placeholder will be replaced by the address of the profile -->
     <string name="qrlogin_ask_login_another">“%1$s” adresine giriş yapılsın mı?\n\nVarolan profiliniz silinmeyecek. Profilleriniz arasında geçiş yapmak için “Profili Değiştir” öğesini kullanın.</string>
     <!-- first placeholder will be replaced by name and address of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">%1$s sizi bu öbeğe katılmaya çağırdı.\n\n%2$s kişisinin aygıtının yanıt vermesi bekleniyor…</string>
     <!-- placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_replies">%1$s yanıtladı; öbeğe eklenmesi bekleniyor…</string>
     <string name="secure_join_wait">Güvencelenen uçtan uca şifreleme kuruluyor, lütfen bekleyin…</string>
+    <!-- deprecated -->
     <string name="secure_join_wait_timeout">Henüz güvencelenen uçtan uca şifreleme kurulamadı; ama zaten bir ileti gönderebilirsiniz.</string>
+    <string name="secure_join_takes_longer">Bu daha uzun sürüyor gibi görünüyor, belki kişi ya da siz çevrimdışısınız.\n\nAncak işlem arka planda sürüyor, başka bir şey yapabilirsiniz…</string>
     <string name="contact_verified">%1$s tanıtıldı.</string>
     <string name="contact_not_verified">%1$s ile güvencelenen uçtan uca şifreleme kurulamıyor.</string>
     <!-- Shown in contact profile. The placeholder will be replaced by the name of the contact that introduced the contact. -->
@@ -1021,6 +1013,7 @@
     <!-- translators: "setup" is the "encryption setup" here, as in "Autocrypt Setup Message" -->
     <string name="contact_setup_changed">%1$s için ayarlama değiştirildi.</string>
     <string name="verified_contact_required_explain">Uçtan uca şifrelemeyi güvencelemek için bu öbeğe yalnızca yeşil bir onay imi olan kişileri ekleyebilirsiniz.\n\nDoğrulanmayan kişilerle kişisel olarak tanışabilir ve onları tanıtmak için onların QR kodunu tarayabilirsiniz.</string>
+    <!-- deprecated -->
     <string name="copy_qr_data_success">QR URL\'si panoya kopyalandı</string>
     <string name="mailto_dialog_header_select_chat">İletiyi göndermek için sohbet seçin</string>
     <!-- first placeholder is the name of the chat -->
@@ -1171,7 +1164,7 @@
     <string name="add_to_widget">Widget\'a Ekle</string>
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Delta Chat, fotoğraflar ve videolar çekmek ve göndermek için ve QR kodlarını taramak için kameranızı kullanır.</string>
-    <string name="InfoPlist_NSContactsUsageDescription">Delta Chat, yazabileceğiniz e-posta adreslerinin bir listesini göstermek için kişilerinizi kullanır. Delta Chat sunucusu yoktur; kişileriniz herhangi bir yere gönderilmez.</string>
+    <string name="InfoPlist_NSContactsUsageDescription">Delta Chat, yazabileceğiniz adreslerin bir listesini göstermek için kişilerinizi kullanır. Delta Chat\'in sunucusu yoktur; kişileriniz herhangi bir yere gönderilmez.</string>
     <string name="InfoPlist_NSLocationAlwaysAndWhenInUseUsageDescription">Konum paylaşımını etkinleştirdiğiniz zaman aralığında konumunuzu paylaşmak için Delta Chat\'e izin gerekir.</string>
     <string name="InfoPlist_NSLocationWhenInUseUsageDescription">Konum paylaşımını etkinleştirdiğiniz zaman aralığında konumunuzu paylaşmak için Delta Chat\'e izin gerekir.</string>
     <string name="InfoPlist_NSMicrophoneUsageDescription">Delta Chat, sesli iletiler ve sesli videolar kaydetmek ve göndermek için mikrofonunuzu kullanır.</string>
@@ -1187,7 +1180,7 @@
     <string name="pref_reliable_service">Arka Plan Bağlantısını Zorla</string>
     <string name="pref_reliable_service_explain">Kalıcı bir bildirime neden olur</string>
 
-    <string name="pref_background_notifications_rationale">E-posta sunucunuza bağlantıyı sürdürmek ve arka planda iletileri almak için sonraki adımda pil iyileştirmelerini yok sayın.\n\nDelta Chat, az kaynak kullanır ve pilinizi boşaltmamaya özen gösterir.</string>
+    <string name="pref_background_notifications_rationale">Bağlantıyı sürdürmek ve arka planda iletileri almak için sonraki adımda pil iyileştirmelerini yok sayın.\n\nDelta Chat, az kaynak kullanır ve pilinizi boşaltmamaya özen gösterir.</string>
     <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
     <string name="perm_enable_bg_reminder_title">Delta Chat arka plandayken iletileri almak için buraya dokunun.</string>
     <string name="perm_enable_bg_already_done">Delta Chat\'in arka planda iletileri almasına zaten izin verdiniz.\n\nİletiler arka planda hâlâ gelmiyorsa, lütfen sistem ayarlarınızı da denetleyin.</string>

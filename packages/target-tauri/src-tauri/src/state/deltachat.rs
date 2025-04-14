@@ -8,9 +8,13 @@ use deltachat_jsonrpc::{
 use futures_lite::stream::StreamExt;
 use log::{error, info};
 use tauri::{async_runtime::JoinHandle, Manager};
+use tauri_plugin_store::StoreExt;
 use tokio::sync::RwLock;
 
-use crate::MainWindowChannels;
+use crate::{
+    settings::{StoreExtBoolExt, SYNC_ALL_ACCOUNTS, SYNC_ALL_ACCOUNTS_DEFAULT},
+    MainWindowChannels, CONFIG_FILE,
+};
 
 pub(crate) struct DeltaChatAppState {
     pub(crate) deltachat: Arc<RwLock<Accounts>>,
@@ -26,7 +30,16 @@ impl DeltaChatAppState {
         info!("Data directory is {data_dir:?}");
 
         let accounts_dir = data_dir.join("accounts");
-        let accounts = Accounts::new(accounts_dir.clone(), true).await?;
+        let mut accounts = Accounts::new(accounts_dir.clone(), true).await?;
+
+        if app
+            .store(CONFIG_FILE)
+            .context("failed to load config.json")?
+            .get_bool_or(SYNC_ALL_ACCOUNTS, SYNC_ALL_ACCOUNTS_DEFAULT)
+        {
+            accounts.start_io().await;
+        }
+
         let accounts = Arc::new(RwLock::new(accounts));
         let state = CommandApi::from_arc(accounts.clone()).await;
         let (client, mut out_receiver) = RpcClient::new();

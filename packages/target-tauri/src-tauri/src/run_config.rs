@@ -1,6 +1,6 @@
 use serde::Serialize;
 
-#[derive(Debug, Default, Clone, Copy, Serialize)]
+#[derive(Debug, Default, Clone, Serialize)]
 pub struct RunConfig {
     /// Log debug messages
     pub log_debug: bool,
@@ -16,6 +16,10 @@ pub struct RunConfig {
     pub minimized_window: bool,
     /// Force tray icon active, because started in minimized mode without visible window
     pub forced_tray_icon: bool,
+    /// the theme address that was set via cli argument
+    pub theme: Option<String>,
+    /// reloading the theme when it changes
+    pub theme_watch: bool,
 }
 
 // Information about cli args that are also relevant for frontend

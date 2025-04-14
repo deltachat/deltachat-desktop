@@ -12,6 +12,14 @@ pub(crate) fn webxdc_icon_protocol<R: tauri::Runtime>(
 ) {
     // info!("webxdc-icon {}", request.uri());
 
+    if ctx.webview_label() != "main" {
+        error!(
+            "prevented other window from accessing webxdc-icon:// scheme (webview label: {})",
+            ctx.webview_label()
+        );
+        return;
+    }
+
     let app_state_deltachat = {
         ctx.app_handle()
             .state::<DeltaChatAppState>()
