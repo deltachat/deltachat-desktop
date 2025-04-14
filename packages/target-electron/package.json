@@ -57,6 +57,7 @@
     "@deltachat/jsonrpc-client": "catalog:",
     "@deltachat/stdio-rpc-server": "catalog:",
     "mime-types": "catalog:",
+    "sass": "catalog:",
     "ws": "7.5.10"
   },
   "devDependencies": {
@@ -70,6 +71,7 @@
     "@types/mocha": "^10.0.7",
     "@types/node": "^20.14.13",
     "@types/rc": "^1.2.4",
+    "@webxdc/types": "catalog:",
     "adm-zip": "0.5.14",
     "application-config": "^1.0.1",
     "chai": "^5.1.1",
@@ -80,7 +82,6 @@
     "esbuild": "^0.19.8",
     "mocha": "^10.7.0",
     "rc": "^1.2.8",
-    "typescript": "catalog:",
-    "@webxdc/types": "catalog:"
+    "typescript": "catalog:"
   }
 }

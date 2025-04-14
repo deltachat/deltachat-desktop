@@ -14,4 +14,4 @@ catalog:
   typescript: ^5.5.4
   typescript-plugin-css-modules: ^5.1.0
 
-  sass: ^1.77.8
+  sass: ^1.86.3
