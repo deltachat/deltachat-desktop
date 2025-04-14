@@ -17,8 +17,8 @@ import Icon from '../Icon'
 
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
-
 import styles from './styles.module.scss'
+import { copyToBlobDir } from '../../utils/copyToBlobDir'
 
 // Implementation notes:
 // * CSS-transforms for picking, canvas API to actually cut the result
@@ -52,6 +52,7 @@ export default function ImageCropper({
     LastUsedSlot.ProfileImage
   )
 
+  const transformed = runtime.transformBlobURL(filepath)
   // cut pattern from the full image
   const cutImage = useRef<HTMLImageElement>(null)
   // full image in background
@@ -135,7 +136,8 @@ export default function ImageCropper({
     rememberLastUsedPathPromise.then(({ setLastPath }) =>
       setLastPath(dirname(filepath))
     )
-    onResult(tempfilepath)
+    const blob_path = await copyToBlobDir(tempfilepath)
+    onResult(blob_path)
     onClose()
   }
 
@@ -391,20 +393,22 @@ export default function ImageCropper({
   return (
     <Dialog canEscapeKeyClose onClose={onClose} canOutsideClickClose={false}>
       <DialogHeader title={tx('ImageEditorHud_crop')} />
-      <DialogBody className={styles.imageCropperDialogBody}>
+      <DialogBody>
         <DialogContent className={styles.imageCropperDialogContent}>
           <div ref={container} className={styles.imageCropperContainer}>
             <div ref={shade} className={styles.imageCropperShade}></div>
             <img
               ref={cutImage}
               className={styles.imageCropperCutImage}
-              src={filepath}
+              src={transformed}
               onLoad={setupImages}
+              crossOrigin='anonymous'
             />
             <img
               ref={fullImage}
               className={styles.imageCropperFullImage}
-              src={filepath}
+              src={transformed}
+              crossOrigin='anonymous'
             />
           </div>
           <div className={styles.imageCropperControls}>

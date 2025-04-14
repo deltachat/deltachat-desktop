@@ -59,6 +59,7 @@ import ImageCropper from '../../ImageCropper'
 import { RovingTabindexProvider } from '../../../contexts/RovingTabindex'
 import ViewProfile from '../ViewProfile'
 import { isInviteLink } from '@deltachat-desktop/shared/util'
+import { copyToBlobDir } from '../../../utils/copyToBlobDir'
 
 type ViewMode = 'main' | 'createGroup' | 'createBroadcastList'
 
@@ -900,7 +901,7 @@ export function useGroupImage(image: string | null) {
     })
     if (file) {
       openDialog(ImageCropper, {
-        filepath: file,
+        filepath: await copyToBlobDir(file),
         shape: 'circle',
         onResult: (croppedImage => {
           setGroupImage(croppedImage)
