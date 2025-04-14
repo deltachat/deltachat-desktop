@@ -27,12 +27,12 @@ permissions = [
     # "opener:allow-open-path" is defined in src/runtime_capabilities.rs
     "opener:allow-open-url",
     "opener:allow-default-urls",
-    
+
     # Badge counter
     "core:window:allow-set-badge-count",
     # This is only needed for Windows.
     "core:window:allow-set-overlay-icon",
-    
+
     "allow-set-main-window-channels",
     "allow-get-frontend-run-config",
     "allow-deltachat-jsonrpc-request",
