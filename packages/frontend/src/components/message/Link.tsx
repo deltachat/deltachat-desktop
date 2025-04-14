@@ -144,7 +144,7 @@ function LabeledLinkConfirmationDialog(
                 .then(() => props.onClose())
             }}
           >
-            {tx('copy')}
+            {tx('menu_copy_link_to_clipboard')}
           </FooterActionButton>
           <FooterActionButton onClick={props.onClose}>
             {tx('cancel')}
