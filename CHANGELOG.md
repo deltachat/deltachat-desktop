@@ -70,7 +70,7 @@
 - fix sticker folder not resolved on windows #4939
 
 ### Removed
-- remove experimental option to disable IMAP IDLE
+- remove experimental option to disable IMAP IDLE #4991
 
 <a id="1_56_0"></a>
 
