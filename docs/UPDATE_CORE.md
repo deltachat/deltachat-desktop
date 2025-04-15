@@ -66,7 +66,7 @@ If you already have a core git checkout, you can skip the first step. Set the en
 
 1. clone the core repo, right next to your desktop repo folder: `git clone git@github.com:chatmail/core.git`
 2. go into your core checkout and run `git pull` to update it to the newest version, then create a branch for your changes
-3. run `python3 deltachat-rpc-server/npm-package/scripts/make_local_dev_version.py`
+3. run `python3 deltachat-rpc-server/npm-package/scripts/make_local_dev_version.py` (needs at least python 3.12)
 4. run `npm i` and `npm run build` inside `../core/deltachat-jsonrpc/typescript/`
 5. go into your desktop repo and run `./bin/link_core/link_local.sh` [^1]
 

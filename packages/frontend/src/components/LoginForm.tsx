@@ -15,17 +15,7 @@ import SettingsSwitch from './Settings/SettingsSwitch'
 
 const log = getLogger('renderer/loginForm')
 
-export type Credentials = T.EnteredLoginParam & ProxySettings
-
-type ProxySettings = {
-  proxyEnabled: boolean
-  proxyUrl: string | null
-}
-
-export enum Proxy {
-  DISABLED = '0',
-  ENABLED = '1',
-}
+import type { Credentials } from './Settings/DefaultCredentials'
 
 const Socket = {
   automatic: 'automatic',
@@ -39,28 +29,6 @@ const CertificateChecks = {
   strict: 'strict',
   acceptInvalidCertificates: 'acceptInvalidCertificates',
 } as const satisfies { [P in T.EnteredCertificateChecks]: P }
-
-export function defaultCredentials(credentials?: Credentials): Credentials {
-  const defaultCredentials: Credentials = {
-    addr: '',
-    imapUser: null,
-    password: '',
-    imapServer: null,
-    imapPort: null,
-    imapSecurity: null,
-    certificateChecks: null,
-    smtpUser: null,
-    smtpPassword: null,
-    smtpServer: null,
-    smtpPort: null,
-    smtpSecurity: null,
-    oauth2: null,
-    proxyEnabled: false,
-    proxyUrl: null,
-  }
-
-  return { ...defaultCredentials, ...credentials }
-}
 
 type LoginProps = React.PropsWithChildren<{
   credentials: Credentials

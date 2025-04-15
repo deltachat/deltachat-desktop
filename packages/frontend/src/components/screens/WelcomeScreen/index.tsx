@@ -19,6 +19,11 @@ type Props = {
   onExitWelcomeScreen: () => Promise<void>
 }
 
+/**
+ * Welcomescreen is shown to users when they start the app
+ * for the first time or when they have no configured accounts
+ */
+
 export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
   const {
     resetInstantOnboarding,
@@ -44,9 +49,6 @@ export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
 
   /**
    * this function is called when the back button is clicked
-   * but also if the dialog is closed by pressing esc multiple
-   * times, which will force Chrome to close the dialog
-   * see https://issues.chromium.org/issues/346597066
    *
    * it will cancel the account creation process and call
    * onExitWelcomeScreen

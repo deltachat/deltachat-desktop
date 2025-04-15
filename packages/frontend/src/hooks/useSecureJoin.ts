@@ -55,6 +55,9 @@ export default function useSecureJoin() {
     [openConfirmationDialog, tx]
   )
 
+  /**
+   * called after scanning a contact invite link
+   */
   const secureJoinContact = useCallback(
     async (
       accountId: number,

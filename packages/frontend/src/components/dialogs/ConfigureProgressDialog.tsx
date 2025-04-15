@@ -15,20 +15,31 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { getDeviceChatId, saveLastChatId } from '../../backend/chat'
 
 import type { DialogProps } from '../../contexts/DialogContext'
-import { Credentials, Proxy } from '../LoginForm'
+import {
+  defaultCredentials,
+  Credentials,
+  Proxy,
+} from '../Settings/DefaultCredentials'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 const log = getLogger('renderer/loginForm')
 
 interface ConfigureProgressDialogProps {
-  credentials: Credentials
+  credentials: Credentials | null
+  qrCode?: string | null // must be of type DCACCOUNT or DCLOGIN
   onSuccess?: () => void
   onUserCancellation?: () => void
   onFail: (error: string) => void
   proxyUpdated: boolean
 }
 
+/**
+ * Shows a progress bar while configuring the account
+ * This dialog is called after editing an existing account
+ * or when creating a new account in InstantOnboarding flow
+ */
 export function ConfigureProgressDialog({
   credentials,
+  qrCode,
   onSuccess,
   onUserCancellation,
   onFail,
@@ -71,12 +82,16 @@ export function ConfigureProgressDialog({
     () => {
       ;(async () => {
         try {
-          let isFirstOnboarding = true
-          const configuration: Credentials = {
-            ...credentials,
+          if (!credentials && !qrCode) {
+            throw new Error(
+              'ConfigureProgressDialog needs either credentials or a qrCode'
+            )
           }
+          const configuration: Credentials = credentials || defaultCredentials()
+          let isInitialOnboarding = false
           const { proxyEnabled, proxyUrl, ...transportConfig } = configuration
           // Set proxy settings only if neccessary!
+          // but before calling addTransport since it might be needed there (TODO)
           if (proxyUpdated) {
             await BackendRemote.rpc.batchSetConfig(accountId, {
               proxy_enabled:
@@ -84,14 +99,32 @@ export function ConfigureProgressDialog({
               proxy_url: proxyUrl,
             })
           }
-          if (
+          if (qrCode) {
+            // create a new transport for accountId based on the QR code
+            await BackendRemote.rpc.addTransportFromQr(accountId, qrCode)
+            isInitialOnboarding = true
+          } else if (
             transportConfig.addr !== undefined &&
             transportConfig.addr.length > 0
           ) {
-            // On first time onboarding addr is empty here
-            isFirstOnboarding = false
+            const existingTransports =
+              await BackendRemote.rpc.listTransports(accountId)
+            if (existingTransports.length > 0) {
+              const existingTransport = existingTransports[0]
+              // there is always a "default" transport with empty addr
+              if (existingTransport.addr === '') {
+                isInitialOnboarding = true
+              } else if (existingTransport.addr !== transportConfig.addr) {
+                // multiple transports are not supported yet
+                throw new Error(
+                  tx(
+                    'Multi transport is not supported right now. Check back in a few months!'
+                  )
+                )
+              }
+            }
             // If the address already exists the transport config is updated
-            // otherwise a new transport is added (not supported yet)
+            // otherwise a new transport is added (if the user entered credentials manually)
             await BackendRemote.rpc.addTransport(accountId, transportConfig)
           }
 
@@ -100,8 +133,7 @@ export function ConfigureProgressDialog({
             onUserCancellation?.()
             return
           }
-
-          if (isFirstOnboarding) {
+          if (isInitialOnboarding) {
             // Select 'Device Messages' chat as the initial one. This will serve
             // as a first introduction to the app after they've entered
             const deviceChatId = await getDeviceChatId(accountId)

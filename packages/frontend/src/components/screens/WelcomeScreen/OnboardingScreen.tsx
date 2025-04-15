@@ -18,6 +18,11 @@ type Props = {
   hasConfiguredAccounts: boolean
 }
 
+/**
+ * Sub component of WelcomeScreen shows the choice
+ * to create a new account or to use an existing one
+ */
+
 export default function OnboardingScreen(props: Props) {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
