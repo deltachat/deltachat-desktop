@@ -46,10 +46,10 @@ export function getBackgroundImageStyle(
         runtime.getRuntimeInfo().target === 'browser'
           ? `url("/${join('background/', filePath)}")`
           : `url("file://${join(
-            runtime.getConfigPath(),
-            'background/',
-            filePath
-          )}")`
+              runtime.getConfigPath(),
+              'background/',
+              filePath
+            )}")`
     } else if (bgImg.startsWith('color: ')) {
       style.backgroundColor = bgImg.slice(7)
       style.backgroundImage = 'none'
@@ -106,7 +106,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
   )
 
   useEffect(() => {
-    let unset = runtime.setDragListener(async e => {
+    const unset = runtime.setDragListener(async e => {
       if (e.payload.type != 'drop') {
         return
       }
@@ -169,8 +169,8 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
       }
     })
     return () => {
-      unset.then((u) => {
-        log.info("dragListenerUnset")
+      unset.then(u => {
+        log.info('dragListenerUnset')
         u()
       })
     }
