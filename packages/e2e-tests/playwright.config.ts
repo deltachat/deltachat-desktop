@@ -86,7 +86,7 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: `node ${ 
+    command: `node ${
       process.env.CI ? '' : '--env-file .env'
     } ../target-browser/dist/server.js`,
     url: baseURL,

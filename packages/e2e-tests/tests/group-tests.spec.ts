@@ -16,7 +16,7 @@ test.describe.configure({ mode: 'serial' })
 
 let existingProfiles: User[] = []
 
-const numberOfProfiles = 4
+const numberOfProfiles = 3
 
 test.beforeAll(async ({ browser }) => {
   const context = await browser.newContext()

@@ -96,7 +96,7 @@ export async function createNewProfile(
 
   // Wait for the dialog to close, so that the underlying content
   // becomes interactive, otherwise `fill()` might silently do nothing.
-  await expect(page.getByTestId('close')).not.toBeVisible()
+  await expect(page.getByTestId('qr-reader-settings')).not.toBeVisible()
 
   const nameInput = page.locator('#displayName')
 
