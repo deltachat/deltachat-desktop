@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useCallback } from 'react'
-import { basename, join, parse } from 'path'
+import { basename, join, parse, ParsedPath } from 'path'
 import { T } from '@deltachat/jsonrpc-client'
 
 import Composer, { useDraft } from '../composer/Composer'
@@ -14,6 +14,8 @@ import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
 import { ReactionsBarProvider } from '../ReactionsBar'
 import useDialog from '../../hooks/dialog/useDialog'
 import useMessage from '../../hooks/chat/useMessage'
+import { BackendRemote } from '../../backend-com'
+import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
@@ -119,65 +121,73 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     regularMessageInputRef
   )
 
-  runtime.setDragListener(async e => {
-    if (e.payload.type != 'drop') {
-      return
-    }
-    if (chat === null) {
-      log.warn('dropped something, but no chat is selected')
-      return
-    }
+  useEffect(() => {
+    let unset = runtime.setDragListener(async e => {
+      if (e.payload.type != 'drop') {
+        return
+      }
+      if (chat === null) {
+        log.warn('dropped something, but no chat is selected')
+        return
+      }
 
-    // sanitize files
-    const paths = e.payload.paths
-    const forbiddenPathRegEx = /DeltaChat\/.+?\.sqlite-blobs\//gi
-    const sanitized = paths
-      .filter(path => {
-        const val = !forbiddenPathRegEx.test(path.replace('\\', '/'))
-        if (!val) {
-          log.warn(
-            'Prevented a file from being send again while dragging it out',
-            path
-          )
-        }
-        return val
-      })
-      .map(path => parse(path))
-
-    // get account
-    const acc = await BackendRemote.rpc.getSelectedAccountId()
-    if (acc === null) {
-      console.error('No account selected')
-      return
-    }
-
-    // send single file
-    if (sanitized.length == 1) {
-      const file = sanitized[0]
-      const msgViewType: Viewtype = isImage(file) ? 'Image' : 'File'
-      await addFileToDraft(fullPath(file), file.name, msgViewType)
-    }
-    // send multiple files
-    else if (sanitized.length > 1) {
-      openDialog(ConfirmSendingFiles, {
-        sanitizedFileList: sanitized.map(path => ({
-          name: path.name,
-        })),
-        chatName: chat.name,
-        onClick: async (isConfirmed: boolean) => {
-          if (!isConfirmed) {
-            return
+      // sanitize files
+      const paths = e.payload.paths
+      const forbiddenPathRegEx = /DeltaChat\/.+?\.sqlite-blobs\//gi
+      const sanitized = paths
+        .filter(path => {
+          const val = !forbiddenPathRegEx.test(path.replace('\\', '/'))
+          if (!val) {
+            log.warn(
+              'Prevented a file from being sent again while dragging it out',
+              path
+            )
           }
+          return val
+        })
+        .map(path => parse(path))
 
-          for (const file of sanitized) {
-            const msgViewType: Viewtype = isImage(file) ? 'Image' : 'File'
-            sendMessage(accountId, chat.id, {
-              file: fullPath(file),
-              filename: file.name,
-              viewtype: msgViewType,
-            })
-          }
-        },
+      // get account
+      const acc = await BackendRemote.rpc.getSelectedAccountId()
+      if (acc === null) {
+        console.error('No account selected')
+        return
+      }
+
+      // send single file
+      if (sanitized.length == 1) {
+        const file = sanitized[0]
+        const msgViewType: Viewtype = isImage(file) ? 'Image' : 'File'
+        await addFileToDraft(fullPath(file), file.name + file.ext, msgViewType)
+      }
+      // send multiple files
+      else if (sanitized.length > 1) {
+        openDialog(ConfirmSendingFiles, {
+          sanitizedFileList: sanitized.map(path => ({
+            name: path.name,
+          })),
+          chatName: chat.name,
+          onClick: async (isConfirmed: boolean) => {
+            if (!isConfirmed) {
+              return
+            }
+
+            for (const file of sanitized) {
+              const msgViewType: Viewtype = isImage(file) ? 'Image' : 'File'
+              sendMessage(accountId, chat.id, {
+                file: fullPath(file),
+                filename: file.name + file.ext,
+                viewtype: msgViewType,
+              })
+            }
+          },
+        })
+      }
+    })
+    return () => {
+      unset.then((u) => {
+        log.info("dragListenerUnset")
+        u()
       })
     }
   })
@@ -189,7 +199,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
   }
   const handleDrop = async (fileList: FileList) => {
     if (chat === null) {
-      log.warn('dropped something, but no chat is selected')
+      log.warn('Dropped something, but no chat is selected')
       return
     }
     const sanitizedFileList: File[] = []
@@ -200,7 +210,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
           sanitizedFileList.push(file)
         } else {
           log.warn(
-            'Prevented a file from being send again while dragging it out',
+            'Prevented a file from being sent again while dragging it out',
             file.name
           )
         }
