@@ -310,4 +310,8 @@ test('delete profiles', async ({ page }) => {
       console.log(`User ${profileToDelete.name} was deleted!`)
     }
   }
+  const leftovers = await loadExistingProfiles(page)
+  /* ignore-console-log */
+  console.log('Leftover profiles:', leftovers)
+  // expect(leftovers.length).toBe(0)
 })

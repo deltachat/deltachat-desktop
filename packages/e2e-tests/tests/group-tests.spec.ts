@@ -81,8 +81,8 @@ test('create group', async ({ page, context, browserName }) => {
     await context.grantPermissions(['clipboard-read', 'clipboard-write'])
   }
   const userA = existingProfiles[0]
-  const userB = existingProfiles[0]
-  const userC = existingProfiles[0]
+  const userB = existingProfiles[1]
+  const userC = existingProfiles[2]
   await switchToProfile(page, userA.id)
   await page.locator('#new-chat-button').click()
   await page.locator('#newgroup button').click()
@@ -96,7 +96,7 @@ test('create group', async ({ page, context, browserName }) => {
     .filter({ hasText: userB.name })
     .click()
 
-    await addMemberDialog.getByTestId('ok').click()
+  await addMemberDialog.getByTestId('ok').click()
 
   await page.getByTestId('group-create-button').click()
   const chatListItem = page
@@ -112,14 +112,16 @@ test('create group', async ({ page, context, browserName }) => {
   // copy group invite link
   await page.getByTestId('chat-info-button').click()
   await page.locator('#showqrcode button').click()
-  await page.getByTestId('copy-qr-code').click()
-  await page.getByTestId('confirm-qr-code').click()
-  await page.getByTestId('view-group-dialog-header-close').click()
+  await clickThroughTestIds(page, [
+    'copy-qr-code',
+    'confirm-qr-code',
+    'view-group-dialog-header-close',
+  ])
+
   // paste invite link in account of userC
   await switchToProfile(page, userC.id)
-  await page.getByTestId('qr-scan-button').click()
-  await page.getByTestId('show-qr-scan').click()
-  await page.getByTestId('paste').click()
+  await clickThroughTestIds(page, ['qr-scan-button', 'show-qr-scan', 'paste'])
+
   const confirmDialog = page.getByTestId('confirm-join-group')
   await expect(confirmDialog).toBeVisible()
   // confirm dialog should contain group name

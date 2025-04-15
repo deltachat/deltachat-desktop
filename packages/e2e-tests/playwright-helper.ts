@@ -221,6 +221,10 @@ export async function deleteAllProfiles(
       console.log(`User ${profileToDelete.name} was deleted!`)
     }
   }
+  const leftovers = await loadExistingProfiles(page)
+  /* ignore-console-log */
+  console.log('Leftover profiles:', leftovers)
+  // expect(leftovers.length).toBe(0)
 }
 
 /**
@@ -255,6 +259,7 @@ export async function loadExistingProfiles(page: Page): Promise<User[]> {
     for (let i = 0; i < existingAccountItems; i++) {
       const account = accountList.nth(i)
       const id = await account.getAttribute('x-account-sidebar-account-id')
+      /* ignore-console-log */
       console.log(`Found account ${id}`)
       if (id) {
         const p = await getProfile(page, id)
