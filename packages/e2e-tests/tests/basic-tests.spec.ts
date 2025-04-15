@@ -7,6 +7,8 @@ import {
   switchToProfile,
   User,
   loadExistingProfiles,
+  clickThroughTestIds,
+  reloadPage,
 } from '../playwright-helper'
 
 /**
@@ -31,7 +33,7 @@ test.beforeAll(async ({ browser }) => {
   const context = await browser.newContext()
   const page = await context.newPage()
 
-  await page.goto('https://localhost:3000/')
+  await reloadPage(page)
 
   existingProfiles = (await loadExistingProfiles(page)) ?? existingProfiles
 
@@ -39,7 +41,7 @@ test.beforeAll(async ({ browser }) => {
 })
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('https://localhost:3000/')
+  await reloadPage(page)
 })
 
 const getUser = (index: number) => {
@@ -93,16 +95,15 @@ test('start chat with user', async ({ page, context, browserName }) => {
   const userB = getUser(1)
   await switchToProfile(page, userA.id)
   // copy invite link from user A
-  await page.getByTestId('qr-scan-button').click()
-  await page.getByTestId('copy-qr-code').click()
-  await page.getByTestId('confirm-qr-code').click()
-  // await page.getByTestId('qr-dialog').getByTestId('close').click()
+  await clickThroughTestIds(page, [
+    'qr-scan-button',
+    'copy-qr-code',
+    'confirm-qr-code',
+  ])
 
   await switchToProfile(page, userB.id)
   // paste invite link in account of userB
-  await page.getByTestId('qr-scan-button').click()
-  await page.getByTestId('show-qr-scan').click()
-  await page.getByTestId('paste').click()
+  await clickThroughTestIds(page, ['qr-scan-button', 'show-qr-scan', 'paste'])
   const confirmDialog = page.getByTestId('confirm-start-chat')
   await expect(confirmDialog).toContainText(userA.name)
 

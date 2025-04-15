@@ -11,6 +11,7 @@ import {
   loadExistingProfiles,
   getProfile,
   deleteProfile,
+  clickThroughTestIds,
 } from '../playwright-helper'
 
 /**
@@ -55,7 +56,7 @@ test.afterAll(async ({ browser }) => {
   await context.close()
 })
 
-test.skip('instant onboarding with contact invite link', async ({
+test('instant onboarding with contact invite link', async ({
   page,
   context,
   browserName,
@@ -67,19 +68,16 @@ test.skip('instant onboarding with contact invite link', async ({
   const userNameC = userNames[1]
   await switchToProfile(page, userA.id)
   // copy invite link from user A
-  await page.getByTestId('qr-scan-button').click()
-  await page.getByTestId('copy-qr-code').click()
-  await page.getByTestId('confirm-qr-code').click()
-
-  await page.getByTestId('add-account-button').click()
-
-  await page.getByTestId('create-account-button').click()
-
-  await page.getByTestId('other-login-button').click()
-
-  await page.getByTestId('scan-qr-login').click()
-
-  await page.getByTestId('paste').click()
+  await clickThroughTestIds(page, [
+    'qr-scan-button',
+    'copy-qr-code',
+    'confirm-qr-code',
+    'add-account-button',
+    'create-account-button',
+    'other-login-button',
+    'scan-qr-login',
+    'paste',
+  ])
 
   const confirmDialog = page.getByTestId('ask-create-profile-and-join-chat')
   await expect(confirmDialog).toContainText(userA.name)
@@ -165,27 +163,33 @@ test('onboarding with manual credentials', async ({
   await page.getByTestId('settings-advanced-close').click()
   // needed in deleteAllProfiles
   existingProfiles.push({
-    id: await newAccountList.last().getAttribute('x-account-sidebar-account-id') ?? '',
+    id:
+      (await newAccountList
+        .last()
+        .getAttribute('x-account-sidebar-account-id')) ?? '',
     name: newUsername,
-    address: addressFromSettings
+    address: addressFromSettings,
   })
 })
 
-test.fixme('instant onboarding fails with withdrawn invite link', async () => {}
+test.fixme(
+  'instant onboarding fails with withdrawn invite link',
+  async () => {}
 )
 
-test.fixme('instant onboarding works with revived invite link', async () => {}
-)
+test.fixme('instant onboarding works with revived invite link', async () => {})
 
 // maybe move this to group tests?
-test.fixme('instant onboarding with group invite link', async () => {}
+test.fixme('instant onboarding with group invite link', async () => {})
+
+test.fixme(
+  'instant onboarding fails with withdrawn group invite link',
+  async () => {}
 )
 
-test.fixme('instant onboarding fails with withdrawn group invite link', async () => {}
-)
+test.fixme('instant onboarding works with DCLOGIN qr code', async () => {})
 
-test.fixme('instant onboarding works with DCLOGIN qr code', async () => {}
-)
-
-test.fixme('instant onboarding with DCACCOUNT link from loaded image', async () => {}
+test.fixme(
+  'instant onboarding with DCACCOUNT link from loaded image',
+  async () => {}
 )

@@ -17,6 +17,15 @@ export async function reloadPage(page: Page): Promise<void> {
   await page.goto('https://localhost:3000/')
 }
 
+export async function clickThroughTestIds(
+  page: Page,
+  testIds: string[]
+): Promise<void> {
+  for await (const testId of testIds) {
+    await page.getByTestId(testId).click()
+  }
+}
+
 export async function switchToProfile(
   page: Page,
   accountId: string
@@ -79,12 +88,11 @@ export async function createNewProfile(
   await page.evaluate(
     `navigator.clipboard.writeText('dcaccount:${chatmailServer}/new')`
   )
-
-  await page.getByTestId('other-login-button').click()
-
-  await page.getByTestId('scan-qr-login').click()
-
-  await page.getByTestId('paste').click()
+  await clickThroughTestIds(page, [
+    'other-login-button',
+    'scan-qr-login',
+    'paste',
+  ])
 
   // Wait for the dialog to close, so that the underlying content
   // becomes interactive, otherwise `fill()` might silently do nothing.
@@ -136,7 +144,11 @@ export async function createNewProfile(
   }
 }
 
-export async function getProfile(page: Page, accountId: string, includePasswd = false): Promise<User> {
+export async function getProfile(
+  page: Page,
+  accountId: string,
+  includePasswd = false
+): Promise<User> {
   await page.getByTestId(`account-item-${accountId}`).click({ button: 'right' })
   await page.getByTestId('open-settings-menu-item').click()
   const nameLocator = page.locator('.styles_module_profileDisplayName')
@@ -159,7 +171,7 @@ export async function getProfile(page: Page, accountId: string, includePasswd = 
     id: accountId,
     name: name ?? '',
     address: address ?? '',
-    password: password
+    password: password,
   }
 }
 

@@ -8,6 +8,8 @@ import {
   User,
   loadExistingProfiles,
   deleteAllProfiles,
+  reloadPage,
+  clickThroughTestIds,
 } from '../playwright-helper'
 
 test.describe.configure({ mode: 'serial' })
@@ -19,7 +21,7 @@ const numberOfProfiles = 4
 test.beforeAll(async ({ browser }) => {
   const context = await browser.newContext()
   const page = await context.newPage()
-  await page.goto('https://localhost:3000/')
+  await reloadPage(page)
 
   existingProfiles = (await loadExistingProfiles(page)) ?? existingProfiles
   await createProfiles(
@@ -34,13 +36,13 @@ test.beforeAll(async ({ browser }) => {
 })
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('https://localhost:3000/')
+  await reloadPage(page)
 })
 
 test.afterAll(async ({ browser }) => {
   const context = await browser.newContext()
   const page = await context.newPage()
-  await page.goto('https://localhost:3000/')
+  await reloadPage(page)
   await deleteAllProfiles(page, existingProfiles)
   await context.close()
 })
@@ -53,15 +55,15 @@ test('start chat with user', async ({ page, context, browserName }) => {
   const userB = getUser(1, existingProfiles)
   await switchToProfile(page, userA.id)
   // copy invite link from user A
-  await page.getByTestId('qr-scan-button').click()
-  await page.getByTestId('copy-qr-code').click()
-  await page.getByTestId('confirm-qr-code').click()
+  await clickThroughTestIds(page, [
+    'qr-scan-button',
+    'copy-qr-code',
+    'confirm-qr-code',
+  ])
 
   await switchToProfile(page, userB.id)
   // paste invite link in account of userB
-  await page.getByTestId('qr-scan-button').click()
-  await page.getByTestId('show-qr-scan').click()
-  await page.getByTestId('paste').click()
+  await clickThroughTestIds(page, ['qr-scan-button', 'show-qr-scan', 'paste'])
   const confirmDialog = page.getByTestId('confirm-start-chat')
   await expect(confirmDialog).toContainText(userA.name)
 
@@ -107,14 +109,14 @@ test('create group', async ({ page, context, browserName }) => {
   // copy group invite link
   await page.getByTestId('chat-info-button').click()
   await page.locator('#showqrcode button').click()
-  await page.getByTestId('copy-qr-code').click()
-  await page.getByTestId('confirm-qr-code').click()
-  await page.getByTestId('view-group-dialog-header-close').click()
+  await clickThroughTestIds(page, [
+    'copy-qr-code',
+    'confirm-qr-code',
+    'view-group-dialog-header-close',
+  ])
   // paste invite link in account of userC
   await switchToProfile(page, userC.id)
-  await page.getByTestId('qr-scan-button').click()
-  await page.getByTestId('show-qr-scan').click()
-  await page.getByTestId('paste').click()
+  await clickThroughTestIds(page, ['qr-scan-button', 'show-qr-scan', 'paste'])
   const confirmDialog = page.getByTestId('confirm-join-group')
   await expect(confirmDialog).toBeVisible()
   // confirm dialog should contain group name
