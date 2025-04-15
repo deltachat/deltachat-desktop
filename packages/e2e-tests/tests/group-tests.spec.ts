@@ -24,6 +24,7 @@ test.beforeAll(async ({ browser }) => {
   await reloadPage(page)
 
   existingProfiles = (await loadExistingProfiles(page)) ?? existingProfiles
+  test.setTimeout(120_000)
   await createProfiles(
     numberOfProfiles,
     existingProfiles,
