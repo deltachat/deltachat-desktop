@@ -36,40 +36,40 @@ import type {
 } from '@deltachat-desktop/shared/logger.js'
 import type { setLogHandler as setLogHandlerFunction } from '@deltachat-desktop/shared/logger.js'
 import { DragDropEvent, getCurrentWebview } from '@tauri-apps/api/webview'
-import { Event, UnlistenFn } from '@tauri-apps/api/event'
+import { Event } from '@tauri-apps/api/event'
 
 let logJsonrpcConnection = false
 
 type MainWindowEvents =
   | {
-    event: 'sendToChat'
-    data: {
-      options: {
-        text: string | null | undefined
-        file: { fileName: string; fileContent: string } | null
+      event: 'sendToChat'
+      data: {
+        options: {
+          text: string | null | undefined
+          file: { fileName: string; fileContent: string } | null
+        }
+        account: number | null
       }
-      account: number | null
     }
-  }
   | {
-    event: 'localeReloaded'
-    data: string | null
-  }
+      event: 'localeReloaded'
+      data: string | null
+    }
   | {
-    event: 'showAboutDialog'
-  }
+      event: 'showAboutDialog'
+    }
   | {
-    event: 'showSettingsDialog'
-  }
+      event: 'showSettingsDialog'
+    }
   | {
-    event: 'showKeybindingsDialog'
-  }
+      event: 'showKeybindingsDialog'
+    }
   | {
-    event: 'resumeFromSleep'
-  }
+      event: 'resumeFromSleep'
+    }
   | {
-    event: 'toggleNotifications'
-  }
+      event: 'toggleNotifications'
+    }
   | {
       event: 'onThemeUpdate'
     }
@@ -123,9 +123,7 @@ class TauriRuntime implements Runtime {
   emitUIFullyReady(): void {
     invoke('ui_frontend_ready')
   }
-  async setDragListener(
-    eventHandler: (event: Event<DragDropEvent>) => void
-  ) {
+  async setDragListener(eventHandler: (event: Event<DragDropEvent>) => void) {
     return getCurrentWebview().onDragDropEvent(event => {
       eventHandler(event)
     })
@@ -203,7 +201,7 @@ class TauriRuntime implements Runtime {
 
     const savedEntries = (await this.store.entries()).reduce(
       (acc, [key, value]) => {
-        ; (acc as any)[key] = value
+        ;(acc as any)[key] = value
         return acc
       },
       {} as Partial<DesktopSettingsType>
@@ -340,9 +338,9 @@ class TauriRuntime implements Runtime {
         this.onWebxdcSendToChat?.(
           options.file
             ? {
-              file_name: options.file.fileName,
-              file_content: options.file.fileContent,
-            }
+                file_name: options.file.fileName,
+                file_content: options.file.fileContent,
+              }
             : null,
           options.text || null,
           account || undefined
@@ -655,10 +653,10 @@ class TauriRuntime implements Runtime {
   onOpenQrUrl: ((url: string) => void) | undefined
   onWebxdcSendToChat:
     | ((
-      file: { file_name: string; file_content: string } | null,
-      text: string | null,
-      account_id?: number
-    ) => void)
+        file: { file_name: string; file_content: string } | null,
+        text: string | null,
+        account_id?: number
+      ) => void)
     | undefined
   onResumeFromSleep: (() => void) | undefined
   onToggleNotifications: (() => void) | undefined
@@ -670,4 +668,4 @@ class TauriRuntime implements Runtime {
   }
 }
 
-; (window as any).r = new TauriRuntime()
+;(window as any).r = new TauriRuntime()
