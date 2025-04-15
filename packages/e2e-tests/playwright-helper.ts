@@ -221,22 +221,6 @@ export async function deleteAllProfiles(
       console.log(`User ${profileToDelete.name} was deleted!`)
     }
   }
-  reloadPage(page)
-  const leftovers = await loadExistingProfiles(page)
-  if (leftovers.length > 0) {
-    for (let i = 0; i < leftovers.length; i++) {
-      const profileToDelete = leftovers[i]
-      const deleted = await deleteProfile(page, profileToDelete.id)
-      expect(deleted).toContain(profileToDelete.name)
-      if (deleted) {
-        /* ignore-console-log */
-        console.log(`User ${profileToDelete.name} was deleted!`)
-      }
-    }
-  }
-  /* ignore-console-log */
-  console.log('Leftover profiles:', leftovers)
-  // expect(leftovers.length).toBe(0)
 }
 
 /**

@@ -14,15 +14,15 @@ import {
 /**
  * This test suite covers basic functionalities like
  * creating profiles based on DCACCOUNT qr code
- * invite a user
- * start a chat
- * send, edit, delete messages
- * load and send webxdc app
- * delete profile
+ * - invite a user
+ * - start a chat
+ * - send, edit, delete messages
+ * - load and send webxdc app
+ * - delete profile
  *
- * creating and deleting propfiles also
- * happens in other tests in beforAll and afterAll
- * so if this test fails the other ones will also
+ * creating and deleting profiles also happens in
+ * other tests in beforAll and afterAll so if this
+ * test fails the other ones will also
  */
 
 test.describe.configure({ mode: 'serial' })
@@ -310,20 +310,4 @@ test('delete profiles', async ({ page }) => {
       console.log(`User ${profileToDelete.name} was deleted!`)
     }
   }
-  reloadPage(page)
-  const leftovers = await loadExistingProfiles(page)
-  if (leftovers.length > 0) {
-    for (let i = 0; i < leftovers.length; i++) {
-      const profileToDelete = leftovers[i]
-      const deleted = await deleteProfile(page, profileToDelete.id)
-      expect(deleted).toContain(profileToDelete.name)
-      if (deleted) {
-        /* ignore-console-log */
-        console.log(`User ${profileToDelete.name} was deleted!`)
-      }
-    }
-  }
-  /* ignore-console-log */
-  console.log('Leftover profiles:', leftovers)
-  // expect(leftovers.length).toBe(0)
 })
