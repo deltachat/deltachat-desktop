@@ -199,6 +199,7 @@ export default function MenuAttachment({
       label: tx('file'),
       action: addFilenameFile.bind(null),
     },
+    { type: 'separator' },
     {
       icon: 'image',
       label: tx('image'),
