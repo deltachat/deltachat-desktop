@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test'
 
 import {
-  userNames,
-  createUser,
+  getUser,
+  createProfiles,
   deleteProfile,
   switchToProfile,
   User,
@@ -29,6 +29,8 @@ test.describe.configure({ mode: 'serial' })
 
 let existingProfiles: User[] = []
 
+const numberOfProfiles = 2
+
 test.beforeAll(async ({ browser }) => {
   const context = await browser.newContext()
   const page = await context.newPage()
@@ -44,55 +46,28 @@ test.beforeEach(async ({ page }) => {
   await reloadPage(page)
 })
 
-const getUser = (index: number) => {
-  if (!existingProfiles || existingProfiles.length < index + 1) {
-    throw new Error(
-      `Not enough profiles for test! Found ${existingProfiles?.length}`
-    )
-  }
-  if (existingProfiles.length < 2) {
-    throw new Error(
-      `Not enough profiles for chat test! Found ${existingProfiles?.length}`
-    )
-  }
-  return existingProfiles[index]
-}
-
 /**
  * covers creating a profile with preconfigured
  * chatmail server on first start or after
  */
 test('create profiles', async ({ page, context, browserName }) => {
   test.setTimeout(120_000)
-  const hasProfileWithName = (name: string): boolean => {
-    let hasProfile = false
-    if (existingProfiles.length > 0) {
-      existingProfiles.forEach(user => {
-        if (user.name === name) {
-          hasProfile = true
-        }
-      })
-    }
-    return hasProfile
-  }
-  if (browserName.toLowerCase().indexOf('chrom') > -1) {
-    await context.grantPermissions(['clipboard-read', 'clipboard-write'])
-  }
-  for (let n = 0; n < 4; n++) {
-    if (!hasProfileWithName(userNames[n])) {
-      await createUser(userNames[n], page, existingProfiles, n === 0)
-    } else {
-      console.log('User already exists')
-    }
-  }
+  await createProfiles(
+    numberOfProfiles,
+    existingProfiles,
+    page,
+    context,
+    browserName
+  )
+  expect(existingProfiles.length).toBe(numberOfProfiles)
 })
 
 test('start chat with user', async ({ page, context, browserName }) => {
   if (browserName.toLowerCase().indexOf('chrom') > -1) {
     await context.grantPermissions(['clipboard-read', 'clipboard-write'])
   }
-  const userA = getUser(0)
-  const userB = getUser(1)
+  const userA = getUser(0, existingProfiles)
+  const userB = getUser(1, existingProfiles)
   await switchToProfile(page, userA.id)
   // copy invite link from user A
   await clickThroughTestIds(page, [
@@ -119,8 +94,8 @@ test('start chat with user', async ({ page, context, browserName }) => {
  * user A sends two messages to user B
  */
 test('send message', async ({ page }) => {
-  const userA = getUser(0)
-  const userB = getUser(1)
+  const userA = existingProfiles[0]
+  const userB = existingProfiles[1]
   // prepare last open chat for receiving user
   await switchToProfile(page, userB.id)
   // the chat that receives the message should not be selected
@@ -179,8 +154,8 @@ test('send message', async ({ page }) => {
  * user A deletes one message for himself
  */
 test('delete message', async ({ page }) => {
-  const userA = getUser(0)
-  const userB = getUser(1)
+  const userA = existingProfiles[0]
+  const userB = existingProfiles[1]
   await switchToProfile(page, userA.id)
   await page
     .locator('.chat-list .chat-list-item')
@@ -206,8 +181,8 @@ test('delete message', async ({ page }) => {
  * user A deletes one message for all
  */
 test('delete message for all', async ({ page }) => {
-  const userA = getUser(0)
-  const userB = getUser(1)
+  const userA = existingProfiles[0]
+  const userB = existingProfiles[1]
   await switchToProfile(page, userA.id)
   await page
     .locator('.chat-list .chat-list-item')
@@ -233,8 +208,8 @@ test('delete message for all', async ({ page }) => {
  * user A sends and edits a message
  */
 test('edit message', async ({ page }) => {
-  const userA = getUser(0)
-  const userB = getUser(1)
+  const userA = existingProfiles[0]
+  const userB = existingProfiles[1]
   await switchToProfile(page, userA.id)
   await page
     .locator('.chat-list .chat-list-item')
@@ -312,7 +287,7 @@ test('add app from picker to chat', async ({ page }) => {
 test('focuses first visible item on arrow down key on input in create chat dialog', async ({
   page,
 }) => {
-  const userA = getUser(0)
+  const userA = existingProfiles[0]
   await switchToProfile(page, userA.id)
   await page.locator('#new-chat-button').click()
   await page.locator('dialog *:focus').waitFor({ state: 'visible' })
