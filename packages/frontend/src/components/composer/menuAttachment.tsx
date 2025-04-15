@@ -178,15 +178,21 @@ export default function MenuAttachment({
 
   // item array used to populate menu
   const menu: (ContextMenuItem | false)[] = [
+    {
+      icon: 'person',
+      label: tx('contact'),
+      action: selectContact.bind(null),
+    },
     !!settings?.settings.webrtc_instance && {
       icon: 'phone',
       label: tx('videochat'),
       action: onVideoChat,
     },
     {
-      icon: 'image',
-      label: tx('image'),
-      action: addFilenameMedia.bind(null),
+      icon: 'apps',
+      label: tx('webxdc_app'),
+      action: selectAppPicker.bind(null),
+      dataTestid: 'open-app-picker',
     },
     {
       icon: 'upload-file',
@@ -194,15 +200,9 @@ export default function MenuAttachment({
       action: addFilenameFile.bind(null),
     },
     {
-      icon: 'person',
-      label: tx('contact'),
-      action: selectContact.bind(null),
-    },
-    {
-      icon: 'apps',
-      label: tx('webxdc_app'),
-      action: selectAppPicker.bind(null),
-      dataTestid: 'open-app-picker',
+      icon: 'image',
+      label: tx('image'),
+      action: addFilenameMedia.bind(null),
     },
   ]
 
