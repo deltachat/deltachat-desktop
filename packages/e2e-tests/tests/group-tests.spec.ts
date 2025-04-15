@@ -80,21 +80,23 @@ test('create group', async ({ page, context, browserName }) => {
   if (browserName.toLowerCase().indexOf('chrom') > -1) {
     await context.grantPermissions(['clipboard-read', 'clipboard-write'])
   }
-  const userA = getUser(0, existingProfiles)
-  const userB = getUser(1, existingProfiles)
-  const userC = getUser(2, existingProfiles)
+  const userA = existingProfiles[0]
+  const userB = existingProfiles[0]
+  const userC = existingProfiles[0]
   await switchToProfile(page, userA.id)
   await page.locator('#new-chat-button').click()
   await page.locator('#newgroup button').click()
   await page.locator('.group-name-input').fill(groupName)
   await page.locator('#addmember button').click()
   const addMemberDialog = page.getByTestId('add-member-dialog')
+  /* ignore-console-log */
+  console.log('userB', userB)
   await page
     .locator('.contact-list-item')
     .filter({ hasText: userB.name })
     .click()
 
-  await addMemberDialog.getByTestId('ok').click()
+    await addMemberDialog.getByTestId('ok').click()
 
   await page.getByTestId('group-create-button').click()
   const chatListItem = page
@@ -110,14 +112,14 @@ test('create group', async ({ page, context, browserName }) => {
   // copy group invite link
   await page.getByTestId('chat-info-button').click()
   await page.locator('#showqrcode button').click()
-  await clickThroughTestIds(page, [
-    'copy-qr-code',
-    'confirm-qr-code',
-    'view-group-dialog-header-close',
-  ])
+  await page.getByTestId('copy-qr-code').click()
+  await page.getByTestId('confirm-qr-code').click()
+  await page.getByTestId('view-group-dialog-header-close').click()
   // paste invite link in account of userC
   await switchToProfile(page, userC.id)
-  await clickThroughTestIds(page, ['qr-scan-button', 'show-qr-scan', 'paste'])
+  await page.getByTestId('qr-scan-button').click()
+  await page.getByTestId('show-qr-scan').click()
+  await page.getByTestId('paste').click()
   const confirmDialog = page.getByTestId('confirm-join-group')
   await expect(confirmDialog).toBeVisible()
   // confirm dialog should contain group name
