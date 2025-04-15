@@ -82,7 +82,7 @@ test('instant onboarding with contact invite link', async ({
   const confirmDialog = page.getByTestId('ask-create-profile-and-join-chat')
   await expect(confirmDialog).toContainText(userA.name)
 
-  confirmDialog.getByTestId('confirm').click()
+  await confirmDialog.getByTestId('confirm').click()
 
   // we have to wait till both dialogs are closed since
   // the displayName input is just behind these dialogs
