@@ -74,6 +74,19 @@ test('start chat with user', async ({ page, context, browserName }) => {
   ).toHaveCount(1)
   /* ignore-console-log */
   console.log(`Chat with ${userA.name} created!`)
+  await page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: userA.name })
+    .click()
+
+  const messageText = `Hello ${userA.name}!`
+  await page.locator('#composer-textarea').fill(messageText)
+  await page.locator('button.send-button').click()
+  const sentMessageText = page
+    .locator(`.message.outgoing`)
+    .last()
+    .locator('.msg-body .text')
+  await expect(sentMessageText).toHaveText(messageText)
 })
 
 test('create group', async ({ page, context, browserName }) => {
@@ -84,6 +97,10 @@ test('create group', async ({ page, context, browserName }) => {
   const userB = existingProfiles[1]
   const userC = existingProfiles[2]
   await switchToProfile(page, userA.id)
+  const chatUserB = page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: userB.name })
+  await expect(chatUserB).toBeVisible()
   await page.locator('#new-chat-button').click()
   await page.locator('#newgroup button').click()
   await page.locator('.group-name-input').fill(groupName)
