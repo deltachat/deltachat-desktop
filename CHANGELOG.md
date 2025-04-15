@@ -20,6 +20,7 @@
 - tauri: add `--minimized` flag #4922
 - tauri: add theming #4940
 - tauri: add autostart #4754
+- testing: add more e2e tests for onboardings etc. #5001
 
 
 ### Changed
