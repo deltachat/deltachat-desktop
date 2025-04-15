@@ -122,7 +122,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
   )
 
   useEffect(() => {
-    let unset = runtime.setDragListener(async e => {
+    const unset = runtime.setDragListener(async e => {
       if (e.payload.type != 'drop') {
         return
       }
@@ -185,8 +185,8 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
       }
     })
     return () => {
-      unset.then((u) => {
-        log.info("dragListenerUnset")
+      unset.then(u => {
+        log.info('dragListenerUnset')
         u()
       })
     }
