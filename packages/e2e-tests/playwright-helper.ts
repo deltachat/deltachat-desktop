@@ -10,6 +10,11 @@ export type User = {
   name: string
   id: string
   address: string
+  password?: string
+}
+
+export async function reloadPage(page: Page): Promise<void> {
+  await page.goto('https://localhost:3000/')
 }
 
 export async function switchToProfile(
@@ -131,7 +136,7 @@ export async function createNewProfile(
   }
 }
 
-export async function getProfile(page: Page, accountId: string): Promise<User> {
+export async function getProfile(page: Page, accountId: string, includePasswd = false): Promise<User> {
   await page.getByTestId(`account-item-${accountId}`).click({ button: 'right' })
   await page.getByTestId('open-settings-menu-item').click()
   const nameLocator = page.locator('.styles_module_profileDisplayName')
@@ -142,6 +147,11 @@ export async function getProfile(page: Page, accountId: string): Promise<User> {
   const addressLocator = page.locator('#addr')
   await expect(addressLocator).toHaveValue(/.+@.+/)
   const address = await addressLocator.inputValue()
+  let password = ''
+  if (includePasswd) {
+    const passwdLocator = page.locator('#password')
+    password = await passwdLocator.inputValue()
+  }
   await page.getByTestId('cancel').click()
   await page.getByTestId('settings-advanced-close').click()
 
@@ -149,6 +159,7 @@ export async function getProfile(page: Page, accountId: string): Promise<User> {
     id: accountId,
     name: name ?? '',
     address: address ?? '',
+    password: password
   }
 }
 
