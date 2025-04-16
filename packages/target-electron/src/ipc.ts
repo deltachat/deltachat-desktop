@@ -174,7 +174,7 @@ export async function init(cwd: string, logHandler: LogHandler) {
     ev.returnValue = app.getPath(arg)
   })
 
-  ipcMain.on('checkMediaAccess', (_ev, mediaType: string) => {
+  ipcMain.handle('checkMediaAccess', (_ev, mediaType: string) => {
     if (mediaType === 'camera') {
       return systemPreferences.getMediaAccessStatus('camera')
     } else if (mediaType === 'microphone') {
@@ -185,7 +185,7 @@ export async function init(cwd: string, logHandler: LogHandler) {
     }
   })
 
-  ipcMain.on('askForMediaAccess', (_ev, mediaType: string) => {
+  ipcMain.handle('askForMediaAccess', (_ev, mediaType: string) => {
     if (mediaType === 'camera') {
       return systemPreferences.askForMediaAccess('camera')
     } else if (mediaType === 'microphone') {
