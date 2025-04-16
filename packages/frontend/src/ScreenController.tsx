@@ -123,7 +123,10 @@ export default class ScreenController extends Component {
     }
   }
 
-  async selectAccount(accountId: number, dontStartIo = false) {
+  async selectAccount(
+    accountId: number,
+    dontStartIo = false
+  ): Promise<boolean> {
     if (accountId !== this.selectedAccountId) {
       await this.unSelectAccount()
       this.selectedAccountId = accountId
@@ -135,6 +138,8 @@ export default class ScreenController extends Component {
       log.info('account is already selected')
       // do not return here as this can be the state transition between unconfigured to configured
     }
+
+    let profileComplete = true
 
     const account = await BackendRemote.rpc.getAccountInfo(
       this.selectedAccountId
@@ -157,6 +162,10 @@ export default class ScreenController extends Component {
     })
 
     await BackendRemote.rpc.selectAccount(accountId)
+    if (account.kind === 'Configured' && account.displayName === '') {
+      profileComplete = false
+    }
+    return profileComplete
   }
 
   async unSelectAccount() {

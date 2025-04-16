@@ -33,7 +33,7 @@ import classNames from 'classnames'
 
 type Props = {
   onAddAccount: () => Promise<number>
-  onSelectAccount: (accountId: number) => Promise<void>
+  onSelectAccount: (accountId: number) => Promise<boolean>
   openAccountDeletionScreen: (accountId: number) => Promise<void>
   selectedAccountId?: number
 }

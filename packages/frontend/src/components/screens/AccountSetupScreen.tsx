@@ -18,6 +18,8 @@ import { DialogId } from '../../contexts/DialogContext'
 import AlertDialog from '../dialogs/AlertDialog'
 
 import type ScreenController from '../../ScreenController'
+import EditProfileDialog from '../dialogs/EditProfileDialog'
+import { useSettingsStore } from '../../stores/settings'
 
 export default function AccountSetupScreen({
   selectAccount,
@@ -32,25 +34,31 @@ export default function AccountSetupScreen({
 
   const [credentials, setCredentials] =
     useState<Credentials>(defaultCredentials())
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const settingsStore = useSettingsStore()[0]!
 
-  const onClickLogin = useCallback(
-    () =>
-      openDialog(ConfigureProgressDialog, {
-        credentials,
-        onSuccess: () => {
-          selectAccount(accountId)
-        },
-        onFail: (error: string) =>
-          setPromptDialogId(
-            openDialog(AlertDialog, {
-              message: error,
-              cb: () => setPromptDialogId(null),
-            })
-          ),
-        proxyUpdated: credentials.proxyEnabled,
-      }),
-    [accountId, openDialog, selectAccount, credentials]
-  )
+  const onClickLogin = useCallback(() => {
+    openDialog(ConfigureProgressDialog, {
+      credentials,
+      onSuccess: async () => {
+        const profileComplete = await selectAccount(accountId)
+        if (!profileComplete) {
+          openDialog(EditProfileDialog, {
+            settingsStore,
+            firstSetup: true,
+          })
+        }
+      },
+      onFail: (error: string) =>
+        setPromptDialogId(
+          openDialog(AlertDialog, {
+            message: error,
+            cb: () => setPromptDialogId(null),
+          })
+        ),
+      proxyUpdated: credentials.proxyEnabled,
+    })
+  }, [openDialog, credentials, selectAccount, accountId, settingsStore])
 
   // TODO(maxph): we're now using <dialog> and can submit result via input
   // and not an explicit keyboard handling
