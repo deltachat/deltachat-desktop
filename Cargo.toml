@@ -13,3 +13,5 @@ codegen-units = 1
 strip = true
 
 [patch.crates-io]
+# tauri-plugin-single-instance = { git = "https://github.com/Simon-Laux/plugins-workspace", branch = "simon/fix-macos-cwd-single-instance" }
+tauri-plugin-single-instance = { version = "2.2.3", path = "../tauri-plugins-workspace/plugins/single-instance" }
