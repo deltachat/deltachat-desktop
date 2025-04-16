@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>NSCameraUsageDescription</key>
+		<string>For scanning qr codes.</string>
+
+		<key>NSMicrophoneUsageDescription</key>
+		<string>For recording voice messages</string>
+
+		<key>CFBundleDocumentTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleTypeExtensions</key>
+				<array>
+					<string>xdc</string>
+				</array>
+				<key>CFBundleTypeIconFile</key>
+				<string>xdc.icns</string>
+				<key>CFBundleTypeName</key>
+				<string>Webxdc app</string>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>LSHandlerRank</key>
+				<string>Default</string>
+			</dict>
+		</array>
+
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLName</key>
+				<string>chat.delta.qr</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>openpgp4fpr</string>
+					<string>dcaccount</string>
+					<string>dclogin</string>
+				</array>
+			</dict>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Editor</string>
+				<key>CFBundleURLName</key>
+				<string>chat.delta.mailto</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>mailto</string>
+				</array>
+			</dict>
+		</array>
+	</dict>
+</plist>
