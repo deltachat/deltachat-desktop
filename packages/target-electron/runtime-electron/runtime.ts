@@ -447,6 +447,16 @@ class ElectronRuntime implements Runtime {
   getConfigPath(): string {
     return ipcBackend.sendSync('get-config-path')
   }
+  checkMediaAccess(
+    mediaType: 'microphone' | 'camera'
+  ): Promise<
+    'not-determined' | 'granted' | 'denied' | 'restricted' | 'unknown'
+  > {
+    return ipcBackend.invoke('checkMediaAccess', mediaType)
+  }
+  askForMediaAccess(mediaType: 'microphone' | 'camera'): Promise<boolean> {
+    return ipcBackend.invoke('askForMediaAccess', mediaType)
+  }
 }
 
 ;(window as any).r = new ElectronRuntime()

@@ -7,6 +7,7 @@ import {
   nativeImage,
   shell,
   NativeImage,
+  systemPreferences,
 } from 'electron'
 import path, {
   basename,
@@ -171,6 +172,28 @@ export async function init(cwd: string, logHandler: LogHandler) {
 
   ipcMain.on('app-get-path', (ev, arg) => {
     ev.returnValue = app.getPath(arg)
+  })
+
+  ipcMain.on('checkMediaAccess', (_ev, mediaType: string) => {
+    if (mediaType === 'camera') {
+      return systemPreferences.getMediaAccessStatus('camera')
+    } else if (mediaType === 'microphone') {
+      return systemPreferences.getMediaAccessStatus('microphone')
+    } else {
+      log.warn('checkMediaAccess: unknown media type', mediaType)
+      return 'unknown'
+    }
+  })
+
+  ipcMain.on('askForMediaAccess', (_ev, mediaType: string) => {
+    if (mediaType === 'camera') {
+      return systemPreferences.askForMediaAccess('camera')
+    } else if (mediaType === 'microphone') {
+      return systemPreferences.askForMediaAccess('microphone')
+    } else {
+      log.warn('checkMediaAccess: unknown media type', mediaType)
+      return 'unknown'
+    }
   })
 
   ipcMain.handle('fileChooser', async (_ev, options) => {
