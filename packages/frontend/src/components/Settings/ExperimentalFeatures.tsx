@@ -6,7 +6,6 @@ import SettingsStoreInstance, {
 } from '../../stores/settings'
 import SettingsSelector from './SettingsSelector'
 import DesktopSettingsSwitch from './DesktopSettingsSwitch'
-import CoreSettingsSwitch from './CoreSettingsSwitch'
 import EditVideochatInstanceDialog from '../dialogs/EditVideochatInstanceDialog'
 import {
   VIDEO_CHAT_INSTANCE_AUTISTICI,
@@ -92,11 +91,6 @@ export function ExperimentalFeatures({ settingsStore }: Props) {
           description={tx('pref_screen_security_explain')}
         />
       )}
-      <CoreSettingsSwitch
-        label={tx('disable_imap_idle')}
-        settingsKey='disable_idle'
-        description={tx('disable_imap_idle_explain')}
-      />
       <SyncAllAccountsSwitch />
       <DesktopSettingsSwitch
         settingsKey='enableWebxdcDevTools'
