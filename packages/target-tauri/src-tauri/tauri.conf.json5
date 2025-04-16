@@ -60,6 +60,10 @@
       "minimumSystemVersion": "13.0",
       "developmentTeam": "8Y86453UA8", // merlinux,
       "frameworks": ["SystemConfiguration"] // needed for system configuration crate, which is used by iroh-net
+    },
+    "macOS": {
+      "entitlements": "../bundle_resources/Entitlements.plist",
+      "files": { "Resources/xdc.icns": "../bundle_resources/xdc.icns" }
     }
   }
 }
