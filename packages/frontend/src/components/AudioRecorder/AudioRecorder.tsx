@@ -3,6 +3,8 @@ import MicRecorder from './MicRecorder'
 import styles from './styles.module.scss'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { runtime } from '@deltachat-desktop/runtime-interface'
+import useDialog from '../../hooks/dialog/useDialog'
+import AlertDialog from '../dialogs/AlertDialog'
 
 export enum AudioErrorType {
   'NO_INPUT',
@@ -91,12 +93,25 @@ export const AudioRecorder = ({
   const tx = useTranslationFunction()
   const [volume, setVolume] = useState(0)
   const recorder = useRef<MicRecorder | null>(null)
+  const  { openDialog } = useDialog()
 
   const onRecordingStart = async () => {
     const access = await runtime.checkMediaAccess('microphone')
-    console.log('microphone access', access)
-    const t = await runtime.askForMediaAccess('microphone')
-    console.log(t)
+    if (access === 'not-determined') {
+      const accessAllowed = await runtime.askForMediaAccess('microphone')
+      if (!accessAllowed) {
+        openDialog(AlertDialog, {
+          message: 'Permission needed for recording voice messages'
+        })
+        return
+      }
+    } else if (access === 'denied') {
+      openDialog(AlertDialog, {
+        message: 'You need to set permission in system settings!'
+      })
+      return
+    }
+    
     if (!recorder.current) {
       recorder.current = new MicRecorder(setVolume, {
         bitRate: 128,
