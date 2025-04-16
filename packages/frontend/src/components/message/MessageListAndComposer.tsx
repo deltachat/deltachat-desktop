@@ -40,14 +40,20 @@ export function getBackgroundImageStyle(
     }
     if (bgImg.startsWith('img: ')) {
       const filePath = bgImg.slice(5)
-      style.backgroundImage =
-        runtime.getRuntimeInfo().target === 'browser'
-          ? `url("/${join('background/', filePath)}")`
-          : `url("file://${join(
-              runtime.getConfigPath(),
-              'background/',
-              filePath
-            )}")`
+      switch (runtime.getRuntimeInfo().target) {
+        case 'electron': {
+          style.backgroundImage = `url("file://${join(
+            runtime.getConfigPath(),
+            'background/',
+            filePath
+          )}")`
+          break
+        }
+        case 'browser': {
+          style.backgroundImage = `url("/${join('background/', filePath)}")`
+          break
+        }
+      }
     } else if (bgImg.startsWith('color: ')) {
       style.backgroundColor = bgImg.slice(7)
       style.backgroundImage = 'none'
