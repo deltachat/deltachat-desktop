@@ -21,6 +21,13 @@ codesign -v target/release/bundle/macos/deltachat-tauri.app
 codesign -v ../../../target/release/bundle/macos/deltachat-tauri.app
 ```
 
+> TODO: You also need to embed a provisioning profile
+
+#### Troubleshooting
+
+- If the app doesn't start, then look into the "Console" for clues.
+- Make sure you have selected the correct signing certificate for your app's team id.
+
 ### Notarisation
 
 https://v2.tauri.app/distribute/sign/macos/#notarization
