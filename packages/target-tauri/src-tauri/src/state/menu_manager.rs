@@ -88,7 +88,7 @@ impl MenuManager {
         let inner = self.inner.read().await;
         let menu_generator = inner
             .get(id)
-            .context("menu generator for window {id} not found")?;
+            .with_context(|| format!("menu generator for window {id} not found"))?;
 
         menu_generator(app)
     }
