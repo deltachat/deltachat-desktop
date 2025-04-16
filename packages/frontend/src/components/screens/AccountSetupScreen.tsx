@@ -97,7 +97,10 @@ export default function AccountSetupScreen({
             <FooterActionButton onClick={onCancel}>
               {tx('cancel')}
             </FooterActionButton>
-            <FooterActionButton onClick={onClickLogin}>
+            <FooterActionButton
+              onClick={onClickLogin}
+              data-testid='login-with-credentials'
+            >
               {tx('login_title')}
             </FooterActionButton>
           </FooterActions>

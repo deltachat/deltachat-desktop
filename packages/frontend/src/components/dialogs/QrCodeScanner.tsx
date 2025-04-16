@@ -15,7 +15,11 @@ export default function QrCodeScanner({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
 
   return (
-    <DialogWithHeader title={tx('qrscan_title')} onClose={onClose}>
+    <DialogWithHeader
+      title={tx('qrscan_title')}
+      onClose={onClose}
+      dataTestid='qrscan-dialog'
+    >
       <QrCodeScanQrInner onClose={onClose} />
     </DialogWithHeader>
   )

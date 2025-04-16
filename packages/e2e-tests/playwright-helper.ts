@@ -1,11 +1,29 @@
-import { expect, Page } from '@playwright/test'
+import { BrowserContext, expect, Page } from '@playwright/test'
 
-const chatmailServer = 'https://ci-chatmail.testrun.org'
+export const chatmailServer = 'https://ci-chatmail.testrun.org'
+
+export const userNames = ['Alice', 'Bob', 'Chris', 'Denis', 'Eve']
+
+export const groupName = 'TestGroup'
 
 export type User = {
   name: string
   id: string
   address: string
+  password?: string
+}
+
+export async function reloadPage(page: Page): Promise<void> {
+  await page.goto('https://localhost:3000/')
+}
+
+export async function clickThroughTestIds(
+  page: Page,
+  testIds: string[]
+): Promise<void> {
+  for await (const testId of testIds) {
+    await page.getByTestId(testId).click()
+  }
 }
 
 export async function switchToProfile(
@@ -35,6 +53,23 @@ export async function createUser(
   return user
 }
 
+export const getUser = (index: number, existingProfiles: User[]) => {
+  if (!existingProfiles || existingProfiles.length < index + 1) {
+    throw new Error(
+      `Not enough profiles for test! Found ${existingProfiles?.length}`
+    )
+  }
+  if (existingProfiles.length < 2) {
+    throw new Error(
+      `Not enough profiles for chat test! Found ${existingProfiles?.length}`
+    )
+  }
+  return existingProfiles[index]
+}
+
+/**
+ * create a profile after pasting DCACCOUNT link
+ */
 export async function createNewProfile(
   page: Page,
   name: string,
@@ -53,16 +88,15 @@ export async function createNewProfile(
   await page.evaluate(
     `navigator.clipboard.writeText('dcaccount:${chatmailServer}/new')`
   )
-
-  await page.getByTestId('other-login-button').click()
-
-  await page.getByTestId('scan-qr-login').click()
-
-  await page.getByTestId('paste').click()
+  await clickThroughTestIds(page, [
+    'other-login-button',
+    'scan-qr-login',
+    'paste',
+  ])
 
   // Wait for the dialog to close, so that the underlying content
   // becomes interactive, otherwise `fill()` might silently do nothing.
-  await expect(page.getByTestId('close')).not.toBeVisible()
+  await expect(page.getByTestId('qrscan-dialog')).not.toBeVisible()
 
   const nameInput = page.locator('#displayName')
 
@@ -110,7 +144,11 @@ export async function createNewProfile(
   }
 }
 
-export async function getProfile(page: Page, accountId: string): Promise<User> {
+export async function getProfile(
+  page: Page,
+  accountId: string,
+  includePasswd = false
+): Promise<User> {
   await page.getByTestId(`account-item-${accountId}`).click({ button: 'right' })
   await page.getByTestId('open-settings-menu-item').click()
   const nameLocator = page.locator('.styles_module_profileDisplayName')
@@ -121,6 +159,11 @@ export async function getProfile(page: Page, accountId: string): Promise<User> {
   const addressLocator = page.locator('#addr')
   await expect(addressLocator).toHaveValue(/.+@.+/)
   const address = await addressLocator.inputValue()
+  let password = ''
+  if (includePasswd) {
+    const passwdLocator = page.locator('#password')
+    password = await passwdLocator.inputValue()
+  }
   await page.getByTestId('cancel').click()
   await page.getByTestId('settings-advanced-close').click()
 
@@ -128,6 +171,55 @@ export async function getProfile(page: Page, accountId: string): Promise<User> {
     id: accountId,
     name: name ?? '',
     address: address ?? '',
+    password: password,
+  }
+}
+
+export async function createProfiles(
+  number: number,
+  existingProfiles: User[],
+  page: Page,
+  context: BrowserContext,
+  browserName: string
+): Promise<void> {
+  const hasProfileWithName = (name: string): boolean => {
+    let hasProfile = false
+    if (existingProfiles.length > 0) {
+      existingProfiles.forEach(user => {
+        if (user.name === name) {
+          hasProfile = true
+        }
+      })
+    }
+    return hasProfile
+  }
+  if (browserName.toLowerCase().indexOf('chrom') > -1) {
+    await context.grantPermissions(['clipboard-read', 'clipboard-write'])
+  }
+  for (let n = 0; n < number; n++) {
+    if (!hasProfileWithName(userNames[n])) {
+      await createUser(userNames[n], page, existingProfiles, n === 0)
+    } else {
+      console.log('User already exists')
+    }
+  }
+}
+
+export async function deleteAllProfiles(
+  page: Page,
+  existingProfiles: User[]
+): Promise<void> {
+  if (existingProfiles.length < 1) {
+    throw new Error('Not existing profiles to delete!')
+  }
+  for (let i = 0; i < existingProfiles.length; i++) {
+    const profileToDelete = existingProfiles[i]
+    const deleted = await deleteProfile(page, profileToDelete.id)
+    expect(deleted).toContain(profileToDelete.name)
+    if (deleted) {
+      /* ignore-console-log */
+      console.log(`User ${profileToDelete.name} was deleted!`)
+    }
   }
 }
 
@@ -163,6 +255,7 @@ export async function loadExistingProfiles(page: Page): Promise<User[]> {
     for (let i = 0; i < existingAccountItems; i++) {
       const account = accountList.nth(i)
       const id = await account.getAttribute('x-account-sidebar-account-id')
+      /* ignore-console-log */
       console.log(`Found account ${id}`)
       if (id) {
         const p = await getProfile(page, id)
