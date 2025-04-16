@@ -51,7 +51,7 @@ It can be deleted after running tests and will be recreated in the next run.
 ## Troubleshooting
 
 Make sure that there are no accounts left after fail.
-`rm -f packages/e2e-tests/data/accounts`
+`rm -r packages/e2e-tests/data/accounts`
 
 After failing tests or stopping tests with Ctrl + C sometimes either the rpc-server process is still running or the used port is still blocked by a process
 To find the related process pid (on Linux) run:
