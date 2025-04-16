@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import MicRecorder from './MicRecorder'
 import styles from './styles.module.scss'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 export enum AudioErrorType {
   'NO_INPUT',
@@ -91,7 +92,11 @@ export const AudioRecorder = ({
   const [volume, setVolume] = useState(0)
   const recorder = useRef<MicRecorder | null>(null)
 
-  const onRecordingStart = () => {
+  const onRecordingStart = async () => {
+    const access = await runtime.checkMediaAccess('microphone')
+    console.log('microphone access', access)
+    const t = await runtime.askForMediaAccess('microphone')
+    console.log(t)
     if (!recorder.current) {
       recorder.current = new MicRecorder(setVolume, {
         bitRate: 128,

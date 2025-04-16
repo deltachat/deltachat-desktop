@@ -166,6 +166,13 @@ export interface Runtime {
     | undefined
   onResumeFromSleep: (() => void) | undefined
   onToggleNotifications: (() => void) | undefined
+
+  checkMediaAccess: (
+    mediaType: 'microphone' | 'camera'
+  ) => Promise<
+    'not-determined' | 'granted' | 'denied' | 'restricted' | 'unknown'
+  >
+  askForMediaAccess: (mediaType: 'microphone' | 'camera') => Promise<boolean>
 }
 
 export const runtime: Runtime = (window as any).r
