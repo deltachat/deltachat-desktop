@@ -1,5 +1,10 @@
 import debounce from 'debounce'
-import electron, { BrowserWindow, Rectangle, session } from 'electron'
+import electron, {
+  BrowserWindow,
+  Rectangle,
+  session,
+  systemPreferences,
+} from 'electron'
 import { isAbsolute, join, sep } from 'path'
 import { platform } from 'os'
 import { fileURLToPath } from 'url'
@@ -159,11 +164,18 @@ export function init(options: { hidden: boolean }) {
     }
   }
   window.webContents.session.setPermissionCheckHandler((_wc, permission) => {
+    if (systemPreferences.getMediaAccessStatus && permission === 'media') {
+      return systemPreferences.getMediaAccessStatus('camera') === 'granted'
+    }
     return permission_handler(permission as any)
   })
   window.webContents.session.setPermissionRequestHandler(
     (_wc, permission, callback) => {
-      callback(permission_handler(permission))
+      if (systemPreferences.askForMediaAccess && permission === 'media') {
+        systemPreferences.askForMediaAccess('camera').then(callback)
+      } else {
+        callback(permission_handler(permission))
+      }
     }
   )
 
