@@ -136,6 +136,7 @@
 - tauri: improve security a little #4813
 - tauri: improve performance a little #4810
 - tauri: translation fn: added fallback to en when a key doesn't exist in a particular language #4818
+- fixed: Mac ask for Microphone access #4986
 
 <a id="1_54_2"></a>
 
