@@ -40,7 +40,8 @@ export function getBackgroundImageStyle(
     }
     if (bgImg.startsWith('img: ')) {
       const filePath = bgImg.slice(5)
-      switch (runtime.getRuntimeInfo().target) {
+      const target = runtime.getRuntimeInfo().target
+      switch (target) {
         case 'electron': {
           style.backgroundImage = `url("file://${join(
             runtime.getConfigPath(),
@@ -49,9 +50,18 @@ export function getBackgroundImageStyle(
           )}")`
           break
         }
+        case 'tauri': {
+          const base =
+            runtime.getRuntimeInfo()?.tauriSpecific?.scheme.chatBackgroundImage
+          style.backgroundImage = `url("${base}${filePath}")`
+          break
+        }
         case 'browser': {
           style.backgroundImage = `url("/${join('background/', filePath)}")`
           break
+        }
+        default: {
+          const _: never = target
         }
       }
     } else if (bgImg.startsWith('color: ')) {

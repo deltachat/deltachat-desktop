@@ -53,6 +53,7 @@ permissions = [
     "allow-write-temp-file",
     "allow-remove-temp-file",
     "allow-copy-blob-file-to-internal-tmp-dir",
+    "allow-copy-background-image-file",
 
     "allow-on-webxdc-message-changed",
     "allow-on-webxdc-message-deleted",

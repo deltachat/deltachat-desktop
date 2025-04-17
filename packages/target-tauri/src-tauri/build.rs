@@ -49,6 +49,7 @@ fn main() {
             "write_temp_file",
             "remove_temp_file",
             "copy_blob_file_to_internal_tmp_dir",
+            "copy_background_image_file",
             "on_webxdc_message_changed",
             "on_webxdc_message_deleted",
             "on_webxdc_status_update",

@@ -26,6 +26,7 @@ struct BuildInfo {
 #[serde(rename_all = "camelCase")]
 pub(crate) struct TauriSpecificScheme {
     blobs: &'static str,
+    chat_background_image: &'static str,
     webxdc_icon: &'static str,
     stickers: &'static str,
 }
@@ -62,12 +63,14 @@ pub fn get_runtime_info() -> RuntimeInfo {
         #[cfg(not(any(target_os = "windows", target_os = "android")))]
         scheme: TauriSpecificScheme {
             blobs: "dcblob://",
+            chat_background_image: "dcchatbgimage://",
             webxdc_icon: "webxdc-icon://",
             stickers: "dcsticker://",
         },
         #[cfg(any(target_os = "windows", target_os = "android"))]
         scheme: TauriSpecificScheme {
             blobs: "http://dcblob.localhost/",
+            chat_background_image: "http://dcchatbgimage.localhost/",
             webxdc_icon: "http://webxdc-icon.localhost/",
             stickers: "http://dcsticker.localhost/",
         },
