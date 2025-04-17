@@ -1,6 +1,6 @@
 use std::{env::current_dir, path::PathBuf, str::FromStr};
 
-use anyhow::bail;
+use anyhow::{bail, Context};
 use base64::Engine;
 use tauri::{AppHandle, Manager};
 use tokio::{fs::File, io::AsyncReadExt};
@@ -30,7 +30,7 @@ pub async fn handle_deep_link(
         .next()
         .map(|s| s.to_owned());
 
-    if let Some(potential_scheme) = potential_scheme {
+    if let Some(potential_scheme) = potential_scheme.as_ref() {
         if matches!(
             potential_scheme.as_str(),
             "openpgp4fpr" | "dcaccount" | "dclogin" | "mailto"
@@ -44,11 +44,20 @@ pub async fn handle_deep_link(
             return Ok(());
         }
 
-        log::error!("handle_deep_link: scheme {potential_scheme}: is unknown")
+        if potential_scheme != "file" {
+            log::error!("handle_deep_link: scheme {potential_scheme}: is unknown")
+        }
     }
 
     if deeplink_or_xdc.ends_with(".xdc") {
-        let mut path = PathBuf::from_str(&deeplink_or_xdc)?;
+        let mut path = if potential_scheme == Some("file".to_owned()) {
+            let path = deeplink_or_xdc
+                .strip_prefix("file://")
+                .context("failed to remove file scheme prefix from {deeplink_or_xdc}")?;
+            PathBuf::from_str(path)?
+        } else {
+            PathBuf::from_str(&deeplink_or_xdc)?
+        };
         if !path.is_absolute() {
             path = alternative_cwd
                 .unwrap_or(current_dir()?)
@@ -56,7 +65,7 @@ pub async fn handle_deep_link(
         }
 
         if !path.exists() {
-            bail!("path does not exist");
+            bail!("path \"{deeplink_or_xdc}\" does not exist");
         }
 
         let mut file = File::open(&path).await?;
