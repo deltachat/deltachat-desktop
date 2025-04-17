@@ -94,6 +94,10 @@ pub async fn handle_deep_link(
         return Ok(());
     }
 
+    let main_window = app.get_window("main").context("main window not found")?;
+    main_window.show()?;
+    main_window.set_focus()?;
+
     Ok(())
 }
 
