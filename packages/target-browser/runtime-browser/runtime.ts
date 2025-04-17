@@ -13,7 +13,11 @@ import {
 import '@deltachat-desktop/shared/global.d.ts'
 
 import { LocaleData } from '@deltachat-desktop/shared/localize.js'
-import { Runtime } from '@deltachat-desktop/runtime-interface'
+import {
+  MediaAccessStatus,
+  MediaType,
+  Runtime,
+} from '@deltachat-desktop/runtime-interface'
 import { BaseDeltaChat, yerpc } from '@deltachat/jsonrpc-client'
 
 import type { getLogger as getLoggerFunction } from '@deltachat-desktop/shared/logger.js'
@@ -761,6 +765,42 @@ class BrowserRuntime implements Runtime {
       isSupported: false,
       isRegistered: false,
     })
+  }
+  async checkMediaAccess(mediaType: MediaType): Promise<MediaAccessStatus> {
+    return navigator.permissions
+      .query({ name: mediaType as PermissionName })
+      .then(result => {
+        if (result.state === 'granted') {
+          return 'granted'
+        } else if (result.state === 'prompt') {
+          return 'not-determined'
+        } else if (result.state === 'denied') {
+          return 'denied'
+        }
+        return 'unknown'
+      })
+  }
+  askForMediaAccess(mediaType: MediaType): Promise<boolean> {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      this.log.error('askForMediaAccess failed: no mediaDevices')
+      return Promise.resolve(false)
+    } else if (mediaType !== 'microphone') {
+      return navigator.mediaDevices.getUserMedia({ audio: true }).then(
+        stream => {
+          stream.getTracks().forEach(track => track.stop())
+          return true
+        },
+        err => {
+          this.log.error('askForMediaAccess "microphone" failed', err)
+          return false
+        }
+      )
+    } else {
+      this.log.error(
+        `askForMediaAccess failed: mediaType "${mediaType}" not implemented`
+      )
+      return Promise.resolve(false)
+    }
   }
 }
 
