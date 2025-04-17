@@ -93,25 +93,27 @@ export const AudioRecorder = ({
   const tx = useTranslationFunction()
   const [volume, setVolume] = useState(0)
   const recorder = useRef<MicRecorder | null>(null)
-  const  { openDialog } = useDialog()
+  const { openDialog } = useDialog()
+
+  const onAccessDenied = useCallback(() => {
+    openDialog(AlertDialog, {
+      message: tx('perm_explain_access_to_mic_denied'),
+    })
+  }, [openDialog, tx])
 
   const onRecordingStart = async () => {
     const access = await runtime.checkMediaAccess('microphone')
     if (access === 'not-determined') {
       const accessAllowed = await runtime.askForMediaAccess('microphone')
       if (!accessAllowed) {
-        openDialog(AlertDialog, {
-          message: 'Permission needed for recording voice messages'
-        })
+        onAccessDenied()
         return
       }
     } else if (access === 'denied') {
-      openDialog(AlertDialog, {
-        message: 'You need to set permission in system settings!'
-      })
+      onAccessDenied()
       return
     }
-    
+
     if (!recorder.current) {
       recorder.current = new MicRecorder(setVolume, {
         bitRate: 128,
