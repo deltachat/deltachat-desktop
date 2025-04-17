@@ -71,7 +71,7 @@ impl ThemeMetadata {
         let css_var_regex = regex::Regex::new(r#"--(\w*): ?['"](.*?)['"];?"#)?;
 
         let meta_block = meta_block_regex
-            .find(&raw_theme)
+            .find(raw_theme)
             .ok_or(Error::NoMetadataInThemeFile)?
             .as_str();
 

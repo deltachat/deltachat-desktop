@@ -70,9 +70,9 @@ pub(crate) async fn load_and_apply_desktop_settings_on_startup(
     app.state::<TrayManager>()
         .apply_wanted_active_state(app)
         .await?;
-    apply_autostart(&app)?;
+    apply_autostart(app)?;
 
-    if let Err(err) = apply_autostart(&app).context("failed to apply autostart") {
+    if let Err(err) = apply_autostart(app).context("failed to apply autostart") {
         // Not too critical, let's just log.
         error!("{err}")
     };

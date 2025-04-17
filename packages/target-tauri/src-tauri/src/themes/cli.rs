@@ -25,8 +25,8 @@ pub fn run_cli(app: &AppHandle, run_config: &RunConfig) -> Result<(), Error> {
         );
 
         // try to load theme
-        if let Err(_) = block_on(get_theme(app.clone(), theme.to_owned())) {
-            eprintln!("theme with address {theme} was not found or failed to load");
+        if let Err(err) = block_on(get_theme(app.clone(), theme.to_owned())) {
+            eprintln!("theme with address {theme} was not found or failed to load: {err}");
             exit(2)
         }
 
