@@ -100,7 +100,7 @@ build['mac'] = {
   entitlementsInherit: 'build/entitlements.mac.plist',
   extendInfo: {
     NSCameraUsageDescription: 'For scanning qr codes.',
-    NSMicrophoneUsageDescription: 'For recoring voice messages',
+    NSMicrophoneUsageDescription: 'For recording voice messages',
     ITSAppUsesNonExemptEncryption: false,
   },
   gatekeeperAssess: true,

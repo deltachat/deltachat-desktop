@@ -1,10 +1,5 @@
 import debounce from 'debounce'
-import electron, {
-  BrowserWindow,
-  Rectangle,
-  session,
-  systemPreferences,
-} from 'electron'
+import electron, { BrowserWindow, Rectangle, session } from 'electron'
 import { isAbsolute, join, sep } from 'path'
 import { platform } from 'os'
 import { fileURLToPath } from 'url'
