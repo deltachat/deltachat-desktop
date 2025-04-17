@@ -21,6 +21,7 @@ import type { DialogProps } from '../../contexts/DialogContext'
 import AlertDialog from './AlertDialog'
 import { selectedAccountId } from '../../ScreenController'
 import { T } from '@deltachat/jsonrpc-client'
+import { unknownErrorToString } from '../helpers/unknownErrorToString'
 
 /**
  * uses a prefilled LoginForm with existing credentials
@@ -124,10 +125,8 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
           return
         }
       } catch (error) {
-        const errorStr =
-          error instanceof Error ? error.message : JSON.stringify(error)
         openDialog(AlertDialog, {
-          message: tx('proxy_invalid') + '\n' + errorStr,
+          message: tx('proxy_invalid') + '\n' + unknownErrorToString(error),
         })
         return
       }

@@ -18,6 +18,7 @@ import type { T } from '@deltachat/jsonrpc-client'
 import type { QrWithUrl } from '../backend/qr'
 import type { WelcomeQrWithUrl } from '../contexts/InstantOnboardingContext'
 import useChat from './chat/useChat'
+import { unknownErrorToString } from '../components/helpers/unknownErrorToString'
 
 const ALLOWED_QR_CODES_ON_WELCOME_SCREEN: T.Qr['kind'][] = [
   'account',
@@ -64,14 +65,7 @@ export default function useProcessQR() {
         await BackendRemote.rpc.setConfigFromQr(accountId, qrContent)
       } catch (error) {
         openAlertDialog({
-          message:
-            (typeof error === 'object' && error != null
-              ? 'message' in error
-                ? `${error.message}`
-                : 'toString' in error
-                  ? error.toString()
-                  : null
-              : null) ?? 'Failed to setConfigFromQr',
+          message: unknownErrorToString(error),
         })
       }
     },

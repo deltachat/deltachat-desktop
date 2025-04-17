@@ -16,6 +16,7 @@ import { selectedAccountId } from '../../../ScreenController'
 
 import type { DcEventType } from '@deltachat/jsonrpc-client'
 import type { DialogProps } from '../../../contexts/DialogContext'
+import { unknownErrorToString } from '../../helpers/unknownErrorToString'
 
 type Props = {
   backupFile: string
@@ -51,9 +52,7 @@ export default function ImportBackupProgressDialog({
           '1'
         )
       } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message)
-        }
+        setError(unknownErrorToString(err))
         return
       }
       onClose()

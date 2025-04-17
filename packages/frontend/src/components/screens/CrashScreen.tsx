@@ -28,6 +28,7 @@ export class CrashScreen extends React.Component<
     })
   }
 
+  // FYI we also have `unknownErrorToString`.
   errorToText(error: object | Error) {
     if (error instanceof Error) {
       // TODO parse the stack and map the sourcemap to provide a useful stacktrace
