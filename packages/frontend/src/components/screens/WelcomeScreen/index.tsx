@@ -9,9 +9,7 @@ import { getConfiguredAccounts } from '../../../backend/account'
 import { BackendRemote, EffectfulBackendActions } from '../../../backend-com'
 import useDialog from '../../../hooks/dialog/useDialog'
 import AlertDialog from '../../dialogs/AlertDialog'
-import { getLogger } from '@deltachat-desktop/shared/logger'
-
-const log = getLogger('renderer/components/screens/WelcomScreen')
+import { unknownErrorToString } from '../../helpers/unknownErrorToString'
 
 type Props = {
   selectedAccountId: number
@@ -62,15 +60,10 @@ export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
       }
       props.onExitWelcomeScreen()
     } catch (error) {
-      if (error instanceof Error) {
-        openDialog(AlertDialog, {
-          message: error?.message,
-          cb: () => {},
-        })
-      } else {
-        log.error('unexpected error type', error)
-        throw error
-      }
+      openDialog(AlertDialog, {
+        message: unknownErrorToString(error),
+        cb: () => {},
+      })
     }
   }
 

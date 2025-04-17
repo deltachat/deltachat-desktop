@@ -17,6 +17,7 @@ import useTranslationFunction from '../../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
 import { runtime } from '@deltachat-desktop/runtime-interface'
+import { unknownErrorToString } from '../../helpers/unknownErrorToString'
 
 const log = getLogger('renderer/receive_backup')
 
@@ -52,9 +53,7 @@ export function ReceiveBackupProgressDialog({
         log.debug(`Starting remote backup import of ${QrWithToken}`)
         await BackendRemote.rpc.getBackup(accountId, QrWithToken)
       } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message)
-        }
+        setError(unknownErrorToString(err))
         return
       }
       onClose()
