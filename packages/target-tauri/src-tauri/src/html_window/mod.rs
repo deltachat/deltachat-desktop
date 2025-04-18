@@ -113,15 +113,20 @@ pub(crate) async fn open_html_window(
         .inner_size(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT)
         .build()?;
 
+    let mut header_webview_builder = WebviewBuilder::new(
+        format!("{window_id}-header"),
+        WebviewUrl::App(
+            PathBuf::from_str("tauri_html_email_view/html_email_view.html")
+                .expect("path conversion failed"),
+        ),
+    );
+    #[cfg(target_os = "macos")]
+    {
+        header_webview_builder = header_webview_builder.allow_link_preview(false);
+    }
+
     let header_view = window.add_child(
-        WebviewBuilder::new(
-            format!("{window_id}-header"),
-            WebviewUrl::App(
-                PathBuf::from_str("tauri_html_email_view/html_email_view.html")
-                    .expect("path conversion failed"),
-            ),
-        )
-        .allow_link_preview(false),
+        header_webview_builder,
         LogicalPosition::new(0., 0.),
         LogicalSize::new(DEFAULT_WINDOW_WIDTH, HEADER_HEIGHT),
     )?;
@@ -146,7 +151,6 @@ pub(crate) async fn open_html_window(
         WebviewUrl::CustomProtocol(initial_url.clone()),
     )
     .disable_javascript()
-    .allow_link_preview(false)
     .on_navigation(move |url| {
         let tx: tauri::State<'_, TranslationState> = app_for_nav.state::<TranslationState>();
         if url.to_string() == "about:blank" {
@@ -241,6 +245,10 @@ pub(crate) async fn open_html_window(
     {
         mail_view_builder = mail_view_builder.incognito(true);
         // on apple this uses nonPersistent WKWebsiteDataStore
+    }
+    #[cfg(target_os = "macos")]
+    {
+        mail_view_builder = mail_view_builder.allow_link_preview(false);
     }
     let mail_view = window.add_child(
         mail_view_builder,

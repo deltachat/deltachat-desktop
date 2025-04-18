@@ -355,7 +355,7 @@ pub(crate) async fn open_webxdc<'a>(
         window_builder = window_builder.inner_size(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
     }
 
-    #[cfg(desktop)]
+    #[cfg(target_os = "macos")]
     {
         window_builder = window_builder.allow_link_preview(false);
     }

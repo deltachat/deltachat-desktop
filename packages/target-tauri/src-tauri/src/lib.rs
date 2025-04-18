@@ -17,12 +17,11 @@ use state::{
     translations::TranslationState, tray_manager::TrayManager,
     webxdc_instances::WebxdcInstancesState,
 };
-use tauri::{async_runtime::block_on, Manager};
-use tauri::{Manager, WebviewUrl, WebviewWindowBuilder};
+use tauri::{async_runtime::block_on, Manager, WebviewUrl, WebviewWindowBuilder};
+
 use tauri_plugin_log::{Target, TargetKind};
 
 use tray::is_tray_icon_active;
-use util::csp::add_custom_schemes_to_csp_for_window_and_android;
 
 mod app_path;
 mod autostart;
@@ -233,12 +232,22 @@ pub fn run() {
         .setup(move |app| {
             app.manage(run_config.clone());
 
-            let main_window =
-                WebviewWindowBuilder::new(app, "main", WebviewUrl::App("tauri_main.html".into()))
-                    .allow_link_preview(false)
-                    .title("Delta Chat Tauri")
-                    .inner_size(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT)
-                    .build()?;
+            let main_window = {
+                let mut window_builder = WebviewWindowBuilder::new(
+                    app,
+                    "main",
+                    WebviewUrl::App("tauri_main.html".into()),
+                )
+                .title("Delta Chat Tauri")
+                .inner_size(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
+
+                #[cfg(target_os = "macos")]
+                {
+                    window_builder = window_builder.allow_link_preview(false);
+                }
+
+                window_builder.build()?
+            };
 
             // Create missing directories for iOS (quick fix, better fix this upstream in tauri)
             #[cfg(target_os = "ios")]

@@ -85,9 +85,12 @@ pub(crate) async fn open_help_window(
         help_window.navigate(url)?;
         help_window
     } else {
-        tauri::WebviewWindowBuilder::new(&app, "help", app_url.clone())
-            .allow_link_preview(false)
-            .build()?
+        let mut window_builder = tauri::WebviewWindowBuilder::new(&app, "help", app_url.clone());
+        #[cfg(target_os = "macos")]
+        {
+            window_builder = window_builder.allow_link_preview(false);
+        }
+        window_builder.build()?
     };
     #[cfg(not(any(target_os = "ios", target_os = "android")))]
     {
