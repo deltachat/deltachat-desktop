@@ -47,13 +47,15 @@ console.log("hello from INIT_SCRIPT")
 
 // remove peer connection by overwriting api
 try {
-window.RTCPeerConnection = ()=>{};
-RTCPeerConnection = ()=>{};
-} catch (e){console.error("failed to overwrite RTCPeerConnection apis",e)}
+    window.RTCPeerConnection = () => {};
+    RTCPeerConnection = () => {};
+} catch (e) {
+    console.error("failed to overwrite RTCPeerConnection apis",e)
+}
 try {
-    window.webkitRTCPeerConnection = ()=>{};
-    webkitRTCPeerConnection = ()=>{};
-} catch (e){}
+    window.webkitRTCPeerConnection = () => {};
+    webkitRTCPeerConnection = () => {};
+} catch (e) {}
 "#;
 
 #[cfg(desktop)]
