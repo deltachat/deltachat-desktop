@@ -63,7 +63,7 @@ pub fn get_runtime_info() -> RuntimeInfo {
         #[cfg(not(any(target_os = "windows", target_os = "android")))]
         scheme: TauriSpecificScheme {
             blobs: "dcblob://",
-            chat_background_image: "dcchatbgimage://",
+            chat_background_image: "dcchatbgimage://dummy.host/",
             webxdc_icon: "webxdc-icon://",
             stickers: "dcsticker://",
         },
