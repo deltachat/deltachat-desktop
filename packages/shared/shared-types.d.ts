@@ -107,6 +107,7 @@ export type RuntimeInfo = {
   tauriSpecific?: {
     scheme: {
       blobs: string
+      chatBackgroundImage: string
       webxdcIcon: string
       stickers: string
     }

@@ -33,6 +33,7 @@ mod help_window;
 mod html_window;
 mod i18n;
 // menus are not available on mobile
+mod chat_background_image;
 #[cfg(desktop)]
 mod menus;
 mod network_isolation_dummy_proxy;
@@ -167,6 +168,7 @@ pub fn run() {
             temp_file::write_temp_file,
             temp_file::remove_temp_file,
             temp_file::copy_blob_file_to_internal_tmp_dir,
+            chat_background_image::copy_background_image_file,
             // not yet available on mobile
             #[cfg(desktop)]
             webxdc::commands_main_window::on_webxdc_message_changed,
@@ -220,6 +222,10 @@ pub fn run() {
         )
         .register_asynchronous_uri_scheme_protocol("dcblob", blobs::delta_blobs_protocol)
         .register_asynchronous_uri_scheme_protocol("dcsticker", stickers::delta_stickers_protocol)
+        .register_asynchronous_uri_scheme_protocol(
+            "dcchatbgimage",
+            chat_background_image::delta_chat_background_image_protocol,
+        )
         .register_asynchronous_uri_scheme_protocol(
             "email",
             html_window::email_scheme::email_protocol,

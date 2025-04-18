@@ -40,14 +40,30 @@ export function getBackgroundImageStyle(
     }
     if (bgImg.startsWith('img: ')) {
       const filePath = bgImg.slice(5)
-      style.backgroundImage =
-        runtime.getRuntimeInfo().target === 'browser'
-          ? `url("/${join('background/', filePath)}")`
-          : `url("file://${join(
-              runtime.getConfigPath(),
-              'background/',
-              filePath
-            )}")`
+      const target = runtime.getRuntimeInfo().target
+      switch (target) {
+        case 'electron': {
+          style.backgroundImage = `url("file://${join(
+            runtime.getConfigPath(),
+            'background/',
+            filePath
+          )}")`
+          break
+        }
+        case 'tauri': {
+          const base =
+            runtime.getRuntimeInfo()?.tauriSpecific?.scheme.chatBackgroundImage
+          style.backgroundImage = `url("${base}${filePath}")`
+          break
+        }
+        case 'browser': {
+          style.backgroundImage = `url("/${join('background/', filePath)}")`
+          break
+        }
+        default: {
+          const _: never = target
+        }
+      }
     } else if (bgImg.startsWith('color: ')) {
       style.backgroundColor = bgImg.slice(7)
       style.backgroundImage = 'none'

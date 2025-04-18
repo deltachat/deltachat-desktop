@@ -605,10 +605,10 @@ class TauriRuntime implements Runtime {
     }
   }
   saveBackgroundImage(
-    _file: string,
-    _isDefaultPicture: boolean
+    srcPath: string,
+    isDefaultPicture: boolean
   ): Promise<string> {
-    throw new Error('Method not implemented.49')
+    return invoke('copy_background_image_file', { srcPath, isDefaultPicture })
   }
   onDragFileOut(_file: string): void {
     throw new Error('Method not implemented.50')

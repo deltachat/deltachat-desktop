@@ -37,7 +37,7 @@
         "script-src": "'self' 'wasm-unsafe-eval'",
         "worker-src": "blob:",
         "child-src": "blob:",
-        "img-src": "'self' data: blob: dcblob: webxdc-icon: dcsticker:",
+        "img-src": "'self' data: blob: dcblob: webxdc-icon: dcsticker: dcchatbgimage:",
         "media-src": "'self' dcblob:"
       }
       // TODO postponed to later
