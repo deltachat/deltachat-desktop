@@ -146,7 +146,7 @@ async fn copy_background_image_file_<R: tauri::Runtime>(
             .await
             .context("failed to delete the old chat background image file")
             .inspect_err(|err| log::error!("{err}"))
-            .inspect(|_| log::info!("deleted old chat bacgrkound file {old_file_path:?}"))
+            .inspect(|_| log::info!("deleted old chat background file {old_file_path:?}"))
             .ok();
         // After removing one file, don't try to remove any more.
         break;
