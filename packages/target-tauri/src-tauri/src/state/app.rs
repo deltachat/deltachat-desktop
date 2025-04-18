@@ -1,4 +1,4 @@
-use std::{path::PathBuf, sync::Mutex, time::SystemTime};
+use std::{path::PathBuf, time::SystemTime};
 
 use anyhow::{bail, Context};
 use log::info;
@@ -6,6 +6,7 @@ use tauri::AppHandle;
 
 #[cfg(desktop)]
 use tauri::Manager;
+use tokio::sync::Mutex;
 
 use crate::{
     i18n::get_all_languages,

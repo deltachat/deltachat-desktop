@@ -80,46 +80,38 @@ fn deltachat_jsonrpc_request(
 }
 
 #[tauri::command]
-fn ui_ready(state: tauri::State<AppState>) -> Result<(), String> {
+async fn ui_ready(state: tauri::State<'_, AppState>) -> Result<(), String> {
     // TODO: theme update if theme was set via cli
 
-    match state.inner.lock() {
-        Ok(mut lock) => {
-            lock.ui_ready = true;
-        }
-        Err(err) => return Err(format!("failed to aquire lock {err:#}")),
-    };
-
+    let mut lock = state.inner.lock().await;
+    lock.ui_ready = true;
     state.log_duration_since_startup("ui_ready");
     Ok(())
 }
 
 #[tauri::command]
-fn ui_frontend_ready(
+async fn ui_frontend_ready(
     app: AppHandle,
     rc: tauri::State<'_, RunConfig>,
     state: tauri::State<'_, AppState>,
 ) -> Result<(), String> {
-    match state.inner.lock() {
-        Ok(mut lock) => {
-            if !lock.ui_frontend_ready {
-                // don't run again on reload
-                if let Some(deeplink_or_xdc) = lock.deeplink.take().or(rc.deeplink.clone()) {
-                    let app_clone = app.clone();
-                    let deeplink_or_xdc = deeplink_or_xdc.to_owned();
-                    spawn(async move {
-                        if let Err(err) = handle_deep_link(&app_clone, None, deeplink_or_xdc).await
-                        {
-                            log::error!("error handling deeplink: {err:?}");
-                        }
-                    });
-                }
-            }
+    let mut lock = state.inner.lock().await;
 
-            lock.ui_frontend_ready = true;
+    if !lock.ui_frontend_ready {
+        // don't run again on reload
+        if let Some(deeplink_or_xdc) = lock.deeplink.take().or(rc.deeplink.clone()) {
+            let app_clone = app.clone();
+            let deeplink_or_xdc = deeplink_or_xdc.to_owned();
+            spawn(async move {
+                if let Err(err) = handle_deep_link(&app_clone, None, deeplink_or_xdc).await {
+                    log::error!("error handling deeplink: {err:?}");
+                }
+            });
         }
-        Err(err) => return Err(format!("failed to aquire lock {err:#}")),
-    };
+    }
+
+    lock.ui_frontend_ready = true;
+
     state.log_duration_since_startup("ui_frontend_ready");
     Ok(())
 }
@@ -345,7 +337,8 @@ pub fn run() -> i32 {
                 // why do we use debug here at the moment?
                 // because the message "[DEBUG][portmapper] failed to get a port mapping deadline has elapsed" looks like important
                 // info for debugging add backup transfer feature. - so better be safe and set it to debug for now.
-                .level_for("portmapper", log::LevelFilter::Debug);
+                .level_for("portmapper", log::LevelFilter::Debug)
+                .level_for("tao", log::LevelFilter::Trace);
 
             if run_config.log_debug {
                 logger_builder = logger_builder.level(log::LevelFilter::Debug);
@@ -547,27 +540,27 @@ pub fn run() -> i32 {
         // tauri::RunEvent::ExitRequested { code, api, .. } => {}
         #[cfg(target_os = "macos")]
         tauri::RunEvent::Opened { urls } => {
-            if let Some(url) = urls.get(0).map(|s| s.to_string()) {
-                let app_state = app_handle.state::<AppState>();
-                match app_state.inner().inner.lock() {
-                    Ok(mut lock) => {
-                        if !lock.ui_frontend_ready {
-                            lock.deeplink.replace(url);
-                        } else {
-                            drop(lock);
-                            let app_clone = app_handle.clone();
-                            spawn(async move {
-                                if let Err(err) = handle_deep_link(&app_clone, None, url).await {
-                                    log::error!("error handling deeplink: {err:?}");
-                                }
-                            });
-                        }
-                    }
-                    Err(err) => {
-                        log::error!("failed to aquire lock on AppState:{err:?}")
-                    }
-                }
-            }
+            // if let Some(url) = urls.get(0).map(|s| s.to_string()) {
+            //     let app_state = app_handle.state::<AppState>();
+            //     match app_state.inner().inner.try_lock() {
+            //         Ok(mut lock) => {
+            //             if !lock.ui_frontend_ready {
+            //                 lock.deeplink.replace(url);
+            //             } else {
+            //                 drop(lock);
+            //                 let app_clone = app_handle.clone();
+            //                 spawn(async move {
+            //                     if let Err(err) = handle_deep_link(&app_clone, None, url).await {
+            //                         log::error!("error handling deeplink: {err:?}");
+            //                     }
+            //                 });
+            //             }
+            //         }
+            //         Err(err) => {
+            //             log::error!("failed to aquire lock on AppState:{err:?}")
+            //         }
+            //     }
+            // }
         }
         #[cfg(target_os = "macos")]
         tauri::RunEvent::Reopen { .. } => {
