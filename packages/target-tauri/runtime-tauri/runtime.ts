@@ -104,6 +104,9 @@ export class TauriDeltaChat extends BaseDeltaChat<TauriTransport> {
   }
 }
 
+// Probably not super reliable, but we don't need it to be.
+const isWindowsOS = navigator.userAgent.includes('Win')
+
 class TauriRuntime implements Runtime {
   constructor() {
     this.getActiveTheme = this.getActiveTheme.bind(this)
@@ -531,10 +534,12 @@ class TauriRuntime implements Runtime {
     // According to the docs, `setBadgeCount` is unsupported on Windows,
     // and we should use `setOverlayIcon` instead.
     window.setBadgeCount(value === 0 ? undefined : value)
-    // Yes, this won't show the count.
-    window.setOverlayIcon?.(
-      value === 0 ? undefined : 'images/tray/unread-badge.png'
-    )
+    if (isWindowsOS) {
+      // Yes, this won't show the count.
+      window.setOverlayIcon?.(
+        value === 0 ? undefined : 'images/tray/unread-badge.png'
+      )
+    }
 
     invoke('update_tray_icon_badge', { counter: value })
   }
