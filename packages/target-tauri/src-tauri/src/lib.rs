@@ -15,9 +15,13 @@ use settings::{
     MINIMIZE_TO_TRAY_DEFAULT,
 };
 use state::{
-    app::AppState, deltachat::DeltaChatAppState, html_email_instances::HtmlEmailInstancesState,
-    main_window_channels::MainWindowChannels, menu_manager::MenuManager,
-    translations::TranslationState, tray_manager::TrayManager,
+    app::{AppState, InnerAppState},
+    deltachat::DeltaChatAppState,
+    html_email_instances::HtmlEmailInstancesState,
+    main_window_channels::MainWindowChannels,
+    menu_manager::MenuManager,
+    translations::TranslationState,
+    tray_manager::TrayManager,
     webxdc_instances::WebxdcInstancesState,
 };
 
@@ -185,6 +189,11 @@ pub fn run() -> i32 {
             }));
     }
 
+    // sepcified here, so the open handler does not rely on appstate to be ready
+    // (that it can be used "outside" of tauri)
+    let inner_appstate = InnerAppState::new();
+    let cloned_inner_appstate = inner_appstate.clone();
+
     let app = builder
         .invoke_handler(tauri::generate_handler![
             // When adding a command, don't forget to also add it
@@ -337,8 +346,8 @@ pub fn run() -> i32 {
                 // why do we use debug here at the moment?
                 // because the message "[DEBUG][portmapper] failed to get a port mapping deadline has elapsed" looks like important
                 // info for debugging add backup transfer feature. - so better be safe and set it to debug for now.
-                .level_for("portmapper", log::LevelFilter::Debug)
-                .level_for("tao", log::LevelFilter::Trace);
+                // .level_for("tao", log::LevelFilter::Trace)
+                .level_for("portmapper", log::LevelFilter::Debug);
 
             if run_config.log_debug {
                 logger_builder = logger_builder.level(log::LevelFilter::Debug);
@@ -381,6 +390,7 @@ pub fn run() -> i32 {
 
             app.manage(tauri::async_runtime::block_on(AppState::try_new(
                 app,
+                cloned_inner_appstate,
                 startup_timestamp,
             ))?);
             app.manage(MainWindowChannels::new());
@@ -535,32 +545,34 @@ pub fn run() -> i32 {
         app_handle.exit(0);
     });
 
+    #[cfg(target_os = "macos")]
+    let cloned_inner_appstate = inner_appstate.clone();
+
     #[allow(clippy::single_match)]
     let exit_code = app.run_return(|app_handle, run_event| match run_event {
         // tauri::RunEvent::ExitRequested { code, api, .. } => {}
         #[cfg(target_os = "macos")]
         tauri::RunEvent::Opened { urls } => {
-            // if let Some(url) = urls.get(0).map(|s| s.to_string()) {
-            //     let app_state = app_handle.state::<AppState>();
-            //     match app_state.inner().inner.try_lock() {
-            //         Ok(mut lock) => {
-            //             if !lock.ui_frontend_ready {
-            //                 lock.deeplink.replace(url);
-            //             } else {
-            //                 drop(lock);
-            //                 let app_clone = app_handle.clone();
-            //                 spawn(async move {
-            //                     if let Err(err) = handle_deep_link(&app_clone, None, url).await {
-            //                         log::error!("error handling deeplink: {err:?}");
-            //                     }
-            //                 });
-            //             }
-            //         }
-            //         Err(err) => {
-            //             log::error!("failed to aquire lock on AppState:{err:?}")
-            //         }
-            //     }
-            // }
+            if let Some(url) = urls.get(0).map(|s| s.to_string()) {
+                match cloned_inner_appstate.try_lock() {
+                    Ok(mut lock) => {
+                        if !lock.ui_frontend_ready {
+                            lock.deeplink.replace(url);
+                        } else {
+                            drop(lock);
+                            let app_clone = app_handle.clone();
+                            spawn(async move {
+                                if let Err(err) = handle_deep_link(&app_clone, None, url).await {
+                                    log::error!("error handling deeplink: {err:?}");
+                                }
+                            });
+                        }
+                    }
+                    Err(err) => {
+                        log::error!("failed to aquire lock on AppState:{err:?}")
+                    }
+                }
+            }
         }
         #[cfg(target_os = "macos")]
         tauri::RunEvent::Reopen { .. } => {
