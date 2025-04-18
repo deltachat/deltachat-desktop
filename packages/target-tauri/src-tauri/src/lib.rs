@@ -401,7 +401,7 @@ pub fn run() {
                 let _ = main_window.hide();
             }
 
-            themes::cli::run_cli(&app.handle(), &run_config)?;
+            themes::cli::run_cli(app.handle(), &run_config)?;
 
             Ok(())
         })
