@@ -7,7 +7,6 @@ export type msgStatus =
   | 'draft'
   | 'delivered'
   | 'read'
-  | 'sent'
   | 'in_fresh'
   | 'in_seen'
   | 'in_noticed'
