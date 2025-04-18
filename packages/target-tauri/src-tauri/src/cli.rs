@@ -8,6 +8,8 @@ use crate::run_config::RunConfig;
 #[derive(Parser)]
 #[command(about, long_about = None)]
 pub struct Cli {
+    /// deeplink or webxdc file to open
+    deeplink: Option<String>,
     #[cfg(target_os = "macos")]
     /// Start deltachat in minimized mode
     #[arg(short, long)]
@@ -43,9 +45,18 @@ pub struct Cli {
     version: bool,
 }
 
-pub fn parse_cli_options() -> RunConfig {
-    let mut cli = Cli::parse();
+pub fn parse_cli_options_from_args(args: Vec<String>) -> RunConfig {
+    let cli = Cli::parse_from(args);
+    options_from_cli(cli)
+}
 
+pub fn parse_cli_options() -> RunConfig {
+    let cli = Cli::parse();
+    options_from_cli(cli)
+}
+
+fn options_from_cli(cli: Cli) -> RunConfig {
+    let mut cli = cli;
     if cli.version {
         println!(
             r"Delta Tauri {} (git: {}, built on {})
@@ -72,6 +83,7 @@ Webview: {:?}",
     cli.dev_mode = cli.dev_mode || cfg!(debug_assertions);
 
     RunConfig {
+        deeplink: cli.deeplink,
         log_debug: cli.dev_mode || cli.log_debug,
         log_to_console: cli.dev_mode || cli.log_to_console,
         devtools: cli.dev_mode,

@@ -68,6 +68,10 @@ type MainWindowEvents =
   | {
       event: 'onThemeUpdate'
     }
+  | {
+      event: 'deepLinkOpened'
+      data: string
+    }
 
 const events = new Channel<MainWindowEvents>()
 const jsonrpc = new Channel<yerpc.Message>()
@@ -344,6 +348,8 @@ class TauriRuntime implements Runtime {
       } else if (event.event === 'onThemeUpdate') {
         this.log.debug('on theme update')
         this.onThemeUpdate?.()
+      } else if (event.event === 'deepLinkOpened') {
+        this.onOpenQrUrl?.(event.data)
       }
     }
     window
