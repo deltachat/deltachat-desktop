@@ -1,4 +1,4 @@
-use std::{path::PathBuf, time::SystemTime};
+use std::{path::PathBuf, sync::Arc, time::SystemTime};
 
 use anyhow::{bail, Context};
 use log::info;
@@ -20,8 +20,14 @@ pub(crate) struct InnerAppState {
     pub(crate) deeplink: Option<String>,
 }
 
+impl InnerAppState {
+    pub(crate) fn new() -> Arc<Mutex<Self>> {
+        Arc::new(Mutex::new(InnerAppState::default()))
+    }
+}
+
 pub(crate) struct AppState {
-    pub(crate) inner: Mutex<InnerAppState>,
+    pub(crate) inner: Arc<Mutex<InnerAppState>>,
     pub(crate) startup_timestamp: SystemTime,
     pub(crate) current_log_file_path: String,
 
@@ -34,6 +40,7 @@ pub(crate) struct AppState {
 impl AppState {
     pub(crate) async fn try_new(
         app: &tauri::App,
+        inner: Arc<Mutex<InnerAppState>>,
         startup_timestamp: SystemTime,
     ) -> anyhow::Result<Self> {
         let handle = app.handle().clone();
@@ -51,7 +58,7 @@ impl AppState {
         let all_languages_for_menu = get_all_languages(app.handle()).await?;
 
         Ok(Self {
-            inner: Mutex::new(InnerAppState::default()),
+            inner,
             startup_timestamp,
             current_log_file_path,
             all_languages_for_menu,
