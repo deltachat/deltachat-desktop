@@ -33,7 +33,14 @@ const files = await walk({
 let found = 0
 
 for (const file of files) {
-  if (!file.endsWith('.ts')) {
+  if (
+    !file.endsWith('.ts') &&
+    !file.endsWith('.js') &&
+    !file.endsWith('.mjs') &&
+    !file.endsWith('.mts') &&
+    !file.endsWith('.tsx') &&
+    !file.endsWith('.jsx')
+  ) {
     continue
   }
 
@@ -47,7 +54,7 @@ for (const file of files) {
 
     const lineContainsConsoleLog =
       line.indexOf('console.') !== -1 &&
-      /console.(debug|log|info|error)\(/.test(line) === true
+      /console.(debug|log|info|warn|error)\(/.test(line) === true
 
     if (!lineContainsConsoleLog) continue
 
