@@ -9,7 +9,7 @@ declare global {
     exp: todo
     __userFeedback: (message: userFeedback | false) => void
     __changeScreen: (screen: Screens) => void
-    __selectAccount: (accountId: number) => Promise<void>
+    __selectAccount: (accountId: number) => Promise<boolean>
     readonly __selectedAccountId: number | undefined
     __screen: Screens
     readonly __contextMenuActive: boolean
