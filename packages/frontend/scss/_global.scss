@@ -27,6 +27,15 @@ body {
   }
 }
 
+#color-input-wrapper {
+  position: absolute;
+  touch-action: none;
+  z-index: 0;
+  user-select: none;
+  pointer-events: none;
+  opacity: 0;
+}
+
 ol,
 ul {
   list-style: none;

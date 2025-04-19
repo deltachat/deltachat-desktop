@@ -70,6 +70,8 @@
 - fix error messages not being shown on some errors, e.g. when QR scan action fails
 - tauri: fix: sticker picker previews not working
 - tauri: fix emoji picker being super ugly
+- tauri: fix color picker appearing during initial page load
+- tauri: fix fullscreen media pan acting a little weird
 - tauri: use current locale in "Help" window when opening it through menu
 - tauri: fix launching a second instance of Delta Chat not focusing the main window if it's closed
 - fix chatlist items sometimes not updating #4975
