@@ -95,8 +95,11 @@ export function keyDownEvent2Action(
       // disabled until we find a better keycombination (see https://github.com/deltachat/deltachat-desktop/issues/1796)
       //   return KeybindAction.ChatList_ScrollToSelectedChat
       // }
+    } else if (
+      (ev.metaKey || ev.ctrlKey) &&
       // fallback to KeyF code for keyboard layouts without f key
-    } else if (ev.ctrlKey && (ev.key === 'f' || ev.code === 'KeyF')) {
+      (ev.key === 'f' || ev.code === 'KeyF')
+    ) {
       // https://github.com/deltachat/deltachat-desktop/issues/4579
       if (ev.shiftKey) {
         return KeybindAction.ChatList_SearchInChat
