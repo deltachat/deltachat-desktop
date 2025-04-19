@@ -22,9 +22,12 @@ import type {
 import '@deltachat-desktop/shared/global.d.ts'
 
 import type {
+  MediaAccessStatus,
+  MediaType,
   Runtime,
   RuntimeAppPath,
 } from '@deltachat-desktop/runtime-interface'
+
 import { BaseDeltaChat, yerpc } from '@deltachat/jsonrpc-client'
 import type { LocaleData } from '@deltachat-desktop/shared/localize.js'
 import type {
@@ -644,6 +647,12 @@ class TauriRuntime implements Runtime {
     | undefined
   onResumeFromSleep: (() => void) | undefined
   onToggleNotifications: (() => void) | undefined
+  checkMediaAccess(_mediaType: MediaType): Promise<MediaAccessStatus> {
+    throw new Error('Method not implemented.')
+  }
+  askForMediaAccess(_mediaType: MediaType): Promise<boolean> {
+    throw new Error('Method not implemented.')
+  }
 }
 
 ;(window as any).r = new TauriRuntime()
