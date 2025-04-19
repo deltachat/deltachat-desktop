@@ -85,6 +85,7 @@ pub(crate) async fn open_help_window(
         help_window.navigate(url)?;
         help_window
     } else {
+        #[allow(unused_mut)]
         let mut window_builder = tauri::WebviewWindowBuilder::new(&app, "help", app_url.clone());
         #[cfg(target_os = "macos")]
         {

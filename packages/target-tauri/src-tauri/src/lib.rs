@@ -233,6 +233,7 @@ pub fn run() {
             app.manage(run_config.clone());
 
             let main_window = {
+                #[allow(unused_mut)]
                 let mut window_builder = WebviewWindowBuilder::new(
                     app,
                     "main",

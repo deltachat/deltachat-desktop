@@ -113,6 +113,7 @@ pub(crate) async fn open_html_window(
         .inner_size(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT)
         .build()?;
 
+    #[allow(unused_mut)]
     let mut header_webview_builder = WebviewBuilder::new(
         format!("{window_id}-header"),
         WebviewUrl::App(
