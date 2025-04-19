@@ -88,6 +88,10 @@ pub(crate) fn delta_stickers_protocol<R: tauri::Runtime>(
                     .join(file_name);
                 // trace!("file_path: {file_path:?}");
 
+                let mut components_rev = file_path.components().rev();
+                assert_eq!(components_rev.next().unwrap().as_os_str(), file_name);
+                assert_eq!(components_rev.next().unwrap().as_os_str(), pack_folder);
+                assert_eq!(components_rev.next().unwrap().as_os_str(), "stickers");
                 match fs::read(&file_path).await {
                     Ok(blob) => {
                         responder.respond(

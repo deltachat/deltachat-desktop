@@ -304,6 +304,17 @@ pub(crate) async fn open_webxdc<'a>(
         .as_ref()
         .map_err(|_err| Error::BlackholeProxyUnavailable)?;
 
+    #[cfg(not(any(target_os = "windows", target_os = "android")))]
+    assert_eq!(
+        initial_url.origin_no_opaque(),
+        ("webxdc", Some(url::Host::Domain("dummy.host")), None)
+    );
+    #[cfg(any(target_os = "windows", target_os = "android"))]
+    assert_eq!(
+        initial_url.origin_no_opaque(),
+        ("http", Some(url::Host::Domain("webxdc.localhost")), None)
+    );
+
     let mut window_builder = WebviewWindowBuilder::new(
         &app,
         &window_id,

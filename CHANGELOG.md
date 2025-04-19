@@ -51,7 +51,7 @@
 - improve attachment menu ordering #5000
 
 ### Fixed
-- tauri: improve security #4826, #4936, #4937, #4944
+- tauri: improve security #4826, #4936, #4937, #4944, #4959
 - improve fatal error dialog readability by removing color from deltachat-rpc-server errors
 - prevent dragging around of webxdc icon #4740
 - tauri: clear temp folder on exit #4839

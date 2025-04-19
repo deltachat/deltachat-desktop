@@ -1,4 +1,4 @@
-use std::{fmt::Display, fs::exists, path::PathBuf};
+use std::{ffi::OsStr, fmt::Display, fs::exists, path::PathBuf};
 
 use base64::Engine;
 use log::{info, warn};
@@ -64,6 +64,13 @@ async fn create_tmp_file(app: &AppHandle, name: &str) -> Result<(File, PathBuf),
         .file_name()
         .ok_or(Error::InvalidFileName)?;
     let file_path = dir.join(file_name);
+
+    assert!(file_path.components().last().unwrap().as_os_str() == file_name);
+    assert!(file_path
+        .components()
+        .rev()
+        .skip(1)
+        .any(|c| c.as_os_str() == OsStr::new(TMP_FOLDER_NAME)));
     let file_handle = File::create(&file_path).await?;
 
     Ok((file_handle, file_path))
@@ -83,6 +90,14 @@ async fn delete_tmp_file(app: &AppHandle, path: SafePathBuf) -> Result<(), Error
         return Err(Error::PathToDeleteOutsideOfTempDir);
     }
     if resolved_path.try_exists()? {
+        assert!(resolved_path
+            .components()
+            .rev()
+            .skip(1)
+            .any(|c| c.as_os_str() == OsStr::new(TMP_FOLDER_NAME)));
+        assert!(!resolved_path
+            .components()
+            .any(|c| matches!(c, std::path::Component::ParentDir)));
         remove_file(resolved_path).await?
         // empty directory remains, but that is not a problem as the name is random and they are cleared on restart.
     }
@@ -109,6 +124,10 @@ pub(crate) async fn clear_tmp_folder(app: &AppHandle) -> Result<(), Error> {
     }
 
     let mut items = 0;
+    assert!(tmp_folder
+        .components()
+        .rev()
+        .any(|c| c.as_os_str() == OsStr::new(TMP_FOLDER_NAME)));
     let mut entries = read_dir(tmp_folder).await?;
     while let Some(entry) = entries.next_entry().await? {
         if entry.metadata().await?.is_dir() {
