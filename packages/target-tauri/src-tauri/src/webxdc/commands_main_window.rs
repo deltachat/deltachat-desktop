@@ -356,6 +356,11 @@ pub(crate) async fn open_webxdc<'a>(
         window_builder = window_builder.inner_size(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT);
     }
 
+    #[cfg(target_os = "macos")]
+    {
+        window_builder = window_builder.allow_link_preview(false);
+    }
+
     window_builder = set_data_store(&app, window_builder, account_id, message_id).await?;
 
     let window = window_builder.build()?;

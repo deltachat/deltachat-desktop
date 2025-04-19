@@ -80,6 +80,7 @@
 
 ### Removed
 - remove experimental option to disable IMAP IDLE #4991
+- tauri: disable long press link preview
 
 <a id="1_56_0"></a>
 
