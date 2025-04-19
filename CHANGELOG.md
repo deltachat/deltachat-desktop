@@ -76,6 +76,7 @@
 - fix sticker folder not resolved on windows #4939
 - tauri: improve performance a little #4812
 - settings: fix: wait for setting to be applied before calling callback #4754
+- tauri: prevent webrtc from being accessed in webxdc apps #4851
 
 ### Removed
 - remove experimental option to disable IMAP IDLE #4991

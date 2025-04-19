@@ -41,20 +41,21 @@ use crate::{
 use super::{commands::WebxdcUpdate, error::Error};
 
 const INIT_SCRIPT: &str = r#"
+// keep this log line as long as we are testing
+// to easily see that it is called from every frame
 console.log("hello from INIT_SCRIPT")
-// this is only run once, not in every iframe, we need an api that is run in every iframe
-// so documentation for this is wrong
-// atleast on macOS
 
-// attempt to remove peer connection on macOS
+// remove peer connection by overwriting api
 try {
-window.RTCPeerConnection = ()=>{};
-RTCPeerConnection = ()=>{};
-} catch (e){console.error("failed to overwrite RTCPeerConnection apis",e)}
+    window.RTCPeerConnection = () => {};
+    RTCPeerConnection = () => {};
+} catch (e) {
+    console.error("failed to overwrite RTCPeerConnection apis",e)
+}
 try {
-    window.webkitRTCPeerConnection = ()=>{};
-    webkitRTCPeerConnection = ()=>{};
-} catch (e){}
+    window.webkitRTCPeerConnection = () => {};
+    webkitRTCPeerConnection = () => {};
+} catch (e) {}
 "#;
 
 #[cfg(desktop)]
@@ -309,7 +310,7 @@ pub(crate) async fn open_webxdc<'a>(
         &window_id,
         WebviewUrl::CustomProtocol(initial_url.clone()),
     )
-    .initialization_script(INIT_SCRIPT)
+    .initialization_script_for_all_frames(INIT_SCRIPT)
     // Use a non-working proxy to almost(!) isolate the app
     // from the internet.
     // "Almost" because there are still cases where the webview
