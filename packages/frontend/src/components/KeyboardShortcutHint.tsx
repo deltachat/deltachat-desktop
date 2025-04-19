@@ -220,11 +220,11 @@ export function getKeybindings(
       },
       {
         title: tx('focus_search_input'),
-        keyBindings: [['Control', 'F']],
+        keyBindings: [[isMac ? 'Meta' : 'Control', 'F']],
       },
       {
         title: tx('search_in_chat'),
-        keyBindings: [['Control', 'Shift', 'F']],
+        keyBindings: [[isMac ? 'Meta' : 'Control', 'Shift', 'F']],
       },
       {
         title: tx('menu_new_chat'),
