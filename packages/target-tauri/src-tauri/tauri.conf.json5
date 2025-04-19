@@ -15,15 +15,15 @@
       "csp": {
         "default-src": "none",
         "connect-src": "'self' ipc:",
-        // The sha256 value is for `emoji-mart`. We can't use 'unsafe-inline',
+        // The sha-256 values are for
+        // - `emoji-mart`.
+        // - `react-zoom-pan-pinch`'s TransformComponent (2nd and 3rd entries).
+        // We can't use 'unsafe-inline',
         // because Tauri injects nonce values,
         // (see https://tauri.app/security/csp/), and the browser complains:
         // > Note that 'unsafe-inline' is ignored if either a hash
         // > or nonce value is present in the source list.
-        //
-        // TODO if you look in dev tools console, we have more warnings
-        // about CSP. Figure out what these are.
-        "style-src": "'self' 'sha256-+A14ONesVdzkn6nr37Osn+rUqNz4oFGZFDbLXrlae04='",
+        "style-src": "'self' 'sha256-+A14ONesVdzkn6nr37Osn+rUqNz4oFGZFDbLXrlae04=' 'sha256-HV3Dam0GcDz1w0B+b1RFgSxPeS9mwy/UvkSnZ/Bh/Cc=' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU='",
         "font-src": "'self'",
         "script-src": "'self' 'wasm-unsafe-eval'",
         "worker-src": "blob:",
