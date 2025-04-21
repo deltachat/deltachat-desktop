@@ -125,6 +125,9 @@ function EditProfileDialogInner({
               }}
             />
           )}
+          <div className={styles.editProfileHint}>
+            {tx('pref_who_can_see_profile_explain')}
+          </div>
         </DialogContent>
       </DialogBody>
       <DialogFooter>
