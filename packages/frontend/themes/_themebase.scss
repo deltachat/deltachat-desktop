@@ -184,6 +184,7 @@ $hover-contrast-change: 2%;
   --globalLinkColor: #2090ea; // Manual value: This will not get generated in the future
   --globalBackground: #{$bgPrimary};
   --globalText: #{$textPrimary};
+  --textLessContrast: #{$colorLessContrast}; // less contrast to background than global text
   --mapOverlayBg: #{$bgPrimary};
   --mapMessageBg: #{$bgPrimary};
   --videoPlayBtnIcon: #{$accentColor};

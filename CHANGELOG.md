@@ -100,6 +100,7 @@
 - add withdraw qr code context menu option #4798
 - adapt dialogs for small screens
 - mute chat for 8 hours
+- add a hint to "Edit profile" about how the profile name, image and bio is transferred #5014
 
 ### Changed
 - tauri: replace `tauri-plugin-shell` with `tauri-plugin-opener` #4699
