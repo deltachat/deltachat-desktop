@@ -25,6 +25,11 @@ export default function Profile({ settingsStore }: Props) {
     settingsStore.selfContact.profileImage || ''
   )
 
+  const profileName =
+    settingsStore.settings.displayname !== ''
+      ? settingsStore.settings.displayname
+      : tx('pref_profile_info_headline')
+
   return (
     <div className={styles.profile}>
       <LargeProfileImage
@@ -33,9 +38,7 @@ export default function Profile({ settingsStore }: Props) {
         imageUrl={profileImageUrl}
       />
       <div className={styles.profileDetails}>
-        <div className={styles.profileDisplayName}>
-          {settingsStore.settings.displayname}
-        </div>
+        <div className={styles.profileDisplayName}>{profileName}</div>
         <div className={styles.profileBio}>
           {settingsStore.settings.selfstatus?.replace('\n', ' ') ||
             tx('pref_default_status_label')}
