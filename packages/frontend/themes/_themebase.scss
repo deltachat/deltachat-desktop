@@ -21,7 +21,6 @@ $hover-contrast-change: 2%;
   --colorDanger: #{$colorDanger};
   --colorNone: #{$colorNone};
   --bgPrimary: #{$bgPrimary};
-  --textLessContrast: #{$colorLessContrast};
   /* Buttons */
   --buttonText: #{$colorPrimary};
   --buttonHover: #{$bgSecondary};
@@ -142,7 +141,7 @@ $hover-contrast-change: 2%;
   --bp4ButtonHoverBg: #ebf1f5;
   --bp4InputText: #{$textPrimary};
   --bp4InputBg: #{$bgPrimary};
-  --bp4InputPlaceholder: #d3d3d3;
+  --bp4InputPlaceholder: lightgray;
   --bp4-input-focused: #{$colorPrimary};
   --bp4MenuText: #{$textPrimary};
   --bp4MenuBg: #{$bgPrimary};
@@ -185,6 +184,7 @@ $hover-contrast-change: 2%;
   --globalLinkColor: #2090ea; // Manual value: This will not get generated in the future
   --globalBackground: #{$bgPrimary};
   --globalText: #{$textPrimary};
+  --textLessContrast: #{$colorLessContrast}; // less contrast to background than global text
   --mapOverlayBg: #{$bgPrimary};
   --mapMessageBg: #{$bgPrimary};
   --videoPlayBtnIcon: #{$accentColor};
