@@ -26,6 +26,7 @@ export default function RadioGroup({
               selected={props.value === selectedValue}
               onSelect={() => onChange && onChange(props.value)}
               name={name}
+              key={props.value}
             />
           )
         })}
