@@ -38,6 +38,7 @@
 - tauri: add autostart #4754
 - tauri: add chat background image customization support
 - testing: add more e2e tests for onboardings etc. #5001
+- tauri: add deeplinking support and opening `.xdc` files to attach them #4956
 
 
 ### Changed
