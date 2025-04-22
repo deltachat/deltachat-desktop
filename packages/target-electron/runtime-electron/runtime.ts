@@ -12,7 +12,11 @@ import {
 } from '@deltachat-desktop/shared/shared-types.js'
 import '@deltachat-desktop/shared/global.d.ts'
 
-import { Runtime } from '@deltachat-desktop/runtime-interface'
+import {
+  MediaAccessStatus,
+  MediaType,
+  Runtime,
+} from '@deltachat-desktop/runtime-interface'
 import { BaseDeltaChat, yerpc } from '@deltachat/jsonrpc-client'
 
 import type { dialog, app, IpcRenderer, webUtils } from 'electron'
@@ -455,14 +459,10 @@ class ElectronRuntime implements Runtime {
       isRegistered: false,
     })
   }
-  checkMediaAccess(
-    mediaType: 'microphone' | 'camera'
-  ): Promise<
-    'not-determined' | 'granted' | 'denied' | 'restricted' | 'unknown'
-  > {
+  checkMediaAccess(mediaType: MediaType): Promise<MediaAccessStatus> {
     return ipcBackend.invoke('checkMediaAccess', mediaType)
   }
-  askForMediaAccess(mediaType: 'microphone' | 'camera'): Promise<boolean> {
+  askForMediaAccess(mediaType: MediaType): Promise<boolean> {
     return ipcBackend.invoke('askForMediaAccess', mediaType)
   }
 }

@@ -175,7 +175,10 @@ export interface Runtime {
   onResumeFromSleep: (() => void) | undefined
   onToggleNotifications: (() => void) | undefined
 
+  // throws an error if the platform does not support checkMediaAccess
   checkMediaAccess: (mediaType: MediaType) => Promise<MediaAccessStatus>
+
+  // throws an error if the platform does not support askForMediaAccess
   askForMediaAccess: (mediaType: MediaType) => Promise<boolean>
 }
 

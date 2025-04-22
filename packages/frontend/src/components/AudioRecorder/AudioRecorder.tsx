@@ -102,16 +102,24 @@ export const AudioRecorder = ({
   }, [openDialog, tx])
 
   const onRecordingStart = async () => {
-    const access = await runtime.checkMediaAccess('microphone')
-    if (access === 'not-determined') {
-      const accessAllowed = await runtime.askForMediaAccess('microphone')
-      if (!accessAllowed) {
+    let access = 'unknown'
+    try {
+      access = await runtime.checkMediaAccess('microphone')
+      if (access === 'denied') {
         onAccessDenied()
         return
       }
-    } else if (access === 'denied') {
-      onAccessDenied()
-      return
+      if (access === 'not-determined') {
+        // try to ask for access
+        const accessAllowed = await runtime.askForMediaAccess('microphone')
+        if (!accessAllowed) {
+          onAccessDenied()
+          return
+        }
+      }
+    } catch (e) {
+      // ignore errors thrown if platform does not
+      // support askForMediaAccess or checkMediaAccess
     }
 
     if (!recorder.current) {

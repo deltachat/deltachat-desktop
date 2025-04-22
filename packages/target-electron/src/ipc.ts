@@ -44,6 +44,7 @@ import { appx, mapPackagePath } from './isAppx.js'
 import DeltaChatController from './deltachat/controller.js'
 import { BuildInfo } from './get-build-info.js'
 import { updateContentProtectionOnAllActiveWindows } from './content-protection.js'
+import { MediaType } from '@deltachat-desktop/runtime-interface'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -174,33 +175,40 @@ export async function init(cwd: string, logHandler: LogHandler) {
     ev.returnValue = app.getPath(arg)
   })
 
-  ipcMain.handle('checkMediaAccess', (_ev, mediaType: string) => {
+  /**
+   * https://www.electronjs.org/docs/latest/api/system-preferences#systempreferencesgetmediaaccessstatusmediatype-windows-macos
+   */
+  ipcMain.handle('checkMediaAccess', (_ev, mediaType: MediaType) => {
     if (!systemPreferences.getMediaAccessStatus) {
-      return 'unknown'
+      throw new Error('getMediaAccessStatus is not supported on this platform')
     }
     if (mediaType === 'camera') {
       return systemPreferences.getMediaAccessStatus('camera')
     } else if (mediaType === 'microphone') {
       return systemPreferences.getMediaAccessStatus('microphone')
     } else {
-      log.warn('checkMediaAccess: unknown media type', mediaType)
-      return 'unknown'
+      throw new Error('checkMediaAccess: unsupported media type')
     }
   })
 
-  ipcMain.handle('askForMediaAccess', (_ev, mediaType: string) => {
-    if (!systemPreferences.askForMediaAccess) {
-      return 'unknown'
+  /**
+   * https://www.electronjs.org/docs/latest/api/system-preferences#systempreferencesaskformediaaccessmediatype-macos
+   */
+  ipcMain.handle(
+    'askForMediaAccess',
+    (_ev, mediaType: MediaType): Promise<boolean> => {
+      if (!systemPreferences.askForMediaAccess) {
+        throw new Error('askForMediaAccess is not supported on this platform')
+      }
+      if (mediaType === 'camera') {
+        return systemPreferences.askForMediaAccess('camera')
+      } else if (mediaType === 'microphone') {
+        return systemPreferences.askForMediaAccess('microphone')
+      } else {
+        throw new Error('askForMediaAccess: unsupported media type')
+      }
     }
-    if (mediaType === 'camera') {
-      return systemPreferences.askForMediaAccess('camera')
-    } else if (mediaType === 'microphone') {
-      return systemPreferences.askForMediaAccess('microphone')
-    } else {
-      log.warn('checkMediaAccess: unknown media type', mediaType)
-      return 'unknown'
-    }
-  })
+  )
 
   ipcMain.handle('fileChooser', async (_ev, options) => {
     if (!mainWindow.window) {
