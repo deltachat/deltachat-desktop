@@ -117,9 +117,7 @@ export function ConfigureProgressDialog({
               } else if (existingTransport.addr !== transportConfig.addr) {
                 // multiple transports are not supported yet
                 throw new Error(
-                  tx(
-                    'Multi transport is not supported right now. Check back in a few months!'
-                  )
+                  'Multi transport is not supported right now. Check back in a few months!'
                 )
               }
             }
