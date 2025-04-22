@@ -859,14 +859,22 @@ export const MessageListInner = React.memo(
     if (!loaded) {
       return (
         <div id='message-list' ref={messageListRef} onScroll={onScroll2}>
-          <ol></ol>
+          <ol aria-setsize={-1}></ol>
         </div>
       )
     }
 
     return (
       <div id='message-list' ref={messageListRef} onScroll={onScroll2}>
-        <ol>
+        {/* aria-setsize='-1' means "undetermined size".
+        This is mostly because not all messages are loaded,
+        and otherwise screen readers just announce the number of messages
+        that are currently in the DOM, which is not helpful.
+        Theoretically we could specify the actual number of messages
+        in this chat, and figure out the order of each individual message,
+        but this is perhaps still not the information that the user
+        would want to hear every time they focus the message list. */}
+        <ol aria-setsize={-1}>
           <RovingTabindexProvider wrapperElementRef={messageListRef}>
             {messageListItems.length === 0 && <EmptyChatMessage chat={chat} />}
             {activeView.map(messageId => {

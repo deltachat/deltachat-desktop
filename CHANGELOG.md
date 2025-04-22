@@ -65,6 +65,7 @@
 - i18n: fix wrong order of substitutions for some strings #4889
 - i18n: translate some more strings
 - accessibility: don't announce "padlock" on messages
+- accessibility: don't announce the number of currently loaded messages in the current chat
 - fix double escape bypasses dialog attribute `canEscapeKeyClose={false}`
 - fix order when sending multiple files at once #4895
 - fix error messages not being shown on some errors, e.g. when QR scan action fails
