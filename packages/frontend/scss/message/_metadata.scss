@@ -31,6 +31,12 @@
     }
   }
 
+  .aria-live-wrapper {
+    // Basically try to behave the same as if the wrapper just wasn't there.
+    display: inline-block;
+    line-height: 0;
+  }
+
   .status-icon {
     margin-bottom: 2px;
   }

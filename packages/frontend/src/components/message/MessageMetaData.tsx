@@ -50,6 +50,9 @@ export default function MessageMetaData(props: Props) {
         ),
       })}
     >
+      {/* FYI the padlock doesn't need `aria-live`
+      as we don't expect it to get removed. See
+      https://github.com/deltachat/deltachat-desktop/pull/5023#discussion_r2059382983 */}
       {padlock && (
         <div
           aria-label={tx('a11y_encryption_padlock')}
@@ -63,11 +66,22 @@ export default function MessageMetaData(props: Props) {
           className={'padlock-icon'}
         />
       )}
-      {isSavedMessage && (
-        <div aria-label={tx('saved')} className={'saved-message-icon'} />
-      )}
+      <div
+        className='aria-live-wrapper'
+        aria-live='polite'
+        // Also announce removals as to notify when a message gets unsaved.
+        // AFAIK "saved" / "unsaved" changes only as a result of user action,
+        // but let's do it for confirmation, and for future-proofing.
+        aria-relevant='all'
+      >
+        {isSavedMessage && (
+          <div aria-label={tx('saved')} className={'saved-message-icon'} />
+        )}
+      </div>
       {hasLocation && <span className={'location-icon'} />}
-      {isEdited && <span className='edited'>{tx('edited')}</span>}
+      <div className='aria-live-wrapper' aria-live='polite'>
+        {isEdited && <span className='edited'>{tx('edited')}</span>}
+      </div>
       <Timestamp
         timestamp={timestamp}
         extended
