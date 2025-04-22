@@ -1792,7 +1792,6 @@ dependencies = [
  "serde",
  "serde_json",
  "strum 0.27.1",
- "tao",
  "tauri",
  "tauri-build",
  "tauri-plugin-autostart",
