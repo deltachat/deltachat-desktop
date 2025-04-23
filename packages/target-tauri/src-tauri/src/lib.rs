@@ -33,6 +33,7 @@ use tauri::{
 use tauri_plugin_log::{Target, TargetKind};
 
 use tray::is_tray_icon_active;
+use user_notify::mac_os::{NotificationDelegate, NotificationManager};
 
 mod app_path;
 mod autostart;
@@ -215,6 +216,8 @@ pub fn run() -> i32 {
                     .inspect_err(|err| log::error!("{err}"))
                     .ok();
             }));
+
+        // registering here does not seem to work
     }
 
     // sepcified here, so the open handler does not rely on appstate to be ready
@@ -382,6 +385,9 @@ pub fn run() -> i32 {
                 // info for debugging add backup transfer feature. - so better be safe and set it to debug for now.
                 .level_for("tao", log::LevelFilter::Trace)
                 .level_for("portmapper", log::LevelFilter::Debug);
+                .level_for("portmapper", log::LevelFilter::Debug);
+                // .level_for("webview::JS::render", log::LevelFilter::Error)
+                // .level_for("webview::JS::renderer", log::LevelFilter::Error);
 
             if run_config.log_debug {
                 logger_builder = logger_builder.level(log::LevelFilter::Debug);
@@ -511,6 +517,10 @@ pub fn run() -> i32 {
                 if let Err(err) = user_notify::mac_os::remove_all_delivered_notifications() {
                     log::error!("remove_all_delivered_notifications: {err:?}");
                 }
+
+                let notification_manager = NotificationManager::new();
+                notification_manager.register();
+                app.manage(notification_manager);
             }
 
             app.state::<AppState>()
