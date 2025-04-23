@@ -7,6 +7,7 @@ edition = "2024"
 [dependencies]
 anyhow = "1.0.97"
 log = "0.4.27"
+send_wrapper = "0.6.0"
 thiserror = "2.0.12"
 tokio = { version = "1.44.2", features = [
     "macros",
@@ -46,6 +47,7 @@ objc2-foundation = { version = "0.3.0", default-features = false, features = [
 objc2-user-notifications = { version = "0.3.0", default-features = false, features = [
     "std",
     "block2",
+    "UNNotification",
     "UNNotificationContent",
     "UNNotificationTrigger",
     "UNNotificationRequest",

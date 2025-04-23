@@ -1,12 +1,24 @@
-use std::{cell::RefCell, ptr::NonNull};
-
-use objc2::{MainThreadMarker, rc::Retained, runtime::Bool};
-use objc2_foundation::{NSArray, NSBundle, NSError, NSString, NSURL, ns_string};
-use objc2_user_notifications::{
-    UNAuthorizationOptions, UNAuthorizationStatus, UNMutableNotificationContent,
-    UNNotificationAttachment, UNNotificationRequest, UNNotificationSettings,
-    UNUserNotificationCenter,
+use std::{
+    cell::{Cell, OnceCell, RefCell},
+    ptr::NonNull,
+    sync::OnceLock,
 };
+
+use objc2::{
+    DefinedClass, MainThreadMarker, MainThreadOnly, Message, define_class, msg_send,
+    rc::Retained,
+    runtime::{Bool, ProtocolObject},
+};
+use objc2_foundation::{
+    NSArray, NSBundle, NSError, NSObject, NSObjectProtocol, NSString, NSURL, ns_string,
+};
+use objc2_user_notifications::{
+    UNAuthorizationOptions, UNAuthorizationStatus, UNMutableNotificationContent, UNNotification,
+    UNNotificationAttachment, UNNotificationPresentationOptions, UNNotificationRequest,
+    UNNotificationResponse, UNNotificationSettings, UNUserNotificationCenter,
+    UNUserNotificationCenterDelegate,
+};
+use send_wrapper::SendWrapper;
 
 use crate::{Error, NotificationBuilder, NotificationHandle};
 
@@ -307,4 +319,111 @@ pub fn get_notification_permission_state<F: FnOnce(bool) + Send + 'static>(
             .getNotificationSettingsWithCompletionHandler(&block);
     }
     Ok(())
+}
+
+#[derive(Clone)]
+pub struct Ivars {
+    // example var to try out ivars, TODO replace this by sth more useful like a channel to extract notifications to
+    pub notification_count: RefCell<usize>,
+}
+
+// for info on how to use the macro see
+// - https://docs.rs/objc2/latest/objc2/#example
+//
+define_class!(
+    // SAFETY:
+    // - The superclass NSObject does not have any subclassing requirements.
+    // - `UserNotificationDelegate` does not implement `Drop`.
+    #[unsafe(super(NSObject))]
+    #[ivars = Ivars]
+    #[name = "TauriNotificationDelegate"]
+    #[thread_kind = MainThreadOnly]
+    pub struct NotificationDelegate;
+
+    impl NotificationDelegate {}
+
+    unsafe impl NSObjectProtocol for NotificationDelegate {}
+
+    unsafe impl UNUserNotificationCenterDelegate for NotificationDelegate {
+        #[unsafe(method(userNotificationCenter:willPresentNotification:withCompletionHandler:))]
+        fn will_present_notification(
+            &self,
+            _center: &UNUserNotificationCenter,
+            _notification: &UNNotification,
+            completion_handler: &block2::Block<dyn Fn(UNNotificationPresentationOptions)>,
+        ) {
+            log::debug!("triggered `userNotificationCenter:willPresentNotification:withCompletionHandler:`");
+            let presentation_options = UNNotificationPresentationOptions::empty()
+                .union(UNNotificationPresentationOptions::Badge)
+                .union(UNNotificationPresentationOptions::Banner)
+                .union(UNNotificationPresentationOptions::Sound);
+            completion_handler.call((presentation_options,));
+            log::debug!("completed `userNotificationCenter:willPresentNotification:withCompletionHandler:`");
+        }
+        #[unsafe(method(userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:))]
+        unsafe fn did_receive_notification_response(
+            &self,
+            _center: &UNUserNotificationCenter,
+            response: &UNNotificationResponse,
+            completion_handler: &block2::Block<dyn Fn()>,
+        ) {
+            // listen for it and log it here, then the todo is to get it out of here
+            // probably give a channel with ivars
+            log::info!("did_receive_notification_response {response:?}");
+
+            self.ivars().notification_count.replace_with(|&mut old| old + 1);
+            log::info!("thusfar user interacted with {} notifications", self.ivars().notification_count.borrow());
+
+            completion_handler.call(());
+        }
+    }
+);
+
+impl NotificationDelegate {
+    pub fn new(mtm: MainThreadMarker) -> Retained<Self> {
+        let this = Self::alloc(mtm).set_ivars(Ivars {
+            notification_count: RefCell::new(0),
+        });
+        unsafe { msg_send![super(this), init] }
+    }
+}
+
+impl Drop for NotificationDelegate {
+    fn drop(&mut self) {
+        panic!("dropped NotificationDelegate")
+    }
+}
+
+#[derive(Debug)]
+pub struct NotificationManager {
+    /// reference to the delegate so that it isn't dropped immitiately
+    delegate_reference:
+        SendWrapper<OnceCell<Retained<ProtocolObject<dyn UNUserNotificationCenterDelegate>>>>,
+}
+
+impl NotificationManager {
+    pub fn new() -> Self {
+        log::debug!("NotificationManager.new called");
+        Self {
+            delegate_reference: SendWrapper::new(OnceCell::new()),
+        }
+    }
+
+    // todo find out if it makes a difference when this is called
+    pub fn register(&self) {
+        log::debug!("NotificationManager.register called");
+        let mtm = MainThreadMarker::new().expect("not on main thread");
+        let notification_delegate = NotificationDelegate::new(mtm);
+        unsafe {
+            let proto: Retained<ProtocolObject<dyn UNUserNotificationCenterDelegate>> =
+                ProtocolObject::from_retained(notification_delegate);
+
+            UNUserNotificationCenter::currentNotificationCenter().setDelegate(Some(&*proto));
+
+            self.delegate_reference
+                .set(proto)
+                .expect("failed to set delegate_reference, did you call register multiple times so that the once_cell was already taken?");
+        }
+        log::debug!("NotificationManager.register completed");
+    }
 }

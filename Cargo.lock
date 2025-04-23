@@ -9520,6 +9520,7 @@ dependencies = [
  "objc2 0.6.1",
  "objc2-foundation 0.3.1",
  "objc2-user-notifications",
+ "send_wrapper",
  "tauri-winrt-notification",
  "thiserror 2.0.12",
  "tokio",
