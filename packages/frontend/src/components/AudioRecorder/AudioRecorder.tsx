@@ -112,14 +112,14 @@ export const AudioRecorder = ({
       if (access === 'not-determined') {
         // try to ask for access
         const accessAllowed = await runtime.askForMediaAccess('microphone')
-        if (!accessAllowed) {
+        if (accessAllowed === false) {
           onAccessDenied()
           return
         }
       }
-    } catch (e) {
-      // ignore errors thrown if platform does not
-      // support askForMediaAccess or checkMediaAccess
+    } catch (err: any) {
+      onError(new AudioRecorderError(err.message))
+      return
     }
 
     if (!recorder.current) {

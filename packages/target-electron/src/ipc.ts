@@ -180,7 +180,9 @@ export async function init(cwd: string, logHandler: LogHandler) {
    */
   ipcMain.handle('checkMediaAccess', (_ev, mediaType: MediaType) => {
     if (!systemPreferences.getMediaAccessStatus) {
-      throw new Error('getMediaAccessStatus is not supported on this platform')
+      return new Promise(resolve => {
+        resolve('unknown')
+      })
     }
     if (mediaType === 'camera') {
       return systemPreferences.getMediaAccessStatus('camera')
@@ -196,17 +198,17 @@ export async function init(cwd: string, logHandler: LogHandler) {
    */
   ipcMain.handle(
     'askForMediaAccess',
-    (_ev, mediaType: MediaType): Promise<boolean> => {
-      if (!systemPreferences.askForMediaAccess) {
-        throw new Error('askForMediaAccess is not supported on this platform')
+    (_ev, mediaType: MediaType): Promise<boolean | undefined> => {
+      if (systemPreferences.askForMediaAccess) {
+        if (mediaType === 'camera') {
+          return systemPreferences.askForMediaAccess('camera')
+        } else if (mediaType === 'microphone') {
+          return systemPreferences.askForMediaAccess('microphone')
+        }
       }
-      if (mediaType === 'camera') {
-        return systemPreferences.askForMediaAccess('camera')
-      } else if (mediaType === 'microphone') {
-        return systemPreferences.askForMediaAccess('microphone')
-      } else {
-        throw new Error('askForMediaAccess: unsupported media type')
-      }
+      return new Promise(resolve => {
+        resolve(undefined)
+      })
     }
   )
 

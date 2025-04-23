@@ -462,7 +462,8 @@ class ElectronRuntime implements Runtime {
   checkMediaAccess(mediaType: MediaType): Promise<MediaAccessStatus> {
     return ipcBackend.invoke('checkMediaAccess', mediaType)
   }
-  askForMediaAccess(mediaType: MediaType): Promise<boolean> {
+  // undefined is returned if the platform does not support askForMediaAccess
+  askForMediaAccess(mediaType: MediaType): Promise<boolean | undefined> {
     return ipcBackend.invoke('askForMediaAccess', mediaType)
   }
 }
