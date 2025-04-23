@@ -71,6 +71,7 @@ type MainWindowEvents =
     }
   | {
       event: 'onThemeUpdate'
+    }
   | {
       event: 'notificationClick'
       data: NotificationClickedEventPayload
