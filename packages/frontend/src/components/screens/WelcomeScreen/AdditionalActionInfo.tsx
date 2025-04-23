@@ -15,12 +15,12 @@ type Props = {
 export default function AdditionalActionInfo(props: Props) {
   const tx = useTranslationFunction()
   const { welcomeQr } = useInstantOnboarding()
-  const [contactAddress, setContactAddress] = useState('')
+  const [displayName, setDisplayName] = useState('')
 
   useEffect(() => {
     const loadContactName = async () => {
       if (!welcomeQr || welcomeQr.qr.kind !== 'askVerifyContact') {
-        setContactAddress('')
+        setDisplayName('')
         return
       }
 
@@ -28,7 +28,7 @@ export default function AdditionalActionInfo(props: Props) {
         props.accountId,
         welcomeQr.qr.contact_id
       )
-      setContactAddress(contact.address)
+      setDisplayName(contact.displayName ?? contact.address)
     }
 
     loadContactName()
@@ -41,7 +41,7 @@ export default function AdditionalActionInfo(props: Props) {
   if (welcomeQr.qr.kind === 'askVerifyGroup') {
     return <p>{tx('instant_onboarding_group_info', welcomeQr.qr.grpname)}</p>
   } else if (welcomeQr.qr.kind === 'askVerifyContact') {
-    return <p>{tx('instant_onboarding_contact_info', contactAddress)}</p>
+    return <p>{tx('instant_onboarding_contact_info', displayName)}</p>
   }
 
   return null
