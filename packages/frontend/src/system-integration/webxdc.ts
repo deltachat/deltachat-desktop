@@ -6,16 +6,16 @@ import { BackendRemote, Type } from '../backend-com'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 
 export function initWebxdc() {
-  BackendRemote.on('WebxdcStatusUpdate', (accountId, { msgId }) => {
+  BackendRemote.on('WebxdcStatusUpdate', (accountId: number, { msgId }: { msgId: number}) => {
     runtime.notifyWebxdcStatusUpdate(accountId, msgId)
   })
-  BackendRemote.on('WebxdcRealtimeData', (accountId, { msgId, data }) => {
+  BackendRemote.on('WebxdcRealtimeData', (accountId: number, { msgId, data }: { msgId: number, data: any}) => {
     runtime.notifyWebxdcRealtimeData(accountId, msgId, data)
   })
-  BackendRemote.on('MsgsChanged', (accountId, { msgId }) => {
+  BackendRemote.on('MsgsChanged', (accountId: number, { msgId }: { msgId: number}) => {
     runtime.notifyWebxdcMessageChanged(accountId, msgId)
   })
-  BackendRemote.on('WebxdcInstanceDeleted', (accountId, { msgId }) => {
+  BackendRemote.on('WebxdcInstanceDeleted', (accountId: number, { msgId }: { msgId: number}) => {
     runtime.notifyWebxdcInstanceDeleted(accountId, msgId)
   })
 }
@@ -44,10 +44,12 @@ export async function internalOpenWebxdc(
   const chatName = (
     await BackendRemote.rpc.getBasicChatInfo(accountId, message.chatId)
   ).name
-  const displayname = await BackendRemote.rpc.getConfig(
+  const account = await BackendRemote.rpc.getAccountInfo(
     accountId,
-    'displayname'
   )
+  const displayname = account.displayName !== ''
+    ? account.displayName
+    : account.address
 
   runtime.openWebxdc(messageId, {
     accountId,
