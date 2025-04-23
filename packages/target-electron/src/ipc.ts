@@ -7,6 +7,7 @@ import {
   nativeImage,
   shell,
   NativeImage,
+  systemPreferences,
 } from 'electron'
 import path, {
   basename,
@@ -43,6 +44,7 @@ import { appx, mapPackagePath } from './isAppx.js'
 import DeltaChatController from './deltachat/controller.js'
 import { BuildInfo } from './get-build-info.js'
 import { updateContentProtectionOnAllActiveWindows } from './content-protection.js'
+import { MediaType } from '@deltachat-desktop/runtime-interface'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -172,6 +174,43 @@ export async function init(cwd: string, logHandler: LogHandler) {
   ipcMain.on('app-get-path', (ev, arg) => {
     ev.returnValue = app.getPath(arg)
   })
+
+  /**
+   * https://www.electronjs.org/docs/latest/api/system-preferences#systempreferencesgetmediaaccessstatusmediatype-windows-macos
+   */
+  ipcMain.handle('checkMediaAccess', (_ev, mediaType: MediaType) => {
+    if (!systemPreferences.getMediaAccessStatus) {
+      return new Promise(resolve => {
+        resolve('unknown')
+      })
+    }
+    if (mediaType === 'camera') {
+      return systemPreferences.getMediaAccessStatus('camera')
+    } else if (mediaType === 'microphone') {
+      return systemPreferences.getMediaAccessStatus('microphone')
+    } else {
+      throw new Error('checkMediaAccess: unsupported media type')
+    }
+  })
+
+  /**
+   * https://www.electronjs.org/docs/latest/api/system-preferences#systempreferencesaskformediaaccessmediatype-macos
+   */
+  ipcMain.handle(
+    'askForMediaAccess',
+    (_ev, mediaType: MediaType): Promise<boolean | undefined> => {
+      if (systemPreferences.askForMediaAccess) {
+        if (mediaType === 'camera') {
+          return systemPreferences.askForMediaAccess('camera')
+        } else if (mediaType === 'microphone') {
+          return systemPreferences.askForMediaAccess('microphone')
+        }
+      }
+      return new Promise(resolve => {
+        resolve(undefined)
+      })
+    }
+  )
 
   ipcMain.handle('fileChooser', async (_ev, options) => {
     if (!mainWindow.window) {

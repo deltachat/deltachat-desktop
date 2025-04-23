@@ -14,6 +14,14 @@ import { BaseDeltaChat } from '@deltachat/jsonrpc-client'
 import type { getLogger as getLoggerFunction } from '@deltachat-desktop/shared/logger.js'
 import type { setLogHandler as setLogHandlerFunction } from '@deltachat-desktop/shared/logger.js'
 
+export type MediaType = 'microphone' | 'camera'
+export type MediaAccessStatus =
+  | 'not-determined'
+  | 'granted'
+  | 'denied'
+  | 'restricted'
+  | 'unknown'
+
 /**
  * Offers an abstraction Layer to make it easier to capsulate
  * context specific functions (like electron, browser, tauri, etc)
@@ -166,6 +174,11 @@ export interface Runtime {
     | undefined
   onResumeFromSleep: (() => void) | undefined
   onToggleNotifications: (() => void) | undefined
+
+  checkMediaAccess: (mediaType: MediaType) => Promise<MediaAccessStatus>
+
+  // undefined if the platform does not support askForMediaAccess
+  askForMediaAccess: (mediaType: MediaType) => Promise<boolean | undefined>
 }
 
 export const runtime: Runtime = (window as any).r

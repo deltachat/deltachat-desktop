@@ -137,3 +137,11 @@
     }
   }
 }
+
+@media (max-width: 400px) {
+  .volumeBarContainer {
+    .volumeBar {
+      display: none;
+    }
+  }
+}

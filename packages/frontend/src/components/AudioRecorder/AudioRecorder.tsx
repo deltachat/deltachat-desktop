@@ -2,6 +2,9 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import MicRecorder from './MicRecorder'
 import styles from './styles.module.scss'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { runtime } from '@deltachat-desktop/runtime-interface'
+import useDialog from '../../hooks/dialog/useDialog'
+import AlertDialog from '../dialogs/AlertDialog'
 
 export enum AudioErrorType {
   'NO_INPUT',
@@ -90,8 +93,35 @@ export const AudioRecorder = ({
   const tx = useTranslationFunction()
   const [volume, setVolume] = useState(0)
   const recorder = useRef<MicRecorder | null>(null)
+  const { openDialog } = useDialog()
 
-  const onRecordingStart = () => {
+  const onAccessDenied = useCallback(() => {
+    openDialog(AlertDialog, {
+      message: tx('perm_explain_access_to_mic_denied'),
+    })
+  }, [openDialog, tx])
+
+  const onRecordingStart = async () => {
+    let access = 'unknown'
+    try {
+      access = await runtime.checkMediaAccess('microphone')
+      if (access === 'denied') {
+        onAccessDenied()
+        return
+      }
+      if (access === 'not-determined') {
+        // try to ask for access
+        const accessAllowed = await runtime.askForMediaAccess('microphone')
+        if (accessAllowed === false) {
+          onAccessDenied()
+          return
+        }
+      }
+    } catch (err: any) {
+      onError(new AudioRecorderError(err.message))
+      return
+    }
+
     if (!recorder.current) {
       recorder.current = new MicRecorder(setVolume, {
         bitRate: 128,
