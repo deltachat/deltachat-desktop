@@ -1654,8 +1654,8 @@ dependencies = [
 
 [[package]]
 name = "deltachat"
-version = "1.159.0"
-source = "git+https://github.com/chatmail/core?tag=v1.159.0#b03edabb11c2c87767d0af6bf606e92e504bb7aa"
+version = "1.159.1"
+source = "git+https://github.com/chatmail/core?tag=v1.159.1#0e3277bc5a71d617f254811f90cecc61e9c05060"
 dependencies = [
  "anyhow",
  "async-broadcast",
@@ -1738,7 +1738,7 @@ dependencies = [
 [[package]]
 name = "deltachat-contact-tools"
 version = "0.0.0"
-source = "git+https://github.com/chatmail/core?tag=v1.159.0#b03edabb11c2c87767d0af6bf606e92e504bb7aa"
+source = "git+https://github.com/chatmail/core?tag=v1.159.1#0e3277bc5a71d617f254811f90cecc61e9c05060"
 dependencies = [
  "anyhow",
  "chrono",
@@ -1748,8 +1748,8 @@ dependencies = [
 
 [[package]]
 name = "deltachat-jsonrpc"
-version = "1.159.0"
-source = "git+https://github.com/chatmail/core?tag=v1.159.0#b03edabb11c2c87767d0af6bf606e92e504bb7aa"
+version = "1.159.1"
+source = "git+https://github.com/chatmail/core?tag=v1.159.1#0e3277bc5a71d617f254811f90cecc61e9c05060"
 dependencies = [
  "anyhow",
  "async-channel 2.3.1",
@@ -1816,12 +1816,12 @@ dependencies = [
 [[package]]
 name = "deltachat-time"
 version = "1.0.0"
-source = "git+https://github.com/chatmail/core?tag=v1.159.0#b03edabb11c2c87767d0af6bf606e92e504bb7aa"
+source = "git+https://github.com/chatmail/core?tag=v1.159.1#0e3277bc5a71d617f254811f90cecc61e9c05060"
 
 [[package]]
 name = "deltachat_derive"
 version = "2.0.0"
-source = "git+https://github.com/chatmail/core?tag=v1.159.0#b03edabb11c2c87767d0af6bf606e92e504bb7aa"
+source = "git+https://github.com/chatmail/core?tag=v1.159.1#0e3277bc5a71d617f254811f90cecc61e9c05060"
 dependencies = [
  "quote",
  "syn 2.0.100",
@@ -2658,7 +2658,7 @@ dependencies = [
 [[package]]
 name = "format-flowed"
 version = "1.0.0"
-source = "git+https://github.com/chatmail/core?tag=v1.159.0#b03edabb11c2c87767d0af6bf606e92e504bb7aa"
+source = "git+https://github.com/chatmail/core?tag=v1.159.1#0e3277bc5a71d617f254811f90cecc61e9c05060"
 
 [[package]]
 name = "fsevent-sys"
@@ -6669,7 +6669,7 @@ dependencies = [
 [[package]]
 name = "ratelimit"
 version = "1.0.0"
-source = "git+https://github.com/chatmail/core?tag=v1.159.0#b03edabb11c2c87767d0af6bf606e92e504bb7aa"
+source = "git+https://github.com/chatmail/core?tag=v1.159.1#0e3277bc5a71d617f254811f90cecc61e9c05060"
 
 [[package]]
 name = "raw-window-handle"
