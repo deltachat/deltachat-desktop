@@ -306,7 +306,9 @@ class TauriRuntime implements Runtime {
       // so the shown file location is not very helpful most of the time,
       // still for errors the stack trace is appended
       const onlyFnName = location?.split('@')[0]
-      location = `JS ${channel}${onlyFnName ? `::${onlyFnName}` : ''}`
+      location = `:JS::${channel.replace(/\//g, '::')}${
+        onlyFnName ? `::${onlyFnName}` : ''
+      }`
 
       const tauriLogLevel = variants[level]
       invoke('plugin:log|log', {
