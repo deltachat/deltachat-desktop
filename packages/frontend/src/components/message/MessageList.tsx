@@ -749,6 +749,8 @@ export const MessageListInner = React.memo(
     unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
     loadMissingMessages: () => Promise<void>
   }) => {
+    const tx = useTranslationFunction()
+
     const {
       onScroll,
       onScrollEnd,
@@ -876,14 +878,14 @@ export const MessageListInner = React.memo(
     if (!loaded) {
       return (
         <div id='message-list' ref={messageListRef} onScroll={onScroll2}>
-          <ol></ol>
+          <ol aria-label={tx('messages')}></ol>
         </div>
       )
     }
 
     return (
       <div id='message-list' ref={messageListRef} onScroll={onScroll2}>
-        <ol>
+        <ol aria-label={tx('messages')}>
           <RovingTabindexProvider wrapperElementRef={messageListRef}>
             {messageListItems.length === 0 && <EmptyChatMessage chat={chat} />}
             {activeView.map(messageId => {
