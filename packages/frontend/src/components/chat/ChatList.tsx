@@ -361,28 +361,118 @@ export default function ChatList(props: {
 
   if (queryChatId && searchChatInfo) {
     return (
-      <>
-        <div className='chat-list'>
-          <AutoSizer disableWidth>
-            {({ height }) => (
-              <div ref={tabindexWrapperElement}>
-                <div className='search-result-divider'>
-                  {tx('search_in', searchChatInfo.name)}
-                  {messageResultIds.length !== 0 &&
-                    ': ' + translate_n('n_messages', messageResultIds.length)}
-                </div>
-                <RovingTabindexProvider
-                  wrapperElementRef={tabindexWrapperElement}
-                  classNameOfTargetElements={rovingTabindexItemsClassName}
+      <div className='chat-list'>
+        <AutoSizer disableWidth>
+          {({ height }) => (
+            <div ref={tabindexWrapperElement}>
+              <div className='search-result-divider'>
+                {tx('search_in', searchChatInfo.name)}
+                {messageResultIds.length !== 0 &&
+                  ': ' + translate_n('n_messages', messageResultIds.length)}
+              </div>
+              <RovingTabindexProvider
+                wrapperElementRef={tabindexWrapperElement}
+                classNameOfTargetElements={rovingTabindexItemsClassName}
+              >
+                <ChatListPart
+                  isRowLoaded={isMessageLoaded}
+                  loadMoreRows={loadMessages}
+                  rowCount={messageResultIds.length}
+                  width={'100%'}
+                  height={
+                    /* take remaining space */
+                    height - DIVIDER_HEIGHT
+                  }
+                  itemKey={index => 'key' + messageResultIds[index]}
+                  itemData={messagelistData}
+                  itemHeight={CHATLISTITEM_MESSAGE_HEIGHT}
                 >
+                  {ChatListItemRowMessage}
+                </ChatListPart>
+              </RovingTabindexProvider>
+            </div>
+          )}
+        </AutoSizer>
+      </div>
+    )
+  }
+
+  return (
+    <div className='chat-list'>
+      <AutoSizer disableWidth>
+        {({ height }) => (
+          <div ref={tabindexWrapperElement}>
+            {isSearchActive && (
+              <div className='search-result-divider'>
+                {translate_n('n_chats', chatListIds.length)}
+              </div>
+            )}
+            {/* TODO RovingTabindex doesn't work well with virtualized
+              lists, because the currently active element might get removed
+              from DOM if scrolled out of view. */}
+            <RovingTabindexProvider
+              wrapperElementRef={tabindexWrapperElement}
+              classNameOfTargetElements={rovingTabindexItemsClassName}
+            >
+              <ChatListPart
+                isRowLoaded={isChatLoaded}
+                loadMoreRows={loadChats}
+                rowCount={chatListIds.length}
+                width={'100%'}
+                height={chatsHeight(height)}
+                setListRef={(ref: List<any> | null) =>
+                  ((listRefRef.current as any) = ref)
+                }
+                itemKey={index => 'key' + chatListIds[index]}
+                itemData={chatlistData}
+                itemHeight={CHATLISTITEM_CHAT_HEIGHT}
+              >
+                {ChatListItemRowChat}
+              </ChatListPart>
+              {isSearchActive && (
+                <>
+                  <div className='search-result-divider'>
+                    {translate_n('n_contacts', contactIds.length)}
+                  </div>
+                  <ChatListPart
+                    isRowLoaded={isContactLoaded}
+                    loadMoreRows={loadContact}
+                    rowCount={contactIds.length}
+                    width={'100%'}
+                    height={contactsHeight(height)}
+                    itemKey={index => 'key' + contactIds[index]}
+                    itemData={contactlistData}
+                    itemHeight={CHATLISTITEM_CONTACT_HEIGHT}
+                  >
+                    {ChatListItemRowContact}
+                  </ChatListPart>
+                  {contactIds.length === 0 &&
+                    chatListIds.length === 0 &&
+                    queryStrIsValidEmail && (
+                      <PseudoListItemAddContact
+                        queryStr={queryStr?.trim() || ''}
+                        queryStrIsEmail={queryStrIsValidEmail}
+                        onClick={addContactOnClick}
+                      />
+                    )}
+                  {showPseudoListItemAddContactFromInviteLink && (
+                    <PseudoListItemAddContactOrGroupFromInviteLink
+                      inviteLink={queryStr!}
+                      accountId={accountId}
+                    />
+                  )}
+                  <div className='search-result-divider'>
+                    {translated_messages_label(messageResultIds.length)}
+                  </div>
+
                   <ChatListPart
                     isRowLoaded={isMessageLoaded}
                     loadMoreRows={loadMessages}
                     rowCount={messageResultIds.length}
                     width={'100%'}
                     height={
-                      /* take remaining space */
-                      height - DIVIDER_HEIGHT
+                      // take remaining space
+                      messagesHeight(height)
                     }
                     itemKey={index => 'key' + messageResultIds[index]}
                     itemData={messagelistData}
@@ -390,121 +480,27 @@ export default function ChatList(props: {
                   >
                     {ChatListItemRowMessage}
                   </ChatListPart>
-                </RovingTabindexProvider>
-              </div>
-            )}
-          </AutoSizer>
-        </div>
-      </>
-    )
-  }
-
-  return (
-    <>
-      <div className='chat-list'>
-        <AutoSizer disableWidth>
-          {({ height }) => (
-            <div ref={tabindexWrapperElement}>
-              {isSearchActive && (
-                <div className='search-result-divider'>
-                  {translate_n('n_chats', chatListIds.length)}
-                </div>
+                </>
               )}
-              {/* TODO RovingTabindex doesn't work well with virtualized
-              lists, because the currently active element might get removed
-              from DOM if scrolled out of view. */}
-              <RovingTabindexProvider
-                wrapperElementRef={tabindexWrapperElement}
-                classNameOfTargetElements={rovingTabindexItemsClassName}
-              >
-                <ChatListPart
-                  isRowLoaded={isChatLoaded}
-                  loadMoreRows={loadChats}
-                  rowCount={chatListIds.length}
-                  width={'100%'}
-                  height={chatsHeight(height)}
-                  setListRef={(ref: List<any> | null) =>
-                    ((listRefRef.current as any) = ref)
-                  }
-                  itemKey={index => 'key' + chatListIds[index]}
-                  itemData={chatlistData}
-                  itemHeight={CHATLISTITEM_CHAT_HEIGHT}
-                >
-                  {ChatListItemRowChat}
-                </ChatListPart>
-                {isSearchActive && (
-                  <>
-                    <div className='search-result-divider'>
-                      {translate_n('n_contacts', contactIds.length)}
-                    </div>
-                    <ChatListPart
-                      isRowLoaded={isContactLoaded}
-                      loadMoreRows={loadContact}
-                      rowCount={contactIds.length}
-                      width={'100%'}
-                      height={contactsHeight(height)}
-                      itemKey={index => 'key' + contactIds[index]}
-                      itemData={contactlistData}
-                      itemHeight={CHATLISTITEM_CONTACT_HEIGHT}
-                    >
-                      {ChatListItemRowContact}
-                    </ChatListPart>
-                    {contactIds.length === 0 &&
-                      chatListIds.length === 0 &&
-                      queryStrIsValidEmail && (
-                        <PseudoListItemAddContact
-                          queryStr={queryStr?.trim() || ''}
-                          queryStrIsEmail={queryStrIsValidEmail}
-                          onClick={addContactOnClick}
-                        />
-                      )}
-                    {showPseudoListItemAddContactFromInviteLink && (
-                      <PseudoListItemAddContactOrGroupFromInviteLink
-                        inviteLink={queryStr!}
-                        accountId={accountId}
-                      />
-                    )}
-                    <div className='search-result-divider'>
-                      {translated_messages_label(messageResultIds.length)}
-                    </div>
-
-                    <ChatListPart
-                      isRowLoaded={isMessageLoaded}
-                      loadMoreRows={loadMessages}
-                      rowCount={messageResultIds.length}
-                      width={'100%'}
-                      height={
-                        // take remaining space
-                        messagesHeight(height)
-                      }
-                      itemKey={index => 'key' + messageResultIds[index]}
-                      itemData={messagelistData}
-                      itemHeight={CHATLISTITEM_MESSAGE_HEIGHT}
-                    >
-                      {ChatListItemRowMessage}
-                    </ChatListPart>
-                  </>
-                )}
-              </RovingTabindexProvider>
-              <button
-                className='floating-action-button'
-                onClick={onCreateChat}
-                id='new-chat-button'
-                aria-label={tx('menu_new_chat')}
-                aria-keyshortcuts='Control+N'
-              >
-                <div
-                  className='Icon'
-                  style={{
-                    WebkitMask: 'url(./images/icons/plus.svg) no-repeat center',
-                  }}
-                ></div>
-              </button>
-            </div>
-          )}
-        </AutoSizer>
-      </div>
-    </>
+            </RovingTabindexProvider>
+            <button
+              className='floating-action-button'
+              onClick={onCreateChat}
+              id='new-chat-button'
+              aria-label={tx('menu_new_chat')}
+              aria-keyshortcuts='Control+N'
+            >
+              <div
+                className='Icon'
+                style={{
+                  WebkitMask: 'url(./images/icons/plus.svg) no-repeat center',
+                }}
+              ></div>
+            </button>
+          </div>
+        )}
+      </AutoSizer>
+    </div>
   )
 }
 
