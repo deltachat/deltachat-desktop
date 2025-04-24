@@ -30,7 +30,7 @@ impl TranslationState {
     }
     pub(crate) async fn reload_from_config(&self, app: &AppHandle) -> anyhow::Result<()> {
         let mut inner = self.inner.write().await;
-        (*inner).tx_engine = Self::load(app).await?;
+        inner.tx_engine = Self::load(app).await?;
         Ok(())
     }
 

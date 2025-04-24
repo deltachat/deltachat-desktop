@@ -1,3 +1,17 @@
+#![forbid(clippy::indexing_slicing)]
+#![warn(
+    unused,
+    clippy::correctness,
+    clippy::all,
+    clippy::wildcard_imports,
+    clippy::needless_borrow,
+    clippy::cast_lossless,
+    clippy::unused_async,
+    clippy::explicit_iter_loop,
+    clippy::explicit_into_iter_loop,
+    clippy::cloned_instead_of_copied
+)]
+
 use std::collections::HashMap;
 
 use intl_pluralrules::{PluralCategory, PluralRuleType, PluralRules};
@@ -5,6 +19,7 @@ use log::error;
 use regex::{self, Regex};
 use unic_langid::{LanguageIdentifier, LanguageIdentifierError};
 
+#[derive(Debug)]
 pub enum Substitution<'a> {
     None,
     String(Vec<&'a str>),
@@ -351,5 +366,5 @@ mod tests {
         assert_eq!(result, "group_name_changed_by_other");
     }
     // TODO: tests: that errors do not crash the program and are returned as errors instead (creation of translation engine)
-    // TODO: handle %s case for substitution pattern matching
+    // TODO: handle different cases for substitution pattern matching (like now unhandeled %s)
 }
