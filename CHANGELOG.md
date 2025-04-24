@@ -5,6 +5,7 @@
 ### Fixed
 - fix outdated info being shown sometimes in some places #5222, #5225
 - accessibility: add accessible labels for lists (messages list, chat list, profiles list) #5030
+- accessibility: mark chat list items as tabs #5041
 - improve performance: remove message context menu open delay
 - improve performace in global search and contact search #5230, #5232
 - improve performance: don't mark messages as seen unnecessarily when focusing window #5243

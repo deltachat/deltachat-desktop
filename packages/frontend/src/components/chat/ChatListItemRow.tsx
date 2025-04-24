@@ -15,6 +15,15 @@ import type { useChatListContextMenu } from './ChatListContextMenu'
 
 export type ChatListItemData = {
   selectedChatId: number | null
+  /**
+   * Whether to set `role='tab'` on the items.
+   *
+   * Note that this doesn't apply to some items,
+   * such as `ChatListItemArchiveLink`.
+   *
+   * @default false
+   */
+  roleTabs?: boolean
   chatListIds: number[]
   chatCache: {
     [id: number]: T.ChatListItemFetchResult | undefined
@@ -52,6 +61,7 @@ export const ChatListItemRowChat = React.memo<{
 }>(({ index, data, style }) => {
   const {
     selectedChatId,
+    roleTabs,
     chatListIds,
     chatCache,
     onChatClick,
@@ -63,6 +73,7 @@ export const ChatListItemRowChat = React.memo<{
   return (
     <li style={style}>
       <ChatListItem
+        roleTab={roleTabs}
         isSelected={selectedChatId === chatId}
         chatListItem={chatCache[chatId] || undefined}
         onClick={onChatClick.bind(null, chatId)}
