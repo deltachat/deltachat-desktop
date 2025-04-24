@@ -67,16 +67,18 @@ impl TranslationEngine {
                         let mut msg = message.clone();
                         for matches in self.var_finder.find_iter(message) {
                             let from = matches.as_str();
-                            if let Some(position) = from.chars().nth(1).and_then(|from| from.to_digit(10)) {
+                            if let Some(position) =
+                                from.chars().nth(1).and_then(|from| from.to_digit(10))
+                            {
                                 if let Some(item) = items.get(position as usize - 1) {
                                     msg = msg.replace(from, item);
                                 } else {
                                     error!("Invalid item position {position}");
-                                    return key.to_owned()
+                                    return key.to_owned();
                                 }
                             } else {
                                 error!("Invalid format of replacement pattern");
-                                return key.to_owned()
+                                return key.to_owned();
                             }
                         }
                         msg
