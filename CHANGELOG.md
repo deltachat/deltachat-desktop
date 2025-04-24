@@ -8,9 +8,9 @@
 
 ### Fixed
 
-<a id="1_58_0"></a>
+<a id="1_57_0"></a>
 
-## [1.58.0] - 2025-04-23
+## [1.57.0] - 2025-04-24
 
 ### Added
 - tauri: support for webxdc #4740, #4852, #4949
@@ -3400,9 +3400,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.58.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.57.0...HEAD
 
-[1.58.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.56.0...v1.58.0
+[1.57.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.56.0...v1.57.0
 
 [1.56.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.54.2...v1.56.0
 
