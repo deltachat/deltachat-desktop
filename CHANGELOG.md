@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+- accessibility: add alt text for QR invite code image
 
 <a id="1_58_0"></a>
 
