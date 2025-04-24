@@ -1,6 +1,5 @@
 use std::{collections::HashMap, sync::Arc};
 
-use anyhow::Context;
 use log::error;
 use tauri::{
     async_runtime::spawn, menu::Menu, AppHandle, Manager, Runtime, WebviewWindow, Window,
