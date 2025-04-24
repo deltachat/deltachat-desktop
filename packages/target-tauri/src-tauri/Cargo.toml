@@ -1,6 +1,6 @@
 [package]
 name = "deltachat-tauri"
-version = "1.58.0"
+version = "1.57.0"
 description = "Delta Chat Desktop: Tauri Edition. Secure, cross-platform, decentralized super-app messenger."
 authors = ["DeltaChat Contributors"]
 edition = "2021"
