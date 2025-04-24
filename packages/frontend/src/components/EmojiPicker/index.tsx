@@ -11,12 +11,18 @@ import styles from './styles.module.scss'
 import type { BaseEmoji } from 'emoji-mart/index'
 
 type Props = {
+  role: 'tabpanel' | undefined
+  id: string | undefined
+  labelledBy: string | undefined
   className?: string
   onSelect: (emoji: BaseEmoji) => void
   full?: boolean
 }
 
 export default function EmojiPicker({
+  role,
+  id,
+  labelledBy,
   className,
   onSelect,
   full = false,
@@ -30,6 +36,9 @@ export default function EmojiPicker({
 
   return (
     <div
+      role={role}
+      id={id}
+      aria-labelledby={labelledBy}
       className={classNames(styles.emojiPicker, className, {
         [styles.full]: full,
       })}

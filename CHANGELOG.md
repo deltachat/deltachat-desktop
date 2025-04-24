@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+- accessibility: improve emoji and sticker picker accessibility: specify "tabs" layout
 
 <a id="1_58_0"></a>
 

@@ -54,6 +54,9 @@ export default function ReactionsBar({
     <>
       {showAllEmojis && (
         <EmojiPicker
+          role={undefined}
+          id={undefined}
+          labelledBy={undefined}
           className={styles.reactionsBarPicker}
           onSelect={(emoji: BaseEmoji) => toggleReaction(emoji.native)}
         />
