@@ -286,7 +286,6 @@ function ChatListItemNormal({
   isSelected,
   onContextMenu,
   isContextMenuActive,
-  hover,
 }: {
   chatListItem: Type.ChatListItemFetchResult & {
     kind: 'ChatListItem'
@@ -297,7 +296,6 @@ function ChatListItemNormal({
   ) => void
   isContextMenuActive?: boolean
   isSelected?: boolean
-  hover?: boolean
 }) {
   const ref = useRef<HTMLButtonElement>(null)
 
@@ -325,7 +323,6 @@ function ChatListItemNormal({
         selected: isSelected,
         'context-menu-active': isContextMenuActive,
       })}
-      style={hover ? { backgroundColor: 'var(--chatListItemBgHover)' } : {}}
     >
       <Avatar
         {...{
@@ -371,12 +368,11 @@ type ChatListItemProps = {
   ) => void
   isContextMenuActive?: boolean
   isSelected?: boolean
-  hover?: boolean
 }
 
 const ChatListItem = React.memo<ChatListItemProps>(
   props => {
-    const { chatListItem, onClick, hover } = props
+    const { chatListItem, onClick } = props
 
     // if not loaded by virtual list yet
     if (typeof chatListItem === 'undefined') return <PlaceholderChatListItem />
@@ -389,7 +385,6 @@ const ChatListItem = React.memo<ChatListItemProps>(
           isSelected={props.isSelected}
           onContextMenu={props.onContextMenu}
           isContextMenuActive={props.isContextMenuActive}
-          hover={hover}
         />
       )
     } else if (chatListItem.kind == 'Error') {
