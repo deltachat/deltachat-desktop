@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+- accessibility: add `role='tablist'` for accounts list
 
 <a id="1_58_0"></a>
 

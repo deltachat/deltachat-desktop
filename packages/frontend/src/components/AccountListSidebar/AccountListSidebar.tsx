@@ -148,6 +148,8 @@ export default function AccountListSidebar({
         ref={accountsListRef}
         className={styles.accountList}
         onScroll={updateHoverInfoPosition}
+        role='tablist'
+        aria-orientation='vertical'
       >
         <RovingTabindexProvider wrapperElementRef={accountsListRef}>
           {accounts.map(id => (

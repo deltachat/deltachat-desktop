@@ -249,6 +249,12 @@ export default function AccountItem({
         [styles.isSticky]: isSticky,
         'unconfigured-account': account?.kind !== 'Configured',
       })}
+      // TODO consider adding `role='tabpanel'` for the main area of the app.
+      // Although screen readers might start to announce
+      // the account name every time you focus something in the main area,
+      // which might be too verbose.
+      role='tab'
+      aria-selected={isSelected}
       aria-busy={!account}
       onClick={() => onSelectAccount(accountId)}
       onContextMenu={onContextMenu}
