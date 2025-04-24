@@ -337,8 +337,11 @@ export default function ChatList(props: {
   //   selectFirstChat()
   // )
 
-  const chatlistData = useMemo(() => {
+  const chatlistData: ChatListItemData = useMemo(() => {
     return {
+      // This should be in sync with `olElementAttrs` of `ChatListPart`.
+      roleTabs: true,
+
       selectedChatId,
       chatListIds,
       chatCache,
@@ -457,6 +460,23 @@ export default function ChatList(props: {
               <div ref={tabindexWrapperElementChats}>
                 <ChatListPart
                   olElementAttrs={{
+                    // Note that there are many `ChatListPart` instances,
+                    // but not all of them are `role='tablist'`.
+                    //
+                    // Also note that not all the interactive items
+                    // have role='tab'. For example, `ChatListItemArchiveLink`.
+                    //
+                    // Aaand also note that we do not set `role='tabpanel'`
+                    // on the "chat" section, out of fear that screen readers
+                    // will get too verbose.
+                    // TODO this should be reconsidered.
+                    // The same goes for the accounts list items,
+                    // which are arguably also tabs.
+                    //
+                    // This should be in sync with `chatlistData.roleTabs`.
+                    role: 'tablist',
+                    'aria-orientation': 'vertical',
+
                     // TODO perhaps `pref_` is not nice,
                     // we might need a separate string.
                     // The same goes for other occurrences
