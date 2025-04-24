@@ -44,10 +44,10 @@ export async function internalOpenWebxdc(
   const chatName = (
     await BackendRemote.rpc.getBasicChatInfo(accountId, message.chatId)
   ).name
-  const displayname = await BackendRemote.rpc.getConfig(
-    accountId,
-    'displayname'
-  )
+  const account: Type.Account =
+    await BackendRemote.rpc.getAccountInfo(accountId)
+  const displayname =
+    account.kind === 'Configured' ? account.displayName || account.addr : null
 
   runtime.openWebxdc(messageId, {
     accountId,
