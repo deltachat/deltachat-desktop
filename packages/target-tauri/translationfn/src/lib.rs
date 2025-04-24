@@ -63,13 +63,21 @@ impl TranslationEngine {
                     }
                 }
                 Substitution::String(items) => {
-                    //TODO: remove unwrap, use log instead
                     if let Some(message) = entry.get("message") {
                         let mut msg = message.clone();
                         for matches in self.var_finder.find_iter(message) {
                             let from = matches.as_str();
-                            let position: u32 = from.chars().nth(1).unwrap().to_digit(10).unwrap();
-                            msg = msg.replace(from, items.get(position as usize - 1).unwrap());
+                            if let Some(position) = from.chars().nth(1).and_then(|from| from.to_digit(10)) {
+                                if let Some(item) = items.get(position as usize - 1) {
+                                    msg = msg.replace(from, item);
+                                } else {
+                                    error!("Invalid item position {position}");
+                                    return key.to_owned()
+                                }
+                            } else {
+                                error!("Invalid format of replacement pattern");
+                                return key.to_owned()
+                            }
                         }
                         msg
                     } else {
@@ -91,7 +99,10 @@ impl TranslationEngine {
                         }
                     };
                     if let Some(message) = entry.get(quantity_key) {
-                        message.replace("%d", &quantity.to_string())
+                        let quantity_string = quantity.to_string();
+                        message
+                            .replace("%1$d", &quantity_string)
+                            .replace("%d", &quantity_string)
                     } else {
                         error!(
                             "Message for key was found {key}, but variant {quantity_key} to represent quantity of {quantity} is missing"
@@ -235,6 +246,7 @@ mod tests {
             "Max Mustermann hat die E-Mail-Adresse von max@mustermann.de nach mustermann@max.de geändert und ist toll"
         );
     }
+
     #[test]
     fn quantity_ru() {
         let msgs: HashMap<String, HashMap<String, String>> =
@@ -258,6 +270,7 @@ mod tests {
         let result = txen.translate("n_minutes", Substitution::QuantityFloat(1.5));
         assert_eq!(result, "1.5 минут");
     }
+
     #[test]
     fn quantity_en() {
         let msgs: HashMap<String, HashMap<String, String>> =
@@ -274,5 +287,67 @@ mod tests {
         assert_eq!(result, "2 hours");
     }
 
-    //TODO: test for dead errors to not crash and are returned
+    #[test]
+    fn quantity_key_missing() {
+        let msgs: HashMap<String, HashMap<String, String>> =
+            serde_json::from_value(serde_json::json!({ "n_hours": {
+                "faulty": "",
+            }}))
+            .unwrap();
+        let txen = TranslationEngine::new(msgs, "en").unwrap();
+        let result = txen.translate("n_hours", Substitution::Quantity(1));
+        assert_eq!(result, "n_hours");
+    }
+
+    #[test]
+    fn no_translation_for_key() {
+        let msgs: HashMap<String, HashMap<String, String>> =
+            serde_json::from_value(serde_json::json!({})).unwrap();
+        let txen = TranslationEngine::new(msgs, "de").unwrap();
+        let result = txen.translate("qrshow_title", Substitution::None);
+        assert_eq!(result, "qrshow_title");
+    }
+
+    #[test]
+    fn no_message_for_key() {
+        let msgs: HashMap<String, HashMap<String, String>> =
+            serde_json::from_value(serde_json::json!({"qrshow_title": {
+            }}))
+            .unwrap();
+        let txen = TranslationEngine::new(msgs, "de").unwrap();
+        let result = txen.translate("qrshow_title", Substitution::None);
+        assert_eq!(result, "qrshow_title");
+    }
+
+    #[test]
+    fn substitution_position_doesnt_exist() {
+        let msgs: HashMap<String, HashMap<String, String>> =
+            serde_json::from_value(serde_json::json!({"group_name_changed_by_other": {
+              "message": "%2$s”"
+            }}))
+            .unwrap();
+        let txen = TranslationEngine::new(msgs, "zh_CN").unwrap();
+        let result = txen.translate(
+            "group_name_changed_by_other",
+            Substitution::String(vec!["1"]),
+        );
+        assert_eq!(result, "group_name_changed_by_other");
+    }
+
+    #[test]
+    fn invalid_substitution_matching_pattern() {
+        let msgs: HashMap<String, HashMap<String, String>> =
+            serde_json::from_value(serde_json::json!({"group_name_changed_by_other": {
+              "message": "$s”"
+            }}))
+            .unwrap();
+        let txen = TranslationEngine::new(msgs, "zh_CN").unwrap();
+        let result = txen.translate(
+            "group_name_changed_by_other",
+            Substitution::String(vec!["1"]),
+        );
+        assert_eq!(result, "group_name_changed_by_other");
+    }
+    // TODO: tests: that errors do not crash the program and are returned as errors instead (creation of translation engine)
+    // TODO: handle %s case for substitution pattern matching
 }
