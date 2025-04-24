@@ -179,6 +179,8 @@ export const EmojiAndStickerPicker = forwardRef<
     hideStickerPicker?: boolean
   }
 >((props, ref) => {
+  const tx = useTranslationFunction()
+
   const accountId = selectedAccountId()
   const { onEmojiSelect, chatId, setShowEmojiPicker, hideStickerPicker } = props
 
@@ -205,13 +207,13 @@ export const EmojiAndStickerPicker = forwardRef<
             onClick={() => setShowSticker(false)}
             isSelected={!showSticker}
           >
-            Emoji
+            {tx('emoji')}
           </EmojiOrStickerSelectorButton>
           <EmojiOrStickerSelectorButton
             onClick={() => setShowSticker(true)}
             isSelected={showSticker}
           >
-            Sticker
+            {tx('sticker')}
           </EmojiOrStickerSelectorButton>
         </div>
       )}
