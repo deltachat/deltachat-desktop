@@ -141,7 +141,7 @@ class AccountSize extends Component<{ accountId: number }, { size?: string }> {
   async update() {
     const bytes = await BackendRemote.rpc
       .getAccountFileSize(this.props.accountId)
-      .catch(log.error)
+      .catch(log.error.bind(log))
     if (!this.wasDestroyed) {
       this.setState({ size: bytes ? filesize(bytes) : undefined })
     }
