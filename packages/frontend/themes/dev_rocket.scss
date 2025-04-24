@@ -1,43 +1,42 @@
+/* Derive the themedata from the theme variables */
+@use './_themebase' with (
+  /* Set theme variables used for theme Generation */
+  $outlineColor: #b9b9b9,
+  $accentColor: #000000,
+  $bgChatView: #e6dcd4,
+  $bgImage: url('./images/background_light.svg'),
+  $bgMessageBubbleIncoming: #ecececaf, // $borderColor
+  $bgMessageBubbleOutgoing: #efffde,
+  $bgNavBar: #fff,
+  $bgPrimary: #fff,
+  $bgSecondary: #f5f5f5,
+  $chatListItemSelectedBg: #4c6e7d,
+  $colorDanger: #f96856,
+  $colorNone: #a0a0a0,
+  $colorPrimary: #000000,
+  $floatingActionButtonBg: gray,
+  $keybindingHintsBoxBackground: rgba(0, 0, 0, 0.05),
+  $keybindingActionBackground: rgba(0, 0, 0, 0.05),
+  $keybindingKeyBackground: lightgray,
+  $keybindingKeyBorder: gray,
+  $keybindingKeyShadow: rgba(0, 0, 0, 0.35),
+  $textPrimary: #010101,
+  $textSecondary: #62656a,
+  $textNavBar: #010101, // $textPrimary
+  $btnPrimaryText: #fff,
+  $btnDangerText: #fff,
+  $btnDangerBackground: #f96856,
+
+  $scrollbarTransparency: 0.5
+);
+
+$borderColor: #ecececaf;
+$navbarBgLight: $borderColor;
+
 .theme-meta {
   --name: 'Rocket';
   --description: 'A theme supposed to look like Rocket.chat';
 }
-
-$borderColor: #ecececaf;
-
-$navbarBgLight: $borderColor;
-
-/* Set theme variables used for theme Generation */
-$outlineColor: #b9b9b9;
-$accentColor: #000000;
-$bgChatView: #e6dcd4;
-$bgImage: url('./images/background_light.svg');
-$bgMessageBubbleIncoming: $navbarBgLight;
-$bgMessageBubbleOutgoing: #efffde;
-$bgNavBar: #fff;
-$bgPrimary: #fff;
-$bgSecondary: #f5f5f5;
-$chatListItemSelectedBg: #4c6e7d;
-$colorDanger: #f96856;
-$colorNone: #a0a0a0;
-$colorPrimary: #000000;
-$floatingActionButtonBg: gray;
-$keybindingHintsBoxBackground: rgba(0, 0, 0, 0.05);
-$keybindingActionBackground: rgba(0, 0, 0, 0.05);
-$keybindingKeyBackground: lightgray;
-$keybindingKeyBorder: gray;
-$keybindingKeyShadow: rgba(0, 0, 0, 0.35);
-$textPrimary: #010101;
-$textSecondary: #62656a;
-$textNavBar: $textPrimary;
-$btnPrimaryText: #fff;
-$btnDangerText: #fff;
-$btnDangerBackground: $colorDanger;
-
-$scrollbarTransparency: 0.5;
-
-/* Derive the themedata from the theme variables */
-@import '_themebase.scss';
 
 /* overwrite themedata */
 :root {

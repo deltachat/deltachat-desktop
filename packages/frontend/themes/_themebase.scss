@@ -1,7 +1,43 @@
 @use 'sass:color';
 
 $hover-contrast-change: 2%;
+// set light theme variables as fallback
+$colorPrimary: #42a5f5 !default;
+$colorDanger: #f96856 !default;
+$colorNone: #a0a0a0 !default;
+$colorLessContrast: #676767 !default;
 
+$textPrimary: #010101 !default;
+$textSecondary: #585a5f !default;
+$outlineColor: #b9b9b9 !default;
+$accentColor: #2090ea !default;
+
+$bgPrimary: #ffffff !default;
+$bgSecondary: #f5f5f5 !default;
+$bgImage: url('./images/background_light.svg') !default;
+$bgMessageBubbleIncoming: #fff !default;
+$bgMessageBubbleOutgoing: #efffde !default;
+$bgNavBar: #f8f9fa !default;
+$bgChatView: #e6dcd4 !default;
+$textNavBar: #fff !default;
+
+$btnPrimaryText: #fff !default;
+$btnDangerText: #fff !default;
+$btnDangerBackground: #f96856 !default;
+
+$keybindingHintsBoxBackground: rgba(0, 0, 0, 0.05) !default;
+$keybindingActionBackground: rgba(0, 0, 0, 0.05) !default;
+$keybindingKeyBackground: lightgray !default;
+$keybindingKeyBorder: gray !default;
+$keybindingKeyShadow: rgba(0, 0, 0, 0.35) !default;
+
+$floatingActionButtonBg: #42a5f5 !default;
+$chatListItemSelectedBg: #e3f2fd !default;
+$scrollbarTransparency: 0.34 !default;
+
+/* Add other missing variables here as needed */
+
+/* Functions */
 @function changeContrast($color, $factor) {
   @if color.channel($color, 'lightness', $space: hsl) < 50 {
     @return color.adjust($color, $lightness: $factor);
@@ -16,6 +52,7 @@ $hover-contrast-change: 2%;
     color.channel($color, 'blue', $space: rgb);
 }
 
+/* Root Variables */
 :root {
   --colorPrimary: #{$colorPrimary};
   --colorDanger: #{$colorDanger};
@@ -263,4 +300,9 @@ $hover-contrast-change: 2%;
 
     --SPECIAL-emoji-picker-category-icon-style: outline;
   }
+}
+
+body {
+  background-color: $bgPrimary;
+  color: $textPrimary;
 }
