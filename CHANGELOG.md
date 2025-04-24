@@ -44,7 +44,7 @@
 - remove addresses from contact list items unless they are not verified. #4880
 - migrate account mute state to new is_muted config option #4888 #4924
 - technical: change script format and imports to esm/module #4871
-- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.159.1`
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.159.3`
   - Simplify e2ee decision logic, remove majority vote
   - Stop saving txt_raw
   - Do not fail to send the message if some keys are missing
