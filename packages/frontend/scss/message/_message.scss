@@ -230,7 +230,7 @@
       color: var(--messageOutgoingStatusColor);
     }
 
-    & > .padlock-icon {
+    .padlock-icon {
       @include mixins.color-svg(
         './images/padlock.svg',
         var(--messageMetadataIconColorOutgoing),
@@ -238,7 +238,7 @@
       );
     }
 
-    & > .location-icon {
+    .location-icon {
       @include mixins.color-svg(
         './images/map-marker.svg',
         var(--messageMetadataIconColorOutgoing),
@@ -246,7 +246,7 @@
       );
     }
 
-    & > .saved-message-icon {
+    .saved-message-icon {
       @include mixins.color-svg(
         './images/icons/bookmark-filled.svg',
         var(--messageMetadataIconColorOutgoing),
@@ -328,15 +328,15 @@
       color: white;
     }
 
-    & > .padlock-icon {
+    .padlock-icon {
       @include mixins.color-svg('./images/padlock.svg', white, 125%);
     }
 
-    & > .location-icon {
+    .location-icon {
       @include mixins.color-svg('./images/map-marker.svg', white, 100%);
     }
 
-    & > .saved-message-icon {
+    .saved-message-icon {
       @include mixins.color-svg(
         './images/icons/bookmark-filled.svg',
         white,
@@ -673,15 +673,15 @@
     .metadata {
       margin: 0;
 
-      & > .padlock-icon {
+      .padlock-icon {
         @include mixins.color-svg('./images/padlock.svg', white, 125%);
       }
 
-      & > .location-icon {
+      .location-icon {
         @include mixins.color-svg('./images/map-marker.svg', white, 100%);
       }
 
-      & > .saved-message-icon {
+      .saved-message-icon {
         @include mixins.color-svg(
           './images/icons/bookmark-filled.svg',
           white,

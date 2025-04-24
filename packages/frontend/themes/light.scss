@@ -1,6 +1,6 @@
-/* Derive the themedata from the theme variables */
+/* Set theme variables used for theme Generation */
 @use './_themebase' with (
-  /* Set theme variables used for theme Generation */ $outlineColor: #b9b9b9,
+  $outlineColor: #b9b9b9,
   $accentColor: #2090ea,
   $bgChatView: #e6dcd4,
   $bgImage: url('./images/background_light.svg'),

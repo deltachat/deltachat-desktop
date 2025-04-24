@@ -1,6 +1,5 @@
-/* Derive the themedata from the theme variables */
+/* Set theme variables used for theme Generation */
 @use './_themebase' with (
-  /* Set theme variables used for theme Generation */
   $accentColor: purple,
   $bgChatView: #000,
   $bgImage: none,

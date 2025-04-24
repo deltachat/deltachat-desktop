@@ -1,11 +1,10 @@
-/* Derive the themedata from the theme variables */
+/* Set theme variables used for theme Generation */
 @use './_themebase' with (
-  /* Set theme variables used for theme Generation */
   $outlineColor: #b9b9b9,
   $accentColor: #000000,
   $bgChatView: #e6dcd4,
   $bgImage: url('./images/background_light.svg'),
-  $bgMessageBubbleIncoming: #ecececaf, // $navbarBgLight,
+  $bgMessageBubbleIncoming: #ecececaf,
   $bgMessageBubbleOutgoing: #efffde,
   $bgNavBar: #fff,
   $bgPrimary: #fff,
@@ -22,7 +21,7 @@
   $keybindingKeyShadow: rgba(0, 0, 0, 0.35),
   $textPrimary: #010101,
   $textSecondary: #62656a,
-  $textNavBar: #010101, //$textPrimary,
+  $textNavBar: #010101,
   $btnPrimaryText: #fff,
   $btnDangerText: #fff,
   $btnDangerBackground: #f96856,
