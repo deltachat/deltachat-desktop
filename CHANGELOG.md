@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+- accessibility: add accessible labels to more items
 
 <a id="1_58_0"></a>
 
