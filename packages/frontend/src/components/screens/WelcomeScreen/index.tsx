@@ -32,7 +32,6 @@ export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
   const { openDialog } = useDialog()
 
   useLayoutEffect(() => {
-    // Show back button when user has already created and configured accounts.
     // On a fresh DC start we will not have any yet.
     const checkAccounts = async () => {
       const accounts = await getConfiguredAccounts()
@@ -45,9 +44,7 @@ export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
   }, [])
 
   /**
-   * this function is called when the back button is clicked
-   *
-   * it will cancel the account creation process and call
+   * cancel the account creation process and call
    * onExitWelcomeScreen
    */
   const onClose = async () => {
