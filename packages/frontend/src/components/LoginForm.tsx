@@ -11,8 +11,6 @@ import { BackendRemote, Type } from '../backend-com'
 import Collapse from './Collapse'
 import { I18nContext } from '../contexts/I18nContext'
 
-import SettingsSwitch from './Settings/SettingsSwitch'
-
 const log = getLogger('renderer/loginForm')
 
 import type { Credentials } from './Settings/DefaultCredentials'
@@ -119,8 +117,6 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
     smtpServer,
     smtpPort,
     smtpSecurity,
-    proxyEnabled,
-    proxyUrl,
   } = credentials
 
   return (
@@ -279,30 +275,6 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
                 {tx('accept_invalid_certificates')}
               </option>
             </DeltaSelect>
-            <SettingsSwitch
-              label={tx('proxy_use_proxy')}
-              value={proxyEnabled}
-              onChange={(isTrue: boolean) =>
-                _handleCredentialsChange('proxyEnabled', isTrue)
-              }
-            />
-            {proxyEnabled && (
-              <>
-                <p className='text'>
-                  Proxy support is currently experimental. Please use at your
-                  own risk. If you type in an address in the e-mail field, there
-                  will be a DNS lookup that won't get tunneled through proxy.
-                </p>
-                <p className='text'>{tx('proxy_add_explain')}</p>
-                <DeltaInput
-                  key='proxyUrl'
-                  id='proxyUrl'
-                  label={tx('proxy_add_url_hint')}
-                  value={proxyUrl}
-                  onChange={handleCredentialsChange}
-                />
-              </>
-            )}
           </Collapse>
           <br />
           <p className='text'>{tx('login_subheader')}</p>

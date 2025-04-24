@@ -18,9 +18,31 @@ import useDialog from '../../../hooks/dialog/useDialog'
 import UseOtherServerDialog from './UseOtherServerDialog'
 import { BackendRemote } from '../../../backend-com'
 
+import { ContextMenuContext } from '../../../contexts/ContextMenuContext'
+import { mouseEventToPosition } from '../../../utils/mouseEventToPosition'
+import { OpenDialog } from '../../../contexts/DialogContext'
+import ProxyConfiguration from '../../dialogs/ProxyConfiguration'
+import { selectedAccountId } from '../../../ScreenController'
+
 type Props = {
   onCancel: () => void
   selectedAccountId: number
+}
+
+function buildContextMenu(openDialog: OpenDialog) {
+  const tx = window.static_translate // don't use the i18n context here for now as this component is inefficient (rendered one menu for every message)
+  // add help item
+  return [
+    {
+      label: tx('proxy_use_proxy'),
+      action: () => {
+        openDialog(ProxyConfiguration, {
+          accountId: selectedAccountId(),
+          configured: false,
+        })
+      },
+    },
+  ]
 }
 
 /**
@@ -50,6 +72,22 @@ export default function InstantOnboardingScreen({
   const [displayName, setDisplayName] = useState('')
   const [profilePicture, setProfilePicture] = useState<string | null>(null)
   const [showMissingNameError, setShowMissingNameError] = useState(false)
+
+  const { openContextMenu } = useContext(ContextMenuContext)
+
+  const showMenu = (
+    event: React.MouseEvent<
+      HTMLDivElement | HTMLAnchorElement | HTMLLIElement,
+      MouseEvent
+    >
+  ) => {
+    const items = buildContextMenu(openDialog)
+
+    openContextMenu({
+      ...mouseEventToPosition(event),
+      items,
+    })
+  }
 
   useEffect(() => {
     ;(async () => {
@@ -142,6 +180,7 @@ export default function InstantOnboardingScreen({
     <>
       <DialogHeader
         onClickBack={onClickBack}
+        onContextMenuClick={showMenu}
         title={tx('instant_onboarding_title')}
       />
       <DialogBody className={styles.welcomeScreenBody}>
@@ -151,6 +190,7 @@ export default function InstantOnboardingScreen({
             profilePicture={profilePicture}
             setProfilePicture={onChangeProfileImage}
           />
+          {/** <!-- radio button --> */}
           <DeltaInput
             key='displayName'
             id='displayName'
