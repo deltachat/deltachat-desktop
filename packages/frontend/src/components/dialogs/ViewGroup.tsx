@@ -269,7 +269,12 @@ function ViewGroupInner(
             </DialogContent>
             {isRelatedChatsEnabled && (
               <>
-                <div className='group-separator'>{tx('related_chats')}</div>
+                <div
+                  id='view-group-related-chats-title'
+                  className='group-separator'
+                >
+                  {tx('related_chats')}
+                </div>
                 <div
                   ref={relatedChatsListWrapperRef}
                   className='group-related-chats-list-wrapper'
@@ -278,6 +283,9 @@ function ViewGroupInner(
                     wrapperElementRef={relatedChatsListWrapperRef}
                   >
                     <ChatListPart
+                      olElementAttrs={{
+                        'aria-labelledby': 'view-group-related-chats-title',
+                      }}
                       isRowLoaded={isChatLoaded}
                       loadMoreRows={loadChats}
                       rowCount={chatListIds.length}

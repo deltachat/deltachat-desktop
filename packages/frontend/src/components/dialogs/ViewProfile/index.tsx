@@ -327,7 +327,9 @@ export function ViewProfileInner({
       )}
       {!(isDeviceChat || isSelfChat) && (
         <>
-          <div className='group-separator'>{tx('profile_shared_chats')}</div>
+          <div id='view-profile-mutual-chats-title' className='group-separator'>
+            {tx('profile_shared_chats')}
+          </div>
           <div
             ref={mutualChatsListRef}
             className='mutual-chats'
@@ -337,6 +339,9 @@ export function ViewProfileInner({
               <AutoSizer disableWidth>
                 {({ height }) => (
                   <ChatListPart
+                    olElementAttrs={{
+                      'aria-labelledby': 'view-profile-mutual-chats-title',
+                    }}
                     isRowLoaded={isChatLoaded}
                     loadMoreRows={loadChats}
                     rowCount={chatListIds.length}

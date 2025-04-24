@@ -221,6 +221,7 @@ function ChatListItemArchiveLink({
 function ChatListItemError({
   chatListItem,
   onClick,
+  roleTab,
   isSelected,
   onContextMenu,
 }: {
@@ -231,6 +232,7 @@ function ChatListItemError({
   onContextMenu?: (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void
+  roleTab?: boolean
   isSelected?: boolean
 }) {
   log.info('Error Loading Chatlistitem ' + chatListItem.id, chatListItem.error)
@@ -252,6 +254,8 @@ function ChatListItemError({
       onKeyDown={tabindexOnKeydown}
       onFocus={tabindexSetAsActiveElement}
       onContextMenu={onContextMenu}
+      role={roleTab ? 'tab' : undefined}
+      aria-selected={isSelected}
       className={classNames('chat-list-item', tabindexClassName, {
         isError: true,
         selected: isSelected,
@@ -284,6 +288,7 @@ function ChatListItemNormal({
   chatListItem,
   onClick,
   isSelected,
+  roleTab,
   onContextMenu,
   isContextMenuActive,
   hover,
@@ -296,6 +301,7 @@ function ChatListItemNormal({
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void
   isContextMenuActive?: boolean
+  roleTab?: boolean
   isSelected?: boolean
   hover?: boolean
 }) {
@@ -317,6 +323,8 @@ function ChatListItemNormal({
       onKeyDown={tabindexOnKeydown}
       onFocus={tabindexSetAsActiveElement}
       onContextMenu={onContextMenu}
+      role={roleTab ? 'tab' : undefined}
+      aria-selected={isSelected}
       className={classNames('chat-list-item', tabindexClassName, {
         'has-unread': chatListItem.freshMessageCounter > 0,
         'is-contact-request': chatListItem.isContactRequest,
@@ -370,13 +378,20 @@ type ChatListItemProps = {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void
   isContextMenuActive?: boolean
+  /**
+   * Whether to set `role='tab'` on the item.
+   *
+   * Note that this doesn't apply to some items,
+   * such as `ChatListItemArchiveLink`.
+   */
+  roleTab?: boolean
   isSelected?: boolean
   hover?: boolean
 }
 
 const ChatListItem = React.memo<ChatListItemProps>(
   props => {
-    const { chatListItem, onClick, hover } = props
+    const { chatListItem, onClick, roleTab, hover } = props
 
     // if not loaded by virtual list yet
     if (typeof chatListItem === 'undefined') return <PlaceholderChatListItem />
@@ -386,6 +401,7 @@ const ChatListItem = React.memo<ChatListItemProps>(
         <ChatListItemNormal
           chatListItem={chatListItem}
           onClick={onClick}
+          roleTab={roleTab}
           isSelected={props.isSelected}
           onContextMenu={props.onContextMenu}
           isContextMenuActive={props.isContextMenuActive}
@@ -397,6 +413,7 @@ const ChatListItem = React.memo<ChatListItemProps>(
         <ChatListItemError
           chatListItem={chatListItem}
           onClick={onClick}
+          roleTab={roleTab}
           isSelected={props.isSelected}
           onContextMenu={props.onContextMenu}
         />
