@@ -8,6 +8,7 @@
 ### Fixed
 - fix "Recent 3 apps" in the chat header showing apps from another chat sometimes #5265
 - accessibility: don't re-announce message input (composer) after sending every message #5049
+- accessibility: correct `aria-posinset` for chat list #5044
 - don't close context menues on window resize #5418
 
 <a id="2_11_1"></a>
