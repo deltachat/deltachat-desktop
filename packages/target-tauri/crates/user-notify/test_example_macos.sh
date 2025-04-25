@@ -31,8 +31,7 @@ cat <<EOF > "$TARGET_DIR/TestExample.app/Contents/Info.plist"
 </plist>
 EOF
 
+# echo "> code signing"
+codesign -s "$APPLE_SIGNING_IDENTITY" ./$TARGET_DIR/TestExample.app/ || (echo "APPLE_SIGNING_IDENTITY env var missing" && exit 1)
+# echo "> run it"
 ./$TARGET_DIR/TestExample.app/Contents/MacOS/test
-
-# TODO: code signing
-
-# this script doesn't work yet, we liekely need code signing and icons to make it work

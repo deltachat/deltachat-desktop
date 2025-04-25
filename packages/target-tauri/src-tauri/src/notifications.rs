@@ -1,10 +1,13 @@
 use std::{path::PathBuf, str::FromStr};
 
 use serde::{Deserialize, Serialize};
-use tauri::{async_runtime::block_on, path::SafePathBuf, Runtime};
-use user_notify::NotificationBuilder;
+use tauri::{async_runtime::block_on, path::SafePathBuf, Runtime, State};
+use user_notify::{NotificationBuilder, NotificationManager};
 
-use crate::temp_file::{remove_temp_file, write_temp_file_from_base64};
+use crate::{
+    temp_file::{remove_temp_file, write_temp_file_from_base64},
+    Notifications,
+};
 
 #[derive(Debug, thiserror::Error)]
 pub(crate) enum Error {
@@ -47,6 +50,7 @@ pub(crate) async fn show_notification(
     chat_id: u32,
     message_id: u32,
     account_id: u32,
+    notifications: State<'_, Notifications>,
 ) -> Result<(), Error> {
     if window.label() != "main" {
         return Err(Error::NotMainWindow);
@@ -63,89 +67,84 @@ pub(crate) async fn show_notification(
 
     let app_clone = app.clone();
     // MacOS needs this to be run on main thread
-    app.run_on_main_thread(move || {
-        // TODO find way to make this async
-        // by doing conversion to async here and not in user_notify crate
-        let notification = match block_on(async {
-            let mut notification_builder = {
-                #[cfg(target_os = "macos")]
-                {
-                    user_notify::mac_os::NotificationBuilderMacOS::new()
+
+    let mut notification_builder = {
+        #[cfg(target_os = "macos")]
+        {
+            user_notify::mac_os::NotificationBuilderMacOS::new()
+        }
+        #[cfg(target_os = "windows")]
+        {
+            todo!();
+        }
+        #[cfg(any(
+            target_os = "linux",
+            target_os = "dragonfly",
+            target_os = "freebsd",
+            target_os = "openbsd",
+            target_os = "netbsd"
+        ))]
+        {
+            todo!();
+            // user_notify::xdg::NotificationBuilderXdg::new()
+            //     .category_hint(user_notify::xdg::NotificationCategory::ImReceived)
+            //     .appname("Delta Chat")
+        }
+    };
+
+    notification_builder = notification_builder
+        .title(&title)
+        .body(&body)
+        .set_thread_id(&format!("{account_id}-{chat_id}"));
+
+    let mut temp_file_to_clean_up = None;
+
+    if let Some(icon) = icon {
+        // file could be
+        // - data uri - webxdc icon
+        // - absolute path to file in blobdir - chat avatar, image in message
+        if icon.starts_with("data:") {
+            // TODO write to disk
+            log::error!("todo webxdc icon: {:?}", icon.get(0..30));
+
+            match icon.strip_prefix("data:image/png;base64,") {
+                None => {
+                    log::error!("webxdc icon format not supported yet (only supports png at the time): {:?}", icon.get(0..30));
                 }
-                #[cfg(target_os = "windows")]
-                {
-                    todo!();
-                }
-                #[cfg(any(
-                    target_os = "linux",
-                    target_os = "dragonfly",
-                    target_os = "freebsd",
-                    target_os = "openbsd",
-                    target_os = "netbsd"
-                ))]
-                {
-                    user_notify::xdg::NotificationBuilderXdg::new()
-                        .category_hint(user_notify::xdg::NotificationCategory::ImReceived)
-                        .appname("Delta Chat")
-                }
-            };
-
-            notification_builder = notification_builder
-                .title(&title)
-                .body(&body)
-                .set_thread_id(&format!("{account_id}-{chat_id}"));
-
-            let mut temp_file_to_clean_up = None;
-
-            if let Some(icon) = icon {
-                // file could be
-                // - data uri - webxdc icon
-                // - absolute path to file in blobdir - chat avatar, image in message
-                if icon.starts_with("data:") {
-                    // TODO write to disk
-                    log::error!("todo webxdc icon: {:?}", icon.get(0..30));
-
-                    match icon.strip_prefix("data:image/png;base64,") {
-                        None => {log::error!("webxdc icon format not supported yet (only supports png at the time): {:?}", icon.get(0..30));},
-                        Some(base_64) => {
-                            match write_temp_file_from_base64(app_clone.clone(), "webxdc_icon.png", base_64).await{
-                                Ok(tmp_file) => {
-                                    // IDEA: on non macos set icon of webxdc instead?
-                                    notification_builder = notification_builder.set_image(PathBuf::from_str(&tmp_file)?)?;
-                                    temp_file_to_clean_up.replace(tmp_file);
-                                },
-                                Err(err)=>{
-                                    log::error!("failed to write webxdc icon to temp file: {err}");
-                                }
-                                }
+                Some(base_64) => {
+                    match write_temp_file_from_base64(app_clone.clone(), "webxdc_icon.png", base_64)
+                        .await
+                    {
+                        Ok(tmp_file) => {
+                            // IDEA: on non macos set icon of webxdc instead?
+                            notification_builder =
+                                notification_builder.set_image(PathBuf::from_str(&tmp_file)?)?;
+                            temp_file_to_clean_up.replace(tmp_file);
+                        }
+                        Err(err) => {
+                            log::error!("failed to write webxdc icon to temp file: {err}");
                         }
                     }
-
-                } else {
-                    notification_builder =
-                        notification_builder.set_image(PathBuf::from_str(&icon)?)?;
-                };
+                }
             }
-
-            let notification = notification_builder.show().await?;
-
-            // here we can delete the tmp file again,
-            // atleast on macos (os moves it to datastore) and on linux (transfers image data on dbus)
-            if let Some(tmp_file) = temp_file_to_clean_up {
-                remove_temp_file(app_clone.clone(), SafePathBuf::from_str(&tmp_file).map_err(|_|Error::FailedToDeleteTmpFile)?).await.map_err(|_|Error::FailedToDeleteTmpFile)?;
-            }
-
-            Ok::<_, Error>(notification)
-        }) {
-            Ok(notification) => notification,
-            Err(err) => {
-                log::error!("show notification failed {err:?}");
-                return;
-            }
+        } else {
+            notification_builder = notification_builder.set_image(PathBuf::from_str(&icon)?)?;
         };
-    })?;
+    }
 
-    // notification.clo
+    let manager = notifications.manager.as_ref();
+    let notification = notification_builder.show(manager).await?;
+
+    // here we can delete the tmp file again,
+    // atleast on macos (os moves it to datastore) and on linux (transfers image data on dbus)
+    if let Some(tmp_file) = temp_file_to_clean_up {
+        remove_temp_file(
+            app_clone.clone(),
+            SafePathBuf::from_str(&tmp_file).map_err(|_| Error::FailedToDeleteTmpFile)?,
+        )
+        .await
+        .map_err(|_| Error::FailedToDeleteTmpFile)?;
+    }
 
     // let _ = app.emit(
     //     "notification_clicked",
@@ -172,26 +171,15 @@ pub(crate) async fn clear_notifications<R: Runtime>(
 
 #[tauri::command]
 pub(crate) async fn clear_all_notifications<R: Runtime>(
-    app: tauri::AppHandle<R>,
     window: tauri::Window<R>,
+    notifications: State<'_, Notifications>,
 ) -> Result<(), Error> {
     if window.label() != "main" {
         return Err(Error::NotMainWindow);
     }
 
-    #[cfg(not(target_os = "macos"))]
-    {
-        // there seems to be no api for this in https://docs.rs/tauri-plugin-notification/latest/tauri_plugin_notification/struct.NotificationBuilder.html
-        todo!("loop through all notifications we hold in the manager and call close on them");
-    }
-
-    #[cfg(target_os = "macos")]
-    {
-        app.run_on_main_thread(|| {
-            if let Err(err) = user_notify::mac_os::remove_all_delivered_notifications() {
-                log::error!("remove_all_delivered_notifications failed: {err}");
-            }
-        })?;
+    if let Err(err) = notifications.manager.remove_all_delivered_notifications() {
+        log::error!("remove_all_delivered_notifications failed: {err}");
     }
 
     Ok(())

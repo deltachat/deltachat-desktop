@@ -23,6 +23,7 @@ use state::{
     translations::TranslationState,
     tray_manager::TrayManager,
     webxdc_instances::WebxdcInstancesState,
+    notification::Notifications,
 };
 
 use tauri::{
@@ -33,7 +34,6 @@ use tauri::{
 use tauri_plugin_log::{Target, TargetKind};
 
 use tray::is_tray_icon_active;
-use user_notify::mac_os::{NotificationDelegate, NotificationManager};
 
 mod app_path;
 mod autostart;
@@ -105,6 +105,7 @@ async fn ui_frontend_ready(
     app: AppHandle,
     rc: tauri::State<'_, RunConfig>,
     state: tauri::State<'_, AppState>,
+    notifications: tauri::State<'_, Notifications>,
 ) -> Result<(), String> {
     let mut lock = state.inner.lock().await;
 
@@ -127,24 +128,7 @@ async fn ui_frontend_ready(
 
     deeplink::register();
 
-    #[cfg(target_os = "macos")]
-    {
-        app.run_on_main_thread(|| {
-            match user_notify::mac_os::first_time_ask_for_notification_permission() {
-                Err(err) => {
-                    log::error!("failed to ask for notification permission: {err:?}");
-                }
-                Ok(rx) => {
-                    spawn(async {
-                        if let Err(err) = rx.await {
-                            println!("failed to ask for notification permission: {err:?}");
-                        }
-                    });
-                }
-            }
-        })
-        .map_err(|err| err.to_string())?;
-    }
+    notifications.ask_for_permission();
 
     Ok(())
 }
@@ -508,20 +492,10 @@ pub fn run() -> i32 {
                     i18n::watch_translations(app.handle().clone());
                 }
             }
-            #[cfg(target_os = "macos")]
-            {
-                // remove all notifications that are still there from previous sessions,
-                // as they probably don't work anymore and are just stuck
-                //
-                // https://github.com/deltachat/deltachat-desktop/issues/2438#issuecomment-1090735045
-                if let Err(err) = user_notify::mac_os::remove_all_delivered_notifications() {
-                    log::error!("remove_all_delivered_notifications: {err:?}");
-                }
 
-                let notification_manager = NotificationManager::new();
-                notification_manager.register();
-                app.manage(notification_manager);
-            }
+            let notifications = Notifications::new();
+            notifications.initialize();
+            app.manage(notifications);
 
             app.state::<AppState>()
                 .log_duration_since_startup("setup done");
