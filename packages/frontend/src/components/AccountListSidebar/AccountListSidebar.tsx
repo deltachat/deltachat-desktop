@@ -46,7 +46,7 @@ export default function AccountListSidebar({
 }: Props) {
   const tx = useTranslationFunction()
 
-  const accountsListRef = useRef<HTMLDivElement>(null)
+  const accountsListRef = useRef<HTMLUListElement>(null)
   const { openDialog } = useDialog()
   const [accounts, setAccounts] = useState<number[]>([])
   const [{ accounts: noficationSettings }] = useAccountNotificationStore()
@@ -144,27 +144,35 @@ export default function AccountListSidebar({
           data-tauri-drag-region
         />
       )}
-      <div
+      <ul
         ref={accountsListRef}
+        // Perhaps just "Profiles" would be more appropriate,
+        // because you can do other things with profiles in this list,
+        // but we have the same on Android.
+        aria-label={tx('switch_account')}
         className={styles.accountList}
         onScroll={updateHoverInfoPosition}
       >
         <RovingTabindexProvider wrapperElementRef={accountsListRef}>
           {accounts.map(id => (
-            <AccountItem
-              key={id}
-              accountId={id}
-              isSelected={selectedAccountId === id}
-              onSelectAccount={selectAccount}
-              openAccountDeletionScreen={openAccountDeletionScreen}
-              updateAccountForHoverInfo={updateAccountForHoverInfo}
-              syncAllAccounts={syncAllAccounts}
-              muted={noficationSettings[id]?.muted || false}
-            />
+            <li>
+              <AccountItem
+                key={id}
+                accountId={id}
+                isSelected={selectedAccountId === id}
+                onSelectAccount={selectAccount}
+                openAccountDeletionScreen={openAccountDeletionScreen}
+                updateAccountForHoverInfo={updateAccountForHoverInfo}
+                syncAllAccounts={syncAllAccounts}
+                muted={noficationSettings[id]?.muted || false}
+              />
+            </li>
           ))}
-          <AddAccountButton onClick={onAddAccount} />
+          <li>
+            <AddAccountButton onClick={onAddAccount} />
+          </li>
         </RovingTabindexProvider>
-      </div>
+      </ul>
       {/* The condition is the same as in https://github.com/deltachat/deltachat-desktop/blob/63af023437ff1828a27de2da37bf94ab180ec528/src/renderer/contexts/KeybindingsContext.tsx#L26 */}
       {window.__screen === Screens.Main && (
         <div className={styles.buttonsContainer}>

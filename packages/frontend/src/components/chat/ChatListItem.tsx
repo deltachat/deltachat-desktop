@@ -160,19 +160,26 @@ const Message = React.memo<
   )
 })
 
-export const PlaceholderChatListItem = React.memo(_ => {
-  return <div className={classNames('chat-list-item', 'skeleton')} />
-})
+export const PlaceholderChatListItem = React.memo(
+  (props: React.HTMLAttributes<HTMLDivElement>) => {
+    return (
+      <div {...props} className={classNames('chat-list-item', 'skeleton')} />
+    )
+  }
+)
 
 function ChatListItemArchiveLink({
   onClick,
   chatListItem,
+  ...rest
 }: {
   onClick: () => void
   chatListItem: Type.ChatListItemFetchResult & {
     kind: 'ArchiveLink'
   }
-}) {
+} & Required<
+  Pick<React.HTMLAttributes<HTMLDivElement>, 'aria-setsize' | 'aria-posinset'>
+>) {
   const tx = window.static_translate
   const { onContextMenu, isContextMenuActive } = useContextMenuWithActiveState([
     {
@@ -198,6 +205,7 @@ function ChatListItemArchiveLink({
   return (
     <button
       ref={ref}
+      {...rest}
       tabIndex={tabIndex}
       onClick={onClick}
       onKeyDown={tabindexOnKeydown}
@@ -221,8 +229,10 @@ function ChatListItemArchiveLink({
 function ChatListItemError({
   chatListItem,
   onClick,
+  roleTab,
   isSelected,
   onContextMenu,
+  ...rest
 }: {
   chatListItem: Type.ChatListItemFetchResult & {
     kind: 'Error'
@@ -231,8 +241,11 @@ function ChatListItemError({
   onContextMenu?: (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void
+  roleTab?: boolean
   isSelected?: boolean
-}) {
+} & Required<
+  Pick<React.HTMLAttributes<HTMLDivElement>, 'aria-setsize' | 'aria-posinset'>
+>) {
   log.info('Error Loading Chatlistitem ' + chatListItem.id, chatListItem.error)
 
   const ref = useRef<HTMLButtonElement>(null)
@@ -247,11 +260,14 @@ function ChatListItemError({
   return (
     <button
       ref={ref}
+      {...rest}
       tabIndex={tabIndex}
       onClick={onClick}
       onKeyDown={tabindexOnKeydown}
       onFocus={tabindexSetAsActiveElement}
       onContextMenu={onContextMenu}
+      role={roleTab ? 'tab' : undefined}
+      aria-selected={isSelected}
       className={classNames('chat-list-item', tabindexClassName, {
         isError: true,
         selected: isSelected,
@@ -284,9 +300,11 @@ function ChatListItemNormal({
   chatListItem,
   onClick,
   isSelected,
+  roleTab,
   onContextMenu,
   isContextMenuActive,
   hover,
+  ...rest
 }: {
   chatListItem: Type.ChatListItemFetchResult & {
     kind: 'ChatListItem'
@@ -296,9 +314,12 @@ function ChatListItemNormal({
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void
   isContextMenuActive?: boolean
+  roleTab?: boolean
   isSelected?: boolean
   hover?: boolean
-}) {
+} & Required<
+  Pick<React.HTMLAttributes<HTMLDivElement>, 'aria-setsize' | 'aria-posinset'>
+>) {
   const ref = useRef<HTMLButtonElement>(null)
 
   const {
@@ -312,11 +333,14 @@ function ChatListItemNormal({
   return (
     <button
       ref={ref}
+      {...rest}
       tabIndex={tabIndex}
       onClick={onClick}
       onKeyDown={tabindexOnKeydown}
       onFocus={tabindexSetAsActiveElement}
       onContextMenu={onContextMenu}
+      role={roleTab ? 'tab' : undefined}
+      aria-selected={isSelected}
       className={classNames('chat-list-item', tabindexClassName, {
         'has-unread': chatListItem.freshMessageCounter > 0,
         'is-contact-request': chatListItem.isContactRequest,
@@ -370,46 +394,52 @@ type ChatListItemProps = {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void
   isContextMenuActive?: boolean
+  /**
+   * Whether to set `role='tab'` on the item.
+   *
+   * Note that this doesn't apply to some items,
+   * such as `ChatListItemArchiveLink`.
+   */
+  roleTab?: boolean
   isSelected?: boolean
   hover?: boolean
-}
+} & Required<
+  Pick<React.HTMLAttributes<HTMLDivElement>, 'aria-setsize' | 'aria-posinset'>
+>
 
 const ChatListItem = React.memo<ChatListItemProps>(
   props => {
-    const { chatListItem, onClick, hover } = props
+    const { chatListItem } = props
 
     // if not loaded by virtual list yet
-    if (typeof chatListItem === 'undefined') return <PlaceholderChatListItem />
+    if (typeof chatListItem === 'undefined')
+      return (
+        <PlaceholderChatListItem
+          aria-posinset={props['aria-posinset']}
+          aria-setsize={props['aria-setsize']}
+        />
+      )
 
     if (chatListItem.kind == 'ChatListItem') {
-      return (
-        <ChatListItemNormal
-          chatListItem={chatListItem}
-          onClick={onClick}
-          isSelected={props.isSelected}
-          onContextMenu={props.onContextMenu}
-          isContextMenuActive={props.isContextMenuActive}
-          hover={hover}
-        />
-      )
+      return <ChatListItemNormal {...props} chatListItem={chatListItem} />
     } else if (chatListItem.kind == 'Error') {
-      return (
-        <ChatListItemError
-          chatListItem={chatListItem}
-          onClick={onClick}
-          isSelected={props.isSelected}
-          onContextMenu={props.onContextMenu}
-        />
-      )
+      return <ChatListItemError {...props} chatListItem={chatListItem} />
     } else if (chatListItem.kind == 'ArchiveLink') {
       return (
         <ChatListItemArchiveLink
           chatListItem={chatListItem}
-          onClick={onClick}
+          onClick={props.onClick}
+          aria-posinset={props['aria-posinset']}
+          aria-setsize={props['aria-setsize']}
         />
       )
     } else {
-      return <PlaceholderChatListItem />
+      return (
+        <PlaceholderChatListItem
+          aria-posinset={props['aria-posinset']}
+          aria-setsize={props['aria-setsize']}
+        />
+      )
     }
   },
   (prevProps, nextProps) => {
@@ -423,15 +453,19 @@ const ChatListItem = React.memo<ChatListItemProps>(
 
 export default ChatListItem
 
-export const ChatListItemMessageResult = React.memo<{
-  msr: T.MessageSearchResult
-  onClick: () => void
-  queryStr: string
-  /**
-   * Whether the user is searching for messages in just a single chat.
-   */
-  isSingleChatSearch: boolean
-}>(props => {
+export const ChatListItemMessageResult = React.memo<
+  {
+    msr: T.MessageSearchResult
+    onClick: () => void
+    queryStr: string
+    /**
+     * Whether the user is searching for messages in just a single chat.
+     */
+    isSingleChatSearch: boolean
+  } & Required<
+    Pick<React.HTMLAttributes<HTMLDivElement>, 'aria-setsize' | 'aria-posinset'>
+  >
+>(props => {
   const {
     msr,
     onClick,
@@ -441,6 +475,7 @@ export const ChatListItemMessageResult = React.memo<{
      * we don't need to specify here which chat it belongs to.
      */
     isSingleChatSearch,
+    ...rest
   } = props
 
   const ref = useRef<HTMLButtonElement>(null)
@@ -457,6 +492,7 @@ export const ChatListItemMessageResult = React.memo<{
   return (
     <button
       ref={ref}
+      {...rest}
       tabIndex={tabIndex}
       onClick={onClick}
       onKeyDown={tabindexOnKeydown}
