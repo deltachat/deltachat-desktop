@@ -1,4 +1,4 @@
-use std::{collections::HashMap, path::PathBuf};
+use std::{collections::HashMap, path::PathBuf, sync::Arc};
 
 use crate::Error;
 
@@ -79,12 +79,15 @@ where
     /// Shows notification and returns Notification handle
     fn show(
         self,
-        manager: &NManager,
+        manager: Arc<NManager>,
     ) -> impl std::future::Future<Output = Result<impl NotificationHandle, Error>>;
 }
 
 // Handle to a sent notification
-pub trait NotificationHandle {
+pub trait NotificationHandle
+where
+    Self: Send + Sync,
+{
     /// close the notification
     fn close(&self) -> Result<(), Error>;
 

@@ -15,8 +15,10 @@ tokio = { version = "1.44.2", features = [
     "rt-multi-thread",
     "sync",
     "signal",
+    "time",
 ] }
 url = "2.5.4"
+uuid = { version = "1.16.0", features = ["v4"] }
 
 
 [target.'cfg(any(target_os = "linux", target_os = "dragonfly", target_os = "freebsd", target_os = "openbsd", target_os = "netbsd"))'.dependencies]

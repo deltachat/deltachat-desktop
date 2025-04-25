@@ -7,6 +7,7 @@ use user_notify::{NotificationBuilder, NotificationManager, mac_os::Notification
 async fn main() -> anyhow::Result<()> {
     let manager = Arc::new(NotificationManagerMacOS::new());
 
+    println!("1");
     #[cfg(target_os = "macos")]
     {
         let manager_clone = manager.clone();
@@ -20,7 +21,7 @@ async fn main() -> anyhow::Result<()> {
             println!("failed to ask for notification permission: {err:?}");
         }
     }
-
+    println!("2");
     let mut notification_builder = {
         #[cfg(target_os = "macos")]
         {
@@ -43,14 +44,25 @@ async fn main() -> anyhow::Result<()> {
                 .appname("Delta Chat")
         }
     };
+    println!("3");
 
     notification_builder = notification_builder
+        .title("my title2")
+        .body("my body2")
+        .set_thread_id(&format!("thread-id"));
+
+    println!("4");
+    notification_builder.show(manager.clone()).await?;
+
+    println!("5");
+    let notification_builder = user_notify::mac_os::NotificationBuilderMacOS::new()
         .title("my title")
         .body("my body")
         .set_thread_id(&format!("thread-id"));
 
-    notification_builder.show(&manager).await?;
-
+    let manager_clone = manager.clone();
+    spawn(async move { notification_builder.show(manager_clone).await }).await??;
+    println!("6");
     let _ = ctrl_c().await;
 
     Ok(())

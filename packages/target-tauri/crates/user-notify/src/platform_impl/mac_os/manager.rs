@@ -1,4 +1,5 @@
 use std::cell::{OnceCell, RefCell};
+use std::sync::Arc;
 use std::{collections::HashMap, ptr::NonNull};
 
 use objc2::runtime::ProtocolObject;
@@ -17,27 +18,34 @@ use crate::{Error, NotificationManager, mac_os::delegate::NotificationDelegate};
 use super::handle::NotificationHandleMacOS;
 
 #[derive(Debug)]
-pub struct NotificationManagerMacOS {
+pub struct NotificationManagerMacOSInner {
     /// reference to the delegate so that it isn't dropped immitiately
     delegate_reference:
         SendWrapper<OnceCell<Retained<ProtocolObject<dyn UNUserNotificationCenterDelegate>>>>,
     pub(crate) bundle_id: Option<String>,
 }
 
+#[derive(Debug, Clone)]
+pub struct NotificationManagerMacOS {
+    pub(super) inner: Arc<NotificationManagerMacOSInner>,
+}
+
 impl NotificationManagerMacOS {
     pub fn new() -> Self {
         log::debug!("NotificationManager.new called");
         Self {
-            delegate_reference: SendWrapper::new(OnceCell::new()),
-            bundle_id: unsafe {
-                NSBundle::mainBundle()
-                    .bundleIdentifier()
-                    .map(|ns_string| ns_string.to_string())
-            },
+            inner: Arc::new(NotificationManagerMacOSInner {
+                delegate_reference: SendWrapper::new(OnceCell::new()),
+                bundle_id: unsafe {
+                    NSBundle::mainBundle()
+                        .bundleIdentifier()
+                        .map(|ns_string| ns_string.to_string())
+                },
+            }),
         }
     }
     /// adds a notification to the notification center
-    /// needs to be called from main thread
+    /// needs to be called from main thread?
     pub(super) fn add_notification<F: FnOnce(Result<(), Error>) + Send + 'static>(
         &self,
         request: &UNNotificationRequest,
@@ -162,7 +170,7 @@ impl NotificationManager for NotificationManagerMacOS {
 
             UNUserNotificationCenter::currentNotificationCenter().setDelegate(Some(&*proto));
 
-            self.delegate_reference
+            self.inner.delegate_reference
                 .set(proto)
                 .expect("failed to set delegate_reference, did you call register multiple times so that the once_cell was already taken?");
         }
