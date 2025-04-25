@@ -18,7 +18,7 @@ impl Notifications {
     }
 
     pub fn initialize(&self) {
-        self.manager.register();
+        self.manager.register(vec![]);
         #[cfg(target_os = "macos")]
         {
             // remove all notifications that are still there from previous sessions,

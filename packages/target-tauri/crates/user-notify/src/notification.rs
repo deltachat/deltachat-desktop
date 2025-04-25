@@ -31,7 +31,6 @@ where
     /// - Windows [text1](https://docs.rs/tauri-winrt-notification/latest/tauri_winrt_notification/struct.Toast.html#method.text1)
     fn subtitle(self, subtitle: &str) -> Self;
 
-    // IDEA: actions, aka buttons
     // IDEA: sound support
 
     /// Set Image Attachment
@@ -57,6 +56,13 @@ where
     /// - Linux not specified yet:
     /// - Windows: not implemented
     fn set_thread_id(self, thread_id: &str) -> Self;
+
+    /// Set the notification Category, those are basically templates how the notification should be displayed
+    ///
+    /// It is used to add a text field or buttons to the notification.
+    ///
+    /// Categories are defined by passing them to [NotificationManager::register] on app startup
+    fn set_category_id(self, category_id: &str) -> Self;
 
     // IDEA: convinience methods? but I believe a generic callback is better in which you get [NotificationResponse]
     // and identify the notification based on id or userinfo is better
@@ -114,7 +120,7 @@ where
         &self,
     ) -> impl std::future::Future<Output = Result<bool, Error>>;
 
-    fn register(&self);
+    fn register(&self, categories: Vec<NotificationCategory>);
 
     /// Removes all of your app’s delivered notifications from Notification Center.
     ///
@@ -178,4 +184,31 @@ pub enum NotificationResponseAction {
     Dismiss,
     /// The identifier string of the action that the user selected, if it is not one of the other actions in [NotificationResponseAction]
     Other(String),
+}
+
+/// Notification Categories are used to define actions for notifications that have this category set
+#[derive(Debug, Clone)]
+pub struct NotificationCategory {
+    /// Id of the category by which it is referenced on notifications [NotificationBuilder::set_category_id]
+    pub identifier: String,
+    /// The actions to display when the system delivers notifications of this type.
+    pub actions: Vec<NotificationCategoryAction>,
+}
+
+#[derive(Debug, Clone)]
+pub enum NotificationCategoryAction {
+    /// ## Platform specific
+    /// https://developer.apple.com/documentation/usernotifications/unnotificationaction?language=objc
+    Action {
+        identifier: String,
+        title: String,
+        /* IDEA: also support icon https://developer.apple.com/documentation/usernotifications/unnotificationaction/init(identifier:title:options:icon:)?language=objc */
+    },
+    TextInputAction {
+        identifier: String,
+        title: String,
+        /* IDEA: also support icon and option https://developer.apple.com/documentation/usernotifications/untextinputnotificationaction/init(identifier:title:options:textinputbuttontitle:textinputplaceholder:)?language=objc */
+        input_button_title: String,
+        input_placeholder: String,
+    },
 }

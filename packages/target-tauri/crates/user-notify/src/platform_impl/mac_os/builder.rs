@@ -21,6 +21,7 @@ pub struct NotificationBuilderMacOS {
     subtitle: Option<String>,
     image: Option<std::path::PathBuf>,
     thread_id: Option<String>,
+    category_id: Option<String>,
     user_info: Option<HashMap<String, String>>,
 }
 
@@ -58,6 +59,11 @@ impl NotificationBuilder<NotificationManagerMacOS> for NotificationBuilderMacOS 
 
     fn set_thread_id(mut self, thread_id: &str) -> Self {
         self.thread_id = Some(thread_id.to_owned());
+        self
+    }
+
+    fn set_category_id(mut self, category_id: &str) -> Self {
+        self.category_id = Some(category_id.to_owned());
         self
     }
 
@@ -156,6 +162,9 @@ impl NotificationBuilderMacOS {
 
             if let Some(thread_id) = self.thread_id {
                 notification.setThreadIdentifier(&NSString::from_str(&thread_id));
+            }
+            if let Some(category_id) = self.category_id {
+                notification.setCategoryIdentifier(&NSString::from_str(&category_id));
             }
 
             if let Some(payload) = self.user_info {
