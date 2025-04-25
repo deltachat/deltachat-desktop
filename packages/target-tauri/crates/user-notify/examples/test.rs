@@ -2,7 +2,8 @@ use std::{collections::HashMap, sync::Arc, time::Duration};
 
 use tokio::{signal::ctrl_c, spawn, time::sleep};
 use user_notify::{
-    NotificationBuilder, NotificationHandle, NotificationManager, mac_os::NotificationManagerMacOS,
+    NotificationBuilder, NotificationCategory, NotificationCategoryAction, NotificationHandle,
+    NotificationManager, mac_os::NotificationManagerMacOS,
 };
 
 #[tokio::main]
@@ -10,7 +11,32 @@ async fn main() -> anyhow::Result<()> {
     env_logger::init();
     log::debug!("0");
     let manager = Arc::new(NotificationManagerMacOS::new());
-    manager.register();
+
+    let categories = vec![
+        NotificationCategory {
+            identifier: "my.app.123".to_string(),
+            actions: vec![
+                NotificationCategoryAction::Action {
+                    identifier: "my.app.123.button1".to_string(),
+                    title: "Hallo Welt".to_string(),
+                },
+                NotificationCategoryAction::Action {
+                    identifier: "my.app.123.button2".to_string(),
+                    title: "Button 2".to_string(),
+                },
+            ],
+        },
+        NotificationCategory {
+            identifier: "my.app.123.textinput".to_string(),
+            actions: vec![NotificationCategoryAction::TextInputAction {
+                identifier: "my.app.123.button2".to_string(),
+                title: "Reply".to_string(),
+                input_button_title: "Send".to_string(),
+                input_placeholder: "type your message here".to_string(),
+            }],
+        },
+    ];
+    manager.register(categories);
 
     log::debug!("1");
     #[cfg(target_os = "macos")]
@@ -67,7 +93,8 @@ async fn main() -> anyhow::Result<()> {
         .title("my title")
         .body("my body")
         .set_thread_id(&format!("thread-id"))
-        .set_user_info(info);
+        .set_user_info(info)
+        .set_category_id("my.app.123.textinput");
 
     let manager_clone = manager.clone();
     spawn(async move { notification_builder.show(manager_clone).await }).await??;

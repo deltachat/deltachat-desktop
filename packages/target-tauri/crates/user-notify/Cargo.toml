@@ -58,6 +58,8 @@ objc2-user-notifications = { version = "0.3.0", default-features = false, featur
     "UNUserNotificationCenter",
     "UNNotificationAttachment",
     "UNNotificationSettings",
+    "UNNotificationCategory",
+    "UNNotificationAction",
 ] }
 [target.'cfg(target_os = "windows")'.dependencies]
 tauri-winrt-notification = "0.7.1"

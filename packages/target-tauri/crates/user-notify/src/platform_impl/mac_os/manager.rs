@@ -3,16 +3,20 @@ use std::ops::Deref;
 use std::sync::Arc;
 use std::{collections::HashMap, ptr::NonNull};
 
+use objc2::Message;
 use objc2::runtime::{AnyObject, ProtocolObject};
 use send_wrapper::SendWrapper;
 
 use objc2::{MainThreadMarker, rc::Retained, runtime::Bool};
-use objc2_foundation::{NSArray, NSBundle, NSDictionary, NSError, NSString};
+use objc2_foundation::{NSArray, NSBundle, NSDictionary, NSError, NSSet, NSString};
 use objc2_user_notifications::{
-    UNAuthorizationOptions, UNAuthorizationStatus, UNNotification, UNNotificationRequest,
-    UNNotificationSettings, UNUserNotificationCenter, UNUserNotificationCenterDelegate,
+    UNAuthorizationOptions, UNAuthorizationStatus, UNNotification, UNNotificationAction,
+    UNNotificationActionOptions, UNNotificationCategory, UNNotificationCategoryOptions,
+    UNNotificationRequest, UNNotificationSettings, UNTextInputNotificationAction,
+    UNUserNotificationCenter, UNUserNotificationCenterDelegate,
 };
 
+use crate::NotificationCategory;
 use crate::{Error, NotificationManager, mac_os::delegate::NotificationDelegate};
 
 use super::handle::NotificationHandleMacOS;
@@ -158,9 +162,9 @@ impl NotificationManager for NotificationManagerMacOS {
         Ok(rx.await??)
     }
 
-    // todo find out if it makes a difference when this is called
+    // TODO find out if it makes a difference when this is called
     // - does it handle notifications of previus sessions just fine?
-    fn register(&self) {
+    fn register(&self, categories: Vec<NotificationCategory>) {
         log::debug!("NotificationManager.register called");
         let mtm = MainThreadMarker::new().expect("not on main thread");
         let notification_delegate = NotificationDelegate::new(mtm);
@@ -168,11 +172,18 @@ impl NotificationManager for NotificationManagerMacOS {
             let proto: Retained<ProtocolObject<dyn UNUserNotificationCenterDelegate>> =
                 ProtocolObject::from_retained(notification_delegate);
 
-            UNUserNotificationCenter::currentNotificationCenter().setDelegate(Some(&*proto));
+            let notification_center = UNUserNotificationCenter::currentNotificationCenter();
+            notification_center.setDelegate(Some(&*proto));
 
             self.inner.delegate_reference
                 .set(proto)
                 .expect("failed to set delegate_reference, did you call register multiple times so that the once_cell was already taken?");
+
+            let categories: Retained<NSSet<_>> = categories
+                .into_iter()
+                .map(|category| W(category_to_native_category(category)))
+                .collect();
+            notification_center.setNotificationCategories(&categories);
         }
         log::debug!("NotificationManager.register completed");
     }
@@ -313,4 +324,85 @@ pub(crate) fn user_info_dictionary_to_hashmap(
     }
 
     map
+}
+
+fn category_to_native_category(category: NotificationCategory) -> Retained<UNNotificationCategory> {
+    let identifier = NSString::from_str(&category.identifier);
+
+    let actions:Retained<_> = category
+        .actions
+        .iter()
+        .map(|action| {
+            use crate::NotificationCategoryAction::*;
+            match action {
+                Action { identifier, title } => {
+                    let identifier = NSString::from_str(identifier);
+                    let title = NSString::from_str(title);
+                    unsafe {
+                       W(UNNotificationAction::actionWithIdentifier_title_options(
+                            &identifier,
+                            &title,
+                            UNNotificationActionOptions::empty(),
+                        ))
+                    }
+                }
+                TextInputAction {
+                    identifier,
+                    title,
+                    input_button_title,
+                    input_placeholder,
+                } => {
+                    let identifier = NSString::from_str(identifier);
+                    let title = NSString::from_str(title);
+                    let text_input_button_title = NSString::from_str(input_button_title);
+                    let text_input_placeholder = NSString::from_str(input_placeholder);
+                    unsafe {
+                       W(  Retained::cast_unchecked::<UNNotificationAction>(
+                        UNTextInputNotificationAction::actionWithIdentifier_title_options_textInputButtonTitle_textInputPlaceholder(
+                            &identifier, &title, UNNotificationActionOptions::empty(), &text_input_button_title, &text_input_placeholder)))
+                    }
+                },
+            }
+        })
+        .collect();
+
+    unsafe {
+        UNNotificationCategory::categoryWithIdentifier_actions_intentIdentifiers_options(
+            &identifier,
+            &actions,
+            &NSArray::new(),
+            UNNotificationCategoryOptions::empty(),
+        )
+    }
+}
+
+/// wrapper to bypass that the I can't implement traits for objc2's Retained here in this crate
+struct W<T: ?Sized + Message>(Retained<T>);
+
+impl<O: Message> FromIterator<W<O>> for Retained<NSArray<O>> {
+    fn from_iter<T: IntoIterator<Item = W<O>>>(iter: T) -> Self {
+        let vec: Vec<Retained<O>> = iter.into_iter().map(|o| o.0).collect();
+
+        let array: Retained<NSArray<O>> = NSArray::from_slice(
+            vec.iter()
+                .map(|r| r.deref())
+                .collect::<Vec<&O>>()
+                .as_slice(),
+        );
+        array
+    }
+}
+
+impl<O: Message> FromIterator<W<O>> for Retained<NSSet<O>> {
+    fn from_iter<T: IntoIterator<Item = W<O>>>(iter: T) -> Self {
+        let vec: Vec<Retained<O>> = iter.into_iter().map(|o| o.0).collect();
+
+        let set: Retained<NSSet<O>> = NSSet::from_slice(
+            vec.iter()
+                .map(|r| r.deref())
+                .collect::<Vec<&O>>()
+                .as_slice(),
+        );
+        set
+    }
 }
