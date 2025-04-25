@@ -1,16 +1,16 @@
 use std::cell::{OnceCell, RefCell};
+use std::ops::Deref;
 use std::sync::Arc;
 use std::{collections::HashMap, ptr::NonNull};
 
-use objc2::runtime::ProtocolObject;
+use objc2::runtime::{AnyObject, ProtocolObject};
 use send_wrapper::SendWrapper;
 
 use objc2::{MainThreadMarker, rc::Retained, runtime::Bool};
-use objc2_foundation::{NSArray, NSBundle, NSError, NSString, NSURL, ns_string};
+use objc2_foundation::{NSArray, NSBundle, NSDictionary, NSError, NSString};
 use objc2_user_notifications::{
-    UNAuthorizationOptions, UNAuthorizationStatus, UNMutableNotificationContent,
-    UNNotificationAttachment, UNNotificationRequest, UNNotificationSettings,
-    UNUserNotificationCenter, UNUserNotificationCenterDelegate,
+    UNAuthorizationOptions, UNAuthorizationStatus, UNNotification, UNNotificationRequest,
+    UNNotificationSettings, UNUserNotificationCenter, UNUserNotificationCenterDelegate,
 };
 
 use crate::{Error, NotificationManager, mac_os::delegate::NotificationDelegate};
@@ -188,7 +188,56 @@ impl NotificationManager for NotificationManagerMacOS {
     #[allow(refining_impl_trait)]
     async fn get_active_notifications(&self) -> Result<Vec<NotificationHandleMacOS>, Error> {
         // https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/getdeliverednotifications(completionhandler:)
-        todo!()
+
+        let (tx, rx) = tokio::sync::oneshot::channel::<Vec<NotificationHandleMacOS>>();
+
+        #[inline]
+        fn get_active_notifications_inner(
+            tx: tokio::sync::oneshot::Sender<Vec<NotificationHandleMacOS>>,
+        ) -> Result<(), Error> {
+            let cb = RefCell::new(Some(tx));
+            let completion_handler =
+                block2::RcBlock::new(move |notifications: NonNull<NSArray<UNNotification>>| {
+                    if let Some(cb) = cb.take() {
+                        let notifications: &NSArray<UNNotification> =
+                            unsafe { notifications.as_ref() };
+
+                        let mut handles = Vec::with_capacity(notifications.count());
+                        for item in notifications {
+                            unsafe {
+                                let request = item.request();
+                                let id = request.identifier().to_string();
+
+                                let user_info =
+                                    user_info_dictionary_to_hashmap(request.content().userInfo());
+
+                                handles.push(NotificationHandleMacOS::new(id, user_info));
+                            }
+                        }
+
+                        if let Err(_) = cb.send(handles) {
+                            log::error!("the receiver dropped");
+                        }
+                    } else {
+                        log::error!("tx was already taken out");
+                    }
+                });
+
+            unsafe {
+                NSBundle::mainBundle()
+                    .bundleIdentifier()
+                    .ok_or(Error::NoBundleId)?;
+
+                UNUserNotificationCenter::currentNotificationCenter()
+                    .getDeliveredNotificationsWithCompletionHandler(&completion_handler);
+            }
+
+            Ok(())
+        }
+
+        get_active_notifications_inner(tx)?;
+
+        Ok(rx.await?)
     }
 
     fn set_user_response_handler(
@@ -227,7 +276,7 @@ fn remove_delivered_notifications(ids: Vec<&str>) -> Result<(), Error> {
 /// Removes all of your app’s delivered notifications from Notification Center.
 ///
 /// https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/removealldeliverednotifications()
-pub fn remove_all_delivered_notifications() -> Result<(), Error> {
+fn remove_all_delivered_notifications() -> Result<(), Error> {
     unsafe {
         MainThreadMarker::new().ok_or(Error::NotMainThread)?;
         NSBundle::mainBundle()
@@ -237,4 +286,31 @@ pub fn remove_all_delivered_notifications() -> Result<(), Error> {
         UNUserNotificationCenter::currentNotificationCenter().removeAllDeliveredNotifications();
     }
     Ok(())
+}
+
+pub(crate) fn user_info_dictionary_to_hashmap(
+    user_info: Retained<NSDictionary<AnyObject, AnyObject>>,
+) -> HashMap<String, String> {
+    let mut map = HashMap::new();
+    let keys = user_info.allKeys();
+    for key in keys {
+        if let Some(key_ns_string) = key.downcast_ref::<NSString>() {
+            if let Some(value) = user_info.objectForKey(key.deref()) {
+                if let Some(value_ns_string) = value.downcast_ref::<NSString>() {
+                    map.insert(key_ns_string.to_string(), value_ns_string.to_string());
+                } else {
+                    log::error!("value object failed to downcast to ns_string: {value:?}");
+                    continue;
+                }
+            } else {
+                log::error!("no value found fpr key {key:?}");
+                continue;
+            }
+        } else {
+            log::error!("key object failed to downcast to ns_string: {key:?}");
+            continue;
+        }
+    }
+
+    map
 }

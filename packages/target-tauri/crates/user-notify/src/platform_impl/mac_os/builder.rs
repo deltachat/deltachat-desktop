@@ -1,8 +1,8 @@
-use std::{collections::HashMap, sync::Arc};
+use std::{collections::HashMap, ops::Deref, sync::Arc};
 
 use super::{NotificationManagerMacOS, handle::NotificationHandleMacOS};
-use objc2::rc::Retained;
-use objc2_foundation::{NSArray, NSString, NSURL, ns_string};
+use objc2::{rc::Retained, runtime::AnyObject};
+use objc2_foundation::{NSArray, NSDictionary, NSString, NSURL, ns_string};
 use objc2_user_notifications::{
     UNMutableNotificationContent, UNNotificationAttachment, UNNotificationRequest,
 };
@@ -95,19 +95,28 @@ impl NotificationBuilderMacOS {
         manager: &NotificationManagerMacOS,
         tx: tokio::sync::oneshot::Sender<Result<(), Error>>,
     ) -> Result<NotificationHandleMacOS, Error> {
-        let (request, id) = self.build(manager)?;
+        let (request, id, user_info) = self.build(manager)?;
         manager.add_notification(&request, move |result| {
             if let Err(err) = tx.send(result) {
                 log::error!("add_notification tx.send error {err:?}");
             }
         });
-        Ok(NotificationHandleMacOS::new(id))
+        Ok(NotificationHandleMacOS::new(id, user_info))
     }
 
     fn build(
         self,
         manager: &NotificationManagerMacOS,
-    ) -> Result<(Retained<UNNotificationRequest>, String), Error> {
+    ) -> Result<
+        (
+            Retained<UNNotificationRequest>,
+            String,
+            HashMap<String, String>,
+        ),
+        Error,
+    > {
+        let mut user_info = HashMap::new();
+
         let notification: Retained<UNMutableNotificationContent> = unsafe {
             let notification = UNMutableNotificationContent::new();
 
@@ -149,8 +158,32 @@ impl NotificationBuilderMacOS {
                 notification.setThreadIdentifier(&NSString::from_str(&thread_id));
             }
 
-            if let Some(user_info) = self.user_info {
-                todo!("user info is not implemented yet")
+            if let Some(payload) = self.user_info {
+                let mut user_info_keys = Vec::with_capacity(payload.len());
+                let mut user_info_values = Vec::with_capacity(payload.len());
+                for (key, value) in payload.iter() {
+                    user_info_keys.push(NSString::from_str(key));
+                    user_info_values.push(NSString::from_str(value));
+                }
+                let string_dictionary = NSDictionary::from_slices(
+                    user_info_keys
+                        .iter()
+                        .map(|r| r.deref())
+                        .collect::<Vec<&NSString>>()
+                        .as_slice(),
+                    user_info_values
+                        .iter()
+                        .map(|r| r.deref())
+                        .collect::<Vec<&NSString>>()
+                        .as_slice(),
+                );
+                let anyobject_dictionary = Retained::cast_unchecked::<
+                    NSDictionary<AnyObject, AnyObject>,
+                >(string_dictionary);
+                notification.setUserInfo(anyobject_dictionary.deref());
+
+                println!("hi");
+                user_info = payload;
             }
 
             notification
@@ -174,7 +207,7 @@ impl NotificationBuilderMacOS {
             );
             println!("{r:?}  -- {:?}", r.identifier());
 
-            return Ok((r, id));
+            return Ok((r, id, user_info));
         };
     }
 }
