@@ -132,7 +132,7 @@ pub(crate) async fn show_notification(
         };
     }
 
-    let manager = notifications.manager.as_ref();
+    let manager = notifications.manager.clone();
     let notification = notification_builder.show(manager).await?;
 
     // here we can delete the tmp file again,
