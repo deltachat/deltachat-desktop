@@ -1,7 +1,10 @@
 use std::sync::Arc;
 
 use tauri::async_runtime::spawn;
-use user_notify::{mac_os::NotificationManagerMacOS, NotificationManager};
+use user_notify::{
+    mac_os::NotificationManagerMacOS, NotificationCategory, NotificationCategoryAction,
+    NotificationManager,
+};
 
 #[derive(Debug, Clone)]
 pub(crate) struct Notifications {
@@ -18,7 +21,17 @@ impl Notifications {
     }
 
     pub fn initialize(&self) {
-        self.manager.register(vec![]);
+        let categories = vec![NotificationCategory {
+            identifier: "chat.delta.tauri.message.with.reply.to".to_string(),
+            actions: vec![NotificationCategoryAction::TextInputAction {
+                identifier: "chat.delta.tauri.message.reply.action".to_string(),
+                // IDEA: translate strings, but for that we would need to do some bigger refactoring probably?
+                title: "Reply".to_string(),
+                input_button_title: "Send".to_string(),
+                input_placeholder: "Type your reply here".to_string(),
+            }],
+        }];
+        self.manager.register(categories);
         #[cfg(target_os = "macos")]
         {
             // remove all notifications that are still there from previous sessions,

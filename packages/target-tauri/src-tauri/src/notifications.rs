@@ -95,6 +95,7 @@ pub(crate) async fn show_notification(
     notification_builder = notification_builder
         .title(&title)
         .body(&body)
+        .set_category_id("chat.delta.tauri.message.with.reply.to")
         .set_thread_id(&format!("{account_id}-{chat_id}"));
 
     let mut temp_file_to_clean_up = None;
