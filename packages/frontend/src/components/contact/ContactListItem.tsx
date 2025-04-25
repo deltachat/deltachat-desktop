@@ -39,19 +39,24 @@ export const DeltaCheckbox = (props: {
     </div>
   )
 }
-export function ContactListItem(props: {
-  tagName: 'li' | 'div'
-  style?: React.CSSProperties
-  contact: Type.Contact
-  onClick?: (contact: Type.Contact) => void
-  showCheckbox: boolean
-  checked: boolean
-  showRemove: boolean
-  onCheckboxClick?: (contact: Type.Contact) => void
-  onRemoveClick?: (contact: Type.Contact) => void
-  disabled?: boolean
-  onContextMenu?: MouseEventHandler<HTMLButtonElement>
-}) {
+export function ContactListItem(
+  props: {
+    tagName: 'li' | 'div'
+    style?: React.CSSProperties
+    contact: Type.Contact
+    onClick?: (contact: Type.Contact) => void
+    showCheckbox: boolean
+    checked: boolean
+    showRemove: boolean
+    onCheckboxClick?: (contact: Type.Contact) => void
+    onRemoveClick?: (contact: Type.Contact) => void
+    disabled?: boolean
+    onContextMenu?: MouseEventHandler<HTMLButtonElement>
+  } & Pick<
+    React.HTMLAttributes<HTMLDivElement>,
+    'aria-setsize' | 'aria-posinset'
+  >
+) {
   const tx = useTranslationFunction()
 
   const {
@@ -94,6 +99,11 @@ export function ContactListItem(props: {
       // because there may be several interactive elements in this component.
       onKeyDown={rovingTabindex.onKeydown}
       onFocus={rovingTabindex.setAsActiveElement}
+      // FYI NVDA doesn't announce these, as of 2025-04.
+      // They probably need to be on the focusable item
+      // in order for it to work.
+      aria-setsize={props['aria-setsize']}
+      aria-posinset={props['aria-posinset']}
     >
       <button
         ref={refMain}

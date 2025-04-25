@@ -242,6 +242,8 @@ export const ChatListItemRowChat = React.memo<{
           []
         )}
         isContextMenuActive={activeContextMenuChatIds.includes(chatId)}
+        aria-setsize={chatListIds.length}
+        aria-posinset={index + 1}
       />
     </li>
   )
@@ -269,10 +271,15 @@ export const ChatListItemRowContact = React.memo<{
       onClick={async _ => {
         openViewProfileDialog(accountId, contactId)
       }}
+      aria-setsize={contactIds.length}
+      aria-posinset={index + 1}
     />
   ) : (
     <li style={style}>
-      <PlaceholderChatListItem />
+      <PlaceholderChatListItem
+        aria-setsize={contactIds.length}
+        aria-posinset={index + 1}
+      />
     </li>
   )
 }, areEqual)
@@ -304,9 +311,15 @@ export const ChatListItemRowMessage = React.memo<{
               scrollIntoViewArg: { block: 'center' },
             })
           }}
+          aria-setsize={messageResultIds.length}
+          aria-posinset={index + 1}
         />
       ) : (
-        <div className='pseudo-chat-list-item skeleton' />
+        <div
+          className='pseudo-chat-list-item skeleton'
+          aria-setsize={messageResultIds.length}
+          aria-posinset={index + 1}
+        />
       )}
     </li>
   )
