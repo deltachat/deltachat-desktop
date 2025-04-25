@@ -34,4 +34,4 @@ EOF
 # echo "> code signing"
 codesign -s "$APPLE_SIGNING_IDENTITY" ./$TARGET_DIR/TestExample.app/ || (echo "APPLE_SIGNING_IDENTITY env var missing" && exit 1)
 # echo "> run it"
-./$TARGET_DIR/TestExample.app/Contents/MacOS/test
+RUST_LOG=trace ./$TARGET_DIR/TestExample.app/Contents/MacOS/test

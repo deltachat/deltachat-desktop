@@ -1,13 +1,18 @@
-use std::sync::Arc;
+use std::{collections::HashMap, sync::Arc, time::Duration};
 
-use tokio::{signal::ctrl_c, spawn};
-use user_notify::{NotificationBuilder, NotificationManager, mac_os::NotificationManagerMacOS};
+use tokio::{signal::ctrl_c, spawn, time::sleep};
+use user_notify::{
+    NotificationBuilder, NotificationHandle, NotificationManager, mac_os::NotificationManagerMacOS,
+};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
+    env_logger::init();
+    log::debug!("0");
     let manager = Arc::new(NotificationManagerMacOS::new());
+    manager.register();
 
-    println!("1");
+    log::debug!("1");
     #[cfg(target_os = "macos")]
     {
         let manager_clone = manager.clone();
@@ -21,7 +26,7 @@ async fn main() -> anyhow::Result<()> {
             println!("failed to ask for notification permission: {err:?}");
         }
     }
-    println!("2");
+    log::debug!("2");
     let mut notification_builder = {
         #[cfg(target_os = "macos")]
         {
@@ -44,25 +49,43 @@ async fn main() -> anyhow::Result<()> {
                 .appname("Delta Chat")
         }
     };
-    println!("3");
+    log::debug!("3");
 
     notification_builder = notification_builder
         .title("my title2")
         .body("my body2")
         .set_thread_id(&format!("thread-id"));
 
-    println!("4");
+    log::debug!("4");
     notification_builder.show(manager.clone()).await?;
 
-    println!("5");
+    log::debug!("5");
+    let mut info = HashMap::new();
+    info.insert("hey".to_owned(), "hi".to_owned());
+
     let notification_builder = user_notify::mac_os::NotificationBuilderMacOS::new()
         .title("my title")
         .body("my body")
-        .set_thread_id(&format!("thread-id"));
+        .set_thread_id(&format!("thread-id"))
+        .set_user_info(info);
 
     let manager_clone = manager.clone();
     spawn(async move { notification_builder.show(manager_clone).await }).await??;
-    println!("6");
+
+    log::debug!("6");
+
+    // sleep to be sure that the notifications are there when we test
+    sleep(Duration::from_secs(2)).await;
+
+    let active = manager.get_active_notifications().await?;
+    log::debug!("{active:?}");
+    assert!(
+        active
+            .iter()
+            .find(|handle| handle.get_user_info().contains_key("hey"))
+            .is_some()
+    );
+
     let _ = ctrl_c().await;
 
     Ok(())

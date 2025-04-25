@@ -61,3 +61,6 @@ objc2-user-notifications = { version = "0.3.0", default-features = false, featur
 ] }
 [target.'cfg(target_os = "windows")'.dependencies]
 tauri-winrt-notification = "0.7.1"
+
+[dev-dependencies]
+env_logger = "0.11.8"

@@ -92,6 +92,8 @@ where
     fn close(&self) -> Result<(), Error>;
 
     fn get_id(&self) -> String;
+
+    fn get_user_info<'a>(&'a self) -> &'a HashMap<String, String>;
 }
 
 // https://developer.apple.com/documentation/usernotifications/unnotificationcontent/targetcontentidentifier

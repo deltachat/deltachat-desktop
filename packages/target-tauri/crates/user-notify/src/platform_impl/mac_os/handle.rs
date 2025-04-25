@@ -1,16 +1,23 @@
+use std::collections::HashMap;
+
 use objc2::{MainThreadMarker, rc::Retained};
 use objc2_foundation::{NSArray, NSBundle, NSString};
 use objc2_user_notifications::UNUserNotificationCenter;
 
 use crate::{Error, NotificationHandle};
 
+#[derive(Debug)]
 pub struct NotificationHandleMacOS {
-    id: String, // idea use normal rust string
+    id: String,
+    user_info: HashMap<String, String>,
 }
 
 impl NotificationHandleMacOS {
-    pub(super) fn new(id: String) -> Self {
-        Self { id }
+    pub(super) fn new(id: String, user_data: HashMap<String, String>) -> Self {
+        Self {
+            id,
+            user_info: user_data,
+        }
     }
 }
 
@@ -34,5 +41,9 @@ impl NotificationHandle for NotificationHandleMacOS {
 
     fn get_id(&self) -> String {
         self.id.to_string()
+    }
+
+    fn get_user_info<'a>(&'a self) -> &'a HashMap<String, String> {
+        &self.user_info
     }
 }
