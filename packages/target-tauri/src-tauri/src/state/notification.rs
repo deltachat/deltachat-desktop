@@ -112,7 +112,7 @@ impl Notifications {
             },
             categories,
         );
-        #[cfg(target_os = "macos")]
+        #[cfg(not(target_os = "macos"))]
         {
             // remove all notifications that are still there from previous sessions,
             // as they probably don't work anymore and are just stuck
