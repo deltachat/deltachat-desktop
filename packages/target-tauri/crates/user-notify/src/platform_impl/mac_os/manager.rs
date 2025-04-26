@@ -203,17 +203,36 @@ impl NotificationManager for NotificationManagerMacOS {
         log::debug!("NotificationManager.register completed");
     }
 
+    /// Removes all of your app’s delivered notifications from Notification Center.
+    ///
+    /// https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/removealldeliverednotifications()
     fn remove_all_delivered_notifications(&self) -> Result<(), Error> {
-        remove_all_delivered_notifications()
+        unsafe {
+            UNUserNotificationCenter::currentNotificationCenter().removeAllDeliveredNotifications();
+        }
+        Ok(())
     }
 
     fn remove_delivered_notifications(&self, ids: Vec<&str>) -> Result<(), Error> {
-        remove_delivered_notifications(ids)
+        let ids: Vec<_> = ids.iter().map(|s| NSString::from_str(s)).collect();
+        let array: Retained<NSArray<NSString>> = NSArray::from_retained_slice(ids.as_slice());
+
+        unsafe {
+            UNUserNotificationCenter::currentNotificationCenter()
+                .removeDeliveredNotificationsWithIdentifiers(&array);
+        }
+        Ok(())
     }
 
     #[allow(refining_impl_trait)]
     async fn get_active_notifications(&self) -> Result<Vec<NotificationHandleMacOS>, Error> {
         // https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/getdeliverednotifications(completionhandler:)
+
+        unsafe {
+            NSBundle::mainBundle()
+                .bundleIdentifier()
+                .ok_or(Error::NoBundleId)?;
+        }
 
         let (tx, rx) = tokio::sync::oneshot::channel::<Vec<NotificationHandleMacOS>>();
 
@@ -250,10 +269,6 @@ impl NotificationManager for NotificationManagerMacOS {
                 });
 
             unsafe {
-                NSBundle::mainBundle()
-                    .bundleIdentifier()
-                    .ok_or(Error::NoBundleId)?;
-
                 UNUserNotificationCenter::currentNotificationCenter()
                     .getDeliveredNotificationsWithCompletionHandler(&completion_handler);
             }
@@ -265,46 +280,6 @@ impl NotificationManager for NotificationManagerMacOS {
 
         Ok(rx.await?)
     }
-}
-
-fn remove_delivered_notifications(ids: Vec<&str>) -> Result<(), Error> {
-    MainThreadMarker::new().ok_or(Error::NotMainThread)?;
-
-    let ids: Vec<_> = ids.iter().map(|s| NSString::from_str(s)).collect();
-    let array: Retained<NSArray<NSString>> = NSArray::from_retained_slice(ids.as_slice());
-
-    unsafe {
-        NSBundle::mainBundle()
-            .bundleIdentifier()
-            .ok_or(Error::NoBundleId)?;
-
-        UNUserNotificationCenter::currentNotificationCenter()
-            .removeDeliveredNotificationsWithIdentifiers(&array);
-    }
-    unsafe {
-        MainThreadMarker::new().ok_or(Error::NotMainThread)?;
-        NSBundle::mainBundle()
-            .bundleIdentifier()
-            .ok_or(Error::NoBundleId)?;
-
-        UNUserNotificationCenter::currentNotificationCenter().removeAllDeliveredNotifications();
-    }
-    Ok(())
-}
-
-/// Removes all of your app’s delivered notifications from Notification Center.
-///
-/// https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/removealldeliverednotifications()
-fn remove_all_delivered_notifications() -> Result<(), Error> {
-    unsafe {
-        MainThreadMarker::new().ok_or(Error::NotMainThread)?;
-        NSBundle::mainBundle()
-            .bundleIdentifier()
-            .ok_or(Error::NoBundleId)?;
-
-        UNUserNotificationCenter::currentNotificationCenter().removeAllDeliveredNotifications();
-    }
-    Ok(())
 }
 
 pub(crate) fn user_info_dictionary_to_hashmap(

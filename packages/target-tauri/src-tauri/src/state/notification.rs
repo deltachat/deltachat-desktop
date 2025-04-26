@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use anyhow::Context;
-use deltachat::{chat::ChatId, message::MsgId};
+use deltachat::message::MsgId;
 use tauri::{
     async_runtime::{handle, spawn},
     AppHandle, Manager,

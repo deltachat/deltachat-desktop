@@ -101,10 +101,9 @@ impl NotificationBuilder for XdgNotificationBuilder {
     fn new() -> Self {
         let notification_builder = notify_rust::Notification::new()
             .auto_icon()
-            /// As said in the readme all notifications are persistent
+            // As said in the readme all notifications are persistent
             .hint(Hint::Resident(true))
             .timeout(0);
-
 
         XdgNotificationBuilder {
             notification_builder,

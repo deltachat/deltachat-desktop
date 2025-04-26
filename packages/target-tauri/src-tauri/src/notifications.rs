@@ -2,7 +2,7 @@ use std::{collections::HashMap, path::PathBuf, str::FromStr};
 
 use serde::{Deserialize, Serialize};
 use tauri::{path::SafePathBuf, Runtime, State};
-use user_notify::{NotificationBuilder, NotificationManager};
+use user_notify::{NotificationBuilder, NotificationHandle, NotificationManager};
 
 use crate::{
     temp_file::{remove_temp_file, write_temp_file_from_base64},
@@ -164,7 +164,7 @@ pub(crate) async fn show_notification(
     }
 
     let manager = notifications.manager.clone();
-    let notification = notification_builder.show(manager).await?;
+    notification_builder.show(manager).await?;
 
     // here we can delete the tmp file again,
     // atleast on macos (os moves it to datastore) and on linux (transfers image data on dbus)
@@ -177,25 +177,61 @@ pub(crate) async fn show_notification(
         .map_err(|_| Error::FailedToDeleteTmpFile)?;
     }
 
-    // let _ = app.emit(
-    //     "notification_clicked",
-    //     NotificationClickedEventPayload,
-    // );
-
     Ok(())
 }
 
 #[tauri::command]
 pub(crate) async fn clear_notifications<R: Runtime>(
-    app: tauri::AppHandle<R>,
     window: tauri::Window<R>,
+    account_id: u32,
     chat_id: u32,
+    notifications: State<'_, Notifications>,
 ) -> Result<(), Error> {
     if window.label() != "main" {
         return Err(Error::NotMainWindow);
     }
 
-    // todo!();
+    let notifications_to_clear:Vec<String> = notifications
+        .manager
+        .get_active_notifications()
+        .await?
+        .iter()
+        .filter_map(|handle| {
+            let payload = handle
+                .get_user_info()
+                .get(NOTIFICATION_PAYLOAD_KEY)
+                .ok_or(Error::ValueMissing(NOTIFICATION_PAYLOAD_KEY.to_owned()))
+                .and_then(|s| {
+                    serde_json::from_str::<NotificationPayload>(s).map_err(Error::SerdeJson)
+                });
+            match payload {
+                Ok(payload) => Some((
+                    handle.get_id(),
+                    payload,
+                )),
+                Err(err) => {
+                    log::warn!("clear_notifications: some notification has a payload that could not be decoded: {err:?}");
+                    log::debug!("clear_notifications: unknown payload {:?}", handle
+                        .get_user_info());
+                    return None
+                },
+            }
+        })
+        // filter what notifications are affected
+        .filter(|(_id, payload)|
+            match payload {
+                NotificationPayload::OpenAccount { account_id:a } => a == &account_id,
+                NotificationPayload::OpenChat { account_id:a, chat_id:c }
+                | NotificationPayload::OpenChatMessage { account_id:a, chat_id:c,..} => a == &account_id && c == &chat_id,
+            }
+        ).map(|(id,_payload)|id).collect();
+
+    notifications.manager.remove_delivered_notifications(
+        notifications_to_clear
+            .iter()
+            .map(|id| id.as_str())
+            .collect(),
+    )?;
 
     Ok(())
 }
