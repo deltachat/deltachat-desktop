@@ -746,7 +746,16 @@ export function useDraft(
   removeFile: () => void
   clearDraft: () => void
 } {
-  const [draftState, _setDraft] = useState<DraftObject>(emptyDraft(chatId))
+  const [
+    draftState,
+    /**
+     * Set `draftState`, but don't update the value of the message textarea
+     * (because it's managed by a separate piece of state).
+     *
+     * This will not save the draft to the backend.
+     */
+    _setDraftStateButKeepTextareaValue,
+  ] = useState<DraftObject>(emptyDraft(chatId))
   /**
    * `draftRef.current` gets set to `draftState` on every render.
    * That is, when you mutate the value of this ref,
@@ -762,7 +771,7 @@ export function useDraft(
   draftRef.current = draftState
 
   const clearDraft = useCallback(() => {
-    _setDraft(_ => emptyDraft(chatId))
+    _setDraftStateButKeepTextareaValue(_ => emptyDraft(chatId))
   }, [chatId])
 
   const loadDraft = useCallback(
@@ -778,7 +787,7 @@ export function useDraft(
           clearDraft()
           inputRef.current?.setText('')
         } else {
-          _setDraft(old => ({
+          _setDraftStateButKeepTextareaValue(old => ({
             ...old,
             id: newDraft.id,
             text: newDraft.text || '',
@@ -853,7 +862,7 @@ export function useDraft(
       ? await BackendRemote.rpc.getDraft(accountId, chatId)
       : null
     if (newDraft) {
-      _setDraft(old => ({
+      _setDraftStateButKeepTextareaValue(old => ({
         ...old,
         id: newDraft.id,
         file: newDraft.file,
