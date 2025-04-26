@@ -1,5 +1,7 @@
 use std::sync::Arc;
 
+use anyhow::Context;
+use deltachat::{chat::ChatId, message::MsgId};
 use tauri::{
     async_runtime::{handle, spawn},
     AppHandle, Manager,
@@ -10,9 +12,12 @@ use user_notify::{
 };
 
 use crate::{
-    notifications::{self, NotificationPayload, NOTIFICATION_PAYLOAD_KEY},
+    notifications::{
+        self, NotificationPayload, NOTIFICATION_PAYLOAD_KEY, NOTIFICATION_REPLY_TO_ACTION_ID,
+        NOTIFICATION_REPLY_TO_CATEGORY,
+    },
     state::main_window_channels::MainWindowEvents,
-    MainWindowChannels,
+    DeltaChatAppState, MainWindowChannels,
 };
 
 #[derive(Debug, Clone)]
@@ -31,9 +36,9 @@ impl Notifications {
 
     pub fn initialize(&self, app: AppHandle) {
         let categories = vec![NotificationCategory {
-            identifier: "chat.delta.tauri.message.with.reply.to".to_string(),
+            identifier: NOTIFICATION_REPLY_TO_CATEGORY.to_string(),
             actions: vec![NotificationCategoryAction::TextInputAction {
-                identifier: "chat.delta.tauri.message.reply.action".to_string(),
+                identifier: NOTIFICATION_REPLY_TO_ACTION_ID.to_string(),
                 // IDEA: translate strings, but for that we would need to do some bigger refactoring probably?
                 title: "Reply".to_string(),
                 input_button_title: "Send".to_string(),
@@ -103,7 +108,32 @@ impl Notifications {
                             /* TODO? notification will just close? on macos this the handler is not even called for closing*/
                             Ok(())
                         }
-                        Other(action_id) => todo!(),
+                        Other(action_id) => {
+                            match action_id {
+                                id if id == NOTIFICATION_REPLY_TO_ACTION_ID => {
+                                    if let NotificationPayload::OpenChatMessage {account_id, message_id, ..} = payload {
+                                        if let Some(user_text) = response.user_text {
+                                            send_reply(&app, account_id, message_id, user_text).await
+                                            // IDEA: open error dialog to inform the user that it failed
+                                        } else {
+                                            // TODO turn into error
+                                            log::error!("Reply Action failed because no text was given");
+                                            // This case should not be possible, if the action was triggered then it should have text
+                                            Ok(())
+                                        }
+                                    } else {
+                                        // TODO turn into error
+                                        log::error!("Reply Action failed because NotificationPayload was not of type NotificationPayload::OpenChatMessage");
+                                        Ok(())
+                                    }
+                                },
+                                _=> {
+                                    // TODO turn into error
+                                    log::error!("Action handler for {action_id:?} is not implemented");
+                                     Ok(())
+                                }
+                            }
+                        },
                     };
                     if let Err(err) = result {
                         log::error!("Error reacting to notification response {err:?}");
@@ -144,4 +174,22 @@ impl Notifications {
             }
         });
     }
+}
+
+async fn send_reply(
+    app: &AppHandle,
+    account_id: u32,
+    message_id: u32,
+    text: String,
+) -> Result<(), anyhow::Error> {
+    let dc_state = app.state::<DeltaChatAppState>();
+    let dc = dc_state.deltachat.read().await;
+    let account = dc.get_account(account_id).context("account not found")?;
+
+    let mut message = deltachat::message::Message::new_text(text);
+    let quote = deltachat::message::Message::load_from_db(&account, MsgId::new(message_id)).await?;
+    message.set_quote(&account, Some(&quote)).await?;
+    deltachat::chat::send_msg(&account, quote.get_chat_id(), &mut message).await?;
+
+    Ok(())
 }

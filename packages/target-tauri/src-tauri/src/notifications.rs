@@ -54,6 +54,8 @@ pub(crate) enum NotificationPayload {
 }
 
 pub(crate) const NOTIFICATION_PAYLOAD_KEY: &str = "NotificationPayload";
+pub(crate) const NOTIFICATION_REPLY_TO_CATEGORY: &str = "chat.delta.tauri.message.with.reply.to";
+pub(crate) const NOTIFICATION_REPLY_TO_ACTION_ID: &str = "chat.delta.tauri.message.reply.action";
 
 #[tauri::command]
 pub(crate) async fn show_notification(
@@ -119,9 +121,12 @@ pub(crate) async fn show_notification(
     notification_builder = notification_builder
         .title(&title)
         .body(&body)
-        // .set_category_id("chat.delta.tauri.message.with.reply.to")
         .set_user_info(user_info)
         .set_thread_id(&format!("{account_id}-{chat_id}"));
+
+    if let NotificationPayload::OpenChatMessage { .. } = notification_kind {
+        notification_builder = notification_builder.set_category_id(NOTIFICATION_REPLY_TO_CATEGORY);
+    }
 
     let mut temp_file_to_clean_up = None;
 
