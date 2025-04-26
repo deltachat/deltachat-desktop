@@ -747,6 +747,17 @@ export function useDraft(
   clearDraft: () => void
 } {
   const [draftState, _setDraft] = useState<DraftObject>(emptyDraft(chatId))
+  /**
+   * `draftRef.current` gets set to `draftState` on every render.
+   * That is, when you mutate the value of this ref,
+   * `draftState` also gets mutated.
+   *
+   * Having this `ref` is just a hack to perform direct state mutations
+   * without triggering a re-render or linter's warnings about the missing
+   * `draftState` hook dependency.
+   *
+   * TODO figure out why this is needed.
+   */
   const draftRef = useRef<DraftObject>(emptyDraft(chatId))
   draftRef.current = draftState
 
