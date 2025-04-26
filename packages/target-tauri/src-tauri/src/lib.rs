@@ -105,6 +105,7 @@ async fn ui_frontend_ready(
     app: AppHandle,
     rc: tauri::State<'_, RunConfig>,
     state: tauri::State<'_, AppState>,
+    mwc: tauri::State<'_, MainWindowChannels>,
     notifications: tauri::State<'_, Notifications>,
 ) -> Result<(), String> {
     let mut lock = state.inner.lock().await;
@@ -129,6 +130,10 @@ async fn ui_frontend_ready(
     deeplink::register();
 
     notifications.ask_for_permission();
+
+    if let Err(err) = mwc.emit_deferred_events().await {
+        log::error!("emit_deferred_events {err:?}")
+    }
 
     Ok(())
 }

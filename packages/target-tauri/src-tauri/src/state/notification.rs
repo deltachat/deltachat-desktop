@@ -68,7 +68,7 @@ impl Notifications {
                     let result = match response.action {
                         Default => match payload {
                             NotificationPayload::OpenAccount { account_id } => {
-                                mwc.emit_event(MainWindowEvents::NotificationClick {
+                                mwc.emit_event_on_startup_deferred(MainWindowEvents::NotificationClick {
                                     account_id,
                                     chat_id: 0,
                                     msg_id: 0,
@@ -79,7 +79,7 @@ impl Notifications {
                                 account_id,
                                 chat_id,
                             } => {
-                                mwc.emit_event(MainWindowEvents::NotificationClick {
+                                mwc.emit_event_on_startup_deferred(MainWindowEvents::NotificationClick {
                                     account_id,
                                     chat_id,
                                     msg_id: 0,
@@ -91,7 +91,7 @@ impl Notifications {
                                 chat_id,
                                 message_id,
                             } => {
-                                mwc.emit_event(MainWindowEvents::NotificationClick {
+                                mwc.emit_event_on_startup_deferred(MainWindowEvents::NotificationClick {
                                     account_id,
                                     chat_id,
                                     msg_id: message_id,
