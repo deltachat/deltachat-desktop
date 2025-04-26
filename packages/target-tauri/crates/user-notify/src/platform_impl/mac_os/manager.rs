@@ -39,6 +39,7 @@ pub struct NotificationManagerMacOS {
 }
 
 impl NotificationManagerMacOS {
+    #[allow(clippy::new_without_default)]
     pub fn new() -> Self {
         log::debug!("NotificationManager.new called");
         Self {
@@ -105,7 +106,7 @@ impl NotificationManager for NotificationManagerMacOS {
                             false
                         }
                     };
-                    if let Err(_) = cb.send(authorized) {
+                    if cb.send(authorized).is_err() {
                         log::error!("the receiver dropped");
                     }
                 }
@@ -128,15 +129,13 @@ impl NotificationManager for NotificationManagerMacOS {
                 if let Some(cb) = cb.take() {
                     let result: Result<bool, Error> = if error.is_null() {
                         Ok(authorized.as_bool())
+                    } else if let Some(err_ref) = unsafe { error.as_ref() } {
+                        let description = err_ref.localizedDescription();
+                        Err(Error::NSError(description.to_string()))
                     } else {
-                        if let Some(err_ref) = unsafe { error.as_ref() } {
-                            let description = err_ref.localizedDescription();
-                            Err(Error::NSError(description.to_string()))
-                        } else {
-                            Err(Error::NSError("Failed to read error".to_string()))
-                        }
+                        Err(Error::NSError("Failed to read error".to_string()))
                     };
-                    if let Err(_) = cb.send(result) {
+                    if cb.send(result).is_err() {
                         log::error!("the receiver dropped");
                     }
                 }
@@ -248,7 +247,7 @@ impl NotificationManager for NotificationManagerMacOS {
                             }
                         }
 
-                        if let Err(_) = cb.send(handles) {
+                        if cb.send(handles).is_err() {
                             log::error!("the receiver dropped");
                         }
                     } else {
@@ -278,7 +277,7 @@ impl NotificationManager for NotificationManagerMacOS {
         builder: NotificationBuilder,
     ) -> Result<Box<dyn NotificationHandle>, Error> {
         let (tx, rx) = tokio::sync::oneshot::channel::<Result<(), Error>>();
-        let handle = build_and_send(builder, &self, tx)?;
+        let handle = build_and_send(builder, self, tx)?;
         rx.await??;
         Ok::<_, Error>(Box::new(handle) as Box<dyn NotificationHandle>)
     }

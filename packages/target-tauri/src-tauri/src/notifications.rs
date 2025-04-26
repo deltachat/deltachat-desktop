@@ -2,7 +2,7 @@ use std::{collections::HashMap, path::PathBuf, str::FromStr};
 
 use serde::{Deserialize, Serialize};
 use tauri::{path::SafePathBuf, Runtime, State};
-use user_notify::{NotificationBuilder, NotificationManager};
+use user_notify::NotificationBuilder;
 
 use crate::{
     temp_file::{remove_temp_file, write_temp_file_from_base64},
@@ -35,6 +35,7 @@ impl serde::Serialize for Error {
     }
 }
 
+#[allow(clippy::enum_variant_names)]
 #[derive(Serialize, Deserialize, Clone, Copy)]
 pub(crate) enum NotificationPayload {
     OpenAccount {
@@ -55,17 +56,18 @@ pub(crate) const NOTIFICATION_PAYLOAD_KEY: &str = "NotificationPayload";
 pub(crate) const NOTIFICATION_REPLY_TO_CATEGORY: &str = "chat.delta.tauri.message.with.reply.to";
 pub(crate) const NOTIFICATION_REPLY_TO_ACTION_ID: &str = "chat.delta.tauri.message.reply.action";
 
+#[allow(clippy::too_many_arguments)]
 #[tauri::command]
 pub(crate) async fn show_notification(
     app: tauri::AppHandle,
     window: tauri::Window,
+    notifications: State<'_, Notifications>,
     title: String,
     body: String,
     icon: Option<String>,
-    chat_id: u32,
-    message_id: u32,
     account_id: u32,
-    notifications: State<'_, Notifications>,
+    message_id: u32,
+    chat_id: u32,
 ) -> Result<(), Error> {
     if window.label() != "main" {
         return Err(Error::NotMainWindow);
@@ -188,7 +190,7 @@ pub(crate) async fn clear_notifications<R: Runtime>(
                     log::warn!("clear_notifications: some notification has a payload that could not be decoded: {err:?}");
                     log::debug!("clear_notifications: unknown payload {:?}", handle
                         .get_user_info());
-                    return None
+                    None
                 },
             }
         })

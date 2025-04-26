@@ -16,8 +16,8 @@ pub fn get_notification_manager() -> Arc<dyn NotificationManager> {
             return Arc::new(platform_impl::mock::NotificationManagerMock::new())
                 as Arc<dyn NotificationManager>;
         }
-        return Arc::new(platform_impl::mac_os::NotificationManagerMacOS::new())
-            as Arc<dyn NotificationManager>;
+        Arc::new(platform_impl::mac_os::NotificationManagerMacOS::new())
+            as Arc<dyn NotificationManager>
     }
     #[cfg(target_os = "windows")]
     {

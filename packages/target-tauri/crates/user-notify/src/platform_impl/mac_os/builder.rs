@@ -24,6 +24,7 @@ pub(super) fn build_and_send(
     Ok(NotificationHandleMacOS::new(id, user_info))
 }
 
+#[allow(clippy::type_complexity)]
 fn build(
     builder: NotificationBuilder,
     manager: &NotificationManagerMacOS,
@@ -54,7 +55,7 @@ fn build(
 
         if let Some(path) = builder.image {
             let ns_url =
-                NSURL::fileURLWithPath(&NSString::from_str(&path.to_string_lossy().to_string()));
+                NSURL::fileURLWithPath(&NSString::from_str(path.to_string_lossy().as_ref()));
             log::trace!("{ns_url:?}");
             let attachment = UNNotificationAttachment::attachmentWithIdentifier_URL_options_error(
                 ns_string!(""),
@@ -116,7 +117,7 @@ fn build(
             .ok_or(Error::NoBundleId)?;
         // log::trace!("bundle_id: {bundle_id:?}");
 
-        let id = format!("{}.{}", Uuid::new_v4(), bundle_id.to_string());
+        let id = format!("{}.{}", Uuid::new_v4(), bundle_id);
 
         let r = UNNotificationRequest::requestWithIdentifier_content_trigger(
             &NSString::from_str(&id),
@@ -126,6 +127,6 @@ fn build(
 
         log::trace!("{r:?}  -- {:?}", r.identifier());
 
-        return Ok((r, id, user_info));
-    };
+        Ok((r, id, user_info))
+    }
 }

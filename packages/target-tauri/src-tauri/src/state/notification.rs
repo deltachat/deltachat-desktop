@@ -154,7 +154,7 @@ impl Notifications {
     pub fn ask_for_permission(&self) {
         let manager_clone = self.manager.clone();
         // this is run on startup so we don't want to block/wait on it
-        let _ = spawn(async move {
+        let future = spawn(async move {
             match manager_clone
                 .first_time_ask_for_notification_permission()
                 .await
@@ -170,6 +170,7 @@ impl Notifications {
                 }
             }
         });
+        drop(future)
     }
 }
 

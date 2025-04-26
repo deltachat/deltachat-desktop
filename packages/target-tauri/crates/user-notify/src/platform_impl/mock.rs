@@ -25,21 +25,19 @@ impl NotificationHandle for NotificationHandleMock {
         self.id.clone()
     }
 
-    fn get_user_info<'a>(&'a self) -> &'a HashMap<String, String> {
+    fn get_user_info(&self) -> &HashMap<String, String> {
         &self.user_info
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Default)]
 pub struct NotificationManagerMock {
     active_notifications: RwLock<Vec<NotificationHandleMock>>,
 }
 
 impl NotificationManagerMock {
     pub fn new() -> Self {
-        Self {
-            active_notifications: RwLock::new(Vec::new()),
-        }
+        Self::default()
     }
 
     async fn add_notification(&self, notification: NotificationHandleMock) {
@@ -119,7 +117,7 @@ impl NotificationManager for NotificationManagerMock {
 
         let handle = NotificationHandleMock {
             id,
-            user_info: builder.user_info.unwrap_or(HashMap::new()),
+            user_info: builder.user_info.unwrap_or_default(),
         };
 
         self.add_notification(handle.clone()).await;
