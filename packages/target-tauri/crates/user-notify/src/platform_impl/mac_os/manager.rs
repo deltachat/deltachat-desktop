@@ -52,7 +52,6 @@ impl NotificationManagerMacOS {
         }
     }
     /// adds a notification to the notification center
-    /// needs to be called from main thread?
     pub(super) fn add_notification<F: FnOnce(Result<(), Error>) + Send + 'static>(
         &self,
         request: &UNNotificationRequest,
@@ -85,13 +84,9 @@ impl NotificationManager for NotificationManagerMacOS {
     /// https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/getnotificationsettings(completionhandler:)
     #[allow(refining_impl_trait)]
     async fn get_notification_permission_state(&self) -> Result<bool, Error> {
+        self.inner.bundle_id.as_ref().ok_or(Error::NoBundleId)?;
         let (tx, rx) = tokio::sync::oneshot::channel::<bool>();
         unsafe {
-            // MainThreadMarker::new().ok_or(Error::NotMainThread)?;
-            // TODO is this ok not being run on main thread?
-            NSBundle::mainBundle()
-                .bundleIdentifier()
-                .ok_or(Error::NoBundleId)?;
             let cb = RefCell::new(Some(tx));
             let block = block2::RcBlock::new(move |settings: NonNull<UNNotificationSettings>| {
                 if let Some(cb) = cb.take() {
@@ -122,13 +117,7 @@ impl NotificationManager for NotificationManagerMacOS {
     /// https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/requestauthorization(options:completionhandler:)
     #[allow(refining_impl_trait)]
     async fn first_time_ask_for_notification_permission(&self) -> Result<bool, Error> {
-        unsafe {
-            // MainThreadMarker::new().ok_or(Error::NotMainThread)?;
-            // TODO is this ok not being run on main thread?
-            NSBundle::mainBundle()
-                .bundleIdentifier()
-                .ok_or(Error::NoBundleId)?;
-        }
+        self.inner.bundle_id.as_ref().ok_or(Error::NoBundleId)?;
         let (tx, rx) = tokio::sync::oneshot::channel::<Result<bool, Error>>();
 
         #[inline]
@@ -207,6 +196,8 @@ impl NotificationManager for NotificationManagerMacOS {
     ///
     /// https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/removealldeliverednotifications()
     fn remove_all_delivered_notifications(&self) -> Result<(), Error> {
+        self.inner.bundle_id.as_ref().ok_or(Error::NoBundleId)?;
+
         unsafe {
             UNUserNotificationCenter::currentNotificationCenter().removeAllDeliveredNotifications();
         }
@@ -214,6 +205,8 @@ impl NotificationManager for NotificationManagerMacOS {
     }
 
     fn remove_delivered_notifications(&self, ids: Vec<&str>) -> Result<(), Error> {
+        self.inner.bundle_id.as_ref().ok_or(Error::NoBundleId)?;
+
         let ids: Vec<_> = ids.iter().map(|s| NSString::from_str(s)).collect();
         let array: Retained<NSArray<NSString>> = NSArray::from_retained_slice(ids.as_slice());
 
@@ -226,13 +219,8 @@ impl NotificationManager for NotificationManagerMacOS {
 
     #[allow(refining_impl_trait)]
     async fn get_active_notifications(&self) -> Result<Vec<NotificationHandleMacOS>, Error> {
+        self.inner.bundle_id.as_ref().ok_or(Error::NoBundleId)?;
         // https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/getdeliverednotifications(completionhandler:)
-
-        unsafe {
-            NSBundle::mainBundle()
-                .bundleIdentifier()
-                .ok_or(Error::NoBundleId)?;
-        }
 
         let (tx, rx) = tokio::sync::oneshot::channel::<Vec<NotificationHandleMacOS>>();
 
