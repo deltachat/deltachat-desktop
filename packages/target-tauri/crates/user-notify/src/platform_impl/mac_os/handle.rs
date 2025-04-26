@@ -43,7 +43,7 @@ impl NotificationHandle for NotificationHandleMacOS {
         self.id.to_string()
     }
 
-    fn get_user_info<'a>(&'a self) -> &'a HashMap<String, String> {
+    fn get_user_info(&self) -> &HashMap<String, String> {
         &self.user_info
     }
 }
