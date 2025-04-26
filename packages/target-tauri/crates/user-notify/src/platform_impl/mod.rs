@@ -1,5 +1,6 @@
 #[cfg(target_os = "macos")]
 pub mod mac_os;
+pub mod mock;
 #[cfg(target_os = "windows")]
 pub mod windows;
 #[cfg(any(

@@ -4,6 +4,7 @@ use std::sync::Arc;
 use std::thread;
 use std::{collections::HashMap, ptr::NonNull};
 
+use async_trait::async_trait;
 use objc2::Message;
 use objc2::runtime::{AnyObject, ProtocolObject};
 use send_wrapper::SendWrapper;
@@ -18,8 +19,9 @@ use objc2_user_notifications::{
 };
 
 use crate::{Error, NotificationManager, mac_os::delegate::NotificationDelegate};
-use crate::{NotificationCategory, NotificationResponse};
+use crate::{NotificationBuilder, NotificationCategory, NotificationHandle, NotificationResponse};
 
+use super::builder::build_and_send;
 use super::handle::NotificationHandleMacOS;
 
 #[derive(Debug)]
@@ -80,9 +82,9 @@ impl NotificationManagerMacOS {
     }
 }
 
+#[async_trait]
 impl NotificationManager for NotificationManagerMacOS {
     /// https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/getnotificationsettings(completionhandler:)
-    #[allow(refining_impl_trait)]
     async fn get_notification_permission_state(&self) -> Result<bool, Error> {
         self.inner.bundle_id.as_ref().ok_or(Error::NoBundleId)?;
         let (tx, rx) = tokio::sync::oneshot::channel::<bool>();
@@ -115,7 +117,6 @@ impl NotificationManager for NotificationManagerMacOS {
     }
 
     /// https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/requestauthorization(options:completionhandler:)
-    #[allow(refining_impl_trait)]
     async fn first_time_ask_for_notification_permission(&self) -> Result<bool, Error> {
         self.inner.bundle_id.as_ref().ok_or(Error::NoBundleId)?;
         let (tx, rx) = tokio::sync::oneshot::channel::<Result<bool, Error>>();
@@ -158,7 +159,7 @@ impl NotificationManager for NotificationManagerMacOS {
     // - does it handle notifications of previus sessions just fine?
     fn register(
         &self,
-        handler_callback: impl Fn(NotificationResponse) + Send + Sync + 'static,
+        handler_callback: Box<dyn Fn(crate::NotificationResponse) + Send + Sync + 'static>,
         categories: Vec<NotificationCategory>,
     ) {
         log::debug!("NotificationManager.register called");
@@ -217,8 +218,7 @@ impl NotificationManager for NotificationManagerMacOS {
         Ok(())
     }
 
-    #[allow(refining_impl_trait)]
-    async fn get_active_notifications(&self) -> Result<Vec<NotificationHandleMacOS>, Error> {
+    async fn get_active_notifications(&self) -> Result<Vec<Box<dyn NotificationHandle>>, Error> {
         self.inner.bundle_id.as_ref().ok_or(Error::NoBundleId)?;
         // https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/getdeliverednotifications(completionhandler:)
 
@@ -266,7 +266,21 @@ impl NotificationManager for NotificationManagerMacOS {
 
         get_active_notifications_inner(tx)?;
 
-        Ok(rx.await?)
+        Ok(rx
+            .await?
+            .into_iter()
+            .map(|n| Box::new(n) as Box<dyn NotificationHandle>)
+            .collect())
+    }
+
+    async fn send_notification(
+        &self,
+        builder: NotificationBuilder,
+    ) -> Result<Box<dyn NotificationHandle>, Error> {
+        let (tx, rx) = tokio::sync::oneshot::channel::<Result<(), Error>>();
+        let handle = build_and_send(builder, &self, tx)?;
+        rx.await??;
+        Ok::<_, Error>(Box::new(handle) as Box<dyn NotificationHandle>)
     }
 }
 

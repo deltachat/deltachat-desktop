@@ -19,6 +19,8 @@ pub enum Error {
     Infallible(#[from] std::convert::Infallible),
     #[error(transparent)]
     TokioRecv(#[from] tokio::sync::oneshot::error::RecvError),
+    #[error(transparent)]
+    TokioTryLock(#[from] tokio::sync::TryLockError),
     #[error("Url from path parse error {0:?}")]
     ParseUrlFromPath(PathBuf),
 }

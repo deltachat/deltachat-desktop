@@ -7,8 +7,7 @@ use tauri::{
     AppHandle, Manager,
 };
 use user_notify::{
-    mac_os::NotificationManagerMacOS, NotificationCategory, NotificationCategoryAction,
-    NotificationManager,
+    get_notification_manager, NotificationCategory, NotificationCategoryAction, NotificationManager,
 };
 
 use crate::{
@@ -22,15 +21,13 @@ use crate::{
 
 #[derive(Debug, Clone)]
 pub(crate) struct Notifications {
-    #[cfg(target_os = "macos")]
-    pub(crate) manager: Arc<NotificationManagerMacOS>,
+    pub(crate) manager: Arc<dyn NotificationManager>,
 }
 
 impl Notifications {
     pub fn new() -> Self {
         Self {
-            #[cfg(target_os = "macos")]
-            manager: Arc::new(NotificationManagerMacOS::new()),
+            manager: get_notification_manager(),
         }
     }
 
@@ -46,7 +43,7 @@ impl Notifications {
             }],
         }];
         let rt = handle();
-        self.manager.register(
+        self.manager.register(Box::new(
             move |response| {
                 let app = app.clone();
                 rt.spawn(async move {
@@ -139,7 +136,7 @@ impl Notifications {
                         log::error!("Error reacting to notification response {err:?}");
                     }
                 });
-            },
+            }),
             categories,
         );
         #[cfg(not(target_os = "macos"))]

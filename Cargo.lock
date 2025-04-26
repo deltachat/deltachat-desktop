@@ -9551,6 +9551,7 @@ name = "user-notify"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "async-trait",
  "block2 0.6.1",
  "env_logger",
  "log",
