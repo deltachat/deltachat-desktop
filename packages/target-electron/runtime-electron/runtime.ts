@@ -261,8 +261,8 @@ class ElectronRuntime implements Runtime {
   clearAllNotifications(): void {
     ipcBackend.invoke('notifications.clearAll')
   }
-  clearNotifications(chatId: number): void {
-    ipcBackend.invoke('notifications.clear', chatId)
+  clearNotifications(accountId: number, chatId: number): void {
+    ipcBackend.invoke('notifications.clear', accountId, chatId)
   }
   setBadgeCounter(value: number): void {
     ipcBackend.invoke('app.setBadgeCountAndTrayIconIndicator', value)

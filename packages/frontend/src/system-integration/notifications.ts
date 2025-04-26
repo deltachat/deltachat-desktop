@@ -398,7 +398,7 @@ async function notificationIsMention(
 export function clearNotificationsForChat(accountId: number, chatId: number) {
   log.debug('clearNotificationsForChat', accountId, chatId)
   // ask runtime to delete the notifications
-  runtime.clearNotifications(chatId)
+  runtime.clearNotifications(accountId, chatId)
 }
 
 export function clearAllNotifications() {
