@@ -2,7 +2,7 @@ use std::{collections::HashMap, path::PathBuf, str::FromStr};
 
 use serde::{Deserialize, Serialize};
 use tauri::{path::SafePathBuf, Runtime, State};
-use user_notify::{NotificationBuilder, NotificationHandle, NotificationManager};
+use user_notify::{NotificationBuilder, NotificationManager};
 
 use crate::{
     temp_file::{remove_temp_file, write_temp_file_from_base64},
@@ -15,8 +15,6 @@ pub(crate) enum Error {
     Tauri(#[from] tauri::Error),
     #[error("not called from main window")]
     NotMainWindow,
-    #[error("url parse error: {0}")]
-    Parse(String),
     #[error(transparent)]
     Notify(#[from] user_notify::Error),
     #[error("failed to delete tmp file")]
@@ -75,29 +73,7 @@ pub(crate) async fn show_notification(
 
     let app_clone = app.clone();
 
-    let mut notification_builder = {
-        #[cfg(target_os = "macos")]
-        {
-            user_notify::mac_os::NotificationBuilderMacOS::new()
-        }
-        #[cfg(target_os = "windows")]
-        {
-            todo!();
-        }
-        #[cfg(any(
-            target_os = "linux",
-            target_os = "dragonfly",
-            target_os = "freebsd",
-            target_os = "openbsd",
-            target_os = "netbsd"
-        ))]
-        {
-            todo!();
-            // user_notify::xdg::NotificationBuilderXdg::new()
-            //     .category_hint(user_notify::xdg::NotificationCategory::ImReceived)
-            //     .appname("Delta Chat")
-        }
-    };
+    let mut notification = NotificationBuilder::new();
 
     let notification_kind = match (message_id, chat_id, account_id) {
         (0, 0, _) => NotificationPayload::OpenAccount { account_id },
@@ -118,14 +94,14 @@ pub(crate) async fn show_notification(
         serde_json::to_string(&notification_kind)?,
     );
 
-    notification_builder = notification_builder
+    notification = notification
         .title(&title)
         .body(&body)
         .set_user_info(user_info)
         .set_thread_id(&format!("{account_id}-{chat_id}"));
 
     if let NotificationPayload::OpenChatMessage { .. } = notification_kind {
-        notification_builder = notification_builder.set_category_id(NOTIFICATION_REPLY_TO_CATEGORY);
+        notification = notification.set_category_id(NOTIFICATION_REPLY_TO_CATEGORY);
     }
 
     let mut temp_file_to_clean_up = None;
@@ -148,8 +124,7 @@ pub(crate) async fn show_notification(
                     {
                         Ok(tmp_file) => {
                             // IDEA: on non macos set icon of webxdc instead?
-                            notification_builder =
-                                notification_builder.set_image(PathBuf::from_str(&tmp_file)?)?;
+                            notification = notification.set_image(PathBuf::from_str(&tmp_file)?);
                             temp_file_to_clean_up.replace(tmp_file);
                         }
                         Err(err) => {
@@ -159,12 +134,12 @@ pub(crate) async fn show_notification(
                 }
             }
         } else {
-            notification_builder = notification_builder.set_image(PathBuf::from_str(&icon)?)?;
+            notification = notification.set_image(PathBuf::from_str(&icon)?);
         };
     }
 
     let manager = notifications.manager.clone();
-    notification_builder.show(manager).await?;
+    manager.send_notification(notification).await?;
 
     // here we can delete the tmp file again,
     // atleast on macos (os moves it to datastore) and on linux (transfers image data on dbus)

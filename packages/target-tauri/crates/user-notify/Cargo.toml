@@ -6,6 +6,7 @@ edition = "2024"
 
 [dependencies]
 anyhow = "1.0.97"
+async-trait = "0.1.88"
 log = "0.4.27"
 send_wrapper = "0.6.0"
 thiserror = "2.0.12"

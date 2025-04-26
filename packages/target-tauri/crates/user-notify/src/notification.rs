@@ -1,35 +1,60 @@
-use std::{collections::HashMap, path::PathBuf, sync::Arc};
+use std::{collections::HashMap, fmt::Debug, path::PathBuf};
+
+use async_trait::async_trait;
 
 use crate::Error;
 
-// This is what every notification on all platforms has
-pub trait NotificationBuilder<NManager>
+#[derive(Debug, Default)]
+pub struct NotificationBuilder {
+    pub(crate) body: Option<String>,
+    pub(crate) title: Option<String>,
+    pub(crate) subtitle: Option<String>,
+    pub(crate) image: Option<std::path::PathBuf>,
+    pub(crate) icon: Option<std::path::PathBuf>,
+    pub(crate) thread_id: Option<String>,
+    pub(crate) category_id: Option<String>,
+    pub(crate) user_info: Option<HashMap<String, String>>,
+}
+
+impl NotificationBuilder
 where
     Self: Sized,
-    NManager: NotificationManager,
 {
-    fn new() -> Self;
+    pub fn new() -> Self {
+        NotificationBuilder {
+            ..Default::default()
+        }
+    }
     /// main content of notification
     ///
     /// Plaform specific:
     /// - MacOS: [UNNotificationContent/body](https://developer.apple.com/documentation/usernotifications/unnotificationcontent/body)
     /// - Linux / XDG: [body](https://specifications.freedesktop.org/notification-spec/latest/basic-design.html#:~:text=This%20is%20a%20multi,the%20summary%20is%20displayed.)
     /// - Windows: [text2](https://docs.rs/tauri-winrt-notification/latest/tauri_winrt_notification/struct.Toast.html#method.text2)
-    fn body(self, body: &str) -> Self;
+    pub fn body(mut self, body: &str) -> Self {
+        self.body = Some(body.to_owned());
+        self
+    }
     /// primary description of notification
     ///
     /// Plaform specific:
     /// - MacOS: [UNNotificationContent/title](https://developer.apple.com/documentation/usernotifications/unnotificationcontent/title)
     /// - Linux / XDG: [summary](https://specifications.freedesktop.org/notification-spec/latest/basic-design.html#:~:text=This%20is%20a,using%20UTF%2D8.)
     /// - Windows: [text2](https://docs.rs/tauri-winrt-notification/latest/tauri_winrt_notification/struct.Toast.html#method.text2)
-    fn title(self, title: &str) -> Self;
+    pub fn title(mut self, title: &str) -> Self {
+        self.title = Some(title.to_owned());
+        self
+    }
     /// Sets secondary description of Notification
     ///
     /// Plaform specific:
     /// - MacOS [UNNotificationContent/subtitle](https://developer.apple.com/documentation/usernotifications/unnotificationcontent/subtitle)
     /// - Linux / XDG: **not suported!**
     /// - Windows [text1](https://docs.rs/tauri-winrt-notification/latest/tauri_winrt_notification/struct.Toast.html#method.text1)
-    fn subtitle(self, subtitle: &str) -> Self;
+    pub fn subtitle(mut self, subtitle: &str) -> Self {
+        self.subtitle = Some(subtitle.to_owned());
+        self
+    }
 
     // IDEA: sound support
 
@@ -39,7 +64,10 @@ where
     /// - MacOS: passed by file path, must be gif, jpg, or png
     /// - For linux the file is read and transfered over dbus (in case you are in a flatpak and it can't read from files) ["image-data"](https://specifications.freedesktop.org/notification-spec/latest/icons-and-images.html#icons-and-images-formats)
     /// - Windows: passed by file path. [image](https://docs.rs/tauri-winrt-notification/latest/tauri_winrt_notification/struct.Toast.html#method.image)
-    fn set_image(self, path: PathBuf) -> Result<Self, Error>;
+    pub fn set_image(mut self, path: PathBuf) -> Self {
+        self.image = Some(path);
+        self
+    }
 
     /// Set App icon
     ///
@@ -47,7 +75,10 @@ where
     /// - MacOS: not supported to change the app icon?
     /// - For linux the file is read and transfered over dbus (in case you are in a flatpak and it can't read from files) [app_icon](https://specifications.freedesktop.org/notification-spec/latest/icons-and-images.html#icons-and-images-formats)
     /// - Windows not implemented yet because it already uses the app icon
-    fn set_icon(self, path: PathBuf) -> Result<Self, Error>;
+    pub fn set_icon(mut self, path: PathBuf) -> Result<Self, Error> {
+        self.icon = Some(path);
+        Ok(self)
+    }
 
     /// Set Thread id, this is used to group related notifications
     ///
@@ -55,14 +86,20 @@ where
     /// - MacOS: [UNNotificationContent/threadIdentifier](https://developer.apple.com/documentation/usernotifications/unnotificationcontent/threadidentifier)
     /// - Linux not specified yet:
     /// - Windows: not implemented
-    fn set_thread_id(self, thread_id: &str) -> Self;
+    pub fn set_thread_id(mut self, thread_id: &str) -> Self {
+        self.thread_id = Some(thread_id.to_owned());
+        self
+    }
 
     /// Set the notification Category, those are basically templates how the notification should be displayed
     ///
     /// It is used to add a text field or buttons to the notification.
     ///
     /// Categories are defined by passing them to [NotificationManager::register] on app startup
-    fn set_category_id(self, category_id: &str) -> Self;
+    pub fn set_category_id(mut self, category_id: &str) -> Self {
+        self.category_id = Some(category_id.to_owned());
+        self
+    }
 
     // IDEA: convinience methods? but I believe a generic callback is better in which you get [NotificationResponse]
     // and identify the notification based on id or userinfo is better
@@ -80,19 +117,16 @@ where
     /// ## Platform Specific
     /// - on MacOS this uses UserInfo field in the notification content, so it works accross sessions
     /// - TODO: on other platforms we emulate this by storing this info inside of NotificationManager
-    fn set_user_info(self, user_info: HashMap<String, String>) -> Self;
-
-    /// Shows notification and returns Notification handle
-    fn show(
-        self,
-        manager: Arc<NManager>,
-    ) -> impl std::future::Future<Output = Result<impl NotificationHandle, Error>>;
+    pub fn set_user_info(mut self, user_info: HashMap<String, String>) -> Self {
+        self.user_info = Some(user_info);
+        self
+    }
 }
 
 // Handle to a sent notification
 pub trait NotificationHandle
 where
-    Self: Send + Sync,
+    Self: Send + Sync + Debug,
 {
     /// close the notification
     fn close(&self) -> Result<(), Error>;
@@ -106,19 +140,16 @@ where
 // maybe offer a seperate api to catch notifications from previous sessions?
 // https://github.com/deltachat/deltachat-desktop/issues/2438
 
+#[async_trait]
 pub trait NotificationManager
 where
-    Self: Send + Sync,
+    Self: Send + Sync + Debug,
 {
     /// Needs to be called from main thread
-    fn get_notification_permission_state(
-        &self,
-    ) -> impl std::future::Future<Output = Result<bool, Error>>;
+    async fn get_notification_permission_state(&self) -> Result<bool, crate::Error>;
 
     /// Needs to be called from main thread
-    fn first_time_ask_for_notification_permission(
-        &self,
-    ) -> impl std::future::Future<Output = Result<bool, Error>>;
+    async fn first_time_ask_for_notification_permission(&self) -> Result<bool, Error>;
 
     /// registers and initializes the notification handler and categories.
     /// Set a function to handle user responses (clicking notification, closing it, clicking an action on it)
@@ -127,7 +158,7 @@ where
     /// - MacOS: sets the UNUserNotificationCenterDelegate
     fn register(
         &self,
-        handler_callback: impl Fn(crate::NotificationResponse) + Send + Sync + 'static,
+        handler_callback: Box<dyn Fn(crate::NotificationResponse) + Send + Sync + 'static>,
         categories: Vec<NotificationCategory>,
     );
 
@@ -147,9 +178,13 @@ where
     ///   - also includes notifications from previous sessions
     ///   - [UNUserNotificationCenter.getDeliveredNotificationsWithCompletionHandler](https://developer.apple.com/documentation/usernotifications/unusernotificationcenter/getdeliverednotifications(completionhandler:))
     /// - Others: TODO: implemented/emulated by keeping track of all notifications in memory
-    fn get_active_notifications(
+    async fn get_active_notifications(&self) -> Result<Vec<Box<dyn NotificationHandle>>, Error>;
+
+    /// Shows notification and returns Notification handle
+    async fn send_notification(
         &self,
-    ) -> impl std::future::Future<Output = Result<Vec<impl NotificationHandle>, Error>>;
+        builder: NotificationBuilder,
+    ) -> Result<Box<dyn NotificationHandle>, Error>;
 }
 
 /// Emmited when user clicked on a notification

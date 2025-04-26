@@ -1,16 +1,13 @@
 use std::{collections::HashMap, sync::Arc, time::Duration};
 
 use tokio::{signal::ctrl_c, spawn, time::sleep};
-use user_notify::{
-    NotificationBuilder, NotificationCategory, NotificationCategoryAction, NotificationHandle,
-    NotificationManager, mac_os::NotificationManagerMacOS,
-};
+use user_notify::{NotificationCategory, NotificationCategoryAction, get_notification_manager};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     env_logger::init();
     log::debug!("0");
-    let manager = Arc::new(NotificationManagerMacOS::new());
+    let manager = get_notification_manager();
 
     let categories = vec![
         NotificationCategory {
@@ -36,7 +33,7 @@ async fn main() -> anyhow::Result<()> {
             }],
         },
     ];
-    manager.register(|_| {}, categories);
+    manager.register(Box::new(|_| {}), categories);
 
     log::debug!("1");
     #[cfg(target_os = "macos")]
@@ -53,43 +50,22 @@ async fn main() -> anyhow::Result<()> {
         }
     }
     log::debug!("2");
-    let mut notification_builder = {
-        #[cfg(target_os = "macos")]
-        {
-            user_notify::mac_os::NotificationBuilderMacOS::new()
-        }
-        #[cfg(target_os = "windows")]
-        {
-            todo!();
-        }
-        #[cfg(any(
-            target_os = "linux",
-            target_os = "dragonfly",
-            target_os = "freebsd",
-            target_os = "openbsd",
-            target_os = "netbsd"
-        ))]
-        {
-            user_notify::xdg::NotificationBuilderXdg::new()
-                .category_hint(user_notify::xdg::NotificationCategory::ImReceived)
-                .appname("Delta Chat")
-        }
-    };
+    let mut notification = user_notify::NotificationBuilder::new();
     log::debug!("3");
 
-    notification_builder = notification_builder
+    notification = notification
         .title("my title2")
         .body("my body2")
         .set_thread_id(&format!("thread-id"));
 
     log::debug!("4");
-    notification_builder.show(manager.clone()).await?;
+    manager.send_notification(notification).await?;
 
     log::debug!("5");
     let mut info = HashMap::new();
     info.insert("hey".to_owned(), "hi".to_owned());
 
-    let notification_builder = user_notify::mac_os::NotificationBuilderMacOS::new()
+    let notification = user_notify::NotificationBuilder::new()
         .title("my title")
         .body("my body")
         .set_thread_id(&format!("thread-id"))
@@ -97,7 +73,7 @@ async fn main() -> anyhow::Result<()> {
         .set_category_id("my.app.123.textinput");
 
     let manager_clone = manager.clone();
-    spawn(async move { notification_builder.show(manager_clone).await }).await??;
+    spawn(async move { manager_clone.send_notification(notification).await }).await??;
 
     log::debug!("6");
 
