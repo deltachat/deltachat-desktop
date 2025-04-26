@@ -51,12 +51,16 @@ pub(crate) struct InnerMainWindowChannelsState {
 /// Channels to communicate with the front-end's Runtime class (see `runtime.ts`).
 pub(crate) struct MainWindowChannels {
     inner: RwLock<Option<InnerMainWindowChannelsState>>,
+    /// deferred events that were triggered on startup before ui was ready
+    /// mainly used for starting dc from a notification
+    deferred_events: RwLock<Vec<MainWindowEvents>>,
 }
 
 impl MainWindowChannels {
     pub fn new() -> Self {
         Self {
             inner: RwLock::new(None),
+            deferred_events: RwLock::new(Vec::new()),
         }
     }
 
@@ -121,6 +125,26 @@ impl MainWindowChannels {
             .context("main window channel not initialized yet, should not happen, contact devs")?
             .events
             .send(event)?;
+        Ok(())
+    }
+
+    /// same as [Self::emit_event] but it deferrs items when the ui is not ready (and the channel doesn't exist yet)
+    pub(crate) async fn emit_event_on_startup_deferred(
+        &self,
+        event: MainWindowEvents,
+    ) -> anyhow::Result<()> {
+        if let Some(inner) = self.inner.read().await.as_ref() {
+            inner.events.send(event)?;
+        } else {
+            self.deferred_events.write().await.push(event);
+        }
+        Ok(())
+    }
+
+    pub(crate) async fn emit_deferred_events(&self) -> anyhow::Result<()> {
+        for event in self.deferred_events.write().await.drain(..) {
+            self.emit_event(event).await?;
+        }
         Ok(())
     }
 
