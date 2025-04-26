@@ -120,7 +120,16 @@ where
         &self,
     ) -> impl std::future::Future<Output = Result<bool, Error>>;
 
-    fn register(&self, categories: Vec<NotificationCategory>);
+    /// registers and initializes the notification handler and categories.
+    /// Set a function to handle user responses (clicking notification, closing it, clicking an action on it)
+    ///
+    /// ## Platform specific:
+    /// - MacOS: sets the UNUserNotificationCenterDelegate
+    fn register(
+        &self,
+        handler_callback: impl Fn(crate::NotificationResponse) + Send + Sync + 'static,
+        categories: Vec<NotificationCategory>,
+    );
 
     /// Removes all of your app’s delivered notifications from Notification Center.
     ///
@@ -141,12 +150,6 @@ where
     fn get_active_notifications(
         &self,
     ) -> impl std::future::Future<Output = Result<Vec<impl NotificationHandle>, Error>>;
-
-    /// Set a function to handle user responses (clicking notification, closing it, clicking an action on it)
-    fn set_user_response_handler(
-        &self,
-        handler_callback: impl Fn(NotificationResponse) + Send + Sync,
-    );
 }
 
 /// Emmited when user clicked on a notification
@@ -169,7 +172,6 @@ pub struct NotificationResponse {
     pub user_info: HashMap<String, String>,
 }
 
-#[non_exhaustive]
 #[derive(Debug, Clone, PartialEq)]
 pub enum NotificationResponseAction {
     /// When user clicks on the notification

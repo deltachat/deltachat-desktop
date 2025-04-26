@@ -494,7 +494,7 @@ pub fn run() -> i32 {
             }
 
             let notifications = Notifications::new();
-            notifications.initialize();
+            notifications.initialize(app.handle().clone());
             app.manage(notifications);
 
             app.state::<AppState>()

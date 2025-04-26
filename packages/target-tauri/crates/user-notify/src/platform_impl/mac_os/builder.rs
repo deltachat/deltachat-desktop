@@ -142,7 +142,7 @@ impl NotificationBuilderMacOS {
                 let ns_url = NSURL::fileURLWithPath(&NSString::from_str(
                     &path.to_string_lossy().to_string(),
                 ));
-                log::info!("{ns_url:?}");
+                log::trace!("{ns_url:?}");
                 let attachment =
                     UNNotificationAttachment::attachmentWithIdentifier_URL_options_error(
                         ns_string!(""),
@@ -190,8 +190,6 @@ impl NotificationBuilderMacOS {
                     NSDictionary<AnyObject, AnyObject>,
                 >(string_dictionary);
                 notification.setUserInfo(anyobject_dictionary.deref());
-
-                println!("hi");
                 user_info = payload;
             }
 
@@ -205,7 +203,7 @@ impl NotificationBuilderMacOS {
                 .as_ref()
                 .map(|s| NSString::from_str(s))
                 .ok_or(Error::NoBundleId)?;
-            println!("bundle_id: {bundle_id:?}");
+            // log::trace!("bundle_id: {bundle_id:?}");
 
             let id = format!("{}.{}", Uuid::new_v4(), bundle_id.to_string());
 
@@ -214,7 +212,8 @@ impl NotificationBuilderMacOS {
                 &notification,
                 None,
             );
-            println!("{r:?}  -- {:?}", r.identifier());
+
+            log::trace!("{r:?}  -- {:?}", r.identifier());
 
             return Ok((r, id, user_info));
         };

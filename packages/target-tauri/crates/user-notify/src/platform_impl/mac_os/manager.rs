@@ -1,6 +1,7 @@
 use std::cell::{OnceCell, RefCell};
 use std::ops::Deref;
 use std::sync::Arc;
+use std::thread;
 use std::{collections::HashMap, ptr::NonNull};
 
 use objc2::Message;
@@ -16,8 +17,8 @@ use objc2_user_notifications::{
     UNUserNotificationCenter, UNUserNotificationCenterDelegate,
 };
 
-use crate::NotificationCategory;
 use crate::{Error, NotificationManager, mac_os::delegate::NotificationDelegate};
+use crate::{NotificationCategory, NotificationResponse};
 
 use super::handle::NotificationHandleMacOS;
 
@@ -26,6 +27,7 @@ pub struct NotificationManagerMacOSInner {
     /// reference to the delegate so that it isn't dropped immitiately
     delegate_reference:
         SendWrapper<OnceCell<Retained<ProtocolObject<dyn UNUserNotificationCenterDelegate>>>>,
+    listener_loop: SendWrapper<OnceCell<thread::JoinHandle<()>>>,
     pub(crate) bundle_id: Option<String>,
 }
 
@@ -40,6 +42,7 @@ impl NotificationManagerMacOS {
         Self {
             inner: Arc::new(NotificationManagerMacOSInner {
                 delegate_reference: SendWrapper::new(OnceCell::new()),
+                listener_loop: SendWrapper::new(OnceCell::new()),
                 bundle_id: unsafe {
                     NSBundle::mainBundle()
                         .bundleIdentifier()
@@ -164,10 +167,15 @@ impl NotificationManager for NotificationManagerMacOS {
 
     // TODO find out if it makes a difference when this is called
     // - does it handle notifications of previus sessions just fine?
-    fn register(&self, categories: Vec<NotificationCategory>) {
+    fn register(
+        &self,
+        handler_callback: impl Fn(NotificationResponse) + Send + Sync + 'static,
+        categories: Vec<NotificationCategory>,
+    ) {
         log::debug!("NotificationManager.register called");
         let mtm = MainThreadMarker::new().expect("not on main thread");
-        let notification_delegate = NotificationDelegate::new(mtm);
+        let (tx, mut rx) = tokio::sync::mpsc::channel::<NotificationResponse>(10);
+        let notification_delegate = NotificationDelegate::new(mtm, tx);
         unsafe {
             let proto: Retained<ProtocolObject<dyn UNUserNotificationCenterDelegate>> =
                 ProtocolObject::from_retained(notification_delegate);
@@ -184,6 +192,13 @@ impl NotificationManager for NotificationManagerMacOS {
                 .map(|category| W(category_to_native_category(category)))
                 .collect();
             notification_center.setNotificationCategories(&categories);
+
+            let handler_loop = thread::spawn(move || {
+                while let Some(response) = rx.blocking_recv() {
+                    handler_callback(response)
+                }
+            });
+            self.inner.listener_loop.set(handler_loop).expect("failed to set delegate_reference, did you call register multiple times so that the once_cell was already taken?");
         }
         log::debug!("NotificationManager.register completed");
     }
@@ -249,13 +264,6 @@ impl NotificationManager for NotificationManagerMacOS {
         get_active_notifications_inner(tx)?;
 
         Ok(rx.await?)
-    }
-
-    fn set_user_response_handler(
-        &self,
-        handler_callback: impl Fn(crate::NotificationResponse) + Send + Sync,
-    ) {
-        todo!()
     }
 }
 

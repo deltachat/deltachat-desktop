@@ -1,5 +1,3 @@
-use std::{cell::RefCell, collections::HashMap};
-
 use objc2::{DefinedClass, MainThreadMarker, MainThreadOnly, define_class, msg_send, rc::Retained};
 use objc2_foundation::{NSObject, NSObjectProtocol};
 use objc2_user_notifications::{
@@ -7,18 +5,19 @@ use objc2_user_notifications::{
     UNNotificationPresentationOptions, UNNotificationResponse, UNTextInputNotificationResponse,
     UNUserNotificationCenter, UNUserNotificationCenterDelegate,
 };
+use tokio::sync::mpsc::Sender;
 
 use crate::{NotificationResponse, NotificationResponseAction};
 
+use super::manager::user_info_dictionary_to_hashmap;
+
 #[derive(Clone)]
 pub struct Ivars {
-    // example var to try out ivars, TODO replace this by sth more useful like a channel to extract notifications to
-    pub notification_count: RefCell<usize>,
+    pub sender: Sender<NotificationResponse>,
 }
 
 // for info on how to use the macro see
 // - https://docs.rs/objc2/latest/objc2/#example
-//
 define_class!(
     // SAFETY:
     // - The superclass NSObject does not have any subclassing requirements.
@@ -62,8 +61,6 @@ define_class!(
             // probably give a channel with ivars
             log::debug!("did_receive_notification_response {response:?}");
 
-            self.ivars().notification_count.replace_with(|&mut old| old + 1);
-            log::info!("thusfar user interacted with {} notifications", self.ivars().notification_count.borrow());
 
             unsafe {
               let action_id = response.actionIdentifier();
@@ -79,18 +76,22 @@ define_class!(
 
               let notification = response.notification();
 
-              let notification_id = notification.request().identifier().to_string();
+              let request = notification.request();
+              let notification_id = request.identifier().to_string();
 
+              let user_info = user_info_dictionary_to_hashmap(request.content().userInfo());
 
               let event = NotificationResponse {
                   notification_id,
                   action,
                   user_text,
-                  user_info: HashMap::new() // TODO: maybe just use a well known key and allow all serde json values
+                  user_info
               };
               log::debug!("NotificationResponse {event:?}");
 
-              // TODO somehow pass events to the handler (I thought a tokio channel and worker that listens for those events would be nice, or just classical channel and thread?)
+                if let Err(err) = self.ivars().sender.try_send(event) {
+                    log::error!("Failed to send notification to handler: {err:?}");
+                }
             }
 
             completion_handler.call(());
@@ -101,10 +102,8 @@ define_class!(
 );
 
 impl NotificationDelegate {
-    pub fn new(mtm: MainThreadMarker) -> Retained<Self> {
-        let this = Self::alloc(mtm).set_ivars(Ivars {
-            notification_count: RefCell::new(0),
-        });
+    pub fn new(mtm: MainThreadMarker, tx: Sender<NotificationResponse>) -> Retained<Self> {
+        let this = Self::alloc(mtm).set_ivars(Ivars { sender: tx });
         unsafe { msg_send![super(this), init] }
     }
 }

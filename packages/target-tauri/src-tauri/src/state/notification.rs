@@ -1,9 +1,18 @@
 use std::sync::Arc;
 
-use tauri::async_runtime::spawn;
+use tauri::{
+    async_runtime::{handle, spawn},
+    AppHandle, Manager,
+};
 use user_notify::{
     mac_os::NotificationManagerMacOS, NotificationCategory, NotificationCategoryAction,
     NotificationManager,
+};
+
+use crate::{
+    notifications::{self, NotificationPayload, NOTIFICATION_PAYLOAD_KEY},
+    state::main_window_channels::MainWindowEvents,
+    MainWindowChannels,
 };
 
 #[derive(Debug, Clone)]
@@ -20,7 +29,7 @@ impl Notifications {
         }
     }
 
-    pub fn initialize(&self) {
+    pub fn initialize(&self, app: AppHandle) {
         let categories = vec![NotificationCategory {
             identifier: "chat.delta.tauri.message.with.reply.to".to_string(),
             actions: vec![NotificationCategoryAction::TextInputAction {
@@ -31,7 +40,78 @@ impl Notifications {
                 input_placeholder: "Type your reply here".to_string(),
             }],
         }];
-        self.manager.register(categories);
+        let rt = handle();
+        self.manager.register(
+            move |response| {
+                let app = app.clone();
+                rt.spawn(async move {
+                    log::info!("[[[[response]]]]: {response:?}");
+                    let mwc = app.state::<MainWindowChannels>();
+
+                    let payload: NotificationPayload = match response
+                        .user_info
+                        .get(NOTIFICATION_PAYLOAD_KEY)
+                        .ok_or(notifications::Error::ValueMissing(
+                            NOTIFICATION_PAYLOAD_KEY.to_owned(),
+                        ))
+                        .and_then(|s| {
+                            serde_json::from_str(s).map_err(notifications::Error::SerdeJson)
+                        }) {
+                        Err(err) => {
+                            log::error!("Error reading notification payload / user info: {err:?}");
+                            return;
+                        }
+                        Ok(p) => p,
+                    };
+
+                    use user_notify::NotificationResponseAction::*;
+                    let result = match response.action {
+                        Default => match payload {
+                            NotificationPayload::OpenAccount { account_id } => {
+                                mwc.emit_event(MainWindowEvents::NotificationClick {
+                                    account_id,
+                                    chat_id: 0,
+                                    msg_id: 0,
+                                })
+                                .await
+                            }
+                            NotificationPayload::OpenChat {
+                                account_id,
+                                chat_id,
+                            } => {
+                                mwc.emit_event(MainWindowEvents::NotificationClick {
+                                    account_id,
+                                    chat_id,
+                                    msg_id: 0,
+                                })
+                                .await
+                            }
+                            NotificationPayload::OpenChatMessage {
+                                account_id,
+                                chat_id,
+                                message_id,
+                            } => {
+                                mwc.emit_event(MainWindowEvents::NotificationClick {
+                                    account_id,
+                                    chat_id,
+                                    msg_id: message_id,
+                                })
+                                .await
+                            }
+                        },
+                        Dismiss => {
+                            /* TODO? notification will just close? on macos this the handler is not even called for closing*/
+                            Ok(())
+                        }
+                        Other(action_id) => todo!(),
+                    };
+                    if let Err(err) = result {
+                        log::error!("Error reacting to notification response {err:?}");
+                    }
+                });
+            },
+            categories,
+        );
         #[cfg(target_os = "macos")]
         {
             // remove all notifications that are still there from previous sessions,
