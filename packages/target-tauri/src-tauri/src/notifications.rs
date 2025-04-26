@@ -1,7 +1,7 @@
-use std::{path::PathBuf, str::FromStr};
+use std::{collections::HashMap, path::PathBuf, str::FromStr};
 
 use serde::{Deserialize, Serialize};
-use tauri::{async_runtime::block_on, path::SafePathBuf, Runtime, State};
+use tauri::{path::SafePathBuf, Runtime, State};
 use user_notify::{NotificationBuilder, NotificationManager};
 
 use crate::{
@@ -21,8 +21,12 @@ pub(crate) enum Error {
     Notify(#[from] user_notify::Error),
     #[error("failed to delete tmp file")]
     FailedToDeleteTmpFile,
+    #[error(transparent)]
+    SerdeJson(#[from] serde_json::Error),
     #[error("Infallible error, something went really wrong: {0}")]
     Infallible(#[from] std::convert::Infallible),
+    #[error("Value missing in User Info for key {0}")]
+    ValueMissing(String),
 }
 impl serde::Serialize for Error {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -34,11 +38,22 @@ impl serde::Serialize for Error {
 }
 
 #[derive(Serialize, Deserialize, Clone, Copy)]
-struct NotificationClickedEventPayload {
-    chat_id: u32,
-    message_id: u32,
-    account_id: u32,
+pub(crate) enum NotificationPayload {
+    OpenAccount {
+        account_id: u32,
+    },
+    OpenChat {
+        account_id: u32,
+        chat_id: u32,
+    },
+    OpenChatMessage {
+        account_id: u32,
+        chat_id: u32,
+        message_id: u32,
+    },
 }
+
+pub(crate) const NOTIFICATION_PAYLOAD_KEY: &str = "NotificationPayload";
 
 #[tauri::command]
 pub(crate) async fn show_notification(
@@ -56,17 +71,7 @@ pub(crate) async fn show_notification(
         return Err(Error::NotMainWindow);
     }
 
-    // .extra(
-    //     "data",
-    //     NotificationClickedEventPayload {
-    //         chat_id,
-    //         message_id,
-    //         account_id,
-    //     },
-    // );
-
     let app_clone = app.clone();
-    // MacOS needs this to be run on main thread
 
     let mut notification_builder = {
         #[cfg(target_os = "macos")]
@@ -92,10 +97,30 @@ pub(crate) async fn show_notification(
         }
     };
 
+    let notification_kind = match (message_id, chat_id, account_id) {
+        (0, 0, _) => NotificationPayload::OpenAccount { account_id },
+        (0, _, _) => NotificationPayload::OpenChat {
+            account_id,
+            chat_id,
+        },
+        _ => NotificationPayload::OpenChatMessage {
+            account_id,
+            chat_id,
+            message_id,
+        },
+    };
+
+    let mut user_info = HashMap::new();
+    user_info.insert(
+        NOTIFICATION_PAYLOAD_KEY.to_owned(),
+        serde_json::to_string(&notification_kind)?,
+    );
+
     notification_builder = notification_builder
         .title(&title)
         .body(&body)
-        .set_category_id("chat.delta.tauri.message.with.reply.to")
+        // .set_category_id("chat.delta.tauri.message.with.reply.to")
+        .set_user_info(user_info)
         .set_thread_id(&format!("{account_id}-{chat_id}"));
 
     let mut temp_file_to_clean_up = None;

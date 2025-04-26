@@ -36,7 +36,7 @@ async fn main() -> anyhow::Result<()> {
             }],
         },
     ];
-    manager.register(categories);
+    manager.register(|_| {}, categories);
 
     log::debug!("1");
     #[cfg(target_os = "macos")]

@@ -74,7 +74,7 @@ type MainWindowEvents =
     }
   | {
       event: 'notificationClick'
-      data: NotificationClickedEventPayload
+      data: { accountId: number; chatId: number; msgId: number }
     }
   | {
       event: 'deepLinkOpened'
@@ -585,9 +585,13 @@ class TauriRuntime implements Runtime {
     invoke('clear_notifications', { chatId })
   }
 
-  notificationCallback?: (data: NotificationClickedEventPayload) => void
+  notificationCallback?: (data: {
+    accountId: number
+    chatId: number
+    msgId: number
+  }) => void
   setNotificationCallback(
-    cb: (data: NotificationClickedEventPayload) => void
+    cb: (data: { accountId: number; chatId: number; msgId: number }) => void
   ): void {
     this.notificationCallback = cb
   }

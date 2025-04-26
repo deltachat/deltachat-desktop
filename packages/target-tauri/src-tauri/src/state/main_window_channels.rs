@@ -35,6 +35,7 @@ pub enum MainWindowEvents {
     ToggleNotifications,
     OnThemeUpdate,
     DeepLinkOpened(String),
+    #[serde(rename_all = "camelCase")]
     NotificationClick {
         account_id: u32,
         chat_id: u32,
