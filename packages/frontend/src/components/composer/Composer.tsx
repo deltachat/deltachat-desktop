@@ -76,7 +76,7 @@ const Composer = forwardRef<
       viewType: T.Viewtype
     ) => Promise<void>
     removeFile: () => void
-    clearDraft: () => void
+    clearDraftStateButKeepTextareaValue: () => void
   }
 >((props, ref) => {
   const {
@@ -744,7 +744,7 @@ export function useDraft(
     viewType: T.Viewtype
   ) => Promise<void>
   removeFile: () => void
-  clearDraft: () => void
+  clearDraftStateButKeepTextareaValue: () => void
 } {
   const [
     draftState,
@@ -770,21 +770,26 @@ export function useDraft(
   const draftRef = useRef<DraftObject>(emptyDraft(chatId))
   draftRef.current = draftState
 
-  const clearDraft = useCallback(() => {
+  /**
+   * Reset `draftState` to "empty draft" value,
+   * but don't save it to backend and don't change the value
+   * of the textarea.
+   */
+  const clearDraftStateButKeepTextareaValue = useCallback(() => {
     _setDraftStateButKeepTextareaValue(_ => emptyDraft(chatId))
   }, [chatId])
 
   const loadDraft = useCallback(
     (chatId: number) => {
       if (chatId === null || !canSend) {
-        clearDraft()
+        clearDraftStateButKeepTextareaValue()
         return
       }
       inputRef.current?.setState({ loadingDraft: true })
       BackendRemote.rpc.getDraft(selectedAccountId(), chatId).then(newDraft => {
         if (!newDraft) {
           log.debug('no draft')
-          clearDraft()
+          clearDraftStateButKeepTextareaValue()
           inputRef.current?.setText('')
         } else {
           _setDraftStateButKeepTextareaValue(old => ({
@@ -808,7 +813,7 @@ export function useDraft(
         })
       })
     },
-    [clearDraft, inputRef, canSend]
+    [clearDraftStateButKeepTextareaValue, inputRef, canSend]
   )
 
   useEffect(() => {
@@ -876,10 +881,10 @@ export function useDraft(
       }))
       // don't load text to prevent bugging back
     } else {
-      clearDraft()
+      clearDraftStateButKeepTextareaValue()
     }
     inputRef.current?.setState({ loadingDraft: false })
-  }, [chatId, clearDraft, canSend, inputRef])
+  }, [chatId, clearDraftStateButKeepTextareaValue, canSend, inputRef])
 
   const updateDraftText = (text: string, InputChatId: number) => {
     if (chatId !== InputChatId) {
@@ -1011,7 +1016,7 @@ export function useDraft(
     updateDraftText,
     addFileToDraft,
     removeFile,
-    clearDraft,
+    clearDraftStateButKeepTextareaValue,
   }
 }
 
