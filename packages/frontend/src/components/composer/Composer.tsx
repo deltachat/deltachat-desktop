@@ -53,6 +53,7 @@ import {
   AudioRecorderError,
 } from '../AudioRecorder/AudioRecorder'
 import AlertDialog from '../dialogs/AlertDialog'
+import { unknownErrorToString } from '../helpers/unknownErrorToString'
 
 const log = getLogger('renderer/composer')
 
@@ -77,6 +78,8 @@ const Composer = forwardRef<
     ) => Promise<void>
     removeFile: () => void
     clearDraftStateButKeepTextareaValue: () => void
+    clearDraftStateAndUpdateTextareaValue: () => void
+    setDraftStateAndUpdateTextareaValue: (newValue: DraftObject) => void
   }
 >((props, ref) => {
   const {
@@ -212,46 +215,68 @@ const Composer = forwardRef<
         if (textareaRef) {
           if (textareaRef.disabled) {
             throw new Error(
-              'text area is disabled, this means it is either already sending or loading the draft'
+              'text area is disabled, this means it is loading the draft'
             )
           }
-          textareaRef.disabled = true
         }
+        const message = regularMessageInputRef.current?.getText() || ''
+        if (!regularMessageInputRef.current?.hasText() && !draftState.file) {
+          log.debug(`Empty message: don't send it...`)
+          return
+        }
+
+        const preSendDraftState = draftState
+        const sendMessagePromise = sendMessage(accountId, chatId, {
+          text: replaceColonsSafe(message),
+          file: draftState.file || undefined,
+          filename: draftState.fileName || undefined,
+          quotedMessageId:
+            draftState.quote?.kind === 'WithMessage'
+              ? draftState.quote.messageId
+              : null,
+          viewtype: draftState.viewType,
+        })
+        // _Immediately_ clear the draft from React state.
+        // This does _not_ remove the draft from the back-end yet.
+        // This is primarily to make sure that you can't accidentally
+        // doube-send the same message.
+        //
+        // We could instead disable the textarea
+        // and disable sending the next message
+        // until the previous one has been sent,
+        // but it's unnecessary to block the user in such a way,
+        // because it's not often that `sendMessage` fails.
+        // And also disabling an input makes it lose focus,
+        // so we'd have to re-focus it, which would make screen readers
+        // re-announce it, which is disorienting.
+        // See https://github.com/deltachat/deltachat-desktop/issues/4590#issuecomment-2821985528.
+        props.clearDraftStateAndUpdateTextareaValue()
+
+        let sentSuccessfully: boolean
         try {
-          const message = regularMessageInputRef.current?.getText() || ''
-          if (!regularMessageInputRef.current?.hasText() && !draftState.file) {
-            log.debug(`Empty message: don't send it...`)
-            return
-          }
-
-          const sendMessagePromise = sendMessage(accountId, chatId, {
-            text: replaceColonsSafe(message),
-            file: draftState.file || undefined,
-            filename: draftState.fileName || undefined,
-            quotedMessageId:
-              draftState.quote?.kind === 'WithMessage'
-                ? draftState.quote.messageId
-                : null,
-            viewtype: draftState.viewType,
-          })
-
           await sendMessagePromise
-
-          // Ensure that the draft is cleared
-          // and the state is reflected in the UI.
+          sentSuccessfully = true
+        } catch (err) {
+          sentSuccessfully = false
+          openDialog(AlertDialog, {
+            message:
+              tx('systemmsg_failed_sending_to', selectedChat.name) +
+              '\n' +
+              tx('error_x', unknownErrorToString(err)),
+          })
+          // Restore the draft, since we failed to send.
+          // Note that this will not save the draft to the backend.
           //
-          // At this point we know that sending has succeeded,
-          // so we do not accidentally remove the draft
-          // if the core fails to send.
-          await BackendRemote.rpc.removeDraft(selectedAccountId(), chatId)
-          window.__reloadDraft && window.__reloadDraft()
-        } catch (error) {
-          log.error(error)
-        } finally {
-          if (textareaRef) {
-            textareaRef.disabled = false
-          }
-          regularMessageInputRef.current?.focus()
+          // TODO fix: hypothetically by this point the user
+          // could have started typing a new message already,
+          // and so this would override it on the frontend.
+          props.setDraftStateAndUpdateTextareaValue(preSendDraftState)
+        }
+        if (sentSuccessfully) {
+          // TODO fix: hypothetically by this point the user
+          // could have started typing (and even have sent!)
+          // a new message already, so this would override it on the backend.
+          await BackendRemote.rpc.removeDraft(accountId, chatId)
         }
       }
 
@@ -745,6 +770,8 @@ export function useDraft(
   ) => Promise<void>
   removeFile: () => void
   clearDraftStateButKeepTextareaValue: () => void
+  clearDraftStateAndUpdateTextareaValue: () => void
+  setDraftStateAndUpdateTextareaValue: (newValue: DraftObject) => void
 } {
   const [
     draftState,
@@ -771,6 +798,17 @@ export function useDraft(
   draftRef.current = draftState
 
   /**
+   * @see {@link _setDraftStateButKeepTextareaValue}.
+   */
+  const setDraftStateAndUpdateTextareaValue = useCallback(
+    (newValue: DraftObject) => {
+      _setDraftStateButKeepTextareaValue(newValue)
+      inputRef.current?.setText(newValue.text)
+    },
+    [inputRef]
+  )
+
+  /**
    * Reset `draftState` to "empty draft" value,
    * but don't save it to backend and don't change the value
    * of the textarea.
@@ -778,6 +816,12 @@ export function useDraft(
   const clearDraftStateButKeepTextareaValue = useCallback(() => {
     _setDraftStateButKeepTextareaValue(_ => emptyDraft(chatId))
   }, [chatId])
+  /**
+   * @see {@link clearDraftStateButKeepTextareaValue}
+   */
+  const clearDraftStateAndUpdateTextareaValue = useCallback(() => {
+    setDraftStateAndUpdateTextareaValue(emptyDraft(chatId))
+  }, [chatId, setDraftStateAndUpdateTextareaValue])
 
   const loadDraft = useCallback(
     (chatId: number) => {
@@ -828,11 +872,6 @@ export function useDraft(
 
   const saveDraft = useCallback(async () => {
     if (chatId === null || !canSend) {
-      return
-    }
-    if (inputRef.current?.textareaRef.current?.disabled) {
-      // Guard against strange races
-      log.warn('Do not save draft while sending')
       return
     }
     const accountId = selectedAccountId()
@@ -1017,6 +1056,8 @@ export function useDraft(
     addFileToDraft,
     removeFile,
     clearDraftStateButKeepTextareaValue,
+    clearDraftStateAndUpdateTextareaValue,
+    setDraftStateAndUpdateTextareaValue,
   }
 }
 

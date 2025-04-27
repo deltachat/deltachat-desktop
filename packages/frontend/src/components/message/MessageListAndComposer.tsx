@@ -102,6 +102,8 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     addFileToDraft,
     removeFile,
     clearDraftStateButKeepTextareaValue,
+    clearDraftStateAndUpdateTextareaValue,
+    setDraftStateAndUpdateTextareaValue,
   } = useDraft(
     accountId,
     chat.id,
@@ -338,6 +340,12 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
         removeFile={removeFile}
         clearDraftStateButKeepTextareaValue={
           clearDraftStateButKeepTextareaValue
+        }
+        clearDraftStateAndUpdateTextareaValue={
+          clearDraftStateAndUpdateTextareaValue
+        }
+        setDraftStateAndUpdateTextareaValue={
+          setDraftStateAndUpdateTextareaValue
         }
       />
     </div>

@@ -8,6 +8,7 @@
 
 ### Fixed
 - accessibility: announce when a message gets edited
+- accessibility: don't re-announce message input (composer) after sending every message
 
 <a id="1_57_0"></a>
 
