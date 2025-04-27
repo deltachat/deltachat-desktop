@@ -2,15 +2,13 @@
 
 ## [Unreleased][unreleased]
 
-<<<<<<< HEAD
-### Fixed
-- fix "Recent 3 apps" in the chat header showing apps from another chat sometimes #5265
-- don't close context menues on window resize #5418
-
-=======
 ### Added
 - support multiple selection (multiselect) in the list of chats, activated with Ctrl + Click, Shift + Click #5297
->>>>>>> b9d383489 (docs: add CHANGELOG entry)
+
+### Fixed
+- fix "Recent 3 apps" in the chat header showing apps from another chat sometimes #5265
+- accessibility: don't re-announce message input (composer) after sending every message #5049
+- don't close context menues on window resize #5418
 
 <a id="2_11_1"></a>
 
