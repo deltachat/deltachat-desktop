@@ -8,6 +8,7 @@
 
 ### Fixed
 - accessibility: announce when a message gets edited
+- accessibility: add longer accessible description to "Search" input
 
 <a id="1_57_0"></a>
 
