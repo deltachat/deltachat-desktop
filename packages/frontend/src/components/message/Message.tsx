@@ -902,9 +902,7 @@ export default function Message(props: {
           {showAttachment(message) && (
             <Attachment
               text={text || undefined}
-              conversationType={conversationType}
               message={message}
-              hasQuote={message.quote !== null}
               tabindexForInteractiveContents={tabindexForInteractiveContents}
             />
           )}

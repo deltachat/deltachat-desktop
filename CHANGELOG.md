@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+- ugly margins / paddings on some saved messages with attachments #5047
 - accessibility: add accessible labels and descriptions to more items #5050, #5055
 - accessibility: add alt text for QR invite code image
 - accessibility: improve tabbing behavior of searh results
