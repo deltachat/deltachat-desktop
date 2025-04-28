@@ -83,8 +83,6 @@ export default function ProxyConfiguration(
     [setProxyState]
   )
 
-  console.log('ProxyConfiguration rendered')
-
   useEffect(() => {
     const loadSettings = async () => {
       try {
@@ -239,7 +237,6 @@ export default function ProxyConfiguration(
       // don't update while loading values from backend
       return
     }
-    console.log('update proxy settings', proxyState)
     const updateProxySettings = async () => {
       const proxyString =
         proxyState.proxies.length > 0

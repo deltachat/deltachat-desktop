@@ -47,7 +47,6 @@ export default function AccountSetupScreen({
               cb: () => setPromptDialogId(null),
             })
           ),
-        proxyUpdated: credentials.proxyEnabled,
       }),
     [accountId, openDialog, selectAccount, credentials]
   )
