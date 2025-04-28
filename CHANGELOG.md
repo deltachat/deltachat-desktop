@@ -8,6 +8,7 @@
 
 ### Fixed
 - accessibility: announce when a message gets edited
+- accessibility: announce when someone reacts to a message in the current chat
 
 <a id="1_57_0"></a>
 
