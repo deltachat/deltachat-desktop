@@ -12,9 +12,9 @@ pub fn register_as_default_handler(
         let bundle_path = NSBundle::mainBundle().bundlePath();
 
         if !bundle_path.to_string().ends_with(".app") {
-            return Err(
-                "Not inside of a bundle, this is normal when you run with `tauri dev`: {bundle_path:?}".to_string(),
-            );
+            return Err(format!(
+                "Not inside of a bundle, this is normal when you run with `tauri dev`: {bundle_path:?}"
+            ));
         }
 
         let workspace = NSWorkspace::sharedWorkspace();
