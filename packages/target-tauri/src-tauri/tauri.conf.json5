@@ -64,6 +64,11 @@
     "macOS": {
       "entitlements": "../bundle_resources/Entitlements.plist",
       "files": { "Resources/xdc.icns": "../bundle_resources/xdc.icns" }
+    },
+    "windows": {
+      "nsis": {
+        "installerHooks": "./windows/hooks.nsi"
+      }
     }
   }
 }
