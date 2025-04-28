@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["packages/target-tauri/src-tauri"]
+members = ["packages/target-tauri/crates/*", "packages/target-tauri/src-tauri"]
 
 # Always optimize dependencies.
 [profile.dev.package."*"]

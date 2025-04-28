@@ -2,6 +2,7 @@ use std::{env::current_dir, path::PathBuf, str::FromStr};
 
 use anyhow::{bail, Context};
 use base64::Engine;
+use register_default_handler::{register_as_default_handler, register_as_file_handler};
 use tauri::{AppHandle, Manager};
 use tokio::{fs::File, io::AsyncReadExt};
 
@@ -106,4 +107,11 @@ pub async fn handle_deep_link(
 pub(crate) struct DeepLinkInvocation {
     pub content: String,
     pub cwd: Option<PathBuf>,
+}
+
+pub fn register() {
+    register_as_default_handler("openpgp4fpr");
+    register_as_default_handler("dcaccount");
+    register_as_default_handler("dclogin");
+    register_as_file_handler();
 }

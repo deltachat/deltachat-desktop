@@ -117,6 +117,9 @@ async fn ui_frontend_ready(
     lock.ui_frontend_ready = true;
 
     state.log_duration_since_startup("ui_frontend_ready");
+
+    deeplink::register();
+
     Ok(())
 }
 
