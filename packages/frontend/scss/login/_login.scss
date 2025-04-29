@@ -83,7 +83,9 @@ div.delta-form-group {
     line-height: 13px;
     width: 100%;
     color: var(--deltaChatPrimaryFgLight);
-    &.focus {
+  }
+  &:focus-within {
+    label {
       color: var(--loginInputFocusColor);
     }
   }

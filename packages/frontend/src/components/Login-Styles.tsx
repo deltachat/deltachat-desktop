@@ -15,24 +15,15 @@ export const DeltaSelect = React.memo(
     const defaultId = useRef(`delta-select-${Math.random()}`)
     const id = props.id ?? defaultId.current
 
-    const [isFocused, setIsFocused] = useState(false)
-
-    const onFocus = () => setIsFocused(true)
-    const onBlur = () => setIsFocused(false)
-
     return (
       <div className='delta-form-group delta-select'>
-        <label htmlFor={id} className={`${isFocused && 'focus'}`}>
-          {props.label}
-        </label>
+        <label htmlFor={id}>{props.label}</label>
         <div className='delta-select-inner'>
           <select
             name={id}
             id={id}
             value={props.value === null ? '' : props.value}
             onChange={props.onChange}
-            onFocus={onFocus}
-            onBlur={onBlur}
           >
             {props.children}
           </select>
@@ -72,7 +63,6 @@ export const DeltaTextarea = React.memo(
       <div className='delta-form-group delta-textarea'>
         <label
           htmlFor={id}
-          className={`${isFocused && 'focus'}`}
           style={{ visibility: !showLabel ? 'hidden' : 'visible' }}
         >
           {props.label && props.label.length > 0
@@ -135,7 +125,6 @@ export const DeltaInput = React.memo(
       <div className='delta-form-group delta-input'>
         <label
           htmlFor={id}
-          className={`${isFocused && 'focus'}`}
           style={{ visibility: !showLabel ? 'hidden' : 'visible' }}
         >
           {props.label && props.label.length > 0
