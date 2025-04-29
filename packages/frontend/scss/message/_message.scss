@@ -177,7 +177,7 @@
   margin-right: 32px;
 
   .metadata:not(.with-image-no-caption) {
-    & > .padlock-icon {
+    .padlock-icon {
       @include mixins.color-svg(
         './images/padlock.svg',
         var(--messageMetadataIconColorIncoming),
@@ -185,7 +185,7 @@
       );
     }
 
-    & > .location-icon {
+    .location-icon {
       @include mixins.color-svg(
         './images/map-marker.svg',
         var(--messageMetadataIconColorIncoming),
@@ -193,7 +193,7 @@
       );
     }
 
-    & > .saved-message-icon {
+    .saved-message-icon {
       @include mixins.color-svg(
         './images/icons/bookmark-filled.svg',
         var(--messageMetadataIconColorIncoming),

@@ -20,11 +20,11 @@
       color: white;
     }
 
-    & > .padlock-icon {
+    .padlock-icon {
       @include mixins.color-svg('./images/padlock.svg', white, 125%);
     }
 
-    & > .saved-message-icon {
+    .saved-message-icon {
       @include mixins.color-svg(
         './images/icons/bookmark-filled.svg',
         white,
