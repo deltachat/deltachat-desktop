@@ -83,6 +83,12 @@ div.delta-form-group {
     line-height: 13px;
     width: 100%;
     color: var(--deltaChatPrimaryFgLight);
+    &:not(.alwaysShow):has(~ input.isEmpty:not(:focus)),
+    &:not(.alwaysShow):has(~ textarea.isEmpty:not(:focus)) {
+      // A native placeholder is shown, we can hide the label
+      // so as to not duplicate the text.
+      visibility: hidden;
+    }
   }
   &:focus-within {
     label {
@@ -192,6 +198,9 @@ div.delta-form-group {
       outline: none;
       border-bottom-color: var(--loginInputFocusColor);
       color: var(--loginInputFocusColor);
+      &::placeholder {
+        color: transparent;
+      }
     }
 
     &:hover {
