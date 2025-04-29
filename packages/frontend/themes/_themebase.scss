@@ -35,8 +35,6 @@ $floatingActionButtonBg: #42a5f5 !default;
 $chatListItemSelectedBg: #e3f2fd !default;
 $scrollbarTransparency: 0.34 !default;
 
-/* Add other missing variables here as needed */
-
 /* Functions */
 @function changeContrast($color, $factor) {
   @if color.channel($color, 'lightness', $space: hsl) < 50 {
