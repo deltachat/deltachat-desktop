@@ -12,9 +12,8 @@ type Props = {
   onExitWelcomeScreen: () => Promise<void>
   onNextStep: () => void
   onUnSelectAccount: () => Promise<void>
-  onClickBackButton: () => Promise<void>
+  onClose: () => Promise<void>
   selectedAccountId: number
-  showBackButton: boolean
   hasConfiguredAccounts: boolean
 }
 
@@ -36,7 +35,7 @@ export default function OnboardingScreen(props: Props) {
   return (
     <>
       <DialogHeader
-        onClickBack={props.showBackButton ? props.onClickBackButton : undefined}
+        onClose={props.hasConfiguredAccounts ? props.onClose : undefined}
         title={
           props.hasConfiguredAccounts
             ? tx('add_account')

@@ -30,10 +30,8 @@ export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
   } = useInstantOnboarding()
   const [hasConfiguredAccounts, setHasConfiguredAccounts] = useState(false)
   const { openDialog } = useDialog()
-  const showBackButton = hasConfiguredAccounts
 
   useLayoutEffect(() => {
-    // Show back button when user has already created and configured accounts.
     // On a fresh DC start we will not have any yet.
     const checkAccounts = async () => {
       const accounts = await getConfiguredAccounts()
@@ -46,12 +44,10 @@ export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
   }, [])
 
   /**
-   * this function is called when the back button is clicked
-   *
-   * it will cancel the account creation process and call
+   * cancel the account creation process and call
    * onExitWelcomeScreen
    */
-  const onClickBackButton = async () => {
+  const onClose = async () => {
     try {
       const acInfo = await BackendRemote.rpc.getAccountInfo(selectedAccountId)
       if (acInfo.kind === 'Unconfigured') {
@@ -72,19 +68,18 @@ export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
       <Dialog
         fixed
         width={400}
-        canEscapeKeyClose={false}
+        canEscapeKeyClose={hasConfiguredAccounts}
         backdropDragAreaOnTauriRuntime
         canOutsideClickClose={false}
-        onClose={onClickBackButton}
+        onClose={onClose}
         dataTestid='onboarding-dialog'
       >
         {!showInstantOnboarding ? (
           <OnboardingScreen
             onNextStep={() => startInstantOnboardingFlow()}
             selectedAccountId={selectedAccountId}
-            showBackButton={showBackButton}
             hasConfiguredAccounts={hasConfiguredAccounts}
-            onClickBackButton={onClickBackButton}
+            onClose={onClose}
             {...props}
           />
         ) : (

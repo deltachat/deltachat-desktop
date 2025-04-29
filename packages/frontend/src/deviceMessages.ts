@@ -27,14 +27,10 @@ export async function updateDeviceChat(
     }
   }
 
-  await addDeviceMessage('changelog-version-1.56.0', {
-    text: `What's new in 1.56.0?
+  await addDeviceMessage('changelog-version-1.57.0', {
+    text: `Thanks for testing the 1.57.0 testrelease, this is the release candidate for the 1.58.0 release.
 
-    📝 Edit messages: already sent messages can be edited now
-    ❌ Delete messages for all chat members as a new option
-
-
-MORE ✨ improvements and 🐜 bug fixes see [Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/main/CHANGELOG.md#1_56_0)`,
+Please report issues on https://support.delta.chat/t/help-testing-the-upcoming-v1-58-x-release`,
   })
 }
 
