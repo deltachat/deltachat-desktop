@@ -123,7 +123,10 @@ export function ConfigureProgressDialog({
             }
             // If the address already exists the transport config is updated
             // otherwise a new transport is added (if the user entered credentials manually)
-            await BackendRemote.rpc.addTransport(accountId, transportConfig)
+            await BackendRemote.rpc.addOrUpdateTransport(
+              accountId,
+              transportConfig
+            )
           }
 
           if (wasCanceled.current) {
