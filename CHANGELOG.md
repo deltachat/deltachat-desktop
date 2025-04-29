@@ -8,6 +8,7 @@
 
 ### Fixed
 - accessibility: announce when a message gets edited
+- accessibility: add labels to some inputs
 
 <a id="1_57_0"></a>
 
