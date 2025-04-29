@@ -50,20 +50,13 @@ export const DeltaTextarea = React.memo(
     const defaultId = useRef(`delta-textarea-${Math.random()}`)
     const id = props.id ?? defaultId.current
 
-    const [isFocused, setIsFocused] = useState(false)
-
-    const onFocus = () => setIsFocused(true)
-    const onBlur = () => setIsFocused(false)
-    const showLabel =
-      isFocused ||
-      props.value?.length > 0 ||
-      (props.label !== undefined && props.label.length > 0)
+    const alwaysShowLabel = (props.label?.length ?? 0) > 0
 
     return (
       <div className='delta-form-group delta-textarea'>
         <label
           htmlFor={id}
-          style={{ visibility: !showLabel ? 'hidden' : 'visible' }}
+          className={alwaysShowLabel ? 'alwaysShow' : undefined}
         >
           {props.label && props.label.length > 0
             ? props.label
@@ -74,10 +67,9 @@ export const DeltaTextarea = React.memo(
           value={props.value}
           id={id}
           disabled={props.disabled}
-          placeholder={!isFocused ? props.placeholder : ''}
-          onFocus={onFocus}
-          onBlur={onBlur}
+          placeholder={props.placeholder}
           rows={5}
+          className={(props.value?.length ?? 0) === 0 ? 'isEmpty' : undefined}
         />
       </div>
     )
@@ -109,23 +101,13 @@ export const DeltaInput = React.memo(
     const defaultId = useRef(`delta-input-${Math.random()}`)
     const id = props.id ?? defaultId.current
 
-    const [isFocused, setIsFocused] = useState(false)
-
-    const onFocus = () => setIsFocused(true)
-    const onBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-      setIsFocused(false)
-      if (props.onBlur) props.onBlur(event)
-    }
-    const showLabel =
-      isFocused ||
-      props.value?.length > 0 ||
-      (props.label !== undefined && props.label.length > 0)
+    const alwaysShowLabel = (props.label?.length ?? 0) > 0
 
     return (
       <div className='delta-form-group delta-input'>
         <label
           htmlFor={id}
-          style={{ visibility: !showLabel ? 'hidden' : 'visible' }}
+          className={alwaysShowLabel ? 'alwaysShow' : undefined}
         >
           {props.label && props.label.length > 0
             ? props.label
@@ -140,9 +122,9 @@ export const DeltaInput = React.memo(
           min={props.min}
           max={props.max}
           disabled={props.disabled}
-          onFocus={onFocus}
-          onBlur={onBlur}
+          onBlur={props.onBlur}
           autoFocus={props.autoFocus}
+          className={(props.value?.length ?? 0) === 0 ? 'isEmpty' : undefined}
         />
         {props.rightElement && (
           <div className='right-element'>{props.rightElement}</div>
