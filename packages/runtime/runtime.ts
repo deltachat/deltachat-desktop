@@ -10,8 +10,8 @@ import {
 } from '@deltachat-desktop/shared/shared-types.js'
 import { LocaleData } from '@deltachat-desktop/shared/localize.js'
 import { BaseDeltaChat } from '@deltachat/jsonrpc-client'
-import { DragDropEvent } from '@tauri-apps/api/webview'
-import { Event, UnlistenFn } from '@tauri-apps/api/event'
+import type { DragDropEvent } from '@tauri-apps/api/webview'
+import type { Event, UnlistenFn } from '@tauri-apps/api/event'
 
 import type { getLogger as getLoggerFunction } from '@deltachat-desktop/shared/logger.js'
 import type { setLogHandler as setLogHandlerFunction } from '@deltachat-desktop/shared/logger.js'
