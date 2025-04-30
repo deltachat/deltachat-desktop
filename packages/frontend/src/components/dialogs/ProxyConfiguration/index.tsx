@@ -141,13 +141,21 @@ export default function ProxyConfiguration(
       return
     }
     let proxyValid = proxyUrl.length > 0
+    let errorMessage = ''
     if (proxyValid) {
-      const parsedUrl = await BackendRemote.rpc.checkQr(accountId, proxyUrl)
-      proxyValid = parsedUrl.kind === 'proxy'
+      try {
+        const parsedUrl = await BackendRemote.rpc.checkQr(accountId, proxyUrl)
+        proxyValid = parsedUrl.kind === 'proxy'
+      } catch (error: any) {
+        log.error('checkQr failed with error', error)
+        errorMessage = `${tx('error')}: ${error.message || error.toString()}`
+        proxyValid = false
+      }
     }
     if (!proxyValid) {
       openAlertDialog({
-        message: tx('proxy_invalid'),
+        message:
+          tx('proxy_invalid') + (errorMessage ? `\n${errorMessage}` : ''),
       })
       return
     }
@@ -304,6 +312,18 @@ export default function ProxyConfiguration(
     [tx, openAlertDialog]
   )
 
+  // some basic validations, returns true if the url seems valid
+  // and is not already in the list of proxies
+  const maybeValidProxyUrl = (url: string): boolean => {
+    const parts = url.split('://')
+    return (
+      parts.length === 2 &&
+      parts[0].length >= 2 && // shortest protocol is ss://
+      parts[1].length >= 1 && // host
+      !proxyState.proxies.includes(url)
+    )
+  }
+
   return (
     <Dialog
       fixed
@@ -355,6 +375,8 @@ export default function ProxyConfiguration(
             <Button
               className='save-proxy'
               onClick={() => addProxy(newProxyUrl)}
+              styling='primary'
+              disabled={!maybeValidProxyUrl(newProxyUrl)}
             >
               {tx('proxy_add')}
             </Button>
