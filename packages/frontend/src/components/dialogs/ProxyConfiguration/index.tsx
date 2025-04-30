@@ -365,7 +365,7 @@ export default function ProxyConfiguration(
       </DialogBody>
       <DialogFooter>
         {showNewProxyForm && (
-          <>
+          <form>
             <DeltaInput
               label={tx('proxy_add_url_hint')}
               value={newProxyUrl}
@@ -379,7 +379,7 @@ export default function ProxyConfiguration(
             >
               {tx('proxy_add')}
             </Button>
-          </>
+          </form>
         )}
         {!showNewProxyForm && (
           <Button
