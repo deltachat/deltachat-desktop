@@ -11,6 +11,7 @@
 - accessibility: add alt text for QR invite code image
 - accessibility: improve tabbing behavior of searh results
 - accessibility: announce when a message gets edited and outgoing message delivery status changes (`aria-live`)
+- reduce voice messages to a lower bitrate #4977
 
 <a id="1_57_0"></a>
 
