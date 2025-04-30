@@ -8,6 +8,7 @@
 
 ### Fixed
 - accessibility: add accessible labels and descriptions to more items #5050, #5055
+- accessibility: add `role='tablist'` for accounts list #5040
 - accessibility: add alt text for QR invite code image
 - accessibility: improve tabbing behavior of searh results
 - accessibility: announce when a message gets edited and outgoing message delivery status changes (`aria-live`)
