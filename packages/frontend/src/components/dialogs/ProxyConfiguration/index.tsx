@@ -21,6 +21,7 @@ import { Proxy } from '../../Settings/DefaultCredentials'
 import { debounceWithInit } from '../../chat/ChatListHelpers'
 
 import { getLogger } from '@deltachat-desktop/shared/logger'
+import { unknownErrorToString } from '../../helpers/unknownErrorToString'
 
 import ProxyItemRow from './ProxyItemRow'
 
@@ -112,10 +113,10 @@ export default function ProxyConfiguration(
             activeProxy,
           }))
         }
-      } catch (error: any) {
+      } catch (error) {
         log.error('failed to load proxy settings', error)
         openAlertDialog({
-          message: `${tx('error')} ${error.message || error.toString()}`,
+          message: unknownErrorToString(error),
         })
       }
     }
@@ -146,9 +147,9 @@ export default function ProxyConfiguration(
       try {
         const parsedUrl = await BackendRemote.rpc.checkQr(accountId, proxyUrl)
         proxyValid = parsedUrl.kind === 'proxy'
-      } catch (error: any) {
+      } catch (error) {
         log.error('checkQr failed with error', error)
-        errorMessage = `${tx('error')}: ${error.message || error.toString()}`
+        errorMessage = unknownErrorToString(error)
         proxyValid = false
       }
     }
@@ -267,10 +268,10 @@ export default function ProxyConfiguration(
 
         await BackendRemote.rpc.stopIo(accountId)
         await BackendRemote.rpc.startIo(accountId)
-      } catch (error: any) {
+      } catch (error) {
         log.error('failed to update proxy settings', error)
         openAlertDialog({
-          message: `${tx('error')} ${error.message || error.toString()}`,
+          message: unknownErrorToString(error),
         })
       }
     }
