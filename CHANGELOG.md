@@ -7,8 +7,10 @@
 ### Changed
 
 ### Fixed
-- accessibility: announce when a message gets edited
-- accessibility: add longer accessible description to "Search" input
+- accessibility: add accessible labels and descriptions to more items #5050, #5055
+- accessibility: add alt text for QR invite code image
+- accessibility: improve tabbing behavior of searh results
+- accessibility: announce when a message gets edited and outgoing message delivery status changes (`aria-live`)
 
 <a id="1_57_0"></a>
 

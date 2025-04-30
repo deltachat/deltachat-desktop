@@ -92,6 +92,21 @@ export default function MessageMetaData(props: Props) {
       {direction === 'outgoing' && (
         <button
           className={classNames('status-icon', status)}
+          // The main point of `aria-live` here is to let the user know
+          // that their message has been sent or delievered
+          // right after they they send it.
+          // We want at least some indication of something happening
+          // after they press "Enter".
+          // But this is also useful to announce when the message has been read.
+          //
+          // Note that this this applies to _all_ loaded messages
+          // and not just the last one.
+          //
+          // TODO fix: NVDA announces the change twice for some reason,
+          // even when you modify just `aria-label` through the dev tools.
+          // We probably ought to keep `aria-label` fixed to "Delivery status",
+          // and only update the content, i.e. "Delivered", "Read".
+          aria-live='polite'
           aria-label={tx(
             `a11y_delivery_status_${
               status as Exclude<
