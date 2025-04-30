@@ -386,6 +386,8 @@ export default function ProxyConfiguration(
             className={styles.addProxyButton}
             onClick={() => setShowNewProxyForm(true)}
             styling='secondary'
+            aria-label={tx('proxy_add')}
+            title={tx('proxy_add')}
           >
             ＋
           </Button>
