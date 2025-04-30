@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import Button from './Button'
 import Icon from './Icon'
 import useTranslationFunction from '../hooks/useTranslationFunction'
@@ -7,11 +7,14 @@ export const DeltaSelect = React.memo(
   (
     props: React.PropsWithChildren<{
       label: string
-      id: any
+      id?: string
       value: any
       onChange: (ev: React.ChangeEvent<HTMLSelectElement>) => void
     }>
   ) => {
+    const defaultId = useRef(`delta-select-${Math.random()}`)
+    const id = props.id ?? defaultId.current
+
     const [isFocused, setIsFocused] = useState(false)
 
     const onFocus = () => setIsFocused(true)
@@ -19,13 +22,13 @@ export const DeltaSelect = React.memo(
 
     return (
       <div className='delta-form-group delta-select'>
-        <label htmlFor={props.id} className={`${isFocused && 'focus'}`}>
+        <label htmlFor={id} className={`${isFocused && 'focus'}`}>
           {props.label}
         </label>
         <div className='delta-select-inner'>
           <select
-            name={props.id}
-            id={props.id}
+            name={id}
+            id={id}
             value={props.value === null ? '' : props.value}
             onChange={props.onChange}
             onFocus={onFocus}
@@ -53,6 +56,9 @@ export const DeltaTextarea = React.memo(
       ) => void
     }>
   ) => {
+    const defaultId = useRef(`delta-textarea-${Math.random()}`)
+    const id = props.id ?? defaultId.current
+
     const [isFocused, setIsFocused] = useState(false)
 
     const onFocus = () => setIsFocused(true)
@@ -65,6 +71,7 @@ export const DeltaTextarea = React.memo(
     return (
       <div className='delta-form-group delta-textarea'>
         <label
+          htmlFor={id}
           className={`${isFocused && 'focus'}`}
           style={{ visibility: !showLabel ? 'hidden' : 'visible' }}
         >
@@ -75,7 +82,7 @@ export const DeltaTextarea = React.memo(
         <textarea
           onChange={props.onChange}
           value={props.value}
-          id={props.id}
+          id={id}
           disabled={props.disabled}
           placeholder={!isFocused ? props.placeholder : ''}
           onFocus={onFocus}
@@ -109,6 +116,9 @@ export const DeltaInput = React.memo(
       ) => void
     }>
   ) => {
+    const defaultId = useRef(`delta-input-${Math.random()}`)
+    const id = props.id ?? defaultId.current
+
     const [isFocused, setIsFocused] = useState(false)
 
     const onFocus = () => setIsFocused(true)
@@ -124,6 +134,7 @@ export const DeltaInput = React.memo(
     return (
       <div className='delta-form-group delta-input'>
         <label
+          htmlFor={id}
           className={`${isFocused && 'focus'}`}
           style={{ visibility: !showLabel ? 'hidden' : 'visible' }}
         >
@@ -132,7 +143,7 @@ export const DeltaInput = React.memo(
             : props.placeholder}
         </label>
         <input
-          id={props.id}
+          id={id}
           type={props.type}
           value={props.value === null ? '' : props.value}
           onChange={props.onChange}
