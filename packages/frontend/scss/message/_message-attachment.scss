@@ -31,6 +31,9 @@
     object-position: center;
     max-width: 450px;
     min-width: 200px;
+    &.sticker {
+      min-width: auto;
+    }
 
     // The padding on the bottom of the bubble produces 4 extra pixels of space at the
     //   bottom, so this doesn't match up with the padding numbers above.
@@ -208,4 +211,9 @@
       margin-top: 3px;
     }
   }
+}
+
+// no border radius for stickers
+.type-sticker .message-attachment-media {
+  border-radius: 0px;
 }
