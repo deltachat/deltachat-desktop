@@ -61,8 +61,9 @@ impl NotificationManager for NotificationManagerMock {
         &self,
         _handler_callback: Box<dyn Fn(crate::NotificationResponse) + Send + Sync + 'static>,
         categories: Vec<crate::NotificationCategory>,
-    ) {
+    ) -> Result<(), crate::Error> {
         log::info!("NotificationManagerMock::register {categories:?}");
+        Ok(())
     }
 
     fn remove_all_delivered_notifications(&self) -> Result<(), crate::Error> {

@@ -150,7 +150,9 @@ async function showNotification(
       let summaryPrefix = notificationInfo.summaryPrefix ?? ''
       let summaryText = notificationInfo.summaryText ?? ''
       const chatName = notificationInfo.chatName
-      let icon = getNotificationIcon(notificationInfo)
+      const nIcon = getNotificationIcon(notificationInfo)
+      let icon = nIcon[0]
+      const iconIsAvatar = nIcon[1]
       if (notificationType === NOTIFICATION_TYPE.WEBXDC_INFO) {
         /**
          * messageId may refer to a webxdc message OR a wexdc-info-message!
@@ -205,6 +207,7 @@ async function showNotification(
         title: chatName,
         body: summaryPrefix ? `${summaryPrefix}: ${summaryText}` : summaryText,
         icon,
+        iconIsAvatar,
         chatId,
         messageId,
         accountId,
@@ -408,12 +411,12 @@ export function clearAllNotifications() {
 
 function getNotificationIcon(
   notification: T.MessageNotificationInfo
-): string | null {
+): [icon: string | null, iconIsAvatar: boolean] {
   if (notification.image && isImage(notification.imageMimeType)) {
-    return notification.image
+    return [notification.image, false]
   } else if (notification.chatProfileImage) {
-    return notification.chatProfileImage
+    return [notification.chatProfileImage, true]
   } else {
-    return null
+    return [null, false]
   }
 }

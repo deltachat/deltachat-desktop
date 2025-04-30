@@ -65,6 +65,7 @@ pub(crate) async fn show_notification(
     title: String,
     body: String,
     icon: Option<String>,
+    icon_is_avatar: bool,
     account_id: u32,
     message_id: u32,
     chat_id: u32,
@@ -126,7 +127,12 @@ pub(crate) async fn show_notification(
                     {
                         Ok(tmp_file) => {
                             // IDEA: on non macos set icon of webxdc instead?
-                            notification = notification.set_image(PathBuf::from_str(&tmp_file)?);
+                            if cfg!(target_os = "windows") {
+                                notification = notification.set_icon(PathBuf::from_str(&tmp_file)?);
+                            } else {
+                                notification =
+                                    notification.set_image(PathBuf::from_str(&tmp_file)?);
+                            }
                             temp_file_to_clean_up.replace(tmp_file);
                         }
                         Err(err) => {
@@ -135,6 +141,10 @@ pub(crate) async fn show_notification(
                     }
                 }
             }
+        } else if cfg!(target_os = "windows") && icon_is_avatar {
+            notification = notification
+                .set_icon(PathBuf::from_str(&icon)?)
+                .set_icon_round_crop(true);
         } else {
             notification = notification.set_image(PathBuf::from_str(&icon)?);
         };

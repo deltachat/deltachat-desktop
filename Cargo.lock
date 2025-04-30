@@ -9559,12 +9559,16 @@ dependencies = [
  "objc2 0.6.1",
  "objc2-foundation 0.3.1",
  "objc2-user-notifications",
+ "quick-xml 0.37.4",
  "send_wrapper",
- "tauri-winrt-notification",
+ "serde",
+ "serde_json",
  "thiserror 2.0.12",
  "tokio",
  "url",
  "uuid",
+ "windows 0.61.1",
+ "windows-collections 0.2.0",
 ]
 
 [[package]]

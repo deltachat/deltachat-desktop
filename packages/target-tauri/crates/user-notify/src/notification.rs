@@ -11,6 +11,7 @@ pub struct NotificationBuilder {
     pub(crate) subtitle: Option<String>,
     pub(crate) image: Option<std::path::PathBuf>,
     pub(crate) icon: Option<std::path::PathBuf>,
+    pub(crate) icon_round_crop: bool,
     pub(crate) thread_id: Option<String>,
     pub(crate) category_id: Option<String>,
     pub(crate) user_info: Option<HashMap<String, String>>,
@@ -74,10 +75,21 @@ where
     /// Plaform specific:
     /// - MacOS: not supported to change the app icon?
     /// - For linux the file is read and transfered over dbus (in case you are in a flatpak and it can't read from files) [app_icon](https://specifications.freedesktop.org/notification-spec/latest/icons-and-images.html#icons-and-images-formats)
-    /// - Windows not implemented yet because it already uses the app icon
-    pub fn set_icon(mut self, path: PathBuf) -> Result<Self, Error> {
+    /// - Windows: [`<image placement="appLogoOverride" />`](https://learn.microsoft.com/de-de/uwp/schemas/tiles/toastschema/element-image)
+    pub fn set_icon(mut self, path: PathBuf) -> Self {
         self.icon = Some(path);
-        Ok(self)
+        self
+    }
+
+    /// Set App icon
+    ///
+    /// Plaform specific:
+    /// - MacOS: not supported
+    /// - Linux: not supported
+    /// - Windows: [`<image placement='appLogoOverride' hint-crop='circle' />`](https://learn.microsoft.com/de-de/uwp/schemas/tiles/toastschema/element-image)
+    pub fn set_icon_round_crop(mut self, icon_round_crop: bool) -> Self {
+        self.icon_round_crop = icon_round_crop;
+        self
     }
 
     /// Set Thread id, this is used to group related notifications
@@ -85,7 +97,7 @@ where
     /// Plaform specific:
     /// - MacOS: [UNNotificationContent/threadIdentifier](https://developer.apple.com/documentation/usernotifications/unnotificationcontent/threadidentifier)
     /// - Linux not specified yet:
-    /// - Windows: not implemented
+    /// - Windows: not supported
     pub fn set_thread_id(mut self, thread_id: &str) -> Self {
         self.thread_id = Some(thread_id.to_owned());
         self
@@ -160,7 +172,7 @@ where
         &self,
         handler_callback: Box<dyn Fn(crate::NotificationResponse) + Send + Sync + 'static>,
         categories: Vec<NotificationCategory>,
-    );
+    ) -> Result<(), Error>;
 
     /// Removes all of your app’s delivered notifications from Notification Center.
     ///

@@ -7,9 +7,11 @@ Notifications stay until they are closed by the user or by the app.
 ## Useful links
 
 - macOS:
- - https://developer.apple.com/documentation/usernotifications
- - https://lib.rs/crates/objc2-user-notifications/features#feature-UNNotificationCategory
-- Windows: https://docs.rs/tauri-winrt-notification/latest/tauri_winrt_notification/struct.Toast.html
+  - https://developer.apple.com/documentation/usernotifications
+  - https://lib.rs/crates/objc2-user-notifications/features#feature-UNNotificationCategory
+- Windows:
+  - https://docs.rs/tauri-winrt-notification/latest/tauri_winrt_notification/struct.Toast.html
+  - https://learn.microsoft.com/en-us/uwp/api/windows.ui.notifications.toastnotification
 - xdg / Linux:
   - https://specifications.freedesktop.org/notification-spec/latest/protocol.html
   - https://github.com/hoodie/notify-rust

@@ -192,7 +192,6 @@ pub fn run() -> i32 {
                         log::error!("deeplink_tx: send error: {err:?}");
                     }
                 }
-
                 let window = app.get_webview_window("main").expect("no main window");
                 window
                     .show()
@@ -498,7 +497,8 @@ pub fn run() -> i32 {
                 }
             }
 
-            let notifications = Notifications::new();
+            let app_id = app.config().identifier.clone();
+            let notifications = Notifications::new(app_id);
             notifications.initialize(app.handle().clone());
             app.manage(notifications);
 
