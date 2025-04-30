@@ -10,11 +10,11 @@ function getConnectivityString(status: number) {
   if (status >= C.DC_CONNECTIVITY_CONNECTED) {
     return 'connectivity_connected'
   }
-  if (status >= C.DC_CONNECTIVITY_CONNECTING) {
-    return 'connectivity_connecting'
-  }
   if (status >= C.DC_CONNECTIVITY_WORKING) {
     return 'connectivity_updating'
+  }
+  if (status >= C.DC_CONNECTIVITY_CONNECTING) {
+    return 'connectivity_connecting'
   }
   return 'connectivity_not_connected'
 }
@@ -76,9 +76,10 @@ const ProxyItemRow = React.memo(function ProxyItemRow({
           <div className={styles.proxyLabel}>{label}</div>
           <div>
             <span className={styles.protocol}>{protocol}</span>
-            {showConnectivity && (
-              <span>{tx(getConnectivityString(connectivityStatus))}</span>
-            )}
+            <span role='status'>
+              {showConnectivity &&
+                tx(getConnectivityString(connectivityStatus))}
+            </span>
           </div>
         </div>
       </div>

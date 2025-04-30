@@ -46,9 +46,8 @@ export default function DialogHeader(props: Props) {
           data-no-drag-region
         >
           <Button
-            id='three-dot-menu-button'
             className={classNames(styles.headerThreeDotButton)}
-            aria-label='three-dot-menu-button'
+            aria-label={tx('menu_more_options'}
             data-testid={dataTestid + '-context-menu'}
             onClick={onContextMenuClick}
           >
