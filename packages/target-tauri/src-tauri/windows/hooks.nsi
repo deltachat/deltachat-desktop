@@ -18,6 +18,7 @@
 ; Runs after the installer has finished copying all files, setting the registry keys and created shortcuts.
 !macro NSIS_HOOK_POSTINSTALL
 ;   MessageBox MB_OK "PostInstall"
+    ; this macro is defined in https://github.com/tauri-apps/tauri/blob/85b19125294917e10e89fc9e09722eaaa4f69962/crates/tauri-bundler/src/bundle/windows/nsis/FileAssociation.nsh
     !insertmacro APP_ASSOCIATE "xdc" "chat.delta.tauri.webxdc" "open" "$INSTDIR\xdc.ico" "Share App with ${PRODUCTNAME}" "$INSTDIR\deltachat-tauri.exe $\"%1$\""
 
     !insertmacro URI_SCHEME "openpgp4fpr"
