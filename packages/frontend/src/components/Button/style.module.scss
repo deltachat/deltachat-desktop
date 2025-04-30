@@ -33,10 +33,6 @@
     &:hover {
       background-color: var(--buttonPrimaryHover);
     }
-    &:disabled {
-      background-color: var(--buttonDisabledBackground);
-      color: var(--buttonDisabledText);
-    }
   }
 
   &.secondary {
@@ -45,10 +41,6 @@
     border: 1px solid #ccc;
     &:hover {
       background-color: var(--buttonSecondaryHover);
-    }
-    &:disabled {
-      background-color: var(--buttonDisabledBackground);
-      color: var(--buttonDisabledText);
     }
   }
 
@@ -62,5 +54,10 @@
 
   &.active {
     background-color: var(--navBarButtonActive);
+  }
+
+  &:disabled {
+    background-color: var(--buttonDisabledBackground);
+    color: var(--buttonDisabledText);
   }
 }
