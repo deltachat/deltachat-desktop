@@ -7,8 +7,10 @@
 ### Changed
 
 ### Fixed
-- accessibility: announce when a message gets edited
-- accessibility: add labels to some inputs
+- accessibility: add accessible labels to more items #5055
+- accessibility: add alt text for QR invite code image
+- accessibility: improve tabbing behavior of searh results
+- accessibility: announce when a message gets edited and outgoing message delivery status changes (`aria-live`)
 
 <a id="1_57_0"></a>
 
