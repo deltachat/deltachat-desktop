@@ -53,14 +53,6 @@ const ProxyItemRow = React.memo(function ProxyItemRow({
       <div
         className={styles.proxyRow}
         onClick={() => changeActiveProxy(proxyUrl)}
-        role='radio'
-        aria-checked={isActive}
-        onKeyDown={e => {
-          if (e.key === ' ' || e.key === 'Enter') {
-            e.preventDefault()
-            changeActiveProxy(proxyUrl)
-          }
-        }}
       >
         <input
           id={`proxy-${index}`}
@@ -73,7 +65,7 @@ const ProxyItemRow = React.memo(function ProxyItemRow({
           aria-labelledby={`proxy-label-${index}`}
         />
         <div>
-          <div className={styles.proxyLabel}>{label}</div>
+          <div id={`proxy-label-${index}`} className={styles.proxyLabel}>{label}</div>
           <div>
             <span className={styles.protocol}>{protocol}</span>
             <span role='status'>
