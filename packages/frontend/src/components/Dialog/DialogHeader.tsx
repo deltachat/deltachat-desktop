@@ -11,6 +11,7 @@ import type { DialogProps } from '../../contexts/DialogContext'
 import styles from './styles.module.scss'
 import Button from '../Button'
 import Icon from '../Icon'
+import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 type Props = PropsWithChildren<{
   title?: string
@@ -31,6 +32,7 @@ export default function DialogHeader(props: Props) {
     children,
   } = props
   const dataTestid = props.dataTestid ?? 'dialog-header'
+  const tx = useTranslationFunction()
   return (
     <header className={classNames(styles.dialogHeader)}>
       {onClickBack && (
@@ -47,7 +49,7 @@ export default function DialogHeader(props: Props) {
         >
           <Button
             className={classNames(styles.headerThreeDotButton)}
-            aria-label={tx('menu_more_options'}
+            aria-label={tx('menu_more_options')}
             data-testid={dataTestid + '-context-menu'}
             onClick={onContextMenuClick}
           >
