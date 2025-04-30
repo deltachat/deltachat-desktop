@@ -1,4 +1,4 @@
-use std::{collections::HashMap, sync::Arc, time::Duration};
+use std::{collections::HashMap, time::Duration};
 
 use tokio::{signal::ctrl_c, spawn, time::sleep};
 use user_notify::{NotificationCategory, NotificationCategoryAction, get_notification_manager};
@@ -7,7 +7,7 @@ use user_notify::{NotificationCategory, NotificationCategoryAction, get_notifica
 async fn main() -> anyhow::Result<()> {
     env_logger::init();
     log::debug!("0");
-    let manager = get_notification_manager();
+    let manager = get_notification_manager("chat.delta.desktop.tauri".to_string(), None);
 
     let categories = vec![
         NotificationCategory {
@@ -33,7 +33,12 @@ async fn main() -> anyhow::Result<()> {
             }],
         },
     ];
-    manager.register(Box::new(|_| {}), categories);
+    manager.register(
+        Box::new(|response| {
+            log::info!("got notification response: {response:?}");
+        }),
+        categories,
+    )?;
 
     log::debug!("1");
     #[cfg(target_os = "macos")]

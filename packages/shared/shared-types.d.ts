@@ -128,16 +128,11 @@ export interface DcNotification {
    * (or a data url with base64 encoded data)
    */
   icon: string | null
+  iconIsAvatar?: boolean // for tauri, windows controlling how images is disaplayed
   chatId: number
   messageId: number
   accountId: number
   notificationType: NOTIFICATION_TYPE
-}
-
-export interface NotificationClickedEventPayload {
-  accountId: number
-  chatId: number
-  msgId: number
 }
 
 export interface DcOpenWebxdcParameters {

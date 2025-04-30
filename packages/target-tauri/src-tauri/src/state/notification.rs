@@ -25,9 +25,10 @@ pub(crate) struct Notifications {
 }
 
 impl Notifications {
-    pub fn new() -> Self {
+    pub fn new(app_id: String) -> Self {
         Self {
-            manager: get_notification_manager(),
+            manager: get_notification_manager(app_id, Some("dc-notification".to_owned())), // - windows: we don't have deeplinking yet and this makes windows ignore the handelers
+                                                                                           // manager: get_notification_manager(app_id, None),
         }
     }
 
@@ -68,39 +69,45 @@ impl Notifications {
 
                     use user_notify::NotificationResponseAction::*;
                     let result = match response.action {
-                        Default => match payload {
-                            NotificationPayload::OpenAccount { account_id } => {
-                                mwc.emit_event_on_startup_deferred(MainWindowEvents::NotificationClick {
-                                    account_id,
-                                    chat_id: 0,
-                                    msg_id: 0,
-                                })
-                                .await
-                            }
-                            NotificationPayload::OpenChat {
-                                account_id,
-                                chat_id,
-                            } => {
-                                mwc.emit_event_on_startup_deferred(MainWindowEvents::NotificationClick {
+                        Default => {
+                            let result = match payload {
+                                NotificationPayload::OpenAccount { account_id } => {
+                                    mwc.emit_event_on_startup_deferred(MainWindowEvents::NotificationClick {
+                                        account_id,
+                                        chat_id: 0,
+                                        msg_id: 0,
+                                    })
+                                    .await
+                                }
+                                NotificationPayload::OpenChat {
                                     account_id,
                                     chat_id,
-                                    msg_id: 0,
-                                })
-                                .await
-                            }
-                            NotificationPayload::OpenChatMessage {
-                                account_id,
-                                chat_id,
-                                message_id,
-                            } => {
-                                mwc.emit_event_on_startup_deferred(MainWindowEvents::NotificationClick {
+                                } => {
+                                    mwc.emit_event_on_startup_deferred(MainWindowEvents::NotificationClick {
+                                        account_id,
+                                        chat_id,
+                                        msg_id: 0,
+                                    })
+                                    .await
+                                }
+                                NotificationPayload::OpenChatMessage {
                                     account_id,
                                     chat_id,
-                                    msg_id: message_id,
-                                })
-                                .await
+                                    message_id,
+                                } => {
+                                    mwc.emit_event_on_startup_deferred(MainWindowEvents::NotificationClick {
+                                        account_id,
+                                        chat_id,
+                                        msg_id: message_id,
+                                    })
+                                    .await
+                                }
+                            };
+                            if let Some(main_window) = app.get_window("main") { 
+                                let _ = main_window.set_focus();
                             }
-                        },
+                            result
+                    },
                         Dismiss => {
                             /* TODO? notification will just close? on macos this the handler is not even called for closing*/
                             Ok(())
@@ -138,8 +145,8 @@ impl Notifications {
                 });
             }),
             categories,
-        );
-        #[cfg(not(target_os = "macos"))]
+        ).unwrap();
+        #[cfg(not(any(target_os = "macos", target_os = "windows")))]
         {
             // remove all notifications that are still there from previous sessions,
             // as they probably don't work anymore and are just stuck

@@ -23,4 +23,16 @@ pub enum Error {
     TokioTryLock(#[from] tokio::sync::TryLockError),
     #[error("Url from path parse error {0:?}")]
     ParseUrlFromPath(PathBuf),
+    #[cfg(target_os = "windows")]
+    #[error(transparent)]
+    Windows(#[from] windows::core::Error),
+    #[cfg(target_os = "windows")]
+    #[error("Failed to parse user info {0:?}")]
+    FailedToParseUserInfo(serde_json::Error),
+    #[cfg(target_os = "windows")]
+    #[error("Error Setting Handler Callback")]
+    SettingHandler,
+    #[cfg(target_os = "windows")]
+    #[error(transparent)]
+    XmlEscape(#[from] quick_xml::escape::EscapeError),
 }

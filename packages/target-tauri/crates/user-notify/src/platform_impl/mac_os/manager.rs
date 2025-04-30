@@ -160,7 +160,7 @@ impl NotificationManager for NotificationManagerMacOS {
         &self,
         handler_callback: Box<dyn Fn(crate::NotificationResponse) + Send + Sync + 'static>,
         categories: Vec<NotificationCategory>,
-    ) {
+    ) -> Result<(), crate::Error> {
         log::debug!("NotificationManager.register called");
         let mtm = MainThreadMarker::new().expect("not on main thread");
         let (tx, mut rx) = tokio::sync::mpsc::channel::<NotificationResponse>(10);
@@ -190,6 +190,7 @@ impl NotificationManager for NotificationManagerMacOS {
             self.inner.listener_loop.set(handler_loop).expect("failed to set delegate_reference, did you call register multiple times so that the once_cell was already taken?");
         }
         log::debug!("NotificationManager.register completed");
+        Ok(())
     }
 
     /// Removes all of your app’s delivered notifications from Notification Center.
