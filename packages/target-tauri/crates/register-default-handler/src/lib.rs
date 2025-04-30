@@ -24,7 +24,9 @@ pub fn register_as_default_handler(url_scheme: &str) {
     }
     #[cfg(target_os = "windows")]
     {
-        todo!();
+        log::debug!(
+            "register_as_default_handler: no-op on linux, registry keys are defined in the installer"
+        );
     }
     #[cfg(any(
         target_os = "linux",
