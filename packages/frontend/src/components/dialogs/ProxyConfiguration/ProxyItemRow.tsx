@@ -65,7 +65,9 @@ const ProxyItemRow = React.memo(function ProxyItemRow({
           aria-labelledby={`proxy-label-${index}`}
         />
         <div>
-          <div id={`proxy-label-${index}`} className={styles.proxyLabel}>{label}</div>
+          <div id={`proxy-label-${index}`} className={styles.proxyLabel}>
+            {label}
+          </div>
           <div>
             <span className={styles.protocol}>{protocol}</span>
             <span role='status'>
@@ -77,10 +79,7 @@ const ProxyItemRow = React.memo(function ProxyItemRow({
       </div>
       <div className={styles.buttons}>
         <Button
-          onClick={e => {
-            e.stopPropagation()
-            copyToClipboard(proxyUrl)
-          }}
+          onClick={() => copyToClipboard(proxyUrl)}
           aria-label={`${tx('menu_copy_to_clipboard')} ${label}`}
           title={tx('menu_copy_to_clipboard')}
         >
@@ -94,10 +93,7 @@ const ProxyItemRow = React.memo(function ProxyItemRow({
           />
         </Button>
         <Button
-          onClick={e => {
-            e.stopPropagation()
-            deleteProxy(proxyUrl)
-          }}
+          onClick={() => deleteProxy(proxyUrl)}
           aria-label={`${tx('delete')} ${label}`}
           title={tx('delete')}
         >
