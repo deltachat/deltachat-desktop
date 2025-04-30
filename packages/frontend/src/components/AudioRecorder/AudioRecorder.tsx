@@ -124,7 +124,7 @@ export const AudioRecorder = ({
 
     if (!recorder.current) {
       recorder.current = new MicRecorder(setVolume, {
-        bitRate: 128,
+        bitRate: 32,
       })
     }
     setRecording(true)

@@ -44,6 +44,8 @@ export default function SearchInput(props: Props) {
       <input
         id={id}
         placeholder={tx('search')}
+        aria-label={tx('search')}
+        aria-description={tx('search_explain')}
         autoFocus
         onChange={onChange}
         value={value}

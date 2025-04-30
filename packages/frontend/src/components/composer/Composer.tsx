@@ -76,7 +76,7 @@ const Composer = forwardRef<
       viewType: T.Viewtype
     ) => Promise<void>
     removeFile: () => void
-    clearDraft: () => void
+    clearDraftStateButKeepTextareaValue: () => void
   }
 >((props, ref) => {
   const {
@@ -744,30 +744,55 @@ export function useDraft(
     viewType: T.Viewtype
   ) => Promise<void>
   removeFile: () => void
-  clearDraft: () => void
+  clearDraftStateButKeepTextareaValue: () => void
 } {
-  const [draftState, _setDraft] = useState<DraftObject>(emptyDraft(chatId))
+  const [
+    draftState,
+    /**
+     * Set `draftState`, but don't update the value of the message textarea
+     * (because it's managed by a separate piece of state).
+     *
+     * This will not save the draft to the backend.
+     */
+    _setDraftStateButKeepTextareaValue,
+  ] = useState<DraftObject>(emptyDraft(chatId))
+  /**
+   * `draftRef.current` gets set to `draftState` on every render.
+   * That is, when you mutate the value of this ref,
+   * `draftState` also gets mutated.
+   *
+   * Having this `ref` is just a hack to perform direct state mutations
+   * without triggering a re-render or linter's warnings about the missing
+   * `draftState` hook dependency.
+   *
+   * TODO figure out why this is needed.
+   */
   const draftRef = useRef<DraftObject>(emptyDraft(chatId))
   draftRef.current = draftState
 
-  const clearDraft = useCallback(() => {
-    _setDraft(_ => emptyDraft(chatId))
+  /**
+   * Reset `draftState` to "empty draft" value,
+   * but don't save it to backend and don't change the value
+   * of the textarea.
+   */
+  const clearDraftStateButKeepTextareaValue = useCallback(() => {
+    _setDraftStateButKeepTextareaValue(_ => emptyDraft(chatId))
   }, [chatId])
 
   const loadDraft = useCallback(
     (chatId: number) => {
       if (chatId === null || !canSend) {
-        clearDraft()
+        clearDraftStateButKeepTextareaValue()
         return
       }
       inputRef.current?.setState({ loadingDraft: true })
       BackendRemote.rpc.getDraft(selectedAccountId(), chatId).then(newDraft => {
         if (!newDraft) {
           log.debug('no draft')
-          clearDraft()
+          clearDraftStateButKeepTextareaValue()
           inputRef.current?.setText('')
         } else {
-          _setDraft(old => ({
+          _setDraftStateButKeepTextareaValue(old => ({
             ...old,
             id: newDraft.id,
             text: newDraft.text || '',
@@ -788,7 +813,7 @@ export function useDraft(
         })
       })
     },
-    [clearDraft, inputRef, canSend]
+    [clearDraftStateButKeepTextareaValue, inputRef, canSend]
   )
 
   useEffect(() => {
@@ -842,7 +867,7 @@ export function useDraft(
       ? await BackendRemote.rpc.getDraft(accountId, chatId)
       : null
     if (newDraft) {
-      _setDraft(old => ({
+      _setDraftStateButKeepTextareaValue(old => ({
         ...old,
         id: newDraft.id,
         file: newDraft.file,
@@ -856,10 +881,10 @@ export function useDraft(
       }))
       // don't load text to prevent bugging back
     } else {
-      clearDraft()
+      clearDraftStateButKeepTextareaValue()
     }
     inputRef.current?.setState({ loadingDraft: false })
-  }, [chatId, clearDraft, canSend, inputRef])
+  }, [chatId, clearDraftStateButKeepTextareaValue, canSend, inputRef])
 
   const updateDraftText = (text: string, InputChatId: number) => {
     if (chatId !== InputChatId) {
@@ -991,7 +1016,7 @@ export function useDraft(
     updateDraftText,
     addFileToDraft,
     removeFile,
-    clearDraft,
+    clearDraftStateButKeepTextareaValue,
   }
 }
 

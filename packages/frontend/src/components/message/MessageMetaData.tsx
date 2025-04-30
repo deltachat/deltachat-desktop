@@ -50,6 +50,9 @@ export default function MessageMetaData(props: Props) {
         ),
       })}
     >
+      {/* FYI the padlock doesn't need `aria-live`
+      as we don't expect it to get removed. See
+      https://github.com/deltachat/deltachat-desktop/pull/5023#discussion_r2059382983 */}
       {padlock && (
         <div
           aria-label={tx('a11y_encryption_padlock')}
@@ -63,11 +66,22 @@ export default function MessageMetaData(props: Props) {
           className={'padlock-icon'}
         />
       )}
-      {isSavedMessage && (
-        <div aria-label={tx('saved')} className={'saved-message-icon'} />
-      )}
+      <div
+        className='aria-live-wrapper'
+        aria-live='polite'
+        // Also announce removals as to notify when a message gets unsaved.
+        // AFAIK "saved" / "unsaved" changes only as a result of user action,
+        // but let's do it for confirmation, and for future-proofing.
+        aria-relevant='all'
+      >
+        {isSavedMessage && (
+          <div aria-label={tx('saved')} className={'saved-message-icon'} />
+        )}
+      </div>
       {hasLocation && <span className={'location-icon'} />}
-      {isEdited && <span className='edited'>{tx('edited')}</span>}
+      <div className='aria-live-wrapper' aria-live='polite'>
+        {isEdited && <span className='edited'>{tx('edited')}</span>}
+      </div>
       <Timestamp
         timestamp={timestamp}
         extended
@@ -78,6 +92,21 @@ export default function MessageMetaData(props: Props) {
       {direction === 'outgoing' && (
         <button
           className={classNames('status-icon', status)}
+          // The main point of `aria-live` here is to let the user know
+          // that their message has been sent or delievered
+          // right after they they send it.
+          // We want at least some indication of something happening
+          // after they press "Enter".
+          // But this is also useful to announce when the message has been read.
+          //
+          // Note that this this applies to _all_ loaded messages
+          // and not just the last one.
+          //
+          // TODO fix: NVDA announces the change twice for some reason,
+          // even when you modify just `aria-label` through the dev tools.
+          // We probably ought to keep `aria-label` fixed to "Delivery status",
+          // and only update the content, i.e. "Delivered", "Read".
+          aria-live='polite'
           aria-label={tx(
             `a11y_delivery_status_${
               status as Exclude<
