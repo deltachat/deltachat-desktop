@@ -170,14 +170,12 @@ export default function ProxyConfiguration(
 
   const changeActiveProxy = useCallback(
     (proxyUrl: string) => {
-      if (!proxyState.enabled) {
-        return
-      }
       updateProxyState({
         activeProxy: proxyUrl,
+        enabled: true,
       })
     },
-    [proxyState.enabled, updateProxyState]
+    [updateProxyState]
   )
 
   const deleteProxy = useCallback(
