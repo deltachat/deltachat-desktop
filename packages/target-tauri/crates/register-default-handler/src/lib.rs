@@ -39,27 +39,3 @@ pub fn register_as_default_handler(url_scheme: &str) {
         );
     }
 }
-
-/// Register as file handler
-pub fn register_as_file_handler() {
-    #[cfg(target_os = "macos")]
-    {
-        log::debug!("register_as_file_handler: on macos file handler needs to be defined in PList");
-    }
-    #[cfg(target_os = "windows")]
-    {
-        todo!();
-    }
-    #[cfg(any(
-        target_os = "linux",
-        target_os = "dragonfly",
-        target_os = "freebsd",
-        target_os = "openbsd",
-        target_os = "netbsd"
-    ))]
-    {
-        log::debug!(
-            "register_as_file_handler: no-op on linux, it is suffient when it is defined in the .desktop-file"
-        );
-    }
-}
