@@ -106,7 +106,7 @@ fn get_current_logfile(state: tauri::State<AppState>) -> String {
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
-pub fn run() {
+pub fn run() -> i32 {
     let startup_timestamp = SystemTime::now();
 
     #[cfg(desktop)]
@@ -479,7 +479,7 @@ pub fn run() {
     });
 
     #[allow(clippy::single_match)]
-    app.run(|app_handle, run_event| match run_event {
+    let exit_code = app.run_return(|app_handle, run_event| match run_event {
         // tauri::RunEvent::ExitRequested { code, api, .. } => {}
         #[cfg(target_os = "macos")]
         tauri::RunEvent::Reopen { .. } => {
@@ -504,6 +504,7 @@ pub fn run() {
         }
         _ => {}
     });
+    exit_code
 }
 
 async fn cleanup(app_handle: &tauri::AppHandle) {
