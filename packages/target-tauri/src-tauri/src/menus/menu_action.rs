@@ -12,12 +12,12 @@ macro_rules! impl_menu_conversion {
             fn try_from(item: &tauri::menu::MenuId) -> Result<Self, Self::Error> {
                 use std::str::FromStr;
                 let mut item_name = item.as_ref().split(':');
-                if let Some(stringify!($enum_name)) = item_name.nth(0) {
-                    let variant = item_name.last().context("could not split menu item name")?;
-                    Self::from_str(variant).map_err(|e| e.into())
-                } else {
-                    Err(anyhow::anyhow!("not the right enum name"))
-                }
+                let Some(stringify!($enum_name)) = item_name.nth(0) else {
+                    return Err(anyhow::anyhow!("not the right enum name"));
+                };
+
+                let variant = item_name.last().context("could not split menu item name")?;
+                Self::from_str(variant).map_err(|e| e.into())
             }
         }
 

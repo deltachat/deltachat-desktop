@@ -168,14 +168,15 @@ impl MenuManager {
         #[cfg(not(target_os = "macos"))]
         {
             for (label, menu_builder) in self.inner.read().await.iter() {
-                if let Some(win) = app.get_window(label).or(app.get_window(label)) {
-                    if let Err(err) = menu_builder(app)
-                        .and_then(|menu| win.set_menu(menu).map_err(|err| err.into()))
-                    {
-                        error!("failed to update menu for window {label}: {err}");
-                    }
-                } else {
+                let Some(win) = app.get_window(label).or(app.get_window(label)) else {
                     error!("window {label} not found");
+                    continue;
+                };
+
+                if let Err(err) =
+                    menu_builder(app).and_then(|menu| win.set_menu(menu).map_err(|err| err.into()))
+                {
+                    error!("failed to update menu for window {label}: {err}");
                 }
             }
         }

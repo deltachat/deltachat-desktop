@@ -46,14 +46,16 @@ impl HtmlEmailInstancesState {
 
     pub(crate) async fn set_network_allow_state(&self, id: &str, allow_network: bool) {
         let mut inner = self.inner.write().await;
-        if let Some(instance) = inner.get_mut(id) {
-            if instance.blocked_by_proxy {
-                warn!("set_network_allow_state was blocked because proxy is active");
-                return;
-            }
+        let Some(instance) = inner.get_mut(id) else {
+            // IDEA: return an error if not found
+            return;
+        };
 
-            instance.network_allow_state = allow_network
+        if instance.blocked_by_proxy {
+            warn!("set_network_allow_state was blocked because proxy is active");
+            return;
         }
-        // IDEA: return an error if not found
+
+        instance.network_allow_state = allow_network
     }
 }
