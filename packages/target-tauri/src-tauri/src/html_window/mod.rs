@@ -109,9 +109,11 @@ pub(crate) async fn open_html_window(
         )
         .await;
 
-    let window = WindowBuilder::new(&app, &window_id)
-        .inner_size(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT)
-        .build()?;
+    let window = Arc::new(
+        WindowBuilder::new(&app, &window_id)
+            .inner_size(DEFAULT_WINDOW_WIDTH, DEFAULT_WINDOW_HEIGHT)
+            .build()?,
+    );
 
     #[allow(unused_mut)]
     let mut header_webview_builder = WebviewBuilder::new(
@@ -259,12 +261,12 @@ pub(crate) async fn open_html_window(
 
     let header_view_arc = Arc::new(header_view);
     let mail_view_arc = Arc::new(mail_view);
-    let window_arc = Arc::new(window.clone());
 
+    let window_clone = Arc::clone(&window);
     // resize
     window.on_window_event(move |event| {
         if let WindowEvent::Resized(_) | WindowEvent::ScaleFactorChanged { .. } = event {
-            update_webview_bounds(&window_arc, &header_view_arc, &mail_view_arc);
+            update_webview_bounds(&window_clone, &header_view_arc, &mail_view_arc);
         }
         if let WindowEvent::Destroyed = event {
             if let Err(err) = mail_view_arc.clear_all_browsing_data() {
@@ -284,7 +286,7 @@ pub(crate) async fn open_html_window(
                     }
                 });
             }
-            let html_instances_state = window_arc.app_handle().state::<HtmlEmailInstancesState>();
+            let html_instances_state = window_clone.app_handle().state::<HtmlEmailInstancesState>();
             block_on(html_instances_state.remove(&window_id));
         }
     });
@@ -314,11 +316,11 @@ pub(crate) async fn open_html_window(
         error!("failed to apply float on top: {err}")
     }
 
-    let window_clone = window.clone();
+    let window_clone = Arc::clone(&window);
     menu_manager
         .register_window(
             &app,
-            &window,
+            &*window,
             Box::new(move |app| create_html_window_menu(app, &window_clone)),
         )
         .await
