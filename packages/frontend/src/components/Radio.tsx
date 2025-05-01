@@ -18,7 +18,7 @@ type RadioProps = {
 
 export default function Radio({
   onSelect,
-  selected,
+  selected,test
   label,
   value,
   className,
