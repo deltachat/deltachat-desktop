@@ -43,40 +43,41 @@ pub(crate) fn webxdc_icon_protocol<R: tauri::Runtime>(
                 }
             };
             // parse url (account & instance id)
-            if let (Some(account_id), Some(instance_id)) = parsed {
-                // trace!("webxdc-icon {account_id} {instance_id}");
-                // get delta chat
-                let dc = app_state_deltachat.read().await;
-
-                match get_webxdc_icon(&dc, account_id, instance_id).await {
-                    Ok(blob) => {
-                        responder.respond(
-                            http::Response::builder()
-                                .status(http::StatusCode::OK)
-                                .body(blob)?,
-                        );
-                    }
-                    Err(err) => {
-                        error!("webxdc-icon loading error: {err:#}");
-                        responder.respond(
-                            http::Response::builder()
-                                .status(http::StatusCode::INTERNAL_SERVER_ERROR)
-                                .header(http::header::CONTENT_TYPE, mime::TEXT_PLAIN.essence_str())
-                                .body(
-                                    "failed to load, look inside logfile for more info"
-                                        .as_bytes()
-                                        .to_vec(),
-                                )?,
-                        );
-                    }
-                }
-            } else {
+            let (Some(account_id), Some(instance_id)) = parsed else {
                 responder.respond(
                     http::Response::builder()
                         .status(http::StatusCode::BAD_REQUEST)
                         .header(http::header::CONTENT_TYPE, mime::TEXT_PLAIN.essence_str())
                         .body("failed to parse requested url".as_bytes().to_vec())?,
                 );
+                return Ok(());
+            };
+
+            // trace!("webxdc-icon {account_id} {instance_id}");
+            // get delta chat
+            let dc = app_state_deltachat.read().await;
+
+            match get_webxdc_icon(&dc, account_id, instance_id).await {
+                Ok(blob) => {
+                    responder.respond(
+                        http::Response::builder()
+                            .status(http::StatusCode::OK)
+                            .body(blob)?,
+                    );
+                }
+                Err(err) => {
+                    error!("webxdc-icon loading error: {err:#}");
+                    responder.respond(
+                        http::Response::builder()
+                            .status(http::StatusCode::INTERNAL_SERVER_ERROR)
+                            .header(http::header::CONTENT_TYPE, mime::TEXT_PLAIN.essence_str())
+                            .body(
+                                "failed to load, look inside logfile for more info"
+                                    .as_bytes()
+                                    .to_vec(),
+                            )?,
+                    );
+                }
             }
             Ok(())
         }

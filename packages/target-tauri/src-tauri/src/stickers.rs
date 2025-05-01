@@ -51,72 +51,73 @@ pub(crate) fn delta_stickers_protocol<R: tauri::Runtime>(
                 }
             };
 
-            if let (Some(account_folder), Some(pack_folder), Some(file_name)) = parsed {
-                // trace!("dcsticker {account_folder} {pack_folder} {file_name}");
-
-                let pack_folder = percent_decode_str(pack_folder).decode_utf8()?;
-                let file_name = percent_decode_str(file_name).decode_utf8()?;
-                // Sanitize path: prevent path traversal and absolute paths.
-                let pack_folder = Path::new(pack_folder.as_ref())
-                    .file_name()
-                    .context(format!("invalid pack folder {pack_folder}"))?;
-                let file_name = Path::new(file_name.as_ref())
-                    .file_name()
-                    .context(format!("invalid file name {file_name}"))?;
-
-                // get delta chat
-                let dc = app_state_deltachat.read().await;
-
-                let account = dc
-                    .get_all()
-                    .into_iter()
-                    .find_map(|id| {
-                        dc.get_account(id).filter(|account| {
-                            account
-                                .get_blobdir()
-                                .parent()
-                                .map(|p| p.ends_with(account_folder))
-                                .unwrap_or(false)
-                        })
-                    })
-                    .context("account not found")?;
-
-                let file_path = account
-                    .get_blobdir()
-                    .join("../stickers")
-                    .join(pack_folder)
-                    .join(file_name);
-                // trace!("file_path: {file_path:?}");
-
-                match fs::read(&file_path).await {
-                    Ok(blob) => {
-                        responder.respond(
-                            http::Response::builder()
-                                .status(http::StatusCode::OK)
-                                .body(blob)?,
-                        );
-                    }
-                    Err(err) => {
-                        error!("dcsticker loading error: {err:#} {file_path:?}");
-                        responder.respond(
-                            http::Response::builder()
-                                .status(http::StatusCode::INTERNAL_SERVER_ERROR)
-                                .header(http::header::CONTENT_TYPE, mime::TEXT_PLAIN.essence_str())
-                                .body(
-                                    "failed to load, look inside logfile for more info"
-                                        .as_bytes()
-                                        .to_vec(),
-                                )?,
-                        );
-                    }
-                }
-            } else {
+            let (Some(account_folder), Some(pack_folder), Some(file_name)) = parsed else {
                 responder.respond(
                     http::Response::builder()
                         .status(http::StatusCode::BAD_REQUEST)
                         .header(http::header::CONTENT_TYPE, mime::TEXT_PLAIN.essence_str())
                         .body("failed to parse requested url".as_bytes().to_vec())?,
                 );
+                return Ok(());
+            };
+
+            // trace!("dcsticker {account_folder} {pack_folder} {file_name}");
+
+            let pack_folder = percent_decode_str(pack_folder).decode_utf8()?;
+            let file_name = percent_decode_str(file_name).decode_utf8()?;
+            // Sanitize path: prevent path traversal and absolute paths.
+            let pack_folder = Path::new(pack_folder.as_ref())
+                .file_name()
+                .context(format!("invalid pack folder {pack_folder}"))?;
+            let file_name = Path::new(file_name.as_ref())
+                .file_name()
+                .context(format!("invalid file name {file_name}"))?;
+
+            // get delta chat
+            let dc = app_state_deltachat.read().await;
+
+            let account = dc
+                .get_all()
+                .into_iter()
+                .find_map(|id| {
+                    dc.get_account(id).filter(|account| {
+                        account
+                            .get_blobdir()
+                            .parent()
+                            .map(|p| p.ends_with(account_folder))
+                            .unwrap_or(false)
+                    })
+                })
+                .context("account not found")?;
+
+            let file_path = account
+                .get_blobdir()
+                .join("../stickers")
+                .join(pack_folder)
+                .join(file_name);
+            // trace!("file_path: {file_path:?}");
+
+            match fs::read(&file_path).await {
+                Ok(blob) => {
+                    responder.respond(
+                        http::Response::builder()
+                            .status(http::StatusCode::OK)
+                            .body(blob)?,
+                    );
+                }
+                Err(err) => {
+                    error!("dcsticker loading error: {err:#} {file_path:?}");
+                    responder.respond(
+                        http::Response::builder()
+                            .status(http::StatusCode::INTERNAL_SERVER_ERROR)
+                            .header(http::header::CONTENT_TYPE, mime::TEXT_PLAIN.essence_str())
+                            .body(
+                                "failed to load, look inside logfile for more info"
+                                    .as_bytes()
+                                    .to_vec(),
+                            )?,
+                    );
+                }
             }
             Ok(())
         }

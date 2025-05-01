@@ -67,32 +67,35 @@ pub(crate) async fn on_webxdc_message_changed<'a>(
     account_id: u32,
     instance_id: u32,
 ) -> Result<(), Error> {
-    if let Some((window_label, instance)) = webxdc_instances
+    let Some((window_label, instance)) = webxdc_instances
         .get_webxdc_for_instance(account_id, instance_id)
         .await
-    {
-        if let Some(window) = app.get_window(&window_label) {
-            let dc_accounts = deltachat_state.deltachat.read().await;
-            let account = dc_accounts
-                .get_account(account_id)
-                .ok_or(Error::AccountNotFound(account_id))?;
-            // we need to load a new snapshot as the document title is part of the message snapshot
-            let webxdc_info = Message::load_from_db(&account, instance.message.get_id())
-                .await
-                .map_err(|err| {
-                    error!("on_webxdc_message_changed: Message::load_from_db {err:?}");
-                    Error::WebxdcInstanceNotFound(account_id, instance.message.get_id().to_u32())
-                })?
-                .get_webxdc_info(&account)
-                .await
-                .map_err(Error::DeltaChat)?;
-            let chat_name = Chat::load_from_db(&account, instance.message.get_chat_id())
-                .await
-                .map_err(Error::DeltaChat)?
-                .name;
-            window.set_title(&make_title(&webxdc_info, &chat_name))?;
-        }
-    }
+    else {
+        return Ok(());
+    };
+    let Some(window) = app.get_window(&window_label) else {
+        return Ok(());
+    };
+
+    let dc_accounts = deltachat_state.deltachat.read().await;
+    let account = dc_accounts
+        .get_account(account_id)
+        .ok_or(Error::AccountNotFound(account_id))?;
+    // we need to load a new snapshot as the document title is part of the message snapshot
+    let webxdc_info = Message::load_from_db(&account, instance.message.get_id())
+        .await
+        .map_err(|err| {
+            error!("on_webxdc_message_changed: Message::load_from_db {err:?}");
+            Error::WebxdcInstanceNotFound(account_id, instance.message.get_id().to_u32())
+        })?
+        .get_webxdc_info(&account)
+        .await
+        .map_err(Error::DeltaChat)?;
+    let chat_name = Chat::load_from_db(&account, instance.message.get_chat_id())
+        .await
+        .map_err(Error::DeltaChat)?
+        .name;
+    window.set_title(&make_title(&webxdc_info, &chat_name))?;
 
     Ok(())
 }
@@ -238,28 +241,28 @@ pub(crate) async fn open_webxdc<'a>(
             .get_webxdc_for_instance(account_id, message_id)
             .await
         {
-            if let Some(window) = app.get_window(&window_label) {
-                // window already exists focus it - android and iOS don't have have the function
-                // and those platforms also don't have multiple windows
-                window.show()?;
-                window.set_focus()?;
-
-                if !href.is_empty() {
-                    window
-                        .webviews()
-                        .first()
-                        .context("did not find webview, this should not happen, contact devs")
-                        .map_err(Error::Anyhow)?
-                        .navigate(href_to_webxdc_url(href)?)?;
-                }
-
-                return Ok(());
-            } else {
+            let Some(window) = app.get_window(&window_label) else {
                 // this case should never happen, this is an attempt to autorecover in production
                 warn!("instance exists, but window missing, we now remove the instance as workaround so the next open will work again");
                 webxdc_instances.remove_by_window_label(&window_label).await;
                 return Err(Error::InstanceExistsButWindowMissing);
+            };
+
+            // window already exists focus it - android and iOS don't have have the function
+            // and those platforms also don't have multiple windows
+            window.show()?;
+            window.set_focus()?;
+
+            if !href.is_empty() {
+                window
+                    .webviews()
+                    .first()
+                    .context("did not find webview, this should not happen, contact devs")
+                    .map_err(Error::Anyhow)?
+                    .navigate(href_to_webxdc_url(href)?)?;
             }
+
+            return Ok(());
         }
     }
 

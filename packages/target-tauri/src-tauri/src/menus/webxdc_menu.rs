@@ -46,22 +46,22 @@ impl TryFrom<&tauri::menu::MenuId> for WebxdcMenuAction {
     fn try_from(item: &tauri::menu::MenuId) -> Result<Self, Self::Error> {
         use std::str::FromStr;
         let mut item_name = item.as_ref().split("||");
-        if let Some(stringify!(WebxdcMenuAction)) = item_name.nth(0) {
-            let mut id_and_variant = item_name
-                .last()
-                .context("could not split menu item name")?
-                .split('|');
-            if let (Some(id), Some(variant)) = (id_and_variant.nth(0), id_and_variant.last()) {
-                Ok(WebxdcMenuAction {
-                    window_id: id.to_owned(),
-                    action: WebxdcMenuActionVariant::from_str(variant)?,
-                })
-            } else {
-                Err(anyhow::anyhow!("not the right format: {:?}", item.as_ref()))
-            }
-        } else {
-            Err(anyhow::anyhow!("not the right enum name"))
-        }
+        let Some(stringify!(WebxdcMenuAction)) = item_name.nth(0) else {
+            return Err(anyhow::anyhow!("not the right enum name"));
+        };
+
+        let mut id_and_variant = item_name
+            .last()
+            .context("could not split menu item name")?
+            .split('|');
+        let (Some(id), Some(variant)) = (id_and_variant.nth(0), id_and_variant.last()) else {
+            return Err(anyhow::anyhow!("not the right format: {:?}", item.as_ref()));
+        };
+
+        Ok(WebxdcMenuAction {
+            window_id: id.to_owned(),
+            action: WebxdcMenuActionVariant::from_str(variant)?,
+        })
     }
 }
 
@@ -127,53 +127,51 @@ impl MenuAction<'static> for WebxdcMenuAction {
                     let instances = app.state::<WebxdcInstancesState>();
                     let dc = app.state::<DeltaChatAppState>();
                     let tx = app.state::<TranslationState>();
-                    if let Some(instance) = instances.get(&win).await {
-                        let dc = dc.deltachat.read().await;
-                        if let Some(account) = dc.get_account(instance.account_id) {
-                            if let Ok(info) = instance.message.get_webxdc_info(&account).await {
-                                let source_code_url = info.source_code_url;
+                    let Some(instance) = instances.get(&win).await else {
+                        error!("instance not found");
+                        return;
+                    };
+                    let dc = dc.deltachat.read().await;
+                    let Some(account) = dc.get_account(instance.account_id) else {
+                        error!("account not found");
+                        return;
+                    };
+                    let Ok(info) = instance.message.get_webxdc_info(&account).await else {
+                        return;
+                    };
+                    let source_code_url = info.source_code_url;
 
-                                if source_code_url.starts_with("https://")
-                                    || source_code_url.starts_with("http://")
-                                {
-                                    if let Err(err) =
-                                        app.opener().open_url(source_code_url, None::<String>)
-                                    {
-                                        error!("failed to open source_code_url {err}");
-                                    }
-                                } else {
-                                    let cloned_app = app.clone();
-                                    let mut dialog_builder = app
-                                        .dialog()
-                                        .message(
-                                            tx.translate("ask_copy_unopenable_link_to_clipboard")
-                                                .await
-                                                .replace("%1$d", &source_code_url),
-                                        )
-                                        .buttons(MessageDialogButtons::OkCancelCustom(
-                                            tx.translate("menu_copy_link_to_clipboard").await,
-                                            tx.translate("no").await,
-                                        ));
-                                    #[cfg(desktop)]
-                                    {
-                                        dialog_builder = dialog_builder.parent(&win);
-                                    }
-                                    dialog_builder.show(move |answer| {
-                                        if answer {
-                                            if let Err(err) =
-                                                cloned_app.clipboard().write_text(source_code_url)
-                                            {
-                                                error!("failed to copy source_code_url {err}");
-                                            }
-                                        }
-                                    });
-                                }
-                            }
-                        } else {
-                            error!("account not found")
+                    if source_code_url.starts_with("https://")
+                        || source_code_url.starts_with("http://")
+                    {
+                        if let Err(err) = app.opener().open_url(source_code_url, None::<String>) {
+                            error!("failed to open source_code_url {err}");
                         }
                     } else {
-                        error!("instance not found")
+                        let cloned_app = app.clone();
+                        let mut dialog_builder = app
+                            .dialog()
+                            .message(
+                                tx.translate("ask_copy_unopenable_link_to_clipboard")
+                                    .await
+                                    .replace("%1$d", &source_code_url),
+                            )
+                            .buttons(MessageDialogButtons::OkCancelCustom(
+                                tx.translate("menu_copy_link_to_clipboard").await,
+                                tx.translate("no").await,
+                            ));
+                        #[cfg(desktop)]
+                        {
+                            dialog_builder = dialog_builder.parent(&win);
+                        }
+                        dialog_builder.show(move |answer| {
+                            if answer {
+                                if let Err(err) = cloned_app.clipboard().write_text(source_code_url)
+                                {
+                                    error!("failed to copy source_code_url {err}");
+                                }
+                            }
+                        });
                     }
                 });
             }

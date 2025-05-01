@@ -33,13 +33,11 @@ impl TrayManager {
                 self.update_badge(app).await?;
             } else {
                 let previous = self.tray.write().await.take();
-                if let Some(tray) = previous {
-                    tray.set_visible(false)?;
-                    let tray_option = app.remove_tray_by_id(tray.id());
-                    drop(tray_option);
-                } else {
-                    unreachable!()
-                }
+                let Some(tray) = previous else { unreachable!() };
+
+                tray.set_visible(false)?;
+                let tray_option = app.remove_tray_by_id(tray.id());
+                drop(tray_option);
             }
         }
 
@@ -62,15 +60,16 @@ impl TrayManager {
             let accounts = dc.deltachat.read().await;
             let mut counter = 0;
             for account_id in accounts.get_all() {
-                if let Some(account) = accounts.get_account(account_id) {
-                    if let Ok(mute_state) = account.get_config(Config::IsMuted).await {
-                        if mute_state != Some("1".to_owned()) {
-                            // account not muted
-                            counter += account.get_fresh_msgs().await?.len();
-                        }
-                    }
-                } else {
+                let Some(account) = accounts.get_account(account_id) else {
                     log::warn!("could not read account");
+                    continue;
+                };
+                let Ok(mute_state) = account.get_config(Config::IsMuted).await else {
+                    continue;
+                };
+                if mute_state != Some("1".to_owned()) {
+                    // account not muted
+                    counter += account.get_fresh_msgs().await?.len();
                 }
             }
             counter
@@ -92,18 +91,20 @@ impl TrayManager {
         let ending = "png";
 
         let lock = self.tray.read().await;
-        if let Some(tray) = lock.as_ref() {
-            let image_name = match counter {
-                0 => "deltachat",
-                _ => "deltachat-unread",
-            };
-            let asset = format!("images/tray/{image_name}.{ending}");
+        let Some(tray) = lock.as_ref() else {
+            return Ok(());
+        };
 
-            if let Some(icon) = app.asset_resolver().get(asset.clone()) {
-                tray.set_icon(Some(Image::from_bytes(&icon.bytes)?))?;
-            } else {
-                log::error!("tray icon asset {asset} not found!")
-            }
+        let image_name = match counter {
+            0 => "deltachat",
+            _ => "deltachat-unread",
+        };
+        let asset = format!("images/tray/{image_name}.{ending}");
+
+        if let Some(icon) = app.asset_resolver().get(asset.clone()) {
+            tray.set_icon(Some(Image::from_bytes(&icon.bytes)?))?;
+        } else {
+            log::error!("tray icon asset {asset} not found!")
         }
         Ok(())
     }

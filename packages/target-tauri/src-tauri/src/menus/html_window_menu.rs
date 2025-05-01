@@ -38,22 +38,22 @@ impl TryFrom<&tauri::menu::MenuId> for HtmlWindowMenuAction {
     fn try_from(item: &tauri::menu::MenuId) -> Result<Self, Self::Error> {
         use std::str::FromStr;
         let mut item_name = item.as_ref().split("||");
-        if let Some(stringify!(HtmlWindowMenuAction)) = item_name.nth(0) {
-            let mut id_and_variant = item_name
-                .last()
-                .context("could not split menu item name")?
-                .split('|');
-            if let (Some(id), Some(variant)) = (id_and_variant.nth(0), id_and_variant.last()) {
-                Ok(HtmlWindowMenuAction {
-                    window_id: id.to_owned(),
-                    action: HtmlWindowMenuActionVariant::from_str(variant)?,
-                })
-            } else {
-                Err(anyhow::anyhow!("not the right format: {:?}", item.as_ref()))
-            }
-        } else {
-            Err(anyhow::anyhow!("not the right enum name"))
-        }
+        let Some(stringify!(HtmlWindowMenuAction)) = item_name.nth(0) else {
+            return Err(anyhow::anyhow!("not the right enum name"));
+        };
+
+        let mut id_and_variant = item_name
+            .last()
+            .context("could not split menu item name")?
+            .split('|');
+        let (Some(id), Some(variant)) = (id_and_variant.nth(0), id_and_variant.last()) else {
+            return Err(anyhow::anyhow!("not the right format: {:?}", item.as_ref()));
+        };
+
+        Ok(HtmlWindowMenuAction {
+            window_id: id.to_owned(),
+            action: HtmlWindowMenuActionVariant::from_str(variant)?,
+        })
     }
 }
 
