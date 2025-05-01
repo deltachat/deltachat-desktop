@@ -1,7 +1,8 @@
 /// Category for the notification
 ///
 /// https://specifications.freedesktop.org/notification-spec/latest/categories.html
-pub enum NotificationCategory {
+#[derive(Debug)]
+pub enum XdgNotificationCategory {
     /// A generic audio or video call notification that doesn't fit into any other category.
     Call,
     /// An audio or video call was ended.
@@ -52,73 +53,5 @@ pub enum NotificationCategory {
     TransferError,
     /// Allows custom Category
     /// If it is not standard, then category should be in the form of "x-vendor.class.name."
-    Custom(&str),
-}
-
-impl NotificationCategory {
-    pub fn to_string(self) -> String {
-        match self {
-            Call => "call",
-            CallEnded => "call.ended",
-            CallIncoming => "call.incoming",
-            Device => "device",
-            DeviceAdded => "device.added",
-            DeviceError => "device.error",
-            DeviceRemoved => "device.removed",
-            Email => "email",
-            EmailArrived => "email.arrived",
-            EmailBounced => "email.bounced",
-            Im => "im",
-            ImError => "im.error",
-            ImReceived => "im.received",
-            Network => "network",
-            NetworkConnected => "network.connected",
-            NetworkDisconnected => "network.disconnected",
-            NetworkError => "network.error",
-            Presence => "presence",
-            PresenceOffline => "presence.offline",
-            PresenceOnline => "presence.online",
-            Transfer => "transfer",
-            TransferComplete => "transfer.complete",
-            TransferError => "transfer.error",
-            Custom(category) => category,
-        }
-        .to_owned()
-    }
-}
-
-pub trait NotificationBuilderExtXdg {
-    /// The type of notification this is.
-    /// https://specifications.freedesktop.org/notification-spec/latest/categories.html
-    fn category_hint(self, category: Category) -> Self;
-}
-
-pub struct XdgNotificationBuilder {
-    notification_builder: notify_rust::Notification,
-}
-
-impl NotificationBuilder for XdgNotificationBuilder {
-    fn new() -> Self {
-        let notification_builder = notify_rust::Notification::new()
-            .auto_icon()
-            // As said in the readme all notifications are persistent
-            .hint(Hint::Resident(true))
-            .timeout(0);
-
-        XdgNotificationBuilder {
-            notification_builder,
-        }
-    }
-
-    fn set_thread_id(self, thread_id: &str) -> Self {
-        // does not exist in xdg spec yet: https://github.com/flatpak/xdg-desktop-portal/discussions/1495
-        self
-    }
-}
-
-impl NotificationBuilderExtXdg for XdgNotificationBuilder {
-    fn category_hint(self, category: Category) {
-        self.notification_builder = notification_builder.hint(Hint::Category(category.to_string()));
-        self
-    }
+    Custom(String),
 }

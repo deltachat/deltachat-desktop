@@ -1,12 +1,14 @@
 mod error;
 mod notification;
 mod platform_impl;
+mod xdg_category;
 
 use std::sync::Arc;
 
 pub use error::Error;
 pub use notification::*;
 pub use platform_impl::*;
+pub use xdg_category::*;
 
 /// Get the notification manager for the platform
 ///
@@ -56,6 +58,6 @@ pub fn get_notification_manager(
         // user_notify::xdg::NotificationBuilderXdg::new()
         //     .category_hint(user_notify::xdg::NotificationCategory::ImReceived)
         //     .appname("Delta Chat")
-        todo!();
+        Arc::new(platform_impl::xdg::NotificationManagerXdg::new()) as Arc<dyn NotificationManager>
     }
 }

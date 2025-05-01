@@ -35,4 +35,13 @@ pub enum Error {
     #[cfg(target_os = "windows")]
     #[error(transparent)]
     XmlEscape(#[from] quick_xml::escape::EscapeError),
+    #[cfg(any(
+        target_os = "linux",
+        target_os = "dragonfly",
+        target_os = "freebsd",
+        target_os = "openbsd",
+        target_os = "netbsd"
+    ))]
+    #[error(transparent)]
+    RustNotifyError(#[from] notify_rust::error::Error),
 }

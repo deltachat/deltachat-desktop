@@ -2,7 +2,7 @@ use std::{collections::HashMap, fmt::Debug, path::PathBuf};
 
 use async_trait::async_trait;
 
-use crate::Error;
+use crate::{Error, xdg_category::XdgNotificationCategory};
 
 #[derive(Debug, Default)]
 pub struct NotificationBuilder {
@@ -14,6 +14,8 @@ pub struct NotificationBuilder {
     pub(crate) icon_round_crop: bool,
     pub(crate) thread_id: Option<String>,
     pub(crate) category_id: Option<String>,
+    pub(crate) xdg_category: Option<XdgNotificationCategory>,
+    pub(crate) xdg_app_name: Option<String>,
     pub(crate) user_info: Option<HashMap<String, String>>,
 }
 
@@ -81,7 +83,7 @@ where
         self
     }
 
-    /// Set App icon
+    /// Set App icon to be round
     ///
     /// Plaform specific:
     /// - MacOS: not supported
@@ -113,22 +115,30 @@ where
         self
     }
 
-    // IDEA: convinience methods? but I believe a generic callback is better in which you get [NotificationResponse]
-    // and identify the notification based on id or userinfo is better
-    // because then your notifications will also work across sessions (atleast on macOS)
-    //
-    // if we make this convinience methods we would store them then:
-    // - document that you should probably use the other way, because thes don't work across sessions
-    // - save them in the manager like the emulated user_info
-    //
-    // fn on_click(self, cb: Box<dyn Fn() + Send + Sync>) -> Self;
-    // fn on_close(self, cb: Box<dyn Fn() + Send + Sync>) -> Self;
+    /// Set the xdg notification Category
+    ///
+    /// The type of notification this is acording to https://specifications.freedesktop.org/notification-spec/latest/categories.html
+    ///
+    /// Platform specific: only work on linux, this does nothing on other platforms
+    pub fn set_xdg_category(mut self, category: XdgNotificationCategory) -> Self {
+        self.xdg_category = Some(category);
+        self
+    }
+
+    /// Set the xdg App Name
+    ///
+    /// Platform specific: only work on linux, this does nothing on other platforms
+    pub fn set_xdg_app_name(mut self, name: String) -> Self {
+        self.xdg_app_name = Some(name);
+        self
+    }
 
     /// set metadata for a notification
     ///
     /// ## Platform Specific
     /// - on MacOS this uses UserInfo field in the notification content, so it works accross sessions
-    /// - TODO: on other platforms we emulate this by storing this info inside of NotificationManager
+    /// - windows stores this in toast [NotificationData](https://learn.microsoft.com/en-us/uwp/api/windows.ui.notifications.notificationdata?view=winrt-26100)
+    /// - linux: on linux we emulate this by storing this info inside of NotificationManager
     pub fn set_user_info(mut self, user_info: HashMap<String, String>) -> Self {
         self.user_info = Some(user_info);
         self
