@@ -23,15 +23,17 @@ import { mouseEventToPosition } from '../../../utils/mouseEventToPosition'
 import { OpenDialog } from '../../../contexts/DialogContext'
 import ProxyConfiguration from '../../dialogs/ProxyConfiguration'
 import { selectedAccountId } from '../../../ScreenController'
+import { TranslationKey } from '@deltachat-desktop/shared/translationKeyType'
 
 type Props = {
   onCancel: () => void
   selectedAccountId: number
 }
 
-function buildContextMenu(openDialog: OpenDialog) {
-  const tx = window.static_translate // don't use the i18n context here for now as this component is inefficient (rendered one menu for every message)
-  // add help item
+function buildContextMenu(
+  openDialog: OpenDialog,
+  tx: (key: TranslationKey) => string
+) {
   return [
     {
       label: tx('proxy_use_proxy'),
@@ -81,7 +83,7 @@ export default function InstantOnboardingScreen({
       MouseEvent
     >
   ) => {
-    const items = buildContextMenu(openDialog)
+    const items = buildContextMenu(openDialog, tx)
 
     openContextMenu({
       ...mouseEventToPosition(event),
@@ -190,7 +192,6 @@ export default function InstantOnboardingScreen({
             profilePicture={profilePicture}
             setProfilePicture={onChangeProfileImage}
           />
-          {/** <!-- radio button --> */}
           <DeltaInput
             key='displayName'
             id='displayName'
