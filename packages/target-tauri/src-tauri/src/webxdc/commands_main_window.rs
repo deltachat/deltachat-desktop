@@ -363,10 +363,9 @@ pub(crate) async fn open_webxdc<'a>(
 
     window_builder = set_data_store(&app, window_builder, account_id, message_id).await?;
 
-    let window = window_builder.build()?;
+    let window = Arc::new(window_builder.build()?);
 
-    let window_arc = Arc::new(window.clone());
-
+    let window_clone = Arc::clone(&window);
     let messge_id_to_leave = webxdc_message.get_id();
     window.on_window_event(move |event| {
         if let WindowEvent::Destroyed = event {
@@ -374,12 +373,12 @@ pub(crate) async fn open_webxdc<'a>(
             warn!("webxdc window destroyed {account_id} {message_id}");
 
             // remove from "running instances"-state
-            let webxdc_instances = window_arc.state::<WebxdcInstancesState>();
+            let webxdc_instances = window_clone.state::<WebxdcInstancesState>();
             block_on(webxdc_instances.remove_by_window_label(&window_id));
 
             // leave realtime channel
             // IDEA: track in WebxdcInstancesState whether webxdc joined and only call this method if it did
-            let dc = window_arc.state::<DeltaChatAppState>();
+            let dc = window_clone.state::<DeltaChatAppState>();
             if let Err(err) = block_on(async move {
                 // workaround for not yet available try_blocks feature
                 // https://doc.rust-lang.org/beta/unstable-book/language-features/try-blocks.html
@@ -429,11 +428,11 @@ pub(crate) async fn open_webxdc<'a>(
 
     #[cfg(desktop)]
     {
-        let window_clone = window.clone();
+        let window_clone = Arc::clone(&window);
         menu_manager
             .register_window(
                 &app,
-                &window,
+                &*window,
                 Box::new(move |app| create_webxdc_window_menu(app, &window_clone, icon.clone())),
             )
             .await
