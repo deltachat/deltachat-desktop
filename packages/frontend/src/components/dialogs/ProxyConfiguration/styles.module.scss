@@ -72,3 +72,10 @@ $iconSize: 1.3em;
   padding: 8px 10px 7px 10px;
   position: absolute;
 }
+
+@media (max-height: 500px) {
+  .proxyList {
+    flex-grow: 0;
+    overflow-y: visible;
+  }
+}
