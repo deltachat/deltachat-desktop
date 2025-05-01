@@ -101,7 +101,8 @@ pub(crate) async fn show_notification(
         .title(&title)
         .body(&body)
         .set_user_info(user_info)
-        .set_thread_id(&format!("{account_id}-{chat_id}"));
+        .set_thread_id(&format!("{account_id}-{chat_id}"))
+        .set_xdg_category(user_notify::XdgNotificationCategory::ImReceived);
 
     if let NotificationPayload::OpenChatMessage { .. } = notification_kind {
         notification = notification.set_category_id(NOTIFICATION_REPLY_TO_CATEGORY);
