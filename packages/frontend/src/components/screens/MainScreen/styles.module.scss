@@ -3,7 +3,7 @@
 // FYI there is also `_main_screen.scss`.
 
 :global(.main-screen.small-screen.chat-view-open) {
-  .chatListAndNavbar {
+  .chatListAndHeader {
     display: none;
   }
 }
@@ -23,7 +23,7 @@
   flex-shrink: 0;
 }
 
-.chatListAndNavbar {
+.chatListAndHeader {
   display: flex;
   flex-direction: column;
 
@@ -33,7 +33,7 @@
 
   min-width: 295px;
 
-  .chatListNavbar {
+  .chatListHeader {
     @include navbar;
     display: flex;
     align-items: center;
@@ -53,7 +53,7 @@
   // Otherwise e.g. the contents of the gallery view
   // (tabs, sepcifically) will refuse to shrink,
   // and this element (`.chatAndNavbar`) will overflow the parent.
-  // Also this ensures that `.chatListAndNavbar` and `.chatAndNavbar`
+  // Also this ensures that `.chatListAndHeader` and `.chatAndNavbar`
   // take respectively 3 and 8 parts of the width of the parent
   // on wide screens.
   width: 0;
