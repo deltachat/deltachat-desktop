@@ -57,6 +57,7 @@ export default function ProxyConfiguration(
   const [newProxyUrl, setNewProxyUrl] = useState('')
 
   const [showNewProxyForm, setShowNewProxyForm] = useState(false)
+  const [showEnableSwitch, setShowEnableSwitch] = useState(false)
 
   // updated on connectivity change
   const [connectivityStatus, setConnectivityStatus] = useState(
@@ -102,9 +103,6 @@ export default function ProxyConfiguration(
             const proxyLines = proxy_url.split(/\n/).filter(s => !!s)
             proxies = proxyLines
             activeProxy = enabled ? proxyLines[0] : null
-            setShowNewProxyForm(false)
-          } else {
-            setShowNewProxyForm(true)
           }
           setProxyState(prev => ({
             ...prev,
@@ -112,6 +110,7 @@ export default function ProxyConfiguration(
             proxies,
             activeProxy,
           }))
+          setShowNewProxyForm(proxies.length === 0)
         }
       } catch (error) {
         log.error('failed to load proxy settings', error)
@@ -138,10 +137,10 @@ export default function ProxyConfiguration(
   const addProxy = async (proxyUrl: string) => {
     if (proxyState.proxies.includes(proxyUrl)) {
       log.warn('skip already existing proxy', proxyUrl)
-      // proxy alread exists, should we show a message here?
+      // proxy alread exists
       return
     }
-    let proxyValid = proxyUrl.length > 0
+    let proxyValid = maybeValidProxyUrl(proxyUrl)
     let errorMessage = ''
     if (proxyValid) {
       try {
@@ -184,6 +183,9 @@ export default function ProxyConfiguration(
       const otherProxies = proxyState.proxies.filter(
         proxy => proxy !== proxyUrl
       )
+      // show new proxy form
+      // if no other proxy is available
+      setShowNewProxyForm(otherProxies.length === 0)
       if (proxyUrl !== proxyState.activeProxy) {
         updateProxyState({
           proxies: otherProxies,
@@ -196,20 +198,25 @@ export default function ProxyConfiguration(
           proxies: otherProxies,
           activeProxy: otherProxies[0],
         })
-        return
       } else {
-        // show new proxy form
-        // if no other proxy is available
         updateProxyState({
           enabled: false,
-          proxies: otherProxies,
+          proxies: [],
           activeProxy: null,
         })
-        setShowNewProxyForm(true)
       }
     },
     [proxyState.activeProxy, proxyState.proxies, updateProxyState]
   )
+
+  // show/hide the enable switch
+  useEffect(() => {
+    if (proxyState.enabled) {
+      setShowEnableSwitch(proxyState.proxies.length > 0)
+    } else {
+      setShowEnableSwitch(proxyState.proxies.length > 0)
+    }
+  }, [showEnableSwitch, proxyState.enabled, proxyState.proxies])
 
   useEffect(() => {
     let removeConnectivityListener = () => {}
@@ -337,11 +344,13 @@ export default function ProxyConfiguration(
       />
       <DialogBody className={styles.proxyDialogBody}>
         <div className={styles.container}>
-          <SettingsSwitch
-            label={tx('proxy_use_proxy')}
-            value={proxyState.enabled}
-            onChange={changeProxyEnable}
-          />
+          {showEnableSwitch && (
+            <SettingsSwitch
+              label={tx('proxy_use_proxy')}
+              value={proxyState.enabled}
+              onChange={changeProxyEnable}
+            />
+          )}
           <div>
             <h3 className='title'>{tx('proxy_list_header')}</h3>
             <p className={styles.explain}>{tx('proxy_add_explain')}</p>
