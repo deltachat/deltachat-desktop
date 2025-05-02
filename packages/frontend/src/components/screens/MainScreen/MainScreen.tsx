@@ -230,8 +230,8 @@ export default function MainScreen({ accountId }: Props) {
         !messageSectionShouldBeHidden ? 'chat-view-open' : ''
       }`}
     >
-      <section className={styles.chatListAndNavbar}>
-        <nav className={styles.chatListNavbar} data-tauri-drag-region>
+      <section className={styles.chatListAndHeader}>
+        <section className={styles.chatListHeader} data-tauri-drag-region>
           {showArchivedChats && (
             <>
               <span data-no-drag-region>
@@ -258,7 +258,7 @@ export default function MainScreen({ accountId }: Props) {
               value={queryStr}
             />
           )}
-        </nav>
+        </section>
         <ChatList
           queryStr={queryStr}
           showArchivedChats={showArchivedChats}
