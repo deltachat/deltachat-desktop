@@ -3,6 +3,7 @@ mod category;
 use std::{collections::HashMap, ops::Deref, sync::Arc};
 
 use async_trait::async_trait;
+use image::ImageReader;
 use notify_rust::Hint;
 use tokio::sync::RwLock;
 
@@ -153,11 +154,30 @@ impl NotificationManager for NotificationManagerXdg {
         }
 
         if let Some(path) = builder.image {
-            //TODO
+            match ImageReader::open(path) {
+                Err(error) => {
+                    log::error!("failed to load image: {error:?}");
+                }
+                Ok(img) => match img.decode() {
+                    Err(error) => {
+                        log::error!("failed to decode image: {error:?}");
+                    }
+                    Ok(img_data) => {
+                        let thumbnail = img_data.thumbnail(512, 512);
+                        match thumbnail.try_into() {
+                            Err(error) => log::error!("failed to convert image: {error:?}"),
+                            Ok(img) => {
+                                notification.hint(Hint::ImageData(img));
+                            }
+                        }
+                    }
+                },
+            }
         }
 
         if let Some(path) = builder.icon {
-            //TODO
+            // untested
+            notification.icon(&format!("file://{}", path.display()));
         } else {
             notification.auto_icon();
         }
