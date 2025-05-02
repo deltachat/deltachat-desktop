@@ -26,6 +26,7 @@ windows-collections = "0.2.0"
 [target.'cfg(any(target_os = "linux", target_os = "dragonfly", target_os = "freebsd", target_os = "openbsd", target_os = "netbsd"))'.dependencies]
 notify-rust = { version = "4.11.6", features = ["images"] }
 image = "0.25.6"
+quick-xml = "0.37"
 
 [target.'cfg(target_os = "macos")'.dependencies]
 block2 = "0.6"

@@ -1,13 +1,16 @@
 mod category;
 
-use std::{collections::HashMap, ops::Deref, sync::Arc};
+use std::{
+    collections::HashMap,
+    sync::{Arc, OnceLock},
+};
 
 use async_trait::async_trait;
 use image::ImageReader;
-use notify_rust::Hint;
+use notify_rust::{ActionResponse, CloseReason, Hint, Urgency, handle_action};
 use tokio::sync::RwLock;
 
-use crate::{NotificationBuilder, NotificationHandle, NotificationManager};
+use crate::{NotificationBuilder, NotificationHandle, NotificationManager, NotificationResponse};
 
 #[derive(Debug, Clone)]
 pub struct NotificationHandleXdg {
@@ -31,9 +34,19 @@ impl NotificationHandle for NotificationHandleXdg {
     }
 }
 
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct NotificationManagerXdg {
     active_notifications: RwLock<Vec<NotificationHandleXdg>>,
+    handler: OnceLock<Arc<Box<dyn Fn(crate::NotificationResponse) + Send + Sync + 'static>>>,
+}
+
+impl std::fmt::Debug for NotificationManagerXdg {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("NotificationManagerXdg")
+            .field("active_notifications", &self.active_notifications)
+            .field("handler", &self.handler.get().is_some().to_string())
+            .finish()
+    }
 }
 
 impl NotificationManagerXdg {
@@ -65,10 +78,16 @@ impl NotificationManager for NotificationManagerXdg {
 
     fn register(
         &self,
-        _handler_callback: Box<dyn Fn(crate::NotificationResponse) + Send + Sync + 'static>,
+        handler_callback: Box<dyn Fn(crate::NotificationResponse) + Send + Sync + 'static>,
         categories: Vec<crate::NotificationCategory>,
     ) -> Result<(), crate::Error> {
         log::info!("NotificationManagerMock::register {categories:?}");
+
+        let _ = self.handler.set(Arc::new(handler_callback));
+
+        // TODO categories? - though the rust notify library
+        // does not seem to implement replies anyways
+        // only buttons
 
         Ok(())
     }
@@ -142,16 +161,14 @@ impl NotificationManager for NotificationManagerXdg {
         }
 
         if let Some(body) = builder.body {
-            notification.body(&body);
+            notification.body(&quick_xml::escape::escape(body));
         }
 
         if let Some(title) = builder.title {
             notification.summary(&title);
         }
 
-        if let Some(subtitle) = builder.subtitle {
-            notification.subtitle(&subtitle);
-        }
+        // subtitles are not supported by xdg spec
 
         if let Some(path) = builder.image {
             match ImageReader::open(path) {
@@ -187,7 +204,7 @@ impl NotificationManager for NotificationManagerXdg {
             // does not exist in xdg spec yet: https://github.com/flatpak/xdg-desktop-portal/discussions/1495
         }
 
-        if let Some(category_id) = builder.category_id {
+        if let Some(_category_id) = builder.category_id {
             // TODO add buttons acording to template
             log::error!("buttons not implemented yet on linux");
         }
@@ -196,15 +213,57 @@ impl NotificationManager for NotificationManagerXdg {
             notification.hint(Hint::Category(xdg_category.to_string()));
         }
 
-        if let Some(payload) = &builder.user_info {
-            // seems to not exist yet - TODO investigate
-        }
+        // if let Some(payload) = &builder.user_info {
+        //     // seems to not exist yet - TODO investigate
+        // }
+
+        notification
+            .urgency(Urgency::Normal)
+            .hint(Hint::Transient(false))
+            // default ation is needed otherwise the notification is not clickable
+            .action("default", "default");
+        //.action("open", "Open");
 
         let notification_handle = notification.show_async().await?;
 
+        let user_info = builder.user_info.unwrap_or_default();
+
+        if let Some(handler) = self.handler.get() {
+            let handler_clone = handler.clone();
+            let notification_id = id.clone();
+            let cloned_user_info = user_info.clone();
+            // on_close and wait_for_action both consume notification_handle so we need to rely on this deprecated feature
+            handle_action(notification_handle.id(), move |action| {
+                let user_info = cloned_user_info.clone();
+                if let ActionResponse::Closed(reason) = action {
+                    match reason {
+                        CloseReason::Other(_) => {
+                            log::warn!("unhandles close reason {reason:?}")
+                        }
+                        CloseReason::Expired | CloseReason::CloseAction => { /* nothing */ }
+                        CloseReason::Dismissed => handler_clone(NotificationResponse {
+                            notification_id,
+                            action: crate::NotificationResponseAction::Dismiss,
+                            user_text: None,
+                            user_info,
+                        }),
+                    }
+                } else {
+                    handler_clone(NotificationResponse {
+                        notification_id,
+                        action: crate::NotificationResponseAction::Default,
+                        user_text: None,
+                        user_info,
+                    });
+                }
+            });
+        } else {
+            log::error!("no handler set");
+        }
+
         let handle = NotificationHandleXdg {
             id,
-            user_info: builder.user_info.unwrap_or_default(),
+            user_info,
             handle: Arc::new(RwLock::new(Some(notification_handle))),
         };
 

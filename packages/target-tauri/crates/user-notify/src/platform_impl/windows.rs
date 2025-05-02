@@ -367,7 +367,7 @@ impl NotificationManager for NotificationManagerWindows {
                             {title_xml}
                             {subtitle_xml}
                             {body_xml}
-                            {icon_xml}            
+                            {icon_xml}
                             {image_xml}
                         </binding>
                     </visual>
