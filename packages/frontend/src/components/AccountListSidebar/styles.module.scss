@@ -46,25 +46,27 @@
   min-width: 68px;
   overflow: hidden;
 
-  .accountList {
-    --als-avatar-size: 42px;
-    --als-avatar-margin: 5px;
-    --als-active-indicator-color: white;
-
-    margin: 0;
-    padding: 0;
-    list-style: none;
-
-    align-items: center;
-    display: flex;
-    flex-direction: column;
+  .accountListNav {
     flex-grow: 1;
     overflow-y: scroll;
-    padding-top: 2px;
-
     scrollbar-width: none;
     &::-webkit-scrollbar {
       width: 0;
+    }
+
+    .accountList {
+      --als-avatar-size: 42px;
+      --als-avatar-margin: 5px;
+      --als-active-indicator-color: white;
+
+      margin: 0;
+      padding: 0;
+      list-style: none;
+
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      padding-top: 2px;
     }
   }
 
