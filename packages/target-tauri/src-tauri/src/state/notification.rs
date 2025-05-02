@@ -104,6 +104,7 @@ impl Notifications {
                                 }
                             };
                             if let Some(main_window) = app.get_window("main") {
+                                let _ = main_window.show();
                                 let _ = main_window.set_focus();
                             }
                             result
