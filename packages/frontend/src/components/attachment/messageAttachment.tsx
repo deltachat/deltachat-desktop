@@ -151,7 +151,8 @@ export default function Attachment({
         <img
           className={classNames(
             'attachment-content',
-            isPortrait(message) ? 'portrait' : null
+            isPortrait(message) ? 'portrait' : null,
+            message.viewType === 'Sticker' ? 'sticker' : null
           )}
           src={runtime.transformBlobURL(message.file)}
           height={calculateHeight(message)}
