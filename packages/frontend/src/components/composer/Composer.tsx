@@ -449,12 +449,12 @@ const Composer = forwardRef<
   }, [settingsStore])
 
   if (chatId === null) {
-    return <div ref={ref}>Error, chatid missing</div>
+    return <section ref={ref}>Error, chatid missing</section>
   }
 
   if (isContactRequest) {
     return (
-      <div ref={ref} className='composer contact-request'>
+      <section ref={ref} className='composer contact-request'>
         <button
           className='contact-request-button delete'
           onClick={async () => {
@@ -487,13 +487,31 @@ const Composer = forwardRef<
         >
           {tx('accept')}
         </button>
-      </div>
+      </section>
     )
   } else if (!selectedChat.canSend) {
     return null
   } else {
     return (
-      <div className='composer' ref={ref}>
+      <section
+        className='composer'
+        ref={ref}
+        role='region'
+        // Note that there are other `return`s in this component,
+        // but this `aria-label` doesn't seem to apply to them.
+        //
+        // TODO a11y: when `isEditingModeActive`, we have an "Edit message"
+        // text, which we can use as the label / header.
+        aria-label={
+          (messageEditing.isEditingModeActive
+            ? window.static_translate('edit_message')
+            : window.static_translate('write_message_desktop')) +
+          // Make it clear which chat we're in.
+          // TODO probably need a proper string, with interpolation.
+          ': ' +
+          selectedChat.name
+        }
+      >
         <div className='upper-bar'>
           {!messageEditing.isEditingModeActive ? (
             <>
@@ -598,7 +616,6 @@ const Composer = forwardRef<
                       }
                 }
                 chatId={chatId}
-                chatName={selectedChat.name}
                 updateDraftText={updateDraftText}
                 onPaste={handlePaste ?? undefined}
                 onChange={setCurrentEditText}
@@ -612,7 +629,6 @@ const Composer = forwardRef<
                   messageEditing.doSendEditRequest ?? (() => {})
                 }
                 chatId={chatId}
-                chatName={selectedChat.name}
                 // We don't store the edits as "drafts" anywhere except
                 // inside the <ComposerMessageInput> component itself,
                 // so this can be a no-op.
@@ -694,7 +710,7 @@ const Composer = forwardRef<
             hideStickerPicker={messageEditing.isEditingModeActive}
           />
         )}
-      </div>
+      </section>
     )
   }
 })
