@@ -50,7 +50,7 @@ test.beforeAll(async ({ browser }) => {
   page = await browser.newPage()
   await reloadPage(page)
 
-  chatList = page.getByRole('tablist', { name: 'Chats' })
+  chatList = page.getByLabel('Chats').getByRole('tablist')
   selectedChats = chatList.getByRole('tab', { selected: true })
   // Let's stop at 9, so that we don't accidentally select "Chat 10"
   // by providing the selector "Chat 1".

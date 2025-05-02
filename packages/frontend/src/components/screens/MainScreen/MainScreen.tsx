@@ -230,7 +230,22 @@ export default function MainScreen({ accountId }: Props) {
         !messageSectionShouldBeHidden ? 'chat-view-open' : ''
       }`}
     >
-      <section className={styles.chatListAndHeader}>
+      <section
+        className={styles.chatListAndHeader}
+        role='region'
+        // TODO a11y: reconsider whether it's OK to use the "Chats" label
+        // even when we're searching for messages in one particular chat
+        // (`queryChatId`), and even despite the fact
+        // that search results, besides chats,
+        // also include messages and contacts.
+        // For the former, perhaps one could argue that `queryChatId`
+        // is just a part of the search query.
+        //
+        // TODO a11y: perhaps `pref_` is not nice, we might need
+        // a separate string.
+        // The same goes for other occurrences of `tx('pref_chats')`.
+        aria-label={tx('pref_chats')}
+      >
         <section className={styles.chatListHeader} data-tauri-drag-region>
           {showArchivedChats && (
             <>
