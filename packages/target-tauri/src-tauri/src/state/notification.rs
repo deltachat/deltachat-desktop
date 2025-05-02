@@ -103,7 +103,7 @@ impl Notifications {
                                     .await
                                 }
                             };
-                            if let Some(main_window) = app.get_window("main") { 
+                            if let Some(main_window) = app.get_window("main") {
                                 let _ = main_window.set_focus();
                             }
                             result
