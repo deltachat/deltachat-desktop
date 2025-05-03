@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- clicking info messages with contacts open the contact's profile
 - tauri: add deeplinking support and opening `.xdc` files to attach them #4956
 
 ### Changed
