@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- clicking info messages with contacts open the contact's profile
 
 ### Changed
 
