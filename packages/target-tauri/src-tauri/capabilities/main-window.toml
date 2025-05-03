@@ -17,7 +17,6 @@ permissions = [
     "store:allow-delete",
     # events - only used for drag and drop
     "core:event:allow-listen",
-    "core:event:default",
     # borderless titlebar
     "core:window:allow-toggle-maximize",
     "core:window:allow-start-dragging",
