@@ -48,6 +48,10 @@ type AppInstance = {
   msgId: number
   accountId: number
   internet_access: boolean
+  selfAddr: string
+  displayName: string
+  sendUpdateInterval: number
+  sendUpdateMaxSize: number
 }
 const open_apps: {
   [instanceId: string]: AppInstance
@@ -128,9 +132,7 @@ export default class DCWebxdc {
       p: DcOpenWebxdcParameters,
       defaultSize: Size = DEFAULT_SIZE_WEBXDC
     ) => {
-      const { webxdcInfo, chatName, displayname, accountId, href } = p
-      const addr = webxdcInfo.selfAddr
-      const { sendUpdateInterval, sendUpdateMaxSize } = webxdcInfo
+      const { webxdcInfo, chatName, accountId, href } = p
       let base64EncodedHref = ''
       const appURL = `webxdc://${accountId}.${msg_id}.webxdc`
       if (href && href !== '') {
@@ -243,19 +245,18 @@ export default class DCWebxdc {
               mimeType
             )
           } else if (filename === 'webxdc.js') {
-            const displayName = Buffer.from(
-              displayname || addr || 'unknown'
-            ).toString('base64')
-            const selfAddr = Buffer.from(addr || 'unknown@unknown').toString(
+            const displayName = Buffer.from(open_apps[id].displayName).toString(
               'base64'
             )
-
+            const selfAddr = Buffer.from(open_apps[id].selfAddr).toString(
+              'base64'
+            )
             // initializes the preload script, the actual implementation of `window.webxdc` is found there: static/webxdc-preload.js
             return makeResponse(
               Buffer.from(
                 `window.parent.webxdc_internal.setup("${selfAddr}","${displayName}", ${Number(
-                  sendUpdateInterval
-                )}, ${Number(sendUpdateMaxSize)})
+                  open_apps[id].sendUpdateInterval
+                )}, ${Number(open_apps[id].sendUpdateMaxSize)})
                 window.webxdc = window.parent.webxdc
                 window.webxdc_custom = window.parent.webxdc_custom`
               ),
@@ -318,6 +319,10 @@ export default class DCWebxdc {
         accountId,
         msgId: msg_id,
         internet_access: webxdcInfo['internetAccess'],
+        selfAddr: webxdcInfo.selfAddr || 'unknown@unknown',
+        displayName: p.displayname || webxdcInfo.selfAddr || 'unknown',
+        sendUpdateInterval: webxdcInfo.sendUpdateInterval,
+        sendUpdateMaxSize: webxdcInfo.sendUpdateMaxSize,
       }
 
       const isMac = platform() === 'darwin'
