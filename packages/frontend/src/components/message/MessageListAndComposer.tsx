@@ -121,68 +121,16 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     regularMessageInputRef
   )
 
+  // Tauri listener
   useEffect(() => {
     const unset = runtime.setDragListener(async e => {
       if (e.payload.type != 'drop') {
         return
       }
-      if (chat === null) {
-        log.warn('dropped something, but no chat is selected')
-        return
-      }
 
       // sanitize files
       const paths = e.payload.paths
-      const forbiddenPathRegEx = /DeltaChat\/.+?\.sqlite-blobs\//gi
-      const sanitized = paths
-        .filter(path => {
-          const val = !forbiddenPathRegEx.test(path.replace('\\', '/'))
-          if (!val) {
-            log.warn(
-              'Prevented a file from being sent again while dragging it out',
-              path
-            )
-          }
-          return val
-        })
-        .map(path => parse(path))
-
-      // get account
-      const acc = await BackendRemote.rpc.getSelectedAccountId()
-      if (acc === null) {
-        console.error('No account selected')
-        return
-      }
-
-      // send single file
-      if (sanitized.length == 1) {
-        const file = sanitized[0]
-        const msgViewType: Viewtype = isImage(file) ? 'Image' : 'File'
-        await addFileToDraft(fullPath(file), file.name + file.ext, msgViewType)
-      }
-      // send multiple files
-      else if (sanitized.length > 1) {
-        openDialog(ConfirmSendingFiles, {
-          sanitizedFileList: sanitized.map(path => ({
-            name: path.name,
-          })),
-          chatName: chat.name,
-          onClick: async (isConfirmed: boolean) => {
-            if (!isConfirmed) {
-              return
-            }
-
-            for (const file of sanitized) {
-              const msgViewType: Viewtype = isImage(file) ? 'Image' : 'File'
-              sendMessage(accountId, chat.id, {
-                file: fullPath(file),
-                filename: file.name + file.ext,
-                viewtype: msgViewType,
-              })
-            }
-          },
-        })
-      }
+      handleDrop(paths)
     })
     return () => {
       unset.then(u => {
@@ -192,37 +140,9 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     }
   })
 
-  const onDrop = (e: React.DragEvent<any>) => {
+  // Electron and webview listener
+  const onDrop = async (e: React.DragEvent<any>) => {
     e.preventDefault()
-    e.stopPropagation()
-    handleDrop(e.dataTransfer.files)
-  }
-  const handleDrop = async (fileList: FileList) => {
-    if (chat === null) {
-      log.warn('Dropped something, but no chat is selected')
-      return
-    }
-    const sanitizedFileList: File[] = []
-    {
-      for (let i = 0; i < fileList.length; i++) {
-        const file = fileList[i]
-        if (runtime.isDroppedFileFromOutside(file)) {
-          sanitizedFileList.push(file)
-        } else {
-          log.warn(
-            'Prevented a file from being sent again while dragging it out',
-            file.name
-          )
-        }
-      }
-    }
-
-    const fileCount = sanitizedFileList.length
-
-    if (fileCount === 0) {
-      return
-    }
-
     function writeTempFileFromFile(file: File): Promise<string> {
       if (file.size > 1e8 /* 100mb */) {
         log.warn(
@@ -253,44 +173,62 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
         reader.readAsDataURL(file)
       })
     }
+    e.stopPropagation()
 
-    if (fileCount === 1) {
-      const file = sanitizedFileList[0]
-      log.debug(`dropped image of type ${file.type}`)
-      const msgViewType: T.Viewtype = file.type.startsWith('image')
-        ? 'Image'
-        : 'File'
-
-      const path = await writeTempFileFromFile(sanitizedFileList[0])
-      await addFileToDraft(path, basename(path), msgViewType)
-      await runtime.removeTempFile(path)
+    const paths = []
+    for (const path of e.dataTransfer.files) {
+      paths.push(await writeTempFileFromFile(path))
+    }
+    handleDrop(paths)
+  }
+  const handleDrop = async (paths: string[]) => {
+    if (chat === null) {
+      log.warn('dropped something, but no chat is selected')
       return
     }
-
-    // This is a desktop specific "hack" to support sending multiple attachments at once.
-    openDialog(ConfirmSendingFiles, {
-      sanitizedFileList,
-      chatName: chat.name,
-      onClick: async (isConfirmed: boolean) => {
-        if (!isConfirmed) {
-          return
+    const forbiddenPathRegEx = /DeltaChat\/.+?\.sqlite-blobs\//gi
+    const sanitized = paths
+      .filter(path => {
+        const val = !forbiddenPathRegEx.test(path.replace('\\', '/'))
+        if (!val) {
+          log.warn(
+            'Prevented a file from being sent again while dragging it out',
+            path
+          )
         }
+        return val
+      })
+      .map(path => parse(path))
 
-        for (const file of sanitizedFileList) {
-          const path = await writeTempFileFromFile(file)
-          const msgViewType: T.Viewtype = file.type.startsWith('image')
-            ? 'Image'
-            : 'File'
-          await sendMessage(accountId, chat.id, {
-            file: path,
-            filename: basename(path),
-            viewtype: msgViewType,
-          })
-          // start sending other files, don't wait until last file is sent
-          runtime.removeTempFile(path)
-        }
-      },
-    })
+    // send single file
+    if (sanitized.length == 1) {
+      const file = sanitized[0]
+      const msgViewType: Viewtype = isImage(file) ? 'Image' : 'File'
+      await addFileToDraft(fullPath(file), file.name + file.ext, msgViewType)
+    }
+    // send multiple files
+    else if (sanitized.length > 1) {
+      openDialog(ConfirmSendingFiles, {
+        sanitizedFileList: sanitized.map(path => ({
+          name: path.name,
+        })),
+        chatName: chat.name,
+        onClick: async (isConfirmed: boolean) => {
+          if (!isConfirmed) {
+            return
+          }
+
+          for (const file of sanitized) {
+            const msgViewType: Viewtype = isImage(file) ? 'Image' : 'File'
+            sendMessage(accountId, chat.id, {
+              file: fullPath(file),
+              filename: file.name + file.ext,
+              viewtype: msgViewType,
+            })
+          }
+        },
+      })
+    }
   }
 
   const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
