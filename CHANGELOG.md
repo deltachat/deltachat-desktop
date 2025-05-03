@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+- webxdc apps sometimes having wrong `selfAddr`, resulting in apps treating the same user as a new one (e.g. the "Poll" app would allow you to vote twice) #5068
 - accessibility: add accessible labels and descriptions to more items #5050, #5055
 - accessibility: add `role='tablist'` for accounts list #5040
 - accessibility: add alt text for QR invite code image
