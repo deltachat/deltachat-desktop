@@ -97,7 +97,7 @@ const DEFAULT_SIZE_MAP: Size = {
 }
 
 export default class DCWebxdc {
-  constructor(private controller: DeltaChatController) {
+  constructor(private readonly controller: DeltaChatController) {
     // icon protocol
     app.whenReady().then(() => {
       protocol.handle('webxdc-icon', async request => {
