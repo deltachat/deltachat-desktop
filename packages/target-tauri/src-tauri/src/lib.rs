@@ -548,7 +548,7 @@ pub fn run() -> i32 {
     let cloned_inner_appstate = inner_appstate.clone();
 
     #[allow(clippy::single_match)]
-    let exit_code = app.run_return(|app_handle, run_event| match run_event {
+    let exit_code = app.run_return(move |app_handle, run_event| match run_event {
         // tauri::RunEvent::ExitRequested { code, api, .. } => {}
         #[cfg(target_os = "macos")]
         tauri::RunEvent::Opened { urls } => {
