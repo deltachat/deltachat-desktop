@@ -508,15 +508,11 @@ pub fn run() -> i32 {
         let app_clone = app.handle().clone();
         tauri::async_runtime::spawn_blocking(move || {
             let deeplink_rx = deeplink_rx;
-            loop {
-                if let Ok(deeplink) = deeplink_rx.recv() {
-                    if let Err(err) =
-                        block_on(handle_deep_link(&app_clone, deeplink.cwd, deeplink.content))
-                    {
-                        log::error!("error handling deeplink: {err:?}");
-                    }
-                } else {
-                    break;
+            while let Ok(deeplink) = deeplink_rx.recv() {
+                if let Err(err) =
+                    block_on(handle_deep_link(&app_clone, deeplink.cwd, deeplink.content))
+                {
+                    log::error!("error handling deeplink: {err:?}");
                 }
             }
         });

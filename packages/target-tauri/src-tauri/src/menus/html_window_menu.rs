@@ -43,7 +43,7 @@ impl TryFrom<&tauri::menu::MenuId> for HtmlWindowMenuAction {
                 .last()
                 .context("could not split menu item name")?
                 .split('|');
-            if let (Some(id), Some(variant)) = (id_and_variant.nth(0), id_and_variant.last()) {
+            if let (Some(id), Some(variant)) = (id_and_variant.nth(0), id_and_variant.next_back()) {
                 Ok(HtmlWindowMenuAction {
                     window_id: id.to_owned(),
                     action: HtmlWindowMenuActionVariant::from_str(variant)?,
