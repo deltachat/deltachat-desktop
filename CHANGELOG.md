@@ -3,10 +3,18 @@
 ## [Unreleased][unreleased]
 
 ### Added
-- clicking info messages with contacts open the contact's profile
-- tauri: add deeplinking support and opening `.xdc` files to attach them #4956
 
 ### Changed
+
+### Fixed
+
+<a id="1_57_1"></a>
+
+## [1.57.1] - 2025-05-03
+
+### Added
+- clicking info messages with contacts open the contact's profile
+- tauri: add deeplinking support and opening `.xdc` files to attach them #4956
 
 ### Fixed
 - webxdc apps sometimes having wrong `selfAddr`, resulting in apps treating the same user as a new one (e.g. the "Poll" app would allow you to vote twice) #5068
@@ -3410,7 +3418,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.57.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.57.1...HEAD
+
+[1.57.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.57.0...v1.57.1
 
 [1.57.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.56.0...v1.57.0
 
