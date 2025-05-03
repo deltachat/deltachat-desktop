@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- tauri: add deeplinking support and opening `.xdc` files to attach them #4956
 
 ### Changed
 
