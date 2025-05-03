@@ -4,6 +4,7 @@
 
 ### Added
 - clicking info messages with contacts open the contact's profile
+- tauri: add deeplinking support and opening `.xdc` files to attach them #4956
 
 ### Changed
 
@@ -14,6 +15,7 @@
 - accessibility: improve tabbing behavior of searh results
 - accessibility: announce when a message gets edited and outgoing message delivery status changes (`aria-live`)
 - reduce voice messages to a lower bitrate #4977
+- tauri: improve security #4959
 
 <a id="1_57_0"></a>
 

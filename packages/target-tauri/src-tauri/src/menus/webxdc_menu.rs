@@ -51,7 +51,7 @@ impl TryFrom<&tauri::menu::MenuId> for WebxdcMenuAction {
                 .last()
                 .context("could not split menu item name")?
                 .split('|');
-            if let (Some(id), Some(variant)) = (id_and_variant.nth(0), id_and_variant.last()) {
+            if let (Some(id), Some(variant)) = (id_and_variant.nth(0), id_and_variant.next_back()) {
                 Ok(WebxdcMenuAction {
                     window_id: id.to_owned(),
                     action: WebxdcMenuActionVariant::from_str(variant)?,

@@ -1,23 +1,34 @@
-use std::time::SystemTime;
+use std::{path::PathBuf, str::FromStr, time::SystemTime};
 
 use anyhow::Context;
+use cli::parse_cli_options_from_args;
 use clipboard::copy_image_to_clipboard;
 
+use deeplink::handle_deep_link;
 #[cfg(desktop)]
 use menus::{handle_menu_event, main_menu::create_main_menu};
 
 use resume_from_sleep::start_resume_after_sleep_detector;
+use run_config::RunConfig;
 use settings::{
     load_and_apply_desktop_settings_on_startup, CONFIG_FILE, MINIMIZE_TO_TRAY,
     MINIMIZE_TO_TRAY_DEFAULT,
 };
 use state::{
-    app::AppState, deltachat::DeltaChatAppState, html_email_instances::HtmlEmailInstancesState,
-    main_window_channels::MainWindowChannels, menu_manager::MenuManager,
-    translations::TranslationState, tray_manager::TrayManager,
+    app::{AppState, InnerAppState},
+    deltachat::DeltaChatAppState,
+    html_email_instances::HtmlEmailInstancesState,
+    main_window_channels::MainWindowChannels,
+    menu_manager::MenuManager,
+    translations::TranslationState,
+    tray_manager::TrayManager,
     webxdc_instances::WebxdcInstancesState,
 };
-use tauri::{async_runtime::block_on, Manager, WebviewUrl, WebviewWindowBuilder};
+
+use tauri::{
+    async_runtime::{block_on, spawn},
+    AppHandle, Manager, WebviewUrl, WebviewWindowBuilder,
+};
 
 use tauri_plugin_log::{Target, TargetKind};
 
@@ -29,6 +40,7 @@ mod blobs;
 #[cfg(desktop)]
 mod cli;
 mod clipboard;
+mod deeplink;
 mod file_dialogs;
 mod help_window;
 mod html_window;
@@ -72,31 +84,42 @@ fn deltachat_jsonrpc_request(
 }
 
 #[tauri::command]
-fn ui_ready(state: tauri::State<AppState>) -> Result<(), String> {
+async fn ui_ready(state: tauri::State<'_, AppState>) -> Result<(), String> {
     // TODO: theme update if theme was set via cli
 
-    match state.inner.lock() {
-        Ok(mut lock) => {
-            lock.ui_ready = true;
-        }
-        Err(err) => return Err(format!("failed to aquire lock {err:#}")),
-    };
-
+    let mut lock = state.inner.lock().await;
+    lock.ui_ready = true;
     state.log_duration_since_startup("ui_ready");
     Ok(())
 }
 
 #[tauri::command]
-fn ui_frontend_ready(state: tauri::State<AppState>) -> Result<(), String> {
-    // TODO: deeplinking: -> send url to frontend
+async fn ui_frontend_ready(
+    app: AppHandle,
+    rc: tauri::State<'_, RunConfig>,
+    state: tauri::State<'_, AppState>,
+) -> Result<(), String> {
+    let mut lock = state.inner.lock().await;
 
-    match state.inner.lock() {
-        Ok(mut lock) => {
-            lock.ui_frontend_ready = true;
+    if !lock.ui_frontend_ready {
+        // don't run again on reload
+        if let Some(deeplink_or_xdc) = lock.deeplink.take().or(rc.deeplink.clone()) {
+            let app_clone = app.clone();
+            let deeplink_or_xdc = deeplink_or_xdc.to_owned();
+            spawn(async move {
+                if let Err(err) = handle_deep_link(&app_clone, None, deeplink_or_xdc).await {
+                    log::error!("error handling deeplink: {err:?}");
+                }
+            });
         }
-        Err(err) => return Err(format!("failed to aquire lock {err:#}")),
-    };
+    }
+
+    lock.ui_frontend_ready = true;
+
     state.log_duration_since_startup("ui_frontend_ready");
+
+    deeplink::register();
+
     Ok(())
 }
 
@@ -106,7 +129,7 @@ fn get_current_logfile(state: tauri::State<AppState>) -> String {
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
-pub fn run() {
+pub fn run() -> i32 {
     let startup_timestamp = SystemTime::now();
 
     #[cfg(desktop)]
@@ -121,6 +144,10 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init());
 
     #[cfg(desktop)]
+    let (deeplink_tx, deeplink_rx) =
+        std::sync::mpsc::sync_channel::<deeplink::DeepLinkInvocation>(4);
+
+    #[cfg(desktop)]
     {
         builder = builder
             .plugin(
@@ -131,9 +158,26 @@ pub fn run() {
                     .with_filter(|label| !label.starts_with("webxdc:"))
                     .build(),
             )
-            .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
+            .plugin(tauri_plugin_single_instance::init(move |app, args, cwd| {
                 log::info!("second instance launched, focusing the original instance instead");
-                // TODO: handle open url case
+
+                let cwd = PathBuf::from_str(&cwd).unwrap();
+                log::debug!("tauri_plugin_single_instance {args:?} {cwd:?}");
+
+                let options = parse_cli_options_from_args(args);
+                if let Some(deeplink) = options.deeplink {
+                    // just calling the method here was unreliable, so using a channel now
+                    //
+                    // how unreliable was it?:
+                    // it did not react on the first call and then always took the data of the previous call
+                    if let Err(err) = deeplink_tx.send(deeplink::DeepLinkInvocation {
+                        content: deeplink,
+                        cwd: Some(cwd),
+                    }) {
+                        log::error!("deeplink_tx: send error: {err:?}");
+                    }
+                }
+
                 let window = app.get_webview_window("main").expect("no main window");
                 window
                     .show()
@@ -147,6 +191,11 @@ pub fn run() {
                     .ok();
             }));
     }
+
+    // sepcified here, so the open handler does not rely on appstate to be ready
+    // (that it can be used "outside" of tauri)
+    let inner_appstate = InnerAppState::new();
+    let cloned_inner_appstate = inner_appstate.clone();
 
     let app = builder
         .invoke_handler(tauri::generate_handler![
@@ -300,6 +349,7 @@ pub fn run() {
                 // why do we use debug here at the moment?
                 // because the message "[DEBUG][portmapper] failed to get a port mapping deadline has elapsed" looks like important
                 // info for debugging add backup transfer feature. - so better be safe and set it to debug for now.
+                .level_for("tao", log::LevelFilter::Trace)
                 .level_for("portmapper", log::LevelFilter::Debug);
 
             if run_config.log_debug {
@@ -343,6 +393,7 @@ pub fn run() {
 
             app.manage(tauri::async_runtime::block_on(AppState::try_new(
                 app,
+                cloned_inner_appstate,
                 startup_timestamp,
             ))?);
             app.manage(MainWindowChannels::new());
@@ -452,6 +503,21 @@ pub fn run() {
         })
         .expect("error while building tauri application");
 
+    #[cfg(desktop)]
+    {
+        let app_clone = app.handle().clone();
+        tauri::async_runtime::spawn_blocking(move || {
+            let deeplink_rx = deeplink_rx;
+            while let Ok(deeplink) = deeplink_rx.recv() {
+                if let Err(err) =
+                    block_on(handle_deep_link(&app_clone, deeplink.cwd, deeplink.content))
+                {
+                    log::error!("error handling deeplink: {err:?}");
+                }
+            }
+        });
+    }
+
     let app_handle = app.handle().clone();
     tauri::async_runtime::spawn(async move {
         tokio::signal::ctrl_c()
@@ -478,9 +544,35 @@ pub fn run() {
         app_handle.exit(0);
     });
 
+    #[cfg(target_os = "macos")]
+    let cloned_inner_appstate = inner_appstate.clone();
+
     #[allow(clippy::single_match)]
-    app.run(|app_handle, run_event| match run_event {
+    let exit_code = app.run_return(move |app_handle, run_event| match run_event {
         // tauri::RunEvent::ExitRequested { code, api, .. } => {}
+        #[cfg(target_os = "macos")]
+        tauri::RunEvent::Opened { urls } => {
+            if let Some(url) = urls.get(0).map(|s| s.to_string()) {
+                match cloned_inner_appstate.try_lock() {
+                    Ok(mut lock) => {
+                        if !lock.ui_frontend_ready {
+                            lock.deeplink.replace(url);
+                        } else {
+                            drop(lock);
+                            let app_clone = app_handle.clone();
+                            spawn(async move {
+                                if let Err(err) = handle_deep_link(&app_clone, None, url).await {
+                                    log::error!("error handling deeplink: {err:?}");
+                                }
+                            });
+                        }
+                    }
+                    Err(err) => {
+                        log::error!("failed to aquire lock on AppState:{err:?}")
+                    }
+                }
+            }
+        }
         #[cfg(target_os = "macos")]
         tauri::RunEvent::Reopen { .. } => {
             // handle clicks on dock on macOS (because on macOS main window never really closes)
@@ -504,6 +596,7 @@ pub fn run() {
         }
         _ => {}
     });
+    exit_code
 }
 
 async fn cleanup(app_handle: &tauri::AppHandle) {

@@ -60,6 +60,30 @@
       "minimumSystemVersion": "13.0",
       "developmentTeam": "8Y86453UA8", // merlinux,
       "frameworks": ["SystemConfiguration"] // needed for system configuration crate, which is used by iroh-net
+    },
+    "macOS": {
+      "entitlements": "../bundle_resources/Entitlements.plist",
+      "files": { "Resources/xdc.icns": "../bundle_resources/xdc.icns" }
+    },
+    "windows": {
+      "nsis": {
+        "installerHooks": "./windows/hooks.nsi"
+      }
+    },
+    "linux": {
+      "rpm": {
+        "desktopTemplate": "./linux/desktop.template",
+        "files": {
+          "/usr/share/mime/packages/chat.delta.desktop.tauri.xml": "./linux/mime.xml" // mime association for xdc file
+        }
+      },
+      "deb": {
+        // this is also used by the nix package
+        "desktopTemplate": "./linux/desktop.template",
+        "files": {
+          "/usr/share/mime/packages/chat.delta.desktop.tauri.xml": "./linux/mime.xml" // mime association for xdc file
+        }
+      }
     }
   }
 }
