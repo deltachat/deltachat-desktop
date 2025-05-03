@@ -1792,6 +1792,7 @@ dependencies = [
  "serde",
  "serde_json",
  "strum 0.27.1",
+ "tao",
  "tauri",
  "tauri-build",
  "tauri-plugin-autostart",
@@ -8453,6 +8454,7 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-single-instance"
 version = "2.2.3"
+source = "git+https://github.com/Simon-Laux/plugins-workspace?branch=simon%2Ffix-macos-cwd-single-instance#231c3ff0620b0546609733fb1e15b88fe9f29c34"
 dependencies = [
  "serde",
  "serde_json",
