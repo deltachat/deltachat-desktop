@@ -4,16 +4,19 @@ This is required for resleasing and for testing features that only work within s
 these can be features that need extra capabilies or the local push notifications api (UserNotification).
 
 Find out the code signing id with:
+
 ```sh
 security find-identity -v -p codesigning
 ```
 
 Build with Code Signing:
+
 ```sh
 APPLE_SIGNING_IDENTITY=<code signing id> pnpm tauri build
 ```
 
 Validate that it worked (no output means success):
+
 ```sh
 # when you are at project root
 codesign -v target/release/bundle/macos/deltachat-tauri.app

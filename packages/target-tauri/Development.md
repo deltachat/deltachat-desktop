@@ -40,7 +40,6 @@ run `cargo update` in `packages/target-tauri/src-tauri`.
 
 - in devmode autostart is disabled by default, because the result would be unexpected for developers. In release mode this option is enabled by default.
 
-
 ## How to debug with CodeLLDB on packaged MacOS app
 
 Sometimes you need to test the MacOS app in it's packaged/bundled and signed form,
@@ -49,6 +48,7 @@ because some features are only available then (notifications, universal app link
 Requirement is that you have access to a valid signing and provisioning profile (easist way is to do this via the apple developer portal websites).
 
 add this to `packages/target-tauri/bundle_resources/Entitlements.plist`:
+
 ```xml
 <!-- for debugging, remove again before merging -->
 <key>com.apple.security.cs.allow-dyld-environment-variables</key>
