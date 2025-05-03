@@ -2,6 +2,7 @@
 mod mac;
 
 /// For uri schemes
+#[allow(unused_variables)]
 pub fn register_as_default_handler(url_scheme: &str) {
     #[cfg(target_os = "macos")]
     {
