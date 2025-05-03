@@ -170,11 +170,11 @@ export default class DCWebxdc {
         await this.rpc.getWebxdcBlob(accountId, msg_id, icon),
         'base64'
       )
-      const ses = sessionFromAccountId(accountId)
 
       // TODO intercept / deny network access - CSP should probably be disabled for testing
 
       if (!accounts_sessions.includes(accountId)) {
+        const ses = sessionFromAccountId(accountId)
         accounts_sessions.push(accountId)
         ses.protocol.handle('webxdc', (...args) =>
           webxdcProtocolHandler(this.rpc, ...args)
