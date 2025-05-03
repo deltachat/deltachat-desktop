@@ -318,7 +318,8 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     ? getBackgroundImageStyle(settingsStore.desktopSettings)
     : {}
 
-  const isElectron = typeof navigator === 'object' && navigator.userAgent.includes('Electron');
+  const isElectron =
+    typeof navigator === 'object' && navigator.userAgent.includes('Electron')
   return (
     <div
       role='tabpanel'
