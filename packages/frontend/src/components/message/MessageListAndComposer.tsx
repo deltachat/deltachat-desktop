@@ -318,6 +318,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     ? getBackgroundImageStyle(settingsStore.desktopSettings)
     : {}
 
+  const isElectron = typeof navigator === 'object' && navigator.userAgent.includes('Electron');
   return (
     <div
       role='tabpanel'
@@ -335,7 +336,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
       className='message-list-and-composer'
       style={style}
       ref={conversationRef}
-      onDrop={onDrop.bind({ props: { chat } })}
+      onDrop={isElectron ? onDrop.bind({ props: { chat } }) : undefined}
       onDragOver={onDragOver}
     >
       <div className='message-list-and-composer__message-list'>
