@@ -74,10 +74,10 @@
       width: 0;
       flex-grow: 1;
     }
-    :global(.navbar-heading--button) {
-      @include mixins.button-reset;
-    }
     :global(.navbar-heading) {
+      position: relative;
+
+      width: fit-content;
       // See `.chatNavbarHeadingWrapper`.
       max-width: 100%;
 
@@ -91,6 +91,13 @@
       font-size: 18px;
       font-weight: bold;
       overflow: hidden;
+    }
+    :global(.navbar-heading-chat-info-button) {
+      // Fill the parent, overlay the siblings.
+      position: absolute;
+      inset: 0;
+      background-color: transparent;
+      border: none;
     }
 
     :global(.views) {
