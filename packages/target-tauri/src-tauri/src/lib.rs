@@ -20,10 +20,10 @@ use state::{
     html_email_instances::HtmlEmailInstancesState,
     main_window_channels::MainWindowChannels,
     menu_manager::MenuManager,
+    notification::Notifications,
     translations::TranslationState,
     tray_manager::TrayManager,
     webxdc_instances::WebxdcInstancesState,
-    notification::Notifications,
 };
 
 use tauri::{
@@ -371,11 +371,10 @@ pub fn run() -> i32 {
                 // why do we use debug here at the moment?
                 // because the message "[DEBUG][portmapper] failed to get a port mapping deadline has elapsed" looks like important
                 // info for debugging add backup transfer feature. - so better be safe and set it to debug for now.
-                .level_for("tao", log::LevelFilter::Trace)
-                .level_for("portmapper", log::LevelFilter::Debug);
-                .level_for("portmapper", log::LevelFilter::Debug);
+                // .level_for("tao", log::LevelFilter::Trace)
                 // .level_for("webview::JS::render", log::LevelFilter::Error)
                 // .level_for("webview::JS::renderer", log::LevelFilter::Error);
+                .level_for("portmapper", log::LevelFilter::Debug);
 
             if run_config.log_debug {
                 logger_builder = logger_builder.level(log::LevelFilter::Debug);
