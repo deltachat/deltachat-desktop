@@ -353,7 +353,7 @@ impl NotificationManager for NotificationManagerWindows {
             if let Some(notification_protocol) = self.notification_protocol.as_ref() {
                 let launch_url = encode_deeplink(
                     notification_protocol,
-                    NotificationResponse {
+                    &NotificationResponse {
                         notification_id: id.clone(),
                         action: NotificationResponseAction::Default,
                         user_text: None,
@@ -425,7 +425,7 @@ impl NotificationManager for NotificationManagerWindows {
     }
 }
 
-fn encode_deeplink(scheme: &str, action: NotificationResponse) -> String {
+fn encode_deeplink(scheme: &str, action: &NotificationResponse) -> String {
     let NotificationResponse {
         notification_id,
         action,
@@ -479,4 +479,25 @@ pub fn decode_deeplink(link: &str) -> Result<NotificationResponse, Error> {
         user_text: None,
         user_info,
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn encode_decode() {
+        let input = NotificationResponse {
+            action: NotificationResponseAction::Default,
+            notification_id: "abcd123-abc12".to_string(),
+            user_info: HashMap::from([
+                ("a".to_string(), "b".to_string()),
+                ("c".to_string(), "d".to_string()),
+            ]),
+            user_text: None,
+        };
+        let encoded = encode_deeplink("dcnotification", &input);
+        let output = decode_deeplink(&encoded);
+        assert_eq!(input, output.unwrap());
+    }
 }
