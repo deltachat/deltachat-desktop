@@ -15,6 +15,7 @@
 - accessibility: add alt text for QR invite code image
 - accessibility: improve tabbing behavior of searh results
 - accessibility: announce when a message gets edited and outgoing message delivery status changes (`aria-live`)
+- accessibility: don't redundantly announce "Chat property page" when the focus enters the chat
 - reduce voice messages to a lower bitrate #4977
 - tauri: improve security #4959
 
