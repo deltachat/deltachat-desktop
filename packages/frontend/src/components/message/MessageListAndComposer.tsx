@@ -123,6 +123,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
 
   // Tauri listener
   useEffect(() => {
+    console.log("drag: register")
     const unset = runtime.setDragListener(async e => {
       if (e.payload.type != 'drop') {
         return
@@ -134,7 +135,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     })
     return () => {
       unset.then(u => {
-        log.info('dragListenerUnset')
+        log.info('drag: unregister')
         u()
       })
     }
@@ -142,7 +143,10 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
 
   // Electron and webview listener
   const onDrop = async (e: React.DragEvent<any>) => {
+    console.log("drag: electron drop")
     e.preventDefault()
+    e.stopPropagation()
+
     function writeTempFileFromFile(file: File): Promise<string> {
       if (file.size > 1e8 /* 100mb */) {
         log.warn(
@@ -173,7 +177,6 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
         reader.readAsDataURL(file)
       })
     }
-    e.stopPropagation()
 
     const paths = []
     for (const path of e.dataTransfer.files) {
@@ -181,7 +184,9 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     }
     handleDrop(paths)
   }
+
   const handleDrop = async (paths: string[]) => {
+    console.log("drag: handling drop: ", paths)
     if (chat === null) {
       log.warn('dropped something, but no chat is selected')
       return
