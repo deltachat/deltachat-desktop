@@ -472,8 +472,8 @@ pub fn decode_deeplink(link: &str) -> Result<NotificationResponse, Error> {
     Ok(NotificationResponse {
         notification_id: url.host().map(|host| host.to_string()).unwrap_or_default(),
         action: match url.path().to_string().as_str() {
-            "__default__" => NotificationResponseAction::Default,
-            "__dismiss__" => NotificationResponseAction::Dismiss,
+            "/__default__" => NotificationResponseAction::Default,
+            "/__dismiss__" => NotificationResponseAction::Dismiss,
             action => NotificationResponseAction::Other(action.to_owned()),
         },
         user_text: None,
