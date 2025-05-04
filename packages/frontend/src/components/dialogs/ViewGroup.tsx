@@ -405,7 +405,10 @@ function ViewGroupInner(
                 </div>
               </>
             )}
-            <div className='group-separator'>
+            <div
+              id='view-group-members-recipients-title'
+              className='group-separator'
+            >
               {!isBroadcast
                 ? tx('n_members', group.contactIds.length.toString(), {
                     quantity: group.contactIds.length,
@@ -444,12 +447,20 @@ function ViewGroupInner(
                     setProfileContact(contact)
                   }}
                   onRemoveClick={showRemoveGroupMemberConfirmationDialog}
+                  olElementAttrs={{
+                    'aria-labelledby': 'view-group-members-recipients-title',
+                  }}
                 />
               </RovingTabindexProvider>
             </div>
             {pastContacts.length > 0 && (
               <>
-                <div className='group-separator'>{tx('past_members')}</div>
+                <div
+                  id='view-group-past-members-title'
+                  className='group-separator'
+                >
+                  {tx('past_members')}
+                </div>
                 <div
                   className='group-member-contact-list-wrapper'
                   ref={groupPastMemberContactListWrapperRef}
@@ -465,6 +476,9 @@ function ViewGroupInner(
                           return
                         }
                         setProfileContact(contact)
+                      }}
+                      olElementAttrs={{
+                        'aria-labelledby': 'view-group-past-members-title',
                       }}
                     />
                   </RovingTabindexProvider>
