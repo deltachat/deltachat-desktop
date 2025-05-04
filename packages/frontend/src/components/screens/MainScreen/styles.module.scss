@@ -91,6 +91,18 @@
       font-size: 18px;
       font-weight: bold;
       overflow: hidden;
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-size: inherit;
+        font-weight: inherit;
+        display: block;
+        margin: 0;
+      }
     }
     :global(.navbar-heading-chat-info-button) {
       // Fill the parent, overlay the siblings.
