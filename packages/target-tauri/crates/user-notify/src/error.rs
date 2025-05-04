@@ -35,6 +35,12 @@ pub enum Error {
     #[cfg(target_os = "windows")]
     #[error(transparent)]
     XmlEscape(#[from] quick_xml::escape::EscapeError),
+    #[cfg(target_os = "windows")]
+    #[error(transparent)]
+    UrlParse(#[from] url::ParseError),
+    #[cfg(target_os = "windows")]
+    #[error(transparent)]
+    Base64Decode(#[from] base64::DecodeError),
     #[cfg(any(
         target_os = "linux",
         target_os = "dragonfly",

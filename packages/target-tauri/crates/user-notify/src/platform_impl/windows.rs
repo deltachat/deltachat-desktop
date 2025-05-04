@@ -20,8 +20,11 @@ use windows::{
 use windows_collections::IVectorView;
 
 use crate::{
-    Error, NotificationBuilder, NotificationHandle, NotificationManager, NotificationResponseAction,
+    Error, NotificationBuilder, NotificationHandle, NotificationManager, NotificationResponse,
+    NotificationResponseAction,
 };
+
+use base64::Engine;
 
 #[derive(Debug, Clone)]
 pub struct NotificationHandleWindows {
@@ -153,7 +156,7 @@ impl NotificationManagerWindows {
                     notification_id: notification_id_clone.clone(),
                     action: action
                         .map(|action| {
-                            if action.starts_with("dc-notification://default") {
+                            if action.starts_with("dcnotification://default") {
                                 NotificationResponseAction::Default
                             } else {
                                 NotificationResponseAction::Other(action)
@@ -346,16 +349,21 @@ impl NotificationManager for NotificationManagerWindows {
             })
             .unwrap_or("{}".to_string());
 
-        let launch_attribute = quick_xml::escape::escape(&user_info_string);
-        let launch_options = if let Some(notification_protocol) =
-            self.notification_protocol.as_ref()
-        {
-            format!(
-                r#"launch="{notification_protocol}://default/{launch_attribute}" activationType="protocol""#
-            )
-        } else {
-            "".to_owned()
-        };
+        let launch_options =
+            if let Some(notification_protocol) = self.notification_protocol.as_ref() {
+                let launch_url = encode_deeplink(
+                    notification_protocol,
+                    NotificationResponse {
+                        notification_id: id.clone(),
+                        action: NotificationResponseAction::Default,
+                        user_text: None,
+                        user_info: builder.user_info.clone().unwrap_or_default(),
+                    },
+                );
+                format!(r#"launch="{launch_url}" activationType="protocol""#)
+            } else {
+                "".to_owned()
+            };
 
         let toast_xml = XmlDocument::new()?;
         // https://learn.microsoft.com/de-de/uwp/schemas/tiles/toastschema/schema-root
@@ -415,4 +423,60 @@ impl NotificationManager for NotificationManagerWindows {
 
         Ok(Box::new(handle) as Box<dyn NotificationHandle>)
     }
+}
+
+fn encode_deeplink(scheme: &str, action: NotificationResponse) -> String {
+    let NotificationResponse {
+        notification_id,
+        action,
+        user_info,
+        ..
+    } = action;
+
+    // TODO: dedup code to not do the encoding here again
+    let user_info_string = match serde_json::to_string(&user_info) {
+        Ok(user_info_string) => Some(user_info_string),
+        Err(err) => {
+            log::error!("failed to serialize user_info: ({user_info:?}) {err:?}");
+            None
+        }
+    }
+    .unwrap_or("{}".to_string());
+
+    let launch_attribute = base64::prelude::BASE64_STANDARD.encode(&user_info_string);
+
+    let action_string = match &action {
+        NotificationResponseAction::Default => "__default__",
+        NotificationResponseAction::Dismiss => "__dismiss__",
+        NotificationResponseAction::Other(action) => action.as_ref(),
+    };
+
+    format!("{scheme}://{notification_id}/{action_string}?{launch_attribute}")
+}
+
+pub fn decode_deeplink(link: &str) -> Result<NotificationResponse, Error> {
+    let url = url::Url::parse(link)?;
+
+    let user_info: HashMap<String, String> = match url.query() {
+        None => {
+            log::error!("notification deeplink has no user info");
+            HashMap::new()
+        }
+        Some(base64_userinfo) => {
+            let user_info_str = base64::prelude::BASE64_STANDARD.decode(base64_userinfo)?;
+            serde_json::from_slice(user_info_str.as_slice())
+                .map_err(Error::FailedToParseUserInfo)?
+        }
+    };
+
+    Ok(NotificationResponse {
+        notification_id: url.host().map(|host| host.to_string()).unwrap_or_default(),
+        action: match url.path().to_string().as_str() {
+            "__default__" => NotificationResponseAction::Default,
+            "__dismiss__" => NotificationResponseAction::Dismiss,
+            action => NotificationResponseAction::Other(action.to_owned()),
+        },
+        user_text: None,
+        user_info,
+    })
 }
