@@ -503,13 +503,13 @@ const Composer = forwardRef<
         // TODO a11y: when `isEditingModeActive`, we have an "Edit message"
         // text, which we can use as the label / header.
         aria-label={
-          (messageEditing.isEditingModeActive
+          messageEditing.isEditingModeActive
             ? window.static_translate('edit_message')
-            : window.static_translate('write_message_desktop')) +
-          // Make it clear which chat we're in.
-          // TODO probably need a proper string, with interpolation.
-          ': ' +
-          selectedChat.name
+            : window.static_translate('write_message_desktop')
+          // We could also add chat name here to make it extra clear
+          // which chat we're in,
+          // but the "Chat" region label
+          // (`id='chat-section-heading'`) is probably enough.
         }
       >
         <div className='upper-bar'>
