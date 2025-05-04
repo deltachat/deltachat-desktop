@@ -50,6 +50,16 @@ pub async fn handle_deep_link(
         }
     }
 
+    #[cfg(target_os = "windows")]
+    if deeplink_or_xdc.starts_with("dcnotification") {
+        use user_notify::windows::decode_deeplink;
+
+        let response = decode_deeplink(&deeplink_or_xdc)?;
+        crate::Notifications::handle_response(app, response).await;
+
+        return Ok(());
+    }
+
     if deeplink_or_xdc.ends_with(".xdc") {
         let mut path = if potential_scheme == Some("file".to_owned()) {
             let path = deeplink_or_xdc
