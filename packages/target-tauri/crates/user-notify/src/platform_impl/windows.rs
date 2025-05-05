@@ -155,12 +155,13 @@ impl NotificationManagerWindows {
                 handler(crate::NotificationResponse {
                     notification_id: notification_id_clone.clone(),
                     action: action
-                        .map(|action| {
-                            if action.starts_with("dcnotification://default") {
-                                NotificationResponseAction::Default
-                            } else {
-                                NotificationResponseAction::Other(action)
-                            }
+                        .and_then(|action| {
+                            decode_deeplink(&action)
+                                .map(|response| response.action)
+                                .inspect_err(|err| {
+                                    log::error!("failed to extract action from {action}: {err}")
+                                })
+                                .ok()
                         })
                         .unwrap_or(NotificationResponseAction::Default),
                     user_text: None,
