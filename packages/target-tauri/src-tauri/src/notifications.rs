@@ -91,11 +91,10 @@ pub(crate) async fn show_notification(
         },
     };
 
-    let mut user_info = HashMap::new();
-    user_info.insert(
+    let user_info = HashMap::from([(
         NOTIFICATION_PAYLOAD_KEY.to_owned(),
         serde_json::to_string(&notification_kind)?,
-    );
+    )]);
 
     notification = notification
         .title(&title)
