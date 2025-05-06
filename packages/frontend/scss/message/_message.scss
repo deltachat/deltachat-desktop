@@ -13,6 +13,7 @@
   display: inline-flex;
   flex-direction: row;
   align-items: stretch;
+  max-width: 75%;
 
   & > .author-avatar {
     @include button-reset;
@@ -385,10 +386,8 @@
   }
 }
 
-// Spec: container > 593px
 @media (min-width: 926px) {
   .message {
-    max-width: 75%;
 
     &.incoming {
       margin-right: auto;
