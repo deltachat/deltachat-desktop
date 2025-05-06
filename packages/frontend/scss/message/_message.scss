@@ -400,7 +400,7 @@
   }
 }
 
-@media (max-width: 925px) {
+@media (max-width: 980px) {
   .message {
     max-width: 100%;
 
@@ -411,12 +411,8 @@
     &.outgoing {
       margin-left: auto;
     }
-    /**
-     * on small screens the limiting factor is the
-     * width not the height (except for stickers)
-     */
     img.portrait:not(.sticker) {
-      height: 300px;
+      height: 275px;
     }
   }
 }
