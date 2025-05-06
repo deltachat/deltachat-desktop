@@ -31,9 +31,8 @@ export async function updateDeviceChat(
     text: `What's new in 1.58.0?
 
   📢 voice messages: finally you can record and send voice messages with DC desktop
-  🚂 change to new transport API (technical)
-  🙍‍♂️ profile view redesign
-  💡 show user names instead mail address in many places
+  🙍‍♂️ profile view dialog redesign
+  💡 show user names instead of mail address in many places
   🌅 improved image rendering
 
 + MORE ✨ improvements and 🐜 bug fixes see [Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/main/CHANGELOG.md#1_58_0)`,
