@@ -591,6 +591,18 @@ export default class DCWebxdc {
       this.rpc.leaveWebxdcRealtime(app.accountId, app.msgId)
     })
 
+    ipcMain.handle('webxdc.getMemberList', async event => {
+      const key = Object.keys(open_apps).find(
+        key => open_apps[key].win.webContents === event.sender
+      )
+      if (!key) {
+        log.error('webxdc.getMemberList, app not found in list of open ones')
+        return
+      }
+      const { accountId, msgId } = open_apps[key]
+      return this.rpc.getWebxdcMemberlist(accountId, msgId)
+    })
+
     ipcMain.handle(
       'webxdc.sendToChat',
       (
