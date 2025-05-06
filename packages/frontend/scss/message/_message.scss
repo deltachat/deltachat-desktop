@@ -388,10 +388,6 @@
   .message {
     max-width: 100%;
 
-    /**
-     * on small screens the limiting factor is the
-     * width not the height (except for stickers)
-     */
     img.portrait:not(.sticker) {
       height: 300px;
     }
