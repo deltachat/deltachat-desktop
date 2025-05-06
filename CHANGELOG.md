@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+- translate "Emoji" and "Sticker" in emoji & sticker picker
 
 <a id="1_57_1"></a>
 
