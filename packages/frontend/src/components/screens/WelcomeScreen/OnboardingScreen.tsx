@@ -64,7 +64,6 @@ export default function OnboardingScreen(props: Props) {
             </Button>
             <Button
               className={styles.welcomeScreenButton}
-              styling='secondary'
               onClick={onAlreadyHaveAccount}
               data-testid='have-account-button'
             >

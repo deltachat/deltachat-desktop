@@ -104,6 +104,11 @@ div.delta-form-group {
     // make buttons smaller
     button {
       padding: 3px;
+      background-color: transparent;
+      border: 0;
+      &:hover {
+        background-color: var(--buttonHover);
+      }
     }
   }
 

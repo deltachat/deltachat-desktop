@@ -306,12 +306,10 @@ export function ViewProfileInner({
       </DialogContent>
       <div className={styles.buttonWrap}>
         {!isDeviceChat && !contact.isBlocked && (
-          <Button styling='secondary' onClick={onSendMessage}>
-            {tx('send_message')}
-          </Button>
+          <Button onClick={onSendMessage}>{tx('send_message')}</Button>
         )}
         {!isDeviceChat && contact.isBlocked && (
-          <Button styling='secondary' onClick={onUnblockContact}>
+          <Button onClick={onUnblockContact}>
             {tx('menu_unblock_contact')}
           </Button>
         )}

@@ -75,14 +75,12 @@ export default function AlternativeSetupsDialog({
       <DialogBody>
         <DialogContent>
           <Button
-            styling='secondary'
             className={styles.welcomeScreenButton}
             onClick={onClickSecondDevice}
           >
             {tx('multidevice_receiver_title')}
           </Button>
           <Button
-            styling='secondary'
             className={styles.welcomeScreenButton}
             onClick={onClickImportBackup}
           >
