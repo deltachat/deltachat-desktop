@@ -416,7 +416,7 @@
      * width not the height (except for stickers)
      */
     img.portrait:not(.sticker) {
-      height: auto;
+      height: 300px;
     }
   }
 }
