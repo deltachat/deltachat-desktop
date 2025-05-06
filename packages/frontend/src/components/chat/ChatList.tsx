@@ -5,6 +5,8 @@ import React, {
   useCallback,
   ComponentType,
   useMemo,
+  HTMLAttributes,
+  useLayoutEffect,
 } from 'react'
 import {
   FixedSizeList as List,
@@ -60,6 +62,7 @@ export function ChatListPart({
   height,
   itemKey,
   setListRef,
+  olElementAttrs,
   itemData,
   itemHeight,
 }: {
@@ -71,6 +74,10 @@ export function ChatListPart({
   height: number
   itemKey: ListItemKeySelector<any>
   setListRef?: (ref: List<any> | null) => void
+  /**
+   * This does _not_ support maps with dynamically added/removed keys.
+   */
+  olElementAttrs?: HTMLAttributes<HTMLOListElement>
   itemData: ChatListItemData | ContactChatListItemData | MessageChatListItemData
   itemHeight: number
 }) {
@@ -92,6 +99,26 @@ export function ChatListPart({
     // So let's play it safe.
   })
 
+  const olRef = useRef<HTMLOListElement>(null)
+  // 'react-window' does not expose API to set attributes on its element,
+  // so we have to `useLayoutEffect`.
+  useLayoutEffect(() => {
+    if (olRef.current == null) {
+      return
+    }
+    if (olElementAttrs == undefined) {
+      return
+    }
+
+    for (const [key, value] of Object.entries(olElementAttrs)) {
+      if (value == undefined) {
+        olRef.current.removeAttribute(key)
+      } else {
+        olRef.current.setAttribute(key, value)
+      }
+    }
+  })
+
   return (
     <InfiniteLoader
       isItemLoaded={isRowLoaded}
@@ -102,6 +129,7 @@ export function ChatListPart({
       {({ onItemsRendered, ref }) => (
         <List
           innerElementType={'ol'}
+          innerRef={olRef}
           className='react-window-list-reset'
           height={height}
           itemCount={rowCount}
@@ -368,7 +396,10 @@ export default function ChatList(props: {
         <AutoSizer disableWidth>
           {({ height }) => (
             <div ref={tabindexWrapperElementChats}>
-              <div className='search-result-divider'>
+              <div
+                id='search-result-divider-messages'
+                className='search-result-divider'
+              >
                 {tx('search_in', searchChatInfo.name)}
                 {messageResultIds.length !== 0 &&
                   ': ' + translate_n('n_messages', messageResultIds.length)}
@@ -378,6 +409,9 @@ export default function ChatList(props: {
                 classNameOfTargetElements={rovingTabindexItemsClassName}
               >
                 <ChatListPart
+                  olElementAttrs={{
+                    'aria-labelledby': 'search-result-divider-messages',
+                  }}
                   isRowLoaded={isMessageLoaded}
                   loadMoreRows={loadMessages}
                   rowCount={messageResultIds.length}
@@ -406,7 +440,10 @@ export default function ChatList(props: {
         {({ height }) => (
           <>
             {isSearchActive && (
-              <div className='search-result-divider'>
+              <div
+                id='search-result-divider-chats'
+                className='search-result-divider'
+              >
                 {translate_n('n_chats', chatListIds.length)}
               </div>
             )}
@@ -419,6 +456,18 @@ export default function ChatList(props: {
             >
               <div ref={tabindexWrapperElementChats}>
                 <ChatListPart
+                  olElementAttrs={{
+                    // TODO perhaps `pref_` is not nice,
+                    // we might need a separate string.
+                    // The same goes for other occurrences
+                    // of `tx('pref_chats')`.
+                    'aria-labelledby': isSearchActive
+                      ? 'search-result-divider-chats'
+                      : undefined,
+                    'aria-label': !isSearchActive
+                      ? tx('pref_chats')
+                      : undefined,
+                  }}
                   isRowLoaded={isChatLoaded}
                   loadMoreRows={loadChats}
                   rowCount={chatListIds.length}
@@ -436,7 +485,10 @@ export default function ChatList(props: {
               </div>
               {isSearchActive && (
                 <>
-                  <div className='search-result-divider'>
+                  <div
+                    id='search-result-divider-contacts'
+                    className='search-result-divider'
+                  >
                     {translate_n('n_contacts', contactIds.length)}
                   </div>
                   <RovingTabindexProvider
@@ -445,6 +497,9 @@ export default function ChatList(props: {
                   >
                     <div ref={tabindexWrapperElementContacts}>
                       <ChatListPart
+                        olElementAttrs={{
+                          'aria-labelledby': 'search-result-divider-contacts',
+                        }}
                         isRowLoaded={isContactLoaded}
                         loadMoreRows={loadContact}
                         rowCount={contactIds.length}
@@ -473,7 +528,10 @@ export default function ChatList(props: {
                       )}
                     </div>
                   </RovingTabindexProvider>
-                  <div className='search-result-divider'>
+                  <div
+                    id='search-result-divider-messages'
+                    className='search-result-divider'
+                  >
                     {translated_messages_label(messageResultIds.length)}
                   </div>
 
@@ -483,6 +541,9 @@ export default function ChatList(props: {
                   >
                     <div ref={tabindexWrapperElementMessages}>
                       <ChatListPart
+                        olElementAttrs={{
+                          'aria-labelledby': 'search-result-divider-messages',
+                        }}
                         isRowLoaded={isMessageLoaded}
                         loadMoreRows={loadMessages}
                         rowCount={messageResultIds.length}

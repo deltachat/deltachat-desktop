@@ -21,6 +21,7 @@ export function ContactList(props: {
   onRemoveClick?: (contact: Type.Contact) => void
   disabledContacts?: number[]
   onContactContextMenu?: (contact: Type.Contact) => void
+  olElementAttrs?: Omit<React.HTMLAttributes<HTMLOListElement>, 'style'>
 }) {
   const {
     contacts,
@@ -32,9 +33,13 @@ export function ContactList(props: {
     onRemoveClick,
     disabledContacts,
     onContactContextMenu,
+    olElementAttrs,
   } = props
   return (
-    <ol style={{ margin: 0, padding: 0, listStyle: 'none' }}>
+    <ol
+      {...olElementAttrs}
+      style={{ margin: 0, padding: 0, listStyle: 'none' }}
+    >
       {contacts.map(contact => {
         let checked = false
         if (showCheckbox && typeof isChecked === 'function') {

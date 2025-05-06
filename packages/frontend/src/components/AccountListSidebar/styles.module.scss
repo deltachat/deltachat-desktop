@@ -50,6 +50,10 @@
     --als-avatar-margin: 5px;
     --als-active-indicator-color: white;
 
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -63,6 +67,28 @@
     }
   }
 
+  .accountWrapper {
+    margin-bottom: var(--als-avatar-margin);
+    margin-top: var(--als-avatar-margin);
+
+    &.isSticky {
+      position: sticky;
+      bottom: var(--als-avatar-margin);
+      top: var(--als-avatar-margin);
+      // Only needed when this account is scrolled _above_ the visible region.
+      z-index: map-get($z-index, account-list-sidebar-scope-sticky-account);
+
+      .account {
+        .avatar {
+          opacity: 1;
+          .content {
+            box-shadow: 0px 0px 4px 2px #00000040;
+          }
+        }
+      }
+    }
+  }
+
   .account {
     border: none;
     background: none;
@@ -71,8 +97,6 @@
 
     height: var(--als-avatar-size);
 
-    margin-bottom: var(--als-avatar-margin);
-    margin-top: var(--als-avatar-margin);
     // Adding extra `var(--als-avatar-size) + 2 * var(--als-avatar-margin)`
     // to the margins so that
     // if there is another `.isSticky` account, then that account does not
@@ -104,21 +128,6 @@
       div.content,
       img.content {
         border-radius: 10%;
-      }
-    }
-
-    &.isSticky {
-      position: sticky;
-      bottom: var(--als-avatar-margin);
-      top: var(--als-avatar-margin);
-      // Only needed when this account is scrolled _above_ the visible region.
-      z-index: map-get($z-index, account-list-sidebar-scope-sticky-account);
-
-      .avatar {
-        opacity: 1;
-        .content {
-          box-shadow: 0px 0px 4px 2px #00000040;
-        }
       }
     }
 
