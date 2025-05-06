@@ -27,10 +27,16 @@ export async function updateDeviceChat(
     }
   }
 
-  await addDeviceMessage('changelog-version-1.57.0', {
-    text: `Thanks for testing the 1.57.0 testrelease, this is the release candidate for the 1.58.0 release.
+  await addDeviceMessage('changelog-version-1.58.0', {
+    text: `What's new in 1.58.0?
 
-Please report issues on https://support.delta.chat/t/help-testing-the-upcoming-v1-58-x-release`,
+  📢 voice messages: finally you can record and send voice messages with DC desktop
+  🚂 change to new transport API (technical)
+  🙍‍♂️ profile view redesign
+  💡 show user names instead mail address in many places
+  🌅 improved image rendering
+
++ MORE ✨ improvements and 🐜 bug fixes see [Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/main/CHANGELOG.md#1_58_0)`,
   })
 }
 
