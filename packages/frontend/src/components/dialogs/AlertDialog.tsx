@@ -39,7 +39,7 @@ export default function AlertDialog({
       </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <FooterActionButton styling='secondary' onClick={onClick}>
+          <FooterActionButton onClick={onClick}>
             {okBtnLabel || tx('ok')}
           </FooterActionButton>
         </FooterActions>

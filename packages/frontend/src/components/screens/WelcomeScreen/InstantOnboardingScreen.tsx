@@ -225,7 +225,6 @@ export default function InstantOnboardingScreen({
             </Button>
             <Button
               className={styles.welcomeScreenButton}
-              styling='secondary'
               onClick={showOtherOptions}
               data-testid='other-login-button'
             >

@@ -143,7 +143,7 @@ export const StickerPicker = ({
             ))}
           </div>
           <div className='sticker-actions-container'>
-            <Button styling='secondary' onClick={onOpenStickerFolder}>
+            <Button onClick={onOpenStickerFolder}>
               {tx('open_sticker_folder')}
             </Button>
           </div>
