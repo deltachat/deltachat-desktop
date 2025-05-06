@@ -64,11 +64,7 @@ export default function ConfirmDeleteMessageDialog(props: Props) {
       </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <FooterActionButton
-            styling='secondary'
-            onClick={() => onClose()}
-            data-testid='cancel'
-          >
+          <FooterActionButton onClick={() => onClose()} data-testid='cancel'>
             {tx('cancel')}
           </FooterActionButton>
           <FooterActionButton

@@ -102,6 +102,8 @@
       padding: 0;
       width: 40px;
       border-radius: 0;
+      border: 0;
+      background-color: transparent;
       &:hover {
         background-color: var(--navBarButtonHover);
       }

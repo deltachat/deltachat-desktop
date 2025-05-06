@@ -138,7 +138,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
           </DialogBody>
           <DialogFooter>
             <FooterActions align='spaceBetween'>
-              <FooterActionButton styling='secondary' onClick={cancel}>
+              <FooterActionButton onClick={cancel}>
                 {tx('cancel')}
               </FooterActionButton>
               <FooterActionButton
@@ -192,7 +192,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
                   </FooterActionButton>
                 )}
               </span>
-              <FooterActionButton onClick={cancel} styling='secondary'>
+              <FooterActionButton onClick={cancel}>
                 {tx('cancel')}
               </FooterActionButton>
             </FooterActions>
