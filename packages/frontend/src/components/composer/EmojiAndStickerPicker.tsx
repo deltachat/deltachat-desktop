@@ -98,10 +98,16 @@ function StickersListItem(props: { filePath: string; onClick: () => void }) {
 }
 
 export const StickerPicker = ({
+  role,
+  id,
+  labelledBy,
   stickers,
   chatId,
   setShowEmojiPicker,
 }: {
+  role: 'tabpanel' | undefined
+  id: string
+  labelledBy: string
   stickers: { [key: string]: string[] }
   chatId: number
   setShowEmojiPicker: (enabled: boolean) => void
@@ -117,7 +123,12 @@ export const StickerPicker = ({
   const stickerPackNames = Object.keys(stickers)
 
   return (
-    <div className='sticker-picker'>
+    <div
+      role={role}
+      id={id}
+      aria-labelledby={labelledBy}
+      className='sticker-picker'
+    >
       {stickerPackNames.length > 0 ? (
         <>
           <div className='sticker-container'>
@@ -152,16 +163,21 @@ export const StickerPicker = ({
 }
 
 const EmojiOrStickerSelectorButton = (
-  props: PropsWithChildren<{ onClick: () => void; isSelected: boolean }>
+  props: React.ButtonHTMLAttributes<HTMLButtonElement> &
+    PropsWithChildren<{ onClick: () => void; isSelected: boolean }>
 ) => {
+  const { isSelected, onClick, children, ...rest } = props
   return (
     <button
+      {...rest}
+      role='tab'
+      aria-selected={isSelected}
       className={classNames('selector-button', {
-        selected: props.isSelected,
+        selected: isSelected,
       })}
-      onClick={props.onClick}
+      onClick={onClick}
     >
-      {props.children}
+      {children}
     </button>
   )
 }
@@ -200,14 +216,18 @@ export const EmojiAndStickerPicker = forwardRef<
   return (
     <div className={'emoji-sticker-picker'} ref={ref}>
       {!hideStickerPicker && (
-        <div className='emoji-or-sticker-header-nav'>
+        <div role='tablist' className='emoji-or-sticker-header-nav'>
           <EmojiOrStickerSelectorButton
+            id='emoji-sticker-picker-tab-emoji'
+            aria-controls='emoji-sticker-picker-tabpanel-emoji'
             onClick={() => setShowSticker(false)}
             isSelected={!showSticker}
           >
             Emoji
           </EmojiOrStickerSelectorButton>
           <EmojiOrStickerSelectorButton
+            id='emoji-sticker-picker-tab-sticker'
+            aria-controls='emoji-sticker-picker-tabpanel-sticker'
             onClick={() => setShowSticker(true)}
             isSelected={showSticker}
           >
@@ -217,6 +237,9 @@ export const EmojiAndStickerPicker = forwardRef<
       )}
       {!showSticker && (
         <EmojiPicker
+          role='tabpanel'
+          id='emoji-sticker-picker-tabpanel-emoji'
+          labelledBy='emoji-sticker-picker-tab-emoji'
           className={styles.emojiPicker}
           full
           onSelect={onEmojiSelect}
@@ -224,6 +247,9 @@ export const EmojiAndStickerPicker = forwardRef<
       )}
       {showSticker && (
         <StickerPicker
+          role='tabpanel'
+          id='emoji-sticker-picker-tabpanel-sticker'
+          labelledBy='emoji-sticker-picker-tab-sticker'
           chatId={chatId}
           stickers={stickers}
           setShowEmojiPicker={setShowEmojiPicker}

@@ -31,6 +31,23 @@ pub async fn handle_deep_link(
         .next()
         .map(|s| s.to_owned());
 
+    if let Ok(main_window) = app
+        .get_window("main")
+        .context("main window not found")
+        .inspect_err(|err| log::error!("{err}"))
+    {
+        main_window
+            .show()
+            .context("failed to show main window")
+            .inspect_err(|err| log::error!("{err}"))
+            .ok();
+        main_window
+            .set_focus()
+            .context("failed to focus main window")
+            .inspect_err(|err| log::error!("{err}"))
+            .ok();
+    }
+
     if let Some(potential_scheme) = potential_scheme.as_ref() {
         if matches!(
             potential_scheme.as_str(),
@@ -95,11 +112,9 @@ pub async fn handle_deep_link(
         return Ok(());
     }
 
-    let main_window = app.get_window("main").context("main window not found")?;
-    main_window.show()?;
-    main_window.set_focus()?;
-
-    Ok(())
+    Err(anyhow::anyhow!(
+        "{deeplink_or_xdc} does not seem to match any supported deeplink format"
+    ))
 }
 
 #[cfg(desktop)]

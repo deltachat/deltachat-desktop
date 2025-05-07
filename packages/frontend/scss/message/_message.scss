@@ -370,11 +370,6 @@
       cursor: pointer;
     }
   }
-  .message-attachment-media {
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    margin-top: 0;
-  }
 }
 
 .setupMessage {
@@ -416,7 +411,7 @@
      * width not the height (except for stickers)
      */
     img.portrait:not(.sticker) {
-      height: auto;
+      height: 300px;
     }
   }
 }

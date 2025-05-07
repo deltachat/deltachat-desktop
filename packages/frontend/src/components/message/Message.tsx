@@ -905,9 +905,7 @@ export default function Message(props: {
           {showAttachment(message) && (
             <Attachment
               text={text || undefined}
-              conversationType={conversationType}
               message={message}
-              hasQuote={message.quote !== null}
               tabindexForInteractiveContents={tabindexForInteractiveContents}
             />
           )}
@@ -953,13 +951,23 @@ export default function Message(props: {
               viewType={message.viewType}
               tabindexForInteractiveContents={tabindexForInteractiveContents}
             />
-            {message.reactions && (
-              <Reactions
-                reactions={message.reactions}
-                tabindexForInteractiveContents={tabindexForInteractiveContents}
-                messageWidth={messageWidth}
-              />
-            )}
+            <div
+              // TODO the "+1" count aria-live announcment is perhaps not great
+              // out of context.
+              // Also the "show ReactionsDialog" button gets announced.
+              aria-live='polite'
+              aria-relevant='all'
+            >
+              {message.reactions && (
+                <Reactions
+                  reactions={message.reactions}
+                  tabindexForInteractiveContents={
+                    tabindexForInteractiveContents
+                  }
+                  messageWidth={messageWidth}
+                />
+              )}
+            </div>
           </footer>
         </div>
       </div>
