@@ -57,6 +57,7 @@
 - Update message-parser to v0.14.1
   - Allow multiple `#` characters in links (fixes matrix links)
   - Parse scheme-less links for some TLDs (links without `https://`-prefix)
+- show icons for classical email contacts & non encrypted chats #5090
 
 ### Fixed
 - crash when a member gets added to a group and "View Group" dialog is open #5111
