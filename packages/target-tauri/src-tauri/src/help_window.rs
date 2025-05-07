@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use anyhow::Context;
 use log::{error, warn};
 use tauri::{Manager, State, WebviewWindow};
@@ -93,6 +95,7 @@ pub(crate) async fn open_help_window(
         }
         window_builder.build()?
     };
+    let help_window = Arc::new(help_window);
     #[cfg(not(any(target_os = "ios", target_os = "android")))]
     {
         // on android and iOS this does not exist, there the window is opened automatically
@@ -113,11 +116,11 @@ pub(crate) async fn open_help_window(
     {
         let _ = set_float_on_top_based_on_main_window(&help_window);
 
-        let help_window_clone = help_window.clone();
+        let help_window_clone = Arc::clone(&help_window);
         menu_manager
             .register_window(
                 &app,
-                &help_window,
+                &*help_window,
                 Box::new(move |app| create_help_menu(app, &help_window_clone)),
             )
             .await

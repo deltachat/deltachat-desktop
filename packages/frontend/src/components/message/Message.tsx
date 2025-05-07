@@ -631,6 +631,7 @@ export default function Message(props: {
     // Some info messages can be clicked by the user to receive further information
     const isInteractive =
       (isWebxdcInfo && message.parentId) ||
+      message.infoContactId != null ||
       isProtectionBrokenMsg ||
       isProtectionEnabledMsg ||
       isInvalidUnencryptedMail
@@ -641,6 +642,8 @@ export default function Message(props: {
         if (isWebxdcInfo) {
           // open or focus the webxdc app
           openWebxdc(message)
+        } else if (message.infoContactId != null) {
+          openViewProfileDialog(accountId, message.infoContactId)
         } else if (isProtectionBrokenMsg) {
           const { name } = await BackendRemote.rpc.getBasicChatInfo(
             selectedAccountId(),

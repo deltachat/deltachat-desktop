@@ -2,6 +2,8 @@ use serde::Serialize;
 
 #[derive(Debug, Default, Clone, Serialize)]
 pub struct RunConfig {
+    /// deeplink or webxdc file to open
+    pub deeplink: Option<String>,
     /// Log debug messages
     pub log_debug: bool,
     /// Output the log to stdout / Browser dev console
