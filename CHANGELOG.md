@@ -9,6 +9,7 @@
 ### Fixed
 - ugly margins / paddings on some saved messages with attachments #5047
 - accessibility: improve emoji and sticker picker accessibility: specify "tabs" layout
+- accessibility: announce when someone reacts to a message in the current chat
 
 <a id="1_58_0"></a>
 
