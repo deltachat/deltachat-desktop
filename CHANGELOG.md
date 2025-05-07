@@ -10,6 +10,7 @@
 - ugly margins / paddings on some saved messages with attachments #5047
 - accessibility: improve emoji and sticker picker accessibility: specify "tabs" layout
 - accessibility: announce when someone reacts to a message in the current chat
+- accessibility: don't redundantly announce "Chat property page" when the focus enters the chat #5076
 
 <a id="1_58_0"></a>
 
