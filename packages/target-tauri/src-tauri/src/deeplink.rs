@@ -62,19 +62,19 @@ pub async fn handle_deep_link(
             return Ok(());
         }
 
+        #[cfg(target_os = "windows")]
+        if potential_scheme == "dcnotification" {
+            use user_notify::windows::decode_deeplink;
+
+            let response = decode_deeplink(&deeplink_or_xdc)?;
+            crate::Notifications::handle_response(app, response).await;
+
+            return Ok(());
+        }
+
         if potential_scheme != "file" {
             log::error!("handle_deep_link: scheme {potential_scheme}: is unknown")
         }
-    }
-
-    #[cfg(target_os = "windows")]
-    if deeplink_or_xdc.starts_with("dcnotification") {
-        use user_notify::windows::decode_deeplink;
-
-        let response = decode_deeplink(&deeplink_or_xdc)?;
-        crate::Notifications::handle_response(app, response).await;
-
-        return Ok(());
     }
 
     if deeplink_or_xdc.ends_with(".xdc") {
