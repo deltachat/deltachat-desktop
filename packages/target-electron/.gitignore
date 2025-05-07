@@ -1,6 +1,6 @@
 html-dist
 bundle_out
 themes
-tests/compiled
+migration-tests/compiled
 
 electron-builder.json5
