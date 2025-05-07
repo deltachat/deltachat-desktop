@@ -21,13 +21,37 @@ pub(crate) fn get_autostart_state(app: AppHandle) -> Result<AutostartState, Stri
 
 #[cfg(all(desktop, feature = "flatpak"))]
 #[tauri::command]
-pub(crate) fn get_autostart_state(app: AppHandle) -> Result<AutostartState, String> {
-    // create or delete file in "~/.config/autostart"?
-    log::error!("autostart is not implemented yet on flatpak");
-    Ok(AutostartState {
-        is_supported: false,
-        is_registered: false,
-    })
+pub(crate) async fn get_autostart_state(_app: AppHandle) -> Result<AutostartState, String> {
+    let background = ashpd::desktop::background::Background::request();
+    if let Ok(request) = background
+        .send()
+        .await
+        .inspect_err(|err| log::error!("get_autostart_state:request {err:?}"))
+    {
+        if let Ok(response) = request
+            .response()
+            .inspect_err(|err| log::error!("get_autostart_state:response {err:?}"))
+        {
+            let is_registered = response.auto_start();
+            return Ok(AutostartState {
+                is_supported: true,
+                is_registered,
+            });
+        }
+    }
+
+    Err("failed to get autostart state, see logs for more info".to_string())
+}
+
+#[cfg(all(desktop, feature = "flatpak"))]
+pub(crate) async fn flatpak_set_auto_start(auto_start: bool) -> Result<(), ashpd::Error> {
+    let response = ashpd::desktop::background::Background::request()
+        .auto_start(auto_start)
+        .command(["deltachat-tauri", "--autostart"])
+        .send()
+        .await;
+    response?.response()?;
+    Ok(())
 }
 
 #[cfg(all(desktop, not(feature = "flatpak")))]
