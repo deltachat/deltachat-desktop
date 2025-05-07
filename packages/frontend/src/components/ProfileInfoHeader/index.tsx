@@ -11,6 +11,7 @@ type Props = {
   color?: string
   displayName: string
   isVerified: boolean
+  isPgpContact: boolean
   wasSeenRecently?: boolean
 }
 
@@ -19,8 +20,10 @@ export default function ProfileInfoHeader({
   color,
   displayName,
   isVerified,
+  isPgpContact,
   wasSeenRecently = false,
 }: Props) {
+  const tx = window.static_translate
   return (
     <div className={styles.profileInfoHeader}>
       <ClickForFullscreenAvatarWrapper filename={avatarPath}>
@@ -38,6 +41,12 @@ export default function ProfileInfoHeader({
           <span className={styles.verifiedIconWrapper}>
             {isVerified && <InlineVerifiedIcon />}
           </span>
+          {!isPgpContact && (
+            <i
+              className='material-svg-icon material-icon-mail'
+              aria-label={tx('email_address')}
+            />
+          )}
         </p>
       </div>
     </div>

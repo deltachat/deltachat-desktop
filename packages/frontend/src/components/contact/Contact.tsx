@@ -13,6 +13,9 @@ function ContactName(props: {
       <div className='display-name'>
         <span className='truncated'>{props.displayName}</span>
         {props.isVerified && <InlineVerifiedIcon />}
+        {!props.isPgpContact && (
+          <i className='material-svg-icon material-icon-mail' />
+        )}
         {props.isBlocked && (
           <i className='material-svg-icon material-icon-blocked' />
         )}
@@ -31,6 +34,7 @@ export default function Contact(props: {
     isVerified: boolean
     wasSeenRecently: boolean
     isBlocked?: boolean
+    isPgpContact?: boolean
   }
 }) {
   const {
@@ -41,6 +45,7 @@ export default function Contact(props: {
     isVerified,
     wasSeenRecently,
     isBlocked,
+    isPgpContact,
   } = props.contact
   return (
     <div className='contact'>
@@ -62,6 +67,7 @@ export default function Contact(props: {
         address={address}
         isVerified={isVerified}
         isBlocked={isBlocked}
+        isPgpContact={isPgpContact}
       />
     </div>
   )

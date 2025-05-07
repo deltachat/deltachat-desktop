@@ -371,6 +371,12 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
           <div className='truncated'>{chat.name}</div>
           <div className='chat_property_icons'>
             {chat.isProtected && <InlineVerifiedIcon />}
+            {!chat.isEncrypted && (
+              <i
+                className='material-svg-icon material-icon-mail'
+                aria-label={tx('email_address')}
+              />
+            )}
             {chat.ephemeralTimer !== 0 && (
               <div
                 className={'disapearing-messages-icon'}

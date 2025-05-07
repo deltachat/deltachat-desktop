@@ -73,7 +73,12 @@ function Header({
         )}
       </div>
       {isPinned && <div className='pin_icon' aria-label={tx('pin')} />}
-      {!isEncrypted && <div className='mail_icon' aria-label='Classic Email' />}
+      {!isEncrypted && (
+        <i
+          className='material-svg-icon material-icon-mail'
+          aria-label={tx('email_address')}
+        />
+      )}
     </div>
   )
 }

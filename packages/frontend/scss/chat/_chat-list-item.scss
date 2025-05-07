@@ -23,13 +23,10 @@
     margin-bottom: 2px;
   }
 
-  .mail_icon {
-    flex-shrink: 0;
-    @include color-svg('./images/icons/mail.svg', var(--globalText));
-    width: 16px;
-    height: 16px;
-    margin-left: 6px;
-  }
+  .material-icon-mail {
+    margin-right: 0px;
+    width: 1.25rem;
+ }
 
   .fresh-message-counter {
     color: var(--unreadCountLabel);
@@ -302,7 +299,7 @@
   }
 
   .pin_icon,
-  .mail_icon,
+  .material-svg-icon,
   .mute_icon {
     background-color: var(--chatListItemSelectedText);
   }
