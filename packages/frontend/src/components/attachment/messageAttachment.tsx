@@ -13,7 +13,6 @@ import {
   MessageTypeAttachmentSubset,
 } from './Attachment'
 import { runtime } from '@deltachat-desktop/runtime-interface'
-import { ConversationType } from '../message/MessageList'
 import { getDirection } from '../../utils/getDirection'
 import { Type } from '../../backend-com'
 import FullscreenMedia, {
@@ -27,17 +26,13 @@ import { selectedAccountId } from '../../ScreenController'
 
 type AttachmentProps = {
   text?: string
-  conversationType: ConversationType
   message: Type.Message
-  hasQuote: boolean
   tabindexForInteractiveContents: -1 | 0
 }
 
 export default function Attachment({
   text,
-  conversationType,
   message,
-  hasQuote,
   tabindexForInteractiveContents,
 }: AttachmentProps) {
   const tx = useTranslationFunction()
@@ -124,10 +119,6 @@ export default function Attachment({
   const withCaption = Boolean(text)
   // For attachments which aren't full-frame
   const withContentBelow = withCaption
-  const withContentAbove =
-    message.overrideSenderName != null ||
-    hasQuote ||
-    (conversationType.hasMultipleParticipants && direction === 'incoming')
   if (isImage(message.fileMime) || message.viewType === 'Sticker') {
     if (!message.file) {
       return (
@@ -144,14 +135,14 @@ export default function Attachment({
         tabIndex={tabindexForInteractiveContents}
         className={classNames(
           'message-attachment-media',
-          withCaption ? 'content-below' : null,
-          withContentAbove ? 'content-above' : null
+          withCaption ? 'content-below' : null
         )}
       >
         <img
           className={classNames(
             'attachment-content',
-            isPortrait(message) ? 'portrait' : null
+            isPortrait(message) ? 'portrait' : null,
+            message.viewType === 'Sticker' ? 'sticker' : null
           )}
           src={runtime.transformBlobURL(message.file)}
           height={calculateHeight(message)}
@@ -176,8 +167,7 @@ export default function Attachment({
       <div
         className={classNames(
           'message-attachment-media',
-          withCaption ? 'content-below' : null,
-          withContentAbove ? 'content-above' : null
+          withCaption ? 'content-below' : null
         )}
       >
         <video
@@ -195,8 +185,7 @@ export default function Attachment({
       <div
         className={classNames(
           'message-attachment-audio',
-          withContentBelow ? 'content-below' : null,
-          withContentAbove ? 'content-above' : null
+          withContentBelow ? 'content-below' : null
         )}
       >
         <AudioPlayer
@@ -214,8 +203,7 @@ export default function Attachment({
       <button
         className={classNames(
           'message-attachment-generic',
-          withContentBelow ? 'content-below' : null,
-          withContentAbove ? 'content-above' : null
+          withContentBelow ? 'content-below' : null
         )}
         onClick={onClickAttachment}
         tabIndex={tabindexForInteractiveContents}

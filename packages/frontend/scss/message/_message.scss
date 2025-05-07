@@ -298,6 +298,8 @@
 
   .message-attachment-media {
     background-color: transparent;
+    // no border radius for stickers
+    border-radius: 0px;
     & > .attachment-content {
       // Make space for the footer, which is `position: absolute;`.
       // However, this does not account for the case
@@ -368,11 +370,6 @@
       cursor: pointer;
     }
   }
-  .message-attachment-media {
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    margin-top: 0;
-  }
 }
 
 .setupMessage {
@@ -408,6 +405,13 @@
 
     &.outgoing {
       margin-left: auto;
+    }
+    /**
+     * on small screens the limiting factor is the
+     * width not the height (except for stickers)
+     */
+    img.portrait:not(.sticker) {
+      height: 300px;
     }
   }
 }

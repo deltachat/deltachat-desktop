@@ -9,6 +9,9 @@ mergeable:
         - do: description
           must_include:
             regex: '#skip-changelog'
+        - do: title
+          must_include:
+            regex: "^refactor:"
         - do: and
           validate:
           - do: dependent

@@ -96,7 +96,7 @@ export default function QrCode({
 export function QrCodeShowQrInner({
   qrCode,
   qrCodeSVG,
-  description: _description,
+  description,
   onClose,
   onBack,
 }: {
@@ -195,6 +195,7 @@ export function QrCodeShowQrInner({
               }}
               className='show-qr-dialog-qr-image'
               src={svgUrl}
+              alt={tx('qr_code') + '\n' + description}
               onContextMenu={imageContextMenu}
               tabIndex={0}
             />

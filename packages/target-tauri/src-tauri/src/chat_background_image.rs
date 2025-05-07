@@ -115,7 +115,7 @@ async fn copy_background_image_file_<R: tauri::Runtime>(
     // We expect only one file to be there, but we'll handle the case
     // when there are other files for some reason.
     assert_eq!(
-        bg_images_dir.components().last().unwrap().as_os_str(),
+        bg_images_dir.components().next_back().unwrap().as_os_str(),
         "background"
     );
     let mut read_dir = fs::read_dir(&bg_images_dir).await?;

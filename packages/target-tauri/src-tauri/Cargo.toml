@@ -1,6 +1,6 @@
 [package]
 name = "deltachat-tauri"
-version = "1.57.0"
+version = "1.58.0"
 description = "Delta Chat Desktop: Tauri Edition. Secure, cross-platform, decentralized super-app messenger."
 authors = ["DeltaChat Contributors"]
 edition = "2021"
@@ -59,6 +59,7 @@ clap = { version = "4.5.35", features = ["derive"] }
 chrono = { version = "0.4.40", default-features = false }
 notify = "8.0.0"
 regex = "1.11.1"
+register-default-handler = { version = "0.1.0", path = "../crates/register-default-handler" }
 
 [target.'cfg(target_os = "android")'.dependencies]
 include_dir = "0.7.4"

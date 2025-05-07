@@ -7,12 +7,13 @@
 ### Changed
 
 ### Fixed
-- accessibility: announce when a message gets edited
+- ugly margins / paddings on some saved messages with attachments #5047
+- accessibility: improve emoji and sticker picker accessibility: specify "tabs" layout
 - accessibility: announce when someone reacts to a message in the current chat
 
-<a id="1_57_0"></a>
+<a id="1_58_0"></a>
 
-## [1.57.0] - 2025-04-24
+## [1.58.0] - 2025-05-06
 
 ### Added
 - tauri: support for webxdc #4740, #4852, #4949
@@ -34,7 +35,8 @@
 - tauri: add autostart #4754
 - tauri: add chat background image customization support
 - testing: add more e2e tests for onboardings etc. #5001
-
+- clicking info messages with contacts open the contact's profile
+- tauri: add deeplinking support and opening `.xdc` files to attach them #4956
 
 ### Changed
 - switch to account the webxdc is from when sending to chat (tauri and electron edition) #4740
@@ -91,10 +93,27 @@
 - tauri: improve performance a little #4812
 - settings: fix: wait for setting to be applied before calling callback #4754
 - tauri: prevent webrtc from being accessed in webxdc apps #4851
+- webxdc apps sometimes having wrong `selfAddr`, resulting in apps treating the same user as a new one (e.g. the "Poll" app would allow you to vote twice) #5068
+- accessibility: add accessible labels and descriptions to more items #5050, #5055
+- accessibility: add `role='tablist'` for accounts list #5040
+- accessibility: add alt text for QR invite code image
+- accessibility: improve tabbing behavior of searh results
+- accessibility: announce when a message gets edited and outgoing message delivery status changes (`aria-live`)
+- reduce voice messages to a lower bitrate #4977
+- tauri: improve security #4959
 
 ### Removed
 - remove experimental option to disable IMAP IDLE #4991
 - tauri: disable long press link preview
+
+<a id="1_57_1"></a>
+
+## [1.57.1] - 2025-05-03 Test release
+
+
+<a id="1_57_0"></a>
+
+## [1.57.0] - 2025-04-24 Test release
 
 <a id="1_56_0"></a>
 
@@ -3402,7 +3421,11 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.57.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.58.0...HEAD
+
+[1.58.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.57.1...v1.58.0
+
+[1.57.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.57.0...v1.57.1
 
 [1.57.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.56.0...v1.57.0
 

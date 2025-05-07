@@ -29,7 +29,7 @@ pub async fn handle_event(app: &AppHandle, event: MenuEvent) -> anyhow::Result<(
             .id()
             .0
             .split(':')
-            .last()
+            .next_back()
             .context("no language found in id")?;
 
         mwc.emit_event(
