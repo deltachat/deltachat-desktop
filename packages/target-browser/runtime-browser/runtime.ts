@@ -160,7 +160,7 @@ class BrowserRuntime implements Runtime {
     // Browser can not implement this
     return
   }
-  isDroppedFileFromOutside(_file: File): boolean {
+  isDroppedFileFromOutside(_file: string): boolean {
     return true // Browser does not support dragging files out, so can only be from outside
   }
   emitUIReady(): void {

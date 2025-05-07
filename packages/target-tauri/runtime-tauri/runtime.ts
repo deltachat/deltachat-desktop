@@ -634,7 +634,7 @@ class TauriRuntime implements Runtime {
   onDragFileOut(_file: string): void {
     throw new Error('Method not implemented.50')
   }
-  isDroppedFileFromOutside(_file: File): boolean {
+  isDroppedFileFromOutside(_file: string): boolean {
     throw new Error('Method not implemented.51')
   }
   // only works on macOS and iOS
