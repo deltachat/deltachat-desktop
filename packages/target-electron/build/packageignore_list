@@ -60,7 +60,7 @@ static/
 _locales/*.xml
 build/
 runtime-electron/
-tests/
+migration-tests/
 
 # Build artifacts
 tsc-dist/renderer/
