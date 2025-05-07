@@ -191,10 +191,9 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
       log.warn('dropped something, but no chat is selected')
       return
     }
-    const forbiddenPathRegEx = /DeltaChat\/.+?\.sqlite-blobs\//gi
     const sanitized = paths
       .filter(path => {
-        const val = !forbiddenPathRegEx.test(path.replace('\\', '/'))
+        const val = runtime.isDroppedFileFromOutside(path)
         if (!val) {
           log.warn(
             'Prevented a file from being sent again while dragging it out',
