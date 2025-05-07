@@ -192,6 +192,8 @@ pub(crate) fn apply_autostart(app: &AppHandle) -> anyhow::Result<()> {
 
 #[cfg(all(desktop, feature = "flatpak"))]
 pub(crate) fn apply_autostart(app: &AppHandle) -> anyhow::Result<()> {
+    // create or delete file in "~/.config/autostart/"
+
     log::error!("autostart is not implemented yet on flatpak");
     Ok(())
 }

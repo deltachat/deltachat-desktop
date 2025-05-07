@@ -19,7 +19,18 @@ pub(crate) fn get_autostart_state(app: AppHandle) -> Result<AutostartState, Stri
     })
 }
 
-#[cfg(desktop)]
+#[cfg(all(desktop, feature = "flatpak"))]
+#[tauri::command]
+pub(crate) fn get_autostart_state(app: AppHandle) -> Result<AutostartState, String> {
+    // create or delete file in "~/.config/autostart"?
+    log::error!("autostart is not implemented yet on flatpak");
+    Ok(AutostartState {
+        is_supported: false,
+        is_registered: false,
+    })
+}
+
+#[cfg(all(desktop, not(feature = "flatpak")))]
 #[tauri::command]
 pub(crate) fn get_autostart_state(app: AppHandle) -> Result<AutostartState, String> {
     use tauri_plugin_autostart::ManagerExt;
