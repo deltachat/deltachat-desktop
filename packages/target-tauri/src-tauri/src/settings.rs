@@ -56,7 +56,7 @@ pub async fn change_desktop_settings_apply_side_effects(
         // update "mute notification" menu item with new state
         NOTIFICATIONS => app.state::<TrayManager>().update_menu(&app).await,
         THEME => update_theme_in_other_windows(&app).context("update theme in other windows"),
-        AUTOSTART_KEY => apply_autostart(&app),
+        AUTOSTART_KEY => apply_autostart(&app).await,
         _ => Ok(()),
     }
     .map_err(|err| format!("{err:#}"))
@@ -71,7 +71,10 @@ pub(crate) async fn load_and_apply_desktop_settings_on_startup(
         .apply_wanted_active_state(app)
         .await?;
 
-    if let Err(err) = apply_autostart(app).context("failed to apply autostart") {
+    if let Err(err) = apply_autostart(app)
+        .await
+        .context("failed to apply autostart")
+    {
         // Not too critical, let's just log.
         error!("{err}")
     };
@@ -186,20 +189,23 @@ impl<R: tauri::Runtime> StoreExtBoolExt for tauri_plugin_store::Store<R> {
 }
 
 #[cfg(not(desktop))]
-pub(crate) fn apply_autostart(app: &AppHandle) -> anyhow::Result<()> {
+pub(crate) async fn apply_autostart(app: &AppHandle) -> anyhow::Result<()> {
     Ok(())
 }
 
 #[cfg(all(desktop, feature = "flatpak"))]
-pub(crate) fn apply_autostart(app: &AppHandle) -> anyhow::Result<()> {
-    // create or delete file in "~/.config/autostart/"
-
-    log::error!("autostart is not implemented yet on flatpak");
+pub(crate) async fn apply_autostart(app: &AppHandle) -> anyhow::Result<()> {
+    let store = app.store(CONFIG_FILE)?;
+    if store.get(AUTOSTART_KEY).is_none() {
+        store.set(AUTOSTART_KEY, AUTOSTART_DEFAULT);
+    }
+    let enable = store.get_bool_or(AUTOSTART_KEY, AUTOSTART_DEFAULT);
+    crate::autostart::flatpak_set_auto_start(enable).await?;
     Ok(())
 }
 
 #[cfg(all(desktop, not(feature = "flatpak")))]
-pub(crate) fn apply_autostart(app: &AppHandle) -> anyhow::Result<()> {
+pub(crate) async fn apply_autostart(app: &AppHandle) -> anyhow::Result<()> {
     use tauri_plugin_autostart::ManagerExt;
     let store = app.store(CONFIG_FILE)?;
     if store.get(AUTOSTART_KEY).is_none() {

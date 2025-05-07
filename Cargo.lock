@@ -1854,6 +1854,7 @@ name = "deltachat-tauri"
 version = "1.58.1"
 dependencies = [
  "anyhow",
+ "ashpd",
  "base64 0.22.1",
  "chrono",
  "clap",
