@@ -70,7 +70,6 @@ pub(crate) async fn load_and_apply_desktop_settings_on_startup(
     app.state::<TrayManager>()
         .apply_wanted_active_state(app)
         .await?;
-    apply_autostart(app)?;
 
     if let Err(err) = apply_autostart(app).context("failed to apply autostart") {
         // Not too critical, let's just log.
@@ -191,7 +190,13 @@ pub(crate) fn apply_autostart(app: &AppHandle) -> anyhow::Result<()> {
     Ok(())
 }
 
-#[cfg(desktop)]
+#[cfg(all(desktop, feature = "flatpak"))]
+pub(crate) fn apply_autostart(app: &AppHandle) -> anyhow::Result<()> {
+    log::error!("autostart is not implemented yet on flatpak");
+    Ok(())
+}
+
+#[cfg(all(desktop, not(feature = "flatpak")))]
 pub(crate) fn apply_autostart(app: &AppHandle) -> anyhow::Result<()> {
     use tauri_plugin_autostart::ManagerExt;
     let store = app.store(CONFIG_FILE)?;
