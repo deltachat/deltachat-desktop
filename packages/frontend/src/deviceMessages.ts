@@ -30,8 +30,8 @@ export async function updateDeviceChat(
   await addDeviceMessage('changelog-version-1.58.0', {
     text: `What's new in 1.58.0?
 
-  📢 voice messages: finally you can record and send voice messages with DC desktop
-  🙍‍♂️ profile view dialog redesign
+  🎤 voice messages: finally you can record and send voice messages with DC desktop
+  👤 profile view dialog redesign
   💡 show user names instead of mail address in many places
   🌅 improved image rendering
 

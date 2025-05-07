@@ -7,10 +7,18 @@
 ### Changed
 
 ### Fixed
+
+
+<a id="1_58_1"></a>
+
+## [1.58.1] - 2025-05-07
+
+### Fixed
 - ugly margins / paddings on some saved messages with attachments #5047
 - accessibility: improve emoji and sticker picker accessibility: specify "tabs" layout
 - accessibility: announce when someone reacts to a message in the current chat
 - accessibility: don't redundantly announce "Chat property page" when the focus enters the chat #5076
+- reduce build size by excluding migration tests
 
 <a id="1_58_0"></a>
 
@@ -3422,7 +3430,10 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.58.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.58.1...HEAD
+
+
+[1.58.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.58.0...v1.58.1
 
 [1.58.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.57.1...v1.58.0
 
