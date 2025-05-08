@@ -59,7 +59,9 @@ impl TrayManager {
     async fn update_badge(&self, app: &AppHandle) -> anyhow::Result<()> {
         let counter = {
             let dc = app.state::<DeltaChatAppState>();
+            log::debug!("update_badge: lock dc");
             let accounts = dc.deltachat.read().await;
+            log::debug!("update_badge: locked dc");
             let mut counter = 0;
             for account_id in accounts.get_all() {
                 if let Some(account) = accounts.get_account(account_id) {
@@ -76,12 +78,15 @@ impl TrayManager {
             counter
         };
 
+        log::debug!("update_badge: update_badge_counter icon");
         self.update_badge_counter(app, counter).await?;
 
+        log::debug!("update_badge: completed");
         Ok(())
     }
 
     async fn update_badge_counter(&self, app: &AppHandle, counter: usize) -> anyhow::Result<()> {
+        return Ok(());
         if cfg!(target_os = "macos") {
             return Ok(());
         }
