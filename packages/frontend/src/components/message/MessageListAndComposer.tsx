@@ -19,6 +19,11 @@ import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
+type Props = {
+  chat: T.FullChat
+  accountId: number
+}
+
 export function getBackgroundImageStyle(
   settings: DesktopSettingsType
 ): React.CSSProperties {
@@ -82,10 +87,6 @@ export function getBackgroundImageStyle(
   return style
 }
 
-type Props = {
-  chat: T.FullChat
-  accountId: number
-}
 
 function fullPath(file: ParsedPath) {
   return file.dir + '/' + file.name + file.ext
