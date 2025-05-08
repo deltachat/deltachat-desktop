@@ -81,7 +81,7 @@ impl NotificationManager for NotificationManagerXdg {
         handler_callback: Box<dyn Fn(crate::NotificationResponse) + Send + Sync + 'static>,
         categories: Vec<crate::NotificationCategory>,
     ) -> Result<(), crate::Error> {
-        log::info!("NotificationManagerMock::register {categories:?}");
+        log::info!("NotificationManagerXdg::register {categories:?}");
 
         let _ = self.handler.set(Arc::new(handler_callback));
 
