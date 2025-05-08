@@ -120,6 +120,7 @@ pub async fn update_tray_icon_badge(
     tray_manager: State<'_, TrayManager>,
     counter: usize,
 ) -> Result<(), String> {
+    log::debug!("update_tray_icon_badge");
     tray_manager
         .update_badge_counter(&app, counter)
         .await
