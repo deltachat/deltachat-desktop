@@ -92,7 +92,7 @@ function fullPath(file: ParsedPath) {
   return file.dir + '/' + file.name + file.ext
 }
 function isImage(file: ParsedPath) {
-  const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif']
+  const imageExtensions = ['.jpg', '.jpeg', '.png']
   return imageExtensions.includes(file.ext)
 }
 
