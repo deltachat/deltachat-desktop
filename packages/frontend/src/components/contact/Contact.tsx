@@ -7,14 +7,16 @@ function ContactName(props: {
   address: string
   isVerified?: boolean
   isBlocked?: boolean
+  isPgpContact?: boolean
 }) {
+  const tx = window.static_translate
   return (
     <div className='contact-name'>
       <div className='display-name'>
         <span className='truncated'>{props.displayName}</span>
         {props.isVerified && <InlineVerifiedIcon />}
         {!props.isPgpContact && (
-          <i className='material-svg-icon material-icon-mail' />
+          <div className='mail_icon' aria-label={tx('email_address')} />
         )}
         {props.isBlocked && (
           <i className='material-svg-icon material-icon-blocked' />

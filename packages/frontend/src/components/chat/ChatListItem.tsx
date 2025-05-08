@@ -60,6 +60,9 @@ function Header({
         <span>
           <span className='truncated'>{name}</span>
           {isProtected && <InlineVerifiedIcon />}
+          {!isEncrypted && (
+            <div className='mail_icon' aria-label='Classic Email' />
+          )}
         </span>
       </div>
       {isMuted && <div className='mute_icon' aria-label={tx('mute')} />}
@@ -73,12 +76,6 @@ function Header({
         )}
       </div>
       {isPinned && <div className='pin_icon' aria-label={tx('pin')} />}
-      {!isEncrypted && (
-        <i
-          className='material-svg-icon material-icon-mail'
-          aria-label={tx('email_address')}
-        />
-      )}
     </div>
   )
 }

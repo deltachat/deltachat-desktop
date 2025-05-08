@@ -372,10 +372,7 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
           <div className='chat_property_icons'>
             {chat.isProtected && <InlineVerifiedIcon />}
             {!chat.isEncrypted && (
-              <i
-                className='material-svg-icon material-icon-mail'
-                aria-label={tx('email_address')}
-              />
+              <div className='mail_icon' aria-label={tx('email_address')} />
             )}
             {chat.ephemeralTimer !== 0 && (
               <div

@@ -23,11 +23,6 @@
     margin-bottom: 2px;
   }
 
-  .material-icon-mail {
-    margin-right: 0px;
-    width: 1.25rem;
- }
-
   .fresh-message-counter {
     color: var(--unreadCountLabel);
     background-color: var(--unreadCountBg);
@@ -300,7 +295,8 @@
 
   .pin_icon,
   .material-svg-icon,
-  .mute_icon {
+  .mute_icon,
+  .mail_icon {
     background-color: var(--chatListItemSelectedText);
   }
 

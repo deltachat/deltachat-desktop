@@ -11,8 +11,8 @@ type Props = {
   color?: string
   displayName: string
   isVerified: boolean
-  isPgpContact: boolean
-  wasSeenRecently?: boolean
+  isPgpContact?: boolean // not relevant for groups
+  wasSeenRecently?: boolean // not relevant for groups
 }
 
 export default function ProfileInfoHeader({
@@ -41,11 +41,8 @@ export default function ProfileInfoHeader({
           <span className={styles.verifiedIconWrapper}>
             {isVerified && <InlineVerifiedIcon />}
           </span>
-          {!isPgpContact && (
-            <i
-              className='material-svg-icon material-icon-mail'
-              aria-label={tx('email_address')}
-            />
+          {isPgpContact === false && (
+            <div className='mail_icon' aria-label={tx('email_address')} />
           )}
         </p>
       </div>
