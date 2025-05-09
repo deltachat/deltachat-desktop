@@ -86,7 +86,7 @@ impl TrayManager {
     }
 
     async fn update_badge_counter(&self, app: &AppHandle, counter: usize) -> anyhow::Result<()> {
-        if cfg!(target_os = "macos") {
+        if cfg!(target_os = "macos") || cfg!(feature = "flatpak") {
             return Ok(());
         }
 
