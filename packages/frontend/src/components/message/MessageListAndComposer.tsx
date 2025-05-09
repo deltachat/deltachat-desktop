@@ -212,7 +212,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
       await addFileToDraft(fullPath(file), file.name + file.ext, msgViewType)
     }
     // send multiple files
-    else if (sanitized.length > 1) {
+    else if (sanitized.length > 1 && !hasOpenDialogs) {
       openDialog(ConfirmSendingFiles, {
         sanitizedFileList: sanitized.map(path => ({
           name: path.name,
