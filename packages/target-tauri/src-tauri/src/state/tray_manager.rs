@@ -25,20 +25,39 @@ impl TrayManager {
         let wanted_state = is_tray_icon_active(app)?;
         let currently_active = { self.tray.read().await.is_some() };
 
-        if currently_active != wanted_state {
-            if wanted_state {
+        if cfg!(not(any(target_os = "windows", target_os = "macos"))) {
+            // on linux removing is broken so we just hide it
+            if !currently_active {
                 let tray = build_tray_icon(app)?;
                 let previous = self.tray.write().await.replace(tray);
                 assert!(previous.is_none());
-                self.update_badge(app).await?;
-            } else {
-                let previous = self.tray.write().await.take();
-                if let Some(tray) = previous {
-                    tray.set_visible(false)?;
-                    let tray_option = app.remove_tray_by_id(tray.id());
-                    drop(tray_option);
+            }
+            let tray = self.tray.read().await;
+            assert!(tray.is_some());
+            if let Some(tray) = tray.as_ref() {
+                if wanted_state {
+                    tray.set_visible(true)?;
+                    self.update_badge(app).await?;
                 } else {
-                    unreachable!()
+                    tray.set_visible(false)?;
+                }
+            }
+        } else {
+            if currently_active != wanted_state {
+                if wanted_state {
+                    let tray = build_tray_icon(app)?;
+                    let previous = self.tray.write().await.replace(tray);
+                    assert!(previous.is_none());
+                    self.update_badge(app).await?;
+                } else {
+                    let previous = self.tray.write().await.take();
+                    if let Some(tray) = previous {
+                        tray.set_visible(false)?;
+                        let tray_option = app.remove_tray_by_id(tray.id());
+                        drop(tray_option);
+                    } else {
+                        unreachable!()
+                    }
                 }
             }
         }
