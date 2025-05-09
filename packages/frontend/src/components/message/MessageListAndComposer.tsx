@@ -131,8 +131,6 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
       if (e.payload.type != 'drop') {
         return
       }
-
-      // sanitize files
       const paths = e.payload.paths
       handleDrop(paths)
     })
