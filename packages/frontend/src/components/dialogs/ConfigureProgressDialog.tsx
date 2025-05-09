@@ -15,11 +15,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { getDeviceChatId, saveLastChatId } from '../../backend/chat'
 
 import type { DialogProps } from '../../contexts/DialogContext'
-import {
-  defaultCredentials,
-  Credentials,
-  Proxy,
-} from '../Settings/DefaultCredentials'
+import { defaultCredentials, Credentials } from '../Settings/DefaultCredentials'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 const log = getLogger('renderer/loginForm')
 
@@ -29,7 +25,6 @@ interface ConfigureProgressDialogProps {
   onSuccess?: () => void
   onUserCancellation?: () => void
   onFail: (error: string) => void
-  proxyUpdated: boolean
 }
 
 /**
@@ -43,7 +38,6 @@ export function ConfigureProgressDialog({
   onSuccess,
   onUserCancellation,
   onFail,
-  proxyUpdated,
   ...dialogProps
 }: ConfigureProgressDialogProps & DialogProps) {
   const { onClose } = dialogProps
@@ -89,23 +83,13 @@ export function ConfigureProgressDialog({
           }
           const configuration: Credentials = credentials || defaultCredentials()
           let isInitialOnboarding = false
-          const { proxyEnabled, proxyUrl, ...transportConfig } = configuration
-          // Set proxy settings only if neccessary!
-          // but before calling addTransport since it might be needed there (TODO)
-          if (proxyUpdated) {
-            await BackendRemote.rpc.batchSetConfig(accountId, {
-              proxy_enabled:
-                proxyEnabled === true ? Proxy.ENABLED : Proxy.DISABLED,
-              proxy_url: proxyUrl,
-            })
-          }
           if (qrCode) {
             // create a new transport for accountId based on the QR code
             await BackendRemote.rpc.addTransportFromQr(accountId, qrCode)
             isInitialOnboarding = true
           } else if (
-            transportConfig.addr !== undefined &&
-            transportConfig.addr.length > 0
+            configuration.addr !== undefined &&
+            configuration.addr.length > 0
           ) {
             const existingTransports =
               await BackendRemote.rpc.listTransports(accountId)
@@ -114,7 +98,7 @@ export function ConfigureProgressDialog({
               // there is always a "default" transport with empty addr
               if (existingTransport.addr === '') {
                 isInitialOnboarding = true
-              } else if (existingTransport.addr !== transportConfig.addr) {
+              } else if (existingTransport.addr !== configuration.addr) {
                 // multiple transports are not supported yet
                 throw new Error(
                   'Multi transport is not supported right now. Check back in a few months!'
@@ -125,7 +109,7 @@ export function ConfigureProgressDialog({
             // otherwise a new transport is added (if the user entered credentials manually)
             await BackendRemote.rpc.addOrUpdateTransport(
               accountId,
-              transportConfig
+              configuration
             )
           }
 

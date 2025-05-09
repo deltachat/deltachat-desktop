@@ -1,6 +1,6 @@
 import { T } from '@deltachat/jsonrpc-client'
 
-export type Credentials = T.EnteredLoginParam & ProxySettings
+export type Credentials = T.EnteredLoginParam
 
 export type ProxySettings = {
   proxyEnabled: boolean
@@ -27,8 +27,6 @@ export function defaultCredentials(credentials?: Credentials): Credentials {
     smtpPort: null,
     smtpSecurity: null,
     oauth2: null,
-    proxyEnabled: false,
-    proxyUrl: null,
   }
 
   return { ...defaultCredentials, ...credentials }

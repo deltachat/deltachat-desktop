@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- new proxy configuration dialog #5052
 
 ### Changed
 
