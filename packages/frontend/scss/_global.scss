@@ -1,3 +1,6 @@
+@use 'sass:map';
+@use 'variables';
+
 * {
   box-sizing: border-box;
   font-variant-ligatures: none;
@@ -85,7 +88,7 @@ input[type='search'],
 textarea {
   &:active,
   &:focus {
-    outline: 1px solid $color-global-textarea-outline;
+    outline: 1px solid variables.$color-global-textarea-outline;
   }
 }
 
@@ -155,7 +158,7 @@ code {
   top: 60px;
   text-align: center;
   width: 100%;
-  z-index: map-get($z-index, user-feedback);
+  z-index: map.get(variables.$z-index, user-feedback);
   pointer-events: none;
 
   p {

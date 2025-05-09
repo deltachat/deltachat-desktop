@@ -1,3 +1,5 @@
+@use '../mixins';
+
 $tab-height: 46px;
 
 .media-view {
@@ -17,7 +19,7 @@ $tab-height: 46px;
     overflow-x: auto;
 
     .tab-item {
-      @include button-reset;
+      @include mixins.button-reset;
 
       font-size: 1.1rem;
       padding-bottom: 6px;

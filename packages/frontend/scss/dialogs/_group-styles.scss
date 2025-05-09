@@ -1,3 +1,5 @@
+@use '../mixins';
+
 input.group-name-input {
   background-color: transparent;
   border: 0;
@@ -43,11 +45,11 @@ input.group-name-input {
   position: relative;
 
   .group-image {
-    @include button-reset;
+    @include mixins.button-reset;
   }
 
   .group-image-edit-button {
-    @include button-reset;
+    @include mixins.button-reset;
 
     position: absolute;
     width: 28px;
@@ -66,7 +68,7 @@ input.group-name-input {
     div {
       height: 20px;
       width: 20px;
-      @include color-svg('./images/icons/lead-pencil.svg', white);
+      @include mixins.color-svg('./images/icons/lead-pencil.svg', white);
     }
   }
 }

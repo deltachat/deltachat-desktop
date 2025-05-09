@@ -1,9 +1,11 @@
+@use '../mixins';
+
 .qr-code-switch {
   display: flex;
   background-color: var(--globalBackground);
 
   button {
-    @include button-reset;
+    @include mixins.button-reset;
 
     width: 50%;
     cursor: pointer;
@@ -48,7 +50,7 @@
   height: 20px;
   transform: rotate(135deg);
   margin-inline-end: 8px;
-  @include color-svg('./images/icons/link.svg', currentcolor, 100%);
+  @include mixins.color-svg('./images/icons/link.svg', currentcolor, 100%);
 }
 
 .copy-content-preview {

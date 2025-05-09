@@ -1,3 +1,5 @@
+@use '../mixins';
+
 .message-wrapper {
   --shortcut-menu-visibility: hidden;
   --shortcut-menu-multiplier: 0;
@@ -15,7 +17,7 @@
   align-items: stretch;
 
   & > .author-avatar {
-    @include button-reset;
+    @include mixins.button-reset;
 
     align-self: flex-end;
     bottom: 0px;
@@ -84,7 +86,7 @@
 
     .msg-body {
       &.msg-body--clickable {
-        @include button-reset;
+        @include mixins.button-reset;
         display: block;
 
         > .text {
@@ -142,7 +144,7 @@
   }
 
   .show-html {
-    @include button-reset;
+    @include mixins.button-reset;
 
     border: none;
     background-color: transparent;
@@ -176,7 +178,7 @@
 
   .metadata:not(.with-image-no-caption) {
     .padlock-icon {
-      @include color-svg(
+      @include mixins.color-svg(
         './images/padlock.svg',
         var(--messageMetadataIconColorIncoming),
         125%
@@ -184,7 +186,7 @@
     }
 
     .location-icon {
-      @include color-svg(
+      @include mixins.color-svg(
         './images/map-marker.svg',
         var(--messageMetadataIconColorIncoming),
         100%
@@ -192,7 +194,7 @@
     }
 
     .saved-message-icon {
-      @include color-svg(
+      @include mixins.color-svg(
         './images/icons/bookmark-filled.svg',
         var(--messageMetadataIconColorIncoming),
         100%
@@ -229,7 +231,7 @@
     }
 
     .padlock-icon {
-      @include color-svg(
+      @include mixins.color-svg(
         './images/padlock.svg',
         var(--messageMetadataIconColorOutgoing),
         125%
@@ -237,7 +239,7 @@
     }
 
     .location-icon {
-      @include color-svg(
+      @include mixins.color-svg(
         './images/map-marker.svg',
         var(--messageMetadataIconColorOutgoing),
         100%
@@ -245,7 +247,7 @@
     }
 
     .saved-message-icon {
-      @include color-svg(
+      @include mixins.color-svg(
         './images/icons/bookmark-filled.svg',
         var(--messageMetadataIconColorOutgoing),
         100%
@@ -327,15 +329,19 @@
     }
 
     .padlock-icon {
-      @include color-svg('./images/padlock.svg', white, 125%);
+      @include mixins.color-svg('./images/padlock.svg', white, 125%);
     }
 
     .location-icon {
-      @include color-svg('./images/map-marker.svg', white, 100%);
+      @include mixins.color-svg('./images/map-marker.svg', white, 100%);
     }
 
     .saved-message-icon {
-      @include color-svg('./images/icons/bookmark-filled.svg', white, 100%);
+      @include mixins.color-svg(
+        './images/icons/bookmark-filled.svg',
+        white,
+        100%
+      );
     }
   }
 
@@ -365,7 +371,7 @@
     opacity: 0.86;
 
     .forwarded-indicator-button {
-      @include button-reset;
+      @include mixins.button-reset;
 
       cursor: pointer;
     }
@@ -432,7 +438,7 @@
   }
 
   .bubble {
-    @include button-reset;
+    @include mixins.button-reset;
 
     display: inline-block;
     text-align: center;
@@ -489,7 +495,7 @@
 // quote
 
 .quote-background {
-  @include button-reset;
+  @include mixins.button-reset;
 
   overflow: hidden;
   max-width: 100%;
@@ -601,7 +607,7 @@
     display: none;
   }
   .author {
-    @include button-reset;
+    @include mixins.button-reset;
 
     display: inline-block;
     max-width: 40vw;
@@ -650,7 +656,7 @@
 
     cursor: pointer;
     .join-button {
-      @include button-reset;
+      @include mixins.button-reset;
 
       font-weight: 100;
       margin-top: 5px;
@@ -668,15 +674,19 @@
       margin: 0;
 
       .padlock-icon {
-        @include color-svg('./images/padlock.svg', white, 125%);
+        @include mixins.color-svg('./images/padlock.svg', white, 125%);
       }
 
       .location-icon {
-        @include color-svg('./images/map-marker.svg', white, 100%);
+        @include mixins.color-svg('./images/map-marker.svg', white, 100%);
       }
 
       .saved-message-icon {
-        @include color-svg('./images/icons/bookmark-filled.svg', white, 100%);
+        @include mixins.color-svg(
+          './images/icons/bookmark-filled.svg',
+          white,
+          100%
+        );
       }
 
       .date,

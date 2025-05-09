@@ -1,3 +1,5 @@
+@use '../mixins';
+
 .mutual-chats {
   .chat-list-item {
     padding: 0px 20px;
@@ -21,7 +23,7 @@
   }
 
   .verification {
-    @include button-reset;
+    @include mixins.button-reset;
     img {
       margin-right: 7px;
     }
