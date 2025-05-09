@@ -120,6 +120,9 @@ class ElectronDeltachat extends BaseDeltaChat<ElectronTransport> {
 }
 
 class ElectronRuntime implements Runtime {
+  setDragListener(_fn: (event: any) => void): Promise<any> {
+    return Promise.resolve()
+  }
   onResumeFromSleep: (() => void) | undefined
   onWebxdcSendToChat:
     | ((
@@ -135,10 +138,9 @@ class ElectronRuntime implements Runtime {
   onDragFileOut(file: string): void {
     ipcBackend.send('ondragstart', file)
   }
-  isDroppedFileFromOutside(file: File): boolean {
-    const path = getPathForFile(file)
+  isDroppedFileFromOutside(file: string): boolean {
     const forbiddenPathRegEx = /DeltaChat\/.+?\.sqlite-blobs\//gi
-    return !forbiddenPathRegEx.test(path.replace('\\', '/'))
+    return !forbiddenPathRegEx.test(file.replace('\\', '/'))
   }
   onThemeUpdate: (() => void) | undefined
   onChooseLanguage: ((locale: string) => Promise<void>) | undefined
