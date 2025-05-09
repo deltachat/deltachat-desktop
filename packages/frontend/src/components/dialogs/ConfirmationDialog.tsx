@@ -55,7 +55,6 @@ export default function ConfirmationDialog({
       <DialogFooter>
         <FooterActions>
           <FooterActionButton
-            styling='secondary'
             onClick={() => handleClick(false)}
             data-testid='cancel'
           >
