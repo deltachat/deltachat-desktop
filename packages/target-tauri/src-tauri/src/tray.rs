@@ -30,7 +30,6 @@ pub(crate) fn build_tray_icon(app: &AppHandle) -> anyhow::Result<TrayIcon> {
     #[cfg(feature = "flatpak")]
     {
         use std::{env, path::PathBuf};
-        // let key = "TEMP";
         let xdg_runtime_dir =
             env::var("XDG_RUNTIME_DIR").expect("XDG_RUNTIME_DIR is not set, this shouldn't happen");
         let flatpak_app_id =
@@ -39,10 +38,6 @@ pub(crate) fn build_tray_icon(app: &AppHandle) -> anyhow::Result<TrayIcon> {
             .expect("XDG_RUNTIME_DIR is not a valid path")
             .join("app")
             .join(&flatpak_app_id);
-        // unsafe {
-        //     env::set_var(key, path.display().to_string());
-        // }
-        // log::debug!("set $TEMP to {:?}", env::var(key));
         tray_builder = tray_builder.temp_dir_path(path);
     }
 
