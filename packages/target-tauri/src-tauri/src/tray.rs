@@ -23,8 +23,7 @@ pub fn is_tray_icon_active(app: &AppHandle) -> anyhow::Result<bool> {
 pub(crate) fn build_tray_icon(app: &AppHandle) -> anyhow::Result<TrayIcon> {
     let menu = create_tray_menu(app)?;
 
-    let id = uuid::Uuid::new_v4().to_string();
-    let mut tray_builder = TrayIconBuilder::with_id(id)
+    let mut tray_builder = TrayIconBuilder::new()
         .menu(&menu)
         .icon(app.default_window_icon().unwrap().clone());
 
