@@ -163,5 +163,6 @@ export interface AutostartState {
   isSupported: boolean
   // This is not the same as enabled in the desktop settings,
   // this is the actual state not the desktop setting
-  isRegistered: boolean
+  // null means it can't be determined and no message should be shown
+  isRegistered: boolean | null
 }

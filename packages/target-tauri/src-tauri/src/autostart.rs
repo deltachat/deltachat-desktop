@@ -7,7 +7,8 @@ pub struct AutostartState {
     is_supported: bool,
     // This is not the same as enabled in the desktop settings,
     // this is the actual state not the desktop setting
-    is_registered: bool,
+    // on flatpak this can not be determined
+    is_registered: Option<bool>,
 }
 
 #[cfg(not(desktop))]
@@ -15,33 +16,17 @@ pub struct AutostartState {
 pub(crate) fn get_autostart_state(app: AppHandle) -> Result<AutostartState, String> {
     Ok(AutostartState {
         is_supported: false,
-        is_registered: false,
+        is_registered: Some(false),
     })
 }
 
 #[cfg(all(desktop, feature = "flatpak"))]
 #[tauri::command]
 pub(crate) async fn get_autostart_state(_app: AppHandle) -> Result<AutostartState, String> {
-    let background = ashpd::desktop::background::Background::request();
-    if let Ok(request) = background
-        .command(["deltachat-tauri", "--autostart"])
-        .send()
-        .await
-        .inspect_err(|err| log::error!("get_autostart_state:request {err:?}"))
-    {
-        if let Ok(response) = request
-            .response()
-            .inspect_err(|err| log::error!("get_autostart_state:response {err:?}"))
-        {
-            let is_registered = response.auto_start();
-            return Ok(AutostartState {
-                is_supported: true,
-                is_registered,
-            });
-        }
-    }
-
-    Err("failed to get autostart state, see logs for more info".to_string())
+    return Ok(AutostartState {
+        is_supported: true,
+        is_registered: None,
+    });
 }
 
 #[cfg(all(desktop, feature = "flatpak"))]
@@ -67,7 +52,7 @@ pub(crate) fn get_autostart_state(app: AppHandle) -> Result<AutostartState, Stri
     let is_supported = true;
     Ok(AutostartState {
         is_supported,
-        is_registered,
+        is_registered: Some(is_registered),
     })
 }
 
