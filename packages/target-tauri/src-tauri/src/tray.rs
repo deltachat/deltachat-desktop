@@ -27,6 +27,16 @@ pub(crate) fn build_tray_icon(app: &AppHandle) -> anyhow::Result<TrayIcon> {
         .menu(&menu)
         .icon(app.default_window_icon().unwrap().clone());
 
+    #[cfg(feature = "flatpak")]
+    {
+        let asset = format!("images/tray/deltachat.png");
+        if let Some(icon) = app.asset_resolver().get(asset.clone()) {
+            tray_builder = tray_builder.icon(tauri::image::Image::from_bytes(&icon.bytes)?);
+        } else {
+            log::error!("tray icon asset {asset} not found!")
+        }
+    }
+
     // // special style icon for macOS
     // // (TODO, for now we use the tauri icon until dc tauri is really the default release?)
     // #[cfg(target_os = "macos")]
