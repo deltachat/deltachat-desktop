@@ -27,7 +27,7 @@ pub(crate) fn build_tray_icon(app: &AppHandle) -> anyhow::Result<TrayIcon> {
 
     let mut tray_builder = TrayIconBuilder::new().menu(&menu);
 
-    // #[cfg(feature = "flatpak")]
+    #[cfg(feature = "flatpak")]
     {
         use std::{env, path::PathBuf};
         // let key = "TEMP";
