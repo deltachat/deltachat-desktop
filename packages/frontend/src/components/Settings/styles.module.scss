@@ -1,4 +1,4 @@
-@import '../../../scss/mixins';
+@use '../../../scss/mixins';
 
 $settingsHeight: 40px;
 
@@ -75,7 +75,7 @@ $settingsHeight: 40px;
 }
 
 .settingsSelector {
-  @include button-reset;
+  @include mixins.button-reset;
   width: 100%;
 
   align-items: center;

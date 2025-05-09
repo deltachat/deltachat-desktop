@@ -1,3 +1,5 @@
+@use 'mixins';
+
 .ConnectivityToast {
   position: fixed;
 
@@ -30,7 +32,7 @@
 
   .tryNowButton {
     // So that it's on top of the `showInfoButton` and can be clicked.
-    @include button-reset;
+    @include mixins.button-reset;
 
     display: block;
     color: var(--colorPrimary);

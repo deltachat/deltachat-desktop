@@ -1,3 +1,5 @@
+@use '../mixins';
+
 .dc-context-menu-layer {
   width: 100vw;
   height: 100vh;
@@ -51,7 +53,7 @@
   }
 
   .item {
-    @include button-reset;
+    @include mixins.button-reset;
     width: 100%;
     line-height: 20px;
     padding: 5px 12px;
@@ -69,7 +71,7 @@
       width: 18px;
       height: 18px;
       margin-left: auto;
-      @include color-svg(
+      @include mixins.color-svg(
         './images/icons/navigate_next.svg',
         var(--textPrimary),
         100%

@@ -1,3 +1,5 @@
+@use '../mixins';
+
 // used by message and the popup message on map
 .metadata {
   display: flex;
@@ -18,12 +20,16 @@
       color: white;
     }
 
-    .padlock-icon {
-      @include color-svg('./images/padlock.svg', white, 125%);
+    & > .padlock-icon {
+      @include mixins.color-svg('./images/padlock.svg', white, 125%);
     }
 
-    .saved-message-icon {
-      @include color-svg('./images/icons/bookmark-filled.svg', white, 100%);
+    & > .saved-message-icon {
+      @include mixins.color-svg(
+        './images/icons/bookmark-filled.svg',
+        white,
+        100%
+      );
     }
 
     .status-icon.sending {
