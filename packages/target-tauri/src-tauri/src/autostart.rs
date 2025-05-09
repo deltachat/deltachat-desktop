@@ -24,6 +24,7 @@ pub(crate) fn get_autostart_state(app: AppHandle) -> Result<AutostartState, Stri
 pub(crate) async fn get_autostart_state(_app: AppHandle) -> Result<AutostartState, String> {
     let background = ashpd::desktop::background::Background::request();
     if let Ok(request) = background
+        .command(["deltachat-tauri", "--autostart"])
         .send()
         .await
         .inspect_err(|err| log::error!("get_autostart_state:request {err:?}"))
