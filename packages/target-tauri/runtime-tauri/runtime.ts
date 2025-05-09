@@ -664,8 +664,9 @@ class TauriRuntime implements Runtime {
   onDragFileOut(_file: string): void {
     throw new Error('Method not implemented.50')
   }
-  isDroppedFileFromOutside(_file: string): boolean {
-    throw new Error('Method not implemented.51')
+  isDroppedFileFromOutside(file: string): boolean {
+    const forbiddenPathRegEx = /DeltaChat\/.+?\.sqlite-blobs\//gi
+    return !forbiddenPathRegEx.test(file.replace('\\', '/'))
   }
   // only works on macOS and iOS
   // exp.runtime.debug_get_datastore_ids()

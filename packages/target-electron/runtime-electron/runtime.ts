@@ -138,9 +138,9 @@ class ElectronRuntime implements Runtime {
   onDragFileOut(file: string): void {
     ipcBackend.send('ondragstart', file)
   }
-  isDroppedFileFromOutside(path: string): boolean {
+  isDroppedFileFromOutside(file: string): boolean {
     const forbiddenPathRegEx = /DeltaChat\/.+?\.sqlite-blobs\//gi
-    return !forbiddenPathRegEx.test(path.replace('\\', '/'))
+    return !forbiddenPathRegEx.test(file.replace('\\', '/'))
   }
   onThemeUpdate: (() => void) | undefined
   onChooseLanguage: ((locale: string) => Promise<void>) | undefined
