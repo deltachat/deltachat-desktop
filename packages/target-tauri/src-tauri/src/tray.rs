@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 use anyhow::Context;
 use tauri::{
     tray::{MouseButton, MouseButtonState, TrayIcon, TrayIconBuilder},
@@ -22,6 +24,24 @@ pub fn is_tray_icon_active(app: &AppHandle) -> anyhow::Result<bool> {
 
 pub(crate) fn build_tray_icon(app: &AppHandle) -> anyhow::Result<TrayIcon> {
     let menu = create_tray_menu(app)?;
+
+    // #[cfg(feature = "flatpak")]
+    {
+        use std::{env, path::PathBuf};
+        let key = "TEMP";
+        let xdg_runtime_dir =
+            env::var("XDG_RUNTIME_DIR").expect("XDG_RUNTIME_DIR is not set, this shouldn't happen");
+        let flatpak_app_id =
+            env::var("FLATPAK_ID").expect("FLATPAK_ID is not set, this shouldn't happen");
+        let path = PathBuf::from_str(&xdg_runtime_dir)
+            .expect("XDG_RUNTIME_DIR is not a valid path")
+            .join("app")
+            .join(&flatpak_app_id);
+        unsafe {
+            env::set_var(key, path.display().to_string());
+        }
+        log::debug!("set $TEMP to {:?}", env::var(key));
+    }
 
     let mut tray_builder = TrayIconBuilder::new()
         .menu(&menu)
