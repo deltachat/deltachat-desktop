@@ -3,7 +3,7 @@ import { app, Notification, nativeImage, ipcMain } from 'electron'
 
 import * as mainWindow from './windows/main.js'
 import { appIcon } from './application-constants.js'
-import { DcNotification } from '../../shared/shared-types.js'
+import type { DcNotification } from '../../shared/shared-types.js'
 import { getLogger } from '../../shared/logger.js'
 
 import type { NativeImage, IpcMainInvokeEvent } from 'electron'
@@ -89,7 +89,9 @@ function onClickNotification(
   mainWindow.window?.focus()
 }
 
-const notifications: { [chatId: number]: Notification[] } = {}
+const notifications: {
+  [accountId: number]: { [chatId: number]: Notification[] }
+} = {}
 
 /**
  * triggers creation of a notification, adds appropriate
@@ -98,7 +100,7 @@ const notifications: { [chatId: number]: Notification[] } = {}
  * @param data is passed from renderer process
  */
 function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
-  const chatId = data.chatId
+  const { chatId, accountId } = data
 
   log.debug(
     'Creating notification:',
@@ -110,8 +112,8 @@ function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
 
     notify.on('click', Event => {
       onClickNotification(data.accountId, chatId, data.messageId, Event)
-      notifications[chatId] =
-        notifications[chatId]?.filter(n => n !== notify) || []
+      notifications[accountId][chatId] =
+        notifications[accountId]?.[chatId]?.filter(n => n !== notify) || []
       notify.close()
     })
     notify.on('close', () => {
@@ -119,17 +121,21 @@ function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
       // when the message is moved to notification center so only close
       // the notification on this event on Mac
       if (isMac) {
-        notifications[chatId] =
-          notifications[chatId]?.filter(n => n !== notify) || []
+        notifications[accountId][chatId] =
+          notifications[accountId]?.[chatId]?.filter(n => n !== notify) || []
       }
       /* ignore-console-log */
       console.log('Notification close event triggered', notify)
     })
 
-    if (notifications[chatId]) {
-      notifications[chatId].push(notify)
+    if (!notifications[accountId]) {
+      notifications[accountId] = {}
+    }
+
+    if (notifications[accountId][chatId]) {
+      notifications[accountId][chatId].push(notify)
     } else {
-      notifications[chatId] = [notify]
+      notifications[accountId][chatId] = [notify]
     }
 
     notify.show()
@@ -138,21 +144,29 @@ function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
   }
 }
 
-function clearNotificationsForChat(_: any, chatId: number) {
-  log.debug('clearNotificationsForChat', { chatId, notifications })
-  if (notifications[chatId]) {
-    for (const notify of notifications[chatId]) {
+function clearNotificationsForChat(
+  _: unknown,
+  accountId: number,
+  chatId: number
+) {
+  log.debug('clearNotificationsForChat', { accountId, chatId, notifications })
+  if (notifications[accountId]?.[chatId]) {
+    for (const notify of notifications[accountId]?.[chatId] || []) {
       notify.close()
     }
-    delete notifications[chatId]
+    delete notifications[accountId][chatId]
   }
-  log.debug('after cleared Notifications', { chatId, notifications })
+  log.debug('after cleared Notifications', { accountId, chatId, notifications })
 }
 
 function clearAll() {
-  for (const chatId of Object.keys(notifications)) {
-    if (isNaN(Number(chatId))) {
-      clearNotificationsForChat(null, Number(chatId))
+  for (const accountId of Object.keys(notifications)) {
+    if (!Number.isNaN(Number(accountId))) {
+      for (const chatId of Object.keys(notifications[Number(accountId)])) {
+        if (!Number.isNaN(Number(chatId))) {
+          clearNotificationsForChat(null, Number(accountId), Number(chatId))
+        }
+      }
     }
   }
 }

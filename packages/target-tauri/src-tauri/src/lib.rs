@@ -20,6 +20,7 @@ use state::{
     html_email_instances::HtmlEmailInstancesState,
     main_window_channels::MainWindowChannels,
     menu_manager::MenuManager,
+    notification::Notifications,
     translations::TranslationState,
     tray_manager::TrayManager,
     webxdc_instances::WebxdcInstancesState,
@@ -45,11 +46,17 @@ mod file_dialogs;
 mod help_window;
 mod html_window;
 mod i18n;
+
 // menus are not available on mobile
 mod chat_background_image;
 #[cfg(desktop)]
 mod menus;
 mod network_isolation_dummy_proxy;
+// currently we have no mobile support for notifications
+// but then there would also be the question if they would even work
+// with the current architecture where everything is controled by the frontend
+// (so the main window needs to be running to send notifications)
+mod notifications;
 mod resume_from_sleep;
 mod run_config;
 mod runtime_capabilities;
@@ -98,6 +105,8 @@ async fn ui_frontend_ready(
     app: AppHandle,
     rc: tauri::State<'_, RunConfig>,
     state: tauri::State<'_, AppState>,
+    mwc: tauri::State<'_, MainWindowChannels>,
+    notifications: tauri::State<'_, Notifications>,
 ) -> Result<(), String> {
     let mut lock = state.inner.lock().await;
 
@@ -119,6 +128,12 @@ async fn ui_frontend_ready(
     state.log_duration_since_startup("ui_frontend_ready");
 
     deeplink::register();
+
+    notifications.ask_for_permission();
+
+    if let Err(err) = mwc.emit_deferred_events().await {
+        log::error!("emit_deferred_events {err:?}")
+    }
 
     Ok(())
 }
@@ -177,7 +192,6 @@ pub fn run() -> i32 {
                         log::error!("deeplink_tx: send error: {err:?}");
                     }
                 }
-
                 let window = app.get_webview_window("main").expect("no main window");
                 window
                     .show()
@@ -190,6 +204,8 @@ pub fn run() -> i32 {
                     .inspect_err(|err| log::error!("{err}"))
                     .ok();
             }));
+
+        // registering here does not seem to work
     }
 
     // sepcified here, so the open handler does not rely on appstate to be ready
@@ -247,6 +263,12 @@ pub fn run() -> i32 {
             webxdc::commands::webxdc_send_to_chat,
             #[cfg(target_vendor = "apple")]
             webxdc::data_storage::debug_get_datastore_ids,
+            #[cfg(desktop)]
+            notifications::show_notification,
+            #[cfg(desktop)]
+            notifications::clear_all_notifications,
+            #[cfg(desktop)]
+            notifications::clear_notifications,
             runtime_info::get_runtime_info,
             settings::change_desktop_settings_apply_side_effects,
             help_window::open_help_window,
@@ -349,7 +371,9 @@ pub fn run() -> i32 {
                 // why do we use debug here at the moment?
                 // because the message "[DEBUG][portmapper] failed to get a port mapping deadline has elapsed" looks like important
                 // info for debugging add backup transfer feature. - so better be safe and set it to debug for now.
-                .level_for("tao", log::LevelFilter::Trace)
+                // .level_for("tao", log::LevelFilter::Trace)
+                // .level_for("webview::JS::render", log::LevelFilter::Error)
+                // .level_for("webview::JS::renderer", log::LevelFilter::Error);
                 .level_for("portmapper", log::LevelFilter::Debug);
 
             if run_config.log_debug {
@@ -471,6 +495,11 @@ pub fn run() -> i32 {
                     i18n::watch_translations(app.handle().clone());
                 }
             }
+
+            let app_id = app.config().identifier.clone();
+            let notifications = Notifications::new(app_id);
+            notifications.initialize(app.handle().clone());
+            app.manage(notifications);
 
             app.state::<AppState>()
                 .log_duration_since_startup("setup done");

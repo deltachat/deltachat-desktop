@@ -70,4 +70,8 @@ permissions = [
     "allow-get-available-themes",
     "allow-get-current-active-theme-address",
     "allow-get-theme",
+
+    "allow-show-notification",
+    "allow-clear-notifications",
+    "allow-clear-all-notifications",
 ]

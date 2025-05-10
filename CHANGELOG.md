@@ -4,6 +4,7 @@
 
 ### Added
 - new proxy configuration dialog #5052
+- tauri: added notifications
 
 ### Changed
 

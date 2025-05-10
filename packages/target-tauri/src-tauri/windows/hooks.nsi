@@ -4,18 +4,18 @@
 ; defines a macro to register as a handler for an uri scheme
 ; adapted from https://github.com/tauri-apps/tauri/blob/f0662e41f4f78ec5a3f88aa76a7367d37d740291/crates/tauri-bundler/src/bundle/windows/nsis/installer.nsi#L648
 !macro URI_SCHEME protocol
-    WriteRegStr SHCTX "Software\Classes\\${protocol}" "URL Protocol" ""
-    WriteRegStr SHCTX "Software\Classes\\${protocol}" "" "URL:${BUNDLEID} protocol"
-    WriteRegStr SHCTX "Software\Classes\\${protocol}\DefaultIcon" "" "$\"$INSTDIR\${MAINBINARYNAME}.exe$\",0"
-    WriteRegStr SHCTX "Software\Classes\\${protocol}\shell\open\command" "" "$\"$INSTDIR\${MAINBINARYNAME}.exe$\" $\"%1$\""
+    WriteRegStr SHCTX "Software\Classes\${protocol}" "URL Protocol" ""
+    WriteRegStr SHCTX "Software\Classes\${protocol}" "" "URL:${BUNDLEID} protocol"
+    WriteRegStr SHCTX "Software\Classes\${protocol}\DefaultIcon" "" "$\"$INSTDIR\${MAINBINARYNAME}.exe$\",0"
+    WriteRegStr SHCTX "Software\Classes\${protocol}\shell\open\command" "" "$\"$INSTDIR\${MAINBINARYNAME}.exe$\" $\"%1$\""
 !macroend
 
 ; defines a macro to remove as handler for an uri scheme
 ; adapted from https://github.com/tauri-apps/tauri/blob/f0662e41f4f78ec5a3f88aa76a7367d37d740291/crates/tauri-bundler/src/bundle/windows/nsis/installer.nsi#L781
 !macro REMOVE_URI_SCHEME protocol
-    ReadRegStr $R7 SHCTX "Software\Classes\\${protocol}\shell\open\command" ""
+    ReadRegStr $R7 SHCTX "Software\Classes\${protocol}\shell\open\command" ""
     ${If} $R7 == "$\"$INSTDIR\${MAINBINARYNAME}.exe$\" $\"%1$\""
-      DeleteRegKey SHCTX "Software\Classes\\${protocol}"
+      DeleteRegKey SHCTX "Software\Classes\${protocol}"
     ${EndIf}
 !macroend
 
@@ -34,6 +34,7 @@
     !insertmacro URI_SCHEME "openpgp4fpr"
     !insertmacro URI_SCHEME "dcaccount"
     !insertmacro URI_SCHEME "dclogin"
+    !insertmacro URI_SCHEME "dcnotification"
 !macroend
 
 ; Runs before removing any files, registry keys and shortcuts.
@@ -44,6 +45,7 @@
     !insertmacro REMOVE_URI_SCHEME "openpgp4fpr"
     !insertmacro REMOVE_URI_SCHEME "dcaccount"
     !insertmacro REMOVE_URI_SCHEME "dclogin"
+    !insertmacro REMOVE_URI_SCHEME "dcnotification"
 !macroend
 
 ; Runs after files, registry keys and shortcuts have been removed.
