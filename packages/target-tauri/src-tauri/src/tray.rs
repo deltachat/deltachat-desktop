@@ -1,3 +1,5 @@
+use std::str::FromStr;
+
 use anyhow::Context;
 use tauri::{
     tray::{MouseButton, MouseButtonState, TrayIcon, TrayIconBuilder},
@@ -23,9 +25,23 @@ pub fn is_tray_icon_active(app: &AppHandle) -> anyhow::Result<bool> {
 pub(crate) fn build_tray_icon(app: &AppHandle) -> anyhow::Result<TrayIcon> {
     let menu = create_tray_menu(app)?;
 
-    let mut tray_builder = TrayIconBuilder::new()
-        .menu(&menu)
-        .icon(app.default_window_icon().unwrap().clone());
+    let mut tray_builder = TrayIconBuilder::new().menu(&menu);
+
+    #[cfg(feature = "flatpak")]
+    {
+        use std::{env, path::PathBuf};
+        let xdg_runtime_dir =
+            env::var("XDG_RUNTIME_DIR").expect("XDG_RUNTIME_DIR is not set, this shouldn't happen");
+        let flatpak_app_id =
+            env::var("FLATPAK_ID").expect("FLATPAK_ID is not set, this shouldn't happen");
+        let path = PathBuf::from_str(&xdg_runtime_dir)
+            .expect("XDG_RUNTIME_DIR is not a valid path")
+            .join("app")
+            .join(&flatpak_app_id);
+        tray_builder = tray_builder.temp_dir_path(path);
+    }
+
+    tray_builder = tray_builder.icon(app.default_window_icon().unwrap().clone());
 
     // // special style icon for macOS
     // // (TODO, for now we use the tauri icon until dc tauri is really the default release?)

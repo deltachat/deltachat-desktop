@@ -775,7 +775,7 @@ class BrowserRuntime implements Runtime {
   getAutostartState(): Promise<AutostartState> {
     return Promise.resolve({
       isSupported: false,
-      isRegistered: false,
+      isRegistered: null,
     })
   }
   async checkMediaAccess(mediaType: MediaType): Promise<MediaAccessStatus> {
