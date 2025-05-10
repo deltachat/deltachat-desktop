@@ -43,9 +43,15 @@ function Header({
   isPinned,
   isMuted,
   isProtected,
+  isEncrypted,
 }: Pick<
   ChatListItemType,
-  'lastUpdated' | 'name' | 'isPinned' | 'isMuted' | 'isProtected'
+  | 'lastUpdated'
+  | 'name'
+  | 'isPinned'
+  | 'isMuted'
+  | 'isProtected'
+  | 'isEncrypted'
 >) {
   const tx = window.static_translate
   return (
@@ -54,6 +60,9 @@ function Header({
         <span>
           <span className='truncated'>{name}</span>
           {isProtected && <InlineVerifiedIcon />}
+          {!isEncrypted && (
+            <div className='mail_icon' aria-label='Classic Email' />
+          )}
         </span>
       </div>
       {isMuted && <div className='mute_icon' aria-label={tx('mute')} />}
@@ -343,6 +352,7 @@ function ChatListItemNormal({
           isProtected={chatListItem.isProtected}
           isPinned={chatListItem.isPinned}
           isMuted={chatListItem.isMuted}
+          isEncrypted={chatListItem.isEncrypted}
         />
 
         <Message

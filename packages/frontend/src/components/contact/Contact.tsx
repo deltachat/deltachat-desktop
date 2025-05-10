@@ -7,12 +7,17 @@ function ContactName(props: {
   address: string
   isVerified?: boolean
   isBlocked?: boolean
+  isPgpContact?: boolean
 }) {
+  const tx = window.static_translate
   return (
     <div className='contact-name'>
       <div className='display-name'>
         <span className='truncated'>{props.displayName}</span>
         {props.isVerified && <InlineVerifiedIcon />}
+        {!props.isPgpContact && (
+          <div className='mail_icon' aria-label={tx('email_address')} />
+        )}
         {props.isBlocked && (
           <i className='material-svg-icon material-icon-blocked' />
         )}
@@ -31,6 +36,7 @@ export default function Contact(props: {
     isVerified: boolean
     wasSeenRecently: boolean
     isBlocked?: boolean
+    isPgpContact?: boolean
   }
 }) {
   const {
@@ -41,6 +47,7 @@ export default function Contact(props: {
     isVerified,
     wasSeenRecently,
     isBlocked,
+    isPgpContact,
   } = props.contact
   return (
     <div className='contact'>
@@ -62,6 +69,7 @@ export default function Contact(props: {
         address={address}
         isVerified={isVerified}
         isBlocked={isBlocked}
+        isPgpContact={isPgpContact}
       />
     </div>
   )
