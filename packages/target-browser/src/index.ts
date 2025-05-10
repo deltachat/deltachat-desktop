@@ -218,7 +218,7 @@ const wssBackend = new WebSocketServer({
   perMessageDeflate: true,
 })
 wssBackend.on('connection', function connection(ws) {
-  ws.on('error', log.error)
+  ws.on('error', log.error.bind(log))
 
   ws.on('message', raw_data => {
     try {
