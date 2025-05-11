@@ -81,7 +81,7 @@
         // this is also used by the nix package
         "desktopTemplate": "./linux/desktop.template",
         "files": {
-          "/usr/share/metainfo/deltachat-tauri.appdata.xml": "../metainfo.svg",
+          "/usr/share/metainfo/deltachat-tauri.appdata.xml": "../metainfo.xml",
           "/usr/share/icons/hicolor/scalable/apps/deltachat-tauri.svg": "../deltachat-tauri.svg",
           "/usr/share/mime/packages/chat.delta.desktop.tauri.xml": "./linux/mime.xml" // mime association for xdc file
         }
