@@ -41,28 +41,39 @@ export default function SearchInput(props: Props) {
 
   return (
     <>
-      <input
-        id={id}
-        placeholder={tx('search')}
-        aria-label={tx('search')}
-        aria-description={tx('search_explain')}
-        autoFocus
-        onChange={onChange}
-        value={value}
-        className={styles.searchInput}
-        data-no-drag-region
-        ref={props.inputRef}
-        spellCheck={false}
-        // FYI there is also Ctrl + Shift + F to search in chat.
-        aria-keyshortcuts='Control+F'
-      />
-      {hasValue && (
-        <SearchInputButton
-          aria-label={tx('clear_search')}
-          icon='cross'
-          onClick={handleClear}
+      <div
+        role='search'
+        // `aria-label={tx('search')}` is not required,
+        // a "search" landmark is enough.
+        // Note that `_explain` strings are generally verbose
+        // and are more suitable for `aria-description`,
+        // but here it's fine to use it as the label.
+        // We must speecify the label, because we have multiple searches
+        // in the app, another one being the attachments search.
+        aria-label={tx('search_explain')}
+        className={styles.inputAndClearButton}
+      >
+        <input
+          id={id}
+          placeholder={tx('search')}
+          autoFocus
+          onChange={onChange}
+          value={value}
+          className={styles.searchInput}
+          data-no-drag-region
+          ref={props.inputRef}
+          spellCheck={false}
+          // FYI there is also Ctrl + Shift + F to search in chat.
+          aria-keyshortcuts='Control+F'
         />
-      )}
+        {hasValue && (
+          <SearchInputButton
+            aria-label={tx('clear_search')}
+            icon='cross'
+            onClick={handleClear}
+          />
+        )}
+      </div>
       {!hasValue && (
         <SearchInputButton
           aria-label={tx('qrscan_title')}

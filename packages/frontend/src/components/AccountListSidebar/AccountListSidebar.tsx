@@ -144,38 +144,45 @@ export default function AccountListSidebar({
           data-tauri-drag-region
         />
       )}
-      <ul
-        ref={accountsListRef}
+      <nav
         // Perhaps just "Profiles" would be more appropriate,
         // because you can do other things with profiles in this list,
         // but we have the same on Android.
         aria-label={tx('switch_account')}
-        className={styles.accountList}
-        onScroll={updateHoverInfoPosition}
-        role='tablist'
-        aria-orientation='vertical'
+        className={styles.accountListNav}
       >
-        <RovingTabindexProvider wrapperElementRef={accountsListRef}>
-          {accounts.map(id => (
-            <AccountItem
-              key={id}
-              accountId={id}
-              isSelected={selectedAccountId === id}
-              onSelectAccount={selectAccount}
-              openAccountDeletionScreen={openAccountDeletionScreen}
-              updateAccountForHoverInfo={updateAccountForHoverInfo}
-              syncAllAccounts={syncAllAccounts}
-              muted={noficationSettings[id]?.muted || false}
-            />
-          ))}
-          <li>
-            <AddAccountButton onClick={onAddAccount} />
-          </li>
-        </RovingTabindexProvider>
-      </ul>
+        <ul
+          ref={accountsListRef}
+          className={styles.accountList}
+          onScroll={updateHoverInfoPosition}
+          role='tablist'
+          aria-orientation='vertical'
+        >
+          <RovingTabindexProvider wrapperElementRef={accountsListRef}>
+            {accounts.map(id => (
+              <AccountItem
+                key={id}
+                accountId={id}
+                isSelected={selectedAccountId === id}
+                onSelectAccount={selectAccount}
+                openAccountDeletionScreen={openAccountDeletionScreen}
+                updateAccountForHoverInfo={updateAccountForHoverInfo}
+                syncAllAccounts={syncAllAccounts}
+                muted={noficationSettings[id]?.muted || false}
+              />
+            ))}
+            <li>
+              <AddAccountButton onClick={onAddAccount} />
+            </li>
+          </RovingTabindexProvider>
+        </ul>
+      </nav>
       {/* The condition is the same as in https://github.com/deltachat/deltachat-desktop/blob/63af023437ff1828a27de2da37bf94ab180ec528/src/renderer/contexts/KeybindingsContext.tsx#L26 */}
       {window.__screen === Screens.Main && (
         <div className={styles.buttonsContainer}>
+          {/* TODO a11y: this button shoul probably be
+          inside a landmark / section.
+          But which? It doesn't really belong to "Profiles". */}
           <button
             aria-label={tx('menu_settings')}
             className={styles.settingsButton}

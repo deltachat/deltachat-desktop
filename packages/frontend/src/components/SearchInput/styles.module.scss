@@ -1,6 +1,12 @@
 $borderRadius: 10px;
 $closeButtonSize: 30px;
 
+.inputAndClearButton {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
 .searchInput {
   background-color: var(--searchInputBackgroundColor);
   border-radius: $borderRadius;
