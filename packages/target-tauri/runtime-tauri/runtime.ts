@@ -72,6 +72,10 @@ type MainWindowEvents =
       event: 'onThemeUpdate'
     }
   | {
+      event: 'notificationClick'
+      data: { accountId: number; chatId: number; msgId: number }
+    }
+  | {
       event: 'deepLinkOpened'
       data: string
     }
@@ -301,7 +305,9 @@ class TauriRuntime implements Runtime {
       // so the shown file location is not very helpful most of the time,
       // still for errors the stack trace is appended
       const onlyFnName = location?.split('@')[0]
-      location = `JS ${channel}${onlyFnName ? `::${onlyFnName}` : ''}`
+      location = `:JS::${channel.replace(/\//g, '::')}${
+        onlyFnName ? `::${onlyFnName}` : ''
+      }`
 
       const tauriLogLevel = variants[level]
       invoke('plugin:log|log', {
@@ -356,6 +362,8 @@ class TauriRuntime implements Runtime {
         this.onThemeUpdate?.()
       } else if (event.event === 'deepLinkOpened') {
         this.onOpenQrUrl?.(event.data)
+      } else if (event.event === 'notificationClick') {
+        this.notificationCallback?.(event.data)
       }
     }
     window
@@ -552,19 +560,41 @@ class TauriRuntime implements Runtime {
 
     invoke('update_tray_icon_badge', { counter: value })
   }
-  showNotification(_data: DcNotification): void {
-    throw new Error('Method not implemented.37')
+  showNotification({
+    title,
+    body,
+    icon,
+    iconIsAvatar,
+    chatId,
+    messageId,
+    accountId,
+  }: DcNotification): void {
+    invoke('show_notification', {
+      title,
+      body,
+      icon,
+      iconIsAvatar: iconIsAvatar || false,
+      chatId,
+      messageId,
+      accountId,
+    })
   }
   clearAllNotifications(): void {
-    throw new Error('Method not implemented.38')
+    invoke('clear_all_notifications')
   }
-  clearNotifications(_chatId: number): void {
-    this.log.error('Method not implemented.39 - clearNotifications')
+  clearNotifications(accountId: number, chatId: number): void {
+    invoke('clear_notifications', { accountId, chatId })
   }
+
+  notificationCallback?: (data: {
+    accountId: number
+    chatId: number
+    msgId: number
+  }) => void
   setNotificationCallback(
-    _cb: (data: { accountId: number; chatId: number; msgId: number }) => void
+    cb: (data: { accountId: number; chatId: number; msgId: number }) => void
   ): void {
-    this.log.error('Method not implemented.40')
+    this.notificationCallback = cb
   }
   writeTempFileFromBase64(name: string, content: string): Promise<string> {
     return invoke('write_temp_file_from_base64', { name, content })

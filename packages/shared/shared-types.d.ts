@@ -128,9 +128,9 @@ export interface DcNotification {
    * (or a data url with base64 encoded data)
    */
   icon: string | null
+  iconIsAvatar?: boolean // for tauri, windows controlling how images is disaplayed
   chatId: number
   messageId: number
-  // for future
   accountId: number
   notificationType: NOTIFICATION_TYPE
 }

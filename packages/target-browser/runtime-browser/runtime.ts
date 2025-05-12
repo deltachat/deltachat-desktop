@@ -356,7 +356,9 @@ class BrowserRuntime implements Runtime {
     })
   }
 
-  activeNotifications: { [chatId: number]: Notification[] } = {}
+  activeNotifications: {
+    [accountId: number]: { [chatId: number]: Notification[] }
+  } = {}
   notificationCB: (data: {
     accountId: number
     chatId: number
@@ -436,29 +438,39 @@ class BrowserRuntime implements Runtime {
       msgId: messageId,
     })
 
-    if (this.activeNotifications[chatId]) {
-      this.activeNotifications[chatId].push(notification)
+    if (!this.activeNotifications[accountId]) {
+      this.activeNotifications[accountId] = {}
+    }
+
+    if (this.activeNotifications[accountId][chatId]) {
+      this.activeNotifications[accountId][chatId].push(notification)
     } else {
-      this.activeNotifications[chatId] = [notification]
+      this.activeNotifications[accountId][chatId] = [notification]
     }
   }
   clearAllNotifications(): void {
-    for (const chatId of Object.keys(this.activeNotifications)) {
-      if (isNaN(Number(chatId))) {
-        this.clearNotifications(Number(chatId))
+    for (const accountId of Object.keys(this.activeNotifications)) {
+      if (!Number.isNaN(Number(accountId))) {
+        for (const chatId of Object.keys(
+          this.activeNotifications[Number(accountId)]
+        )) {
+          if (!Number.isNaN(Number(chatId))) {
+            this.clearNotifications(Number(accountId), Number(chatId))
+          }
+        }
       }
     }
   }
-  clearNotifications(chatId: number): void {
+  clearNotifications(accountId: number, chatId: number): void {
     this.log.debug('clearNotificationsForChat', {
       chatId,
       notifications: this.activeNotifications,
     })
-    if (this.activeNotifications[chatId]) {
-      for (const notify of this.activeNotifications[chatId]) {
+    if (this.activeNotifications[accountId]?.[chatId]) {
+      for (const notify of this.activeNotifications[accountId][chatId]) {
         notify.close()
       }
-      delete this.activeNotifications[chatId]
+      delete this.activeNotifications[accountId][chatId]
     }
     this.log.debug('after cleared Notifications', {
       chatId,
