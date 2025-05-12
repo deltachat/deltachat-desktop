@@ -2,6 +2,7 @@ import AutoSizer from 'react-virtualized-auto-sizer'
 import React, { useState, useEffect, useRef } from 'react'
 import moment from 'moment'
 import { C } from '@deltachat/jsonrpc-client'
+import classNames from 'classnames'
 
 import { useChatList } from '../../chat/ChatListHelpers'
 import { useLogicVirtualChatList, ChatListPart } from '../../chat/ChatList'
@@ -249,8 +250,29 @@ export function ViewProfileInner({
           isVerified={contact.isProfileVerified}
           wasSeenRecently={contact.wasSeenRecently}
         />
+        {statusText !== '' && (
+          <>
+            <div className={styles.statusText}>
+              <MessagesDisplayContext.Provider
+                value={{
+                  context: 'contact_profile_status',
+                  contact_id: contact.id,
+                  closeProfileDialog: onClose,
+                }}
+              >
+                <MessageBody text={statusText} disableJumbomoji />
+              </MessagesDisplayContext.Provider>
+            </div>
+            <div
+              className={classNames(
+                'group-separator',
+                styles.extendedSeparator
+              )}
+            ></div>
+          </>
+        )}
         {!isSelfChat && (
-          <div className='contact-attributes'>
+          <div className={styles.contactAttributes}>
             {verifier && (
               <VerificationTag
                 className='verification'
@@ -275,7 +297,7 @@ export function ViewProfileInner({
             )}
             {contact.address && (
               <div className={styles.addressLine}>
-                <i className='material-svg-icon material-icon-email-at' />
+                <i className='material-svg-icon material-icon-server' />
                 {addressLine}
               </div>
             )}
@@ -294,31 +316,13 @@ export function ViewProfileInner({
           </Button>
         )}
       </div>
-      {statusText !== '' && (
-        <>
-          <div className='group-separator'>
-            {tx('pref_default_status_label')}
-          </div>
-          <div className={styles.statusText}>
-            <MessagesDisplayContext.Provider
-              value={{
-                context: 'contact_profile_status',
-                contact_id: contact.id,
-                closeProfileDialog: onClose,
-              }}
-            >
-              <MessageBody text={statusText} disableJumbomoji />
-            </MessagesDisplayContext.Provider>
-          </div>
-        </>
-      )}
       {!(isDeviceChat || isSelfChat) && (
         <>
           <div className='group-separator'>{tx('profile_shared_chats')}</div>
           <div
             ref={mutualChatsListRef}
-            className='mutual-chats'
-            style={{ flexGrow: 1, minHeight: mutualChatsMinHeight }}
+            className={styles.mutualChats}
+            style={{ minHeight: mutualChatsMinHeight }}
           >
             <RovingTabindexProvider wrapperElementRef={mutualChatsListRef}>
               <AutoSizer disableWidth>
