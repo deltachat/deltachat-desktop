@@ -6,6 +6,7 @@
 - new proxy configuration dialog #5052
 
 ### Changed
+- restyle profile view #5093
 
 ### Fixed
 
