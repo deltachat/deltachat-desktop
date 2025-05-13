@@ -45,6 +45,34 @@ export function useMessageResults(
     [chatId]
   )
 
+  useEffect(() => {
+    const accountId = window.__selectedAccountId
+    const removeMessageDeletedListener = onDCEvent(
+      accountId,
+      'MsgDeleted',
+      ({ msgId }) => {
+        if (ids.includes(msgId)) {
+          setIds(ids.filter(id => id !== msgId))
+        }
+      }
+    )
+    const removeChatChangedListener = onDCEvent(
+      accountId,
+      'ChatlistItemChanged',
+      () => {
+        if (queryStr.length > 0) {
+          // if a chatlist item changed, we need to re-fetch the messages
+          // (chatlist items change if new messages arrive)
+          debouncedSearchMessages(queryStr)
+        }
+      }
+    )
+    return () => {
+      removeMessageDeletedListener()
+      removeChatChangedListener()
+    }
+  }, [chatId, debouncedSearchMessages, ids, queryStr])
+
   useEffect(
     () => debouncedSearchMessages(queryStr),
     [queryStr, debouncedSearchMessages]
