@@ -19,3 +19,4 @@ our custom hardcoded values
 Keywords=dc;chat;delta;messaging;messenger;email;webxdc
 MimeType=application/x-webxdc;x-scheme-handler/openpgp4fpr;x-scheme-handler/mailto;x-scheme-handler/dcaccount;x-scheme-handler/dclogin;
 Categories=Network;Chat;InstantMessaging;
+StartupWMClass={{exec}}

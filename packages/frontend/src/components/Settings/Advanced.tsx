@@ -110,7 +110,9 @@ function SettingsAutoStart() {
             ? autostartState.isSupported
               ? autostartState.isRegistered
                 ? tx('pref_autostart_registered')
-                : tx('pref_autostart_not_registered')
+                : autostartState.isRegistered == null
+                  ? undefined // no description if status can't be determined
+                  : tx('pref_autostart_not_registered')
               : tx('pref_autostart_not_supported')
             : undefined // don't show description while it is loading
         }
