@@ -74,4 +74,6 @@ permissions = [
     "allow-show-notification",
     "allow-clear-notifications",
     "allow-clear-all-notifications",
+    "allow-check-media-permission",
+    "allow-request-media-permission",
 ]

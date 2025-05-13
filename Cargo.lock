@@ -1875,6 +1875,7 @@ dependencies = [
  "serde",
  "serde_json",
  "strum 0.27.1",
+ "system_permissions",
  "tauri",
  "tauri-build",
  "tauri-plugin-autostart",
@@ -5525,6 +5526,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "objc2-av-foundation"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2e085a2e16c61dadbad7a808fc9d5b5f8472b1b825b53d529c9f64ccac78e722"
+dependencies = [
+ "bitflags 2.9.0",
+ "block2 0.6.1",
+ "objc2 0.6.1",
+ "objc2-core-foundation",
+ "objc2-foundation 0.3.1",
+]
+
+[[package]]
 name = "objc2-cloud-kit"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -8509,6 +8523,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "system_permissions"
+version = "0.1.0"
+dependencies = [
+ "block2 0.6.1",
+ "log",
+ "objc2 0.6.1",
+ "objc2-av-foundation",
+ "objc2-foundation 0.3.1",
+ "serde",
+]
+
+[[package]]
 name = "tagger"
 version = "4.3.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -9183,9 +9209,9 @@ checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
 
 [[package]]
 name = "tokio"
-version = "1.44.2"
+version = "1.45.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e6b88822cbe49de4185e3a4cbf8321dd487cf5fe0c5c65695fef6346371e9c48"
+checksum = "2513ca694ef9ede0fb23fe71a4ee4107cb102b9dc1930f6d0fd77aae068ae165"
 dependencies = [
  "backtrace",
  "bytes",

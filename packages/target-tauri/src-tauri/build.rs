@@ -79,6 +79,8 @@ fn main() {
             "show_notification",
             "clear_notifications",
             "clear_all_notifications",
+            "check_media_permission",
+            "request_media_permission",
         ]),
     ))
     .expect("failed to run tauri-build");
