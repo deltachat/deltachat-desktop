@@ -17,8 +17,7 @@
 }
 
 .contactAttributes {
-  margin-top: 10px;
-  margin-bottom: 20px;
+  margin-top: 15px;
   margin-inline-start: -4px;
   font-size: 1.08em;
 
@@ -32,20 +31,14 @@
       vertical-align: middle;
     }
   }
+}
 
-  .verification {
-    @include mixins.button-reset;
-    img {
-      margin-inline-start: 7px;
-    }
-  }
+.verification {
+  @include mixins.button-reset;
 }
 
 .buttonWrap {
-  display: flex;
-  margin: 20px 0px;
-  justify-content: center;
-  gap: 30px;
+  margin: 10px 0 24px 30px;
   button {
     min-width: 150px;
   }
@@ -59,7 +52,8 @@
 
 .mutualChats {
   margin-inline-start: 22px;
-  margin-inline-start: 20px;
+  margin-inline-end: 20px;
+  margin-top: 8px;
   flex-grow: 1;
   .chat-list-item {
     padding: 0px 20px;
