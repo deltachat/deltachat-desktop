@@ -8550,23 +8550,12 @@ dependencies = [
  "parking_lot",
  "raw-window-handle",
  "scopeguard",
- "tao-macros 0.1.3 (git+https://github.com/Simon-Laux/tao?branch=hunt-down-open-url-crash-and-add-application_continue_user_activity)",
+ "tao-macros",
  "unicode-segmentation",
  "url",
  "windows 0.61.1",
  "windows-core 0.61.0",
  "windows-version",
-]
-
-[[package]]
-name = "tao-macros"
-version = "0.1.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f4e16beb8b2ac17db28eab8bca40e62dbfbb34c0fcdc6d9826b11b7b5d047dfd"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.100",
 ]
 
 [[package]]
@@ -11046,7 +11035,7 @@ dependencies = [
  "raw-window-handle",
  "sha2",
  "soup3",
- "tao-macros 0.1.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tao-macros",
  "thiserror 2.0.12",
  "tracing",
  "url",
