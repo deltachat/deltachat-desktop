@@ -7,19 +7,26 @@
   <developer id="@delta@chaos.social">
     <name>Delta Chat Contributors</name>
   </developer>
-  <summary>Reliable Instant messaging with mini apps, multi-profile and multi-device support</summary>
+  <summary>Decentralized private messenger with chat-shared tools and games</summary>
   <branding>
     <color type="primary" scheme_preference="light">#28df86</color>
     <color type="primary" scheme_preference="dark">#174551</color>
   </branding>
   <description>
-    <p>💬 Reliable instant messaging with multi-profile and multi-device support</p>
-    <p>⚡️ Sign up to secure fast chatmail servers or use classic e-mail servers</p>
-    <p>🥳 Interactive web apps in chats for gaming and collaboration</p>
-    <p>🔒 Audited end-to-end encryption safe
-      against network and server attacks</p>
-    <p>👉 FOSS software, built on Internet Standards, avoiding xkcd927 :)</p>
-    <p>This is basically Delta Chat Desktop, but based on Tauri instead of Electron.</p>
+    <p>Delta Chat is a reliable decentralized instant messenger that is easy and fun to use for friends, family, groups and organizations.
+    Delta Chat is developed by a dedicated FOSS contributor community that jointly releases refinements and new features several times a year,
+    across many stores and platforms world-wide.</p>
+    <p>Features at a glance:</p>
+    <ul>
+        <li>🌐 Anonymous. Instant onboarding without a phone number, e-mail or other private data.</li>
+        <li>📱 Flexible. Supports multiple chat profiles and is easy to setup on multiple devices.</li>
+        <li>🧩 Extensible. Add tools like shopping lists, calendars or gaming apps to any chat.</li>
+        <li>🌧️ Reliable. Works under bad and adversarial network conditions.</li>
+        <li>🛡️ Secure. Audited End-to-End encryption safe against network and server attacks.</li>
+        <li>🏠 Sovereign. Can be run with your own e-mail address or server.</li>
+        <li>📜 FOSS. Fully Open Source/Free Software, built on Internet Standards.</li>
+    </ul>
+    <p>Delta Chat Tauri is basically Delta Chat Desktop, but based on Tauri instead of Electron.</p>
   </description>
   <launchable type="desktop-id">deltachat-tauri.desktop</launchable>
   <screenshots>
