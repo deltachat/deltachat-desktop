@@ -9,7 +9,7 @@
 ### Changed
 
 ### Fixed
-
+- show error when sendMsg fails #5092
 
 <a id="1_58_1"></a>
 
