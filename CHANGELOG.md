@@ -5,7 +5,7 @@
 ### Added
 - new proxy configuration dialog #5052
 - tauri: added notifications
-- tauri: ask for media permissions on macOS
+- tauri: ask for media permissions on macOS #5103
 
 ### Changed
 
