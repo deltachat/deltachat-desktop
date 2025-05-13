@@ -7,6 +7,9 @@
 - tauri: added notifications
 
 ### Changed
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.159.4`
+  - Better avatar quality
+  - Update iroh from 0.33.0 to 0.35.0
 
 ### Fixed
 - show error when sendMsg fails #5092
