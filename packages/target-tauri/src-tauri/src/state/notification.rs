@@ -29,7 +29,7 @@ impl Notifications {
     pub fn new(app_id: String) -> Self {
         Self {
             manager: get_notification_manager(app_id, Some("dcnotification".to_owned())), // - windows: we don't have deeplinking yet and this makes windows ignore the handelers
-                                                                                           // manager: get_notification_manager(app_id, None),
+                                                                                          // manager: get_notification_manager(app_id, None),
         }
     }
 
@@ -108,7 +108,7 @@ impl Notifications {
                         } = payload
                         {
                             if let Some(user_text) = response.user_text {
-                                send_reply(&app, account_id, message_id, user_text).await
+                                send_reply(app, account_id, message_id, user_text).await
                                 // IDEA: open error dialog to inform the user that it failed
                             } else {
                                 // TODO turn into error

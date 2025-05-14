@@ -584,7 +584,7 @@ pub fn run() -> i32 {
         // tauri::RunEvent::ExitRequested { code, api, .. } => {}
         #[cfg(target_os = "macos")]
         tauri::RunEvent::Opened { urls } => {
-            if let Some(url) = urls.get(0).map(|s| s.to_string()) {
+            if let Some(url) = urls.first().map(|s| s.to_string()) {
                 match cloned_inner_appstate.try_lock() {
                     Ok(mut lock) => {
                         if !lock.ui_frontend_ready {

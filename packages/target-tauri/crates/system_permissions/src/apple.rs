@@ -33,7 +33,7 @@ pub(crate) fn check(permission: PermissionKind) -> Result<Status, Error> {
         }
         .expect("static option for AVMediaType should be defined");
 
-        Ok(AVCaptureDevice::authorizationStatusForMediaType(&media_type).into())
+        Ok(AVCaptureDevice::authorizationStatusForMediaType(media_type).into())
     }
 }
 
@@ -59,7 +59,7 @@ pub(crate) fn request(
         });
 
         AVCaptureDevice::requestAccessForMediaType_completionHandler(
-            &media_type,
+            media_type,
             &completion_handler,
         );
         Ok(())

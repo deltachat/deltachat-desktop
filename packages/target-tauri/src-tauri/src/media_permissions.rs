@@ -26,7 +26,7 @@ pub(crate) async fn request_media_permission(permission: PermissionKind) -> Resu
     system_permissions::request(
         permission,
         Box::new(move |result: bool| {
-            if let Err(_) = tx.send(result) {
+            if tx.send(result).is_err() {
                 log::error!("failed to send result")
             }
         }),
@@ -37,5 +37,5 @@ pub(crate) async fn request_media_permission(permission: PermissionKind) -> Resu
 
     // On macOS all permissions are always allowed by default
     // https://github.com/tauri-apps/wry/blob/b7644ba41d28e922ee407e9020091e169b9071b8/src/wkwebview/class/wry_web_view_ui_delegate.rs#L74
-    Ok(rx.await.map_err(|err| format!("{err:?}"))?)
+    rx.await.map_err(|err| format!("{err:?}"))
 }
