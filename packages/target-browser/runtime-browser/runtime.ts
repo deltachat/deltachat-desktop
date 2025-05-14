@@ -104,6 +104,9 @@ class BrowserRuntime implements Runtime {
       console.error('WebSocket error:', event)
     })
   }
+  setDropListener(_onDrop: ((paths: string[]) => void) | null) {
+    return Promise.resolve()
+  }
 
   sendToBackendOverWS(message: MessageToBackend.AllTypes) {
     if (this.socket.readyState != this.socket.OPEN) {
@@ -157,7 +160,7 @@ class BrowserRuntime implements Runtime {
     // Browser can not implement this
     return
   }
-  isDroppedFileFromOutside(_file: File): boolean {
+  isDroppedFileFromOutside(_file: string): boolean {
     return true // Browser does not support dragging files out, so can only be from outside
   }
   emitUIReady(): void {

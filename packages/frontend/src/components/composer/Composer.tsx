@@ -53,6 +53,7 @@ import {
   AudioRecorderError,
 } from '../AudioRecorder/AudioRecorder'
 import AlertDialog from '../dialogs/AlertDialog'
+import { unknownErrorToString } from '../helpers/unknownErrorToString'
 
 const log = getLogger('renderer/composer')
 
@@ -246,6 +247,9 @@ const Composer = forwardRef<
           await BackendRemote.rpc.removeDraft(selectedAccountId(), chatId)
           window.__reloadDraft && window.__reloadDraft()
         } catch (error) {
+          openDialog(AlertDialog, {
+            message: unknownErrorToString(error),
+          })
           log.error(error)
         } finally {
           if (textareaRef) {

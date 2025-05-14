@@ -87,15 +87,17 @@
    git push origin main --tags
    ```
 10. Now create a GitHub release for your tag:
-   - Copy the relevant part of the `CHANGELOG.md` file into the description field
-     - for fresh releases this includes the changelog of the test releases
-     - for patch releases the full changelog is not needed, the part that changed from the last release is enough
-   - Add a header `# Downloads` with a link to the download page.
-     If it's an official release, add a link to the release progress issue.
-   - for testing releases add a link to the testing forum topic:
-     ```md
-     > This release candidate is currently in the testing phase, to learn more read https://support.delta.chat/t/<rest of link>
-     ```
+
+- Copy the relevant part of the `CHANGELOG.md` file into the description field
+  - for fresh releases this includes the changelog of the test releases
+  - for patch releases the full changelog is not needed, the part that changed from the last release is enough
+- Add a header `# Downloads` with a link to the download page.
+  If it's an official release, add a link to the release progress issue.
+- for testing releases add a link to the testing forum topic:
+  ```md
+  > This release candidate is currently in the testing phase, to learn more read https://support.delta.chat/t/<rest of link>
+  ```
+
 11. As soon as the new tag is detected by our build machine, it will start
     building releases for various platforms (MacOS, Windows, Linux) and upload
     them to: `https://download.delta.chat/desktop/[version_code]`. This process

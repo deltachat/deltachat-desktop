@@ -29,7 +29,7 @@ impl Notifications {
     pub fn new(app_id: String) -> Self {
         Self {
             manager: get_notification_manager(app_id, Some("dcnotification".to_owned())), // - windows: we don't have deeplinking yet and this makes windows ignore the handelers
-                                                                                           // manager: get_notification_manager(app_id, None),
+                                                                                          // manager: get_notification_manager(app_id, None),
         }
     }
 

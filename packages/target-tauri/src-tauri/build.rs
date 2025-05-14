@@ -79,6 +79,7 @@ fn main() {
             "show_notification",
             "clear_notifications",
             "clear_all_notifications",
+            "drag_file_out",
         ]),
     ))
     .expect("failed to run tauri-build");

@@ -150,10 +150,12 @@ export interface Runtime {
 
   /** only support this if you have a real implementation for `isDroppedFileFromOutside`  */
   onDragFileOut(file: string): void
+  /** Set (tauri) drag listener to handle drag and drop events */
+  setDropListener(onDrop: ((paths: string[]) => void) | null): void
   /** guard function that checks if it is a file from `onDragFileOut`, if so it denies the drop.
    * It checks by checking if file path contains references to the deltachat bob dir,
    */
-  isDroppedFileFromOutside(file: File): boolean
+  isDroppedFileFromOutside(file: string): boolean
 
   getAutostartState(): Promise<AutostartState>
   // callbacks to set
