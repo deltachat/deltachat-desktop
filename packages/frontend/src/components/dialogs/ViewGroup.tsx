@@ -267,7 +267,7 @@ function ViewGroupInner(
                 isVerified={chat.isProtected}
               />
             </DialogContent>
-            {isRelatedChatsEnabled && (
+            {isRelatedChatsEnabled && chatListIds.length > 0 && (
               <>
                 <div className='group-separator'>{tx('related_chats')}</div>
                 <div
