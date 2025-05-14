@@ -5,7 +5,6 @@ pub(crate) fn check_media_permission(permission: PermissionKind) -> Result<Statu
     // check system media permission
     let result = system_permissions::check(permission);
 
-    // if allowed or unusupported platform then also check permission in webview
     match result {
         Err(PermissionCheckError::UnsupportedPlatform) | Ok(Status::Granted) => {
             // IDEA: also check if it is allowed in webview

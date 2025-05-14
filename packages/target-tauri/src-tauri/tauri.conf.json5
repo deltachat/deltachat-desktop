@@ -5,7 +5,7 @@
   "build": {
     "devUrl": null,
     "beforeDevCommand": "pnpm build",
-    "beforeBuildCommand": "pnpm build",
+    "beforeBuildCommand": "pnpm build4production",
     "frontendDist": "../html-dist"
   },
   "app": {
