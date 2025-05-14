@@ -3,7 +3,7 @@
 import { Channel, invoke } from '@tauri-apps/api/core'
 import { getCurrentWindow } from '@tauri-apps/api/window'
 
-import type { attachLogger } from '@tauri-apps/plugin-log'
+import { info, type attachLogger } from '@tauri-apps/plugin-log'
 import { getStore } from '@tauri-apps/plugin-store'
 import type { Store } from '@tauri-apps/plugin-store'
 import { openPath, openUrl } from '@tauri-apps/plugin-opener'
@@ -369,7 +369,12 @@ class TauriRuntime implements Runtime {
     }
     getCurrentWebview().onDragDropEvent(event => {
       if (event.payload.type === 'drop') {
-        this.onDrop?.(event.payload.paths)
+        if (event.payload.paths.includes(this.lastDragOutFile || '')) {
+          this.log.info('prevented dropping a file that we just draged out')
+          return
+        } else {
+          this.onDrop?.(event.payload.paths)
+        }
       }
       // IDEA: there are also enter and over events with a position,
       // we could use to show an drop overlay explaining the feature
@@ -662,14 +667,18 @@ class TauriRuntime implements Runtime {
   ): Promise<string> {
     return invoke('copy_background_image_file', { srcPath, isDefaultPicture })
   }
+  lastDragOutFile?: string
   onDrop: ((paths: string[]) => void) | null = null
   setDropListener(onDrop: ((paths: string[]) => void) | null) {
     this.onDrop = onDrop
   }
   onDragFileOut(fileName: string): void {
+    this.lastDragOutFile = fileName
     invoke('drag_file_out', { fileName })
   }
   isDroppedFileFromOutside(file: string): boolean {
+    this.log.debug('isDroppedFileFromOutside', file)
+    // this does not work (because we don't get the real original path here it seems?), TODO think about removing it
     const forbiddenPathRegEx = /DeltaChat\/.+?\.sqlite-blobs\//gi
     return !forbiddenPathRegEx.test(file.replace('\\', '/'))
   }
