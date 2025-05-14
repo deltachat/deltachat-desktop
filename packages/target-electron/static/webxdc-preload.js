@@ -28,7 +28,7 @@ class RealtimeListener {
   }
 
   send(data) {
-    if ((!data) instanceof Uint8Array) {
+    if (!(data instanceof Uint8Array)) {
       throw new Error('realtime listener data must be a Uint8Array')
     }
     if (this.trashed) {
