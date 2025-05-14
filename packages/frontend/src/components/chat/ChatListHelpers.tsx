@@ -62,7 +62,12 @@ export function useMessageResults(
     const removeChatChangedListener = onDCEvent(
       accountId,
       'ChatlistItemChanged',
-      () => {
+      ({ chatId: eventChatId }) => {
+        if (chatId != null && eventChatId !== chatId) {
+          // if we search in a specific chat, but the
+          // change event is for another chat
+          return
+        }
         if (queryStr && queryStr.length > 0) {
           // if a chatlist item changed, we need to re-fetch the messages
           // (chatlist items change if new messages arrive)
