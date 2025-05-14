@@ -77,4 +77,6 @@ permissions = [
     "allow-show-notification",
     "allow-clear-notifications",
     "allow-clear-all-notifications",
+
+    "allow-drag-file-out",
 ]

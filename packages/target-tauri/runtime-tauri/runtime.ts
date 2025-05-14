@@ -126,10 +126,6 @@ class TauriRuntime implements Runtime {
   emitUIFullyReady(): void {
     invoke('ui_frontend_ready')
   }
-  onDrop: ((paths: string[]) => void) | null = null
-  setDropListener(onDrop: ((paths: string[]) => void) | null) {
-    this.onDrop = onDrop
-  }
   emitUIReady(): void {
     invoke('ui_ready')
   }
@@ -666,8 +662,12 @@ class TauriRuntime implements Runtime {
   ): Promise<string> {
     return invoke('copy_background_image_file', { srcPath, isDefaultPicture })
   }
-  onDragFileOut(_file: string): void {
-    throw new Error('Method not implemented.50')
+  onDrop: ((paths: string[]) => void) | null = null
+  setDropListener(onDrop: ((paths: string[]) => void) | null) {
+    this.onDrop = onDrop
+  }
+  onDragFileOut(fileName: string): void {
+    invoke('drag_file_out', { fileName })
   }
   isDroppedFileFromOutside(file: string): boolean {
     const forbiddenPathRegEx = /DeltaChat\/.+?\.sqlite-blobs\//gi
