@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useCallback } from 'react'
-import { basename, join, parse, ParsedPath } from 'path'
+import { join, parse, ParsedPath } from 'path'
 import { T } from '@deltachat/jsonrpc-client'
 
 import Composer, { useDraft } from '../composer/Composer'
@@ -14,7 +14,6 @@ import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
 import { ReactionsBarProvider } from '../ReactionsBar'
 import useDialog from '../../hooks/dialog/useDialog'
 import useMessage from '../../hooks/chat/useMessage'
-import { BackendRemote } from '../../backend-com'
 import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 
 const log = getLogger('renderer/MessageListAndComposer')
@@ -87,7 +86,6 @@ export function getBackgroundImageStyle(
   return style
 }
 
-
 // Invariant: The called function handles windows specifically.
 function fullPath(file: ParsedPath) {
   return file.dir + '/' + file.name + file.ext
@@ -126,7 +124,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
 
   // Tauri listener
   useEffect(() => {
-    console.log("drag: register")
+    console.log('drag: register')
     const unset = runtime.setDragListener(async e => {
       if (e.payload.type != 'drop') {
         return
@@ -144,7 +142,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
 
   // Electron and webview listener
   const onDrop = async (e: React.DragEvent<any>) => {
-    console.log("drag: electron drop")
+    console.log('drag: electron drop')
     e.preventDefault()
     e.stopPropagation()
 
@@ -187,7 +185,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
   }
 
   const handleDrop = async (paths: string[]) => {
-    console.log("drag: handling drop: ", paths)
+    console.log('drag: handling drop: ', paths)
     if (chat === null) {
       log.warn('dropped something, but no chat is selected')
       return
