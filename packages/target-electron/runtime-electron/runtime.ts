@@ -19,20 +19,17 @@ import {
 } from '@deltachat-desktop/runtime-interface'
 import { BaseDeltaChat, yerpc } from '@deltachat/jsonrpc-client'
 
-import type { dialog, app, IpcRenderer, webUtils } from 'electron'
+import type { dialog, app, IpcRenderer } from 'electron'
 import type { LocaleData } from '@deltachat-desktop/shared/localize.js'
 import type { getLogger as getLoggerFunction } from '@deltachat-desktop/shared/logger.js'
 import type { setLogHandler as setLogHandlerFunction } from '@deltachat-desktop/shared/logger.js'
 
-const {
-  app_getPath,
-  ipcRenderer: ipcBackend,
-  getPathForFile,
-} = (window as any).get_electron_functions() as {
+const { app_getPath, ipcRenderer: ipcBackend } = (
+  window as any
+).get_electron_functions() as {
   // see static/preload.js
   ipcRenderer: IpcRenderer
   app_getPath: typeof app.getPath
-  getPathForFile: typeof webUtils.getPathForFile
 }
 
 const { BaseTransport } = yerpc
@@ -120,7 +117,7 @@ class ElectronDeltachat extends BaseDeltaChat<ElectronTransport> {
 }
 
 class ElectronRuntime implements Runtime {
-  setDragListener(_fn: (event: any) => void): Promise<any> {
+  setDropListener(_onDrop: ((paths: string[]) => void) | null) {
     return Promise.resolve()
   }
   onResumeFromSleep: (() => void) | undefined

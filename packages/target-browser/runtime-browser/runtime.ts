@@ -104,7 +104,7 @@ class BrowserRuntime implements Runtime {
       console.error('WebSocket error:', event)
     })
   }
-  setDragListener(_fn: (event: any) => void): Promise<any> {
+  setDropListener(_onDrop: ((paths: string[]) => void) | null) {
     return Promise.resolve()
   }
 

@@ -124,25 +124,19 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
 
   // Tauri listener
   useEffect(() => {
-    console.log('drag: register')
-    const unset = runtime.setDragListener(async e => {
-      if (e.payload.type != 'drop') {
-        return
-      }
-      const paths = e.payload.paths
+    log.debug('drag: register')
+    runtime.setDropListener(paths => {
       handleDrop(paths)
     })
     return () => {
-      unset.then(u => {
-        log.info('drag: unregister')
-        u()
-      })
+      log.debug('drag: unregister')
+      runtime.setDropListener(null)
     }
   })
 
   // Electron and webview listener
   const onDrop = async (e: React.DragEvent<any>) => {
-    console.log('drag: electron drop')
+    log.debug('drag: browser/electron drop')
     e.preventDefault()
     e.stopPropagation()
 

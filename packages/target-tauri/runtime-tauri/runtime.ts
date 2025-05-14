@@ -35,8 +35,7 @@ import type {
   LogLevelString,
 } from '@deltachat-desktop/shared/logger.js'
 import type { setLogHandler as setLogHandlerFunction } from '@deltachat-desktop/shared/logger.js'
-import { DragDropEvent, getCurrentWebview } from '@tauri-apps/api/webview'
-import { Event } from '@tauri-apps/api/event'
+import { getCurrentWebview } from '@tauri-apps/api/webview'
 
 let logJsonrpcConnection = false
 
@@ -127,10 +126,9 @@ class TauriRuntime implements Runtime {
   emitUIFullyReady(): void {
     invoke('ui_frontend_ready')
   }
-  async setDragListener(eventHandler: (event: Event<DragDropEvent>) => void) {
-    return getCurrentWebview().onDragDropEvent(event => {
-      eventHandler(event)
-    })
+  onDrop: ((paths: string[]) => void) | null = null
+  setDropListener(onDrop: ((paths: string[]) => void) | null) {
+    this.onDrop = onDrop
   }
   emitUIReady(): void {
     invoke('ui_ready')
@@ -373,6 +371,13 @@ class TauriRuntime implements Runtime {
         this.notificationCallback?.(event.data)
       }
     }
+    getCurrentWebview().onDragDropEvent(event => {
+      if (event.payload.type === 'drop') {
+        this.onDrop?.(event.payload.paths)
+      }
+      // IDEA: there are also enter and over events with a position,
+      // we could use to show an drop overlay explaining the feature
+    })
     window
       .matchMedia('(prefers-color-scheme: dark)')
       .addEventListener('change', event => {

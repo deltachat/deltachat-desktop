@@ -8,7 +8,6 @@
   },
   "dependencies": {
     "@deltachat-desktop/shared": "link:../shared",
-    "@deltachat/jsonrpc-client": "catalog:",
-    "@tauri-apps/api": "^2.2.0"
+    "@deltachat/jsonrpc-client": "catalog:"
   }
 }
