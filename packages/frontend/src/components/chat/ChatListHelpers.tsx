@@ -47,6 +47,9 @@ export function useMessageResults(
 
   useEffect(() => {
     const accountId = window.__selectedAccountId
+    if (!accountId) {
+      return
+    }
     const removeMessageDeletedListener = onDCEvent(
       accountId,
       'MsgDeleted',
@@ -60,7 +63,7 @@ export function useMessageResults(
       accountId,
       'ChatlistItemChanged',
       () => {
-        if (queryStr.length > 0) {
+        if (queryStr && queryStr.length > 0) {
           // if a chatlist item changed, we need to re-fetch the messages
           // (chatlist items change if new messages arrive)
           debouncedSearchMessages(queryStr)
