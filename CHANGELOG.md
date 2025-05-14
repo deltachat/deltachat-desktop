@@ -14,6 +14,7 @@
 
 ### Fixed
 - show error when sendMsg fails #5092
+- update search results on changes #5100
 
 <a id="1_58_1"></a>
 
