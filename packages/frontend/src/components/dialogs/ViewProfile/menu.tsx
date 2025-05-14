@@ -18,11 +18,18 @@ import useChatDialog from '../../../hooks/chat/useChatDialog'
 import useConfirmationDialog from '../../../hooks/dialog/useConfirmationDialog'
 
 import type { T } from '@deltachat/jsonrpc-client'
+import { C } from '@deltachat/jsonrpc-client'
 import type { DialogProps } from '../../../contexts/DialogContext'
 
 import debounce from 'debounce'
+import useCreateDraftMessage from '../../../hooks/chat/useCreateDraftMesssage'
+import { runtime } from '@deltachat-desktop/runtime-interface'
+import SelectChat from '../SelectChat'
 
-export default function useViewProfileMenu(contact: T.Contact) {
+export default function useViewProfileMenu(
+  contact: T.Contact,
+  onClose: () => void
+) {
   const { openContextMenu } = useContext(ContextMenuContext)
 
   const [isBlocked, setBlocked] = useState(false)
@@ -79,12 +86,31 @@ export default function useViewProfileMenu(contact: T.Contact) {
     })
   }
 
+  const onClickShareContact = () => {
+    openDialog(ShareProfileDialog, {
+      contact,
+      onParentClose: onClose,
+    })
+  }
+
   const menu: (ContextMenuItem | false)[] = [
     // we show Edit Name option every time since this menu
     // is only accessible from ViewProfile which you can edit name for
     {
       label: tx('menu_edit_name'),
       action: onClickEdit,
+    },
+    {
+      label: tx('menu_share'),
+      action: onClickShareContact,
+    },
+    {
+      type: 'separator',
+    },
+    {
+      label: tx('encryption_info_title_desktop'),
+      action: () =>
+        openEncryptionInfoDialog({ chatId: null, dmChatContact: contact.id }),
     },
     isBlocked
       ? {
@@ -95,11 +121,6 @@ export default function useViewProfileMenu(contact: T.Contact) {
           label: tx('menu_block_contact'),
           action: () => openBlockContactById(accountId, contact.id),
         },
-    {
-      label: tx('encryption_info_title_desktop'),
-      action: () =>
-        openEncryptionInfoDialog({ chatId: null, dmChatContact: contact.id }),
-    },
   ]
 
   return (event: React.MouseEvent<any, MouseEvent>) => {
@@ -164,5 +185,43 @@ function EditContactNameDialog({
       </DialogBody>
       <OkCancelFooterAction onCancel={onClickCancel} onOk={onClickOk} />
     </Dialog>
+  )
+}
+
+function ShareProfileDialog(
+  props: { contact: T.Contact; onParentClose: () => void } & DialogProps
+) {
+  const { onClose, onParentClose, contact } = props
+
+  const tx = useTranslationFunction()
+  const accountId = selectedAccountId()
+  const createDraftMessage = useCreateDraftMessage()
+
+  const onChatClick = async (chatId: number) => {
+    const vcard = await BackendRemote.rpc.makeVcard(accountId, [contact.id])
+
+    const filePath = await runtime.writeTempFile('contact.vcard', vcard)
+    // treefit: I would like to use setDraftVcard here, but it requires a draft message, which we may now have:
+    // BackendRemote.rpc.setDraftVcard(accountId, msgId, contacts)
+    // and there is no way to create an empty draft message with the current api as far as I know
+    //
+    // why is this better? because we then only would need to ask to replace draft when there is a file
+
+    onClose()
+    onParentClose()
+    await createDraftMessage(accountId, chatId, '', {
+      name: `${contact.displayName}.vcard`,
+      path: filePath,
+    })
+    runtime.removeTempFile(filePath)
+  }
+
+  return (
+    <SelectChat
+      headerTitle={tx('chat_share_with_title')}
+      onChatClick={onChatClick}
+      onClose={onClose}
+      listFlags={C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS}
+    />
   )
 }

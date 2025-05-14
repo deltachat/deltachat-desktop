@@ -7,6 +7,7 @@
 - tauri: added notifications
 
 ### Changed
+- restyle profile view #5093
 - Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.159.4`
   - Better avatar quality
   - Update iroh from 0.33.0 to 0.35.0
