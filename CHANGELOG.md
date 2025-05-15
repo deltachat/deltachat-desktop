@@ -3,6 +3,17 @@
 ## [Unreleased][unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+
+<a id="1_58_2"></a>
+
+## [1.58.2] - 2025-05-14
+
+### Added
 - new proxy configuration dialog #5052
 - tauri: added notifications
 
@@ -3437,8 +3448,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.58.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.58.2...HEAD
 
+[1.58.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.58.1...v1.58.2
 
 [1.58.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.58.0...v1.58.1
 
