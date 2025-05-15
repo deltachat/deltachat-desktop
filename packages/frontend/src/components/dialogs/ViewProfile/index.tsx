@@ -248,6 +248,7 @@ export function ViewProfileInner({
           color={contact.color}
           displayName={displayName}
           isVerified={contact.isProfileVerified}
+          isPgpContact={contact.isPgpContact}
           wasSeenRecently={contact.wasSeenRecently}
         />
         {statusText !== '' && (

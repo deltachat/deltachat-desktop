@@ -5,6 +5,7 @@
 ### Added
 
 ### Changed
+- show icons for classical email contacts & non encrypted chats #5090
 
 ### Fixed
 

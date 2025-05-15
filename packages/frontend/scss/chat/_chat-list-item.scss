@@ -293,7 +293,9 @@
   }
 
   .pin_icon,
-  .mute_icon {
+  .material-svg-icon,
+  .mute_icon,
+  .mail_icon {
     background-color: var(--chatListItemSelectedText);
   }
 
