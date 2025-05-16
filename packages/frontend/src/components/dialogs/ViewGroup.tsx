@@ -263,7 +263,7 @@ function ViewGroupInner(
   const showAddMemberDialog = () => {
     openDialog(AddMemberDialog, {
       listFlags,
-      groupMembers,
+      groupMembers: group.contactIds,
       onOk: addGroupMembers,
       isBroadcast: isBroadcast,
       isVerificationRequired: chat.isProtected,
