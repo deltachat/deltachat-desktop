@@ -39,16 +39,16 @@
 - When making an official release create a new issue following this template to
   track its status:
   ```
-  - [ ] DeltaChat Website
-  - [ ] flathub
-  - [ ] GitHub release
-       - [ ] downloadable files also on GitHub
-  - [ ] MacOS store
-  - [ ] Windows store
-  - [ ] homebrew
-  - [ ] arch
-  - [ ] nix
-  - [ ] (community) snap
+  - [ ] [DeltaChat Website](https://delta.chat/en/download)
+  - [ ] [flathub](https://flathub.org/apps/chat.delta.desktop)
+  - [ ] [GitHub release](https://github.com/deltachat/deltachat-desktop/releases)
+       - [ ] downloadable files also on [GitHub](https://download.delta.chat/desktop/)
+  - [ ] [MacOS store](https://apps.apple.com/us/app/delta-chat-desktop/id1462750497)
+  - [ ] [Windows store](https://apps.microsoft.com/detail/9pjtxx7hn3pk)
+  - [ ] [homebrew](https://formulae.brew.sh/cask/deltachat)
+  - [ ] [arch](https://archlinux.org/packages/extra/any/deltachat-desktop/)
+  - [ ] [nix](https://search.nixos.org/packages?channel=unstable&show=deltachat-desktop&from=0&type=packages&query=deltachat)
+  - [ ] [snap](https://snapcraft.io/deltachat-desktop) (community)
   ```
   See [example](https://github.com/deltachat/deltachat-desktop/issues/3582)
 
