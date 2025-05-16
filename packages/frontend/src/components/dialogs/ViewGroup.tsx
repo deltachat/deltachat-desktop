@@ -81,6 +81,16 @@ export const useGroup = (accountId: number, chat: T.FullChat) => {
   }
 
   type GroupContacts = typeof group.contacts
+  /**
+   * Why setGroupContacts & setGroupMembers?
+   * setGroupMembers triggers a modifiyGroup in the backend and is called after
+   * changes triggered by the user while setGroupContacts is only called after
+   * changes from "outside" (not on this client) after DCEvent "ContactsChanged"
+   * to update the group in local state
+   *
+   * It takes a "setter" argument to make sure, the update always happens
+   * on the latest group state
+   */
   const setGroupContacts = useCallback(
     (setter: (oldContacts: GroupContacts) => GroupContacts) => {
       setGroup(group => {
