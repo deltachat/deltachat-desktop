@@ -683,12 +683,20 @@ class TauriRuntime implements Runtime {
     | undefined
   onResumeFromSleep: (() => void) | undefined
   onToggleNotifications: (() => void) | undefined
-  checkMediaAccess(_mediaType: MediaType): Promise<MediaAccessStatus> {
-    throw new Error('Method not implemented.')
+  checkMediaAccess(mediaType: MediaType): Promise<MediaAccessStatus> {
+    return invoke('check_media_permission', {
+      permission: mediaTypeToPermission[mediaType],
+    })
   }
-  askForMediaAccess(_mediaType: MediaType): Promise<boolean> {
-    throw new Error('Method not implemented.')
+  askForMediaAccess(mediaType: MediaType): Promise<boolean> {
+    return invoke('request_media_permission', {
+      permission: mediaTypeToPermission[mediaType],
+    })
   }
+}
+const mediaTypeToPermission: Record<MediaType, string> = {
+  camera: 'video',
+  microphone: 'audio',
 }
 
 ;(window as any).r = new TauriRuntime()

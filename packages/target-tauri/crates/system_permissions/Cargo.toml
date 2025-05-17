@@ -1,0 +1,23 @@
+[package]
+name = "system_permissions"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+log = "0.4.27"
+serde = { version = "1.0.219", features = ["derive"] }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+block2 = "0.6"
+objc2 = { version = "0.6", features = ["exception"] }
+objc2-foundation = { version = "0.3.0", default-features = false, features = [
+    "std",
+    "objc2-core-foundation",
+] }
+objc2-av-foundation = { version = "0.3.0", default-features = false, features = [
+    "std",
+    "objc2-core-foundation",
+    "block2",
+    "AVCaptureDevice",
+    "AVMediaFormat",
+] }

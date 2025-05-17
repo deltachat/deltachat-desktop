@@ -108,7 +108,7 @@ impl Notifications {
                         } = payload
                         {
                             if let Some(user_text) = response.user_text {
-                                send_reply(&app, account_id, message_id, user_text).await
+                                send_reply(app, account_id, message_id, user_text).await
                                 // IDEA: open error dialog to inform the user that it failed
                             } else {
                                 // TODO turn into error

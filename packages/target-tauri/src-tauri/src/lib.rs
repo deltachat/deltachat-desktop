@@ -49,6 +49,7 @@ mod i18n;
 
 // menus are not available on mobile
 mod chat_background_image;
+mod media_permissions;
 #[cfg(desktop)]
 mod menus;
 mod network_isolation_dummy_proxy;
@@ -290,6 +291,8 @@ pub fn run() -> i32 {
             themes::commands::get_available_themes,
             themes::commands::get_theme,
             themes::commands::get_current_active_theme_address,
+            media_permissions::check_media_permission,
+            media_permissions::request_media_permission
         ])
         .register_asynchronous_uri_scheme_protocol(
             "webxdc-icon",
@@ -581,7 +584,7 @@ pub fn run() -> i32 {
         // tauri::RunEvent::ExitRequested { code, api, .. } => {}
         #[cfg(target_os = "macos")]
         tauri::RunEvent::Opened { urls } => {
-            if let Some(url) = urls.get(0).map(|s| s.to_string()) {
+            if let Some(url) = urls.first().map(|s| s.to_string()) {
                 match cloned_inner_appstate.try_lock() {
                     Ok(mut lock) => {
                         if !lock.ui_frontend_ready {
