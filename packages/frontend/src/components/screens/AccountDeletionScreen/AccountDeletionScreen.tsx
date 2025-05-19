@@ -113,7 +113,6 @@ export default function AccountDeletionScreen({
           <DialogFooter>
             <FooterActions>
               <FooterActionButton
-                styling='secondary'
                 onClick={() => onCancel()}
                 data-testid='cancel-delete-account'
               >

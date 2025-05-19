@@ -194,6 +194,7 @@ export default function MainScreen({ accountId }: Props) {
                   aria-label={tx('back')}
                   onClick={() => setArchivedChatsSelected(false)}
                   className='backButton'
+                  styling='borderless'
                 >
                   <Icon icon='arrow-left' className='backButtonIcon'></Icon>
                 </Button>
@@ -233,6 +234,7 @@ export default function MainScreen({ accountId }: Props) {
                 aria-label={tx('back')}
                 onClick={onBackButton}
                 className='backButton'
+                styling='borderless'
               >
                 <Icon icon='arrow-left' className='backButtonIcon'></Icon>
               </Button>
@@ -270,6 +272,7 @@ export default function MainScreen({ accountId }: Props) {
                 className='navbar-button'
                 aria-label={tx('main_menu')}
                 onClick={onClickThreeDotMenu}
+                styling='borderless'
               >
                 <Icon coloring='navbar' icon='more' rotation={90} size={24} />
               </Button>
@@ -417,6 +420,7 @@ function ChatNavButtons() {
           aria-controls='message-list-and-composer'
           aria-label={tx('chat')}
           className='navbar-button'
+          styling='borderless'
         >
           <Icon coloring='navbar' icon='chats' size={18} />
         </Button>
@@ -429,6 +433,7 @@ function ChatNavButtons() {
           aria-controls='media-view'
           aria-label={tx('media')}
           className='navbar-button'
+          styling='borderless'
         >
           <Icon coloring='navbar' icon='image' size={18} />
         </Button>

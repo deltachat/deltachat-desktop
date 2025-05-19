@@ -394,7 +394,6 @@ export default function ProxyConfiguration(
           <Button
             className={styles.addProxyButton}
             onClick={() => setShowNewProxyForm(true)}
-            styling='secondary'
             aria-label={tx('proxy_add')}
             title={tx('proxy_add')}
           >
@@ -402,7 +401,7 @@ export default function ProxyConfiguration(
           </Button>
         )}
         <FooterActions>
-          <FooterActionButton styling='secondary' onClick={closeDialog}>
+          <FooterActionButton onClick={closeDialog}>
             {tx('close')}
           </FooterActionButton>
         </FooterActions>
