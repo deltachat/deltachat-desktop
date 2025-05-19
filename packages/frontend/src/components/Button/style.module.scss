@@ -17,12 +17,6 @@
     background-color: var(--buttonSecondaryHover);
   }
 
-  &:disabled {
-    background-color: var(--buttonDisabledBackground);
-    color: var(--buttonDisabledText);
-    cursor: not-allowed;
-  }
-
   & > span {
     user-select: none;
   }
@@ -57,6 +51,7 @@
   &:disabled {
     background-color: var(--buttonDisabledBackground);
     color: var(--buttonDisabledText);
+    cursor: not-allowed;
     &:hover {
       background-color: var(--buttonDisabledBackground);
     }
