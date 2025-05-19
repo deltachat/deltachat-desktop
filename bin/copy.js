@@ -2,7 +2,6 @@
 //@ts-check
 import { copyFile, mkdir, readdir, stat } from 'fs/promises'
 import { join } from 'path'
-import { watch as _watch } from 'chokidar'
 
 async function copyRecursive(source, destination) {
   if ((await stat(source)).isDirectory()) {
@@ -47,6 +46,8 @@ async function copy(source, destination, watch = false) {
   let scheduled = undefined
 
   if (watch === true) {
+    // Dynamically import chokidar only when watch is true
+    const { watch: _watch } = await import('chokidar')
     const watcher = _watch(source)
     watcher.on('ready', () => {
       watcher.on('all', (event, path) => {
