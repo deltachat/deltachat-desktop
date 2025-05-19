@@ -14,6 +14,7 @@
 - accessibility: don't re-announce message input (composer) after sending every message #5049
 - accessibility: correct `aria-posinset` for chat list #5044
 - don't close context menues on window resize #5418
+- tauri: accessibility: fix focus always being locked on the message input #5125
 
 <a id="2_11_1"></a>
 
