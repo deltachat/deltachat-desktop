@@ -30,6 +30,7 @@
   &.primary {
     background-color: var(--buttonPrimaryBackground);
     color: var(--buttonPrimaryText);
+    border: var(--buttonPrimaryBackground);
     &:hover {
       background-color: var(--buttonPrimaryHover);
     }
@@ -38,6 +39,7 @@
   &.danger {
     color: var(--buttonDangerText);
     background-color: var(--buttonDangerBackground);
+    border: var(--buttonPrimaryBackground);
     &:hover {
       background-color: var(--buttonDangerHover);
     }
@@ -58,5 +60,8 @@
   &:disabled {
     background-color: var(--buttonDisabledBackground);
     color: var(--buttonDisabledText);
+    &:hover {
+      background-color: var(--buttonDisabledBackground);
+    }
   }
 }

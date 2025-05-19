@@ -157,6 +157,7 @@ export const DeltaPasswordInput = React.memo(
       <Button
         onClick={() => setShowPassword(!showPassword)}
         aria-label={showPassword ? tx('hide_password') : tx('show_password')}
+        styling='borderless'
       >
         <Icon
           coloring='contextMenu'
