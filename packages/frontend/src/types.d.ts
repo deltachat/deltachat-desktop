@@ -74,7 +74,7 @@ declare module 'react-virtualized-auto-sizer' {
     constructor(props: AutoSizerProps)
     componentDidMount(): void
     componentWillUnmount(): void
-    render(): JSX.Element
+    render(): React.ReactElement
   }
   export default AutoSizer
 }

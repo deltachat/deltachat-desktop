@@ -74,7 +74,7 @@ export const ChatProvider = ({
   const [activeView, setActiveView] = useState(ChatView.MessageList)
 
   const [chatWithLinger, setChatWithLinger] = useState<T.FullChat | undefined>()
-  const cancelPendingSetChat = useRef<() => void>()
+  const cancelPendingSetChat = useRef<(() => void) | undefined>(undefined)
 
   const [chatId, setChatId] = useState<number | undefined>()
   const [alternativeView, setAlternativeView] = useState<AlternativeView>(null)

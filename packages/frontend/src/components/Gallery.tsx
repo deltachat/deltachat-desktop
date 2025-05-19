@@ -33,7 +33,7 @@ type GalleryElement = (
   props: GalleryAttachmentElementProps & {
     openFullscreenMedia: (message: Type.Message) => void
   }
-) => JSX.Element
+) => React.ReactElement
 
 const MediaTabs: Readonly<{
   [key in MediaTabKey]: {

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { ReactElement, useRef, useState } from 'react'
 import Button from './Button'
 import Icon from './Icon'
 import useTranslationFunction from '../hooks/useTranslationFunction'
@@ -86,7 +86,7 @@ export const DeltaInput = React.memo(
       type?: string
       min?: string
       max?: string
-      rightElement?: JSX.Element
+      rightElement?: ReactElement
       disabled?: boolean
       autoFocus?: boolean
       onChange: (

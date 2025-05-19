@@ -19,7 +19,7 @@ type Props = {
   headerTitle: string
   onChatClick: (chatId: number) => void
   listFlags: number
-  footer?: React.JSX.Element
+  footer?: React.ReactElement
 }
 
 export default function SelectChat(props: Props) {

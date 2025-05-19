@@ -81,7 +81,7 @@ export default function App(_props: any) {
     </CrashScreen>
   )
 }
-function ThemeContextWrapper({ children }: { children: React.ReactChild }) {
+function ThemeContextWrapper({ children }: { children: React.ReactElement }) {
   /** on each theme change this var changes */
   const [theme_rand, setThemeRand] = useState(0)
   useEffect(() => {

@@ -10,7 +10,7 @@ import { useEffect, useRef } from 'react'
  * - https://stackoverflow.com/questions/53446020/how-to-compare-oldvalues-and-newvalues-on-react-hooks-useeffect
  */
 export function usePrevious(value: any) {
-  const ref = useRef()
+  const ref = useRef(undefined)
   useEffect(() => {
     ref.current = value
   })

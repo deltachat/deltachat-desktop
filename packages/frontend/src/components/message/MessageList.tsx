@@ -86,7 +86,7 @@ function useUnreadCount(
   chat: Pick<T.FullChat, 'freshMessageCounter' | 'id'>
 ) {
   const [updatedValue, setUpdatedValue] = useState<number | null>(null)
-  const updatedValueForChat = useRef<typeof chat>()
+  const updatedValueForChat = useRef<typeof chat>(null)
 
   useEffect(() => {
     let outdated = false
