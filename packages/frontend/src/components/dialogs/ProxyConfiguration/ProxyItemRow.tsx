@@ -82,6 +82,7 @@ const ProxyItemRow = React.memo(function ProxyItemRow({
           onClick={() => copyToClipboard(proxyUrl)}
           aria-label={`${tx('menu_copy_to_clipboard')} ${label}`}
           title={tx('menu_copy_to_clipboard')}
+          styling='borderless'
         >
           <i
             className={classNames(
@@ -96,6 +97,7 @@ const ProxyItemRow = React.memo(function ProxyItemRow({
           onClick={() => deleteProxy(proxyUrl)}
           aria-label={`${tx('delete')} ${label}`}
           title={tx('delete')}
+          styling='borderless'
         >
           <i
             className={classNames(

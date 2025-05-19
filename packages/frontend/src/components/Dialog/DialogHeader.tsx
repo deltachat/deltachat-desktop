@@ -52,6 +52,7 @@ export default function DialogHeader(props: Props) {
             aria-label={tx('menu_more_options')}
             data-testid={dataTestid + '-context-menu'}
             onClick={onContextMenuClick}
+            styling='borderless'
           >
             <Icon coloring='contextMenu' icon='more' rotation={90} size={24} />
           </Button>

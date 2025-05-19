@@ -5,7 +5,7 @@ import styles from './style.module.scss'
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   active?: boolean
-  styling?: 'primary' | 'secondary' | 'danger'
+  styling?: 'primary' | 'danger' | 'borderless'
 }
 
 export default function Button({
