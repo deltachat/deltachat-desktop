@@ -5,6 +5,7 @@
 ### Added
 
 ### Changed
+- update react from 18.0.0 to 18.3.1
 
 ### Fixed
 - crash when a member gets added to a group and "View Group" dialog is open #5111
