@@ -14,7 +14,7 @@
     "watch": "pnpm build:source-map-support && pnpm watch:ts & pnpm watch:static & pnpm watch:scss & pnpm watch:types",
     "watch:ts": "pnpm build:ts -- -w",
     "watch:types": "npx tsc --noEmit --pretty -w --preserveWatchOutput",
-    "watch:static": "node ../../bin/copy.js ../../static ./html-dist -w & node ../../bin/copy.js ./static ./html-dist -w & node ../../bin/copy.js ../../images ./html-dist/images -w",
+    "watch:static": "node ../../bin/copy.js ../../static ./html-dist & node ../../bin/copy.js ./static ./html-dist & node ../../bin/copy.js ../../images ./html-dist/images",
     "watch:scss": "pnpm build:scss --watch"
   },
   "browser": {
