@@ -64,7 +64,7 @@
     "@typescript-eslint/eslint-plugin": "^8.32.1",
     "@typescript-eslint/parser": "^8.32.1",
     "chokidar": "^3.6.0",
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.5.0",
     "eslint": "^9.27.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
