@@ -12,9 +12,6 @@ export default defineConfig(
       files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
       plugins: { js },
       extends: ['js/recommended'],
-    },
-    {
-      files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
       languageOptions: { globals: { ...globals.browser, ...globals.node } },
     },
     tseslint.configs.recommended,
@@ -39,6 +36,20 @@ export default defineConfig(
       },
       rules: {
         ...pluginReactHooks.configs.recommended.rules,
+      },
+    },
+    {
+      files: ['packages/e2e-tests/**/*spec.ts'],
+      languageOptions: {
+        parserOptions: {
+          project: './packages/e2e-tests/tsconfig.json',
+          tsconfigRootDir: './',
+        },
+      },
+      rules: {
+        // `expect()` usually needs to be awaited. Not awaiting causes flakiness.
+        // https://playwright.dev/docs/best-practices#lint-your-tests
+        '@typescript-eslint/no-floating-promises': 'warn',
       },
     },
     eslintPluginPrettierRecommended,
