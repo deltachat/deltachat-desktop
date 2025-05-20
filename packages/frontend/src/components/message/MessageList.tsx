@@ -454,7 +454,8 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
             // Retrigger animation
             highlightableElement.classList.add('highlight')
             highlightableElement.style.animation = 'none'
-            // highlightableElement.offsetHeight TBD: Not needed?
+            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+            highlightableElement.offsetHeight
             //@ts-ignore
             highlightableElement.style.animation = null
           }, 0)

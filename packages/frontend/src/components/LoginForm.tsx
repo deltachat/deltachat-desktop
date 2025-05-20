@@ -37,8 +37,6 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
     Type.ProviderInfo | undefined
   >()
 
-  // override existing credentials with new value
-
   const handleCredentialsChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
