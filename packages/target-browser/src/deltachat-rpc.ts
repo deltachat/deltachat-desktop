@@ -135,7 +135,7 @@ export async function startDeltaChat(): Promise<
             logCoreEvent.debug(contextId, event.kind, event)
           }
         }
-      } catch (error) {
+      } catch (_error) {
         // ignore json parse errors
         return
       }

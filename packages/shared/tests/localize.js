@@ -1,6 +1,6 @@
 //@ts-check
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-/* global it, console */
+
+/* global it */
 import { describe, setup } from 'mocha'
 import { expect, assert } from 'chai'
 import fs from 'fs'

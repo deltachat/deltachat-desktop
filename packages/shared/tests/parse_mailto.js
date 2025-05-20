@@ -1,6 +1,5 @@
 //@ts-check
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-/* global it console */
+/* global it */
 import { describe } from 'mocha'
 import { expect } from 'chai'
 import { parseMailto } from '../ts-compiled-for-tests/parse_mailto.js'

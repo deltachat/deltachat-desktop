@@ -85,7 +85,7 @@ export class Store<S> {
 
   setState(
     stateReducer: (currentState: S) => S | undefined,
-    description: String
+    description: string
   ) {
     const modifiedState = stateReducer(this.state)
     if (modifiedState === undefined) return

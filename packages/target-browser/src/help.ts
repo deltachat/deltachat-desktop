@@ -17,7 +17,7 @@ helpRoute.get('/help_exists/:lang', async (req, res) => {
     // test if file exists
     await stat(filePath)
     return res.status(200).json({ msg: 'File Found' })
-  } catch (error) {
+  } catch (_error) {
     return res.status(404).json({ msg: '404 Not Found' })
   }
 })

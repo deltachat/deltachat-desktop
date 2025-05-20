@@ -27,7 +27,7 @@ async function getHelpFileForLang(locale: string) {
       throw new Error('contentFilePath not a file')
     }
     return contentFilePath
-  } catch (error) {
+  } catch (_error) {
     log.warn(
       `Did not find help file for language ${locale}, falling back to english`
     )

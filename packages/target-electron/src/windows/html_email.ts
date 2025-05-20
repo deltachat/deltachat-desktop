@@ -116,7 +116,7 @@ export function openHtmlEmailWindow(
   nativeTheme.on('updated', () => {
     try {
       window.webContents.ipc.emit('theme-update')
-    } catch (error) {
+    } catch (_error) {
       /* ignore error */
     }
   })
