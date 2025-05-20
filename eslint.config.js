@@ -55,14 +55,6 @@ export default defineConfig(
     eslintPluginPrettierRecommended,
     {
       rules: {
-        '@typescript-eslint/ban-types': 'off',
-        '@typescript-eslint/no-redeclare': 'error',
-        '@typescript-eslint/default-param-last': 'error',
-        '@typescript-eslint/no-invalid-void-type': 'warn',
-        'no-var': 'warn',
-        'prefer-const': 'warn',
-        'no-useless-escape': 'warn',
-
         '@typescript-eslint/no-unused-vars': [
           'error',
           {
@@ -77,8 +69,6 @@ export default defineConfig(
         ],
 
         '@typescript-eslint/ban-ts-comment': 'off',
-        '@typescript-eslint/explicit-module-boundary-types': 'off',
-        '@typescript-eslint/no-empty-function': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/no-namespace': 'off',
         '@typescript-eslint/no-empty-object-type': 'off', // allow {} as object type
@@ -86,9 +76,6 @@ export default defineConfig(
           'error',
           { allowTernary: true, allowShortCircuit: true },
         ],
-
-        'no-case-declarations': 'warn',
-        'no-constant-binary-expression': 'error',
       },
     },
   ],
