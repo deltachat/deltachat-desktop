@@ -255,20 +255,6 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     [hasOpenDialogs]
   )
 
-  const onSelectionChange = () => {
-    const selection = window.getSelection()
-
-    if (
-      selection?.type === 'Caret' ||
-      (selection?.type === 'Range' && selection.rangeCount > 0)
-    )
-      return
-
-    // Only one of these is actually rendered at any given moment.
-    regularMessageInputRef.current?.focus()
-    editMessageInputRef.current?.focus()
-  }
-
   const onEscapeKeyUp = (ev: KeyboardEvent) => {
     if (ev.code === 'Escape') {
       // Only one of these is actually rendered at any given moment.
@@ -279,7 +265,6 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
 
   useEffect(() => {
     window.addEventListener('mouseup', onMouseUp)
-    document.addEventListener('selectionchange', onSelectionChange)
     window.addEventListener('keyup', onEscapeKeyUp)
 
     // Only one of these is actually rendered at any given moment.
@@ -288,7 +273,6 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
 
     return () => {
       window.removeEventListener('mouseup', onMouseUp)
-      document.removeEventListener('selectionchange', onSelectionChange)
       window.removeEventListener('keyup', onEscapeKeyUp)
     }
   }, [onMouseUp])
