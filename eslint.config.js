@@ -3,7 +3,6 @@ import globals from 'globals'
 import tseslint from 'typescript-eslint'
 import pluginReact from 'eslint-plugin-react'
 import pluginReactHooks from 'eslint-plugin-react-hooks'
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig(
@@ -52,7 +51,6 @@ export default defineConfig(
         '@typescript-eslint/no-floating-promises': 'warn',
       },
     },
-    eslintPluginPrettierRecommended,
     {
       rules: {
         '@typescript-eslint/no-unused-vars': [
