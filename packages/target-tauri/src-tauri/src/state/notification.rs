@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use anyhow::Context;
+use anyhow::{anyhow, Context};
 use deltachat::message::MsgId;
 use tauri::{
     async_runtime::{handle, spawn},
@@ -33,7 +33,21 @@ impl Notifications {
         }
     }
 
-    pub(crate) async fn handle_response(app: &AppHandle, response: NotificationResponse) {
+    /// Handle an interaction with a notification.
+    ///
+    /// `is_untrusted` must be `true` for when the contents of `response`
+    /// could be coming from a malicious source, such as a random website
+    /// that has `<a href="dcnotification:..."`.
+    /// When set to `true`, the handler will not perform effectful
+    /// (permanent, destructive) actions, such as automatically sending a reply.
+    /// See https://learn.microsoft.com/en-us/windows/apps/develop/launch/handle-uri-activation#remarks
+    /// > Any app or website can use your URI scheme name,
+    /// > including malicious ones.
+    pub(crate) async fn handle_response(
+        app: &AppHandle,
+        response: NotificationResponse,
+        is_untrusted: bool,
+    ) {
         log::info!("[[[[response]]]]: {response:?}");
         let mwc = app.state::<MainWindowChannels>();
 
@@ -53,7 +67,7 @@ impl Notifications {
         };
 
         use user_notify::NotificationResponseAction::*;
-        let result = match response.action {
+        let result = (async || match response.action {
             Default => {
                 let result = match payload {
                     NotificationPayload::OpenAccount { account_id } => {
@@ -64,6 +78,12 @@ impl Notifications {
                         })
                         .await
                     }
+                    // Even though opening a chat or a message can be considered
+                    // effectful in that it could send a "read" receipt,
+                    // let's not be overzealous, i.e. let's not put this
+                    // behind an `is_untrusted` check.
+                    // After all, it's the user who allowed a website
+                    // to interact with Delta Chat.
                     NotificationPayload::OpenChat {
                         account_id,
                         chat_id,
@@ -99,6 +119,11 @@ impl Notifications {
                 Ok(())
             }
             Other(action_id) => {
+                if is_untrusted {
+                    return Err(anyhow!(
+                        "the requested notification action is powerful, but the source of the request is untrusted"
+                    ));
+                }
                 match action_id {
                     id if id == NOTIFICATION_REPLY_TO_ACTION_ID => {
                         if let NotificationPayload::OpenChatMessage {
@@ -129,7 +154,7 @@ impl Notifications {
                     }
                 }
             }
-        };
+        })().await;
         if let Err(err) = result {
             log::error!("Error reacting to notification response {err:?}");
         }
@@ -151,7 +176,13 @@ impl Notifications {
             .register(
                 Box::new(move |response| {
                     let app = app.clone();
-                    rt.spawn(async move { Notifications::handle_response(&app, response).await });
+                    rt.spawn(async move {
+                        // The handler is invoked by the operating system
+                        // directly in response to a notification click,
+                        // so it is trusted.
+                        let is_untrusted = false;
+                        Notifications::handle_response(&app, response, is_untrusted).await
+                    });
                 }),
                 categories,
             )

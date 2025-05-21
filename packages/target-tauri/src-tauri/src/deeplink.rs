@@ -67,7 +67,13 @@ pub async fn handle_deep_link(
             use user_notify::windows::decode_deeplink;
 
             let response = decode_deeplink(&deeplink_or_xdc)?;
-            crate::Notifications::handle_response(app, response).await;
+
+            // This unfortunately means that the "reply" feature
+            // (although it's not implemented yet on Windows)
+            // will not work while the app is closed.
+            let is_untrusted = true;
+
+            crate::Notifications::handle_response(app, response, is_untrusted).await;
 
             return Ok(());
         }
