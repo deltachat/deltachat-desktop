@@ -9,6 +9,7 @@
 ### Fixed
 - crash when a member gets added to a group and "View Group" dialog is open #5111
 - show appropriate state in AddMemberDialog #5114
+- tauri: hardening: ensure that random sites can't send a message if the user allows the website to open Delta Chat on Windows
 
 <a id="1_58_2"></a>
 
