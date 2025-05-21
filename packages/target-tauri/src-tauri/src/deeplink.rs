@@ -17,10 +17,19 @@ const BASE64_ENGINE: base64::engine::GeneralPurpose = base64::engine::GeneralPur
         .with_decode_padding_mode(base64::engine::DecodePaddingMode::Indifferent),
 );
 
+/// `handle_dcnotification_scheme` should be set to `true` only if
+/// the app has not been already running when the deep link was activated.
+/// This is because the normal "on click" notification handler
+/// already works in that case, so we don't need another handler to run.
+/// The deep-linking handler is only needed when the app isn't running,
+/// in order to launch the app.
+/// This is also an additional security measure against websites
+/// trying to abuse the `dcnotification:` scheme.
 pub async fn handle_deep_link(
     app: &AppHandle,
     alternative_cwd: Option<PathBuf>,
     deeplink_or_xdc: String,
+    #[cfg(target_os = "windows")] handle_dcnotification_scheme: bool,
 ) -> Result<(), anyhow::Error> {
     log::info!("handle_deep_link: {deeplink_or_xdc}");
     let main_window_channel = app.state::<MainWindowChannels>();
@@ -64,6 +73,15 @@ pub async fn handle_deep_link(
 
         #[cfg(target_os = "windows")]
         if potential_scheme == "dcnotification" {
+            if !handle_dcnotification_scheme {
+                log::info!(
+                    "`dcnotification:` deep link handler invoked while `handle_dcnotification_scheme == false`, ignoring"
+                );
+                return Ok(());
+                // Note, however, that we did focus the window still,
+                // so we didn't _completely_ ignore the deep link.
+            }
+
             use user_notify::windows::decode_deeplink;
 
             let response = decode_deeplink(&deeplink_or_xdc)?;
