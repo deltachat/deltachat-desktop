@@ -5,6 +5,8 @@
 ### Added
 
 ### Changed
+- update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.159.5`
+  - Don't change webxdc self-addr when saving and loading draft
 
 ### Fixed
 - crash when a member gets added to a group and "View Group" dialog is open #5111
