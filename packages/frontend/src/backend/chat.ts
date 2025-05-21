@@ -1,5 +1,4 @@
 import { BackendRemote } from '../backend-com'
-import { debouncedUpdateBadgeCounter } from '../system-integration/badge-counter'
 import { clearNotificationsForChat } from '../system-integration/notifications'
 
 import { C, type T } from '@deltachat/jsonrpc-client'
@@ -64,7 +63,11 @@ export async function unmuteChat(accountId: number, chatId: number) {
 export function markChatAsSeen(accountId: number, chatId: number) {
   // Mark all messages in chat as "seen" in core backend
   BackendRemote.rpc.marknoticedChat(accountId, chatId)
-  debouncedUpdateBadgeCounter()
+
+  // We could `debouncedUpdateBadgeCounter()` here,
+  // but it's not necessary, because we listen for `MsgsNoticed` anyway,
+  // and this function doesn't actually always affect
+  // the badge counter, e.g. when all messages in the chat are already noticed.
 
   // Remove potential system notifications for this chat
   clearNotificationsForChat(accountId, chatId)
