@@ -164,7 +164,7 @@ export async function migrateAccountsIfNeeded(
       try {
         try {
           await rm(join(oldFolder, '.DS_Store'))
-        } catch (error) {
+        } catch (_error) {
           /* ignore */
         }
         await rmdir(oldFolder)

@@ -27,7 +27,7 @@ type DialogContextValue = {
   openDialog: OpenDialog
   closeDialog: CloseDialog
   closeAllDialogs: CloseAllDialogs
-  openDialogIds: String[] // IDs of currently opened dialogs
+  openDialogIds: string[] // IDs of currently opened dialogs
 }
 
 const initialValues: DialogContextValue = {

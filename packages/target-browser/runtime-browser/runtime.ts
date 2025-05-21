@@ -114,7 +114,7 @@ class BrowserRuntime implements Runtime {
     } else {
       try {
         this.socket.send(JSON.stringify(message))
-      } catch (error) {
+      } catch (_error) {
         /* ignore-console-log */
         console.warn(
           'sendToBackendOverWS failed to send message to backend over websocket'

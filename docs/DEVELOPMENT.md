@@ -82,7 +82,7 @@ Sometimes `eslint` complains on code lines that for whatever reason doesn't fit 
 const unused_var = 'This line would normally trigger some linting errors'
 ```
 
-We set up the linting using this [`guide`](https://github.com/typescript-eslint/typescript-eslint/blob/master/docs/getting-started/linting/README.md)
+The configuration for eslint is documented here: https://eslint.org/docs/latest/use/configure/configuration-files
 
 If you work with SCSS make sure you read [`docs/STYLES.md`](./STYLES.md)
 

@@ -2,8 +2,9 @@
   /* 'EmojiMart' represents the general emoji font of the app, themes may redefine it */
   --emojifonts: 'EmojiMart', 'Apple Color Emoji', NotoEmoji;
 
-  --fonts-default: Roboto, var(--emojifonts), 'Helvetica Neue', Arial, Helvetica,
-    NotoMono, sans-serif;
+  --fonts-default:
+    Roboto, var(--emojifonts), 'Helvetica Neue', Arial, Helvetica, NotoMono,
+    sans-serif;
 
   --fonts-system: system-ui, var(--fonts-default);
 }

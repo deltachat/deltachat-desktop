@@ -111,7 +111,10 @@ $scrollbarTransparency: 0.34 !default;
   --cli-search-result-divider-border: #{changeContrast($bgSecondary, 10%)};
   --cli-search-result-divider-border-width: 2px;
   /* ContactList / AccountList */
-  --contactListItemBgHover: #{changeContrast($bgPrimary, $hover-contrast-change)};
+  --contactListItemBgHover: #{changeContrast(
+      $bgPrimary,
+      $hover-contrast-change
+    )};
   --contactListItemBgFocus: #{changeContrast($bgPrimary, 12%)};
   /* Keybindings Cheatsheet */
   --keybindingHintsBoxBackground: #{$keybindingHintsBoxBackground};

@@ -13,6 +13,7 @@ import {
 import { runtime } from '@deltachat-desktop/runtime-interface'
 
 async function main() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
   exp.help //make sure experimental.ts is used
   try {
     await runtime.initialize(setLogHandler, getLogger)

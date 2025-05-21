@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-function-type */
 import { getLogger } from '../../../../shared/logger'
 
 const log = getLogger('renderer/stores/chat/scheduler')
