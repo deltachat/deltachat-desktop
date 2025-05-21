@@ -44,7 +44,7 @@ export const LabeledLink = ({
   destination,
   tabIndex,
 }: {
-  label: string | JSX.Element | JSX.Element[]
+  label: string | React.ReactElement | React.ReactElement[]
   destination: LinkDestination
   tabIndex: -1 | 0
 }) => {

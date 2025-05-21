@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-
 import { C, T } from '@deltachat/jsonrpc-client'
 import React, { useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce/lib'
@@ -38,14 +36,6 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
   const [providerInfo, setProviderInfo] = useState<
     Type.ProviderInfo | undefined
   >()
-
-  // override existing credentials with new value
-  const _handleCredentialsChange = (
-    id: keyof Credentials,
-    value: string | boolean
-  ) => {
-    setCredentials({ ...credentials, [id]: value })
-  }
 
   const handleCredentialsChange = (
     event: React.ChangeEvent<HTMLInputElement>

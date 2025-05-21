@@ -39,7 +39,7 @@ export default class ComposerMessageInput extends React.Component<
 
   composerSize: number
   setCursorPosition: number | false
-  textareaRef: React.RefObject<HTMLTextAreaElement>
+  textareaRef: React.RefObject<HTMLTextAreaElement | null>
   throttledSaveDraft: ReturnType<typeof throttle>
   constructor(props: ComposerMessageInputProps) {
     super(props)

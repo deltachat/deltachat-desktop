@@ -21,7 +21,7 @@ export async function isWindowsStorePackage() {
         console.info('App is probably running as appx')
         appx = info.isAPPX
       }
-    } catch (error) {
+    } catch (_error) {
       /* ignore-console-log */
       console.warn(
         'Could not fetch windows build info, this is normal in dev mode'

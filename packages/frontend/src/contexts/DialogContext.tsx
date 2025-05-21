@@ -27,7 +27,7 @@ type DialogContextValue = {
   openDialog: OpenDialog
   closeDialog: CloseDialog
   closeAllDialogs: CloseAllDialogs
-  openDialogIds: String[] // IDs of currently opened dialogs
+  openDialogIds: string[] // IDs of currently opened dialogs
 }
 
 const initialValues: DialogContextValue = {
@@ -42,7 +42,9 @@ export const DialogContext =
   React.createContext<DialogContextValue>(initialValues)
 
 export const DialogContextProvider = ({ children }: PropsWithChildren<{}>) => {
-  const [dialogs, setDialogs] = useState<{ [id: DialogId]: JSX.Element }>({})
+  const [dialogs, setDialogs] = useState<{
+    [id: DialogId]: React.ReactElement
+  }>({})
 
   const closeDialog = useCallback((id: DialogId) => {
     setDialogs(({ [id]: _, ...rest }) => rest)

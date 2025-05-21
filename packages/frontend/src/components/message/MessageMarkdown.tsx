@@ -31,7 +31,7 @@ function renderElement(
   elm: ParsedElement,
   tabindexForInteractiveContents: -1 | 0,
   key?: number
-): JSX.Element {
+): React.ReactElement {
   const mapFn = (elm: ParsedElement, index: number) =>
     renderElement(elm, tabindexForInteractiveContents, index)
   switch (elm.t) {
@@ -128,7 +128,10 @@ function renderElement(
 
 /** render in preview mode for ChatListItem summary and for quoted messages,
  *  not interactive (links can not be clicked) just looks more similar to the message in the chatview/message-list */
-function renderElementPreview(elm: ParsedElement, key?: number): JSX.Element {
+function renderElementPreview(
+  elm: ParsedElement,
+  key?: number
+): React.ReactElement {
   switch (elm.t) {
     case 'CodeBlock':
     case 'InlineCode':
@@ -183,7 +186,7 @@ export function message2React(
    * no interactive elements in the first place
    */
   tabindexForInteractiveContents: -1 | 0
-): JSX.Element {
+): React.ReactElement {
   try {
     const elements = parseMessage(message)
     return preview ? (
@@ -207,7 +210,7 @@ function EmailLink({
 }: {
   email: string
   tabIndex: -1 | 0
-}): JSX.Element {
+}): React.ReactElement {
   const accountId = selectedAccountId()
   const createChatByEmail = useCreateChatByEmail()
   const { selectChat } = useChat()

@@ -110,7 +110,7 @@ BackendApiRoute.post(
       await writeFile(filepath, tmpFilebin, 'binary')
 
       res.status(200).send({ path: filepath })
-    } catch (error) {
+    } catch (_error) {
       res.status(500).json({ message: 'Failed to create Tempfile' })
     }
   }

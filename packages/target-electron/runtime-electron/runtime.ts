@@ -418,9 +418,8 @@ class ElectronRuntime implements Runtime {
     })
     ipcBackend.on('theme-update', () => this.onThemeUpdate?.())
     ipcBackend.on('showAboutDialog', () => this.onShowDialog?.('about'))
-    ipcBackend.on(
-      'showKeybindingsDialog',
-      () => this.onShowDialog?.('keybindings')
+    ipcBackend.on('showKeybindingsDialog', () =>
+      this.onShowDialog?.('keybindings')
     )
     ipcBackend.on('showSettingsDialog', () => this.onShowDialog?.('settings'))
     ipcBackend.on('open-url', (_ev, url) => this.onOpenQrUrl?.(url))

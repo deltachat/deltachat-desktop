@@ -1,1 +1,1 @@
-module.exports=()=>Promise.resolve() // eslint-disable-line
+module.exports = () => Promise.resolve()
