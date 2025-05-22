@@ -229,6 +229,10 @@ test('Invite new user to group', async ({ page, context, browserName }) => {
       .locator('.group-member-contact-list-wrapper .contact-list-item')
       .filter({ hasText: userB.name })
   ).toBeVisible()
+  await page.getByTestId('view-group-dialog-header-close').click()
+  // update existing profiles so they include the new user
+  // to make sure all get deleted after the test
+  existingProfiles = await loadExistingProfiles(page)
 })
 
 test('Remove user from group', async ({ page }) => {
@@ -256,6 +260,7 @@ test('Remove user from group', async ({ page }) => {
   await expect(pastMember.locator('.contact-list-item').first()).toContainText(
     userB.name
   )
+  await page.getByTestId('view-group-dialog-header-close').click()
 })
 
 test('Readd user to group', async ({ page }) => {
@@ -284,6 +289,7 @@ test('Readd user to group', async ({ page }) => {
       .locator('.group-member-contact-list-wrapper .contact-list-item')
       .filter({ hasText: userB.name })
   ).toHaveCount(1)
+  await page.getByTestId('view-group-dialog-header-close').click()
 })
 
 test('Edit group profile from context menu and rename group', async ({
