@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- add a sound effect that plays when a message gets received in the currently open chat (can be turned off)
 
 ### Changed
 - update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.159.5`

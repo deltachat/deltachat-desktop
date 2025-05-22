@@ -33,6 +33,7 @@ export function getDefaultState(): DesktopSettingsType {
     useSystemUIFont: false,
     contentProtectionEnabled: false,
     isMentionsEnabled: true,
+    inChatSoundsVolume: 0.5,
     autostart: true,
   }
 }

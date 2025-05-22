@@ -29,6 +29,16 @@ export interface DesktopSettingsType {
   notifications: boolean
   showNotificationContent: boolean
   isMentionsEnabled: boolean
+  /**
+   * Controls the volume of the sound accompanying incoming
+   * (and possibly outgoing, in the future) messages
+   * of the currently open chat.
+   * A number between 0 and 1.
+   *
+   * This is important for accessibility. We do not otherwise announce
+   * incoming messages in the current chat.
+   */
+  inChatSoundsVolume: number
   /** @deprecated isn't used anymore since the move to jsonrpc */
   lastChats: { [accountId: number]: number }
   zoomFactor: number
