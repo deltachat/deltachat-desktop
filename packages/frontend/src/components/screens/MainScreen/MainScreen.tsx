@@ -167,11 +167,15 @@ export default function MainScreen({ accountId }: Props) {
   const updatethreeDotMenuHidden = useCallback(() => {
     setthreeDotMenuHidden(
       (alternativeView === 'global-gallery' || activeView === ChatView.Media) &&
+        // galleryRef.current?.state.currentTab holds the
+        // previous tab when this is called (won't fix since will be
+        // obsolete after gallery updates step 2)
         !['images', 'video'].includes(
           galleryRef.current?.state.currentTab || ''
         )
     )
   }, [activeView, alternativeView])
+
   useEffect(() => {
     updatethreeDotMenuHidden()
   }, [alternativeView, galleryRef, updatethreeDotMenuHidden])
@@ -431,11 +435,12 @@ function ChatNavButtons() {
           active={activeView === ChatView.Media}
           aria-selected={activeView === ChatView.Media}
           aria-controls='media-view'
-          aria-label={tx('media')}
+          aria-label={`${tx('webxdc_apps')} & ${tx('media')}`}
+          title={`${tx('webxdc_apps')} & ${tx('media')}`}
           className='navbar-button'
           styling='borderless'
         >
-          <Icon coloring='navbar' icon='image' size={18} />
+          <Icon coloring='navbar' icon='apps' size={18} />
         </Button>
         {settingsStore?.desktopSettings.enableOnDemandLocationStreaming && (
           // Yes, this is not marked as `role='tab'`.
