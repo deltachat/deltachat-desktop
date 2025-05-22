@@ -239,6 +239,7 @@ export function useChatListContextMenu(): {
             chatListItem.isGroup &&
               chatListItem.isSelfInGroup && {
                 label: tx('menu_edit_group'),
+                dataTestid: 'edit-group',
                 action: onViewGroup,
               },
             // Edit Broadcast List

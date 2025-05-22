@@ -232,6 +232,7 @@ function ViewGroupInner(
           ? tx('ask_remove_members', contact.displayName)
           : tx('ask_remove_from_broadcast', contact.displayName),
         confirmLabel: tx('delete'),
+        dataTestid: 'remove-group-member-dialog',
       })
 
       if (confirmed) {

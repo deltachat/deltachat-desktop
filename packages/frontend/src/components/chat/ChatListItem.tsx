@@ -307,6 +307,12 @@ function ChatListItemNormal({
   } = useRovingTabindex(ref)
   // TODO `setAsActiveElement` if `isSelected` and `activeElement === null`
 
+  const chatTypeForTests = chatListItem.isSelfTalk
+    ? 'self-talk'
+    : chatListItem.isDeviceTalk
+      ? 'device-talk'
+      : chatListItem.id
+
   return (
     <button
       ref={ref}
@@ -323,6 +329,7 @@ function ChatListItemNormal({
         selected: isSelected,
         'context-menu-active': isContextMenuActive,
       })}
+      data-testid={`chat${chatListItem.isGroup ? '-group' : ''}-${chatTypeForTests}`}
     >
       <Avatar
         {...{
