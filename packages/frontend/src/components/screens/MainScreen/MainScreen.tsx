@@ -449,6 +449,7 @@ function ChatNavButtons() {
             onClick={() => openMapWebxdc(selectedAccountId(), chatId)}
             aria-label={tx('tab_map')}
             className='navbar-button'
+            styling='borderless'
           >
             <Icon coloring='navbar' icon='map' size={18} />
           </Button>
