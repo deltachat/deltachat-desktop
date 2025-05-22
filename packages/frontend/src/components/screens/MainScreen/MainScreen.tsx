@@ -423,6 +423,7 @@ function ChatNavButtons() {
           // but they're not supposed to be rendered at the same time.
           aria-controls='message-list-and-composer'
           aria-label={tx('chat')}
+          title={tx('chat')}
           className='navbar-button'
           styling='borderless'
         >
@@ -450,6 +451,7 @@ function ChatNavButtons() {
             aria-label={tx('tab_map')}
             className='navbar-button'
             styling='borderless'
+            title={tx('tab_map')}
           >
             <Icon coloring='navbar' icon='map' size={18} />
           </Button>
