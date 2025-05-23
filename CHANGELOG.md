@@ -16,6 +16,7 @@
 - crash when a member gets added to a group and "View Group" dialog is open #5111
 - show appropriate state in AddMemberDialog #5114
 - tauri: fix: ignore `dcnotification:` deep-link when the app is already running
+- define max height for video in drafts #5128
 
 <a id="1_58_2"></a>
 
