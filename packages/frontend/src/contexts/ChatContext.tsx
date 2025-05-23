@@ -73,6 +73,7 @@ export const ChatProvider = ({
   const cancelPendingSetChat = useRef<(() => void) | undefined>(undefined)
 
   const [chatId, setChatId] = useState<number | undefined>()
+  window.__selectedChatId = chatId
 
   const setChatView = useCallback<SetView>((nextView: ChatView) => {
     setActiveView(nextView)

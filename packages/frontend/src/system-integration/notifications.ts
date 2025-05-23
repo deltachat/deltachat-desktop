@@ -103,10 +103,25 @@ function incomingMessageHandler(
     return
   }
 
-  if (document.hasFocus() && accountId === window.__selectedAccountId) {
-    // window has focus don't send notification for the selected account
+  if (chatId === window.__selectedChatId && document.hasFocus()) {
+    // window has focus don't send notification for the selected chat
+    //
+    // It is important for accessibility to notify the user of all new messages,
+    // no matter what chat or account they belong to.
+    // For the current chat we might utilize `aria-live` on the messages list,
+    // or a simple sound effect
+    // (https://github.com/deltachat/deltachat-desktop/pull/5143).
+    // For other chats, let's use OS notifications for this.
+    // See https://github.com/deltachat/deltachat-desktop/issues/4743.
+    //
+    // Additionally, one has to remember that we have the "narrow screen mode",
+    // where the list of chats is not shown,
+    // thus there is no indication of a new message,
+    // besides the unread badge counter increasing.
+    //
+    // This is also in line with other messengers, such as Telegram.
     log.debug(
-      'notification ignored: window has focus and account of the notification is selected'
+      'notification ignored: window has focus and chat of the notification is selected'
     )
     return
   }

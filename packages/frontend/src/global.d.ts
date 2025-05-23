@@ -11,6 +11,7 @@ declare global {
     __changeScreen: (screen: Screens) => void
     __selectAccount: (accountId: number) => Promise<void>
     readonly __selectedAccountId: number | undefined
+    __selectedChatId: number | undefined
     __screen: Screens
     readonly __contextMenuActive: boolean
     __setContextMenuActive: (newVal: boolean) => void
