@@ -62,8 +62,6 @@ export default function ViewGroup(
 export const useGroup = (accountId: number, chat: T.FullChat) => {
   const [group, setGroup] = useState(chat)
   const [groupName, setGroupName] = useState(chat.name)
-  const [addMembers, setAddMembers] = useState<number[] | null>(null)
-  const [removeMember, setRemoveMember] = useState<number | null>(null)
   const [groupImage, setGroupImage] = useState(chat.profileImage)
   const firstLoad = useRef(true)
   const { openDialog } = useDialog()
@@ -77,59 +75,58 @@ export const useGroup = (accountId: number, chat: T.FullChat) => {
     }
   }, [groupName, groupImage, chat.id, accountId])
 
-  useEffect(() => {
-    if (addMembers && addMembers.length > 0) {
-      Promise.all(
-        addMembers.map(id =>
-          BackendRemote.rpc.addContactToChat(accountId, chat.id, id)
-        )
-      )
-        .then(() => {
-          log.info(
-            `Account ${accountId} added ${addMembers.length} members to group ${chat.id} (${addMembers.join(
-              ', '
-            )})`
+  const addMembers = useCallback(
+    (members: number[]) => {
+      if (members && members.length > 0) {
+        Promise.all(
+          members.map(id =>
+            BackendRemote.rpc.addContactToChat(accountId, chat.id, id)
           )
-        })
-        .catch(error => {
-          openDialog(AlertDialog, {
-            title: tx('error'),
-            message: tx(
-              'error_x',
-              `Failed to modify group members: ${unknownErrorToString(error)}`
-            ),
-          })
-        })
-        .finally(() => {
-          setAddMembers(null)
-        })
-    }
-  }, [tx, openDialog, addMembers, chat.id, accountId])
-
-  useEffect(() => {
-    if (removeMember == null) {
-      return
-    }
-    BackendRemote.rpc
-      .removeContactFromChat(accountId, chat.id, removeMember)
-      .then(() => {
-        log.info(
-          `Account ${accountId} removed member ${removeMember} from group ${chat.id})`
         )
-      })
-      .catch(error => {
-        openDialog(AlertDialog, {
-          title: tx('error'),
-          message: tx(
-            'error_x',
-            `Failed to modify group members: ${unknownErrorToString(error)}`
-          ),
-        })
-      })
-      .finally(() => {
-        setRemoveMember(null)
-      })
-  }, [tx, openDialog, removeMember, chat.id, accountId])
+          .then(() => {
+            log.info(
+              `Account ${accountId} added ${members.length} members to group ${chat.id} (${members.join(
+                ', '
+              )})`
+            )
+          })
+          .catch(error => {
+            openDialog(AlertDialog, {
+              title: tx('error'),
+              message: tx(
+                'error_x',
+                `Failed to modify group members: ${unknownErrorToString(error)}`
+              ),
+            })
+          })
+      }
+    },
+    [tx, openDialog, chat.id, accountId]
+  )
+
+  const removeMember = useCallback(
+    (userId: number) => {
+      if (userId !== null) {
+        BackendRemote.rpc
+          .removeContactFromChat(accountId, chat.id, userId)
+          .then(() => {
+            log.info(
+              `Account ${accountId} removed member ${userId} from group ${chat.id})`
+            )
+          })
+          .catch(error => {
+            openDialog(AlertDialog, {
+              title: tx('error'),
+              message: tx(
+                'error_x',
+                `Failed to modify group members: ${unknownErrorToString(error)}`
+              ),
+            })
+          })
+      }
+    },
+    [tx, openDialog, chat.id, accountId]
+  )
 
   type GroupContacts = typeof group.contacts
   /**
@@ -162,8 +159,8 @@ export const useGroup = (accountId: number, chat: T.FullChat) => {
     groupName,
     groupImage,
     setGroupName,
-    setAddMembers,
-    setRemoveMember,
+    addMembers,
+    removeMember,
     setGroupImage,
     setGroupContacts,
   }
@@ -206,8 +203,8 @@ function ViewGroupInner(
     groupName,
     groupImage,
     setGroupName,
-    setAddMembers,
-    setRemoveMember,
+    addMembers,
+    removeMember,
     setGroupImage,
     setGroupContacts,
   } = useGroup(accountId, chat)
@@ -284,10 +281,10 @@ function ViewGroupInner(
       })
 
       if (confirmed) {
-        setRemoveMember(contact.id)
+        removeMember(contact.id)
       }
     },
-    [isBroadcast, openConfirmationDialog, setRemoveMember, tx]
+    [isBroadcast, openConfirmationDialog, removeMember, tx]
   )
 
   const onClickEdit = () => {
@@ -313,7 +310,7 @@ function ViewGroupInner(
     openDialog(AddMemberDialog, {
       listFlags,
       groupMembers: group.contactIds,
-      onOk: setAddMembers,
+      onOk: addMembers,
       isBroadcast: isBroadcast,
       isVerificationRequired: chat.isProtected,
     })
