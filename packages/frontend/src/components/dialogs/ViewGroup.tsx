@@ -76,54 +76,59 @@ export const useGroup = (accountId: number, chat: T.FullChat) => {
   }, [groupName, groupImage, chat.id, accountId])
 
   const addMembers = useCallback(
-    (members: number[]) => {
-      if (members && members.length > 0) {
-        Promise.all(
+    async (members: number[]) => {
+      if (!members || members.length === 0) {
+        return
+      }
+
+      try {
+        await Promise.all(
           members.map(id =>
             BackendRemote.rpc.addContactToChat(accountId, chat.id, id)
           )
         )
-          .then(() => {
-            log.info(
-              `Account ${accountId} added ${members.length} members to group ${chat.id} (${members.join(
-                ', '
-              )})`
-            )
-          })
-          .catch(error => {
-            openDialog(AlertDialog, {
-              title: tx('error'),
-              message: tx(
-                'error_x',
-                `Failed to modify group members: ${unknownErrorToString(error)}`
-              ),
-            })
-          })
+      } catch (error) {
+        openDialog(AlertDialog, {
+          title: tx('error'),
+          message: tx(
+            'error_x',
+            `Failed to modify group members: ${unknownErrorToString(error)}`
+          ),
+        })
+        return
       }
+
+      log.info(
+        `Account ${accountId} added ${members.length} members to group ${chat.id} (${members.join(
+          ', '
+        )})`
+      )
     },
     [tx, openDialog, chat.id, accountId]
   )
 
   const removeMember = useCallback(
-    (userId: number) => {
-      if (userId !== null) {
-        BackendRemote.rpc
-          .removeContactFromChat(accountId, chat.id, userId)
-          .then(() => {
-            log.info(
-              `Account ${accountId} removed member ${userId} from group ${chat.id})`
-            )
-          })
-          .catch(error => {
-            openDialog(AlertDialog, {
-              title: tx('error'),
-              message: tx(
-                'error_x',
-                `Failed to modify group members: ${unknownErrorToString(error)}`
-              ),
-            })
-          })
+    async (userId: number) => {
+      try {
+        await BackendRemote.rpc.removeContactFromChat(
+          accountId,
+          chat.id,
+          userId
+        )
+      } catch (error) {
+        openDialog(AlertDialog, {
+          title: tx('error'),
+          message: tx(
+            'error_x',
+            `Failed to modify group members: ${unknownErrorToString(error)}`
+          ),
+        })
+        return
       }
+
+      log.info(
+        `Account ${accountId} removed member ${userId} from group ${chat.id})`
+      )
     },
     [tx, openDialog, chat.id, accountId]
   )
