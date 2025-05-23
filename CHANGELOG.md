@@ -17,6 +17,7 @@
 - show appropriate state in AddMemberDialog #5114
 - tauri: fix: ignore `dcnotification:` deep-link when the app is already running
 - define max height for video in drafts #5128
+- avoid overriding changes when adding/removing group members #5132
 
 <a id="1_58_2"></a>
 

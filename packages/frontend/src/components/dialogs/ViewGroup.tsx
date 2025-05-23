@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
+import type { T } from '@deltachat/jsonrpc-client'
 
 import { QrCodeShowQrInner } from './QrCode'
 import { useThemeCssVar } from '../../ThemeManager'
@@ -30,13 +31,16 @@ import ProfileInfoHeader from '../ProfileInfoHeader'
 import ImageSelector from '../ImageSelector'
 import { modifyGroup } from '../../backend/group'
 
-import type { T } from '@deltachat/jsonrpc-client'
 import type { DialogProps } from '../../contexts/DialogContext'
 import ImageCropper from '../ImageCropper'
 import { AddMemberDialog } from './AddMember/AddMemberDialog'
 import { RovingTabindexProvider } from '../../contexts/RovingTabindex'
 import { ChatListItemRowChat } from '../chat/ChatListItemRow'
 import { copyToBlobDir } from '../../utils/copyToBlobDir'
+import AlertDialog from './AlertDialog'
+import { unknownErrorToString } from '../helpers/unknownErrorToString'
+import { getLogger } from '@deltachat-desktop/shared/logger'
+const log = getLogger('ViewGroup')
 
 export default function ViewGroup(
   props: {
@@ -51,49 +55,90 @@ export default function ViewGroup(
   )
 }
 
+/**
+ * manages changes to the group name, image and members
+ * and updates the group in the backend
+ */
 export const useGroup = (accountId: number, chat: T.FullChat) => {
   const [group, setGroup] = useState(chat)
   const [groupName, setGroupName] = useState(chat.name)
-  const [groupMembers, setGroupMembers] = useState(chat.contactIds)
   const [groupImage, setGroupImage] = useState(chat.profileImage)
   const firstLoad = useRef(true)
+  const { openDialog } = useDialog()
+  const tx = useTranslationFunction()
 
   useEffect(() => {
     if (firstLoad.current) {
       firstLoad.current = false
     } else {
-      modifyGroup(accountId, chat.id, groupName, groupImage, groupMembers).then(
-        (chat: T.FullChat) => {
-          // we have to refresh the local group since the current edited group chat
-          // might not be the current selected chat in chatContext
-          // (when editGroup was opened via chat list context menu)
-          setGroup(chat)
-        }
-      )
+      modifyGroup(accountId, chat.id, groupName, groupImage)
     }
-  }, [groupName, groupImage, groupMembers, chat.id, accountId])
+  }, [groupName, groupImage, chat.id, accountId])
 
-  const removeGroupMember = (contactId: number) =>
-    setGroupMembers(members => members.filter(mId => mId !== contactId))
+  const addMembers = useCallback(
+    (members: number[]) => {
+      if (members && members.length > 0) {
+        Promise.all(
+          members.map(id =>
+            BackendRemote.rpc.addContactToChat(accountId, chat.id, id)
+          )
+        )
+          .then(() => {
+            log.info(
+              `Account ${accountId} added ${members.length} members to group ${chat.id} (${members.join(
+                ', '
+              )})`
+            )
+          })
+          .catch(error => {
+            openDialog(AlertDialog, {
+              title: tx('error'),
+              message: tx(
+                'error_x',
+                `Failed to modify group members: ${unknownErrorToString(error)}`
+              ),
+            })
+          })
+      }
+    },
+    [tx, openDialog, chat.id, accountId]
+  )
 
-  const addGroupMembers = async (newGroupMembers: number[]) => {
-    setGroupMembers(members => [...members, ...newGroupMembers])
-  }
+  const removeMember = useCallback(
+    (userId: number) => {
+      if (userId !== null) {
+        BackendRemote.rpc
+          .removeContactFromChat(accountId, chat.id, userId)
+          .then(() => {
+            log.info(
+              `Account ${accountId} removed member ${userId} from group ${chat.id})`
+            )
+          })
+          .catch(error => {
+            openDialog(AlertDialog, {
+              title: tx('error'),
+              message: tx(
+                'error_x',
+                `Failed to modify group members: ${unknownErrorToString(error)}`
+              ),
+            })
+          })
+      }
+    },
+    [tx, openDialog, chat.id, accountId]
+  )
 
   type GroupContacts = typeof group.contacts
   /**
-   * Why setGroupContacts & setGroupMembers?
-   * setGroupMembers triggers a modifiyGroup in the backend and is called after
-   * changes triggered by the user while setGroupContacts is only called after
-   * changes from "outside" (not on this client) after DCEvent "ContactsChanged"
-   * to update the group in local state
+   * setGroupContacts is only called after changes from "outside" triggered by
+   * DCEvent "ContactsChanged" to update the group contacts in local state
    *
    * It takes a "setter" argument to make sure, the update always happens
    * on the latest group state
    */
   const setGroupContacts = useCallback(
     (setter: (oldContacts: GroupContacts) => GroupContacts) => {
-      setGroup(group => {
+      setGroup((group: T.FullChat) => {
         const newContacts = setter(group.contacts)
         return { ...group, contacts: newContacts }
       })
@@ -112,12 +157,10 @@ export const useGroup = (accountId: number, chat: T.FullChat) => {
   return {
     group,
     groupName,
-    setGroupName,
-    groupMembers,
-    setGroupMembers,
-    addGroupMembers,
-    removeGroupMember,
     groupImage,
+    setGroupName,
+    addMembers,
+    removeMember,
     setGroupImage,
     setGroupContacts,
   }
@@ -143,7 +186,7 @@ function ViewGroupInner(
     if (isRelatedChatsEnabled)
       BackendRemote.rpc
         .getSimilarChatIds(selectedAccountId(), chat.id)
-        .then(chatIds => setChatListIds(chatIds))
+        .then((chatIds: number[]) => setChatListIds(chatIds))
   }, [chat.id, isRelatedChatsEnabled])
 
   const { isChatLoaded, loadChats, chatCache } =
@@ -158,11 +201,10 @@ function ViewGroupInner(
   const {
     group,
     groupName,
-    setGroupName,
-    groupMembers,
-    addGroupMembers,
-    removeGroupMember,
     groupImage,
+    setGroupName,
+    addMembers,
+    removeMember,
     setGroupImage,
     setGroupContacts,
   } = useGroup(accountId, chat)
@@ -172,8 +214,10 @@ function ViewGroupInner(
   useEffect(() => {
     BackendRemote.rpc
       .getContactsByIds(accountId, group.pastContactIds)
-      .then(pastContacts => {
-        setPastContacts(group.pastContactIds.map(id => pastContacts[id]))
+      .then((pastContacts: { [id: number]: T.Contact }) => {
+        setPastContacts(
+          group.pastContactIds.map((id: number) => pastContacts[id])
+        )
       })
   }, [accountId, group.pastContactIds])
 
@@ -206,13 +250,14 @@ function ViewGroupInner(
 
         BackendRemote.rpc
           .getContactsByIds(accountId, contactIdsToReload)
-          .then(contactsToUpdate => {
+          .then((contactsToUpdate: { [id: string]: T.Contact }) => {
             // Making sure to only update the contacts
             // that are already present in the lists,
             // because we're doing it in an async way.
             setGroupContacts(groupContacts =>
               groupContacts.map(
-                oldContact => contactsToUpdate[oldContact.id] ?? oldContact
+                (oldContact: T.Contact) =>
+                  contactsToUpdate[oldContact.id] ?? oldContact
               )
             )
             setPastContacts(pastContacts =>
@@ -236,10 +281,10 @@ function ViewGroupInner(
       })
 
       if (confirmed) {
-        removeGroupMember(contact.id)
+        removeMember(contact.id)
       }
     },
-    [isBroadcast, openConfirmationDialog, removeGroupMember, tx]
+    [isBroadcast, openConfirmationDialog, removeMember, tx]
   )
 
   const onClickEdit = () => {
@@ -265,7 +310,7 @@ function ViewGroupInner(
     openDialog(AddMemberDialog, {
       listFlags,
       groupMembers: group.contactIds,
-      onOk: addGroupMembers,
+      onOk: addMembers,
       isBroadcast: isBroadcast,
       isVerificationRequired: chat.isProtected,
     })
@@ -349,11 +394,11 @@ function ViewGroupInner(
             )}
             <div className='group-separator'>
               {!isBroadcast
-                ? tx('n_members', groupMembers.length.toString(), {
-                    quantity: groupMembers.length,
+                ? tx('n_members', group.contactIds.length.toString(), {
+                    quantity: group.contactIds.length,
                   })
-                : tx('n_recipients', groupMembers.length.toString(), {
-                    quantity: groupMembers.length,
+                : tx('n_recipients', group.contactIds.length.toString(), {
+                    quantity: group.contactIds.length,
                   })}
             </div>
             <div
