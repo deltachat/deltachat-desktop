@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- show a notification when receiving a message in any chat except the currently open one, instead of only showing notifications for other accounts
 - add a sound effect that plays when a message gets received in the currently open chat (can be turned off)
 
 ### Changed
