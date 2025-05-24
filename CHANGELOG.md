@@ -5,6 +5,7 @@
 ### Added
 
 ### Changed
+- show a notification when receiving a message in any chat except the currently open one, instead of only showing notifications for other accounts
 - update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.159.5`
   - Don't change webxdc self-addr when saving and loading draft
 - development:
