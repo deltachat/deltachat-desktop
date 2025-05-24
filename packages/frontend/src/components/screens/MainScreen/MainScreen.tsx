@@ -35,6 +35,7 @@ import { selectedAccountId } from '../../../ScreenController'
 import { openMapWebxdc } from '../../../system-integration/webxdc'
 import { ChatView } from '../../../contexts/ChatContext'
 import { ScreenContext } from '../../../contexts/ScreenContext'
+import MediaView from '../../dialogs/MediaView'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import CreateChat from '../../dialogs/CreateChat'
@@ -258,7 +259,7 @@ export default function MainScreen({ accountId }: Props) {
             )}
             {chatWithLinger && <ChatHeading chat={chatWithLinger} />}
           </div>
-          {chatWithLinger && <ChatNavButtons />}
+          {chatWithLinger && <ChatNavButtons chat={chatWithLinger} />}
           {(chatWithLinger || alternativeView === 'global-gallery') && (
             <span
               style={{
@@ -400,10 +401,17 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
   )
 }
 
-function ChatNavButtons() {
+function ChatNavButtons({ chat }: { chat: T.FullChat }) {
   const tx = useTranslationFunction()
-  const { activeView, setChatView, chatId } = useChat()
+  const { chatId } = useChat()
   const settingsStore = useSettingsStore()[0]
+  const { openDialog } = useDialog()
+
+  const openMediaViewDialog = useCallback(() => {
+    openDialog(MediaView, {
+      chat,
+    })
+  }, [openDialog, chat])
 
   return (
     <>
@@ -415,26 +423,8 @@ function ChatNavButtons() {
       >
         <Button
           role='tab'
-          id='tab-message-list-view'
-          onClick={() => setChatView(ChatView.MessageList)}
-          active={activeView === ChatView.MessageList}
-          aria-selected={activeView === ChatView.MessageList}
-          // FYI there are 2 components that use this ID,
-          // but they're not supposed to be rendered at the same time.
-          aria-controls='message-list-and-composer'
-          aria-label={tx('chat')}
-          title={tx('chat')}
-          className='navbar-button'
-          styling='borderless'
-        >
-          <Icon coloring='navbar' icon='chats' size={18} />
-        </Button>
-        <Button
-          role='tab'
           id='tab-media-view'
-          onClick={() => setChatView(ChatView.Media)}
-          active={activeView === ChatView.Media}
-          aria-selected={activeView === ChatView.Media}
+          onClick={openMediaViewDialog}
           aria-controls='media-view'
           aria-label={`${tx('webxdc_apps')} & ${tx('media')}`}
           title={`${tx('webxdc_apps')} & ${tx('media')}`}

@@ -430,7 +430,7 @@ export default class Gallery extends Component<
                   let itemHeight = itemWidth
 
                   if (currentTab === 'webxdc_apps') {
-                    itemHeight = 61
+                    itemHeight = 59
                   } else if (currentTab === 'audio') {
                     itemHeight = 94
                   }
