@@ -378,8 +378,8 @@ function ChatNavButtons({ chat }: { chat: T.FullChat }) {
           id='tab-media-view'
           onClick={openMediaViewDialog}
           aria-controls='media-view'
-          aria-label={`${tx('webxdc_apps')} & ${tx('media')}`}
-          title={`${tx('webxdc_apps')} & ${tx('media')}`}
+          aria-label={tx('apps_and_media')}
+          title={tx('apps_and_media')}
           className='navbar-button'
           styling='borderless'
         >

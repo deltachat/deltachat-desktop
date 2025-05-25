@@ -14,10 +14,12 @@ export default function MediaView(
 ) {
   const { onClose, chatId } = props
   const tx = useTranslationFunction()
+  const headerString =
+    chatId === 'all' ? tx('all_apps_and_media') : tx('apps_and_media')
 
   return (
     <Dialog onClose={onClose} className={styles.mediaViewDialog}>
-      <DialogHeader title={tx('menu_all_media')} onClose={onClose} />
+      <DialogHeader title={headerString} onClose={onClose} />
       <DialogBody className={styles.mediaViewDialogBody}>
         <Gallery chatId={chatId} />
       </DialogBody>
