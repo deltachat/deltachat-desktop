@@ -51,12 +51,7 @@ export default function MainScreen({ accountId }: Props) {
   const [queryStr, setQueryStr] = useState('')
   const [queryChatId, setQueryChatId] = useState<null | number>(null)
   const [archivedChatsSelected, setArchivedChatsSelected] = useState(false)
-  const {
-    chatId,
-    chatWithLinger,
-    selectChat,
-    unselectChat,
-  } = useChat()
+  const { chatId, chatWithLinger, selectChat, unselectChat } = useChat()
   const { smallScreenMode } = useContext(ScreenContext)
 
   // Small hack/misuse of keyBindingAction to setArchivedChatsSelected from
@@ -68,10 +63,8 @@ export default function MainScreen({ accountId }: Props) {
     setArchivedChatsSelected(false)
   )
 
-  const chatListShouldBeHidden =
-    smallScreenMode && chatId !== undefined
-  const messageSectionShouldBeHidden =
-    smallScreenMode && chatId === undefined
+  const chatListShouldBeHidden = smallScreenMode && chatId !== undefined
+  const messageSectionShouldBeHidden = smallScreenMode && chatId === undefined
 
   const onBackButton = () => {
     unselectChat()
@@ -147,7 +140,7 @@ export default function MainScreen({ accountId }: Props) {
 
   useKeyBindingAction(KeybindAction.GlobalGallery_Open, () => {
     openDialog(MediaView, {
-      chatId: 'all'
+      chatId: 'all',
     })
   })
 
@@ -156,9 +149,7 @@ export default function MainScreen({ accountId }: Props) {
     SettingsStoreInstance.effect.load()
   }, [])
 
-  const onClickThreeDotMenu = useThreeDotMenu(
-    chatWithLinger,
-  )
+  const onClickThreeDotMenu = useThreeDotMenu(chatWithLinger)
   const isSearchActive = queryStr.length > 0 || queryChatId !== null
   const showArchivedChats = !isSearchActive && archivedChatsSelected
 
@@ -230,7 +221,7 @@ export default function MainScreen({ accountId }: Props) {
             {chatWithLinger && <ChatHeading chat={chatWithLinger} />}
           </div>
           {chatWithLinger && <ChatNavButtons chat={chatWithLinger} />}
-          {chatWithLinger  && (
+          {chatWithLinger && (
             <span
               style={{
                 marginLeft: 0,
@@ -250,9 +241,7 @@ export default function MainScreen({ accountId }: Props) {
             </span>
           )}
         </nav>
-        <MessageListView
-          accountId={accountId}
-        />
+        <MessageListView accountId={accountId} />
       </section>
       {!chatListShouldBeHidden && <ConnectivityToast />}
     </div>

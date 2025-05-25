@@ -20,14 +20,8 @@ export default function MediaView(
   const onUpdateView = () => setGalleryUpdated(!galleryUpdated)
 
   return (
-    <Dialog
-      onClose={onClose}
-      className={styles.mediaViewDialog}
-    >
-      <DialogHeader
-        title={tx('menu_all_media')}
-        onClose={onClose}
-      />
+    <Dialog onClose={onClose} className={styles.mediaViewDialog}>
+      <DialogHeader title={tx('menu_all_media')} onClose={onClose} />
       <DialogBody className={styles.mediaViewDialogBody}>
         <Gallery chatId={chatId} onUpdateView={onUpdateView} />
       </DialogBody>

@@ -15,10 +15,7 @@ export default function MessageListView({
   if (chatWithLinger && accountId) {
     return (
       <RecoverableCrashScreen reset_on_change_key={chatWithLinger.id}>
-        <MessageListAndComposer
-          accountId={accountId}
-          chat={chatWithLinger}
-        />
+        <MessageListAndComposer accountId={accountId} chat={chatWithLinger} />
       </RecoverableCrashScreen>
     )
   }

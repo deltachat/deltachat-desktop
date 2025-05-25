@@ -17,9 +17,7 @@ import { unmuteChat } from '../backend/chat'
 
 import type { T } from '@deltachat/jsonrpc-client'
 
-export function useThreeDotMenu(
-  selectedChat?: T.FullChat,
-) {
+export function useThreeDotMenu(selectedChat?: T.FullChat) {
   const { openDialog } = useDialog()
   const { openContextMenu } = useContext(ContextMenuContext)
   const [settingsStore] = useSettingsStore()
