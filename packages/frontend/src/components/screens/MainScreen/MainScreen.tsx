@@ -8,7 +8,6 @@ import React, {
 } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
-import Gallery from '../../Gallery'
 import { useThreeDotMenu } from '../../ThreeDotMenu'
 import ChatList from '../../chat/ChatList'
 import { Avatar } from '../../Avatar'
@@ -33,7 +32,6 @@ import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { KeybindAction } from '../../../keybindings'
 import { selectedAccountId } from '../../../ScreenController'
 import { openMapWebxdc } from '../../../system-integration/webxdc'
-import { ChatView } from '../../../contexts/ChatContext'
 import { ScreenContext } from '../../../contexts/ScreenContext'
 import MediaView from '../../dialogs/MediaView'
 
@@ -54,10 +52,8 @@ export default function MainScreen({ accountId }: Props) {
   const [queryChatId, setQueryChatId] = useState<null | number>(null)
   const [archivedChatsSelected, setArchivedChatsSelected] = useState(false)
   const {
-    activeView,
     chatId,
     chatWithLinger,
-    alternativeView,
     selectChat,
     unselectChat,
   } = useChat()
@@ -73,9 +69,9 @@ export default function MainScreen({ accountId }: Props) {
   )
 
   const chatListShouldBeHidden =
-    smallScreenMode && (chatId !== undefined || alternativeView !== null)
+    smallScreenMode && chatId !== undefined
   const messageSectionShouldBeHidden =
-    smallScreenMode && chatId === undefined && alternativeView === null
+    smallScreenMode && chatId === undefined
 
   const onBackButton = () => {
     unselectChat()
@@ -149,6 +145,12 @@ export default function MainScreen({ accountId }: Props) {
     openDialog(CreateChat)
   })
 
+  useKeyBindingAction(KeybindAction.GlobalGallery_Open, () => {
+    openDialog(MediaView, {
+      chatId: 'all'
+    })
+  })
+
   useEffect(() => {
     // Make sure it uses new version of settings store instance
     SettingsStoreInstance.effect.load()
@@ -156,31 +158,7 @@ export default function MainScreen({ accountId }: Props) {
 
   const onClickThreeDotMenu = useThreeDotMenu(
     chatWithLinger,
-    alternativeView === 'global-gallery' || activeView === ChatView.Media
-      ? 'gallery'
-      : 'chat'
   )
-  const galleryRef = useRef<Gallery | null>(null)
-
-  // @TODO: This could be refactored into a context which knows about the
-  // gallery tab state
-  const [threeDotMenuHidden, setthreeDotMenuHidden] = useState(false)
-  const updatethreeDotMenuHidden = useCallback(() => {
-    setthreeDotMenuHidden(
-      (alternativeView === 'global-gallery' || activeView === ChatView.Media) &&
-        // galleryRef.current?.state.currentTab holds the
-        // previous tab when this is called (won't fix since will be
-        // obsolete after gallery updates step 2)
-        !['images', 'video'].includes(
-          galleryRef.current?.state.currentTab || ''
-        )
-    )
-  }, [activeView, alternativeView])
-
-  useEffect(() => {
-    updatethreeDotMenuHidden()
-  }, [alternativeView, galleryRef, updatethreeDotMenuHidden])
-
   const isSearchActive = queryStr.length > 0 || queryChatId !== null
   const showArchivedChats = !isSearchActive && archivedChatsSelected
 
@@ -249,28 +227,16 @@ export default function MainScreen({ accountId }: Props) {
             className={styles.chatNavbarHeadingWrapper}
             data-tauri-drag-region
           >
-            {alternativeView === 'global-gallery' && (
-              <>
-                <div className='navbar-heading' data-tauri-drag-region>
-                  {tx('menu_all_media')}
-                </div>
-                <span className='views' data-tauri-drag-region />
-              </>
-            )}
             {chatWithLinger && <ChatHeading chat={chatWithLinger} />}
           </div>
           {chatWithLinger && <ChatNavButtons chat={chatWithLinger} />}
-          {(chatWithLinger || alternativeView === 'global-gallery') && (
+          {chatWithLinger  && (
             <span
               style={{
                 marginLeft: 0,
                 marginRight: '3px',
-                ...(threeDotMenuHidden
-                  ? { opacity: 0, pointerEvents: 'none' }
-                  : {}),
               }}
               data-no-drag-region
-              aria-disabled={threeDotMenuHidden}
             >
               <Button
                 id='three-dot-menu-button'
@@ -286,9 +252,6 @@ export default function MainScreen({ accountId }: Props) {
         </nav>
         <MessageListView
           accountId={accountId}
-          alternativeView={alternativeView}
-          galleryRef={galleryRef}
-          onUpdateGalleryView={updatethreeDotMenuHidden}
         />
       </section>
       {!chatListShouldBeHidden && <ConnectivityToast />}
@@ -409,7 +372,7 @@ function ChatNavButtons({ chat }: { chat: T.FullChat }) {
 
   const openMediaViewDialog = useCallback(() => {
     openDialog(MediaView, {
-      chat,
+      chatId: chat.id,
     })
   }, [openDialog, chat])
 

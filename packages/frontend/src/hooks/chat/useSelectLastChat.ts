@@ -14,9 +14,9 @@ export default function useSelectLastChat(accountId?: number) {
   const { smallScreenMode } = useContext(ScreenContext)
   const hasAccountIdChanged = useHasChanged(accountId)
   const hasSmallScreenModeChanged = useHasChanged(smallScreenMode)
-  const { selectChat, chatId, alternativeView } = useChat()
+  const { selectChat, chatId } = useChat()
 
-  const smallScreenModeChatListVisible = !(chatId || alternativeView)
+  const smallScreenModeChatListVisible = !chatId
 
   const selectLastChat = useCallback(async () => {
     if (!accountId) {

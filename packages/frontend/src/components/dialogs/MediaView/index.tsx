@@ -4,16 +4,15 @@ import Dialog, { DialogBody, DialogHeader } from '../../Dialog'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
-import type { T } from '@deltachat/jsonrpc-client'
 
 import styles from './styles.module.scss'
 
 export default function MediaView(
   props: {
-    chat: T.FullChat
+    chatId: number | 'all'
   } & DialogProps
 ) {
-  const { onClose, chat } = props
+  const { onClose, chatId } = props
   const tx = useTranslationFunction()
 
   // This will update the gallery view when needed
@@ -30,7 +29,7 @@ export default function MediaView(
         onClose={onClose}
       />
       <DialogBody className={styles.mediaViewDialogBody}>
-        <Gallery chatId={chat.id} onUpdateView={onUpdateView} />
+        <Gallery chatId={chatId} onUpdateView={onUpdateView} />
       </DialogBody>
     </Dialog>
   )
