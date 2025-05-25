@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- open all media view (gallery) in an own dialog #5141 #5074
 
 ### Changed
 - update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.159.5`
