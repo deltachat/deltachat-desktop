@@ -63,7 +63,7 @@ const MediaTabs: Readonly<{
   },
 }
 
-type Props = { chatId: number | 'all'; onUpdateView?: () => void }
+type Props = { chatId: number | 'all' }
 
 const getCurrentDocumentVerticalScrollbarWidth = () => {
   const outer = document.createElement('div')
@@ -225,7 +225,6 @@ export default class Gallery extends Component<
           loading: false,
         })
         this.forceUpdate()
-        this.props.onUpdateView?.()
       })
       .catch(log.error.bind(log))
   }
@@ -430,7 +429,7 @@ export default class Gallery extends Component<
                   let itemHeight = itemWidth
 
                   if (currentTab === 'webxdc_apps') {
-                    itemHeight = 59
+                    itemHeight = 61
                   } else if (currentTab === 'audio') {
                     itemHeight = 94
                   }
