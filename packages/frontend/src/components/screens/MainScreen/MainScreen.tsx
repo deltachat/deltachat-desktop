@@ -149,7 +149,7 @@ export default function MainScreen({ accountId }: Props) {
 
   useEffect(() => {
     const fetchMedia = async () => {
-      const maxIcons = 3
+      const maxIcons = smallScreenMode ? 1 : 3
       if (!accountId || !chatId) {
         return
       }
@@ -173,7 +173,7 @@ export default function MainScreen({ accountId }: Props) {
     if (accountId && chatId) {
       fetchMedia()
     }
-  }, [accountId, chatId])
+  }, [accountId, chatId, smallScreenMode])
 
   useEffect(() => {
     // Make sure it uses new version of settings store instance
