@@ -78,6 +78,10 @@
           XDG_DATA_DIRS = "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}:$XDG_DATA_DIRS";
           WEBKIT_DISABLE_COMPOSITING_MODE = 1;
         };
+        shellHook = ''
+          # On nixos, you can not run npm electron, so we remove it here and have it in packages.
+          rm ./packages/target-electron/node_modules/.bin/electron
+        '';
       };
     });
   };
