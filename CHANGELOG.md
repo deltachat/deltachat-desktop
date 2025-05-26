@@ -11,6 +11,9 @@
   - upgrade to react 19.x
   - upgrade typescript 5.8.3
   - upgrade eslint 9.x and prettier 3.5.x
+- Update message-parser to v0.14.0
+  - Allow multiple `#` characters in links (fixes matrix links)
+  - Parse scheme-less links for some TLDs (links without `https://`-prefix)
 
 ### Fixed
 - crash when a member gets added to a group and "View Group" dialog is open #5111
