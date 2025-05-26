@@ -3,6 +3,17 @@
 ## [Unreleased][unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+<a id="1_59_0"></a>
+
+## [1.59.0] - 2025-05-26
+
+
+### Added
 - open all media view (gallery) in an own dialog #5141 #5074
 - show last apps in chat navbar
 
@@ -3464,7 +3475,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.58.2...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.59.0...HEAD
+
+[1.59.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.58.2...v1.59.0
 
 [1.58.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.58.1...v1.58.2
 
