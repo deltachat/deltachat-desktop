@@ -168,7 +168,7 @@ export default function MainScreen({ accountId }: Props) {
       const lastMessages = Object.values(mediaLoadResult).filter(
         result => result.kind === 'message'
       )
-      setLastWebxdcApps(lastMessages)
+      setLastWebxdcApps(lastMessages.reverse()) // show newest first
     }
     if (accountId && chatId) {
       fetchMedia()
@@ -454,7 +454,7 @@ function AppIcons({
           key={app.id}
           className={styles.webxdcIcon}
           src={runtime.getWebxdcIconURL(accountId, app.id)}
-          alt=''
+          alt={app.webxdcInfo?.name}
           aria-hidden='true'
           onClick={() => {
             openWebxdc(app)
