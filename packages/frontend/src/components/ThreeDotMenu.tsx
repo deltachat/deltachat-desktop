@@ -3,7 +3,7 @@ import React, { useContext } from 'react'
 
 import { Timespans } from '../../../shared/constants'
 import { ContextMenuItem } from './ContextMenu'
-import SettingsStoreInstance, { useSettingsStore } from '../stores/settings'
+import { useSettingsStore } from '../stores/settings'
 import { BackendRemote } from '../backend-com'
 import { ActionEmitter, KeybindAction } from '../keybindings'
 import useChat from '../hooks/chat/useChat'
@@ -17,10 +17,7 @@ import { unmuteChat } from '../backend/chat'
 
 import type { T } from '@deltachat/jsonrpc-client'
 
-export function useThreeDotMenu(
-  selectedChat?: T.FullChat,
-  mode: 'chat' | 'gallery' = 'chat'
-) {
+export function useThreeDotMenu(selectedChat?: T.FullChat) {
   const { openDialog } = useDialog()
   const { openContextMenu } = useContext(ContextMenuContext)
   const [settingsStore] = useSettingsStore()
@@ -199,23 +196,6 @@ export function useThreeDotMenu(
       {
         label: tx('menu_delete_chat'),
         action: onDeleteChat,
-      },
-    ]
-  }
-
-  if (mode == 'gallery' && settingsStore?.desktopSettings) {
-    const { galleryImageKeepAspectRatio } = settingsStore.desktopSettings
-    menu = [
-      {
-        label: tx(
-          galleryImageKeepAspectRatio ? 'square_grid' : 'aspect_ratio_grid'
-        ),
-        action: async () => {
-          await SettingsStoreInstance.effect.setDesktopSetting(
-            'galleryImageKeepAspectRatio',
-            !galleryImageKeepAspectRatio
-          )
-        },
       },
     ]
   }
