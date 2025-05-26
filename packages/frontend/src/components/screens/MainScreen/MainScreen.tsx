@@ -16,7 +16,7 @@ import MailingListProfile from '../../dialogs/MessageListProfile'
 import SettingsStoreInstance, {
   useSettingsStore,
 } from '../../../stores/settings'
-import { Type } from '../../../backend-com'
+import { BackendRemote, Type } from '../../../backend-com'
 import { InlineVerifiedIcon } from '../../VerifiedIcon'
 import Button from '../../Button'
 import Icon from '../../Icon'
@@ -34,9 +34,11 @@ import { selectedAccountId } from '../../../ScreenController'
 import { openMapWebxdc } from '../../../system-integration/webxdc'
 import { ScreenContext } from '../../../contexts/ScreenContext'
 import MediaView from '../../dialogs/MediaView'
+import { openWebxdc } from '../../message/messageFunctions'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import CreateChat from '../../dialogs/CreateChat'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 type Props = {
   accountId?: number
@@ -53,6 +55,7 @@ export default function MainScreen({ accountId }: Props) {
   const [archivedChatsSelected, setArchivedChatsSelected] = useState(false)
   const { chatId, chatWithLinger, selectChat, unselectChat } = useChat()
   const { smallScreenMode } = useContext(ScreenContext)
+  const [lastWebxdcApps, setLastWebxdcApps] = useState<T.Message[]>([])
 
   // Small hack/misuse of keyBindingAction to setArchivedChatsSelected from
   // other components (especially ViewProfile when selecting a shared chat/group)
@@ -145,6 +148,34 @@ export default function MainScreen({ accountId }: Props) {
   })
 
   useEffect(() => {
+    const fetchMedia = async () => {
+      const maxIcons = smallScreenMode ? 1 : 3
+      if (!accountId || !chatId) {
+        return
+      }
+      const mediaIds = await BackendRemote.rpc.getChatMedia(
+        accountId,
+        chatId,
+        'Webxdc',
+        null,
+        null
+      )
+      mediaIds.reverse() // newest first
+      const mediaLoadResult = await BackendRemote.rpc.getMessages(
+        accountId,
+        mediaIds.slice(0, maxIcons)
+      )
+      const lastMessages = Object.values(mediaLoadResult).filter(
+        result => result.kind === 'message'
+      )
+      setLastWebxdcApps(lastMessages.reverse()) // show newest first
+    }
+    if (accountId && chatId) {
+      fetchMedia()
+    }
+  }, [accountId, chatId, smallScreenMode])
+
+  useEffect(() => {
     // Make sure it uses new version of settings store instance
     SettingsStoreInstance.effect.load()
   }, [])
@@ -220,6 +251,9 @@ export default function MainScreen({ accountId }: Props) {
           >
             {chatWithLinger && <ChatHeading chat={chatWithLinger} />}
           </div>
+          {lastWebxdcApps.length > 0 && (
+            <AppIcons accountId={accountId} apps={lastWebxdcApps} />
+          )}
           {chatWithLinger && <ChatNavButtons chat={chatWithLinger} />}
           {chatWithLinger && (
             <span
@@ -400,5 +434,35 @@ function ChatNavButtons({ chat }: { chat: T.FullChat }) {
         )}
       </span>
     </>
+  )
+}
+
+function AppIcons({
+  accountId,
+  apps,
+}: {
+  accountId: number | undefined
+  apps: T.Message[]
+}) {
+  if (!accountId || !apps || apps.length === 0) {
+    return null
+  }
+  return (
+    <div className={styles.webxdcIcons} data-no-drag-region='true'>
+      {apps.map(app => (
+        <img
+          key={app.id}
+          className={styles.webxdcIcon}
+          src={runtime.getWebxdcIconURL(accountId, app.id)}
+          alt={app.webxdcInfo?.name}
+          aria-hidden='true'
+          onClick={() => {
+            openWebxdc(app)
+          }}
+          title={app.webxdcInfo?.name}
+          aria-label={app.webxdcInfo?.name}
+        />
+      ))}
+    </div>
   )
 }
