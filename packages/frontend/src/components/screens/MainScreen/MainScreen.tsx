@@ -448,7 +448,7 @@ function AppIcons({
     return null
   }
   return (
-    <div className={styles.webxdcIcons}>
+    <div className={styles.webxdcIcons} data-no-drag-region='true'>
       {apps.map(app => (
         <img
           key={app.id}
