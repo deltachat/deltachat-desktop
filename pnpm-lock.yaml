@@ -114,8 +114,8 @@ importers:
         specifier: 'catalog:'
         version: 1.159.5(ws@7.5.10)
       '@deltachat/message_parser_wasm':
-        specifier: ^0.13.0
-        version: 0.13.0
+        specifier: ^0.14.1
+        version: 0.14.1
       '@emoji-mart/data':
         specifier: ^1.2.1
         version: 1.2.1
@@ -468,8 +468,8 @@ packages:
   '@deltachat/jsonrpc-client@1.159.5':
     resolution: {integrity: sha512-hlQEablVv0SDwJNaFvOqsv5AVW9oN14QfyHivcFhQ6ZhTcm32g7dm2r6KK6EEkJ4AymBnkUCTSLwY6xhaFdA9g==}
 
-  '@deltachat/message_parser_wasm@0.13.0':
-    resolution: {integrity: sha512-X5KhNzNm5gZ7A+V86yCowqN2OAMKzseUY2PLOLwohUlwmBTs6kTppprgHPiH6XOcjHeckaUtVs1u0Ttomvu0Ig==}
+  '@deltachat/message_parser_wasm@0.14.1':
+    resolution: {integrity: sha512-rYaKxzUh2a1BbieXR5awLbQc+KY59DFJQNiNhAdPpvg+0BGgyr14nb2vdojqEEqgltlrQO/gafYmpgaWSc51og==}
 
   '@deltachat/stdio-rpc-server-android-arm64@1.159.5':
     resolution: {integrity: sha512-p6b8zNspGYVDdJQT1YH2ek/NoWSCD1ryI8xq1+FVaJ/k0lm1ROeDIfWRQeRU5wYzv+9w43rT3HpkBMZJNhfjug==}
@@ -4062,7 +4062,7 @@ snapshots:
       - utf-8-validate
       - ws
 
-  '@deltachat/message_parser_wasm@0.13.0': {}
+  '@deltachat/message_parser_wasm@0.14.1': {}
 
   '@deltachat/stdio-rpc-server-android-arm64@1.159.5':
     optional: true
