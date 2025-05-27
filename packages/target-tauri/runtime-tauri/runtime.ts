@@ -3,7 +3,7 @@
 import { Channel, invoke } from '@tauri-apps/api/core'
 import { getCurrentWindow } from '@tauri-apps/api/window'
 
-import type { attachLogger } from '@tauri-apps/plugin-log'
+import { info, type attachLogger } from '@tauri-apps/plugin-log'
 import { getStore } from '@tauri-apps/plugin-store'
 import type { Store } from '@tauri-apps/plugin-store'
 import { openPath, openUrl } from '@tauri-apps/plugin-opener'
@@ -35,6 +35,7 @@ import type {
   LogLevelString,
 } from '@deltachat-desktop/shared/logger.js'
 import type { setLogHandler as setLogHandlerFunction } from '@deltachat-desktop/shared/logger.js'
+import { getCurrentWebview } from '@tauri-apps/api/webview'
 
 let logJsonrpcConnection = false
 
@@ -367,6 +368,18 @@ class TauriRuntime implements Runtime {
         this.notificationCallback?.(event.data)
       }
     }
+    getCurrentWebview().onDragDropEvent(event => {
+      if (event.payload.type === 'drop') {
+        if (event.payload.paths.includes(this.lastDragOutFile || '')) {
+          this.log.info('prevented dropping a file that we just draged out')
+          return
+        } else {
+          this.onDrop?.(event.payload.paths)
+        }
+      }
+      // IDEA: there are also enter and over events with a position,
+      // we could use to show an drop overlay explaining the feature
+    })
     window
       .matchMedia('(prefers-color-scheme: dark)')
       .addEventListener('change', event => {
@@ -655,11 +668,20 @@ class TauriRuntime implements Runtime {
   ): Promise<string> {
     return invoke('copy_background_image_file', { srcPath, isDefaultPicture })
   }
-  onDragFileOut(_file: string): void {
-    throw new Error('Method not implemented.50')
+  lastDragOutFile?: string
+  onDrop: ((paths: string[]) => void) | null = null
+  setDropListener(onDrop: ((paths: string[]) => void) | null) {
+    this.onDrop = onDrop
   }
-  isDroppedFileFromOutside(_file: File): boolean {
-    throw new Error('Method not implemented.51')
+  onDragFileOut(fileName: string): void {
+    this.lastDragOutFile = fileName
+    invoke('drag_file_out', { fileName })
+  }
+  isDroppedFileFromOutside(file: string): boolean {
+    this.log.debug('isDroppedFileFromOutside', file)
+    // this does not work (because we don't get the real original path here it seems?), TODO think about removing it
+    const forbiddenPathRegEx = /DeltaChat\/.+?\.sqlite-blobs\//gi
+    return !forbiddenPathRegEx.test(file.replace('\\', '/'))
   }
   // only works on macOS and iOS
   // exp.runtime.debug_get_datastore_ids()

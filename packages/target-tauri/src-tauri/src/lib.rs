@@ -42,6 +42,7 @@ mod blobs;
 mod cli;
 mod clipboard;
 mod deeplink;
+mod drag_and_drop;
 mod file_dialogs;
 mod help_window;
 mod html_window;
@@ -301,6 +302,7 @@ pub fn run() -> i32 {
             themes::commands::get_current_active_theme_address,
             media_permissions::check_media_permission,
             media_permissions::request_media_permission
+            drag_and_drop::drag_file_out,
         ])
         .register_asynchronous_uri_scheme_protocol(
             "webxdc-icon",

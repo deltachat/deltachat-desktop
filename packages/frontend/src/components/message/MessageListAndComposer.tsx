@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useCallback } from 'react'
-import { basename, join, parse } from 'path'
+import { join, parse, ParsedPath } from 'path'
 import { T } from '@deltachat/jsonrpc-client'
 
 import Composer, { useDraft } from '../composer/Composer'
@@ -14,8 +14,14 @@ import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
 import { ReactionsBarProvider } from '../ReactionsBar'
 import useDialog from '../../hooks/dialog/useDialog'
 import useMessage from '../../hooks/chat/useMessage'
+import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 
 const log = getLogger('renderer/MessageListAndComposer')
+
+type Props = {
+  chat: T.FullChat
+  accountId: number
+}
 
 export function getBackgroundImageStyle(
   settings: DesktopSettingsType
@@ -80,9 +86,14 @@ export function getBackgroundImageStyle(
   return style
 }
 
-type Props = {
-  chat: T.FullChat
-  accountId: number
+// Invariant: The called function handles windows specifically.
+function fullPath(file: ParsedPath) {
+  return file.dir + '/' + file.name + file.ext
+}
+
+function isImage(file: ParsedPath) {
+  const imageExtensions = ['.jpg', '.jpeg', '.png']
+  return imageExtensions.includes(file.ext)
 }
 
 export default function MessageListAndComposer({ accountId, chat }: Props) {
@@ -111,37 +122,23 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     regularMessageInputRef
   )
 
-  const onDrop = async (e: React.DragEvent<any>) => {
-    if (chat === null) {
-      log.warn('dropped something, but no chat is selected')
-      return
+  // Tauri listener
+  useEffect(() => {
+    log.debug('drag: register')
+    runtime.setDropListener(paths => {
+      handleDrop(paths)
+    })
+    return () => {
+      log.debug('drag: unregister')
+      runtime.setDropListener(null)
     }
+  })
 
+  // Electron and webview listener
+  const onDrop = async (e: React.DragEvent<any>) => {
+    log.debug('drag: browser/electron drop')
     e.preventDefault()
     e.stopPropagation()
-
-    const sanitizedFileList: File[] = []
-    {
-      const fileList: FileList =
-        /* (e.target as any).files */ e.dataTransfer.files
-      for (let i = 0; i < fileList.length; i++) {
-        const file = fileList[i]
-        if (runtime.isDroppedFileFromOutside(file)) {
-          sanitizedFileList.push(file)
-        } else {
-          log.warn(
-            'Prevented a file from being send again while dragging it out',
-            file.name
-          )
-        }
-      }
-    }
-
-    const fileCount = sanitizedFileList.length
-
-    if (fileCount === 0) {
-      return
-    }
 
     function writeTempFileFromFile(file: File): Promise<string> {
       if (file.size > 1e8 /* 100mb */) {
@@ -174,43 +171,61 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
       })
     }
 
-    if (fileCount === 1) {
-      const file = sanitizedFileList[0]
-      log.debug(`dropped image of type ${file.type}`)
-      const msgViewType: T.Viewtype = file.type.startsWith('image')
-        ? 'Image'
-        : 'File'
+    const paths = []
+    for (const path of e.dataTransfer.files) {
+      paths.push(await writeTempFileFromFile(path))
+    }
+    handleDrop(paths)
+  }
 
-      const path = await writeTempFileFromFile(sanitizedFileList[0])
-      await addFileToDraft(path, basename(path), msgViewType)
-      await runtime.removeTempFile(path)
+  const handleDrop = async (paths: string[]) => {
+    console.log('drag: handling drop: ', paths)
+    if (chat === null) {
+      log.warn('dropped something, but no chat is selected')
       return
     }
-
-    // This is a desktop specific "hack" to support sending multiple attachments at once.
-    openDialog(ConfirmSendingFiles, {
-      sanitizedFileList,
-      chatName: chat.name,
-      onClick: async (isConfirmed: boolean) => {
-        if (!isConfirmed) {
-          return
+    const sanitized = paths
+      .filter(path => {
+        const val = runtime.isDroppedFileFromOutside(path)
+        if (!val) {
+          log.warn(
+            'Prevented a file from being sent again while dragging it out',
+            path
+          )
         }
+        return val
+      })
+      .map(path => parse(path))
 
-        for (const file of sanitizedFileList) {
-          const path = await writeTempFileFromFile(file)
-          const msgViewType: T.Viewtype = file.type.startsWith('image')
-            ? 'Image'
-            : 'File'
-          await sendMessage(accountId, chat.id, {
-            file: path,
-            filename: basename(path),
-            viewtype: msgViewType,
-          })
-          // start sending other files, don't wait until last file is sent
-          runtime.removeTempFile(path)
-        }
-      },
-    })
+    // send single file
+    if (sanitized.length == 1) {
+      const file = sanitized[0]
+      const msgViewType: Viewtype = isImage(file) ? 'Image' : 'File'
+      await addFileToDraft(fullPath(file), file.name + file.ext, msgViewType)
+    }
+    // send multiple files
+    else if (sanitized.length > 1 && !hasOpenDialogs) {
+      openDialog(ConfirmSendingFiles, {
+        sanitizedFileList: sanitized.map(path => ({
+          name: path.name,
+        })),
+        chatName: chat.name,
+        onClick: async (isConfirmed: boolean) => {
+          if (!isConfirmed) {
+            return
+          }
+
+          for (const file of sanitized) {
+            const msgViewType: Viewtype = isImage(file) ? 'Image' : 'File'
+            sendMessage(accountId, chat.id, {
+              file: fullPath(file),
+              filename: file.name + file.ext,
+              viewtype: msgViewType,
+            })
+          }
+        },
+      })
+    }
   }
 
   const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -316,6 +331,8 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     ? getBackgroundImageStyle(settingsStore.desktopSettings)
     : {}
 
+  const isElectron =
+    typeof navigator === 'object' && navigator.userAgent.includes('Electron')
   return (
     <div
       role='tabpanel'
@@ -333,7 +350,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
       className='message-list-and-composer'
       style={style}
       ref={conversationRef}
-      onDrop={onDrop.bind({ props: { chat } })}
+      onDrop={isElectron ? onDrop.bind({ props: { chat } }) : undefined}
       onDragOver={onDragOver}
     >
       <div className='message-list-and-composer__message-list'>
