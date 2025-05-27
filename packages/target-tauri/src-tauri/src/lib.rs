@@ -117,7 +117,15 @@ async fn ui_frontend_ready(
             let app_clone = app.clone();
             let deeplink_or_xdc = deeplink_or_xdc.to_owned();
             spawn(async move {
-                if let Err(err) = handle_deep_link(&app_clone, None, deeplink_or_xdc).await {
+                if let Err(err) = handle_deep_link(
+                    &app_clone,
+                    None,
+                    deeplink_or_xdc,
+                    #[cfg(target_os = "windows")]
+                    true, // This is the initial launch, handle `dcnotification:`.
+                )
+                .await
+                {
                     log::error!("error handling deeplink: {err:?}");
                 }
             });
@@ -541,9 +549,13 @@ pub fn run() -> i32 {
         tauri::async_runtime::spawn_blocking(move || {
             let deeplink_rx = deeplink_rx;
             while let Ok(deeplink) = deeplink_rx.recv() {
-                if let Err(err) =
-                    block_on(handle_deep_link(&app_clone, deeplink.cwd, deeplink.content))
-                {
+                if let Err(err) = block_on(handle_deep_link(
+                    &app_clone,
+                    deeplink.cwd,
+                    deeplink.content,
+                    #[cfg(target_os = "windows")]
+                    false, // Not the initial launch, ignore `dcnotification:`
+                )) {
                     log::error!("error handling deeplink: {err:?}");
                 }
             }

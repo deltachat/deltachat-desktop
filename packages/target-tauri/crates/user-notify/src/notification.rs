@@ -77,7 +77,7 @@ where
     /// Plaform specific:
     /// - MacOS: not supported to change the app icon?
     /// - For linux the file is read and transfered over dbus (in case you are in a flatpak and it can't read from files) [app_icon](https://specifications.freedesktop.org/notification-spec/latest/icons-and-images.html#icons-and-images-formats)
-    /// - Windows: [`<image placement="appLogoOverride" />`](https://learn.microsoft.com/de-de/uwp/schemas/tiles/toastschema/element-image)
+    /// - Windows: [`<image placement="appLogoOverride" />`](https://learn.microsoft.com/uwp/schemas/tiles/toastschema/element-image)
     pub fn set_icon(mut self, path: PathBuf) -> Self {
         self.icon = Some(path);
         self
@@ -88,7 +88,7 @@ where
     /// Plaform specific:
     /// - MacOS: not supported
     /// - Linux: not supported
-    /// - Windows: [`<image placement='appLogoOverride' hint-crop='circle' />`](https://learn.microsoft.com/de-de/uwp/schemas/tiles/toastschema/element-image)
+    /// - Windows: [`<image placement='appLogoOverride' hint-crop='circle' />`](https://learn.microsoft.com/uwp/schemas/tiles/toastschema/element-image)
     pub fn set_icon_round_crop(mut self, icon_round_crop: bool) -> Self {
         self.icon_round_crop = icon_round_crop;
         self

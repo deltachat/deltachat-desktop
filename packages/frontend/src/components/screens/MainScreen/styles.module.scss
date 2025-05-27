@@ -93,7 +93,6 @@
     }
 
     :global(.views) {
-      margin-right: 15px;
       display: flex;
       height: 100%;
     }
@@ -112,4 +111,14 @@
       border-radius: 100%;
     }
   }
+}
+
+.webxdcIcons img {
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
+  margin-top: 4px;
+  cursor: pointer;
+  border-radius: 3px;
+  background-color: #fff;
 }

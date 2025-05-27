@@ -29,7 +29,7 @@ type SettingsView =
 
 export default function Settings({ onClose }: DialogProps) {
   const { openDialog, closeDialog, openDialogIds } = useDialog()
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
   const settingsStore = useSettingsStore()[0]!
   const tx = useTranslationFunction()
   const [settingsMode, setSettingsMode] = useState<SettingsView>('main')

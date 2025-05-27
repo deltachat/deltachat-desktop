@@ -40,7 +40,7 @@ function ConnectivityDialogInner() {
         const cHTML = await getConnectivityHTML(styleSensor)
         setConnectivityHTML(cHTML)
       }, 240),
-    [] // eslint-disable-line react-hooks/exhaustive-deps
+    []
   )
 
   useEffect(() => {

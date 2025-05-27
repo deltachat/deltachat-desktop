@@ -7,9 +7,34 @@
 ### Changed
 
 ### Fixed
+- improve performance a little
+
+<a id="1_59_0"></a>
+
+## [1.59.0] - 2025-05-26
+
+
+### Added
+- open all media view (gallery) in an own dialog #5141 #5074
+- show last apps in chat navbar
+
+### Changed
+- update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.159.5`
+  - Don't change webxdc self-addr when saving and loading draft
+- development:
+  - upgrade to react 19.x
+  - upgrade typescript 5.8.3
+  - upgrade eslint 9.x and prettier 3.5.x
+- Update message-parser to v0.14.1
+  - Allow multiple `#` characters in links (fixes matrix links)
+  - Parse scheme-less links for some TLDs (links without `https://`-prefix)
+
+### Fixed
 - crash when a member gets added to a group and "View Group" dialog is open #5111
 - show appropriate state in AddMemberDialog #5114
-- improve performance a little
+- tauri: fix: ignore `dcnotification:` deep-link when the app is already running
+- define max height for video in drafts #5128
+- avoid overriding changes when adding/removing group members #5132
 
 <a id="1_58_2"></a>
 
@@ -3451,7 +3476,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.58.2...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.59.0...HEAD
+
+[1.59.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.58.2...v1.59.0
 
 [1.58.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.58.1...v1.58.2
 

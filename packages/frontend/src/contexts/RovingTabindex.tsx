@@ -40,7 +40,7 @@ import React, {
  *   until `setAsActiveElement` is called explicitly.
  * - lacks "Home", "End" key handling, and some other features.
  */
-export function useRovingTabindex(elementRef: RefObject<HTMLElement>) {
+export function useRovingTabindex(elementRef: RefObject<HTMLElement | null>) {
   const context = useContext(RovingTabindexContext)
 
   const tabIndex: 0 | -1 =
@@ -98,7 +98,7 @@ type ProviderProps = PropsWithChildren<{
    * An element that wraps all the elements that we need the roving tabindex
    * behavior applied to them within this UI widget.
    */
-  wrapperElementRef: RefObject<HTMLElement>
+  wrapperElementRef: RefObject<HTMLDivElement | HTMLElement | null>
   /**
    * All elements that will utilize roving tabindex must have this
    * class name set.

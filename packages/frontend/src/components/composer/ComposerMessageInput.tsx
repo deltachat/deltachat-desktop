@@ -39,7 +39,7 @@ export default class ComposerMessageInput extends React.Component<
 
   composerSize: number
   setCursorPosition: number | false
-  textareaRef: React.RefObject<HTMLTextAreaElement>
+  textareaRef: React.RefObject<HTMLTextAreaElement | null>
   throttledSaveDraft: ReturnType<typeof throttle>
   constructor(props: ComposerMessageInputProps) {
     super(props)
@@ -138,6 +138,9 @@ export default class ComposerMessageInput extends React.Component<
         )
       ) {
         // Focus on the current selection, hack for focusing on newlines
+        // TODO this pretty much doesn't work,
+        // because you can't focus an element that is covered by a dialog.
+        // See the comment in `onMouseUp` in `MessageListAndComposer`.
         if (this.context.hasOpenDialogs) {
           this.textareaRef.current.blur()
           this.textareaRef.current.focus()

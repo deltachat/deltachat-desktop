@@ -44,7 +44,7 @@ export const LabeledLink = ({
   destination,
   tabIndex,
 }: {
-  label: string | JSX.Element | JSX.Element[]
+  label: string | React.ReactElement | React.ReactElement[]
   destination: LinkDestination
   tabIndex: -1 | 0
 }) => {
@@ -53,7 +53,7 @@ export const LabeledLink = ({
   const processQr = useProcessQr()
   const messageDisplay = useContext(MessagesDisplayContext)
   const accountId = selectedAccountId()
-  const { target, punycode, hostname } = destination
+  const { target, punycode, hostname, scheme } = destination
 
   // encode the punycode to make phishing harder
   const realUrl = punycode ? punycode.punycode_encoded_url : target
@@ -74,11 +74,15 @@ export const LabeledLink = ({
 
     //check if domain is trusted, or if there is no domain like on mailto just open it
     if (isDeviceChat || !hostName || isDomainTrusted(hostName)) {
-      openLinkSafely(accountId, target)
+      openLinkSafely(accountId, scheme ? target : `https://${target}`)
       return
     }
     // not trusted - ask for confirmation from user
-    openDialog(LabeledLinkConfirmationDialog, { realUrl, hostName, target })
+    openDialog(LabeledLinkConfirmationDialog, {
+      realUrl,
+      hostName,
+      target: scheme ? target : `https://${target}`,
+    })
   }
   return (
     <a
@@ -177,7 +181,8 @@ export const Link = ({
   const { openDialog } = useDialog()
   const openLinkSafely = useOpenLinkSafely()
   const accountId = selectedAccountId()
-  const { target, punycode } = destination
+  const { target, punycode, scheme } = destination
+
   const processQr = useProcessQr()
   const asciiUrl = punycode ? punycode.punycode_encoded_url : target
 
@@ -194,10 +199,12 @@ export const Link = ({
       openDialog(PunycodeUrlConfirmationDialog, {
         originalHostname: punycode.original_hostname,
         asciiHostname: punycode.ascii_hostname,
-        asciiUrl: punycode.punycode_encoded_url,
+        asciiUrl: scheme
+          ? punycode.punycode_encoded_url
+          : `https://${punycode.punycode_encoded_url}`,
       })
     } else {
-      openLinkSafely(accountId, target)
+      openLinkSafely(accountId, scheme ? target : `https://${target}`)
     }
   }
 

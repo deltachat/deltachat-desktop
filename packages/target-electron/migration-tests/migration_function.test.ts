@@ -63,6 +63,7 @@ describe('/electron/main/account-migration', async () => {
       // run migration function on environment
       if (!existsSync(join(targetFolder, 'accounts.toml'))) {
         const migrated = await migrateAccountsIfNeeded(targetFolder, log, true)
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         expect(migrated).to.be.true
       } else {
         log.debug(

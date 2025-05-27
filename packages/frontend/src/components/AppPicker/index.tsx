@@ -58,7 +58,7 @@ const getJsonFromBase64 = (base64: string): any => {
     }
     const decoder = new TextDecoder()
     return JSON.parse(decoder.decode(bytes))
-  } catch (error) {
+  } catch (_error) {
     log.critical('String could not de decoded or parsed')
     return null
   }

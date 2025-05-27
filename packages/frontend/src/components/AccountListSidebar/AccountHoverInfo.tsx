@@ -38,7 +38,7 @@ export default function AccountHoverInfo({
 
   const showConnection = isSelected || !bgSyncDisabled
 
-  let content: JSX.Element
+  let content: React.ReactElement
 
   if (account.kind === 'Unconfigured') {
     content = (

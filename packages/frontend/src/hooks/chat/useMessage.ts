@@ -123,6 +123,7 @@ export default function useMessage() {
         ],
       }
       window.__internal_check_jump_to_message?.()
+      window.__closeAllDialogs?.()
     },
     [chatId, selectChat, setChatView]
   )

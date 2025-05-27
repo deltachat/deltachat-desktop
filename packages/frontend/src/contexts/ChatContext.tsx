@@ -1,14 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import { ActionEmitter, KeybindAction } from '../keybindings'
-import useKeyBindingAction from '../hooks/useKeyBindingAction'
 import { markChatAsSeen, saveLastChatId } from '../backend/chat'
 import { BackendRemote } from '../backend-com'
 
 import type { MutableRefObject, PropsWithChildren } from 'react'
 import type { T } from '@deltachat/jsonrpc-client'
-
-export type AlternativeView = 'global-gallery' | null
 
 export enum ChatView {
   Media,
@@ -33,7 +30,6 @@ export type ChatContextValue = {
    */
   chatWithLinger?: T.FullChat
   chatId?: number
-  alternativeView: AlternativeView
   // The resolve value of the promise is unused at the time of writing.
   // And the Promise itself doesn't seem to be used that much.
   // Maybe we can make it just return `void`, or need to reconsider
@@ -74,10 +70,9 @@ export const ChatProvider = ({
   const [activeView, setActiveView] = useState(ChatView.MessageList)
 
   const [chatWithLinger, setChatWithLinger] = useState<T.FullChat | undefined>()
-  const cancelPendingSetChat = useRef<() => void>()
+  const cancelPendingSetChat = useRef<(() => void) | undefined>(undefined)
 
   const [chatId, setChatId] = useState<number | undefined>()
-  const [alternativeView, setAlternativeView] = useState<AlternativeView>(null)
 
   const setChatView = useCallback<SetView>((nextView: ChatView) => {
     setActiveView(nextView)
@@ -117,7 +112,6 @@ export const ChatProvider = ({
       }
 
       // Already set known state
-      setAlternativeView(null)
       setActiveView(ChatView.MessageList)
       setChatId(nextChatId)
 
@@ -192,18 +186,12 @@ export const ChatProvider = ({
   }, [accountId, chatId])
 
   const unselectChat = useCallback<UnselectChat>(() => {
-    setAlternativeView(null)
     setActiveView(ChatView.MessageList)
     setChatId(undefined)
     setChatWithLinger(undefined)
   }, [])
 
   unselectChatRef.current = unselectChat
-
-  useKeyBindingAction(KeybindAction.GlobalGallery_Open, () => {
-    unselectChat()
-    setAlternativeView('global-gallery')
-  })
 
   // Subscribe to events coming from the core
   useEffect(() => {
@@ -260,7 +248,6 @@ export const ChatProvider = ({
     activeView,
     chatWithLinger,
     chatId,
-    alternativeView,
     selectChat,
     setChatView,
     unselectChat,
