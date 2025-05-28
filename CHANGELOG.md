@@ -10,6 +10,7 @@
 
 ### Fixed
 - improve performance a little
+- tauri: hardening: ensure that random sites can't send a message if the user allows the website to open Delta Chat on Windows
 
 <a id="1_59_0"></a>
 
