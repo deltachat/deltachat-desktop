@@ -73,12 +73,11 @@ input.group-name-input {
   }
 }
 
+// same padding as contacts here
 .group-related-chats-list-wrapper {
-  margin-left: 20px;
-  margin-right: 10px;
-}
-
-.group-member-contact-list-wrapper {
-  margin-left: 10px;
-  margin-right: 5px;
+  margin-top: 8px;
+  .chat-list-item,
+  .pseudo-chat-list-item {
+    padding-inline-start: 20px;
+  }
 }
