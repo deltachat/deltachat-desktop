@@ -10,6 +10,7 @@
 
 ### Fixed
 - improve performance a little
+- show all shared chats at once in contact profile #4982
 
 <a id="1_59_0"></a>
 
