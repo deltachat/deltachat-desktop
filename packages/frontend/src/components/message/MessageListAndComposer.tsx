@@ -239,6 +239,22 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
         return
       }
 
+      // TODO this function pretty much never works, because of this condition.
+      // trying to focus the composer while a dialog is open
+      // is impossible, because the dialog will keep focus inside of it.
+      //
+      // The condition was probably meant to be the opposite
+      // (i.e. do nothing if a dialog is open),
+      // but it only incidentally fixed the bug that it was intended to fix
+      // (https://github.com/deltachat/deltachat-desktop/issues/3286),
+      // while at the same time breaking the function.
+      //
+      // However, we probably should not fix this function
+      // and remove it instead, for accessibility reasons, laid out here:
+      // https://github.com/deltachat/deltachat-desktop/issues/4590.
+      //
+      // The same goes for the check in
+      // `ComposerMessageInput.componentDidUpdate`.
       if (!hasOpenDialogs) {
         return
       }

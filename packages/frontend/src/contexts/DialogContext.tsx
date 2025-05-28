@@ -98,6 +98,8 @@ export const DialogContextProvider = ({ children }: PropsWithChildren<{}>) => {
     openDialogIds,
   }
 
+  window.__closeAllDialogs = closeAllDialogs
+
   return (
     <DialogContext.Provider value={value}>
       {children}

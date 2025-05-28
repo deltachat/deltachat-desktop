@@ -325,6 +325,8 @@ export default class DCWebxdc {
       })
 
       webxdcWindow.once('closed', () => {
+        this.rpc.leaveWebxdcRealtime(accountId, msg_id)
+
         delete open_apps[`${accountId}.${msg_id}`]
       })
 
@@ -661,7 +663,9 @@ export default class DCWebxdc {
         if (instance) {
           instance.win.webContents.send('webxdc.realtimeData', payload)
         } else {
-          this.rpc.leaveWebxdcRealtime(accountId, instanceId)
+          log.info(
+            `Received realtime data but there is no app instance ${accountId} ${instanceId}`
+          )
         }
       }
     )

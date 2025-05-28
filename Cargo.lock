@@ -299,7 +299,7 @@ dependencies = [
  "asn1-rs-derive",
  "asn1-rs-impl",
  "displaydoc",
- "nom",
+ "nom 7.1.3",
  "num-traits",
  "rusticata-macros",
  "thiserror 1.0.69",
@@ -429,7 +429,7 @@ dependencies = [
  "futures",
  "imap-proto",
  "log",
- "nom",
+ "nom 7.1.3",
  "pin-project",
  "pin-utils",
  "self_cell",
@@ -530,17 +530,17 @@ dependencies = [
 
 [[package]]
 name = "async-smtp"
-version = "0.10.1"
+version = "0.10.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7c2d87bfab790b8b5b718a65bbcca6187f0d091270ea21f8c12fa03ce3823aba"
+checksum = "55219982f938e74491ba85dc4e49cefe8096b1e8f49348c67180a7d244988dca"
 dependencies = [
  "anyhow",
  "base64 0.22.1",
  "futures",
  "log",
- "nom",
+ "nom 8.0.0",
  "pin-project",
- "thiserror 1.0.69",
+ "thiserror 2.0.12",
  "tokio",
 ]
 
@@ -675,7 +675,7 @@ dependencies = [
  "anyhow",
  "arrayvec",
  "log",
- "nom",
+ "nom 7.1.3",
  "num-rational",
  "v_frame",
 ]
@@ -1791,8 +1791,8 @@ dependencies = [
 
 [[package]]
 name = "deltachat"
-version = "1.159.4"
-source = "git+https://github.com/chatmail/core?tag=v1.159.4#259ffef0bbbb41b915b2e810f50fbffb39332ce5"
+version = "1.159.5"
+source = "git+https://github.com/chatmail/core?tag=v1.159.5#47b9bfc8bf807ad099d2211a59d6ba80290b0c95"
 dependencies = [
  "anyhow",
  "async-broadcast",
@@ -1875,7 +1875,7 @@ dependencies = [
 [[package]]
 name = "deltachat-contact-tools"
 version = "0.0.0"
-source = "git+https://github.com/chatmail/core?tag=v1.159.4#259ffef0bbbb41b915b2e810f50fbffb39332ce5"
+source = "git+https://github.com/chatmail/core?tag=v1.159.5#47b9bfc8bf807ad099d2211a59d6ba80290b0c95"
 dependencies = [
  "anyhow",
  "chrono",
@@ -1885,8 +1885,8 @@ dependencies = [
 
 [[package]]
 name = "deltachat-jsonrpc"
-version = "1.159.4"
-source = "git+https://github.com/chatmail/core?tag=v1.159.4#259ffef0bbbb41b915b2e810f50fbffb39332ce5"
+version = "1.159.5"
+source = "git+https://github.com/chatmail/core?tag=v1.159.5#47b9bfc8bf807ad099d2211a59d6ba80290b0c95"
 dependencies = [
  "anyhow",
  "async-channel 2.3.1",
@@ -1906,7 +1906,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat-tauri"
-version = "1.58.2"
+version = "1.59.0"
 dependencies = [
  "anyhow",
  "base64 0.22.1",
@@ -1953,12 +1953,12 @@ dependencies = [
 [[package]]
 name = "deltachat-time"
 version = "1.0.0"
-source = "git+https://github.com/chatmail/core?tag=v1.159.4#259ffef0bbbb41b915b2e810f50fbffb39332ce5"
+source = "git+https://github.com/chatmail/core?tag=v1.159.5#47b9bfc8bf807ad099d2211a59d6ba80290b0c95"
 
 [[package]]
 name = "deltachat_derive"
 version = "2.0.0"
-source = "git+https://github.com/chatmail/core?tag=v1.159.4#259ffef0bbbb41b915b2e810f50fbffb39332ce5"
+source = "git+https://github.com/chatmail/core?tag=v1.159.5#47b9bfc8bf807ad099d2211a59d6ba80290b0c95"
 dependencies = [
  "quote",
  "syn 2.0.100",
@@ -1984,7 +1984,7 @@ checksum = "5cd0a5c643689626bec213c4d8bd4d96acc8ffdb4ad4bb6bc16abf27d5f4b553"
 dependencies = [
  "asn1-rs",
  "displaydoc",
- "nom",
+ "nom 7.1.3",
  "num-bigint",
  "num-traits",
  "rusticata-macros",
@@ -2806,7 +2806,7 @@ dependencies = [
 [[package]]
 name = "format-flowed"
 version = "1.0.0"
-source = "git+https://github.com/chatmail/core?tag=v1.159.4#259ffef0bbbb41b915b2e810f50fbffb39332ce5"
+source = "git+https://github.com/chatmail/core?tag=v1.159.5#47b9bfc8bf807ad099d2211a59d6ba80290b0c95"
 
 [[package]]
 name = "fsevent-sys"
@@ -3993,7 +3993,7 @@ version = "0.16.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "de555d9526462b6f9ece826a26fb7c67eca9a0245bd9ff84fa91972a5d5d8856"
 dependencies = [
- "nom",
+ "nom 7.1.3",
 ]
 
 [[package]]
@@ -5304,6 +5304,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "nom"
+version = "8.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "df9761775871bdef83bee530e60050f7e54b1105350d6884eb0fb4f46c2f9405"
+dependencies = [
+ "memchr",
+]
+
+[[package]]
 name = "noop_proc_macro"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -6131,7 +6140,7 @@ dependencies = [
  "k256",
  "log",
  "md-5",
- "nom",
+ "nom 7.1.3",
  "num-bigint-dig",
  "num-traits",
  "num_enum",
@@ -7043,7 +7052,7 @@ dependencies = [
 [[package]]
 name = "ratelimit"
 version = "1.0.0"
-source = "git+https://github.com/chatmail/core?tag=v1.159.4#259ffef0bbbb41b915b2e810f50fbffb39332ce5"
+source = "git+https://github.com/chatmail/core?tag=v1.159.5#47b9bfc8bf807ad099d2211a59d6ba80290b0c95"
 
 [[package]]
 name = "rav1e"
@@ -7504,7 +7513,7 @@ version = "4.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "faf0c4a6ece9950b9abdb62b1cfcf2a68b3b67a10ba445b3bb85be2a293d0632"
 dependencies = [
- "nom",
+ "nom 7.1.3",
 ]
 
 [[package]]
@@ -8538,23 +8547,12 @@ dependencies = [
  "parking_lot",
  "raw-window-handle",
  "scopeguard",
- "tao-macros 0.1.3 (git+https://github.com/Simon-Laux/tao?branch=hunt-down-open-url-crash-and-add-application_continue_user_activity)",
+ "tao-macros",
  "unicode-segmentation",
  "url",
  "windows 0.61.1",
  "windows-core 0.61.0",
  "windows-version",
-]
-
-[[package]]
-name = "tao-macros"
-version = "0.1.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f4e16beb8b2ac17db28eab8bca40e62dbfbb34c0fcdc6d9826b11b7b5d047dfd"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.100",
 ]
 
 [[package]]
@@ -9586,7 +9584,7 @@ checksum = "aac5e8971f245c3389a5a76e648bfc80803ae066a1243a75db0064d7c1129d63"
 dependencies = [
  "fnv",
  "memchr",
- "nom",
+ "nom 7.1.3",
  "once_cell",
  "petgraph",
 ]
@@ -10984,7 +10982,7 @@ dependencies = [
  "raw-window-handle",
  "sha2",
  "soup3",
- "tao-macros 0.1.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "tao-macros",
  "thiserror 2.0.12",
  "tracing",
  "url",
@@ -11085,7 +11083,7 @@ dependencies = [
  "data-encoding",
  "der-parser",
  "lazy_static",
- "nom",
+ "nom 7.1.3",
  "oid-registry",
  "rusticata-macros",
  "thiserror 1.0.69",

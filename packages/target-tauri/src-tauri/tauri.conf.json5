@@ -63,7 +63,8 @@
     },
     "macOS": {
       "entitlements": "../bundle_resources/Entitlements.plist",
-      "files": { "Resources/xdc.icns": "../bundle_resources/xdc.icns" }
+      "files": { "Resources/xdc.icns": "../bundle_resources/xdc.icns" },
+      "minimumSystemVersion": "14.0" // because it links to proxy apis that require atleast version 14
     },
     "windows": {
       "nsis": {

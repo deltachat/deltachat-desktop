@@ -367,7 +367,7 @@ impl NotificationManager for NotificationManagerWindows {
             };
 
         let toast_xml = XmlDocument::new()?;
-        // https://learn.microsoft.com/de-de/uwp/schemas/tiles/toastschema/schema-root
+        // https://learn.microsoft.com/uwp/schemas/tiles/toastschema/schema-root
         toast_xml
             .LoadXml(&HSTRING::from(format!(
                 r#"<toast duration="short" {launch_options}>
@@ -395,7 +395,7 @@ impl NotificationManager for NotificationManagerWindows {
         toast.SetTag(&HSTRING::from(id.clone()))?;
 
         // group seems to be sth. different than thread. messages are not grouped by it.
-        // [ToastNotification.Group](https://learn.microsoft.com/de-de/uwp/api/windows.ui.notifications.toastnotification.group?view=winrt-26100)
+        // [ToastNotification.Group](https://learn.microsoft.com/uwp/api/windows.ui.notifications.toastnotification.group?view=winrt-26100)
         // setting it gives the tag a scope, so we can not simply remove it without also knowing its group id
         //
         // if let Some(thread_id) = builder.thread_id {

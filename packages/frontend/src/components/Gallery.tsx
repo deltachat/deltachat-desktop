@@ -27,7 +27,7 @@ import {
 
 const log = getLogger('renderer/Gallery')
 
-type MediaTabKey = 'images' | 'video' | 'audio' | 'files' | 'webxdc_apps'
+type MediaTabKey = 'webxdc_apps' | 'images' | 'video' | 'audio' | 'files'
 
 type GalleryElement = (
   props: GalleryAttachmentElementProps & {
@@ -41,6 +41,10 @@ const MediaTabs: Readonly<{
     element: GalleryElement
   }
 }> = {
+  webxdc_apps: {
+    values: ['Webxdc'],
+    element: WebxdcAttachment,
+  },
   images: {
     values: ['Gif', 'Image'],
     element: ImageAttachment,
@@ -57,13 +61,9 @@ const MediaTabs: Readonly<{
     values: ['File'],
     element: FileAttachmentRow,
   },
-  webxdc_apps: {
-    values: ['Webxdc'],
-    element: WebxdcAttachment,
-  },
 }
 
-type Props = { chatId: number | 'all'; onUpdateView?: () => void }
+type Props = { chatId: number | 'all' }
 
 const getCurrentDocumentVerticalScrollbarWidth = () => {
   const outer = document.createElement('div')
@@ -114,9 +114,9 @@ export default class Gallery extends Component<
     super(props)
 
     this.state = {
-      currentTab: 'images',
-      msgTypes: MediaTabs.images.values,
-      element: ImageAttachment,
+      currentTab: 'webxdc_apps',
+      msgTypes: MediaTabs.webxdc_apps.values,
+      element: WebxdcAttachment,
       mediaMessageIds: [],
       mediaLoadResult: {},
       loading: true,
@@ -129,9 +129,9 @@ export default class Gallery extends Component<
 
   reset() {
     this.setState({
-      currentTab: 'images',
-      msgTypes: MediaTabs.images.values,
-      element: ImageAttachment,
+      currentTab: 'webxdc_apps',
+      msgTypes: MediaTabs.webxdc_apps.values,
+      element: WebxdcAttachment,
       mediaMessageIds: [],
       mediaLoadResult: {},
       loading: true,
@@ -225,7 +225,6 @@ export default class Gallery extends Component<
           loading: false,
         })
         this.forceUpdate()
-        this.props.onUpdateView?.()
       })
       .catch(log.error.bind(log))
   }

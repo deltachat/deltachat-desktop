@@ -193,6 +193,7 @@ class TauriRuntime implements Runtime {
       enableRelatedChats: false,
       galleryImageKeepAspectRatio: false,
       isMentionsEnabled: false,
+      inChatSoundsVolume: 50,
       useSystemUIFont: false,
     } satisfies Partial<DesktopSettingsType>
 

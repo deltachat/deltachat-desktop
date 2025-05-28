@@ -11,6 +11,7 @@ declare global {
     __changeScreen: (screen: Screens) => void
     __selectAccount: (accountId: number) => Promise<void>
     readonly __selectedAccountId: number | undefined
+    __selectedChatId: number | undefined
     __screen: Screens
     readonly __contextMenuActive: boolean
     __setContextMenuActive: (newVal: boolean) => void
@@ -73,5 +74,6 @@ declare global {
      */
     __internal_current_message_list_instance_id?: symbol
     __updateAccountListSidebar: (() => void) | undefined
+    __closeAllDialogs: () => void | undefined
   }
 }
