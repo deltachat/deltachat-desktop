@@ -233,11 +233,17 @@ export function ViewProfileInner({
     avatarPath = selfChatAvatar
   }
 
+  // edge case: if there are more than 150 mutual chats,
+  // we load them in a virtual list
+  const maxChatItemsOnFirstLoad = 150
+  // and limit the height to 5 visible items
   const maxMinHeightItems = 5
-  const mutualChatsMinHeight =
-    CHATLISTITEM_CHAT_HEIGHT *
-    Math.max(Math.min(maxMinHeightItems, chatListIds.length), 1)
+  const mutualChatsHeightFactor =
+    chatListIds.length > maxChatItemsOnFirstLoad
+      ? Math.max(Math.min(maxMinHeightItems, chatListIds.length), 1)
+      : chatListIds.length
 
+  const mutualChatsHeight = CHATLISTITEM_CHAT_HEIGHT * mutualChatsHeightFactor
   const VerificationTag = verifier?.action ? 'button' : 'div'
 
   return (
@@ -320,7 +326,7 @@ export function ViewProfileInner({
           <div
             ref={mutualChatsListRef}
             className={styles.mutualChats}
-            style={{ minHeight: mutualChatsMinHeight }}
+            style={{ minHeight: mutualChatsHeight }}
           >
             <RovingTabindexProvider wrapperElementRef={mutualChatsListRef}>
               <AutoSizer disableWidth>
