@@ -9,6 +9,7 @@
 - add drag and drop to tauri
 
 ### Changed
+- infinite loading for gallery #4868
 
 ### Fixed
 - improve performance a little
