@@ -301,7 +301,7 @@ pub fn run() -> i32 {
             themes::commands::get_theme,
             themes::commands::get_current_active_theme_address,
             media_permissions::check_media_permission,
-            media_permissions::request_media_permission
+            media_permissions::request_media_permission,
             drag_and_drop::drag_file_out,
         ])
         .register_asynchronous_uri_scheme_protocol(
