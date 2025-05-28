@@ -61,6 +61,7 @@ notify = "8.0.0"
 regex = "1.11.1"
 register-default-handler = { version = "0.1.0", path = "../crates/register-default-handler" }
 system_permissions = { version = "0.1.0", path = "../crates/system_permissions" }
+ashpd = "0.11.0"
 
 [target.'cfg(target_os = "android")'.dependencies]
 include_dir = "0.7.4"
@@ -77,4 +78,4 @@ crabnebula_extras = ["tauri-plugin-devtools"]
 # on macOS this uses private apis, so can't be uploaded to Mac Appstore with this enabled.
 inspector_in_production = ["tauri/devtools"]
 default = ["inspector_in_production"]
-flatpak = []
+flatpak = []                                 # ["ashpd"]
