@@ -463,7 +463,6 @@ function GridGallery({
     [id: number]: undefined | LoadStatus.FETCHING | LoadStatus.LOADED
   }>({})
 
-
   const isMessageLoaded: (index: number) => boolean = index =>
     !!messageLoadState[mediaMessageIds[index]]
   const loadMessages: (startIndex: number, stopIndex: number) => void = (
@@ -487,7 +486,8 @@ function GridGallery({
   return (
     <AutoSizer>
       {({ width, height }) => {
-        const widthWithoutScrollbar = width - 6
+        const widthWithoutScrollbar =
+          width - getCurrentDocumentVerticalScrollbarWidth()
 
         let minWidth = 160
 
