@@ -19,20 +19,17 @@ import {
 } from '@deltachat-desktop/runtime-interface'
 import { BaseDeltaChat, yerpc } from '@deltachat/jsonrpc-client'
 
-import type { dialog, app, IpcRenderer, webUtils } from 'electron'
+import type { dialog, app, IpcRenderer } from 'electron'
 import type { LocaleData } from '@deltachat-desktop/shared/localize.js'
 import type { getLogger as getLoggerFunction } from '@deltachat-desktop/shared/logger.js'
 import type { setLogHandler as setLogHandlerFunction } from '@deltachat-desktop/shared/logger.js'
 
-const {
-  app_getPath,
-  ipcRenderer: ipcBackend,
-  getPathForFile,
-} = (window as any).get_electron_functions() as {
+const { app_getPath, ipcRenderer: ipcBackend } = (
+  window as any
+).get_electron_functions() as {
   // see static/preload.js
   ipcRenderer: IpcRenderer
   app_getPath: typeof app.getPath
-  getPathForFile: typeof webUtils.getPathForFile
 }
 
 const { BaseTransport } = yerpc
@@ -120,6 +117,9 @@ class ElectronDeltachat extends BaseDeltaChat<ElectronTransport> {
 }
 
 class ElectronRuntime implements Runtime {
+  setDropListener(_onDrop: ((paths: string[]) => void) | null) {
+    return Promise.resolve()
+  }
   onResumeFromSleep: (() => void) | undefined
   onWebxdcSendToChat:
     | ((
@@ -135,10 +135,9 @@ class ElectronRuntime implements Runtime {
   onDragFileOut(file: string): void {
     ipcBackend.send('ondragstart', file)
   }
-  isDroppedFileFromOutside(file: File): boolean {
-    const path = getPathForFile(file)
+  isDroppedFileFromOutside(file: string): boolean {
     const forbiddenPathRegEx = /DeltaChat\/.+?\.sqlite-blobs\//gi
-    return !forbiddenPathRegEx.test(path.replace('\\', '/'))
+    return !forbiddenPathRegEx.test(file.replace('\\', '/'))
   }
   onThemeUpdate: (() => void) | undefined
   onChooseLanguage: ((locale: string) => Promise<void>) | undefined

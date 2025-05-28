@@ -75,27 +75,30 @@
 2. Update the `CHANGELOG.md` file (put the stuff in "unreleased" under a
    section with your new version code)
 3. Do not forget to update the tag links at the end of the `CHANGELOG.md` file!
-4. Change `version` field in `package.json` to `X.Y.Z`
-5. Run `pnpm -w update:target-versions` to update versions in the other packages
-6. Open a PR for your branch and get it reviewed.
-7. As soon as your PR is approved merge it to `main`
-8. After the PR is merged, checkout the latest version on `main`. Tag the latest commit
+4. add the release to `packages/target-tauri/metainfo.xml`
+5. Change `version` field in `package.json` to `X.Y.Z`
+6. Run `pnpm -w update:target-versions` to update versions in the other packages
+7. Open a PR for your branch and get it reviewed.
+8. As soon as your PR is approved merge it to `main`
+9. After the PR is merged, checkout the latest version on `main`. Tag the latest commit
    with your version number:
    ```bash
    git tag <tagname> # for example v1.43.2
    git push origin main --tags
    ```
-9. Now create a GitHub release for your tag:
-   - Copy the relevant part of the `CHANGELOG.md` file into the description field
-     - for fresh releases this includes the changelog of the test releases
-     - for patch releases the full changelog is not needed, the part that changed from the last release is enough
-   - Add a header `# Downloads` with a link to the download page.
-     If it's an official release, add a link to the release progress issue.
-   - for testing releases add a link to the testing forum topic:
-     ```md
-     > This release candidate is currently in the testing phase, to learn more read https://support.delta.chat/t/<rest of link>
-     ```
-10. As soon as the new tag is detected by our build machine, it will start
+10. Now create a GitHub release for your tag:
+
+- Copy the relevant part of the `CHANGELOG.md` file into the description field
+  - for fresh releases this includes the changelog of the test releases
+  - for patch releases the full changelog is not needed, the part that changed from the last release is enough
+- Add a header `# Downloads` with a link to the download page.
+  If it's an official release, add a link to the release progress issue.
+- for testing releases add a link to the testing forum topic:
+  ```md
+  > This release candidate is currently in the testing phase, to learn more read https://support.delta.chat/t/<rest of link>
+  ```
+
+11. As soon as the new tag is detected by our build machine, it will start
     building releases for various platforms (MacOS, Windows, Linux) and upload
     them to: `https://download.delta.chat/desktop/[version_code]`. This process
     takes 2-3 hours.
