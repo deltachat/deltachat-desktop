@@ -98,6 +98,7 @@ function EditProfileDialogInner({
           <DeltaInput
             key='displayname'
             id='displayname'
+            dataTestId='displayname-input'
             placeholder={tx('pref_your_name')}
             value={displayname}
             onChange={(

@@ -99,10 +99,12 @@ export default function useViewProfileMenu(
     {
       label: tx('menu_edit_name'),
       action: onClickEdit,
+      dataTestid: 'edit-contact-name',
     },
     {
       label: tx('menu_share'),
       action: onClickShareContact,
+      dataTestid: 'share-contact',
     },
     {
       type: 'separator',
@@ -111,15 +113,18 @@ export default function useViewProfileMenu(
       label: tx('encryption_info_title_desktop'),
       action: () =>
         openEncryptionInfoDialog({ chatId: null, dmChatContact: contact.id }),
+      dataTestid: 'encryption-info',
     },
     isBlocked
       ? {
           label: tx('menu_unblock_contact'),
           action: onUnblockContact,
+          dataTestid: 'unblock-contact',
         }
       : {
           label: tx('menu_block_contact'),
           action: () => openBlockContactById(accountId, contact.id),
+          dataTestid: 'block-contact',
         },
   ]
 
@@ -180,6 +185,7 @@ function EditContactNameDialog({
             ) => {
               setContactName(event.target.value)
             }}
+            dataTestId='edit-contact-name-input'
           />
         </DialogContent>
       </DialogBody>

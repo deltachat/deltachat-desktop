@@ -33,7 +33,7 @@ export default function ProfileInfoHeader({
         />
       </ClickForFullscreenAvatarWrapper>
       <div className={styles.infoContainer}>
-        <p className={styles.displayName}>
+        <p className={styles.displayName} data-test-id='profile-display-name'>
           {displayName}
           <span className={styles.verifiedIconWrapper}>
             {isVerified && <InlineVerifiedIcon />}
