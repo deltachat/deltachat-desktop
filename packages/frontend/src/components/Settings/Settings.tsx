@@ -81,6 +81,7 @@ export default function Settings({ onClose }: DialogProps) {
             <Profile settingsStore={settingsStore} />
             <SettingsIconButton
               icon='person'
+              dataTestid='edit-profile-button'
               onClick={() => {
                 openDialog(EditProfileDialog, {
                   settingsStore,

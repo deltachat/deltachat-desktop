@@ -9,6 +9,7 @@ import {
   loadExistingProfiles,
   clickThroughTestIds,
   reloadPage,
+  sendMessage,
 } from '../playwright-helper'
 
 /**
@@ -295,6 +296,63 @@ test('focuses first visible item on arrow down key on input in create chat dialo
 
   // check if moved the focus down
   await expect(page.locator('*:focus')).toContainText('New Contact')
+})
+
+test('correct handling of changed profile displaynames', async ({ page }) => {
+  const userA = existingProfiles[0]
+  const userB = existingProfiles[1]
+  const newDisplayName = 'Alice Wonderland'
+  await switchToProfile(page, userA.id)
+  // helper function to repeatedly edit the profile name
+  const editProfileName = async (name: string) => {
+    await clickThroughTestIds(page, [
+      'open-settings-button',
+      'edit-profile-button',
+    ])
+    await page.getByTestId('displayname-input').fill(name)
+    await clickThroughTestIds(page, ['ok', 'settings-close'])
+
+    // send a message to user B to trigger the update in his account
+    await sendMessage(page, userB.name, 'I just changed my display name!')
+  }
+  await editProfileName(newDisplayName)
+
+  // now user B should see the new display name of user A
+  await switchToProfile(page, userB.id)
+  await expect(
+    page
+      .locator('.chat-list .chat-list-item')
+      .filter({ hasText: newDisplayName })
+  ).toBeVisible()
+
+  // now user B edits the contact name for user A
+  const contactNameGivenByMe = 'Alice (my friend)'
+  // open the chat with user A
+  await page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: newDisplayName })
+    .click()
+  const profileButton = page.getByTestId('chat-info-button')
+  await expect(profileButton).toContainText(newDisplayName)
+  await profileButton.click()
+  await page.locator('#view-profile-menu').click()
+  await page.getByTestId('edit-contact-name').click()
+  await page.getByTestId('edit-contact-name-input').fill(contactNameGivenByMe)
+  await page.getByTestId('ok').click()
+  await page.getByTestId('dialog-header-close').click()
+  // profile shows the name I gave to the contact
+  await expect(profileButton).toContainText(contactNameGivenByMe)
+
+  await switchToProfile(page, userA.id)
+  await editProfileName('Alice Wonderland 2')
+  // now user A changes the display name again
+  await switchToProfile(page, userB.id)
+  // but the name I gave to the contact should not be updated
+  await expect(
+    page
+      .locator('.chat-list .chat-list-item')
+      .filter({ hasText: contactNameGivenByMe })
+  ).toBeVisible()
 })
 
 test('delete profiles', async ({ page }) => {

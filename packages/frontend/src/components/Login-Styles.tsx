@@ -96,6 +96,7 @@ export const DeltaInput = React.memo(
       onBlur?: (
         event: React.FormEvent<HTMLElement> & React.FocusEvent<HTMLInputElement>
       ) => void
+      dataTestId?: string
     }>
   ) => {
     const defaultId = useRef(`delta-input-${Math.random()}`)
@@ -125,6 +126,7 @@ export const DeltaInput = React.memo(
           onBlur={props.onBlur}
           autoFocus={props.autoFocus}
           className={(props.value?.length ?? 0) === 0 ? 'isEmpty' : undefined}
+          data-testid={props.dataTestId}
         />
         {props.rightElement && (
           <div className='right-element'>{props.rightElement}</div>
