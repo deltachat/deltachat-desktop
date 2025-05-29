@@ -3,12 +3,20 @@
 ## [Unreleased][unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+<a id="1_59_1"></a>
+
+## [1.59.1] - 2025-05-29
+
+### Added
 - show a notification when receiving a message in any chat except the currently open one, instead of only showing notifications for other accounts
 - add a sound effect that plays when a message gets received in the currently open chat (can be turned off)
 - add flatpak support for tauri
 - add drag and drop to tauri
-
-### Changed
 
 ### Fixed
 - improve performance a little
@@ -3482,7 +3490,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.59.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.59.1...HEAD
+
+[1.59.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.59.0...v1.59.1
 
 [1.59.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.58.2...v1.59.0
 
