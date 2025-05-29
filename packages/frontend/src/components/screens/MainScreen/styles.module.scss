@@ -113,12 +113,20 @@
   }
 }
 
-.webxdcIcons img {
-  width: 25px;
-  height: 25px;
-  margin-right: 10px;
+.webxdcIcons {
   margin-top: 4px;
-  cursor: pointer;
-  border-radius: 3px;
-  background-color: #fff;
+  img {
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    border-radius: 3px;
+    background-color: #fff;
+  }
+}
+
+.webxdcIconButton {
+  display: inline-block !important;
+  margin: 0 10px 0 0;
+  padding: 0 !important;
+  border-radius: 0 !important;
 }

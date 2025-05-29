@@ -450,18 +450,24 @@ function AppIcons({
   return (
     <div className={styles.webxdcIcons} data-no-drag-region='true'>
       {apps.map(app => (
-        <img
+        <Button
+          styling='borderless'
           key={app.id}
-          className={styles.webxdcIcon}
-          src={runtime.getWebxdcIconURL(accountId, app.id)}
-          alt={app.webxdcInfo?.name}
-          aria-hidden='true'
+          className={styles.webxdcIconButton}
+          title={app.webxdcInfo?.name}
+          aria-label={app.webxdcInfo?.name}
           onClick={() => {
             openWebxdc(app)
           }}
-          title={app.webxdcInfo?.name}
-          aria-label={app.webxdcInfo?.name}
-        />
+        >
+          <img
+            key={app.id}
+            className={styles.webxdcIcon}
+            src={runtime.getWebxdcIconURL(accountId, app.id)}
+            alt={app.webxdcInfo?.name}
+            aria-hidden='true'
+          />
+        </Button>
       ))}
     </div>
   )
