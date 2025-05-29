@@ -461,11 +461,9 @@ function AppIcons({
           }}
         >
           <img
-            key={app.id}
             className={styles.webxdcIcon}
             src={runtime.getWebxdcIconURL(accountId, app.id)}
             alt={app.webxdcInfo?.name}
-            aria-hidden='true'
           />
         </Button>
       ))}
