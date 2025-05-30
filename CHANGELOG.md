@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+- tauri: save zoom level between webxdc app launches
 
 <a id="1_59_1"></a>
 
