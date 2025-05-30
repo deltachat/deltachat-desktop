@@ -7,7 +7,8 @@
 ### Changed
 
 ### Fixed
-- tauri: save zoom level between webxdc app launches
+- translate "Emoji" and "Sticker" in emoji & sticker picker
+- tauri: save zoom level between webxdc app launches #5163
 
 <a id="1_59_1"></a>
 
