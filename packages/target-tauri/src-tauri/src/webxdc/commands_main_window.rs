@@ -26,7 +26,10 @@ use crate::{menus::webxdc_menu::create_webxdc_window_menu, settings::get_content
 
 use crate::{
     network_isolation_dummy_proxy,
-    settings::{StoreExtBoolExt, ENABLE_WEBXDC_DEV_TOOLS_DEFAULT, ENABLE_WEBXDC_DEV_TOOLS_KEY},
+    settings::{
+        StoreExtBoolExt, ENABLE_WEBXDC_DEV_TOOLS_DEFAULT, ENABLE_WEBXDC_DEV_TOOLS_KEY,
+        WEBXDC_ZOOM_FACTOR_KEY,
+    },
     state::{
         menu_manager::MenuManager,
         webxdc_instances::{WebxdcInstance, WebxdcInstancesState},
@@ -375,6 +378,25 @@ pub(crate) async fn open_webxdc<'a>(
     window_builder = set_data_store(&app, window_builder, account_id, message_id).await?;
 
     let window = Arc::new(window_builder.build()?);
+
+    // FYI there is also `window_builder.zoom_hotkeys_enabled(true)`.
+    // But the zoom level unfortunately does not appear to persist
+    // between app launches, at least on Windows.
+    window
+        .set_zoom(
+            app.store(CONFIG_FILE)
+                .context(format!(
+                    "failed to load config.json to read the value of {WEBXDC_ZOOM_FACTOR_KEY}"
+                ))
+                .inspect_err(|err| log::error!("{err}"))
+                .ok()
+                .and_then(|store| store.get(WEBXDC_ZOOM_FACTOR_KEY))
+                .and_then(|f| f.as_f64())
+                .unwrap_or(1.0),
+        )
+        .context("failed to set zoom on new webxdc window")
+        .inspect_err(|err| log::error!("{err}"))
+        .ok();
 
     let window_clone = Arc::clone(&window);
     let messge_id_to_leave = webxdc_message.get_id();
