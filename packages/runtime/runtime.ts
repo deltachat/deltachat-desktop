@@ -22,6 +22,13 @@ export type MediaAccessStatus =
   | 'restricted'
   | 'unknown'
 
+export type DropListener = {
+  /** element that gets compared against the event target,
+  either by bounds or by event target path */
+  elementRef: { current: HTMLElement | null } // I don't want to import add react to dependencies just for this
+  handler: (paths: string[]) => void
+}
+
 /**
  * Offers an abstraction Layer to make it easier to capsulate
  * context specific functions (like electron, browser, tauri, etc)
@@ -150,8 +157,8 @@ export interface Runtime {
 
   /** only support this if you have a real implementation for `isDroppedFileFromOutside`  */
   onDragFileOut(file: string): void
-  /** Set (tauri) drag listener to handle drag and drop events */
-  setDropListener(onDrop: ((paths: string[]) => void) | null): void
+  /** Set drag listener to handle drag and drop events */
+  setDropListener(onDrop: DropListener | null): void
   /** guard function that checks if it is a file from `onDragFileOut`, if so it denies the drop.
    * It checks by checking if file path contains references to the deltachat bob dir,
    */

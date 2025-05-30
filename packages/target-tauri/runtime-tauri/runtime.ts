@@ -22,6 +22,7 @@ import type {
 import '@deltachat-desktop/shared/global.d.ts'
 
 import type {
+  DropListener,
   MediaAccessStatus,
   MediaType,
   Runtime,
@@ -373,9 +374,9 @@ class TauriRuntime implements Runtime {
         if (event.payload.paths.includes(this.lastDragOutFile || '')) {
           this.log.info('prevented dropping a file that we just draged out')
           return
-        } else {
-          this.onDrop?.(event.payload.paths)
         }
+        // IDEA we could check element bounds and drop location, to only let you drop on chatview
+        this.onDrop?.handler(event.payload.paths)
       }
       // IDEA: there are also enter and over events with a position,
       // we could use to show an drop overlay explaining the feature
@@ -669,8 +670,8 @@ class TauriRuntime implements Runtime {
     return invoke('copy_background_image_file', { srcPath, isDefaultPicture })
   }
   lastDragOutFile?: string
-  onDrop: ((paths: string[]) => void) | null = null
-  setDropListener(onDrop: ((paths: string[]) => void) | null) {
+  onDrop: DropListener | null = null
+  setDropListener(onDrop: DropListener | null) {
     this.onDrop = onDrop
   }
   onDragFileOut(fileName: string): void {
@@ -679,9 +680,8 @@ class TauriRuntime implements Runtime {
   }
   isDroppedFileFromOutside(file: string): boolean {
     this.log.debug('isDroppedFileFromOutside', file)
-    // this does not work (because we don't get the real original path here it seems?), TODO think about removing it
-    const forbiddenPathRegEx = /DeltaChat\/.+?\.sqlite-blobs\//gi
-    return !forbiddenPathRegEx.test(file.replace('\\', '/'))
+    this.log.info(this.lastDragOutFile, file)
+    return this.lastDragOutFile !== file
   }
   // only works on macOS and iOS
   // exp.runtime.debug_get_datastore_ids()

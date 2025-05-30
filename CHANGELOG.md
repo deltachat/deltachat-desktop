@@ -7,6 +7,8 @@
 ### Changed
 
 ### Fixed
+- fix `runtime.isDroppedFileFromOutside` is not working as indended #5165
+- tauri: fix drag and drop on macOS #5165
 - translate "Emoji" and "Sticker" in emoji & sticker picker
 - tauri: save zoom level between webxdc app launches #5163
 
