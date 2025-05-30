@@ -440,7 +440,7 @@ class ElectronRuntime implements Runtime {
     ipcBackend.on('onResumeFromSleep', () => this.onResumeFromSleep?.())
 
     document.body.addEventListener('drop', async e => {
-      // event is a react event with circular references, so we can not simply log it
+      // react does sth. to the even, so that it gets circular references, so we can not simply log it because our logging system uses JSON.stringify and that throws an error with circular references
       this.log.debug('drop event')
       if (!this.onDrop) {
         this.log.warn('file dropped, but no drop handler set')
