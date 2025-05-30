@@ -83,7 +83,7 @@ export function EncryptionInfo({
       <DialogFooter>
         <FooterActions>
           {dmChatContact && !isChatmail && (
-            <FooterActionButton onClick={onResetEncryption} styling='secondary'>
+            <FooterActionButton onClick={onResetEncryption}>
               {tx('reset_encryption')}
             </FooterActionButton>
           )}

@@ -14,6 +14,8 @@ import { runtime } from '@deltachat-desktop/runtime-interface'
 import CoreSettingsSwitch from './CoreSettingsSwitch'
 import DesktopSettingsSwitch from './DesktopSettingsSwitch'
 import { AutostartState } from '@deltachat-desktop/shared/shared-types'
+import ProxyConfiguration from '../dialogs/ProxyConfiguration'
+import { selectedAccountId } from '../../ScreenController'
 
 type Props = {
   settingsStore: SettingsStoreState
@@ -22,6 +24,12 @@ type Props = {
 export default function Advanced({ settingsStore }: Props) {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
+  const openProxySettings = () => {
+    openDialog(ProxyConfiguration, {
+      accountId: selectedAccountId(),
+      configured: true,
+    })
+  }
 
   return (
     <>
@@ -60,6 +68,15 @@ export default function Advanced({ settingsStore }: Props) {
       >
         {tx('pref_password_and_account_settings')}
       </SettingsButton>
+      <SettingsButton
+        onClick={() => {
+          openProxySettings()
+        }}
+        dataTestid='open-proxy-settings'
+      >
+        {tx('proxy_settings')}
+      </SettingsButton>
+
       {settingsStore.settings.is_chatmail === '0' && (
         <ImapFolderHandling settingsStore={settingsStore} />
       )}
@@ -93,7 +110,9 @@ function SettingsAutoStart() {
             ? autostartState.isSupported
               ? autostartState.isRegistered
                 ? tx('pref_autostart_registered')
-                : tx('pref_autostart_not_registered')
+                : autostartState.isRegistered == null
+                  ? undefined // no description if status can't be determined
+                  : tx('pref_autostart_not_registered')
               : tx('pref_autostart_not_supported')
             : undefined // don't show description while it is loading
         }

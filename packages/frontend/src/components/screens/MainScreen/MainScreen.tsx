@@ -8,7 +8,6 @@ import React, {
 } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
-import Gallery from '../../Gallery'
 import { useThreeDotMenu } from '../../ThreeDotMenu'
 import ChatList from '../../chat/ChatList'
 import { Avatar } from '../../Avatar'
@@ -17,7 +16,7 @@ import MailingListProfile from '../../dialogs/MessageListProfile'
 import SettingsStoreInstance, {
   useSettingsStore,
 } from '../../../stores/settings'
-import { Type } from '../../../backend-com'
+import { BackendRemote, Type } from '../../../backend-com'
 import { InlineVerifiedIcon } from '../../VerifiedIcon'
 import Button from '../../Button'
 import Icon from '../../Icon'
@@ -33,11 +32,13 @@ import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { KeybindAction } from '../../../keybindings'
 import { selectedAccountId } from '../../../ScreenController'
 import { openMapWebxdc } from '../../../system-integration/webxdc'
-import { ChatView } from '../../../contexts/ChatContext'
 import { ScreenContext } from '../../../contexts/ScreenContext'
+import MediaView from '../../dialogs/MediaView'
+import { openWebxdc } from '../../message/messageFunctions'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import CreateChat from '../../dialogs/CreateChat'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 type Props = {
   accountId?: number
@@ -52,15 +53,9 @@ export default function MainScreen({ accountId }: Props) {
   const [queryStr, setQueryStr] = useState('')
   const [queryChatId, setQueryChatId] = useState<null | number>(null)
   const [archivedChatsSelected, setArchivedChatsSelected] = useState(false)
-  const {
-    activeView,
-    chatId,
-    chatWithLinger,
-    alternativeView,
-    selectChat,
-    unselectChat,
-  } = useChat()
+  const { chatId, chatWithLinger, selectChat, unselectChat } = useChat()
   const { smallScreenMode } = useContext(ScreenContext)
+  const [lastWebxdcApps, setLastWebxdcApps] = useState<T.Message[]>([])
 
   // Small hack/misuse of keyBindingAction to setArchivedChatsSelected from
   // other components (especially ViewProfile when selecting a shared chat/group)
@@ -71,10 +66,8 @@ export default function MainScreen({ accountId }: Props) {
     setArchivedChatsSelected(false)
   )
 
-  const chatListShouldBeHidden =
-    smallScreenMode && (chatId !== undefined || alternativeView !== null)
-  const messageSectionShouldBeHidden =
-    smallScreenMode && chatId === undefined && alternativeView === null
+  const chatListShouldBeHidden = smallScreenMode && chatId !== undefined
+  const messageSectionShouldBeHidden = smallScreenMode && chatId === undefined
 
   const onBackButton = () => {
     unselectChat()
@@ -148,34 +141,46 @@ export default function MainScreen({ accountId }: Props) {
     openDialog(CreateChat)
   })
 
+  useKeyBindingAction(KeybindAction.GlobalGallery_Open, () => {
+    openDialog(MediaView, {
+      chatId: 'all',
+    })
+  })
+
+  useEffect(() => {
+    const fetchMedia = async () => {
+      const maxIcons = smallScreenMode ? 1 : 3
+      if (!accountId || !chatId) {
+        return
+      }
+      const mediaIds = await BackendRemote.rpc.getChatMedia(
+        accountId,
+        chatId,
+        'Webxdc',
+        null,
+        null
+      )
+      mediaIds.reverse() // newest first
+      const mediaLoadResult = await BackendRemote.rpc.getMessages(
+        accountId,
+        mediaIds.slice(0, maxIcons)
+      )
+      const lastMessages = Object.values(mediaLoadResult).filter(
+        result => result.kind === 'message'
+      )
+      setLastWebxdcApps(lastMessages.reverse()) // show newest first
+    }
+    if (accountId && chatId) {
+      fetchMedia()
+    }
+  }, [accountId, chatId, smallScreenMode])
+
   useEffect(() => {
     // Make sure it uses new version of settings store instance
     SettingsStoreInstance.effect.load()
   }, [])
 
-  const onClickThreeDotMenu = useThreeDotMenu(
-    chatWithLinger,
-    alternativeView === 'global-gallery' || activeView === ChatView.Media
-      ? 'gallery'
-      : 'chat'
-  )
-  const galleryRef = useRef<Gallery | null>(null)
-
-  // @TODO: This could be refactored into a context which knows about the
-  // gallery tab state
-  const [threeDotMenuHidden, setthreeDotMenuHidden] = useState(false)
-  const updatethreeDotMenuHidden = useCallback(() => {
-    setthreeDotMenuHidden(
-      (alternativeView === 'global-gallery' || activeView === ChatView.Media) &&
-        !['images', 'video'].includes(
-          galleryRef.current?.state.currentTab || ''
-        )
-    )
-  }, [activeView, alternativeView])
-  useEffect(() => {
-    updatethreeDotMenuHidden()
-  }, [alternativeView, galleryRef, updatethreeDotMenuHidden])
-
+  const onClickThreeDotMenu = useThreeDotMenu(chatWithLinger)
   const isSearchActive = queryStr.length > 0 || queryChatId !== null
   const showArchivedChats = !isSearchActive && archivedChatsSelected
 
@@ -194,6 +199,7 @@ export default function MainScreen({ accountId }: Props) {
                   aria-label={tx('back')}
                   onClick={() => setArchivedChatsSelected(false)}
                   className='backButton'
+                  styling='borderless'
                 >
                   <Icon icon='arrow-left' className='backButtonIcon'></Icon>
                 </Button>
@@ -233,6 +239,7 @@ export default function MainScreen({ accountId }: Props) {
                 aria-label={tx('back')}
                 onClick={onBackButton}
                 className='backButton'
+                styling='borderless'
               >
                 <Icon icon='arrow-left' className='backButtonIcon'></Icon>
               </Button>
@@ -242,46 +249,33 @@ export default function MainScreen({ accountId }: Props) {
             className={styles.chatNavbarHeadingWrapper}
             data-tauri-drag-region
           >
-            {alternativeView === 'global-gallery' && (
-              <>
-                <div className='navbar-heading' data-tauri-drag-region>
-                  {tx('menu_all_media')}
-                </div>
-                <span className='views' data-tauri-drag-region />
-              </>
-            )}
             {chatWithLinger && <ChatHeading chat={chatWithLinger} />}
           </div>
-          {chatWithLinger && <ChatNavButtons />}
-          {(chatWithLinger || alternativeView === 'global-gallery') && (
+          {lastWebxdcApps.length > 0 && (
+            <AppIcons accountId={accountId} apps={lastWebxdcApps} />
+          )}
+          {chatWithLinger && <ChatNavButtons chat={chatWithLinger} />}
+          {chatWithLinger && (
             <span
               style={{
                 marginLeft: 0,
                 marginRight: '3px',
-                ...(threeDotMenuHidden
-                  ? { opacity: 0, pointerEvents: 'none' }
-                  : {}),
               }}
               data-no-drag-region
-              aria-disabled={threeDotMenuHidden}
             >
               <Button
                 id='three-dot-menu-button'
                 className='navbar-button'
                 aria-label={tx('main_menu')}
                 onClick={onClickThreeDotMenu}
+                styling='borderless'
               >
                 <Icon coloring='navbar' icon='more' rotation={90} size={24} />
               </Button>
             </span>
           )}
         </nav>
-        <MessageListView
-          accountId={accountId}
-          alternativeView={alternativeView}
-          galleryRef={galleryRef}
-          onUpdateGalleryView={updatethreeDotMenuHidden}
-        />
+        <MessageListView accountId={accountId} />
       </section>
       {!chatListShouldBeHidden && <ConnectivityToast />}
     </div>
@@ -393,10 +387,17 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
   )
 }
 
-function ChatNavButtons() {
+function ChatNavButtons({ chat }: { chat: T.FullChat }) {
   const tx = useTranslationFunction()
-  const { activeView, setChatView, chatId } = useChat()
+  const { chatId } = useChat()
   const settingsStore = useSettingsStore()[0]
+  const { openDialog } = useDialog()
+
+  const openMediaViewDialog = useCallback(() => {
+    openDialog(MediaView, {
+      chatId: chat.id,
+    })
+  }, [openDialog, chat])
 
   return (
     <>
@@ -408,29 +409,15 @@ function ChatNavButtons() {
       >
         <Button
           role='tab'
-          id='tab-message-list-view'
-          onClick={() => setChatView(ChatView.MessageList)}
-          active={activeView === ChatView.MessageList}
-          aria-selected={activeView === ChatView.MessageList}
-          // FYI there are 2 components that use this ID,
-          // but they're not supposed to be rendered at the same time.
-          aria-controls='message-list-and-composer'
-          aria-label={tx('chat')}
-          className='navbar-button'
-        >
-          <Icon coloring='navbar' icon='chats' size={18} />
-        </Button>
-        <Button
-          role='tab'
           id='tab-media-view'
-          onClick={() => setChatView(ChatView.Media)}
-          active={activeView === ChatView.Media}
-          aria-selected={activeView === ChatView.Media}
+          onClick={openMediaViewDialog}
           aria-controls='media-view'
-          aria-label={tx('media')}
+          aria-label={tx('apps_and_media')}
+          title={tx('apps_and_media')}
           className='navbar-button'
+          styling='borderless'
         >
-          <Icon coloring='navbar' icon='image' size={18} />
+          <Icon coloring='navbar' icon='apps' size={18} />
         </Button>
         {settingsStore?.desktopSettings.enableOnDemandLocationStreaming && (
           // Yes, this is not marked as `role='tab'`.
@@ -439,11 +426,47 @@ function ChatNavButtons() {
             onClick={() => openMapWebxdc(selectedAccountId(), chatId)}
             aria-label={tx('tab_map')}
             className='navbar-button'
+            styling='borderless'
+            title={tx('tab_map')}
           >
             <Icon coloring='navbar' icon='map' size={18} />
           </Button>
         )}
       </span>
     </>
+  )
+}
+
+function AppIcons({
+  accountId,
+  apps,
+}: {
+  accountId: number | undefined
+  apps: T.Message[]
+}) {
+  if (!accountId || !apps || apps.length === 0) {
+    return null
+  }
+  return (
+    <div className={styles.webxdcIcons} data-no-drag-region='true'>
+      {apps.map(app => (
+        <Button
+          styling='borderless'
+          key={app.id}
+          className={styles.webxdcIconButton}
+          title={app.webxdcInfo?.name}
+          aria-label={app.webxdcInfo?.name}
+          onClick={() => {
+            openWebxdc(app)
+          }}
+        >
+          <img
+            className={styles.webxdcIcon}
+            src={runtime.getWebxdcIconURL(accountId, app.id)}
+            alt={app.webxdcInfo?.name}
+          />
+        </Button>
+      ))}
+    </div>
   )
 }

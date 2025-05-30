@@ -1,7 +1,6 @@
 //@ts-check
 import { xml2js } from 'xml-js'
 import { extname, join } from 'path'
-import chokidar from 'chokidar'
 import { readdir, readFile, writeFile } from 'fs/promises'
 
 function removeJunk(input) {
@@ -84,7 +83,8 @@ async function convertTranslationsFromXMLToJSON(pathLocales, watch = false) {
   console.log(`+ converted ${count_converted} files in ${time} ms\n`)
 
   if (watch === true) {
-    const watcher = chokidar.watch(join(pathLocales, '*.xml'), {
+    const { watch: _watch } = await import('chokidar')
+    const watcher = _watch(join(pathLocales, '*.xml'), {
       persistent: true,
     })
 

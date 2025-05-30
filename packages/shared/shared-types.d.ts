@@ -29,6 +29,16 @@ export interface DesktopSettingsType {
   notifications: boolean
   showNotificationContent: boolean
   isMentionsEnabled: boolean
+  /**
+   * Controls the volume of the sound accompanying incoming
+   * (and possibly outgoing, in the future) messages
+   * of the currently open chat.
+   * A number between 0 and 1.
+   *
+   * This is important for accessibility. We do not otherwise announce
+   * incoming messages in the current chat.
+   */
+  inChatSoundsVolume: number
   /** @deprecated isn't used anymore since the move to jsonrpc */
   lastChats: { [accountId: number]: number }
   zoomFactor: number
@@ -128,9 +138,9 @@ export interface DcNotification {
    * (or a data url with base64 encoded data)
    */
   icon: string | null
+  iconIsAvatar?: boolean // for tauri, windows controlling how images is disaplayed
   chatId: number
   messageId: number
-  // for future
   accountId: number
   notificationType: NOTIFICATION_TYPE
 }
@@ -163,5 +173,6 @@ export interface AutostartState {
   isSupported: boolean
   // This is not the same as enabled in the desktop settings,
   // this is the actual state not the desktop setting
-  isRegistered: boolean
+  // null means it can't be determined and no message should be shown
+  isRegistered: boolean | null
 }

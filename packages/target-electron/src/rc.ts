@@ -20,11 +20,11 @@ const defaults: RC_Config = {
 const config = rc('DeltaChat', defaults) as RC_Config
 
 if (config.version || config.v) {
-  config.version == true
+  config.version = true
 }
 
 if (config.help || config.h) {
-  config.help == true
+  config.help = true
 }
 
 if (config.devmode) {

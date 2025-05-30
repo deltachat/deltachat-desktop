@@ -38,6 +38,24 @@ export async function switchToProfile(
   )
 }
 
+export async function sendMessage(
+  page: Page,
+  userName: string,
+  messageText: string
+): Promise<void> {
+  await page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: userName })
+    .click()
+  await page.locator('#composer-textarea').fill(messageText)
+  await page.locator('button.send-button').click()
+  const sentMessageText = page
+    .locator(`.message.outgoing`)
+    .last()
+    .locator('.msg-body .text')
+  await expect(sentMessageText).toHaveText(messageText)
+}
+
 export async function createUser(
   userName: string,
   page: Page,

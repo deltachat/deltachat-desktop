@@ -1,0 +1,86 @@
+[package]
+name = "user-notify"
+description = "notifications for end users on linux, macos and windows"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow = "1.0.97"
+async-trait = "0.1.88"
+log = "0.4.27"
+send_wrapper = "0.6.0"
+thiserror = "2.0.12"
+tokio = { version = "1.44.2", features = [
+    "macros",
+    "rt",
+    "rt-multi-thread",
+    "sync",
+    "signal",
+    "time",
+] }
+url = "2.5.4"
+uuid = { version = "1.16.0", features = ["v4"] }
+
+
+[target.'cfg(any(target_os = "linux", target_os = "dragonfly", target_os = "freebsd", target_os = "openbsd", target_os = "netbsd"))'.dependencies]
+notify-rust = { version = "4.11.6", features = ["images"] }
+image = "0.25.6"
+quick-xml = "0.37"
+
+[target.'cfg(target_os = "macos")'.dependencies]
+block2 = "0.6"
+objc2 = { version = "0.6", features = ["exception"] }
+objc2-foundation = { version = "0.3.0", default-features = false, features = [
+    # TODO remove what we don't need
+    "std",
+    "objc2-core-foundation",
+    "NSURLRequest",
+    "NSKeyValueCoding",
+    "NSStream",
+    "NSDictionary",
+    "NSObject",
+    "NSData",
+    "NSEnumerator",
+    "NSKeyValueObserving",
+    "NSDate",
+    "NSValue",
+    "NSRange",
+    # used
+    "NSString",
+    "NSBundle",
+    "NSURL",
+] }
+objc2-user-notifications = { version = "0.3.0", default-features = false, features = [
+    "std",
+    "block2",
+    "UNNotification",
+    "UNNotificationContent",
+    "UNNotificationTrigger",
+    "UNNotificationRequest",
+    "UNNotificationResponse",
+    "UNUserNotificationCenter",
+    "UNNotificationAttachment",
+    "UNNotificationSettings",
+    "UNNotificationCategory",
+    "UNNotificationAction",
+] }
+[target.'cfg(target_os = "windows")'.dependencies]
+windows = { version = "0.61", features = [
+    "Win32_Foundation",
+    "Win32_UI_Shell",
+    "Foundation_Collections",
+    "Data_Xml_Dom",
+    "UI_Notifications",
+    "ApplicationModel",
+    "Win32_UI_WindowsAndMessaging", # only used for example
+    "Win32_Security",
+    "Win32_System_Threading",
+] }
+windows-collections = "0.2.0"
+quick-xml = "0.37"
+serde = { version = "1" }
+serde_json = "1"
+base64 = "0.22.1"
+
+[dev-dependencies]
+env_logger = "0.11.8"

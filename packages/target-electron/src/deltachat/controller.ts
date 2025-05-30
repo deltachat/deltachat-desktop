@@ -132,7 +132,7 @@ export default class DeltaChatController extends EventEmitter {
                 logCoreEvent.debug(contextId, event.kind, event)
               }
             }
-          } catch (error) {
+          } catch (_error) {
             // ignore json parse errors
             return
           }

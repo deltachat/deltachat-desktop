@@ -1,4 +1,4 @@
-@import '../../../scss/mixins';
+@use '../../../scss/mixins';
 
 .icon {
   background-color: var(--colorPrimary);
@@ -34,7 +34,7 @@
   }
 }
 .iconButton {
-  @include button-reset;
+  @include mixins.button-reset;
   // Ensure that the button wraps the icon tightly and doesn't produce
   // extra height.
   display: flex;

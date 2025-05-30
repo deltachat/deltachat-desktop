@@ -76,6 +76,12 @@ fn main() {
             "get_available_themes",
             "get_theme",
             "get_current_active_theme_address",
+            "show_notification",
+            "clear_notifications",
+            "clear_all_notifications",
+            "check_media_permission",
+            "request_media_permission",
+            "drag_file_out",
         ]),
     ))
     .expect("failed to run tauri-build");

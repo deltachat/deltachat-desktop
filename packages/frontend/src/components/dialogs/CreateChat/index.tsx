@@ -593,10 +593,7 @@ export function CreateGroup(props: CreateGroupProps) {
       </DialogBody>
       <DialogFooter>
         <FooterActions align='spaceBetween'>
-          <FooterActionButton
-            styling='secondary'
-            onClick={() => setViewMode('main')}
-          >
+          <FooterActionButton onClick={() => setViewMode('main')}>
             {tx('cancel')}
           </FooterActionButton>
           <FooterActionButton

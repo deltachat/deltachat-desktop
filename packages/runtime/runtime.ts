@@ -22,6 +22,13 @@ export type MediaAccessStatus =
   | 'restricted'
   | 'unknown'
 
+export type DropListener = {
+  /** element that gets compared against the event target,
+  either by bounds or by event target path */
+  elementRef: { current: HTMLElement | null } // I don't want to import add react to dependencies just for this
+  handler: (paths: string[]) => void
+}
+
 /**
  * Offers an abstraction Layer to make it easier to capsulate
  * context specific functions (like electron, browser, tauri, etc)
@@ -123,7 +130,7 @@ export interface Runtime {
   setBadgeCounter(value: number): void
   showNotification(data: DcNotification): void
   clearAllNotifications(): void
-  clearNotifications(chatId: number): void
+  clearNotifications(accountId: number, chatId: number): void
   /** enables to set a callback (used in frontend RuntimeAdapter) */
   setNotificationCallback(
     cb: (data: { accountId: number; chatId: number; msgId: number }) => void
@@ -150,10 +157,12 @@ export interface Runtime {
 
   /** only support this if you have a real implementation for `isDroppedFileFromOutside`  */
   onDragFileOut(file: string): void
+  /** Set drag listener to handle drag and drop events */
+  setDropListener(onDrop: DropListener | null): void
   /** guard function that checks if it is a file from `onDragFileOut`, if so it denies the drop.
    * It checks by checking if file path contains references to the deltachat bob dir,
    */
-  isDroppedFileFromOutside(file: File): boolean
+  isDroppedFileFromOutside(file: string): boolean
 
   getAutostartState(): Promise<AutostartState>
   // callbacks to set

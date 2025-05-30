@@ -75,7 +75,6 @@ export default function SmallSelectDialog({
               onCancel && onCancel()
               onClose()
             }}
-            styling='secondary'
           >
             {tx('cancel')}
           </FooterActionButton>

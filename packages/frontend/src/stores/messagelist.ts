@@ -10,10 +10,11 @@ import {
   defaultChatViewState,
 } from './chat/chat_view_reducer'
 import { ChatStoreScheduler } from './chat/chat_scheduler'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import { debounce } from 'debounce'
 import { getLogger } from '@deltachat-desktop/shared/logger'
+import { useSettingsStore } from './settings'
 
 const log = getLogger('messagelist')
 
@@ -58,6 +59,26 @@ export function useMessageList(accountId: number, chatId: number) {
     return store
   }, [accountId, chatId])
 
+  // perf: It's a shame that we have to re-render on settings changes
+  // even though we only depend on `volume`,
+  // but let's hope the React compiler will take care of this
+  // when it's released.
+  const settingsStore = useSettingsStore()[0]
+
+  const incomingMessageAudioElement_ = useRef<HTMLAudioElement>(null)
+  if (incomingMessageAudioElement_.current == null) {
+    incomingMessageAudioElement_.current = document.createElement('audio')
+    incomingMessageAudioElement_.current.src = './audio/sound_in.wav'
+  }
+  const incomingMessageAudioElement = incomingMessageAudioElement_.current
+  {
+    const volume = settingsStore?.desktopSettings.inChatSoundsVolume
+    if (volume != null) {
+      // Note that `volume` could be 0.
+      incomingMessageAudioElement.volume = volume
+    }
+  }
+
   useEffect(() => {
     const cleanup = [
       onDCEvent(accountId, 'MsgDelivered', ({ chatId: eventChatId, msgId }) => {
@@ -68,6 +89,12 @@ export function useMessageList(accountId: number, chatId: number) {
       onDCEvent(accountId, 'IncomingMsg', ({ chatId: eventChatId }) => {
         if (chatId === eventChatId) {
           store.effect.onEventIncomingMessage()
+
+          // Note that the element might already be playing,
+          // if we received two or more messages rapidly.
+          // In that case it could be nice to play multiple sounds in parallel.
+          incomingMessageAudioElement.currentTime = 0
+          incomingMessageAudioElement.play()
         } else {
           store.log.debug(
             `chatId of IncomingMsg event (${chatId}) doesn't match id of selected chat (${eventChatId}). Skipping.`
@@ -104,7 +131,7 @@ export function useMessageList(accountId: number, chatId: number) {
       }),
     ]
     return () => cleanup.forEach(off => off())
-  }, [accountId, chatId, store])
+  }, [accountId, chatId, incomingMessageAudioElement, store])
 
   const [state, setState] = useState(store.getState())
 
@@ -981,6 +1008,10 @@ class MessageListStore extends Store<MessageListState> {
             `even belong to chat ${chatId}? Or did the message get deleted?\n` +
             `Anyways, falling back to jumping to the last message.`
         )
+        window.__userFeedback({
+          type: 'error',
+          text: `${window.static_translate('error')}: message not found`,
+        })
         jumpToMessageIndex = messageListItems.length - 1
       }
 

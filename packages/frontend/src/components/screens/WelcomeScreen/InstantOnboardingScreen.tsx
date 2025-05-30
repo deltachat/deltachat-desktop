@@ -18,9 +18,33 @@ import useDialog from '../../../hooks/dialog/useDialog'
 import UseOtherServerDialog from './UseOtherServerDialog'
 import { BackendRemote } from '../../../backend-com'
 
+import { ContextMenuContext } from '../../../contexts/ContextMenuContext'
+import { mouseEventToPosition } from '../../../utils/mouseEventToPosition'
+import { OpenDialog } from '../../../contexts/DialogContext'
+import ProxyConfiguration from '../../dialogs/ProxyConfiguration'
+import { selectedAccountId } from '../../../ScreenController'
+import { TranslationKey } from '@deltachat-desktop/shared/translationKeyType'
+
 type Props = {
   onCancel: () => void
   selectedAccountId: number
+}
+
+function buildContextMenu(
+  openDialog: OpenDialog,
+  tx: (key: TranslationKey) => string
+) {
+  return [
+    {
+      label: tx('proxy_use_proxy'),
+      action: () => {
+        openDialog(ProxyConfiguration, {
+          accountId: selectedAccountId(),
+          configured: false,
+        })
+      },
+    },
+  ]
 }
 
 /**
@@ -50,6 +74,22 @@ export default function InstantOnboardingScreen({
   const [displayName, setDisplayName] = useState('')
   const [profilePicture, setProfilePicture] = useState<string | null>(null)
   const [showMissingNameError, setShowMissingNameError] = useState(false)
+
+  const { openContextMenu } = useContext(ContextMenuContext)
+
+  const showMenu = (
+    event: React.MouseEvent<
+      HTMLDivElement | HTMLAnchorElement | HTMLLIElement,
+      MouseEvent
+    >
+  ) => {
+    const items = buildContextMenu(openDialog, tx)
+
+    openContextMenu({
+      ...mouseEventToPosition(event),
+      items,
+    })
+  }
 
   useEffect(() => {
     ;(async () => {
@@ -142,6 +182,7 @@ export default function InstantOnboardingScreen({
     <>
       <DialogHeader
         onClickBack={onClickBack}
+        onContextMenuClick={showMenu}
         title={tx('instant_onboarding_title')}
       />
       <DialogBody className={styles.welcomeScreenBody}>
@@ -184,7 +225,6 @@ export default function InstantOnboardingScreen({
             </Button>
             <Button
               className={styles.welcomeScreenButton}
-              styling='secondary'
               onClick={showOtherOptions}
               data-testid='other-login-button'
             >

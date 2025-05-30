@@ -1,3 +1,6 @@
+@use 'sass:map';
+@use '../variables';
+
 $esp-height: 70vh;
 $esp-header-height: 40px;
 $esp-footer-height: 30px;
@@ -6,7 +9,7 @@ $emojimart-search-height: 31px + 6px;
 
 .emoji-sticker-picker {
   position: fixed;
-  z-index: map-get($z-index, emoji-sticker-picker);
+  z-index: map.get(variables.$z-index, emoji-sticker-picker);
 
   width: 438px;
   height: $esp-height;

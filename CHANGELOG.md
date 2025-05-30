@@ -7,17 +7,87 @@
 ### Changed
 
 ### Fixed
-- accessibility: add accessible labels and descriptions to more items #5050, #5055
-- accessibility: add `role='tablist'` for accounts list #5040
-- accessibility: add alt text for QR invite code image
-- accessibility: improve tabbing behavior of searh results
-- accessibility: announce when a message gets edited and outgoing message delivery status changes (`aria-live`)
-- reduce voice messages to a lower bitrate #4977
-- tauri: fix webxdc apps not receiving `visibilitychange`, `beforeunload` and `pagehide` when the window gets closed
+- fix `runtime.isDroppedFileFromOutside` is not working as indended #5165
+- tauri: fix drag and drop on macOS #5165
+- translate "Emoji" and "Sticker" in emoji & sticker picker
+- tauri: fix webxdc apps not receiving `visibilitychange`, `beforeunload` and `pagehide` when the window gets closed (except on macOS) #5065
+- tauri: save zoom level between webxdc app launches #5163
 
-<a id="1_57_0"></a>
+<a id="1_59_1"></a>
 
-## [1.57.0] - 2025-04-24
+## [1.59.1] - 2025-05-29
+
+### Added
+- show a notification when receiving a message in any chat except the currently open one, instead of only showing notifications for other accounts
+- add a sound effect that plays when a message gets received in the currently open chat (can be turned off)
+- add flatpak support for tauri
+- add drag and drop to tauri
+
+### Fixed
+- improve performance a little
+- show all shared chats at once in contact profile #4982
+- tauri: hardening: ensure that random sites can't send a message if the user allows the website to open Delta Chat on Windows
+
+<a id="1_59_0"></a>
+
+## [1.59.0] - 2025-05-26
+
+
+### Added
+- open all media view (gallery) in an own dialog #5141 #5074
+- show last apps in chat navbar
+
+### Changed
+- update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.159.5`
+  - Don't change webxdc self-addr when saving and loading draft
+- development:
+  - upgrade to react 19.x
+  - upgrade typescript 5.8.3
+  - upgrade eslint 9.x and prettier 3.5.x
+- Update message-parser to v0.14.1
+  - Allow multiple `#` characters in links (fixes matrix links)
+  - Parse scheme-less links for some TLDs (links without `https://`-prefix)
+
+### Fixed
+- crash when a member gets added to a group and "View Group" dialog is open #5111
+- show appropriate state in AddMemberDialog #5114
+- tauri: fix: ignore `dcnotification:` deep-link when the app is already running
+- define max height for video in drafts #5128
+- avoid overriding changes when adding/removing group members #5132
+
+<a id="1_58_2"></a>
+
+## [1.58.2] - 2025-05-14
+
+### Added
+- new proxy configuration dialog #5052
+- tauri: added notifications
+- tauri: ask for media permissions on macOS #5103
+
+### Changed
+- restyle profile view #5093
+- Update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.159.4`
+  - Better avatar quality
+  - Update iroh from 0.33.0 to 0.35.0
+
+### Fixed
+- show error when sendMsg fails #5092
+- update search results on changes #5100
+
+<a id="1_58_1"></a>
+
+## [1.58.1] - 2025-05-07
+
+### Fixed
+- ugly margins / paddings on some saved messages with attachments #5047
+- accessibility: improve emoji and sticker picker accessibility: specify "tabs" layout
+- accessibility: announce when someone reacts to a message in the current chat
+- accessibility: don't redundantly announce "Chat property page" when the focus enters the chat #5076
+- reduce build size by excluding migration tests
+
+<a id="1_58_0"></a>
+
+## [1.58.0] - 2025-05-06
 
 ### Added
 - tauri: support for webxdc #4740, #4852, #4949
@@ -39,7 +109,8 @@
 - tauri: add autostart #4754
 - tauri: add chat background image customization support
 - testing: add more e2e tests for onboardings etc. #5001
-
+- clicking info messages with contacts open the contact's profile
+- tauri: add deeplinking support and opening `.xdc` files to attach them #4956
 
 ### Changed
 - switch to account the webxdc is from when sending to chat (tauri and electron edition) #4740
@@ -68,7 +139,7 @@
 - improve attachment menu ordering #5000
 
 ### Fixed
-- tauri: improve security #4826, #4936, #4937, #4944, #4959
+- tauri: improve security #4826, #4936, #4937, #4944
 - improve fatal error dialog readability by removing color from deltachat-rpc-server errors
 - prevent dragging around of webxdc icon #4740
 - tauri: clear temp folder on exit #4839
@@ -96,10 +167,27 @@
 - tauri: improve performance a little #4812
 - settings: fix: wait for setting to be applied before calling callback #4754
 - tauri: prevent webrtc from being accessed in webxdc apps #4851
+- webxdc apps sometimes having wrong `selfAddr`, resulting in apps treating the same user as a new one (e.g. the "Poll" app would allow you to vote twice) #5068
+- accessibility: add accessible labels and descriptions to more items #5050, #5055
+- accessibility: add `role='tablist'` for accounts list #5040
+- accessibility: add alt text for QR invite code image
+- accessibility: improve tabbing behavior of searh results
+- accessibility: announce when a message gets edited and outgoing message delivery status changes (`aria-live`)
+- reduce voice messages to a lower bitrate #4977
+- tauri: improve security #4959
 
 ### Removed
 - remove experimental option to disable IMAP IDLE #4991
 - tauri: disable long press link preview
+
+<a id="1_57_1"></a>
+
+## [1.57.1] - 2025-05-03 Test release
+
+
+<a id="1_57_0"></a>
+
+## [1.57.0] - 2025-04-24 Test release
 
 <a id="1_56_0"></a>
 
@@ -3407,7 +3495,19 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.57.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.59.1...HEAD
+
+[1.59.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.59.0...v1.59.1
+
+[1.59.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.58.2...v1.59.0
+
+[1.58.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.58.1...v1.58.2
+
+[1.58.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.58.0...v1.58.1
+
+[1.58.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.57.1...v1.58.0
+
+[1.57.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.57.0...v1.57.1
 
 [1.57.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.56.0...v1.57.0
 

@@ -37,6 +37,7 @@ import {
   refresh as refreshTitleMenu,
 } from '../menu.js'
 import { T } from '@deltachat/jsonrpc-client'
+import type * as Jsonrpc from '@deltachat/jsonrpc-client'
 import { setContentProtection } from '../content-protection.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -48,6 +49,10 @@ type AppInstance = {
   msgId: number
   accountId: number
   internet_access: boolean
+  selfAddr: string
+  displayName: string
+  sendUpdateInterval: number
+  sendUpdateMaxSize: number
 }
 const open_apps: {
   [instanceId: string]: AppInstance
@@ -128,9 +133,7 @@ export default class DCWebxdc {
       p: DcOpenWebxdcParameters,
       defaultSize: Size = DEFAULT_SIZE_WEBXDC
     ) => {
-      const { webxdcInfo, chatName, displayname, accountId, href } = p
-      const addr = webxdcInfo.selfAddr
-      const { sendUpdateInterval, sendUpdateMaxSize } = webxdcInfo
+      const { webxdcInfo, chatName, accountId, href } = p
       let base64EncodedHref = ''
       const appURL = `webxdc://${accountId}.${msg_id}.webxdc`
       if (href && href !== '') {
@@ -167,118 +170,15 @@ export default class DCWebxdc {
         await this.rpc.getWebxdcBlob(accountId, msg_id, icon),
         'base64'
       )
-      const ses = sessionFromAccountId(accountId)
 
       // TODO intercept / deny network access - CSP should probably be disabled for testing
 
       if (!accounts_sessions.includes(accountId)) {
+        const ses = sessionFromAccountId(accountId)
         accounts_sessions.push(accountId)
-        ses.protocol.handle('webxdc', async request => {
-          /**
-           * Make sure to only `return makeResponse()` because it sets headers
-           * that are important for security, namely `Content-Security-Policy`.
-           * Failing to set CSP might result in the app being able to create
-           * an <iframe> with no CSP, e.g. `<iframe src="/no_such_file.lol">`
-           * within which they can then do whatever
-           * through the parent frame, see
-           * "XDC-01-002 WP1: Full CSP bypass via desktop app webxdc.js"
-           * https://public.opentech.fund/documents/XDC-01-report_2_1.pdf
-           */
-          const makeResponse = (
-            body: BodyInit,
-            responseInit: Omit<ResponseInit, 'headers'>,
-            mime_type?: undefined | string
-          ) => {
-            const headers = new Headers()
-            if (!open_apps[id].internet_access) {
-              headers.append('Content-Security-Policy', CSP)
-            }
-            // Ensure that the client doesn't try to interpret a file as
-            // one with 'application/pdf' mime type and therefore open it
-            // in the PDF viewer, see
-            // "XDC-01-005 WP1: Full CSP bypass via desktop app PDF embed"
-            // https://public.opentech.fund/documents/XDC-01-report_2_1.pdf
-            headers.append('X-Content-Type-Options', 'nosniff')
-            if (mime_type) {
-              headers.append('content-type', mime_type)
-            }
-            return new Response(body, {
-              ...responseInit,
-              headers,
-            })
-          }
-
-          const url = new URL(request.url)
-          const [account, msg] = url.hostname.split('.')
-          const id = `${account}.${msg}`
-
-          if (!open_apps[id]) {
-            return makeResponse('', { status: 500 })
-          }
-
-          let filename = url.pathname
-          // remove leading / trailing "/"
-          if (filename.endsWith('/')) {
-            filename = filename.substring(0, filename.length - 1)
-          }
-          if (filename.startsWith('/')) {
-            filename = filename.substring(1)
-          }
-
-          let mimeType: string | undefined = Mime.lookup(filename) || ''
-          // Make sure that the browser doesn't open files in the PDF viewer.
-          // TODO is this the only mime type that opens the PDF viewer?
-          // TODO consider a mime type whitelist instead.
-          if (mimeType === 'application/pdf') {
-            // TODO make sure that `callback` won't internally set mime type back
-            // to 'application/pdf' (at the time of writing it's not the case).
-            // Otherwise consider explicitly setting it as a header.
-            mimeType = undefined
-          }
-
-          if (filename === WRAPPER_PATH) {
-            return makeResponse(
-              await readFile(join(htmlDistDir(), '/webxdc_wrapper.html')),
-              {},
-              mimeType
-            )
-          } else if (filename === 'webxdc.js') {
-            const displayName = Buffer.from(
-              displayname || addr || 'unknown'
-            ).toString('base64')
-            const selfAddr = Buffer.from(addr || 'unknown@unknown').toString(
-              'base64'
-            )
-
-            // initializes the preload script, the actual implementation of `window.webxdc` is found there: static/webxdc-preload.js
-            return makeResponse(
-              Buffer.from(
-                `window.parent.webxdc_internal.setup("${selfAddr}","${displayName}", ${Number(
-                  sendUpdateInterval
-                )}, ${Number(sendUpdateMaxSize)})
-                window.webxdc = window.parent.webxdc
-                window.webxdc_custom = window.parent.webxdc_custom`
-              ),
-              {},
-              mimeType
-            )
-          } else {
-            try {
-              const blob = Buffer.from(
-                await this.rpc.getWebxdcBlob(
-                  open_apps[id].accountId,
-                  open_apps[id].msgId,
-                  filename
-                ),
-                'base64'
-              )
-              return makeResponse(blob, {}, mimeType)
-            } catch (error) {
-              log.error('webxdc: load blob:', error)
-              return makeResponse('', { status: 404 })
-            }
-          }
-        })
+        ses.protocol.handle('webxdc', (...args) =>
+          webxdcProtocolHandler(this.rpc, ...args)
+        )
       }
 
       const app_icon = icon_blob && nativeImage?.createFromBuffer(icon_blob)
@@ -318,6 +218,10 @@ export default class DCWebxdc {
         accountId,
         msgId: msg_id,
         internet_access: webxdcInfo['internetAccess'],
+        selfAddr: webxdcInfo.selfAddr || 'unknown@unknown',
+        displayName: p.displayname || webxdcInfo.selfAddr || 'unknown',
+        sendUpdateInterval: webxdcInfo.sendUpdateInterval,
+        sendUpdateMaxSize: webxdcInfo.sendUpdateMaxSize,
       }
 
       const isMac = platform() === 'darwin'
@@ -421,6 +325,8 @@ export default class DCWebxdc {
       })
 
       webxdcWindow.once('closed', () => {
+        this.rpc.leaveWebxdcRealtime(accountId, msg_id)
+
         delete open_apps[`${accountId}.${msg_id}`]
       })
 
@@ -757,7 +663,9 @@ export default class DCWebxdc {
         if (instance) {
           instance.win.webContents.send('webxdc.realtimeData', payload)
         } else {
-          this.rpc.leaveWebxdcRealtime(accountId, instanceId)
+          log.info(
+            `Received realtime data but there is no app instance ${accountId} ${instanceId}`
+          )
         }
       }
     )
@@ -904,6 +812,113 @@ export default class DCWebxdc {
   _closeAll() {
     for (const open_app of Object.keys(open_apps)) {
       open_apps[open_app].win.close()
+    }
+  }
+}
+
+async function webxdcProtocolHandler(
+  rpc: Jsonrpc.RawClient,
+  request: GlobalRequest
+): Promise<GlobalResponse> {
+  /**
+   * Make sure to only `return makeResponse()` because it sets headers
+   * that are important for security, namely `Content-Security-Policy`.
+   * Failing to set CSP might result in the app being able to create
+   * an <iframe> with no CSP, e.g. `<iframe src="/no_such_file.lol">`
+   * within which they can then do whatever
+   * through the parent frame, see
+   * "XDC-01-002 WP1: Full CSP bypass via desktop app webxdc.js"
+   * https://public.opentech.fund/documents/XDC-01-report_2_1.pdf
+   */
+  const makeResponse = (
+    body: BodyInit,
+    responseInit: Omit<ResponseInit, 'headers'>,
+    mime_type?: undefined | string
+  ) => {
+    const headers = new Headers()
+    if (!open_apps[id].internet_access) {
+      headers.append('Content-Security-Policy', CSP)
+    }
+    // Ensure that the client doesn't try to interpret a file as
+    // one with 'application/pdf' mime type and therefore open it
+    // in the PDF viewer, see
+    // "XDC-01-005 WP1: Full CSP bypass via desktop app PDF embed"
+    // https://public.opentech.fund/documents/XDC-01-report_2_1.pdf
+    headers.append('X-Content-Type-Options', 'nosniff')
+    if (mime_type) {
+      headers.append('content-type', mime_type)
+    }
+    return new Response(body, {
+      ...responseInit,
+      headers,
+    })
+  }
+
+  const url = new URL(request.url)
+  const [account, msg] = url.hostname.split('.')
+  const id = `${account}.${msg}`
+
+  if (!open_apps[id]) {
+    return makeResponse('', { status: 500 })
+  }
+
+  let filename = url.pathname
+  // remove leading / trailing "/"
+  if (filename.endsWith('/')) {
+    filename = filename.substring(0, filename.length - 1)
+  }
+  if (filename.startsWith('/')) {
+    filename = filename.substring(1)
+  }
+
+  let mimeType: string | undefined = Mime.lookup(filename) || ''
+  // Make sure that the browser doesn't open files in the PDF viewer.
+  // TODO is this the only mime type that opens the PDF viewer?
+  // TODO consider a mime type whitelist instead.
+  if (mimeType === 'application/pdf') {
+    // TODO make sure that `callback` won't internally set mime type back
+    // to 'application/pdf' (at the time of writing it's not the case).
+    // Otherwise consider explicitly setting it as a header.
+    mimeType = undefined
+  }
+
+  if (filename === WRAPPER_PATH) {
+    return makeResponse(
+      await readFile(join(htmlDistDir(), '/webxdc_wrapper.html')),
+      {},
+      mimeType
+    )
+  } else if (filename === 'webxdc.js') {
+    const displayName = Buffer.from(open_apps[id].displayName).toString(
+      'base64'
+    )
+    const selfAddr = Buffer.from(open_apps[id].selfAddr).toString('base64')
+    // initializes the preload script, the actual implementation of `window.webxdc` is found there: static/webxdc-preload.js
+    return makeResponse(
+      Buffer.from(
+        `window.parent.webxdc_internal.setup("${selfAddr}","${displayName}", ${Number(
+          open_apps[id].sendUpdateInterval
+        )}, ${Number(open_apps[id].sendUpdateMaxSize)})
+        window.webxdc = window.parent.webxdc
+        window.webxdc_custom = window.parent.webxdc_custom`
+      ),
+      {},
+      mimeType
+    )
+  } else {
+    try {
+      const blob = Buffer.from(
+        await rpc.getWebxdcBlob(
+          open_apps[id].accountId,
+          open_apps[id].msgId,
+          filename
+        ),
+        'base64'
+      )
+      return makeResponse(blob, {}, mimeType)
+    } catch (error) {
+      log.error('webxdc: load blob:', error)
+      return makeResponse('', { status: 404 })
     }
   }
 }

@@ -70,7 +70,7 @@ const useEdit = (
   onClose: DialogProps['onClose']
 ) => {
   const updateGroup = async () => {
-    await modifyGroup(accountId, groupId, groupName, groupImage, null)
+    await modifyGroup(accountId, groupId, groupName, groupImage)
   }
 
   const onUpdateGroup = async () => {

@@ -1,5 +1,21 @@
+@use '../mixins';
+// "Has content above" selector
+// (i.e. author title, "Forwarded" indicator, quote).
+//
+// Note that `.can-hide` means `display: none;`
+// only on non-experimental themes.
+// But TBH we don't care about the other themes too much.
+@mixin attachment-has-content-above {
+  // Has a preceding element
+  *:not(.can-hide) + &,
+  // Has a parent that has a preceding element
+  .msg-container *:not(.can-hide) + * & {
+    @content;
+  }
+}
+
 .message-attachment-media {
-  @include button-reset;
+  @include mixins.button-reset;
   display: block;
 
   // Entirely to ensure that images are centered if they aren't full width of bubble
@@ -69,7 +85,7 @@
 
       height: 36px;
       width: 36px;
-      @include color-svg('./images/play.svg', var(--videoPlayBtnIcon));
+      @include mixins.color-svg('./images/play.svg', var(--videoPlayBtnIcon));
     }
   }
 
@@ -79,7 +95,7 @@
     border-bottom-right-radius: 0px;
   }
 
-  &.content-above {
+  @include attachment-has-content-above {
     margin-top: 4px;
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
@@ -98,7 +114,7 @@
 }
 
 .message-attachment-broken-media {
-  @include button-reset;
+  @include mixins.button-reset;
   display: block;
 
   font-size: 11px;
@@ -124,13 +140,13 @@
     margin-bottom: 5px;
   }
 
-  &.content-above {
+  @include attachment-has-content-above {
     margin-top: 6px;
   }
 }
 
 .message-attachment-generic {
-  @include button-reset;
+  @include mixins.button-reset;
 
   display: flex;
   flex-direction: row;
@@ -139,7 +155,7 @@
     padding-bottom: 6px;
   }
 
-  &.content-above {
+  @include attachment-has-content-above {
     padding-top: 4px;
   }
 

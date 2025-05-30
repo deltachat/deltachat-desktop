@@ -1,4 +1,4 @@
-@import '../../../scss/mixins';
+@use '../../../scss/mixins';
 
 // $reaction-transition-duration: 100ms;
 
@@ -45,7 +45,7 @@
 }
 
 .vcard {
-  @include button-reset;
+  @include mixins.button-reset;
 
   display: flex;
   // TODO should probably lighten instead of darkening if the theme is dark.

@@ -1,4 +1,4 @@
-@import '../../../../scss/mixins';
+@use '../../../../scss/mixins';
 
 // FYI there is also `_main_screen.scss`.
 
@@ -74,7 +74,7 @@
       flex-grow: 1;
     }
     :global(.navbar-heading--button) {
-      @include button-reset;
+      @include mixins.button-reset;
     }
     :global(.navbar-heading) {
       // See `.chatNavbarHeadingWrapper`.
@@ -93,7 +93,6 @@
     }
 
     :global(.views) {
-      margin-right: 15px;
       display: flex;
       height: 100%;
     }
@@ -112,4 +111,22 @@
       border-radius: 100%;
     }
   }
+}
+
+.webxdcIcons {
+  margin-top: 4px;
+  img {
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    border-radius: 3px;
+    background-color: #fff;
+  }
+}
+
+.webxdcIconButton {
+  display: inline-block !important;
+  margin: 0 10px 0 0;
+  padding: 0 !important;
+  border-radius: 0 !important;
 }

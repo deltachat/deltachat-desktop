@@ -335,6 +335,32 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
           // Stop all streams if some existed before we begin a new one
           stopStream(activeStream)
 
+          try {
+            const permission_status = await runtime.checkMediaAccess('camera')
+            if (permission_status === 'not-determined') {
+              if (!(await runtime.askForMediaAccess('camera'))) {
+                log.error(
+                  'runtime reported that permission request was denied by user'
+                )
+                setCameraAccessError(true)
+                return
+              }
+            } else if (
+              permission_status !== 'granted' &&
+              permission_status !== 'unknown'
+            ) {
+              log.error('runtime reported that permission is not granted:', {
+                permission_status,
+              })
+              setCameraAccessError(true)
+              return
+            }
+          } catch (err: any) {
+            if (err.message !== 'UnsupportedPlatform') {
+              log.warn('failed to check for runtime media permission:', err)
+            }
+          }
+
           const stream = await navigator.mediaDevices.getUserMedia({
             video: videoConstraints,
             audio: false,

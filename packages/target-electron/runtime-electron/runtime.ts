@@ -13,6 +13,7 @@ import {
 import '@deltachat-desktop/shared/global.d.ts'
 
 import {
+  DropListener,
   MediaAccessStatus,
   MediaType,
   Runtime,
@@ -120,6 +121,10 @@ class ElectronDeltachat extends BaseDeltaChat<ElectronTransport> {
 }
 
 class ElectronRuntime implements Runtime {
+  onDrop: DropListener | null = null
+  setDropListener(onDrop: DropListener | null) {
+    this.onDrop = onDrop
+  }
   onResumeFromSleep: (() => void) | undefined
   onWebxdcSendToChat:
     | ((
@@ -135,10 +140,10 @@ class ElectronRuntime implements Runtime {
   onDragFileOut(file: string): void {
     ipcBackend.send('ondragstart', file)
   }
-  isDroppedFileFromOutside(file: File): boolean {
-    const path = getPathForFile(file)
-    const forbiddenPathRegEx = /DeltaChat\/.+?\.sqlite-blobs\//gi
-    return !forbiddenPathRegEx.test(path.replace('\\', '/'))
+  isDroppedFileFromOutside(file: string): boolean {
+    // ".sqlite-blobs" is the old folder name that could still be there in old accounts
+    const forbiddenPathRegEx = /DeltaChat\/.+?(\.sqlite-blobs|\.db-blobs)\//gi
+    return !forbiddenPathRegEx.test(file.replace('\\', '/'))
   }
   onThemeUpdate: (() => void) | undefined
   onChooseLanguage: ((locale: string) => Promise<void>) | undefined
@@ -261,8 +266,8 @@ class ElectronRuntime implements Runtime {
   clearAllNotifications(): void {
     ipcBackend.invoke('notifications.clearAll')
   }
-  clearNotifications(chatId: number): void {
-    ipcBackend.invoke('notifications.clear', chatId)
+  clearNotifications(accountId: number, chatId: number): void {
+    ipcBackend.invoke('notifications.clear', accountId, chatId)
   }
   setBadgeCounter(value: number): void {
     ipcBackend.invoke('app.setBadgeCountAndTrayIconIndicator', value)
@@ -418,9 +423,8 @@ class ElectronRuntime implements Runtime {
     })
     ipcBackend.on('theme-update', () => this.onThemeUpdate?.())
     ipcBackend.on('showAboutDialog', () => this.onShowDialog?.('about'))
-    ipcBackend.on(
-      'showKeybindingsDialog',
-      () => this.onShowDialog?.('keybindings')
+    ipcBackend.on('showKeybindingsDialog', () =>
+      this.onShowDialog?.('keybindings')
     )
     ipcBackend.on('showSettingsDialog', () => this.onShowDialog?.('settings'))
     ipcBackend.on('open-url', (_ev, url) => this.onOpenQrUrl?.(url))
@@ -434,6 +438,77 @@ class ElectronRuntime implements Runtime {
       ) => this.onWebxdcSendToChat?.(file, text, account)
     )
     ipcBackend.on('onResumeFromSleep', () => this.onResumeFromSleep?.())
+
+    document.body.addEventListener('drop', async e => {
+      // react does sth. to the even, so that it gets circular references, so we can not simply log it because our logging system uses JSON.stringify and that throws an error with circular references
+      this.log.debug('drop event')
+      if (!this.onDrop) {
+        this.log.warn('file dropped, but no drop handler set')
+        return
+      }
+      const dropTarget = this.onDrop.elementRef.current
+      if (!dropTarget) {
+        this.log.warn('file dropped, but drop target is unset')
+        return
+      }
+      if (!e.dataTransfer) {
+        this.log.debug('dropped, but no data transfer')
+        return
+      }
+      if (!(e.target && dropTarget.contains(e.target as HTMLElement))) {
+        this.log.debug(
+          'file dropped, but it was dropped outside of the drop target element'
+        )
+        return
+      }
+      e.preventDefault()
+      e.stopPropagation()
+      const writeTempFileFromFile = (file: File) => {
+        if (file.size > 1e8 /* 100mb */) {
+          this.log.warn(
+            `dropped file is bigger than 100mb ${file.name} ${file.size} ${file.type}`
+          )
+        }
+        return new Promise<string>((resolve, reject) => {
+          const reader = new FileReader()
+          reader.onload = _ => {
+            if (reader.result === null) {
+              return reject(new Error('result empty'))
+            }
+            if (typeof reader.result !== 'string') {
+              return reject(new Error('wrong type'))
+            }
+            const base64Content = reader.result.split(',')[1]
+            this.writeTempFileFromBase64(file.name, base64Content)
+              .then(tempUrl => {
+                resolve(tempUrl)
+              })
+              .catch(err => {
+                reject(err)
+              })
+          }
+          reader.onerror = err => {
+            reject(err)
+          }
+          reader.readAsDataURL(file)
+        })
+      }
+
+      const paths: string[] = []
+      for (const file of e.dataTransfer.files) {
+        const path = getPathForFile(file)
+        this.log.info({ path })
+        if (!this.isDroppedFileFromOutside(path)) {
+          this.log.warn(
+            'Prevented a file from being sent again while dragging it out',
+            path
+          )
+        } else {
+          paths.push(await writeTempFileFromFile(file))
+        }
+      }
+      this.onDrop.handler(paths)
+    })
 
     return Promise.resolve()
   }

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useCallback } from 'react'
-import { basename, join, parse } from 'path'
+import { join, parse, ParsedPath } from 'path'
 import { T } from '@deltachat/jsonrpc-client'
 
 import Composer, { useDraft } from '../composer/Composer'
@@ -14,8 +14,14 @@ import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
 import { ReactionsBarProvider } from '../ReactionsBar'
 import useDialog from '../../hooks/dialog/useDialog'
 import useMessage from '../../hooks/chat/useMessage'
+import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 
 const log = getLogger('renderer/MessageListAndComposer')
+
+type Props = {
+  chat: T.FullChat
+  accountId: number
+}
 
 export function getBackgroundImageStyle(
   settings: DesktopSettingsType
@@ -80,13 +86,18 @@ export function getBackgroundImageStyle(
   return style
 }
 
-type Props = {
-  chat: T.FullChat
-  accountId: number
+// Invariant: The called function handles windows specifically.
+function fullPath(file: ParsedPath) {
+  return file.dir + '/' + file.name + file.ext
+}
+
+function isImage(file: ParsedPath) {
+  const imageExtensions = ['.jpg', '.jpeg', '.png']
+  return imageExtensions.includes(file.ext)
 }
 
 export default function MessageListAndComposer({ accountId, chat }: Props) {
-  const conversationRef = useRef(null)
+  const conversationRef = useRef<HTMLDivElement>(null)
   const refComposer = useRef(null)
 
   const { openDialog, hasOpenDialogs } = useDialog()
@@ -111,107 +122,70 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     regularMessageInputRef
   )
 
-  const onDrop = async (e: React.DragEvent<any>) => {
-    if (chat === null) {
-      log.warn('dropped something, but no chat is selected')
-      return
-    }
-
-    e.preventDefault()
-    e.stopPropagation()
-
-    const sanitizedFileList: File[] = []
-    {
-      const fileList: FileList =
-        /* (e.target as any).files */ e.dataTransfer.files
-      for (let i = 0; i < fileList.length; i++) {
-        const file = fileList[i]
-        if (runtime.isDroppedFileFromOutside(file)) {
-          sanitizedFileList.push(file)
-        } else {
-          log.warn(
-            'Prevented a file from being send again while dragging it out',
-            file.name
-          )
-        }
+  const handleDrop = useCallback(
+    async (paths: string[]) => {
+      log.info('drag: handling drop: ', paths)
+      if (chat === null) {
+        log.warn('dropped something, but no chat is selected')
+        return
       }
-    }
-
-    const fileCount = sanitizedFileList.length
-
-    if (fileCount === 0) {
-      return
-    }
-
-    function writeTempFileFromFile(file: File): Promise<string> {
-      if (file.size > 1e8 /* 100mb */) {
-        log.warn(
-          `dropped file is bigger than 100mb ${file.name} ${file.size} ${file.type}`
-        )
-      }
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader()
-        reader.onload = _ => {
-          if (reader.result === null) {
-            return reject(new Error('result empty'))
-          } else if (typeof reader.result !== 'string') {
-            return reject(new Error('wrong type'))
+      const sanitized = paths
+        .filter(path => {
+          const val = runtime.isDroppedFileFromOutside(path)
+          if (!val) {
+            log.warn(
+              'Prevented a file from being sent again while dragging it out',
+              path
+            )
           }
-          const base64Content = reader.result.split(',')[1]
-          runtime
-            .writeTempFileFromBase64(file.name, base64Content)
-            .then(tempUrl => {
-              resolve(tempUrl)
-            })
-            .catch(err => {
-              reject(err)
-            })
-        }
-        reader.onerror = err => {
-          reject(err)
-        }
-        reader.readAsDataURL(file)
-      })
-    }
+          return val
+        })
+        .map(path => parse(path))
 
-    if (fileCount === 1) {
-      const file = sanitizedFileList[0]
-      log.debug(`dropped image of type ${file.type}`)
-      const msgViewType: T.Viewtype = file.type.startsWith('image')
-        ? 'Image'
-        : 'File'
+      // send single file
+      if (sanitized.length == 1) {
+        const file = sanitized[0]
+        const msgViewType: Viewtype = isImage(file) ? 'Image' : 'File'
+        await addFileToDraft(fullPath(file), file.name + file.ext, msgViewType)
+      }
+      // send multiple files
+      else if (sanitized.length > 1 && !hasOpenDialogs) {
+        openDialog(ConfirmSendingFiles, {
+          sanitizedFileList: sanitized.map(path => ({
+            name: path.name,
+          })),
+          chatName: chat.name,
+          onClick: async (isConfirmed: boolean) => {
+            if (!isConfirmed) {
+              return
+            }
 
-      const path = await writeTempFileFromFile(sanitizedFileList[0])
-      await addFileToDraft(path, basename(path), msgViewType)
-      await runtime.removeTempFile(path)
-      return
-    }
+            for (const file of sanitized) {
+              const msgViewType: Viewtype = isImage(file) ? 'Image' : 'File'
+              sendMessage(accountId, chat.id, {
+                file: fullPath(file),
+                filename: file.name + file.ext,
+                viewtype: msgViewType,
+              })
+            }
+          },
+        })
+      }
+    },
+    [accountId, addFileToDraft, chat, hasOpenDialogs, openDialog, sendMessage]
+  )
 
-    // This is a desktop specific "hack" to support sending multiple attachments at once.
-    openDialog(ConfirmSendingFiles, {
-      sanitizedFileList,
-      chatName: chat.name,
-      onClick: async (isConfirmed: boolean) => {
-        if (!isConfirmed) {
-          return
-        }
-
-        for (const file of sanitizedFileList) {
-          const path = await writeTempFileFromFile(file)
-          const msgViewType: T.Viewtype = file.type.startsWith('image')
-            ? 'Image'
-            : 'File'
-          await sendMessage(accountId, chat.id, {
-            file: path,
-            filename: basename(path),
-            viewtype: msgViewType,
-          })
-          // start sending other files, don't wait until last file is sent
-          runtime.removeTempFile(path)
-        }
-      },
+  useEffect(() => {
+    log.debug('drag: register')
+    runtime.setDropListener({
+      elementRef: conversationRef,
+      handler: handleDrop,
     })
-  }
+    return () => {
+      log.debug('drag: unregister')
+      runtime.setDropListener(null)
+    }
+  }, [handleDrop])
 
   const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
@@ -239,6 +213,22 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
         return
       }
 
+      // TODO this function pretty much never works, because of this condition.
+      // trying to focus the composer while a dialog is open
+      // is impossible, because the dialog will keep focus inside of it.
+      //
+      // The condition was probably meant to be the opposite
+      // (i.e. do nothing if a dialog is open),
+      // but it only incidentally fixed the bug that it was intended to fix
+      // (https://github.com/deltachat/deltachat-desktop/issues/3286),
+      // while at the same time breaking the function.
+      //
+      // However, we probably should not fix this function
+      // and remove it instead, for accessibility reasons, laid out here:
+      // https://github.com/deltachat/deltachat-desktop/issues/4590.
+      //
+      // The same goes for the check in
+      // `ComposerMessageInput.componentDidUpdate`.
       if (!hasOpenDialogs) {
         return
       }
@@ -255,7 +245,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     [hasOpenDialogs]
   )
 
-  const onSelectionChange = () => {
+  const onSelectionChange = useCallback(() => {
     const selection = window.getSelection()
 
     if (
@@ -267,15 +257,15 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     // Only one of these is actually rendered at any given moment.
     regularMessageInputRef.current?.focus()
     editMessageInputRef.current?.focus()
-  }
+  }, [])
 
-  const onEscapeKeyUp = (ev: KeyboardEvent) => {
+  const onEscapeKeyUp = useCallback((ev: KeyboardEvent) => {
     if (ev.code === 'Escape') {
       // Only one of these is actually rendered at any given moment.
       regularMessageInputRef.current?.focus()
       editMessageInputRef.current?.focus()
     }
-  }
+  }, [])
 
   useEffect(() => {
     window.addEventListener('mouseup', onMouseUp)
@@ -291,7 +281,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
       document.removeEventListener('selectionchange', onSelectionChange)
       window.removeEventListener('keyup', onEscapeKeyUp)
     }
-  }, [onMouseUp])
+  }, [onMouseUp, onEscapeKeyUp, onSelectionChange])
 
   const settingsStore = useSettingsStore()[0]
   // If you want to update this, don't forget to update
@@ -303,13 +293,20 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
   return (
     <div
       role='tabpanel'
-      aria-labelledby='tab-message-list-view'
+      // Techically we must apply `aria-labelledby` to `tabpanel`,
+      // but it's a little annoying that screen readers (NVDA)
+      // announce "'Chat' property page" every time
+      // the focus enters this tabpanel, because it's the "default" one,
+      // it's not often that another tab (Gallery) is selected.
+      // So, let's comment this out for now, until we resolve
+      // https://github.com/deltachat/deltachat-desktop/issues/5074.
+      // aria-labelledby='tab-message-list-view'
+
       // NoChatSelected also has this ID and class.
       id='message-list-and-composer'
       className='message-list-and-composer'
       style={style}
       ref={conversationRef}
-      onDrop={onDrop.bind({ props: { chat } })}
       onDragOver={onDragOver}
     >
       <div className='message-list-and-composer__message-list'>

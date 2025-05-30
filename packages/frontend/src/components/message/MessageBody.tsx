@@ -23,7 +23,7 @@ function MessageBody({
    * Has no effect when {@link nonInteractiveContent} === true.
    */
   tabindexForInteractiveContents?: -1 | 0
-}): JSX.Element {
+}): React.ReactElement {
   if (text.length >= UPPER_LIMIT_FOR_PARSED_MESSAGES) {
     return <>{text}</>
   }

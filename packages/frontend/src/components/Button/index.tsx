@@ -5,7 +5,9 @@ import styles from './style.module.scss'
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   active?: boolean
-  styling?: 'primary' | 'secondary' | 'danger'
+  // borderless means button element has no border and transparent background
+  // and is of type button for accessibility reasons
+  styling?: 'primary' | 'danger' | 'borderless'
 }
 
 export default function Button({

@@ -1,0 +1,22 @@
+[Desktop Entry]
+{{!
+spec of .desktop file format: https://specifications.freedesktop.org/desktop-entry-spec/latest/recognized-keys.html
+
+rest of tauri template, orgininal can be found at:
+https://github.com/tauri-apps/tauri/blob/dev/crates/tauri-bundler/src/bundle/linux/freedesktop/main.desktop
+}}
+{{#if comment}}
+Comment={{comment}}
+{{/if}}
+Exec={{exec}} %U
+Icon={{icon}}
+Name={{name}}
+Terminal=false
+Type=Application
+{{!
+our custom hardcoded values
+}}
+Keywords=dc;chat;delta;messaging;messenger;email;webxdc
+MimeType=application/x-webxdc;x-scheme-handler/openpgp4fpr;x-scheme-handler/mailto;x-scheme-handler/dcaccount;x-scheme-handler/dclogin;
+Categories=Network;Chat;InstantMessaging;
+StartupWMClass={{exec}}

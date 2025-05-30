@@ -148,7 +148,7 @@ app.get('/blobs/:accountId/:filename', authMiddleWare, async (req, res) => {
   try {
     // test if file exists
     await stat(filePath)
-  } catch (error) {
+  } catch (_error) {
     return res.status(404).send('404 Not Found')
   }
 
@@ -187,7 +187,7 @@ app.use('/background', express.static(join(DATA_DIR, 'background')))
 app.use('/backend-api', BackendApiRoute)
 app.use(helpRoute)
 
-app.get('/themes.json', async (req, res) => {
+app.get('/themes.json', async (_req, res) => {
   res.json(await readThemeDir())
 })
 
@@ -218,7 +218,7 @@ const wssBackend = new WebSocketServer({
   perMessageDeflate: true,
 })
 wssBackend.on('connection', function connection(ws) {
-  ws.on('error', log.error)
+  ws.on('error', log.error.bind(log))
 
   ws.on('message', raw_data => {
     try {
@@ -272,5 +272,5 @@ process.on('exit', () => {
   sslserver.closeAllConnections()
   sslserver.close()
   shutdownDC()
-  logHandler.end
+  logHandler.end()
 })

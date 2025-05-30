@@ -631,6 +631,7 @@ export default function Message(props: {
     // Some info messages can be clicked by the user to receive further information
     const isInteractive =
       (isWebxdcInfo && message.parentId) ||
+      message.infoContactId != null ||
       isProtectionBrokenMsg ||
       isProtectionEnabledMsg ||
       isInvalidUnencryptedMail
@@ -641,6 +642,8 @@ export default function Message(props: {
         if (isWebxdcInfo) {
           // open or focus the webxdc app
           openWebxdc(message)
+        } else if (message.infoContactId != null) {
+          openViewProfileDialog(accountId, message.infoContactId)
         } else if (isProtectionBrokenMsg) {
           const { name } = await BackendRemote.rpc.getBasicChatInfo(
             selectedAccountId(),
@@ -902,9 +905,7 @@ export default function Message(props: {
           {showAttachment(message) && (
             <Attachment
               text={text || undefined}
-              conversationType={conversationType}
               message={message}
-              hasQuote={message.quote !== null}
               tabindexForInteractiveContents={tabindexForInteractiveContents}
             />
           )}
@@ -950,13 +951,23 @@ export default function Message(props: {
               viewType={message.viewType}
               tabindexForInteractiveContents={tabindexForInteractiveContents}
             />
-            {message.reactions && (
-              <Reactions
-                reactions={message.reactions}
-                tabindexForInteractiveContents={tabindexForInteractiveContents}
-                messageWidth={messageWidth}
-              />
-            )}
+            <div
+              // TODO the "+1" count aria-live announcment is perhaps not great
+              // out of context.
+              // Also the "show ReactionsDialog" button gets announced.
+              aria-live='polite'
+              aria-relevant='all'
+            >
+              {message.reactions && (
+                <Reactions
+                  reactions={message.reactions}
+                  tabindexForInteractiveContents={
+                    tabindexForInteractiveContents
+                  }
+                  messageWidth={messageWidth}
+                />
+              )}
+            </div>
           </footer>
         </div>
       </div>

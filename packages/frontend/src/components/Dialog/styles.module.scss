@@ -1,4 +1,4 @@
-@import '../../../scss/variables.scss';
+@use '../../../scss/variables.scss';
 
 $headerButtonSize: 30px;
 $paddingHorizontal: 30px;
@@ -6,7 +6,7 @@ $paddingVertical: 20px;
 
 .dialog {
   padding: 0;
-  @media (width < $default-dialog-width) {
+  @media (width < variables.$default-dialog-width) {
     max-width: calc(100vw - 1rem) !important;
     min-width: 0 !important;
   }
@@ -134,13 +134,18 @@ $paddingVertical: 20px;
   margin: 0 !important;
 }
 
+.headerThreeDotButton {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
 .backButton {
   margin-right: 20px;
 }
 
 .footerActions {
   display: flex;
-  @media (width <= $default-dialog-width) {
+  @media (width <= variables.$default-dialog-width) {
     flex-direction: column;
   }
 
@@ -167,7 +172,7 @@ $paddingVertical: 20px;
   & + & {
     margin-left: 20px;
   }
-  @media (width <= $default-dialog-width) {
+  @media (width <= variables.$default-dialog-width) {
     & + & {
       margin-left: 0px;
       margin-top: 20px;

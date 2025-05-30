@@ -98,6 +98,7 @@ function EditProfileDialogInner({
           <DeltaInput
             key='displayname'
             id='displayname'
+            dataTestId='displayname-input'
             placeholder={tx('pref_your_name')}
             value={displayname}
             onChange={(
@@ -133,11 +134,7 @@ function EditProfileDialogInner({
       <DialogFooter>
         <FooterActions>
           {!firstSetup && (
-            <FooterActionButton
-              styling='secondary'
-              onClick={onCancel}
-              data-testid='cancel'
-            >
+            <FooterActionButton onClick={onCancel} data-testid='cancel'>
               {tx('cancel')}
             </FooterActionButton>
           )}

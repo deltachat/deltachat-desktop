@@ -1,11 +1,11 @@
-@import '../../../../scss/mixins';
+@use '../../../../scss/mixins';
 
 .reactionsDialogList {
   margin: 0;
 }
 
 .reactionsDialogListItem {
-  @include button-reset;
+  @include mixins.button-reset;
 
   width: 100%;
   align-items: center;

@@ -113,7 +113,6 @@ export default function AccountDeletionScreen({
           <DialogFooter>
             <FooterActions>
               <FooterActionButton
-                styling='secondary'
                 onClick={() => onCancel()}
                 data-testid='cancel-delete-account'
               >
@@ -141,7 +140,7 @@ class AccountSize extends Component<{ accountId: number }, { size?: string }> {
   async update() {
     const bytes = await BackendRemote.rpc
       .getAccountFileSize(this.props.accountId)
-      .catch(log.error)
+      .catch(log.error.bind(log))
     if (!this.wasDestroyed) {
       this.setState({ size: bytes ? filesize(bytes) : undefined })
     }

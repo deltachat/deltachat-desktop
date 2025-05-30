@@ -1,5 +1,7 @@
+@use '../mixins';
+
 .media-attachment-media {
-  @include button-reset;
+  @include mixins.button-reset;
 
   // Entirely to ensure that images are centered if they aren't full width of bubble
   text-align: center;
@@ -45,7 +47,7 @@
 
       height: 36px;
       width: 36px;
-      @include color-svg('./images/play.svg', var(--videoPlayBtnIcon));
+      @include mixins.color-svg('./images/play.svg', var(--videoPlayBtnIcon));
     }
   }
 }
@@ -86,7 +88,7 @@
 }
 
 .media-attachment-generic {
-  @include button-reset;
+  @include mixins.button-reset;
 
   display: flex;
   flex-direction: row;
@@ -197,11 +199,10 @@
 }
 
 .media-attachment-webxdc {
-  @include button-reset;
+  @include mixins.button-reset;
 
   display: flex;
   flex-direction: row;
-  width: 300px;
   margin: 3.5px 3px;
 
   &:hover {
@@ -255,4 +256,9 @@
       color: var(--colorDanger);
     }
   }
+}
+
+#gallery-tabpanel-webxdc_apps .item {
+  overflow: hidden;
+  padding-right: 3px;
 }

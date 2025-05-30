@@ -1,5 +1,6 @@
-@import '../../../scss/variables';
-@import '../../../scss/mixins';
+@use 'sass:map';
+@use '../../../scss/variables';
+@use '../../../scss/mixins';
 
 .avatar {
   --local-avatar-size: 48px;
@@ -92,7 +93,7 @@
     );
 
     position: relative;
-    z-index: $z-index-new-local-scope;
+    z-index: variables.$z-index-new-local-scope;
 
     .avatar {
       --local-avatar-size: var(--als-avatar-size);
@@ -112,7 +113,10 @@
       bottom: var(--als-avatar-margin);
       top: var(--als-avatar-margin);
       // Only needed when this account is scrolled _above_ the visible region.
-      z-index: map-get($z-index, account-list-sidebar-scope-sticky-account);
+      z-index: map.get(
+        variables.$z-index,
+        account-list-sidebar-scope-sticky-account
+      );
 
       .avatar {
         opacity: 1;
@@ -220,7 +224,10 @@
   pointer-events: none;
   position: absolute;
   right: -5px;
-  z-index: map-get($z-index, account-list-sidebar-scope-account-badge);
+  z-index: map.get(
+    variables.$z-index,
+    account-list-sidebar-scope-account-badge
+  );
 }
 
 .accountBadgeIcon {
@@ -258,7 +265,7 @@
 
 .accountHoverInfoContainer {
   position: absolute;
-  z-index: map-get($z-index, account-hover-info);
+  z-index: map.get(variables.$z-index, account-hover-info);
 }
 
 .accountHoverInfo {

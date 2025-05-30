@@ -1,4 +1,5 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
-  "rust-analyzer.cargo.targetDir": "target/target-rust-analyzer"
+  "rust-analyzer.cargo.targetDir": "target/target-rust-analyzer",
+  "files.eol": "\n"
 }

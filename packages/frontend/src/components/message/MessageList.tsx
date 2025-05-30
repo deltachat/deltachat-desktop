@@ -86,7 +86,7 @@ function useUnreadCount(
   chat: Pick<T.FullChat, 'freshMessageCounter' | 'id'>
 ) {
   const [updatedValue, setUpdatedValue] = useState<number | null>(null)
-  const updatedValueForChat = useRef<typeof chat>()
+  const updatedValueForChat = useRef<typeof chat>(null)
 
   useEffect(() => {
     let outdated = false
@@ -216,7 +216,6 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
     return () => window.removeEventListener('focus', onFocus)
   }, [accountId])
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     return () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -455,6 +454,7 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
             // Retrigger animation
             highlightableElement.classList.add('highlight')
             highlightableElement.style.animation = 'none'
+            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
             highlightableElement.offsetHeight
             //@ts-ignore
             highlightableElement.style.animation = null

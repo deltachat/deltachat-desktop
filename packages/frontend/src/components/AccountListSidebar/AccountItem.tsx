@@ -55,13 +55,13 @@ export default function AccountItem({
       BackendRemote.rpc
         .getAccountInfo(accountId)
         .then(setAccount)
-        .catch(log.error)
+        .catch(log.error.bind(log))
     }, 200)
     const updateUnread = debounce(() => {
       BackendRemote.rpc
         .getFreshMsgs(accountId)
         .then(u => setUnreadCount(u?.length || 0))
-        .catch(log.error)
+        .catch(log.error.bind(log))
     }, 200)
 
     updateAccount()

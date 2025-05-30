@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { ReactElement, useRef, useState } from 'react'
 import Button from './Button'
 import Icon from './Icon'
 import useTranslationFunction from '../hooks/useTranslationFunction'
@@ -15,24 +15,15 @@ export const DeltaSelect = React.memo(
     const defaultId = useRef(`delta-select-${Math.random()}`)
     const id = props.id ?? defaultId.current
 
-    const [isFocused, setIsFocused] = useState(false)
-
-    const onFocus = () => setIsFocused(true)
-    const onBlur = () => setIsFocused(false)
-
     return (
       <div className='delta-form-group delta-select'>
-        <label htmlFor={id} className={`${isFocused && 'focus'}`}>
-          {props.label}
-        </label>
+        <label htmlFor={id}>{props.label}</label>
         <div className='delta-select-inner'>
           <select
             name={id}
             id={id}
             value={props.value === null ? '' : props.value}
             onChange={props.onChange}
-            onFocus={onFocus}
-            onBlur={onBlur}
           >
             {props.children}
           </select>
@@ -59,21 +50,13 @@ export const DeltaTextarea = React.memo(
     const defaultId = useRef(`delta-textarea-${Math.random()}`)
     const id = props.id ?? defaultId.current
 
-    const [isFocused, setIsFocused] = useState(false)
-
-    const onFocus = () => setIsFocused(true)
-    const onBlur = () => setIsFocused(false)
-    const showLabel =
-      isFocused ||
-      props.value?.length > 0 ||
-      (props.label !== undefined && props.label.length > 0)
+    const alwaysShowLabel = (props.label?.length ?? 0) > 0
 
     return (
       <div className='delta-form-group delta-textarea'>
         <label
           htmlFor={id}
-          className={`${isFocused && 'focus'}`}
-          style={{ visibility: !showLabel ? 'hidden' : 'visible' }}
+          className={alwaysShowLabel ? 'alwaysShow' : undefined}
         >
           {props.label && props.label.length > 0
             ? props.label
@@ -84,10 +67,9 @@ export const DeltaTextarea = React.memo(
           value={props.value}
           id={id}
           disabled={props.disabled}
-          placeholder={!isFocused ? props.placeholder : ''}
-          onFocus={onFocus}
-          onBlur={onBlur}
+          placeholder={props.placeholder}
           rows={5}
+          className={(props.value?.length ?? 0) === 0 ? 'isEmpty' : undefined}
         />
       </div>
     )
@@ -104,7 +86,7 @@ export const DeltaInput = React.memo(
       type?: string
       min?: string
       max?: string
-      rightElement?: JSX.Element
+      rightElement?: ReactElement
       disabled?: boolean
       autoFocus?: boolean
       onChange: (
@@ -114,29 +96,19 @@ export const DeltaInput = React.memo(
       onBlur?: (
         event: React.FormEvent<HTMLElement> & React.FocusEvent<HTMLInputElement>
       ) => void
+      dataTestId?: string
     }>
   ) => {
     const defaultId = useRef(`delta-input-${Math.random()}`)
     const id = props.id ?? defaultId.current
 
-    const [isFocused, setIsFocused] = useState(false)
-
-    const onFocus = () => setIsFocused(true)
-    const onBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-      setIsFocused(false)
-      if (props.onBlur) props.onBlur(event)
-    }
-    const showLabel =
-      isFocused ||
-      props.value?.length > 0 ||
-      (props.label !== undefined && props.label.length > 0)
+    const alwaysShowLabel = (props.label?.length ?? 0) > 0
 
     return (
       <div className='delta-form-group delta-input'>
         <label
           htmlFor={id}
-          className={`${isFocused && 'focus'}`}
-          style={{ visibility: !showLabel ? 'hidden' : 'visible' }}
+          className={alwaysShowLabel ? 'alwaysShow' : undefined}
         >
           {props.label && props.label.length > 0
             ? props.label
@@ -151,9 +123,10 @@ export const DeltaInput = React.memo(
           min={props.min}
           max={props.max}
           disabled={props.disabled}
-          onFocus={onFocus}
-          onBlur={onBlur}
+          onBlur={props.onBlur}
           autoFocus={props.autoFocus}
+          className={(props.value?.length ?? 0) === 0 ? 'isEmpty' : undefined}
+          data-testid={props.dataTestId}
         />
         {props.rightElement && (
           <div className='right-element'>{props.rightElement}</div>
@@ -186,6 +159,7 @@ export const DeltaPasswordInput = React.memo(
       <Button
         onClick={() => setShowPassword(!showPassword)}
         aria-label={showPassword ? tx('hide_password') : tx('show_password')}
+        styling='borderless'
       >
         <Icon
           coloring='contextMenu'

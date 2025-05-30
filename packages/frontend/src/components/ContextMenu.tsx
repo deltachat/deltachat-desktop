@@ -368,7 +368,7 @@ export function ContextMenu(props: {
         >
           {level.items.map((item, index) => {
             if (item.type === 'separator') {
-              return <hr className='separator' />
+              return <hr className='separator' key={index} />
             }
             return (
               <button

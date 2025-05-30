@@ -1,71 +1,70 @@
 // Using BEM syntax explained here: https://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/
 
 // import node_module dependencies (without ".css" means include)
-@import '../node_modules/normalize.css/normalize';
+@use '../node_modules/normalize.css/normalize';
 
 // Global Settings, Variables, and Mixins
-@import 'variables';
-@import 'mixins';
-@import 'global';
+@use 'variables';
+@use 'mixins';
+@use 'global';
 
 // Components
-@import 'emoji';
+@use 'emoji';
 
 // Chat
-@import 'chat/_chat-list-item';
-@import 'chat/_chat-list';
+@use 'chat/_chat-list-item';
+@use 'chat/_chat-list';
 
 // Composer
-@import 'composer/_composer';
-@import 'composer/_emoji-sticker-picker';
+@use 'composer/_composer';
+@use 'composer/_emoji-sticker-picker';
 
 // Contact
-@import 'contact/_contact-list';
-@import 'contact/_contact';
+@use 'contact/_contact-list';
+@use 'contact/_contact';
 
 // Gallery (media view)
-@import 'gallery/attachment-view';
-@import 'gallery/_media-attachment';
-@import 'gallery/media';
+@use 'gallery/attachment-view';
+@use 'gallery/_media-attachment';
+@use 'gallery/media';
 
 // Dialogs
-@import 'dialogs/_about';
-@import 'dialogs/_audit_log';
-@import 'dialogs/_autocrypt_setup.scss';
-@import 'dialogs/_select-chat';
-@import 'dialogs/_group-styles';
-@import 'dialogs/_settings';
-@import 'dialogs/_view_profile';
-@import 'dialogs/_qr-code';
+@use 'dialogs/_about';
+@use 'dialogs/_audit_log';
+@use 'dialogs/_autocrypt_setup.scss';
+@use 'dialogs/_select-chat';
+@use 'dialogs/_group-styles';
+@use 'dialogs/_settings';
+@use 'dialogs/_qr-code';
 
 // Login
-@import 'login/_login.scss';
+@use 'login/_login.scss';
 
 // MainScreen
-@import 'main_screen/main_screen';
+@use 'main_screen/main_screen';
 
 // Message
-@import 'message/_message-attachment';
-@import 'message/_message-detail';
-@import 'message/_message-list';
-@import 'message/_message';
-@import 'message/_metadata';
-@import 'message/_status-icon';
-@import 'message/_message-calls';
-@import 'message/_message-markdown';
+@use 'message/_message-attachment';
+@use 'message/_message-detail';
+@use 'message/_message-list';
+@use 'message/_message';
+@use 'message/_metadata';
+@use 'message/_status-icon';
+@use 'message/_message-calls';
+@use 'message/_message-markdown';
 
 // misc
-@import 'misc/_avatar.scss';
-@import 'misc/_context_menu.scss';
-@import 'misc/_keyboard_hint_box.scss';
-@import 'misc/_search-input.scss';
-@import 'misc/react-window-list-reset.scss';
+@use 'misc/_avatar.scss';
+@use 'misc/_context_menu.scss';
+@use 'misc/_keyboard_hint_box.scss';
+@use 'misc/_search-input.scss';
+@use 'misc/react-window-list-reset.scss';
 
 // ConnectivityToast
-@import '_connectivity-toast';
+@use '_connectivity-toast';
 
 // Icons
-@import '_icons';
+@use '_icons';
 
 // Re-usable generic UI components
-@import 'components/_radios';
+@use 'components/_radios';

@@ -22,6 +22,7 @@ import type {
 import '@deltachat-desktop/shared/global.d.ts'
 
 import type {
+  DropListener,
   MediaAccessStatus,
   MediaType,
   Runtime,
@@ -35,6 +36,7 @@ import type {
   LogLevelString,
 } from '@deltachat-desktop/shared/logger.js'
 import type { setLogHandler as setLogHandlerFunction } from '@deltachat-desktop/shared/logger.js'
+import { getCurrentWebview } from '@tauri-apps/api/webview'
 
 let logJsonrpcConnection = false
 
@@ -70,6 +72,14 @@ type MainWindowEvents =
     }
   | {
       event: 'onThemeUpdate'
+    }
+  | {
+      event: 'notificationClick'
+      data: { accountId: number; chatId: number; msgId: number }
+    }
+  | {
+      event: 'deepLinkOpened'
+      data: string
     }
 
 const events = new Channel<MainWindowEvents>()
@@ -185,6 +195,7 @@ class TauriRuntime implements Runtime {
       enableRelatedChats: false,
       galleryImageKeepAspectRatio: false,
       isMentionsEnabled: false,
+      inChatSoundsVolume: 0.5,
       useSystemUIFont: false,
     } satisfies Partial<DesktopSettingsType>
 
@@ -297,7 +308,9 @@ class TauriRuntime implements Runtime {
       // so the shown file location is not very helpful most of the time,
       // still for errors the stack trace is appended
       const onlyFnName = location?.split('@')[0]
-      location = `JS ${channel}${onlyFnName ? `::${onlyFnName}` : ''}`
+      location = `:JS::${channel.replace(/\//g, '::')}${
+        onlyFnName ? `::${onlyFnName}` : ''
+      }`
 
       const tauriLogLevel = variants[level]
       invoke('plugin:log|log', {
@@ -350,8 +363,24 @@ class TauriRuntime implements Runtime {
       } else if (event.event === 'onThemeUpdate') {
         this.log.debug('on theme update')
         this.onThemeUpdate?.()
+      } else if (event.event === 'deepLinkOpened') {
+        this.onOpenQrUrl?.(event.data)
+      } else if (event.event === 'notificationClick') {
+        this.notificationCallback?.(event.data)
       }
     }
+    getCurrentWebview().onDragDropEvent(event => {
+      if (event.payload.type === 'drop') {
+        if (event.payload.paths.includes(this.lastDragOutFile || '')) {
+          this.log.info('prevented dropping a file that we just draged out')
+          return
+        }
+        // IDEA we could check element bounds and drop location, to only let you drop on chatview
+        this.onDrop?.handler(event.payload.paths)
+      }
+      // IDEA: there are also enter and over events with a position,
+      // we could use to show an drop overlay explaining the feature
+    })
     window
       .matchMedia('(prefers-color-scheme: dark)')
       .addEventListener('change', event => {
@@ -546,19 +575,41 @@ class TauriRuntime implements Runtime {
 
     invoke('update_tray_icon_badge', { counter: value })
   }
-  showNotification(_data: DcNotification): void {
-    throw new Error('Method not implemented.37')
+  showNotification({
+    title,
+    body,
+    icon,
+    iconIsAvatar,
+    chatId,
+    messageId,
+    accountId,
+  }: DcNotification): void {
+    invoke('show_notification', {
+      title,
+      body,
+      icon,
+      iconIsAvatar: iconIsAvatar || false,
+      chatId,
+      messageId,
+      accountId,
+    })
   }
   clearAllNotifications(): void {
-    throw new Error('Method not implemented.38')
+    invoke('clear_all_notifications')
   }
-  clearNotifications(_chatId: number): void {
-    this.log.error('Method not implemented.39 - clearNotifications')
+  clearNotifications(accountId: number, chatId: number): void {
+    invoke('clear_notifications', { accountId, chatId })
   }
+
+  notificationCallback?: (data: {
+    accountId: number
+    chatId: number
+    msgId: number
+  }) => void
   setNotificationCallback(
-    _cb: (data: { accountId: number; chatId: number; msgId: number }) => void
+    cb: (data: { accountId: number; chatId: number; msgId: number }) => void
   ): void {
-    this.log.error('Method not implemented.40')
+    this.notificationCallback = cb
   }
   writeTempFileFromBase64(name: string, content: string): Promise<string> {
     return invoke('write_temp_file_from_base64', { name, content })
@@ -618,11 +669,19 @@ class TauriRuntime implements Runtime {
   ): Promise<string> {
     return invoke('copy_background_image_file', { srcPath, isDefaultPicture })
   }
-  onDragFileOut(_file: string): void {
-    throw new Error('Method not implemented.50')
+  lastDragOutFile?: string
+  onDrop: DropListener | null = null
+  setDropListener(onDrop: DropListener | null) {
+    this.onDrop = onDrop
   }
-  isDroppedFileFromOutside(_file: File): boolean {
-    throw new Error('Method not implemented.51')
+  onDragFileOut(fileName: string): void {
+    this.lastDragOutFile = fileName
+    invoke('drag_file_out', { fileName })
+  }
+  isDroppedFileFromOutside(file: string): boolean {
+    this.log.debug('isDroppedFileFromOutside', file)
+    this.log.info(this.lastDragOutFile, file)
+    return this.lastDragOutFile !== file
   }
   // only works on macOS and iOS
   // exp.runtime.debug_get_datastore_ids()
@@ -647,12 +706,20 @@ class TauriRuntime implements Runtime {
     | undefined
   onResumeFromSleep: (() => void) | undefined
   onToggleNotifications: (() => void) | undefined
-  checkMediaAccess(_mediaType: MediaType): Promise<MediaAccessStatus> {
-    throw new Error('Method not implemented.')
+  checkMediaAccess(mediaType: MediaType): Promise<MediaAccessStatus> {
+    return invoke('check_media_permission', {
+      permission: mediaTypeToPermission[mediaType],
+    })
   }
-  askForMediaAccess(_mediaType: MediaType): Promise<boolean> {
-    throw new Error('Method not implemented.')
+  askForMediaAccess(mediaType: MediaType): Promise<boolean> {
+    return invoke('request_media_permission', {
+      permission: mediaTypeToPermission[mediaType],
+    })
   }
+}
+const mediaTypeToPermission: Record<MediaType, string> = {
+  camera: 'video',
+  microphone: 'audio',
 }
 
 ;(window as any).r = new TauriRuntime()

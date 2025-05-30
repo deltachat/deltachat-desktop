@@ -1,3 +1,7 @@
+@use 'sass:map';
+@use '../mixins';
+@use '../variables';
+
 /* Chat List (conversation list) */
 
 .chat-list-item,
@@ -215,7 +219,8 @@
 
 .chat-list-item.skeleton {
   background-repeat: no-repeat;
-  background-image: radial-gradient(circle 24px, grey 99%, transparent 0),
+  background-image:
+    radial-gradient(circle 24px, grey 99%, transparent 0),
     linear-gradient(grey 40px, transparent 0),
     linear-gradient(grey 40px, transparent 0),
     linear-gradient(grey 40px, transparent 0);
@@ -255,7 +260,7 @@
   }
   .pin_icon {
     flex-shrink: 0;
-    @include color-svg('./images/pin.svg', var(--globalText));
+    @include mixins.color-svg('./images/pin.svg', var(--globalText));
     width: 16px;
     height: 16px;
     margin-left: 6px;
@@ -268,7 +273,7 @@
   }
   .mute_icon {
     flex-shrink: 0;
-    @include color-svg('./images/mute.png', var(--globalText));
+    @include mixins.color-svg('./images/mute.png', var(--globalText));
     width: 16px;
     height: 16px;
   }
@@ -334,7 +339,7 @@
   --size: 50px;
   --iconSize: 20px;
   position: fixed;
-  z-index: map-get($z-index, chatlist-scope-floating-action-button);
+  z-index: map.get(variables.$z-index, chatlist-scope-floating-action-button);
   bottom: 15px;
 
   width: var(--size);

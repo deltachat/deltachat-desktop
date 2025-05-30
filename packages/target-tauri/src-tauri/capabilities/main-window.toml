@@ -15,6 +15,9 @@ permissions = [
     "store:allow-get",
     "store:allow-set",
     "store:allow-delete",
+    # events - only used for drag and drop
+    "core:event:allow-listen",
+    "core:event:allow-unlisten",
     # borderless titlebar
     "core:window:allow-toggle-maximize",
     "core:window:allow-start-dragging",
@@ -70,4 +73,11 @@ permissions = [
     "allow-get-available-themes",
     "allow-get-current-active-theme-address",
     "allow-get-theme",
+
+    "allow-show-notification",
+    "allow-clear-notifications",
+    "allow-clear-all-notifications",
+    "allow-check-media-permission",
+    "allow-request-media-permission",
+    "allow-drag-file-out",
 ]

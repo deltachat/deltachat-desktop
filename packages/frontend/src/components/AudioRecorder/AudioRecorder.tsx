@@ -5,6 +5,9 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import useDialog from '../../hooks/dialog/useDialog'
 import AlertDialog from '../dialogs/AlertDialog'
+import { getLogger } from '@deltachat-desktop/shared/logger'
+
+const log = getLogger('renderer/AudioRecorder')
 
 export enum AudioErrorType {
   'NO_INPUT',
@@ -105,6 +108,7 @@ export const AudioRecorder = ({
     let access = 'unknown'
     try {
       access = await runtime.checkMediaAccess('microphone')
+      log.debug('checkMediaAccess', { access })
       if (access === 'denied') {
         onAccessDenied()
         return
@@ -118,6 +122,7 @@ export const AudioRecorder = ({
         }
       }
     } catch (err: any) {
+      log.error('failed to check or request media permission', err)
       onError(new AudioRecorderError(err.message))
       return
     }

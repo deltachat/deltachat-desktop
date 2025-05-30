@@ -14,6 +14,7 @@ import '@deltachat-desktop/shared/global.d.ts'
 
 import { LocaleData } from '@deltachat-desktop/shared/localize.js'
 import {
+  DropListener,
   MediaAccessStatus,
   MediaType,
   Runtime,
@@ -104,6 +105,10 @@ class BrowserRuntime implements Runtime {
       console.error('WebSocket error:', event)
     })
   }
+  onDrop: DropListener | null = null
+  setDropListener(onDrop: DropListener | null) {
+    this.onDrop = onDrop
+  }
 
   sendToBackendOverWS(message: MessageToBackend.AllTypes) {
     if (this.socket.readyState != this.socket.OPEN) {
@@ -114,7 +119,7 @@ class BrowserRuntime implements Runtime {
     } else {
       try {
         this.socket.send(JSON.stringify(message))
-      } catch (error) {
+      } catch (_error) {
         /* ignore-console-log */
         console.warn(
           'sendToBackendOverWS failed to send message to backend over websocket'
@@ -157,7 +162,7 @@ class BrowserRuntime implements Runtime {
     // Browser can not implement this
     return
   }
-  isDroppedFileFromOutside(_file: File): boolean {
+  isDroppedFileFromOutside(_file: string): boolean {
     return true // Browser does not support dragging files out, so can only be from outside
   }
   emitUIReady(): void {
@@ -356,7 +361,9 @@ class BrowserRuntime implements Runtime {
     })
   }
 
-  activeNotifications: { [chatId: number]: Notification[] } = {}
+  activeNotifications: {
+    [accountId: number]: { [chatId: number]: Notification[] }
+  } = {}
   notificationCB: (data: {
     accountId: number
     chatId: number
@@ -436,29 +443,39 @@ class BrowserRuntime implements Runtime {
       msgId: messageId,
     })
 
-    if (this.activeNotifications[chatId]) {
-      this.activeNotifications[chatId].push(notification)
+    if (!this.activeNotifications[accountId]) {
+      this.activeNotifications[accountId] = {}
+    }
+
+    if (this.activeNotifications[accountId][chatId]) {
+      this.activeNotifications[accountId][chatId].push(notification)
     } else {
-      this.activeNotifications[chatId] = [notification]
+      this.activeNotifications[accountId][chatId] = [notification]
     }
   }
   clearAllNotifications(): void {
-    for (const chatId of Object.keys(this.activeNotifications)) {
-      if (isNaN(Number(chatId))) {
-        this.clearNotifications(Number(chatId))
+    for (const accountId of Object.keys(this.activeNotifications)) {
+      if (!Number.isNaN(Number(accountId))) {
+        for (const chatId of Object.keys(
+          this.activeNotifications[Number(accountId)]
+        )) {
+          if (!Number.isNaN(Number(chatId))) {
+            this.clearNotifications(Number(accountId), Number(chatId))
+          }
+        }
       }
     }
   }
-  clearNotifications(chatId: number): void {
+  clearNotifications(accountId: number, chatId: number): void {
     this.log.debug('clearNotificationsForChat', {
       chatId,
       notifications: this.activeNotifications,
     })
-    if (this.activeNotifications[chatId]) {
-      for (const notify of this.activeNotifications[chatId]) {
+    if (this.activeNotifications[accountId]?.[chatId]) {
+      for (const notify of this.activeNotifications[accountId][chatId]) {
         notify.close()
       }
-      delete this.activeNotifications[chatId]
+      delete this.activeNotifications[accountId][chatId]
     }
     this.log.debug('after cleared Notifications', {
       chatId,
@@ -721,6 +738,68 @@ class BrowserRuntime implements Runtime {
     }, config)
 
     this.askBrowserForNotificationPermission()
+
+    document.body.addEventListener('drop', async e => {
+      this.log.debug('drop event', { target: e.target }, this.onDrop)
+      if (!this.onDrop) {
+        this.log.warn('file dropped, but no drop handler set')
+        return
+      }
+      const dropTarget = this.onDrop.elementRef.current
+      if (!dropTarget) {
+        this.log.warn('file dropped, but drop target is unset')
+        return
+      }
+      if (!e.dataTransfer) {
+        this.log.debug('dropped, but no data transfer')
+        return
+      }
+      if (!(e.target && dropTarget.contains(e.target as HTMLElement))) {
+        this.log.debug(
+          'file dropped, but it was dropped outside of the drop target element'
+        )
+        return
+      }
+      e.preventDefault()
+      e.stopPropagation()
+      const writeTempFileFromFile = (file: File) => {
+        if (file.size > 1e8 /* 100mb */) {
+          this.log.warn(
+            `dropped file is bigger than 100mb ${file.name} ${file.size} ${file.type}`
+          )
+        }
+        return new Promise<string>((resolve, reject) => {
+          const reader = new FileReader()
+          reader.onload = _ => {
+            if (reader.result === null) {
+              return reject(new Error('result empty'))
+            }
+            if (typeof reader.result !== 'string') {
+              return reject(new Error('wrong type'))
+            }
+            const base64Content = reader.result.split(',')[1]
+            this.writeTempFileFromBase64(file.name, base64Content)
+              .then(tempUrl => {
+                resolve(tempUrl)
+              })
+              .catch(err => {
+                reject(err)
+              })
+          }
+          reader.onerror = err => {
+            reject(err)
+          }
+          reader.readAsDataURL(file)
+        })
+      }
+
+      const paths: string[] = []
+      for (const path of e.dataTransfer.files) {
+        // browser does not support dragging files out, so we need no check here
+        paths.push(await writeTempFileFromFile(path))
+      }
+      this.onDrop.handler(paths)
+    })
   }
 
   async askBrowserForNotificationPermission() {
@@ -763,7 +842,7 @@ class BrowserRuntime implements Runtime {
   getAutostartState(): Promise<AutostartState> {
     return Promise.resolve({
       isSupported: false,
-      isRegistered: false,
+      isRegistered: null,
     })
   }
   async checkMediaAccess(mediaType: MediaType): Promise<MediaAccessStatus> {
