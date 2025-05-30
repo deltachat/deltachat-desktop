@@ -8,6 +8,7 @@
 
 ### Fixed
 - fix `runtime.isDroppedFileFromOutside` is not working as indended #5165
+- tauri: fix drag and drop on macOS #5165
 
 <a id="1_59_1"></a>
 
