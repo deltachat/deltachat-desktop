@@ -124,7 +124,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
 
   const handleDrop = useCallback(
     async (paths: string[]) => {
-      console.log('drag: handling drop: ', paths)
+      log.info('drag: handling drop: ', paths)
       if (chat === null) {
         log.warn('dropped something, but no chat is selected')
         return
@@ -175,7 +175,6 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     [accountId, addFileToDraft, chat, hasOpenDialogs, openDialog, sendMessage]
   )
 
-  // Tauri listener
   useEffect(() => {
     log.debug('drag: register')
     runtime.setDropListener({

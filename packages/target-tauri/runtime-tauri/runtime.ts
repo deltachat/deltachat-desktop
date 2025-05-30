@@ -375,7 +375,7 @@ class TauriRuntime implements Runtime {
           this.log.info('prevented dropping a file that we just draged out')
           return
         }
-        // IDEA we could check element bounds and drop location, to onlz let you drop on chatview
+        // IDEA we could check element bounds and drop location, to only let you drop on chatview
         this.onDrop?.handler(event.payload.paths)
       }
       // IDEA: there are also enter and over events with a position,
