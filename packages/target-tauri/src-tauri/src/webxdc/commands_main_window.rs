@@ -303,6 +303,7 @@ pub(crate) async fn open_webxdc<'a>(
     } else {
         href_to_webxdc_url(href)?
     };
+    let initial_url_clone = initial_url.clone();
 
     let dummy_localhost_proxy_url = network_isolation_dummy_proxy::DUMMY_LOCALHOST_PROXY_URL
         .as_ref()
@@ -353,7 +354,7 @@ pub(crate) async fn open_webxdc<'a>(
             })
             .unwrap_or(false)
     })
-    .on_navigation(move |url| url.origin_no_opaque() == initial_url.origin_no_opaque());
+    .on_navigation(move |url| url.origin_no_opaque() == initial_url_clone.origin_no_opaque());
 
     // This is only for Chromium (i.e. Windows).
     // Note that this will make `WebviewWindowBuilder::proxy_url`,
@@ -399,6 +400,14 @@ pub(crate) async fn open_webxdc<'a>(
         .ok();
 
     let window_clone = Arc::clone(&window);
+    let webxdc_js_url = {
+        let mut url = initial_url.clone();
+        url.set_path("/webxdc.js");
+        url
+    };
+    // Whether we're about to close the window.
+    // (there is probably a way to use a non-atomic bool).
+    let is_closing = std::sync::atomic::AtomicBool::new(false);
     let messge_id_to_leave = webxdc_message.get_id();
     window.on_window_event(move |event| {
         if let WindowEvent::Destroyed = event {
@@ -426,6 +435,86 @@ pub(crate) async fn open_webxdc<'a>(
             }) {
                 warn!("failed to leave realtime channel, this is normal if the webxdc app did not open a realtime channel: {err}")
             }
+        }
+        if let WindowEvent::CloseRequested { api, .. } = event {
+            // Close the window, but manually unload the page, and wait a bit,
+            // so that `sendUpdate()`s executed inside of `visibilitychange`
+            // or `unload` event listeners have time to reach the backend
+            // and don't get lost.
+            // This is a workaround for
+            // https://github.com/deltachat/deltachat-desktop/issues/3321.
+            //
+            // TODO fix: this doesn't work when you quit
+            // the Delta Chat app itself (as opposed to only closing
+            // the webxdc app window).
+            //
+            // TODO fix: for some reason the "Text Webxdc" app
+            // (https://webxdc.org/apps/#webxdc-test)
+            // reports that there are 2 `webxdc.sendUpdate()`s per each
+            // `beforeunload`, `visibilitychange` and `pagehide` event,
+            // at least on Windows.
+
+            // I don't know much about ordering,
+            // but non-relaxed ordering doesn't seem to be needed here.
+            let is_closing_already = is_closing.swap(true, std::sync::atomic::Ordering::Relaxed);
+            if is_closing_already {
+                log::debug!("A second CloseRequested event fired on webxdc window, closing now");
+                return;
+            }
+            let new_url = webxdc_js_url.clone();
+            log::debug!(
+                "CloseRequested on webxdc window. Will `prevent_close()` and navigate to {new_url}"
+            );
+
+            // `CloseRequested` itself does not seem to trigger any of the
+            // web page lifecycle events (`beforeunload`, `visibilitychange`),
+            // (probably because it can be cancelled).
+            // So let's ensure to manually unload the app's document,
+            // by simply navigating.
+            //
+            // Navigating to any page should work, but let's pick a page
+            // navigating to which will have no side effects on the app state,
+            // i.e. the page where we won't execute any JavaScript.
+            // This is not for security, but to ensure
+            // normal functioning of the app.
+            // That is, we could just `window.reload()`,
+            // but then the app could execute some JS and, let's say,
+            // update the "times you opened this app" counter.
+            //
+            // We could have also picked a random path
+            // that we'd expect to be 404, but `/webxdc.js` is just consistent.
+            if let Err(err) = window_clone.navigate(new_url.clone()) {
+                log::error!(
+                    "failed to navigate webxdc window to {new_url} prior to close. Closing will not be delayed. The app may not be able to save state with `webxdc.sendUpdate()`: {err}"
+                );
+                // Let's just return and not proceed with `api.prevent_close()`.
+                return;
+            };
+
+            // Hide the window right away so as to not annoy the user
+            // with the perceived slowness.
+            window_clone
+                .hide()
+                .context("failed to hide webxdc window prior to delayed close")
+                .inspect_err(|err| log::warn!("{err}"))
+                .ok();
+
+            api.prevent_close();
+
+            let window_clone = Arc::clone(&window_clone);
+            tauri::async_runtime::spawn(async move {
+                // TODO is just waiting 300ms always enough though?
+                // What if the `sendUpdate()` payload is reeeally heavy?
+                // Would it still have time to get delivered to the backend?
+                tokio::time::sleep(tokio::time::Duration::from_millis(300)).await;
+                log::debug!("closing webxdc window: delay elapsed, will close for real now");
+                window_clone
+                    .close()
+                    .context("failed to close webxdc window after delay")
+                    .inspect_err(|err| log::error!("{err}"))
+                    .ok();
+                // FYI there is also `window.destroy()`.
+            });
         }
     });
 
