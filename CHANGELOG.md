@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+- fix `runtime.isDroppedFileFromOutside` is not working as indended
 
 <a id="1_59_1"></a>
 

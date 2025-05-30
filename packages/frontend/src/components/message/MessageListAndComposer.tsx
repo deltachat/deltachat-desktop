@@ -97,7 +97,7 @@ function isImage(file: ParsedPath) {
 }
 
 export default function MessageListAndComposer({ accountId, chat }: Props) {
-  const conversationRef = useRef(null)
+  const conversationRef = useRef<HTMLDivElement>(null)
   const refComposer = useRef(null)
 
   const { openDialog, hasOpenDialogs } = useDialog()
@@ -122,111 +122,71 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     regularMessageInputRef
   )
 
+  const handleDrop = useCallback(
+    async (paths: string[]) => {
+      console.log('drag: handling drop: ', paths)
+      if (chat === null) {
+        log.warn('dropped something, but no chat is selected')
+        return
+      }
+      const sanitized = paths
+        .filter(path => {
+          const val = runtime.isDroppedFileFromOutside(path)
+          if (!val) {
+            log.warn(
+              'Prevented a file from being sent again while dragging it out',
+              path
+            )
+          }
+          return val
+        })
+        .map(path => parse(path))
+
+      // send single file
+      if (sanitized.length == 1) {
+        const file = sanitized[0]
+        const msgViewType: Viewtype = isImage(file) ? 'Image' : 'File'
+        await addFileToDraft(fullPath(file), file.name + file.ext, msgViewType)
+      }
+      // send multiple files
+      else if (sanitized.length > 1 && !hasOpenDialogs) {
+        openDialog(ConfirmSendingFiles, {
+          sanitizedFileList: sanitized.map(path => ({
+            name: path.name,
+          })),
+          chatName: chat.name,
+          onClick: async (isConfirmed: boolean) => {
+            if (!isConfirmed) {
+              return
+            }
+
+            for (const file of sanitized) {
+              const msgViewType: Viewtype = isImage(file) ? 'Image' : 'File'
+              sendMessage(accountId, chat.id, {
+                file: fullPath(file),
+                filename: file.name + file.ext,
+                viewtype: msgViewType,
+              })
+            }
+          },
+        })
+      }
+    },
+    [accountId, addFileToDraft, chat, hasOpenDialogs, openDialog, sendMessage]
+  )
+
   // Tauri listener
   useEffect(() => {
     log.debug('drag: register')
-    runtime.setDropListener(paths => {
-      handleDrop(paths)
+    runtime.setDropListener({
+      elementRef: conversationRef,
+      handler: handleDrop,
     })
     return () => {
       log.debug('drag: unregister')
       runtime.setDropListener(null)
     }
-  })
-
-  // Electron and webview listener
-  const onDrop = async (e: React.DragEvent<any>) => {
-    log.debug('drag: browser/electron drop')
-    e.preventDefault()
-    e.stopPropagation()
-
-    function writeTempFileFromFile(file: File): Promise<string> {
-      if (file.size > 1e8 /* 100mb */) {
-        log.warn(
-          `dropped file is bigger than 100mb ${file.name} ${file.size} ${file.type}`
-        )
-      }
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader()
-        reader.onload = _ => {
-          if (reader.result === null) {
-            return reject(new Error('result empty'))
-          } else if (typeof reader.result !== 'string') {
-            return reject(new Error('wrong type'))
-          }
-          const base64Content = reader.result.split(',')[1]
-          runtime
-            .writeTempFileFromBase64(file.name, base64Content)
-            .then(tempUrl => {
-              resolve(tempUrl)
-            })
-            .catch(err => {
-              reject(err)
-            })
-        }
-        reader.onerror = err => {
-          reject(err)
-        }
-        reader.readAsDataURL(file)
-      })
-    }
-
-    const paths = []
-    for (const path of e.dataTransfer.files) {
-      paths.push(await writeTempFileFromFile(path))
-    }
-    handleDrop(paths)
-  }
-
-  const handleDrop = async (paths: string[]) => {
-    console.log('drag: handling drop: ', paths)
-    if (chat === null) {
-      log.warn('dropped something, but no chat is selected')
-      return
-    }
-    const sanitized = paths
-      .filter(path => {
-        const val = runtime.isDroppedFileFromOutside(path)
-        if (!val) {
-          log.warn(
-            'Prevented a file from being sent again while dragging it out',
-            path
-          )
-        }
-        return val
-      })
-      .map(path => parse(path))
-
-    // send single file
-    if (sanitized.length == 1) {
-      const file = sanitized[0]
-      const msgViewType: Viewtype = isImage(file) ? 'Image' : 'File'
-      await addFileToDraft(fullPath(file), file.name + file.ext, msgViewType)
-    }
-    // send multiple files
-    else if (sanitized.length > 1 && !hasOpenDialogs) {
-      openDialog(ConfirmSendingFiles, {
-        sanitizedFileList: sanitized.map(path => ({
-          name: path.name,
-        })),
-        chatName: chat.name,
-        onClick: async (isConfirmed: boolean) => {
-          if (!isConfirmed) {
-            return
-          }
-
-          for (const file of sanitized) {
-            const msgViewType: Viewtype = isImage(file) ? 'Image' : 'File'
-            sendMessage(accountId, chat.id, {
-              file: fullPath(file),
-              filename: file.name + file.ext,
-              viewtype: msgViewType,
-            })
-          }
-        },
-      })
-    }
-  }
+  }, [handleDrop])
 
   const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
@@ -286,7 +246,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     [hasOpenDialogs]
   )
 
-  const onSelectionChange = () => {
+  const onSelectionChange = useCallback(() => {
     const selection = window.getSelection()
 
     if (
@@ -298,15 +258,15 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     // Only one of these is actually rendered at any given moment.
     regularMessageInputRef.current?.focus()
     editMessageInputRef.current?.focus()
-  }
+  }, [])
 
-  const onEscapeKeyUp = (ev: KeyboardEvent) => {
+  const onEscapeKeyUp = useCallback((ev: KeyboardEvent) => {
     if (ev.code === 'Escape') {
       // Only one of these is actually rendered at any given moment.
       regularMessageInputRef.current?.focus()
       editMessageInputRef.current?.focus()
     }
-  }
+  }, [])
 
   useEffect(() => {
     window.addEventListener('mouseup', onMouseUp)
@@ -322,7 +282,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
       document.removeEventListener('selectionchange', onSelectionChange)
       window.removeEventListener('keyup', onEscapeKeyUp)
     }
-  }, [onMouseUp])
+  }, [onMouseUp, onEscapeKeyUp, onSelectionChange])
 
   const settingsStore = useSettingsStore()[0]
   // If you want to update this, don't forget to update
@@ -331,8 +291,6 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     ? getBackgroundImageStyle(settingsStore.desktopSettings)
     : {}
 
-  const isElectron =
-    typeof navigator === 'object' && navigator.userAgent.includes('Electron')
   return (
     <div
       role='tabpanel'
@@ -350,7 +308,6 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
       className='message-list-and-composer'
       style={style}
       ref={conversationRef}
-      onDrop={isElectron ? onDrop.bind({ props: { chat } }) : undefined}
       onDragOver={onDragOver}
     >
       <div className='message-list-and-composer__message-list'>

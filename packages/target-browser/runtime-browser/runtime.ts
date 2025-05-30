@@ -14,6 +14,7 @@ import '@deltachat-desktop/shared/global.d.ts'
 
 import { LocaleData } from '@deltachat-desktop/shared/localize.js'
 import {
+  DropListener,
   MediaAccessStatus,
   MediaType,
   Runtime,
@@ -104,8 +105,9 @@ class BrowserRuntime implements Runtime {
       console.error('WebSocket error:', event)
     })
   }
-  setDropListener(_onDrop: ((paths: string[]) => void) | null) {
-    return Promise.resolve()
+  onDrop: DropListener | null = null
+  setDropListener(onDrop: DropListener | null) {
+    this.onDrop = onDrop
   }
 
   sendToBackendOverWS(message: MessageToBackend.AllTypes) {
@@ -736,6 +738,68 @@ class BrowserRuntime implements Runtime {
     }, config)
 
     this.askBrowserForNotificationPermission()
+
+    document.body.addEventListener('drop', async e => {
+      this.log.debug('drop event', { target: e.target }, this.onDrop)
+      if (!this.onDrop) {
+        this.log.warn('file dropped, but no drop handler set')
+        return
+      }
+      const dropTarget = this.onDrop.elementRef.current
+      if (!dropTarget) {
+        this.log.warn('file dropped, but drop target is unset')
+        return
+      }
+      if (!e.dataTransfer) {
+        this.log.debug('dropped, but no data transfer')
+        return
+      }
+      if (!(e.target && dropTarget.contains(e.target as HTMLElement))) {
+        this.log.debug(
+          'file dropped, but it was dropped outside of the drop target element'
+        )
+        return
+      }
+      e.preventDefault()
+      e.stopPropagation()
+      const writeTempFileFromFile = (file: File) => {
+        if (file.size > 1e8 /* 100mb */) {
+          this.log.warn(
+            `dropped file is bigger than 100mb ${file.name} ${file.size} ${file.type}`
+          )
+        }
+        return new Promise<string>((resolve, reject) => {
+          const reader = new FileReader()
+          reader.onload = _ => {
+            if (reader.result === null) {
+              return reject(new Error('result empty'))
+            }
+            if (typeof reader.result !== 'string') {
+              return reject(new Error('wrong type'))
+            }
+            const base64Content = reader.result.split(',')[1]
+            this.writeTempFileFromBase64(file.name, base64Content)
+              .then(tempUrl => {
+                resolve(tempUrl)
+              })
+              .catch(err => {
+                reject(err)
+              })
+          }
+          reader.onerror = err => {
+            reject(err)
+          }
+          reader.readAsDataURL(file)
+        })
+      }
+
+      const paths: string[] = []
+      for (const path of e.dataTransfer.files) {
+        // browser does not support dragging files out, so we need no check here
+        paths.push(await writeTempFileFromFile(path))
+      }
+      this.onDrop.handler(paths)
+    })
   }
 
   async askBrowserForNotificationPermission() {

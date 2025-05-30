@@ -24,6 +24,7 @@
     return {
       ipcRenderer: electron.ipcRenderer,
       app_getPath: p => electron.ipcRenderer.sendSync('app-get-path', p),
+      getPathForFile: electron.webUtils.getPathForFile,
     }
   }
 
