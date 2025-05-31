@@ -66,6 +66,13 @@ export default function MainScreen({ accountId }: Props) {
     setArchivedChatsSelected(false)
   )
 
+  useKeyBindingAction(KeybindAction.ZoomIn, () => {
+    runtime.increaseZoom()
+  })
+  useKeyBindingAction(KeybindAction.ZoomOut, () => {
+    runtime.decreaseZoom()
+  })
+
   const chatListShouldBeHidden = smallScreenMode && chatId !== undefined
   const messageSectionShouldBeHidden = smallScreenMode && chatId === undefined
 

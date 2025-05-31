@@ -25,6 +25,8 @@ export enum KeybindAction {
   MessageList_PageUp = 'msglist:pageup',
   MessageList_PageDown = 'msglist:pagedown',
   GlobalGallery_Open = 'globalgallery:open',
+  ZoomIn = 'zoom:in',
+  ZoomOut = 'zoom:out',
 
   // Actions that are not necessarily triggered by keybindings
   ChatList_SwitchToArchiveView = 'chatlist:switch-to-archive-view',
@@ -152,6 +154,10 @@ export function keyDownEvent2Action(
       if ((ev.target as HTMLElement)?.id === 'composer-textarea') {
         return KeybindAction.MessageList_PageDown
       }
+    } else if ((ev.metaKey || ev.ctrlKey) && ev.key === '+') {
+      return KeybindAction.ZoomIn
+    } else if ((ev.metaKey || ev.ctrlKey) && ev.key === '-') {
+      return KeybindAction.ZoomOut
     } else if (
       (ev.metaKey || ev.ctrlKey) &&
       (ev.key === '/' || ev.code === 'Slash')

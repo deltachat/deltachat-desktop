@@ -541,6 +541,12 @@ class ElectronRuntime implements Runtime {
   askForMediaAccess(mediaType: MediaType): Promise<boolean | undefined> {
     return ipcBackend.invoke('askForMediaAccess', mediaType)
   }
+  increaseZoom(): void {
+    ipcBackend.send('zoom-in')
+  }
+  decreaseZoom(): void {
+    ipcBackend.send('zoom-out')
+  }
 }
 
 ;(window as any).r = new ElectronRuntime()

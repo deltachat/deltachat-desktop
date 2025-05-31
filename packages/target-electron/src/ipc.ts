@@ -175,6 +175,26 @@ export async function init(cwd: string, logHandler: LogHandler) {
     ev.returnValue = app.getPath(arg)
   })
 
+  ipcMain.on('zoom-in', () => {
+    if (!mainWindow.window) {
+      throw new Error('window does not exist, this should never happen')
+    }
+    const currentZoomFactor = mainWindow.window.webContents.getZoomFactor()
+    const newZoomFactor = currentZoomFactor + 0.2
+    mainWindow.window.webContents.setZoomFactor(newZoomFactor)
+    DesktopSettings.update({ zoomFactor: newZoomFactor })
+  })
+
+  ipcMain.on('zoom-out', () => {
+    if (!mainWindow.window) {
+      throw new Error('window does not exist, this should never happen')
+    }
+    const currentZoomFactor = mainWindow.window.webContents.getZoomFactor()
+    const newZoomFactor = currentZoomFactor - 0.2
+    mainWindow.window.webContents.setZoomFactor(newZoomFactor)
+    DesktopSettings.update({ zoomFactor: newZoomFactor })
+  })
+
   /**
    * https://www.electronjs.org/docs/latest/api/system-preferences#systempreferencesgetmediaaccessstatusmediatype-windows-macos
    */
