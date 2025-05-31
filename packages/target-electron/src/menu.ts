@@ -343,6 +343,8 @@ function getMenuTemplate(
           label: tx('zoom'),
           submenu: getZoomFactors(),
         },
+        { role: 'zoomIn' }, 
+      { role: 'zoomOut' }, 
         {
           label: tx('pref_language'),
           submenu: getAvailableLanguages(),
