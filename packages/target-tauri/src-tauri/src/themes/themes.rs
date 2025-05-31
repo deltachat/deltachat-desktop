@@ -83,7 +83,7 @@ impl ThemeMetadata {
             ) {
                 map.insert(key, value);
             } else {
-                log::warn!("can't parse css variable {:?}", captures);
+                log::warn!("can't parse css variable {captures:?}");
                 continue;
             }
         }

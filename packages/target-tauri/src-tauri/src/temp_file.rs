@@ -65,7 +65,7 @@ async fn create_tmp_file(app: &AppHandle, name: &str) -> Result<(File, PathBuf),
         .ok_or(Error::InvalidFileName)?;
     let file_path = dir.join(file_name);
 
-    assert!(file_path.components().last().unwrap().as_os_str() == file_name);
+    assert!(file_path.components().next_back().unwrap().as_os_str() == file_name);
     assert!(file_path
         .components()
         .rev()
@@ -109,7 +109,7 @@ async fn delete_tmp_file(app: &AppHandle, path: SafePathBuf) -> Result<(), Error
 // create tmp folder
 pub(crate) async fn create_tmp_folder(app: &AppHandle) -> Result<(), Error> {
     let tmp_folder = get_temp_folder_path(app)?;
-    info!("using temp folder at {:?}", tmp_folder);
+    info!("using temp folder at {tmp_folder:?}");
     create_dir_all(get_temp_folder_path(app)?).await?;
     Ok(())
 }
@@ -119,7 +119,7 @@ pub(crate) async fn create_tmp_folder(app: &AppHandle) -> Result<(), Error> {
 pub(crate) async fn clear_tmp_folder(app: &AppHandle) -> Result<(), Error> {
     let tmp_folder = get_temp_folder_path(app)?;
     if !exists(&tmp_folder)? {
-        warn!("tmp folder does not exist at: {:?}", tmp_folder);
+        warn!("tmp folder does not exist at: {tmp_folder:?}");
         return Ok(());
     }
 

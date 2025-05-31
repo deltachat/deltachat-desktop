@@ -42,22 +42,20 @@ impl TrayManager {
                     tray.set_visible(false)?;
                 }
             }
-        } else {
-            if currently_active != wanted_state {
-                if wanted_state {
-                    let tray = build_tray_icon(app)?;
-                    let previous = self.tray.write().await.replace(tray);
-                    assert!(previous.is_none());
-                    self.update_badge(app).await?;
+        } else if currently_active != wanted_state {
+            if wanted_state {
+                let tray = build_tray_icon(app)?;
+                let previous = self.tray.write().await.replace(tray);
+                assert!(previous.is_none());
+                self.update_badge(app).await?;
+            } else {
+                let previous = self.tray.write().await.take();
+                if let Some(tray) = previous {
+                    tray.set_visible(false)?;
+                    let tray_option = app.remove_tray_by_id(tray.id());
+                    drop(tray_option);
                 } else {
-                    let previous = self.tray.write().await.take();
-                    if let Some(tray) = previous {
-                        tray.set_visible(false)?;
-                        let tray_option = app.remove_tray_by_id(tray.id());
-                        drop(tray_option);
-                    } else {
-                        unreachable!()
-                    }
+                    unreachable!()
                 }
             }
         }

@@ -87,7 +87,7 @@ pub(crate) fn delta_blobs_protocol<R: tauri::Runtime>(
                 // trace!("file_path: {file_path:?}");
 
                 assert_eq!(
-                    file_path.components().last().unwrap().as_os_str(),
+                    file_path.components().next_back().unwrap().as_os_str(),
                     file_name
                 );
                 assert!(file_path

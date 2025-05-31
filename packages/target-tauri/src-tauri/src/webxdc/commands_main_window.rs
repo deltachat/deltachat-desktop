@@ -265,13 +265,12 @@ pub(crate) async fn open_webxdc<'a>(
             })
             .unwrap_or_else(|err| {
                 log::error!(
-                    "failed to read {} store, webxdc window bounds will not be restored: {err}",
-                    webxdc_window_state_store_name,
+                    "failed to read {webxdc_window_state_store_name} store, webxdc window bounds will not be restored: {err}",
                 );
                 get_random_chars()
             });
 
-        let hash = sha2::Sha256::digest(format!("{}-{}-{}", secret, account_id, message_id));
+        let hash = sha2::Sha256::digest(format!("{secret}-{account_id}-{message_id}"));
         format!("webxdc:{hash:X}")
     };
     trace!("open webxdc '{window_id}', ({account_id}, {message_id}): href: {href}");

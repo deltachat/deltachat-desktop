@@ -53,7 +53,7 @@ pub(crate) fn handle_menu_event(app: &AppHandle, event: MenuEvent) {
     let app = app.clone();
     let future = spawn(async move {
         if let Err(e) = handle_event(&app, event).await {
-            log::error!("{:?}", e);
+            log::error!("{e:?}");
         }
     });
     drop(future);
