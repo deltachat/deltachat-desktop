@@ -188,6 +188,8 @@ export interface Runtime {
 
   // undefined if the platform does not support askForMediaAccess
   askForMediaAccess: (mediaType: MediaType) => Promise<boolean | undefined>
+  increaseZoom(): void
+  decreaseZoom(): void
 }
 
 export const runtime: Runtime = (window as any).r

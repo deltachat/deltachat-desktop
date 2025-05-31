@@ -103,7 +103,7 @@ function getZoomFactors(): Electron.MenuItemConstructorOptions[] {
   return zoomFactors.map(({ key, scale }) => {
     return {
       label: !(scale === 1 && key === 'custom')
-        ? `${scale}x ${tx(key)}`
+        ? `${scale.toFixed(1)}x ${tx(key)}`
         : tx('custom'),
       type: 'radio',
       checked:
@@ -343,6 +343,8 @@ function getMenuTemplate(
           label: tx('zoom'),
           submenu: getZoomFactors(),
         },
+        { role: 'zoomIn' }, 
+      { role: 'zoomOut' }, 
         {
           label: tx('pref_language'),
           submenu: getAvailableLanguages(),

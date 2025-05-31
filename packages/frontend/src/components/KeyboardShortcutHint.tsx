@@ -219,6 +219,10 @@ export function getKeybindings(
         keyBindings: [['PageUp'], ['PageDown']],
       },
       {
+        title: tx('menu_new_chat'),
+        keyBindings: [[isMac ? 'Meta' : 'Control', 'N']],
+      },
+      {
         title: tx('focus_search_input'),
         keyBindings: [[isMac ? 'Meta' : 'Control', 'F']],
       },
@@ -227,8 +231,12 @@ export function getKeybindings(
         keyBindings: [[isMac ? 'Meta' : 'Control', 'Shift', 'F']],
       },
       {
-        title: tx('menu_new_chat'),
-        keyBindings: [[isMac ? 'Meta' : 'Control', 'N']],
+        title: tx('menu_zoom_in'),
+        keyBindings: [[isMac ? 'Meta' : 'Control', '+']],
+      },
+      {
+        title: tx('menu_zoom_out'),
+        keyBindings: [[isMac ? 'Meta' : 'Control', '-']],
       },
       {
         title: tx('focus_message_input'),

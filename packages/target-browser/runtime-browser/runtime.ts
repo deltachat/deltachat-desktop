@@ -881,6 +881,12 @@ class BrowserRuntime implements Runtime {
       return Promise.resolve(false)
     }
   }
+  increaseZoom(): void {
+    throw new Error('Method increaseZoom not implemented.')
+  }
+  decreaseZoom(): void {
+    throw new Error('Method decreaseZoom not implemented.')
+  }
 }
 
 ;(window as any).r = new BrowserRuntime()

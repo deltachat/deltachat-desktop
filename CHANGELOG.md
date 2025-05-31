@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- Zoom In/Out with Ctrl +/- #890
 
 ### Changed
 
