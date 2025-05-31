@@ -61,7 +61,7 @@ async fn main() -> anyhow::Result<()> {
     notification = notification
         .title("my title2")
         .body("my body2")
-        .set_thread_id(&format!("thread-id"));
+        .set_thread_id(&"thread-id".to_string());
 
     log::debug!("4");
     manager.send_notification(notification).await?;
@@ -73,7 +73,7 @@ async fn main() -> anyhow::Result<()> {
     let notification = user_notify::NotificationBuilder::new()
         .title("my title")
         .body("my body")
-        .set_thread_id(&format!("thread-id"))
+        .set_thread_id(&"thread-id".to_string())
         .set_user_info(info)
         .set_category_id("my.app.123.textinput");
 
@@ -90,8 +90,7 @@ async fn main() -> anyhow::Result<()> {
     assert!(
         active
             .iter()
-            .find(|handle| handle.get_user_info().contains_key("hey"))
-            .is_some()
+            .any(|handle| handle.get_user_info().contains_key("hey"))
     );
 
     let _ = ctrl_c().await;

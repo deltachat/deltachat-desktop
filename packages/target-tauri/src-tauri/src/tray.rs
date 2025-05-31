@@ -1,5 +1,3 @@
-use std::str::FromStr;
-
 use anyhow::Context;
 use tauri::{
     tray::{MouseButton, MouseButtonState, TrayIcon, TrayIconBuilder},
@@ -29,7 +27,7 @@ pub(crate) fn build_tray_icon(app: &AppHandle) -> anyhow::Result<TrayIcon> {
 
     #[cfg(feature = "flatpak")]
     {
-        use std::{env, path::PathBuf};
+        use std::{env, path::PathBuf, str::FromStr};
         let xdg_runtime_dir =
             env::var("XDG_RUNTIME_DIR").expect("XDG_RUNTIME_DIR is not set, this shouldn't happen");
         let flatpak_app_id =
