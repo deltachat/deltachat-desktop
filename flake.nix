@@ -63,6 +63,13 @@
           webkitgtk_4_1
           openssl
           libayatana-appindicator
+          # Video/Audio data playback
+          gst_all_1.gstreamer
+          gst_all_1.gst-plugins-base
+          gst_all_1.gst-plugins-good
+          gst_all_1.gst-plugins-bad
+          gst_all_1.gst-libav
+          gst_all_1.gst-vaapi
 
           # coding
           pnpm
@@ -80,7 +87,7 @@
         };
         shellHook = ''
           # On nixos, you can not run npm electron, so we remove it here and have it in packages.
-          rm ./packages/target-electron/node_modules/.bin/electron
+          rm ./packages/target-electron/node_modules/.bin/electron || true
         '';
       };
     });
