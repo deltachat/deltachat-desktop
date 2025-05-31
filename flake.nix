@@ -63,6 +63,13 @@
           webkitgtk_4_1
           openssl
           libayatana-appindicator
+          # Video/Audio data playback
+          gst_all_1.gstreamer
+          gst_all_1.gst-plugins-base
+          gst_all_1.gst-plugins-good
+          gst_all_1.gst-plugins-bad
+          gst_all_1.gst-libav
+          gst_all_1.gst-vaapi
 
           # coding
           pnpm
@@ -76,11 +83,15 @@
           RUST_SRC_PATH = "${pkgs.rustToolchain}/lib/rustlib/src/rust/library";
           LD_LIBRARY_PATH = "${pkgs.lib.makeLibraryPath buildInputs}:$LD_LIBRARY_PATH";
           XDG_DATA_DIRS = "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}:${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}:$XDG_DATA_DIRS";
+
+          # needed with nvidia driver to make it show the ui at all,
+          # but it slows down the UI performance by a lot.
+          # though even on AMD gpu I get some glitches without it.
           WEBKIT_DISABLE_COMPOSITING_MODE = 1;
         };
         shellHook = ''
           # On nixos, you can not run npm electron, so we remove it here and have it in packages.
-          rm ./packages/target-electron/node_modules/.bin/electron
+          rm ./packages/target-electron/node_modules/.bin/electron || true
         '';
       };
     });
