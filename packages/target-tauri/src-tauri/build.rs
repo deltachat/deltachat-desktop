@@ -114,13 +114,13 @@ fn get_git_ref() -> String {
     {
         git_branch = git_symbolic_ref
             .split('/')
-            .last()
+            .next_back()
             .unwrap_or("main")
             .to_string();
-        println!("{} {}", git_symbolic_ref, git_branch);
+        println!("{git_symbolic_ref} {git_branch}");
     } else {
         git_branch = gather_process_stdout("git", &["symbolic-ref", "HEAD"])
-            .map(|r| r.split('/').last().unwrap_or("main").to_owned())
+            .map(|r| r.split('/').next_back().unwrap_or("main").to_owned())
             .unwrap_or("main".to_owned())
             .to_string();
     }
@@ -128,6 +128,6 @@ fn get_git_ref() -> String {
     if git_branch == "main" {
         git_describe
     } else {
-        format!("{}-{}", git_describe, git_branch)
+        format!("{git_describe}-{git_branch}")
     }
 }

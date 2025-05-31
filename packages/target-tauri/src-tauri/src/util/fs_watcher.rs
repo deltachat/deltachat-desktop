@@ -41,9 +41,9 @@ where
 
     while let Some(res) = rx.recv().await {
         match res {
-            Err(e) => log::error!("watch error: {:?}", e),
+            Err(e) => log::error!("watch error: {e:?}"),
             Ok(event) => {
-                log::trace!("changed: {:?}", event);
+                log::trace!("changed: {event:?}");
                 if event.kind.is_create() || event.kind.is_modify() || event.kind.is_remove() {
                     let now = Instant::now();
                     if now.saturating_duration_since(last_action) < delay {

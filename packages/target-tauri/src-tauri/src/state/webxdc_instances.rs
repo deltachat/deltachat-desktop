@@ -86,8 +86,8 @@ impl WebxdcInstancesState {
         self.inner
             .read()
             .await
-            .iter()
-            .map(|(window_label, _)| window_label.to_owned())
+            .keys()
+            .map(|window_label| window_label.to_owned())
             .collect()
     }
     pub(crate) async fn get_all_webxdc_windows_for_account_id(

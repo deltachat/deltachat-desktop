@@ -37,8 +37,7 @@ pub(crate) fn email_protocol<R: tauri::Runtime>(
     let webview_label = ctx.webview_label();
     if !webview_label.starts_with("html-window:") || !webview_label.ends_with("-mail") {
         error!(
-            "prevented other window from accessing email:// scheme (webview label: {})",
-            webview_label
+            "prevented other window from accessing email:// scheme (webview label: {webview_label})"
         );
         return;
     }
