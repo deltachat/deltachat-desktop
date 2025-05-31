@@ -716,6 +716,12 @@ class TauriRuntime implements Runtime {
       permission: mediaTypeToPermission[mediaType],
     })
   }
+  increaseZoom(): void {
+    throw new Error('Method not implemented: runtime.increaseZoom')
+  }
+  decreaseZoom(): void {
+    throw new Error('Method not implemented: runtime.decreaseZoom')
+  }
 }
 const mediaTypeToPermission: Record<MediaType, string> = {
   camera: 'video',
