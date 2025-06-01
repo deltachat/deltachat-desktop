@@ -113,7 +113,11 @@ export function init(options: { hidden: boolean }) {
   window.on('resize', saveBounds)
 
   window.once('show', () => {
-    mainWindow.webContents.setZoomFactor(DesktopSettings.state.zoomFactor)
+    if (DesktopSettings.state.zoomFactor > 0) {
+      // apply existing legacy zoomFactor once before setting it to 0
+      mainWindow.webContents.setZoomFactor(DesktopSettings.state.zoomFactor)
+      DesktopSettings.update({ zoomFactor: 0 })
+    }
   })
   window.on('close', () => {})
   window.on('blur', () => {
