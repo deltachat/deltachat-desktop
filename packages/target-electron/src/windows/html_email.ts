@@ -68,7 +68,8 @@ export function openHtmlEmailWindow(
     y: undefined,
   }
 
-  const zoomFactor = mainWindow.window?.webContents.getZoomFactor() || 1.0
+  const mainWindowZoomFactor =
+    mainWindow.window?.webContents.getZoomFactor() || 1.0
 
   const window = (open_windows[window_id] = new electron.BrowserWindow({
     backgroundColor: '#282828',
@@ -94,7 +95,7 @@ export function openHtmlEmailWindow(
     },
     alwaysOnTop: mainWindow?.isAlwaysOnTop(),
   }))
-  window.webContents.setZoomFactor(zoomFactor)
+  window.webContents.setZoomFactor(mainWindowZoomFactor)
 
   setContentProtection(window)
 
@@ -239,7 +240,7 @@ export function openHtmlEmailWindow(
   )
   window.contentView.addChildView(sandboxedView)
   sandboxedView.webContents.setZoomFactor(
-    zoomFactor * Math.pow(1.2, window.webContents.getZoomLevel())
+    mainWindowZoomFactor * Math.pow(1.2, window.webContents.getZoomLevel())
   )
   let context_menu_handle = createContextMenu(window, sandboxedView.webContents)
 
@@ -297,7 +298,7 @@ export function openHtmlEmailWindow(
     'html-view:resize-content',
     (_ev, bounds: Electron.Rectangle) => {
       const contentZoomFactor =
-        zoomFactor * Math.pow(1.2, window.webContents.getZoomLevel())
+        mainWindowZoomFactor * Math.pow(1.2, window.webContents.getZoomLevel())
       const windowZoomFactor = window.webContents.getZoomFactor()
 
       const window_bounds = window.getBounds()
