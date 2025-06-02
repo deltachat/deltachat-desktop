@@ -113,11 +113,11 @@ export function init(options: { hidden: boolean }) {
   window.on('resize', saveBounds)
 
   window.once('show', () => {
-    if (DesktopSettings.state.zoomFactor !== null) {
+    if (DesktopSettings.state.zoomFactor !== undefined) {
       // apply existing legacy zoomFactor once
       mainWindow.webContents.setZoomFactor(DesktopSettings.state.zoomFactor)
       // we don't save or read zoomFactor from settings any more
-      DesktopSettings.update({ zoomFactor: null })
+      DesktopSettings.update({ zoomFactor: undefined })
     }
   })
   window.on('close', () => {})

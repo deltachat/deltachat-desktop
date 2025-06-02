@@ -44,7 +44,7 @@ export interface DesktopSettingsType {
   /** @deprecated we don't store/read the zoomFactor from settings since PR #5175
    *  chromium saves it per same-origin
    */
-  zoomFactor: number | null
+  zoomFactor: number | undefined
   /** address to the active theme file scheme: "custom:name" or "dc:name" */
   activeTheme: string
   minimizeToTray: boolean
