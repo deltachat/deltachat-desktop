@@ -12,6 +12,7 @@
 - translate "Emoji" and "Sticker" in emoji & sticker picker
 - tauri: fix webxdc apps not receiving `visibilitychange`, `beforeunload` and `pagehide` when the window gets closed (except on macOS) #5065
 - tauri: save zoom level between webxdc app launches #5163
+- tauri: prevent moving around of the whole app with the touchpad gestures on windows
 
 <a id="1_59_1"></a>
 

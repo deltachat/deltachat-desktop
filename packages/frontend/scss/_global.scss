@@ -28,6 +28,12 @@ body {
     --font-family: var(--fonts-system);
     font-family: var(--font-family);
   }
+
+  /*
+  prevent moving around of the whole app with the touchpad gestures on tauri windows
+  see https://github.com/deltachat/deltachat-desktop/issues/5075
+  */
+  overscroll-behavior: none;
 }
 
 #color-input-wrapper {
