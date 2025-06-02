@@ -188,10 +188,6 @@ pub fn run() -> i32 {
                             original_label
                         }
                     })
-                    // Disabled for webxdc, because we generate a new UUID label
-                    // every time we create a webxdc window,
-                    // so it doesn't make sense to store it. TODO (https://github.com/deltachat/deltachat-desktop/issues/4468)
-                    .with_filter(|label| !label.starts_with("webxdc:"))
                     .build(),
             )
             .plugin(tauri_plugin_single_instance::init(move |app, args, cwd| {
