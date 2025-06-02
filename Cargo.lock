@@ -1931,6 +1931,7 @@ dependencies = [
  "register-default-handler",
  "serde",
  "serde_json",
+ "sha2",
  "strum 0.27.1",
  "system_permissions",
  "tauri",
