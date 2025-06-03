@@ -13,16 +13,7 @@ export default function NoChatSelected() {
     : {}
 
   return (
-    <div
-      role='tabpanel'
-      // See MessageListAndComposer as to why this is commented out.
-      // aria-labelledby='tab-message-list-view'
-
-      // The main MessageListAndComposer also has this ID and class.
-      id='message-list-and-composer'
-      className='message-list-and-composer'
-      style={style}
-    >
+    <div className='message-list-and-composer' style={style}>
       <div
         className='message-list-and-composer__message-list'
         style={{ display: 'flex' }}
