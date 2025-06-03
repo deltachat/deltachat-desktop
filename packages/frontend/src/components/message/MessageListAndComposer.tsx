@@ -292,18 +292,6 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
 
   return (
     <div
-      role='tabpanel'
-      // Techically we must apply `aria-labelledby` to `tabpanel`,
-      // but it's a little annoying that screen readers (NVDA)
-      // announce "'Chat' property page" every time
-      // the focus enters this tabpanel, because it's the "default" one,
-      // it's not often that another tab (Gallery) is selected.
-      // So, let's comment this out for now, until we resolve
-      // https://github.com/deltachat/deltachat-desktop/issues/5074.
-      // aria-labelledby='tab-message-list-view'
-
-      // NoChatSelected also has this ID and class.
-      id='message-list-and-composer'
       className='message-list-and-composer'
       style={style}
       ref={conversationRef}

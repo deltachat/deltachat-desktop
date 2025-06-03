@@ -401,17 +401,9 @@ function ChatNavButtons({ chat }: { chat: T.FullChat }) {
 
   return (
     <>
-      <span
-        role='tablist'
-        aria-orientation='horizontal'
-        className='views'
-        data-no-drag-region
-      >
+      <span className='views' data-no-drag-region>
         <Button
-          role='tab'
-          id='tab-media-view'
           onClick={openMediaViewDialog}
-          aria-controls='media-view'
           aria-label={tx('apps_and_media')}
           title={tx('apps_and_media')}
           className='navbar-button'
@@ -420,8 +412,6 @@ function ChatNavButtons({ chat }: { chat: T.FullChat }) {
           <Icon coloring='navbar' icon='apps' size={18} />
         </Button>
         {settingsStore?.desktopSettings.enableOnDemandLocationStreaming && (
-          // Yes, this is not marked as `role='tab'`.
-          // I'm not sure if this is alright.
           <Button
             onClick={() => openMapWebxdc(selectedAccountId(), chatId)}
             aria-label={tx('tab_map')}

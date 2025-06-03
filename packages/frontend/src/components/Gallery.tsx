@@ -302,18 +302,8 @@ export default class Gallery extends Component<
     const showDateHeader =
       currentTab !== 'files' && currentTab !== 'webxdc_apps'
 
-    // FYI the role="tablist" element is not rendered when
-    // `props.chatId === 'all'`.
-    // Would be nice to DRY this somehow.
-    const isTabpanel = this.props.chatId !== 'all'
-
     return (
-      <div
-        role={isTabpanel ? 'tabpanel' : undefined}
-        aria-labelledby={isTabpanel ? 'tab-media-view' : undefined}
-        id='media-view'
-        className='media-view'
-      >
+      <div className='media-view'>
         <ul ref={this.tabListRef} className='tab-list .modifier' role='tablist'>
           <RovingTabindexProvider
             wrapperElementRef={this.tabListRef}

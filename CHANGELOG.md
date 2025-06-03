@@ -9,6 +9,7 @@
 
 ### Fixed
 - fix `runtime.isDroppedFileFromOutside` is not working as indended #5165
+- accessibility: fix incorrect "Gallery" button "tab" role, introduced in 1.59.0
 - tauri: fix drag and drop on macOS #5165
 - translate "Emoji" and "Sticker" in emoji & sticker picker
 - tauri: fix webxdc apps not receiving `visibilitychange`, `beforeunload` and `pagehide` when the window gets closed (except on macOS) #5065
