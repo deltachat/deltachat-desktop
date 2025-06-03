@@ -1,4 +1,10 @@
-import React, { ChangeEvent, Component, createRef, useRef } from 'react'
+import React, {
+  ChangeEvent,
+  Component,
+  createRef,
+  useRef,
+  useState,
+} from 'react'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { FixedSizeGrid, FixedSizeList } from 'react-window'
 import moment from 'moment'
@@ -24,6 +30,8 @@ import {
   RovingTabindexProvider,
   useRovingTabindex,
 } from '../contexts/RovingTabindex'
+import InfiniteLoader from 'react-window-infinite-loader'
+import { T } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('renderer/Gallery')
 
@@ -211,10 +219,11 @@ export default class Gallery extends Component<
     BackendRemote.rpc
       .getChatMedia(accountId, chatId, msgTypes[0], msgTypes[1], null)
       .then(async media_ids => {
-        const mediaLoadResult = await BackendRemote.rpc.getMessages(
-          accountId,
-          media_ids
-        )
+        const mediaLoadResult =
+          tab !== 'files'
+            ? // This state is unused if the tab is not 'files'.
+              []
+            : await BackendRemote.rpc.getMessages(accountId, media_ids)
         media_ids.reverse() // order newest up - if we need different ordering we need to do it in core
         this.setState({
           currentTab: tab,
@@ -291,13 +300,18 @@ export default class Gallery extends Component<
     const tx = window.static_translate // static because dynamic isn't too important here
     const emptyTabMessage = this.emptyTabMessage(currentTab)
 
-    const filteredMediaMessageIds = mediaMessageIds.filter(id => {
-      const result = mediaLoadResult[id]
-      return (
-        result.kind === 'message' &&
-        result.fileName?.toLowerCase().indexOf(queryText.toLowerCase()) !== -1
-      )
-    })
+    const filteredMediaMessageIds =
+      currentTab !== 'files'
+        ? []
+        : mediaMessageIds.filter(id => {
+            const result = mediaLoadResult[id]
+            return (
+              result.kind === 'message' &&
+              result.fileName
+                ?.toLowerCase()
+                .indexOf(queryText.toLowerCase()) !== -1
+            )
+          })
 
     const showDateHeader =
       currentTab !== 'files' && currentTab !== 'webxdc_apps'
@@ -403,88 +417,16 @@ export default class Gallery extends Component<
             )}
 
             {currentTab !== 'files' && (
-              <AutoSizer>
-                {({ width, height }) => {
-                  const widthWithoutScrollbar = width - this.scrollbarWidth
-
-                  let minWidth = 160
-
-                  if (currentTab === 'webxdc_apps') {
-                    minWidth = 265
-                  } else if (currentTab === 'audio') {
-                    minWidth = 322
-                  }
-
-                  const itemsPerRow = Math.max(
-                    Math.floor(widthWithoutScrollbar / minWidth),
-                    1
-                  )
-
-                  const itemWidth = widthWithoutScrollbar / itemsPerRow
-
-                  const rowCount = Math.ceil(
-                    mediaMessageIds.length / itemsPerRow
-                  )
-
-                  let itemHeight = itemWidth
-
-                  if (currentTab === 'webxdc_apps') {
-                    itemHeight = 61
-                  } else if (currentTab === 'audio') {
-                    itemHeight = 94
-                  }
-
-                  return (
-                    <RovingTabindexProvider
-                      wrapperElementRef={this.galleryItemsRef}
-                      // TODO improvement: perhaps we can easily write
-                      // proper grid navigation,
-                      // since grid dimensions are known.
-                      direction='both'
-                    >
-                      <FixedSizeGrid
-                        width={width}
-                        height={height}
-                        columnWidth={itemWidth}
-                        rowHeight={itemHeight}
-                        columnCount={itemsPerRow}
-                        rowCount={rowCount}
-                        overscanRowCount={10}
-                        onItemsRendered={({
-                          visibleColumnStartIndex,
-                          visibleRowStartIndex,
-                        }) => {
-                          const msgId =
-                            mediaMessageIds[
-                              visibleRowStartIndex * itemsPerRow +
-                                visibleColumnStartIndex
-                            ]
-                          const message = mediaLoadResult[msgId]
-                          if (!message) {
-                            return
-                          }
-                          this.updateFirstVisibleMessage(message)
-                        }}
-                        itemData={{
-                          Component: this.state.element,
-                          mediaMessageIds,
-                          mediaLoadResult,
-                          openFullscreenMedia:
-                            this.openFullscreenMedia.bind(this),
-                          itemsPerRow,
-                        }}
-                        itemKey={({ rowIndex, columnIndex, data }) =>
-                          data.mediaMessageIds[
-                            rowIndex * itemsPerRow + columnIndex
-                          ]
-                        }
-                      >
-                        {GalleryGridCell}
-                      </FixedSizeGrid>
-                    </RovingTabindexProvider>
-                  )
-                }}
-              </AutoSizer>
+              <GridGallery
+                currentTab={currentTab}
+                element={this.state.element}
+                openFullscreenMedia={this.openFullscreenMedia.bind(this)}
+                mediaMessageIds={mediaMessageIds}
+                galleryItemsRef={this.galleryItemsRef}
+                updateFirstVisibleMessage={this.updateFirstVisibleMessage.bind(
+                  this
+                )}
+              />
             )}
           </div>
         </div>
@@ -492,6 +434,170 @@ export default class Gallery extends Component<
     )
   }
 }
+
+const enum LoadStatus {
+  FETCHING = 1,
+  LOADED = 2,
+}
+
+function GridGallery({
+  currentTab,
+  mediaMessageIds,
+  galleryItemsRef,
+  updateFirstVisibleMessage,
+  element,
+  openFullscreenMedia,
+}: {
+  currentTab: MediaTabKey
+  mediaMessageIds: number[]
+  galleryItemsRef: React.RefObject<HTMLDivElement | null>
+  updateFirstVisibleMessage: (msg: T.MessageLoadResult) => void
+  element: GalleryElement
+  openFullscreenMedia: (message: Type.Message) => void
+}): React.ReactNode {
+  const accountId = selectedAccountId()
+
+  const [messageCache, setMessageCache] = useState<{
+    [id: number]: T.MessageLoadResult | undefined
+  }>({})
+  const [messageLoadState, setMessageLoading] = useState<{
+    [id: number]: undefined | LoadStatus.FETCHING | LoadStatus.LOADED
+  }>({})
+
+  const isMessageLoaded: (index: number) => boolean = index =>
+    !!messageLoadState[mediaMessageIds[index]]
+  const loadMessages: (startIndex: number, stopIndex: number) => void = (
+    startIndex,
+    stopIndex
+  ) => {
+    const ids = mediaMessageIds.slice(startIndex, stopIndex + 1)
+    setMessageLoading(prevState => {
+      const newState = { ...prevState }
+      ids.forEach(id => (newState[id] = LoadStatus.FETCHING))
+      return newState
+    })
+    BackendRemote.rpc.getMessages(accountId, ids).then(messages => {
+      setMessageCache(cache => ({ ...cache, ...messages }))
+      setMessageLoading(prevState => {
+        const newState = { ...prevState }
+        ids.forEach(id => (newState[id] = LoadStatus.LOADED))
+        return newState
+      })
+    })
+  }
+
+  return (
+    <AutoSizer>
+      {({ width, height }) => {
+        const widthWithoutScrollbar =
+          width - getCurrentDocumentVerticalScrollbarWidth()
+
+        let minWidth = 160
+
+        if (currentTab === 'webxdc_apps') {
+          minWidth = 265
+        } else if (currentTab === 'audio') {
+          minWidth = 322
+        }
+
+        const itemsPerRow = Math.max(
+          Math.floor(widthWithoutScrollbar / minWidth),
+          1
+        )
+
+        const itemWidth = widthWithoutScrollbar / itemsPerRow
+
+        const rowCount = Math.ceil(mediaMessageIds.length / itemsPerRow)
+
+        let itemHeight = itemWidth
+
+        if (currentTab === 'webxdc_apps') {
+          itemHeight = 61
+        } else if (currentTab === 'audio') {
+          itemHeight = 94
+        }
+
+        return (
+          <RovingTabindexProvider
+            wrapperElementRef={galleryItemsRef}
+            // TODO improvement: perhaps we can easily write
+            // proper grid navigation,
+            // since grid dimensions are known.
+            direction='both'
+          >
+            <InfiniteLoader
+              isItemLoaded={isMessageLoaded}
+              itemCount={mediaMessageIds.length}
+              loadMoreItems={loadMessages}
+            >
+              {({ onItemsRendered, ref }) => (
+                <FixedSizeGrid
+                  width={width}
+                  height={height}
+                  columnWidth={itemWidth}
+                  rowHeight={itemHeight}
+                  columnCount={itemsPerRow}
+                  rowCount={rowCount}
+                  overscanRowCount={itemsPerRow * 10}
+                  ref={ref}
+                  onItemsRendered={props => {
+                    const { visibleColumnStartIndex, visibleRowStartIndex } =
+                      props
+                    const msgId =
+                      mediaMessageIds[
+                        visibleRowStartIndex * itemsPerRow +
+                          visibleColumnStartIndex
+                      ]
+                    const message = messageCache[msgId]
+                    if (message) {
+                      updateFirstVisibleMessage(message)
+                    }
+                    const translatedProps = {
+                      overscanStartIndex: Math.min(
+                        mediaMessageIds.length - 1,
+                        props.overscanRowStartIndex * itemsPerRow +
+                          props.overscanColumnStartIndex
+                      ),
+                      overscanStopIndex: Math.min(
+                        mediaMessageIds.length - 1,
+                        props.overscanRowStopIndex * itemsPerRow +
+                          props.overscanColumnStopIndex
+                      ),
+                      visibleStartIndex: Math.min(
+                        mediaMessageIds.length - 1,
+                        visibleRowStartIndex * itemsPerRow +
+                          visibleColumnStartIndex
+                      ),
+                      visibleStopIndex: Math.min(
+                        mediaMessageIds.length - 1,
+                        props.visibleRowStopIndex * itemsPerRow +
+                          props.visibleColumnStopIndex
+                      ),
+                    }
+                    onItemsRendered(translatedProps)
+                  }}
+                  itemData={{
+                    Component: element,
+                    mediaMessageIds,
+                    messageCache,
+                    openFullscreenMedia,
+                    itemsPerRow,
+                  }}
+                  itemKey={({ rowIndex, columnIndex, data }) =>
+                    data.mediaMessageIds[rowIndex * itemsPerRow + columnIndex]
+                  }
+                >
+                  {GalleryGridCell}
+                </FixedSizeGrid>
+              )}
+            </InfiniteLoader>
+          </RovingTabindexProvider>
+        )
+      }}
+    </AutoSizer>
+  )
+}
+
 function GalleryGridCell({
   columnIndex,
   rowIndex,
@@ -504,7 +610,7 @@ function GalleryGridCell({
   data: {
     Component: GalleryElement
     mediaMessageIds: number[]
-    mediaLoadResult: Record<number, Type.MessageLoadResult>
+    messageCache: Record<number, Type.MessageLoadResult | undefined>
     openFullscreenMedia: (message: Type.Message) => void
     itemsPerRow: number
   }
@@ -512,14 +618,15 @@ function GalleryGridCell({
   const {
     Component,
     mediaMessageIds,
-    mediaLoadResult,
+    messageCache,
     openFullscreenMedia,
     itemsPerRow,
   } = data
 
   const msgId = mediaMessageIds[rowIndex * itemsPerRow + columnIndex]
-  const message = mediaLoadResult[msgId]
+  const message = messageCache[msgId]
   if (!message) {
+    // todo skeleton item (for each mode a fitting shape: image, video, audio, webxdc)
     return null
   }
   return (

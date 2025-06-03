@@ -25,6 +25,9 @@
 - add flatpak support for tauri
 - add drag and drop to tauri
 
+### Changed
+- infinite loading for gallery #4868
+
 ### Fixed
 - improve performance a little
 - show all shared chats at once in contact profile #4982
