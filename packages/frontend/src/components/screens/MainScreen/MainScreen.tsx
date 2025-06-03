@@ -464,6 +464,7 @@ function AppIcons({
             className={styles.webxdcIcon}
             src={runtime.getWebxdcIconURL(accountId, app.id)}
             alt={app.webxdcInfo?.name}
+            onContextMenu={(e: React.MouseEvent) => e.preventDefault()}
           />
         </Button>
       ))}
