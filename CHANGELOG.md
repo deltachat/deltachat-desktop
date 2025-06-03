@@ -6,6 +6,7 @@
 - Zoom In/Out with Ctrl +/- #890
 
 ### Changed
+- reverse order of recent webxdc apps in chat header (last item means last message)
 
 ### Fixed
 - fix `runtime.isDroppedFileFromOutside` is not working as indended #5165

@@ -160,7 +160,6 @@ export default function MainScreen({ accountId }: Props) {
         null,
         null
       )
-      mediaIds.reverse() // newest first
       const mediaLoadResult = await BackendRemote.rpc.getMessages(
         accountId,
         mediaIds.slice(0, maxIcons)
