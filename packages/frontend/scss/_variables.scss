@@ -28,6 +28,9 @@ $border-radius: 5px;
 
 $font-size: 14px;
 
+// Breakpoint for messages/images in message list
+$breakpoint-messagelist: 900px;
+
 // Get these keys via: `map-get($z-index, keyname)`
 $z-index: (
   // Local Scopes

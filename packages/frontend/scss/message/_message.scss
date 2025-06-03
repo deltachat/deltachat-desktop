@@ -1,4 +1,5 @@
 @use '../mixins';
+@use '../variables';
 
 .message-wrapper {
   --shortcut-menu-visibility: hidden;
@@ -385,7 +386,7 @@
   }
 }
 
-@media (max-width: 925px) {
+@media (max-width: variables.$breakpoint-messagelist) {
   .message {
     max-width: 100%;
 
