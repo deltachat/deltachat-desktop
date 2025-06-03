@@ -221,7 +221,8 @@ export default class Gallery extends Component<
       .then(async media_ids => {
         const mediaLoadResult =
           tab !== 'files'
-            ? []
+            ? // This state is unused if the tab is not 'files'.
+              []
             : await BackendRemote.rpc.getMessages(accountId, media_ids)
         media_ids.reverse() // order newest up - if we need different ordering we need to do it in core
         this.setState({
@@ -470,15 +471,17 @@ function GridGallery({
     stopIndex
   ) => {
     const ids = mediaMessageIds.slice(startIndex, stopIndex + 1)
-    setMessageLoading(state => {
-      ids.forEach(id => (state[id] = LoadStatus.FETCHING))
-      return state
+    setMessageLoading(prevState => {
+      const newState = { ...prevState }
+      ids.forEach(id => (newState[id] = LoadStatus.FETCHING))
+      return newState
     })
     BackendRemote.rpc.getMessages(accountId, ids).then(messages => {
       setMessageCache(cache => ({ ...cache, ...messages }))
-      setMessageLoading(state => {
-        ids.forEach(id => (state[id] = LoadStatus.LOADED))
-        return state
+      setMessageLoading(prevState => {
+        const newState = { ...prevState }
+        ids.forEach(id => (newState[id] = LoadStatus.LOADED))
+        return newState
       })
     })
   }
