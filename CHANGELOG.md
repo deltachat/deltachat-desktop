@@ -8,6 +8,7 @@
 ### Changed
 
 ### Fixed
+- fix "Copy Selected Text" item never appearing in message context menu
 - fix `runtime.isDroppedFileFromOutside` is not working as indended #5165
 - tauri: fix drag and drop on macOS #5165
 - translate "Emoji" and "Sticker" in emoji & sticker picker
