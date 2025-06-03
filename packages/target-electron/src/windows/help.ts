@@ -157,9 +157,21 @@ export async function openHelpWindow(locale: string, anchor?: string) {
       {
         label: tx('global_menu_view_desktop'),
         submenu: [
-          { role: 'resetZoom' },
-          { role: 'zoomIn' },
-          { role: 'zoomOut' },
+          {
+            accelerator: 'CmdOrCtrl+=',
+            label: tx('menu_zoom_in'),
+            role: 'zoomIn',
+          },
+          {
+            accelerator: 'CmdOrCtrl+-',
+            label: tx('menu_zoom_out'),
+            role: 'zoomOut',
+          },
+          {
+            accelerator: 'CmdOrCtrl+0',
+            label: `${tx('reset')}`,
+            role: 'resetZoom',
+          },
           { type: 'separator' },
           {
             label: tx('global_menu_view_floatontop_desktop'),
