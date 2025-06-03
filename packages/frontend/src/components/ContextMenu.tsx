@@ -131,7 +131,10 @@ export function ContextMenuLayer({
     setPosition({ top, left })
   }, [])
 
-  const cancel = useCallback(() => {
+  const cancel = useCallback((evt?: React.MouseEvent) => {
+    // Prevent default since ContextMenuLayer is only visible
+    // when a context menu is already open
+    evt?.preventDefault()
     window.__setContextMenuActive(false)
     setCurrentItems([])
     layerRef.current?.close()
@@ -174,7 +177,7 @@ export function ContextMenu(props: {
   rightLimit: number
   items: (ContextMenuItem | false)[]
   openCallback: (el: HTMLDivElement | null) => void
-  closeCallback: () => void
+  closeCallback: (evt?: React.MouseEvent) => void
 }) {
   const { closeCallback } = props
 
@@ -339,7 +342,7 @@ export function ContextMenu(props: {
       }
     }
 
-    const onResize = (_ev: UIEvent) => closeCallback()
+    const onResize = () => closeCallback()
 
     document.addEventListener('keydown', onKeyDown)
     window.addEventListener('resize', onResize)
