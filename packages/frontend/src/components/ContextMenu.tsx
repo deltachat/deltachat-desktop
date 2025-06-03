@@ -131,7 +131,8 @@ export function ContextMenuLayer({
     setPosition({ top, left })
   }, [])
 
-  const cancel = useCallback(() => {
+  const cancel = useCallback((evt: React.MouseEvent) => {
+    evt.preventDefault()
     window.__setContextMenuActive(false)
     setCurrentItems([])
     layerRef.current?.close()
