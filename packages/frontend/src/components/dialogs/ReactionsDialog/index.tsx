@@ -155,7 +155,10 @@ function ReactionsDialogListItem(props: {
         />
       </div>
       <div className={styles.reactionsDialogContactName}>
-        <ContactName displayName={contact.displayName} />
+        <ContactName
+          displayName={contact.displayName}
+          isPgpContact={contact.isPgpContact}
+        />
       </div>
       <div className={styles.reactionsDialogEmoji}>{contact.emoji}</div>
     </button>

@@ -6,6 +6,7 @@
 - Zoom In/Out with Ctrl +/- #890
 
 ### Changed
+- show icons for classical email contacts & non encrypted chats #5090
 
 ### Fixed
 - fix "Copy Selected Text" item never appearing in message context menu

@@ -8,6 +8,7 @@ type Props = {
   displayName: string
   address?: string
   isVerified?: boolean
+  isPgpContact?: boolean
 }
 
 export default function ContactName(props: Props) {
