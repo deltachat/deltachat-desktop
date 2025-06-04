@@ -16,6 +16,7 @@
 - tauri: fix webxdc apps not receiving `visibilitychange`, `beforeunload` and `pagehide` when the window gets closed (except on macOS) #5065
 - tauri: save zoom level between webxdc app launches #5163
 - tauri: prevent moving around of the whole app with the touchpad gestures on windows #5182
+- fix horizontal scroll in message list #5162
 
 <a id="1_59_1"></a>
 

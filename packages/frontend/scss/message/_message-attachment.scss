@@ -1,4 +1,5 @@
 @use '../mixins';
+@use '../variables';
 // "Has content above" selector
 // (i.e. author title, "Forwarded" indicator, quote).
 //
@@ -101,8 +102,7 @@
     border-top-right-radius: 0px;
   }
 }
-
-@media (max-width: 900px) {
+@media (max-width: variables.$breakpoint-messagelist) {
   .message-attachment-media {
     & > .attachment-content {
       max-width: 100%;
