@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import AbsolutePositioningHelper from '../AbsolutePositioningHelper'
 import OutsideClickHelper from '../OutsideClickHelper'
@@ -38,6 +38,18 @@ export const ReactionsBarProvider = ({ children }: PropsWithChildren<{}>) => {
     hideReactionsBar,
     isReactionsBarShown: barArgs !== null,
   }
+
+  useEffect(() => {
+    const hideOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && barArgs !== null) {
+        hideReactionsBar()
+      }
+    }
+    window.addEventListener('keyup', hideOnEscape)
+    return () => {
+      window.removeEventListener('keyup', hideOnEscape)
+    }
+  }, [barArgs])
 
   return (
     <ReactionsBarContext.Provider value={value}>
