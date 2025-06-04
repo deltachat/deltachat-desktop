@@ -60,6 +60,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
     previous: false,
     next: false,
   })
+  const [contextMenuOpen, setContextMenuOpen] = useState(false)
 
   const [mediaMessageList, setMediaMessageList] = useState<number[]>([])
   useEffect(() => {
@@ -127,6 +128,14 @@ export default function FullscreenMedia(props: Props & DialogProps) {
     },
   ])
 
+  const openContextmenu = useCallback(
+    (evt: React.MouseEvent) => {
+      openMenu(evt)
+      setContextMenuOpen(true)
+    },
+    [openMenu]
+  )
+
   let elm = null
 
   if (isImage(fileMime)) {
@@ -143,7 +152,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
               <TransformComponent>
                 <div
                   className='image-context-menu-container'
-                  onContextMenu={openMenu}
+                  onContextMenu={openContextmenu}
                   tabIndex={0}
                 >
                   <img
@@ -250,6 +259,16 @@ export default function FullscreenMedia(props: Props & DialogProps) {
       if (ev.repeat) {
         return
       }
+      if (ev.code === 'Escape') {
+        if (contextMenuOpen) {
+          setContextMenuOpen(false)
+          ev.preventDefault()
+          ev.stopPropagation()
+          return
+        }
+        onClose()
+        return
+      }
       const left = ev.code === 'ArrowLeft'
       const right = ev.code === 'ArrowRight'
       if (!left && !right) {
@@ -265,12 +284,12 @@ export default function FullscreenMedia(props: Props & DialogProps) {
     }
     document.addEventListener('keydown', listener)
     return () => document.removeEventListener('keydown', listener)
-  }, [previousImage, nextImage])
+  }, [previousImage, nextImage, contextMenuOpen, onClose])
 
   if (!msg || !msg.file) return elm
 
   return (
-    <Dialog unstyled onClose={onClose}>
+    <Dialog unstyled onClose={onClose} canEscapeKeyClose={false}>
       <div className='attachment-view'>{elm}</div>
       {runtime.getRuntimeInfo().isMac && (
         <div className='attachment-view-drag-bar' data-tauri-drag-region></div>

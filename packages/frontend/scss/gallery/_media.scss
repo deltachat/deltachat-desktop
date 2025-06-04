@@ -82,3 +82,7 @@ $tab-height: 46px;
     }
   }
 }
+
+.image-context-menu-container:focus-visible {
+  outline: none;
+}
