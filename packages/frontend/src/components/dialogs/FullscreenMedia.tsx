@@ -13,7 +13,7 @@ import { useInitEffect } from '../helpers/hooks'
 import { BackendRemote, onDCEvent, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useContextMenu from '../../hooks/useContextMenu'
+import { useContextMenuWithActiveState } from '../ContextMenu'
 import useMessage from '../../hooks/chat/useMessage'
 
 import type { DialogProps } from '../../contexts/DialogContext'
@@ -60,7 +60,6 @@ export default function FullscreenMedia(props: Props & DialogProps) {
     previous: false,
     next: false,
   })
-  const [contextMenuOpen, setContextMenuOpen] = useState(false)
 
   const [mediaMessageList, setMediaMessageList] = useState<number[]>([])
   useEffect(() => {
@@ -102,7 +101,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
     throw new Error('file attribute not set')
   }
 
-  const openMenu = useContextMenu([
+  const { isContextMenuActive, onContextMenu } = useContextMenuWithActiveState([
     {
       label: tx('menu_copy_image_to_clipboard'),
       action: () => {
@@ -128,14 +127,6 @@ export default function FullscreenMedia(props: Props & DialogProps) {
     },
   ])
 
-  const openContextmenu = useCallback(
-    (evt: React.MouseEvent) => {
-      openMenu(evt)
-      setContextMenuOpen(true)
-    },
-    [openMenu]
-  )
-
   let elm = null
 
   if (isImage(fileMime)) {
@@ -152,7 +143,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
               <TransformComponent>
                 <div
                   className='image-context-menu-container'
-                  onContextMenu={openContextmenu}
+                  onContextMenu={onContextMenu}
                   tabIndex={0}
                 >
                   <img
@@ -259,14 +250,8 @@ export default function FullscreenMedia(props: Props & DialogProps) {
       if (ev.repeat) {
         return
       }
-      if (ev.code === 'Escape') {
-        if (contextMenuOpen) {
-          setContextMenuOpen(false)
-          ev.preventDefault()
-          ev.stopPropagation()
-          return
-        }
-        onClose()
+      if (ev.code === 'Escape' && isContextMenuActive) {
+        ev.preventDefault()
         return
       }
       const left = ev.code === 'ArrowLeft'
@@ -284,12 +269,12 @@ export default function FullscreenMedia(props: Props & DialogProps) {
     }
     document.addEventListener('keydown', listener)
     return () => document.removeEventListener('keydown', listener)
-  }, [previousImage, nextImage, contextMenuOpen, onClose])
+  }, [previousImage, nextImage, isContextMenuActive])
 
   if (!msg || !msg.file) return elm
 
   return (
-    <Dialog unstyled onClose={onClose} canEscapeKeyClose={false}>
+    <Dialog unstyled onClose={onClose}>
       <div className='attachment-view'>{elm}</div>
       {runtime.getRuntimeInfo().isMac && (
         <div className='attachment-view-drag-bar' data-tauri-drag-region></div>
