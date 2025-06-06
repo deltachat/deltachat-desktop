@@ -251,6 +251,8 @@ export default function FullscreenMedia(props: Props & DialogProps) {
         return
       }
       if (ev.code === 'Escape' && isContextMenuActive) {
+        // Only close the context menu, instead of closing both
+        // the context menu and the whole FullscreenMedia dialog.
         ev.preventDefault()
         return
       }
