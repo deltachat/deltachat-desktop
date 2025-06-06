@@ -82,3 +82,9 @@ $tab-height: 46px;
     }
   }
 }
+
+.image-context-menu-container:focus-visible {
+  // This element gets focused by default when you open
+  // the fullscreen media. Outlining it is unnecessary.
+  outline: none;
+}
