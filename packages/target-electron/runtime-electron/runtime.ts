@@ -143,7 +143,7 @@ class ElectronRuntime implements Runtime {
   isDroppedFileFromOutside(file: string): boolean {
     // ".sqlite-blobs" is the old folder name that could still be there in old accounts
     const forbiddenPathRegEx = /DeltaChat\/.+?(\.sqlite-blobs|\.db-blobs)\//gi
-    return !forbiddenPathRegEx.test(file.replace('\\', '/'))
+    return !forbiddenPathRegEx.test(file.replaceAll('\\', '/'))
   }
   onThemeUpdate: (() => void) | undefined
   onChooseLanguage: ((locale: string) => Promise<void>) | undefined
