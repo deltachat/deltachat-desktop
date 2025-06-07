@@ -11,7 +11,7 @@
 - fix notifications not working sometimes, introduced in 1.59.1
 - fix dropping files from outside not working on Windows, introduced in 1.59.1
 - fix "Copy Selected Text" item never appearing in message context menu
-- fix `runtime.isDroppedFileFromOutside` is not working as indended #5165
+- fix `runtime.isDroppedFileFromOutside` is not working as indended #5165, #5197
 - accessibility: fix incorrect "Gallery" button "tab" role, introduced in 1.59.0
 - tauri: fix drag and drop on macOS #5165
 - translate "Emoji" and "Sticker" in emoji & sticker picker
