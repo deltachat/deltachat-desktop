@@ -13,6 +13,7 @@
 - Zoom In/Out with Ctrl +/- #890
 
 ### Changed
+- tauri: macOS: webxdc: Remove the nowhere-proxy to support pre-14 macOS.
 
 ### Fixed
 - fix notifications not working sometimes, introduced in 1.59.1
