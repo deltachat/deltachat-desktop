@@ -326,15 +326,6 @@ pub(crate) async fn open_webxdc<'a>(
         WebviewUrl::CustomProtocol(initial_url.clone()),
     )
     .initialization_script_for_all_frames(INIT_SCRIPT)
-    // Use a non-working proxy to almost(!) isolate the app
-    // from the internet.
-    // "Almost" because there are still cases where the webview
-    // will bypass the proxy, such as with WebRTC.
-    // To disable WebRTC, we take separate measures.
-    //
-    // Note that `additional_browser_args` might make `proxy_url`
-    // have no effect (see below).
-    .proxy_url(dummy_localhost_proxy_url.clone())
     .devtools({
         // Dev tools might not work on macOS in production,
         // see comments around `enableWebxdcDevTools`.
@@ -355,6 +346,20 @@ pub(crate) async fn open_webxdc<'a>(
             .unwrap_or(false)
     })
     .on_navigation(move |url| url.origin_no_opaque() == initial_url_clone.origin_no_opaque());
+
+    // This is only for non-macOS platforms.
+    // Use a non-working proxy to almost(!) isolate the app
+    // from the internet.
+    // "Almost" because there are still cases where the webview
+    // will bypass the proxy, such as with WebRTC.
+    // To disable WebRTC, we take separate measures.
+    //
+    // Note that `additional_browser_args` might make `proxy_url`
+    // have no effect (see below).
+    #[cfg(not(target_os = "macos"))]
+    {
+        window_builder = window_builder.proxy_url(dummy_localhost_proxy_url.clone());
+    }
 
     // This is only for Chromium (i.e. Windows).
     // Note that this will make `WebviewWindowBuilder::proxy_url`,
