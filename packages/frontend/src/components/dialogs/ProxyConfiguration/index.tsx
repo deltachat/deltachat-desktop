@@ -18,7 +18,7 @@ import Button from '../../Button'
 
 import styles from './styles.module.scss'
 import { Proxy } from '../../Settings/DefaultCredentials'
-import { debounceWithInit } from '../../chat/ChatListHelpers'
+import { debounce } from 'debounce'
 
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { unknownErrorToString } from '../../helpers/unknownErrorToString'
@@ -209,27 +209,32 @@ export default function ProxyConfiguration(
   )
 
   useEffect(() => {
-    let removeConnectivityListener = () => {}
-    const checkConnectivity = async () => {
-      if (configured) {
-        const connectivity = await BackendRemote.rpc.getConnectivity(accountId)
-        setConnectivityStatus(connectivity)
-        removeConnectivityListener = onDCEvent(
-          accountId,
-          'ConnectivityChanged',
-          () =>
-            debounceWithInit(async () => {
-              const connectivity =
-                await BackendRemote.rpc.getConnectivity(accountId)
-              setConnectivityStatus(connectivity)
-            }, 300)()
-        )
+    let outdated = false
+
+    if (!configured) {
+      return
+    }
+
+    const update = async () => {
+      const connectivity = await BackendRemote.rpc.getConnectivity(accountId)
+
+      if (outdated) {
+        return
       }
+
+      setConnectivityStatus(connectivity)
     }
-    checkConnectivity()
-    return () => {
-      removeConnectivityListener()
-    }
+
+    const debouncedUpdate = debounce(update, 300)
+    debouncedUpdate()
+    debouncedUpdate.flush()
+
+    const cleanup = [
+      onDCEvent(accountId, 'ConnectivityChanged', debouncedUpdate),
+      () => debouncedUpdate.clear(),
+      () => (outdated = true),
+    ]
+    return () => cleanup.forEach(off => off())
   }, [accountId, configured])
 
   /**
