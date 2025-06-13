@@ -57,7 +57,6 @@ export default function ProxyConfiguration(
   const [newProxyUrl, setNewProxyUrl] = useState('')
 
   const [showNewProxyForm, setShowNewProxyForm] = useState(false)
-  const [showEnableSwitch, setShowEnableSwitch] = useState(false)
 
   // updated on connectivity change
   const [connectivityStatus, setConnectivityStatus] = useState(
@@ -209,15 +208,6 @@ export default function ProxyConfiguration(
     [proxyState.activeProxy, proxyState.proxies, updateProxyState]
   )
 
-  // show/hide the enable switch
-  useEffect(() => {
-    if (proxyState.enabled) {
-      setShowEnableSwitch(proxyState.proxies.length > 0)
-    } else {
-      setShowEnableSwitch(proxyState.proxies.length > 0)
-    }
-  }, [showEnableSwitch, proxyState.enabled, proxyState.proxies])
-
   useEffect(() => {
     let removeConnectivityListener = () => {}
     const checkConnectivity = async () => {
@@ -344,7 +334,7 @@ export default function ProxyConfiguration(
       />
       <DialogBody className={styles.proxyDialogBody}>
         <div className={styles.container}>
-          {showEnableSwitch && (
+          {proxyState.proxies.length > 0 && (
             <SettingsSwitch
               label={tx('proxy_use_proxy')}
               value={proxyState.enabled}
