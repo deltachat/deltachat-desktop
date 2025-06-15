@@ -19,6 +19,7 @@
 - tauri: save zoom level between webxdc app launches #5163
 - tauri: fix "Connectivity" dialog being unreadable on dark theme
 - tauri: prevent moving around of the whole app with the touchpad gestures on windows #5182
+- tauri: fix fullscreen media view zoom, pan, pinch not working quite right
 - fix horizontal scroll in message list #5162
 
 <a id="1_59_1"></a>
