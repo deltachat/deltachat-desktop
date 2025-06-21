@@ -8,6 +8,14 @@
 
 html {
   height: 100%;
+
+  // Since we're managing the color scheme (theme) manually,
+  // let's specify that we're only supporting this color scheme (dark or light).
+  // This affects some default styles, such as outline color and
+  // input (radio buttons, etc) colors.
+  // Outline color is important, because if we don't do this,
+  // the outline is barely visible on dark theme on Tauri on Windows.
+  color-scheme: var(--themeDarkOrLight);
 }
 
 body {
