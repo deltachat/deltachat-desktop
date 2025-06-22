@@ -60,6 +60,10 @@ jobs:
           projectPath: packages/target-tauri
           args: ${{ matrix.args }}
 
+      - name: log paths
+        run: |
+          echo ${{ steps.build.artifactPaths }}
+
       - uses: actions/upload-artifact@v4
         with:
           name: releases
