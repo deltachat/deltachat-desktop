@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'v*'
+  pull_request: # TODO remove after testing
 
 jobs:
   build-tauri:
@@ -58,7 +59,8 @@ jobs:
         with:
           projectPath: packages/target-tauri
           args: ${{ matrix.args }}
-          tagName: v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version.
-          releaseName: 'v__VERSION__'
-          releaseDraft: true
-          prerelease: false
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: releases
+          path: ${{ steps.build.artifactPaths }}
