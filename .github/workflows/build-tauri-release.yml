@@ -62,9 +62,9 @@ jobs:
 
       - name: log paths
         run: |
-          echo ${{ steps.build.artifactPaths }}
+          echo ${{ steps.build.outputs.artifactPaths }}
 
       - uses: actions/upload-artifact@v4
         with:
-          name: releases
-          path: ${{ steps.build.artifactPaths }}
+          name: releases-${{ matrix.platform }}-${{ matrix.label }}
+          path: ${{ steps.build.outputs.artifactPaths }}
