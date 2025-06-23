@@ -67,7 +67,7 @@ jobs:
       - name: convert paths
         run: |
           node -e '
-          import fs from 'node/fs';
+          import fs from "fs";
           const files = ${{ steps.build.outputs.artifactPaths }}.join("\n");
           fs.appendFile(process.env.GITHUB_ENV,`UPLOAD_PATHS=\"${files}\"\n`, err => {
               if (err){
