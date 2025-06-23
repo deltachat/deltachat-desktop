@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { BackendRemote } from '../backend-com'
 
 type MethodsOnly<T> = {
@@ -51,7 +51,20 @@ export function useRpcFetch<
 ): null | Ret<Method> {
   const returnNull = args == null
   type OkType = Awaited<ReturnType<Method>>
-  const [result, setResult] = useState<Result<OkType> | null>(null)
+
+  const [resultAndFetchId, setResultAndFetchId] = useState<null | {
+    result: Result<OkType>
+    /**
+     * This is needed to keep track of whether we have finished fetching
+     * the newest data after the last dependencies change
+     * (or after the initial render).
+     *
+     * Yes, we could have used just `setResult(null)` when we need a new fetch
+     * (together with `const loading = result === null`),
+     * but that would cause a re-render (which is not good for performance).
+     */
+    fetchId: typeof fetchId
+  }>(null)
 
   const [refreshDummyValue, _setRefreshDummyValue] = useState(0)
   const refresh = useCallback(() => _setRefreshDummyValue(old => old + 1), [])
@@ -61,50 +74,33 @@ export function useRpcFetch<
     // Make sure that we're handling all arguments.
     const _assert: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 = args.length
   }
-  useEffect(() => {
-    if (returnNull) {
-      return
-    }
 
-    let outdated = false
-
-    // If we do introduce `linger`, then `loading` will need to be a `useState`.
-    // if (!options?.linger) {
-    setResult(null)
-    // }
-    // TODO perf: somehow avoid re-render with this `setResult(null)`.
-    // Maybe `useHasChanged2`
-
-    const method_ = method.bind(BackendRemote.rpc)
-    method_(
-      arg0 as never,
-      arg1 as never,
-      arg2 as never,
-      arg3 as never,
-      arg4 as never,
-      arg5 as never,
-      arg6 as never
-    )
-      .then(value => {
-        if (!outdated) {
-          setResult({ ok: true, value: value as any })
-        }
-      })
-      .catch(err => {
-        if (!outdated) {
-          setResult({ ok: false, err })
-        }
-      })
-
-    return () => {
-      outdated = true
-    }
-  }, [
+  // We need this type to ensure that `fetchId`'s `useMemo` and `useEffect`
+  // dependencies are in sync.
+  type Dependencies = [
+    typeof method,
+    typeof returnNull,
+    typeof refreshDummyValue,
+    // Not using just `args` in the dependency array
+    // because it's expected to be a new array instance on every render.
+    typeof arg0,
+    typeof arg1,
+    typeof arg2,
+    typeof arg3,
+    typeof arg4,
+    typeof arg5,
+    typeof arg6,
+  ]
+  /**
+   * This value changes when and only when the dependencies
+   * for the RPC fetch change.
+   * That is, when we need to (and will) perform a new fetch.
+   */
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const fetchId = useMemo(() => Symbol(), [
     method,
     returnNull,
     refreshDummyValue,
-    // Not using just `args` in the dependency array
-    // because it's expected to be a new array instance on every render.
     arg0,
     arg1,
     arg2,
@@ -112,7 +108,63 @@ export function useRpcFetch<
     arg4,
     arg5,
     arg6,
-  ])
+  ] as Dependencies)
+  const loading = resultAndFetchId?.fetchId !== fetchId
+  type DependenciesWithFetchId = [...Dependencies, typeof fetchId]
+
+  useEffect(
+    () => {
+      if (returnNull) {
+        return
+      }
+
+      let outdated = false
+
+      const method_ = method.bind(BackendRemote.rpc)
+      method_(
+        arg0 as never,
+        arg1 as never,
+        arg2 as never,
+        arg3 as never,
+        arg4 as never,
+        arg5 as never,
+        arg6 as never
+      )
+        .then(value => {
+          if (!outdated) {
+            setResultAndFetchId({
+              result: { ok: true, value: value as any },
+              fetchId,
+            })
+          }
+        })
+        .catch(err => {
+          if (!outdated) {
+            setResultAndFetchId({
+              result: { ok: false, err },
+              fetchId,
+            })
+          }
+        })
+
+      return () => {
+        outdated = true
+      }
+    },
+    [
+      method,
+      returnNull,
+      refreshDummyValue,
+      arg0,
+      arg1,
+      arg2,
+      arg3,
+      arg4,
+      arg5,
+      arg6,
+      fetchId,
+    ] as DependenciesWithFetchId
+  )
 
   if (returnNull) {
     return null
@@ -120,18 +172,16 @@ export function useRpcFetch<
   // if (result != null && !result.ok) {
   //   throw result.err
   // }
-  const loading = result === null
   if (loading) {
-    // Yes, the return value is the same. Stupid, but makes TypeScript happy.
     return {
       loading,
-      result,
+      result: null,
       refresh,
     }
   }
   return {
     loading,
-    result,
+    result: resultAndFetchId.result,
     refresh,
   }
 }
