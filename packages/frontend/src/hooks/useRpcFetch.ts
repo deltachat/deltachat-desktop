@@ -13,6 +13,15 @@ type RetGeneric<T extends MethodOfRpc, Loading extends boolean> = {
    * `null` when {@link RetGeneric.loading loading} === true
    */
   readonly result: Loading extends true ? null : Result<Awaited<ReturnType<T>>>
+  /**
+   * Similar to {@link RetGeneric.result | `result`}, but when a new fetch
+   * is in progress, this returns the result of the previous fetch.
+   * When no fetch is in progress, this is equal to
+   * {@link RetGeneric.result | `result`}.
+   */
+  readonly lingeringResult: Loading extends true
+    ? null | Result<Awaited<ReturnType<T>>>
+    : Result<Awaited<ReturnType<T>>>
   readonly refresh: () => void
 }
 type Ret<T extends MethodOfRpc> = RetGeneric<T, true> | RetGeneric<T, false>
@@ -44,10 +53,6 @@ export function useRpcFetch<
    * When `null`, the hook returns `null` and does not perform the fetch.
    */
   args: Args
-  // options?: {
-  //   /** Whether to keep the old result while the new one is being loaded */
-  //   linger?: boolean
-  // }
 ): null | Ret<Method> {
   const returnNull = args == null
   type OkType = Awaited<ReturnType<Method>>
@@ -176,12 +181,14 @@ export function useRpcFetch<
     return {
       loading,
       result: null,
+      lingeringResult: resultAndFetchId ? resultAndFetchId.result : null,
       refresh,
     }
   }
   return {
     loading,
     result: resultAndFetchId.result,
+    lingeringResult: resultAndFetchId.result,
     refresh,
   }
 }

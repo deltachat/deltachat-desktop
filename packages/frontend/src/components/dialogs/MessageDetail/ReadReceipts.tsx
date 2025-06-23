@@ -30,16 +30,16 @@ export function ReadReceiptsList(props: ReadReceiptsListProps) {
       }),
     [accountId, props.messageId, refresh]
   )
-  if (receiptsFetch.loading) {
-    return null
-  }
-  if (receiptsFetch.result?.ok === false) {
+  if (receiptsFetch.lingeringResult?.ok === false) {
     return tx(
       'error_x',
-      `Failed to fetch read receipts:\n${unknownErrorToString(receiptsFetch.result.err)}`
+      `Failed to fetch read receipts:\n${unknownErrorToString(receiptsFetch.lingeringResult.err)}`
     )
   }
-  const receipts = receiptsFetch.result.value
+  const receipts = receiptsFetch.lingeringResult?.value
+  if (!receipts) {
+    return null
+  }
 
   if (receipts.length === 0) {
     return null
