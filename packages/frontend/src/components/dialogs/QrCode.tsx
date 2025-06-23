@@ -2,7 +2,6 @@ import React, {
   useState,
   useContext,
   useRef,
-  useEffect,
   useLayoutEffect,
   useCallback,
 } from 'react'
@@ -30,6 +29,7 @@ import useDialog from '../../hooks/dialog/useDialog'
 import type { DialogProps } from '../../contexts/DialogContext'
 import useAlertDialog from '../../hooks/dialog/useAlertDialog'
 import QrCodeCopyConfirmationDialog from './QrCodeCopyConfirmationDialog'
+import { useRpcFetch } from '../../hooks/useRpcFetch'
 
 const log = getLogger('renderer/dialogs/QrCode')
 
@@ -52,15 +52,15 @@ export default function QrCode({
 }: Props & DialogProps) {
   const tx = useTranslationFunction()
   const [showQrCode, setShowQrCode] = useState(!selectScan)
-  const [addr, setAddr] = useState('')
 
-  useEffect(() => {
-    if (window.__selectedAccountId) {
-      BackendRemote.rpc
-        .getConfig(window.__selectedAccountId, 'addr')
-        .then(addr => setAddr(addr || ''))
-    }
-  }, [])
+  const addrFetch = useRpcFetch(
+    BackendRemote.rpc.getConfig,
+    window.__selectedAccountId ? [window.__selectedAccountId, 'addr'] : null
+  )
+  if (addrFetch?.result?.ok === false) {
+    log.error(addrFetch.result.err)
+  }
+  const addr = addrFetch?.result?.ok ? (addrFetch.result.value ?? '') : ''
 
   return (
     <Dialog onClose={onClose} dataTestid='qr-dialog'>
