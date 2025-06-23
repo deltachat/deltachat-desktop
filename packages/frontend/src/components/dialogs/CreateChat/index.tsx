@@ -60,6 +60,7 @@ import { RovingTabindexProvider } from '../../../contexts/RovingTabindex'
 import ViewProfile from '../ViewProfile'
 import { isInviteLink } from '@deltachat-desktop/shared/util'
 import { copyToBlobDir } from '../../../utils/copyToBlobDir'
+import { useRpcFetch } from '../../../hooks/useRpcFetch'
 
 type ViewMode = 'main' | 'createGroup' | 'createBroadcastList'
 
@@ -90,13 +91,11 @@ export function CloneChat(props: { chatTemplateId: number } & DialogProps) {
   const accountId = selectedAccountId()
   const tx = useTranslationFunction()
 
-  const [chat, setChat] = useState<T.FullChat | null>(null)
-
-  useEffect(() => {
-    BackendRemote.rpc
-      .getFullChatById(accountId, chatTemplateId)
-      .then(c => setChat(c))
-  }, [accountId, chatTemplateId])
+  const chatFetch = useRpcFetch(BackendRemote.rpc.getFullChatById, [
+    accountId,
+    chatTemplateId,
+  ])
+  const chat = chatFetch.result?.ok ? chatFetch.result.value : null
 
   return (
     <Dialog width={400} onClose={onClose} fixed>
@@ -526,17 +525,25 @@ export function CreateGroup(props: CreateGroupProps) {
   const finishCreateGroup = useCreateGroup(groupName, groupImage, groupMembers)
 
   const [errorMissingGroupName, setErrorMissingGroupName] = useState(false)
-  const [groupContacts, setGroupContacts] = useState<Type.Contact[]>([])
 
   const groupMemberContactListWrapperRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    BackendRemote.rpc
-      .getContactsByIds(accountId, groupMembers)
-      .then(records => {
-        setGroupContacts(groupMembers.map(id => records[id]))
-      })
-  }, [accountId, groupMembers])
+  const groupContactsFetch = useRpcFetch(BackendRemote.rpc.getContactsByIds, [
+    accountId,
+    groupMembers,
+  ])
+  // Using `lingeringResult` in order to not be jumpy when removing members.
+  const groupContactsResult = groupContactsFetch.lingeringResult
+  const groupContacts = useMemo(
+    () =>
+      groupContactsResult?.ok
+        ? groupMembers
+            .map(id => groupContactsResult.value[id] ?? null)
+            // In case the new contacts have not loaded yet.
+            .filter(c => c != null)
+        : [],
+    [groupContactsResult, groupMembers]
+  )
 
   const showAddMemberDialog = () => {
     openDialog(AddMemberDialog, {
@@ -643,17 +650,24 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
     onClose
   )
 
-  const [broadcastContacts, setBroadcastContacts] = useState<Type.Contact[]>([])
-
   const groupMemberContactListWrapperRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    BackendRemote.rpc
-      .getContactsByIds(accountId, broadcastRecipients)
-      .then(records => {
-        setBroadcastContacts(broadcastRecipients.map(id => records[id]))
-      })
-  }, [accountId, broadcastRecipients])
+  const recipientsFetch = useRpcFetch(BackendRemote.rpc.getContactsByIds, [
+    accountId,
+    broadcastRecipients,
+  ])
+  // Using `lingeringResult` in order to not be jumpy when removing recipients.
+  const recipientsResult = recipientsFetch.lingeringResult
+  const broadcastContacts = useMemo(
+    () =>
+      recipientsResult?.ok
+        ? broadcastRecipients
+            .map(id => recipientsResult.value[id] ?? null)
+            // In case the new contacts have not loaded yet.
+            .filter(c => c != null)
+        : [],
+    [broadcastRecipients, recipientsResult]
+  )
 
   const [errorMissingChatName, setErrorMissingChatName] =
     useState<boolean>(false)
