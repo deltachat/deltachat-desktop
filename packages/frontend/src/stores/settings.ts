@@ -4,7 +4,7 @@ import { BackendRemote, Type } from '../backend-com'
 import { onReady } from '../onready'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { Store, useStore } from './store'
-import { debouncedUpdateBadgeCounter } from '../system-integration/badge-counter'
+import { throttledUpdateBadgeCounter } from '../system-integration/badge-counter'
 
 export interface SettingsStoreState {
   accountId: number
@@ -178,7 +178,7 @@ class SettingsStore extends Store<SettingsStoreState | null> {
           if (this.state?.accountId) {
             BackendRemote.rpc.startIo(this.state.accountId)
           }
-          debouncedUpdateBadgeCounter()
+          throttledUpdateBadgeCounter()
           window.__updateAccountListSidebar?.()
         }
         this.reducer.setDesktopSetting(key, value)

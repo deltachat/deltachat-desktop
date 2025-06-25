@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import debounce from 'debounce'
+import { throttle } from '@deltachat-desktop/shared/util'
 
 import { ContactList } from '../contact/ContactList'
 import { BackendRemote, onDCEvent, Type } from '../../backend-com'
@@ -27,7 +27,7 @@ export default function UnblockContacts({ onClose }: DialogProps) {
     return onDCEvent(
       accountId,
       'ContactsChanged',
-      debounce(onContactsUpdate, 500)
+      throttle(onContactsUpdate, 500)
     )
   }, [accountId])
 

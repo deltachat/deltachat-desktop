@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef } from 'react'
 import classNames from 'classnames'
-import debounce from 'debounce'
+import { throttle } from '@deltachat-desktop/shared/util'
 
 import {
   BackendRemote,
@@ -70,8 +70,8 @@ export default function AccountItem({
     : null
 
   useEffect(() => {
-    const updateAccount = debounce(accountFetch.refresh, 200)
-    const updateUnread = debounce(freshMsgsFetch.refresh, 200)
+    const updateAccount = throttle(accountFetch.refresh, 200)
+    const updateUnread = throttle(freshMsgsFetch.refresh, 200)
 
     const cleanup = [
       onDCEvent(accountId, 'AccountsItemChanged', updateAccount),
