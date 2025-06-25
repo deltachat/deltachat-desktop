@@ -1,4 +1,4 @@
-import { debounce } from 'debounce'
+import { throttle } from '@deltachat-desktop/shared/util'
 import { BackendRemote } from '../backend-com'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import AccountNotificationStoreInstance from '../stores/accountNotifications'
@@ -27,11 +27,7 @@ async function updateBadgeCounter() {
   runtime.setBadgeCounter(combined_count)
 }
 
-export const debouncedUpdateBadgeCounter = debounce(
-  updateBadgeCounter,
-  333,
-  false
-)
+export const throttledUpdateBadgeCounter = throttle(updateBadgeCounter, 500)
 
 export function initBadgeCounter() {
   // FYI we have 3 places where we watch the number of unread messages:
@@ -40,17 +36,17 @@ export function initBadgeCounter() {
   // - useUnreadCount
   // Make sure to update all the places if you update one of them.
   BackendRemote.on('IncomingMsg', _ => {
-    debouncedUpdateBadgeCounter()
+    throttledUpdateBadgeCounter()
   })
   BackendRemote.on('ChatlistChanged', _ => {
-    debouncedUpdateBadgeCounter()
+    throttledUpdateBadgeCounter()
   })
   BackendRemote.on('MsgsNoticed', _ => {
-    debouncedUpdateBadgeCounter()
+    throttledUpdateBadgeCounter()
   })
   BackendRemote.on('ChatModified', _ => {
-    debouncedUpdateBadgeCounter()
+    throttledUpdateBadgeCounter()
   })
   // on app startup:
-  debouncedUpdateBadgeCounter()
+  throttledUpdateBadgeCounter()
 }

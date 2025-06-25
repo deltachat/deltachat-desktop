@@ -21,7 +21,7 @@ import type { T } from '@deltachat/jsonrpc-client'
 import { C } from '@deltachat/jsonrpc-client'
 import type { DialogProps } from '../../../contexts/DialogContext'
 
-import debounce from 'debounce'
+import { throttle } from '@deltachat-desktop/shared/util'
 import useCreateDraftMessage from '../../../hooks/chat/useCreateDraftMesssage'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import SelectChat from '../SelectChat'
@@ -65,7 +65,7 @@ export default function useViewProfileMenu(
     return onDCEvent(
       accountId,
       'ContactsChanged',
-      debounce(onContactsUpdate, 500)
+      throttle(onContactsUpdate, 500)
     )
   }, [accountId, contact.id])
 

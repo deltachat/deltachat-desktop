@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
-import debounce from 'debounce'
+import { throttle } from '@deltachat-desktop/shared/util'
 
 import Dialog from '../Dialog'
 import { IconButton } from '../Icon'
@@ -83,11 +83,11 @@ export default function FullscreenMedia(props: Props & DialogProps) {
       }
     }
     update()
-    const debouncedUpdate = debounce(update, 400)
+    const throttledUpdate = throttle(update, 400)
     const listeners = [
-      onDCEvent(accountId, 'MsgsChanged', debouncedUpdate),
-      onDCEvent(accountId, 'IncomingMsgBunch', debouncedUpdate),
-      onDCEvent(accountId, 'MsgDeleted', debouncedUpdate),
+      onDCEvent(accountId, 'MsgsChanged', throttledUpdate),
+      onDCEvent(accountId, 'IncomingMsgBunch', throttledUpdate),
+      onDCEvent(accountId, 'MsgDeleted', throttledUpdate),
     ]
     return () => {
       listeners.forEach(cleanup => cleanup())
