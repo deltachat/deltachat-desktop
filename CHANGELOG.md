@@ -3,12 +3,14 @@
 ## [Unreleased][unreleased]
 
 ### Fixed
+- fix outdated info being shown sometimes in some places #5222, #5225
 - accessibility: add accessible labels for lists (messages list, chat list, profiles list) #5030
 - improve performance: remove message context menu open delay
 - improve performace in contact search #5230
 - improve performance: don't mark messages as seen unnecessarily when focusing window #5243
 - improve performance in "Edit Group" a little #5237
 - tauri: accessibility: fix outline being barely visible on Windows, and adjust some other colors #5217
+- improve performance a little in some other places #5225
 
 <a id="1_60_0"></a>
 
