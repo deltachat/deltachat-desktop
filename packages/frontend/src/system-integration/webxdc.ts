@@ -37,7 +37,8 @@ export async function internalOpenWebxdc(
     messageId = message.parentId
     message = await BackendRemote.rpc.getMessage(accountId, messageId)
   }
-  if (!message.webxdcInfo) {
+  const webxdcInfo = await BackendRemote.rpc.getWebxdcInfo(accountId, messageId)
+  if (!webxdcInfo) {
     // we can open only messages with webxdc info
     throw new Error('no webxdc info for message ' + message)
   }
@@ -53,7 +54,7 @@ export async function internalOpenWebxdc(
     accountId,
     displayname,
     chatName,
-    webxdcInfo: message.webxdcInfo,
+    webxdcInfo,
     href,
   })
 }
