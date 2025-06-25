@@ -7,6 +7,7 @@
 - accessibility: add accessible labels for lists (messages list, chat list, profiles list) #5030
 - accessibility: mark chat list items as tabs #5041
 - don't execute Ctrl + Up shortcut if the message input is not focused
+- improve performance: reduce delay of some events (e.g. display badge counter changes faster) #5224
 - improve performance: remove message context menu open delay
 - improve performace in global search and contact search #5230, #5232
 - improve performance: don't mark messages as seen unnecessarily when focusing window #5243
@@ -51,6 +52,7 @@
 - Zoom In/Out with Ctrl +/- #890
 
 ### Fixed
+- reduce delay of some events (e.g. display badge counter changes faster)
 - fix notifications not working sometimes, introduced in 1.59.1
 - fix dropping files from outside not working on Windows, introduced in 1.59.1
 - fix "Copy Selected Text" item never appearing in message context menu

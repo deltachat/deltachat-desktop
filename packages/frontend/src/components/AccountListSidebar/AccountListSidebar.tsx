@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { debounce } from 'debounce'
+import { throttle } from '@deltachat-desktop/shared/util'
 
 import AccountHoverInfo from './AccountHoverInfo'
 import AccountItem from './AccountItem'
@@ -53,11 +53,11 @@ export default function AccountListSidebar({
 
   const accountsFetch = useRpcFetch(BackendRemote.rpc.getAllAccountIds, [])
   useEffect(() => {
-    const debouncedRefreshAccountList = debounce(accountsFetch.refresh, 200)
+    const throttledRefreshAccountList = throttle(accountsFetch.refresh, 200)
 
-    BackendRemote.on('AccountsChanged', debouncedRefreshAccountList)
+    BackendRemote.on('AccountsChanged', throttledRefreshAccountList)
     return () => {
-      BackendRemote.off('AccountsChanged', debouncedRefreshAccountList)
+      BackendRemote.off('AccountsChanged', throttledRefreshAccountList)
     }
   }, [accountsFetch.refresh])
 
@@ -86,12 +86,12 @@ export default function AccountListSidebar({
 
     refreshSyncAllAccounts()
 
-    const debouncedRefreshSyncAllAccounts = debounce(
+    const throttledRefreshSyncAllAccounts = throttle(
       refreshSyncAllAccounts,
       200
     )
     /// now this workaround is only used when changing background sync setting
-    window.__updateAccountListSidebar = debouncedRefreshSyncAllAccounts
+    window.__updateAccountListSidebar = throttledRefreshSyncAllAccounts
   }, [])
 
   const [accountForHoverInfo, internalSetAccountForHoverInfo] =

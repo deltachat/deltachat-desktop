@@ -17,7 +17,7 @@ import { getLogger } from '../../../../shared/logger'
 import { KeybindAction } from '../../keybindings'
 import { useMessageList } from '../../stores/messagelist'
 import { BackendRemote, onDCEvent } from '../../backend-com'
-import { debouncedUpdateBadgeCounter } from '../../system-integration/badge-counter'
+import { throttledUpdateBadgeCounter } from '../../system-integration/badge-counter'
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
@@ -74,7 +74,7 @@ const onWindowFocus = (accountId: number) => {
     // so `.then(debouncedUpdateBadgeCounter)` is probably not necessary.
     BackendRemote.rpc
       .markseenMsgs(accountId, messageIdsToMarkAsRead)
-      .then(debouncedUpdateBadgeCounter)
+      .then(throttledUpdateBadgeCounter)
   }
 }
 
@@ -214,7 +214,7 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
         // so `.then(debouncedUpdateBadgeCounter)` is probably not necessary.
         BackendRemote.rpc
           .markseenMsgs(accountId, messageIdsToMarkAsRead)
-          .then(debouncedUpdateBadgeCounter)
+          .then(throttledUpdateBadgeCounter)
       }
     })
   }
