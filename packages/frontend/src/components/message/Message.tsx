@@ -1114,13 +1114,35 @@ function WebxdcMessageContent({
   tabindexForInteractiveContents: -1 | 0
 }) {
   const tx = useTranslationFunction()
+  const [webxdcInfo, setWebxdcInfo] = useState<T.WebxdcMessageInfo | null>(null)
+  const [isLoadingWebxdcInfo, setIsLoadingWebxdcInfo] = useState(false)
+  const accountId = selectedAccountId()
+
+  useEffect(() => {
+    if (message.viewType === 'Webxdc') {
+      setIsLoadingWebxdcInfo(true)
+      BackendRemote.rpc.getWebxdcInfo(accountId, message.id)
+        .then((info: T.WebxdcMessageInfo) => {
+          setWebxdcInfo(info)
+        })
+        .catch((error: any) => {
+          console.error('Failed to load webxdc info for message:', message.id, error)
+          setWebxdcInfo(null)
+        })
+        .finally(() => {
+          setIsLoadingWebxdcInfo(false)
+        })
+    }
+  }, [accountId, message.id, message.viewType])
+
   if (message.viewType !== 'Webxdc') {
     return null
   }
-  const info = message.webxdcInfo || {
-    name: 'INFO MISSING!',
+
+  const info = webxdcInfo || {
+    name: isLoadingWebxdcInfo ? 'Loading...' : 'INFO MISSING!',
     document: undefined,
-    summary: 'INFO MISSING!',
+    summary: isLoadingWebxdcInfo ? '' : 'INFO MISSING!',
   }
 
   return (
