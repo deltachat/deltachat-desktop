@@ -86,5 +86,5 @@ export function dragAttachmentOut(
 
 export type MessageTypeAttachmentSubset = Pick<
   Type.Message,
-  'id' | 'file' | 'fileMime' | 'fileBytes' | 'fileName' | 'webxdcInfo'
+  'id' | 'file' | 'fileMime' | 'fileBytes' | 'fileName' | 'viewType'
 >
