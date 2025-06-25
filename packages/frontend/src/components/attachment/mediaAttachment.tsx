@@ -613,7 +613,8 @@ export function WebxdcAttachment({
   useEffect(() => {
     if (loadResult.kind === 'message') {
       setIsLoadingWebxdcInfo(true)
-      BackendRemote.rpc.getWebxdcInfo(accountId, messageId)
+      BackendRemote.rpc
+        .getWebxdcInfo(accountId, messageId)
         .then(info => {
           if (info) {
             setWebxdcInfo(info)
@@ -622,7 +623,14 @@ export function WebxdcAttachment({
           }
         })
         .catch(error => {
-          log.error('Failed to load webxdc info for message:', messageId, 'accountId:', accountId, 'error:', error)
+          log.error(
+            'Failed to load webxdc info for message:',
+            messageId,
+            'accountId:',
+            accountId,
+            'error:',
+            error
+          )
           setWebxdcInfo(null)
         })
         .finally(() => {

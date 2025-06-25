@@ -191,7 +191,10 @@ async function showNotification(
             message.parentId
           )
         }
-        const webxdcInfo = await BackendRemote.rpc.getWebxdcInfo(accountId, message.id)
+        const webxdcInfo = await BackendRemote.rpc.getWebxdcInfo(
+          accountId,
+          message.id
+        )
         if (webxdcInfo) {
           summaryText = eventText
           summaryPrefix = `${webxdcInfo.name}`
