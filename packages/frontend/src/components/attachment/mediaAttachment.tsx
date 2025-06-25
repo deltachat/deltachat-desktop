@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react'
+import React, { useContext, useRef, useState, useEffect } from 'react'
 import { filesize } from 'filesize'
 
 import {
@@ -596,10 +596,11 @@ export function WebxdcAttachment({
   loadResult,
 }: GalleryAttachmentElementProps) {
   const { openDialog } = useDialog()
-  const tx = useTranslationFunction()
   const contextMenu = useContext(ContextMenuContext)
   const { jumpToMessage, deleteMessage } = useMessage()
   const accountId = selectedAccountId()
+  const [webxdcInfo, setWebxdcInfo] = useState<T.WebxdcMessageInfo | null>(null)
+  const [isLoadingWebxdcInfo, setIsLoadingWebxdcInfo] = useState(false)
 
   const interactiveElRef = useRef<any>(null)
   const rovingTabindex = useRovingTabindex(interactiveElRef)
@@ -609,31 +610,51 @@ export function WebxdcAttachment({
     tabIndex: rovingTabindex.tabIndex,
   } as const
 
-  if (loadResult.kind === 'loadingError') {
-    const onContextMenu = getBrokenMediaContextMenu(
-      contextMenu.openContextMenu,
-      openDialog,
-      deleteMessage,
-      messageId,
-      accountId
-    )
+  useEffect(() => {
+    if (loadResult.kind === 'message') {
+      setIsLoadingWebxdcInfo(true)
+      BackendRemote.rpc.getWebxdcInfo(accountId, messageId)
+        .then(info => {
+          if (info) {
+            setWebxdcInfo(info)
+          } else {
+            setWebxdcInfo(null)
+          }
+        })
+        .catch(error => {
+          log.error('Failed to load webxdc info for message:', messageId, 'accountId:', accountId, 'error:', error)
+          setWebxdcInfo(null)
+        })
+        .finally(() => {
+          setIsLoadingWebxdcInfo(false)
+        })
+    }
+  }, [accountId, messageId, loadResult.kind])
 
+  // If the message is not yet loaded by GridGallery, show loading state
+  if (!loadResult || loadResult.kind !== 'message') {
     return (
       <div
         ref={interactiveElRef}
-        className={'media-attachment-webxdc broken ' + rovingTabindex.className}
-        title={loadResult.error}
-        onContextMenu={onContextMenu}
+        className={'media-attachment-webxdc ' + rovingTabindex.className}
         {...rovingTabindexProps}
       >
-        <div className='icon'></div>
+        <img
+          className='icon'
+          src={runtime.getWebxdcIconURL(selectedAccountId(), messageId)}
+        />
         <div className='text-part'>
-          <div className='name'>{tx('attachment_failed_to_load')}</div>
+          <div className='name'>Loading...</div>
           <div className='summary'></div>
         </div>
       </div>
     )
-  } else if (loadResult.webxdcInfo == null) {
+  }
+
+  // At this point, loadResult.kind is guaranteed to be 'message'
+  const message = loadResult
+
+  if (isLoadingWebxdcInfo) {
     const onContextMenu = getBrokenMediaContextMenu(
       contextMenu.openContextMenu,
       openDialog,
@@ -641,8 +662,6 @@ export function WebxdcAttachment({
       messageId,
       accountId
     )
-    // webxdc info is not set, show different error
-    log.error('message.webxdcInfo is undefined, msgid:', messageId)
     return (
       <div
         ref={interactiveElRef}
@@ -655,9 +674,36 @@ export function WebxdcAttachment({
           src={runtime.getWebxdcIconURL(selectedAccountId(), messageId)}
         />
         <div className='text-part'>
+          <div className='name'>Loading...</div>
+          <div className='summary'></div>
+        </div>
+      </div>
+    )
+  } else if (webxdcInfo == null) {
+    const onContextMenu = getBrokenMediaContextMenu(
+      contextMenu.openContextMenu,
+      openDialog,
+      deleteMessage,
+      messageId,
+      accountId
+    )
+    log.error('webxdcInfo is not available, msgid:', messageId)
+
+    return (
+      <div
+        ref={interactiveElRef}
+        className={'media-attachment-webxdc broken' + rovingTabindex.className}
+        onContextMenu={onContextMenu}
+        {...rovingTabindexProps}
+      >
+        <img
+          className='icon'
+          src={runtime.getWebxdcIconURL(selectedAccountId(), messageId)}
+        />
+        <div className='text-part'>
           <div className='name'>Error loading info</div>
           <div className='summary'>
-            {'message.webxdcInfo is undefined, msgid:' + messageId}
+            {'webxdcInfo is not available!, msgid:' + messageId}
           </div>
         </div>
       </div>
@@ -667,21 +713,21 @@ export function WebxdcAttachment({
       contextMenu.openContextMenu,
       openDialog,
       jumpToMessage,
-      loadResult,
+      message,
       accountId
     )
-    const { summary, name, document } = loadResult.webxdcInfo
+    const { summary, name, document } = webxdcInfo
     return (
       <button
         ref={interactiveElRef}
         className={'media-attachment-webxdc ' + rovingTabindex.className}
         onContextMenu={openContextMenu}
-        onClick={openWebxdc.bind(null, loadResult)}
+        onClick={openWebxdc.bind(null, message)}
         {...rovingTabindexProps}
       >
         <img
           className='icon'
-          src={runtime.getWebxdcIconURL(selectedAccountId(), loadResult.id)}
+          src={runtime.getWebxdcIconURL(selectedAccountId(), message.id)}
         />
         <div className='text-part'>
           <div
