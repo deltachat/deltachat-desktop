@@ -79,7 +79,7 @@
     "debounce": "^1.2.0",
     "electron": "^34.0.1",
     "electron-builder": "^24.13.3",
-    "esbuild": "^0.19.8",
+    "esbuild": "^0.25.0",
     "mocha": "^10.7.0",
     "rc": "^1.2.8",
     "typescript": "catalog:"
