@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+<a id="1_59_2"></a>
+
+## [1.59.2] - 2025-06-25
+
 ### Added
 - Zoom In/Out with Ctrl +/- #890
 
@@ -3506,7 +3510,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.59.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.59.2...HEAD
+
+[1.59.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.59.1...v1.59.2
 
 [1.59.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.59.0...v1.59.1
 
