@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { debounce } from 'debounce'
+import { throttle } from '@deltachat-desktop/shared/util'
 
 import AccountHoverInfo from './AccountHoverInfo'
 import AccountItem from './AccountItem'
@@ -118,15 +118,15 @@ export default function AccountListSidebar({
   }, [accountForHoverInfo, updateHoverInfoPosition])
 
   useEffect(() => {
-    const debouncedUpdate = debounce(() => {
+    const throttledUpdate = throttle(() => {
       refresh()
-    }, 200)
+    }, 400)
 
     /// now this workaround is only used when changing background sync setting
-    window.__updateAccountListSidebar = debouncedUpdate
-    BackendRemote.on('AccountsChanged', debouncedUpdate)
+    window.__updateAccountListSidebar = throttledUpdate
+    BackendRemote.on('AccountsChanged', throttledUpdate)
     return () => {
-      BackendRemote.off('AccountsChanged', debouncedUpdate)
+      BackendRemote.off('AccountsChanged', throttledUpdate)
     }
   }, [refresh])
 

@@ -8,6 +8,7 @@
 ### Changed
 
 ### Fixed
+- reduce delay of some events (e.g. display badge counter changes faster)
 - fix notifications not working sometimes, introduced in 1.59.1
 - fix dropping files from outside not working on Windows, introduced in 1.59.1
 - fix "Copy Selected Text" item never appearing in message context menu

@@ -1,7 +1,7 @@
 import React, { createRef } from 'react'
 import { Component } from 'react'
 import { DcEventType } from '@deltachat/jsonrpc-client'
-import { debounce } from 'debounce'
+import { throttle } from '@deltachat-desktop/shared/util'
 
 import MainScreen from './components/screens/MainScreen/MainScreen'
 import { getLogger } from '../../shared/logger'
@@ -266,13 +266,13 @@ export default class ScreenController extends Component {
   componentDidMount() {
     BackendRemote.on('Error', this.onError)
 
-    runtime.onResumeFromSleep = debounce(() => {
+    runtime.onResumeFromSleep = throttle(() => {
       log.info('onResumeFromSleep')
       // update timestamps
       updateTimestamps()
       // call maybe network
       BackendRemote.rpc.maybeNetwork()
-    }, 1000)
+    }, 2000)
 
     this.startup().then(() => {
       runtime.emitUIFullyReady()
