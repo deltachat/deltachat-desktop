@@ -242,19 +242,24 @@ export function DraftAttachment({
   useEffect(() => {
     if (attachment && attachment.viewType === 'Webxdc') {
       setIsLoadingWebxdcInfo(true)
-      BackendRemote.rpc.getWebxdcInfo(accountId, attachment.id)
+      BackendRemote.rpc
+        .getWebxdcInfo(accountId, attachment.id)
         .then((info: T.WebxdcMessageInfo) => {
           setWebxdcInfo(info)
         })
         .catch((error: any) => {
-          console.error('Failed to load webxdc info for draft:', attachment.id, error)
+          console.error(
+            'Failed to load webxdc info for draft:',
+            attachment.id,
+            error
+          )
           setWebxdcInfo(null)
         })
         .finally(() => {
           setIsLoadingWebxdcInfo(false)
         })
     }
-  }, [accountId, attachment?.id, attachment?.viewType])
+  }, [accountId, attachment, attachment.id, attachment.viewType])
 
   if (!attachment) {
     return null
@@ -287,7 +292,9 @@ export function DraftAttachment({
         <img className='icon' src={iconUrl} alt='app icon' />
         <div className='text-part'>
           <div className='name'>
-            {isLoadingWebxdcInfo ? 'Loading...' : webxdcInfo?.name || 'Unknown App'}
+            {isLoadingWebxdcInfo
+              ? 'Loading...'
+              : webxdcInfo?.name || 'Unknown App'}
           </div>
           <div className='size'>
             {attachment.fileBytes ? filesize(attachment.fileBytes) : '?'}

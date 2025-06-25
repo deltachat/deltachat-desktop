@@ -688,10 +688,7 @@ export default class DCWebxdc {
         const instance = open_apps[`${accountId}.${instanceId}`]
         if (instance) {
           const webxdcInfo = await this.rpc.getWebxdcInfo(accountId, instanceId)
-          const { chatId } = await this.rpc.getMessage(
-            accountId,
-            instanceId
-          )
+          const { chatId } = await this.rpc.getMessage(accountId, instanceId)
           const { name } = await this.rpc.getBasicChatInfo(accountId, chatId)
           if (instance.win && webxdcInfo) {
             instance.win.title = makeTitle(webxdcInfo, name)

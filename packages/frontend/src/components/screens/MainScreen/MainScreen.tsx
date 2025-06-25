@@ -436,20 +436,15 @@ function ChatNavButtons({ chat }: { chat: T.FullChat }) {
   )
 }
 
-function AppIcon({
-  accountId,
-  app,
-}: {
-  accountId: number
-  app: T.Message
-}) {
+function AppIcon({ accountId, app }: { accountId: number; app: T.Message }) {
   const [webxdcInfo, setWebxdcInfo] = useState<T.WebxdcMessageInfo | null>(null)
   const [isLoadingWebxdcInfo, setIsLoadingWebxdcInfo] = useState(false)
 
   useEffect(() => {
     if (app.viewType === 'Webxdc') {
       setIsLoadingWebxdcInfo(true)
-      BackendRemote.rpc.getWebxdcInfo(accountId, app.id)
+      BackendRemote.rpc
+        .getWebxdcInfo(accountId, app.id)
         .then((info: T.WebxdcMessageInfo) => {
           setWebxdcInfo(info)
         })
@@ -463,7 +458,8 @@ function AppIcon({
     }
   }, [accountId, app.id, app.viewType])
 
-  const appName = webxdcInfo?.name || (isLoadingWebxdcInfo ? 'Loading...' : 'Unknown App')
+  const appName =
+    webxdcInfo?.name || (isLoadingWebxdcInfo ? 'Loading...' : 'Unknown App')
 
   return (
     <Button

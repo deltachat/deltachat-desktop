@@ -1121,12 +1121,17 @@ function WebxdcMessageContent({
   useEffect(() => {
     if (message.viewType === 'Webxdc') {
       setIsLoadingWebxdcInfo(true)
-      BackendRemote.rpc.getWebxdcInfo(accountId, message.id)
+      BackendRemote.rpc
+        .getWebxdcInfo(accountId, message.id)
         .then((info: T.WebxdcMessageInfo) => {
           setWebxdcInfo(info)
         })
         .catch((error: any) => {
-          console.error('Failed to load webxdc info for message:', message.id, error)
+          console.error(
+            'Failed to load webxdc info for message:',
+            message.id,
+            error
+          )
           setWebxdcInfo(null)
         })
         .finally(() => {
