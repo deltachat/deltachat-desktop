@@ -29,7 +29,7 @@ import useDialog from '../../hooks/dialog/useDialog'
 import type { DialogProps } from '../../contexts/DialogContext'
 import useAlertDialog from '../../hooks/dialog/useAlertDialog'
 import QrCodeCopyConfirmationDialog from './QrCodeCopyConfirmationDialog'
-import { useRpcFetch } from '../../hooks/useRpcFetch'
+import { useRpcFetch } from '../../hooks/useFetch'
 
 const log = getLogger('renderer/dialogs/QrCode')
 

@@ -8,7 +8,7 @@ import useProcessQR from '../../hooks/useProcessQr'
 import { BackendRemote } from '../../backend-com'
 import { ContactListItem } from '../contact/ContactListItem'
 import { useRovingTabindex } from '../../contexts/RovingTabindex'
-import { useRpcFetch } from '../../hooks/useRpcFetch'
+import { useRpcFetch } from '../../hooks/useFetch'
 
 export function PseudoListItem(
   props: PropsWithChildren<{

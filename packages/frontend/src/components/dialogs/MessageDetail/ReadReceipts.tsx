@@ -8,7 +8,7 @@ import { Avatar } from '../../Avatar'
 import { InlineVerifiedIcon } from '../../VerifiedIcon'
 import moment from 'moment'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
-import { useRpcFetch } from '../../../hooks/useRpcFetch'
+import { useRpcFetch } from '../../../hooks/useFetch'
 import { unknownErrorToString } from '../../helpers/unknownErrorToString'
 type ReadReceiptsListProps = { messageId: number }
 
