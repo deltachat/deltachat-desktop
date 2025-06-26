@@ -1,8 +1,12 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react'
+import React, { useState, useMemo } from 'react'
 import { ContactListItem } from './ContactListItem'
-import { debounce } from 'debounce'
+import { default as asyncThrottle } from '@jcoreio/async-throttle'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import { useFetch } from '../../hooks/useFetch'
+import { getLogger } from '@deltachat-desktop/shared/logger'
+
+const log = getLogger('ContactList')
 
 /**
  * Make sure not to render all of the user's contacts with this component.
@@ -83,7 +87,7 @@ export function useLazyLoadedContacts(
   queryStr: string | undefined
 ) {
   const accountId = selectedAccountId()
-  const { contactIds, queryStrIsValidEmail, refresh } = useContactIds(
+  const { contactIds, queryStrIsValidEmail, refreshContacts } = useContactIds(
     listFlags,
     queryStr
   )
@@ -132,55 +136,63 @@ export function useLazyLoadedContacts(
     queryStrIsValidEmail,
 
     /** Useful when e.g. a contact got deleted or added. */
-    refresh,
+    refreshContacts,
   }
 }
 
 function useContactIds(listFlags: number, queryStr: string | undefined) {
   const accountId = selectedAccountId()
-  const [state, setState] = useState<{
-    contactIds: number[]
-    queryStrIsValidEmail: boolean
-  }>({ contactIds: [], queryStrIsValidEmail: false })
 
-  const debouncedGetContactsIds = useMemo(
-    () =>
-      debounce(async (listFlags: number, queryStr: string | undefined) => {
-        const contactIdsP = BackendRemote.rpc.getContactIds(
-          accountId,
-          listFlags,
-          queryStr?.trim() || null
-        )
-        const queryStrIsValidEmailP = BackendRemote.rpc.checkEmailValidity(
-          queryStr?.trim() || ''
-        )
-        setState({
-          contactIds: await contactIdsP,
-          queryStrIsValidEmail: await queryStrIsValidEmailP,
-        })
-      }, 200),
-    [setState, accountId]
+  const trimmedQueryStr = queryStr?.trim()
+  const contactIdsFetch = useFetch(
+    useMemo(
+      () =>
+        asyncThrottle(
+          BackendRemote.rpc.getContactIds.bind(BackendRemote.rpc),
+          100
+        ),
+      []
+    ),
+    [accountId, listFlags, trimmedQueryStr || null]
   )
-
-  const init = useRef(false)
-
-  useEffect(() => {
-    debouncedGetContactsIds(listFlags, queryStr)
-    if (!init.current) {
-      // make sure that contact fetching isn't delayed on first run
-      debouncedGetContactsIds.flush()
-      init.current = true
-    }
-  }, [debouncedGetContactsIds, listFlags, queryStr])
-
-  const refresh = () => {
-    debouncedGetContactsIds(listFlags, queryStr)
-    debouncedGetContactsIds.flush()
+  if (contactIdsFetch.result?.ok === false) {
+    log.error('Failed to fetch cotnact IDs', contactIdsFetch.result.err)
   }
 
+  const queryStrMayBeValidEmail =
+    trimmedQueryStr != undefined && trimmedQueryStr.length > 2
+  const queryStrIsValidEmailFetch = useFetch(
+    useMemo(
+      () =>
+        asyncThrottle(
+          BackendRemote.rpc.checkEmailValidity.bind(BackendRemote.rpc),
+          100
+        ),
+      []
+    ),
+    queryStrMayBeValidEmail ? [trimmedQueryStr] : null
+  )
+  if (queryStrIsValidEmailFetch?.result?.ok === false) {
+    log.error(
+      'Failed to checkEmailValidity',
+      queryStrIsValidEmailFetch.result.err
+    )
+  }
+  const queryStrIsValidEmail =
+    (queryStrMayBeValidEmail &&
+      queryStrIsValidEmailFetch?.lingeringResult?.ok &&
+      queryStrIsValidEmailFetch.lingeringResult.value) ??
+    false
+
   return {
-    ...state,
+    queryStrIsValidEmail,
+    queryStrIsValidEmailFetch,
+
+    contactIds: contactIdsFetch.lingeringResult?.ok
+      ? contactIdsFetch.lingeringResult.value
+      : [],
+    contactsFetch: contactIdsFetch,
     /** Useful when e.g. a contact got deleted or added. */
-    refresh,
+    refreshContacts: contactIdsFetch.refresh,
   }
 }

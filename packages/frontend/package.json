@@ -28,6 +28,7 @@
     "@deltachat/message_parser_wasm": "^0.14.1",
     "@emoji-mart/data": "^1.2.1",
     "@emoji-mart/react": "^1.1.1",
+    "@jcoreio/async-throttle": "^1.6.1",
     "classnames": "^2.5.1",
     "debounce": "^1.2.1",
     "emoji-js-clean": "^4.0.0",
