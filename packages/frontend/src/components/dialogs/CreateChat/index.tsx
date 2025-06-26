@@ -136,7 +136,7 @@ function CreateChatMain(props: CreateChatMainProps) {
     contactCache,
     loadContacts,
     queryStrIsValidEmail,
-    refresh: refreshContacts,
+    refreshContacts,
   } = useLazyLoadedContacts(C.DC_GCL_ADD_SELF, queryStr)
 
   const chooseContact = async ({ id }: Type.Contact) => {

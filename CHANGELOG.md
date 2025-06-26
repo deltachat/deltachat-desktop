@@ -20,6 +20,7 @@
 - tauri: fix "Connectivity" dialog being unreadable on dark theme
 - tauri: prevent moving around of the whole app with the touchpad gestures on windows #5182
 - fix horizontal scroll in message list #5162
+- improve performace in contact search
 
 <a id="1_59_1"></a>
 
