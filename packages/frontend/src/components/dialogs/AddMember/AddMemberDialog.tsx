@@ -29,7 +29,7 @@ export function AddMemberDialog({
     contactCache,
     loadContacts,
     queryStrIsValidEmail,
-    refresh: refreshContacts,
+    refreshContacts,
   } = useLazyLoadedContacts(listFlags, queryStr)
   return (
     <Dialog
