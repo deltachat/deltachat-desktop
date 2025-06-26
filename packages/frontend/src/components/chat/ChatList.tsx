@@ -45,7 +45,7 @@ import type {
 } from './ChatListItemRow'
 import { isInviteLink } from '../../../../shared/util'
 import { RovingTabindexProvider } from '../../contexts/RovingTabindex'
-import { useRpcFetch } from '../../hooks/useRpcFetch'
+import { useRpcFetch } from '../../hooks/useFetch'
 
 const enum LoadStatus {
   FETCHING = 1,

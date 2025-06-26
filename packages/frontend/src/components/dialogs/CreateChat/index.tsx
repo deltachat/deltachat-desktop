@@ -60,7 +60,7 @@ import { RovingTabindexProvider } from '../../../contexts/RovingTabindex'
 import ViewProfile from '../ViewProfile'
 import { isInviteLink } from '@deltachat-desktop/shared/util'
 import { copyToBlobDir } from '../../../utils/copyToBlobDir'
-import { useRpcFetch } from '../../../hooks/useRpcFetch'
+import { useRpcFetch } from '../../../hooks/useFetch'
 
 type ViewMode = 'main' | 'createGroup' | 'createBroadcastList'
 
