@@ -4,6 +4,7 @@ import useChat from './useChat'
 import { BackendRemote } from '../../backend-com'
 import { ChatView } from '../../contexts/ChatContext'
 import { getLogger } from '../../../../shared/logger'
+import { notifyWebxdcMessageSent } from '../useWebxdcMessageSent'
 
 import type { T } from '@deltachat/jsonrpc-client'
 
@@ -138,6 +139,9 @@ export default function useMessage() {
         ...MESSAGE_DEFAULT,
         ...message,
       })
+
+      // Notify about the sent message (listeners can filter by message type if needed)
+      notifyWebxdcMessageSent(accountId, chatId, message)
 
       // Jump down on sending
       jumpToMessage({
