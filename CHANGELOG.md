@@ -8,6 +8,7 @@
 
 ### Added
 - Zoom In/Out with Ctrl +/- #890
+- Add Group Search field
 
 ### Changed
 
