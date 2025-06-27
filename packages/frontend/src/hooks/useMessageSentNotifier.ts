@@ -15,7 +15,7 @@ export function notifyMessageSent(
 }
 
 /**
- * A notifier that allows components to subscribe to message sent events.
+ * A notifier that allows components to subscribe to webxdc message sent events.
  * For cases where DC Event 'MsgsChanged' is not sufficient
  * (like on MainScreen where we want to update AppIcons immediately when a
  * Webxdc message is sent).

@@ -35,7 +35,7 @@ import { openMapWebxdc } from '../../../system-integration/webxdc'
 import { ScreenContext } from '../../../contexts/ScreenContext'
 import MediaView from '../../dialogs/MediaView'
 import { openWebxdc } from '../../message/messageFunctions'
-import { useMessageSentListener } from '../../../hooks/useMessageSentNotifier'
+import { useWebxdcMessageSentListener } from '../../../hooks/useWebxdcMessageSent'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import CreateChat from '../../dialogs/CreateChat'
@@ -178,15 +178,10 @@ export default function MainScreen({ accountId }: Props) {
     }
   }, [accountId, chatId, fetchLastUsedApps])
 
-  // Listen for messages being sent to the current chat
-  useMessageSentListener(accountId || 0, chatId || 0, message => {
-    // Only refresh Webxdc apps list if the sent message is a Webxdc message or .xdc file
-    if (
-      message.viewtype === 'Webxdc' ||
-      (message.filename && message.filename.endsWith('.xdc'))
-    ) {
-      fetchLastUsedApps()
-    }
+  // Listen for Webxdc messages being sent to the current chat
+  useWebxdcMessageSentListener(accountId || 0, chatId || 0, () => {
+    // Refresh Webxdc apps list when a Webxdc message is sent
+    fetchLastUsedApps()
   })
 
   useEffect(() => {
