@@ -285,9 +285,11 @@ export function useRpcFetch<
  * A (possibly) more convenient version of {@link useFetch},
  * when dealing with `BackendRemote.rpc` calls.
  *
- * This hook provides better TypeScript support when working with
- * the backend RPC methods, as it can infer the correct argument types
- * and return types from the method signature.
+ * Namely, it allows you to pass `BackendRemote.rpc` methods directly
+ * as the `method` arg, without having to worry about the `this` value.
+ *
+ * @example
+ * useRpcFetch(BackendRemote.rpc.getMessage, [accId, msgId])
  */
 export function useRpcFetch<
   Method extends MethodOfRpc,
