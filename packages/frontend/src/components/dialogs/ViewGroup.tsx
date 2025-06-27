@@ -203,7 +203,7 @@ function ViewGroupInner(
   const groupMemberContactListWrapperRef = useRef<HTMLDivElement>(null)
   const groupPastMemberContactListWrapperRef = useRef<HTMLDivElement>(null)
   const relatedChatsListWrapperRef = useRef<HTMLDivElement>(null)
-  
+
   const [memberFilter, setMemberFilter] = useState('')
 
   const {
@@ -438,12 +438,18 @@ function ViewGroupInner(
                   </>
                 )}
                 <ContactList
-                  contacts={memberFilter
-                    ? group.contacts.filter(contact => 
-                        contact.displayName.toLowerCase().includes(memberFilter.toLowerCase()) ||
-                        contact.address.toLowerCase().includes(memberFilter.toLowerCase())
-                      )
-                    : group.contacts
+                  contacts={
+                    memberFilter
+                      ? group.contacts.filter(
+                          contact =>
+                            contact.displayName
+                              .toLowerCase()
+                              .includes(memberFilter.toLowerCase()) ||
+                            contact.address
+                              .toLowerCase()
+                              .includes(memberFilter.toLowerCase())
+                        )
+                      : group.contacts
                   }
                   showRemove={!chatDisabled}
                   onClick={contact => {
@@ -467,12 +473,18 @@ function ViewGroupInner(
                     wrapperElementRef={groupPastMemberContactListWrapperRef}
                   >
                     <ContactList
-                      contacts={memberFilter
-                        ? pastContacts.filter(contact => 
-                            contact.displayName.toLowerCase().includes(memberFilter.toLowerCase()) ||
-                            contact.address.toLowerCase().includes(memberFilter.toLowerCase())
-                          )
-                        : pastContacts
+                      contacts={
+                        memberFilter
+                          ? pastContacts.filter(
+                              contact =>
+                                contact.displayName
+                                  .toLowerCase()
+                                  .includes(memberFilter.toLowerCase()) ||
+                                contact.address
+                                  .toLowerCase()
+                                  .includes(memberFilter.toLowerCase())
+                            )
+                          : pastContacts
                       }
                       showRemove={false}
                       onClick={contact => {
