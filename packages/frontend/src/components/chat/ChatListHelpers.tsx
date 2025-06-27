@@ -3,6 +3,8 @@ import { getLogger } from '../../../../shared/logger'
 import { debounce } from 'debounce'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
+import { useFetch } from '../../hooks/useFetch'
+import asyncThrottle from '@jcoreio/async-throttle'
 
 const log = getLogger('renderer/helpers/ChatList')
 
@@ -108,140 +110,109 @@ export function useChatList(
   const initialListFlags = useRef(listFlags)
   const initialQueryStr = useRef(queryStr)
   const initialQueryContactId = useRef(queryContactId)
-  const [chatListEntries, setChatListEntries] = useState<number[]>([])
 
   const areQueryParamsInitial: boolean =
     listFlags === initialListFlags.current &&
     queryStr === initialQueryStr.current &&
     queryContactId === initialQueryContactId.current
-  const chatListEntriesForInitialQueryParams = useChatListNoDebounce(
-    accountId,
-    initialListFlags.current,
-    initialQueryStr.current,
-    initialQueryContactId.current
+  const chatListEntriesForInitialQueryParams = useChatListSimple(
+    // Here let's never pass `null`, so that switching to the "default" view
+    // is always up to date and switching back to it is instant.
+    [
+      accountId,
+      initialListFlags.current,
+      initialQueryStr.current,
+      initialQueryContactId.current,
+    ]
   )
-
-  const debouncedGetChatListEntries = useMemo(
-    () =>
-      debounce(
-        (
-          listFlags: number | null,
-          queryStr: string | undefined,
-          queryContactId: number | undefined
-        ) => {
-          BackendRemote.rpc
-            .getChatlistEntries(
-              accountId,
-              listFlags,
-              queryStr || null,
-              queryContactId || null
-            )
-            .then(setChatListEntries)
-        },
-        200
-      ),
-    [accountId]
+  const chatListEntriesForNonInitialQueryParams = useChatListSimple(
+    // When query params are initial, `chatListEntriesForNonInitialQueryParams`
+    // is unused.
+    areQueryParamsInitial
+      ? null
+      : [accountId, listFlags, queryStr, queryContactId]
   )
-
-  useEffect(() => {
-    log.debug(
-      'useChatList: listFlags, queryStr or queryContactId changed, refetching chatlistids'
-    )
-
-    const refetchChatlist = () => {
-      log.debug('useChatList: refetchingChatlist')
-
-      if (areQueryParamsInitial) {
-        // We don't need to fetch the chat list another time,
-        // because it will be fetched with the same parameters
-        // inside of `useChatListNoDebounce`,
-        // and we'll return that from this hook.
-        debouncedGetChatListEntries.clear()
-      } else {
-        debouncedGetChatListEntries(listFlags, queryStr, queryContactId)
-      }
-    }
-
-    if (areQueryParamsInitial) {
-      debouncedGetChatListEntries.clear()
-    } else {
-      debouncedGetChatListEntries(listFlags, queryStr, queryContactId)
-    }
-
-    return onDCEvent(accountId, 'ChatlistChanged', refetchChatlist)
-  }, [
-    listFlags,
-    queryStr,
-    queryContactId,
-    debouncedGetChatListEntries,
-    accountId,
-    areQueryParamsInitial,
-  ])
+  // TODO remove the flashing of the lingering value
+  // when `areQueryParamsInitial` changes.
+  // For example, if you start a search, then cancel it,
+  // and then open the "archive" folder,
+  // we would flash the previous search results for a moment.
 
   if (areQueryParamsInitial) {
     log.debug(
       "useChatList: query params are initial, we'll use " +
         'the cached version of the chat list'
     )
+    return chatListEntriesForInitialQueryParams
   } else {
     log.debug(
       "useChatList: query params are non-initial, we'll use a " +
         'freshly fetched chat list'
     )
-  }
-  return {
-    chatListIds: areQueryParamsInitial
-      ? chatListEntriesForInitialQueryParams
-      : chatListEntries,
+    return chatListEntriesForNonInitialQueryParams
   }
 }
 
-/**
- * Despite the name, fetching is still debounced on ChatlistChanged events.
- * (but it's not debounced when the hook's arguments change).
- */
-function useChatListNoDebounce(
-  accountId: number,
-  listFlags: number | null = null,
-  queryStr: string = '',
-  queryContactId?: number
+function useChatListSimple(
+  /**
+   * When `null`, this hook returns `[]` and doesn't perform any fetches.
+   */
+  args:
+    | null
+    | [
+        accountId: number,
+        listFlags?: number | null,
+        queryStr?: string,
+        queryContactId?: number,
+      ]
 ) {
-  const [chatListEntries, setChatListEntries] = useState<number[]>([])
+  const accountId = args ? args[0] : null
 
-  // Though perhaps a throttle would be more appropriate.
-  const debouncedFetchChatlist = useMemo(
-    () =>
-      debounce(
-        (
-          listFlags: number | null,
-          queryStr: string,
-          queryContactId: number | undefined
-        ) => {
-          log.debug('useChatListNoDebounce: fetching chat list')
-
-          BackendRemote.rpc
-            .getChatlistEntries(
-              accountId,
-              listFlags,
-              queryStr || null,
-              queryContactId || null
-            )
-            .then(setChatListEntries)
-        },
-        200
-      ),
-    [accountId]
+  const chatListFetch = useFetch(
+    useMemo(
+      () =>
+        asyncThrottle(
+          (
+            ...args: Parameters<typeof BackendRemote.rpc.getChatlistEntries>
+          ) => {
+            log.debug('useChatList: fetching chatlist')
+            return BackendRemote.rpc.getChatlistEntries(...args)
+          },
+          200
+        ),
+      []
+    ),
+    args == null
+      ? null
+      : [
+          args[0], // accountId
+          args[1] ?? null, // listFlags
+          args[2] || null, // queryStr
+          args[3] ?? null, // queryContactId
+        ]
   )
-
+  const refreshChatlist = chatListFetch?.refresh
   useEffect(() => {
-    debouncedFetchChatlist(listFlags, queryStr, queryContactId)
-    debouncedFetchChatlist.flush()
-
-    const debouncedFetchChatlist2 = () => {
-      debouncedFetchChatlist(listFlags, queryStr, queryContactId)
+    if (accountId == undefined || refreshChatlist == undefined) {
+      return
     }
-    return onDCEvent(accountId, 'ChatlistChanged', debouncedFetchChatlist2)
-  }, [accountId, listFlags, queryStr, queryContactId, debouncedFetchChatlist])
+    return onDCEvent(accountId, 'ChatlistChanged', () => {
+      log.debug('useChatList: ChatlistChanged, will refetch chatlist')
+      refreshChatlist()
+    })
+  }, [accountId, refreshChatlist])
 
-  return chatListEntries
+  if (chatListFetch?.result?.ok === false) {
+    log.error(
+      'useChatList: getChatlistEntries failed:',
+      chatListFetch.result.err
+    )
+  }
+
+  return {
+    chatListIds: chatListFetch?.lingeringResult?.ok
+      ? chatListFetch?.lingeringResult.value
+      : [],
+    chatListFetch,
+  }
 }
