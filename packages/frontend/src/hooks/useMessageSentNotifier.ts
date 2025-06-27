@@ -14,6 +14,12 @@ export function notifyMessageSent(
   messageListeners.forEach(callback => callback(accountId, chatId, message))
 }
 
+/**
+ * A notifier that allows components to subscribe to message sent events.
+ * For cases where DC Event 'MsgsChanged' is not sufficient
+ * (like on MainScreen where we want to update AppIcons immediately when a
+ * Webxdc message is sent).
+ */
 export function useMessageSentNotifier() {
   const [listeners] = useState(() => messageListeners)
 
