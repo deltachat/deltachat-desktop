@@ -216,6 +216,7 @@
 
 ### Added
 - Zoom In/Out with Ctrl +/- #890
+- Add Group Search field
 
 ### Fixed
 - reduce delay of some events (e.g. display badge counter changes faster)
