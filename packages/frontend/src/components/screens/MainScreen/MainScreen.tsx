@@ -35,6 +35,7 @@ import { openMapWebxdc } from '../../../system-integration/webxdc'
 import { ScreenContext } from '../../../contexts/ScreenContext'
 import MediaView from '../../dialogs/MediaView'
 import { openWebxdc } from '../../message/messageFunctions'
+import { useMessageSentListener } from '../../../hooks/useMessageSentNotifier'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import CreateChat from '../../dialogs/CreateChat'
@@ -147,33 +148,46 @@ export default function MainScreen({ accountId }: Props) {
     })
   })
 
-  useEffect(() => {
-    const fetchMedia = async () => {
-      const maxIcons = smallScreenMode ? 1 : 3
-      if (!accountId || !chatId) {
-        return
-      }
-      const mediaIds = await BackendRemote.rpc.getChatMedia(
-        accountId,
-        chatId,
-        'Webxdc',
-        null,
-        null
-      )
-      mediaIds.reverse() // newest first
-      const mediaLoadResult = await BackendRemote.rpc.getMessages(
-        accountId,
-        mediaIds.slice(0, maxIcons)
-      )
-      const lastMessages = Object.values(mediaLoadResult).filter(
-        result => result.kind === 'message'
-      )
-      setLastWebxdcApps(lastMessages.reverse()) // show newest first
+  // Shared function to fetch Webxdc media
+  const fetchLastUsedApps = useCallback(async () => {
+    const maxIcons = smallScreenMode ? 1 : 3
+    if (!accountId || !chatId) {
+      return
     }
-    if (accountId && chatId) {
-      fetchMedia()
-    }
+    const mediaIds = await BackendRemote.rpc.getChatMedia(
+      accountId,
+      chatId,
+      'Webxdc',
+      null,
+      null
+    )
+    mediaIds.reverse() // newest first
+    const mediaLoadResult = await BackendRemote.rpc.getMessages(
+      accountId,
+      mediaIds.slice(0, maxIcons)
+    )
+    const lastMessages = Object.values(mediaLoadResult).filter(
+      result => result.kind === 'message'
+    )
+    setLastWebxdcApps(lastMessages.reverse()) // show newest first
   }, [accountId, chatId, smallScreenMode])
+
+  useEffect(() => {
+    if (accountId && chatId) {
+      fetchLastUsedApps()
+    }
+  }, [accountId, chatId, fetchLastUsedApps])
+
+  // Listen for messages being sent to the current chat
+  useMessageSentListener(accountId || 0, chatId || 0, message => {
+    // Only refresh Webxdc apps list if the sent message is a Webxdc message or .xdc file
+    if (
+      message.viewtype === 'Webxdc' ||
+      (message.filename && message.filename.endsWith('.xdc'))
+    ) {
+      fetchLastUsedApps()
+    }
+  })
 
   useEffect(() => {
     // Make sure it uses new version of settings store instance
