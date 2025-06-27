@@ -452,7 +452,11 @@ function AppIcons({
     return null
   }
   return (
-    <div className={styles.webxdcIcons} data-no-drag-region='true'>
+    <div
+      className={styles.webxdcIcons}
+      data-testid='last-used-apps'
+      data-no-drag-region='true'
+    >
       {apps.map(app => (
         <Button
           styling='borderless'
