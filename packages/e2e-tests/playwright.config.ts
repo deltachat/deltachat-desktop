@@ -23,7 +23,7 @@ export default defineConfig({
   expect: {
     // Our tests involve network interaction, so we want a higher timeout
     // for assertions, such as receiving an invitation to a group.
-    timeout: 20_000,
+    timeout: 60_000,
   },
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
