@@ -19,7 +19,7 @@ export function getDefaultState(): DesktopSettingsType {
     enableOnDemandLocationStreaming: false,
     chatViewBgImg: undefined,
     lastChats: {},
-    zoomFactor: 1,
+    zoomFactor: undefined,
     activeTheme: 'system',
     minimizeToTray: true,
     syncAllAccounts: true,

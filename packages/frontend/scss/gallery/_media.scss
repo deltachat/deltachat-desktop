@@ -15,6 +15,7 @@ $tab-height: 46px;
     display: flex;
     justify-content: space-between;
     gap: 30px;
+    margin-left: 10px;
 
     overflow-x: auto;
 
@@ -80,4 +81,10 @@ $tab-height: 46px;
       margin-right: 20px;
     }
   }
+}
+
+.image-context-menu-container:focus-visible {
+  // This element gets focused by default when you open
+  // the fullscreen media. Outlining it is unnecessary.
+  outline: none;
 }

@@ -103,7 +103,11 @@ function incomingMessageHandler(
     return
   }
 
-  if (chatId === window.__selectedChatId && document.hasFocus()) {
+  if (
+    accountId === window.__selectedAccountId &&
+    chatId === window.__selectedChatId &&
+    document.hasFocus()
+  ) {
     // window has focus don't send notification for the selected chat
     //
     // It is important for accessibility to notify the user of all new messages,

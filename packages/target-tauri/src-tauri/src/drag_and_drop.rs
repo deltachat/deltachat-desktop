@@ -18,11 +18,21 @@ pub(crate) async fn drag_file_out(
         drag::Image::Raw(include_bytes!("../../../../images/electron-file-drag-out.png").to_vec());
 
     app.run_on_main_thread(move || {
+        #[cfg(target_os = "linux")]
+        let gtk_window = match window
+            .gtk_window()
+            .map_err(|err| format!("failed to get window.gtk_window: {err:?}"))
+        {
+            Ok(gtk_window) => gtk_window,
+            Err(error) => {
+                log::error!("{error:?}");
+                return;
+            }
+        };
+
         if let Err(error) = drag::start_drag(
             #[cfg(target_os = "linux")]
-            &window
-                .gtk_window()
-                .map_err(|err| format!("failed tp get window.gtk_window: {err:?}"))?,
+            &gtk_window,
             #[cfg(not(target_os = "linux"))]
             &window,
             DragItem::Files(vec![file]),

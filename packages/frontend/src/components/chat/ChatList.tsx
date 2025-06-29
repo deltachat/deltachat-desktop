@@ -45,6 +45,7 @@ import type {
 } from './ChatListItemRow'
 import { isInviteLink } from '../../../../shared/util'
 import { RovingTabindexProvider } from '../../contexts/RovingTabindex'
+import { useRpcFetch } from '../../hooks/useFetch'
 
 const enum LoadStatus {
   FETCHING = 1,
@@ -347,17 +348,16 @@ export default function ChatList(props: {
     }
   }, [messageResultIds, messageCache, queryStr, queryChatId])
 
-  const [searchChatInfo, setSearchChatInfo] = useState<T.BasicChat | null>(null)
-  useEffect(() => {
-    if (queryChatId) {
-      BackendRemote.rpc
-        .getBasicChatInfo(accountId, queryChatId)
-        .then(setSearchChatInfo)
-        .catch(console.error)
-    } else {
-      setSearchChatInfo(null)
-    }
-  }, [accountId, queryChatId, isSearchActive])
+  const searchChatInfoFetch = useRpcFetch(
+    BackendRemote.rpc.getBasicChatInfo,
+    queryChatId ? [accountId, queryChatId] : null
+  )
+  if (searchChatInfoFetch?.result?.ok === false) {
+    console.error(searchChatInfoFetch.result.err)
+  }
+  const searchChatInfo = searchChatInfoFetch?.result?.ok
+    ? searchChatInfoFetch.result.value
+    : null
 
   // Render --------------------
   const tx = useTranslationFunction()

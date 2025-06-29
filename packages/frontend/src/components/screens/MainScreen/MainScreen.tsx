@@ -35,6 +35,7 @@ import { openMapWebxdc } from '../../../system-integration/webxdc'
 import { ScreenContext } from '../../../contexts/ScreenContext'
 import MediaView from '../../dialogs/MediaView'
 import { openWebxdc } from '../../message/messageFunctions'
+import { useWebxdcMessageSentListener } from '../../../hooks/useWebxdcMessageSent'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import CreateChat from '../../dialogs/CreateChat'
@@ -147,33 +148,41 @@ export default function MainScreen({ accountId }: Props) {
     })
   })
 
-  useEffect(() => {
-    const fetchMedia = async () => {
-      const maxIcons = smallScreenMode ? 1 : 3
-      if (!accountId || !chatId) {
-        return
-      }
-      const mediaIds = await BackendRemote.rpc.getChatMedia(
-        accountId,
-        chatId,
-        'Webxdc',
-        null,
-        null
-      )
-      mediaIds.reverse() // newest first
-      const mediaLoadResult = await BackendRemote.rpc.getMessages(
-        accountId,
-        mediaIds.slice(0, maxIcons)
-      )
-      const lastMessages = Object.values(mediaLoadResult).filter(
-        result => result.kind === 'message'
-      )
-      setLastWebxdcApps(lastMessages.reverse()) // show newest first
+  // Shared function to fetch Webxdc media
+  const fetchLastUsedApps = useCallback(async () => {
+    const maxIcons = smallScreenMode ? 1 : 3
+    if (!accountId || !chatId) {
+      return
     }
-    if (accountId && chatId) {
-      fetchMedia()
-    }
+    const mediaIds = await BackendRemote.rpc.getChatMedia(
+      accountId,
+      chatId,
+      'Webxdc',
+      null,
+      null
+    )
+    mediaIds.reverse() // newest first
+    const mediaLoadResult = await BackendRemote.rpc.getMessages(
+      accountId,
+      mediaIds.slice(0, maxIcons)
+    )
+    const lastMessages = Object.values(mediaLoadResult).filter(
+      result => result.kind === 'message'
+    )
+    setLastWebxdcApps(lastMessages.reverse()) // show newest first
   }, [accountId, chatId, smallScreenMode])
+
+  useEffect(() => {
+    if (accountId && chatId) {
+      fetchLastUsedApps()
+    }
+  }, [accountId, chatId, fetchLastUsedApps])
+
+  // Listen for Webxdc messages being sent to the current chat
+  useWebxdcMessageSentListener(accountId || 0, chatId || 0, () => {
+    // Refresh Webxdc apps list when a Webxdc message is sent
+    fetchLastUsedApps()
+  })
 
   useEffect(() => {
     // Make sure it uses new version of settings store instance
@@ -401,17 +410,9 @@ function ChatNavButtons({ chat }: { chat: T.FullChat }) {
 
   return (
     <>
-      <span
-        role='tablist'
-        aria-orientation='horizontal'
-        className='views'
-        data-no-drag-region
-      >
+      <span className='views' data-no-drag-region>
         <Button
-          role='tab'
-          id='tab-media-view'
           onClick={openMediaViewDialog}
-          aria-controls='media-view'
           aria-label={tx('apps_and_media')}
           title={tx('apps_and_media')}
           className='navbar-button'
@@ -420,8 +421,6 @@ function ChatNavButtons({ chat }: { chat: T.FullChat }) {
           <Icon coloring='navbar' icon='apps' size={18} />
         </Button>
         {settingsStore?.desktopSettings.enableOnDemandLocationStreaming && (
-          // Yes, this is not marked as `role='tab'`.
-          // I'm not sure if this is alright.
           <Button
             onClick={() => openMapWebxdc(selectedAccountId(), chatId)}
             aria-label={tx('tab_map')}
@@ -448,7 +447,11 @@ function AppIcons({
     return null
   }
   return (
-    <div className={styles.webxdcIcons} data-no-drag-region='true'>
+    <div
+      className={styles.webxdcIcons}
+      data-testid='last-used-apps'
+      data-no-drag-region='true'
+    >
       {apps.map(app => (
         <Button
           styling='borderless'
@@ -464,6 +467,7 @@ function AppIcons({
             className={styles.webxdcIcon}
             src={runtime.getWebxdcIconURL(accountId, app.id)}
             alt={app.webxdcInfo?.name}
+            onContextMenu={(e: React.MouseEvent) => e.preventDefault()}
           />
         </Button>
       ))}

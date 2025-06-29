@@ -3,16 +3,31 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- Update last used app icons immediately after sending a new app
+
+<a id="1_59_2"></a>
+
+## [1.59.2] - 2025-06-25
+
+### Added
+- Zoom In/Out with Ctrl +/- #890
 
 ### Changed
 
 ### Fixed
-- fix `runtime.isDroppedFileFromOutside` is not working as indended #5165
+- fix notifications not working sometimes, introduced in 1.59.1
+- fix dropping files from outside not working on Windows, introduced in 1.59.1
+- fix "Copy Selected Text" item never appearing in message context menu
+- fix `runtime.isDroppedFileFromOutside` is not working as indended #5165, #5197
+- accessibility: fix incorrect "Gallery" button "tab" role, introduced in 1.59.0
 - tauri: fix drag and drop on macOS #5165
 - translate "Emoji" and "Sticker" in emoji & sticker picker
 - tauri: fix webxdc apps not receiving `visibilitychange`, `beforeunload` and `pagehide` when the window gets closed (except on macOS) #5065
 - tauri: save zoom level between webxdc app launches #5163
-- tauri: remember HTML email viewer window position / size for all HTML messages together, instead of separately for each individual message
+- tauri: remember HTML email viewer window position / size for all HTML messages together, instead of separately for each individual message #5171
+- tauri: fix "Connectivity" dialog being unreadable on dark theme
+- tauri: prevent moving around of the whole app with the touchpad gestures on windows #5182
+- fix horizontal scroll in message list #5162
 
 <a id="1_59_1"></a>
 
@@ -23,6 +38,9 @@
 - add a sound effect that plays when a message gets received in the currently open chat (can be turned off)
 - add flatpak support for tauri
 - add drag and drop to tauri
+
+### Changed
+- infinite loading for gallery #4868
 
 ### Fixed
 - improve performance a little
@@ -3496,7 +3514,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.59.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.59.2...HEAD
+
+[1.59.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.59.1...v1.59.2
 
 [1.59.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.59.0...v1.59.1
 

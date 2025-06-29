@@ -143,7 +143,7 @@ class ElectronRuntime implements Runtime {
   isDroppedFileFromOutside(file: string): boolean {
     // ".sqlite-blobs" is the old folder name that could still be there in old accounts
     const forbiddenPathRegEx = /DeltaChat\/.+?(\.sqlite-blobs|\.db-blobs)\//gi
-    return !forbiddenPathRegEx.test(file.replace('\\', '/'))
+    return !forbiddenPathRegEx.test(file.replaceAll('\\', '/'))
   }
   onThemeUpdate: (() => void) | undefined
   onChooseLanguage: ((locale: string) => Promise<void>) | undefined
@@ -498,7 +498,13 @@ class ElectronRuntime implements Runtime {
       for (const file of e.dataTransfer.files) {
         const path = getPathForFile(file)
         this.log.info({ path })
-        if (!this.isDroppedFileFromOutside(path)) {
+        // TODO this doesn't work propertly when dropping images
+        // from inside Delta Chat to inside Delta Chat:
+        // `getPathForFile` returns an empty string then.
+        // It's not clear whether this only happens with files
+        // dragged from inside Delta Chat,
+        // i.e. we probably can't ignore all such files.
+        if (path.length !== 0 && !this.isDroppedFileFromOutside(path)) {
           this.log.warn(
             'Prevented a file from being sent again while dragging it out',
             path

@@ -152,10 +152,7 @@ export function keyDownEvent2Action(
       if ((ev.target as HTMLElement)?.id === 'composer-textarea') {
         return KeybindAction.MessageList_PageDown
       }
-    } else if (
-      (ev.metaKey || ev.ctrlKey) &&
-      (ev.key === '/' || ev.code === 'Slash')
-    ) {
+    } else if ((ev.metaKey || ev.ctrlKey) && ev.key === '/') {
       return KeybindAction.KeybindingCheatSheet_Open
     }
   } else {

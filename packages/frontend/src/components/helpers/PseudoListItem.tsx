@@ -1,10 +1,4 @@
-import React, {
-  PropsWithChildren,
-  CSSProperties,
-  useState,
-  useEffect,
-  useRef,
-} from 'react'
+import React, { PropsWithChildren, CSSProperties, useRef } from 'react'
 
 import { PseudoContact } from '../contact/Contact'
 import { QRAvatar } from '../Avatar'
@@ -12,9 +6,9 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { useSettingsStore } from '../../stores/settings'
 import useProcessQR from '../../hooks/useProcessQr'
 import { BackendRemote } from '../../backend-com'
-import { T } from '@deltachat/jsonrpc-client'
 import { ContactListItem } from '../contact/ContactListItem'
 import { useRovingTabindex } from '../../contexts/RovingTabindex'
+import { useRpcFetch } from '../../hooks/useFetch'
 
 export function PseudoListItem(
   props: PropsWithChildren<{
@@ -147,51 +141,18 @@ export const PseudoListItemAddContactOrGroupFromInviteLink = ({
   const processQr = useProcessQR()
   const inviteLinkTrimmed = inviteLink.trim()
 
-  const [parsedQr, setParsedQr] = useState<null | T.Qr>(null)
-  useEffect(() => {
-    setParsedQr(null)
-    let outdated = false
-
-    BackendRemote.rpc
-      .checkQr(accountId, inviteLinkTrimmed)
-      .then(qr => {
-        if (!outdated) {
-          setParsedQr(qr)
-        }
-      })
-      .catch(() => {
-        if (!outdated) {
-          setParsedQr(null)
-        }
-      })
-
-    return () => {
-      outdated = true
-    }
-  }, [accountId, inviteLinkTrimmed])
-
-  const [contact, setContact] = useState<null | T.Contact>(null)
-  useEffect(() => {
-    setContact(null)
-
-    if (parsedQr?.kind !== 'askVerifyContact') {
-      return
-    }
-
-    let outdated = false
-
-    BackendRemote.rpc
-      .getContact(accountId, parsedQr.contact_id)
-      .then(contact => {
-        if (!outdated) {
-          setContact(contact)
-        }
-      })
-
-    return () => {
-      outdated = true
-    }
-  }, [accountId, parsedQr])
+  const parsedQrFetch = useRpcFetch(BackendRemote.rpc.checkQr, [
+    accountId,
+    inviteLink,
+  ])
+  const parsedQr = parsedQrFetch.result?.ok ? parsedQrFetch.result.value : null
+  const contactFetch = useRpcFetch(
+    BackendRemote.rpc.getContact,
+    parsedQr && parsedQr.kind === 'askVerifyContact'
+      ? [accountId, parsedQr.contact_id]
+      : null
+  )
+  const contact = contactFetch?.result?.ok ? contactFetch.result.value : null
 
   const onClick = () => {
     processQr(accountId, inviteLinkTrimmed)

@@ -86,11 +86,6 @@ export function getBackgroundImageStyle(
   return style
 }
 
-// Invariant: The called function handles windows specifically.
-function fullPath(file: ParsedPath) {
-  return file.dir + '/' + file.name + file.ext
-}
-
 function isImage(file: ParsedPath) {
   const imageExtensions = ['.jpg', '.jpeg', '.png']
   return imageExtensions.includes(file.ext)
@@ -140,19 +135,27 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
           }
           return val
         })
-        .map(path => parse(path))
+        // TODO `parse` is a polyfill, and doesn't properly work
+        // for Windows paths.
+        // Namely, `name` is the full path, except for file extension
+        // (unless the file has no extension, then the things are even worse).
+        .map(path => ({ parsed: parse(path), pathStr: path }))
 
       // send single file
       if (sanitized.length == 1) {
         const file = sanitized[0]
-        const msgViewType: Viewtype = isImage(file) ? 'Image' : 'File'
-        await addFileToDraft(fullPath(file), file.name + file.ext, msgViewType)
+        const msgViewType: Viewtype = isImage(file.parsed) ? 'Image' : 'File'
+        await addFileToDraft(
+          file.pathStr,
+          file.parsed.name + file.parsed.ext,
+          msgViewType
+        )
       }
       // send multiple files
       else if (sanitized.length > 1 && !hasOpenDialogs) {
         openDialog(ConfirmSendingFiles, {
           sanitizedFileList: sanitized.map(path => ({
-            name: path.name,
+            name: path.parsed.name,
           })),
           chatName: chat.name,
           onClick: async (isConfirmed: boolean) => {
@@ -161,10 +164,12 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
             }
 
             for (const file of sanitized) {
-              const msgViewType: Viewtype = isImage(file) ? 'Image' : 'File'
+              const msgViewType: Viewtype = isImage(file.parsed)
+                ? 'Image'
+                : 'File'
               sendMessage(accountId, chat.id, {
-                file: fullPath(file),
-                filename: file.name + file.ext,
+                file: file.pathStr,
+                filename: file.parsed.name + file.parsed.ext,
                 viewtype: msgViewType,
               })
             }
@@ -292,18 +297,6 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
 
   return (
     <div
-      role='tabpanel'
-      // Techically we must apply `aria-labelledby` to `tabpanel`,
-      // but it's a little annoying that screen readers (NVDA)
-      // announce "'Chat' property page" every time
-      // the focus enters this tabpanel, because it's the "default" one,
-      // it's not often that another tab (Gallery) is selected.
-      // So, let's comment this out for now, until we resolve
-      // https://github.com/deltachat/deltachat-desktop/issues/5074.
-      // aria-labelledby='tab-message-list-view'
-
-      // NoChatSelected also has this ID and class.
-      id='message-list-and-composer'
       className='message-list-and-composer'
       style={style}
       ref={conversationRef}

@@ -88,7 +88,7 @@
   <url type="translate">https://www.transifex.com/delta-chat/public/</url>
   <url type="contribute">https://delta.chat/en/contribute</url>
   <releases>
-    <release version="v1.59.0" date="2025-05-26" />
+    <release version="v1.59.2" date="2025-06-25" />
     <release version="v1.58.1" date="2025-05-10" />
   </releases>
   <content_rating type="oars-1.0">

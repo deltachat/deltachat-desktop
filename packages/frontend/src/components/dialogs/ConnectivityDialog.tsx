@@ -12,6 +12,7 @@ import Dialog, {
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 const INHERIT_STYLES = ['line-height', 'background-color', 'color', 'font-size']
 const OverwrittenStyles =
@@ -34,13 +35,24 @@ function ConnectivityDialogInner() {
   const [connectivityHTML, setConnectivityHTML] = useState('')
   const styleSensor = useRef<HTMLDivElement | null>(null)
 
+  // On Tauri we cannot inject dynamic styles due to more strict CSP,
+  // so let's fall back to light theme,
+  // white background.
+  // TODO fix. Maybe we could at least have two styles for dark and light.
+  //
+  // TODO also the progress bar's "width" style is not applied
+  // https://github.com/chatmail/core/blob/f03dc6af122b271bb586e9821977c55117a8b9fa/src/scheduler/connectivity.rs#L512
+  const canInjectStyles = runtime.getRuntimeInfo().target !== 'tauri'
+
   const updateConnectivity = useMemo(
     () =>
       debounceWithInit(async () => {
-        const cHTML = await getConnectivityHTML(styleSensor)
+        const cHTML = await getConnectivityHTML(
+          canInjectStyles ? styleSensor : undefined
+        )
         setConnectivityHTML(cHTML)
       }, 240),
-    []
+    [canInjectStyles]
   )
 
   useEffect(() => {
@@ -58,6 +70,7 @@ function ConnectivityDialogInner() {
               height: '100%',
               width: '100%',
               minHeight: '320px',
+              backgroundColor: canInjectStyles ? undefined : 'white',
             }}
             srcDoc={connectivityHTML}
             sandbox={''}
@@ -69,11 +82,11 @@ function ConnectivityDialogInner() {
 }
 
 async function getConnectivityHTML(
-  styleSensor: React.MutableRefObject<HTMLDivElement | null>
+  styleSensor?: React.MutableRefObject<HTMLDivElement | null>
 ): Promise<string> {
   let cHTML = await BackendRemote.rpc.getConnectivityHtml(selectedAccountId())
 
-  if (styleSensor.current) {
+  if (styleSensor?.current) {
     const cstyle = window.getComputedStyle(styleSensor.current)
     let resulting_style = ''
     for (const property of INHERIT_STYLES) {

@@ -68,6 +68,9 @@ export function openHtmlEmailWindow(
     y: undefined,
   }
 
+  const mainWindowZoomFactor =
+    mainWindow.window?.webContents.getZoomFactor() || 1.0
+
   const window = (open_windows[window_id] = new electron.BrowserWindow({
     backgroundColor: '#282828',
     // backgroundThrottling: false, // do not throttle animations/timers when page is background
@@ -92,7 +95,7 @@ export function openHtmlEmailWindow(
     },
     alwaysOnTop: mainWindow?.isAlwaysOnTop(),
   }))
-  window.webContents.setZoomFactor(DesktopSettings.state.zoomFactor)
+  window.webContents.setZoomFactor(mainWindowZoomFactor)
 
   setContentProtection(window)
 
@@ -170,9 +173,21 @@ export function openHtmlEmailWindow(
       {
         label: tx('global_menu_view_desktop'),
         submenu: [
-          { role: 'resetZoom' },
-          { role: 'zoomIn' },
-          { role: 'zoomOut' },
+          {
+            accelerator: 'CmdOrCtrl+=',
+            label: tx('menu_zoom_in'),
+            role: 'zoomIn',
+          },
+          {
+            accelerator: 'CmdOrCtrl+-',
+            label: tx('menu_zoom_out'),
+            role: 'zoomOut',
+          },
+          {
+            accelerator: 'CmdOrCtrl+0',
+            label: `${tx('reset')}`,
+            role: 'resetZoom',
+          },
           { type: 'separator' },
           {
             label: tx('global_menu_view_floatontop_desktop'),
@@ -212,6 +227,11 @@ export function openHtmlEmailWindow(
     }
   })
 
+  /**
+   * the actual content of the email is loaded into a sandboxed view
+   * with its own session and webPreferences that allows to load remote
+   * content, but only if the user allows it
+   */
   let sandboxedView: WebContentsView = makeBrowserView(
     account_id,
     loadRemoteContentAtStart,
@@ -220,8 +240,7 @@ export function openHtmlEmailWindow(
   )
   window.contentView.addChildView(sandboxedView)
   sandboxedView.webContents.setZoomFactor(
-    DesktopSettings.state.zoomFactor *
-      Math.pow(1.2, window.webContents.getZoomLevel())
+    mainWindowZoomFactor * Math.pow(1.2, window.webContents.getZoomLevel())
   )
   let context_menu_handle = createContextMenu(window, sandboxedView.webContents)
 
@@ -279,8 +298,7 @@ export function openHtmlEmailWindow(
     'html-view:resize-content',
     (_ev, bounds: Electron.Rectangle) => {
       const contentZoomFactor =
-        DesktopSettings.state.zoomFactor *
-        Math.pow(1.2, window.webContents.getZoomLevel())
+        mainWindowZoomFactor * Math.pow(1.2, window.webContents.getZoomLevel())
       const windowZoomFactor = window.webContents.getZoomFactor()
 
       const window_bounds = window.getBounds()
@@ -376,7 +394,7 @@ export function openHtmlEmailWindow(
     // for debugging email
     // sandboxedView.webContents.openDevTools({ mode: 'detach' })
   }
-
+  // handle toggle network button
   window.webContents.ipc.handle('html-view:change-network', update_restrictions)
 
   window.loadFile(

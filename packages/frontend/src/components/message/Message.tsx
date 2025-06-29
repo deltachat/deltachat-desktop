@@ -855,7 +855,6 @@ export default function Message(props: {
         />
       )}
       <div
-        onContextMenu={showContextMenu}
         className='msg-container'
         style={{ borderColor: message.sender.color }}
         ref={messageContainerRef}
