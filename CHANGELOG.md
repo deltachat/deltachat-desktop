@@ -15,6 +15,8 @@
 - tauri: remember HTML email viewer window position / size for all HTML messages together, instead of separately for each individual message #5171
 - tauri: fix fullscreen media view zoom, pan, pinch not working quite right #5200
 - tauri: fix fullscreen avatar for selfavatar #5240
+- upgrade `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.160.0`
+- upgrade electron from 34 to 37
 
 <a id="1_59_2"></a>
 
