@@ -6,7 +6,7 @@ export async function modifyGroup(
   name: string,
   image: string | null | undefined
 ): Promise<void> {
-  const chat = await BackendRemote.rpc.getFullChatById(accountId, chatId)
+  const chat = await BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
 
   await BackendRemote.rpc.setChatName(accountId, chatId, name)
 
