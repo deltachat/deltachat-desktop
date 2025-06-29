@@ -15,9 +15,6 @@
 ### Added
 - Zoom In/Out with Ctrl +/- #890
 
-### Changed
-- tauri: macOS: webxdc: Remove the nowhere-proxy to support pre-14 macOS.
-
 ### Fixed
 - fix notifications not working sometimes, introduced in 1.59.1
 - fix dropping files from outside not working on Windows, introduced in 1.59.1
