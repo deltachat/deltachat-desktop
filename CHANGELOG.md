@@ -5,6 +5,9 @@
 ### Added
 - Update last used app icons immediately after sending a new app
 
+### Changed
+- tauri: macOS: webxdc: Remove the nowhere-proxy to support pre-14 macOS. #5202
+
 ### Fixed
 - tauri: remember webxdc app windows' position and size between app re-launches
 
@@ -14,8 +17,6 @@
 
 ### Added
 - Zoom In/Out with Ctrl +/- #890
-
-### Changed
 
 ### Fixed
 - fix notifications not working sometimes, introduced in 1.59.1
