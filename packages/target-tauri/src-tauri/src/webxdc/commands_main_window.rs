@@ -356,6 +356,10 @@ pub(crate) async fn open_webxdc<'a>(
     //
     // Note that `additional_browser_args` might make `proxy_url`
     // have no effect (see below).
+    //
+    // IDEA: we disabled it on macOS, because it increased the minimum version to 14.
+    // But there may be a possibility to enable it conditionally when the api is available, see
+    // https://github.com/deltachat/deltachat-desktop/issues/5201
     #[cfg(not(target_os = "macos"))]
     {
         window_builder = window_builder.proxy_url(dummy_localhost_proxy_url.clone());
