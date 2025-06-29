@@ -5,6 +5,10 @@
 ### Added
 - Update last used app icons immediately after sending a new app
 
+### Fixed
+- tauri: remember HTML email viewer window position / size for all HTML messages together, instead of separately for each individual message #5171
+- tauri: fix fullscreen media view zoom, pan, pinch not working quite right #5200
+
 <a id="1_59_2"></a>
 
 ## [1.59.2] - 2025-06-25
@@ -24,10 +28,8 @@
 - translate "Emoji" and "Sticker" in emoji & sticker picker
 - tauri: fix webxdc apps not receiving `visibilitychange`, `beforeunload` and `pagehide` when the window gets closed (except on macOS) #5065
 - tauri: save zoom level between webxdc app launches #5163
-- tauri: remember HTML email viewer window position / size for all HTML messages together, instead of separately for each individual message #5171
 - tauri: fix "Connectivity" dialog being unreadable on dark theme
 - tauri: prevent moving around of the whole app with the touchpad gestures on windows #5182
-- tauri: fix fullscreen media view zoom, pan, pinch not working quite right
 - fix horizontal scroll in message list #5162
 
 <a id="1_59_1"></a>
