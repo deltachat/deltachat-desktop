@@ -15,6 +15,9 @@
   "languages": {
     "TypeScript": {
       "formatter": "prettier"
+    },
+    "TSX": {
+      "formatter": "prettier"
     }
   }
 }
