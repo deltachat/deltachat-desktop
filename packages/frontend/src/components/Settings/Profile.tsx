@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { avatarInitial } from '../Avatar'
-import { runtime } from '@deltachat-desktop/runtime-interface'
 import LargeProfileImage from '../LargeProfileImage'
 
 import type { SettingsStoreState } from '../../stores/settings'
@@ -21,9 +20,7 @@ export default function Profile({ settingsStore }: Props) {
     settingsStore.selfContact.address
   )
 
-  const profileImageUrl = runtime.transformBlobURL(
-    settingsStore.selfContact.profileImage || ''
-  )
+  const profileImageUrl = settingsStore.selfContact.profileImage || ''
 
   const profileName =
     settingsStore.settings.displayname !== ''

@@ -3,6 +3,7 @@ import React, { CSSProperties } from 'react'
 import Icon from '../Icon'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { ClickForFullscreenAvatarWrapper } from '../Avatar'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 import styles from './styles.module.scss'
 
@@ -29,7 +30,7 @@ export default function LargeProfileImage({
         <ClickForFullscreenAvatarWrapper filename={imageUrl}>
           <img
             className={styles.largeProfileImageArea}
-            src={imageUrl}
+            src={runtime.transformBlobURL(imageUrl)}
             alt={tx('pref_profile_photo')}
           />
         </ClickForFullscreenAvatarWrapper>
