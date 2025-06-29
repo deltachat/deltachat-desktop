@@ -6,6 +6,10 @@ import { BackendRemote } from '../backend-com'
 
 import type { MutableRefObject, PropsWithChildren } from 'react'
 import type { T } from '@deltachat/jsonrpc-client'
+import { useRpcFetch } from '../hooks/useFetch'
+import { getLogger } from '@deltachat-desktop/shared/logger'
+
+const log = getLogger('ChatContext')
 
 export enum ChatView {
   Media,
@@ -29,6 +33,8 @@ export type ChatContextValue = {
    * until the new chat's info gets loaded.
    */
   chatWithLinger?: T.FullChat
+  chatNoLinger?: T.FullChat
+  loadingChat: boolean
   chatId?: number
   // The resolve value of the promise is unused at the time of writing.
   // And the Promise itself doesn't seem to be used that much.
@@ -69,15 +75,43 @@ export const ChatProvider = ({
 }: PropsWithChildren<Props>) => {
   const [activeView, setActiveView] = useState(ChatView.MessageList)
 
-  const [chatWithLinger, setChatWithLinger] = useState<T.FullChat | undefined>()
-  const cancelPendingSetChat = useRef<(() => void) | undefined>(undefined)
-
   const [chatId, setChatId] = useState<number | undefined>()
   window.__selectedChatId = chatId
 
   const setChatView = useCallback<SetView>((nextView: ChatView) => {
     setActiveView(nextView)
   }, [])
+
+  const chatFetch = useRpcFetch(
+    BackendRemote.rpc.getFullChatById,
+    accountId != undefined && chatId != undefined ? [accountId, chatId] : null
+  )
+  if (chatFetch?.result?.ok === false) {
+    log.error('Failed to fetch chat', chatFetch.result.err)
+  }
+  const chatWithLinger = chatFetch?.lingeringResult?.ok
+    ? chatFetch.lingeringResult.value
+    : undefined
+  const chatNoLinger = chatFetch?.result?.ok
+    ? chatFetch.result.value
+    : undefined
+
+  type ChatOrNull = null | Awaited<
+    ReturnType<typeof BackendRemote.rpc.getFullChatById>
+  >
+  const resolvePendingSetChatPromise = useRef<
+    ((res: ChatOrNull) => void) | null
+  >(null)
+  if (
+    resolvePendingSetChatPromise.current &&
+    chatNoLinger != undefined &&
+    // This is implied by `chatNoLinger != undefined`, but let's double-check.
+    chatNoLinger.id === chatId
+  ) {
+    resolvePendingSetChatPromise.current(chatNoLinger)
+    resolvePendingSetChatPromise.current = null
+    // Maybe a callback passed to `useRpcFetch` would be simpler.
+  }
 
   const selectChat = useCallback<SelectChat>(
     (nextAccountId: number, nextChatId: number) => {
@@ -122,78 +156,37 @@ export const ChatProvider = ({
       // Remember that user selected this chat to open it again when they come back
       saveLastChatId(accountId, nextChatId)
 
-      // Make sure that this gets called eventually.
-      let resolveRetPromise: (result: boolean) => void
-      const retPromise = new Promise<boolean>(r => {
-        resolveRetPromise = r
+      resolvePendingSetChatPromise.current?.(null)
+      const setChatPromise = new Promise<ChatOrNull>(r => {
+        resolvePendingSetChatPromise.current = r
       })
 
-      // `cancelPendingSetChat` is mostly to resolve race conditions
-      // where the previous `selectChat()` finishes _after_ the new one.
-      cancelPendingSetChat.current?.()
-      let cancelled = false
-      const cancel = () => {
-        cancelled = true
-        resolveRetPromise(false)
-      }
-      cancelPendingSetChat.current = cancel
+      setChatPromise.then(nextChat => {
+        if (nextChat == null) {
+          return
+        }
+        // Switch to "archived" view if selected chat is there
+        // @TODO: We probably want this to be part of the UI logic instead
+        ActionEmitter.emitAction(
+          nextChat.archived
+            ? KeybindAction.ChatList_SwitchToArchiveView
+            : KeybindAction.ChatList_SwitchToNormalView
+        )
+      })
 
-      BackendRemote.rpc
-        .getFullChatById(accountId, nextChatId)
-        .then(nextChat => {
-          if (cancelled) {
-            throw new Error('cancelled')
-          }
-
-          setChatWithLinger(nextChat)
-
-          // Switch to "archived" view if selected chat is there
-          // @TODO: We probably want this to be part of the UI logic instead
-          ActionEmitter.emitAction(
-            nextChat.archived
-              ? KeybindAction.ChatList_SwitchToArchiveView
-              : KeybindAction.ChatList_SwitchToNormalView
-          )
-        })
-        .then(() => {
-          resolveRetPromise(true)
-        })
-        .catch(_err => {
-          resolveRetPromise(false)
-        })
-        .finally(() => {
-          // Yes, need to check if the current pendingSetChat
-          // is this one, because this one might take longer
-          // than the next one.
-          if (cancelPendingSetChat.current === cancel) {
-            // This is not necessary. Just to clean up the state.
-            cancelPendingSetChat.current = undefined
-          }
-        })
-
-      return retPromise
+      return setChatPromise.then(nextChat => nextChat != null)
     },
     [accountId, chatId]
   )
 
-  const refreshChat = useCallback(async () => {
-    if (!accountId || !chatId) {
-      return
-    }
-
-    setChatWithLinger(
-      await BackendRemote.rpc.getFullChatById(accountId, chatId)
-    )
-  }, [accountId, chatId])
-
   const unselectChat = useCallback<UnselectChat>(() => {
     setActiveView(ChatView.MessageList)
     setChatId(undefined)
-    setChatWithLinger(undefined)
   }, [])
 
   unselectChatRef.current = unselectChat
 
+  const refreshChat = chatFetch?.refresh
   // Subscribe to events coming from the core
   useEffect(() => {
     const onChatModified = (
@@ -208,7 +201,11 @@ export const ChatProvider = ({
         return
       }
 
-      refreshChat()
+      if (refreshChat) {
+        refreshChat()
+      } else {
+        log.error("tried to refreshChat, but it's", refreshChat)
+      }
     }
 
     const onContactsModified = (
@@ -231,7 +228,11 @@ export const ChatProvider = ({
         return
       }
 
-      refreshChat()
+      if (refreshChat) {
+        refreshChat()
+      } else {
+        log.error("tried to refreshChat, but it's", refreshChat)
+      }
     }
 
     BackendRemote.on('ChatModified', onChatModified)
@@ -248,6 +249,8 @@ export const ChatProvider = ({
   const value: ChatContextValue = {
     activeView,
     chatWithLinger,
+    chatNoLinger,
+    loadingChat: chatFetch?.loading ?? false,
     chatId,
     selectChat,
     setChatView,
