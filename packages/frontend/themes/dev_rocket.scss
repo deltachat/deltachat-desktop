@@ -1,5 +1,6 @@
 /* Set theme variables used for theme Generation */
 @use './_themebase' with (
+  $themeDarkOrLight: light,
   $outlineColor: #b9b9b9,
   $accentColor: #000000,
   $bgChatView: #e6dcd4,
