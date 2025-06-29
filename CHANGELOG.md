@@ -16,6 +16,7 @@
 - Zoom In/Out with Ctrl +/- #890
 
 ### Changed
+- use new getWebxdcInfo API function instead of message.webxdcInfo #5227
 
 ### Fixed
 - fix notifications not working sometimes, introduced in 1.59.1
