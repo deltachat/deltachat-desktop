@@ -5,6 +5,9 @@
 ### Added
 - Update last used app icons immediately after sending a new app
 
+### Fixed
+- tauri: fix fullscreen avatar for selfavatar #5240
+
 <a id="1_59_2"></a>
 
 ## [1.59.2] - 2025-06-25
