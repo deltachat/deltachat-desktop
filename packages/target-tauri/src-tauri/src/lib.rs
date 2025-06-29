@@ -177,6 +177,17 @@ pub fn run() -> i32 {
         builder = builder
             .plugin(
                 tauri_plugin_window_state::Builder::new()
+                    .map_label(|original_label| {
+                        if original_label.starts_with("html-window:") {
+                            // HTML email viewer window label
+                            // contains account ID and message ID.
+                            // Let's not store state
+                            // for each individual message.
+                            "html-window:"
+                        } else {
+                            original_label
+                        }
+                    })
                     // Disabled for webxdc, because we generate a new UUID label
                     // every time we create a webxdc window,
                     // so it doesn't make sense to store it. TODO (https://github.com/deltachat/deltachat-desktop/issues/4468)
