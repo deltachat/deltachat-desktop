@@ -66,7 +66,7 @@ export function MessageWrapper(props: RenderMessageProps) {
       <div
         ref={observerRef}
         className='message-observer-bottom'
-        id={'bottom-' + props.key2}
+        data-messageid={props.key2}
       />
     </li>
   )
