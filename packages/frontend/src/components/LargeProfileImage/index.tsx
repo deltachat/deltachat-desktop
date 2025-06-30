@@ -9,7 +9,7 @@ import styles from './styles.module.scss'
 
 type Props = {
   color?: string
-  imageUrl?: string
+  imagePath?: string
   initials: string
 }
 
@@ -19,18 +19,18 @@ interface CssWithAvatarColor extends CSSProperties {
 
 export default function LargeProfileImage({
   color,
-  imageUrl,
+  imagePath,
   initials,
 }: Props) {
   const tx = useTranslationFunction()
 
   return (
     <div className={styles.largeProfileImage}>
-      {imageUrl ? (
-        <ClickForFullscreenAvatarWrapper filename={imageUrl}>
+      {imagePath ? (
+        <ClickForFullscreenAvatarWrapper filename={imagePath}>
           <img
             className={styles.largeProfileImageArea}
-            src={runtime.transformBlobURL(imageUrl)}
+            src={runtime.transformBlobURL(imagePath)}
             alt={tx('pref_profile_photo')}
           />
         </ClickForFullscreenAvatarWrapper>

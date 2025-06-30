@@ -32,7 +32,7 @@ export default function Profile({ settingsStore }: Props) {
       <LargeProfileImage
         initials={initials}
         color={settingsStore.selfContact.color}
-        imageUrl={profileImageUrl}
+        imagePath={profileImageUrl}
       />
       <div className={styles.profileDetails}>
         <div className={styles.profileDisplayName}>{profileName}</div>
