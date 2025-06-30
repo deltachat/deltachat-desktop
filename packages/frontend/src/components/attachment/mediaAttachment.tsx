@@ -64,7 +64,7 @@ const contextMenuFactory = (
       action: openWebxdc.bind(null, message),
     },
     {
-      label: tx('save_as'),
+      label: tx('menu_export_attachment'),
       action: onDownload.bind(null, message),
     },
     showCopyImage && {
