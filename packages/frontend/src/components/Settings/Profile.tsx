@@ -20,7 +20,7 @@ export default function Profile({ settingsStore }: Props) {
     settingsStore.selfContact.address
   )
 
-  const profileImageUrl = settingsStore.selfContact.profileImage || ''
+  const profileImagePath = settingsStore.selfContact.profileImage || ''
 
   const profileName =
     settingsStore.settings.displayname !== ''
@@ -32,7 +32,7 @@ export default function Profile({ settingsStore }: Props) {
       <LargeProfileImage
         initials={initials}
         color={settingsStore.selfContact.color}
-        imagePath={profileImageUrl}
+        imagePath={profileImagePath}
       />
       <div className={styles.profileDetails}>
         <div className={styles.profileDisplayName}>{profileName}</div>
