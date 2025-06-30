@@ -63,11 +63,19 @@ export function MessageWrapper(props: RenderMessageProps) {
   return (
     <li id={props.key2} className='message-wrapper'>
       <Message {...props} />
-      <div
-        ref={observerRef}
-        className='message-observer-bottom'
-        data-messageid={props.key2}
-      />
+      {/* TODO perf: `shouldInViewObserve` does not become `false`
+      when we do mark a message as read, because the messagelist.ts
+      does not update its state on such events.
+      Maybe we could listen for such events in this component,
+      or somehow manually remove the observer when we do perform the
+      `rpc.markseenMsgs` request. */}
+      {shouldInViewObserve && (
+        <div
+          ref={observerRef}
+          className='message-observer-bottom'
+          data-messageid={props.key2}
+        />
+      )}
     </li>
   )
 }
