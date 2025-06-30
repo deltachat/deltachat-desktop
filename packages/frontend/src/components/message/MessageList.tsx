@@ -43,7 +43,7 @@ type ChatTypes =
 
 const onWindowFocus = (accountId: number) => {
   log.debug('window focused')
-  const messageElements = Array.prototype.slice.call(
+  const messageElements: HTMLElement[] = Array.prototype.slice.call(
     document.querySelectorAll('#message-list .message-observer-bottom')
   )
 
