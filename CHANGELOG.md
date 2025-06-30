@@ -10,6 +10,7 @@
 - reword 'Save As' to 'Export Attachment' to have a clearer cut to 'Save' #5245
 
 ### Fixed
+- improve performance: don't mark messages as seen unnecessarily when focusing window
 - tauri: remember webxdc app windows' position and size between app re-launches
 - tauri: remember HTML email viewer window position / size for all HTML messages together, instead of separately for each individual message #5171
 - tauri: fix fullscreen media view zoom, pan, pinch not working quite right #5200
