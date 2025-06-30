@@ -6,6 +6,7 @@
 - Update last used app icons immediately after sending a new app
 
 ### Changed
+- adjust distance between info messages to match Delta Chat for Android #5244
 - tauri: macOS: webxdc: Remove the nowhere-proxy to support pre-14 macOS. #5202
 - reword 'Save As' to 'Export Attachment' to have a clearer cut to 'Save' #5245
 - use rpc.getWebxdcInfo instead of message.webxdcInfo #5227
@@ -14,6 +15,7 @@
 
 ### Fixed
 - always set "unread" count to 0 when "jump to bottom" is clicked #5204
+- fix the last info message not getting marked as read when you scroll to it #5244
 - tauri: remember webxdc app windows' position and size between app re-launches
 - tauri: remember HTML email viewer window position / size for all HTML messages together, instead of separately for each individual message #5171
 - tauri: fix fullscreen media view zoom, pan, pinch not working quite right #5200
