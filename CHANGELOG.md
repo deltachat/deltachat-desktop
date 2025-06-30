@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- improve performance: don't mark messages as seen unnecessarily when focusing window #5243
+
 <a id="1_60_0"></a>
 
 ## [1.60.0] - 2025-07-10
