@@ -347,7 +347,7 @@ function buildContextMenu(
     },
     // Save attachment as
     showAttachmentOptions && {
-      label: tx('save_as'),
+      label: tx('menu_export_attachment'),
       action: onDownload.bind(null, message),
     },
     // copy link

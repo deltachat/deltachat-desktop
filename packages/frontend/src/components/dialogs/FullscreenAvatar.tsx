@@ -32,7 +32,7 @@ export default function FullscreenAvatar(
       },
     },
     {
-      label: tx('save_as'),
+      label: tx('menu_export_attachment'),
       action: saveAs,
     },
   ])
