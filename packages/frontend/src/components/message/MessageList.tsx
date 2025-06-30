@@ -32,6 +32,7 @@ import {
   RovingTabindexProvider,
   useRovingTabindex,
 } from '../../contexts/RovingTabindex'
+import { markChatAsSeen } from '../../backend/chat'
 
 type ChatTypes =
   | C.DC_CHAT_TYPE_SINGLE
@@ -1006,6 +1007,8 @@ function JumpDownButton({
     countToShow = '99+'
   }
 
+  const stackIsEmpty = jumpToMessageStack.length === 0
+
   return (
     <>
       <div className='jump-down-button'>
@@ -1035,16 +1038,19 @@ function JumpDownButton({
               scrollIntoViewArg: { block: 'center' },
               focus: false,
             })
+            if (stackIsEmpty) {
+              // We're jumping to the very bottom, so let's mark all messages
+              // as seen, even if we're skipping over many messages
+              // without the user actually seeing them.
+              // See https://github.com/deltachat/deltachat-desktop/issues/3072.
+              markChatAsSeen(accountId, chat.id)
+            }
           }}
           // Technically this is not always "to bottom",
           // but perhaps it's good enough.
           aria-label={tx('menu_scroll_to_bottom')}
         >
-          <div
-            className={
-              'icon ' + (jumpToMessageStack.length > 0 ? 'back' : 'down')
-            }
-          />
+          <div className={'icon ' + (!stackIsEmpty ? 'back' : 'down')} />
         </button>
       </div>
     </>
