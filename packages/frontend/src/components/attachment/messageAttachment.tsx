@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import classNames from 'classnames'
 import { filesize } from 'filesize'
 
@@ -239,27 +239,33 @@ export function DraftAttachment({
   const [isLoadingWebxdcInfo, setIsLoadingWebxdcInfo] = useState(false)
   const accountId = selectedAccountId()
 
+  const lastFileNameRef = useRef<string | null>(null)
+
   useEffect(() => {
-    if (attachment && attachment.viewType === 'Webxdc') {
-      setIsLoadingWebxdcInfo(true)
-      BackendRemote.rpc
-        .getWebxdcInfo(accountId, attachment.id)
-        .then((info: T.WebxdcMessageInfo) => {
-          setWebxdcInfo(info)
-        })
-        .catch((error: any) => {
-          console.error(
-            'Failed to load webxdc info for draft:',
-            attachment.id,
-            error
-          )
-          setWebxdcInfo(null)
-        })
-        .finally(() => {
-          setIsLoadingWebxdcInfo(false)
-        })
+    if (attachment.viewType === 'Webxdc') {
+      // Only load webxdc info if filename has changed
+      if (attachment.fileName !== lastFileNameRef.current) {
+        lastFileNameRef.current = attachment.fileName
+        setIsLoadingWebxdcInfo(true)
+        BackendRemote.rpc
+          .getWebxdcInfo(accountId, attachment.id)
+          .then((info: T.WebxdcMessageInfo) => {
+            setWebxdcInfo(info)
+          })
+          .catch((error: any) => {
+            console.error(
+              'Failed to load webxdc info for draft:',
+              attachment.id,
+              error
+            )
+            setWebxdcInfo(null)
+          })
+          .finally(() => {
+            setIsLoadingWebxdcInfo(false)
+          })
+      }
     }
-  }, [accountId, attachment, attachment.id, attachment.viewType])
+  }, [accountId, attachment.id, attachment.viewType, attachment.fileName])
 
   if (!attachment) {
     return null
