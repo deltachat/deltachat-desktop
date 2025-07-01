@@ -24,13 +24,6 @@ const SUPPORTED_IMAGE_MIME_TYPES = Object.freeze([
   // for opening avatars
   'image/x',
 ])
-// See: https://www.chromium.org/audio-video
-const SUPPORTED_VIDEO_MIME_TYPES = Object.freeze([
-  'video/mp4',
-  'video/ogg',
-  'video/webm',
-  'video/quicktime',
-])
 /* EndSection - Data Copied in part from Signal */
 
 // TODO define this correctly
@@ -44,13 +37,61 @@ export function hasAttachment(attachment: MessageTypeAttachmentSubset | null) {
   return attachment && attachment.file
 }
 
-export function isVideo(filemime: string | null) {
-  return SUPPORTED_VIDEO_MIME_TYPES.includes(filemime || '')
+function canMaybePlayType(el: HTMLMediaElement, filemime: string) {
+  // https://html.spec.whatwg.org/multipage/media.html#dom-navigator-canplaytype-dev
+  const canPlayType = el.canPlayType(filemime)
+  switch (canPlayType) {
+    case 'probably':
+      return true
+    // > Implementers are encouraged to return "maybe"
+    // > unless the type can be confidently established
+    // > as being supported or not.
+    case 'maybe':
+      return true
+    case '':
+      return false
+  }
+  const _assert: never = canPlayType
 }
 
+const dummyVideoEl = document.createElement('video')
+/**
+ * Note that this does not guarantee that we are able to play this video.
+ */
+export function isVideo(filemime: string | null): boolean {
+  if (
+    filemime == null ||
+    // This is to make sure that, wherever this function is used,
+    // displaying it as an audio is preferred instead.
+    // Because `dummyVideoEl.canPlayType('audio/...')`
+    // may return 'probably' or 'maybe'.
+    // See `isAudio`.
+    !filemime.startsWith('video/')
+  ) {
+    return false
+  }
+  return canMaybePlayType(dummyVideoEl, filemime)
+}
+
+const dummyAudioEl = document.createElement('audio')
+/**
+ * Note that this does not guarantee that we are able to play this audio.
+ */
 export function isAudio(filemime: string | null) {
-  if (!filemime) return false
-  return filemime.startsWith('audio/')
+  if (
+    filemime == null ||
+    // This is to make sure that, wherever this function is used,
+    // displaying it as a video is preferred instead.
+    // Because `dummyAudioEl.canPlayType('video/...')`
+    // may return 'probably' or 'maybe'.
+    // See `isVideo`.
+    //
+    // We should probably always check `isVideo` first everywhere instead.
+    !filemime.startsWith('audio/')
+  ) {
+    return false
+  }
+  return canMaybePlayType(dummyAudioEl, filemime)
 }
 
 export function isDisplayableByFullscreenMedia(filemime: string | null) {
