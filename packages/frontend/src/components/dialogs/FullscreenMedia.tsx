@@ -109,7 +109,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
       },
     },
     {
-      label: tx('save_as'),
+      label: tx('menu_export_attachment'),
       action: onDownload.bind(null, msg),
     },
     {
