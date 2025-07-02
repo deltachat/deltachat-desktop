@@ -625,29 +625,6 @@ export function WebxdcAttachment({
     ? webxdcInfoFetch.result.value
     : null
 
-  // If the message is not yet loaded by GridGallery, show loading state
-  if (!loadResult || loadResult.kind !== 'message') {
-    return (
-      <div
-        ref={interactiveElRef}
-        className={'media-attachment-webxdc ' + rovingTabindex.className}
-        {...rovingTabindexProps}
-      >
-        <img
-          className='icon'
-          src={runtime.getWebxdcIconURL(selectedAccountId(), messageId)}
-        />
-        <div className='text-part'>
-          <div className='name'>Loading...</div>
-          <div className='summary'></div>
-        </div>
-      </div>
-    )
-  }
-
-  // At this point, loadResult.kind is guaranteed to be 'message'
-  const message = loadResult
-
   if (webxdcInfoFetch?.loading) {
     const onContextMenu = getBrokenMediaContextMenu(
       contextMenu.openContextMenu,
@@ -673,7 +650,7 @@ export function WebxdcAttachment({
         </div>
       </div>
     )
-  } else if (webxdcInfo == null) {
+  } else if (webxdcInfo == null || loadResult.kind !== 'message') {
     const onContextMenu = getBrokenMediaContextMenu(
       contextMenu.openContextMenu,
       openDialog,
@@ -707,7 +684,7 @@ export function WebxdcAttachment({
       contextMenu.openContextMenu,
       openDialog,
       jumpToMessage,
-      message,
+      loadResult,
       accountId
     )
     const { summary, name, document } = webxdcInfo
@@ -716,12 +693,12 @@ export function WebxdcAttachment({
         ref={interactiveElRef}
         className={'media-attachment-webxdc ' + rovingTabindex.className}
         onContextMenu={openContextMenu}
-        onClick={openWebxdc.bind(null, message, webxdcInfo ?? undefined)}
+        onClick={openWebxdc.bind(null, loadResult, webxdcInfo ?? undefined)}
         {...rovingTabindexProps}
       >
         <img
           className='icon'
-          src={runtime.getWebxdcIconURL(selectedAccountId(), message.id)}
+          src={runtime.getWebxdcIconURL(selectedAccountId(), loadResult.id)}
         />
         <div className='text-part'>
           <div
