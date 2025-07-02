@@ -3,12 +3,14 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react'
 import reactStringReplace from 'react-string-replace'
 import classNames from 'classnames'
 import { C, T } from '@deltachat/jsonrpc-client'
+import { debounce } from 'debounce'
 
 import MessageBody from './MessageBody'
 import MessageMetaData, { isMediaWithoutText } from './MessageMetaData'
@@ -1118,27 +1120,53 @@ function WebxdcMessageContent({
   const [isLoadingWebxdcInfo, setIsLoadingWebxdcInfo] = useState(false)
   const accountId = selectedAccountId()
 
-  useEffect(() => {
-    if (message.viewType === 'Webxdc') {
-      setIsLoadingWebxdcInfo(true)
-      BackendRemote.rpc
-        .getWebxdcInfo(accountId, message.id)
-        .then((info: T.WebxdcMessageInfo) => {
-          setWebxdcInfo(info)
-        })
-        .catch((error: any) => {
-          console.error(
-            'Failed to load webxdc info for message:',
-            message.id,
-            error
-          )
-          setWebxdcInfo(null)
-        })
-        .finally(() => {
-          setIsLoadingWebxdcInfo(false)
-        })
+  const fetchWebxdcInfo = useCallback(async () => {
+    setIsLoadingWebxdcInfo(true)
+    try {
+      const info = await BackendRemote.rpc.getWebxdcInfo(accountId, message.id)
+      setWebxdcInfo(info)
+    } catch (error) {
+      console.error(
+        'Failed to refresh webxdc info for message:',
+        message.id,
+        error
+      )
+    } finally {
+      setIsLoadingWebxdcInfo(false)
     }
-  }, [accountId, message.id, message.viewType])
+  }, [accountId, message.id])
+
+  const debouncedFetchWebxdcInfo = useMemo(
+    () => debounce(fetchWebxdcInfo, 500),
+    [fetchWebxdcInfo]
+  )
+
+  useEffect(() => {
+    if (message.viewType !== 'Webxdc') return
+
+    // Initial fetch
+    fetchWebxdcInfo()
+
+    // Listen for updates
+    const cleanup = onDCEvent(
+      accountId,
+      'WebxdcStatusUpdate',
+      async ({ msgId }) => {
+        if (msgId === message.id) {
+          // Debounce the refresh since event might be triggered on every key stroke
+          debouncedFetchWebxdcInfo()
+        }
+      }
+    )
+
+    return cleanup
+  }, [
+    accountId,
+    message.id,
+    message.viewType,
+    fetchWebxdcInfo,
+    debouncedFetchWebxdcInfo,
+  ])
 
   if (message.viewType !== 'Webxdc') {
     return null
