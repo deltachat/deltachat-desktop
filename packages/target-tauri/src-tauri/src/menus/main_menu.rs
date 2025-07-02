@@ -33,6 +33,7 @@ pub(crate) enum MainMenuAction {
     Zoom10,
     Zoom12,
     Zoom14,
+    #[cfg(any(feature = "inspector_in_production", dev))]
     DevTools,
     LogFolder,
     CurrentLogFile,
@@ -103,13 +104,12 @@ impl MenuAction<'static> for MainMenuAction {
                 menu_manager.update_all(app);
             }
 
+            #[cfg(any(feature = "inspector_in_production", dev))]
             MainMenuAction::DevTools => {
-                if cfg!(feature = "inspector_in_production") {
-                    if main_window.is_devtools_open() {
-                        main_window.close_devtools();
-                    } else {
-                        main_window.open_devtools();
-                    }
+                if main_window.is_devtools_open() {
+                    main_window.close_devtools();
+                } else {
+                    main_window.open_devtools();
                 }
             }
             MainMenuAction::LogFolder => {
@@ -250,7 +250,7 @@ pub(crate) fn create_main_menu(
         tx.sync_translate("global_menu_view_developer_desktop"),
         true,
         &[
-            #[cfg(feature = "inspector_in_production")]
+            #[cfg(any(feature = "inspector_in_production", dev))]
             &MenuItem::with_id(
                 app,
                 MainMenuAction::DevTools,
