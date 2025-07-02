@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState, useEffect } from 'react'
+import React, { useContext, useRef } from 'react'
 import { filesize } from 'filesize'
 
 import {
@@ -33,6 +33,7 @@ import type { JumpToMessage, DeleteMessage } from '../../hooks/chat/useMessage'
 import { useRovingTabindex } from '../../contexts/RovingTabindex'
 import ConfirmDeleteMessageDialog from '../dialogs/ConfirmDeleteMessage'
 import { BackendRemote } from '../../backend-com'
+import { useRpcFetch } from '../../hooks/useFetch'
 
 const log = getLogger('mediaAttachment')
 
@@ -61,7 +62,7 @@ const contextMenuFactory = (
     },
     viewType === 'Webxdc' && {
       label: tx('start_app'),
-      action: openWebxdc.bind(null, message),
+      action: openWebxdc.bind(null, message, undefined),
     },
     {
       label: tx('menu_export_attachment'),
@@ -599,8 +600,6 @@ export function WebxdcAttachment({
   const contextMenu = useContext(ContextMenuContext)
   const { jumpToMessage, deleteMessage } = useMessage()
   const accountId = selectedAccountId()
-  const [webxdcInfo, setWebxdcInfo] = useState<T.WebxdcMessageInfo | null>(null)
-  const [isLoadingWebxdcInfo, setIsLoadingWebxdcInfo] = useState(false)
 
   const interactiveElRef = useRef<any>(null)
   const rovingTabindex = useRovingTabindex(interactiveElRef)
@@ -610,34 +609,21 @@ export function WebxdcAttachment({
     tabIndex: rovingTabindex.tabIndex,
   } as const
 
-  useEffect(() => {
-    if (loadResult.kind === 'message') {
-      setIsLoadingWebxdcInfo(true)
-      BackendRemote.rpc
-        .getWebxdcInfo(accountId, messageId)
-        .then(info => {
-          if (info) {
-            setWebxdcInfo(info)
-          } else {
-            setWebxdcInfo(null)
-          }
-        })
-        .catch(error => {
-          log.error(
-            'Failed to load webxdc info for message:',
-            messageId,
-            'accountId:',
-            accountId,
-            'error:',
-            error
-          )
-          setWebxdcInfo(null)
-        })
-        .finally(() => {
-          setIsLoadingWebxdcInfo(false)
-        })
-    }
-  }, [accountId, messageId, loadResult.kind])
+  const webxdcInfoFetch = useRpcFetch(
+    BackendRemote.rpc.getWebxdcInfo,
+    loadResult.kind === 'message' ? [accountId, messageId] : null
+  )
+  if (webxdcInfoFetch?.result?.ok === false) {
+    log.error(
+      `Failed to load webxdc info for message:
+      messageId: ${messageId},
+      accountId: ${accountId},
+      error: ${webxdcInfoFetch.result.err}`
+    )
+  }
+  const webxdcInfo = webxdcInfoFetch?.result?.ok
+    ? webxdcInfoFetch.result.value
+    : null
 
   // If the message is not yet loaded by GridGallery, show loading state
   if (!loadResult || loadResult.kind !== 'message') {
@@ -662,7 +648,7 @@ export function WebxdcAttachment({
   // At this point, loadResult.kind is guaranteed to be 'message'
   const message = loadResult
 
-  if (isLoadingWebxdcInfo) {
+  if (webxdcInfoFetch?.loading) {
     const onContextMenu = getBrokenMediaContextMenu(
       contextMenu.openContextMenu,
       openDialog,
@@ -730,7 +716,7 @@ export function WebxdcAttachment({
         ref={interactiveElRef}
         className={'media-attachment-webxdc ' + rovingTabindex.className}
         onContextMenu={openContextMenu}
-        onClick={openWebxdc.bind(null, message)}
+        onClick={openWebxdc.bind(null, message, webxdcInfo ?? undefined)}
         {...rovingTabindexProps}
       >
         <img

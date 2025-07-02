@@ -4,6 +4,7 @@
 
 import { BackendRemote, Type } from '../backend-com'
 import { runtime } from '@deltachat-desktop/runtime-interface'
+import { T } from '@deltachat/jsonrpc-client'
 
 export function initWebxdc() {
   BackendRemote.on('WebxdcStatusUpdate', (accountId, { msgId }) => {
@@ -27,7 +28,8 @@ export function initWebxdc() {
  */
 export async function internalOpenWebxdc(
   accountId: number,
-  message: Type.Message
+  message: Type.Message,
+  webxdcInfo?: T.WebxdcMessageInfo
 ) {
   let href = ''
   let messageId = message.id
@@ -37,7 +39,9 @@ export async function internalOpenWebxdc(
     messageId = message.parentId
     message = await BackendRemote.rpc.getMessage(accountId, messageId)
   }
-  const webxdcInfo = await BackendRemote.rpc.getWebxdcInfo(accountId, messageId)
+  if (!webxdcInfo) {
+    webxdcInfo = await BackendRemote.rpc.getWebxdcInfo(accountId, messageId)
+  }
   if (!webxdcInfo) {
     // we can open only messages with webxdc info
     throw new Error('no webxdc info for message ' + message)

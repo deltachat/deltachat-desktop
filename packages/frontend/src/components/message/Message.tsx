@@ -1157,7 +1157,7 @@ function WebxdcMessageContent({
         alt={`icon of ${info.name}`}
         // No need to turn this element into a `<button>` for a11y,
         // because there is a button below that does the same.
-        onClick={() => openWebxdc(message)}
+        onClick={() => openWebxdc(message, webxdcInfo ?? undefined)}
         // Not setting `tabIndex={tabindexForInteractiveContents}` here
         // because there is a button below that does the same
       />
@@ -1172,7 +1172,7 @@ function WebxdcMessageContent({
       <Button
         className={styles.startWebxdcButton}
         styling='primary'
-        onClick={() => openWebxdc(message)}
+        onClick={() => openWebxdc(message, webxdcInfo ?? undefined)}
         tabIndex={tabindexForInteractiveContents}
       >
         {tx('start_app')}

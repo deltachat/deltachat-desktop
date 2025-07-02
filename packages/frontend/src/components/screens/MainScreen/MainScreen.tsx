@@ -469,7 +469,7 @@ function AppIcon({ accountId, app }: { accountId: number; app: T.Message }) {
       title={appName}
       aria-label={appName}
       onClick={() => {
-        openWebxdc(app)
+        openWebxdc(app, webxdcInfo ?? undefined)
       }}
     >
       <img
