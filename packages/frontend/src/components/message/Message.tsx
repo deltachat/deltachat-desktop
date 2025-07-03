@@ -3,12 +3,14 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react'
 import reactStringReplace from 'react-string-replace'
 import classNames from 'classnames'
 import { C, T } from '@deltachat/jsonrpc-client'
+import { debounce } from 'debounce'
 
 import MessageBody from './MessageBody'
 import MessageMetaData, { isMediaWithoutText } from './MessageMetaData'
@@ -1114,13 +1116,66 @@ function WebxdcMessageContent({
   tabindexForInteractiveContents: -1 | 0
 }) {
   const tx = useTranslationFunction()
+  const [webxdcInfo, setWebxdcInfo] = useState<T.WebxdcMessageInfo | null>(null)
+  const [isLoadingWebxdcInfo, setIsLoadingWebxdcInfo] = useState(false)
+  const accountId = selectedAccountId()
+
+  const fetchWebxdcInfo = useCallback(async () => {
+    setIsLoadingWebxdcInfo(true)
+    try {
+      const info = await BackendRemote.rpc.getWebxdcInfo(accountId, message.id)
+      setWebxdcInfo(info)
+    } catch (error) {
+      console.error(
+        'Failed to refresh webxdc info for message:',
+        message.id,
+        error
+      )
+    } finally {
+      setIsLoadingWebxdcInfo(false)
+    }
+  }, [accountId, message.id])
+
+  const debouncedFetchWebxdcInfo = useMemo(
+    () => debounce(fetchWebxdcInfo, 500),
+    [fetchWebxdcInfo]
+  )
+
+  useEffect(() => {
+    if (message.viewType !== 'Webxdc') return
+
+    // Initial fetch
+    fetchWebxdcInfo()
+
+    // Listen for updates
+    const cleanup = onDCEvent(
+      accountId,
+      'WebxdcStatusUpdate',
+      async ({ msgId }) => {
+        if (msgId === message.id) {
+          // Debounce the refresh since event might be triggered on every key stroke
+          debouncedFetchWebxdcInfo()
+        }
+      }
+    )
+
+    return cleanup
+  }, [
+    accountId,
+    message.id,
+    message.viewType,
+    fetchWebxdcInfo,
+    debouncedFetchWebxdcInfo,
+  ])
+
   if (message.viewType !== 'Webxdc') {
     return null
   }
-  const info = message.webxdcInfo || {
-    name: 'INFO MISSING!',
+
+  const info = webxdcInfo || {
+    name: isLoadingWebxdcInfo ? 'Loading...' : 'INFO MISSING!',
     document: undefined,
-    summary: 'INFO MISSING!',
+    summary: isLoadingWebxdcInfo ? '' : 'INFO MISSING!',
   }
 
   return (
@@ -1130,7 +1185,7 @@ function WebxdcMessageContent({
         alt={`icon of ${info.name}`}
         // No need to turn this element into a `<button>` for a11y,
         // because there is a button below that does the same.
-        onClick={() => openWebxdc(message)}
+        onClick={() => openWebxdc(message, webxdcInfo ?? undefined)}
         // Not setting `tabIndex={tabindexForInteractiveContents}` here
         // because there is a button below that does the same
       />
@@ -1145,7 +1200,7 @@ function WebxdcMessageContent({
       <Button
         className={styles.startWebxdcButton}
         styling='primary'
-        onClick={() => openWebxdc(message)}
+        onClick={() => openWebxdc(message, webxdcInfo ?? undefined)}
         tabIndex={tabindexForInteractiveContents}
       >
         {tx('start_app')}

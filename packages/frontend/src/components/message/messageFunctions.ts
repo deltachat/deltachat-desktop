@@ -152,7 +152,10 @@ export async function downloadFullMessage(messageId: number) {
   await BackendRemote.rpc.downloadFullMessage(selectedAccountId(), messageId)
 }
 
-export async function openWebxdc(message: Type.Message) {
+export async function openWebxdc(
+  message: Type.Message,
+  webxdcInfo?: T.WebxdcMessageInfo
+) {
   const accountId = selectedAccountId()
-  internalOpenWebxdc(accountId, message)
+  internalOpenWebxdc(accountId, message, webxdcInfo)
 }

@@ -706,7 +706,7 @@ export default Composer
 
 export type DraftObject = { chatId: number } & Pick<
   Type.Message,
-  'id' | 'text' | 'file' | 'quote' | 'viewType' | 'vcardContact' | 'webxdcInfo'
+  'id' | 'text' | 'file' | 'quote' | 'viewType' | 'vcardContact'
 > &
   MessageTypeAttachmentSubset
 
@@ -722,7 +722,6 @@ function emptyDraft(chatId: number | null): DraftObject {
     quote: null,
     viewType: 'Text',
     vcardContact: null,
-    webxdcInfo: null,
   }
 }
 
@@ -807,7 +806,6 @@ export function useDraft(
             viewType: newDraft.viewType,
             quote: newDraft.quote,
             vcardContact: newDraft.vcardContact,
-            webxdcInfo: newDraft.webxdcInfo,
           }))
           inputRef.current?.setText(newDraft.text)
         }
@@ -881,7 +879,6 @@ export function useDraft(
         viewType: newDraft.viewType,
         quote: newDraft.quote,
         vcardContact: newDraft.vcardContact,
-        webxdcInfo: newDraft.webxdcInfo,
       }))
       // don't load text to prevent bugging back
     } else {
