@@ -222,7 +222,7 @@ export function AppPicker({ onAppSelected }: Props) {
                 </ClickableLink>
               </p>
               <p>
-                <span>{tx('app_size')}:</span> {filesize(app.size)}
+                <span>{tx('app_size')}:</span> {filesize(app.size ?? 0)}
               </p>
             </div>
           </DialogContent>

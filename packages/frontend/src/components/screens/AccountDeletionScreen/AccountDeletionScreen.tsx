@@ -142,7 +142,7 @@ class AccountSize extends Component<{ accountId: number }, { size?: string }> {
       .getAccountFileSize(this.props.accountId)
       .catch(log.error.bind(log))
     if (!this.wasDestroyed) {
-      this.setState({ size: bytes ? filesize(bytes) : undefined })
+      this.setState({ size: bytes !== undefined ? filesize(bytes) : undefined })
     }
   }
 
