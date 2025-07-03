@@ -223,7 +223,7 @@ export default function Attachment({
         </div>
         <div className='text-part'>
           <div className='name'>{fileName}</div>
-          <div className='size'>{fileBytes ? filesize(fileBytes) : '?'}</div>
+          <div className='size'>{filesize(fileBytes ?? 0)}</div>
         </div>
       </button>
     )
@@ -302,9 +302,7 @@ export function DraftAttachment({
               ? 'Loading...'
               : webxdcInfo?.name || 'Unknown App'}
           </div>
-          <div className='size'>
-            {attachment.fileBytes ? filesize(attachment.fileBytes) : '?'}
-          </div>
+          <div className='size'>{filesize(attachment.fileBytes ?? 0)}</div>
         </div>
       </div>
     )
@@ -328,7 +326,7 @@ export function DraftAttachment({
         </div>
         <div className='text-part'>
           <div className='name'>{fileName}</div>
-          <div className='size'>{fileBytes ? filesize(fileBytes) : '?'}</div>
+          <div className='size'>{filesize(fileBytes ?? 0)}</div>
         </div>
       </div>
     )
