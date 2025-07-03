@@ -15,6 +15,10 @@ export function isInviteLink(url: string) {
   return url.startsWith('https://i.delta.chat/') && url.includes('#')
 }
 
+/**
+ * Like [Lodash `throttle`](https://lodash.com/docs/4.17.15#throttle)
+ * with default options (`{ leading: true, trailing: true }`).
+ */
 export function throttle<R, A extends any[]>(
   fn: (...args: A) => R,
   wait: number
