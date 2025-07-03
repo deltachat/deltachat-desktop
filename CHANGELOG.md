@@ -15,6 +15,7 @@
 - tauri: remember HTML email viewer window position / size for all HTML messages together, instead of separately for each individual message #5171
 - tauri: fix fullscreen media view zoom, pan, pinch not working quite right #5200
 - tauri: fix fullscreen avatar for selfavatar #5240
+- show avatar for deleted saved messages #5221
 
 <a id="1_59_2"></a>
 
