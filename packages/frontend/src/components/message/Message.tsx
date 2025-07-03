@@ -443,7 +443,7 @@ export default function Message(props: {
   message: T.Message
   conversationType: ConversationType
 }) {
-  const { message, conversationType } = props
+  const { message, conversationType, chat } = props
   const { id, viewType, text, hasLocation, hasHtml } = message
   const direction = getDirection(message)
   const status = mapCoreMsgStatus2String(message.state)
@@ -818,7 +818,8 @@ export default function Message(props: {
   const showAuthor =
     conversationType.hasMultipleParticipants ||
     message?.overrideSenderName ||
-    message?.originalMsgId
+    message?.originalMsgId ||
+    chat.isSelfTalk
 
   const hasText = text !== null && text !== ''
   const fileMime = message.fileMime || null
