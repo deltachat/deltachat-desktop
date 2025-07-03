@@ -83,6 +83,3 @@ crabnebula_extras = ["tauri-plugin-devtools"]
 inspector_in_production = ["tauri/devtools"]
 default = ["inspector_in_production"]
 flatpak = []                                 # ["ashpd"]
-
-[patch.crates-io]
-parking_lot = "=0.12.4"
