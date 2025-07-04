@@ -9,6 +9,8 @@
 - tauri: macOS: webxdc: Remove the nowhere-proxy to support pre-14 macOS. #5202
 - reword 'Save As' to 'Export Attachment' to have a clearer cut to 'Save' #5245
 - use rpc.getWebxdcInfo instead of message.webxdcInfo #5227
+- upgrade `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.160.0`
+- upgrade electron from 34 to 37 #5229
 
 ### Fixed
 - tauri: remember webxdc app windows' position and size between app re-launches
