@@ -170,7 +170,7 @@ export default function MainScreen({ accountId }: Props) {
       .map((id: number) => {
         // mediaIds holds the ids of the last updated apps,
         // in reverse order
-        if (mediaLoadResult[id].kind === 'message') {
+        if (mediaLoadResult[id]?.kind === 'message') {
           return mediaLoadResult[id]
         }
         return null
