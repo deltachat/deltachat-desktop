@@ -161,15 +161,23 @@ export default function MainScreen({ accountId }: Props) {
       null,
       null
     )
-    mediaIds.reverse() // newest first
     const mediaLoadResult = await BackendRemote.rpc.getMessages(
       accountId,
       mediaIds.slice(0, maxIcons)
     )
-    const lastMessages = Object.values(mediaLoadResult).filter(
-      result => result.kind === 'message'
-    )
-    setLastWebxdcApps(lastMessages.reverse()) // show newest first
+    const lastUpdatedApps = mediaIds
+      .reverse()
+      .map((id: number) => {
+        // mediaIds holds the ids of the last updated apps,
+        // in reverse order
+        if (mediaLoadResult[id].kind === 'message') {
+          return mediaLoadResult[id]
+        }
+        return null
+      })
+      .filter(app => app !== null)
+
+    setLastWebxdcApps(lastUpdatedApps)
   }, [accountId, chatId, smallScreenMode])
 
   useEffect(() => {
