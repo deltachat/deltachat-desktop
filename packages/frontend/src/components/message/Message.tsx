@@ -62,6 +62,7 @@ import type { PrivateReply } from '../../hooks/chat/usePrivateReply'
 import type { JumpToMessage } from '../../hooks/chat/useMessage'
 import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
 import { useRovingTabindex } from '../../contexts/RovingTabindex'
+import { useRpcFetch } from '../../hooks/useFetch'
 
 interface CssWithAvatarColor extends CSSProperties {
   '--local-avatar-color': string
@@ -1117,37 +1118,36 @@ function WebxdcMessageContent({
   tabindexForInteractiveContents: -1 | 0
 }) {
   const tx = useTranslationFunction()
-  const [webxdcInfo, setWebxdcInfo] = useState<T.WebxdcMessageInfo | null>(null)
-  const [isLoadingWebxdcInfo, setIsLoadingWebxdcInfo] = useState(false)
   const accountId = selectedAccountId()
 
-  const fetchWebxdcInfo = useCallback(async () => {
-    setIsLoadingWebxdcInfo(true)
-    try {
-      const info = await BackendRemote.rpc.getWebxdcInfo(accountId, message.id)
-      setWebxdcInfo(info)
-    } catch (error) {
-      console.error(
-        'Failed to refresh webxdc info for message:',
-        message.id,
-        error
-      )
-    } finally {
-      setIsLoadingWebxdcInfo(false)
+  const [windowWidth, setWindowWidth] = useState<number>(0)
+
+  useEffect(() => {
+    function updateWidth() {
+      setWindowWidth(window.innerWidth)
     }
-  }, [accountId, message.id])
+    updateWidth()
+    window.addEventListener('resize', updateWidth)
+    return () => {
+      window.removeEventListener('resize', updateWidth)
+    }
+  }, [])
+
+  const fetchWebxdcInfo = useRpcFetch(BackendRemote.rpc.getWebxdcInfo, [
+    accountId,
+    message.id,
+  ])
+
+  const webxdcInfo = fetchWebxdcInfo?.lingeringResult?.ok
+    ? fetchWebxdcInfo.lingeringResult.value
+    : null
 
   const debouncedFetchWebxdcInfo = useMemo(
-    () => debounce(fetchWebxdcInfo, 500),
+    () => debounce(fetchWebxdcInfo.refresh, 500),
     [fetchWebxdcInfo]
   )
 
   useEffect(() => {
-    if (message.viewType !== 'Webxdc') return
-
-    // Initial fetch
-    fetchWebxdcInfo()
-
     // Listen for updates
     const cleanup = onDCEvent(
       accountId,
@@ -1161,22 +1161,54 @@ function WebxdcMessageContent({
     )
 
     return cleanup
-  }, [
-    accountId,
-    message.id,
-    message.viewType,
-    fetchWebxdcInfo,
-    debouncedFetchWebxdcInfo,
-  ])
+  }, [accountId, message.id, debouncedFetchWebxdcInfo])
 
   if (message.viewType !== 'Webxdc') {
     return null
   }
 
-  const info = webxdcInfo || {
-    name: isLoadingWebxdcInfo ? 'Loading...' : 'INFO MISSING!',
+  type WebxdcInfo =
+    | T.WebxdcMessageInfo
+    | { name: string; document: undefined; summary: string }
+
+  const info: WebxdcInfo = webxdcInfo || {
+    name: fetchWebxdcInfo.loading ? 'Loading...' : 'INFO MISSING!',
     document: undefined,
-    summary: isLoadingWebxdcInfo ? '' : 'INFO MISSING!',
+    summary: fetchWebxdcInfo.loading ? '' : 'INFO MISSING!',
+  }
+
+  /**
+   * To avoid a dynamic height change which would cause wrong calculation in the
+   * message list height, we do not allow line breaks here. So we have to calculate
+   * an appropriate max length for the name and document depending on the window width.
+   * We can't use the messageWidth or containerWidth here because they are
+   * dynamic and depending on the length of the text itself.
+   */
+  const defaultMaxLength = 66
+  const getMaxLength = () => {
+    if (windowWidth > 1040) return defaultMaxLength
+    if (windowWidth > 760) return 46
+    if (windowWidth > 330) return 36
+    return 20
+  }
+  const maxLength = getMaxLength()
+
+  const truncateInfo = (info: WebxdcInfo) => {
+    if (!info.document || info.name.length >= maxLength - 4) {
+      // skip info.document if name is too long
+      return truncateText(info.name, maxLength)
+    }
+
+    let infoText = info.document + ' - ' + info.name
+
+    if (infoText.length > maxLength) {
+      infoText =
+        truncateText(info.document, maxLength - info.name.length) +
+        ' - ' +
+        info.name
+    }
+
+    return infoText
   }
 
   return (
@@ -1194,10 +1226,11 @@ function WebxdcMessageContent({
         className='name'
         title={`${info.document ? info.document + ' \n' : ''}${info.name}`}
       >
-        {info.document && truncateText(info.document, 24) + ' - '}
-        {truncateText(info.name, 42)}
+        {truncateInfo(info)}
       </div>
-      <div>{info.summary}</div>
+      <div className='summary'>
+        {info.summary && truncateText(info.summary, getMaxLength())}
+      </div>
       <Button
         className={styles.startWebxdcButton}
         styling='primary'

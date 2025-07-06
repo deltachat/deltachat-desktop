@@ -124,6 +124,10 @@
       div.name {
         font-size: medium;
         font-weight: 300;
+        white-space: nowrap;
+      }
+      div.summary {
+        white-space: nowrap;
       }
       div.experimental {
         color: var(--colorDanger);
