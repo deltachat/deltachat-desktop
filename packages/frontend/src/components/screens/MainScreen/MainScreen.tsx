@@ -161,15 +161,17 @@ export default function MainScreen({ accountId }: Props) {
       null,
       null
     )
+    // mediaIds holds the ids of the last updated apps,
+    // in reverse order
+    mediaIds.reverse()
+    const firstFew = mediaIds.slice(0, maxIcons)
+
     const mediaLoadResult = await BackendRemote.rpc.getMessages(
       accountId,
-      mediaIds.slice(0, maxIcons)
+      firstFew
     )
-    const lastUpdatedApps = mediaIds
-      .reverse()
+    const lastUpdatedApps = firstFew
       .map((id: number) => {
-        // mediaIds holds the ids of the last updated apps,
-        // in reverse order
         if (mediaLoadResult[id]?.kind === 'message') {
           return mediaLoadResult[id]
         }
