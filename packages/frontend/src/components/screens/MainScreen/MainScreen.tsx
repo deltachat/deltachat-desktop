@@ -41,7 +41,7 @@ import type { T } from '@deltachat/jsonrpc-client'
 import CreateChat from '../../dialogs/CreateChat'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import asyncThrottle from '@jcoreio/async-throttle'
-import { useFetch } from '../../../hooks/useFetch'
+import { useFetch, useRpcFetch } from '../../../hooks/useFetch'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 
 const log = getLogger('MainScreen')
@@ -481,29 +481,25 @@ function ChatNavButtons({ chat }: { chat: T.FullChat }) {
 }
 
 function AppIcon({ accountId, app }: { accountId: number; app: T.Message }) {
-  const [webxdcInfo, setWebxdcInfo] = useState<T.WebxdcMessageInfo | null>(null)
-  const [isLoadingWebxdcInfo, setIsLoadingWebxdcInfo] = useState(true)
+  const tx = useTranslationFunction()
 
-  useEffect(() => {
-    if (app.viewType === 'Webxdc') {
-      setIsLoadingWebxdcInfo(true)
-      BackendRemote.rpc
-        .getWebxdcInfo(accountId, app.id)
-        .then((info: T.WebxdcMessageInfo) => {
-          setWebxdcInfo(info)
-        })
-        .catch((error: any) => {
-          console.error('Failed to load webxdc info for app:', app.id, error)
-          setWebxdcInfo(null)
-        })
-        .finally(() => {
-          setIsLoadingWebxdcInfo(false)
-        })
-    }
-  }, [accountId, app.id, app.viewType])
+  const webxdcInfoFetch = useRpcFetch(BackendRemote.rpc.getWebxdcInfo, [
+    accountId,
+    app.id,
+  ])
+  if (webxdcInfoFetch.result?.ok === false) {
+    log.error(
+      'Failed to load webxdc info for app:',
+      app.id,
+      webxdcInfoFetch.result.err
+    )
+  }
 
-  const appName =
-    webxdcInfo?.name || (isLoadingWebxdcInfo ? 'Loading...' : 'Unknown App')
+  const appName = webxdcInfoFetch.loading
+    ? tx('loading')
+    : webxdcInfoFetch.result.ok
+      ? webxdcInfoFetch.result.value.name
+      : 'Unknown App'
 
   return (
     <Button
@@ -512,8 +508,12 @@ function AppIcon({ accountId, app }: { accountId: number; app: T.Message }) {
       className={styles.webxdcIconButton}
       title={appName}
       aria-label={appName}
+      aria-busy={webxdcInfoFetch.loading}
       onClick={() => {
-        openWebxdc(app, webxdcInfo ?? undefined)
+        openWebxdc(
+          app,
+          webxdcInfoFetch.result?.ok ? webxdcInfoFetch.result.value : undefined
+        )
       }}
     >
       <img
