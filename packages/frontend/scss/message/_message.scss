@@ -1,6 +1,9 @@
 @use '../mixins';
 @use '../variables';
 
+// limit for text width, needed to trigger ellipsis
+$info-text-max-width: 400px;
+
 .message-wrapper {
   --shortcut-menu-visibility: hidden;
   --shortcut-menu-multiplier: 0;
@@ -121,10 +124,15 @@
         // firefox does not support this, but chromium and webkit do https://caniuse.com/?search=user-drag
         -webkit-user-drag: none;
       }
+      // nowrap and min-height address the problem that
+      // the height of a message bubble should not change
+      // after it's first load, even if the content changes
+      // after loading webxdcInfo async
+      // see https://github.com/deltachat/deltachat-desktop/issues/3753
       div.info-text {
         display: flex;
         flex-direction: row;
-        max-width: 400px;
+        max-width: $info-text-max-width;
         min-width: 0;
         white-space: nowrap;
         font-size: medium;
@@ -132,15 +140,13 @@
         gap: 3px;
       }
       div.name {
-        flex-shrink: 0;
-        flex-grow: 1;
         min-width: 0;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
       }
       div.document {
-        flex-shrink: 1;
+        flex-shrink: 999999999999999;
         min-width: 0;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -157,7 +163,8 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: 400px;
+        max-width: $info-text-max-width;
+        min-height: 18px;
       }
       div.experimental {
         color: var(--colorDanger);
