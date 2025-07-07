@@ -4,6 +4,7 @@
 
 <<<<<<< HEAD
 ### Fixed
+- fix "Recent 3 apps" in the chat header showing apps from another chat sometimes #5265
 - don't close context menues on window resize #5418
 
 =======
