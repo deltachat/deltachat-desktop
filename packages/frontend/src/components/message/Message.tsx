@@ -1191,13 +1191,15 @@ function WebxdcMessageContent({
         // because there is a button below that does the same
       />
       <div
-        className='name'
+        className='info-text'
         title={`${info.document ? info.document + ' \n' : ''}${info.name}`}
       >
-        {info.document && truncateText(info.document, 24) + ' - '}
-        {truncateText(info.name, 42)}
+        <div className='document'>
+          {info.document && truncateText(info.document, 32)}
+        </div>
+        <div className='name'>{info.name}</div>
       </div>
-      <div>{info.summary}</div>
+      <div className='summary'>{info.summary}</div>
       <Button
         className={styles.startWebxdcButton}
         styling='primary'

@@ -121,9 +121,43 @@
         // firefox does not support this, but chromium and webkit do https://caniuse.com/?search=user-drag
         -webkit-user-drag: none;
       }
-      div.name {
+      div.info-text {
+        display: flex;
+        flex-direction: row;
+        max-width: 400px;
+        min-width: 0;
+        white-space: nowrap;
         font-size: medium;
         font-weight: 300;
+        gap: 3px;
+      }
+      div.name {
+        flex-shrink: 0;
+        flex-grow: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      div.document {
+        flex-shrink: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        &:not(:empty)::after {
+          content: '–';
+          margin-left: 3px;
+        }
+        &:empty {
+          display: none;
+        }
+      }
+      div.summary {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 400px;
       }
       div.experimental {
         color: var(--colorDanger);
