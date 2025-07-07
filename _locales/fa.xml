@@ -151,7 +151,6 @@
         <item quantity="one">تعداد %d انتخاب شده است</item>
         <item quantity="other">تعداد  %dانتخاب شده است</item>
     </plurals>
-
     <string name="self">من</string>
     <string name="draft">پیش‌نویس</string>
     <string name="image">تصویر</string>
