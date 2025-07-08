@@ -116,13 +116,15 @@ export function keyDownEvent2Action(
       // Also consider adding this to `ev.repeat` when it stops being so sluggish
       ev.code === 'ArrowUp' &&
       (ev.ctrlKey || ev.metaKey) &&
-      !(ev.ctrlKey && ev.metaKey) // Both at the same time
+      !(ev.ctrlKey && ev.metaKey) && // Both at the same time
+      (ev.target as HTMLElement)?.id === 'composer-textarea'
     ) {
       return KeybindAction.Composer_SelectReplyToUp
     } else if (
       ev.code === 'ArrowDown' &&
       (ev.ctrlKey || ev.metaKey) &&
-      !(ev.ctrlKey && ev.metaKey) // Both at the same time
+      !(ev.ctrlKey && ev.metaKey) && // Both at the same time
+      (ev.target as HTMLElement)?.id === 'composer-textarea'
     ) {
       return KeybindAction.Composer_SelectReplyToDown
     } else if (
