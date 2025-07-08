@@ -255,13 +255,13 @@ export default function ChatList(props: {
         : 0))
 
   // scroll to selected chat ---
-  const listRefRef = useRef<List<any>>(null)
+  const chatListRef = useRef<List<any>>(null)
   const selectedChatIndex =
     selectedChatId != null ? chatListIds.indexOf(selectedChatId) : -1
 
   const scrollSelectedChatIntoView = useCallback((index: number) => {
     if (index !== -1) {
-      listRefRef.current?.scrollToItem(index)
+      chatListRef.current?.scrollToItem(index)
     }
   }, [])
 
@@ -489,7 +489,7 @@ export default function ChatList(props: {
                   width={'100%'}
                   height={chatsHeight(height)}
                   setListRef={(ref: List<any> | null) =>
-                    ((listRefRef.current as any) = ref)
+                    ((chatListRef.current as any) = ref)
                   }
                   itemKey={index => 'key' + chatListIds[index]}
                   itemData={chatlistData}
