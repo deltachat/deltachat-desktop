@@ -23,6 +23,7 @@
 - tauri: fix fullscreen avatar for selfavatar #5240
 - fix: showing 0 instead ? as size for empty files #5253
 - show avatar for deleted saved messages #5221
+- don't execute Ctrl + Up shortcut if the message input is not focused
 
 <a id="1_59_2"></a>
 
