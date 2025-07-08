@@ -1193,7 +1193,7 @@ function WebxdcMessageContent({
         className='info-text'
         title={`${info.document ? info.document + ' \n' : ''}${info.name}`}
       >
-        <div className='document'>{info.document && info.document}</div>
+        <div className='document'>{info.document}</div>
         <div className='name'>{info.name}</div>
       </div>
       <div className='summary'>{info.summary}</div>
