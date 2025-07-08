@@ -226,42 +226,41 @@ export default function ChatList(props: {
         ? CHATLISTITEM_MESSAGE_HEIGHT
         : 0))
 
-  // scroll to selected chat ---
-  const listRefRef = useRef<List<any>>(null)
-  const selectedChatIndex = chatListIds.findIndex(
-    chatId => chatId === selectedChatId
-  )
-
-  const scrollSelectedChatIntoView = useCallback((index: number) => {
+  const chatListRef = useRef<List<any>>(null)
+  const scrollChatIntoView = useCallback((index: number) => {
     if (index !== -1) {
-      listRefRef.current?.scrollToItem(index)
+      chatListRef.current?.scrollToItem(index)
     }
   }, [])
 
+  const selectedChatIndex = useMemo(
+    () => (selectedChatId != null ? chatListIds.indexOf(selectedChatId) : -1),
+    [chatListIds, selectedChatId]
+  )
   const lastShowArchivedChatsState = useRef(showArchivedChats)
   const lastQuery = useRef(queryStr)
   // on select chat - scroll to selected chat - chatView
   // follow chat after loading or when it's position in the chatlist changes
   useEffect(() => {
     if (isSearchActive && lastQuery.current !== queryStr) {
-      scrollSelectedChatIntoView(0)
+      scrollChatIntoView(0)
       // search is active, don't scroll to selected chat, scroll up instead when queryStr changes
       lastQuery.current = queryStr
       return
     }
     // when showArchivedChats changes, select selected chat if it is archived/not-archived otherwise select first item
     if (selectedChatIndex !== -1) {
-      scrollSelectedChatIntoView(selectedChatIndex)
+      scrollChatIntoView(selectedChatIndex)
     } else {
       if (lastShowArchivedChatsState.current !== showArchivedChats) {
-        scrollSelectedChatIntoView(0)
+        scrollChatIntoView(0)
       }
     }
     lastShowArchivedChatsState.current = showArchivedChats
   }, [
     selectedChatIndex,
     isSearchActive,
-    scrollSelectedChatIntoView,
+    scrollChatIntoView,
     showArchivedChats,
     queryStr,
   ])
@@ -270,14 +269,12 @@ export default function ChatList(props: {
 
   // KeyboardShortcuts ---------
   useKeyBindingAction(KeybindAction.ChatList_ScrollToSelectedChat, () =>
-    scrollSelectedChatIntoView(selectedChatIndex)
+    scrollChatIntoView(selectedChatIndex)
   )
 
   useKeyBindingAction(KeybindAction.ChatList_SelectNextChat, () => {
     if (selectedChatId === null) return selectFirstChat()
-    const selectedChatIndex = chatListIds.findIndex(
-      chatId => chatId === selectedChatId
-    )
+    const selectedChatIndex = chatListIds.indexOf(selectedChatId)
     const newChatId = chatListIds[selectedChatIndex + 1]
     if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
       selectChat(accountId, newChatId)
@@ -286,9 +283,7 @@ export default function ChatList(props: {
 
   useKeyBindingAction(KeybindAction.ChatList_SelectPreviousChat, () => {
     if (selectedChatId === null) return selectFirstChat()
-    const selectedChatIndex = chatListIds.findIndex(
-      chatId => chatId === selectedChatId
-    )
+    const selectedChatIndex = chatListIds.indexOf(selectedChatId)
     const newChatId = chatListIds[selectedChatIndex - 1]
     if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
       selectChat(accountId, newChatId)
@@ -425,7 +420,7 @@ export default function ChatList(props: {
                   width={'100%'}
                   height={chatsHeight(height)}
                   setListRef={(ref: List<any> | null) =>
-                    ((listRefRef.current as any) = ref)
+                    ((chatListRef.current as any) = ref)
                   }
                   itemKey={index => 'key' + chatListIds[index]}
                   itemData={chatlistData}
