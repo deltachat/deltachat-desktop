@@ -226,17 +226,17 @@ export default function ChatList(props: {
         ? CHATLISTITEM_MESSAGE_HEIGHT
         : 0))
 
-  // scroll to selected chat ---
   const chatListRef = useRef<List<any>>(null)
-  const selectedChatIndex =
-    selectedChatId != null ? chatListIds.indexOf(selectedChatId) : -1
-
   const scrollChatIntoView = useCallback((index: number) => {
     if (index !== -1) {
       chatListRef.current?.scrollToItem(index)
     }
   }, [])
 
+  const selectedChatIndex = useMemo(
+    () => (selectedChatId != null ? chatListIds.indexOf(selectedChatId) : -1),
+    [chatListIds, selectedChatId]
+  )
   const lastShowArchivedChatsState = useRef(showArchivedChats)
   const lastQuery = useRef(queryStr)
   // on select chat - scroll to selected chat - chatView
