@@ -256,9 +256,8 @@ export default function ChatList(props: {
 
   // scroll to selected chat ---
   const listRefRef = useRef<List<any>>(null)
-  const selectedChatIndex = chatListIds.findIndex(
-    chatId => chatId === selectedChatId
-  )
+  const selectedChatIndex =
+    selectedChatId != null ? chatListIds.indexOf(selectedChatId) : -1
 
   const scrollSelectedChatIntoView = useCallback((index: number) => {
     if (index !== -1) {
@@ -303,9 +302,7 @@ export default function ChatList(props: {
 
   useKeyBindingAction(KeybindAction.ChatList_SelectNextChat, () => {
     if (selectedChatId === null) return selectFirstChat()
-    const selectedChatIndex = chatListIds.findIndex(
-      chatId => chatId === selectedChatId
-    )
+    const selectedChatIndex = chatListIds.indexOf(selectedChatId)
     const newChatId = chatListIds[selectedChatIndex + 1]
     if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
       selectChat(accountId, newChatId)
@@ -314,9 +311,7 @@ export default function ChatList(props: {
 
   useKeyBindingAction(KeybindAction.ChatList_SelectPreviousChat, () => {
     if (selectedChatId === null) return selectFirstChat()
-    const selectedChatIndex = chatListIds.findIndex(
-      chatId => chatId === selectedChatId
-    )
+    const selectedChatIndex = chatListIds.indexOf(selectedChatId)
     const newChatId = chatListIds[selectedChatIndex - 1]
     if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
       selectChat(accountId, newChatId)
