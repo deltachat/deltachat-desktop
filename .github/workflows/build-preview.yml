@@ -101,6 +101,7 @@ jobs:
     - name: upload folder
       id: upload
       shell: bash
+      if: contains(github.event.pull_request.body, '#public-preview')
       run: |
         echo -e "${{ secrets.KEY }}" >__TEMP_INPUT_KEY_FILE
         chmod 600 __TEMP_INPUT_KEY_FILE
