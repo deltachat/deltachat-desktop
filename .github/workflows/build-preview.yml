@@ -98,9 +98,6 @@ jobs:
         move Delta*Chat*.exe preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.portable.exe
         dir preview
         cd ..
-    # Debugging
-    - name: Debug PR body
-      run: echo "${{ github.event.pull_request.body }}"
     # Upload Step
     - name: upload folder
       id: upload
