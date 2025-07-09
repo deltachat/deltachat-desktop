@@ -24,6 +24,7 @@
 - tauri: fix fullscreen avatar for selfavatar #5240
 - fix: showing 0 instead ? as size for empty files #5253
 - show avatar for deleted saved messages #5221
+- increase contrast between background and unread badge in dark theme #5273
 
 <a id="1_59_2"></a>
 
