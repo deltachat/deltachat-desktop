@@ -115,8 +115,8 @@ jobs:
        PR_ID: ${{ steps.prepare.outputs.prid }}
        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Upload result to artifacts
+      if: contains(github.event.pull_request.body, '#public-preview') == false
       id: upload-github
-      if: steps.upload.outcome == 'failure'
       uses: actions/upload-artifact@main
       with:
         name: ${{ matrix.os }} output
