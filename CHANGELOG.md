@@ -13,6 +13,7 @@
 - upgrade `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.160.0`
 - upgrade electron from 34 to 37 #5229
 - update translations (07-07-2025)
+- development: introduce new condition to publish build previews
 
 ### Fixed
 - always set "unread" count to 0 when "jump to bottom" is clicked #5204
