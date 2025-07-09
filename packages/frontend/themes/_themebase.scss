@@ -98,7 +98,7 @@ $scrollbarTransparency: 0.34 !default;
     )};
   --chatListItemSelectedText: #{$bgPrimary};
   --chatListItemBgHover: #{changeContrast($bgPrimary, $hover-contrast-change)};
-  --chatListItemBgPinned: #{changeContrast($bgPrimary, 7%)};
+  --chatListItemBgPinned: #{changeContrast($bgPrimary, 3.3%)};
   --chatListItemBgPinnedHover: #{changeContrast(
       $bgPrimary,
       7% + $hover-contrast-change
