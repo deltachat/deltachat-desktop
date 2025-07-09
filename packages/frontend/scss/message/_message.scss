@@ -164,7 +164,19 @@ $info-text-max-width: 400px;
         overflow: hidden;
         text-overflow: ellipsis;
         max-width: $info-text-max-width;
-        min-height: 18px;
+
+        $font-size: 0.875rem;
+        $line-height: 1.15;
+        font-size: $font-size;
+        line-height: $line-height;
+        // Ensure that even if the element is empty
+        // (e.g. while we're loading `webxdcInfo`),
+        // it still takes height, so that when the info finally loads
+        // and `summary` is present, the message bubble doesn't get taller,
+        // which would result in the message list getting scrolled.
+        // See
+        // https://github.com/deltachat/deltachat-desktop/pull/5227#discussion_r2173774006.
+        min-height: calc($font-size * $line-height);
       }
       div.experimental {
         color: var(--colorDanger);
