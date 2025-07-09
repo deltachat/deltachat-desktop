@@ -98,7 +98,7 @@ $scrollbarTransparency: 0.34 !default;
     )};
   --chatListItemSelectedText: #{$bgPrimary};
   --chatListItemBgHover: #{changeContrast($bgPrimary, $hover-contrast-change)};
-  --chatListItemBgPinned: #{changeContrast($bgPrimary, 3.3%)};
+  --chatListItemBgPinned: #{changeContrast($bgPrimary, 7%)};
   --chatListItemBgPinnedHover: #{changeContrast(
       $bgPrimary,
       7% + $hover-contrast-change
@@ -287,7 +287,8 @@ $scrollbarTransparency: 0.34 !default;
 
     --settingsIconColor: #666666;
 
-    --unreadCountBgMuted: #3b3b3b;
+    --unreadCountBgMuted: #5e5e5e;
+    
 
     --SPECIAL-emoji-picker-category-icon-style: solid;
   } @else {
