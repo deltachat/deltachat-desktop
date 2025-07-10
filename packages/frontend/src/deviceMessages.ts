@@ -27,15 +27,15 @@ export async function updateDeviceChat(
     }
   }
 
-  await addDeviceMessage('changelog-version-1.58.0', {
-    text: `What's new in 1.58.0?
+  await addDeviceMessage('changelog-version-1.60.0', {
+    text: `What's new in 1.60.0?
 
-  🎤 voice messages: finally you can record and send voice messages with DC desktop
-  👤 profile view dialog redesign
-  💡 show user names instead of mail address in many places
-  🌅 improved image rendering
+  🖼️ open all media view (gallery) in an own dialog
+  🔔 a sound effect is played when current open chat gets a new message (can be turned off)
+  🔎 Zoom In/Out with Ctrl +/-
+  💠 show last 3 apps in chat navbar in the order they were updated
 
-+ MORE ✨ improvements and 🐜 bug fixes see [Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/main/CHANGELOG.md#1_58_0)`,
++ MORE ✨ improvements and 🐜 bug fixes see [Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/main/CHANGELOG.md#1_60_0)`,
   })
 }
 

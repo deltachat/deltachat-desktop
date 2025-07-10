@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+<a id="1_60_0"></a>
+
+## [1.60.0] - 2025-07-10
+
 ### Added
 - Update last used app icons immediately after sending a new app
 
@@ -3532,7 +3536,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.59.2...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.60.0...HEAD
+
+[1.60.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.59.2...v1.60.0
 
 [1.59.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.59.1...v1.59.2
 
