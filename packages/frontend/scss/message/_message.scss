@@ -1,6 +1,9 @@
 @use '../mixins';
 @use '../variables';
 
+// limit for text width, needed to trigger ellipsis
+$info-text-max-width: 400px;
+
 .message-wrapper {
   --shortcut-menu-visibility: hidden;
   --shortcut-menu-multiplier: 0;
@@ -121,9 +124,59 @@
         // firefox does not support this, but chromium and webkit do https://caniuse.com/?search=user-drag
         -webkit-user-drag: none;
       }
-      div.name {
+      // nowrap and min-height address the problem that
+      // the height of a message bubble should not change
+      // after it's first load, even if the content changes
+      // after loading webxdcInfo async
+      // see https://github.com/deltachat/deltachat-desktop/issues/3753
+      div.info-text {
+        display: flex;
+        flex-direction: row;
+        max-width: $info-text-max-width;
+        min-width: 0;
+        white-space: nowrap;
         font-size: medium;
         font-weight: 300;
+        gap: 3px;
+      }
+      div.name {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      div.document {
+        flex-shrink: 999999999999999;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        &:not(:empty)::after {
+          content: '–';
+          margin-left: 3px;
+        }
+        &:empty {
+          display: none;
+        }
+      }
+      div.summary {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: $info-text-max-width;
+
+        $font-size: 0.875rem;
+        $line-height: 1.15;
+        font-size: $font-size;
+        line-height: $line-height;
+        // Ensure that even if the element is empty
+        // (e.g. while we're loading `webxdcInfo`),
+        // it still takes height, so that when the info finally loads
+        // and `summary` is present, the message bubble doesn't get taller,
+        // which would result in the message list getting scrolled.
+        // See
+        // https://github.com/deltachat/deltachat-desktop/pull/5227#discussion_r2173774006.
+        min-height: calc($font-size * $line-height);
       }
       div.experimental {
         color: var(--colorDanger);

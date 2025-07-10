@@ -31,7 +31,6 @@ import { isGenericAttachment, isImage } from '../attachment/Attachment'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { AvatarFromContact } from '../Avatar'
 import { ConversationType } from './MessageList'
-import { truncateText } from '@deltachat-desktop/shared/util'
 import { getDirection } from '../../utils/getDirection'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { ContextMenuItem } from '../ContextMenu'
@@ -1118,7 +1117,7 @@ function WebxdcMessageContent({
 }) {
   const tx = useTranslationFunction()
   const [webxdcInfo, setWebxdcInfo] = useState<T.WebxdcMessageInfo | null>(null)
-  const [isLoadingWebxdcInfo, setIsLoadingWebxdcInfo] = useState(false)
+  const [isLoadingWebxdcInfo, setIsLoadingWebxdcInfo] = useState(true)
   const accountId = selectedAccountId()
 
   const fetchWebxdcInfo = useCallback(async () => {
@@ -1191,13 +1190,13 @@ function WebxdcMessageContent({
         // because there is a button below that does the same
       />
       <div
-        className='name'
+        className='info-text'
         title={`${info.document ? info.document + ' \n' : ''}${info.name}`}
       >
-        {info.document && truncateText(info.document, 24) + ' - '}
-        {truncateText(info.name, 42)}
+        <div className='document'>{info.document}</div>
+        <div className='name'>{info.name}</div>
       </div>
-      <div>{info.summary}</div>
+      <div className='summary'>{info.summary}</div>
       <Button
         className={styles.startWebxdcButton}
         styling='primary'

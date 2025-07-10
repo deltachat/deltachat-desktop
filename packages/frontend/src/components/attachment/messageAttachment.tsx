@@ -236,7 +236,7 @@ export function DraftAttachment({
   attachment: MessageTypeAttachmentSubset
 }) {
   const [webxdcInfo, setWebxdcInfo] = useState<T.WebxdcMessageInfo | null>(null)
-  const [isLoadingWebxdcInfo, setIsLoadingWebxdcInfo] = useState(false)
+  const [isLoadingWebxdcInfo, setIsLoadingWebxdcInfo] = useState(true)
   const accountId = selectedAccountId()
 
   const lastFileNameRef = useRef<string | null>(null)

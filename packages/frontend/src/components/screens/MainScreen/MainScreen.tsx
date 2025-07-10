@@ -448,7 +448,7 @@ function ChatNavButtons({ chat }: { chat: T.FullChat }) {
 
 function AppIcon({ accountId, app }: { accountId: number; app: T.Message }) {
   const [webxdcInfo, setWebxdcInfo] = useState<T.WebxdcMessageInfo | null>(null)
-  const [isLoadingWebxdcInfo, setIsLoadingWebxdcInfo] = useState(false)
+  const [isLoadingWebxdcInfo, setIsLoadingWebxdcInfo] = useState(true)
 
   useEffect(() => {
     if (app.viewType === 'Webxdc') {
