@@ -122,6 +122,9 @@ importers:
       '@emoji-mart/react':
         specifier: ^1.1.1
         version: 1.1.1(emoji-mart@5.6.0)(react@19.1.0)
+      '@jcoreio/async-throttle':
+        specifier: ^1.6.1
+        version: 1.6.1
       classnames:
         specifier: ^2.5.1
         version: 2.5.1
@@ -1082,6 +1085,10 @@ packages:
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
     engines: {node: '>=12'}
+
+  '@jcoreio/async-throttle@1.6.1':
+    resolution: {integrity: sha512-9c9SH93yYEX6zK7N8GThr7twbRtJdKX59CuIKd3qtF0SH4ZDAgeMuQPlWnWMLmWy/RdGKgHJaiciOoOHnFlmUA==}
+    engines: {node: '>=16'}
 
   '@jridgewell/resolve-uri@3.1.2':
     resolution: {integrity: sha512-bRISgCIjP20/tbWSPWMEi54QVPRZExkuD9lJL+UIxUKtwVJA8wW1Trb1jMs1RFXo1CBTNZ/5hpC9QvmKWdopKw==}
@@ -4355,6 +4362,10 @@ snapshots:
       strip-ansi-cjs: strip-ansi@6.0.1
       wrap-ansi: 8.1.0
       wrap-ansi-cjs: wrap-ansi@7.0.0
+
+  '@jcoreio/async-throttle@1.6.1':
+    dependencies:
+      '@babel/runtime': 7.19.0
 
   '@jridgewell/resolve-uri@3.1.2':
     optional: true

@@ -136,7 +136,7 @@ function CreateChatMain(props: CreateChatMainProps) {
     contactCache,
     loadContacts,
     queryStrIsValidEmail,
-    refresh: refreshContacts,
+    refreshContacts,
   } = useLazyLoadedContacts(C.DC_GCL_ADD_SELF, queryStr)
 
   const chooseContact = async ({ id }: Type.Contact) => {
@@ -572,7 +572,7 @@ export function CreateGroup(props: CreateGroupProps) {
             type='group'
           />
         </DialogContent>
-        <div className='group-separator'>
+        <div id='create-group-members-title' className='group-separator'>
           {tx('n_members', groupMembers.length.toString(), {
             quantity: groupMembers.length,
           })}
@@ -593,6 +593,9 @@ export function CreateGroup(props: CreateGroupProps) {
               showRemove
               onRemoveClick={c => {
                 removeGroupMember(c)
+              }}
+              olElementAttrs={{
+                'aria-labelledby': 'create-group-members-title',
               }}
             />
           </RovingTabindexProvider>
@@ -704,7 +707,10 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
           />
           <br />
           {broadcastRecipients.length > 0 && (
-            <div className='group-separator'>
+            <div
+              id='create-broadcast-list-recipients-title'
+              className='group-separator'
+            >
               {tx('n_recipients', broadcastRecipients.length.toString(), {
                 quantity: broadcastRecipients.length,
               })}
@@ -726,6 +732,9 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
                 showRemove
                 onRemoveClick={c => {
                   removeBroadcastRecipient(c)
+                }}
+                olElementAttrs={{
+                  'aria-labelledby': 'create-broadcast-list-recipients-title',
                 }}
               />
             </RovingTabindexProvider>

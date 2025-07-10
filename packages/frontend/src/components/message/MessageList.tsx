@@ -43,7 +43,7 @@ type ChatTypes =
 
 const onWindowFocus = (accountId: number) => {
   log.debug('window focused')
-  const messageElements = Array.prototype.slice.call(
+  const messageElements: HTMLElement[] = Array.prototype.slice.call(
     document.querySelectorAll('#message-list .message-observer-bottom')
   )
 
@@ -58,9 +58,11 @@ const onWindowFocus = (accountId: number) => {
     )
   })
 
-  const messageIdsToMarkAsRead = visibleElements.map(el =>
-    Number.parseInt(el.getAttribute('id').split('-')[1])
-  )
+  const messageIdsToMarkAsRead = visibleElements
+    .map(el =>
+      el.dataset.messageid ? Number.parseInt(el.dataset.messageid) : undefined
+    )
+    .filter(id => id != undefined)
 
   if (messageIdsToMarkAsRead.length !== 0) {
     log.debug(
@@ -173,9 +175,23 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
       const messageIdsToMarkAsRead = []
       for (const entry of entries) {
         if (!entry.isIntersecting) continue
-        const messageKey = entry.target.getAttribute('id')
-        if (messageKey === null) continue
-        const messageId = messageKey.split('-')[1]
+        if (!(entry.target instanceof HTMLElement)) {
+          log.error(
+            'onUnreadMessageInView: entry.target is not HTMLElement:',
+            entry.target
+          )
+          continue
+        }
+        const messageId = entry.target.dataset.messageid
+          ? Number.parseInt(entry.target.dataset.messageid)
+          : undefined
+        if (messageId == undefined || !Number.isSafeInteger(messageId)) {
+          log.error(
+            'onUnreadMessageInView: failed to get message id from element',
+            entry.target
+          )
+          continue
+        }
         const messageHeight = entry.target.clientHeight
 
         log.debug(
@@ -185,7 +201,7 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
           `onUnreadMessageInView: messageId ${messageId} marking as read`
         )
 
-        messageIdsToMarkAsRead.push(Number.parseInt(messageId))
+        messageIdsToMarkAsRead.push(messageId)
         if (unreadMessageInViewIntersectionObserver.current === null) continue
         unreadMessageInViewIntersectionObserver.current.unobserve(entry.target)
       }
@@ -733,6 +749,8 @@ export const MessageListInner = React.memo(
     unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
     loadMissingMessages: () => Promise<void>
   }) => {
+    const tx = useTranslationFunction()
+
     const {
       onScroll,
       onScrollEnd,
@@ -860,14 +878,14 @@ export const MessageListInner = React.memo(
     if (!loaded) {
       return (
         <div id='message-list' ref={messageListRef} onScroll={onScroll2}>
-          <ol></ol>
+          <ol aria-label={tx('messages')}></ol>
         </div>
       )
     }
 
     return (
       <div id='message-list' ref={messageListRef} onScroll={onScroll2}>
-        <ol>
+        <ol aria-label={tx('messages')}>
           <RovingTabindexProvider wrapperElementRef={messageListRef}>
             {messageListItems.length === 0 && <EmptyChatMessage chat={chat} />}
             {activeView.map(messageId => {

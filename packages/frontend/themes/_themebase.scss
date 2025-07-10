@@ -2,6 +2,7 @@
 
 $hover-contrast-change: 2%;
 // set light theme variables as fallback
+$themeDarkOrLight: light !default;
 $colorPrimary: #42a5f5 !default;
 $colorDanger: #f96856 !default;
 $colorNone: #a0a0a0 !default;
@@ -52,6 +53,8 @@ $scrollbarTransparency: 0.34 !default;
 
 /* Root Variables */
 :root {
+  --themeDarkOrLight: #{$themeDarkOrLight};
+
   --colorPrimary: #{$colorPrimary};
   --colorDanger: #{$colorDanger};
   --colorNone: #{$colorNone};
@@ -256,6 +259,7 @@ $scrollbarTransparency: 0.34 !default;
   );
 
   /** HTML Email Window */
+  --htmlEmail-themeDarkOrLight: #{$themeDarkOrLight};
   --htmlEmail-background: #{$bgPrimary};
   --htmlEmail-color: #{$textPrimary};
   --htmlEmail-border-color: #{changeContrast($bgPrimary, 20%)};

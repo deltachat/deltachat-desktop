@@ -2,6 +2,20 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- fix outdated info being shown sometimes in some places #5222, #5225
+- accessibility: add accessible labels for lists (messages list, chat list, profiles list) #5030
+- improve performance: remove message context menu open delay
+- improve performace in global search and contact search #5230, #5232
+- improve performance: don't mark messages as seen unnecessarily when focusing window #5243
+- improve performance in "Edit Group" a little #5237
+- tauri: accessibility: fix outline being barely visible on Windows, and adjust some other colors #5217
+- improve performance a little in some other places #5225
+
+<a id="1_60_0"></a>
+
+## [1.60.0] - 2025-07-10
+
 ### Added
 - Update last used app icons immediately after sending a new app
 
@@ -3532,7 +3546,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.59.2...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.60.0...HEAD
+
+[1.60.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.59.2...v1.60.0
 
 [1.59.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.59.1...v1.59.2
 

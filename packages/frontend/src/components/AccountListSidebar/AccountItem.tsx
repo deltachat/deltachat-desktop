@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useRef } from 'react'
 import classNames from 'classnames'
 import debounce from 'debounce'
 
@@ -23,6 +23,7 @@ import { openMapWebxdc } from '../../system-integration/webxdc'
 import useDialog from '../../hooks/dialog/useDialog'
 import { EditPrivateTagDialog } from './EditPrivateTagDialog'
 import { useRovingTabindex } from '../../contexts/RovingTabindex'
+import { useRpcFetch } from '../../hooks/useFetch'
 
 type Props = {
   accountId: number
@@ -46,26 +47,31 @@ export default function AccountItem({
   muted,
 }: Props) {
   const tx = useTranslationFunction()
-  const [unreadCount, setUnreadCount] = useState<number>(0)
-  const [account, setAccount] = useState<T.Account | null>(null)
   const { openDialog } = useDialog()
 
-  useEffect(() => {
-    const updateAccount = debounce(() => {
-      BackendRemote.rpc
-        .getAccountInfo(accountId)
-        .then(setAccount)
-        .catch(log.error.bind(log))
-    }, 200)
-    const updateUnread = debounce(() => {
-      BackendRemote.rpc
-        .getFreshMsgs(accountId)
-        .then(u => setUnreadCount(u?.length || 0))
-        .catch(log.error.bind(log))
-    }, 200)
+  const accountFetch = useRpcFetch(BackendRemote.rpc.getAccountInfo, [
+    accountId,
+  ])
+  if (accountFetch.result?.ok === false) {
+    log.error('Failed to fetch account', accountFetch.result.err)
+  }
+  const account = accountFetch.lingeringResult?.ok
+    ? accountFetch.lingeringResult.value
+    : null
 
-    updateAccount()
-    updateUnread()
+  const freshMsgsFetch = useRpcFetch(BackendRemote.rpc.getFreshMsgs, [
+    accountId,
+  ])
+  if (freshMsgsFetch.result?.ok === false) {
+    log.error('Failed to fetch unread count', freshMsgsFetch.result.err)
+  }
+  const unreadCount = freshMsgsFetch.lingeringResult?.ok
+    ? freshMsgsFetch.lingeringResult.value.length
+    : null
+
+  useEffect(() => {
+    const updateAccount = debounce(accountFetch.refresh, 200)
+    const updateUnread = debounce(freshMsgsFetch.refresh, 200)
 
     const cleanup = [
       onDCEvent(accountId, 'AccountsItemChanged', updateAccount),
@@ -88,7 +94,7 @@ export default function AccountItem({
     ]
 
     return () => cleanup.forEach(off => off())
-  }, [accountId])
+  }, [accountId, accountFetch.refresh, freshMsgsFetch.refresh])
 
   const bgSyncDisabled = syncAllAccounts === false && !isSelected
 
@@ -175,7 +181,7 @@ export default function AccountItem({
         ⏻
       </div>
     )
-  } else if (unreadCount > 0) {
+  } else if (unreadCount != null && unreadCount > 0) {
     badgeContent = (
       <div
         className={classNames(styles.accountBadgeIcon, {
@@ -194,7 +200,7 @@ export default function AccountItem({
     )
   }
 
-  const isSticky = unreadCount > 0
+  const isSticky = unreadCount != null && unreadCount > 0
 
   const ref = useRef<HTMLButtonElement>(null)
   useLayoutEffect(() => {
@@ -249,17 +255,15 @@ export default function AccountItem({
         [styles.isSticky]: isSticky,
         'unconfigured-account': account?.kind !== 'Configured',
       })}
-      // TODO consider adding `role='tabpanel'` for the main area of the app.
-      // Although screen readers might start to announce
-      // the account name every time you focus something in the main area,
-      // which might be too verbose.
       role='tab'
       aria-selected={isSelected}
-      aria-busy={!account}
+      aria-busy={!account && accountFetch.loading}
       onClick={() => onSelectAccount(accountId)}
       onContextMenu={onContextMenu}
       onMouseEnter={() => account && updateAccountForHoverInfo(account, true)}
-      onMouseLeave={() => account && updateAccountForHoverInfo(account, false)}
+      onMouseLeave={() =>
+        account && updateAccountForHoverInfo(account, false)
+      }
       x-account-sidebar-account-id={accountId}
       data-testid={`account-item-${accountId}`}
       ref={ref}
@@ -269,11 +273,12 @@ export default function AccountItem({
     >
       {!account ? (
         <div className={styles.avatar}>
-          <div className={styles.content}>⏳</div>
+          <div className={styles.content}>
+            {accountFetch.loading ? '⏳' : '⚠️'}
+          </div>
         </div>
       ) : account.kind == 'Configured' ? (
         <div className={styles.avatar}>
-          {' '}
           {account.profileImage ? (
             <img
               className={styles.content}

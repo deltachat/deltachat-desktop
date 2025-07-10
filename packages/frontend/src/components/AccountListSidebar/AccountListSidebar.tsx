@@ -155,9 +155,15 @@ export default function AccountListSidebar({
 
   const refresh = useMemo(
     () => async () => {
-      // Use getAccountsOrder instead of getAllAccountIds to get the proper ordering
-      const accounts = await (BackendRemote.rpc as any).getAccountsOrder()
-      setAccounts(accounts)
+      try {
+        // Use getAccountsOrder instead of getAllAccountIds to get the proper ordering
+        const accounts = await (BackendRemote.rpc as any).getAccountsOrder()
+        setAccounts(accounts)
+      } catch (error) {
+        // Fallback to getAllAccountIds if getAccountsOrder doesn't exist
+        const accountsResult = await BackendRemote.rpc.getAllAccountIds()
+        setAccounts(accountsResult)
+      }
       const desktopSettings = await runtime.getDesktopSettings()
       setSyncAllAccounts(desktopSettings.syncAllAccounts)
     },
@@ -239,38 +245,40 @@ export default function AccountListSidebar({
         aria-orientation='vertical'
       >
         <RovingTabindexProvider wrapperElementRef={accountsListRef}>
-          {accounts.map((id, index) => (
-            <div
-              key={id}
-              draggable
-              onDragStart={() => handleDragStart(id)}
-              onDragOver={(e) => handleDragOver(e, index)}
-              onDrop={handleDrop}
-              onDragEnd={handleDragEnd}
-              onDragLeave={handleDragLeave}
-              className={classNames({
-                [styles.dragging]: draggedAccountId === id,
-                [styles.dragOverTop]:
-                  dropIndicator?.index === index &&
-                  dropIndicator?.position === 'top' &&
-                  draggedAccountId !== id,
-                [styles.dragOverBottom]:
-                  dropIndicator?.index === index &&
-                  dropIndicator?.position === 'bottom' &&
-                  draggedAccountId !== id,
-              })}
-            >
-              <AccountItem
-                accountId={id}
-                isSelected={selectedAccountId === id}
-                onSelectAccount={selectAccount}
-                openAccountDeletionScreen={openAccountDeletionScreen}
-                updateAccountForHoverInfo={updateAccountForHoverInfo}
-                syncAllAccounts={syncAllAccounts}
-                muted={noficationSettings[id]?.muted || false}
-              />
-            </div>
-          ))}
+          {accounts.map((id, index) => {
+            return (
+              <div
+                key={id}
+                draggable
+                onDragStart={() => handleDragStart(id)}
+                onDragOver={(e) => handleDragOver(e, index)}
+                onDrop={handleDrop}
+                onDragEnd={handleDragEnd}
+                onDragLeave={handleDragLeave}
+                className={classNames(styles.accountWrapper, {
+                  [styles.dragging]: draggedAccountId === id,
+                  [styles.dragOverTop]:
+                    dropIndicator?.index === index &&
+                    dropIndicator?.position === 'top' &&
+                    draggedAccountId !== id,
+                  [styles.dragOverBottom]:
+                    dropIndicator?.index === index &&
+                    dropIndicator?.position === 'bottom' &&
+                    draggedAccountId !== id,
+                })}
+              >
+                <AccountItem
+                  accountId={id}
+                  isSelected={selectedAccountId === id}
+                  onSelectAccount={selectAccount}
+                  openAccountDeletionScreen={openAccountDeletionScreen}
+                  updateAccountForHoverInfo={updateAccountForHoverInfo}
+                  syncAllAccounts={syncAllAccounts}
+                  muted={noficationSettings[id]?.muted || false}
+                />
+              </div>
+            )
+          })}
           <AddAccountButton onClick={onAddAccount} />
         </RovingTabindexProvider>
       </div>
