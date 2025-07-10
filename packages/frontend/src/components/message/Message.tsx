@@ -460,17 +460,13 @@ export default function Message(props: {
   const [messageWidth, setMessageWidth] = useState(0)
 
   const showContextMenu = useCallback(
-    async (
+    (
       event: React.MouseEvent<
         HTMLButtonElement | HTMLAnchorElement | HTMLDivElement,
         MouseEvent
       >
     ) => {
       event.preventDefault() // prevent default runtime context menu from opening
-      const chat = await BackendRemote.rpc.getFullChatById(
-        accountId,
-        message.chatId
-      )
 
       const showContextMenuEventPos = mouseEventToPosition(event)
 
@@ -511,7 +507,7 @@ export default function Message(props: {
           openDialog,
           privateReply,
           handleReactClick,
-          chat,
+          chat: props.chat,
           jumpToMessage,
         },
         target
@@ -524,6 +520,7 @@ export default function Message(props: {
     },
     [
       accountId,
+      props.chat,
       conversationType,
       message,
       openContextMenu,

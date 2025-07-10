@@ -17,7 +17,7 @@ type Props = {
   chat: Parameters<typeof showReactionsUi>[1]
   direction: 'incoming' | 'outgoing'
   message: T.Message
-  showContextMenu: (event: OnButtonClick) => Promise<void>
+  showContextMenu: (event: OnButtonClick) => void
   tabindexForInteractiveContents: -1 | 0
 }
 
