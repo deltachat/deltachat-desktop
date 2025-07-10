@@ -33,9 +33,6 @@ const SUPPORTED_VIDEO_MIME_TYPES = Object.freeze([
 ])
 /* EndSection - Data Copied in part from Signal */
 
-// TODO define this correctly
-// (maybe inside shared module??, but that depends on wether its also used in the backend or just exists in the frontend)
-
 export function isImage(filemime: string | null) {
   return SUPPORTED_IMAGE_MIME_TYPES.includes(filemime || '')
 }
@@ -86,5 +83,5 @@ export function dragAttachmentOut(
 
 export type MessageTypeAttachmentSubset = Pick<
   Type.Message,
-  'id' | 'file' | 'fileMime' | 'fileBytes' | 'fileName' | 'webxdcInfo'
+  'id' | 'file' | 'fileMime' | 'fileBytes' | 'fileName' | 'viewType'
 >

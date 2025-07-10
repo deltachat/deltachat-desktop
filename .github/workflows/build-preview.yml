@@ -3,6 +3,7 @@ name: Preview Builds
 
 on: 
   pull_request:
+    types: [opened, synchronize, reopened, edited]
     paths-ignore:
       - 'docs/**'  # only trigger build if a file outside of /docs was changed
       - 'README_ASSETS/**'
@@ -101,6 +102,7 @@ jobs:
     - name: upload folder
       id: upload
       shell: bash
+      if: contains(github.event.pull_request.body, '#public-preview')
       run: |
         echo -e "${{ secrets.KEY }}" >__TEMP_INPUT_KEY_FILE
         chmod 600 __TEMP_INPUT_KEY_FILE
@@ -113,8 +115,8 @@ jobs:
        PR_ID: ${{ steps.prepare.outputs.prid }}
        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Upload result to artifacts
+      if: contains(github.event.pull_request.body, '#public-preview') == false || steps.upload.outcome == 'failure'
       id: upload-github
-      if: steps.upload.outcome == 'failure'
       uses: actions/upload-artifact@main
       with:
         name: ${{ matrix.os }} output

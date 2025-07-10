@@ -25,7 +25,7 @@
         // (see https://tauri.app/security/csp/), and the browser complains:
         // > Note that 'unsafe-inline' is ignored if either a hash
         // > or nonce value is present in the source list.
-        "style-src": "'self' 'sha256-+A14ONesVdzkn6nr37Osn+rUqNz4oFGZFDbLXrlae04=' 'sha256-HV3Dam0GcDz1w0B+b1RFgSxPeS9mwy/UvkSnZ/Bh/Cc=' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=' 'sha256-Zh4jUM9OY2WmO7yf9x6EN6kOIMV+Qs5XBO/aKendd1M='",
+        "style-src": "'self' 'sha256-+A14ONesVdzkn6nr37Osn+rUqNz4oFGZFDbLXrlae04=' 'sha256-31CP0ioHn9tdjnRPKUZDADOC/7ixdd8LUNgAG3CWiUg=' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=' 'sha256-Zh4jUM9OY2WmO7yf9x6EN6kOIMV+Qs5XBO/aKendd1M='",
         "font-src": "'self'",
         "script-src": "'self' 'wasm-unsafe-eval'",
         "worker-src": "blob:",

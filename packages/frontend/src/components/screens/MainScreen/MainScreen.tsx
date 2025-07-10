@@ -161,15 +161,25 @@ export default function MainScreen({ accountId }: Props) {
       null,
       null
     )
-    mediaIds.reverse() // newest first
+    // mediaIds holds the ids of the last updated apps,
+    // in reverse order
+    mediaIds.reverse()
+    const firstFew = mediaIds.slice(0, maxIcons)
+
     const mediaLoadResult = await BackendRemote.rpc.getMessages(
       accountId,
-      mediaIds.slice(0, maxIcons)
+      firstFew
     )
-    const lastMessages = Object.values(mediaLoadResult).filter(
-      result => result.kind === 'message'
-    )
-    setLastWebxdcApps(lastMessages.reverse()) // show newest first
+    const lastUpdatedApps = firstFew
+      .map((id: number) => {
+        if (mediaLoadResult[id]?.kind === 'message') {
+          return mediaLoadResult[id]
+        }
+        return null
+      })
+      .filter(app => app !== null)
+
+    setLastWebxdcApps(lastUpdatedApps)
   }, [accountId, chatId, smallScreenMode])
 
   useEffect(() => {
@@ -436,6 +446,52 @@ function ChatNavButtons({ chat }: { chat: T.FullChat }) {
   )
 }
 
+function AppIcon({ accountId, app }: { accountId: number; app: T.Message }) {
+  const [webxdcInfo, setWebxdcInfo] = useState<T.WebxdcMessageInfo | null>(null)
+  const [isLoadingWebxdcInfo, setIsLoadingWebxdcInfo] = useState(true)
+
+  useEffect(() => {
+    if (app.viewType === 'Webxdc') {
+      setIsLoadingWebxdcInfo(true)
+      BackendRemote.rpc
+        .getWebxdcInfo(accountId, app.id)
+        .then((info: T.WebxdcMessageInfo) => {
+          setWebxdcInfo(info)
+        })
+        .catch((error: any) => {
+          console.error('Failed to load webxdc info for app:', app.id, error)
+          setWebxdcInfo(null)
+        })
+        .finally(() => {
+          setIsLoadingWebxdcInfo(false)
+        })
+    }
+  }, [accountId, app.id, app.viewType])
+
+  const appName =
+    webxdcInfo?.name || (isLoadingWebxdcInfo ? 'Loading...' : 'Unknown App')
+
+  return (
+    <Button
+      styling='borderless'
+      key={app.id}
+      className={styles.webxdcIconButton}
+      title={appName}
+      aria-label={appName}
+      onClick={() => {
+        openWebxdc(app, webxdcInfo ?? undefined)
+      }}
+    >
+      <img
+        className={styles.webxdcIcon}
+        src={runtime.getWebxdcIconURL(accountId, app.id)}
+        alt={appName}
+        onContextMenu={(e: React.MouseEvent) => e.preventDefault()}
+      />
+    </Button>
+  )
+}
+
 function AppIcons({
   accountId,
   apps,
@@ -453,23 +509,7 @@ function AppIcons({
       data-no-drag-region='true'
     >
       {apps.map(app => (
-        <Button
-          styling='borderless'
-          key={app.id}
-          className={styles.webxdcIconButton}
-          title={app.webxdcInfo?.name}
-          aria-label={app.webxdcInfo?.name}
-          onClick={() => {
-            openWebxdc(app)
-          }}
-        >
-          <img
-            className={styles.webxdcIcon}
-            src={runtime.getWebxdcIconURL(accountId, app.id)}
-            alt={app.webxdcInfo?.name}
-            onContextMenu={(e: React.MouseEvent) => e.preventDefault()}
-          />
-        </Button>
+        <AppIcon key={app.id} accountId={accountId} app={app} />
       ))}
     </div>
   )

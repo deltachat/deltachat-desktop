@@ -3,12 +3,14 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react'
 import reactStringReplace from 'react-string-replace'
 import classNames from 'classnames'
 import { C, T } from '@deltachat/jsonrpc-client'
+import { debounce } from 'debounce'
 
 import MessageBody from './MessageBody'
 import MessageMetaData, { isMediaWithoutText } from './MessageMetaData'
@@ -29,7 +31,6 @@ import { isGenericAttachment, isImage } from '../attachment/Attachment'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { AvatarFromContact } from '../Avatar'
 import { ConversationType } from './MessageList'
-import { truncateText } from '@deltachat-desktop/shared/util'
 import { getDirection } from '../../utils/getDirection'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { ContextMenuItem } from '../ContextMenu'
@@ -347,7 +348,7 @@ function buildContextMenu(
     },
     // Save attachment as
     showAttachmentOptions && {
-      label: tx('save_as'),
+      label: tx('menu_export_attachment'),
       action: onDownload.bind(null, message),
     },
     // copy link
@@ -441,7 +442,7 @@ export default function Message(props: {
   message: T.Message
   conversationType: ConversationType
 }) {
-  const { message, conversationType } = props
+  const { message, conversationType, chat } = props
   const { id, viewType, text, hasLocation, hasHtml } = message
   const direction = getDirection(message)
   const status = mapCoreMsgStatus2String(message.state)
@@ -459,17 +460,13 @@ export default function Message(props: {
   const [messageWidth, setMessageWidth] = useState(0)
 
   const showContextMenu = useCallback(
-    async (
+    (
       event: React.MouseEvent<
         HTMLButtonElement | HTMLAnchorElement | HTMLDivElement,
         MouseEvent
       >
     ) => {
       event.preventDefault() // prevent default runtime context menu from opening
-      const chat = await BackendRemote.rpc.getFullChatById(
-        accountId,
-        message.chatId
-      )
 
       const showContextMenuEventPos = mouseEventToPosition(event)
 
@@ -510,7 +507,7 @@ export default function Message(props: {
           openDialog,
           privateReply,
           handleReactClick,
-          chat,
+          chat: props.chat,
           jumpToMessage,
         },
         target
@@ -523,6 +520,7 @@ export default function Message(props: {
     },
     [
       accountId,
+      props.chat,
       conversationType,
       message,
       openContextMenu,
@@ -816,7 +814,8 @@ export default function Message(props: {
   const showAuthor =
     conversationType.hasMultipleParticipants ||
     message?.overrideSenderName ||
-    message?.originalMsgId
+    message?.originalMsgId ||
+    chat.isSelfTalk
 
   const hasText = text !== null && text !== ''
   const fileMime = message.fileMime || null
@@ -1114,13 +1113,66 @@ function WebxdcMessageContent({
   tabindexForInteractiveContents: -1 | 0
 }) {
   const tx = useTranslationFunction()
+  const [webxdcInfo, setWebxdcInfo] = useState<T.WebxdcMessageInfo | null>(null)
+  const [isLoadingWebxdcInfo, setIsLoadingWebxdcInfo] = useState(true)
+  const accountId = selectedAccountId()
+
+  const fetchWebxdcInfo = useCallback(async () => {
+    setIsLoadingWebxdcInfo(true)
+    try {
+      const info = await BackendRemote.rpc.getWebxdcInfo(accountId, message.id)
+      setWebxdcInfo(info)
+    } catch (error) {
+      console.error(
+        'Failed to refresh webxdc info for message:',
+        message.id,
+        error
+      )
+    } finally {
+      setIsLoadingWebxdcInfo(false)
+    }
+  }, [accountId, message.id])
+
+  const debouncedFetchWebxdcInfo = useMemo(
+    () => debounce(fetchWebxdcInfo, 500),
+    [fetchWebxdcInfo]
+  )
+
+  useEffect(() => {
+    if (message.viewType !== 'Webxdc') return
+
+    // Initial fetch
+    fetchWebxdcInfo()
+
+    // Listen for updates
+    const cleanup = onDCEvent(
+      accountId,
+      'WebxdcStatusUpdate',
+      async ({ msgId }) => {
+        if (msgId === message.id) {
+          // Debounce the refresh since event might be triggered on every key stroke
+          debouncedFetchWebxdcInfo()
+        }
+      }
+    )
+
+    return cleanup
+  }, [
+    accountId,
+    message.id,
+    message.viewType,
+    fetchWebxdcInfo,
+    debouncedFetchWebxdcInfo,
+  ])
+
   if (message.viewType !== 'Webxdc') {
     return null
   }
-  const info = message.webxdcInfo || {
-    name: 'INFO MISSING!',
+
+  const info = webxdcInfo || {
+    name: isLoadingWebxdcInfo ? 'Loading...' : 'INFO MISSING!',
     document: undefined,
-    summary: 'INFO MISSING!',
+    summary: isLoadingWebxdcInfo ? '' : 'INFO MISSING!',
   }
 
   return (
@@ -1130,22 +1182,22 @@ function WebxdcMessageContent({
         alt={`icon of ${info.name}`}
         // No need to turn this element into a `<button>` for a11y,
         // because there is a button below that does the same.
-        onClick={() => openWebxdc(message)}
+        onClick={() => openWebxdc(message, webxdcInfo ?? undefined)}
         // Not setting `tabIndex={tabindexForInteractiveContents}` here
         // because there is a button below that does the same
       />
       <div
-        className='name'
+        className='info-text'
         title={`${info.document ? info.document + ' \n' : ''}${info.name}`}
       >
-        {info.document && truncateText(info.document, 24) + ' - '}
-        {truncateText(info.name, 42)}
+        <div className='document'>{info.document}</div>
+        <div className='name'>{info.name}</div>
       </div>
-      <div>{info.summary}</div>
+      <div className='summary'>{info.summary}</div>
       <Button
         className={styles.startWebxdcButton}
         styling='primary'
-        onClick={() => openWebxdc(message)}
+        onClick={() => openWebxdc(message, webxdcInfo ?? undefined)}
         tabIndex={tabindexForInteractiveContents}
       >
         {tx('start_app')}

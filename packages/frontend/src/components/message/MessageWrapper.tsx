@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react'
+import React, { useLayoutEffect, useRef } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
 import Message from './Message'
@@ -18,6 +18,7 @@ type RenderMessageProps = {
 const log = getLogger('renderer/message/MessageWrapper')
 
 export function MessageWrapper(props: RenderMessageProps) {
+  const observerRef = useRef<HTMLDivElement>(null)
   const state = props.message.state
   const shouldInViewObserve =
     state === C.DC_STATE_IN_FRESH || state === C.DC_STATE_IN_NOTICED
@@ -27,14 +28,10 @@ export function MessageWrapper(props: RenderMessageProps) {
   useLayoutEffect(() => {
     if (!shouldInViewObserve) return
 
-    log.debug(
-      `MessageWrapper: key: ${props.key2} We should observe this message if in view`
-    )
-
-    const messageBottomElement = document.querySelector('#bottom-' + props.key2)
+    const messageBottomElement = observerRef.current
     if (!messageBottomElement) {
       log.error(
-        `MessageWrapper: key: ${props.key2} couldn't find dom element. Returning`
+        `MessageWrapper: expected messageBottomElement for message ${props.key2} to be present, but it's not?`
       )
       return
     }
@@ -66,7 +63,19 @@ export function MessageWrapper(props: RenderMessageProps) {
   return (
     <li id={props.key2} className='message-wrapper'>
       <Message {...props} />
-      <div className='message-observer-bottom' id={'bottom-' + props.key2} />
+      {/* TODO perf: `shouldInViewObserve` does not become `false`
+      when we do mark a message as read, because the messagelist.ts
+      does not update its state on such events.
+      Maybe we could listen for such events in this component,
+      or somehow manually remove the observer when we do perform the
+      `rpc.markseenMsgs` request. */}
+      {shouldInViewObserve && (
+        <div
+          ref={observerRef}
+          className='message-observer-bottom'
+          data-messageid={props.key2}
+        />
+      )}
     </li>
   )
 }

@@ -2,11 +2,39 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- accessibility: add accessible labels for lists (messages list, chat list, profiles list) #5030
+- improve performance: remove message context menu open delay
+- improve performance: don't mark messages as seen unnecessarily when focusing window #5243
+- improve performance in "Edit Group" a little #5237
+
+<a id="1_60_0"></a>
+
+## [1.60.0] - 2025-07-10
+
 ### Added
 - Update last used app icons immediately after sending a new app
 
+### Changed
+- adjust distance between info messages to match Delta Chat for Android #5244
+- tauri: macOS: webxdc: Remove the nowhere-proxy to support pre-14 macOS. #5202
+- reword 'Save As' to 'Export Attachment' to have a clearer cut to 'Save' #5245
+- use rpc.getWebxdcInfo instead of message.webxdcInfo #5227
+- upgrade `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.160.0`
+- upgrade electron from 34 to 37 #5229
+- update translations (07-07-2025)
+- development: introduce new condition to publish build previews
+
 ### Fixed
-- improve performance in "Edit Group" a little
+- always set "unread" count to 0 when "jump to bottom" is clicked #5204
+- fix the last info message not getting marked as read when you scroll to it #5244
+- tauri: remember webxdc app windows' position and size between app re-launches
+- tauri: remember HTML email viewer window position / size for all HTML messages together, instead of separately for each individual message #5171
+- tauri: fix fullscreen media view zoom, pan, pinch not working quite right #5200
+- tauri: fix fullscreen avatar for selfavatar #5240
+- fix: showing 0 instead ? as size for empty files #5253
+- show avatar for deleted saved messages #5221
+- increase contrast between background and unread badge in dark theme #5273
 
 <a id="1_59_2"></a>
 
@@ -14,8 +42,6 @@
 
 ### Added
 - Zoom In/Out with Ctrl +/- #890
-
-### Changed
 
 ### Fixed
 - fix notifications not working sometimes, introduced in 1.59.1
@@ -3516,7 +3542,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.59.2...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.60.0...HEAD
+
+[1.60.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.59.2...v1.60.0
 
 [1.59.2]: https://github.com/deltachat/deltachat-desktop/compare/v1.59.1...v1.59.2
 
