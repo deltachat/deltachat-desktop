@@ -54,7 +54,12 @@ const enum LoadStatus {
   LOADED = 2,
 }
 
-export function ChatListPart({
+export function ChatListPart<
+  T extends
+    | ChatListItemData
+    | ContactChatListItemData
+    | MessageChatListItemData,
+>({
   isRowLoaded,
   loadMoreRows,
   rowCount,
@@ -71,15 +76,15 @@ export function ChatListPart({
   loadMoreRows: (startIndex: number, stopIndex: number) => Promise<any>
   rowCount: number
   width: number | string
-  children: ComponentType<ListChildComponentProps<any>>
+  children: ComponentType<ListChildComponentProps<T>>
   height: number
-  itemKey: ListItemKeySelector<any>
-  setListRef?: (ref: List<any> | null) => void
+  itemKey: ListItemKeySelector<T>
+  setListRef?: (ref: List<T> | null) => void
   /**
    * This does _not_ support maps with dynamically added/removed keys.
    */
   olElementAttrs?: HTMLAttributes<HTMLOListElement>
-  itemData: ChatListItemData | ContactChatListItemData | MessageChatListItemData
+  itemData: T
   itemHeight: number
 }) {
   const infiniteLoaderRef = useRef<InfiniteLoader | null>(null)
