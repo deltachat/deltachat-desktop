@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Fixed
+- accessibility: improve screen-reader accessibility of the general structure of the app by using landmarks #5067
 - accessibility: add accessible labels for lists (messages list, chat list, profiles list) #5030
 - improve performance: remove message context menu open delay
 - improve performance: don't mark messages as seen unnecessarily when focusing window #5243

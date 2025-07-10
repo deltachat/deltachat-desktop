@@ -457,16 +457,11 @@ export default function ChatList(props: {
               <div ref={tabindexWrapperElementChats}>
                 <ChatListPart
                   olElementAttrs={{
-                    // TODO perhaps `pref_` is not nice,
-                    // we might need a separate string.
-                    // The same goes for other occurrences
-                    // of `tx('pref_chats')`.
                     'aria-labelledby': isSearchActive
                       ? 'search-result-divider-chats'
                       : undefined,
-                    'aria-label': !isSearchActive
-                      ? tx('pref_chats')
-                      : undefined,
+                    // When `!isSearchActive`, the wrapper `<section>` label
+                    // is enough.
                   }}
                   isRowLoaded={isChatLoaded}
                   loadMoreRows={loadChats}

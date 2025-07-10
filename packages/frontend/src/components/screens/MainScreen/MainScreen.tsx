@@ -40,6 +40,9 @@ import { useWebxdcMessageSentListener } from '../../../hooks/useWebxdcMessageSen
 import type { T } from '@deltachat/jsonrpc-client'
 import CreateChat from '../../dialogs/CreateChat'
 import { runtime } from '@deltachat-desktop/runtime-interface'
+import { getLogger } from '@deltachat-desktop/shared/logger'
+
+const log = getLogger('MainScreen')
 
 type Props = {
   accountId?: number
@@ -209,8 +212,23 @@ export default function MainScreen({ accountId }: Props) {
         !messageSectionShouldBeHidden ? 'chat-view-open' : ''
       }`}
     >
-      <section className={styles.chatListAndNavbar}>
-        <nav className={styles.chatListNavbar} data-tauri-drag-region>
+      <section
+        className={styles.chatListAndHeader}
+        role='region'
+        // TODO a11y: reconsider whether it's OK to use the "Chats" label
+        // even when we're searching for messages in one particular chat
+        // (`queryChatId`), and even despite the fact
+        // that search results, besides chats,
+        // also include messages and contacts.
+        // For the former, perhaps one could argue that `queryChatId`
+        // is just a part of the search query.
+        //
+        // TODO a11y: perhaps `pref_` is not nice, we might need
+        // a separate string.
+        // The same goes for other occurrences of `tx('pref_chats')`.
+        aria-label={tx('pref_chats')}
+      >
+        <section className={styles.chatListHeader} data-tauri-drag-region>
           {showArchivedChats && (
             <>
               <span data-no-drag-region>
@@ -237,7 +255,7 @@ export default function MainScreen({ accountId }: Props) {
               value={queryStr}
             />
           )}
-        </nav>
+        </section>
         <ChatList
           queryStr={queryStr}
           showArchivedChats={showArchivedChats}
@@ -250,7 +268,11 @@ export default function MainScreen({ accountId }: Props) {
           }}
         />
       </section>
-      <section className={styles.chatAndNavbar}>
+      <section
+        role='region'
+        aria-labelledby='chat-section-heading'
+        className={styles.chatAndNavbar}
+      >
         <nav className={styles.chatNavbar} data-tauri-drag-region>
           {smallScreenMode && (
             <span data-no-drag-region>
@@ -365,15 +387,41 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
     }
   }
 
+  let buttonLabel: string
+  switch (chat.chatType) {
+    case C.DC_CHAT_TYPE_SINGLE: {
+      buttonLabel = tx('menu_view_profile')
+      break
+    }
+    case C.DC_CHAT_TYPE_GROUP: {
+      // If you're no longer a member, editing a group is not possible,
+      // but we don't have a better string.
+      buttonLabel = tx('menu_edit_group')
+      break
+    }
+    case C.DC_CHAT_TYPE_MAILINGLIST: {
+      // We don't have a more appropriate one
+      buttonLabel = tx('menu_view_profile')
+      break
+    }
+    case C.DC_CHAT_TYPE_BROADCAST: {
+      buttonLabel = tx('edit_broadcast_list')
+      break
+    }
+    case C.DC_CHAT_TYPE_UNDEFINED: {
+      buttonLabel = tx('menu_view_profile')
+      break
+    }
+    default: {
+      buttonLabel = tx('menu_view_profile')
+      log.warn(`Unknown chatType ${chat.chatType}`)
+    }
+  }
+
   const subtitle = chatSubtitle(chat)
 
   return (
-    <button
-      className='navbar-heading navbar-heading--button'
-      data-no-drag-region
-      onClick={onTitleClick}
-      data-testid='chat-info-button'
-    >
+    <div className='navbar-heading' data-no-drag-region>
       <Avatar
         displayName={chat.name}
         color={chat.color}
@@ -387,7 +435,13 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
       />
       <div style={{ marginLeft: '7px', overflow: 'hidden' }}>
         <div className='navbar-chat-name'>
-          <div className='truncated'>{chat.name}</div>
+          <h2 id='chat-section-heading' className='truncated'>
+            {chat.name}
+            <span className='visually-hidden'>
+              <br />
+              {tx('chat')}
+            </span>
+          </h2>
           <div className='chat_property_icons'>
             {chat.isProtected && <InlineVerifiedIcon />}
             {chat.ephemeralTimer !== 0 && (
@@ -402,7 +456,13 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
           <div className='navbar-chat-subtitle'>{subtitle}</div>
         )}
       </div>
-    </button>
+      <button
+        onClick={onTitleClick}
+        aria-label={buttonLabel}
+        data-testid='chat-info-button'
+        className='navbar-heading-chat-info-button'
+      ></button>
+    </div>
   )
 }
 
@@ -499,11 +559,15 @@ function AppIcons({
   accountId: number | undefined
   apps: T.Message[]
 }) {
+  const tx = useTranslationFunction()
+
   if (!accountId || !apps || apps.length === 0) {
     return null
   }
   return (
-    <div
+    <section
+      role='region'
+      aria-label={tx('webxdc_apps')}
       className={styles.webxdcIcons}
       data-testid='last-used-apps'
       data-no-drag-region='true'
@@ -511,6 +575,6 @@ function AppIcons({
       {apps.map(app => (
         <AppIcon key={app.id} accountId={accountId} app={app} />
       ))}
-    </div>
+    </section>
   )
 }

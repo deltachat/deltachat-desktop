@@ -3,7 +3,7 @@
 // FYI there is also `_main_screen.scss`.
 
 :global(.main-screen.small-screen.chat-view-open) {
-  .chatListAndNavbar {
+  .chatListAndHeader {
     display: none;
   }
 }
@@ -23,7 +23,7 @@
   flex-shrink: 0;
 }
 
-.chatListAndNavbar {
+.chatListAndHeader {
   display: flex;
   flex-direction: column;
 
@@ -33,7 +33,7 @@
 
   min-width: 295px;
 
-  .chatListNavbar {
+  .chatListHeader {
     @include navbar;
     display: flex;
     align-items: center;
@@ -52,7 +52,7 @@
   // Otherwise e.g. the contents of the gallery view
   // (tabs, sepcifically) will refuse to shrink,
   // and this element (`.chatAndNavbar`) will overflow the parent.
-  // Also this ensures that `.chatListAndNavbar` and `.chatAndNavbar`
+  // Also this ensures that `.chatListAndHeader` and `.chatAndNavbar`
   // take respectively 3 and 8 parts of the width of the parent
   // on wide screens.
   width: 0;
@@ -73,10 +73,10 @@
       width: 0;
       flex-grow: 1;
     }
-    :global(.navbar-heading--button) {
-      @include mixins.button-reset;
-    }
     :global(.navbar-heading) {
+      position: relative;
+
+      width: fit-content;
       // See `.chatNavbarHeadingWrapper`.
       max-width: 100%;
 
@@ -90,6 +90,25 @@
       font-size: 18px;
       font-weight: bold;
       overflow: hidden;
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-size: inherit;
+        font-weight: inherit;
+        display: block;
+        margin: 0;
+      }
+    }
+    :global(.navbar-heading-chat-info-button) {
+      // Fill the parent, overlay the siblings.
+      position: absolute;
+      inset: 0;
+      background-color: transparent;
+      border: none;
     }
 
     :global(.views) {

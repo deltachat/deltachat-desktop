@@ -14,7 +14,6 @@ type ComposerMessageInputProps = {
   hidden?: boolean
   isMessageEditingMode: boolean
   chatId: number
-  chatName: string
   sendMessageOrEditRequest: () => void
   enterKeySends: boolean
   onPaste?: (e: React.ClipboardEvent<HTMLTextAreaElement>) => void
@@ -280,15 +279,6 @@ export default class ComposerMessageInput extends React.Component<
           this.props.isMessageEditingMode
             ? window.static_translate('edit_message')
             : window.static_translate('write_message_desktop')
-        }
-        aria-label={
-          (this.props.isMessageEditingMode
-            ? window.static_translate('edit_message')
-            : window.static_translate('write_message_desktop')) +
-          // Make it clear which chat we're in.
-          // TODO probably need a proper string, with interpolation.
-          ': ' +
-          this.props.chatName
         }
         disabled={this.state.loadingDraft}
         dir='auto'
