@@ -2,6 +2,13 @@
 
 ## [Unreleased][unreleased]
 
+<a id="1_60_1"></a>
+
+## [1.60.1] - 2025-07-10
+
+### Changed
+- downgrade `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `1.159.5` (till next major release)
+
 <a id="1_60_0"></a>
 
 ## [1.60.0] - 2025-07-10
@@ -3536,7 +3543,9 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.60.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.60.1...HEAD
+
+[1.60.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.60.0...v1.60.1
 
 [1.60.0]: https://github.com/deltachat/deltachat-desktop/compare/v1.59.2...v1.60.0
 
