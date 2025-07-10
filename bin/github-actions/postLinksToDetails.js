@@ -34,7 +34,7 @@ if (process.platform === 'darwin') {
     FULL_ARTIFACT_URL ||
     base_url + prId + '.AppImage'
 } else {
-  throw new Error('Unsuported platform: ' + process.platform)
+  throw new Error('Unsupported platform: ' + process.platform)
 }
 
 const STATUS_DATA = {

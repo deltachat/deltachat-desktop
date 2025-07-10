@@ -687,10 +687,8 @@ export default class DCWebxdc {
       async (_ev, accountId: number, instanceId: number) => {
         const instance = open_apps[`${accountId}.${instanceId}`]
         if (instance) {
-          const { chatId, webxdcInfo } = await this.rpc.getMessage(
-            accountId,
-            instanceId
-          )
+          const webxdcInfo = await this.rpc.getWebxdcInfo(accountId, instanceId)
+          const { chatId } = await this.rpc.getMessage(accountId, instanceId)
           const { name } = await this.rpc.getBasicChatInfo(accountId, chatId)
           if (instance.win && webxdcInfo) {
             instance.win.title = makeTitle(webxdcInfo, name)
@@ -761,8 +759,8 @@ export default class DCWebxdc {
             open_apps[key].win.loadURL('about:blank')
             open_apps[key].win.close()
           }
-          const messageWithMap = await this.rpc.getMessage(accountId, msgId)
-          if (messageWithMap && messageWithMap.webxdcInfo) {
+          const webxdcInfo = await this.rpc.getWebxdcInfo(accountId, msgId)
+          if (webxdcInfo) {
             openWebxdc(
               evt,
               msgId,
@@ -770,7 +768,7 @@ export default class DCWebxdc {
                 accountId,
                 displayname: '',
                 chatName,
-                webxdcInfo: messageWithMap.webxdcInfo,
+                webxdcInfo,
                 href: '',
               },
               // special behaviour for the map dc integration,

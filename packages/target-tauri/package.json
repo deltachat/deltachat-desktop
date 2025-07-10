@@ -1,7 +1,7 @@
 {
   "name": "@deltachat-desktop/target-tauri",
   "private": true,
-  "version": "1.59.2",
+  "version": "1.60.0",
   "type": "module",
   "license": "GPL-3.0-or-later",
   "scripts": {
@@ -33,7 +33,7 @@
     "@tauri-apps/plugin-clipboard-manager": "^2.2.2",
     "@tauri-apps/plugin-dialog": "^2.2.1",
     "@webxdc/types": "catalog:",
-    "esbuild": "^0.24.0",
+    "esbuild": "^0.25.0",
     "typescript": "^5.2.2"
   }
 }

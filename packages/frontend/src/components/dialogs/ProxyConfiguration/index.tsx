@@ -18,7 +18,7 @@ import Button from '../../Button'
 
 import styles from './styles.module.scss'
 import { Proxy } from '../../Settings/DefaultCredentials'
-import { debounceWithInit } from '../../chat/ChatListHelpers'
+import { debounce } from 'debounce'
 
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { unknownErrorToString } from '../../helpers/unknownErrorToString'
@@ -57,7 +57,6 @@ export default function ProxyConfiguration(
   const [newProxyUrl, setNewProxyUrl] = useState('')
 
   const [showNewProxyForm, setShowNewProxyForm] = useState(false)
-  const [showEnableSwitch, setShowEnableSwitch] = useState(false)
 
   // updated on connectivity change
   const [connectivityStatus, setConnectivityStatus] = useState(
@@ -209,37 +208,33 @@ export default function ProxyConfiguration(
     [proxyState.activeProxy, proxyState.proxies, updateProxyState]
   )
 
-  // show/hide the enable switch
   useEffect(() => {
-    if (proxyState.enabled) {
-      setShowEnableSwitch(proxyState.proxies.length > 0)
-    } else {
-      setShowEnableSwitch(proxyState.proxies.length > 0)
-    }
-  }, [showEnableSwitch, proxyState.enabled, proxyState.proxies])
+    let outdated = false
 
-  useEffect(() => {
-    let removeConnectivityListener = () => {}
-    const checkConnectivity = async () => {
-      if (configured) {
-        const connectivity = await BackendRemote.rpc.getConnectivity(accountId)
-        setConnectivityStatus(connectivity)
-        removeConnectivityListener = onDCEvent(
-          accountId,
-          'ConnectivityChanged',
-          () =>
-            debounceWithInit(async () => {
-              const connectivity =
-                await BackendRemote.rpc.getConnectivity(accountId)
-              setConnectivityStatus(connectivity)
-            }, 300)()
-        )
+    if (!configured) {
+      return
+    }
+
+    const update = async () => {
+      const connectivity = await BackendRemote.rpc.getConnectivity(accountId)
+
+      if (outdated) {
+        return
       }
+
+      setConnectivityStatus(connectivity)
     }
-    checkConnectivity()
-    return () => {
-      removeConnectivityListener()
-    }
+
+    const debouncedUpdate = debounce(update, 300)
+    debouncedUpdate()
+    debouncedUpdate.flush()
+
+    const cleanup = [
+      onDCEvent(accountId, 'ConnectivityChanged', debouncedUpdate),
+      () => debouncedUpdate.clear(),
+      () => (outdated = true),
+    ]
+    return () => cleanup.forEach(off => off())
   }, [accountId, configured])
 
   /**
@@ -344,7 +339,7 @@ export default function ProxyConfiguration(
       />
       <DialogBody className={styles.proxyDialogBody}>
         <div className={styles.container}>
-          {showEnableSwitch && (
+          {proxyState.proxies.length > 0 && (
             <SettingsSwitch
               label={tx('proxy_use_proxy')}
               value={proxyState.enabled}

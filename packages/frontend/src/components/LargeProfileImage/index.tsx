@@ -3,12 +3,13 @@ import React, { CSSProperties } from 'react'
 import Icon from '../Icon'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { ClickForFullscreenAvatarWrapper } from '../Avatar'
+import { runtime } from '@deltachat-desktop/runtime-interface'
 
 import styles from './styles.module.scss'
 
 type Props = {
   color?: string
-  imageUrl?: string
+  imagePath?: string
   initials: string
 }
 
@@ -18,18 +19,18 @@ interface CssWithAvatarColor extends CSSProperties {
 
 export default function LargeProfileImage({
   color,
-  imageUrl,
+  imagePath,
   initials,
 }: Props) {
   const tx = useTranslationFunction()
 
   return (
     <div className={styles.largeProfileImage}>
-      {imageUrl ? (
-        <ClickForFullscreenAvatarWrapper filename={imageUrl}>
+      {imagePath ? (
+        <ClickForFullscreenAvatarWrapper filename={imagePath}>
           <img
             className={styles.largeProfileImageArea}
-            src={imageUrl}
+            src={runtime.transformBlobURL(imagePath)}
             alt={tx('pref_profile_photo')}
           />
         </ClickForFullscreenAvatarWrapper>

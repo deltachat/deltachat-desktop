@@ -14,12 +14,13 @@ use deltachat::{
 };
 use log::{error, trace, warn};
 
+use rand::distr::SampleString;
+use sha2::Digest;
 use tauri::{
     async_runtime::block_on, image::Image, AppHandle, Manager, State, Url, WebviewUrl,
     WebviewWindowBuilder, WindowEvent,
 };
 use tauri_plugin_store::StoreExt;
-use uuid::Uuid;
 
 #[cfg(desktop)]
 use crate::{menus::webxdc_menu::create_webxdc_window_menu, settings::get_content_protection};
@@ -231,8 +232,48 @@ pub(crate) async fn open_webxdc<'a>(
     message_id: u32,
     href: String,
 ) -> Result<(), Error> {
-    let uuid = Uuid::new_v4().to_string();
-    let window_id = format!("webxdc:{uuid}");
+    let window_id: String = {
+        let get_random_chars = || rand::distr::Alphanumeric.sample_string(&mut rand::rng(), 64);
+        let webxdc_window_state_store_name = ".webxdc-window-state-secret.json";
+        // Why do we need to store a secret just for making a window label?
+        // Because we want to keep the window label fixed
+        // per webxdc app message,
+        // so that the window state (position, size) is stored
+        // using `tauri_plugin_window_state`,
+        // but at the same time we don't want to expose
+        // the account_id and message_id to the webxdc app
+        // (through `globalThis.__TAURI_INTERNALS__.metadata.currentWindow.label`)
+        // because account_id and message_id can give away how many accounts
+        // and messages the user has.
+        // So the app could
+        //
+        // TODO we probably need to consider a more secure way
+        // to store this secret. But it's not a super important one.
+        let secret = app
+            .store(webxdc_window_state_store_name)
+            .map(|store| {
+                let store_key = "webxdc-window-state-secret";
+                store
+                    .get(store_key)
+                    .and_then(|val| val.as_str().map(|s| s.to_string()))
+                    .unwrap_or_else(|| {
+                        let random_chars = get_random_chars();
+                        log::info!("{store_key} not found, creating a storing a new one");
+                        store.set(store_key, random_chars.clone());
+                        random_chars
+                    })
+            })
+            .unwrap_or_else(|err| {
+                log::error!(
+                    "failed to read {} store, webxdc window bounds will not be restored: {err}",
+                    webxdc_window_state_store_name,
+                );
+                get_random_chars()
+            });
+
+        let hash = sha2::Sha256::digest(format!("{}-{}-{}", secret, account_id, message_id));
+        format!("webxdc:{hash:X}")
+    };
     trace!("open webxdc '{window_id}', ({account_id}, {message_id}): href: {href}");
 
     #[cfg(not(any(target_os = "ios", target_os = "android")))]
@@ -326,15 +367,6 @@ pub(crate) async fn open_webxdc<'a>(
         WebviewUrl::CustomProtocol(initial_url.clone()),
     )
     .initialization_script_for_all_frames(INIT_SCRIPT)
-    // Use a non-working proxy to almost(!) isolate the app
-    // from the internet.
-    // "Almost" because there are still cases where the webview
-    // will bypass the proxy, such as with WebRTC.
-    // To disable WebRTC, we take separate measures.
-    //
-    // Note that `additional_browser_args` might make `proxy_url`
-    // have no effect (see below).
-    .proxy_url(dummy_localhost_proxy_url.clone())
     .devtools({
         // Dev tools might not work on macOS in production,
         // see comments around `enableWebxdcDevTools`.
@@ -355,6 +387,24 @@ pub(crate) async fn open_webxdc<'a>(
             .unwrap_or(false)
     })
     .on_navigation(move |url| url.origin_no_opaque() == initial_url_clone.origin_no_opaque());
+
+    // This is only for non-macOS platforms.
+    // Use a non-working proxy to almost(!) isolate the app
+    // from the internet.
+    // "Almost" because there are still cases where the webview
+    // will bypass the proxy, such as with WebRTC.
+    // To disable WebRTC, we take separate measures.
+    //
+    // Note that `additional_browser_args` might make `proxy_url`
+    // have no effect (see below).
+    //
+    // IDEA: we disabled it on macOS, because it increased the minimum version to 14.
+    // But there may be a possibility to enable it conditionally when the api is available, see
+    // https://github.com/deltachat/deltachat-desktop/issues/5201
+    #[cfg(not(target_os = "macos"))]
+    {
+        window_builder = window_builder.proxy_url(dummy_localhost_proxy_url.clone());
+    }
 
     // This is only for Chromium (i.e. Windows).
     // Note that this will make `WebviewWindowBuilder::proxy_url`,

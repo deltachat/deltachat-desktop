@@ -107,9 +107,10 @@ If you're unsure it's always safe to run `pnpm -w fix` to fix everything. If you
 
 ### CI github actions
 
-We have several [github actions](../.github/workflows/) configured to be executed for each PR. These include code validation, tests and preview builds which are downloadable from the artifacts and from https://download.delta.chat/desktop/preview/
+We have several [github actions](../.github/workflows/) configured to be executed for each PR. These include code validation, tests and preview builds which are downloadable from the artifacts.
+Previews can be uploaded to https://download.delta.chat/desktop/preview/ by adding a line "#public-preview" to the PR description. This also works if the line is added later, since the upload step is triggered on "edit" also.
 
-The code validation includes a check if the Changelog has a new entry for the PR. That can be skipped (if reasonable) by adding the keyword "skip changelog check" in the description, ideally followed by a reason for skipping
+The code validation includes a check if the Changelog has a new entry for the PR. That can be skipped (if reasonable) by adding the keyword "#skip-changelog" in the description, ideally followed by a reason for skipping
 
 ### Tests <a id="tests"></a>
 

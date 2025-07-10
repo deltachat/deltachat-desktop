@@ -19,12 +19,15 @@ export default defineConfig({
   workers: 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [['list'], ['html']],
-  // timeout: 30 * 60 * 1000,
+
+  // Our tests involve network interaction, so we want a higher timeout
+  // for assertions, such as receiving an invitation to a group,
+  // as well as whole tests.
+  timeout: 5 * 60 * 1000,
   expect: {
-    // Our tests involve network interaction, so we want a higher timeout
-    // for assertions, such as receiving an invitation to a group.
-    timeout: 20_000,
+    timeout: 60_000,
   },
+
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
