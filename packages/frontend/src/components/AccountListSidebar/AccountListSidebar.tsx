@@ -63,6 +63,14 @@ export default function AccountListSidebar({
 
   const [{ accounts: noficationSettings }] = useAccountNotificationStore()
 
+  // Drag and drop state
+  const [draggedAccountId, setDraggedAccountId] = useState<number | null>(null)
+  const [dropIndicator, setDropIndicator] = useState<{
+    index: number
+    position: 'top' | 'bottom'
+  } | null>(null)
+  const [accounts, setAccounts] = useState<number[]>([])
+
   const { smallScreenMode } = useContext(ScreenContext)
   const { chatId } = useChat()
 
@@ -78,6 +86,86 @@ export default function AccountListSidebar({
   }
 
   const [syncAllAccounts, setSyncAllAccounts] = useState(true)
+
+  // Drag and drop handlers
+  const handleDragStart = (accountId: number) => {
+    setDraggedAccountId(accountId)
+  }
+
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault()
+    if (draggedAccountId === null) return
+
+    const target = e.currentTarget as HTMLDivElement
+    const rect = target.getBoundingClientRect()
+    const position = e.clientY < rect.top + rect.height / 2 ? 'top' : 'bottom'
+
+    setDropIndicator({ index, position })
+  }
+
+  const handleDragLeave = () => {
+    setDropIndicator(null)
+  }
+
+  const handleDragEnd = () => {
+    setDraggedAccountId(null)
+    setDropIndicator(null)
+  }
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault()
+
+    if (draggedAccountId === null || dropIndicator === null) return
+
+    const dragIndex = accounts.indexOf(draggedAccountId)
+    const dropIndex = dropIndicator.index
+
+    if (dragIndex === -1 || dragIndex === dropIndex) {
+      // If dropping on itself, check position to maybe move it one slot.
+      if (
+        dragIndex === dropIndex &&
+        ((dropIndicator.position === 'top' && dragIndex > 0) ||
+          (dropIndicator.position === 'bottom' &&
+            dragIndex < accounts.length - 1))
+      ) {
+        // This case is handled by dropping on the adjacent item, so we can ignore it.
+      } else {
+        setDraggedAccountId(null)
+        setDropIndicator(null)
+        return
+      }
+    }
+
+    // Create new array with reordered accounts
+    const newAccounts = [...accounts]
+    const [removed] = newAccounts.splice(dragIndex, 1)
+
+    let targetIndex = dropIndex
+    if (dragIndex < dropIndex) {
+      targetIndex--
+    }
+
+    if (dropIndicator.position === 'bottom') {
+      targetIndex++
+    }
+
+    newAccounts.splice(targetIndex, 0, removed)
+
+    // Update local state immediately for smooth UI
+    setAccounts(newAccounts)
+
+    try {
+      // Update backend with new order
+      await BackendRemote.rpc.setAccountsOrder(newAccounts)
+    } catch (_error) {
+      // Revert on error
+      accountsFetch.refresh()
+    }
+
+    setDraggedAccountId(null)
+    setDropIndicator(null)
+  }
+
   useEffect(() => {
     const refreshSyncAllAccounts = async () => {
       const desktopSettings = await runtime.getDesktopSettings()
@@ -93,6 +181,17 @@ export default function AccountListSidebar({
     /// now this workaround is only used when changing background sync setting
     window.__updateAccountListSidebar = throttledRefreshSyncAllAccounts
   }, [])
+
+  // Update local accounts state when fetch result changes
+  useEffect(() => {
+    const result = accountsFetch.lingeringResult
+    if (result?.ok === true) {
+      // Use setTimeout to avoid synchronous setState in effect
+      setTimeout(() => {
+        setAccounts(result.value)
+      }, 0)
+    }
+  }, [accountsFetch.lingeringResult])
 
   const [accountForHoverInfo, internalSetAccountForHoverInfo] =
     useState<T.Account | null>(null)
@@ -183,17 +282,37 @@ export default function AccountListSidebar({
                 ⚠️
               </button>
             ) : (
-              accountsFetch.lingeringResult?.value.map(id => (
-                <AccountItem
+              accountsFetch.lingeringResult?.value.map((id, index) => (
+                <div
                   key={id}
-                  accountId={id}
-                  isSelected={selectedAccountId === id}
-                  onSelectAccount={selectAccount}
-                  openAccountDeletionScreen={openAccountDeletionScreen}
-                  updateAccountForHoverInfo={updateAccountForHoverInfo}
-                  syncAllAccounts={syncAllAccounts}
-                  muted={noficationSettings[id]?.muted || false}
-                />
+                  draggable
+                  onDragStart={() => handleDragStart(id)}
+                  onDragOver={e => handleDragOver(e, index)}
+                  onDrop={handleDrop}
+                  onDragEnd={handleDragEnd}
+                  onDragLeave={handleDragLeave}
+                  className={classNames({
+                    [styles.dragging]: draggedAccountId === id,
+                    [styles.dragOverTop]:
+                      dropIndicator?.index === index &&
+                      dropIndicator?.position === 'top' &&
+                      draggedAccountId !== id,
+                    [styles.dragOverBottom]:
+                      dropIndicator?.index === index &&
+                      dropIndicator?.position === 'bottom' &&
+                      draggedAccountId !== id,
+                  })}
+                >
+                  <AccountItem
+                    accountId={id}
+                    isSelected={selectedAccountId === id}
+                    onSelectAccount={selectAccount}
+                    openAccountDeletionScreen={openAccountDeletionScreen}
+                    updateAccountForHoverInfo={updateAccountForHoverInfo}
+                    syncAllAccounts={syncAllAccounts}
+                    muted={noficationSettings[id]?.muted || false}
+                  />
+                </div>
               ))
             )}
             <li>
