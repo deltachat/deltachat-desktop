@@ -248,80 +248,69 @@ export default function AccountItem({
   // for a different account, and upon initial render.
 
   return (
-    <li
-      className={classNames(styles.accountWrapper, {
+    <button
+      className={classNames(styles.account, rovingTabindex.className, {
+        [styles.active]: isSelected,
+        [styles['context-menu-active']]: isContextMenuActive,
         [styles.isSticky]: isSticky,
+        'unconfigured-account': account?.kind !== 'Configured',
       })}
+      role='tab'
+      aria-selected={isSelected}
+      aria-busy={!account && accountFetch.loading}
+      onClick={() => onSelectAccount(accountId)}
+      onContextMenu={onContextMenu}
+      onMouseEnter={() => account && updateAccountForHoverInfo(account, true)}
+      onMouseLeave={() =>
+        account && updateAccountForHoverInfo(account, false)
+      }
+      x-account-sidebar-account-id={accountId}
+      data-testid={`account-item-${accountId}`}
+      ref={ref}
+      tabIndex={rovingTabindex.tabIndex}
+      onFocus={rovingTabindex.setAsActiveElement}
+      onKeyDown={rovingTabindex.onKeydown}
     >
-      <button
-        className={classNames(styles.account, rovingTabindex.className, {
-          [styles.active]: isSelected,
-          [styles['context-menu-active']]: isContextMenuActive,
-          [styles.isSticky]: isSticky,
-          'unconfigured-account': account?.kind !== 'Configured',
-        })}
-        // TODO consider adding `role='tabpanel'` for the main area of the app.
-        // Although screen readers might start to announce
-        // the account name every time you focus something in the main area,
-        // which might be too verbose.
-        role='tab'
-        aria-selected={isSelected}
-        aria-busy={!account && accountFetch.loading}
-        onClick={() => onSelectAccount(accountId)}
-        onContextMenu={onContextMenu}
-        onMouseEnter={() => account && updateAccountForHoverInfo(account, true)}
-        onMouseLeave={() =>
-          account && updateAccountForHoverInfo(account, false)
-        }
-        x-account-sidebar-account-id={accountId}
-        data-testid={`account-item-${accountId}`}
-        ref={ref}
-        tabIndex={rovingTabindex.tabIndex}
-        onFocus={rovingTabindex.setAsActiveElement}
-        onKeyDown={rovingTabindex.onKeydown}
-      >
-        {!account ? (
-          <div className={styles.avatar}>
-            <div className={styles.content}>
-              {accountFetch.loading ? '⏳' : '⚠️'}
+      {!account ? (
+        <div className={styles.avatar}>
+          <div className={styles.content}>
+            {accountFetch.loading ? '⏳' : '⚠️'}
+          </div>
+        </div>
+      ) : account.kind == 'Configured' ? (
+        <div className={styles.avatar}>
+          {account.profileImage ? (
+            <img
+              className={styles.content}
+              src={runtime.transformBlobURL(account.profileImage)}
+            />
+          ) : (
+            <div
+              className={styles.content}
+              style={{ backgroundColor: account.color }}
+            >
+              {avatarInitial(
+                account.displayName || '',
+                account.addr || undefined
+              )}
             </div>
-          </div>
-        ) : account.kind == 'Configured' ? (
-          <div className={styles.avatar}>
-            {' '}
-            {account.profileImage ? (
-              <img
-                className={styles.content}
-                src={runtime.transformBlobURL(account.profileImage)}
-              />
-            ) : (
-              <div
-                className={styles.content}
-                style={{ backgroundColor: account.color }}
-              >
-                {avatarInitial(
-                  account.displayName || '',
-                  account.addr || undefined
-                )}
-              </div>
-            )}
-          </div>
-        ) : (
-          <div className={styles.avatar}>
-            <div className={styles.content}>?</div>
-          </div>
-        )}
-        {muted && (
-          <div
-            aria-label='Account notifications muted'
-            className={styles.accountMutedIconShadow}
-          >
-            <Icon className={styles.accountMutedIcon} icon='audio-muted' />
-          </div>
-        )}
-        <div className={classNames(styles.accountBadge)}>{badgeContent}</div>
-      </button>
-    </li>
+          )}
+        </div>
+      ) : (
+        <div className={styles.avatar}>
+          <div className={styles.content}>?</div>
+        </div>
+      )}
+      {muted && (
+        <div
+          aria-label='Account notifications muted'
+          className={styles.accountMutedIconShadow}
+        >
+          <Icon className={styles.accountMutedIcon} icon='audio-muted' />
+        </div>
+      )}
+      <div className={classNames(styles.accountBadge)}>{badgeContent}</div>
+    </button>
   )
 }
 

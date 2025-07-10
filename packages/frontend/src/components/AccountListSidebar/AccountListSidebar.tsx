@@ -2,6 +2,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react'
@@ -29,9 +30,6 @@ import {
   useRovingTabindex,
 } from '../../contexts/RovingTabindex'
 import classNames from 'classnames'
-import { useRpcFetch } from '../../hooks/useFetch'
-import AlertDialog from '../dialogs/AlertDialog'
-import { unknownErrorToString } from '../helpers/unknownErrorToString'
 
 type Props = {
   onAddAccount: () => Promise<number>
@@ -48,20 +46,17 @@ export default function AccountListSidebar({
 }: Props) {
   const tx = useTranslationFunction()
 
-  const accountsListRef = useRef<HTMLUListElement>(null)
+  const accountsListRef = useRef<HTMLDivElement>(null)
   const { openDialog } = useDialog()
-
-  const accountsFetch = useRpcFetch(BackendRemote.rpc.getAllAccountIds, [])
-  useEffect(() => {
-    const debouncedRefreshAccountList = debounce(accountsFetch.refresh, 200)
-
-    BackendRemote.on('AccountsChanged', debouncedRefreshAccountList)
-    return () => {
-      BackendRemote.off('AccountsChanged', debouncedRefreshAccountList)
-    }
-  }, [accountsFetch.refresh])
-
+  const [accounts, setAccounts] = useState<number[]>([])
   const [{ accounts: noficationSettings }] = useAccountNotificationStore()
+  
+  // Drag and drop state
+  const [draggedAccountId, setDraggedAccountId] = useState<number | null>(null)
+  const [dropIndicator, setDropIndicator] = useState<{
+    index: number
+    position: 'top' | 'bottom'
+  } | null>(null)
 
   const { smallScreenMode } = useContext(ScreenContext)
   const { chatId } = useChat()
@@ -78,21 +73,106 @@ export default function AccountListSidebar({
   }
 
   const [syncAllAccounts, setSyncAllAccounts] = useState(true)
-  useEffect(() => {
-    const refreshSyncAllAccounts = async () => {
-      const desktopSettings = await runtime.getDesktopSettings()
-      setSyncAllAccounts(desktopSettings.syncAllAccounts)
+
+  // Drag and drop handlers
+  const handleDragStart = (accountId: number) => {
+    setDraggedAccountId(accountId)
+  }
+
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault()
+    if (draggedAccountId === null) return
+
+    const target = e.currentTarget as HTMLDivElement
+    const rect = target.getBoundingClientRect()
+    const position = e.clientY < rect.top + rect.height / 2 ? 'top' : 'bottom'
+
+    setDropIndicator({ index, position })
+  }
+
+  const handleDragLeave = () => {
+    setDropIndicator(null)
+  }
+
+  const handleDragEnd = () => {
+    setDraggedAccountId(null)
+    setDropIndicator(null)
+  }
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault()
+    
+    if (draggedAccountId === null || dropIndicator === null) return
+    
+    const dragIndex = accounts.indexOf(draggedAccountId)
+    let dropIndex = dropIndicator.index
+
+    if (dragIndex === -1 || dragIndex === dropIndex) {
+      // If dropping on itself, check position to maybe move it one slot.
+      if (
+        dragIndex === dropIndex &&
+        ((dropIndicator.position === 'top' && dragIndex > 0) ||
+          (dropIndicator.position === 'bottom' && dragIndex < accounts.length - 1))
+      ) {
+        // This case is handled by dropping on the adjacent item, so we can ignore it.
+      } else {
+        setDraggedAccountId(null)
+        setDropIndicator(null)
+        return
+      }
     }
 
-    refreshSyncAllAccounts()
+    // Create new array with reordered accounts
+    const newAccounts = [...accounts]
+    const [removed] = newAccounts.splice(dragIndex, 1)
 
-    const debouncedRefreshSyncAllAccounts = debounce(
-      refreshSyncAllAccounts,
-      200
-    )
-    /// now this workaround is only used when changing background sync setting
-    window.__updateAccountListSidebar = debouncedRefreshSyncAllAccounts
-  }, [])
+    let targetIndex = dropIndex
+    if (dragIndex < dropIndex) {
+      targetIndex--
+    }
+
+    if (dropIndicator.position === 'bottom') {
+      targetIndex++
+    }
+
+    newAccounts.splice(targetIndex, 0, removed)
+    
+    // Update local state immediately for smooth UI
+    setAccounts(newAccounts)
+    
+    try {
+      // Update backend with new order
+      await (BackendRemote.rpc as any).setAccountsOrder(newAccounts)
+    } catch (error) {
+      console.error('Failed to update account order:', error)
+      // Revert on error
+      refresh()
+    }
+    
+    setDraggedAccountId(null)
+    setDropIndicator(null)
+  }
+
+  const refresh = useMemo(
+    () => async () => {
+      try {
+        // Use getAccountsOrder instead of getAllAccountIds to get the proper ordering
+        const accounts = await (BackendRemote.rpc as any).getAccountsOrder()
+        setAccounts(accounts)
+      } catch (error) {
+        // Fallback to getAllAccountIds if getAccountsOrder doesn't exist
+        const accountsResult = await BackendRemote.rpc.getAllAccountIds()
+        setAccounts(accountsResult)
+      }
+      const desktopSettings = await runtime.getDesktopSettings()
+      setSyncAllAccounts(desktopSettings.syncAllAccounts)
+    },
+    []
+  )
+
+  useEffect(() => {
+    refresh()
+  }, [selectedAccountId, refresh])
 
   const [accountForHoverInfo, internalSetAccountForHoverInfo] =
     useState<T.Account | null>(null)
@@ -130,6 +210,19 @@ export default function AccountListSidebar({
     updateHoverInfoPosition()
   }, [accountForHoverInfo, updateHoverInfoPosition])
 
+  useEffect(() => {
+    const debouncedUpdate = debounce(() => {
+      refresh()
+    }, 200)
+
+    /// now this workaround is only used when changing background sync setting
+    window.__updateAccountListSidebar = debouncedUpdate
+    BackendRemote.on('AccountsChanged', debouncedUpdate)
+    return () => {
+      BackendRemote.off('AccountsChanged', debouncedUpdate)
+    }
+  }, [refresh])
+
   const openSettings = () => openDialog(Settings)
 
   if (shouldBeHidden) {
@@ -144,60 +237,51 @@ export default function AccountListSidebar({
           data-tauri-drag-region
         />
       )}
-      <ul
+      <div
         ref={accountsListRef}
-        // Perhaps just "Profiles" would be more appropriate,
-        // because you can do other things with profiles in this list,
-        // but we have the same on Android.
-        aria-label={tx('switch_account')}
         className={styles.accountList}
         onScroll={updateHoverInfoPosition}
         role='tablist'
         aria-orientation='vertical'
       >
         <RovingTabindexProvider wrapperElementRef={accountsListRef}>
-          {accountsFetch.lingeringResult?.ok === false ? (
-            <button
-              onClick={() => {
-                if (
-                  !accountsFetch.lingeringResult ||
-                  accountsFetch.lingeringResult.ok
-                ) {
-                  // This should not happen, TypeScript.
-                  throw new Error('expected non-ok value')
-                }
-                openDialog(AlertDialog, {
-                  message: tx(
-                    'error_x',
-                    'Failed to load account IDs:\n' +
-                      unknownErrorToString(accountsFetch.lingeringResult.err)
-                  ),
-                })
-              }}
-              aria-label={tx('error')}
-              title={tx('error')}
-            >
-              ⚠️
-            </button>
-          ) : (
-            accountsFetch.lingeringResult?.value.map(id => (
-              <AccountItem
+          {accounts.map((id, index) => {
+            return (
+              <div
                 key={id}
-                accountId={id}
-                isSelected={selectedAccountId === id}
-                onSelectAccount={selectAccount}
-                openAccountDeletionScreen={openAccountDeletionScreen}
-                updateAccountForHoverInfo={updateAccountForHoverInfo}
-                syncAllAccounts={syncAllAccounts}
-                muted={noficationSettings[id]?.muted || false}
-              />
-            ))
-          )}
-          <li>
-            <AddAccountButton onClick={onAddAccount} />
-          </li>
+                draggable
+                onDragStart={() => handleDragStart(id)}
+                onDragOver={(e) => handleDragOver(e, index)}
+                onDrop={handleDrop}
+                onDragEnd={handleDragEnd}
+                onDragLeave={handleDragLeave}
+                className={classNames(styles.accountWrapper, {
+                  [styles.dragging]: draggedAccountId === id,
+                  [styles.dragOverTop]:
+                    dropIndicator?.index === index &&
+                    dropIndicator?.position === 'top' &&
+                    draggedAccountId !== id,
+                  [styles.dragOverBottom]:
+                    dropIndicator?.index === index &&
+                    dropIndicator?.position === 'bottom' &&
+                    draggedAccountId !== id,
+                })}
+              >
+                <AccountItem
+                  accountId={id}
+                  isSelected={selectedAccountId === id}
+                  onSelectAccount={selectAccount}
+                  openAccountDeletionScreen={openAccountDeletionScreen}
+                  updateAccountForHoverInfo={updateAccountForHoverInfo}
+                  syncAllAccounts={syncAllAccounts}
+                  muted={noficationSettings[id]?.muted || false}
+                />
+              </div>
+            )
+          })}
+          <AddAccountButton onClick={onAddAccount} />
         </RovingTabindexProvider>
-      </ul>
+      </div>
       {/* The condition is the same as in https://github.com/deltachat/deltachat-desktop/blob/63af023437ff1828a27de2da37bf94ab180ec528/src/renderer/contexts/KeybindingsContext.tsx#L26 */}
       {window.__screen === Screens.Main && (
         <div className={styles.buttonsContainer}>
