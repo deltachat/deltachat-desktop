@@ -295,7 +295,7 @@ function buildContextMenu(
   // Only show in groups, don't show on info messages or outgoing messages
   const showReplyPrivately =
     (conversationType.chatType === C.DC_CHAT_TYPE_GROUP ||
-      conversationType.chatType === C.DC_CHAT_TYPE_MAILINGLIST) &&
+      conversationType.chatType === C.DC_CHAT_TYPE_IN_BROADCAST) &&
     message.fromId > C.DC_CONTACT_ID_LAST_SPECIAL
 
   return [
