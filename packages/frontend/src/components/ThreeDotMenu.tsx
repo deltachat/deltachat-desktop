@@ -80,7 +80,7 @@ export function useThreeDotMenu(selectedChat?: T.FullChat) {
         },
       },
       canSend &&
-        selectedChat.chatType !== C.DC_CHAT_TYPE_MAILINGLIST && {
+        selectedChat.chatType !== C.DC_CHAT_TYPE_IN_BROADCAST && {
           label: tx('ephemeral_messages'),
           action: onDisappearingMessages,
         },
