@@ -52,7 +52,12 @@ const enum LoadStatus {
   LOADED = 2,
 }
 
-export function ChatListPart({
+export function ChatListPart<
+  T extends
+    | ChatListItemData
+    | ContactChatListItemData
+    | MessageChatListItemData,
+>({
   isRowLoaded,
   loadMoreRows,
   rowCount,
@@ -68,11 +73,11 @@ export function ChatListPart({
   loadMoreRows: (startIndex: number, stopIndex: number) => Promise<any>
   rowCount: number
   width: number | string
-  children: ComponentType<ListChildComponentProps<any>>
+  children: ComponentType<ListChildComponentProps<T>>
   height: number
-  itemKey: ListItemKeySelector<any>
-  setListRef?: (ref: List<any> | null) => void
-  itemData: ChatListItemData | ContactChatListItemData | MessageChatListItemData
+  itemKey: ListItemKeySelector<T>
+  setListRef?: (ref: List<T> | null) => void
+  itemData: T
   itemHeight: number
 }) {
   const infiniteLoaderRef = useRef<InfiniteLoader | null>(null)
@@ -304,7 +309,7 @@ export default function ChatList(props: {
   //   selectFirstChat()
   // )
 
-  const chatlistData = useMemo(() => {
+  const chatlistData: ChatListItemData = useMemo(() => {
     return {
       selectedChatId,
       chatListIds,
@@ -322,19 +327,14 @@ export default function ChatList(props: {
     activeContextMenuChatId,
   ])
 
-  const contactlistData: {
-    contactCache: {
-      [id: number]: Type.Contact | undefined
-    }
-    contactIds: number[]
-  } = useMemo(() => {
+  const contactlistData: ContactChatListItemData = useMemo(() => {
     return {
       contactCache,
       contactIds,
     }
   }, [contactCache, contactIds])
 
-  const messagelistData = useMemo(() => {
+  const messagelistData: MessageChatListItemData = useMemo(() => {
     return {
       messageResultIds,
       messageCache,
