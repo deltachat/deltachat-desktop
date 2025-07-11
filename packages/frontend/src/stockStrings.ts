@@ -77,7 +77,7 @@ export async function updateCoreStrings() {
   strings[C.DC_STR_ERROR] = tx('error_x')
   strings[C.DC_STR_NOT_SUPPORTED_BY_PROVIDER] = tx('not_supported_by_provider')
   strings[C.DC_STR_MESSAGES] = tx('messages')
-  strings[C.DC_STR_BROADCAST_LIST] = tx('broadcast_list')
+  strings[C.DC_STR_BROADCAST_LIST] = tx('channel')
   strings[C.DC_STR_PART_OF_TOTAL_USED] = tx('part_of_total_used')
   strings[C.DC_STR_SECURE_JOIN_STARTED] = tx('secure_join_started')
   strings[C.DC_STR_SECUREJOIN_TAKES_LONGER] = tx('secure_join_takes_longer')

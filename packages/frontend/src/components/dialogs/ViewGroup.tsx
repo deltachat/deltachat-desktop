@@ -177,7 +177,7 @@ function ViewGroupInner(
   } & DialogProps
 ) {
   const { chat, onClose } = props
-  const isBroadcast = chat.chatType === C.DC_CHAT_TYPE_BROADCAST
+  const isBroadcast = chat.chatType === C.DC_CHAT_TYPE_OUT_BROADCAST
   const { openDialog } = useDialog()
   const accountId = selectedAccountId()
   const openConfirmationDialog = useConfirmationDialog()
@@ -280,7 +280,7 @@ function ViewGroupInner(
       const confirmed = await openConfirmationDialog({
         message: !isBroadcast
           ? tx('ask_remove_members', contact.displayName)
-          : tx('ask_remove_from_broadcast', contact.displayName),
+          : tx('ask_remove_from_channel', contact.displayName),
         confirmLabel: tx('delete'),
         dataTestid: 'remove-group-member-dialog',
       })
@@ -349,7 +349,7 @@ function ViewGroupInner(
       {!profileContact && (
         <>
           <DialogHeader
-            title={!isBroadcast ? tx('tab_group') : tx('broadcast_list')}
+            title={!isBroadcast ? tx('tab_group') : tx('channel')}
             onClickEdit={onClickEdit}
             onClose={onClose}
             dataTestid='view-group-dialog-header'
@@ -556,9 +556,7 @@ export function EditGroupNameDialog({
     <Dialog onClose={onClose} canOutsideClickClose={false} fixed>
       <DialogHeader
         title={
-          !isBroadcast
-            ? tx('menu_group_name_and_image')
-            : tx('broadcast_list_name')
+          !isBroadcast ? tx('menu_group_name_and_image') : tx('channel_name')
         }
       />
       <DialogBody>
@@ -579,9 +577,7 @@ export function EditGroupNameDialog({
           <DeltaInput
             key='groupname'
             id='groupname'
-            placeholder={
-              !isBroadcast ? tx('group_name') : tx('broadcast_list_name')
-            }
+            placeholder={!isBroadcast ? tx('group_name') : tx('channel_name')}
             value={groupName}
             onChange={(
               event: React.FormEvent<HTMLElement> &
@@ -602,7 +598,7 @@ export function EditGroupNameDialog({
             >
               {!isBroadcast
                 ? tx('group_please_enter_group_name')
-                : tx('please_enter_broadcast_list_name')}
+                : tx('please_enter_channel_name')}
             </p>
           )}
         </DialogContent>
