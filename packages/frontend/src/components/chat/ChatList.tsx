@@ -358,19 +358,14 @@ export default function ChatList(props: {
     activeContextMenuChatId,
   ])
 
-  const contactlistData: {
-    contactCache: {
-      [id: number]: Type.Contact | undefined
-    }
-    contactIds: number[]
-  } = useMemo(() => {
+  const contactlistData: ContactChatListItemData = useMemo(() => {
     return {
       contactCache,
       contactIds,
     }
   }, [contactCache, contactIds])
 
-  const messagelistData = useMemo(() => {
+  const messagelistData: MessageChatListItemData = useMemo(() => {
     return {
       messageResultIds,
       messageCache,
