@@ -430,7 +430,7 @@ function CreateChatMainRow({
           <PseudoListItem
             id='newbroadcastlist'
             cutoff='+'
-            text={tx('new_broadcast_list')}
+            text={tx('new_channel')}
             onClick={() => setViewMode('createBroadcastList')}
           />
         )
@@ -691,11 +691,11 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
 
   return (
     <>
-      <DialogHeader title={tx('new_broadcast_list')} />
+      <DialogHeader title={tx('new_channel')} />
       <DialogBody>
         <DialogContent>
           <div className='broadcast-list-hint'>
-            <p>{tx('chat_new_broadcast_hint')}</p>
+            <p>{tx('chat_new_channel_hint')}</p>
           </div>
           <br />
           <ChatSettingsSetNameAndProfileImage
@@ -822,7 +822,7 @@ export const ChatSettingsSetNameAndProfileImage = ({
             <p className='input-error'>
               {type === 'group'
                 ? tx('group_please_enter_group_name')
-                : tx('please_enter_broadcast_list_name')}
+                : tx('please_enter_channel_name')}
             </p>
           )}
         </div>
@@ -881,7 +881,7 @@ const useCreateBroadcast = (
   const { selectChat } = useChat()
 
   const createBroadcastList = async () => {
-    const chatId = await BackendRemote.rpc.createBroadcastList(accountId)
+    const chatId = await BackendRemote.rpc.createBroadcast(accountId, groupName)
 
     await Promise.all(
       broadcastRecipients.map(contactId => {

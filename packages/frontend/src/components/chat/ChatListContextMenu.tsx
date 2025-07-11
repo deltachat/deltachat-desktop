@@ -129,7 +129,7 @@ export function useChatListContextMenu(): {
         if (!fullChat) {
           throw new Error('chat was not found')
         }
-        if (fullChat.chatType !== C.DC_CHAT_TYPE_MAILINGLIST) {
+        if (fullChat.chatType !== C.DC_CHAT_TYPE_IN_BROADCAST) {
           openViewProfileDialog(accountId, fullChat.contactIds[0])
         } else {
           openDialog(MailingListProfile, {
@@ -242,9 +242,9 @@ export function useChatListContextMenu(): {
                 dataTestid: 'edit-group',
                 action: onViewGroup,
               },
-            // Edit Broadcast List
+            // Edit Channel
             chatListItem.isBroadcast && {
-              label: tx('edit_broadcast_list'),
+              label: tx('edit_channel'),
               action: onViewGroup,
             },
             // Clone Group
