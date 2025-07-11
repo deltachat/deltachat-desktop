@@ -30,6 +30,19 @@ export default function VCardComponent({
   }
   const { displayName, addr } = message.vcardContact
   const startChatWithContact = async (addr: string) => {
+    // TODO: what should we do/show here if the contact already exists?
+    //
+    // const existingContactId = await BackendRemote.rpc.lookupContactIdByAddr(
+    //   accountId,
+    //   addr
+    // )
+    // if (existingContactId) {
+    //   const chatId = await createChatByContactId(accountId, existingContactId)
+    //   if (chatId) {
+    //     await selectChat(selectedAccountId(), chatId)
+    //   }
+    //   return
+    // }
     const confirmed = await openConfirmationDialog({
       message: tx('ask_start_chat_with', displayName),
       confirmLabel: tx('ok'),

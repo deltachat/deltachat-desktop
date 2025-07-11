@@ -24,7 +24,9 @@
     font-weight: bold;
     display: flex;
     user-select: none;
-
+    .material-svg-icon {
+      background-color: var(--navBarText);
+    }
     .truncated {
       overflow: hidden;
       text-overflow: ellipsis;
