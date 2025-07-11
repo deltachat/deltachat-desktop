@@ -18,8 +18,8 @@ export default function EmptyChatMessage({ chat }: Props) {
 
   let emptyChatMessage = tx('chat_new_one_to_one_hint', [chat.name, chat.name])
 
-  if (chat.chatType === C.DC_CHAT_TYPE_BROADCAST) {
-    emptyChatMessage = tx('chat_new_broadcast_hint')
+  if (chat.chatType === C.DC_CHAT_TYPE_OUT_BROADCAST) {
+    emptyChatMessage = tx('chat_new_channel_hint')
   } else if (chat.chatType === C.DC_CHAT_TYPE_GROUP && !chat.isContactRequest) {
     emptyChatMessage = chat.isUnpromoted
       ? tx('chat_new_group_hint')
