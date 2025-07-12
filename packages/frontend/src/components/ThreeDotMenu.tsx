@@ -30,7 +30,7 @@ export function useThreeDotMenu(selectedChat?: T.FullChat) {
   const {
     openBlockFirstContactOfChatDialog,
     openChatAuditDialog,
-    openDeleteChatDialog,
+    openDeleteChatsDialog,
     openLeaveGroupOrChannelDialog,
     openClearChatDialog,
   } = useChatDialog()
@@ -53,7 +53,7 @@ export function useThreeDotMenu(selectedChat?: T.FullChat) {
       openBlockFirstContactOfChatDialog(accountId, selectedChat)
 
     const onDeleteChat = () =>
-      openDeleteChatDialog(accountId, selectedChat, chatId)
+      openDeleteChatsDialog(accountId, [selectedChat], chatId)
 
     const onUnmuteChat = () => unmuteChat(accountId, chatId)
 
