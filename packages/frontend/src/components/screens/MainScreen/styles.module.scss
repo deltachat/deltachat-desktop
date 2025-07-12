@@ -18,20 +18,25 @@
   background-color: var(--navBarBackground);
   color: var(--navBarText);
   border-bottom: var(--outlineProperties);
-  // Just in case the "main" section below the navbar decides
-  // to do something like `height: 100%` instead of `flex-grow: 1`.
   flex-shrink: 0;
+  /* Glassmorphism effect */
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.04);
 }
 
 .chatListAndNavbar {
   display: flex;
   flex-direction: column;
-
-  // See below, `.chatAndNavbar`'s flex-grow.
   width: 0;
   flex-grow: 3;
-
   min-width: 295px;
+  /* Glassmorphism effect for sidebar */
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  box-shadow: 2px 0 24px 0 rgba(0,0,0,0.04);
 
   .chatListNavbar {
     @include navbar;
@@ -57,7 +62,6 @@
   // on wide screens.
   width: 0;
   flex-grow: 8;
-
   display: flex;
   flex-direction: column;
 
@@ -66,6 +70,11 @@
     display: flex;
     align-items: center;
     padding: 0px;
+    /* Glassmorphism effect for chat topbar */
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(12px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%);
+    box-shadow: 0 4px 24px 0 rgba(0,0,0,0.04);
 
     .chatNavbarHeadingWrapper {
       // Otherwise it will refuse to truncate the chat name
@@ -96,7 +105,6 @@
       display: flex;
       height: 100%;
     }
-
     :global(.navbar-button) {
       padding: 0;
       width: 40px;
