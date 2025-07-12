@@ -377,51 +377,39 @@ type ChatListItemProps = {
   isSelected?: boolean
 }
 
-const ChatListItem = React.memo<ChatListItemProps>(
-  props => {
-    const { chatListItem, onClick } = props
+const ChatListItem = React.memo<ChatListItemProps>(props => {
+  const { chatListItem, onClick } = props
 
-    // if not loaded by virtual list yet
-    if (typeof chatListItem === 'undefined') return <PlaceholderChatListItem />
+  // if not loaded by virtual list yet
+  if (typeof chatListItem === 'undefined') return <PlaceholderChatListItem />
 
-    if (chatListItem.kind == 'ChatListItem') {
-      return (
-        <ChatListItemNormal
-          chatListItem={chatListItem}
-          onClick={onClick}
-          isSelected={props.isSelected}
-          onContextMenu={props.onContextMenu}
-          isContextMenuActive={props.isContextMenuActive}
-        />
-      )
-    } else if (chatListItem.kind == 'Error') {
-      return (
-        <ChatListItemError
-          chatListItem={chatListItem}
-          onClick={onClick}
-          isSelected={props.isSelected}
-          onContextMenu={props.onContextMenu}
-        />
-      )
-    } else if (chatListItem.kind == 'ArchiveLink') {
-      return (
-        <ChatListItemArchiveLink
-          chatListItem={chatListItem}
-          onClick={onClick}
-        />
-      )
-    } else {
-      return <PlaceholderChatListItem />
-    }
-  },
-  (prevProps, nextProps) => {
-    const shouldRerender =
-      prevProps.chatListItem !== nextProps.chatListItem ||
-      prevProps.isSelected !== nextProps.isSelected ||
-      prevProps.isContextMenuActive !== nextProps.isContextMenuActive
-    return !shouldRerender
+  if (chatListItem.kind == 'ChatListItem') {
+    return (
+      <ChatListItemNormal
+        chatListItem={chatListItem}
+        onClick={onClick}
+        isSelected={props.isSelected}
+        onContextMenu={props.onContextMenu}
+        isContextMenuActive={props.isContextMenuActive}
+      />
+    )
+  } else if (chatListItem.kind == 'Error') {
+    return (
+      <ChatListItemError
+        chatListItem={chatListItem}
+        onClick={onClick}
+        isSelected={props.isSelected}
+        onContextMenu={props.onContextMenu}
+      />
+    )
+  } else if (chatListItem.kind == 'ArchiveLink') {
+    return (
+      <ChatListItemArchiveLink chatListItem={chatListItem} onClick={onClick} />
+    )
+  } else {
+    return <PlaceholderChatListItem />
   }
-)
+})
 
 export default ChatListItem
 
