@@ -90,7 +90,7 @@ export function useChatListContextMenu(): {
   const {
     openBlockFirstContactOfChatDialog,
     openEncryptionInfoDialog,
-    openDeleteChatDialog,
+    openDeleteChatsDialog,
     openLeaveGroupOrChannelDialog,
   } = useChatDialog()
   const openViewGroupDialog = useOpenViewGroupDialog()
@@ -107,7 +107,7 @@ export function useChatListContextMenu(): {
     activeContextMenuChatId,
     openContextMenu: async (event, chatListItem, selectedChatId) => {
       const onDeleteChat = () =>
-        openDeleteChatDialog(accountId, chatListItem, selectedChatId)
+        openDeleteChatsDialog(accountId, [chatListItem], selectedChatId)
       const onEncrInfo = () =>
         openEncryptionInfoDialog({
           chatId: chatListItem.id,
