@@ -148,6 +148,16 @@ export function useChatListContextMenu(): {
         )
       const onBlockContact = () =>
         openBlockFirstContactOfChatDialog(accountId, chatListItem)
+      const muteUntil = (duration: Timespans) => {
+        return BackendRemote.rpc.setChatMuteDuration(
+          accountId,
+          chatListItem.id,
+          {
+            kind: 'Until',
+            duration,
+          }
+        )
+      }
       const onUnmuteChat = () => unmuteChat(accountId, chatListItem.id)
 
       const { pin, archive } = archiveStateMenu(
@@ -171,58 +181,27 @@ export function useChatListContextMenu(): {
           ? {
               label: tx('menu_mute'),
               subitems: [
-                {
-                  label: tx('mute_for_one_hour'),
-                  action: () => {
-                    BackendRemote.rpc.setChatMuteDuration(
-                      accountId,
-                      chatListItem.id,
-                      {
-                        kind: 'Until',
-                        duration: Timespans.ONE_HOUR_IN_SECONDS,
-                      }
-                    )
+                ...[
+                  {
+                    label: tx('mute_for_one_hour'),
+                    duration: Timespans.ONE_HOUR_IN_SECONDS,
                   },
-                },
-                {
-                  label: tx('mute_for_eight_hours'),
-                  action: () => {
-                    BackendRemote.rpc.setChatMuteDuration(
-                      accountId,
-                      chatListItem.id,
-                      {
-                        kind: 'Until',
-                        duration: Timespans.ONE_HOUR_IN_SECONDS * 8,
-                      }
-                    )
+                  {
+                    label: tx('mute_for_eight_hours'),
+                    duration: Timespans.ONE_HOUR_IN_SECONDS * 8,
                   },
-                },
-                {
-                  label: tx('mute_for_one_day'),
-                  action: () => {
-                    BackendRemote.rpc.setChatMuteDuration(
-                      accountId,
-                      chatListItem.id,
-                      {
-                        kind: 'Until',
-                        duration: Timespans.ONE_DAY_IN_SECONDS,
-                      }
-                    )
+                  {
+                    label: tx('mute_for_one_day'),
+                    duration: Timespans.ONE_DAY_IN_SECONDS,
                   },
-                },
-                {
-                  label: tx('mute_for_seven_days'),
-                  action: () => {
-                    BackendRemote.rpc.setChatMuteDuration(
-                      accountId,
-                      chatListItem.id,
-                      {
-                        kind: 'Until',
-                        duration: Timespans.ONE_WEEK_IN_SECONDS,
-                      }
-                    )
+                  {
+                    label: tx('mute_for_seven_days'),
+                    duration: Timespans.ONE_WEEK_IN_SECONDS,
                   },
-                },
+                ].map(({ label, duration }) => ({
+                  label,
+                  action: () => muteUntil(duration),
+                })),
                 {
                   label: tx('mute_forever'),
                   action: () => {
