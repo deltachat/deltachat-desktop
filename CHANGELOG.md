@@ -46,6 +46,7 @@
 
 ### Added
 - Zoom In/Out with Ctrl +/- #890
+- Add Group Search field
 
 ### Fixed
 - fix notifications not working sometimes, introduced in 1.59.1

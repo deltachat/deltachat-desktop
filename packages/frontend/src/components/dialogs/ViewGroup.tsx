@@ -14,6 +14,7 @@ import ViewProfile from './ViewProfile'
 import { avatarInitial } from '../Avatar'
 import { DeltaInput } from '../Login-Styles'
 import { BackendRemote, onDCEvent } from '../../backend-com'
+import GroupSearchInput from './ViewGroup/GroupSearchInput'
 import { selectedAccountId } from '../../ScreenController'
 import { useSettingsStore } from '../../stores/settings'
 import Dialog, {
@@ -202,6 +203,8 @@ function ViewGroupInner(
   const groupMemberContactListWrapperRef = useRef<HTMLDivElement>(null)
   const groupPastMemberContactListWrapperRef = useRef<HTMLDivElement>(null)
   const relatedChatsListWrapperRef = useRef<HTMLDivElement>(null)
+
+  const [memberFilter, setMemberFilter] = useState('')
 
   const {
     group,
@@ -417,6 +420,14 @@ function ViewGroupInner(
                     quantity: group.contactIds.length,
                   })}
             </div>
+            <div className='group-member-filter'>
+              <GroupSearchInput
+                id='group-member-filter'
+                onChange={value => setMemberFilter(value)}
+                value={memberFilter}
+                onClear={() => setMemberFilter('')}
+              />
+            </div>
             <div
               className='group-member-contact-list-wrapper'
               ref={groupMemberContactListWrapperRef}
@@ -438,7 +449,19 @@ function ViewGroupInner(
                   </>
                 )}
                 <ContactList
-                  contacts={group.contacts}
+                  contacts={
+                    memberFilter
+                      ? group.contacts.filter(
+                          contact =>
+                            contact.displayName
+                              .toLowerCase()
+                              .includes(memberFilter.toLowerCase()) ||
+                            contact.address
+                              .toLowerCase()
+                              .includes(memberFilter.toLowerCase())
+                        )
+                      : group.contacts
+                  }
                   showRemove={!chatDisabled}
                   onClick={contact => {
                     if (contact.id === C.DC_CONTACT_ID_SELF) {
@@ -469,7 +492,19 @@ function ViewGroupInner(
                     wrapperElementRef={groupPastMemberContactListWrapperRef}
                   >
                     <ContactList
-                      contacts={pastContacts}
+                      contacts={
+                        memberFilter
+                          ? pastContacts.filter(
+                              contact =>
+                                contact.displayName
+                                  .toLowerCase()
+                                  .includes(memberFilter.toLowerCase()) ||
+                                contact.address
+                                  .toLowerCase()
+                                  .includes(memberFilter.toLowerCase())
+                            )
+                          : pastContacts
+                      }
                       showRemove={false}
                       onClick={contact => {
                         if (contact.id === C.DC_CONTACT_ID_SELF) {
