@@ -7,12 +7,15 @@
 
 ### Changed
 - upgrade `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.2.0`
+- remove resetEncryptionInfo
   - API-Changes
     - jsonrpc: Add CommandApi::create_group_chat_unencrypted() (#6927).
     - [breaking] In ChatListItem, replace is_group and is_(out_)broadcast with chat_type property (#7003).
   - Features / Changes
     - Donation request device message (#6913).
-- remove resetEncryptionInfo
+
+### Added
+- feat: add channel and remove broadcasts #5258
 
 ### Fixed
 - fix outdated info being shown sometimes in some places #5222, #5225
