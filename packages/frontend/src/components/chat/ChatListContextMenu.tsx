@@ -163,159 +163,157 @@ export function useChatListContextMenu(): {
       const isOutBroadcast =
         chatListItem.chatType === C.DC_CHAT_TYPE_OUT_BROADCAST
 
-      const menu: (ContextMenuItem | false)[] = chatListItem
-        ? [
-            // Pin
-            pin,
-            // Mute
-            !chatListItem.isMuted
-              ? {
-                  label: tx('menu_mute'),
-                  subitems: [
-                    {
-                      label: tx('mute_for_one_hour'),
-                      action: () => {
-                        BackendRemote.rpc.setChatMuteDuration(
-                          accountId,
-                          chatListItem.id,
-                          {
-                            kind: 'Until',
-                            duration: Timespans.ONE_HOUR_IN_SECONDS,
-                          }
-                        )
-                      },
-                    },
-                    {
-                      label: tx('mute_for_eight_hours'),
-                      action: () => {
-                        BackendRemote.rpc.setChatMuteDuration(
-                          accountId,
-                          chatListItem.id,
-                          {
-                            kind: 'Until',
-                            duration: Timespans.ONE_HOUR_IN_SECONDS * 8,
-                          }
-                        )
-                      },
-                    },
-                    {
-                      label: tx('mute_for_one_day'),
-                      action: () => {
-                        BackendRemote.rpc.setChatMuteDuration(
-                          accountId,
-                          chatListItem.id,
-                          {
-                            kind: 'Until',
-                            duration: Timespans.ONE_DAY_IN_SECONDS,
-                          }
-                        )
-                      },
-                    },
-                    {
-                      label: tx('mute_for_seven_days'),
-                      action: () => {
-                        BackendRemote.rpc.setChatMuteDuration(
-                          accountId,
-                          chatListItem.id,
-                          {
-                            kind: 'Until',
-                            duration: Timespans.ONE_WEEK_IN_SECONDS,
-                          }
-                        )
-                      },
-                    },
-                    {
-                      label: tx('mute_forever'),
-                      action: () => {
-                        BackendRemote.rpc.setChatMuteDuration(
-                          accountId,
-                          chatListItem.id,
-                          { kind: 'Forever' }
-                        )
-                      },
-                    },
-                  ],
-                }
-              : {
-                  label: tx('menu_unmute'),
-                  action: onUnmuteChat,
+      const menu: (ContextMenuItem | false)[] = [
+        // Pin
+        pin,
+        // Mute
+        !chatListItem.isMuted
+          ? {
+              label: tx('menu_mute'),
+              subitems: [
+                {
+                  label: tx('mute_for_one_hour'),
+                  action: () => {
+                    BackendRemote.rpc.setChatMuteDuration(
+                      accountId,
+                      chatListItem.id,
+                      {
+                        kind: 'Until',
+                        duration: Timespans.ONE_HOUR_IN_SECONDS,
+                      }
+                    )
+                  },
                 },
-            // Archive
-            archive,
-            { type: 'separator' },
-            // View Profile
-            !isGroup && {
-              label: tx('menu_view_profile'),
-              action: onViewProfile,
+                {
+                  label: tx('mute_for_eight_hours'),
+                  action: () => {
+                    BackendRemote.rpc.setChatMuteDuration(
+                      accountId,
+                      chatListItem.id,
+                      {
+                        kind: 'Until',
+                        duration: Timespans.ONE_HOUR_IN_SECONDS * 8,
+                      }
+                    )
+                  },
+                },
+                {
+                  label: tx('mute_for_one_day'),
+                  action: () => {
+                    BackendRemote.rpc.setChatMuteDuration(
+                      accountId,
+                      chatListItem.id,
+                      {
+                        kind: 'Until',
+                        duration: Timespans.ONE_DAY_IN_SECONDS,
+                      }
+                    )
+                  },
+                },
+                {
+                  label: tx('mute_for_seven_days'),
+                  action: () => {
+                    BackendRemote.rpc.setChatMuteDuration(
+                      accountId,
+                      chatListItem.id,
+                      {
+                        kind: 'Until',
+                        duration: Timespans.ONE_WEEK_IN_SECONDS,
+                      }
+                    )
+                  },
+                },
+                {
+                  label: tx('mute_forever'),
+                  action: () => {
+                    BackendRemote.rpc.setChatMuteDuration(
+                      accountId,
+                      chatListItem.id,
+                      { kind: 'Forever' }
+                    )
+                  },
+                },
+              ],
+            }
+          : {
+              label: tx('menu_unmute'),
+              action: onUnmuteChat,
             },
-            // View Group Profile (for non encrypted groups)
-            isGroup &&
-              !chatListItem.isEncrypted &&
-              chatListItem.isSelfInGroup && {
-                label: tx('menu_view_profile'),
-                action: onViewGroup,
-              },
-            // Edit Group
-            isGroup &&
-              chatListItem.isEncrypted &&
-              chatListItem.isSelfInGroup && {
-                label: tx('menu_edit_group'),
-                dataTestid: 'edit-group',
-                action: onViewGroup,
-              },
-            // Edit Channel
-            isOutBroadcast && {
-              label: tx('edit_channel'),
-              action: onViewGroup,
-            },
-            // Clone Group
-            isGroup && {
-              label: tx('clone_chat'),
-              action: () => {
-                openDialog(CloneChat, {
-                  setViewMode: 'createGroup',
-                  chatTemplateId: chatListItem.id,
-                })
-              },
-            },
+        // Archive
+        archive,
+        { type: 'separator' },
+        // View Profile
+        !isGroup && {
+          label: tx('menu_view_profile'),
+          action: onViewProfile,
+        },
+        // View Group Profile (for non encrypted groups)
+        isGroup &&
+          !chatListItem.isEncrypted &&
+          chatListItem.isSelfInGroup && {
+            label: tx('menu_view_profile'),
+            action: onViewGroup,
+          },
+        // Edit Group
+        isGroup &&
+          chatListItem.isEncrypted &&
+          chatListItem.isSelfInGroup && {
+            label: tx('menu_edit_group'),
+            dataTestid: 'edit-group',
+            action: onViewGroup,
+          },
+        // Edit Channel
+        isOutBroadcast && {
+          label: tx('edit_channel'),
+          action: onViewGroup,
+        },
+        // Clone Group
+        isGroup && {
+          label: tx('clone_chat'),
+          action: () => {
+            openDialog(CloneChat, {
+              setViewMode: 'createGroup',
+              chatTemplateId: chatListItem.id,
+            })
+          },
+        },
 
-            // Encryption Info
-            !chatListItem.isDeviceTalk &&
-              !chatListItem.isSelfTalk && {
-                label: tx('encryption_info_title_desktop'),
-                action: onEncrInfo,
-              },
-            { type: 'separator' },
-            // Leave channel
-            chatListItem.chatType === C.DC_CHAT_TYPE_IN_BROADCAST &&
-              !chatListItem.isContactRequest && {
-                label: tx('menu_leave_channel'),
-                action: onLeaveGroupOrChannel,
-              },
-            // Leave group
-            isGroup &&
-              chatListItem.isEncrypted &&
-              chatListItem.isSelfInGroup && {
-                label: tx('menu_leave_group'),
-                action: onLeaveGroupOrChannel,
-              },
-            // Block contact
-            !isGroup &&
-              !(
-                chatListItem.isSelfTalk ||
-                chatListItem.isDeviceTalk ||
-                isOutBroadcast
-              ) && {
-                label: tx('menu_block_contact'),
-                action: onBlockContact,
-              },
-            // Delete
-            {
-              label: tx('menu_delete_chat'),
-              action: onDeleteChat,
-            },
-          ]
-        : []
+        // Encryption Info
+        !chatListItem.isDeviceTalk &&
+          !chatListItem.isSelfTalk && {
+            label: tx('encryption_info_title_desktop'),
+            action: onEncrInfo,
+          },
+        { type: 'separator' },
+        // Leave channel
+        chatListItem.chatType === C.DC_CHAT_TYPE_IN_BROADCAST &&
+          !chatListItem.isContactRequest && {
+            label: tx('menu_leave_channel'),
+            action: onLeaveGroupOrChannel,
+          },
+        // Leave group
+        isGroup &&
+          chatListItem.isEncrypted &&
+          chatListItem.isSelfInGroup && {
+            label: tx('menu_leave_group'),
+            action: onLeaveGroupOrChannel,
+          },
+        // Block contact
+        !isGroup &&
+          !(
+            chatListItem.isSelfTalk ||
+            chatListItem.isDeviceTalk ||
+            isOutBroadcast
+          ) && {
+            label: tx('menu_block_contact'),
+            action: onBlockContact,
+          },
+        // Delete
+        {
+          label: tx('menu_delete_chat'),
+          action: onDeleteChat,
+        },
+      ]
 
       event.preventDefault() // prevent default runtime context menu from opening
 
