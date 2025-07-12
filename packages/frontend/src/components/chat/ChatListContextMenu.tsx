@@ -50,7 +50,7 @@ function archiveStateMenu(
     action: () => {
       BackendRemote.rpc.setChatVisibility(accountId, chat.id, 'Pinned')
 
-      if (chat.isArchived) {
+      if (isTheSelectedChat && chat.isArchived) {
         unselectChat()
       }
     },
