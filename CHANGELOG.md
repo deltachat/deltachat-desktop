@@ -6,8 +6,8 @@
 - after upgrade to `@deltachat/stdio-rpc-server` version `2.x` you can not go back to 1.x versions any more since account data is not backward compatible!
 
 ### Changed
-- upgrade `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.2.0`
 - remove resetEncryptionInfo
+- upgrade `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.2.0`
   - API-Changes
     - jsonrpc: Add CommandApi::create_group_chat_unencrypted() (#6927).
     - [breaking] In ChatListItem, replace is_group and is_(out_)broadcast with chat_type property (#7003).
