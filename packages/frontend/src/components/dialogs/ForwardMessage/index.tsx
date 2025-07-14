@@ -1,5 +1,4 @@
 import React from 'react'
-import { C } from '@deltachat/jsonrpc-client'
 
 import { BackendRemote } from '../../../backend-com'
 import { selectedAccountId } from '../../../ScreenController'
