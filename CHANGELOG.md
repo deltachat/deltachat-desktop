@@ -4,6 +4,8 @@
 
 ###  Changed
 - update translations (17-07-2025)
+- upgrade `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.1.0`
+- remove resetEncryptionInfo
 
 ### Fixed
 - fix outdated info being shown sometimes in some places #5222, #5225
