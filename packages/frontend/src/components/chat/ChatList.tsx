@@ -617,11 +617,12 @@ export function useLogicVirtualChatList(chatListIds: number[]) {
 
   const isChatLoaded: (index: number) => boolean = index =>
     !!chatLoadState[chatListIds[index]]
-  const loadChats: (
-    startIndex: number,
-    stopIndex: number
-  ) => Promise<void> = async (startIndex, stopIndex) => {
-    const entries = chatListIds.slice(startIndex, stopIndex + 1)
+  const isChatLoadedByChatId: (chatId: number) => boolean = chatId =>
+    !!chatLoadState[chatId]
+
+  const loadChatsByChatIds: (
+    entries: number[]
+  ) => Promise<void> = async entries => {
     setChatLoading(state => {
       entries.forEach(chatId => (state[chatId] = LoadStatus.FETCHING))
       return state
@@ -635,6 +636,13 @@ export function useLogicVirtualChatList(chatListIds: number[]) {
       entries.forEach(chatId => (state[chatId] = LoadStatus.LOADED))
       return state
     })
+  }
+  const loadChats: (
+    startIndex: number,
+    stopIndex: number
+  ) => Promise<void> = async (startIndex, stopIndex) => {
+    const entries = chatListIds.slice(startIndex, stopIndex + 1)
+    await loadChatsByChatIds(entries)
   }
 
   useEffect(() => {
@@ -716,7 +724,15 @@ export function useLogicVirtualChatList(chatListIds: number[]) {
     }
   }, [accountId])
 
-  return { isChatLoaded, loadChats, chatCache }
+  return {
+    isChatLoaded,
+    loadChats,
+    chatCache,
+    // alternative methods to use chatid directly instead of list index
+    // used in SelectChatOrContact
+    isChatLoadedByChatId,
+    loadChatsByChatIds,
+  }
 }
 
 function useLogicChatPart(
