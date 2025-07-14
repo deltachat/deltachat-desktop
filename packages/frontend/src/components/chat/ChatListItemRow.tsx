@@ -14,7 +14,7 @@ import type { T } from '@deltachat/jsonrpc-client'
 import type { useChatListContextMenu } from './ChatListContextMenu'
 
 export type ChatListItemData = {
-  selectedChatId: number | null
+  activeChatId: number | null
   /**
    * Whether to set `role='tab'` on the items.
    *
@@ -60,7 +60,7 @@ export const ChatListItemRowChat = React.memo<{
   style: React.CSSProperties
 }>(({ index, data, style }) => {
   const {
-    selectedChatId,
+    activeChatId,
     roleTabs,
     chatListIds,
     chatCache,
@@ -80,10 +80,10 @@ export const ChatListItemRowChat = React.memo<{
   const onContextMenu = useCallback(
     (event: React.MouseEvent) => {
       if (chat?.kind === 'ChatListItem') {
-        openContextMenu(event, chat, selectedChatId)
+        openContextMenu(event, chat, activeChatId)
       }
     },
-    [chat, openContextMenu, selectedChatId]
+    [chat, openContextMenu, activeChatId]
   )
   const onContextMenuRef = useRef(onContextMenu)
   onContextMenuRef.current = onContextMenu
@@ -92,7 +92,7 @@ export const ChatListItemRowChat = React.memo<{
     <li style={style}>
       <ChatListItem
         roleTab={roleTabs}
-        isSelected={selectedChatId === chatId}
+        isSelected={activeChatId === chatId}
         chatListItem={chat}
         onClick={useCallback(() => onChatClickRef.current(chatId), [chatId])}
         onContextMenu={useCallback(

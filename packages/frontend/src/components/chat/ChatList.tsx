@@ -173,7 +173,7 @@ export default function ChatList(props: {
   const accountId = selectedAccountId()
 
   const {
-    selectedChatId,
+    selectedChatId: activeChatId,
     showArchivedChats,
     onChatClick,
     queryStr,
@@ -275,9 +275,9 @@ export default function ChatList(props: {
     }
   }, [])
 
-  const selectedChatIndex = useMemo(
-    () => (selectedChatId != null ? chatListIds.indexOf(selectedChatId) : -1),
-    [chatListIds, selectedChatId]
+  const activeChatIndex = useMemo(
+    () => (activeChatId != null ? chatListIds.indexOf(activeChatId) : -1),
+    [chatListIds, activeChatId]
   )
   const lastShowArchivedChatsState = useRef(showArchivedChats)
   const lastQuery = useRef(queryStr)
@@ -291,8 +291,8 @@ export default function ChatList(props: {
       return
     }
     // when showArchivedChats changes, select selected chat if it is archived/not-archived otherwise select first item
-    if (selectedChatIndex !== -1) {
-      scrollChatIntoView(selectedChatIndex)
+    if (activeChatIndex !== -1) {
+      scrollChatIntoView(activeChatIndex)
     } else {
       if (lastShowArchivedChatsState.current !== showArchivedChats) {
         scrollChatIntoView(0)
@@ -300,7 +300,7 @@ export default function ChatList(props: {
     }
     lastShowArchivedChatsState.current = showArchivedChats
   }, [
-    selectedChatIndex,
+    activeChatIndex,
     isSearchActive,
     scrollChatIntoView,
     showArchivedChats,
@@ -311,22 +311,22 @@ export default function ChatList(props: {
 
   // KeyboardShortcuts ---------
   useKeyBindingAction(KeybindAction.ChatList_ScrollToSelectedChat, () =>
-    scrollChatIntoView(selectedChatIndex)
+    scrollChatIntoView(activeChatIndex)
   )
 
   useKeyBindingAction(KeybindAction.ChatList_SelectNextChat, () => {
-    if (selectedChatId === null) return selectFirstChat()
-    const selectedChatIndex = chatListIds.indexOf(selectedChatId)
-    const newChatId = chatListIds[selectedChatIndex + 1]
+    if (activeChatId === null) return selectFirstChat()
+    const activeChatIndex = chatListIds.indexOf(activeChatId)
+    const newChatId = chatListIds[activeChatIndex + 1]
     if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
       selectChat(accountId, newChatId)
     }
   })
 
   useKeyBindingAction(KeybindAction.ChatList_SelectPreviousChat, () => {
-    if (selectedChatId === null) return selectFirstChat()
-    const selectedChatIndex = chatListIds.indexOf(selectedChatId)
-    const newChatId = chatListIds[selectedChatIndex - 1]
+    if (activeChatId === null) return selectFirstChat()
+    const activeChatIndex = chatListIds.indexOf(activeChatId)
+    const newChatId = chatListIds[activeChatIndex - 1]
     if (newChatId && newChatId !== C.DC_CHAT_ID_ARCHIVED_LINK) {
       selectChat(accountId, newChatId)
     }
@@ -351,7 +351,7 @@ export default function ChatList(props: {
       // This should be in sync with `olElementAttrs` of `ChatListPart`.
       roleTabs: true,
 
-      selectedChatId,
+      activeChatId,
       chatListIds,
       chatCache,
       onChatClick,
@@ -359,7 +359,7 @@ export default function ChatList(props: {
       activeContextMenuChatId,
     }
   }, [
-    selectedChatId,
+    activeChatId,
     chatListIds,
     chatCache,
     onChatClick,
