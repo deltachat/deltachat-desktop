@@ -86,7 +86,7 @@ export const LabeledLink = ({
   }
   return (
     <a
-      href={'#' + target}
+      href={target}
       x-target-url={target}
       title={realUrl}
       onClick={onClick}
@@ -210,7 +210,7 @@ export const Link = ({
 
   return (
     <a
-      href='#'
+      href={asciiUrl}
       x-target-url={asciiUrl}
       title={asciiUrl}
       onClick={onClick}

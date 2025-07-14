@@ -224,7 +224,7 @@ function EmailLink({
 
   return (
     <a
-      href={'#'}
+      href={`mailto:${email}`}
       x-not-a-link='email'
       x-target-email={email}
       onClick={handleClick}
