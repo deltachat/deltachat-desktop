@@ -11,6 +11,7 @@
 - improve performance in "Edit Group" a little #5237
 - tauri: accessibility: fix outline being barely visible on Windows, and adjust some other colors #5217
 - improve performance a little in some other places #5225
+- fix copying of links into richtext editors
 
 <a id="1_60_0"></a>
 
