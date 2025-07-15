@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { BackendRemote } from '../backend-com'
+import { getLogger } from '@deltachat-desktop/shared/logger'
+
+const log = getLogger('renderer/hooks/useFetch')
 
 /**
  * Possible results of an async operation - either success with a value
@@ -141,6 +144,11 @@ export function useFetchGeneric<F extends AsyncFNoArgs>(
               result: { ok: false, err },
               fetchId,
             })
+            log.errorWithoutStackTrace(
+              'error while executing fetch',
+              err,
+              fetchId
+            )
           }
         })
 
