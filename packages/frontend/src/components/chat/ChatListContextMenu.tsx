@@ -243,7 +243,7 @@ export function useChatListContextMenu(): {
                 action: onViewGroup,
               },
             // Edit Channel
-            chatListItem.isBroadcast && {
+            chatListItem.chatType === C.DC_CHAT_TYPE_OUT_BROADCAST && {
               label: tx('edit_channel'),
               action: onViewGroup,
             },
