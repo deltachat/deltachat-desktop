@@ -433,7 +433,7 @@ function ViewGroupInner(
                         onChatClick,
 
                         activeChatId: null,
-                        activeContextMenuChatId: null,
+                        activeContextMenuChatIds: [],
                         openContextMenu: async () => {},
                       }}
                     >

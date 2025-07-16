@@ -361,7 +361,7 @@ export function ViewProfileInner({
                       onChatClick,
 
                       activeChatId: null,
-                      activeContextMenuChatId: null,
+                      activeContextMenuChatIds: [],
                       openContextMenu: async () => {},
                     }}
                   >
