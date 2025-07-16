@@ -1,0 +1,52 @@
+$borderRadius: 10px;
+$closeButtonSize: 30px;
+
+.searchInputContainer {
+  position: relative;
+  display: flex;
+  flex: 1;
+  width: 100%;
+  align-items: center;
+}
+
+.searchInput {
+  background-color: var(--searchInputBackgroundColor);
+  border-radius: $borderRadius;
+  border: 10px;
+  margin: 10px;
+  caret-color: var(--navBarText);
+  color: var(--navBarText);
+  flex: 1;
+  font-size: 14px;
+  height: $closeButtonSize;
+  padding: 10px;
+  width: 100%;
+  outline: none;
+
+  &::placeholder {
+    color: var(--navBarSearchPlaceholder);
+  }
+}
+
+.searchInputButton {
+  align-items: center;
+  background-color: transparent;
+  color: var(--navBarText);
+  border-radius: $borderRadius;
+  border: 0;
+  display: flex;
+  height: $closeButtonSize;
+  justify-content: center;
+  padding: 0;
+  min-width: $closeButtonSize;
+  position: absolute;
+  right: 0;
+
+  &:hover {
+    background-color: var(--navBarButtonHover);
+  }
+}
+
+.searchInputButtonIcon {
+  background-color: currentcolor;
+}
