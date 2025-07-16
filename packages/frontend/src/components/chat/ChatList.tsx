@@ -48,6 +48,11 @@ import type {
 import { isInviteLink } from '../../../../shared/util'
 import { RovingTabindexProvider } from '../../contexts/RovingTabindex'
 import { useRpcFetch } from '../../hooks/useFetch'
+import { useMultiselect } from '../../hooks/useMultiselect'
+import { getLogger } from '@deltachat-desktop/shared/logger'
+import { useHasChanged2 } from '../../hooks/useHasChanged'
+
+const useMultiselectLog = getLogger('ChatListMultiselect')
 
 const enum LoadStatus {
   FETCHING = 1,
@@ -192,7 +197,7 @@ export default function ChatList(props: {
     showArchivedChats
   )
 
-  const { openContextMenu, activeContextMenuChatId } = useChatListContextMenu()
+  const { openContextMenu, activeContextMenuChatIds } = useChatListContextMenu()
   const createChatByContactId = useCreateChatByContactId()
   const { selectChat } = useChat()
 
@@ -337,25 +342,33 @@ export default function ChatList(props: {
   //   selectFirstChat()
   // )
 
+  const multiselect = useChatListMultiselect(
+    chatListIds,
+    activeChatId,
+    accountId
+  )
+
   const chatlistData: ChatListItemData = useMemo(() => {
     return {
       // This should be in sync with `olElementAttrs` of `ChatListPart`.
       roleTabs: true,
 
       activeChatId,
+      multiselect,
       chatListIds,
       chatCache,
       onChatClick,
       openContextMenu,
-      activeContextMenuChatId,
+      activeContextMenuChatIds,
     }
   }, [
     activeChatId,
+    multiselect,
     chatListIds,
     chatCache,
     onChatClick,
     openContextMenu,
-    activeContextMenuChatId,
+    activeContextMenuChatIds,
   ])
 
   const contactlistData: ContactChatListItemData = useMemo(() => {
@@ -471,6 +484,7 @@ export default function ChatList(props: {
                     // This should be in sync with `chatlistData.roleTabs`.
                     role: 'tablist',
                     'aria-orientation': 'vertical',
+                    'aria-multiselectable': multiselect != undefined,
 
                     // TODO perhaps `pref_` is not nice,
                     // we might need a separate string.
@@ -808,6 +822,173 @@ function useContactAndMessageLogic(
     messageCache,
     queryStrIsValidEmail,
   }
+}
+
+function useChatListMultiselect(
+  chatListIds: Awaited<ReturnType<typeof BackendRemote.rpc.getChatlistEntries>>,
+  activeChatId: T.BasicChat['id'] | null,
+  accountId: number
+) {
+  /**
+   * Same as `activeChatId`, but a ref to avoid re-renders.
+   */
+  const activeChatIdRef = useRef(activeChatId)
+  activeChatIdRef.current = activeChatId
+
+  const [dummyValueForSelectionReset, _setDummyValueForSelectionReset] =
+    useState(Symbol())
+  const resetSelection = useCallback(
+    () => _setDummyValueForSelectionReset(Symbol()),
+    []
+  )
+  /**
+   * This is used to tell whether a selection is "valid",
+   * otherwise we should use the default, reset state.
+   * When this value changes, the previous selection becomes invalid.
+   */
+  const selectionId_ = useMemo(
+    () => Symbol(),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      // When the active chat gets changed, for example, as a result of
+      // executing the Ctrl + PageDown shortcut,
+      // we want to reset selection, invalidate it,
+      // to reduce confusion,
+      // e.g. "is the currently active chat selected or not?"
+      //
+      // `activeChatId` never (or almost never?) gets changed
+      // automatically, it's always a result of a user action,
+      // so resetting selection in this case shouldn't make users angry.
+      activeChatId,
+      dummyValueForSelectionReset,
+      // It's not strictly necessary to watch `accountId` as of now,
+      // because the code above this hook ensures that the component
+      // is re-created when accountId changes.
+      // But let's do it for future-proofing.
+      accountId,
+    ]
+  )
+  // Put behind a ref to avoid re-renders.
+  const selectionId = useRef(selectionId_)
+  selectionId.current = selectionId_
+
+  const [multiselectState_, setMultiselectState_] = useState({
+    // If you are going to change the initial selection,
+    // make sure to also check what happens when you invoke the context menu
+    // for a chat that is not selected.
+    selectedChats: new Set<(typeof chatListIds)[number]>(),
+    // Initialize with a new Symbol so that the initial state is "invalid".
+    forSelectionId: Symbol(),
+  })
+  const setSelectedChats = useCallback(
+    (newSelectedChats: Set<(typeof chatListIds)[number]>) => {
+      setMultiselectState_({
+        selectedChats: newSelectedChats,
+        forSelectionId: selectionId.current,
+      })
+    },
+    []
+  )
+  const activeChatSet: Set<(typeof chatListIds)[number]> = useMemo(
+    () => (activeChatId == null ? new Set() : new Set([activeChatId])),
+    [activeChatId]
+  )
+  const multiselectStateIsValid =
+    selectionId.current === multiselectState_.forSelectionId
+  const selectedChats = multiselectStateIsValid
+    ? multiselectState_.selectedChats
+    : // Make sure to have the active chat selected by default,
+      // e.g. for the case when the user wants to Ctrl + Click
+      // another chat.
+      // This is important, because the chat list items
+      // are only styled as "selected" based on `multiselect`,
+      // and not `activeChatId` (see `isSelected` in `ChatListItemRowChat`).
+      //
+      // TODO or should we do this though? Why complicate things?
+      // Just mark "selected" and "active" chat distinctly
+      // and we're good?
+      // Maybe it's better to manage this inside of `useMultiselect`?
+      activeChatSet
+
+  // Remove chats from selection that have been removed from `chatListIds`.
+  //
+  // Why not `useMemo`? Because if the removed chat gets added back to the list,
+  // we _don't_ want it to get added back to selection,
+  // to avoid, let's say, accidentally deleting a chat.
+  //
+  // For example, let's say the user had two chats selected, but then
+  // one of the selected chats got archived (e.g. from another device).
+  // Then they forgot about selecting it and went to delete some other chats:
+  // they selected two other chats for deletion, but then a message arrives
+  // to the archived chat, unarchiving it.
+  // This would suddenly make 4 chats selected, instead of 3,
+  // and they could unintentionally delete the one they archived.
+  //
+  // An alternative would be to simply reset (invalidate) selection
+  // on _any_ change to `chatListIds`,
+  // but that would not be nice, e.g. for example if only the order
+  // of chat list items changed, e.g. when receiving a new message.
+  //
+  // This also handles the more common case of simply resetting selection
+  // after you have deleted / archived selected chats.
+  //
+  // TODO should this be part of `useMultiselect`?
+  // Or at least another, more "advanced" but still generic wrapper for it.
+  if (useHasChanged2(chatListIds)) {
+    // Using `multiselectState_.selectedChats` instead of `selectedChats`
+    // To avoid an infinite loop of `setMultiselectState_`
+    // when `selectedChats === activeChatSet`.
+    const newSelectedChats = new Set(multiselectState_.selectedChats)
+    let foundMissing = false
+    for (const id of multiselectState_.selectedChats) {
+      if (!chatListIds.includes(id)) {
+        foundMissing = true
+        newSelectedChats.delete(id)
+      }
+    }
+    if (foundMissing) {
+      setMultiselectState_(old => ({
+        selectedChats: newSelectedChats,
+        // Keep the ID: in case it's already invalid, don't revalidate it.
+        forSelectionId: old.forSelectionId,
+      }))
+    }
+  }
+
+  const multiselect = useMultiselect(
+    chatListIds,
+    selectedChats,
+    useCallback(
+      newSelectedChats => {
+        // `chatListIds` might include `C.DC_CHAT_ID_ARCHIVED_LINK`.
+        // Let's make sure that only normal chat list items can be selected
+        // with multiselect.
+        // Note that the context menu and regular clicks still work
+        // for these chats.
+        // This is primarily for `C.DC_CHAT_ID_ARCHIVED_LINK`,
+        // but let's be conservative and also exclude
+        // other weird chat list items.
+        for (let i = 0; i <= C.DC_CHAT_ID_LAST_SPECIAL; i++) {
+          newSelectedChats.delete(i)
+        }
+
+        // TODO perf: to avoid re-renders, maybe store this into a ref,
+        // but only update reactive state only if there are 2+ items selected?
+        setSelectedChats(newSelectedChats)
+      },
+      [setSelectedChats]
+    ),
+    useMultiselectLog
+  )
+
+  return useMemo(
+    () => ({
+      ...multiselect,
+      setSelectedChats,
+      resetSelection,
+    }),
+    [multiselect, setSelectedChats, resetSelection]
+  )
 }
 
 function translated_messages_label(count: number) {
