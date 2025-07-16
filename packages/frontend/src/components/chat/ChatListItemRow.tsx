@@ -12,6 +12,10 @@ import { selectedAccountId } from '../../ScreenController'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import type { useChatListContextMenu } from './ChatListContextMenu'
+import type { useMultiselect } from '../../hooks/useMultiselect'
+import { getLogger } from '@deltachat-desktop/shared/logger'
+
+const log = getLogger('ChatListItemRow')
 
 export type ChatListItemData = {
   activeChatId: number | null
@@ -24,15 +28,23 @@ export type ChatListItemData = {
    * @default false
    */
   roleTabs?: boolean
+  // multiselectSelectedChatIds?: Set<T.BasicChat['id']>
+  multiselect?: ReturnType<typeof useMultiselect<T.BasicChat['id']>> & {
+    setSelectedChats: (newItems: Set<T.BasicChat['id']>) => void
+    resetSelection: () => void
+  }
+  // multiselectSetSelectedItems?: (newItems: Set<T.BasicChat['id']>) => void
   chatListIds: number[]
   chatCache: {
     [id: number]: T.ChatListItemFetchResult | undefined
   }
   onChatClick: (chatId: number) => void
+  // onChatClick: (event: React.MouseEvent, chatId: number) => void
+  // onChatFocus?: (chatId: number) => void
   openContextMenu: ReturnType<typeof useChatListContextMenu>['openContextMenu']
-  activeContextMenuChatId: ReturnType<
+  activeContextMenuChatIds: ReturnType<
     typeof useChatListContextMenu
-  >['activeContextMenuChatId']
+  >['activeContextMenuChatIds']
 }
 
 export type MessageChatListItemData = {
@@ -62,44 +74,174 @@ export const ChatListItemRowChat = React.memo<{
   const {
     activeChatId,
     roleTabs,
+    multiselect,
     chatListIds,
     chatCache,
     onChatClick,
     openContextMenu,
-    activeContextMenuChatId,
+    activeContextMenuChatIds,
   } = data
   const chatId = chatListIds[index]
   const chat = chatCache[chatId]
 
+  const multiselectOnClick = multiselect?.onClick
+  const onChatClick2 = useCallback(
+    (e: React.MouseEvent) => {
+      let shouldPreventDefault = false
+      if (multiselectOnClick) {
+        shouldPreventDefault = multiselectOnClick(e, chatId)
+      }
+      if (shouldPreventDefault) {
+        // This doesn't really do anything as of writing.
+        // Not calling `onChatClick` is enough.
+        e.preventDefault()
+        return
+      }
+
+      onChatClick(chatId)
+    },
+    [chatId, multiselectOnClick, onChatClick]
+  )
   // Using refs to avoid re-renders, because `ChatListItem` is memoized.
   // TODO `useRef` docs recomment against updating refs during rendering.
   // Is it bad in this case?
-  const onChatClickRef = useRef(onChatClick)
-  onChatClickRef.current = onChatClick
+  const onChatClick2Ref = useRef(onChatClick2)
+  onChatClick2Ref.current = onChatClick2
 
   const onContextMenu = useCallback(
     (event: React.MouseEvent) => {
-      if (chat?.kind === 'ChatListItem') {
-        openContextMenu(event, chat, activeChatId)
+      // So, do we handle archive link multiselect here?
+      if (chat == null) {
+        // Probably still loading.
+        // TODO can this be a loading error though?
+        return
       }
+      if (chat.kind === 'Error') {
+        // TODO again, should we still handle this somehow?
+        // At he very least we know the chat ID,
+        // so we can still e.g. delete it.
+        return
+      }
+      if (chat.kind === 'ArchiveLink') {
+        // This is a special case, not so much of a "chat list item".
+        // It has its own `onContextMenu` handler,
+        // so here we don't need to do anything.
+        return
+      }
+      // IDK why TypeScript can't admit that this is true, but it is.
+      // const _assert: true = chat.kind === 'ChatListItem'
+
+      const thisChatId = chatId
+      const thisChat = chat
+
+      if (multiselect == undefined) {
+        openContextMenu(event, [thisChat], activeChatId)
+        return
+      }
+      if (!multiselect.selectedItems.has(thisChatId)) {
+        // Invoked a context menu for an item
+        // that is not among multiselected chats.
+
+        multiselect?.setSelectedChats(new Set([thisChatId]))
+
+        const contextMenuClosedP = openContextMenu(
+          event,
+          [thisChat],
+          activeChatId
+        )
+        contextMenuClosedP.finally(() => {
+          // Let's reset selection to the active chat,
+          // so as to not confuse people
+          // who don't use the "multiselect" feature.
+          //
+          // Note that in theory the active chat could have changed
+          // by the time the context menu got closed.
+          // `resetSelection` can handle that as of writing, i.e.
+          // reset selection to the currently active chat.
+          multiselect?.resetSelection()
+        })
+
+        return
+      }
+
+      const targetChats = [...multiselect.selectedItems.values()].map(
+        chatId => chatCache[chatId]
+      )
+      // TODO fix: while in practice most of the time all the chats are loaded,
+      // because they have been Ctrl / Shift + Clicked by the user,
+      // it's not guaranteed.
+      // For example, if the user scrolled past a lot of chats
+      // and Shift selected all of them.
+      //
+      // What we should probably do is to call the `loadChats`
+      // function that the infinite loader uses.
+      //
+      // But we probably should not assume that chats are never unloaded
+      // from `chatCache`.
+      const targetChatsFiltered = targetChats.filter(
+        chat => chat != undefined && chat.kind === 'ChatListItem'
+      )
+      if (targetChatsFiltered.length !== multiselect.selectedItems.size) {
+        log.error(
+          'Failed to open context menu for multiple chats:',
+          'one of the chats is either not loaded or not a ChatListItem',
+          multiselect.selectedItems,
+          targetChats
+        )
+        return
+      }
+      // Note that here we don't reset the selection
+      // after the context menu gets closed, unlike above.
+      // This is in case the user wants to do several actions
+      // on the selected chats.
+      openContextMenu(event, targetChatsFiltered, activeChatId)
     },
-    [chat, openContextMenu, activeChatId]
+    [chat, chatCache, chatId, multiselect, openContextMenu, activeChatId]
   )
   const onContextMenuRef = useRef(onContextMenu)
   onContextMenuRef.current = onContextMenu
+
+  const multiselectOnFocus = multiselect?.onFocus
+  const onFocus = useCallback(
+    (_e: React.FocusEvent) => {
+      multiselectOnFocus?.(chatId)
+    },
+    [chatId, multiselectOnFocus]
+  )
+  const onFocusRef = useRef(onFocus)
+  onFocusRef.current = onFocus
 
   return (
     <li style={style}>
       <ChatListItem
         roleTab={roleTabs}
-        isSelected={activeChatId === chatId}
+        isSelected={
+          multiselect
+            ? // When `multiselect` is provided, we don't need
+              // to also check `activeChatId === chatId`, because multiselect
+              // also follows it during "normal" usage,
+              // including switching the active chat with shortcuts
+              // and through notifications.
+              //
+              // TODO however, for completeness and to avoid confusion,
+              // we should probably add a distinct `isActive` prop,
+              // and a separate style for `isSelected`.
+              // Because it's possible to, for example, unselect all chats,
+              // or to select just a single chat that is not the activeChatId.
+              multiselect.selectedItems.has(chatId)
+            : activeChatId === chatId
+        }
         chatListItem={chat}
-        onClick={useCallback(() => onChatClickRef.current(chatId), [chatId])}
+        onClick={useCallback(event => onChatClick2Ref.current(event), [])}
+        onFocus={useCallback(
+          (event: React.FocusEvent) => onFocusRef.current(event),
+          []
+        )}
         onContextMenu={useCallback(
           (event: React.MouseEvent) => onContextMenuRef.current(event),
           []
         )}
-        isContextMenuActive={activeContextMenuChatId === chatId}
+        isContextMenuActive={activeContextMenuChatIds.includes(chatId)}
       />
     </li>
   )
