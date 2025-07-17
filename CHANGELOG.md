@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+###  Changed
+- update translations (17-07-2025)
+
 ### Fixed
 - fix outdated info being shown sometimes in some places #5222, #5225
 - accessibility: add accessible labels for lists (messages list, chat list, profiles list) #5030
