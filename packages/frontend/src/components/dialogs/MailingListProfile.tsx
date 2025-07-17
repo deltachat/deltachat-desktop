@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { useGroupImage } from './CreateChat'
 import Dialog, {
   CloseFooterAction,
   DialogBody,
@@ -21,7 +20,6 @@ export default function MailingListProfile(
   const { onClose, chat } = props
 
   const tx = useTranslationFunction()
-  const [groupImage] = useGroupImage(chat.profileImage)
 
   return (
     <Dialog onClose={onClose} fixed>
@@ -29,7 +27,7 @@ export default function MailingListProfile(
       <DialogBody>
         <DialogContent>
           <ProfileInfoHeader
-            avatarPath={groupImage ? groupImage : undefined}
+            avatarPath={chat.profileImage ? chat.profileImage : undefined}
             color={chat.color}
             displayName={chat.name}
             isVerified={chat.isProtected}
