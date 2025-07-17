@@ -5,6 +5,9 @@
 ### Breaking
 - after upgrade to `@deltachat/stdio-rpc-server` version `2.x` you can not go back to 1.x versions any more since account data is not backward compatible!
 
+### Added
+- After some time, add a device message asking to donate. Can't wait? Donate today at https://delta.chat/donate #5295
+
 ### Changed
 - update translations (17-07-2025)
 - upgrade `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.2.0`
