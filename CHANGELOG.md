@@ -13,6 +13,7 @@
   - Features / Changes
     - Donation request device message (#6913).
 - remove resetEncryptionInfo
+- no more edit of mailing list profiles for recipients
 
 ### Fixed
 - fix outdated info being shown sometimes in some places #5222, #5225
