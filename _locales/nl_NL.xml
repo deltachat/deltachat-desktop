@@ -240,14 +240,31 @@
     <!-- "Chat" is a verb here, "Message to" would also fit. the string might be used in the "New Chat" screen above the contact list -->
     <string name="chat_with">Gesprek voeren met…</string>
     <string name="clone_chat">Gesprek klonen</string>
-    <!-- consider keeping the term "broadcast" as in WhatsApp or Telegram -->
+    <!-- deprecated -->
     <string name="broadcast_list">Verzendlijst</string>
+    <!-- deprecated -->
     <string name="broadcast_lists">Verzendlijsten</string>
+    <!-- deprecated -->
     <string name="new_broadcast_list">Nieuwe verzendlijst</string>
+    <!-- consider keeping the term "channel" as in WhatsApp or Telegram -->
+    <string name="channel">Kanaal</string>
+    <!-- consider keeping the term "channel" as in WhatsApp or Telegram -->
+    <string name="channels">Kanalen</string>
+    <!-- consider keeping the term "channel" as in WhatsApp or Telegram -->
+    <string name="new_channel">Nieuw kanaal</string>
     <string name="add_recipients">Ontvangers toevoegen</string>
+    <!-- deprecated -->
     <string name="edit_broadcast_list">Verzendlijst bewerken</string>
+    <!-- deprecated -->
     <string name="broadcast_list_name">Naam van verzendlijst</string>
+    <!-- deprecated -->
     <string name="please_enter_broadcast_list_name">Geef de verzendlijst een naam.</string>
+    <!-- consider keeping the term "channel" as in WhatsApp or Telegram -->
+    <string name="channel_name">Kanaalnaam</string>
+    <!-- "New" as in "Create New E-Mail"; shown together with "New Group" and "New Channel" -->
+    <string name="new_email">Nieuwe e-mail</string>
+    <!-- the "Subject" of an e-mail, use the term common in classic e-mail apps -->
+    <string name="subject">Onderwerp</string>
     <string name="menu_send">Versturen</string>
     <string name="menu_toggle_keyboard">Emojitoetsenbord tonen/verbergen</string>
     <string name="menu_edit_group">Groep aanpassen</string>
@@ -257,6 +274,7 @@
     <string name="menu_unarchive_chat">Gesprek de-archiveren</string>
     <string name="menu_add_attachment">Bijlage toevoegen</string>
     <string name="menu_leave_group">Groep verlaten</string>
+    <string name="menu_leave_channel">Kanaal verlaten</string>
     <string name="menu_delete_chat">Gesprek verwijderen</string>
     <!-- Command to delete all messages in a chat. The chat itself will not be deleted but will be empty afterwards, so make sure to be different from "Delete Chat" here. "Clear" is a verb here, "Empty Chat" would also be fine (eg. in German "Chat leeren") -->
     <string name="clear_chat">Ale berichten wissen</string>
@@ -341,6 +359,7 @@
     <!-- Menu item beside an app/chat that adds an icon to the system's home screen. If the user taps that icon, the app/chat is opened directly. -->
     <string name="add_to_home_screen">Toevoegen aan startscherm</string>
     <string name="donate">Doneren</string>
+    <string name="donate_device_msg">❤️ Het lijkt er op dat je blij bent met Delta Chat!\n\nAls dat zo is, zouden we je vriendelijk willen vragen om een donatie, zodat Delta Chat gratis beschikbaar kan blijven.\n\n Ook al is Delta Chat gratis en opensource, de ontwikkeling ervan kost wél geld. Jouw donatie kan het verschil maken!\n\nhttps://delta.chat/donate</string>
 
     <string name="mute_for_one_hour">1 uur lang uitschakelen</string>
     <string name="mute_for_eight_hours">8 uur lang uitschakelen</string>
@@ -377,7 +396,8 @@
     <string name="videochat_invitation_body">Je bent uitgenodigd voor een videogesprek. Druk op %1$s om deel te nemen.</string>
 
     <!-- get confirmations -->
-    <string name="ask_leave_group">Weet je zeker dat je deze groep wilt verlaten?</string>
+    <!-- confirmation for leaving groups, channels, broadcasts or a mailinglists. If a subject is needed, "Are you sure you want to leave the chat?" would work as well -->
+    <string name="ask_leave_group">Weet je zeker dat je dit kanaal wilt verlaten?</string>
     <plurals name="ask_delete_chat">
         <item quantity="one">Wil je %d gesprek verwijderen van al je apparaten?</item>
         <item quantity="other">Wil je %d gesprekken verwijderen van al je apparaten?</item>
@@ -403,8 +423,10 @@
     <string name="ask_start_chat_with">Wil je een gesprek voeren met %1$s?</string>
     <!-- %1$s is replaced by a comma-separated list of names -->
     <string name="ask_remove_members">Wil je %1$s verwijderen uit de groep?</string>
-    <!-- %1$s is replaced by a comma-separated list of names -->
+    <!-- deprecated -->
     <string name="ask_remove_from_broadcast">Wil je %1$s verwijderen van de verzendlijst?</string>
+    <!-- %1$s is replaced by a comma-separated list of names -->
+    <string name="ask_remove_from_channel">Weet je zeker dat je %1$s van het kanaal wilt verwijderen?</string>
     <string name="open_url_confirmation">Weet je zeker dat je deze link wilt openen?</string>
 
 
@@ -434,7 +456,10 @@
     </plurals>
     <!-- The placeholder will be replaced by the name of the recipient in a one-to-one chat. -->
     <string name="chat_new_one_to_one_hint">Stuur een bericht aan %1$s .</string>
+    <!-- deprecated -->
     <string name="chat_new_broadcast_hint">Op een verzendlijst hebben ontvangers niet de mogelijkheid om te reageren op je berichten.</string>
+    <!-- consider keeping the term "channel" as in WhatsApp or Telegram -->
+    <string name="chat_new_channel_hint">Kanalen zijn bedoeld om te gebruiken als verzendlijsten.</string>
     <string name="chat_new_group_hint">Stel het eerste bericht op zodat anderen binnen deze groep kunnen reageren.</string>
     <string name="chat_record_slide_to_cancel">Veeg opzij om te annuleren</string>
     <string name="chat_record_explain">Houd ingedrukt om een spraakbericht op te nemen; laat los om te versturen</string>
@@ -901,8 +926,8 @@
     <string name="remove_member_by_you">Je hebt ‘%1$s’ verwijderd.</string>
     <!-- %1$s will be replaced by name and address of the contact removed from the group, %2$s will be replaced by name and address of the contact who did the action -->
     <string name="remove_member_by_other">‘%1$s’ is verwijderd door %2$s.</string>
-    <!-- "left" in the meaning of "exited" -->
-    <string name="group_left_by_you">Je hebt de groep verlaten.</string>
+    <!-- "left" in the meaning of "exited". This string is added to a chat after groups, channels, broadcasts or mailinglists are left. If a subject is needed, "You left the chat." would work as well. -->
+    <string name="group_left_by_you">Je hebt het kanaal verlaten.</string>
     <!-- "left" in the meaning of "exited"; %1$s will be replaced by name and address of the contact leaving the group -->
     <string name="group_left_by_other">De groep is verlaten door %1$s.</string>
     <string name="group_image_deleted_by_you">Je hebt de groepsfoto verwijderd.</string>
@@ -948,9 +973,11 @@
     <string name="ephemeral_timer_weeks_by_other">De tijdklok van verdwijnende berichten is door %2$s ingesteld op %1$s weken.</string>
     <!-- this may be shown instead of the chat's input field, with buttons "More Info" and "OK" -->
     <string name="chat_protection_broken">%1$s heeft een bericht verstuurd vanaf een ander apparaat.</string>
-    <string name="chat_protection_enabled_tap_to_learn_more">Berichten zijn vanaf nu gegarandeerd van eind-tot-eindversleuteling voorzien. Druk hier voor meer informatie.</string>
-    <string name="chat_protection_enabled_explanation">Alle berichten in dit gesprek zijn vanaf nu gegarandeerd van eind-tot-eindversleuteling voorzien.\n\nMet behulp van deze versleuteling blijven berichten tussen jou en je gesprekspartners geheim - zelfs je e-mailprovider kan ze niet uitlezen.</string>
+    <string name="chat_protection_enabled_tap_to_learn_more">Berichten zijn gegarandeerd van eind-tot-eindversleuteling voorzien. Druk hier voor meer informatie.</string>
+    <string name="chat_protection_enabled_explanation">Alle berichten in dit gesprek zijn gegarandeerd van eind-tot-eindversleuteling voorzien.\n\nMet behulp van deze versleuteling blijven berichten tussen jou en je gesprekspartners geheim - zelfs je e-mailprovider kan ze niet uitlezen.</string>
+    <!-- deprecated -->
     <string name="chat_protection_broken_tap_to_learn_more">%1$s heeft een bericht verstuurd vanaf een ander apparaat. Druk hier voor meer informatie.</string>
+    <!-- deprecated -->
     <string name="chat_protection_broken_explanation">Eind-tot-eindversleuteling kan niet meer worden gegarandeerd, omdat %1$s Delta Chat opnieuw heeft geïnstalleerd of een bericht vanaf een ander apparaat heeft verstuurd.\n\nMaak een afspraak met hem/haar en scan de QR-code opnieuw om eind-tot-eindversleuteling weer in te schakelen.</string>
     <string name="invalid_unencrypted_tap_to_learn_more">⚠️ Voor %1$s is eind-tot-eindversleuteling vereist, maar dit is nog niet ingesteld in het huidige gesprek. Druk voor meer informatie.</string>
     <string name="invalid_unencrypted_explanation">Spreek met elkaar af en scan elkaars QR-code om eind-tot-eindversleuteling op te zetten.</string>
