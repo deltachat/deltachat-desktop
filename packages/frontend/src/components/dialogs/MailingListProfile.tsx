@@ -21,23 +21,19 @@ export default function MailingListProfile(
   const { onClose, chat } = props
 
   const tx = useTranslationFunction()
-  const [groupImage] = useGroupImage(
-    chat.profileImage
-  )
-
-
+  const [groupImage] = useGroupImage(chat.profileImage)
 
   return (
     <Dialog onClose={onClose} fixed>
       <DialogHeader title={tx('mailing_list')} />
       <DialogBody>
         <DialogContent>
-        <ProfileInfoHeader
-          avatarPath={groupImage ? groupImage : undefined}
-          color={chat.color}
-          displayName={chat.name}
-          isVerified={chat.isProtected}
-        />
+          <ProfileInfoHeader
+            avatarPath={groupImage ? groupImage : undefined}
+            color={chat.color}
+            displayName={chat.name}
+            isVerified={chat.isProtected}
+          />
         </DialogContent>
       </DialogBody>
       <CloseFooterAction onClose={onClose} />

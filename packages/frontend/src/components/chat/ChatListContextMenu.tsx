@@ -3,7 +3,7 @@ import { C } from '@deltachat/jsonrpc-client'
 
 import { Timespans } from '../../../../shared/constants'
 import { ContextMenuItem } from '../ContextMenu'
-import MailingListProfile from '../dialogs/MessageListProfile'
+import MailingListProfile from '../dialogs/MailingListProfile'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'

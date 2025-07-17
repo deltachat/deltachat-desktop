@@ -12,7 +12,7 @@ import { useThreeDotMenu } from '../../ThreeDotMenu'
 import ChatList from '../../chat/ChatList'
 import { Avatar } from '../../Avatar'
 import ConnectivityToast from '../../ConnectivityToast'
-import MailingListProfile from '../../dialogs/MessageListProfile'
+import MailingListProfile from '../../dialogs/MailingListProfile'
 import SettingsStoreInstance, {
   useSettingsStore,
 } from '../../../stores/settings'
