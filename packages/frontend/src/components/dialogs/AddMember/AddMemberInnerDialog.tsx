@@ -349,6 +349,7 @@ function AddMemberInnerDialogRow({
         isProfileVerified: false,
         isBot: false,
         e2eeAvail: false,
+        isKeyContact: false,
       }
       return (
         <ContactListItem

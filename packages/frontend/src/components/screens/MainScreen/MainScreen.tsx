@@ -12,7 +12,7 @@ import { useThreeDotMenu } from '../../ThreeDotMenu'
 import ChatList from '../../chat/ChatList'
 import { Avatar } from '../../Avatar'
 import ConnectivityToast from '../../ConnectivityToast'
-import MailingListProfile from '../../dialogs/MessageListProfile'
+import MailingListProfile from '../../dialogs/MailingListProfile'
 import SettingsStoreInstance, {
   useSettingsStore,
 } from '../../../stores/settings'
@@ -313,13 +313,13 @@ function chatSubtitle(chat: Type.FullChat) {
       chat.contacts[0]?.isBot
     ) {
       return tx('bot')
-    } else if (chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST) {
+    } else if (chat.chatType === C.DC_CHAT_TYPE_IN_BROADCAST) {
       if (chat.mailingListAddress) {
         return `${tx('mailing_list')} – ${chat.mailingListAddress}`
       } else {
         return tx('mailing_list')
       }
-    } else if (chat.chatType === C.DC_CHAT_TYPE_BROADCAST) {
+    } else if (chat.chatType === C.DC_CHAT_TYPE_OUT_BROADCAST) {
       return tx('n_recipients', [String(chat.contactIds.length)], {
         quantity: chat.contactIds.length,
       })
@@ -351,11 +351,11 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
       return
     }
 
-    if (chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST) {
+    if (chat.chatType === C.DC_CHAT_TYPE_IN_BROADCAST) {
       openDialog(MailingListProfile, { chat })
     } else if (
       chat.chatType === C.DC_CHAT_TYPE_GROUP ||
-      chat.chatType === C.DC_CHAT_TYPE_BROADCAST
+      chat.chatType === C.DC_CHAT_TYPE_OUT_BROADCAST
     ) {
       openViewGroupDialog(chat)
     } else {

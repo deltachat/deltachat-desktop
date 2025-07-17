@@ -2,8 +2,22 @@
 
 ## [Unreleased][unreleased]
 
+### Breaking
+- after upgrade to `@deltachat/stdio-rpc-server` version `2.x` you can not go back to 1.x versions any more since account data is not backward compatible!
+
 ### Added
 - After some time, add a device message asking to donate. Can't wait? Donate today at https://delta.chat/donate #5295
+
+### Changed
+- update translations (17-07-2025)
+- upgrade `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.2.0`
+  - API-Changes
+    - jsonrpc: Add CommandApi::create_group_chat_unencrypted() (#6927).
+    - [breaking] In ChatListItem, replace is_group and is_(out_)broadcast with chat_type property (#7003).
+  - Features / Changes
+    - Donation request device message (#6913).
+- remove resetEncryptionInfo
+- no more edit of mailing list profiles for recipients
 
 ### Fixed
 - fix outdated info being shown sometimes in some places #5222, #5225
