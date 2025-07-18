@@ -80,27 +80,6 @@
   "need_to_be_logged_out": {
     "message": "Please log out first"
   },
-  "channel": {
-    "message": "Channel"
-  },
-  "channels": {
-    "message": "Channels"
-  },
-  "new_channel": {
-    "message": "New Channel"
-  },
-  "menu_leave_channel": {
-    "message": "Leave Channel"
-  },
-  "channel_name": {
-    "message": "Channel Name"
-  },
-  "ask_remove_from_channel": {
-    "message": "Remove %1$s from channel?"
-  },
-  "chat_new_channel_hint": {
-    "message": "In a channel, recipients don't see who else is part of the channel."
-  },
   "please_enter_channel_name": {
     "message": "Please enter channel name"
   },
