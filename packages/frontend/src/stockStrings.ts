@@ -183,6 +183,7 @@ export async function updateCoreStrings() {
   strings[C.DC_STR_BACKUP_TRANSFER_QR] = tx('multidevice_qr_subtitle')
   strings[C.DC_STR_YOU_REACTED] = tx('reaction_by_you')
   strings[C.DC_STR_REACTED_BY] = tx('reaction_by_other')
+  strings[C.DC_STR_DONATION_REQUEST] = tx('donate_device_msg')
 
   await BackendRemote.rpc.setStockStrings(strings)
 }

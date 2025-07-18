@@ -258,14 +258,31 @@
     <!-- "Chat" is a verb here, "Message to" would also fit. the string might be used in the "New Chat" screen above the contact list -->
     <string name="chat_with">Начать чат с…</string>
     <string name="clone_chat">Клонировать чат</string>
-    <!-- consider keeping the term "broadcast" as in WhatsApp or Telegram -->
+    <!-- deprecated -->
     <string name="broadcast_list">Список рассылки</string>
+    <!-- deprecated -->
     <string name="broadcast_lists">Списки рассылки</string>
+    <!-- deprecated -->
     <string name="new_broadcast_list">Новый список рассылки</string>
+    <!-- consider keeping the term "channel" as in WhatsApp or Telegram -->
+    <string name="channel">Канал</string>
+    <!-- consider keeping the term "channel" as in WhatsApp or Telegram -->
+    <string name="channels">Каналы</string>
+    <!-- consider keeping the term "channel" as in WhatsApp or Telegram -->
+    <string name="new_channel">Новый канал</string>
     <string name="add_recipients">Добавить получателей</string>
+    <!-- deprecated -->
     <string name="edit_broadcast_list">Редактировать список рассылки</string>
+    <!-- deprecated -->
     <string name="broadcast_list_name">Название списка рассылки</string>
+    <!-- deprecated -->
     <string name="please_enter_broadcast_list_name">Введите название списка рассылки.</string>
+    <!-- consider keeping the term "channel" as in WhatsApp or Telegram -->
+    <string name="channel_name">Название канала</string>
+    <!-- "New" as in "Create New E-Mail"; shown together with "New Group" and "New Channel" -->
+    <string name="new_email">Новое письмо</string>
+    <!-- the "Subject" of an e-mail, use the term common in classic e-mail apps -->
+    <string name="subject">Тема</string>
     <string name="menu_send">Отправить</string>
     <string name="menu_toggle_keyboard">Эмодзи клавиатура</string>
     <string name="menu_edit_group">Редактировать группу</string>
@@ -275,6 +292,7 @@
     <string name="menu_unarchive_chat">Вернуть чат из архива</string>
     <string name="menu_add_attachment">Добавить вложение</string>
     <string name="menu_leave_group">Покинуть группу</string>
+    <string name="menu_leave_channel">Покинуть канал</string>
     <string name="menu_delete_chat">Удалить чат</string>
     <!-- Command to delete all messages in a chat. The chat itself will not be deleted but will be empty afterwards, so make sure to be different from "Delete Chat" here. "Clear" is a verb here, "Empty Chat" would also be fine (eg. in German "Chat leeren") -->
     <string name="clear_chat">Очистить чат</string>
@@ -359,6 +377,7 @@
     <!-- Menu item beside an app/chat that adds an icon to the system's home screen. If the user taps that icon, the app/chat is opened directly. -->
     <string name="add_to_home_screen">Добавить на главный экран</string>
     <string name="donate">Пожертвовать</string>
+    <string name="donate_device_msg">❤️ Кажется, вам нравится Delta Chat!\n\nРассмотрите возможность сделать пожертвование, чтобы Delta Chat и дальше оставался бесплатным для всех пользователей.\n\nDelta Chat — это бесплатное приложение с открытым исходным кодом, но его разработка требует денег. Поддержите нас, чтобы сохранить независимость Delta Chat и сделать его ещё более крутым в будущем.\n\nhttps://delta.chat/donate</string>
 
     <string name="mute_for_one_hour">На 1 час</string>
     <string name="mute_for_eight_hours">На 8 часов</string>
@@ -397,7 +416,8 @@
     <string name="videochat_invitation_body">Вы приглашены в видеочат, нажмите %1$s, чтобы присоединиться.</string>
 
     <!-- get confirmations -->
-    <string name="ask_leave_group">Вы уверены, что хотите покинуть эту группу?</string>
+    <!-- confirmation for leaving groups, channels, broadcasts or a mailinglists. If a subject is needed, "Are you sure you want to leave the chat?" would work as well -->
+    <string name="ask_leave_group">Вы действительно хотите выйти?</string>
     <plurals name="ask_delete_chat">
         <item quantity="one">Удалить %d чат на всех ваших устройствах?</item>
         <item quantity="few">Удалить %d чата на всех ваших устройствах?</item>
@@ -429,8 +449,10 @@
     <string name="ask_start_chat_with">Создать чат с %1$s?</string>
     <!-- %1$s is replaced by a comma-separated list of names -->
     <string name="ask_remove_members">Удалить %1$s из группы?</string>
-    <!-- %1$s is replaced by a comma-separated list of names -->
+    <!-- deprecated -->
     <string name="ask_remove_from_broadcast">Удалить %1$s из списка рассылки?</string>
+    <!-- %1$s is replaced by a comma-separated list of names -->
+    <string name="ask_remove_from_channel">Удалить %1$s из канала?</string>
     <string name="open_url_confirmation">Вы хотите открыть эту ссылку?</string>
 
 
@@ -466,7 +488,10 @@
     </plurals>
     <!-- The placeholder will be replaced by the name of the recipient in a one-to-one chat. -->
     <string name="chat_new_one_to_one_hint">Отправьте сообщение %1$s.</string>
+    <!-- deprecated -->
     <string name="chat_new_broadcast_hint">В списке рассылки получатели будут получать сообщения в чате с вами, доступном только для чтения.</string>
+    <!-- consider keeping the term "channel" as in WhatsApp or Telegram -->
+    <string name="chat_new_channel_hint">Каналы представляют собой инструмент одностороннего вещания ваших сообщений множеству получателей.</string>
     <string name="chat_new_group_hint">Другие пользователи увидят эту группу только после того, как вы отправите первое сообщение.</string>
     <string name="chat_record_slide_to_cancel">Смахните для отмены</string>
     <string name="chat_record_explain">Нажмите и удерживайте для записи голосового сообщения, отпустите для отправки</string>
@@ -933,8 +958,8 @@
     <string name="remove_member_by_you">Вы удалили участника %1$s.</string>
     <!-- %1$s will be replaced by name and address of the contact removed from the group, %2$s will be replaced by name and address of the contact who did the action -->
     <string name="remove_member_by_other">%2$s удаляет участника %1$s.</string>
-    <!-- "left" in the meaning of "exited" -->
-    <string name="group_left_by_you">Вы покинули группу.</string>
+    <!-- "left" in the meaning of "exited". This string is added to a chat after groups, channels, broadcasts or mailinglists are left. If a subject is needed, "You left the chat." would work as well. -->
+    <string name="group_left_by_you">Вы покинули.</string>
     <!-- "left" in the meaning of "exited"; %1$s will be replaced by name and address of the contact leaving the group -->
     <string name="group_left_by_other">%1$s покидает группу.</string>
     <string name="group_image_deleted_by_you">Вы удалили изображение группы.</string>
@@ -982,7 +1007,9 @@
     <string name="chat_protection_broken">%1$s отправил сообщение с другого устройства.</string>
     <string name="chat_protection_enabled_tap_to_learn_more">Теперь сообщения гарантированно шифруются сквозным шифрованием. Нажмите, чтобы узнать больше.</string>
     <string name="chat_protection_enabled_explanation">Теперь сообщения в этом чате гарантированно шифруются сквозным шифрованием.\n\nСквозное шифрование гарантирует, что сообщения остаются конфиденциальными между вами и вашими собеседниками. Даже ваш провайдер электронной почты не имеет доступа к ним.</string>
+    <!-- deprecated -->
     <string name="chat_protection_broken_tap_to_learn_more">%1$s отправил сообщение с другого устройства. Нажмите, чтобы узнать больше.</string>
+    <!-- deprecated -->
     <string name="chat_protection_broken_explanation">Сквозное шифрование больше не может быть гарантировано, вероятно, потому что %1$s переустановил Delta Chat или отправил сообщение с другого устройства.\n\nВы можете встретиться с ним лично и отсканировать QR-код снова чтобы восстановить гарантированное сквозное шифрование.</string>
     <string name="invalid_unencrypted_tap_to_learn_more">⚠️ %1$s требуется сквозное шифрование, которое ещё не настроено для данного чата. Нажмите, чтобы узнать больше.</string>
     <string name="invalid_unencrypted_explanation">Чтобы установить сквозное шифрование, вы можете встретиться с контактами лично и отсканировать их QR-код, чтобы подтвердить их личность.</string>
