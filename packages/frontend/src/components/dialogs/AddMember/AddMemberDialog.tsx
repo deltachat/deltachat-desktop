@@ -14,13 +14,15 @@ export function AddMemberDialog({
   onOk,
   groupMembers,
   listFlags,
-  isBroadcast = false,
+  titleMembersOrRecipients,
   isVerificationRequired = false,
 }: {
   onOk: (members: number[]) => void
   groupMembers: number[]
   listFlags: number
-  isBroadcast?: boolean
+  titleMembersOrRecipients: Parameters<
+    typeof AddMemberInnerDialog
+  >[0]['titleMembersOrRecipients']
   isVerificationRequired?: boolean
 } & DialogProps) {
   const [queryStr, setQueryStr] = useState('')
@@ -56,7 +58,7 @@ export function AddMemberDialog({
         refreshContacts,
 
         groupMembers,
-        isBroadcast,
+        titleMembersOrRecipients,
         isVerificationRequired,
       })}
     </Dialog>

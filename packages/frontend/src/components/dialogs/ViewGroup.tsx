@@ -309,14 +309,21 @@ function ViewGroupInner(
     })
   }
 
+  // Note that this might also need `C.DC_GCL_ADDRESS` for unencrypted groups,
+  // but we're not supposed to display this component for those.
   const listFlags = C.DC_GCL_ADD_SELF
 
+  // Note that we are not checking `chat.isEncrypted`,
+  // unlike in "New E-Mail" dialog.
+  // See https://github.com/deltachat/deltachat-desktop/issues/5294
+  // > the chat itself picks up "group wording"
+  const membersOrRecipients = isBroadcast ? 'recipients' : 'members'
   const showAddMemberDialog = () => {
     openDialog(AddMemberDialog, {
       listFlags,
       groupMembers: group.contactIds,
       onOk: addMembers,
-      isBroadcast: isBroadcast,
+      titleMembersOrRecipients: membersOrRecipients,
       isVerificationRequired: chat.isProtected,
     })
   }
@@ -428,7 +435,7 @@ function ViewGroupInner(
                   <>
                     <PseudoListItemAddMember
                       onClick={() => showAddMemberDialog()}
-                      isBroadcast={isBroadcast}
+                      labelMembersOrRecipients={membersOrRecipients}
                     />
                     {!isBroadcast && (
                       <PseudoListItemShowQrCode
