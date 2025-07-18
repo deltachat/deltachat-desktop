@@ -39,6 +39,7 @@ type ChatTypes =
   | C.DC_CHAT_TYPE_GROUP
   | C.DC_CHAT_TYPE_IN_BROADCAST
   | C.DC_CHAT_TYPE_OUT_BROADCAST
+  | C.DC_CHAT_TYPE_MAILINGLIST
   | C.DC_CHAT_TYPE_UNDEFINED
 
 const onWindowFocus = (accountId: number) => {

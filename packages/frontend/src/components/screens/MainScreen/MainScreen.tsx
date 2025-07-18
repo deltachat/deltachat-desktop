@@ -313,7 +313,10 @@ function chatSubtitle(chat: Type.FullChat) {
       chat.contacts[0]?.isBot
     ) {
       return tx('bot')
-    } else if (chat.chatType === C.DC_CHAT_TYPE_IN_BROADCAST) {
+    } else if (
+      chat.chatType === C.DC_CHAT_TYPE_IN_BROADCAST ||
+      chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST
+    ) {
       if (chat.mailingListAddress) {
         return `${tx('mailing_list')} – ${chat.mailingListAddress}`
       } else {
@@ -351,7 +354,10 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
       return
     }
 
-    if (chat.chatType === C.DC_CHAT_TYPE_IN_BROADCAST) {
+    if (
+      chat.chatType === C.DC_CHAT_TYPE_IN_BROADCAST ||
+      chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST
+    ) {
       openDialog(MailingListProfile, { chat })
     } else if (
       chat.chatType === C.DC_CHAT_TYPE_GROUP ||
