@@ -17,6 +17,7 @@
 
 ### Added
 - feat: add channel and remove broadcasts #5258
+- Option to create a new plain email with subject and recipients (available only for non-Chatmail accounts) #5294
 - no more edit of mailing list profiles for recipients
 - After some time, add a device message asking to donate. Can't wait? Donate today at https://delta.chat/donate #5295
 - show email icon for non encrypted messages instead padlock for encrypted

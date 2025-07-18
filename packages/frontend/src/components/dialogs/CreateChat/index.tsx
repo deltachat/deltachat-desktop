@@ -62,24 +62,56 @@ import { isInviteLink } from '@deltachat-desktop/shared/util'
 import { copyToBlobDir } from '../../../utils/copyToBlobDir'
 import { useRpcFetch } from '../../../hooks/useFetch'
 
-type ViewMode = 'main' | 'createGroup' | 'createBroadcastList'
+const enum GroupType {
+  /**
+   * Regular group, chat.
+   * @see {@link BackendRemote.rpc.createGroupChat}.
+   */
+  REGULAR_GROUP = 'regular_group',
+  /**
+   * A.k.a. "unencrypted" group.
+   * @see {@link T.FullChat['isEncrypted']}
+   * and {@link BackendRemote.rpc.createGroupChatUnencrypted}.
+   */
+  PLAIN_EMAIL = 'plain_email',
+  /**
+   * @see {@link BackendRemote.rpc.createBroadcast}.
+   */
+  BROADCAST_LIST = 'broadcast_list',
+}
+
+type ViewMode = 'main_' | GroupType
 
 export default function CreateChat(props: DialogProps) {
   const { onClose } = props
   const tx = useTranslationFunction()
 
-  const [viewMode, setViewMode] = useState<ViewMode>('main')
+  const [viewMode, setViewMode] = useState<ViewMode>('main_')
 
   return (
     <Dialog width={400} onClose={onClose} fixed>
-      {viewMode == 'main' && <CreateChatMain {...{ setViewMode, onClose }} />}
-      {viewMode == 'createGroup' && (
+      {viewMode == 'main_' && <CreateChatMain {...{ setViewMode, onClose }} />}
+      {viewMode == GroupType.REGULAR_GROUP && (
         <>
           <DialogHeader title={tx('menu_new_group')} />
-          <CreateGroup {...{ setViewMode, onClose }} />
+          <CreateGroup
+            {...{
+              groupType: GroupType.REGULAR_GROUP,
+              setViewMode,
+              onClose,
+            }}
+          />
         </>
       )}
-      {viewMode == 'createBroadcastList' && (
+      {viewMode == GroupType.PLAIN_EMAIL && (
+        <>
+          <DialogHeader title={tx('new_email')} />
+          <CreateGroup
+            {...{ groupType: GroupType.PLAIN_EMAIL, setViewMode, onClose }}
+          />
+        </>
+      )}
+      {viewMode == GroupType.BROADCAST_LIST && (
         <CreateBroadcastList {...{ setViewMode, onClose }} />
       )}
     </Dialog>
@@ -104,6 +136,11 @@ export function CloneChat(props: { chatTemplateId: number } & DialogProps) {
           <DialogHeader title={tx('clone_chat')} />
           <CreateGroup
             {...{
+              // See https://github.com/deltachat/deltachat-desktop/issues/5059.
+              groupType: chat.isEncrypted
+                ? GroupType.REGULAR_GROUP
+                : GroupType.PLAIN_EMAIL,
+
               setViewMode: onClose,
               onClose,
               groupMembers: chat.contactIds,
@@ -158,6 +195,12 @@ function CreateChatMain(props: CreateChatMainProps) {
     queryStr.length === 0 &&
     (settingsStore?.desktopSettings.enableBroadcastLists ?? false)
   const needToRenderAddContactQRScan = queryStr.length === 0
+
+  // Chatmail accounts can't send unencrypted emails. See
+  // - https://github.com/deltachat/deltachat-desktop/issues/5294#issuecomment-3089552788
+  // - https://github.com/deltachat/deltachat-ios/blob/a0043be425d9c14f4039561957adb82ef1ab2adb/deltachat-ios/Controller/NewChatViewController.swift#L76-L78
+  const needToRenderNewEmail = !isChatmail && queryStr.length === 0
+
   const needToRenderAddContact = !(
     queryStr === '' ||
     (contactIds.length === 1 &&
@@ -178,6 +221,7 @@ function CreateChatMain(props: CreateChatMainProps) {
       ...(needToRenderAddBroadcastList
         ? [CreateChatExtraItemType.ADD_BROADCAST_LIST]
         : []),
+      ...(needToRenderNewEmail ? [CreateChatExtraItemType.NEW_EMAIL] : []),
       ...contactIds,
       ...(needToRenderAddContact ? [CreateChatExtraItemType.ADD_CONTACT] : []),
     ],
@@ -187,6 +231,7 @@ function CreateChatMain(props: CreateChatMainProps) {
       needToRenderAddContact,
       needToRenderAddContactQRScan,
       needToRenderAddGroup,
+      needToRenderNewEmail,
       showPseudoListItemAddContactFromInviteLink,
     ]
   )
@@ -421,7 +466,7 @@ function CreateChatMainRow({
             id='newgroup'
             cutoff='+'
             text={tx('menu_new_group')}
-            onClick={() => setViewMode('createGroup')}
+            onClick={() => setViewMode(GroupType.REGULAR_GROUP)}
           />
         )
       }
@@ -431,7 +476,17 @@ function CreateChatMainRow({
             id='newbroadcastlist'
             cutoff='+'
             text={tx('new_channel')}
-            onClick={() => setViewMode('createBroadcastList')}
+            onClick={() => setViewMode(GroupType.BROADCAST_LIST)}
+          />
+        )
+      }
+      case CreateChatExtraItemType.NEW_EMAIL: {
+        return (
+          <PseudoListItem
+            id='newemail'
+            cutoff='+'
+            text={tx('new_email')}
+            onClick={() => setViewMode(GroupType.PLAIN_EMAIL)}
           />
         )
       }
@@ -497,32 +552,53 @@ const enum CreateChatExtraItemType {
   ADD_CONTACT_QR_SCAN = -999,
   ADD_GROUP,
   ADD_BROADCAST_LIST,
+  NEW_EMAIL,
   ADD_CONTACT,
   INVITE_LINK,
 }
 
 type CreateGroupProps = {
   setViewMode: (newViewMode: ViewMode) => void
+  // `GroupType.BROADCAST_LIST` type is handled
+  // in the `CreateBroadcastList` component.
+  groupType: GroupType.REGULAR_GROUP | GroupType.PLAIN_EMAIL
   onClose: DialogProps['onClose']
-  groupImage?: string | null
   groupMembers?: number[]
-}
+} & (
+  | {
+      groupType: GroupType.REGULAR_GROUP
+      groupImage?: string | null
+    }
+  | {
+      groupType: GroupType.PLAIN_EMAIL
+    }
+)
 
 export function CreateGroup(props: CreateGroupProps) {
   const { selectChat } = useChat()
   const { openDialog } = useDialog()
-  const { setViewMode, onClose } = props
+  const { setViewMode, onClose, groupType } = props
   const tx = useTranslationFunction()
   const accountId = selectedAccountId()
 
   const [groupName, setGroupName] = useState('')
-  const [groupImage, onSetGroupImage, onUnsetGroupImage] = useGroupImage(
-    props.groupImage || null
+  const useGroupImageRet = useGroupImage(
+    groupType === GroupType.REGULAR_GROUP ? props.groupImage || null : null
   )
+  const [groupImage, onSetGroupImage, onUnsetGroupImage] =
+    groupType === GroupType.REGULAR_GROUP
+      ? useGroupImageRet
+      : [null, undefined, undefined]
+
   const [groupMembers, removeGroupMember, addGroupMember] = useGroupMembers(
     props.groupMembers || [C.DC_CONTACT_ID_SELF]
   )
-  const finishCreateGroup = useCreateGroup(groupName, groupImage, groupMembers)
+  const finishCreateGroup = useCreateGroup(
+    groupType,
+    groupName,
+    groupImage,
+    groupMembers
+  )
 
   const [errorMissingGroupName, setErrorMissingGroupName] = useState(false)
 
@@ -545,14 +621,34 @@ export function CreateGroup(props: CreateGroupProps) {
     [groupContactsResult, groupMembers]
   )
 
+  let membersOrRecipients: 'members' | 'recipients'
+  switch (groupType) {
+    case GroupType.REGULAR_GROUP:
+      membersOrRecipients = 'members'
+      break
+    case GroupType.PLAIN_EMAIL:
+      membersOrRecipients = 'recipients'
+      break
+    default: {
+      const _assert: never = groupType
+      membersOrRecipients = 'members'
+      break
+    }
+  }
+
   const showAddMemberDialog = () => {
     openDialog(AddMemberDialog, {
-      listFlags: C.DC_GCL_ADD_SELF,
+      // Same as in
+      // https://github.com/deltachat/deltachat-ios/blob/a0043be425d9c14f4039561957adb82ef1ab2adb/deltachat-ios/Controller/AddGroupMembersViewController.swift#L46
+      listFlags:
+        C.DC_GCL_ADD_SELF |
+        (groupType === GroupType.PLAIN_EMAIL ? C.DC_GCL_ADDRESS : 0),
+
       groupMembers,
       onOk: (members: number[]) => {
         members.forEach(contactId => addGroupMember({ id: contactId }))
       },
-      isBroadcast: false,
+      titleMembersOrRecipients: membersOrRecipients,
       isVerificationRequired: false,
     })
   }
@@ -569,13 +665,17 @@ export function CreateGroup(props: CreateGroupProps) {
             setChatName={setGroupName}
             errorMissingChatName={errorMissingGroupName}
             setErrorMissingChatName={setErrorMissingGroupName}
-            type='group'
+            groupType={groupType}
           />
         </DialogContent>
         <div id='create-group-members-title' className='group-separator'>
-          {tx('n_members', groupMembers.length.toString(), {
-            quantity: groupMembers.length,
-          })}
+          {tx(
+            membersOrRecipients === 'members' ? 'n_members' : 'n_recipients',
+            groupMembers.length.toString(),
+            {
+              quantity: groupMembers.length,
+            }
+          )}
         </div>
         <div
           className='group-member-contact-list-wrapper'
@@ -586,7 +686,7 @@ export function CreateGroup(props: CreateGroupProps) {
           >
             <PseudoListItemAddMember
               onClick={showAddMemberDialog}
-              isBroadcast={false}
+              labelMembersOrRecipients={membersOrRecipients}
             />
             <ContactList
               contacts={groupContacts}
@@ -603,7 +703,7 @@ export function CreateGroup(props: CreateGroupProps) {
       </DialogBody>
       <DialogFooter>
         <FooterActions align='spaceBetween'>
-          <FooterActionButton onClick={() => setViewMode('main')}>
+          <FooterActionButton onClick={() => setViewMode('main_')}>
             {tx('cancel')}
           </FooterActionButton>
           <FooterActionButton
@@ -625,7 +725,9 @@ export function CreateGroup(props: CreateGroupProps) {
             data-testid='group-create-button'
             styling='primary'
           >
-            {tx('group_create_button')}
+            {groupType === GroupType.PLAIN_EMAIL
+              ? tx('perm_continue')
+              : tx('group_create_button')}
           </FooterActionButton>
         </FooterActions>
       </DialogFooter>
@@ -685,7 +787,7 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
         recipients.forEach(contactId =>
           addBroadcastRecipient({ id: contactId })
         ),
-      isBroadcast: true,
+      titleMembersOrRecipients: 'recipients',
     })
   }
 
@@ -703,7 +805,7 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
             setChatName={setBroadcastName}
             errorMissingChatName={errorMissingChatName}
             setErrorMissingChatName={setErrorMissingChatName}
-            type='broadcast'
+            groupType={GroupType.BROADCAST_LIST}
           />
           <br />
           {broadcastRecipients.length > 0 && (
@@ -725,7 +827,7 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
             >
               <PseudoListItemAddMember
                 onClick={showAddMemberDialog}
-                isBroadcast
+                labelMembersOrRecipients='recipients'
               />
               <ContactList
                 contacts={broadcastContacts}
@@ -743,7 +845,7 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
       </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <FooterActionButton onClick={() => setViewMode('main')}>
+          <FooterActionButton onClick={() => setViewMode('main_')}>
             {tx('cancel')}
           </FooterActionButton>
           <FooterActionButton
@@ -772,7 +874,7 @@ export const ChatSettingsSetNameAndProfileImage = ({
   errorMissingChatName,
   setErrorMissingChatName,
   color,
-  type,
+  groupType,
 }: {
   groupImage?: string | null
   onSetGroupImage?: () => void
@@ -782,48 +884,72 @@ export const ChatSettingsSetNameAndProfileImage = ({
   errorMissingChatName: boolean
   setErrorMissingChatName: React.Dispatch<React.SetStateAction<boolean>>
   color?: string
-  type: 'group' | 'broadcast'
+  groupType: GroupType
 }) => {
   const tx = useTranslationFunction()
   const onChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     if (target.value.length > 0) setErrorMissingChatName(false)
     setChatName(target.value)
   }
-  if (type === 'group' && !(onSetGroupImage && onUnsetGroupImage)) {
+  if (
+    groupType === GroupType.REGULAR_GROUP &&
+    !(onSetGroupImage && onUnsetGroupImage)
+  ) {
     throw new Error(
       'if type is group, onSetGroupImage and onUnsetGroupImage must be present'
     )
   }
+
+  let inputLabel: string
+  let missingNameErrorText: string
+  switch (groupType) {
+    case GroupType.REGULAR_GROUP:
+      inputLabel = tx('group_name')
+      missingNameErrorText = tx('group_please_enter_group_name')
+      break
+    case GroupType.PLAIN_EMAIL:
+      inputLabel = tx('subject')
+      // TODO do we need another string?
+      missingNameErrorText = tx('group_please_enter_group_name')
+      break
+    case GroupType.BROADCAST_LIST:
+      inputLabel = tx('name_desktop')
+      missingNameErrorText = tx('please_enter_channel_name')
+      break
+    default: {
+      const _assert: never = groupType
+      inputLabel = tx('group_name')
+      missingNameErrorText = tx('group_please_enter_group_name')
+      break
+    }
+  }
+
   return (
     <>
       <div className='group-settings-container'>
-        {type === 'group' && onUnsetGroupImage && onSetGroupImage && (
-          <GroupImage
-            style={{ float: 'left' }}
-            groupImage={groupImage}
-            onSetGroupImage={onSetGroupImage}
-            onUnsetGroupImage={onUnsetGroupImage}
-            groupName={chatName}
-            color={color}
-          />
-        )}
+        {groupType === GroupType.REGULAR_GROUP &&
+          onUnsetGroupImage &&
+          onSetGroupImage && (
+            <GroupImage
+              style={{ float: 'left' }}
+              groupImage={groupImage}
+              onSetGroupImage={onSetGroupImage}
+              onUnsetGroupImage={onUnsetGroupImage}
+              groupName={chatName}
+              color={color}
+            />
+          )}
         <div className='group-name-input-wrapper'>
           <input
             className='group-name-input'
-            placeholder={
-              type === 'group' ? tx('group_name') : tx('name_desktop')
-            }
+            placeholder={inputLabel}
             value={chatName}
             onChange={onChange}
             autoFocus
             spellCheck={false}
           />
           {errorMissingChatName && (
-            <p className='input-error'>
-              {type === 'group'
-                ? tx('group_please_enter_group_name')
-                : tx('please_enter_channel_name')}
-            </p>
+            <p className='input-error'>{missingNameErrorText}</p>
           )}
         </div>
       </div>
@@ -831,21 +957,44 @@ export const ChatSettingsSetNameAndProfileImage = ({
   )
 }
 
-const useCreateGroup = (
+function useCreateGroup<
+  T extends GroupType.REGULAR_GROUP | GroupType.PLAIN_EMAIL,
+>(
+  groupType: T,
   groupName: string,
-  groupImage: string | null | undefined,
+  groupImage: T extends GroupType.REGULAR_GROUP ? string | null : null,
   groupMembers: number[]
-) => {
+) {
   const accountId = selectedAccountId()
 
+  type ChatId = T.BasicChat['id']
   const createGroup = useCallback(async () => {
-    const isVerified = await areAllContactsVerified(accountId, groupMembers)
-
-    const chatId = await BackendRemote.rpc.createGroupChat(
-      accountId,
-      groupName,
-      isVerified
-    )
+    let chatId: ChatId
+    switch (groupType) {
+      case GroupType.REGULAR_GROUP: {
+        const isVerified = await areAllContactsVerified(accountId, groupMembers)
+        chatId = await BackendRemote.rpc.createGroupChat(
+          accountId,
+          groupName,
+          isVerified
+        )
+        break
+      }
+      case GroupType.PLAIN_EMAIL: {
+        chatId = await BackendRemote.rpc.createGroupChatUnencrypted(
+          accountId,
+          groupName
+        )
+        break
+      }
+      default: {
+        const _assert: never = groupType
+        throw new Error(
+          'Failed to create group: ' +
+            `don't know how to handle groupType ${groupType}`
+        )
+      }
+    }
 
     if (groupImage && groupImage !== '') {
       await BackendRemote.rpc.setChatProfileImage(accountId, chatId, groupImage)
@@ -861,7 +1010,7 @@ const useCreateGroup = (
     )
 
     return chatId
-  }, [accountId, groupImage, groupMembers, groupName])
+  }, [accountId, groupImage, groupMembers, groupName, groupType])
 
   return async () => {
     if (groupName === '') {
