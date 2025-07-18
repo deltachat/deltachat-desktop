@@ -20,8 +20,8 @@
       color: white;
     }
 
-    .padlock-icon {
-      @include mixins.color-svg('./images/padlock.svg', white, 125%);
+    .email-icon {
+      @include mixins.color-svg('./images/icons/email.svg', white, 125%);
     }
 
     .saved-message-icon {
@@ -63,13 +63,13 @@
     flex-grow: 1;
   }
 
-  .padlock-icon,
   .location-icon,
+  .email-icon,
   .saved-message-icon {
     width: 12px;
     height: 12px;
     display: inline-block;
-    margin-right: 2px;
+    margin-right: 4px;
     margin-bottom: 3px;
   }
 

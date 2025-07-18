@@ -8,7 +8,7 @@ import { msgStatus } from '../../types-app'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 type Props = {
-  padlock: boolean
+  encrypted: boolean
   fileMime: string | null
   direction?: 'incoming' | 'outgoing'
   status: msgStatus
@@ -26,7 +26,7 @@ export default function MessageMetaData(props: Props) {
   const tx = useTranslationFunction()
 
   const {
-    padlock,
+    encrypted,
     fileMime,
     direction,
     status,
@@ -50,20 +50,20 @@ export default function MessageMetaData(props: Props) {
         ),
       })}
     >
-      {/* FYI the padlock doesn't need `aria-live`
+      {/* FYI the email doesn't need `aria-live`
       as we don't expect it to get removed. See
       https://github.com/deltachat/deltachat-desktop/pull/5023#discussion_r2059382983 */}
-      {padlock && (
+      {!encrypted && (
         <div
-          aria-label={tx('a11y_encryption_padlock')}
+          aria-label={tx('email')}
           // We should not announce this for _every_ message.
           // This is available in the "Message info" dialog.
-          // In addition, if the message is not encerypted,
-          // we simply don't display the padlock,
-          // but arguably "not encrypted" is more important of a status
+          // In addition, if the message is encrypted,
+          // we simply don't display the email icon,
+          // since "not encrypted" is more important of a status
           // than "encrypted".
           aria-hidden={true}
-          className={'padlock-icon'}
+          className={'email-icon'}
         />
       )}
       <div
