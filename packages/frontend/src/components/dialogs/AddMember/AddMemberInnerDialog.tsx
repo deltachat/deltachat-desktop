@@ -37,7 +37,7 @@ export function AddMemberInnerDialog({
   refreshContacts,
 
   groupMembers,
-  isBroadcast = false,
+  titleMembersOrRecipients,
   isVerificationRequired = false,
 }: {
   onOk: (addMembers: number[]) => void
@@ -52,7 +52,7 @@ export function AddMemberInnerDialog({
   refreshContacts: () => void
 
   groupMembers: number[]
-  isBroadcast: boolean
+  titleMembersOrRecipients: 'members' | 'recipients'
   isVerificationRequired: boolean
 }) {
   const tx = useTranslationFunction()
@@ -192,7 +192,11 @@ export function AddMemberInnerDialog({
   return (
     <>
       <DialogHeader
-        title={!isBroadcast ? tx('group_add_members') : tx('add_recipients')}
+        title={
+          titleMembersOrRecipients === 'members'
+            ? tx('group_add_members')
+            : tx('add_recipients')
+        }
       />
       <DialogBody className={styles.addMemberDialogBody}>
         <div className={styles.AddMemberChipsWrapper}>
