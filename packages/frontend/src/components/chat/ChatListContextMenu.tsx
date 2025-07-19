@@ -91,7 +91,7 @@ export function useChatListContextMenu(): {
     openBlockFirstContactOfChatDialog,
     openEncryptionInfoDialog,
     openDeleteChatDialog,
-    openLeaveChatDialog,
+    openLeaveGroupOrChannelDialog,
   } = useChatDialog()
   const openViewGroupDialog = useOpenViewGroupDialog()
   const openViewProfileDialog = useOpenViewProfileDialog()
@@ -140,7 +140,12 @@ export function useChatListContextMenu(): {
           })
         }
       }
-      const onLeaveGroup = () => openLeaveChatDialog(accountId, chatListItem.id)
+      const onLeaveGroupOrChannel = () =>
+        openLeaveGroupOrChannelDialog(
+          accountId,
+          chatListItem.id,
+          chatListItem.chatType === C.DC_CHAT_TYPE_GROUP
+        )
       const onBlockContact = () =>
         openBlockFirstContactOfChatDialog(accountId, chatListItem)
       const onUnmuteChat = () => unmuteChat(accountId, chatListItem.id)
@@ -152,6 +157,8 @@ export function useChatListContextMenu(): {
         tx,
         selectedChatId === chatListItem.id
       )
+
+      const isGroup = chatListItem.chatType === C.DC_CHAT_TYPE_GROUP
 
       const menu: (ContextMenuItem | false)[] = chatListItem
         ? [
@@ -234,12 +241,12 @@ export function useChatListContextMenu(): {
             archive,
             { type: 'separator' },
             // View Profile
-            !chatListItem.isGroup && {
+            !isGroup && {
               label: tx('menu_view_profile'),
               action: onViewProfile,
             },
             // Edit Group
-            chatListItem.isGroup &&
+            isGroup &&
               chatListItem.isSelfInGroup && {
                 label: tx('menu_edit_group'),
                 dataTestid: 'edit-group',
@@ -251,7 +258,7 @@ export function useChatListContextMenu(): {
               action: onViewGroup,
             },
             // Clone Group
-            chatListItem.isGroup && {
+            isGroup && {
               label: tx('clone_chat'),
               action: () => {
                 openDialog(CloneChat, {
@@ -268,14 +275,20 @@ export function useChatListContextMenu(): {
                 action: onEncrInfo,
               },
             { type: 'separator' },
+            // Leave channel
+            chatListItem.chatType === C.DC_CHAT_TYPE_IN_BROADCAST &&
+              !chatListItem.isContactRequest && {
+                label: tx('menu_leave_channel'),
+                action: onLeaveGroupOrChannel,
+              },
             // Leave group
-            chatListItem.isGroup &&
+            isGroup &&
               chatListItem.isSelfInGroup && {
                 label: tx('menu_leave_group'),
-                action: onLeaveGroup,
+                action: onLeaveGroupOrChannel,
               },
             // Block contact
-            !chatListItem.isGroup &&
+            !isGroup &&
               !(chatListItem.isSelfTalk || chatListItem.isDeviceTalk) && {
                 label: tx('menu_block_contact'),
                 action: onBlockContact,

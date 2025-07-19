@@ -124,11 +124,13 @@ export default function useChatDialog() {
     [openDialog]
   )
 
-  const openLeaveChatDialog = useCallback(
-    async (accountId: number, chatId: number) => {
+  const openLeaveGroupOrChannelDialog = useCallback(
+    async (accountId: number, chatId: number, isGroup: boolean) => {
       const hasUserConfirmed = await openConfirmationDialog({
         message: tx('ask_leave_group'),
-        confirmLabel: tx('menu_leave_group'),
+        confirmLabel: isGroup
+          ? tx('menu_leave_group')
+          : tx('menu_leave_channel'),
         isConfirmDanger: true,
         noMargin: true,
       })
@@ -154,7 +156,7 @@ export default function useChatDialog() {
     openClearChatDialog,
     openDeleteChatDialog,
     openEncryptionInfoDialog,
-    openLeaveChatDialog,
+    openLeaveGroupOrChannelDialog,
     openMuteChatDialog,
   }
 }

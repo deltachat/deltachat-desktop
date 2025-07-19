@@ -321,3 +321,9 @@ test('Edit group profile from context menu and rename group', async ({
     .filter({ hasText: groupName + ' edited' })
   await expect(renamedGroupchatListItem).toBeVisible()
 })
+
+test.fixme('create channel and add members', async () => {})
+
+test.fixme('accept or decline channel invite', async () => {})
+
+test.fixme('leave channel and remove from channel', async () => {})
