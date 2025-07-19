@@ -190,18 +190,18 @@ function CreateChatMain(props: CreateChatMainProps) {
   const settingsStore = useSettingsStore()[0]
   const isChatmail = settingsStore?.settings.is_chatmail === '1'
 
-  const needToRenderAddGroup = queryStr.length === 0
-  const needToRenderAddBroadcastList =
+  const showAddGroup = queryStr.length === 0
+  const showAddBroadcastList =
     queryStr.length === 0 &&
     (settingsStore?.desktopSettings.enableBroadcastLists ?? false)
-  const needToRenderAddContactQRScan = queryStr.length === 0
+  const showAddContactQRScan = queryStr.length === 0
 
   // Chatmail accounts can't send unencrypted emails. See
   // - https://github.com/deltachat/deltachat-desktop/issues/5294#issuecomment-3089552788
   // - https://github.com/deltachat/deltachat-ios/blob/a0043be425d9c14f4039561957adb82ef1ab2adb/deltachat-ios/Controller/NewChatViewController.swift#L76-L78
-  const needToRenderNewEmail = !isChatmail && queryStr.length === 0
+  const showNewEmail = !isChatmail && queryStr.length === 0
 
-  const needToRenderAddContact = !(
+  const showAddContact = !(
     queryStr === '' ||
     (contactIds.length === 1 &&
       contactCache[contactIds[0]]?.address.toLowerCase() ===
@@ -214,24 +214,24 @@ function CreateChatMain(props: CreateChatMainProps) {
       ...(showPseudoListItemAddContactFromInviteLink
         ? [CreateChatExtraItemType.INVITE_LINK]
         : []),
-      ...(needToRenderAddContactQRScan
+      ...(showAddContactQRScan
         ? [CreateChatExtraItemType.ADD_CONTACT_QR_SCAN]
         : []),
-      ...(needToRenderAddGroup ? [CreateChatExtraItemType.ADD_GROUP] : []),
-      ...(needToRenderAddBroadcastList
+      ...(showAddGroup ? [CreateChatExtraItemType.ADD_GROUP] : []),
+      ...(showAddBroadcastList
         ? [CreateChatExtraItemType.ADD_BROADCAST_LIST]
         : []),
-      ...(needToRenderNewEmail ? [CreateChatExtraItemType.NEW_EMAIL] : []),
+      ...(showNewEmail ? [CreateChatExtraItemType.NEW_EMAIL] : []),
       ...contactIds,
-      ...(needToRenderAddContact ? [CreateChatExtraItemType.ADD_CONTACT] : []),
+      ...(showAddContact ? [CreateChatExtraItemType.ADD_CONTACT] : []),
     ],
     [
       contactIds,
-      needToRenderAddBroadcastList,
-      needToRenderAddContact,
-      needToRenderAddContactQRScan,
-      needToRenderAddGroup,
-      needToRenderNewEmail,
+      showAddBroadcastList,
+      showAddContact,
+      showAddContactQRScan,
+      showAddGroup,
+      showNewEmail,
       showPseudoListItemAddContactFromInviteLink,
     ]
   )

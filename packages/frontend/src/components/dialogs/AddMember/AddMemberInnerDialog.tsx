@@ -157,8 +157,8 @@ export function AddMemberInnerDialog({
   useLayoutEffect(applyCSSHacks, [inputRef, contactIdsToAdd])
   useEffect(applyCSSHacks, [])
 
-  const needToRenderAddContact = queryStr !== '' && contactIds.length === 0
-  const itemCount = contactIds.length + (needToRenderAddContact ? 1 : 0)
+  const showAddContact = queryStr !== '' && contactIds.length === 0
+  const itemCount = contactIds.length + (showAddContact ? 1 : 0)
 
   const addContactOnKeyDown = (ev: React.KeyboardEvent<HTMLInputElement>) => {
     if (ev.key === 'Enter') {
