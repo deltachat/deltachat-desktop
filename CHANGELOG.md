@@ -19,6 +19,7 @@
 - feat: add channel and remove broadcasts #5258
 - no more edit of mailing list profiles for recipients
 - After some time, add a device message asking to donate. Can't wait? Donate today at https://delta.chat/donate #5295
+- show email icon for non encrypted messages instead padlock for encrypted
 
 ### Fixed
 - fix outdated info being shown sometimes in some places #5222, #5225

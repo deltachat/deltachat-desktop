@@ -129,7 +129,10 @@ export function useChatListContextMenu(): {
         if (!fullChat) {
           throw new Error('chat was not found')
         }
-        if (fullChat.chatType !== C.DC_CHAT_TYPE_IN_BROADCAST) {
+        if (
+          fullChat.chatType !== C.DC_CHAT_TYPE_IN_BROADCAST &&
+          fullChat.chatType !== C.DC_CHAT_TYPE_MAILINGLIST
+        ) {
           openViewProfileDialog(accountId, fullChat.contactIds[0])
         } else {
           openDialog(MailingListProfile, {

@@ -353,7 +353,10 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
       return
     }
 
-    if (chat.chatType === C.DC_CHAT_TYPE_IN_BROADCAST) {
+    if (
+      chat.chatType === C.DC_CHAT_TYPE_IN_BROADCAST ||
+      chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST
+    ) {
       openDialog(MailingListProfile, { chat })
     } else if (
       chat.chatType === C.DC_CHAT_TYPE_GROUP ||
