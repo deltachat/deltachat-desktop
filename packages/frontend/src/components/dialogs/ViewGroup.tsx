@@ -305,7 +305,7 @@ function ViewGroupInner(
 
         setGroupImage(groupImage)
       },
-      isBroadcast: isBroadcast,
+      isBroadcast,
     })
   }
 
@@ -565,14 +565,12 @@ export function EditGroupNameDialog({
             className='profile-image-username center'
             style={{ marginBottom: '30px' }}
           >
-            {!isBroadcast && (
-              <GroupImageSelector
-                groupName={groupName}
-                groupColor={groupColor}
-                groupImage={groupImage}
-                setGroupImage={setGroupImage}
-              />
-            )}
+            <GroupImageSelector
+              groupName={groupName}
+              groupColor={groupColor}
+              groupImage={groupImage}
+              setGroupImage={setGroupImage}
+            />
           </div>
           <DeltaInput
             key='groupname'
