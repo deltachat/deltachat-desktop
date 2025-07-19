@@ -64,8 +64,8 @@ export function ExperimentalFeatures({ settingsStore }: Props) {
       </SettingsSelector>
       <DesktopSettingsSwitch
         settingsKey='enableBroadcastLists'
-        label={tx('broadcast_lists')}
-        description={tx('chat_new_broadcast_hint')}
+        label={tx('channels')}
+        description={tx('chat_new_channel_hint')}
       />
       <DesktopSettingsSwitch
         settingsKey='enableOnDemandLocationStreaming'

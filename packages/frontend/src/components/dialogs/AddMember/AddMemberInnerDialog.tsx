@@ -37,7 +37,7 @@ export function AddMemberInnerDialog({
   refreshContacts,
 
   groupMembers,
-  isBroadcast = false,
+  titleMembersOrRecipients,
   isVerificationRequired = false,
 }: {
   onOk: (addMembers: number[]) => void
@@ -52,7 +52,7 @@ export function AddMemberInnerDialog({
   refreshContacts: () => void
 
   groupMembers: number[]
-  isBroadcast: boolean
+  titleMembersOrRecipients: 'members' | 'recipients'
   isVerificationRequired: boolean
 }) {
   const tx = useTranslationFunction()
@@ -157,8 +157,8 @@ export function AddMemberInnerDialog({
   useLayoutEffect(applyCSSHacks, [inputRef, contactIdsToAdd])
   useEffect(applyCSSHacks, [])
 
-  const needToRenderAddContact = queryStr !== '' && contactIds.length === 0
-  const itemCount = contactIds.length + (needToRenderAddContact ? 1 : 0)
+  const showAddContact = queryStr !== '' && contactIds.length === 0
+  const itemCount = contactIds.length + (showAddContact ? 1 : 0)
 
   const addContactOnKeyDown = (ev: React.KeyboardEvent<HTMLInputElement>) => {
     if (ev.key === 'Enter') {
@@ -192,7 +192,11 @@ export function AddMemberInnerDialog({
   return (
     <>
       <DialogHeader
-        title={!isBroadcast ? tx('group_add_members') : tx('add_recipients')}
+        title={
+          titleMembersOrRecipients === 'members'
+            ? tx('group_add_members')
+            : tx('add_recipients')
+        }
       />
       <DialogBody className={styles.addMemberDialogBody}>
         <div className={styles.AddMemberChipsWrapper}>
@@ -349,6 +353,7 @@ function AddMemberInnerDialogRow({
         isProfileVerified: false,
         isBot: false,
         e2eeAvail: false,
+        isKeyContact: false,
       }
       return (
         <ContactListItem

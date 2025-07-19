@@ -2,8 +2,25 @@
 
 ## [Unreleased][unreleased]
 
-###  Changed
+### Breaking
+- after upgrade to `@deltachat/stdio-rpc-server` version `2.x` you can not go back to 1.x versions any more since account data is not backward compatible!
+
+### Changed
 - update translations (17-07-2025)
+- upgrade `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.2.0`
+  - API-Changes
+    - jsonrpc: Add CommandApi::create_group_chat_unencrypted() (#6927).
+    - [breaking] In ChatListItem, replace is_group and is_(out_)broadcast with chat_type property (#7003).
+  - Features / Changes
+    - Donation request device message (#6913).
+- remove resetEncryptionInfo
+
+### Added
+- feat: add channel and remove broadcasts #5258
+- Option to create a new plain email with subject and recipients (available only for non-Chatmail accounts) #5294
+- no more edit of mailing list profiles for recipients
+- After some time, add a device message asking to donate. Can't wait? Donate today at https://delta.chat/donate #5295
+- show email icon for non encrypted messages instead padlock for encrypted
 
 ### Fixed
 - fix outdated info being shown sometimes in some places #5222, #5225

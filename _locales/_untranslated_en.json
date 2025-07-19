@@ -79,5 +79,14 @@
   },
   "need_to_be_logged_out": {
     "message": "Please log out first"
+  },
+  "please_enter_channel_name": {
+    "message": "Please enter channel name"
+  },
+  "edit_channel": {
+    "message": "Edit Channel"
+  },
+  "email": {
+    "message": "Email"
   }
 }

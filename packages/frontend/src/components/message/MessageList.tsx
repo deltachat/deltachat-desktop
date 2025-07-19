@@ -37,7 +37,8 @@ import { markChatAsSeen } from '../../backend/chat'
 type ChatTypes =
   | C.DC_CHAT_TYPE_SINGLE
   | C.DC_CHAT_TYPE_GROUP
-  | C.DC_CHAT_TYPE_BROADCAST
+  | C.DC_CHAT_TYPE_IN_BROADCAST
+  | C.DC_CHAT_TYPE_OUT_BROADCAST
   | C.DC_CHAT_TYPE_MAILINGLIST
   | C.DC_CHAT_TYPE_UNDEFINED
 
@@ -765,10 +766,7 @@ export const MessageListInner = React.memo(
     } = props
 
     const conversationType: ConversationType = {
-      hasMultipleParticipants:
-        chat.chatType === C.DC_CHAT_TYPE_GROUP ||
-        chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST ||
-        chat.chatType === C.DC_CHAT_TYPE_BROADCAST,
+      hasMultipleParticipants: chat.chatType !== C.DC_CHAT_TYPE_SINGLE,
       isDeviceChat: chat.isDeviceChat as boolean,
       chatType: chat.chatType as number,
     }

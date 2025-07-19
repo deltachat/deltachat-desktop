@@ -28,7 +28,7 @@ export function useThreeDotMenu(selectedChat?: T.FullChat) {
     openBlockFirstContactOfChatDialog,
     openChatAuditDialog,
     openDeleteChatDialog,
-    openLeaveChatDialog,
+    openLeaveGroupOrChannelDialog,
     openClearChatDialog,
   } = useChatDialog()
 
@@ -44,7 +44,7 @@ export function useThreeDotMenu(selectedChat?: T.FullChat) {
     const isGroup = selectedChat.chatType === C.DC_CHAT_TYPE_GROUP
 
     const onLeaveGroup = () =>
-      selectedChat && openLeaveChatDialog(accountId, chatId)
+      selectedChat && openLeaveGroupOrChannelDialog(accountId, chatId, isGroup)
 
     const onBlockContact = () =>
       openBlockFirstContactOfChatDialog(accountId, selectedChat)
@@ -80,6 +80,7 @@ export function useThreeDotMenu(selectedChat?: T.FullChat) {
         },
       },
       canSend &&
+        selectedChat.chatType !== C.DC_CHAT_TYPE_IN_BROADCAST &&
         selectedChat.chatType !== C.DC_CHAT_TYPE_MAILINGLIST && {
           label: tx('ephemeral_messages'),
           action: onDisappearingMessages,
