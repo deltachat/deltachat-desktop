@@ -431,7 +431,7 @@ function ViewGroupInner(
               <RovingTabindexProvider
                 wrapperElementRef={groupMemberContactListWrapperRef}
               >
-                {!chatDisabled && (
+                {!chatDisabled && group.isEncrypted && (
                   <>
                     <PseudoListItemAddMember
                       onClick={() => showAddMemberDialog()}
