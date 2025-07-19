@@ -245,8 +245,16 @@ export function useChatListContextMenu(): {
               label: tx('menu_view_profile'),
               action: onViewProfile,
             },
+            // View Group Profile (for non encrypted groups)
+            isGroup &&
+              !chatListItem.isEncrypted &&
+              chatListItem.isSelfInGroup && {
+                label: tx('menu_view_profile'),
+                action: onViewGroup,
+              },
             // Edit Group
             isGroup &&
+              chatListItem.isEncrypted &&
               chatListItem.isSelfInGroup && {
                 label: tx('menu_edit_group'),
                 dataTestid: 'edit-group',
@@ -283,6 +291,7 @@ export function useChatListContextMenu(): {
               },
             // Leave group
             isGroup &&
+              chatListItem.isEncrypted &&
               chatListItem.isSelfInGroup && {
                 label: tx('menu_leave_group'),
                 action: onLeaveGroupOrChannel,
