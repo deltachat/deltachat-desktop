@@ -231,9 +231,9 @@ $info-text-max-width: 400px;
   margin-left: 0;
 
   .metadata:not(.with-image-no-caption) {
-    .padlock-icon {
+    .email-icon {
       @include mixins.color-svg(
-        './images/padlock.svg',
+        './images/icons/email.svg',
         var(--messageMetadataIconColorIncoming),
         125%
       );
@@ -283,9 +283,9 @@ $info-text-max-width: 400px;
       color: var(--messageOutgoingStatusColor);
     }
 
-    .padlock-icon {
+    .email-icon {
       @include mixins.color-svg(
-        './images/padlock.svg',
+        './images/icons/email.svg',
         var(--messageMetadataIconColorOutgoing),
         125%
       );
@@ -381,8 +381,8 @@ $info-text-max-width: 400px;
       color: white;
     }
 
-    .padlock-icon {
-      @include mixins.color-svg('./images/padlock.svg', white, 125%);
+    .email-icon {
+      @include mixins.color-svg('./images/icons/email.svg', white, 125%);
     }
 
     .location-icon {
@@ -699,8 +699,8 @@ $info-text-max-width: 400px;
     .metadata {
       margin: 0;
 
-      .padlock-icon {
-        @include mixins.color-svg('./images/padlock.svg', white, 125%);
+      .email-icon {
+        @include mixins.color-svg('./images/iconsemail.svg', white, 125%);
       }
 
       .location-icon {

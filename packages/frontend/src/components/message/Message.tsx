@@ -762,7 +762,7 @@ export default function Message(props: {
             hasText={text !== null && text !== ''}
             hasLocation={hasLocation}
             timestamp={message.timestamp * 1000}
-            padlock={message.showPadlock}
+            encrypted={message.showPadlock}
             isSavedMessage={isOrHasSavedMessage}
             onClickError={openMessageInfo.bind(null, openDialog, message)}
             viewType={'VideochatInvitation'}
@@ -943,7 +943,7 @@ export default function Message(props: {
               hasText={hasText}
               hasLocation={hasLocation}
               timestamp={message.timestamp * 1000}
-              padlock={message.showPadlock}
+              encrypted={message.showPadlock}
               isSavedMessage={isOrHasSavedMessage}
               onClickError={openMessageInfo.bind(null, openDialog, message)}
               viewType={message.viewType}

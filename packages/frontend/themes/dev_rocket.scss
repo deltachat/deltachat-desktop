@@ -220,8 +220,8 @@ $navbarBgLight: $borderColor;
 }
 .message.outgoing .metadata > .status-icon.read,
 .message.outgoing .metadata > .status-icon.delivered,
-.message.outgoing .metadata > .padlock-icon,
-.metadata.with-image-no-caption > .padlock-icon {
+.message.outgoing .metadata > .email-icon,
+.metadata.with-image-no-caption > .email-icon {
   background-color: var(--messageMetadataIconColorIncoming);
 }
 
@@ -229,8 +229,8 @@ $navbarBgLight: $borderColor;
 .metadata.with-image-no-caption > .date {
   color: var(--messageMetadataIncoming);
 }
-.metadata.with-image-no-caption > .padlock-icon {
-  -webkit-mask: url(./images/padlock.svg) no-repeat center;
+.metadata.with-image-no-caption > .email-icon {
+  -webkit-mask: url(./images/icons/email.svg) no-repeat center;
   -webkit-mask-size: 125%;
   background-color: var(--messageMetadataIconColorIncoming);
 }
@@ -342,7 +342,7 @@ div.group-image-wrapper div.group-image-edit-button {
   bottom: unset;
 }
 
-.message .msg-container .metadata .padlock-icon,
+.message .msg-container .metadata .email-icon,
 .message .msg-container .metadata .status-icon.read {
   display: none;
 }
