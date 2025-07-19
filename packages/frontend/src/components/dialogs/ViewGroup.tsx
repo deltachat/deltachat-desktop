@@ -318,6 +318,10 @@ function ViewGroupInner(
   // See https://github.com/deltachat/deltachat-desktop/issues/5294
   // > the chat itself picks up "group wording"
   const membersOrRecipients = isBroadcast ? 'recipients' : 'members'
+
+  // We don't allow editing of non encryped groups (email groups)
+  const allowEdit = !chatDisabled && group.isEncrypted
+
   const showAddMemberDialog = () => {
     openDialog(AddMemberDialog, {
       listFlags,
@@ -355,12 +359,21 @@ function ViewGroupInner(
     <>
       {!profileContact && (
         <>
-          <DialogHeader
-            title={!isBroadcast ? tx('tab_group') : tx('channel')}
-            onClickEdit={onClickEdit}
-            onClose={onClose}
-            dataTestid='view-group-dialog-header'
-          />
+          {allowEdit && (
+            <DialogHeader
+              title={!isBroadcast ? tx('tab_group') : tx('channel')}
+              onClickEdit={onClickEdit}
+              onClose={onClose}
+              dataTestid='view-group-dialog-header'
+            />
+          )}
+          {!allowEdit && (
+            <DialogHeader
+              title={tx('tab_group')}
+              onClose={onClose}
+              dataTestid='view-group-dialog-header'
+            />
+          )}
           <DialogBody>
             <DialogContent paddingBottom>
               <ProfileInfoHeader
@@ -446,7 +459,7 @@ function ViewGroupInner(
                 )}
                 <ContactList
                   contacts={group.contacts}
-                  showRemove={!chatDisabled}
+                  showRemove={!chatDisabled && group.isEncrypted}
                   onClick={contact => {
                     if (contact.id === C.DC_CONTACT_ID_SELF) {
                       return
