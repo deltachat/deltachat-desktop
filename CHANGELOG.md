@@ -18,6 +18,7 @@
     - Donation request device message (#6913).
 - remove resetEncryptionInfo
 - no more edit of mailing list profiles for recipients
+- show email icon for non encrypted messages instead padlock for encrypted
 
 ### Fixed
 - fix outdated info being shown sometimes in some places #5222, #5225
