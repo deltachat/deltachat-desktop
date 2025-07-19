@@ -58,10 +58,6 @@ export default function MessageMetaData(props: Props) {
           aria-label={tx('email')}
           // We should not announce this for _every_ message.
           // This is available in the "Message info" dialog.
-          // In addition, if the message is encrypted,
-          // we simply don't display the email icon,
-          // since "not encrypted" is more important of a status
-          // than "encrypted".
           aria-hidden={true}
           className={'email-icon'}
         />
