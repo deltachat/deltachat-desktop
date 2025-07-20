@@ -7,7 +7,7 @@
 
 ### Changed
 - update translations (17-07-2025)
-- upgrade `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.2.0`
+- upgrade `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.3.0`
   - API-Changes
     - jsonrpc: Add CommandApi::create_group_chat_unencrypted() (#6927).
     - [breaking] In ChatListItem, replace is_group and is_(out_)broadcast with chat_type property (#7003).
