@@ -47,6 +47,11 @@ test.beforeAll(async ({ browser }) => {
 test.beforeEach(async ({ page }) => {
   await reloadPage(page)
 })
+test.afterEach(async ({ page }) => {
+  // These tests might add or delete profiles, so let's make sure
+  // that `existingProfiles` is always up to date.
+  existingProfiles = await loadExistingProfiles(page)
+})
 
 test.afterAll(async ({ browser }) => {
   const context = await browser.newContext()
