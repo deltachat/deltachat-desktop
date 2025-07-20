@@ -1775,8 +1775,8 @@ dependencies = [
 
 [[package]]
 name = "deltachat"
-version = "2.2.0"
-source = "git+https://github.com/chatmail/core?tag=v2.2.0#a0f6bdffeb454588f0570c90fdda01ea54a64832"
+version = "2.3.0"
+source = "git+https://github.com/chatmail/core?tag=v2.3.0#e3973f6448fb0f6f5e8b4893211a6b4516b137b8"
 dependencies = [
  "anyhow",
  "async-broadcast",
@@ -1860,7 +1860,7 @@ dependencies = [
 [[package]]
 name = "deltachat-contact-tools"
 version = "0.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.2.0#a0f6bdffeb454588f0570c90fdda01ea54a64832"
+source = "git+https://github.com/chatmail/core?tag=v2.3.0#e3973f6448fb0f6f5e8b4893211a6b4516b137b8"
 dependencies = [
  "anyhow",
  "chrono",
@@ -1870,8 +1870,8 @@ dependencies = [
 
 [[package]]
 name = "deltachat-jsonrpc"
-version = "2.2.0"
-source = "git+https://github.com/chatmail/core?tag=v2.2.0#a0f6bdffeb454588f0570c90fdda01ea54a64832"
+version = "2.3.0"
+source = "git+https://github.com/chatmail/core?tag=v2.3.0#e3973f6448fb0f6f5e8b4893211a6b4516b137b8"
 dependencies = [
  "anyhow",
  "async-channel 2.3.1",
@@ -1941,12 +1941,12 @@ dependencies = [
 [[package]]
 name = "deltachat-time"
 version = "1.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.2.0#a0f6bdffeb454588f0570c90fdda01ea54a64832"
+source = "git+https://github.com/chatmail/core?tag=v2.3.0#e3973f6448fb0f6f5e8b4893211a6b4516b137b8"
 
 [[package]]
 name = "deltachat_derive"
 version = "2.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.2.0#a0f6bdffeb454588f0570c90fdda01ea54a64832"
+source = "git+https://github.com/chatmail/core?tag=v2.3.0#e3973f6448fb0f6f5e8b4893211a6b4516b137b8"
 dependencies = [
  "quote",
  "syn 2.0.104",
@@ -2861,7 +2861,7 @@ dependencies = [
 [[package]]
 name = "format-flowed"
 version = "1.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.2.0#a0f6bdffeb454588f0570c90fdda01ea54a64832"
+source = "git+https://github.com/chatmail/core?tag=v2.3.0#e3973f6448fb0f6f5e8b4893211a6b4516b137b8"
 
 [[package]]
 name = "fsevent-sys"
@@ -7093,7 +7093,7 @@ dependencies = [
 [[package]]
 name = "ratelimit"
 version = "1.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.2.0#a0f6bdffeb454588f0570c90fdda01ea54a64832"
+source = "git+https://github.com/chatmail/core?tag=v2.3.0#e3973f6448fb0f6f5e8b4893211a6b4516b137b8"
 
 [[package]]
 name = "rav1e"
