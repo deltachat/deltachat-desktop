@@ -22,7 +22,9 @@ import ProfileInfoHeader from '../ProfileInfoHeader'
  */
 export default function MailingListProfile(
   props: {
-    chat: T.BasicChat
+    chat: T.BasicChat & {
+      chatType: C.DC_CHAT_TYPE_MAILINGLIST | C.DC_CHAT_TYPE_IN_BROADCAST
+    }
   } & DialogProps
 ) {
   const { onClose, chat } = props

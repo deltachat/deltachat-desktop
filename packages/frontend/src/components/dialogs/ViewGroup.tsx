@@ -54,7 +54,7 @@ const log = getLogger('ViewGroup')
  */
 export default function ViewGroup(
   props: {
-    chat: T.FullChat
+    chat: Parameters<typeof ViewGroupInner>[0]['chat']
   } & DialogProps
 ) {
   const { chat, onClose } = props
@@ -183,7 +183,9 @@ export const useGroup = (accountId: number, chat: T.FullChat) => {
 
 function ViewGroupInner(
   props: {
-    chat: T.FullChat
+    chat: T.FullChat & {
+      chatType: C.DC_CHAT_TYPE_GROUP | C.DC_CHAT_TYPE_OUT_BROADCAST
+    }
   } & DialogProps
 ) {
   const { chat, onClose } = props
