@@ -160,7 +160,8 @@ export function useChatListContextMenu(): {
 
       const isGroup = chatListItem.chatType === C.DC_CHAT_TYPE_GROUP
 
-      const isOutBroadcast = chatListItem.chatType === C.DC_CHAT_TYPE_OUT_BROADCAST
+      const isOutBroadcast =
+        chatListItem.chatType === C.DC_CHAT_TYPE_OUT_BROADCAST
 
       const menu: (ContextMenuItem | false)[] = chatListItem
         ? [
@@ -300,7 +301,11 @@ export function useChatListContextMenu(): {
               },
             // Block contact
             !isGroup &&
-              !(chatListItem.isSelfTalk || chatListItem.isDeviceTalk || isOutBroadcast) && {
+              !(
+                chatListItem.isSelfTalk ||
+                chatListItem.isDeviceTalk ||
+                isOutBroadcast
+              ) && {
                 label: tx('menu_block_contact'),
                 action: onBlockContact,
               },
