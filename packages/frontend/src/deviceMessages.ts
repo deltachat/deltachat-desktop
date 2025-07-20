@@ -3,7 +3,7 @@ import { getDeviceChatId, markChatAsSeen } from './backend/chat'
 
 export async function updateDeviceChat(
   accountId: number,
-  skipCurrentChangelog: boolean = false,
+  skipCurrentChangelog: boolean = false
 ) {
   const tx = window.static_translate
   const addDeviceMessage = async (
@@ -27,10 +27,8 @@ export async function updateDeviceChat(
       })
     }
   }
-
-  await addDeviceMessage('changelog-version-2.3.0', {
-    text: tx('update_2_0') + `
-+ MORE ✨ improvements and 🐜 bug fixes see [Full Changelog](https://github.com/deltachat/deltachat-desktop/blob/main/CHANGELOG.md#2_3_0)`,
+  await addDeviceMessage(`changelog-version-2.3.0`, {
+    text: tx('update_2_0', 'https://delta.chat/donate'),
   })
 }
 
