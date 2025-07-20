@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect, type Page } from '@playwright/test'
 
 import {
   createProfiles,
@@ -14,40 +14,45 @@ let existingProfiles: User[] = []
 
 const numberOfProfiles = 1
 
+// https://playwright.dev/docs/next/test-retries#reuse-single-page-between-tests
+let page: Page
+
 test.beforeAll(async ({ browser }) => {
-  const context = await browser.newContext()
-  const page = await context.newPage()
+  const contextForProfileCreation = await browser.newContext()
+  const pageForProfileCreation = await contextForProfileCreation.newPage()
+  const pageForTestsP = browser.newPage()
 
-  await reloadPage(page)
+  await reloadPage(pageForProfileCreation)
 
-  existingProfiles = (await loadExistingProfiles(page)) ?? existingProfiles
+  existingProfiles =
+    (await loadExistingProfiles(pageForProfileCreation)) ?? existingProfiles
 
   await createProfiles(
     numberOfProfiles,
     existingProfiles,
-    page,
-    context,
+    pageForProfileCreation,
+    contextForProfileCreation,
     browser.browserType().name()
   )
 
-  await context.close()
-})
-
-test.beforeEach(async ({ page }) => {
+  await contextForProfileCreation.close()
+  page = await pageForTestsP
   await reloadPage(page)
 })
 
 test.afterAll(async ({ browser }) => {
+  await page.close()
+
   const context = await browser.newContext()
-  const page = await context.newPage()
-  await reloadPage(page)
-  await deleteAllProfiles(page, existingProfiles)
+  const pageForProfileDeletion = await context.newPage()
+  await reloadPage(pageForProfileDeletion)
+  await deleteAllProfiles(pageForProfileDeletion, existingProfiles)
   await context.close()
 })
 
 const emailSubject = 'some subjecttt'
 
-test('check "New E-Mail" option presence', async ({ page }) => {
+test('check "New E-Mail" option presence', async () => {
   await page.locator('#new-chat-button').click()
 
   await expect(page.getByRole('button', { name: 'New Group' })).toBeVisible()
@@ -57,9 +62,11 @@ test('check "New E-Mail" option presence', async ({ page }) => {
   await expect(newEmailButton).not.toBeVisible()
   // Same button, but double-check, by ID.
   await expect(page.locator('#newemail')).not.toBeVisible({ timeout: 1 })
+
+  await page.getByRole('dialog').press('Escape')
 })
 
-test('create unencrypted group (email)', async ({ page }) => {
+test('create unencrypted group (email)', async () => {
   // But we can still test unencrypted group creation itself,
   // despite the fact that sending messages won't work.
   await page.locator('#new-chat-button').click()
@@ -100,7 +107,7 @@ test('create unencrypted group (email)', async ({ page }) => {
   await expect(page.locator('.navbar-heading')).toContainText(emailSubject)
 })
 
-test('group dialog', async ({ page }) => {
+test('group dialog', async () => {
   await page
     .locator('.chat-list .chat-list-item')
     .filter({ hasText: emailSubject })
@@ -126,7 +133,7 @@ test('group dialog', async ({ page }) => {
   await page.getByTestId('view-group-dialog-header-close').click()
 })
 
-test('chat list item context menu', async ({ page }) => {
+test('chat list item context menu', async () => {
   const chatListItem = page
     .locator('.chat-list .chat-list-item')
     .filter({ hasText: emailSubject })
@@ -146,7 +153,7 @@ test('chat list item context menu', async ({ page }) => {
   await expect(page.getByRole('menuitem')).not.toBeVisible()
 })
 
-test('send message to unencrypted group', async ({ page }) => {
+test('send message to unencrypted group', async () => {
   await page
     .locator('.chat-list .chat-list-item')
     .filter({ hasText: emailSubject })
