@@ -42,6 +42,16 @@ import { unknownErrorToString } from '../helpers/unknownErrorToString'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 const log = getLogger('ViewGroup')
 
+/**
+ * This dialog is used to for groups of various types:
+ * - encrypted groups
+ * - non encrypted groups (email groups)
+ * - channels if the current account is the sender (DC_CHAT_TYPE_OUT_BROADCAST)
+ *
+ * Mailinglists and channels (receiver side) have an own dialog
+ * since you don't see other receivers in those chats
+ * (see MailingListProfile)
+ */
 export default function ViewGroup(
   props: {
     chat: T.FullChat
@@ -298,7 +308,7 @@ function ViewGroupInner(
       groupImage,
       groupColor: chat.color,
       onOk: (groupName: string, groupImage: string | null) => {
-        //(treefit): TODO this check should be way earlier, you should not be able to "OK" the dialog if there is no group name
+        // TODO this check should be way earlier, you should not be able to "OK" the dialog if there is no group name
         if (groupName.length > 1) {
           setGroupName(groupName)
         }
@@ -309,8 +319,6 @@ function ViewGroupInner(
     })
   }
 
-  // Note that this might also need `C.DC_GCL_ADDRESS` for unencrypted groups,
-  // but we're not supposed to display this component for those.
   const listFlags = C.DC_GCL_ADD_SELF
 
   // Note that we are not checking `chat.isEncrypted`,
@@ -320,6 +328,11 @@ function ViewGroupInner(
   const membersOrRecipients = isBroadcast ? 'recipients' : 'members'
 
   // We don't allow editing of non encryped groups (email groups)
+  // i.e. changing name, avatar or recipients
+  // since it cannot be guaranteed that the recipients will adapt
+  // these changes (image is not shown at all in MTAs, group name is
+  // just the subject and recipients are basically just an email
+  // distribution list)
   const allowEdit = !chatDisabled && group.isEncrypted
 
   const showAddMemberDialog = () => {

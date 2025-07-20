@@ -14,7 +14,11 @@ import ProfileInfoHeader from '../ProfileInfoHeader'
 
 /**
  * This dialog is used to display the profile of a mailing list
- * or a channel (DC_CHAT_TYPE_IN_BROADCAST as seen by recipient).
+ * (DC_CHAT_TYPE_MAILINGLIST) or a channel as seen by recipient.
+ * (DC_CHAT_TYPE_IN_BROADCAST)
+ *
+ * The main difference to other groups (which use ViewGroup):
+ * you don't see other receivers here and you can not edit the group.
  */
 export default function MailingListProfile(
   props: {
