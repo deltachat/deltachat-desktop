@@ -619,7 +619,8 @@ export default function Message(props: {
     const isProtectionBrokenMsg =
       message.systemMessageType === 'ChatProtectionDisabled'
     const isProtectionEnabledMsg =
-      message.systemMessageType === 'ChatProtectionEnabled'
+      message.systemMessageType === 'ChatProtectionEnabled' ||
+      message.systemMessageType === 'ChatE2ee'
 
     // Message can't be sent because of `Invalid unencrypted mail to <>`
     // which is sent by chatmail servers.
