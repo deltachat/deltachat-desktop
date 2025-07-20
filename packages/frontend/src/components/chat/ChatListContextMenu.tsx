@@ -160,6 +160,8 @@ export function useChatListContextMenu(): {
 
       const isGroup = chatListItem.chatType === C.DC_CHAT_TYPE_GROUP
 
+      const isOutBroadcast = chatListItem.chatType === C.DC_CHAT_TYPE_OUT_BROADCAST
+
       const menu: (ContextMenuItem | false)[] = chatListItem
         ? [
             // Pin
@@ -261,7 +263,7 @@ export function useChatListContextMenu(): {
                 action: onViewGroup,
               },
             // Edit Channel
-            chatListItem.chatType === C.DC_CHAT_TYPE_OUT_BROADCAST && {
+            isOutBroadcast && {
               label: tx('edit_channel'),
               action: onViewGroup,
             },
@@ -298,7 +300,7 @@ export function useChatListContextMenu(): {
               },
             // Block contact
             !isGroup &&
-              !(chatListItem.isSelfTalk || chatListItem.isDeviceTalk) && {
+              !(chatListItem.isSelfTalk || chatListItem.isDeviceTalk || isOutBroadcast) && {
                 label: tx('menu_block_contact'),
                 action: onBlockContact,
               },
