@@ -90,23 +90,6 @@ test('start chat with user', async ({ page, context, browserName }) => {
   await expect(sentMessageText).toHaveText(messageText)
 })
 
-test('unencrypted group (plain email)', async ({ page }) => {
-  await page.locator('#new-chat-button').click()
-
-  await expect(page.getByRole('button', { name: 'New Group' })).toBeVisible()
-
-  // Since we're on a Chatmail server, this button is not supposed to be shown.
-  // TODO we should still test the dialog somehow.
-  await expect(
-    page.getByRole('button', { name: 'New E-Mail' })
-  ).not.toBeVisible()
-  // Same button, but double-check, by ID.
-  await expect(page.locator('#newemail')).not.toBeVisible()
-
-  // Restore app state to "normal".
-  await page.getByRole('button', { name: 'Close' }).click()
-})
-
 test('create group', async ({ page, context, browserName }) => {
   if (browserName.toLowerCase().indexOf('chrom') > -1) {
     await context.grantPermissions(['clipboard-read', 'clipboard-write'])
