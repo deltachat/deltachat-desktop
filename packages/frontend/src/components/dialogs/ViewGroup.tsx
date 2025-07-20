@@ -42,9 +42,19 @@ import { unknownErrorToString } from '../helpers/unknownErrorToString'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 const log = getLogger('ViewGroup')
 
+/**
+ * This dialog is used to for groups of various types:
+ * - encrypted groups
+ * - non encrypted groups (email groups)
+ * - channels if the current account is the sender (DC_CHAT_TYPE_OUT_BROADCAST)
+ *
+ * Mailinglists and channels (receiver side) have an own dialog
+ * since you don't see other receivers in those chats
+ * (see MailingListProfile)
+ */
 export default function ViewGroup(
   props: {
-    chat: T.FullChat
+    chat: Parameters<typeof ViewGroupInner>[0]['chat']
   } & DialogProps
 ) {
   const { chat, onClose } = props
@@ -173,7 +183,9 @@ export const useGroup = (accountId: number, chat: T.FullChat) => {
 
 function ViewGroupInner(
   props: {
-    chat: T.FullChat
+    chat: T.FullChat & {
+      chatType: C.DC_CHAT_TYPE_GROUP | C.DC_CHAT_TYPE_OUT_BROADCAST
+    }
   } & DialogProps
 ) {
   const { chat, onClose } = props
@@ -298,7 +310,7 @@ function ViewGroupInner(
       groupImage,
       groupColor: chat.color,
       onOk: (groupName: string, groupImage: string | null) => {
-        //(treefit): TODO this check should be way earlier, you should not be able to "OK" the dialog if there is no group name
+        // TODO this check should be way earlier, you should not be able to "OK" the dialog if there is no group name
         if (groupName.length > 1) {
           setGroupName(groupName)
         }
@@ -309,8 +321,6 @@ function ViewGroupInner(
     })
   }
 
-  // Note that this might also need `C.DC_GCL_ADDRESS` for unencrypted groups,
-  // but we're not supposed to display this component for those.
   const listFlags = C.DC_GCL_ADD_SELF
 
   // Note that we are not checking `chat.isEncrypted`,
@@ -318,6 +328,15 @@ function ViewGroupInner(
   // See https://github.com/deltachat/deltachat-desktop/issues/5294
   // > the chat itself picks up "group wording"
   const membersOrRecipients = isBroadcast ? 'recipients' : 'members'
+
+  // We don't allow editing of non encryped groups (email groups)
+  // i.e. changing name, avatar or recipients
+  // since it cannot be guaranteed that the recipients will adapt
+  // these changes (image is not shown at all in MTAs, group name is
+  // just the subject and recipients are basically just an email
+  // distribution list)
+  const allowEdit = !chatDisabled && group.isEncrypted
+
   const showAddMemberDialog = () => {
     openDialog(AddMemberDialog, {
       listFlags,
@@ -355,12 +374,21 @@ function ViewGroupInner(
     <>
       {!profileContact && (
         <>
-          <DialogHeader
-            title={!isBroadcast ? tx('tab_group') : tx('channel')}
-            onClickEdit={onClickEdit}
-            onClose={onClose}
-            dataTestid='view-group-dialog-header'
-          />
+          {allowEdit && (
+            <DialogHeader
+              title={!isBroadcast ? tx('tab_group') : tx('channel')}
+              onClickEdit={onClickEdit}
+              onClose={onClose}
+              dataTestid='view-group-dialog-header'
+            />
+          )}
+          {!allowEdit && (
+            <DialogHeader
+              title={tx('tab_group')}
+              onClose={onClose}
+              dataTestid='view-group-dialog-header'
+            />
+          )}
           <DialogBody>
             <DialogContent paddingBottom>
               <ProfileInfoHeader
@@ -431,7 +459,7 @@ function ViewGroupInner(
               <RovingTabindexProvider
                 wrapperElementRef={groupMemberContactListWrapperRef}
               >
-                {!chatDisabled && (
+                {!chatDisabled && group.isEncrypted && (
                   <>
                     <PseudoListItemAddMember
                       onClick={() => showAddMemberDialog()}
@@ -446,7 +474,7 @@ function ViewGroupInner(
                 )}
                 <ContactList
                   contacts={group.contacts}
-                  showRemove={!chatDisabled}
+                  showRemove={!chatDisabled && group.isEncrypted}
                   onClick={contact => {
                     if (contact.id === C.DC_CONTACT_ID_SELF) {
                       return
