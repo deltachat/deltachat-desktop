@@ -30,7 +30,8 @@ export default function ConfirmDeleteMessageDialog(props: Props) {
     msg.sender.id === C.DC_CONTACT_ID_SELF &&
     !msg.isInfo &&
     chat.canSend &&
-    !chat.isSelfTalk
+    !chat.isSelfTalk &&
+    chat.isEncrypted
 
   const deleteMessage = (deleteForEveryone: boolean) => {
     if (deleteForEveryone) {
