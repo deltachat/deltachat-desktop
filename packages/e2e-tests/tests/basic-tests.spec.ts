@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect, type Page } from '@playwright/test'
 
 import {
   getUser,
@@ -32,40 +32,48 @@ let existingProfiles: User[] = []
 
 const numberOfProfiles = 2
 
+// https://playwright.dev/docs/next/test-retries#reuse-single-page-between-tests
+let page: Page
+
 test.beforeAll(async ({ browser }) => {
-  const context = await browser.newContext()
-  const page = await context.newPage()
+  const contextForProfiles = await browser.newContext()
+  const pageForProfiles = await contextForProfiles.newPage()
 
+  await reloadPage(pageForProfiles)
+
+  existingProfiles =
+    (await loadExistingProfiles(pageForProfiles)) ?? existingProfiles
+
+  await contextForProfiles.close()
+  page = await browser.newPage()
   await reloadPage(page)
-
-  existingProfiles = (await loadExistingProfiles(page)) ?? existingProfiles
-
-  await context.close()
 })
 
-test.beforeEach(async ({ page }) => {
-  await reloadPage(page)
+test.afterEach(async () => {
+  // Pressing Escape a bunch of times should reset the UI state,
+  // so there is no need to reload the page.
+  for (let i = 0; i < 5; i++) {
+    await page.keyboard.press('Escape')
+  }
+})
+
+test.afterAll(async () => {
+  await page?.close()
 })
 
 /**
  * covers creating a profile with preconfigured
  * chatmail server on first start or after
  */
-test('create profiles', async ({ page, context, browserName }) => {
+test('create profiles', async ({ browserName }) => {
   test.setTimeout(120_000)
-  await createProfiles(
-    numberOfProfiles,
-    existingProfiles,
-    page,
-    context,
-    browserName
-  )
+  await createProfiles(numberOfProfiles, existingProfiles, page, browserName)
   expect(existingProfiles.length).toBe(numberOfProfiles)
 })
 
-test('start chat with user', async ({ page, context, browserName }) => {
+test('start chat with user', async ({ browserName }) => {
   if (browserName.toLowerCase().indexOf('chrom') > -1) {
-    await context.grantPermissions(['clipboard-read', 'clipboard-write'])
+    await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
   }
   const userA = getUser(0, existingProfiles)
   const userB = getUser(1, existingProfiles)
@@ -94,7 +102,7 @@ test('start chat with user', async ({ page, context, browserName }) => {
 /**
  * user A sends two messages to user B
  */
-test('send message', async ({ page }) => {
+test('send message', async () => {
   const userA = existingProfiles[0]
   const userB = existingProfiles[1]
   // prepare last open chat for receiving user
@@ -154,7 +162,7 @@ test('send message', async ({ page }) => {
 /**
  * user A deletes one message for himself
  */
-test('delete message', async ({ page }) => {
+test('delete message', async () => {
   const userA = existingProfiles[0]
   const userB = existingProfiles[1]
   await switchToProfile(page, userA.id)
@@ -181,7 +189,7 @@ test('delete message', async ({ page }) => {
 /**
  * user A deletes one message for all
  */
-test('delete message for all', async ({ page }) => {
+test('delete message for all', async () => {
   const userA = existingProfiles[0]
   const userB = existingProfiles[1]
   await switchToProfile(page, userA.id)
@@ -208,7 +216,7 @@ test('delete message for all', async ({ page }) => {
 /**
  * user A sends and edits a message
  */
-test('edit message', async ({ page }) => {
+test('edit message', async () => {
   const userA = existingProfiles[0]
   const userB = existingProfiles[1]
   await switchToProfile(page, userA.id)
@@ -250,7 +258,7 @@ test('edit message', async ({ page }) => {
   await expect(page.locator('body')).not.toContainText(originalMessageText)
 })
 
-test('add app from picker to chat', async ({ page }) => {
+test('add app from picker to chat', async () => {
   const userA = existingProfiles[0]
   const userB = existingProfiles[1]
   await switchToProfile(page, userA.id)
@@ -309,9 +317,7 @@ test('add app from picker to chat', async ({ page }) => {
   expect(finalAppIconsCount).toBeGreaterThan(initialAppIconsCount)
 })
 
-test('focuses first visible item on arrow down key on input in create chat dialog', async ({
-  page,
-}) => {
+test('focuses first visible item on arrow down key on input in create chat dialog', async () => {
   const userA = existingProfiles[0]
   await switchToProfile(page, userA.id)
   await page.locator('#new-chat-button').click()
@@ -322,7 +328,7 @@ test('focuses first visible item on arrow down key on input in create chat dialo
   await expect(page.locator('*:focus')).toContainText('New Contact')
 })
 
-test('correct handling of changed profile displaynames', async ({ page }) => {
+test('correct handling of changed profile displaynames', async () => {
   const userA = existingProfiles[0]
   const userB = existingProfiles[1]
   const newDisplayName = 'Alice Wonderland'
@@ -379,7 +385,7 @@ test('correct handling of changed profile displaynames', async ({ page }) => {
   ).toBeVisible()
 })
 
-test('delete profiles', async ({ page }) => {
+test('delete profiles', async () => {
   if (existingProfiles.length < 1) {
     throw new Error('Not existing profiles to delete!')
   }

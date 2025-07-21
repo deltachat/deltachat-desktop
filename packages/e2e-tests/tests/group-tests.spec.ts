@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test'
+import { test, expect, type Page } from '@playwright/test'
 
 import {
   groupName,
@@ -19,39 +19,51 @@ let existingProfiles: User[] = []
 
 const numberOfProfiles = 3
 
-test.beforeAll(async ({ browser }) => {
-  const context = await browser.newContext()
-  const page = await context.newPage()
-  await reloadPage(page)
+// https://playwright.dev/docs/next/test-retries#reuse-single-page-between-tests
+let page: Page
 
-  existingProfiles = (await loadExistingProfiles(page)) ?? existingProfiles
+test.beforeAll(async ({ browser }) => {
+  const contextForProfileCreation = await browser.newContext()
+  const pageForProfileCreation = await contextForProfileCreation.newPage()
+  await reloadPage(pageForProfileCreation)
+
+  existingProfiles =
+    (await loadExistingProfiles(pageForProfileCreation)) ?? existingProfiles
   test.setTimeout(120_000)
+
   await createProfiles(
     numberOfProfiles,
     existingProfiles,
-    page,
-    context,
+    pageForProfileCreation,
     browser.browserType().name()
   )
 
-  await context.close()
+  await contextForProfileCreation.close()
+  page = await browser.newPage()
+  await reloadPage(page)
 })
 
-test.beforeEach(async ({ page }) => {
-  await reloadPage(page)
+test.afterEach(async () => {
+  // Pressing Escape a bunch of times should reset the UI state,
+  // so there is no need to reload the page.
+  for (let i = 0; i < 5; i++) {
+    await page.keyboard.press('Escape')
+  }
 })
 
 test.afterAll(async ({ browser }) => {
+  await page?.close()
+
   const context = await browser.newContext()
-  const page = await context.newPage()
-  await reloadPage(page)
-  await deleteAllProfiles(page, existingProfiles)
+  const pageForProfileDeletion = await context.newPage()
+  await reloadPage(pageForProfileDeletion)
+  await deleteAllProfiles(pageForProfileDeletion, existingProfiles)
   await context.close()
 })
 
-test('start chat with user', async ({ page, context, browserName }) => {
+test('start chat with user', async ({ browserName }) => {
   if (browserName.toLowerCase().indexOf('chrom') > -1) {
-    await context.grantPermissions(['clipboard-read', 'clipboard-write'])
+    await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
   }
   const userA = getUser(0, existingProfiles)
   const userB = getUser(1, existingProfiles)
@@ -90,9 +102,9 @@ test('start chat with user', async ({ page, context, browserName }) => {
   await expect(sentMessageText).toHaveText(messageText)
 })
 
-test('create group', async ({ page, context, browserName }) => {
+test('create group', async ({ browserName }) => {
   if (browserName.toLowerCase().indexOf('chrom') > -1) {
-    await context.grantPermissions(['clipboard-read', 'clipboard-write'])
+    await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
   }
   const userA = existingProfiles[0]
   const userB = existingProfiles[1]
@@ -128,13 +140,9 @@ test('create group', async ({ page, context, browserName }) => {
   await expect(badgeNumber).toHaveText('1')
 })
 
-test('Invite existing user to group', async ({
-  page,
-  context,
-  browserName,
-}) => {
+test('Invite existing user to group', async ({ browserName }) => {
   if (browserName.toLowerCase().indexOf('chrom') > -1) {
-    await context.grantPermissions(['clipboard-read', 'clipboard-write'])
+    await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
   }
   const userA = existingProfiles[0]
   const userB = existingProfiles[1]
@@ -178,9 +186,9 @@ test('Invite existing user to group', async ({
   await expect(badge).toBeVisible()
 })
 
-test('Invite new user to group', async ({ page, context, browserName }) => {
+test('Invite new user to group', async ({ browserName }) => {
   if (browserName.toLowerCase().indexOf('chrom') > -1) {
-    await context.grantPermissions(['clipboard-read', 'clipboard-write'])
+    await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
   }
   const newUserName = userNames[3]
   const userA = existingProfiles[0]
@@ -235,7 +243,7 @@ test('Invite new user to group', async ({ page, context, browserName }) => {
   existingProfiles = await loadExistingProfiles(page)
 })
 
-test('Remove user from group', async ({ page }) => {
+test('Remove user from group', async () => {
   // user C removes user B
   const userB = existingProfiles[1]
   const userC = existingProfiles[2]
@@ -263,7 +271,7 @@ test('Remove user from group', async ({ page }) => {
   await page.getByTestId('view-group-dialog-header-close').click()
 })
 
-test('Readd user to group', async ({ page }) => {
+test('Readd user to group', async () => {
   // user A adds user B again
   const userA = existingProfiles[0]
   const userB = existingProfiles[1]
@@ -292,9 +300,7 @@ test('Readd user to group', async ({ page }) => {
   await page.getByTestId('view-group-dialog-header-close').click()
 })
 
-test('Edit group profile from context menu and rename group', async ({
-  page,
-}) => {
+test('Edit group profile from context menu and rename group', async () => {
   const userA = existingProfiles[0]
   const userC = existingProfiles[2]
   await switchToProfile(page, userA.id)
