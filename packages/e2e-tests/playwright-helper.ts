@@ -1,4 +1,4 @@
-import { BrowserContext, expect, Page } from '@playwright/test'
+import { expect, Page } from '@playwright/test'
 
 export const chatmailServer = 'https://ci-chatmail.testrun.org'
 
@@ -197,7 +197,6 @@ export async function createProfiles(
   number: number,
   existingProfiles: User[],
   page: Page,
-  context: BrowserContext,
   browserName: string
 ): Promise<void> {
   const hasProfileWithName = (name: string): boolean => {
@@ -212,7 +211,7 @@ export async function createProfiles(
     return hasProfile
   }
   if (browserName.toLowerCase().indexOf('chrom') > -1) {
-    await context.grantPermissions(['clipboard-read', 'clipboard-write'])
+    await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
   }
   for (let n = 0; n < number; n++) {
     if (!hasProfileWithName(userNames[n])) {
