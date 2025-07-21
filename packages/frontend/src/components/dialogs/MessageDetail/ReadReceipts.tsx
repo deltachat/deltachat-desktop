@@ -5,7 +5,6 @@ import { selectedAccountId } from '../../../ScreenController'
 
 import styles from './styles.module.scss'
 import { Avatar } from '../../Avatar'
-import { InlineVerifiedIcon } from '../../VerifiedIcon'
 import moment from 'moment'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { useRpcFetch } from '../../../hooks/useFetch'
@@ -94,7 +93,6 @@ function ReadReceipt(props: { receipt: T.MessageReadReceipt }) {
           <span className='truncated'>
             <b>{contact.displayName}</b>
           </span>{' '}
-          {contact.isVerified && <InlineVerifiedIcon />}
         </div>
         {!contact.isVerified && (
           <div className={styles.ContactEmail}>{contact.address}</div>

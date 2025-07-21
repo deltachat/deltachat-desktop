@@ -5,7 +5,6 @@ import Dialog from '../../Dialog'
 import Icon from '../../Icon'
 import type { T } from '@deltachat/jsonrpc-client'
 import type { DialogProps } from '../../../contexts/DialogContext'
-import { InlineVerifiedIcon } from '../../VerifiedIcon'
 import { Avatar } from '../../Avatar'
 import styles from './styles.module.scss'
 
@@ -86,7 +85,6 @@ export const AddMemberChip = (props: {
       </div>
       <div className={styles.DisplayName}>
         <div>{contact.displayName}</div>
-        {contact.isVerified && <InlineVerifiedIcon />}
       </div>
       <button
         className={styles.removeMember}

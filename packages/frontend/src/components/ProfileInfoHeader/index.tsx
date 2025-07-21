@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { Avatar, ClickForFullscreenAvatarWrapper } from '../Avatar'
-import { InlineVerifiedIcon } from '../VerifiedIcon'
 
 import styles from './styles.module.scss'
 
@@ -18,7 +17,6 @@ export default function ProfileInfoHeader({
   avatarPath,
   color,
   displayName,
-  isVerified,
   wasSeenRecently = false,
 }: Props) {
   return (
@@ -35,9 +33,6 @@ export default function ProfileInfoHeader({
       <div className={styles.infoContainer}>
         <p className={styles.displayName} data-test-id='profile-display-name'>
           {displayName}
-          <span className={styles.verifiedIconWrapper}>
-            {isVerified && <InlineVerifiedIcon />}
-          </span>
         </p>
       </div>
     </div>

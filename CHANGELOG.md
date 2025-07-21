@@ -14,6 +14,7 @@
   - Features / Changes
     - Donation request device message (#6913).
 - remove resetEncryptionInfo
+- remove the green checkmark since it's default now
 
 ### Added
 - feat: add channel and remove broadcasts #5258

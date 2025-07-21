@@ -17,7 +17,6 @@ import SettingsStoreInstance, {
   useSettingsStore,
 } from '../../../stores/settings'
 import { BackendRemote, Type } from '../../../backend-com'
-import { InlineVerifiedIcon } from '../../VerifiedIcon'
 import Button from '../../Button'
 import Icon from '../../Icon'
 import SearchInput from '../../SearchInput'
@@ -394,7 +393,6 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
         <div className='navbar-chat-name'>
           <div className='truncated'>{chat.name}</div>
           <div className='chat_property_icons'>
-            {chat.isProtected && <InlineVerifiedIcon />}
             {chat.ephemeralTimer !== 0 && (
               <div
                 className={'disapearing-messages-icon'}

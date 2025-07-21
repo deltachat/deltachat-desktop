@@ -663,21 +663,12 @@ export default function Message(props: {
         className={classNames(
           'info-message',
           isWebxdcInfo && 'webxdc-info',
-          isInteractive && 'interactive'
+          isInteractive && 'interactive',
+          isProtectionEnabledMsg && 'e2ee-info' // used in e2e-tests
         )}
         id={String(message.id)}
         onContextMenu={showContextMenu}
       >
-        {(isProtectionBrokenMsg || isProtectionEnabledMsg) && (
-          <img
-            className='verified-icon-info-msg'
-            src={
-              isProtectionBrokenMsg
-                ? './images/verified_broken.svg'
-                : './images/verified.svg'
-            }
-          />
-        )}
         <TagName
           className={'bubble ' + rovingTabindex.className}
           onClick={onClick}
