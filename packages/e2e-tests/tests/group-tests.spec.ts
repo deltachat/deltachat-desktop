@@ -185,7 +185,7 @@ test('Invite existing user to group', async ({
     userA.address
   )
   // verified chat after response from userA
-  await expect(page.locator('.verified-icon-info-msg')).toBeVisible()
+  await expect(page.locator('.e2ee-info')).toBeVisible()
   // userB has 2 new notifications now
   const badge = page
     .getByTestId(`account-item-${userB.id}`)
@@ -238,7 +238,7 @@ test('Invite new user to group', async ({ page, context, browserName }) => {
     userA.address
   )
   // verified chat after response from userA
-  await expect(page.locator('.verified-icon-info-msg')).toBeVisible()
+  await expect(page.locator('.e2ee-info')).toBeVisible()
   await page.getByTestId('chat-info-button').click()
   // new user sees group members
   await expect(

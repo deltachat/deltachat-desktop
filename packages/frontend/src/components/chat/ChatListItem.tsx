@@ -9,7 +9,6 @@ import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { getLogger } from '../../../../shared/logger'
 import { useContextMenuWithActiveState } from '../ContextMenu'
 import { selectedAccountId } from '../../ScreenController'
-import { InlineVerifiedIcon } from '../VerifiedIcon'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { message2React } from '../message/MessageMarkdown'
 import { useRovingTabindex } from '../../contexts/RovingTabindex'
@@ -42,18 +41,13 @@ function Header({
   name,
   isPinned,
   isMuted,
-  isProtected,
-}: Pick<
-  ChatListItemType,
-  'lastUpdated' | 'name' | 'isPinned' | 'isMuted' | 'isProtected'
->) {
+}: Pick<ChatListItemType, 'lastUpdated' | 'name' | 'isPinned' | 'isMuted'>) {
   const tx = window.static_translate
   return (
     <div className='header'>
       <div className='name'>
         <span>
           <span className='truncated'>{name}</span>
-          {isProtected && <InlineVerifiedIcon />}
         </span>
       </div>
       {isMuted && <div className='mute_icon' aria-label={tx('mute')} />}
@@ -355,7 +349,6 @@ function ChatListItemNormal({
         <Header
           lastUpdated={chatListItem.lastUpdated}
           name={chatListItem.name}
-          isProtected={chatListItem.isProtected}
           isPinned={chatListItem.isPinned}
           isMuted={chatListItem.isMuted}
         />
@@ -521,9 +514,6 @@ export const ChatListItemMessageResult = React.memo<{
               <span className='truncated'>
                 {!isSingleChatSearch ? msr.chatName : msr.authorName}
               </span>
-              {!isSingleChatSearch && msr.isChatProtected && (
-                <InlineVerifiedIcon />
-              )}
             </span>
           </div>
           <div>
