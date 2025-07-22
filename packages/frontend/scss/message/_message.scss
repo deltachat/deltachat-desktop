@@ -456,13 +456,6 @@ $info-text-max-width: 400px;
   flex-direction: column;
   align-items: center;
 
-  img.verified-icon-info-msg {
-    --size: 64px;
-    width: var(--size);
-    height: var(--size);
-    margin-bottom: 10px;
-  }
-
   .bubble {
     @include mixins.button-reset;
 
