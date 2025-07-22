@@ -284,6 +284,8 @@ test('Readd user to group', async ({ page }) => {
   // user A adds user B again
   const userA = existingProfiles[0]
   const userB = existingProfiles[1]
+  const userC = existingProfiles[2]
+  const userD = existingProfiles[3]
   await switchToProfile(page, userA.id)
   const chatListItem = page
     .locator('.chat-list .chat-list-item')
@@ -291,6 +293,18 @@ test('Readd user to group', async ({ page }) => {
   await expect(chatListItem).toBeVisible()
   await chatListItem.click()
   await page.getByTestId('chat-info-button').click()
+
+  // Wait for the removal of userB in the "View Group" dialog,
+  // because the "Add Members" dialog won't auto-update.
+  // We probably should make it auto-updateable as well.
+  const membersList = page
+    .getByTestId('view-group-dialog')
+    .getByRole('list', { name: /\d+ members/ })
+  await expect(membersList.getByRole('listitem')).toHaveCount(3)
+  await expect(membersList).not.toContainText(userB.name)
+  for (const name of ['Me', userC.name, userD.name]) {
+    await expect(membersList).toContainText(name)
+  }
 
   await page.locator('#addmember button').click()
   const addMemberDialog = page.getByTestId('add-member-dialog')
@@ -301,11 +315,10 @@ test('Readd user to group', async ({ page }) => {
   await userBRow.click()
   await expect(userBRow.locator('.checkmark')).toBeVisible()
   await addMemberDialog.getByTestId('ok').click()
-  await expect(
-    page
-      .locator('.group-member-contact-list-wrapper .contact-list-item')
-      .filter({ hasText: userB.name })
-  ).toHaveCount(1)
+  for (const name of ['Me', userB.name, userC.name, userD.name]) {
+    await expect(membersList).toContainText(name)
+  }
+  await expect(membersList.getByRole('listitem')).toHaveCount(4)
   await page.getByTestId('view-group-dialog-header-close').click()
 })
 
