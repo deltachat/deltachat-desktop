@@ -6,6 +6,7 @@
 - after upgrade to `@deltachat/stdio-rpc-server` version `2.x` you can not go back to 1.x versions any more since account data is not backward compatible!
 
 ### Changed
+- updated help pages #5324
 - update translations (17-20-2025)
 - upgrade `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.4.0`
   - Features / Changes
