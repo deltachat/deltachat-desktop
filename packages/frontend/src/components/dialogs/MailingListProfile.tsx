@@ -45,7 +45,6 @@ export default function MailingListProfile(
             avatarPath={chat.profileImage ? chat.profileImage : undefined}
             color={chat.color}
             displayName={chat.name}
-            isVerified={chat.isProtected}
           />
         </DialogContent>
       </DialogBody>

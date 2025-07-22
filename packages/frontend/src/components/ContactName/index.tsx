@@ -1,7 +1,5 @@
 import React from 'react'
 
-import { InlineVerifiedIcon } from '../VerifiedIcon'
-
 import styles from './styles.module.scss'
 
 type Props = {
@@ -15,7 +13,6 @@ export default function ContactName(props: Props) {
     <div className={styles.contactName}>
       <div className={styles.contactNameDisplay}>
         <span className={styles.contactNameTruncated}>{props.displayName}</span>
-        {props.isVerified && <InlineVerifiedIcon />}
       </div>
       {!!props.address && (
         <div className={styles.contactNameAddress}>{props.address}</div>

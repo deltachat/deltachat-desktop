@@ -395,7 +395,6 @@ function ViewGroupInner(
                 avatarPath={groupImage ? groupImage : undefined}
                 color={chat.color}
                 displayName={groupName}
-                isVerified={chat.isProtected}
               />
             </DialogContent>
             {isRelatedChatsEnabled && chatListIds.length > 0 && (

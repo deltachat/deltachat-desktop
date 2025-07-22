@@ -1,6 +1,5 @@
 import React, { type PropsWithChildren } from 'react'
 import { Avatar } from '../Avatar'
-import { InlineVerifiedIcon } from '../VerifiedIcon'
 
 function ContactName(props: {
   displayName: string
@@ -12,7 +11,6 @@ function ContactName(props: {
     <div className='contact-name'>
       <div className='display-name'>
         <span className='truncated'>{props.displayName}</span>
-        {props.isVerified && <InlineVerifiedIcon />}
         {props.isBlocked && (
           <i className='material-svg-icon material-icon-blocked' />
         )}
