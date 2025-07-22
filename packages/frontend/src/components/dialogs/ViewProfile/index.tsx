@@ -253,7 +253,6 @@ export function ViewProfileInner({
           avatarPath={avatarPath ? avatarPath : undefined}
           color={contact.color}
           displayName={displayName}
-          isVerified={contact.isProfileVerified}
           wasSeenRecently={contact.wasSeenRecently}
         />
         {statusText !== '' && (

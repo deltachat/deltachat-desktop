@@ -9,7 +9,6 @@ type Props = {
   avatarPath?: string
   color?: string
   displayName: string
-  isVerified: boolean
   wasSeenRecently?: boolean
 }
 
