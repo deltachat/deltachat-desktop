@@ -17,7 +17,7 @@ import useDialog from '../../hooks/dialog/useDialog'
 import type { DialogProps } from '../../contexts/DialogContext'
 
 const VERIFICATION_BROKEN_ANCHOR = 'nocryptanymore'
-const VERIFICATION_ENABLED_ANCHOR = 'e2eeguarantee'
+const VERIFICATION_ENABLED_ANCHOR = 'e2ee'
 const VERIFICATION_REQUIRED_ANCHOR = 'howtoe2ee'
 
 export function ProtectionBrokenDialog({
