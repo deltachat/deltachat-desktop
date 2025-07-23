@@ -2,7 +2,7 @@
   "private": true,
   "name": "@deltachat-desktop/target-browser",
   "type": "module",
-  "version": "1.60.1",
+  "version": "2.6.0",
   "license": "GPL-3.0-or-later",
   "scripts": {
     "check:types": "tsc --noEmit && tsc --noEmit -p runtime-browser",
