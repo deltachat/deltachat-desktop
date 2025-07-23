@@ -2,8 +2,19 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+
+### Added
+
+### Fixed
+
+<a id="2_6_0_rc_1"></a>
+
+## [2.60.0.rc.1] - 2025-07-23
+
+
 ### Breaking
-- after upgrade to `@deltachat/stdio-rpc-server` version `2.x` you can not go back to 1.x versions any more since account data is not backward compatible!
+- after upgrade to `@deltachat/stdio-rpc-server` version `2.x` your account data will be migrated and you can not go back to 1.x versions any more, since account data is not backward compatible!
 
 ### Changed
 - updated help pages #5324
@@ -3578,7 +3589,10 @@ This section is only relevant to contributors.
 
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v1.60.1...HEAD
+
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.60.0.rc.1...HEAD
+
+[2.60.0.rc.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.60.1...v2.60.0.rc.1
 
 [1.60.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.60.0...v1.60.1
 

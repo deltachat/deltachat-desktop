@@ -27,7 +27,7 @@ export async function updateDeviceChat(
       })
     }
   }
-  await addDeviceMessage(`changelog-version-2.3.0`, {
+  await addDeviceMessage(`changelog-version-2.6.0`, {
     text: tx('update_2_0', 'https://delta.chat/donate'),
   })
 }
