@@ -32,7 +32,7 @@ catalogs:
       version: 5.1.0
 
 overrides:
-  stylus: 0.0.1-security
+  stylus: npm:empty-npm-package@1.0.0
 
 importers:
 
@@ -2230,6 +2230,9 @@ packages:
   emoji-regex@9.2.2:
     resolution: {integrity: sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==}
 
+  empty-npm-package@1.0.0:
+    resolution: {integrity: sha512-q4Mq/+XO7UNDdMiPpR/LIBIW1Zl4V0Z6UT9aKGqIAnBCtCb3lvZJM1KbDbdzdC8fKflwflModfjR29Nt0EpcwA==}
+
   encodeurl@1.0.2:
     resolution: {integrity: sha512-TPJXq8JqFaVYm2CWmPvnP2Iyo4ZSM7/QKcSmuMLDObfpH5fi7RUGmd/rTDf+rut/saiDiQEeVTNgAmJEdAOx0w==}
     engines: {node: '>= 0.8'}
@@ -3742,9 +3745,6 @@ packages:
   strip-json-comments@3.1.1:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
-
-  stylus@0.0.1-security:
-    resolution: {integrity: sha512-qTLX5NJwuj5dqdJyi1eAjXGE4HfjWDoPLbSIpYWn/rAEdiyZnsngS/Yj0BRjM7wC41e/+spK4QCXFqz7LM0fFQ==}
 
   sumchecker@3.0.1:
     resolution: {integrity: sha512-MvjXzkz/BOfyVDkG0oFOtBxHX2u3gKbMHIF/dXblZsgD3BWOFLmHovIpZY7BykJdAjcqRCBi1WYBNdEC9yI7vg==}
@@ -5705,6 +5705,8 @@ snapshots:
 
   emoji-regex@9.2.2: {}
 
+  empty-npm-package@1.0.0: {}
+
   encodeurl@1.0.2: {}
 
   encodeurl@2.0.0: {}
@@ -7528,8 +7530,6 @@ snapshots:
 
   strip-json-comments@3.1.1: {}
 
-  stylus@0.0.1-security: {}
-
   sumchecker@3.0.1:
     dependencies:
       debug: 4.4.1(supports-color@8.1.1)
@@ -7686,7 +7686,7 @@ snapshots:
       reserved-words: 0.1.2
       sass: 1.86.3
       source-map-js: 1.2.0
-      stylus: 0.0.1-security
+      stylus: empty-npm-package@1.0.0
       tsconfig-paths: 4.2.0
       typescript: 5.8.3
     transitivePeerDependencies:

@@ -56,7 +56,7 @@
       "esbuild"
     ],
     "overrides": {
-      "stylus": "0.0.1-security"
+      "stylus": "npm:empty-npm-package@1.0.0"
     }
   },
   "devDependencies": {
