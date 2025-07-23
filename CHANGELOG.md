@@ -8,7 +8,7 @@
 ### Changed
 - updated help pages #5324
 - update translations (17-20-2025)
-- upgrade `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.5.0`
+- upgrade `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.6.0`
   - Features / Changes
     - Donation request device message (#6913).
 - remove resetEncryptionInfo
