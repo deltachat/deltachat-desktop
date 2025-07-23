@@ -181,28 +181,33 @@ export function ViewProfileInner({
 
   useEffect(() => {
     ;(async () => {
-      if (contact.verifierId === null) {
-        setVerifier(null)
-      } else if (contact.verifierId === C.DC_CONTACT_ID_SELF) {
-        setVerifier({ label: tx('verified_by_you') })
+      if (contact.isVerified) {
+        // it might happen that a verified contact has no verifiedBy ID
+        setVerifier({ label: tx('verified_by_unknown') })
       } else {
-        setVerifier(null) // make sure it rather shows nothing than wrong values
+        setVerifier(null) // will be overridden if verifiedBy ID is available
+      }
+
+      if (contact.verifierId === C.DC_CONTACT_ID_SELF) {
+        setVerifier({ label: tx('verified_by_you') })
+      } else if (contact.verifierId !== null) {
         const verifierContactId = contact.verifierId
         try {
           const { displayName } = await BackendRemote.rpc.getContact(
             accountId,
             verifierContactId
           )
-          setVerifier({
-            label: tx('verified_by', displayName),
-            action: () => openViewProfileDialog(accountId, verifierContactId),
-          })
+          if (displayName && displayName !== '') {
+            setVerifier({
+              label: tx('verified_by', displayName),
+              action: () => openViewProfileDialog(accountId, verifierContactId),
+            })
+          }
         } catch (error) {
           log.error('failed to load verifier contact', error)
           setVerifier({
             label:
               'verified by: failed to load verifier contact, please report this issue',
-            action: () => openViewProfileDialog(accountId, verifierContactId),
           })
         }
       }
@@ -211,6 +216,7 @@ export function ViewProfileInner({
     accountId,
     contact.id,
     contact.verifierId,
+    contact.isVerified,
     openDialog,
     openViewProfileDialog,
     tx,

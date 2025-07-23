@@ -13,6 +13,7 @@
     - Donation request device message (#6913).
 - remove resetEncryptionInfo
 - remove the green checkmark since it's default now
+- show verified status: "Introduced" if verified but no verifier name #5327
 
 ### Added
 - feat: add channel and remove broadcasts #5258
