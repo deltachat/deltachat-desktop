@@ -56,7 +56,7 @@
       "esbuild"
     ],
     "overrides": {
-      "stylus": "https://github.com/stylus/stylus.git"
+      "stylus": "0.0.1-security"
     }
   },
   "devDependencies": {
