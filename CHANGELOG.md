@@ -8,9 +8,9 @@
 
 ### Fixed
 
-<a id="2_6_0_rc_1"></a>
+<a id="2_6_0-rc_1"></a>
 
-## [2.60.0.rc.1] - 2025-07-23
+## [2.60.0-rc.1] - 2025-07-23
 
 
 ### Breaking
@@ -3590,9 +3590,9 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.60.0.rc.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.60.0-rc.1...HEAD
 
-[2.60.0.rc.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.60.1...v2.60.0.rc.1
+[2.60.0-rc.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.60.1...v2.60.0-rc.1
 
 [1.60.1]: https://github.com/deltachat/deltachat-desktop/compare/v1.60.0...v1.60.1
 
