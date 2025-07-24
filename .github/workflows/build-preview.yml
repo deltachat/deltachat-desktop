@@ -29,8 +29,9 @@ jobs:
         node-version: 20.x
     - name: Get Branch Name
       id: prepare
+      shell: bash
       run: |
-        node -e "console.log('branch=' + '${{ github.head_ref }}'.replace(/[^A-Za-z0-9._-]/g, '_'))" >> $GITHUB_OUTPUT
+        echo "branch=$(echo '${{ github.head_ref }}' | sed 's/[^A-Za-z0-9._-]/_/g')" >> $GITHUB_OUTPUT
     - name: change build name and Product Name to development id
       run: |
         node ./bin/github-actions/devbuild.js
