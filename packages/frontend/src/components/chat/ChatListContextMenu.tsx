@@ -173,6 +173,51 @@ export function useChatListContextMenu(): {
       const isOutBroadcast =
         chatListItem.chatType === C.DC_CHAT_TYPE_OUT_BROADCAST
 
+      const viewCloneEncInfo = [
+        // View Profile
+        !isGroup && {
+          label: tx('menu_view_profile'),
+          action: onViewProfile,
+        },
+        // View Group Profile (for non encrypted groups)
+        isGroup &&
+          !chatListItem.isEncrypted &&
+          chatListItem.isSelfInGroup && {
+            label: tx('menu_view_profile'),
+            action: onViewGroup,
+          },
+        // Edit Group
+        isGroup &&
+          chatListItem.isEncrypted &&
+          chatListItem.isSelfInGroup && {
+            label: tx('menu_edit_group'),
+            dataTestid: 'edit-group',
+            action: onViewGroup,
+          },
+        // Edit Channel
+        isOutBroadcast && {
+          label: tx('edit_channel'),
+          action: onViewGroup,
+        },
+        // Clone Group
+        isGroup && {
+          label: tx('clone_chat'),
+          action: () => {
+            openDialog(CloneChat, {
+              setViewMode: 'createGroup',
+              chatTemplateId: chatListItem.id,
+            })
+          },
+        },
+
+        // Encryption Info
+        !chatListItem.isDeviceTalk &&
+          !chatListItem.isSelfTalk && {
+            label: tx('encryption_info_title_desktop'),
+            action: onEncrInfo,
+          },
+      ]
+
       const menu: (ContextMenuItem | false)[] = [
         // Pin
         pin,
@@ -220,49 +265,10 @@ export function useChatListContextMenu(): {
             },
         // Archive
         archive,
-        { type: 'separator' },
-        // View Profile
-        !isGroup && {
-          label: tx('menu_view_profile'),
-          action: onViewProfile,
-        },
-        // View Group Profile (for non encrypted groups)
-        isGroup &&
-          !chatListItem.isEncrypted &&
-          chatListItem.isSelfInGroup && {
-            label: tx('menu_view_profile'),
-            action: onViewGroup,
-          },
-        // Edit Group
-        isGroup &&
-          chatListItem.isEncrypted &&
-          chatListItem.isSelfInGroup && {
-            label: tx('menu_edit_group'),
-            dataTestid: 'edit-group',
-            action: onViewGroup,
-          },
-        // Edit Channel
-        isOutBroadcast && {
-          label: tx('edit_channel'),
-          action: onViewGroup,
-        },
-        // Clone Group
-        isGroup && {
-          label: tx('clone_chat'),
-          action: () => {
-            openDialog(CloneChat, {
-              setViewMode: 'createGroup',
-              chatTemplateId: chatListItem.id,
-            })
-          },
-        },
-
-        // Encryption Info
-        !chatListItem.isDeviceTalk &&
-          !chatListItem.isSelfTalk && {
-            label: tx('encryption_info_title_desktop'),
-            action: onEncrInfo,
-          },
+        ...(viewCloneEncInfo.some(item => Boolean(item))
+          ? ([{ type: 'separator' }] as const)
+          : []),
+        ...viewCloneEncInfo,
         { type: 'separator' },
         // Leave channel
         chatListItem.chatType === C.DC_CHAT_TYPE_IN_BROADCAST &&
