@@ -32,7 +32,7 @@ jobs:
       shell: bash
       run: |
         echo "branch=$(echo '${{ github.head_ref }}' | sed 's/[^A-Za-z0-9._-]/_/g')" >> $GITHUB_OUTPUT
-    - name: change build name and Product Name to development id
+    - name: change build name and Product Name to branch name
       run: |
         node ./bin/github-actions/devbuild.js
     # Building JS

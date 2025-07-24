@@ -1,25 +1,31 @@
 # How to do releases
 
-> We distinct between "test" releases and "official" releases. Test releases
-> serve as "Release Candidates" which do not land in the official app stores
-> yet.
+> Every new git tag triggers a build script which will create a new release on github,
+> build binaries for the different platforms and add a new release folder on
+> delta.chat/downloads/vX.Y.Z/ which includes all generated apps
 
 ## Test releases
 
-- Before every official release we make at least one test release, similar to
+- Before every official release we build release previews, similar to
   "Release Candidates"
-- Test releases are published to supporters and the userbase through our
+- by adding a #public-preview token to the PR description preview builds
+  will be uploaded to delta.chat/download/previews/. The branch name of the
+  PR will be used as filename, so the branch name should be something like
+  "preview-release-X.Y.Z". The package.json version should be updated to the
+  release version, but no git tag should be pushed, since that would trigger
+  the final release.
+- Release previews are published to supporters and the userbase through our
   community channels, but not through official app stores
 - Incite more broad user testing, look for issues which came up and gather feedback
-  - Create a forum post to inform about the test release, mention what this
+  - Create a forum post to inform about the release preview, mention what this
     release is about and what should be tested, here is an
     [example](https://support.delta.chat/t/help-testing-the-upcoming-1-41-x-release/2793)
-  - Create a delta post in testing groups and channels, and the delta chat dev group
+  - Create a delta post in testing groups and channels and the delta chat dev group
   - toot on mastodon, from private account,
     with `#deltachat` and `#deltachat_desktop` hashtag with release highlights
     and pointing users to the forum post
-- Usually after a round of feedback and bug reports we do another test release
-  and repeat, until the release stabilized
+- After a round of feedback and bug reports we can do another release preview (with a
+  new revision number) and repeat, until the release stabilized
 - Optional: We can use flatpak for test releases as well (they have a
   "testing" branch users can opt-in)
 - Optional: Draft an in-app device message for the new version informing users
@@ -27,12 +33,16 @@
 
 ## Official releases
 
-- Make sure the latest version number is reflected on the official DeltaChat
-  website, adjust the constants in this file:
+- Versioning: every deltachat client app should follow this versiong rule:
+  the two first digits (Major.Minor) should reflect the current core version and
+  only the revision might be client specific. So if core is on 2.23.0 the first
+  release with that core should have 2.23.0. If more releases are needed with the
+  same core they will have 2.23.1, 2.23.2 etc.
+- Update the official DeltaChat website by adjusting the constants in this file:
   <https://github.com/deltachat/deltachat-pages/blob/master/_includes/download-boxes.html>
-- An in-app device message for the new official release should exist, if there
-  is no highlight to mention we can say it's a release focused on stability and
-  bug fixes
+- An in-app device message for the new official release should exist (except for minor
+  changes or revisions), if there is no highlight to mention we can say it's a
+  release focused on stability and bug fixes
 - Official releases require individual building steps for each platform we
   support. The exact steps are not further defined in this document (yet).
   Please consult one of the maintainers of this repository
@@ -53,8 +63,6 @@
   See [example](https://github.com/deltachat/deltachat-desktop/issues/3582)
 
 ---
-
-> Both test and official releases follow similar steps described further below.
 
 ## Before Releasing
 
@@ -86,7 +94,8 @@
    git tag <tagname> # for example v1.43.2
    git push origin main --tags
    ```
-10. Now create a GitHub release for your tag:
+10. The deployment script creates a [release](https://github.com/deltachat/deltachat-desktop/releases)
+    draft on github which needs to be updated and published manually:
 
 - Copy the relevant part of the `CHANGELOG.md` file into the description field
   - for fresh releases this includes the changelog of the test releases
@@ -98,7 +107,7 @@
   > This release candidate is currently in the testing phase, to learn more read https://support.delta.chat/t/<rest of link>
   ```
 
-11. As soon as the new tag is detected by our build machine, it will start
+1.  As soon as the new tag is detected by our build machine, it will start
     building releases for various platforms (MacOS, Windows, Linux) and upload
     them to: `https://download.delta.chat/desktop/[version_code]`. This process
     takes 2-3 hours.
@@ -108,7 +117,7 @@
 Rebase your PR and redo the steps as necessary. If you are unsure ask another
 contributor on how to proceed in your case.
 
-## Upload build artefacts to GitHub release
+## Upload build artefacts to GitHub release (if deployment script failed)
 
 You can easily upload the build artefacts into the GitHub release with the help
 of the [GitHub command line tool](https://cli.github.com/). Make sure you've
