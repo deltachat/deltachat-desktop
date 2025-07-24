@@ -27,10 +27,10 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: 20.x
-    - name: Get Pullrequest ID
+    - name: Get Branch Name
       id: prepare
       run: |
-        node -e "console.log('::set-output name=prid::' + '${{ github.ref }}'.split('/')[2])"
+        node -e "console.log('branch=' + '${{ github.head_ref }}'.replace(/[^A-Za-z0-9._-]/g, '_'))" >> $GITHUB_OUTPUT
     - name: change build name and Product Name to development id
       run: |
         node ./bin/github-actions/devbuild.js
@@ -56,7 +56,7 @@ jobs:
       run: |
         cd dist
         mkdir preview
-        mv *.AppImage preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.AppImage
+        mv *.AppImage preview/deltachat-desktop.${{ steps.prepare.outputs.branch }}.AppImage
         ls preview
         cd ..
     - name: MAC electron builder
@@ -78,9 +78,9 @@ jobs:
       run: |
         ls -lah dist
         mkdir -p dist/preview
-        zip -r dist/preview/deltachat-desktop-mas-${{ steps.prepare.outputs.prid }}.zip dist/mas-universal
+        zip -r dist/preview/deltachat-desktop-mas.${{ steps.prepare.outputs.branch }}.zip dist/mas-universal
         cd dist
-        mv *.dmg preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.dmg || true
+        mv *.dmg preview/deltachat-desktop.${{ steps.prepare.outputs.branch }}.dmg || true
         cd ..
         ls dist/preview
     - name: WINDOWS electron builder
@@ -88,14 +88,14 @@ jobs:
       run: |
         cd packages/target-electron
         set DEBUG=electron-builder
-        pnpm electron-builder --win portable --config.artifactName="deltachat-desktop-${{ steps.prepare.outputs.prid }}.portable.exe"
+        pnpm electron-builder --win portable --config.artifactName="deltachat-desktop.${{ steps.prepare.outputs.branch }}.portable.exe"
     - name: WINDOWS renaming / upload Preperation
       if: runner.os == 'Windows'
       working-directory: packages/target-electron/dist
       run: |
         dir
         mkdir preview
-        move Delta*Chat*.exe preview/deltachat-desktop-${{ steps.prepare.outputs.prid }}.portable.exe
+        move Delta*Chat*.exe preview/deltachat-desktop.${{ steps.prepare.outputs.branch }}.portable.exe
         dir preview
         cd ..
     # Upload Step
@@ -112,7 +112,7 @@ jobs:
       if: steps.upload.outcome == 'success'
       run: node ./bin/github-actions/postLinksToDetails.js
       env:
-       PR_ID: ${{ steps.prepare.outputs.prid }}
+       PR_BRANCH: ${{ steps.prepare.outputs.branch }}
        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Upload result to artifacts
       if: contains(github.event.pull_request.body, '#public-preview') == false || steps.upload.outcome == 'failure'

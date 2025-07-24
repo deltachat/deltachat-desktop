@@ -13,21 +13,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Get Pullrequest ID
+    - name: Get Branch Name
       id: getid
       run: |
-        export PULLREQUEST_ID=$(jq .number < $GITHUB_EVENT_PATH)
-        echo ::set-output name=prid::$PULLREQUEST_ID
+        export BRANCH_NAME=$(jq -r .pull_request.head.ref < $GITHUB_EVENT_PATH | sed 's/[^A-Za-z0-9._-]/_/g')
+        echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
     - name: Renaming
       run: |
         mkdir preview
         # create empty file to copy it over the outdated deliverable on download.delta.chat
         echo "This preview build is outdated and has been removed." > empty
-        cp empty preview/deltachat-desktop-${{ steps.getid.outputs.prid }}.AppImage
-        cp empty preview/deltachat-desktop-${{ steps.getid.outputs.prid }}.portable.exe
-        cp empty preview/deltachat-desktop-${{ steps.getid.outputs.prid }}.dmg
-        cp empty preview/deltachat-desktop-mas-${{ steps.getid.outputs.prid }}.zip
-        cd ..
+        cp empty preview/deltachat-desktop.${{ steps.getid.outputs.branch }}.AppImage
+        cp empty preview/deltachat-desktop.${{ steps.getid.outputs.branch }}.portable.exe
+        cp empty preview/deltachat-desktop.${{ steps.getid.outputs.branch }}.dmg
+        cp empty preview/deltachat-desktop-mas.${{ steps.getid.outputs.branch }}.zip
     - name: Replace builds with dummy files
       uses: horochx/deploy-via-scp@v1.0.1
       with:
