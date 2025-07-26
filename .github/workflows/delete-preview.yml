@@ -11,7 +11,7 @@ jobs:
   delete:
 
     runs-on: ubuntu-latest
-
+    if: contains(github.event.pull_request.body, '#public-preview')
     steps:
     - name: Get Branch Name
       id: getid
