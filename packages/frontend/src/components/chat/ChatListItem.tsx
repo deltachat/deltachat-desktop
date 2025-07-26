@@ -160,9 +160,11 @@ export const PlaceholderChatListItem = React.memo(_ => {
 
 function ChatListItemArchiveLink({
   onClick,
+  onFocus,
   chatListItem,
 }: {
-  onClick: () => void
+  onClick: (event: React.MouseEvent) => void
+  onFocus?: (event: React.FocusEvent) => void
   chatListItem: Type.ChatListItemFetchResult & {
     kind: 'ArchiveLink'
   }
@@ -195,7 +197,10 @@ function ChatListItemArchiveLink({
       tabIndex={tabIndex}
       onClick={onClick}
       onKeyDown={tabindexOnKeydown}
-      onFocus={tabindexSetAsActiveElement}
+      onFocus={e => {
+        tabindexSetAsActiveElement()
+        onFocus?.(e)
+      }}
       onContextMenu={onContextMenu}
       className={`chat-list-item archive-link-item ${tabindexClassName} ${
         isContextMenuActive ? 'context-menu-active' : ''
@@ -216,13 +221,15 @@ function ChatListItemError({
   chatListItem,
   onClick,
   roleTab,
+  onFocus,
   isSelected,
   onContextMenu,
 }: {
   chatListItem: Type.ChatListItemFetchResult & {
     kind: 'Error'
   }
-  onClick: () => void
+  onClick: (event: React.MouseEvent) => void
+  onFocus?: (event: React.FocusEvent) => void
   onContextMenu?: (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void
@@ -246,7 +253,10 @@ function ChatListItemError({
       tabIndex={tabIndex}
       onClick={onClick}
       onKeyDown={tabindexOnKeydown}
-      onFocus={tabindexSetAsActiveElement}
+      onFocus={e => {
+        onFocus?.(e)
+        tabindexSetAsActiveElement()
+      }}
       onContextMenu={onContextMenu}
       role={roleTab ? 'tab' : undefined}
       aria-selected={isSelected}
@@ -281,6 +291,7 @@ function ChatListItemError({
 function ChatListItemNormal({
   chatListItem,
   onClick,
+  onFocus,
   isSelected,
   roleTab,
   onContextMenu,
@@ -289,7 +300,8 @@ function ChatListItemNormal({
   chatListItem: Type.ChatListItemFetchResult & {
     kind: 'ChatListItem'
   }
-  onClick: () => void
+  onClick: (event: React.MouseEvent) => void
+  onFocus?: (event: React.FocusEvent) => void
   onContextMenu?: (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void
@@ -319,7 +331,10 @@ function ChatListItemNormal({
       tabIndex={tabIndex}
       onClick={onClick}
       onKeyDown={tabindexOnKeydown}
-      onFocus={tabindexSetAsActiveElement}
+      onFocus={e => {
+        onFocus?.(e)
+        tabindexSetAsActiveElement()
+      }}
       onContextMenu={onContextMenu}
       role={roleTab ? 'tab' : undefined}
       aria-selected={isSelected}
@@ -370,7 +385,8 @@ function ChatListItemNormal({
 
 type ChatListItemProps = {
   chatListItem: Type.ChatListItemFetchResult | undefined
-  onClick: () => void
+  onClick: (event: React.MouseEvent) => void
+  onFocus?: (event: React.FocusEvent) => void
   onContextMenu?: (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void
@@ -385,53 +401,47 @@ type ChatListItemProps = {
   isSelected?: boolean
 }
 
-const ChatListItem = React.memo<ChatListItemProps>(
-  props => {
-    const { chatListItem, onClick, roleTab } = props
+const ChatListItem = React.memo<ChatListItemProps>(props => {
+  const { chatListItem, onClick, roleTab, onFocus } = props
 
-    // if not loaded by virtual list yet
-    if (typeof chatListItem === 'undefined') return <PlaceholderChatListItem />
+  // if not loaded by virtual list yet
+  if (typeof chatListItem === 'undefined') return <PlaceholderChatListItem />
 
-    if (chatListItem.kind == 'ChatListItem') {
-      return (
-        <ChatListItemNormal
-          chatListItem={chatListItem}
-          onClick={onClick}
-          roleTab={roleTab}
-          isSelected={props.isSelected}
-          onContextMenu={props.onContextMenu}
-          isContextMenuActive={props.isContextMenuActive}
-        />
-      )
-    } else if (chatListItem.kind == 'Error') {
-      return (
-        <ChatListItemError
-          chatListItem={chatListItem}
-          onClick={onClick}
-          roleTab={roleTab}
-          isSelected={props.isSelected}
-          onContextMenu={props.onContextMenu}
-        />
-      )
-    } else if (chatListItem.kind == 'ArchiveLink') {
-      return (
-        <ChatListItemArchiveLink
-          chatListItem={chatListItem}
-          onClick={onClick}
-        />
-      )
-    } else {
-      return <PlaceholderChatListItem />
-    }
-  },
-  (prevProps, nextProps) => {
-    const shouldRerender =
-      prevProps.chatListItem !== nextProps.chatListItem ||
-      prevProps.isSelected !== nextProps.isSelected ||
-      prevProps.isContextMenuActive !== nextProps.isContextMenuActive
-    return !shouldRerender
+  if (chatListItem.kind == 'ChatListItem') {
+    return (
+      <ChatListItemNormal
+        chatListItem={chatListItem}
+        onClick={onClick}
+        roleTab={roleTab}
+        onFocus={onFocus}
+        isSelected={props.isSelected}
+        onContextMenu={props.onContextMenu}
+        isContextMenuActive={props.isContextMenuActive}
+      />
+    )
+  } else if (chatListItem.kind == 'Error') {
+    return (
+      <ChatListItemError
+        chatListItem={chatListItem}
+        onClick={onClick}
+        roleTab={roleTab}
+        onFocus={onFocus}
+        isSelected={props.isSelected}
+        onContextMenu={props.onContextMenu}
+      />
+    )
+  } else if (chatListItem.kind == 'ArchiveLink') {
+    return (
+      <ChatListItemArchiveLink
+        chatListItem={chatListItem}
+        onClick={onClick}
+        onFocus={onFocus}
+      />
+    )
+  } else {
+    return <PlaceholderChatListItem />
   }
-)
+})
 
 export default ChatListItem
 
