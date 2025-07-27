@@ -124,6 +124,7 @@ export function ContactListItem(props: {
           onCheckboxClick()
         }}
         onContextMenu={onContextMenu}
+        aria-haspopup={onContextMenu != undefined ? 'menu' : undefined}
       >
         <Contact contact={contact} />
       </button>

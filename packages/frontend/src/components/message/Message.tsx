@@ -681,6 +681,9 @@ export default function Message(props: {
           className={'bubble ' + rovingTabindex.className}
           onClick={onClick}
           {...rovingTabindexAttrs}
+          // Note that the actual `onContextMenu` listener
+          // is on the wrapper component.
+          aria-haspopup='menu'
         >
           {isWebxdcInfo && message.parentId && (
             <img
@@ -722,6 +725,7 @@ export default function Message(props: {
         className={`videochat-invitation ${rovingTabindex.className}`}
         id={message.id.toString()}
         onContextMenu={showContextMenu}
+        aria-haspopup='menu'
         {...rovingTabindexAttrs}
       >
         <div className='videochat-icon'>
@@ -828,6 +832,7 @@ export default function Message(props: {
   return (
     <div
       onContextMenu={showContextMenu}
+      aria-haspopup='menu'
       className={classNames(
         'message',
         direction,

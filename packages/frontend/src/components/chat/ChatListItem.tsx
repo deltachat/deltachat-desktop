@@ -197,6 +197,7 @@ function ChatListItemArchiveLink({
       onKeyDown={tabindexOnKeydown}
       onFocus={tabindexSetAsActiveElement}
       onContextMenu={onContextMenu}
+      aria-haspopup='menu'
       className={`chat-list-item archive-link-item ${tabindexClassName} ${
         isContextMenuActive ? 'context-menu-active' : ''
       }`}
@@ -248,6 +249,7 @@ function ChatListItemError({
       onKeyDown={tabindexOnKeydown}
       onFocus={tabindexSetAsActiveElement}
       onContextMenu={onContextMenu}
+      aria-haspopup={onContextMenu != undefined ? 'menu' : undefined}
       role={roleTab ? 'tab' : undefined}
       aria-selected={isSelected}
       className={classNames('chat-list-item', tabindexClassName, {
@@ -321,6 +323,7 @@ function ChatListItemNormal({
       onKeyDown={tabindexOnKeydown}
       onFocus={tabindexSetAsActiveElement}
       onContextMenu={onContextMenu}
+      aria-haspopup={onContextMenu != undefined ? 'menu' : undefined}
       role={roleTab ? 'tab' : undefined}
       aria-selected={isSelected}
       className={classNames('chat-list-item', tabindexClassName, {
