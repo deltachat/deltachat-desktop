@@ -92,6 +92,8 @@ export const LabeledLink = ({
       onClick={onClick}
       tabIndex={tabIndex}
       onContextMenu={ev => ((ev as any).t = ev.currentTarget)}
+      // aria-haspopup='menu' probably doesn't make sense here,
+      // because we don't have any special context menu actions for links.
     >
       {label}
     </a>

@@ -197,6 +197,7 @@ export function QrCodeShowQrInner({
               src={svgUrl}
               alt={tx('qr_code') + '\n' + description}
               onContextMenu={imageContextMenu}
+              aria-haspopup='menu'
               tabIndex={0}
             />
           )}
