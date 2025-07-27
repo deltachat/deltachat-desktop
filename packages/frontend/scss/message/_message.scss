@@ -467,6 +467,7 @@ $info-text-max-width: 400px;
     border-radius: 20px;
     opacity: 0.9;
     color: var(--infoMessageBubbleText);
+    outline-offset: 4px;
 
     .status-icon.sending {
       background-color: var(--infoMessageBubbleText);

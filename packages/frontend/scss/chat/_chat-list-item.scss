@@ -16,6 +16,7 @@
   flex-direction: row;
   padding: 0px 10px;
   align-items: center;
+  outline-offset: -1px;
 
   .status-icon {
     flex-shrink: 0;
@@ -360,4 +361,9 @@
 #new-chat-button {
   right: 15px;
   position: absolute;
+  outline-offset: 2px;
+  &:focus {
+    height: 52px;
+    width: 52px;
+  }
 }
