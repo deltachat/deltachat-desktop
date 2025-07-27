@@ -205,10 +205,12 @@ export function useMultiselect<T>(
   // but not on `FocusEvent`. This is why we need to track them here.
   const shiftPressed = useRef(false)
   const ctrlPressed = useRef(false)
+  const metaPressed = useRef(false)
   useEffect(() => {
     const onEvent = (ev: KeyboardEvent | MouseEvent) => {
       shiftPressed.current = ev.shiftKey
       ctrlPressed.current = ev.ctrlKey
+      metaPressed.current = ev.metaKey
     }
     document.addEventListener('keydown', onEvent, { passive: true })
     document.addEventListener('keyup', onEvent, { passive: true })
@@ -233,7 +235,7 @@ export function useMultiselect<T>(
       // but let's not do that, e.g. in case we later actually need it,
       // and also because `event.ctrlKey` is a more reliable
       // "source of truth" than our custom `ctrlPressed` tracking code.
-      if (event.ctrlKey) {
+      if (event.ctrlKey || event.metaKey) {
         toggleItemSelection(item)
         lastActivatedItem.current = item
         return true // shouldPreventDefault
@@ -258,7 +260,7 @@ export function useMultiselect<T>(
       if (shiftPressed.current) {
         onSelectContiguous(item)
       } else {
-        if (!ctrlPressed.current) {
+        if (!(ctrlPressed.current || metaPressed.current)) {
           // This is to make sure that a sequence
           // ArrowDown
           // ArrowDown
