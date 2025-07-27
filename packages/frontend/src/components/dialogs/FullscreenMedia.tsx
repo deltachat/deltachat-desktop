@@ -144,6 +144,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
                 <div
                   className='image-context-menu-container'
                   onContextMenu={onContextMenu}
+                  aria-haspopup='menu'
                   tabIndex={0}
                 >
                   <img

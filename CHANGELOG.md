@@ -7,6 +7,7 @@
 ### Added
 
 ### Fixed
+- accessibility: make screen readers announce where a context menu is available (opened with Shift + F10): apply `aria-haspopup='menu'`
 
 <a id="2_7_0"></a>
 
