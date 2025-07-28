@@ -475,6 +475,12 @@ $info-text-max-width: 400px;
   }
 
   &.daymarker {
+    // Be careful with overriding margins on messages, see
+    // commit c56a78595df073bada81e1f769407990e37d8d57
+    // (https://github.com/deltachat/deltachat-desktop/pull/5244).
+    // `margin-top` should be fine, unlike margin-bottom.
+    margin-top: 1.5rem;
+
     .bubble {
       font-weight: bold;
     }
