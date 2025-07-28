@@ -39,6 +39,8 @@ function buildContextMenu(
   closeDialogCallback: DialogProps['onClose']
 ) {
   const tx = window.static_translate // don't use the i18n context here for now as this component is inefficient (rendered one menu for every message)
+  const isInfoOrCallInvitation =
+    message.isInfo || message.viewType === 'VideochatInvitation'
   return [
     // Show in Chat
     {
@@ -78,7 +80,9 @@ function buildContextMenu(
       },
     },
     // Reply
-    {
+    // TODO also check `chat.canSend`, as with `showReply` in `Message.tsx`,
+    // and double-check other items.
+    !isInfoOrCallInvitation && {
       label: tx('reply_noun'),
       action: () => {
         setQuoteInDraft(message.id)
@@ -87,6 +91,7 @@ function buildContextMenu(
     },
     // Reply privately -> only show in groups, don't show on info messages or outgoing messages
     isGroup &&
+      !isInfoOrCallInvitation &&
       message.fromId > C.DC_CONTACT_ID_LAST_SPECIAL && {
         label: tx('reply_privately'),
         action: () => {

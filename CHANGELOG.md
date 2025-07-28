@@ -7,6 +7,7 @@
 ### Added
 
 ### Fixed
+- don't show "Reply" and "Save" for info messages (e.g. "user A removed user B") and video call invitations #5337
 
 <a id="2_7_0"></a>
 
