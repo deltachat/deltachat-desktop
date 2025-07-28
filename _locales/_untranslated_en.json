@@ -85,5 +85,11 @@
   },
   "edit_channel": {
     "message": "Edit Channel"
+  },
+  "chat_list_item_menu_label": {
+    "message": "Actions with Chat"
+  },
+  "accounts_list_item_menu_label": {
+    "message": "Actions with Profile"
   }
 }

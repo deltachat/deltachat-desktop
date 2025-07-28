@@ -516,6 +516,9 @@ export default function Message(props: {
       openContextMenu({
         ...showContextMenuEventPos,
         items,
+        ariaAttrs: {
+          'aria-label': tx('a11y_message_context_menu_btn_label'),
+        },
       })
     },
     [
@@ -529,6 +532,7 @@ export default function Message(props: {
       showReactionsBar,
       text,
       jumpToMessage,
+      tx,
     ]
   )
   const ref = useRef<any>(null)

@@ -323,6 +323,9 @@ export function useChatListContextMenu(): {
       await openContextMenu({
         ...mouseEventToPosition(event),
         items: menu,
+        ariaAttrs: {
+          'aria-label': tx('chat_list_item_menu_label'),
+        },
       })
       setActiveContextMenuChatId(null)
     },
