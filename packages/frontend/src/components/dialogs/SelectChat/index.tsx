@@ -79,8 +79,8 @@ export default function SelectChat(props: Props) {
                       chatListIds,
                       onChatClick: props.onChatClick,
 
-                      selectedChatId: null,
-                      activeContextMenuChatId: null,
+                      activeChatId: null,
+                      activeContextMenuChatIds: [],
                       openContextMenu: async () => {},
                     }}
                   >
