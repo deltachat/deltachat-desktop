@@ -8,6 +8,14 @@
 
 ### Fixed
 
+<a id="2_8_0"></a>
+
+## [2.8.0] - 2025-07-28
+
+### Changed
+- upgrade `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.8.0`
+
+
 <a id="2_7_0"></a>
 
 ## [2.7.0] - 2025-07-27
@@ -3598,7 +3606,9 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.7.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.8.0...HEAD
+
+[2.8.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.7.0...v2.8.0
 
 [2.7.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.6.0...v2.7.0
 
