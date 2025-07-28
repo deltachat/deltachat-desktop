@@ -7,6 +7,7 @@
 ### Added
 
 ### Fixed
+- the upgrade `application-config` to `^3.0.0` allows the desktop client to be built on FreeBSD
 
 <a id="2_7_0"></a>
 
