@@ -221,6 +221,9 @@ export default function MenuAttachment({
       x,
       y,
       items: menu,
+      ariaAttrs: {
+        'aria-labelledby': 'attachment-menu-button',
+      },
     })
   }
 
