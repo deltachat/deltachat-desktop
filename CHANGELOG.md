@@ -5,6 +5,9 @@
 ### Added
 -flip electron fuses to avoid security debates #5423
 
+### Fixed
+- don't show "Reply" and "Save" for info messages (e.g. "user A removed user B") and video call invitations #5337
+
 <a id="2_11_0"></a>
 
 ## [2.11.0] - 2025-08-18
