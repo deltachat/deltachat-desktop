@@ -361,9 +361,8 @@
 #new-chat-button {
   right: 15px;
   position: absolute;
-  outline-offset: 2px;
-  &:focus {
-    height: 52px;
-    width: 52px;
+  &:focus-visible {
+    outline-offset: 2px;
+    scale: 1.1;
   }
 }

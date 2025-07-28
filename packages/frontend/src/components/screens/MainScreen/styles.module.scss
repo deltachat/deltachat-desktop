@@ -95,6 +95,7 @@
     :global(.views) {
       display: flex;
       height: 100%;
+      padding: 4px 0;
     }
 
     :global(.navbar-button) {
