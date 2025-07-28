@@ -56,6 +56,7 @@
     display: flex;
     align-items: flex-end;
     background-color: var(--composerBg);
+    padding: 2px 0;
 
     .attachment-button,
     .emoji-button,
@@ -72,6 +73,7 @@
 
       box-shadow: none;
       border: none;
+      outline-offset: -1px;
 
       &:hover {
         background: none;
@@ -110,6 +112,9 @@
 
       &:focus:not(:focus-visible) {
         outline: none;
+      }
+      &:focus-visible {
+        outline-offset: 2px;
       }
 
       .paper-plane {
