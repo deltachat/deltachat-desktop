@@ -373,11 +373,12 @@ export function ContextMenu(props: {
             if (item.type === 'separator') {
               return <hr className='separator' key={index} />
             }
+            const isExpanded = index === openSublevels[levelIdx]
             return (
               <button
                 className={classNames({
                   item: true,
-                  selected: index === openSublevels[levelIdx],
+                  selected: isExpanded,
                 })}
                 onClick={(ev: React.MouseEvent) => {
                   if (item.subitems) {
@@ -403,6 +404,8 @@ export function ContextMenu(props: {
                 data-testid={item.dataTestid}
                 role='menuitem'
                 key={index}
+                aria-haspopup={item.subitems ? 'menu' : undefined}
+                aria-expanded={item.subitems ? isExpanded : undefined}
                 {...(item.subitems && { 'data-expandable-index': index })}
               >
                 {item.icon && <Icon className='left-icon' icon={item.icon} />}
