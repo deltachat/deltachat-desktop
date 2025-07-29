@@ -8,6 +8,8 @@
 
 ### Fixed
 
+- Make `Archived Chats` title non selectable
+
 <a id="2_8_0"></a>
 
 ## [2.8.0] - 2025-07-28
