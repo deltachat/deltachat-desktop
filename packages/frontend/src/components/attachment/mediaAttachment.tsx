@@ -214,6 +214,7 @@ export function ImageAttachment({
         className={'media-attachment-media broken ' + rovingTabindex.className}
         title={loadResult.error}
         onContextMenu={onContextMenu}
+        aria-haspopup='menu'
         {...rovingTabindexProps}
       >
         <div className='attachment-content'>
@@ -244,6 +245,7 @@ export function ImageAttachment({
           isBroken ? openInShell : openFullscreenMedia.bind(null, message)
         }
         onContextMenu={openContextMenu}
+        aria-haspopup='menu'
         {...rovingTabindexProps}
       >
         {isBroken ? (
@@ -296,6 +298,7 @@ export function VideoAttachment({
         className={'media-attachment-media broken ' + rovingTabindex.className}
         title={loadResult.error}
         onContextMenu={onContextMenu}
+        aria-haspopup='menu'
         {...rovingTabindexProps}
       >
         <div className='attachment-content'>
@@ -325,6 +328,7 @@ export function VideoAttachment({
           isBroken ? openInShell : openFullscreenMedia.bind(null, message)
         }
         onContextMenu={openContextMenu}
+        aria-haspopup='menu'
         {...rovingTabindexProps}
       >
         {isBroken ? (
@@ -378,6 +382,7 @@ export function AudioAttachment({
         className={'media-attachment-audio broken ' + rovingTabindex.className}
         title={loadResult.error}
         onContextMenu={onContextMenu}
+        aria-haspopup='menu'
         {...rovingTabindexProps}
       >
         <div className='heading'>
@@ -408,6 +413,7 @@ export function AudioAttachment({
           rovingTabindex.className
         }`}
         onContextMenu={openContextMenu}
+        aria-haspopup='menu'
         onKeyDown={e => {
           // Audio elements have controls that utilize
           // arrows. That is seeking, changing volume.
@@ -505,6 +511,7 @@ export function FileAttachmentRow({
         }
         title={loadResult.error}
         onContextMenu={onContextMenu}
+        aria-haspopup='menu'
         {...rovingTabindexProps}
       >
         <div className='file-icon'>
@@ -537,6 +544,7 @@ export function FileAttachmentRow({
           openInShell()
         }}
         onContextMenu={openContextMenu}
+        aria-haspopup='menu'
         {...rovingTabindexProps}
       >
         <div
@@ -638,6 +646,7 @@ export function WebxdcAttachment({
         ref={interactiveElRef}
         className={'media-attachment-webxdc ' + rovingTabindex.className}
         onContextMenu={onContextMenu}
+        aria-haspopup='menu'
         {...rovingTabindexProps}
       >
         <img
@@ -665,6 +674,7 @@ export function WebxdcAttachment({
         ref={interactiveElRef}
         className={'media-attachment-webxdc broken' + rovingTabindex.className}
         onContextMenu={onContextMenu}
+        aria-haspopup='menu'
         {...rovingTabindexProps}
       >
         <img
@@ -693,6 +703,7 @@ export function WebxdcAttachment({
         ref={interactiveElRef}
         className={'media-attachment-webxdc ' + rovingTabindex.className}
         onContextMenu={openContextMenu}
+        aria-haspopup='menu'
         onClick={openWebxdc.bind(null, loadResult, webxdcInfo ?? undefined)}
         {...rovingTabindexProps}
       >

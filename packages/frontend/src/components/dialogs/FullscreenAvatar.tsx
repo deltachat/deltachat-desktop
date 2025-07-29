@@ -51,6 +51,7 @@ export default function FullscreenAvatar(
                   <div
                     className='image-context-menu-container'
                     onContextMenu={openMenu}
+                    aria-haspopup='menu'
                     tabIndex={0}
                   >
                     <img

@@ -269,6 +269,7 @@ export default function AccountItem({
         aria-busy={!account && accountFetch.loading}
         onClick={() => onSelectAccount(accountId)}
         onContextMenu={onContextMenu}
+        aria-haspopup='menu'
         onMouseEnter={() => account && updateAccountForHoverInfo(account, true)}
         onMouseLeave={() =>
           account && updateAccountForHoverInfo(account, false)
