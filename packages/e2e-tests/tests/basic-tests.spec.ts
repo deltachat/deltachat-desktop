@@ -151,6 +151,47 @@ test('send message', async ({ page }) => {
   await expect(receivedMessageText).toHaveText(messageText)
 })
 
+test('message menu items presence', async ({ page }) => {
+  const userA = existingProfiles[0]
+  const userB = existingProfiles[1]
+  await switchToProfile(page, userA.id)
+  await page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: userB.name })
+    .click()
+
+  const someRegularOutgoingMessage = page
+    .getByLabel('Messages')
+    .getByText('Hello')
+    .first()
+  await someRegularOutgoingMessage.click({ button: 'right' })
+  await expect(page.getByRole('menu').getByRole('menuitem')).toHaveText([
+    'Reply',
+    'Forward',
+    'React',
+    'Edit',
+    'Save',
+    'Copy Text',
+    'Resend',
+    'Info',
+    'Delete Message',
+  ])
+  await page.keyboard.press('Escape')
+
+  const someInfoMessage = page
+    .getByLabel('Messages')
+    .getByText('Messages are end-to-end encrypted')
+    .first()
+  await someInfoMessage.click({ button: 'right' })
+  await expect(page.getByRole('menu').getByRole('menuitem')).toHaveText([
+    'Forward',
+    'Copy Text',
+    'Info',
+    'Delete Message',
+  ])
+  await page.keyboard.press('Escape')
+})
+
 /**
  * user A deletes one message for himself
  */
