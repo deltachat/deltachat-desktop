@@ -178,6 +178,10 @@ export function ContextMenuLayer({
       className='dc-context-menu-layer'
       onClick={cancel}
       onContextMenuCapture={cancel}
+      // The `<dialog>` is only used to make sure that the menu is on top
+      // of other content, and to trap focus.
+      // The dialog semantics are not needed, and are probably confusing.
+      role='presentation'
     >
       {currentItems.length > 0 && (
         <ContextMenu
