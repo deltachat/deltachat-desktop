@@ -7,6 +7,7 @@
 ### Added
 
 ### Fixed
+- accessibility: add labels to some menus (e.g. message context menu, chat list item context menu)
 
 <a id="2_8_0"></a>
 

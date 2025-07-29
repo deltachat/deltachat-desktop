@@ -9,8 +9,9 @@ import type {
 } from '../components/ContextMenu'
 
 export default function useContextMenu(
-  itemsOrItemsFactoryFn: ContextMenuItems | ContextMenuItemsFactoryFn
+  itemsOrItemsFactoryFn: ContextMenuItems | ContextMenuItemsFactoryFn,
+  ariaAttrs?: Parameters<typeof makeContextMenu>[2]
 ) {
   const { openContextMenu } = useContext(ContextMenuContext)
-  return makeContextMenu(itemsOrItemsFactoryFn, openContextMenu)
+  return makeContextMenu(itemsOrItemsFactoryFn, openContextMenu, ariaAttrs)
 }

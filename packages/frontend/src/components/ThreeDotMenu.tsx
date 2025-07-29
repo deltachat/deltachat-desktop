@@ -218,6 +218,7 @@ export function useThreeDotMenu(selectedChat?: T.FullChat) {
       x,
       y,
       items: menu,
+      ariaAttrs: { 'aria-labelledby': 'three-dot-menu-button' },
     })
   }
 }
