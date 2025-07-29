@@ -54,7 +54,10 @@ class PersistentState extends EventEmitter {
   saveImmediate(): Promise<void> {
     log.info(`Saving state to ${appConfig.filePath}`)
     const copy = Object.assign({}, this.inner_state)
-    return appConfig.write(copy)
+    return appConfig.write(copy).catch(err => {
+      log.error('State save failed', err)
+      throw new Error('State save failed', { cause: err })
+    })
   }
 }
 
