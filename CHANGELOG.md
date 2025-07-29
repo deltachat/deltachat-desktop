@@ -6,7 +6,7 @@
 - don't show "Edit Message", "Disappearing Messages" and fullscreen avatar view in classic E-Mail chats #5365
 - accessibility: improve keyboard and screen reader accessibility of the "Add Reaction" menu #5376
 - accessibility: make screen readers announce where a context menu is available (opened with Shift + F10): apply `aria-haspopup="menu"` #5345
-- accessibility: add labels to some menus (e.g. message context menu, chat list item context menu) #5347
+- accessibility: add proper labels to some menus (e.g. message context menu, chat list item context menu) #5347, #5355
 - accessibility: apply `aria-expanded` to parent menu items (e.g. "Mute Chat" menu) #5354
 
 ### Changed
