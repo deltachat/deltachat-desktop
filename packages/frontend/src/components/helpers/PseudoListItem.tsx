@@ -117,13 +117,13 @@ export const PseudoListItemAddContact = ({
   const settingsStore = useSettingsStore()[0]
   const isChatmail = settingsStore?.settings.is_chatmail === '1'
 
+  if (isChatmail) return null
+
   return (
     <PseudoListItem
       id='newcontact'
       cutoff='+'
-      text={
-        isChatmail ? tx('menu_new_classic_contact') : tx('menu_new_contact')
-      }
+      text={tx('menu_new_contact')}
       subText={
         queryStrIsEmail ? queryStr + ' ...' : tx('contacts_type_email_above')
       }
