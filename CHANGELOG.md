@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Changed
+- removed "Add contact manually" when on chatmail account #5358
 
 ### Added
 
