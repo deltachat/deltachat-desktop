@@ -35,7 +35,6 @@ import Dialog, {
   FooterActionButton,
   FooterActions,
 } from '../../Dialog'
-import { ScreenContext } from '../../../contexts/ScreenContext'
 import useChat from '../../../hooks/chat/useChat'
 import useConfirmationDialog from '../../../hooks/dialog/useConfirmationDialog'
 import useCreateChatByContactId from '../../../hooks/chat/useCreateChatByContactId'
@@ -48,6 +47,8 @@ import {
 import { dirname } from 'path'
 import QrCode from '../QrCode'
 import { areAllContactsVerified } from '../../../backend/chat'
+import AlertDialog from '../AlertDialog'
+import { unknownErrorToString } from '../../helpers/unknownErrorToString'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import type { DialogProps } from '../../../contexts/DialogContext'
@@ -161,7 +162,6 @@ type CreateChatMainProps = {
 function CreateChatMain(props: CreateChatMainProps) {
   const { setViewMode, onClose } = props
   const tx = useTranslationFunction()
-  const { userFeedback } = useContext(ScreenContext)
   const openConfirmationDialog = useConfirmationDialog()
   const accountId = selectedAccountId()
   const { openDialog } = useDialog()
@@ -180,9 +180,9 @@ function CreateChatMain(props: CreateChatMainProps) {
     try {
       await createChatByContactId(accountId, id)
     } catch (error: any) {
-      return userFeedback({
-        type: 'error',
-        text: error && (error.message || error),
+      const errorMessage = unknownErrorToString(error)
+      openDialog(AlertDialog, {
+        message: tx('error_x', errorMessage),
       })
     }
     onClose()
@@ -202,6 +202,7 @@ function CreateChatMain(props: CreateChatMainProps) {
   const showNewEmail = !isChatmail && queryStr.length === 0
 
   const showAddContact = !(
+    isChatmail ||
     queryStr === '' ||
     (contactIds.length === 1 &&
       contactCache[contactIds[0]]?.address.toLowerCase() ===
@@ -246,13 +247,20 @@ function CreateChatMain(props: CreateChatMainProps) {
   const addContactOnClick = async () => {
     if (!queryStrIsValidEmail) return
 
-    const contactId = await BackendRemote.rpc.createContact(
-      accountId,
-      queryStr.trim(),
-      null
-    )
-    await createChatByContactId(accountId, contactId)
-    onClose()
+    try {
+      const contactId = await BackendRemote.rpc.createContact(
+        accountId,
+        queryStr.trim(),
+        null
+      )
+      await createChatByContactId(accountId, contactId)
+      onClose()
+    } catch (error: any) {
+      const errorMessage = unknownErrorToString(error)
+      openDialog(AlertDialog, {
+        message: tx('error_x', errorMessage),
+      })
+    }
   }
 
   const { openContextMenu } = useContext(ContextMenuContext)
@@ -966,6 +974,8 @@ function useCreateGroup<
   groupMembers: number[]
 ) {
   const accountId = selectedAccountId()
+  const { openDialog } = useDialog()
+  const tx = useTranslationFunction()
 
   type ChatId = T.BasicChat['id']
   const createGroup = useCallback(async () => {
@@ -1017,7 +1027,15 @@ function useCreateGroup<
       return
     }
 
-    return createGroup()
+    try {
+      return await createGroup()
+    } catch (error) {
+      const errorMessage = unknownErrorToString(error)
+      openDialog(AlertDialog, {
+        message: tx('error_x', errorMessage),
+      })
+      return null
+    }
   }
 }
 

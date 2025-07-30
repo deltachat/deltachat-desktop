@@ -8,7 +8,7 @@
 ### Added
 
 ### Fixed
-
+- disable adding address contacts to groups #5336
 - Make `Archived Chats` title non selectable
 
 <a id="2_8_0"></a>

@@ -39,6 +39,7 @@ export function AddMemberInnerDialog({
   groupMembers,
   titleMembersOrRecipients,
   isVerificationRequired = false,
+  allowAddManually,
 }: {
   onOk: (addMembers: number[]) => void
   onCancel: Parameters<typeof OkCancelFooterAction>[0]['onCancel']
@@ -54,6 +55,7 @@ export function AddMemberInnerDialog({
   groupMembers: number[]
   titleMembersOrRecipients: 'members' | 'recipients'
   isVerificationRequired: boolean
+  allowAddManually: boolean
 }) {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
@@ -157,8 +159,9 @@ export function AddMemberInnerDialog({
   useLayoutEffect(applyCSSHacks, [inputRef, contactIdsToAdd])
   useEffect(applyCSSHacks, [])
 
-  const showAddContact = queryStr !== '' && contactIds.length === 0
-  const itemCount = contactIds.length + (showAddContact ? 1 : 0)
+  const showAddContactManually =
+    queryStr !== '' && contactIds.length === 0 && allowAddManually
+  const itemCount = contactIds.length + (showAddContactManually ? 1 : 0)
 
   const addContactOnKeyDown = (ev: React.KeyboardEvent<HTMLInputElement>) => {
     if (ev.key === 'Enter') {
