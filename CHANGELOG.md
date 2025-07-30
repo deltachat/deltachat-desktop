@@ -7,6 +7,7 @@
 ### Added
 
 ### Fixed
+- the upgrade `application-config` to `^3.0.0` allows the desktop client to be built on FreeBSD
 
 - Make `Archived Chats` title non selectable
 
