@@ -48,6 +48,8 @@ import {
 import { dirname } from 'path'
 import QrCode from '../QrCode'
 import { areAllContactsVerified } from '../../../backend/chat'
+import AlertDialog from '../AlertDialog'
+import { unknownErrorToString } from '../../helpers/unknownErrorToString'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import type { DialogProps } from '../../../contexts/DialogContext'
@@ -180,9 +182,9 @@ function CreateChatMain(props: CreateChatMainProps) {
     try {
       await createChatByContactId(accountId, id)
     } catch (error: any) {
-      return userFeedback({
-        type: 'error',
-        text: error && (error.message || error),
+      const errorMessage = unknownErrorToString(error)
+      openDialog(AlertDialog, {
+        message: tx('error_x', errorMessage),
       })
     }
     onClose()
@@ -202,6 +204,7 @@ function CreateChatMain(props: CreateChatMainProps) {
   const showNewEmail = !isChatmail && queryStr.length === 0
 
   const showAddContact = !(
+    isChatmail ||
     queryStr === '' ||
     (contactIds.length === 1 &&
       contactCache[contactIds[0]]?.address.toLowerCase() ===
@@ -246,13 +249,20 @@ function CreateChatMain(props: CreateChatMainProps) {
   const addContactOnClick = async () => {
     if (!queryStrIsValidEmail) return
 
-    const contactId = await BackendRemote.rpc.createContact(
-      accountId,
-      queryStr.trim(),
-      null
-    )
-    await createChatByContactId(accountId, contactId)
-    onClose()
+    try {
+      const contactId = await BackendRemote.rpc.createContact(
+        accountId,
+        queryStr.trim(),
+        null
+      )
+      await createChatByContactId(accountId, contactId)
+      onClose()
+    } catch (error: any) {
+      const errorMessage = unknownErrorToString(error)
+      openDialog(AlertDialog, {
+        message: tx('error_x', errorMessage),
+      })
+    }
   }
 
   const { openContextMenu } = useContext(ContextMenuContext)
@@ -649,7 +659,7 @@ export function CreateGroup(props: CreateGroupProps) {
         members.forEach(contactId => addGroupMember({ id: contactId }))
       },
       titleMembersOrRecipients: membersOrRecipients,
-      isVerificationRequired: false,
+      isVerificationRequired: groupType !== GroupType.PLAIN_EMAIL,
     })
   }
 
@@ -966,6 +976,8 @@ function useCreateGroup<
   groupMembers: number[]
 ) {
   const accountId = selectedAccountId()
+  const { openDialog } = useDialog()
+  const tx = useTranslationFunction()
 
   type ChatId = T.BasicChat['id']
   const createGroup = useCallback(async () => {
@@ -973,6 +985,12 @@ function useCreateGroup<
     switch (groupType) {
       case GroupType.REGULAR_GROUP: {
         const isVerified = await areAllContactsVerified(accountId, groupMembers)
+        if (!isVerified) {
+          throw new Error(
+            'Failed to create group: All contacts must be verified'
+          )
+        }
+
         chatId = await BackendRemote.rpc.createGroupChat(
           accountId,
           groupName,
@@ -1017,7 +1035,15 @@ function useCreateGroup<
       return
     }
 
-    return createGroup()
+    try {
+      return await createGroup()
+    } catch (error) {
+      const errorMessage = unknownErrorToString(error)
+      openDialog(AlertDialog, {
+        message: tx('error_x', errorMessage),
+      })
+      return null
+    }
   }
 }
 
@@ -1028,6 +1054,8 @@ const useCreateBroadcast = (
 ) => {
   const accountId = selectedAccountId()
   const { selectChat } = useChat()
+  const { openDialog } = useDialog()
+  const tx = useTranslationFunction()
 
   const createBroadcastList = async () => {
     const chatId = await BackendRemote.rpc.createBroadcast(accountId, groupName)
@@ -1047,9 +1075,16 @@ const useCreateBroadcast = (
   }
 
   return async () => {
-    const chatId = await createBroadcastList()
-    onClose()
-    selectChat(accountId, chatId)
+    try {
+      const chatId = await createBroadcastList()
+      onClose()
+      selectChat(accountId, chatId)
+    } catch (error) {
+      const errorMessage = unknownErrorToString(error)
+      openDialog(AlertDialog, {
+        message: tx('error_x', errorMessage),
+      })
+    }
   }
 }
 

@@ -343,7 +343,7 @@ function ViewGroupInner(
       groupMembers: group.contactIds,
       onOk: addMembers,
       titleMembersOrRecipients: membersOrRecipients,
-      isVerificationRequired: chat.isProtected,
+      isVerificationRequired: chat.isEncrypted, // channels are not protected (why?) but need verified contacts
     })
   }
 

@@ -14,7 +14,7 @@ export function AddMemberDialog({
   groupMembers,
   listFlags,
   titleMembersOrRecipients,
-  isVerificationRequired = false,
+  isVerificationRequired = true,
 }: {
   onOk: (members: number[]) => void
   groupMembers: number[]
