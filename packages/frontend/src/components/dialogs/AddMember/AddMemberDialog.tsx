@@ -3,7 +3,7 @@ import { AddMemberInnerDialog } from './AddMemberInnerDialog'
 import { useLazyLoadedContacts } from '../../contact/ContactList'
 import Dialog from '../../Dialog'
 import Icon from '../../Icon'
-import type { T } from '@deltachat/jsonrpc-client'
+import { C, type T } from '@deltachat/jsonrpc-client'
 import type { DialogProps } from '../../../contexts/DialogContext'
 import { Avatar } from '../../Avatar'
 import styles from './styles.module.scss'
@@ -32,6 +32,10 @@ export function AddMemberDialog({
     queryStrIsValidEmail,
     refreshContacts,
   } = useLazyLoadedContacts(listFlags, queryStr)
+
+  // compare bitwise if address flag is set
+  const allowAddManually = (listFlags & C.DC_GCL_ADDRESS) !== 0
+
   return (
     <Dialog
       canOutsideClickClose={false}
@@ -59,6 +63,7 @@ export function AddMemberDialog({
         groupMembers,
         titleMembersOrRecipients,
         isVerificationRequired,
+        allowAddManually,
       })}
     </Dialog>
   )

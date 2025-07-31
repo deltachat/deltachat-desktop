@@ -48,6 +48,7 @@ import type {
 import { isInviteLink } from '../../../../shared/util'
 import { RovingTabindexProvider } from '../../contexts/RovingTabindex'
 import { useRpcFetch } from '../../hooks/useFetch'
+import { useSettingsStore } from '../../stores/settings'
 
 const enum LoadStatus {
   FETCHING = 1,
@@ -201,6 +202,9 @@ export default function ChatList(props: {
   const tabindexWrapperElementChats = useRef<HTMLDivElement>(null)
   const tabindexWrapperElementContacts = useRef<HTMLDivElement>(null)
   const tabindexWrapperElementMessages = useRef<HTMLDivElement>(null)
+
+  const settingsStore = useSettingsStore()[0]
+  const isChatmail = settingsStore?.settings.is_chatmail === '1'
 
   const addContactOnClick = async () => {
     if (!queryStrIsValidEmail || !queryStr) return
@@ -526,7 +530,8 @@ export default function ChatList(props: {
                       >
                         {ChatListItemRowContact}
                       </ChatListPart>
-                      {contactIds.length === 0 &&
+                      {!isChatmail &&
+                        contactIds.length === 0 &&
                         chatListIds.length === 0 &&
                         queryStrIsValidEmail && (
                           <PseudoListItemAddContact

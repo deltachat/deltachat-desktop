@@ -8,7 +8,7 @@
 ### Added
 
 ### Fixed
-
+- don't show "add contact manually" (by email address) for groups #5336
 - Make `Archived Chats` title non selectable
 
 <a id="2_8_0"></a>
