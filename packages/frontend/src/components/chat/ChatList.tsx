@@ -530,7 +530,8 @@ export default function ChatList(props: {
                       >
                         {ChatListItemRowContact}
                       </ChatListPart>
-                      {!isChatmail && contactIds.length === 0 &&
+                      {!isChatmail &&
+                        contactIds.length === 0 &&
                         chatListIds.length === 0 &&
                         queryStrIsValidEmail && (
                           <PseudoListItemAddContact

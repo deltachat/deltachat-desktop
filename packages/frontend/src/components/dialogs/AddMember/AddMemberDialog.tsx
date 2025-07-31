@@ -31,7 +31,7 @@ export function AddMemberDialog({
     loadContacts,
     queryStrIsValidEmail,
     refreshContacts,
-  } = useLazyLoadedContacts(listFlags, queryStr)
+  } = useLazyLoadedContacts(listFlags, queryStr, isVerificationRequired)
   return (
     <Dialog
       canOutsideClickClose={false}

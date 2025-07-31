@@ -84,7 +84,8 @@ export function ContactList(props: {
  */
 export function useLazyLoadedContacts(
   listFlags: number,
-  queryStr: string | undefined
+  queryStr: string | undefined,
+  isVerificationRequired: boolean
 ) {
   const accountId = selectedAccountId()
   const { contactIds, queryStrIsValidEmail, refreshContacts } = useContactIds(
@@ -120,7 +121,20 @@ export function useLazyLoadedContacts(
     })
 
     const contacts = await BackendRemote.rpc.getContactsByIds(accountId, ids)
-    setContactCache(cache => ({ ...cache, ...contacts }))
+    if (isVerificationRequired && contacts) {
+      const verifiedContacts = Object.values(contacts)
+        .filter(contact => contact.isVerified)
+        .reduce(
+          (acc, contact) => {
+            acc[contact.id] = contact
+            return acc
+          },
+          {} as { [id: number]: Type.Contact }
+        )
+      setContactCache(cache => ({ ...cache, ...verifiedContacts }))
+    } else {
+      setContactCache(cache => ({ ...cache, ...contacts }))
+    }
     setContactLoading(state => {
       ids.forEach(id => (state[id] = LoadStatus.LOADED))
       return state
