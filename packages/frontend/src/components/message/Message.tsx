@@ -280,9 +280,13 @@ function buildContextMenu(
   // Do not show "reply" in read-only chats
   const showReply = chat.canSend
 
-  // See https://github.com/deltachat/deltachat-desktop/issues/4695.
+  // See
+  // - https://github.com/deltachat/deltachat-desktop/issues/4695.
+  // - https://github.com/deltachat/deltachat-desktop/issues/5365.
+  // - https://github.com/deltachat/deltachat-android/blob/fd4a377752cc6778f161590fde2f9ab29c5d3011/src/main/java/org/thoughtcrime/securesms/ConversationFragment.java#L334
   const showEdit =
     message.fromId === C.DC_CONTACT_ID_SELF &&
+    chat.isEncrypted &&
     message.text !== '' &&
     chat.canSend &&
     !message.isInfo &&
