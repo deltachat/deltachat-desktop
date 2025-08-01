@@ -2,10 +2,19 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+
 ### Changed
-- removed "Add contact manually" when on chatmail account #5358
 
 ### Added
+
+<a id="2_9_0"></a>
+
+## [2.9.0] - 2025-07-30
+
+### Changed
+- removed "Add contact manually" when on chatmail account #5358
+- update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.9.0`
 
 ### Fixed
 - don't show "add contact manually" (by email address) for groups #5336
@@ -3609,7 +3618,9 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.8.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.9.0...HEAD
+
+[2.9.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.8.0...v2.9.0
 
 [2.8.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.7.0...v2.8.0
 
