@@ -261,7 +261,11 @@ export function ViewProfileInner({
           color={contact.color}
           displayName={displayName}
           wasSeenRecently={contact.wasSeenRecently}
-          disableClickForFullscreen={shouldDisableClickForFullscreen(contact)}
+          disableClickForFullscreen={
+            isSelfChat ||
+            isDeviceChat ||
+            shouldDisableClickForFullscreen(contact)
+          }
         />
         {statusText !== '' && (
           <>
