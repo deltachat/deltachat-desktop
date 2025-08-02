@@ -11,7 +11,10 @@ type Props = {
   color?: string
   imagePath?: string
   initials: string
-}
+} & Pick<
+  Parameters<typeof ClickForFullscreenAvatarWrapper>[0],
+  'disableClickForFullscreen'
+>
 
 interface CssWithAvatarColor extends CSSProperties {
   '--local-avatar-color': string
@@ -21,13 +24,17 @@ export default function LargeProfileImage({
   color,
   imagePath,
   initials,
+  disableClickForFullscreen,
 }: Props) {
   const tx = useTranslationFunction()
 
   return (
     <div className={styles.largeProfileImage}>
       {imagePath ? (
-        <ClickForFullscreenAvatarWrapper filename={imagePath}>
+        <ClickForFullscreenAvatarWrapper
+          filename={imagePath}
+          disableClickForFullscreen={disableClickForFullscreen}
+        >
           <img
             className={styles.largeProfileImageArea}
             src={runtime.transformBlobURL(imagePath)}

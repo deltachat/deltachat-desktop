@@ -3,7 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Fixed
-- don't show "Edit Message" and "Disappearing Messages" in classic E-Mail chats #5365
+- don't show "Edit Message", "Disappearing Messages" and fullscreen avatar view in classic E-Mail chats #5365
 
 ### Changed
 

@@ -11,6 +11,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { C, type T } from '@deltachat/jsonrpc-client'
 import { DialogProps } from '../../contexts/DialogContext'
 import ProfileInfoHeader from '../ProfileInfoHeader'
+import { shouldDisableClickForFullscreen } from '../Avatar'
 
 /**
  * This dialog is used to display the profile of a mailing list
@@ -45,6 +46,7 @@ export default function MailingListProfile(
             avatarPath={chat.profileImage ? chat.profileImage : undefined}
             color={chat.color}
             displayName={chat.name}
+            disableClickForFullscreen={shouldDisableClickForFullscreen(chat)}
           />
         </DialogContent>
       </DialogBody>
