@@ -30,6 +30,7 @@ import type { DialogProps } from '../../../contexts/DialogContext'
 import type { T } from '@deltachat/jsonrpc-client'
 import { RovingTabindexProvider } from '../../../contexts/RovingTabindex'
 import { ChatListItemRowChat } from '../../chat/ChatListItemRow'
+import { shouldDisableClickForFullscreen } from '../../Avatar'
 
 const log = getLogger('renderer/dialogs/ViewProfile')
 
@@ -260,6 +261,7 @@ export function ViewProfileInner({
           color={contact.color}
           displayName={displayName}
           wasSeenRecently={contact.wasSeenRecently}
+          disableClickForFullscreen={shouldDisableClickForFullscreen(contact)}
         />
         {statusText !== '' && (
           <>

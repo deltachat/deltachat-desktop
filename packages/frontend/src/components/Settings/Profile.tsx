@@ -33,6 +33,7 @@ export default function Profile({ settingsStore }: Props) {
         initials={initials}
         color={settingsStore.selfContact.color}
         imagePath={profileImagePath}
+        disableClickForFullscreen={false}
       />
       <div className={styles.profileDetails}>
         <div className={styles.profileDisplayName}>{profileName}</div>
