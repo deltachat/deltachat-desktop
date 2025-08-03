@@ -73,7 +73,7 @@
     "@types/rc": "^1.2.4",
     "@webxdc/types": "catalog:",
     "adm-zip": "0.5.14",
-    "application-config": "^1.0.1",
+    "application-config": "^3.0.0",
     "chai": "^5.1.1",
     "chokidar": "^3.6.0",
     "debounce": "^1.2.0",

@@ -4,6 +4,7 @@
 
 ### Fixed
 - don't show "Edit Message", "Disappearing Messages" and fullscreen avatar view in classic E-Mail chats #5365
+- the upgrade `application-config` to `^3.0.0` allows the desktop client to be built on FreeBSD
 
 ### Changed
 
@@ -27,7 +28,6 @@
 
 ### Changed
 - upgrade `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.8.0`
-
 
 <a id="2_7_0"></a>
 
