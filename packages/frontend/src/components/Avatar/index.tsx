@@ -138,8 +138,7 @@ export function ClickForFullscreenAvatarWrapper(
 ) {
   const { openDialog } = useDialog()
 
-  const { children, filename, disableFullscreen, ...buttonProps } =
-    props
+  const { children, filename, disableFullscreen, ...buttonProps } = props
 
   return filename && !disableFullscreen ? (
     <button
@@ -175,14 +174,12 @@ export function shouldDisableClickForFullscreen<
   } else {
     const _assert: ChatSubset = chatOrContact
   }
-  const [contact, chat] = isContact
-    ? [chatOrContact, undefined]
-    : [undefined, chatOrContact]
 
   // It's just an "envelope" icon, there is no need to view it in full screen.
   // See https://github.com/deltachat/deltachat-desktop/issues/5365.
-  const isAvatarADummyImage =
-    chat != undefined ? !chat.isEncrypted : !contact.isKeyContact
+  const isAvatarADummyImage = isContact
+    ? !chatOrContact.isKeyContact
+    : !chatOrContact.isEncrypted
 
   return isAvatarADummyImage
 }
