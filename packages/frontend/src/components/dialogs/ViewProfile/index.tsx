@@ -261,7 +261,7 @@ export function ViewProfileInner({
           color={contact.color}
           displayName={displayName}
           wasSeenRecently={contact.wasSeenRecently}
-          disableClickForFullscreen={shouldDisableClickForFullscreen(contact)}
+          disableFullscreen={shouldDisableClickForFullscreen(contact)}
         />
         {statusText !== '' && (
           <>

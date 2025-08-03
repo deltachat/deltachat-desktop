@@ -46,7 +46,7 @@ export default function MailingListProfile(
             avatarPath={chat.profileImage ? chat.profileImage : undefined}
             color={chat.color}
             displayName={chat.name}
-            disableClickForFullscreen={shouldDisableClickForFullscreen(chat)}
+            disableFullscreen={shouldDisableClickForFullscreen(chat)}
           />
         </DialogContent>
       </DialogBody>

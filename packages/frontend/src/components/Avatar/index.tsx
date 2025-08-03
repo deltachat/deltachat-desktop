@@ -133,15 +133,15 @@ export function AvatarFromContact(
 export function ClickForFullscreenAvatarWrapper(
   props: React.ButtonHTMLAttributes<HTMLButtonElement> & {
     filename?: string
-    disableClickForFullscreen: boolean
+    disableFullscreen: boolean
   }
 ) {
   const { openDialog } = useDialog()
 
-  const { children, filename, disableClickForFullscreen, ...buttonProps } =
+  const { children, filename, disableFullscreen, ...buttonProps } =
     props
 
-  return filename && !disableClickForFullscreen ? (
+  return filename && !disableFullscreen ? (
     <button
       className={styles.avatarButton}
       onClick={() => {

@@ -11,7 +11,10 @@ import {
   PseudoListItemAddMember,
 } from '../helpers/PseudoListItem'
 import ViewProfile from './ViewProfile'
-import { avatarInitial, shouldDisableClickForFullscreen } from '../Avatar'
+import {
+  avatarInitial,
+  shouldDisableClickForFullscreen as shouldDisableFullscreenAvatar,
+} from '../Avatar'
 import { DeltaInput } from '../Login-Styles'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
@@ -395,9 +398,7 @@ function ViewGroupInner(
                 avatarPath={groupImage ? groupImage : undefined}
                 color={chat.color}
                 displayName={groupName}
-                disableClickForFullscreen={shouldDisableClickForFullscreen(
-                  chat
-                )}
+                disableFullscreen={shouldDisableFullscreenAvatar(chat)}
               />
             </DialogContent>
             {isRelatedChatsEnabled && chatListIds.length > 0 && (

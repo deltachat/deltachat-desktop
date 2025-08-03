@@ -63,7 +63,7 @@ export default function ImageSelector({
           color={color}
           imagePath={filePath || undefined}
           initials={initials}
-          disableClickForFullscreen={false}
+          disableFullscreen={false}
         />
         {!filePath && (
           <button

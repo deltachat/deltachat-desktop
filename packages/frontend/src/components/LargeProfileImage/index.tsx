@@ -13,7 +13,7 @@ type Props = {
   initials: string
 } & Pick<
   Parameters<typeof ClickForFullscreenAvatarWrapper>[0],
-  'disableClickForFullscreen'
+  'disableFullscreen'
 >
 
 interface CssWithAvatarColor extends CSSProperties {
@@ -24,7 +24,7 @@ export default function LargeProfileImage({
   color,
   imagePath,
   initials,
-  disableClickForFullscreen,
+  disableFullscreen,
 }: Props) {
   const tx = useTranslationFunction()
 
@@ -33,7 +33,7 @@ export default function LargeProfileImage({
       {imagePath ? (
         <ClickForFullscreenAvatarWrapper
           filename={imagePath}
-          disableClickForFullscreen={disableClickForFullscreen}
+          disableFullscreen={disableFullscreen}
         >
           <img
             className={styles.largeProfileImageArea}
