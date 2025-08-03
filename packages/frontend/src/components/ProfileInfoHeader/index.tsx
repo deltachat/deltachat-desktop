@@ -10,17 +10,24 @@ type Props = {
   color?: string
   displayName: string
   wasSeenRecently?: boolean
-}
+} & Pick<
+  Parameters<typeof ClickForFullscreenAvatarWrapper>[0],
+  'disableFullscreen'
+>
 
 export default function ProfileInfoHeader({
   avatarPath,
   color,
   displayName,
   wasSeenRecently = false,
+  disableFullscreen,
 }: Props) {
   return (
     <div className={styles.profileInfoHeader}>
-      <ClickForFullscreenAvatarWrapper filename={avatarPath}>
+      <ClickForFullscreenAvatarWrapper
+        filename={avatarPath}
+        disableFullscreen={disableFullscreen}
+      >
         <Avatar
           displayName={displayName}
           avatarPath={avatarPath}

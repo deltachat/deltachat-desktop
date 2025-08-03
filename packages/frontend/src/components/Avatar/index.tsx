@@ -9,6 +9,7 @@ import { get_first_emoji } from '@deltachat/message_parser_wasm'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 
 import styles from './styles.module.scss'
+import type { T } from '@deltachat/jsonrpc-client'
 
 export function QRAvatar() {
   return (
@@ -132,13 +133,14 @@ export function AvatarFromContact(
 export function ClickForFullscreenAvatarWrapper(
   props: React.ButtonHTMLAttributes<HTMLButtonElement> & {
     filename?: string
+    disableFullscreen: boolean
   }
 ) {
   const { openDialog } = useDialog()
 
-  const { children, filename } = props
+  const { children, filename, disableFullscreen, ...buttonProps } = props
 
-  return filename ? (
+  return filename && !disableFullscreen ? (
     <button
       className={styles.avatarButton}
       onClick={() => {
@@ -146,11 +148,38 @@ export function ClickForFullscreenAvatarWrapper(
           imagePath: filename!,
         })
       }}
-      {...props}
+      {...buttonProps}
     >
       {children}
     </button>
   ) : (
     <div>{children}</div>
   )
+}
+
+type ChatSubset = Pick<T.BasicChat, 'isEncrypted'>
+type ContactSubset = Pick<T.Contact, 'isKeyContact'>
+
+/**
+ * Note that this function does not apply to all possible avatars.
+ * It's only handy in places where we usually want to make it possible
+ * to enlarge the avatar, except some somewhat special cases.
+ */
+export function shouldDisableClickForFullscreen<
+  T extends ChatSubset | ContactSubset,
+>(chatOrContact: T): boolean {
+  const isContact = 'isKeyContact' in chatOrContact
+  if (isContact) {
+    const _assert: ContactSubset = chatOrContact
+  } else {
+    const _assert: ChatSubset = chatOrContact
+  }
+
+  // It's just an "envelope" icon, there is no need to view it in full screen.
+  // See https://github.com/deltachat/deltachat-desktop/issues/5365.
+  const isAvatarADummyImage = isContact
+    ? !chatOrContact.isKeyContact
+    : !chatOrContact.isEncrypted
+
+  return isAvatarADummyImage
 }
