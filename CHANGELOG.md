@@ -3,6 +3,16 @@
 ## [Unreleased][unreleased]
 
 ### Fixed
+
+### Changed
+
+### Added
+
+<a id="2_10_0"></a>
+
+## [2.10.0] - 2025-08-05
+
+### Fixed
 - don't show "Edit Message", "Disappearing Messages" and fullscreen avatar view in classic E-Mail chats #5365
 - accessibility: improve keyboard and screen reader accessibility of the "Add Reaction" menu #5376
 - accessibility: make screen readers announce where a context menu is available (opened with Shift + F10): apply `aria-haspopup="menu"` #5345
@@ -11,8 +21,6 @@
 
 ### Changed
 - update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.10.0`
-
-### Added
 
 <a id="2_9_0"></a>
 
@@ -3624,7 +3632,9 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.9.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.10.0...HEAD
+
+[2.10.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.9.0...v2.10.0
 
 [2.9.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.8.0...v2.9.0
 
