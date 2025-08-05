@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import classNames from 'classnames'
 
 import Icon from '../Icon'
@@ -10,6 +10,9 @@ import styles from './styles.module.scss'
 
 import type { BaseEmoji } from 'emoji-mart/index'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { getLogger } from '@deltachat-desktop/shared/logger'
+
+const log = getLogger('ReactionsBar')
 
 type Props = {
   messageId: number
@@ -25,6 +28,17 @@ export default function ReactionsBar({
   myReaction,
 }: Props) {
   const tx = useTranslationFunction()
+
+  const reactionsBarRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const firstButton =
+      reactionsBarRef.current?.getElementsByTagName('button')[0]
+    if (firstButton == undefined) {
+      log.warn('Failed to focus reactions bar after opening it')
+      return
+    }
+    firstButton.focus()
+  }, [])
 
   const [showAllEmojis, setShowAllEmojis] = useState(false)
   const accountId = selectedAccountId()
@@ -62,7 +76,7 @@ export default function ReactionsBar({
         />
       )}
       {!showAllEmojis && (
-        <div className={styles.reactionsBar}>
+        <div ref={reactionsBarRef} className={styles.reactionsBar}>
           {myReaction && !isMyReactionDefault && (
             <button
               onClick={() => toggleReaction(myReaction!)}
