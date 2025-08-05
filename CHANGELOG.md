@@ -10,6 +10,7 @@
 - accessibility: apply `aria-expanded` to parent menu items (e.g. "Mute Chat" menu) #5354
 
 ### Changed
+- update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.10.0`
 
 ### Added
 
