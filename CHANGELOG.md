@@ -4,7 +4,7 @@
 
 ### Fixed
 - don't show "Edit Message", "Disappearing Messages" and fullscreen avatar view in classic E-Mail chats #5365
-- accessibility: improve keyboard and screen reader accessibility of the "Add Reaction" menu
+- accessibility: improve keyboard and screen reader accessibility of the "Add Reaction" menu #5376
 
 ### Changed
 
