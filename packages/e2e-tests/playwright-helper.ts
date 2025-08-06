@@ -211,7 +211,7 @@ export async function createProfiles(
   existingProfiles: User[],
   page: Page,
   browserName: string,
-  unencrypted = false
+  useChatmail: boolean = true
 ): Promise<void> {
   const hasProfileWithName = (name: string): boolean => {
     let hasProfile = false
@@ -234,7 +234,7 @@ export async function createProfiles(
         page,
         existingProfiles,
         n === 0,
-        unencrypted
+        useChatmail
       )
     } else {
       console.log('User already exists')

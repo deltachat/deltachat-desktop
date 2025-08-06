@@ -961,6 +961,7 @@ export const ChatSettingsSetNameAndProfileImage = ({
         <div className='group-name-input-wrapper'>
           <input
             className='group-name-input'
+            data-testid='group-name-input'
             placeholder={inputLabel}
             value={chatName}
             onChange={onChange}

@@ -1,76 +1,91 @@
-import { test, expect } from '@playwright/test'
+import { test, expect, type Page } from '@playwright/test'
 
 import {
   createProfiles,
-  deleteProfile,
   User,
   loadExistingProfiles,
+  deleteAllProfiles,
+  switchToProfile,
   reloadPage,
 } from '../playwright-helper'
-
-/**
- * This test suite covers basic functionalities like
- * creating profiles based on DCACCOUNT qr code
- * - invite a user
- * - start a chat
- * - send, edit, delete messages
- * - load and send webxdc app
- * - delete profile
- *
- * creating and deleting profiles also happens in
- * other tests in beforAll and afterAll so if this
- * test fails the other ones will also
- */
 
 test.describe.configure({ mode: 'serial' })
 
 let existingProfiles: User[] = []
 
-const numberOfProfiles = 2
+const numberOfProfiles = 4
+
+// https://playwright.dev/docs/next/test-retries#reuse-single-page-between-tests
+let page: Page
 
 test.beforeAll(async ({ browser }) => {
-  const context = await browser.newContext()
-  const page = await context.newPage()
+  const contextForProfileCreation = await browser.newContext()
+  const pageForProfileCreation = await contextForProfileCreation.newPage()
+  const pageForTestsP = browser.newPage()
 
-  await reloadPage(page)
+  await reloadPage(pageForProfileCreation)
 
-  existingProfiles = (await loadExistingProfiles(page)) ?? existingProfiles
+  existingProfiles =
+    (await loadExistingProfiles(pageForProfileCreation)) ?? existingProfiles
 
-  await context.close()
-})
-
-test.beforeEach(async ({ page }) => {
-  await reloadPage(page)
-})
-
-/**
- * covers creating a profile with preconfigured
- * server on first start or after
- */
-test('create e-mail profiles', async ({ page, context, browserName }) => {
-  test.setTimeout(120_000)
   await createProfiles(
     numberOfProfiles,
     existingProfiles,
-    page,
-    context,
-    browserName,
+    pageForProfileCreation,
+    contextForProfileCreation,
+    browser.browserType().name(),
     false // useChatmail = false
   )
-  expect(existingProfiles.length).toBe(numberOfProfiles)
+
+  await contextForProfileCreation.close()
+  page = await pageForTestsP
+  await reloadPage(page)
 })
 
-test('delete profiles', async ({ page }) => {
-  if (existingProfiles.length < 1) {
-    throw new Error('Not existing profiles to delete!')
-  }
-  for (let i = 0; i < existingProfiles.length; i++) {
-    const profileToDelete = existingProfiles[i]
-    const deleted = await deleteProfile(page, profileToDelete.id)
-    expect(deleted).toContain(profileToDelete.name)
-    if (deleted) {
-      /* ignore-console-log */
-      console.log(`User ${profileToDelete.name} was deleted!`)
-    }
-  }
+test.afterAll(async ({ browser }) => {
+  await page.close()
+
+  const context = await browser.newContext()
+  const pageForProfileDeletion = await context.newPage()
+  await reloadPage(pageForProfileDeletion)
+  await deleteAllProfiles(pageForProfileDeletion, existingProfiles)
+  await context.close()
+})
+
+test('check "New E-Mail" option is shown and a chat can be created', async () => {
+  const userA = existingProfiles[0]
+  const userB = existingProfiles[1]
+  const subject = 'Test Chat Subject'
+  const emailUserB = userB.address
+  // prepare last open chat for receiving user
+  await switchToProfile(page, userA.id)
+  await page.locator('#new-chat-button').click()
+
+  await expect(page.getByRole('button', { name: 'New Group' })).toBeVisible()
+
+  // Since we're on a Chatmail server, this button is supposed to be shown.
+  const newEmailButton = page.getByRole('button', { name: 'New E-Mail' })
+  await expect(newEmailButton).toBeVisible()
+
+  await newEmailButton.click()
+
+  await page.getByTestId('group-name-input').fill(subject)
+  await page.locator('#addmember').click()
+
+  await page.getByTestId('add-member-search').fill(emailUserB)
+
+  const contact = page
+    .locator('.styles_module_addMemberContactList li button')
+    .filter({ hasText: emailUserB })
+    .first()
+  await contact.click()
+
+  await page.getByTestId('ok').click()
+
+  await page.getByTestId('group-create-button').click()
+
+  const chatListItem = page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: subject })
+  await expect(chatListItem).toBeVisible()
 })
