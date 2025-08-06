@@ -8,6 +8,8 @@
 
 ### Fixed
 
+- Truncate app title and description in app picker
+
 <a id="2_10_0"></a>
 
 ## [2.10.0] - 2025-08-05
