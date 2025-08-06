@@ -62,6 +62,24 @@ const enum LoadStatus {
   LOADED = 2,
 }
 
+/**
+ * This component holds either a list of chats OR the result
+ * of a search query including chats, contacts and messages.
+ *
+ * <ChatList>
+ *   <ChatListPart> // virtual list (one for each type of search result)
+ *     <ChatListItemRow>
+ *       <ChatListItem(Default (Chat) | Message | Contact) />
+ *     </ChatListItemRow>
+ *   </ChatListPart>
+ * </ChatList>
+ */
+
+/**
+ * wrapper for a virtual list that handles scrolling and loading items
+ *
+ * up to 3 ChatListParts can be present in the chat list
+ */
 export function ChatListPart<
   T extends
     | ChatListItemData
