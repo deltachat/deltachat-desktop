@@ -94,8 +94,33 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 208px;
   p {
     margin: 2px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  button {
+    border: none;
+    background: none;
+    color: var(--globalLinkColor);
+    text-align: left;
+    margin: 2px 0;
+    padding: 0;
+  }
+}
+
+.appInfoFullWidth {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  p {
+    margin: 2px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   button {
     border: none;
@@ -124,6 +149,13 @@
 .appName {
   font-size: 16px;
   font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.appAuthor {
+  color: #808080;
 }
 
 .tabBar {

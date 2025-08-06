@@ -254,7 +254,9 @@ export function AppPicker({ onAppSelected }: Props) {
           alt={`${app.name} icon`}
           className={styles.appIcon}
         />
-        <div className={styles.appInfo}>
+        <div
+          className={setSearchQuery ? styles.appInfoFullWidth : styles.appInfo}
+        >
           <div className={styles.appName}>{app.name}</div>
           <p>{app.short_description}</p>
           {setSearchQuery && app.author && (
@@ -271,7 +273,9 @@ export function AppPicker({ onAppSelected }: Props) {
               {app.author}
             </button>
           )}
-          {!setSearchQuery && app.author && <p>{app.author}</p>}
+          {!setSearchQuery && app.author && (
+            <p className={styles.appAuthor}>{app.author}</p>
+          )}
         </div>
       </div>
     )
