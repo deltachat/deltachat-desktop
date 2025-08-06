@@ -66,13 +66,13 @@ export async function createUser(
   page: Page,
   existingProfiles: User[],
   isFirstOnboarding: boolean,
-  unencrypted = false
+  useChatmail: boolean = true
 ): Promise<User> {
   const user = await createNewProfile(
     page,
     userName,
     isFirstOnboarding,
-    unencrypted
+    useChatmail
   )
 
   expect(user.id).toBeDefined()
@@ -103,7 +103,7 @@ export async function createNewProfile(
   page: Page,
   name: string,
   isFirstOnboarding: boolean,
-  unencrypted: boolean
+  useChatmail: boolean
 ): Promise<User> {
   await page.waitForSelector('.styles_module_account')
   const accountList = page.locator('.styles_module_account')
@@ -115,9 +115,9 @@ export async function createNewProfile(
   // create a new account
   await page.getByTestId('create-account-button').click()
 
-  const dcAccountLink = unencrypted
-    ? `dcaccount:${mailServerUrl}`
-    : `dcaccount:${chatmailServer}/new`
+  const dcAccountLink = useChatmail
+    ? `dcaccount:${chatmailServer}/new`
+    : `dcaccount:${mailServerUrl}`
   await page.evaluate(`navigator.clipboard.writeText('${dcAccountLink}')`)
   await clickThroughTestIds(page, [
     'other-login-button',

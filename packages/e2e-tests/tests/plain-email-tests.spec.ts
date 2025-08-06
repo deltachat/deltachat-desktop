@@ -45,7 +45,7 @@ test.beforeEach(async ({ page }) => {
 
 /**
  * covers creating a profile with preconfigured
- * chatmail server on first start or after
+ * server on first start or after
  */
 test('create e-mail profiles', async ({ page, context, browserName }) => {
   test.setTimeout(120_000)
@@ -55,7 +55,7 @@ test('create e-mail profiles', async ({ page, context, browserName }) => {
     page,
     context,
     browserName,
-    true // unencrypted = true
+    false // useChatmail = false
   )
   expect(existingProfiles.length).toBe(numberOfProfiles)
 })
