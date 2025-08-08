@@ -7,7 +7,7 @@
 ### Changed
 
 ### Fixed
-
+- share email contacts by email not by VCard #5364
 - Truncate app title and description in app picker
 
 <a id="2_10_0"></a>
