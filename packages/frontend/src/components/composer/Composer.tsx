@@ -61,7 +61,6 @@ const Composer = forwardRef<
   any,
   {
     isContactRequest: boolean
-    isProtectionBroken: boolean
     selectedChat: Type.FullChat
     regularMessageInputRef: React.MutableRefObject<ComposerMessageInput | null>
     editMessageInputRef: React.MutableRefObject<ComposerMessageInput | null>
@@ -82,7 +81,6 @@ const Composer = forwardRef<
 >((props, ref) => {
   const {
     isContactRequest,
-    isProtectionBroken,
     selectedChat,
     regularMessageInputRef,
     editMessageInputRef,
@@ -471,27 +469,6 @@ const Composer = forwardRef<
         </button>
       </div>
     )
-  } else if (isProtectionBroken) {
-    return (
-      <div ref={ref} className='composer contact-request'>
-        <button
-          className='contact-request-button'
-          onClick={async () => {
-            openDialog(ProtectionBrokenDialog, { name: selectedChat.name })
-          }}
-        >
-          {tx('more_info_desktop')}
-        </button>
-        <button
-          className='contact-request-button'
-          onClick={() => {
-            EffectfulBackendActions.acceptChat(selectedAccountId(), chatId)
-          }}
-        >
-          {tx('ok')}
-        </button>
-      </div>
-    )
   } else if (!selectedChat.canSend) {
     return null
   } else {
@@ -729,7 +706,6 @@ export function useDraft(
   accountId: number,
   chatId: number | null,
   isContactRequest: boolean,
-  isProtectionBroken: boolean,
   canSend: boolean, // no draft needed in chats we can't send messages
   inputRef: React.MutableRefObject<ComposerMessageInput | null>
 ): {
@@ -826,7 +802,7 @@ export function useDraft(
     return () => {
       window.__reloadDraft = null
     }
-  }, [chatId, loadDraft, isContactRequest, isProtectionBroken])
+  }, [chatId, loadDraft, isContactRequest])
 
   const saveDraft = useCallback(async () => {
     if (chatId === null || !canSend) {
