@@ -112,7 +112,6 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     accountId,
     chat.id,
     chat.isContactRequest,
-    chat.isProtectionBroken,
     chat.canSend,
     regularMessageInputRef
   )
@@ -317,7 +316,6 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
         ref={refComposer}
         selectedChat={chat}
         isContactRequest={chat.isContactRequest}
-        isProtectionBroken={chat.isProtectionBroken}
         regularMessageInputRef={regularMessageInputRef}
         editMessageInputRef={editMessageInputRef}
         draftState={draftState}

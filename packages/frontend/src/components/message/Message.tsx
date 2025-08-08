@@ -36,10 +36,7 @@ import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { ContextMenuItem } from '../ContextMenu'
 import { onDCEvent, BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import {
-  ProtectionBrokenDialog,
-  ProtectionEnabledDialog,
-} from '../dialogs/ProtectionStatusDialog'
+import { ProtectionEnabledDialog } from '../dialogs/ProtectionStatusDialog'
 import useDialog from '../../hooks/dialog/useDialog'
 import useMessage from '../../hooks/chat/useMessage'
 import useOpenViewProfileDialog from '../../hooks/dialog/useOpenViewProfileDialog'
@@ -624,8 +621,6 @@ export default function Message(props: {
   // Info Message
   if (message.isInfo) {
     const isWebxdcInfo = message.systemMessageType === 'WebxdcInfoMessage'
-    const isProtectionBrokenMsg =
-      message.systemMessageType === 'ChatProtectionDisabled'
     const isProtectionEnabledMsg =
       message.systemMessageType === 'ChatProtectionEnabled' ||
       message.systemMessageType === 'ChatE2ee'
@@ -639,7 +634,6 @@ export default function Message(props: {
     const isInteractive =
       (isWebxdcInfo && message.parentId) ||
       message.infoContactId != null ||
-      isProtectionBrokenMsg ||
       isProtectionEnabledMsg ||
       isInvalidUnencryptedMail
 
@@ -654,12 +648,6 @@ export default function Message(props: {
           message.infoContactId !== C.DC_CONTACT_ID_SELF
         ) {
           openViewProfileDialog(accountId, message.infoContactId)
-        } else if (isProtectionBrokenMsg) {
-          const { name } = await BackendRemote.rpc.getBasicChatInfo(
-            selectedAccountId(),
-            message.chatId
-          )
-          openDialog(ProtectionBrokenDialog, { name })
         } else if (isProtectionEnabledMsg) {
           openDialog(ProtectionEnabledDialog)
         } else if (isInvalidUnencryptedMail) {

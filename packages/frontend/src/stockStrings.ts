@@ -26,15 +26,12 @@ export async function updateCoreStrings() {
   // strings[C.DC_STR_ENCR_NONE] = tx('DC_STR_ENCR_NONE')
   strings[C.DC_STR_FINGERPRINTS] = tx('qrscan_fingerprint_label')
   strings[C.DC_STR_CANTDECRYPT_MSG_BODY] = tx('systemmsg_cannot_decrypt')
-  strings[C.DC_STR_E2E_PREFERRED] = tx('autocrypt_prefer_e2ee')
   strings[C.DC_STR_ARCHIVEDCHATS] = tx('chat_archived_chats_title')
   strings[C.DC_STR_CANNOT_LOGIN] = tx('login_error_cannot_login')
   strings[C.DC_STR_DEVICE_MESSAGES] = tx('device_talk')
   strings[C.DC_STR_NEW_GROUP_SEND_FIRST_MESSAGE] = tx('chat_new_group_hint')
   strings[C.DC_STR_SAVED_MESSAGES] = tx('saved_messages')
   strings[C.DC_STR_CONTACT_VERIFIED] = tx('contact_verified')
-  strings[C.DC_STR_CONTACT_NOT_VERIFIED] = tx('contact_not_verified')
-  strings[C.DC_STR_CONTACT_SETUP_CHANGED] = tx('contact_setup_changed')
   strings[C.DC_STR_DEVICE_MESSAGES_HINT] = tx('device_talk_explain')
   strings[C.DC_STR_WELCOME_MESSAGE] = tx('device_talk_welcome_message2')
   strings[C.DC_STR_UNKNOWN_SENDER_FOR_CHAT] = tx(
@@ -80,12 +77,10 @@ export async function updateCoreStrings() {
   strings[C.DC_STR_BROADCAST_LIST] = tx('channel')
   strings[C.DC_STR_PART_OF_TOTAL_USED] = tx('part_of_total_used')
   strings[C.DC_STR_SECURE_JOIN_STARTED] = tx('secure_join_started')
-  strings[C.DC_STR_SECUREJOIN_TAKES_LONGER] = tx('secure_join_takes_longer')
   strings[C.DC_STR_SECURE_JOIN_REPLIES] = tx('secure_join_replies')
   strings[C.DC_STR_SETUP_CONTACT_QR_DESC] = tx('qrshow_join_contact_hint')
   strings[C.DC_STR_SECURE_JOIN_GROUP_QR_DESC] = tx('qrshow_join_group_hint')
   strings[C.DC_STR_NOT_CONNECTED] = tx('connectivity_not_connected')
-  strings[C.DC_STR_AEAP_ADDR_CHANGED] = tx('aeap_addr_changed')
   strings[C.DC_STR_AEAP_EXPLANATION_AND_LINK] = tx('aeap_explanation')
   strings[C.DC_STR_GROUP_NAME_CHANGED_BY_YOU] = tx('group_name_changed_by_you')
   strings[C.DC_STR_GROUP_NAME_CHANGED_BY_OTHER] = tx(
@@ -173,9 +168,6 @@ export async function updateCoreStrings() {
   )
   strings[C.DC_STR_CHAT_PROTECTION_ENABLED] = tx(
     'chat_protection_enabled_tap_to_learn_more'
-  )
-  strings[C.DC_STR_CHAT_PROTECTION_DISABLED] = tx(
-    'chat_protection_broken_tap_to_learn_more'
   )
   strings[C.DC_STR_INVALID_UNENCRYPTED_MAIL] = tx(
     'invalid_unencrypted_tap_to_learn_more'
