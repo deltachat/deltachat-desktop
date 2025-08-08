@@ -649,7 +649,10 @@ export default function Message(props: {
         if (isWebxdcInfo) {
           // open or focus the webxdc app
           openWebxdc(message)
-        } else if (message.infoContactId != null) {
+        } else if (
+          message.infoContactId != null &&
+          message.infoContactId !== C.DC_CONTACT_ID_SELF
+        ) {
           openViewProfileDialog(accountId, message.infoContactId)
         } else if (isProtectionBrokenMsg) {
           const { name } = await BackendRemote.rpc.getBasicChatInfo(

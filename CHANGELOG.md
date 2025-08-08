@@ -9,6 +9,7 @@
 ### Fixed
 
 - Truncate app title and description in app picker
+- do not open self chat on info message click #5361
 
 <a id="2_10_0"></a>
 
