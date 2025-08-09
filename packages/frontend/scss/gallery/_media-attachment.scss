@@ -75,7 +75,7 @@
       max-width: calc(100% - 90px);
     }
     & > span.date {
-      float: right;
+      float: inline-end;
       color: grey;
     }
   }
@@ -125,8 +125,8 @@
       // Along with flow layout in parent item, centers text
       text-align: center;
       width: $file-icon-width;
-      margin-left: auto;
-      margin-right: auto;
+      margin-inline-start: auto;
+      margin-inline-end: auto;
 
       // We don't have much room for text here, cut it off without ellipse
       overflow-x: hidden;
@@ -218,7 +218,7 @@
 
   & > .text-part {
     flex-grow: 1;
-    margin-left: 8px;
+    margin-inline-start: 8px;
     // The width of the icon plus our 8px margin
     max-width: calc(100% - 37px);
 
@@ -260,5 +260,5 @@
 
 #gallery-tabpanel-webxdc_apps .item {
   overflow: hidden;
-  padding-right: 3px;
+  padding-inline-end: 3px;
 }
