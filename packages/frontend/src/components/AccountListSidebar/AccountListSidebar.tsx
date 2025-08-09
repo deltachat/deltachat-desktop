@@ -121,7 +121,7 @@ export default function AccountListSidebar({
       if (elem) {
         const rect = elem.getBoundingClientRect()
         hoverInfo.current.style.top = `${rect.top}px`
-        hoverInfo.current.style.left = `${rect.right + 15}px`
+        hoverInfo.current.style.insetInlineStart = `${rect.width + 30}px`
       }
     }
   }, [accountForHoverInfo])
