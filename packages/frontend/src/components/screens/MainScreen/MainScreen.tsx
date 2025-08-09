@@ -288,7 +288,12 @@ export default function MainScreen({ accountId }: Props) {
                 onClick={onClickThreeDotMenu}
                 styling='borderless'
               >
-                <Icon coloring='navbar' icon='more' rotation={90} size={24} />
+                <Icon
+                  coloring='navbar'
+                  icon='more'
+                  className='rotate90'
+                  size={24}
+                />
               </Button>
             </span>
           )}

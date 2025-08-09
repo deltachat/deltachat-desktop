@@ -267,7 +267,7 @@ $info-text-max-width: 400px;
 
     &,
     .message-attachment-media {
-      border-bottom-left-radius: 1px;
+      border-end-start-radius: 1px;
     }
   }
 }
@@ -322,7 +322,7 @@ $info-text-max-width: 400px;
 
     &,
     .message-attachment-media {
-      border-bottom-right-radius: 1px;
+      border-end-end-radius: 1px;
     }
   }
 }

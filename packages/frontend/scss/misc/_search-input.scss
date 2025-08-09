@@ -17,7 +17,7 @@ input.search-input {
   outline: none;
 
   &.wrap {
-    margin-left: 40px;
+    margin-inline-start: 40px;
     padding: 10px 0px;
     width: calc(100% - 80px);
   }

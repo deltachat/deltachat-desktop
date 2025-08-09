@@ -13,7 +13,7 @@ $emojimart-search-height: 31px + 6px;
 
   width: 438px;
   height: $esp-height;
-  right: 13px;
+  inset-inline-end: 13px;
   bottom: 50px;
   background-color: var(--picker-Background);
   border-radius: var(--picker-BorderRadius);
