@@ -7,6 +7,7 @@
 ### Changed
 
 ### Fixed
+- don't show "Reply" and "Save" for info messages (e.g. "user A removed user B") and video call invitations #5337
 
 - Truncate app title and description in app picker
 - do not open self chat on info message click #5361
