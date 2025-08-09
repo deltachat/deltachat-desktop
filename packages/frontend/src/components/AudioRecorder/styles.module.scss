@@ -1,7 +1,7 @@
 .microphoneButton {
   height: 40px;
   width: 40px;
-  padding-left: 6px;
+  padding-inline-start: 6px;
   padding-bottom: 8px;
   background-color: var(--composerBg);
   border: none;
@@ -26,7 +26,7 @@
   flex-direction: row;
   align-items: stretch;
   flex-grow: 1;
-  margin-left: 10px;
+  margin-inline-start: 10px;
   p {
     margin: 12px 0 0 3px;
   }
@@ -53,12 +53,12 @@
     width: 85px;
     border-radius: 5px;
     border: none;
-    margin-left: 16px;
+    margin-inline-start: 16px;
 
     &.stopRecording {
       background-color: var(--buttonPrimaryBackground);
       color: #fff;
-      margin-right: 40px;
+      margin-inline-end: 40px;
       &:hover {
         background-color: var(--buttonPrimaryHover);
       }
@@ -81,7 +81,7 @@
 
 .volumeBarContainer {
   flex: 1;
-  padding-right: 10px;
+  padding-inline-end: 10px;
   .volumeBar {
     display: flex;
     position: relative;

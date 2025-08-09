@@ -1,6 +1,6 @@
 .reactions {
   cursor: pointer;
-  margin-right: 10px;
+  margin-inline-end: 10px;
   position: relative;
   line-height: 1; // So that it doesn't change the message height.
   top: 16px;
@@ -14,7 +14,7 @@
   padding: 2px 6px;
 
   & ~ & {
-    margin-left: 2px;
+    margin-inline-start: 2px;
   }
 
   &.isFromSelf {
@@ -37,8 +37,8 @@
   bottom: 1px;
   color: var(--messageText);
   font-size: 12px;
-  margin-left: 3px;
-  margin-right: 1px;
+  margin-inline-start: 3px;
+  margin-inline-end: 1px;
   position: relative;
 }
 
