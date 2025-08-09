@@ -38,7 +38,9 @@ import useChat from '../../hooks/chat/useChat'
 import useCreateChatByContactId from '../../hooks/chat/useCreateChatByContactId'
 import useDialog from '../../hooks/dialog/useDialog'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
+import useTranslationFunction, {
+  useTranslationWritingDirection,
+} from '../../hooks/useTranslationFunction'
 
 import type {
   ChatListItemData,
@@ -88,6 +90,8 @@ export function ChatListPart<
   itemData: T
   itemHeight: number
 }) {
+  const writingDirection = useTranslationWritingDirection()
+
   const infiniteLoaderRef = useRef<InfiniteLoader | null>(null)
 
   // By default InfiniteLoader assumes that each item's index in the list
@@ -149,6 +153,7 @@ export function ChatListPart<
           width={width}
           itemKey={itemKey}
           itemData={itemData}
+          direction={writingDirection}
         >
           {children}
         </List>

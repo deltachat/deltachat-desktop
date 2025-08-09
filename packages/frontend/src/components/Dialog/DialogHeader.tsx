@@ -54,7 +54,12 @@ export default function DialogHeader(props: Props) {
             onClick={onContextMenuClick}
             styling='borderless'
           >
-            <Icon coloring='contextMenu' icon='more' rotation={90} size={24} />
+            <Icon
+              coloring='contextMenu'
+              icon='more'
+              className='rotation90'
+              size={24}
+            />
           </Button>
         </span>
       )}

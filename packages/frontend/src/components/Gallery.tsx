@@ -32,6 +32,7 @@ import {
 } from '../contexts/RovingTabindex'
 import InfiniteLoader from 'react-window-infinite-loader'
 import { T } from '@deltachat/jsonrpc-client'
+import { useTranslationWritingDirection } from '../hooks/useTranslationFunction'
 
 const log = getLogger('renderer/Gallery')
 
@@ -674,6 +675,7 @@ function FileTable({
   mediaLoadResult: Record<number, Type.MessageLoadResult>
   queryText: string
 }) {
+  const writingDirection = useTranslationWritingDirection()
   return (
     <FixedSizeList
       innerElementType={'ol'}
@@ -688,6 +690,7 @@ function FileTable({
         mediaLoadResult,
         queryText,
       }}
+      direction={writingDirection}
       itemKey={(index, data) => data.mediaMessageIds[index]}
     >
       {FileAttachmentRowWrapper}

@@ -224,7 +224,11 @@ class BrowserRuntime implements Runtime {
     ).json()
 
     if (!locale) {
-      return { locale: 'en', messages: { ...messagesEnglish, ...untranslated } }
+      return {
+        locale: 'en',
+        messages: { ...messagesEnglish, ...untranslated },
+        dir: 'ltr',
+      }
     }
 
     let localeMessages: LocaleData['messages']
@@ -255,7 +259,11 @@ class BrowserRuntime implements Runtime {
         localeMessages = messagesEnglish
       }
     }
-    return { locale: 'en', messages: { ...localeMessages, ...untranslated } }
+    return {
+      locale: 'en',
+      messages: { ...localeMessages, ...untranslated },
+      dir: 'ltr',
+    }
   }
   setLocale(_locale: string): Promise<void> {
     throw new Error('Method not implemented.')

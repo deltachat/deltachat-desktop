@@ -5,7 +5,7 @@
   width: 56%;
   max-width: 640px;
   height: 70vh;
-  margin-left: 8px;
+  margin-inline-start: 8px;
   bottom: 50px;
   background-color: var(--bgPrimary);
   border-radius: var(--picker-BorderRadius);
@@ -86,7 +86,7 @@
 .appIcon {
   width: 64px;
   height: 64px;
-  margin-right: 16px;
+  margin-inline-end: 16px;
   border-radius: 5px;
 }
 

@@ -15,7 +15,7 @@
   width: 18px; // respect the 1.5:1 aspect ratio (dictated by delivered & seen icon)
   height: 12px;
   display: inline-block;
-  margin-left: 2px;
+  margin-inline-start: 2px;
 
   &.sending {
     @include mixins.color-svg(
@@ -25,7 +25,7 @@
     animation: __status-icon--spinning 4s linear infinite;
     // ensure the element takes always the same width:
     width: 12px;
-    margin-left: 8px;
+    margin-inline-start: 8px;
   }
   &.delivered {
     @include mixins.color-svg('./images/sent.svg', var(--messageStatusIcon));
@@ -39,7 +39,7 @@
     @include mixins.color-svg('./images/error.svg', var(--errorColor));
     // ensure the element takes always the same width:
     width: 12px;
-    margin-left: 8px;
+    margin-inline-start: 8px;
     cursor: pointer;
   }
 }

@@ -1,6 +1,7 @@
 import React, {
   ChangeEvent,
   useCallback,
+  useContext,
   useEffect,
   useLayoutEffect,
   useRef,
@@ -16,13 +17,13 @@ import { BackendRemote, onDCEvent, Type } from '../../../backend-com'
 import { selectedAccountId } from '../../../ScreenController'
 import { DialogBody, DialogHeader, OkCancelFooterAction } from '../../Dialog'
 import useDialog from '../../../hooks/dialog/useDialog'
-import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import { VerifiedContactsRequiredDialog } from '../ProtectionStatusDialog'
 import InfiniteLoader from 'react-window-infinite-loader'
 import { AddMemberChip } from './AddMemberDialog'
 import styles from './styles.module.scss'
 import classNames from 'classnames'
 import { RovingTabindexProvider } from '../../../contexts/RovingTabindex'
+import { I18nContext } from '../../../contexts/I18nContext'
 
 export function AddMemberInnerDialog({
   onCancel,
@@ -57,7 +58,7 @@ export function AddMemberInnerDialog({
   isVerificationRequired: boolean
   allowAddManually: boolean
 }) {
-  const tx = useTranslationFunction()
+  const { tx, writingDirection } = useContext(I18nContext)
   const { openDialog } = useDialog()
   const accountId = selectedAccountId()
   const contactIdsInGroup: number[] = contactIds.filter(contactId =>
@@ -274,6 +275,7 @@ export function AddMemberInnerDialog({
                         return isExtraItem ? 'addContact' : contactIds[index]
                       }}
                       onItemsRendered={onItemsRendered}
+                      direction={writingDirection}
                       ref={ref}
                       height={height}
                       width='100%'

@@ -111,7 +111,7 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
 
   return (
     <I18nContext.Consumer>
-      {tx => (
+      {({ tx }) => (
         <div className='login-form'>
           <DeltaInput
             key='addr'

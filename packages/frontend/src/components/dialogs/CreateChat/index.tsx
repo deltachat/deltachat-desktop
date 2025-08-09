@@ -62,6 +62,7 @@ import ViewProfile from '../ViewProfile'
 import { isInviteLink } from '@deltachat-desktop/shared/util'
 import { copyToBlobDir } from '../../../utils/copyToBlobDir'
 import { useRpcFetch } from '../../../hooks/useFetch'
+import { I18nContext } from '../../../contexts/I18nContext'
 
 const enum GroupType {
   /**
@@ -161,7 +162,7 @@ type CreateChatMainProps = {
 
 function CreateChatMain(props: CreateChatMainProps) {
   const { setViewMode, onClose } = props
-  const tx = useTranslationFunction()
+  const { tx, writingDirection } = useContext(I18nContext)
   const openConfirmationDialog = useConfirmationDialog()
   const accountId = selectedAccountId()
   const { openDialog } = useDialog()
@@ -408,6 +409,7 @@ function CreateChatMain(props: CreateChatMainProps) {
                     outerRef={fixedSizeListOuterRef}
                     height={height}
                     width='100%'
+                    direction={writingDirection}
                     // TODO fix: The size of each item is determined
                     // by `--local-avatar-size` and `--local-avatar-vertical-margin`,
                     // which might be different, e.g. currently they're smaller for

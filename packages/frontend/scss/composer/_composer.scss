@@ -32,7 +32,7 @@
 
       // The "remove attachment / quote" buttons.
       button:not(.quote-background) {
-        margin-left: auto;
+        margin-inline-start: auto;
       }
 
       .message-attachment-media {
@@ -69,7 +69,7 @@
       width: 40px;
       height: 40px;
       padding-top: 4px;
-      padding-left: 8px;
+      padding-inline-start: 8px;
 
       box-shadow: none;
       border: none;
@@ -127,7 +127,11 @@
         background-repeat: no-repeat;
         background-position: 3px 1px;
         background-size: contain;
+
         vertical-align: middle;
+        &:dir(rtl) {
+          transform: rotate(180deg);
+        }
       }
     }
 
@@ -160,7 +164,7 @@
 
       // The "edit message" mode hides the .attachment-button.
       &:first-child {
-        margin-left: 1rem;
+        margin-inline-start: 1rem;
       }
     }
   }
