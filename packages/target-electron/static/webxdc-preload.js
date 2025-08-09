@@ -71,7 +71,7 @@ class RealtimeListener {
     )
     for (const update of updates) {
       last_serial = update.max_serial
-      callback(update)
+      await callback(update)
     }
     if (setUpdateListenerPromise) {
       setUpdateListenerPromise()
