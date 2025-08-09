@@ -280,15 +280,18 @@ function ChatListItemError({
   )
 }
 
-function ChatListItemNormal({
-  chatListItem,
+/**
+ * Default is Chat Item
+ */
+function DefaultChatListItem({
+  chatItem,
   onClick,
   isSelected,
   roleTab,
   onContextMenu,
   isContextMenuActive,
 }: {
-  chatListItem: Type.ChatListItemFetchResult & {
+  chatItem: Type.ChatListItemFetchResult & {
     kind: 'ChatListItem'
   }
   onClick: () => void
@@ -309,11 +312,11 @@ function ChatListItemNormal({
   } = useRovingTabindex(ref)
   // TODO `setAsActiveElement` if `isSelected` and `activeElement === null`
 
-  const chatTypeForTests = chatListItem.isSelfTalk
+  const chatTypeForTests = chatItem.isSelfTalk
     ? 'self-talk'
-    : chatListItem.isDeviceTalk
+    : chatItem.isDeviceTalk
       ? 'device-talk'
-      : chatListItem.id
+      : chatItem.id
 
   return (
     <button
@@ -327,21 +330,21 @@ function ChatListItemNormal({
       role={roleTab ? 'tab' : undefined}
       aria-selected={isSelected}
       className={classNames('chat-list-item', tabindexClassName, {
-        'has-unread': chatListItem.freshMessageCounter > 0,
-        'is-contact-request': chatListItem.isContactRequest,
-        pinned: chatListItem.isPinned,
-        muted: chatListItem.isMuted,
+        'has-unread': chatItem.freshMessageCounter > 0,
+        'is-contact-request': chatItem.isContactRequest,
+        pinned: chatItem.isPinned,
+        muted: chatItem.isMuted,
         selected: isSelected,
         'context-menu-active': isContextMenuActive,
       })}
-      data-testid={`chat${chatListItem.isGroup ? '-group' : ''}-${chatTypeForTests}`}
+      data-testid={`chat${chatItem.isGroup ? '-group' : ''}-${chatTypeForTests}`}
     >
       <Avatar
         {...{
-          displayName: chatListItem.name,
-          avatarPath: chatListItem.avatarPath || undefined,
-          color: chatListItem.color,
-          wasSeenRecently: chatListItem.wasSeenRecently,
+          displayName: chatItem.name,
+          avatarPath: chatItem.avatarPath || undefined,
+          color: chatItem.color,
+          wasSeenRecently: chatItem.wasSeenRecently,
           // Avatar is purely decorative here,
           // and is redundant accessibility-wise,
           // because we display the chat name below.
@@ -350,21 +353,21 @@ function ChatListItemNormal({
       />
       <div className='content'>
         <Header
-          lastUpdated={chatListItem.lastUpdated}
-          name={chatListItem.name}
-          isPinned={chatListItem.isPinned}
-          isMuted={chatListItem.isMuted}
+          lastUpdated={chatItem.lastUpdated}
+          name={chatItem.name}
+          isPinned={chatItem.isPinned}
+          isMuted={chatItem.isMuted}
         />
 
         <Message
-          summaryStatus={chatListItem.summaryStatus}
-          summaryText1={chatListItem.summaryText1}
-          summaryText2={chatListItem.summaryText2}
-          summaryPreviewImage={chatListItem.summaryPreviewImage}
-          freshMessageCounter={chatListItem.freshMessageCounter}
-          isArchived={chatListItem.isArchived}
-          isContactRequest={chatListItem.isContactRequest}
-          lastMessageId={chatListItem.lastMessageId}
+          summaryStatus={chatItem.summaryStatus}
+          summaryText1={chatItem.summaryText1}
+          summaryText2={chatItem.summaryText2}
+          summaryPreviewImage={chatItem.summaryPreviewImage}
+          freshMessageCounter={chatItem.freshMessageCounter}
+          isArchived={chatItem.isArchived}
+          isContactRequest={chatItem.isContactRequest}
+          lastMessageId={chatItem.lastMessageId}
         />
       </div>
     </button>
@@ -397,8 +400,8 @@ const ChatListItem = React.memo<ChatListItemProps>(
 
     if (chatListItem.kind == 'ChatListItem') {
       return (
-        <ChatListItemNormal
-          chatListItem={chatListItem}
+        <DefaultChatListItem
+          chatItem={chatListItem}
           onClick={onClick}
           roleTab={roleTab}
           isSelected={props.isSelected}

@@ -13,6 +13,17 @@ import { selectedAccountId } from '../../ScreenController'
 import type { T } from '@deltachat/jsonrpc-client'
 import type { useChatListContextMenu } from './ChatListContextMenu'
 
+/**
+ * This file contains the row wrapper components for the 3 possible
+ * types of search result items in the chat list:
+ * - ChatListItemRowChat
+ * - ChatListItemRowContact
+ * - ChatListItemRowMessage
+ */
+
+/**
+ * Data for a chat item
+ */
 export type ChatListItemData = {
   selectedChatId: number | null
   /**
@@ -35,6 +46,9 @@ export type ChatListItemData = {
   >['activeContextMenuChatId']
 }
 
+/**
+ * Data for a message item
+ */
 export type MessageChatListItemData = {
   messageResultIds: number[]
   messageCache: {
@@ -47,6 +61,9 @@ export type MessageChatListItemData = {
   isSingleChatSearch: boolean
 }
 
+/**
+ * Data for a contact item
+ */
 export type ContactChatListItemData = {
   contactCache: {
     [id: number]: T.Contact | undefined
