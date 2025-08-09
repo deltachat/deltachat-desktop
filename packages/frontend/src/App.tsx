@@ -59,7 +59,7 @@ export default function App(_props: any) {
   )
 }
 
-function I18nContextWrapper({ children }: { children: React.ReactChild }) {
+function I18nContextWrapper({ children }: { children: React.ReactElement }) {
   const [localeData, setLocaleData] = useState<LocaleData | null>(null)
 
   useLayoutEffect(() => {
@@ -71,6 +71,7 @@ function I18nContextWrapper({ children }: { children: React.ReactChild }) {
 
   async function reloadLocaleData(locale: string) {
     const localeData = await runtime.getLocaleData(locale)
+    // localeData.dir = 'rtl' use for right-to-left language tests
     window.localeData = localeData
     window.static_translate = translate(localeData.locale, localeData.messages)
     setLocaleData(localeData)

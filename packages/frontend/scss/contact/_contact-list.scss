@@ -3,7 +3,6 @@
 .contact-list-item {
   display: flex;
   --contact-padding-start: 20px;
-  padding-inline-start: 20px;
 
   &:hover {
     background-color: var(--contactListItemBgHover);

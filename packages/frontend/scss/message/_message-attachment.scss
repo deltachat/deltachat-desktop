@@ -23,8 +23,8 @@
   text-align: center;
   position: relative;
 
-  margin-left: calc(-1 * var(--msg-container-padding-horizontal));
-  margin-right: calc(-1 * var(--msg-container-padding-horizontal));
+  margin-inline-start: calc(-1 * var(--msg-container-padding-horizontal));
+  margin-inline-end: calc(-1 * var(--msg-container-padding-horizontal));
   width: calc(100% + 2 * var(--msg-container-padding-horizontal));
   margin-top: calc(-1 * var(--msg-container-padding-top));
   margin-bottom: -12px;
@@ -163,8 +163,8 @@
     background: url('./images/file-gradient.svg') no-repeat center;
     height: 44px;
     width: 56px;
-    margin-left: -13px;
-    margin-right: -14px;
+    margin-inline-start: -13px;
+    margin-inline-end: -14px;
     margin-bottom: -4px;
 
     // So we can center the extension text inside this icon
@@ -181,8 +181,8 @@
       // Along with flow layout in parent item, centers text
       text-align: center;
       width: 25px;
-      margin-left: auto;
-      margin-right: auto;
+      margin-inline-start: auto;
+      margin-inline-end: auto;
 
       // We don't have much room for text here, cut it off without ellipse
       overflow-x: hidden;
@@ -196,7 +196,7 @@
 
   & > .text-part {
     flex-grow: 1;
-    margin-left: 8px;
+    margin-inline-start: 8px;
     // The width of the icon plus our 8px margin
     max-width: calc(100% - 37px);
 

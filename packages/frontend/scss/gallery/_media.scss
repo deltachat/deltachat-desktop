@@ -4,7 +4,7 @@ $tab-height: 46px;
 
 .media-view {
   background-color: var(--galleryBg);
-  padding-left: 10px;
+  padding-inline-start: 10px;
   overflow: hidden;
   min-width: 200px;
   flex-grow: 1;
@@ -15,7 +15,7 @@ $tab-height: 46px;
     display: flex;
     justify-content: space-between;
     gap: 30px;
-    margin-left: 10px;
+    margin-inline-start: 10px;
 
     overflow-x: auto;
 
@@ -34,7 +34,7 @@ $tab-height: 46px;
         flex-grow: 1;
         text-align: end;
         align-self: center;
-        margin-right: 12px;
+        margin-inline-end: 12px;
         font-size: 18px;
         color: var(--summary-text-color);
         white-space: nowrap;
@@ -78,7 +78,7 @@ $tab-height: 46px;
       background: transparent;
       color: var(--textPrimary);
       outline: none;
-      margin-right: 20px;
+      margin-inline-end: 20px;
     }
   }
 }
