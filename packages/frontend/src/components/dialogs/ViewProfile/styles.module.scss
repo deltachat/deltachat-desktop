@@ -38,7 +38,9 @@
 }
 
 .buttonWrap {
-  margin: 10px 0 24px 30px;
+  margin: 10px 0 24px 0;
+  margin-inline-start: 30px;
+
   button {
     min-width: 150px;
   }

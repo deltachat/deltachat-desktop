@@ -141,6 +141,10 @@ $paddingVertical: 20px;
 
 .backButton {
   margin-inline-end: 20px;
+
+  :global([dir='rtl']) & {
+    transform: rotate(180deg);
+  }
 }
 
 .footerActions {
