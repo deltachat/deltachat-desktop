@@ -22,15 +22,15 @@
   border-bottom: solid 2px #d3d3d3;
   max-height: 33%;
   overflow-y: scroll;
-  padding-left: 19px;
-  padding-right: 30px;
+  padding-inline-start: 19px;
+  padding-inline-end: 30px;
 
   .AddMemberChips {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    margin-left: -5px;
-    margin-right: -5px;
+    margin-inline-start: -5px;
+    margin-inline-end: -5px;
 
     .AddMemberChip {
       display: flex;
@@ -44,9 +44,9 @@
       .DisplayName {
         display: flex;
         align-items: center;
-        padding-right: 6px;
+        padding-inline-end: 6px;
         padding-bottom: 4px;
-        margin-left: 5px;
+        margin-inline-start: 5px;
         div {
           max-width: 90px;
           white-space: nowrap;

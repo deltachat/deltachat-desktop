@@ -23,7 +23,7 @@
 
 .sendBackupSteps {
   margin-top: 20px;
-  margin-left: 20px;
+  margin-inline-start: 20px;
   max-width: 300px;
   min-width: 200px;
 }
@@ -49,7 +49,7 @@
       flex: none;
       height: 20px;
       justify-content: center;
-      margin-right: 8px;
+      margin-inline-end: 8px;
       padding-top: 2px;
       width: 20px;
     }
@@ -62,7 +62,7 @@
 
 .linkIcon {
   background-color: var(--colorPrimary);
-  margin-left: 10px;
+  margin-inline-start: 10px;
 }
 
 .buttonGroup {

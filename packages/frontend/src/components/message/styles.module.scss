@@ -25,7 +25,7 @@
   &.onlyMedia {
     bottom: 5px;
     left: 0;
-    margin-left: 10px;
+    margin-inline-start: 10px;
     position: absolute;
     right: 5px;
   }
@@ -53,7 +53,7 @@
   border-radius: 10px;
   padding: 9px;
   padding-top: 0;
-  padding-right: 15px;
+  padding-inline-end: 15px;
   .avatar {
     margin-bottom: 0;
   }
@@ -61,7 +61,7 @@
     display: flex;
     flex-grow: 1;
     flex-direction: column;
-    padding-left: 10px;
+    padding-inline-start: 10px;
   }
   .displayName {
     margin-bottom: 0;

@@ -71,7 +71,6 @@ function I18nContextWrapper({ children }: { children: React.ReactElement }) {
 
   async function reloadLocaleData(locale: string) {
     const localeData = await runtime.getLocaleData(locale)
-    // localeData.dir = 'rtl' use for right-to-left language tests
     window.localeData = localeData
     window.static_translate = translate(localeData.locale, localeData.messages)
     setLocaleData(localeData)

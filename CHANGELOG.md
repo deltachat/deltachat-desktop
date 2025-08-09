@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Added
+- support RTL layout if locale.dir = rtf #4168
 
 ### Changed
 
