@@ -254,7 +254,7 @@ export default function ChatAuditLogDialog(
                       onContextMenu={ev => showMenu(message, ev)}
                       aria-haspopup='menu'
                     >
-                      <p>
+                      <div>
                         <div className='timestamp'>
                           {moment.unix(timestamp).format('LT')}
                         </div>
@@ -275,7 +275,7 @@ export default function ChatAuditLogDialog(
                               aria-label={tx(`a11y_delivery_status_${status}`)}
                             />
                           )}
-                      </p>
+                      </div>
                     </li>
                   )
                 })}
