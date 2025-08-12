@@ -169,13 +169,13 @@ $paddingVertical: 20px;
 .footerActionButton {
   min-width: 100px;
   padding: 8px 12px !important;
+  margin: 10px 0;
   & + & {
     margin-left: 20px;
   }
   @media (width <= variables.$default-dialog-width) {
     & + & {
-      margin-left: 0px;
-      margin-top: 20px;
+      margin-inline-start: 10px;
     }
   }
 }
