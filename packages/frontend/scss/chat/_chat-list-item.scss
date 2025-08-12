@@ -360,7 +360,7 @@
 }
 
 #new-chat-button {
-  right: 15px;
+  inset-inline-end: 15px;
   position: absolute;
   &:focus-visible {
     outline-offset: 2px;
