@@ -2,12 +2,10 @@
 
 ## [Unreleased][unreleased]
 
-### Added
-- support RTL layout if locale.dir = rtf #4168
 
 <a id="2_11_0"></a>
 
-## [2.11.0] - 2025-08-13
+## [2.11.0] - 2025-08-14
 
 ### Changed
 - update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.11.0`
@@ -21,6 +19,9 @@
 - Truncate app title and description in app picker
 - do not open self chat on info message click #5361
 - fix Connectivity colors in dark mode #5397
+
+### Added
+- support RTL layout if locale.dir = rtf #4168
 
 <a id="2_10_0"></a>
 
