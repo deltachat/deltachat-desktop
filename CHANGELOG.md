@@ -4,7 +4,7 @@
 
 <a id="2_11_0"></a>
 
-## [2.11.0] - 2025-08-13
+## [2.11.0] - 2025-08-18
 
 ### Added
 - support RTL layout if locale.dir = rtf #4168
