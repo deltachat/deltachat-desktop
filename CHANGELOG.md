@@ -5,7 +5,16 @@
 ### Added
 - support RTL layout if locale.dir = rtf #4168
 
+<a id="2_11_0"></a>
+
+## [2.11.0] - 2025-08-13
+
 ### Changed
+- update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.11.0`
+  - Do not add key-contacts to unencrypted groups.
+  - Do not reset GuaranteeE2ee in the database when resending messages.
+  - Take Chat-Group-Name into account when matching ad hoc groups.
+  - Don't break long group names with non-ASCII characters.
 
 ### Fixed
 - share email contacts by email not by VCard #5364
@@ -3637,7 +3646,9 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.10.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.11.0...HEAD
+
+[2.11.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.10.0...v2.11.0
 
 [2.10.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.9.0...v2.10.0
 
