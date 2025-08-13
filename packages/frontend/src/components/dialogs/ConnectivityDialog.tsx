@@ -71,6 +71,7 @@ function ConnectivityDialogInner() {
               width: '100%',
               minHeight: '320px',
               backgroundColor: canInjectStyles ? undefined : 'white',
+              color: canInjectStyles ? undefined : 'black',
             }}
             srcDoc={connectivityHTML}
             sandbox={''}
@@ -82,7 +83,7 @@ function ConnectivityDialogInner() {
 }
 
 async function getConnectivityHTML(
-  styleSensor?: React.MutableRefObject<HTMLDivElement | null>
+  styleSensor?: React.RefObject<HTMLDivElement | null>
 ): Promise<string> {
   let cHTML = await BackendRemote.rpc.getConnectivityHtml(selectedAccountId())
 
@@ -90,7 +91,17 @@ async function getConnectivityHTML(
     const cstyle = window.getComputedStyle(styleSensor.current)
     let resulting_style = ''
     for (const property of INHERIT_STYLES) {
+      if (property === 'background-color') {
+        // background-color is always
+        // rgba(0,0,0,0) no matter what the theme bgColor is??
+        continue
+      }
       resulting_style += `${property}: ${cstyle.getPropertyValue(property)};`
+    }
+    if (cstyle.getPropertyValue('color') === 'rgb(255, 255, 255)') {
+      resulting_style += `background-color: #222;`
+    } else {
+      resulting_style += `background-color: white;`
     }
     cHTML = cHTML.replace(
       '</style>',
