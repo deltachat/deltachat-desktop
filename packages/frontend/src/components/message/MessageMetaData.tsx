@@ -53,7 +53,8 @@ export default function MessageMetaData(props: Props) {
       {/* FYI the email doesn't need `aria-live`
       as we don't expect it to get removed. See
       https://github.com/deltachat/deltachat-desktop/pull/5023#discussion_r2059382983 */}
-      {!encrypted && (
+      {!encrypted && status !== 'in_noticed' && (
+        // if a message is in status in_notice we don't know if it is encrypted or not
         <div
           aria-label={tx('email')}
           // We should not announce this for _every_ message.
