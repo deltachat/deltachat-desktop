@@ -332,6 +332,7 @@ const PERMISSIONS_POLICY_DENY_ALL: &str = concat!(
     "captured-surface-control=(), ",
     "conversion-measurement=(), ",
     "digital-credentials-get=(), ",
+    "digital-credentials-create=(), ",
     "focus-without-user-activation=(), ",
     "join-ad-interest-group=(), ",
     "local-fonts=(), ",
