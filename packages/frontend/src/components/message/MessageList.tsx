@@ -1012,16 +1012,15 @@ function JumpDownButton({
 }) {
   const tx = useTranslationFunction()
 
-  const locale = window.localeData.locale
   const countUnreadMessages = useUnreadCount(accountId, chat)
 
   if (hidden) {
     return null
   }
 
-  let countToShow: string = countUnreadMessages.toLocaleString(locale)
+  let countToShow: string = countUnreadMessages.toString()
   if (countUnreadMessages > 99) {
-    countToShow = '99+' // TODO: show in localeString
+    countToShow = '99+'
   }
 
   const stackIsEmpty = jumpToMessageStack.length === 0
@@ -1036,13 +1035,9 @@ function JumpDownButton({
           )}
           // Even though this is not focusable as of the time of writing,
           // let's still apply label, for future-proofing.
-          aria-label={tx(
-            'chat_n_new_messages',
-            countUnreadMessages.toLocaleString(locale),
-            {
-              quantity: countUnreadMessages,
-            }
-          )}
+          aria-label={tx('chat_n_new_messages', String(countUnreadMessages), {
+            quantity: countUnreadMessages,
+          })}
           style={countUnreadMessages === 0 ? { visibility: 'hidden' } : {}}
         >
           {countToShow}

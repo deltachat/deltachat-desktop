@@ -48,7 +48,6 @@ export default function AccountItem({
 }: Props) {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
-  const locale = window.localeData.locale
 
   const accountFetch = useRpcFetch(BackendRemote.rpc.getAccountInfo, [
     accountId,
@@ -195,15 +194,11 @@ export default function AccountItem({
         // it only applies to a single chat.
         // But it's good enough I guess.
         // Maybe we could also use `n_messages_in_m_chats` instead.
-        aria-label={tx(
-          'chat_n_new_messages',
-          unreadCount.toLocaleString(locale),
-          {
-            quantity: unreadCount,
-          }
-        )}
+        aria-label={tx('chat_n_new_messages', String(unreadCount), {
+          quantity: unreadCount,
+        })}
       >
-        {unreadCount.toLocaleString(locale)}
+        {unreadCount}
       </div>
     )
   }

@@ -30,7 +30,6 @@ export default function formatRelativeTime(
 ) {
   const { extended } = options
   const tx = window.static_translate
-  const locale = window.localeData.locale
   const formats = extended ? getExtendedFormats() : getShortFormats()
   const timestamp = moment(rawTimestamp)
   const now = moment()
@@ -45,13 +44,13 @@ export default function formatRelativeTime(
   } else if (diff.hours() >= 1) {
     const key = 'n_hours'
 
-    return tx(key, diff.hours().toLocaleString(locale), {
+    return tx(key, String(diff.hours()), {
       quantity: diff.hours(),
     })
   } else if (diff.minutes() >= 1) {
     const key = 'n_minutes'
 
-    return tx(key, diff.minutes().toLocaleString(locale), {
+    return tx(key, String(diff.minutes()), {
       quantity: diff.minutes(),
     })
   }

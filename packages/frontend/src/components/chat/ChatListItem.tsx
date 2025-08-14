@@ -18,17 +18,16 @@ const log = getLogger('renderer/chatlist/item')
 
 function FreshMessageCounter({ counter }: { counter: number }) {
   const tx = useTranslationFunction()
-  const locale = window.localeData.locale
 
   if (counter === 0) return null
   return (
     <span
       className='fresh-message-counter'
-      aria-label={tx('chat_n_new_messages', counter.toLocaleString(locale), {
+      aria-label={tx('chat_n_new_messages', String(counter), {
         quantity: counter,
       })}
     >
-      {counter.toLocaleString(locale)}
+      {counter}
     </span>
   )
 }
