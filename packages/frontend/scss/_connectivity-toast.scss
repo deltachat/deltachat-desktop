@@ -4,7 +4,7 @@
   position: fixed;
 
   bottom: 15px;
-  margin-left: 8px;
+  margin-inline-start: 8px;
   text-align: center;
   background-color: var(--contextMenuBg);
   border: 1px solid var(--contextMenuBorder);
@@ -36,7 +36,7 @@
 
     display: block;
     color: var(--colorPrimary);
-    margin-left: 4px;
+    margin-inline-start: 4px;
     cursor: pointer;
 
     &:hover,

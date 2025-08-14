@@ -27,7 +27,7 @@ $info-text-max-width: 400px;
     align-self: flex-end;
     bottom: 0px;
     position: static;
-    margin-right: 8px;
+    margin-inline-end: 8px;
     user-select: none;
 
     img {
@@ -84,8 +84,8 @@ $info-text-max-width: 400px;
     border-radius: 16px;
     --msg-container-padding-horizontal: 12px;
     --msg-container-padding-top: 10px;
-    padding-right: var(--msg-container-padding-horizontal);
-    padding-left: var(--msg-container-padding-horizontal);
+    padding-inline-end: var(--msg-container-padding-horizontal);
+    padding-inline-start: var(--msg-container-padding-horizontal);
     padding-top: var(--msg-container-padding-top);
     padding-bottom: 10px;
 
@@ -111,7 +111,7 @@ $info-text-max-width: 400px;
         white-space: pre-wrap;
         cursor: default;
 
-        margin-right: 10px;
+        margin-inline-end: 10px;
       }
     }
 
@@ -153,7 +153,7 @@ $info-text-max-width: 400px;
         white-space: nowrap;
         &:not(:empty)::after {
           content: '–';
-          margin-left: 3px;
+          margin-inline-start: 3px;
         }
         &:empty {
           display: none;
@@ -203,7 +203,7 @@ $info-text-max-width: 400px;
 
     border: none;
     background-color: transparent;
-    padding-left: 0;
+    padding-inline-start: 0;
     color: var(--colorPrimary);
     &:hover {
       cursor: pointer;
@@ -219,7 +219,7 @@ $info-text-max-width: 400px;
     button {
       border: none;
       background-color: transparent;
-      padding-left: 0;
+      padding-inline-start: 0;
       color: var(--colorPrimary);
     }
   }
@@ -228,7 +228,7 @@ $info-text-max-width: 400px;
 // States that modify the message bubble appearance
 
 .message.incoming {
-  margin-left: 0;
+  margin-inline-start: 0;
 
   .metadata:not(.with-image-no-caption) {
     .email-icon {
@@ -267,15 +267,15 @@ $info-text-max-width: 400px;
 
     &,
     .message-attachment-media {
-      border-bottom-left-radius: 1px;
+      border-end-start-radius: 1px;
     }
   }
 }
 
 .message.outgoing {
   flex-direction: row-reverse;
-  float: right;
-  margin-right: 0;
+  float: inline-end;
+  margin-inline-end: 0;
 
   .metadata:not(.with-image-no-caption) {
     .date,
@@ -322,7 +322,7 @@ $info-text-max-width: 400px;
 
     &,
     .message-attachment-media {
-      border-bottom-right-radius: 1px;
+      border-end-end-radius: 1px;
     }
   }
 }
@@ -342,7 +342,7 @@ $info-text-max-width: 400px;
       background: var(--messageBg);
 
       padding: 5px;
-      padding-left: 6px;
+      padding-inline-start: 6px;
       border-radius: 7px;
 
       & > .quote {
@@ -366,7 +366,7 @@ $info-text-max-width: 400px;
   }
 
   .metadata {
-    float: right;
+    float: inline-end;
     padding: 4px 8px 1px 8px;
     background-color: #01010159;
     border-radius: 4px;
@@ -529,9 +529,9 @@ $info-text-max-width: 400px;
 
 .message .msg-container .quote,
 .composer .quote {
-  border-left: 3px gray solid;
+  border-inline-start: 3px gray solid;
   padding: 0 4px;
-  padding-left: 9px;
+  padding-inline-start: 9px;
   margin: 2px 0 5px 0;
   display: flex;
   --quote-img-size: 36px;
@@ -598,7 +598,7 @@ $info-text-max-width: 400px;
     object-fit: scale-down;
     object-position: center;
 
-    margin-left: 6px;
+    margin-inline-start: 6px;
   }
 
   img.quoted-webxdc-icon {
@@ -607,7 +607,7 @@ $info-text-max-width: 400px;
     width: var(--quote-img-size);
     flex-shrink: 0;
 
-    margin-left: 6px;
+    margin-inline-start: 6px;
     border-radius: 7%;
   }
 }
@@ -659,7 +659,7 @@ $info-text-max-width: 400px;
     background-color: var(--infoMessageBubbleBg);
     border-radius: 100%;
     margin: 8px 0px;
-    margin-right: 10px;
+    margin-inline-end: 10px;
   }
   .break {
     flex-basis: 100%;

@@ -9,7 +9,9 @@ import { ActionEmitter, KeybindAction } from '../keybindings'
 import useChat from '../hooks/chat/useChat'
 import useChatDialog from '../hooks/chat/useChatDialog'
 import useDialog from '../hooks/dialog/useDialog'
-import useTranslationFunction from '../hooks/useTranslationFunction'
+import useTranslationFunction, {
+  useTranslationWritingDirection,
+} from '../hooks/useTranslationFunction'
 import DisappearingMessages from './dialogs/DisappearingMessages'
 import { ContextMenuContext } from '../contexts/ContextMenuContext'
 import { selectedAccountId } from '../ScreenController'
@@ -24,6 +26,7 @@ export function useThreeDotMenu(selectedChat?: T.FullChat) {
   const tx = useTranslationFunction()
   const accountId = selectedAccountId()
   const { unselectChat } = useChat()
+  const writingDirection = useTranslationWritingDirection()
   const {
     openBlockFirstContactOfChatDialog,
     openChatAuditDialog,
@@ -211,7 +214,7 @@ export function useThreeDotMenu(selectedChat?: T.FullChat) {
     const boundingBox = threeDotButtonElement.getBoundingClientRect()
 
     const [x, y] = [
-      boundingBox.x + boundingBox.width - 3,
+      writingDirection === 'rtl' ? 0 : boundingBox.x + boundingBox.width - 3,
       boundingBox.y + boundingBox.height - 2,
     ]
     event.preventDefault() // prevent default runtime context menu from opening

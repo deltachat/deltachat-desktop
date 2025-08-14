@@ -18,12 +18,12 @@ $transitionDuration: 50ms;
 
   &.incoming {
     flex-direction: row;
-    margin-left: 10px;
+    margin-inline-start: 10px;
   }
 
   &.outgoing {
     flex-direction: row-reverse;
-    margin-right: 10px;
+    margin-inline-end: 10px;
   }
 }
 
@@ -76,5 +76,5 @@ $transitionDuration: 50ms;
   width: 40px;
   height: 40px;
   background-color: var(--buttonPrimaryText);
-  margin-left: 2px;
+  margin-inline-start: 2px;
 }

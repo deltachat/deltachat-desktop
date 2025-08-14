@@ -51,8 +51,8 @@ $paddingVertical: 20px;
   border-bottom: var(--outlineProperties);
   display: flex;
   padding-bottom: 20px;
-  padding-left: $paddingHorizontal;
-  padding-right: $paddingHorizontal - 5px;
+  padding-inline-start: $paddingHorizontal;
+  padding-inline-end: $paddingHorizontal - 5px;
   padding-top: $paddingVertical;
   user-select: none;
 }
@@ -81,8 +81,8 @@ $paddingVertical: 20px;
 }
 
 .dialogContent {
-  padding-left: $paddingHorizontal;
-  padding-right: $paddingHorizontal;
+  padding-inline-start: $paddingHorizontal;
+  padding-inline-end: $paddingHorizontal;
   line-height: 22px;
 
   &.paddingTop {
@@ -103,8 +103,8 @@ $paddingVertical: 20px;
   width: 100%;
   background-color: var(--bp4DialogBgPrimary);
   padding-bottom: $paddingVertical;
-  padding-left: $paddingHorizontal;
-  padding-right: $paddingHorizontal;
+  padding-inline-start: $paddingHorizontal;
+  padding-inline-end: $paddingHorizontal;
   padding-top: $paddingVertical;
 }
 
@@ -121,7 +121,7 @@ $paddingVertical: 20px;
   width: $headerButtonSize;
 
   & + & {
-    margin-left: 5px;
+    margin-inline-start: 5px;
   }
 
   &:hover {
@@ -137,10 +137,15 @@ $paddingVertical: 20px;
 .headerThreeDotButton {
   margin: 0 !important;
   padding: 0 !important;
+  transform: rotate(90deg);
 }
 
 .backButton {
-  margin-right: 20px;
+  margin-inline-end: 20px;
+
+  :global([dir='rtl']) & {
+    transform: rotate(180deg);
+  }
 }
 
 .footerActions {
@@ -171,7 +176,7 @@ $paddingVertical: 20px;
   padding: 8px 12px !important;
   margin: 10px 0;
   & + & {
-    margin-left: 20px;
+    margin-inline-start: 20px;
   }
   @media (width <= variables.$default-dialog-width) {
     & + & {

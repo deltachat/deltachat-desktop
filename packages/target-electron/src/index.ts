@@ -170,8 +170,7 @@ async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
 ]) {
   // can fail due to user error so running it first is better (cli argument)
   acceptThemeCLI()
-
-  setLanguage(DesktopSettings.state.locale || app.getLocale())
+  setLanguage(DesktopSettings.state.locale || app.getLocale().split('-')[0]) // can consist of 2 strings like in en-GB
 
   const cwd = getAccountsPath()
   log.info(`cwd ${cwd}`)

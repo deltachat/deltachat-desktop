@@ -288,7 +288,12 @@ export default function MainScreen({ accountId }: Props) {
                 onClick={onClickThreeDotMenu}
                 styling='borderless'
               >
-                <Icon coloring='navbar' icon='more' rotation={90} size={24} />
+                <Icon
+                  coloring='navbar'
+                  icon='more'
+                  className='rotate90'
+                  size={24}
+                />
               </Button>
             </span>
           )}
@@ -389,7 +394,7 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
         // because we display the chat name below.
         aria-hidden={true}
       />
-      <div style={{ marginLeft: '7px', overflow: 'hidden' }}>
+      <div style={{ marginInlineStart: '7px', overflow: 'hidden' }}>
         <div className='navbar-chat-name'>
           <div className='truncated'>{chat.name}</div>
           <div className='chat_property_icons'>
