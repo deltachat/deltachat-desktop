@@ -11,6 +11,7 @@
 - share email contacts by email not by VCard #5364
 - Truncate app title and description in app picker
 - do not open self chat on info message click #5361
+- fix Connectivity colors in dark mode #5397
 
 <a id="2_10_0"></a>
 
