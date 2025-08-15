@@ -30,7 +30,7 @@ $settingsHeight: 40px;
   min-height: $settingsHeight;
   padding-inline-start: 30px;
   padding-inline-end: 30px;
-  text-align: inline-end;
+  text-align: inherit;
   width: 100%;
 
   &:hover {
