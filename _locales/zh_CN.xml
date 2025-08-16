@@ -940,6 +940,9 @@
     <string name="ephemeral_timer_1_week_by_you">你将消息定时销毁计时器设为 1 周</string>
     <!-- %1$s will be replaced by name and address of the contact -->
     <string name="ephemeral_timer_1_week_by_other">%1$s 将消息定时销毁计时器设为 1 天</string>
+    <string name="ephemeral_timer_1_year_by_you">您将消失消息计时器设置为 1 年。</string>
+    <!-- %1$s will be replaced by name of the contact -->
+    <string name="ephemeral_timer_1_year_by_other">%1$s 将消失消息计时器设置为 1 年。</string>
     <!-- %1$s will be replaced by the number of minutes (always >1) the timer is set to -->
     <string name="ephemeral_timer_minutes_by_you">你将消息定时销毁计时器设为 %1$s 分钟</string>
     <!-- %1$s will be replaced by the number of minutes (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->

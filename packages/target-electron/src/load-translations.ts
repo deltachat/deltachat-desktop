@@ -42,9 +42,11 @@ export default function setLanguage(locale: string) {
 }
 
 export function loadTranslations(locale: string): LocaleData {
-  const metaData = languages.find(item => item.locale === locale)
+  let metaData = languages.find(item => item.locale === locale)
   if (!metaData) {
-    throw new Error('Language not found in language list')
+    log.error(`Could not load metaDate for ${locale}`, locale)
+    locale = 'en'
+    metaData = languages.find(item => item.locale === locale)
   }
   const messagesEnglish = getLocaleMessages(retrieveLocaleFile('en'))
 
