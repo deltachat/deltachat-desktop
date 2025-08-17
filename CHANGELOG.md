@@ -14,6 +14,7 @@
 - do not open self chat on info message click #5361
 - fix Connectivity colors in dark mode #5397
 - Not fully downloaded messages display an ✉️ icon #5399
+- fix new chat button bg in dark modes #5183
 
 <a id="2_10_0"></a>
 
