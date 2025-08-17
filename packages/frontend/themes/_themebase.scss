@@ -32,7 +32,7 @@ $keybindingKeyBackground: lightgray !default;
 $keybindingKeyBorder: gray !default;
 $keybindingKeyShadow: rgba(0, 0, 0, 0.35) !default;
 
-$floatingActionButtonBg: #42a5f5 !default;
+$newChatButtonBg: #42a5f5 !default;
 $chatListItemSelectedBg: #e3f2fd !default;
 $scrollbarTransparency: 0.34 !default;
 
@@ -127,7 +127,7 @@ $scrollbarTransparency: 0.34 !default;
   --keybindingKeyShadow: #{$keybindingKeyShadow};
   --keybindingActionBackground: #{$keybindingActionBackground};
   /* Floating Action Button */
-  --floatingActionButtonBg: #{$floatingActionButtonBg};
+  --newChatButtonBg: #{$newChatButtonBg};
   /* Message Bubble */
   --messageText: #{$textPrimary};
   --messageTextLink: #{$textPrimary};
