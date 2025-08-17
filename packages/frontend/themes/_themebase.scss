@@ -10,7 +10,6 @@ $colorLessContrast: #676767 !default;
 
 $textPrimary: #010101 !default;
 $textSecondary: #585a5f !default;
-$outlineColor: #b9b9b9 !default;
 $accentColor: #2090ea !default;
 
 $bgPrimary: #ffffff !default;
@@ -63,9 +62,14 @@ $scrollbarTransparency: 0.34 !default;
   --buttonPrimaryBackground: #{$colorPrimary};
   --buttonPrimaryText: #{$btnPrimaryText};
   --buttonPrimaryHover: #{changeContrast($colorPrimary, 10%)};
+  --buttonSecondaryBackground: #{$bgSecondary};
+  --buttonSecondaryText: #{$textSecondary};
+  --buttonSecondaryHover: #{changeContrast($bgSecondary, 10%)};
   --buttonDangerText: #{$btnDangerText};
   --buttonDangerBackground: #{$btnDangerBackground};
   --buttonDangerHover: #{changeContrast($btnDangerBackground, 10%)};
+  --buttonDisabledBackground: #{changeContrast($bgSecondary, 10%)};
+  --buttonDisabledText: #{changeContrast($textSecondary, 25%)};
   /* Icons in context menu */
   --iconBackground: #{$colorNone};
   /* NavBar */
@@ -113,6 +117,7 @@ $scrollbarTransparency: 0.34 !default;
     )};
   --contactListItemBgFocus: #{changeContrast($bgPrimary, 12%)};
   /* Keybindings Cheatsheet */
+  --keybindingHintsBoxBackground: #{$keybindingHintsBoxBackground};
   --keybindingKeyBackground: #{$keybindingKeyBackground};
   --keybindingKeyBorder: #{$keybindingKeyBorder};
   --keybindingKeyFontColor: black;
@@ -161,6 +166,7 @@ $scrollbarTransparency: 0.34 !default;
   --bp4Heading: #{$textPrimary};
   --bp4InputText: #{$textPrimary};
   --bp4InputPlaceholder: lightgray;
+  --bp4-input-focused: #{$colorPrimary};
   --bp4MenuText: #{$textPrimary};
   --bp4MenuBg: #{$bgPrimary};
   --bp4Switch: #7a8084;
