@@ -4,6 +4,7 @@
 
 ### Added
 - support RTL layout if locale.dir = rtf #4168
+- add more rtl configurations to languages that use it 
 
 ### Changed
 
