@@ -4,8 +4,10 @@
 
 ### Added
 - support RTL layout if locale.dir = rtf #4168
+- added estonian language
 
 ### Changed
+- update translations (15-08-2025)
 
 ### Fixed
 - share email contacts by email not by VCard #5364
