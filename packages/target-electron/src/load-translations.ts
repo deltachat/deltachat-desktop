@@ -80,7 +80,7 @@ export function loadTranslations(locale: string): LocaleData {
   }
 
   log.debug(messages['no_chat_selected_suggestion_desktop'])
-  return { messages, locale, dir: metaData.dir }
+  return { messages, locale, dir: metaData?.dir ?? 'ltr' }
 }
 
 function retrieveLocaleFile(locale: string) {
