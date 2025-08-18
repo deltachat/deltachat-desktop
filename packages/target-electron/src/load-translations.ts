@@ -42,9 +42,11 @@ export default function setLanguage(locale: string) {
 }
 
 export function loadTranslations(locale: string): LocaleData {
-  const metaData = languages.find(item => item.locale === locale)
+  let metaData = languages.find(item => item.locale === locale)
   if (!metaData) {
-    throw new Error('Language not found in language list')
+    log.error(`Could not load metaDate for ${locale}`, locale)
+    locale = 'en'
+    metaData = languages.find(item => item.locale === locale)
   }
   const messagesEnglish = getLocaleMessages(retrieveLocaleFile('en'))
 
@@ -78,7 +80,7 @@ export function loadTranslations(locale: string): LocaleData {
   }
 
   log.debug(messages['no_chat_selected_suggestion_desktop'])
-  return { messages, locale, dir: metaData.dir }
+  return { messages, locale, dir: metaData?.dir ?? 'ltr' }
 }
 
 function retrieveLocaleFile(locale: string) {
