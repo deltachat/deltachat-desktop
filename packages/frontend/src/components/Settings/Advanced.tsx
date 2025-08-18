@@ -45,7 +45,7 @@ export default function Advanced({ settingsStore }: Props) {
       {/*
         don't show it on electron yet, as the message "not available on this runtime/platform"
         would confuse users as long as tauri is not the default */}
-      {runtime.getRuntimeInfo().target === 'tauri' && <SettingsAutoStart />}
+      {(runtime.getRuntimeInfo().target === 'tauri' || runtime.getRuntimeInfo().target === 'electron') && <SettingsAutoStart />}
 
       <SettingsSeparator />
 

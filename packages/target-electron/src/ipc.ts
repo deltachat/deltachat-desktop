@@ -176,6 +176,17 @@ export async function init(cwd: string, logHandler: LogHandler) {
   })
 
   /**
+   * https://www.electronjs.org/docs/latest/api/app#appgetloginitemsettingsoptions-macos-windows
+   */
+  ipcMain.on('getAutostartState', ev => {
+    const res = app.getLoginItemSettings()
+    ev.returnValue = {
+      isSupported: platform() === 'darwin' || platform() === 'win32',
+      isRegistered: res.openAtLogin,
+    }
+  })
+
+  /**
    * https://www.electronjs.org/docs/latest/api/system-preferences#systempreferencesgetmediaaccessstatusmediatype-windows-macos
    */
   ipcMain.handle('checkMediaAccess', (_ev, mediaType: MediaType) => {

@@ -535,11 +535,7 @@ class ElectronRuntime implements Runtime {
     return ipcBackend.sendSync('get-config-path')
   }
   getAutostartState(): Promise<AutostartState> {
-    // TODO - see https://github.com/deltachat/deltachat-desktop/issues/2518
-    return Promise.resolve({
-      isSupported: false,
-      isRegistered: false,
-    })
+    return ipcBackend.invoke('getAutostartState')
   }
   checkMediaAccess(mediaType: MediaType): Promise<MediaAccessStatus> {
     return ipcBackend.invoke('checkMediaAccess', mediaType)
