@@ -5,6 +5,7 @@
 ### Added
 - support RTL layout if locale.dir = rtf #4168
 - added estonian language
+- add more rtl configurations to languages that use it 
 
 ### Changed
 - update translations (15-08-2025)
@@ -15,6 +16,7 @@
 - do not open self chat on info message click #5361
 - fix Connectivity colors in dark mode #5397
 - Not fully downloaded messages display an ✉️ icon #5399
+- fix new chat button bg in dark modes #5183
 
 <a id="2_10_0"></a>
 

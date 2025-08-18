@@ -32,7 +32,7 @@ $keybindingKeyBackground: lightgray !default;
 $keybindingKeyBorder: gray !default;
 $keybindingKeyShadow: rgba(0, 0, 0, 0.35) !default;
 
-$floatingActionButtonBg: #42a5f5 !default;
+$newChatButtonBg: #42a5f5 !default;
 $chatListItemSelectedBg: #e3f2fd !default;
 $scrollbarTransparency: 0.34 !default;
 
@@ -73,8 +73,8 @@ $scrollbarTransparency: 0.34 !default;
   --buttonDangerHover: #{changeContrast($btnDangerBackground, 10%)};
   --buttonDisabledBackground: #{changeContrast($bgSecondary, 10%)};
   --buttonDisabledText: #{changeContrast($textSecondary, 25%)};
-  /* Icons */
-  --iconBackground: #757575; /* color from emoji.png */
+  /* Icons in context menu */
+  --iconBackground: #{$colorNone};
   /* NavBar */
   --navBarBackground: #{$bgNavBar};
   --navBarHeight: 50px;
@@ -127,7 +127,7 @@ $scrollbarTransparency: 0.34 !default;
   --keybindingKeyShadow: #{$keybindingKeyShadow};
   --keybindingActionBackground: #{$keybindingActionBackground};
   /* Floating Action Button */
-  --floatingActionButtonBg: #{$floatingActionButtonBg};
+  --newChatButtonBg: #{$newChatButtonBg};
   /* Message Bubble */
   --messageText: #{$textPrimary};
   --messageTextLink: #{$textPrimary};
@@ -158,6 +158,7 @@ $scrollbarTransparency: 0.34 !default;
   --messageAttachmentIconBg: transparent;
   /* Manual value: This will not get generated in the future */
   --messageAttachmentFileInfo: #{$textPrimary};
+  --showInChatButtonBg: #{$colorNone};
   /* Login Screen */
   --loginInputFocusColor: #{$colorPrimary};
   --loginButtonText: #{$colorPrimary};
