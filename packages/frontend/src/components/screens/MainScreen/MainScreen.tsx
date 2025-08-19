@@ -73,14 +73,17 @@ export default function MainScreen({ accountId }: Props) {
     unselectChat()
   }
 
-  const onChatClick = (chatId: number) => {
-    if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) {
-      setArchivedChatsSelected(true)
-      return
-    }
+  const onChatClick = useCallback(
+    (chatId: number) => {
+      if (chatId === C.DC_CHAT_ID_ARCHIVED_LINK) {
+        setArchivedChatsSelected(true)
+        return
+      }
 
-    accountId && selectChat(accountId, chatId)
-  }
+      accountId && selectChat(accountId, chatId)
+    },
+    [accountId, selectChat]
+  )
 
   const searchChats = useCallback(
     (queryStr: string, chatId: number | null = null) => {

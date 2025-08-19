@@ -20,6 +20,9 @@ test/
 *.html
 *.yaml
 
+# We use a console.log in the docstring there.
+packages/frontend/src/hooks/useMultiselect.ts
+
 packages/e2e-tests/
 
 packages/target-electron/migration-tests/
