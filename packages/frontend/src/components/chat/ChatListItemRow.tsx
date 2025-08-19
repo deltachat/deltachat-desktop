@@ -71,7 +71,16 @@ export const ChatListItemRowChat = React.memo<{
   const chatId = chatListIds[index]
 
   return (
-    <li style={style}>
+    <li
+      style={style}
+      // TODO looks like screen-readers (at least NVDA) do not announce
+      // this "position" thing. Probably because the `<li>` itself
+      // is not focusable.
+      // Should we apply these attributes to the button?
+      // And get rid of the wrapper `<li>` entirely?
+      aria-posinset={index + 1}
+      aria-setsize={chatListIds.length}
+    >
       <ChatListItem
         roleTab={roleTabs}
         isSelected={selectedChatId === chatId}
@@ -113,7 +122,11 @@ export const ChatListItemRowContact = React.memo<{
       }}
     />
   ) : (
-    <li style={style}>
+    <li
+      style={style}
+      aria-posinset={index + 1}
+      aria-setsize={contactIds.length}
+    >
       <PlaceholderChatListItem />
     </li>
   )
@@ -131,7 +144,11 @@ export const ChatListItemRowMessage = React.memo<{
   const accountId = selectedAccountId()
 
   return (
-    <li style={style}>
+    <li
+      style={style}
+      aria-posinset={index + 1}
+      aria-setsize={messageResultIds.length}
+    >
       {messageSearchResult ? (
         <ChatListItemMessageResult
           queryStr={queryStr || ''}
