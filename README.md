@@ -11,7 +11,7 @@
 | [`Electron`](https://www.electronjs.org/) :electron:                                               | [`Tauri`](https://tauri.app/) <img src="README_ASSETS/TAURI_Glyph_Color.svg" width="16px" height="16px" style="vertical-align:middle" />                                                         | Browser 🦊🧭🏐                                                                                                                                                                                |
 | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | <img src="README_ASSETS/desktop.png" style="max-width:256px;min-hight:200px" />                    | <img src="README_ASSETS/desktop.png" style="max-width:256px" />                                                                                                                                  | <img src="README_ASSETS/browser-screenshot.png" style="max-width:256px;min-hight:200px" />                                                                                                    |
-| The default application. Based on Electron. Currently deployed in appstore and used by most users. | WIP client using Tauri instead of Electron. <br /> Tauri is a modern alternative to Electron: Less disk usage, less ram usage and better performance rust backend.                               | Highly experimental version with a webserver component and web-ui in the browser. At the moment only meant for developers and automated testing.                                              |
+| The default application. Based on Electron. Currently deployed in appstore and used by most users. | **WIP** client using Tauri instead of Electron. <br /> Tauri is a modern alternative to Electron: Less disk usage, less ram usage and better performance rust backend.                           | Highly experimental version with a webserver component and web-ui in the browser. At the moment only meant for developers and automated testing.                                              |
 | [Project Folder](./packages/target-electron) <br /> [Download Links](https://get.delta.chat)       | [Project Folder](./packages/target-tauri) <br /> [Fediverse Thread](https://fosstodon.org/@treefit/113578409177635057) <br /> [Delta Tauri - nlnet project](https://nlnet.nl/project/DeltaTauri) | [Project Folder](./packages/target-browser) <br /> [Fediverse Thread](https://fosstodon.org/@treefit/113116480883632874) <br /> [Blog Post](https://delta.chat/en/2025-05-22-browser-edition) |
 
 ## Documentation Links <a id="docs"></a>
@@ -197,16 +197,16 @@ For more details on how the logging system works, read [`docs/LOGGING.md`](docs/
 Licensed under `GPL-3.0-or-later`, see [`LICENSE`](./LICENSE) file for details.
 
 > Copyright © DeltaChat contributors.
-
+>
 > This program is free software: you can redistribute it and/or modify
 > it under the terms of the GNU General Public License as published by
 > the Free Software Foundation, either version 3 of the License, or
 > (at your option) any later version.
-
+>
 > This program is distributed in the hope that it will be useful,
 > but WITHOUT ANY WARRANTY; without even the implied warranty of
 > MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 > GNU General Public License for more details.
-
+>
 > You should have received a copy of the GNU General Public License
 > along with this program. If not, see <http://www.gnu.org/licenses/>.
