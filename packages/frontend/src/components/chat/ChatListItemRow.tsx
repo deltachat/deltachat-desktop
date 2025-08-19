@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useRef } from 'react'
 import { areEqual } from 'react-window'
 
 import ChatListItem, {
@@ -69,20 +69,36 @@ export const ChatListItemRowChat = React.memo<{
     activeContextMenuChatId,
   } = data
   const chatId = chatListIds[index]
+  const chat = chatCache[chatId]
+
+  // Using refs to avoid re-renders, because `ChatListItem` is memoized.
+  // TODO `useRef` docs recomment against updating refs during rendering.
+  // Is it bad in this case?
+  const onChatClickRef = useRef(onChatClick)
+  onChatClickRef.current = onChatClick
+
+  const onContextMenu = useCallback(
+    (event: React.MouseEvent) => {
+      if (chat?.kind === 'ChatListItem') {
+        openContextMenu(event, chat, selectedChatId)
+      }
+    },
+    [chat, openContextMenu, selectedChatId]
+  )
+  const onContextMenuRef = useRef(onContextMenu)
+  onContextMenuRef.current = onContextMenu
 
   return (
     <li style={style}>
       <ChatListItem
         roleTab={roleTabs}
         isSelected={selectedChatId === chatId}
-        chatListItem={chatCache[chatId] || undefined}
-        onClick={onChatClick.bind(null, chatId)}
-        onContextMenu={event => {
-          const chat = chatCache[chatId]
-          if (chat?.kind === 'ChatListItem') {
-            openContextMenu(event, chat, selectedChatId)
-          }
-        }}
+        chatListItem={chat}
+        onClick={useCallback(() => onChatClickRef.current(chatId), [chatId])}
+        onContextMenu={useCallback(
+          (event: React.MouseEvent) => onContextMenuRef.current(event),
+          []
+        )}
         isContextMenuActive={activeContextMenuChatId === chatId}
       />
     </li>
