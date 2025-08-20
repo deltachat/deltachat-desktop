@@ -56,6 +56,8 @@
   "dependencies": {
     "@deltachat/jsonrpc-client": "catalog:",
     "@deltachat/stdio-rpc-server": "catalog:",
+    "@electron/fuses": "^2.0.0",
+    "dmg-license": "^1.0.11",
     "mime-types": "catalog:",
     "sass": "catalog:",
     "ws": "7.5.10"
