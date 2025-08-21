@@ -10,7 +10,6 @@ $colorLessContrast: #676767 !default;
 
 $textPrimary: #010101 !default;
 $textSecondary: #585a5f !default;
-$outlineColor: #b9b9b9 !default;
 $accentColor: #2090ea !default;
 
 $bgPrimary: #ffffff !default;
@@ -60,8 +59,6 @@ $scrollbarTransparency: 0.34 !default;
   --colorNone: #{$colorNone};
   --bgPrimary: #{$bgPrimary};
   /* Buttons */
-  --buttonText: #{$colorPrimary};
-  --buttonHover: #{$bgSecondary};
   --buttonPrimaryBackground: #{$colorPrimary};
   --buttonPrimaryText: #{$btnPrimaryText};
   --buttonPrimaryHover: #{changeContrast($colorPrimary, 10%)};
@@ -137,7 +134,6 @@ $scrollbarTransparency: 0.34 !default;
   --infoMessageBubbleBg: #0000008c;
   --infoMessageBubbleText: white;
   --messageIncomingBg: #{$bgMessageBubbleIncoming};
-  --messageIncomingDate: #{$textPrimary};
   --messageOutgoingBg: #{$bgMessageBubbleOutgoing};
   --messageOutgoingStatusColor: #4caf50; // Message Bubble - Buttons
   /* Message Bubble - Metadata */
@@ -147,11 +143,6 @@ $scrollbarTransparency: 0.34 !default;
   --messageMetadataIconColorIncoming: #a4a6a9;
   --messageMetadataDate: #62656a;
   --messageMetadataIncoming: rgba(#ffffff, 0.7);
-  --messageAuthor: #ffffff;
-  --messageReplyBtn: whitesmoke;
-  --messageReplyBtnHover: white;
-  --messageReplyBtnBg: rgba(0, 0, 0, 0.23);
-  --messageReplyBtnBgHover: rgba(0, 0, 0, 0.33);
   /* Message Bubble - Attachments */
   --messageAttachmentIconExtentionColor: #070c14;
   /* Manual value: This will not get generated in the future */
@@ -161,15 +152,11 @@ $scrollbarTransparency: 0.34 !default;
   --showInChatButtonBg: #{$colorNone};
   /* Login Screen */
   --loginInputFocusColor: #{$colorPrimary};
-  --loginButtonText: #{$colorPrimary};
-  --deltaChatPrimaryFg: #{$textPrimary}; // todo rename this var
   --deltaChatPrimaryFgLight: #{$textSecondary}; // todo rename this var
   /* Context Menu */
   --contextMenuBg: #{$bgPrimary};
   --contextMenuBorder: #{changeContrast($bgSecondary, 10%)};
   --contextMenuText: #{$textSecondary};
-  --contextMenuSelected: #{$bgSecondary};
-  --contextMenuSelectedBg: #a4a6a9;
   --separatorColor: #{$bgSecondary};
   --bp4DialogHeaderBg: #{$bgPrimary};
   /* BlueprintJS overwrites, used in code, just weren't renamed for the sake of renaming */
@@ -177,13 +164,7 @@ $scrollbarTransparency: 0.34 !default;
   --bp4DialogBgSecondary: #{$bgSecondary};
   --bp4DialogBgPrimary: #{$bgPrimary};
   --bp4Heading: #{$textPrimary};
-  --bp4ButtonText: #{$textPrimary};
-  --bp4ButtonBg: #{$bgPrimary};
-  --bp4ButtonGradientTop: rgba(255, 255, 255, 0.8);
-  --bp4ButtonGradientBottom: rgba(255, 255, 255, 0);
-  --bp4ButtonHoverBg: #ebf1f5;
   --bp4InputText: #{$textPrimary};
-  --bp4InputBg: #{$bgPrimary};
   --bp4InputPlaceholder: lightgray;
   --bp4-input-focused: #{$colorPrimary};
   --bp4MenuText: #{$textPrimary};
@@ -196,14 +177,9 @@ $scrollbarTransparency: 0.34 !default;
   --bp4SwitchKnobShadow: 0px 2px 0 0px #d2cfcfad;
   --bp4SwitchKnobChecked: #42a5f5;
   --bp4SwitchKnobShadowChecked: 0px 1px 0 0px #c9d4d2d1;
-  --bp4SpinnerTrack: #acd4e8;
-  --bp4SpinnerHead: #42a5f5;
-  --bp4SelectorTop: rgba(255, 255, 255, 0.8);
-  --bp4SelectorBottom: rgba(255, 255, 255, 0);
 
   --dialogBackdropBackground: rgba(17, 20, 24, 0.7);
   --outlineProperties: 1px solid transparent;
-  --outlineColor: #{$outlineColor};
   --delta-dialog-separator: #{$bgSecondary};
   --delta-dialog-separator-text: #{changeContrast($bgSecondary, 24%)};
 
@@ -229,8 +205,6 @@ $scrollbarTransparency: 0.34 !default;
   --globalText: #{$textPrimary};
   --globalHoverBg: #{changeContrast($bgPrimary, 3%)};
   --textLessContrast: #{$colorLessContrast}; // less contrast to background than global text
-  --mapOverlayBg: #{$bgPrimary};
-  --mapMessageBg: #{$bgPrimary};
   --videoPlayBtnIcon: #{$accentColor};
   --videoPlayBtnBg: #ffffff; // Manual value: This will not get generated in the future
   --videoPlayBtnBorder: #eaeaea;
@@ -265,14 +239,6 @@ $scrollbarTransparency: 0.34 !default;
   --htmlEmail-color: #{$textPrimary};
   --htmlEmail-border-color: #{changeContrast($bgPrimary, 20%)};
 
-  /** delta tab button */
-  --delta-btn-tab-bg: transparent;
-  --delta-btn-tab-text: #{$textSecondary};
-  --delta-btn-tab-hover-bg: rgba(125, 125, 125, 0.3);
-  --delta-btn-tab-hover-text: #{$textPrimary};
-  --delta-btn-tab-selected-bg: #{$colorPrimary};
-  --delta-btn-tab-selected-text: #{$textPrimary};
-
   /** MessageDetails Colors **/
   --MessageDetails-ReadReceipt-Bg: #{changeContrast($bgPrimary, 10%)};
   --MessageDetails-ReadReceipt-Date: #{changeContrast($textPrimary, 30%)};
@@ -286,9 +252,6 @@ $scrollbarTransparency: 0.34 !default;
     // dark theme
     --scrollbarThumb: #{rgba(white, $scrollbarTransparency)};
     --scrollbarThumbHover: #{rgba(white, $scrollbarTransparency + 0.14)};
-
-    --messageReplyBtnBg: rgba(255, 255, 255, 0.13);
-    --messageReplyBtnBgHover: rgba(255, 255, 255, 0.23);
 
     --settingsIconColor: #666666;
 
