@@ -1,5 +1,5 @@
 import { copyFileSync } from 'fs'
-import { flipFuses, FuseVersion, FuseV1Options } from '@electron/fuses';
+import { flipFuses, FuseVersion, FuseV1Options } from '@electron/fuses'
 import {
   readdir,
   writeFile,
@@ -33,7 +33,7 @@ function convertArch(arch) {
 }
 
 export default async context => {
-  const source_dir = join(__dirname, '..')
+  const source_dir = join(new URL('.', import.meta.url).pathname, '..')
 
   console.log({ context, source_dir })
   const isMacBuild = ['darwin', 'mas', 'dmg'].includes(
@@ -74,7 +74,6 @@ export default async context => {
 
   // console.log({ dcStdioServers })
 
-
   // for (const serverPackage of dcStdioServers) {
   //   const name = serverPackage.split('+')[1].split('@')[0]
   //   await cp(
@@ -87,13 +86,13 @@ export default async context => {
 
   // delete not needed prebuilds
   // ---------------------------------------------------------------------------------
-  // if (!env['NO_ASAR']) {
-  //   await deleteNotNeededPrebuildsFromUnpackedASAR(
-  //     prebuild_dir,
-  //     context,
-  //     isMacBuild
-  //   )
-  // }
+  if (!env['NO_ASAR']) {
+    await deleteNotNeededPrebuildsFromUnpackedASAR(
+      prebuild_dir,
+      context,
+      isMacBuild
+    )
+  }
 
   // package msvc redist
   // ---------------------------------------------------------------------------------
@@ -106,12 +105,12 @@ export default async context => {
   // asar is electrons archive format, flatpak doesn't use it. read more about what asar is on https://www.electronjs.org/docs/latest/glossary#asar
   // asar is electrons archive format, flatpak doesn't use it. read more about what asar is on https://www.electronjs.org/docs/latest/glossary#asar
   const asar = env['NO_ASAR'] ? false : true
-  // await copyMapXdc(resources_dir, source_dir, asar)
+  await copyMapXdc(resources_dir, source_dir, asar)
   await setFuses(context)
 }
 
 async function packageMSVCRedist(context) {
-  const base = join(__dirname, 'vcredist/')
+  const base = join(new URL('.', import.meta.url).pathname, 'vcredist/')
   const dir = await readdir(base)
   dir.forEach(d => {
     copyFileSync(join(base, d), join(context.appOutDir, d))
@@ -190,35 +189,32 @@ async function deleteNotNeededPrebuildsFromUnpackedASAR(
 }
 
 async function setFuses(context) {
-    // Apply security fuses for all builds
-    let appPath;
-    switch (context.electronPlatformName) {
-      case 'darwin':
-      case 'mas':
-        appPath = `${context.appOutDir}/Rocket.Chat.app`;
-        break;
-      case 'win32':
-        appPath = `${context.appOutDir}/Rocket.Chat.exe`;
-        break;
-      default:
-        appPath = `${context.appOutDir}/rocketchat-desktop`;
-        break;
-    }
-  
-    console.log('Applying electron fuses for enhanced security to:', appPath);
-  await flipFuses(
-    appPath,
-    {
-      version: FuseVersion.V1,
-      [FuseV1Options.RunAsNode]: false, // Disables ELECTRON_RUN_AS_NODE
-      [FuseV1Options.EnableCookieEncryption]: true, // Enables cookie encryption
-      [FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false, // Disables the NODE_OPTIONS environment variable
-      [FuseV1Options.EnableNodeCliInspectArguments]: false, // Disables the --inspect and --inspect-brk family of CLI options
-      [FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: true, // Enables validation of the app.asar archive on macOS
-      [FuseV1Options.OnlyLoadAppFromAsar]: true, // Enforces that Electron will only load your app from "app.asar" instead of its normal search paths
-      [FuseV1Options.LoadBrowserProcessSpecificV8Snapshot]: true, // Loads V8 Snapshot from `browser_v8_context_snapshot.bin` for the browser process
-      [FuseV1Options.GrantFileProtocolExtraPrivileges]: true, // Grants the file protocol extra privileges
-    },
-  );
-  console.log('Flipped all fuses');
+  // Apply security fuses for all builds
+  let appPath
+  switch (context.electronPlatformName) {
+    case 'darwin':
+    case 'mas':
+      appPath = `${context.appOutDir}/deltachat-desktop.app`
+      break
+    case 'win32':
+      appPath = `${context.appOutDir}/deltachat-desktop.exe`
+      break
+    default:
+      appPath = `${context.appOutDir}/deltachat-desktop`
+      break
+  }
+
+  console.log('Applying electron fuses for enhanced security to:', appPath)
+  await flipFuses(appPath, {
+    version: FuseVersion.V1,
+    [FuseV1Options.RunAsNode]: false, // Disables ELECTRON_RUN_AS_NODE
+    [FuseV1Options.EnableCookieEncryption]: true, // Enables cookie encryption
+    [FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false, // Disables the NODE_OPTIONS environment variable
+    [FuseV1Options.EnableNodeCliInspectArguments]: false, // Disables the --inspect and --inspect-brk family of CLI options
+    [FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: true, // Enables validation of the app.asar archive on macOS
+    [FuseV1Options.OnlyLoadAppFromAsar]: true, // Enforces that Electron will only load your app from "app.asar" instead of its normal search paths
+    [FuseV1Options.LoadBrowserProcessSpecificV8Snapshot]: true, // Loads V8 Snapshot from `browser_v8_context_snapshot.bin` for the browser process
+    [FuseV1Options.GrantFileProtocolExtraPrivileges]: true, // Grants the file protocol extra privileges
+  })
+  console.log('Flipped all fuses')
 }
