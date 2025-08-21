@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useRef } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import { debounceWithInit } from '../chat/ChatListHelpers'
 import { BackendRemote, onDCEvent } from '../../backend-com'
@@ -14,7 +14,6 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import type { DialogProps } from '../../contexts/DialogContext'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 
-const INHERIT_STYLES = ['line-height', 'background-color', 'color', 'font-size']
 const OverwrittenStyles =
   'font-family: Arial, Helvetica, sans-serif;font-variant-ligatures: none;'
 
@@ -33,7 +32,11 @@ export default function ConnectivityDialog({ onClose }: DialogProps) {
 function ConnectivityDialogInner() {
   const accountId = selectedAccountId()
   const [connectivityHTML, setConnectivityHTML] = useState('')
-  const styleSensor = useRef<HTMLDivElement | null>(null)
+
+  const style = window.getComputedStyle(document.body)
+  const bgColor = style.getPropertyValue('--bgPrimary')
+  const textColor = style.getPropertyValue('--textPrimary')
+  const stylesToInject = `background-color: ${bgColor}; color: ${textColor};`
 
   // On Tauri we cannot inject dynamic styles due to more strict CSP,
   // so let's fall back to light theme,
@@ -48,11 +51,11 @@ function ConnectivityDialogInner() {
     () =>
       debounceWithInit(async () => {
         const cHTML = await getConnectivityHTML(
-          canInjectStyles ? styleSensor : undefined
+          canInjectStyles ? stylesToInject : undefined
         )
         setConnectivityHTML(cHTML)
       }, 240),
-    [canInjectStyles]
+    [canInjectStyles, stylesToInject]
   )
 
   useEffect(() => {
@@ -63,38 +66,32 @@ function ConnectivityDialogInner() {
   return (
     <DialogBody>
       <DialogContent>
-        <div ref={styleSensor} style={{ height: '100%', width: '100%' }}>
-          <iframe
-            style={{
-              border: 0,
-              height: '100%',
-              width: '100%',
-              minHeight: '320px',
-              backgroundColor: canInjectStyles ? undefined : 'white',
-            }}
-            srcDoc={connectivityHTML}
-            sandbox={''}
-          />
-        </div>
+        <iframe
+          style={{
+            border: 0,
+            height: '100%',
+            width: '100%',
+            minHeight: '320px',
+            backgroundColor: bgColor,
+            color: textColor,
+          }}
+          srcDoc={connectivityHTML}
+          sandbox={''}
+        />
       </DialogContent>
     </DialogBody>
   )
 }
 
 async function getConnectivityHTML(
-  styleSensor?: React.MutableRefObject<HTMLDivElement | null>
+  stylesToInject?: string | undefined
 ): Promise<string> {
   let cHTML = await BackendRemote.rpc.getConnectivityHtml(selectedAccountId())
 
-  if (styleSensor?.current) {
-    const cstyle = window.getComputedStyle(styleSensor.current)
-    let resulting_style = ''
-    for (const property of INHERIT_STYLES) {
-      resulting_style += `${property}: ${cstyle.getPropertyValue(property)};`
-    }
+  if (stylesToInject) {
     cHTML = cHTML.replace(
       '</style>',
-      `</style><style> html {${resulting_style}${OverwrittenStyles}}</style>`
+      `</style><style> html {${stylesToInject}${OverwrittenStyles}}</style>`
     )
   }
   return cHTML

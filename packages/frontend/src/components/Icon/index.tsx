@@ -9,7 +9,6 @@ export type IconName =
   | 'audio-muted'
   | 'bell'
   | 'brightness-6'
-  | 'chats'
   | 'chevron-left'
   | 'chevron-right'
   | 'code-tags'
@@ -23,10 +22,7 @@ export type IconName =
   | 'image'
   | 'image_outline'
   | 'info'
-  | 'ios_share'
-  | 'ios_share_modified'
   | 'lead-pencil'
-  | 'list'
   | 'map'
   | 'minus'
   | 'more'
@@ -42,13 +38,10 @@ export type IconName =
   | 'qr'
   | 'question_mark'
   | 'reaction'
-  | 'reset-image'
   | 'sell'
   | 'settings'
-  | 'share'
   | 'swap_vert'
   | 'swap_hor'
-  | 'undo'
   | 'upload-file'
 
 type PropsBase = {
@@ -57,7 +50,6 @@ type PropsBase = {
   icon: IconName
   coloring?: keyof Omit<typeof styles, 'icon'>
   size?: number
-  rotation?: number
 }
 type JustIconProps = PropsBase & {
   /** Consider using IconButton instead */
@@ -70,7 +62,6 @@ type IconButtonProps = PropsBase & {
 export default function Icon({
   coloring,
   size = 20,
-  rotation = 0,
   icon,
   className,
 }: JustIconProps) {
@@ -82,7 +73,6 @@ export default function Icon({
         className
       )}
       style={{
-        transform: `rotate(${rotation}deg)`,
         WebkitMaskImage: `url(./images/icons/${icon}.svg)`,
         height: `${size}px`,
         width: `${size}px`,
@@ -91,16 +81,10 @@ export default function Icon({
   )
 }
 
-export function IconButton({
-  coloring,
-  size,
-  rotation,
-  icon,
-  ...rest
-}: IconButtonProps) {
+export function IconButton({ coloring, size, icon, ...rest }: IconButtonProps) {
   return (
     <button {...rest} className={classNames(styles.iconButton)}>
-      <Icon coloring={coloring} size={size} rotation={rotation} icon={icon} />
+      <Icon coloring={coloring} size={size} icon={icon} />
     </button>
   )
 }

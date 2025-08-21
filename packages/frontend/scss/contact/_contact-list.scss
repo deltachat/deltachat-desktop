@@ -13,8 +13,8 @@
   }
 
   .chat-list & {
-    padding-left: 0px;
     --contact-padding-start: 0px;
+    padding-inline-start: 0px;
   }
 
   .contact-list-item-button {
@@ -32,12 +32,12 @@
     appearance: none;
     background: none;
     border: none;
-    margin-right: 10px;
+    margin-inline-end: 10px;
   }
 }
 
 .delta-checkbox {
-  margin-right: 10px;
+  margin-inline-end: 10px;
   input {
     -webkit-appearance: none;
     width: 20px;

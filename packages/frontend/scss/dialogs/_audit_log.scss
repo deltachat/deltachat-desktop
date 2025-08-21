@@ -41,10 +41,11 @@
 
     li.info {
       font-size: 14px;
+      margin: 14px 0;
       div.timestamp {
         font-weight: bold;
         display: inline-block;
-        margin-right: 4px;
+        margin-inline-end: 4px;
         font-size: 15px;
         background-color: #385e6b;
         border-radius: 10px;

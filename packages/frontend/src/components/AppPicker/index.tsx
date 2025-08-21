@@ -271,7 +271,9 @@ export function AppPicker({ onAppSelected }: Props) {
               {app.author}
             </button>
           )}
-          {!setSearchQuery && app.author && <p>{app.author}</p>}
+          {!setSearchQuery && app.author && (
+            <p className={styles.appAuthor}>{app.author}</p>
+          )}
         </div>
       </div>
     )

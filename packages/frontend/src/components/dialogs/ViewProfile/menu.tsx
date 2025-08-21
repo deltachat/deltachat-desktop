@@ -204,22 +204,26 @@ function ShareProfileDialog(
   const createDraftMessage = useCreateDraftMessage()
 
   const onChatClick = async (chatId: number) => {
-    const vcard = await BackendRemote.rpc.makeVcard(accountId, [contact.id])
+    if (contact.isKeyContact) {
+      const vcard = await BackendRemote.rpc.makeVcard(accountId, [contact.id])
 
-    const filePath = await runtime.writeTempFile('contact.vcard', vcard)
-    // treefit: I would like to use setDraftVcard here, but it requires a draft message, which we may now have:
-    // BackendRemote.rpc.setDraftVcard(accountId, msgId, contacts)
-    // and there is no way to create an empty draft message with the current api as far as I know
-    //
-    // why is this better? because we then only would need to ask to replace draft when there is a file
+      const filePath = await runtime.writeTempFile('contact.vcard', vcard)
+      // treefit: I would like to use setDraftVcard here, but it requires a draft message, which we may now have:
+      // BackendRemote.rpc.setDraftVcard(accountId, msgId, contacts)
+      // and there is no way to create an empty draft message with the current api as far as I know
+      //
+      // why is this better? because we then only would need to ask to replace draft when there is a file
 
+      await createDraftMessage(accountId, chatId, '', {
+        name: `${contact.displayName}.vcard`,
+        path: filePath,
+      })
+      runtime.removeTempFile(filePath)
+    } else {
+      await createDraftMessage(accountId, chatId, contact.address)
+    }
     onClose()
     onParentClose()
-    await createDraftMessage(accountId, chatId, '', {
-      name: `${contact.displayName}.vcard`,
-      path: filePath,
-    })
-    runtime.removeTempFile(filePath)
   }
 
   return (

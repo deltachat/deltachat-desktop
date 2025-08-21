@@ -98,78 +98,81 @@ export default function AccountItem({
 
   const bgSyncDisabled = syncAllAccounts === false && !isSelected
 
-  const { onContextMenu, isContextMenuActive } = useContextMenuWithActiveState([
-    muted
-      ? {
-          label: tx('menu_unmute'),
-          action: () => {
-            AccountNotificationStoreInstance.effect.setMuted(accountId, false)
+  const { onContextMenu, isContextMenuActive } = useContextMenuWithActiveState(
+    [
+      muted
+        ? {
+            label: tx('menu_unmute'),
+            action: () => {
+              AccountNotificationStoreInstance.effect.setMuted(accountId, false)
+            },
+          }
+        : {
+            label: tx('menu_mute'),
+            action: () => {
+              AccountNotificationStoreInstance.effect.setMuted(accountId, true)
+            },
           },
-        }
-      : {
-          label: tx('menu_mute'),
-          action: () => {
-            AccountNotificationStoreInstance.effect.setMuted(accountId, true)
-          },
+      {
+        label: tx('mark_all_as_read'),
+        action: () => {
+          markAccountAsRead(accountId)
         },
-    {
-      label: tx('mark_all_as_read'),
-      action: () => {
-        markAccountAsRead(accountId)
       },
-    },
-    {
-      label: tx('menu_all_media'),
-      action: async () => {
-        await onSelectAccount(accountId)
-        // set Timeout forces it to be run after react update
-        setTimeout(() => {
-          ActionEmitter.emitAction(KeybindAction.GlobalGallery_Open)
-          // NOTE(maxph): Gallery.tsx gets unmounted before receiving media data
-          // and only partially updates chat header without changing chat view to Gallery,
-          // so here 50ms is a temprorary workaround for that
-        }, 50)
-      },
-    },
-    {
-      label: tx('menu_show_global_map'),
-      action: async () => {
-        await onSelectAccount(accountId)
-        openMapWebxdc(accountId)
-      },
-    },
-    { type: 'separator' },
-    {
-      label: tx('menu_settings'),
-      action: async () => {
-        await onSelectAccount(accountId)
-        setTimeout(() => {
+      {
+        label: tx('menu_all_media'),
+        action: async () => {
+          await onSelectAccount(accountId)
           // set Timeout forces it to be run after react update
-          // without the small delay the app crashed randomly in the e2e tests
-          ActionEmitter.emitAction(KeybindAction.Settings_Open)
-        }, 100)
+          setTimeout(() => {
+            ActionEmitter.emitAction(KeybindAction.GlobalGallery_Open)
+            // NOTE(maxph): Gallery.tsx gets unmounted before receiving media data
+            // and only partially updates chat header without changing chat view to Gallery,
+            // so here 50ms is a temprorary workaround for that
+          }, 50)
+        },
       },
-      dataTestid: 'open-settings-menu-item',
-    },
-    {
-      label: tx('profile_tag'),
-      action: async () => {
-        openDialog(EditPrivateTagDialog, {
-          accountId,
-          currentTag: await BackendRemote.rpc.getConfig(
+      {
+        label: tx('menu_show_global_map'),
+        action: async () => {
+          await onSelectAccount(accountId)
+          openMapWebxdc(accountId)
+        },
+      },
+      { type: 'separator' },
+      {
+        label: tx('menu_settings'),
+        action: async () => {
+          await onSelectAccount(accountId)
+          setTimeout(() => {
+            // set Timeout forces it to be run after react update
+            // without the small delay the app crashed randomly in the e2e tests
+            ActionEmitter.emitAction(KeybindAction.Settings_Open)
+          }, 100)
+        },
+        dataTestid: 'open-settings-menu-item',
+      },
+      {
+        label: tx('profile_tag'),
+        action: async () => {
+          openDialog(EditPrivateTagDialog, {
             accountId,
-            'private_tag'
-          ),
-        })
+            currentTag: await BackendRemote.rpc.getConfig(
+              accountId,
+              'private_tag'
+            ),
+          })
+        },
       },
-    },
-    { type: 'separator' },
-    {
-      label: tx('delete_account'),
-      action: openAccountDeletionScreen.bind(null, accountId),
-      dataTestid: 'delete-account-menu-item',
-    },
-  ])
+      { type: 'separator' },
+      {
+        label: tx('delete_account'),
+        action: openAccountDeletionScreen.bind(null, accountId),
+        dataTestid: 'delete-account-menu-item',
+      },
+    ],
+    { 'aria-label': tx('accounts_list_item_menu_label') }
+  )
 
   let badgeContent
   if (bgSyncDisabled) {
@@ -269,6 +272,7 @@ export default function AccountItem({
         aria-busy={!account && accountFetch.loading}
         onClick={() => onSelectAccount(accountId)}
         onContextMenu={onContextMenu}
+        aria-haspopup='menu'
         onMouseEnter={() => account && updateAccountForHoverInfo(account, true)}
         onMouseLeave={() =>
           account && updateAccountForHoverInfo(account, false)

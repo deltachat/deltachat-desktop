@@ -5,7 +5,7 @@
   width: 56%;
   max-width: 640px;
   height: 70vh;
-  margin-left: 8px;
+  margin-inline-start: 8px;
   bottom: 50px;
   background-color: var(--bgPrimary);
   border-radius: var(--picker-BorderRadius);
@@ -86,7 +86,7 @@
 .appIcon {
   width: 64px;
   height: 64px;
-  margin-right: 16px;
+  margin-inline-end: 16px;
   border-radius: 5px;
 }
 
@@ -94,8 +94,12 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 100%;
   p {
     margin: 2px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   button {
     border: none;
@@ -105,6 +109,11 @@
     margin: 2px 0;
     padding: 0;
   }
+}
+
+/** limited width in app picker */
+.appListItem .appInfo {
+  width: 208px;
 }
 
 .appDetails {
@@ -124,6 +133,13 @@
 .appName {
   font-size: 16px;
   font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.appAuthor {
+  color: #808080;
 }
 
 .tabBar {

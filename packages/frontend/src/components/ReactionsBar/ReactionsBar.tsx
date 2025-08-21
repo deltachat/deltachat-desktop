@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import classNames from 'classnames'
 
 import Icon from '../Icon'
@@ -10,6 +10,9 @@ import styles from './styles.module.scss'
 
 import type { BaseEmoji } from 'emoji-mart/index'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { getLogger } from '@deltachat-desktop/shared/logger'
+
+const log = getLogger('ReactionsBar')
 
 type Props = {
   messageId: number
@@ -25,6 +28,17 @@ export default function ReactionsBar({
   myReaction,
 }: Props) {
   const tx = useTranslationFunction()
+
+  const reactionsBarRef = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const firstButton =
+      reactionsBarRef.current?.getElementsByTagName('button')[0]
+    if (firstButton == undefined) {
+      log.warn('Failed to focus reactions bar after opening it')
+      return
+    }
+    firstButton.focus()
+  }, [])
 
   const [showAllEmojis, setShowAllEmojis] = useState(false)
   const accountId = selectedAccountId()
@@ -62,9 +76,17 @@ export default function ReactionsBar({
         />
       )}
       {!showAllEmojis && (
-        <div className={styles.reactionsBar}>
+        <div
+          role='menu'
+          aria-label={tx('react')}
+          aria-orientation='horizontal'
+          ref={reactionsBarRef}
+          className={styles.reactionsBar}
+        >
           {myReaction && !isMyReactionDefault && (
             <button
+              role='menuitemradio'
+              aria-checked={true}
               onClick={() => toggleReaction(myReaction!)}
               className={classNames(
                 styles.reactionsBarButton,
@@ -75,12 +97,15 @@ export default function ReactionsBar({
             </button>
           )}
           {DEFAULT_EMOJIS.map((emoji, index) => {
+            const isChecked = myReaction === emoji
             return (
               <button
+                role='menuitemradio'
+                aria-checked={isChecked}
                 key={`emoji-${index}`}
                 onClick={() => toggleReaction(emoji)}
                 className={classNames(styles.reactionsBarButton, {
-                  [styles.isFromSelf]: myReaction === emoji,
+                  [styles.isFromSelf]: isChecked,
                 })}
               >
                 <span className={styles.reactionsBarEmoji}>{emoji}</span>
@@ -88,12 +113,14 @@ export default function ReactionsBar({
             )
           })}
           <button
+            role='menuitem'
+            aria-haspopup='dialog'
+            aria-label={tx('react_more_emojis')}
             className={classNames(
               styles.reactionsBarButton,
               styles.showAllEmojis
             )}
             onClick={handleShowAllEmojis}
-            aria-label={tx('react_more_emojis')}
           >
             <Icon className={styles.showAllIcon} icon='more' />
           </button>

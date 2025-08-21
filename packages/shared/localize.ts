@@ -4,6 +4,7 @@ const log = getLogger('localize')
 
 export interface LocaleData {
   locale: string
+  dir: 'ltr' | 'rtl'
   messages: {
     [key: string]: {
       [P in Intl.LDMLPluralRule]?: string

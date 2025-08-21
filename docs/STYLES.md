@@ -16,6 +16,7 @@ We use `prettier` for CSS formatting. Use `pnpm -w fix:format` before committing
 ### General
 
 - Prefer `padding-top`, `padding-bottom`, `padding-left` etc. over `padding` to avoid bugs through order-critical dependencies between properties, except when you only need `padding` or `border` etc.
+- Avoid `padding-right`, `margin-left`, `float: left` and so on, instead use `padding-inline-end`, `margin-inline-start` and `float: inline-start` to avoid bugs with RTL Layout (some languages are written right to left, so the interface should also be "mirrored").
 - Try to avoid hacky `!important` as much as possible (goal is to get rid of them altogether at one point), if your components are well composed and styles isolated you don't need them
 - Avoid setting styles directly on elements via the `style` attribute. Exception: the value is dynamically set through an JavaScript variable
 - Prefer `0` instead of `0px` when setting zero values

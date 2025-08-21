@@ -420,6 +420,7 @@ class ElectronRuntime implements Runtime {
     )
     ipcBackend.on('chooseLanguage', (_ev, locale) => {
       this.onChooseLanguage?.(locale)
+      ipcBackend.send('reload-main-window')
     })
     ipcBackend.on('theme-update', () => this.onThemeUpdate?.())
     ipcBackend.on('showAboutDialog', () => this.onShowDialog?.('about'))

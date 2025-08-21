@@ -249,10 +249,12 @@ export default function ChatAuditLogDialog(
                     <li
                       key={id}
                       className='info'
+                      // TODO make this element focusable.
                       onClick={ev => showMenu(message, ev)}
                       onContextMenu={ev => showMenu(message, ev)}
+                      aria-haspopup='menu'
                     >
-                      <p>
+                      <div>
                         <div className='timestamp'>
                           {moment.unix(timestamp).format('LT')}
                         </div>
@@ -273,7 +275,7 @@ export default function ChatAuditLogDialog(
                               aria-label={tx(`a11y_delivery_status_${status}`)}
                             />
                           )}
-                      </p>
+                      </div>
                     </li>
                   )
                 })}

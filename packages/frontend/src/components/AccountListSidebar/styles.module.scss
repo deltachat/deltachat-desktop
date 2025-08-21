@@ -233,7 +233,7 @@
   bottom: -6px;
   pointer-events: none;
   position: absolute;
-  right: -5px;
+  inset-inline-end: -5px;
   z-index: map.get(
     variables.$z-index,
     account-list-sidebar-scope-account-badge
@@ -263,7 +263,7 @@
 
 .accountMutedIconShadow {
   filter: drop-shadow(0 0 2px black);
-  left: 2px;
+  inset-inline-start: 2px;
   pointer-events: none;
   position: absolute;
   top: 2px;

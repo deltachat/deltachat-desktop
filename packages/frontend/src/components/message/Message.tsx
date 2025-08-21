@@ -36,10 +36,7 @@ import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { ContextMenuItem } from '../ContextMenu'
 import { onDCEvent, BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import {
-  ProtectionBrokenDialog,
-  ProtectionEnabledDialog,
-} from '../dialogs/ProtectionStatusDialog'
+import { ProtectionEnabledDialog } from '../dialogs/ProtectionStatusDialog'
 import useDialog from '../../hooks/dialog/useDialog'
 import useMessage from '../../hooks/chat/useMessage'
 import useOpenViewProfileDialog from '../../hooks/dialog/useOpenViewProfileDialog'
@@ -520,6 +517,9 @@ export default function Message(props: {
       openContextMenu({
         ...showContextMenuEventPos,
         items,
+        ariaAttrs: {
+          'aria-label': tx('a11y_message_context_menu_btn_label'),
+        },
       })
     },
     [
@@ -533,6 +533,7 @@ export default function Message(props: {
       showReactionsBar,
       text,
       jumpToMessage,
+      tx,
     ]
   )
   const ref = useRef<any>(null)
@@ -620,8 +621,6 @@ export default function Message(props: {
   // Info Message
   if (message.isInfo) {
     const isWebxdcInfo = message.systemMessageType === 'WebxdcInfoMessage'
-    const isProtectionBrokenMsg =
-      message.systemMessageType === 'ChatProtectionDisabled'
     const isProtectionEnabledMsg =
       message.systemMessageType === 'ChatProtectionEnabled' ||
       message.systemMessageType === 'ChatE2ee'
@@ -635,7 +634,6 @@ export default function Message(props: {
     const isInteractive =
       (isWebxdcInfo && message.parentId) ||
       message.infoContactId != null ||
-      isProtectionBrokenMsg ||
       isProtectionEnabledMsg ||
       isInvalidUnencryptedMail
 
@@ -645,14 +643,11 @@ export default function Message(props: {
         if (isWebxdcInfo) {
           // open or focus the webxdc app
           openWebxdc(message)
-        } else if (message.infoContactId != null) {
+        } else if (
+          message.infoContactId != null &&
+          message.infoContactId !== C.DC_CONTACT_ID_SELF
+        ) {
           openViewProfileDialog(accountId, message.infoContactId)
-        } else if (isProtectionBrokenMsg) {
-          const { name } = await BackendRemote.rpc.getBasicChatInfo(
-            selectedAccountId(),
-            message.chatId
-          )
-          openDialog(ProtectionBrokenDialog, { name })
         } else if (isProtectionEnabledMsg) {
           openDialog(ProtectionEnabledDialog)
         } else if (isInvalidUnencryptedMail) {
@@ -677,6 +672,9 @@ export default function Message(props: {
           className={'bubble ' + rovingTabindex.className}
           onClick={onClick}
           {...rovingTabindexAttrs}
+          // Note that the actual `onContextMenu` listener
+          // is on the wrapper component.
+          aria-haspopup='menu'
         >
           {isWebxdcInfo && message.parentId && (
             <img
@@ -718,6 +716,7 @@ export default function Message(props: {
         className={`videochat-invitation ${rovingTabindex.className}`}
         id={message.id.toString()}
         onContextMenu={showContextMenu}
+        aria-haspopup='menu'
         {...rovingTabindexAttrs}
       >
         <div className='videochat-icon'>
@@ -754,6 +753,7 @@ export default function Message(props: {
             fileMime={message.fileMime || null}
             direction={direction}
             status={status}
+            downloadState={message.downloadState}
             isEdited={message.isEdited}
             hasText={text !== null && text !== ''}
             hasLocation={hasLocation}
@@ -824,6 +824,7 @@ export default function Message(props: {
   return (
     <div
       onContextMenu={showContextMenu}
+      aria-haspopup='menu'
       className={classNames(
         'message',
         direction,
@@ -935,6 +936,7 @@ export default function Message(props: {
               fileMime={fileMime}
               direction={direction}
               status={status}
+              downloadState={downloadState}
               isEdited={message.isEdited}
               hasText={hasText}
               hasLocation={hasLocation}

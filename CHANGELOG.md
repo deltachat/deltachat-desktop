@@ -2,13 +2,45 @@
 
 ## [Unreleased][unreleased]
 
+<a id="2_11_0"></a>
+
+## [2.11.0] - 2025-08-18
+
+### Added
+- support RTL layout if locale.dir = rtf #4168
+- added estonian language
+- add more rtl configurations to languages that use it 
+
+### Changed
+- update translations (15-08-2025)
+- update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.11.0`
+  - Do not add key-contacts to unencrypted groups.
+  - Do not reset GuaranteeE2ee in the database when resending messages.
+  - Take Chat-Group-Name into account when matching ad hoc groups.
+  - Don't break long group names with non-ASCII characters.
+
+### Fixed
+- share email contacts by email not by VCard #5364
+- Truncate app title and description in app picker
+- do not open self chat on info message click #5361
+- fix Connectivity colors in dark mode #5397
+- Not fully downloaded messages display an ✉️ icon #5399
+- fix new chat button bg in dark modes #5183
+
+<a id="2_10_0"></a>
+
+## [2.10.0] - 2025-08-05
+
 ### Fixed
 - don't show "Edit Message", "Disappearing Messages" and fullscreen avatar view in classic E-Mail chats #5365
 - the upgrade `application-config` to `^3.0.0` allows the desktop client to be built on FreeBSD
+- accessibility: improve keyboard and screen reader accessibility of the "Add Reaction" menu #5376
+- accessibility: make screen readers announce where a context menu is available (opened with Shift + F10): apply `aria-haspopup="menu"` #5345
+- accessibility: add proper labels to some menus (e.g. message context menu, chat list item context menu) #5347, #5355
+- accessibility: apply `aria-expanded` to parent menu items (e.g. "Mute Chat" menu) #5354
 
 ### Changed
-
-### Added
+- update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.10.0`
 
 <a id="2_9_0"></a>
 
@@ -3619,7 +3651,11 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.9.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.11.0...HEAD
+
+[2.11.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.10.0...v2.11.0
+
+[2.10.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.9.0...v2.10.0
 
 [2.9.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.8.0...v2.9.0
 

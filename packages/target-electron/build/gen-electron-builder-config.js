@@ -188,6 +188,7 @@ const languages = [
   'el',
   // 'eo',  not supported by ms-store
   'es',
+  'et',
   'eu',
   'fa',
   'fi',
@@ -198,7 +199,6 @@ const languages = [
   'id',
   'it',
   'ja-jp',
-  'km',
   'ko',
   'lt',
   'nb',
