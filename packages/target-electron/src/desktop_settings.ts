@@ -1,5 +1,4 @@
 import { EventEmitter } from 'events'
-import { promisify } from 'util'
 import { getLogger } from '../../shared/logger.js'
 import { DesktopSettingsType } from '../../shared/shared-types.js'
 import { getDefaultState } from '../../shared/state.js'
@@ -27,9 +26,7 @@ class PersistentState extends EventEmitter {
     const default_state = getDefaultState()
     let saved: Partial<DesktopSettingsType> = {}
     try {
-      saved = (await promisify(cb =>
-        appConfig.read(cb)
-      )()) as DesktopSettingsType
+      saved = (await appConfig.read()) as DesktopSettingsType
       // validate&fix saved state
       if (typeof saved.lastAccount !== 'number' || saved.lastAccount < 0) {
         saved.lastAccount = undefined
@@ -57,14 +54,9 @@ class PersistentState extends EventEmitter {
   saveImmediate(): Promise<void> {
     log.info(`Saving state to ${appConfig.filePath}`)
     const copy = Object.assign({}, this.inner_state)
-    return new Promise((res, rej) => {
-      appConfig.write(copy, (err: any) => {
-        if (err) {
-          log.error('State save failed', err)
-          rej(err)
-        }
-        res(err)
-      })
+    return appConfig.write(copy).catch(err => {
+      log.error('State save failed', err)
+      throw new Error('State save failed', { cause: err })
     })
   }
 }
