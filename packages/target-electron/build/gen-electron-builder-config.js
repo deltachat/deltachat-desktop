@@ -75,7 +75,7 @@ build['files'] = files
 build['asarUnpack'] = [] // ['./node_modules/@deltachat/stdio-rpc-server']
 // 'html-dist/xdcs/' should be in 'asarUnpack', but that had "file already exists" errors in the ci
 // see https://github.com/deltachat/deltachat-desktop/pull/3876, so we now do it "manually" in the afterPackHook
-build['afterExtract'] = './build/afterExtractHook.cjs'
+
 build['afterPack'] = './build/afterPackHook.cjs'
 build['afterSign'] = './build/afterSignHook.cjs'
 
@@ -135,10 +135,15 @@ build['dmg'] = {
 }
 build['linux'] = {
   target: ['AppImage', 'deb'],
+  executableName: "deltachat-desktop",
   category: 'Network;Chat;InstantMessaging;',
   desktop: {
-    Comment: 'Delta Chat email-based messenger',
-    Keywords: 'dc;chat;delta;messaging;messenger;email',
+    entry: {
+      "Name": "Delta Chat",
+      "Comment": "Official Delta Chat Desktop Client",
+      "GenericName": "Delta Chat",
+      "Categories": "Delta Chat email-based messenger"
+    }
   },
   files: [...files, PREBUILD_FILTERS.NOT_MAC, PREBUILD_FILTERS.NOT_WINDOWS],
   icon: 'build/icon.icns', // electron builder gets the icon out of the mac icon archive
