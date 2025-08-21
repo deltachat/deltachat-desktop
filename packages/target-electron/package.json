@@ -80,7 +80,7 @@
     "chokidar": "^3.6.0",
     "debounce": "^1.2.0",
     "electron": "^37.1.0",
-    "electron-builder": "^25.1.6",
+    "electron-builder": "^26.0.12",
     "esbuild": "^0.25.0",
     "mocha": "^10.7.0",
     "rc": "^1.2.8",
