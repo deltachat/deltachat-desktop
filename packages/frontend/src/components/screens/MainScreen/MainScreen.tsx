@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useCallback,
   useContext,
+  useMemo,
 } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
@@ -39,6 +40,11 @@ import { useWebxdcMessageSentListener } from '../../../hooks/useWebxdcMessageSen
 import type { T } from '@deltachat/jsonrpc-client'
 import CreateChat from '../../dialogs/CreateChat'
 import { runtime } from '@deltachat-desktop/runtime-interface'
+import asyncThrottle from '@jcoreio/async-throttle'
+import { useFetch, useRpcFetch } from '../../../hooks/useFetch'
+import { getLogger } from '@deltachat-desktop/shared/logger'
+
+const log = getLogger('MainScreen')
 
 type Props = {
   accountId?: number
@@ -55,7 +61,6 @@ export default function MainScreen({ accountId }: Props) {
   const [archivedChatsSelected, setArchivedChatsSelected] = useState(false)
   const { chatId, chatWithLinger, selectChat, unselectChat } = useChat()
   const { smallScreenMode } = useContext(ScreenContext)
-  const [lastWebxdcApps, setLastWebxdcApps] = useState<T.Message[]>([])
 
   // Small hack/misuse of keyBindingAction to setArchivedChatsSelected from
   // other components (especially ViewProfile when selecting a shared chat/group)
@@ -147,50 +152,64 @@ export default function MainScreen({ accountId }: Props) {
     })
   })
 
-  // Shared function to fetch Webxdc media
-  const fetchLastUsedApps = useCallback(async () => {
-    const maxIcons = smallScreenMode ? 1 : 3
-    if (!accountId || !chatId) {
-      return
-    }
-    const mediaIds = await BackendRemote.rpc.getChatMedia(
-      accountId,
-      chatId,
-      'Webxdc',
-      null,
-      null
-    )
-    // mediaIds holds the ids of the last updated apps,
-    // in reverse order
-    mediaIds.reverse()
-    const firstFew = mediaIds.slice(0, maxIcons)
+  // Throttle in case the user switches chats very rapidly,
+  // e.g. by holding down Ctrl + PageDown.
+  //
+  // TODO a debounce would probably be more appropriate here,
+  // given that the operation is relatively expensive,
+  // but I haven't looked for an `asyncDebounce` function.
+  const throttledFetchLastUsedApps = useMemo(
+    () =>
+      asyncThrottle(
+        async (accountId: number, chatId: number, smallScreenMode: boolean) => {
+          const maxIcons = smallScreenMode ? 1 : 3
+          const mediaIds = await BackendRemote.rpc.getChatMedia(
+            accountId,
+            chatId,
+            'Webxdc',
+            null,
+            null
+          )
+          // mediaIds holds the ids of the last updated apps,
+          // in reverse order
+          mediaIds.reverse()
+          const firstFew = mediaIds.slice(0, maxIcons)
 
-    const mediaLoadResult = await BackendRemote.rpc.getMessages(
-      accountId,
-      firstFew
-    )
-    const lastUpdatedApps = firstFew
-      .map((id: number) => {
-        if (mediaLoadResult[id]?.kind === 'message') {
-          return mediaLoadResult[id]
-        }
-        return null
-      })
-      .filter(app => app !== null)
+          // TODO perf: if the current throttled fetch was canceled
+          // before the next line got executed, we could bail here.
+          const mediaLoadResult = await BackendRemote.rpc.getMessages(
+            accountId,
+            firstFew
+          )
+          const lastUpdatedApps = firstFew
+            .map((id: number) => {
+              if (mediaLoadResult[id]?.kind === 'message') {
+                return mediaLoadResult[id]
+              }
+              return null
+            })
+            .filter(app => app !== null)
 
-    setLastWebxdcApps(lastUpdatedApps)
-  }, [accountId, chatId, smallScreenMode])
-
-  useEffect(() => {
-    if (accountId && chatId) {
-      fetchLastUsedApps()
-    }
-  }, [accountId, chatId, fetchLastUsedApps])
+          return lastUpdatedApps
+        },
+        50
+      ),
+    []
+  )
+  const lastUsedAppsFetch = useFetch(
+    throttledFetchLastUsedApps,
+    accountId != undefined && chatId != undefined
+      ? [accountId, chatId, smallScreenMode]
+      : null
+  )
+  if (lastUsedAppsFetch?.result?.ok === false) {
+    log.error('Failed to fetch last used apps', lastUsedAppsFetch.result.err)
+  }
 
   // Listen for Webxdc messages being sent to the current chat
   useWebxdcMessageSentListener(accountId || 0, chatId || 0, () => {
     // Refresh Webxdc apps list when a Webxdc message is sent
-    fetchLastUsedApps()
+    lastUsedAppsFetch?.refresh()
   })
 
   useEffect(() => {
@@ -269,9 +288,13 @@ export default function MainScreen({ accountId }: Props) {
           >
             {chatWithLinger && <ChatHeading chat={chatWithLinger} />}
           </div>
-          {lastWebxdcApps.length > 0 && (
-            <AppIcons accountId={accountId} apps={lastWebxdcApps} />
-          )}
+          {lastUsedAppsFetch?.result?.ok &&
+            lastUsedAppsFetch.result.value.length > 0 && (
+              <AppIcons
+                accountId={accountId}
+                apps={lastUsedAppsFetch.result.value}
+              />
+            )}
           {chatWithLinger && <ChatNavButtons chat={chatWithLinger} />}
           {chatWithLinger && (
             <span
@@ -455,29 +478,25 @@ function ChatNavButtons({ chat }: { chat: T.FullChat }) {
 }
 
 function AppIcon({ accountId, app }: { accountId: number; app: T.Message }) {
-  const [webxdcInfo, setWebxdcInfo] = useState<T.WebxdcMessageInfo | null>(null)
-  const [isLoadingWebxdcInfo, setIsLoadingWebxdcInfo] = useState(true)
+  const tx = useTranslationFunction()
 
-  useEffect(() => {
-    if (app.viewType === 'Webxdc') {
-      setIsLoadingWebxdcInfo(true)
-      BackendRemote.rpc
-        .getWebxdcInfo(accountId, app.id)
-        .then((info: T.WebxdcMessageInfo) => {
-          setWebxdcInfo(info)
-        })
-        .catch((error: any) => {
-          console.error('Failed to load webxdc info for app:', app.id, error)
-          setWebxdcInfo(null)
-        })
-        .finally(() => {
-          setIsLoadingWebxdcInfo(false)
-        })
-    }
-  }, [accountId, app.id, app.viewType])
+  const webxdcInfoFetch = useRpcFetch(BackendRemote.rpc.getWebxdcInfo, [
+    accountId,
+    app.id,
+  ])
+  if (webxdcInfoFetch.result?.ok === false) {
+    log.error(
+      'Failed to load webxdc info for app:',
+      app.id,
+      webxdcInfoFetch.result.err
+    )
+  }
 
-  const appName =
-    webxdcInfo?.name || (isLoadingWebxdcInfo ? 'Loading...' : 'Unknown App')
+  const appName = webxdcInfoFetch.loading
+    ? tx('loading')
+    : webxdcInfoFetch.result.ok
+      ? webxdcInfoFetch.result.value.name
+      : 'Unknown App'
 
   return (
     <Button
@@ -486,8 +505,12 @@ function AppIcon({ accountId, app }: { accountId: number; app: T.Message }) {
       className={styles.webxdcIconButton}
       title={appName}
       aria-label={appName}
+      aria-busy={webxdcInfoFetch.loading}
       onClick={() => {
-        openWebxdc(app, webxdcInfo ?? undefined)
+        openWebxdc(
+          app,
+          webxdcInfoFetch.result?.ok ? webxdcInfoFetch.result.value : undefined
+        )
       }}
     >
       <img
