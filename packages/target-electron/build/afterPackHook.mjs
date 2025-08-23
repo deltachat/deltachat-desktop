@@ -219,7 +219,7 @@ async function setFuses(context) {
     return
   }
 
-  console.log('Applying electron fuses for enhanced security to:', appPath)
+  console.log('Applying electron fuses to:', appPath)
   await flipFuses(appPath, {
     version: FuseVersion.V1,
     [FuseV1Options.RunAsNode]: false, // Disables ELECTRON_RUN_AS_NODE
@@ -228,8 +228,8 @@ async function setFuses(context) {
     [FuseV1Options.EnableNodeCliInspectArguments]: false, // Disables the --inspect and --inspect-brk family of CLI options
     [FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: true, // Enables validation of the app.asar archive on macOS
     [FuseV1Options.OnlyLoadAppFromAsar]: true, // Enforces that Electron will only load your app from "app.asar" instead of its normal search paths
-    [FuseV1Options.LoadBrowserProcessSpecificV8Snapshot]: false, // Loads V8 Snapshot from `browser_v8_context_snapshot.bin` for the browser process
+    [FuseV1Options.LoadBrowserProcessSpecificV8Snapshot]: false, // Setting to true failed in AppImage builds
     [FuseV1Options.GrantFileProtocolExtraPrivileges]: true, // Grants the file protocol extra privileges
   })
-  console.log('Flipped all fuses')
+  console.log('Successfully flipped configured fuses')
 }
