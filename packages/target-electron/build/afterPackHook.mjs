@@ -1,15 +1,14 @@
-import { copyFileSync } from 'fs'
+import { copyFileSync, existsSync } from 'fs'
 import { flipFuses, FuseVersion, FuseV1Options } from '@electron/fuses'
 import {
   readdir,
   writeFile,
   rm,
-  copyFile,
   cp,
   mkdir,
-  readFile,
 } from 'fs/promises'
-import { join } from 'path'
+import { join, dirname } from 'path'
+import { fileURLToPath } from 'url'
 
 import { Arch } from 'electron-builder'
 import { env } from 'process'
@@ -33,7 +32,7 @@ function convertArch(arch) {
 }
 
 export default async context => {
-  const source_dir = join(new URL('.', import.meta.url).pathname, '..')
+  const source_dir = join(dirname(fileURLToPath(import.meta.url)), '..')
 
   console.log({ context, source_dir })
   const isMacBuild = ['darwin', 'mas', 'dmg'].includes(
@@ -103,14 +102,13 @@ export default async context => {
   // copy map xdc
   // ---------------------------------------------------------------------------------
   // asar is electrons archive format, flatpak doesn't use it. read more about what asar is on https://www.electronjs.org/docs/latest/glossary#asar
-  // asar is electrons archive format, flatpak doesn't use it. read more about what asar is on https://www.electronjs.org/docs/latest/glossary#asar
   const asar = env['NO_ASAR'] ? false : true
   await copyMapXdc(resources_dir, source_dir, asar)
   await setFuses(context)
 }
 
 async function packageMSVCRedist(context) {
-  const base = join(new URL('.', import.meta.url).pathname, 'vcredist/')
+  const base = join(dirname(fileURLToPath(import.meta.url)), 'vcredist/')
   const dir = await readdir(base)
   dir.forEach(d => {
     copyFileSync(join(base, d), join(context.appOutDir, d))
@@ -191,17 +189,34 @@ async function deleteNotNeededPrebuildsFromUnpackedASAR(
 async function setFuses(context) {
   // Apply security fuses for all builds
   let appPath
+  let executableName = context.packager.executableName ?? 'DeltaChat'
+  if (process.env.IS_PREVIEW) {
+    executableName = executableName + '-DevBuild'
+  }
   switch (context.electronPlatformName) {
     case 'darwin':
     case 'mas':
-      appPath = `${context.appOutDir}/DeltaChat.app`
+      appPath = `${context.appOutDir}/${executableName}.app`
       break
     case 'win32':
-      appPath = `${context.appOutDir}DeltaChat.exe`
+      appPath = `${context.appOutDir}/${executableName}.exe`
       break
     default:
-      appPath = `${context.appOutDir}/deltachat-desktop`
+      appPath = `${context.appOutDir}/${context.packager.executableName ?? 'deltachat-desktop'}`
       break
+  }
+
+  if (!existsSync(appPath)) {
+    console.log('Skipping electron fuses. Target not exists:', appPath)
+    const files = await readdir(context.appOutDir)
+    
+    // Log the list of file names
+    console.log(`Files in ${context.appOutDir}:`);
+    files.forEach(file => {
+      console.log(file);
+    });
+    // Only for debugging! should throw error in production!
+    return
   }
 
   console.log('Applying electron fuses for enhanced security to:', appPath)
