@@ -194,10 +194,10 @@ async function setFuses(context) {
   switch (context.electronPlatformName) {
     case 'darwin':
     case 'mas':
-      appPath = `${context.appOutDir}/deltachat-desktop.app`
+      appPath = `${context.appOutDir}/DeltaChat.app`
       break
     case 'win32':
-      appPath = `${context.appOutDir}/deltachat-desktop.exe`
+      appPath = `${context.appOutDir}DeltaChat.exe`
       break
     default:
       appPath = `${context.appOutDir}/deltachat-desktop`
