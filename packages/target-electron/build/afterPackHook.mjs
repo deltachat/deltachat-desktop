@@ -104,7 +104,7 @@ export default async context => {
   // asar is electrons archive format, flatpak doesn't use it. read more about what asar is on https://www.electronjs.org/docs/latest/glossary#asar
   const asar = env['NO_ASAR'] ? false : true
   await copyMapXdc(resources_dir, source_dir, asar)
-  await setFuses(context)
+  await setFuses(context, asar)
 }
 
 async function packageMSVCRedist(context) {
@@ -186,7 +186,7 @@ async function deleteNotNeededPrebuildsFromUnpackedASAR(
   }
 }
 
-async function setFuses(context) {
+async function setFuses(context, asar) {
   // Apply security fuses for all builds
   let appPath
   let executableName = context.packager.executableName ?? 'DeltaChat'
@@ -207,29 +207,27 @@ async function setFuses(context) {
   }
 
   if (!existsSync(appPath)) {
-    console.log('Skipping electron fuses. Target not exists:', appPath)
     const files = await readdir(context.appOutDir)
     
     // Log the list of file names
-    console.log(`Files in ${context.appOutDir}:`);
+    console.log(`Files in context.appOutDir (${context.appOutDir}):`);
     files.forEach(file => {
       console.log(file);
     });
-    // Only for debugging! should throw error in production!
-    return
+    throw new Error('Could not apply electron fuses since target not exists: ' + appPath)
   }
 
   console.log('Applying electron fuses to:', appPath)
   await flipFuses(appPath, {
     version: FuseVersion.V1,
     [FuseV1Options.RunAsNode]: false, // Disables ELECTRON_RUN_AS_NODE
-    [FuseV1Options.EnableCookieEncryption]: true, // Enables cookie encryption
+    [FuseV1Options.EnableCookieEncryption]: false, // not needed
     [FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false, // Disables the NODE_OPTIONS environment variable
     [FuseV1Options.EnableNodeCliInspectArguments]: false, // Disables the --inspect and --inspect-brk family of CLI options
     [FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: true, // Enables validation of the app.asar archive on macOS
-    [FuseV1Options.OnlyLoadAppFromAsar]: true, // Enforces that Electron will only load your app from "app.asar" instead of its normal search paths
+    [FuseV1Options.OnlyLoadAppFromAsar]: asar, // Enforces that Electron will only load your app from "app.asar" instead of its normal search paths
     [FuseV1Options.LoadBrowserProcessSpecificV8Snapshot]: false, // Setting to true failed in AppImage builds
-    [FuseV1Options.GrantFileProtocolExtraPrivileges]: true, // Grants the file protocol extra privileges
+    [FuseV1Options.GrantFileProtocolExtraPrivileges]: true, // TODO: can be disabled if we serve all files via custom protocols
   })
   console.log('Successfully flipped configured fuses')
 }
