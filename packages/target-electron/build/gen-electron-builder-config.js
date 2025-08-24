@@ -76,7 +76,7 @@ build['asarUnpack'] = [] // ['./node_modules/@deltachat/stdio-rpc-server']
 // 'html-dist/xdcs/' should be in 'asarUnpack', but that had "file already exists" errors in the ci
 // see https://github.com/deltachat/deltachat-desktop/pull/3876, so we now do it "manually" in the afterPackHook
 
-build['afterPack'] = './build/afterPackHook.cjs'
+build['afterPack'] = './build/afterPackHook.mjs'
 build['afterSign'] = './build/afterSignHook.cjs'
 
 if (typeof env.NO_ASAR !== 'undefined' && env.NO_ASAR != 'false') {

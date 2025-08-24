@@ -1,17 +1,17 @@
-const { copyFileSync } = require('fs')
-const {
+import { copyFileSync, existsSync } from 'fs'
+import { flipFuses, FuseVersion, FuseV1Options } from '@electron/fuses'
+import {
   readdir,
   writeFile,
   rm,
-  copyFile,
   cp,
   mkdir,
-  readFile,
-} = require('fs/promises')
-const { join } = require('path')
+} from 'fs/promises'
+import { join, dirname } from 'path'
+import { fileURLToPath } from 'url'
 
-const { Arch } = require('electron-builder')
-const { env } = require('process')
+import { Arch } from 'electron-builder'
+import { env } from 'process'
 
 function convertArch(arch) {
   switch (arch) {
@@ -31,8 +31,8 @@ function convertArch(arch) {
   }
 }
 
-module.exports = async context => {
-  const source_dir = join(__dirname, '..')
+export default async context => {
+  const source_dir = join(dirname(fileURLToPath(import.meta.url)), '..')
 
   console.log({ context, source_dir })
   const isMacBuild = ['darwin', 'mas', 'dmg'].includes(
@@ -73,7 +73,6 @@ module.exports = async context => {
 
   // console.log({ dcStdioServers })
 
-
   // for (const serverPackage of dcStdioServers) {
   //   const name = serverPackage.split('+')[1].split('@')[0]
   //   await cp(
@@ -103,13 +102,13 @@ module.exports = async context => {
   // copy map xdc
   // ---------------------------------------------------------------------------------
   // asar is electrons archive format, flatpak doesn't use it. read more about what asar is on https://www.electronjs.org/docs/latest/glossary#asar
-  // asar is electrons archive format, flatpak doesn't use it. read more about what asar is on https://www.electronjs.org/docs/latest/glossary#asar
   const asar = env['NO_ASAR'] ? false : true
   await copyMapXdc(resources_dir, source_dir, asar)
+  await setFuses(context, asar)
 }
 
 async function packageMSVCRedist(context) {
-  const base = join(__dirname, 'vcredist/')
+  const base = join(dirname(fileURLToPath(import.meta.url)), 'vcredist/')
   const dir = await readdir(base)
   dir.forEach(d => {
     copyFileSync(join(base, d), join(context.appOutDir, d))
@@ -185,4 +184,50 @@ async function deleteNotNeededPrebuildsFromUnpackedASAR(
       "prebuilds were not cleared correctly or prebuild is missing, there should only be one (unless it's mac)"
     )
   }
+}
+
+async function setFuses(context, asar) {
+  // Apply security fuses for all builds
+  let appPath
+  let executableName = context.packager.executableName ?? 'DeltaChat'
+  if (process.env.IS_PREVIEW) {
+    executableName = executableName + '-DevBuild'
+  }
+  switch (context.electronPlatformName) {
+    case 'darwin':
+    case 'mas':
+      appPath = `${context.appOutDir}/${executableName}.app`
+      break
+    case 'win32':
+      appPath = `${context.appOutDir}/${executableName}.exe`
+      break
+    default:
+      appPath = `${context.appOutDir}/${context.packager.executableName ?? 'deltachat-desktop'}`
+      break
+  }
+
+  if (!existsSync(appPath)) {
+    const files = await readdir(context.appOutDir)
+    
+    // Log the list of file names
+    console.log(`Files in context.appOutDir (${context.appOutDir}):`);
+    files.forEach(file => {
+      console.log(file);
+    });
+    throw new Error('Could not apply electron fuses since target not exists: ' + appPath)
+  }
+
+  console.log('Applying electron fuses to:', appPath)
+  await flipFuses(appPath, {
+    version: FuseVersion.V1,
+    [FuseV1Options.RunAsNode]: false, // Disables ELECTRON_RUN_AS_NODE
+    [FuseV1Options.EnableCookieEncryption]: false, // not needed
+    [FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false, // Disables the NODE_OPTIONS environment variable
+    [FuseV1Options.EnableNodeCliInspectArguments]: false, // Disables the --inspect and --inspect-brk family of CLI options
+    [FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: true, // Enables validation of the app.asar archive on macOS
+    [FuseV1Options.OnlyLoadAppFromAsar]: asar, // Enforces that Electron will only load your app from "app.asar" instead of its normal search paths
+    [FuseV1Options.LoadBrowserProcessSpecificV8Snapshot]: false, // Setting to true failed in AppImage builds
+    [FuseV1Options.GrantFileProtocolExtraPrivileges]: true, // TODO: can be disabled if we serve all files via custom protocols
+  })
+  console.log('Successfully flipped configured fuses')
 }

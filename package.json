@@ -52,6 +52,7 @@
       ]
     },
     "onlyBuiltDependencies": [
+      "@parcel/watcher",
       "electron",
       "esbuild"
     ],

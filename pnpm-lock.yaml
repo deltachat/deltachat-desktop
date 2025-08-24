@@ -345,6 +345,9 @@ importers:
       '@deltachat-desktop/shared':
         specifier: link:../shared
         version: link:../shared
+      '@electron/fuses':
+        specifier: ^2.0.0
+        version: 2.0.0
       '@electron/notarize':
         specifier: ^2.4
         version: 2.5.0
@@ -536,6 +539,11 @@ packages:
   '@electron/asar@3.2.10':
     resolution: {integrity: sha512-mvBSwIBUeiRscrCeJE1LwctAriBj65eUDm0Pc11iE5gRwzkmsdbS7FnZ1XUWjpSeQWL1L5g12Fc/SchPM9DUOw==}
     engines: {node: '>=10.12.0'}
+    hasBin: true
+
+  '@electron/fuses@2.0.0':
+    resolution: {integrity: sha512-lyb1zK3YHeWUjaz7yiK0GnxSPduwASKMyiDbCtbn3spP6EEt+UWtktggWehG0icFrXAk3GwvcJ4nCrJO0N9IhQ==}
+    engines: {node: '>=22.12.0'}
     hasBin: true
 
   '@electron/get@2.0.3':
@@ -3904,6 +3912,8 @@ snapshots:
       commander: 5.1.0
       glob: 7.2.3
       minimatch: 3.1.2
+
+  '@electron/fuses@2.0.0': {}
 
   '@electron/get@2.0.3':
     dependencies:
