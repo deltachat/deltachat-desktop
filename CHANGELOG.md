@@ -2,9 +2,14 @@
 
 ## [Unreleased][unreleased]
 
+<<<<<<< HEAD
 ### Fixed
 - don't close context menues on window resize #5418
 
+=======
+### Added
+- support multiple selection (multiselect) in the list of chats, activated with Ctrl + Click, Shift + Click #5297
+>>>>>>> b9d383489 (docs: add CHANGELOG entry)
 
 <a id="2_11_1"></a>
 
