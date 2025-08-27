@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- support multiple selection (multiselect) in the list of chats, activated with Ctrl + Click, Shift + Click #5297
+
 <a id="2_11_0"></a>
 
 ## [2.11.0] - 2025-08-18
