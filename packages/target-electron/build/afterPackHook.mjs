@@ -190,8 +190,7 @@ async function setFuses(context) {
   // Apply security fuses for all builds
   let appPath
   let executableName = context.packager.executableName ?? 'DeltaChat'
-  let isMac = false
-  const isArm64 = appOutDir.indexOf('arm64') !== -1
+  let isDarwinArm64 = false
   if (process.env.IS_PREVIEW) {
     executableName = executableName + '-DevBuild'
   }
@@ -199,7 +198,9 @@ async function setFuses(context) {
     case 'darwin':
     case 'mas':
       appPath = `${context.appOutDir}/${executableName}.app`
-      isMac = true
+      // only arm64 architecture on macOS needs this flag
+      // see https://github.com/electron/fuses/blob/main/src/index.ts#L186
+      isDarwinArm64 = appPath.indexOf('arm64') !== -1
       break
     case 'win32':
       appPath = `${context.appOutDir}/${executableName}.exe`
@@ -223,7 +224,7 @@ async function setFuses(context) {
   console.log('Applying electron fuses to:', appPath)
   await flipFuses(appPath, {
     version: FuseVersion.V1,
-    resetAdHocDarwinSignature: isMac && isArm64, // avoid code signature validation errors
+    resetAdHocDarwinSignature: isDarwinArm64, // avoid code signature validation errors
     [FuseV1Options.RunAsNode]: false, // Disables ELECTRON_RUN_AS_NODE
     [FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false, // Disables the NODE_OPTIONS environment variable
     [FuseV1Options.EnableNodeCliInspectArguments]: false, // Disables the --inspect and --inspect-brk family of CLI options
