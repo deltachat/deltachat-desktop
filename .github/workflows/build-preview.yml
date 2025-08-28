@@ -20,6 +20,8 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
       fail-fast: false
     name: Upload Preview
+    env:
+      IS_PREVIEW: true
     steps:
     # Preperation
     - uses: actions/checkout@v1
