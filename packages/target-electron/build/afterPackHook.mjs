@@ -104,7 +104,7 @@ export default async context => {
   // asar is electrons archive format, flatpak doesn't use it. read more about what asar is on https://www.electronjs.org/docs/latest/glossary#asar
   const asar = env['NO_ASAR'] ? false : true
   await copyMapXdc(resources_dir, source_dir, asar)
-  await setFuses(context, asar)
+  await setFuses(context)
 }
 
 async function packageMSVCRedist(context) {
@@ -186,10 +186,12 @@ async function deleteNotNeededPrebuildsFromUnpackedASAR(
   }
 }
 
-async function setFuses(context, asar) {
+async function setFuses(context) {
   // Apply security fuses for all builds
   let appPath
   let executableName = context.packager.executableName ?? 'DeltaChat'
+  let isMac = false
+  const isArm64 = appOutDir.indexOf('arm64') !== -1
   if (process.env.IS_PREVIEW) {
     executableName = executableName + '-DevBuild'
   }
@@ -197,6 +199,7 @@ async function setFuses(context, asar) {
     case 'darwin':
     case 'mas':
       appPath = `${context.appOutDir}/${executableName}.app`
+      isMac = true
       break
     case 'win32':
       appPath = `${context.appOutDir}/${executableName}.exe`
@@ -220,14 +223,10 @@ async function setFuses(context, asar) {
   console.log('Applying electron fuses to:', appPath)
   await flipFuses(appPath, {
     version: FuseVersion.V1,
+    resetAdHocDarwinSignature: isMac && isArm64, // avoid code signature validation errors
     [FuseV1Options.RunAsNode]: false, // Disables ELECTRON_RUN_AS_NODE
-    [FuseV1Options.EnableCookieEncryption]: false, // not needed
     [FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false, // Disables the NODE_OPTIONS environment variable
     [FuseV1Options.EnableNodeCliInspectArguments]: false, // Disables the --inspect and --inspect-brk family of CLI options
-    [FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: true, // Enables validation of the app.asar archive on macOS
-    [FuseV1Options.OnlyLoadAppFromAsar]: asar, // Enforces that Electron will only load your app from "app.asar" instead of its normal search paths
-    [FuseV1Options.LoadBrowserProcessSpecificV8Snapshot]: false, // Setting to true failed in AppImage builds
-    [FuseV1Options.GrantFileProtocolExtraPrivileges]: true, // TODO: can be disabled if we serve all files via custom protocols
   })
   console.log('Successfully flipped configured fuses')
 }
