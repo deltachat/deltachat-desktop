@@ -11,7 +11,7 @@ catalog:
   mime-types: ^2.1.35
 
   # tools / dev dependencies
-  typescript: ^5.8.3
-  typescript-plugin-css-modules: ^5.2.0
-
   sass: ^1.86.3
+  typescript: ^5.9.2
+  typescript-plugin-css-modules: ^5.2.0
+  '@types/node': ^20.14.13

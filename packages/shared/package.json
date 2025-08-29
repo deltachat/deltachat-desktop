@@ -17,6 +17,7 @@
     "@types/mocha": "^10.0.7",
     "chai": "^5.1.1",
     "esbuild": "^0.25.0",
-    "mocha": "^10.7.0"
+    "mocha": "^10.7.0",
+    "@types/node": "catalog:"
   }
 }

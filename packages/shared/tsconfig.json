@@ -8,7 +8,6 @@
     "allowJs": false,
     "strictNullChecks": true,
     "strict": true,
-    "skipLibCheck": true,
     "resolveJsonModule": true,
     "moduleResolution": "NodeNext"
   },
