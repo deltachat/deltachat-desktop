@@ -45,7 +45,7 @@
     "react-virtualized-auto-sizer": "^1.0.26",
     "react-window": "^1.8.11",
     "react-window-infinite-loader": "^1.0.10",
-    "react-zoom-pan-pinch": "^3.0.0",
+    "react-zoom-pan-pinch": "^3.7.0",
     "use-debounce": "^3.3.0",
     "ws": "7.5.10"
   },

@@ -5,6 +5,9 @@
 ### Added
 -flip electron fuses to avoid security debates #5423
 
+### Fixed
+- unexpected zoom/scroll behaviour #5426
+
 <a id="2_11_0"></a>
 
 ## [2.11.0] - 2025-08-18
