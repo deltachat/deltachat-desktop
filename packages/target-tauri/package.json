@@ -33,6 +33,7 @@
     "@tauri-apps/plugin-clipboard-manager": "^2.2.2",
     "@tauri-apps/plugin-dialog": "^2.2.1",
     "@webxdc/types": "catalog:",
+    "@types/node": "catalog:",
     "esbuild": "^0.25.0",
     "typescript": "^5.2.2"
   }
