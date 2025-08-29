@@ -9,6 +9,6 @@
     "strictNullChecks": true,
     "strict": true,
     "moduleResolution": "bundler",
-    "skipLibCheck": true,
+    "skipLibCheck": true
   }
 }
