@@ -1,17 +1,12 @@
 packages:
   - packages/*
+
 catalog:
-  # deltachat specific
   '@deltachat/jsonrpc-client': 2.11.0
   '@deltachat/stdio-rpc-server': 2.11.0
-  '@webxdc/types': ^2.1.2
-
-  # dependencies
   '@types/mime-types': ^2.1.4
+  '@webxdc/types': ^2.1.2
   mime-types: ^2.1.35
-
-  # tools / dev dependencies
-  typescript: ^5.8.3
-  typescript-plugin-css-modules: ^5.2.0
-
   sass: ^1.86.3
+  typescript: ^5.9.2
+  typescript-plugin-css-modules: ^5.2.0
