@@ -20,7 +20,6 @@ let page: Page
 test.beforeAll(async ({ browser }) => {
   const contextForProfileCreation = await browser.newContext()
   const pageForProfileCreation = await contextForProfileCreation.newPage()
-  const pageForTestsP = browser.newPage()
 
   await reloadPage(pageForProfileCreation)
 
@@ -31,17 +30,24 @@ test.beforeAll(async ({ browser }) => {
     numberOfProfiles,
     existingProfiles,
     pageForProfileCreation,
-    contextForProfileCreation,
     browser.browserType().name()
   )
 
   await contextForProfileCreation.close()
-  page = await pageForTestsP
+  page = await browser.newPage()
   await reloadPage(page)
 })
 
+test.afterEach(async () => {
+  // Pressing Escape a bunch of times should reset the UI state,
+  // so there is no need to reload the page.
+  for (let i = 0; i < 5; i++) {
+    await page.keyboard.press('Escape')
+  }
+})
+
 test.afterAll(async ({ browser }) => {
-  await page.close()
+  await page?.close()
 
   const context = await browser.newContext()
   const pageForProfileDeletion = await context.newPage()
