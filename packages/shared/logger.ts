@@ -2,10 +2,17 @@ import errorStackParser from 'error-stack-parser'
 import StackFrame from 'stackframe'
 import { RC_Config } from './shared-types.js'
 
-const startTime = Date.now()
+let showColors = true
+
+if (process?.argv?.includes('--no-color')) {
+  showColors = false
+}
 
 export const colorize = (light: number, code: number) => (str: string) =>
   '\x1B[' + light + ';' + code + 'm' + str + '\x1b[0m'
+
+const startTime = Date.now()
+
 export const blue = colorize(1, 34)
 export const red = colorize(1, 31)
 export const yellow = colorize(1, 33)
@@ -127,21 +134,28 @@ function log(
   handler(channel, variant.level, stacktrace, ...args)
   if (rc['log-to-console']) {
     if (isMainProcess) {
-      const beginning = `${Math.round((Date.now() - startTime) / 100) / 10}s ${
-        LoggerVariants[level].symbol
-      }${grey(channel)}:`
-      if (!stacktrace) {
-        variant.log(beginning, ...args)
-      } else {
-        variant.log(
-          beginning,
-          ...args,
-          red(
+      // Helper function to apply colors only if showColors is true
+      const maybeColor = (colorFn: (str: string) => string, str: string) =>
+        showColors ? colorFn(str) : str
+
+      const timePrefix = `${Math.round((Date.now() - startTime) / 100) / 10}s`
+      const levelSymbol = showColors ? variant.symbol : variant.level
+      const channelText = maybeColor(grey, channel)
+      const beginning = `${timePrefix} ${levelSymbol}${channelText}:`
+
+      const stackText = stacktrace
+        ? maybeColor(
+            red,
             Array.isArray(stacktrace)
               ? stacktrace.map(s => `\n${s.toString()}`).join()
               : stacktrace
           )
-        )
+        : null
+
+      if (stackText) {
+        variant.log(beginning, ...args, stackText)
+      } else {
+        variant.log(beginning, ...args)
       }
     } else {
       const prefix = `%c${variant.emoji}%c${channel}`
