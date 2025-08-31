@@ -27,6 +27,7 @@ enum DisappearingMessageDuration {
   ONE_DAY = Timespans.ONE_DAY_IN_SECONDS,
   ONE_WEEK = Timespans.ONE_WEEK_IN_SECONDS,
   FIVE_WEEKS = Timespans.ONE_WEEK_IN_SECONDS * 5,
+  ONE_YEAR = Timespans.ONE_YEAR_IN_SECONDS,
 }
 
 function SelectDisappearingMessageDuration({
@@ -57,38 +58,33 @@ function SelectDisappearingMessageDuration({
       />
       <Radio
         key={'eph-1'}
-        label={tx('after_1_minute')}
-        value={String(DisappearingMessageDuration.ONE_MINUTE)}
-      />
-      <Radio
-        key={'eph-2'}
         label={tx('after_5_minutes')}
         value={String(DisappearingMessageDuration.FIVE_MINUTES)}
       />
       <Radio
-        key={'eph-3'}
-        label={tx('after_30_minutes')}
-        value={String(DisappearingMessageDuration.THIRTY_MINUTES)}
-      />
-      <Radio
-        key={'eph-4'}
+        key={'eph-2'}
         label={tx('autodel_after_1_hour')}
         value={String(DisappearingMessageDuration.ONE_HOUR)}
       />
       <Radio
-        key={'eph-5'}
+        key={'eph-3'}
         label={tx('autodel_after_1_day')}
         value={String(DisappearingMessageDuration.ONE_DAY)}
       />
       <Radio
-        key={'eph-6'}
+        key={'eph-4'}
         label={tx('autodel_after_1_week')}
         value={String(DisappearingMessageDuration.ONE_WEEK)}
       />
       <Radio
-        key={'eph-7'}
+        key={'eph-5'}
         label={tx('after_5_weeks')}
         value={String(DisappearingMessageDuration.FIVE_WEEKS)}
+      />
+      <Radio
+        key={'eph-6'}
+        label={tx('autodel_after_1_year')}
+        value={String(DisappearingMessageDuration.ONE_YEAR)}
       />
     </RadioGroup>
   )
