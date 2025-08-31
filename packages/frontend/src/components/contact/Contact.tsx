@@ -4,7 +4,7 @@ import { Avatar } from '../Avatar'
 function ContactName(props: {
   displayName: string
   address: string
-  isVerified?: boolean
+  isKeyContact?: boolean
   isBlocked?: boolean
 }) {
   return (
@@ -15,7 +15,7 @@ function ContactName(props: {
           <i className='material-svg-icon material-icon-blocked' />
         )}
       </div>
-      {!props.isVerified && <div className='email'>{props.address}</div>}
+      {!props.isKeyContact && <div className='email'>{props.address}</div>}
     </div>
   )
 }
@@ -26,7 +26,7 @@ export default function Contact(props: {
     color: string
     displayName: string
     address: string
-    isVerified: boolean
+    isKeyContact: boolean
     wasSeenRecently: boolean
     isBlocked?: boolean
   }
@@ -36,7 +36,7 @@ export default function Contact(props: {
     color,
     displayName,
     address,
-    isVerified,
+    isKeyContact,
     wasSeenRecently,
     isBlocked,
   } = props.contact
@@ -58,7 +58,7 @@ export default function Contact(props: {
       <ContactName
         displayName={displayName}
         address={address}
-        isVerified={isVerified}
+        isKeyContact={isKeyContact}
         isBlocked={isBlocked}
       />
     </div>
