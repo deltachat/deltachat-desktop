@@ -211,7 +211,12 @@ export function init(options: { hidden: boolean }) {
 
       log.errorWithoutStackTrace(
         'tried to access path that is not whitelisted',
-        pathname
+        {
+          pathname,
+          ALLOWED_ACCOUNT_FOLDERS,
+          accountPaths: getAccountsPath(),
+          filePathWhiteList: window?.filePathWhiteList,
+        }
       )
       return callback({ cancel: true })
     }

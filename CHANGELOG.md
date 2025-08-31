@@ -7,6 +7,8 @@
 
 ### Fixed
 - unexpected zoom/scroll behaviour #5426
+- don't show "Reply" and "Save" for info messages (e.g. "user A removed user B") and video call invitations #5337
+- don't show mail addresses for key contacts #5430
 
 <a id="2_11_0"></a>
 
