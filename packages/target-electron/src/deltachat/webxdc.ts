@@ -16,8 +16,7 @@ import {
   clipboard,
   IpcMainInvokeEvent,
 } from 'electron'
-import { join, dirname } from 'path'
-import { fileURLToPath } from 'url'
+import { join } from 'path'
 import { platform } from 'os'
 import { readdir, stat, rmdir, writeFile, readFile } from 'fs/promises'
 import { existsSync } from 'fs'
@@ -39,8 +38,6 @@ import {
 import { T } from '@deltachat/jsonrpc-client'
 import type * as Jsonrpc from '@deltachat/jsonrpc-client'
 import { setContentProtection } from '../content-protection.js'
-
-const __dirname = dirname(fileURLToPath(import.meta.url))
 
 const log = getLogger('main/deltachat/webxdc')
 
@@ -135,7 +132,8 @@ export default class DCWebxdc {
     ) => {
       const { webxdcInfo, chatName, accountId, href } = p
       let base64EncodedHref = ''
-      const appURL = `webxdc://${accountId}.${msg_id}.webxdc`
+      const appId = `${accountId}.${msg_id}`
+      const appURL = `webxdc://${appId}.webxdc`
       if (href && href !== '') {
         // href is user provided content, so we want to be sure it's relative
         // relative href needs a base to construct URL
@@ -177,7 +175,10 @@ export default class DCWebxdc {
         const ses = sessionFromAccountId(accountId)
         accounts_sessions.push(accountId)
         ses.protocol.handle('webxdc', (...args) =>
-          webxdcProtocolHandler(this.rpc, ...args)
+          webxdcProtocolHandler(this.rpc, appId, ...args)
+        )
+        ses.protocol.handle('maps', (...args) =>
+          mapProtocolHandler(this.rpc, appId, accountId, ...args)
         )
       }
 
@@ -213,7 +214,7 @@ export default class DCWebxdc {
 
       // show after repositioning to avoid blinking
       webxdcWindow.show()
-      open_apps[`${accountId}.${msg_id}`] = {
+      open_apps[appId] = {
         win: webxdcWindow,
         accountId,
         msgId: msg_id,
@@ -828,8 +829,67 @@ export default class DCWebxdc {
   }
 }
 
+/**
+ * Apply some security measures to every response
+ */
+const makeResponse = (
+  appId: string,
+  body: BodyInit,
+  responseInit: Omit<ResponseInit, 'headers'>,
+  mime_type?: undefined | string
+) => {
+  const headers = new Headers()
+  if (!open_apps[appId] || !open_apps[appId].internet_access) {
+    headers.append('Content-Security-Policy', CSP)
+  }
+  headers.append('X-Content-Type-Options', 'nosniff')
+  if (mime_type) {
+    headers.append('content-type', mime_type)
+  }
+  return new Response(body, {
+    ...responseInit,
+    headers,
+  })
+}
+
+async function mapProtocolHandler(
+  rpc: Jsonrpc.RawClient,
+  appId: string,
+  accountId: number,
+  request: GlobalRequest
+): Promise<GlobalResponse> {
+  const url = new URL(request.url)
+  let filename = url.pathname
+  // remove leading / trailing "/"
+  if (filename.endsWith('/')) {
+    filename = filename.substring(0, filename.length - 1)
+  }
+  if (filename.startsWith('/')) {
+    filename = filename.substring(1)
+  }
+
+  log.debug('map: loading tile', filename)
+
+  const mimeType: string | undefined = Mime.lookup(filename) || ''
+  // if (mimeType.indexOf('image') !== 0) {
+  //   throw new Error(`Invalid mime type: ${mimeType}. Tiles should have mime type image/*.`)
+  // }
+  try {
+    const response = await rpc.getHttpResponse(
+      accountId,
+      request.url.replace('maps://', 'https://')
+    )
+    const blob = Buffer.from(response.blob, 'base64')
+    return makeResponse(appId, blob, {}, mimeType)
+  } catch (error) {
+    log.error('map: load blob:', error)
+    return makeResponse(appId, '', { status: 404 })
+  }
+}
+
 async function webxdcProtocolHandler(
   rpc: Jsonrpc.RawClient,
+  appId: string,
   request: GlobalRequest
 ): Promise<GlobalResponse> {
   /**
@@ -842,36 +902,12 @@ async function webxdcProtocolHandler(
    * "XDC-01-002 WP1: Full CSP bypass via desktop app webxdc.js"
    * https://public.opentech.fund/documents/XDC-01-report_2_1.pdf
    */
-  const makeResponse = (
-    body: BodyInit,
-    responseInit: Omit<ResponseInit, 'headers'>,
-    mime_type?: undefined | string
-  ) => {
-    const headers = new Headers()
-    if (!open_apps[id].internet_access) {
-      headers.append('Content-Security-Policy', CSP)
-    }
-    // Ensure that the client doesn't try to interpret a file as
-    // one with 'application/pdf' mime type and therefore open it
-    // in the PDF viewer, see
-    // "XDC-01-005 WP1: Full CSP bypass via desktop app PDF embed"
-    // https://public.opentech.fund/documents/XDC-01-report_2_1.pdf
-    headers.append('X-Content-Type-Options', 'nosniff')
-    if (mime_type) {
-      headers.append('content-type', mime_type)
-    }
-    return new Response(body, {
-      ...responseInit,
-      headers,
-    })
-  }
-
   const url = new URL(request.url)
   const [account, msg] = url.hostname.split('.')
   const id = `${account}.${msg}`
 
   if (!open_apps[id]) {
-    return makeResponse('', { status: 500 })
+    return makeResponse(appId, '', { status: 500 })
   }
 
   let filename = url.pathname
@@ -907,6 +943,7 @@ async function webxdcProtocolHandler(
     const selfAddr = Buffer.from(open_apps[id].selfAddr).toString('base64')
     // initializes the preload script, the actual implementation of `window.webxdc` is found there: static/webxdc-preload.js
     return makeResponse(
+      appId,
       Buffer.from(
         `window.parent.webxdc_internal.setup("${selfAddr}","${displayName}", ${Number(
           open_apps[id].sendUpdateInterval
@@ -927,10 +964,10 @@ async function webxdcProtocolHandler(
         ),
         'base64'
       )
-      return makeResponse(blob, {}, mimeType)
+      return makeResponse(id, blob, {}, mimeType)
     } catch (error) {
       log.error('webxdc: load blob:', error)
-      return makeResponse('', { status: 404 })
+      return makeResponse(id, '', { status: 404 })
     }
   }
 }
