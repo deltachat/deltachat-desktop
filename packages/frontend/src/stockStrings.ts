@@ -118,9 +118,11 @@ export async function updateCoreStrings() {
   strings[C.DC_STR_EPHEMERAL_TIMER_SECONDS_BY_OTHER] = tx(
     'ephemeral_timer_seconds_by_other'
   )
+  // deprecated only used in older versions
   strings[C.DC_STR_EPHEMERAL_TIMER_1_MINUTE_BY_YOU] = tx(
     'ephemeral_timer_1_minute_by_you'
   )
+  // deprecated only used in older versions
   strings[C.DC_STR_EPHEMERAL_TIMER_1_MINUTE_BY_OTHER] = tx(
     'ephemeral_timer_1_minute_by_other'
   )
@@ -165,6 +167,12 @@ export async function updateCoreStrings() {
   )
   strings[C.DC_STR_EPHEMERAL_TIMER_WEEKS_BY_OTHER] = tx(
     'ephemeral_timer_weeks_by_other'
+  )
+  strings[C.DC_STR_EPHEMERAL_TIMER_1_YEAR_BY_YOU] = tx(
+    'ephemeral_timer_1_year_by_you'
+  )
+  strings[C.DC_STR_EPHEMERAL_TIMER_1_YEAR_BY_OTHER] = tx(
+    'ephemeral_timer_1_year_by_other'
   )
   strings[C.DC_STR_CHAT_PROTECTION_ENABLED] = tx(
     'chat_protection_enabled_tap_to_learn_more'
