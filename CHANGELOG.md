@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+<a id="2_11_1"></a>
+
+## [2.11.1] - 2025-09-01
+
 ### Added
 -flip electron fuses to avoid security debates #5423
 - add "one year" option for disappearing messages #5421
@@ -3659,7 +3663,9 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.11.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.11.1...HEAD
+
+[2.11.1]: https://github.com/deltachat/deltachat-desktop/compare/v2.11.0...v2.11.1
 
 [2.11.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.10.0...v2.11.0
 
