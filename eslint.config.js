@@ -42,7 +42,7 @@ export default defineConfig(
       languageOptions: {
         parserOptions: {
           project: './packages/e2e-tests/tsconfig.json',
-          tsconfigRootDir: './',
+          tsconfigRootDir: import.meta.dirname,
         },
       },
       rules: {

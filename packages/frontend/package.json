@@ -63,6 +63,7 @@
     "sass": "catalog:",
     "source-map-support": "^0.5.21",
     "typescript": "catalog:",
-    "typescript-plugin-css-modules": "catalog:"
+    "typescript-plugin-css-modules": "catalog:",
+    "@types/node": "catalog:"
   }
 }

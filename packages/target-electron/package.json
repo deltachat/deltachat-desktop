@@ -69,7 +69,7 @@
     "@types/debounce": "^1.2.4",
     "@types/mime-types": "catalog:",
     "@types/mocha": "^10.0.7",
-    "@types/node": "^20.14.13",
+    "@types/node": "catalog:",
     "@types/rc": "^1.2.4",
     "@webxdc/types": "catalog:",
     "@electron/fuses": "^2.0.0",

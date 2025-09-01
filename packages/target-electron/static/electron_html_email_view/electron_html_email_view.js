@@ -17,7 +17,7 @@ let promise = window.htmlview
       toggle_network,
       networkButtonLabelText,
     }) => {
-      ;(subjectElement.innerText = subject), (fromElement.innerText = from)
+      ;((subjectElement.innerText = subject), (fromElement.innerText = from))
       networkButtonLabel.innerText = networkButtonLabelText
       networkCheckbox.checked = window.network_enabled = toggle_network
       receiveTimeElement.innerText = receiveTime
