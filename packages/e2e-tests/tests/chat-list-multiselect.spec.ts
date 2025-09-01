@@ -437,6 +437,86 @@ test("selection doesn't reset if items get reordered", async () => {
   )
 })
 
+test('when chats get removed from the list, they get unselected', async () => {
+  // Using the "search" function is perhaps not
+  // the most appropriate display of items getting removed from the list,
+  // but it's probably the best one we can get by using a single device
+  // and not being able to receive messages on command.
+
+  // This is a pretty stupid hack to ensure that the search results
+  // get "cached". When we perform the search for the first time,
+  // there is a moment when it shows 0 chats before the results get loaded,
+  // resulting in all chats getting unselected, which we don't want.
+  await page.getByRole('textbox', { name: 'Search' }).fill('5')
+  await expect(chatList.getByRole('tab', { name: 'Some chat ' })).toContainText(
+    ['Some chat 5']
+  )
+  await page.getByRole('textbox', { name: 'Search' }).clear()
+
+  await getChat(9).click()
+  await expectSelectedChats([9])
+  await getChat(1).click({
+    modifiers: ['Shift'],
+  })
+  await expectSelectedChats([9, 8, 7, 6, 5, 4, 3, 2, 1])
+
+  await page.getByRole('textbox', { name: 'Search' }).fill('5')
+  await expect(chatList.getByRole('tab', { name: 'Some chat ' })).toContainText(
+    ['Some chat 5']
+  )
+  await expectSelectedChats([5])
+
+  // Check that the action only affects a single chat.
+  await getChat(5).click({
+    button: 'right',
+  })
+  await page.getByRole('menuitem', { name: 'Pin Chat' }).click()
+  await page.getByRole('textbox', { name: 'Search' }).clear()
+  await expect(chatList.getByRole('tab', { name: 'Some chat ' })).toContainText(
+    [
+      'Some chat 5',
+
+      'Some chat 9',
+      'Some chat 8',
+      'Some chat 7',
+      'Some chat 6',
+      'Some chat 4',
+      'Some chat 3',
+      'Some chat 2',
+      'Some chat 1',
+    ]
+  )
+  await expect(
+    chatList.getByRole('tab', { name: 'Some chat ' }).getByLabel('Pin')
+  ).toHaveCount(1)
+
+  // Now verify that the previously selected chats are not selected
+  // after they have been brought back.
+  // Why? See the comment
+  // "Remove chats from selection that have been removed from `chatListIds`"
+  // in the code base.
+  await expectSelectedChats([5])
+
+  await getChat(5).click({
+    button: 'right',
+  })
+  // Unpin all, to restore state for other tests.
+  await page.getByRole('menuitem', { name: 'Unpin Chat' }).click()
+  await expect(chatList.getByRole('tab', { name: 'Some chat ' })).toContainText(
+    [
+      'Some chat 9',
+      'Some chat 8',
+      'Some chat 7',
+      'Some chat 6',
+      'Some chat 5',
+      'Some chat 4',
+      'Some chat 3',
+      'Some chat 2',
+      'Some chat 1',
+    ]
+  )
+})
+
 test('delete several', async () => {
   await getChat(7).click()
   await expectSelectedChats([7])
