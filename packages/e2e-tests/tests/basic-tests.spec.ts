@@ -159,7 +159,7 @@ test('send message', async () => {
   await expect(receivedMessageText).toHaveText(messageText)
 })
 
-test('message menu items presence', async ({ page }) => {
+test('message menu items presence', async () => {
   const userA = existingProfiles[0]
   const userB = existingProfiles[1]
   await switchToProfile(page, userA.id)
