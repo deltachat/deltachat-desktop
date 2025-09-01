@@ -4,7 +4,7 @@
 
 ### Added
 -flip electron fuses to avoid security debates #5423
-- add one year for disappearing messages #5421
+- add "one year" option for disappearing messages #5421
 
 ### Fixed
 - don't show "Reply" and "Save" for info messages (e.g. "user A removed user B") and video call invitations #5337

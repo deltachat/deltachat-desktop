@@ -118,11 +118,11 @@ export async function updateCoreStrings() {
   strings[C.DC_STR_EPHEMERAL_TIMER_SECONDS_BY_OTHER] = tx(
     'ephemeral_timer_seconds_by_other'
   )
-  // deprecated only used in recent versions
+  // deprecated only used in older versions
   strings[C.DC_STR_EPHEMERAL_TIMER_1_MINUTE_BY_YOU] = tx(
     'ephemeral_timer_1_minute_by_you'
   )
-  // deprecated only used in recent versions
+  // deprecated only used in older versions
   strings[C.DC_STR_EPHEMERAL_TIMER_1_MINUTE_BY_OTHER] = tx(
     'ephemeral_timer_1_minute_by_other'
   )
