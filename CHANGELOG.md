@@ -5,6 +5,9 @@
 ### Added
 - support multiple selection (multiselect) in the list of chats, activated with Ctrl + Click, Shift + Click #5297
 
+### Changed
+- update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.12.0`
+
 ### Fixed
 - fix "Recent 3 apps" in the chat header showing apps from another chat sometimes #5265
 - accessibility: don't re-announce message input (composer) after sending every message #5049

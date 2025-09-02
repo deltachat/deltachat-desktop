@@ -1381,6 +1381,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "colorutils-rs"
+version = "0.7.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "103c2458789cd7b46e6ed7c7ba1bf969b6569c902e3732843c55962c53eac686"
+dependencies = [
+ "erydanos",
+ "half",
+ "num-traits",
+]
+
+[[package]]
 name = "combine"
 version = "4.6.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1777,8 +1788,8 @@ dependencies = [
 
 [[package]]
 name = "deltachat"
-version = "2.11.0"
-source = "git+https://github.com/chatmail/core?tag=v2.11.0#2e2cfc4cb3cee10b9a92489003f5b5a0b924d1e6"
+version = "2.12.0"
+source = "git+https://github.com/chatmail/core?tag=v2.12.0#6372b677d2b714b06f7e26bb8db0f55b90ef3b05"
 dependencies = [
  "anyhow",
  "async-broadcast",
@@ -1792,6 +1803,7 @@ dependencies = [
  "brotli",
  "bytes",
  "chrono",
+ "colorutils-rs",
  "data-encoding",
  "deltachat-contact-tools",
  "deltachat-time",
@@ -1830,7 +1842,6 @@ dependencies = [
  "ratelimit",
  "regex",
  "rusqlite",
- "rust-hsluv",
  "rustls",
  "rustls-pki-types",
  "sanitize-filename",
@@ -1862,7 +1873,7 @@ dependencies = [
 [[package]]
 name = "deltachat-contact-tools"
 version = "0.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.11.0#2e2cfc4cb3cee10b9a92489003f5b5a0b924d1e6"
+source = "git+https://github.com/chatmail/core?tag=v2.12.0#6372b677d2b714b06f7e26bb8db0f55b90ef3b05"
 dependencies = [
  "anyhow",
  "chrono",
@@ -1872,8 +1883,8 @@ dependencies = [
 
 [[package]]
 name = "deltachat-jsonrpc"
-version = "2.11.0"
-source = "git+https://github.com/chatmail/core?tag=v2.11.0#2e2cfc4cb3cee10b9a92489003f5b5a0b924d1e6"
+version = "2.12.0"
+source = "git+https://github.com/chatmail/core?tag=v2.12.0#6372b677d2b714b06f7e26bb8db0f55b90ef3b05"
 dependencies = [
  "anyhow",
  "async-channel 2.5.0",
@@ -1893,7 +1904,7 @@ dependencies = [
 
 [[package]]
 name = "deltachat-tauri"
-version = "2.11.0"
+version = "2.11.1"
 dependencies = [
  "anyhow",
  "ashpd",
@@ -1943,12 +1954,12 @@ dependencies = [
 [[package]]
 name = "deltachat-time"
 version = "1.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.11.0#2e2cfc4cb3cee10b9a92489003f5b5a0b924d1e6"
+source = "git+https://github.com/chatmail/core?tag=v2.12.0#6372b677d2b714b06f7e26bb8db0f55b90ef3b05"
 
 [[package]]
 name = "deltachat_derive"
 version = "2.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.11.0#2e2cfc4cb3cee10b9a92489003f5b5a0b924d1e6"
+source = "git+https://github.com/chatmail/core?tag=v2.12.0#6372b677d2b714b06f7e26bb8db0f55b90ef3b05"
 dependencies = [
  "quote",
  "syn 2.0.104",
@@ -2623,6 +2634,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dea2df4cf52843e0452895c455a1a2cfbb842a1e7329671acf418fdc53ed4c59"
 
 [[package]]
+name = "erydanos"
+version = "0.2.18"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8cbdc4987ed8e9ece64845393c2d53596b3a4ccbfb3948d799d58f6450e89fb1"
+dependencies = [
+ "num-traits",
+]
+
+[[package]]
 name = "escaper"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2862,7 +2882,7 @@ dependencies = [
 [[package]]
 name = "format-flowed"
 version = "1.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.11.0#2e2cfc4cb3cee10b9a92489003f5b5a0b924d1e6"
+source = "git+https://github.com/chatmail/core?tag=v2.12.0#6372b677d2b714b06f7e26bb8db0f55b90ef3b05"
 
 [[package]]
 name = "fsevent-sys"
@@ -7111,7 +7131,7 @@ dependencies = [
 [[package]]
 name = "ratelimit"
 version = "1.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.11.0#2e2cfc4cb3cee10b9a92489003f5b5a0b924d1e6"
+source = "git+https://github.com/chatmail/core?tag=v2.12.0#6372b677d2b714b06f7e26bb8db0f55b90ef3b05"
 
 [[package]]
 name = "rav1e"
@@ -7535,12 +7555,6 @@ dependencies = [
  "libsqlite3-sys",
  "smallvec",
 ]
-
-[[package]]
-name = "rust-hsluv"
-version = "0.1.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "efe2374f2385cdd8755a446f80b2a646de603c9d8539ca38734879b5c71e378b"
 
 [[package]]
 name = "rust_decimal"
