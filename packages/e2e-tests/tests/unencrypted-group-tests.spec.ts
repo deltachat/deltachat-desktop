@@ -105,6 +105,9 @@ test('create unencrypted group (email)', async () => {
     const item = addMembersDialog.locator('li', { hasText: addr })
     await expect(item).toHaveCount(1)
     await item.getByRole('checkbox').click()
+    // The text field will get automatically cleared:
+    // let's wait for it before we try to fill it again.
+    await expect(addMembersDialog.getByTestId('add-member-search')).toBeEmpty()
   }
 
   await page.getByTestId('ok').click()
