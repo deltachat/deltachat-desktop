@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- don't close context menues on window resize #5418
+
+
 <a id="2_11_1"></a>
 
 ## [2.11.1] - 2025-09-01

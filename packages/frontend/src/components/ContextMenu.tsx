@@ -374,13 +374,9 @@ export function ContextMenu(props: {
       }
     }
 
-    const onResize = () => closeCallback()
-
     document.addEventListener('keydown', onKeyDown)
-    window.addEventListener('resize', onResize)
     return () => {
       document.removeEventListener('keydown', onKeyDown)
-      window.removeEventListener('resize', onResize)
     }
   }, [openSublevels, closeCallback, expandMenu])
 
