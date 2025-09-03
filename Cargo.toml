@@ -11,10 +11,3 @@ lto = true
 opt-level = "z"
 codegen-units = 1
 strip = true
-
-[patch.crates-io]
-tauri-plugin-single-instance = { git = "https://github.com/Simon-Laux/plugins-workspace", branch = "simon/fix-macos-cwd-single-instance" }
-# tauri-plugin-single-instance = { version = "2.2.3", path = "../tauri-plugins-workspace/plugins/single-instance" }
-# tao = { path = "../tao" }
-tao = { git = "https://github.com/Simon-Laux/tao", branch = "hunt-down-open-url-crash-and-add-application_continue_user_activity" }
-tao-macros = { git = "https://github.com/Simon-Laux/tao", branch = "hunt-down-open-url-crash-and-add-application_continue_user_activity" }
