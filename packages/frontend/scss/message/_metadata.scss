@@ -37,12 +37,23 @@
     }
   }
 
-  .aria-live-wrapper {
+  .aria-live-wrapper,
+  .delivery-status-wrapper {
     // Basically try to behave the same as if the wrapper just wasn't there.
     display: inline-block;
     line-height: 0;
   }
 
+  .delivery-status-wrapper {
+    position: relative;
+    button.error-button {
+      // Fill the parent.
+      position: absolute;
+      inset: 0;
+      border: none;
+      background: transparent;
+    }
+  }
   .status-icon {
     margin-bottom: 2px;
   }

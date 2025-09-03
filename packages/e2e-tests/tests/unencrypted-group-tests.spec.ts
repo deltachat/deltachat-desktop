@@ -180,7 +180,7 @@ test('send message to unencrypted group', async () => {
   //
   // When this is no longer the case, we might want to reuse the code
   // from regular group tests.
-  await expect(
-    message.getByRole('button', { name: 'Delivery status: Error' })
-  ).toBeVisible()
+  await expect(message.getByText('Delivery status')).toHaveText(
+    'Delivery status: Error'
+  )
 })
