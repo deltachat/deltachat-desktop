@@ -9,6 +9,7 @@
 - update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.12.0`
 
 ### Fixed
+- if adding an app from the app picker fails, show an error dialog
 - fix "Recent 3 apps" in the chat header showing apps from another chat sometimes #5265
 - accessibility: improve screen-reader accessibility of the general structure of the app by using landmarks #5067
 - accessibility: don't re-announce message input (composer) after sending every message #5049
