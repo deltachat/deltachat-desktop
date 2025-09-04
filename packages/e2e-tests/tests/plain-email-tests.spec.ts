@@ -32,7 +32,6 @@ test.beforeAll(async ({ browser }) => {
     numberOfProfiles,
     existingProfiles,
     pageForProfileCreation,
-    contextForProfileCreation,
     browser.browserType().name(),
     false // useChatmail = false
   )
