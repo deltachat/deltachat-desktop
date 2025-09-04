@@ -122,9 +122,6 @@ export function AppPicker({ onAppSelected }: Props) {
         }
       }
       const newIcons: { [key: string]: string } = {}
-      for (const app of apps) {
-        newIcons[app.app_id] = `./images/icons/image_outline.svg`
-      }
       setIcons(newIcons)
       let count = 0
       for (const app of apps) {
@@ -250,7 +247,7 @@ export function AppPicker({ onAppSelected }: Props) {
     return (
       <div className={styles.appItem}>
         <img
-          src={icons[app.app_id] ?? ''}
+          src={icons[app.app_id] ?? './images/icons/image_outline.svg'}
           alt={`${app.name} icon`}
           className={styles.appIcon}
         />
@@ -305,7 +302,7 @@ export function AppPicker({ onAppSelected }: Props) {
           />
         )}
         <div className={styles.appPickerList}>
-          {!isOffline && Object.keys(icons).length > 0 ? (
+          {!isOffline && Object.keys(apps).length > 0 ? (
             <>
               {selectedAppInfo && (
                 <AppInfoOverlay
