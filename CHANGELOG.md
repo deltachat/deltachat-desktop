@@ -9,6 +9,8 @@
 - update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.12.0`
 
 ### Fixed
+- fix app picker sometimes incorrectly showing "Offline"
+- allow using the app picker even when offline, as long as the app store data is cached
 - if adding an app from the app picker fails, show an error dialog
 - fix "Recent 3 apps" in the chat header showing apps from another chat sometimes #5265
 - accessibility: improve screen-reader accessibility of the general structure of the app by using landmarks #5067
