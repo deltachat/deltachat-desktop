@@ -21,7 +21,8 @@ import {
 } from '../Dialog'
 import SearchInputButton from '../SearchInput/SearchInputButton'
 import { ClickableLink } from '../helpers/ClickableLink'
-import { useFetch } from '../../hooks/useFetch'
+import { useFetch, useRpcFetch } from '../../hooks/useFetch'
+import { unknownErrorToString } from '../helpers/unknownErrorToString'
 
 const log = getLogger('renderer/components/AppPicker')
 
@@ -72,7 +73,6 @@ type Props = {
 export function AppPicker({ onAppSelected }: Props) {
   const tx = useTranslationFunction()
   const [searchQuery, setSearchQuery] = useState('')
-  const [isOffline, setIsOffline] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState(AppCategoryEnum.home)
   const [selectedAppInfo, setSelectedAppInfo] = useState<AppInfo | null>(null)
   const [icons, setIcons] = useState<{ [key: string]: string }>({})
@@ -107,19 +107,26 @@ export function AppPicker({ onAppSelected }: Props) {
     return apps
   }, [])
   const appsFetch = useFetch(fetchApps, [])
-  if (appsFetch.result?.ok === false) {
-    log.error('Failed to fetch apps:', appsFetch.result.err)
-  }
   const apps = appsFetch.result?.ok ? appsFetch.result.value : null
+
+  const appsFetchFailed = appsFetch.result?.ok === false
+  const connectivityFetch = useRpcFetch(BackendRemote.rpc.getConnectivity, [
+    selectedAccountId(),
+  ])
+  const connectivityFetchRefresh = connectivityFetch?.refresh
+  useEffect(() => {
+    if (!appsFetchFailed) {
+      return
+    }
+    connectivityFetchRefresh()
+  }, [appsFetchFailed, connectivityFetchRefresh])
+  const isOffline =
+    connectivityFetch.result?.ok === true &&
+    connectivityFetch.result.value !== C.DC_CONNECTIVITY_CONNECTED
 
   useEffect(() => {
     const loadIcons = async () => {
       if (apps == null) {
-        const connectivity =
-          await BackendRemote.rpc.getConnectivity(selectedAccountId())
-        if (connectivity !== C.DC_CONNECTIVITY_CONNECTED) {
-          setIsOffline(true)
-        }
         return
       }
       const newIcons: { [key: string]: string } = {}
@@ -307,7 +314,19 @@ export function AppPicker({ onAppSelected }: Props) {
           />
         )}
         <div className={styles.appPickerList}>
-          {!isOffline && filteredApps != null ? (
+          {appsFetch.loading ? (
+            <div className={styles.offlineMessage}>{tx('loading')}</div>
+          ) : appsFetch.result.ok !== true ? (
+            <div className={styles.offlineMessage}>
+              {isOffline
+                ? tx('offline')
+                : tx(
+                    'error_x',
+                    'Failed to fetch apps:\n' +
+                      unknownErrorToString(appsFetch.result.err)
+                  )}
+            </div>
+          ) : (
             <>
               {selectedAppInfo && (
                 <AppInfoOverlay
@@ -316,7 +335,9 @@ export function AppPicker({ onAppSelected }: Props) {
                   onSelect={onAppSelected}
                 />
               )}
-              {filteredApps.map(app => (
+              {/* `appsFetch.result.ok === true` implies that
+              this is not null. */}
+              {filteredApps!.map(app => (
                 <button
                   key={app.app_id}
                   className={styles.appListItem}
@@ -326,10 +347,6 @@ export function AppPicker({ onAppSelected }: Props) {
                 </button>
               ))}
             </>
-          ) : (
-            <div className={styles.offlineMessage}>
-              {tx(isOffline ? 'offline' : 'loading')}
-            </div>
           )}
         </div>
         <div className={styles.tabBar}>
