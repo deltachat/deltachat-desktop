@@ -358,19 +358,42 @@ const Composer = forwardRef<
     ? null
     : async (appInfo: AppInfo) => {
         log.debug('App selected', appInfo)
-        const response = await BackendRemote.rpc.getHttpResponse(
+        const downloadUrl = AppStoreUrl + appInfo.cache_relname
+        const responseP = BackendRemote.rpc.getHttpResponse(
           selectedAccountId(),
           AppStoreUrl + appInfo.cache_relname
         )
-        if (response?.blob?.length) {
-          const path = await runtime.writeTempFileFromBase64(
-            appInfo.cache_relname,
-            response.blob
-          )
-          await addFileToDraft(path, appInfo.cache_relname, 'File')
-          await runtime.removeTempFile(path)
-          setShowAppPicker(false)
+        let response: Awaited<typeof responseP>
+        try {
+          response = await responseP
+          if (!(response?.blob?.length > 0)) {
+            throw new Error(
+              'BackendRemote.rpc.getHttpResponse did not return a body'
+            )
+          }
+        } catch (error) {
+          openDialog(AlertDialog, {
+            message: tx(
+              'error_x',
+              'Failed download the app file from the store:\n' +
+                unknownErrorToString(error) +
+                '\n\n' +
+                'You may try to download the app manually from\n\n' +
+                downloadUrl +
+                '\n\n' +
+                'or\n' +
+                'https://webxdc.org/apps'
+            ),
+          })
+          return
         }
+        const path = await runtime.writeTempFileFromBase64(
+          appInfo.cache_relname,
+          response.blob
+        )
+        await addFileToDraft(path, appInfo.cache_relname, 'File')
+        await runtime.removeTempFile(path)
+        setShowAppPicker(false)
       }
 
   // Paste file functionality
