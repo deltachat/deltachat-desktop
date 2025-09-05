@@ -22,6 +22,9 @@ const defaultLocations: {
   [LastUsedSlot.KeyExport]: 'downloads',
 }
 
+/*
+ * Returns a default path if no path has been used.
+ */
 export async function rememberLastUsedPath(key: LastUsedSlot) {
   const defaultPath = await runtime.getAppPath(defaultLocations[key])
   const selectedPath = sessionStorage.getItem(key) || defaultPath
