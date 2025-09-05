@@ -22,6 +22,13 @@ const defaultLocations: {
   [LastUsedSlot.KeyExport]: 'downloads',
 }
 
+/*
+ * What path last has been used for this data? Return a default path if
+ * no path has been used.
+ *
+ * @param {string} key The data slot you are looking for.
+ * @return {Promise<{ defaultPath: string, setLastPath: (lastPath: string) : void}>} The default path as well as a callback to set the last path.
+ */
 export async function rememberLastUsedPath(key: LastUsedSlot) {
   const defaultPath = await runtime.getAppPath(defaultLocations[key])
   const selectedPath = sessionStorage.getItem(key) || defaultPath
