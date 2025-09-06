@@ -3,9 +3,11 @@ import { expect, Page } from '@playwright/test'
 const { config } = await import('dotenv')
 config()
 
-export const chatmailServer = process.env.DC_CHATMAIL_SERVER
+export const chatmailServerUrl = process.env.DC_CHATMAIL_SERVER
 
-export const mailServerUrl = process.env.DC_MAIL_SERVER_URL
+export const mailServerUrl = process.env.DC_MAIL_SERVER
+
+export const mailServerToken = process.env.DC_MAIL_SERVER_TOKEN
 
 export const userNames = ['Alice', 'Bob', 'Chris', 'Denis', 'Eve']
 
@@ -116,8 +118,8 @@ export async function createNewProfile(
   await page.getByTestId('create-account-button').click()
 
   const dcAccountLink = useChatmail
-    ? `dcaccount:${chatmailServer}/new`
-    : `dcaccount:${mailServerUrl}`
+    ? `dcaccount:${chatmailServerUrl}/new`
+    : `dcaccount:${mailServerUrl}//new_email?t=${mailServerToken}&n=ci_github`
   await page.evaluate(`navigator.clipboard.writeText('${dcAccountLink}')`)
   await clickThroughTestIds(page, [
     'other-login-button',
