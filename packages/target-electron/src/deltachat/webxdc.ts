@@ -38,6 +38,7 @@ import {
 import { T } from '@deltachat/jsonrpc-client'
 import type * as Jsonrpc from '@deltachat/jsonrpc-client'
 import { setContentProtection } from '../content-protection.js'
+import { Server } from 'net'
 
 const log = getLogger('main/deltachat/webxdc')
 
@@ -108,6 +109,62 @@ const DEFAULT_SIZE_MAP: Size = {
 
 export default class DCWebxdc {
   constructor(private readonly controller: DeltaChatController) {
+    let dummyProxy_: { server: Server; url: string } | undefined
+    const getDummyProxyUrl = async () => {
+      if (dummyProxy_) {
+        if (dummyProxy_.server.listening) {
+          // TODO maybe also close all WebXDC instances
+          // as soon as we encounter any error?
+          // This would be more important when/if we get rid of `host-rules`.
+          throw new Error(
+            'the dummy proxy is not working anymore, `server.listening` is `false`'
+          )
+        }
+        return dummyProxy_.url
+      }
+
+      const dummyProxy = new Server({}, socket => {
+        socket.destroy()
+      })
+      const listeningP = new Promise((resolve, reject) => {
+        dummyProxy.once('listening', resolve)
+        dummyProxy.once('error', reject)
+      })
+      dummyProxy.listen({
+        host: '127.0.0.1',
+        // Auto-assign port, to avoid a situation
+        // where a fixed one is occupied.
+        port: 0,
+        // We don't really use any connections, but `backlog: 0`
+        // probably doesn't make sense, so let's set the minimum "sane" value.
+        backlog: 1,
+      })
+
+      await listeningP
+      const listenAddress = dummyProxy.address()
+      if (listenAddress == null) {
+        throw new Error("'listening' event fired, but address is `null`")
+      }
+      if (typeof listenAddress === 'string') {
+        throw new Error(
+          'dummy proxy listen address type is string, expected object'
+        )
+      }
+      if (listenAddress.family !== 'IPv4') {
+        throw new Error(
+          `dummy proxy listen address family is ${listenAddress.family}, expected "IPv4"`
+        )
+      }
+
+      const url = `socks5://${listenAddress.address}:${listenAddress.port}`
+      dummyProxy_ = {
+        server: dummyProxy,
+        url: url,
+      }
+      log.info('Dummy blackhole proxy listening on', listenAddress)
+      return url
+    }
+
     // icon protocol
     app.whenReady().then(() => {
       protocol.handle('webxdc-icon', async request => {
@@ -129,16 +186,38 @@ export default class DCWebxdc {
       })
     })
 
-    const createSessionIfNotExists = (
+    const createSessionIfNotExists = async (
       accountId: number,
       internetAccess: boolean
-    ): string => {
+    ): Promise<string> => {
       const partition = partitionKeyFromAccountId(accountId, internetAccess)
       if (!existing_sessions.includes(partition)) {
         const ses = session.fromPartition(partition, {
           cache: false,
         })
         existing_sessions.push(partition)
+
+        // Thanks to the fact that we specify `host-rules`,
+        // no connection attempt to the proxy should occur at all,
+        // at least as of now.
+        // See https://www.chromium.org/developers/design-documents/network-stack/socks-proxy/ :
+        // > The "EXCLUDE" clause make an exception for "myproxy",
+        // > because otherwise Chrome would be unable to resolve
+        // > the address of the SOCKS proxy server itself,
+        // > and all requests would necessarily fail
+        // > with PROXY_CONNECTION_FAILED.
+        //
+        // However, let's still use our dummy TCP listener, just in case.
+        await ses.setProxy({
+          mode: 'fixed_servers',
+          proxyRules: await getDummyProxyUrl(),
+        })
+        await ses.closeAllConnections()
+
+        // TODO also consider this. However, this might have observable effects
+        // on the app (i.e. "offline" status).
+        // ses.enableNetworkEmulation({ offline: true })
+
         // register appropriate protocols
         // see https://www.electronjs.org/docs/latest/api/protocol
         ses.protocol.handle('webxdc', (...args) => {
@@ -208,7 +287,7 @@ export default class DCWebxdc {
       // TODO intercept / deny network access - CSP should probably be disabled for testing
 
       // used by BrowserWindow
-      const partition = createSessionIfNotExists(
+      const partition = await createSessionIfNotExists(
         accountId,
         webxdcInfo['internetAccess']
       )
@@ -232,6 +311,18 @@ export default class DCWebxdc {
         alwaysOnTop: main_window?.isAlwaysOnTop(),
         show: false,
       })
+      // Settings this should make WebRTC always use the proxy.
+      // However, since the proxy won't work, this should, in theory,
+      // effectively disable WebRTC.
+      //
+      // However, weirdly, this alone seems to disable WebRTC,
+      // even without setting a proxy,
+      // as evident by using Wireshark together with the "Test Webxdc" app
+      // (but let's not rely on this, let's still use the proxy).
+      webxdcWindow.webContents.setWebRTCIPHandlingPolicy(
+        'disable_non_proxied_udp'
+      )
+
       setContentProtection(webxdcWindow)
 
       // reposition the window to last position (or default)
