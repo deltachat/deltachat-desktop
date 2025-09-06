@@ -6,7 +6,11 @@ import { C } from '@deltachat/jsonrpc-client'
  * In other words, for a given contact ID, is it id of self or another contact?
  *
  * @return "outgoing" | "incoming"
-  */
-export function getDirection({ fromId }: { fromId: number }): "outgoing" | "incoming" {
+ */
+export function getDirection({
+  fromId,
+}: {
+  fromId: number
+}): 'outgoing' | 'incoming' {
   return fromId === C.DC_CONTACT_ID_SELF ? 'outgoing' : 'incoming'
 }
