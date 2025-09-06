@@ -104,7 +104,9 @@ export default async context => {
   // asar is electrons archive format, flatpak doesn't use it. read more about what asar is on https://www.electronjs.org/docs/latest/glossary#asar
   const asar = env['NO_ASAR'] ? false : true
   await copyMapXdc(resources_dir, source_dir, asar)
-  await setFuses(context)
+  if (!env['SKIP_FUSES']) {
+    await setFuses(context)
+  }
 }
 
 async function packageMSVCRedist(context) {
