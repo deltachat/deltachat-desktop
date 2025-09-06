@@ -17,6 +17,17 @@ import { getLogger } from '@deltachat-desktop/shared/logger'
 
 const log = getLogger('ChatListItemRow')
 
+/**
+ * This file contains the row wrapper components for the 3 possible
+ * types of search result items in the chat list:
+ * - ChatListItemRowChat
+ * - ChatListItemRowContact
+ * - ChatListItemRowMessage
+ */
+
+/**
+ * Data for a chat item
+ */
 export type ChatListItemData = {
   activeChatId: number | null
   /**
@@ -47,6 +58,9 @@ export type ChatListItemData = {
   >['activeContextMenuChatIds']
 }
 
+/**
+ * Data for a message item
+ */
 export type MessageChatListItemData = {
   messageResultIds: number[]
   messageCache: {
@@ -59,6 +73,9 @@ export type MessageChatListItemData = {
   isSingleChatSearch: boolean
 }
 
+/**
+ * Data for a contact item
+ */
 export type ContactChatListItemData = {
   contactCache: {
     [id: number]: T.Contact | undefined
