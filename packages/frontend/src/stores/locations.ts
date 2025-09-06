@@ -42,10 +42,10 @@ const getLocations = async (chatId: number, mapSettings: MapSettings) => {
 }
 
 /*
-* Add callbacks for fetching locations and storing them in LocationStore
-* There are callbacks for when a location changes, a messages changes
-* or when a new message arrives.
-*/
+ * Add callbacks for fetching locations and storing them in LocationStore
+ * There are callbacks for when a location changes, a messages changes
+ * or when a new message arrives.
+ */
 onReady(() => {
   BackendRemote.on('LocationChanged', (accountId, { contactId }) => {
     if (accountId !== window.__selectedAccountId) {
