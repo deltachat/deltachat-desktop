@@ -9,6 +9,7 @@
 - update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.12.0`
 
 ### Fixed
+- open WebXDC apps faster: remove the initial progress bar (`RTCPeerConnection` exhaustion hack, a.k.a. FILL500)
 - fix app picker sometimes incorrectly showing "Offline"
 - allow using the app picker even when offline, as long as the app store data is cached
 - if adding an app from the app picker fails, show an error dialog
