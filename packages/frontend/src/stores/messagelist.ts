@@ -52,7 +52,32 @@ const defaultState = () =>
     loaded: false,
   }) as MessageListState
 
-export function useMessageList(accountId: number, chatId: number) {
+// TODO: find a better name for this interface
+interface MessageListR {
+  state: MessageListState
+  store: MessageListStore
+  fetchMoreTop: () => void
+  fetchMoreBottom: () => void
+}
+
+/*
+ * A hook to read a portion of messages(a view) for a given chat. It creates a store(MessageListStore)
+ * for the given chat and account and loads messages on it. It always has a maximum specified number
+ * of messages as per PAGE_SIZE constant. The hook returns theocurrent message list state, the store
+ * and two callbacks to fetch more messages from either top or bottom, if any.
+ *
+ * The hook depends on SettingsStore, however, just volume is read from it. It also depends on a number of DC events:
+ *  Delivery of a message,
+ *  A new incoming message,
+ *  Change of a reaction,
+ *  Change of a message,
+ *  Change of read status of a Message
+ *  If sending a message has failed
+ */
+export function useMessageList(
+  accountId: number,
+  chatId: number
+): MessageListR {
   const store = useMemo(() => {
     const store = new MessageListStore(accountId, chatId)
     store.effect.loadChat()
@@ -160,6 +185,11 @@ export function useMessageList(accountId: number, chatId: number) {
   return { store, state, fetchMoreTop, fetchMoreBottom }
 }
 
+/*
+ * Simply returns a subarray of items, from start to end
+ *
+ * @return {T[]} The subarray from start to end
+ */
 function getView<T>(items: T[], start: number, end: number) {
   return items.slice(start, end + 1)
 }
