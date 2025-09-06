@@ -7,6 +7,7 @@
 
 ### Changed
 - update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.12.0`
+- Add some docstrings for `useMessageList` hook, `getDirection` function, `copyToBlobDir` function and `locations.ts` all in frontend package
 
 ### Fixed
 - fix "Recent 3 apps" in the chat header showing apps from another chat sometimes #5265
