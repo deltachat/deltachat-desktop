@@ -62,7 +62,7 @@ test('check "New E-Mail" option is shown and a chat can be created', async () =>
 
   await expect(page.getByRole('button', { name: 'New Group' })).toBeVisible()
 
-  // Since we're on a Chatmail server, this button is supposed to be shown.
+  // Since we're on a non-Chatmail server, this button is supposed to be shown.
   const newEmailButton = page.getByRole('button', { name: 'New E-Mail' })
   await expect(newEmailButton).toBeVisible()
 
