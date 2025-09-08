@@ -44,8 +44,8 @@ import useTranslationFunction, {
 
 import type {
   ChatListItemData,
-  ContactChatListItemData,
-  MessageChatListItemData,
+  ChatListContactItemData,
+  ChatListMessageItemData,
 } from './ChatListItemRow'
 import { isInviteLink } from '../../../../shared/util'
 import { RovingTabindexProvider } from '../../contexts/RovingTabindex'
@@ -78,13 +78,14 @@ const enum LoadStatus {
 /**
  * wrapper for a virtual list that handles scrolling and loading items
  *
- * up to 3 ChatListParts can be present in the chat list
+ * ChatList has two modes: regular and search mode.
+ * In search mode there are 3 ChatListParts: for chats, contacts, and messages
  */
 export function ChatListPart<
   T extends
     | ChatListItemData
-    | ContactChatListItemData
-    | MessageChatListItemData,
+    | ChatListContactItemData
+    | ChatListMessageItemData,
 >({
   isRowLoaded,
   loadMoreRows,
@@ -398,14 +399,14 @@ export default function ChatList(props: {
     activeContextMenuChatIds,
   ])
 
-  const contactlistData: ContactChatListItemData = useMemo(() => {
+  const contactlistData: ChatListContactItemData = useMemo(() => {
     return {
       contactCache,
       contactIds,
     }
   }, [contactCache, contactIds])
 
-  const messagelistData: MessageChatListItemData = useMemo(() => {
+  const messagelistData: ChatListMessageItemData = useMemo(() => {
     return {
       messageResultIds,
       messageCache,

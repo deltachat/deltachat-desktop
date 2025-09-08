@@ -303,10 +303,10 @@ function ChatListItemError({
 }
 
 /**
- * Default is Chat Item
+ * component for items of type chat in the chat list
  */
-function DefaultChatListItem({
-  chatItem,
+function RegularChatListItem({
+  chat,
   onClick,
   onFocus,
   isSelected,
@@ -315,7 +315,7 @@ function DefaultChatListItem({
   isContextMenuActive,
   ...rest
 }: {
-  chatItem: Type.ChatListItemFetchResult & {
+  chat: Type.ChatListItemFetchResult & {
     kind: 'ChatListItem'
   }
   onClick: (event: React.MouseEvent) => void
@@ -339,11 +339,11 @@ function DefaultChatListItem({
   } = useRovingTabindex(ref)
   // TODO `setAsActiveElement` if `isSelected` and `activeElement === null`
 
-  const chatTypeForTests = chatItem.isSelfTalk
+  const chatTypeForTests = chat.isSelfTalk
     ? 'self-talk'
-    : chatItem.isDeviceTalk
+    : chat.isDeviceTalk
       ? 'device-talk'
-      : chatItem.id
+      : chat.id
 
   return (
     <button
@@ -361,21 +361,21 @@ function DefaultChatListItem({
       role={roleTab ? 'tab' : undefined}
       aria-selected={isSelected}
       className={classNames('chat-list-item', tabindexClassName, {
-        'has-unread': chatItem.freshMessageCounter > 0,
-        'is-contact-request': chatItem.isContactRequest,
-        pinned: chatItem.isPinned,
-        muted: chatItem.isMuted,
+        'has-unread': chat.freshMessageCounter > 0,
+        'is-contact-request': chat.isContactRequest,
+        pinned: chat.isPinned,
+        muted: chat.isMuted,
         selected: isSelected,
         'context-menu-active': isContextMenuActive,
       })}
-      data-testid={`chat${chatItem.isGroup ? '-group' : ''}-${chatTypeForTests}`}
+      data-testid={`chat${chat.isGroup ? '-group' : ''}-${chatTypeForTests}`}
     >
       <Avatar
         {...{
-          displayName: chatItem.name,
-          avatarPath: chatItem.avatarPath || undefined,
-          color: chatItem.color,
-          wasSeenRecently: chatItem.wasSeenRecently,
+          displayName: chat.name,
+          avatarPath: chat.avatarPath || undefined,
+          color: chat.color,
+          wasSeenRecently: chat.wasSeenRecently,
           // Avatar is purely decorative here,
           // and is redundant accessibility-wise,
           // because we display the chat name below.
@@ -384,21 +384,21 @@ function DefaultChatListItem({
       />
       <div className='content'>
         <Header
-          lastUpdated={chatItem.lastUpdated}
-          name={chatItem.name}
-          isPinned={chatItem.isPinned}
-          isMuted={chatItem.isMuted}
+          lastUpdated={chat.lastUpdated}
+          name={chat.name}
+          isPinned={chat.isPinned}
+          isMuted={chat.isMuted}
         />
 
         <Message
-          summaryStatus={chatItem.summaryStatus}
-          summaryText1={chatItem.summaryText1}
-          summaryText2={chatItem.summaryText2}
-          summaryPreviewImage={chatItem.summaryPreviewImage}
-          freshMessageCounter={chatItem.freshMessageCounter}
-          isArchived={chatItem.isArchived}
-          isContactRequest={chatItem.isContactRequest}
-          lastMessageId={chatItem.lastMessageId}
+          summaryStatus={chat.summaryStatus}
+          summaryText1={chat.summaryText1}
+          summaryText2={chat.summaryText2}
+          summaryPreviewImage={chat.summaryPreviewImage}
+          freshMessageCounter={chat.freshMessageCounter}
+          isArchived={chat.isArchived}
+          isContactRequest={chat.isContactRequest}
+          lastMessageId={chat.lastMessageId}
         />
       </div>
     </button>
@@ -438,7 +438,7 @@ const ChatListItem = React.memo<ChatListItemProps>(props => {
     )
 
   if (chatListItem.kind == 'ChatListItem') {
-    return <DefaultChatListItem {...props} chatItem={chatListItem} />
+    return <RegularChatListItem {...props} chat={chatListItem} />
   } else if (chatListItem.kind == 'Error') {
     return <ChatListItemError {...props} chatListItem={chatListItem} />
   } else if (chatListItem.kind == 'ArchiveLink') {
