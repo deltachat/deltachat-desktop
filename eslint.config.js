@@ -99,5 +99,6 @@ export default defineConfig(
     'packages/shared/ts-compiled-for-tests',
     'packages/target-electron/migration-tests/compiled',
     'packages/e2e-tests/playwright-report',
+    'packages/e2e-tests/test-results'
   ])
 )
