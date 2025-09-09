@@ -55,8 +55,12 @@ const open_apps: {
   [instanceId: string]: AppInstance
 } = {}
 
-// holds all accounts which have a session with webxdc scheme registered
+// holds all accounts which have a session with webxdc
+// scheme registered except those with internet access
 const accounts_sessions: number[] = []
+
+// holds all accounts which have internet access
+const sessions_with_internet_access: string[] = []
 
 // TODO:
 // 2. on message deletion close webxdc if open and remove its DOMStorage data
@@ -142,12 +146,12 @@ export default class DCWebxdc {
         // make href eval safe
         base64EncodedHref = Buffer.from(appURL + relativeUrl).toString('base64')
       }
-      if (open_apps[`${accountId}.${msg_id}`]) {
+      if (open_apps[`${appId}`]) {
         log.warn(
           'webxdc instance for this app is already open, trying to focus it',
           { msg_id }
         )
-        const window = open_apps[`${accountId}.${msg_id}`].win
+        const window = open_apps[`${appId}`].win
         if (window.isMinimized()) {
           window.restore()
         }
@@ -169,24 +173,43 @@ export default class DCWebxdc {
         'base64'
       )
 
+      // used by BrowserWindow
+      let partition = partitionFromId(accountId)
+
       // TODO intercept / deny network access - CSP should probably be disabled for testing
 
-      if (!accounts_sessions.includes(accountId)) {
-        const ses = sessionFromAccountId(accountId)
+      // register appropriate protocols
+      // see https://www.electronjs.org/docs/latest/api/protocol
+      if (webxdcInfo['internetAccess']) {
+        if (!sessions_with_internet_access.includes(appId)) {
+          const ses = sessionFromId(appId)
+          partition = partitionFromId(appId)
+          sessions_with_internet_access.push(appId)
+          ses.protocol.handle('webxdc', (...args) => {
+            return webxdcProtocolHandler(this.rpc, ...args)
+          })
+          if (DesktopSettings.state.enableOnDemandLocationStreaming) {
+            // mapxdc app needs maps:// protocol to load tiles from internet
+            ses.protocol.handle('maps', (...args) =>
+              mapProtocolHandler(accountId, this.rpc, ...args)
+            )
+          }
+        } else {
+          partition = partitionFromId(appId)
+        }
+      } else if (!accounts_sessions.includes(accountId)) {
+        const ses = sessionFromId(accountId)
         accounts_sessions.push(accountId)
-        ses.protocol.handle('webxdc', (...args) =>
-          webxdcProtocolHandler(this.rpc, appId, ...args)
-        )
-        ses.protocol.handle('maps', (...args) =>
-          mapProtocolHandler(this.rpc, appId, accountId, ...args)
-        )
+        ses.protocol.handle('webxdc', (...args) => {
+          return webxdcProtocolHandler(this.rpc, ...args)
+        })
       }
 
       const app_icon = icon_blob && nativeImage?.createFromBuffer(icon_blob)
 
       const webxdcWindow = new BrowserWindow({
         webPreferences: {
-          partition: partitionFromAccountId(accountId),
+          partition,
           sandbox: true,
           contextIsolation: true,
           webSecurity: true,
@@ -709,12 +732,18 @@ export default class DCWebxdc {
           instance.win.close()
         }
         this.removeLastBounds(accountId, instanceId)
-        const s = sessionFromAccountId(accountId)
         const appURL = `webxdc://${webxdcId}.webxdc`
-        s.clearStorageData({ origin: appURL })
-        s.clearData({ origins: [appURL] })
-        s.clearCodeCaches({ urls: [appURL] })
-        s.clearCache()
+        const sessions = getAllSessionsForAccount(accountId)
+        if (sessions.length === 0) {
+          return
+        }
+        // clear all sessions for that account
+        for (const s of sessions) {
+          s.clearStorageData({ origin: appURL })
+          s.clearData({ origins: [appURL] })
+          s.clearCodeCaches({ urls: [appURL] })
+          s.clearCache()
+        }
       }
     )
 
@@ -784,6 +813,10 @@ export default class DCWebxdc {
     )
   } // end of DeltaChatController constructor
 
+  /**
+   * convenience accessor for rpc calls to access the RawClient
+   * of jsonrpcRemote of the injected DeltaChat Controller
+   */
   get rpc() {
     return this.controller.jsonrpcRemote.rpc
   }
@@ -830,18 +863,49 @@ export default class DCWebxdc {
 }
 
 /**
- * Apply some security measures to every response
+ * Make sure to only `return makeResponse()` because it sets headers
+ * that are important for security, namely `Content-Security-Policy`.
+ * Failing to set CSP might result in the app being able to create
+ * an <iframe> with no CSP, e.g. `<iframe src="/no_such_file.lol">`
+ * within which they can then do whatever
+ * through the parent frame, see
+ * "XDC-01-002 WP1: Full CSP bypass via desktop app webxdc.js"
+ * https://public.opentech.fund/documents/XDC-01-report_2_1.pdf
  */
 const makeResponse = (
-  appId: string,
+  appId: string | null,
   body: BodyInit,
   responseInit: Omit<ResponseInit, 'headers'>,
   mime_type?: undefined | string
 ) => {
   const headers = new Headers()
-  if (!open_apps[appId] || !open_apps[appId].internet_access) {
+  if (appId && open_apps[appId] && open_apps[appId].internet_access) {
+    /**
+     * for apps with internet access (only maps.xdc for now)
+     * we need to allow the maps://* protocol as image src in CSP
+     * the maps protocolHandler fetches the tiles through our backend getHttpResponse
+     *
+     * note that the extended CSP is only applied to the responses of the
+     * webxdc protocol (only that can provide the appId for each request)
+     */
+
+    headers.append(
+      'Content-Security-Policy',
+      CSP.replace(
+        "img-src 'self' data: blob: ;",
+        "img-src 'self' maps://* data: blob: ;"
+      )
+    )
+    log.debug('extended CSP for maps://*', appId)
+  } else {
     headers.append('Content-Security-Policy', CSP)
+    log.debug('standard CSP', appId)
   }
+  // Ensure that the client doesn't try to interpret a file as
+  // one with 'application/pdf' mime type and therefore open it
+  // in the PDF viewer, see
+  // "XDC-01-005 WP1: Full CSP bypass via desktop app PDF embed"
+  // https://public.opentech.fund/documents/XDC-01-report_2_1.pdf
   headers.append('X-Content-Type-Options', 'nosniff')
   if (mime_type) {
     headers.append('content-type', mime_type)
@@ -852,13 +916,20 @@ const makeResponse = (
   })
 }
 
+/**
+ * the maps:// protocol may only be used by apps
+ * that are allowed to access the internet
+ * additionally it should be restricted by CSP
+ *
+ * for now that is only the integrated (but replacable) maps.xdc
+ */
 async function mapProtocolHandler(
-  rpc: Jsonrpc.RawClient,
-  appId: string,
   accountId: number,
+  rpc: Jsonrpc.RawClient,
   request: GlobalRequest
 ): Promise<GlobalResponse> {
   const url = new URL(request.url)
+
   let filename = url.pathname
   // remove leading / trailing "/"
   if (filename.endsWith('/')) {
@@ -871,43 +942,40 @@ async function mapProtocolHandler(
   log.debug('map: loading tile', filename)
 
   const mimeType: string | undefined = Mime.lookup(filename) || ''
-  // if (mimeType.indexOf('image') !== 0) {
-  //   throw new Error(`Invalid mime type: ${mimeType}. Tiles should have mime type image/*.`)
-  // }
   try {
+    // now we pipe the real request through our backend
+    // to avoid CORS issues and to be able to cache tiles
     const response = await rpc.getHttpResponse(
       accountId,
       request.url.replace('maps://', 'https://')
     )
     const blob = Buffer.from(response.blob, 'base64')
-    return makeResponse(appId, blob, {}, mimeType)
+    return makeResponse(null, blob, {}, mimeType)
   } catch (error) {
     log.error('map: load blob:', error)
-    return makeResponse(appId, '', { status: 404 })
+    return makeResponse(null, '', { status: 404 })
   }
 }
 
+/**
+ * the webxdc:// protocol is used to fetch the webxdc app files
+ * and any additional blobs (images, sounds, etc.) that are
+ * part of the webxdc package.
+ * All responses have the appropriate CSP headers set (using makeResponse)
+ *
+ * Instead of a domain we use accountId.msgId as hostname
+ * so we can identify each request from the app and check permissions
+ */
 async function webxdcProtocolHandler(
   rpc: Jsonrpc.RawClient,
-  appId: string,
   request: GlobalRequest
 ): Promise<GlobalResponse> {
-  /**
-   * Make sure to only `return makeResponse()` because it sets headers
-   * that are important for security, namely `Content-Security-Policy`.
-   * Failing to set CSP might result in the app being able to create
-   * an <iframe> with no CSP, e.g. `<iframe src="/no_such_file.lol">`
-   * within which they can then do whatever
-   * through the parent frame, see
-   * "XDC-01-002 WP1: Full CSP bypass via desktop app webxdc.js"
-   * https://public.opentech.fund/documents/XDC-01-report_2_1.pdf
-   */
   const url = new URL(request.url)
   const [account, msg] = url.hostname.split('.')
   const id = `${account}.${msg}`
 
   if (!open_apps[id]) {
-    return makeResponse(appId, '', { status: 500 })
+    return makeResponse(id, '', { status: 500 })
   }
 
   let filename = url.pathname
@@ -931,19 +999,19 @@ async function webxdcProtocolHandler(
   }
 
   if (filename === WRAPPER_PATH) {
-    return makeResponse(
-      await readFile(join(htmlDistDir(), '/webxdc_wrapper.html'), 'utf8'),
-      {},
-      mimeType
+    const wrapperBuffer = await readFile(
+      join(htmlDistDir(), '/webxdc_wrapper.html')
     )
+    return makeResponse(id, new Uint8Array(wrapperBuffer), {}, mimeType)
   } else if (filename === 'webxdc.js') {
     const displayName = Buffer.from(open_apps[id].displayName).toString(
       'base64'
     )
     const selfAddr = Buffer.from(open_apps[id].selfAddr).toString('base64')
-    // initializes the preload script, the actual implementation of `window.webxdc` is found there: static/webxdc-preload.js
+    // initializes the preload script, the actual implementation of
+    // `window.webxdc` is found there: static/webxdc-preload.js
     return makeResponse(
-      appId,
+      id,
       Buffer.from(
         `window.parent.webxdc_internal.setup("${selfAddr}","${displayName}", ${Number(
           open_apps[id].sendUpdateInterval
@@ -967,7 +1035,7 @@ async function webxdcProtocolHandler(
       return makeResponse(id, blob, {}, mimeType)
     } catch (error) {
       log.error('webxdc: load blob:', error)
-      return makeResponse(id, '', { status: 404 })
+      return makeResponse(null, '', { status: 404 })
     }
   }
 }
@@ -988,52 +1056,83 @@ function makeTitle(webxdcInfo: T.WebxdcMessageInfo, chatName: string): string {
   }${truncateText(webxdcInfo.name, 42)} – ${chatName}`
 }
 
-function partitionFromAccountId(accountId: number) {
-  return `persist:webxdc_${accountId}`
+function partitionFromId(id: number | string) {
+  return `persist:webxdc_${id}`
 }
 
-function sessionFromAccountId(accountId: number) {
-  return session.fromPartition(partitionFromAccountId(accountId), {
+function sessionFromId(id: number | string) {
+  return session.fromPartition(partitionFromId(id), {
     cache: false,
   })
 }
 
+/**
+ * helper function to get all sessions for a given accountId
+ * for cleanup and removal of data
+ */
+function getAllSessionsForAccount(accountId: number) {
+  const sessions: Electron.Session[] = []
+  if (accounts_sessions.includes(accountId)) {
+    sessions.push(sessionFromId(accountId))
+  }
+  if (sessions_with_internet_access.length > 0) {
+    for (const appId of sessions_with_internet_access) {
+      const [accId, _id] = appId.split('.')
+      if (Number(accId) === accountId) {
+        const s = sessionFromId(appId)
+        sessions.push(s)
+      }
+    }
+  }
+  return sessions
+}
+
 ipcMain.handle('webxdc.clearWebxdcDOMStorage', async (_, accountId: number) => {
-  const session = sessionFromAccountId(accountId)
-  await session.clearStorageData()
-  await session.clearData()
+  const sessions = getAllSessionsForAccount(accountId)
+  for (const s of sessions) {
+    await s.clearStorageData()
+    await s.clearData()
+  }
 })
 
 ipcMain.handle('webxdc.getWebxdcDiskUsage', async (_, accountId: number) => {
-  const ses = sessionFromAccountId(accountId)
-  if (!ses.storagePath) {
-    throw new Error('session has no storagePath set')
-  }
-  const [cache_size, real_total_size] = await Promise.all([
-    ses.getCacheSize(),
-    get_recursive_folder_size(ses.storagePath, [
-      'GPUCache',
-      'QuotaManager',
-      'Code Cache',
-      'LOG',
-      'LOG.old',
-      'LOCK',
-      '.DS_Store',
-      'Cookies-journal',
-      'Databases.db-journal',
-      'Preferences',
-      'QuotaManager-journal',
-      '000003.log',
-      'MANIFEST-000001',
-    ]),
-  ])
-  const empty_size = 49 * 1024 // ~ size of an empty session/partition
+  const sessions = getAllSessionsForAccount(accountId)
+  let cache_size = 0
+  let total_size = 0
+  let data_size = 0
 
-  let total_size = real_total_size - empty_size
-  let data_size = total_size - cache_size
-  if (total_size < 0) {
-    total_size = 0
-    data_size = 0
+  for (const s of sessions) {
+    if (!s.storagePath) {
+      throw new Error('session has no storagePath set')
+    }
+    const [ses_cache_size, ses_real_total_size] = await Promise.all([
+      s.getCacheSize(),
+      get_recursive_folder_size(s.storagePath, [
+        'GPUCache',
+        'QuotaManager',
+        'Code Cache',
+        'LOG',
+        'LOG.old',
+        'LOCK',
+        '.DS_Store',
+        'Cookies-journal',
+        'Databases.db-journal',
+        'Preferences',
+        'QuotaManager-journal',
+        '000003.log',
+        'MANIFEST-000001',
+      ]),
+    ])
+    const empty_size = 49 * 1024 // ~ size of an empty session/partition
+    let total_ses_size = ses_real_total_size - empty_size
+    let data_ses_size = total_ses_size - ses_cache_size
+    if (total_ses_size < 0) {
+      total_ses_size = 0
+      data_ses_size = 0
+    }
+    cache_size += ses_cache_size
+    total_size += total_ses_size
+    data_size += data_ses_size
   }
   return {
     cache_size,
