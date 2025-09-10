@@ -83,6 +83,9 @@ jobs:
       NODE_ENV: test
       VERSION_INFO_GIT_REF: ${{ github.ref }}
       DC_ACCOUNTS_DIR: ../../e2e-tests/data/accounts
+      DC_CHATMAIL_SERVER: ${{ vars.CI_CHATMAIL_SERVER }}
+      DC_MAIL_SERVER: ${{ vars.CI_MAIL_SERVER }}
+      DC_MAIL_SERVER_TOKEN: ${{ secrets.CI_MAIL_SERVER_TOKEN }}
     timeout-minutes: 60
     runs-on: ${{ matrix.os }}
     strategy:

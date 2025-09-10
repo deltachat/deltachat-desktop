@@ -1,6 +1,13 @@
 import { expect, Page } from '@playwright/test'
 
-export const chatmailServer = 'https://ci-chatmail.testrun.org'
+const { config } = await import('dotenv')
+config()
+
+export const chatmailServerUrl = process.env.DC_CHATMAIL_SERVER
+
+export const mailServerUrl = process.env.DC_MAIL_SERVER
+
+export const mailServerToken = process.env.DC_MAIL_SERVER_TOKEN
 
 export const userNames = ['Alice', 'Bob', 'Chris', 'Denis', 'Eve']
 
@@ -60,9 +67,15 @@ export async function createUser(
   userName: string,
   page: Page,
   existingProfiles: User[],
-  isFirstOnboarding: boolean
+  isFirstOnboarding: boolean,
+  useChatmail: boolean = true
 ): Promise<User> {
-  const user = await createNewProfile(page, userName, isFirstOnboarding)
+  const user = await createNewProfile(
+    page,
+    userName,
+    isFirstOnboarding,
+    useChatmail
+  )
 
   expect(user.id).toBeDefined()
 
@@ -91,7 +104,8 @@ export const getUser = (index: number, existingProfiles: User[]) => {
 export async function createNewProfile(
   page: Page,
   name: string,
-  isFirstOnboarding: boolean
+  isFirstOnboarding: boolean,
+  useChatmail: boolean
 ): Promise<User> {
   await page.waitForSelector('.styles_module_account')
   const accountList = page.locator('.styles_module_account')
@@ -103,9 +117,10 @@ export async function createNewProfile(
   // create a new account
   await page.getByTestId('create-account-button').click()
 
-  await page.evaluate(
-    `navigator.clipboard.writeText('dcaccount:${chatmailServer}/new')`
-  )
+  const dcAccountLink = useChatmail
+    ? `dcaccount:${chatmailServerUrl}/new`
+    : `dcaccount:${mailServerUrl}//new_email?t=${mailServerToken}&n=ci_github`
+  await page.evaluate(`navigator.clipboard.writeText('${dcAccountLink}')`)
   await clickThroughTestIds(page, [
     'other-login-button',
     'scan-qr-login',
@@ -197,7 +212,8 @@ export async function createProfiles(
   number: number,
   existingProfiles: User[],
   page: Page,
-  browserName: string
+  browserName: string,
+  useChatmail: boolean = true
 ): Promise<void> {
   const hasProfileWithName = (name: string): boolean => {
     let hasProfile = false
@@ -215,7 +231,13 @@ export async function createProfiles(
   }
   for (let n = 0; n < number; n++) {
     if (!hasProfileWithName(userNames[n])) {
-      await createUser(userNames[n], page, existingProfiles, n === 0)
+      await createUser(
+        userNames[n],
+        page,
+        existingProfiles,
+        n === 0,
+        useChatmail
+      )
     } else {
       console.log('User already exists')
     }
