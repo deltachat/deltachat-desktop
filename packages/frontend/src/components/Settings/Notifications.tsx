@@ -96,6 +96,7 @@ export default function Notifications({ desktopSettings }: Props) {
         label={tx('pref_mention_notifications')}
         description={tx('pref_mention_notifications_explain')}
         disabled={isMuted || !desktopSettings['notifications']}
+        disabledValue={false}
       />
     </>
   )
