@@ -9,8 +9,7 @@ import { initIsWindowsStorePackageVar } from './isAppx.js'
 import { getHelpMenu } from './help_menu.js'
 import { initialisePowerMonitor } from './resume_from_sleep.js'
 
-// Hardening: prohibit all DNS queries, except for  OpenStreetMap
-// (used by /static/xdcs/maps.xdc)
+// Hardening: prohibit all DNS queries
 // The `~NOTFOUND` string is here:
 // https://chromium.googlesource.com/chromium/src/+/6459548ee396bbe1104978b01e19fcb1bb68d0e5/net/dns/mapped_host_resolver.cc#46
 // Chromium docs that touch on `--host-resolver-rules` and DNS:
