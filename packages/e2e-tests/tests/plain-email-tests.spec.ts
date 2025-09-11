@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test'
+import { expect, type Page } from '@playwright/test'
 
 import {
   createProfiles,
@@ -7,18 +7,23 @@ import {
   deleteAllProfiles,
   switchToProfile,
   reloadPage,
+  test,
 } from '../playwright-helper'
 
 test.describe.configure({ mode: 'serial' })
 
 let existingProfiles: User[] = []
 
-const numberOfProfiles = 4
+const numberOfProfiles = 2
 
 // https://playwright.dev/docs/next/test-retries#reuse-single-page-between-tests
 let page: Page
 
-test.beforeAll(async ({ browser }) => {
+test.beforeAll(async ({ browser, chatmail }) => {
+  if (chatmail) {
+    test.skip(true, 'This test is only relevant for non chatmail profiles')
+  }
+
   const contextForProfileCreation = await browser.newContext()
   const pageForProfileCreation = await contextForProfileCreation.newPage()
   const pageForTestsP = browser.newPage()
@@ -33,7 +38,7 @@ test.beforeAll(async ({ browser }) => {
     existingProfiles,
     pageForProfileCreation,
     browser.browserType().name(),
-    false // useChatmail = false
+    chatmail // is false here, otherwise the test would be skipped
   )
 
   await contextForProfileCreation.close()
@@ -42,12 +47,14 @@ test.beforeAll(async ({ browser }) => {
 })
 
 test.afterAll(async ({ browser }) => {
-  await page.close()
+  await page?.close()
 
   const context = await browser.newContext()
   const pageForProfileDeletion = await context.newPage()
   await reloadPage(pageForProfileDeletion)
-  await deleteAllProfiles(pageForProfileDeletion, existingProfiles)
+  if (existingProfiles.length > 0) {
+    await deleteAllProfiles(pageForProfileDeletion, existingProfiles)
+  }
   await context.close()
 })
 
@@ -59,8 +66,6 @@ test('check "New E-Mail" option is shown and a chat can be created', async () =>
   // prepare last open chat for receiving user
   await switchToProfile(page, userA.id)
   await page.locator('#new-chat-button').click()
-
-  await expect(page.getByRole('button', { name: 'New Group' })).toBeVisible()
 
   // Since we're on a non-Chatmail server, this button is supposed to be shown.
   const newEmailButton = page.getByRole('button', { name: 'New E-Mail' })
@@ -80,6 +85,42 @@ test('check "New E-Mail" option is shown and a chat can be created', async () =>
   await contact.click()
 
   await page.getByTestId('ok').click()
+
+  await page.getByTestId('group-create-button').click()
+
+  const chatListItem = page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: subject })
+  await expect(chatListItem).toBeVisible()
+})
+
+test('group can be created but no non key contacts can be added', async () => {
+  const userA = existingProfiles[0]
+  const userB = existingProfiles[1]
+  const subject = 'Test Chat Subject'
+  const emailUserB = userB.address
+  // prepare last open chat for receiving user
+  await switchToProfile(page, userA.id)
+  await page.locator('#new-chat-button').click()
+
+  const createGroupButton = page.getByRole('button', { name: 'New Group' })
+
+  await expect(createGroupButton).toBeVisible()
+
+  await createGroupButton.click()
+
+  await page.getByTestId('group-name-input').fill(subject)
+  await page.locator('#addmember').click()
+
+  await page.getByTestId('add-member-search').fill(emailUserB)
+
+  const contactList = page.getByTestId('add-member-dialog').locator('li button')
+
+  await expect(contactList).toHaveCount(0)
+
+  await expect(page.getByTestId('ok')).toHaveAttribute('disabled')
+
+  await page.getByTestId('cancel').click()
 
   await page.getByTestId('group-create-button').click()
 

@@ -1,5 +1,7 @@
 import { defineConfig, devices } from '@playwright/test'
 
+import { TestOptions } from './playwright-helper'
+
 const port = process.env.PORT ?? 3000
 
 const baseURL = `https://localhost:${port}`
@@ -7,7 +9,7 @@ const baseURL = `https://localhost:${port}`
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
-export default defineConfig({
+export default defineConfig<TestOptions>({
   testDir: './tests',
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -44,47 +46,22 @@ export default defineConfig({
     },
   },
 
-  /* Configure projects for major browsers */
+  /* Configure projects for chatmail and non-chatmail tests */
   projects: [
     {
-      name: 'Chrome',
+      name: 'chatmail',
       use: {
         ...devices['Desktop Chrome'],
+        chatmail: true, // create profiles on a dedicated chatmail server
       },
     },
-    // {
-    //   name: 'firefox',
-    //   use: {
-    //     ...devices['Desktop Firefox'],
-    //   },
-    // },
-
-    // {
-    //   name: 'webkit',
-    //   use: {
-    //     ...devices['Desktop Safari'],
-    //     launchOptions: {
-    //       args: [''],
-    //     },
-    //   },
-    // },
-
-    /* Test against mobile viewports. */
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
-    // },
-    // {
-    //   name: 'Mobile Safari',
-    //   use: { ...devices['iPhone 12'] },
-    // },
-
-    /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    // },
-    // },
+    {
+      name: 'non-chatmail',
+      use: {
+        ...devices['Desktop Chrome'],
+        chatmail: false, // create profiles on a dedicated non-chatmail server
+      },
+    },
   ],
 
   /* Run your local dev server before starting the tests */

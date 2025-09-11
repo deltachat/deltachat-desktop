@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test'
+import { expect, type Page } from '@playwright/test'
 
 import {
   userNames,
@@ -12,6 +12,7 @@ import {
   getProfile,
   deleteProfile,
   clickThroughTestIds,
+  test,
 } from '../playwright-helper'
 
 /**
@@ -28,9 +29,13 @@ const numberOfProfiles = 2
 // https://playwright.dev/docs/next/test-retries#reuse-single-page-between-tests
 let page: Page
 
-test.beforeAll(async ({ browser }) => {
+test.beforeAll(async ({ browser, chatmail }) => {
   const contextForProfileCreation = await browser.newContext()
   const pageForProfileCreation = await contextForProfileCreation.newPage()
+
+  console.log(
+    `Running tests with ${chatmail ? 'chatmail' : 'plain email'} profiles`
+  )
 
   await reloadPage(pageForProfileCreation)
 

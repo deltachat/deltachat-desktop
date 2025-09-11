@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test'
+import { expect, type Page } from '@playwright/test'
 
 import {
   groupName,
@@ -11,6 +11,7 @@ import {
   deleteAllProfiles,
   reloadPage,
   clickThroughTestIds,
+  test,
 } from '../playwright-helper'
 
 test.describe.configure({ mode: 'serial' })
@@ -22,7 +23,10 @@ const numberOfProfiles = 3
 // https://playwright.dev/docs/next/test-retries#reuse-single-page-between-tests
 let page: Page
 
-test.beforeAll(async ({ browser }) => {
+test.beforeAll(async ({ browser, chatmail }) => {
+  if (!chatmail) {
+    test.skip(true, 'Group tests are not relevant for non chatmail profiles')
+  }
   const contextForProfileCreation = await browser.newContext()
   const pageForProfileCreation = await contextForProfileCreation.newPage()
   await reloadPage(pageForProfileCreation)
@@ -57,7 +61,9 @@ test.afterAll(async ({ browser }) => {
   const context = await browser.newContext()
   const pageForProfileDeletion = await context.newPage()
   await reloadPage(pageForProfileDeletion)
-  await deleteAllProfiles(pageForProfileDeletion, existingProfiles)
+  if (existingProfiles.length > 0) {
+    await deleteAllProfiles(pageForProfileDeletion, existingProfiles)
+  }
   await context.close()
 })
 
