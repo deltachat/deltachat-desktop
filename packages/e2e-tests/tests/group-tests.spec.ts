@@ -24,9 +24,6 @@ const numberOfProfiles = 3
 let page: Page
 
 test.beforeAll(async ({ browser, chatmail }) => {
-  if (!chatmail) {
-    test.skip(true, 'Group tests are not relevant for non chatmail profiles')
-  }
   const contextForProfileCreation = await browser.newContext()
   const pageForProfileCreation = await contextForProfileCreation.newPage()
   await reloadPage(pageForProfileCreation)
@@ -39,7 +36,8 @@ test.beforeAll(async ({ browser, chatmail }) => {
     numberOfProfiles,
     existingProfiles,
     pageForProfileCreation,
-    browser.browserType().name()
+    browser.browserType().name(),
+    chatmail
   )
 
   await contextForProfileCreation.close()

@@ -67,10 +67,6 @@ test.afterAll(async () => {
   await page?.close()
 })
 
-/**
- * covers creating a profile with preconfigured
- * chatmail server on first start or after
- */
 test('create profiles', async ({ browserName, chatmail }) => {
   test.setTimeout(120_000)
   await createProfiles(

@@ -105,7 +105,7 @@ jobs:
     - name: create data dir
       run: mkdir -p packages/target-browser/data
     - name: Run e2e tests
-      run: pnpm e2e --project Chrome
+      run: pnpm e2e
     - uses: actions/upload-artifact@v4
       # We may want to not upload artifacts if tests pass,
       # (`if: ${{ failure() && !cancelled() }}`)
