@@ -4,18 +4,27 @@ import { onReady } from '../onready'
 import { selectedAccountId } from '../ScreenController'
 import { Store } from './store'
 
-export class state {
+interface MapSettings {
+  timestampFrom: number
+  timestampTo: number
+}
+
+export class State {
   selectedChat: Type.FullChat | null = null
-  mapSettings = {
+  mapSettings: MapSettings = {
     timestampFrom: 0,
     timestampTo: 0,
   }
   locations: T.Location[] = []
 }
 
-export const locationStore = new Store(new state(), 'location')
+export const locationStore = new Store(new State(), 'location')
 
-const getLocations = async (chatId: number, mapSettings: todo) => {
+/*
+ * Fetch all sent locations(in live location sharing) for a given chat during a given timeframe.
+ * Then store them all in the location store.
+ */
+const getLocations = async (chatId: number, mapSettings: MapSettings) => {
   const { timestampFrom, timestampTo } = mapSettings
   const locations: T.Location[] = await BackendRemote.rpc.getLocations(
     selectedAccountId(),
@@ -29,6 +38,9 @@ const getLocations = async (chatId: number, mapSettings: todo) => {
   }, 'getLocations')
 }
 
+/*
+ * Add callbacks for fetching locations and storing them in LocationStore
+ */
 onReady(() => {
   BackendRemote.on('LocationChanged', (accountId, { contactId }) => {
     if (accountId !== window.__selectedAccountId) {
