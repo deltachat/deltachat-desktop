@@ -55,13 +55,14 @@ export default defineConfig<TestOptions>({
         chatmail: true, // create profiles on a dedicated chatmail server
       },
     },
-    {
-      name: 'non-chatmail',
-      use: {
-        ...devices['Desktop Chrome'],
-        chatmail: false, // create profiles on a dedicated non-chatmail server
-      },
-    },
+    // Our non chatmail server is too unreliable right now to be used in CI
+    // {
+    //   name: 'non-chatmail',
+    //   use: {
+    //     ...devices['Desktop Chrome'],
+    //     chatmail: false, // create profiles on a dedicated non-chatmail server
+    //   },
+    // },
   ],
 
   /* Run your local dev server before starting the tests */
