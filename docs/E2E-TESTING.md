@@ -38,6 +38,14 @@ pnpm -w e2e basic
 
 to run only tests in file basic-tests.spec.ts (all tests that match by second parameter)
 
+or
+
+```sh
+pnpm -w e2e --project=non-chatmail
+```
+
+to run all tests with option chatmail = false (to use non chatmail server)
+
 ```sh
 pnpm -w --filter e2e-tests e2e:report
 ```
