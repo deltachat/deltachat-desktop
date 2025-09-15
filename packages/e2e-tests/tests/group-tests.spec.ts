@@ -195,12 +195,6 @@ test('Invite existing user to group', async ({ browserName, isChatmail }) => {
   await expect(page.locator('#message-list li').nth(1)).toContainText(
     userA.address
   )
-  if (isChatmail) {
-    // verified chat after response from userA
-    await expect(page.locator('.e2ee-info')).toBeVisible()
-  } else {
-    await expect(page.locator('.e2ee-info')).not.toBeVisible()
-  }
   // userB has 2 new notifications now
   const badge = page
     .getByTestId(`account-item-${userB.id}`)
@@ -208,6 +202,7 @@ test('Invite existing user to group', async ({ browserName, isChatmail }) => {
     .getByText('2')
 
   await expect(badge).toBeVisible()
+  await expect(page.locator('.e2ee-info')).toBeVisible()
 })
 
 test('Invite new user to group', async ({ browserName }) => {
