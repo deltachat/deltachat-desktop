@@ -6,7 +6,7 @@ import { existsSync } from 'fs'
 
 export let appx = false
 
-export async function isWindowsStorePackage() {
+export async function initIsWindowsStorePackageVar() {
   if (platform() === 'win32') {
     const app_path = app.getAppPath()
     try {

@@ -4,7 +4,7 @@ import { mkdirSync, Stats, watchFile } from 'fs'
 import { app as rawApp, dialog, ipcMain, protocol } from 'electron'
 import rc from './rc.js'
 import contextMenu from './electron-context-menu.js'
-import { isWindowsStorePackage } from './isAppx.js'
+import { initIsWindowsStorePackageVar } from './isAppx.js'
 import { getHelpMenu } from './help_menu.js'
 import { initialisePowerMonitor } from './resume_from_sleep.js'
 
@@ -144,7 +144,7 @@ app.isQuitting = false
 Promise.all([
   new Promise((resolve, _reject) => app.on('ready', resolve)),
   DesktopSettings.load(),
-  isWindowsStorePackage(),
+  initIsWindowsStorePackageVar(),
   webxdcStartUpCleanup(),
 ])
   .then(onReady)
