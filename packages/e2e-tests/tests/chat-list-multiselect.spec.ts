@@ -1,4 +1,4 @@
-import { test, expect, type Page, type Locator } from '@playwright/test'
+import { expect, type Page, type Locator } from '@playwright/test'
 
 import {
   createProfiles,
@@ -6,6 +6,7 @@ import {
   loadExistingProfiles,
   deleteAllProfiles,
   reloadPage,
+  test,
 } from '../playwright-helper'
 
 test.describe.configure({ mode: 'serial' })
@@ -30,9 +31,13 @@ const expectSelectedChats = async (chatNums: number[]) => {
   )
 }
 
-test.beforeAll(async ({ browser }) => {
+test.beforeAll(async ({ browser, isChatmail }) => {
   const contextForProfileCreation = await browser.newContext()
   const pageForProfileCreation = await contextForProfileCreation.newPage()
+
+  console.log(
+    `Running multiselect tests with ${isChatmail ? 'isChatmail' : 'plain email'} profiles`
+  )
 
   await reloadPage(pageForProfileCreation)
 
@@ -43,7 +48,8 @@ test.beforeAll(async ({ browser }) => {
     numberOfProfiles,
     existingProfiles,
     pageForProfileCreation,
-    browser.browserType().name()
+    browser.browserType().name(),
+    isChatmail
   )
 
   await contextForProfileCreation.close()

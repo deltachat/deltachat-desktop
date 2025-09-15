@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test'
+import { expect, type Page } from '@playwright/test'
 
 import {
   getUser,
@@ -10,6 +10,7 @@ import {
   clickThroughTestIds,
   reloadPage,
   sendMessage,
+  test,
 } from '../playwright-helper'
 
 /**
@@ -35,7 +36,11 @@ const numberOfProfiles = 2
 // https://playwright.dev/docs/next/test-retries#reuse-single-page-between-tests
 let page: Page
 
-test.beforeAll(async ({ browser }) => {
+test.beforeAll(async ({ browser, isChatmail }) => {
+  console.log(
+    `Running tests with ${isChatmail ? 'chatmail' : 'plain email'} profiles`
+  )
+
   const contextForProfiles = await browser.newContext()
   const pageForProfiles = await contextForProfiles.newPage()
 
@@ -61,13 +66,15 @@ test.afterAll(async () => {
   await page?.close()
 })
 
-/**
- * covers creating a profile with preconfigured
- * chatmail server on first start or after
- */
-test('create profiles', async ({ browserName }) => {
+test('create profiles', async ({ browserName, isChatmail }) => {
   test.setTimeout(120_000)
-  await createProfiles(numberOfProfiles, existingProfiles, page, browserName)
+  await createProfiles(
+    numberOfProfiles,
+    existingProfiles,
+    page,
+    browserName,
+    isChatmail
+  )
   expect(existingProfiles.length).toBe(numberOfProfiles)
 })
 

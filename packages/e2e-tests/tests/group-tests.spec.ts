@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test'
+import { expect, type Page } from '@playwright/test'
 
 import {
   groupName,
@@ -11,6 +11,7 @@ import {
   deleteAllProfiles,
   reloadPage,
   clickThroughTestIds,
+  test,
 } from '../playwright-helper'
 
 test.describe.configure({ mode: 'serial' })
@@ -22,7 +23,7 @@ const numberOfProfiles = 3
 // https://playwright.dev/docs/next/test-retries#reuse-single-page-between-tests
 let page: Page
 
-test.beforeAll(async ({ browser }) => {
+test.beforeAll(async ({ browser, isChatmail }) => {
   const contextForProfileCreation = await browser.newContext()
   const pageForProfileCreation = await contextForProfileCreation.newPage()
   await reloadPage(pageForProfileCreation)
@@ -35,7 +36,8 @@ test.beforeAll(async ({ browser }) => {
     numberOfProfiles,
     existingProfiles,
     pageForProfileCreation,
-    browser.browserType().name()
+    browser.browserType().name(),
+    isChatmail
   )
 
   await contextForProfileCreation.close()

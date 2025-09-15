@@ -1,4 +1,4 @@
-import { expect, Page } from '@playwright/test'
+import { expect, test as base, Page } from '@playwright/test'
 
 const { config } = await import('dotenv')
 config()
@@ -19,6 +19,18 @@ export type User = {
   address: string
   password?: string
 }
+
+export type TestOptions = {
+  isChatmail: boolean
+}
+
+/**
+ * extend all tests with chatmail option
+ */
+export const test = base.extend<TestOptions>({
+  // can be overriden in the config.
+  isChatmail: [true, { option: true }],
+})
 
 export async function reloadPage(page: Page): Promise<void> {
   await page.goto('https://localhost:3000/')
@@ -80,7 +92,7 @@ export async function createUser(
   expect(user.id).toBeDefined()
 
   existingProfiles.push(user)
-  console.log(`User ${user.name} wurde angelegt!`, user)
+  console.log(`User ${user.name} was created!`, user)
   return user
 }
 
@@ -249,7 +261,7 @@ export async function deleteAllProfiles(
   existingProfiles: User[]
 ): Promise<void> {
   if (existingProfiles.length < 1) {
-    throw new Error('Not existing profiles to delete!')
+    console.log('No existing profiles to delete!')
   }
   for (let i = 0; i < existingProfiles.length; i++) {
     const profileToDelete = existingProfiles[i]
