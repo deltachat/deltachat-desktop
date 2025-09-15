@@ -982,7 +982,11 @@ export function useDraft(
     if (chatId == undefined || !canSend) {
       return
     }
-    const quoteMessage = (messageId: number) => {
+    const quoteMessage = async (messageId: number) => {
+      const message = await BackendRemote.rpc.getMessage(accountId, messageId)
+      if (message.isInfo || message.viewType === 'VideochatInvitation') {
+        return
+      }
       draftRef.current.quote = {
         kind: 'WithMessage',
         messageId,
@@ -1017,7 +1021,7 @@ export function useDraft(
     const currQuote = draftRef.current.quote
     if (!currQuote) {
       if (upOrDown === KeybindAction.Composer_SelectReplyToUp) {
-        quoteMessage(messageIds[messageIds.length - 1])
+        await quoteMessage(messageIds[messageIds.length - 1])
       }
       return
     }
