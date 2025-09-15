@@ -160,7 +160,7 @@ test('check "New E-Mail" option presence', async ({ isChatmail }) => {
   await page.getByRole('dialog').press('Escape')
 })
 
-test('Invite existing user to group', async ({ browserName, isChatmail }) => {
+test('Invite existing user to group', async ({ browserName }) => {
   if (browserName.toLowerCase().indexOf('chrom') > -1) {
     await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
   }

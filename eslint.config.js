@@ -39,6 +39,12 @@ export default defineConfig(
     },
     {
       files: ['packages/e2e-tests/**/*spec.ts'],
+      languageOptions: {
+        parserOptions: {
+          project: 'packages/e2e-tests/tsconfig.json',
+          tsconfigRootDir: import.meta.dirname,
+        },
+      },
       rules: {
         // `expect()` usually needs to be awaited. Not awaiting causes flakiness.
         // https://playwright.dev/docs/best-practices#lint-your-tests
