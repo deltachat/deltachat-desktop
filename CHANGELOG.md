@@ -14,6 +14,7 @@
 
 ### Added
 - support multiple selection (multiselect) in the list of chats, activated with Ctrl + Click, Shift + Click #5297
+- allow to scan a proxy url from QR code #4290
 
 ### Changed
 - update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.15.0`

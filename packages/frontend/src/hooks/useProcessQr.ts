@@ -19,6 +19,7 @@ import type { QrWithUrl } from '../backend/qr'
 import type { WelcomeQrWithUrl } from '../contexts/InstantOnboardingContext'
 import useChat from './chat/useChat'
 import { unknownErrorToString } from '../components/helpers/unknownErrorToString'
+import ProxyConfiguration from '../components/dialogs/ProxyConfiguration'
 
 const ALLOWED_QR_CODES_ON_WELCOME_SCREEN: T.Qr['kind'][] = [
   'account',
@@ -403,6 +404,23 @@ export default function useProcessQR() {
 
         callback?.()
         return
+      }
+
+      if (qr.kind === 'proxy') {
+        const userConfirmed = await openConfirmationDialog({
+          message: tx('proxy_use_proxy_confirm', qr.url),
+          confirmLabel: tx('ok'),
+        })
+
+        if (userConfirmed) {
+          openDialog(ProxyConfiguration, {
+            accountId,
+            configured: true,
+            newProxyUrl: qr.url,
+          })
+        }
+
+        return callback?.()
       }
 
       // Just show the contents of the scanned QR code if it is correct but
