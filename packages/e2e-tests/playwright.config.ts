@@ -55,7 +55,6 @@ export default defineConfig<TestOptions>({
         isChatmail: true, // create profiles on a dedicated chatmail server
       },
     },
-    // Our non chatmail server is too unreliable right now to be used in CI
     {
       name: 'non-chatmail',
       use: {
