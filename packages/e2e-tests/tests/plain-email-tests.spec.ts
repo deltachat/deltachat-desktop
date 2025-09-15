@@ -19,8 +19,8 @@ const numberOfProfiles = 2
 // https://playwright.dev/docs/next/test-retries#reuse-single-page-between-tests
 let page: Page
 
-test.beforeAll(async ({ browser, chatmail }) => {
-  if (chatmail) {
+test.beforeAll(async ({ browser, isChatmail }) => {
+  if (isChatmail) {
     test.skip(true, 'This test is only relevant for non chatmail profiles')
   }
 
@@ -38,7 +38,7 @@ test.beforeAll(async ({ browser, chatmail }) => {
     existingProfiles,
     pageForProfileCreation,
     browser.browserType().name(),
-    chatmail // is false here, otherwise the test would be skipped
+    isChatmail // is false here, otherwise the test would be skipped
   )
 
   await contextForProfileCreation.close()
@@ -52,9 +52,7 @@ test.afterAll(async ({ browser }) => {
   const context = await browser.newContext()
   const pageForProfileDeletion = await context.newPage()
   await reloadPage(pageForProfileDeletion)
-  if (existingProfiles.length > 0) {
-    await deleteAllProfiles(pageForProfileDeletion, existingProfiles)
-  }
+  await deleteAllProfiles(pageForProfileDeletion, existingProfiles)
   await context.close()
 })
 
@@ -67,7 +65,7 @@ test('check "New E-Mail" option is shown and a chat can be created', async () =>
   await switchToProfile(page, userA.id)
   await page.locator('#new-chat-button').click()
 
-  // Since we're on a non-Chatmail server, this button is supposed to be shown.
+  // Since we're on a non-chatmail server, this button is supposed to be shown.
   const newEmailButton = page.getByRole('button', { name: 'New E-Mail' })
   await expect(newEmailButton).toBeVisible()
 

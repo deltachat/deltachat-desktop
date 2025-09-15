@@ -52,7 +52,7 @@ export default defineConfig<TestOptions>({
       name: 'chatmail',
       use: {
         ...devices['Desktop Chrome'],
-        chatmail: true, // create profiles on a dedicated chatmail server
+        isChatmail: true, // create profiles on a dedicated chatmail server
       },
     },
     // Our non chatmail server is too unreliable right now to be used in CI
@@ -60,7 +60,7 @@ export default defineConfig<TestOptions>({
     //   name: 'non-chatmail',
     //   use: {
     //     ...devices['Desktop Chrome'],
-    //     chatmail: false, // create profiles on a dedicated non-chatmail server
+    //     isChatmail: false, // create profiles on a dedicated non-chatmail server
     //   },
     // },
   ],

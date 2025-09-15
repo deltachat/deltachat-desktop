@@ -21,7 +21,7 @@ export type User = {
 }
 
 export type TestOptions = {
-  chatmail: boolean
+  isChatmail: boolean
 }
 
 /**
@@ -29,7 +29,7 @@ export type TestOptions = {
  */
 export const test = base.extend<TestOptions>({
   // can be overriden in the config.
-  chatmail: [true, { option: true }],
+  isChatmail: [true, { option: true }],
 })
 
 export async function reloadPage(page: Page): Promise<void> {

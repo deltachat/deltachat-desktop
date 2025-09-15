@@ -31,12 +31,12 @@ const expectSelectedChats = async (chatNums: number[]) => {
   )
 }
 
-test.beforeAll(async ({ browser, chatmail }) => {
+test.beforeAll(async ({ browser, isChatmail }) => {
   const contextForProfileCreation = await browser.newContext()
   const pageForProfileCreation = await contextForProfileCreation.newPage()
 
   console.log(
-    `Running multiselect tests with ${chatmail ? 'chatmail' : 'plain email'} profiles`
+    `Running multiselect tests with ${isChatmail ? 'isChatmail' : 'plain email'} profiles`
   )
 
   await reloadPage(pageForProfileCreation)
@@ -49,7 +49,7 @@ test.beforeAll(async ({ browser, chatmail }) => {
     existingProfiles,
     pageForProfileCreation,
     browser.browserType().name(),
-    chatmail
+    isChatmail
   )
 
   await contextForProfileCreation.close()

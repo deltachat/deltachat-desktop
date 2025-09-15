@@ -23,7 +23,7 @@ const numberOfProfiles = 3
 // https://playwright.dev/docs/next/test-retries#reuse-single-page-between-tests
 let page: Page
 
-test.beforeAll(async ({ browser, chatmail }) => {
+test.beforeAll(async ({ browser, isChatmail }) => {
   const contextForProfileCreation = await browser.newContext()
   const pageForProfileCreation = await contextForProfileCreation.newPage()
   await reloadPage(pageForProfileCreation)
@@ -37,7 +37,7 @@ test.beforeAll(async ({ browser, chatmail }) => {
     existingProfiles,
     pageForProfileCreation,
     browser.browserType().name(),
-    chatmail
+    isChatmail
   )
 
   await contextForProfileCreation.close()
@@ -59,9 +59,7 @@ test.afterAll(async ({ browser }) => {
   const context = await browser.newContext()
   const pageForProfileDeletion = await context.newPage()
   await reloadPage(pageForProfileDeletion)
-  if (existingProfiles.length > 0) {
-    await deleteAllProfiles(pageForProfileDeletion, existingProfiles)
-  }
+  await deleteAllProfiles(pageForProfileDeletion, existingProfiles)
   await context.close()
 })
 

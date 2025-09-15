@@ -36,10 +36,9 @@ const numberOfProfiles = 2
 // https://playwright.dev/docs/next/test-retries#reuse-single-page-between-tests
 let page: Page
 
-test.beforeAll(async ({ browser, chatmail }) => {
-  // Determine which type of profiles to use based on test context
+test.beforeAll(async ({ browser, isChatmail }) => {
   console.log(
-    `Running tests with ${chatmail ? 'chatmail' : 'plain email'} profiles`
+    `Running tests with ${isChatmail ? 'chatmail' : 'plain email'} profiles`
   )
 
   const contextForProfiles = await browser.newContext()
@@ -67,14 +66,14 @@ test.afterAll(async () => {
   await page?.close()
 })
 
-test('create profiles', async ({ browserName, chatmail }) => {
+test('create profiles', async ({ browserName, isChatmail }) => {
   test.setTimeout(120_000)
   await createProfiles(
     numberOfProfiles,
     existingProfiles,
     page,
     browserName,
-    chatmail
+    isChatmail
   )
   expect(existingProfiles.length).toBe(numberOfProfiles)
 })
