@@ -10,7 +10,7 @@ import {
   defaultChatViewState,
 } from './chat/chat_view_reducer'
 import { ChatStoreScheduler } from './chat/chat_scheduler'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useMemo, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import { debounce } from 'debounce'
 import { getLogger } from '@deltachat-desktop/shared/logger'
@@ -180,7 +180,7 @@ function getView<T>(items: T[], start: number, end: number): T[] {
   return items.slice(start, end + 1)
 }
 
-class MessageListStore extends Store<MessageListState> {
+export class MessageListStore extends Store<MessageListState> {
   scheduler = new ChatStoreScheduler()
 
   emitter = BackendRemote.getContextEvents(this.accountId)

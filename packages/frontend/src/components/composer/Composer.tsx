@@ -739,7 +739,6 @@ const Composer = forwardRef<
 
 export default Composer
 
-
 function useMessageEditing(
   accountId: number,
   chatId: T.BasicChat['id'],
