@@ -355,7 +355,6 @@ function AddMemberInnerDialogRow({
         isVerified: false,
         verifierId: null,
         wasSeenRecently: false,
-        isProfileVerified: false,
         isBot: false,
         e2eeAvail: false,
         isKeyContact: false,
