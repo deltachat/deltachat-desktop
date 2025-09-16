@@ -1,5 +1,4 @@
 import { app as rawApp, ipcMain } from 'electron'
-import { EventEmitter } from 'events'
 import { yerpc, BaseDeltaChat } from '@deltachat/jsonrpc-client'
 import { getRPCServerPath } from '@deltachat/stdio-rpc-server'
 
@@ -39,7 +38,7 @@ export class JRPCDeltaChat extends BaseDeltaChat<ElectronMainTransport> {}
  * - sends events to renderer
  * - handles events from renderer
  */
-export default class DeltaChatController extends EventEmitter {
+export default class DeltaChatController {
   /**
    * Created and owned by ipc on the backend
    */
@@ -54,9 +53,7 @@ export default class DeltaChatController extends EventEmitter {
   /** for runtime info */
   rpcServerPath?: string
 
-  constructor(public cwd: string) {
-    super()
-  }
+  constructor(public cwd: string) {}
 
   _jsonrpcRemote: JRPCDeltaChat | null = null
   get jsonrpcRemote(): Readonly<JRPCDeltaChat> {
