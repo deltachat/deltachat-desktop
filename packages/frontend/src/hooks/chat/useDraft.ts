@@ -71,7 +71,7 @@ export function useDraft(
   ] = useState<DraftObject>(emptyDraft(chatId))
 
   const {
-    state: { messageCache },
+    state: { messageCache, messageListItems },
   } = useMessageList(accountId, chatId || 0)
 
   /**
@@ -260,12 +260,14 @@ export function useDraft(
     if (chatId == undefined || !canSend) {
       return
     }
-    const quoteMessage = (messageId: number) => {
-      draftRef.current.quote = {
-        kind: 'WithMessage',
-        messageId,
-      } as Type.MessageQuote
-      saveDraft()
+    const quoteMessage = (messageId: number, jumpToOnly = false) => {
+      if (!jumpToOnly) {
+        draftRef.current.quote = {
+          kind: 'WithMessage',
+          messageId,
+        } as Type.MessageQuote
+        saveDraft()
+      }
 
       // TODO perf: jumpToMessage is not instant, but it should be
       // since the message is (almost?) always already rendered.
@@ -302,6 +304,23 @@ export function useDraft(
       return
     }
     const currQuoteMessageIdInd = messageIds.lastIndexOf(currQuote.messageId)
+    if (currQuoteMessageIdInd === -1) {
+      const fullMsgIdList = messageListItems
+        .filter(m => m.kind === 'message')
+        .map(m => m.msg_id)
+      // quoted message not found in cache
+      const fullIndex = fullMsgIdList.findIndex(m => m === currQuote.messageId)
+      if (fullIndex !== -1) {
+        // message is in the full list, just not in the cache (yet)
+        // -> jump to it, it will be loaded then
+        quoteMessage(currQuote.messageId, true)
+        return
+      } else {
+        // message not found at all, remove quote
+        removeQuote()
+        return
+      }
+    }
     if (
       currQuoteMessageIdInd === messageIds.length - 1 && // Last message
       upOrDown === KeybindAction.Composer_SelectReplyToDown

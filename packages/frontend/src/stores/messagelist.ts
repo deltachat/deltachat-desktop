@@ -10,7 +10,7 @@ import {
   defaultChatViewState,
 } from './chat/chat_view_reducer'
 import { ChatStoreScheduler } from './chat/chat_scheduler'
-import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import { debounce } from 'debounce'
 import { getLogger } from '@deltachat-desktop/shared/logger'
@@ -20,7 +20,8 @@ const log = getLogger('messagelist')
 
 const PAGE_SIZE = 11
 
-// Singleton store cache
+// The store is used in different places so we export
+// it as Singleton to make sure all subscribers use the same store instance
 const storeCache = new Map<string, MessageListStore>()
 
 function getStoreKey(accountId: number, chatId: number): string {
