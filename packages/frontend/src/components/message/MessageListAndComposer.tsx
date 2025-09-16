@@ -16,6 +16,7 @@ import { ReactionsBarProvider } from '../ReactionsBar'
 import useDialog from '../../hooks/dialog/useDialog'
 import useMessage from '../../hooks/chat/useMessage'
 import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
+import { useMessageList } from '../../stores/messagelist'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
@@ -101,6 +102,14 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
 
   const regularMessageInputRef = useRef<ComposerMessageInput>(null)
   const editMessageInputRef = useRef<ComposerMessageInput>(null)
+
+  const {
+    store: messageListStore,
+    state: messageListState,
+    fetchMoreBottom,
+    fetchMoreTop,
+  } = useMessageList(accountId, chat.id)
+
   const {
     draftState,
     updateDraftText,
@@ -112,6 +121,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     clearDraftStateAndUpdateTextareaValue,
     setDraftStateAndUpdateTextareaValue,
   } = useDraft(
+    messageListState,
     accountId,
     chat.id,
     chat.isContactRequest,
@@ -295,6 +305,10 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
               accountId={accountId}
               chat={chat}
               refComposer={refComposer}
+              messageListStore={messageListStore}
+              messageListState={messageListState}
+              fetchMoreBottom={fetchMoreBottom}
+              fetchMoreTop={fetchMoreTop}
             />
           </ReactionsBarProvider>
         </RecoverableCrashScreen>

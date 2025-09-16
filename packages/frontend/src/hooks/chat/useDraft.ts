@@ -9,6 +9,7 @@ import { MessageTypeAttachmentSubset } from '../../components/attachment/Attachm
 import { KeybindAction } from '../../keybindings'
 import useMessage from './useMessage'
 import ComposerMessageInput from '../../components/composer/ComposerMessageInput'
+import { type MessageListStore } from '../../stores/messagelist'
 
 const log = getLogger('renderer/composer')
 
@@ -34,11 +35,12 @@ function emptyDraft(chatId: number | null): DraftObject {
 }
 
 export function useDraft(
+  messageListState: MessageListStore['state'],
   accountId: number,
   chatId: number | null,
   isContactRequest: boolean,
   canSend: boolean, // no draft needed in chats we can't send messages
-  inputRef: React.MutableRefObject<ComposerMessageInput | null>
+  inputRef: React.RefObject<ComposerMessageInput | null>
 ): {
   draftState: DraftObject
   onSelectReplyToShortcut: (
@@ -68,6 +70,7 @@ export function useDraft(
      */
     _setDraftStateButKeepTextareaValue,
   ] = useState<DraftObject>(emptyDraft(chatId))
+
   /**
    * `draftRef.current` gets set to `draftState` on every render.
    * That is, when you mutate the value of this ref,
@@ -246,6 +249,11 @@ export function useDraft(
   )
 
   const { jumpToMessage } = useMessage()
+
+  /**
+   * Support the Ctrl/Cmd+Up/Down shortcuts to select a message
+   * to reply to and set the quote in the draft accordingly
+   */
   const onSelectReplyToShortcut = async (
     upOrDown:
       | KeybindAction.Composer_SelectReplyToUp
@@ -274,18 +282,19 @@ export function useDraft(
         scrollIntoViewArg: { block: 'nearest' },
       })
     }
-    // TODO perf: I imagine this is pretty slow, given IPC and some chats
-    // being quite large. Perhaps we could hook into the
-    // MessageList component, or share the list of messages with it.
-    // If not, at least cache this list. Use the cached version first,
-    // then, when the Promise resolves, execute this code again in case
-    // the message list got updated so that it feels more reponsive.
-    const messageIds = await BackendRemote.rpc.getMessageIds(
-      accountId,
-      chatId,
-      false,
-      false
-    )
+
+    /**
+     * filter all messageIds that can be replied to
+     *
+     * see https://github.com/deltachat/deltachat-desktop/blob/77a1f88a351df49e5df38a14c3a1704a76ecdcb3/packages/frontend/src/components/message/Message.tsx#L274-L278
+     */
+    const messageIds = Object.keys(messageListState.messageCache)
+      .map(Number)
+      .filter(
+        id =>
+          messageListState.messageCache[id]?.kind === 'message' &&
+          messageListState.messageCache[id]?.isInfo === false
+      )
     const currQuote = draftRef.current.quote
     if (!currQuote) {
       if (upOrDown === KeybindAction.Composer_SelectReplyToUp) {
@@ -298,6 +307,31 @@ export function useDraft(
       return
     }
     const currQuoteMessageIdInd = messageIds.lastIndexOf(currQuote.messageId)
+    if (currQuoteMessageIdInd === -1) {
+      // maybe the message is just not in the cache (yet)
+      // but still in the full list of messages
+      // -> check if it's there
+      const isQuoteInMessagelist = messageListState.messageListItems.some(
+        m => m.kind === 'message' && m.msg_id === currQuote.messageId
+      )
+      if (isQuoteInMessagelist) {
+        // message is in the full list, just not in the cache (yet)
+        // -> jump to it, it will be loaded then (and the surrounding messages)
+        jumpToMessage({
+          accountId,
+          msgId: currQuote.messageId,
+          msgChatId: chatId,
+          highlight: true,
+          focus: false,
+          scrollIntoViewArg: { block: 'nearest' },
+        })
+        return
+      } else {
+        // message not found at all, remove quote
+        removeQuote()
+        return
+      }
+    }
     if (
       currQuoteMessageIdInd === messageIds.length - 1 && // Last message
       upOrDown === KeybindAction.Composer_SelectReplyToDown
