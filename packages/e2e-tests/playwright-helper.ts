@@ -260,9 +260,6 @@ export async function deleteAllProfiles(
   page: Page,
   existingProfiles: User[]
 ): Promise<void> {
-  if (existingProfiles.length < 1) {
-    console.log('No existing profiles to delete!')
-  }
   for (let i = 0; i < existingProfiles.length; i++) {
     const profileToDelete = existingProfiles[i]
     const deleted = await deleteProfile(page, profileToDelete.id)

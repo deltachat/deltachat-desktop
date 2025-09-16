@@ -39,6 +39,7 @@ export function PseudoListItem(
         tabIndex={rovingTabindex.tabIndex}
         onFocus={rovingTabindex.setAsActiveElement}
         onKeyDown={rovingTabindex.onKeydown}
+        data-testid={id}
       >
         <PseudoContact cutoff={cutoff} text={text} subText={subText}>
           {props.children}

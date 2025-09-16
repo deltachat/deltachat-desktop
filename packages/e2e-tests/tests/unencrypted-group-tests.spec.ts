@@ -1,4 +1,4 @@
-import { expect, type Page } from '@playwright/test'
+import { expect, Page } from '@playwright/test'
 
 import {
   createProfiles,
@@ -7,23 +7,33 @@ import {
   deleteAllProfiles,
   reloadPage,
   test,
+  switchToProfile,
+  clickThroughTestIds,
+  getUser,
 } from '../playwright-helper'
 
 test.describe.configure({ mode: 'serial' })
 
 let existingProfiles: User[] = []
 
-const numberOfProfiles = 1
+const numberOfProfiles = 4
+
+const encryptedGroupSubject = 'Encrypted group chat subject'
+const unencryptedGroupSubject1 = '1st unencrypted group chat subject'
+const unencryptedGroupSubject2 = '2nd unencrypted group chat subject'
 
 // https://playwright.dev/docs/next/test-retries#reuse-single-page-between-tests
 let page: Page
 
 test.beforeAll(async ({ browser, isChatmail }) => {
+  if (isChatmail) {
+    test.skip(
+      true,
+      'Non encrypted groups are not possible on chatmail accounts'
+    )
+  }
   const contextForProfileCreation = await browser.newContext()
   const pageForProfileCreation = await contextForProfileCreation.newPage()
-  if (!isChatmail) {
-    test.skip(true, 'Only suitable for chatmail profiles')
-  }
   await reloadPage(pageForProfileCreation)
 
   existingProfiles =
@@ -33,7 +43,8 @@ test.beforeAll(async ({ browser, isChatmail }) => {
     numberOfProfiles,
     existingProfiles,
     pageForProfileCreation,
-    browser.browserType().name()
+    browser.browserType().name(),
+    isChatmail
   )
 
   await contextForProfileCreation.close()
@@ -59,75 +70,160 @@ test.afterAll(async ({ browser }) => {
   await context.close()
 })
 
-const emailSubject = 'some subjecttt'
-
-test('check "New E-Mail" option presence', async () => {
+/**
+ * create an unencrypted group with plain email contacts
+ */
+test('check "New E-Mail" option is shown and a chat can be created', async () => {
+  const userA = existingProfiles[0]
+  const userB = existingProfiles[1]
+  const userC = existingProfiles[2]
+  const emailUserB = userB.address
+  const emailUserC = userC.address
+  // prepare last open chat for receiving user
+  await switchToProfile(page, userA.id)
   await page.locator('#new-chat-button').click()
 
-  await expect(page.getByRole('button', { name: 'New Group' })).toBeVisible()
-
-  // Since we're on a Chatmail server, this button is not supposed to be shown.
+  // Since we're on a non-chatmail server, this button is supposed to be shown.
   const newEmailButton = page.getByRole('button', { name: 'New E-Mail' })
-  await expect(newEmailButton).not.toBeVisible()
-  // Same button, but double-check, by ID.
-  await expect(page.locator('#newemail')).not.toBeVisible({ timeout: 1 })
+  await expect(newEmailButton).toBeVisible()
 
-  await page.getByRole('dialog').press('Escape')
-})
+  await newEmailButton.click()
 
-test('create unencrypted group (email)', async () => {
-  // But we can still test unencrypted group creation itself,
-  // despite the fact that sending messages won't work.
-  await page.locator('#new-chat-button').click()
-  await page.evaluate(() => {
-    ;(window as any).__testForceShowNewEmailButton(true)
-  })
+  await page.getByTestId('group-name-input').fill(unencryptedGroupSubject1)
+  await page.locator('#addmember').click()
 
-  await page.getByRole('button', { name: 'New E-Mail' }).click()
-  const createChatDialog = page.getByTestId('create-chat-dialog')
-  await expect(
-    createChatDialog.getByRole('heading', { name: 'New E-Mail' })
-  ).toBeVisible()
-  await expect(
-    createChatDialog.getByRole('button', { name: 'Change Group Image' })
-  ).not.toBeVisible({ timeout: 1 })
-  await expect(
-    createChatDialog.getByTestId('group-image-edit-button')
-  ).not.toBeVisible({
-    timeout: 1,
-  })
+  await page.getByTestId('add-member-search').fill(emailUserB)
 
-  await page.getByRole('textbox', { name: 'Subject' }).fill(emailSubject)
+  const contactRowA = page
+    .locator('.styles_module_addMemberContactList li button')
+    .filter({ hasText: emailUserB })
+    .first()
+  await contactRowA.click()
 
-  await page.getByRole('button', { name: 'Add Recipients' }).click()
-  const addMembersDialog = page.getByTestId('add-member-dialog')
-  // TODO check that non-address-contacts are not visible,
-  // and only address-contacts are.
-  for (const addr of ['example@example.com', 'example2@example.com']) {
-    await addMembersDialog.getByTestId('add-member-search').fill(addr)
-    const item = addMembersDialog.locator('li', { hasText: addr })
-    await expect(item).toHaveCount(1)
-    await item.getByRole('checkbox').click()
-    // The text field will get automatically cleared:
-    // let's wait for it before we try to fill it again.
-    await expect(addMembersDialog.getByTestId('add-member-search')).toBeEmpty()
-  }
+  await page.getByTestId('add-member-search').fill(emailUserC)
+
+  const contactRowB = page
+    .locator('.styles_module_addMemberContactList li button')
+    .filter({ hasText: emailUserC })
+    .first()
+  await contactRowB.click()
 
   await page.getByTestId('ok').click()
-  await page.getByRole('button', { name: 'Continue' }).click()
 
-  await expect(page.locator('.navbar-heading')).toContainText(emailSubject)
+  await page.getByTestId('group-create-button').click()
+
+  const chatListItem = page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: unencryptedGroupSubject1 })
+  await expect(chatListItem).toBeVisible()
+  await chatListItem.click()
+  await expect(page.locator('.navbar-heading')).toContainText(
+    unencryptedGroupSubject1
+  )
 })
 
-test('group dialog', async () => {
+test('start encrypted chat with user D', async ({ browserName }) => {
+  if (browserName.toLowerCase().indexOf('chrom') > -1) {
+    await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
+  }
+  const userA = getUser(0, existingProfiles)
+  const userD = getUser(3, existingProfiles)
+  await switchToProfile(page, userA.id)
+  // copy invite link from user A
+  await clickThroughTestIds(page, [
+    'qr-scan-button',
+    'copy-qr-code',
+    'confirm-qr-code',
+  ])
+
+  await switchToProfile(page, userD.id)
+  // paste invite link in account of userD
+  await clickThroughTestIds(page, ['qr-scan-button', 'show-qr-scan', 'paste'])
+  const confirmDialog = page.getByTestId('confirm-start-chat')
+  await expect(confirmDialog).toContainText(userA.name)
+
+  await page.getByTestId('confirm-start-chat').getByTestId('confirm').click()
+  await expect(
+    page.locator('.chat-list .chat-list-item').filter({ hasText: userA.name })
+  ).toHaveCount(1)
+  /* ignore-console-log */
+  console.log(`Chat with ${userA.name} created!`)
+})
+
+test('check appropriate members are shown for new encrypted group', async () => {
+  const userA = existingProfiles[0]
+  const userB = existingProfiles[1]
+  // verified contact added via invite code
+  const userD = existingProfiles[3]
+
+  await switchToProfile(page, userA.id)
+  await clickThroughTestIds(page, ['new-chat-button', 'newgroup', 'addmember'])
+  const addMemberDialog = page.getByTestId('add-member-dialog')
+  const contactList = page.getByTestId('add-member-dialog').locator('li button')
+  // only self and the verified user should be visible
+  await expect(contactList).toHaveCount(2)
+  // TODO: this should show the contact by name but it fails with a
+  // screenshot showing the mail address instead of the name ??
+  await page
+    .locator('.contact-list-item')
+    .filter({ hasText: userD.address })
+    .click()
+  const contactShouldNotBeListed = page
+    .locator('.contact-list-item')
+    .filter({ hasText: userB.name })
+  await expect(contactShouldNotBeListed).not.toBeVisible()
+  await addMemberDialog.getByTestId('ok').click()
+  await page.getByTestId('group-name-input').fill(encryptedGroupSubject)
+  await page.getByTestId('group-create-button').click()
+  const chatListItem = page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: encryptedGroupSubject })
+  await expect(chatListItem).toBeVisible()
+})
+
+test('check appropriate members are shown for new unencrypted group', async () => {
+  const userA = existingProfiles[0]
+  const userB = existingProfiles[1]
+  // verified contact added via invite code
+  const userD = existingProfiles[3]
+
+  await switchToProfile(page, userA.id)
+  await clickThroughTestIds(page, ['new-chat-button', 'newemail', 'addmember'])
+  const addMemberDialog = page.getByTestId('add-member-dialog')
+  const contactList = page.getByTestId('add-member-dialog').locator('li button')
+  // only self and the non verified users should be visible
+  await expect(contactList).toHaveCount(3)
+  await page
+    .locator('.contact-list-item')
+    .filter({ hasText: userB.address })
+    .click()
+  const contactShouldNotBeListedByName = page
+    .locator('.contact-list-item')
+    .filter({ hasText: userD.name })
+  await expect(contactShouldNotBeListedByName).not.toBeVisible()
+  const contactShouldNotBeListedByAddress = page
+    .locator('.contact-list-item')
+    .filter({ hasText: userD.address })
+  await expect(contactShouldNotBeListedByAddress).not.toBeVisible()
+  await addMemberDialog.getByTestId('ok').click()
+  await page.getByTestId('group-name-input').fill(unencryptedGroupSubject2)
+  await page.getByTestId('group-create-button').click()
+  const chatListItem = page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: unencryptedGroupSubject2 })
+  await expect(chatListItem).toBeVisible()
+})
+
+test('check group dialog for unencrypted group has appropriate entries', async () => {
   await page
     .locator('.chat-list .chat-list-item')
-    .filter({ hasText: emailSubject })
+    .filter({ hasText: unencryptedGroupSubject1 })
+    .first()
     .click()
   await page.getByTestId('chat-info-button').click()
 
   const dialog = page.getByTestId('view-group-dialog')
-  await expect(dialog).toContainText(emailSubject)
+  await expect(dialog).toContainText(unencryptedGroupSubject1)
   await expect(dialog).toContainText('3 members')
   // Unavailable for unencrypted groups.
   await expect(
@@ -148,7 +244,8 @@ test('group dialog', async () => {
 test('chat list item context menu', async () => {
   const chatListItem = page
     .locator('.chat-list .chat-list-item')
-    .filter({ hasText: emailSubject })
+    .filter({ hasText: unencryptedGroupSubject1 })
+    .first()
   await chatListItem.click({
     button: 'right',
   })
@@ -163,27 +260,4 @@ test('chat list item context menu', async () => {
 
   await page.getByRole('menuitem').first().press('Escape')
   await expect(page.getByRole('menuitem')).not.toBeVisible()
-})
-
-test('send message to unencrypted group', async () => {
-  await page
-    .locator('.chat-list .chat-list-item')
-    .filter({ hasText: emailSubject })
-    .click()
-
-  const messageText = 'test unencrypted email messageee'
-  await page.locator('#composer-textarea').fill(messageText)
-  await page.locator('#composer-textarea').press('ControlOrMeta+Enter')
-  const message = page.locator(`.message.outgoing`).last()
-  await expect(message).toContainText(messageText)
-  await expect(message.locator('.email-icon')).toBeVisible()
-  // Again, on Chatmail sending an unencrypted message should not be possible.
-  // This is basically our (unreliable) way of checking
-  // that the created group really is unencrypted.
-  //
-  // When this is no longer the case, we might want to reuse the code
-  // from regular group tests.
-  await expect(message.getByText('Delivery status')).toHaveText(
-    'Delivery status: Error'
-  )
 })
