@@ -9,6 +9,7 @@ import { MessageTypeAttachmentSubset } from '../../components/attachment/Attachm
 import { KeybindAction } from '../../keybindings'
 import useMessage from './useMessage'
 import ComposerMessageInput from '../../components/composer/ComposerMessageInput'
+import { useMessageList } from '../../stores/messagelist'
 
 const log = getLogger('renderer/composer')
 
@@ -38,7 +39,7 @@ export function useDraft(
   chatId: number | null,
   isContactRequest: boolean,
   canSend: boolean, // no draft needed in chats we can't send messages
-  inputRef: React.MutableRefObject<ComposerMessageInput | null>
+  inputRef: React.RefObject<ComposerMessageInput | null>
 ): {
   draftState: DraftObject
   onSelectReplyToShortcut: (
@@ -68,6 +69,11 @@ export function useDraft(
      */
     _setDraftStateButKeepTextareaValue,
   ] = useState<DraftObject>(emptyDraft(chatId))
+
+  const {
+    state: { messageCache },
+  } = useMessageList(accountId, chatId || 0)
+
   /**
    * `draftRef.current` gets set to `draftState` on every render.
    * That is, when you mutate the value of this ref,
@@ -274,18 +280,16 @@ export function useDraft(
         scrollIntoViewArg: { block: 'nearest' },
       })
     }
-    // TODO perf: I imagine this is pretty slow, given IPC and some chats
-    // being quite large. Perhaps we could hook into the
-    // MessageList component, or share the list of messages with it.
-    // If not, at least cache this list. Use the cached version first,
-    // then, when the Promise resolves, execute this code again in case
-    // the message list got updated so that it feels more reponsive.
-    const messageIds = await BackendRemote.rpc.getMessageIds(
-      accountId,
-      chatId,
-      false,
-      false
-    )
+
+    const messageIds = Object.keys(messageCache)
+      .map(Number)
+      .filter(
+        id =>
+          messageCache[id]?.kind === 'message' &&
+          messageCache[id]?.chatId === chatId &&
+          messageCache[id]?.isInfo === false
+      )
+    console.log('messageIds', messageIds)
     const currQuote = draftRef.current.quote
     if (!currQuote) {
       if (upOrDown === KeybindAction.Composer_SelectReplyToUp) {
