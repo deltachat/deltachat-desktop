@@ -13,7 +13,6 @@ export interface SettingsStoreState {
     [P in (typeof settingsKeys)[number]]: {
       sentbox_watch: string
       mvbox_move: string
-      e2ee_enabled: string
       addr: string
       displayname: string
       selfstatus: string
@@ -37,7 +36,6 @@ export interface SettingsStoreState {
 const settingsKeys = [
   'sentbox_watch',
   'mvbox_move',
-  'e2ee_enabled',
   'addr',
   'displayname',
   'selfstatus',
