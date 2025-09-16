@@ -1,4 +1,3 @@
-import { EventEmitter } from 'events'
 import { getLogger } from '../../shared/logger.js'
 import { DesktopSettingsType } from '../../shared/shared-types.js'
 import { getDefaultState } from '../../shared/state.js'
@@ -8,11 +7,7 @@ const log = getLogger('main/state')
 
 const SAVE_DEBOUNCE_INTERVAL = 1000
 
-class PersistentState extends EventEmitter {
-  constructor() {
-    super()
-  }
-
+class PersistentState {
   private inner_state: null | DesktopSettingsType = null
 
   get state(): Readonly<DesktopSettingsType> {

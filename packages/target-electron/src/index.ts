@@ -8,8 +8,6 @@ import { isWindowsStorePackage } from './isAppx.js'
 import { getHelpMenu } from './help_menu.js'
 import { initialisePowerMonitor } from './resume_from_sleep.js'
 
-import type { EventEmitter } from 'events'
-
 // Hardening: prohibit all DNS queries, except for  OpenStreetMap
 // (used by /static/xdcs/maps.xdc)
 // The `~NOTFOUND` string is here:
@@ -205,7 +203,7 @@ async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
   initialisePowerMonitor()
 }
 
-;(app as EventEmitter).once('ipcReady', () => {
+app.once('ipcReady' as any, () => {
   if (!mainWindow.window) {
     throw new Error('window does not exist, this should never happen')
   }

@@ -1,5 +1,4 @@
 import { app as rawApp, ipcMain } from 'electron'
-import type { EventEmitter } from 'events'
 import { readFile } from 'fs/promises'
 import { basename } from 'path'
 import { getLogger } from '../../shared/logger.js'
@@ -54,7 +53,7 @@ export const open_url = function (url: string) {
   if (app.ipcReady) return sendOpenUrlEvent()
 
   log.debug('open-url: Waiting for ipc to be ready before opening url.')
-  ;(app as EventEmitter).once('ipcReady', () => {
+  app.once('ipcReady' as any, () => {
     log.debug('open-url: IPC ready.')
     sendOpenUrlEvent()
   })
@@ -83,7 +82,7 @@ async function handleWebxdcFileOpen(path: string) {
   // todo make this code nicer and maybe show even a custom dialog that shows what is being sent?
   const buffer = await readFile(path)
   if (!app.ipcReady) {
-    await new Promise(res => (app as any).once('ipcReady', res))
+    await new Promise(res => app.once('ipcReady' as any, res))
   }
   if (!frontend_ready) {
     await new Promise(res => ipcMain.once('frontendReady', res))
