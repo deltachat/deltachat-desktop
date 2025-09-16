@@ -7,6 +7,7 @@ packages/target-electron/migration-tests/compiled
 packages/shared/ts-compiled-for-tests
 packages/e2e-tests/test-results
 packages/e2e-tests/playwright-report
+packages/e2e-tests/data
 
 packages/target-browser/dist
 packages/target-browser/data
