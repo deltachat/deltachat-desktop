@@ -10,7 +10,7 @@ import {
   defaultChatViewState,
 } from './chat/chat_view_reducer'
 import { ChatStoreScheduler } from './chat/chat_scheduler'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import { debounce } from 'debounce'
 import { getLogger } from '@deltachat-desktop/shared/logger'
@@ -19,6 +19,29 @@ import { useSettingsStore } from './settings'
 const log = getLogger('messagelist')
 
 const PAGE_SIZE = 11
+
+// Singleton store cache
+const storeCache = new Map<string, MessageListStore>()
+
+function getStoreKey(accountId: number, chatId: number): string {
+  return `${accountId}-${chatId}`
+}
+
+function getOrCreateMessageListStore(
+  accountId: number,
+  chatId: number
+): MessageListStore {
+  const key = getStoreKey(accountId, chatId)
+  let store = storeCache.get(key)
+
+  if (!store) {
+    store = new MessageListStore(accountId, chatId)
+    store.effect.loadChat()
+    storeCache.set(key, store)
+  }
+
+  return store
+}
 
 interface MessageListState {
   // chat: Type.FullChat | null
@@ -67,9 +90,7 @@ export function useMessageList(
   fetchMoreTop: () => void
 } {
   const store = useMemo(() => {
-    const store = new MessageListStore(accountId, chatId)
-    store.effect.loadChat()
-    return store
+    return getOrCreateMessageListStore(accountId, chatId)
   }, [accountId, chatId])
 
   // PERF: It's a shame that we have to re-render on settings changes
