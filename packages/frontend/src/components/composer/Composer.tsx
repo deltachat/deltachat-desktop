@@ -974,6 +974,70 @@ export function useDraft(
   )
 
   const { jumpToMessage } = useMessage()
+
+  // Cache for message IDs to avoid expensive RPC calls
+  const quotableMessageIdsCache = useRef<{
+    chatId: number | null
+    messageIds: number[] | null
+  }>({ chatId: null, messageIds: null })
+
+  const getCachedQuotableMessageIds = useCallback(async (): Promise<
+    number[]
+  > => {
+    if (chatId === null) return []
+
+    // Check if we have cached data for the current chat
+    if (
+      quotableMessageIdsCache.current.chatId === chatId &&
+      quotableMessageIdsCache.current.messageIds
+    ) {
+      return quotableMessageIdsCache.current.messageIds
+    }
+
+    // Fetch fresh data and cache it
+    const messageIds = await BackendRemote.rpc.getMessageIds(
+      accountId,
+      chatId,
+      false,
+      false
+    )
+
+    const infoMessages = await BackendRemote.rpc.getMessageListItems(
+      accountId,
+      chatId,
+      true, // only info messages
+      false //no daymarkers
+    )
+    const infoMessageIds = new Set(
+      infoMessages
+        .filter(msg => msg.kind === 'message' && 'msg_id' in msg)
+        .map(msg => (msg as { msg_id: number }).msg_id)
+    )
+
+    // Filter out info messages
+    const filteredMessageIds = messageIds.filter(id => !infoMessageIds.has(id))
+
+    quotableMessageIdsCache.current = {
+      chatId,
+      messageIds: filteredMessageIds,
+    }
+
+    return filteredMessageIds
+  }, [accountId, chatId])
+
+  // Invalidate message IDs cache when the chat list changes
+  useEffect(() => {
+    if (chatId === null) return
+    const cleanup = onDCEvent(accountId, 'IncomingMsg', args => {
+      if (chatId !== args.chatId) return
+      // Only invalidate cache for the related chat
+      if (quotableMessageIdsCache.current.chatId === args.chatId) {
+        quotableMessageIdsCache.current = { chatId: null, messageIds: null }
+      }
+    })
+    return cleanup
+  }, [accountId, chatId])
+
   const onSelectReplyToShortcut = async (
     upOrDown:
       | KeybindAction.Composer_SelectReplyToUp
@@ -1002,18 +1066,10 @@ export function useDraft(
         scrollIntoViewArg: { block: 'nearest' },
       })
     }
-    // TODO perf: I imagine this is pretty slow, given IPC and some chats
-    // being quite large. Perhaps we could hook into the
-    // MessageList component, or share the list of messages with it.
-    // If not, at least cache this list. Use the cached version first,
-    // then, when the Promise resolves, execute this code again in case
-    // the message list got updated so that it feels more reponsive.
-    const messageIds = await BackendRemote.rpc.getMessageIds(
-      accountId,
-      chatId,
-      false,
-      false
-    )
+    const messageIds = await getCachedQuotableMessageIds()
+    if (messageIds.length === 0) {
+      return
+    }
     const currQuote = draftRef.current.quote
     if (!currQuote) {
       if (upOrDown === KeybindAction.Composer_SelectReplyToUp) {
