@@ -6,7 +6,9 @@
 - support multiple selection (multiselect) in the list of chats, activated with Ctrl + Click, Shift + Click #5297
 
 ### Changed
-- update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.12.0`
+- update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.15.0`
+  - withdraw all QR codes when one is withdrawn
+  - do not create a group if the sender includes self in the To field
 
 ### Fixed
 - fix app picker sometimes incorrectly showing "Offline"
