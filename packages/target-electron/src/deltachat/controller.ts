@@ -31,6 +31,17 @@ class ElectronMainTransport extends yerpc.BaseTransport {
 }
 
 export class JRPCDeltaChat extends BaseDeltaChat<ElectronMainTransport> {}
+/**
+ * A DeltaChat JSON-RPC client that does not emit events
+ * (but still can be used to send regular requests).
+ *
+ * It does not emit events because there can be only one consumer of
+ * `get_next_event`, and that is the renderer process's JSON-RPC client.
+ */
+type JRPCDeltaChatWithoutEvents = Omit<
+  JRPCDeltaChat,
+  'getContextEvents' | 'on' | 'once' | 'off' | 'eventLoop' | 'emit'
+>
 
 /**
  * DeltaChatController
@@ -58,8 +69,8 @@ export default class DeltaChatController extends EventEmitter {
     super()
   }
 
-  _jsonrpcRemote: JRPCDeltaChat | null = null
-  get jsonrpcRemote(): Readonly<JRPCDeltaChat> {
+  _jsonrpcRemote: JRPCDeltaChatWithoutEvents | null = null
+  get jsonrpcRemote(): Readonly<JRPCDeltaChatWithoutEvents> {
     if (!this._jsonrpcRemote) {
       throw new Error('_jsonrpcRemote is not defined (yet?)')
     }
@@ -93,6 +104,12 @@ export default class DeltaChatController extends EventEmitter {
     this._inner_account_manager = new StdioServer(
       response => {
         try {
+          // The `main-` in the ID prefix signifies that this is a response
+          // to a request that originated from this (main) process's
+          // JSON-RPC client, and not the JSON-RPC client
+          // of the renderer process.
+          // Thus we don't need to forward this response
+          // to the renderer process.
           if (response.indexOf('"id":"main-') !== -1) {
             const message = JSON.parse(response)
             if (message.id.startsWith('main-')) {
@@ -155,7 +172,12 @@ export default class DeltaChatController extends EventEmitter {
       this.account_manager.send(message)
     })
 
-    this._jsonrpcRemote = new JRPCDeltaChat(mainProcessTransport, false)
+    this._jsonrpcRemote = new JRPCDeltaChat(
+      mainProcessTransport,
+      // Do NOT start calling `rpc.getNextEvent`.
+      // See the comments on `JRPCDeltaChatWithoutEvents`.
+      false
+    )
 
     if (DesktopSettings.state.syncAllAccounts) {
       log.info('Ready, starting accounts io...')
