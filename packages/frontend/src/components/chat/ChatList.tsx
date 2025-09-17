@@ -44,8 +44,8 @@ import useTranslationFunction, {
 
 import type {
   ChatListItemData,
-  ContactChatListItemData,
-  MessageChatListItemData,
+  ChatListContactItemData,
+  ChatListMessageItemData,
 } from './ChatListItemRow'
 import { isInviteLink } from '../../../../shared/util'
 import { RovingTabindexProvider } from '../../contexts/RovingTabindex'
@@ -62,11 +62,30 @@ const enum LoadStatus {
   LOADED = 2,
 }
 
+/**
+ * This component holds either a list of chats OR the result
+ * of a search query including chats, contacts and messages.
+ *
+ * <ChatList>
+ *   <ChatListPart> // virtual list (one for each type of search result)
+ *     <ChatListItemRow>
+ *       <ChatListItem(Default (Chat) | Message | Contact) />
+ *     </ChatListItemRow>
+ *   </ChatListPart>
+ * </ChatList>
+ */
+
+/**
+ * wrapper for a virtual list that handles scrolling and loading items
+ *
+ * ChatList has two modes: regular and search mode.
+ * In search mode there are 3 ChatListParts: for chats, contacts, and messages
+ */
 export function ChatListPart<
   T extends
     | ChatListItemData
-    | ContactChatListItemData
-    | MessageChatListItemData,
+    | ChatListContactItemData
+    | ChatListMessageItemData,
 >({
   isRowLoaded,
   loadMoreRows,
@@ -380,14 +399,14 @@ export default function ChatList(props: {
     activeContextMenuChatIds,
   ])
 
-  const contactlistData: ContactChatListItemData = useMemo(() => {
+  const contactlistData: ChatListContactItemData = useMemo(() => {
     return {
       contactCache,
       contactIds,
     }
   }, [contactCache, contactIds])
 
-  const messagelistData: MessageChatListItemData = useMemo(() => {
+  const messagelistData: ChatListMessageItemData = useMemo(() => {
     return {
       messageResultIds,
       messageCache,

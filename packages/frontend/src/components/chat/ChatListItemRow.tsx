@@ -17,6 +17,17 @@ import { getLogger } from '@deltachat-desktop/shared/logger'
 
 const log = getLogger('ChatListItemRow')
 
+/**
+ * This file contains the row wrapper components for the 3 possible
+ * types of search result items in the chat list:
+ * - ChatListItemRowChat
+ * - ChatListItemRowContact
+ * - ChatListItemRowMessage
+ */
+
+/**
+ * Data for a chat item
+ */
 export type ChatListItemData = {
   activeChatId: number | null
   /**
@@ -47,7 +58,10 @@ export type ChatListItemData = {
   >['activeContextMenuChatIds']
 }
 
-export type MessageChatListItemData = {
+/**
+ * Data for a message item
+ */
+export type ChatListMessageItemData = {
   messageResultIds: number[]
   messageCache: {
     [id: number]: T.MessageSearchResult | undefined
@@ -59,7 +73,10 @@ export type MessageChatListItemData = {
   isSingleChatSearch: boolean
 }
 
-export type ContactChatListItemData = {
+/**
+ * Data for a contact item
+ */
+export type ChatListContactItemData = {
   contactCache: {
     [id: number]: T.Contact | undefined
   }
@@ -251,7 +268,7 @@ export const ChatListItemRowChat = React.memo<{
 
 export const ChatListItemRowContact = React.memo<{
   index: number
-  data: ContactChatListItemData
+  data: ChatListContactItemData
   style: React.CSSProperties
 }>(({ index, data, style }) => {
   const { contactCache, contactIds } = data
@@ -286,7 +303,7 @@ export const ChatListItemRowContact = React.memo<{
 
 export const ChatListItemRowMessage = React.memo<{
   index: number
-  data: MessageChatListItemData
+  data: ChatListMessageItemData
   style: React.CSSProperties
 }>(({ index, data, style }) => {
   const { messageResultIds, messageCache, queryStr, isSingleChatSearch } = data

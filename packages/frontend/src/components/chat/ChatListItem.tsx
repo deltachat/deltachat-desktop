@@ -302,8 +302,11 @@ function ChatListItemError({
   )
 }
 
-function ChatListItemNormal({
-  chatListItem,
+/**
+ * component for items of type chat in the chat list
+ */
+function RegularChatListItem({
+  chat,
   onClick,
   onFocus,
   isSelected,
@@ -312,7 +315,7 @@ function ChatListItemNormal({
   isContextMenuActive,
   ...rest
 }: {
-  chatListItem: Type.ChatListItemFetchResult & {
+  chat: Type.ChatListItemFetchResult & {
     kind: 'ChatListItem'
   }
   onClick: (event: React.MouseEvent) => void
@@ -336,11 +339,11 @@ function ChatListItemNormal({
   } = useRovingTabindex(ref)
   // TODO `setAsActiveElement` if `isSelected` and `activeElement === null`
 
-  const chatTypeForTests = chatListItem.isSelfTalk
+  const chatTypeForTests = chat.isSelfTalk
     ? 'self-talk'
-    : chatListItem.isDeviceTalk
+    : chat.isDeviceTalk
       ? 'device-talk'
-      : chatListItem.id
+      : chat.id
 
   return (
     <button
@@ -358,21 +361,21 @@ function ChatListItemNormal({
       role={roleTab ? 'tab' : undefined}
       aria-selected={isSelected}
       className={classNames('chat-list-item', tabindexClassName, {
-        'has-unread': chatListItem.freshMessageCounter > 0,
-        'is-contact-request': chatListItem.isContactRequest,
-        pinned: chatListItem.isPinned,
-        muted: chatListItem.isMuted,
+        'has-unread': chat.freshMessageCounter > 0,
+        'is-contact-request': chat.isContactRequest,
+        pinned: chat.isPinned,
+        muted: chat.isMuted,
         selected: isSelected,
         'context-menu-active': isContextMenuActive,
       })}
-      data-testid={`chat${chatListItem.isGroup ? '-group' : ''}-${chatTypeForTests}`}
+      data-testid={`chat${chat.isGroup ? '-group' : ''}-${chatTypeForTests}`}
     >
       <Avatar
         {...{
-          displayName: chatListItem.name,
-          avatarPath: chatListItem.avatarPath || undefined,
-          color: chatListItem.color,
-          wasSeenRecently: chatListItem.wasSeenRecently,
+          displayName: chat.name,
+          avatarPath: chat.avatarPath || undefined,
+          color: chat.color,
+          wasSeenRecently: chat.wasSeenRecently,
           // Avatar is purely decorative here,
           // and is redundant accessibility-wise,
           // because we display the chat name below.
@@ -381,21 +384,21 @@ function ChatListItemNormal({
       />
       <div className='content'>
         <Header
-          lastUpdated={chatListItem.lastUpdated}
-          name={chatListItem.name}
-          isPinned={chatListItem.isPinned}
-          isMuted={chatListItem.isMuted}
+          lastUpdated={chat.lastUpdated}
+          name={chat.name}
+          isPinned={chat.isPinned}
+          isMuted={chat.isMuted}
         />
 
         <Message
-          summaryStatus={chatListItem.summaryStatus}
-          summaryText1={chatListItem.summaryText1}
-          summaryText2={chatListItem.summaryText2}
-          summaryPreviewImage={chatListItem.summaryPreviewImage}
-          freshMessageCounter={chatListItem.freshMessageCounter}
-          isArchived={chatListItem.isArchived}
-          isContactRequest={chatListItem.isContactRequest}
-          lastMessageId={chatListItem.lastMessageId}
+          summaryStatus={chat.summaryStatus}
+          summaryText1={chat.summaryText1}
+          summaryText2={chat.summaryText2}
+          summaryPreviewImage={chat.summaryPreviewImage}
+          freshMessageCounter={chat.freshMessageCounter}
+          isArchived={chat.isArchived}
+          isContactRequest={chat.isContactRequest}
+          lastMessageId={chat.lastMessageId}
         />
       </div>
     </button>
@@ -435,7 +438,7 @@ const ChatListItem = React.memo<ChatListItemProps>(props => {
     )
 
   if (chatListItem.kind == 'ChatListItem') {
-    return <ChatListItemNormal {...props} chatListItem={chatListItem} />
+    return <RegularChatListItem {...props} chat={chatListItem} />
   } else if (chatListItem.kind == 'Error') {
     return <ChatListItemError {...props} chatListItem={chatListItem} />
   } else if (chatListItem.kind == 'ArchiveLink') {
