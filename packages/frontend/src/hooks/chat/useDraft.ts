@@ -252,6 +252,11 @@ export function useDraft(
   )
 
   const { jumpToMessage } = useMessage()
+
+  /**
+   * Support the Ctrl/Cmd+Up/Down shortcuts to select a message
+   * to reply to and set the quote in the draft accordingly
+   */
   const onSelectReplyToShortcut = async (
     upOrDown:
       | KeybindAction.Composer_SelectReplyToUp
@@ -291,7 +296,6 @@ export function useDraft(
           messageCache[id]?.chatId === chatId &&
           messageCache[id]?.isInfo === false
       )
-    console.log('messageIds', messageIds)
     const currQuote = draftRef.current.quote
     if (!currQuote) {
       if (upOrDown === KeybindAction.Composer_SelectReplyToUp) {
@@ -312,7 +316,7 @@ export function useDraft(
       const fullIndex = fullMsgIdList.findIndex(m => m === currQuote.messageId)
       if (fullIndex !== -1) {
         // message is in the full list, just not in the cache (yet)
-        // -> jump to it, it will be loaded then
+        // -> jump to it, it will be loaded then (and the surrounding messages)
         quoteMessage(currQuote.messageId, true)
         return
       } else {
