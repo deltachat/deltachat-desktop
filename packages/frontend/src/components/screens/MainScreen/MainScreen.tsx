@@ -504,15 +504,15 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
 
 function ChatNavButtons({ chat }: { chat: T.FullChat }) {
   const tx = useTranslationFunction()
-  const { chatId } = useChat()
+  const chatId = chat.id
   const settingsStore = useSettingsStore()[0]
   const { openDialog } = useDialog()
 
   const openMediaViewDialog = useCallback(() => {
     openDialog(MediaView, {
-      chatId: chat.id,
+      chatId,
     })
-  }, [openDialog, chat])
+  }, [openDialog, chatId])
 
   return (
     <>
