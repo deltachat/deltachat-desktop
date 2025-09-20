@@ -31,9 +31,10 @@
   "scripts": {
     "check:types": "tsc --noEmit && tsc --noEmit -p runtime-electron || node ./bin/printCheckWarning.js",
     "build4production": "NODE_ENV=production pnpm build && pnpm -w check:types",
-    "build": "pnpm build:locales && pnpm build:backend && pnpm --filter=@deltachat-desktop/frontend build && pnpm build:compose-frontend",
+    "build": "pnpm build:locales && pnpm build:backend && pnpm --filter=@deltachat-desktop/frontend build && pnpm build:compose-frontend && pnpm build:calls-webapp",
     "build:locales": "pnpm -w translations:convert",
     "build:backend": "node ./bin/build.js",
+    "build:calls-webapp": "node ../../bin/copy.js ./node_modules/calls-webapp#build-for-deltachat-desktop ./html-dist/calls-webapp",
     "build:runtime-impl": "pnpm esbuild --format=esm --bundle --minify --keep-names --sourcemap --outdir=./html-dist runtime-electron/runtime.ts",
     "build:compose-frontend": "node ../../bin/copy.js ../frontend/html-dist ./html-dist && node ../../bin/copy.js ./static ./html-dist && pnpm build:runtime-impl",
     "watch:compose-frontend": "node ../../bin/copy.js ../frontend/html-dist ./html-dist -w & node ../../bin/copy.js ./static ./html-dist -w & pnpm build:runtime-impl --watch",
@@ -56,6 +57,7 @@
   "dependencies": {
     "@deltachat/jsonrpc-client": "catalog:",
     "@deltachat/stdio-rpc-server": "catalog:",
+    "calls-webapp#build-for-deltachat-desktop": "catalog:",
     "mime-types": "catalog:",
     "sass": "catalog:",
     "ws": "7.5.10"
