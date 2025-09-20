@@ -119,6 +119,11 @@ export interface Runtime {
   notifyWebxdcMessageChanged(accountId: number, instanceId: number): void
   notifyWebxdcInstanceDeleted(accountId: number, instanceId: number): void
 
+  /**
+   * Initiates and conducts the video call fully, from start to end.
+   */
+  startOutgoingVideoCall(accountId: number, chatId: number): void
+
   // control app
   restartApp(): void
 

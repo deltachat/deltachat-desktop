@@ -200,6 +200,9 @@ class BrowserRuntime implements Runtime {
   notifyWebxdcInstanceDeleted(_accountId: number, _instanceId: number): void {
     this.log.critical('Method not implemented.')
   }
+  startOutgoingVideoCall(): void {
+    this.log.critical('Method not implemented.')
+  }
   async saveBackgroundImage(
     file: string,
     isDefaultPicture: boolean

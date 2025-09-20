@@ -187,6 +187,7 @@ class TauriRuntime implements Runtime {
       showNotificationContent: true,
       enterKeySends: false,
       enableAVCalls: false,
+      enableAVCallsV2: false,
       enableBroadcastLists: false,
       enableChatAuditLog: false,
       enableOnDemandLocationStreaming: false,
@@ -547,6 +548,9 @@ class TauriRuntime implements Runtime {
   }
   notifyWebxdcInstanceDeleted(accountId: number, instanceId: number): void {
     invoke('on_webxdc_message_deleted', { accountId, instanceId })
+  }
+  startOutgoingVideoCall(): void {
+    throw new Error('Method not implemented.101')
   }
   restartApp(): void {
     // will not be implemented in tauri for now, as this method is currently unused

@@ -14,6 +14,7 @@ export function getDefaultState(): DesktopSettingsType {
     credentials: undefined,
     lastAccount: undefined,
     enableAVCalls: false,
+    enableAVCallsV2: false,
     enableBroadcastLists: false,
     enableChatAuditLog: false,
     enableOnDemandLocationStreaming: false,
