@@ -65,6 +65,8 @@ protocol.registerSchemesAsPrivileged([
     },
   },
 ])
+import { registerCallsWebappSchemeAsPrivileged } from './windows/video-call.js'
+registerCallsWebappSchemeAsPrivileged()
 
 const app = rawApp as ExtendedAppMainProcess
 app.rc = rc

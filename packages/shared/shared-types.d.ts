@@ -20,7 +20,16 @@ export interface DesktopSettingsType {
    * @deprecated in favor of storing selected account over core account manager in accounts.toml
    */
   lastAccount?: number
+  /**
+   * @see also {@linkcode enableAVCallsV2}
+   */
   enableAVCalls: boolean
+  /**
+   * The new version of video calls.
+   * @see https://github.com/orgs/deltachat/projects/81
+   * @see also {@linkcode enableAVCalls}
+   */
+  enableAVCallsV2: boolean
   enableBroadcastLists: boolean
   enableChatAuditLog: boolean
   enableOnDemandLocationStreaming: boolean
