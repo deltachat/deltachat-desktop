@@ -45,6 +45,7 @@ import DeltaChatController from './deltachat/controller.js'
 import { BuildInfo } from './get-build-info.js'
 import { updateContentProtectionOnAllActiveWindows } from './content-protection.js'
 import { MediaType } from '@deltachat-desktop/runtime-interface'
+import { startOutgoingVideoCall } from './windows/video-call.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -53,6 +54,9 @@ const log = getLogger('main/ipc')
 const app = rawApp as ExtendedAppMainProcess
 
 let dcController: typeof DeltaChatController.prototype
+export function getDCJsonrpcRemote() {
+  return dcController.jsonrpcRemote
+}
 export function getDCJsonrpcClient() {
   return dcController.jsonrpcRemote.rpc
 }
@@ -377,6 +381,13 @@ export async function init(cwd: string, logHandler: LogHandler) {
         receiveTime,
         content
       )
+    }
+  )
+
+  ipcMain.handle(
+    'startOutgoingVideoCall',
+    (_ev, accountId: number, chatId: number) => {
+      startOutgoingVideoCall(accountId, chatId)
     }
   )
 

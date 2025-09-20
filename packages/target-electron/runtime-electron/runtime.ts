@@ -197,6 +197,9 @@ class ElectronRuntime implements Runtime {
   notifyWebxdcInstanceDeleted(accountId: number, instanceId: number): void {
     ipcBackend.invoke('webxdc:instance-deleted', accountId, instanceId)
   }
+  startOutgoingVideoCall(accountId: number, chatId: number): void {
+    ipcBackend.invoke('startOutgoingVideoCall', accountId, chatId)
+  }
   openMapsWebxdc(accountId: number, chatId?: number | undefined): void {
     ipcBackend.invoke('open-maps-webxdc', accountId, chatId)
   }
