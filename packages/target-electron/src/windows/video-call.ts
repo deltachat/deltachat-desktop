@@ -1,5 +1,6 @@
 import {
   BrowserWindow,
+  dialog,
   Menu,
   MessageChannelMain,
   net,
@@ -17,7 +18,11 @@ const log = getLogger('windows/video-call')
 export function startOutgoingVideoCall(accountId: number, chatId: number) {
   log.info('starting outgoing video call', { accountId, chatId })
 
-  const { offerPromise, windowClosed } = openVideoCallWindow(accountId)
+  const { offerPromise, windowClosed } = openVideoCallWindow(
+    accountId,
+    CallDirection.Outgoing,
+    {}
+  )
 
   const jsonrpcRemote = getDCJsonrpcRemote()
 
@@ -48,16 +53,89 @@ export function startOutgoingVideoCall(accountId: number, chatId: number) {
   })()
 }
 
-function openVideoCallWindow(accountId: number): {
+/**
+ * Listen for and fully handle `IncomingCall` core events,
+ * by opening "Incoming call" windows.
+ * @returns "stop handling" function
+ */
+export function startHandlingIncomingVideoCalls(
+  jsonrpcRemote: ReturnType<typeof getDCJsonrpcRemote>
+): () => void {
+  const incomingCallListener = (
+    eventAccountId: number,
+    { msg_id, place_call_info }: { msg_id: number; place_call_info: string }
+  ) => {
+    log.info('got IncomingCall event', eventAccountId, msg_id)
+
+    openIncomingVideoCallWindow(eventAccountId, msg_id, place_call_info)
+  }
+
+  jsonrpcRemote.on('IncomingCall', incomingCallListener)
+  return () => jsonrpcRemote.off('IncomingCall', incomingCallListener)
+}
+
+function openIncomingVideoCallWindow(
+  accountId: number,
+  callMessageId: number,
+  callerWebrtcOffer: string
+) {
+  log.info('received incoming call', { accountId, callMessageId })
+
+  const { answerPromise, windowClosed } = openVideoCallWindow(
+    accountId,
+    CallDirection.Incoming,
+    {
+      callerWebrtcOffer,
+    }
+  )
+
+  const jsonrpcRemote = getDCJsonrpcRemote()
+
+  windowClosed.then(() => {
+    log.info('Call window closed, ending the call')
+    jsonrpcRemote.rpc.endCall(accountId, callMessageId)
+  })
+
+  //
+  ;(async () => {
+    const answer = await answerPromise
+    log.info('Call WebRTC answer generated, sending "accept call" message')
+    jsonrpcRemote.rpc.acceptIncomingCall(accountId, callMessageId, answer)
+  })()
+}
+
+const enum CallDirection {
+  Incoming,
+  Outgoing,
+}
+
+function openVideoCallWindow<T extends CallDirection>(
+  accountId: number,
+  callDirection: T,
+  {
+    callerWebrtcOffer,
+  }: T extends CallDirection.Incoming
+    ? {
+        callerWebrtcOffer: string
+      }
+    : {
+        callerWebrtcOffer?: undefined
+      }
+): {
   windowClosed: Promise<void>
-  offerPromise: Promise<{
-    offer: string
-    /**
-     * Must be called when the call is answered by the callee
-     */
-    onAnswer: (answer: string) => void
-  }>
-} {
+} & (T extends CallDirection.Incoming
+  ? {
+      answerPromise: Promise<string>
+    }
+  : {
+      offerPromise: Promise<{
+        offer: string
+        /**
+         * Must be called when the call is answered by the callee
+         */
+        onAnswer: (answer: string) => void
+      }>
+    }) {
   const ses = session.fromPartition(`calls-webapp_${accountId}`)
 
   if (!ses.protocol.isProtocolHandled(SCHEME_NAME)) {
@@ -179,7 +257,36 @@ function openVideoCallWindow(accountId: number): {
     })
   }
 
-  const offerPromise = new Promise<string>(r => {
+  if (callerWebrtcOffer != undefined) {
+    // const _assert: CallDirection.Incoming = callDirection
+    dialog
+      .showMessageBox(win, {
+        // TODO i18n
+        // TODO from whom? And to which account?
+        message: 'Incoming call',
+        type: 'question',
+        buttons: ['Decline', 'Answer'],
+        defaultId: 0,
+        cancelId: 0,
+      })
+      .then(({ response }) => {
+        const answer = response === 1
+        if (answer) {
+          webAppMessagePort.postMessage({
+            type: 'offer',
+            offer: callerWebrtcOffer,
+          })
+        } else {
+          win.close()
+        }
+      })
+  }
+
+  /**
+   * This is gonna be either an offer or an answer,
+   * depending on {@linkcode callDirection}
+   */
+  const messageFromPagePromise = new Promise<string>(r => {
     webAppMessagePort.once('message', e => {
       if (typeof e.data !== 'string') {
         log.error('Invalid message type from calls-webapp window', e.data)
@@ -190,13 +297,19 @@ function openVideoCallWindow(accountId: number): {
   })
   webAppMessagePort.start()
 
-  win.webContents.loadURL(`${SCHEME_NAME}://${DUMMY_HOST_NAME}#startCall`, {
+  const hash =
+    callDirection === CallDirection.Outgoing
+      ? '#startCall'
+      : // Otherwise we'll set the hash later, when the call gets accepted.
+        ''
+  win.webContents.loadURL(`${SCHEME_NAME}://${DUMMY_HOST_NAME}${hash}`, {
     extraHeaders: 'Content-Security-Policy: ' + CSP,
   })
 
   const windowClosed = new Promise<void>(r => win.once('closed', r))
   return {
-    offerPromise: offerPromise.then(offer => ({
+    answerPromise: messageFromPagePromise,
+    offerPromise: messageFromPagePromise.then(offer => ({
       offer,
       /**
        * Must be called when the call is answered by the callee
