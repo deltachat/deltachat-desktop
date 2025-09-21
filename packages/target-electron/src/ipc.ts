@@ -45,7 +45,10 @@ import DeltaChatController from './deltachat/controller.js'
 import { BuildInfo } from './get-build-info.js'
 import { updateContentProtectionOnAllActiveWindows } from './content-protection.js'
 import { MediaType } from '@deltachat-desktop/runtime-interface'
-import { startOutgoingVideoCall } from './windows/video-call.js'
+import {
+  startHandlingIncomingVideoCalls,
+  startOutgoingVideoCall,
+} from './windows/video-call.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -387,9 +390,13 @@ export async function init(cwd: string, logHandler: LogHandler) {
       startOutgoingVideoCall(accountId, chatId)
     }
   )
+  const stopHandlingIncomingVideoCalls = startHandlingIncomingVideoCalls(
+    dcController.jsonrpcRemote
+  )
 
+  // the shutdown function
   return () => {
-    // the shutdown function
+    stopHandlingIncomingVideoCalls()
     dcController.jsonrpcRemote.rpc.stopIoForAllAccounts()
   }
 }

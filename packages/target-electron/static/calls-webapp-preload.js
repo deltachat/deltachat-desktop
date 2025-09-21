@@ -22,6 +22,10 @@ portP.then(port => {
         location.hash = `onAnswer=${btoa(e.data.answer)}`
         break
       }
+      case 'offer': {
+        location.hash = `acceptCall=${btoa(e.data.offer)}`
+        break
+      }
       case 'iceServers': {
         onIceServers(e.data.iceServersString)
         break
@@ -55,6 +59,21 @@ contextBridge.exposeInMainWorld('calls', {
 
     const port = await portP
     port.postMessage(offerPayload)
+  },
+  /**
+   * @param {unknown} answerPayload
+   */
+  async acceptCall(answerPayload) {
+    console.log('acceptCall called with', answerPayload)
+
+    if (typeof answerPayload !== 'string') {
+      throw new Error(
+        `expected a string parameter, got ${typeof answerPayload}`
+      )
+    }
+
+    const port = await portP
+    port.postMessage(answerPayload)
   },
   /**
    * @returns {void}
