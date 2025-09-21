@@ -17,7 +17,7 @@ const log = getLogger('windows/video-call')
 export function startOutgoingVideoCall(accountId: number, chatId: number) {
   log.info('starting outgoing video call', { accountId, chatId })
 
-  const { offerPromise, onWindowClosed } = openVideoCallWindow(accountId)
+  const { offerPromise, windowClosed } = openVideoCallWindow(accountId)
 
   const jsonrpcRemote = getDCJsonrpcRemote()
 
@@ -28,7 +28,7 @@ export function startOutgoingVideoCall(accountId: number, chatId: number) {
       chatId,
       offer
     )
-    onWindowClosed(() => {
+    windowClosed.then(() => {
       log.info('Call window closed, ending the call')
       jsonrpcRemote.rpc.endCall(accountId, callMessageId)
     })
@@ -37,7 +37,7 @@ export function startOutgoingVideoCall(accountId: number, chatId: number) {
     // Make sure there are no `await`s between `placeOutgoingCall` and this.
     const { answerP, removeListenerAndResolvePromiseToNull } =
       listenForAnswerFromCallee(jsonrpcRemote, accountId, callMessageId)
-    onWindowClosed(removeListenerAndResolvePromiseToNull)
+    windowClosed.then(removeListenerAndResolvePromiseToNull)
     const answer = await answerP
     if (answer == null) {
       log.info('Given up on waiting for answer from callee')
@@ -49,7 +49,7 @@ export function startOutgoingVideoCall(accountId: number, chatId: number) {
 }
 
 function openVideoCallWindow(accountId: number): {
-  onWindowClosed: (callback: () => void) => void
+  windowClosed: Promise<void>
   offerPromise: Promise<{
     offer: string
     /**
@@ -194,7 +194,7 @@ function openVideoCallWindow(accountId: number): {
     extraHeaders: 'Content-Security-Policy: ' + CSP,
   })
 
-  const onWindowClosed = (listener: () => void) => win.once('closed', listener)
+  const windowClosed = new Promise<void>(r => win.once('closed', r))
   return {
     offerPromise: offerPromise.then(offer => ({
       offer,
@@ -205,7 +205,7 @@ function openVideoCallWindow(accountId: number): {
         webAppMessagePort.postMessage({ type: 'answer', answer })
       },
     })),
-    onWindowClosed,
+    windowClosed,
   }
 }
 
