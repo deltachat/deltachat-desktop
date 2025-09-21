@@ -17,6 +17,47 @@ const log = getLogger('windows/video-call')
 export function startOutgoingVideoCall(accountId: number, chatId: number) {
   log.info('starting outgoing video call', { accountId, chatId })
 
+  const { offerPromise, onWindowClosed } = openVideoCallWindow(accountId)
+
+  const jsonrpcRemote = getDCJsonrpcRemote()
+
+  ;(async () => {
+    const { offer, onAnswer } = await offerPromise
+    const callMessageId = await jsonrpcRemote.rpc.placeOutgoingCall(
+      accountId,
+      chatId,
+      offer
+    )
+    onWindowClosed(() => {
+      log.info('Call window closed, ending the call')
+      jsonrpcRemote.rpc.endCall(accountId, callMessageId)
+    })
+    log.info('Call invitation sent')
+
+    // Make sure there are no `await`s between `placeOutgoingCall` and this.
+    const { answerP, removeListenerAndResolvePromiseToNull } =
+      listenForAnswerFromCallee(jsonrpcRemote, accountId, callMessageId)
+    onWindowClosed(removeListenerAndResolvePromiseToNull)
+    const answer = await answerP
+    if (answer == null) {
+      log.info('Given up on waiting for answer from callee')
+      return
+    }
+    log.info('Received answer from callee')
+    onAnswer(answer)
+  })()
+}
+
+function openVideoCallWindow(accountId: number): {
+  onWindowClosed: (callback: () => void) => void
+  offerPromise: Promise<{
+    offer: string
+    /**
+     * Must be called when the call is answered by the callee
+     */
+    onAnswer: (answer: string) => void
+  }>
+} {
   const ses = session.fromPartition(`calls-webapp_${accountId}`)
 
   if (!ses.protocol.isProtocolHandled(SCHEME_NAME)) {
@@ -149,38 +190,23 @@ export function startOutgoingVideoCall(accountId: number, chatId: number) {
   })
   webAppMessagePort.start()
 
-  //
-  ;(async () => {
-    const callMessageId = await jsonrpcRemote.rpc.placeOutgoingCall(
-      accountId,
-      chatId,
-      await offerPromise
-    )
-    win.once('closed', () => {
-      log.info('Call window closed, ending the call')
-      jsonrpcRemote.rpc.endCall(accountId, callMessageId)
-    })
-    log.info('Call invitation sent')
-
-    // Make sure there are no `await`s between `placeOutgoingCall` and this.
-    const { answerP, removeListenerAndResolvePromiseToNull } =
-      listenForAnswerFromCallee(jsonrpcRemote, accountId, callMessageId)
-    win.once('closed', removeListenerAndResolvePromiseToNull)
-    const answer = await answerP
-    if (answer == null) {
-      log.info('Given up on waiting for answer from callee')
-      return
-    }
-    log.info('Received answer from callee')
-    webAppMessagePort.postMessage({
-      type: 'answer',
-      answer: answer satisfies string,
-    })
-  })()
-
   win.webContents.loadURL(`${SCHEME_NAME}://${DUMMY_HOST_NAME}#startCall`, {
     extraHeaders: 'Content-Security-Policy: ' + CSP,
   })
+
+  const onWindowClosed = (listener: () => void) => win.once('closed', listener)
+  return {
+    offerPromise: offerPromise.then(offer => ({
+      offer,
+      /**
+       * Must be called when the call is answered by the callee
+       */
+      onAnswer: (answer: string) => {
+        webAppMessagePort.postMessage({ type: 'answer', answer })
+      },
+    })),
+    onWindowClosed,
+  }
 }
 
 function listenForAnswerFromCallee(
