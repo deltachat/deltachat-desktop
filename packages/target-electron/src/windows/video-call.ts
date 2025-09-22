@@ -18,7 +18,7 @@ const log = getLogger('windows/video-call')
 export function startOutgoingVideoCall(accountId: number, chatId: number) {
   log.info('starting outgoing video call', { accountId, chatId })
 
-  const { offerPromise, windowClosed } = openVideoCallWindow(
+  const { offerPromise, windowClosed, closeWindow } = openVideoCallWindow(
     accountId,
     CallDirection.Outgoing,
     {}
@@ -33,16 +33,19 @@ export function startOutgoingVideoCall(accountId: number, chatId: number) {
       chatId,
       offer
     )
-    windowClosed.then(() => {
-      log.info('Call window closed, ending the call')
-      jsonrpcRemote.rpc.endCall(accountId, callMessageId)
-    })
+    const { done, onCallAcceptedOnThisDevice: _ } = handleCallEnd(
+      jsonrpcRemote,
+      accountId,
+      callMessageId,
+      windowClosed,
+      closeWindow
+    )
     log.info('Call invitation sent')
 
     // Make sure there are no `await`s between `placeOutgoingCall` and this.
     const { answerP, removeListenerAndResolvePromiseToNull } =
       listenForAnswerFromCallee(jsonrpcRemote, accountId, callMessageId)
-    windowClosed.then(removeListenerAndResolvePromiseToNull)
+    done.then(removeListenerAndResolvePromiseToNull)
     const answer = await answerP
     if (answer == null) {
       log.info('Given up on waiting for answer from callee')
@@ -81,7 +84,7 @@ function openIncomingVideoCallWindow(
 ) {
   log.info('received incoming call', { accountId, callMessageId })
 
-  const { answerPromise, windowClosed } = openVideoCallWindow(
+  const { answerPromise, windowClosed, closeWindow } = openVideoCallWindow(
     accountId,
     CallDirection.Incoming,
     {
@@ -91,16 +94,20 @@ function openIncomingVideoCallWindow(
 
   const jsonrpcRemote = getDCJsonrpcRemote()
 
-  windowClosed.then(() => {
-    log.info('Call window closed, ending the call')
-    jsonrpcRemote.rpc.endCall(accountId, callMessageId)
-  })
+  const { onCallAcceptedOnThisDevice } = handleCallEnd(
+    jsonrpcRemote,
+    accountId,
+    callMessageId,
+    windowClosed,
+    closeWindow
+  )
 
   //
   ;(async () => {
     const answer = await answerPromise
     log.info('Call WebRTC answer generated, sending "accept call" message')
     jsonrpcRemote.rpc.acceptIncomingCall(accountId, callMessageId, answer)
+    onCallAcceptedOnThisDevice()
   })()
 }
 
@@ -122,6 +129,7 @@ function openVideoCallWindow<T extends CallDirection>(
         callerWebrtcOffer?: undefined
       }
 ): {
+  closeWindow: () => void
   windowClosed: Promise<void>
 } & (T extends CallDirection.Incoming
   ? {
@@ -268,6 +276,11 @@ function openVideoCallWindow<T extends CallDirection>(
         buttons: ['Decline', 'Answer'],
         defaultId: 0,
         cancelId: 0,
+        signal: (() => {
+          const abortController = new AbortController()
+          win.once('closed', () => abortController.abort('window closed'))
+          return abortController.signal
+        })(),
       })
       .then(({ response }) => {
         const answer = response === 1
@@ -319,6 +332,18 @@ function openVideoCallWindow<T extends CallDirection>(
       },
     })),
     windowClosed,
+    closeWindow: () => {
+      if (win.isDestroyed()) {
+        return
+      }
+      if (win.webContents.isDevToolsOpened()) {
+        log.info(
+          "closeWindow called, but dev tools are open, let's keep the window open"
+        )
+        return
+      }
+      win.close()
+    },
   }
 }
 
@@ -365,6 +390,106 @@ function listenForAnswerFromCallee(
       resolve(null)
     },
   }
+}
+
+/**
+ * Fully handles call termination:
+ * closes the window and invokes `rpc.endCall` as appropriate.
+ * Be it when the incoming call gets accepted from another device,
+ * when the window gets closed, or when `CallEnded` fires.
+ */
+function handleCallEnd(
+  jsonrpcRemote: ReturnType<typeof getDCJsonrpcRemote>,
+  accountId: number,
+  callMessageId: number,
+  windowClosed: Promise<void>,
+  closeWindow: () => void
+): {
+  /**
+   * Resolves when we are done with handling the call on this device,
+   * when we're ready to clean everything up.
+   */
+  done: Promise<void>
+  /**
+   * If this is an incoming call, this must be called when we decide
+   * to accept the call on this device.
+   */
+  onCallAcceptedOnThisDevice: () => void
+} {
+  let onDone!: () => void
+  const done = new Promise<void>(r => (onDone = r))
+
+  // Note that this event will never fire for outgoing calls. It's fine.
+  const {
+    /**
+     * Does not resolve if the call didn't get accepted on another device.
+     */
+    incomingCallAcceptedOnOtherDevice,
+    removeIncomingCallAcceptedListener,
+  } = (() => {
+    let resolve: () => void
+    const p = new Promise<void>(r => (resolve = r))
+    const listener = (
+      eventAccountId: number,
+      { msg_id }: { msg_id: number }
+    ) => {
+      log.info('got IncomingCallAccepted event', eventAccountId, msg_id)
+      if (eventAccountId !== accountId || msg_id !== callMessageId) {
+        return
+      }
+      resolve()
+      removeListener()
+    }
+    jsonrpcRemote.on('IncomingCallAccepted', listener)
+    const removeListener = () => {
+      jsonrpcRemote.off('IncomingCallAccepted', listener)
+    }
+    done.then(removeListener)
+
+    return {
+      removeIncomingCallAcceptedListener: removeListener,
+      incomingCallAcceptedOnOtherDevice: p,
+    }
+  })()
+  const onCallAcceptedOnThisDevice = removeIncomingCallAcceptedListener
+
+  const callEnded = (() => {
+    let resolve: () => void
+    const p = new Promise<void>(r => (resolve = r))
+    const listener = (
+      eventAccountId: number,
+      { msg_id }: { msg_id: number }
+    ) => {
+      log.info('got CallEnded event', eventAccountId, msg_id)
+      if (eventAccountId !== accountId || msg_id !== callMessageId) {
+        return
+      }
+      resolve()
+      removeListener()
+    }
+    jsonrpcRemote.on('CallEnded', listener)
+    const removeListener = () => {
+      jsonrpcRemote.off('CallEnded', listener)
+    }
+    done.then(removeListener)
+
+    return p
+  })()
+
+  Promise.race<{ invokeEndCall: boolean }>([
+    callEnded.then(() => ({ invokeEndCall: false })),
+    incomingCallAcceptedOnOtherDevice.then(() => ({ invokeEndCall: false })),
+    windowClosed.then(() => ({ invokeEndCall: true })),
+  ])
+    .then(({ invokeEndCall }) => {
+      if (invokeEndCall) {
+        jsonrpcRemote.rpc.endCall(accountId, callMessageId)
+      }
+      closeWindow()
+    })
+    .finally(onDone)
+
+  return { done, onCallAcceptedOnThisDevice }
 }
 
 // See https://github.com/deltachat/calls-webapp/pull/20.
