@@ -1,5 +1,5 @@
 # Run unit & integration tests
-on: 
+on:
   push:
     paths-ignore:
       - 'docs/**'  # only trigger build if a file outside of /docs was changed
@@ -18,10 +18,10 @@ jobs:
       fail-fast: false # don't fail fast, because some tests can be flaky so better we get all results
     steps:
     - uses: actions/checkout@v1
-    - name: Use Node.js 20.x
+    - name: Use Node.js 22.x
       uses: actions/setup-node@v1
       with:
-        node-version: 20.x
+        node-version: 22.x
     - name: install dependencies
       run: |
         npm i -g pnpm
@@ -32,4 +32,3 @@ jobs:
     - name: test
       run: |
         pnpm run test
-
