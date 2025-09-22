@@ -27,6 +27,9 @@ import { buildContextMenu } from './contextMenu'
 
 const log = getLogger('render/ChatAuditLog')
 
+import styles from './styles.module.scss'
+import classNames from 'classnames'
+
 export default function ChatAuditLogDialog(
   props: {
     selectedChat: Pick<Type.BasicChat, 'id' | 'name' | 'chatType'>
@@ -114,93 +117,88 @@ export default function ChatAuditLogDialog(
         onClose={onClose}
         title={tx('chat_audit_log_title', selectedChat.name)}
       />
-      <DialogBody>
+      <DialogBody className={classNames(styles.DialogBodyWithoutBottomMargin, styles.DialogBody)}>
         <DialogContent>
           <h5>{tx('chat_audit_log_description')}</h5>
-          {loading ? (
-            <div>{tx('loading')}</div>
-          ) : (
-            <div style={{ overflowY: 'scroll' }} ref={listView}>
-              {msgEntries.length === 0 && (
-                <div className='no-content' key='no-content-msg'>
-                  <div>{tx('chat_audit_log_empty_message')}</div>
-                </div>
-              )}
-              <ol key='info-message-list'>
-                {msgEntries.map(entry => {
-                  if (entry.kind === 'dayMarker') {
-                    const key = 'magic' + entry.timestamp
-                    return (
-                      <li key={key} className='time'>
-                        <div>
-                          {moment.unix(entry.timestamp).calendar(null, {
-                            sameDay: `[${tx('today')}]`,
-                            lastDay: `[${tx('yesterday')}]`,
-                            lastWeek: 'LL',
-                            sameElse: 'LL',
-                          })}
-                        </div>
-                      </li>
-                    )
-                  }
-                  const id = entry.msg_id
-                  const message = messages[id]
-                  if (!message || message == null) {
-                    log.debug(`Missing message with id ${id}`)
-                    return
-                  }
-                  if (message.kind !== 'message') {
-                    log.debug(`Loading of message with id ${id} failed`)
-                    return (
-                      <li key={id} className='info'>
-                        <p>{`${id}: ${message.error}`}</p>
-                      </li>
-                    )
-                  }
-
-                  const { text, timestamp, systemMessageType, parentId } =
-                    message
-                  const direction = getDirection(message)
-                  const status = mapCoreMsgStatus2String(message.state)
-                  const accountId = selectedAccountId()
+        </DialogContent>
+        {loading ? (
+          <div>{tx('loading')}</div>
+        ) : (
+          <div className={styles.List} style={{ overflowY: 'scroll' }} ref={listView}>
+            {msgEntries.length === 0 && (
+              <div className='no-content' key='no-content-msg'>
+                <div>{tx('chat_audit_log_empty_message')}</div>
+              </div>
+            )}
+            <ol key='info-message-list'>
+              {msgEntries.map(entry => {
+                if (entry.kind === 'dayMarker') {
+                  const key = 'magic' + entry.timestamp
                   return (
-                    <li
-                      key={id}
-                      className='info'
-                      // TODO make this element focusable.
-                      onClick={ev => showMenu(message, ev)}
-                      onContextMenu={ev => showMenu(message, ev)}
-                      aria-haspopup='menu'
-                    >
+                    <li key={key} className='time'>
                       <div>
-                        <div className='timestamp'>
-                          {moment.unix(timestamp).format('LT')}
-                        </div>
-                        {systemMessageType == 'WebxdcInfoMessage' &&
-                          parentId && (
-                            <img
-                              src={runtime.getWebxdcIconURL(
-                                accountId,
-                                parentId
-                              )}
-                            />
-                          )}
-                        {text}
-                        {direction === 'outgoing' &&
-                          (status === 'sending' || status === 'error') && (
-                            <div
-                              className={`status-icon ${status}`}
-                              aria-label={tx(`a11y_delivery_status_${status}`)}
-                            />
-                          )}
+                        {moment.unix(entry.timestamp).calendar(null, {
+                          sameDay: `[${tx('today')}]`,
+                          lastDay: `[${tx('yesterday')}]`,
+                          lastWeek: 'LL',
+                          sameElse: 'LL',
+                        })}
                       </div>
                     </li>
                   )
-                })}
-              </ol>
-            </div>
-          )}
-        </DialogContent>
+                }
+                const id = entry.msg_id
+                const message = messages[id]
+                if (!message || message == null) {
+                  log.debug(`Missing message with id ${id}`)
+                  return
+                }
+                if (message.kind !== 'message') {
+                  log.debug(`Loading of message with id ${id} failed`)
+                  return (
+                    <li key={id} className='info'>
+                      <p>{`${id}: ${message.error}`}</p>
+                    </li>
+                  )
+                }
+
+                const { text, timestamp, systemMessageType, parentId } = message
+                const direction = getDirection(message)
+                const status = mapCoreMsgStatus2String(message.state)
+                const accountId = selectedAccountId()
+                return (
+                  <li
+                    key={id}
+                    className='info'
+                    // TODO make this element focusable.
+                    onClick={ev => showMenu(message, ev)}
+                    onContextMenu={ev => showMenu(message, ev)}
+                    aria-haspopup='menu'
+                  >
+                    <div>
+                      <div className='timestamp'>
+                        {moment.unix(timestamp).format('LT')}
+                      </div>
+                      {systemMessageType == 'WebxdcInfoMessage' && parentId && (
+                        <img
+                          src={runtime.getWebxdcIconURL(accountId, parentId)}
+                        />
+                      )}
+                      {text}
+                      {direction === 'outgoing' &&
+                        (status === 'sending' || status === 'error') && (
+                          <div
+                            className={`status-icon ${status}`}
+                            aria-label={tx(`a11y_delivery_status_${status}`)}
+                          />
+                        )}
+                    </div>
+                  </li>
+                )
+              })}
+            </ol>
+          </div>
+        )}
       </DialogBody>
     </Dialog>
   )

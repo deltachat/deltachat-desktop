@@ -1,0 +1,12 @@
+.DialogBodyWithoutBottomMargin {
+  margin-bottom: 0 !important;
+}
+
+.DialogBody {
+  display: flex;
+  flex-direction: column;
+}
+
+.List {
+  padding-inline: 20px;
+}

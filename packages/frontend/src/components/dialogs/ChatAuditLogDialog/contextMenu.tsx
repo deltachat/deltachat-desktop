@@ -1,6 +1,9 @@
 import { C, T } from '@deltachat/jsonrpc-client'
 
-import { openMessageInfo, setQuoteInDraft } from '../../message/messageFunctions'
+import {
+  openMessageInfo,
+  setQuoteInDraft,
+} from '../../message/messageFunctions'
 
 import type { DialogProps, OpenDialog } from '../../../contexts/DialogContext'
 import type { JumpToMessage } from '../../../hooks/chat/useMessage'
