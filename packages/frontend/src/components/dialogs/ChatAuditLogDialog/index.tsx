@@ -5,7 +5,7 @@ import React, {
   useContext,
   useCallback,
 } from 'react'
-import { C } from '@deltachat/jsonrpc-client'
+import { C, T } from '@deltachat/jsonrpc-client'
 import moment from 'moment'
 
 import Dialog, { DialogBody, DialogContent, DialogHeader } from '../../Dialog'
@@ -18,7 +18,6 @@ import { ContextMenuContext } from '../../../contexts/ContextMenuContext'
 import { getDirection } from '../../../utils/getDirection'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { mapCoreMsgStatus2String } from '../../helpers/MapMsgStatus'
-import { runtime } from '@deltachat-desktop/runtime-interface'
 import { selectedAccountId } from '../../../ScreenController'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
@@ -29,6 +28,12 @@ const log = getLogger('render/ChatAuditLog')
 
 import styles from './styles.module.scss'
 import classNames from 'classnames'
+import { Avatar } from '../../Avatar'
+import {
+  loadContactsWithFallback,
+  uniqueFromIdsFromMessageResults,
+} from './util'
+import { SenderIcon } from './SenderIcon'
 
 export default function ChatAuditLogDialog(
   props: {
@@ -46,6 +51,14 @@ export default function ChatAuditLogDialog(
   const [messages, setMessages] = useState<
     Record<number, Type.MessageLoadResult>
   >([])
+
+  const [contactsCache, setContactsCache] = useState<Record<T.U32, T.Contact>>(
+    {}
+  )
+  useEffect(() => {
+    const contactIds: number[] = uniqueFromIdsFromMessageResults(messages)
+    loadContactsWithFallback(accountId, contactIds).then(setContactsCache)
+  }, [accountId, messages])
 
   const listView = useRef<HTMLDivElement>(null)
 
@@ -152,6 +165,7 @@ export default function ChatAuditLogDialog(
                       entry={entry}
                       cachedMessage={messages[id]}
                       showMenu={showMenu}
+                      contactsCache={contactsCache}
                     />
                   )
                 }
@@ -187,11 +201,19 @@ function DayMarker({
 function InfoMsgEntry({
   entry,
   cachedMessage,
-  showMenu
+  contactsCache,
+  showMenu,
 }: {
   entry: Type.MessageListItem & { kind: 'message' }
   cachedMessage: Type.MessageLoadResult | null
-  showMenu: (message: Type.Message, event: React.MouseEvent<HTMLDivElement | HTMLAnchorElement | HTMLLIElement, MouseEvent>) => void
+  contactsCache: Record<T.U32, T.Contact>
+  showMenu: (
+    message: Type.Message,
+    event: React.MouseEvent<
+      HTMLDivElement | HTMLAnchorElement | HTMLLIElement,
+      MouseEvent
+    >
+  ) => void
 }) {
   const tx = useTranslationFunction()
   const id = entry.msg_id
@@ -208,10 +230,10 @@ function InfoMsgEntry({
     )
   }
 
-  const { text, timestamp, systemMessageType, parentId } = cachedMessage
+  const { text, timestamp } = cachedMessage
   const direction = getDirection(cachedMessage)
   const status = mapCoreMsgStatus2String(cachedMessage.state)
-  const accountId = selectedAccountId()
+
   return (
     <li
       key={id}
@@ -223,9 +245,10 @@ function InfoMsgEntry({
     >
       <div>
         <div className='timestamp'>{moment.unix(timestamp).format('LT')}</div>
-        {systemMessageType == 'WebxdcInfoMessage' && parentId && (
-          <img src={runtime.getWebxdcIconURL(accountId, parentId)} />
-        )}
+        <SenderIcon
+          contactsCache={contactsCache}
+          cachedMessage={cachedMessage}
+        />
         {text}
         {direction === 'outgoing' &&
           (status === 'sending' || status === 'error') && (
