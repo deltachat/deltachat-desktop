@@ -2,7 +2,7 @@
   description = "A Nix-flake-based Rust development environment";
 
   inputs = {
-    nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0.1.*.tar.gz";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     rust-overlay = {
       url = "github:oxalica/rust-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -45,8 +45,8 @@
           gobject-introspection
           cargo
           cargo-tauri
-          nodejs
-          electron
+          nodejs_22 # what electron uses
+          electron_37 # electron version should be same as defined in packages/target-electron/package.json
         ];
 
         buildInputs = with pkgs; [
