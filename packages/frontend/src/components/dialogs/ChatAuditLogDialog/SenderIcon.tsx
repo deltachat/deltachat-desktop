@@ -3,6 +3,7 @@ import { C, T } from '@deltachat/jsonrpc-client'
 import { selectedAccountId } from '../../../ScreenController'
 import { Avatar } from '../../Avatar'
 import { runtime } from '@deltachat-desktop/runtime-interface'
+import styles from './styles.module.scss'
 
 export function SenderIcon({
   contactsCache,
@@ -16,7 +17,7 @@ export function SenderIcon({
 
   let senderIcon = <SystemAvatar />
   if (systemMessageType == 'WebxdcInfoMessage' && parentId) {
-    senderIcon = <img src={runtime.getWebxdcIconURL(accountId, parentId)} />
+    senderIcon = <img className={styles.webxdcIcon} src={runtime.getWebxdcIconURL(accountId, parentId)} />
   } else {
     if (
       fromId > C.DC_CONTACT_ID_LAST_SPECIAL ||

@@ -28,7 +28,6 @@ const log = getLogger('render/ChatAuditLog')
 
 import styles from './styles.module.scss'
 import classNames from 'classnames'
-import { Avatar } from '../../Avatar'
 import {
   loadContactsWithFallback,
   uniqueFromIdsFromMessageResults,
@@ -137,7 +136,9 @@ export default function ChatAuditLogDialog(
         )}
       >
         <DialogContent>
-          <h5>{tx('chat_audit_log_description')}</h5>
+          <h5 className={styles.description}>
+            {tx('chat_audit_log_description')}
+          </h5>
         </DialogContent>
         {loading ? (
           <div>{tx('loading')}</div>
@@ -148,11 +149,11 @@ export default function ChatAuditLogDialog(
             ref={listView}
           >
             {msgEntries.length === 0 && (
-              <div className='no-content' key='no-content-msg'>
+              <div className={styles.noContent} key='no-content-msg'>
                 <div>{tx('chat_audit_log_empty_message')}</div>
               </div>
             )}
-            <ol key='info-message-list'>
+            <ol className={styles.infoMessageList} key='info-message-list'>
               {msgEntries.map(entry => {
                 if (entry.kind === 'dayMarker') {
                   const key = 'magic' + entry.timestamp
@@ -185,7 +186,7 @@ function DayMarker({
 }) {
   const tx = useTranslationFunction()
   return (
-    <li className='time'>
+    <li className={styles.dayMarker}>
       <div>
         {moment.unix(entry.timestamp).calendar(null, {
           sameDay: `[${tx('today')}]`,
@@ -237,14 +238,16 @@ function InfoMsgEntry({
   return (
     <li
       key={id}
-      className='info'
+      className={styles.InfoMsgEntry}
       // TODO make this element focusable.
       onClick={ev => showMenu(cachedMessage, ev)}
       onContextMenu={ev => showMenu(cachedMessage, ev)}
       aria-haspopup='menu'
     >
       <div>
-        <div className='timestamp'>{moment.unix(timestamp).format('LT')}</div>
+        <div className={styles.timestamp}>
+          {moment.unix(timestamp).format('LT')}
+        </div>
         <SenderIcon
           contactsCache={contactsCache}
           cachedMessage={cachedMessage}
