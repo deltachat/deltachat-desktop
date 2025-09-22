@@ -1,7 +1,7 @@
 //@ts-check
 import { versions } from 'process'
 
-const MIN_NODE_VERSION = 20
+const MIN_NODE_VERSION = 22
 
 const majorVersion = versions.node.split('.')[0]
 if (Number(majorVersion) < MIN_NODE_VERSION) {
