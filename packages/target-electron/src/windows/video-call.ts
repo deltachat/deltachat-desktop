@@ -28,6 +28,13 @@ export function startOutgoingVideoCall(accountId: number, chatId: number) {
 
   ;(async () => {
     const { offer, onAnswer } = await offerPromise
+    if (offer == null) {
+      log.info("calls-webapp didn't return an offer, aborting outgoing call")
+      // We expect this code path to be taken
+      // only if the window already got closed, but let's be defeinsive.
+      closeWindow()
+      return
+    }
     const callMessageId = await jsonrpcRemote.rpc.placeOutgoingCall(
       accountId,
       chatId,
@@ -105,6 +112,13 @@ function openIncomingVideoCallWindow(
   //
   ;(async () => {
     const answer = await answerPromise
+    if (answer == null) {
+      log.info("calls-webapp didn't return an answer")
+      // We expect this code path to be taken
+      // only if the window already got closed, but let's be defeinsive.
+      closeWindow()
+      return
+    }
     log.info('Call WebRTC answer generated, sending "accept call" message')
     jsonrpcRemote.rpc.acceptIncomingCall(accountId, callMessageId, answer)
     onCallAcceptedOnThisDevice()
@@ -133,11 +147,21 @@ function openVideoCallWindow<T extends CallDirection>(
   windowClosed: Promise<void>
 } & (T extends CallDirection.Incoming
   ? {
-      answerPromise: Promise<string>
+      /**
+       * Resolves to `null` if the page port got closed,
+       * which is only expected to happen when the page gets closed,
+       * or on invalid message from the page.
+       */
+      answerPromise: Promise<null | string>
     }
   : {
       offerPromise: Promise<{
-        offer: string
+        /**
+         * `null` if the page port got closed
+         * which is only expected to happen when the page gets closed,
+         * or on invalid message from the page.
+         */
+        offer: null | string
         /**
          * Must be called when the call is answered by the callee
          */
@@ -299,13 +323,18 @@ function openVideoCallWindow<T extends CallDirection>(
    * This is gonna be either an offer or an answer,
    * depending on {@linkcode callDirection}
    */
-  const messageFromPagePromise = new Promise<string>(r => {
+  const messageFromPagePromise = new Promise<string | null>(r => {
     webAppMessagePort.once('message', e => {
       if (typeof e.data !== 'string') {
         log.error('Invalid message type from calls-webapp window', e.data)
+        r(null)
         return
       }
       r(e.data)
+    })
+    webAppMessagePort.once('close', () => {
+      log.info('calls-webapp page port closed')
+      r(null)
     })
   })
   webAppMessagePort.start()
