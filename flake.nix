@@ -90,6 +90,7 @@
           WEBKIT_DISABLE_COMPOSITING_MODE = 1;
         };
         shellHook = ''
+          pnpm install
           # On nixos, you can not run npm electron, so we remove it here and have it in packages.
           rm ./packages/target-electron/node_modules/.bin/electron || true
         '';
