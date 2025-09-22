@@ -47,7 +47,7 @@ export function Avatar(props: {
   small?: boolean
   wasSeenRecently?: boolean
   style?: htmlDivProps['style']
-  onClick?: () => void
+  onClick?: React.MouseEventHandler<HTMLDivElement> | undefined
   /**
    * Consider setting this to `true` if the name
    * of whoever the avatar belongs to is displayed somewhere near.

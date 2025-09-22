@@ -4,6 +4,7 @@ import { selectedAccountId } from '../../../ScreenController'
 import { Avatar } from '../../Avatar'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import styles from './styles.module.scss'
+import useOpenViewProfileDialog from '../../../hooks/dialog/useOpenViewProfileDialog'
 
 export function SenderIcon({
   contactsCache,
@@ -17,7 +18,12 @@ export function SenderIcon({
 
   let senderIcon = <SystemAvatar />
   if (systemMessageType == 'WebxdcInfoMessage' && parentId) {
-    senderIcon = <img className={styles.webxdcIcon} src={runtime.getWebxdcIconURL(accountId, parentId)} />
+    senderIcon = (
+      <img
+        className={styles.webxdcIcon}
+        src={runtime.getWebxdcIconURL(accountId, parentId)}
+      />
+    )
   } else {
     if (
       fromId > C.DC_CONTACT_ID_LAST_SPECIAL ||
@@ -32,6 +38,8 @@ export function SenderIcon({
 }
 
 function ContactAvatar({ contact }: { contact: T.Contact }) {
+  const openViewProfileDialog = useOpenViewProfileDialog()
+
   if (contact) {
     // TODO we need our own customized design here
     return (
@@ -41,6 +49,11 @@ function ContactAvatar({ contact }: { contact: T.Contact }) {
         displayName={contact.displayName}
         addr={contact.address}
         small={true}
+        onClick={ev => {
+          ev.preventDefault()
+          ev.stopPropagation()
+          openViewProfileDialog(selectedAccountId(), contact.id)
+        }}
       />
     )
   } else {
