@@ -169,7 +169,7 @@ For development with local `deltachat core` read [`docs/UPDATE_CORE.md`](docs/UP
 - This module builds on top of [`deltachat core`](https://github.com/chatmail/core),
   which in turn has external dependencies. The instructions below assume a Linux system (e.g. Ubuntu 18.10).
 - Read the error, maybe it already tells you what you need to do. If not feel free to file an issue in this github repo.
-- Make sure that your nodejs version is `20.0.0` or newer.
+- Make sure that your nodejs version is `22.0.0` or newer.
 - If you still get errors look at the instructions in [`docs/UPDATE_CORE.md`](docs/UPDATE_CORE.md) to set things up or [write an issue](https://github.com/deltachat/deltachat-desktop/issues/new/choose).
 
 ## Configuration and Databases <a id="config-and-db"></a>
