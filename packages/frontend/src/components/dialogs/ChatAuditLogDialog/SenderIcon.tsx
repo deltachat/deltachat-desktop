@@ -5,6 +5,7 @@ import { Avatar } from '../../Avatar'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import styles from './styles.module.scss'
 import useOpenViewProfileDialog from '../../../hooks/dialog/useOpenViewProfileDialog'
+import useTranslationFunction from '../../../hooks/useTranslationFunction'
 
 export function SenderIcon({
   contactsCache,
@@ -13,10 +14,12 @@ export function SenderIcon({
   contactsCache: Record<T.U32, T.Contact>
   cachedMessage: T.MessageLoadResult & { kind: 'message' }
 }) {
+  const tx = useTranslationFunction()
   const accountId = selectedAccountId()
   const { systemMessageType, parentId, fromId } = cachedMessage
 
   let senderIcon = <SystemAvatar />
+  let actingUser = undefined
   if (systemMessageType == 'WebxdcInfoMessage' && parentId) {
     senderIcon = (
       <img
@@ -24,17 +27,20 @@ export function SenderIcon({
         src={runtime.getWebxdcIconURL(accountId, parentId)}
       />
     )
+  } else if (
+    fromId > C.DC_CONTACT_ID_LAST_SPECIAL ||
+    fromId === C.DC_CONTACT_ID_SELF
+  ) {
+    // contact or self  sent this
+    senderIcon = <ContactAvatar contact={contactsCache[fromId]} />
+    actingUser = contactsCache[fromId] && tx('chat_audit_dialog_acting_user', [
+      contactsCache[fromId].displayName,
+    ])
   } else {
-    if (
-      fromId > C.DC_CONTACT_ID_LAST_SPECIAL ||
-      fromId === C.DC_CONTACT_ID_SELF
-    ) {
-      // contact or self  sent this
-      senderIcon = <ContactAvatar contact={contactsCache[fromId]} />
-    }
+    actingUser = tx('chat_audit_dialog_acting_user_system')
   }
 
-  return senderIcon
+  return <div title={actingUser} className={styles.inlineAvatar}>{senderIcon}</div>
 }
 
 function ContactAvatar({ contact }: { contact: T.Contact }) {
