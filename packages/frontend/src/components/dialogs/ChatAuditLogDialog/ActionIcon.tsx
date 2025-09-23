@@ -55,8 +55,18 @@ export function ActionIcon({
   systemMessageType: T.SystemMessageType
 }) {
   return (
-    <div className={styles.actionIcon} style={{"--icon-color": Action2ColorMap[systemMessageType] || undefined }as any}>
-      <Icon icon={Action2IconMap[systemMessageType]} coloring='iconColorCSSVar' />
+    <div
+      className={styles.actionIcon}
+      style={
+        {
+          '--icon-color': Action2ColorMap[systemMessageType] || undefined,
+        } as any
+      }
+    >
+      <Icon
+        icon={Action2IconMap[systemMessageType]}
+        coloring='iconColorCSSVar'
+      />
     </div>
   )
 }
