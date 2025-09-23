@@ -27,7 +27,7 @@ export function startOutgoingVideoCall(accountId: number, chatId: number) {
 
   const jsonrpcRemote = getDCJsonrpcRemote()
 
-  ;(async () => {
+  const callHandledPromise = (async () => {
     const { offer, onAnswer } = await offerPromise
     if (offer == null) {
       log.info("calls-webapp didn't return an offer, aborting outgoing call")
@@ -61,7 +61,11 @@ export function startOutgoingVideoCall(accountId: number, chatId: number) {
     }
     log.info('Received answer from callee')
     onAnswer(answer)
+
+    return await done
   })()
+
+  return callHandledPromise
 }
 
 /**
