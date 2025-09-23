@@ -532,17 +532,24 @@ function ChatNavButtons({ chat }: { chat: T.FullChat }) {
       <span className='views' data-no-drag-region>
         {/* Note that the `enableAVCallsV2` setting itself is hidden
         on unsupported targets (Tauri, Browser). */}
-        {settingsStore?.desktopSettings.enableAVCallsV2 && (
-          <Button
-            aria-label={tx('videochat')}
-            title={tx('videochat')}
-            className='navbar-button'
-            styling='borderless'
-            onClick={onVideoChat}
-          >
-            <Icon coloring='navbar' icon='phone' size={18} />
-          </Button>
-        )}
+        {settingsStore?.desktopSettings.enableAVCallsV2 &&
+          chat.canSend &&
+          chat.isEncrypted &&
+          // Core only allows placing calls in chats of type "single"
+          // (but not e.g. in groups consisting of 2 members).
+          // https://github.com/chatmail/core/blob/738dc5ce197f589131479801db2fbd0fb0964599/src/calls.rs#L147
+          chat.chatType === C.DC_CHAT_TYPE_SINGLE &&
+          chat.contactIds.some(id => id > C.DC_CONTACT_ID_LAST_SPECIAL) && (
+            <Button
+              aria-label={tx('videochat')}
+              title={tx('videochat')}
+              className='navbar-button'
+              styling='borderless'
+              onClick={onVideoChat}
+            >
+              <Icon coloring='navbar' icon='phone' size={18} />
+            </Button>
+          )}
         <Button
           onClick={openMediaViewDialog}
           aria-label={tx('apps_and_media')}
