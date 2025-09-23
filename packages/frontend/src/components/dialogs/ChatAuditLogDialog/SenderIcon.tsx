@@ -33,14 +33,18 @@ export function SenderIcon({
   ) {
     // contact or self  sent this
     senderIcon = <ContactAvatar contact={contactsCache[fromId]} />
-    actingUser = contactsCache[fromId] && tx('chat_audit_dialog_acting_user', [
-      contactsCache[fromId].displayName,
-    ])
+    actingUser =
+      contactsCache[fromId] &&
+      tx('chat_audit_dialog_acting_user', [contactsCache[fromId].displayName])
   } else {
     actingUser = tx('chat_audit_dialog_acting_user_system')
   }
 
-  return <div title={actingUser} className={styles.inlineAvatar}>{senderIcon}</div>
+  return (
+    <div title={actingUser} className={styles.inlineAvatar}>
+      {senderIcon}
+    </div>
+  )
 }
 
 function ContactAvatar({ contact }: { contact: T.Contact }) {

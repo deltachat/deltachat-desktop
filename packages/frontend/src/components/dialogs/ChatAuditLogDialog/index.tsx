@@ -33,6 +33,7 @@ import {
   uniqueFromIdsFromMessageResults,
 } from './util'
 import { SenderIcon } from './SenderIcon'
+import { ActionIcon } from './ActionIcon'
 
 export default function ChatAuditLogDialog(
   props: {
@@ -231,7 +232,7 @@ function InfoMsgEntry({
     )
   }
 
-  const { text, timestamp } = cachedMessage
+  const { text, timestamp, systemMessageType, parentId } = cachedMessage
   const direction = getDirection(cachedMessage)
   const status = mapCoreMsgStatus2String(cachedMessage.state)
 
@@ -252,6 +253,9 @@ function InfoMsgEntry({
           contactsCache={contactsCache}
           cachedMessage={cachedMessage}
         />
+        {!(systemMessageType === 'WebxdcInfoMessage' && parentId) && (
+          <ActionIcon systemMessageType={systemMessageType} />
+        )}
         {text}
         {direction === 'outgoing' &&
           (status === 'sending' || status === 'error') && (

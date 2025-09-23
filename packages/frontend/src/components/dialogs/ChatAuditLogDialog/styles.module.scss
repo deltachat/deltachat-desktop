@@ -78,7 +78,14 @@ li.InfoMsgEntry {
 }
 
 .inlineAvatar {
-    display: inline;
-    vertical-align: middle;
-    margin-inline-end: 5px;
+  display: inline;
+  vertical-align: middle;
+  margin-inline-end: 5px;
+}
+
+.actionIcon {
+  display: inline;
+  vertical-align: middle;
+  margin-inline-end: 5px;
+  --icon-color: var(--textSecondary);
 }
