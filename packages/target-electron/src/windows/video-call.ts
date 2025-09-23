@@ -12,6 +12,7 @@ import { appIcon, htmlDistDir } from '../application-constants'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { getDCJsonrpcRemote } from '../ipc'
 import { pathToFileURL } from 'node:url'
+import type { T } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('windows/video-call')
 
@@ -183,6 +184,8 @@ function openVideoCallWindow<T extends CallDirection>(
         onAnswer: (answer: string) => void
       }>
     }) {
+  const chatInfoPromise = getChatInfo(accountId, chatIdOrMessageId)
+
   const ses = session.fromPartition('calls-webapp')
 
   if (!ses.protocol.isProtocolHandled(SCHEME_NAME)) {
@@ -208,9 +211,8 @@ function openVideoCallWindow<T extends CallDirection>(
     autoHideMenuBar: true,
     // The `calls-webapp` theme is dark. Reduce flashing.
     backgroundColor: '#000',
-    // TODO
-    title: 'Call',
-    icon: appIcon(),
+    title: 'Call', // To be changed later.
+    icon: appIcon(), // To be changed later.
     // TODO
     // alwaysOnTop: main_window?.isAlwaysOnTop(),
   })
@@ -221,6 +223,15 @@ function openVideoCallWindow<T extends CallDirection>(
   //
   // Maybe we could add a setting for this, i.e. "Allow calls to bypass VPN".
   // win.webContents.setWebRTCIPHandlingPolicy()
+
+  chatInfoPromise.then(chat => {
+    if (win.isDestroyed()) {
+      return
+    }
+    // TODO i18n
+    win.setTitle(`Call with ${chat.name}`)
+    chat.profileImage && win.setIcon(chat.profileImage)
+  })
 
   // TODO proper menu?
   win.setMenu(Menu.buildFromTemplate([{ role: 'toggleDevTools' }]))
@@ -306,32 +317,42 @@ function openVideoCallWindow<T extends CallDirection>(
 
   if (callerWebrtcOffer != undefined) {
     // const _assert: CallDirection.Incoming = callDirection
-    dialog
-      .showMessageBox(win, {
+    ;(async () => {
+      let chatInfo: null | T.BasicChat = null
+      try {
+        chatInfo = await chatInfoPromise
+      } catch (error) {
+        log.warn('Failed to get basic chat info', error)
+      }
+
+      const { response } = await dialog.showMessageBox(win, {
         // TODO i18n
-        // TODO from whom? And to which account?
-        message: 'Incoming call',
+        // TODO show the account name / label that received the call?
+        message: chatInfo
+          ? `📞 ${chatInfo.name} is calling`
+          : '📞 Incoming call',
         type: 'question',
         buttons: ['Decline', 'Answer'],
         defaultId: 0,
         cancelId: 0,
+        icon: chatInfo?.profileImage || undefined,
         signal: (() => {
           const abortController = new AbortController()
           win.once('closed', () => abortController.abort('window closed'))
           return abortController.signal
         })(),
       })
-      .then(({ response }) => {
-        const answer = response === 1
-        if (answer) {
-          webAppMessagePort.postMessage({
-            type: 'offer',
-            offer: callerWebrtcOffer,
-          })
-        } else {
-          win.close()
-        }
-      })
+
+      const answer = response === 1
+      if (answer) {
+        webAppMessagePort.postMessage({
+          type: 'offer',
+          offer: callerWebrtcOffer,
+        })
+      } else {
+        win.close()
+      }
+    })()
   }
 
   /**
@@ -573,20 +594,9 @@ async function returnIndexHtmlOrAvatar(request: GlobalRequest) {
       return makeResponse('', { status: 400 })
     }
 
-    const jsonrpcRemote = getDCJsonrpcRemote()
-
-    const chatId =
-      parsedHost.chatIdOrMessageId.chatId ??
-      (
-        await jsonrpcRemote.rpc.getMessage(
-          parsedHost.accountId,
-          parsedHost.chatIdOrMessageId.callMessageId
-        )
-      ).chatId
-
-    const { profileImage } = await jsonrpcRemote.rpc.getBasicChatInfo(
+    const { profileImage } = await getChatInfo(
       parsedHost.accountId,
-      chatId
+      parsedHost.chatIdOrMessageId
     )
     if (profileImage == null || profileImage == '') {
       // TODO shouldn't we display an initial letter avatar then?
@@ -706,6 +716,32 @@ function parseHost(host: string): null | {
           callMessageId,
         },
   }
+}
+
+async function getChatInfo(
+  accountId: number,
+  chatIdOrMessageId:
+    | {
+        chatId: number
+        callMessageId?: undefined
+      }
+    | {
+        chatId?: undefined
+        callMessageId: number
+      }
+): Promise<T.BasicChat> {
+  const jsonrpcRemote = getDCJsonrpcRemote()
+
+  const chatId =
+    chatIdOrMessageId.chatId ??
+    (
+      await jsonrpcRemote.rpc.getMessage(
+        accountId,
+        chatIdOrMessageId.callMessageId
+      )
+    ).chatId
+
+  return await jsonrpcRemote.rpc.getBasicChatInfo(accountId, chatId)
 }
 
 export function registerCallsWebappSchemeAsPrivileged() {
