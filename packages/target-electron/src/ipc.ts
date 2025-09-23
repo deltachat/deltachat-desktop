@@ -57,9 +57,6 @@ let dcController: typeof DeltaChatController.prototype
 export function getDCJsonrpcRemote() {
   return dcController.jsonrpcRemote
 }
-export function getDCJsonrpcClient() {
-  return dcController.jsonrpcRemote.rpc
-}
 
 /** returns shutdown function */
 export async function init(cwd: string, logHandler: LogHandler) {

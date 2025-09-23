@@ -20,7 +20,7 @@ import { isInviteLink, truncateText } from '@deltachat-desktop/shared/util.js'
 import { tx } from '../load-translations.js'
 import { open_url } from '../open_url.js'
 import { loadTheme } from '../themes.js'
-import { getDCJsonrpcClient } from '../ipc.js'
+import { getDCJsonrpcRemote } from '../ipc.js'
 import { getLogger } from '../../../shared/logger.js'
 
 import * as mainWindow from './main.js'
@@ -459,7 +459,7 @@ function makeBrowserView(
   if (allow_remote_content) {
     const callback = async (req: Request) => {
       try {
-        const response = await getDCJsonrpcClient().getHttpResponse(
+        const response = await getDCJsonrpcRemote().rpc.getHttpResponse(
           account_id,
           req.url
         )
