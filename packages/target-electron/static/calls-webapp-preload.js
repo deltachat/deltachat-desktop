@@ -81,4 +81,7 @@ contextBridge.exposeInMainWorld('calls', {
   endCall() {
     window.close()
   },
+  getAvatar() {
+    return '/avatar'
+  },
 })

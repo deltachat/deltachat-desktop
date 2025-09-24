@@ -20,6 +20,7 @@ export function startOutgoingVideoCall(accountId: number, chatId: number) {
 
   const { offerPromise, windowClosed, closeWindow } = openVideoCallWindow(
     accountId,
+    { chatId },
     CallDirection.Outgoing,
     {}
   )
@@ -93,6 +94,7 @@ function openIncomingVideoCallWindow(
 
   const { answerPromise, windowClosed, closeWindow } = openVideoCallWindow(
     accountId,
+    { callMessageId },
     CallDirection.Incoming,
     {
       callerWebrtcOffer,
@@ -132,6 +134,19 @@ const enum CallDirection {
 
 function openVideoCallWindow<T extends CallDirection>(
   accountId: number,
+  /**
+   * Depending on the call direction we only know
+   * the chat ID or the call message ID
+   */
+  chatIdOrMessageId:
+    | {
+        chatId: number
+        callMessageId?: undefined
+      }
+    | {
+        chatId?: undefined
+        callMessageId: number
+      },
   callDirection: T,
   {
     callerWebrtcOffer,
@@ -168,10 +183,10 @@ function openVideoCallWindow<T extends CallDirection>(
         onAnswer: (answer: string) => void
       }>
     }) {
-  const ses = session.fromPartition(`calls-webapp_${accountId}`)
+  const ses = session.fromPartition('calls-webapp')
 
   if (!ses.protocol.isProtocolHandled(SCHEME_NAME)) {
-    ses.protocol.handle(SCHEME_NAME, returnCallsWebappFile)
+    ses.protocol.handle(SCHEME_NAME, returnIndexHtmlOrAvatar)
   }
 
   const win = new BrowserWindow({
@@ -339,12 +354,13 @@ function openVideoCallWindow<T extends CallDirection>(
   })
   webAppMessagePort.start()
 
+  const host = formatHost(accountId, chatIdOrMessageId)
   const hash =
     callDirection === CallDirection.Outgoing
       ? '#startCall'
       : // Otherwise we'll set the hash later, when the call gets accepted.
         ''
-  win.webContents.loadURL(`${SCHEME_NAME}://${DUMMY_HOST_NAME}${hash}`, {
+  win.webContents.loadURL(`${SCHEME_NAME}://${host}${hash}`, {
     extraHeaders: 'Content-Security-Policy: ' + CSP,
   })
 
@@ -526,41 +542,86 @@ const CSP =
   "default-src 'none';\
 style-src 'self' 'unsafe-inline';\
 script-src 'self' 'unsafe-inline';\
-img-src 'self' data:"
+img-src 'self'"
 
-async function returnCallsWebappFile(request: GlobalRequest) {
+async function returnIndexHtmlOrAvatar(request: GlobalRequest) {
   const url = URL.parse(request.url)
   if (url == null) {
     return makeResponse('', { status: 400 })
   }
-  if (
-    url.pathname !== '/' &&
-    url.pathname !== '/index.html' &&
-    url.pathname !== ''
-  ) {
-    return makeResponse('', { status: 404 })
+
+  if (!isOriginGood(request.url)) {
+    return makeResponse('', { status: 401 })
   }
 
-  const res = await net.fetch(
-    pathToFileURL(join(htmlDistDir(), 'calls-webapp', 'index.html')).toString()
-  )
-  return makeResponse(res.body)
+  if (
+    url.pathname === '/' ||
+    url.pathname === '/index.html' ||
+    url.pathname === ''
+  ) {
+    const res = await net.fetch(
+      pathToFileURL(
+        join(htmlDistDir(), 'calls-webapp', 'index.html')
+      ).toString()
+    )
+    return makeResponse(res.body)
+  }
+
+  if (url.pathname === '/avatar') {
+    const parsedHost = parseHost(url.host)
+    if (parsedHost == null) {
+      return makeResponse('', { status: 400 })
+    }
+
+    const jsonrpcRemote = getDCJsonrpcRemote()
+
+    const chatId =
+      parsedHost.chatIdOrMessageId.chatId ??
+      (
+        await jsonrpcRemote.rpc.getMessage(
+          parsedHost.accountId,
+          parsedHost.chatIdOrMessageId.callMessageId
+        )
+      ).chatId
+
+    const { profileImage } = await jsonrpcRemote.rpc.getBasicChatInfo(
+      parsedHost.accountId,
+      chatId
+    )
+    if (profileImage == null || profileImage == '') {
+      // TODO shouldn't we display an initial letter avatar then?
+      return makeResponse('', { status: 404 })
+    }
+    const res = await net.fetch(pathToFileURL(profileImage).toString())
+    return makeResponse(
+      res.body,
+      undefined,
+      res.headers.get('Content-Type') ?? undefined
+    )
+  }
+
+  return makeResponse('', { status: 404 })
 }
 // Copy-pasted from webxdc.ts
 function makeResponse(
   body: ConstructorParameters<typeof Response>[0],
-  responseInit?: Omit<ResponseInit, 'headers'>
+  responseInit?: Omit<ResponseInit, 'headers'>,
+  mimeType?: string
 ) {
+  const headers = new Headers({
+    'Content-Security-Policy': CSP,
+  })
+  if (mimeType != undefined) {
+    headers.append('content-type', mimeType)
+  }
+
   return new Response(body, {
     ...responseInit,
-    headers: {
-      'Content-Security-Policy': CSP,
-    },
+    headers,
   })
 }
 
 const SCHEME_NAME = 'calls-webapp-scheme'
-const DUMMY_HOST_NAME = 'calls-webapp-dummy-host'
 
 /**
  * @see `origin_no_opaque` in the Tauri version.
@@ -572,9 +633,79 @@ function isOriginGood(url: string) {
   }
   return (
     urlParsed.protocol === SCHEME_NAME + ':' &&
-    urlParsed.host === DUMMY_HOST_NAME &&
+    parseHost(urlParsed.host) != null &&
     urlParsed.port === ''
   )
+}
+
+type ChatId = number
+type MsgId = number
+type AccountId = number
+type HostStr =
+  | `${MsgId}.${ChatId | 'none'}.${AccountId}.calls-webapp-dummy-host`
+  | `${MsgId | 'none'}.${ChatId}.${AccountId}.calls-webapp-dummy-host`
+function formatHost(
+  accountId: number,
+  chatIdOrMessageId:
+    | {
+        chatId: number
+        callMessageId?: undefined
+      }
+    | {
+        chatId?: undefined
+        callMessageId: number
+      }
+): HostStr {
+  return chatIdOrMessageId.chatId != undefined
+    ? `${chatIdOrMessageId.callMessageId ?? 'none'}.${chatIdOrMessageId.chatId}.${accountId}.calls-webapp-dummy-host`
+    : `${chatIdOrMessageId.callMessageId}.none.${accountId}.calls-webapp-dummy-host`
+}
+/**
+ * @see {@linkcode formatHost}.
+ * @returns `null` if the host is invalid.
+ */
+function parseHost(host: string): null | {
+  accountId: number
+  chatIdOrMessageId:
+    | {
+        chatId: number
+        callMessageId?: undefined
+      }
+    | {
+        chatId?: undefined
+        callMessageId: number
+      }
+} {
+  const [messageIdStr, chatIdStr, accountIdStr, dummyHostName, ...rest] =
+    host.split('.')
+  const [callMessageId, chatId, accountId] = [
+    parseInt(messageIdStr),
+    parseInt(chatIdStr),
+    parseInt(accountIdStr),
+  ]
+  const isValidId = (num: number) => Number.isFinite(num) && num >= 0
+  if (!isValidId(accountId)) {
+    return null
+  }
+  if (!isValidId(chatId) && !isValidId(callMessageId)) {
+    return null
+  }
+  if (rest.length !== 0) {
+    return null
+  }
+  if (dummyHostName !== 'calls-webapp-dummy-host') {
+    return null
+  }
+  return {
+    accountId,
+    chatIdOrMessageId: isValidId(chatId)
+      ? {
+          chatId,
+        }
+      : {
+          callMessageId,
+        },
+  }
 }
 
 export function registerCallsWebappSchemeAsPrivileged() {
