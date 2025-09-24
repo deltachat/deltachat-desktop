@@ -29,6 +29,8 @@
     "@emoji-mart/data": "^1.2.1",
     "@emoji-mart/react": "^1.1.1",
     "@jcoreio/async-throttle": "^1.6.1",
+    "@types/linkifyjs": "^2.1.7",
+    "@types/punycode": "^2.1.4",
     "classnames": "^2.5.1",
     "debounce": "^1.2.1",
     "emoji-js-clean": "^4.0.0",
@@ -36,9 +38,14 @@
     "filesize": "^10.1.4",
     "immutable": "^4.3.7",
     "jsqr": "^1.4.0",
+    "linkify-plugin-hashtag": "^4.3.2",
+    "linkify-plugin-mention": "^4.3.2",
+    "linkify-string": "^4.3.2",
+    "linkifyjs": "^4.3.2",
     "mime-types": "catalog:",
     "moment": "^2.30.1",
     "path-browserify": "^1.0.1",
+    "punycode": "^2.3.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-string-replace": "^1.1.1",
@@ -53,6 +60,7 @@
     "@types/debounce": "^1.2.4",
     "@types/emoji-mart": "^3.0.14",
     "@types/mime-types": "catalog:",
+    "@types/node": "catalog:",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
     "@types/react-window": "^1.8.8",
@@ -63,7 +71,6 @@
     "sass": "catalog:",
     "source-map-support": "^0.5.21",
     "typescript": "catalog:",
-    "typescript-plugin-css-modules": "catalog:",
-    "@types/node": "catalog:"
+    "typescript-plugin-css-modules": "catalog:"
   }
 }
