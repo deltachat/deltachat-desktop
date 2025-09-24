@@ -660,6 +660,11 @@ function formatHost(
     ? `${chatIdOrMessageId.callMessageId ?? 'none'}.${chatIdOrMessageId.chatId}.${accountId}.calls-webapp-dummy-host`
     : `${chatIdOrMessageId.callMessageId}.none.${accountId}.calls-webapp-dummy-host`
 }
+/**
+ * check if the numbers used in host are valid
+ * and the format (see formatHost) is correct
+ * @returns `null` if the host is invalid.
+ */
 function parseHost(host: string): null | {
   accountId: number
   chatIdOrMessageId:
