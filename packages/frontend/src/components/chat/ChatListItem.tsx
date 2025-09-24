@@ -10,7 +10,7 @@ import { getLogger } from '../../../../shared/logger'
 import { useContextMenuWithActiveState } from '../ContextMenu'
 import { selectedAccountId } from '../../ScreenController'
 import { runtime } from '@deltachat-desktop/runtime-interface'
-import { message2React } from '../message/MessageMarkdown'
+import { parseAndRenderMessage } from '../message/MessageParser'
 import { useRovingTabindex } from '../../contexts/RovingTabindex'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
@@ -65,7 +65,7 @@ function Header({
   )
 }
 
-// `React.memo()` because `message2React` inside of it takes a while.
+// `React.memo()` because `parseAndRenderMessage` inside of it takes a while.
 // Although we also `React.memo()` entire `ChatListItem`s,
 // they are still re-rendered when their `isSelected` changes.
 const Message = React.memo<
@@ -132,7 +132,7 @@ const Message = React.memo<
             }}
           />
         )}
-        {message2React(summaryText2 || '', true, -1)}
+        {parseAndRenderMessage(summaryText2 || '', true, -1)}
       </div>
       {isContactRequest && (
         <div className='label'>
