@@ -661,11 +661,6 @@ function formatHost(
     : `${chatIdOrMessageId.callMessageId}.none.${accountId}.calls-webapp-dummy-host`
 }
 /**
- * check if the numbers used in host are valid
- * and the format (see formatHost) is correct
- * @returns `null` if the host is invalid.
- */
-/**
  * @see {@linkcode formatHost}.
  * @returns `null` if the host is invalid.
  */
