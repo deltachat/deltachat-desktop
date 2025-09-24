@@ -665,6 +665,10 @@ function formatHost(
  * and the format (see formatHost) is correct
  * @returns `null` if the host is invalid.
  */
+/**
+ * @see {@linkcode formatHost}.
+ * @returns `null` if the host is invalid.
+ */
 function parseHost(host: string): null | {
   accountId: number
   chatIdOrMessageId:
