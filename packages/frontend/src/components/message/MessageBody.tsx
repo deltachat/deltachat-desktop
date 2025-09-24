@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
 import { getSizeClass, replaceColons } from '../conversations/emoji'
-import { message2React } from './MessageMarkdown'
+import { parseAndRenderMessage } from './MessageParser'
 
 /** limit where message parser will not parse the message, limit of core is lower, this is just a failsafe */
 const UPPER_LIMIT_FOR_PARSED_MESSAGES = 20_000
@@ -39,7 +39,7 @@ function MessageBody({
       )
     }
   }
-  return message2React(
+  return parseAndRenderMessage(
     emojifiedText,
     nonInteractiveContent,
     tabindexForInteractiveContents ?? 0
