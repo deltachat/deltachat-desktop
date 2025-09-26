@@ -42,6 +42,44 @@ portP.then(port => {
   port.start()
 })
 
+if (location.search.includes('playRingtone')) {
+  // TODO perf: sometimes, according to developer tools,
+  // the audio file request is not completed until `getUserMedia` completes,
+  // resulting in delayed playback of the ringtone.
+  const audio = document.createElement('audio')
+  audio.loop = true
+  audio.autoplay = true
+  audio.src = '/ringtone'
+  audio.play()
+
+  const intervalId = setInterval(() => {
+    if (navigator.userActivation.isActive) {
+      stopRingtoneAndCleanup()
+    }
+  }, 1000)
+
+  /**
+   * @type {Array<keyof DocumentEventMap>}
+   */
+  const eventNames = ['click', 'keydown', 'mousedown', 'touchstart']
+  const stopRingtoneAndCleanup = () => {
+    audio.pause()
+    // To make sure that things gets GCd.
+    audio.src = ''
+
+    clearInterval(intervalId)
+
+    for (const eventName of eventNames) {
+      document.removeEventListener(eventName, stopRingtoneAndCleanup)
+    }
+  }
+  for (const eventName of eventNames) {
+    document.addEventListener(eventName, stopRingtoneAndCleanup, {
+      passive: true,
+    })
+  }
+}
+
 // See https://github.com/deltachat/calls-webapp/blob/f92bea8ed1a7de6edfbdcdd4893b50438be56b24/README.md#integrating
 contextBridge.exposeInMainWorld('calls', {
   /**
