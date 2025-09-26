@@ -382,6 +382,7 @@ function openVideoCallWindow<T extends CallDirection>(
   webAppMessagePort.start()
 
   const host = formatHost(accountId, chatIdOrMessageId)
+  const query = callDirection === CallDirection.Incoming ? '?playRingtone' : ''
   const hash =
     callDirection === CallDirection.Outgoing
       ? '#startCall'
@@ -389,7 +390,7 @@ function openVideoCallWindow<T extends CallDirection>(
         ? `#offerIncomingCall=${btoa(callerWebrtcOffer!)}`
         : // Otherwise we'll set the hash later, when the call gets accepted.
           ''
-  win.webContents.loadURL(`${SCHEME_NAME}://${host}${hash}`, {
+  win.webContents.loadURL(`${SCHEME_NAME}://${host}${query}${hash}`, {
     extraHeaders: 'Content-Security-Policy: ' + CSP,
   })
 
@@ -571,7 +572,8 @@ const CSP =
   "default-src 'none';\
 style-src 'self' 'unsafe-inline';\
 script-src 'self' 'unsafe-inline';\
-img-src 'self'"
+img-src 'self';\
+media-src 'self'"
 
 async function returnIndexHtmlOrAvatar(request: GlobalRequest) {
   const url = URL.parse(request.url)
@@ -611,6 +613,19 @@ async function returnIndexHtmlOrAvatar(request: GlobalRequest) {
       return makeResponse('', { status: 404 })
     }
     const res = await net.fetch(pathToFileURL(profileImage).toString())
+    return makeResponse(
+      res.body,
+      undefined,
+      res.headers.get('Content-Type') ?? undefined
+    )
+  }
+
+  if (url.pathname === '/ringtone') {
+    const res = await net.fetch(
+      pathToFileURL(
+        join(htmlDistDir(), 'audio', 'ringtone_AfroNigeria.opus')
+      ).toString()
+    )
     return makeResponse(
       res.body,
       undefined,
