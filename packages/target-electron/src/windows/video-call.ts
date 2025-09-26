@@ -13,6 +13,7 @@ import { getLogger } from '@deltachat-desktop/shared/logger'
 import { getDCJsonrpcRemote } from '../ipc'
 import { pathToFileURL } from 'node:url'
 import type { T } from '@deltachat/jsonrpc-client'
+import { tx } from '../load-translations'
 
 const log = getLogger('windows/video-call')
 
@@ -233,8 +234,24 @@ function openVideoCallWindow<T extends CallDirection>(
     chat.profileImage && win.setIcon(chat.profileImage)
   })
 
-  // TODO proper menu?
-  win.setMenu(Menu.buildFromTemplate([{ role: 'toggleDevTools' }]))
+  win.setMenu(
+    Menu.buildFromTemplate([
+      {
+        label: tx('global_menu_view_desktop'),
+        submenu: [
+          { role: 'toggleDevTools' },
+
+          { type: 'separator' },
+          { role: 'resetZoom' },
+          { role: 'zoomIn' },
+          { role: 'zoomOut' },
+          { type: 'separator' },
+
+          { role: 'togglefullscreen' },
+        ],
+      },
+    ])
+  )
 
   const jsonrpcRemote = getDCJsonrpcRemote()
 
