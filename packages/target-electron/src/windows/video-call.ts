@@ -315,7 +315,13 @@ function openVideoCallWindow<T extends CallDirection>(
     })
   }
 
-  if (callerWebrtcOffer != undefined) {
+  /**
+   * Whether to utilize the "Accept call?" prompt
+   * that is provided inside the `calls-webapp` itself,
+   * or use a native dialog instead.
+   */
+  const useBuiltinAcceptCallPrompt = true
+  if (callerWebrtcOffer != undefined && !useBuiltinAcceptCallPrompt) {
     // const _assert: CallDirection.Incoming = callDirection
     ;(async () => {
       let chatInfo: null | T.BasicChat = null
@@ -379,8 +385,10 @@ function openVideoCallWindow<T extends CallDirection>(
   const hash =
     callDirection === CallDirection.Outgoing
       ? '#startCall'
-      : // Otherwise we'll set the hash later, when the call gets accepted.
-        ''
+      : useBuiltinAcceptCallPrompt
+        ? `#offerIncomingCall=${btoa(callerWebrtcOffer!)}`
+        : // Otherwise we'll set the hash later, when the call gets accepted.
+          ''
   win.webContents.loadURL(`${SCHEME_NAME}://${host}${hash}`, {
     extraHeaders: 'Content-Security-Policy: ' + CSP,
   })

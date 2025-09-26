@@ -22,6 +22,10 @@ portP.then(port => {
         location.hash = `onAnswer=${btoa(e.data.answer)}`
         break
       }
+      /**
+       * Note that this is unused when
+       * {@linkcode useBuiltinAcceptCallPrompt} === true
+       */
       case 'offer': {
         location.hash = `acceptCall=${btoa(e.data.offer)}`
         break
