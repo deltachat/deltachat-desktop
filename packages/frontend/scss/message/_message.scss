@@ -98,6 +98,29 @@ $info-text-max-width: 400px;
           cursor: pointer;
         }
       }
+      &.call {
+        > .text {
+          margin-inline-end: 24px;
+          white-space: nowrap;
+          font-weight: bold;
+          span:last-child {
+            margin-inline-end: 6px;
+          }
+          &::after {
+            content: '';
+            position: absolute;
+            top: 18px;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            @include mixins.color-svg(
+              './images/icons/phone_filled.svg',
+              var(--messageOutgoingStatusColor),
+              100%
+            );
+          }
+        }
+      }
 
       & > .text {
         color: var(--messageText);
@@ -229,6 +252,14 @@ $info-text-max-width: 400px;
 
 .message.incoming {
   margin-inline-start: 0;
+
+  .msg-body.call > .text::after {
+    @include mixins.color-svg(
+      './images/icons/phone_filled.svg',
+      var(--messagePhoneIconColorIncoming),
+      100%
+    );
+  }
 
   .metadata:not(.with-image-no-caption) {
     .email-icon {

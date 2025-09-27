@@ -892,6 +892,7 @@ export default function Message(props: {
         <div
           className={classNames('msg-body', {
             'msg-body--clickable': onClickMessageBody,
+            call: message.viewType === 'Call',
           })}
           onClick={onClickMessageBody}
           tabIndex={onClickMessageBody ? tabindexForInteractiveContents : -1}
