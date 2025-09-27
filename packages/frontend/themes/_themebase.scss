@@ -17,6 +17,7 @@ $bgSecondary: #f5f5f5 !default;
 $bgImage: url('./images/background_light.svg') !default;
 $bgMessageBubbleIncoming: #fff !default;
 $bgMessageBubbleOutgoing: #efffde !default;
+$messageOutgoingStatusColor: #4caf50 !default;
 $bgNavBar: #f8f9fa !default;
 $bgChatView: #e6dcd4 !default;
 $textNavBar: #fff !default;
@@ -135,7 +136,7 @@ $scrollbarTransparency: 0.34 !default;
   --infoMessageBubbleText: white;
   --messageIncomingBg: #{$bgMessageBubbleIncoming};
   --messageOutgoingBg: #{$bgMessageBubbleOutgoing};
-  --messageOutgoingStatusColor: #4caf50; // Message Bubble - Buttons
+  --messageOutgoingStatusColor: #{$messageOutgoingStatusColor}; // Message Bubble - Buttons
   /* Message Bubble - Metadata */
   --messageStatusIcon: #4caf50;
   --messageStatusIconSending: #62656a;
