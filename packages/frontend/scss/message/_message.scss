@@ -100,7 +100,8 @@ $info-text-max-width: 400px;
       }
       &.call {
         > .text {
-          margin-inline-end: 24px;
+          --call-icon-size: 24px;
+          margin-inline-end: var(--call-icon-size);
           white-space: nowrap;
           font-weight: bold;
           span:last-child {
@@ -111,8 +112,8 @@ $info-text-max-width: 400px;
             position: absolute;
             top: 18px;
             transform: translateY(-50%);
-            width: 24px;
-            height: 24px;
+            width: var(--call-icon-size);
+            height: var(--call-icon-size);
             @include mixins.color-svg(
               './images/icons/phone_filled.svg',
               var(--messageOutgoingStatusColor),
