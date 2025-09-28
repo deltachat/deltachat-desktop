@@ -104,13 +104,11 @@ $info-text-max-width: 400px;
           margin-inline-end: var(--call-icon-size);
           white-space: nowrap;
           font-weight: bold;
-          span:last-child {
-            margin-inline-end: 6px;
-          }
           &::after {
             content: '';
             position: absolute;
             top: 18px;
+            inset-inline-end: 8px;
             transform: translateY(-50%);
             width: var(--call-icon-size);
             height: var(--call-icon-size);
