@@ -61,8 +61,8 @@ const Composer = forwardRef<
   {
     isContactRequest: boolean
     selectedChat: Type.FullChat
-    regularMessageInputRef: React.MutableRefObject<ComposerMessageInput | null>
-    editMessageInputRef: React.MutableRefObject<ComposerMessageInput | null>
+    regularMessageInputRef: React.RefObject<ComposerMessageInput | null>
+    editMessageInputRef: React.RefObject<ComposerMessageInput | null>
     draftState: DraftObject
     onSelectReplyToShortcut: ReturnType<
       typeof useDraft
@@ -766,7 +766,7 @@ export function useDraft(
   chatId: number | null,
   isContactRequest: boolean,
   canSend: boolean, // no draft needed in chats we can't send messages
-  inputRef: React.MutableRefObject<ComposerMessageInput | null>
+  inputRef: React.RefObject<ComposerMessageInput | null>
 ): {
   draftState: DraftObject
   onSelectReplyToShortcut: (
@@ -1075,7 +1075,7 @@ export function useDraft(
 function useMessageEditing(
   accountId: number,
   chatId: T.BasicChat['id'],
-  editMessageInputRef: React.MutableRefObject<ComposerMessageInput | null>
+  editMessageInputRef: React.RefObject<ComposerMessageInput | null>
 ) {
   const tx = useTranslationFunction()
   const { userFeedback } = useContext(ScreenContext)
