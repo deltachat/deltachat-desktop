@@ -272,7 +272,8 @@ function buildContextMenu(
 
   const showAttachmentOptions = !!message.file
   const showCopyImage = !!message.file && message.viewType === 'Image'
-  const showResend = message.sender.id === C.DC_CONTACT_ID_SELF
+  const showResend =
+    message.sender.id === C.DC_CONTACT_ID_SELF && message.viewType !== 'Call'
 
   const isInfoOrCallInvitation =
     message.isInfo || message.viewType === 'VideochatInvitation'
@@ -292,7 +293,8 @@ function buildContextMenu(
     message.text !== '' &&
     chat.canSend &&
     !isInfoOrCallInvitation &&
-    !message.hasHtml
+    !message.hasHtml &&
+    message.viewType !== 'Call'
 
   // Do not show "react" for system messages
   const showSendReaction = showReactionsUi(message, chat)
@@ -892,6 +894,7 @@ export default function Message(props: {
         <div
           className={classNames('msg-body', {
             'msg-body--clickable': onClickMessageBody,
+            call: message.viewType === 'Call',
           })}
           onClick={onClickMessageBody}
           tabIndex={onClickMessageBody ? tabindexForInteractiveContents : -1}
