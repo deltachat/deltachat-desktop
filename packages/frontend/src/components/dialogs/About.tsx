@@ -196,6 +196,7 @@ export default function About({ onClose }: DialogProps) {
               )}
             </tbody>
           </table>
+          <br /> {/* some space at the bottom of the dialog */}
         </DialogContent>
       </DialogBody>
     </DialogWithHeader>
