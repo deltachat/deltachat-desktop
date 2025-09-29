@@ -20,6 +20,30 @@ const log = getLogger('messagelist')
 
 const PAGE_SIZE = 11
 
+// The store is used in different places so we export
+// it as Singleton to make sure all subscribers use the same store instance
+const storeCache = new Map<string, MessageListStore>()
+
+function getStoreKey(accountId: number, chatId: number): string {
+  return `${accountId}-${chatId}`
+}
+
+function getOrCreateMessageListStore(
+  accountId: number,
+  chatId: number
+): MessageListStore {
+  const key = getStoreKey(accountId, chatId)
+  let store = storeCache.get(key)
+
+  if (!store) {
+    store = new MessageListStore(accountId, chatId)
+    store.effect.loadChat()
+    storeCache.set(key, store)
+  }
+
+  return store
+}
+
 interface MessageListState {
   // chat: Type.FullChat | null
   messageListItems: T.MessageListItem[]
@@ -67,9 +91,7 @@ export function useMessageList(
   fetchMoreTop: () => void
 } {
   const store = useMemo(() => {
-    const store = new MessageListStore(accountId, chatId)
-    store.effect.loadChat()
-    return store
+    return getOrCreateMessageListStore(accountId, chatId)
   }, [accountId, chatId])
 
   // PERF: It's a shame that we have to re-render on settings changes
