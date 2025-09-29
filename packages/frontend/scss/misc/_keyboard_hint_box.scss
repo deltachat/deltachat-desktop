@@ -3,11 +3,11 @@
 .keyboard-hint-cheatsheet-dialog {
   .keybinding {
     display: block;
-    padding: 7px 0;
+    padding: 5px 0;
 
     .key {
       background: var(--keybindingKeyBackground);
-      border-radius: 4px;
+      border-radius: 6px;
       border: 1px var(--keybindingKeyBorder) solid;
       box-shadow: 0px 3px var(--keybindingKeyShadow);
       color: var(--keybindingKeyFontColor);
@@ -26,12 +26,18 @@
   .action {
     display: block;
     background-color: var(--keybindingActionBackground);
-    border-radius: 4px;
-    padding: 4px 6px;
-    margin: 4px 0px;
+    border-radius: 10px;
+    padding: 3px 6px;
+    margin: 6px 0px;
 
     .heading {
-      margin-bottom: 4px;
+      margin-bottom: 0;
+      line-height: normal;
+      margin-top: 1px;
+    }
+
+    &:nth-last-child {
+      padding-bottom: 0;
     }
   }
 
