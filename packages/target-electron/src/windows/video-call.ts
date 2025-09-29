@@ -623,7 +623,7 @@ async function returnIndexHtmlOrAvatar(request: GlobalRequest) {
   if (url.pathname === '/ringtone') {
     const res = await net.fetch(
       pathToFileURL(
-        join(htmlDistDir(), 'audio', 'ringtone_AfroNigeria.opus')
+        join(htmlDistDir(), 'audio', 'afro-nigeria-ringtone.opus')
       ).toString()
     )
     return makeResponse(
