@@ -14,7 +14,7 @@ import Advanced from './Advanced'
 import Profile from './Profile'
 import Dialog, { DialogBody, DialogHeader } from '../Dialog'
 import EditProfileDialog from '../dialogs/EditProfileDialog'
-import SettingsSeparator from './SettingsSeparator'
+import SettingsSeparator, { SettingsEndSeparator } from './SettingsSeparator'
 import useDialog from '../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
@@ -145,6 +145,7 @@ export default function Settings({ onClose }: DialogProps) {
             <SettingsIconButton icon='info' onClick={() => openDialog(About)}>
               {tx('global_menu_help_about_desktop')}
             </SettingsIconButton>
+            <SettingsEndSeparator />
           </DialogBody>
         </>
       )}
@@ -160,6 +161,7 @@ export default function Settings({ onClose }: DialogProps) {
               settingsStore={settingsStore}
               desktopSettings={settingsStore.desktopSettings}
             />
+            <SettingsEndSeparator />
           </DialogBody>
         </>
       )}
@@ -172,6 +174,7 @@ export default function Settings({ onClose }: DialogProps) {
           />
           <DialogBody>
             <Notifications desktopSettings={settingsStore.desktopSettings} />
+            <SettingsEndSeparator />
           </DialogBody>
         </>
       )}
@@ -188,6 +191,7 @@ export default function Settings({ onClose }: DialogProps) {
               desktopSettings={settingsStore.desktopSettings}
               settingsStore={settingsStore}
             />
+            <SettingsEndSeparator />
           </DialogBody>
         </>
       )}
@@ -201,6 +205,7 @@ export default function Settings({ onClose }: DialogProps) {
           />
           <DialogBody>
             <Advanced settingsStore={settingsStore} />
+            <SettingsEndSeparator />
           </DialogBody>
         </>
       )}
