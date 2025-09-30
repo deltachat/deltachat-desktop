@@ -763,6 +763,7 @@ export default function Message(props: {
             fileMime={message.fileMime || null}
             direction={direction}
             status={status}
+            error={message.error || null}
             downloadState={message.downloadState}
             isEdited={message.isEdited}
             hasText={text !== null && text !== ''}
@@ -947,6 +948,7 @@ export default function Message(props: {
               fileMime={fileMime}
               direction={direction}
               status={status}
+              error={message.error || null}
               downloadState={downloadState}
               isEdited={message.isEdited}
               hasText={hasText}
