@@ -10,7 +10,7 @@
   - withdraw all QR codes when one is withdrawn
   - do not create a group if the sender includes self in the To field
 - minor visual improvements to keyboard shortcut preview #5495
-- upgrade electron from `37.1.0` to `37.6.0`
+- upgrade electron from `37.1.0` to `37.6.0` #5499
   - this fixes high GPU usage bugs on macOS Tahoe
 
 ### Fixed
