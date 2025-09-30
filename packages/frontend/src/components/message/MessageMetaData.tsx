@@ -12,6 +12,7 @@ type Props = {
   fileMime: string | null
   direction?: 'incoming' | 'outgoing'
   status: msgStatus
+  error: string | null
   downloadState: T.DownloadState
   isEdited: boolean
   hasText: boolean
@@ -31,6 +32,7 @@ export default function MessageMetaData(props: Props) {
     fileMime,
     direction,
     status,
+    error,
     downloadState,
     isEdited,
     hasText,
@@ -88,7 +90,7 @@ export default function MessageMetaData(props: Props) {
         module='date'
       />
       <span className='spacer' />
-      {direction === 'outgoing' && (
+      {(direction === 'outgoing' || error !== null) && (
         <div className='delivery-status-wrapper'>
           {/* The main point of `role='status'` here is to let the user know
           that their message has been sent or delievered
@@ -101,7 +103,13 @@ export default function MessageMetaData(props: Props) {
           and not just the last one. */}
           {/* TODO a11y: we should probably apply `aria-label='Delivery status'`
           and change the contents to `Delivered` (or `Error` or whatever). */}
-          <div role='status' className={classNames('status-icon', status)}>
+          <div
+            role='status'
+            className={classNames(
+              'status-icon',
+              error !== null ? 'error' : status
+            )}
+          >
             <span className='visually-hidden'>
               {tx(
                 `a11y_delivery_status_${
@@ -119,7 +127,7 @@ export default function MessageMetaData(props: Props) {
               )}
             </span>
           </div>
-          {status === 'error' && (
+          {error !== null && (
             <button
               className='error-button'
               tabIndex={tabindexForInteractiveContents}
