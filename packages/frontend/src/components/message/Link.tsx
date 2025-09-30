@@ -19,8 +19,19 @@ import { isInviteLink } from '@deltachat-desktop/shared/util'
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
 import { selectedAccountId } from '../../ScreenController'
 
-import type { LinkDestination } from '@deltachat/message_parser_wasm'
 import type { DialogProps } from '../../contexts/DialogContext'
+
+export type PunycodeWarning = {
+  original_hostname: string
+  ascii_hostname: string
+  punycode_encoded_url: string
+}
+export type LinkDestination = {
+  target: string
+  hostname: null | string
+  punycode: null | PunycodeWarning
+  scheme: null | string
+}
 
 const log = getLogger('renderer/LabeledLink')
 
