@@ -9,6 +9,7 @@
 - update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.15.0`
   - withdraw all QR codes when one is withdrawn
   - do not create a group if the sender includes self in the To field
+- minor visual improvements to keyboard shortcut preview #5495
 
 ### Fixed
 - Display message error even for messages that are not OutFailed #5498
@@ -43,7 +44,7 @@
 ### Added
 - support RTL layout if locale.dir = rtf #4168
 - added estonian language
-- add more rtl configurations to languages that use it 
+- add more rtl configurations to languages that use it
 
 ### Changed
 - update translations (15-08-2025)
