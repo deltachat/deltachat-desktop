@@ -18,6 +18,40 @@ import useCreateChatByEmail from '../../hooks/chat/useCreateChatByEmail.js'
 
 const log = getLogger('renderer/message-markdown')
 
+/**
+ * returns an array with emojis if the first token of str
+ * is of type emoji, composed emojis are just one item in the array
+ */
+export function extractEmojisFromFirstToken(
+  str: string,
+  emojiOnly = false // only return emojis if the whole string is just one emoji token
+): string[] | null {
+  const elements = linkify.tokenize(str)
+  if (emojiOnly && elements.length !== 1) {
+    return null
+  }
+  if (
+    elements.length > 0 &&
+    elements[0].t === 'text' &&
+    elements[0].tk &&
+    (elements[0].tk.length === 1 || !emojiOnly)
+  ) {
+    const firstToken = elements[0].tk[0]
+    if (firstToken.t === 'EMOJI') {
+      // use Intl.Segmenter to split grapheme clusters (emoji + skin tone modifier etc)
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter/Segmenter
+      const segmenter = new (Intl as any).Segmenter('en', {
+        // Split the input into segments at grapheme cluster
+        // (user-perceived character) boundaries
+        granularity: 'grapheme',
+      })
+      const segments = [...segmenter.segment(firstToken.v)]
+      return segments.map(s => s.input)
+    }
+  }
+  return null
+}
+
 function renderElement(
   elm: linkify.MultiToken,
   tabindexForInteractiveContents: -1 | 0,
