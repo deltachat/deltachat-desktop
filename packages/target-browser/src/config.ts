@@ -3,6 +3,7 @@ import { existsSync, mkdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'path'
 import { config } from 'dotenv'
+import { isAbsolute } from 'node:path'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -30,7 +31,11 @@ export const ENV_WEB_TRUST_FIRST_PROXY = Boolean(
 )
 
 if (process.env['DC_ACCOUNTS_DIR']) {
-  DC_ACCOUNTS_DIR = join(__dirname, process.env['DC_ACCOUNTS_DIR'])
+  if (isAbsolute(process.env['DC_ACCOUNTS_DIR'])) {
+    DC_ACCOUNTS_DIR = process.env['DC_ACCOUNTS_DIR']
+  } else {
+    DC_ACCOUNTS_DIR = join(__dirname, process.env['DC_ACCOUNTS_DIR'])
+  }
 }
 
 export const NODE_ENV = (process.env['NODE_ENV'] ?? 'production').toLowerCase()
