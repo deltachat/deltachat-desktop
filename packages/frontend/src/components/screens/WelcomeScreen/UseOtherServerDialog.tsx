@@ -51,7 +51,6 @@ export default function UseOtherServerDialog({ onClose }: DialogProps) {
             {tx('instant_onboarding_other_server')}{' '}
             <Icon icon='open_in_new' className={styles.openExternalIcon} />
           </Button>
-
           <Button
             className={styles.welcomeScreenButton}
             onClick={onClickLogin}
@@ -66,6 +65,7 @@ export default function UseOtherServerDialog({ onClose }: DialogProps) {
           >
             {tx('scan_invitation_code')}
           </Button>
+          <br /> {/* space after buttons */}
         </DialogContent>
       </DialogBody>
     </Dialog>

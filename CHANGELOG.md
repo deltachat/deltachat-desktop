@@ -23,6 +23,7 @@
 - accessibility: correct `aria-posinset` for chat list #5044
 - don't close context menues on window resize #5418
 - tauri: accessibility: fix focus always being locked on the message input #5125
+- fix: remove weird bottom margins in some scrollable dialogs #5494
 
 <a id="2_11_1"></a>
 

@@ -86,6 +86,7 @@ export default function AlternativeSetupsDialog({
           >
             {tx('import_backup_title')}
           </Button>
+          <br /> {/* space after buttons */}
         </DialogContent>
       </DialogBody>
     </Dialog>

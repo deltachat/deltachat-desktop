@@ -70,6 +70,7 @@ export default function OnboardingScreen(props: Props) {
               {tx('onboarding_alternative_logins')}
             </Button>
           </div>
+          <br /> {/* space after buttons */}
         </DialogContent>
       </DialogBody>
     </>
