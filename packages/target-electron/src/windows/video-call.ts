@@ -4,8 +4,10 @@ import {
   Menu,
   MessageChannelMain,
   net,
-  protocol,
   session,
+  // This is actually used in a JSDoc.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  type protocol,
 } from 'electron/main'
 import { join } from 'path'
 import { appIcon, htmlDistDir } from '../application-constants'
@@ -773,18 +775,17 @@ async function getChatInfo(
   return await jsonrpcRemote.rpc.getBasicChatInfo(accountId, chatId)
 }
 
-export function registerCallsWebappSchemeAsPrivileged() {
-  protocol.registerSchemesAsPrivileged([
-    {
-      scheme: SCHEME_NAME,
-      privileges: {
-        // Needed for `getUserMedia`.
-        secure: true,
+/**
+ * To be passed to {@linkcode protocol.registerSchemesAsPrivileged}.
+ */
+export const callsWebappElectronScheme = {
+  scheme: SCHEME_NAME,
+  privileges: {
+    // Needed for `getUserMedia`.
+    secure: true,
 
-        // Needed for videos to work.
-        stream: true,
-        standard: true,
-      },
-    },
-  ])
+    // Needed for videos to work.
+    stream: true,
+    standard: true,
+  },
 }
