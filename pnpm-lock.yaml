@@ -122,9 +122,6 @@ importers:
       '@deltachat/jsonrpc-client':
         specifier: 'catalog:'
         version: 2.15.0(ws@7.5.10)
-      '@deltachat/message_parser_wasm':
-        specifier: ^0.14.1
-        version: 0.14.1
       '@emoji-mart/data':
         specifier: ^1.2.1
         version: 1.2.1
@@ -165,9 +162,6 @@ importers:
         specifier: ^4.3.2
         version: 4.3.2(linkifyjs@4.3.2)
       linkify-plugin-mention:
-        specifier: ^4.3.2
-        version: 4.3.2(linkifyjs@4.3.2)
-      linkify-string:
         specifier: ^4.3.2
         version: 4.3.2(linkifyjs@4.3.2)
       linkifyjs:
@@ -512,9 +506,6 @@ packages:
 
   '@deltachat/jsonrpc-client@2.15.0':
     resolution: {integrity: sha512-bPK3kdDdsXYxBgFQnq7/9tz3d94JpMTOr6e1XJ4Wkd0KYpz8jYnZOx4ltl/skwPSvcT6pFj5fNYv5s3vgoqmTw==}
-
-  '@deltachat/message_parser_wasm@0.14.1':
-    resolution: {integrity: sha512-rYaKxzUh2a1BbieXR5awLbQc+KY59DFJQNiNhAdPpvg+0BGgyr14nb2vdojqEEqgltlrQO/gafYmpgaWSc51og==}
 
   '@deltachat/stdio-rpc-server-android-arm64@2.15.0':
     resolution: {integrity: sha512-lN6ehdwA1mNIPrRusyjeT9nkAr7HCBOzjPJjrQbwJFRqRwmtxq5vmnoNWLiy4iKZyfTxsbY3kWE7Ysl7WzSDMw==}
@@ -2748,11 +2739,6 @@ packages:
     peerDependencies:
       linkifyjs: ^4.0.0
 
-  linkify-string@4.3.2:
-    resolution: {integrity: sha512-JqBuQpSa+CSj2tskIII70SKOjPfjXwDFyjRRNFTrlg76gp2nap36xeRj/cWaXxukqBNrxM+L07XyKRsUtH/DpQ==}
-    peerDependencies:
-      linkifyjs: ^4.0.0
-
   linkifyjs@4.3.2:
     resolution: {integrity: sha512-NT1CJtq3hHIreOianA8aSXn6Cw0JzYOuDQbOrSPe7gqFnCpKP++MQe3ODgO3oh2GJFORkAAdqredOa60z63GbA==}
 
@@ -3919,8 +3905,6 @@ snapshots:
       - bufferutil
       - utf-8-validate
       - ws
-
-  '@deltachat/message_parser_wasm@0.14.1': {}
 
   '@deltachat/stdio-rpc-server-android-arm64@2.15.0':
     optional: true
@@ -6392,10 +6376,6 @@ snapshots:
       linkifyjs: 4.3.2
 
   linkify-plugin-mention@4.3.2(linkifyjs@4.3.2):
-    dependencies:
-      linkifyjs: 4.3.2
-
-  linkify-string@4.3.2(linkifyjs@4.3.2):
     dependencies:
       linkifyjs: 4.3.2
 
