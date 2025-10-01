@@ -15,7 +15,8 @@
     "watch:ts": "pnpm build:ts -- -w",
     "watch:types": "npx tsc --noEmit --pretty -w --preserveWatchOutput",
     "watch:static": "node ../../bin/copy.js ../../static ./html-dist & node ../../bin/copy.js ./static ./html-dist & node ../../bin/copy.js ../../images ./html-dist/images",
-    "watch:scss": "pnpm build:scss --watch"
+    "watch:scss": "pnpm build:scss --watch",
+    "test": "NODE_OPTIONS=\"--enable-source-maps --import ./bin/register-ts-node.mjs\" mocha 'src/tests/**/*.ts'"
   },
   "browser": {
     "path": "path-browserify"
@@ -55,20 +56,25 @@
     "ws": "7.5.10"
   },
   "devDependencies": {
+    "@types/chai": "^4.3.17",
     "@types/debounce": "^1.2.4",
     "@types/emoji-mart": "^3.0.14",
     "@types/mime-types": "catalog:",
+    "@types/mocha": "^10.0.7",
     "@types/node": "catalog:",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "@types/react-window": "^1.8.8",
     "@types/react-window-infinite-loader": "^1.0.9",
+    "chai": "^5.1.1",
     "esbuild": "^0.25.0",
     "esbuild-plugin-inline-worker": "^0.1.1",
+    "mocha": "^10.7.0",
     "normalize.css": "^8.0.1",
     "sass": "catalog:",
     "source-map-support": "^0.5.21",
     "typescript": "catalog:",
+    "ts-node": "^10.9.2",
     "typescript-plugin-css-modules": "catalog:"
   }
 }

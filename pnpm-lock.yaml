@@ -121,7 +121,7 @@ importers:
         version: link:../shared
       '@deltachat/jsonrpc-client':
         specifier: 'catalog:'
-        version: 2.20.0(ws@7.5.10)
+        version: 2.22.0(ws@7.5.10)
       '@emoji-mart/data':
         specifier: ^1.2.1
         version: 1.2.1
@@ -207,6 +207,9 @@ importers:
         specifier: 7.5.10
         version: 7.5.10
     devDependencies:
+      '@types/chai':
+        specifier: ^4.3.17
+        version: 4.3.20
       '@types/debounce':
         specifier: ^1.2.4
         version: 1.2.4
@@ -216,6 +219,9 @@ importers:
       '@types/mime-types':
         specifier: 'catalog:'
         version: 2.1.4
+      '@types/mocha':
+        specifier: ^10.0.7
+        version: 10.0.10
       '@types/node':
         specifier: 'catalog:'
         version: 20.17.50
@@ -231,12 +237,18 @@ importers:
       '@types/react-window-infinite-loader':
         specifier: ^1.0.9
         version: 1.0.9
+      chai:
+        specifier: ^5.1.1
+        version: 5.2.0
       esbuild:
         specifier: ^0.25.0
         version: 0.25.8
       esbuild-plugin-inline-worker:
         specifier: ^0.1.1
         version: 0.1.1
+      mocha:
+        specifier: ^10.7.0
+        version: 10.8.2
       normalize.css:
         specifier: ^8.0.1
         version: 8.0.1
@@ -246,12 +258,15 @@ importers:
       source-map-support:
         specifier: ^0.5.21
         version: 0.5.21
+      ts-node:
+        specifier: ^10.9.2
+        version: 10.9.2(@types/node@20.17.50)(typescript@5.8.3)
       typescript:
         specifier: 'catalog:'
         version: 5.8.3
       typescript-plugin-css-modules:
         specifier: 'catalog:'
-        version: 5.2.0(ts-node@10.9.1(@types/node@20.17.50)(typescript@5.8.3))(typescript@5.8.3)
+        version: 5.2.0(ts-node@10.9.2(@types/node@20.17.50)(typescript@5.8.3))(typescript@5.8.3)
 
   packages/runtime:
     dependencies:
@@ -583,8 +598,8 @@ packages:
   '@deltachat/jsonrpc-client@2.22.0':
     resolution: {integrity: sha512-g6oQzNdrw64MDhUMZUIl5JO4Ot7ASVAhLtF4hTW9yUzJjDKLJ2+cqlRb0Y0XL8YL9XQ5nYOxHwgteWOkFRlTWA==}
 
-  '@deltachat/stdio-rpc-server-android-arm64@2.20.0':
-    resolution: {integrity: sha512-BXE0OEik+YpOC3cQXGebuohZbYZS8ExWXJmCotRu01DUZpQGQ05sL/Vb35vOdrPN+YyD3kpl8FXjap62MMY8ig==}
+  '@deltachat/stdio-rpc-server-android-arm64@2.22.0':
+    resolution: {integrity: sha512-8NIUmIWYRBE1hHuO87BemaJmCDcrbpLhQks7sLzgh1ZPQ3nQUx+KVHcm/W6ijJ6ADALPFhHdlgtGiFWzwHiSFQ==}
     cpu: [arm64]
     os: [android]
 
@@ -3741,8 +3756,8 @@ packages:
     peerDependencies:
       typescript: '>=4.8.4'
 
-  ts-node@10.9.1:
-    resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
+  ts-node@10.9.2:
+    resolution: {integrity: sha512-f0FFpIdcHgn8zcPSbf1dRevwt047YMnaiJM3u2w2RewrB+fob/zePZcrOyQoLMMO7aBIddLcQIEK5dYjkLnGrQ==}
     hasBin: true
     peerDependencies:
       '@swc/core': '>=1.2.50'
@@ -4140,7 +4155,6 @@ snapshots:
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
-    optional: true
 
   '@deltachat/calls-webapp@0.10.0-beta-debug':
     dependencies:
@@ -4166,7 +4180,7 @@ snapshots:
       - utf-8-validate
       - ws
 
-  '@deltachat/stdio-rpc-server-android-arm64@2.20.0':
+  '@deltachat/stdio-rpc-server-android-arm64@2.22.0':
     optional: true
 
   '@deltachat/stdio-rpc-server-android-arm@2.22.0':
@@ -4560,7 +4574,6 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
-    optional: true
 
   '@malept/cross-spawn-promise@1.1.1':
     dependencies:
@@ -4732,17 +4745,13 @@ snapshots:
 
   '@tootallnate/once@2.0.0': {}
 
-  '@tsconfig/node10@1.0.11':
-    optional: true
+  '@tsconfig/node10@1.0.11': {}
 
-  '@tsconfig/node12@1.0.11':
-    optional: true
+  '@tsconfig/node12@1.0.11': {}
 
-  '@tsconfig/node14@1.0.3':
-    optional: true
+  '@tsconfig/node14@1.0.3': {}
 
-  '@tsconfig/node16@1.0.4':
-    optional: true
+  '@tsconfig/node16@1.0.4': {}
 
   '@types/adm-zip@0.5.7':
     dependencies:
@@ -5021,7 +5030,6 @@ snapshots:
   acorn-walk@8.3.4:
     dependencies:
       acorn: 8.15.0
-    optional: true
 
   acorn@8.15.0: {}
 
@@ -5141,8 +5149,7 @@ snapshots:
       tar-stream: 2.2.0
       zip-stream: 4.1.1
 
-  arg@4.1.3:
-    optional: true
+  arg@4.1.3: {}
 
   argparse@2.0.1: {}
 
@@ -5494,8 +5501,7 @@ snapshots:
       buffer: 5.7.1
     optional: true
 
-  create-require@1.1.1:
-    optional: true
+  create-require@1.1.1: {}
 
   cross-spawn@7.0.6:
     dependencies:
@@ -5583,8 +5589,7 @@ snapshots:
   detect-node@2.1.0:
     optional: true
 
-  diff@4.0.2:
-    optional: true
+  diff@4.0.2: {}
 
   diff@5.2.0: {}
 
@@ -6754,8 +6759,7 @@ snapshots:
     dependencies:
       semver: 6.3.1
 
-  make-error@1.3.6:
-    optional: true
+  make-error@1.3.6: {}
 
   matcher@3.0.0:
     dependencies:
@@ -7024,13 +7028,13 @@ snapshots:
 
   possible-typed-array-names@1.1.0: {}
 
-  postcss-load-config@3.1.4(postcss@8.5.6)(ts-node@10.9.1(@types/node@20.17.50)(typescript@5.8.3)):
+  postcss-load-config@3.1.4(postcss@8.5.6)(ts-node@10.9.2(@types/node@20.17.50)(typescript@5.8.3)):
     dependencies:
       lilconfig: 2.1.0
       yaml: 1.10.2
     optionalDependencies:
       postcss: 8.5.6
-      ts-node: 10.9.1(@types/node@20.17.50)(typescript@5.8.3)
+      ts-node: 10.9.2(@types/node@20.17.50)(typescript@5.8.3)
 
   postcss-modules-extract-imports@3.1.0(postcss@8.5.6):
     dependencies:
@@ -7588,7 +7592,7 @@ snapshots:
     dependencies:
       typescript: 5.9.2
 
-  ts-node@10.9.1(@types/node@20.17.50)(typescript@5.8.3):
+  ts-node@10.9.2(@types/node@20.17.50)(typescript@5.8.3):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.11
@@ -7602,10 +7606,9 @@ snapshots:
       create-require: 1.1.1
       diff: 4.0.2
       make-error: 1.3.6
-      typescript: 5.9.2
+      typescript: 5.8.3
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-    optional: true
 
   tsconfig-paths@4.2.0:
     dependencies:
@@ -7675,7 +7678,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  typescript-plugin-css-modules@5.2.0(ts-node@10.9.1(@types/node@20.17.50)(typescript@5.8.3))(typescript@5.8.3):
+  typescript-plugin-css-modules@5.2.0(ts-node@10.9.2(@types/node@20.17.50)(typescript@5.8.3))(typescript@5.8.3):
     dependencies:
       '@types/postcss-modules-local-by-default': 4.0.2
       '@types/postcss-modules-scope': 3.0.4
@@ -7684,7 +7687,7 @@ snapshots:
       less: 4.4.0
       lodash.camelcase: 4.3.0
       postcss: 8.5.6
-      postcss-load-config: 3.1.4(postcss@8.5.6)(ts-node@10.9.1(@types/node@20.17.50)(typescript@5.8.3))
+      postcss-load-config: 3.1.4(postcss@8.5.6)(ts-node@10.9.2(@types/node@20.17.50)(typescript@5.8.3))
       postcss-modules-extract-imports: 3.1.0(postcss@8.5.6)
       postcss-modules-local-by-default: 4.2.0(postcss@8.5.6)
       postcss-modules-scope: 3.2.1(postcss@8.5.6)
@@ -7745,8 +7748,7 @@ snapshots:
 
   utils-merge@1.0.1: {}
 
-  v8-compile-cache-lib@3.0.1:
-    optional: true
+  v8-compile-cache-lib@3.0.1: {}
 
   vary@1.1.2: {}
 
@@ -7906,8 +7908,7 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  yn@3.1.1:
-    optional: true
+  yn@3.1.1: {}
 
   yocto-queue@0.1.0: {}
 
