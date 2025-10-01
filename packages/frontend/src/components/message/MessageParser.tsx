@@ -3,7 +3,7 @@ import React, { useContext } from 'react'
 import * as linkify from 'linkifyjs'
 import 'linkify-plugin-mention'
 import 'linkify-plugin-hashtag'
-import '../../utils/linkify-plugin-bot-command/index.js'
+import '../../utils/linkify-plugin-bot-command'
 import * as punycode from 'punycode/'
 
 import { Link } from './Link.js'
