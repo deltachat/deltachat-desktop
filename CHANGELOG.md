@@ -24,6 +24,8 @@
 - don't close context menues on window resize #5418
 - tauri: accessibility: fix focus always being locked on the message input #5125
 - fix: remove weird bottom margins in some scrollable dialogs #5494
+- upgrade electron from `37.1.0` to `37.6.0` #5499
+  - this fixes high GPU usage bugs on macOS Tahoe
 
 <a id="2_11_1"></a>
 
