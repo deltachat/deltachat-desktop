@@ -140,7 +140,7 @@ const enum CallDirection {
   Outgoing,
 }
 
-function openVideoCallWindow<T extends CallDirection>(
+function openVideoCallWindow<D extends CallDirection>(
   accountId: number,
   /**
    * Depending on the call direction we only know
@@ -155,10 +155,10 @@ function openVideoCallWindow<T extends CallDirection>(
         chatId?: undefined
         callMessageId: number
       },
-  callDirection: T,
+  callDirection: D,
   {
     callerWebrtcOffer,
-  }: T extends CallDirection.Incoming
+  }: D extends CallDirection.Incoming
     ? {
         callerWebrtcOffer: string
       }
@@ -168,7 +168,7 @@ function openVideoCallWindow<T extends CallDirection>(
 ): {
   closeWindow: () => void
   windowClosed: Promise<void>
-} & (T extends CallDirection.Incoming
+} & (D extends CallDirection.Incoming
   ? {
       /**
        * Resolves to `null` if the page port got closed,
