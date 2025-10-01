@@ -22,7 +22,7 @@ export function startOutgoingVideoCall(accountId: number, chatId: number) {
 
   const { offerPromise, windowClosed, closeWindow } = openVideoCallWindow(
     accountId,
-    { chatId },
+    chatId,
     CallDirection.Outgoing,
     {}
   )
@@ -80,11 +80,20 @@ export function startHandlingIncomingVideoCalls(
 ): () => void {
   const incomingCallListener = (
     eventAccountId: number,
-    { msg_id, place_call_info }: { msg_id: number; place_call_info: string }
+    {
+      chat_id,
+      msg_id,
+      place_call_info,
+    }: { chat_id: number; msg_id: number; place_call_info: string }
   ) => {
     log.info('got IncomingCall event', eventAccountId, msg_id)
 
-    openIncomingVideoCallWindow(eventAccountId, msg_id, place_call_info)
+    openIncomingVideoCallWindow(
+      eventAccountId,
+      chat_id,
+      msg_id,
+      place_call_info
+    )
   }
 
   jsonrpcRemote.on('IncomingCall', incomingCallListener)
@@ -93,14 +102,15 @@ export function startHandlingIncomingVideoCalls(
 
 function openIncomingVideoCallWindow(
   accountId: number,
+  chatId: number,
   callMessageId: number,
   callerWebrtcOffer: string
 ) {
-  log.info('received incoming call', { accountId, callMessageId })
+  log.info('received incoming call', { accountId, chatId, callMessageId })
 
   const { answerPromise, windowClosed, closeWindow } = openVideoCallWindow(
     accountId,
-    { callMessageId },
+    chatId,
     CallDirection.Incoming,
     {
       callerWebrtcOffer,
@@ -138,25 +148,13 @@ const enum CallDirection {
   Outgoing,
 }
 
-function openVideoCallWindow<T extends CallDirection>(
+function openVideoCallWindow<D extends CallDirection>(
   accountId: number,
-  /**
-   * Depending on the call direction we only know
-   * the chat ID or the call message ID
-   */
-  chatIdOrMessageId:
-    | {
-        chatId: number
-        callMessageId?: undefined
-      }
-    | {
-        chatId?: undefined
-        callMessageId: number
-      },
-  callDirection: T,
+  chatId: number,
+  callDirection: D,
   {
     callerWebrtcOffer,
-  }: T extends CallDirection.Incoming
+  }: D extends CallDirection.Incoming
     ? {
         callerWebrtcOffer: string
       }
@@ -166,7 +164,7 @@ function openVideoCallWindow<T extends CallDirection>(
 ): {
   closeWindow: () => void
   windowClosed: Promise<void>
-} & (T extends CallDirection.Incoming
+} & (D extends CallDirection.Incoming
   ? {
       /**
        * Resolves to `null` if the page port got closed,
@@ -189,7 +187,9 @@ function openVideoCallWindow<T extends CallDirection>(
         onAnswer: (answer: string) => void
       }>
     }) {
-  const chatInfoPromise = getChatInfo(accountId, chatIdOrMessageId)
+  const jsonrpcRemote = getDCJsonrpcRemote()
+
+  const chatInfoPromise = jsonrpcRemote.rpc.getBasicChatInfo(accountId, chatId)
 
   const ses = session.fromPartition('calls-webapp')
 
@@ -256,8 +256,6 @@ function openVideoCallWindow<T extends CallDirection>(
       },
     ])
   )
-
-  const jsonrpcRemote = getDCJsonrpcRemote()
 
   // prevent reload and navigation
   win.webContents.on('will-navigate', ev => {
@@ -402,7 +400,7 @@ function openVideoCallWindow<T extends CallDirection>(
   })
   webAppMessagePort.start()
 
-  const host = formatHost(accountId, chatIdOrMessageId)
+  const host = formatHost(accountId, chatId)
   const hash =
     callDirection === CallDirection.Outgoing
       ? '#startCall'
@@ -623,9 +621,10 @@ async function returnIndexHtmlOrAvatar(request: GlobalRequest) {
       return makeResponse('', { status: 400 })
     }
 
-    const { profileImage } = await getChatInfo(
+    const jsonrpcRemote = getDCJsonrpcRemote()
+    const { profileImage } = await jsonrpcRemote.rpc.getBasicChatInfo(
       parsedHost.accountId,
-      parsedHost.chatIdOrMessageId
+      parsedHost.chatId
     )
     if (profileImage == null || profileImage == '') {
       // TODO shouldn't we display an initial letter avatar then?
@@ -678,26 +677,12 @@ function isOriginGood(url: string) {
 }
 
 type ChatId = number
-type MsgId = number
 type AccountId = number
-type HostStr =
-  | `${MsgId}.${ChatId | 'none'}.${AccountId}.calls-webapp-dummy-host`
-  | `${MsgId | 'none'}.${ChatId}.${AccountId}.calls-webapp-dummy-host`
 function formatHost(
   accountId: number,
-  chatIdOrMessageId:
-    | {
-        chatId: number
-        callMessageId?: undefined
-      }
-    | {
-        chatId?: undefined
-        callMessageId: number
-      }
-): HostStr {
-  return chatIdOrMessageId.chatId != undefined
-    ? `${chatIdOrMessageId.callMessageId ?? 'none'}.${chatIdOrMessageId.chatId}.${accountId}.calls-webapp-dummy-host`
-    : `${chatIdOrMessageId.callMessageId}.none.${accountId}.calls-webapp-dummy-host`
+  chatId: number
+): `${ChatId}.${AccountId}.calls-webapp-dummy-host` {
+  return `${chatId}.${accountId}.calls-webapp-dummy-host`
 }
 /**
  * @see {@linkcode formatHost}.
@@ -705,28 +690,12 @@ function formatHost(
  */
 function parseHost(host: string): null | {
   accountId: number
-  chatIdOrMessageId:
-    | {
-        chatId: number
-        callMessageId?: undefined
-      }
-    | {
-        chatId?: undefined
-        callMessageId: number
-      }
+  chatId: number
 } {
-  const [messageIdStr, chatIdStr, accountIdStr, dummyHostName, ...rest] =
-    host.split('.')
-  const [callMessageId, chatId, accountId] = [
-    parseInt(messageIdStr),
-    parseInt(chatIdStr),
-    parseInt(accountIdStr),
-  ]
+  const [chatIdStr, accountIdStr, dummyHostName, ...rest] = host.split('.')
+  const [chatId, accountId] = [parseInt(chatIdStr), parseInt(accountIdStr)]
   const isValidId = (num: number) => Number.isFinite(num) && num >= 0
-  if (!isValidId(accountId)) {
-    return null
-  }
-  if (!isValidId(chatId) && !isValidId(callMessageId)) {
+  if (!isValidId(accountId) || !isValidId(chatId)) {
     return null
   }
   if (rest.length !== 0) {
@@ -737,40 +706,8 @@ function parseHost(host: string): null | {
   }
   return {
     accountId,
-    chatIdOrMessageId: isValidId(chatId)
-      ? {
-          chatId,
-        }
-      : {
-          callMessageId,
-        },
+    chatId,
   }
-}
-
-async function getChatInfo(
-  accountId: number,
-  chatIdOrMessageId:
-    | {
-        chatId: number
-        callMessageId?: undefined
-      }
-    | {
-        chatId?: undefined
-        callMessageId: number
-      }
-): Promise<T.BasicChat> {
-  const jsonrpcRemote = getDCJsonrpcRemote()
-
-  const chatId =
-    chatIdOrMessageId.chatId ??
-    (
-      await jsonrpcRemote.rpc.getMessage(
-        accountId,
-        chatIdOrMessageId.callMessageId
-      )
-    ).chatId
-
-  return await jsonrpcRemote.rpc.getBasicChatInfo(accountId, chatId)
 }
 
 export function registerCallsWebappSchemeAsPrivileged() {
