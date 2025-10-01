@@ -1,4 +1,4 @@
-import { MutableRefObject, useEffect, useRef, useState } from 'react'
+import { RefObject, useEffect, useRef, useState } from 'react'
 import { debounce } from 'debounce'
 
 /** debounce workaround so it can be useful in useFunctions that are used from multiple places at once
@@ -26,7 +26,7 @@ export function useRefLock(): {
     setLock: (lock: boolean) => {
       return (lockRef.current = lock)
     },
-  }) as MutableRefObject<any>
+  }) as RefObject<any>
 
   return stableRef.current
 }

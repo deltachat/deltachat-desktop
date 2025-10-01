@@ -12,7 +12,7 @@ type RenderMessageProps = {
   chat: T.FullChat
   message: T.Message
   conversationType: ConversationType
-  unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
+  unreadMessageInViewIntersectionObserver: React.RefObject<IntersectionObserver | null>
 }
 
 const log = getLogger('renderer/message/MessageWrapper')

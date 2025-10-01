@@ -4,7 +4,7 @@ import { ActionEmitter, KeybindAction } from '../keybindings'
 import { markChatAsSeen, saveLastChatId } from '../backend/chat'
 import { BackendRemote } from '../backend-com'
 
-import type { MutableRefObject, PropsWithChildren } from 'react'
+import type { RefObject, PropsWithChildren } from 'react'
 import type { T } from '@deltachat/jsonrpc-client'
 import { useRpcFetch } from '../hooks/useFetch'
 import { getLogger } from '@deltachat-desktop/shared/logger'
@@ -63,7 +63,7 @@ type Props = {
    * the ref gives us a handle to reset the component without moving it up in the hierarchy.
    * a class component would give us the option to call methods on the component,
    * but we are using a functional component here so we need to pass this as a property instead*/
-  unselectChatRef: MutableRefObject<UnselectChat | null>
+  unselectChatRef: RefObject<UnselectChat | null>
 }
 
 export const ChatContext = React.createContext<ChatContextValue | null>(null)

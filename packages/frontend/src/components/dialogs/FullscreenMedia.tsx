@@ -49,9 +49,9 @@ export default function FullscreenMedia(props: Props & DialogProps) {
   const { onClose } = props
 
   const [msg, setMsg] = useState(props.msg)
-  const resetImageZoom = useRef<(() => void) | null>(
-    null
-  ) as React.MutableRefObject<(() => void) | null>
+  const resetImageZoom = useRef<(() => void) | null>(null) as React.RefObject<
+    (() => void) | null
+  >
   const previousNextMessageId = useRef<[number | null, number | null]>([
     null,
     null,

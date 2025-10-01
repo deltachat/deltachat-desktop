@@ -16,9 +16,9 @@ export default function FullscreenAvatar(
   const tx = useTranslationFunction()
   const { onClose, imagePath } = props
 
-  const resetImageZoom = useRef<(() => void) | null>(
-    null
-  ) as React.MutableRefObject<(() => void) | null>
+  const resetImageZoom = useRef<(() => void) | null>(null) as React.RefObject<
+    (() => void) | null
+  >
 
   const saveAs = () => {
     runtime.downloadFile(imagePath, basename(imagePath))
