@@ -122,9 +122,6 @@ importers:
       '@deltachat/jsonrpc-client':
         specifier: 'catalog:'
         version: 2.20.0(ws@7.5.10)
-      '@deltachat/message_parser_wasm':
-        specifier: ^0.14.1
-        version: 0.14.1
       '@emoji-mart/data':
         specifier: ^1.2.1
         version: 1.2.1
@@ -165,9 +162,6 @@ importers:
         specifier: ^4.3.2
         version: 4.3.2(linkifyjs@4.3.2)
       linkify-plugin-mention:
-        specifier: ^4.3.2
-        version: 4.3.2(linkifyjs@4.3.2)
-      linkify-string:
         specifier: ^4.3.2
         version: 4.3.2(linkifyjs@4.3.2)
       linkifyjs:
@@ -254,10 +248,10 @@ importers:
         version: 0.5.21
       typescript:
         specifier: 'catalog:'
-        version: 5.9.2
+        version: 5.8.3
       typescript-plugin-css-modules:
         specifier: 'catalog:'
-        version: 5.2.0(ts-node@10.9.1(@types/node@20.17.50)(typescript@5.9.2))(typescript@5.9.2)
+        version: 5.2.0(ts-node@10.9.1(@types/node@20.17.50)(typescript@5.8.3))(typescript@5.8.3)
 
   packages/runtime:
     dependencies:
@@ -446,7 +440,7 @@ importers:
         version: 1.2.8
       typescript:
         specifier: 'catalog:'
-        version: 5.9.2
+        version: 5.8.3
 
   packages/target-tauri:
     dependencies:
@@ -515,9 +509,6 @@ packages:
 
   '@deltachat/jsonrpc-client@2.20.0':
     resolution: {integrity: sha512-kWZPJIz+WEcYUoXN07AkHxrhjjdkDcylSas4SGCfRR1mgzTaKj52KsZj5ok4FxF9NWbak3mMYqH4AoNs0DtsYA==}
-
-  '@deltachat/message_parser_wasm@0.14.1':
-    resolution: {integrity: sha512-rYaKxzUh2a1BbieXR5awLbQc+KY59DFJQNiNhAdPpvg+0BGgyr14nb2vdojqEEqgltlrQO/gafYmpgaWSc51og==}
 
   '@deltachat/stdio-rpc-server-android-arm64@2.20.0':
     resolution: {integrity: sha512-BXE0OEik+YpOC3cQXGebuohZbYZS8ExWXJmCotRu01DUZpQGQ05sL/Vb35vOdrPN+YyD3kpl8FXjap62MMY8ig==}
@@ -2747,11 +2738,6 @@ packages:
     peerDependencies:
       linkifyjs: ^4.0.0
 
-  linkify-string@4.3.2:
-    resolution: {integrity: sha512-JqBuQpSa+CSj2tskIII70SKOjPfjXwDFyjRRNFTrlg76gp2nap36xeRj/cWaXxukqBNrxM+L07XyKRsUtH/DpQ==}
-    peerDependencies:
-      linkifyjs: ^4.0.0
-
   linkifyjs@4.3.2:
     resolution: {integrity: sha512-NT1CJtq3hHIreOianA8aSXn6Cw0JzYOuDQbOrSPe7gqFnCpKP++MQe3ODgO3oh2GJFORkAAdqredOa60z63GbA==}
 
@@ -3925,8 +3911,6 @@ snapshots:
       - bufferutil
       - utf-8-validate
       - ws
-
-  '@deltachat/message_parser_wasm@0.14.1': {}
 
   '@deltachat/stdio-rpc-server-android-arm64@2.20.0':
     optional: true
@@ -5190,7 +5174,7 @@ snapshots:
   config-file-ts@0.2.6:
     dependencies:
       glob: 10.3.15
-      typescript: 5.9.2
+      typescript: 5.8.3
 
   content-disposition@0.5.4:
     dependencies:
@@ -6399,10 +6383,6 @@ snapshots:
     dependencies:
       linkifyjs: 4.3.2
 
-  linkify-string@4.3.2(linkifyjs@4.3.2):
-    dependencies:
-      linkifyjs: 4.3.2
-
   linkifyjs@4.3.2: {}
 
   load-json-file@7.0.1: {}
@@ -6730,13 +6710,13 @@ snapshots:
 
   possible-typed-array-names@1.1.0: {}
 
-  postcss-load-config@3.1.4(postcss@8.5.6)(ts-node@10.9.1(@types/node@20.17.50)(typescript@5.9.2)):
+  postcss-load-config@3.1.4(postcss@8.5.6)(ts-node@10.9.1(@types/node@20.17.50)(typescript@5.8.3)):
     dependencies:
       lilconfig: 2.1.0
       yaml: 1.10.2
     optionalDependencies:
       postcss: 8.5.6
-      ts-node: 10.9.1(@types/node@20.17.50)(typescript@5.9.2)
+      ts-node: 10.9.1(@types/node@20.17.50)(typescript@5.8.3)
 
   postcss-modules-extract-imports@3.1.0(postcss@8.5.6):
     dependencies:
@@ -7294,7 +7274,7 @@ snapshots:
     dependencies:
       typescript: 5.9.2
 
-  ts-node@10.9.1(@types/node@20.17.50)(typescript@5.9.2):
+  ts-node@10.9.1(@types/node@20.17.50)(typescript@5.8.3):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.11
@@ -7381,7 +7361,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  typescript-plugin-css-modules@5.2.0(ts-node@10.9.1(@types/node@20.17.50)(typescript@5.9.2))(typescript@5.9.2):
+  typescript-plugin-css-modules@5.2.0(ts-node@10.9.1(@types/node@20.17.50)(typescript@5.8.3))(typescript@5.8.3):
     dependencies:
       '@types/postcss-modules-local-by-default': 4.0.2
       '@types/postcss-modules-scope': 3.0.4
@@ -7390,7 +7370,7 @@ snapshots:
       less: 4.4.0
       lodash.camelcase: 4.3.0
       postcss: 8.5.6
-      postcss-load-config: 3.1.4(postcss@8.5.6)(ts-node@10.9.1(@types/node@20.17.50)(typescript@5.9.2))
+      postcss-load-config: 3.1.4(postcss@8.5.6)(ts-node@10.9.1(@types/node@20.17.50)(typescript@5.8.3))
       postcss-modules-extract-imports: 3.1.0(postcss@8.5.6)
       postcss-modules-local-by-default: 4.2.0(postcss@8.5.6)
       postcss-modules-scope: 3.2.1(postcss@8.5.6)
@@ -7398,7 +7378,7 @@ snapshots:
       sass: 1.86.3
       source-map-js: 1.2.1
       tsconfig-paths: 4.2.0
-      typescript: 5.9.2
+      typescript: 5.8.3
     optionalDependencies:
       stylus: empty-npm-package@1.0.0
     transitivePeerDependencies:
