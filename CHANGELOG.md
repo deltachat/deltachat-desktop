@@ -25,6 +25,9 @@
   - withdraw all QR codes when one is withdrawn
   - do not create a group if the sender includes self in the To field
 - minor visual improvements to keyboard shortcut preview #5495
+- replace rust message-parser with javascript library
+  - removes experimental markdown support
+  - fixes some link parsing issues
 
 ### Fixed
 - Display message error even for messages that are not OutFailed #5498

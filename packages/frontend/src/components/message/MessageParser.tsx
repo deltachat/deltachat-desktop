@@ -17,7 +17,7 @@ import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog.js'
 import useCreateChatByEmail from '../../hooks/chat/useCreateChatByEmail.js'
 import { ChatView } from '../../contexts/ChatContext.js'
 
-const log = getLogger('renderer/message-markdown')
+const log = getLogger('renderer/message-parser')
 
 /**
  * returns an array with emojis if the first token of str
