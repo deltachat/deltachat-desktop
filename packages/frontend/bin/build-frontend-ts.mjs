@@ -127,13 +127,6 @@ const reporterPlugin = {
 }
 
 /**
- * Bundle all files with `esbuild`.
- */
-async function bundle(options) {
-  await esbuild.build(options)
-    }
-
-/**
  * Start watching for all files with `esbuild`, on change of any watched
  * file this will trigger a build.
  */
@@ -152,7 +145,7 @@ async function main(isWatch = false, isProduction = false, isMinify = false) {
   if (isWatch) {
     await watch(options)
   } else {
-    await bundle(options)
+    await esbuild.build(options)
   }
 }
 
