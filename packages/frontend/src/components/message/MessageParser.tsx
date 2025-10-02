@@ -6,16 +6,16 @@ import 'linkify-plugin-hashtag'
 import '../../utils/linkify-plugin-bot-command'
 import * as punycode from 'punycode/'
 
-import { Link } from './Link.js'
-import { getLogger } from '@deltachat-desktop/shared/logger.js'
-import { ActionEmitter, KeybindAction } from '../../keybindings.js'
-import { BackendRemote } from '../../backend-com.js'
-import { selectedAccountId } from '../../ScreenController.js'
-import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext.js'
-import useChat from '../../hooks/chat/useChat.js'
-import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog.js'
-import useCreateChatByEmail from '../../hooks/chat/useCreateChatByEmail.js'
-import { ChatView } from '../../contexts/ChatContext.js'
+import { Link } from './Link'
+import { getLogger } from '@deltachat-desktop/shared/logger'
+import { ActionEmitter, KeybindAction } from '../../keybindings'
+import { BackendRemote } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
+import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
+import useChat from '../../hooks/chat/useChat'
+import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
+import useCreateChatByEmail from '../../hooks/chat/useCreateChatByEmail'
+import { ChatView } from '../../contexts/ChatContext'
 
 const log = getLogger('renderer/message-parser')
 
@@ -70,17 +70,17 @@ function renderElement(
 
     /**
      * linkifyJS does even identify URLs without scheme as URL, e.g.
-     * "www.example.com" or "example.com/test" or "example.com?param=value"
-     * etc.
-     * It does only identify valid TLDs.
-     * (see https://en.wikipedia.org/wiki/List_of_Internet_top-level_domains)
-     *
+     * "www.example.com" or "example.com/test" or "example.com?param=value" etc.
+     * It does only identify valid TLDs based on https://data.iana.org/TLD/tlds-alpha-by-domain.txt
      */
     case 'url': {
       let fullUrl = elm.v
       // no token for scheme?
       if (!elm.tk.find(t => t.t === 'SLASH_SCHEME')) {
-        // if the scheme is missing, we add https as default
+        // no scheme so we add https as default
+        // be aware that custom protocols may not
+        // have a SLASH_SCHEME but just a SCHEME
+        // see https://github.com/nfrasser/linkifyjs/blob/3abe9abbcb4e069aeadde2f42de7dfcc2371c0f0/packages/linkifyjs/src/text.mjs#L24
         fullUrl = 'https://' + fullUrl
       }
       const url = new URL(fullUrl)
@@ -100,8 +100,6 @@ function renderElement(
       }
       destination.hostname = url.hostname
       destination.scheme = url.protocol.replace(':', '')
-      console.log('Link destination:', destination)
-      console.log('URL parts:', url)
       return (
         <Link
           destination={destination}
@@ -134,7 +132,7 @@ function renderElement(
     case 'nl':
       return <span key={key}>{'\n'}</span>
 
-    case 'mention': // TODO: implement user mention rendering
+    case 'mention': // for later usage
     case 'text':
       return <span key={key}>{elm.v}</span>
     default:
@@ -196,7 +194,7 @@ export function parseAndRenderMessage(
 ): React.ReactElement {
   try {
     const elements = linkify.tokenize(message)
-    console.log('linkifyjs elms:', elements)
+    // console.log('linkifyjs elements:', elements)
     return preview ? (
       <div className='truncated'>{elements.map(renderElementPreview)}</div>
     ) : (
