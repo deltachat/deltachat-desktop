@@ -48,9 +48,9 @@ class Encoder {
 
   /**
    * Append new audio buffer to current active buffer
-   * @param {ArrayBuffer | Int8Array} buffer
+   * @param {ArrayBuffer | Int8Array | Uint8Array} buffer
    */
-  appendToBuffer(buffer: ArrayBuffer | Int8Array): void {
+  appendToBuffer(buffer: ArrayBuffer | Int8Array | Uint8Array): void {
     this.dataBuffer.push(new Int8Array(buffer))
   }
 
