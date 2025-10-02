@@ -91,5 +91,14 @@
   },
   "accounts_list_item_menu_label": {
     "message": "Actions with Profile"
+  },
+  "a11y_delivery_status_in_fresh": {
+    "message": "Message is new"
+  },
+  "a11y_delivery_status_in_seen": {
+    "message": "Message is seen"
+  },
+  "a11y_delivery_status_in_noticed": {
+    "message": "Message was notified"
   }
 }

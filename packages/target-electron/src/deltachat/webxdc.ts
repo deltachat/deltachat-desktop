@@ -894,7 +894,7 @@ async function webxdcProtocolHandler(
 
   if (filename === WRAPPER_PATH) {
     return makeResponse(
-      await readFile(join(htmlDistDir(), '/webxdc_wrapper.html')),
+      await readFile(join(htmlDistDir(), '/webxdc_wrapper.html'), 'utf8'),
       {},
       mimeType
     )

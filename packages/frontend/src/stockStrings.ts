@@ -20,7 +20,6 @@ export async function updateCoreStrings() {
   strings[C.DC_STR_VIDEO] = tx('video')
   strings[C.DC_STR_AUDIO] = tx('audio')
   strings[C.DC_STR_FILE] = tx('file')
-  strings[C.DC_STR_ENCRYPTEDMSG] = tx('encrypted_message')
   // strings[C.DC_STR_E2E_AVAILABLE] = tx('DC_STR_E2E_AVAILABLE')
   // strings[C.DC_STR_ENCR_TRANSP] = tx('DC_STR_ENCR_TRANSP')
   // strings[C.DC_STR_ENCR_NONE] = tx('DC_STR_ENCR_NONE')
@@ -81,7 +80,6 @@ export async function updateCoreStrings() {
   strings[C.DC_STR_SETUP_CONTACT_QR_DESC] = tx('qrshow_join_contact_hint')
   strings[C.DC_STR_SECURE_JOIN_GROUP_QR_DESC] = tx('qrshow_join_group_hint')
   strings[C.DC_STR_NOT_CONNECTED] = tx('connectivity_not_connected')
-  strings[C.DC_STR_AEAP_EXPLANATION_AND_LINK] = tx('aeap_explanation')
   strings[C.DC_STR_GROUP_NAME_CHANGED_BY_YOU] = tx('group_name_changed_by_you')
   strings[C.DC_STR_GROUP_NAME_CHANGED_BY_OTHER] = tx(
     'group_name_changed_by_other'

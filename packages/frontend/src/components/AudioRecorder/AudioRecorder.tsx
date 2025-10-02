@@ -154,7 +154,7 @@ export const AudioRecorder = ({
       ?.stop()
       .getMp3()
       .then(([buffer, _blob]) => {
-        saveVoiceAsDraft(new Blob(buffer, { type: 'audio/mp3' }))
+        saveVoiceAsDraft(new Blob(buffer as any, { type: 'audio/mp3' }))
       })
       .catch((err: any) => {
         onError(new AudioRecorderError(err.message))
