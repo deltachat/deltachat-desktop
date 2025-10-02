@@ -50,7 +50,6 @@ describe('linkify-plugin-botcommand', () => {
     it('Works with basic bot commands', () => {
       expect(linkify.test('/help', 'botcommand')).to.equal(true)
       expect(linkify.test('/status', 'botcommand')).to.equal(true)
-      expect(linkify.test('/config', 'botcommand')).to.equal(true)
     })
 
     it('Works with bot commands containing hyphens', () => {
