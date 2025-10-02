@@ -12,6 +12,8 @@ const BotCommandToken = createTokenClass('botcommand', {
  * Bot command parser plugin for linkify
  * Finds strings with a single trailing slash at the beginning of a word
  * Allows alphanumeric characters and special characters: /,-,_,@
+ * the related code in android is here:
+ * https://github.com/deltachat/deltachat-android/blob/70a05221abc68f7352eb29d14b23734a2c9cc795/src/main/java/org/thoughtcrime/securesms/util/Linkifier.java#L12
  */
 export const botcommand: Plugin = ({ scanner, parser }) => {
   const {
@@ -30,15 +32,15 @@ export const botcommand: Plugin = ({ scanner, parser }) => {
   // Start with a slash
   const Slash = parser.start.tt(SLASH)
 
-  // Create the accepting state that emits our BotCommandToken
+  // Create the accepting state for BotCommandToken
   // This state represents a valid bot command and will generate the final token
   const BotCommand = new State(BotCommandToken as any)
 
   // Define transitions from the slash state to the bot command state
-  // These transitions determine what characters can immediately follow a slash
-  // to form a valid bot command
+  // These transitions determine what characters can immediately follow
+  // a slash to form a valid bot command
 
-  // Note: We only allow alphabetic characters immediately after the slash.
+  // Only allow alphabetic characters immediately after the slash.
   Slash.ta(alpha, BotCommand)
 
   // Allow alphanumeric tokens (which contain at least one letter)
@@ -49,12 +51,12 @@ export const botcommand: Plugin = ({ scanner, parser }) => {
   BotCommand.ta(alphanumeric, BotCommand)
   BotCommand.ta(numeric, BotCommand)
 
-  // Allow specific alphanumeric tokens to continue the command
+  // Allow specific alphanumeric tokens
   BotCommand.tt(NUM, BotCommand)
   BotCommand.tt(ASCIINUMERICAL, BotCommand)
   BotCommand.tt(ALPHANUMERICAL, BotCommand)
 
-  // Allow only these special characters to continue the command:
+  // Allow only these special characters
   BotCommand.tt(HYPHEN, BotCommand)
   BotCommand.tt(UNDERSCORE, BotCommand)
   BotCommand.tt(DOT, BotCommand)

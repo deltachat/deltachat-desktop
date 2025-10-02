@@ -1,9 +1,6 @@
-import React, { useContext, useState } from 'react'
+import React from 'react'
 
-import { DeltaCheckbox } from '../contact/ContactListItem'
-import { getLogger } from '../../../../shared/logger'
 import reactStringReplace from 'react-string-replace'
-import { runtime } from '@deltachat-desktop/runtime-interface'
 import Dialog, {
   DialogBody,
   DialogContent,
@@ -16,173 +13,21 @@ import useOpenLinkSafely from '../../hooks/useOpenLinkSafely'
 import useProcessQr from '../../hooks/useProcessQr'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { isInviteLink } from '@deltachat-desktop/shared/util'
-import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
 import { selectedAccountId } from '../../ScreenController'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 import { SCAN_CONTEXT_TYPE } from '../../hooks/useProcessQr'
 
-export type PunycodeWarning = {
+type PunycodeWarning = {
   original_hostname: string
   ascii_hostname: string
   punycode_encoded_url: string
 }
-export type LinkDestination = {
+type LinkDestination = {
   target: string
   hostname: null | string
   punycode: null | PunycodeWarning
   scheme: null | string
-}
-
-const log = getLogger('renderer/LabeledLink')
-
-function getTrustedDomains(): string[] {
-  return JSON.parse(localStorage.getItem('trustedDomains') || '[]')
-}
-
-function trustDomain(domain: string) {
-  log.info('trustDomain', domain)
-  const trusted: string[] = getTrustedDomains()
-  trusted.push(domain)
-  localStorage.setItem('trustedDomains', JSON.stringify(trusted))
-}
-
-function isDomainTrusted(domain: string): boolean {
-  return getTrustedDomains().includes(domain)
-}
-
-export const LabeledLink = ({
-  label,
-  destination,
-  tabIndex,
-}: {
-  label: string | React.ReactElement | React.ReactElement[]
-  destination: LinkDestination
-  tabIndex: -1 | 0
-}) => {
-  const { openDialog } = useDialog()
-  const openLinkSafely = useOpenLinkSafely()
-  const processQr = useProcessQr()
-  const messageDisplay = useContext(MessagesDisplayContext)
-  const accountId = selectedAccountId()
-  const { target, punycode, hostname, scheme } = destination
-
-  // encode the punycode to make phishing harder
-  const realUrl = punycode ? punycode.punycode_encoded_url : target
-  const hostName = punycode ? punycode.ascii_hostname : hostname
-
-  const onClick = (ev: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    ev.preventDefault()
-    ev.stopPropagation()
-    const isDeviceChat =
-      messageDisplay?.context == 'chat_messagelist'
-        ? messageDisplay.isDeviceChat
-        : false
-
-    if (isInviteLink(target)) {
-      processQr(accountId, target, SCAN_CONTEXT_TYPE.DEFAULT)
-      return
-    }
-
-    //check if domain is trusted, or if there is no domain like on mailto just open it
-    if (isDeviceChat || !hostName || isDomainTrusted(hostName)) {
-      openLinkSafely(accountId, scheme ? target : `https://${target}`)
-      return
-    }
-    // not trusted - ask for confirmation from user
-    openDialog(LabeledLinkConfirmationDialog, {
-      realUrl,
-      hostName,
-      target: scheme ? target : `https://${target}`,
-    })
-  }
-  return (
-    <a
-      href={target}
-      x-target-url={target}
-      title={realUrl}
-      onClick={onClick}
-      tabIndex={tabIndex}
-      onContextMenu={ev => ((ev as any).t = ev.currentTarget)}
-      // aria-haspopup='menu' probably doesn't make sense here,
-      // because we don't have any special context menu actions for links.
-    >
-      {label}
-    </a>
-  )
-}
-
-function LabeledLinkConfirmationDialog(
-  props: {
-    realUrl: string
-    hostName: string
-    target: string
-  } & DialogProps
-) {
-  const tx = useTranslationFunction()
-  const accountId = selectedAccountId()
-  const openLinkSafely = useOpenLinkSafely()
-  const [isChecked, setIsChecked] = useState(false)
-  const toggleIsChecked = () => setIsChecked(checked => !checked)
-
-  return (
-    <Dialog onClose={props.onClose}>
-      <DialogBody>
-        <DialogContent paddingTop>
-          <p>{tx('open_url_confirmation')}</p>
-          <p
-            style={{
-              overflowWrap: 'break-word',
-              overflowY: 'scroll',
-              maxHeight: '50vh',
-            }}
-          >
-            {props.realUrl}
-          </p>
-          <div style={{ display: 'flex' }}>
-            <DeltaCheckbox checked={isChecked} onClick={toggleIsChecked} />
-            <div style={{ alignSelf: 'center' }}>
-              {reactStringReplace(
-                tx('open_external_url_trust_domain', '$$hostname$$'),
-                '$$hostname$$',
-                () => (
-                  <i>{props.hostName}</i>
-                )
-              )}
-            </div>
-          </div>
-        </DialogContent>
-      </DialogBody>
-      <DialogFooter>
-        <FooterActions>
-          <FooterActionButton
-            onClick={() => {
-              runtime
-                .writeClipboardText(props.target)
-                .then(() => props.onClose())
-            }}
-          >
-            {tx('menu_copy_link_to_clipboard')}
-          </FooterActionButton>
-          <FooterActionButton onClick={props.onClose}>
-            {tx('cancel')}
-          </FooterActionButton>
-          <FooterActionButton
-            onClick={() => {
-              props.onClose()
-              if (isChecked) {
-                // trust url
-                trustDomain(props.hostName)
-              }
-              openLinkSafely(accountId, props.target)
-            }}
-          >
-            {tx('open')}
-          </FooterActionButton>
-        </FooterActions>
-      </DialogFooter>
-    </Dialog>
-  )
 }
 
 export const Link = ({
