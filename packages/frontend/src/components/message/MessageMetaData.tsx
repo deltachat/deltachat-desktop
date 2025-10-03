@@ -113,16 +113,15 @@ export default function MessageMetaData(props: Props) {
             <span className='visually-hidden'>
               {tx(
                 `a11y_delivery_status_${
-                  status as Exclude<
-                    typeof status,
-                    // '' is not supposed to happen.
-                    // The others are not supposed to happen
-                    // as long as direction is outgoing.
-                    | ''
-                    | (typeof direction extends 'outgoing'
-                        ? 'in_fresh' | 'in_seen' | 'in_noticed'
-                        : never)
-                  >
+                  error !== null
+                    ? 'error'
+                    : (status as Exclude<
+                        typeof status,
+                        // '' is not supposed to happen.
+                        // The others are not supposed to happen
+                        // as long as direction is outgoing.
+                        '' | 'in_fresh' | 'in_seen' | 'in_noticed'
+                      >)
                 }`
               )}
             </span>
