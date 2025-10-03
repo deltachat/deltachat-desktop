@@ -32,6 +32,7 @@ if (rc['help'] === true || rc['h'] === true) {
   process.exit()
 }
 
+import { callsWebappElectronScheme } from './windows/video-call.js'
 protocol.registerSchemesAsPrivileged([
   {
     scheme: 'webxdc',
@@ -64,9 +65,8 @@ protocol.registerSchemesAsPrivileged([
       stream: true, // needed for audio playback
     },
   },
+  callsWebappElectronScheme,
 ])
-import { registerCallsWebappSchemeAsPrivileged } from './windows/video-call.js'
-registerCallsWebappSchemeAsPrivileged()
 
 const app = rawApp as ExtendedAppMainProcess
 app.rc = rc
