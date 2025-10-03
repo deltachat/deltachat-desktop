@@ -312,29 +312,12 @@ function openVideoCallWindow<T extends CallDirection>(
     return port1
   })()
 
-  if (jsonrpcRemote.rpc.iceServers != undefined) {
-    jsonrpcRemote.rpc.iceServers(accountId).then((iceServersString: string) => {
-      webAppMessagePort.postMessage({
-        type: 'iceServers',
-        iceServersString,
-      })
-    })
-  } else {
+  jsonrpcRemote.rpc.iceServers(accountId).then((iceServersString: string) => {
     webAppMessagePort.postMessage({
       type: 'iceServers',
-      iceServersString: JSON.stringify([
-        {
-          urls: [
-            'turn:ci-chatmail.testrun.org',
-            // Same , but by IP.
-            'turn:49.12.217.82',
-          ],
-          username: 'ohV8aec1',
-          credential: 'zo3theiY',
-        },
-      ]),
+      iceServersString,
     })
-  }
+  })
 
   /**
    * Whether to utilize the "Accept call?" prompt
