@@ -1,75 +1,105 @@
 import React, { useContext } from 'react'
-import {
-  parse_text,
-  ParsedElement,
-} from '@deltachat/message_parser_wasm/message_parser_wasm'
 
-import { LabeledLink, Link } from './Link'
-import { getLogger } from '../../../../shared/logger'
+import * as linkify from 'linkifyjs'
+import 'linkify-plugin-mention'
+import 'linkify-plugin-hashtag'
+import '../../utils/linkify-plugin-bot-command'
+import * as punycode from 'punycode/'
+
+import { Link } from './Link'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import SettingsStoreInstance from '../../stores/settings'
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
 import useChat from '../../hooks/chat/useChat'
 import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
 import useCreateChatByEmail from '../../hooks/chat/useCreateChatByEmail'
 import { ChatView } from '../../contexts/ChatContext'
 
-const log = getLogger('renderer/message-markdown')
+const log = getLogger('renderer/message-parser')
 
-let parseMessage: (message: string) => ParsedElement[] = m =>
-  parse_text(m, false)
-
-SettingsStoreInstance.subscribe(newState => {
-  const markDownEnabled =
-    !!newState?.desktopSettings.experimentalEnableMarkdownInMessages
-  parseMessage = m => parse_text(m, markDownEnabled)
-})
+/**
+ * returns an array with emojis if the first token of str
+ * is of type emoji, composed emojis are just one item in the array
+ */
+export function extractEmojisFromFirstToken(
+  str: string,
+  emojiOnly = false // only return emojis if the whole string is just one emoji token
+): string[] | null {
+  const elements = linkify.tokenize(str)
+  if (emojiOnly && elements.length !== 1) {
+    return null
+  }
+  if (
+    elements.length > 0 &&
+    elements[0].t === 'text' &&
+    elements[0].tk &&
+    (elements[0].tk.length === 1 || !emojiOnly)
+  ) {
+    const firstToken = elements[0].tk[0]
+    if (firstToken.t === 'EMOJI') {
+      // use Intl.Segmenter to split grapheme clusters (emoji + skin tone modifier etc)
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter/Segmenter
+      const segmenter = new (Intl as any).Segmenter('en', {
+        // Split the input into segments at grapheme cluster
+        // (user-perceived character) boundaries
+        granularity: 'grapheme',
+      })
+      const segments = [...segmenter.segment(firstToken.v)]
+      return segments.map(s => s.input)
+    }
+  }
+  return null
+}
 
 function renderElement(
-  elm: ParsedElement,
+  elm: linkify.MultiToken,
   tabindexForInteractiveContents: -1 | 0,
   key?: number
 ): React.ReactElement {
-  const mapFn = (elm: ParsedElement, index: number) =>
-    renderElement(elm, tabindexForInteractiveContents, index)
   switch (elm.t) {
-    case 'CodeBlock':
-      return (
-        <code className={'mm-code mm-code-' + elm.c.language} key={key}>
-          {elm.c.language && <span>{elm.c.language}</span>}
-          {elm.c.content}
-        </code>
-      )
-
-    case 'InlineCode':
-      return (
-        <code className='mm-inline-code' key={key}>
-          {elm.c.content}
-        </code>
-      )
-
-    case 'StrikeThrough':
-      return <s key={key}>{elm.c.map(mapFn)}</s>
-
-    case 'Italics':
-      return <i key={key}>{elm.c.map(mapFn)}</i>
-
-    case 'Bold':
-      return <b key={key}>{elm.c.map(mapFn)}</b>
-
-    case 'Tag':
+    case 'hashtag':
       return (
         <TagLink
           key={key}
-          tag={elm.c}
+          tag={elm.v}
           tabIndex={tabindexForInteractiveContents}
         />
       )
 
-    case 'Link': {
-      const { destination } = elm.c
+    /**
+     * linkifyJS does even identify URLs without scheme as URL, e.g.
+     * "www.example.com" or "example.com/test" or "example.com?param=value" etc.
+     * It does only identify valid TLDs based on https://data.iana.org/TLD/tlds-alpha-by-domain.txt
+     */
+    case 'url': {
+      let fullUrl = elm.v
+      // no token for scheme?
+      if (!elm.tk.find(t => t.t === 'SLASH_SCHEME')) {
+        // no scheme so we add https as default
+        // be aware that custom protocols may not
+        // have a SLASH_SCHEME but just a SCHEME
+        // see https://github.com/nfrasser/linkifyjs/blob/3abe9abbcb4e069aeadde2f42de7dfcc2371c0f0/packages/linkifyjs/src/text.mjs#L24
+        fullUrl = 'https://' + fullUrl
+      }
+      const url = new URL(fullUrl)
+      const ascii = punycode.toASCII(url.hostname)
+      const destination = {
+        target: fullUrl,
+        hostname: '',
+        punycode:
+          ascii === url.hostname
+            ? null
+            : {
+                ascii_hostname: ascii,
+                punycode_encoded_url: ascii,
+                original_hostname: url.hostname,
+              },
+        scheme: '',
+      }
+      destination.hostname = url.hostname
+      destination.scheme = url.protocol.replace(':', '')
       return (
         <Link
           destination={destination}
@@ -79,19 +109,8 @@ function renderElement(
       )
     }
 
-    case 'LabeledLink':
-      return (
-        <span key={key}>
-          <LabeledLink
-            destination={elm.c.destination}
-            label={<>{elm.c.label.map(mapFn)}</>}
-            tabIndex={tabindexForInteractiveContents}
-          />{' '}
-        </span>
-      )
-
-    case 'EmailAddress': {
-      const email = elm.c
+    case 'email': {
+      const email = elm.v
       return (
         <EmailLink
           key={key}
@@ -101,20 +120,21 @@ function renderElement(
       )
     }
 
-    case 'BotCommandSuggestion':
+    case 'botcommand':
       return (
         <BotCommandSuggestion
           key={key}
-          suggestion={elm.c}
+          suggestion={elm.v}
           tabIndex={tabindexForInteractiveContents}
         />
       )
 
-    case 'Linebreak':
+    case 'nl':
       return <span key={key}>{'\n'}</span>
 
-    case 'Text':
-      return <span key={key}>{elm.c}</span>
+    case 'mention': // for later usage
+    case 'text':
+      return <span key={key}>{elm.v}</span>
     default:
       //@ts-ignore
       log.error(`type ${elm.t} not known/implemented yet`, elm)
@@ -126,47 +146,28 @@ function renderElement(
   }
 }
 
-/** render in preview mode for ChatListItem summary and for quoted messages,
- *  not interactive (links can not be clicked) just looks more similar to the message in the chatview/message-list */
+/**
+ * render in preview mode for ChatListItem summary and for quoted messages,
+ * not interactive (links can not be clicked) just looks more similar to
+ * the message in the chatview/message-list
+ */
 function renderElementPreview(
-  elm: ParsedElement,
+  elm: linkify.MultiToken,
   key?: number
 ): React.ReactElement {
   switch (elm.t) {
-    case 'CodeBlock':
-    case 'InlineCode':
-      return (
-        <code className='mm-inline-code' key={key}>
-          {elm.c.content}
-        </code>
-      )
-
-    case 'StrikeThrough':
-      return <s key={key}>{elm.c.map(renderElementPreview)}</s>
-
-    case 'Italics':
-      return <i key={key}>{elm.c.map(renderElementPreview)}</i>
-
-    case 'Bold':
-      return <b key={key}>{elm.c.map(renderElementPreview)}</b>
-
-    case 'Link':
-      return <span key={key}>{elm.c.destination.target}</span>
-
-    case 'LabeledLink':
-      return <span key={key}>{elm.c.label.map(renderElementPreview)} </span>
-
-    case 'Linebreak':
+    case 'nl':
       // In ChatListItem this will be collapsed by default.
       // We need line breaks to be displayed for quoted messages
       // and in the composer.
       return <span key={key}>{'\n'}</span>
 
-    case 'Tag':
-    case 'EmailAddress':
-    case 'BotCommandSuggestion':
-    case 'Text':
-      return <span key={key}>{elm.c}</span>
+    case 'url':
+    case 'hashtag':
+    case 'email':
+    case 'botcommand':
+    case 'text':
+      return <span key={key}>{elm.v}</span>
     default:
       //@ts-ignore
       log.error(`type ${elm.t} not known/implemented yet`, elm)
@@ -178,7 +179,11 @@ function renderElementPreview(
   }
 }
 
-export function message2React(
+/**
+ * parse message text (for links and interactive elements)
+ * and render as React elements
+ */
+export function parseAndRenderMessage(
   message: string,
   preview: boolean,
   /**
@@ -188,7 +193,8 @@ export function message2React(
   tabindexForInteractiveContents: -1 | 0
 ): React.ReactElement {
   try {
-    const elements = parseMessage(message)
+    const elements = linkify.tokenize(message)
+    // console.log('linkifyjs elements:', elements)
     return preview ? (
       <div className='truncated'>{elements.map(renderElementPreview)}</div>
     ) : (
@@ -240,13 +246,11 @@ function EmailLink({
 function TagLink({ tag, tabIndex }: { tag: string; tabIndex: -1 | 0 }) {
   const setSearch = () => {
     log.debug(
-      `Clicked on a hastag, this should open search for the text "${tag}"`
+      `Clicked on a hashtag, this should open search for the text "${tag}"`
     )
     if (window.__chatlistSetSearch) {
       window.__chatlistSetSearch(tag, null)
       ActionEmitter.emitAction(KeybindAction.ChatList_FocusSearchInput)
-      // TODO: If you wonder why the focus doesn't work - its because of jikstra's composer focus hacks
-      // Which transfer the focus back to the composer instantly
     }
   }
 

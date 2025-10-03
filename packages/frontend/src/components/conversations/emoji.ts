@@ -2,7 +2,7 @@
 // We only really need the emoji data of this module
 import EmojiConvertor from 'emoji-js-clean'
 import { getLogger } from '../../../../shared/logger'
-import { count_emojis_if_only_contains_emoji } from '@deltachat/message_parser_wasm'
+import { extractEmojisFromFirstToken } from '../message/MessageParser'
 
 const log = getLogger('renderer/emoji')
 
@@ -49,19 +49,24 @@ const MAX_BYTE_SIZE_OF_EMOJI = 10 /* 10 is maybe already too generous? */
 const MAX_STRING_LENGTH_FOR_BIG_EMOJI =
   MAX_BIG_EMOJI_COUNT * MAX_BYTE_SIZE_OF_EMOJI
 
+/**
+ * if a message contains only emojis and is not too long,
+ * we display the emojis bigger as usual inline emojis
+ */
 export function getSizeClass(str: string) {
   // if string is small enough and only contains emojis
   if (str.length > MAX_STRING_LENGTH_FOR_BIG_EMOJI) {
     return undefined
   } else {
-    const emojiCount = count_emojis_if_only_contains_emoji(str)
-    if (emojiCount == null || emojiCount > 8) {
+    const emojis = extractEmojisFromFirstToken(str, true)
+
+    if (emojis == null || emojis.length > 8) {
       return undefined
-    } else if (emojiCount > 6) {
+    } else if (emojis.length > 6) {
       return 'small'
-    } else if (emojiCount > 4) {
+    } else if (emojis.length > 4) {
       return 'medium'
-    } else if (emojiCount > 2) {
+    } else if (emojis.length > 2) {
       return 'large'
     } else {
       return 'jumbo'

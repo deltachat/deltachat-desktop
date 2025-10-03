@@ -5,11 +5,11 @@ import useDialog from '../../hooks/dialog/useDialog'
 import FullscreenAvatar from '../dialogs/FullscreenAvatar'
 
 import type { Type } from '../../backend-com'
-import { get_first_emoji } from '@deltachat/message_parser_wasm'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 
 import styles from './styles.module.scss'
 import type { T } from '@deltachat/jsonrpc-client'
+import { extractEmojisFromFirstToken } from '../message/MessageParser'
 
 export function QRAvatar() {
   return (
@@ -22,9 +22,9 @@ export function QRAvatar() {
 }
 
 export function avatarInitial(name: string, addr?: string) {
-  const firstEmoji = name && get_first_emoji(name)
-  if (firstEmoji) {
-    return firstEmoji
+  const emojis = extractEmojisFromFirstToken(name)
+  if (emojis) {
+    return emojis[0]
   } else {
     const nameOrAddr = name || addr
     const codepoint = nameOrAddr && nameOrAddr.codePointAt(0)
