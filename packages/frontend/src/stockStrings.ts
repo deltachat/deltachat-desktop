@@ -129,6 +129,7 @@ export async function updateCoreStrings() {
     [C.DC_STR_SETUP_CONTACT_QR_DESC]: tx('qrshow_join_contact_hint'),
     [C.DC_STR_SECURE_JOIN_GROUP_QR_DESC]: tx('qrshow_join_group_hint'),
     [C.DC_STR_NOT_CONNECTED]: tx('connectivity_not_connected'),
+    [C.DC_STR_AEAP_EXPLANATION_AND_LINK]: tx('aeap_explanation'),
     [C.DC_STR_GROUP_NAME_CHANGED_BY_YOU]: tx('group_name_changed_by_you'),
     [C.DC_STR_GROUP_NAME_CHANGED_BY_OTHER]: tx('group_name_changed_by_other'),
     [C.DC_STR_GROUP_IMAGE_CHANGED_BY_YOU]: tx('group_image_changed_by_you'),
@@ -210,8 +211,13 @@ export async function updateCoreStrings() {
       'invalid_unencrypted_tap_to_learn_more'
     ),
     [C.DC_STR_BACKUP_TRANSFER_QR]: tx('multidevice_qr_subtitle'),
+    [C.DC_STR_BACKUP_TRANSFER_MSG_BODY]: tx(
+      'multidevice_transfer_done_devicemsg'
+    ),
+    [C.DC_STR_MESSAGE_ADD_MEMBER]: tx('member_x_added'),
     [C.DC_STR_YOU_REACTED]: tx('reaction_by_you'),
     [C.DC_STR_REACTED_BY]: tx('reaction_by_other'),
+    [C.DC_STR_SECUREJOIN_WAIT]: tx('secure_join_wait_timeout'),
     [C.DC_STR_DONATION_REQUEST]: tx('donate_device_msg'),
   }
 

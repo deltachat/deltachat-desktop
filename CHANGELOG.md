@@ -4,6 +4,9 @@
 
 <a id="2_15_0"></a>
 
+### Fixed
+- some strings being untranslated
+
 ## [2.15.0] - 2025-10-02
 
 ### Added
