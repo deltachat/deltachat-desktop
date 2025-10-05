@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- refactor proxy dialog styles to fix #5507
+
 <a id="2_15_0"></a>
 
 ## [2.15.0] - 2025-10-02
