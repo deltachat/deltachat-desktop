@@ -312,9 +312,7 @@ function openVideoCallWindow<T extends CallDirection>(
     return port1
   })()
 
-  // @ts-expect-error ts(2339) This API will be introduced later.
   if (jsonrpcRemote.rpc.iceServers != undefined) {
-    // @ts-expect-error ts(2339) This API will be introduced later.
     jsonrpcRemote.rpc.iceServers(accountId).then((iceServersString: string) => {
       webAppMessagePort.postMessage({
         type: 'iceServers',
