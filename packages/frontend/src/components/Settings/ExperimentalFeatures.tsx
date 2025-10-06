@@ -62,13 +62,13 @@ export function ExperimentalFeatures({ settingsStore }: Props) {
       >
         {tx('videochat')}
       </SettingsSelector>
-      {/* {runtime.getRuntimeInfo().target === 'electron' && (
+      {runtime.getRuntimeInfo().target === 'electron' && (
         <DesktopSettingsSwitch
           settingsKey='enableAVCallsV2'
           label={tx('videochat') + ' v2'}
           description='Work in progress…'
         />
-      )} */}
+      )}
       <DesktopSettingsSwitch
         settingsKey='enableBroadcastLists'
         label={tx('channels')}
