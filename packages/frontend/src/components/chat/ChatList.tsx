@@ -622,6 +622,7 @@ export default function ChatList(props: {
               id='new-chat-button'
               aria-label={tx('menu_new_chat')}
               aria-keyshortcuts='Control+N'
+              data-testid='new-chat-button'
             >
               <div
                 className='Icon'
