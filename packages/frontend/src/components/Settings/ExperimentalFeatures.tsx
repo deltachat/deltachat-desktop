@@ -54,14 +54,6 @@ export function ExperimentalFeatures({ settingsStore }: Props) {
 
   return (
     <>
-      <SettingsSelector
-        onClick={onClickEdit.bind(null)}
-        currentValue={showVideochatInstance(
-          settingsStore.settings['webrtc_instance']
-        )}
-      >
-        {tx('videochat')}
-      </SettingsSelector>
       {runtime.getRuntimeInfo().target === 'electron' && (
         <DesktopSettingsSwitch
           settingsKey='enableAVCallsV2'
