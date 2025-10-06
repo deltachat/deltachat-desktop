@@ -333,7 +333,7 @@ export default function ProxyConfiguration(
       canOutsideClickClose={false}
     >
       <DialogHeader
-        title={tx('menu_settings')}
+        title={tx('proxy_settings')}
         onClose={closeDialog}
         dataTestid='proxy-settings'
       />
