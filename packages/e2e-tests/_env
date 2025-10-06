@@ -2,7 +2,7 @@ DC_ACCOUNTS_DIR=../../e2e-tests/data/accounts
 NODE_ENV=test
 
 # URL of chatmail user
-DC_CHATMAIL_SERVER=
+DC_CHATMAIL_SERVER=https://ci-chatmail.testrun.org
 
 # URL of non chatmail server (including token)
 DC_MAIL_SERVER_URL=
