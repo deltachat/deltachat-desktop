@@ -62,7 +62,6 @@ export async function updateCoreStrings() {
     | C.DC_STR_CHAT_PROTECTION_DISABLED
     | C.DC_STR_SECUREJOIN_WAIT_TIMEOUT
     | C.DC_STR_SECUREJOIN_TAKES_LONGER
-    | C.DC_STR_CONTACT
   >
   const strings: StockStringsSomeOmited = {
     // TODO: Check if we need the uncommented core translations
@@ -129,7 +128,7 @@ export async function updateCoreStrings() {
     [C.DC_STR_SETUP_CONTACT_QR_DESC]: tx('qrshow_join_contact_hint'),
     [C.DC_STR_SECURE_JOIN_GROUP_QR_DESC]: tx('qrshow_join_group_hint'),
     [C.DC_STR_NOT_CONNECTED]: tx('connectivity_not_connected'),
-    [C.DC_STR_AEAP_EXPLANATION_AND_LINK]: tx('aeap_explanation'),
+    [C.DC_STR_AEAP_EXPLANATION_AND_LINK]: 'deprecated',
     [C.DC_STR_GROUP_NAME_CHANGED_BY_YOU]: tx('group_name_changed_by_you'),
     [C.DC_STR_GROUP_NAME_CHANGED_BY_OTHER]: tx('group_name_changed_by_other'),
     [C.DC_STR_GROUP_IMAGE_CHANGED_BY_YOU]: tx('group_image_changed_by_you'),
@@ -217,8 +216,16 @@ export async function updateCoreStrings() {
     [C.DC_STR_MESSAGE_ADD_MEMBER]: tx('member_x_added'),
     [C.DC_STR_YOU_REACTED]: tx('reaction_by_you'),
     [C.DC_STR_REACTED_BY]: tx('reaction_by_other'),
-    [C.DC_STR_SECUREJOIN_WAIT]: tx('secure_join_wait_timeout'),
+    [C.DC_STR_SECUREJOIN_WAIT]: 'deprecated',
     [C.DC_STR_DONATION_REQUEST]: tx('donate_device_msg'),
+    [C.DC_STR_CANCELED_CALL]: tx('call_canceled'),
+    [C.DC_STR_CANT_DECRYPT_OUTGOING_MSGS]: tx('systemmsg_cannot_decrypt'),
+    [C.DC_STR_CHANNEL_LEFT_BY_YOU]: tx('channel_left_by_you'),
+    [C.DC_STR_DECLINED_CALL]: tx('call_declined'),
+    [C.DC_STR_INCOMING_CALL]: tx('call_incoming'),
+    [C.DC_STR_MISSED_CALL]: tx('call_missed'),
+    [C.DC_STR_OUTGOING_CALL]: tx('call_outgoing'),
+    [C.DC_STR_SECURE_JOIN_CHANNEL_QR_DESC]: tx('qrshow_join_channel_hint'),
   }
 
   await BackendRemote.rpc.setStockStrings(strings)

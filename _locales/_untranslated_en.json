@@ -91,5 +91,26 @@
   },
   "accounts_list_item_menu_label": {
     "message": "Actions with Profile"
+  },
+  "call_canceled": {
+    "message": "Call canceled"
+  },
+  "call_declined": {
+    "message": "Call declined"
+  },
+  "call_incoming": {
+    "message": "Incoming call"
+  },
+  "call_missed": {
+    "message": "Missed call"
+  },
+  "call_outgoing": {
+    "message": "Outgoing call"
+  },
+  "channel_left_by_you": {
+    "message": "You left the Channel"
+  },
+  "qrshow_join_channel_hint": {
+    "message": "Scan to join Channel."
   }
 }

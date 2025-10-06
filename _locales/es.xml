@@ -249,12 +249,6 @@
     <!-- "Chat" is a verb here, "Message to" would also fit. the string might be used in the "New Chat" screen above the contact list -->
     <string name="chat_with">Chatear con...</string>
     <string name="clone_chat">Clonar chat</string>
-    <!-- deprecated -->
-    <string name="broadcast_list">Difusión</string>
-    <!-- deprecated -->
-    <string name="broadcast_lists">Difusiones</string>
-    <!-- deprecated -->
-    <string name="new_broadcast_list">Nueva difusión</string>
     <!-- consider keeping the term "channel" as in WhatsApp or Telegram -->
     <string name="channel">Canal</string>
     <!-- consider keeping the term "channel" as in WhatsApp or Telegram -->
@@ -262,12 +256,6 @@
     <!-- consider keeping the term "channel" as in WhatsApp or Telegram -->
     <string name="new_channel">Nuevo canal</string>
     <string name="add_recipients">Agregar destinatarios</string>
-    <!-- deprecated -->
-    <string name="edit_broadcast_list">Editar difusión</string>
-    <!-- deprecated -->
-    <string name="broadcast_list_name">Nombre de difusión</string>
-    <!-- deprecated -->
-    <string name="please_enter_broadcast_list_name">Por favor, introduce un nombre para la difusión.</string>
     <!-- consider keeping the term "channel" as in WhatsApp or Telegram -->
     <string name="channel_name">Nombre del canal</string>
     <string name="email">Correo electrónico</string>
@@ -390,20 +378,33 @@
     </plurals>
     <string name="file_saved_to">Archivo guardado en \"%1$s\".</string>
 
+    <!-- deprecated -->
     <string name="videochat">Video llamada</string>
+    <!-- deprecated -->
     <string name="videochat_invite_user_to_videochat">¿Invitar a %1$s a una videollamada?</string>
+    <!-- deprecated -->
     <string name="videochat_invite_user_hint">Esto requiere una app compatible o un navegador compatible en los dos lados.</string>
+    <!-- deprecated -->
     <string name="videochat_contact_invited_hint">%1$s invitado a una videollamada.</string>
+    <!-- deprecated -->
     <string name="videochat_you_invited_hint">Invitaste a una videollamada.</string>
+    <!-- deprecated -->
     <string name="videochat_tap_to_join">Toca para unirte</string>
+    <!-- deprecated -->
     <string name="videochat_tap_to_open">Toca para abrir</string>
+    <!-- deprecated -->
     <string name="videochat_instance">Instancia de videollamada</string>
+    <!-- deprecated -->
     <string name="videochat_instance_placeholder">Tu instancia de videollamada</string>
-    <!-- Do not translate "$ROOM", since it is a fixed token Delta Chat will replace with a generated room ID like "aOclju5eCky" -->
+    <!-- deprecated -->
     <string name="videochat_instance_example">Ejemplo: https://tu-servidor.org/$ROOM</string>
+    <!-- deprecated -->
     <string name="videochat_instance_explain_2">Si el videochat está activado, puedes iniciar un videochat desde cada chat. Los chats de vídeo necesitan una aplicación o un navegador compatible en los dos lados.</string>
+    <!-- deprecated -->
     <string name="videochat_instance_from_qr">¿Usa \"%1$s\" para invitar a otros a la videollamada?\n\nUna vez configurado, puedes iniciar una videollamada desde el chat individual. Esto reemplaza la configuración previa de videollamadas. Si la hubiera.</string>
+    <!-- deprecated -->
     <string name="videochat_invitation">Invitación a videollamada</string>
+    <!-- deprecated -->
     <string name="videochat_invitation_body">Fuiste invitado a una videollamada, click en %1$s para unirse.</string>
 
     <!-- get confirmations -->
@@ -437,8 +438,6 @@
     <string name="ask_start_chat_with">¿Chatear con %1$s?</string>
     <!-- %1$s is replaced by a comma-separated list of names -->
     <string name="ask_remove_members">¿Eliminar a %1$s del grupo?</string>
-    <!-- deprecated -->
-    <string name="ask_remove_from_broadcast">¿Eliminar %1$s de la lista de difusión?</string>
     <!-- %1$s is replaced by a comma-separated list of names -->
     <string name="ask_remove_from_channel">¿Quita %1$s del canal?</string>
     <string name="open_url_confirmation">¿Quieres abrir este enlace?</string>
@@ -473,8 +472,6 @@
     </plurals>
     <!-- The placeholder will be replaced by the name of the recipient in a one-to-one chat. -->
     <string name="chat_new_one_to_one_hint">Envíe un mensaje a %1$s.</string>
-    <!-- deprecated -->
-    <string name="chat_new_broadcast_hint">En una difusión, los destinatarios recibirán mensajes en un chat de solo lectura contigo.</string>
     <!-- consider keeping the term "channel" as in WhatsApp or Telegram -->
     <string name="chat_new_channel_hint">Canales son una herramienta para comunicación de uno a muchos para crear un transmisión de mensajes.</string>
     <string name="chat_new_group_hint">Los demás sólo verán este grupo después de que hayas enviado un primer mensaje.</string>
@@ -585,11 +582,6 @@
     <!-- option to show images in the gallery as square (instead of using correct width/height) -->
     <string name="square_grid">Cuadrícula cuadrada</string>
     <string name="send_message">Enviar mensaje</string>
-    <!-- deprecated, was stock string -->
-    <string name="aeap_addr_changed">%1$s cambió su dirección de %2$s a %3$s</string>
-    <!-- deprecated -->
-    <string name="aeap_explanation">Has cambiado tu dirección de correo electrónico de %1$s a %2$s.\n\nSi ahora envías un mensaje a un grupo verificado, los contactos de éste sustituirán automáticamente la antigua por tu nueva dirección.\n\nEs muy recomendable que configures tu antiguo proveedor de correo electrónico para que reenvíe todos los mensajes a tu nueva dirección. De lo contrario, podrías perderte los mensajes de los contactos que aún no han recibido tu nueva dirección.</string>
-
 
     <!-- Multi Device -->
     <!-- "Second Device" can also be translated as "Another Device", if that is catchier in the destination language. However, make sure to use the term consistently. -->
@@ -905,8 +897,10 @@
     <!-- "At once" in the meaning of "Immediately", without any intervening time. -->
     <string name="autodel_at_once">Inmediatamente</string>
     <string name="after_30_seconds">Luego de 30 segundos</string>
+    <!-- deprecated -->
     <string name="after_1_minute">Luego de 1 minuto</string>
     <string name="after_5_minutes">Luego de 5 minutos</string>
+    <!-- deprecated -->
     <string name="after_30_minutes">Luego de 30 minutos</string>
     <string name="autodel_after_1_hour">Luego de 1 hora</string>
     <string name="autodel_after_1_day">Luego de 1 día</string>
@@ -960,8 +954,9 @@
     <string name="ephemeral_timer_seconds_by_you">Estableciste el temporizador de la desaparición de mensajes en %1$s segundos</string>
     <!-- %1$s will be replaced by the number of seconds (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
     <string name="ephemeral_timer_seconds_by_other">Temporizador de la desaparición de mensajes establecido en %1$s segundos por %2$s.</string>
+    <!-- deprecated, usage needs to be removed in core -->
     <string name="ephemeral_timer_1_minute_by_you">Estableciste el temporizador de la desaparición de mensajes en 1 minuto.</string>
-    <!-- %1$s will be replaced by name and address of the contact -->
+    <!-- deprecated, usage needs to be removed in core -->
     <string name="ephemeral_timer_1_minute_by_other">Temporizador de la desaparición de mensajes establecido en 1 minuto por %1$s.</string>
     <string name="ephemeral_timer_1_hour_by_you">Estableciste el temporizador de la desaparición de mensajes en 1 hora.</string>
     <!-- %1$s will be replaced by name and address of the contact -->
@@ -972,6 +967,9 @@
     <string name="ephemeral_timer_1_week_by_you">Estableciste el temporizador de la desaparición de mensajes en 1 semana.</string>
     <!-- %1$s will be replaced by name and address of the contact -->
     <string name="ephemeral_timer_1_week_by_other">Temporizador de la desaparición de mensajes establecido en 1 semana por %1$s.</string>
+    <string name="ephemeral_timer_1_year_by_you">Estableciste el temporizador de la desaparición de mensajes en 1 año.</string>
+    <!-- %1$s will be replaced by name of the contact -->
+    <string name="ephemeral_timer_1_year_by_other">Temporizador de la desaparición de mensajes establecido en 1 año por %1$s.</string>
     <!-- %1$s will be replaced by the number of minutes (always >1) the timer is set to -->
     <string name="ephemeral_timer_minutes_by_you">Estableciste el temporizador de la desaparición de mensajes en %1$s minutos.</string>
     <!-- %1$s will be replaced by the number of minutes (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
@@ -988,14 +986,8 @@
     <string name="ephemeral_timer_weeks_by_you">Estableciste el temporizador de la desaparición de mensajes en %1$s semanas.</string>
     <!-- %1$s will be replaced by the number of weeks (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
     <string name="ephemeral_timer_weeks_by_other">Temporizador de la desaparición de mensajes establecido en %1$s semanas por %2$s.</string>
-    <!-- deprecated -->
-    <string name="chat_protection_broken">%1$s envió un mensaje desde otro dispositivo.</string>
     <string name="chat_protection_enabled_tap_to_learn_more">A partir de ahora se garantiza que los mensajes están cifrados de extremo a extremo . Toca para obtener más información.</string>
     <string name="chat_protection_enabled_explanation">Ahora se garantiza que todos los mensajes en este chat están cifrados de extremo a extremo.\n\nEl cifrado de extremo a extremo mantiene los mensajes privados entre tú y tus compañeros de chat. Ni siquiera tu proveedor de correo electrónico puede leerlos.</string>
-    <!-- deprecated -->
-    <string name="chat_protection_broken_tap_to_learn_more">%1$s envió un mensaje desde otro dispositivo. Toca para obtener más información.</string>
-    <!-- deprecated -->
-    <string name="chat_protection_broken_explanation">El cifrado de extremo a extremo ya no se puede garantizar, probablemente porque %1$s reinstaló Delta Chat o envió un mensaje desde otro dispositivo.\n\nPueden encontrarse en persona y escanear su código QR nuevamente para restablecer el cifrado de extremo a extremo garantizado.</string>
     <string name="invalid_unencrypted_tap_to_learn_more">⚠️ %1$s requiere cifrado de extremo a extremo que aún no está configurado para este chat. Toca para obtener más información.</string>
     <string name="invalid_unencrypted_explanation">Para establecer un cifrado de extremo a extremo, puede reunirse con los contactos en persona y escanear su código QR.</string>
     <string name="learn_more">Aprender más</string>
@@ -1054,19 +1046,11 @@
     <!-- placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_replies">%1$s respondió, esperando ser agregado al grupo…</string>
     <string name="secure_join_wait">Estableciendo cifrado de extremo a extremo garantizado, por favor, espere...</string>
-    <!-- deprecated -->
-    <string name="secure_join_wait_timeout">No se pudo aún establecer el cifrado de extremo a extremo garantizado, pero ya puede enviar mensajes.</string>
-    <!-- deprecated, was stock string -->
-    <string name="secure_join_takes_longer">El contacto debe estar en línea para continuar.\n\nEste proceso continuará automáticamente en segundo plano.</string>
     <string name="contact_verified">%1$s verificado.</string>
-    <!-- deprecated, was stock string -->
-    <string name="contact_not_verified">No se pudo verificar %1$s.</string>
     <!-- Shown in contact profile. The placeholder will be replaced by the name of the contact that introduced the contact. -->
     <string name="verified_by">Verificado por %1$s</string>
     <string name="verified_by_you">Verificado por ti</string>
     <string name="verified_by_unknown">Introducido</string>
-    <!-- deprecated, was stock string -->
-    <string name="contact_setup_changed">Configuración cambiada para %1$s.</string>
     <string name="verified_contact_required_explain">Para garantizar el cifrado de extremo a extremo, solo puedes añadir contactos con una marca de verificación verde</string>
     <string name="mailto_dialog_header_select_chat">Seleccione el chat para enviar el mensaje</string>
     <!-- first placeholder is the name of the chat -->
@@ -1108,9 +1092,6 @@
     <string name="ImageEditorHud_crop">Recortar</string>
     <string name="ImageEditorHud_flip">Voltear</string>
     <string name="ImageEditorHud_rotate">Rotar</string>
-
-    <!-- deprecated, use string "E-Mail" for non-encrypted messages instead -->
-    <string name="encrypted_message">Mensaje cifrado</string>
 
     <!-- strings introduced on desktop. we want to share strings between the os, in general, please do not add generic strings here -->
     <string name="about_offical_app_desktop">Esta es la aplicación oficial de Delta Chat para escritorio.</string>
@@ -1199,7 +1180,7 @@
     <string name="disabled_in_dc">Deshabilitado en Delta Chat</string>
     <string name="disabled_in_system_settings">Deshabilitado en la configuración del sistema</string>
     <string name="bg_app_refresh_disabled">\"Actualización de aplicaciones en segundo plano\" desactivada en los ajustes del sistema</string>
-    <!-- iOS connectivity view, Adjective, used eg. as "Notifications: Delayed" -->
+    <!-- deprecated, was used on iOS only -->
     <string name="delayed">Demorado</string>
     <string name="notifications_avg_minutes">Promedio cada %1$d minutos</string>
     <string name="notifications_avg_hours">Promedio cada %1$d horas</string>
@@ -1226,7 +1207,6 @@
     <string name="InfoPlist_NSPhotoLibraryAddUsageDescription">Delta Chat quiere guardar imágenes en tu galería</string>
     <string name="InfoPlist_NSFaceIDUsageDescription">Delta Chat puede utilizar Face ID para proteger su perfil local, la creación de copias de seguridad y la configuración de un segundo dispositivo.</string>
 
-
     <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
     <string name="pref_instant_delivery">Entrega inmediata</string>
     <string name="pref_background_notifications">Usar conexión en segundo plano</string>
@@ -1241,8 +1221,4 @@
 
     <!-- device messages for updates -->
     <string name="update_2_0">¿Qué hay de nuevo?\n\n💯 El cifrado de extremo a extremo es fiable y para siempre. ¡Se acabaron los candados 🔒!\n\n✉️ El correo electrónico clásico sin cifrado de extremo a extremo es marcado con un símbolo de carta.\n\n😻 Nueva pantalla de perfil mejorada para todos tus contactos.\n\n🔲 Nuevo botón para acceder rápidamente a las apps usadas en el chat.\n\n❤️ Dona para ayudarnos a mantener nuestra independencia y seguir mejorando: %1$s</string>
-    <!-- deprecated -->
-    <string name="update_1_50_android">¿Qué hay de nuevo?\n\n❤️‍🔥 Nuevo selector de emojis con más emojis\n\n🎮 Aplicaciones de chat mejoradas: recibe notificaciones y abre aplicaciones en contexto, por ejemplo, abre una entrada de calendario agregada directamente\n\n👍 Recibe notificaciones sobre las reacciones a tus mensajes\n\n... 🛠️ CORRECCIONES y AÚN MÁS en %1$s</string>
-    <!-- deprecated -->
-    <string name="update_switch_profile_placement">ℹ️ Se movió la opción \"Cambiar perfil\": toca tu imagen de perfil en la esquina superior de la pantalla principal para agregar o cambiar perfiles 💡</string>
 </resources>

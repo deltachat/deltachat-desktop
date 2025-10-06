@@ -4,21 +4,65 @@
     <string name="app_name">Delta Chat</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancelar</string>
+    <string name="clear_search">Limpar Pesquisa</string>
+    <!-- a noun, used on a button, short for "show link" -->
+    <string name="link">Ligação</string>
     <string name="yes">Sim</string>
     <string name="no">Não</string>
+    <string name="select">Seleccionar</string>
     <string name="on">Ligado</string>
     <string name="off">Desligado</string>
     <string name="def">Padrão</string>
+    <string name="default_value">Padrão (%1$s)</string>
+    <string name="default_value_as_above">Padrão (igual acima)</string>
     <string name="custom">Personalizado</string>
     <string name="none">Nenhum</string>
     <string name="open">Abrir</string>
+    <string name="download">Descarregar</string>
+    <string name="downloading">A descarregar...</string>
+    <string name="open_attachment">Abrir Anexo</string>
+    <string name="join">Entrar</string>
+    <string name="rejoin">Re-entrar</string>
     <string name="delete">Apagar</string>
+    <string name="delete_for_me">Apagar para mim</string>
+    <string name="delete_for_everyone">Apagar para toda a gente</string>
+    <string name="info">Informação</string>
+    <string name="update">Actualizar</string>
+    <string name="emoji">Emoji</string>
+    <string name="attachment">Anexo</string>
+    <!-- the placeholder will be replaced by the name of the image or file to attach -->
+    <string name="ask_attach">Anexar \"%1$s\"?</string>
+    <string name="close">Fechar</string>
+    <string name="close_window">Fechar Janela</string>
+    <string name="create">Criar</string>
+    <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
+    <string name="resend">Re-enviar</string>
+    <string name="edit_message">Editar Mensagem</string>
+    <!-- Verb "to archive", as in "put a chat in the archive", not a noun "The Archive". -->
+    <string name="archive">Arquivar</string>
+    <!-- Verb "to unarchive", as in "remove a chat from the archive", opposite of the previous string -->
+    <string name="unarchive">Desarquivar</string>
+    <string name="mute">Silenciar</string>
     <string name="ephemeral_messages">Destruição de mensagens</string>
+    <string name="save">Guardar</string>
+    <string name="chat">Conversa</string>
+    <string name="profile">Perfil</string>
+    <string name="all_profiles">Todos os Perfis</string>
+    <string name="current_profile">Perfil Actual</string>
+    <string name="main_menu">Menu Principal</string>
+    <!-- Stay short here, say ~16 characters. The source string could also be "All Read", maybe that hint can make translations easier :) -->
+    <string name="mark_all_as_read">Marcar como lidas</string>
+    <string name="mark_as_read">Marcar como lida</string>
+    <!-- Shortest text for "Mark as being read". In english, this could be "Read" (past tense of "to read"), in german, this could be "Gelesen". -->
+    <string name="mark_as_read_short">Marcar lida</string>
+    <!-- Placeholder text when something is loading -->
+    <string name="loading">A carregar...</string>
     <string name="not_now">Agora não</string>
     <string name="never">Nunca</string>
     <string name="one_moment">Um momento...</string>
     <string name="done">Feito</string>
     <string name="undo">Desfazer</string>
+    <string name="offline">Offline</string>
     <string name="error">Erro</string>
     <string name="error_x">Erro: %1$s</string>
     <string name="no_app_to_handle_data">Não é possível encontrar uma aplicação para lidar com esse tipo de dados.</string>
@@ -329,10 +373,6 @@
     <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and address eg. "Scan to chat with Alice (alice@example.org)" -->
     <string name="qrshow_join_contact_hint">Digitalize para configurar um contato com %1$s</string>
     <string name="contact_verified">%1$s verificado.</string>
-    <!-- deprecated, was stock string -->
-    <string name="contact_not_verified">Não é possível verificar %1$s</string>
-    <!-- deprecated, was stock string -->
-    <string name="contact_setup_changed">Configuração alterada para %1$s</string>
     <!-- notifications  -->
     <string name="notify_reply_button">Responder</string>
     <string name="notify_new_message">Mensagem nova</string>
@@ -350,9 +390,6 @@
     <string name="perm_explain_access_to_mic_denied">O Delta Chat necessita de permissão de  acesso ao microfone para enviar mensagens de áudio, mas foi negado. Por favor, continue com as configurações do aplicativo, selecione \"Permissões\" e active \"Microfone\".</string>
     <string name="perm_explain_access_to_storage_denied">O Delta Chat necessita da permissão de armazenamento para anexar ou exportar fotos, vídeos ou áudio, mas foi negado. Por favor, continue no menu de configurações do aplicativo, seleccione \"Permissões\" e active \"Armazenamento\".</string>
     <string name="perm_explain_access_to_location_denied">O Delta Chat necessita permissão de acesso à localização para anexar um local, mas ele negado. Por favor, continue no menu de configurações do aplicativo, selecione \"Permissões \"e ative \"Localização\".</string>
-    <!-- deprecated, use string "E-Mail" for non-encrypted messages instead -->
-    <string name="encrypted_message">Mensagem encriptada</string>
-
     <string name="global_menu_preferences_language_desktop">Escolha o seu idioma...</string>
     <string name="global_menu_file_desktop">Arquivo</string>
     <string name="global_menu_file_quit_desktop">Sair</string>

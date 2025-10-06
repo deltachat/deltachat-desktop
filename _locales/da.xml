@@ -239,17 +239,29 @@
     </plurals>
     <string name="file_saved_to">Fil gemt til \"%1$s\".</string>
 
+    <!-- deprecated -->
     <string name="videochat">Videochat</string>
+    <!-- deprecated -->
     <string name="videochat_invite_user_to_videochat">Invitér %1$s til en videochat?</string>
+    <!-- deprecated -->
     <string name="videochat_invite_user_hint">Dette kræver en kompatibel app eller en kompatibel webbrowser hos både afsender og modtager.</string>
+    <!-- deprecated -->
     <string name="videochat_contact_invited_hint">%1$s inviterede dig til en videochat.</string>
+    <!-- deprecated -->
     <string name="videochat_you_invited_hint">Du inviterede til en videochat.</string>
+    <!-- deprecated -->
     <string name="videochat_tap_to_join">Tryk for at forbinde</string>
+    <!-- deprecated -->
     <string name="videochat_tap_to_open">Tryk for at åbne</string>
+    <!-- deprecated -->
     <string name="videochat_instance">Videochat instans</string>
+    <!-- deprecated -->
     <string name="videochat_instance_placeholder">Din videochat instans</string>
+    <!-- deprecated -->
     <string name="videochat_instance_from_qr">Brug \"%1$s\" til at invitere andre til videochats?\n\nNår det er sat kan du starte en videochat fra hver en-til-en chat. Dette vil erstatte den tidligere indstilling for videochats hvis den findes.</string>
+    <!-- deprecated -->
     <string name="videochat_invitation">Videochat-invitation</string>
+    <!-- deprecated -->
     <string name="videochat_invitation_body">Du er inviteret til en videochat, klik %1$s for at tilslutte dig.</string>
 
     <!-- Used for the deletion of Device messages -->
@@ -343,6 +355,7 @@
     <string name="tab_docs_empty_hint">Dokumenter, musik og andre filer delt i denne samtale vises her.</string>
     <string name="media_preview">Medie forhåndsvisning</string>
     <string name="send_message">Send besked</string>
+
     <!-- Connectivity -->
     <!-- Headline for the "Inbox" eg. in the "Connectivity" view -->
     <string name="incoming_messages">Indkommende beskeder</string>
@@ -530,8 +543,10 @@
     <!-- "At once" in the meaning of "Immediately", without any intervening time. -->
     <string name="autodel_at_once">Med det samme</string>
     <string name="after_30_seconds">Efter 30 sekunder</string>
+    <!-- deprecated -->
     <string name="after_1_minute">Efter 1 minut</string>
     <string name="after_5_minutes">Efter 5 minutter</string>
+    <!-- deprecated -->
     <string name="after_30_minutes">Efter 30 minutter</string>
     <string name="autodel_after_1_hour">Efter 1 time</string>
     <string name="autodel_after_1_day">Efter 1 dag</string>
@@ -574,8 +589,9 @@
     <string name="ephemeral_timer_seconds_by_you">Tidsudløb for beskeder sat til %1$s s af mig.</string>
     <!-- %1$s will be replaced by the number of seconds (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
     <string name="ephemeral_timer_seconds_by_other">Tidsudløb for beskeder sat til %1$s s af %2$s.</string>
+    <!-- deprecated, usage needs to be removed in core -->
     <string name="ephemeral_timer_1_minute_by_you">Tidsudløb for beskeder sat til 1 minut af mig.</string>
-    <!-- %1$s will be replaced by name and address of the contact -->
+    <!-- deprecated, usage needs to be removed in core -->
     <string name="ephemeral_timer_1_minute_by_other">Tidsudløb for beskeder sat til 1 minut af %1$s.</string>
     <string name="ephemeral_timer_1_hour_by_you">Tidsudløb for beskeder sat til 1 time af mig.</string>
     <!-- %1$s will be replaced by name and address of the contact -->
@@ -631,10 +647,6 @@
     <string name="qraccount_ask_create_and_login_another">Opret ny e-mail adresse på \"%1$s\" og log ind der?\n\nDin eksisterende konto bliver ikke slettet. Brug \"Skift konto\" for at skifte imellem dine konti.</string>
     <string name="qraccount_qr_code_cannot_be_used">Den skannede QR-kode kan ikke bruges til at opsætte en ny konto.</string>
     <string name="contact_verified">%1$s bekræftet.</string>
-    <!-- deprecated, was stock string -->
-    <string name="contact_not_verified">Kan ikke bekræfte %1$s</string>
-    <!-- deprecated, was stock string -->
-    <string name="contact_setup_changed">Ændret opsætning for %1$s</string>
     <!-- notifications  -->
     <string name="notify_reply_button">Svar</string>
     <string name="notify_new_message">Ny besked</string>
@@ -655,9 +667,6 @@
     <!-- ImageEditorHud -->
     <string name="ImageEditorHud_draw_anywhere_to_blur">Tegn hvor som helst for at sløre</string>
     <string name="ImageEditorHud_rotate">Roter</string>
-
-    <!-- deprecated, use string "E-Mail" for non-encrypted messages instead -->
-    <string name="encrypted_message">Krypteret besked</string>
 
     <!-- strings introduced on desktop. we want to share strings between the os, in general, please do not add generic strings here -->
     <string name="about_offical_app_desktop">Dette er den officielle Delta Chat Desktop app.</string>
