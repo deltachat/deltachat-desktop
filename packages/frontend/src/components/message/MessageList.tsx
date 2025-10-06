@@ -421,13 +421,9 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
       if (
         !domElement.classList.contains('message') &&
         !domElement.classList.contains('info-message') &&
-        !domElement.classList.contains('videochat-invitation') &&
         // Currently we have the same `id=` set on both `<li>` and its child.
         !domElement.firstElementChild?.classList.contains('message') &&
-        !domElement.firstElementChild?.classList.contains('info-message') &&
-        !domElement.firstElementChild?.classList.contains(
-          'videochat-invitation'
-        )
+        !domElement.firstElementChild?.classList.contains('info-message')
       ) {
         log.warn(
           `scrollTo: scrollToMessage, found an element with ` +

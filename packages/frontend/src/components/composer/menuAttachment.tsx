@@ -1,15 +1,11 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useContext } from 'react'
 import { dirname, basename } from 'path'
 
 import { runtime } from '@deltachat-desktop/runtime-interface'
-import { useStore } from '../../stores/store'
-import SettingsStoreInstance from '../../stores/settings'
 import { IMAGE_EXTENSIONS } from '../../../../shared/constants'
-import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/dialog/useDialog'
 import SelectContactDialog from '../dialogs/SelectContact'
-import useVideoChat from '../../hooks/useVideoChat'
 import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
 import { selectedAccountId } from '../../ScreenController'
 import Icon from '../Icon'
@@ -37,11 +33,8 @@ export default function MenuAttachment({
   const { openContextMenu } = useContext(ContextMenuContext)
 
   const tx = useTranslationFunction()
-  const openConfirmationDialog = useConfirmationDialog()
-  const { sendVideoChatInvitation } = useVideoChat()
   const { openDialog, closeDialog } = useDialog()
   const { sendMessage } = useMessage()
-  const [settings] = useStore(SettingsStoreInstance)
   const accountId = selectedAccountId()
 
   const confirmSendMultipleFiles = (
@@ -123,28 +116,6 @@ export default function MenuAttachment({
     }
   }
 
-  const onVideoChat = useCallback(async () => {
-    if (!selectedChat) {
-      return
-    }
-
-    const confirmed = await openConfirmationDialog({
-      header: tx('videochat_invite_user_to_videochat', selectedChat.name),
-      message: tx('videochat_invite_user_hint'),
-      confirmLabel: tx('ok'),
-    })
-
-    if (confirmed) {
-      sendVideoChatInvitation(accountId, selectedChat.id)
-    }
-  }, [
-    accountId,
-    openConfirmationDialog,
-    selectedChat,
-    sendVideoChatInvitation,
-    tx,
-  ])
-
   const selectContact = async () => {
     let dialogId = ''
     /**
@@ -182,11 +153,6 @@ export default function MenuAttachment({
       icon: 'person',
       label: tx('contact'),
       action: selectContact.bind(null),
-    },
-    !!settings?.settings.webrtc_instance && {
-      icon: 'phone',
-      label: tx('videochat'),
-      action: onVideoChat,
     },
     {
       icon: 'apps',
