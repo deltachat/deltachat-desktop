@@ -129,9 +129,20 @@ export async function createNewProfile(
   // create a new account
   await page.getByTestId('create-account-button').click()
 
-  const dcAccountLink = useChatmail
-    ? `dcaccount:${chatmailServerUrl}/new`
-    : `dcaccount:${mailServerUrl}//new_email?t=${mailServerToken}&n=ci_github`
+  let dcAccountLink: string
+  if (useChatmail) {
+    if (!chatmailServerUrl) {
+      throw new Error('DC_CHATMAIL_SERVER env var not set, cannot run tests')
+    }
+    dcAccountLink = `dcaccount:${chatmailServerUrl satisfies string}/new`
+  } else {
+    if (!mailServerUrl || mailServerToken == undefined) {
+      throw new Error(
+        'DC_MAIL_SERVER or DC_MAIL_SERVER_TOKEN env var not set, cannot run tests'
+      )
+    }
+    dcAccountLink = `dcaccount:${mailServerUrl satisfies string}//new_email?t=${mailServerToken satisfies string}&n=ci_github`
+  }
   await page.evaluate(`navigator.clipboard.writeText('${dcAccountLink}')`)
   await clickThroughTestIds(page, [
     'other-login-button',
