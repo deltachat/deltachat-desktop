@@ -200,16 +200,8 @@ function CreateChatMain(props: CreateChatMainProps) {
   // Chatmail accounts can't send unencrypted emails. See
   // - https://github.com/deltachat/deltachat-desktop/issues/5294#issuecomment-3089552788
   // - https://github.com/deltachat/deltachat-ios/blob/a0043be425d9c14f4039561957adb82ef1ab2adb/deltachat-ios/Controller/NewChatViewController.swift#L76-L78
-  const [forceShowNewEmail_, setForceShowNewEmail_] = useState(false)
-  useEffect(() => {
-    // For E2E tests.
-    window.__testForceShowNewEmailButton = setForceShowNewEmail_
-    return () => {
-      window.__testForceShowNewEmailButton = undefined
-    }
-  }, [])
-  const showNewEmail =
-    (!isChatmail && queryStr.length === 0) || forceShowNewEmail_
+
+  const showNewEmail = !isChatmail && queryStr.length === 0
 
   const showAddContact = !(
     isChatmail ||

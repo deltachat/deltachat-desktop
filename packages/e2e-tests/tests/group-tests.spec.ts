@@ -142,6 +142,24 @@ test('create group', async ({ browserName }) => {
   await expect(badgeNumber).toHaveText('1')
 })
 
+test('check "New E-Mail" option presence', async ({ isChatmail }) => {
+  await page.locator('#new-chat-button').click()
+
+  await expect(page.getByRole('button', { name: 'New Group' })).toBeVisible()
+
+  // Since we're on a Chatmail server, this button is not supposed to be shown.
+  const newEmailButton = page.getByRole('button', { name: 'New E-Mail' })
+  if (isChatmail) {
+    await expect(newEmailButton).not.toBeVisible()
+    // Same button, but double-check, by ID.
+    await expect(page.locator('#newemail')).not.toBeVisible({ timeout: 1 })
+  } else {
+    await expect(newEmailButton).toBeVisible()
+  }
+
+  await page.getByRole('dialog').press('Escape')
+})
+
 test('Invite existing user to group', async ({ browserName }) => {
   if (browserName.toLowerCase().indexOf('chrom') > -1) {
     await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
@@ -177,8 +195,6 @@ test('Invite existing user to group', async ({ browserName }) => {
   await expect(page.locator('#message-list li').nth(1)).toContainText(
     userA.address
   )
-  // verified chat after response from userA
-  await expect(page.locator('.e2ee-info')).toBeVisible()
   // userB has 2 new notifications now
   const badge = page
     .getByTestId(`account-item-${userB.id}`)
@@ -186,6 +202,7 @@ test('Invite existing user to group', async ({ browserName }) => {
     .getByText('2')
 
   await expect(badge).toBeVisible()
+  await expect(page.locator('.e2ee-info')).toBeVisible()
 })
 
 test('Invite new user to group', async ({ browserName }) => {

@@ -5,7 +5,14 @@
 ### Fixed
 - refactor proxy dialog styles to fix #5507
 
+### Changed
+- update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.17.0`
+
+
 <a id="2_15_0"></a>
+
+### Fixed
+- some strings being untranslated
 
 ## [2.15.0] - 2025-10-02
 

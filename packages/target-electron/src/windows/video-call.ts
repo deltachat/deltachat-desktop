@@ -312,31 +312,12 @@ function openVideoCallWindow<T extends CallDirection>(
     return port1
   })()
 
-  // @ts-expect-error ts(2339) This API will be introduced later.
-  if (jsonrpcRemote.rpc.iceServers != undefined) {
-    // @ts-expect-error ts(2339) This API will be introduced later.
-    jsonrpcRemote.rpc.iceServers(accountId).then((iceServersString: string) => {
-      webAppMessagePort.postMessage({
-        type: 'iceServers',
-        iceServersString,
-      })
-    })
-  } else {
+  jsonrpcRemote.rpc.iceServers(accountId).then((iceServersString: string) => {
     webAppMessagePort.postMessage({
       type: 'iceServers',
-      iceServersString: JSON.stringify([
-        {
-          urls: [
-            'turn:ci-chatmail.testrun.org',
-            // Same , but by IP.
-            'turn:49.12.217.82',
-          ],
-          username: 'ohV8aec1',
-          credential: 'zo3theiY',
-        },
-      ]),
+      iceServersString,
     })
-  }
+  })
 
   /**
    * Whether to utilize the "Accept call?" prompt
@@ -405,6 +386,7 @@ function openVideoCallWindow<T extends CallDirection>(
   webAppMessagePort.start()
 
   const host = formatHost(accountId, chatIdOrMessageId)
+  const query = callDirection === CallDirection.Incoming ? '?playRingtone' : ''
   const hash =
     callDirection === CallDirection.Outgoing
       ? '#startCall'
@@ -412,7 +394,7 @@ function openVideoCallWindow<T extends CallDirection>(
         ? `#offerIncomingCall=${btoa(callerWebrtcOffer!)}`
         : // Otherwise we'll set the hash later, when the call gets accepted.
           ''
-  win.webContents.loadURL(`${SCHEME_NAME}://${host}${hash}`, {
+  win.webContents.loadURL(`${SCHEME_NAME}://${host}${query}${hash}`, {
     extraHeaders: 'Content-Security-Policy: ' + CSP,
   })
 
@@ -594,7 +576,8 @@ const CSP =
   "default-src 'none';\
 style-src 'self' 'unsafe-inline';\
 script-src 'self' 'unsafe-inline';\
-img-src 'self'"
+img-src 'self';\
+media-src 'self'"
 
 async function returnIndexHtmlOrAvatar(request: GlobalRequest) {
   const url = URL.parse(request.url)
@@ -634,6 +617,19 @@ async function returnIndexHtmlOrAvatar(request: GlobalRequest) {
       return makeResponse('', { status: 404 })
     }
     const res = await net.fetch(pathToFileURL(profileImage).toString())
+    return makeResponse(
+      res.body,
+      undefined,
+      res.headers.get('Content-Type') ?? undefined
+    )
+  }
+
+  if (url.pathname === '/ringtone') {
+    const res = await net.fetch(
+      pathToFileURL(
+        join(htmlDistDir(), 'audio', 'ringtone-afro-nigeria-short.opus')
+      ).toString()
+    )
     return makeResponse(
       res.body,
       undefined,

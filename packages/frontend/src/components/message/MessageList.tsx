@@ -2,7 +2,7 @@ import React, {
   useRef,
   useCallback,
   useLayoutEffect,
-  MutableRefObject,
+  RefObject,
   useEffect,
   useState,
   useMemo,
@@ -219,7 +219,7 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
       }
     })
   }
-  const unreadMessageInViewIntersectionObserver: MutableRefObject<IntersectionObserver> =
+  const unreadMessageInViewIntersectionObserver: RefObject<IntersectionObserver> =
     useRef(
       new IntersectionObserver(onUnreadMessageInView, {
         root: null,
@@ -744,10 +744,10 @@ export const MessageListInner = React.memo(
     messageListItems: T.MessageListItem[]
     activeView: T.MessageListItem[]
     messageCache: { [msgId: number]: T.MessageLoadResult | undefined }
-    messageListRef: React.MutableRefObject<HTMLDivElement | null>
+    messageListRef: React.RefObject<HTMLDivElement | null>
     chat: T.FullChat
     loaded: boolean
-    unreadMessageInViewIntersectionObserver: React.MutableRefObject<IntersectionObserver | null>
+    unreadMessageInViewIntersectionObserver: React.RefObject<IntersectionObserver | null>
     loadMissingMessages: () => Promise<void>
   }) => {
     const tx = useTranslationFunction()

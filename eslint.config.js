@@ -41,7 +41,7 @@ export default defineConfig(
       files: ['packages/e2e-tests/**/*spec.ts'],
       languageOptions: {
         parserOptions: {
-          project: './packages/e2e-tests/tsconfig.json',
+          project: 'packages/e2e-tests/tsconfig.json',
           tsconfigRootDir: import.meta.dirname,
         },
       },
