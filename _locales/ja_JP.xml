@@ -235,17 +235,29 @@
     </plurals>
     <string name="file_saved_to">%1$sに保存しました。</string>
 
+    <!-- deprecated -->
     <string name="videochat">ビデオ通話</string>
+    <!-- deprecated -->
     <string name="videochat_invite_user_to_videochat">%1$sをビデオ通話に招待しますか？</string>
+    <!-- deprecated -->
     <string name="videochat_invite_user_hint">互換性のあるブラウザ又はアプリが必要です。</string>
+    <!-- deprecated -->
     <string name="videochat_contact_invited_hint">%1$sをビデオ通話に招待しました。</string>
+    <!-- deprecated -->
     <string name="videochat_you_invited_hint">ビデオ通話に招待しました。</string>
+    <!-- deprecated -->
     <string name="videochat_tap_to_join">タップして参加</string>
+    <!-- deprecated -->
     <string name="videochat_tap_to_open">タップして開く</string>
+    <!-- deprecated -->
     <string name="videochat_instance">ビデオ通話サーバー</string>
+    <!-- deprecated -->
     <string name="videochat_instance_placeholder">選んだビデオ通話サーバー</string>
+    <!-- deprecated -->
     <string name="videochat_instance_from_qr">%1$sで他人をビデオ通話に招待しますか？設定次第に各チャットからビデオ通話を開始することができます。以前の設定も置き換えます。</string>
+    <!-- deprecated -->
     <string name="videochat_invitation">ビデオ通話に招待</string>
+    <!-- deprecated -->
     <string name="videochat_invitation_body">ビデオ通話に招待されて、%1$sで参加</string>
 
     <string name="ask_forward">%1$sにメッセージを転送しますか？</string>
@@ -335,6 +347,7 @@
     <string name="tab_docs_empty_hint">このチャットで共有されたドキュメントや音楽などがここに表示されます。</string>
     <string name="media_preview">メディアのプレビュー</string>
     <string name="send_message">送る</string>
+
     <string name="connectivity">接続性</string>
     <!-- Shown in the title bar if the app is "Not connected"; prefer short strings. -->
     <string name="connectivity_not_connected">未接続</string>
@@ -503,8 +516,10 @@
     <!-- "At once" in the meaning of "Immediately", without any intervening time. -->
     <string name="autodel_at_once">すぐに</string>
     <string name="after_30_seconds">30秒</string>
+    <!-- deprecated -->
     <string name="after_1_minute">1分</string>
     <string name="after_5_minutes">5分</string>
+    <!-- deprecated -->
     <string name="after_30_minutes">30分</string>
     <string name="autodel_after_1_hour">1時間</string>
     <string name="autodel_after_1_day">1日後</string>
@@ -545,8 +560,9 @@
     <string name="ephemeral_timer_seconds_by_you">自分から消えるメッセージを%1$s秒にしました。</string>
     <!-- %1$s will be replaced by the number of seconds (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
     <string name="ephemeral_timer_seconds_by_other">%2$sから消えるメッセージを%1$s秒にしました。</string>
+    <!-- deprecated, usage needs to be removed in core -->
     <string name="ephemeral_timer_1_minute_by_you">自分から消えるメッセージを1分にしました。</string>
-    <!-- %1$s will be replaced by name and address of the contact -->
+    <!-- deprecated, usage needs to be removed in core -->
     <string name="ephemeral_timer_1_minute_by_other">%1$sから消えるメッセージを1分にしました。</string>
     <string name="ephemeral_timer_1_hour_by_you">自分から消えるメッセージを1時間にしました。</string>
     <!-- %1$s will be replaced by name and address of the contact -->
@@ -595,10 +611,6 @@
     <string name="qrshow_join_contact_no_connection_toast">インターネットに接続されていないので、QRコードの設定ができません。</string>
     <string name="qraccount_ask_create_and_login">%1$sに新しいメールアドレスを作ってログしますか。</string>
     <string name="contact_verified">%1$sを確認しました。</string>
-    <!-- deprecated, was stock string -->
-    <string name="contact_not_verified">%1$sを確認できません。</string>
-    <!-- deprecated, was stock string -->
-    <string name="contact_setup_changed">設定が%1$sに変わりました。</string>
     <!-- notifications  -->
     <string name="notify_reply_button">返信</string>
     <string name="notify_new_message">新規メッセージ</string>
@@ -615,9 +627,6 @@
     <string name="ImageEditorHud_crop">切り抜き</string>
     <string name="ImageEditorHud_flip">反転</string>
     <string name="ImageEditorHud_rotate">回転</string>
-
-    <!-- deprecated, use string "E-Mail" for non-encrypted messages instead -->
-    <string name="encrypted_message">暗号化されたメッセージ</string>
 
     <string name="welcome_desktop">Delta Chatにようこそ</string>
     <string name="global_menu_preferences_language_desktop">言語を選択して下さい</string>

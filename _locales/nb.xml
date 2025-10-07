@@ -194,17 +194,29 @@
 
     <string name="file_saved_to">Lagre fil til \"%1$s\".</string>
 
+    <!-- deprecated -->
     <string name="videochat">Videochat</string>
+    <!-- deprecated -->
     <string name="videochat_invite_user_to_videochat">Inviter %1$s til en videochat?</string>
+    <!-- deprecated -->
     <string name="videochat_invite_user_hint">Dette krever en kompatibel app, eller en kompatible nettleser i begge ender.</string>
+    <!-- deprecated -->
     <string name="videochat_contact_invited_hint">%1$s inviterte til en videochat.</string>
+    <!-- deprecated -->
     <string name="videochat_you_invited_hint">Du inviterte til en videochat.</string>
+    <!-- deprecated -->
     <string name="videochat_tap_to_join">Trykk for å bli med</string>
+    <!-- deprecated -->
     <string name="videochat_tap_to_open">Trykk for å åpne</string>
+    <!-- deprecated -->
     <string name="videochat_instance">Videochatteinstans</string>
+    <!-- deprecated -->
     <string name="videochat_instance_placeholder">Din videochatteinstans</string>
+    <!-- deprecated -->
     <string name="videochat_instance_from_qr">Bruk \"%1$s\" til å invitere andre til videochatter?\n\nNår satt, kan dere starte videochatter til hverandre en-til-en. Dette vil erstatte, eventuelle, tidligere innstillinger for videochatter.</string>
+    <!-- deprecated -->
     <string name="videochat_invitation">Videochatinvitasjon</string>
+    <!-- deprecated -->
     <string name="videochat_invitation_body">Du er invitert til en videochat, klikk %1$s for å bli med.</string>
 
     <string name="ask_forward">Videresend meldinger til %1$s?</string>
@@ -386,9 +398,6 @@
     <!-- permissions -->
     <string name="perm_required_title">Tillatelse kreves</string>
     <string name="perm_continue">Fortsett</string>
-    <!-- deprecated, use string "E-Mail" for non-encrypted messages instead -->
-    <string name="encrypted_message">Kryptert melding</string>
-
     <string name="welcome_desktop">Velkommen til Delta Chat</string>
     <string name="global_menu_preferences_language_desktop">Språk</string>
     <string name="global_menu_edit_desktop">Rediger</string>
