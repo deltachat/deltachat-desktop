@@ -13,6 +13,7 @@ import type { DialogProps } from '../../contexts/DialogContext'
 /**
  * QR code scanner for proxy configuration
  * Processes scanned QR code and calls onSuccess if it is a valid proxy QR code
+ * copied from dialogs/ProxyConfiguration/index.tsx
  */
 export default function ProxyQrScanner({
   onSuccess,

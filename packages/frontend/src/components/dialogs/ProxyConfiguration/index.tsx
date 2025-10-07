@@ -199,9 +199,12 @@ export default function ProxyConfiguration(
     ]
   )
 
-  if (props.newProxyUrl) {
-    addProxy(props.newProxyUrl)
-  }
+  // Handle new proxy URL from props
+  useEffect(() => {
+    if (props.newProxyUrl) {
+      addProxy(props.newProxyUrl)
+    }
+  }, [props.newProxyUrl, addProxy])
 
   const openQrScanner = useCallback(() => {
     openDialog(ProxyQrScanner, {
@@ -330,7 +333,6 @@ export default function ProxyConfiguration(
     proxyState.proxies,
     proxyState.activeProxy,
     proxyState.updateSettings,
-    proxyState,
   ])
 
   /**
