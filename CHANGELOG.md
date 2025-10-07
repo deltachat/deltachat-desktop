@@ -40,7 +40,6 @@
 
 <a id="2_11_1"></a>
 
-trans
 ### Added
 -flip electron fuses to avoid security debates #5423
 - add "one year" option for disappearing messages #5421
