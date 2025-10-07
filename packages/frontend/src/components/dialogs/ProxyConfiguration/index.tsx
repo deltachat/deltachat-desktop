@@ -204,7 +204,8 @@ export default function ProxyConfiguration(
     if (props.newProxyUrl) {
       addProxy(props.newProxyUrl)
     }
-  }, [props.newProxyUrl, addProxy])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.newProxyUrl]) // skip addProxy in deps since it has too many deps itself
 
   const openQrScanner = useCallback(() => {
     openDialog(ProxyQrScanner, {
