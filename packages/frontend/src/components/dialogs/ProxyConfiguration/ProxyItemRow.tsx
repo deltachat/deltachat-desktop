@@ -65,7 +65,11 @@ const ProxyItemRow = React.memo(function ProxyItemRow({
           aria-labelledby={`proxy-label-${index}`}
         />
         <div>
-          <div id={`proxy-label-${index}`} className={styles.proxyLabel}>
+          <div
+            id={`proxy-label-${index}`}
+            className={styles.proxyLabel}
+            title={label}
+          >
             {label}
           </div>
           <div>

@@ -195,6 +195,7 @@ div.delta-form-group {
     font-family: inherit;
     box-shadow: none !important;
     resize: vertical;
+    field-sizing: content;
 
     &:focus,
     &:active {

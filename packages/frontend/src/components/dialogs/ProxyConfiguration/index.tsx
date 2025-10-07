@@ -11,7 +11,7 @@ import Dialog, {
 import { C } from '@deltachat/jsonrpc-client'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import SettingsSwitch from '../../Settings/SettingsSwitch'
-import { DeltaInput } from '../../Login-Styles'
+import { DeltaTextarea } from '../../Login-Styles'
 import { BackendRemote, onDCEvent } from '../../../backend-com'
 import useAlertDialog from '../../../hooks/dialog/useAlertDialog'
 import Button from '../../Button'
@@ -328,7 +328,7 @@ export default function ProxyConfiguration(
   return (
     <Dialog
       fixed
-      width={400}
+      width={500}
       dataTestid='proxy-dialog'
       canOutsideClickClose={false}
     >
@@ -370,7 +370,7 @@ export default function ProxyConfiguration(
       <DialogFooter>
         {showNewProxyForm && (
           <form>
-            <DeltaInput
+            <DeltaTextarea
               label={tx('proxy_add_url_hint')}
               value={newProxyUrl}
               onChange={e => setNewProxyUrl(e.target.value)}
