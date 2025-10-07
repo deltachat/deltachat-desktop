@@ -1,10 +1,8 @@
 import React, { useContext } from 'react'
 
 import * as linkify from 'linkifyjs'
-import 'linkify-plugin-mention'
 import 'linkify-plugin-hashtag'
 import '../../utils/linkify-plugin-bot-command'
-import * as punycode from 'punycode/'
 
 import { Link } from './Link'
 import { getLogger } from '@deltachat-desktop/shared/logger'
@@ -83,18 +81,30 @@ function renderElement(
         fullUrl = 'https://' + fullUrl
       }
       const url = new URL(fullUrl)
-      const ascii = punycode.toASCII(url.hostname)
+      let suspicousUrl = false
+      const stripLastSlash = (url: string) => {
+        if (url.endsWith('/')) {
+          url = url.slice(0, -1)
+        }
+        return url
+      }
+      // according to https://developer.mozilla.org/de/docs/Web/API/URL/hostname
+      // domain names will be transformed to punycode automatically
+      // so we just need to check if the original hostname is different
+      // from the punycode one
+      if (stripLastSlash(url.href) !== stripLastSlash(fullUrl)) {
+        suspicousUrl = true
+      }
       const destination = {
         target: fullUrl,
         hostname: '',
-        punycode:
-          ascii === url.hostname
-            ? null
-            : {
-                ascii_hostname: ascii,
-                punycode_encoded_url: ascii,
-                original_hostname: url.hostname,
-              },
+        punycode: suspicousUrl
+          ? {
+              ascii_hostname: url.hostname,
+              punycode_encoded_url: url.href,
+              original_hostname: elm.v, // TODO: change naming here
+            }
+          : null,
         scheme: '',
       }
       destination.hostname = url.hostname

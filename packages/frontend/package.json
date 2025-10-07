@@ -30,7 +30,6 @@
     "@emoji-mart/react": "^1.1.1",
     "@jcoreio/async-throttle": "^1.6.1",
     "@types/linkifyjs": "^2.1.7",
-    "@types/punycode": "^2.1.4",
     "classnames": "^2.5.1",
     "debounce": "^1.2.1",
     "emoji-js-clean": "^4.0.0",
