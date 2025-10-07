@@ -73,7 +73,7 @@ function renderElement(
     case 'url': {
       let fullUrl = elm.v
       // no token for scheme?
-      if (!elm.tk.find(t => t.t === 'SLASH_SCHEME')) {
+      if (!elm.tk.find(t => ['SLASH_SCHEME', 'SCHEME'].includes(t.t))) {
         // no scheme so we add https as default
         // be aware that custom protocols may not
         // have a SLASH_SCHEME but just a SCHEME
