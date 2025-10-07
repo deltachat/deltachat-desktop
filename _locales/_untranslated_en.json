@@ -11,12 +11,6 @@
   "background_sync_disabled_explaination": {
     "message": "Background sync disabled, profile is only synced when selected"
   },
-  "pref_all_accounts": {
-    "message": "All Profiles"
-  },
-  "pref_current_account": {
-    "message": "Current Profile"
-  },
   "webxdc_beforeunload_dialog_title": {
     "message": "Close app?"
   },
@@ -49,12 +43,6 @@
   },
   "search_result_for_x": {
     "message": "Result for \"%s\""
-  },
-  "reset_encryption": {
-    "message": "Reset Encryption"
-  },
-  "reset_encryption_confirm": {
-    "message": "Forget encryption key for this contact."
   },
   "voice_send": {
     "message": "Record a voice message"

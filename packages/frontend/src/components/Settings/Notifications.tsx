@@ -65,7 +65,7 @@ export default function Notifications({ desktopSettings }: Props) {
 
   return (
     <>
-      <SettingsHeading>{tx('pref_all_accounts')}</SettingsHeading>
+      <SettingsHeading>{tx('all_profiles')}</SettingsHeading>
       <DesktopSettingsSwitch
         settingsKey='notifications'
         label={tx('pref_notifications_explain')}
@@ -82,7 +82,7 @@ export default function Notifications({ desktopSettings }: Props) {
         {tx('pref_in_chat_sounds')}
       </SettingsSelector>
       <SettingsSeparator></SettingsSeparator>
-      <SettingsHeading>{tx('pref_current_account')}</SettingsHeading>
+      <SettingsHeading>{tx('current_profile')}</SettingsHeading>
       <SettingsSwitch
         label={tx('menu_mute')}
         value={isMuted}
