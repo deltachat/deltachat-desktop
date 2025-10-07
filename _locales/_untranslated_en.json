@@ -91,5 +91,8 @@
   },
   "accounts_list_item_menu_label": {
     "message": "Actions with Profile"
+  },
+  "calls": {
+    "message": "Calls"
   }
 }
