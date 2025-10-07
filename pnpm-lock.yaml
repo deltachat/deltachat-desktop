@@ -134,9 +134,6 @@ importers:
       '@types/linkifyjs':
         specifier: ^2.1.7
         version: 2.1.7
-      '@types/punycode':
-        specifier: ^2.1.4
-        version: 2.1.4
       classnames:
         specifier: ^2.5.1
         version: 2.5.1
@@ -176,9 +173,6 @@ importers:
       path-browserify:
         specifier: ^1.0.1
         version: 1.0.1
-      punycode:
-        specifier: ^2.3.1
-        version: 2.3.1
       react:
         specifier: ^19.1.0
         version: 19.1.0
@@ -1342,9 +1336,6 @@ packages:
 
   '@types/postcss-modules-scope@3.0.4':
     resolution: {integrity: sha512-//ygSisVq9kVI0sqx3UPLzWIMCmtSVrzdljtuaAEJtGoGnpjBikZ2sXO5MpH9SnWX9HRfXxHifDAXcQjupWnIQ==}
-
-  '@types/punycode@2.1.4':
-    resolution: {integrity: sha512-trzh6NzBnq8yw5e35f8xe8VTYjqM3NE7bohBtvDVf/dtUer3zYTLK1Ka3DG3p7bdtoaOHZucma6FfVKlQ134pQ==}
 
   '@types/qs@6.9.15':
     resolution: {integrity: sha512-uXHQKES6DQKKCLh441Xv/dwxOq1TVS3JPUMlEqoEglvlhR6Mxnlew/Xq/LRVHpLyk7iK3zODe1qYHIMltO7XGg==}
@@ -4587,8 +4578,6 @@ snapshots:
   '@types/postcss-modules-scope@3.0.4':
     dependencies:
       postcss: 8.5.6
-
-  '@types/punycode@2.1.4': {}
 
   '@types/qs@6.9.15': {}
 
