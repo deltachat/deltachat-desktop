@@ -106,6 +106,7 @@ function renderElement(
             }
           : null,
         scheme: '',
+        linkText: elm.v,
       }
       destination.hostname = url.hostname
       destination.scheme = url.protocol.replace(':', '')
@@ -141,7 +142,6 @@ function renderElement(
     case 'nl':
       return <span key={key}>{'\n'}</span>
 
-    case 'mention': // for later usage
     case 'text':
       return <span key={key}>{elm.v}</span>
     default:
