@@ -27,6 +27,7 @@ type LinkDestination = {
   hostname: null | string
   punycode: null | PunycodeWarning
   scheme: null | string
+  linkText?: string
 }
 
 export const Link = ({
@@ -39,7 +40,7 @@ export const Link = ({
   const { openDialog } = useDialog()
   const openLinkSafely = useOpenLinkSafely()
   const accountId = selectedAccountId()
-  const { target, punycode, scheme } = destination
+  const { target, punycode, scheme, linkText } = destination
 
   const processQr = useProcessQr()
   const asciiUrl = punycode ? punycode.punycode_encoded_url : target
@@ -74,7 +75,7 @@ export const Link = ({
       onClick={onClick}
       tabIndex={tabIndex}
     >
-      {target}
+      {linkText ?? target}
     </a>
   )
 }
