@@ -3,7 +3,7 @@ import React, { useContext } from 'react'
 import * as linkify from 'linkifyjs'
 import 'linkify-plugin-hashtag'
 import '../../utils/linkify/plugin-bot-command'
-import { convertFediverseMentions } from '../../utils/linkify/fediverseLinks'
+import { clearFediverseMentions } from '../../utils/linkify/clearFediverseMentions'
 
 import { Link } from './Link'
 import { getLogger } from '@deltachat-desktop/shared/logger'
@@ -207,7 +207,7 @@ export function parseAndRenderMessage(
 ): React.ReactElement {
   try {
     let elements = linkify.tokenize(message)
-    elements = convertFediverseMentions(elements)
+    elements = clearFediverseMentions(elements)
     // console.log('linkifyjs elements:', elements)
     return preview ? (
       <div className='truncated'>{elements.map(renderElementPreview)}</div>

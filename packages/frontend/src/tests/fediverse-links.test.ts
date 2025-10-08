@@ -1,5 +1,5 @@
 import * as linkify from 'linkifyjs'
-import { convertFediverseMentions } from '../utils/linkify/fediverseLinks.js'
+import { clearFediverseMentions } from '../utils/linkify/clearFediverseMentions.js'
 import { expect } from 'chai'
 import { beforeEach, describe, it } from 'mocha'
 import { type customMultiToken } from '../components/message/MessageParser.js'
@@ -51,36 +51,21 @@ describe('linkify-plugin-botcommand', () => {
     linkify.reset()
   })
 
-  it('parses fediverse addresses as links', () => {
-    const elements1 = convertFediverseMentions(
+  it('parses fediverse addresses as text', () => {
+    const elements1 = clearFediverseMentions(
       linkify.tokenize('Written by @user@mastodon.social')
     )
     elementExpectHelper(elements1, [
-      { type: 'text', value: 'Written by ' },
-      {
-        type: 'url',
-        value: 'mastodon.social/@user',
-        initialText: '@user@mastodon.social',
-      },
+      { type: 'text', value: 'Written by @user@mastodon.social' },
     ])
-    const elements2 = convertFediverseMentions(
+    const elements2 = clearFediverseMentions(
       linkify.tokenize(
         'Written by @user@mastodon.social and @user2@subdomain.fostodon.social'
       )
     )
     elementExpectHelper(elements2, [
-      { type: 'text', value: 'Written by ' },
-      {
-        type: 'url',
-        value: 'mastodon.social/@user',
-        initialText: '@user@mastodon.social',
-      },
-      { type: 'text', value: ' and ' },
-      {
-        type: 'url',
-        value: 'subdomain.fostodon.social/@user2',
-        initialText: '@user2@subdomain.fostodon.social',
-      },
+      { type: 'text', value: 'Written by @user@mastodon.social' },
+      { type: 'text', value: ' and @user2@subdomain.fostodon.social' },
     ])
     const validAddresses = [
       '[@test@mastodon.social]',
@@ -92,46 +77,19 @@ describe('linkify-plugin-botcommand', () => {
       '@foobar.test@fostodon.cloud?foo=bar', // TBD: query params are removed from link!
     ]
     validAddresses.forEach(text => {
-      const elements = convertFediverseMentions(linkify.tokenize(text))
-      elementExpectCountHelper(elements, 'url', 1)
-    })
-  })
-
-  it('ignores invalid fediverse addresses', () => {
-    const invalidAddresses = [
-      '@user@foo',
-      'text@user@',
-      '@@user@ ',
-      '@user@',
-      '@user@foo:test',
-      '@user@foo.not',
-    ]
-    invalidAddresses.forEach(text => {
-      const elements = convertFediverseMentions(linkify.tokenize(text))
+      const elements = clearFediverseMentions(linkify.tokenize(text))
       elementExpectCountHelper(elements, 'url', 0)
-    })
-    const invalidAddresses2 = [
-      '@test@ mastodon.social',
-      '@test@:mastodon.social',
-      '@test@@mastodon.social',
-    ]
-    invalidAddresses2.forEach(text => {
-      const elements = convertFediverseMentions(linkify.tokenize(text))
-      elementExpectCountHelper(elements, 'url', 1)
-      expect(elements[1].v).to.not.include('@')
     })
   })
 
   it('parses normal addresses as expected', () => {
-    const elements1 = convertFediverseMentions(
+    const elements1 = clearFediverseMentions(
       linkify.tokenize('https://user:pass@test.com')
     )
     elementExpectHelper(elements1, [
       { type: 'url', value: 'https://user:pass@test.com' },
     ])
-    const elements2 = convertFediverseMentions(
-      linkify.tokenize('mail@test.com')
-    )
+    const elements2 = clearFediverseMentions(linkify.tokenize('mail@test.com'))
     elementExpectHelper(elements2, [{ type: 'email', value: 'mail@test.com' }])
   })
 })
