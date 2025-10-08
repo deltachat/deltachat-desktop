@@ -1,5 +1,4 @@
 import React, { useRef } from 'react'
-import { C } from '@deltachat/jsonrpc-client'
 
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
@@ -18,9 +17,9 @@ export default function EmptyChatMessage({ chat }: Props) {
 
   let emptyChatMessage = tx('chat_new_one_to_one_hint', [chat.name, chat.name])
 
-  if (chat.chatType === C.DC_CHAT_TYPE_OUT_BROADCAST) {
+  if (chat.chatType === 'OutBroadcast') {
     emptyChatMessage = tx('chat_new_channel_hint')
-  } else if (chat.chatType === C.DC_CHAT_TYPE_GROUP && !chat.isContactRequest) {
+  } else if (chat.chatType === 'Group' && !chat.isContactRequest) {
     emptyChatMessage = chat.isUnpromoted
       ? tx('chat_new_group_hint')
       : tx('chat_no_messages')

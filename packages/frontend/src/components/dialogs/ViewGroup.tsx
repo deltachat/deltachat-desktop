@@ -47,7 +47,7 @@ const log = getLogger('ViewGroup')
  * This dialog is used to for groups of various types:
  * - encrypted groups
  * - non encrypted groups (email groups)
- * - channels if the current account is the sender (DC_CHAT_TYPE_OUT_BROADCAST)
+ * - channels if the current account is the sender (chatType == "OutBroadcast")
  *
  * Mailinglists and channels (receiver side) have an own dialog
  * since you don't see other receivers in those chats
@@ -185,12 +185,12 @@ export const useGroup = (accountId: number, chat: T.FullChat) => {
 function ViewGroupInner(
   props: {
     chat: T.FullChat & {
-      chatType: C.DC_CHAT_TYPE_GROUP | C.DC_CHAT_TYPE_OUT_BROADCAST
+      chatType: 'Group' | 'OutBroadcast'
     }
   } & DialogProps
 ) {
   const { chat, onClose } = props
-  const isBroadcast = chat.chatType === C.DC_CHAT_TYPE_OUT_BROADCAST
+  const isBroadcast = chat.chatType === 'OutBroadcast'
   const { openDialog } = useDialog()
   const accountId = selectedAccountId()
   const openConfirmationDialog = useConfirmationDialog()
