@@ -386,20 +386,10 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
   const openViewProfileDialog = useOpenViewProfileDialog()
   const accountId = selectedAccountId()
 
-  const [firstChatContact, setFirstChatContact] = useState<T.Contact | null>(
-    null
-  )
-  useEffect(() => {
-    BackendRemote.rpc
-      .getContact(accountId, chat.contactIds[0])
-      .then(setFirstChatContact)
-      .catch(
-        log.error.bind(
-          null,
-          'error fetching first contact of chat for chat subtitle'
-        )
-      )
-  }, [chat.contactIds, accountId])
+  const firstChatContact = useRpcFetch(BackendRemote.rpc.getContact, [
+    accountId,
+    chat.contactIds[0],
+  ])
 
   const onTitleClick = () => {
     if (!chat) {
@@ -453,7 +443,10 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
     }
   }
 
-  const subtitle = chatSubtitle(chat, firstChatContact)
+  const subtitle = chatSubtitle(
+    chat,
+    firstChatContact.result?.ok ? firstChatContact.result?.value : null
+  )
 
   return (
     <div className='navbar-heading' data-no-drag-region>
