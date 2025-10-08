@@ -9,7 +9,7 @@ import { MessageTypeAttachmentSubset } from '../../components/attachment/Attachm
 import { KeybindAction } from '../../keybindings'
 import useMessage from './useMessage'
 import ComposerMessageInput from '../../components/composer/ComposerMessageInput'
-import { useMessageList } from '../../stores/messagelist'
+import { MessageListStore } from '../../stores/messagelist'
 
 const log = getLogger('renderer/composer')
 
@@ -35,6 +35,7 @@ function emptyDraft(chatId: number | null): DraftObject {
 }
 
 export function useDraft(
+  messageListStore: MessageListStore,
   accountId: number,
   chatId: number | null,
   isContactRequest: boolean,
@@ -70,9 +71,21 @@ export function useDraft(
     _setDraftStateButKeepTextareaValue,
   ] = useState<DraftObject>(emptyDraft(chatId))
 
-  const {
-    state: { messageCache, messageListItems },
-  } = useMessageList(accountId, chatId || 0)
+  // Use the shared store to access the message cache and list of messages
+  const [messageCache, setMessageCache] = useState(
+    messageListStore.state.messageCache
+  )
+  const [messageListItems, setMessageListItems] = useState(
+    messageListStore.state.messageListItems
+  )
+
+  useEffect(() => {
+    const unsubscribe = messageListStore.subscribe(update => {
+      setMessageCache(update.messageCache)
+      setMessageListItems(update.messageListItems)
+    })
+    return unsubscribe
+  }, [messageListStore])
 
   /**
    * `draftRef.current` gets set to `draftState` on every render.
@@ -309,6 +322,9 @@ export function useDraft(
     }
     const currQuoteMessageIdInd = messageIds.lastIndexOf(currQuote.messageId)
     if (currQuoteMessageIdInd === -1) {
+      // maybe the message is just not in the cache (yet)
+      // but still in the full list of messages
+      // -> check if it's there
       const fullMsgIdList = messageListItems
         .filter(m => m.kind === 'message')
         .map(m => m.msg_id)

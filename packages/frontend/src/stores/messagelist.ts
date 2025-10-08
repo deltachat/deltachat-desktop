@@ -10,7 +10,7 @@ import {
   defaultChatViewState,
 } from './chat/chat_view_reducer'
 import { ChatStoreScheduler } from './chat/chat_scheduler'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import { debounce } from 'debounce'
 import { getLogger } from '@deltachat-desktop/shared/logger'
@@ -20,28 +20,16 @@ const log = getLogger('messagelist')
 
 const PAGE_SIZE = 11
 
-// The store is used in different places so we export
-// it as Singleton to make sure all subscribers use the same store instance
-const storeCache = new Map<string, MessageListStore>()
-
-function getStoreKey(accountId: number, chatId: number): string {
-  return `${accountId}-${chatId}`
-}
-
-function getOrCreateMessageListStore(
+/**
+ * Creates a new MessageListStore instance.
+ * The store should be created at the parent component level (MessageListAndComposer)
+ * and shared between useMessageList and useDraft to avoid redundant data loading.
+ */
+export function createMessageListStore(
   accountId: number,
   chatId: number
 ): MessageListStore {
-  const key = getStoreKey(accountId, chatId)
-  let store = storeCache.get(key)
-
-  if (!store) {
-    store = new MessageListStore(accountId, chatId)
-    store.effect.loadChat()
-    storeCache.set(key, store)
-  }
-
-  return store
+  return new MessageListStore(accountId, chatId)
 }
 
 interface MessageListState {
@@ -77,11 +65,12 @@ const defaultState = () =>
   }) as MessageListState
 
 /*
- * A hook to read a portion of messages(a view) for a given chat. It creates a store(MessageListStore)
+ * A hook to read a portion of messages(a view) for a given chat. It uses the passed store(MessageListStore)
  * for the given chat and account and loads messages on it. It always has a maximum specified number
- * of messages as per PAGE_SIZE constant.
+ * of messages as per PAGE_SIZE constant. The store is also used in useDraft to avoid redundant data loading.
  */
 export function useMessageList(
+  store: MessageListStore,
   accountId: number,
   chatId: number
 ): {
@@ -90,10 +79,6 @@ export function useMessageList(
   fetchMoreBottom: () => void
   fetchMoreTop: () => void
 } {
-  const store = useMemo(() => {
-    return getOrCreateMessageListStore(accountId, chatId)
-  }, [accountId, chatId])
-
   // PERF: It's a shame that we have to re-render on settings changes
   // even though we only depend on `volume`,
   // but let's hope the React compiler will take care of this
@@ -202,7 +187,7 @@ function getView<T>(items: T[], start: number, end: number): T[] {
   return items.slice(start, end + 1)
 }
 
-class MessageListStore extends Store<MessageListState> {
+export class MessageListStore extends Store<MessageListState> {
   scheduler = new ChatStoreScheduler()
 
   emitter = BackendRemote.getContextEvents(this.accountId)

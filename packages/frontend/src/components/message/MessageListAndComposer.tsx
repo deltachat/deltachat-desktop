@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback } from 'react'
+import React, { useRef, useEffect, useCallback, useMemo } from 'react'
 import { join, parse, ParsedPath } from 'path'
 import { T } from '@deltachat/jsonrpc-client'
 
@@ -16,6 +16,7 @@ import { ReactionsBarProvider } from '../ReactionsBar'
 import useDialog from '../../hooks/dialog/useDialog'
 import useMessage from '../../hooks/chat/useMessage'
 import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
+import { createMessageListStore } from '../../stores/messagelist'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
@@ -99,6 +100,15 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
   const { openDialog, hasOpenDialogs } = useDialog()
   const { sendMessage } = useMessage()
 
+  // Create a store instance and share it between
+  // useMessageList and useDraft to avoid redundant data loading
+  const messageListStore = useMemo(() => {
+    const store = createMessageListStore(accountId, chat.id)
+    // Initialize the store
+    store.effect.loadChat()
+    return store
+  }, [accountId, chat.id])
+
   const regularMessageInputRef = useRef<ComposerMessageInput>(null)
   const editMessageInputRef = useRef<ComposerMessageInput>(null)
   const {
@@ -112,6 +122,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     clearDraftStateAndUpdateTextareaValue,
     setDraftStateAndUpdateTextareaValue,
   } = useDraft(
+    messageListStore,
     accountId,
     chat.id,
     chat.isContactRequest,
@@ -295,6 +306,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
               accountId={accountId}
               chat={chat}
               refComposer={refComposer}
+              messageListStore={messageListStore}
             />
           </ReactionsBarProvider>
         </RecoverableCrashScreen>
