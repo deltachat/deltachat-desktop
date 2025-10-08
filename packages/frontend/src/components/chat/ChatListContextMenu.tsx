@@ -144,7 +144,9 @@ export function useChatListContextMenu(): {
           accountId,
           chatId
         )
-        openViewGroupDialog(fullChat)
+        openViewGroupDialog(
+          fullChat as T.FullChat & { chatType: 'Group' | 'OutBroadcast' }
+        )
       }
       const onViewProfile = async (
         chatId: (typeof chatListItems)[number]['id']
@@ -157,13 +159,15 @@ export function useChatListContextMenu(): {
           throw new Error('chat was not found')
         }
         if (
-          fullChat.chatType !== C.DC_CHAT_TYPE_IN_BROADCAST &&
-          fullChat.chatType !== C.DC_CHAT_TYPE_MAILINGLIST
+          fullChat.chatType !== 'InBroadcast' &&
+          fullChat.chatType !== 'Mailinglist'
         ) {
           openViewProfileDialog(accountId, fullChat.contactIds[0])
         } else {
           openDialog(MailingListProfile, {
-            chat: fullChat,
+            chat: fullChat as T.FullChat & {
+              chatType: 'InBroadcast' | 'Mailinglist'
+            },
           })
         }
       }
@@ -171,7 +175,7 @@ export function useChatListContextMenu(): {
         openLeaveGroupOrChannelDialog(
           accountId,
           chat.id,
-          chat.chatType === C.DC_CHAT_TYPE_GROUP
+          chat.chatType === 'Group'
         )
       const onBlockContact = (chat: (typeof chatListItems)[number]) =>
         openBlockFirstContactOfChatDialog(accountId, chat)
@@ -195,11 +199,10 @@ export function useChatListContextMenu(): {
 
       const singleChat = chatListItems.length === 1 ? chatListItems[0] : false
 
-      const isGroup: boolean =
-        singleChat && singleChat.chatType === C.DC_CHAT_TYPE_GROUP
+      const isGroup: boolean = singleChat && singleChat.chatType === 'Group'
 
       const isOutBroadcast: boolean =
-        singleChat && singleChat.chatType === C.DC_CHAT_TYPE_OUT_BROADCAST
+        singleChat && singleChat.chatType === 'OutBroadcast'
 
       // TODO pluralize strings.
       const viewCloneEncInfo = [
@@ -317,7 +320,7 @@ export function useChatListContextMenu(): {
         //
         // Leave channel
         singleChat &&
-          singleChat.chatType === C.DC_CHAT_TYPE_IN_BROADCAST &&
+          singleChat.chatType === 'InBroadcast' &&
           !singleChat.isContactRequest && {
             label: tx('menu_leave_channel'),
             action: () => onLeaveGroupOrChannel(singleChat),

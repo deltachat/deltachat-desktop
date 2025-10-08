@@ -350,7 +350,7 @@ async function flushNotifications(accountId: number) {
               accountId,
               notification.chatId
             )
-            if (chat.chatType === C.DC_CHAT_TYPE_GROUP) {
+            if (chat.chatType === 'Group') {
               // only show mentions for group chats
               return notification
             }

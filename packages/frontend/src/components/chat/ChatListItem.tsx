@@ -525,8 +525,7 @@ export const ChatListItemMessageResult = React.memo<
               displayName={msr.chatName}
             />
             {!(
-              msr.chatType === C.DC_CHAT_TYPE_SINGLE &&
-              msr.authorId !== C.DC_CONTACT_ID_SELF
+              msr.chatType === 'Single' && msr.authorId !== C.DC_CONTACT_ID_SELF
             ) && (
               <Avatar
                 className='small'
