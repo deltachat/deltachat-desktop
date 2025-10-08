@@ -157,7 +157,9 @@ export const useGroup = (accountId: number, chat: T.FullChat) => {
     BackendRemote.rpc
       .getContactsByIds(accountId, group.contactIds)
       .then((groupContacts: { [id: number]: T.Contact }) => {
-        setPastContacts(group.contactIds.map((id: number) => groupContacts[id]))
+        setGroupContacts(
+          group.contactIds.map((id: number) => groupContacts[id])
+        )
       })
   }, [accountId, group.contactIds])
 
