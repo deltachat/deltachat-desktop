@@ -146,23 +146,76 @@ export const useGroup = (accountId: number, chat: T.FullChat) => {
     [tx, openDialog, chat.id, accountId]
   )
 
-  type GroupContacts = typeof group.contacts
-  /**
-   * setGroupContacts is only called after changes from "outside" triggered by
-   * DCEvent "ContactsChanged" to update the group contacts in local state
-   *
-   * It takes a "setter" argument to make sure, the update always happens
-   * on the latest group state
-   */
-  const setGroupContacts = useCallback(
-    (setter: (oldContacts: GroupContacts) => GroupContacts) => {
-      setGroup((group: T.FullChat) => {
-        const newContacts = setter(group.contacts)
-        return { ...group, contacts: newContacts }
+  const [pastContacts, setPastContacts] = useState<T.Contact[]>([])
+
+  useEffect(() => {
+    BackendRemote.rpc
+      .getContactsByIds(accountId, group.pastContactIds)
+      .then((pastContacts: { [id: number]: T.Contact }) => {
+        setPastContacts(
+          group.pastContactIds.map((id: number) => pastContacts[id])
+        )
       })
-    },
-    []
-  )
+  }, [accountId, group.pastContactIds])
+
+  const [groupContacts, setGroupContacts] = useState<T.Contact[]>([])
+
+  useEffect(() => {
+    BackendRemote.rpc
+      .getContactsByIds(accountId, group.contactIds)
+      .then((groupContacts: { [id: number]: T.Contact }) => {
+        setPastContacts(group.contactIds.map((id: number) => groupContacts[id]))
+      })
+  }, [accountId, group.contactIds])
+
+  useEffect(() => {
+    return onDCEvent(
+      accountId,
+      'ContactsChanged',
+      ({ contactId: changedContactId }) => {
+        // update contacts in case a contact changed
+        // while this dialog is open (e.g. contact got blocked)
+        //
+        // Loading the initial `pastContacts`
+        // and `groupContacts` is taken care of in different places.
+
+        let contactIdsToReload: Array<T.Contact['id']>
+        if (changedContactId == null) {
+          contactIdsToReload = [...group.pastContactIds, ...group.contactIds]
+        } else {
+          if (
+            !group.pastContactIds.includes(changedContactId) &&
+            !group.contactIds.includes(changedContactId)
+          ) {
+            // No need to do anything, the contact has nothing to do
+            // with this group. For performance.
+            return
+          }
+
+          contactIdsToReload = [changedContactId]
+        }
+
+        BackendRemote.rpc
+          .getContactsByIds(accountId, contactIdsToReload)
+          .then((contactsToUpdate: { [id: string]: T.Contact }) => {
+            // Making sure to only update the contacts
+            // that are already present in the lists,
+            // because we're doing it in an async way.
+            setGroupContacts(groupContacts =>
+              groupContacts.map(
+                (oldContact: T.Contact) =>
+                  contactsToUpdate[oldContact.id] ?? oldContact
+              )
+            )
+            setPastContacts(pastContacts =>
+              pastContacts.map(
+                oldContact => contactsToUpdate[oldContact.id] ?? oldContact
+              )
+            )
+          })
+      }
+    )
+  }, [accountId, group])
 
   useEffect(() => {
     return onDCEvent(accountId, 'ChatModified', ({ chatId }) => {
@@ -177,10 +230,11 @@ export const useGroup = (accountId: number, chat: T.FullChat) => {
     groupName,
     groupImage,
     setGroupName,
+    groupContacts,
     addMembers,
     removeMember,
     setGroupImage,
-    setGroupContacts,
+    pastContacts,
   }
 }
 
@@ -223,72 +277,12 @@ function ViewGroupInner(
     groupName,
     groupImage,
     setGroupName,
+    groupContacts,
+    pastContacts,
     addMembers,
     removeMember,
     setGroupImage,
-    setGroupContacts,
   } = useGroup(accountId, chat)
-
-  const [pastContacts, setPastContacts] = useState<T.Contact[]>([])
-
-  useEffect(() => {
-    BackendRemote.rpc
-      .getContactsByIds(accountId, group.pastContactIds)
-      .then((pastContacts: { [id: number]: T.Contact }) => {
-        setPastContacts(
-          group.pastContactIds.map((id: number) => pastContacts[id])
-        )
-      })
-  }, [accountId, group.pastContactIds])
-
-  useEffect(() => {
-    return onDCEvent(
-      accountId,
-      'ContactsChanged',
-      ({ contactId: changedContactId }) => {
-        // update contacts in case a contact changed
-        // while this dialog is open (e.g. contact got blocked)
-        //
-        // Loading the initial `pastContacts`
-        // and `group.contacts` is taken care of in different places.
-
-        let contactIdsToReload: Array<T.Contact['id']>
-        if (changedContactId == null) {
-          contactIdsToReload = [...group.pastContactIds, ...group.contactIds]
-        } else {
-          if (
-            !group.pastContactIds.includes(changedContactId) &&
-            !group.contactIds.includes(changedContactId)
-          ) {
-            // No need to do anything, the contact has nothing to do
-            // with this group. For performance.
-            return
-          }
-
-          contactIdsToReload = [changedContactId]
-        }
-
-        BackendRemote.rpc
-          .getContactsByIds(accountId, contactIdsToReload)
-          .then((contactsToUpdate: { [id: string]: T.Contact }) => {
-            // Making sure to only update the contacts
-            // that are already present in the lists,
-            // because we're doing it in an async way.
-            setGroupContacts(groupContacts =>
-              groupContacts.map(
-                (oldContact: T.Contact) =>
-                  contactsToUpdate[oldContact.id] ?? oldContact
-              )
-            )
-            setPastContacts(pastContacts =>
-              pastContacts.map(
-                oldContact => contactsToUpdate[oldContact.id] ?? oldContact
-              )
-            )
-          })
-      }
-    )
-  }, [accountId, group, setGroupContacts])
 
   const showRemoveGroupMemberConfirmationDialog = useCallback(
     async (contact: T.Contact) => {
@@ -476,7 +470,7 @@ function ViewGroupInner(
                   </>
                 )}
                 <ContactList
-                  contacts={group.contacts}
+                  contacts={groupContacts}
                   showRemove={!chatDisabled && group.isEncrypted}
                   onClick={contact => {
                     if (contact.id === C.DC_CONTACT_ID_SELF) {
