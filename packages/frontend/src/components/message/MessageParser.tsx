@@ -2,7 +2,8 @@ import React, { useContext } from 'react'
 
 import * as linkify from 'linkifyjs'
 import 'linkify-plugin-hashtag'
-import '../../utils/linkify-plugin-bot-command'
+import '../../utils/linkify/plugin-bot-command'
+import { convertFediverseMentions } from '../../utils/linkify/fediverseLinks'
 
 import { Link } from './Link'
 import { getLogger } from '@deltachat-desktop/shared/logger'
@@ -16,6 +17,8 @@ import useCreateChatByEmail from '../../hooks/chat/useCreateChatByEmail'
 import { ChatView } from '../../contexts/ChatContext'
 
 const log = getLogger('renderer/message-parser')
+
+export type customMultiToken = linkify.MultiToken & { initialText?: string }
 
 /**
  * returns an array with emojis if the first token of str
@@ -52,7 +55,7 @@ export function extractEmojisFromFirstToken(
 }
 
 function renderElement(
-  elm: linkify.MultiToken,
+  elm: customMultiToken,
   tabindexForInteractiveContents: -1 | 0,
   key?: number
 ): React.ReactElement {
@@ -107,7 +110,7 @@ function renderElement(
             }
           : null,
         scheme: '',
-        linkText: elm.v,
+        linkText: elm.initialText || elm.v,
       }
       destination.hostname = url.hostname
       destination.scheme = url.protocol.replace(':', '')
@@ -203,7 +206,8 @@ export function parseAndRenderMessage(
   tabindexForInteractiveContents: -1 | 0
 ): React.ReactElement {
   try {
-    const elements = linkify.tokenize(message)
+    let elements = linkify.tokenize(message)
+    elements = convertFediverseMentions(elements)
     // console.log('linkifyjs elements:', elements)
     return preview ? (
       <div className='truncated'>{elements.map(renderElementPreview)}</div>

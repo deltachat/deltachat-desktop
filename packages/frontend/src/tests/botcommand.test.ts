@@ -1,5 +1,5 @@
 import * as linkify from 'linkifyjs'
-import { botcommand } from '../utils/linkify-plugin-bot-command/index.js'
+import { botcommand } from '../utils/linkify/plugin-bot-command/index.js'
 import { expect } from 'chai'
 import { beforeEach, describe, it } from 'mocha'
 
