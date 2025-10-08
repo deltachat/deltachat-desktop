@@ -335,8 +335,10 @@ export default function MainScreen({ accountId }: Props) {
     </div>
   )
 }
-
-function chatSubtitle(chat: Type.FullChat) {
+/**
+ * @param chat
+ * @param firstContact The fist contact of chat and null if not loaded */
+function chatSubtitle(chat: Type.FullChat, firstContact: T.Contact | null) {
   const tx = window.static_translate
   if (chat.id && chat.id > C.DC_CHAT_ID_LAST_SPECIAL) {
     if (chat.chatType === 'Group') {
@@ -347,7 +349,7 @@ function chatSubtitle(chat: Type.FullChat) {
       } else {
         return '…'
       }
-    } else if (chat.chatType === 'Single' && chat.contacts[0]?.isBot) {
+    } else if (chat.chatType === 'Single' && firstContact?.isBot) {
       return tx('bot')
     } else if (chat.chatType === 'Mailinglist') {
       if (chat.mailingListAddress) {
@@ -367,7 +369,11 @@ function chatSubtitle(chat: Type.FullChat) {
       } else if (chat.isDeviceChat) {
         return tx('device_talk_subtitle')
       }
-      return chat.isEncrypted ? null : chat.contacts[0].address
+      if (chat.isProtected) {
+        return null
+      } else {
+        return firstContact?.address
+      }
     }
   }
   return 'ErrTitle'
@@ -379,6 +385,21 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
   const openViewGroupDialog = useOpenViewGroupDialog()
   const openViewProfileDialog = useOpenViewProfileDialog()
   const accountId = selectedAccountId()
+
+  const [firstChatContact, setFirstChatContact] = useState<T.Contact | null>(
+    null
+  )
+  useEffect(() => {
+    BackendRemote.rpc
+      .getContact(accountId, chat.contactIds[0])
+      .then(setFirstChatContact)
+      .catch(
+        log.error.bind(
+          null,
+          'error fetching first contact of chat for chat subtitle'
+        )
+      )
+  }, [chat.contactIds, accountId])
 
   const onTitleClick = () => {
     if (!chat) {
@@ -432,7 +453,7 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
     }
   }
 
-  const subtitle = chatSubtitle(chat)
+  const subtitle = chatSubtitle(chat, firstChatContact)
 
   return (
     <div className='navbar-heading' data-no-drag-region>

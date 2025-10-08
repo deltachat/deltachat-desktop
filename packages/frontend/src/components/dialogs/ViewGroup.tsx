@@ -139,74 +139,6 @@ export const useGroup = (accountId: number, chat: T.FullChat) => {
     [tx, openDialog, chat.id, accountId]
   )
 
-  type GroupContacts = typeof group.contacts
-  /**
-   * setGroupContacts is only called after changes from "outside" triggered by
-   * DCEvent "ContactsChanged" to update the group contacts in local state
-   *
-   * It takes a "setter" argument to make sure, the update always happens
-   * on the latest group state
-   */
-  const setGroupContacts = useCallback(
-    (setter: (oldContacts: GroupContacts) => GroupContacts) => {
-      setGroup((group: T.FullChat) => {
-        const newContacts = setter(group.contacts)
-        return { ...group, contacts: newContacts }
-      })
-    },
-    []
-  )
-
-  useEffect(() => {
-    return onDCEvent(accountId, 'ChatModified', ({ chatId }) => {
-      if (chatId === group.id) {
-        BackendRemote.rpc.getFullChatById(accountId, group.id).then(setGroup)
-      }
-    })
-  })
-
-  return {
-    group,
-    groupName,
-    groupImage,
-    setGroupName,
-    addMembers,
-    removeMember,
-    setGroupImage,
-    setGroupContacts,
-  }
-}
-
-function ViewGroupInner(
-  props: {
-    chat: T.FullChat & {
-      chatType: 'Group' | 'OutBroadcast'
-    }
-  } & DialogProps
-) {
-  const { chat, onClose } = props
-  const isBroadcast = chat.chatType === 'OutBroadcast'
-  const { openDialog } = useDialog()
-  const accountId = selectedAccountId()
-  const openConfirmationDialog = useConfirmationDialog()
-  const tx = useTranslationFunction()
-
-  const chatDisabled = !chat.canSend
-
-  const groupMemberContactListWrapperRef = useRef<HTMLDivElement>(null)
-  const groupPastMemberContactListWrapperRef = useRef<HTMLDivElement>(null)
-
-  const {
-    group,
-    groupName,
-    groupImage,
-    setGroupName,
-    addMembers,
-    removeMember,
-    setGroupImage,
-    setGroupContacts,
-  } = useGroup(accountId, chat)
-
   const [pastContacts, setPastContacts] = useState<T.Contact[]>([])
 
   useEffect(() => {
@@ -219,6 +151,16 @@ function ViewGroupInner(
       })
   }, [accountId, group.pastContactIds])
 
+  const [groupContacts, setGroupContacts] = useState<T.Contact[]>([])
+
+  useEffect(() => {
+    BackendRemote.rpc
+      .getContactsByIds(accountId, group.contactIds)
+      .then((groupContacts: { [id: number]: T.Contact }) => {
+        setPastContacts(group.contactIds.map((id: number) => groupContacts[id]))
+      })
+  }, [accountId, group.contactIds])
+
   useEffect(() => {
     return onDCEvent(
       accountId,
@@ -228,7 +170,7 @@ function ViewGroupInner(
         // while this dialog is open (e.g. contact got blocked)
         //
         // Loading the initial `pastContacts`
-        // and `group.contacts` is taken care of in different places.
+        // and `groupContacts` is taken care of in different places.
 
         let contactIdsToReload: Array<T.Contact['id']>
         if (changedContactId == null) {
@@ -266,7 +208,59 @@ function ViewGroupInner(
           })
       }
     )
-  }, [accountId, group, setGroupContacts])
+  }, [accountId, group])
+
+  useEffect(() => {
+    return onDCEvent(accountId, 'ChatModified', ({ chatId }) => {
+      if (chatId === group.id) {
+        BackendRemote.rpc.getFullChatById(accountId, group.id).then(setGroup)
+      }
+    })
+  })
+
+  return {
+    group,
+    groupName,
+    groupImage,
+    setGroupName,
+    groupContacts,
+    addMembers,
+    removeMember,
+    setGroupImage,
+    pastContacts,
+  }
+}
+
+function ViewGroupInner(
+  props: {
+    chat: T.FullChat & {
+      chatType: 'Group' | 'OutBroadcast'
+    }
+  } & DialogProps
+) {
+  const { chat, onClose } = props
+  const isBroadcast = chat.chatType === 'OutBroadcast'
+  const { openDialog } = useDialog()
+  const accountId = selectedAccountId()
+  const openConfirmationDialog = useConfirmationDialog()
+  const tx = useTranslationFunction()
+
+  const chatDisabled = !chat.canSend
+
+  const groupMemberContactListWrapperRef = useRef<HTMLDivElement>(null)
+  const groupPastMemberContactListWrapperRef = useRef<HTMLDivElement>(null)
+
+  const {
+    group,
+    groupName,
+    groupImage,
+    setGroupName,
+    groupContacts,
+    pastContacts,
+    addMembers,
+    removeMember,
+    setGroupImage,
+  } = useGroup(accountId, chat)
 
   const showRemoveGroupMemberConfirmationDialog = useCallback(
     async (contact: T.Contact) => {
@@ -393,7 +387,7 @@ function ViewGroupInner(
                   </>
                 )}
                 <ContactList
-                  contacts={group.contacts}
+                  contacts={groupContacts}
                   showRemove={!chatDisabled && group.isEncrypted}
                   onClick={contact => {
                     if (contact.id === C.DC_CONTACT_ID_SELF) {
