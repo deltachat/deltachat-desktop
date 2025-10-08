@@ -335,6 +335,7 @@ const PERMISSIONS_POLICY_DENY_ALL: &str = concat!(
     "focus-without-user-activation=(), ",
     "join-ad-interest-group=(), ",
     "local-fonts=(), ",
+    "monetization=(), ",
     "run-ad-auction=(), ",
     "smart-card=(), ",
     "sync-script=(), ",
