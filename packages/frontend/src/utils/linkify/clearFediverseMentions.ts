@@ -12,7 +12,6 @@ export function clearFediverseMentions(
   for (let i = 0; i < elements.length; i++) {
     const lastTokenIsAtSign = (token: customMultiToken['tk']) =>
       token.length > 0 && token[token.length - 1].v === '@'
-    // Check if we have a sequence: @mail@url which is parsed as text + email
     if (
       i + 1 < elements.length &&
       elements[i].t === 'text' &&
@@ -22,7 +21,7 @@ export function clearFediverseMentions(
       // Combine the elements into one text element
       const combinedValue = `${elements[i].v}${elements[i + 1].v}`
 
-      // Create a new url element
+      // Extend the text element with the content of the email element
       const combinedElement = {
         ...elements[i],
         v: combinedValue,
