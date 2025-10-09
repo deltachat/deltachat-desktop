@@ -88,7 +88,7 @@ function renderElement(
         }
         return url
       }
-      // according to https://developer.mozilla.org/de/docs/Web/API/URL/hostname
+      // according to https://developer.mozilla.org/docs/Web/API/URL/hostname
       // domain names will be transformed to punycode automatically
       // so we just need to check if the original hostname is different
       // from the punycode one
@@ -97,7 +97,7 @@ function renderElement(
       }
       const destination = {
         target: fullUrl,
-        hostname: '',
+        hostname: url.hostname,
         punycode: suspicousUrl
           ? {
               ascii_hostname: url.hostname,
@@ -105,11 +105,9 @@ function renderElement(
               original_hostname: elm.v, // TODO: change naming here
             }
           : null,
-        scheme: '',
+        scheme: url.protocol.replace(':', ''),
         linkText: elm.v,
       }
-      destination.hostname = url.hostname
-      destination.scheme = url.protocol.replace(':', '')
       return (
         <Link
           destination={destination}
@@ -156,56 +154,26 @@ function renderElement(
 }
 
 /**
- * render in preview mode for ChatListItem summary and for quoted messages,
- * not interactive (links can not be clicked) just looks more similar to
- * the message in the chatview/message-list
- */
-function renderElementPreview(
-  elm: linkify.MultiToken,
-  key?: number
-): React.ReactElement {
-  switch (elm.t) {
-    case 'nl':
-      // In ChatListItem this will be collapsed by default.
-      // We need line breaks to be displayed for quoted messages
-      // and in the composer.
-      return <span key={key}>{'\n'}</span>
-
-    case 'url':
-    case 'hashtag':
-    case 'email':
-    case 'botcommand':
-    case 'text':
-      return <span key={key}>{elm.v}</span>
-    default:
-      //@ts-ignore
-      log.error(`type ${elm.t} not known/implemented yet`, elm)
-      return (
-        <div key={key} style={{ color: 'red' }}>
-          {JSON.stringify(elm)}
-        </div>
-      )
-  }
-}
-
-/**
  * parse message text (for links and interactive elements)
  * and render as React elements
+ *
+ * @param preview - render in preview mode for ChatListItem summary
+ * and for quoted messages, without interactive elements
+ * (links can not be clicked etc.)
  */
 export function parseAndRenderMessage(
   message: string,
   preview: boolean,
   /**
-   * Has no effect `{@link preview} === true`, because there should be
+   * Has no effect if `{@link preview} === true`, because there should be
    * no interactive elements in the first place
    */
   tabindexForInteractiveContents: -1 | 0
 ): React.ReactElement {
   try {
     const elements = linkify.tokenize(message)
-    // console.log('linkifyjs elements:', elements)
     return preview ? (
-      <div className='truncated'>{elements.map(renderElementPreview)}</div>
+      <div className='truncated'>{elements.map(el => el.v)}</div>
     ) : (
       <>
         {elements.map((el, index) =>

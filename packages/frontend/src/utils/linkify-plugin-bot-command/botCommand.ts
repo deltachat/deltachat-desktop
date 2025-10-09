@@ -10,7 +10,7 @@ const BotCommandToken = createTokenClass('botcommand', {
 
 /**
  * Bot command parser plugin for linkify
- * Finds strings with a single trailing slash at the beginning of a word
+ * Finds strings with a single slash at the beginning of a word
  * Allows alphanumeric characters and special characters: /,-,_,@
  * the related code in android is here:
  * https://github.com/deltachat/deltachat-android/blob/70a05221abc68f7352eb29d14b23734a2c9cc795/src/main/java/org/thoughtcrime/securesms/util/Linkifier.java#L12
