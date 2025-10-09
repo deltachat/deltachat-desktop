@@ -38,7 +38,6 @@
     "immutable": "^4.3.7",
     "jsqr": "^1.4.0",
     "linkify-plugin-hashtag": "^4.3.2",
-    "linkify-plugin-mention": "^4.3.2",
     "linkifyjs": "^4.3.2",
     "mime-types": "catalog:",
     "moment": "^2.30.1",
