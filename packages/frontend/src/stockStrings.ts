@@ -71,6 +71,8 @@ export async function updateCoreStrings() {
     | C.DC_STR_SECURE_JOIN_CHANNEL_QR_DESC
     | C.DC_STR_SECUREJOIN_WAIT
     | C.DC_STR_AEAP_EXPLANATION_AND_LINK
+    | C.DC_STR_VIDEOCHAT_INVITATION // can be removed
+    | C.DC_STR_VIDEOCHAT_INVITE_MSG_BODY // with core 2.18
   >
   const strings: StockStringsSomeOmited = {
     // TODO: Check if we need the uncommented core translations
@@ -99,8 +101,6 @@ export async function updateCoreStrings() {
     [C.DC_STR_UNKNOWN_SENDER_FOR_CHAT]: tx('systemmsg_unknown_sender_for_chat'),
     [C.DC_STR_SUBJECT_FOR_NEW_CONTACT]: tx('systemmsg_subject_for_new_contact'),
     [C.DC_STR_FAILED_SENDING_TO]: tx('systemmsg_failed_sending_to'),
-    [C.DC_STR_VIDEOCHAT_INVITATION]: tx('videochat_invitation'),
-    [C.DC_STR_VIDEOCHAT_INVITE_MSG_BODY]: tx('videochat_invitation_body'),
     [C.DC_STR_CONFIGURATION_FAILED]: tx('configuration_failed_with_error'),
     [C.DC_STR_REPLY_NOUN]: tx('reply_noun'),
     [C.DC_STR_FORWARDED]: tx('forwarded'),
