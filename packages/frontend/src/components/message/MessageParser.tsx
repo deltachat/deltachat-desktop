@@ -143,7 +143,6 @@ function renderElement(
     case 'text':
       return <span key={key}>{elm.v}</span>
     default:
-      //@ts-ignore
       log.error(`type ${elm.t} not known/implemented yet`, elm)
       return (
         <span key={key} style={{ color: 'red' }}>
