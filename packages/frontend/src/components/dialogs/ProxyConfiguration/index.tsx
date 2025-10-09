@@ -14,6 +14,7 @@ import SettingsSwitch from '../../Settings/SettingsSwitch'
 import { DeltaTextarea } from '../../Login-Styles'
 import { BackendRemote, onDCEvent } from '../../../backend-com'
 import useAlertDialog from '../../../hooks/dialog/useAlertDialog'
+import useDialog from '../../../hooks/dialog/useDialog'
 import Button from '../../Button'
 
 import styles from './styles.module.scss'
@@ -24,6 +25,7 @@ import { getLogger } from '@deltachat-desktop/shared/logger'
 import { unknownErrorToString } from '../../helpers/unknownErrorToString'
 
 import ProxyItemRow from './ProxyItemRow'
+import ProxyQrScanner from '../ProxyQrScanner'
 
 const log = getLogger('proxy-configuration')
 
@@ -49,7 +51,11 @@ type ProxyStateType = {
  * the list of proxies is kept even if proxy is disabled
  */
 export default function ProxyConfiguration(
-  props: DialogProps & { accountId: number; configured: boolean }
+  props: DialogProps & {
+    accountId: number
+    configured: boolean
+    newProxyUrl?: string
+  }
 ) {
   const tx = useTranslationFunction()
 
@@ -68,6 +74,7 @@ export default function ProxyConfiguration(
   const { accountId, configured, onClose } = props
 
   const openAlertDialog = useAlertDialog()
+  const { openDialog } = useDialog()
 
   const [proxyState, setProxyState] = useState<ProxyStateType>({
     enabled: false,
@@ -82,6 +89,21 @@ export default function ProxyConfiguration(
     (updates: Partial<typeof proxyState>) =>
       setProxyState(prev => ({ ...prev, ...updates, updateSettings: true })),
     [setProxyState]
+  )
+
+  // some basic validations, returns true if the url seems valid
+  // and is not already in the list of proxies
+  const maybeValidProxyUrl = useCallback(
+    (url: string): boolean => {
+      const parts = url.split('://')
+      return (
+        parts.length === 2 &&
+        parts[0].length >= 2 && // shortest protocol is ss://
+        parts[1].length >= 1 && // host
+        !proxyState.proxies.includes(url)
+      )
+    },
+    [proxyState.proxies]
   )
 
   useEffect(() => {
@@ -133,39 +155,65 @@ export default function ProxyConfiguration(
     })
   }
 
-  const addProxy = async (proxyUrl: string) => {
-    if (proxyState.proxies.includes(proxyUrl)) {
-      log.warn('skip already existing proxy', proxyUrl)
-      // proxy alread exists
-      return
-    }
-    let proxyValid = maybeValidProxyUrl(proxyUrl)
-    let errorMessage = ''
-    if (proxyValid) {
-      try {
-        const parsedUrl = await BackendRemote.rpc.checkQr(accountId, proxyUrl)
-        proxyValid = parsedUrl.kind === 'proxy'
-      } catch (error) {
-        log.error('checkQr failed with error', error)
-        errorMessage = unknownErrorToString(error)
-        proxyValid = false
+  const addProxy = useCallback(
+    async (proxyUrl: string) => {
+      if (proxyState.proxies.includes(proxyUrl)) {
+        log.warn('skip already existing proxy', proxyUrl)
+        // proxy alread exists
+        return
       }
-    }
-    if (!proxyValid) {
-      openAlertDialog({
-        message:
-          tx('proxy_invalid') + (errorMessage ? `\n${errorMessage}` : ''),
+      let proxyValid = maybeValidProxyUrl(proxyUrl)
+      let errorMessage = ''
+      if (proxyValid) {
+        try {
+          const parsedUrl = await BackendRemote.rpc.checkQr(accountId, proxyUrl)
+          proxyValid = parsedUrl.kind === 'proxy'
+        } catch (error) {
+          log.error('checkQr failed with error', error)
+          errorMessage = unknownErrorToString(error)
+          proxyValid = false
+        }
+      }
+      if (!proxyValid) {
+        openAlertDialog({
+          message:
+            tx('proxy_invalid') + (errorMessage ? `\n${errorMessage}` : ''),
+        })
+        return
+      }
+      updateProxyState({
+        enabled: true,
+        proxies: [...proxyState.proxies, proxyUrl],
+        activeProxy: proxyUrl,
       })
-      return
+      setShowNewProxyForm(false)
+      setNewProxyUrl('')
+    },
+    [
+      proxyState.proxies,
+      maybeValidProxyUrl,
+      accountId,
+      openAlertDialog,
+      tx,
+      updateProxyState,
+    ]
+  )
+
+  // Handle new proxy URL from props
+  useEffect(() => {
+    if (props.newProxyUrl) {
+      addProxy(props.newProxyUrl)
     }
-    updateProxyState({
-      enabled: true,
-      proxies: [...proxyState.proxies, proxyUrl],
-      activeProxy: proxyUrl,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.newProxyUrl]) // skip addProxy in deps since it has too many deps itself
+
+  const openQrScanner = useCallback(() => {
+    openDialog(ProxyQrScanner, {
+      onSuccess: (result: string) => {
+        addProxy(result)
+      },
     })
-    setShowNewProxyForm(false)
-    setNewProxyUrl('')
-  }
+  }, [openDialog, addProxy])
 
   const changeActiveProxy = useCallback(
     (proxyUrl: string) => {
@@ -286,7 +334,6 @@ export default function ProxyConfiguration(
     proxyState.proxies,
     proxyState.activeProxy,
     proxyState.updateSettings,
-    proxyState,
   ])
 
   /**
@@ -312,18 +359,6 @@ export default function ProxyConfiguration(
     },
     [tx, openAlertDialog]
   )
-
-  // some basic validations, returns true if the url seems valid
-  // and is not already in the list of proxies
-  const maybeValidProxyUrl = (url: string): boolean => {
-    const parts = url.split('://')
-    return (
-      parts.length === 2 &&
-      parts[0].length >= 2 && // shortest protocol is ss://
-      parts[1].length >= 1 && // host
-      !proxyState.proxies.includes(url)
-    )
-  }
 
   return (
     <Dialog
@@ -375,14 +410,23 @@ export default function ProxyConfiguration(
               value={newProxyUrl}
               onChange={e => setNewProxyUrl(e.target.value)}
             />
-            <Button
-              className='save-proxy'
-              onClick={() => addProxy(newProxyUrl)}
-              styling='primary'
-              disabled={!maybeValidProxyUrl(newProxyUrl)}
-            >
-              {tx('proxy_add')}
-            </Button>
+            <div className={styles.buttonsContainer}>
+              <Button
+                className='save-proxy'
+                onClick={() => addProxy(newProxyUrl)}
+                styling='primary'
+                disabled={!maybeValidProxyUrl(newProxyUrl)}
+              >
+                {tx('proxy_add')}
+              </Button>
+              <Button
+                className={styles.scanQrButton}
+                onClick={openQrScanner}
+                styling='primary'
+              >
+                {tx('qrscan_title')}
+              </Button>
+            </div>
           </form>
         )}
         {!showNewProxyForm && (

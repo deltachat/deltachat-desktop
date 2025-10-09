@@ -60,11 +60,10 @@ $iconSize: 1.3em;
   height: $iconSize !important;
 }
 
-.buttons {
+.buttonsContainer {
   display: flex;
-  button {
-    padding: 8px;
-  }
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
 .addProxyButton {
