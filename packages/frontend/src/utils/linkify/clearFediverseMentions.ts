@@ -1,16 +1,16 @@
-import { type customMultiToken } from '../../components/message/MessageParser.js'
+import * as linkify from 'linkifyjs'
 /**
  * Do not render fediverse mentions like  @user@domain.tld as email addresses
  *
  * this is a workaround for https://github.com/nfrasser/linkifyjs/issues/476
  */
 export function clearFediverseMentions(
-  elements: customMultiToken[]
-): customMultiToken[] {
-  const result: customMultiToken[] = []
+  elements: linkify.MultiToken[]
+): linkify.MultiToken[] {
+  const result: linkify.MultiToken[] = []
 
   for (let i = 0; i < elements.length; i++) {
-    const lastTokenIsAtSign = (token: customMultiToken['tk']) =>
+    const lastTokenIsAtSign = (token: linkify.MultiToken['tk']) =>
       token.length > 0 && token[token.length - 1].v === '@'
     if (
       i + 1 < elements.length &&
@@ -26,7 +26,7 @@ export function clearFediverseMentions(
         ...elements[i],
         v: combinedValue,
         tk: [...(elements[i].tk || []), ...(elements[i + 1].tk || [])],
-      } as customMultiToken
+      } as linkify.MultiToken
 
       result.push(combinedElement)
       // Skip the next element as it's already processed

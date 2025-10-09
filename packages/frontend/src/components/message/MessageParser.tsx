@@ -18,8 +18,6 @@ import { ChatView } from '../../contexts/ChatContext'
 
 const log = getLogger('renderer/message-parser')
 
-export type customMultiToken = linkify.MultiToken & { initialText?: string }
-
 /**
  * returns an array with emojis if the first token of str
  * is of type emoji, composed emojis are just one item in the array
@@ -55,7 +53,7 @@ export function extractEmojisFromFirstToken(
 }
 
 function renderElement(
-  elm: customMultiToken,
+  elm: linkify.MultiToken,
   tabindexForInteractiveContents: -1 | 0,
   key?: number
 ): React.ReactElement {
@@ -101,7 +99,7 @@ function renderElement(
       }
       const destination = {
         target: fullUrl,
-        hostname: '',
+        hostname: url.hostname,
         punycode: suspicousUrl
           ? {
               ascii_hostname: url.hostname,
@@ -109,11 +107,9 @@ function renderElement(
               original_hostname: elm.v, // TODO: change naming here
             }
           : null,
-        scheme: '',
-        linkText: elm.initialText || elm.v,
+        scheme: url.protocol.replace(':', ''),
+        linkText: elm.v,
       }
-      destination.hostname = url.hostname
-      destination.scheme = url.protocol.replace(':', '')
       return (
         <Link
           destination={destination}
