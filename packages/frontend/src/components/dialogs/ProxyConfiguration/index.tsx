@@ -71,7 +71,7 @@ export default function ProxyConfiguration(
 
   // configured means the account is already configured
   // which is needed to decide if we show the connectivity status
-  const { accountId, configured, onClose } = props
+  const { accountId, configured, newProxyUrl: incomingProxyUrl, onClose } = props
 
   const openAlertDialog = useAlertDialog()
   const { openDialog } = useDialog()
@@ -94,16 +94,16 @@ export default function ProxyConfiguration(
   // some basic validations, returns true if the url seems valid
   // and is not already in the list of proxies
   const maybeValidProxyUrl = useCallback(
-    (url: string): boolean => {
+    (url: string, existingProxies: string[]): boolean => {
       const parts = url.split('://')
       return (
         parts.length === 2 &&
         parts[0].length >= 2 && // shortest protocol is ss://
         parts[1].length >= 1 && // host
-        !proxyState.proxies.includes(url)
+        !existingProxies.includes(url.trim())
       )
     },
-    [proxyState.proxies]
+    []
   )
 
   useEffect(() => {
@@ -115,7 +115,7 @@ export default function ProxyConfiguration(
             'proxy_url',
           ])
         if (proxy_enabled !== undefined) {
-          const enabled = proxy_enabled === Proxy.ENABLED
+          let enabled = proxy_enabled === Proxy.ENABLED
           let proxies: string[] = []
           let activeProxy = null
           if (proxy_url && proxy_url.length > 0) {
@@ -123,7 +123,17 @@ export default function ProxyConfiguration(
             // and remove empty lines from possible previous settings
             const proxyLines = proxy_url.split(/\n/).filter(s => !!s)
             proxies = proxyLines
-            activeProxy = enabled ? proxyLines[0] : null
+            activeProxy = enabled ? proxies[0] : null
+          }
+          if (incomingProxyUrl) {
+            // This is the case when the proxy url was scanned
+            // from general qr code scanner in an existing account.
+            // Then this dialog opens and the scanned url is passed via props.
+            if (maybeValidProxyUrl(incomingProxyUrl, proxies)) {
+              proxies = [incomingProxyUrl, ...proxies]
+              activeProxy = incomingProxyUrl
+              enabled = true
+            }
           }
           setProxyState(prev => ({
             ...prev,
@@ -141,7 +151,7 @@ export default function ProxyConfiguration(
       }
     }
     loadSettings()
-  }, [accountId, openAlertDialog, tx])
+  }, [accountId, openAlertDialog, maybeValidProxyUrl, incomingProxyUrl, tx])
 
   const changeProxyEnable = (enableProxy: boolean) => {
     let activeProxy = null
@@ -159,10 +169,10 @@ export default function ProxyConfiguration(
     async (proxyUrl: string) => {
       if (proxyState.proxies.includes(proxyUrl)) {
         log.warn('skip already existing proxy', proxyUrl)
-        // proxy alread exists
+        // proxy already exists
         return
       }
-      let proxyValid = maybeValidProxyUrl(proxyUrl)
+      let proxyValid = maybeValidProxyUrl(proxyUrl, proxyState.proxies)
       let errorMessage = ''
       if (proxyValid) {
         try {
@@ -181,11 +191,13 @@ export default function ProxyConfiguration(
         })
         return
       }
-      updateProxyState({
+      setProxyState(prev => ({
+        ...prev,
         enabled: true,
-        proxies: [...proxyState.proxies, proxyUrl],
+        proxies: [...prev.proxies, proxyUrl],
         activeProxy: proxyUrl,
-      })
+        updateSettings: true,
+      }))
       setShowNewProxyForm(false)
       setNewProxyUrl('')
     },
@@ -195,17 +207,9 @@ export default function ProxyConfiguration(
       accountId,
       openAlertDialog,
       tx,
-      updateProxyState,
+      setProxyState,
     ]
   )
-
-  // Handle new proxy URL from props
-  useEffect(() => {
-    if (props.newProxyUrl) {
-      addProxy(props.newProxyUrl)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.newProxyUrl]) // skip addProxy in deps since it has too many deps itself
 
   const openQrScanner = useCallback(() => {
     openDialog(ProxyQrScanner, {
@@ -412,14 +416,16 @@ export default function ProxyConfiguration(
             />
             <div className={styles.buttonsContainer}>
               <Button
+                aria-label={tx('proxy_add')}
                 className='save-proxy'
                 onClick={() => addProxy(newProxyUrl)}
                 styling='primary'
-                disabled={!maybeValidProxyUrl(newProxyUrl)}
+                disabled={!maybeValidProxyUrl(newProxyUrl, proxyState.proxies)}
               >
                 {tx('proxy_add')}
               </Button>
               <Button
+                aria-label={tx('qrscan_title')}
                 className={styles.scanQrButton}
                 onClick={openQrScanner}
                 styling='primary'
