@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { DialogProps } from '../../../contexts/DialogContext'
 import Dialog, {
   DialogBody,
@@ -54,6 +54,9 @@ export default function ProxyConfiguration(
   props: DialogProps & {
     accountId: number
     configured: boolean
+    /**
+     * Changing this value after initial render has no effect.
+     */
     newProxyUrl?: string
   }
 ) {
@@ -200,12 +203,11 @@ export default function ProxyConfiguration(
   )
 
   // Handle new proxy URL from props
-  useEffect(() => {
-    if (props.newProxyUrl) {
-      addProxy(props.newProxyUrl)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.newProxyUrl]) // skip addProxy in deps since it has too many deps itself
+  const addedProxyFromProps = useRef(false)
+  if (props.newProxyUrl && !addedProxyFromProps.current) {
+    addedProxyFromProps.current = true
+    addProxy(props.newProxyUrl)
+  }
 
   const openQrScanner = useCallback(() => {
     openDialog(ProxyQrScanner, {
