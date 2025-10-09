@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react'
-import { C } from '@deltachat/jsonrpc-client'
 
 import { Timespans } from '../../../../shared/constants'
 import { ContextMenuItem } from '../ContextMenu'
