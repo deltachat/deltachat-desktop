@@ -158,9 +158,6 @@ importers:
       linkify-plugin-hashtag:
         specifier: ^4.3.2
         version: 4.3.2(linkifyjs@4.3.2)
-      linkify-plugin-mention:
-        specifier: ^4.3.2
-        version: 4.3.2(linkifyjs@4.3.2)
       linkifyjs:
         specifier: ^4.3.2
         version: 4.3.2
@@ -2867,11 +2864,6 @@ packages:
 
   linkify-plugin-hashtag@4.3.2:
     resolution: {integrity: sha512-04geGSNuWTeMUJZdje0HvjZqN+cKbyKu1fV3R51TCNIjqnR+vXza5M5G/sBfL5WzOppVoas4XGoFCfv63oGglw==}
-    peerDependencies:
-      linkifyjs: ^4.0.0
-
-  linkify-plugin-mention@4.3.2:
-    resolution: {integrity: sha512-pPkhuF1iR3on649dg65trgfKVrl0Jjhksyd2eGttpIBJFlGu7s6ZV5mA8fDBuketdkX7P9om3mKtjfMeDAbjsA==}
     peerDependencies:
       linkifyjs: ^4.0.0
 
@@ -6678,10 +6670,6 @@ snapshots:
   lilconfig@2.1.0: {}
 
   linkify-plugin-hashtag@4.3.2(linkifyjs@4.3.2):
-    dependencies:
-      linkifyjs: 4.3.2
-
-  linkify-plugin-mention@4.3.2(linkifyjs@4.3.2):
     dependencies:
       linkifyjs: 4.3.2
 
