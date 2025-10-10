@@ -16,27 +16,39 @@ export function ExperimentalFeatures() {
   const { openDialog } = useDialog()
 
   const showExperimentalInfoDialog = async (
-    settingsKey: keyof SettingsStoreState['desktopSettings'],
+    settingsKey: keyof Pick<
+      SettingsStoreState['desktopSettings'],
+      | 'enableAVCallsV2'
+      | 'enableBroadcastLists'
+      | 'enableOnDemandLocationStreaming'
+    >,
     updatedValue: boolean
   ) => {
     if (!updatedValue) {
       return
     }
-    let header = ''
-    let message = ''
-    if (settingsKey === 'enableAVCallsV2') {
-      header = 'Thanks for helping to debug "Calls"!'
-      message =
-        '• You can now debug calls using the "phone" icon in one-to-one-chats' +
-        "\n\n• The experiment is about making decentralised calls work and reliable at all, not about options or UI. We're happy about focused feedback at support.delta.chat"
-    } else if (settingsKey === 'enableBroadcastLists') {
-      header = 'Thanks for trying out "Channels"'
-      message = '• You can now create "Channels" from the "New Chat" dialog'
-    } else if (settingsKey === 'enableOnDemandLocationStreaming') {
-      header = 'Thanks for trying out "On-Demand Location Streaming"'
-      message =
-        '• If enabled you will find a map icon above the message list, which opens a map with shared locations of your contacts' +
-        '\n\n• Sharing your own location is only available in mobile clients'
+    let header: string
+    let message: string
+    switch (settingsKey) {
+      case 'enableAVCallsV2': {
+        header = 'Thanks for helping to debug "Calls"!'
+        message =
+          '• You can now debug calls using the "phone" icon in one-to-one-chats' +
+          "\n\n• The experiment is about making decentralised calls work and reliable at all, not about options or UI. We're happy about focused feedback at support.delta.chat"
+        break
+      }
+      case 'enableBroadcastLists': {
+        header = 'Thanks for trying out "Channels"'
+        message = '• You can now create "Channels" from the "New Chat" dialog'
+        break
+      }
+      case 'enableOnDemandLocationStreaming': {
+        header = 'Thanks for trying out "On-Demand Location Streaming"'
+        message =
+          '• If enabled you will find a map icon above the message list, which opens a map with shared locations of your contacts' +
+          '\n\n• Sharing your own location is only available in mobile clients'
+        break
+      }
     }
     message +=
       '\n\n• If you want to quit the experimental feature, you can disable it at "Settings / Advanced"'
