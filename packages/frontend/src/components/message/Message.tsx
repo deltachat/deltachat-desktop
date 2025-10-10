@@ -29,7 +29,6 @@ import {
 import Attachment from '../attachment/messageAttachment'
 import { isGenericAttachment, isImage } from '../attachment/Attachment'
 import { runtime } from '@deltachat-desktop/runtime-interface'
-import { AvatarFromContact } from '../Avatar'
 import { ConversationType } from './MessageList'
 import { getDirection } from '../../utils/getDirection'
 import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
@@ -42,7 +41,6 @@ import useMessage from '../../hooks/chat/useMessage'
 import useOpenViewProfileDialog from '../../hooks/dialog/useOpenViewProfileDialog'
 import usePrivateReply from '../../hooks/chat/usePrivateReply'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useVideoChat from '../../hooks/useVideoChat'
 import { useReactionsBar, showReactionsUi } from '../ReactionsBar'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import Reactions from '../Reactions'
@@ -275,13 +273,11 @@ function buildContextMenu(
   const showResend =
     message.sender.id === C.DC_CONTACT_ID_SELF && message.viewType !== 'Call'
 
-  const isInfoOrCallInvitation =
-    message.isInfo || message.viewType === 'VideochatInvitation'
   // Do not show "reply" in read-only chats, and for info messages.
   // See
   // - https://github.com/deltachat/deltachat-desktop/issues/5337
   // - https://github.com/deltachat/deltachat-android/blob/52c01976821803fa2d8a177f93576fa4082ef5bd/src/main/java/org/thoughtcrime/securesms/ConversationFragment.java#L332-L332
-  const showReply = chat.canSend && !isInfoOrCallInvitation
+  const showReply = chat.canSend && !message.isInfo
 
   // See
   // - https://github.com/deltachat/deltachat-desktop/issues/4695.
@@ -292,7 +288,7 @@ function buildContextMenu(
     chat.isEncrypted &&
     message.text !== '' &&
     chat.canSend &&
-    !isInfoOrCallInvitation &&
+    !message.isInfo &&
     !message.hasHtml &&
     message.viewType !== 'Call'
 
@@ -303,7 +299,7 @@ function buildContextMenu(
   const showReplyPrivately =
     (conversationType.chatType === C.DC_CHAT_TYPE_GROUP ||
       conversationType.chatType === C.DC_CHAT_TYPE_IN_BROADCAST) &&
-    !isInfoOrCallInvitation &&
+    !message.isInfo &&
     message.fromId > C.DC_CONTACT_ID_LAST_SPECIAL
 
   return [
@@ -341,7 +337,7 @@ function buildContextMenu(
     // https://github.com/deltachat/deltachat-android/blob/52c01976821803fa2d8a177f93576fa4082ef5bd/src/main/java/org/thoughtcrime/securesms/ConversationFragment.java#L342
     !chat.isSelfTalk &&
       !isSavedMessage &&
-      !isInfoOrCallInvitation && {
+      !message.isInfo && {
         label: tx('save'),
         action: () =>
           BackendRemote.rpc.saveMsgs(selectedAccountId(), [message.id]),
@@ -377,13 +373,6 @@ function buildContextMenu(
         runtime.writeClipboardImage(message.file as string)
       },
     },
-    // Copy videocall link to clipboard
-    message.videochatUrl !== null &&
-      message.videochatUrl !== '' && {
-        label: tx('menu_copy_link_to_clipboard'),
-        action: () =>
-          runtime.writeClipboardText(message.videochatUrl as string),
-      },
     // Open Attachment
     showAttachmentOptions &&
       message.viewType !== 'Webxdc' &&
@@ -454,7 +443,7 @@ export default function Message(props: {
   conversationType: ConversationType
 }) {
   const { message, conversationType, chat } = props
-  const { id, viewType, text, hasLocation, hasHtml } = message
+  const { viewType, text, hasLocation, hasHtml } = message
   const direction = getDirection(message)
   const status = mapCoreMsgStatus2String(message.state)
 
@@ -466,7 +455,6 @@ export default function Message(props: {
   const privateReply = usePrivateReply()
   const { openContextMenu } = useContext(ContextMenuContext)
   const openViewProfileDialog = useOpenViewProfileDialog()
-  const { joinVideoChat } = useVideoChat()
   const { jumpToMessage } = useMessage()
   const [messageWidth, setMessageWidth] = useState(0)
 
@@ -719,77 +707,16 @@ export default function Message(props: {
     ? true
     : !!message.savedMessageId
 
-  let content
-  if (message.viewType === 'VideochatInvitation') {
-    return (
-      <div
-        className={`videochat-invitation ${rovingTabindex.className}`}
-        id={message.id.toString()}
-        onContextMenu={showContextMenu}
-        aria-haspopup='menu'
-        {...rovingTabindexAttrs}
-      >
-        <div className='videochat-icon'>
-          <span className='icon videocamera' />
-        </div>
-        {/* FYI the clickable element is not a semantic button.
-        Here it's probably fine. So there is also no need
-        to specify tabindex.*/}
-        <AvatarFromContact
-          contact={message.sender}
-          onClick={onContactClick}
-          // tabindexForInteractiveContents={tabindexForInteractiveContents}
+  let content = (
+    <div dir='auto' className='text'>
+      {text !== null ? (
+        <MessageBody
+          text={text}
+          tabindexForInteractiveContents={tabindexForInteractiveContents}
         />
-        <div className='break' />
-        <div
-          className='info-button'
-          onClick={() => joinVideoChat(accountId, id)}
-        >
-          {direction === 'incoming'
-            ? tx('videochat_contact_invited_hint', message.sender.displayName)
-            : tx('videochat_you_invited_hint')}
-          <button
-            className='join-button'
-            tabIndex={tabindexForInteractiveContents}
-          >
-            {direction === 'incoming'
-              ? tx('videochat_tap_to_join')
-              : tx('rejoin')}
-          </button>
-        </div>
-        <div className='break' />
-        <div className='meta-data-container'>
-          <MessageMetaData
-            fileMime={message.fileMime || null}
-            direction={direction}
-            status={status}
-            error={message.error || null}
-            downloadState={message.downloadState}
-            isEdited={message.isEdited}
-            hasText={text !== null && text !== ''}
-            hasLocation={hasLocation}
-            timestamp={message.timestamp * 1000}
-            encrypted={message.showPadlock}
-            isSavedMessage={isOrHasSavedMessage}
-            onClickError={openMessageInfo.bind(null, openDialog, message)}
-            viewType={'VideochatInvitation'}
-            tabindexForInteractiveContents={tabindexForInteractiveContents}
-          />
-        </div>
-      </div>
-    )
-  } else {
-    content = (
-      <div dir='auto' className='text'>
-        {text !== null ? (
-          <MessageBody
-            text={text}
-            tabindexForInteractiveContents={tabindexForInteractiveContents}
-          />
-        ) : null}
-      </div>
-    )
-  }
+      ) : null}
+    </div>
+  )
 
   const { downloadState } = message
 

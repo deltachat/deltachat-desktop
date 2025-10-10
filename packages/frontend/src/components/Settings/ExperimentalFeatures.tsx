@@ -1,67 +1,16 @@
 import React from 'react'
 
-import SettingsStoreInstance, {
-  SettingsStoreState,
-  useSettingsStore,
-} from '../../stores/settings'
-import SettingsSelector from './SettingsSelector'
+import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 import DesktopSettingsSwitch from './DesktopSettingsSwitch'
-import EditVideochatInstanceDialog from '../dialogs/EditVideochatInstanceDialog'
-import {
-  VIDEO_CHAT_INSTANCE_AUTISTICI,
-  VIDEO_CHAT_INSTANCE_SYSTEMLI,
-} from '../../../../shared/constants'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import useDialog from '../../hooks/dialog/useDialog'
 import SettingsSwitch from './SettingsSwitch'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 
-type Props = {
-  settingsStore: SettingsStoreState
-}
-
-export function ExperimentalFeatures({ settingsStore }: Props) {
+export function ExperimentalFeatures() {
   const tx = useTranslationFunction()
-  const { openDialog } = useDialog()
-
-  const onClickEdit = async () => {
-    openDialog(EditVideochatInstanceDialog, {
-      onOk: async (configValue: string) => {
-        SettingsStoreInstance.effect.setCoreSetting(
-          'webrtc_instance',
-          configValue
-        )
-        if (configValue === '') {
-          SettingsStoreInstance.effect.setDesktopSetting('enableAVCalls', false)
-        } else {
-          SettingsStoreInstance.effect.setDesktopSetting('enableAVCalls', true)
-        }
-      },
-      settingsStore,
-    })
-  }
-
-  const showVideochatInstance = (instance: string) => {
-    if (instance === '') {
-      return tx('off')
-    } else if (instance === VIDEO_CHAT_INSTANCE_SYSTEMLI) {
-      return 'Systemli'
-    } else if (instance === VIDEO_CHAT_INSTANCE_AUTISTICI) {
-      return 'Autistici'
-    }
-    return instance
-  }
 
   return (
     <>
-      <SettingsSelector
-        onClick={onClickEdit.bind(null)}
-        currentValue={showVideochatInstance(
-          settingsStore.settings['webrtc_instance']
-        )}
-      >
-        {tx('videochat')}
-      </SettingsSelector>
       {runtime.getRuntimeInfo().target === 'electron' && (
         <DesktopSettingsSwitch
           settingsKey='enableAVCallsV2'

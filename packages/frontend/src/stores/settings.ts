@@ -21,7 +21,6 @@ export interface SettingsStoreState {
       bcc_self: string
       delete_device_after: string
       delete_server_after: string
-      webrtc_instance: string
       download_limit: string
       only_fetch_mvbox: string
       media_quality: string
@@ -44,7 +43,6 @@ const settingsKeys = [
   'bcc_self',
   'delete_device_after',
   'delete_server_after',
-  'webrtc_instance',
   'download_limit',
   'only_fetch_mvbox',
   'media_quality',
