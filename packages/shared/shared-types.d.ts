@@ -21,9 +21,10 @@ export interface DesktopSettingsType {
    */
   lastAccount?: number
   /**
-   * @see also {@linkcode enableAVCallsV2}
+   * @deprecated removed in https://github.com/deltachat/deltachat-desktop/pull/3965
+   * @see {@linkcode enableAVCallsV2}
    */
-  enableAVCalls: boolean
+  enableAVCalls?: boolean
   /**
    * The new version of video calls.
    * @see https://github.com/orgs/deltachat/projects/81
