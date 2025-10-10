@@ -114,7 +114,7 @@ $info-text-max-width: 400px;
             height: var(--call-icon-size);
             @include mixins.color-svg(
               './images/icons/phone.svg',
-              var(--messageOutgoingStatusColor),
+              var(--messageText),
               100%
             );
           }
@@ -255,7 +255,7 @@ $info-text-max-width: 400px;
   .msg-body.call > .text::after {
     @include mixins.color-svg(
       './images/icons/phone.svg',
-      var(--messagePhoneIconColorIncoming),
+      var(--messageText),
       100%
     );
   }
