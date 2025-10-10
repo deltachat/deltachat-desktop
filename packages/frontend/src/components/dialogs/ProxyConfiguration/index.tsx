@@ -71,7 +71,12 @@ export default function ProxyConfiguration(
 
   // configured means the account is already configured
   // which is needed to decide if we show the connectivity status
-  const { accountId, configured, newProxyUrl: incomingProxyUrl, onClose } = props
+  const {
+    accountId,
+    configured,
+    newProxyUrl: incomingProxyUrl,
+    onClose,
+  } = props
 
   const openAlertDialog = useAlertDialog()
   const { openDialog } = useDialog()
@@ -91,19 +96,40 @@ export default function ProxyConfiguration(
     [setProxyState]
   )
 
-  // some basic validations, returns true if the url seems valid
-  // and is not already in the list of proxies
-  const maybeValidProxyUrl = useCallback(
-    (url: string, existingProxies: string[]): boolean => {
-      const parts = url.split('://')
-      return (
-        parts.length === 2 &&
-        parts[0].length >= 2 && // shortest protocol is ss://
-        parts[1].length >= 1 && // host
-        !existingProxies.includes(url.trim())
-      )
+  // some basic prevalidations, returns true if the url seems valid
+  // called on each key up in new proxy form!
+  const maybeValidProxyUrl = useCallback((url: string): boolean => {
+    const parts = url.split('://')
+    return (
+      parts.length === 2 &&
+      parts[0].length >= 2 && // shortest protocol is ss://
+      parts[1].length >= 1 // host
+    )
+  }, [])
+
+  const isValidProxyUrl = useCallback(
+    async (proxyUrl: string, existingProxies: string[]): Promise<boolean> => {
+      let errorMessage: string | null = null
+      let proxyValid = false
+      try {
+        if (existingProxies.includes(proxyUrl.trim())) {
+          throw new Error('Proxy already exists')
+        }
+        const parsedUrl = await BackendRemote.rpc.checkQr(accountId, proxyUrl)
+        proxyValid = parsedUrl.kind === 'proxy'
+      } catch (error) {
+        log.error('checkQr failed with error', error)
+        errorMessage = unknownErrorToString(error)
+      }
+      if (!proxyValid) {
+        openAlertDialog({
+          message:
+            tx('proxy_invalid') + (errorMessage ? `\n${errorMessage}` : ''),
+        })
+      }
+      return proxyValid
     },
-    []
+    [accountId, openAlertDialog, tx]
   )
 
   useEffect(() => {
@@ -129,8 +155,9 @@ export default function ProxyConfiguration(
             // This is the case when the proxy url was scanned
             // from general qr code scanner in an existing account.
             // Then this dialog opens and the scanned url is passed via props.
-            if (maybeValidProxyUrl(incomingProxyUrl, proxies)) {
-              proxies = [incomingProxyUrl, ...proxies]
+            const proxyValid = await isValidProxyUrl(incomingProxyUrl, proxies)
+            if (proxyValid) {
+              proxies.push(incomingProxyUrl)
               activeProxy = incomingProxyUrl
               enabled = true
             }
@@ -151,7 +178,7 @@ export default function ProxyConfiguration(
       }
     }
     loadSettings()
-  }, [accountId, openAlertDialog, maybeValidProxyUrl, incomingProxyUrl, tx])
+  }, [accountId, openAlertDialog, isValidProxyUrl, incomingProxyUrl, tx])
 
   const changeProxyEnable = (enableProxy: boolean) => {
     let activeProxy = null
@@ -167,48 +194,20 @@ export default function ProxyConfiguration(
 
   const addProxy = useCallback(
     async (proxyUrl: string) => {
-      if (proxyState.proxies.includes(proxyUrl)) {
-        log.warn('skip already existing proxy', proxyUrl)
-        // proxy already exists
-        return
-      }
-      let proxyValid = maybeValidProxyUrl(proxyUrl, proxyState.proxies)
-      let errorMessage = ''
+      const proxyValid = await isValidProxyUrl(proxyUrl, proxyState.proxies)
       if (proxyValid) {
-        try {
-          const parsedUrl = await BackendRemote.rpc.checkQr(accountId, proxyUrl)
-          proxyValid = parsedUrl.kind === 'proxy'
-        } catch (error) {
-          log.error('checkQr failed with error', error)
-          errorMessage = unknownErrorToString(error)
-          proxyValid = false
-        }
+        setProxyState(prev => ({
+          ...prev,
+          enabled: true,
+          proxies: [...prev.proxies, proxyUrl],
+          activeProxy: proxyUrl,
+          updateSettings: true,
+        }))
+        setShowNewProxyForm(false)
+        setNewProxyUrl('')
       }
-      if (!proxyValid) {
-        openAlertDialog({
-          message:
-            tx('proxy_invalid') + (errorMessage ? `\n${errorMessage}` : ''),
-        })
-        return
-      }
-      setProxyState(prev => ({
-        ...prev,
-        enabled: true,
-        proxies: [...prev.proxies, proxyUrl],
-        activeProxy: proxyUrl,
-        updateSettings: true,
-      }))
-      setShowNewProxyForm(false)
-      setNewProxyUrl('')
     },
-    [
-      proxyState.proxies,
-      maybeValidProxyUrl,
-      accountId,
-      openAlertDialog,
-      tx,
-      setProxyState,
-    ]
+    [proxyState.proxies, isValidProxyUrl, setProxyState]
   )
 
   const openQrScanner = useCallback(() => {
@@ -420,7 +419,7 @@ export default function ProxyConfiguration(
                 className='save-proxy'
                 onClick={() => addProxy(newProxyUrl)}
                 styling='primary'
-                disabled={!maybeValidProxyUrl(newProxyUrl, proxyState.proxies)}
+                disabled={!maybeValidProxyUrl(newProxyUrl)}
               >
                 {tx('proxy_add')}
               </Button>
