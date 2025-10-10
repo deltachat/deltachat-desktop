@@ -224,6 +224,11 @@ export default function MainScreen({ accountId }: Props) {
   const isSearchActive = queryStr.length > 0 || queryChatId !== null
   const showArchivedChats = !isSearchActive && archivedChatsSelected
 
+  const lastUsedApps =
+    lastUsedAppsFetch?.result?.ok && lastUsedAppsFetch.result.value.length > 0
+      ? lastUsedAppsFetch.result.value
+      : []
+
   return (
     <div
       className={`main-screen ${smallScreenMode ? 'small-screen' : ''} ${
@@ -310,14 +315,9 @@ export default function MainScreen({ accountId }: Props) {
           >
             {chatWithLinger && <ChatHeading chat={chatWithLinger} />}
           </div>
-          {lastUsedAppsFetch?.result?.ok &&
-            lastUsedAppsFetch.result.value.length > 0 && (
-              <AppIcons
-                accountId={accountId}
-                apps={lastUsedAppsFetch.result.value}
-              />
-            )}
-          {chatWithLinger && <ChatNavButtons chat={chatWithLinger} />}
+          {chatWithLinger && (
+            <ChatNavButtons chat={chatWithLinger} lastUsedApps={lastUsedApps} />
+          )}
           {chatWithLinger && (
             <span
               style={{
@@ -502,7 +502,13 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
   )
 }
 
-function ChatNavButtons({ chat }: { chat: T.FullChat }) {
+function ChatNavButtons({
+  chat,
+  lastUsedApps,
+}: {
+  chat: T.FullChat
+  lastUsedApps: T.Message[]
+}) {
   const tx = useTranslationFunction()
   const chatId = chat.id
   const settingsStore = useSettingsStore()[0]
@@ -517,6 +523,29 @@ function ChatNavButtons({ chat }: { chat: T.FullChat }) {
   return (
     <>
       <span className='views' data-no-drag-region>
+        {lastUsedApps && lastUsedApps.length > 0 && (
+          <AppIcons accountId={selectedAccountId()} apps={lastUsedApps} />
+        )}
+        <Button
+          onClick={openMediaViewDialog}
+          aria-label={tx('apps_and_media')}
+          title={tx('apps_and_media')}
+          className='navbar-button'
+          styling='borderless'
+        >
+          <Icon coloring='navbar' icon='apps' size={18} />
+        </Button>
+        {settingsStore?.desktopSettings.enableOnDemandLocationStreaming && (
+          <Button
+            onClick={() => openMapWebxdc(selectedAccountId(), chatId)}
+            aria-label={tx('tab_map')}
+            className='navbar-button'
+            styling='borderless'
+            title={tx('tab_map')}
+          >
+            <Icon coloring='navbar' icon='map' size={18} />
+          </Button>
+        )}
         {/* Note that the `enableAVCallsV2` setting itself is hidden
         on unsupported targets (Tauri, Browser). */}
         {settingsStore?.desktopSettings.enableAVCallsV2 &&
@@ -539,26 +568,6 @@ function ChatNavButtons({ chat }: { chat: T.FullChat }) {
               <Icon coloring='navbar' icon='phone' size={18} />
             </Button>
           )}
-        <Button
-          onClick={openMediaViewDialog}
-          aria-label={tx('apps_and_media')}
-          title={tx('apps_and_media')}
-          className='navbar-button'
-          styling='borderless'
-        >
-          <Icon coloring='navbar' icon='apps' size={18} />
-        </Button>
-        {settingsStore?.desktopSettings.enableOnDemandLocationStreaming && (
-          <Button
-            onClick={() => openMapWebxdc(selectedAccountId(), chatId)}
-            aria-label={tx('tab_map')}
-            className='navbar-button'
-            styling='borderless'
-            title={tx('tab_map')}
-          >
-            <Icon coloring='navbar' icon='map' size={18} />
-          </Button>
-        )}
       </span>
     </>
   )

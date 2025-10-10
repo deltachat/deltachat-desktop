@@ -135,7 +135,7 @@
 }
 
 .webxdcIcons {
-  margin-top: 4px;
+  margin-top: 8px;
   img {
     width: 25px;
     height: 25px;
@@ -151,4 +151,7 @@
   margin-inline-end: 10px;
   padding: 0 !important;
   border-radius: 0 !important;
+  &:last-child {
+    margin-inline-end: 0;
+  }
 }
