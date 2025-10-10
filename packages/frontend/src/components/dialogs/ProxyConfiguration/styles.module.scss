@@ -66,6 +66,13 @@ $iconSize: 1.3em;
   margin-bottom: 20px;
 }
 
+.buttons {
+  display: flex;
+  button {
+    padding: 6px;
+  }
+}
+
 .addProxyButton {
   padding: 8px 10px 7px 10px;
   position: absolute;
