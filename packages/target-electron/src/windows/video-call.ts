@@ -231,6 +231,9 @@ function openVideoCallWindow<D extends CallDirection>(
   // Maybe we could add a setting for this, i.e. "Allow calls to bypass VPN".
   // win.webContents.setWebRTCIPHandlingPolicy()
 
+  const abortController = new AbortController()
+  win.once('closed', () => abortController.abort('window closed'))
+
   chatInfoPromise.then(chat => {
     if (win.isDestroyed()) {
       return
@@ -344,11 +347,7 @@ function openVideoCallWindow<D extends CallDirection>(
         defaultId: 0,
         cancelId: 0,
         icon: chatInfo?.profileImage || undefined,
-        signal: (() => {
-          const abortController = new AbortController()
-          win.once('closed', () => abortController.abort('window closed'))
-          return abortController.signal
-        })(),
+        signal: abortController.signal,
       })
 
       const answer = response === 1
@@ -410,6 +409,11 @@ function openVideoCallWindow<D extends CallDirection>(
     })),
     windowClosed,
     closeWindow: () => {
+      // `closeWindow` doesn't always actually close the window,
+      // so let's also directly abort here,
+      // instead of waiting for 'closed' event.
+      abortController.abort('closeWindow called')
+
       if (win.isDestroyed()) {
         return
       }
