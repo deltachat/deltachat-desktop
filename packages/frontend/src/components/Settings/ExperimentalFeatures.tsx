@@ -24,6 +24,8 @@ export function ExperimentalFeatures() {
     }
     let header = ''
     let message = ''
+    // The strings are copy-pasted from
+    // https://github.com/deltachat/deltachat-android/blob/2385b236c7ed9eb0e26ef819d8274936877b7023/src/main/java/org/thoughtcrime/securesms/preferences/AdvancedPreferenceFragment.java
     if (settingsKey === 'enableAVCallsV2') {
       header = 'Thanks for helping to debug "Calls"!'
       message =
