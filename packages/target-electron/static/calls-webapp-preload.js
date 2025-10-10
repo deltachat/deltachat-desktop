@@ -18,6 +18,10 @@ portP.then(port => {
   port.onmessage = e => {
     console.log('Received message from port', e.data)
     switch (e.data.type) {
+      case 'startCall': {
+        location.hash = '#startCall'
+        break
+      }
       case 'answer': {
         location.hash = `onAnswer=${btoa(e.data.answer)}`
         break
