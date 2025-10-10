@@ -8,7 +8,9 @@
 ### Changed
 - update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.17.0`
 - update translations (7-10-2025)
-- remove experimental video chat invitation per external link
+
+# Removed
+- remove experimental video chat invitation link feature
 
 
 <a id="2_15_0"></a>
