@@ -144,6 +144,7 @@ export default function ProxyConfiguration(
           let enabled = proxy_enabled === Proxy.ENABLED
           let proxies: string[] = []
           let activeProxy = null
+          let updateSettings = false
           if (proxy_url && proxy_url.length > 0) {
             // split proxy_url by new line
             // and remove empty lines from possible previous settings
@@ -160,6 +161,7 @@ export default function ProxyConfiguration(
               proxies.push(incomingProxyUrl)
               activeProxy = incomingProxyUrl
               enabled = true
+              updateSettings = true
             }
           }
           setProxyState(prev => ({
@@ -167,6 +169,7 @@ export default function ProxyConfiguration(
             enabled,
             proxies,
             activeProxy,
+            updateSettings,
           }))
           setShowNewProxyForm(proxies.length === 0)
         }
