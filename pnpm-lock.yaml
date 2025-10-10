@@ -346,7 +346,7 @@ importers:
         version: 2.17.0(@deltachat/jsonrpc-client@2.17.0(ws@7.5.10))
       calls-webapp#build-for-deltachat-desktop:
         specifier: 'catalog:'
-        version: https://codeload.github.com/deltachat/calls-webapp/tar.gz/c4297b399f7e2d321bd50d2c3a4f5407532b905c
+        version: https://codeload.github.com/deltachat/calls-webapp/tar.gz/283103f4dfedf78c6d3479b5b47081f64436a68a
       mime-types:
         specifier: 'catalog:'
         version: 2.1.35
@@ -1666,8 +1666,8 @@ packages:
     resolution: {integrity: sha512-+ys997U96po4Kx/ABpBCqhA9EuxJaQWDQg7295H4hBphv3IZg0boBKuwYpt4YXp6MZ5AmZQnU/tyMTlRpaSejg==}
     engines: {node: '>= 0.4'}
 
-  calls-webapp#build-for-deltachat-desktop@https://codeload.github.com/deltachat/calls-webapp/tar.gz/c4297b399f7e2d321bd50d2c3a4f5407532b905c:
-    resolution: {tarball: https://codeload.github.com/deltachat/calls-webapp/tar.gz/c4297b399f7e2d321bd50d2c3a4f5407532b905c}
+  calls-webapp#build-for-deltachat-desktop@https://codeload.github.com/deltachat/calls-webapp/tar.gz/283103f4dfedf78c6d3479b5b47081f64436a68a:
+    resolution: {tarball: https://codeload.github.com/deltachat/calls-webapp/tar.gz/283103f4dfedf78c6d3479b5b47081f64436a68a}
     version: 0.0.0
 
   callsites@3.1.0:
@@ -5040,7 +5040,7 @@ snapshots:
       call-bind-apply-helpers: 1.0.2
       get-intrinsic: 1.3.0
 
-  calls-webapp#build-for-deltachat-desktop@https://codeload.github.com/deltachat/calls-webapp/tar.gz/c4297b399f7e2d321bd50d2c3a4f5407532b905c: {}
+  calls-webapp#build-for-deltachat-desktop@https://codeload.github.com/deltachat/calls-webapp/tar.gz/283103f4dfedf78c6d3479b5b47081f64436a68a: {}
 
   callsites@3.1.0: {}
 
