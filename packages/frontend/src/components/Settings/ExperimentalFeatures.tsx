@@ -9,44 +9,53 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import SettingsSwitch from './SettingsSwitch'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import useDialog from '../../hooks/dialog/useDialog'
-import ConfirmationDialog from '../dialogs/ConfirmationDialog'
+import AlertDialog from '../dialogs/AlertDialog'
 
 export function ExperimentalFeatures() {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
 
   const showExperimentalInfoDialog = async (
-    settingsKey: keyof SettingsStoreState['desktopSettings'],
+    settingsKey: keyof Pick<
+      SettingsStoreState['desktopSettings'],
+      | 'enableAVCallsV2'
+      | 'enableBroadcastLists'
+      | 'enableOnDemandLocationStreaming'
+    >,
     updatedValue: boolean
   ) => {
     if (!updatedValue) {
       return
     }
-    let header = ''
-    let message = ''
+    let message: string
     // The strings are copy-pasted from
     // https://github.com/deltachat/deltachat-android/blob/2385b236c7ed9eb0e26ef819d8274936877b7023/src/main/java/org/thoughtcrime/securesms/preferences/AdvancedPreferenceFragment.java
-    if (settingsKey === 'enableAVCallsV2') {
-      header = 'Thanks for helping to debug "Calls"!'
-      message =
-        '• You can now debug calls using the "phone" icon in one-to-one-chats' +
-        "\n\n• The experiment is about making decentralised calls work and reliable at all, not about options or UI. We're happy about focused feedback at support.delta.chat"
-    } else if (settingsKey === 'enableBroadcastLists') {
-      header = 'Thanks for trying out "Channels"'
-      message = '• You can now create "Channels" from the "New Chat" dialog'
-    } else if (settingsKey === 'enableOnDemandLocationStreaming') {
-      header = 'Thanks for trying out "On-Demand Location Streaming"'
-      message =
-        '• If enabled you will find a map icon above the message list, which opens a map with shared locations of your contacts' +
-        '\n\n• Sharing your own location is only available in mobile clients'
+
+    switch (settingsKey) {
+      case 'enableAVCallsV2':
+        message =
+          'Thanks for helping to debug "Calls"!\n\n' +
+          '• You can now debug calls using the "phone" icon in one-to-one-chats' +
+          "\n\n• The experiment is about making decentralised calls work and reliable at all, not about options or UI. We're happy about focused feedback at support.delta.chat"
+        break
+      case 'enableBroadcastLists':
+        message =
+          'Thanks for trying out "Channels"!\n\n' +
+          '• You can now create "Channels" from the "New Chat" dialog'
+        break
+      case 'enableOnDemandLocationStreaming':
+        message =
+          'Thanks for trying out "On-Demand Location Streaming"\n\n' +
+          '• If enabled you will find a map icon above the message list, which opens a map with shared locations of your contacts' +
+          '\n\n• Sharing your own location is only available in mobile clients'
+        break
     }
+
     message +=
       '\n\n• If you want to quit the experimental feature, you can disable it at "Settings / Advanced"'
-    openDialog(ConfirmationDialog, {
-      header,
+    openDialog(AlertDialog, {
       message,
       confirmLabel: tx('ok'),
-      cb: () => {},
     })
   }
 
