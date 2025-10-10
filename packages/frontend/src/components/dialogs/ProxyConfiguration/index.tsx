@@ -418,7 +418,6 @@ export default function ProxyConfiguration(
             />
             <div className={styles.buttonsContainer}>
               <Button
-                aria-label={tx('proxy_add')}
                 className='save-proxy'
                 onClick={() => addProxy(newProxyUrl)}
                 styling='primary'
@@ -427,7 +426,6 @@ export default function ProxyConfiguration(
                 {tx('proxy_add')}
               </Button>
               <Button
-                aria-label={tx('qrscan_title')}
                 className={styles.scanQrButton}
                 onClick={openQrScanner}
                 styling='primary'
