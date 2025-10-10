@@ -224,6 +224,11 @@ export default function MainScreen({ accountId }: Props) {
   const isSearchActive = queryStr.length > 0 || queryChatId !== null
   const showArchivedChats = !isSearchActive && archivedChatsSelected
 
+  const lastUsedApps =
+    lastUsedAppsFetch?.result?.ok && lastUsedAppsFetch.result.value.length > 0
+      ? lastUsedAppsFetch.result.value
+      : []
+
   return (
     <div
       className={`main-screen ${smallScreenMode ? 'small-screen' : ''} ${
@@ -310,14 +315,9 @@ export default function MainScreen({ accountId }: Props) {
           >
             {chatWithLinger && <ChatHeading chat={chatWithLinger} />}
           </div>
-          {lastUsedAppsFetch?.result?.ok &&
-            lastUsedAppsFetch.result.value.length > 0 && (
-              <AppIcons
-                accountId={accountId}
-                apps={lastUsedAppsFetch.result.value}
-              />
-            )}
-          {chatWithLinger && <ChatNavButtons chat={chatWithLinger} />}
+          {chatWithLinger && (
+            <ChatNavButtons chat={chatWithLinger} lastUsedApps={lastUsedApps} />
+          )}
           {chatWithLinger && (
             <span
               style={{
@@ -502,7 +502,13 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
   )
 }
 
-function ChatNavButtons({ chat }: { chat: T.FullChat }) {
+function ChatNavButtons({
+  chat,
+  lastUsedApps,
+}: {
+  chat: T.FullChat
+  lastUsedApps: T.Message[]
+}) {
   const tx = useTranslationFunction()
   const chatId = chat.id
   const settingsStore = useSettingsStore()[0]
@@ -530,7 +536,7 @@ function ChatNavButtons({ chat }: { chat: T.FullChat }) {
             <Button
               aria-label={tx('videochat')}
               title={tx('videochat')}
-              className='navbar-button'
+              className={`navbar-button ${styles.navbarButtonVideochat}`}
               styling='borderless'
               onClick={() => {
                 runtime.startOutgoingVideoCall(selectedAccountId(), chat.id)
@@ -539,6 +545,9 @@ function ChatNavButtons({ chat }: { chat: T.FullChat }) {
               <Icon coloring='navbar' icon='phone' size={18} />
             </Button>
           )}
+        {lastUsedApps && lastUsedApps.length > 0 && (
+          <AppIcons accountId={selectedAccountId()} apps={lastUsedApps} />
+        )}
         <Button
           onClick={openMediaViewDialog}
           aria-label={tx('apps_and_media')}
