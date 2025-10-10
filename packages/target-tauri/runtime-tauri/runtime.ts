@@ -186,7 +186,6 @@ class TauriRuntime implements Runtime {
     const frontendOnly = {
       showNotificationContent: true,
       enterKeySends: false,
-      enableAVCalls: false,
       enableAVCallsV2: false,
       enableBroadcastLists: false,
       enableChatAuditLog: false,
