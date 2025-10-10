@@ -43,7 +43,6 @@ import { runtime } from '@deltachat-desktop/runtime-interface'
 import asyncThrottle from '@jcoreio/async-throttle'
 import { useFetch, useRpcFetch } from '../../../hooks/useFetch'
 import { getLogger } from '@deltachat-desktop/shared/logger'
-import useConfirmationDialog from '../../../hooks/dialog/useConfirmationDialog'
 
 const log = getLogger('MainScreen')
 
@@ -515,18 +514,6 @@ function ChatNavButtons({ chat }: { chat: T.FullChat }) {
     })
   }, [openDialog, chatId])
 
-  const openConfirmationDialog = useConfirmationDialog()
-  const onVideoChat = useCallback(async () => {
-    const confirmed = await openConfirmationDialog({
-      message: tx('videochat_invite_user_to_videochat', chat.name),
-      confirmLabel: tx('ok'),
-    })
-    if (!confirmed) {
-      return
-    }
-    runtime.startOutgoingVideoCall(selectedAccountId(), chatId)
-  }, [chat.name, chatId, openConfirmationDialog, tx])
-
   return (
     <>
       <span className='views' data-no-drag-region>
@@ -545,7 +532,9 @@ function ChatNavButtons({ chat }: { chat: T.FullChat }) {
               title={tx('videochat')}
               className='navbar-button'
               styling='borderless'
-              onClick={onVideoChat}
+              onClick={() => {
+                runtime.startOutgoingVideoCall(selectedAccountId(), chat.id)
+              }}
             >
               <Icon coloring='navbar' icon='phone' size={18} />
             </Button>

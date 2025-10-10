@@ -386,7 +386,7 @@ function openVideoCallWindow<D extends CallDirection>(
   const query = callDirection === CallDirection.Incoming ? '?playRingtone' : ''
   const hash =
     callDirection === CallDirection.Outgoing
-      ? '#startCall'
+      ? '' // We'll `#startCall` after a "grace period" below.
       : useBuiltinAcceptCallPrompt
         ? `#offerIncomingCall=${btoa(callerWebrtcOffer!)}`
         : // Otherwise we'll set the hash later, when the call gets accepted.
@@ -394,6 +394,21 @@ function openVideoCallWindow<D extends CallDirection>(
   win.webContents.loadURL(`${SCHEME_NAME}://${host}${query}${hash}`, {
     extraHeaders: 'Content-Security-Policy: ' + CSP,
   })
+
+  if (callDirection === CallDirection.Outgoing) {
+    // Do not `#startCall` immediately. Give the user a moment to cancel it
+    // before it starts ringing.
+    // Note that after we actually `#startCall`,
+    // the offer will be generated almost immediately,
+    // because the app is "warmed up" (e.g. see `iceCandidatePoolSize`).
+    // So basically this sets a minimum delay, rather than an extra delay.
+    setTimeout(() => {
+      if (abortController.signal.aborted) {
+        return
+      }
+      webAppMessagePort.postMessage({ type: 'startCall' })
+    }, 1500)
+  }
 
   const windowClosed = new Promise<void>(r => win.once('closed', r))
   return {
