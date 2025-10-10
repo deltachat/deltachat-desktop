@@ -10,7 +10,7 @@ type Props = {
   description?: string
   disabled?: boolean
   disabledValue?: boolean
-  callback?: () => void
+  callback?: (updatedValue: boolean) => void
 }
 
 /*
@@ -37,11 +37,12 @@ export default function DesktopSettingsSwitch({
       description={description}
       value={value}
       onChange={async () => {
+        const newValue = !settingsStore.desktopSettings[settingsKey]
         await SettingsStoreInstance.effect.setDesktopSetting(
           settingsKey,
-          !settingsStore.desktopSettings[settingsKey]
+          newValue
         )
-        callback?.()
+        callback?.(newValue)
       }}
       disabled={disabled}
     />
