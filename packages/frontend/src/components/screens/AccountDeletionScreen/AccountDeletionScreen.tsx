@@ -80,7 +80,9 @@ export default function AccountDeletionScreen({
                         style={{ backgroundColor: accountInfo.color }}
                       >
                         {avatarInitial(
-                          accountInfo.displayName || '',
+                          accountInfo.privateTag ||
+                            accountInfo.displayName ||
+                            '',
                           accountInfo.addr || undefined
                         )}
                       </div>

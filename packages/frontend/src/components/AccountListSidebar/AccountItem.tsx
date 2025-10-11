@@ -304,7 +304,7 @@ export default function AccountItem({
                 style={{ backgroundColor: account.color }}
               >
                 {avatarInitial(
-                  account.displayName || '',
+                  account.privateTag || account.displayName || '',
                   account.addr || undefined
                 )}
               </div>

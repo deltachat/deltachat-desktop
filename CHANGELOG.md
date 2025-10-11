@@ -7,6 +7,7 @@
 - some strings being untranslated
 
 ### Changed
+- Use profile label first letter (or emoji) as its avatar when no avatar set, instead of the profile public name
 - update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.17.0`
 - update translations (7-10-2025)
 
