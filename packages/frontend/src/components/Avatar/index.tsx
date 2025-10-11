@@ -34,7 +34,7 @@ export function avatarInitial(name: string, addr?: string) {
 
 type htmlDivProps = React.HTMLAttributes<HTMLDivElement>
 
-interface CssWithAvatarColor extends CSSProperties {
+export interface CssWithAvatarColor extends CSSProperties {
   '--local-avatar-color': string
 }
 
