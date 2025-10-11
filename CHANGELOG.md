@@ -5,6 +5,7 @@
 ### Fixed
 - refactor proxy dialog styles to fix #5507
 - some strings being untranslated
+- some emoji avatars displaying incorrect emoji
 
 ### Changed
 - update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.17.0`
