@@ -56,6 +56,7 @@ import type { PrivateReply } from '../../hooks/chat/usePrivateReply'
 import type { JumpToMessage } from '../../hooks/chat/useMessage'
 import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
 import { useRovingTabindex } from '../../contexts/RovingTabindex'
+import { avatarInitial } from '../Avatar'
 
 interface CssWithAvatarColor extends CSSProperties {
   '--local-avatar-color': string
@@ -70,7 +71,7 @@ const Avatar = ({
   onContactClick: (contact: T.Contact) => void
   tabIndex: -1 | 0
 }) => {
-  const { profileImage, color, displayName } = contact
+  const { profileImage, color, displayName, address } = contact
 
   const onClick = () => onContactClick(contact)
 
@@ -81,10 +82,7 @@ const Avatar = ({
       </button>
     )
   } else {
-    const codepoint = displayName && displayName.codePointAt(0)
-    const initial = codepoint
-      ? String.fromCodePoint(codepoint).toUpperCase()
-      : '#'
+    const initial = avatarInitial(displayName, address)
     return (
       <button
         className='author-avatar default'
