@@ -6,6 +6,9 @@ settings:
 
 catalogs:
   default:
+    '@deltachat/calls-webapp':
+      specifier: 0.10.0-beta-debug
+      version: 0.10.0-beta-debug
     '@deltachat/jsonrpc-client':
       specifier: 2.20.0
       version: 2.20.0
@@ -21,9 +24,6 @@ catalogs:
     '@webxdc/types':
       specifier: ^2.1.2
       version: 2.1.2
-    calls-webapp#debug-build:
-      specifier: github:deltachat/calls-webapp#debug-build
-      version: 0.0.0
     mime-types:
       specifier: ^2.1.35
       version: 2.1.35
@@ -338,15 +338,15 @@ importers:
 
   packages/target-electron:
     dependencies:
+      '@deltachat/calls-webapp':
+        specifier: 'catalog:'
+        version: 0.10.0-beta-debug
       '@deltachat/jsonrpc-client':
         specifier: 'catalog:'
         version: 2.20.0(ws@7.5.10)
       '@deltachat/stdio-rpc-server':
         specifier: 'catalog:'
         version: 2.20.0(@deltachat/jsonrpc-client@2.20.0(ws@7.5.10))
-      calls-webapp#debug-build:
-        specifier: 'catalog:'
-        version: https://codeload.github.com/deltachat/calls-webapp/tar.gz/a36acf6825226421c236dfcd428eeef895791dc4
       mime-types:
         specifier: 'catalog:'
         version: 2.1.35
@@ -488,6 +488,9 @@ packages:
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
+
+  '@deltachat/calls-webapp@0.10.0-beta-debug':
+    resolution: {integrity: sha512-eErbULxmTN3YPCtjW+xXZzCFahtnblNM9gIohdwO837k2HbtkK6YbGw3G7rrkFenfTx4WBCxL636b/105TJmcg==}
 
   '@deltachat/jsonrpc-client@2.20.0':
     resolution: {integrity: sha512-kWZPJIz+WEcYUoXN07AkHxrhjjdkDcylSas4SGCfRR1mgzTaKj52KsZj5ok4FxF9NWbak3mMYqH4AoNs0DtsYA==}
@@ -1665,10 +1668,6 @@ packages:
   call-bound@1.0.4:
     resolution: {integrity: sha512-+ys997U96po4Kx/ABpBCqhA9EuxJaQWDQg7295H4hBphv3IZg0boBKuwYpt4YXp6MZ5AmZQnU/tyMTlRpaSejg==}
     engines: {node: '>= 0.4'}
-
-  calls-webapp#debug-build@https://codeload.github.com/deltachat/calls-webapp/tar.gz/a36acf6825226421c236dfcd428eeef895791dc4:
-    resolution: {tarball: https://codeload.github.com/deltachat/calls-webapp/tar.gz/a36acf6825226421c236dfcd428eeef895791dc4}
-    version: 0.0.0
 
   callsites@3.1.0:
     resolution: {integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==}
@@ -3120,6 +3119,9 @@ packages:
     resolution: {integrity: sha512-3Ybi1tAuwAP9s0r1UQ2J4n5Y0G05bJkpUIO0/bI9MhwmD70S5aTWbXGBwxHrelT+XM1k6dM0pk+SwNkpTRN7Pg==}
     engines: {node: ^10 || ^12 || >=14}
 
+  preact@10.27.2:
+    resolution: {integrity: sha512-5SYSgFKSyhCbk6SrXyMpqjb5+MQBgfvEKE/OC+PujcY34sOpqtr+0AZQtPYx5IA6VxynQ7rUPCtKzyovpj9Bpg==}
+
   prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
@@ -3854,6 +3856,10 @@ snapshots:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
     optional: true
+
+  '@deltachat/calls-webapp@0.10.0-beta-debug':
+    dependencies:
+      preact: 10.27.2
 
   '@deltachat/jsonrpc-client@2.20.0(ws@7.5.10)':
     dependencies:
@@ -5039,8 +5045,6 @@ snapshots:
     dependencies:
       call-bind-apply-helpers: 1.0.2
       get-intrinsic: 1.3.0
-
-  calls-webapp#debug-build@https://codeload.github.com/deltachat/calls-webapp/tar.gz/a36acf6825226421c236dfcd428eeef895791dc4: {}
 
   callsites@3.1.0: {}
 
@@ -6697,6 +6701,8 @@ snapshots:
       nanoid: 3.3.11
       picocolors: 1.1.1
       source-map-js: 1.2.1
+
+  preact@10.27.2: {}
 
   prelude-ls@1.2.1: {}
 
