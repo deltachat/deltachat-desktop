@@ -107,7 +107,7 @@ export default function ProxyConfiguration(
     )
   }, [])
 
-  const isValidProxyUrl = useCallback(
+  const validateProxy = useCallback(
     async (proxyUrl: string, existingProxies: string[]): Promise<boolean> => {
       let errorMessage: string | null = null
       let proxyValid = false
@@ -133,7 +133,12 @@ export default function ProxyConfiguration(
   )
 
   useEffect(() => {
-    const loadSettings = async () => {
+    // load current proxy settings from backend
+    // and add incomingProxyUrl if given
+    // This is the case when the proxy url was scanned
+    // from general qr code scanner in an existing account.
+    // Then this dialog is opened with the scanned url as prop.
+    const init = async () => {
       try {
         const { proxy_enabled, proxy_url } =
           await BackendRemote.rpc.batchGetConfig(accountId, [
@@ -153,10 +158,7 @@ export default function ProxyConfiguration(
             activeProxy = enabled ? proxies[0] : null
           }
           if (incomingProxyUrl) {
-            // This is the case when the proxy url was scanned
-            // from general qr code scanner in an existing account.
-            // Then this dialog opens and the scanned url is passed via props.
-            const proxyValid = await isValidProxyUrl(incomingProxyUrl, proxies)
+            const proxyValid = await validateProxy(incomingProxyUrl, proxies)
             if (proxyValid) {
               proxies.push(incomingProxyUrl)
               activeProxy = incomingProxyUrl
@@ -180,8 +182,8 @@ export default function ProxyConfiguration(
         })
       }
     }
-    loadSettings()
-  }, [accountId, openAlertDialog, isValidProxyUrl, incomingProxyUrl, tx])
+    init()
+  }, [accountId, openAlertDialog, validateProxy, incomingProxyUrl, tx])
 
   const changeProxyEnable = (enableProxy: boolean) => {
     let activeProxy = null
@@ -197,7 +199,7 @@ export default function ProxyConfiguration(
 
   const addProxy = useCallback(
     async (proxyUrl: string) => {
-      const proxyValid = await isValidProxyUrl(proxyUrl, proxyState.proxies)
+      const proxyValid = await validateProxy(proxyUrl, proxyState.proxies)
       if (proxyValid) {
         setProxyState(prev => ({
           ...prev,
@@ -210,7 +212,7 @@ export default function ProxyConfiguration(
         setNewProxyUrl('')
       }
     },
-    [proxyState.proxies, isValidProxyUrl, setProxyState]
+    [proxyState.proxies, validateProxy, setProxyState]
   )
 
   const openQrScanner = useCallback(() => {
