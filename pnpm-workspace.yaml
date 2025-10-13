@@ -2,8 +2,8 @@ packages:
   - packages/*
 catalog:
   # deltachat specific
-  '@deltachat/jsonrpc-client': 2.19.0
-  '@deltachat/stdio-rpc-server': 2.19.0
+  '@deltachat/jsonrpc-client': 2.20.0
+  '@deltachat/stdio-rpc-server': 2.20.0
   '@webxdc/types': ^2.1.2
   'calls-webapp#debug-build': "github:deltachat/calls-webapp#debug-build"
 
