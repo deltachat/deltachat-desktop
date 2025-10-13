@@ -15,18 +15,33 @@ catalogs:
     '@deltachat/stdio-rpc-server':
       specifier: 2.22.0
       version: 2.22.0
+    '@types/chai':
+      specifier: ^4.3.17
+      version: 4.3.20
     '@types/mime-types':
       specifier: ^2.1.4
       version: 2.1.4
+    '@types/mocha':
+      specifier: ^10.0.7
+      version: 10.0.10
     '@types/node':
       specifier: ^20.14.13
       version: 20.17.50
     '@webxdc/types':
       specifier: ^2.1.2
       version: 2.1.2
+    chai:
+      specifier: ^5.1.1
+      version: 5.2.0
+    esbuild:
+      specifier: ^0.25.0
+      version: 0.25.11
     mime-types:
       specifier: ^2.1.35
       version: 2.1.35
+    mocha:
+      specifier: ^10.7.0
+      version: 10.8.2
     sass:
       specifier: ^1.86.3
       version: 1.86.3
@@ -202,7 +217,7 @@ importers:
         version: 7.5.10
     devDependencies:
       '@types/chai':
-        specifier: ^4.3.17
+        specifier: 'catalog:'
         version: 4.3.20
       '@types/debounce':
         specifier: ^1.2.4
@@ -214,7 +229,7 @@ importers:
         specifier: 'catalog:'
         version: 2.1.4
       '@types/mocha':
-        specifier: ^10.0.7
+        specifier: 'catalog:'
         version: 10.0.10
       '@types/node':
         specifier: 'catalog:'
@@ -232,16 +247,16 @@ importers:
         specifier: ^1.0.9
         version: 1.0.9
       chai:
-        specifier: ^5.1.1
+        specifier: 'catalog:'
         version: 5.2.0
       esbuild:
-        specifier: ^0.25.0
-        version: 0.25.8
+        specifier: 'catalog:'
+        version: 0.25.11
       esbuild-plugin-inline-worker:
         specifier: ^0.1.1
         version: 0.1.1
       mocha:
-        specifier: ^10.7.0
+        specifier: 'catalog:'
         version: 10.8.2
       normalize.css:
         specifier: ^8.0.1
@@ -254,13 +269,13 @@ importers:
         version: 0.5.21
       ts-node:
         specifier: ^10.9.2
-        version: 10.9.2(@types/node@20.17.50)(typescript@5.8.3)
+        version: 10.9.2(@types/node@20.17.50)(typescript@5.9.2)
       typescript:
         specifier: 'catalog:'
-        version: 5.8.3
+        version: 5.9.2
       typescript-plugin-css-modules:
         specifier: 'catalog:'
-        version: 5.2.0(ts-node@10.9.2(@types/node@20.17.50)(typescript@5.8.3))(typescript@5.8.3)
+        version: 5.2.0(ts-node@10.9.2(@types/node@20.17.50)(typescript@5.9.2))(typescript@5.9.2)
 
   packages/runtime:
     dependencies:
@@ -287,22 +302,22 @@ importers:
         version: 1.3.4
     devDependencies:
       '@types/chai':
-        specifier: ^4.3.17
+        specifier: 'catalog:'
         version: 4.3.20
       '@types/mocha':
-        specifier: ^10.0.7
+        specifier: 'catalog:'
         version: 10.0.10
       '@types/node':
         specifier: 'catalog:'
         version: 20.17.50
       chai:
-        specifier: ^5.1.1
+        specifier: 'catalog:'
         version: 5.2.0
       esbuild:
-        specifier: ^0.25.0
-        version: 0.25.8
+        specifier: 'catalog:'
+        version: 0.25.11
       mocha:
-        specifier: ^10.7.0
+        specifier: 'catalog:'
         version: 10.8.2
 
   packages/target-browser:
@@ -455,7 +470,7 @@ importers:
         version: 1.2.8
       typescript:
         specifier: 'catalog:'
-        version: 5.8.3
+        version: 5.9.2
 
   packages/target-tauri:
     dependencies:
@@ -3601,10 +3616,6 @@ packages:
     resolution: {integrity: sha512-aSbHV0DaBcr7u0PVHXzM6NbZNAtrr9sF6+Qfs9UUVG7Ll3jQ6hHi8F/xqIIcn2rvIVbr0v/2zyjSdwSV47AgLQ==}
     engines: {node: '>=12'}
 
-  source-map-js@1.2.0:
-    resolution: {integrity: sha512-itJW8lvSA0TXEphiRoawsCksnlf8SyvmFzIhltqAHluXd88pkCd+cXJVHTDwdCr0IzwptSm035IHQktUu1QUMg==}
-    engines: {node: '>=0.10.0'}
-
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
     engines: {node: '>=0.10.0'}
@@ -5446,7 +5457,7 @@ snapshots:
   config-file-ts@0.2.6:
     dependencies:
       glob: 10.3.15
-      typescript: 5.8.3
+      typescript: 5.9.2
 
   content-disposition@0.5.4:
     dependencies:
@@ -7008,13 +7019,13 @@ snapshots:
 
   possible-typed-array-names@1.1.0: {}
 
-  postcss-load-config@3.1.4(postcss@8.5.6)(ts-node@10.9.2(@types/node@20.17.50)(typescript@5.8.3)):
+  postcss-load-config@3.1.4(postcss@8.5.6)(ts-node@10.9.2(@types/node@20.17.50)(typescript@5.9.2)):
     dependencies:
       lilconfig: 2.1.0
       yaml: 1.10.2
     optionalDependencies:
       postcss: 8.5.6
-      ts-node: 10.9.2(@types/node@20.17.50)(typescript@5.8.3)
+      ts-node: 10.9.2(@types/node@20.17.50)(typescript@5.9.2)
 
   postcss-modules-extract-imports@3.1.0(postcss@8.5.6):
     dependencies:
@@ -7273,7 +7284,7 @@ snapshots:
     dependencies:
       chokidar: 4.0.3
       immutable: 5.1.1
-      source-map-js: 1.2.0
+      source-map-js: 1.2.1
     optionalDependencies:
       '@parcel/watcher': 2.5.1
 
@@ -7408,8 +7419,6 @@ snapshots:
   sort-keys@5.1.0:
     dependencies:
       is-plain-obj: 4.1.0
-
-  source-map-js@1.2.0: {}
 
   source-map-js@1.2.1: {}
 
@@ -7572,7 +7581,7 @@ snapshots:
     dependencies:
       typescript: 5.9.2
 
-  ts-node@10.9.2(@types/node@20.17.50)(typescript@5.8.3):
+  ts-node@10.9.2(@types/node@20.17.50)(typescript@5.9.2):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.11
@@ -7586,7 +7595,7 @@ snapshots:
       create-require: 1.1.1
       diff: 4.0.2
       make-error: 1.3.6
-      typescript: 5.8.3
+      typescript: 5.9.2
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
 
@@ -7658,7 +7667,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  typescript-plugin-css-modules@5.2.0(ts-node@10.9.2(@types/node@20.17.50)(typescript@5.8.3))(typescript@5.8.3):
+  typescript-plugin-css-modules@5.2.0(ts-node@10.9.2(@types/node@20.17.50)(typescript@5.9.2))(typescript@5.9.2):
     dependencies:
       '@types/postcss-modules-local-by-default': 4.0.2
       '@types/postcss-modules-scope': 3.0.4
@@ -7667,7 +7676,7 @@ snapshots:
       less: 4.4.0
       lodash.camelcase: 4.3.0
       postcss: 8.5.6
-      postcss-load-config: 3.1.4(postcss@8.5.6)(ts-node@10.9.2(@types/node@20.17.50)(typescript@5.8.3))
+      postcss-load-config: 3.1.4(postcss@8.5.6)(ts-node@10.9.2(@types/node@20.17.50)(typescript@5.9.2))
       postcss-modules-extract-imports: 3.1.0(postcss@8.5.6)
       postcss-modules-local-by-default: 4.2.0(postcss@8.5.6)
       postcss-modules-scope: 3.2.1(postcss@8.5.6)
@@ -7675,7 +7684,7 @@ snapshots:
       sass: 1.86.3
       source-map-js: 1.2.1
       tsconfig-paths: 4.2.0
-      typescript: 5.8.3
+      typescript: 5.9.2
     optionalDependencies:
       stylus: empty-npm-package@1.0.0
     transitivePeerDependencies:
