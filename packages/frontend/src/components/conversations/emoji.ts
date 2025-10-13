@@ -2,7 +2,7 @@
 // We only really need the emoji data of this module
 import EmojiConvertor from 'emoji-js-clean'
 import { getLogger } from '../../../../shared/logger'
-import { extractEmojisFromFirstToken } from '../message/MessageParser'
+import { extractFirstEmojisFromString } from '../message/MessageParser'
 
 const log = getLogger('renderer/emoji')
 
@@ -58,7 +58,7 @@ export function getSizeClass(str: string) {
   if (str.length > MAX_STRING_LENGTH_FOR_BIG_EMOJI) {
     return undefined
   } else {
-    const emojis = extractEmojisFromFirstToken(str, true)
+    const emojis = extractFirstEmojisFromString(str, true)
 
     if (emojis == null || emojis.length > 8) {
       return undefined

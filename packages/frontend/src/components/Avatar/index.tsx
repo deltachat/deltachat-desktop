@@ -9,7 +9,7 @@ import { runtime } from '@deltachat-desktop/runtime-interface'
 
 import styles from './styles.module.scss'
 import type { T } from '@deltachat/jsonrpc-client'
-import { extractEmojisFromFirstToken } from '../message/MessageParser'
+import { extractFirstEmojisFromString } from '../message/MessageParser'
 
 export function QRAvatar() {
   return (
@@ -22,7 +22,7 @@ export function QRAvatar() {
 }
 
 export function avatarInitial(name: string, addr?: string) {
-  const emojis = extractEmojisFromFirstToken(name)
+  const emojis = extractFirstEmojisFromString(name)
   if (emojis) {
     return emojis[0]
   } else {
