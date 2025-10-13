@@ -71,7 +71,12 @@ export default function ProxyConfiguration(
 
   // configured means the account is already configured
   // which is needed to decide if we show the connectivity status
-  const { accountId, configured, onClose } = props
+  const {
+    accountId,
+    configured,
+    newProxyUrl: incomingProxyUrl,
+    onClose,
+  } = props
 
   const openAlertDialog = useAlertDialog()
   const { openDialog } = useDialog()
@@ -91,23 +96,49 @@ export default function ProxyConfiguration(
     [setProxyState]
   )
 
-  // some basic validations, returns true if the url seems valid
-  // and is not already in the list of proxies
-  const maybeValidProxyUrl = useCallback(
-    (url: string): boolean => {
-      const parts = url.split('://')
-      return (
-        parts.length === 2 &&
-        parts[0].length >= 2 && // shortest protocol is ss://
-        parts[1].length >= 1 && // host
-        !proxyState.proxies.includes(url)
-      )
+  // some basic prevalidations, returns true if the url seems valid
+  // called on each key up in new proxy form!
+  const maybeValidProxyUrl = useCallback((url: string): boolean => {
+    const parts = url.split('://')
+    return (
+      parts.length === 2 &&
+      parts[0].length >= 2 && // shortest protocol is ss://
+      parts[1].length >= 1 // host
+    )
+  }, [])
+
+  const validateProxy = useCallback(
+    async (proxyUrl: string, existingProxies: string[]): Promise<boolean> => {
+      let errorMessage: string | null = null
+      let proxyValid = false
+      try {
+        if (existingProxies.includes(proxyUrl.trim())) {
+          throw new Error('Proxy already exists')
+        }
+        const parsedUrl = await BackendRemote.rpc.checkQr(accountId, proxyUrl)
+        proxyValid = parsedUrl.kind === 'proxy'
+      } catch (error) {
+        log.error('checkQr failed with error', error)
+        errorMessage = unknownErrorToString(error)
+      }
+      if (!proxyValid) {
+        openAlertDialog({
+          message:
+            tx('proxy_invalid') + (errorMessage ? `\n${errorMessage}` : ''),
+        })
+      }
+      return proxyValid
     },
-    [proxyState.proxies]
+    [accountId, openAlertDialog, tx]
   )
 
   useEffect(() => {
-    const loadSettings = async () => {
+    // load current proxy settings from backend
+    // and add incomingProxyUrl if given
+    // This is the case when the proxy url was scanned
+    // from general qr code scanner in an existing account.
+    // Then this dialog is opened with the scanned url as prop.
+    const init = async () => {
       try {
         const { proxy_enabled, proxy_url } =
           await BackendRemote.rpc.batchGetConfig(accountId, [
@@ -115,21 +146,32 @@ export default function ProxyConfiguration(
             'proxy_url',
           ])
         if (proxy_enabled !== undefined) {
-          const enabled = proxy_enabled === Proxy.ENABLED
+          let enabled = proxy_enabled === Proxy.ENABLED
           let proxies: string[] = []
           let activeProxy = null
+          let updateSettings = false
           if (proxy_url && proxy_url.length > 0) {
             // split proxy_url by new line
             // and remove empty lines from possible previous settings
             const proxyLines = proxy_url.split(/\n/).filter(s => !!s)
             proxies = proxyLines
-            activeProxy = enabled ? proxyLines[0] : null
+            activeProxy = enabled ? proxies[0] : null
+          }
+          if (incomingProxyUrl) {
+            const proxyValid = await validateProxy(incomingProxyUrl, proxies)
+            if (proxyValid) {
+              proxies.push(incomingProxyUrl)
+              activeProxy = incomingProxyUrl
+              enabled = true
+              updateSettings = true
+            }
           }
           setProxyState(prev => ({
             ...prev,
             enabled,
             proxies,
             activeProxy,
+            updateSettings,
           }))
           setShowNewProxyForm(proxies.length === 0)
         }
@@ -140,8 +182,8 @@ export default function ProxyConfiguration(
         })
       }
     }
-    loadSettings()
-  }, [accountId, openAlertDialog, tx])
+    init()
+  }, [accountId, openAlertDialog, validateProxy, incomingProxyUrl, tx])
 
   const changeProxyEnable = (enableProxy: boolean) => {
     let activeProxy = null
@@ -157,55 +199,21 @@ export default function ProxyConfiguration(
 
   const addProxy = useCallback(
     async (proxyUrl: string) => {
-      if (proxyState.proxies.includes(proxyUrl)) {
-        log.warn('skip already existing proxy', proxyUrl)
-        // proxy alread exists
-        return
-      }
-      let proxyValid = maybeValidProxyUrl(proxyUrl)
-      let errorMessage = ''
+      const proxyValid = await validateProxy(proxyUrl, proxyState.proxies)
       if (proxyValid) {
-        try {
-          const parsedUrl = await BackendRemote.rpc.checkQr(accountId, proxyUrl)
-          proxyValid = parsedUrl.kind === 'proxy'
-        } catch (error) {
-          log.error('checkQr failed with error', error)
-          errorMessage = unknownErrorToString(error)
-          proxyValid = false
-        }
+        setProxyState(prev => ({
+          ...prev,
+          enabled: true,
+          proxies: [...prev.proxies, proxyUrl],
+          activeProxy: proxyUrl,
+          updateSettings: true,
+        }))
+        setShowNewProxyForm(false)
+        setNewProxyUrl('')
       }
-      if (!proxyValid) {
-        openAlertDialog({
-          message:
-            tx('proxy_invalid') + (errorMessage ? `\n${errorMessage}` : ''),
-        })
-        return
-      }
-      updateProxyState({
-        enabled: true,
-        proxies: [...proxyState.proxies, proxyUrl],
-        activeProxy: proxyUrl,
-      })
-      setShowNewProxyForm(false)
-      setNewProxyUrl('')
     },
-    [
-      proxyState.proxies,
-      maybeValidProxyUrl,
-      accountId,
-      openAlertDialog,
-      tx,
-      updateProxyState,
-    ]
+    [proxyState.proxies, validateProxy, setProxyState]
   )
-
-  // Handle new proxy URL from props
-  useEffect(() => {
-    if (props.newProxyUrl) {
-      addProxy(props.newProxyUrl)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.newProxyUrl]) // skip addProxy in deps since it has too many deps itself
 
   const openQrScanner = useCallback(() => {
     openDialog(ProxyQrScanner, {
