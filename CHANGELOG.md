@@ -5,6 +5,7 @@
 ### Fixed
 - refactor proxy dialog styles to fix #5507
 - some strings being untranslated
+- VCard (share contact) avatars not having color (all being gray instead) #5552
 - some emoji avatars displaying incorrect emoji
 
 ### Changed

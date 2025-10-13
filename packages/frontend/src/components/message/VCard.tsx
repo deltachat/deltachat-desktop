@@ -8,7 +8,7 @@ import { createChatByContactId } from '../../backend/chat'
 import useChat from '../../hooks/chat/useChat'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
-import { avatarInitial } from '../Avatar'
+import { avatarInitial, CssWithAvatarColor } from '../Avatar'
 
 /**
  * displays a VCard attachement with avatar, mail & name
@@ -87,7 +87,10 @@ export function VisualVCardComponent({
             src={'data:image/jpeg;base64,' + profileImage}
           />
         ) : (
-          <div style={{ backgroundColor: color }} className='content'>
+          <div
+            className='content'
+            style={{ '--local-avatar-color': color } as CssWithAvatarColor}
+          >
             {initial}
           </div>
         )}
