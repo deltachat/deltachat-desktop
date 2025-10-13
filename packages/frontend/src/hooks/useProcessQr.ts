@@ -136,8 +136,8 @@ export default function useProcessQR() {
     async (accountId: number, url: string, callback?: () => void) => {
       // Scanned string is actually a link to an email address
       if (url.toLowerCase().startsWith('mailto:')) {
-        await openMailtoLink(accountId, url, callback)
-        return
+        await openMailtoLink(accountId, url)
+        return callback?.()
       }
 
       // Check if given string is a valid DeltaChat URI-Scheme and return
