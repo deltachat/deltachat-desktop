@@ -312,15 +312,14 @@ export default function useProcessQR() {
           qr.contact_id
         )
 
-        const userConfirmed = await openConfirmationDialog({
+        // TODO apparently we are supposed to suggest
+        // to start the chat with this contact.
+        const _userConfirmed = await openConfirmationDialog({
           message: `The fingerprint of ${contact.displayName} is valid!`,
           confirmLabel: tx('ok'),
         })
 
-        if (userConfirmed) {
-          callback?.()
-        }
-        return
+        return callback?.()
       }
 
       /**
