@@ -16,7 +16,7 @@ import { ReactionsBarProvider } from '../ReactionsBar'
 import useDialog from '../../hooks/dialog/useDialog'
 import useMessage from '../../hooks/chat/useMessage'
 import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
-import { createMessageListStore } from '../../stores/messagelist'
+import { MessageListStore } from '../../stores/messagelist'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
@@ -103,7 +103,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
   // Create a store instance and share it between
   // useMessageList and useDraft to avoid redundant data loading
   const messageListStore = useMemo(() => {
-    const store = createMessageListStore(accountId, chat.id)
+    const store = new MessageListStore(accountId, chat.id)
     // Initialize the store
     store.effect.loadChat()
     return store

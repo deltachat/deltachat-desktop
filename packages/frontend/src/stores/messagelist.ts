@@ -20,18 +20,6 @@ const log = getLogger('messagelist')
 
 const PAGE_SIZE = 11
 
-/**
- * Creates a new MessageListStore instance.
- * The store should be created at the parent component level (MessageListAndComposer)
- * and shared between useMessageList and useDraft to avoid redundant data loading.
- */
-export function createMessageListStore(
-  accountId: number,
-  chatId: number
-): MessageListStore {
-  return new MessageListStore(accountId, chatId)
-}
-
 interface MessageListState {
   // chat: Type.FullChat | null
   messageListItems: T.MessageListItem[]
