@@ -7,6 +7,7 @@
 - some strings being untranslated
 - VCard (share contact) avatars not having color (all being gray instead) #5552
 - some emoji avatars displaying incorrect emoji
+- handle invalid qr code properly #5555
 
 ### Changed
 - update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.17.0`
