@@ -9,7 +9,7 @@
 - some emoji avatars displaying incorrect emoji
 
 ### Changed
-- update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.19.0`
+- update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.20.0`
 - update translations (7-10-2025)
 
 # Removed
