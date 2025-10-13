@@ -133,7 +133,11 @@ export default function useProcessQR() {
   )
 
   return useCallback(
-    async (accountId: number, url: string, callback?: () => void) => {
+    async (
+      accountId: number,
+      url: string,
+      callback?: () => void
+    ): Promise<void> => {
       // Scanned string is actually a link to an email address
       if (url.toLowerCase().startsWith('mailto:')) {
         await openMailtoLink(accountId, url)
