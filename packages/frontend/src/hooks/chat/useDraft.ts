@@ -9,7 +9,7 @@ import { MessageTypeAttachmentSubset } from '../../components/attachment/Attachm
 import { KeybindAction } from '../../keybindings'
 import useMessage from './useMessage'
 import ComposerMessageInput from '../../components/composer/ComposerMessageInput'
-import { MessageListStore } from '../../stores/messagelist'
+import { MessageListStore, useMessageListStore } from '../../stores/messagelist'
 
 const log = getLogger('renderer/composer')
 
@@ -72,20 +72,8 @@ export function useDraft(
   ] = useState<DraftObject>(emptyDraft(chatId))
 
   // Use the shared store to access the message cache and list of messages
-  const [messageCache, setMessageCache] = useState(
-    messageListStore.state.messageCache
-  )
-  const [messageListItems, setMessageListItems] = useState(
-    messageListStore.state.messageListItems
-  )
-
-  useEffect(() => {
-    const unsubscribe = messageListStore.subscribe(update => {
-      setMessageCache(update.messageCache)
-      setMessageListItems(update.messageListItems)
-    })
-    return unsubscribe
-  }, [messageListStore])
+  const { messageCache, messageListItems } =
+    useMessageListStore(messageListStore)
 
   /**
    * `draftRef.current` gets set to `draftState` on every render.
@@ -325,15 +313,20 @@ export function useDraft(
       // maybe the message is just not in the cache (yet)
       // but still in the full list of messages
       // -> check if it's there
-      const fullMsgIdList = messageListItems
-        .filter(m => m.kind === 'message')
-        .map(m => m.msg_id)
-      // quoted message not found in cache
-      const fullIndex = fullMsgIdList.findIndex(m => m === currQuote.messageId)
-      if (fullIndex !== -1) {
+      const isQuoteInMessagelist = messageListItems.some(
+        m => m.kind === 'message' && m.msg_id === currQuote.messageId
+      )
+      if (isQuoteInMessagelist) {
         // message is in the full list, just not in the cache (yet)
         // -> jump to it, it will be loaded then (and the surrounding messages)
-        quoteMessage(currQuote.messageId, true)
+        jumpToMessage({
+          accountId,
+          msgId: currQuote.messageId,
+          msgChatId: chatId,
+          highlight: true,
+          focus: false,
+          scrollIntoViewArg: { block: 'nearest' },
+        })
         return
       } else {
         // message not found at all, remove quote

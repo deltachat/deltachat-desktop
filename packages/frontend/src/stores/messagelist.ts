@@ -10,7 +10,7 @@ import {
   defaultChatViewState,
 } from './chat/chat_view_reducer'
 import { ChatStoreScheduler } from './chat/chat_scheduler'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useReducer, useRef, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import { debounce } from 'debounce'
 import { getLogger } from '@deltachat-desktop/shared/logger'
@@ -1189,4 +1189,21 @@ async function loadMessages(
   }
 
   return await BackendRemote.rpc.getMessages(accountId, view)
+}
+
+// Custom hook to reactively access message list store state
+export const useMessageListStore = (messageListStore: MessageListStore) => {
+  const [, forceUpdate] = useReducer(x => x + 1, 0)
+
+  useEffect(() => {
+    const unsubscribe = messageListStore.subscribe(() => {
+      forceUpdate()
+    })
+    return unsubscribe
+  }, [messageListStore])
+
+  return {
+    messageCache: messageListStore.state.messageCache,
+    messageListItems: messageListStore.state.messageListItems,
+  }
 }
