@@ -296,7 +296,6 @@ export default function useProcessQR() {
           await openAlertDialog({
             message: tx('need_to_be_logged_out'),
           })
-          callback?.()
         } else {
           openDialog(ReceiveBackupProgressDialog, {
             QrWithToken: url,
