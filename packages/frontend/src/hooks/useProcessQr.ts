@@ -161,8 +161,7 @@ export default function useProcessQR() {
         await openAlertDialog({
           message: tx('multidevice_receiver_needs_update'),
         })
-        callback?.()
-        return
+        return callback?.()
       }
 
       // Some actions can only be executed when the user already has an account
@@ -301,8 +300,7 @@ export default function useProcessQR() {
             QrWithToken: url,
           })
         }
-        callback?.()
-        return
+        return callback?.()
       }
 
       // DC_FPR_OK: Verify contact fingerprint
@@ -339,8 +337,7 @@ export default function useProcessQR() {
           await processQrCode(accountId, url)
         }
 
-        callback?.()
-        return
+        return callback?.()
       }
 
       /**
@@ -359,8 +356,7 @@ export default function useProcessQR() {
           await processQrCode(accountId, url)
         }
 
-        callback?.()
-        return
+        return callback?.()
       }
 
       /**
@@ -380,8 +376,7 @@ export default function useProcessQR() {
           await processQrCode(accountId, url)
         }
 
-        callback?.()
-        return
+        return callback?.()
       }
 
       /**
@@ -400,8 +395,7 @@ export default function useProcessQR() {
           await processQrCode(accountId, url)
         }
 
-        callback?.()
-        return
+        return callback?.()
       }
 
       if (qr.kind === 'proxy') {
