@@ -20,7 +20,7 @@ const log = getLogger('renderer/message-parser')
  * returns an array with emojis if the first token of str
  * is of type emoji, composed emojis are just one item in the array
  */
-export function extractEmojisFromFirstToken(
+export function extractFirstEmojisFromString(
   str: string,
   emojiOnly = false // only return emojis if the whole string is just one emoji token
 ): string[] | null {
