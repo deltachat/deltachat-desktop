@@ -30,7 +30,7 @@ export default function useOpenMailtoLink() {
   const { selectChat } = useChat()
 
   return useCallback(
-    async (accountId: number, url: string, callback?: () => void) => {
+    async (accountId: number, url: string) => {
       log.debug('processing mailto url:', url)
 
       try {
@@ -66,8 +66,6 @@ export default function useOpenMailtoLink() {
           message: tx('mailto_link_could_not_be_decoded', url),
         })
       }
-
-      callback && callback()
     },
     [
       createChatByEmail,
