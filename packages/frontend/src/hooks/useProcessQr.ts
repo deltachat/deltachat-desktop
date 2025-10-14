@@ -423,16 +423,26 @@ export default function useProcessQR() {
         return callback?.()
       }
 
-      // Just show the contents of the scanned QR code if it is correct but
+      // Just show the contents of the scanned QR code
+      // so the user can see what it contains,
       // we don't know what to do with it ..
-      openDialog(CopyContentAlertDialog, {
-        message:
-          qr.kind === 'url'
-            ? tx('qrscan_contains_url', url)
-            : tx('qrscan_contains_text', url),
-        content: url,
-        cb: callback,
-      })
+      if (isLoggedIn) {
+        openDialog(CopyContentAlertDialog, {
+          message:
+            qr.kind === 'url'
+              ? tx('qrscan_contains_url', url)
+              : tx('qrscan_contains_text', url),
+          content: url,
+        })
+        // this closes the underlying scan dialog immediately
+        // while the copyContent dialog is still open
+        return callback?.()
+      } else {
+        await openAlertDialog({
+          message: tx('qraccount_qr_code_cannot_be_used'),
+        })
+        return callback?.()
+      }
     },
     [
       openAlertDialog,
