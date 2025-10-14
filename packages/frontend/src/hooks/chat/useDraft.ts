@@ -294,7 +294,6 @@ export function useDraft(
       .filter(
         id =>
           messageCache[id]?.kind === 'message' &&
-          messageCache[id]?.chatId === chatId &&
           messageCache[id]?.isInfo === false
       )
     const currQuote = draftRef.current.quote
