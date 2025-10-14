@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+<a id="2_20_0"></a>
+
+## [2.20.0] - 2025-10-14
+
 ### Fixed
 - refactor proxy dialog styles to fix #5507
 - some strings being untranslated
@@ -3709,7 +3713,9 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.15.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.20.0...HEAD
+
+[2.20.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.15.0...v2.20.0
 
 [2.15.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.11.1...v2.15.0
 
