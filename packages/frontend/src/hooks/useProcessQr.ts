@@ -12,10 +12,10 @@ import { BackendRemote } from '../backend-com'
 import { ReceiveBackupProgressDialog } from '../components/dialogs/SetupMultiDevice'
 import { ScreenContext } from '../contexts/ScreenContext'
 import { getLogger } from '../../../shared/logger'
-import { processQr } from '../backend/qr'
+import { processQr, QrWithUrl } from '../backend/qr'
+import { SCAN_CONTEXT_TYPE } from '@deltachat-desktop/shared/constants'
 
 import type { T } from '@deltachat/jsonrpc-client'
-import type { QrWithUrl } from '../backend/qr'
 import type { WelcomeQrWithUrl } from '../contexts/InstantOnboardingContext'
 import useChat from './chat/useChat'
 import { unknownErrorToString } from '../components/helpers/unknownErrorToString'
@@ -136,6 +136,7 @@ export default function useProcessQR() {
     async (
       accountId: number,
       url: string,
+      scanContext: SCAN_CONTEXT_TYPE,
       callback?: () => void
     ): Promise<void> => {
       // Scanned string is actually a link to an email address
@@ -160,6 +161,20 @@ export default function useProcessQR() {
       }
 
       const { qr } = parsed
+
+      if (
+        (scanContext === SCAN_CONTEXT_TYPE.TRANSFER_BACKUP &&
+          qr.kind !== 'backup2') ||
+        (scanContext === SCAN_CONTEXT_TYPE.OTHER_SERVER &&
+          !['account', 'login', 'askVerifyGroup', 'askVerifyContact'].includes(
+            qr.kind
+          ))
+      ) {
+        await openAlertDialog({
+          message: tx('qraccount_qr_code_cannot_be_used'),
+        })
+        return callback?.()
+      }
 
       if (qr.kind === 'backupTooNew') {
         await openAlertDialog({

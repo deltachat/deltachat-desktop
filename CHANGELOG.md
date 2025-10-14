@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- show appropriate messages when scanning wrong qr codes #5563
+
 <a id="2_22_0"></a>
 
 ## [2.22.0] - 2025-10-17

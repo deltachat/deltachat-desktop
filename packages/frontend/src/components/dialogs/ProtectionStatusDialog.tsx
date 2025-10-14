@@ -15,6 +15,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/dialog/useDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+import { SCAN_CONTEXT_TYPE } from '@deltachat-desktop/shared/constants'
 
 const VERIFICATION_ENABLED_ANCHOR = 'e2ee'
 const VERIFICATION_REQUIRED_ANCHOR = 'howtoe2ee'
@@ -28,7 +29,12 @@ export function VerifiedContactsRequiredDialog({ onClose }: DialogProps) {
     const [qrCode, qrCodeSVG] =
       await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(accountId, null)
     onClose()
-    openDialog(QrCode, { selectScan: true, qrCode, qrCodeSVG })
+    openDialog(QrCode, {
+      selectScan: true,
+      qrCode,
+      qrCodeSVG,
+      scanContext: SCAN_CONTEXT_TYPE.DEFAULT,
+    })
   }
 
   const onLearnMore = () => {

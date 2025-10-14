@@ -63,6 +63,7 @@ import { isInviteLink } from '@deltachat-desktop/shared/util'
 import { copyToBlobDir } from '../../../utils/copyToBlobDir'
 import { useRpcFetch } from '../../../hooks/useFetch'
 import { I18nContext } from '../../../contexts/I18nContext'
+import { SCAN_CONTEXT_TYPE } from '@deltachat-desktop/shared/constants'
 
 const enum GroupType {
   /**
@@ -242,7 +243,12 @@ function CreateChatMain(props: CreateChatMainProps) {
   const openQRScan = async () => {
     const [qrCode, qrCodeSVG] =
       await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(accountId, null)
-    openDialog(QrCode, { qrCode, qrCodeSVG, selectScan: true })
+    openDialog(QrCode, {
+      qrCode,
+      qrCodeSVG,
+      selectScan: true,
+      scanContext: SCAN_CONTEXT_TYPE.DEFAULT,
+    })
     onClose()
   }
 
