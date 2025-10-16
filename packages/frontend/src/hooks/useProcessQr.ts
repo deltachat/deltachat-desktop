@@ -308,6 +308,8 @@ export default function useProcessQR() {
        *
        * Ask the user if they want to set up a new device
        * based on an existing backup
+       * TODO: TRANSFER_BACKUP context only works with backup2 QR codes,
+       * so we might extract the QR code processing from this function
        */
       if (qr.kind === 'backup2') {
         if (isLoggedIn) {
