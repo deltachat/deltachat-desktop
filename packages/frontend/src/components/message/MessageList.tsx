@@ -15,7 +15,7 @@ import { debounce } from 'debounce'
 import { MessageWrapper } from './MessageWrapper'
 import { getLogger } from '../../../../shared/logger'
 import { KeybindAction } from '../../keybindings'
-import { useMessageList } from '../../stores/messagelist'
+import { useMessageList, MessageListStore } from '../../stores/messagelist'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { throttledUpdateBadgeCounter } from '../../system-integration/badge-counter'
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
@@ -127,9 +127,15 @@ type Props = {
   accountId: number
   chat: T.FullChat
   refComposer: any
+  messageListStore: MessageListStore
 }
 
-export default function MessageList({ accountId, chat, refComposer }: Props) {
+export default function MessageList({
+  accountId,
+  chat,
+  refComposer,
+  messageListStore,
+}: Props) {
   const {
     store: {
       scheduler,
@@ -148,7 +154,7 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
     },
     fetchMoreBottom,
     fetchMoreTop,
-  } = useMessageList(accountId, chat.id)
+  } = useMessageList(messageListStore, accountId, chat.id)
   const { hideReactionsBar, isReactionsBarShown } = useReactionsBar()
 
   const messageListRef = useRef<HTMLDivElement | null>(null)

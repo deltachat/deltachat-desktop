@@ -10,7 +10,7 @@ import {
   defaultChatViewState,
 } from './chat/chat_view_reducer'
 import { ChatStoreScheduler } from './chat/chat_scheduler'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useReducer, useRef, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import { debounce } from 'debounce'
 import { getLogger } from '@deltachat-desktop/shared/logger'
@@ -53,11 +53,12 @@ const defaultState = () =>
   }) as MessageListState
 
 /*
- * A hook to read a portion of messages(a view) for a given chat. It creates a store(MessageListStore)
+ * A hook to read a portion of messages(a view) for a given chat. It uses the passed store(MessageListStore)
  * for the given chat and account and loads messages on it. It always has a maximum specified number
- * of messages as per PAGE_SIZE constant.
+ * of messages as per PAGE_SIZE constant. The store is also used in useDraft to avoid redundant data loading.
  */
 export function useMessageList(
+  store: MessageListStore,
   accountId: number,
   chatId: number
 ): {
@@ -66,12 +67,6 @@ export function useMessageList(
   fetchMoreBottom: () => void
   fetchMoreTop: () => void
 } {
-  const store = useMemo(() => {
-    const store = new MessageListStore(accountId, chatId)
-    store.effect.loadChat()
-    return store
-  }, [accountId, chatId])
-
   // PERF: It's a shame that we have to re-render on settings changes
   // even though we only depend on `volume`,
   // but let's hope the React compiler will take care of this
@@ -180,7 +175,7 @@ function getView<T>(items: T[], start: number, end: number): T[] {
   return items.slice(start, end + 1)
 }
 
-class MessageListStore extends Store<MessageListState> {
+export class MessageListStore extends Store<MessageListState> {
   scheduler = new ChatStoreScheduler()
 
   emitter = BackendRemote.getContextEvents(this.accountId)
@@ -1194,4 +1189,21 @@ async function loadMessages(
   }
 
   return await BackendRemote.rpc.getMessages(accountId, view)
+}
+
+// Custom hook to reactively access message list store state
+export const useMessageListStore = (messageListStore: MessageListStore) => {
+  const [, forceUpdate] = useReducer(x => x + 1, 0)
+
+  useEffect(() => {
+    const unsubscribe = messageListStore.subscribe(() => {
+      forceUpdate()
+    })
+    return unsubscribe
+  }, [messageListStore])
+
+  return {
+    messageCache: messageListStore.state.messageCache,
+    messageListItems: messageListStore.state.messageListItems,
+  }
 }

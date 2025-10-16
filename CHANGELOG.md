@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- fix: remove the option to select info messages with Ctrl + Up/Down #5337
+
 <a id="2_20_0"></a>
 
 ## [2.20.0] - 2025-10-14
