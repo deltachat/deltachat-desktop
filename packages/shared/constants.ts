@@ -35,3 +35,9 @@ export const enum NOTIFICATION_TYPE {
   REACTION,
   WEBXDC_INFO,
 }
+
+export const enum SCAN_CONTEXT_TYPE {
+  DEFAULT = 'DEFAULT', // default context, no restrictions on qr code types
+  OTHER_SERVER = 'OTHER_SERVER', // onboarding with another server than the default server
+  TRANSFER_BACKUP = 'TRANSFER_BACKUP', // for multi-device setup
+}

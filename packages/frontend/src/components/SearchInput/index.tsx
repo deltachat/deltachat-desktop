@@ -8,6 +8,7 @@ import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 
 import styles from './styles.module.scss'
+import { SCAN_CONTEXT_TYPE } from '@deltachat-desktop/shared/constants'
 
 type Props = {
   onChange: (
@@ -34,7 +35,11 @@ export default function SearchInput(props: Props) {
   const handleQRScan = async () => {
     const [qrCode, qrCodeSVG] =
       await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(accountId, null)
-    openDialog(QrCode, { qrCode, qrCodeSVG })
+    openDialog(QrCode, {
+      qrCode,
+      qrCodeSVG,
+      scanContext: SCAN_CONTEXT_TYPE.DEFAULT,
+    })
   }
 
   const hasValue = value.length > 0 || onClear
