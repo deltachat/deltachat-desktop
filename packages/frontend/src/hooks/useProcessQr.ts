@@ -334,7 +334,7 @@ export default function useProcessQR() {
         const userConfirmed = await openConfirmationDialog({
           message: tx('withdraw_verifycontact_explain'),
           header: tx('withdraw_qr_code'),
-          confirmLabel: tx('ok'),
+          confirmLabel: tx('withdraw_qr_code'),
         })
 
         if (userConfirmed) {
@@ -353,7 +353,7 @@ export default function useProcessQR() {
         const userConfirmed = await openConfirmationDialog({
           message: tx('revive_verifycontact_explain'),
           header: tx('revive_qr_code'),
-          confirmLabel: tx('ok'),
+          confirmLabel: tx('revive_qr_code'),
         })
 
         if (userConfirmed) {
