@@ -46,11 +46,6 @@ export default function ImportBackupProgressDialog({
       try {
         log.debug(`Starting backup import of ${backupFile}`)
         await BackendRemote.rpc.importBackup(accountId, backupFile, null)
-        await BackendRemote.rpc.setConfig(
-          accountId,
-          'verified_one_on_one_chats',
-          '1'
-        )
       } catch (err) {
         setError(unknownErrorToString(err))
         return

@@ -210,13 +210,6 @@ export default class DeltaChatController {
       this.jsonrpcRemote.rpc.startIoForAllAccounts()
       log.info('Started accounts io.')
     }
-    for (const account of await this.jsonrpcRemote.rpc.getAllAccountIds()) {
-      this.jsonrpcRemote.rpc.setConfig(
-        account,
-        'verified_one_on_one_chats',
-        '1'
-      )
-    }
   }
 
   readonly webxdc = new DCWebxdc(this)
