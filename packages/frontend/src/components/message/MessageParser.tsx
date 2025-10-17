@@ -2,9 +2,10 @@ import React, { useContext } from 'react'
 
 import * as linkify from 'linkifyjs'
 import 'linkify-plugin-hashtag'
-import '../../utils/linkify-plugin-bot-command'
+import '../../utils/linkify/plugin-bot-command/index.js'
 
-import { Link } from './Link'
+import { Link } from './Link.js'
+import { parseElements } from '../../utils/linkify/parseElements.js'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 import { BackendRemote } from '../../backend-com'
@@ -170,7 +171,7 @@ export function parseAndRenderMessage(
   tabindexForInteractiveContents: -1 | 0
 ): React.ReactElement {
   try {
-    const elements = linkify.tokenize(message)
+    const elements = parseElements(message)
     return preview ? (
       <div className='truncated'>{elements.map(el => el.v)}</div>
     ) : (
@@ -181,7 +182,7 @@ export function parseAndRenderMessage(
       </>
     )
   } catch (error) {
-    log.error('parseMessage failed:', { input: message, error })
+    log.error('parseAndRenderMessage failed:', { input: message, error })
     return <>{message}</>
   }
 }
