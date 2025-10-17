@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Changed
+- update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.22.0`
+
 <a id="2_20_0"></a>
 
 ## [2.20.0] - 2025-10-14
