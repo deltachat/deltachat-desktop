@@ -329,13 +329,6 @@ class BrowserRuntime implements Runtime {
     // not applicable in browser
     this.log.warn('clearWebxdcDOMStorage method does not exist in browser.')
   }
-  getWebxdcDiskUsage(_accountId: number): Promise<{
-    total_size: number
-    data_size: number
-  }> {
-    // not applicable in browser
-    throw new Error('getWebxdcDiskUsage method does not exist in browser.')
-  }
   async writeTempFileFromBase64(
     name: string,
     content: string
