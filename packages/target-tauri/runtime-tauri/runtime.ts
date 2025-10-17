@@ -635,12 +635,7 @@ class TauriRuntime implements Runtime {
   removeTempFile(path: string): Promise<void> {
     return invoke('remove_temp_file', { path })
   }
-  getWebxdcDiskUsage(
-    _accountId: number
-  ): Promise<{ total_size: number; data_size: number }> {
-    // will not be implemented in tauri for now, as this method is currently unused
-    throw new Error('Method not implemented: runtime.getWebxdcDiskUsage')
-  }
+
   clearWebxdcDOMStorage(_accountId: number): Promise<void> {
     // will not be implemented in tauri for now, as this method is currently unused
     // Also isn't this function essentially a duplicate of `this.deleteWebxdcAccountData`?
