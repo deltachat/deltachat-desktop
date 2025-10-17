@@ -1,3 +1,4 @@
+import escapeHTML from 'escape-html'
 import {
   BrowserWindow,
   dialog,
@@ -630,15 +631,34 @@ async function returnIndexHtmlOrAvatar(request: GlobalRequest) {
     }
 
     const jsonrpcRemote = getDCJsonrpcRemote()
-    const { profileImage } = await jsonrpcRemote.rpc.getBasicChatInfo(
+    const chat = await jsonrpcRemote.rpc.getBasicChatInfo(
       parsedHost.accountId,
       parsedHost.chatId
     )
-    if (profileImage == null || profileImage == '') {
-      // TODO shouldn't we display an initial letter avatar then?
-      return makeResponse('', { status: 404 })
+    if (chat.profileImage == null || chat.profileImage == '') {
+      const initial = avatarInitial(chat.name)
+      // Style (font size, etc) are mostly copy-pasted from `.avatar`
+      // (in `_avatar.scss`).
+      return makeResponse(
+        `<svg width="48" height="48" xmlns="http://www.w3.org/2000/svg">
+            <rect width="48" height="48" fill="${escapeHTML(chat.color)}"/>
+            <text
+              x="50%"
+              y="50%"
+              dominant-baseline="central"
+              text-anchor="middle"
+              font-size="26"
+              font-family="Roboto, Arial"
+              fill="#fff"
+            >
+              ${escapeHTML(initial)}
+            </text>
+          </svg>`,
+        undefined,
+        'image/svg+xml'
+      )
     }
-    const res = await net.fetch(pathToFileURL(profileImage).toString())
+    const res = await net.fetch(pathToFileURL(chat.profileImage).toString())
     return makeResponse(
       res.body,
       undefined,
@@ -729,6 +749,23 @@ function parseHost(host: string): null | {
     accountId,
     chatId,
   }
+}
+
+const userPerceivedCharacterSegmenter = new Intl.Segmenter(undefined, {
+  granularity: 'grapheme',
+})
+// TODO refactor: there is another funciton with this name. Need to DRY.
+// Note though that that function is currently only used
+// in the frontend package.
+/**
+ * This could return an empty string, e.g. if the inputs are also empty strings.
+ */
+function avatarInitial(name: string, addr?: string): string {
+  const str = name || addr || ''
+  return (
+    userPerceivedCharacterSegmenter.segment(str)[Symbol.iterator]().next().value
+      ?.segment ?? ''
+  )
 }
 
 /**
