@@ -22,6 +22,7 @@ export default function useChatDialog() {
   const { openDialog } = useDialog()
   const { chatWithLinger, selectChat, unselectChat } = useChat()
 
+  const chatContactIds = chatWithLinger?.contactIds
   const openBlockContactById = useCallback(
     async (accountId: number, dmChatContact: number) => {
       const hasUserConfirmed = await openConfirmationDialog({
@@ -32,16 +33,16 @@ export default function useChatDialog() {
 
       if (hasUserConfirmed) {
         if (
-          chatWithLinger?.contactIds &&
-          chatWithLinger.contactIds.length === 1 &&
-          chatWithLinger.contactIds[0] === dmChatContact
+          chatContactIds &&
+          chatContactIds.length === 1 &&
+          chatContactIds[0] === dmChatContact
         ) {
           unselectChat()
         }
         await BackendRemote.rpc.blockContact(accountId, dmChatContact)
       }
     },
-    [openConfirmationDialog, tx, unselectChat, chatWithLinger?.contactIds]
+    [openConfirmationDialog, tx, unselectChat, chatContactIds]
   )
 
   /**

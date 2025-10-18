@@ -121,7 +121,9 @@ export default function MainScreen({ accountId }: Props) {
     }
   }, [archivedChatsSelected, chatWithLinger?.archived, searchChats])
 
-  window.__chatlistSetSearch = searchChats
+  useEffect(() => {
+    window.__chatlistSetSearch = searchChats
+  }, [searchChats])
 
   const searchRef = useRef<HTMLInputElement>(null)
 

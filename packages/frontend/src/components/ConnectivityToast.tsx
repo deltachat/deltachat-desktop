@@ -55,6 +55,7 @@ export default function ConnectivityToast() {
             )
             maybeNetwork()
           } else if (ms < 30000) {
+            /* eslint react-hooks/immutability: "warn" */
             tryMaybeNetworkIfOfflineAfterXms(2 * ms)
           } else {
             log.debug(

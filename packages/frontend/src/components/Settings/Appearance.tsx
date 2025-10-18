@@ -175,6 +175,7 @@ function BackgroundSelector({
         `position:absolute;top:${y}px;left:${eventPos.x}px;`
       )
       if (desktopSettings?.chatViewBgImg?.startsWith('color: ')) {
+        /* eslint react-hooks/immutability: "warn" */
         colorInput.value = desktopSettings?.chatViewBgImg.slice(7) || ''
       }
       setTimeout(() => colorInput.click(), 0)

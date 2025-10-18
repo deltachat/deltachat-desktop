@@ -76,7 +76,9 @@ export const ChatProvider = ({
   const [activeView, setActiveView] = useState(ChatView.MessageList)
 
   const [chatId, setChatId] = useState<number | undefined>()
-  window.__selectedChatId = chatId
+  useEffect(() => {
+    window.__selectedChatId = chatId
+  }, [chatId])
 
   const setChatView = useCallback<SetView>((nextView: ChatView) => {
     setActiveView(nextView)
