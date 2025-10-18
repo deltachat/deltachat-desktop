@@ -1,5 +1,6 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
   "rust-analyzer.cargo.targetDir": "target/target-rust-analyzer",
-  "files.eol": "\n"
+  "files.eol": "\n",
+  "editor.formatOnSave": true
 }
