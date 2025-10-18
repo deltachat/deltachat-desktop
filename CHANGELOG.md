@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+<a id="2_22_0"></a>
+
+## [2.22.0] - 2025-10-17
+
 ### Changed
 - update `@deltachat/stdio-rpc-server` and `deltachat/jsonrpc-client` to `2.22.0`
 
@@ -3716,7 +3720,9 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.20.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.22.0...HEAD
+
+[2.22.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.20.0...v2.22.0
 
 [2.20.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.15.0...v2.20.0
 
