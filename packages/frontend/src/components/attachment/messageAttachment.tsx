@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState } from 'react'
 import classNames from 'classnames'
 import { filesize } from 'filesize'
 
@@ -24,6 +24,8 @@ import AudioPlayer from '../AudioPlayer'
 import { T } from '@deltachat/jsonrpc-client'
 import { selectedAccountId } from '../../ScreenController'
 import { BackendRemote } from '../../backend-com'
+import { useRpcFetch } from '../../hooks/useFetch'
+import { useHasChanged2 } from '../../hooks/useHasChanged'
 
 type AttachmentProps = {
   text?: string
@@ -235,37 +237,17 @@ export function DraftAttachment({
 }: {
   attachment: MessageTypeAttachmentSubset
 }) {
-  const [webxdcInfo, setWebxdcInfo] = useState<T.WebxdcMessageInfo | null>(null)
-  const [isLoadingWebxdcInfo, setIsLoadingWebxdcInfo] = useState(true)
-  const accountId = selectedAccountId()
-
-  const lastFileNameRef = useRef<string | null>(null)
-
-  useEffect(() => {
-    if (attachment.viewType === 'Webxdc') {
-      // Only load webxdc info if filename has changed
-      if (attachment.fileName !== lastFileNameRef.current) {
-        lastFileNameRef.current = attachment.fileName
-        setIsLoadingWebxdcInfo(true)
-        BackendRemote.rpc
-          .getWebxdcInfo(accountId, attachment.id)
-          .then((info: T.WebxdcMessageInfo) => {
-            setWebxdcInfo(info)
-          })
-          .catch((error: any) => {
-            console.error(
-              'Failed to load webxdc info for draft:',
-              attachment.id,
-              error
-            )
-            setWebxdcInfo(null)
-          })
-          .finally(() => {
-            setIsLoadingWebxdcInfo(false)
-          })
-      }
-    }
-  }, [accountId, attachment.id, attachment.viewType, attachment.fileName])
+  const isViewTypeWebxdc = attachment.viewType === 'Webxdc'
+  const [attachmentIdToLoad, setAttachmentIdToLoad] = useState(attachment.id)
+  if (useHasChanged2(attachment.fileName)) {
+    // Only reload webxdc info if filename has changed, because
+    // the `id` itself could be changing as often as we update the draft.
+    setAttachmentIdToLoad(attachment.id)
+  }
+  const webxdcInfoFetch = useRpcFetch(
+    BackendRemote.rpc.getWebxdcInfo,
+    isViewTypeWebxdc ? [selectedAccountId(), attachmentIdToLoad] : null
+  )
 
   if (!attachment) {
     return null
@@ -291,16 +273,20 @@ export function DraftAttachment({
     )
   } else if (isAudio(attachment.fileMime)) {
     return <AudioPlayer src={runtime.transformBlobURL(attachment.file || '')} />
-  } else if (attachment.viewType === 'Webxdc') {
+  } else if (isViewTypeWebxdc) {
     const iconUrl = runtime.getWebxdcIconURL(selectedAccountId(), attachment.id)
     return (
       <div className='media-attachment-webxdc'>
         <img className='icon' src={iconUrl} alt='app icon' />
         <div className='text-part'>
           <div className='name'>
-            {isLoadingWebxdcInfo
+            {/* `webxdcInfoFetch` is never `null` here, but TypeScript
+            doesn't know it. */}
+            {webxdcInfoFetch?.loading
               ? 'Loading...'
-              : webxdcInfo?.name || 'Unknown App'}
+              : webxdcInfoFetch?.result.ok
+                ? webxdcInfoFetch.result.value.name
+                : 'Unknown App'}
           </div>
           <div className='size'>{filesize(attachment.fileBytes ?? 0)}</div>
         </div>
