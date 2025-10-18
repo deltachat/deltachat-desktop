@@ -239,7 +239,8 @@ export function DraftAttachment({
 }) {
   const isViewTypeWebxdc = attachment.viewType === 'Webxdc'
   const [attachmentIdToLoad, setAttachmentIdToLoad] = useState(attachment.id)
-  if (useHasChanged2(attachment.fileName)) {
+  const hasFileNameChanged = useHasChanged2(attachment.fileName)
+  if (hasFileNameChanged) {
     // Only reload webxdc info if filename has changed, because
     // the `id` itself could be changing as often as we update the draft.
     setAttachmentIdToLoad(attachment.id)
