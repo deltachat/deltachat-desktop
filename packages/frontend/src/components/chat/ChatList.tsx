@@ -677,8 +677,9 @@ export function useLogicVirtualChatList(chatListIds: number[]) {
   ) => Promise<void> = async (startIndex, stopIndex) => {
     const entries = chatListIds.slice(startIndex, stopIndex + 1)
     setChatLoading(state => {
-      entries.forEach(chatId => (state[chatId] = LoadStatus.FETCHING))
-      return state
+      const newState = { ...state }
+      entries.forEach(chatId => (newState[chatId] = LoadStatus.FETCHING))
+      return newState
     })
     const chats = await BackendRemote.rpc.getChatlistItemsByEntries(
       accountId,
@@ -686,8 +687,9 @@ export function useLogicVirtualChatList(chatListIds: number[]) {
     )
     setChatCache(cache => ({ ...cache, ...chats }))
     setChatLoading(state => {
-      entries.forEach(chatId => (state[chatId] = LoadStatus.LOADED))
-      return state
+      const newState = { ...state }
+      entries.forEach(chatId => (newState[chatId] = LoadStatus.LOADED))
+      return newState
     })
   }
 
@@ -820,8 +822,9 @@ function useContactAndMessageLogic(
     const ids = messageResultIds.slice(startIndex, stopIndex + 1)
 
     setMessageLoading(state => {
-      ids.forEach(id => (state[id] = LoadStatus.FETCHING))
-      return state
+      const newState = { ...state }
+      ids.forEach(id => (newState[id] = LoadStatus.FETCHING))
+      return newState
     })
     const messages = await BackendRemote.rpc.messageIdsToSearchResults(
       accountId,
@@ -829,8 +832,9 @@ function useContactAndMessageLogic(
     )
     setMessageCache(cache => ({ ...cache, ...messages }))
     setMessageLoading(state => {
-      ids.forEach(id => (state[id] = LoadStatus.LOADED))
-      return state
+      const newState = { ...state }
+      ids.forEach(id => (newState[id] = LoadStatus.LOADED))
+      return newState
     })
   }
 
