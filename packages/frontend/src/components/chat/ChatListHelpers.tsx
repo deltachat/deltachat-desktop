@@ -25,7 +25,7 @@ export function debounceWithInit<ARGS extends Array<any>>(
   }
 }
 
-export function useMessageResults(
+export function useMessageResultIds(
   queryStr: string | undefined,
   chatId: number | null = null
 ) {

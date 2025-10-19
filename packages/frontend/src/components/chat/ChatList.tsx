@@ -19,7 +19,7 @@ import InfiniteLoader from 'react-window-infinite-loader'
 
 import { useLazyLoadedContacts } from '../contact/ContactList'
 import { useChatListContextMenu } from './ChatListContextMenu'
-import { useMessageResults, useChatList } from './ChatListHelpers'
+import { useMessageResultIds, useChatList } from './ChatListHelpers'
 import {
   ChatListItemRowChat,
   ChatListItemRowContact,
@@ -795,7 +795,7 @@ function useContactAndMessageLogic(
   searchChatId: number | null = null
 ) {
   const accountId = selectedAccountId()
-  const messageResultIds = useMessageResults(queryStr, searchChatId)
+  const messageResultIds = useMessageResultIds(queryStr, searchChatId)
 
   // Contacts ----------------
   const {
