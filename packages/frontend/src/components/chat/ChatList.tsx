@@ -433,7 +433,7 @@ export default function ChatList(props: {
       <div ref={rootRef} className='chat-list'>
         <AutoSizer disableWidth>
           {({ height }) => (
-            <div ref={tabindexWrapperElementChats}>
+            <div ref={tabindexWrapperElementMessages}>
               <div
                 id='search-result-divider-messages'
                 className='search-result-divider'
@@ -443,7 +443,7 @@ export default function ChatList(props: {
                   ': ' + translate_n('n_messages', messageResultIds.length)}
               </div>
               <RovingTabindexProvider
-                wrapperElementRef={tabindexWrapperElementChats}
+                wrapperElementRef={tabindexWrapperElementMessages}
                 classNameOfTargetElements={rovingTabindexItemsClassName}
               >
                 <ChatListPart
