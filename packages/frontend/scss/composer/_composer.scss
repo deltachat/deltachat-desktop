@@ -24,17 +24,22 @@
       padding: 9px;
       border-bottom: 1px solid
         color-mix(in srgb, var(--messageQuotedText) 15%, transparent);
-      height: 64px;
 
       .quote {
         // this is just overwrites for the quote styles defined in _message.scss
         margin: 4px;
+        .quoted-text {
+          // Set fixed height to reduce layout shifts
+          // when changing the quote rapidly, e.g. with the Ctrl + Up shortcut.
+          // See https://github.com/deltachat/deltachat-desktop/issues/4314.
+          height: 24px;
+        }
       }
 
       // The "remove attachment / quote" buttons.
       button:not(.quote-background) {
         margin-inline-start: auto;
-        justify-content: right;
+        justify-content: flex-end;
       }
 
       .message-attachment-media {
