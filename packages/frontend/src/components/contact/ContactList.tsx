@@ -115,15 +115,17 @@ export function useLazyLoadedContacts(
     const ids = contactIds.slice(startIndex, stopIndex + 1)
 
     setContactLoading(state => {
-      ids.forEach(id => (state[id] = LoadStatus.FETCHING))
-      return state
+      const newState = { ...state }
+      ids.forEach(id => (newState[id] = LoadStatus.FETCHING))
+      return newState
     })
 
     const contacts = await BackendRemote.rpc.getContactsByIds(accountId, ids)
     setContactCache(cache => ({ ...cache, ...contacts }))
     setContactLoading(state => {
-      ids.forEach(id => (state[id] = LoadStatus.LOADED))
-      return state
+      const newState = { ...state }
+      ids.forEach(id => (newState[id] = LoadStatus.LOADED))
+      return newState
     })
   }
 
