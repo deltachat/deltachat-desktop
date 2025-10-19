@@ -854,12 +854,6 @@ function useChatListMultiselect(
   activeChatId: T.BasicChat['id'] | null,
   accountId: number
 ) {
-  /**
-   * Same as `activeChatId`, but a ref to avoid re-renders.
-   */
-  const activeChatIdRef = useRef(activeChatId)
-  activeChatIdRef.current = activeChatId
-
   const [dummyValueForSelectionReset, _setDummyValueForSelectionReset] =
     useState(Symbol())
   const resetSelection = useCallback(
