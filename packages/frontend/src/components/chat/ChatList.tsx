@@ -206,17 +206,15 @@ export default function ChatList(props: {
   } = props
   const isSearchActive = queryStr !== ''
 
+  const { messageResultIds, isMessageLoaded, loadMessages, messageCache } =
+    useMessageResults(queryStr, queryChatId)
   const {
     contactIds,
-    messageResultIds,
-    isMessageLoaded,
-    loadMessages,
-    messageCache,
     isContactLoaded,
-    loadContact,
+    loadContacts: loadContact,
     contactCache,
     queryStrIsValidEmail,
-  } = useContactAndMessageLogic(queryStr, queryChatId)
+  } = useLazyLoadedContacts(0, queryStr)
 
   const { chatListIds, isChatLoaded, loadChats, chatCache } = useLogicChatPart(
     queryStr,
@@ -790,23 +788,13 @@ function useLogicChatPart(
   return { chatListIds, isChatLoaded, loadChats, chatCache }
 }
 
-function useContactAndMessageLogic(
+function useMessageResults(
   queryStr: string | undefined,
   searchChatId: number | null = null
 ) {
   const accountId = selectedAccountId()
   const messageResultIds = useMessageResultIds(queryStr, searchChatId)
 
-  // Contacts ----------------
-  const {
-    contactIds,
-    contactCache,
-    loadContacts: loadContact,
-    isContactLoaded,
-    queryStrIsValidEmail,
-  } = useLazyLoadedContacts(0, queryStr)
-
-  // Message ----------------
   const [messageCache, setMessageCache] = useState<{
     [id: number]: T.MessageSearchResult | undefined
   }>({})
@@ -840,17 +828,10 @@ function useContactAndMessageLogic(
   }
 
   return {
-    // contacts
-    contactIds,
-    isContactLoaded,
-    loadContact,
-    contactCache,
-    // messages
     messageResultIds,
     isMessageLoaded,
     loadMessages,
     messageCache,
-    queryStrIsValidEmail,
   }
 }
 
