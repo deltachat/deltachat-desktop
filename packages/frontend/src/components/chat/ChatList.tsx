@@ -204,7 +204,7 @@ export default function ChatList(props: {
     queryStr,
     queryChatId,
   } = props
-  const isSearchActive = queryStr !== ''
+  const isSearchActive = queryStr && queryStr !== ''
 
   const { messageResultIds, isMessageLoaded, loadMessages, messageCache } =
     useMessageResults(queryStr, queryChatId)
