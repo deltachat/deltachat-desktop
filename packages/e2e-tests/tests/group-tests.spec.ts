@@ -87,7 +87,6 @@ test('start chat with user', async ({ browserName }) => {
   await expect(
     page.locator('.chat-list .chat-list-item').filter({ hasText: userA.name })
   ).toHaveCount(1)
-  /* ignore-console-log */
   console.log(`Chat with ${userA.name} created!`)
   await page
     .locator('.chat-list .chat-list-item')
@@ -120,7 +119,6 @@ test('create group', async ({ browserName }) => {
   await page.locator('.group-name-input').fill(groupName)
   await page.locator('#addmember button').click()
   const addMemberDialog = page.getByTestId('add-member-dialog')
-  /* ignore-console-log */
   console.log('userB', userB)
   await page
     .locator('.contact-list-item')

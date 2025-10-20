@@ -102,7 +102,6 @@ test('start chat with user', async ({ browserName }) => {
   await expect(
     page.locator('.chat-list .chat-list-item').filter({ hasText: userA.name })
   ).toHaveCount(1)
-  /* ignore-console-log */
   console.log(`Chat with ${userA.name} created!`)
 })
 
@@ -442,7 +441,6 @@ test('delete profiles', async () => {
     const deleted = await deleteProfile(page, profileToDelete.id)
     expect(deleted).toContain(profileToDelete.name)
     if (deleted) {
-      /* ignore-console-log */
       console.log(`User ${profileToDelete.name} was deleted!`)
     }
   }

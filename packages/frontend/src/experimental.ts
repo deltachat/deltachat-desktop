@@ -8,7 +8,7 @@ const log = getLogger('renderer/experiments')
 
 class Experimental {
   help() {
-    /* ignore-console-log */
+    // eslint-disable-next-line no-console
     console.log(`
 These functions are highly experimental, use at your own risk.
 - importContacts (contacts:[email,name][]) // for mass importing contacts

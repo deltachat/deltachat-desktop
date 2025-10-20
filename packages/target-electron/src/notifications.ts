@@ -124,7 +124,7 @@ function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
         notifications[accountId][chatId] =
           notifications[accountId]?.[chatId]?.filter(n => n !== notify) || []
       }
-      /* ignore-console-log */
+      // eslint-disable-next-line no-console
       console.log('Notification close event triggered', notify)
     })
 

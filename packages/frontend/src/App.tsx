@@ -156,7 +156,7 @@ export function startBackendLogging() {
         data = event_clone
       }
 
-      /* ignore-console-log */
+      // eslint-disable-next-line no-console
       console.debug(
         `%c${isActiveAccount ? '👤' : '👻'}${accountId}%c📡 ${event.kind}`,
         `background:${accountColor};border-radius:8px 0 0 8px;padding:2px 4px;`,

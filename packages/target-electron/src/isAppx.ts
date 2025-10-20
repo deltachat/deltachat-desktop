@@ -17,12 +17,12 @@ export async function initIsWindowsStorePackageVar() {
         )
       )
       if (info.isAPPX) {
-        /* ignore-console-log */
+        // eslint-disable-next-line no-console
         console.info('App is probably running as appx')
         appx = info.isAPPX
       }
     } catch (_error) {
-      /* ignore-console-log */
+      // eslint-disable-next-line no-console
       console.warn(
         'Could not fetch windows build info, this is normal in dev mode'
       )

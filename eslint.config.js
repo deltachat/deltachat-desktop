@@ -12,6 +12,9 @@ export default defineConfig(
       plugins: { js },
       extends: ['js/recommended'],
       languageOptions: { globals: { ...globals.browser, ...globals.node } },
+      rules: {
+        'no-console': 'warn',
+      },
     },
     tseslint.configs.recommended,
     {
@@ -52,6 +55,8 @@ export default defineConfig(
         // `expect()` usually needs to be awaited. Not awaiting causes flakiness.
         // https://playwright.dev/docs/best-practices#lint-your-tests
         '@typescript-eslint/no-floating-promises': 'warn',
+
+        'no-console': 'off',
       },
     },
     {
@@ -102,6 +107,6 @@ export default defineConfig(
     'packages/shared/ts-compiled-for-tests',
     'packages/target-electron/migration-tests/compiled',
     'packages/e2e-tests/playwright-report',
-    'packages/e2e-tests/test-results'
+    'packages/e2e-tests/test-results',
   ])
 )

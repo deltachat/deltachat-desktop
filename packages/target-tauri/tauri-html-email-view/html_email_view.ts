@@ -82,7 +82,7 @@ networkMoreButton.onclick = _ => {
 window
   .matchMedia('(prefers-color-scheme: dark)')
   .addEventListener('change', event => {
-    /* ignore-console-log */
+    // eslint-disable-next-line no-console
     console.debug('system theme changed:', { dark_theme: event.matches })
     ;(window as any).updateTheme()
   })

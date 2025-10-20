@@ -553,7 +553,7 @@ export default function MessageList({ accountId, chat, refComposer }: Props) {
             () => {
               pendingProgrammaticSmoothScrollTo.current = null
 
-              console.warn(
+              log.warn(
                 'Smooth scroll: scrollend did not fire before timeout.\n' +
                   'Did the user scroll, or did the smooth scroll take so long?'
               )
