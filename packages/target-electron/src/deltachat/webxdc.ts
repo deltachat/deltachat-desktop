@@ -1087,14 +1087,6 @@ function getAllSessionsForAccount(accountId: number) {
   return sessions
 }
 
-ipcMain.handle('webxdc.clearWebxdcDOMStorage', async (_, accountId: number) => {
-  const sessions = getAllSessionsForAccount(accountId)
-  for (const s of sessions) {
-    await s.clearStorageData()
-    await s.clearData()
-  }
-})
-
 export async function webxdcStartUpCleanup() {
   try {
     const partitions_dir = join(getConfigPath(), 'Partitions')

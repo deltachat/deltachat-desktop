@@ -636,11 +636,6 @@ class TauriRuntime implements Runtime {
     return invoke('remove_temp_file', { path })
   }
 
-  clearWebxdcDOMStorage(_accountId: number): Promise<void> {
-    // will not be implemented in tauri for now, as this method is currently unused
-    // Also isn't this function essentially a duplicate of `this.deleteWebxdcAccountData`?
-    throw new Error('Method not implemented.46')
-  }
   getAvailableThemes(): Promise<Theme[]> {
     return invoke<Theme[]>('get_available_themes')
   }
