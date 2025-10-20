@@ -2,6 +2,10 @@
 
 ## [Unreleased][unreleased]
 
+### Fixed
+- accessibility: announce when the draft's quoted message and attachments change (as a result of user actions) (make it a live region) #4693
+
+
 <a id="2_22_0"></a>
 
 ## [2.22.0] - 2025-10-17
