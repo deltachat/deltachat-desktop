@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { expect, test as base, Page } from '@playwright/test'
 
 const { config } = await import('dotenv')
@@ -276,7 +277,6 @@ export async function deleteAllProfiles(
     const deleted = await deleteProfile(page, profileToDelete.id)
     expect(deleted).toContain(profileToDelete.name)
     if (deleted) {
-      /* ignore-console-log */
       console.log(`User ${profileToDelete.name} was deleted!`)
     }
   }
@@ -314,7 +314,6 @@ export async function loadExistingProfiles(page: Page): Promise<User[]> {
     for (let i = 0; i < existingAccountItems; i++) {
       const account = accountList.nth(i)
       const id = await account.getAttribute('x-account-sidebar-account-id')
-      /* ignore-console-log */
       console.log(`Found account ${id}`)
       if (id) {
         const p = await getProfile(page, id)

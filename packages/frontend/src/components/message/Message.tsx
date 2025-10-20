@@ -57,6 +57,9 @@ import type { JumpToMessage } from '../../hooks/chat/useMessage'
 import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
 import { useRovingTabindex } from '../../contexts/RovingTabindex'
 import { avatarInitial } from '../Avatar'
+import { getLogger } from '@deltachat-desktop/shared/logger'
+
+const log = getLogger('Message')
 
 interface CssWithAvatarColor extends CSSProperties {
   '--local-avatar-color': string
@@ -1059,11 +1062,7 @@ function WebxdcMessageContent({
       const info = await BackendRemote.rpc.getWebxdcInfo(accountId, message.id)
       setWebxdcInfo(info)
     } catch (error) {
-      console.error(
-        'Failed to refresh webxdc info for message:',
-        message.id,
-        error
-      )
+      log.error('Failed to refresh webxdc info for message:', message.id, error)
     } finally {
       setIsLoadingWebxdcInfo(false)
     }

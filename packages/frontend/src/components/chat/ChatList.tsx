@@ -55,6 +55,7 @@ import { useMultiselect } from '../../hooks/useMultiselect'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { useHasChanged2 } from '../../hooks/useHasChanged'
 
+const log = getLogger('ChatList')
 const useMultiselectLog = getLogger('ChatListMultiselect')
 
 const enum LoadStatus {
@@ -420,7 +421,7 @@ export default function ChatList(props: {
     queryChatId ? [accountId, queryChatId] : null
   )
   if (searchChatInfoFetch?.result?.ok === false) {
-    console.error(searchChatInfoFetch.result.err)
+    log.error(searchChatInfoFetch.result.err)
   }
   const searchChatInfo = searchChatInfoFetch?.result?.ok
     ? searchChatInfoFetch.result.value

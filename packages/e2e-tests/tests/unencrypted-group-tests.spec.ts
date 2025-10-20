@@ -146,7 +146,6 @@ test('start encrypted chat with user D', async ({ browserName }) => {
   await expect(
     page.locator('.chat-list .chat-list-item').filter({ hasText: userA.name })
   ).toHaveCount(1)
-  /* ignore-console-log */
   console.log(`Chat with ${userA.name} created!`)
 })
 

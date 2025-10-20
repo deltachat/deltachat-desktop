@@ -28,7 +28,7 @@ function logName() {
 export function createLogHandler() {
   const fileName = logName()
   const stream = createWriteStream(fileName, { flags: 'w' })
-  /* ignore-console-log */
+  // eslint-disable-next-line no-console
   console.log(`Logfile: ${fileName}`)
   return {
     /**
@@ -52,7 +52,7 @@ export function createLogHandler() {
       if (stream.writable) {
         stream.write(`${line.join('\t')}\n`)
       } else {
-        /* ignore-console-log */
+        // eslint-disable-next-line no-console
         console.warn('tried to log something after logger shut down', {
           channel,
           level,

@@ -51,7 +51,7 @@ class BrowserTransport extends WebsocketTransport {
       )
     }
     if (logJsonrpcConnection) {
-      /* ignore-console-log */
+      // eslint-disable-next-line no-console
       console.debug('%c▼ %c[JSONRPC]', 'color: red', 'color:grey', message)
     }
     super._onmessage(message)
@@ -60,7 +60,7 @@ class BrowserTransport extends WebsocketTransport {
   _send(message: yerpc.Message): void {
     super._send(message)
     if (logJsonrpcConnection) {
-      /* ignore-console-log */
+      // eslint-disable-next-line no-console
       console.debug('%c▲ %c[JSONRPC]', 'color: green', 'color:grey', message)
       if ((message as any)['method']) {
         this.callCounterFunction((message as any).method)
@@ -86,22 +86,22 @@ class BrowserRuntime implements Runtime {
     this.socket = new WebSocket('wss://localhost:3000/ws/backend')
 
     this.socket.addEventListener('open', () => {
-      /* ignore-console-log */
+      // eslint-disable-next-line no-console
       console.log('WebSocket connection opened')
     })
 
     this.socket.addEventListener('message', event => {
-      /* ignore-console-log */
+      // eslint-disable-next-line no-console
       console.log('Received message from server:', event.data)
     })
 
     this.socket.addEventListener('close', () => {
-      /* ignore-console-log */
+      // eslint-disable-next-line no-console
       console.log('WebSocket connection closed')
     })
 
     this.socket.addEventListener('error', event => {
-      /* ignore-console-log */
+      // eslint-disable-next-line no-console
       console.error('WebSocket error:', event)
     })
   }
@@ -112,7 +112,7 @@ class BrowserRuntime implements Runtime {
 
   sendToBackendOverWS(message: MessageToBackend.AllTypes) {
     if (this.socket.readyState != this.socket.OPEN) {
-      /* ignore-console-log */
+      // eslint-disable-next-line no-console
       console.warn(
         'sendToBackendOverWS can not send message to backend because websocket is not open'
       )
@@ -120,7 +120,7 @@ class BrowserRuntime implements Runtime {
       try {
         this.socket.send(JSON.stringify(message))
       } catch (_error) {
-        /* ignore-console-log */
+        // eslint-disable-next-line no-console
         console.warn(
           'sendToBackendOverWS failed to send message to backend over websocket'
         )
@@ -737,7 +737,7 @@ class BrowserRuntime implements Runtime {
       logJsonrpcConnection = true
     }
 
-    /* ignore-console-log */
+    // eslint-disable-next-line no-console
     console.info('RC_Config', config)
     this.runtime_info = await RuntimeInfoRequest.json()
 

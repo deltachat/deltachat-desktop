@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 //@ts-check
 import { describe } from 'mocha'
 import { expect } from 'chai'

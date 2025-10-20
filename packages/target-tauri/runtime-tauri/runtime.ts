@@ -92,7 +92,7 @@ class TauriTransport extends yerpc.BaseTransport {
 
     jsonrpc.onmessage = (message: yerpc.Message) => {
       if (logJsonrpcConnection) {
-        /* ignore-console-log */
+        // eslint-disable-next-line no-console
         console.debug('%c▼ %c[JSONRPC]', 'color: red', 'color:grey', message)
       }
       this._onmessage(message)
@@ -101,7 +101,7 @@ class TauriTransport extends yerpc.BaseTransport {
   _send(message: yerpc.Message): void {
     invoke('deltachat_jsonrpc_request', { message })
     if (logJsonrpcConnection) {
-      /* ignore-console-log */
+      // eslint-disable-next-line no-console
       console.debug('%c▲ %c[JSONRPC]', 'color: green', 'color:grey', message)
       if ((message as any)['method']) {
         this.callCounterFunction((message as any).method)

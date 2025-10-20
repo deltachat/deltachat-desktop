@@ -202,6 +202,7 @@ export async function startDeltaChat(): Promise<
 
   const wssDC = new WebSocketServer({ noServer: true, perMessageDeflate: true })
   wssDC.on('connection', function connection(ws) {
+    // eslint-disable-next-line no-console
     ws.on('error', console.error)
 
     if (active_connection) {
