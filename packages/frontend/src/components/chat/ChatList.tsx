@@ -206,45 +206,18 @@ export default function ChatList(props: {
   } = props
   const isSearchActive = queryStr && queryStr !== ''
 
-  const { messageResultIds, isMessageLoaded, loadMessages, messageCache } =
-    useMessageResults(queryStr, queryChatId)
-  const {
-    contactIds,
-    isContactLoaded,
-    loadContacts: loadContact,
-    contactCache,
-    queryStrIsValidEmail,
-  } = useLazyLoadedContacts(0, queryStr)
-
   const { chatListIds, isChatLoaded, loadChats, chatCache } = useLogicChatPart(
     queryStr,
     showArchivedChats
   )
 
   const { openContextMenu, activeContextMenuChatIds } = useChatListContextMenu()
-  const createChatByContactId = useCreateChatByContactId()
   const { selectChat } = useChat()
 
   const rovingTabindexItemsClassName = 'roving-tabindex'
   const rootRef = useRef<HTMLDivElement>(null)
   const tabindexWrapperElementChats = useRef<HTMLDivElement>(null)
-  const tabindexWrapperElementContacts = useRef<HTMLDivElement>(null)
-  const tabindexWrapperElementMessages = useRef<HTMLDivElement>(null)
 
-  const settingsStore = useSettingsStore()[0]
-  const isChatmail = settingsStore?.settings.is_chatmail === '1'
-
-  const addContactOnClick = async () => {
-    if (!queryStrIsValidEmail || !queryStr) return
-
-    const contactId = await BackendRemote.rpc.createContact(
-      selectedAccountId(),
-      queryStr.trim(),
-      null
-    )
-    await createChatByContactId(accountId, contactId)
-    props.onExitSearch && props.onExitSearch()
-  }
   const { openDialog } = useDialog()
 
   const onCreateChat = () => {
@@ -262,7 +235,6 @@ export default function ChatList(props: {
     Number(useThemeCssVar('--SPECIAL-chatlist-divider-height')) || 40
 
   // divider height ------------
-
   const chatsHeight = (height: number) =>
     isSearchActive
       ? Math.min(
@@ -270,26 +242,6 @@ export default function ChatList(props: {
           chatListIds.length * CHATLISTITEM_CHAT_HEIGHT
         )
       : height
-
-  const contactsHeight = (height: number) =>
-    Math.min(
-      height / 3 - DIVIDER_HEIGHT,
-      contactIds.length * CHATLISTITEM_CONTACT_HEIGHT
-    )
-
-  const showPseudoListItemAddContactFromInviteLink =
-    queryStr && isInviteLink(queryStr)
-  const messagesHeight = (height: number) =>
-    height -
-    (DIVIDER_HEIGHT * 3 +
-      chatsHeight(height) +
-      contactsHeight(height) +
-      (chatListIds.length == 0 && queryStrIsValidEmail
-        ? CHATLISTITEM_MESSAGE_HEIGHT
-        : 0) +
-      (showPseudoListItemAddContactFromInviteLink
-        ? CHATLISTITEM_MESSAGE_HEIGHT
-        : 0))
 
   const chatListRef = useRef<List<any>>(null)
   const scrollChatIntoView = useCallback((index: number) => {
@@ -398,77 +350,19 @@ export default function ChatList(props: {
     activeContextMenuChatIds,
   ])
 
-  const contactlistData: ChatListContactItemData = useMemo(() => {
-    return {
-      contactCache,
-      contactIds,
-    }
-  }, [contactCache, contactIds])
-
-  const messagelistData: ChatListMessageItemData = useMemo(() => {
-    return {
-      messageResultIds,
-      messageCache,
-      queryStr,
-      isSingleChatSearch: queryChatId != null,
-    }
-  }, [messageResultIds, messageCache, queryStr, queryChatId])
-
-  const searchChatInfoFetch = useRpcFetch(
-    BackendRemote.rpc.getBasicChatInfo,
-    queryChatId ? [accountId, queryChatId] : null
-  )
-  if (searchChatInfoFetch?.result?.ok === false) {
-    log.error(searchChatInfoFetch.result.err)
-  }
-  const searchChatInfo = searchChatInfoFetch?.result?.ok
-    ? searchChatInfoFetch.result.value
-    : null
-
   // Render --------------------
   const tx = useTranslationFunction()
 
-  if (queryChatId && searchChatInfo) {
+  if (queryChatId) {
     return (
-      <div ref={rootRef} className='chat-list'>
-        <AutoSizer disableWidth>
-          {({ height }) => (
-            <div ref={tabindexWrapperElementMessages}>
-              <div
-                id='search-result-divider-messages'
-                className='search-result-divider'
-              >
-                {tx('search_in', searchChatInfo.name)}
-                {messageResultIds.length !== 0 &&
-                  ': ' + translate_n('n_messages', messageResultIds.length)}
-              </div>
-              <RovingTabindexProvider
-                wrapperElementRef={tabindexWrapperElementMessages}
-                classNameOfTargetElements={rovingTabindexItemsClassName}
-              >
-                <ChatListPart
-                  olElementAttrs={{
-                    'aria-labelledby': 'search-result-divider-messages',
-                  }}
-                  isRowLoaded={isMessageLoaded}
-                  loadMoreRows={loadMessages}
-                  rowCount={messageResultIds.length}
-                  width={'100%'}
-                  height={
-                    /* take remaining space */
-                    height - DIVIDER_HEIGHT
-                  }
-                  itemKey={index => 'key' + messageResultIds[index]}
-                  itemData={messagelistData}
-                  itemHeight={CHATLISTITEM_MESSAGE_HEIGHT}
-                >
-                  {ChatListItemRowMessage}
-                </ChatListPart>
-              </RovingTabindexProvider>
-            </div>
-          )}
-        </AutoSizer>
-      </div>
+      <SearchInChatResults
+        ref={rootRef}
+        queryStr={queryStr}
+        queryChatId={queryChatId}
+        rovingTabindexItemsClassName={rovingTabindexItemsClassName}
+        CHATLISTITEM_MESSAGE_HEIGHT={CHATLISTITEM_MESSAGE_HEIGHT}
+        DIVIDER_HEIGHT={DIVIDER_HEIGHT}
+      />
     )
   }
 
@@ -535,84 +429,17 @@ export default function ChatList(props: {
                 </ChatListPart>
               </div>
               {isSearchActive && (
-                <>
-                  <div
-                    id='search-result-divider-contacts'
-                    className='search-result-divider'
-                  >
-                    {translate_n('n_contacts', contactIds.length)}
-                  </div>
-                  <RovingTabindexProvider
-                    wrapperElementRef={tabindexWrapperElementContacts}
-                    classNameOfTargetElements={rovingTabindexItemsClassName}
-                  >
-                    <div ref={tabindexWrapperElementContacts}>
-                      <ChatListPart
-                        olElementAttrs={{
-                          'aria-labelledby': 'search-result-divider-contacts',
-                        }}
-                        isRowLoaded={isContactLoaded}
-                        loadMoreRows={loadContact}
-                        rowCount={contactIds.length}
-                        width={'100%'}
-                        height={contactsHeight(height)}
-                        itemKey={index => 'key' + contactIds[index]}
-                        itemData={contactlistData}
-                        itemHeight={CHATLISTITEM_CONTACT_HEIGHT}
-                      >
-                        {ChatListItemRowContact}
-                      </ChatListPart>
-                      {!isChatmail &&
-                        contactIds.length === 0 &&
-                        chatListIds.length === 0 &&
-                        queryStrIsValidEmail && (
-                          <PseudoListItemAddContact
-                            queryStr={queryStr?.trim() || ''}
-                            queryStrIsEmail={queryStrIsValidEmail}
-                            onClick={addContactOnClick}
-                          />
-                        )}
-                      {showPseudoListItemAddContactFromInviteLink && (
-                        <PseudoListItemAddContactOrGroupFromInviteLink
-                          inviteLink={queryStr!}
-                          accountId={accountId}
-                        />
-                      )}
-                    </div>
-                  </RovingTabindexProvider>
-                  <div
-                    id='search-result-divider-messages'
-                    className='search-result-divider'
-                  >
-                    {translated_messages_label(messageResultIds.length)}
-                  </div>
-
-                  <RovingTabindexProvider
-                    wrapperElementRef={tabindexWrapperElementMessages}
-                    classNameOfTargetElements={rovingTabindexItemsClassName}
-                  >
-                    <div ref={tabindexWrapperElementMessages}>
-                      <ChatListPart
-                        olElementAttrs={{
-                          'aria-labelledby': 'search-result-divider-messages',
-                        }}
-                        isRowLoaded={isMessageLoaded}
-                        loadMoreRows={loadMessages}
-                        rowCount={messageResultIds.length}
-                        width={'100%'}
-                        height={
-                          // take remaining space
-                          messagesHeight(height)
-                        }
-                        itemKey={index => 'key' + messageResultIds[index]}
-                        itemData={messagelistData}
-                        itemHeight={CHATLISTITEM_MESSAGE_HEIGHT}
-                      >
-                        {ChatListItemRowMessage}
-                      </ChatListPart>
-                    </div>
-                  </RovingTabindexProvider>
-                </>
+                <ContactAndMessageSearchResults
+                  queryStr={queryStr}
+                  onExitSearch={props.onExitSearch}
+                  parentSectionHeight={height}
+                  chatsHeight={chatsHeight}
+                  chatListSearchResultsIsEmpty={chatListIds.length === 0}
+                  rovingTabindexItemsClassName={rovingTabindexItemsClassName}
+                  CHATLISTITEM_CONTACT_HEIGHT={CHATLISTITEM_CONTACT_HEIGHT}
+                  CHATLISTITEM_MESSAGE_HEIGHT={CHATLISTITEM_MESSAGE_HEIGHT}
+                  DIVIDER_HEIGHT={DIVIDER_HEIGHT}
+                />
               )}
             </RovingTabindexProvider>
             <button
@@ -634,6 +461,264 @@ export default function ChatList(props: {
         )}
       </AutoSizer>
     </div>
+  )
+}
+
+function SearchInChatResults({
+  ref,
+  queryStr,
+  queryChatId,
+  rovingTabindexItemsClassName,
+  CHATLISTITEM_MESSAGE_HEIGHT,
+  DIVIDER_HEIGHT,
+}: {
+  ref: React.RefObject<HTMLDivElement | null>
+  queryStr: string | undefined
+  queryChatId: number
+  rovingTabindexItemsClassName: string
+  CHATLISTITEM_MESSAGE_HEIGHT: number
+  DIVIDER_HEIGHT: number
+}) {
+  const tx = useTranslationFunction()
+
+  const { messageResultIds, isMessageLoaded, loadMessages, messageCache } =
+    useMessageResults(queryStr, queryChatId)
+
+  const tabindexWrapperElement = useRef<HTMLDivElement>(null)
+
+  const messagelistData: ChatListMessageItemData = useMemo(() => {
+    return {
+      messageResultIds,
+      messageCache,
+      queryStr,
+      isSingleChatSearch: queryChatId != null,
+    }
+  }, [messageResultIds, messageCache, queryStr, queryChatId])
+
+  const searchChatInfoFetch = useRpcFetch(
+    BackendRemote.rpc.getBasicChatInfo,
+    queryChatId ? [selectedAccountId(), queryChatId] : null
+  )
+  if (searchChatInfoFetch?.result?.ok === false) {
+    log.error(searchChatInfoFetch.result.err)
+  }
+
+  return (
+    <div ref={ref} className='chat-list'>
+      <AutoSizer disableWidth>
+        {({ height }) => (
+          <div ref={tabindexWrapperElement}>
+            <div
+              id='search-result-divider-messages'
+              className='search-result-divider'
+            >
+              {searchChatInfoFetch?.result?.ok
+                ? tx('search_in', searchChatInfoFetch.result.value.name)
+                : tx('search_in_chat')}
+              {messageResultIds.length !== 0 &&
+                ': ' + translate_n('n_messages', messageResultIds.length)}
+            </div>
+            <RovingTabindexProvider
+              wrapperElementRef={tabindexWrapperElement}
+              classNameOfTargetElements={rovingTabindexItemsClassName}
+            >
+              <ChatListPart
+                olElementAttrs={{
+                  'aria-labelledby': 'search-result-divider-messages',
+                }}
+                isRowLoaded={isMessageLoaded}
+                loadMoreRows={loadMessages}
+                rowCount={messageResultIds.length}
+                width={'100%'}
+                height={
+                  /* take remaining space */
+                  height - DIVIDER_HEIGHT
+                }
+                itemKey={index => 'key' + messageResultIds[index]}
+                itemData={messagelistData}
+                itemHeight={CHATLISTITEM_MESSAGE_HEIGHT}
+              >
+                {ChatListItemRowMessage}
+              </ChatListPart>
+            </RovingTabindexProvider>
+          </div>
+        )}
+      </AutoSizer>
+    </div>
+  )
+}
+
+function ContactAndMessageSearchResults({
+  queryStr,
+  onExitSearch,
+  parentSectionHeight,
+  chatsHeight,
+  chatListSearchResultsIsEmpty,
+  rovingTabindexItemsClassName,
+  CHATLISTITEM_CONTACT_HEIGHT,
+  CHATLISTITEM_MESSAGE_HEIGHT,
+  DIVIDER_HEIGHT,
+}: {
+  queryStr: string
+  onExitSearch?: () => void
+  parentSectionHeight: number
+  chatsHeight: (heihgt: number) => number
+  chatListSearchResultsIsEmpty: boolean
+  rovingTabindexItemsClassName: string
+  CHATLISTITEM_CONTACT_HEIGHT: number
+  CHATLISTITEM_MESSAGE_HEIGHT: number
+  DIVIDER_HEIGHT: number
+}) {
+  const accountId = selectedAccountId()
+
+  const queryChatId = null
+  const { messageResultIds, isMessageLoaded, loadMessages, messageCache } =
+    useMessageResults(queryStr, queryChatId)
+  const {
+    contactIds,
+    isContactLoaded,
+    loadContacts: loadContact,
+    contactCache,
+    queryStrIsValidEmail,
+  } = useLazyLoadedContacts(0, queryStr)
+
+  const createChatByContactId = useCreateChatByContactId()
+
+  const tabindexWrapperElementContacts = useRef<HTMLDivElement>(null)
+  const tabindexWrapperElementMessages = useRef<HTMLDivElement>(null)
+
+  const settingsStore = useSettingsStore()[0]
+  const isChatmail = settingsStore?.settings.is_chatmail === '1'
+
+  const addContactOnClick = async () => {
+    if (!queryStrIsValidEmail || !queryStr) return
+
+    const contactId = await BackendRemote.rpc.createContact(
+      selectedAccountId(),
+      queryStr.trim(),
+      null
+    )
+    await createChatByContactId(accountId, contactId)
+    onExitSearch?.()
+  }
+
+  // divider height ------------
+
+  const contactsHeight = (height: number) =>
+    Math.min(
+      height / 3 - DIVIDER_HEIGHT,
+      contactIds.length * CHATLISTITEM_CONTACT_HEIGHT
+    )
+
+  const showPseudoListItemAddContactFromInviteLink =
+    queryStr && isInviteLink(queryStr)
+  const messagesHeight = (height: number) =>
+    height -
+    (DIVIDER_HEIGHT * 3 +
+      chatsHeight(height) +
+      contactsHeight(height) +
+      (chatListSearchResultsIsEmpty && queryStrIsValidEmail
+        ? CHATLISTITEM_MESSAGE_HEIGHT
+        : 0) +
+      (showPseudoListItemAddContactFromInviteLink
+        ? CHATLISTITEM_MESSAGE_HEIGHT
+        : 0))
+
+  const contactlistData: ChatListContactItemData = useMemo(() => {
+    return {
+      contactCache,
+      contactIds,
+    }
+  }, [contactCache, contactIds])
+
+  const messagelistData: ChatListMessageItemData = useMemo(() => {
+    return {
+      messageResultIds,
+      messageCache,
+      queryStr,
+      isSingleChatSearch: queryChatId != null,
+    }
+  }, [messageResultIds, messageCache, queryStr, queryChatId])
+
+  return (
+    <>
+      <div
+        id='search-result-divider-contacts'
+        className='search-result-divider'
+      >
+        {translate_n('n_contacts', contactIds.length)}
+      </div>
+      <RovingTabindexProvider
+        wrapperElementRef={tabindexWrapperElementContacts}
+        classNameOfTargetElements={rovingTabindexItemsClassName}
+      >
+        <div ref={tabindexWrapperElementContacts}>
+          <ChatListPart
+            olElementAttrs={{
+              'aria-labelledby': 'search-result-divider-contacts',
+            }}
+            isRowLoaded={isContactLoaded}
+            loadMoreRows={loadContact}
+            rowCount={contactIds.length}
+            width={'100%'}
+            height={contactsHeight(parentSectionHeight)}
+            itemKey={index => 'key' + contactIds[index]}
+            itemData={contactlistData}
+            itemHeight={CHATLISTITEM_CONTACT_HEIGHT}
+          >
+            {ChatListItemRowContact}
+          </ChatListPart>
+          {!isChatmail &&
+            contactIds.length === 0 &&
+            chatListSearchResultsIsEmpty &&
+            queryStrIsValidEmail && (
+              <PseudoListItemAddContact
+                queryStr={queryStr?.trim() || ''}
+                queryStrIsEmail={queryStrIsValidEmail}
+                onClick={addContactOnClick}
+              />
+            )}
+          {showPseudoListItemAddContactFromInviteLink && (
+            <PseudoListItemAddContactOrGroupFromInviteLink
+              inviteLink={queryStr!}
+              accountId={accountId}
+            />
+          )}
+        </div>
+      </RovingTabindexProvider>
+      <div
+        id='search-result-divider-messages'
+        className='search-result-divider'
+      >
+        {translated_messages_label(messageResultIds.length)}
+      </div>
+
+      <RovingTabindexProvider
+        wrapperElementRef={tabindexWrapperElementMessages}
+        classNameOfTargetElements={rovingTabindexItemsClassName}
+      >
+        <div ref={tabindexWrapperElementMessages}>
+          <ChatListPart
+            olElementAttrs={{
+              'aria-labelledby': 'search-result-divider-messages',
+            }}
+            isRowLoaded={isMessageLoaded}
+            loadMoreRows={loadMessages}
+            rowCount={messageResultIds.length}
+            width={'100%'}
+            height={
+              // take remaining space
+              messagesHeight(parentSectionHeight)
+            }
+            itemKey={index => 'key' + messageResultIds[index]}
+            itemData={messagelistData}
+            itemHeight={CHATLISTITEM_MESSAGE_HEIGHT}
+          >
+            {ChatListItemRowMessage}
+          </ChatListPart>
+        </div>
+      </RovingTabindexProvider>
+    </>
   )
 }
 
