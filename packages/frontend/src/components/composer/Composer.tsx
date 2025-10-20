@@ -539,27 +539,36 @@ const Composer = forwardRef<
           {!messageEditing.isEditingModeActive ? (
             <>
               {draftState.quote !== null && (
-                <div className='attachment-quote-section is-quote'>
+                <section
+                  className='attachment-quote-section is-quote'
+                  aria-label={tx('menu_reply')}
+                >
                   <Quote quote={draftState.quote} tabIndex={0} />
                   <CloseButton onClick={removeQuote} />
-                </div>
+                </section>
               )}
               {draftState.file && !draftState.vcardContact && (
-                <div className='attachment-quote-section is-attachment'>
+                <section
+                  className='attachment-quote-section is-attachment'
+                  aria-label={tx('attachment')}
+                >
                   {/* TODO make this pretty: draft image/video/attachment */}
                   {/* <p>file: {draftState.file}</p> */}
                   {/* {draftState.viewType} */}
                   <DraftAttachment attachment={draftState} />
                   <CloseButton onClick={removeFile} />
-                </div>
+                </section>
               )}
               {draftState.vcardContact && (
-                <div className='attachment-quote-section is-attachment'>
+                <section
+                  className='attachment-quote-section is-attachment'
+                  aria-label={tx('attachment')}
+                >
                   <VisualVCardComponent
                     vcardContact={draftState.vcardContact}
                   />
                   <CloseButton onClick={removeFile} />
-                </div>
+                </section>
               )}
             </>
           ) : (
