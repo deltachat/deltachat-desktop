@@ -495,11 +495,11 @@ function SearchInChatResults({
     }
   }, [messageResultIds, messageCache, queryStr, queryChatId])
 
-  const searchChatInfoFetch = useRpcFetch(
-    BackendRemote.rpc.getBasicChatInfo,
-    queryChatId ? [selectedAccountId(), queryChatId] : null
-  )
-  if (searchChatInfoFetch?.result?.ok === false) {
+  const searchChatInfoFetch = useRpcFetch(BackendRemote.rpc.getBasicChatInfo, [
+    selectedAccountId(),
+    queryChatId,
+  ])
+  if (searchChatInfoFetch.result?.ok === false) {
     log.error(searchChatInfoFetch.result.err)
   }
 
@@ -512,7 +512,7 @@ function SearchInChatResults({
               id='search-result-divider-messages'
               className='search-result-divider'
             >
-              {searchChatInfoFetch?.result?.ok
+              {searchChatInfoFetch.result?.ok
                 ? tx('search_in', searchChatInfoFetch.result.value.name)
                 : tx('search_in_chat')}
               {messageResultIds.length !== 0 &&
