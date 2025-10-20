@@ -636,7 +636,7 @@ function ContactAndMessageSearchResults({
       messageResultIds,
       messageCache,
       queryStr,
-      isSingleChatSearch: queryChatId != null,
+      isSingleChatSearch: queryChatId != null, // `false`
     }
   }, [messageResultIds, messageCache, queryStr, queryChatId])
 
