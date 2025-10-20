@@ -55,12 +55,9 @@ const open_apps: {
   [instanceId: string]: AppInstance
 } = {}
 
-// holds all accounts which have a session with webxdc
-// scheme registered except those with internet access
-const accounts_sessions: number[] = []
-
-// holds all accounts which have internet access
-const sessions_with_internet_access: string[] = []
+// holds all partitionKeys that have a session created for webxdc apps
+// mainly to avoid creating multiple sessions for the same partition
+const existing_sessions: string[] = []
 
 // TODO:
 // 2. on message deletion close webxdc if open and remove its DOMStorage data
@@ -174,17 +171,21 @@ export default class DCWebxdc {
       )
 
       // used by BrowserWindow
-      let partition = partitionFromId(accountId)
+      let partition = partitionKeyFromAccountId(accountId)
 
       // TODO intercept / deny network access - CSP should probably be disabled for testing
 
       // register appropriate protocols
       // see https://www.electronjs.org/docs/latest/api/protocol
       if (webxdcInfo['internetAccess']) {
-        if (!sessions_with_internet_access.includes(appId)) {
-          const ses = sessionFromId(appId)
-          partition = partitionFromId(appId)
-          sessions_with_internet_access.push(appId)
+        // we use a different partition for apps that have internet access
+        // to have different sessions with different protocol handlers
+        partition = partitionKeyFromAccountId(accountId, true)
+        if (!existing_sessions.includes(partition)) {
+          const ses = session.fromPartition(partition, {
+            cache: false,
+          })
+          existing_sessions.push(partition)
           ses.protocol.handle('webxdc', (...args) => {
             return webxdcProtocolHandler(this.rpc, ...args)
           })
@@ -194,12 +195,12 @@ export default class DCWebxdc {
               mapProtocolHandler(accountId, this.rpc, ...args)
             )
           }
-        } else {
-          partition = partitionFromId(appId)
         }
-      } else if (!accounts_sessions.includes(accountId)) {
-        const ses = sessionFromId(accountId)
-        accounts_sessions.push(accountId)
+      } else if (!existing_sessions.includes(partition)) {
+        const ses = session.fromPartition(partition, {
+          cache: false,
+        })
+        existing_sessions.push(partition)
         ses.protocol.handle('webxdc', (...args) => {
           return webxdcProtocolHandler(this.rpc, ...args)
         })
@@ -734,9 +735,6 @@ export default class DCWebxdc {
         this.removeLastBounds(accountId, instanceId)
         const appURL = `webxdc://${webxdcId}.webxdc`
         const sessions = getAllSessionsForAccount(accountId)
-        if (sessions.length === 0) {
-          return
-        }
         // clear all sessions for that account
         for (const s of sessions) {
           s.clearStorageData({ origin: appURL })
@@ -939,8 +937,6 @@ async function mapProtocolHandler(
     filename = filename.substring(1)
   }
 
-  log.debug('map: loading tile', filename)
-
   const mimeType: string | undefined = Mime.lookup(filename) || ''
   try {
     // now we pipe the real request through our backend
@@ -1056,14 +1052,8 @@ function makeTitle(webxdcInfo: T.WebxdcMessageInfo, chatName: string): string {
   }${truncateText(webxdcInfo.name, 42)} – ${chatName}`
 }
 
-function partitionFromId(id: number | string) {
-  return `persist:webxdc_${id}`
-}
-
-function sessionFromId(id: number | string) {
-  return session.fromPartition(partitionFromId(id), {
-    cache: false,
-  })
+function partitionKeyFromAccountId(accountId: number, integrated = false) {
+  return `persist:webxdc_${accountId}${integrated ? '_integrated' : ''}`
 }
 
 /**
@@ -1071,20 +1061,10 @@ function sessionFromId(id: number | string) {
  * for cleanup and removal of data
  */
 function getAllSessionsForAccount(accountId: number) {
-  const sessions: Electron.Session[] = []
-  if (accounts_sessions.includes(accountId)) {
-    sessions.push(sessionFromId(accountId))
-  }
-  if (sessions_with_internet_access.length > 0) {
-    for (const appId of sessions_with_internet_access) {
-      const [accId, _id] = appId.split('.')
-      if (Number(accId) === accountId) {
-        const s = sessionFromId(appId)
-        sessions.push(s)
-      }
-    }
-  }
-  return sessions
+  return [
+    session.fromPartition(partitionKeyFromAccountId(accountId)),
+    session.fromPartition(partitionKeyFromAccountId(accountId, true)),
+  ]
 }
 
 export async function webxdcStartUpCleanup() {
@@ -1128,16 +1108,23 @@ function adjustSize(size: Size): Size {
 ipcMain.handle('delete_webxdc_account_data', async (_ev, accountId: number) => {
   // we can not delete the directory as it might still be used and that would be a problem on windows
   // so the second next best thing we can do is telling electron to clear the data, even though it won't delete everything
-  const s = session.fromPartition(`persist:webxdc_${accountId}`, {
-    cache: false,
-  })
-  await s.clearStorageData()
-  await s.clearData()
+  async function clearData(session: Electron.Session) {
+    await session.clearStorageData()
+    await session.clearData()
+    // mark the folder for deletion on next startup
+    if (session.storagePath) {
+      await writeFile(join(session.storagePath, 'webxdc-cleanup'), '-', 'utf-8')
+    } else {
+      throw new Error('session has no storagePath set')
+    }
+  }
 
-  // mark the folder for deletion on next startup
-  if (s.storagePath) {
-    await writeFile(join(s.storagePath, 'webxdc-cleanup'), '-', 'utf-8')
-  } else {
-    throw new Error('session has no storagePath set')
+  const sessions = getAllSessionsForAccount(accountId)
+  for (const s of sessions) {
+    try {
+      await clearData(s)
+    } catch (error) {
+      log.error('failed to clear webxdc session data', error)
+    }
   }
 })
