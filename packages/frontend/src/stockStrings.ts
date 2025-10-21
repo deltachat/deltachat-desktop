@@ -223,7 +223,6 @@ export async function updateCoreStrings() {
     [C.DC_STR_YOU_REACTED]: tx('reaction_by_you'),
     [C.DC_STR_REACTED_BY]: tx('reaction_by_other'),
     [C.DC_STR_DONATION_REQUEST]: tx('donate_device_msg'),
-    [C.DC_STR_CANT_DECRYPT_OUTGOING_MSGS]: tx('systemmsg_cannot_decrypt'),
   }
 
   await BackendRemote.rpc.setStockStrings(strings)
