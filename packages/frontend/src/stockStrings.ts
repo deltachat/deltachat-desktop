@@ -25,6 +25,8 @@ export async function updateCoreStrings() {
     | C.DC_STR_SERVER_TURNED_OFF
     | C.DC_STR_SYNC_MSG_SUBJECT
     | C.DC_STR_SYNC_MSG_BODY
+    | C.DC_STR_CANT_DECRYPT_OUTGOING_MSGS
+    | C.DC_STR_CANTDECRYPT_MSG_BODY
 
     // Deprecated, see
     // https://github.com/chatmail/core/blob/main/deltachat-ffi/deltachat.h
@@ -71,7 +73,6 @@ export async function updateCoreStrings() {
     | C.DC_STR_SECURE_JOIN_CHANNEL_QR_DESC
     | C.DC_STR_SECUREJOIN_WAIT
     | C.DC_STR_AEAP_EXPLANATION_AND_LINK
-    | C.DC_STR_CANT_DECRYPT_OUTGOING_MSGS
   >
   const strings: StockStringsSomeOmited = {
     // TODO: Check if we need the uncommented core translations
@@ -88,7 +89,6 @@ export async function updateCoreStrings() {
     // [C.DC_STR_ENCR_TRANSP]: tx('DC_STR_ENCR_TRANSP'),
     // [C.DC_STR_ENCR_NONE]: tx('DC_STR_ENCR_NONE'),
     [C.DC_STR_FINGERPRINTS]: tx('qrscan_fingerprint_label'),
-    [C.DC_STR_CANTDECRYPT_MSG_BODY]: tx('systemmsg_cannot_decrypt'),
     [C.DC_STR_ARCHIVEDCHATS]: tx('chat_archived_chats_title'),
     [C.DC_STR_CANNOT_LOGIN]: tx('login_error_cannot_login'),
     [C.DC_STR_DEVICE_MESSAGES]: tx('device_talk'),
