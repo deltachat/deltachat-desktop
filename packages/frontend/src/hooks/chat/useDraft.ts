@@ -148,13 +148,16 @@ export function useDraft(
   )
 
   useEffect(() => {
-    log.debug('reloading chat because id changed', chatId)
-    //load
-    loadDraft(chatId || 0)
     window.__reloadDraft = loadDraft.bind(null, chatId || 0)
     return () => {
       window.__reloadDraft = null
     }
+  }, [chatId, loadDraft])
+
+  useEffect(() => {
+    log.debug('reloading chat because id changed', chatId)
+    //load
+    loadDraft(chatId || 0)
   }, [chatId, loadDraft, isContactRequest])
 
   const saveDraft = useCallback(async () => {
