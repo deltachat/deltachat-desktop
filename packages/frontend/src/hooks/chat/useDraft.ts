@@ -167,7 +167,6 @@ export function useDraft(
     const accountId = selectedAccountId()
 
     const draft = draftRef.current
-    const oldChatId = chatId
     if (
       (draft.text && draft.text.length > 0) ||
       (draft.file && draft.file != '') ||
@@ -188,10 +187,6 @@ export function useDraft(
       await BackendRemote.rpc.removeDraft(accountId, chatId)
     }
 
-    if (oldChatId !== chatId) {
-      log.debug('switched chat no reloading of draft required')
-      return
-    }
     const newDraft = chatId
       ? await BackendRemote.rpc.getDraft(accountId, chatId)
       : null
