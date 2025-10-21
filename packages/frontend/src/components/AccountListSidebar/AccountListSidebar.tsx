@@ -69,7 +69,6 @@ export default function AccountListSidebar({
     index: number
     position: 'top' | 'bottom'
   } | null>(null)
-  const [accounts, setAccounts] = useState<number[]>([])
 
   const { smallScreenMode } = useContext(ScreenContext)
   const { chatId } = useChat()
@@ -117,6 +116,12 @@ export default function AccountListSidebar({
 
     if (draggedAccountId === null || dropIndicator === null) return
 
+    const accounts =
+      accountsFetch.lingeringResult?.ok === true
+        ? accountsFetch.lingeringResult.value
+        : null
+    if (!accounts) return
+
     const dragIndex = accounts.indexOf(draggedAccountId)
     const dropIndex = dropIndicator.index
 
@@ -151,12 +156,11 @@ export default function AccountListSidebar({
 
     newAccounts.splice(targetIndex, 0, removed)
 
-    // Update local state immediately for smooth UI
-    setAccounts(newAccounts)
-
     try {
       // Update backend with new order
       await BackendRemote.rpc.setAccountsOrder(newAccounts)
+      // Refresh to get the updated order from backend
+      accountsFetch.refresh()
     } catch (_error) {
       // Revert on error
       accountsFetch.refresh()
@@ -181,17 +185,6 @@ export default function AccountListSidebar({
     /// now this workaround is only used when changing background sync setting
     window.__updateAccountListSidebar = throttledRefreshSyncAllAccounts
   }, [])
-
-  // Update local accounts state when fetch result changes
-  useEffect(() => {
-    const result = accountsFetch.lingeringResult
-    if (result?.ok === true) {
-      // Use setTimeout to avoid synchronous setState in effect
-      setTimeout(() => {
-        setAccounts(result.value)
-      }, 0)
-    }
-  }, [accountsFetch.lingeringResult])
 
   const [accountForHoverInfo, internalSetAccountForHoverInfo] =
     useState<T.Account | null>(null)
