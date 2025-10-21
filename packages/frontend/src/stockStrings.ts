@@ -71,6 +71,7 @@ export async function updateCoreStrings() {
     | C.DC_STR_SECURE_JOIN_CHANNEL_QR_DESC
     | C.DC_STR_SECUREJOIN_WAIT
     | C.DC_STR_AEAP_EXPLANATION_AND_LINK
+    | C.DC_STR_CANT_DECRYPT_OUTGOING_MSGS
   >
   const strings: StockStringsSomeOmited = {
     // TODO: Check if we need the uncommented core translations
