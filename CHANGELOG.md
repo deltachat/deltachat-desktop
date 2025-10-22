@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- enable drag & drop for the account order
+
 ### Fixed
 - fix: remove the option to select info messages with Ctrl + Up/Down #5337
 
