@@ -80,7 +80,7 @@ export function useMessageList(
 
   const incomingMessageAudioElementRef = useRef<HTMLAudioElement>(null)
 
-  useEffect(() => {
+  useMemo(() => {
     if (incomingMessageAudioElementRef.current == null) {
       incomingMessageAudioElementRef.current = document.createElement('audio')
       incomingMessageAudioElementRef.current.src = './audio/sound_in.wav'
@@ -150,7 +150,6 @@ export function useMessageList(
   const [state, setState] = useState(store.getState())
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setState(store.getState())
     store.subscribe(setState)
     return () => store.unsubscribe(setState)
