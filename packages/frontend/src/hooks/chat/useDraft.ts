@@ -165,7 +165,7 @@ export function useDraft(
     loadDraft(chatId || 0)
   }, [chatId, loadDraft, isContactRequest])
 
-  const saveDraft = useCallback(async () => {
+  const saveAndRefetchDraft = useCallback(async () => {
     if (chatId === null || !canSend) {
       return
     }
@@ -221,7 +221,7 @@ export function useDraft(
       if (draftRef.current) {
         draftRef.current.text = text // don't need to rerender on text change
       }
-      saveDraft()
+      saveAndRefetchDraft()
     }
   }
 
@@ -229,16 +229,16 @@ export function useDraft(
     if (draftRef.current) {
       draftRef.current.quote = null
     }
-    saveDraft()
+    saveAndRefetchDraft()
     inputRef.current?.focus()
-  }, [inputRef, saveDraft])
+  }, [inputRef, saveAndRefetchDraft])
 
   const removeFile = useCallback(() => {
     draftRef.current.file = ''
     draftRef.current.viewType = 'Text'
-    saveDraft()
+    saveAndRefetchDraft()
     inputRef.current?.focus()
-  }, [inputRef, saveDraft])
+  }, [inputRef, saveAndRefetchDraft])
 
   const addFileToDraft = useCallback(
     async (file: string, fileName: string, viewType: T.Viewtype) => {
@@ -246,9 +246,9 @@ export function useDraft(
       draftRef.current.fileName = fileName
       draftRef.current.viewType = viewType
       inputRef.current?.focus()
-      return saveDraft()
+      return saveAndRefetchDraft()
     },
-    [inputRef, saveDraft]
+    [inputRef, saveAndRefetchDraft]
   )
 
   const { jumpToMessage } = useMessage()
@@ -270,7 +270,7 @@ export function useDraft(
         kind: 'WithMessage',
         messageId,
       } as Type.MessageQuote
-      saveDraft()
+      saveAndRefetchDraft()
 
       jumpToMessage({
         accountId,
@@ -358,13 +358,13 @@ export function useDraft(
         kind: 'WithMessage',
         messageId,
       } as Partial<Type.MessageQuote> as any as Type.MessageQuote
-      saveDraft()
+      saveAndRefetchDraft()
       inputRef.current?.focus()
     }
     return () => {
       window.__setQuoteInDraft = null
     }
-  }, [draftRef, inputRef, saveDraft])
+  }, [draftRef, inputRef, saveAndRefetchDraft])
 
   return {
     draftState,
