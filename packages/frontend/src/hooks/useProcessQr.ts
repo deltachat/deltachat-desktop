@@ -12,10 +12,9 @@ import { BackendRemote } from '../backend-com'
 import { ReceiveBackupProgressDialog } from '../components/dialogs/SetupMultiDevice'
 import { ScreenContext } from '../contexts/ScreenContext'
 import { getLogger } from '../../../shared/logger'
-import { processQr } from '../backend/qr'
+import { processQr, QrWithUrl } from '../backend/qr'
 
 import type { T } from '@deltachat/jsonrpc-client'
-import type { QrWithUrl } from '../backend/qr'
 import type { WelcomeQrWithUrl } from '../contexts/InstantOnboardingContext'
 import useChat from './chat/useChat'
 import { unknownErrorToString } from '../components/helpers/unknownErrorToString'
@@ -30,6 +29,15 @@ const ALLOWED_QR_CODES_ON_WELCOME_SCREEN: T.Qr['kind'][] = [
   'text',
   'url',
 ]
+
+export const enum SCAN_CONTEXT_TYPE {
+  /** default context, no restrictions on QR code types */
+  DEFAULT = 'DEFAULT',
+  /** onboarding with another server than the default server or contact/group invite code */
+  OTHER_SERVER = 'OTHER_SERVER',
+  /** for multi-device setup */
+  TRANSFER_BACKUP = 'TRANSFER_BACKUP',
+}
 
 const log = getLogger('renderer/hooks/useProcessQr')
 
@@ -136,6 +144,7 @@ export default function useProcessQR() {
     async (
       accountId: number,
       url: string,
+      scanContext: SCAN_CONTEXT_TYPE,
       callback?: () => void
     ): Promise<void> => {
       // Scanned string is actually a link to an email address
@@ -160,6 +169,20 @@ export default function useProcessQR() {
       }
 
       const { qr } = parsed
+
+      if (
+        (scanContext === SCAN_CONTEXT_TYPE.TRANSFER_BACKUP &&
+          qr.kind !== 'backup2') ||
+        (scanContext === SCAN_CONTEXT_TYPE.OTHER_SERVER &&
+          !['account', 'login', 'askVerifyGroup', 'askVerifyContact'].includes(
+            qr.kind
+          ))
+      ) {
+        await openAlertDialog({
+          message: tx('qraccount_qr_code_cannot_be_used'),
+        })
+        return callback?.()
+      }
 
       if (qr.kind === 'backupTooNew') {
         await openAlertDialog({
@@ -293,6 +316,8 @@ export default function useProcessQR() {
        *
        * Ask the user if they want to set up a new device
        * based on an existing backup
+       * TODO: TRANSFER_BACKUP context only works with backup2 QR codes,
+       * so we might extract the QR code processing from this function
        */
       if (qr.kind === 'backup2') {
         if (isLoggedIn) {

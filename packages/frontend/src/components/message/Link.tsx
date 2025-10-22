@@ -21,6 +21,7 @@ import { selectedAccountId } from '../../ScreenController'
 
 import type { LinkDestination } from '@deltachat/message_parser_wasm'
 import type { DialogProps } from '../../contexts/DialogContext'
+import { SCAN_CONTEXT_TYPE } from '../../hooks/useProcessQr'
 
 const log = getLogger('renderer/LabeledLink')
 
@@ -68,7 +69,7 @@ export const LabeledLink = ({
         : false
 
     if (isInviteLink(target)) {
-      processQr(accountId, target)
+      processQr(accountId, target, SCAN_CONTEXT_TYPE.DEFAULT)
       return
     }
 
@@ -193,7 +194,7 @@ export const Link = ({
     ev.stopPropagation()
 
     if (isInviteLink(target)) {
-      processQr(accountId, target)
+      processQr(accountId, target, SCAN_CONTEXT_TYPE.DEFAULT)
       return
     }
 

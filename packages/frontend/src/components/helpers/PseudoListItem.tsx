@@ -9,6 +9,7 @@ import { BackendRemote } from '../../backend-com'
 import { ContactListItem } from '../contact/ContactListItem'
 import { useRovingTabindex } from '../../contexts/RovingTabindex'
 import { useRpcFetch } from '../../hooks/useFetch'
+import { SCAN_CONTEXT_TYPE } from '../../hooks/useProcessQr'
 
 export function PseudoListItem(
   props: PropsWithChildren<{
@@ -160,7 +161,7 @@ export const PseudoListItemAddContactOrGroupFromInviteLink = ({
   const contact = contactFetch?.result?.ok ? contactFetch.result.value : null
 
   const onClick = () => {
-    processQr(accountId, inviteLinkTrimmed)
+    processQr(accountId, inviteLinkTrimmed, SCAN_CONTEXT_TYPE.DEFAULT)
     callback?.()
   }
 

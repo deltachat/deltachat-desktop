@@ -14,6 +14,7 @@ import styles from './styles.module.scss'
 import type { DialogProps } from '../../../contexts/DialogContext'
 import useAlertDialog from '../../../hooks/dialog/useAlertDialog'
 import { runtime } from '@deltachat-desktop/runtime-interface'
+import { SCAN_CONTEXT_TYPE } from '../../../hooks/useProcessQr'
 
 const log = getLogger('renderer/dialogs/SetupMultiDevice/ReceiveBackup')
 
@@ -49,7 +50,12 @@ export function ReceiveBackupDialog({ onClose }: Props & DialogProps) {
       if (data && !processingQrCode.current) {
         processingQrCode.current = true
         try {
-          await processQr(accountId, data, onDone)
+          await processQr(
+            accountId,
+            data,
+            SCAN_CONTEXT_TYPE.TRANSFER_BACKUP,
+            onDone
+          )
         } catch (error: any) {
           log.errorWithoutStackTrace('QrReader process error: ', error)
           handleError(error)

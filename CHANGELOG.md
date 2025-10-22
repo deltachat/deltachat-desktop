@@ -3,6 +3,7 @@
 ## [Unreleased][unreleased]
 
 ### Fixed
+- show appropriate messages when scanning wrong qr codes #5563
 - fix: remove the option to select info messages with Ctrl + Up/Down #5337
 
 <a id="2_22_0"></a>

@@ -30,6 +30,7 @@ import type { DialogProps } from '../../contexts/DialogContext'
 import useAlertDialog from '../../hooks/dialog/useAlertDialog'
 import QrCodeCopyConfirmationDialog from './QrCodeCopyConfirmationDialog'
 import { useRpcFetch } from '../../hooks/useFetch'
+import { SCAN_CONTEXT_TYPE } from '../../hooks/useProcessQr'
 
 const log = getLogger('renderer/dialogs/QrCode')
 
@@ -37,6 +38,7 @@ type Props = {
   selectScan?: true
   qrCodeSVG: string
   qrCode: string
+  scanContext: SCAN_CONTEXT_TYPE
 }
 
 /**
@@ -45,9 +47,10 @@ type Props = {
  * provides a QR code reader
  */
 export default function QrCode({
+  selectScan,
   qrCodeSVG,
   qrCode,
-  selectScan,
+  scanContext,
   onClose,
 }: Props & DialogProps) {
   const tx = useTranslationFunction()
@@ -88,7 +91,9 @@ export default function QrCode({
           onClose={onClose}
         />
       )}
-      {!showQrCode && <QrCodeScanQrInner onClose={onClose} />}
+      {!showQrCode && (
+        <QrCodeScanQrInner onClose={onClose} scanContext={scanContext} />
+      )}
     </Dialog>
   )
 }
@@ -153,7 +158,13 @@ export function QrCodeShowQrInner({
   const imageContextMenu = useContextMenu([
     {
       label: tx('withdraw_qr_code'),
-      action: () => processQr(accountId, qrCode, onBack || onClose),
+      action: () =>
+        processQr(
+          accountId,
+          qrCode,
+          SCAN_CONTEXT_TYPE.DEFAULT, // no need to set a specific context here
+          onBack || onClose
+        ),
     },
     {
       label: tx('menu_copy_image_to_clipboard'),
@@ -227,8 +238,10 @@ export function QrCodeShowQrInner({
 
 export function QrCodeScanQrInner({
   onClose,
+  scanContext,
 }: React.PropsWithChildren<{
   onClose: () => void
+  scanContext: SCAN_CONTEXT_TYPE
 }>) {
   const tx = useTranslationFunction()
   const accountId = selectedAccountId()
@@ -256,7 +269,7 @@ export function QrCodeScanQrInner({
       if (data && !processingQrCode.current) {
         processingQrCode.current = true
         try {
-          await processQr(accountId, data, onDone)
+          await processQr(accountId, data, scanContext, onDone)
         } catch (error: any) {
           log.errorWithoutStackTrace('QrReader process error: ', error)
           handleError(error)
@@ -266,7 +279,7 @@ export function QrCodeScanQrInner({
         log.debug('Already processing a qr code')
       }
     },
-    [accountId, processQr, onDone, handleError]
+    [accountId, processQr, onDone, handleError, scanContext]
   )
 
   const pasteClipboard = useCallback(async () => {

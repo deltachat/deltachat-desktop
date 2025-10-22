@@ -15,6 +15,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/dialog/useDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
+import { SCAN_CONTEXT_TYPE } from '../../hooks/useProcessQr'
 
 export default function InvalidUnencryptedMailDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
@@ -25,7 +26,12 @@ export default function InvalidUnencryptedMailDialog({ onClose }: DialogProps) {
     const [qrCode, qrCodeSVG] =
       await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(accountId, null)
     onClose()
-    openDialog(QrCode, { selectScan: true, qrCode, qrCodeSVG })
+    openDialog(QrCode, {
+      selectScan: true,
+      qrCode,
+      qrCodeSVG,
+      scanContext: SCAN_CONTEXT_TYPE.DEFAULT,
+    })
   }
 
   const onLearnMore = () => {
