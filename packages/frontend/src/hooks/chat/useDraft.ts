@@ -15,9 +15,15 @@ const log = getLogger('renderer/composer')
 
 export type DraftObject = { chatId: number } & Pick<
   Type.Message,
-  'id' | 'text' | 'file' | 'quote' | 'viewType' | 'vcardContact'
+  'id' | 'file' | 'quote' | 'viewType' | 'vcardContact'
 > &
-  MessageTypeAttachmentSubset
+  MessageTypeAttachmentSubset & {
+    /**
+     * Note that this text is not always synced with the actual state
+     * of the composer <textarea>. It's basically duplicated state.
+     */
+    text: Type.Message['text']
+  }
 
 function emptyDraft(chatId: number | null): DraftObject {
   return {
