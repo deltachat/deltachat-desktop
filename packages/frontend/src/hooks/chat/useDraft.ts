@@ -257,7 +257,7 @@ export function useDraft(
    * Support the Ctrl/Cmd+Up/Down shortcuts to select a message
    * to reply to and set the quote in the draft accordingly
    */
-  const onSelectReplyToShortcut = async (
+  const onSelectReplyToShortcut = (
     upOrDown:
       | KeybindAction.Composer_SelectReplyToUp
       | KeybindAction.Composer_SelectReplyToDown
