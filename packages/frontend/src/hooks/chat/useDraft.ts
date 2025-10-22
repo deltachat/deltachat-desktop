@@ -165,6 +165,16 @@ export function useDraft(
     loadDraft(chatId || 0)
   }, [chatId, loadDraft, isContactRequest])
 
+  /**
+   * Saving (uploading) the draft to the backend is not always enough.
+   * We also need to then immediately refetch the draft from the backend,
+   * in cases such as
+   * - Setting the quote. Because we only set its `messageId`,
+   *   without setting the quote's text and the author locally.
+   * - Adding an attachment ({@linkcode addFileToDraft}).
+   *   Because the file name might get changed
+   *   by the backend, and because we don't set the file size locally.
+   */
   const saveAndRefetchDraft = useCallback(async () => {
     if (chatId === null || !canSend) {
       return
