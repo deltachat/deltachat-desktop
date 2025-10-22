@@ -242,6 +242,7 @@ wssBackend.on('connection', function connection(ws) {
 })
 
 sslserver.on('upgrade', (request, socket, head) => {
+  // eslint-disable-next-line no-console
   socket.on('error', console.error)
 
   sessionParser(request as any, {} as any, () => {

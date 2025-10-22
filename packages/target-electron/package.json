@@ -58,6 +58,7 @@
     "@deltachat/jsonrpc-client": "catalog:",
     "@deltachat/stdio-rpc-server": "catalog:",
     "@deltachat/calls-webapp": "catalog:",
+    "escape-html": "^1.0.3",
     "mime-types": "catalog:",
     "sass": "catalog:",
     "ws": "7.5.10"
@@ -69,6 +70,7 @@
     "@types/adm-zip": "^0.5.5",
     "@types/chai": "^4.3.17",
     "@types/debounce": "^1.2.4",
+    "@types/escape-html": "^1.0.4",
     "@types/mime-types": "catalog:",
     "@types/mocha": "^10.0.7",
     "@types/node": "catalog:",

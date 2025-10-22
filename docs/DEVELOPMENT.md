@@ -73,7 +73,6 @@ This command in turn splits up into the following commands:
 - `pnpm -w check:types` -> Runs `tsc` to make sure the `TypeScript` code is ok
 - `pnpm -w check:lint` -> Runs [`eslint`](https://eslint.org) with [`TypeScript`](https://typescriptlang.org/) rules to check for common bad practices in all `.js`, `.ts` and `.tsx` files
 - `pnpm -w check:format` -> Runs [`Prettier`](https://prettier.io/) with rules inspired by [`StandardJS`](https://standardjs.com/) to check formatting in all `.scss`, `.js`, `.ts`, `.tsx`, `.json` and `.md` files
-- `pnpm -w check:log-conventions` -> checks for illegal use of `console.log()`
 
 Sometimes `eslint` complains on code lines that for whatever reason doesn't fit well with the project style. Lines like this can be ignored by using `// eslint-disable-next-line` on the line prior to the line you would like to ignore:
 

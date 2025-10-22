@@ -240,7 +240,7 @@ function BackgroundSelector({
         openColorInput(ev)
         break
       default:
-        /* ignore-console-log */
+        // eslint-disable-next-line no-console
         console.error("this shouldn't happen")
     }
   }

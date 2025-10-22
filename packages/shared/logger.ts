@@ -33,30 +33,35 @@ export const enum LogLevelString {
 
 const LoggerVariants = [
   {
+    // eslint-disable-next-line no-console
     log: console.debug,
     level: LogLevelString.DEBUG,
     emoji: '🕸️',
     symbol: '[D]',
   },
   {
+    // eslint-disable-next-line no-console
     log: console.info,
     level: LogLevelString.INFO,
     emoji: 'ℹ️',
     symbol: blue('[i]'),
   },
   {
+    // eslint-disable-next-line no-console
     log: console.warn,
     level: LogLevelString.WARNING,
     emoji: '⚠️',
     symbol: yellow('[w]'),
   },
   {
+    // eslint-disable-next-line no-console
     log: console.error,
     level: LogLevelString.ERROR,
     emoji: '🚨',
     symbol: red('[E]'),
   },
   {
+    // eslint-disable-next-line no-console
     log: console.error,
     level: LogLevelString.CRITICAL,
     emoji: '🚨🚨',
@@ -65,14 +70,14 @@ const LoggerVariants = [
 ]
 
 export function printProcessLogLevelInfo() {
-  /* ignore-console-log */
+  // eslint-disable-next-line no-console
   console.info(
     `%cLogging Levels:\n${LoggerVariants.map(v => `${v.emoji} ${v.level}`).join(
       '\n'
     )}`,
     emojiFontCss
   )
-  /* ignore-console-log */
+  // eslint-disable-next-line no-console
   console.info(
     `# Tips and Tricks for using the search filter in the browser console:
 
@@ -125,9 +130,9 @@ function log(
 ) {
   const variant = LoggerVariants[level]
   if (!handler) {
-    /* ignore-console-log */
+    // eslint-disable-next-line no-console
     console.log('Failed to log message - Handler not initialized yet')
-    /* ignore-console-log */
+    // eslint-disable-next-line no-console
     console.log(`Log Message: ${channel} ${level} ${args.join(' ')}`)
     throw Error('Failed to log message - Handler not initialized yet')
   }

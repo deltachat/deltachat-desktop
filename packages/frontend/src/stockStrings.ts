@@ -25,6 +25,8 @@ export async function updateCoreStrings() {
     | C.DC_STR_SERVER_TURNED_OFF
     | C.DC_STR_SYNC_MSG_SUBJECT
     | C.DC_STR_SYNC_MSG_BODY
+    | C.DC_STR_CANT_DECRYPT_OUTGOING_MSGS
+    | C.DC_STR_CANTDECRYPT_MSG_BODY
 
     // Deprecated, see
     // https://github.com/chatmail/core/blob/main/deltachat-ffi/deltachat.h
@@ -87,7 +89,6 @@ export async function updateCoreStrings() {
     // [C.DC_STR_ENCR_TRANSP]: tx('DC_STR_ENCR_TRANSP'),
     // [C.DC_STR_ENCR_NONE]: tx('DC_STR_ENCR_NONE'),
     [C.DC_STR_FINGERPRINTS]: tx('qrscan_fingerprint_label'),
-    [C.DC_STR_CANTDECRYPT_MSG_BODY]: tx('systemmsg_cannot_decrypt'),
     [C.DC_STR_ARCHIVEDCHATS]: tx('chat_archived_chats_title'),
     [C.DC_STR_CANNOT_LOGIN]: tx('login_error_cannot_login'),
     [C.DC_STR_DEVICE_MESSAGES]: tx('device_talk'),
@@ -223,7 +224,6 @@ export async function updateCoreStrings() {
     [C.DC_STR_YOU_REACTED]: tx('reaction_by_you'),
     [C.DC_STR_REACTED_BY]: tx('reaction_by_other'),
     [C.DC_STR_DONATION_REQUEST]: tx('donate_device_msg'),
-    [C.DC_STR_CANT_DECRYPT_OUTGOING_MSGS]: tx('systemmsg_cannot_decrypt'),
   }
 
   await BackendRemote.rpc.setStockStrings(strings)

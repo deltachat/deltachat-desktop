@@ -73,7 +73,7 @@ class ElectronTransport extends BaseTransport {
           // delete requestToLog.id
         }
 
-        /* ignore-console-log */
+        // eslint-disable-next-line no-console
         console.debug(
           '%c▼ %c[JSONRPC]',
           'color: red',
@@ -101,7 +101,7 @@ class ElectronTransport extends BaseTransport {
         idToRequestMap.delete(message.id)
       }, 60000)
 
-      /* ignore-console-log */
+      // eslint-disable-next-line no-console
       console.debug('%c▲ %c[JSONRPC]', 'color: green', 'color:grey', message)
       if ((message as any)['method']) {
         this.callCounterFunction((message as any).method)

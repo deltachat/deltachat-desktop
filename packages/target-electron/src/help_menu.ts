@@ -1,5 +1,5 @@
 export function getHelpMenu() {
-  /* ignore-console-log */
+  // eslint-disable-next-line no-console
   console.info(`Options:
 
 Flag

@@ -5,11 +5,10 @@
   "version": "2.22.0",
   "scripts": {
     "preinstall": "node ./bin/check-nodejs-version.js",
-    "check": "pnpm check:types && pnpm check:lint && pnpm check:format && pnpm check:target-versions && pnpm check:log-conventions",
+    "check": "pnpm check:types && pnpm check:lint && pnpm check:format && pnpm check:target-versions",
     "check:types": "pnpm -r --no-bail check:types",
     "check:lint": "eslint . --cache",
     "check:format": "prettier --check \"**/*.scss\" \"packages/**/*.{js,ts,tsx,json}\" \"**/*.md\"",
-    "check:log-conventions": "node ./bin/log-conventions",
     "fix": "pnpm fix:lint && pnpm fix:format",
     "fix:lint": "eslint . --cache --fix || true",
     "fix:format": "prettier --write \"**/*.scss\" \"packages/**/*.{js,ts,tsx,json}\" \"**/*.md\"",

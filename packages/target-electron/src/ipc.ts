@@ -74,7 +74,7 @@ export async function init(cwd: string, logHandler: LogHandler) {
       error,
       dcController.rpcServerPath
     )
-    /* ignore-console-log */
+    // eslint-disable-next-line no-console
     console.error(
       "Fatal: The DeltaChat Module couldn't be loaded. Please check if all dependencies for deltachat-core are installed!",
       error,

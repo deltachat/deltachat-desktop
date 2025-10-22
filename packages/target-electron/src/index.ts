@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-console
 console.time('init')
 
 import { mkdirSync, Stats, watchFile } from 'fs'
@@ -22,7 +23,7 @@ rawApp.commandLine.appendSwitch('host-rules', hostRules)
 rawApp.commandLine.appendSwitch('disable-features', 'IsolateSandboxedIframes')
 
 if (rc['version'] === true || rc['v'] === true) {
-  /* ignore-console-log */
+  // eslint-disable-next-line no-console
   console.info(BuildInfo.VERSION)
   process.exit()
 }
@@ -79,7 +80,7 @@ if (
   !app.requestSingleInstanceLock() &&
   !process.env.DC_TEST_DIR
 ) {
-  /* ignore-console-log */
+  // eslint-disable-next-line no-console
   console.error('Only one instance allowed. Quitting.')
   app.quit()
   process.exit(0)
@@ -113,7 +114,7 @@ process.on('uncaughtException', err => {
   if (log) {
     log.error('uncaughtError', error)
   } else {
-    /* ignore-console-log */
+    // eslint-disable-next-line no-console
     console.error('uncaughtException', error)
   }
   dialog.showErrorBox(
@@ -209,6 +210,7 @@ app.once('ipcReady' as any, () => {
   if (!mainWindow.window) {
     throw new Error('window does not exist, this should never happen')
   }
+  // eslint-disable-next-line no-console
   console.timeEnd('init')
   if (process.env.NODE_ENV === 'test') {
     mainWindow.window.maximize()

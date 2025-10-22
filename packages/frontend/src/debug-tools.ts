@@ -12,6 +12,7 @@ export function countCall(label: string) {
   }
 }
 export function printCallCounterResult() {
+  // eslint-disable-next-line no-console
   console.table(countCalls)
 }
 
