@@ -272,8 +272,6 @@ export function useDraft(
       } as Type.MessageQuote
       saveDraft()
 
-      // TODO perf: jumpToMessage is not instant, but it should be
-      // since the message is (almost?) always already rendered.
       jumpToMessage({
         accountId,
         msgId: messageId,
