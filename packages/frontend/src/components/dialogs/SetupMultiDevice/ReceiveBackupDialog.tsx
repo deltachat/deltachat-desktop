@@ -14,7 +14,7 @@ import styles from './styles.module.scss'
 import type { DialogProps } from '../../../contexts/DialogContext'
 import useAlertDialog from '../../../hooks/dialog/useAlertDialog'
 import { runtime } from '@deltachat-desktop/runtime-interface'
-import { SCAN_CONTEXT_TYPE } from '@deltachat-desktop/shared/constants'
+import { SCAN_CONTEXT_TYPE } from '../../../hooks/useProcessQr'
 
 const log = getLogger('renderer/dialogs/SetupMultiDevice/ReceiveBackup')
 

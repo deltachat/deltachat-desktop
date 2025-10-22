@@ -8,7 +8,7 @@ import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 
 import styles from './styles.module.scss'
-import { SCAN_CONTEXT_TYPE } from '@deltachat-desktop/shared/constants'
+import { SCAN_CONTEXT_TYPE } from '../../hooks/useProcessQr'
 
 type Props = {
   onChange: (

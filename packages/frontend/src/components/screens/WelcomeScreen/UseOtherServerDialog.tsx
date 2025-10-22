@@ -15,7 +15,7 @@ import type { DialogProps } from '../../../contexts/DialogContext'
 import QrCodeScanner from '../../dialogs/QrCodeScanner'
 import { CHATMAIL_INSTANCES_LIST_URL } from './chatmailInstances'
 import Icon from '../../Icon'
-import { SCAN_CONTEXT_TYPE } from '@deltachat-desktop/shared/constants'
+import { SCAN_CONTEXT_TYPE } from '../../../hooks/useProcessQr'
 
 export default function UseOtherServerDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()

@@ -15,7 +15,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/dialog/useDialog'
 
 import type { DialogProps } from '../../contexts/DialogContext'
-import { SCAN_CONTEXT_TYPE } from '@deltachat-desktop/shared/constants'
+import { SCAN_CONTEXT_TYPE } from '../../hooks/useProcessQr'
 
 export default function InvalidUnencryptedMailDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()

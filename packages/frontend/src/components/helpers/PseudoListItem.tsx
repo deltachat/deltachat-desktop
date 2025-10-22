@@ -9,7 +9,7 @@ import { BackendRemote } from '../../backend-com'
 import { ContactListItem } from '../contact/ContactListItem'
 import { useRovingTabindex } from '../../contexts/RovingTabindex'
 import { useRpcFetch } from '../../hooks/useFetch'
-import { SCAN_CONTEXT_TYPE } from '@deltachat-desktop/shared/constants'
+import { SCAN_CONTEXT_TYPE } from '../../hooks/useProcessQr'
 
 export function PseudoListItem(
   props: PropsWithChildren<{

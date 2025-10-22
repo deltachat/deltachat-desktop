@@ -5,7 +5,7 @@ import { DialogWithHeader } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
-import { SCAN_CONTEXT_TYPE } from '@deltachat-desktop/shared/constants'
+import { SCAN_CONTEXT_TYPE } from '../../hooks/useProcessQr'
 
 /**
  * used to scan a QR code in other context

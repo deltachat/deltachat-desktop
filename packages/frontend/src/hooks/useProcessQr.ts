@@ -13,7 +13,6 @@ import { ReceiveBackupProgressDialog } from '../components/dialogs/SetupMultiDev
 import { ScreenContext } from '../contexts/ScreenContext'
 import { getLogger } from '../../../shared/logger'
 import { processQr, QrWithUrl } from '../backend/qr'
-import { SCAN_CONTEXT_TYPE } from '@deltachat-desktop/shared/constants'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import type { WelcomeQrWithUrl } from '../contexts/InstantOnboardingContext'
@@ -30,6 +29,15 @@ const ALLOWED_QR_CODES_ON_WELCOME_SCREEN: T.Qr['kind'][] = [
   'text',
   'url',
 ]
+
+export const enum SCAN_CONTEXT_TYPE {
+  /** default context, no restrictions on QR code types */
+  DEFAULT = 'DEFAULT',
+  /** onboarding with another server than the default server or contact/group invite code */
+  OTHER_SERVER = 'OTHER_SERVER',
+  /** for multi-device setup */
+  TRANSFER_BACKUP = 'TRANSFER_BACKUP',
+}
 
 const log = getLogger('renderer/hooks/useProcessQr')
 

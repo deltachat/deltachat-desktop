@@ -12,7 +12,7 @@ import WebxdcSaveToChatDialog from './dialogs/WebxdcSendToChat'
 import { saveLastChatId } from '../backend/chat'
 import useChat from '../hooks/chat/useChat'
 import SettingsStoreInstance from '../stores/settings'
-import { SCAN_CONTEXT_TYPE } from '@deltachat-desktop/shared/constants'
+import { SCAN_CONTEXT_TYPE } from '../hooks/useProcessQr'
 
 type Props = {
   accountId?: number
