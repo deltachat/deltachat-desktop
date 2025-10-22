@@ -156,7 +156,6 @@ export function useDraft(
 
   useEffect(() => {
     log.debug('reloading chat because id changed', chatId)
-    //load
     loadDraft(chatId || 0)
   }, [chatId, loadDraft, isContactRequest])
 
