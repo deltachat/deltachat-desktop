@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react'
 import MicRecorder from './MicRecorder'
 import styles from './styles.module.scss'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
@@ -57,7 +63,16 @@ const Timer = () => {
 const VolumeMeter = (prop: { volume: number }) => {
   const steps = 10
   const volumeBarRef = useRef<HTMLDivElement>(null)
-  const totalWidth = Number(volumeBarRef.current?.clientWidth) || 0
+  const [totalWidth, setTotalWidth] = useState(0)
+  useLayoutEffect(() => {
+    const el = volumeBarRef.current
+    if (!el) return
+    const updateWidth = () => setTotalWidth(el.clientWidth)
+    const ro = new ResizeObserver(updateWidth)
+    ro.observe(el)
+    updateWidth()
+    return () => ro.disconnect()
+  }, [])
   // doubling the volume shows a more realistic volume level
   const level = Math.min(totalWidth * prop.volume * 2, totalWidth)
   const levelWidth = totalWidth > 0 ? `${totalWidth - level}px` : '100%'
@@ -172,10 +187,14 @@ export const AudioRecorder = ({
     }
   }, [onRecordingCancel])
 
-  if (!recording) {
-    // make sure recorder is stopped when still running
-    recorder.current?.stop()
+  useEffect(() => {
+    if (!recording) {
+      // make sure recorder is stopped when still running
+      recorder.current?.stop()
+    }
+  }, [recording])
 
+  if (!recording) {
     return (
       <button
         aria-label={tx('voice_send')}
