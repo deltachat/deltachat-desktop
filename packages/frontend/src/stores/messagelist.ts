@@ -78,19 +78,20 @@ export function useMessageList(
   // when it's released.
   const settingsStore = useSettingsStore()[0]
 
-  const incomingMessageAudioElement_ = useRef<HTMLAudioElement>(null)
-  if (incomingMessageAudioElement_.current == null) {
-    incomingMessageAudioElement_.current = document.createElement('audio')
-    incomingMessageAudioElement_.current.src = './audio/sound_in.wav'
-  }
-  const incomingMessageAudioElement = incomingMessageAudioElement_.current
-  {
+  const incomingMessageAudioElementRef = useRef<HTMLAudioElement>(null)
+
+  useEffect(() => {
+    if (incomingMessageAudioElementRef.current == null) {
+      incomingMessageAudioElementRef.current = document.createElement('audio')
+      incomingMessageAudioElementRef.current.src = './audio/sound_in.wav'
+    }
+
     const volume = settingsStore?.desktopSettings.inChatSoundsVolume
     if (volume != null) {
       // Note that `volume` could be 0.
-      incomingMessageAudioElement.volume = volume
+      incomingMessageAudioElementRef.current!.volume = volume
     }
-  }
+  }, [settingsStore?.desktopSettings.inChatSoundsVolume])
 
   useEffect(() => {
     const cleanup = [
@@ -106,8 +107,8 @@ export function useMessageList(
           // Note that the element might already be playing,
           // if we received two or more messages rapidly.
           // In that case it could be nice to play multiple sounds in parallel.
-          incomingMessageAudioElement.currentTime = 0
-          incomingMessageAudioElement.play()
+          incomingMessageAudioElementRef.current!.currentTime = 0
+          incomingMessageAudioElementRef.current!.play()
         } else {
           store.log.debug(
             `chatId of IncomingMsg event (${chatId}) doesn't match id of selected chat (${eventChatId}). Skipping.`
@@ -144,11 +145,12 @@ export function useMessageList(
       }),
     ]
     return () => cleanup.forEach(off => off())
-  }, [accountId, chatId, incomingMessageAudioElement, store])
+  }, [accountId, chatId, store])
 
   const [state, setState] = useState(store.getState())
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setState(store.getState())
     store.subscribe(setState)
     return () => store.unsubscribe(setState)
