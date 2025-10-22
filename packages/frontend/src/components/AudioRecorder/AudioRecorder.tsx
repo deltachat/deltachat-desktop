@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import MicRecorder from './MicRecorder'
 import styles from './styles.module.scss'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
@@ -62,35 +56,25 @@ const Timer = () => {
  */
 const VolumeMeter = (prop: { volume: number }) => {
   const steps = 10
-  const volumeBarRef = useRef<HTMLDivElement>(null)
-  const [totalWidth, setTotalWidth] = useState(0)
-  useLayoutEffect(() => {
-    const el = volumeBarRef.current
-    if (!el) return
-    const updateWidth = () => setTotalWidth(el.clientWidth)
-    const ro = new ResizeObserver(updateWidth)
-    ro.observe(el)
-    updateWidth()
-    return () => ro.disconnect()
-  }, [])
   // doubling the volume shows a more realistic volume level
-  const level = Math.min(totalWidth * prop.volume * 2, totalWidth)
-  const levelWidth = totalWidth > 0 ? `${totalWidth - level}px` : '100%'
+  const level = Math.min(prop.volume * 2, 1)
+  const levelPercentage = `${(1 - level) * 100}%`
+
   return (
     <div
       role='meter'
       aria-valuemin={0}
-      aria-valuemax={totalWidth}
+      aria-valuemax={1}
       aria-valuenow={level}
       className={styles.volumeBarContainer}
     >
       <div className={styles.volumeBar}>
-        <div ref={volumeBarRef} className={styles.mask}>
+        <div className={styles.mask}>
           {Array.from({ length: steps }).map((_, index) => (
             <div key={index} className={styles.step} />
           ))}
         </div>
-        <div className={styles.level} style={{ width: `${levelWidth}` }} />
+        <div className={styles.level} style={{ width: levelPercentage }} />
         <div className={styles.colorBackground} />
       </div>
     </div>
