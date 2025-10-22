@@ -69,7 +69,7 @@ export function useDraft(
      * This will not save the draft to the backend.
      */
     _setDraftStateButKeepTextareaValue,
-  ] = useState<DraftObject>(emptyDraft(chatId))
+  ] = useState<DraftObject>(() => emptyDraft(chatId))
 
   /**
    * `draftRef.current` gets set to `draftState` on every render.
@@ -82,7 +82,7 @@ export function useDraft(
    *
    * TODO figure out why this is needed.
    */
-  const draftRef = useRef<DraftObject>(emptyDraft(chatId))
+  const draftRef = useRef<DraftObject>(draftState)
   draftRef.current = draftState
 
   /**
