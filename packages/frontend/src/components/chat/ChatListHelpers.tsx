@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { getLogger } from '../../../../shared/logger'
 import { debounce } from 'debounce'
 import { BackendRemote, onDCEvent } from '../../backend-com'
@@ -107,23 +107,18 @@ export function useChatList(
   const accountId = window.__selectedAccountId
   if (!queryStr) queryStr = ''
 
-  const initialListFlags = useRef(listFlags)
-  const initialQueryStr = useRef(queryStr)
-  const initialQueryContactId = useRef(queryContactId)
+  const [initialListFlags] = useState(listFlags)
+  const [initialQueryStr] = useState(queryStr)
+  const [initialQueryContactId] = useState(queryContactId)
 
   const areQueryParamsInitial: boolean =
-    listFlags === initialListFlags.current &&
-    queryStr === initialQueryStr.current &&
-    queryContactId === initialQueryContactId.current
+    listFlags === initialListFlags &&
+    queryStr === initialQueryStr &&
+    queryContactId === initialQueryContactId
   const chatListEntriesForInitialQueryParams = useChatListSimple(
     // Here let's never pass `null`, so that switching to the "default" view
     // is always up to date and switching back to it is instant.
-    [
-      accountId,
-      initialListFlags.current,
-      initialQueryStr.current,
-      initialQueryContactId.current,
-    ]
+    [accountId, initialListFlags, initialQueryStr, initialQueryContactId]
   )
   const chatListEntriesForNonInitialQueryParams = useChatListSimple(
     // When query params are initial, `chatListEntriesForNonInitialQueryParams`
