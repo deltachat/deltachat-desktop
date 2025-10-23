@@ -85,8 +85,9 @@ export function useDraft(
    * Having this `ref` is just a hack to perform direct state mutations
    * without triggering a re-render or linter's warnings about the missing
    * `draftState` hook dependency.
-   *
-   * TODO figure out why this is needed.
+   * @see {@linkcode saveAndRefetchDraft_} docs about the cases
+   * where it's nice to update the draft object, but not re-render
+   * until we have re-fetched it from the backend.
    */
   const draftRef = useRef<DraftObject>(draftState)
   draftRef.current = draftState
