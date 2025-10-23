@@ -277,7 +277,13 @@ export function useDraft(
       | KeybindAction.Composer_SelectReplyToUp
       | KeybindAction.Composer_SelectReplyToDown
   ) => {
-    if (chatId == undefined || !canSend) {
+    if (
+      saveAndRefetchDraft == null ||
+      // These are implied by `saveAndRefetchDraft == null`,
+      // but TypeScript doesn't know
+      chatId == undefined ||
+      !canSend
+    ) {
       return
     }
     const quoteMessage = (messageId: number) => {
@@ -285,7 +291,7 @@ export function useDraft(
         kind: 'WithMessage',
         messageId,
       } as Type.MessageQuote
-      saveAndRefetchDraft?.()
+      saveAndRefetchDraft()
 
       jumpToMessage({
         accountId,
