@@ -10,7 +10,7 @@ import {
   defaultChatViewState,
 } from './chat/chat_view_reducer'
 import { ChatStoreScheduler } from './chat/chat_scheduler'
-import { useEffect, useRef, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import { debounce } from 'debounce'
 import { getLogger } from '@deltachat-desktop/shared/logger'
@@ -78,20 +78,17 @@ export function useMessageList(
   // when it's released.
   const settingsStore = useSettingsStore()[0]
 
-  const incomingMessageAudioElementRef = useRef<HTMLAudioElement>(null)
-
-  useMemo(() => {
-    if (incomingMessageAudioElementRef.current == null) {
-      incomingMessageAudioElementRef.current = document.createElement('audio')
-      incomingMessageAudioElementRef.current.src = './audio/sound_in.wav'
-    }
-
-    const volume = settingsStore?.desktopSettings.inChatSoundsVolume
-    if (volume != null) {
-      // Note that `volume` could be 0.
-      incomingMessageAudioElementRef.current!.volume = volume
-    }
-  }, [settingsStore?.desktopSettings.inChatSoundsVolume])
+  const incomingMessageAudioElement = useMemo(() => {
+    const el = document.createElement('audio')
+    el.src = './audio/sound_in.wav'
+    return el
+  }, [])
+  const volume = settingsStore?.desktopSettings.inChatSoundsVolume
+  if (volume != null) {
+    // Note that `volume` could be 0.
+    // eslint-disable-next-line react-hooks/immutability
+    incomingMessageAudioElement.volume = volume
+  }
 
   useEffect(() => {
     const cleanup = [
@@ -107,8 +104,8 @@ export function useMessageList(
           // Note that the element might already be playing,
           // if we received two or more messages rapidly.
           // In that case it could be nice to play multiple sounds in parallel.
-          incomingMessageAudioElementRef.current!.currentTime = 0
-          incomingMessageAudioElementRef.current!.play()
+          incomingMessageAudioElement.currentTime = 0
+          incomingMessageAudioElement.play()
         } else {
           store.log.debug(
             `chatId of IncomingMsg event (${chatId}) doesn't match id of selected chat (${eventChatId}). Skipping.`
@@ -145,7 +142,7 @@ export function useMessageList(
       }),
     ]
     return () => cleanup.forEach(off => off())
-  }, [accountId, chatId, store])
+  }, [accountId, chatId, incomingMessageAudioElement, store])
 
   const [state, setState] = useState(store.getState())
 
