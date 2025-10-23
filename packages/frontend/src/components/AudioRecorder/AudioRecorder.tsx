@@ -56,26 +56,25 @@ const Timer = () => {
  */
 const VolumeMeter = (prop: { volume: number }) => {
   const steps = 10
-  const volumeBarRef = useRef<HTMLDivElement>(null)
-  const totalWidth = Number(volumeBarRef.current?.clientWidth) || 0
   // doubling the volume shows a more realistic volume level
-  const level = Math.min(totalWidth * prop.volume * 2, totalWidth)
-  const levelWidth = totalWidth > 0 ? `${totalWidth - level}px` : '100%'
+  const level = Math.min(prop.volume * 2, 1)
+  const levelPercentage = `${(1 - level) * 100}%`
+
   return (
     <div
       role='meter'
       aria-valuemin={0}
-      aria-valuemax={totalWidth}
+      aria-valuemax={1}
       aria-valuenow={level}
       className={styles.volumeBarContainer}
     >
       <div className={styles.volumeBar}>
-        <div ref={volumeBarRef} className={styles.mask}>
+        <div className={styles.mask}>
           {Array.from({ length: steps }).map((_, index) => (
             <div key={index} className={styles.step} />
           ))}
         </div>
-        <div className={styles.level} style={{ width: `${levelWidth}` }} />
+        <div className={styles.level} style={{ width: levelPercentage }} />
         <div className={styles.colorBackground} />
       </div>
     </div>
@@ -172,10 +171,14 @@ export const AudioRecorder = ({
     }
   }, [onRecordingCancel])
 
-  if (!recording) {
-    // make sure recorder is stopped when still running
-    recorder.current?.stop()
+  useEffect(() => {
+    if (!recording) {
+      // make sure recorder is stopped when still running
+      recorder.current?.stop()
+    }
+  }, [recording])
 
+  if (!recording) {
     return (
       <button
         aria-label={tx('voice_send')}

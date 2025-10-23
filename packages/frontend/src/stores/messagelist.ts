@@ -10,7 +10,7 @@ import {
   defaultChatViewState,
 } from './chat/chat_view_reducer'
 import { ChatStoreScheduler } from './chat/chat_scheduler'
-import { useEffect, useRef, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce'
 import { debounce } from 'debounce'
 import { getLogger } from '@deltachat-desktop/shared/logger'
@@ -78,18 +78,16 @@ export function useMessageList(
   // when it's released.
   const settingsStore = useSettingsStore()[0]
 
-  const incomingMessageAudioElement_ = useRef<HTMLAudioElement>(null)
-  if (incomingMessageAudioElement_.current == null) {
-    incomingMessageAudioElement_.current = document.createElement('audio')
-    incomingMessageAudioElement_.current.src = './audio/sound_in.wav'
-  }
-  const incomingMessageAudioElement = incomingMessageAudioElement_.current
-  {
-    const volume = settingsStore?.desktopSettings.inChatSoundsVolume
-    if (volume != null) {
-      // Note that `volume` could be 0.
-      incomingMessageAudioElement.volume = volume
-    }
+  const incomingMessageAudioElement = useMemo(() => {
+    const el = document.createElement('audio')
+    el.src = './audio/sound_in.wav'
+    return el
+  }, [])
+  const volume = settingsStore?.desktopSettings.inChatSoundsVolume
+  if (volume != null) {
+    // Note that `volume` could be 0.
+    // eslint-disable-next-line react-hooks/immutability
+    incomingMessageAudioElement.volume = volume
   }
 
   useEffect(() => {

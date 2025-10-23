@@ -7,6 +7,7 @@ export function useStore<T extends Store<any>>(
   const [state, setState] = useState(StoreInstance.getState())
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setState(StoreInstance.getState())
     return StoreInstance.subscribe(setState)
   }, [StoreInstance])
