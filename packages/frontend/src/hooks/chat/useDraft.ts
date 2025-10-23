@@ -197,9 +197,7 @@ export function useDraft(
         await BackendRemote.rpc.removeDraft(accountId, chatId)
       }
 
-      const newDraft = chatId
-        ? await BackendRemote.rpc.getDraft(accountId, chatId)
-        : null
+      const newDraft = await BackendRemote.rpc.getDraft(accountId, chatId)
       if (newDraft) {
         _setDraftStateButKeepTextareaValue(old => ({
           ...old,
