@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { T } from '@deltachat/jsonrpc-client'
 import { basename } from 'path'
 
@@ -175,54 +175,59 @@ export function useDraft(
    *   Because the file name might get changed
    *   by the backend, and because we don't set the file size locally.
    */
-  const saveAndRefetchDraft = useCallback(async () => {
-    if (chatId === null || !canSend) {
-      return
-    }
-    const accountId = selectedAccountId()
+  const saveAndRefetchDraft_ = useCallback(
+    async (chatId: number) => {
+      const accountId = selectedAccountId()
 
-    const draft = draftRef.current
-    if (
-      (draft.text && draft.text.length > 0) ||
-      (draft.file && draft.file != '') ||
-      !!draft.quote
-    ) {
-      const fileName =
-        draft.fileName ?? (draft.file ? basename(draft.file) : null)
-      await BackendRemote.rpc.miscSetDraft(
-        accountId,
-        chatId,
-        draft.text,
-        draft.file !== '' ? draft.file : null,
-        fileName ?? null,
-        draft.quote?.kind === 'WithMessage' ? draft.quote.messageId : null,
-        draft.viewType
-      )
-    } else {
-      await BackendRemote.rpc.removeDraft(accountId, chatId)
-    }
+      const draft = draftRef.current
+      if (
+        (draft.text && draft.text.length > 0) ||
+        (draft.file && draft.file != '') ||
+        !!draft.quote
+      ) {
+        const fileName =
+          draft.fileName ?? (draft.file ? basename(draft.file) : null)
+        await BackendRemote.rpc.miscSetDraft(
+          accountId,
+          chatId,
+          draft.text,
+          draft.file !== '' ? draft.file : null,
+          fileName ?? null,
+          draft.quote?.kind === 'WithMessage' ? draft.quote.messageId : null,
+          draft.viewType
+        )
+      } else {
+        await BackendRemote.rpc.removeDraft(accountId, chatId)
+      }
 
-    const newDraft = chatId
-      ? await BackendRemote.rpc.getDraft(accountId, chatId)
-      : null
-    if (newDraft) {
-      _setDraftStateButKeepTextareaValue(old => ({
-        ...old,
-        id: newDraft.id,
-        file: newDraft.file,
-        fileBytes: newDraft.fileBytes,
-        fileMime: newDraft.fileMime,
-        fileName: newDraft.fileName,
-        viewType: newDraft.viewType,
-        quote: newDraft.quote,
-        vcardContact: newDraft.vcardContact,
-      }))
-      // don't load text to prevent bugging back
-    } else {
-      clearDraftStateButKeepTextareaValue()
-    }
-    inputRef.current?.setState({ loadingDraft: false })
-  }, [chatId, clearDraftStateButKeepTextareaValue, canSend, inputRef])
+      const newDraft = chatId
+        ? await BackendRemote.rpc.getDraft(accountId, chatId)
+        : null
+      if (newDraft) {
+        _setDraftStateButKeepTextareaValue(old => ({
+          ...old,
+          id: newDraft.id,
+          file: newDraft.file,
+          fileBytes: newDraft.fileBytes,
+          fileMime: newDraft.fileMime,
+          fileName: newDraft.fileName,
+          viewType: newDraft.viewType,
+          quote: newDraft.quote,
+          vcardContact: newDraft.vcardContact,
+        }))
+        // don't load text to prevent bugging back
+      } else {
+        clearDraftStateButKeepTextareaValue()
+      }
+      inputRef.current?.setState({ loadingDraft: false })
+    },
+    [clearDraftStateButKeepTextareaValue, inputRef]
+  )
+  const saveAndRefetchDraft = useMemo(
+    () =>
+      chatId != null && canSend ? () => saveAndRefetchDraft_(chatId) : null,
+    [canSend, chatId, saveAndRefetchDraft_]
+  )
 
   const updateDraftText = (text: string, InputChatId: number) => {
     if (chatId !== InputChatId) {
@@ -231,7 +236,7 @@ export function useDraft(
       if (draftRef.current) {
         draftRef.current.text = text // don't need to rerender on text change
       }
-      saveAndRefetchDraft()
+      saveAndRefetchDraft?.()
     }
   }
 
@@ -239,14 +244,14 @@ export function useDraft(
     if (draftRef.current) {
       draftRef.current.quote = null
     }
-    saveAndRefetchDraft()
+    saveAndRefetchDraft?.()
     inputRef.current?.focus()
   }, [inputRef, saveAndRefetchDraft])
 
   const removeFile = useCallback(() => {
     draftRef.current.file = ''
     draftRef.current.viewType = 'Text'
-    saveAndRefetchDraft()
+    saveAndRefetchDraft?.()
     inputRef.current?.focus()
   }, [inputRef, saveAndRefetchDraft])
 
@@ -256,7 +261,7 @@ export function useDraft(
       draftRef.current.fileName = fileName
       draftRef.current.viewType = viewType
       inputRef.current?.focus()
-      return saveAndRefetchDraft()
+      return saveAndRefetchDraft?.()
     },
     [inputRef, saveAndRefetchDraft]
   )
@@ -280,7 +285,7 @@ export function useDraft(
         kind: 'WithMessage',
         messageId,
       } as Type.MessageQuote
-      saveAndRefetchDraft()
+      saveAndRefetchDraft?.()
 
       jumpToMessage({
         accountId,
@@ -368,7 +373,7 @@ export function useDraft(
         kind: 'WithMessage',
         messageId,
       } as Partial<Type.MessageQuote> as any as Type.MessageQuote
-      saveAndRefetchDraft()
+      saveAndRefetchDraft?.()
       inputRef.current?.focus()
     }
     return () => {
