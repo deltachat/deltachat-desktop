@@ -117,52 +117,49 @@ export function useDraft(
     setDraftStateAndUpdateTextareaValue(emptyDraft(chatId))
   }, [chatId, setDraftStateAndUpdateTextareaValue])
 
-  const loadDraft = useCallback(
-    (chatId: number) => {
-      if (chatId === null || !canSend) {
+  const loadDraft = useCallback(() => {
+    if (chatId === null || !canSend) {
+      clearDraftStateButKeepTextareaValue()
+      return
+    }
+    inputRef.current?.setState({ loadingDraft: true })
+    BackendRemote.rpc.getDraft(selectedAccountId(), chatId).then(newDraft => {
+      if (!newDraft) {
+        log.debug('no draft')
         clearDraftStateButKeepTextareaValue()
-        return
+        inputRef.current?.setText('')
+      } else {
+        _setDraftStateButKeepTextareaValue(old => ({
+          ...old,
+          id: newDraft.id,
+          text: newDraft.text || '',
+          file: newDraft.file,
+          fileBytes: newDraft.fileBytes,
+          fileMime: newDraft.fileMime,
+          fileName: newDraft.fileName,
+          viewType: newDraft.viewType,
+          quote: newDraft.quote,
+          vcardContact: newDraft.vcardContact,
+        }))
+        inputRef.current?.setText(newDraft.text)
       }
-      inputRef.current?.setState({ loadingDraft: true })
-      BackendRemote.rpc.getDraft(selectedAccountId(), chatId).then(newDraft => {
-        if (!newDraft) {
-          log.debug('no draft')
-          clearDraftStateButKeepTextareaValue()
-          inputRef.current?.setText('')
-        } else {
-          _setDraftStateButKeepTextareaValue(old => ({
-            ...old,
-            id: newDraft.id,
-            text: newDraft.text || '',
-            file: newDraft.file,
-            fileBytes: newDraft.fileBytes,
-            fileMime: newDraft.fileMime,
-            fileName: newDraft.fileName,
-            viewType: newDraft.viewType,
-            quote: newDraft.quote,
-            vcardContact: newDraft.vcardContact,
-          }))
-          inputRef.current?.setText(newDraft.text)
-        }
-        inputRef.current?.setState({ loadingDraft: false })
-        setTimeout(() => {
-          inputRef.current?.focus()
-        })
+      inputRef.current?.setState({ loadingDraft: false })
+      setTimeout(() => {
+        inputRef.current?.focus()
       })
-    },
-    [clearDraftStateButKeepTextareaValue, inputRef, canSend]
-  )
+    })
+  }, [chatId, clearDraftStateButKeepTextareaValue, inputRef, canSend])
 
   useEffect(() => {
-    window.__reloadDraft = loadDraft.bind(null, chatId || 0)
+    window.__reloadDraft = loadDraft
     return () => {
       window.__reloadDraft = null
     }
-  }, [chatId, loadDraft])
+  }, [loadDraft])
 
   useEffect(() => {
     log.debug('reloading chat because id changed', chatId)
-    loadDraft(chatId || 0)
+    loadDraft()
   }, [chatId, loadDraft, isContactRequest])
 
   /**
