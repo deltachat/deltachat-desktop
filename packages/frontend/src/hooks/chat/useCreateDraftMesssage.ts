@@ -9,7 +9,7 @@ export type CreateDraftMessage = (
   accountId: number,
   chatId: number,
   messageText: string,
-  file?: { path: string; name: string }
+  file?: { path: string; name?: string }
 ) => Promise<void>
 
 /**
