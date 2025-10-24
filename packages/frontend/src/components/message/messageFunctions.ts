@@ -103,9 +103,12 @@ export function openMessageInfo(openDialog: OpenDialog, message: Type.Message) {
   openDialog(MessageDetail, { id: message.id })
 }
 
-export function setQuoteInDraft(messageId: number) {
+// TODO convert more usaged of this function
+export function setQuoteInDraft(
+  messageOrMessageId: number | T.Message['quote']
+) {
   if (window.__setQuoteInDraft) {
-    window.__setQuoteInDraft(messageId)
+    window.__setQuoteInDraft(messageOrMessageId)
   } else {
     throw new Error('window.__setQuoteInDraft undefined')
   }

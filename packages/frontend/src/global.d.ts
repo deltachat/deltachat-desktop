@@ -18,7 +18,10 @@ declare global {
     __settingsOpened: boolean
     __keybindingsDialogOpened: boolean
     __aboutDialogOpened: boolean
-    __setQuoteInDraft: ((msgId: number) => void) | null
+    // TODO narrower type. Only necessary props.
+    __setQuoteInDraft:
+      | ((messageOrMessageId: number | T.Message['quote']) => void)
+      | null
     __enterEditMessageMode: ((messageToEdit: T.Message) => void) | null
     __reloadDraft: (() => void) | null
     __chatlistSetSearch:
