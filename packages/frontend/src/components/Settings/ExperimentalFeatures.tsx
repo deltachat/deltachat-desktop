@@ -95,10 +95,6 @@ export function ExperimentalFeatures() {
         settingsKey='enableRelatedChats'
         label={tx('related_chats')}
       />
-      <DesktopSettingsSwitch
-        settingsKey='experimentalEnableMarkdownInMessages'
-        label='Render Markdown in Messages'
-      />
       {runtime.getRuntimeInfo().isContentProtectionSupported && (
         <DesktopSettingsSwitch
           settingsKey='contentProtectionEnabled'
