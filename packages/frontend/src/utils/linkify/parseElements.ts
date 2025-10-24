@@ -23,8 +23,8 @@ export function parseElements(message: string): linkify.MultiToken[] {
     })
     return elements
   } catch (error) {
-    /* ignore-console-log */
+    // eslint-disable-next-line no-console
     console.error('parseElements failed:', { input: message, error })
-    return []
+    return [{ t: 'text', v: message } as linkify.MultiToken]
   }
 }

@@ -6,6 +6,11 @@
 - show appropriate messages when scanning wrong qr codes #5563
 - fix: remove the option to select info messages with Ctrl + Up/Down #5337
 
+### Changed
+- replace rust/wasm message-parser with javascript lib linkify
+  - removes experimental markdown support
+  - fixes some link parsing issues
+
 <a id="2_22_0"></a>
 
 ## [2.22.0] - 2025-10-17
@@ -45,9 +50,6 @@
   - withdraw all QR codes when one is withdrawn
   - do not create a group if the sender includes self in the To field
 - minor visual improvements to keyboard shortcut preview #5495
-- replace rust/wasm message-parser with javascript lib linkify
-  - removes experimental markdown support
-  - fixes some link parsing issues
 
 ### Fixed
 - Display message error even for messages that are not OutFailed #5498
