@@ -2,6 +2,9 @@
 
 ## [Unreleased][unreleased]
 
+### Added
+- enable drag & drop for the account order
+
 ### Fixed
 - show appropriate messages when scanning wrong qr codes #5563
 - fix: remove the option to select info messages with Ctrl + Up/Down #5337

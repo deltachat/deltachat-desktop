@@ -58,6 +58,34 @@ export async function switchToProfile(
   )
 }
 
+/**
+ * Helper function to wait for all account items to finish loading
+ * by waiting for all aria-busy attributes to be false and the text not being '⏳'
+ * note that even if there are no accounts yet, there will be one account item
+ * created preparing the InstantOnboarding process.
+ */
+export async function waitForAccountItemsToFinishLoading(
+  page: Page
+): Promise<void> {
+  await page.waitForFunction(() => {
+    const accountItems = document.querySelectorAll(
+      '[data-testid^="account-item-"]'
+    )
+
+    // If no account items exist return false,
+    // no accounts loaded yet so keep waiting
+    if (accountItems.length === 0) {
+      return false
+    }
+
+    return Array.from(accountItems).every(item => {
+      const ariaBusy = item.getAttribute('aria-busy')
+      const text = item.textContent
+      return ariaBusy === 'false' && text !== null && text !== '⏳'
+    })
+  })
+}
+
 export async function sendMessage(
   page: Page,
   userName: string,
