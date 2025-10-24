@@ -14,7 +14,6 @@ import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
 import useChat from '../../hooks/chat/useChat'
 import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
 import useCreateChatByEmail from '../../hooks/chat/useCreateChatByEmail'
-import { ChatView } from '../../contexts/ChatContext'
 
 const log = getLogger('renderer/message-markdown')
 
@@ -267,7 +266,7 @@ function BotCommandSuggestion({
   const openConfirmationDialog = useConfirmationDialog()
   const messageDisplay = useContext(MessagesDisplayContext)
   const accountId = selectedAccountId()
-  const { selectChat, setChatView } = useChat()
+  const { selectChat } = useChat()
 
   const applySuggestion = async () => {
     if (!messageDisplay) {
@@ -284,11 +283,6 @@ function BotCommandSuggestion({
       // also select the chat and close the profile window if this is the case
       selectChat(accountId, chatId)
       messageDisplay.closeProfileDialog()
-    } else if (messageDisplay.context == 'chat_map') {
-      chatId = messageDisplay.chatId
-      // go back to chat view
-      selectChat(accountId, chatId)
-      setChatView(ChatView.MessageList)
     } else if (messageDisplay.context == 'chat_messagelist') {
       // nothing special to do
       chatId = messageDisplay.chatId
