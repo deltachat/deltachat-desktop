@@ -365,6 +365,47 @@ export function useDraft(
     [draftState, inputRef, saveAndRefetchDraft, debouncedSaveAndRefetchDraft]
   )
 
+  const quoteMessage = useMemo(
+    () =>
+      setAndDebouncedSaveAndRefetchDraft == null ||
+      debouncedSaveAndRefetchDraft == null
+        ? null
+        : (messageOrMessageId: number | T.Message) => {
+            let newDraftState: typeof draftState
+            let needRefetch: boolean
+            const isFullMessage = typeof messageOrMessageId !== 'number'
+            if (isFullMessage) {
+              const fullQuote = messageToQuote(messageOrMessageId)
+              newDraftState = {
+                ...draftState,
+                quote: fullQuote.quote,
+              }
+              needRefetch = fullQuote.needRefetch
+            } else {
+              newDraftState = {
+                ...draftState,
+                quote: {
+                  kind: 'WithMessage',
+                  messageId: messageOrMessageId,
+                },
+              }
+              needRefetch = true
+            }
+
+            setAndDebouncedSaveAndRefetchDraft(newDraftState)
+            if (needRefetch) {
+              // Need an immediate refetch, to get the "full" quote,
+              // with the author's name, text, etc.
+              debouncedSaveAndRefetchDraft.flush()
+            }
+          },
+    [
+      draftState,
+      setAndDebouncedSaveAndRefetchDraft,
+      debouncedSaveAndRefetchDraft,
+    ]
+  )
+
   const { jumpToMessage } = useMessage()
 
   /**
@@ -377,6 +418,7 @@ export function useDraft(
       | KeybindAction.Composer_SelectReplyToDown
   ) => {
     if (
+      quoteMessage == null ||
       setAndDebouncedSaveAndRefetchDraft == null ||
       // These are implied by `setAndDebouncedSaveAndRefetchDraft == null`,
       // but TypeScript doesn't know
@@ -386,21 +428,12 @@ export function useDraft(
     ) {
       return
     }
-    const quoteMessage = (messageId: number) => {
-      setAndDebouncedSaveAndRefetchDraft({
-        ...draftState,
-        quote: {
-          kind: 'WithMessage',
-          messageId,
-        },
-      })
-      // Need an immediate refetch, to get the "full" quote,
-      // with the author's name, text, etc.
-      debouncedSaveAndRefetchDraft.flush()
-
+    const quoteAndJumpToMessage = (messageOrMessageId: number | T.Message) => {
+      const isFullMessage = typeof messageOrMessageId !== 'number'
+      quoteMessage(messageOrMessageId)
       jumpToMessage({
         accountId,
-        msgId: messageId,
+        msgId: isFullMessage ? messageOrMessageId.id : messageOrMessageId,
         msgChatId: chatId,
         highlight: true,
         focus: false,
@@ -425,7 +458,9 @@ export function useDraft(
     const currQuote = draftState.quote
     if (!currQuote) {
       if (upOrDown === KeybindAction.Composer_SelectReplyToUp) {
-        quoteMessage(messageIds[messageIds.length - 1])
+        const id = messageIds[messageIds.length - 1]
+        const fromCache = messageListState.messageCache[id]
+        quoteAndJumpToMessage(fromCache?.kind === 'message' ? fromCache : id)
       }
       return
     }
@@ -475,33 +510,21 @@ export function useDraft(
     if (newId == undefined) {
       return
     }
-    quoteMessage(newId)
+    const fromCache = messageListState.messageCache[newId]
+    quoteAndJumpToMessage(fromCache?.kind === 'message' ? fromCache : newId)
   }
 
   useEffect(() => {
-    window.__setQuoteInDraft = (messageId: number) => {
-      setAndDebouncedSaveAndRefetchDraft?.({
-        ...draftState,
-        quote: {
-          kind: 'WithMessage',
-          messageId,
-        },
-      })
-      // Again, we need an immediate refetch, to get the "full" quote,
-      // with the author's name, text, etc.
-      debouncedSaveAndRefetchDraft?.flush()
-
+    window.__setQuoteInDraft = (
+      messageOrMessageId: Parameters<Exclude<typeof quoteMessage, null>>[0]
+    ) => {
+      quoteMessage?.(messageOrMessageId)
       inputRef.current?.focus()
     }
     return () => {
       window.__setQuoteInDraft = null
     }
-  }, [
-    draftState,
-    inputRef,
-    setAndDebouncedSaveAndRefetchDraft,
-    debouncedSaveAndRefetchDraft,
-  ])
+  }, [quoteMessage, inputRef])
 
   /**
    * Handle {@linkcode window.__setDraftRequest} which might have been set
@@ -625,5 +648,64 @@ export function useDraft(
       },
       [debouncedSaveAndRefetchDraft]
     ),
+  }
+}
+
+function messageToQuote(
+  message: Pick<
+    T.Message,
+    | 'id'
+    | 'chatId'
+    | 'sender'
+    | 'viewType'
+    | 'text'
+    | 'file'
+    | 'isForwarded'
+    | 'overrideSenderName'
+  >
+): {
+  quote: T.MessageQuote
+  /**
+   * Whether the accuracy of the conversion is good enough
+   * to show the returned quote in the UI,
+   * or whether we need to re-fetch the quote from core right away.
+   */
+  needRefetch: boolean
+} {
+  return {
+    needRefetch: !(
+      // Obscure `viewType`s usually have some special quote text.
+      // For example, quotes with a contact attachment
+      // have `text` '<person emoji> <Contact name>',
+      // even if the original message doens't have any text.
+      // So let's refetch those.
+      // See https://github.com/chatmail/core/blob/347938a9f991c44f304f20e562c460ed66ef13a4/deltachat-jsonrpc/src/api/types/message.rs#L157-L177.
+      (
+        message.viewType === 'Text' ||
+        // Images and stickers also have `text` '<emoji> Image',
+        // but it's probably fine not to refetch.
+        message.viewType === 'Image' ||
+        message.viewType === 'Sticker' ||
+        message.viewType === 'Gif'
+      )
+    ),
+    quote: {
+      kind: 'WithMessage',
+      chatId: message.chatId,
+      isForwarded: message.isForwarded,
+      overrideSenderName: message.overrideSenderName,
+      authorDisplayColor: message.sender.color,
+      authorDisplayName: message.sender.displayName,
+
+      text: message.text,
+      viewType: message.viewType,
+      image:
+        message.viewType === 'Image' ||
+        message.viewType === 'Sticker' ||
+        message.viewType === 'Gif'
+          ? message.file
+          : null,
+      messageId: message.id,
+    },
   }
 }
