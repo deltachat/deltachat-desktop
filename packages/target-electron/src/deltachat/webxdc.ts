@@ -57,6 +57,9 @@ const open_apps: {
 
 // holds all partitionKeys that have a session created for webxdc apps
 // mainly to avoid creating multiple sessions for the same partition
+// each account can have up to 2 sessions based on different partition keys:
+// one for apps with internet access
+// and one for apps without internet access
 const existing_sessions: string[] = []
 
 // TODO:
@@ -122,6 +125,34 @@ export default class DCWebxdc {
       })
     })
 
+    const createSessionIfNotExists = (
+      accountId: number,
+      internetAccess: boolean
+    ): string => {
+      const partition = partitionKeyFromAccountId(accountId, internetAccess)
+      if (!existing_sessions.includes(partition)) {
+        const ses = session.fromPartition(partition, {
+          cache: false,
+        })
+        existing_sessions.push(partition)
+        // register appropriate protocols
+        // see https://www.electronjs.org/docs/latest/api/protocol
+        ses.protocol.handle('webxdc', (...args) => {
+          return webxdcProtocolHandler(this.rpc, ...args)
+        })
+        if (
+          DesktopSettings.state.enableOnDemandLocationStreaming &&
+          internetAccess
+        ) {
+          // mapxdc app needs maps:// protocol to load tiles from internet
+          ses.protocol.handle('maps', (...args) =>
+            mapProtocolHandler(accountId, this.rpc, ...args)
+          )
+        }
+      }
+      return partition
+    }
+
     /**
      * ipcMain handler for 'open-webxdc' event invoked by the renderer
      */
@@ -170,41 +201,13 @@ export default class DCWebxdc {
         'base64'
       )
 
-      // used by BrowserWindow
-      let partition = partitionKeyFromAccountId(accountId)
-
       // TODO intercept / deny network access - CSP should probably be disabled for testing
 
-      // register appropriate protocols
-      // see https://www.electronjs.org/docs/latest/api/protocol
-      if (webxdcInfo['internetAccess']) {
-        // we use a different partition for apps that have internet access
-        // to have different sessions with different protocol handlers
-        partition = partitionKeyFromAccountId(accountId, true)
-        if (!existing_sessions.includes(partition)) {
-          const ses = session.fromPartition(partition, {
-            cache: false,
-          })
-          existing_sessions.push(partition)
-          ses.protocol.handle('webxdc', (...args) => {
-            return webxdcProtocolHandler(this.rpc, ...args)
-          })
-          if (DesktopSettings.state.enableOnDemandLocationStreaming) {
-            // mapxdc app needs maps:// protocol to load tiles from internet
-            ses.protocol.handle('maps', (...args) =>
-              mapProtocolHandler(accountId, this.rpc, ...args)
-            )
-          }
-        }
-      } else if (!existing_sessions.includes(partition)) {
-        const ses = session.fromPartition(partition, {
-          cache: false,
-        })
-        existing_sessions.push(partition)
-        ses.protocol.handle('webxdc', (...args) => {
-          return webxdcProtocolHandler(this.rpc, ...args)
-        })
-      }
+      // used by BrowserWindow
+      const partition = createSessionIfNotExists(
+        accountId,
+        webxdcInfo['internetAccess']
+      )
 
       const app_icon = icon_blob && nativeImage?.createFromBuffer(icon_blob)
 
