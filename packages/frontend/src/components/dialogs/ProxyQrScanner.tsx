@@ -29,6 +29,7 @@ export default function ProxyQrScanner({
       const errorMessage = error?.message || error.toString()
       openAlertDialog({
         message: `${tx('qrscan_failed')} ${errorMessage}`,
+        dataTestid: 'proxy-scan-failed',
       })
     },
     [openAlertDialog, tx]

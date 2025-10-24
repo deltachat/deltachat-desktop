@@ -165,6 +165,7 @@ export function QrCodeShowQrInner({
           SCAN_CONTEXT_TYPE.DEFAULT, // no need to set a specific context here
           onBack || onClose
         ),
+      dataTestid: 'withdraw-qr-code',
     },
     {
       label: tx('menu_copy_image_to_clipboard'),
@@ -210,6 +211,7 @@ export function QrCodeShowQrInner({
               onContextMenu={imageContextMenu}
               aria-haspopup='menu'
               tabIndex={0}
+              data-testid='qr-code-image'
             />
           )}
         </DialogContent>

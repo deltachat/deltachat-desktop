@@ -136,11 +136,6 @@ export const getUser = (index: number, existingProfiles: User[]) => {
       `Not enough profiles for test! Found ${existingProfiles?.length}`
     )
   }
-  if (existingProfiles.length < 2) {
-    throw new Error(
-      `Not enough profiles for chat test! Found ${existingProfiles?.length}`
-    )
-  }
   return existingProfiles[index]
 }
 
@@ -415,4 +410,33 @@ export async function createNDummyChats(
       .map((_val, i) => `${chatNamePrefix}${(i + 1).toString()}`)
       .reverse()
   )
+}
+
+/**
+ * Create a profile from an invite link and start a chat
+ * based on that link
+ */
+export const createProfileAndJoinChat = async (
+  inviterName: string,
+  inviteeName: string,
+  page: Page
+) => {
+  const confirmDialog = page.getByTestId('ask-create-profile-and-join-chat')
+  await expect(confirmDialog).toContainText(inviterName)
+
+  await confirmDialog.getByTestId('confirm').click()
+
+  // we have to wait till both dialogs are closed since
+  // the displayName input is just behind these dialogs
+  await expect(confirmDialog).not.toBeVisible()
+
+  await expect(page.getByTestId('qr-reader-settings')).not.toBeVisible()
+
+  const nameInput = page.locator('#displayName')
+
+  await expect(nameInput).toBeVisible()
+
+  await nameInput.fill(inviteeName)
+
+  await page.getByTestId('login-button').click()
 }

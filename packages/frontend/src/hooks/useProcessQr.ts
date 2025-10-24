@@ -163,6 +163,7 @@ export default function useProcessQR() {
 
         await openAlertDialog({
           message: tx('qrscan_failed') + '\n\n' + url,
+          dataTestid: 'qr-scan-failed',
         })
 
         return callback?.()
@@ -180,6 +181,7 @@ export default function useProcessQR() {
       ) {
         await openAlertDialog({
           message: tx('qraccount_qr_code_cannot_be_used'),
+          dataTestid: 'qr-code-cannot-be-used',
         })
         return callback?.()
       }
@@ -200,6 +202,7 @@ export default function useProcessQR() {
       ) {
         await openAlertDialog({
           message: tx('need_to_be_logged_in'),
+          dataTestid: 'need-to-be-logged-in',
         })
         return callback?.()
       }
@@ -461,6 +464,7 @@ export default function useProcessQR() {
       } else {
         await openAlertDialog({
           message: tx('qraccount_qr_code_cannot_be_used'),
+          dataTestid: 'qr-code-cannot-be-used',
         })
         return callback?.()
       }
