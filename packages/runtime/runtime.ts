@@ -148,11 +148,6 @@ export interface Runtime {
     sourcePath: string
   ): Promise<string>
   removeTempFile(path: string): Promise<void>
-  getWebxdcDiskUsage(accountId: number): Promise<{
-    total_size: number
-    data_size: number
-  }>
-  clearWebxdcDOMStorage(accountId: number): Promise<void>
   getAvailableThemes(): Promise<Theme[]>
   getActiveTheme(): Promise<{
     theme: Theme
