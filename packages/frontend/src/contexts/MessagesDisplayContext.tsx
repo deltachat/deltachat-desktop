@@ -2,7 +2,6 @@ import { createContext } from 'react'
 
 type MessagesDisplayContextValue =
   | { context: 'chat_messagelist'; chatId: number; isDeviceChat: boolean }
-  | { context: 'chat_map'; chatId: number }
   | {
       context: 'contact_profile_status'
       contact_id: number
