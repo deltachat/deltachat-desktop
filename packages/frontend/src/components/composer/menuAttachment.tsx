@@ -23,7 +23,11 @@ import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
 import useMessage from '../../hooks/chat/useMessage'
 
 type Props = {
-  addFileToDraft: (file: string, fileName: string, viewType: T.Viewtype) => void
+  addFileToDraft: (
+    file: string,
+    fileName: string | null,
+    viewType: T.Viewtype
+  ) => void
   focusMessageInput: () => void
   showAppPicker: (show: boolean) => void
   selectedChat: Pick<T.BasicChat, 'name' | 'id' | 'chatType'> | null
@@ -106,7 +110,7 @@ export default function MenuAttachment({
       } else if (files[0].toLowerCase().endsWith('.vcf')) {
         viewType = 'Vcard'
       }
-      addFileToDraft(files[0], basename(files[0]), viewType)
+      addFileToDraft(files[0], null, viewType)
       focusMessageInput()
     } else if (files.length > 1) {
       confirmSendMultipleFiles(files, 'File')
@@ -131,7 +135,7 @@ export default function MenuAttachment({
 
     if (files.length === 1) {
       setLastPath(dirname(files[0]))
-      addFileToDraft(files[0], basename(files[0]), 'Image')
+      addFileToDraft(files[0], null, 'Image')
       focusMessageInput()
     } else if (files.length > 1) {
       confirmSendMultipleFiles(files, 'Image')

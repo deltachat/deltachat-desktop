@@ -85,7 +85,7 @@ export function useDraft(
   updateDraftText: (text: string, InputChatId: number) => void
   addFileToDraft: (
     file: string,
-    fileName: string,
+    fileName: string | null,
     viewType: T.Viewtype
   ) => Promise<void>
   removeFile: () => void
