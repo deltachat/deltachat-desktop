@@ -83,7 +83,7 @@ function buildContextMenu(
     !message.isInfo && {
       label: tx('reply_noun'),
       action: () => {
-        setQuoteInDraft(message.id)
+        setQuoteInDraft(message)
         closeDialogCallback()
       },
     },

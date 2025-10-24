@@ -103,9 +103,17 @@ export function openMessageInfo(openDialog: OpenDialog, message: Type.Message) {
   openDialog(MessageDetail, { id: message.id })
 }
 
-export function setQuoteInDraft(messageId: number) {
+/**
+ * @param messageOrMessageId prefer to pass the full message
+ * insitead of the message ID, for better performance.
+ */
+export function setQuoteInDraft(
+  messageOrMessageId: Parameters<
+    Exclude<typeof window.__setQuoteInDraft, null>
+  >[0]
+) {
   if (window.__setQuoteInDraft) {
-    window.__setQuoteInDraft(messageId)
+    window.__setQuoteInDraft(messageOrMessageId)
   } else {
     throw new Error('window.__setQuoteInDraft undefined')
   }

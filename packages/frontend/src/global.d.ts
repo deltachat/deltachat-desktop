@@ -19,7 +19,7 @@ declare global {
     __keybindingsDialogOpened: boolean
     __aboutDialogOpened: boolean
 
-    __setQuoteInDraft: ((msgId: number) => void) | null
+    __setQuoteInDraft: ((messageOrMessageId: number | T.Message) => void) | null
     /**
      * Setting this will make `useDraft` set the draft to this state,
      * as soon as it renders with the specified `accountId` and `chatId`.

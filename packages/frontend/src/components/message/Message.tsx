@@ -307,7 +307,7 @@ function buildContextMenu(
     // Reply
     showReply && {
       label: tx('notify_reply_button'),
-      action: setQuoteInDraft.bind(null, message.id),
+      action: setQuoteInDraft.bind(null, message),
     },
     // Reply privately
     showReplyPrivately && {
