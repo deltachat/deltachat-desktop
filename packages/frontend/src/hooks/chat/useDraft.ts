@@ -25,6 +25,8 @@ export type DraftObject = { chatId: number } & Pick<
     text: Type.Message['text']
     quote:
       | Type.Message['quote']
+      // TODO say that this is unused?
+      // But still supported in case we need to quote just by message ID.
       /**
        * This is for when we've set the quote by `messageId`,
        * but havent loaded the full quote yet.
@@ -329,16 +331,38 @@ export function useDraft(
     ) {
       return
     }
-    const quoteMessage = (messageId: number) => {
-      draftRef.current.quote = {
-        kind: 'WithMessage',
-        messageId,
-      }
+    const quoteMessage = (messageOrMessageId: number | T.Message) => {
+      const isFullMessage = typeof messageOrMessageId !== 'number'
+      draftRef.current.quote = isFullMessage
+        ? // TODO make an util function??
+          {
+            kind: 'WithMessage',
+
+            chatId: messageOrMessageId.chatId,
+            isForwarded: messageOrMessageId.isForwarded,
+            overrideSenderName: messageOrMessageId.overrideSenderName,
+            text: messageOrMessageId.text,
+            viewType: messageOrMessageId.viewType,
+
+            authorDisplayColor: messageOrMessageId.sender.color,
+            authorDisplayName: messageOrMessageId.sender.displayName,
+            image:
+              messageOrMessageId.viewType === 'Image'
+                ? messageOrMessageId.file
+                : null,
+            messageId: messageOrMessageId.id,
+          }
+        : {
+            kind: 'WithMessage',
+            messageId: messageOrMessageId,
+          }
+
+      // TODO fix / perf: refetching the draft is not necessary (but saving is).
       saveAndRefetchDraft()
 
       jumpToMessage({
         accountId,
-        msgId: messageId,
+        msgId: isFullMessage ? messageOrMessageId.id : messageOrMessageId,
         msgChatId: chatId,
         highlight: true,
         focus: false,
@@ -363,7 +387,9 @@ export function useDraft(
     const currQuote = draftRef.current.quote
     if (!currQuote) {
       if (upOrDown === KeybindAction.Composer_SelectReplyToUp) {
-        quoteMessage(messageIds[messageIds.length - 1])
+        const id = messageIds[messageIds.length - 1]
+        const fromCache = messageListState.messageCache[id]
+        quoteMessage(fromCache?.kind === 'message' ? fromCache : id)
       }
       return
     }
@@ -413,15 +439,22 @@ export function useDraft(
     if (newId == undefined) {
       return
     }
-    quoteMessage(newId)
+    const fromCache = messageListState.messageCache[newId]
+    quoteMessage(fromCache?.kind === 'message' ? fromCache : newId)
   }
 
   useEffect(() => {
-    window.__setQuoteInDraft = (messageId: number) => {
-      draftRef.current.quote = {
-        kind: 'WithMessage',
-        messageId,
-      }
+    window.__setQuoteInDraft = (
+      messageOrMessageId: number | DraftObject['quote']
+    ) => {
+      const isFullMessage = typeof messageOrMessageId !== 'number'
+      draftRef.current.quote = isFullMessage
+        ? messageOrMessageId
+        : {
+            kind: 'WithMessage',
+            messageId: messageOrMessageId,
+          }
+      // TODO fix / perf: refetching the draft is not necessary (but saving is).
       saveAndRefetchDraft?.()
       inputRef.current?.focus()
     }
