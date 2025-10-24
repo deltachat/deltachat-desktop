@@ -542,7 +542,11 @@ const Composer = forwardRef<
                   className='attachment-quote-section is-quote'
                   aria-label={tx('menu_reply')}
                 >
-                  <Quote quote={draftState.quote} tabIndex={0} />
+                  {/* Check that this is a "full" quote.
+                  TODO it would be nice to show a placeholder otherwise. */}
+                  {'text' in draftState.quote && (
+                    <Quote quote={draftState.quote} tabIndex={0} />
+                  )}
                   <CloseButton onClick={removeQuote} />
                 </section>
               )}
