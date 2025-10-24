@@ -310,7 +310,7 @@ function BotCommandSuggestion({
 
     if (draft) {
       // Ask if the draft should be replaced
-      const confirmed = openConfirmationDialog({
+      const confirmed: boolean = await openConfirmationDialog({
         message: window.static_translate('confirm_replace_draft', name),
         confirmLabel: window.static_translate('replace_draft'),
       })
