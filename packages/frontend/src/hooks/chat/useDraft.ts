@@ -15,7 +15,7 @@ const log = getLogger('renderer/composer')
 
 export type DraftObject = { chatId: number } & Pick<
   Type.Message,
-  'id' | 'file' | 'quote' | 'viewType' | 'vcardContact'
+  'id' | 'file' | 'viewType' | 'vcardContact'
 > &
   MessageTypeAttachmentSubset & {
     /**
@@ -23,6 +23,13 @@ export type DraftObject = { chatId: number } & Pick<
      * of the composer <textarea>. It's basically duplicated state.
      */
     text: Type.Message['text']
+    quote:
+      | Type.Message['quote']
+      /**
+       * This is for when we've set the quote by `messageId`,
+       * but havent loaded the full quote yet.
+       */
+      | { kind: 'WithMessage'; messageId: number }
   }
 
 function emptyDraft(chatId: number | null): DraftObject {
@@ -326,7 +333,7 @@ export function useDraft(
       draftRef.current.quote = {
         kind: 'WithMessage',
         messageId,
-      } as Type.MessageQuote
+      }
       saveAndRefetchDraft()
 
       jumpToMessage({
@@ -414,7 +421,7 @@ export function useDraft(
       draftRef.current.quote = {
         kind: 'WithMessage',
         messageId,
-      } as Partial<Type.MessageQuote> as any as Type.MessageQuote
+      }
       saveAndRefetchDraft?.()
       inputRef.current?.focus()
     }
