@@ -19,6 +19,15 @@ export type DraftObject = { chatId: number } & Pick<
 > &
   MessageTypeAttachmentSubset & {
     /**
+     * Whether the current state is to be soon uploaded to the backend
+     * ({@linkcode BackendRemote.rpc.miscSetDraft}); and then re-fetched
+     * (e.g. to finalize the value of {@linkcode DraftObject.fileName}
+     * or {@linkcode DraftObject.quote}).
+     *
+     * This only gets set to `true` when the user changes the draft.
+     */
+    isPendingSaveAndRefetch: boolean
+    /**
      * Note that this text is not always synced with the actual state
      * of the composer <textarea>. It's basically duplicated state.
      */
@@ -34,6 +43,7 @@ export type DraftObject = { chatId: number } & Pick<
 
 function emptyDraft(chatId: number | null): DraftObject {
   return {
+    isPendingSaveAndRefetch: false,
     id: 0,
     chatId: chatId || 0,
     text: '',
@@ -90,21 +100,6 @@ export function useDraft(
      */
     _setDraftStateButKeepTextareaValue,
   ] = useState<DraftObject>(() => emptyDraft(chatId))
-
-  /**
-   * `draftRef.current` gets set to `draftState` on every render.
-   * That is, when you mutate the value of this ref,
-   * `draftState` also gets mutated.
-   *
-   * Having this `ref` is just a hack to perform direct state mutations
-   * without triggering a re-render or linter's warnings about the missing
-   * `draftState` hook dependency.
-   * @see {@linkcode saveAndRefetchDraft_} docs about the cases
-   * where it's nice to update the draft object, but not re-render
-   * until we have re-fetched it from the backend.
-   */
-  const draftRef = useRef<DraftObject>(draftState)
-  draftRef.current = draftState
 
   /**
    * @see {@link _setDraftStateButKeepTextareaValue}.
@@ -178,6 +173,7 @@ export function useDraft(
         } else {
           _setDraftStateButKeepTextareaValue(old => ({
             ...old,
+            isPendingSaveAndRefetch: false,
             id: newDraft.id,
             text: newDraft.text || '',
             file: newDraft.file,
@@ -228,12 +224,35 @@ export function useDraft(
    * - Adding an attachment ({@linkcode addFileToDraft}).
    *   Because the file name might get changed
    *   by the backend, and because we don't set the file size locally.
+   *
+   * TODO fix: when adding an attachment, the composer quickly flashes
+   * the new attachment as "file <path>; 0 bytes",
+   * even if it is a media attachment or a contact.
+   * The same flash happens when setting a quote.
    */
-  const saveAndRefetchDraft_ = useCallback(
-    async (chatId: number) => {
+  useEffect(() => {
+    if (
+      chatId == null ||
+      !canSend ||
+      // Note that this covers the "`loadDraft` has not yet finished"
+      // and "`loadDraft` has just finished" cases.
+      !draftState.isPendingSaveAndRefetch
+    ) {
+      return
+    }
+
+    /**
+     * A.k.a. "don't refetch the draft after saving".
+     */
+    let outdated = false
+
+    // Note that we must make sure that this function doesn't change the state
+    // such that `isPendingSaveAndRefetch` remains `true`,
+    // in order to avoid an endless loop.
+    ;(async function saveAndRefetchDraft() {
       const accountId = selectedAccountId()
 
-      const draft = draftRef.current
+      const draft = draftState
       if (
         (draft.text && draft.text.length > 0) ||
         (draft.file && draft.file != '') ||
@@ -254,17 +273,18 @@ export function useDraft(
         await BackendRemote.rpc.removeDraft(accountId, chatId)
       }
 
-      if (abortController.signal.aborted) {
+      if (outdated) {
         return
       }
       const newDraft = await BackendRemote.rpc.getDraft(accountId, chatId)
-      if (abortController.signal.aborted) {
+      if (outdated) {
         return
       }
 
       if (newDraft) {
         _setDraftStateButKeepTextareaValue(old => ({
           ...old,
+          isPendingSaveAndRefetch: false,
           id: newDraft.id,
           file: newDraft.file,
           fileBytes: newDraft.fileBytes,
@@ -276,52 +296,128 @@ export function useDraft(
         }))
         // don't load text to prevent bugging back
       } else {
-        clearDraftStateButKeepTextareaValue()
+        _setDraftStateButKeepTextareaValue(_ => ({
+          ...emptyDraft(chatId),
+          isPendingSaveAndRefetch: false,
+        }))
       }
+    })()
+
+    return () => {
+      outdated = true
+    }
+  }, [draftState, chatId, canSend])
+
+  const setAndSaveAndRefetchDraftButKeepTextareaValue = useCallback(
+    (
+      action: (
+        prevDraftState: DraftObject
+      ) => Omit<DraftObject, 'isPendingSaveAndRefetch'>
+    ) => {
+      _setDraftStateButKeepTextareaValue(prevDraftState => {
+        return {
+          ...action(prevDraftState),
+          isPendingSaveAndRefetch: true,
+        }
+      })
     },
-    [abortController, clearDraftStateButKeepTextareaValue]
-  )
-  const saveAndRefetchDraft = useMemo(
-    () =>
-      chatId != null && canSend ? () => saveAndRefetchDraft_(chatId) : null,
-    [canSend, chatId, saveAndRefetchDraft_]
+    []
   )
 
   const updateDraftText = (text: string, InputChatId: number) => {
     if (chatId !== InputChatId) {
       log.warn("chat Id and InputChatId don't match, do nothing")
     } else {
-      if (draftRef.current) {
-        draftRef.current.text = text // don't need to rerender on text change
-      }
-      saveAndRefetchDraft?.()
+      setAndSaveAndRefetchDraftButKeepTextareaValue(draft => ({
+        ...draft,
+        text,
+      }))
     }
   }
 
   const removeQuote = useCallback(() => {
-    if (draftRef.current) {
-      draftRef.current.quote = null
-    }
-    saveAndRefetchDraft?.()
+    setAndSaveAndRefetchDraftButKeepTextareaValue(draft => ({
+      ...draft,
+      quote: null,
+    }))
     inputRef.current?.focus()
-  }, [inputRef, saveAndRefetchDraft])
+  }, [inputRef, setAndSaveAndRefetchDraftButKeepTextareaValue])
 
   const removeFile = useCallback(() => {
-    draftRef.current.file = ''
-    draftRef.current.viewType = 'Text'
-    saveAndRefetchDraft?.()
-    inputRef.current?.focus()
-  }, [inputRef, saveAndRefetchDraft])
+    setAndSaveAndRefetchDraftButKeepTextareaValue(draft => ({
+      ...draft,
+      file: '',
+      viewType: 'Text',
+    }))
 
-  const addFileToDraft = useCallback(
-    async (file: string, fileName: string, viewType: T.Viewtype) => {
-      draftRef.current.file = file
-      draftRef.current.fileName = fileName
-      draftRef.current.viewType = viewType
-      inputRef.current?.focus()
-      return saveAndRefetchDraft?.()
+    inputRef.current?.focus()
+  }, [inputRef, setAndSaveAndRefetchDraftButKeepTextareaValue])
+
+  type FilePath = string
+  const fileIsNotInDraftMap = useRef(
+    new Map<FilePath, { promise: Promise<void>; resolvePromise: () => void }>()
+  )
+  const getFileIsNotInDraftPromise = useCallback(
+    (filePath: FilePath): Promise<void> => {
+      const entry = fileIsNotInDraftMap.current.get(filePath)
+      if (entry != undefined) {
+        return entry.promise
+      }
+
+      let resolvePromise: () => void
+      const promise = new Promise<void>(r => (resolvePromise = r))
+      fileIsNotInDraftMap.current.set(filePath, {
+        promise,
+        resolvePromise: resolvePromise!,
+      })
+      return promise
     },
-    [inputRef, saveAndRefetchDraft]
+    []
+  )
+  useEffect(() => {
+    const map = fileIsNotInDraftMap.current
+    map.forEach(({ resolvePromise }, filePath) => {
+      // If the file is not in the draft, then it has been removed
+      // from the draft (or, possibly, was never added to the draft
+      // in the first place).
+      if (draftState.file !== filePath) {
+        log.info('File', filePath, 'is not in the draft, invoking callback')
+        resolvePromise()
+        map.delete(filePath)
+      }
+    })
+  }, [draftState.file])
+  // TODO all this complexity can probably be solved
+  // by adding Core API to set draft file by content (and not just by path).
+  /**
+   * @returns a Promise that resolves when the file
+   * has been removed from the draft (or, possibly, was never added
+   * to the draft in the first place).
+   * This is useful when adding a temporary file,
+   * so that you know that you can delete it.
+   *
+   * Note that as of writing, this happens basically immediately,
+   * because when you call {@linkcode BackendRemote.rpc.miscSetDraft},
+   * the Core copies the file and sets the file path to that copied files' path.
+   */
+  const addFileToDraft = useCallback(
+    (file: string, fileName: string, viewType: T.Viewtype): Promise<void> => {
+      setAndSaveAndRefetchDraftButKeepTextareaValue(draft => ({
+        ...draft,
+        file,
+        fileName,
+        viewType,
+        fileBytes: 0,
+        fileMime: null,
+      }))
+      inputRef.current?.focus()
+      return getFileIsNotInDraftPromise(file)
+    },
+    [
+      inputRef,
+      setAndSaveAndRefetchDraftButKeepTextareaValue,
+      getFileIsNotInDraftPromise,
+    ]
   )
 
   const { jumpToMessage } = useMessage()
@@ -336,8 +432,9 @@ export function useDraft(
       | KeybindAction.Composer_SelectReplyToDown
   ) => {
     if (
-      saveAndRefetchDraft == null ||
-      // These are implied by `saveAndRefetchDraft == null`,
+      setAndSaveAndRefetchDraftButKeepTextareaValue == null ||
+      // These are implied by
+      // `setAndSaveAndRefetchDraftButKeepTextareaValue == null`,
       // but TypeScript doesn't know
       chatId == undefined ||
       !canSend
@@ -345,11 +442,13 @@ export function useDraft(
       return
     }
     const quoteMessage = (messageId: number) => {
-      draftRef.current.quote = {
-        kind: 'WithMessage',
-        messageId,
-      }
-      saveAndRefetchDraft()
+      setAndSaveAndRefetchDraftButKeepTextareaValue(draft => ({
+        ...draft,
+        quote: {
+          kind: 'WithMessage',
+          messageId,
+        },
+      }))
 
       jumpToMessage({
         accountId,
@@ -375,7 +474,7 @@ export function useDraft(
           messageListState.messageCache[id]?.kind === 'message' &&
           messageListState.messageCache[id]?.isInfo === false
       )
-    const currQuote = draftRef.current.quote
+    const currQuote = draftState.quote
     if (!currQuote) {
       if (upOrDown === KeybindAction.Composer_SelectReplyToUp) {
         quoteMessage(messageIds[messageIds.length - 1])
@@ -433,17 +532,19 @@ export function useDraft(
 
   useEffect(() => {
     window.__setQuoteInDraft = (messageId: number) => {
-      draftRef.current.quote = {
-        kind: 'WithMessage',
-        messageId,
-      }
-      saveAndRefetchDraft?.()
+      setAndSaveAndRefetchDraftButKeepTextareaValue(draft => ({
+        ...draft,
+        quote: {
+          kind: 'WithMessage',
+          messageId,
+        },
+      }))
       inputRef.current?.focus()
     }
     return () => {
       window.__setQuoteInDraft = null
     }
-  }, [draftRef, inputRef, saveAndRefetchDraft])
+  }, [inputRef, setAndSaveAndRefetchDraftButKeepTextareaValue])
 
   return {
     draftState,
