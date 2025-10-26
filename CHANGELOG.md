@@ -9,6 +9,10 @@
 - show appropriate messages when scanning wrong qr codes #5563
 - fix: remove the option to select info messages with Ctrl + Up/Down #5337
 
+### Changed
+
+- Removed "Watch Sent Folder" preference. #5611
+
 <a id="2_22_0"></a>
 
 ## [2.22.0] - 2025-10-17
