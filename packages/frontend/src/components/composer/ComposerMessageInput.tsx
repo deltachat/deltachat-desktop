@@ -10,6 +10,13 @@ const log = getLogger('renderer/composer/ComposerMessageInput')
 
 type ComposerMessageInputProps = {
   /**
+   * Whether the initial loading of the draft is being performed,
+   * e.g. after switching the chat, or after a
+   * {@linkcode BackendRemote.rpc.miscSetDraft} from outside of
+   * {@linkcode useDraft}.
+   */
+  loadingDraft: boolean
+  /**
    * Whether to render the HTML or to return `null`.
    */
   hidden?: boolean
@@ -27,7 +34,6 @@ type ComposerMessageInputState = {
   text: string
   chatId: number
   // error?:boolean|Error
-  loadingDraft: boolean
 }
 
 export default class ComposerMessageInput extends React.Component<
@@ -46,7 +52,6 @@ export default class ComposerMessageInput extends React.Component<
     this.state = {
       text: '',
       chatId: props.chatId,
-      loadingDraft: false,
     }
 
     this.composerSize = 48
@@ -98,7 +103,7 @@ export default class ComposerMessageInput extends React.Component<
    * e.g. after sending the message or opening a chat with an existing draft.
    */
   setText(text: string | null) {
-    this.setState({ text: text || '', loadingDraft: false })
+    this.setState({ text: text || '' })
     this.throttledSaveDraft.cancel()
     this.props.onChange(text || '')
   }
@@ -283,7 +288,7 @@ export default class ComposerMessageInput extends React.Component<
                 ? window.static_translate('edit_message')
                 : window.static_translate('write_message_desktop')
             }
-            disabled={this.state.loadingDraft}
+            disabled={this.props.loadingDraft}
             dir={
               writingDirection === 'rtl'
                 ? 'rtl'

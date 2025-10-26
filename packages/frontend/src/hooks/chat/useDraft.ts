@@ -49,6 +49,13 @@ export function useDraft(
   inputRef: React.RefObject<ComposerMessageInput | null>
 ): {
   draftState: DraftObject
+  /**
+   * Whether the initial loading of the draft is being performed,
+   * e.g. after switching the chat, or after a
+   * {@linkcode BackendRemote.rpc.miscSetDraft} from outside of
+   * {@linkcode useDraft}.
+   */
+  draftIsLoading: boolean
   onSelectReplyToShortcut: (
     upOrDown:
       | KeybindAction.Composer_SelectReplyToUp
@@ -141,47 +148,56 @@ export function useDraft(
     }
   }, [abortController])
 
+  const [draftIsLoading_, setDraftIsLoading] = useState(true)
+  const skipLoadingDraft = chatId === null || !canSend
+  const draftIsLoading = skipLoadingDraft ? false : draftIsLoading_
   const loadDraft = useCallback(() => {
-    if (chatId === null || !canSend) {
+    if (skipLoadingDraft) {
       clearDraftStateButKeepTextareaValue()
       return
     }
-    inputRef.current?.setState({ loadingDraft: true })
-    BackendRemote.rpc.getDraft(selectedAccountId(), chatId).then(newDraft => {
-      if (abortController.signal.aborted) {
-        return
-      }
+    setDraftIsLoading(true)
+    BackendRemote.rpc
+      .getDraft(selectedAccountId(), chatId)
+      .then(newDraft => {
+        if (abortController.signal.aborted) {
+          return
+        }
 
-      if (!newDraft) {
-        log.debug('no draft')
-        clearDraftStateButKeepTextareaValue()
-        inputRef.current?.setText('')
-      } else {
-        _setDraftStateButKeepTextareaValue(old => ({
-          ...old,
-          id: newDraft.id,
-          text: newDraft.text || '',
-          file: newDraft.file,
-          fileBytes: newDraft.fileBytes,
-          fileMime: newDraft.fileMime,
-          fileName: newDraft.fileName,
-          viewType: newDraft.viewType,
-          quote: newDraft.quote,
-          vcardContact: newDraft.vcardContact,
-        }))
-        inputRef.current?.setText(newDraft.text)
-      }
-      inputRef.current?.setState({ loadingDraft: false })
-      setTimeout(() => {
-        inputRef.current?.focus()
+        if (!newDraft) {
+          log.debug('no draft')
+          clearDraftStateButKeepTextareaValue()
+          inputRef.current?.setText('')
+        } else {
+          _setDraftStateButKeepTextareaValue(old => ({
+            ...old,
+            id: newDraft.id,
+            text: newDraft.text || '',
+            file: newDraft.file,
+            fileBytes: newDraft.fileBytes,
+            fileMime: newDraft.fileMime,
+            fileName: newDraft.fileName,
+            viewType: newDraft.viewType,
+            quote: newDraft.quote,
+            vcardContact: newDraft.vcardContact,
+          }))
+          inputRef.current?.setText(newDraft.text)
+        }
+        setDraftIsLoading(false)
+        setTimeout(() => {
+          inputRef.current?.focus()
+        })
       })
-    })
+      .catch(error => {
+        setDraftIsLoading(false)
+        throw error
+      })
   }, [
     chatId,
     abortController,
     clearDraftStateButKeepTextareaValue,
     inputRef,
-    canSend,
+    skipLoadingDraft,
   ])
 
   useEffect(() => {
@@ -255,9 +271,8 @@ export function useDraft(
       } else {
         clearDraftStateButKeepTextareaValue()
       }
-      inputRef.current?.setState({ loadingDraft: false })
     },
-    [abortController, clearDraftStateButKeepTextareaValue, inputRef]
+    [abortController, clearDraftStateButKeepTextareaValue]
   )
   const saveAndRefetchDraft = useMemo(
     () =>
@@ -425,6 +440,7 @@ export function useDraft(
 
   return {
     draftState,
+    draftIsLoading,
     onSelectReplyToShortcut,
     removeQuote,
     updateDraftText,
