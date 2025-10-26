@@ -197,7 +197,7 @@ export default function AccountListSidebar({
               </button>
             ) : (
               accountsFetch.lingeringResult?.value.map((id, index) => (
-                <div
+                <li
                   key={id}
                   draggable
                   onDragStart={() => handleDragStart(id)}
@@ -226,7 +226,7 @@ export default function AccountListSidebar({
                     syncAllAccounts={syncAllAccounts}
                     muted={noficationSettings[id]?.muted || false}
                   />
-                </div>
+                </li>
               ))
             )}
             <li>
