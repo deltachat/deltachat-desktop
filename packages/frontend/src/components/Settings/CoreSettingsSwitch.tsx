@@ -28,12 +28,13 @@ export default function CoreSettingsSwitch({
   disabled,
   disabledValue,
 }: Props) {
-  const settingsStore = useSettingsStore()[0]!
+  const settingsStore = useSettingsStore()[0]
 
+  const disabledFinal: boolean = disabled || settingsStore == null
   const value =
-    disabled === true && typeof disabledValue !== 'undefined'
+    disabledFinal === true && typeof disabledValue !== 'undefined'
       ? disabledValue
-      : settingsStore.settings[settingsKey] === '1'
+      : settingsStore?.settings[settingsKey] === '1'
 
   return (
     <SettingsSwitch
@@ -41,12 +42,15 @@ export default function CoreSettingsSwitch({
       value={value}
       description={description}
       onChange={() => {
+        if (settingsStore == null) {
+          return
+        }
         SettingsStoreInstance.effect.setCoreSetting(
           settingsKey,
           flipDeltaBoolean(settingsStore.settings[settingsKey])
         )
       }}
-      disabled={disabled}
+      disabled={disabledFinal}
     />
   )
 }

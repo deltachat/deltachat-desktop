@@ -125,14 +125,18 @@ export function ExperimentalFeatures() {
 
 export default function SyncAllAccountsSwitch() {
   const tx = useTranslationFunction()
-  const settingsStore = useSettingsStore()[0]!
+  const settingsStore = useSettingsStore()[0]
 
   return (
     <SettingsSwitch
       label={tx('pref_background_sync_disabled')}
       description={tx('explain_background_sync_disabled')}
-      value={settingsStore.desktopSettings.syncAllAccounts !== true}
+      value={settingsStore?.desktopSettings.syncAllAccounts !== true}
+      disabled={settingsStore == null}
       onChange={() => {
+        if (settingsStore == null) {
+          return
+        }
         SettingsStoreInstance.effect.setDesktopSetting(
           'syncAllAccounts',
           !settingsStore.desktopSettings.syncAllAccounts

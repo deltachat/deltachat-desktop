@@ -30,7 +30,7 @@ type SettingsView =
 export default function Settings({ onClose }: DialogProps) {
   const { openDialog, closeDialog, openDialogIds } = useDialog()
 
-  const settingsStore = useSettingsStore()[0]!
+  const settingsStore = useSettingsStore()[0]
   const tx = useTranslationFunction()
   const [settingsMode, setSettingsMode] = useState<SettingsView>('main')
 
@@ -78,11 +78,14 @@ export default function Settings({ onClose }: DialogProps) {
             dataTestid='settings'
           />
           <DialogBody>
-            <Profile settingsStore={settingsStore} />
+            {settingsStore != null && <Profile settingsStore={settingsStore} />}
             <SettingsIconButton
               icon='person'
               dataTestid='edit-profile-button'
               onClick={() => {
+                if (settingsStore == null) {
+                  return
+                }
                 openDialog(EditProfileDialog, {
                   settingsStore,
                 })
@@ -157,10 +160,12 @@ export default function Settings({ onClose }: DialogProps) {
             onClose={onClose}
           />
           <DialogBody>
-            <ChatsAndMedia
-              settingsStore={settingsStore}
-              desktopSettings={settingsStore.desktopSettings}
-            />
+            {settingsStore != null && (
+              <ChatsAndMedia
+                settingsStore={settingsStore}
+                desktopSettings={settingsStore.desktopSettings}
+              />
+            )}
             <SettingsEndSeparator />
           </DialogBody>
         </>
@@ -173,7 +178,9 @@ export default function Settings({ onClose }: DialogProps) {
             onClose={onClose}
           />
           <DialogBody>
-            <Notifications desktopSettings={settingsStore.desktopSettings} />
+            {settingsStore != null && (
+              <Notifications desktopSettings={settingsStore.desktopSettings} />
+            )}
             <SettingsEndSeparator />
           </DialogBody>
         </>
@@ -186,11 +193,13 @@ export default function Settings({ onClose }: DialogProps) {
             onClose={onClose}
           />
           <DialogBody>
-            <Appearance
-              rc={settingsStore.rc}
-              desktopSettings={settingsStore.desktopSettings}
-              settingsStore={settingsStore}
-            />
+            {settingsStore != null && (
+              <Appearance
+                rc={settingsStore.rc}
+                desktopSettings={settingsStore.desktopSettings}
+                settingsStore={settingsStore}
+              />
+            )}
             <SettingsEndSeparator />
           </DialogBody>
         </>
@@ -204,7 +213,9 @@ export default function Settings({ onClose }: DialogProps) {
             dataTestid='settings-advanced'
           />
           <DialogBody>
-            <Advanced settingsStore={settingsStore} />
+            {settingsStore != null && (
+              <Advanced settingsStore={settingsStore} />
+            )}
             <SettingsEndSeparator />
           </DialogBody>
         </>
