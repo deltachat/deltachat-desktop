@@ -1,8 +1,13 @@
 /* eslint-disable no-console */
+import path from 'node:path'
 import { expect, test as base, Page } from '@playwright/test'
 
 const { config } = await import('dotenv')
-config()
+config({
+  // Need to specify path in order to make the Playwright VSCode extension work.
+  // Otherwise it complains that `DC_CHATMAIL_SERVER` is not defined.
+  path: path.join(import.meta.dirname, '.env'),
+})
 
 export const chatmailServerUrl = process.env.DC_CHATMAIL_SERVER
 
