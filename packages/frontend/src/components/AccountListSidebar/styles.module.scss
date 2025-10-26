@@ -67,6 +67,17 @@
       display: flex;
       flex-direction: column;
       padding-top: 2px;
+      li:has(.accountWrapper.isSticky) {
+        // Styles for the li element when it contains a sticky account
+        position: sticky;
+        bottom: var(--als-avatar-margin);
+        top: var(--als-avatar-margin);
+        // Only needed when this account is scrolled _above_ the visible region.
+        z-index: map.get(
+          variables.$z-index,
+          account-list-sidebar-scope-sticky-account
+        );
+      }
     }
   }
 
@@ -75,15 +86,6 @@
     margin-top: var(--als-avatar-margin);
 
     &.isSticky {
-      position: sticky;
-      bottom: var(--als-avatar-margin);
-      top: var(--als-avatar-margin);
-      // Only needed when this account is scrolled _above_ the visible region.
-      z-index: map.get(
-        variables.$z-index,
-        account-list-sidebar-scope-sticky-account
-      );
-
       .account {
         .avatar {
           opacity: 1;
@@ -316,4 +318,35 @@
   display: inline-block;
   text-align: center;
   width: 1em;
+}
+
+// Drag and drop styles
+.dragging {
+  opacity: 0.5;
+  transform: scale(0.95);
+  transition: all 0.2s ease;
+}
+
+.dragOverTop,
+.dragOverBottom {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: var(--colorPrimary);
+    z-index: 10;
+    border-radius: 1px;
+  }
+}
+
+.dragOverTop::before {
+  top: -2px;
+}
+
+.dragOverBottom::before {
+  bottom: -2px;
 }

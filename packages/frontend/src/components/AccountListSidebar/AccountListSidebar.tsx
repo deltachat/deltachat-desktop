@@ -14,6 +14,7 @@ import Settings from '../Settings'
 import useDialog from '../../hooks/dialog/useDialog'
 import { BackendRemote } from '../../backend-com'
 import { runtime } from '@deltachat-desktop/runtime-interface'
+import { useAccountDragAndDrop } from '../../hooks/useAccountDragAndDrop'
 import { useAccountNotificationStore } from '../../stores/accountNotifications'
 
 import styles from './styles.module.scss'
@@ -63,6 +64,16 @@ export default function AccountListSidebar({
 
   const [{ accounts: noficationSettings }] = useAccountNotificationStore()
 
+  const {
+    draggedAccountId,
+    dropIndicator,
+    handleDragStart,
+    handleDragOver,
+    handleDragLeave,
+    handleDragEnd,
+    handleDrop,
+  } = useAccountDragAndDrop(accountsFetch)
+
   const { smallScreenMode } = useContext(ScreenContext)
   const { chatId } = useChat()
 
@@ -78,6 +89,7 @@ export default function AccountListSidebar({
   }
 
   const [syncAllAccounts, setSyncAllAccounts] = useState(true)
+
   useEffect(() => {
     const refreshSyncAllAccounts = async () => {
       const desktopSettings = await runtime.getDesktopSettings()
@@ -183,17 +195,37 @@ export default function AccountListSidebar({
                 ⚠️
               </button>
             ) : (
-              accountsFetch.lingeringResult?.value.map(id => (
-                <AccountItem
+              accountsFetch.lingeringResult?.value.map((id, index) => (
+                <li
                   key={id}
-                  accountId={id}
-                  isSelected={selectedAccountId === id}
-                  onSelectAccount={selectAccount}
-                  openAccountDeletionScreen={openAccountDeletionScreen}
-                  updateAccountForHoverInfo={updateAccountForHoverInfo}
-                  syncAllAccounts={syncAllAccounts}
-                  muted={noficationSettings[id]?.muted || false}
-                />
+                  draggable
+                  onDragStart={() => handleDragStart(id)}
+                  onDragOver={e => handleDragOver(e, index)}
+                  onDrop={handleDrop}
+                  onDragEnd={handleDragEnd}
+                  onDragLeave={handleDragLeave}
+                  className={classNames({
+                    [styles.dragging]: draggedAccountId === id,
+                    [styles.dragOverTop]:
+                      dropIndicator?.index === index &&
+                      dropIndicator?.position === 'top' &&
+                      draggedAccountId !== id,
+                    [styles.dragOverBottom]:
+                      dropIndicator?.index === index &&
+                      dropIndicator?.position === 'bottom' &&
+                      draggedAccountId !== id,
+                  })}
+                >
+                  <AccountItem
+                    accountId={id}
+                    isSelected={selectedAccountId === id}
+                    onSelectAccount={selectAccount}
+                    openAccountDeletionScreen={openAccountDeletionScreen}
+                    updateAccountForHoverInfo={updateAccountForHoverInfo}
+                    syncAllAccounts={syncAllAccounts}
+                    muted={noficationSettings[id]?.muted || false}
+                  />
+                </li>
               ))
             )}
             <li>

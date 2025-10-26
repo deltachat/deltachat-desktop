@@ -251,7 +251,7 @@ export default function AccountItem({
   // for a different account, and upon initial render.
 
   return (
-    <li
+    <div
       className={classNames(styles.accountWrapper, {
         [styles.isSticky]: isSticky,
       })}
@@ -325,7 +325,7 @@ export default function AccountItem({
         )}
         <div className={classNames(styles.accountBadge)}>{badgeContent}</div>
       </button>
-    </li>
+    </div>
   )
 }
 
