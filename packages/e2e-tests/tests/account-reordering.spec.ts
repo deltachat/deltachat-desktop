@@ -64,6 +64,10 @@ test('basic drag-and-drop account reordering', async () => {
   const userB = getUser(1, existingProfiles)
   const userC = getUser(2, existingProfiles)
 
+  const userAInitial = userA.name.substring(0, 1)
+  const userBInitial = userB.name.substring(0, 1)
+  const userCInitial = userC.name.substring(0, 1)
+
   // Wait for account items to be rendered and finish loading
   const accountItems = page.locator('[data-testid^="account-item-"]')
   await waitForAccountItemsToFinishLoading(page)
@@ -71,7 +75,11 @@ test('basic drag-and-drop account reordering', async () => {
   // Get initial account order
   const initialOrder = await accountItems.allTextContents()
 
-  // should be [' A', ' B', ' C'] if no previous accounts existed
+  expect(initialOrder).toEqual([
+    ` ${userAInitial}`,
+    ` ${userBInitial}`,
+    ` ${userCInitial}`,
+  ])
 
   console.log('Initial account order:', initialOrder)
 
@@ -99,7 +107,11 @@ test('basic drag-and-drop account reordering', async () => {
   await waitForAccountItemsToFinishLoading(page)
 
   const orderAfterDrag = await accountItems.allTextContents()
-  // should be [' C', ' B', ' A'] if no previous accounts existed
+  expect(orderAfterDrag).toEqual([
+    ` ${userCInitial}`,
+    ` ${userBInitial}`,
+    ` ${userAInitial}`,
+  ])
   console.log('Order after drag:', orderAfterDrag)
   expect(orderAfterDrag).not.toEqual(initialOrder)
 
