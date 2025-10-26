@@ -67,6 +67,16 @@
       display: flex;
       flex-direction: column;
       padding-top: 2px;
+      li:has(.accountWrapper.isSticky) {
+        // Styles for the li element when it contains a sticky account
+        position: sticky;
+        bottom: var(--als-avatar-margin);
+        top: var(--als-avatar-margin);
+        z-index: map.get(
+          variables.$z-index,
+          account-list-sidebar-scope-sticky-account
+        );
+      }
     }
   }
 
@@ -75,15 +85,6 @@
     margin-top: var(--als-avatar-margin);
 
     &.isSticky {
-      position: sticky;
-      bottom: var(--als-avatar-margin);
-      top: var(--als-avatar-margin);
-      // Only needed when this account is scrolled _above_ the visible region.
-      z-index: map.get(
-        variables.$z-index,
-        account-list-sidebar-scope-sticky-account
-      );
-
       .account {
         .avatar {
           opacity: 1;
