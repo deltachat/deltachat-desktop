@@ -72,16 +72,8 @@ test('basic drag-and-drop account reordering', async () => {
   const accountItems = page.locator('[data-testid^="account-item-"]')
   await waitForAccountItemsToFinishLoading(page)
 
-  // Get initial account order
-  const initialOrder = await accountItems.allTextContents()
-
-  expect(initialOrder).toEqual([
-    ` ${userAInitial}`,
-    ` ${userBInitial}`,
-    ` ${userCInitial}`,
-  ])
-
-  console.log('Initial account order:', initialOrder)
+  const initialOrder = [userAInitial, userBInitial, userCInitial]
+  await expect(accountItems).toContainText(initialOrder)
 
   // Find the account items by their test IDs
   const accountA = page.getByTestId(`account-item-${userA.id}`)
@@ -106,19 +98,12 @@ test('basic drag-and-drop account reordering', async () => {
   })
   await waitForAccountItemsToFinishLoading(page)
 
-  const orderAfterDrag = await accountItems.allTextContents()
-  expect(orderAfterDrag).toEqual([
-    ` ${userCInitial}`,
-    ` ${userBInitial}`,
-    ` ${userAInitial}`,
-  ])
-  console.log('Order after drag:', orderAfterDrag)
-  expect(orderAfterDrag).not.toEqual(initialOrder)
+  const orderAfterDrag = [userCInitial, userBInitial, userAInitial]
+  await expect(accountItems).toContainText(orderAfterDrag)
+  await expect(accountItems).not.toContainText(initialOrder)
 
   await reloadPage(page)
   await waitForAccountItemsToFinishLoading(page)
 
-  const orderAfterReload = await accountItems.allTextContents()
-  console.log('Order after reload:', orderAfterReload)
-  expect(orderAfterReload).toEqual(orderAfterDrag)
+  await expect(accountItems).toContainText(orderAfterDrag)
 })
