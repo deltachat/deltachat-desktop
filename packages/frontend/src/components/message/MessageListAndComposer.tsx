@@ -112,6 +112,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
 
   const {
     draftState,
+    draftIsLoading,
     updateDraftText,
     onSelectReplyToShortcut,
     removeQuote,
@@ -320,6 +321,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
         regularMessageInputRef={regularMessageInputRef}
         editMessageInputRef={editMessageInputRef}
         draftState={draftState}
+        draftIsLoading={draftIsLoading}
         updateDraftText={updateDraftText}
         onSelectReplyToShortcut={onSelectReplyToShortcut}
         removeQuote={removeQuote}
