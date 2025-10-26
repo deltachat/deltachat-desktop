@@ -100,7 +100,6 @@ test('basic drag-and-drop account reordering', async () => {
 
   const orderAfterDrag = await accountItems.allTextContents()
   // should be [' C', ' B', ' A'] if no previous accounts existed
-  expect(orderAfterDrag).not.toEqual(initialOrder)
   console.log('Order after drag:', orderAfterDrag)
   expect(orderAfterDrag).not.toEqual(initialOrder)
 
