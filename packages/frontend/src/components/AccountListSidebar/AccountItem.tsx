@@ -254,7 +254,6 @@ export default function AccountItem({
     <div
       className={classNames(styles.accountWrapper, {
         [styles.isSticky]: isSticky,
-        'sticky-account': isSticky,
       })}
     >
       <button

@@ -64,7 +64,6 @@ export default function AccountListSidebar({
 
   const [{ accounts: noficationSettings }] = useAccountNotificationStore()
 
-  // Use drag and drop hook
   const {
     draggedAccountId,
     dropIndicator,
