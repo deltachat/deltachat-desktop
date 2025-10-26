@@ -11,7 +11,6 @@ export interface SettingsStoreState {
   selfContact: Type.Contact
   settings: {
     [P in (typeof settingsKeys)[number]]: {
-      sentbox_watch: string
       mvbox_move: string
       addr: string
       displayname: string
@@ -33,7 +32,6 @@ export interface SettingsStoreState {
 }
 
 const settingsKeys = [
-  'sentbox_watch',
   'mvbox_move',
   'addr',
   'displayname',

@@ -18,12 +18,6 @@ export default function ImapFolderHandling({ settingsStore }: Props) {
     <>
       <ShowClassicEmail settingsStore={settingsStore} />
       <CoreSettingsSwitch
-        label={tx('pref_watch_sent_folder')}
-        settingsKey='sentbox_watch'
-        disabled={disableIfOnlyFetchMvBoxIsTrue}
-        disabledValue={false}
-      />
-      <CoreSettingsSwitch
         label={tx('pref_send_copy_to_self')}
         settingsKey='bcc_self'
         description={tx('pref_send_copy_to_self_explain')}
