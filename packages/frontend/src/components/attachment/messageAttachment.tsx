@@ -239,16 +239,21 @@ export function DraftAttachment({
 }) {
   const isViewTypeWebxdc = attachment.viewType === 'Webxdc'
   const [attachmentIdToLoad, setAttachmentIdToLoad] = useState(attachment.id)
-  const hasFileNameChanged = useHasChanged2(attachment.fileName)
-  if (hasFileNameChanged) {
-    // Only reload webxdc info if filename has changed, because
-    // the `id` itself could be changing as often as we update the draft.
-    setAttachmentIdToLoad(attachment.id)
-  }
   const webxdcInfoFetch = useRpcFetch(
     BackendRemote.rpc.getWebxdcInfo,
     isViewTypeWebxdc ? [selectedAccountId(), attachmentIdToLoad] : null
   )
+  const hasFileNameChanged = useHasChanged2(attachment.fileName)
+  if (hasFileNameChanged || webxdcInfoFetch?.result?.ok === false) {
+    // Only reload webxdc info if filename has changed, because
+    // the `id` itself could be changing as often as we update the draft.
+    //
+    // Additionally, since this is a draft message, a draft could get replaced,
+    // i.e. the draft message could get deleted. If that happens,
+    // the fetch will fail. In such a case let's also make sure
+    // that we're fetching the latest draft.
+    setAttachmentIdToLoad(attachment.id)
+  }
 
   if (!attachment) {
     return null
