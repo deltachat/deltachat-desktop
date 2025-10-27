@@ -19,6 +19,7 @@ import type { WelcomeQrWithUrl } from '../contexts/InstantOnboardingContext'
 import useChat from './chat/useChat'
 import { unknownErrorToString } from '../components/helpers/unknownErrorToString'
 import ProxyConfiguration from '../components/dialogs/ProxyConfiguration'
+import { useSettingsStore } from '../stores/settings'
 
 const ALLOWED_QR_CODES_ON_WELCOME_SCREEN: T.Qr['kind'][] = [
   'account',
@@ -62,6 +63,8 @@ export default function useProcessQR() {
   const { startInstantOnboardingFlow } = useInstantOnboarding()
   const { secureJoinGroup, secureJoinContact } = useSecureJoin()
 
+  const settingsStore = useSettingsStore()[0]
+  const isChatmail = settingsStore?.settings.is_chatmail === '1'
   const { selectChat } = useChat()
 
   /**
@@ -147,12 +150,6 @@ export default function useProcessQR() {
       scanContext: SCAN_CONTEXT_TYPE,
       callback?: () => void
     ): Promise<void> => {
-      // Scanned string is actually a link to an email address
-      if (url.toLowerCase().startsWith('mailto:')) {
-        await openMailtoLink(accountId, url)
-        return callback?.()
-      }
-
       // Check if given string is a valid DeltaChat URI-Scheme and return
       // parsed object, otherwise show an error to the user
       let parsed: QrWithUrl
@@ -181,6 +178,19 @@ export default function useProcessQR() {
         await openAlertDialog({
           message: tx('qraccount_qr_code_cannot_be_used'),
         })
+        return callback?.()
+      }
+
+      // Scanned string is actually a link to an email address
+      if (url.toLowerCase().startsWith('mailto:')) {
+        if (isChatmail) {
+          // on chatmail server simple email can't be used
+          await openAlertDialog({
+            message: tx('invalid_unencrypted_explanation'),
+          })
+        } else {
+          await openMailtoLink(accountId, url)
+        }
         return callback?.()
       }
 
@@ -476,6 +486,7 @@ export default function useProcessQR() {
       startInstantOnboarding,
       addAndSelectAccount,
       selectChat,
+      isChatmail,
       tx,
     ]
   )
