@@ -4,7 +4,6 @@ import { basename } from 'path'
 
 import { getLogger } from '../../../../shared/logger'
 import { BackendRemote, Type } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
 import { MessageTypeAttachmentSubset } from '../../components/attachment/Attachment'
 import { KeybindAction } from '../../keybindings'
 import useMessage from './useMessage'
@@ -165,7 +164,7 @@ export function useDraft(
     }
     setDraftIsLoading(true)
     BackendRemote.rpc
-      .getDraft(selectedAccountId(), chatId)
+      .getDraft(accountId, chatId)
       .then(newDraft => {
         if (abortController.signal.aborted) {
           return
@@ -200,6 +199,7 @@ export function useDraft(
         throw error
       })
   }, [
+    accountId,
     chatId,
     abortController,
     clearDraftStateButKeepTextareaValue,
@@ -231,8 +231,6 @@ export function useDraft(
    */
   const saveAndRefetchDraft_ = useCallback(
     async (chatId: number) => {
-      const accountId = selectedAccountId()
-
       const draft = draftRef.current
       if (
         (draft.text && draft.text.length > 0) ||
@@ -279,7 +277,7 @@ export function useDraft(
         clearDraftStateButKeepTextareaValue()
       }
     },
-    [abortController, clearDraftStateButKeepTextareaValue]
+    [accountId, abortController, clearDraftStateButKeepTextareaValue]
   )
   const saveAndRefetchDraft = useMemo(
     () =>
