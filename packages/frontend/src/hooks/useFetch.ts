@@ -144,11 +144,7 @@ export function useFetchGeneric<F extends AsyncFNoArgs>(
               result: { ok: false, err },
               fetchId,
             })
-            log.errorWithoutStackTrace(
-              'error while executing fetch',
-              err,
-              fetchId
-            )
+            log.errorWithoutStackTrace('error while executing fetch', err)
           }
         })
 
