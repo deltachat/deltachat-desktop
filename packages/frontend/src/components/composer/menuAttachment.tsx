@@ -19,7 +19,11 @@ import ConfirmSendingFiles from '../dialogs/ConfirmSendingFiles'
 import useMessage from '../../hooks/chat/useMessage'
 
 type Props = {
-  addFileToDraft: (file: string, fileName: string, viewType: T.Viewtype) => void
+  addFileToDraft: (
+    file: string,
+    fileName: string | null,
+    viewType: T.Viewtype
+  ) => void
   showAppPicker: (show: boolean) => void
   selectedChat: Pick<T.BasicChat, 'name' | 'id'> | null
 }
@@ -55,7 +59,7 @@ export default function MenuAttachment({
         for (const filePath of filePaths) {
           await sendMessage(accountId, selectedChat.id, {
             file: filePath,
-            filename: basename(filePath),
+            // filename
             viewtype: msgViewType,
           })
           // start sending other files, don't wait until last file is sent
@@ -86,7 +90,7 @@ export default function MenuAttachment({
 
     if (files.length === 1) {
       setLastPath(dirname(files[0]))
-      addFileToDraft(files[0], basename(files[0]), 'File')
+      addFileToDraft(files[0], null, 'File')
     } else if (files.length > 1) {
       confirmSendMultipleFiles(files, 'File')
     }
@@ -110,7 +114,7 @@ export default function MenuAttachment({
 
     if (files.length === 1) {
       setLastPath(dirname(files[0]))
-      addFileToDraft(files[0], basename(files[0]), 'Image')
+      addFileToDraft(files[0], null, 'Image')
     } else if (files.length > 1) {
       confirmSendMultipleFiles(files, 'Image')
     }
