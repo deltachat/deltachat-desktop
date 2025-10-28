@@ -360,7 +360,10 @@ class ElectronRuntime implements Runtime {
     return filePaths
   }
   openLink(link: string): void {
-    if (link.startsWith('http:') || link.startsWith('https:')) {
+    if (
+      link.toLowerCase().startsWith('http:') ||
+      link.toLowerCase().startsWith('https:')
+    ) {
       ipcBackend.invoke('electron.shell.openExternal', link)
     } else {
       this.log.error('tried to open a non http/https external link', {
