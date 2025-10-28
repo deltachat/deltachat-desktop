@@ -7,6 +7,7 @@ import {
   deleteAllProfiles,
   reloadPage,
   test,
+  createNDummyChats,
 } from '../playwright-helper'
 
 test.describe.configure({ mode: 'serial' })
@@ -60,7 +61,7 @@ test.beforeAll(async ({ browser, isChatmail }) => {
   selectedChats = chatList.getByRole('tab', { selected: true })
   // Let's stop at 9, so that we don't accidentally select "Chat 10"
   // by providing the selector "Chat 1".
-  await createNDummyChats(9)
+  await createNDummyChats(page, 9, 'Some chat ')
 })
 
 test.afterAll(async ({ browser }) => {
@@ -72,23 +73,6 @@ test.afterAll(async ({ browser }) => {
   await deleteAllProfiles(pageForProfileDeletion, existingProfiles)
   await context.close()
 })
-
-async function createNDummyChats(n: number) {
-  for (let i = 0; i < n; i++) {
-    await page.getByRole('button', { name: 'New Chat' }).click()
-    await page.getByRole('button', { name: 'New Group' }).click()
-    await page
-      .getByRole('textbox', { name: 'Group Name' })
-      .fill(`Some chat ${(i + 1).toString()}`)
-    await page.getByTestId('group-create-button').click()
-  }
-  await expect(chatList.getByRole('tab', { name: 'Some chat ' })).toContainText(
-    Array(n)
-      .fill(null)
-      .map((_val, i) => `Some chat ${(i + 1).toString()}`)
-      .reverse()
-  )
-}
 
 test.describe('Ctrl + Click', () => {
   test('add chats to selection', async () => {

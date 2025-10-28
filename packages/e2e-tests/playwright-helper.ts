@@ -387,3 +387,27 @@ export async function deleteProfile(
   }
   return null
 }
+
+export async function createNDummyChats(
+  page: Page,
+  n: number,
+  chatNamePrefix = 'Some chat '
+) {
+  for (let i = 0; i < n; i++) {
+    await page.getByRole('button', { name: 'New Chat' }).click()
+    await page.getByRole('button', { name: 'New Group' }).click()
+    await page
+      .getByRole('textbox', { name: 'Group Name' })
+      .fill(`${chatNamePrefix}${(i + 1).toString()}`)
+    await page.getByTestId('group-create-button').click()
+  }
+  const chatList = page.getByLabel('Chats').getByRole('tablist')
+  await expect(
+    chatList.getByRole('tab', { name: chatNamePrefix })
+  ).toContainText(
+    Array(n)
+      .fill(null)
+      .map((_val, i) => `${chatNamePrefix}${(i + 1).toString()}`)
+      .reverse()
+  )
+}
