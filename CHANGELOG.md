@@ -9,6 +9,7 @@
 - show appropriate messages when scanning wrong qr codes #5563
 - fix: remove the option to select info messages with Ctrl + Up/Down #5337
 - fix: open https links case insensitive #5625
+- don't start chat for mailto links on chatmail accounts
 
 ### Changed
 

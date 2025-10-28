@@ -36,15 +36,11 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
   const [initialSettings, setInitialAccountSettings] =
     useState<Credentials>(defaultCredentials())
 
-  const [accountSettings, _setAccountSettings] =
+  const [accountSettings, setAccountSettings] =
     useState<Credentials>(defaultCredentials())
 
   const { openDialog } = useDialog()
   const tx = useTranslationFunction()
-
-  const setAccountSettings = (value: Credentials) => {
-    _setAccountSettings(value)
-  }
 
   const loadSettings = async () => {
     if (window.__selectedAccountId === undefined) {
@@ -58,7 +54,7 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
     const accountSettings: T.EnteredLoginParam = transports[0]
 
     setInitialAccountSettings(accountSettings)
-    _setAccountSettings(accountSettings)
+    setAccountSettings(accountSettings)
   }
 
   useEffect(() => {
