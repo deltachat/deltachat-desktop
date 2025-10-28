@@ -12,7 +12,9 @@ export function truncateText(text: string, max_len: number) {
  * - https://github.com/deltachat/interface/blob/main/uri-schemes.md#invite-links-httpsideltachat-
  */
 export function isInviteLink(url: string) {
-  return url.startsWith('https://i.delta.chat/') && url.includes('#')
+  return (
+    url.toLowerCase().startsWith('https://i.delta.chat/') && url.includes('#')
+  )
 }
 
 /**

@@ -511,7 +511,10 @@ function makeBrowserView(
       open_url(url)
       mainWindow.window?.show()
     } else {
-      if (url.startsWith('http:') || url.startsWith('https:')) {
+      if (
+        url.toLowerCase().startsWith('http:') ||
+        url.toLowerCase().startsWith('https:')
+      ) {
         shell.openExternal(url)
       } else {
         dialog
