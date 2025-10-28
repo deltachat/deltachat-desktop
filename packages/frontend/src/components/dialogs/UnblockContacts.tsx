@@ -55,14 +55,7 @@ export default function UnblockContacts({ onClose }: DialogProps) {
         <DialogContent>
           {blockedContacts.length === 0 && <p>{tx('blocked_empty_hint')}</p>}
           {blockedContacts.length > 0 && (
-            <div
-              ref={wrapperRef}
-              style={{
-                overflow: 'scroll',
-                height: '100%',
-                backgroundColor: 'var(--bp4DialogBgPrimary)',
-              }}
-            >
+            <div ref={wrapperRef}>
               <RovingTabindexProvider wrapperElementRef={wrapperRef}>
                 <ContactList
                   contacts={blockedContacts}
