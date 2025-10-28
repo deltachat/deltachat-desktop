@@ -97,6 +97,69 @@ async function typeText(text: string) {
   await expect(textarea).toHaveText(text)
 }
 
+test("doesn't send the same message twice on multiple clicks", async () => {
+  await getChat(1).click()
+  const messageText = `somee messageee foo ${Math.random()}`
+  await textarea.fill(messageText)
+
+  const sendButton = page.getByRole('button', { name: 'Send' })
+
+  await sendButton.click()
+  for (let i = 0; i < 5; i++) {
+    try {
+      // Note that if we don't `await` each click,
+      // it can results in Playwright clicking
+      // the "record voice message" button.
+      await sendButton.click({ timeout: 1000, force: true })
+    } catch (_error) {
+      break
+    }
+  }
+
+  await expect(
+    page
+      .getByRole('list', { name: 'Messages' })
+      .getByRole('listitem')
+      .getByText(messageText)
+  ).toHaveCount(1)
+
+  await textarea.fill(messageText)
+
+  await Promise.allSettled([
+    textarea.press('ControlOrMeta+Enter'),
+    textarea.press('ControlOrMeta+Enter'),
+    textarea.press('ControlOrMeta+Enter'),
+  ])
+  // One more outside of the `Promise.allSettled`, for good measure.
+  await textarea.press('ControlOrMeta+Enter')
+
+  // Note that we're using the same message text so that we can check
+  // that there are now 2 elements, and not that there is one element
+  // that contains both of the messages.
+  await expect(
+    page
+      .getByRole('list', { name: 'Messages' })
+      .getByRole('listitem')
+      .getByText(messageText)
+  ).toHaveCount(2)
+
+  // Now make sure that the message list is in its "final" state
+  // and no message sends are pending.
+  const finalMessageText = 'my final message'
+  await textarea.fill(finalMessageText)
+  await sendButton.click()
+  await expect(page.getByRole('list', { name: 'Messages' })).toContainText(
+    finalMessageText
+  )
+  // And verify message count again.
+  await expect(
+    page
+      .getByRole('list', { name: 'Messages' })
+      .getByRole('listitem')
+      .getByText(messageText)
+  ).toHaveCount(2)
+})
+
 test.describe('draft', () => {
   async function testSavesText(text: string, targetChatNum: number = 1) {
     const targetChat = getChat(targetChatNum)
