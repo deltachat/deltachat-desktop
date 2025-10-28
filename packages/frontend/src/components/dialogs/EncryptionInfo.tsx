@@ -2,13 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import Dialog, {
-  DialogBody,
-  DialogContent,
-  DialogFooter,
-  FooterActionButton,
-  FooterActions,
-} from '../Dialog'
+import Dialog, { DialogBody, DialogContent, DialogHeader } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
@@ -48,6 +42,10 @@ export function EncryptionInfo({
 
   return (
     <Dialog onClose={onClose}>
+      <DialogHeader
+        title={tx('encryption_info_title_desktop')}
+        onClose={onClose}
+      />
       <DialogBody>
         <DialogContent paddingTop>
           <p style={{ whiteSpace: 'pre-wrap' }}>
@@ -56,13 +54,6 @@ export function EncryptionInfo({
           </p>
         </DialogContent>
       </DialogBody>
-      <DialogFooter>
-        <FooterActions>
-          <FooterActionButton styling='primary' onClick={onClose}>
-            {tx('ok')}
-          </FooterActionButton>
-        </FooterActions>
-      </DialogFooter>
     </Dialog>
   )
 }

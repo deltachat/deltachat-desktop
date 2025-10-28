@@ -3,12 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { debounceWithInit } from '../chat/ChatListHelpers'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import Dialog, {
-  CloseFooterAction,
-  DialogBody,
-  DialogContent,
-  DialogHeader,
-} from '../Dialog'
+import Dialog, { DialogBody, DialogContent, DialogHeader } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
@@ -22,9 +17,8 @@ export default function ConnectivityDialog({ onClose }: DialogProps) {
 
   return (
     <Dialog onClose={onClose} canOutsideClickClose={true}>
-      <DialogHeader title={tx('connectivity')} />
+      <DialogHeader title={tx('connectivity')} onClose={onClose} />
       {ConnectivityDialogInner()}
-      <CloseFooterAction onClose={onClose} />
     </Dialog>
   )
 }

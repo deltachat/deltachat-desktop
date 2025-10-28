@@ -1,12 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
-import Dialog, {
-  DialogBody,
-  DialogFooter,
-  DialogHeader,
-  FooterActionButton,
-  FooterActions,
-} from '../../Dialog'
+import Dialog, { DialogBody, DialogHeader } from '../../Dialog'
 import styles from './styles.module.scss'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import type { T } from '@deltachat/jsonrpc-client'
@@ -58,7 +52,7 @@ export default function SelectContactDialog({
 
   return (
     <Dialog width={400} onClose={onClose} fixed>
-      <DialogHeader>
+      <DialogHeader onClose={onClose}>
         <input
           data-no-drag-region
           className='search-input'
@@ -120,13 +114,6 @@ export default function SelectContactDialog({
           </AutoSizer>
         </div>
       </DialogBody>
-      <DialogFooter>
-        <FooterActions>
-          <FooterActionButton onClick={onClose}>
-            {tx('close')}
-          </FooterActionButton>
-        </FooterActions>
-      </DialogFooter>
     </Dialog>
   )
 }

@@ -1,11 +1,6 @@
 import React from 'react'
 
-import Dialog, {
-  CloseFooterAction,
-  DialogBody,
-  DialogContent,
-  DialogHeader,
-} from '../Dialog'
+import Dialog, { DialogBody, DialogContent, DialogHeader } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import { C, type T } from '@deltachat/jsonrpc-client'
@@ -39,7 +34,7 @@ export default function MailingListProfile(
 
   return (
     <Dialog onClose={onClose} fixed>
-      <DialogHeader title={title} />
+      <DialogHeader title={title} onClose={onClose} />
       <DialogBody>
         <DialogContent>
           <ProfileInfoHeader
@@ -48,9 +43,9 @@ export default function MailingListProfile(
             displayName={chat.name}
             disableFullscreen={shouldDisableClickForFullscreen(chat)}
           />
+          <div style={{ margin: '1rem 0' }}></div>
         </DialogContent>
       </DialogBody>
-      <CloseFooterAction onClose={onClose} />
     </Dialog>
   )
 }
