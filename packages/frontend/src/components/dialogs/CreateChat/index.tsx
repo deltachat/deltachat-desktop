@@ -339,7 +339,7 @@ function CreateChatMain(props: CreateChatMainProps) {
 
   return (
     <>
-      <DialogHeader>
+      <DialogHeader onClose={onClose}>
         <input
           data-no-drag-region
           className='search-input'
@@ -428,13 +428,6 @@ function CreateChatMain(props: CreateChatMainProps) {
           )}
         </AutoSizer>
       </DialogBody>
-      <DialogFooter>
-        <FooterActions>
-          <FooterActionButton styling='primary' onClick={onClose}>
-            {tx('close')}
-          </FooterActionButton>
-        </FooterActions>
-      </DialogFooter>
     </>
   )
 }

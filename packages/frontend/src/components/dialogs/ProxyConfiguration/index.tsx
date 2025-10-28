@@ -1,12 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { DialogProps } from '../../../contexts/DialogContext'
-import Dialog, {
-  DialogBody,
-  DialogHeader,
-  DialogFooter,
-  FooterActions,
-  FooterActionButton,
-} from '../../Dialog'
+import Dialog, { DialogBody, DialogHeader, DialogFooter } from '../../Dialog'
 
 import { C } from '@deltachat/jsonrpc-client'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
@@ -448,11 +442,6 @@ export default function ProxyConfiguration(
             ＋
           </Button>
         )}
-        <FooterActions>
-          <FooterActionButton onClick={closeDialog}>
-            {tx('close')}
-          </FooterActionButton>
-        </FooterActions>
       </DialogFooter>
     </Dialog>
   )
