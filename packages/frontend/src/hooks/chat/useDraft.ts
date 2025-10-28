@@ -175,8 +175,8 @@ export function useDraft(
           clearDraftStateButKeepTextareaValue()
           inputRef.current?.setText('')
         } else {
-          _setDraftStateButKeepTextareaValue(old => ({
-            ...old,
+          _setDraftStateButKeepTextareaValue(_old => ({
+            chatId,
             id: newDraft.id,
             text: newDraft.text || '',
             file: newDraft.file,
@@ -262,7 +262,10 @@ export function useDraft(
 
       if (newDraft) {
         _setDraftStateButKeepTextareaValue(old => ({
-          ...old,
+          // don't load text to prevent bugging back
+          text: old.text,
+
+          chatId,
           id: newDraft.id,
           file: newDraft.file,
           fileBytes: newDraft.fileBytes,
@@ -272,7 +275,6 @@ export function useDraft(
           quote: newDraft.quote,
           vcardContact: newDraft.vcardContact,
         }))
-        // don't load text to prevent bugging back
       } else {
         clearDraftStateButKeepTextareaValue()
       }
