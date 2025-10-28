@@ -15,9 +15,25 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 type Props = PropsWithChildren<{
   title?: string
+  /**
+   * When this is provided, a "back" button will be shown.
+   * Otherwise it will be hidden.
+   */
   onClickBack?: () => void
+  /**
+   * When this is provided, aт "edit" button will be shown.
+   * Otherwise it will be hidden.
+   */
   onClickEdit?: () => void
+  /**
+   * When this is provided, a "close" button will be shown.
+   * Otherwise it will be hidden.
+   */
   onClose?: DialogProps['onClose']
+  /**
+   * When this is provided, a "three-dot" button will be shown.
+   * Otherwise it will be hidden.
+   */
   onContextMenuClick?: (_event: any) => void
   dataTestid?: string
 }>
