@@ -873,6 +873,7 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
               }
               finishCreateBroadcast()
             }}
+            styling='primary'
           >
             {tx('create')}
           </FooterActionButton>
