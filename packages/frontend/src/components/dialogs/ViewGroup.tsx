@@ -548,7 +548,7 @@ export function ShowQRDialog({
   return (
     <Dialog
       onClose={onClose}
-      canOutsideClickClose={false}
+      canOutsideClickClose={true}
       fixed
       dataTestid='group-invite-qr'
     >
@@ -590,8 +590,11 @@ export function EditGroupNameDialog({
     onOk(groupName, groupImage)
   }
 
+  const haveUnsavedChanges =
+    groupName !== initialGroupName || groupImage !== initialGroupImage
+
   return (
-    <Dialog onClose={onClose} canOutsideClickClose={false} fixed>
+    <Dialog onClose={onClose} canOutsideClickClose={!haveUnsavedChanges} fixed>
       <DialogHeader
         title={
           !isBroadcast ? tx('menu_group_name_and_image') : tx('channel_name')
