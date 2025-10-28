@@ -127,93 +127,116 @@ export function useDraft(
     setDraftStateAndUpdateTextareaValue(emptyDraft(chatId))
   }, [chatId, setDraftStateAndUpdateTextareaValue])
 
-  /**
-   * Aborts and gets re-created when {@linkcode accountId} or
-   * {@linkcode chatId} change, or simply when the component unmounts.
-   *
-   * It is needed to avoid races where e.g. `getDraft` started but then
-   * {@linkcode chatId} changed before it finished.
-   * The approach is similar to
-   * https://react.dev/learn/you-might-not-need-an-effect#fetching-data.
-   */
-  const abortController = useMemo(
-    () => new AbortController(),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [accountId, chatId]
-  )
-  useEffect(() => {
-    // The fact that `abortController` updated means that its dependencies,
-    // i.e. `[accountId, chatId]`, updated.
-    return () => {
-      // This is now the "old" `abortController`. Let's abort it.
-      abortController.abort()
-    }
-  }, [abortController])
-
-  const [draftIsLoading_, setDraftIsLoading] = useState(true)
   const skipLoadingDraft = chatId === null || !canSend
-  const draftIsLoading = skipLoadingDraft ? false : draftIsLoading_
-  const loadDraft = useCallback(() => {
-    if (skipLoadingDraft) {
-      clearDraftStateButKeepTextareaValue()
-      return
-    }
-    setDraftIsLoading(true)
-    BackendRemote.rpc
-      .getDraft(selectedAccountId(), chatId)
-      .then(newDraft => {
-        if (abortController.signal.aborted) {
-          return
-        }
+  // The "loading" approach below is similar to that of our `useRpcFetch`.
+  /**
+   * Dummy state used to trigger manual refreshes.
+   * Changing this value forces a new fetch.
+   */
+  const [refreshDraftDummyValue, _setRefreshDraftDummyValue] = useState(0)
+  const reloadDraft = useCallback(
+    () => _setRefreshDraftDummyValue(old => old + 1),
+    []
+  )
+  type LoadDraftDependencies = [
+    typeof accountId,
+    typeof chatId,
+    typeof refreshDraftDummyValue,
+    typeof isContactRequest,
 
-        if (!newDraft) {
-          log.debug('no draft')
-          clearDraftStateButKeepTextareaValue()
-          inputRef.current?.setText('')
-        } else {
-          _setDraftStateButKeepTextareaValue(old => ({
-            ...old,
-            isPendingSaveAndRefetch: false,
-            id: newDraft.id,
-            text: newDraft.text || '',
-            file: newDraft.file,
-            fileBytes: newDraft.fileBytes,
-            fileMime: newDraft.fileMime,
-            fileName: newDraft.fileName,
-            viewType: newDraft.viewType,
-            quote: newDraft.quote,
-            vcardContact: newDraft.vcardContact,
-          }))
-          inputRef.current?.setText(newDraft.text)
-        }
-        setDraftIsLoading(false)
-        setTimeout(() => {
-          inputRef.current?.focus()
+    typeof clearDraftStateButKeepTextareaValue,
+    typeof inputRef,
+    typeof skipLoadingDraft,
+  ]
+  const draftDependenciesIdentity = useMemo(
+    () => Symbol(),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      accountId,
+      chatId,
+      refreshDraftDummyValue,
+      isContactRequest,
+      clearDraftStateButKeepTextareaValue,
+      inputRef,
+      skipLoadingDraft,
+    ] as LoadDraftDependencies
+  )
+  const [loadedDraftForDependencies, setLoadedDraftForDependencies] = useState<
+    null | typeof draftDependenciesIdentity
+  >(null)
+  const draftIsLoading = skipLoadingDraft
+    ? false
+    : loadedDraftForDependencies !== draftDependenciesIdentity
+  useEffect(
+    () => {
+      if (skipLoadingDraft) {
+        clearDraftStateButKeepTextareaValue()
+        return
+      }
+
+      let outdated = false
+
+      BackendRemote.rpc
+        .getDraft(selectedAccountId(), chatId)
+        .then(newDraft => {
+          if (outdated) {
+            return
+          }
+
+          if (!newDraft) {
+            log.debug('no draft')
+            clearDraftStateButKeepTextareaValue()
+            inputRef.current?.setText('')
+          } else {
+            _setDraftStateButKeepTextareaValue(old => ({
+              ...old,
+              isPendingSaveAndRefetch: false,
+              id: newDraft.id,
+              text: newDraft.text || '',
+              file: newDraft.file,
+              fileBytes: newDraft.fileBytes,
+              fileMime: newDraft.fileMime,
+              fileName: newDraft.fileName,
+              viewType: newDraft.viewType,
+              quote: newDraft.quote,
+              vcardContact: newDraft.vcardContact,
+            }))
+            inputRef.current?.setText(newDraft.text)
+          }
+          setLoadedDraftForDependencies(draftDependenciesIdentity)
+          setTimeout(() => {
+            inputRef.current?.focus()
+          })
         })
-      })
-      .catch(error => {
-        setDraftIsLoading(false)
-        throw error
-      })
-  }, [
-    chatId,
-    abortController,
-    clearDraftStateButKeepTextareaValue,
-    inputRef,
-    skipLoadingDraft,
-  ])
+        .catch(error => {
+          if (!outdated) {
+            setLoadedDraftForDependencies(draftDependenciesIdentity)
+          }
+          throw error
+        })
+
+      return () => {
+        outdated = true
+      }
+    },
+    [
+      accountId,
+      chatId,
+      refreshDraftDummyValue,
+      isContactRequest,
+      clearDraftStateButKeepTextareaValue,
+      inputRef,
+      skipLoadingDraft,
+      draftDependenciesIdentity,
+    ] as [...LoadDraftDependencies, typeof draftDependenciesIdentity]
+  )
 
   useEffect(() => {
-    window.__reloadDraft = loadDraft
+    window.__reloadDraft = reloadDraft
     return () => {
       window.__reloadDraft = null
     }
-  }, [loadDraft])
-
-  useEffect(() => {
-    log.debug('reloading chat because id changed', chatId)
-    loadDraft()
-  }, [chatId, loadDraft, isContactRequest])
+  }, [reloadDraft])
 
   /**
    * Saving (uploading) the draft to the backend is not always enough.
