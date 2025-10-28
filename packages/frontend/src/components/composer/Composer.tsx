@@ -86,13 +86,13 @@ const Composer = forwardRef<
     regularMessageInputRef,
     editMessageInputRef,
     draftState,
+    draftIsLoading,
     onSelectReplyToShortcut,
     removeQuote,
     updateDraftText,
     addFileToDraft,
     removeFile,
   } = props
-  const draftIsLoading = draftState == null
 
   const chatId = selectedChat.id
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
