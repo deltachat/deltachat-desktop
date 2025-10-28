@@ -68,7 +68,13 @@ export function KeyViewPanel({
   )
 }
 
-function InitiatePanel({ onClick }: { onClick: todo }) {
+function InitiatePanel({
+  onClick,
+  onClose,
+}: {
+  onClick: todo
+  onClose: () => void
+}) {
   const tx = useTranslationFunction()
 
   return (
@@ -77,8 +83,13 @@ function InitiatePanel({ onClick }: { onClick: todo }) {
         <Callout>{tx('autocrypt_send_asm_explain_before')}</Callout>
       </DialogBody>
       <DialogFooter>
-        <FooterActions align='center'>
-          <FooterActionButton onClick={onClick}>{tx('ok')}</FooterActionButton>
+        <FooterActions>
+          <FooterActionButton onClick={onClose}>
+            {tx('cancel')}
+          </FooterActionButton>
+          <FooterActionButton onClick={onClick} styling='primary'>
+            {tx('autocrypt_send_asm_button')}
+          </FooterActionButton>
         </FooterActions>
       </DialogFooter>
     </>
@@ -104,7 +115,7 @@ export function SendAutocryptSetupMessage({ onClose: _onClose }: DialogProps) {
   if (key) {
     body = <KeyViewPanel autocryptKey={key} onClose={onClose} />
   } else {
-    body = <InitiatePanel onClick={initiateKeyTransfer} />
+    body = <InitiatePanel onClick={initiateKeyTransfer} onClose={onClose} />
   }
 
   return (
