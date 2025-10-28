@@ -285,8 +285,10 @@ export default class DCWebxdc {
                 icon: app_icon?.resize({ width: 24 }) || undefined,
                 click: () => {
                   if (
-                    webxdcInfo.sourceCodeUrl?.startsWith('https:') ||
-                    webxdcInfo.sourceCodeUrl?.startsWith('http:')
+                    webxdcInfo.sourceCodeUrl
+                      ?.toLowerCase()
+                      .startsWith('https:') ||
+                    webxdcInfo.sourceCodeUrl?.toLowerCase().startsWith('http:')
                   ) {
                     shell.openExternal(webxdcInfo.sourceCodeUrl)
                   } else if (webxdcInfo.sourceCodeUrl) {

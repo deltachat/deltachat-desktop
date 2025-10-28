@@ -421,7 +421,10 @@ class TauriRuntime implements Runtime {
     return this.runtime_info
   }
   openLink(link: string): void {
-    if (link.startsWith('http:') || link.startsWith('https:')) {
+    if (
+      link.toLowerCase().startsWith('http:') ||
+      link.toLowerCase().startsWith('https:')
+    ) {
       openUrl(link)
     } else {
       this.log.error('tried to open a non http/https external link', {
