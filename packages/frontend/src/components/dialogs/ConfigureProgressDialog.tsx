@@ -162,7 +162,7 @@ export function ConfigureProgressDialog({
       </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <FooterActionButton styling='danger' onClick={onCancel}>
+          <FooterActionButton onClick={onCancel}>
             {tx('cancel')}
           </FooterActionButton>
         </FooterActions>
