@@ -70,8 +70,8 @@ const Composer = forwardRef<
       viewType: T.Viewtype
     ) => Promise<void>
     removeFile: () => void
-    clearDraftStateAndUpdateTextareaValue: () => void
-    setDraftStateAndUpdateTextareaValue: (newValue: DraftObject) => void
+    clearDraftState: () => void
+    setDraftState: (newValue: DraftObject) => void
   }
 >((props, ref) => {
   const {
@@ -217,7 +217,7 @@ const Composer = forwardRef<
           // so we'd have to re-focus it, which would make screen readers
           // re-announce it, which is disorienting.
           // See https://github.com/deltachat/deltachat-desktop/issues/4590#issuecomment-2821985528.
-          props.clearDraftStateAndUpdateTextareaValue()
+          props.clearDraftState()
 
           let sentSuccessfully: boolean
           try {
@@ -237,7 +237,7 @@ const Composer = forwardRef<
             // TODO fix: hypothetically by this point the user
             // could have started typing a new message already,
             // and so this would override it on the frontend.
-            props.setDraftStateAndUpdateTextareaValue(preSendDraftState)
+            props.setDraftState(preSendDraftState)
           }
           if (sentSuccessfully) {
             // TODO fix: hypothetically by this point the user
