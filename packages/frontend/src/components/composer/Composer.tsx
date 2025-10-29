@@ -155,12 +155,7 @@ const Composer = forwardRef<
       // random filename
       const filename = Math.random().toString(36).substring(2, 10) + '.mp3'
       const path = await runtime.writeTempFileFromBase64(filename, b64)
-      addFileToDraft(path, filename, 'Voice').catch((reason: any) => {
-        log.error('Cannot send message:', reason)
-        openDialog(AlertDialog, {
-          message: `${tx('error')}: ${reason}`,
-        })
-      })
+      addFileToDraft(path, filename, 'Voice')
     }
   }
 
