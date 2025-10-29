@@ -178,7 +178,7 @@ export function useDraft(
           _setDraftStateButKeepTextareaValue(_old => ({
             chatId,
             id: newDraft.id,
-            text: newDraft.text || '',
+            text: newDraft.text,
             file: newDraft.file,
             fileBytes: newDraft.fileBytes,
             fileMime: newDraft.fileMime,
