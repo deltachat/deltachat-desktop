@@ -118,8 +118,8 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     removeQuote,
     addFileToDraft,
     removeFile,
-    clearDraftStateAndUpdateTextareaValue,
-    setDraftStateAndUpdateTextareaValue,
+    clearDraftState,
+    setDraftState,
   } = useDraft(
     messageListState,
     accountId,
@@ -322,12 +322,8 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
         removeQuote={removeQuote}
         addFileToDraft={addFileToDraft}
         removeFile={removeFile}
-        clearDraftStateAndUpdateTextareaValue={
-          clearDraftStateAndUpdateTextareaValue
-        }
-        setDraftStateAndUpdateTextareaValue={
-          setDraftStateAndUpdateTextareaValue
-        }
+        clearDraftState={clearDraftState}
+        setDraftState={setDraftState}
       />
     </div>
   )
