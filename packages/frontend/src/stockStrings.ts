@@ -97,7 +97,6 @@ export async function updateCoreStrings() {
     [C.DC_STR_CONTACT_VERIFIED]: tx('contact_verified'),
     [C.DC_STR_DEVICE_MESSAGES_HINT]: tx('device_talk_explain'),
     [C.DC_STR_WELCOME_MESSAGE]: tx('device_talk_welcome_message2'),
-    [C.DC_STR_UNKNOWN_SENDER_FOR_CHAT]: tx('systemmsg_unknown_sender_for_chat'),
     [C.DC_STR_SUBJECT_FOR_NEW_CONTACT]: tx('systemmsg_subject_for_new_contact'),
     [C.DC_STR_FAILED_SENDING_TO]: tx('systemmsg_failed_sending_to'),
     [C.DC_STR_CONFIGURATION_FAILED]: tx('configuration_failed_with_error'),
