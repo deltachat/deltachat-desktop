@@ -17,10 +17,6 @@ export type DraftObject = { chatId: number } & Pick<
   'id' | 'file' | 'viewType' | 'vcardContact'
 > &
   MessageTypeAttachmentSubset & {
-    /**
-     * Note that this text is not always synced with the actual state
-     * of the composer <textarea>. It's basically duplicated state.
-     */
     text: Type.Message['text']
     quote:
       | Type.Message['quote']
@@ -75,46 +71,22 @@ export function useDraft(
     viewType: T.Viewtype
   ) => Promise<void>
   removeFile: () => void
-  clearDraftStateButKeepTextareaValue: () => void
   clearDraftStateAndUpdateTextareaValue: () => void
   setDraftStateAndUpdateTextareaValue: (newValue: DraftObject) => void
 } {
   const [
     draftState,
     /**
-     * Set `draftState`, but don't update the value of the message textarea
-     * (because it's managed by a separate piece of state).
-     *
      * This will not save the draft to the backend.
      */
-    _setDraftStateButKeepTextareaValue,
+    // TODO rename.
+    setDraftStateAndUpdateTextareaValue,
   ] = useState<DraftObject>(() => emptyDraft(chatId))
 
-  /**
-   * @see {@link _setDraftStateButKeepTextareaValue}.
-   */
-  const setDraftStateAndUpdateTextareaValue = useCallback(
-    (newValue: DraftObject) => {
-      _setDraftStateButKeepTextareaValue(newValue)
-      inputRef.current?.setText(newValue.text)
-    },
-    [inputRef]
-  )
-
-  /**
-   * Reset `draftState` to "empty draft" value,
-   * but don't save it to backend and don't change the value
-   * of the textarea.
-   */
-  const clearDraftStateButKeepTextareaValue = useCallback(() => {
-    _setDraftStateButKeepTextareaValue(_ => emptyDraft(chatId))
-  }, [chatId])
-  /**
-   * @see {@link clearDraftStateButKeepTextareaValue}
-   */
+  // TODO rename.
   const clearDraftStateAndUpdateTextareaValue = useCallback(() => {
     setDraftStateAndUpdateTextareaValue(emptyDraft(chatId))
-  }, [chatId, setDraftStateAndUpdateTextareaValue])
+  }, [chatId])
 
   /**
    * Aborts and gets re-created when {@linkcode accountId} or
@@ -144,7 +116,7 @@ export function useDraft(
   const draftIsLoading = skipLoadingDraft ? false : draftIsLoading_
   const loadDraft = useCallback(() => {
     if (skipLoadingDraft) {
-      clearDraftStateButKeepTextareaValue()
+      clearDraftStateAndUpdateTextareaValue()
       return
     }
     setDraftIsLoading(true)
@@ -157,10 +129,9 @@ export function useDraft(
 
         if (!newDraft) {
           log.debug('no draft')
-          clearDraftStateButKeepTextareaValue()
-          inputRef.current?.setText('')
+          clearDraftStateAndUpdateTextareaValue()
         } else {
-          _setDraftStateButKeepTextareaValue(_old => ({
+          setDraftStateAndUpdateTextareaValue(_old => ({
             chatId,
             id: newDraft.id,
             text: newDraft.text,
@@ -172,7 +143,6 @@ export function useDraft(
             quote: newDraft.quote,
             vcardContact: newDraft.vcardContact,
           }))
-          inputRef.current?.setText(newDraft.text)
         }
         setDraftIsLoading(false)
         setTimeout(() => {
@@ -187,7 +157,7 @@ export function useDraft(
     accountId,
     chatId,
     abortController,
-    clearDraftStateButKeepTextareaValue,
+    clearDraftStateAndUpdateTextareaValue,
     inputRef,
     skipLoadingDraft,
   ])
@@ -249,9 +219,9 @@ export function useDraft(
         return
       }
 
+      // don't load text to prevent bugging back
       if (newDraft) {
-        _setDraftStateButKeepTextareaValue(old => ({
-          // don't load text to prevent bugging back
+        setDraftStateAndUpdateTextareaValue(old => ({
           text: old.text,
 
           chatId,
@@ -265,10 +235,13 @@ export function useDraft(
           vcardContact: newDraft.vcardContact,
         }))
       } else {
-        clearDraftStateButKeepTextareaValue()
+        setDraftStateAndUpdateTextareaValue(old => ({
+          ...emptyDraft(chatId),
+          text: old.text,
+        }))
       }
     },
-    [accountId, abortController, clearDraftStateButKeepTextareaValue]
+    [accountId, abortController]
   )
   const saveAndRefetchDraft = useMemo(
     () =>
@@ -284,7 +257,7 @@ export function useDraft(
       saveAndRefetchDraft == null
         ? null
         : (newDraftState: DraftObject) => {
-            _setDraftStateButKeepTextareaValue(newDraftState)
+            setDraftStateAndUpdateTextareaValue(newDraftState)
             return saveAndRefetchDraft(newDraftState)
           },
     [saveAndRefetchDraft]
@@ -294,6 +267,7 @@ export function useDraft(
     if (chatId !== InputChatId) {
       log.warn("chat Id and InputChatId don't match, do nothing")
     } else {
+      // TODO debounce.
       setAndSaveAndRefetchDraftButKeepTextareaValue?.({
         ...draftState,
         text,
@@ -468,7 +442,6 @@ export function useDraft(
     updateDraftText,
     addFileToDraft,
     removeFile,
-    clearDraftStateButKeepTextareaValue,
     clearDraftStateAndUpdateTextareaValue,
     setDraftStateAndUpdateTextareaValue,
   }

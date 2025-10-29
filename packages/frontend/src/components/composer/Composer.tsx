@@ -75,7 +75,6 @@ const Composer = forwardRef<
       viewType: T.Viewtype
     ) => Promise<void>
     removeFile: () => void
-    clearDraftStateButKeepTextareaValue: () => void
     clearDraftStateAndUpdateTextareaValue: () => void
     setDraftStateAndUpdateTextareaValue: (newValue: DraftObject) => void
   }
@@ -97,7 +96,6 @@ const Composer = forwardRef<
   const chatId = selectedChat.id
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   const [showAppPicker, setShowAppPicker] = useState(false)
-  const [currentEditText, setCurrentEditText] = useState('')
   const [recording, setRecording] = useState(false)
 
   const emojiAndStickerRef = useRef<HTMLDivElement>(null)
@@ -135,6 +133,11 @@ const Composer = forwardRef<
   const currentComposerMessageInputRef = messageEditing.isEditingModeActive
     ? editMessageInputRef
     : regularMessageInputRef
+
+  const onComposerMessageInputChange = useCallback(
+    (newText: string) => updateDraftText(newText, chatId),
+    [chatId, updateDraftText]
+  )
 
   const voiceMessageDisabled =
     !!draftState.file || !!draftState.text || messageEditing.isEditingModeActive
@@ -187,7 +190,9 @@ const Composer = forwardRef<
     }
   }, [selectedChat.canSend])
 
-  const showSendButton = currentEditText !== '' || !!draftState.file
+  const showSendButton = messageEditing.isEditingModeActive
+    ? messageEditing.newText.length > 0
+    : draftState.text.length > 0 || !!draftState.file
 
   useEffect(() => {
     return onDCEvent(accountId, 'SecurejoinJoinerProgress', ({ progress }) => {
@@ -207,18 +212,14 @@ const Composer = forwardRef<
           if (chatId === null) {
             throw new Error('chat id is undefined')
           }
-          if (!regularMessageInputRef.current) {
-            throw new Error('messageInputRef is undefined')
-          }
-          const message = regularMessageInputRef.current?.getText() || ''
-          if (!regularMessageInputRef.current?.hasText() && !draftState.file) {
+          if (!(draftState.text.length > 0) && !draftState.file) {
             log.debug(`Empty message: don't send it...`)
             return
           }
 
           const preSendDraftState = draftState
           const sendMessagePromise = sendMessage(accountId, chatId, {
-            text: replaceColonsSafe(message),
+            text: replaceColonsSafe(draftState.text),
             file: draftState.file || undefined,
             filename: draftState.fileName || undefined,
             quotedMessageId:
@@ -629,6 +630,7 @@ const Composer = forwardRef<
           {settingsStore && !recording && (
             <>
               <ComposerMessageInput
+                text={draftState.text}
                 // We use `hidden` instead of simply conditionally rendering
                 // because the source of truth for the draft text
                 // is stored inside the `ComposerMessageInput`,
@@ -653,11 +655,11 @@ const Composer = forwardRef<
                   })
                 }
                 chatId={chatId}
-                updateDraftText={updateDraftText}
                 onPaste={handlePaste ?? undefined}
-                onChange={setCurrentEditText}
+                onChange={onComposerMessageInputChange}
               />
               <ComposerMessageInput
+                text={messageEditing.newText ?? ''}
                 isMessageEditingMode={true}
                 hidden={!messageEditing.isEditingModeActive}
                 ref={editMessageInputRef}
@@ -667,13 +669,9 @@ const Composer = forwardRef<
                   messageEditing.doSendEditRequest ?? (() => {})
                 }
                 chatId={chatId}
-                // We don't store the edits as "drafts" anywhere except
-                // inside the <ComposerMessageInput> component itself,
-                // so this can be a no-op.
-                updateDraftText={() => {}}
                 // Message editing mode doesn't support file pasting.
                 // onPaste={handlePaste}
-                onChange={setCurrentEditText}
+                onChange={messageEditing.setNewText ?? (() => {})}
               />
             </>
           )}
@@ -767,6 +765,7 @@ function useMessageEditing(
   // but let's still make sure that it belongs to the current chat here.
   const originalMessage =
     _originalMessage?.chatId === chatId ? _originalMessage : null
+  const [newText, setNewText] = useState<string>(originalMessage?.text || '')
 
   // Should we also listen for `MsgsChanged` and update the message?
   // E.g. if it got edited from another device.
@@ -777,8 +776,8 @@ function useMessageEditing(
     setOriginalMessage(null)
     // This should be unnecessary because `setOriginalMessage(null)`
     // should be enough, but let's sill clean up.
-    editMessageInputRef.current?.setText('')
-  }, [editMessageInputRef])
+    setNewText('')
+  }, [])
 
   if (useHasChanged2(chatId)) {
     // Yes, this means that the "edit draft" gets lost on chat change.
@@ -805,7 +804,7 @@ function useMessageEditing(
       setOriginalMessage(newOriginalMessage)
       // Let's not reset the text if we're already editing this message.
       if (newOriginalMessage.id !== prevOriginalMessageId) {
-        editMessageInputRef.current?.setText(newOriginalMessage.text)
+        setNewText(newOriginalMessage.text)
       }
 
       // Wait until the new element is actually rendered, only then focus.
@@ -819,12 +818,6 @@ function useMessageEditing(
   }, [chatId, editMessageInputRef, originalMessage?.id])
 
   const doSendEditRequest = useCallback(() => {
-    if (editMessageInputRef.current == null) {
-      log.error('doEdit called, but editMessageInputRef is not present')
-      return
-    }
-
-    const newText = editMessageInputRef.current.getText()
     if (newText.trim().length === 0) {
       userFeedback({
         type: 'error',
@@ -856,7 +849,7 @@ function useMessageEditing(
         // but this backend call shouldn't take long,
         // and it's rare that it would fail.
         setOriginalMessage(originalMessage_)
-        editMessageInputRef.current?.setText(newText)
+        setNewText(newText)
 
         userFeedback({
           type: 'error',
@@ -868,7 +861,7 @@ function useMessageEditing(
     // Otimistically exit the "edit" mode,
     // without waiting for the backend call to finish.
     setOriginalMessage(null)
-    editMessageInputRef.current.setText('')
+    setNewText('')
     // TODO focus the "regular message" input?
     // Or is it not a bug but a feature,
     // so that you don't accidentally send the draft
@@ -878,7 +871,7 @@ function useMessageEditing(
     //
     // Maybe instead, to guard against this, we could simply disable
     // the "send" function for ~1 second after the edit is done.
-  }, [accountId, editMessageInputRef, originalMessage, tx, userFeedback])
+  }, [accountId, newText, originalMessage, tx, userFeedback])
 
   // An early return to help TypeScript.
   if (!isEditingModeActive) {
@@ -891,6 +884,8 @@ function useMessageEditing(
   return {
     isEditingModeActive,
     originalMessage,
+    newText,
+    setNewText,
     doSendEditRequest,
     /**
      * Exit the "edit" mode, without doing anything else.

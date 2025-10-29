@@ -1,5 +1,4 @@
 import React from 'react'
-import { throttle } from '@deltachat-desktop/shared/util.js'
 
 import { ActionEmitter, KeybindAction } from '../../keybindings'
 import { getLogger } from '../../../../shared/logger'
@@ -12,6 +11,7 @@ const browserSupportsCSSFieldSizing = CSS.supports('field-sizing', 'content')
 const maxLines = 9
 
 type ComposerMessageInputProps = {
+  text: string
   /**
    * Whether the initial loading of the draft is being performed,
    * e.g. after switching the chat, or after a
@@ -28,14 +28,11 @@ type ComposerMessageInputProps = {
   sendMessageOrEditRequest: () => void
   enterKeySends: boolean
   onPaste?: (e: React.ClipboardEvent<HTMLTextAreaElement>) => void
-  updateDraftText: (text: string, InputChatId: number) => void
   // used to show/hide send button
   onChange: (text: string) => void
 }
 
 type ComposerMessageInputState = {
-  text: string
-  chatId: number
   // error?:boolean|Error
 }
 
@@ -49,13 +46,8 @@ export default class ComposerMessageInput extends React.Component<
   composerSize: number
   setCursorPosition: number | false
   textareaRef: React.RefObject<HTMLTextAreaElement | null>
-  throttledSaveDraft: ReturnType<typeof throttle>
   constructor(props: ComposerMessageInputProps) {
     super(props)
-    this.state = {
-      text: '',
-      chatId: props.chatId,
-    }
 
     this.composerSize = 48
     this.setComposerSize = this.setComposerSize.bind(this)
@@ -64,17 +56,6 @@ export default class ComposerMessageInput extends React.Component<
     this.onChange = this.onChange.bind(this)
     this.insertStringAtCursorPosition =
       this.insertStringAtCursorPosition.bind(this)
-
-    // Remember that the draft might be updated from the outside
-    // of this component (with the `setText` method,
-    // e.g. when the draft gets cleared after sending a message).
-    // This can happen _after_ an `onChange` event but _before_
-    // the unrelying throttled function invokation.
-    this.throttledSaveDraft = throttle((text, chatId) => {
-      if (this.state.chatId === chatId) {
-        this.props.updateDraftText(text.trim() === '' ? '' : text, chatId)
-      }
-    }, 400)
 
     this.textareaRef = React.createRef()
     this.focus = this.focus.bind(this)
@@ -88,29 +69,6 @@ export default class ComposerMessageInput extends React.Component<
     ActionEmitter.unRegisterHandler(KeybindAction.Composer_Focus, this.focus)
   }
 
-  static getDerivedStateFromProps(
-    props: ComposerMessageInputProps,
-    currentState: ComposerMessageInputState
-  ) {
-    if (currentState.chatId !== props.chatId) {
-      return { chatId: props.chatId, text: '' }
-    }
-    return null
-  }
-
-  /**
-   * Sets the text area value, and ensures that `updateDraftText`
-   * does not get invoked until the next change to the draft text.
-   *
-   * Useful for setting / clearing draft text afer loading it from core,
-   * e.g. after sending the message or opening a chat with an existing draft.
-   */
-  setText(text: string | null) {
-    this.setState({ text: text || '' })
-    this.throttledSaveDraft.cancel()
-    this.props.onChange(text || '')
-  }
-
   setComposerSize(size: number) {
     this.composerSize = size
   }
@@ -122,18 +80,7 @@ export default class ComposerMessageInput extends React.Component<
     }
   }
 
-  getText() {
-    return this.state.text
-  }
-
-  hasText(): boolean {
-    return !this.getText().match(/^\s*$/)
-  }
-
-  componentDidUpdate(
-    prevProps: ComposerMessageInputProps,
-    prevState: ComposerMessageInputState
-  ) {
+  componentDidUpdate(prevProps: ComposerMessageInputProps) {
     if (this.setCursorPosition && this.textareaRef.current) {
       this.textareaRef.current.selectionStart = this.setCursorPosition
       this.textareaRef.current.selectionEnd = this.setCursorPosition
@@ -161,14 +108,14 @@ export default class ComposerMessageInput extends React.Component<
       if (
         prevProps.hidden !== this.props.hidden &&
         !this.props.hidden &&
-        this.state.text.length !== 0
+        this.props.text.length !== 0
       ) {
         this.moveCursorToTheEnd()
       }
     }
     if (
       !browserSupportsCSSFieldSizing &&
-      prevState.chatId === this.state.chatId
+      prevProps.chatId === this.props.chatId
     ) {
       this.resizeTextareaAndComposer()
     }
@@ -183,15 +130,13 @@ export default class ComposerMessageInput extends React.Component<
       )
       return
     }
-    this.textareaRef.current.selectionStart = this.state.text.length
-    this.textareaRef.current.selectionEnd = this.state.text.length
+    this.textareaRef.current.selectionStart = this.props.text.length
+    this.textareaRef.current.selectionEnd = this.props.text.length
   }
 
   onChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     const text = e.target.value
     this.props.onChange(text)
-    this.setState({ text /*error: false*/ })
-    this.throttledSaveDraft(text, this.state.chatId)
   }
 
   keyEventToAction(e: React.KeyboardEvent<HTMLTextAreaElement>) {
@@ -257,7 +202,7 @@ export default class ComposerMessageInput extends React.Component<
       throw new Error('textareaElem missing')
     }
     const { selectionStart, selectionEnd } = textareaElem
-    const textValue = this.state.text
+    const textValue = this.props.text
 
     const textBeforeCursor = textValue.slice(0, selectionStart)
     const textAfterCursor = textValue.slice(selectionEnd)
@@ -266,9 +211,7 @@ export default class ComposerMessageInput extends React.Component<
 
     this.setCursorPosition = textareaElem.selectionStart + str.length
 
-    this.setState({ text: updatedText })
     this.props.onChange(updatedText)
-    this.throttledSaveDraft(updatedText, this.state.chatId)
   }
 
   render() {
@@ -291,7 +234,7 @@ export default class ComposerMessageInput extends React.Component<
             rows={1}
             // intent={this.state.error ? 'danger' : 'none'}
             // large
-            value={this.state.text}
+            value={this.props.text}
             onKeyDown={this.onKeyDown}
             onChange={this.onChange}
             onPaste={this.props.onPaste}
