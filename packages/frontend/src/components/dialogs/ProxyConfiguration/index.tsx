@@ -412,7 +412,7 @@ export default function ProxyConfiguration(
       </DialogBody>
       <DialogFooter>
         {showNewProxyForm && (
-          <form>
+          <>
             <DeltaTextarea
               label={tx('proxy_add_url_hint')}
               value={newProxyUrl}
@@ -431,11 +431,12 @@ export default function ProxyConfiguration(
                 className={styles.scanQrButton}
                 onClick={openQrScanner}
                 styling='primary'
+                data-testid='scan-proxy-qr-button'
               >
                 {tx('qrscan_title')}
               </Button>
             </div>
-          </form>
+          </>
         )}
         {!showNewProxyForm && (
           <Button

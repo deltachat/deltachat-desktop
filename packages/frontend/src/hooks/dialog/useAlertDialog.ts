@@ -5,8 +5,7 @@ import AlertDialog, {
   Props as AlertDialogProps,
 } from '../../components/dialogs/AlertDialog'
 
-type OpenAlertDialog = Pick<AlertDialogProps, 'message'>
-
+type OpenAlertDialog = Pick<AlertDialogProps, 'message' | 'dataTestid'>
 export default function useAlertDialog() {
   const { openDialog } = useDialog()
 

@@ -13,6 +13,7 @@ import {
   deleteProfile,
   clickThroughTestIds,
   test,
+  createProfileAndJoinChat,
 } from '../playwright-helper'
 
 /**
@@ -24,7 +25,7 @@ test.describe.configure({ mode: 'serial' })
 
 let existingProfiles: User[] = []
 
-const numberOfProfiles = 2
+const numberOfProfiles = 1
 
 // https://playwright.dev/docs/next/test-retries#reuse-single-page-between-tests
 let page: Page
@@ -81,7 +82,7 @@ test('instant onboarding with contact invite link', async ({ browserName }) => {
     await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
   }
   const userA = getUser(0, existingProfiles)
-  const userNameC = userNames[1]
+  const userNameB = userNames[1]
   await switchToProfile(page, userA.id)
   // copy invite link from user A
   await clickThroughTestIds(page, [
@@ -95,27 +96,82 @@ test('instant onboarding with contact invite link', async ({ browserName }) => {
     'paste',
   ])
 
-  const confirmDialog = page.getByTestId('ask-create-profile-and-join-chat')
-  await expect(confirmDialog).toContainText(userA.name)
-
-  await confirmDialog.getByTestId('confirm').click()
-
-  // we have to wait till both dialogs are closed since
-  // the displayName input is just behind these dialogs
-  await expect(confirmDialog).not.toBeVisible()
-
-  await expect(page.getByTestId('qr-reader-settings')).not.toBeVisible()
-
-  const nameInput = page.locator('#displayName')
-
-  await expect(nameInput).toBeVisible()
-
-  await nameInput.fill(userNameC)
-
-  await page.getByTestId('login-button').click()
+  await createProfileAndJoinChat(userA.name, userNameB, page)
   await expect(
     page.locator('.chat-list .chat-list-item').filter({ hasText: userA.name })
   ).toHaveCount(1)
+})
+
+test('instant onboarding with withdrawn and revived invite link', async ({
+  browserName,
+}) => {
+  if (browserName.toLowerCase().indexOf('chrom') > -1) {
+    await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
+  }
+  const userA = getUser(0, existingProfiles)
+  // user B was created in the previous test
+  const userNameC = userNames[2]
+  const userNameD = userNames[3]
+  await switchToProfile(page, userA.id)
+  // copy invite link from user A
+  await clickThroughTestIds(page, [
+    'qr-scan-button',
+    'copy-qr-code',
+    'confirm-qr-code',
+    'qr-scan-button',
+  ])
+
+  // now we reset the qr code (withdraw)
+  await page.getByTestId('qr-code-image').click({ button: 'right' })
+  await page.getByTestId('withdraw-qr-code').click()
+  await page.getByTestId('confirm-dialog').getByTestId('confirm').click()
+
+  await clickThroughTestIds(page, [
+    'add-account-button',
+    'create-account-button',
+    'other-login-button',
+    'scan-qr-login',
+    'paste',
+  ])
+  /**
+   * scanning a withdrawn invite link allows to start a chat with
+   * the inviter but he will should get the invitation message
+   * we cannot test this reliably, what we do is to switch to the inviters
+   * profile at the end of this test and check that there is
+   * NO chat with user B while the chat with user D was created
+   */
+  await createProfileAndJoinChat(userA.name, userNameC, page)
+
+  // revive the qr code again
+  await switchToProfile(page, userA.id)
+  await page.getByTestId('qr-scan-button').click()
+  await page.getByTestId('qr-code-image').click({ button: 'right' })
+  await page.getByTestId('withdraw-qr-code').click()
+  await page.getByTestId('confirm-dialog').getByTestId('confirm').click()
+
+  await clickThroughTestIds(page, [
+    'qr-scan-button',
+    'copy-qr-code',
+    'confirm-qr-code',
+    'add-account-button',
+    'create-account-button',
+    'other-login-button',
+    'scan-qr-login',
+    'paste',
+  ])
+
+  await createProfileAndJoinChat(userA.name, userNameD, page)
+  await switchToProfile(page, userA.id)
+
+  // chat with user D should exist
+  await expect(
+    page.locator('.chat-list .chat-list-item').filter({ hasText: userNameD })
+  ).toHaveCount(1)
+
+  // chat with user C should NOT exist
+  await expect(
+    page.locator('.chat-list .chat-list-item').filter({ hasText: userNameC })
+  ).toHaveCount(0)
 })
 
 /**
@@ -184,12 +240,67 @@ test('onboarding with manual credentials', async ({ browserName }) => {
   })
 })
 
-test.fixme(
-  'instant onboarding fails with withdrawn invite link',
-  async () => {}
-)
+test('wrong qr code for onboarding shows error message', async ({
+  browserName,
+}) => {
+  if (browserName.toLowerCase().indexOf('chrom') > -1) {
+    await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
+  }
+  await page.getByTestId('add-account-button').click()
+  await page.reload()
+  await expect(page.getByTestId('have-account-button')).toBeVisible()
+  const testQrCodeInSecondDeviceScan = async () => {
+    await clickThroughTestIds(page, [
+      'have-account-button',
+      'second-device-button',
+      'qr-reader-settings',
+      'paste-from-clipboard',
+    ])
+    await expect(page.getByTestId('qr-code-cannot-be-used')).toBeVisible()
+    await page.getByTestId('alert-ok').click()
+  }
 
-test.fixme('instant onboarding works with revived invite link', async () => {})
+  await page.evaluate(`navigator.clipboard.writeText('invalid qr code')`)
+  await testQrCodeInSecondDeviceScan()
+
+  // see https://github.com/deltachat/deltachat-desktop/issues/5616
+  // await page.evaluate(
+  //   `navigator.clipboard.writeText('mailto:user@testing.com')`
+  // )
+  // await testQrCodeInSecondDeviceScan()
+
+  await page.evaluate(`navigator.clipboard.writeText('https://localhost:1111')`)
+  await testQrCodeInSecondDeviceScan()
+
+  await clickThroughTestIds(page, [
+    'create-account-button',
+    'other-login-button',
+    'scan-qr-login',
+    'paste',
+  ])
+  // proxy should not be accepted here
+  await expect(page.getByTestId('qr-code-cannot-be-used')).toBeVisible()
+  await page.getByTestId('alert-ok').click()
+
+  await page.evaluate(`navigator.clipboard.writeText('invalid qr code')`)
+  await clickThroughTestIds(page, [
+    'dialog-header-context-menu',
+    'proxy-context-menu-item',
+    'scan-proxy-qr-button',
+    'paste',
+  ])
+  await expect(page.getByTestId('proxy-scan-failed')).toBeVisible()
+  await page.getByTestId('alert-ok').click()
+  await page.getByTestId('proxy-qrscan-dialog').getByTestId('close').click()
+  await page.getByTestId('proxy-settings-close').click()
+
+  await page.getByTestId('dialog-header-back').click()
+  await page
+    .getByTestId('onboarding-dialog')
+    .getByTestId('dialog-header-close')
+    .click()
+  await page.reload()
+})
 
 // maybe move this to group tests?
 test.fixme('instant onboarding with group invite link', async () => {})

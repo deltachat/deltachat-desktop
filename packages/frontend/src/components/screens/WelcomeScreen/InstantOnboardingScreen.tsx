@@ -43,6 +43,7 @@ function buildContextMenu(
           configured: false,
         })
       },
+      dataTestid: 'proxy-context-menu-item',
     },
   ]
 }

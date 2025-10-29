@@ -15,6 +15,7 @@ export type Props = {
   cb?: () => void
   message: string
   okBtnLabel?: string
+  dataTestid?: string
 } & DialogProps
 
 export default function AlertDialog({
@@ -22,6 +23,7 @@ export default function AlertDialog({
   onClose,
   cb,
   okBtnLabel,
+  dataTestid,
 }: Props) {
   const tx = useTranslationFunction()
 
@@ -31,7 +33,7 @@ export default function AlertDialog({
   }
 
   return (
-    <Dialog width={350} onClose={onClose}>
+    <Dialog width={350} onClose={onClose} dataTestid={dataTestid}>
       <DialogBody>
         <DialogContent paddingTop>
           <p className='whitespace'>{message}</p>
@@ -39,7 +41,7 @@ export default function AlertDialog({
       </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <FooterActionButton onClick={onClick}>
+          <FooterActionButton onClick={onClick} data-testid='alert-ok'>
             {okBtnLabel || tx('ok')}
           </FooterActionButton>
         </FooterActions>
