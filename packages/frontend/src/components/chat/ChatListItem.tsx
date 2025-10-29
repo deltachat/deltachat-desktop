@@ -307,6 +307,7 @@ function ChatListItemError({
  */
 function RegularChatListItem({
   chat,
+  chatListItem: _chatListItem, // to avoid the console error about unrecognized prop
   onClick,
   onFocus,
   isSelected,
@@ -318,6 +319,7 @@ function RegularChatListItem({
   chat: Type.ChatListItemFetchResult & {
     kind: 'ChatListItem'
   }
+  chatListItem?: Type.ChatListItemFetchResult
   onClick: (event: React.MouseEvent) => void
   onFocus?: (event: React.FocusEvent) => void
   onContextMenu?: (
