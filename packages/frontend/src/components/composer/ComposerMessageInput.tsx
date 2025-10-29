@@ -90,7 +90,7 @@ export default class ComposerMessageInput extends React.Component<
     currentState: ComposerMessageInputState
   ) {
     if (currentState.chatId !== props.chatId) {
-      return { chatId: props.chatId, text: '', loadingDraft: true }
+      return { chatId: props.chatId, text: '' }
     }
     return null
   }
