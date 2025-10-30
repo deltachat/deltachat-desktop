@@ -854,7 +854,7 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
         </DialogContent>
       </DialogBody>
       <DialogFooter>
-        <FooterActions>
+        <FooterActions align='spaceBetween'>
           <FooterActionButton onClick={() => setViewMode('main_')}>
             {tx('cancel')}
           </FooterActionButton>
