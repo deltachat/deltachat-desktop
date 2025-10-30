@@ -9,6 +9,7 @@ import { KeybindAction } from '../../keybindings'
 import useMessage from './useMessage'
 import ComposerMessageInput from '../../components/composer/ComposerMessageInput'
 import { type MessageListStore } from '../../stores/messagelist'
+import { debounce } from 'debounce'
 
 const log = getLogger('renderer/composer')
 
@@ -249,24 +250,59 @@ export function useDraft(
         : null,
     [canSend, chatId, saveAndRefetchDraft_]
   )
-
-  const setAndSaveAndRefetchDraft = useMemo(
+  const debouncedSaveAndRefetchDraft = useMemo(
     () =>
       saveAndRefetchDraft == null
         ? null
+        : // Maybe we could also specify `maxWait` option,
+          // but only Lodash's `debounce` supports it.
+          debounce(saveAndRefetchDraft, 15_000),
+    [saveAndRefetchDraft]
+  )
+  // Flush the draft to backend when switching chats.
+  // Note that specifying `chatId` as a dependency is not necessary,
+  // because `debouncedSaveAndRefetchDraft` itself already depends on it.
+  useEffect(() => {
+    return () => {
+      debouncedSaveAndRefetchDraft?.flush()
+    }
+  }, [accountId, chatId, debouncedSaveAndRefetchDraft])
+  // Flush when alt-tabbing and stuff.
+  // This should also work for when quitting the app,
+  // but it doesn't manage to finish in time, unfortunately.
+  useEffect(() => {
+    if (debouncedSaveAndRefetchDraft == null) {
+      return
+    }
+    const flushIfHidden = () => {
+      if (document.visibilityState === 'hidden') {
+        debouncedSaveAndRefetchDraft.flush()
+      }
+    }
+    document.addEventListener('visibilitychange', flushIfHidden)
+    return () => document.removeEventListener('visibilitychange', flushIfHidden)
+  }, [debouncedSaveAndRefetchDraft])
+  // TODO also flush when unfocusing the element?
+  // For example, to cover the case where the user goes to quit the app
+  // (though this will not cover `Ctrl + Q` shortcut),
+  // or to turn off the machine.
+
+  const setAndDebouncedSaveAndRefetchDraft = useMemo(
+    () =>
+      debouncedSaveAndRefetchDraft == null
+        ? null
         : (newDraftState: DraftObject) => {
             setDraftState(newDraftState)
-            return saveAndRefetchDraft(newDraftState)
+            debouncedSaveAndRefetchDraft(newDraftState)
           },
-    [saveAndRefetchDraft]
+    [debouncedSaveAndRefetchDraft]
   )
 
   const updateDraftText = (text: string, InputChatId: number) => {
     if (chatId !== InputChatId) {
       log.warn("chat Id and InputChatId don't match, do nothing")
     } else {
-      // TODO debounce.
-      setAndSaveAndRefetchDraft?.({
+      setAndDebouncedSaveAndRefetchDraft?.({
         ...draftState,
         text,
       })
@@ -274,36 +310,51 @@ export function useDraft(
   }
 
   const removeQuote = useCallback(() => {
-    setAndSaveAndRefetchDraft?.({
+    setAndDebouncedSaveAndRefetchDraft?.({
       ...draftState,
       quote: null,
     })
     inputRef.current?.focus()
-  }, [draftState, inputRef, setAndSaveAndRefetchDraft])
+  }, [draftState, inputRef, setAndDebouncedSaveAndRefetchDraft])
 
   const removeFile = useCallback(() => {
-    setAndSaveAndRefetchDraft?.({
+    setAndDebouncedSaveAndRefetchDraft?.({
       ...draftState,
       file: '',
+      fileName: null,
+      fileBytes: 0,
+      fileMime: null,
+      // VCard is derived from the file. When we remove `file`,
+      // the re-fetched draft object will also have removed `vcardContact`.
+      // But we can skip a flush here, so let's set it to `null` manually.
+      vcardContact: null,
       viewType: 'Text',
     })
 
     inputRef.current?.focus()
-  }, [draftState, inputRef, setAndSaveAndRefetchDraft])
+  }, [draftState, inputRef, setAndDebouncedSaveAndRefetchDraft])
 
   const addFileToDraft = useCallback(
     async (file: string, fileName: string, viewType: T.Viewtype) => {
+      if (debouncedSaveAndRefetchDraft == null || saveAndRefetchDraft == null) {
+        return
+      }
       inputRef.current?.focus()
-      return setAndSaveAndRefetchDraft?.({
+      const newDraftState: typeof draftState = {
         ...draftState,
         file,
         fileName,
         viewType,
         fileBytes: 0,
         fileMime: null,
-      })
+      }
+      // Cannot use `setAndDebouncedSaveAndRefetchDraft`
+      // because it doesn't return the Promise.
+      setDraftState(newDraftState)
+      debouncedSaveAndRefetchDraft?.clear()
+      return saveAndRefetchDraft(newDraftState)
     },
-    [draftState, inputRef, setAndSaveAndRefetchDraft]
+    [draftState, inputRef, saveAndRefetchDraft, debouncedSaveAndRefetchDraft]
   )
 
   const { jumpToMessage } = useMessage()
@@ -318,22 +369,26 @@ export function useDraft(
       | KeybindAction.Composer_SelectReplyToDown
   ) => {
     if (
-      setAndSaveAndRefetchDraft == null ||
-      // These are implied by `setAndSaveAndRefetchDraft == null`,
+      setAndDebouncedSaveAndRefetchDraft == null ||
+      // These are implied by `setAndDebouncedSaveAndRefetchDraft == null`,
       // but TypeScript doesn't know
+      debouncedSaveAndRefetchDraft == null ||
       chatId == undefined ||
       !canSend
     ) {
       return
     }
     const quoteMessage = (messageId: number) => {
-      setAndSaveAndRefetchDraft({
+      setAndDebouncedSaveAndRefetchDraft({
         ...draftState,
         quote: {
           kind: 'WithMessage',
           messageId,
         },
       })
+      // Need an immediate refetch, to get the "full" quote,
+      // with the author's name, text, etc.
+      debouncedSaveAndRefetchDraft.flush()
 
       jumpToMessage({
         accountId,
@@ -417,19 +472,28 @@ export function useDraft(
 
   useEffect(() => {
     window.__setQuoteInDraft = (messageId: number) => {
-      setAndSaveAndRefetchDraft?.({
+      setAndDebouncedSaveAndRefetchDraft?.({
         ...draftState,
         quote: {
           kind: 'WithMessage',
           messageId,
         },
       })
+      // Again, we need an immediate refetch, to get the "full" quote,
+      // with the author's name, text, etc.
+      debouncedSaveAndRefetchDraft?.flush()
+
       inputRef.current?.focus()
     }
     return () => {
       window.__setQuoteInDraft = null
     }
-  }, [draftState, inputRef, setAndSaveAndRefetchDraft])
+  }, [
+    draftState,
+    inputRef,
+    setAndDebouncedSaveAndRefetchDraft,
+    debouncedSaveAndRefetchDraft,
+  ])
 
   return {
     draftState,
@@ -439,7 +503,16 @@ export function useDraft(
     updateDraftText,
     addFileToDraft,
     removeFile,
-    clearDraftState,
-    setDraftState,
+    clearDraftState: useCallback(() => {
+      clearDraftState()
+      debouncedSaveAndRefetchDraft?.clear()
+    }, [clearDraftState, debouncedSaveAndRefetchDraft]),
+    setDraftState: useCallback(
+      (newState: DraftObject) => {
+        setDraftState(newState)
+        debouncedSaveAndRefetchDraft?.clear()
+      },
+      [debouncedSaveAndRefetchDraft]
+    ),
   }
 }

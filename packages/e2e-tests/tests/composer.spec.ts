@@ -10,11 +10,6 @@ import {
   createNDummyChats,
 } from '../playwright-helper'
 
-/**
- * @see https://github.com/deltachat/deltachat-desktop/issues/3733
- */
-const QUICK_CHAT_SWITCH_BUG_HAS_BEEN_FIXED = false
-
 test.describe.configure({ mode: 'serial' })
 
 expect.configure({ timeout: 5_000 })
@@ -286,26 +281,19 @@ test.describe('draft', () => {
 
     await sendDraftAndTestDraftIsCleared()
   })
-  ;(QUICK_CHAT_SWITCH_BUG_HAS_BEEN_FIXED ? test : test.skip)(
-    'saves two keystrokes',
-    async () => {
-      await testSavesText('ab')
+  test('saves two keystrokes', async () => {
+    await testSavesText('ab')
 
-      await sendDraftAndTestDraftIsCleared()
-    }
-  )
-  // Not reliable, for the same reason as the previos text is broken.
-  ;(QUICK_CHAT_SWITCH_BUG_HAS_BEEN_FIXED ? test : test.skip)(
-    'saves a bunch of keystrokes',
-    async () => {
-      await testSavesText(
-        'Some long draft message text foobar foobar foobar foobar foobar foobar' +
-          ' foobar foobar foobar foobar foobar foobar foobar foobar foobar!'
-      )
+    await sendDraftAndTestDraftIsCleared()
+  })
+  test('saves a bunch of keystrokes', async () => {
+    await testSavesText(
+      'Some long draft message text foobar foobar foobar foobar foobar foobar' +
+        ' foobar foobar foobar foobar foobar foobar foobar foobar foobar!'
+    )
 
-      await sendDraftAndTestDraftIsCleared()
-    }
-  )
+    await sendDraftAndTestDraftIsCleared()
+  })
 
   test('saves quote', async () => {
     await testSavesQuote()
@@ -317,9 +305,8 @@ test.describe('draft', () => {
 
   test('saves quote and text', async () => {
     const chatNum = 1
-    const draftText = QUICK_CHAT_SWITCH_BUG_HAS_BEEN_FIXED
-      ? 'Foobar foobar foobar foobar foobar foobar foobar foobar foobar'
-      : 'a'
+    const draftText =
+      'Foobar foobar foobar foobar foobar foobar foobar foobar foobar'
     const quoteMessageText = 'someeee messageeee'
 
     await testSavesQuote(quoteMessageText, chatNum)
@@ -339,9 +326,8 @@ test.describe('draft', () => {
 
   test('saves file, quote, and text', async () => {
     const chatNum = 1
-    const draftText = QUICK_CHAT_SWITCH_BUG_HAS_BEEN_FIXED
-      ? 'Foobar foobar foobar foobar foobar foobar foobar foobar foobar'
-      : 'a'
+    const draftText =
+      'Foobar foobar foobar foobar foobar foobar foobar foobar foobar'
     const quoteMessageText = 'someeee messageeee'
 
     await testSavesQuote(quoteMessageText, chatNum)
