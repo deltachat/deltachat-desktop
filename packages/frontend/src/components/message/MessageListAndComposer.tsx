@@ -300,19 +300,15 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
       onDragOver={onDragOver}
     >
       <div className='message-list-and-composer__message-list'>
-        <RecoverableCrashScreen reset_on_change_key={chat.id}>
-          <ReactionsBarProvider>
-            <MessageList
-              accountId={accountId}
-              chat={chat}
-              refComposer={refComposer}
-              messageListStore={messageListStore}
-              messageListState={messageListState}
-              fetchMoreBottom={fetchMoreBottom}
-              fetchMoreTop={fetchMoreTop}
-            />
-          </ReactionsBarProvider>
-        </RecoverableCrashScreen>
+        <MessageListMemoized
+          accountId={accountId}
+          chat={chat}
+          refComposer={refComposer}
+          messageListStore={messageListStore}
+          messageListState={messageListState}
+          fetchMoreBottom={fetchMoreBottom}
+          fetchMoreTop={fetchMoreTop}
+        />
       </div>
       <Composer
         ref={refComposer}
@@ -340,3 +336,13 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     </div>
   )
 }
+
+const MessageListMemoized = React.memo(
+  (args: Parameters<typeof MessageList>[0]) => (
+    <RecoverableCrashScreen reset_on_change_key={args.chat.id}>
+      <ReactionsBarProvider>
+        <MessageList {...args} />
+      </ReactionsBarProvider>
+    </RecoverableCrashScreen>
+  )
+)
