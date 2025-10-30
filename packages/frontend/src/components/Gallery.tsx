@@ -203,7 +203,7 @@ export default class Gallery extends Component<
     if (this.props.chatId !== prevProps.chatId) {
       // reset
       this.reset()
-      this.onSelect('images')
+      this.onSelect('webxdc_apps')
     }
   }
 
@@ -247,14 +247,10 @@ export default class Gallery extends Component<
     const allMedia = this.props.chatId === 'all'
     const tx = window.static_translate // static because dynamic isn't too important here
     switch (tab) {
-      case 'images':
+      case 'gallery':
         return allMedia
           ? tx('tab_all_media_empty_hint')
           : tx('tab_image_empty_hint')
-      case 'video':
-        return allMedia
-          ? tx('tab_all_media_empty_hint')
-          : tx('tab_video_empty_hint')
       case 'audio':
         return allMedia
           ? tx('tab_all_media_empty_hint')
