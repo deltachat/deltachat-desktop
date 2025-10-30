@@ -79,23 +79,19 @@
 ## Releasing
 
 1. Create a new branch for the new version (you could name it
-   `prepare_versioncode`, for example `prepare_1.3.0`)
-2. Update the `CHANGELOG.md` file (put the stuff in "unreleased" under a
-   section with your new version code)
-3. Do not forget to update the tag links at the end of the `CHANGELOG.md` file!
-4. add the release to `packages/target-tauri/metainfo.xml`
-5. Change `version` field in `package.json` to `X.Y.Z`
-6. Run `pnpm -w update:target-versions` to update versions in the other packages
-7. Open a PR for your branch and get it reviewed.
-8. As soon as your PR is approved merge it to `main`
-9. After the PR is merged, checkout the latest version on `main`. Tag the latest commit
+   `prepare-version-<version>`, for example `prepare-release-2.23.0`)
+2. Run `pnpm prepare-release <version>`
+3. check and cleanup the changes added to CHANGELOG
+4. Open a PR for your branch and get it reviewed.
+5. As soon as your PR is approved merge it to `main`
+6. After the PR is merged, checkout the latest version on `main`. Tag the latest commit
    with your version number:
    ```bash
-   git tag <tagname> # for example v1.43.2
+   git tag v<version> # for example v2.23.0
    git push origin main --tags
    ```
-10. The deployment script creates a [release](https://github.com/deltachat/deltachat-desktop/releases)
-    draft on github which needs to be updated and published manually:
+7. The deployment script creates a [release](https://github.com/deltachat/deltachat-desktop/releases)
+   draft on github which needs to be updated and published manually:
 
 - Copy the relevant part of the `CHANGELOG.md` file into the description field
   - for fresh releases this includes the changelog of the test releases
