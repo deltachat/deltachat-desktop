@@ -2,7 +2,6 @@
 # Helper script to update changelog and footer links
 #
 # Usage:
-#   ./bin/update-changelog.sh              # Update unreleased section
 #   ./bin/update-changelog.sh 2.23.0       # Prepare release 2.23.0 (before tagging)
 
 set -e
@@ -34,6 +33,9 @@ if [ -n "$NEW_VERSION" ]; then
 
     # Replace the Unreleased section header with the version header
     sed -i "s/## \[Unreleased\]\[unreleased\]/<a id=\"${VERSION_ANCHOR}\"><\/a>\n\n## [${CLEAN_VERSION}] - ${TODAY}/" CHANGELOG.md
+
+    # Remove trailing whitespace
+    sed -i 's/[[:space:]]*$//' CHANGELOG.md
 
     echo "✅ Added version section for ${CLEAN_VERSION}"
 
