@@ -13,6 +13,8 @@ commit_preprocessors = [
   { pattern = '#(\d+)', replace = "[#${1}](https://github.com/deltachat/deltachat-desktop/issues/${1})" },
 ]
 # regex for parsing and grouping commits
+# note that commitlint.config.js needs to be
+# updated after changes in this list
 commit_parsers = [
     { message = "^feat", group = "Features / Changes"},
     { message = "^fix", group = "Fixes"},
