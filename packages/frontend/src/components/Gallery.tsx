@@ -36,7 +36,7 @@ import { useTranslationWritingDirection } from '../hooks/useTranslationFunction'
 
 const log = getLogger('renderer/Gallery')
 
-type MediaTabKey = 'webxdc_apps' | 'images' | 'video' | 'audio' | 'files'
+type MediaTabKey = 'webxdc_apps' | 'gallery' | 'audio' | 'files'
 
 type GalleryElement = (
   props: GalleryAttachmentElementProps & {
@@ -54,13 +54,13 @@ const MediaTabs: Readonly<{
     values: ['Webxdc'],
     element: WebxdcAttachment,
   },
-  images: {
-    values: ['Gif', 'Image'],
-    element: ImageAttachment,
-  },
-  video: {
-    values: ['Video'],
-    element: VideoAttachment,
+  gallery: {
+    values: ['Gif', 'Image', 'Video'],
+    element: props =>
+      props.loadResult.kind === 'message' &&
+      props.loadResult.viewType === 'Video'
+        ? VideoAttachment(props)
+        : ImageAttachment(props),
   },
   audio: {
     values: ['Audio', 'Voice'],
