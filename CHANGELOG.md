@@ -3200,8 +3200,7 @@ This section is only relevant to contributors.
 - remove version from titlebar
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.23.0...HEAD
-[2.23.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.22.0...v2.23.0
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.22.0...HEAD
 
 [2.22.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.20.0...v2.22.0
 

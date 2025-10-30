@@ -85,6 +85,8 @@ change: update electron from 37.1.0 to 37.6.0
 docs: update contributing guidelines
 ```
 
+see [cliff config](./cliff.toml)
+
 If the changes affect the user interface,
 screenshots are very helpful,
 esp. before/after screenshots.
