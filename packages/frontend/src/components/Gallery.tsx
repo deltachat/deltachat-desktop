@@ -218,7 +218,7 @@ export default class Gallery extends Component<
     this.setState({ loading: true })
 
     BackendRemote.rpc
-      .getChatMedia(accountId, chatId, msgTypes[0], msgTypes[1], null)
+      .getChatMedia(accountId, chatId, msgTypes[0], msgTypes[1], msgTypes[2])
       .then(async media_ids => {
         const mediaLoadResult =
           tab !== 'files'
