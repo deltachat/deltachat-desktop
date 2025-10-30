@@ -8,6 +8,9 @@ import { I18nContext } from '../../contexts/I18nContext'
 
 const log = getLogger('renderer/composer/ComposerMessageInput')
 
+const browserSupportsCSSFieldSizing = CSS.supports('field-sizing', 'content')
+const maxLines = 9
+
 type ComposerMessageInputProps = {
   /**
    * Whether the initial loading of the draft is being performed,
@@ -163,7 +166,10 @@ export default class ComposerMessageInput extends React.Component<
         this.moveCursorToTheEnd()
       }
     }
-    if (prevState.chatId === this.state.chatId) {
+    if (
+      !browserSupportsCSSFieldSizing &&
+      prevState.chatId === this.state.chatId
+    ) {
       this.resizeTextareaAndComposer()
     }
   }
@@ -211,7 +217,7 @@ export default class ComposerMessageInput extends React.Component<
   }
 
   resizeTextareaAndComposer() {
-    const maxScrollHeight = 9 * 24
+    const maxScrollHeight = maxLines * 24
 
     const el = this.textareaRef.current
 
@@ -273,7 +279,13 @@ export default class ComposerMessageInput extends React.Component<
       <I18nContext.Consumer>
         {({ writingDirection }) => (
           <textarea
-            className='message-input-area'
+            className={
+              'message-input-area' +
+              (browserSupportsCSSFieldSizing
+                ? ' use-field-sizing-css-prop'
+                : '')
+            }
+            style={{ '--maxLines': maxLines } as React.CSSProperties}
             id='composer-textarea'
             ref={this.textareaRef}
             rows={1}

@@ -70,6 +70,9 @@
     .microphone-button {
       background: none;
       border: none;
+
+      // So that the composer doesn't make them shrink as you type text.
+      flex-shrink: 0;
     }
 
     .attachment-button {
@@ -148,12 +151,20 @@
       padding: 0px;
       border: 0;
       height: auto;
-      line-height: 24px;
+      $line-height: 24px;
+      line-height: $line-height;
       margin-top: 8px;
       margin-bottom: 8px;
       overflow-y: hidden;
       background-color: var(--composerBg);
       color: var(--composerText);
+
+      &.use-field-sizing-css-prop {
+        field-sizing: content;
+        max-height: calc(var(--maxLines) * $line-height);
+
+        overflow-y: auto;
+      }
 
       &::placeholder {
         color: var(--composerPlaceholderText);
