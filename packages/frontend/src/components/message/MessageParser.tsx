@@ -170,11 +170,12 @@ export function parseAndRenderMessage(
    */
   tabindexForInteractiveContents: -1 | 0
 ): React.ReactElement {
+  if (preview) {
+    return <div className='truncated'>{message}</div>
+  }
   try {
     const elements = parseElements(message)
-    return preview ? (
-      <div className='truncated'>{elements.map(el => el.v)}</div>
-    ) : (
+    return (
       <>
         {elements.map((el, index) =>
           renderElement(el, tabindexForInteractiveContents, index)
