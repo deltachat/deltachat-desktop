@@ -307,7 +307,9 @@ function ChatListItemError({
  */
 function RegularChatListItem({
   chat,
-  chatListItem: _chatListItem, // to avoid the console error about unrecognized prop
+  // To avoid the console error about unrecognized DOM prop,
+  // simply remove it from `rest`.
+  chatListItem: _chatListItem,
   onClick,
   onFocus,
   isSelected,
