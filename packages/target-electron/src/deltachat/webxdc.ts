@@ -878,13 +878,11 @@ export default class DCWebxdc {
  * https://public.opentech.fund/documents/XDC-01-report_2_1.pdf
  */
 const makeResponse = ({
-  appId,
   body,
   responseInit,
   mime_type,
   cspAllowMapsImgSrc,
 }: {
-  appId: string | null
   body: BodyInit
   responseInit: Omit<ResponseInit, 'headers'>
   mime_type?: undefined | string
@@ -908,10 +906,10 @@ const makeResponse = ({
         "img-src 'self' maps://* data: blob: ;"
       )
     )
-    log.debug('extended CSP for maps://*', appId)
+    log.debug('extended CSP for maps://*')
   } else {
     headers.append('Content-Security-Policy', CSP)
-    log.debug('standard CSP', appId)
+    log.debug('standard CSP')
   }
   // Ensure that the client doesn't try to interpret a file as
   // one with 'application/pdf' mime type and therefore open it
@@ -961,7 +959,6 @@ async function mapProtocolHandler(
     )
     const blob = Buffer.from(response.blob, 'base64')
     return makeResponse({
-      appId: null,
       body: blob,
       responseInit: {},
       mime_type: mimeType,
@@ -969,7 +966,6 @@ async function mapProtocolHandler(
   } catch (error) {
     log.error('map: load blob:', error)
     return makeResponse({
-      appId: null,
       body: '',
       responseInit: { status: 404 },
     })
@@ -995,7 +991,6 @@ async function webxdcProtocolHandler(
 
   if (!open_apps[id]) {
     return makeResponse({
-      appId: id,
       body: '',
       responseInit: { status: 500 },
     })
@@ -1028,7 +1023,6 @@ async function webxdcProtocolHandler(
       join(htmlDistDir(), '/webxdc_wrapper.html')
     )
     return makeResponse({
-      appId: id,
       body: new Uint8Array(wrapperBuffer),
       responseInit: {},
       mime_type: mimeType,
@@ -1042,7 +1036,6 @@ async function webxdcProtocolHandler(
     // initializes the preload script, the actual implementation of
     // `window.webxdc` is found there: static/webxdc-preload.js
     return makeResponse({
-      appId: id,
       body: Buffer.from(
         `window.parent.webxdc_internal.setup("${selfAddr}","${displayName}", ${Number(
           open_apps[id].sendUpdateInterval
@@ -1065,7 +1058,6 @@ async function webxdcProtocolHandler(
         'base64'
       )
       return makeResponse({
-        appId: id,
         body: blob,
         responseInit: {},
         mime_type: mimeType,
@@ -1074,7 +1066,6 @@ async function webxdcProtocolHandler(
     } catch (error) {
       log.error('webxdc: load blob:', error)
       return makeResponse({
-        appId: null,
         body: '',
         responseInit: { status: 404 },
       })
