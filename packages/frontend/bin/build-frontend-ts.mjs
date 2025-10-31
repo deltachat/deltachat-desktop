@@ -16,7 +16,7 @@ import { compile } from 'sass'
 function config(options) {
   const { isProduction, isMinify, isWatch } = options
 
-  const plugins = [wasmPlugin, sassPlugin, inlineWorkerPlugin()]
+  const plugins = [sassPlugin, inlineWorkerPlugin()]
   if (isWatch || isProduction) {
     // Make eslint optional as it affects build times significantly
     plugins.push(eslintPlugin)
@@ -104,36 +104,6 @@ const sassPlugin = {
 }
 
 /**
- * `esbuild` plugin decoding WebAssembly and automatically embedding it in the build.
- */
-const wasmPlugin = {
-  name: 'wasm',
-  setup(build) {
-    // Resolve ".wasm" files to a path with a namespace
-    build.onResolve({ filter: /\.wasm$/ }, args => {
-      if (args.resolveDir === '') {
-        return // Ignore unresolvable paths
-      }
-      return {
-        path: path.isAbsolute(args.path)
-          ? args.path
-          : path.join(args.resolveDir, args.path),
-        namespace: 'wasm-binary',
-      }
-    })
-
-    // Virtual modules in the "wasm-binary" namespace contain the actual bytes
-    // of the WebAssembly file. This uses esbuild's built-in "binary" loader
-    // instead of manually embedding the binary data inside JavaScript code
-    // ourselves.
-    build.onLoad({ filter: /.*/, namespace: 'wasm-binary' }, async args => ({
-      contents: await readFile(args.path),
-      loader: 'binary',
-    }))
-  },
-}
-
-/**
  * `esbuild` plugin to report to the user if a bundle process started or ended.
  *
  * This is especially useful to find out if a warning or error got fixed after
@@ -157,18 +127,6 @@ const reporterPlugin = {
 }
 
 /**
- * Bundle all files with `esbuild`.
- */
-async function bundle(options) {
-  await esbuild.build(options)
-
-  await copyFile(
-    'node_modules/@deltachat/message_parser_wasm/message_parser_wasm_bg.wasm',
-    'html-dist/message_parser_wasm_bg.wasm'
-  )
-}
-
-/**
  * Start watching for all files with `esbuild`, on change of any watched
  * file this will trigger a build.
  */
@@ -187,7 +145,7 @@ async function main(isWatch = false, isProduction = false, isMinify = false) {
   if (isWatch) {
     await watch(options)
   } else {
-    await bundle(options)
+    await esbuild.build(options)
   }
 }
 

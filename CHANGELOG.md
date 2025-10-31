@@ -15,6 +15,11 @@
 
 - Removed "Watch Sent Folder" preference. #5611
 
+### Changed
+- replace rust/wasm message-parser with javascript lib linkify
+  - removes experimental markdown support
+  - fixes some link parsing issues
+
 <a id="2_22_0"></a>
 
 ## [2.22.0] - 2025-10-17

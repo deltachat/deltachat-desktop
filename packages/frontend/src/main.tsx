@@ -1,6 +1,5 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import initWasm from '@deltachat/message_parser_wasm'
 
 import App from './App'
 import initSystemIntegration from './system-integration'
@@ -18,8 +17,6 @@ async function main() {
   try {
     await runtime.initialize(setLogHandler, getLogger)
     printProcessLogLevelInfo()
-
-    await initWasm('./message_parser_wasm_bg.wasm')
 
     initSystemIntegration()
     const domNode = document.querySelector('#root')
