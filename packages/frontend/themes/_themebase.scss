@@ -71,8 +71,6 @@ $scrollbarTransparency: 0.34 !default;
   --buttonDangerHover: #{changeContrast($btnDangerBackground, 10%)};
   --buttonDisabledBackground: #{changeContrast($bgSecondary, 10%)};
   --buttonDisabledText: #{changeContrast($textSecondary, 25%)};
-  /* Icons in context menu */
-  --iconBackground: #{$colorNone};
   /* NavBar */
   --navBarBackground: #{$bgNavBar};
   --navBarHeight: 50px;
