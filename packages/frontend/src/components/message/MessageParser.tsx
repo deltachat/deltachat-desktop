@@ -103,7 +103,7 @@ function renderElement(
           ? {
               ascii_hostname: url.hostname,
               punycode_encoded_url: url.href,
-              original_hostname: elm.v, // TODO: change naming here
+              original_hostname_or_full_url: elm.v,
             }
           : null,
         scheme: url.protocol.replace(':', ''),

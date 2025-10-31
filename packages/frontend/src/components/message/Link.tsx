@@ -19,7 +19,7 @@ import type { DialogProps } from '../../contexts/DialogContext'
 import { SCAN_CONTEXT_TYPE } from '../../hooks/useProcessQr'
 
 type PunycodeWarning = {
-  original_hostname: string
+  original_hostname_or_full_url: string
   ascii_hostname: string
   punycode_encoded_url: string
 }
@@ -57,7 +57,7 @@ export const Link = ({
 
     if (punycode) {
       openDialog(PunycodeUrlConfirmationDialog, {
-        originalHostname: punycode.original_hostname,
+        originalHostnameOrFullUrl: punycode.original_hostname_or_full_url,
         asciiHostname: punycode.ascii_hostname,
         asciiUrl: scheme
           ? punycode.punycode_encoded_url
@@ -83,7 +83,7 @@ export const Link = ({
 
 function PunycodeUrlConfirmationDialog(
   props: {
-    originalHostname: string
+    originalHostnameOrFullUrl: string
     asciiHostname: string
     asciiUrl: string
   } & DialogProps
@@ -119,11 +119,11 @@ function PunycodeUrlConfirmationDialog(
             {reactStringReplace(
               reactStringReplace(
                 tx('puny_code_warning_description', [
-                  '$$originalHostname$$',
+                  '$$originalHostnameOrFullUrl$$',
                   '$$asciiHostname$$',
                 ]),
-                '$$originalHostname$$',
-                () => <b>{props.originalHostname}</b>
+                '$$originalHostnameOrFullUrl$$',
+                () => <b>{props.originalHostnameOrFullUrl}</b>
               ),
               '$$asciiHostname$$',
               () => (
