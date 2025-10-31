@@ -105,12 +105,9 @@ export function keyDownEvent2Action(
         return KeybindAction.ChatList_SearchInChat
       }
       return KeybindAction.ChatList_FocusSearchInput
-    } else if (
-      (ev.metaKey || ev.ctrlKey) &&
-      (ev.key === 'n' || ev.code === 'KeyN')
-    ) {
+    } else if ((ev.metaKey || ev.ctrlKey) && ev.key === 'n') {
       return KeybindAction.NewChat_Open
-    } else if (ev.ctrlKey && (ev.key === 'm' || ev.code === 'KeyM')) {
+    } else if (ev.ctrlKey && ev.key === 'm') {
       return KeybindAction.Composer_Focus
     } else if (
       // Also consider adding this to `ev.repeat` when it stops being so sluggish
@@ -127,10 +124,7 @@ export function keyDownEvent2Action(
       (ev.target as HTMLElement)?.id === 'composer-textarea'
     ) {
       return KeybindAction.Composer_SelectReplyToDown
-    } else if (
-      (ev.metaKey || ev.ctrlKey) &&
-      (ev.key === ',' || ev.code === 'Comma')
-    ) {
+    } else if ((ev.metaKey || ev.ctrlKey) && ev.key === ',') {
       return KeybindAction.Settings_Open
     } else if (ev.code === 'Escape') {
       if ((ev.target as any).id === 'chat-list-search') {
