@@ -1,7 +1,7 @@
 import type { QrWithUrl } from '../../../backend/qr'
 
 // URL to list of various other chatmail instances
-export const CHATMAIL_INSTANCES_LIST_URL = 'https://delta.chat/chatmail'
+export const CHATMAIL_INSTANCES_LIST_URL = 'https://chatmail.at/relays'
 
 // Hostname of the default chatmail instance
 export const DEFAULT_CHATMAIL_HOSTNAME = 'nine.testrun.org'
