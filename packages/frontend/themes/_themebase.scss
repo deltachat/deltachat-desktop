@@ -248,13 +248,12 @@ $scrollbarTransparency: 0.34 !default;
   --summary-text-color: #{changeContrast($textPrimary, 33%)};
   --textPrimary: #{$textPrimary};
   --textSecondary: #{$textSecondary};
+  --iconColorPrimary: #{changeContrast($textPrimary, 20%)};
 
   @if color.channel($bgPrimary, 'lightness', $space: hsl) < 50 {
     // dark theme
     --scrollbarThumb: #{rgba(white, $scrollbarTransparency)};
     --scrollbarThumbHover: #{rgba(white, $scrollbarTransparency + 0.14)};
-
-    --settingsIconColor: #666666;
 
     --unreadCountBgMuted: grey;
 
@@ -264,7 +263,6 @@ $scrollbarTransparency: 0.34 !default;
     --scrollbarThumb: #{rgba(grey, $scrollbarTransparency)};
     --scrollbarThumbHover: #{rgba(grey, $scrollbarTransparency + 0.14)};
 
-    --settingsIconColor: #666666;
     --jumpDownButtonBackgroundColor: white;
     --jumpDownButtonIconColor: #808080;
 

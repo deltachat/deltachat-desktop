@@ -1,7 +1,7 @@
 @use '../../../scss/mixins';
 
 .icon {
-  background-color: var(--colorPrimary);
+  background-color: var(--iconColorPrimary);
   display: inline-block;
   mask-position: center;
   mask-repeat: no-repeat;
@@ -9,10 +9,6 @@
 
   &.navbar {
     background-color: var(--navBarText);
-  }
-
-  &.settings {
-    background-color: var(--settingsIconColor);
   }
 
   &.contextMenu {

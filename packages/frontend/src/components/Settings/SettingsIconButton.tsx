@@ -27,9 +27,9 @@ export default function SettingsIconButton({
       onClick={onClick}
       data-testid={dataTestid}
     >
-      <Icon className={styles.settingsIcon} icon={icon} />
+      <Icon icon={icon} />
       <span className={styles.settingsIconButtonLabel}>{children}</span>
-      {isLink && <Icon className={styles.settingsIcon} icon='open_in_new' />}
+      {isLink && <Icon icon='open_in_new' />}
     </button>
   )
 }
