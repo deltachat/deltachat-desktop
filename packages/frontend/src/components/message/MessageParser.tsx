@@ -147,7 +147,7 @@ function renderElement(
       log.error(`type ${elm.t} not known/implemented yet`, elm)
       return (
         <span key={key} style={{ color: 'red' }}>
-          {JSON.stringify(elm)}
+          {elm.v}
         </span>
       )
   }
