@@ -55,11 +55,15 @@ const open_apps: {
   [instanceId: string]: AppInstance
 } = {}
 
-// holds all partitionKeys that have a session created for webxdc apps
-// mainly to avoid creating multiple sessions for the same partition
-// each account can have up to 2 sessions based on different partition keys:
-// one for apps with internet access
-// and one for apps without internet access
+/**
+ * holds all partitionKeys that have an existing session
+ * to make sure each session is only created once per partitionKey
+ *
+ * each account can have up to 2 sessions based on different partition keys:
+ * one for apps with internet access
+ * and one for apps without internet access
+ *
+ * */
 const existing_sessions: string[] = []
 
 // TODO:
@@ -873,14 +877,21 @@ export default class DCWebxdc {
  * "XDC-01-002 WP1: Full CSP bypass via desktop app webxdc.js"
  * https://public.opentech.fund/documents/XDC-01-report_2_1.pdf
  */
-const makeResponse = (
-  appId: string | null,
-  body: BodyInit,
-  responseInit: Omit<ResponseInit, 'headers'>,
+const makeResponse = ({
+  appId,
+  body,
+  responseInit,
+  mime_type,
+  cspAllowMapsImgSrc,
+}: {
+  appId: string | null
+  body: BodyInit
+  responseInit: Omit<ResponseInit, 'headers'>
   mime_type?: undefined | string
-) => {
+  cspAllowMapsImgSrc?: boolean
+}) => {
   const headers = new Headers()
-  if (appId && open_apps[appId] && open_apps[appId].internet_access) {
+  if (cspAllowMapsImgSrc) {
     /**
      * for apps with internet access (only maps.xdc for now)
      * we need to allow the maps://* protocol as image src in CSP
@@ -943,16 +954,25 @@ async function mapProtocolHandler(
   const mimeType: string | undefined = Mime.lookup(filename) || ''
   try {
     // now we pipe the real request through our backend
-    // to avoid CORS issues and to be able to cache tiles
+    // to bypass CORS restrictions and to be able to cache tiles
     const response = await rpc.getHttpResponse(
       accountId,
       request.url.replace('maps://', 'https://')
     )
     const blob = Buffer.from(response.blob, 'base64')
-    return makeResponse(null, blob, {}, mimeType)
+    return makeResponse({
+      appId: null,
+      body: blob,
+      responseInit: {},
+      mime_type: mimeType,
+    })
   } catch (error) {
     log.error('map: load blob:', error)
-    return makeResponse(null, '', { status: 404 })
+    return makeResponse({
+      appId: null,
+      body: '',
+      responseInit: { status: 404 },
+    })
   }
 }
 
@@ -974,8 +994,14 @@ async function webxdcProtocolHandler(
   const id = `${account}.${msg}`
 
   if (!open_apps[id]) {
-    return makeResponse(id, '', { status: 500 })
+    return makeResponse({
+      appId: id,
+      body: '',
+      responseInit: { status: 500 },
+    })
   }
+
+  const cspAllowMapsImgSrc = open_apps[id].internet_access
 
   let filename = url.pathname
   // remove leading / trailing "/"
@@ -1001,7 +1027,13 @@ async function webxdcProtocolHandler(
     const wrapperBuffer = await readFile(
       join(htmlDistDir(), '/webxdc_wrapper.html')
     )
-    return makeResponse(id, new Uint8Array(wrapperBuffer), {}, mimeType)
+    return makeResponse({
+      appId: id,
+      body: new Uint8Array(wrapperBuffer),
+      responseInit: {},
+      mime_type: mimeType,
+      cspAllowMapsImgSrc,
+    })
   } else if (filename === 'webxdc.js') {
     const displayName = Buffer.from(open_apps[id].displayName).toString(
       'base64'
@@ -1009,18 +1041,19 @@ async function webxdcProtocolHandler(
     const selfAddr = Buffer.from(open_apps[id].selfAddr).toString('base64')
     // initializes the preload script, the actual implementation of
     // `window.webxdc` is found there: static/webxdc-preload.js
-    return makeResponse(
-      id,
-      Buffer.from(
+    return makeResponse({
+      appId: id,
+      body: Buffer.from(
         `window.parent.webxdc_internal.setup("${selfAddr}","${displayName}", ${Number(
           open_apps[id].sendUpdateInterval
         )}, ${Number(open_apps[id].sendUpdateMaxSize)})
         window.webxdc = window.parent.webxdc
         window.webxdc_custom = window.parent.webxdc_custom`
       ),
-      {},
-      mimeType
-    )
+      responseInit: {},
+      mime_type: mimeType,
+      cspAllowMapsImgSrc,
+    })
   } else {
     try {
       const blob = Buffer.from(
@@ -1031,10 +1064,20 @@ async function webxdcProtocolHandler(
         ),
         'base64'
       )
-      return makeResponse(id, blob, {}, mimeType)
+      return makeResponse({
+        appId: id,
+        body: blob,
+        responseInit: {},
+        mime_type: mimeType,
+        cspAllowMapsImgSrc,
+      })
     } catch (error) {
       log.error('webxdc: load blob:', error)
-      return makeResponse(null, '', { status: 404 })
+      return makeResponse({
+        appId: null,
+        body: '',
+        responseInit: { status: 404 },
+      })
     }
   }
 }
