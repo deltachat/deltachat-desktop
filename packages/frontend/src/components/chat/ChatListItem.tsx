@@ -307,6 +307,9 @@ function ChatListItemError({
  */
 function RegularChatListItem({
   chat,
+  // To avoid the console error about unrecognized DOM prop,
+  // simply remove it from `rest`.
+  chatListItem: _chatListItem,
   onClick,
   onFocus,
   isSelected,
@@ -318,6 +321,7 @@ function RegularChatListItem({
   chat: Type.ChatListItemFetchResult & {
     kind: 'ChatListItem'
   }
+  chatListItem?: Type.ChatListItemFetchResult
   onClick: (event: React.MouseEvent) => void
   onFocus?: (event: React.FocusEvent) => void
   onContextMenu?: (
