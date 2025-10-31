@@ -93,7 +93,7 @@ describe('linkify-plugin-botcommand', () => {
 
     // although we want to limit the bot commands to word boundaries,
     // it is not possible to do so with the current implementation of linkify.
-    // this test prooves that this is still the case and our filter workaround
+    // this test proves that this is still the case and our filter workaround
     // is needed.
     it('Is not limited to word boundaries', () => {
       expect(
