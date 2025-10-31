@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { T } from '@deltachat/jsonrpc-client'
-import { basename } from 'path'
 
 import { getLogger } from '../../../../shared/logger'
 import { BackendRemote, Type } from '../../backend-com'
@@ -237,14 +236,12 @@ export function useDraft(
         (draft.file && draft.file != '') ||
         !!draft.quote
       ) {
-        const fileName =
-          draft.fileName ?? (draft.file ? basename(draft.file) : null)
         await BackendRemote.rpc.miscSetDraft(
           accountId,
           chatId,
           draft.text,
           draft.file !== '' ? draft.file : null,
-          fileName ?? null,
+          draft.fileName,
           draft.quote?.kind === 'WithMessage' ? draft.quote.messageId : null,
           draft.viewType
         )
@@ -314,7 +311,7 @@ export function useDraft(
   }, [inputRef, saveAndRefetchDraft])
 
   const addFileToDraft = useCallback(
-    async (file: string, fileName: string, viewType: T.Viewtype) => {
+    async (file: string, fileName: string | null, viewType: T.Viewtype) => {
       draftRef.current.file = file
       draftRef.current.fileName = fileName
       draftRef.current.viewType = viewType
