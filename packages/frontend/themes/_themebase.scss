@@ -71,8 +71,6 @@ $scrollbarTransparency: 0.34 !default;
   --buttonDangerHover: #{changeContrast($btnDangerBackground, 10%)};
   --buttonDisabledBackground: #{changeContrast($bgSecondary, 10%)};
   --buttonDisabledText: #{changeContrast($textSecondary, 25%)};
-  /* Icons in context menu */
-  --iconBackground: #{$colorNone};
   /* NavBar */
   --navBarBackground: #{$bgNavBar};
   --navBarHeight: 50px;
@@ -161,7 +159,6 @@ $scrollbarTransparency: 0.34 !default;
   --separatorColor: #{$bgSecondary};
   --bp4DialogHeaderBg: #{$bgPrimary};
   /* BlueprintJS overwrites, used in code, just weren't renamed for the sake of renaming */
-  --bp4DialogHeaderIcon: #666666;
   --bp4DialogBgSecondary: #{$bgSecondary};
   --bp4DialogBgPrimary: #{$bgPrimary};
   --bp4Heading: #{$textPrimary};
@@ -248,13 +245,12 @@ $scrollbarTransparency: 0.34 !default;
   --summary-text-color: #{changeContrast($textPrimary, 33%)};
   --textPrimary: #{$textPrimary};
   --textSecondary: #{$textSecondary};
+  --iconColorPrimary: #{changeContrast($textPrimary, 20%)};
 
   @if color.channel($bgPrimary, 'lightness', $space: hsl) < 50 {
     // dark theme
     --scrollbarThumb: #{rgba(white, $scrollbarTransparency)};
     --scrollbarThumbHover: #{rgba(white, $scrollbarTransparency + 0.14)};
-
-    --settingsIconColor: #666666;
 
     --unreadCountBgMuted: grey;
 
@@ -264,7 +260,6 @@ $scrollbarTransparency: 0.34 !default;
     --scrollbarThumb: #{rgba(grey, $scrollbarTransparency)};
     --scrollbarThumbHover: #{rgba(grey, $scrollbarTransparency + 0.14)};
 
-    --settingsIconColor: #666666;
     --jumpDownButtonBackgroundColor: white;
     --jumpDownButtonIconColor: #808080;
 

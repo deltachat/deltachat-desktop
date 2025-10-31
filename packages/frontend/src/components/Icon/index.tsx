@@ -44,11 +44,18 @@ export type IconName =
   | 'swap_hor'
   | 'upload-file'
 
+type IconColoring =
+  | 'navbar'
+  | 'contextMenu'
+  | 'fullscreenControls'
+  | 'appearanceSelector'
+  | 'remove'
+
 type PropsBase = {
   className?: string
   onClick?: (ev: Event | React.SyntheticEvent<Element, Event>) => void
   icon: IconName
-  coloring?: keyof Omit<typeof styles, 'icon'>
+  coloring?: IconColoring
   size?: number
 }
 type JustIconProps = PropsBase & {
