@@ -181,8 +181,6 @@ function getView<T>(items: T[], start: number, end: number): T[] {
 export class MessageListStore extends Store<MessageListState> {
   scheduler = new ChatStoreScheduler()
 
-  emitter = BackendRemote.getContextEvents(this.accountId)
-
   constructor(
     private readonly accountId: number,
     private readonly chatId: number
