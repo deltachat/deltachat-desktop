@@ -56,7 +56,7 @@ import type { PrivateReply } from '../../hooks/chat/usePrivateReply'
 import type { JumpToMessage } from '../../hooks/chat/useMessage'
 import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
 import { useRovingTabindex } from '../../contexts/RovingTabindex'
-import { avatarInitial } from '../Avatar'
+import { avatarInitial } from '@deltachat-desktop/shared/avatarInitial'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 
 const log = getLogger('Message')

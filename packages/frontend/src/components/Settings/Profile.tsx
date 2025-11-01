@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { avatarInitial } from '../Avatar'
+import { avatarInitial } from '@deltachat-desktop/shared/avatarInitial'
 import LargeProfileImage from '../LargeProfileImage'
 
 import type { SettingsStoreState } from '../../stores/settings'
