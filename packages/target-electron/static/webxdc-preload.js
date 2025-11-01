@@ -53,8 +53,6 @@ class RealtimeListener {
   // setLocation was called before all connections were filled
   let locationUrl = ''
 
-  let connectionsFilled = false
-
   /**
    * @type {Parameters<import('@webxdc/types').Webxdc["setUpdateListener"]>[0]|null}
    */
@@ -244,8 +242,6 @@ class RealtimeListener {
     },
   }
 
-  const connections = []
-
   contextBridge.exposeInMainWorld('webxdc_internal', {
     setup: (selfAddr, selfName, sendUpdateInterval, sendUpdateMaxSize) => {
       if (is_ready) {
@@ -262,64 +258,17 @@ class RealtimeListener {
 
       window.frames[0].window.addEventListener('keydown', keydown_handler)
     },
-    fill_up_connections: async () => {
-      /** @type {HTMLProgressElement} */
-      const loadingProgress = document.getElementById('progress')
-      const numIterations = 50
-      loadingProgress.max = numIterations
-      const loadingDiv = document.getElementById('loading')
+    setInitialIframeSrc: async () => {
       const iframe = document.getElementById('frame')
-
-      const cert = {
-        certificates: [
-          await RTCPeerConnection.generateCertificate({
-            name: 'ECDSA',
-            namedCurve: 'P-256',
-          }),
-        ],
-      }
-
-      try {
-        for (let i = 0; i < numIterations; i++) {
-          connections.push(new RTCPeerConnection(cert))
-          connections.push(new RTCPeerConnection(cert))
-          connections.push(new RTCPeerConnection(cert))
-          connections.push(new RTCPeerConnection(cert))
-          connections.push(new RTCPeerConnection(cert))
-          connections.push(new RTCPeerConnection(cert))
-          connections.push(new RTCPeerConnection(cert))
-          connections.push(new RTCPeerConnection(cert))
-          connections.push(new RTCPeerConnection(cert))
-          connections.push(new RTCPeerConnection(cert))
-          await new Promise(res => setTimeout(res, 0)) // this is to view loading bar, it returns to the ev loop
-          loadingProgress.value = i + 1
-        }
-        try {
-          connections.push(new RTCPeerConnection(cert))
-          console.log('could create 501th connection, this should never happen')
-          ipcRenderer.invoke('webxdc.exit')
-        } catch (error) {
-          loadingDiv.remove()
-          iframe.src = locationUrl !== '' ? locationUrl : 'index.html'
-          iframe.contentWindow.window.addEventListener(
-            'keydown',
-            keydown_handler
-          )
-          connectionsFilled = true
-        }
-      } catch (error) {
-        console.log('error loading, should crash/close window', error)
-        ipcRenderer.invoke('webxdc.exit')
-      }
+      iframe.src = locationUrl !== '' ? locationUrl : 'index.html'
+      iframe.contentWindow.window.addEventListener('keydown', keydown_handler)
     },
     /**
      * called via webContents.executeJavaScript
      */
     setLocationUrl(base64EncodedHref) {
       locationUrl = Buffer.from(base64EncodedHref, 'base64').toString('utf8')
-      if (locationUrl && locationUrl !== '' && connectionsFilled) {
-        // if connectionsFilled is false, the url is loaded after
-        // the connections are filled
+      if (locationUrl && locationUrl !== '') {
         window.frames[0].window.location = locationUrl
       }
     },
