@@ -2,7 +2,7 @@ DC_ACCOUNTS_DIR=../../e2e-tests/data/accounts
 NODE_ENV=test
 
 # URL of chatmail server
-DC_CHATMAIL_SERVER=https://ci-chatmail.testrun.org
+DC_CHATMAIL_DOMAIN=ci-chatmail.testrun.org
 
 # Base URL of non chatmail server
 # If you don't have one, you may skip non-Chatmail tests with
