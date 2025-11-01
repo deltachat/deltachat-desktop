@@ -9,6 +9,7 @@ import { KeybindAction } from '../../keybindings'
 import useMessage from './useMessage'
 import ComposerMessageInput from '../../components/composer/ComposerMessageInput'
 import { type MessageListStore } from '../../stores/messagelist'
+import { debounce } from 'debounce'
 
 const log = getLogger('renderer/composer')
 
@@ -17,10 +18,6 @@ export type DraftObject = { chatId: number } & Pick<
   'id' | 'file' | 'viewType' | 'vcardContact'
 > &
   MessageTypeAttachmentSubset & {
-    /**
-     * Note that this text is not always synced with the actual state
-     * of the composer <textarea>. It's basically duplicated state.
-     */
     text: Type.Message['text']
     quote:
       | Type.Message['quote']
@@ -75,46 +72,20 @@ export function useDraft(
     viewType: T.Viewtype
   ) => Promise<void>
   removeFile: () => void
-  clearDraftStateButKeepTextareaValue: () => void
-  clearDraftStateAndUpdateTextareaValue: () => void
-  setDraftStateAndUpdateTextareaValue: (newValue: DraftObject) => void
+  clearDraftState: () => void
+  setDraftState: (newValue: DraftObject) => void
 } {
   const [
     draftState,
     /**
-     * Set `draftState`, but don't update the value of the message textarea
-     * (because it's managed by a separate piece of state).
-     *
      * This will not save the draft to the backend.
      */
-    _setDraftStateButKeepTextareaValue,
+    setDraftState,
   ] = useState<DraftObject>(() => emptyDraft(chatId))
 
-  /**
-   * @see {@link _setDraftStateButKeepTextareaValue}.
-   */
-  const setDraftStateAndUpdateTextareaValue = useCallback(
-    (newValue: DraftObject) => {
-      _setDraftStateButKeepTextareaValue(newValue)
-      inputRef.current?.setText(newValue.text)
-    },
-    [inputRef]
-  )
-
-  /**
-   * Reset `draftState` to "empty draft" value,
-   * but don't save it to backend and don't change the value
-   * of the textarea.
-   */
-  const clearDraftStateButKeepTextareaValue = useCallback(() => {
-    _setDraftStateButKeepTextareaValue(_ => emptyDraft(chatId))
+  const clearDraftState = useCallback(() => {
+    setDraftState(emptyDraft(chatId))
   }, [chatId])
-  /**
-   * @see {@link clearDraftStateButKeepTextareaValue}
-   */
-  const clearDraftStateAndUpdateTextareaValue = useCallback(() => {
-    setDraftStateAndUpdateTextareaValue(emptyDraft(chatId))
-  }, [chatId, setDraftStateAndUpdateTextareaValue])
 
   /**
    * Aborts and gets re-created when {@linkcode accountId} or
@@ -144,7 +115,7 @@ export function useDraft(
   const draftIsLoading = skipLoadingDraft ? false : draftIsLoading_
   const loadDraft = useCallback(() => {
     if (skipLoadingDraft) {
-      clearDraftStateButKeepTextareaValue()
+      clearDraftState()
       return
     }
     setDraftIsLoading(true)
@@ -157,10 +128,9 @@ export function useDraft(
 
         if (!newDraft) {
           log.debug('no draft')
-          clearDraftStateButKeepTextareaValue()
-          inputRef.current?.setText('')
+          clearDraftState()
         } else {
-          _setDraftStateButKeepTextareaValue(_old => ({
+          setDraftState(_old => ({
             chatId,
             id: newDraft.id,
             text: newDraft.text,
@@ -172,7 +142,6 @@ export function useDraft(
             quote: newDraft.quote,
             vcardContact: newDraft.vcardContact,
           }))
-          inputRef.current?.setText(newDraft.text)
         }
         setDraftIsLoading(false)
         setTimeout(() => {
@@ -187,7 +156,7 @@ export function useDraft(
     accountId,
     chatId,
     abortController,
-    clearDraftStateButKeepTextareaValue,
+    clearDraftState,
     inputRef,
     skipLoadingDraft,
   ])
@@ -249,9 +218,9 @@ export function useDraft(
         return
       }
 
+      // don't load text to prevent bugging back
       if (newDraft) {
-        _setDraftStateButKeepTextareaValue(old => ({
-          // don't load text to prevent bugging back
+        setDraftState(old => ({
           text: old.text,
 
           chatId,
@@ -265,10 +234,13 @@ export function useDraft(
           vcardContact: newDraft.vcardContact,
         }))
       } else {
-        clearDraftStateButKeepTextareaValue()
+        setDraftState(old => ({
+          ...emptyDraft(chatId),
+          text: old.text,
+        }))
       }
     },
-    [accountId, abortController, clearDraftStateButKeepTextareaValue]
+    [accountId, abortController]
   )
   const saveAndRefetchDraft = useMemo(
     () =>
@@ -278,23 +250,59 @@ export function useDraft(
         : null,
     [canSend, chatId, saveAndRefetchDraft_]
   )
-
-  const setAndSaveAndRefetchDraftButKeepTextareaValue = useMemo(
+  const debouncedSaveAndRefetchDraft = useMemo(
     () =>
       saveAndRefetchDraft == null
         ? null
-        : (newDraftState: DraftObject) => {
-            _setDraftStateButKeepTextareaValue(newDraftState)
-            return saveAndRefetchDraft(newDraftState)
-          },
+        : // Maybe we could also specify `maxWait` option,
+          // but only Lodash's `debounce` supports it.
+          debounce(saveAndRefetchDraft, 15_000),
     [saveAndRefetchDraft]
+  )
+  // Flush the draft to backend when switching chats.
+  // Note that specifying `chatId` as a dependency is not necessary,
+  // because `debouncedSaveAndRefetchDraft` itself already depends on it.
+  useEffect(() => {
+    return () => {
+      debouncedSaveAndRefetchDraft?.flush()
+    }
+  }, [accountId, chatId, debouncedSaveAndRefetchDraft])
+  // Flush when alt-tabbing and stuff.
+  // This should also work for when quitting the app,
+  // but it doesn't manage to finish in time, unfortunately.
+  useEffect(() => {
+    if (debouncedSaveAndRefetchDraft == null) {
+      return
+    }
+    const flushIfHidden = () => {
+      if (document.visibilityState === 'hidden') {
+        debouncedSaveAndRefetchDraft.flush()
+      }
+    }
+    document.addEventListener('visibilitychange', flushIfHidden)
+    return () => document.removeEventListener('visibilitychange', flushIfHidden)
+  }, [debouncedSaveAndRefetchDraft])
+  // TODO also flush when unfocusing the element?
+  // For example, to cover the case where the user goes to quit the app
+  // (though this will not cover `Ctrl + Q` shortcut),
+  // or to turn off the machine.
+
+  const setAndDebouncedSaveAndRefetchDraft = useMemo(
+    () =>
+      debouncedSaveAndRefetchDraft == null
+        ? null
+        : (newDraftState: DraftObject) => {
+            setDraftState(newDraftState)
+            debouncedSaveAndRefetchDraft(newDraftState)
+          },
+    [debouncedSaveAndRefetchDraft]
   )
 
   const updateDraftText = (text: string, InputChatId: number) => {
     if (chatId !== InputChatId) {
       log.warn("chat Id and InputChatId don't match, do nothing")
     } else {
-      setAndSaveAndRefetchDraftButKeepTextareaValue?.({
+      setAndDebouncedSaveAndRefetchDraft?.({
         ...draftState,
         text,
       })
@@ -302,36 +310,51 @@ export function useDraft(
   }
 
   const removeQuote = useCallback(() => {
-    setAndSaveAndRefetchDraftButKeepTextareaValue?.({
+    setAndDebouncedSaveAndRefetchDraft?.({
       ...draftState,
       quote: null,
     })
     inputRef.current?.focus()
-  }, [draftState, inputRef, setAndSaveAndRefetchDraftButKeepTextareaValue])
+  }, [draftState, inputRef, setAndDebouncedSaveAndRefetchDraft])
 
   const removeFile = useCallback(() => {
-    setAndSaveAndRefetchDraftButKeepTextareaValue?.({
+    setAndDebouncedSaveAndRefetchDraft?.({
       ...draftState,
       file: '',
+      fileName: null,
+      fileBytes: 0,
+      fileMime: null,
+      // VCard is derived from the file. When we remove `file`,
+      // the re-fetched draft object will also have removed `vcardContact`.
+      // But we can skip a flush here, so let's set it to `null` manually.
+      vcardContact: null,
       viewType: 'Text',
     })
 
     inputRef.current?.focus()
-  }, [draftState, inputRef, setAndSaveAndRefetchDraftButKeepTextareaValue])
+  }, [draftState, inputRef, setAndDebouncedSaveAndRefetchDraft])
 
   const addFileToDraft = useCallback(
     async (file: string, fileName: string, viewType: T.Viewtype) => {
+      if (debouncedSaveAndRefetchDraft == null || saveAndRefetchDraft == null) {
+        return
+      }
       inputRef.current?.focus()
-      return setAndSaveAndRefetchDraftButKeepTextareaValue?.({
+      const newDraftState: typeof draftState = {
         ...draftState,
         file,
         fileName,
         viewType,
         fileBytes: 0,
         fileMime: null,
-      })
+      }
+      // Cannot use `setAndDebouncedSaveAndRefetchDraft`
+      // because it doesn't return the Promise.
+      setDraftState(newDraftState)
+      debouncedSaveAndRefetchDraft?.clear()
+      return saveAndRefetchDraft(newDraftState)
     },
-    [draftState, inputRef, setAndSaveAndRefetchDraftButKeepTextareaValue]
+    [draftState, inputRef, saveAndRefetchDraft, debouncedSaveAndRefetchDraft]
   )
 
   const { jumpToMessage } = useMessage()
@@ -346,23 +369,26 @@ export function useDraft(
       | KeybindAction.Composer_SelectReplyToDown
   ) => {
     if (
-      setAndSaveAndRefetchDraftButKeepTextareaValue == null ||
-      // These are implied by
-      // `setAndSaveAndRefetchDraftButKeepTextareaValue == null`,
+      setAndDebouncedSaveAndRefetchDraft == null ||
+      // These are implied by `setAndDebouncedSaveAndRefetchDraft == null`,
       // but TypeScript doesn't know
+      debouncedSaveAndRefetchDraft == null ||
       chatId == undefined ||
       !canSend
     ) {
       return
     }
     const quoteMessage = (messageId: number) => {
-      setAndSaveAndRefetchDraftButKeepTextareaValue({
+      setAndDebouncedSaveAndRefetchDraft({
         ...draftState,
         quote: {
           kind: 'WithMessage',
           messageId,
         },
       })
+      // Need an immediate refetch, to get the "full" quote,
+      // with the author's name, text, etc.
+      debouncedSaveAndRefetchDraft.flush()
 
       jumpToMessage({
         accountId,
@@ -446,19 +472,28 @@ export function useDraft(
 
   useEffect(() => {
     window.__setQuoteInDraft = (messageId: number) => {
-      setAndSaveAndRefetchDraftButKeepTextareaValue?.({
+      setAndDebouncedSaveAndRefetchDraft?.({
         ...draftState,
         quote: {
           kind: 'WithMessage',
           messageId,
         },
       })
+      // Again, we need an immediate refetch, to get the "full" quote,
+      // with the author's name, text, etc.
+      debouncedSaveAndRefetchDraft?.flush()
+
       inputRef.current?.focus()
     }
     return () => {
       window.__setQuoteInDraft = null
     }
-  }, [draftState, inputRef, setAndSaveAndRefetchDraftButKeepTextareaValue])
+  }, [
+    draftState,
+    inputRef,
+    setAndDebouncedSaveAndRefetchDraft,
+    debouncedSaveAndRefetchDraft,
+  ])
 
   return {
     draftState,
@@ -468,8 +503,16 @@ export function useDraft(
     updateDraftText,
     addFileToDraft,
     removeFile,
-    clearDraftStateButKeepTextareaValue,
-    clearDraftStateAndUpdateTextareaValue,
-    setDraftStateAndUpdateTextareaValue,
+    clearDraftState: useCallback(() => {
+      clearDraftState()
+      debouncedSaveAndRefetchDraft?.clear()
+    }, [clearDraftState, debouncedSaveAndRefetchDraft]),
+    setDraftState: useCallback(
+      (newState: DraftObject) => {
+        setDraftState(newState)
+        debouncedSaveAndRefetchDraft?.clear()
+      },
+      [debouncedSaveAndRefetchDraft]
+    ),
   }
 }
