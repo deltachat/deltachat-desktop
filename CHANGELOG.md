@@ -14,6 +14,7 @@
 ### Changed
 
 - Removed "Watch Sent Folder" preference. #5611
+- In the message context menu, rename "Save" to "Save Message" #5658
 
 ### Changed
 - replace rust/wasm message-parser with javascript lib linkify
