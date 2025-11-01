@@ -16,7 +16,7 @@ import { initialisePowerMonitor } from './resume_from_sleep.js'
 // Chromium docs that touch on `--host-resolver-rules` and DNS:
 // https://www.chromium.org/developers/design-documents/network-stack/socks-proxy/
 // https://www.chromium.org/developers/design-documents/dns-prefetching/
-const hostRules = 'MAP * ~NOTFOUND, EXCLUDE *.openstreetmap.org'
+const hostRules = 'MAP * ~NOTFOUND'
 rawApp.commandLine.appendSwitch('host-resolver-rules', hostRules)
 rawApp.commandLine.appendSwitch('host-rules', hostRules)
 
