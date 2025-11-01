@@ -11,10 +11,8 @@ import {
   PseudoListItemAddMember,
 } from '../helpers/PseudoListItem'
 import ViewProfile from './ViewProfile'
-import {
-  avatarInitial,
-  shouldDisableClickForFullscreen as shouldDisableFullscreenAvatar,
-} from '../Avatar'
+import { avatarInitial } from '@deltachat-desktop/shared/avatarInitial'
+import { shouldDisableClickForFullscreen as shouldDisableFullscreenAvatar } from '../Avatar'
 import { DeltaInput } from '../Login-Styles'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'

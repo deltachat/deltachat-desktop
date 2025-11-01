@@ -17,23 +17,15 @@ import useCreateChatByEmail from '../../hooks/chat/useCreateChatByEmail'
 
 const log = getLogger('renderer/message-parser')
 
-/**
- * returns an array with emojis if the first token of str
- * is of type emoji, composed emojis are just one item in the array
- */
-export function extractFirstEmojisFromString(
-  str: string,
-  emojiOnly = false // only return emojis if the whole string is just one emoji token
-): string[] | null {
+export function countEmojisIfOnlyContainsEmoji(str: string): number | null {
   const elements = linkify.tokenize(str)
-  if (emojiOnly && elements.length !== 1) {
+  if (elements.length !== 1) {
     return null
   }
   if (
-    elements.length > 0 &&
     elements[0].t === 'text' &&
     elements[0].tk &&
-    (elements[0].tk.length === 1 || !emojiOnly)
+    elements[0].tk.length === 1
   ) {
     const firstToken = elements[0].tk[0]
     if (firstToken.t === 'EMOJI') {
@@ -44,8 +36,7 @@ export function extractFirstEmojisFromString(
         // (user-perceived character) boundaries
         granularity: 'grapheme',
       })
-      const segments = [...segmenter.segment(firstToken.v)]
-      return segments.map(s => s.input)
+      return [...segmenter.segment(firstToken.v)].length
     }
   }
   return null

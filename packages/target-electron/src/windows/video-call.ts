@@ -11,6 +11,7 @@ import {
   type protocol,
 } from 'electron/main'
 import { join } from 'path'
+import { avatarInitial } from '@deltachat-desktop/shared/avatarInitial'
 import { appIcon, htmlDistDir } from '../application-constants'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { getDCJsonrpcRemote } from '../ipc'
@@ -758,23 +759,6 @@ function parseHost(host: string): null | {
     accountId,
     chatId,
   }
-}
-
-const userPerceivedCharacterSegmenter = new Intl.Segmenter(undefined, {
-  granularity: 'grapheme',
-})
-// TODO refactor: there is another funciton with this name. Need to DRY.
-// Note though that that function is currently only used
-// in the frontend package.
-/**
- * This could return an empty string, e.g. if the inputs are also empty strings.
- */
-function avatarInitial(name: string, addr?: string): string {
-  const str = name || addr || ''
-  return (
-    userPerceivedCharacterSegmenter.segment(str)[Symbol.iterator]().next().value
-      ?.segment ?? ''
-  )
 }
 
 /**

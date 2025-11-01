@@ -8,7 +8,8 @@ import { createChatByContactId } from '../../backend/chat'
 import useChat from '../../hooks/chat/useChat'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
-import { avatarInitial, CssWithAvatarColor } from '../Avatar'
+import { CssWithAvatarColor } from '../Avatar'
+import { avatarInitial } from '@deltachat-desktop/shared/avatarInitial'
 
 /**
  * displays a VCard attachement with avatar, mail & name
