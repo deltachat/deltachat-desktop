@@ -193,6 +193,9 @@ test('Invite existing user to group', async ({ browserName }) => {
   await expect(page.locator('#message-list li').nth(1)).toContainText(
     userA.address
   )
+  const composer = page.locator('textarea#composer-textarea')
+  await expect(composer).not.toBeVisible({ timeout: 1 })
+
   // userB has 2 new notifications now
   const badge = page
     .getByTestId(`account-item-${userB.id}`)
@@ -201,6 +204,10 @@ test('Invite existing user to group', async ({ browserName }) => {
 
   await expect(badge).toBeVisible()
   await expect(page.locator('.e2ee-info')).toBeVisible()
+  const msg = 'Hello chat!' + Math.random()
+  await composer.fill(msg)
+  await page.getByRole('button', { name: 'Send' }).click()
+  await expect(page.locator('#message-list li').last()).toContainText(msg)
 })
 
 test('Invite new user to group', async ({ browserName }) => {
@@ -245,8 +252,17 @@ test('Invite new user to group', async ({ browserName }) => {
   await expect(page.locator('#message-list li').nth(1)).toContainText(
     userA.address
   )
+  const composer = page.locator('textarea#composer-textarea')
+  await expect(composer).not.toBeVisible({ timeout: 1 })
+
   // verified chat after response from userA
   await expect(page.locator('.e2ee-info')).toBeVisible()
+
+  const msg = 'Hello chat!' + Math.random()
+  await composer.fill(msg)
+  await page.getByRole('button', { name: 'Send' }).click()
+  await expect(page.locator('#message-list li').last()).toContainText(msg)
+
   await page.getByTestId('chat-info-button').click()
   // new user sees group members
   await expect(
