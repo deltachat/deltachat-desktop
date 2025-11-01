@@ -951,8 +951,8 @@ async function mapProtocolHandler(
 
   const mimeType: string | undefined = Mime.lookup(filename) || ''
   try {
-    // now we pipe the real request through our backend
-    // to bypass CORS restrictions and to be able to cache tiles
+    // since webxdc apps are not allowed to access the internet
+    // directly, we proxy the request through our backend
     const response = await rpc.getHttpResponse(
       accountId,
       request.url.replace('maps://', 'https://')
