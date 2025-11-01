@@ -2,7 +2,6 @@
 // We only really need the emoji data of this module
 import EmojiConvertor from 'emoji-js-clean'
 import { getLogger } from '../../../../shared/logger'
-import { countEmojisIfOnlyContainsEmoji } from '../message/MessageParser'
 
 const log = getLogger('renderer/emoji')
 
@@ -49,6 +48,10 @@ const MAX_BYTE_SIZE_OF_EMOJI = 10 /* 10 is maybe already too generous? */
 const MAX_STRING_LENGTH_FOR_BIG_EMOJI =
   MAX_BIG_EMOJI_COUNT * MAX_BYTE_SIZE_OF_EMOJI
 
+const userPerceivedCharacterSegmenter = new Intl.Segmenter(undefined, {
+  granularity: 'grapheme',
+})
+
 /**
  * if a message contains only emojis and is not too long,
  * we display the emojis bigger as usual inline emojis
@@ -58,7 +61,14 @@ export function getSizeClass(str: string) {
   if (str.length > MAX_STRING_LENGTH_FOR_BIG_EMOJI) {
     return undefined
   } else {
-    const emojiCount = countEmojisIfOnlyContainsEmoji(str)
+    // Check if it contains only 1-8 emojis.
+    // https://stackoverflow.com/questions/18862256/how-to-detect-emoji-using-javascript
+    if (!/^\p{Extended_Pictographic}{1,8}$/u.test(str)) {
+      return undefined
+    }
+    const emojiCount = [
+      ...userPerceivedCharacterSegmenter.segment(str)[Symbol.iterator](),
+    ].length
 
     if (emojiCount == null || emojiCount > 8) {
       return undefined
