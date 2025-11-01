@@ -45,8 +45,6 @@ export function init(options: { hidden: boolean }) {
     DesktopSettings.state.bounds
   )
 
-  const isMac = platform() === 'darwin'
-
   const mainWindow = (window = <ExtendedBrowserWindow>(
     new electron.BrowserWindow({
       backgroundColor: '#282828',
@@ -67,7 +65,7 @@ export function init(options: { hidden: boolean }) {
         allowRunningInsecureContent: false,
         contextIsolation: false,
       },
-      titleBarStyle: isMac ? 'hidden' : 'default',
+      titleBarStyle: 'default',
       titleBarOverlay: true,
     })
   ))
