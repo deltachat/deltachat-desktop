@@ -17,31 +17,6 @@ import useCreateChatByEmail from '../../hooks/chat/useCreateChatByEmail'
 
 const log = getLogger('renderer/message-parser')
 
-export function countEmojisIfOnlyContainsEmoji(str: string): number | null {
-  const elements = linkify.tokenize(str)
-  if (elements.length !== 1) {
-    return null
-  }
-  if (
-    elements[0].t === 'text' &&
-    elements[0].tk &&
-    elements[0].tk.length === 1
-  ) {
-    const firstToken = elements[0].tk[0]
-    if (firstToken.t === 'EMOJI') {
-      // use Intl.Segmenter to split grapheme clusters (emoji + skin tone modifier etc)
-      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Segmenter/Segmenter
-      const segmenter = new (Intl as any).Segmenter('en', {
-        // Split the input into segments at grapheme cluster
-        // (user-perceived character) boundaries
-        granularity: 'grapheme',
-      })
-      return [...segmenter.segment(firstToken.v)].length
-    }
-  }
-  return null
-}
-
 function renderElement(
   elm: linkify.MultiToken,
   tabindexForInteractiveContents: -1 | 0,
