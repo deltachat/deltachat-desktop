@@ -1,6 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
-import { getSizeClass, replaceColons } from '../conversations/emoji'
+import { getSizeClass } from '../conversations/emoji'
 import { parseAndRenderMessage } from './MessageParser'
 
 /** limit where message parser will not parse the message, limit of core is lower, this is just a failsafe */
@@ -27,20 +27,20 @@ function MessageBody({
   if (text.length >= UPPER_LIMIT_FOR_PARSED_MESSAGES) {
     return <>{text}</>
   }
+  const textTrimmed = trim(text)
   // if text is only emojis and Jumbomoji is enabled
-  const emojifiedText = trim(text.replace(/:[\w\d_\-+]*:/g, replaceColons))
   if (!disableJumbomoji) {
-    const sizeClass = getSizeClass(emojifiedText)
+    const sizeClass = getSizeClass(textTrimmed)
     if (sizeClass !== undefined) {
       return (
         <span className={classNames('emoji-container', sizeClass)}>
-          {emojifiedText}
+          {textTrimmed}
         </span>
       )
     }
   }
   return parseAndRenderMessage(
-    emojifiedText,
+    textTrimmed,
     nonInteractiveContent,
     tabindexForInteractiveContents ?? 0
   )
