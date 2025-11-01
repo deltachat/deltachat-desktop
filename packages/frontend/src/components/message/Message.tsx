@@ -339,7 +339,7 @@ function buildContextMenu(
     !chat.isSelfTalk &&
       !isSavedMessage &&
       !message.isInfo && {
-        label: tx('save'),
+        label: tx('save_message'),
         action: () =>
           BackendRemote.rpc.saveMsgs(selectedAccountId(), [message.id]),
       },
