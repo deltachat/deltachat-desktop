@@ -19,12 +19,7 @@ import { replaceColonsSafe } from '../conversations/emoji'
 import { Quote } from '../message/Message'
 import { DraftAttachment } from '../attachment/messageAttachment'
 import { useSettingsStore } from '../../stores/settings'
-import {
-  BackendRemote,
-  EffectfulBackendActions,
-  onDCEvent,
-  Type,
-} from '../../backend-com'
+import { BackendRemote, EffectfulBackendActions, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { confirmDialog } from '../message/messageFunctions'
@@ -178,27 +173,7 @@ const Composer = forwardRef<
     })
   }
 
-  const hasSecureJoinEnded = useRef<boolean>(false)
-  useEffect(() => {
-    if (hasSecureJoinEnded) {
-      // after can send was updated
-      window.__reloadDraft && window.__reloadDraft()
-      hasSecureJoinEnded.current = false
-    }
-  }, [selectedChat.canSend])
-
   const showSendButton = currentEditText !== '' || !!draftState.file
-
-  useEffect(() => {
-    return onDCEvent(accountId, 'SecurejoinJoinerProgress', ({ progress }) => {
-      // fix bug where composer was locked after joining a group via qr code
-      if (progress === 1000) {
-        // if already updated can send, currently this is not the case
-        window.__reloadDraft && window.__reloadDraft()
-        hasSecureJoinEnded.current = true
-      }
-    })
-  }, [accountId])
 
   const composerSendMessage =
     messageEditing.isEditingModeActive || draftIsLoading
