@@ -14,6 +14,7 @@
 ### Changed
 
 - Removed "Watch Sent Folder" preference. #5611
+- Show standard title bar on macOS. #5651
 
 ### Changed
 - replace rust/wasm message-parser with javascript lib linkify
