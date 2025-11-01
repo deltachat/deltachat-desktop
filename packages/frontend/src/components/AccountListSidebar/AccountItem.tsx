@@ -8,7 +8,7 @@ import {
   EffectfulBackendActions,
 } from '../../backend-com'
 import { runtime } from '@deltachat-desktop/runtime-interface'
-import { avatarInitial } from '../Avatar'
+import { avatarInitial } from '@deltachat-desktop/shared/avatarInitial'
 import { getLogger } from '../../../../shared/logger'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { useContextMenuWithActiveState } from '../ContextMenu'

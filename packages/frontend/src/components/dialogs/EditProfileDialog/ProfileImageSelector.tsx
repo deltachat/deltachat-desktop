@@ -4,7 +4,7 @@ import ImageSelector from '../../ImageSelector'
 import ImageCropper from '../../ImageCropper'
 
 import { LastUsedSlot } from '../../../utils/lastUsedPaths'
-import { avatarInitial } from '../../Avatar'
+import { avatarInitial } from '@deltachat-desktop/shared/avatarInitial'
 import useDialog from '../../../hooks/dialog/useDialog'
 import { copyToBlobDir } from '../../../utils/copyToBlobDir'
 
