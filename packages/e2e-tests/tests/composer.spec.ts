@@ -174,6 +174,23 @@ test.describe('draft', () => {
     await expect(composerReply).toContainText(quoteText)
   }
 
+  // A contact is also a file, and it's the easiest way
+  // to attach a file, so let's go for it.
+  async function attachFile() {
+    await composerSection
+      .getByRole('button', { name: 'Add attachment' })
+      .click()
+    await page.getByRole('menuitem', { name: 'Contact' }).click()
+    await page.getByRole('dialog').getByRole('button', { name: 'Me' }).click()
+  }
+  async function testDraftHasFile() {
+    const myName = 'Alice'
+    await expect(
+      composerSection.getByRole('region', { name: 'Attachment' })
+    ).toContainText(myName)
+    await expect(composerSection).toContainText(myName)
+  }
+
   async function testSavesText(text: string, targetChatNum: number = 1) {
     const targetChat = getChat(targetChatNum)
     const someOtherChat = getChat(targetChatNum === 1 ? 2 : 1)
@@ -227,21 +244,14 @@ test.describe('draft', () => {
     const someOtherChat = getChat(targetChatNum === 1 ? 2 : 1)
     await targetChat.click()
 
-    await composerSection
-      .getByRole('button', { name: 'Add attachment' })
-      .click()
-    // A contact is also a file, and it's the easiest way
-    // to attach a file, so let's go for it.
-    await page.getByRole('menuitem', { name: 'Contact' }).click()
-    await page.getByRole('dialog').getByRole('button', { name: 'Me' }).click()
+    await attachFile()
+    await testDraftHasFile()
 
-    const myName = 'Alice'
-    await expect(composerSection).toContainText(myName)
     await someOtherChat.click()
-    await expect(composerSection).not.toContainText(myName, { timeout: 300 })
+    await testDraftIsEmpty()
 
     await targetChat.click()
-    await expect(composerSection).toContainText(myName)
+    await testDraftHasFile()
   }
 
   async function testDraftIsEmpty() {
