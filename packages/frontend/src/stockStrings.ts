@@ -221,8 +221,8 @@ export async function updateCoreStrings() {
     [C.DC_STR_YOU_REACTED]: tx('reaction_by_you'),
     [C.DC_STR_REACTED_BY]: tx('reaction_by_other'),
     [C.DC_STR_DONATION_REQUEST]: tx('donate_device_msg'),
-    [C.DC_STR_PROXY_ENABLED]: '',
-    [C.DC_STR_PROXY_ENABLED_DESCRIPTION]: '',
+    [C.DC_STR_PROXY_ENABLED]: tx('proxy_enabled'),
+    [C.DC_STR_PROXY_ENABLED_DESCRIPTION]: tx('proxy_enabled_hint'),
   }
 
   await BackendRemote.rpc.setStockStrings(strings)
