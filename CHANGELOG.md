@@ -1,26 +1,5 @@
 # Changelog
 
-## [Unreleased][unreleased]
-
-### Added
-- enable drag & drop for the account order
-
-### Fixed
-- show appropriate messages when scanning wrong qr codes #5563
-- fix: remove the option to select info messages with Ctrl + Up/Down #5337
-- fix: open https links case insensitive #5625
-- don't start chat for mailto links on chatmail accounts
-
-### Changed
-
-- Removed "Watch Sent Folder" preference. #5611
-- In the message context menu, rename "Save" to "Save Message" #5658
-
-### Changed
-- replace rust/wasm message-parser with javascript lib linkify
-  - removes experimental markdown support
-  - fixes some link parsing issues
-
 <a id="2_22_0"></a>
 
 ## [2.22.0] - 2025-10-17

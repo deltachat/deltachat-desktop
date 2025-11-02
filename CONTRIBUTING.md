@@ -58,10 +58,34 @@ Otherwise fork the repository and create a branch in your fork.
 
 Please add a meaningful description to your PR
 so that reviewers get an idea about what the modifications are supposed to do.
-Add a meaningful line to `CHANGELOG.md` that is at least roughly understandable by the end user.
-If you added changes that have no impact on the end user or are not visible to the end user
-you should add a line in the PR description, starting with `#skip-changelog` followed by a
-short explanation of why it's not needed.
+
+### Commit Messages and Changelog
+
+We use [Conventional Commits](https://www.conventionalcommits.org/) to automatically generate our changelog.
+Each commit message should follow this format:
+
+```
+<type>[optional scope]: <description>
+```
+
+Common types:
+
+- `feat:` or `add:` - New features (appears in "Added" section)
+- `fix:` - Bug fixes (appears in "Fixed" section)
+- `change:` or `update:` - Changes to existing functionality (appears in "Changed" section)
+- `remove:` - Removal of features (appears in "Removed" section)
+- `docs:`, `test:`, `chore:`, `ci:` - Changes that don't appear in the changelog
+
+Examples:
+
+```
+feat: add support for multiple selection in chat list
+fix: prevent crash when scanning invalid QR codes
+change: update electron from 37.1.0 to 37.6.0
+docs: update contributing guidelines
+```
+
+see [cliff config](./cliff.toml)
 
 If the changes affect the user interface,
 screenshots are very helpful,
@@ -112,7 +136,8 @@ To ensure the correct merge strategy, merging is left to the PR author:
 
 - Usually, PRs are squash-merged
   as UI development often results in tiny tweak commits that are not that meaningful on their own.
-- If all commits are meaningful and have a well-written description,
+  **When squash-merging, ensure the final commit message follows the conventional commit format.**
+- If all commits are meaningful, follow conventional commit format, and have a well-written description,
   they can be rebased-merged.
 
 If you do not have write access to the repository,

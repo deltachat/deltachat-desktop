@@ -3,8 +3,35 @@ import { join } from 'path'
 
 const checkOnly = process.argv.includes('--check')
 
+// Get version from argument or from root package.json
+const args = process.argv.slice(2)
+const versionArg = args.find(arg => !arg.startsWith('--'))
 const rootPackageJson = JSON.parse(readFileSync('package.json', 'utf8'))
-const version = rootPackageJson.version
+
+let version
+if (versionArg) {
+  if (checkOnly) {
+    console.error('❌ Error: Cannot use --check with a version argument')
+    console.error('Usage: node bin/update_desktop_version.js [version]')
+    console.error('   or: node bin/update_desktop_version.js --check')
+    process.exit(1)
+  }
+
+  // remove 'v' prefix if present
+  version = versionArg.replace(/^v/, '')
+
+  // Update root package.json
+  rootPackageJson.version = version
+  writeFileSync(
+    'package.json',
+    JSON.stringify(rootPackageJson, null, 2) + '\n',
+    'utf8'
+  )
+  console.log(`✅ Updated root package.json to ${version}`)
+} else {
+  // No argument - use version from root package.json
+  version = rootPackageJson.version
+}
 
 const packagesDirectory = 'packages'
 const packageDirectories = readdirSync(packagesDirectory)
@@ -26,19 +53,23 @@ packageDirectories
         }
       } else {
         packageJson.version = version
-        writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
+        writeFileSync(
+          packageJsonPath,
+          JSON.stringify(packageJson, null, 2) + '\n'
+        )
+        console.log(`✅ Updated ${packageJson.name} to ${version}`)
       }
     }
   })
 
 // check Cargo.toml
 
-const cargoFilePath = "./packages/target-tauri/src-tauri/Cargo.toml"
+const cargoFilePath = './packages/target-tauri/src-tauri/Cargo.toml'
 const configFile = readFileSync(cargoFilePath, 'utf8')
 
 const currentVersionInCargo = /^version = "(.*?)"/m.exec(configFile)[1]
 
-if (checkOnly){
+if (checkOnly) {
   if (currentVersionInCargo !== version) {
     checkFailed = true
     console.log(
@@ -46,13 +77,23 @@ if (checkOnly){
     )
   }
 } else {
-  writeFileSync(cargoFilePath, configFile.replace(/^version = "(.*?)"/m, `version = "${version}"`), 'utf8')
+  writeFileSync(
+    cargoFilePath,
+    configFile.replace(/^version = "(.*?)"/m, `version = "${version}"`),
+    'utf8'
+  )
+  console.log(`✅ Updated Cargo.toml to ${version}`)
 }
 
-
-// TODO
-
-if (checkFailed) {
-  console.log("\nCheck failed, make sure you have run 'update:target-versions'")
-  process.exit(1)
+if (checkOnly) {
+  if (checkFailed) {
+    console.log(
+      "\n❌ Check failed, make sure you have run 'pnpm update:target-versions'"
+    )
+    process.exit(1)
+  } else {
+    console.log('\n✅ All versions are in sync!')
+  }
+} else {
+  console.log(`\n✅ All versions updated to ${version}!`)
 }
