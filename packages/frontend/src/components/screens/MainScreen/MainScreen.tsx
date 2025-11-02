@@ -351,18 +351,17 @@ export default function MainScreen({ accountId }: Props) {
     </div>
   )
 }
-
-function chatSubtitle(chat: Type.FullChat) {
+/**
+ * @param chat
+ * @param firstContact The fist contact of chat and null if not loaded */
+function chatSubtitle(chat: Type.FullChat, firstContact: T.Contact | null) {
   const tx = window.static_translate
   if (chat.id && chat.id > C.DC_CHAT_ID_LAST_SPECIAL) {
     if (chat.chatType === C.DC_CHAT_TYPE_GROUP) {
       return tx('n_members', [String(chat.contactIds.length)], {
         quantity: chat.contactIds.length,
       })
-    } else if (
-      chat.chatType === C.DC_CHAT_TYPE_SINGLE &&
-      chat.contacts[0]?.isBot
-    ) {
+    } else if (chat.chatType === C.DC_CHAT_TYPE_SINGLE && firstContact?.isBot) {
       return tx('bot')
     } else if (chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST) {
       if (chat.mailingListAddress) {
@@ -385,7 +384,7 @@ function chatSubtitle(chat: Type.FullChat) {
       if (chat.isProtected) {
         return null
       } else {
-        return chat.contacts[0].address
+        return firstContact?.address
       }
     }
   }
@@ -398,6 +397,11 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
   const openViewGroupDialog = useOpenViewGroupDialog()
   const openViewProfileDialog = useOpenViewProfileDialog()
   const accountId = selectedAccountId()
+
+  const firstChatContact = useRpcFetch(BackendRemote.rpc.getContact, [
+    accountId,
+    chat.contactIds[0],
+  ])
 
   const onTitleClick = () => {
     if (!chat) {
@@ -457,7 +461,10 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
     }
   }
 
-  const subtitle = chatSubtitle(chat)
+  const subtitle = chatSubtitle(
+    chat,
+    firstChatContact.result?.ok ? firstChatContact.result.value : null
+  )
 
   return (
     <div className='navbar-heading' data-no-drag-region>
