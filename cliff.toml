@@ -78,17 +78,3 @@ body = """
 {% endfor %}\n
 """
 trim = true
-footer = """
-{% for release in releases -%}
-    {% if release.version -%}
-        {% if release.previous.version -%}
-            [{{ release.version | trim_start_matches(pat="v") }}]: \
-                https://github.com/deltachat/deltachat-desktop\
-                /compare/v{{ release.previous.version | trim_start_matches(pat="v") }}...v{{ release.version | trim_start_matches(pat="v") }}
-        {% endif -%}
-    {% else -%}
-        [unreleased]: https://github.com/deltachat/deltachat-desktop\
-            /compare/v{{ release.previous.version | trim_start_matches(pat="v") }}...HEAD
-    {% endif -%}
-{% endfor %}
-"""
