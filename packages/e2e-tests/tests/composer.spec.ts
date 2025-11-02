@@ -8,6 +8,7 @@ import {
   reloadPage,
   test,
   createNDummyChats,
+  makeDummyContactInviteLink,
 } from '../playwright-helper'
 
 test.describe.configure({ mode: 'serial' })
@@ -61,6 +62,11 @@ test.beforeAll(async ({ browser, isChatmail }) => {
   await createNDummyChats(page, 3, 'Some chat ')
 })
 
+function getRemoveQuoteOrFileButton(parent: Locator): Locator {
+  return parent.getByRole('button', {
+    name: /(close|cancel|remove|delete)/i,
+  })
+}
 async function testDraftIsEmpty() {
   await expect(textarea).toBeEmpty({ timeout: 500 })
 
@@ -70,11 +76,7 @@ async function testDraftIsEmpty() {
   await expect(
     composerSection.getByRole('region', { name: /reply|attachment|/i })
   ).not.toBeVisible()
-  await expect(
-    composerSection.getByRole('button', {
-      name: /(close|cancel|remove|delete)/i,
-    })
-  ).not.toBeVisible()
+  await expect(getRemoveQuoteOrFileButton(composerSection)).not.toBeVisible()
   await expect(composerSection.locator('.upper-bar')).toBeEmpty()
 }
 
@@ -353,7 +355,7 @@ test.describe('draft', () => {
     await testSavesText(draftText, chatNum)
   })
 
-  // TODO test: there are more of such "prepare draft" functions,
+  // FYI there are more of such "prepare draft" functions,
   // see `useCreateDraftMessage`.
   test("bot command click doesn't override draft", async () => {
     await getChat(1).click()
@@ -401,6 +403,88 @@ test.describe('draft', () => {
       .click()
     await expect(textarea).toHaveText('/someBotCommand')
     await textarea.clear()
+    await testDraftIsEmpty()
+  })
+  // This is pretty similar to the previous test.
+  test('"Share Profile" doesn\'t override draft', async () => {
+    // Create dummy contact
+    await page.getByRole('button', { name: 'New Chat' }).click()
+    const dummyContactName = 'Dummy Contact' + Math.random()
+    await page
+      .getByRole('dialog')
+      .getByRole('textbox')
+      .fill(makeDummyContactInviteLink(dummyContactName))
+    await page
+      .getByRole('dialog')
+      .getByRole('button', {
+        name: dummyContactName,
+      })
+      .click()
+    await page
+      .getByRole('dialog')
+      .filter({ hasText: 'Chat with' })
+      .getByRole('button', { name: 'Ok' })
+      .click()
+
+    const shareProfile = async () => {
+      await chatList.getByText(dummyContactName).click({ button: 'right' })
+      await page.getByRole('menuitem', { name: 'View Profile' }).click()
+      await page
+        .getByRole('dialog')
+        .getByRole('button', { name: 'Profile Menu' })
+        .click()
+      await page.getByRole('menuitem', { name: 'Share' }).click()
+      await page
+        .getByRole('dialog')
+        .filter({ hasText: 'Share with' })
+        .getByRole('button', { name: 'Some Chat 1' })
+        .click()
+    }
+    const replaceDraftDialog = page.getByRole('dialog').filter({
+      hasText: 'already has a draft message, do you want to replace it?',
+    })
+    const tryShareProfileAndCancel = async () => {
+      await shareProfile()
+      await expect(replaceDraftDialog).toBeVisible()
+      await replaceDraftDialog.press('Escape')
+      await expect(replaceDraftDialog).not.toBeVisible()
+    }
+
+    await getChat(1).click()
+    await attachFile()
+    const somePriorDraftText = 'Some prior draft text' + Math.random()
+    await textarea.fill(somePriorDraftText)
+    await tryShareProfileAndCancel()
+    const myName = 'Alice'
+    await expect(
+      composerSection.getByRole('region', { name: 'Attachment' })
+    ).toContainText(myName)
+    await expect(composerSection).not.toContainText(dummyContactName)
+    await expect(textarea).toHaveText(somePriorDraftText)
+
+    await getRemoveQuoteOrFileButton(composerSection).click()
+    // Again, it probably doesn't make sense to replace the whole draft
+    // if we only need to attach a file (contact), but let's test.
+    await tryShareProfileAndCancel()
+    await expect(textarea).toHaveText(somePriorDraftText)
+
+    await getChat(2).click()
+    await expect(textarea).toBeEmpty()
+    await getChat(1).click()
+    await tryShareProfileAndCancel()
+    await expect(textarea).toHaveText(somePriorDraftText)
+
+    await shareProfile()
+    await replaceDraftDialog
+      .getByRole('button', { name: 'Replace Draft' })
+      .click()
+    await expect(
+      composerSection.getByRole('region', { name: 'Attachment' })
+    ).not.toContainText(myName)
+    await expect(composerSection).toContainText(dummyContactName)
+    await expect(textarea).not.toHaveText(somePriorDraftText)
+
+    await getRemoveQuoteOrFileButton(composerSection).click()
     await testDraftIsEmpty()
   })
 })

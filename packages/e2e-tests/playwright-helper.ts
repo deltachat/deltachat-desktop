@@ -10,6 +10,9 @@ config({
 })
 
 export const chatmailServerUrl = process.env.DC_CHATMAIL_SERVER
+const chatmailServerHostname = chatmailServerUrl
+  ? URL.parse(chatmailServerUrl)?.hostname
+  : null
 
 export const mailServerUrl = process.env.DC_MAIL_SERVER
 
@@ -440,3 +443,12 @@ export const createProfileAndJoinChat = async (
 
   await page.getByTestId('login-button').click()
 }
+
+export const makeDummyContactInviteLink = (
+  contactName: string
+) => `https://i.delta.chat/\
+#AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\
+&a=echo%40${chatmailServerHostname}\
+&n=${encodeURIComponent(contactName)}\
+&i=aaaaaaaaaaaaaaaaaaaaaaaa\
+&s=aaaaaaaaaaaaaaaaaaaaaaaa`
