@@ -659,7 +659,6 @@ export function CreateGroup(props: CreateGroupProps) {
         members.forEach(contactId => addGroupMember({ id: contactId }))
       },
       titleMembersOrRecipients: membersOrRecipients,
-      isVerificationRequired: false,
     })
   }
 
