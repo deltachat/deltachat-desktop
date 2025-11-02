@@ -61,6 +61,23 @@ test.beforeAll(async ({ browser, isChatmail }) => {
   await createNDummyChats(page, 3, 'Some chat ')
 })
 
+async function testDraftIsEmpty() {
+  await expect(textarea).toBeEmpty({ timeout: 500 })
+
+  await expect(composerSection).toHaveText('', { timeout: 500 })
+  // The above check should be enough, but let's double check
+  // with these extra ones.
+  await expect(
+    composerSection.getByRole('region', { name: /reply|attachment|/i })
+  ).not.toBeVisible()
+  await expect(
+    composerSection.getByRole('button', {
+      name: /(close|cancel|remove|delete)/i,
+    })
+  ).not.toBeVisible()
+  await expect(composerSection.locator('.upper-bar')).toBeEmpty()
+}
+
 test.afterEach(async () => {
   for (const chat of await chatList
     .getByRole('tab', { name: 'Some chat ' })
@@ -70,6 +87,7 @@ test.afterEach(async () => {
     // In case the draft is actually empty already, type some text.
     await textarea.fill('dummy message to clear draft')
     await page.getByRole('button', { name: 'Send' }).click()
+    await testDraftIsEmpty()
   }
 })
 
@@ -255,22 +273,6 @@ test.describe('draft', () => {
     await testDraftHasFile()
   }
 
-  async function testDraftIsEmpty() {
-    await expect(textarea).toBeEmpty({ timeout: 500 })
-
-    await expect(composerSection).toHaveText('', { timeout: 500 })
-    // The above check should be enough, but let's double check
-    // with these extra ones.
-    await expect(
-      composerSection.getByRole('region', { name: /reply|attachment|/i })
-    ).not.toBeVisible()
-    await expect(
-      composerSection.getByRole('button', {
-        name: /(close|cancel|remove|delete)/i,
-      })
-    ).not.toBeVisible()
-    await expect(composerSection.locator('.upper-bar')).toBeEmpty()
-  }
   async function sendDraftAndTestDraftIsCleared() {
     await page.getByRole('button', { name: 'Send' }).click()
 
