@@ -440,3 +440,12 @@ export const createProfileAndJoinChat = async (
 
   await page.getByTestId('login-button').click()
 }
+
+export const makeDummyContactInviteLink = (
+  contactName: string
+) => `https://i.delta.chat/\
+#AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\
+&a=echo%40${chatmailServerDomain}\
+&n=${encodeURIComponent(contactName)}\
+&i=aaaaaaaaaaaaaaaaaaaaaaaa\
+&s=aaaaaaaaaaaaaaaaaaaaaaaa`
