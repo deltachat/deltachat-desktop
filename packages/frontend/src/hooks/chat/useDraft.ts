@@ -42,6 +42,14 @@ function emptyDraft(chatId: number | null): DraftObject {
   }
 }
 
+function isDraftEmpty(draft: DraftObject): boolean {
+  return !(
+    (draft.text && draft.text.length > 0) ||
+    (draft.file && draft.file != '') ||
+    !!draft.quote
+  )
+}
+
 export function useDraft(
   messageListState: MessageListStore['state'],
   accountId: number,
@@ -189,11 +197,7 @@ export function useDraft(
    */
   const saveAndRefetchDraft_ = useCallback(
     async (chatId: number, draft: DraftObject) => {
-      if (
-        (draft.text && draft.text.length > 0) ||
-        (draft.file && draft.file != '') ||
-        !!draft.quote
-      ) {
+      if (!isDraftEmpty(draft)) {
         await BackendRemote.rpc.miscSetDraft(
           accountId,
           chatId,
