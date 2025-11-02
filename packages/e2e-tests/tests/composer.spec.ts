@@ -25,6 +25,7 @@ let page: Page
 let chatList: Locator
 let textarea: Locator
 let composerSection: Locator
+let composerReply: Locator
 const numDummyChats = 3
 const getChat = (chatNum: number) =>
   chatList.getByRole('tab', { name: `Some chat ${chatNum}` })
@@ -57,6 +58,7 @@ test.beforeAll(async ({ browser, isChatmail }) => {
   chatList = page.getByLabel('Chats').getByRole('tablist')
   textarea = page.locator('textarea#composer-textarea')
   composerSection = page.getByRole('region', { name: 'Write a message' })
+  composerReply = composerSection.getByRole('region', { name: 'Reply' })
   await createNDummyChats(page, numDummyChats, 'Some chat ')
 })
 
@@ -155,6 +157,23 @@ test("doesn't send the same message twice on multiple clicks", async () => {
 })
 
 test.describe('draft', () => {
+  async function sendMessageAndSetAsQuote(messageText: string) {
+    // Note that this will clear the current text.
+    // Maybe we should already have a message ready, e.g. in `beforeAll`.
+    await textarea.fill(messageText)
+    await page.getByRole('button', { name: 'Send' }).click()
+
+    await page
+      .getByLabel('Messages')
+      .getByText(messageText)
+      .click({ button: 'right' })
+    await page.getByRole('menuitem', { name: 'Reply' }).click()
+  }
+  async function testDraftHasQuote(quoteText: string) {
+    await expect(composerReply).toContainText('Me', { ignoreCase: false })
+    await expect(composerReply).toContainText(quoteText)
+  }
+
   async function testSavesText(text: string, targetChatNum: number = 1) {
     const targetChat = getChat(targetChatNum)
     const someOtherChat = getChat(targetChatNum === 1 ? 2 : 1)
@@ -185,20 +204,9 @@ test.describe('draft', () => {
     const someOtherChat = getChat(targetChatNum === 1 ? 2 : 1)
     await targetChat.click()
 
-    // Note that this will clear the current text.
-    // Maybe we should already have a message ready, e.g. in `beforeAll`.
     const messageText = `${messageTextStart}${Math.random()}`
-    await textarea.fill(messageText)
-    await page.getByRole('button', { name: 'Send' }).click()
-    await page
-      .getByLabel('Messages')
-      .getByText(messageText)
-      .click({ button: 'right' })
-    await page.getByRole('menuitem', { name: 'Reply' }).click()
-
-    const composerReply = composerSection.getByRole('region', { name: 'Reply' })
-    await expect(composerReply).toContainText('Me', { ignoreCase: false })
-    await expect(composerReply).toContainText(messageText)
+    await sendMessageAndSetAsQuote(messageText)
+    await testDraftHasQuote(messageText)
 
     await someOtherChat.click()
     await expect(composerSection).not.toContainText(messageText, {
@@ -211,8 +219,7 @@ test.describe('draft', () => {
     // await expect(targetChat).toContainText(`Draft: Reply`)
 
     await targetChat.click()
-    await expect(composerReply).toContainText('Me', { ignoreCase: false })
-    await expect(composerReply).toContainText(messageText)
+    await testDraftHasQuote(messageText)
   }
 
   async function testSavesFile(targetChatNum: number = 1) {
@@ -313,8 +320,7 @@ test.describe('draft', () => {
 
     await getChat(chatNum).click()
     await expect(textarea).toHaveText(draftText)
-    await expect(composerSection).toContainText('Me', { ignoreCase: false })
-    await expect(composerSection).toContainText(quoteMessageText)
+    await testDraftHasQuote(quoteMessageText)
 
     await sendDraftAndTestDraftIsCleared()
   })
