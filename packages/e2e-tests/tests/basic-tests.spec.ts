@@ -182,9 +182,9 @@ test('message menu items presence', async () => {
   await expect(page.getByRole('menu').getByRole('menuitem')).toHaveText([
     'Reply',
     'Forward',
+    'Save Message',
     'React',
     'Edit',
-    'Save',
     'Copy Text',
     'Resend',
     'Info',

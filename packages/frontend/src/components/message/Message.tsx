@@ -321,25 +321,13 @@ function buildContextMenu(
       label: tx('forward'),
       action: openForwardDialog.bind(null, openDialog, message),
     },
-    // Send emoji reaction
-    showSendReaction && {
-      label: tx('react'),
-      action: handleReactClick,
-    },
-    showEdit && {
-      // Not `tx('edit_message')`.
-      // See https://github.com/deltachat/deltachat-desktop/issues/4695#issuecomment-2688716592
-      label: tx('global_menu_edit_desktop'),
-      action: enterEditMessageMode.bind(null, message),
-    },
-    { type: 'separator' },
     // Save Message
     // For reference, the conditions when it's shown:
     // https://github.com/deltachat/deltachat-android/blob/52c01976821803fa2d8a177f93576fa4082ef5bd/src/main/java/org/thoughtcrime/securesms/ConversationFragment.java#L342
     !chat.isSelfTalk &&
       !isSavedMessage &&
       !message.isInfo && {
-        label: tx('save'),
+        label: tx('save_message'),
         action: () =>
           BackendRemote.rpc.saveMsgs(selectedAccountId(), [message.id]),
       },
@@ -354,6 +342,18 @@ function buildContextMenu(
         }
       },
     },
+    // Send emoji reaction
+    showSendReaction && {
+      label: tx('react'),
+      action: handleReactClick,
+    },
+    showEdit && {
+      // Not `tx('edit_message')`.
+      // See https://github.com/deltachat/deltachat-desktop/issues/4695#issuecomment-2688716592
+      label: tx('global_menu_edit_desktop'),
+      action: enterEditMessageMode.bind(null, message),
+    },
+    { type: 'separator' },
     // Save attachment as
     showAttachmentOptions && {
       label: tx('menu_export_attachment'),
