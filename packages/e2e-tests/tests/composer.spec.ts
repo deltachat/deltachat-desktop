@@ -352,4 +352,55 @@ test.describe('draft', () => {
     await testSavesFile(chatNum)
     await testSavesText(draftText, chatNum)
   })
+
+  // TODO test: there are more of such "prepare draft" functions,
+  // see `useCreateDraftMessage`.
+  test("bot command click doesn't override draft", async () => {
+    await getChat(1).click()
+    await textarea.fill('Try /someBotCommand')
+    await textarea.press('ControlOrMeta+Enter')
+    const commandSuggestion = page.getByRole('link', {
+      name: '/someBotCommand',
+    })
+
+    const replaceDraftDialog = page.getByRole('dialog').filter({
+      hasText: 'already has a draft message, do you want to replace it?',
+    })
+    const clickCommandAndCancel = async () => {
+      await commandSuggestion.click()
+      await expect(replaceDraftDialog).toBeVisible()
+
+      await replaceDraftDialog.getByRole('button', { name: 'Cancel' }).click()
+    }
+
+    const somePriorDraftText =
+      'Draft text before bot command has been clicked' + Math.random()
+    await textarea.fill(somePriorDraftText)
+    await clickCommandAndCancel()
+    await expect(textarea).toHaveText(somePriorDraftText)
+
+    await textarea.clear()
+    await testDraftIsEmpty()
+    // It probably doesn't make senese to warn when there is no text
+    // but only a file, but let's test for this.
+    await attachFile()
+    await clickCommandAndCancel()
+    await testDraftHasFile()
+    await expect(textarea).toBeEmpty()
+
+    await getChat(2).click()
+    await expect(textarea).toBeEmpty()
+    await getChat(1).click()
+    await clickCommandAndCancel()
+    await testDraftHasFile()
+    await expect(textarea).toBeEmpty()
+
+    await commandSuggestion.click()
+    await replaceDraftDialog
+      .getByRole('button', { name: 'Replace Draft' })
+      .click()
+    await expect(textarea).toHaveText('/someBotCommand')
+    await textarea.clear()
+    await testDraftIsEmpty()
+  })
 })
