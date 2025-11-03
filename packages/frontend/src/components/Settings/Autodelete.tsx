@@ -33,8 +33,6 @@ function durationToString(
       return neverMeansAutomatic ? tx('automatic') : tx('never')
     case AutodeleteDuration.AT_ONCE:
       return tx('autodel_at_once')
-    case AutodeleteDuration.ONE_MINUTE:
-      return tx('after_1_minute')
     case AutodeleteDuration.ONE_HOUR:
       return tx('autodel_after_1_hour')
     case AutodeleteDuration.ONE_DAY:
