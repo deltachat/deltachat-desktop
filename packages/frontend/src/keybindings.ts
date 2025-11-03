@@ -78,6 +78,7 @@ export function keyDownEvent2Action(
   // When modifying this, don't forget to also update the corresponding
   // `aria-keyshortcuts` properties, and the "Keybindings" help window.
   if (!ev.repeat) {
+    const isLatin = ev.key && /^\p{Script=Latin}$/u.test(ev.key)
     // fire only on first press
     if (ev.altKey && ev.code === 'ArrowDown') {
       return KeybindAction.ChatList_SelectNextChat
@@ -97,17 +98,22 @@ export function keyDownEvent2Action(
       // }
     } else if (
       (ev.metaKey || ev.ctrlKey) &&
-      // fallback to KeyF code for keyboard layouts without f key
-      (ev.key === 'f' || ev.code === 'KeyF')
+      (ev.key === 'f' || (!isLatin && ev.code === 'KeyF'))
     ) {
       // https://github.com/deltachat/deltachat-desktop/issues/4579
       if (ev.shiftKey) {
         return KeybindAction.ChatList_SearchInChat
       }
       return KeybindAction.ChatList_FocusSearchInput
-    } else if ((ev.metaKey || ev.ctrlKey) && ev.key === 'n') {
+    } else if (
+      (ev.metaKey || ev.ctrlKey) &&
+      (ev.key === 'n' || (!isLatin && ev.code === 'KeyN'))
+    ) {
       return KeybindAction.NewChat_Open
-    } else if (ev.ctrlKey && ev.key === 'm') {
+    } else if (
+      ev.ctrlKey &&
+      (ev.key === 'm' || (!isLatin && ev.code === 'KeyM'))
+    ) {
       return KeybindAction.Composer_Focus
     } else if (
       // Also consider adding this to `ev.repeat` when it stops being so sluggish
@@ -124,7 +130,10 @@ export function keyDownEvent2Action(
       (ev.target as HTMLElement)?.id === 'composer-textarea'
     ) {
       return KeybindAction.Composer_SelectReplyToDown
-    } else if ((ev.metaKey || ev.ctrlKey) && ev.key === ',') {
+    } else if (
+      (ev.metaKey || ev.ctrlKey) &&
+      (ev.key === ',' || (!isLatin && ev.code === 'Comma'))
+    ) {
       return KeybindAction.Settings_Open
     } else if (ev.code === 'Escape') {
       if ((ev.target as any).id === 'chat-list-search') {
@@ -148,7 +157,10 @@ export function keyDownEvent2Action(
       if ((ev.target as HTMLElement)?.id === 'composer-textarea') {
         return KeybindAction.MessageList_PageDown
       }
-    } else if ((ev.metaKey || ev.ctrlKey) && ev.key === '/') {
+    } else if (
+      ((ev.metaKey || ev.ctrlKey) && ev.key === '/') ||
+      (!isLatin && ev.code === 'KeySlash')
+    ) {
       return KeybindAction.KeybindingCheatSheet_Open
     }
   } else {
