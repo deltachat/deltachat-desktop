@@ -219,7 +219,7 @@ function openVideoCallWindow<D extends CallDirection>(
     autoHideMenuBar: true,
     // The `calls-webapp` theme is dark. Reduce flashing.
     backgroundColor: '#000',
-    title: 'Call', // To be changed later.
+    title: tx('start_call'), // To be changed later.
     icon: appIcon(), // To be changed later.
     // TODO
     // alwaysOnTop: main_window?.isAlwaysOnTop(),
@@ -342,7 +342,7 @@ function openVideoCallWindow<D extends CallDirection>(
         // TODO show the account name / label that received the call?
         message: chatInfo
           ? `📞 ${chatInfo.name} is calling`
-          : '📞 Incoming call',
+          : `📞 ${tx('incoming_call')}`,
         type: 'question',
         buttons: ['Decline', 'Answer'],
         defaultId: 0,
