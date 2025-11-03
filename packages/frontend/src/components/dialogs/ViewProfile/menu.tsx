@@ -225,12 +225,17 @@ function ShareProfileDialog(
 
       const filePath = await runtime.writeTempFile('contact.vcard', vcard)
 
-      await createDraftMessage(targetAccountId, chatId, '', {
-        name: `${contact.displayName}.vcard`,
-        path: filePath,
-        viewType: 'Vcard',
-        deleteTempFileWhenDone: true,
-      })
+      await createDraftMessage(
+        targetAccountId,
+        chatId,
+        null, // text
+        {
+          name: `${contact.displayName}.vcard`,
+          path: filePath,
+          viewType: 'Vcard',
+          deleteTempFileWhenDone: true,
+        }
+      )
     } else {
       await createDraftMessage(targetAccountId, chatId, contact.address)
     }

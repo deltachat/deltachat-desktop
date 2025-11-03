@@ -40,7 +40,7 @@ export default function WebxdcSaveToChatDialog(props: Props) {
       : undefined
     // Close dialog before createDraftMessage because it may switch accounts
     onClose()
-    await createDraftMessage(targetAccountId, chatId, messageText ?? '', file2)
+    await createDraftMessage(targetAccountId, chatId, messageText, file2)
   }
 
   const onSaveClick = async () => {
