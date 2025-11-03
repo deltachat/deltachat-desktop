@@ -344,7 +344,6 @@ function ViewGroupInner(
       groupMembers: group.contactIds,
       onOk: addMembers,
       titleMembersOrRecipients: membersOrRecipients,
-      isVerificationRequired: chat.isProtected,
     })
   }
 

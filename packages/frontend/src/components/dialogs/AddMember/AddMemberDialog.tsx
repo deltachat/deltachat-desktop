@@ -14,7 +14,6 @@ export function AddMemberDialog({
   groupMembers,
   listFlags,
   titleMembersOrRecipients,
-  isVerificationRequired = false,
 }: {
   onOk: (members: number[]) => void
   groupMembers: number[]
@@ -22,7 +21,6 @@ export function AddMemberDialog({
   titleMembersOrRecipients: Parameters<
     typeof AddMemberInnerDialog
   >[0]['titleMembersOrRecipients']
-  isVerificationRequired?: boolean
 } & DialogProps) {
   const [queryStr, setQueryStr] = useState('')
   const {
@@ -62,7 +60,6 @@ export function AddMemberDialog({
 
         groupMembers,
         titleMembersOrRecipients,
-        isVerificationRequired,
         allowAddManually,
       })}
     </Dialog>

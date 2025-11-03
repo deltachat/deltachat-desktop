@@ -20,9 +20,7 @@ import { runtime } from '@deltachat-desktop/runtime-interface'
 
 enum DisappearingMessageDuration {
   OFF = Timespans.ZERO_SECONDS,
-  ONE_MINUTE = Timespans.ONE_MINUTE_IN_SECONDS,
   FIVE_MINUTES = Timespans.ONE_MINUTE_IN_SECONDS * 5,
-  THIRTY_MINUTES = Timespans.ONE_MINUTE_IN_SECONDS * 30,
   ONE_HOUR = Timespans.ONE_HOUR_IN_SECONDS,
   ONE_DAY = Timespans.ONE_DAY_IN_SECONDS,
   ONE_WEEK = Timespans.ONE_WEEK_IN_SECONDS,

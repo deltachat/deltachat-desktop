@@ -16,8 +16,6 @@ import { ContactListItem } from '../../contact/ContactListItem'
 import { BackendRemote, onDCEvent, Type } from '../../../backend-com'
 import { selectedAccountId } from '../../../ScreenController'
 import { DialogBody, DialogHeader, OkCancelFooterAction } from '../../Dialog'
-import useDialog from '../../../hooks/dialog/useDialog'
-import { VerifiedContactsRequiredDialog } from '../ProtectionStatusDialog'
 import InfiniteLoader from 'react-window-infinite-loader'
 import { AddMemberChip } from './AddMemberDialog'
 import styles from './styles.module.scss'
@@ -39,7 +37,6 @@ export function AddMemberInnerDialog({
 
   groupMembers,
   titleMembersOrRecipients,
-  isVerificationRequired = false,
   allowAddManually,
 }: {
   onOk: (addMembers: number[]) => void
@@ -55,11 +52,9 @@ export function AddMemberInnerDialog({
 
   groupMembers: number[]
   titleMembersOrRecipients: 'members' | 'recipients'
-  isVerificationRequired: boolean
   allowAddManually: boolean
 }) {
   const { tx, writingDirection } = useContext(I18nContext)
-  const { openDialog } = useDialog()
   const accountId = selectedAccountId()
   const contactIdsInGroup: number[] = contactIds.filter(contactId =>
     groupMembers.includes(contactId)
@@ -80,14 +75,9 @@ export function AddMemberInnerDialog({
 
   const addMember = useCallback(
     (contact: Type.Contact) => {
-      if (isVerificationRequired && !contact.isVerified) {
-        openDialog(VerifiedContactsRequiredDialog)
-        return
-      }
-
       setContactIdsToAdd([...contactIdsToAdd, contact])
     },
-    [contactIdsToAdd, isVerificationRequired, openDialog]
+    [contactIdsToAdd]
   )
 
   const removeMember = useCallback(

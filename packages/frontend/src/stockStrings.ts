@@ -25,8 +25,6 @@ export async function updateCoreStrings() {
     | C.DC_STR_SERVER_TURNED_OFF
     | C.DC_STR_SYNC_MSG_SUBJECT
     | C.DC_STR_SYNC_MSG_BODY
-    | C.DC_STR_CANT_DECRYPT_OUTGOING_MSGS
-    | C.DC_STR_CANTDECRYPT_MSG_BODY
 
     // Deprecated, see
     // https://github.com/chatmail/core/blob/main/deltachat-ffi/deltachat.h
@@ -64,12 +62,6 @@ export async function updateCoreStrings() {
     | C.DC_STR_CHAT_PROTECTION_DISABLED
     | C.DC_STR_SECUREJOIN_WAIT_TIMEOUT
     | C.DC_STR_SECUREJOIN_TAKES_LONGER
-    | C.DC_STR_CHANNEL_LEFT_BY_YOU
-    | C.DC_STR_CANCELED_CALL
-    | C.DC_STR_DECLINED_CALL
-    | C.DC_STR_INCOMING_CALL
-    | C.DC_STR_MISSED_CALL
-    | C.DC_STR_OUTGOING_CALL
     | C.DC_STR_SECURE_JOIN_CHANNEL_QR_DESC
     | C.DC_STR_SECUREJOIN_WAIT
     | C.DC_STR_AEAP_EXPLANATION_AND_LINK
@@ -223,6 +215,14 @@ export async function updateCoreStrings() {
     [C.DC_STR_YOU_REACTED]: tx('reaction_by_you'),
     [C.DC_STR_REACTED_BY]: tx('reaction_by_other'),
     [C.DC_STR_DONATION_REQUEST]: tx('donate_device_msg'),
+    [C.DC_STR_PROXY_ENABLED]: tx('proxy_enabled'),
+    [C.DC_STR_PROXY_ENABLED_DESCRIPTION]: tx('proxy_enabled_hint'),
+    [C.DC_STR_CHANNEL_LEFT_BY_YOU]: tx('channel_left_by_you'),
+    [C.DC_STR_CANCELED_CALL]: tx('canceled_call'),
+    [C.DC_STR_DECLINED_CALL]: tx('declined_call'),
+    [C.DC_STR_INCOMING_CALL]: tx('incoming_call'),
+    [C.DC_STR_MISSED_CALL]: tx('missed_call'),
+    [C.DC_STR_OUTGOING_CALL]: tx('outgoing_call'),
   }
 
   await BackendRemote.rpc.setStockStrings(strings)

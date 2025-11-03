@@ -382,11 +382,7 @@ function chatSubtitle(chat: Type.FullChat) {
       } else if (chat.isDeviceChat) {
         return tx('device_talk_subtitle')
       }
-      if (chat.isProtected) {
-        return null
-      } else {
-        return chat.contacts[0].address
-      }
+      return chat.contacts[0].address
     }
   }
   return 'ErrTitle'
@@ -559,8 +555,8 @@ function ChatNavButtons({
           chat.chatType === C.DC_CHAT_TYPE_SINGLE &&
           chat.contactIds.some(id => id > C.DC_CONTACT_ID_LAST_SPECIAL) && (
             <Button
-              aria-label={tx('videochat')}
-              title={tx('videochat')}
+              aria-label={tx('start_call')}
+              title={tx('start_call')}
               className='navbar-button'
               styling='borderless'
               onClick={() => {
