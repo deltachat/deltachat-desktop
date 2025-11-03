@@ -98,7 +98,6 @@ export function VisualVCardComponent({
       </div>
       <div className={styles.contactInfo}>
         <div className={styles.displayName}>{displayName}</div>
-        <div>{addr}</div>
       </div>
     </Tag>
   )
