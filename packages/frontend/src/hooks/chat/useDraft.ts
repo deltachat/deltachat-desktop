@@ -542,14 +542,37 @@ export function useDraft(
     }
 
     ;(async () => {
-      // TODO fix: consider checking _only_ whether either file or text
-      // is going to get overridden in the current draft.
-      // If there is no file, just add the file to draft,
-      // no need to ask for confirmation.
-      //
-      // Also if the file and the text are the same as in the current draft,
-      // no need to do anything.
-      if (!isDraftEmpty(draftState)) {
+      const newDraftState = { ...draftState }
+
+      let askConfirm = false
+      if (setDraftRequest.text !== undefined) {
+        if (
+          draftState.text.length > 0 &&
+          draftState.text !== (setDraftRequest.text satisfies string)
+        ) {
+          askConfirm = true
+        }
+
+        newDraftState.text = setDraftRequest.text
+      }
+      if (setDraftRequest.file !== undefined) {
+        if (
+          draftState.file != null &&
+          draftState.file?.length > 0 &&
+          draftState.file !== (setDraftRequest.file.path satisfies string)
+        ) {
+          askConfirm = true
+        }
+
+        // Same as in `addFileToDraft`.
+        newDraftState.file = setDraftRequest.file.path
+        newDraftState.fileName = setDraftRequest.file.name ?? null
+        newDraftState.viewType = setDraftRequest.file.viewType
+        newDraftState.fileMime = null
+        newDraftState.fileBytes = 0
+      }
+
+      if (askConfirm) {
         // perf: we could add `chat` argument to `useDraft`,
         // but let's not change API for such a minor thing
         const chatName: string = await BackendRemote.rpc
@@ -566,19 +589,6 @@ export function useDraft(
         }
       }
 
-      const newDraftState = emptyDraft(chatId)
-
-      if (setDraftRequest.text !== undefined) {
-        newDraftState.text = setDraftRequest.text
-      }
-      if (setDraftRequest.file !== undefined) {
-        // Same as in `addFileToDraft`.
-        newDraftState.file = setDraftRequest.file.path
-        newDraftState.fileName = setDraftRequest.file.name ?? null
-        newDraftState.viewType = setDraftRequest.file.viewType
-        newDraftState.fileMime = null
-        newDraftState.fileBytes = 0
-      }
       // Cannot use `setAndDebouncedSaveAndRefetchDraft`
       // because it doesn't return the Promise. See also `addFileToDraft`.
       //
