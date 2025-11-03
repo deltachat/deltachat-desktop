@@ -6,9 +6,6 @@ export const CHATMAIL_INSTANCES_LIST_URL = 'https://chatmail.at/relays'
 // Hostname of the default chatmail instance
 export const DEFAULT_CHATMAIL_HOSTNAME = 'nine.testrun.org'
 
-// Full URL for the default chatmail instance, used in DCACCOUNT QR codes
-export const DEFAULT_CHATMAIL_QR_URL = `https://${DEFAULT_CHATMAIL_HOSTNAME}/cgi-bin/newemail.py`
-
 // URL to privacy policy of default DeltaChat Chatmail instance
 export const DEFAULT_INSTANCE_PRIVACY_POLICY_URL = `https://${DEFAULT_CHATMAIL_HOSTNAME}/privacy.html`
 

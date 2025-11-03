@@ -3,7 +3,7 @@ import { useCallback, useContext } from 'react'
 import useDialog from './dialog/useDialog'
 import useSecureJoin from './useSecureJoin'
 import { ConfigureProgressDialog } from '../components/dialogs/ConfigureProgressDialog'
-import { DEFAULT_CHATMAIL_QR_URL } from '../components/screens/WelcomeScreen/chatmailInstances'
+import { DEFAULT_CHATMAIL_HOSTNAME } from '../components/screens/WelcomeScreen/chatmailInstances'
 import { InstantOnboardingContext } from '../contexts/InstantOnboardingContext'
 
 import type { T } from '@deltachat/jsonrpc-client'
@@ -75,7 +75,7 @@ export default function useInstantOnboarding(): InstantOnboarding {
       // DCACCOUNT is the default QR code which is used if the user
       // didn't scan a code but just clicked the button to create a
       // new account on the welcome screen.
-      let configurationQR = `dcaccount:${DEFAULT_CHATMAIL_QR_URL}`
+      let configurationQR = `dcaccount:${DEFAULT_CHATMAIL_HOSTNAME}`
 
       if (welcomeQr) {
         if (welcomeQr.qr.kind === 'account') {

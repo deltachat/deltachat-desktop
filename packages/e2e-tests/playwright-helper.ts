@@ -5,11 +5,11 @@ import { expect, test as base, Page } from '@playwright/test'
 const { config } = await import('dotenv')
 config({
   // Need to specify path in order to make the Playwright VSCode extension work.
-  // Otherwise it complains that `DC_CHATMAIL_SERVER` is not defined.
+  // Otherwise it complains that `DC_CHATMAIL_DOMAIN` is not defined.
   path: path.join(import.meta.dirname, '.env'),
 })
 
-export const chatmailServerUrl = process.env.DC_CHATMAIL_SERVER
+export const chatmailServerDomain = process.env.DC_CHATMAIL_DOMAIN
 
 export const mailServerUrl = process.env.DC_MAIL_SERVER
 
@@ -160,10 +160,10 @@ export async function createNewProfile(
 
   let dcAccountLink: string
   if (useChatmail) {
-    if (!chatmailServerUrl) {
-      throw new Error('DC_CHATMAIL_SERVER env var not set, cannot run tests')
+    if (!chatmailServerDomain) {
+      throw new Error('DC_CHATMAIL_DOMAIN env var not set, cannot run tests')
     }
-    dcAccountLink = `dcaccount:${chatmailServerUrl satisfies string}/new`
+    dcAccountLink = `dcaccount:${chatmailServerDomain satisfies string}`
   } else {
     if (!mailServerUrl || mailServerToken == undefined) {
       throw new Error(
