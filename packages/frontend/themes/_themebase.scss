@@ -35,6 +35,7 @@ $keybindingKeyShadow: rgba(0, 0, 0, 0.35) !default;
 $newChatButtonBg: #42a5f5 !default;
 $chatListItemSelectedBg: #e3f2fd !default;
 $scrollbarTransparency: 0.34 !default;
+$navBarSearchBorder: #867a7a !default;
 
 /* Functions */
 @function changeContrast($color, $factor) {
@@ -78,6 +79,7 @@ $scrollbarTransparency: 0.34 !default;
   --navBarButtonHover: rgba(143, 153, 168, 0.15);
   --navBarButtonActive: rgba(143, 153, 168, 0.3);
   --navBarSearchPlaceholder: #{changeContrast($textNavBar, 27%)};
+  --navBarSearchBorder: #{$navBarSearchBorder};
   --navBarGroupSubtitle: #{changeContrast($textNavBar, 27%)};
   /* ChatView */
   --chatViewBg: #{$bgChatView};
@@ -210,8 +212,8 @@ $scrollbarTransparency: 0.34 !default;
   --fullScreenMediaButtons: #8b8e91;
   --messageHightlightColor: rgba(66, 165, 245, 0.8);
   --addMemberChipBackgroundColor: #{$bgSecondary};
-  --searchInputBackgroundColor: #52768700;
-  --galleryWebxdcItem: #{changeContrast($bgPrimary, 10%)};
+  --searchInputBackgroundColor: ##666
+    --galleryWebxdcItem: #{changeContrast($bgPrimary, 10%)};
   --galleryFileRowHover: #{changeContrast($bgPrimary, 7%)};
   --recently-seen-indicator-color: #34c759;
 

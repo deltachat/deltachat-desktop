@@ -1,15 +1,17 @@
 $borderRadius: 10px;
-$closeButtonSize: 30px;
+$closeButtonSize: 24px;
 
 .inputAndClearButton {
   flex: 1;
   display: flex;
   align-items: center;
+  border: 1px solid var(--navBarSearchBorder);
+  margin-right: 10px;
+  border-radius: 3px;
 }
 
 .searchInput {
   background-color: var(--searchInputBackgroundColor);
-  border-radius: $borderRadius;
   border: 0;
   caret-color: var(--navBarText);
   color: var(--navBarText);
