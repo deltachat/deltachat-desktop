@@ -47,11 +47,6 @@ impl TranslationState {
         )?)
     }
 
-    pub(crate) async fn translate(&self, key: &str, substitution: Substitution<'_>) -> String {
-        let tx_en = &self.inner.read().await.tx_engine;
-        tx_en.translate(key, substitution)
-    }
-
     pub(crate) fn sync_translate(&self, key: &str, substitution: Substitution) -> String {
         if let Ok(lock) = &self.inner.try_read() {
             lock.tx_engine.translate(key, substitution)

@@ -1,7 +1,6 @@
-#![forbid(clippy::indexing_slicing)]
+#![forbid(clippy::indexing_slicing, clippy::correctness)]
 #![warn(
     unused,
-    clippy::correctness,
     clippy::all,
     clippy::wildcard_imports,
     clippy::needless_borrow,
@@ -67,92 +66,88 @@ impl TranslationEngine {
         })
     }
     pub fn translate(&self, key: &str, substitution: Substitution) -> String {
-        if let Some(entry) = self.messages.get(key) {
-            match substitution {
-                Substitution::None => {
-                    if let Some(message) = entry.get("message") {
-                        message.to_owned()
-                    } else {
-                        error!("Message not existing for {key}");
-                        key.to_owned()
-                    }
-                }
-                Substitution::String(items) => {
-                    if let Some(message) = entry.get("message") {
-                        let mut msg = message.clone();
-                        for matches in self.var_finder.find_iter(message) {
-                            let from = matches.as_str();
-                            if let Some(position) =
-                                from.chars().nth(1).and_then(|from| from.to_digit(10))
-                            {
-                                if let Some(item) = items.get(position as usize - 1) {
-                                    msg = msg.replace(from, item);
-                                } else {
-                                    error!("Invalid item position {position}");
-                                    return key.to_owned();
-                                }
-                            } else {
-                                error!("Invalid format of replacement pattern");
-                                return key.to_owned();
-                            }
-                        }
-                        msg
-                    } else {
-                        error!("Message not existing for {key}");
-                        key.to_owned()
-                    }
-                }
-                Substitution::Quantity(quantity) => {
-                    let quantity_key = match self.plural_rules.select(quantity) {
-                        Ok(PluralCategory::ZERO) => "zero",
-                        Ok(PluralCategory::ONE) => "one",
-                        Ok(PluralCategory::TWO) => "two",
-                        Ok(PluralCategory::FEW) => "few",
-                        Ok(PluralCategory::MANY) => "many",
-                        Ok(PluralCategory::OTHER) => "other",
-                        Err(_) => {
-                            error!("Failed to  {quantity}");
-                            return key.to_owned();
-                        }
-                    };
-                    if let Some(message) = entry.get(quantity_key) {
-                        let quantity_string = quantity.to_string();
-                        message
-                            .replace("%1$d", &quantity_string)
-                            .replace("%d", &quantity_string)
-                    } else {
-                        error!(
-                            "Message for key was found {key}, but variant {quantity_key} to represent quantity of {quantity} is missing"
-                        );
-                        key.to_owned()
-                    }
-                }
-                Substitution::QuantityFloat(quantity_float) => {
-                    let quantity_key = match self.plural_rules.select(quantity_float) {
-                        Ok(PluralCategory::ZERO) => "zero",
-                        Ok(PluralCategory::ONE) => "one",
-                        Ok(PluralCategory::TWO) => "two",
-                        Ok(PluralCategory::FEW) => "few",
-                        Ok(PluralCategory::MANY) => "many",
-                        Ok(PluralCategory::OTHER) => "other",
-                        Err(_) => {
-                            error!("Failed to  {quantity_float}");
-                            return key.to_owned();
-                        }
-                    };
-                    if let Some(message) = entry.get(quantity_key) {
-                        message.replace("%d", &quantity_float.to_string())
-                    } else {
-                        error!(
-                            "Message for key was found {key}, but variant {quantity_key} to represent quantity of {quantity_float} is missing"
-                        );
-                        key.to_owned()
-                    }
+        let Some(entry) = self.messages.get(key) else {
+            error!("Translation for key {key} missing");
+            return key.to_owned();
+        };
+        match substitution {
+            Substitution::None => {
+                if let Some(message) = entry.get("message") {
+                    message.to_owned()
+                } else {
+                    error!("Message not existing for {key}");
+                    key.to_owned()
                 }
             }
-        } else {
-            error!("Translation for key {key} missing");
-            key.to_owned()
+            Substitution::String(items) => {
+                let Some(message) = entry.get("message") else {
+                    error!("Message not existing for {key}");
+                    return key.to_owned();
+                };
+                let mut msg = message.clone();
+                for matches in self.var_finder.find_iter(message) {
+                    let from = matches.as_str();
+                    let Some(position) = from.chars().nth(1).and_then(|from| from.to_digit(10))
+                    else {
+                        error!("Invalid format of replacement pattern");
+                        return key.to_owned();
+                    };
+                    if let Some(item) = items.get(position as usize - 1) {
+                        msg = msg.replace(from, item);
+                    } else {
+                        error!("Invalid item position {position}");
+                        return key.to_owned();
+                    }
+                }
+                msg
+            }
+            Substitution::Quantity(quantity) => {
+                let quantity_key = match self.plural_rules.select(quantity) {
+                    Ok(PluralCategory::ZERO) => "zero",
+                    Ok(PluralCategory::ONE) => "one",
+                    Ok(PluralCategory::TWO) => "two",
+                    Ok(PluralCategory::FEW) => "few",
+                    Ok(PluralCategory::MANY) => "many",
+                    Ok(PluralCategory::OTHER) => "other",
+                    Err(_) => {
+                        error!("Failed to  {quantity}");
+                        return key.to_owned();
+                    }
+                };
+                if let Some(message) = entry.get(quantity_key) {
+                    let quantity_string = quantity.to_string();
+                    message
+                        .replace("%1$d", &quantity_string)
+                        .replace("%d", &quantity_string)
+                } else {
+                    error!(
+                        "Message for key was found {key}, but variant {quantity_key} to represent quantity of {quantity} is missing"
+                    );
+                    key.to_owned()
+                }
+            }
+            Substitution::QuantityFloat(quantity_float) => {
+                let quantity_key = match self.plural_rules.select(quantity_float) {
+                    Ok(PluralCategory::ZERO) => "zero",
+                    Ok(PluralCategory::ONE) => "one",
+                    Ok(PluralCategory::TWO) => "two",
+                    Ok(PluralCategory::FEW) => "few",
+                    Ok(PluralCategory::MANY) => "many",
+                    Ok(PluralCategory::OTHER) => "other",
+                    Err(_) => {
+                        error!("Failed to  {quantity_float}");
+                        return key.to_owned();
+                    }
+                };
+                if let Some(message) = entry.get(quantity_key) {
+                    message.replace("%d", &quantity_float.to_string())
+                } else {
+                    error!(
+                        "Message for key was found {key}, but variant {quantity_key} to represent quantity of {quantity_float} is missing"
+                    );
+                    key.to_owned()
+                }
+            }
         }
     }
 }
