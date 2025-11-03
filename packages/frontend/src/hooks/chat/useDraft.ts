@@ -1,4 +1,10 @@
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useEffectEvent,
+} from 'react'
 import { T } from '@deltachat/jsonrpc-client'
 
 import { getLogger } from '../../../../shared/logger'
@@ -9,6 +15,10 @@ import useMessage from './useMessage'
 import ComposerMessageInput from '../../components/composer/ComposerMessageInput'
 import { type MessageListStore } from '../../stores/messagelist'
 import { debounce } from 'debounce'
+import useTranslationFunction from '../useTranslationFunction'
+import { runtime } from '@deltachat-desktop/runtime-interface'
+import useConfirmationDialog from '../dialog/useConfirmationDialog'
+import useAlertDialog from '../dialog/useAlertDialog'
 
 const log = getLogger('renderer/composer')
 
@@ -82,6 +92,10 @@ export function useDraft(
   clearDraftState: () => void
   setDraftState: (newValue: DraftObject) => void
 } {
+  const tx = useTranslationFunction()
+  const openConfirmationDialog = useConfirmationDialog()
+  const openAlertDialog = useAlertDialog()
+
   const [
     draftState,
     /**
@@ -119,7 +133,14 @@ export function useDraft(
 
   const [draftIsLoading_, setDraftIsLoading] = useState(true)
   const skipLoadingDraft = chatId === null || !canSend
-  const draftIsLoading = skipLoadingDraft ? false : draftIsLoading_
+  const draftIsLoading = skipLoadingDraft
+    ? false
+    : // `draftIsLoading_` is is not enough, because it remains `false`
+      // for one render cycle e.g. immediately after switching the chat.
+      // Thouhg `draftState.chatId !== chatId` is not a "complete" check either.
+      // We probably need to use the approach similar to the `fetchId` approach
+      // in our `useFetch`. But it works for `handleSetDraftRequest`.
+      draftIsLoading_ || draftState.chatId !== chatId
   const loadDraft = useCallback(() => {
     if (skipLoadingDraft) {
       clearDraftState()
@@ -495,6 +516,94 @@ export function useDraft(
     setAndDebouncedSaveAndRefetchDraft,
     debouncedSaveAndRefetchDraft,
   ])
+
+  const handleSetDraftRequest = () => {
+    if (
+      window.__setDraftRequest == undefined ||
+      draftIsLoading ||
+      window.__setDraftRequest.accountId !== accountId ||
+      window.__setDraftRequest.chatId !== chatId
+    ) {
+      return
+    }
+
+    const setDraftRequest = window.__setDraftRequest
+    window.__setDraftRequest = undefined
+
+    if (saveAndRefetchDraft == null) {
+      // This is expected to happen if `!canSend`.
+      openAlertDialog({
+        message: tx(
+          'error_x',
+          'Could not set draft message\n' + JSON.stringify({ canSend, chatId })
+        ),
+      })
+      return
+    }
+
+    ;(async () => {
+      // TODO fix: consider checking _only_ whether either file or text
+      // is going to get overridden in the current draft.
+      // If there is no file, just add the file to draft,
+      // no need to ask for confirmation.
+      //
+      // Also if the file and the text are the same as in the current draft,
+      // no need to do anything.
+      if (!isDraftEmpty(draftState)) {
+        // perf: we could add `chat` argument to `useDraft`,
+        // but let's not change API for such a minor thing
+        const chatName: string = await BackendRemote.rpc
+          .getBasicChatInfo(accountId, chatId)
+          .then(c => c.name)
+          .catch(() => tx('chat'))
+
+        const continueProcess: boolean = await openConfirmationDialog({
+          message: tx('confirm_replace_draft', chatName),
+          confirmLabel: tx('replace_draft'),
+        })
+        if (!continueProcess) {
+          return
+        }
+      }
+
+      const newDraftState = emptyDraft(chatId)
+
+      if (setDraftRequest.text !== undefined) {
+        newDraftState.text = setDraftRequest.text
+      }
+      if (setDraftRequest.file !== undefined) {
+        // Same as in `addFileToDraft`.
+        newDraftState.file = setDraftRequest.file.path
+        newDraftState.fileName = setDraftRequest.file.name ?? null
+        newDraftState.viewType = setDraftRequest.file.viewType
+        newDraftState.fileMime = null
+        newDraftState.fileBytes = 0
+      }
+      // Cannot use `setAndDebouncedSaveAndRefetchDraft`
+      // because it doesn't return the Promise. See also `addFileToDraft`.
+      //
+      // `await` is important here, it makes sure
+      // that we don't delete the file before we're done storing it
+      // to the Core.
+      setDraftState(newDraftState)
+      debouncedSaveAndRefetchDraft?.clear()
+      await saveAndRefetchDraft(newDraftState)
+    })().finally(() => {
+      if (setDraftRequest.file?.deleteTempFileWhenDone) {
+        runtime.removeTempFile(setDraftRequest.file.path)
+      }
+    })
+  }
+  handleSetDraftRequest()
+  const handleSetDraftRequestEffectEvent = useEffectEvent(handleSetDraftRequest)
+  useEffect(() => {
+    window.__checkSetDraftRequest = handleSetDraftRequestEffectEvent
+    return () => {
+      if (window.__checkSetDraftRequest === handleSetDraftRequestEffectEvent) {
+        window.__checkSetDraftRequest = undefined
+      }
+    }
+  }, [])
 
   return {
     draftState,

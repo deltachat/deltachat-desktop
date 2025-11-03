@@ -18,9 +18,36 @@ declare global {
     __settingsOpened: boolean
     __keybindingsDialogOpened: boolean
     __aboutDialogOpened: boolean
+
     __setQuoteInDraft: ((msgId: number) => void) | null
-    __enterEditMessageMode: ((messageToEdit: T.Message) => void) | null
     __reloadDraft: (() => void) | null
+    /**
+     * Setting this will make `useDraft` set the draft to this state,
+     * as soon as it renders with the specified `accountId` and `chatId`.
+     *
+     * @see {@linkcode __internal_jump_to_message_asap}
+     */
+    __setDraftRequest?: {
+      accountId: number
+      chatId: number
+      file?: {
+        path: string
+        name?: string
+        viewType: T.Viewtype
+        deleteTempFileWhenDone: boolean
+      }
+      text?: string
+    }
+    /**
+     * This should be called after assigning to {@linkcode __setDraftRequest}
+     * so that we don't have to wait for `useDraft` to re-render.
+     *
+     * @see {@linkcode __internal_check_jump_to_message}
+     */
+    __checkSetDraftRequest?: () => void
+
+    __enterEditMessageMode: ((messageToEdit: T.Message) => void) | null
+
     __chatlistSetSearch:
       | ((searchTerm: string, chatId: number | null) => void)
       | undefined
@@ -39,6 +66,8 @@ declare global {
      * Ensuring that MessageList _will_ load the chat with the specified
      * `accountId` and `chatId` is the responsibility of whoever
      * accesses this property.
+     *
+     * @see {@linkcode __setDraftRequest}
      */
     __internal_jump_to_message_asap?: {
       accountId: number
@@ -66,6 +95,7 @@ declare global {
      *
      * This property is managed by the MessageList component instance,
      * it gets assigned when the component gets rendered.
+     * @see {@linkcode __checkSetDraftRequest}
      */
     __internal_check_jump_to_message?: () => void
     /**

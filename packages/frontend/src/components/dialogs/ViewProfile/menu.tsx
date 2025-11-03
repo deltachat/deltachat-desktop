@@ -219,8 +219,9 @@ function ShareProfileDialog(
       await createDraftMessage(accountId, chatId, '', {
         name: `${contact.displayName}.vcard`,
         path: filePath,
+        viewType: 'Vcard',
+        deleteTempFileWhenDone: true,
       })
-      runtime.removeTempFile(filePath)
     } else {
       await createDraftMessage(accountId, chatId, contact.address)
     }

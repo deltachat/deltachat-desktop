@@ -12,7 +12,6 @@ import { BackendRemote } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
 import useChat from '../../hooks/chat/useChat'
-import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
 import useCreateChatByEmail from '../../hooks/chat/useCreateChatByEmail'
 
 const log = getLogger('renderer/message-parser')
@@ -246,7 +245,6 @@ function BotCommandSuggestion({
   suggestion: string
   tabIndex: -1 | 0
 }) {
-  const openConfirmationDialog = useConfirmationDialog()
   const messageDisplay = useContext(MessagesDisplayContext)
   const accountId = selectedAccountId()
   const { selectChat } = useChat()
@@ -278,42 +276,16 @@ function BotCommandSuggestion({
       return
     }
 
-    // IDEA: Optimisation - unify these two calls in a new backend call that only returns the info we need
-    const [chat, draft] = await Promise.all([
-      BackendRemote.rpc.getBasicChatInfo(accountId, chatId),
-      BackendRemote.rpc.getDraft(accountId, chatId),
-    ])
-
-    if (!chat) {
-      log.error('chat not defined')
-      return
+    // Copy-pasted from `useCreateDraftMesssage`.
+    if (window.__setDraftRequest != undefined) {
+      log.error('previous BotCommandSuggestion has not worked?')
     }
-
-    const { name } = chat
-
-    if (draft) {
-      // Ask if the draft should be replaced
-      const confirmed: boolean = await openConfirmationDialog({
-        message: window.static_translate('confirm_replace_draft', name),
-        confirmLabel: window.static_translate('replace_draft'),
-      })
-
-      if (!confirmed) {
-        return
-      }
-    }
-
-    await BackendRemote.rpc.miscSetDraft(
+    window.__setDraftRequest = {
       accountId,
       chatId,
-      suggestion,
-      null,
-      null,
-      null,
-      'Text'
-    )
-
-    window.__reloadDraft && window.__reloadDraft()
+      text: suggestion,
+    }
+    window.__checkSetDraftRequest?.()
   }
 
   return (
