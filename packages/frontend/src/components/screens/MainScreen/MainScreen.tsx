@@ -318,31 +318,7 @@ export default function MainScreen({ accountId }: Props) {
             {chatWithLinger && <ChatHeading chat={chatWithLinger} />}
           </div>
           {chatWithLinger && (
-            <ChatNavButtons chat={chatWithLinger} lastUsedApps={lastUsedApps} />
-          )}
-          {chatWithLinger && (
-            <span
-              style={{
-                marginLeft: 0,
-                marginRight: '3px',
-              }}
-              data-no-drag-region
-            >
-              <Button
-                id='three-dot-menu-button'
-                className='navbar-button'
-                aria-label={tx('main_menu')}
-                onClick={onClickThreeDotMenu}
-                styling='borderless'
-              >
-                <Icon
-                  coloring='navbar'
-                  icon='more'
-                  className='rotate90'
-                  size={24}
-                />
-              </Button>
-            </span>
+            <ChatNavButtons chat={chatWithLinger} lastUsedApps={lastUsedApps} onClickThreeDotMenu={onClickThreeDotMenu} />
           )}
         </nav>
         <MessageListView accountId={accountId} />
@@ -503,9 +479,11 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
 function ChatNavButtons({
   chat,
   lastUsedApps,
+  onClickThreeDotMenu,
 }: {
   chat: T.FullChat
-  lastUsedApps: T.Message[]
+  lastUsedApps: T.Message[],
+  onClickThreeDotMenu: (evt: React.MouseEvent<HTMLButtonElement>) => void
 }) {
   const tx = useTranslationFunction()
   const chatId = chat.id
@@ -566,6 +544,20 @@ function ChatNavButtons({
               <Icon coloring='navbar' icon='phone' size={18} />
             </Button>
           )}
+          <Button
+            id='three-dot-menu-button'
+            className='navbar-button'
+            aria-label={tx('main_menu')}
+            onClick={onClickThreeDotMenu}
+            styling='borderless'
+          >
+            <Icon
+              coloring='navbar'
+              icon='more'
+              className='rotate90'
+              size={24}
+            />
+          </Button>
       </span>
     </>
   )
