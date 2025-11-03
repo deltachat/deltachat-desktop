@@ -1,15 +1,28 @@
 import { useCallback } from 'react'
 
 import useChat from './useChat'
-import useConfirmationDialog from '../dialog/useConfirmationDialog'
-import useTranslationFunction from '../useTranslationFunction'
-import { BackendRemote } from '../../backend-com'
+import { getLogger } from '@deltachat-desktop/shared/logger'
+import type { T } from '@deltachat/jsonrpc-client'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { runtime } from '@deltachat-desktop/runtime-interface'
+
+const log = getLogger('useCreateDraftMessage')
 
 export type CreateDraftMessage = (
   accountId: number,
   chatId: number,
   messageText: string,
-  file?: { path: string; name?: string }
+  file?: {
+    path: string
+    name?: string
+    viewType?: T.Viewtype
+    /**
+     * If the provided file is a temp file, set this to `true`,
+     * and the file will be deleted (with {@linkcode runtime.removeTempFile})
+     * when we're done adding it to the draft (or if something failed).
+     */
+    deleteTempFileWhenDone: boolean
+  }
 ) => Promise<void>
 
 /**
@@ -19,45 +32,29 @@ export type CreateDraftMessage = (
  * replace it.
  */
 export default function useCreateDraftMessage() {
-  const tx = useTranslationFunction()
-  const openConfirmationDialog = useConfirmationDialog()
   const { selectChat } = useChat()
 
   return useCallback<CreateDraftMessage>(
     async (accountId, chatId, messageText, file) => {
-      const draft = await BackendRemote.rpc.getDraft(accountId, chatId)
-
       selectChat(accountId, chatId)
 
-      if (draft) {
-        const { name } = await BackendRemote.rpc.getBasicChatInfo(
-          accountId,
-          chatId
-        )
-
-        // Ask if the draft should be replaced
-        const continueProcess = await openConfirmationDialog({
-          message: tx('confirm_replace_draft', name),
-          confirmLabel: tx('replace_draft'),
-        })
-
-        if (!continueProcess) {
-          return
-        }
+      if (window.__setDraftRequest != undefined) {
+        log.error('previous createDraftMessage has not worked?')
       }
-
-      await BackendRemote.rpc.miscSetDraft(
+      window.__setDraftRequest = {
         accountId,
         chatId,
-        messageText,
-        file?.path || null,
-        file?.name || null,
-        null,
-        file ? 'File' : 'Text'
-      )
-
-      window.__reloadDraft?.()
+        file: file
+          ? {
+              ...file,
+              // Should we make `viewType` required?
+              viewType: file.viewType ?? 'File',
+            }
+          : undefined,
+        text: messageText,
+      }
+      window.__checkSetDraftRequest?.()
     },
-    [tx, openConfirmationDialog, selectChat]
+    [selectChat]
   )
 }
