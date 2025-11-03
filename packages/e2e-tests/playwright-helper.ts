@@ -388,18 +388,20 @@ export async function deleteProfile(
   return null
 }
 
+export async function createDummyChat(page: Page, chatName: string) {
+  await page.getByRole('button', { name: 'New Chat' }).click()
+  await page.getByRole('button', { name: 'New Group' }).click()
+  await page.getByRole('textbox', { name: 'Group Name' }).fill(chatName)
+  await page.getByTestId('group-create-button').click()
+  // await page.getByLabel('Chats').getByRole('tablist').getByRole('tab', { name: chatNamePrefix })
+}
 export async function createNDummyChats(
   page: Page,
   n: number,
   chatNamePrefix = 'Some chat '
 ) {
   for (let i = 0; i < n; i++) {
-    await page.getByRole('button', { name: 'New Chat' }).click()
-    await page.getByRole('button', { name: 'New Group' }).click()
-    await page
-      .getByRole('textbox', { name: 'Group Name' })
-      .fill(`${chatNamePrefix}${(i + 1).toString()}`)
-    await page.getByTestId('group-create-button').click()
+    await createDummyChat(page, `${chatNamePrefix}${(i + 1).toString()}`)
   }
   const chatList = page.getByLabel('Chats').getByRole('tablist')
   await expect(

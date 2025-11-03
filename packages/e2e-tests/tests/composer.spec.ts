@@ -8,6 +8,7 @@ import {
   reloadPage,
   test,
   createNDummyChats,
+  createDummyChat,
   makeDummyContactInviteLink,
 } from '../playwright-helper'
 
@@ -81,15 +82,24 @@ async function testDraftIsEmpty() {
 }
 
 test.afterEach(async () => {
-  for (const chat of await chatList
-    .getByRole('tab', { name: 'Some chat ' })
-    .all()) {
+  const chats = chatList.getByRole('tab', { name: 'Some chat ' }).all()
+  for (const chat of await chats) {
     await chat.click()
     // Just send a/the message to make sure the draft is cleared.
     // In case the draft is actually empty already, type some text.
-    await textarea.fill('dummy message to clear draft')
+    const msg = 'dummy message to clear draft'
+    await textarea.fill(msg)
     await page.getByRole('button', { name: 'Send' }).click()
     await testDraftIsEmpty()
+
+    // Delete it, to leave no side effects.
+    await page.getByLabel('Messages').getByText(msg).click({ button: 'right' })
+    await page.getByRole('menuitem', { name: 'Delete' }).click()
+    await page
+      .getByRole('dialog')
+      .getByRole('button', { name: 'Delete' })
+      .last()
+      .click()
   }
 })
 
@@ -486,5 +496,114 @@ test.describe('draft', () => {
 
     await getRemoveQuoteOrFileButton(composerSection).click()
     await testDraftIsEmpty()
+  })
+})
+
+test.describe('Ctrl + Up shortcut', () => {
+  test.describe.configure({ mode: 'serial' })
+
+  const chatName = 'Dummy chat for shortcut testing'
+  function getMessageText(i: number) {
+    return `Some message ${i}`
+  }
+  test.beforeAll(async () => {
+    await createDummyChat(page, 'Dummy chat for shortcut testing')
+
+    for (let i = 0; i <= 9; i++) {
+      const text = getMessageText(i)
+      await textarea.fill(text)
+      await textarea.press('ControlOrMeta+Enter')
+      await expect(page.getByLabel('Messages').getByText(text)).toBeVisible()
+    }
+  })
+  // This is to "negate" the effect of `afterEach` in global scope.
+  // A little stupid, but works I guess.
+  test.beforeEach(async () => {
+    await chatList.getByRole('tab', { name: chatName }).click()
+  })
+
+  async function up() {
+    await textarea.press('ControlOrMeta+ArrowUp')
+  }
+  async function down() {
+    await textarea.press('ControlOrMeta+ArrowDown')
+  }
+  async function expectQuote(i: number) {
+    await expect(composerSection).toContainText('Me', { timeout: 500 })
+    await expect(composerSection).toContainText(getMessageText(i), {
+      timeout: 500,
+    })
+  }
+  async function expectNoQuote() {
+    await expect(composerSection).toHaveText('', { timeout: 500 })
+
+    await expect(composerSection).not.toContainText('Me', { timeout: 500 })
+  }
+
+  test('quotes last message', async () => {
+    await expectNoQuote()
+
+    await textarea.focus()
+    await up()
+    await expectQuote(9)
+
+    await expect(textarea).toBeFocused()
+  })
+
+  test('removes quote on Ctrl + Down', async () => {
+    await expectQuote(9)
+    await down()
+    await expectNoQuote()
+  })
+
+  test('quotes messages above', async () => {
+    await expectNoQuote()
+    for (let i = 9; i >= 1; i--) {
+      await up()
+      await expectQuote(i)
+    }
+    await expectQuote(1)
+    await up()
+    await expectQuote(0)
+
+    // Not quoting info messages above.
+    await up()
+    await expectQuote(0)
+    await up()
+    await expectQuote(0)
+
+    await composerSection
+      .getByRole('button', {
+        name: /(close|cancel|remove|delete)/i,
+      })
+      .click()
+    await expectNoQuote()
+  })
+
+  test('quotes messages back and forth', async () => {
+    await up()
+    await expectQuote(9)
+    await up()
+    await expectQuote(8)
+    await down()
+    await expectQuote(9)
+    await up()
+    await expectQuote(8)
+    await up()
+    await expectQuote(7)
+    await down()
+    await expectQuote(8)
+  })
+
+  test('sends the message with the quote', async () => {
+    await expectQuote(8)
+
+    const msg = 'Msg' + Math.random()
+    await textarea.fill(msg)
+    await textarea.press('ControlOrMeta+Enter')
+
+    await expect(
+      page.getByLabel('Messages').getByRole('listitem').filter({ hasText: msg })
+    ).toContainText(getMessageText(8))
   })
 })
