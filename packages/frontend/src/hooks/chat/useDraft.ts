@@ -64,7 +64,6 @@ export function useDraft(
   messageListState: MessageListStore['state'],
   accountId: number,
   chatId: number | null,
-  isContactRequest: boolean,
   canSend: boolean, // no draft needed in chats we can't send messages
   inputRef: React.RefObject<ComposerMessageInput | null>
 ): {
@@ -184,7 +183,7 @@ export function useDraft(
   useEffect(() => {
     log.debug('reloading chat because id changed', chatId)
     loadDraft()
-  }, [chatId, loadDraft, isContactRequest])
+  }, [chatId, loadDraft])
 
   /**
    * Saving (uploading) the draft to the backend is not always enough.
