@@ -61,6 +61,12 @@ i.material-icon-trash {
   transform: translate(0px, -0.07em);
 }
 
+i.material-icon-edit {
+  mask-image: url(./images/icons/edit.svg);
+  -webkit-mask-image: url(./images/icons/edit.svg);
+  transform: translate(0px, -0.07em);
+}
+
 i.material-icon-copy {
   mask-image: url(./images/icons/copy.svg);
   -webkit-mask-image: url(./images/icons/copy.svg);
