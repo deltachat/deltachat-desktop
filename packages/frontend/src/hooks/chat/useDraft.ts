@@ -133,7 +133,7 @@ export function useDraft(
   const [draftIsLoading_, setDraftIsLoading] = useState(true)
   const skipLoadingDraft = chatId === null
   const draftIsLoading = skipLoadingDraft ? false : draftIsLoading_
-  const loadDraft = useCallback(() => {
+  useEffect(() => {
     if (skipLoadingDraft) {
       return
     }
@@ -179,11 +179,6 @@ export function useDraft(
     inputRef,
     skipLoadingDraft,
   ])
-
-  useEffect(() => {
-    log.debug('reloading chat because id changed', chatId)
-    loadDraft()
-  }, [chatId, loadDraft])
 
   /**
    * Saving (uploading) the draft to the backend is not always enough.
