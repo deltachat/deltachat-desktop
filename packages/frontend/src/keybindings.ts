@@ -78,6 +78,7 @@ export function keyDownEvent2Action(
   // When modifying this, don't forget to also update the corresponding
   // `aria-keyshortcuts` properties, and the "Keybindings" help window.
   if (!ev.repeat) {
+    // check if key is latin, if not we have to use ev.code instead of ev.key
     const isLatin = ev.key && /^\p{Script=Latin}$/u.test(ev.key)
     // fire only on first press
     if (ev.altKey && ev.code === 'ArrowDown') {
@@ -159,7 +160,7 @@ export function keyDownEvent2Action(
       }
     } else if (
       ((ev.metaKey || ev.ctrlKey) && ev.key === '/') ||
-      (!isLatin && ev.code === 'KeySlash')
+      (!isLatin && ev.code === 'Slash')
     ) {
       return KeybindAction.KeybindingCheatSheet_Open
     }
