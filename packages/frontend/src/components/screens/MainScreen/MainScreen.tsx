@@ -265,7 +265,7 @@ export default function MainScreen({ accountId }: Props) {
                   <Icon icon='arrow-left' className='backButtonIcon'></Icon>
                 </Button>
               </span>
-              <div className={styles.archivedChatsTitle} data-no-drag-region>
+              <div className={styles.archivedChatsTitle}>
                 {tx('chat_archived_chats_title')}
               </div>
             </>

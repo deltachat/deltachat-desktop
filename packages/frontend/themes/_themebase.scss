@@ -35,7 +35,6 @@ $keybindingKeyShadow: rgba(0, 0, 0, 0.35) !default;
 $newChatButtonBg: #42a5f5 !default;
 $chatListItemSelectedBg: #e3f2fd !default;
 $scrollbarTransparency: 0.34 !default;
-$navBarSearchBorder: #867a7a !default;
 
 /* Functions */
 @function changeContrast($color, $factor) {
@@ -79,7 +78,6 @@ $navBarSearchBorder: #867a7a !default;
   --navBarButtonHover: rgba(143, 153, 168, 0.15);
   --navBarButtonActive: rgba(143, 153, 168, 0.3);
   --navBarSearchPlaceholder: #{changeContrast($textNavBar, 27%)};
-  --navBarSearchBorder: #{$navBarSearchBorder};
   --navBarGroupSubtitle: #{changeContrast($textNavBar, 27%)};
   /* ChatView */
   --chatViewBg: #{$bgChatView};
