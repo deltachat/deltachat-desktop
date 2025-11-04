@@ -294,12 +294,16 @@ test('wrong qr code for onboarding shows error message', async ({
   await page.getByTestId('proxy-qrscan-dialog').getByTestId('close').click()
   await page.getByTestId('proxy-settings-close').click()
 
+  const accounts = page.getByLabel('profile').getByRole('tab')
+  const priorCount = await accounts.count()
   await page.getByTestId('dialog-header-back').click()
   await page
     .getByTestId('onboarding-dialog')
     .getByTestId('dialog-header-close')
     .click()
-  await page.reload()
+  // Wait fot the unconfigured account to truly get deleted,
+  // otherwise `afterEach` will fail.
+  await expect(accounts).toHaveCount(priorCount - 1)
 })
 
 // maybe move this to group tests?
