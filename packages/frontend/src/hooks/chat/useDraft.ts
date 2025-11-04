@@ -4,6 +4,7 @@ import {
   useCallback,
   useMemo,
   useEffectEvent,
+  useRef,
 } from 'react'
 import { T } from '@deltachat/jsonrpc-client'
 
@@ -133,7 +134,15 @@ export function useDraft(
   const [draftIsLoading_, setDraftIsLoading] = useState(true)
   const skipLoadingDraft = chatId === null
   const draftIsLoading = skipLoadingDraft ? false : draftIsLoading_
+  const effectRanRef = useRef(false)
   useEffect(() => {
+    if (effectRanRef.current) {
+      log.warn(
+        "useEffect to load draft already ran. `useDraft` doesn't support this well"
+      )
+    }
+    effectRanRef.current = true
+
     if (skipLoadingDraft) {
       return
     }
