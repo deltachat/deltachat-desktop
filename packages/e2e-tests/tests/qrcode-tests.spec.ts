@@ -299,7 +299,6 @@ test('wrong qr code for onboarding shows error message', async ({
     .getByTestId('onboarding-dialog')
     .getByTestId('dialog-header-close')
     .click()
-  await page.reload()
 })
 
 // maybe move this to group tests?
