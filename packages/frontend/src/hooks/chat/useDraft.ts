@@ -228,7 +228,7 @@ export function useDraft(
           debounce(saveAndRefetchDraft, 15_000),
     [saveAndRefetchDraft]
   )
-  // Flush the draft to backend when switching chats.
+  // Flush the draft to backend when ~~switching chats~~ unmounting.
   // Note that specifying `chatId` as a dependency is not necessary,
   // because `debouncedSaveAndRefetchDraft` itself already depends on it.
   useEffect(() => {
