@@ -21,9 +21,31 @@
   .upper-bar {
     & > .attachment-quote-section {
       display: flex;
+      $vertical-padding: 9px;
       padding: 9px;
       border-bottom: 1px solid
         color-mix(in srgb, var(--messageQuotedText) 15%, transparent);
+
+      // TODO
+      // - consider not transitioning when you open the chat for the first time
+      // - transition when _removing_ the file / quote?
+      //   Or is it not common.
+      //   Also see how it behaves when you send the message.
+      // - sometimes this still causes the message list to get scrolled up.
+      //   See `scrollDistanceToBottomBeforeResize`.
+      //   I think this happens when performance is low.
+      // - Padding is not animated?
+      transition-property: height, padding;
+      transition-duration: 100ms;
+      height: calc-size(auto, size);
+      padding-top: calc-size($vertical-padding, size);
+      padding-bottom: calc-size($vertical-padding, size);
+      overflow-y: hidden;
+      @starting-style {
+        padding-top: 0;
+        padding-bottom: 0;
+        height: 0;
+      }
 
       .quote {
         // this is just overwrites for the quote styles defined in _message.scss
