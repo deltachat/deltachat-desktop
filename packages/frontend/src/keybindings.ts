@@ -159,8 +159,8 @@ export function keyDownEvent2Action(
         return KeybindAction.MessageList_PageDown
       }
     } else if (
-      ((ev.metaKey || ev.ctrlKey) && ev.key === '/') ||
-      (!isLatin && ev.code === 'Slash')
+      (ev.metaKey || ev.ctrlKey) &&
+      (ev.key === '/' || (!isLatin && ev.code === 'Slash'))
     ) {
       return KeybindAction.KeybindingCheatSheet_Open
     }
