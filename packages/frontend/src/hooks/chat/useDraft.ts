@@ -131,10 +131,7 @@ export function useDraft(
     BackendRemote.rpc
       .getDraft(accountId, chatId)
       .then(newDraft => {
-        if (!newDraft) {
-          log.debug('no draft')
-          clearDraftState()
-        } else {
+        if (newDraft) {
           setDraftState(_old => ({
             chatId,
             id: newDraft.id,
@@ -155,7 +152,7 @@ export function useDraft(
         setDraftIsLoading(false)
         throw error
       })
-  }, [accountId, chatId, clearDraftState, skipLoadingDraft])
+  }, [accountId, chatId, skipLoadingDraft])
 
   /**
    * Saving (uploading) the draft to the backend is not always enough.
