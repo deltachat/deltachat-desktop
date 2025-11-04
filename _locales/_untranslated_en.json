@@ -79,5 +79,26 @@
   },
   "accounts_list_item_menu_label": {
     "message": "Actions with Profile"
+  },
+  "transports": {
+    "message": "Transports"
+  },
+  "transport_settings": {
+    "message": "Transport Settings"
+  },
+  "add_transport": {
+    "message": "Add Transport"
+  },
+  "edit_transport": {
+    "message": "Edit Transport"
+  },
+  "remove_transport": {
+    "message": "Remove Transport"
+  },
+  "confirm_add_transport": {
+    "message": "Are you sure you want to add this transport?"
+  },
+  "confirm_remove_transport": {
+    "message": "Are you sure you want to remove this?"
   }
 }

@@ -17,22 +17,29 @@ import type { DialogProps } from '../../contexts/DialogContext'
 import AlertDialog from './AlertDialog'
 import { T } from '@deltachat/jsonrpc-client'
 
+type AccountAndPasswordDialogProps = DialogProps & {
+  addr?: string
+}
+
 /**
  * uses a prefilled LoginForm with existing
  * credentials to edit transport settings
  */
-export default function EditAccountAndPasswordDialog({ onClose }: DialogProps) {
+export default function EditAccountAndPasswordDialog({
+  onClose,
+  addr,
+}: AccountAndPasswordDialogProps) {
   const tx = useTranslationFunction()
 
   return (
     <Dialog canOutsideClickClose={false} onClose={onClose}>
       <DialogHeader title={tx('login_header')} />
-      {EditAccountInner(onClose)}
+      {EditAccountInner(onClose, addr)}
     </Dialog>
   )
 }
 
-function EditAccountInner(onClose: DialogProps['onClose']) {
+function EditAccountInner(onClose: DialogProps['onClose'], addr?: string) {
   const [initialSettings, setInitialAccountSettings] =
     useState<Credentials>(defaultCredentials())
 
@@ -51,7 +58,15 @@ function EditAccountInner(onClose: DialogProps['onClose']) {
     if (transports.length === 0) {
       throw new Error('no transport found')
     }
-    const accountSettings: T.EnteredLoginParam = transports[0]
+    const configuredAddress =
+      addr || (await BackendRemote.rpc.getConfig(accountId, 'configured_addr'))
+    const accountSettings: T.EnteredLoginParam | undefined = transports.find(
+      t => t.addr === configuredAddress
+    )
+
+    if (!accountSettings) {
+      throw new Error('configured transport not found in transport list')
+    }
 
     setInitialAccountSettings(accountSettings)
     setAccountSettings(accountSettings)
