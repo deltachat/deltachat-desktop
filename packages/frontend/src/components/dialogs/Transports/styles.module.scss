@@ -1,0 +1,88 @@
+.transportList {
+  flex-grow: 1;
+  overflow-y: scroll;
+}
+
+.container {
+  margin: 0 10px 0 30px;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  h3 {
+    margin: 0;
+    margin-top: 10px;
+  }
+}
+
+.transportRow {
+  display: flex;
+  border-bottom: 1px solid var(--separatorColor);
+  padding: 10px 0 10px 10px;
+  justify-content: space-between;
+  &:hover {
+    background-color: var(--globalHoverBg);
+  }
+  div {
+    display: flex;
+  }
+  .transportRadioButton {
+    display: flex;
+    flex-grow: 1;
+    padding-inline-end: 10px;
+    &:hover {
+      background-color: var(--globalHoverBg);
+    }
+  }
+  .transportItem {
+    cursor: pointer;
+  }
+}
+
+.explain {
+  margin-inline-end: 20px;
+  margin-top: 10px;
+}
+
+$iconSize: 1.3em;
+
+.trash,
+.edit {
+  mask-size: $iconSize !important;
+  -webkit-mask-size: $iconSize !important;
+  width: $iconSize !important;
+  height: $iconSize !important;
+}
+
+.deleteButton,
+.editButton {
+  padding: 0 !important;
+}
+
+// Apply margin when editButton is the last child in its parent
+.editButton:last-child {
+  margin-inline-end: 30px;
+}
+
+.buttonsContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.buttons {
+  display: flex;
+  button {
+    padding: 6px;
+  }
+}
+
+.addTransportButton {
+  padding: 8px 10px 7px 10px;
+}
+
+@media (max-height: 500px) {
+  .transportList {
+    flex-grow: 0;
+    overflow-y: visible;
+  }
+}

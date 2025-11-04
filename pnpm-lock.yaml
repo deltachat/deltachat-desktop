@@ -6787,10 +6787,6 @@ snapshots:
     dependencies:
       ws: 8.18.2
 
-  isomorphic-ws@5.0.0(ws@7.5.10):
-    dependencies:
-      ws: 7.5.10
-
   isomorphic-ws@5.0.0(ws@8.18.2):
     dependencies:
       ws: 8.18.2

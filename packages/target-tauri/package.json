@@ -28,12 +28,12 @@
   "devDependencies": {
     "@deltachat-desktop/runtime-interface": "link:../runtime",
     "@deltachat-desktop/shared": "link:../shared",
-    "@deltachat/jsonrpc-client": "catalog:",
+    "@deltachat/jsonrpc-client": "link:../../../core/deltachat-jsonrpc/typescript",
     "@tauri-apps/cli": "^2.7.0",
     "@tauri-apps/plugin-clipboard-manager": "^2.2.2",
     "@tauri-apps/plugin-dialog": "^2.2.1",
-    "@webxdc/types": "catalog:",
     "@types/node": "catalog:",
+    "@webxdc/types": "catalog:",
     "esbuild": "^0.25.0",
     "typescript": "^5.2.2"
   }

@@ -17,6 +17,7 @@ import DesktopSettingsSwitch from './DesktopSettingsSwitch'
 import { AutostartState } from '@deltachat-desktop/shared/shared-types'
 import ProxyConfiguration from '../dialogs/ProxyConfiguration'
 import { selectedAccountId } from '../../ScreenController'
+import TransportsDialog from '../dialogs/Transports'
 
 type Props = {
   settingsStore: SettingsStoreState
@@ -48,6 +49,15 @@ export default function Advanced({ settingsStore }: Props) {
     return true
   }
 
+  const openTransportSettings = () => {
+    openDialog(TransportsDialog, {
+      accountId: selectedAccountId(),
+      configured: true,
+    })
+  }
+
+  const addr = settingsStore.settings.addr
+
   return (
     <>
       <SettingsButton onClick={() => runtime.openLogFile()}>
@@ -78,7 +88,7 @@ export default function Advanced({ settingsStore }: Props) {
       <SettingsButton
         onClick={() => {
           openDialog(EditAccountAndPasswordDialog, {
-            settingsStore,
+            addr,
           })
         }}
         dataTestid='open-account-and-password'
@@ -105,6 +115,16 @@ export default function Advanced({ settingsStore }: Props) {
           <ImapFolderHandling settingsStore={settingsStore} />
         </>
       )}
+      <SettingsButton
+        onClick={() => {
+          openTransportSettings()
+        }}
+        dataTestid='open-transport-settings'
+      >
+        {tx('transport_settings')}
+      </SettingsButton>
+
+      <ImapFolderHandling settingsStore={settingsStore} />
     </>
   )
 }

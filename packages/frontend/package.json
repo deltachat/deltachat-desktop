@@ -25,7 +25,7 @@
     "@breezystack/lamejs": "^1.2.7",
     "@deltachat-desktop/runtime-interface": "link:../runtime",
     "@deltachat-desktop/shared": "link:../shared",
-    "@deltachat/jsonrpc-client": "catalog:",
+    "@deltachat/jsonrpc-client": "link:../../../core/deltachat-jsonrpc/typescript",
     "@emoji-mart/data": "^1.2.1",
     "@emoji-mart/react": "^1.1.1",
     "@jcoreio/async-throttle": "^1.6.1",
@@ -42,9 +42,9 @@
     "mime-types": "catalog:",
     "moment": "^2.30.1",
     "path-browserify": "^1.0.1",
+    "punycode": "^2.3.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "punycode": "^2.3.1",
     "react-string-replace": "^1.1.1",
     "react-virtualized-auto-sizer": "^1.0.26",
     "react-window": "^1.8.11",
@@ -71,8 +71,8 @@
     "normalize.css": "^8.0.1",
     "sass": "catalog:",
     "source-map-support": "^0.5.21",
-    "typescript": "catalog:",
     "ts-node": "^10.9.2",
+    "typescript": "catalog:",
     "typescript-plugin-css-modules": "catalog:"
   }
 }
