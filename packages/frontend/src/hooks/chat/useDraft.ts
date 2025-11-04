@@ -108,29 +108,6 @@ export function useDraft(
     setDraftState(emptyDraft(chatId))
   }, [chatId])
 
-  /**
-   * Aborts and gets re-created when {@linkcode accountId} or
-   * {@linkcode chatId} change, or simply when the component unmounts.
-   *
-   * It is needed to avoid races where e.g. `getDraft` started but then
-   * {@linkcode chatId} changed before it finished.
-   * The approach is similar to
-   * https://react.dev/learn/you-might-not-need-an-effect#fetching-data.
-   */
-  const abortController = useMemo(
-    () => new AbortController(),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [accountId, chatId]
-  )
-  useEffect(() => {
-    // The fact that `abortController` updated means that its dependencies,
-    // i.e. `[accountId, chatId]`, updated.
-    return () => {
-      // This is now the "old" `abortController`. Let's abort it.
-      abortController.abort()
-    }
-  }, [abortController])
-
   const [draftIsLoading_, setDraftIsLoading] = useState(true)
   const skipLoadingDraft = chatId === null
   const draftIsLoading = skipLoadingDraft ? false : draftIsLoading_
@@ -150,10 +127,6 @@ export function useDraft(
     BackendRemote.rpc
       .getDraft(accountId, chatId)
       .then(newDraft => {
-        if (abortController.signal.aborted) {
-          return
-        }
-
         if (!newDraft) {
           log.debug('no draft')
           clearDraftState()
@@ -180,14 +153,7 @@ export function useDraft(
         setDraftIsLoading(false)
         throw error
       })
-  }, [
-    accountId,
-    chatId,
-    abortController,
-    clearDraftState,
-    inputRef,
-    skipLoadingDraft,
-  ])
+  }, [accountId, chatId, clearDraftState, inputRef, skipLoadingDraft])
 
   /**
    * Saving (uploading) the draft to the backend is not always enough.
@@ -220,13 +186,7 @@ export function useDraft(
         await BackendRemote.rpc.removeDraft(accountId, chatId)
       }
 
-      if (abortController.signal.aborted) {
-        return
-      }
       const newDraft = await BackendRemote.rpc.getDraft(accountId, chatId)
-      if (abortController.signal.aborted) {
-        return
-      }
 
       // don't load text to prevent bugging back
       if (newDraft) {
@@ -250,7 +210,7 @@ export function useDraft(
         }))
       }
     },
-    [accountId, abortController]
+    [accountId]
   )
   const saveAndRefetchDraft = useMemo(
     () =>
