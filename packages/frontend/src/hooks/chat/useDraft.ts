@@ -96,6 +96,10 @@ export function useDraft(
   const openConfirmationDialog = useConfirmationDialog()
   const openAlertDialog = useAlertDialog()
 
+  const focusComposerIfRendered = useEffectEvent(() => {
+    inputRef.current?.focus()
+  })
+
   const [
     draftState,
     /**
@@ -145,15 +149,13 @@ export function useDraft(
           }))
         }
         setDraftIsLoading(false)
-        setTimeout(() => {
-          inputRef.current?.focus()
-        })
+        setTimeout(focusComposerIfRendered)
       })
       .catch(error => {
         setDraftIsLoading(false)
         throw error
       })
-  }, [accountId, chatId, clearDraftState, inputRef, skipLoadingDraft])
+  }, [accountId, chatId, clearDraftState, skipLoadingDraft])
 
   /**
    * Saving (uploading) the draft to the backend is not always enough.
@@ -481,12 +483,12 @@ export function useDraft(
       messageOrMessageId: Parameters<Exclude<typeof quoteMessage, null>>[0]
     ) => {
       quoteMessage?.(messageOrMessageId)
-      inputRef.current?.focus()
+      focusComposerIfRendered()
     }
     return () => {
       window.__setQuoteInDraft = null
     }
-  }, [quoteMessage, inputRef])
+  }, [quoteMessage])
 
   /**
    * Handle {@linkcode window.__setDraftRequest} which might have been set
