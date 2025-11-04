@@ -132,11 +132,10 @@ export function useDraft(
   }, [abortController])
 
   const [draftIsLoading_, setDraftIsLoading] = useState(true)
-  const skipLoadingDraft = chatId === null || !canSend
+  const skipLoadingDraft = chatId === null
   const draftIsLoading = skipLoadingDraft ? false : draftIsLoading_
   const loadDraft = useCallback(() => {
     if (skipLoadingDraft) {
-      clearDraftState()
       return
     }
     setDraftIsLoading(true)
