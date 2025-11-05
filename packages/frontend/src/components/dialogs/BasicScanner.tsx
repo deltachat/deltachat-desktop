@@ -4,23 +4,19 @@ import Dialog, { DialogBody, DialogFooter, FooterActions } from '../Dialog'
 import FooterActionButton from '../Dialog/FooterActionButton'
 import { QrReader, QrCodeScanRef } from '../QrReader'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import { processQr } from '../../backend/qr'
 import useAlertDialog from '../../hooks/dialog/useAlertDialog'
-import { selectedAccountId } from '../../ScreenController'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 
 /**
- * QR code scanner for transport configuration
- * Processes scanned QR code and calls onSuccess if it is a valid transport QR code
- * copied from dialogs/QrCode.tsx
+ * Basic QR code scanner
+ * Just returns the scanned QR code as string
  */
-export default function TransportQrScanner({
+export default function BasicQrScanner({
   onSuccess,
   onClose,
 }: DialogProps & { onSuccess: (result: string) => void }) {
   const tx = useTranslationFunction()
-  const accountId = selectedAccountId()
   const openAlertDialog = useAlertDialog()
   const qrReaderRef = useRef<QrCodeScanRef | null>(null)
 
@@ -29,7 +25,7 @@ export default function TransportQrScanner({
       const errorMessage = error?.message || error.toString()
       openAlertDialog({
         message: `${tx('qrscan_failed')} ${errorMessage}`,
-        dataTestid: 'transport-scan-failed',
+        dataTestid: 'scan-failed',
       })
     },
     [openAlertDialog, tx]
@@ -37,17 +33,10 @@ export default function TransportQrScanner({
 
   const handleScan = useCallback(
     async (data: string) => {
-      if (data) {
-        const { qr } = await processQr(accountId, data)
-        if (qr.kind === 'account') {
-          onSuccess(data)
-          onClose()
-        } else {
-          handleError(new Error('Invalid transport QR code'))
-        }
-      }
+      onSuccess(data)
+      onClose()
     },
-    [onSuccess, onClose, accountId, handleError]
+    [onSuccess, onClose]
   )
 
   const pasteClipboard = useCallback(async () => {
