@@ -105,12 +105,39 @@ export function useDraft(
     /**
      * This will not save the draft to the backend.
      */
-    setDraftState,
+    setDraftState_,
   ] = useState<DraftObject>(() => emptyDraft(chatId))
 
+  let draftStateLive_ = draftState
+  /**
+   * This is like a regular React's `setState` with a function argument,
+   * but it applies the function synchronously, and returns the new state.
+   */
+  // We need this workaround to be able to call `miscSetDraft` without waiting
+  // for a re-render to see the final `draftState`.
+  // Because the next re-render might just not ever happen,
+  // e.g. because the composer got unmounted / re-created with another key.
+  // Otherwise a `useEffect` would probably work.
+  // See
+  // - https://react.dev/learn/queueing-a-series-of-state-updates
+  // - https://medium.com/geographit/accessing-react-state-in-event-listeners-with-usestate-and-useref-hooks-8cceee73c559
+  // - https://stackoverflow.com/questions/61951257/how-to-access-the-latest-state-value-in-the-functional-component-in-react
+  // - https://stackoverflow.com/questions/54069253/the-usestate-set-method-is-not-reflecting-a-change-immediately
+  const setDraftState = useCallback(
+    (draftSetter: (currDraft: DraftObject) => DraftObject): DraftObject => {
+      // I'm not entirely sure if it's safe to ignore these warnings,
+      // but is seems to work.
+      // eslint-disable-next-line react-hooks/immutability, react-hooks/exhaustive-deps
+      draftStateLive_ = draftSetter(draftStateLive_)
+      setDraftState_(draftSetter)
+      return draftStateLive_
+    },
+    []
+  )
+
   const clearDraftState = useCallback(() => {
-    setDraftState(emptyDraft(chatId))
-  }, [chatId])
+    setDraftState(() => emptyDraft(chatId))
+  }, [setDraftState, chatId])
 
   const [draftIsLoading_, setDraftIsLoading] = useState(true)
   const skipLoadingDraft = chatId === null
@@ -152,7 +179,7 @@ export function useDraft(
         setDraftIsLoading(false)
         throw error
       })
-  }, [accountId, chatId, skipLoadingDraft])
+  }, [accountId, chatId, skipLoadingDraft, setDraftState])
 
   /**
    * Saving (uploading) the draft to the backend is not always enough.
@@ -209,7 +236,7 @@ export function useDraft(
         }))
       }
     },
-    [accountId]
+    [accountId, setDraftState]
   )
   const saveAndRefetchDraft = useMemo(
     () =>
@@ -260,35 +287,35 @@ export function useDraft(
     () =>
       debouncedSaveAndRefetchDraft == null
         ? null
-        : (newDraftState: DraftObject) => {
-            setDraftState(newDraftState)
+        : (draftSetter: (currDraft: DraftObject) => DraftObject) => {
+            const newDraftState = setDraftState(draftSetter)
             debouncedSaveAndRefetchDraft(newDraftState)
           },
-    [debouncedSaveAndRefetchDraft]
+    [debouncedSaveAndRefetchDraft, setDraftState]
   )
 
   const updateDraftText = (text: string, InputChatId: number) => {
     if (chatId !== InputChatId) {
       log.warn("chat Id and InputChatId don't match, do nothing")
     } else {
-      setAndDebouncedSaveAndRefetchDraft?.({
-        ...draftState,
+      setAndDebouncedSaveAndRefetchDraft?.(curr => ({
+        ...curr,
         text,
-      })
+      }))
     }
   }
 
   const removeQuote = useCallback(() => {
-    setAndDebouncedSaveAndRefetchDraft?.({
-      ...draftState,
+    setAndDebouncedSaveAndRefetchDraft?.(curr => ({
+      ...curr,
       quote: null,
-    })
+    }))
     inputRef.current?.focus()
-  }, [draftState, inputRef, setAndDebouncedSaveAndRefetchDraft])
+  }, [inputRef, setAndDebouncedSaveAndRefetchDraft])
 
   const removeFile = useCallback(() => {
-    setAndDebouncedSaveAndRefetchDraft?.({
-      ...draftState,
+    setAndDebouncedSaveAndRefetchDraft?.(curr => ({
+      ...curr,
       file: '',
       fileName: null,
       fileBytes: 0,
@@ -298,32 +325,43 @@ export function useDraft(
       // But we can skip a flush here, so let's set it to `null` manually.
       vcardContact: null,
       viewType: 'Text',
-    })
+    }))
 
     inputRef.current?.focus()
-  }, [draftState, inputRef, setAndDebouncedSaveAndRefetchDraft])
+  }, [inputRef, setAndDebouncedSaveAndRefetchDraft])
 
+  // Note that this function could get called from inside an async function,
+  // for example, when pasting a big file with Ctrl + V.
+  // This means that for example, the draft's text
+  // could have been changed already by the time this function got called.
+  // It's even possible that the composer component has unmounted
+  // by the time this got called.
+  // This is why we shouldn't set the new state
+  // based on the captured `draftState` object,
+  // otherwise we could override the changes.
+  // The same goes for other functions that we return,
+  // but this one is the most prominent.
   const addFileToDraft = useCallback(
     async (file: string, fileName: string | null, viewType: T.Viewtype) => {
       if (debouncedSaveAndRefetchDraft == null || saveAndRefetchDraft == null) {
         return
       }
       inputRef.current?.focus()
-      const newDraftState: typeof draftState = {
-        ...draftState,
+
+      // Cannot use `setAndDebouncedSaveAndRefetchDraft`
+      // because it doesn't return the Promise.
+      const newDraftState = setDraftState(curr => ({
+        ...curr,
         file,
         fileName,
         viewType,
         fileBytes: 0,
         fileMime: null,
-      }
-      // Cannot use `setAndDebouncedSaveAndRefetchDraft`
-      // because it doesn't return the Promise.
-      setDraftState(newDraftState)
+      }))
       debouncedSaveAndRefetchDraft?.clear()
       return saveAndRefetchDraft(newDraftState)
     },
-    [draftState, inputRef, saveAndRefetchDraft, debouncedSaveAndRefetchDraft]
+    [setDraftState, inputRef, saveAndRefetchDraft, debouncedSaveAndRefetchDraft]
   )
 
   const { jumpToMessage } = useMessage()
@@ -348,13 +386,13 @@ export function useDraft(
       return
     }
     const quoteMessage = (messageId: number) => {
-      setAndDebouncedSaveAndRefetchDraft({
-        ...draftState,
+      setAndDebouncedSaveAndRefetchDraft(curr => ({
+        ...curr,
         quote: {
           kind: 'WithMessage',
           messageId,
         },
-      })
+      }))
       // Need an immediate refetch, to get the "full" quote,
       // with the author's name, text, etc.
       debouncedSaveAndRefetchDraft.flush()
@@ -441,13 +479,13 @@ export function useDraft(
 
   useEffect(() => {
     window.__setQuoteInDraft = (messageId: number) => {
-      setAndDebouncedSaveAndRefetchDraft?.({
-        ...draftState,
+      setAndDebouncedSaveAndRefetchDraft?.(curr => ({
+        ...curr,
         quote: {
           kind: 'WithMessage',
           messageId,
         },
-      })
+      }))
       // Again, we need an immediate refetch, to get the "full" quote,
       // with the author's name, text, etc.
       debouncedSaveAndRefetchDraft?.flush()
@@ -457,11 +495,7 @@ export function useDraft(
     return () => {
       window.__setQuoteInDraft = null
     }
-  }, [
-    draftState,
-    setAndDebouncedSaveAndRefetchDraft,
-    debouncedSaveAndRefetchDraft,
-  ])
+  }, [setAndDebouncedSaveAndRefetchDraft, debouncedSaveAndRefetchDraft])
 
   const handleSetDraftRequest = useCallback(() => {
     if (
@@ -531,7 +565,7 @@ export function useDraft(
       // `await` is important here, it makes sure
       // that we don't delete the file before we're done storing it
       // to the Core.
-      setDraftState(newDraftState)
+      setDraftState(() => newDraftState)
       debouncedSaveAndRefetchDraft?.clear()
       await saveAndRefetchDraft(newDraftState)
     })().finally(() => {
@@ -549,6 +583,7 @@ export function useDraft(
     openAlertDialog,
     openConfirmationDialog,
     saveAndRefetchDraft,
+    setDraftState,
     tx,
   ])
   handleSetDraftRequest()
@@ -576,10 +611,10 @@ export function useDraft(
     }, [clearDraftState, debouncedSaveAndRefetchDraft]),
     setDraftState: useCallback(
       (newState: DraftObject) => {
-        setDraftState(newState)
+        setDraftState(() => newState)
         debouncedSaveAndRefetchDraft?.clear()
       },
-      [debouncedSaveAndRefetchDraft]
+      [setDraftState, debouncedSaveAndRefetchDraft]
     ),
   }
 }
