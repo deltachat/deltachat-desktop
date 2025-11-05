@@ -99,17 +99,34 @@ export function useDraft(
     inputRef.current?.focus()
   })
 
-  const [
-    draftState,
-    /**
-     * This will not save the draft to the backend.
-     */
-    setDraftState,
-  ] = useState<DraftObject>(() => emptyDraft())
+  const [draftState, _setDraftState] = useState<DraftObject>(() => emptyDraft())
+  const draftStateRef = useRef(draftState)
+  /**
+   * This is like a regular React's `setState` with a function argument,
+   * but it applies the function synchronously, and returns the new state.
+   *
+   * This will not save the draft to the backend.
+   */
+  // We need this workaround to be able to call `miscSetDraft` without waiting
+  // for a re-render to see the final `draftState`.
+  // Because the next re-render might just not ever happen,
+  // e.g. because the composer got unmounted / re-created with another key.
+  //
+  // Otherwise a `useEffect` would probably be enough for `rpc.miscSetDraft()`.
+  const setDraftState = useCallback(
+    (
+      draftSetter: (prevDraftState: DraftObject) => DraftObject
+    ): DraftObject => {
+      draftStateRef.current = draftSetter(draftStateRef.current)
+      _setDraftState(draftStateRef.current)
+      return draftStateRef.current
+    },
+    []
+  )
 
   const clearDraftState = useCallback(() => {
-    setDraftState(emptyDraft())
-  }, [])
+    setDraftState(() => emptyDraft())
+  }, [setDraftState])
 
   const [draftIsLoading_, setDraftIsLoading] = useState(true)
   const skipLoadingDraft = chatId === null
@@ -126,7 +143,6 @@ export function useDraft(
     if (skipLoadingDraft) {
       return
     }
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDraftIsLoading(true)
     BackendRemote.rpc
       .getDraft(accountId, chatId)
@@ -151,7 +167,7 @@ export function useDraft(
         setDraftIsLoading(false)
         throw error
       })
-  }, [accountId, chatId, skipLoadingDraft])
+  }, [accountId, chatId, skipLoadingDraft, setDraftState])
 
   /**
    * Saving (uploading) the draft to the backend is not always enough.
@@ -207,7 +223,7 @@ export function useDraft(
         }))
       }
     },
-    [accountId]
+    [accountId, setDraftState]
   )
   const saveAndRefetchDraft = useMemo(
     () =>
@@ -219,10 +235,14 @@ export function useDraft(
   )
   const debouncedSaveAndRefetchDraft = useMemo(
     () =>
+      // IDK what ESLint is warning about here.
+      // We're basically making a callback and nothing more.
+      // eslint-disable-next-line react-hooks/refs
       saveAndRefetchDraft == null
         ? null
         : // Maybe we could also specify `maxWait` option,
           // but only Lodash's `debounce` supports it.
+          // eslint-disable-next-line react-hooks/refs
           debounce(saveAndRefetchDraft, 15_000),
     [saveAndRefetchDraft]
   )
@@ -258,35 +278,35 @@ export function useDraft(
     () =>
       debouncedSaveAndRefetchDraft == null
         ? null
-        : (newDraftState: DraftObject) => {
-            setDraftState(newDraftState)
+        : (draftSetter: (prevDraftState: DraftObject) => DraftObject) => {
+            const newDraftState = setDraftState(draftSetter)
             debouncedSaveAndRefetchDraft(newDraftState)
           },
-    [debouncedSaveAndRefetchDraft]
+    [debouncedSaveAndRefetchDraft, setDraftState]
   )
 
   const updateDraftText = (text: string, InputChatId: number) => {
     if (chatId !== InputChatId) {
       log.warn("chat Id and InputChatId don't match, do nothing")
     } else {
-      setAndDebouncedSaveAndRefetchDraft?.({
-        ...draftState,
+      setAndDebouncedSaveAndRefetchDraft?.(prevDraftState => ({
+        ...prevDraftState,
         text,
-      })
+      }))
     }
   }
 
   const removeQuote = useCallback(() => {
-    setAndDebouncedSaveAndRefetchDraft?.({
-      ...draftState,
+    setAndDebouncedSaveAndRefetchDraft?.(prevDraftState => ({
+      ...prevDraftState,
       quote: null,
-    })
+    }))
     inputRef.current?.focus()
-  }, [draftState, inputRef, setAndDebouncedSaveAndRefetchDraft])
+  }, [inputRef, setAndDebouncedSaveAndRefetchDraft])
 
   const removeFile = useCallback(() => {
-    setAndDebouncedSaveAndRefetchDraft?.({
-      ...draftState,
+    setAndDebouncedSaveAndRefetchDraft?.(prevDraftState => ({
+      ...prevDraftState,
       file: '',
       fileName: null,
       fileBytes: 0,
@@ -296,73 +316,82 @@ export function useDraft(
       // But we can skip a flush here, so let's set it to `null` manually.
       vcardContact: null,
       viewType: 'Text',
-    })
+    }))
 
     inputRef.current?.focus()
-  }, [draftState, inputRef, setAndDebouncedSaveAndRefetchDraft])
+  }, [inputRef, setAndDebouncedSaveAndRefetchDraft])
 
+  // Note that this function could get called from inside an async function,
+  // for example, when pasting a big file with Ctrl + V.
+  // This means that for example, the draft's text
+  // could have been changed already by the time this function got called.
+  // It's even possible that the composer component has unmounted
+  // by the time this got called.
+  // This is why we shouldn't set the new state
+  // based on the captured `draftState` object,
+  // otherwise we could override the changes.
+  // The same goes for other functions that we return,
+  // but this one is the most prominent.
   const addFileToDraft = useCallback(
     async (file: string, fileName: string | null, viewType: T.Viewtype) => {
       if (debouncedSaveAndRefetchDraft == null || saveAndRefetchDraft == null) {
         return
       }
 
-      const newDraftState: typeof draftState = {
-        ...draftState,
+      // Cannot use `setAndDebouncedSaveAndRefetchDraft`
+      // because it doesn't return the Promise.
+      const newDraftState = setDraftState(prevDraftState => ({
+        ...prevDraftState,
         file,
         fileName,
         viewType,
         fileBytes: 0,
         fileMime: null,
-      }
-      // Cannot use `setAndDebouncedSaveAndRefetchDraft`
-      // because it doesn't return the Promise.
-      setDraftState(newDraftState)
+      }))
       debouncedSaveAndRefetchDraft?.clear()
       return saveAndRefetchDraft(newDraftState)
     },
-    [draftState, saveAndRefetchDraft, debouncedSaveAndRefetchDraft]
+    [setDraftState, saveAndRefetchDraft, debouncedSaveAndRefetchDraft]
   )
 
   const quoteMessage = useMemo(
     () =>
+      // eslint-disable-next-line react-hooks/refs
       setAndDebouncedSaveAndRefetchDraft == null ||
       debouncedSaveAndRefetchDraft == null
         ? null
         : (messageOrMessageId: number | T.Message) => {
-            let newDraftState: typeof draftState
+            let setNewDraftState: Parameters<
+              typeof setAndDebouncedSaveAndRefetchDraft
+            >[0]
             let needRefetch: boolean
             const isFullMessage = typeof messageOrMessageId !== 'number'
             if (isFullMessage) {
               const fullQuote = messageToQuote(messageOrMessageId)
-              newDraftState = {
-                ...draftState,
+              setNewDraftState = prevDraftState => ({
+                ...prevDraftState,
                 quote: fullQuote.quote,
-              }
+              })
               needRefetch = fullQuote.needRefetch
             } else {
-              newDraftState = {
-                ...draftState,
+              setNewDraftState = prevDraftState => ({
+                ...prevDraftState,
                 quote: {
                   kind: 'WithMessage',
                   messageId: messageOrMessageId,
                 },
-              }
+              })
               needRefetch = true
             }
 
-            setAndDebouncedSaveAndRefetchDraft(newDraftState)
+            setAndDebouncedSaveAndRefetchDraft(setNewDraftState)
             if (needRefetch) {
               // Need an immediate refetch, to get the "full" quote,
               // with the author's name, text, etc.
               debouncedSaveAndRefetchDraft.flush()
             }
           },
-    [
-      draftState,
-      setAndDebouncedSaveAndRefetchDraft,
-      debouncedSaveAndRefetchDraft,
-    ]
+    [setAndDebouncedSaveAndRefetchDraft, debouncedSaveAndRefetchDraft]
   )
 
   const { jumpToMessage } = useMessage()
@@ -567,7 +596,7 @@ export function useDraft(
       // `await` is important here, it makes sure
       // that we don't delete the file before we're done storing it
       // to the Core.
-      setDraftState(newDraftState)
+      setDraftState(() => newDraftState)
       debouncedSaveAndRefetchDraft?.clear()
       await saveAndRefetchDraft(newDraftState)
     })().finally(() => {
@@ -582,13 +611,16 @@ export function useDraft(
     debouncedSaveAndRefetchDraft,
     draftIsLoading,
     draftState,
+    setDraftState,
     openAlertDialog,
     openConfirmationDialog,
     saveAndRefetchDraft,
     tx,
   ])
-  handleSetDraftRequest()
   const handleSetDraftRequestEffectEvent = useEffectEvent(handleSetDraftRequest)
+  useEffect(() => {
+    handleSetDraftRequestEffectEvent()
+  })
   useEffect(() => {
     window.__checkSetDraftRequest = handleSetDraftRequestEffectEvent
     return () => {
@@ -612,10 +644,10 @@ export function useDraft(
     }, [clearDraftState, debouncedSaveAndRefetchDraft]),
     setDraftState: useCallback(
       (newState: DraftObject) => {
-        setDraftState(newState)
+        setDraftState(() => newState)
         debouncedSaveAndRefetchDraft?.clear()
       },
-      [debouncedSaveAndRefetchDraft]
+      [setDraftState, debouncedSaveAndRefetchDraft]
     ),
   }
 }
