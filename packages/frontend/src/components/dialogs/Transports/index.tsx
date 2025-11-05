@@ -5,7 +5,8 @@ import { BackendRemote } from '../../../backend-com'
 
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import useConfirmationDialog from '../../../hooks/dialog/useConfirmationDialog'
-import TransportQrScanner from '../TransportScanner'
+import useAlertDialog from '../../../hooks/dialog/useAlertDialog'
+import BasicQrScanner from '../BasicScanner'
 import EditAccountAndPasswordDialog from '../EditAccountAndPasswordDialog'
 import Button from '../../Button'
 
@@ -14,10 +15,10 @@ import styles from './styles.module.scss'
 import { EnteredLoginParam } from '@deltachat/jsonrpc-client/dist/generated/types'
 import classNames from 'classnames'
 import useDialog from '../../../hooks/dialog/useDialog'
+import { processQr } from '../../../backend/qr'
 
 /**
  * Dialog for transports configuration
-
  */
 export default function TransportsDialog(
   props: DialogProps & {
@@ -27,7 +28,7 @@ export default function TransportsDialog(
   }
 ) {
   const tx = useTranslationFunction()
-
+  const openAlertDialog = useAlertDialog()
   const { accountId, onClose } = props
 
   // used in  new transport form
@@ -50,63 +51,67 @@ export default function TransportsDialog(
     fetchTransports()
   }, [accountId])
 
-  // const addTransport = useCallback(async (transport: EnteredLoginParam) => {
-  //   await BackendRemote.rpc
-  //     .addTransport(accountId, transport)
-  //     .then(() => {
-  //       // refresh transport list
-  //       setTransports((prev) => [
-  //         ...prev,
-  //         transport,
-  //       ])
-  //     })
-  // }, [accountId])
-
   const { openDialog } = useDialog()
   const openConfirmationDialog = useConfirmationDialog()
 
-  const changeDefaultTransport = (transport: EnteredLoginParam) => {
-    const setDefaultConfig = async (addr: string) => {
-      await BackendRemote.rpc.setConfig(accountId, 'configured_addr', addr)
+  const changeDefaultTransport = useCallback(
+    async (transport: EnteredLoginParam) => {
+      await BackendRemote.rpc.setConfig(
+        accountId,
+        'configured_addr',
+        transport.addr
+      )
       await BackendRemote.rpc.stopIo(accountId)
       await BackendRemote.rpc.startIo(accountId)
       setTransports(prev =>
         prev.map(t => ({ ...t, isDefault: t.addr === transport.addr }))
       )
-    }
-    setDefaultConfig(transport.addr)
-  }
+    },
+    [accountId]
+  )
 
   const openQrScanner = useCallback(() => {
-    openDialog(TransportQrScanner, {
-      onSuccess: (result: string) => {
-        BackendRemote.rpc.addTransportFromQr(accountId, result).then(() => {
+    openDialog(BasicQrScanner, {
+      onSuccess: async (result: string) => {
+        const { qr } = await processQr(accountId, result)
+        if (qr.kind === 'account') {
+          await BackendRemote.rpc.addTransportFromQr(accountId, result)
           // refresh transport list
           getTransports()
-        })
+        } else {
+          openAlertDialog({
+            message: tx('invalid_transport_qr'),
+          })
+        }
       },
     })
-  }, [openDialog, accountId, getTransports])
+  }, [openDialog, accountId, getTransports, openAlertDialog, tx])
 
   useEffect(() => {
     getTransports()
   }, [getTransports])
 
-  const deleteTransport = async (transport: EnteredLoginParam) => {
-    const confirmed = await openConfirmationDialog({
-      message: tx('confirm_remove_transport', transport.addr),
-    })
-    if (confirmed) {
-      await BackendRemote.rpc.deleteTransport(accountId, transport.addr)
-      setTransports(prev => prev.filter(t => t.addr !== transport.addr))
-    }
-  }
+  const deleteTransport = useCallback(
+    async (transport: EnteredLoginParam) => {
+      const confirmed = await openConfirmationDialog({
+        message: tx('confirm_remove_transport', transport.addr),
+      })
+      if (confirmed) {
+        await BackendRemote.rpc.deleteTransport(accountId, transport.addr)
+        setTransports(prev => prev.filter(t => t.addr !== transport.addr))
+      }
+    },
+    [openConfirmationDialog, tx, accountId]
+  )
 
-  const editTransport = (transport: EnteredLoginParam) => {
-    openDialog(EditAccountAndPasswordDialog, {
-      addr: transport.addr,
-    })
-  }
+  const editTransport = useCallback(
+    (transport: EnteredLoginParam) => {
+      openDialog(EditAccountAndPasswordDialog, {
+        addr: transport.addr,
+      })
+    },
+    [openDialog]
+  )
 
   return (
     <Dialog

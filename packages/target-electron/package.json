@@ -55,9 +55,9 @@
     "pack:all": "electron-builder --config ./electron-builder.json5 --mac dmg --win nsis portable --linux AppImage deb"
   },
   "dependencies": {
+    "@deltachat/jsonrpc-client": "catalog:",
+    "@deltachat/stdio-rpc-server": "catalog:",
     "@deltachat/calls-webapp": "catalog:",
-    "@deltachat/jsonrpc-client": "link:../../../core/deltachat-jsonrpc/typescript",
-    "@deltachat/stdio-rpc-server": "link:../../../core/deltachat-rpc-server/npm-package",
     "escape-html": "^1.0.3",
     "mime-types": "catalog:",
     "sass": "catalog:",
@@ -66,7 +66,6 @@
   "devDependencies": {
     "@deltachat-desktop/runtime-interface": "link:../runtime",
     "@deltachat-desktop/shared": "link:../shared",
-    "@electron/fuses": "^2.0.0",
     "@electron/notarize": "^2.4",
     "@types/adm-zip": "^0.5.5",
     "@types/chai": "^4.3.17",
@@ -77,6 +76,7 @@
     "@types/node": "catalog:",
     "@types/rc": "^1.2.4",
     "@webxdc/types": "catalog:",
+    "@electron/fuses": "^2.0.0",
     "adm-zip": "0.5.14",
     "application-config": "^3.0.0",
     "chai": "^5.1.1",
