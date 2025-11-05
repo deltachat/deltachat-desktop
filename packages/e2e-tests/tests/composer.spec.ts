@@ -25,6 +25,7 @@ let page: Page
 let chatList: Locator
 let textarea: Locator
 let composerSection: Locator
+const numDummyChats = 3
 const getChat = (chatNum: number) =>
   chatList.getByRole('tab', { name: `Some chat ${chatNum}` })
 
@@ -56,14 +57,12 @@ test.beforeAll(async ({ browser, isChatmail }) => {
   chatList = page.getByLabel('Chats').getByRole('tablist')
   textarea = page.locator('textarea#composer-textarea')
   composerSection = page.getByRole('region', { name: 'Write a message' })
-  await createNDummyChats(page, 3, 'Some chat ')
+  await createNDummyChats(page, numDummyChats, 'Some chat ')
 })
 
 test.afterEach(async () => {
-  for (const chat of await chatList
-    .getByRole('tab', { name: 'Some chat ' })
-    .all()) {
-    await chat.click()
+  for (let i = 1; i <= numDummyChats; i++) {
+    await getChat(i).click()
     // Just send a/the message to make sure the draft is cleared.
     // In case the draft is actually empty already, type some text.
     await textarea.fill('dummy message to clear draft')
