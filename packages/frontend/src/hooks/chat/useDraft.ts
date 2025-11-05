@@ -23,7 +23,7 @@ import useAlertDialog from '../dialog/useAlertDialog'
 
 const log = getLogger('renderer/composer')
 
-export type DraftObject = { chatId: number } & Pick<
+export type DraftObject = Pick<
   Type.Message,
   'id' | 'file' | 'viewType' | 'vcardContact'
 > &
@@ -38,10 +38,9 @@ export type DraftObject = { chatId: number } & Pick<
       | { kind: 'WithMessage'; messageId: number }
   }
 
-function emptyDraft(chatId: number | null): DraftObject {
+function emptyDraft(): DraftObject {
   return {
     id: 0,
-    chatId: chatId || 0,
     text: '',
     file: null,
     fileBytes: 0,
@@ -106,7 +105,7 @@ export function useDraft(
      * This will not save the draft to the backend.
      */
     setDraftState_,
-  ] = useState<DraftObject>(() => emptyDraft(chatId))
+  ] = useState<DraftObject>(() => emptyDraft())
 
   let draftStateLive_ = draftState
   /**
@@ -136,8 +135,8 @@ export function useDraft(
   )
 
   const clearDraftState = useCallback(() => {
-    setDraftState(() => emptyDraft(chatId))
-  }, [setDraftState, chatId])
+    setDraftState(() => emptyDraft())
+  }, [setDraftState])
 
   const [draftIsLoading_, setDraftIsLoading] = useState(true)
   const skipLoadingDraft = chatId === null
@@ -160,7 +159,6 @@ export function useDraft(
       .then(newDraft => {
         if (newDraft) {
           setDraftState(_old => ({
-            chatId,
             id: newDraft.id,
             text: newDraft.text,
             file: newDraft.file,
@@ -219,7 +217,6 @@ export function useDraft(
         setDraftState(old => ({
           text: old.text,
 
-          chatId,
           id: newDraft.id,
           file: newDraft.file,
           fileBytes: newDraft.fileBytes,
@@ -231,7 +228,7 @@ export function useDraft(
         }))
       } else {
         setDraftState(old => ({
-          ...emptyDraft(chatId),
+          ...emptyDraft(),
           text: old.text,
         }))
       }
@@ -546,7 +543,7 @@ export function useDraft(
         }
       }
 
-      const newDraftState = emptyDraft(chatId)
+      const newDraftState = emptyDraft()
 
       if (setDraftRequest.text !== undefined) {
         newDraftState.text = setDraftRequest.text
