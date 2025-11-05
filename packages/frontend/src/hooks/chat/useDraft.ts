@@ -179,6 +179,7 @@ export function useDraft(
       })
   }, [accountId, chatId, skipLoadingDraft, setDraftState])
 
+  const abortLastRefetch = useRef<() => void>(null)
   /**
    * Saving (uploading) the draft to the backend is not always enough.
    * We also need to then immediately refetch the draft from the backend,
@@ -196,6 +197,12 @@ export function useDraft(
    */
   const saveAndRefetchDraft_ = useCallback(
     async (chatId: number, draft: DraftObject) => {
+      // Make sure that only the last refetch has an effect
+      // and all the previous ones are ignored.
+      abortLastRefetch.current?.()
+      const abortController = new AbortController()
+      abortLastRefetch.current = () => abortController.abort()
+
       if (!isDraftEmpty(draft)) {
         await BackendRemote.rpc.miscSetDraft(
           accountId,
@@ -210,7 +217,13 @@ export function useDraft(
         await BackendRemote.rpc.removeDraft(accountId, chatId)
       }
 
+      if (abortController.signal.aborted) {
+        return
+      }
       const newDraft = await BackendRemote.rpc.getDraft(accountId, chatId)
+      if (abortController.signal.aborted) {
+        return
+      }
 
       // don't load text to prevent bugging back
       if (newDraft) {
