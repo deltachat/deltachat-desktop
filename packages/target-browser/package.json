@@ -17,8 +17,8 @@
   "dependencies": {
     "@deltachat-desktop/runtime-interface": "link:../runtime",
     "@deltachat-desktop/shared": "link:../shared",
-    "@deltachat/jsonrpc-client": "link:../../../core/deltachat-jsonrpc/typescript",
-    "@deltachat/stdio-rpc-server": "link:../../../core/deltachat-rpc-server/npm-package",
+    "@deltachat/jsonrpc-client": "catalog:",
+    "@deltachat/stdio-rpc-server": "catalog:",
     "@types/express-session": "^1.18.0",
     "@types/node-localstorage": "^1.3.3",
     "express": "^4.20.0",

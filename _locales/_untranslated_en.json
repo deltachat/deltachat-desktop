@@ -108,6 +108,9 @@
     "message": "Are you sure you want to add this transport?"
   },
   "confirm_remove_transport": {
-    "message": "Are you sure you want to remove this?"
+    "message": "Are you sure you want to remove this transport? %1$s"
+  },
+  "invalid_transport_qr": {
+    "message": "The scanned QR code does not contain a valid transport"
   }
 }
