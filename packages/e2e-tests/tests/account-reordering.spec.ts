@@ -12,6 +12,13 @@ import {
 } from '../playwright-helper'
 
 /**
+ * It takes one backend call to show the new order after reordering.
+ * We should be optimistally setting the new order without doing another
+ * `BackendRemote.rpc.getAllAccountIds`. TODO.
+ */
+const REORDER_DELAY_BUG_FIXED = false
+
+/**
  * This test covers the drag-and-drop account
  * reordering functionality in the AccountListSidebar
  */
@@ -90,6 +97,15 @@ test('basic drag-and-drop account reordering', async () => {
     targetPosition: { x: 0, y: 50 }, // Drop on bottom half of (after) userB
     force: true,
   })
+
+  // Wait for the new order to take effect before starting another drag.
+  if (!REORDER_DELAY_BUG_FIXED) {
+    await expect(accountItems).toContainText([
+      userBInitial,
+      userAInitial,
+      userCInitial,
+    ])
+  }
 
   // Perform drag-and-drop: move userC to position after userB
   await accountC.dragTo(accountB, {
