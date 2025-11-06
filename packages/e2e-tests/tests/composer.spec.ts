@@ -522,10 +522,11 @@ test.describe('Ctrl + Up shortcut', () => {
   function getMessageText(i: number) {
     return `Some message ${i}`
   }
+  const numMessages = 10
   test.beforeAll(async () => {
     await createDummyChat(page, chatName)
 
-    for (let i = 0; i <= 9; i++) {
+    for (let i = 0; i < numMessages; i++) {
       const text = getMessageText(i)
 
       // A hack against flakiness (same as other such occurrences)
@@ -622,7 +623,82 @@ test.describe('Ctrl + Up shortcut', () => {
     await expectNoQuote()
   })
 
+  // This is also a stress-test to the overall draft implementation.
+  test('handles rapid input', async () => {
+    await up()
+    await up()
+    await up()
+    await up()
+    await up()
+    await up()
+    let currQuoteInd = 4
+    await expectQuote(currQuoteInd)
+
+    // TODO maybe we can avoid `await`ing
+    // each individual `up()` or `down()`, for even more rapid input?
+    // const promises: Promise<void>[] = []
+    for (let i = 0; i < 100; i++) {
+      let indChange: -1 | 1
+      if (currQuoteInd === numMessages) {
+        // No quote, can only go up the list
+        indChange = -1
+      } else if (currQuoteInd === 0) {
+        // Topmost message is quoted, can only go down
+        indChange = 1
+      } else {
+        indChange = Math.random() > 0.5 ? 1 : -1
+      }
+
+      if (indChange === 1) {
+        // promises.push(down())
+        await down()
+      } else {
+        indChange satisfies -1
+        // promises.push(up())
+        await up()
+      }
+      currQuoteInd += indChange
+    }
+    // await Promise.all(promises)
+
+    const shouldExpectNoQuote = currQuoteInd === numMessages
+    if (shouldExpectNoQuote) {
+      await expectNoQuote()
+    } else {
+      await expectQuote(currQuoteInd)
+    }
+
+    // It might be that the UI still has not settled and the quote
+    // is still changing rapidly.
+    // Sending a message is out way to "lock" the quote,
+    // and check its final value.
+    const text = 'msg with quote' + Math.random()
+    await textarea.fill(text)
+    await textarea.press('ControlOrMeta+Enter')
+    const msg = page
+      .getByLabel('Messages')
+      .getByRole('listitem')
+      .filter({ hasText: text })
+    await expect(msg).toBeVisible()
+
+    if (shouldExpectNoQuote) {
+      await expect(msg).not.toContainText(getMessageText(currQuoteInd))
+    } else {
+      await expect(msg).toContainText(getMessageText(currQuoteInd))
+    }
+
+    await page.getByLabel('Messages').getByText(text).click({ button: 'right' })
+    await page.getByRole('menuitem', { name: 'Delete' }).click()
+    await page
+      .getByRole('dialog')
+      .getByRole('button', { name: 'Delete' })
+      .last()
+      .click()
+    await expectNoQuote()
+  })
+
   test('sends the message with the quote', async () => {
+    await expectNoQuote()
     await up()
     await up()
 
