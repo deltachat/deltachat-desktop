@@ -234,6 +234,7 @@ export function useChatListContextMenu(): {
           },
         // Clone Group
         singleChat &&
+          !isOutBroadcast &&
           isGroup && {
             label: tx('clone_chat'),
             action: () => {
