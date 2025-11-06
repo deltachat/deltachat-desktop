@@ -191,7 +191,7 @@ test('Invite existing user to group', async ({ browserName }) => {
   await page.getByTestId('confirm-join-group').getByTestId('confirm').click()
   // userA invited you to group message
   await expect(page.locator('#message-list li').nth(1)).toContainText(
-    userA.address
+    userA.name
   )
   const composer = page.locator('textarea#composer-textarea')
   await expect(composer).not.toBeVisible({ timeout: 1 })
