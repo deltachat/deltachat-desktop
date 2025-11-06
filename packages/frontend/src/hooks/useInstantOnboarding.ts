@@ -37,8 +37,7 @@ type InstantOnboarding = {
 export default function useInstantOnboarding(): InstantOnboarding {
   const context = useContext(InstantOnboardingContext)
   const { openDialog } = useDialog()
-  const { secureJoinContact, secureJoinGroup, secureJoinChannel } =
-    useSecureJoin()
+  const { secureJoin } = useSecureJoin()
 
   if (!context) {
     throw new Error(
@@ -116,28 +115,19 @@ export default function useInstantOnboarding(): InstantOnboarding {
               // If the QR code included a contact or group to join, we continue with this now
               let chatId: number | null = null
               if (welcomeQr) {
-                if (welcomeQr.qr.kind === 'askVerifyContact') {
-                  chatId = await secureJoinContact(
-                    accountId,
-                    { ...welcomeQr, qr: welcomeQr.qr },
-                    true
-                  )
-                } else if (welcomeQr.qr.kind === 'askVerifyGroup') {
-                  chatId = await secureJoinGroup(
-                    accountId,
-                    { ...welcomeQr, qr: welcomeQr.qr },
-                    true
-                  )
-                } else if (welcomeQr.qr.kind === 'askJoinBroadcast') {
-                  chatId = await secureJoinChannel(
+                if (
+                  welcomeQr.qr.kind === 'askVerifyContact' ||
+                  welcomeQr.qr.kind === 'askVerifyGroup' ||
+                  welcomeQr.qr.kind === 'askJoinBroadcast'
+                ) {
+                  chatId = await secureJoin(
                     accountId,
                     { ...welcomeQr, qr: welcomeQr.qr },
                     true
                   )
                 } else {
                   // Exhaustivity check
-                  const _: AccountQr | LoginQr | VerifyChannelQr | never =
-                    welcomeQr.qr
+                  const _: AccountQr | LoginQr | never = welcomeQr.qr
                 }
               }
 
@@ -153,13 +143,7 @@ export default function useInstantOnboarding(): InstantOnboarding {
         })
       })
     },
-    [
-      openDialog,
-      secureJoinContact,
-      secureJoinGroup,
-      secureJoinChannel,
-      welcomeQr,
-    ]
+    [openDialog, secureJoin, welcomeQr]
   )
 
   const resetInstantOnboarding = () => {
