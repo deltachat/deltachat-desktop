@@ -99,7 +99,7 @@ export function keyDownEvent2Action(
       // }
     } else if (
       (ev.metaKey || ev.ctrlKey) &&
-      (ev.key === 'f' || (!isLatin && ev.code === 'KeyF'))
+      (ev.key.toLowerCase() === 'f' || (!isLatin && ev.code === 'KeyF'))
     ) {
       // https://github.com/deltachat/deltachat-desktop/issues/4579
       if (ev.shiftKey) {
@@ -108,12 +108,12 @@ export function keyDownEvent2Action(
       return KeybindAction.ChatList_FocusSearchInput
     } else if (
       (ev.metaKey || ev.ctrlKey) &&
-      (ev.key === 'n' || (!isLatin && ev.code === 'KeyN'))
+      (ev.key.toLowerCase() === 'n' || (!isLatin && ev.code === 'KeyN'))
     ) {
       return KeybindAction.NewChat_Open
     } else if (
       ev.ctrlKey &&
-      (ev.key === 'm' || (!isLatin && ev.code === 'KeyM'))
+      (ev.key.toLowerCase() === 'm' || (!isLatin && ev.code === 'KeyM'))
     ) {
       return KeybindAction.Composer_Focus
     } else if (
