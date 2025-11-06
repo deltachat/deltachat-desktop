@@ -461,15 +461,13 @@ function ViewGroupInner(
               >
                 {!chatDisabled && group.isEncrypted && (
                   <>
-                    <PseudoListItemAddMember
-                      onClick={() => showAddMemberDialog()}
-                      labelMembersOrRecipients={membersOrRecipients}
-                    />
                     {!isBroadcast && (
-                      <PseudoListItemShowQrCode
-                        onClick={() => showQRDialog()}
+                      <PseudoListItemAddMember
+                        onClick={() => showAddMemberDialog()}
+                        labelMembersOrRecipients={membersOrRecipients}
                       />
                     )}
+                    <PseudoListItemShowQrCode onClick={() => showQRDialog()} />
                   </>
                 )}
                 <ContactList
