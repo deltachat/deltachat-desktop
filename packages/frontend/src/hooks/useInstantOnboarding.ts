@@ -11,6 +11,7 @@ import type { WelcomeQrWithUrl } from '../contexts/InstantOnboardingContext'
 import type {
   AccountQr,
   LoginQr,
+  VerifyChannelQr,
   VerifyContactQr,
   VerifyGroupQr,
 } from '../backend/qr'
@@ -36,7 +37,8 @@ type InstantOnboarding = {
 export default function useInstantOnboarding(): InstantOnboarding {
   const context = useContext(InstantOnboardingContext)
   const { openDialog } = useDialog()
-  const { secureJoinContact, secureJoinGroup } = useSecureJoin()
+  const { secureJoinContact, secureJoinGroup, secureJoinChannel } =
+    useSecureJoin()
 
   if (!context) {
     throw new Error(
@@ -93,7 +95,8 @@ export default function useInstantOnboarding(): InstantOnboarding {
           configurationQR = welcomeQr.url
         } else {
           // Exhaustivity check, these QR codes just use default configurationQR
-          const _: VerifyContactQr | VerifyGroupQr | never = welcomeQr.qr
+          const _: VerifyContactQr | VerifyGroupQr | VerifyChannelQr | never =
+            welcomeQr.qr
         }
       }
 
@@ -125,9 +128,16 @@ export default function useInstantOnboarding(): InstantOnboarding {
                     { ...welcomeQr, qr: welcomeQr.qr },
                     true
                   )
+                } else if (welcomeQr.qr.kind === 'askJoinBroadcast') {
+                  chatId = await secureJoinChannel(
+                    accountId,
+                    { ...welcomeQr, qr: welcomeQr.qr },
+                    true
+                  )
                 } else {
                   // Exhaustivity check
-                  const _: AccountQr | LoginQr | never = welcomeQr.qr
+                  const _: AccountQr | LoginQr | VerifyChannelQr | never =
+                    welcomeQr.qr
                 }
               }
 
@@ -143,7 +153,13 @@ export default function useInstantOnboarding(): InstantOnboarding {
         })
       })
     },
-    [openDialog, secureJoinContact, secureJoinGroup, welcomeQr]
+    [
+      openDialog,
+      secureJoinContact,
+      secureJoinGroup,
+      secureJoinChannel,
+      welcomeQr,
+    ]
   )
 
   const resetInstantOnboarding = () => {

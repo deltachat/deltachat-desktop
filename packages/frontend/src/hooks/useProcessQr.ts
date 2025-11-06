@@ -25,6 +25,7 @@ const ALLOWED_QR_CODES_ON_WELCOME_SCREEN: T.Qr['kind'][] = [
   'account',
   'askVerifyContact',
   'askVerifyGroup',
+  'askJoinBroadcast',
   'backup2',
   'login',
   'text',
@@ -61,7 +62,8 @@ export default function useProcessQR() {
 
   const openMailtoLink = useOpenMailtoLink()
   const { startInstantOnboardingFlow } = useInstantOnboarding()
-  const { secureJoinGroup, secureJoinContact } = useSecureJoin()
+  const { secureJoinGroup, secureJoinContact, secureJoinChannel } =
+    useSecureJoin()
 
   const settingsStore = useSettingsStore()[0]
   const isChatmail = settingsStore?.settings.is_chatmail === '1'
@@ -136,6 +138,16 @@ export default function useProcessQR() {
         if (!userConfirmed) {
           return
         }
+      } else if (qr.kind === 'askJoinBroadcast') {
+        const userConfirmed = await openConfirmationDialog({
+          message: tx('instant_onboarding_confirm_channel', qr.name),
+          confirmLabel: tx('ok'),
+          dataTestid: 'ask-create-profile-and-join-channel',
+        })
+
+        if (!userConfirmed) {
+          return
+        }
       }
 
       await startInstantOnboardingFlow(qrWithUrl)
@@ -172,9 +184,13 @@ export default function useProcessQR() {
         (scanContext === SCAN_CONTEXT_TYPE.TRANSFER_BACKUP &&
           qr.kind !== 'backup2') ||
         (scanContext === SCAN_CONTEXT_TYPE.OTHER_SERVER &&
-          !['account', 'login', 'askVerifyGroup', 'askVerifyContact'].includes(
-            qr.kind
-          ))
+          ![
+            'account',
+            'login',
+            'askVerifyGroup',
+            'askVerifyContact',
+            'askJoinBroadcast',
+          ].includes(qr.kind))
       ) {
         await openAlertDialog({
           message: tx('qraccount_qr_code_cannot_be_used'),
@@ -321,6 +337,21 @@ export default function useProcessQR() {
             selectChat(accountId, chatId)
           }
         }
+        return callback?.()
+      }
+
+      if (qr.kind === 'askJoinBroadcast') {
+        if (!isLoggedIn) {
+          // Ask user to create a new account with instant onboarding flow before they
+          // can join the given channel
+          await startInstantOnboarding(accountId, { ...parsed, qr })
+        } else {
+          const chatId = await secureJoinChannel(accountId, { ...parsed, qr })
+          if (chatId) {
+            selectChat(accountId, chatId)
+          }
+        }
+
         return callback?.()
       }
 
@@ -486,6 +517,7 @@ export default function useProcessQR() {
       openMailtoLink,
       secureJoinContact,
       secureJoinGroup,
+      secureJoinChannel,
       processQrCode,
       startInstantOnboarding,
       addAndSelectAccount,

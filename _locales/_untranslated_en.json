@@ -79,5 +79,11 @@
   },
   "accounts_list_item_menu_label": {
     "message": "Actions with Profile"
+  },
+  "qrscan_ask_join_channel": {
+    "message": "Do you want to join the channel \"%1$s\"?"
+  },
+  "instant_onboarding_confirm_channel": {
+    "message": "Create a profile to join channel %1$s."
   }
 }

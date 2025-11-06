@@ -5,7 +5,12 @@ import useTranslationFunction from './useTranslationFunction'
 import { BackendRemote } from '../backend-com'
 
 import type { T } from '@deltachat/jsonrpc-client'
-import type { QrWithUrl, VerifyContactQr, VerifyGroupQr } from '../backend/qr'
+import type {
+  QrWithUrl,
+  VerifyContactQr,
+  VerifyGroupQr,
+  VerifyChannelQr,
+} from '../backend/qr'
 
 export default function useSecureJoin() {
   const openConfirmationDialog = useConfirmationDialog()
@@ -50,6 +55,24 @@ export default function useSecureJoin() {
         message: tx('qrscan_ask_join_group', qr.grpname),
         confirmLabel: tx('ok'),
         dataTestid: 'confirm-join-group',
+      })
+    },
+    [openConfirmationDialog, tx]
+  )
+
+  const confirmJoinChannel = useCallback(
+    async (qrWithUrl: QrWithUrl) => {
+      const { qr } = qrWithUrl
+      if (qr.kind !== 'askJoinBroadcast') {
+        throw new Error(
+          "secureJoinChannel requires QR codes of kind 'askJoinBroadcast'"
+        )
+      }
+
+      return await openConfirmationDialog({
+        message: tx('qrscan_ask_join_channel', qr.name),
+        confirmLabel: tx('ok'),
+        dataTestid: 'confirm-join-channel',
       })
     },
     [openConfirmationDialog, tx]
@@ -110,8 +133,35 @@ export default function useSecureJoin() {
     [confirmJoinGroup]
   )
 
+  const secureJoinChannel = useCallback(
+    async (
+      accountId: number,
+      qrWithUrl: QrWithUrl<VerifyChannelQr>,
+      skipUserConfirmation: boolean = false
+    ): Promise<T.FullChat['id'] | null> => {
+      const { qr, url } = qrWithUrl
+      if (qr.kind !== 'askJoinBroadcast') {
+        throw new Error(
+          "secureJoinChannel requires QR codes of kind 'askJoinBroadcast'"
+        )
+      }
+
+      const userConfirmed = skipUserConfirmation
+        ? true
+        : await confirmJoinChannel(qrWithUrl)
+
+      if (userConfirmed) {
+        return await BackendRemote.rpc.secureJoin(accountId, url)
+      }
+
+      return null
+    },
+    [confirmJoinChannel]
+  )
+
   return {
     secureJoinGroup,
     secureJoinContact,
+    secureJoinChannel,
   }
 }
