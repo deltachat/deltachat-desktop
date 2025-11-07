@@ -304,9 +304,9 @@ export default function useProcessQR() {
        * create a new account and join the contact chat, group or channel
        */
       if (
-        ['askVerifyContact', 'askVerifyGroup', 'askJoinBroadcast'].includes(
-          qr.kind
-        )
+        qr.kind === 'askVerifyContact' ||
+        qr.kind === 'askVerifyGroup' ||
+        qr.kind === 'askJoinBroadcast'
       ) {
         if (!isLoggedIn) {
           // Ask user to create a new account with instant onboarding flow before they
@@ -314,7 +314,7 @@ export default function useProcessQR() {
           await startInstantOnboarding(accountId, {
             ...parsed,
             qr,
-          } as WelcomeQrWithUrl)
+          })
         } else {
           const chatId = await secureJoin(accountId, { ...parsed, qr })
           if (chatId) {

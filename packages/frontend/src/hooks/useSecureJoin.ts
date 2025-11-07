@@ -5,7 +5,12 @@ import useTranslationFunction from './useTranslationFunction'
 import { BackendRemote } from '../backend-com'
 
 import type { T } from '@deltachat/jsonrpc-client'
-import type { QrWithUrl } from '../backend/qr'
+import type {
+  JoinBroadcastQr,
+  QrWithUrl,
+  VerifyContactQr,
+  VerifyGroupQr,
+} from '../backend/qr'
 import type { TranslationKey } from '@deltachat-desktop/shared/translationKeyType'
 
 type QrKind = 'askVerifyContact' | 'askVerifyGroup' | 'askJoinBroadcast'
@@ -55,17 +60,12 @@ export default function useSecureJoin() {
   const secureJoin = useCallback(
     async (
       accountId: number,
-      qrWithUrl: QrWithUrl,
+      qrWithUrl: QrWithUrl<VerifyContactQr | VerifyGroupQr | JoinBroadcastQr>,
       skipUserConfirmation: boolean = false
     ): Promise<T.FullChat['id'] | null> => {
       const { qr, url } = qrWithUrl
 
-      const config = JOIN_CONFIGS[qr.kind as QrKind]
-      if (!config) {
-        throw new Error(
-          `Unsupported QR code kind: ${qr.kind}. SecureJoin needs one of: ${Object.keys(JOIN_CONFIGS).join(', ')}`
-        )
-      }
+      const config = JOIN_CONFIGS[qr.kind]
 
       // Get user confirmation unless skipped
       const userConfirmed =
