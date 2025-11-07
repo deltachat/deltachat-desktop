@@ -232,9 +232,8 @@ export function useChatListContextMenu(): {
             label: tx('edit_channel'),
             action: () => onViewGroup(singleChat.id),
           },
-        // Clone Group
+        // Clone Group (note that broadcasts should not be cloned!)
         singleChat &&
-          !isOutBroadcast &&
           isGroup && {
             label: tx('clone_chat'),
             action: () => {

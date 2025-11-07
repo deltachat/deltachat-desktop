@@ -84,6 +84,6 @@
     "message": "Do you want to join the channel \"%1$s\"?"
   },
   "instant_onboarding_confirm_channel": {
-    "message": "Create a profile to join channel %1$s."
+    "message": "Do you want to create a new profile and join the channel \"%1$s\"?"
   }
 }

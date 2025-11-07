@@ -11,7 +11,7 @@ import type { WelcomeQrWithUrl } from '../contexts/InstantOnboardingContext'
 import type {
   AccountQr,
   LoginQr,
-  VerifyChannelQr,
+  JoinBroadcastQr,
   VerifyContactQr,
   VerifyGroupQr,
 } from '../backend/qr'
@@ -94,7 +94,7 @@ export default function useInstantOnboarding(): InstantOnboarding {
           configurationQR = welcomeQr.url
         } else {
           // Exhaustivity check, these QR codes just use default configurationQR
-          const _: VerifyContactQr | VerifyGroupQr | VerifyChannelQr | never =
+          const _: VerifyContactQr | VerifyGroupQr | JoinBroadcastQr | never =
             welcomeQr.qr
         }
       }

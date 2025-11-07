@@ -5,7 +5,7 @@ import type {
   AccountQr,
   LoginQr,
   QrWithUrl,
-  VerifyChannelQr,
+  JoinBroadcastQr,
   VerifyContactQr,
   VerifyGroupQr,
 } from '../backend/qr'
@@ -13,7 +13,7 @@ import type {
 export type WelcomeQr =
   | VerifyGroupQr
   | VerifyContactQr
-  | VerifyChannelQr
+  | JoinBroadcastQr
   | AccountQr
   | LoginQr
 
