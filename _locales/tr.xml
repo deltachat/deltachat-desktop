@@ -639,9 +639,13 @@
     <string name="welcome_chat_over_email">Güvenli Merkezi Olmayan Sohbet</string>
     <string name="scan_invitation_code">Çağrı Kodunu Tara</string>
     <string name="login_title">Giriş Yap</string>
+    <!-- deprecated -->
     <string name="login_header">E-Posta Hesabınıza Giriş Yapın</string>
+    <!-- deprecated -->
     <string name="login_explain">Varolan bir e-posta hesabıyla giriş yapın</string>
+    <!-- deprecated -->
     <string name="login_subheader">Bilinen e-posta sağlayıcıları için ek ayarlar otomatik olarak ayarlanır. Bazen IMAP\'in web ayarlarından etkinleştirilmesi gerekir. Yardım için e-posta sağlayıcınıza ya da arkadaşlarınıza danışın.</string>
+    <!-- deprecated -->
     <string name="login_no_servers_hint">Delta Chat kullanıcı verisi toplamaz; her şey aygıtınızda kalır.</string>
     <string name="login_inbox">Gelen Kutusu</string>
     <string name="login_imap_login">IMAP Giriş Adı</string>
@@ -654,6 +658,7 @@
     <string name="login_smtp_server">SMTP Sunucusu</string>
     <string name="login_smtp_port">SMTP Bağlantı Noktası</string>
     <string name="login_smtp_security">SMTP Güvenliği</string>
+    <!-- deprecated -->
     <string name="login_auth_method">Yetkilendirme Yöntemi</string>
     <!-- the word "Proxy" might be left untranslated unless the destination language has a well-known term for a "Proxy Server", acting intermediary between the app and the server -->
     <string name="proxy_settings">Proxy</string>
@@ -671,7 +676,9 @@
     <string name="proxy_enabled">Proxy Etkinleştirildi</string>
     <string name="proxy_enabled_hint">Bir proxy kullanıyorsunuz. Bağlanmakta sorun yaşıyorsanız başka bir proxy deneyin.</string>
 
+    <!-- deprecated -->
     <string name="login_info_oauth2_title">Basitleştirilen ayarlamayla sürdürülsün mü?</string>
+    <!-- deprecated -->
     <string name="login_info_oauth2_text">Girilen e-posta adresi basitleştirilen bir ayarlamayı (OAuth 2.0) destekliyor.\n\nSonraki adımda, lütfen Delta Chat\'e iletiler gönderme ve alma izni verin.\n\nDelta Chat kullanıcı verisi toplamaz; her şey aygıtınızda kalır.</string>
     <string name="login_certificate_checks">Sertifika Denetimleri</string>
     <string name="login_error_mail">Lütfen geçerli bir e-posta adresi girin</string>
@@ -792,6 +799,7 @@
     <string name="pref_background_btn_default">Varsayılan Görseli Kullan</string>
     <string name="pref_background_btn_gallery">Galeriden Seç</string>
     <string name="pref_imap_folder_warn_disable_defaults">Bu seçeneği değiştirirseniz, sunucunuzun ve diğer istemcilerinizin uygun olarak yapılandırıldığından emin olun.\n\nDeğilse özellikler hiç çalışmayabilir.</string>
+    <!-- deprecated -->
     <string name="pref_watch_sent_folder">Gönderilen Klasörünü İzle</string>
     <string name="pref_send_copy_to_self">Kendime Kopya Gönder</string>
     <string name="pref_send_copy_to_self_explain">Bu hesap çoklu aygıtlarda kullanılırken gereklidir.</string>
@@ -1024,6 +1032,7 @@
     <string name="verified_by">%1$s tarafından tanıtıldı</string>
     <string name="verified_by_you">Benim tarafımdan tanıtıldı</string>
     <string name="verified_by_unknown">Tanıtıldı</string>
+    <!-- deprecated -->
     <string name="verified_contact_required_explain">Uçtan uca şifrelemeyi güvencelemek için bu öbeğe yalnızca yeşil bir onay imi olan kişileri ekleyebilirsiniz.\n\nDoğrulanmayan kişilerle kişisel olarak tanışabilir ve onları tanıtmak için onların QR kodunu tarayabilirsiniz.</string>
     <string name="mailto_dialog_header_select_chat">İletiyi göndermek için sohbet seçin</string>
     <!-- first placeholder is the name of the chat -->

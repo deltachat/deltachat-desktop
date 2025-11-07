@@ -657,9 +657,14 @@
     <string name="welcome_chat_over_email">Chat Decentralizzata Sicura</string>
     <string name="scan_invitation_code">Scansiona Codice Invito</string>
     <string name="login_title">Accedi</string>
+    <string name="login_advanced_hint">Questo accesso è per utenti avanzati:\n\n• Non utilizzare un account che stai utilizzando in un\'altra app.\n\n• Il server e-mail classico consente chat senza crittografia end-to-end, contrassegnate da un\'icona di posta.</string>
+    <!-- deprecated -->
     <string name="login_header">Accedi al tuo Profilo E-Mail</string>
+    <!-- deprecated -->
     <string name="login_explain">Accedi con un profilo e-mail esistente</string>
+    <!-- deprecated -->
     <string name="login_subheader">Per i provider e-mail noti vengono impostate automaticamente impostazioni aggiuntive. A volte è necessario abilitare IMAP nelle impostazioni Web. Consulta il tuo provider e-mail o i tuoi amici per ricevere assistenza.</string>
+    <!-- deprecated -->
     <string name="login_no_servers_hint">Delta Chat non raccoglie dati utente: tutto rimane sul tuo dispositivo.</string>
     <string name="login_inbox">In Arrivo</string>
     <string name="login_imap_login">Nome Accesso IMAP</string>
@@ -672,6 +677,7 @@
     <string name="login_smtp_server">Server SMTP</string>
     <string name="login_smtp_port">Porta SMTP</string>
     <string name="login_smtp_security">Sicurezza SMTP</string>
+    <!-- deprecated -->
     <string name="login_auth_method">Metodo Autorizzazione</string>
     <!-- the word "Proxy" might be left untranslated unless the destination language has a well-known term for a "Proxy Server", acting intermediary between the app and the server -->
     <string name="proxy_settings">Proxy</string>
@@ -686,7 +692,12 @@
     <string name="proxy_use_proxy_confirm">Vuoi usare il proxy \"%1$s\"?</string>
     <string name="proxy_share_explain">I tuoi amici possono aggiungere questo proxy scansionando il codice QR.</string>
     <string name="proxy_share_link">Condividi Collegamento</string>
+    <string name="proxy_enabled">Proxy Abilitato</string>
+    <string name="proxy_enabled_hint">Stai utilizzando un proxy. Se riscontri problemi di connessione, prova un proxy diverso.</string>
+
+    <!-- deprecated -->
     <string name="login_info_oauth2_title">Continuare con la configurazione semplificata?</string>
+    <!-- deprecated -->
     <string name="login_info_oauth2_text">L\'indirizzo e-mail inserito supporta una configurazione semplificata (OAuth 2.0).\n\nNel passaggio successivo, per favore consenti a Delta Chat di inviare e ricevere messaggi.\n\nDelta Chat non raccoglie dati utente, tutto rimane sul tuo dispositivo.</string>
     <string name="login_certificate_checks">Controlli Certificato</string>
     <string name="login_error_mail">Per piacere Inserisci un indirizzo e-mail valido</string>
@@ -792,6 +803,7 @@
     <string name="pref_backup">Backup</string>
     <string name="pref_backup_explain">Backup Chat su Memoria Esterna</string>
     <string name="pref_backup_export_explain">Un backup ti aiuta a impostare una nuova installazione su questo o un altro dispositivo.\n\nIl backup conterrà tutti i messaggi, i contatti, le chat e le impostazioni end-to-end Autocrypt. Tieni il file di backup in un luogo sicuro oppure eliminarlo il prima possibile.</string>
+    <string name="pref_backup_export_this">Esporta questo profilo</string>
     <!-- deprecated -->
     <string name="pref_backup_export_x">Esporta %1$s</string>
     <!-- the placeholder will be replaced by the number of profiles to export; the number is always larger than 1 -->
@@ -806,6 +818,7 @@
     <string name="pref_background_btn_default">Usa Immagine Predefinita</string>
     <string name="pref_background_btn_gallery">Seleziona Dalla Galleria</string>
     <string name="pref_imap_folder_warn_disable_defaults">Se modifichi questa opzione, assicurati che il tuo server e gli altri client siano configurati di conseguenza.\n\nAltrimenti le cose potrebbero non funzionare affatto.</string>
+    <!-- deprecated -->
     <string name="pref_watch_sent_folder">Controlla Cartella Inviata</string>
     <string name="pref_send_copy_to_self">Invia Copia a Te Stesso</string>
     <string name="pref_send_copy_to_self_explain">Richiesto quando si utilizza questo profilo su più dispositivi.</string>
@@ -972,6 +985,7 @@
     <string name="ephemeral_timer_weeks_by_you">Hai impostato il timer dei messaggi a scomparsa su %1$s settimane.</string>
     <!-- %1$s will be replaced by the number of weeks (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
     <string name="ephemeral_timer_weeks_by_other">Timer messaggi a scomparsa impostato su %1$s settimane da %2$s.</string>
+    <string name="chat_unencrypted_explanation">I messaggi in questa chat utilizzano l\' e-mail classica e non sono crittografati end-to-end.</string>
     <string name="chat_protection_enabled_tap_to_learn_more">I messaggi sono crittografati end-to-end. Tocca per saperne di più.</string>
     <string name="chat_protection_enabled_explanation">Tutti i messaggi in questa chat sono crittografati end-to-end. La crittografia end-to-end mantiene privati i messaggi tra te e i tuoi interlocutori. Nemmeno servers, providers o relays possono leggerli.</string>
     <string name="invalid_unencrypted_tap_to_learn_more">⚠️ %1$s richiede la crittografia end-to-end che non è ancora configurata per questa chat. Tocca per saperne di più.</string>
@@ -996,6 +1010,7 @@
     <string name="qrscan_hint_desktop">Sposta il codice QR sulla fotocamera</string>
     <string name="qrscan_failed">Impossibile decodificare il codice QR</string>
     <string name="qrscan_ask_join_group">Vuoi entrare nel gruppo \"%1$s\"?</string>
+    <string name="qrscan_ask_join_channel">Vuoi unirti al canale \"%1$s\"?</string>
     <string name="qrscan_fingerprint_mismatch">L\'impronta digitale scansionata non corrisponde all\'ultima visualizzata per %1$s.</string>
     <string name="qrscan_no_addr_found">Questo codice QR contiene un\'impronta ma non un indirizzo email.\n\nPer una verifica efficace, per favore prima stabilisci una connessione cifrata col destinatario.</string>
     <string name="qrscan_contains_text">Testo codice QR scansionato:\n\n%1$s</string>
@@ -1038,6 +1053,7 @@
     <string name="verified_by">Introdotto da %1$s</string>
     <string name="verified_by_you">Introdotto da me</string>
     <string name="verified_by_unknown">Introdotto</string>
+    <!-- deprecated -->
     <string name="verified_contact_required_explain">Per garantire la crittografia end-to-end, puoi aggiungere a questo gruppo solo i contatti con un segno di spunta verde.\n\nPuoi incontrare i contatti di persona e scansionare il loro Codice QR per verificarli.</string>
     <string name="mailto_dialog_header_select_chat">Seleziona la chat a cui inviare il messaggio</string>
     <!-- first placeholder is the name of the chat -->

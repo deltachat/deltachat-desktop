@@ -675,9 +675,13 @@
     <string name="welcome_chat_over_email">Bezpieczny zdecentralizowany czat</string>
     <string name="scan_invitation_code">Zeskanuj kod zaproszenia</string>
     <string name="login_title">Zaloguj się</string>
+    <!-- deprecated -->
     <string name="login_header">Zaloguj się na swoje konto e-mail</string>
+    <!-- deprecated -->
     <string name="login_explain">Zaloguj się przy użyciu istniejącego konta e-mail</string>
+    <!-- deprecated -->
     <string name="login_subheader">Dla znanych dostawców usług poczty elektronicznej poniższe ustawienia są ustawiane automatycznie. Czasami IMAP musi być włączony w interfejsie WWW. O pomoc należy zwrócić się do usługodawcy e-mail lub znajomych.</string>
+    <!-- deprecated -->
     <string name="login_no_servers_hint">Nie ma serwerów Delta Chat, Twoje dane pozostają na Twoim urządzeniu!</string>
     <string name="login_inbox">Skrzynka odbiorcza</string>
     <string name="login_imap_login">Nazwa użytkownika IMAP</string>
@@ -690,6 +694,7 @@
     <string name="login_smtp_server">Serwer SMTP</string>
     <string name="login_smtp_port">Port SMTP</string>
     <string name="login_smtp_security">Bezpieczeństwo SMTP</string>
+    <!-- deprecated -->
     <string name="login_auth_method">Metoda autoryzacji</string>
     <!-- the word "Proxy" might be left untranslated unless the destination language has a well-known term for a "Proxy Server", acting intermediary between the app and the server -->
     <string name="proxy_settings">Proxy</string>
@@ -704,7 +709,12 @@
     <string name="proxy_use_proxy_confirm">Chcesz użyć proxy „%1$s”?</string>
     <string name="proxy_share_explain">Twoi znajomi mogą dodać ten serwer proxy, skanując kod QR.</string>
     <string name="proxy_share_link">Udostępnij link</string>
+    <string name="proxy_enabled">Włączone proxy</string>
+    <string name="proxy_enabled_hint">Używasz serwera proxy. Jeśli masz problemy z połączeniem, spróbuj użyć innego serwera proxy.</string>
+
+    <!-- deprecated -->
     <string name="login_info_oauth2_title">Kontynuuj w uproszczonej konfiguracji?</string>
+    <!-- deprecated -->
     <string name="login_info_oauth2_text">Wprowadzony adres e-mail obsługuje uproszczoną konfigurację (OAuth2.0).\n\nW następnym kroku zezwól Delta Chat na wysyłanie i odbieranie wiadomości.\n\nNie ma serwerów Delta Chat, Twoje dane pozostają na Twoim urządzeniu!</string>
     <string name="login_certificate_checks">Sprawdzanie certyfikatów</string>
     <string name="login_error_mail">Podaj ważny adres e-mail</string>
@@ -810,10 +820,11 @@
     <string name="pref_backup">Kopia zapasowa</string>
     <string name="pref_backup_explain">Wykonaj kopię zapasową czatów na pamięci zewnętrznej</string>
     <string name="pref_backup_export_explain">Kopia zapasowa pomaga skonfigurować nową instalację na tym lub na innym urządzeniu.\n\nKopia zapasowa będzie zawierała wszystkie wiadomości, kontakty i czaty oraz pełną konfigurację  funkcji automatycznego szyfrowania typu end-to-end. Przechowuj plik kopii zapasowej w bezpiecznym miejscu lub usuń go jak najszybciej.</string>
+    <string name="pref_backup_export_this">Eksportuj ten profil</string>
     <!-- deprecated -->
     <string name="pref_backup_export_x">Eksportuj %1$s</string>
     <!-- the placeholder will be replaced by the number of profiles to export; the number is always larger than 1 -->
-    <string name="pref_backup_export_all">Eksportuj wszystkie %1$d konta</string>
+    <string name="pref_backup_export_all">Eksportuj wszystkie profile (%1$d)</string>
     <string name="pref_backup_export_start_button">Utwórz kopię</string>
     <string name="pref_backup_written_to_x">Kopia zapasowa została pomyślnie zapisana do %1$s</string>
     <string name="pref_managekeys_export_secret_keys">Eksportuj prywatne klucze</string>
@@ -824,6 +835,7 @@
     <string name="pref_background_btn_default">Użyj domyślnego obrazu</string>
     <string name="pref_background_btn_gallery">Wybierz z galerii</string>
     <string name="pref_imap_folder_warn_disable_defaults">Jeśli wyłączysz tę opcję, upewnij się, że twój serwer i inni klienci są odpowiednio skonfigurowani.\n\nW przeciwnym razie wszystko może w ogóle nie działać.</string>
+    <!-- deprecated -->
     <string name="pref_watch_sent_folder">Pokaż katalog Wysłane</string>
     <string name="pref_send_copy_to_self">Wyślij kopię do siebie</string>
     <string name="pref_send_copy_to_self_explain">Wymagane kiedy korzystasz z tego konta na wielu urządzeniach.</string>
@@ -1056,6 +1068,7 @@
     <string name="verified_by">Kontakt zweryfikowany przez %1$s</string>
     <string name="verified_by_you">Kontakt zweryfikowany przez ciebie</string>
     <string name="verified_by_unknown">Zweryfikowano</string>
+    <!-- deprecated -->
     <string name="verified_contact_required_explain">Aby zagwarantować szyfrowanie end-to-end, do tej grupy możesz dodawać wyłącznie kontakty oznaczone zielonym znacznikiem wyboru.\n\nMożesz spotkać się z kontaktami osobiście i zeskanować ich kod QR, aby je zweryfikować.</string>
     <string name="mailto_dialog_header_select_chat">Wybierz czat, do którego chcesz wysłać wiadomość</string>
     <!-- first placeholder is the name of the chat -->

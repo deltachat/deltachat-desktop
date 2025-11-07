@@ -639,9 +639,14 @@
     <string name="welcome_chat_over_email">Secure Decentralized Chat</string>
     <string name="scan_invitation_code">Scan Invitation Code</string>
     <string name="login_title">Log In</string>
+    <string name="login_advanced_hint">This login is for advanced users:\n\n• Do not use an account you\'re using in another app.\n\n• Classic e-mail server allow chats without end-to-end encryption marked by a mail icon.</string>
+    <!-- deprecated -->
     <string name="login_header">Log into your E-Mail Account</string>
+    <!-- deprecated -->
     <string name="login_explain">Log in with an existing e-mail account</string>
+    <!-- deprecated -->
     <string name="login_subheader">For known e-mail providers additional settings are set up automatically. Sometimes IMAP needs to be enabled in the web settings. Consult your e-mail provider or friends for help.</string>
+    <!-- deprecated -->
     <string name="login_no_servers_hint">Delta Chat does not collect user data, everything stays on your device.</string>
     <string name="login_inbox">Inbox</string>
     <string name="login_imap_login">IMAP Login Name</string>
@@ -654,6 +659,7 @@
     <string name="login_smtp_server">SMTP Server</string>
     <string name="login_smtp_port">SMTP Port</string>
     <string name="login_smtp_security">SMTP Security</string>
+    <!-- deprecated -->
     <string name="login_auth_method">Authorization Method</string>
     <!-- the word "Proxy" might be left untranslated unless the destination language has a well-known term for a "Proxy Server", acting intermediary between the app and the server -->
     <string name="proxy_settings">Proxy</string>
@@ -671,7 +677,9 @@
     <string name="proxy_enabled">Proxy Enabled</string>
     <string name="proxy_enabled_hint">You are using a proxy. If you\'re having trouble connecting, try a different proxy.</string>
 
+    <!-- deprecated -->
     <string name="login_info_oauth2_title">Continue with simplified setup?</string>
+    <!-- deprecated -->
     <string name="login_info_oauth2_text">The entered address supports a simplified setup (OAuth 2.0).\n\nIn the next step, please allow Delta Chat to send and receive messages.\n\nDelta Chat does not collect user data, everything stays on your device.</string>
     <string name="login_certificate_checks">Certificate Checks</string>
     <string name="login_error_mail">Please enter a valid e-mail address</string>
@@ -792,6 +800,7 @@
     <string name="pref_background_btn_default">Use Default Image</string>
     <string name="pref_background_btn_gallery">Select From Gallery</string>
     <string name="pref_imap_folder_warn_disable_defaults">If you change this option, make sure, your server and your other clients are configured accordingly.\n\nOtherwise things may not work at all.</string>
+    <!-- deprecated -->
     <string name="pref_watch_sent_folder">Watch Sent Folder</string>
     <string name="pref_send_copy_to_self">Send Copy to Self</string>
     <string name="pref_send_copy_to_self_explain">Required when using this account on multiple devices.</string>
@@ -958,6 +967,7 @@
     <string name="ephemeral_timer_weeks_by_you">You set disappearing messages timer to %1$s weeks.</string>
     <!-- %1$s will be replaced by the number of weeks (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
     <string name="ephemeral_timer_weeks_by_other">Disappearing messages timer set to %1$s weeks by %2$s.</string>
+    <string name="chat_unencrypted_explanation">Messages in this chat use classic email and are not end-to-end encrypted.</string>
     <string name="chat_protection_enabled_tap_to_learn_more">Messages are end-to-end encrypted. Tap to learn more.</string>
     <string name="chat_protection_enabled_explanation">All messages in this chat are end-to-end encrypted.\n\nEnd-to-end encryption keeps messages private between you and your chat partners. Not even servers, providers or relays can read them.</string>
     <string name="invalid_unencrypted_tap_to_learn_more">⚠️ %1$s requires end-to-end encryption which is not setup for this chat yet. Tap to learn more.</string>
@@ -982,6 +992,7 @@
     <string name="qrscan_hint_desktop">Move the QR code to the camera</string>
     <string name="qrscan_failed">QR code could not be decoded</string>
     <string name="qrscan_ask_join_group">Do you want to join the group \"%1$s\"?</string>
+    <string name="qrscan_ask_join_channel">Do you want to join the channel \"%1$s\"?</string>
     <string name="qrscan_fingerprint_mismatch">The scanned fingerprint does not match the last seen for %1$s.</string>
     <string name="qrscan_no_addr_found">This QR code contains a fingerprint but no address.\n\nFor an out-of-band-verification, please establish an encrypted connection to the recipient first.</string>
     <string name="qrscan_contains_text">Scanned QR code text:\n\n%1$s</string>
@@ -1024,6 +1035,7 @@
     <string name="verified_by">Introduced by %1$s</string>
     <string name="verified_by_you">Introduced by me</string>
     <string name="verified_by_unknown">Introduced</string>
+    <!-- deprecated -->
     <string name="verified_contact_required_explain">To guarantee end-to-end-encryption, you can only add contacts with a green checkmark to this group.\n\nYou may meet contacts in person and scan their QR Code to introduce them.</string>
     <string name="mailto_dialog_header_select_chat">Select chat to send the message to</string>
     <!-- first placeholder is the name of the chat -->

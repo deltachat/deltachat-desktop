@@ -675,9 +675,13 @@
     <string name="welcome_chat_over_email">Безопасный децентрализованный чат</string>
     <string name="scan_invitation_code">Сканировать код приглашения</string>
     <string name="login_title">Войти</string>
+    <!-- deprecated -->
     <string name="login_header">Вход в аккаунт</string>
+    <!-- deprecated -->
     <string name="login_explain">Вход в аккаунт электронной почты</string>
+    <!-- deprecated -->
     <string name="login_subheader">Для известных провайдеров электронной почты дополнительные настройки устанавливаются автоматически. Иногда необходимо включить IMAP в настройках веб-сайта. Проконсультируйтесь с технической поддержкой вашей почтовой службы или друзьями, для получения помощи.</string>
+    <!-- deprecated -->
     <string name="login_no_servers_hint">Delta Chat не собирает данные пользователей, все данные хранятся на вашем устройстве!</string>
     <string name="login_inbox">Входящие</string>
     <string name="login_imap_login">Имя пользователя IMAP</string>
@@ -690,6 +694,7 @@
     <string name="login_smtp_server">Сервер SMTP</string>
     <string name="login_smtp_port">Порт SMTP</string>
     <string name="login_smtp_security">Защита соединения SMTP</string>
+    <!-- deprecated -->
     <string name="login_auth_method">Метод авторизации</string>
     <!-- the word "Proxy" might be left untranslated unless the destination language has a well-known term for a "Proxy Server", acting intermediary between the app and the server -->
     <string name="proxy_settings">Прокси</string>
@@ -707,7 +712,9 @@
     <string name="proxy_enabled">Прокси включен</string>
     <string name="proxy_enabled_hint">Вы используете прокси. При проблемах с подключением, попробуйте другой прокси.</string>
 
+    <!-- deprecated -->
     <string name="login_info_oauth2_title">Продолжить упрощенную настройку?</string>
+    <!-- deprecated -->
     <string name="login_info_oauth2_text">Введённый адрес электронной почты поддерживает упрощённую настройку (OAuth 2.0).\n\nНа следующем шаге, разрешите Delta Chat отправлять и получать сообщения.\n\nDelta Chat не собирает ваши данные, они все остаются на вашем устройстве.</string>
     <string name="login_certificate_checks">Проверки сертификатов</string>
     <string name="login_error_mail">Введите правильный адрес электронной почты</string>
@@ -828,6 +835,7 @@
     <string name="pref_background_btn_default">Использовать изображение по умолчанию</string>
     <string name="pref_background_btn_gallery">Выбрать из галереи</string>
     <string name="pref_imap_folder_warn_disable_defaults">Если вы измените этот параметр, убедитесь, что ваш сервер и другие клиенты настроены соответствующим образом.\n\nВ противном случае, всё может перестать работать.</string>
+    <!-- deprecated -->
     <string name="pref_watch_sent_folder">Следить за папкой \"Исходящие\"</string>
     <string name="pref_send_copy_to_self">Отправлять копию себе</string>
     <string name="pref_send_copy_to_self_explain">Требуется при использовании этого аккаунта на нескольких устройствах.</string>
@@ -1060,6 +1068,7 @@
     <string name="verified_by">Подтверждён: %1$s</string>
     <string name="verified_by_you">Подтверждён: Лично</string>
     <string name="verified_by_unknown">Подтверждён</string>
+    <!-- deprecated -->
     <string name="verified_contact_required_explain">Чтобы обеспечить сквозное шифрование, вы можете добавлять в эту группу только контакты с зеленой галочкой.\n\nВы можете встретиться с контактами лично и отсканировать их QR-код, чтобы подтвердить их личность.</string>
     <string name="mailto_dialog_header_select_chat">Выберите чат, чтобы отправить сообщение</string>
     <!-- first placeholder is the name of the chat -->

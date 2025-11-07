@@ -605,9 +605,13 @@
     <string name="welcome_chat_over_email">Conversas Seguras e Descentralizadas</string>
     <string name="scan_invitation_code">Escanear código de convite</string>
     <string name="login_title">Acceder</string>
+    <!-- deprecated -->
     <string name="login_header">Accede ao teu servidor</string>
+    <!-- deprecated -->
     <string name="login_explain">Accede cunha conta de correo existente</string>
+    <!-- deprecated -->
     <string name="login_subheader">Para os provedores de correo máis frecuentes os axustes establécense automaticamente. Porén poderías ter que activar IMAP nos seus axustes. Consulta o teu provedor de correo ou aos amigos se tes dúbidas.</string>
+    <!-- deprecated -->
     <string name="login_no_servers_hint">Non hai servidores Delta Chat, os teus datos permanecen no dispositivo.</string>
     <string name="login_inbox">Entrada</string>
     <string name="login_imap_login">identificador IMAP</string>
@@ -620,6 +624,7 @@
     <string name="login_smtp_server">Servidor SMTP</string>
     <string name="login_smtp_port">Porto SMTP</string>
     <string name="login_smtp_security">Seguridade SMTP</string>
+    <!-- deprecated -->
     <string name="login_auth_method">Método de autorización</string>
     <!-- the word "Proxy" might be left untranslated unless the destination language has a well-known term for a "Proxy Server", acting intermediary between the app and the server -->
     <string name="proxy_settings">Proxy</string>
@@ -633,7 +638,9 @@
     <string name="proxy_delete_explain">Tes certeza de querer eliminar \"%1$s\"?</string>
     <string name="proxy_use_proxy_confirm">Queres usar o proxy \"%1$s\"?</string>
     <string name="proxy_share_link">Compartir ligazón</string>
+    <!-- deprecated -->
     <string name="login_info_oauth2_title">Continuar co axuste simplificado?</string>
+    <!-- deprecated -->
     <string name="login_info_oauth2_text">O enderezo introducido soporta o axuste simplificado (OAuth 2.0).\n\nNo seguinte paso, permite a Delta Chat actuar como app de Conversa sobre Correo-e.\n\nNon hai servidores Delta Chat, os teus datos permanecen no dispositivo.</string>
     <string name="login_certificate_checks">Comprobacións do certificado</string>
     <string name="login_error_mail">Introduce un enderezo de correo válido</string>
@@ -743,6 +750,7 @@
     <string name="pref_background_btn_default">Usar imaxe por omisión</string>
     <string name="pref_background_btn_gallery">Escoller na galería</string>
     <string name="pref_imap_folder_warn_disable_defaults">Se desactivas esta opción, asegúrate de que o servidor e os teus outros clientes están configurados de xeito acorde.\n\nSe non, algo podería fallar.</string>
+    <!-- deprecated -->
     <string name="pref_watch_sent_folder">Vixiar cartafol Enviados</string>
     <string name="pref_send_copy_to_self">Enviar copia a ti mesmo</string>
     <string name="pref_send_copy_to_self_explain">Requerido se utilizas esta conta en varios dispositivos.</string>
@@ -948,6 +956,7 @@
     <string name="verified_by">Introducido/a por %1$s</string>
     <string name="verified_by_you">Introducido/a por min</string>
     <string name="verified_by_unknown">Introducido/a</string>
+    <!-- deprecated -->
     <string name="verified_contact_required_explain">Para garantir cifrado extremo-a-extremo, só podes adicionar contactos com un visto verde a este grupo.\n\nPodes encontrarche con contactos en persoa e escanear os seus códigos QR para os introducir.</string>
     <string name="mailto_dialog_header_select_chat">Elexir chat ao que enviar a mensaxe</string>
     <!-- first placeholder is the name of the chat -->

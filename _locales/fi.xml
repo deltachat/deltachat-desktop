@@ -518,9 +518,13 @@
     <string name="welcome_chat_over_email">Turvallinen hajautettu keskustelu</string>
     <string name="scan_invitation_code">Skannaa kutsukoodi</string>
     <string name="login_title">Kirjaudu sisään</string>
+    <!-- deprecated -->
     <string name="login_header">Kirjaudu sähköpostitilillesi</string>
+    <!-- deprecated -->
     <string name="login_explain">Kirjaudu olemassa olevalla sähköpostitilillä</string>
+    <!-- deprecated -->
     <string name="login_subheader">Sähköpostiasetukset määritetään automaattisesti tunnetuille palvelimille. Joskus verkkoasetuksista täytyy ottaa käyttöön IMAP. Kysy apua palveluntarjoajaltasi tai ystäviltäsi.</string>
+    <!-- deprecated -->
     <string name="login_no_servers_hint">Delta Chat ei kerää käyttäjädataa, kaikki tallennetaan vain laitteellesi.</string>
     <string name="login_inbox">Saapuvan postin laatikko</string>
     <string name="login_imap_login">IMAP -kirjautumistunnus</string>
@@ -533,8 +537,11 @@
     <string name="login_smtp_server">SMTP -palvelin</string>
     <string name="login_smtp_port">SMTP -portti</string>
     <string name="login_smtp_security">SMTP -turvallisuusprotokolla</string>
+    <!-- deprecated -->
     <string name="login_auth_method">Kirjautumismenetelmä</string>
+    <!-- deprecated -->
     <string name="login_info_oauth2_title">Jatka yksinkertaistetulla käyttöönotolla?</string>
+    <!-- deprecated -->
     <string name="login_info_oauth2_text">Annettu sähköpostiosoite tukee yksinkertaista käyttöönottoa (OAuth 2.0).\n\nSeuraavassa vaiheessa sinun tulisi antaa Delta Chatille oikeus toimia keskustelusovelluksena sähköpostia hyödyntäen.\n\nDelta Chat ei kerää käyttäjädataa, kaikki tallennetaan vain laitteellesi.</string>
     <string name="login_certificate_checks">Varmenteiden tarkastus</string>
     <string name="login_error_mail">Anna kelvollinen sähköpostiosoite</string>
@@ -642,6 +649,7 @@
     <string name="pref_background_btn_default">Käytä oletuskuvaa</string>
     <string name="pref_background_btn_gallery">Valitse galleriasta</string>
     <string name="pref_imap_folder_warn_disable_defaults">Jos muutat tätä asetusta, varmista että palvelimesi ja muut päätelaitteesi ovat määritetty vastaavasti.\n\nMuutoin ne eivät ehkä toimi lainkaan.</string>
+    <!-- deprecated -->
     <string name="pref_watch_sent_folder">Tarkkaile Lähetetyt -kansiota</string>
     <string name="pref_send_copy_to_self">Lähetä kopio itselle</string>
     <string name="pref_send_copy_to_self_explain">Vaaditaan käytettäessä tiliä usealla laitteella.</string>
@@ -861,6 +869,7 @@
     <!-- Shown in contact profile. The placeholder will be replaced by the name of the contact that introduced the contact. -->
     <string name="verified_by">%1$s lisäsi</string>
     <string name="verified_by_you">Lisäämäni</string>
+    <!-- deprecated -->
     <string name="verified_contact_required_explain">Päästä-päähän -salauksen takaamiseksi, voit lisätä ryhmään ainoastaan yhteystietoja joilla on vihreä \"oikein\" -merkki.\n\nVoit tavata yhteystietoja kasvotusten ja skannata heidän QR -koodinsa niin saat lisättyä salauksen käyttöön</string>
     <string name="mailto_dialog_header_select_chat">Valitse keskustelu viestien lähettämiseen</string>
     <!-- first placeholder is the name of the chat -->

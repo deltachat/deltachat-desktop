@@ -518,9 +518,13 @@
     <string name="welcome_chat_over_email">Защитен децентрализиран чат</string>
     <string name="scan_invitation_code">Сканиране на код за покана</string>
     <string name="login_title">Влизане</string>
+    <!-- deprecated -->
     <string name="login_header">Влизане във Вашия акаунт за електронна поща</string>
+    <!-- deprecated -->
     <string name="login_explain">Влизане със съществуващ акаунт за електронна поща</string>
+    <!-- deprecated -->
     <string name="login_subheader">За известните доставчици на електронна поща допълнителните настройки се попълват автоматично. Понякога е необходимо да се разреши IMAP в уеб настройките. Потърсете помощ от Вашия доставчик на електронна поща или приятели.</string>
+    <!-- deprecated -->
     <string name="login_no_servers_hint">Delta Chat няма сървъри, Вашите данни стоят на Вашето устройство.</string>
     <string name="login_inbox">Входящи</string>
     <string name="login_imap_login"> Име за влизане на IMAP</string>
@@ -533,8 +537,11 @@
     <string name="login_smtp_server">SMTP сървър</string>
     <string name="login_smtp_port">SMTP порт</string>
     <string name="login_smtp_security">Сигурност на SMTP връзката</string>
+    <!-- deprecated -->
     <string name="login_auth_method">Метод за оторизация</string>
+    <!-- deprecated -->
     <string name="login_info_oauth2_title">Да се продължи ли с опростената настройка?</string>
+    <!-- deprecated -->
     <string name="login_info_oauth2_text">Въведеният адрес за електронна поща поддържа опростена настройка (OAuth 2.0).\n\nНа следващата стъпка, моля позволете на Delta Chat да действа в качеството си на избраното от Вас приложение за чат върху електронна поща.\n\nDelta Chat няма сървъри, Вашите данни стоят на Вашето устройство.</string>
     <string name="login_certificate_checks">Проверки на сертификатите</string>
     <string name="login_error_mail">Моля, въведете валиден адрес за електронна поща</string>
@@ -642,6 +649,7 @@
     <string name="pref_background_btn_default">Да се използва подразбиращото се изображение</string>
     <string name="pref_background_btn_gallery">Избор от галерията</string>
     <string name="pref_imap_folder_warn_disable_defaults">Ако промение тази опция, се уверете, че Вашият сървър и другите Ви клиенти са конфигурирани по съответен начин.\n\nВ противен случай е възможно нещата въобще да не работят.</string>
+    <!-- deprecated -->
     <string name="pref_watch_sent_folder">Да бъде наблюдавана папката \"Изпратени\"</string>
     <string name="pref_send_copy_to_self">Изпращане на копие до себе си</string>
     <string name="pref_send_copy_to_self_explain">Изисква се, когато този акант се използва на повече от едно устройство.</string>
@@ -861,6 +869,7 @@
     <!-- Shown in contact profile. The placeholder will be replaced by the name of the contact that introduced the contact. -->
     <string name="verified_by">Проверен от%1$s</string>
     <string name="verified_by_you">Представен от мен</string>
+    <!-- deprecated -->
     <string name="verified_contact_required_explain">За да се гарантира криптирането от край до край, можете да добавяте в тази група само контакти, отбелязани със зелена отметка.\n\nБихте могли да се срещнете с лицата, с които желаете да контактувате, лично и да сканирате техните QR кодове, за да ги въведете.</string>
     <string name="mailto_dialog_header_select_chat">Изберете чат, към който да бъде пратено съобщението</string>
     <!-- first placeholder is the name of the chat -->

@@ -169,6 +169,7 @@
     <string name="profile_encryption">மறைகுறியாக்கம்</string>
     <string name="tab_contact">தொடர்பு</string>
     <string name="tab_gallery">காட்சி கூடம்</string>
+    <!-- deprecated -->
     <string name="login_subheader">அறியப்பட்ட மின் அஞ்சல் வழங்குநர்களுக்கு மற்ற அமைப்புகள் தானாக தீர்மானிக்கப்படும் </string>
     <string name="login_inbox">உட்பெட்டி</string>
     <string name="login_outbox">வெளிப்பெட்டி</string>

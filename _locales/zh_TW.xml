@@ -576,9 +576,13 @@
     <string name="welcome_chat_over_email">安全的去中心化聊天</string>
     <string name="scan_invitation_code">掃描邀請碼</string>
     <string name="login_title">登入</string>
+    <!-- deprecated -->
     <string name="login_header">登入你的電子郵件帳戶</string>
+    <!-- deprecated -->
     <string name="login_explain">使用現有的電子郵件帳戶登入</string>
+    <!-- deprecated -->
     <string name="login_subheader">我們能自動處理大多數常見的郵件伺服器設定。有時候你需要在 web 界面上手動打開 IMAP 服務，請詢問郵件服務商或請朋友幫忙。</string>
+    <!-- deprecated -->
     <string name="login_no_servers_hint">Delta Chat 沒有伺服器，你的資料只會存在你自己的裝置上!</string>
     <string name="login_inbox">收件匣</string>
     <string name="login_imap_login">IMAP 帳號</string>
@@ -591,6 +595,7 @@
     <string name="login_smtp_server">SMTP 伺服器</string>
     <string name="login_smtp_port">SMTP 埠</string>
     <string name="login_smtp_security">SMTP 安全</string>
+    <!-- deprecated -->
     <string name="login_auth_method">授權方式</string>
     <!-- the word "Proxy" might be left untranslated unless the destination language has a well-known term for a "Proxy Server", acting intermediary between the app and the server -->
     <string name="proxy_settings">代理伺服器</string>
@@ -605,7 +610,9 @@
     <string name="proxy_use_proxy_confirm">是否要使用代理 「%1$s」？</string>
     <string name="proxy_share_explain">您的朋友可以通過掃描QR碼來添加此代理。</string>
     <string name="proxy_share_link">分享連結</string>
+    <!-- deprecated -->
     <string name="login_info_oauth2_title">繼續使用簡易設定?</string>
+    <!-- deprecated -->
     <string name="login_info_oauth2_text">輸入的電子郵件位址支援簡化設定（OAuth 2.0）。\n\n在下一步中，請允許 Delta Chat 充當你的電子郵件對話應用程式。\n\nDelta Chat 不會收集使用者資料，所有內容都保留在你的裝置上。</string>
     <string name="login_certificate_checks">憑證檢查</string>
     <string name="login_error_mail">請輸入有效的電子郵件位址</string>
@@ -725,6 +732,7 @@
     <string name="pref_background_btn_default">使用預設圖案</string>
     <string name="pref_background_btn_gallery">從相簿中挑選</string>
     <string name="pref_imap_folder_warn_disable_defaults">如果關閉本選項的話，請務必確定你的伺服器和其它客戶端應用程式都使用相同的設定，否則很可能不能運作。</string>
+    <!-- deprecated -->
     <string name="pref_watch_sent_folder">監看送件匣</string>
     <string name="pref_send_copy_to_self">將副本發送給自己</string>
     <string name="pref_send_copy_to_self_explain">在多個裝置上使用此帳戶時，這是必需的。</string>
@@ -947,6 +955,7 @@
     <!-- Shown in contact profile. The placeholder will be replaced by the name of the contact that introduced the contact. -->
     <string name="verified_by">由%1$s介紹</string>
     <string name="verified_by_you">由我介紹</string>
+    <!-- deprecated -->
     <string name="verified_contact_required_explain">為了保證端到端加密，您只能將帶有綠色驗證標識的聯絡人添加到此群組。\n\n您可以當面掃描聯絡人的QR碼以介紹他們。</string>
     <string name="mailto_dialog_header_select_chat">選擇要將消息發送到的聊天</string>
     <!-- first placeholder is the name of the chat -->

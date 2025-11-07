@@ -675,9 +675,13 @@
     <string name="welcome_chat_over_email">Безпечний децентралізований чат</string>
     <string name="scan_invitation_code">Сканувати код запрошення</string>
     <string name="login_title">Увійти</string>
+    <!-- deprecated -->
     <string name="login_header">Увійдіть до свого облікового запису електронної пошти</string>
+    <!-- deprecated -->
     <string name="login_explain">Увійти з наявним обліковим записом електронної пошти</string>
+    <!-- deprecated -->
     <string name="login_subheader">Для відомих провайдерів електронної пошти додаткові налаштування встановлюються автоматично. Іноді IMAP потрібен дозвіл у веб-інтерфейсі. Проконсультуйтеся з Вашим провайдером електронної пошти або друзями для отримання допомоги.</string>
+    <!-- deprecated -->
     <string name="login_no_servers_hint">У Delta Chat немає серверів, Ваші дані залишаються на Вашому пристрої!</string>
     <string name="login_inbox">Вхідні</string>
     <string name="login_imap_login">IMAP-логін</string>
@@ -690,6 +694,7 @@
     <string name="login_smtp_server">SMTP-сервер</string>
     <string name="login_smtp_port">SMTP-порт</string>
     <string name="login_smtp_security">Налаштування безпеки SMTP</string>
+    <!-- deprecated -->
     <string name="login_auth_method">Метод авторизації</string>
     <!-- the word "Proxy" might be left untranslated unless the destination language has a well-known term for a "Proxy Server", acting intermediary between the app and the server -->
     <string name="proxy_settings">Проксі</string>
@@ -704,7 +709,9 @@
     <string name="proxy_use_proxy_confirm">Ви хочете використовувати проксі \"%1$s\"?</string>
     <string name="proxy_share_explain">Ваші друзі можуть додати цей проксі, відсканувавши QR-код.</string>
     <string name="proxy_share_link">Поділитися посиланням</string>
+    <!-- deprecated -->
     <string name="login_info_oauth2_title">Продовжити спрощене налаштування?</string>
+    <!-- deprecated -->
     <string name="login_info_oauth2_text">Дана скринька підтримує спрощене налаштовування (OAuth 2.0).\n\nНаступним кроком, будь‐ласка, дозвольте Дельта‐чатові надсилати й одержувати повідомлення.\n\nДельта‐чат не збирає користувацьких даних: усе лишається на вашім пристрої.</string>
     <string name="login_certificate_checks">Перевірки сертифікатів</string>
     <string name="login_error_mail">Вкажіть дійсну адресу електронної пошти</string>
@@ -824,6 +831,7 @@
     <string name="pref_background_btn_default">Використовувати тло за замовчуванням</string>
     <string name="pref_background_btn_gallery">Вибрати з галереї</string>
     <string name="pref_imap_folder_warn_disable_defaults">Якщо ви змінюєте цей параметр, переконайтеся, що Ваш сервер та інші Ваші клієнти налаштовані відповідним чином.\n\nІнакше щось може взагалі не працювати.</string>
+    <!-- deprecated -->
     <string name="pref_watch_sent_folder">Стежити за папкою «Надіслані»</string>
     <string name="pref_send_copy_to_self">Відправити копію собі</string>
     <string name="pref_send_copy_to_self_explain">Обов’язково при використанні цього облікового запису на кількох пристроях.</string>
@@ -1050,6 +1058,7 @@
     <string name="verified_by">Представни·ця: %1$s</string>
     <string name="verified_by_you">Представлено мною</string>
     <string name="verified_by_unknown">Представлено</string>
+    <!-- deprecated -->
     <string name="verified_contact_required_explain">Аби наскрізне шифрування лишалося ґарантованим, у цю групу можна додавати лише контактних осіб із зеленою галочкою.\n\nМожна зустрітись із контактною особою та відсканувати баркод із її пристрою, щоби представити її.</string>
     <string name="mailto_dialog_header_select_chat">Виберіть чат, куди потрібно надіслати повідомлення</string>
     <!-- first placeholder is the name of the chat -->
