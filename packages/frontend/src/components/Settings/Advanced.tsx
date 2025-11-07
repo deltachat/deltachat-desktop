@@ -16,6 +16,7 @@ import DesktopSettingsSwitch from './DesktopSettingsSwitch'
 import { AutostartState } from '@deltachat-desktop/shared/shared-types'
 import ProxyConfiguration from '../dialogs/ProxyConfiguration'
 import { selectedAccountId } from '../../ScreenController'
+import TransportsDialog from '../dialogs/Transports'
 
 type Props = {
   settingsStore: SettingsStoreState
@@ -30,6 +31,15 @@ export default function Advanced({ settingsStore }: Props) {
       configured: true,
     })
   }
+
+  const openTransportSettings = () => {
+    openDialog(TransportsDialog, {
+      accountId: selectedAccountId(),
+      configured: true,
+    })
+  }
+
+  const addr = settingsStore.settings.addr
 
   return (
     <>
@@ -61,7 +71,7 @@ export default function Advanced({ settingsStore }: Props) {
       <SettingsButton
         onClick={() => {
           openDialog(EditAccountAndPasswordDialog, {
-            settingsStore,
+            addr,
           })
         }}
         dataTestid='open-account-and-password'
@@ -75,6 +85,14 @@ export default function Advanced({ settingsStore }: Props) {
         dataTestid='open-proxy-settings'
       >
         {tx('proxy_settings')}
+      </SettingsButton>
+      <SettingsButton
+        onClick={() => {
+          openTransportSettings()
+        }}
+        dataTestid='open-transport-settings'
+      >
+        {tx('transport_settings')}
       </SettingsButton>
 
       {settingsStore.settings.is_chatmail === '0' && (
