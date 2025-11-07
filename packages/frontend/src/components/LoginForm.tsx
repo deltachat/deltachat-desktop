@@ -12,6 +12,7 @@ import { I18nContext } from '../contexts/I18nContext'
 const log = getLogger('renderer/loginForm')
 
 import type { Credentials } from './Settings/DefaultCredentials'
+import { useSettingsStore } from '../stores/settings'
 
 const Socket = {
   automatic: 'automatic',
@@ -36,6 +37,8 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
   const [providerInfo, setProviderInfo] = useState<
     Type.ProviderInfo | undefined
   >()
+  const settingsStore = useSettingsStore()[0]
+  const isChatmail = settingsStore?.settings.is_chatmail === '1'
 
   const handleCredentialsChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -145,7 +148,7 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
             </div>
           )}
 
-          <p className='text'>{tx('login_no_servers_hint')}</p>
+          {!isChatmail && <p className='text'>{tx('login_advanced_hint')}</p>}
           <button
             className='advanced'
             aria-controls='advanced-collapse'
@@ -153,7 +156,7 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
             id={'show-advanced-button'}
           >
             <div className={`advanced-icon ${uiShowAdvanced && 'opened'}`} />
-            <p>{tx('menu_advanced')}</p>
+            <p>{tx('menu_more_options')}</p>
           </button>
           <Collapse id='advanced-collapse' isOpen={uiShowAdvanced}>
             <br />
@@ -162,7 +165,7 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
             <DeltaInput
               key='imapUser'
               id='imapUser'
-              placeholder={tx('default_value_as_above')}
+              placeholder={tx('automatic')}
               label={tx('login_imap_login')}
               type='text'
               value={imapUser}
@@ -206,7 +209,7 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
             <DeltaInput
               key='smtpUser'
               id='smtpUser'
-              placeholder={tx('default_value_as_above')}
+              placeholder={tx('automatic')}
               label={tx('login_smtp_login')}
               value={smtpUser}
               onChange={handleCredentialsChange}
@@ -215,7 +218,7 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
               key='smtpPassword'
               id='smtpPassword'
               label={tx('login_smtp_password')}
-              placeholder={tx('default_value_as_above')}
+              placeholder={tx('automatic')}
               password={smtpPassword || ''}
               onChange={handleCredentialsChange}
             />
@@ -267,7 +270,6 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
             </DeltaSelect>
           </Collapse>
           <br />
-          <p className='text'>{tx('login_subheader')}</p>
         </div>
       )}
     </I18nContext.Consumer>
