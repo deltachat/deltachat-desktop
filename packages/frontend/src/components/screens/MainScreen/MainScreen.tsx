@@ -17,7 +17,7 @@ import MailingListProfile from '../../dialogs/MailingListProfile'
 import SettingsStoreInstance, {
   useSettingsStore,
 } from '../../../stores/settings'
-import { BackendRemote, Type } from '../../../backend-com'
+import { BackendRemote, onDCEvent, Type } from '../../../backend-com'
 import Button from '../../Button'
 import Icon from '../../Icon'
 import SearchInput from '../../SearchInput'
@@ -216,6 +216,15 @@ export default function MainScreen({ accountId }: Props) {
     // Refresh Webxdc apps list when a Webxdc message is sent
     lastUsedAppsFetch?.refresh()
   })
+
+  useEffect(() => {
+    if (!accountId) {
+      return
+    }
+    return onDCEvent(accountId, 'WebxdcInstanceDeleted', () => {
+      lastUsedAppsFetch?.refresh()
+    })
+  }, [accountId, lastUsedAppsFetch])
 
   useEffect(() => {
     // Make sure it uses new version of settings store instance
