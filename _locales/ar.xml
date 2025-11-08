@@ -143,6 +143,7 @@
     <string name="tab_map">الخريطة</string>
     <string name="media_preview">معاينة الصورة</string>
     <string name="login_title">الولوج</string>
+    <!-- deprecated -->
     <string name="login_header">الإتصال بخادومك</string>
     <string name="login_inbox">صندوق الوارد</string>
     <string name="login_imap_login">مستخدم IMAP</string>

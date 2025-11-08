@@ -639,9 +639,13 @@
     <string name="welcome_chat_over_email">Biztonságos decentralizált csevegés</string>
     <string name="scan_invitation_code">QR-kód-meghívó beolvasása</string>
     <string name="login_title">Bejelentkezés</string>
+    <!-- deprecated -->
     <string name="login_header">Jelentkezzen be az e-mail-fiókjába</string>
+    <!-- deprecated -->
     <string name="login_explain">Bejelentkezés meglévő e-mail-fiókkal</string>
+    <!-- deprecated -->
     <string name="login_subheader">Az ismert e-mail-szolgáltatók esetében a rendszer automatikus beállításokat hoz létre. Kivételes esetekben az IMAP-ot engedélyezni kell az e-mail-szolgáltatójának webes beállításaiban. Forduljon az e-mail-szolgáltatójához vagy partnereihez további segítségért.</string>
+    <!-- deprecated -->
     <string name="login_no_servers_hint">A Delta Chat nem gyűjt felhasználói adatokat, az Ön összes adata az eszközén van tárolva.</string>
     <string name="login_inbox">Bejövő</string>
     <string name="login_imap_login">IMAP bejelentkezési név</string>
@@ -654,6 +658,7 @@
     <string name="login_smtp_server">SMTP-kiszolgáló</string>
     <string name="login_smtp_port">SMTP-port</string>
     <string name="login_smtp_security">SMTP-biztonság</string>
+    <!-- deprecated -->
     <string name="login_auth_method">Azonosítási eljárás</string>
     <!-- the word "Proxy" might be left untranslated unless the destination language has a well-known term for a "Proxy Server", acting intermediary between the app and the server -->
     <string name="proxy_settings">Proxy</string>
@@ -671,7 +676,9 @@
     <string name="proxy_enabled">Proxy engedélyezve</string>
     <string name="proxy_enabled_hint">Ön jelenleg proxyt használ. Ha problémája van a kapcsolódással, próbáljon ki egy másik proxyt.</string>
 
+    <!-- deprecated -->
     <string name="login_info_oauth2_title">Folytatja az egyszerűsített beállítást?</string>
+    <!-- deprecated -->
     <string name="login_info_oauth2_text">A megadott e-mail cím támogatja az egyszerűsített beállítást (OAuth 2.0).\n\nA következő lépésben engedélyezze a Delta Chat számára, hogy e-mailen keresztüli csevegésre szolgáló alkalmazásként működjön.\n\nA Delta Chat nem gyűjt felhasználói adatokat, az Ön összes adata kizárólag az eszközén tárolódik.</string>
     <string name="login_certificate_checks">Tanúsítvány ellenőrzése</string>
     <string name="login_error_mail">Adjon meg egy érvényes e-mail-címet</string>
@@ -792,6 +799,7 @@
     <string name="pref_background_btn_default">Alapértelemezett kép használata</string>
     <string name="pref_background_btn_gallery">Kiválasztás a galériából</string>
     <string name="pref_imap_folder_warn_disable_defaults">Ha megváltoztatja ezt a beállítást, győződjön meg arról, hogy a kiszolgálója és a többi kliense is ennek megfelelően van beállítva.\n\nMáskülönben előfordulhat, hogy a dolgok egyáltalán nem fognak működni.</string>
+    <!-- deprecated -->
     <string name="pref_watch_sent_folder">Elküldött üzenetek mappájának figyelése</string>
     <string name="pref_send_copy_to_self">Másolat küldése Önmagának</string>
     <string name="pref_send_copy_to_self_explain">Szükséges, ha ezt a fiókot több eszközön is használja.</string>
@@ -1024,6 +1032,7 @@
     <string name="verified_by">%1$s által bemutatva</string>
     <string name="verified_by_you">Ön által bemutatva</string>
     <string name="verified_by_unknown">Bemutatva</string>
+    <!-- deprecated -->
     <string name="verified_contact_required_explain">A végpontok közötti titkosítás garantálása érdekében csak zöld jelöléssel rendelkező névjegyeket adhat hozzá ehhez a csoporthoz.\n\n Személyesen is találkozhat a partnereivel és beolvashatja a QR-kódjukat, hogy bemutassa őket.</string>
     <string name="mailto_dialog_header_select_chat">Válassza ki a csevegést az üzenet elküldéséhez</string>
     <!-- first placeholder is the name of the chat -->

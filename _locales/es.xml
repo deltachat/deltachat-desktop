@@ -657,9 +657,13 @@
     <string name="welcome_chat_over_email">Chat seguro y descentralizado</string>
     <string name="scan_invitation_code">Escanear código de invitación</string>
     <string name="login_title">Iniciar sesión</string>
+    <!-- deprecated -->
     <string name="login_header">Inicie sesión en su servidor</string>
+    <!-- deprecated -->
     <string name="login_explain">Iniciar sesión con una cuenta de correo existente</string>
+    <!-- deprecated -->
     <string name="login_subheader">Para los proveedores de correo conocidos, la configuración es realizada automáticamente. A veces, IMAP debe estar habilitado en la interfaz web. Consulte a su proveedor de correo o amigos para obtener ayuda.</string>
+    <!-- deprecated -->
     <string name="login_no_servers_hint">No hay servidores de Delta Chat, tus datos permanecen en tu dispositivo!</string>
     <string name="login_inbox">Bandeja de entrada</string>
     <string name="login_imap_login">Nombre de usuario IMAP</string>
@@ -672,6 +676,7 @@
     <string name="login_smtp_server">Servidor SMTP</string>
     <string name="login_smtp_port">Puerto SMTP</string>
     <string name="login_smtp_security">Seguridad SMTP</string>
+    <!-- deprecated -->
     <string name="login_auth_method">Método de autorización</string>
     <!-- the word "Proxy" might be left untranslated unless the destination language has a well-known term for a "Proxy Server", acting intermediary between the app and the server -->
     <string name="proxy_settings">Proxy</string>
@@ -686,7 +691,9 @@
     <string name="proxy_use_proxy_confirm">¿Quieres utilizar el proxy \"%1$s\"?</string>
     <string name="proxy_share_explain">Tus amigos pueden agregar este proxy escaneando el código QR.</string>
     <string name="proxy_share_link">Compartir enlace</string>
+    <!-- deprecated -->
     <string name="login_info_oauth2_title">¿Continuar con la configuración simplificada?</string>
+    <!-- deprecated -->
     <string name="login_info_oauth2_text">La dirección de correo electrónico introducida admite una configuración simplificada (OAuth 2.0).\n\nEn el próximo paso, permita que Delta Chat actúe como su aplicación de chat por correo electrónico.\n\nNo hay servidores de Delta Chat, tus datos permanecen en tu dispositivo.</string>
     <string name="login_certificate_checks">Comprobaciones de certificados</string>
     <string name="login_error_mail">Por favor, introduzca una dirección de correo válida</string>
@@ -806,6 +813,7 @@
     <string name="pref_background_btn_default">Usar imagen por defecto</string>
     <string name="pref_background_btn_gallery">Seleccionar de la galería</string>
     <string name="pref_imap_folder_warn_disable_defaults">Si deshabilita esta opción, asegúrese de que su servidor y sus otros clientes estén configurados en consecuencia.\n\nDe lo contrario, las cosas pueden no funcionar en absoluto.</string>
+    <!-- deprecated -->
     <string name="pref_watch_sent_folder">Monitorear carpeta Enviados</string>
     <string name="pref_send_copy_to_self">Enviar autocopia</string>
     <string name="pref_send_copy_to_self_explain">Necesario cuando utilizando esta cuenta en varios dispositivos.</string>
@@ -1032,6 +1040,7 @@
     <string name="verified_by">Verificado por %1$s</string>
     <string name="verified_by_you">Verificado por ti</string>
     <string name="verified_by_unknown">Introducido</string>
+    <!-- deprecated -->
     <string name="verified_contact_required_explain">Para garantizar el cifrado de extremo a extremo, solo puedes añadir contactos con una marca de verificación verde</string>
     <string name="mailto_dialog_header_select_chat">Seleccione el chat para enviar el mensaje</string>
     <!-- first placeholder is the name of the chat -->

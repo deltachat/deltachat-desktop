@@ -622,8 +622,12 @@
     <string name="welcome_chat_over_email">Turvaline hajutatud vestluslahendus</string>
     <string name="scan_invitation_code">Skaneeri kutsekoodi</string>
     <string name="login_title">Logi sisse</string>
+    <string name="login_advanced_hint">See sisselogimine sobib  oskuskasutajatele:\n\n• Ära kasuta kontot, mis juba on kasutusel mõnes muus rakenduses.\n\n• Klassikaline e-posti server võimaldab vestlemist vaid ilma läbiva krüptimiseta ja seda märgistab kirja ikoon.</string>
+    <!-- deprecated -->
     <string name="login_header">Logi sisse oma e-postikontoga</string>
+    <!-- deprecated -->
     <string name="login_explain">Logi sisse olemasoleva e-postikontoga</string>
+    <!-- deprecated -->
     <string name="login_no_servers_hint">Delta Chat ei  kogu kasutajate andmeid - kogu teave jääb sinu seadmesse.</string>
     <string name="login_inbox">Saabuvad kirjad</string>
     <string name="login_imap_login">IMAP-i kasutajanimi</string>
@@ -636,6 +640,7 @@
     <string name="login_smtp_server">SMTP server</string>
     <string name="login_smtp_port">SMTP port</string>
     <string name="login_smtp_security">SMTP turvalisus</string>
+    <!-- deprecated -->
     <string name="login_auth_method">Tuvastamise meetod</string>
     <!-- the word "Proxy" might be left untranslated unless the destination language has a well-known term for a "Proxy Server", acting intermediary between the app and the server -->
     <string name="proxy_settings">Proksiserver</string>
@@ -653,6 +658,7 @@
     <string name="proxy_enabled">Proksiserver on kasutusel</string>
     <string name="proxy_enabled_hint">Sa kasutad proksiserverit. Kui võrguühendus ei toimi korralikult, siis proovi teist proksiserverit.</string>
 
+    <!-- deprecated -->
     <string name="login_info_oauth2_title">Kas jätkame lihtsustatud seadistamisega?</string>
     <string name="login_certificate_checks">Sertifikaadikontrollid</string>
     <string name="login_error_mail">Palun sisesta korrektne e-posti aadress</string>
@@ -767,11 +773,14 @@
     <string name="pref_background">Taustapilt</string>
     <string name="pref_background_btn_default">Kasuta vaikimisi pilti</string>
     <string name="pref_background_btn_gallery">Vali galeriist</string>
+    <string name="pref_imap_folder_warn_disable_defaults">Kui sa seda eelistust muudad, siis palun kontrolli, et server ja muud kliendid on vastavalt seadistatud.\n\nVastasel juhul võib minna nii, et mitte miski ei toimi.</string>
+    <!-- deprecated -->
     <string name="pref_watch_sent_folder">Välju saadetud sõnumite kausta</string>
     <string name="pref_send_copy_to_self">Saada koopia iseendale</string>
     <string name="pref_send_copy_to_self_explain">Vajalik, kui kasutad seda kontot mitmes seadmes.</string>
     <string name="pref_auto_folder_moves">Tõsta automaatselt DeltaChati kausta</string>
     <string name="pref_only_fetch_mvbox_title">Laadi vaid DeltaChati kasutast</string>
+    <string name="pref_only_fetch_mvbox_explain">Eira muid kaustu. See eeldab, et sinu server oskab tõsta vestluste sõnumid DeltaChati kausta.</string>
     <string name="pref_show_emails">Näita klassikalisi e-kirju</string>
     <string name="pref_show_emails_all">Kõik</string>
     <string name="pref_experimental_features">Katselised funktsionaalsused</string>
@@ -849,6 +858,9 @@
     <string name="autocrypt_send_asm_button">Saada Autocrypti seadistussõnum</string>
     <string name="autocrypt_prefer_e2ee">Eelista läbivat krüptimist</string>
 
+    <!-- system messages -->
+    <!-- deprecated -->
+    <string name="systemmsg_unknown_sender_for_chat">Tundmatu saatja selle vestluse jaoks. Üksikasju näed infovaatest.</string>
     <string name="systemmsg_subject_for_new_contact">Sõnum kasutajalt %1$s</string>
     <string name="systemmsg_failed_sending_to">Sõnumi saatmine kasutajale %1$s ei õnnestunud.</string>
     <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name -->
@@ -920,6 +932,7 @@
     <string name="ephemeral_timer_weeks_by_you">Sa määrasid isekustuvate sõnumite kehtivuseks %1$s nädalat.</string>
     <!-- %1$s will be replaced by the number of weeks (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
     <string name="ephemeral_timer_weeks_by_other">%2$s määras isekustuvate sõnumite kehtivuseks %1$s nädalat.</string>
+    <string name="chat_unencrypted_explanation">Sõnumid siin vestluses kasutavad klassikalist e-postiliidestust ja pole läbivalt krüptitud.</string>
     <string name="chat_protection_enabled_tap_to_learn_more">Sõnumid on läbivalt krüptitud. Lisateabe ligemiseks klõpsi.</string>
     <string name="chat_protection_enabled_explanation">Kõik selle vestluse sõnumid on läbivalt krüptitud.\n\nSee tagab, et sõnumid on loetavad vaid sinu ja vestluse teis(t)e osapool(t)e poolt. Ei teenusepakkujad, serverihaldajad, ega põrgatajad ei saa neid sõnumeid lugeda.</string>
     <string name="invalid_unencrypted_tap_to_learn_more">⚠️ %1$s eeldab läbiva krüptimise kasutamist, aga see pole veel antud vestluse jaoks seadistatud. Lisateabe ligemiseks klõpsi.</string>
@@ -942,6 +955,7 @@
     <string name="qrscan_hint_desktop">Liiguta QR-kood kaamera poole</string>
     <string name="qrscan_failed">QR-koodi dekodeerimine ei õnnestunud</string>
     <string name="qrscan_ask_join_group">Kas soovid liituda „%1$s“ grupiga?</string>
+    <string name="qrscan_ask_join_channel">Kas sa soovid liituda „%1$s“ kanaliga?</string>
     <string name="qrscan_fingerprint_mismatch">Skaneeritud sõrmejälg ei vasta %1$s viimati nähtud sõrmejäljele.</string>
     <string name="qrscan_no_addr_found">Selles QR-koois on sõrmejälg, kuid pole aadressi.\n\nTavakanalivälise verifitseerimise jaoks palun esmalt loo teise osapoolega krüptitud ühendus.</string>
     <string name="qrscan_contains_text">Skaneeritud QR-koodi tekst:\n\n%1$s</string>
@@ -975,7 +989,7 @@
     <!-- the placeholder will be replaced by the address of the profile -->
     <string name="qrlogin_ask_login_another">Kas soovid sisse logid oma kontoga „%1$s“ serveris?\n\nSinu olemasolev profiil jääb alles. Profiile saad vahetada käsuga „Vaheta profiili“.</string>
     <!-- first placeholder will be replaced by name and address of the inviter, second placeholder will be replaced by the name of the inviter. -->
-    <string name="secure_join_started">%1$s kutsus sind liituma selle grupiga.\n\n\Ootan vastust kasutaja %2$s seadmest…</string>
+    <string name="secure_join_started">%1$s kutsus sind liituma selle grupiga.\n\nOotan vastust kasutaja %2$s seadmest…</string>
     <!-- placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_replies">%1$s vastas, ootan gruppi lisamist…</string>
     <string name="secure_join_wait">Panen aluse läbivale krüptimisele…</string>
@@ -984,6 +998,7 @@
     <string name="verified_by">%1$s lisas kontakti vestlusesse</string>
     <string name="verified_by_you">Mina lisasin kontakti vestlusesse</string>
     <string name="verified_by_unknown">Vestlusesse lisatud</string>
+    <!-- deprecated -->
     <string name="verified_contact_required_explain">Selleks, et läbiv krüptimine toimiks garanteeritult, sa võid sellesse vestlusesse lisada vaid rohelise linnukesega kontakte.\n\nParim viis on omavahel kohtuda ning teise osapoole QR-koodi skaneerimisega lisada ta vestlusesse.</string>
     <string name="mailto_dialog_header_select_chat">Vali vestlus, kuhu soovid sõnumi saata</string>
     <!-- first placeholder is the name of the chat -->

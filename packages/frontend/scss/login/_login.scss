@@ -5,6 +5,8 @@
 
   p.text {
     color: var(--deltaChatPrimaryFgLight);
+    white-space: pre-line;
+    line-height: 20px;
   }
 
   p.delta-headline {

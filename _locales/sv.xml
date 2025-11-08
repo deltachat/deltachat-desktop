@@ -524,9 +524,13 @@
     <string name="welcome_chat_over_email">Säker decentraliserad chatt</string>
     <string name="scan_invitation_code">Skanna inbjudningskod</string>
     <string name="login_title">Logga in</string>
+    <!-- deprecated -->
     <string name="login_header">Logga in på din server</string>
+    <!-- deprecated -->
     <string name="login_explain">Logga in med ett befintligt e-postkonto</string>
+    <!-- deprecated -->
     <string name="login_subheader">För kända e-postleverantörer installeras ytterligare inställningar automatiskt. Ibland måste IMAP aktiveras i webbinställningarna. Kontakta din e-postleverantör eller vänner för hjälp.</string>
+    <!-- deprecated -->
     <string name="login_no_servers_hint">Det finns ingen Delta Chat-server, din data stannar på din enhet.</string>
     <string name="login_inbox">Inkorg</string>
     <string name="login_imap_login">IMAP inloggningsnamn</string>
@@ -539,8 +543,11 @@
     <string name="login_smtp_server">SMTP server</string>
     <string name="login_smtp_port">SMTP port</string>
     <string name="login_smtp_security">SMTP säkerhet</string>
+    <!-- deprecated -->
     <string name="login_auth_method">Auktoriseringsmetod</string>
+    <!-- deprecated -->
     <string name="login_info_oauth2_title">Fortsätta med förenklad installation?</string>
+    <!-- deprecated -->
     <string name="login_info_oauth2_text">Den angivna e-postadressen stödjer förenklad inställning (OAuth 2.0).\n\nLåt Delta Chat agera som ditt chatt-över-epost-program, i nästa steg.\n\nDet finns ingen Delta Chat-server, din data stannar på din enhet.</string>
     <string name="login_certificate_checks">Certifikatkontroller</string>
     <string name="login_error_mail">Ange en giltig e-postadress</string>
@@ -648,6 +655,7 @@
     <string name="pref_background_btn_default">Använd standardbild</string>
     <string name="pref_background_btn_gallery">Välj från galleriet</string>
     <string name="pref_imap_folder_warn_disable_defaults">Om du inaktiverar det här alternativet, tillse att servern och dina andra klienter är konfigurerade i enlighet med detta.\n\nAnnars kanske saker och ting inte fungerar alls.</string>
+    <!-- deprecated -->
     <string name="pref_watch_sent_folder">Övervaka mappen \"Skickat\"</string>
     <string name="pref_send_copy_to_self">Skicka kopia till mig själv</string>
     <string name="pref_send_copy_to_self_explain">Krävs när du använder detta konto på flera enheter.</string>
@@ -869,6 +877,7 @@
     <!-- Shown in contact profile. The placeholder will be replaced by the name of the contact that introduced the contact. -->
     <string name="verified_by">Introducerad av %1$s</string>
     <string name="verified_by_you">Introducerad av mig</string>
+    <!-- deprecated -->
     <string name="verified_contact_required_explain">För att garantera totalsträckskryptering  kan du bara lägga till kontakter med en grön bock i den här gruppen.\n\nDu kan träffa kontakter personligen och skanna deras QR-kod för att introducera dem.</string>
     <string name="mailto_dialog_header_select_chat">Välj chatt för att skicka meddelandet till</string>
     <!-- first placeholder is the name of the chat -->

@@ -16,6 +16,7 @@ import useDialog from '../../hooks/dialog/useDialog'
 import type { DialogProps } from '../../contexts/DialogContext'
 import AlertDialog from './AlertDialog'
 import { T } from '@deltachat/jsonrpc-client'
+import { useSettingsStore } from '../../stores/settings'
 
 /**
  * uses a prefilled LoginForm with existing
@@ -24,9 +25,18 @@ import { T } from '@deltachat/jsonrpc-client'
 export default function EditAccountAndPasswordDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
 
+  const settingsStore = useSettingsStore()[0]
+  const isChatmail = settingsStore?.settings.is_chatmail === '1'
+
   return (
     <Dialog canOutsideClickClose={false} onClose={onClose}>
-      <DialogHeader title={tx('login_header')} />
+      <DialogHeader
+        title={
+          isChatmail
+            ? tx('pref_password_and_account_settings')
+            : tx('manual_account_setup_option')
+        }
+      />
       {EditAccountInner(onClose)}
     </Dialog>
   )

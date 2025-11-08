@@ -266,6 +266,7 @@
     <string name="login_smtp_server">SMTP-tjener</string>
     <string name="login_smtp_port">SMTP-port</string>
     <string name="login_smtp_security">SMTP-sikkerhet</string>
+    <!-- deprecated -->
     <string name="login_auth_method">Autoriseringsmetode</string>
     <string name="login_certificate_checks">Sertifikat sjekker</string>
     <string name="import_backup_title">Importer sikkerhetskopi</string>

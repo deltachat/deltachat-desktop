@@ -602,9 +602,13 @@ Ak chcete pokračovať, aktualizujte toto zariadenie na najnovšiu verziu Delta 
     <string name="instant_onboarding_confirm_contact">Chcete vytvoriť nový účet a začať konverzáciu s %1$s?</string>
     <string name="scan_invitation_code">Skenovať kód pozvánky</string>
     <string name="login_title">Prihlásiť sa</string>
+    <!-- deprecated -->
     <string name="login_header">Prihláste sa na server</string>
+    <!-- deprecated -->
     <string name="login_explain">Prihláste sa pomocou existujúceho e-mailového účtu</string>
+    <!-- deprecated -->
     <string name="login_subheader">Pre známych poskytovateľov e-mailov sa automaticky nastavujú ďalšie nastavenia. Niekedy je potrebné v nastaveniach webu povoliť protokol IMAP. Požiadajte o pomoc svojho poskytovateľa e-mailu alebo priateľov</string>
+    <!-- deprecated -->
     <string name="login_no_servers_hint">Neexistujú žiadne servery Delta Chat, vaše dáta zostanú vo vašom zariadení.</string>
     <string name="login_inbox">Doručená pošta</string>
     <string name="login_imap_login">Prihlasovacie meno IMAP</string>
@@ -617,6 +621,7 @@ Ak chcete pokračovať, aktualizujte toto zariadenie na najnovšiu verziu Delta 
     <string name="login_smtp_server">Server SMTP</string>
     <string name="login_smtp_port">Port SMTP</string>
     <string name="login_smtp_security">Zabezpečenie SMTP</string>
+    <!-- deprecated -->
     <string name="login_auth_method">Metóda autorizácie</string>
     <!-- the word "Proxy" might be left untranslated unless the destination language has a well-known term for a "Proxy Server", acting intermediary between the app and the server -->
     <string name="proxy_settings">Proxy</string>
@@ -631,7 +636,9 @@ Ak chcete pokračovať, aktualizujte toto zariadenie na najnovšiu verziu Delta 
     <string name="proxy_use_proxy_confirm">Chcete použiť proxy \"%1$s\"?</string>
     <string name="proxy_share_explain">Vaši priatelia si môžu pridať túto proxy naskenovaním QR kódu.</string>
     <string name="proxy_share_link">Zdieľať odkaz</string>
+    <!-- deprecated -->
     <string name="login_info_oauth2_title">Pokračovať v zjednodušenom nastavovaní?</string>
+    <!-- deprecated -->
     <string name="login_info_oauth2_text">Zadaná e-mailová adresa podporuje zjednodušené nastavenie (OAuth 2.0).\n\nV ďalšom kroku povoľte aplikácii Delta Chat, aby fungovala ako vaša aplikácia Chat cez e-mail.\n\nNie sú k dispozícii servery Delta Chat, vaše dáta zostanú vo vašom zariadení .</string>
     <string name="login_certificate_checks">Osvedčovacie kontroly</string>
     <string name="login_error_mail">Prosím zadajte platnú emailovú adresu</string>
@@ -738,6 +745,7 @@ Ak chcete pokračovať, aktualizujte toto zariadenie na najnovšiu verziu Delta 
     <string name="pref_background_btn_default">Použiť predvolený obrázok</string>
     <string name="pref_background_btn_gallery">Vyberte z galérie</string>
     <string name="pref_imap_folder_warn_disable_defaults">Ak túto možnosť zakážete, uistite sa, že váš server a ostatní klienti sú zodpovedajúcim spôsobom nakonfigurovaní.\n\nV opačnom prípade nemusí fungovať vôbec.</string>
+    <!-- deprecated -->
     <string name="pref_watch_sent_folder">Pozrieť priečinok Odoslané</string>
     <string name="pref_send_copy_to_self">Odoslať kópiu sebe</string>
     <string name="pref_send_copy_to_self_explain">Vyžaduje sa, ak používate tento účet na viacerých zariadeniach.</string>

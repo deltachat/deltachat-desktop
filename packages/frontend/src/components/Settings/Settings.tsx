@@ -207,7 +207,7 @@ export default function Settings({ onClose }: DialogProps) {
       {settingsMode === 'advanced' && (
         <>
           <DialogHeader
-            title={tx('menu_advanced')}
+            title={tx('menu_more_options')}
             onClickBack={() => setSettingsMode('main')}
             onClose={onClose}
             dataTestid='settings-advanced'
