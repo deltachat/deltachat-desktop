@@ -9,6 +9,7 @@ import {
   test,
   createNDummyChats,
   makeDummyContactInviteLink,
+  selectChat as selectChatByName,
 } from '../playwright-helper'
 
 test.describe.configure({ mode: 'serial' })
@@ -28,8 +29,9 @@ let textarea: Locator
 let composerSection: Locator
 let composerReply: Locator
 const numDummyChats = 3
-const getChat = (chatNum: number) =>
-  chatList.getByRole('tab', { name: `Some chat ${chatNum}` })
+const getChatName = (chatNum: number) => `Some chat ${chatNum}`
+const selectChat = (chatNum: number) =>
+  selectChatByName(page, getChatName(chatNum))
 
 test.beforeAll(async ({ browser, isChatmail }) => {
   const contextForProfileCreation = await browser.newContext()
@@ -83,7 +85,7 @@ async function testDraftIsEmpty() {
 
 test.afterEach(async () => {
   for (let i = 1; i <= numDummyChats; i++) {
-    await getChat(i).click()
+    await selectChat(i)
     // Just send a/the message to make sure the draft is cleared.
     // In case the draft is actually empty already, type some text.
     await textarea.fill('dummy message to clear draft')
@@ -114,7 +116,7 @@ async function typeText(text: string) {
 }
 
 test("doesn't send the same message twice on multiple clicks", async () => {
-  await getChat(1).click()
+  await selectChat(1)
   const messageText = `somee messageee foo ${Math.random()}`
   await textarea.fill(messageText)
 
@@ -212,15 +214,14 @@ test.describe('draft', () => {
   }
 
   async function testSavesText(text: string, targetChatNum: number = 1) {
-    const targetChat = getChat(targetChatNum)
-    const someOtherChat = getChat(targetChatNum === 1 ? 2 : 1)
-    await targetChat.click()
+    const someOtherChatNum = targetChatNum === 1 ? 2 : 1
+    await selectChat(targetChatNum)
 
     await typeText(text)
     // Note that we want to switch to another chat _immediately_ after typing,
     // in order to make sure that the last input character doesn't get lost.
     // See e.g. https://github.com/deltachat/deltachat-desktop/issues/3733.
-    await someOtherChat.click()
+    await selectChat(someOtherChatNum)
 
     // Shouldn't take long to clear the value.
     await expect(textarea).toBeEmpty({ timeout: 300 })
@@ -229,7 +230,7 @@ test.describe('draft', () => {
     // `ChatlistItemChanged` race. TODO.
     // await expect(targetChat).toContainText(`Draft: ${text}`)
 
-    await targetChat.click()
+    await selectChat(targetChatNum)
     await expect(textarea).toHaveText(text)
   }
 
@@ -237,15 +238,14 @@ test.describe('draft', () => {
     messageTextStart: string = 'some messageeeeeee ',
     targetChatNum: number = 1
   ) {
-    const targetChat = getChat(targetChatNum)
-    const someOtherChat = getChat(targetChatNum === 1 ? 2 : 1)
-    await targetChat.click()
+    const someOtherChatNum = targetChatNum === 1 ? 2 : 1
+    await selectChat(targetChatNum)
 
     const messageText = `${messageTextStart}${Math.random()}`
     await sendMessageAndSetAsQuote(messageText)
     await testDraftHasQuote(messageText)
 
-    await someOtherChat.click()
+    await selectChat(someOtherChatNum)
     await expect(composerSection).not.toContainText(messageText, {
       timeout: 300,
     })
@@ -255,22 +255,21 @@ test.describe('draft', () => {
     // `ChatlistItemChanged` race. TODO.
     // await expect(targetChat).toContainText(`Draft: Reply`)
 
-    await targetChat.click()
+    await selectChat(targetChatNum)
     await testDraftHasQuote(messageText)
   }
 
   async function testSavesFile(targetChatNum: number = 1) {
-    const targetChat = getChat(targetChatNum)
-    const someOtherChat = getChat(targetChatNum === 1 ? 2 : 1)
-    await targetChat.click()
+    const someOtherChatNum = targetChatNum === 1 ? 2 : 1
+    await selectChat(targetChatNum)
 
     await attachFile()
     await testDraftHasFile()
 
-    await someOtherChat.click()
+    await selectChat(someOtherChatNum)
     await testDraftIsEmpty()
 
-    await targetChat.click()
+    await selectChat(targetChatNum)
     await testDraftHasFile()
   }
 
@@ -332,7 +331,7 @@ test.describe('draft', () => {
     await testSavesQuote(quoteMessageText, chatNum)
     await testSavesText(draftText, chatNum)
 
-    await getChat(chatNum).click()
+    await selectChat(chatNum)
     await expect(textarea).toHaveText(draftText)
     await testDraftHasQuote(quoteMessageText)
 
@@ -357,7 +356,7 @@ test.describe('draft', () => {
   // FYI there are more of such "prepare draft" functions,
   // see `useCreateDraftMessage`.
   test("bot command click doesn't override draft", async () => {
-    await getChat(1).click()
+    await selectChat(1)
     await textarea.fill('Try /someBotCommand')
     await textarea.press('ControlOrMeta+Enter')
     const commandSuggestion = page.getByRole('link', {
@@ -389,9 +388,9 @@ test.describe('draft', () => {
     await testDraftHasFile()
     await expect(textarea).toBeEmpty()
 
-    await getChat(2).click()
+    await selectChat(2)
     await expect(textarea).toBeEmpty()
-    await getChat(1).click()
+    await selectChat(1)
     await clickCommandAndCancel()
     await testDraftHasFile()
     await expect(textarea).toBeEmpty()
@@ -449,7 +448,7 @@ test.describe('draft', () => {
       await expect(replaceDraftDialog).not.toBeVisible()
     }
 
-    await getChat(1).click()
+    await selectChat(1)
     await attachFile()
     const somePriorDraftText = 'Some prior draft text' + Math.random()
     await textarea.fill(somePriorDraftText)
@@ -467,9 +466,9 @@ test.describe('draft', () => {
     await tryShareProfileAndCancel()
     await expect(textarea).toHaveText(somePriorDraftText)
 
-    await getChat(2).click()
+    await selectChat(2)
     await expect(textarea).toBeEmpty()
-    await getChat(1).click()
+    await selectChat(1)
     await tryShareProfileAndCancel()
     await expect(textarea).toHaveText(somePriorDraftText)
 

@@ -412,6 +412,37 @@ export async function createNDummyChats(
   )
 }
 
+export async function selectChat(
+  page: Page,
+  chatName: string,
+  options?: { dontWaitForLoaded?: boolean }
+) {
+  const chatList = page.getByLabel('Chats').getByRole('tablist')
+  await chatList.getByRole('tab', { name: chatName }).click()
+
+  if (options?.dontWaitForLoaded) {
+    return
+  }
+
+  // Waiting for the chat to get loaded is useful to avoid the tests
+  // trying to do something in the previous chat without
+  // while the new one is being loaded, e.g. filling the textarea.
+  //
+  // We should probably consider making sure that the old chat
+  // cannot be interacted with anymore when we have initiated chat switching.
+  // For example, by disabling the composer, or applying `aria-busy`.
+  // When we have done that, we can remove this code.
+  await expect(chatList.getByRole('tab', { selected: true })).toContainText(
+    chatName
+  )
+  await expect(
+    page
+      .getByRole('region', { name: /chat(?!s)/i })
+      .filter({ has: page.getByRole('list', { name: 'Messages' }) })
+      .getByRole('heading')
+  ).toContainText(chatName)
+}
+
 /**
  * Create a profile from an invite link and start a chat
  * based on that link
