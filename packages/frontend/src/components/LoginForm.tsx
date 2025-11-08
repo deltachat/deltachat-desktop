@@ -12,7 +12,6 @@ import { I18nContext } from '../contexts/I18nContext'
 const log = getLogger('renderer/loginForm')
 
 import type { Credentials } from './Settings/DefaultCredentials'
-import { useSettingsStore } from '../stores/settings'
 
 const Socket = {
   automatic: 'automatic',
@@ -37,8 +36,6 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
   const [providerInfo, setProviderInfo] = useState<
     Type.ProviderInfo | undefined
   >()
-  const settingsStore = useSettingsStore()[0]
-  const isChatmail = settingsStore?.settings.is_chatmail === '1'
 
   const handleCredentialsChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -148,7 +145,7 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
             </div>
           )}
 
-          {!isChatmail && <p className='text'>{tx('login_advanced_hint')}</p>}
+          <p className='text'>{tx('login_advanced_hint')}</p>
           <button
             className='advanced'
             aria-controls='advanced-collapse'
