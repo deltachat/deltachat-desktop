@@ -191,7 +191,8 @@ export function useThreeDotMenu(selectedChat?: T.FullChat) {
           action: onBlockContact,
         },
       isGroup &&
-        selfInGroup && {
+        selfInGroup &&
+        !selectedChat.isContactRequest && {
           label: tx('menu_leave_group'),
           action: onLeaveGroup,
         },

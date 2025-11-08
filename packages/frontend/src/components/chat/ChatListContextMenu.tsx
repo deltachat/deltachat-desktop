@@ -326,7 +326,8 @@ export function useChatListContextMenu(): {
         singleChat &&
           isGroup &&
           singleChat.isEncrypted &&
-          singleChat.isSelfInGroup && {
+          singleChat.isSelfInGroup &&
+          !singleChat.isContactRequest && {
             label: tx('menu_leave_group'),
             action: () => onLeaveGroupOrChannel(singleChat),
           },
