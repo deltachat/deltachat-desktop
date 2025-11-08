@@ -750,55 +750,14 @@ type CreateBroadcastListProps = {
 }
 
 function CreateBroadcastList(props: CreateBroadcastListProps) {
-  const { openDialog } = useDialog()
   const { setViewMode, onClose } = props
   const tx = useTranslationFunction()
-  const accountId = selectedAccountId()
 
   const [broadcastName, setBroadcastName] = useState<string>('')
-  const [broadcastRecipients, removeBroadcastRecipient, addBroadcastRecipient] =
-    useGroupMembers([])
-  const finishCreateBroadcast = useCreateBroadcast(
-    broadcastRecipients,
-    broadcastName,
-    onClose
-  )
-
-  const groupMemberContactListWrapperRef = useRef<HTMLDivElement>(null)
-
-  const recipientsFetch = useRpcFetch(BackendRemote.rpc.getContactsByIds, [
-    accountId,
-    broadcastRecipients,
-  ])
-  // Using `lingeringResult` in order to not be jumpy when removing recipients.
-  const recipientsResult = recipientsFetch.lingeringResult
-  const broadcastContacts = useMemo(
-    () =>
-      recipientsResult?.ok
-        ? broadcastRecipients
-            .map(id => recipientsResult.value[id] ?? null)
-            // In case the new contacts have not loaded yet.
-            .filter(c => c != null)
-        : [],
-    [broadcastRecipients, recipientsResult]
-  )
+  const finishCreateBroadcast = useCreateBroadcast(broadcastName, onClose)
 
   const [errorMissingChatName, setErrorMissingChatName] =
     useState<boolean>(false)
-
-  const showAddMemberDialog = () => {
-    const listFlags = C.DC_GCL_ADD_SELF
-
-    openDialog(AddMemberDialog, {
-      listFlags,
-      groupMembers: broadcastRecipients,
-      onOk: (recipients: number[]) =>
-        recipients.forEach(contactId =>
-          addBroadcastRecipient({ id: contactId })
-        ),
-      titleMembersOrRecipients: 'recipients',
-    })
-  }
 
   return (
     <>
@@ -816,40 +775,6 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
             setErrorMissingChatName={setErrorMissingChatName}
             groupType={GroupType.BROADCAST_LIST}
           />
-          <br />
-          {broadcastRecipients.length > 0 && (
-            <div
-              id='create-broadcast-list-recipients-title'
-              className='group-separator'
-            >
-              {tx('n_recipients', broadcastRecipients.length.toString(), {
-                quantity: broadcastRecipients.length,
-              })}
-            </div>
-          )}
-          <div
-            className='group-member-contact-list-wrapper'
-            ref={groupMemberContactListWrapperRef}
-          >
-            <RovingTabindexProvider
-              wrapperElementRef={groupMemberContactListWrapperRef}
-            >
-              <PseudoListItemAddMember
-                onClick={showAddMemberDialog}
-                labelMembersOrRecipients='recipients'
-              />
-              <ContactList
-                contacts={broadcastContacts}
-                showRemove
-                onRemoveClick={c => {
-                  removeBroadcastRecipient(c)
-                }}
-                olElementAttrs={{
-                  'aria-labelledby': 'create-broadcast-list-recipients-title',
-                }}
-              />
-            </RovingTabindexProvider>
-          </div>
         </DialogContent>
       </DialogBody>
       <DialogFooter>
@@ -1043,7 +968,6 @@ function useCreateGroup<
 }
 
 const useCreateBroadcast = (
-  broadcastRecipients: number[],
   groupName: string,
   onClose: DialogProps['onClose']
 ) => {
@@ -1052,15 +976,6 @@ const useCreateBroadcast = (
 
   const createBroadcastList = async () => {
     const chatId = await BackendRemote.rpc.createBroadcast(accountId, groupName)
-
-    await Promise.all(
-      broadcastRecipients.map(contactId => {
-        if (contactId === C.DC_CONTACT_ID_SELF) {
-          return
-        }
-        return BackendRemote.rpc.addContactToChat(accountId, chatId, contactId)
-      })
-    )
 
     await BackendRemote.rpc.setChatName(accountId, chatId, groupName)
 

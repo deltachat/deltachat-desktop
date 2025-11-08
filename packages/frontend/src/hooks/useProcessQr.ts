@@ -25,6 +25,7 @@ const ALLOWED_QR_CODES_ON_WELCOME_SCREEN: T.Qr['kind'][] = [
   'account',
   'askVerifyContact',
   'askVerifyGroup',
+  'askJoinBroadcast',
   'backup2',
   'login',
   'text',
@@ -61,7 +62,7 @@ export default function useProcessQR() {
 
   const openMailtoLink = useOpenMailtoLink()
   const { startInstantOnboardingFlow } = useInstantOnboarding()
-  const { secureJoinGroup, secureJoinContact } = useSecureJoin()
+  const { secureJoin } = useSecureJoin()
 
   const settingsStore = useSettingsStore()[0]
   const isChatmail = settingsStore?.settings.is_chatmail === '1'
@@ -136,6 +137,16 @@ export default function useProcessQR() {
         if (!userConfirmed) {
           return
         }
+      } else if (qr.kind === 'askJoinBroadcast') {
+        const userConfirmed = await openConfirmationDialog({
+          message: tx('instant_onboarding_confirm_channel', qr.name),
+          confirmLabel: tx('ok'),
+          dataTestid: 'ask-create-profile-and-join-channel',
+        })
+
+        if (!userConfirmed) {
+          return
+        }
       }
 
       await startInstantOnboardingFlow(qrWithUrl)
@@ -172,9 +183,13 @@ export default function useProcessQR() {
         (scanContext === SCAN_CONTEXT_TYPE.TRANSFER_BACKUP &&
           qr.kind !== 'backup2') ||
         (scanContext === SCAN_CONTEXT_TYPE.OTHER_SERVER &&
-          !['account', 'login', 'askVerifyGroup', 'askVerifyContact'].includes(
-            qr.kind
-          ))
+          ![
+            'account',
+            'login',
+            'askVerifyGroup',
+            'askVerifyContact',
+            'askJoinBroadcast',
+          ].includes(qr.kind))
       ) {
         await openAlertDialog({
           message: tx('qraccount_qr_code_cannot_be_used'),
@@ -279,44 +294,29 @@ export default function useProcessQR() {
       }
 
       /**
-       * DC_ASK_VERIFYCONTACT
+       * handle invite links for contacts, groups and channels
        *
-       * typically based on an invite link (parsed from QR code)
+       * DC_ASK_VERIFYCONTACT, DC_ASK_VERIFYGROUP, DC_ASK_JOIN_BROADCAST
+       *
        * see https://securejoin.readthedocs.io/en/latest/new.html#setup-contact-protocol
        *
-       * the parsed QR code also includes a local contact_id which is used to
-       * initiate the chat with this contact after onboarding
-       *
        * Before creating an account the user will be asked if he agrees to
-       * create a new account and start chatting with the given contact
+       * create a new account and join the contact chat, group or channel
        */
-      if (qr.kind === 'askVerifyContact') {
+      if (
+        ['askVerifyContact', 'askVerifyGroup', 'askJoinBroadcast'].includes(
+          qr.kind
+        )
+      ) {
         if (!isLoggedIn) {
           // Ask user to create a new account with instant onboarding flow before they
-          // can start chatting with the given contact
-          await startInstantOnboarding(accountId, { ...parsed, qr })
+          // can enter the secure join flow
+          await startInstantOnboarding(accountId, {
+            ...parsed,
+            qr,
+          } as WelcomeQrWithUrl)
         } else {
-          const chatId = await secureJoinContact(accountId, { ...parsed, qr })
-          if (chatId) {
-            selectChat(accountId, chatId)
-          }
-        }
-        return callback?.()
-      }
-
-      /**
-       * DC_ASK_VERIFYGROUP
-       *
-       * similar to DC_ASK_VERIFYCONTACT but for groups
-       *
-       */
-      if (qr.kind === 'askVerifyGroup') {
-        if (!isLoggedIn) {
-          // Ask user to create a new account with instant onboarding flow before they
-          // can join the given group
-          await startInstantOnboarding(accountId, { ...parsed, qr })
-        } else {
-          const chatId = await secureJoinGroup(accountId, { ...parsed, qr })
+          const chatId = await secureJoin(accountId, { ...parsed, qr })
           if (chatId) {
             selectChat(accountId, chatId)
           }
@@ -484,8 +484,7 @@ export default function useProcessQR() {
       openConfirmationDialog,
       openDialog,
       openMailtoLink,
-      secureJoinContact,
-      secureJoinGroup,
+      secureJoin,
       processQrCode,
       startInstantOnboarding,
       addAndSelectAccount,

@@ -11,6 +11,7 @@ import type { WelcomeQrWithUrl } from '../contexts/InstantOnboardingContext'
 import type {
   AccountQr,
   LoginQr,
+  JoinBroadcastQr,
   VerifyContactQr,
   VerifyGroupQr,
 } from '../backend/qr'
@@ -36,7 +37,7 @@ type InstantOnboarding = {
 export default function useInstantOnboarding(): InstantOnboarding {
   const context = useContext(InstantOnboardingContext)
   const { openDialog } = useDialog()
-  const { secureJoinContact, secureJoinGroup } = useSecureJoin()
+  const { secureJoin } = useSecureJoin()
 
   if (!context) {
     throw new Error(
@@ -93,7 +94,8 @@ export default function useInstantOnboarding(): InstantOnboarding {
           configurationQR = welcomeQr.url
         } else {
           // Exhaustivity check, these QR codes just use default configurationQR
-          const _: VerifyContactQr | VerifyGroupQr | never = welcomeQr.qr
+          const _: VerifyContactQr | VerifyGroupQr | JoinBroadcastQr | never =
+            welcomeQr.qr
         }
       }
 
@@ -113,14 +115,12 @@ export default function useInstantOnboarding(): InstantOnboarding {
               // If the QR code included a contact or group to join, we continue with this now
               let chatId: number | null = null
               if (welcomeQr) {
-                if (welcomeQr.qr.kind === 'askVerifyContact') {
-                  chatId = await secureJoinContact(
-                    accountId,
-                    { ...welcomeQr, qr: welcomeQr.qr },
-                    true
-                  )
-                } else if (welcomeQr.qr.kind === 'askVerifyGroup') {
-                  chatId = await secureJoinGroup(
+                if (
+                  welcomeQr.qr.kind === 'askVerifyContact' ||
+                  welcomeQr.qr.kind === 'askVerifyGroup' ||
+                  welcomeQr.qr.kind === 'askJoinBroadcast'
+                ) {
+                  chatId = await secureJoin(
                     accountId,
                     { ...welcomeQr, qr: welcomeQr.qr },
                     true
@@ -143,7 +143,7 @@ export default function useInstantOnboarding(): InstantOnboarding {
         })
       })
     },
-    [openDialog, secureJoinContact, secureJoinGroup, welcomeQr]
+    [openDialog, secureJoin, welcomeQr]
   )
 
   const resetInstantOnboarding = () => {
