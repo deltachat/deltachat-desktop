@@ -210,8 +210,8 @@ $scrollbarTransparency: 0.34 !default;
   --fullScreenMediaButtons: #8b8e91;
   --messageHightlightColor: rgba(66, 165, 245, 0.8);
   --addMemberChipBackgroundColor: #{$bgSecondary};
-  --searchInputBackgroundColor: #52768700;
-  --galleryWebxdcItem: #{changeContrast($bgPrimary, 10%)};
+  --searchInputBackgroundColor: ##666
+    --galleryWebxdcItem: #{changeContrast($bgPrimary, 10%)};
   --galleryFileRowHover: #{changeContrast($bgPrimary, 7%)};
   --recently-seen-indicator-color: #34c759;
 

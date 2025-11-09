@@ -231,7 +231,6 @@ export default function MainScreen({ accountId }: Props) {
     SettingsStoreInstance.effect.load()
   }, [])
 
-  const onClickThreeDotMenu = useThreeDotMenu(chatWithLinger)
   const isSearchActive = queryStr.length > 0 || queryChatId !== null
   const showArchivedChats = !isSearchActive && archivedChatsSelected
 
@@ -275,7 +274,7 @@ export default function MainScreen({ accountId }: Props) {
                   <Icon icon='arrow-left' className='backButtonIcon'></Icon>
                 </Button>
               </span>
-              <div className={styles.archivedChatsTitle} data-no-drag-region>
+              <div className={styles.archivedChatsTitle}>
                 {tx('chat_archived_chats_title')}
               </div>
             </>
@@ -328,30 +327,6 @@ export default function MainScreen({ accountId }: Props) {
           </div>
           {chatWithLinger && (
             <ChatNavButtons chat={chatWithLinger} lastUsedApps={lastUsedApps} />
-          )}
-          {chatWithLinger && (
-            <span
-              style={{
-                marginLeft: 0,
-                marginRight: '3px',
-              }}
-              data-no-drag-region
-            >
-              <Button
-                id='three-dot-menu-button'
-                className='navbar-button'
-                aria-label={tx('main_menu')}
-                onClick={onClickThreeDotMenu}
-                styling='borderless'
-              >
-                <Icon
-                  coloring='navbar'
-                  icon='more'
-                  className='rotate90'
-                  size={24}
-                />
-              </Button>
-            </span>
           )}
         </nav>
         <MessageListView accountId={accountId} />
@@ -517,6 +492,7 @@ function ChatNavButtons({
   lastUsedApps: T.Message[]
 }) {
   const tx = useTranslationFunction()
+  const onClickThreeDotMenu = useThreeDotMenu(chat)
   const chatId = chat.id
   const settingsStore = useSettingsStore()[0]
   const { openDialog } = useDialog()
@@ -528,55 +504,62 @@ function ChatNavButtons({
   }, [openDialog, chatId])
 
   return (
-    <>
-      <span className='views' data-no-drag-region>
-        {lastUsedApps && lastUsedApps.length > 0 && (
-          <AppIcons accountId={selectedAccountId()} apps={lastUsedApps} />
-        )}
+    <div className='views' data-no-drag-region>
+      {lastUsedApps && lastUsedApps.length > 0 && (
+        <AppIcons accountId={selectedAccountId()} apps={lastUsedApps} />
+      )}
+      <Button
+        onClick={openMediaViewDialog}
+        aria-label={tx('apps_and_media')}
+        title={tx('apps_and_media')}
+        className='navbar-button'
+        styling='borderless'
+      >
+        <Icon coloring='navbar' icon='apps' size={18} />
+      </Button>
+      {settingsStore?.desktopSettings.enableOnDemandLocationStreaming && (
         <Button
-          onClick={openMediaViewDialog}
-          aria-label={tx('apps_and_media')}
-          title={tx('apps_and_media')}
+          onClick={() => openMapWebxdc(selectedAccountId(), chatId)}
+          aria-label={tx('tab_map')}
           className='navbar-button'
           styling='borderless'
+          title={tx('tab_map')}
         >
-          <Icon coloring='navbar' icon='apps' size={18} />
+          <Icon coloring='navbar' icon='map' size={18} />
         </Button>
-        {settingsStore?.desktopSettings.enableOnDemandLocationStreaming && (
+      )}
+      {/* Note that the `enableAVCallsV2` setting itself is hidden
+        on unsupported targets (Tauri, Browser). */}
+      {settingsStore?.desktopSettings.enableAVCallsV2 &&
+        chat.canSend &&
+        chat.isEncrypted &&
+        // Core only allows placing calls in chats of type "single"
+        // (but not e.g. in groups consisting of 2 members).
+        // https://github.com/chatmail/core/blob/738dc5ce197f589131479801db2fbd0fb0964599/src/calls.rs#L147
+        chat.chatType === C.DC_CHAT_TYPE_SINGLE &&
+        chat.contactIds.some(id => id > C.DC_CONTACT_ID_LAST_SPECIAL) && (
           <Button
-            onClick={() => openMapWebxdc(selectedAccountId(), chatId)}
-            aria-label={tx('tab_map')}
+            aria-label={tx('start_call')}
+            title={tx('start_call')}
             className='navbar-button'
             styling='borderless'
-            title={tx('tab_map')}
+            onClick={() => {
+              runtime.startOutgoingVideoCall(selectedAccountId(), chat.id)
+            }}
           >
-            <Icon coloring='navbar' icon='map' size={18} />
+            <Icon coloring='navbar' icon='phone' size={18} />
           </Button>
         )}
-        {/* Note that the `enableAVCallsV2` setting itself is hidden
-        on unsupported targets (Tauri, Browser). */}
-        {settingsStore?.desktopSettings.enableAVCallsV2 &&
-          chat.canSend &&
-          chat.isEncrypted &&
-          // Core only allows placing calls in chats of type "single"
-          // (but not e.g. in groups consisting of 2 members).
-          // https://github.com/chatmail/core/blob/738dc5ce197f589131479801db2fbd0fb0964599/src/calls.rs#L147
-          chat.chatType === C.DC_CHAT_TYPE_SINGLE &&
-          chat.contactIds.some(id => id > C.DC_CONTACT_ID_LAST_SPECIAL) && (
-            <Button
-              aria-label={tx('start_call')}
-              title={tx('start_call')}
-              className='navbar-button'
-              styling='borderless'
-              onClick={() => {
-                runtime.startOutgoingVideoCall(selectedAccountId(), chat.id)
-              }}
-            >
-              <Icon coloring='navbar' icon='phone' size={18} />
-            </Button>
-          )}
-      </span>
-    </>
+      <Button
+        id='three-dot-menu-button'
+        className='navbar-button'
+        aria-label={tx('main_menu')}
+        onClick={onClickThreeDotMenu}
+        styling='borderless'
+      >
+        <Icon coloring='navbar' icon='more' className='rotate90' size={24} />
+      </Button>
+    </div>
   )
 }
 
