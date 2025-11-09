@@ -108,6 +108,8 @@ async function typeText(text: string) {
   // We might disable the textarea while we're loading the draft.
   await expect(textarea).not.toBeDisabled()
 
+  await textarea.focus()
+
   await textarea.pressSequentially(text, { delay: 50 })
 
   // Seems to be necessary, otherwise it's flaky.
