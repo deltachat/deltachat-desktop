@@ -375,7 +375,7 @@ test.describe('draft', () => {
 
     const somePriorDraftText =
       'Draft text before bot command has been clicked' + Math.random()
-    await textarea.fill(somePriorDraftText)
+    await typeText(somePriorDraftText)
     await clickCommandAndCancel()
     await expect(textarea).toHaveText(somePriorDraftText)
 
@@ -451,7 +451,7 @@ test.describe('draft', () => {
     await selectChat(1)
     await attachFile()
     const somePriorDraftText = 'Some prior draft text' + Math.random()
-    await textarea.fill(somePriorDraftText)
+    await typeText(somePriorDraftText)
     await tryShareProfileAndCancel()
     const myName = 'Alice'
     await expect(
