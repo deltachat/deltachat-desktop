@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import Icon from '../../Icon'
 
@@ -10,12 +10,19 @@ type Props = {
   id: string
   inputRef?: React.ClassAttributes<HTMLInputElement>['ref']
   onClear?: () => void
+  onCollapse?: () => void
 }
 
 export default function GroupSearchInput(props: Props) {
   const tx = useTranslationFunction()
-  const { onChange, value, id, onClear } = props
+  const { onChange, value, id, onClear, onCollapse } = props
   const [debouncedValue, setDebouncedValue] = useState(value)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  // Focus input on mount
+  useEffect(() => {
+    inputRef.current?.focus()
+  }, [])
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -39,6 +46,10 @@ export default function GroupSearchInput(props: Props) {
     onClear?.()
   }, [onClear])
 
+  const handleCollapse = useCallback(() => {
+    onCollapse?.()
+  }, [onCollapse])
+
   const hasValue = value.length > 0
 
   return (
@@ -52,7 +63,7 @@ export default function GroupSearchInput(props: Props) {
         value={debouncedValue}
         className={styles.searchInput}
         data-no-drag-region
-        ref={props.inputRef}
+        ref={inputRef}
         spellCheck={false}
       />
       {hasValue && (
@@ -61,6 +72,20 @@ export default function GroupSearchInput(props: Props) {
           className={styles.searchInputButton}
           data-no-drag-region
           onClick={handleClear}
+        >
+          <Icon
+            className={styles.searchInputButtonIcon}
+            icon='cross'
+            size={20}
+          />
+        </button>
+      )}
+      {!hasValue && (
+        <button
+          aria-label={tx('close')}
+          className={styles.searchInputButton}
+          data-no-drag-region
+          onClick={handleCollapse}
         >
           <Icon
             className={styles.searchInputButtonIcon}

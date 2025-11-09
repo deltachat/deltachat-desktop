@@ -42,6 +42,7 @@ import { copyToBlobDir } from '../../utils/copyToBlobDir'
 import AlertDialog from './AlertDialog'
 import { unknownErrorToString } from '../helpers/unknownErrorToString'
 import { getLogger } from '@deltachat-desktop/shared/logger'
+import Icon from '../Icon'
 const log = getLogger('ViewGroup')
 
 /**
@@ -218,6 +219,8 @@ function ViewGroupInner(
   const relatedChatsListWrapperRef = useRef<HTMLDivElement>(null)
 
   const [memberFilter, setMemberFilter] = useState('')
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false)
+  const [isRelatedChatsExpanded, setIsRelatedChatsExpanded] = useState(true)
 
   const {
     group,
@@ -406,63 +409,141 @@ function ViewGroupInner(
                 <div
                   id='view-group-related-chats-title'
                   className='group-separator'
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    cursor: 'pointer',
+                  }}
+                  onClick={() =>
+                    setIsRelatedChatsExpanded(!isRelatedChatsExpanded)
+                  }
                 >
-                  {tx('related_chats')}
-                </div>
-                <div
-                  ref={relatedChatsListWrapperRef}
-                  className='group-related-chats-list-wrapper'
-                >
-                  <RovingTabindexProvider
-                    wrapperElementRef={relatedChatsListWrapperRef}
+                  <span style={{ flex: 1 }}>{tx('related_chats')}</span>
+                  <button
+                    aria-label={tx('related_chats')}
+                    aria-expanded={isRelatedChatsExpanded}
+                    style={{
+                      alignItems: 'center',
+                      backgroundColor: 'transparent',
+                      border: 0,
+                      display: 'flex',
+                      height: '30px',
+                      justifyContent: 'center',
+                      padding: 0,
+                      minWidth: '30px',
+                      cursor: 'pointer',
+                      borderRadius: '10px',
+                      transform: isRelatedChatsExpanded
+                        ? 'rotate(90deg)'
+                        : 'rotate(0deg)',
+                      transition: 'transform 0.2s ease',
+                    }}
+                    data-no-drag-region
+                    onMouseEnter={e => {
+                      e.currentTarget.style.backgroundColor =
+                        'var(--navBarButtonHover)'
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.backgroundColor = 'transparent'
+                    }}
                   >
-                    <ChatListPart
-                      olElementAttrs={{
-                        'aria-labelledby': 'view-group-related-chats-title',
-                      }}
-                      isRowLoaded={isChatLoaded}
-                      loadMoreRows={loadChats}
-                      rowCount={chatListIds.length}
-                      width={'100%'}
-                      height={CHATLISTITEM_CHAT_HEIGHT * chatListIds.length}
-                      itemKey={index => 'key' + chatListIds[index]}
-                      itemHeight={CHATLISTITEM_CHAT_HEIGHT}
-                      itemData={{
-                        chatCache,
-                        chatListIds,
-                        onChatClick,
-
-                        activeChatId: null,
-                        activeContextMenuChatIds: [],
-                        openContextMenu: async () => {},
-                      }}
-                    >
-                      {ChatListItemRowChat}
-                    </ChatListPart>
-                  </RovingTabindexProvider>
+                    <Icon icon='chevron-right' size={20} />
+                  </button>
                 </div>
+                {isRelatedChatsExpanded && (
+                  <div
+                    ref={relatedChatsListWrapperRef}
+                    className='group-related-chats-list-wrapper'
+                  >
+                    <RovingTabindexProvider
+                      wrapperElementRef={relatedChatsListWrapperRef}
+                    >
+                      <ChatListPart
+                        olElementAttrs={{
+                          'aria-labelledby': 'view-group-related-chats-title',
+                        }}
+                        isRowLoaded={isChatLoaded}
+                        loadMoreRows={loadChats}
+                        rowCount={chatListIds.length}
+                        width={'100%'}
+                        height={CHATLISTITEM_CHAT_HEIGHT * chatListIds.length}
+                        itemKey={index => 'key' + chatListIds[index]}
+                        itemHeight={CHATLISTITEM_CHAT_HEIGHT}
+                        itemData={{
+                          chatCache,
+                          chatListIds,
+                          onChatClick,
+
+                          activeChatId: null,
+                          activeContextMenuChatIds: [],
+                          openContextMenu: async () => {},
+                        }}
+                      >
+                        {ChatListItemRowChat}
+                      </ChatListPart>
+                    </RovingTabindexProvider>
+                  </div>
+                )}
               </>
             )}
             <div
               id='view-group-members-recipients-title'
               className='group-separator'
+              style={{ display: 'flex', alignItems: 'center' }}
             >
-              {!isBroadcast
-                ? tx('n_members', group.contactIds.length.toString(), {
-                    quantity: group.contactIds.length,
-                  })
-                : tx('n_recipients', group.contactIds.length.toString(), {
-                    quantity: group.contactIds.length,
-                  })}
+              <span style={{ flex: 1 }}>
+                {!isBroadcast
+                  ? tx('n_members', group.contactIds.length.toString(), {
+                      quantity: group.contactIds.length,
+                    })
+                  : tx('n_recipients', group.contactIds.length.toString(), {
+                      quantity: group.contactIds.length,
+                    })}
+              </span>
+              <button
+                aria-label={tx('search')}
+                style={{
+                  alignItems: 'center',
+                  backgroundColor: 'transparent',
+                  border: 0,
+                  display: 'flex',
+                  height: '30px',
+                  justifyContent: 'center',
+                  padding: 0,
+                  minWidth: '30px',
+                  cursor: 'pointer',
+                  borderRadius: '10px',
+                }}
+                data-no-drag-region
+                onClick={() => {
+                  setIsSearchExpanded(true)
+                  setIsRelatedChatsExpanded(false)
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.backgroundColor =
+                    'var(--navBarButtonHover)'
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.backgroundColor = 'transparent'
+                }}
+              >
+                <Icon icon='search' size={20} />
+              </button>
             </div>
-            <div className='group-member-filter'>
-              <GroupSearchInput
-                id='group-member-filter'
-                onChange={value => setMemberFilter(value)}
-                value={memberFilter}
-                onClear={() => setMemberFilter('')}
-              />
-            </div>
+            {isSearchExpanded && (
+              <div className='group-member-filter'>
+                <GroupSearchInput
+                  id='group-member-filter'
+                  onChange={value => setMemberFilter(value)}
+                  value={memberFilter}
+                  onClear={() => setMemberFilter('')}
+                  onCollapse={() => {
+                    setIsSearchExpanded(false)
+                    setMemberFilter('')
+                  }}
+                />
+              </div>
+            )}
             <div
               className='group-member-contact-list-wrapper'
               ref={groupMemberContactListWrapperRef}
@@ -470,7 +551,7 @@ function ViewGroupInner(
               <RovingTabindexProvider
                 wrapperElementRef={groupMemberContactListWrapperRef}
               >
-                {!chatDisabled && group.isEncrypted && (
+                {!chatDisabled && group.isEncrypted && !memberFilter && (
                   <>
                     {!isBroadcast && (
                       <PseudoListItemAddMember

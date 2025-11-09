@@ -13,13 +13,13 @@ $closeButtonSize: 30px;
   background-color: var(--searchInputBackgroundColor);
   border-radius: $borderRadius;
   border: 10px;
-  margin: 10px;
+  margin: 10px 0;
   caret-color: var(--navBarText);
   color: var(--navBarText);
   flex: 1;
   font-size: 14px;
   height: $closeButtonSize;
-  padding: 10px;
+  padding: 10px 0;
   width: 100%;
   outline: none;
 

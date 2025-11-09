@@ -38,6 +38,7 @@ export type IconName =
   | 'qr'
   | 'question_mark'
   | 'reaction'
+  | 'search'
   | 'sell'
   | 'settings'
   | 'swap_vert'
