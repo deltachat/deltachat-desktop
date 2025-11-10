@@ -409,34 +409,21 @@ function ViewGroupInner(
               <>
                 <div
                   id='view-group-related-chats-title'
-                  className='group-separator'
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    cursor: 'pointer',
-                  }}
+                  className={`group-separator ${styles.relatedChatsTitle}`}
                   onClick={() =>
                     setIsRelatedChatsExpanded(!isRelatedChatsExpanded)
                   }
                 >
-                  <span style={{ flex: 1 }}>{tx('related_chats')}</span>
+                  <span>{tx('related_chats')}</span>
                   <button
                     aria-label={tx('related_chats')}
                     aria-expanded={isRelatedChatsExpanded}
-                    style={{
-                      transform: isRelatedChatsExpanded
-                        ? 'rotate(90deg)'
-                        : 'rotate(0deg)',
-                    }}
-                    className={styles.iconButton}
+                    className={`${styles.iconButton} ${styles.chevronButton} ${
+                      isRelatedChatsExpanded
+                        ? styles.expanded
+                        : styles.collapsed
+                    }`}
                     data-no-drag-region
-                    onMouseEnter={e => {
-                      e.currentTarget.style.backgroundColor =
-                        'var(--navBarButtonHover)'
-                    }}
-                    onMouseLeave={e => {
-                      e.currentTarget.style.backgroundColor = 'transparent'
-                    }}
                   >
                     <Icon icon='chevron-right' size={20} />
                   </button>
@@ -480,9 +467,8 @@ function ViewGroupInner(
             <div
               id='view-group-members-recipients-title'
               className='group-separator'
-              style={{ display: 'flex', alignItems: 'center' }}
             >
-              <span style={{ flex: 1 }}>
+              <span>
                 {!isBroadcast
                   ? tx('n_members', group.contactIds.length.toString(), {
                       quantity: group.contactIds.length,
@@ -499,13 +485,6 @@ function ViewGroupInner(
                   onClick={() => {
                     setIsSearchExpanded(true)
                     setIsRelatedChatsExpanded(false)
-                  }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.backgroundColor =
-                      'var(--navBarButtonHover)'
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.backgroundColor = 'transparent'
                   }}
                 >
                   <Icon icon='search' size={20} />
@@ -696,8 +675,7 @@ export function EditGroupNameDialog({
       <DialogBody>
         <DialogContent>
           <div
-            className='profile-image-username center'
-            style={{ marginBottom: '30px' }}
+            className={`profile-image-username center ${styles.profileImageUsername}`}
           >
             <GroupImageSelector
               groupName={groupName}
@@ -719,15 +697,7 @@ export function EditGroupNameDialog({
             }}
           />
           {groupName === '' && (
-            <p
-              style={{
-                color: 'var(--colorDanger)',
-                marginLeft: '80px',
-                position: 'relative',
-                top: '-10px',
-                marginBottom: '-18px',
-              }}
-            >
+            <p className={styles.errorMessage}>
               {!isBroadcast
                 ? tx('group_please_enter_group_name')
                 : tx('please_enter_channel_name')}
