@@ -366,7 +366,7 @@ function chatSubtitle(chat: Type.FullChat) {
       } else if (chat.isDeviceChat) {
         return tx('device_talk_subtitle')
       }
-      return chat.contacts[0].address
+      return null
     }
   }
   return 'ErrTitle'
