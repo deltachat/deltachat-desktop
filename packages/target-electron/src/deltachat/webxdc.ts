@@ -314,6 +314,12 @@ export default class DCWebxdc {
       // Settings this should make WebRTC always use the proxy.
       // However, since the proxy won't work, this should, in theory,
       // effectively disable WebRTC.
+      // See https://www.rfc-editor.org/rfc/rfc8828#name-modes-and-recommendations
+      // > If the proxy does not support UDP
+      // > (as is the case for all HTTP and most SOCKS [RFC1928] proxies),
+      // > or the WebRTC implementation does not support UDP proxying,
+      // > the use of UDP will be disabled,
+      // > and TCP will be used to send and receive media through the proxy.
       //
       // However, weirdly, this alone seems to disable WebRTC,
       // even without setting a proxy,
