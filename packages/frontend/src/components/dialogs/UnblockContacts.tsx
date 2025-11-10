@@ -52,7 +52,7 @@ export default function UnblockContacts({ onClose }: DialogProps) {
       title={tx('pref_blocked_contacts')}
     >
       <DialogBody>
-        <DialogContent>
+        <DialogContent className='blocked-contacts'>
           {blockedContacts.length === 0 && <p>{tx('blocked_empty_hint')}</p>}
           {blockedContacts.length > 0 && (
             <div ref={wrapperRef}>
