@@ -16,7 +16,8 @@
   white-space: pre-wrap;
 }
 
-.contactAttributes {
+.contactAttributes,
+.contactAttributesBottom {
   margin-top: 15px;
   margin-inline-start: -4px;
   font-size: 1.08em;
@@ -31,6 +32,11 @@
       vertical-align: middle;
     }
   }
+}
+
+.contactAttributesBottom {
+  padding: 10px 15px;
+  margin-top: auto;
 }
 
 .verification {
