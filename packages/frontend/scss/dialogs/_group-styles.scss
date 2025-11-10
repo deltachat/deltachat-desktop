@@ -1,5 +1,11 @@
 @use '../mixins';
 
+.viewGroupDialogBody {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 input.group-name-input {
   background-color: transparent;
   border: 0;
@@ -22,6 +28,7 @@ input.group-name-input {
   padding: 10px 10px 10px 20px;
   margin-bottom: 5px;
   height: 50px;
+  flex-shrink: 0;
   &.no-margin {
     margin: 0px;
   }

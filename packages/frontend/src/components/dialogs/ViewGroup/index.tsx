@@ -2,47 +2,48 @@ import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 import type { T } from '@deltachat/jsonrpc-client'
 
-import { QrCodeShowQrInner } from './QrCode'
-import { useThemeCssVar } from '../../ThemeManager'
-import { ContactList } from '../contact/ContactList'
-import { useLogicVirtualChatList, ChatListPart } from '../chat/ChatList'
+import { QrCodeShowQrInner } from '../QrCode'
+import { useThemeCssVar } from '../../../ThemeManager'
+import { ContactList } from '../../contact/ContactList'
+import { useLogicVirtualChatList, ChatListPart } from '../../chat/ChatList'
 import {
   PseudoListItemShowQrCode,
   PseudoListItemAddMember,
-} from '../helpers/PseudoListItem'
-import ViewProfile from './ViewProfile'
+} from '../../helpers/PseudoListItem'
+import ViewProfile from '../ViewProfile'
 import { avatarInitial } from '@deltachat-desktop/shared/avatarInitial'
-import { shouldDisableClickForFullscreen as shouldDisableFullscreenAvatar } from '../Avatar'
-import { DeltaInput } from '../Login-Styles'
-import { BackendRemote, onDCEvent } from '../../backend-com'
-import GroupSearchInput from './ViewGroup/GroupSearchInput'
-import { selectedAccountId } from '../../ScreenController'
-import { useSettingsStore } from '../../stores/settings'
+import { shouldDisableClickForFullscreen as shouldDisableFullscreenAvatar } from '../../Avatar'
+import { DeltaInput } from '../../Login-Styles'
+import { BackendRemote, onDCEvent } from '../../../backend-com'
+import GroupSearchInput from './GroupSearchInput'
+import { selectedAccountId } from '../../../ScreenController'
+import { useSettingsStore } from '../../../stores/settings'
 import Dialog, {
   DialogBody,
   DialogContent,
   DialogHeader,
   OkCancelFooterAction,
-} from '../Dialog'
-import useChat from '../../hooks/chat/useChat'
-import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
-import useDialog from '../../hooks/dialog/useDialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import { LastUsedSlot } from '../../utils/lastUsedPaths'
-import ProfileInfoHeader from '../ProfileInfoHeader'
-import ImageSelector from '../ImageSelector'
-import { modifyGroup } from '../../backend/group'
+} from '../../Dialog'
+import useChat from '../../../hooks/chat/useChat'
+import useConfirmationDialog from '../../../hooks/dialog/useConfirmationDialog'
+import useDialog from '../../../hooks/dialog/useDialog'
+import useTranslationFunction from '../../../hooks/useTranslationFunction'
+import { LastUsedSlot } from '../../../utils/lastUsedPaths'
+import ProfileInfoHeader from '../../ProfileInfoHeader'
+import ImageSelector from '../../ImageSelector'
+import { modifyGroup } from '../../../backend/group'
 
-import type { DialogProps } from '../../contexts/DialogContext'
-import ImageCropper from '../ImageCropper'
-import { AddMemberDialog } from './AddMember/AddMemberDialog'
-import { RovingTabindexProvider } from '../../contexts/RovingTabindex'
-import { ChatListItemRowChat } from '../chat/ChatListItemRow'
-import { copyToBlobDir } from '../../utils/copyToBlobDir'
-import AlertDialog from './AlertDialog'
-import { unknownErrorToString } from '../helpers/unknownErrorToString'
+import type { DialogProps } from '../../../contexts/DialogContext'
+import ImageCropper from '../../ImageCropper'
+import { AddMemberDialog } from '../AddMember/AddMemberDialog'
+import { RovingTabindexProvider } from '../../../contexts/RovingTabindex'
+import { ChatListItemRowChat } from '../../chat/ChatListItemRow'
+import { copyToBlobDir } from '../../../utils/copyToBlobDir'
+import AlertDialog from '../AlertDialog'
+import { unknownErrorToString } from '../../helpers/unknownErrorToString'
 import { getLogger } from '@deltachat-desktop/shared/logger'
-import Icon from '../Icon'
+import Icon from '../../Icon'
+import styles from './styles.module.scss'
 const log = getLogger('ViewGroup')
 
 /**
@@ -395,7 +396,7 @@ function ViewGroupInner(
               dataTestid='view-group-dialog-header'
             />
           )}
-          <DialogBody>
+          <DialogBody className='viewGroupDialogBody'>
             <DialogContent paddingBottom>
               <ProfileInfoHeader
                 avatarPath={groupImage ? groupImage : undefined}
@@ -423,21 +424,11 @@ function ViewGroupInner(
                     aria-label={tx('related_chats')}
                     aria-expanded={isRelatedChatsExpanded}
                     style={{
-                      alignItems: 'center',
-                      backgroundColor: 'transparent',
-                      border: 0,
-                      display: 'flex',
-                      height: '30px',
-                      justifyContent: 'center',
-                      padding: 0,
-                      minWidth: '30px',
-                      cursor: 'pointer',
-                      borderRadius: '10px',
                       transform: isRelatedChatsExpanded
                         ? 'rotate(90deg)'
                         : 'rotate(0deg)',
-                      transition: 'transform 0.2s ease',
                     }}
+                    className={styles.iconButton}
                     data-no-drag-region
                     onMouseEnter={e => {
                       e.currentTarget.style.backgroundColor =
@@ -503,18 +494,7 @@ function ViewGroupInner(
               {!isSearchExpanded && (
                 <button
                   aria-label={tx('search')}
-                  style={{
-                    alignItems: 'center',
-                    backgroundColor: 'transparent',
-                    border: 0,
-                    display: 'flex',
-                    height: '30px',
-                    justifyContent: 'center',
-                    padding: 0,
-                    minWidth: '30px',
-                    cursor: 'pointer',
-                    borderRadius: '10px',
-                  }}
+                  className={styles.iconButton}
                   data-no-drag-region
                   onClick={() => {
                     setIsSearchExpanded(true)
