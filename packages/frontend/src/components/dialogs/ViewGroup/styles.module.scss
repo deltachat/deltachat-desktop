@@ -10,28 +10,21 @@ $closeButtonSize: 30px;
 }
 
 .searchInput {
-  background-color: var(--searchInputBackgroundColor);
-  border-radius: $borderRadius;
-  border: 10px;
-  margin: 10px 0;
-  caret-color: var(--navBarText);
-  color: var(--navBarText);
+  border: 0;
+  margin: 0;
+  caret-color: var(--colorPrimary);
   flex: 1;
   font-size: 14px;
   height: $closeButtonSize;
-  padding: 10px 0;
+  padding: 0;
   width: 100%;
   outline: none;
-
-  &::placeholder {
-    color: var(--navBarSearchPlaceholder);
-  }
+  background-color: transparent;
 }
 
 .searchInputButton {
   align-items: center;
   background-color: transparent;
-  color: var(--navBarText);
   border-radius: $borderRadius;
   border: 0;
   display: flex;
@@ -41,12 +34,8 @@ $closeButtonSize: 30px;
   min-width: $closeButtonSize;
   position: absolute;
   right: 0;
-
-  &:hover {
-    background-color: var(--navBarButtonHover);
-  }
 }
 
 .searchInputButtonIcon {
-  background-color: currentcolor;
+  background-color: var(--colorNone);
 }

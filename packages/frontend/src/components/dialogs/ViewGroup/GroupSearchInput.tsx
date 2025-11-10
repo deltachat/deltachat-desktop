@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import Icon from '../../Icon'
 
-import styles from './GroupSearchInput.module.scss'
+import styles from './styles.module.scss'
 
 type Props = {
   onChange: (value: string) => void

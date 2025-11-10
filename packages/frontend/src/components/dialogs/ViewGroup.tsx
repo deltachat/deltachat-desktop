@@ -500,35 +500,37 @@ function ViewGroupInner(
                       quantity: group.contactIds.length,
                     })}
               </span>
-              <button
-                aria-label={tx('search')}
-                style={{
-                  alignItems: 'center',
-                  backgroundColor: 'transparent',
-                  border: 0,
-                  display: 'flex',
-                  height: '30px',
-                  justifyContent: 'center',
-                  padding: 0,
-                  minWidth: '30px',
-                  cursor: 'pointer',
-                  borderRadius: '10px',
-                }}
-                data-no-drag-region
-                onClick={() => {
-                  setIsSearchExpanded(true)
-                  setIsRelatedChatsExpanded(false)
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.backgroundColor =
-                    'var(--navBarButtonHover)'
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.backgroundColor = 'transparent'
-                }}
-              >
-                <Icon icon='search' size={20} />
-              </button>
+              {!isSearchExpanded && (
+                <button
+                  aria-label={tx('search')}
+                  style={{
+                    alignItems: 'center',
+                    backgroundColor: 'transparent',
+                    border: 0,
+                    display: 'flex',
+                    height: '30px',
+                    justifyContent: 'center',
+                    padding: 0,
+                    minWidth: '30px',
+                    cursor: 'pointer',
+                    borderRadius: '10px',
+                  }}
+                  data-no-drag-region
+                  onClick={() => {
+                    setIsSearchExpanded(true)
+                    setIsRelatedChatsExpanded(false)
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.backgroundColor =
+                      'var(--navBarButtonHover)'
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.backgroundColor = 'transparent'
+                  }}
+                >
+                  <Icon icon='search' size={20} />
+                </button>
+              )}
             </div>
             {isSearchExpanded && (
               <div className='group-member-filter'>
