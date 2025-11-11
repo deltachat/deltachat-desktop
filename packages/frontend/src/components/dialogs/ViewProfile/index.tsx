@@ -290,16 +290,6 @@ export function ViewProfileInner({
         )}
         {!isSelfChat && (
           <div className={styles.contactAttributes}>
-            {verifier && (
-              <VerificationTag
-                className={styles.verification}
-                onClick={verifier.action}
-                style={{ display: 'flex' }}
-              >
-                <InlineVerifiedIcon />
-                {verifier.label}
-              </VerificationTag>
-            )}
             {contact.lastSeen !== 0 && (
               <div>
                 <i className='material-svg-icon material-icon-schedule' />
@@ -310,12 +300,6 @@ export function ViewProfileInner({
               <div>
                 <i className='material-svg-icon material-icon-blocked' />
                 {tx('contact_is_blocked')}
-              </div>
-            )}
-            {contact.address && (
-              <div className={styles.addressLine}>
-                <i className='material-svg-icon material-icon-server' />
-                {addressLine}
               </div>
             )}
           </div>
@@ -371,6 +355,26 @@ export function ViewProfileInner({
               </AutoSizer>
             </RovingTabindexProvider>
           </div>
+          {!isSelfChat && (
+            <div className={styles.contactAttributesBottom}>
+              {verifier && (
+                <VerificationTag
+                  className={styles.verification}
+                  onClick={verifier.action}
+                  style={{ display: 'flex' }}
+                >
+                  <InlineVerifiedIcon />
+                  {verifier.label}
+                </VerificationTag>
+              )}
+              {contact.address && (
+                <div className={styles.addressLine}>
+                  <i className='material-svg-icon material-icon-server' />
+                  {addressLine}
+                </div>
+              )}
+            </div>
+          )}
         </>
       )}
     </>
