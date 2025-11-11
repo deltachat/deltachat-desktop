@@ -366,7 +366,7 @@ function chatSubtitle(chat: Type.FullChat) {
       } else if (chat.isDeviceChat) {
         return tx('device_talk_subtitle')
       }
-      return null
+      return chat.isEncrypted ? null : chat.contacts[0].address
     }
   }
   return 'ErrTitle'
