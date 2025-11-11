@@ -345,7 +345,7 @@ function chatSubtitle(chat: Type.FullChat) {
           quantity: chat.contactIds.length,
         })
       } else {
-        return '...'
+        return '…'
       }
     } else if (
       chat.chatType === C.DC_CHAT_TYPE_SINGLE &&
