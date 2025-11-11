@@ -7,10 +7,6 @@ import Dialog, { DialogBody, DialogContent, DialogHeader } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
-import { runtime } from '@deltachat-desktop/runtime-interface'
-
-const OverwrittenStyles =
-  'font-family: Arial, Helvetica, sans-serif;font-variant-ligatures: none;'
 
 export default function ConnectivityDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
@@ -27,29 +23,13 @@ function ConnectivityDialogInner() {
   const accountId = selectedAccountId()
   const [connectivityHTML, setConnectivityHTML] = useState('')
 
-  const style = window.getComputedStyle(document.body)
-  const bgColor = style.getPropertyValue('--bgPrimary')
-  const textColor = style.getPropertyValue('--textPrimary')
-  const stylesToInject = `background-color: ${bgColor}; color: ${textColor};`
-
-  // On Tauri we cannot inject dynamic styles due to more strict CSP,
-  // so let's fall back to light theme,
-  // white background.
-  // TODO fix. Maybe we could at least have two styles for dark and light.
-  //
-  // TODO also the progress bar's "width" style is not applied
-  // https://github.com/chatmail/core/blob/f03dc6af122b271bb586e9821977c55117a8b9fa/src/scheduler/connectivity.rs#L512
-  const canInjectStyles = runtime.getRuntimeInfo().target !== 'tauri'
-
   const updateConnectivity = useMemo(
     () =>
       debounceWithInit(async () => {
-        const cHTML = await getConnectivityHTML(
-          canInjectStyles ? stylesToInject : undefined
-        )
+        const cHTML = await getConnectivityHTML()
         setConnectivityHTML(cHTML)
       }, 240),
-    [canInjectStyles, stylesToInject]
+    []
   )
 
   useEffect(() => {
@@ -57,36 +37,43 @@ function ConnectivityDialogInner() {
     return onDCEvent(accountId, 'ConnectivityChanged', updateConnectivity)
   }, [accountId, updateConnectivity])
 
+  // dangerouslySetInnerHTML is fine since the content comes
+  // from backend and is trusted
   return (
     <DialogBody>
       <DialogContent>
-        <iframe
+        <div
           style={{
-            border: 0,
             height: '100%',
             width: '100%',
             minHeight: '320px',
-            backgroundColor: bgColor,
-            color: textColor,
+            overflow: 'auto',
           }}
-          srcDoc={connectivityHTML}
-          sandbox={''}
+          dangerouslySetInnerHTML={{ __html: connectivityHTML }}
         />
       </DialogContent>
     </DialogBody>
   )
 }
 
-async function getConnectivityHTML(
-  stylesToInject?: string | undefined
-): Promise<string> {
+function extractStylesAndBody(html: string): string {
+  const parser = new DOMParser()
+  const doc = parser.parseFromString(html, 'text/html')
+
+  // Extract all style tags from the head
+  const styleTags = Array.from(doc.head.querySelectorAll('style'))
+  const stylesHTML = styleTags.map(tag => tag.outerHTML).join('\n')
+
+  // Extract body content
+  const bodyContent = doc.body.innerHTML
+
+  return stylesHTML + bodyContent
+}
+
+async function getConnectivityHTML(): Promise<string> {
   let cHTML = await BackendRemote.rpc.getConnectivityHtml(selectedAccountId())
 
-  if (stylesToInject) {
-    cHTML = cHTML.replace(
-      '</style>',
-      `</style><style> html {${stylesToInject}${OverwrittenStyles}}</style>`
-    )
-  }
+  cHTML = extractStylesAndBody(cHTML)
+
   return cHTML
 }
