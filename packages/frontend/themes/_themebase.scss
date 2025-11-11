@@ -126,7 +126,6 @@ $scrollbarTransparency: 0.34 !default;
   --newChatButtonBg: #{$newChatButtonBg};
   /* Message Bubble */
   --messageText: #{$textPrimary};
-  --messageTextLink: #{$textPrimary};
   --messageQuotedText: #{changeContrast($textPrimary, 45%)};
   /* same as message text */
   --setupMessageText: #ed824e;
