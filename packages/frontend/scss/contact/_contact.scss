@@ -67,7 +67,10 @@
   padding-bottom: 20px;
   padding-inline-start: 10px !important;
   // hide blocked contact icon
-  .contact-name .display-name i {
+  .material-icon-blocked {
     display: none;
+  }
+  p {
+    padding-inline-start: 20px;
   }
 }
