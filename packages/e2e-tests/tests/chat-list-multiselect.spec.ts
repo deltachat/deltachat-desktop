@@ -22,12 +22,16 @@ const numberOfProfiles = 1
 // https://playwright.dev/docs/next/test-retries#reuse-single-page-between-tests
 let page: Page
 
-let chatList: Locator
-let selectedChats: Locator
+function chatList(): Locator {
+  return page.getByLabel('Chats').getByRole('tablist')
+}
+function selectedChats(): Locator {
+  return chatList().getByRole('tab', { selected: true })
+}
 const getChat = (chatNum: number) =>
-  chatList.getByRole('tab', { name: `Some chat ${chatNum}` })
+  chatList().getByRole('tab', { name: `Some chat ${chatNum}` })
 const expectSelectedChats = async (chatNums: number[]) => {
-  await expect(selectedChats).toContainText(
+  await expect(selectedChats()).toContainText(
     chatNums.map(chatNum => `Some chat ${chatNum}`)
   )
 }
@@ -57,8 +61,6 @@ test.beforeAll(async ({ browser, isChatmail }) => {
   page = await browser.newPage()
   await reloadPage(page)
 
-  chatList = page.getByLabel('Chats').getByRole('tablist')
-  selectedChats = chatList.getByRole('tab', { selected: true })
   // Let's stop at 9, so that we don't accidentally select "Chat 10"
   // by providing the selector "Chat 1".
   await createNDummyChats(page, 9, 'Some chat ')
@@ -249,7 +251,7 @@ test.describe('context menu', () => {
     // Unfortunately we have to wait for core to respond to the "Pin" action,
     // otherwise the menu would think that the chats are still not pinned.
     await expect(
-      chatList.getByRole('tab', { name: 'Some chat ' })
+      chatList().getByRole('tab', { name: 'Some chat ' })
     ).toContainText([
       'Some chat 7',
       'Some chat 5',
@@ -293,7 +295,7 @@ test.describe('context menu', () => {
 
     await page.getByRole('menuitem', { name: 'Pin Chat' }).click()
     await expect(
-      chatList.getByRole('tab', { name: 'Some chat ' })
+      chatList().getByRole('tab', { name: 'Some chat ' })
     ).toContainText([
       'Some chat 7',
       'Some chat 5',
@@ -312,7 +314,7 @@ test.describe('context menu', () => {
     // Unpin all, to restore state for other tests.
     await page.getByRole('menuitem', { name: 'Unpin Chat' }).click()
     await expect(
-      chatList.getByRole('tab', { name: 'Some chat ' })
+      chatList().getByRole('tab', { name: 'Some chat ' })
     ).toContainText([
       'Some chat 9',
       'Some chat 8',
@@ -391,20 +393,20 @@ test("selection doesn't reset if items get reordered", async () => {
   })
   // Change the order of chats by pinning some.
   await page.getByRole('menuitem', { name: 'Pin Chat' }).click()
-  await expect(chatList.getByRole('tab', { name: 'Some chat ' })).toContainText(
-    [
-      'Some chat 7',
-      'Some chat 5',
+  await expect(
+    chatList().getByRole('tab', { name: 'Some chat ' })
+  ).toContainText([
+    'Some chat 7',
+    'Some chat 5',
 
-      'Some chat 9',
-      'Some chat 8',
-      'Some chat 6',
-      'Some chat 4',
-      'Some chat 3',
-      'Some chat 2',
-      'Some chat 1',
-    ]
-  )
+    'Some chat 9',
+    'Some chat 8',
+    'Some chat 6',
+    'Some chat 4',
+    'Some chat 3',
+    'Some chat 2',
+    'Some chat 1',
+  ])
   await expectSelectedChats([7, 5])
 
   await getChat(5).click({
@@ -412,19 +414,19 @@ test("selection doesn't reset if items get reordered", async () => {
   })
   // Unpin all, to restore state for other tests.
   await page.getByRole('menuitem', { name: 'Unpin Chat' }).click()
-  await expect(chatList.getByRole('tab', { name: 'Some chat ' })).toContainText(
-    [
-      'Some chat 9',
-      'Some chat 8',
-      'Some chat 7',
-      'Some chat 6',
-      'Some chat 5',
-      'Some chat 4',
-      'Some chat 3',
-      'Some chat 2',
-      'Some chat 1',
-    ]
-  )
+  await expect(
+    chatList().getByRole('tab', { name: 'Some chat ' })
+  ).toContainText([
+    'Some chat 9',
+    'Some chat 8',
+    'Some chat 7',
+    'Some chat 6',
+    'Some chat 5',
+    'Some chat 4',
+    'Some chat 3',
+    'Some chat 2',
+    'Some chat 1',
+  ])
 })
 
 test('when chats get removed from the list, they get unselected', async () => {
@@ -438,9 +440,9 @@ test('when chats get removed from the list, they get unselected', async () => {
   // there is a moment when it shows 0 chats before the results get loaded,
   // resulting in all chats getting unselected, which we don't want.
   await page.getByRole('textbox', { name: 'Search' }).fill('5')
-  await expect(chatList.getByRole('tab', { name: 'Some chat ' })).toContainText(
-    ['Some chat 5']
-  )
+  await expect(
+    chatList().getByRole('tab', { name: 'Some chat ' })
+  ).toContainText(['Some chat 5'])
   await page.getByRole('textbox', { name: 'Search' }).clear()
 
   await getChat(9).click()
@@ -451,9 +453,9 @@ test('when chats get removed from the list, they get unselected', async () => {
   await expectSelectedChats([9, 8, 7, 6, 5, 4, 3, 2, 1])
 
   await page.getByRole('textbox', { name: 'Search' }).fill('5')
-  await expect(chatList.getByRole('tab', { name: 'Some chat ' })).toContainText(
-    ['Some chat 5']
-  )
+  await expect(
+    chatList().getByRole('tab', { name: 'Some chat ' })
+  ).toContainText(['Some chat 5'])
   await expectSelectedChats([5])
 
   // Check that the action only affects a single chat.
@@ -462,22 +464,22 @@ test('when chats get removed from the list, they get unselected', async () => {
   })
   await page.getByRole('menuitem', { name: 'Pin Chat' }).click()
   await page.getByRole('textbox', { name: 'Search' }).clear()
-  await expect(chatList.getByRole('tab', { name: 'Some chat ' })).toContainText(
-    [
-      'Some chat 5',
-
-      'Some chat 9',
-      'Some chat 8',
-      'Some chat 7',
-      'Some chat 6',
-      'Some chat 4',
-      'Some chat 3',
-      'Some chat 2',
-      'Some chat 1',
-    ]
-  )
   await expect(
-    chatList.getByRole('tab', { name: 'Some chat ' }).getByLabel('Pin')
+    chatList().getByRole('tab', { name: 'Some chat ' })
+  ).toContainText([
+    'Some chat 5',
+
+    'Some chat 9',
+    'Some chat 8',
+    'Some chat 7',
+    'Some chat 6',
+    'Some chat 4',
+    'Some chat 3',
+    'Some chat 2',
+    'Some chat 1',
+  ])
+  await expect(
+    chatList().getByRole('tab', { name: 'Some chat ' }).getByLabel('Pin')
   ).toHaveCount(1)
 
   // Now verify that the previously selected chats are not selected
@@ -492,19 +494,19 @@ test('when chats get removed from the list, they get unselected', async () => {
   })
   // Unpin all, to restore state for other tests.
   await page.getByRole('menuitem', { name: 'Unpin Chat' }).click()
-  await expect(chatList.getByRole('tab', { name: 'Some chat ' })).toContainText(
-    [
-      'Some chat 9',
-      'Some chat 8',
-      'Some chat 7',
-      'Some chat 6',
-      'Some chat 5',
-      'Some chat 4',
-      'Some chat 3',
-      'Some chat 2',
-      'Some chat 1',
-    ]
-  )
+  await expect(
+    chatList().getByRole('tab', { name: 'Some chat ' })
+  ).toContainText([
+    'Some chat 9',
+    'Some chat 8',
+    'Some chat 7',
+    'Some chat 6',
+    'Some chat 5',
+    'Some chat 4',
+    'Some chat 3',
+    'Some chat 2',
+    'Some chat 1',
+  ])
 })
 
 test('delete several', async () => {
@@ -533,8 +535,14 @@ test('delete several', async () => {
       'Some chat 2'
   )
   await page.getByRole('dialog').getByRole('button', { name: 'Delete' }).click()
-  await expect(chatList.getByRole('tab', { name: 'Some chat ' })).toContainText(
-    ['Some chat 9', 'Some chat 8', 'Some chat 4', 'Some chat 3', 'Some chat 1']
-  )
+  await expect(
+    chatList().getByRole('tab', { name: 'Some chat ' })
+  ).toContainText([
+    'Some chat 9',
+    'Some chat 8',
+    'Some chat 4',
+    'Some chat 3',
+    'Some chat 1',
+  ])
   await expectSelectedChats([])
 })
