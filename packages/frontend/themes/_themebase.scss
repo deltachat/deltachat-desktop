@@ -158,7 +158,7 @@ $scrollbarTransparency: 0.34 !default;
   --separatorColor: #{$bgSecondary};
   --bp4DialogHeaderBg: #{$bgPrimary};
   /* BlueprintJS overwrites, used in code, just weren't renamed for the sake of renaming */
-  --bp4DialogBgSecondary: #{$bgSecondary};
+  --bgSecondary: #{$bgSecondary};
   --bp4DialogBgPrimary: #{$bgPrimary};
   --bp4Heading: #{$textPrimary};
   --bp4InputText: #{$textPrimary};

@@ -1,0 +1,86 @@
+$borderRadius: 10px;
+$closeButtonSize: 30px;
+
+.searchInputContainer {
+  position: relative;
+  display: flex;
+  flex: 1;
+  width: 100%;
+  align-items: center;
+}
+
+.searchInput {
+  border: 0;
+  margin: 0;
+  caret-color: var(--colorPrimary);
+  flex: 1;
+  font-size: 14px;
+  height: $closeButtonSize;
+  padding: 0;
+  width: 100%;
+  outline: none;
+  background-color: transparent;
+}
+
+.searchInputButton {
+  align-items: center;
+  background-color: transparent;
+  border-radius: $borderRadius;
+  border: 0;
+  display: flex;
+  height: $closeButtonSize;
+  justify-content: center;
+  padding: 0;
+  min-width: $closeButtonSize;
+  position: absolute;
+  right: 0;
+}
+
+.searchInputButtonIcon {
+  background-color: var(--colorNone);
+}
+
+.iconButton {
+  align-items: center;
+  background-color: transparent;
+  border: 0;
+  display: flex;
+  height: 30px;
+  justify-content: center;
+  padding: 0;
+  min-width: 30px;
+  cursor: pointer;
+  border-radius: 10px;
+
+  &:hover {
+    background-color: var(--navBarButtonHover);
+  }
+}
+
+.relatedChatsTitle {
+  cursor: pointer;
+}
+
+.chevronButton {
+  transition: transform 0.2s ease;
+
+  &.expanded {
+    transform: rotate(90deg);
+  }
+
+  &.collapsed {
+    transform: rotate(0deg);
+  }
+}
+
+.profileImageUsername {
+  margin-bottom: 30px;
+}
+
+.errorMessage {
+  color: var(--colorDanger);
+  margin-left: 80px;
+  position: relative;
+  top: -10px;
+  margin-bottom: -18px;
+}

@@ -2,45 +2,48 @@ import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 import type { T } from '@deltachat/jsonrpc-client'
 
-import { QrCodeShowQrInner } from './QrCode'
-import { useThemeCssVar } from '../../ThemeManager'
-import { ContactList } from '../contact/ContactList'
-import { useLogicVirtualChatList, ChatListPart } from '../chat/ChatList'
+import { QrCodeShowQrInner } from '../QrCode'
+import { useThemeCssVar } from '../../../ThemeManager'
+import { ContactList } from '../../contact/ContactList'
+import { useLogicVirtualChatList, ChatListPart } from '../../chat/ChatList'
 import {
   PseudoListItemShowQrCode,
   PseudoListItemAddMember,
-} from '../helpers/PseudoListItem'
-import ViewProfile from './ViewProfile'
+} from '../../helpers/PseudoListItem'
+import ViewProfile from '../ViewProfile'
 import { avatarInitial } from '@deltachat-desktop/shared/avatarInitial'
-import { shouldDisableClickForFullscreen as shouldDisableFullscreenAvatar } from '../Avatar'
-import { DeltaInput } from '../Login-Styles'
-import { BackendRemote, onDCEvent } from '../../backend-com'
-import { selectedAccountId } from '../../ScreenController'
-import { useSettingsStore } from '../../stores/settings'
+import { shouldDisableClickForFullscreen as shouldDisableFullscreenAvatar } from '../../Avatar'
+import { DeltaInput } from '../../Login-Styles'
+import { BackendRemote, onDCEvent } from '../../../backend-com'
+import GroupSearchInput from './GroupSearchInput'
+import { selectedAccountId } from '../../../ScreenController'
+import { useSettingsStore } from '../../../stores/settings'
 import Dialog, {
   DialogBody,
   DialogContent,
   DialogHeader,
   OkCancelFooterAction,
-} from '../Dialog'
-import useChat from '../../hooks/chat/useChat'
-import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
-import useDialog from '../../hooks/dialog/useDialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-import { LastUsedSlot } from '../../utils/lastUsedPaths'
-import ProfileInfoHeader from '../ProfileInfoHeader'
-import ImageSelector from '../ImageSelector'
-import { modifyGroup } from '../../backend/group'
+} from '../../Dialog'
+import useChat from '../../../hooks/chat/useChat'
+import useConfirmationDialog from '../../../hooks/dialog/useConfirmationDialog'
+import useDialog from '../../../hooks/dialog/useDialog'
+import useTranslationFunction from '../../../hooks/useTranslationFunction'
+import { LastUsedSlot } from '../../../utils/lastUsedPaths'
+import ProfileInfoHeader from '../../ProfileInfoHeader'
+import ImageSelector from '../../ImageSelector'
+import { modifyGroup } from '../../../backend/group'
 
-import type { DialogProps } from '../../contexts/DialogContext'
-import ImageCropper from '../ImageCropper'
-import { AddMemberDialog } from './AddMember/AddMemberDialog'
-import { RovingTabindexProvider } from '../../contexts/RovingTabindex'
-import { ChatListItemRowChat } from '../chat/ChatListItemRow'
-import { copyToBlobDir } from '../../utils/copyToBlobDir'
-import AlertDialog from './AlertDialog'
-import { unknownErrorToString } from '../helpers/unknownErrorToString'
+import type { DialogProps } from '../../../contexts/DialogContext'
+import ImageCropper from '../../ImageCropper'
+import { AddMemberDialog } from '../AddMember/AddMemberDialog'
+import { RovingTabindexProvider } from '../../../contexts/RovingTabindex'
+import { ChatListItemRowChat } from '../../chat/ChatListItemRow'
+import { copyToBlobDir } from '../../../utils/copyToBlobDir'
+import AlertDialog from '../AlertDialog'
+import { unknownErrorToString } from '../../helpers/unknownErrorToString'
 import { getLogger } from '@deltachat-desktop/shared/logger'
+import Icon from '../../Icon'
+import styles from './styles.module.scss'
 const log = getLogger('ViewGroup')
 
 /**
@@ -216,6 +219,10 @@ function ViewGroupInner(
   const groupPastMemberContactListWrapperRef = useRef<HTMLDivElement>(null)
   const relatedChatsListWrapperRef = useRef<HTMLDivElement>(null)
 
+  const [memberFilter, setMemberFilter] = useState('')
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false)
+  const [isRelatedChatsExpanded, setIsRelatedChatsExpanded] = useState(true)
+
   const {
     group,
     groupName,
@@ -389,7 +396,7 @@ function ViewGroupInner(
               dataTestid='view-group-dialog-header'
             />
           )}
-          <DialogBody>
+          <DialogBody className='viewGroupDialogBody'>
             <DialogContent paddingBottom>
               <ProfileInfoHeader
                 avatarPath={groupImage ? groupImage : undefined}
@@ -402,56 +409,102 @@ function ViewGroupInner(
               <>
                 <div
                   id='view-group-related-chats-title'
-                  className='group-separator'
+                  className={`group-separator ${styles.relatedChatsTitle}`}
+                  onClick={() =>
+                    setIsRelatedChatsExpanded(!isRelatedChatsExpanded)
+                  }
                 >
-                  {tx('related_chats')}
-                </div>
-                <div
-                  ref={relatedChatsListWrapperRef}
-                  className='group-related-chats-list-wrapper'
-                >
-                  <RovingTabindexProvider
-                    wrapperElementRef={relatedChatsListWrapperRef}
+                  <span>{tx('related_chats')}</span>
+                  <button
+                    aria-label={tx('related_chats')}
+                    aria-expanded={isRelatedChatsExpanded}
+                    className={`${styles.iconButton} ${styles.chevronButton} ${
+                      isRelatedChatsExpanded
+                        ? styles.expanded
+                        : styles.collapsed
+                    }`}
+                    data-no-drag-region
                   >
-                    <ChatListPart
-                      olElementAttrs={{
-                        'aria-labelledby': 'view-group-related-chats-title',
-                      }}
-                      isRowLoaded={isChatLoaded}
-                      loadMoreRows={loadChats}
-                      rowCount={chatListIds.length}
-                      width={'100%'}
-                      height={CHATLISTITEM_CHAT_HEIGHT * chatListIds.length}
-                      itemKey={index => 'key' + chatListIds[index]}
-                      itemHeight={CHATLISTITEM_CHAT_HEIGHT}
-                      itemData={{
-                        chatCache,
-                        chatListIds,
-                        onChatClick,
-
-                        activeChatId: null,
-                        activeContextMenuChatIds: [],
-                        openContextMenu: async () => {},
-                      }}
-                    >
-                      {ChatListItemRowChat}
-                    </ChatListPart>
-                  </RovingTabindexProvider>
+                    <Icon icon='chevron-right' size={20} />
+                  </button>
                 </div>
+                {isRelatedChatsExpanded && (
+                  <div
+                    ref={relatedChatsListWrapperRef}
+                    className='group-related-chats-list-wrapper'
+                  >
+                    <RovingTabindexProvider
+                      wrapperElementRef={relatedChatsListWrapperRef}
+                    >
+                      <ChatListPart
+                        olElementAttrs={{
+                          'aria-labelledby': 'view-group-related-chats-title',
+                        }}
+                        isRowLoaded={isChatLoaded}
+                        loadMoreRows={loadChats}
+                        rowCount={chatListIds.length}
+                        width={'100%'}
+                        height={CHATLISTITEM_CHAT_HEIGHT * chatListIds.length}
+                        itemKey={index => 'key' + chatListIds[index]}
+                        itemHeight={CHATLISTITEM_CHAT_HEIGHT}
+                        itemData={{
+                          chatCache,
+                          chatListIds,
+                          onChatClick,
+
+                          activeChatId: null,
+                          activeContextMenuChatIds: [],
+                          openContextMenu: async () => {},
+                        }}
+                      >
+                        {ChatListItemRowChat}
+                      </ChatListPart>
+                    </RovingTabindexProvider>
+                  </div>
+                )}
               </>
             )}
             <div
               id='view-group-members-recipients-title'
               className='group-separator'
             >
-              {!isBroadcast
-                ? tx('n_members', group.contactIds.length.toString(), {
-                    quantity: group.contactIds.length,
-                  })
-                : tx('n_recipients', group.contactIds.length.toString(), {
-                    quantity: group.contactIds.length,
-                  })}
+              <span>
+                {!isBroadcast
+                  ? tx('n_members', group.contactIds.length.toString(), {
+                      quantity: group.contactIds.length,
+                    })
+                  : tx('n_recipients', group.contactIds.length.toString(), {
+                      quantity: group.contactIds.length,
+                    })}
+              </span>
+              {!isSearchExpanded && (
+                <button
+                  aria-label={tx('search')}
+                  className={styles.iconButton}
+                  data-no-drag-region
+                  onClick={() => {
+                    setIsSearchExpanded(true)
+                    setIsRelatedChatsExpanded(false)
+                  }}
+                >
+                  <Icon icon='search' size={20} />
+                </button>
+              )}
             </div>
+            {isSearchExpanded && (
+              <div className='group-member-filter'>
+                <GroupSearchInput
+                  id='group-member-filter'
+                  onChange={value => setMemberFilter(value)}
+                  value={memberFilter}
+                  onClear={() => setMemberFilter('')}
+                  onCollapse={() => {
+                    setIsSearchExpanded(false)
+                    setMemberFilter('')
+                  }}
+                />
+              </div>
+            )}
             <div
               className='group-member-contact-list-wrapper'
               ref={groupMemberContactListWrapperRef}
@@ -459,7 +512,7 @@ function ViewGroupInner(
               <RovingTabindexProvider
                 wrapperElementRef={groupMemberContactListWrapperRef}
               >
-                {!chatDisabled && group.isEncrypted && (
+                {!chatDisabled && group.isEncrypted && !memberFilter && (
                   <>
                     {!isBroadcast && (
                       <PseudoListItemAddMember
@@ -471,7 +524,19 @@ function ViewGroupInner(
                   </>
                 )}
                 <ContactList
-                  contacts={group.contacts}
+                  contacts={
+                    memberFilter
+                      ? group.contacts.filter(
+                          contact =>
+                            contact.displayName
+                              .toLowerCase()
+                              .includes(memberFilter.toLowerCase()) ||
+                            contact.address
+                              .toLowerCase()
+                              .includes(memberFilter.toLowerCase())
+                        )
+                      : group.contacts
+                  }
                   showRemove={!chatDisabled && group.isEncrypted}
                   onClick={contact => {
                     if (contact.id === C.DC_CONTACT_ID_SELF) {
@@ -502,7 +567,19 @@ function ViewGroupInner(
                     wrapperElementRef={groupPastMemberContactListWrapperRef}
                   >
                     <ContactList
-                      contacts={pastContacts}
+                      contacts={
+                        memberFilter
+                          ? pastContacts.filter(
+                              contact =>
+                                contact.displayName
+                                  .toLowerCase()
+                                  .includes(memberFilter.toLowerCase()) ||
+                                contact.address
+                                  .toLowerCase()
+                                  .includes(memberFilter.toLowerCase())
+                            )
+                          : pastContacts
+                      }
                       showRemove={false}
                       onClick={contact => {
                         if (contact.id === C.DC_CONTACT_ID_SELF) {
@@ -598,8 +675,7 @@ export function EditGroupNameDialog({
       <DialogBody>
         <DialogContent>
           <div
-            className='profile-image-username center'
-            style={{ marginBottom: '30px' }}
+            className={`profile-image-username center ${styles.profileImageUsername}`}
           >
             <GroupImageSelector
               groupName={groupName}
@@ -621,15 +697,7 @@ export function EditGroupNameDialog({
             }}
           />
           {groupName === '' && (
-            <p
-              style={{
-                color: 'var(--colorDanger)',
-                marginLeft: '80px',
-                position: 'relative',
-                top: '-10px',
-                marginBottom: '-18px',
-              }}
-            >
+            <p className={styles.errorMessage}>
               {!isBroadcast
                 ? tx('group_please_enter_group_name')
                 : tx('please_enter_channel_name')}

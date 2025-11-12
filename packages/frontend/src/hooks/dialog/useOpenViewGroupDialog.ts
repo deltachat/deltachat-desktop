@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 
 import useDialog from './useDialog'
-import ViewGroup from '../../components/dialogs/ViewGroup'
+import ViewGroup from '../../components/dialogs/ViewGroup/index'
 
 export default function useOpenViewGroupDialog() {
   const { openDialog } = useDialog()
