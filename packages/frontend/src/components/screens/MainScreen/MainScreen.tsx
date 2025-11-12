@@ -340,9 +340,13 @@ function chatSubtitle(chat: Type.FullChat) {
   const tx = window.static_translate
   if (chat.id && chat.id > C.DC_CHAT_ID_LAST_SPECIAL) {
     if (chat.chatType === C.DC_CHAT_TYPE_GROUP) {
-      return tx('n_members', [String(chat.contactIds.length)], {
-        quantity: chat.contactIds.length,
-      })
+      if (chat.selfInGroup) {
+        return tx('n_members', [String(chat.contactIds.length)], {
+          quantity: chat.contactIds.length,
+        })
+      } else {
+        return '…'
+      }
     } else if (
       chat.chatType === C.DC_CHAT_TYPE_SINGLE &&
       chat.contacts[0]?.isBot

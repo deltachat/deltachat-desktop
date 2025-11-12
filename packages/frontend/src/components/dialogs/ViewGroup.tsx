@@ -445,9 +445,11 @@ function ViewGroupInner(
               className='group-separator'
             >
               {!isBroadcast
-                ? tx('n_members', group.contactIds.length.toString(), {
-                    quantity: group.contactIds.length,
-                  })
+                ? group.selfInGroup
+                  ? tx('n_members', group.contactIds.length.toString(), {
+                      quantity: group.contactIds.length,
+                    })
+                  : ''
                 : tx('n_recipients', group.contactIds.length.toString(), {
                     quantity: group.contactIds.length,
                   })}
