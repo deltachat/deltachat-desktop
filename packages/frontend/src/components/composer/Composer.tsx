@@ -134,6 +134,40 @@ const Composer = forwardRef<
     [chatId, updateDraftText]
   )
 
+  const onArrowUpWhenEmpty = useCallback(async () => {
+    if (messageEditing.isEditingModeActive) {
+      return
+    }
+    try {
+      // Get message list items for the chat
+      const messageListItems = await BackendRemote.rpc.getMessageListItems(
+        accountId,
+        chatId,
+        false,
+        true
+      )
+      // Find the last message item (we'll check if it's outgoing when loading)
+      const lastMessageItem = messageListItems
+        .slice()
+        .reverse()
+        .find(item => item.kind === 'message' && item.msg_id > 0)
+      if (!lastMessageItem || lastMessageItem.kind !== 'message') {
+        return
+      }
+      // Load the full message
+      const messages = await BackendRemote.rpc.getMessages(accountId, [
+        lastMessageItem.msg_id,
+      ])
+      const message = messages[lastMessageItem.msg_id]
+      if (message && message.kind === 'message' && message.state >= 10) {
+        // Enter edit mode only for outgoing messages
+        window.__enterEditMessageMode?.(message)
+      }
+    } catch (error) {
+      log.error('Failed to load last sent message for editing', error)
+    }
+  }, [accountId, chatId, messageEditing.isEditingModeActive])
+
   const voiceMessageDisabled =
     !!draftState.file || !!draftState.text || messageEditing.isEditingModeActive
 
@@ -630,6 +664,7 @@ const Composer = forwardRef<
                 chatId={chatId}
                 onPaste={handlePaste ?? undefined}
                 onChange={onComposerMessageInputChange}
+                onArrowUpWhenEmpty={onArrowUpWhenEmpty}
               />
               <ComposerMessageInput
                 text={messageEditing.newText ?? ''}
