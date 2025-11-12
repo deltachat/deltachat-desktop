@@ -24,10 +24,18 @@ test.setTimeout(30_000)
 // https://playwright.dev/docs/next/test-retries#reuse-single-page-between-tests
 let page: Page
 
-let chatList: Locator
-let textarea: Locator
-let composerSection: Locator
-let composerReply: Locator
+function chatList(): Locator {
+  return page.getByLabel('Chats').getByRole('tablist')
+}
+function textarea(): Locator {
+  return page.locator('textarea.create-or-edit-message-input')
+}
+function composerSection(): Locator {
+  return page.getByRole('region', { name: 'Write a message' })
+}
+function composerReply(): Locator {
+  return composerSection().getByRole('region', { name: 'Reply' })
+}
 const numDummyChats = 3
 const getChatName = (chatNum: number) => `Some chat ${chatNum}`
 const selectChat = (chatNum: number) =>
@@ -38,10 +46,6 @@ test.beforeAll(async ({ browser }) => {
   await reloadPage(page)
   await importDummyProfileFromBackup(page)
 
-  chatList = page.getByLabel('Chats').getByRole('tablist')
-  textarea = page.locator('textarea.create-or-edit-message-input')
-  composerSection = page.getByRole('region', { name: 'Write a message' })
-  composerReply = composerSection.getByRole('region', { name: 'Reply' })
   await createNDummyChats(page, numDummyChats, 'Some chat ')
 })
 
@@ -51,16 +55,16 @@ function getRemoveQuoteOrFileButton(parent: Locator): Locator {
   })
 }
 async function testDraftIsEmpty() {
-  await expect(textarea).toBeEmpty({ timeout: 500 })
+  await expect(textarea()).toBeEmpty({ timeout: 500 })
 
-  await expect(composerSection).toHaveText('', { timeout: 500 })
+  await expect(composerSection()).toHaveText('', { timeout: 500 })
   // The above check should be enough, but let's double check
   // with these extra ones.
   await expect(
-    composerSection.getByRole('region', { name: /reply|attachment|/i })
+    composerSection().getByRole('region', { name: /reply|attachment|/i })
   ).not.toBeVisible()
-  await expect(getRemoveQuoteOrFileButton(composerSection)).not.toBeVisible()
-  await expect(composerSection.locator('.upper-bar')).toBeEmpty()
+  await expect(getRemoveQuoteOrFileButton(composerSection())).not.toBeVisible()
+  await expect(composerSection().locator('.upper-bar')).toBeEmpty()
 }
 
 // Maybe it would be more proper to have properly-skoped `afterEach`,
@@ -77,7 +81,7 @@ test.afterEach(async () => {
     // Just send a/the message to make sure the draft is cleared.
     // In case the draft is actually empty already, type some text.
     const msg = 'dummy message to clear draft'
-    await textarea.fill(msg)
+    await textarea().fill(msg)
     await page.getByRole('button', { name: 'Send' }).click()
     await testDraftIsEmpty()
 
@@ -104,19 +108,19 @@ test.afterAll(async ({ browser }) => {
 
 async function typeText(text: string) {
   // We might disable the textarea while we're loading the draft.
-  await expect(textarea).not.toBeDisabled()
+  await expect(textarea()).not.toBeDisabled()
 
-  await textarea.pressSequentially(text, { delay: 50 })
+  await textarea().pressSequentially(text, { delay: 50 })
 
   // Seems to be necessary, otherwise it's flaky.
   // This might indicate a bug in our app, actually.
-  await expect(textarea).toHaveText(text)
+  await expect(textarea()).toHaveText(text)
 }
 
 test("doesn't send empty message", async () => {
   await createDummyChat(page, 'empty message test')
   await selectChatByName(page, 'empty message test')
-  await textarea.fill('123')
+  await textarea().fill('123')
   await page.getByRole('button', { name: 'Send' }).click()
   const messages = page
     .getByRole('list', { name: 'Messages' })
@@ -126,25 +130,25 @@ test("doesn't send empty message", async () => {
     .filter({ hasNotText: 'Today' })
   await expect(messages).toHaveCount(1)
 
-  await textarea.fill('     ')
-  await textarea.press('ControlOrMeta+Enter')
-  await textarea.press('ControlOrMeta+Enter')
-  await textarea.press('ControlOrMeta+Enter')
+  await textarea().fill('     ')
+  await textarea().press('ControlOrMeta+Enter')
+  await textarea().press('ControlOrMeta+Enter')
+  await textarea().press('ControlOrMeta+Enter')
   await page.getByRole('button', { name: 'Send' }).click()
   await page.getByRole('button', { name: 'Send' }).click()
   await page.getByRole('button', { name: 'Send' }).click()
-  await expect(textarea).toHaveText('     ')
+  await expect(textarea()).toHaveText('     ')
   await expect(messages).toHaveCount(1)
 
-  await textarea.fill('\n')
-  await textarea.press('ControlOrMeta+Enter')
+  await textarea().fill('\n')
+  await textarea().press('ControlOrMeta+Enter')
   await page.getByRole('button', { name: 'Send' }).click()
-  await expect(textarea).toHaveText('\n')
+  await expect(textarea()).toHaveText('\n')
   await expect(messages).toHaveCount(1)
 
-  await textarea.fill('\na')
-  await textarea.press('ControlOrMeta+Enter')
-  await expect(textarea).toBeEmpty()
+  await textarea().fill('\na')
+  await textarea().press('ControlOrMeta+Enter')
+  await expect(textarea()).toBeEmpty()
   await expect(messages).toHaveCount(2)
 
   // Clean up
@@ -154,7 +158,7 @@ test("doesn't send empty message", async () => {
 test("doesn't send the same message twice on multiple clicks", async () => {
   await selectChat(1)
   const messageText = `somee messageee foo ${Math.random()}`
-  await textarea.fill(messageText)
+  await textarea().fill(messageText)
 
   const sendButton = page.getByRole('button', { name: 'Send' })
 
@@ -177,15 +181,15 @@ test("doesn't send the same message twice on multiple clicks", async () => {
       .getByText(messageText)
   ).toHaveCount(1)
 
-  await textarea.fill(messageText)
+  await textarea().fill(messageText)
 
   await Promise.allSettled([
-    textarea.press('ControlOrMeta+Enter'),
-    textarea.press('ControlOrMeta+Enter'),
-    textarea.press('ControlOrMeta+Enter'),
+    textarea().press('ControlOrMeta+Enter'),
+    textarea().press('ControlOrMeta+Enter'),
+    textarea().press('ControlOrMeta+Enter'),
   ])
   // One more outside of the `Promise.allSettled`, for good measure.
-  await textarea.press('ControlOrMeta+Enter')
+  await textarea().press('ControlOrMeta+Enter')
 
   // Note that we're using the same message text so that we can check
   // that there are now 2 elements, and not that there is one element
@@ -200,7 +204,7 @@ test("doesn't send the same message twice on multiple clicks", async () => {
   // Now make sure that the message list is in its "final" state
   // and no message sends are pending.
   const finalMessageText = 'my final message'
-  await textarea.fill(finalMessageText)
+  await textarea().fill(finalMessageText)
   await sendButton.click()
   await expect(page.getByRole('list', { name: 'Messages' })).toContainText(
     finalMessageText
@@ -218,7 +222,7 @@ test.describe('draft', () => {
   async function sendMessageAndSetAsQuote(messageText: string) {
     // Note that this will clear the current text.
     // Maybe we should already have a message ready, e.g. in `beforeAll`.
-    await textarea.fill(messageText)
+    await textarea().fill(messageText)
     await page.getByRole('button', { name: 'Send' }).click()
 
     await page
@@ -228,14 +232,14 @@ test.describe('draft', () => {
     await page.getByRole('menuitem', { name: 'Reply' }).click()
   }
   async function testDraftHasQuote(quoteText: string) {
-    await expect(composerReply).toContainText('Me', { ignoreCase: false })
-    await expect(composerReply).toContainText(quoteText)
+    await expect(composerReply()).toContainText('Me', { ignoreCase: false })
+    await expect(composerReply()).toContainText(quoteText)
   }
 
   // A contact is also a file, and it's the easiest way
   // to attach a file, so let's go for it.
   async function attachFile() {
-    await composerSection
+    await composerSection()
       .getByRole('button', { name: 'Add attachment' })
       .click()
     await page.getByRole('menuitem', { name: 'Contact' }).click()
@@ -252,9 +256,9 @@ test.describe('draft', () => {
   async function testDraftHasFile() {
     const myName = 'Alice'
     await expect(
-      composerSection.getByRole('region', { name: 'Attachment' })
+      composerSection().getByRole('region', { name: 'Attachment' })
     ).toContainText(myName)
-    await expect(composerSection).toContainText(myName)
+    await expect(composerSection()).toContainText(myName)
   }
 
   async function testSavesText(text: string, targetChatNum: number = 1) {
@@ -268,14 +272,14 @@ test.describe('draft', () => {
     await selectChat(someOtherChatNum)
 
     // Shouldn't take long to clear the value.
-    await expect(textarea).toBeEmpty({ timeout: 300 })
+    await expect(textarea()).toBeEmpty({ timeout: 300 })
 
     // This is currently failing sometimes, probably due to some
     // `ChatlistItemChanged` race. TODO.
     // await expect(targetChat).toContainText(`Draft: ${text}`)
 
     await selectChat(targetChatNum)
-    await expect(textarea).toHaveText(text)
+    await expect(textarea()).toHaveText(text)
   }
 
   async function testSavesQuote(
@@ -290,10 +294,10 @@ test.describe('draft', () => {
     await testDraftHasQuote(messageText)
 
     await selectChat(someOtherChatNum)
-    await expect(composerSection).not.toContainText(messageText, {
+    await expect(composerSection()).not.toContainText(messageText, {
       timeout: 300,
     })
-    await expect(composerReply).not.toBeVisible({ timeout: 1 })
+    await expect(composerReply()).not.toBeVisible({ timeout: 1 })
 
     // This is currently failing sometimes, probably due to some
     // `ChatlistItemChanged` race. TODO.
@@ -323,17 +327,17 @@ test.describe('draft', () => {
     await testDraftIsEmpty()
 
     // Switch the chat back and forth.
-    const currChatHandle = await chatList
+    const currChatHandle = await chatList()
       .getByRole('tab', { selected: true })
       .elementHandle()
-    const otherChatTab = chatList
+    const otherChatTab = chatList()
       .getByRole('tab', { selected: false, name: 'Some chat' })
       .first()
     await otherChatTab.click()
     // Wait for the other chat to fully load before going back.
-    await expect(textarea).not.toBeDisabled()
+    await expect(textarea()).not.toBeDisabled()
     await currChatHandle!.click()
-    await expect(composerSection).toHaveText('')
+    await expect(composerSection()).toHaveText('')
 
     await testDraftIsEmpty()
   }
@@ -361,7 +365,7 @@ test.describe('draft', () => {
     await testSavesQuote()
 
     await expect(page.getByRole('button', { name: 'Send' })).not.toBeVisible()
-    await textarea.fill('foo')
+    await textarea().fill('foo')
     await sendDraftAndTestDraftIsCleared()
   })
 
@@ -375,7 +379,7 @@ test.describe('draft', () => {
     await testSavesText(draftText, chatNum)
 
     await selectChat(chatNum)
-    await expect(textarea).toHaveText(draftText)
+    await expect(textarea()).toHaveText(draftText)
     await testDraftHasQuote(quoteMessageText)
 
     await sendDraftAndTestDraftIsCleared()
@@ -400,8 +404,8 @@ test.describe('draft', () => {
   // see `useCreateDraftMessage`.
   test("bot command click doesn't override draft", async () => {
     await selectChat(1)
-    await textarea.fill('Try /someBotCommand')
-    await textarea.press('ControlOrMeta+Enter')
+    await textarea().fill('Try /someBotCommand')
+    await textarea().press('ControlOrMeta+Enter')
     const commandSuggestion = page.getByRole('link', {
       name: '/someBotCommand',
     })
@@ -417,34 +421,34 @@ test.describe('draft', () => {
     }
 
     // If there is a file but no text, it's safe to set the text.
-    await expect(textarea).toBeFocused()
-    await textarea.clear()
+    await expect(textarea()).toBeFocused()
+    await textarea().clear()
     await testDraftIsEmpty()
     await attachFile()
     await commandSuggestion.click()
     await testDraftHasFile()
-    await expect(textarea).toHaveText('/someBotCommand')
+    await expect(textarea()).toHaveText('/someBotCommand')
 
     const somePriorDraftText =
       'Draft text before bot command has been clicked' + Math.random()
-    await textarea.fill(somePriorDraftText)
+    await textarea().fill(somePriorDraftText)
     await clickCommandAndCancel()
-    await expect(textarea).toHaveText(somePriorDraftText)
+    await expect(textarea()).toHaveText(somePriorDraftText)
 
     await selectChat(2)
-    await expect(textarea).toBeEmpty()
+    await expect(textarea()).toBeEmpty()
     await selectChat(1)
     await clickCommandAndCancel()
     await testDraftHasFile()
-    await expect(textarea).toHaveText(somePriorDraftText)
+    await expect(textarea()).toHaveText(somePriorDraftText)
 
     await commandSuggestion.click()
     await replaceDraftDialog
       .getByRole('button', { name: 'Replace Draft' })
       .click()
-    await expect(textarea).toHaveText('/someBotCommand')
-    await getRemoveQuoteOrFileButton(composerSection).click()
-    await textarea.clear()
+    await expect(textarea()).toHaveText('/someBotCommand')
+    await getRemoveQuoteOrFileButton(composerSection()).click()
+    await textarea().clear()
     await testDraftIsEmpty()
   })
   // This is pretty similar to the previous test.
@@ -494,47 +498,47 @@ test.describe('draft', () => {
 
     await selectChat(1)
     const somePriorDraftText = 'Some prior draft text' + Math.random()
-    await expect(textarea).toBeFocused()
-    await textarea.fill(somePriorDraftText)
+    await expect(textarea()).toBeFocused()
+    await textarea().fill(somePriorDraftText)
     // Can add a file to draft if already have text but no file.
     await shareProfile()
     await expect(
-      composerSection.getByRole('region', { name: 'Attachment' })
+      composerSection().getByRole('region', { name: 'Attachment' })
     ).toContainText(dummyContactName)
-    await expect(textarea).toHaveText(somePriorDraftText)
+    await expect(textarea()).toHaveText(somePriorDraftText)
 
-    await getRemoveQuoteOrFileButton(composerSection).click()
+    await getRemoveQuoteOrFileButton(composerSection()).click()
     await attachFile()
     await tryShareProfileAndCancel()
     const myName = 'Alice'
     await expect(
-      composerSection.getByRole('region', { name: 'Attachment' })
+      composerSection().getByRole('region', { name: 'Attachment' })
     ).toContainText(myName)
-    await expect(composerSection).not.toContainText(dummyContactName)
-    await expect(textarea).toHaveText(somePriorDraftText)
+    await expect(composerSection()).not.toContainText(dummyContactName)
+    await expect(textarea()).toHaveText(somePriorDraftText)
 
     await selectChat(2)
-    await expect(textarea).toBeEmpty()
+    await expect(textarea()).toBeEmpty()
     await selectChat(1)
     await tryShareProfileAndCancel()
     await expect(
-      composerSection.getByRole('region', { name: 'Attachment' })
+      composerSection().getByRole('region', { name: 'Attachment' })
     ).toContainText(myName)
-    await expect(composerSection).not.toContainText(dummyContactName)
-    await expect(textarea).toHaveText(somePriorDraftText)
+    await expect(composerSection()).not.toContainText(dummyContactName)
+    await expect(textarea()).toHaveText(somePriorDraftText)
 
     await shareProfile()
     await replaceDraftDialog
       .getByRole('button', { name: 'Replace Draft' })
       .click()
     await expect(
-      composerSection.getByRole('region', { name: 'Attachment' })
+      composerSection().getByRole('region', { name: 'Attachment' })
     ).not.toContainText(myName)
-    await expect(composerSection).toContainText(dummyContactName)
-    await expect(textarea).toHaveText(somePriorDraftText)
+    await expect(composerSection()).toContainText(dummyContactName)
+    await expect(textarea()).toHaveText(somePriorDraftText)
 
-    await getRemoveQuoteOrFileButton(composerSection).click()
-    await textarea.clear()
+    await getRemoveQuoteOrFileButton(composerSection()).click()
+    await textarea().clear()
     await testDraftIsEmpty()
   })
 })
@@ -542,27 +546,27 @@ test.describe('draft', () => {
 test('gets focused when selecting a chat', async () => {
   await selectChat(1)
   await page.getByRole('button').first().focus() // Focus a random button
-  await expect(textarea).not.toBeFocused()
+  await expect(textarea()).not.toBeFocused()
 
   await selectChat(2)
-  await expect(textarea).toBeFocused()
+  await expect(textarea()).toBeFocused()
 
-  await textarea.blur()
+  await textarea().blur()
   // When clicking on a chat that is already active, still focus the composer.
-  await expect(textarea).not.toBeFocused()
+  await expect(textarea()).not.toBeFocused()
   await selectChat(2)
-  await expect(textarea).toBeFocused()
+  await expect(textarea()).toBeFocused()
 })
 
 test('gets focused after clicking/touching send message button', async () => {
   await selectChat(1)
 
   const msg = 'Msg' + Math.random()
-  await textarea.fill(msg)
+  await textarea().fill(msg)
   await page.getByRole('button', { name: 'Send' }).focus()
   await page.getByRole('button', { name: 'Send' }).click()
 
-  await expect(textarea).toBeFocused()
+  await expect(textarea()).toBeFocused()
 })
 
 test.describe('Ctrl + Up shortcut', () => {
@@ -582,10 +586,10 @@ test.describe('Ctrl + Up shortcut', () => {
       const text = getMessageText(i)
 
       // A hack against flakiness (same as other such occurrences)
-      await expect(textarea).toBeFocused()
+      await expect(textarea()).toBeFocused()
 
-      await textarea.fill(text)
-      await textarea.press('ControlOrMeta+Enter')
+      await textarea().fill(text)
+      await textarea().press('ControlOrMeta+Enter')
       await expect(page.getByLabel('Messages').getByText(text)).toBeVisible()
     }
   })
@@ -596,38 +600,38 @@ test.describe('Ctrl + Up shortcut', () => {
   })
 
   async function up() {
-    await textarea.press('ControlOrMeta+ArrowUp')
+    await textarea().press('ControlOrMeta+ArrowUp')
   }
   async function down() {
-    await textarea.press('ControlOrMeta+ArrowDown')
+    await textarea().press('ControlOrMeta+ArrowDown')
   }
   async function expectQuote(i: number) {
-    await expect(composerSection).toContainText('Me', { timeout: 500 })
-    await expect(composerSection).toContainText(getMessageText(i), {
+    await expect(composerSection()).toContainText('Me', { timeout: 500 })
+    await expect(composerSection()).toContainText(getMessageText(i), {
       timeout: 500,
     })
   }
   async function expectNoQuote() {
-    await expect(composerSection).toHaveText('', { timeout: 500 })
+    await expect(composerSection()).toHaveText('', { timeout: 500 })
 
-    await expect(composerSection).not.toContainText('Me', { timeout: 500 })
+    await expect(composerSection()).not.toContainText('Me', { timeout: 500 })
   }
 
   test('quotes last message', async () => {
     await expectNoQuote()
 
-    await textarea.focus()
+    await textarea().focus()
     await up()
     await expectQuote(9)
 
-    await expect(textarea).toBeFocused()
+    await expect(textarea()).toBeFocused()
 
-    await textarea.press('Escape')
+    await textarea().press('Escape')
     await expectNoQuote()
   })
 
   test('removes quote on Ctrl + Down', async () => {
-    await textarea.focus()
+    await textarea().focus()
     await up()
     await expectQuote(9)
     await down()
@@ -650,7 +654,7 @@ test.describe('Ctrl + Up shortcut', () => {
     await up()
     await expectQuote(0)
 
-    await composerSection
+    await composerSection()
       .getByRole('button', {
         name: /(close|cancel|remove|delete)/i,
       })
@@ -672,7 +676,7 @@ test.describe('Ctrl + Up shortcut', () => {
     await down()
     await expectQuote(8)
 
-    await textarea.press('Escape')
+    await textarea().press('Escape')
     await expectNoQuote()
   })
 
@@ -726,8 +730,8 @@ test.describe('Ctrl + Up shortcut', () => {
     // Sending a message is out way to "lock" the quote,
     // and check its final value.
     const text = 'msg with quote' + Math.random()
-    await textarea.fill(text)
-    await textarea.press('ControlOrMeta+Enter')
+    await textarea().fill(text)
+    await textarea().press('ControlOrMeta+Enter')
     const msg = page
       .getByLabel('Messages')
       .getByRole('listitem')
@@ -758,8 +762,8 @@ test.describe('Ctrl + Up shortcut', () => {
     await expectQuote(8)
 
     const msg = 'Msg' + Math.random()
-    await textarea.fill(msg)
-    await textarea.press('ControlOrMeta+Enter')
+    await textarea().fill(msg)
+    await textarea().press('ControlOrMeta+Enter')
 
     await expect(
       page.getByLabel('Messages').getByRole('listitem').filter({ hasText: msg })
@@ -788,12 +792,12 @@ test.describe('edit message', () => {
   })
 
   test('enter edit mode with ArrowUp', async () => {
-    await textarea.focus()
-    await expect(textarea).toBeEmpty()
+    await textarea().focus()
+    await expect(textarea()).toBeEmpty()
 
     await page.keyboard.press('ArrowUp')
 
-    await expect(textarea).toHaveText('M 3')
+    await expect(textarea()).toHaveText('M 3')
     await expect(editMessageSection()).toContainText('Edit Message')
     await expect(editMessageSection()).toContainText('M 3')
     await expect(
@@ -804,11 +808,11 @@ test.describe('edit message', () => {
   test('exit edit mode with Escape', async () => {
     await page.keyboard.press('Escape')
 
-    await expect(textarea).toBeEmpty()
-    await expect(composerSection).not.toContainText('Edit Message')
-    await expect(composerSection).not.toContainText('M 3')
+    await expect(textarea()).toBeEmpty()
+    await expect(composerSection()).not.toContainText('Edit Message')
+    await expect(composerSection()).not.toContainText('M 3')
     await expect(
-      composerSection.getByRole('button', { name: 'Add Attachment' })
+      composerSection().getByRole('button', { name: 'Add Attachment' })
     ).toBeVisible()
     await expect(textareaNonEdit()).toBeFocused()
   })
@@ -824,7 +828,7 @@ test.describe('edit message', () => {
     await textareaNonEdit().fill('123')
     await page.keyboard.press('ArrowUp')
     await expect(textareaNonEdit()).toHaveText('123')
-    await expect(composerSection).not.toContainText('Edit Message')
+    await expect(composerSection()).not.toContainText('Edit Message')
     await page.keyboard.press('ArrowUp')
     await page.keyboard.press('ArrowUp')
     await expect(textareaNonEdit()).toHaveText('123')
@@ -835,7 +839,7 @@ test.describe('edit message', () => {
     await page.keyboard.press('ArrowUp')
     await page.keyboard.press('ArrowUp')
     await expect(textareaNonEdit()).toHaveText('\n\n\n\n\n')
-    await expect(composerSection).not.toContainText('Edit Message')
+    await expect(composerSection()).not.toContainText('Edit Message')
   })
 })
 
@@ -848,8 +852,8 @@ test.describe('Emoji picker', () => {
   })
 
   test('adds emoji to draft', async () => {
-    await textarea.focus()
-    await textarea.fill('12345')
+    await textarea().focus()
+    await textarea().fill('12345')
     await page.keyboard.press('ArrowLeft')
     await page.keyboard.press('ArrowLeft')
     await page.keyboard.press('Tab')
@@ -862,11 +866,11 @@ test.describe('Emoji picker', () => {
     await expect(
       page.getByRole('tabpanel', { name: 'Emoji' })
     ).not.toBeVisible()
-    await expect(textarea).toBeFocused()
-    await expect(textarea).toHaveText('123👍45')
+    await expect(textarea()).toBeFocused()
+    await expect(textarea()).toHaveText('123👍45')
   })
   test('focuses composer when closed with Escape', async () => {
-    await textarea.focus()
+    await textarea().focus()
     await page.keyboard.press('Tab')
     await page.keyboard.press('Space')
     await expect(
@@ -876,7 +880,7 @@ test.describe('Emoji picker', () => {
     await expect(
       page.getByRole('tabpanel', { name: 'Emoji' })
     ).not.toBeVisible()
-    await expect(textarea).toBeFocused()
-    await expect(textarea).toBeEmpty()
+    await expect(textarea()).toBeFocused()
+    await expect(textarea()).toBeEmpty()
   })
 })
