@@ -1,5 +1,47 @@
 # Changelog
 
+All notable changes to this project will be documented in this file.
+
+<a id="2_25_0"></a>
+## [2.25.0] - 2025-11-12
+
+### Added
+
+- Implement drag-and-drop to reorder accounts ([#5590](https://github.com/deltachat/deltachat-desktop/issues/5590))
+- New broadcast channel behaviour (experimental) ([#5686](https://github.com/deltachat/deltachat-desktop/issues/5686))
+- A11y: Reply and Attachment landmark
+
+### Changed
+
+- Upgrade core to 2.25 ([#5665](https://github.com/deltachat/deltachat-desktop/issues/5665))
+- Change link color ([#5701](https://github.com/deltachat/deltachat-desktop/issues/5701))
+- Remove "Watch Sent Folder" preference
+- Update classic email login wordings ([#5688](https://github.com/deltachat/deltachat-desktop/issues/5688))
+- Do not use HTTPS request for default instant onboarding ([#5618](https://github.com/deltachat/deltachat-desktop/issues/5618))
+- Remove address from Vcard ([#5672](https://github.com/deltachat/deltachat-desktop/issues/5672))
+- Hide or move email address ([#5700](https://github.com/deltachat/deltachat-desktop/issues/5700))
+
+### Fixed
+
+- Calls: show initial letter img if no avatar
+- Skip info messages on Ctrl-Up ([#5337](https://github.com/deltachat/deltachat-desktop/issues/5337))
+- Handle wrong qr code scans ([#5565](https://github.com/deltachat/deltachat-desktop/issues/5565))
+- Handle mailto links on chatmail accounts ([#5620](https://github.com/deltachat/deltachat-desktop/issues/5620))
+- Lowercase scheme before comparison ([#5627](https://github.com/deltachat/deltachat-desktop/issues/5627))
+- Improper display of blocked contacts ([#5630](https://github.com/deltachat/deltachat-desktop/issues/5630))
+- More contrast for icons ([#5646](https://github.com/deltachat/deltachat-desktop/issues/5646))
+- Avoid console error ([#5631](https://github.com/deltachat/deltachat-desktop/issues/5631))
+- Remove some key codes from keyhandler ([#5667](https://github.com/deltachat/deltachat-desktop/issues/5667))
+- Compare with lower case key ([#5685](https://github.com/deltachat/deltachat-desktop/issues/5685))
+- Some bugs when switching chats
+- No "leave group" for contact requests ([#5693](https://github.com/deltachat/deltachat-desktop/issues/5693))
+- Remove deleted app immediately ([#5692](https://github.com/deltachat/deltachat-desktop/issues/5692))
+- Improve drag regions on MacOS ([#5671](https://github.com/deltachat/deltachat-desktop/issues/5671))
+- Remove RTCPeerConnection exhaustion (FILL500)
+- Padding & hide icon in blocked contacts ([#5703](https://github.com/deltachat/deltachat-desktop/issues/5703))
+- Small UI fixes ([#5633](https://github.com/deltachat/deltachat-desktop/issues/5633))
+
+
 <a id="2_22_0"></a>
 
 ## [2.22.0] - 2025-10-17
@@ -3718,7 +3760,8 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.22.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.25.0...HEAD
+[2.25.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.22.0...v2.25.0
 
 [2.22.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.20.0...v2.22.0
 
