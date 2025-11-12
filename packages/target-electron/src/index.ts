@@ -20,6 +20,8 @@ const hostRules = 'MAP * ~NOTFOUND'
 rawApp.commandLine.appendSwitch('host-resolver-rules', hostRules)
 rawApp.commandLine.appendSwitch('host-rules', hostRules)
 
+rawApp.commandLine.appendSwitch('disable-features', 'IsolateSandboxedIframes')
+
 if (rc['version'] === true || rc['v'] === true) {
   // eslint-disable-next-line no-console
   console.info(BuildInfo.VERSION)
