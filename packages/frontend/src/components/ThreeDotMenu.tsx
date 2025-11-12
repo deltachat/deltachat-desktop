@@ -1,4 +1,3 @@
-import { C } from '@deltachat/jsonrpc-client'
 import React, { useContext } from 'react'
 
 import { Timespans } from '../../../shared/constants'
@@ -44,7 +43,7 @@ export function useThreeDotMenu(selectedChat?: T.FullChat) {
       id: chatId,
       canSend,
     } = selectedChat
-    const isGroup = selectedChat.chatType === C.DC_CHAT_TYPE_GROUP
+    const isGroup = selectedChat.chatType === 'Group'
 
     const onLeaveGroup = () =>
       selectedChat && openLeaveGroupOrChannelDialog(accountId, chatId, isGroup)
@@ -84,8 +83,8 @@ export function useThreeDotMenu(selectedChat?: T.FullChat) {
       },
       // See https://github.com/deltachat/deltachat-android/blob/fd4a377752cc6778f161590fde2f9ab29c5d3011/src/main/java/org/thoughtcrime/securesms/ConversationActivity.java#L445-L447.
       canSend &&
-        selectedChat.chatType !== C.DC_CHAT_TYPE_IN_BROADCAST &&
-        selectedChat.chatType !== C.DC_CHAT_TYPE_MAILINGLIST &&
+        selectedChat.chatType !== 'InBroadcast' &&
+        selectedChat.chatType !== 'Mailinglist' &&
         selectedChat.isEncrypted && {
           label: tx('ephemeral_messages'),
           action: onDisappearingMessages,

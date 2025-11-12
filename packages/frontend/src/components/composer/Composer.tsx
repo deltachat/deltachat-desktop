@@ -8,7 +8,7 @@ import React, {
   useMemo,
   useContext,
 } from 'react'
-import { C, T } from '@deltachat/jsonrpc-client'
+import { T } from '@deltachat/jsonrpc-client'
 import { extension } from 'mime-types'
 
 import MenuAttachment from './menuAttachment'
@@ -456,7 +456,7 @@ const Composer = forwardRef<
         <button
           className='contact-request-button delete'
           onClick={async () => {
-            if (selectedChat.chatType !== C.DC_CHAT_TYPE_SINGLE) {
+            if (selectedChat.chatType !== 'Single') {
               // if chat gets deleted instead of blocked ask user for confirmation
               if (
                 !(await confirmDialog(
@@ -473,9 +473,7 @@ const Composer = forwardRef<
             unselectChat()
           }}
         >
-          {selectedChat.chatType === C.DC_CHAT_TYPE_SINGLE
-            ? tx('block')
-            : tx('delete')}
+          {selectedChat.chatType === 'Single' ? tx('block') : tx('delete')}
         </button>
         <button
           className='contact-request-button accept'

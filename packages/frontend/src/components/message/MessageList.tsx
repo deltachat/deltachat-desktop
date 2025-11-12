@@ -9,7 +9,6 @@ import React, {
 } from 'react'
 import classNames from 'classnames'
 import moment from 'moment'
-import { C } from '@deltachat/jsonrpc-client'
 import { debounce } from 'debounce'
 
 import { MessageWrapper } from './MessageWrapper'
@@ -33,14 +32,6 @@ import {
   useRovingTabindex,
 } from '../../contexts/RovingTabindex'
 import { markChatAsSeen } from '../../backend/chat'
-
-type ChatTypes =
-  | C.DC_CHAT_TYPE_SINGLE
-  | C.DC_CHAT_TYPE_GROUP
-  | C.DC_CHAT_TYPE_IN_BROADCAST
-  | C.DC_CHAT_TYPE_OUT_BROADCAST
-  | C.DC_CHAT_TYPE_MAILINGLIST
-  | C.DC_CHAT_TYPE_UNDEFINED
 
 const onWindowFocus = (accountId: number) => {
   log.debug('window focused')
@@ -737,7 +728,7 @@ export type ConversationType = {
   /* whether this chat has multiple participants */
   hasMultipleParticipants: boolean
   isDeviceChat: boolean
-  chatType: ChatTypes
+  chatType: T.ChatType
 }
 
 export const MessageListInner = React.memo(
@@ -770,9 +761,9 @@ export const MessageListInner = React.memo(
     } = props
 
     const conversationType: ConversationType = {
-      hasMultipleParticipants: chat.chatType !== C.DC_CHAT_TYPE_SINGLE,
+      hasMultipleParticipants: chat.chatType !== 'Single',
       isDeviceChat: chat.isDeviceChat as boolean,
-      chatType: chat.chatType as number,
+      chatType: chat.chatType,
     }
 
     useKeyBindingAction(KeybindAction.MessageList_PageUp, () => {

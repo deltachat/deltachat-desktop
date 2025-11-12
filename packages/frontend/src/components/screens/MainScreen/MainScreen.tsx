@@ -339,24 +339,21 @@ export default function MainScreen({ accountId }: Props) {
 function chatSubtitle(chat: Type.FullChat) {
   const tx = window.static_translate
   if (chat.id && chat.id > C.DC_CHAT_ID_LAST_SPECIAL) {
-    if (chat.chatType === C.DC_CHAT_TYPE_GROUP) {
+    if (chat.chatType === 'Group') {
       return tx('n_members', [String(chat.contactIds.length)], {
         quantity: chat.contactIds.length,
       })
-    } else if (
-      chat.chatType === C.DC_CHAT_TYPE_SINGLE &&
-      chat.contacts[0]?.isBot
-    ) {
+    } else if (chat.chatType === 'Single' && chat.contacts[0]?.isBot) {
       return tx('bot')
-    } else if (chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST) {
+    } else if (chat.chatType === 'Mailinglist') {
       if (chat.mailingListAddress) {
         return `${tx('mailing_list')} – ${chat.mailingListAddress}`
       } else {
         return tx('mailing_list')
       }
-    } else if (chat.chatType === C.DC_CHAT_TYPE_IN_BROADCAST) {
+    } else if (chat.chatType === 'InBroadcast') {
       return tx('channel')
-    } else if (chat.chatType === C.DC_CHAT_TYPE_OUT_BROADCAST) {
+    } else if (chat.chatType === 'OutBroadcast') {
       return tx('n_recipients', [String(chat.contactIds.length)], {
         quantity: chat.contactIds.length,
       })
@@ -384,16 +381,14 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
       return
     }
 
-    if (
-      chat.chatType === C.DC_CHAT_TYPE_IN_BROADCAST ||
-      chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST
-    ) {
-      openDialog(MailingListProfile, { chat })
-    } else if (
-      chat.chatType === C.DC_CHAT_TYPE_GROUP ||
-      chat.chatType === C.DC_CHAT_TYPE_OUT_BROADCAST
-    ) {
-      openViewGroupDialog(chat)
+    if (chat.chatType === 'InBroadcast' || chat.chatType === 'Mailinglist') {
+      openDialog(MailingListProfile, {
+        chat: chat as T.FullChat & { chatType: 'InBroadcast' | 'Mailinglist' },
+      })
+    } else if (chat.chatType === 'Group' || chat.chatType === 'OutBroadcast') {
+      openViewGroupDialog(
+        chat as T.FullChat & { chatType: 'Group' | 'OutBroadcast' }
+      )
     } else {
       if (chat.contactIds && chat.contactIds[0]) {
         openViewProfileDialog(accountId, chat.contactIds[0])
@@ -403,31 +398,27 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
 
   let buttonLabel: string
   switch (chat.chatType) {
-    case C.DC_CHAT_TYPE_SINGLE: {
+    case 'Single': {
       buttonLabel = tx('menu_view_profile')
       break
     }
-    case C.DC_CHAT_TYPE_GROUP: {
+    case 'Group': {
       // If you're no longer a member, editing the group is not possible,
       // but we don't have a better string.
       buttonLabel = tx('menu_edit_group')
       break
     }
-    case C.DC_CHAT_TYPE_OUT_BROADCAST: {
+    case 'OutBroadcast': {
       buttonLabel = tx('edit_channel')
       break
     }
-    case C.DC_CHAT_TYPE_IN_BROADCAST: {
+    case 'InBroadcast': {
       // We don't have a more appropriate one
       buttonLabel = tx('menu_view_profile')
       break
     }
-    case C.DC_CHAT_TYPE_MAILINGLIST: {
+    case 'Mailinglist': {
       // We don't have a more appropriate one
-      buttonLabel = tx('menu_view_profile')
-      break
-    }
-    case C.DC_CHAT_TYPE_UNDEFINED: {
       buttonLabel = tx('menu_view_profile')
       break
     }
@@ -536,7 +527,7 @@ function ChatNavButtons({
         // Core only allows placing calls in chats of type "single"
         // (but not e.g. in groups consisting of 2 members).
         // https://github.com/chatmail/core/blob/738dc5ce197f589131479801db2fbd0fb0964599/src/calls.rs#L147
-        chat.chatType === C.DC_CHAT_TYPE_SINGLE &&
+        chat.chatType === "Single" &&
         chat.contactIds.some(id => id > C.DC_CONTACT_ID_LAST_SPECIAL) && (
           <Button
             aria-label={tx('start_call')}

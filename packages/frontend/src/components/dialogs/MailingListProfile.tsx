@@ -3,15 +3,15 @@ import React from 'react'
 import Dialog, { DialogBody, DialogContent, DialogHeader } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
-import { C, type T } from '@deltachat/jsonrpc-client'
+import { type T } from '@deltachat/jsonrpc-client'
 import { DialogProps } from '../../contexts/DialogContext'
 import ProfileInfoHeader from '../ProfileInfoHeader'
 import { shouldDisableClickForFullscreen } from '../Avatar'
 
 /**
  * This dialog is used to display the profile of a mailing list
- * (DC_CHAT_TYPE_MAILINGLIST) or a channel as seen by recipient.
- * (DC_CHAT_TYPE_IN_BROADCAST)
+ * (chatType == 'Mailinglist') or a channel as seen by recipient.
+ * (chatType == 'InBroadcast')
  *
  * The main difference to other groups (which use ViewGroup):
  * you don't see other receivers here and you can not edit the group.
@@ -19,7 +19,7 @@ import { shouldDisableClickForFullscreen } from '../Avatar'
 export default function MailingListProfile(
   props: {
     chat: T.BasicChat & {
-      chatType: C.DC_CHAT_TYPE_MAILINGLIST | C.DC_CHAT_TYPE_IN_BROADCAST
+      chatType: 'Mailinglist' | 'InBroadcast'
     }
   } & DialogProps
 ) {
@@ -28,9 +28,7 @@ export default function MailingListProfile(
   const tx = useTranslationFunction()
 
   const title =
-    chat.chatType === C.DC_CHAT_TYPE_MAILINGLIST
-      ? tx('mailing_list')
-      : tx('channel')
+    chat.chatType === 'Mailinglist' ? tx('mailing_list') : tx('channel')
 
   return (
     <Dialog onClose={onClose} fixed>
