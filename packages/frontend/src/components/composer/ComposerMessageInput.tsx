@@ -30,6 +30,11 @@ type ComposerMessageInputProps = {
   onPaste?: (e: React.ClipboardEvent<HTMLTextAreaElement>) => void
   // used to show/hide send button
   onChange: (text: string) => void
+  /**
+   * Called when ArrowUp is pressed and the input is empty.
+   * Only relevant for non-editing mode.
+   */
+  onArrowUpWhenEmpty?: () => void
 }
 
 type ComposerMessageInputState = {
@@ -156,6 +161,14 @@ export default class ComposerMessageInput extends React.Component<
 
     if (action === 'SEND') {
       this.props.sendMessageOrEditRequest()
+      e.preventDefault()
+      e.stopPropagation()
+    } else if (
+      e.key === 'ArrowUp' &&
+      this.props.text.trim() === '' &&
+      this.props.onArrowUpWhenEmpty
+    ) {
+      this.props.onArrowUpWhenEmpty()
       e.preventDefault()
       e.stopPropagation()
     }
