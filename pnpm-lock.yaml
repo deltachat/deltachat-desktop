@@ -7,8 +7,8 @@ settings:
 catalogs:
   default:
     '@deltachat/calls-webapp':
-      specifier: 0.10.0-beta-debug
-      version: 0.10.0-beta-debug
+      specifier: 0.11.0-beta-debug
+      version: 0.11.0-beta-debug
     '@deltachat/jsonrpc-client':
       specifier: 2.25.0
       version: 2.25.0
@@ -382,7 +382,7 @@ importers:
     dependencies:
       '@deltachat/calls-webapp':
         specifier: 'catalog:'
-        version: 0.10.0-beta-debug
+        version: 0.11.0-beta-debug
       '@deltachat/jsonrpc-client':
         specifier: 'catalog:'
         version: 2.25.0(ws@7.5.10)
@@ -604,8 +604,8 @@ packages:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
 
-  '@deltachat/calls-webapp@0.10.0-beta-debug':
-    resolution: {integrity: sha512-eErbULxmTN3YPCtjW+xXZzCFahtnblNM9gIohdwO837k2HbtkK6YbGw3G7rrkFenfTx4WBCxL636b/105TJmcg==}
+  '@deltachat/calls-webapp@0.11.0-beta-debug':
+    resolution: {integrity: sha512-W8ZknzRKHIUSieJ20P7Tiyfqu0UuqiPW3phisS+3AmK+b9fUM4Uu7j3bZdH1Kgaf0zbEr5OutJji6CHgGKLIRg==}
 
   '@deltachat/jsonrpc-client@2.25.0':
     resolution: {integrity: sha512-aFL59XIOYAjvx0Kqjv6+N4/Qao4qd5CiaktkQ+1wTUubyeNJ+sXfhnU17exCSjsABgjo4QLi2ined2nfSVhIIw==}
@@ -4436,7 +4436,7 @@ snapshots:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
 
-  '@deltachat/calls-webapp@0.10.0-beta-debug':
+  '@deltachat/calls-webapp@0.11.0-beta-debug':
     dependencies:
       preact: 10.27.2
 
