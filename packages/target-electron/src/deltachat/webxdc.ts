@@ -112,7 +112,7 @@ export default class DCWebxdc {
     let dummyProxy_: { server: Server; url: string } | undefined
     const getDummyProxyUrl = async () => {
       if (dummyProxy_) {
-        if (dummyProxy_.server.listening) {
+        if (!dummyProxy_.server.listening) {
           // TODO maybe also close all WebXDC instances
           // as soon as we encounter any error?
           // This would be more important when/if we get rid of `host-rules`.
