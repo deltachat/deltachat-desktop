@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+<a id="2_25_1"></a>
+## [2.25.1] - 2025-11-13
+
+### Fixed
+- WebXDC apps only opening on one account
+
 <a id="2_25_0"></a>
 ## [2.25.0] - 2025-11-12
 
@@ -3780,7 +3786,8 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.25.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.25.1...HEAD
+[2.25.1]: https://github.com/deltachat/deltachat-desktop/compare/2.25.0...v2.25.1
 [2.25.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.22.0...v2.25.0
 
 [2.22.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.20.0...v2.22.0
