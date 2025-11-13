@@ -5,7 +5,7 @@
 # parse the commits based on https://www.conventionalcommits.org
 conventional_commits = true
 # filter out the commits that are not conventional
-filter_unconventional = true
+filter_unconventional = false
 # process each line of a commit as an individual commit
 split_commits = false
 # regex for preprocessing the commit messages
@@ -14,8 +14,10 @@ commit_preprocessors = [
 ]
 # regex for parsing and grouping commits
 commit_parsers = [
-    { message = "^feat", group = "Features / Changes"},
-    { message = "^fix", group = "Fixes"},
+    { message = "^feat", group = "Added"},
+    { message = "^update", group = "Changes"},
+    { message = "^fix", group = "Fixed"},
+    { message = "^remove", group = "Removed"},
     { message = "^refactor", group = "Refactor"},
     { message = "^perf", group = "Performance"},
     { message = "^test", group = "Tests"},
