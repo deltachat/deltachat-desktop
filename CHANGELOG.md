@@ -9,37 +9,57 @@ All notable changes to this project will be documented in this file.
 
 - Implement drag-and-drop to reorder accounts ([#5590](https://github.com/deltachat/deltachat-desktop/issues/5590))
 - New broadcast channel behaviour (experimental) ([#5686](https://github.com/deltachat/deltachat-desktop/issues/5686))
-- A11y: Reply and Attachment landmark
 
 ### Changed
 
 - Upgrade core to 2.25 ([#5665](https://github.com/deltachat/deltachat-desktop/issues/5665))
-- Change link color ([#5701](https://github.com/deltachat/deltachat-desktop/issues/5701))
+- Change message link color to blue ([#5701](https://github.com/deltachat/deltachat-desktop/issues/5701))
 - Remove "Watch Sent Folder" preference
 - Update classic email login wordings ([#5688](https://github.com/deltachat/deltachat-desktop/issues/5688))
 - Do not use HTTPS request for default instant onboarding ([#5618](https://github.com/deltachat/deltachat-desktop/issues/5618))
 - Remove address from Vcard ([#5672](https://github.com/deltachat/deltachat-desktop/issues/5672))
-- Hide or move email address ([#5700](https://github.com/deltachat/deltachat-desktop/issues/5700))
+- Remove email address from chat header ([#5700](https://github.com/deltachat/deltachat-desktop/issues/5700))
 
 ### Fixed
 
-- Calls: show initial letter img if no avatar
-- Skip info messages on Ctrl-Up ([#5337](https://github.com/deltachat/deltachat-desktop/issues/5337))
+- Open WebXDC apps faster, improve security (remove RTCPeerConnection exhaustion (FILL500)) ([#5451](https://github.com/deltachat/deltachat-desktop/issues/5451))
+- Writing a message, draft
+  - Some draft races and other bugs when switching between chats
+  - Some other rare draft message bugs
+  - Draft WebXDC name being 'Unknown App' rarely
+  - Potential bug with incorrect WebXDC attachment info
+  - Set fixed height for "Reply" quote, make it less jumpy when switching between quotes
+  - improve performance while writing a message
+  - Debounce instead of throttle to save draft - don't save it too often
+  - performance: Make message quoting instant
+  - a11y: add "Reply" and "Attachment" landmark to message composer
+  - Skip info messages on Ctrl-Up ([#5337](https://github.com/deltachat/deltachat-desktop/issues/5337))
+- Fix shortcuts on DVORAK layout ([#5667](https://github.com/deltachat/deltachat-desktop/issues/5667))
+- Links being unclickable if not written in all lowercase ([#5627](https://github.com/deltachat/deltachat-desktop/issues/5627))
+- Remove `:emoji:` replacement on incoming msgs
+- Some potential bugs in Chat/ContactList
+- Remove "Close" buttons in some dialogs
+- Allow closing more dialogs on outside clicks
+- Rename 'Save' to 'Save Message' ([#5658](https://github.com/deltachat/deltachat-desktop/issues/5658))
+- Remove one wrong translation
+- Proper "Send Autocrypt msg" dialog button label
 - Handle wrong qr code scans ([#5565](https://github.com/deltachat/deltachat-desktop/issues/5565))
+- Crash when clicking settings while loading
 - Handle mailto links on chatmail accounts ([#5620](https://github.com/deltachat/deltachat-desktop/issues/5620))
-- Lowercase scheme before comparison ([#5627](https://github.com/deltachat/deltachat-desktop/issues/5627))
-- Improper display of blocked contacts ([#5630](https://github.com/deltachat/deltachat-desktop/issues/5630))
-- More contrast for icons ([#5646](https://github.com/deltachat/deltachat-desktop/issues/5646))
-- Avoid console error ([#5631](https://github.com/deltachat/deltachat-desktop/issues/5631))
-- Remove some key codes from keyhandler ([#5667](https://github.com/deltachat/deltachat-desktop/issues/5667))
-- Compare with lower case key ([#5685](https://github.com/deltachat/deltachat-desktop/issues/5685))
-- Some bugs when switching chats
+- More contrast for button icons ([#5646](https://github.com/deltachat/deltachat-desktop/issues/5646))
 - No "leave group" for contact requests ([#5693](https://github.com/deltachat/deltachat-desktop/issues/5693))
-- Remove deleted app immediately ([#5692](https://github.com/deltachat/deltachat-desktop/issues/5692))
+- Fix apps remaining in the chat header after app deletion ([#5692](https://github.com/deltachat/deltachat-desktop/issues/5692))
 - Improve drag regions on MacOS ([#5671](https://github.com/deltachat/deltachat-desktop/issues/5671))
-- Remove RTCPeerConnection exhaustion (FILL500)
-- Padding & hide icon in blocked contacts ([#5703](https://github.com/deltachat/deltachat-desktop/issues/5703))
+- Improve the look of the "Blocked Contacts" dialog ([#5703](https://github.com/deltachat/deltachat-desktop/issues/5703)), ([#5630](https://github.com/deltachat/deltachat-desktop/issues/5630))
+- Don't show incorrect member count while joining group ([#5704](https://github.com/deltachat/deltachat-desktop/issues/5704))
+- Apply primary style to "Create Channel" btn
 - Small UI fixes ([#5633](https://github.com/deltachat/deltachat-desktop/issues/5633))
+  * fix: harmonize button alignment for create group & create channel
+  * fix: no danger styling on cancel button in "create account progress" dialog
+- Update chatmail relays link ([#5645](https://github.com/deltachat/deltachat-desktop/issues/5645))
+- Update "Maps" app ([#5705](https://github.com/deltachat/deltachat-desktop/issues/5705))
+- Calls: show initial letter img if no avatar
+- Calls: add "P2P" / "non-P2P" text
 
 
 <a id="2_22_0"></a>
