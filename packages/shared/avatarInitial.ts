@@ -8,8 +8,6 @@ const userPerceivedCharacterSegmenter = new Intl.Segmenter(undefined, {
  */
 export function avatarInitial(name: string, addr?: string): string {
   const str = name || addr || ''
-  return (
-    userPerceivedCharacterSegmenter.segment(str)[Symbol.iterator]().next().value
-      ?.segment ?? ''
-  )
+  const segments = userPerceivedCharacterSegmenter.segment(str)
+  return segments[Symbol.iterator]().next().value?.segment.toUpperCase() ?? ''
 }
