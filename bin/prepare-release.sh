@@ -1,17 +1,23 @@
 #!/bin/bash
 # Prepare a new release
 #
-# Usage: ./bin/prepare-release.sh 2.23.0
+# Usage: ./bin/prepare-release.sh v2.23.0
 
 set -e
 
 if [ -z "$1" ]; then
     echo "❌ Error: Version argument required"
-    echo "Usage: ./bin/prepare-release.sh VERSION"
+    echo "Usage: ./bin/prepare-release.sh vVERSION"
     exit 1
 fi
 
 VERSION="$1"
+
+if [[ ! "$VERSION" =~ ^v ]]; then
+    echo "❌ Error: Version tag must start with 'v'"
+    echo "Example: ./bin/prepare-release.sh v2.23.0"
+    exit 1
+fi
 CLEAN_VERSION=$(echo "$VERSION" | sed 's/^v//')
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
