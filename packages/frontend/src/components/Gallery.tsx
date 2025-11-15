@@ -426,11 +426,6 @@ export default class Gallery extends Component<
   }
 }
 
-const enum LoadStatus {
-  FETCHING = 1,
-  LOADED = 2,
-}
-
 function GridGallery({
   currentTab,
   mediaMessageIds,
@@ -451,29 +446,24 @@ function GridGallery({
   const [messageCache, setMessageCache] = useState<{
     [id: number]: T.MessageLoadResult | undefined
   }>({})
-  const [messageLoadState, setMessageLoading] = useState<{
-    [id: number]: undefined | LoadStatus.FETCHING | LoadStatus.LOADED
-  }>({})
+  const loadingMessages = useRef(new Set<T.Message['id']>()).current
 
   const isMessageLoaded: (index: number) => boolean = index =>
-    !!messageLoadState[mediaMessageIds[index]]
+    !!messageCache[mediaMessageIds[index]] ||
+    loadingMessages.has(mediaMessageIds[index])
   const loadMessages: (startIndex: number, stopIndex: number) => void = (
     startIndex,
     stopIndex
   ) => {
     const ids = mediaMessageIds.slice(startIndex, stopIndex + 1)
-    setMessageLoading(prevState => {
-      const newState = { ...prevState }
-      ids.forEach(id => (newState[id] = LoadStatus.FETCHING))
-      return newState
-    })
+    for (const id of ids) {
+      loadingMessages.add(id)
+    }
     BackendRemote.rpc.getMessages(accountId, ids).then(messages => {
       setMessageCache(cache => ({ ...cache, ...messages }))
-      setMessageLoading(prevState => {
-        const newState = { ...prevState }
-        ids.forEach(id => (newState[id] = LoadStatus.LOADED))
-        return newState
-      })
+      for (const id of ids) {
+        loadingMessages.delete(id)
+      }
     })
   }
 
