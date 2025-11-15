@@ -7,6 +7,7 @@ import React, {
   useMemo,
   HTMLAttributes,
   useLayoutEffect,
+  useEffectEvent,
 } from 'react'
 import {
   FixedSizeList as List,
@@ -729,20 +730,10 @@ function translate_n(
 /** functions for the chat virtual list */
 export function useLogicVirtualChatList(chatListIds: number[]) {
   const accountId = selectedAccountId()
-  // workaround to save a current reference of chatListIds
-  const chatListIdsRef = useRef(chatListIds)
-  if (chatListIdsRef.current !== chatListIds) {
-    // this is similar to a use hook doing this, but probably less expensive
-    chatListIdsRef.current = chatListIds
-  }
-  // end workaround
 
   const [chatCache, setChatCache] = useState<{
     [id: number]: Type.ChatListItemFetchResult | undefined
   }>({})
-  /** reference to newest chat cache for use in useEffect functions that listen for events */
-  const chatCacheRef = useRef<typeof chatCache>({})
-  chatCacheRef.current = chatCache
 
   const loadingChatsRef_ = useRef(new Set<T.BasicChat['id']>())
   const loadingChats = loadingChatsRef_.current
@@ -767,6 +758,25 @@ export function useLogicVirtualChatList(chatListIds: number[]) {
     }
   }
 
+  const reloadChats = useEffectEvent(async () => {
+    const cached_items = Object.keys(chatCache).map(Number)
+    const possibly_visible = cached_items.filter(
+      chatId => chatListIds.indexOf(chatId) !== -1
+    )
+    setChatCache({})
+    loadingChats.clear()
+    for (const id of possibly_visible) {
+      loadingChats.add(id)
+    }
+    const chats = await BackendRemote.rpc.getChatlistItemsByEntries(
+      accountId,
+      possibly_visible
+    )
+    setChatCache(cache => ({ ...cache, ...chats }))
+    for (const id of possibly_visible) {
+      loadingChats.delete(id)
+    }
+  })
   useEffect(() => {
     const loadingChats = loadingChatsRef_.current
 
@@ -807,25 +817,7 @@ export function useLogicVirtualChatList(chatListIds: number[]) {
           }
         } else {
           // invalidate whole chatlist cache and reload everyhting that was visible before
-          const cached_items = Object.keys(chatCacheRef.current || {}).map(
-            Number
-          )
-          const possibly_visible = cached_items.filter(
-            chatId => chatListIdsRef.current.indexOf(chatId) !== -1
-          )
-          setChatCache({})
-          loadingChats.clear()
-          for (const id of possibly_visible) {
-            loadingChats.add(id)
-          }
-          const chats = await BackendRemote.rpc.getChatlistItemsByEntries(
-            accountId,
-            possibly_visible
-          )
-          setChatCache(cache => ({ ...cache, ...chats }))
-          for (const id of possibly_visible) {
-            loadingChats.delete(id)
-          }
+          await reloadChats()
           // reset debouncing
           debouncingChatlistItemRequests = {}
         }
