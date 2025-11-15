@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+<a id="2_25_2"></a>
+## [2.25.2] - 2025-11-15
+
+### Fixed
+
+- App hanging when opening the "New Chat" dialog or attaching a contact sometimes
+- Avatar initials not being always uppercase
+
 <a id="2_25_1"></a>
 ## [2.25.1] - 2025-11-13
 
@@ -3786,7 +3794,8 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.25.1...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.25.2...HEAD
+[2.25.2]: https://github.com/deltachat/deltachat-desktop/compare/v2.25.1...v2.25.2
 [2.25.1]: https://github.com/deltachat/deltachat-desktop/compare/2.25.0...v2.25.1
 [2.25.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.22.0...v2.25.0
 
