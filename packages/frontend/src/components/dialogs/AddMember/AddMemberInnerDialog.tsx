@@ -32,6 +32,7 @@ export function AddMemberInnerDialog({
 
   contactIds,
   contactCache,
+  isContactLoaded,
   loadContacts,
   refreshContacts,
 
@@ -47,6 +48,7 @@ export function AddMemberInnerDialog({
 
   contactIds: number[]
   contactCache: { [id: number]: T.Contact | undefined }
+  isContactLoaded: (index: number) => boolean
   loadContacts: (startIndex: number, stopIndex: number) => Promise<void>
   refreshContacts: () => void
 
@@ -230,14 +232,9 @@ export function AddMemberInnerDialog({
                 // with wrong indices.
                 // See `CreateChatMain` component.
                 loadMoreItems={loadContacts}
-                // perf: consider using `isContactLoaded` from `useLazyLoadedContacts`
-                // otherwise sometimes we might load the same contact twice (performance thing)
-                // See https://github.com/bvaughn/react-window/issues/765
                 isItemLoaded={index => {
                   const isExtraItem = index >= contactIds.length
-                  return isExtraItem
-                    ? true
-                    : contactCache[contactIds[index]] != undefined
+                  return isExtraItem ? true : isContactLoaded(index)
                 }}
                 // minimumBatchSize={100}
               >
