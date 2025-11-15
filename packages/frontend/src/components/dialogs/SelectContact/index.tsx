@@ -28,10 +28,8 @@ export default function SelectContactDialog({
   onOk: (contact: T.Contact) => void
 } & DialogProps) {
   const [queryStr, setQueryStr] = useState('')
-  const { contactIds, contactCache, loadContacts } = useLazyLoadedContacts(
-    C.DC_GCL_ADD_SELF,
-    queryStr
-  )
+  const { contactIds, contactCache, loadContacts, isContactLoaded } =
+    useLazyLoadedContacts(C.DC_GCL_ADD_SELF, queryStr)
   const tx = useTranslationFunction()
 
   const selectContactListRef = useRef<HTMLDivElement>(null)
@@ -71,12 +69,7 @@ export default function SelectContactDialog({
                 ref={infiniteLoaderRef}
                 itemCount={contactIds.length}
                 loadMoreItems={loadContacts}
-                // perf: consider using `isContactLoaded` from `useLazyLoadedContacts`
-                // otherwise sometimes we might load the same contact twice (performance thing)
-                // See https://github.com/bvaughn/react-window/issues/765
-                isItemLoaded={index =>
-                  contactCache[contactIds[index]] != undefined
-                }
+                isItemLoaded={isContactLoaded}
                 // minimumBatchSize={100}
               >
                 {({ onItemsRendered, ref }) => (
