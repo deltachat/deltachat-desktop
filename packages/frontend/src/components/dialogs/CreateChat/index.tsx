@@ -173,6 +173,7 @@ function CreateChatMain(props: CreateChatMainProps) {
   const {
     contactIds,
     contactCache,
+    isContactLoaded,
     loadContacts,
     queryStrIsValidEmail,
     refreshContacts,
@@ -366,15 +367,17 @@ function CreateChatMain(props: CreateChatMainProps) {
                   contactIds.indexOf(contactsAndExtraItems[stopInd])
                 )
               }}
-              // perf: consider using `isContactLoaded` from `useLazyLoadedContacts`
-              // otherwise sometimes we might load the same contact twice (performance thing)
-              // See https://github.com/bvaughn/react-window/issues/765
               isItemLoaded={index => {
                 const isExtraItem = contactsAndExtraItems[index] < -100
                 if (isExtraItem) {
                   return true
                 }
-                return contactCache[contactsAndExtraItems[index]] != undefined
+                // Again, the indices are shifted
+                // due to the existence of extra items.
+                const indInContactIds = contactIds.indexOf(
+                  contactsAndExtraItems[index]
+                )
+                return isContactLoaded(indInContactIds)
               }}
               // minimumBatchSize={100}
             >

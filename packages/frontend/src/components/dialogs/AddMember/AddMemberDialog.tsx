@@ -26,6 +26,7 @@ export function AddMemberDialog({
   const {
     contactIds,
     contactCache,
+    isContactLoaded,
     loadContacts,
     queryStrIsValidEmail,
     refreshContacts,
@@ -55,6 +56,7 @@ export function AddMemberDialog({
 
         contactIds,
         contactCache,
+        isContactLoaded,
         loadContacts,
         refreshContacts,
 
