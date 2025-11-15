@@ -1,10 +1,11 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useRef } from 'react'
 import { ContactListItem } from './ContactListItem'
 import { default as asyncThrottle } from '@jcoreio/async-throttle'
 import { BackendRemote, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { useFetch } from '../../hooks/useFetch'
 import { getLogger } from '@deltachat-desktop/shared/logger'
+import type { T } from '@deltachat/jsonrpc-client'
 
 const log = getLogger('ContactList')
 
@@ -92,45 +93,37 @@ export function useLazyLoadedContacts(
     queryStr
   )
 
-  const enum LoadStatus {
-    FETCHING = 1,
-    LOADED = 2,
-  }
-
   // TODO perf: shall we use Map instead of an object?
   // Or does it not matter since there is not going to be too many contacts?
   const [contactCache, setContactCache] = useState<{
     [id: number]: Type.Contact | undefined
   }>({})
-  const [contactLoadState, setContactLoading] = useState<{
-    [id: number]: undefined | LoadStatus.FETCHING | LoadStatus.LOADED
-  }>({})
+  const loadingContacts = useRef(new Set<T.Contact['id']>()).current
 
   const isContactLoaded: (index: number) => boolean = index =>
-    !!contactLoadState[contactIds[index]]
+    !!contactCache[contactIds[index]] || loadingContacts.has(contactIds[index])
   const loadContacts: (
     startIndex: number,
     stopIndex: number
   ) => Promise<void> = async (startIndex, stopIndex) => {
     const ids = contactIds.slice(startIndex, stopIndex + 1)
 
-    setContactLoading(state => {
-      const newState = { ...state }
-      ids.forEach(id => (newState[id] = LoadStatus.FETCHING))
-      return newState
-    })
-
+    for (const id of ids) {
+      loadingContacts.add(id)
+    }
     const contacts = await BackendRemote.rpc.getContactsByIds(accountId, ids)
     setContactCache(cache => ({ ...cache, ...contacts }))
-    setContactLoading(state => {
-      const newState = { ...state }
-      ids.forEach(id => (newState[id] = LoadStatus.LOADED))
-      return newState
-    })
+    for (const id of ids) {
+      loadingContacts.delete(id)
+    }
   }
 
   return {
     contactIds,
+    /**
+     * This function is not reactive, i.e. it doesn't get re-created
+     * when we start loading more items.
+     */
     isContactLoaded,
     loadContacts,
     contactCache,

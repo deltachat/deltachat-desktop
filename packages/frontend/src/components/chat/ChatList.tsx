@@ -58,11 +58,6 @@ import { useHasChanged2 } from '../../hooks/useHasChanged'
 const log = getLogger('ChatList')
 const useMultiselectLog = getLogger('ChatListMultiselect')
 
-const enum LoadStatus {
-  FETCHING = 1,
-  LOADED = 2,
-}
-
 /**
  * This component holds either a list of chats OR the result
  * of a search query including chats, contacts and messages.
@@ -749,52 +744,43 @@ export function useLogicVirtualChatList(chatListIds: number[]) {
   const chatCacheRef = useRef<typeof chatCache>({})
   chatCacheRef.current = chatCache
 
-  const [chatLoadState, setChatLoading] = useState<{
-    [id: number]: undefined | LoadStatus.FETCHING | LoadStatus.LOADED
-  }>({})
+  const loadingChatsRef_ = useRef(new Set<T.BasicChat['id']>())
+  const loadingChats = loadingChatsRef_.current
 
   const isChatLoaded: (index: number) => boolean = index =>
-    !!chatLoadState[chatListIds[index]]
+    !!chatCache[chatListIds[index]] || loadingChats.has(chatListIds[index])
   const loadChats: (
     startIndex: number,
     stopIndex: number
   ) => Promise<void> = async (startIndex, stopIndex) => {
     const entries = chatListIds.slice(startIndex, stopIndex + 1)
-    setChatLoading(state => {
-      const newState = { ...state }
-      entries.forEach(chatId => (newState[chatId] = LoadStatus.FETCHING))
-      return newState
-    })
+    for (const id of entries) {
+      loadingChats.add(id)
+    }
     const chats = await BackendRemote.rpc.getChatlistItemsByEntries(
       accountId,
       entries
     )
     setChatCache(cache => ({ ...cache, ...chats }))
-    setChatLoading(state => {
-      const newState = { ...state }
-      entries.forEach(chatId => (newState[chatId] = LoadStatus.LOADED))
-      return newState
-    })
+    for (const id of entries) {
+      loadingChats.delete(id)
+    }
   }
 
   useEffect(() => {
+    const loadingChats = loadingChatsRef_.current
+
     let debouncingChatlistItemRequests: { [chatid: number]: number } = {}
 
     const updateChatListItem = async (chatId: number) => {
       debouncingChatlistItemRequests[chatId] = 1
-      setChatLoading(state => ({
-        ...state,
-        [chatId]: LoadStatus.FETCHING,
-      }))
+      loadingChats.add(chatId)
       const chats = await BackendRemote.rpc.getChatlistItemsByEntries(
         accountId,
         [chatId]
       )
       setChatCache(cache => ({ ...cache, ...chats }))
-      setChatLoading(state => ({
-        ...state,
-        [chatId]: LoadStatus.LOADED,
-      }))
+      loadingChats.delete(chatId)
       if (debouncingChatlistItemRequests[chatId] > 1) {
         updateChatListItem(chatId)
       } else {
@@ -828,24 +814,18 @@ export function useLogicVirtualChatList(chatListIds: number[]) {
             chatId => chatListIdsRef.current.indexOf(chatId) !== -1
           )
           setChatCache({})
-          const new_loading: { [id: number]: LoadStatus | undefined } = {}
-          possibly_visible.forEach(
-            chatId => (new_loading[chatId] = LoadStatus.FETCHING)
-          )
-          setChatLoading(new_loading)
+          loadingChats.clear()
+          for (const id of possibly_visible) {
+            loadingChats.add(id)
+          }
           const chats = await BackendRemote.rpc.getChatlistItemsByEntries(
             accountId,
             possibly_visible
           )
           setChatCache(cache => ({ ...cache, ...chats }))
-          const new_done: { [id: number]: LoadStatus | undefined } = {}
-          possibly_visible.forEach(
-            chatId => (new_done[chatId] = LoadStatus.LOADED)
-          )
-          setChatLoading(state => ({
-            ...state,
-            ...new_done,
-          }))
+          for (const id of possibly_visible) {
+            loadingChats.delete(id)
+          }
           // reset debouncing
           debouncingChatlistItemRequests = {}
         }
@@ -856,7 +836,15 @@ export function useLogicVirtualChatList(chatListIds: number[]) {
     }
   }, [accountId])
 
-  return { isChatLoaded, loadChats, chatCache }
+  return {
+    /**
+     * This function is not reactive, i.e. it doesn't get re-created
+     * when we start loading more items.
+     */
+    isChatLoaded,
+    loadChats,
+    chatCache,
+  }
 }
 
 function useLogicChatPart(
@@ -883,37 +871,36 @@ function useMessageResults(
   const [messageCache, setMessageCache] = useState<{
     [id: number]: T.MessageSearchResult | undefined
   }>({})
-  const [messageLoadState, setMessageLoading] = useState<{
-    [id: number]: undefined | LoadStatus.FETCHING | LoadStatus.LOADED
-  }>({})
+  const loadingMessages = useRef(new Set<T.MessageSearchResult['id']>()).current
 
   const isMessageLoaded: (index: number) => boolean = index =>
-    !!messageLoadState[messageResultIds[index]]
+    !!messageCache[messageResultIds[index]] ||
+    loadingMessages.has(messageResultIds[index])
   const loadMessages: (
     startIndex: number,
     stopIndex: number
   ) => Promise<void> = async (startIndex, stopIndex) => {
     const ids = messageResultIds.slice(startIndex, stopIndex + 1)
 
-    setMessageLoading(state => {
-      const newState = { ...state }
-      ids.forEach(id => (newState[id] = LoadStatus.FETCHING))
-      return newState
-    })
+    for (const id of ids) {
+      loadingMessages.add(id)
+    }
     const messages = await BackendRemote.rpc.messageIdsToSearchResults(
       accountId,
       ids
     )
     setMessageCache(cache => ({ ...cache, ...messages }))
-    setMessageLoading(state => {
-      const newState = { ...state }
-      ids.forEach(id => (newState[id] = LoadStatus.LOADED))
-      return newState
-    })
+    for (const id of ids) {
+      loadingMessages.delete(id)
+    }
   }
 
   return {
     messageResultIds,
+    /**
+     * This function is not reactive, i.e. it doesn't get re-created
+     * when we start loading more items.
+     */
     isMessageLoaded,
     loadMessages,
     messageCache,
