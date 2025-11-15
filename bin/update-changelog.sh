@@ -24,7 +24,7 @@ if [ -n "$NEW_VERSION" ]; then
     echo "📝 Preparing release ${NEW_VERSION}"
 
     # Generate unreleased changelog
-    git cliff --unreleased --tag $NEW_VERSION  --prepend CHANGELOG.md
+    pnpm exec git-cliff --unreleased --tag $NEW_VERSION --prepend CHANGELOG.md
 
     # Replace [Unreleased] with the version and today's date
     TODAY=$(date +%Y-%m-%d)
@@ -44,7 +44,7 @@ if [ -n "$NEW_VERSION" ]; then
 else
     # No version specified - just update unreleased
     echo "📝 Updating unreleased commits"
-    git cliff --unreleased --prepend CHANGELOG.md
+    pnpm exec git-cliff --unreleased --prepend CHANGELOG.md
 fi
 
 # Update footer links
