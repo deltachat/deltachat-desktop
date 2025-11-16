@@ -68,10 +68,9 @@ impl DeltaChatAppState {
                 }) = &message
                 {
                     if let Some(response) = response.as_object() {
-                        if let (Some(event_object), Some(context_id)) = (
-                            response.get("event").and_then(|e| e.as_object()),
-                            response.get("contextId").and_then(|e| e.as_u64()),
-                        ) {
+                        if let Some(event_object) =
+                            response.get("event").and_then(|e| e.as_object())
+                        {
                             let kind = event_object.get("kind").and_then(|v| v.as_str());
                             let msg = event_object.get("msg").and_then(|v| v.as_str());
                             if let (Some(kind), Some(msg)) = (kind, msg) {
