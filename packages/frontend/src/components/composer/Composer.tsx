@@ -22,7 +22,7 @@ import { useSettingsStore } from '../../stores/settings'
 import { BackendRemote, EffectfulBackendActions, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { runtime } from '@deltachat-desktop/runtime-interface'
-import { confirmDialog } from '../message/messageFunctions'
+import { confirmDialog, isMessageEditable } from '../message/messageFunctions'
 import useDialog from '../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useMessage from '../../hooks/chat/useMessage'
@@ -159,14 +159,19 @@ const Composer = forwardRef<
         lastMessageItem.msg_id,
       ])
       const message = messages[lastMessageItem.msg_id]
-      if (message && message.kind === 'message' && message.state >= 10) {
-        // Enter edit mode only for outgoing messages
+      if (
+        message &&
+        message.kind === 'message' &&
+        message.state >= 10 &&
+        isMessageEditable(message, selectedChat)
+      ) {
+        // Enter edit mode only for editable messages
         window.__enterEditMessageMode?.(message)
       }
     } catch (error) {
       log.error('Failed to load last sent message for editing', error)
     }
-  }, [accountId, chatId, messageEditing.isEditingModeActive])
+  }, [accountId, chatId, messageEditing.isEditingModeActive, selectedChat])
 
   const voiceMessageDisabled =
     !!draftState.file || !!draftState.text || messageEditing.isEditingModeActive
