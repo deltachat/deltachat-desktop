@@ -105,7 +105,7 @@ jobs:
     - name: upload folder
       id: upload
       shell: bash
-      if: contains(github.event.pull_request.body, '#public-preview')
+      if: contains(github.event.pull_request.body, '#public-preview')  || startsWith(github.event.pull_request.title, 'prepare release')
       run: |
         echo -e "${{ secrets.KEY }}" >__TEMP_INPUT_KEY_FILE
         chmod 600 __TEMP_INPUT_KEY_FILE
@@ -118,7 +118,7 @@ jobs:
        PR_BRANCH: ${{ steps.prepare.outputs.branch }}
        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Upload result to artifacts
-      if: contains(github.event.pull_request.body, '#public-preview') == false || steps.upload.outcome == 'failure'
+      if: contains(github.event.pull_request.body, '#public-preview') == false || startsWith(github.event.pull_request.title, 'prepare release') == false || steps.upload.outcome == 'failure'
       id: upload-github
       uses: actions/upload-artifact@main
       with:
