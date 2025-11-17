@@ -19,6 +19,7 @@ import {
   openAttachmentInShell,
   openForwardDialog,
   openMessageInfo,
+  isMessageEditable,
   setQuoteInDraft,
   openMessageHTML,
   confirmDeleteMessage,
@@ -284,14 +285,7 @@ function buildContextMenu(
   // - https://github.com/deltachat/deltachat-desktop/issues/4695.
   // - https://github.com/deltachat/deltachat-desktop/issues/5365.
   // - https://github.com/deltachat/deltachat-android/blob/fd4a377752cc6778f161590fde2f9ab29c5d3011/src/main/java/org/thoughtcrime/securesms/ConversationFragment.java#L334
-  const showEdit =
-    message.fromId === C.DC_CONTACT_ID_SELF &&
-    chat.isEncrypted &&
-    message.text !== '' &&
-    chat.canSend &&
-    !message.isInfo &&
-    !message.hasHtml &&
-    message.viewType !== 'Call'
+  const showEdit = isMessageEditable(message, chat)
 
   // Do not show "react" for system messages
   const showSendReaction = showReactionsUi(message, chat)
