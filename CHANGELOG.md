@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file.
 
 ### Fixed
 
-- Use https protocol for maps ([#5735](https://github.com/deltachat/deltachat-desktop/issues/5720))
+- Fix experimental "maps" app not working ([#5735](https://github.com/deltachat/deltachat-desktop/issues/5720))
 
 <a id="2_25_2"></a>
 ## [2.25.2] - 2025-11-15
