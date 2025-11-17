@@ -412,6 +412,7 @@ function ViewGroupInner(
             <div
               className='group-member-contact-list-wrapper'
               ref={groupMemberContactListWrapperRef}
+              data-testid='group-member-list'
             >
               <RovingTabindexProvider
                 wrapperElementRef={groupMemberContactListWrapperRef}
