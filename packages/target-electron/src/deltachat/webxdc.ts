@@ -218,7 +218,7 @@ export default class DCWebxdc {
           {
             urls: ['<all_urls>'],
           },
-          async (details, cb) => {
+          (details, cb) => {
             let cancelRequest = true
             if (details.url.startsWith('webxdc://')) {
               cancelRequest = false
@@ -1040,7 +1040,7 @@ const makeResponse = ({
 }
 
 /**
- * this should only be allowed for apps that are
+ * this should only be used by apps that are
  * allowed to access the internet
  * additionally it should be restricted by CSP
  *
