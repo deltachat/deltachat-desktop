@@ -59,6 +59,7 @@
   - [ ] [arch](https://archlinux.org/packages/extra/any/deltachat-desktop/)
   - [ ] [nix](https://search.nixos.org/packages?channel=unstable&show=deltachat-desktop&from=0&type=packages&query=deltachat)
   - [ ] [snap](https://snapcraft.io/deltachat-desktop) (community)
+  - [ ] [FreeBSD](https://www.freshports.org/net-im/deltachat-desktop)
   ```
   See [example](https://github.com/deltachat/deltachat-desktop/issues/3582)
 
