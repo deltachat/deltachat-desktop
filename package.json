@@ -2,7 +2,7 @@
   "private": "true",
   "name": "deltachat-desktop",
   "type": "module",
-  "version": "2.25.2",
+  "version": "2.25.3",
   "scripts": {
     "preinstall": "node ./bin/check-nodejs-version.js",
     "check": "pnpm check:types && pnpm check:lint && pnpm check:format && pnpm check:target-versions",
