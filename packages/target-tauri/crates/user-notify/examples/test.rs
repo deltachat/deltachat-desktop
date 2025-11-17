@@ -1,4 +1,4 @@
-use std::{collections::HashMap, path::PathBuf, time::Duration};
+use std::{collections::HashMap, time::Duration};
 
 use tokio::{signal::ctrl_c, spawn, time::sleep};
 use user_notify::{NotificationCategory, NotificationCategoryAction, get_notification_manager};
