@@ -214,6 +214,23 @@ export default class DCWebxdc {
         })
         await ses.closeAllConnections()
 
+        ses.webRequest.onBeforeRequest(
+          {
+            urls: ['<all_urls>'],
+          },
+          (details, cb) => {
+            let cancelRequest = true
+            if (details.url.startsWith('webxdc://')) {
+              cancelRequest = false
+            } else if (details.url.startsWith('devtools://')) {
+              cancelRequest = !DesktopSettings.state.enableWebxdcDevTools
+            } else if (details.url.startsWith('https://')) {
+              cancelRequest = !internetAccess
+            }
+            cb({ cancel: cancelRequest })
+          }
+        )
+
         // TODO also consider this. However, this might have observable effects
         // on the app (i.e. "offline" status).
         // ses.enableNetworkEmulation({ offline: true })
@@ -227,9 +244,8 @@ export default class DCWebxdc {
           DesktopSettings.state.enableOnDemandLocationStreaming &&
           internetAccess
         ) {
-          // mapxdc app needs maps:// protocol to load tiles from internet
-          ses.protocol.handle('maps', (...args) =>
-            mapProtocolHandler(accountId, this.rpc, ...args)
+          ses.protocol.handle('https', req =>
+            webRequestHandler(accountId, this.rpc, req)
           )
         }
       }
@@ -978,19 +994,19 @@ const makeResponse = ({
   body,
   responseInit,
   mime_type,
-  cspAllowMapsImgSrc,
+  cspAllowHttpsImgSrc,
 }: {
   body: BodyInit
   responseInit: Omit<ResponseInit, 'headers'>
   mime_type?: undefined | string
-  cspAllowMapsImgSrc?: boolean
+  cspAllowHttpsImgSrc?: boolean
 }) => {
   const headers = new Headers()
-  if (cspAllowMapsImgSrc) {
+  if (cspAllowHttpsImgSrc) {
     /**
      * for apps with internet access (only maps.xdc for now)
-     * we need to allow the maps://* protocol as image src in CSP
-     * the maps protocolHandler fetches the tiles through our backend getHttpResponse
+     * we need to allow the https://* protocol as image src in CSP
+     * the webRequestHandler fetches the tiles through our backend getHttpResponse
      *
      * note that the extended CSP is only applied to the responses of the
      * webxdc protocol (only that can provide the appId for each request)
@@ -1000,10 +1016,10 @@ const makeResponse = ({
       'Content-Security-Policy',
       CSP.replace(
         "img-src 'self' data: blob: ;",
-        "img-src 'self' maps://* data: blob: ;"
+        "img-src 'self' https://* data: blob: ;"
       )
     )
-    log.debug('extended CSP for maps://*')
+    log.debug('extended CSP for https://*')
   } else {
     headers.append('Content-Security-Policy', CSP)
     log.debug('standard CSP')
@@ -1024,13 +1040,13 @@ const makeResponse = ({
 }
 
 /**
- * the maps:// protocol may only be used by apps
- * that are allowed to access the internet
+ * this should only be used by apps that are
+ * allowed to access the internet
  * additionally it should be restricted by CSP
  *
  * for now that is only the integrated (but replacable) maps.xdc
  */
-async function mapProtocolHandler(
+async function webRequestHandler(
   accountId: number,
   rpc: Jsonrpc.RawClient,
   request: GlobalRequest
@@ -1050,10 +1066,7 @@ async function mapProtocolHandler(
   try {
     // since webxdc apps are not allowed to access the internet
     // directly, we proxy the request through our backend
-    const response = await rpc.getHttpResponse(
-      accountId,
-      request.url.replace('maps://', 'https://')
-    )
+    const response = await rpc.getHttpResponse(accountId, request.url)
     const blob = Buffer.from(response.blob, 'base64')
     return makeResponse({
       body: blob,
@@ -1093,7 +1106,7 @@ async function webxdcProtocolHandler(
     })
   }
 
-  const cspAllowMapsImgSrc = open_apps[id].internet_access
+  const cspAllowHttpsImgSrc = open_apps[id].internet_access
 
   let filename = url.pathname
   // remove leading / trailing "/"
@@ -1123,7 +1136,7 @@ async function webxdcProtocolHandler(
       body: new Uint8Array(wrapperBuffer),
       responseInit: {},
       mime_type: mimeType,
-      cspAllowMapsImgSrc,
+      cspAllowHttpsImgSrc,
     })
   } else if (filename === 'webxdc.js') {
     const displayName = Buffer.from(open_apps[id].displayName).toString(
@@ -1142,7 +1155,7 @@ async function webxdcProtocolHandler(
       ),
       responseInit: {},
       mime_type: mimeType,
-      cspAllowMapsImgSrc,
+      cspAllowHttpsImgSrc,
     })
   } else {
     try {
@@ -1158,7 +1171,7 @@ async function webxdcProtocolHandler(
         body: blob,
         responseInit: {},
         mime_type: mimeType,
-        cspAllowMapsImgSrc,
+        cspAllowHttpsImgSrc,
       })
     } catch (error) {
       log.error('webxdc: load blob:', error)
