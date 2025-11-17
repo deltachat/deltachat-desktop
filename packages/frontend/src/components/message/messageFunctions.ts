@@ -10,7 +10,7 @@ import ConfirmationDialog from '../dialogs/ConfirmationDialog'
 import MessageDetail from '../dialogs/MessageDetail/MessageDetail'
 
 import type { OpenDialog } from '../../contexts/DialogContext'
-import type { T } from '@deltachat/jsonrpc-client'
+import { C, T } from '@deltachat/jsonrpc-client'
 import ConfirmDeleteMessageDialog from '../dialogs/ConfirmDeleteMessage'
 
 const log = getLogger('render/msgFunctions')
@@ -168,4 +168,19 @@ export async function openWebxdc(
 ) {
   const accountId = selectedAccountId()
   internalOpenWebxdc(accountId, message, webxdcInfo)
+}
+
+export function isMessageEditable(
+  message: T.Message,
+  chat: T.FullChat
+): boolean {
+  return (
+    message.fromId === C.DC_CONTACT_ID_SELF &&
+    chat.isEncrypted &&
+    message.text !== '' &&
+    chat.canSend &&
+    !message.isInfo &&
+    !message.hasHtml &&
+    message.viewType !== 'Call'
+  )
 }
