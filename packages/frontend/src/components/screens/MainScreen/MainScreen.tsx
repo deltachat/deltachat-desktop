@@ -339,7 +339,7 @@ export default function MainScreen({ accountId }: Props) {
 function chatSubtitle(chat: Type.FullChat) {
   const tx = window.static_translate
   if (chat.id && chat.id > C.DC_CHAT_ID_LAST_SPECIAL) {
-    if (chat.chatType === C.DC_CHAT_TYPE_GROUP) {
+    if (chat.chatType === 'Group') {
       if (chat.selfInGroup) {
         return tx('n_members', [String(chat.contactIds.length)], {
           quantity: chat.contactIds.length,
@@ -347,10 +347,7 @@ function chatSubtitle(chat: Type.FullChat) {
       } else {
         return '…'
       }
-    } else if (
-      chat.chatType === 'Group' &&
-      chat.contacts[0]?.isBot
-    ) {
+    } else if (chat.chatType === 'Single' && chat.contacts[0]?.isBot) {
       return tx('bot')
     } else if (chat.chatType === 'Mailinglist') {
       if (chat.mailingListAddress) {
@@ -534,7 +531,7 @@ function ChatNavButtons({
         // Core only allows placing calls in chats of type "single"
         // (but not e.g. in groups consisting of 2 members).
         // https://github.com/chatmail/core/blob/738dc5ce197f589131479801db2fbd0fb0964599/src/calls.rs#L147
-        chat.chatType === "Single" &&
+        chat.chatType === 'Single' &&
         chat.contactIds.some(id => id > C.DC_CONTACT_ID_LAST_SPECIAL) && (
           <Button
             aria-label={tx('start_call')}

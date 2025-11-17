@@ -223,6 +223,7 @@ export async function updateCoreStrings() {
     [C.DC_STR_INCOMING_CALL]: tx('incoming_call'),
     [C.DC_STR_MISSED_CALL]: tx('missed_call'),
     [C.DC_STR_OUTGOING_CALL]: tx('outgoing_call'),
+    [C.DC_STR_CHAT_UNENCRYPTED_EXPLANATON]: tx('chat_unencrypted_explanation'),
   }
 
   await BackendRemote.rpc.setStockStrings(strings)
