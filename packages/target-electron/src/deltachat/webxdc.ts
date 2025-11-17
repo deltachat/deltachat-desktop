@@ -994,15 +994,15 @@ const makeResponse = ({
   body,
   responseInit,
   mime_type,
-  cspAllowMapsImgSrc,
+  cspAllowHttpsImgSrc,
 }: {
   body: BodyInit
   responseInit: Omit<ResponseInit, 'headers'>
   mime_type?: undefined | string
-  cspAllowMapsImgSrc?: boolean
+  cspAllowHttpsImgSrc?: boolean
 }) => {
   const headers = new Headers()
-  if (cspAllowMapsImgSrc) {
+  if (cspAllowHttpsImgSrc) {
     /**
      * for apps with internet access (only maps.xdc for now)
      * we need to allow the https://* protocol as image src in CSP
@@ -1106,7 +1106,7 @@ async function webxdcProtocolHandler(
     })
   }
 
-  const cspAllowMapsImgSrc = open_apps[id].internet_access
+  const cspAllowHttpsImgSrc = open_apps[id].internet_access
 
   let filename = url.pathname
   // remove leading / trailing "/"
@@ -1136,7 +1136,7 @@ async function webxdcProtocolHandler(
       body: new Uint8Array(wrapperBuffer),
       responseInit: {},
       mime_type: mimeType,
-      cspAllowMapsImgSrc,
+      cspAllowHttpsImgSrc,
     })
   } else if (filename === 'webxdc.js') {
     const displayName = Buffer.from(open_apps[id].displayName).toString(
@@ -1155,7 +1155,7 @@ async function webxdcProtocolHandler(
       ),
       responseInit: {},
       mime_type: mimeType,
-      cspAllowMapsImgSrc,
+      cspAllowHttpsImgSrc,
     })
   } else {
     try {
@@ -1171,7 +1171,7 @@ async function webxdcProtocolHandler(
         body: blob,
         responseInit: {},
         mime_type: mimeType,
-        cspAllowMapsImgSrc,
+        cspAllowHttpsImgSrc,
       })
     } catch (error) {
       log.error('webxdc: load blob:', error)
