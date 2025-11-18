@@ -97,7 +97,7 @@ const ALLOWED_PERMISSIONS: string[] = [
 
 /**
  * Path to the static webxdc wrapper HTML file which contains the
- * loading animation and an iframe that will host the webxdc app
+ * iframe that will host the webxdc app
  */
 const WRAPPER_PATH = 'webxdc-wrapper.45870014933640136498.html'
 

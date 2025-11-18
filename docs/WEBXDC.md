@@ -29,7 +29,7 @@ This document explains how Webxdc apps are integrated and executed within Delta 
 │              Sandboxed BrowserWindow (Renderer Process)         │
 ├─────────────────────────────────────────────────────────────────┤
 │ 3. Wrapper HTML (webxdc_wrapper.html)                           │
-│    - Container iframe                                           │                  │
+│    - Container iframe                                           │
 ├─────────────────────────────────────────────────────────────────┤
 │    - IPC bridge to main process                                 │
 │    - Context isolation bridge                                   │
@@ -118,7 +118,7 @@ window.webxdc = {
 
 **Key responsibilities:**
 
-- Implements the complete Webxdc API specification
+- Implements the complete [Webxdc API specification](https://webxdc.org/docs/spec/index.html)
 - Manages IPC communication with the main process
 - Handles update listeners and real-time data
 - Provides file import/export capabilities
@@ -139,7 +139,7 @@ The actual Webxdc app runs in a sandboxed environment:
 
 - Webxdc API calls => IPC => Main process => Delta Chat core
 - Real-time data via dedicated IPC channels
-- File operations through secure IPC bridges
+- File operations through IPC bridges
 
 ## Bootstrap Sequence
 
