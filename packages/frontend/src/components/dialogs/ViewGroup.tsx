@@ -399,7 +399,7 @@ function ViewGroupInner(
               />
               <div className='group-profile-subtitle'>
                 {!isBroadcast
-                  ? group.selfInGroup
+                  ? group.contactIds.length > 1 || group.selfInGroup
                     ? tx('n_members', group.contactIds.length.toString(), {
                         quantity: group.contactIds.length,
                       })

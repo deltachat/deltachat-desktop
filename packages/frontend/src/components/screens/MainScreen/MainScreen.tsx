@@ -340,7 +340,7 @@ function chatSubtitle(chat: Type.FullChat) {
   const tx = window.static_translate
   if (chat.id && chat.id > C.DC_CHAT_ID_LAST_SPECIAL) {
     if (chat.chatType === 'Group') {
-      if (chat.selfInGroup) {
+      if (chat.contactIds.length > 1 || chat.selfInGroup) {
         return tx('n_members', [String(chat.contactIds.length)], {
           quantity: chat.contactIds.length,
         })
