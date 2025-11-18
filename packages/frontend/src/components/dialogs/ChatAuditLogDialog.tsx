@@ -145,7 +145,7 @@ export default function ChatAuditLogDialog(
       privateReply,
       accountId,
       message,
-      selectedChat.chatType === C.DC_CHAT_TYPE_GROUP,
+      selectedChat.chatType === 'Group',
       onClose
     )
 
