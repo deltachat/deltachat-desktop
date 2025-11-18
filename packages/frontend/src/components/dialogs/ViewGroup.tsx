@@ -397,7 +397,53 @@ function ViewGroupInner(
                 displayName={groupName}
                 disableFullscreen={shouldDisableFullscreenAvatar(chat)}
               />
+              <div className='group-profile-subtitle'>
+                {!isBroadcast
+                  ? group.selfInGroup
+                    ? tx('n_members', group.contactIds.length.toString(), {
+                        quantity: group.contactIds.length,
+                      })
+                    : ''
+                  : tx('n_recipients', group.contactIds.length.toString(), {
+                      quantity: group.contactIds.length,
+                    })}
+              </div>
             </DialogContent>
+            <div
+              className='group-member-contact-list-wrapper'
+              ref={groupMemberContactListWrapperRef}
+              data-testid='group-member-list'
+            >
+              <RovingTabindexProvider
+                wrapperElementRef={groupMemberContactListWrapperRef}
+              >
+                {!chatDisabled && group.isEncrypted && (
+                  <>
+                    {!isBroadcast && (
+                      <PseudoListItemAddMember
+                        onClick={() => showAddMemberDialog()}
+                        labelMembersOrRecipients={membersOrRecipients}
+                      />
+                    )}
+                    <PseudoListItemShowQrCode onClick={() => showQRDialog()} />
+                  </>
+                )}
+                <ContactList
+                  contacts={group.contacts}
+                  showRemove={!chatDisabled && group.isEncrypted}
+                  onClick={contact => {
+                    if (contact.id === C.DC_CONTACT_ID_SELF) {
+                      return
+                    }
+                    setProfileContact(contact)
+                  }}
+                  onRemoveClick={showRemoveGroupMemberConfirmationDialog}
+                  olElementAttrs={{
+                    'aria-labelledby': 'group-profile-subtitle',
+                  }}
+                />
+              </RovingTabindexProvider>
+            </div>
             {isRelatedChatsEnabled && chatListIds.length > 0 && (
               <>
                 <div
@@ -440,54 +486,6 @@ function ViewGroupInner(
                 </div>
               </>
             )}
-            <div
-              id='view-group-members-recipients-title'
-              className='group-separator'
-            >
-              {!isBroadcast
-                ? group.selfInGroup
-                  ? tx('n_members', group.contactIds.length.toString(), {
-                      quantity: group.contactIds.length,
-                    })
-                  : ''
-                : tx('n_recipients', group.contactIds.length.toString(), {
-                    quantity: group.contactIds.length,
-                  })}
-            </div>
-            <div
-              className='group-member-contact-list-wrapper'
-              ref={groupMemberContactListWrapperRef}
-            >
-              <RovingTabindexProvider
-                wrapperElementRef={groupMemberContactListWrapperRef}
-              >
-                {!chatDisabled && group.isEncrypted && (
-                  <>
-                    {!isBroadcast && (
-                      <PseudoListItemAddMember
-                        onClick={() => showAddMemberDialog()}
-                        labelMembersOrRecipients={membersOrRecipients}
-                      />
-                    )}
-                    <PseudoListItemShowQrCode onClick={() => showQRDialog()} />
-                  </>
-                )}
-                <ContactList
-                  contacts={group.contacts}
-                  showRemove={!chatDisabled && group.isEncrypted}
-                  onClick={contact => {
-                    if (contact.id === C.DC_CONTACT_ID_SELF) {
-                      return
-                    }
-                    setProfileContact(contact)
-                  }}
-                  onRemoveClick={showRemoveGroupMemberConfirmationDialog}
-                  olElementAttrs={{
-                    'aria-labelledby': 'view-group-members-recipients-title',
-                  }}
-                />
-              </RovingTabindexProvider>
-            </div>
             {pastContacts.length > 0 && (
               <>
                 <div

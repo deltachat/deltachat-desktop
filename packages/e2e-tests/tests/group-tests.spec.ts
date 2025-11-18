@@ -321,9 +321,7 @@ test('Readd user to group', async () => {
   // Wait for the removal of userB in the "View Group" dialog,
   // because the "Add Members" dialog won't auto-update.
   // We probably should make it auto-updateable as well.
-  const membersList = page
-    .getByTestId('view-group-dialog')
-    .getByRole('list', { name: /\d+ members/ })
+  const membersList = page.getByTestId('group-member-list')
   await expect(membersList.getByRole('listitem')).toHaveCount(3)
   await expect(membersList).not.toContainText(userB.name)
   for (const name of ['Me', userC.name, userD.name]) {
