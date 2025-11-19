@@ -410,7 +410,7 @@ export default function useProcessQR() {
         const userConfirmed = await openConfirmationDialog({
           message: tx('withdraw_verifygroup_explain', qr.grpname),
           header: tx('withdraw_qr_code'),
-          confirmLabel: tx('ok'),
+          confirmLabel: tx('withdraw_qr_code'),
           dataTestid: 'withdraw-verify-group',
         })
 
@@ -430,7 +430,46 @@ export default function useProcessQR() {
         const userConfirmed = await openConfirmationDialog({
           message: tx('revive_verifygroup_explain', qr.grpname),
           header: tx('revive_qr_code'),
-          confirmLabel: tx('ok'),
+          confirmLabel: tx('revive_qr_code'),
+        })
+
+        if (userConfirmed) {
+          await processQrCode(accountId, url)
+        }
+
+        return callback?.()
+      }
+
+      /**
+       * DC_QR_WITHDRAW_JOINBROADCAST
+       *
+       * Same as DC_WITHDRAW_VERIFYCONTACT but for channels
+       */
+      if (qr.kind === 'withdrawJoinBroadcast') {
+        const userConfirmed = await openConfirmationDialog({
+          message: tx('withdraw_joinbroadcast_explain', qr.name),
+          header: tx('withdraw_qr_code'),
+          confirmLabel: tx('withdraw_qr_code'),
+          dataTestid: 'withdraw-verify-channel',
+        })
+
+        if (userConfirmed) {
+          await processQrCode(accountId, url)
+        }
+
+        return callback?.()
+      }
+
+      /**
+       * DC_QR_REVIVE_JOINBROADCAST
+       *
+       * Reactivate a previous withdrawn qr code
+       */
+      if (qr.kind === 'reviveJoinBroadcast') {
+        const userConfirmed = await openConfirmationDialog({
+          message: tx('revive_joinbroadcast_explain', qr.name),
+          header: tx('revive_qr_code'),
+          confirmLabel: tx('revive_qr_code'),
         })
 
         if (userConfirmed) {
