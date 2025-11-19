@@ -16,6 +16,7 @@ import { processQr, QrWithUrl } from '../backend/qr'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import type { WelcomeQrWithUrl } from '../contexts/InstantOnboardingContext'
+import type { TranslationKey } from '../../../shared/translationKeyType'
 import useChat from './chat/useChat'
 import { unknownErrorToString } from '../components/helpers/unknownErrorToString'
 import ProxyConfiguration from '../components/dialogs/ProxyConfiguration'
@@ -42,6 +43,46 @@ export const enum SCAN_CONTEXT_TYPE {
 }
 
 const log = getLogger('renderer/hooks/useProcessQr')
+
+type WithdrawOrReviveConfig = {
+  kind: T.Qr['kind']
+  messageKey: TranslationKey
+  getMessageArgs?: (qr: any) => string[]
+  dataTestid?: string
+}
+
+const WITHDRAW_OR_REVIVE_CONFIGS: WithdrawOrReviveConfig[] = [
+  {
+    kind: 'withdrawVerifyContact',
+    messageKey: 'withdraw_verifycontact_explain',
+  },
+  {
+    kind: 'reviveVerifyContact',
+    messageKey: 'revive_verifycontact_explain',
+  },
+  {
+    kind: 'withdrawVerifyGroup',
+    messageKey: 'withdraw_verifygroup_explain',
+    getMessageArgs: qr => [qr.grpname],
+    dataTestid: 'withdraw-verify-group',
+  },
+  {
+    kind: 'reviveVerifyGroup',
+    messageKey: 'revive_verifygroup_explain',
+    getMessageArgs: qr => [qr.grpname],
+  },
+  {
+    kind: 'withdrawJoinBroadcast',
+    messageKey: 'withdraw_joinbroadcast_explain',
+    getMessageArgs: qr => [qr.name],
+    dataTestid: 'withdraw-verify-channel',
+  },
+  {
+    kind: 'reviveJoinBroadcast',
+    messageKey: 'revive_joinbroadcast_explain',
+    getMessageArgs: qr => [qr.name],
+  },
+]
 
 /**
  * Processes an unchecked string which was scanned from a QR code.
@@ -363,113 +404,22 @@ export default function useProcessQR() {
       }
 
       /**
-       * DC_WITHDRAW_VERIFYCONTACT
-       *
-       * When scanning an already existing own invite link
-       * the option is provided to withdraw the invite link
+       * Handle withdraw/revive actions for contacts, groups, and channels
        */
-      if (qr.kind === 'withdrawVerifyContact') {
+      const withdrawOrReviveAction = WITHDRAW_OR_REVIVE_CONFIGS.find(
+        config => config.kind === qr.kind
+      )
+      if (withdrawOrReviveAction) {
+        const isWithdraw = withdrawOrReviveAction.kind.startsWith('withdraw')
+        const headerKey = isWithdraw ? 'withdraw_qr_code' : 'revive_qr_code'
+        const messageArgs = withdrawOrReviveAction.getMessageArgs?.(qr) || []
         const userConfirmed = await openConfirmationDialog({
-          message: tx('withdraw_verifycontact_explain'),
-          header: tx('withdraw_qr_code'),
-          confirmLabel: tx('withdraw_qr_code'),
-        })
-
-        if (userConfirmed) {
-          await processQrCode(accountId, url)
-        }
-
-        return callback?.()
-      }
-
-      /**
-       * DC_REVIVE_VERIFYCONTACT
-       *
-       * Reactivate a previous withdrawn qr code
-       */
-      if (qr.kind === 'reviveVerifyContact') {
-        const userConfirmed = await openConfirmationDialog({
-          message: tx('revive_verifycontact_explain'),
-          header: tx('revive_qr_code'),
-          confirmLabel: tx('revive_qr_code'),
-        })
-
-        if (userConfirmed) {
-          await processQrCode(accountId, url)
-        }
-
-        return callback?.()
-      }
-
-      /**
-       * DC_WITHDRAW_VERIFYGROUP
-       *
-       * Same as DC_WITHDRAW_VERIFYCONTACT but for groups
-       */
-      if (qr.kind === 'withdrawVerifyGroup') {
-        const userConfirmed = await openConfirmationDialog({
-          message: tx('withdraw_verifygroup_explain', qr.grpname),
-          header: tx('withdraw_qr_code'),
-          confirmLabel: tx('withdraw_qr_code'),
-          dataTestid: 'withdraw-verify-group',
-        })
-
-        if (userConfirmed) {
-          await processQrCode(accountId, url)
-        }
-
-        return callback?.()
-      }
-
-      /**
-       * DC_REVIVE_VERIFYGROUP
-       *
-       * Reactivate a previous withdrawn qr code
-       */
-      if (qr.kind === 'reviveVerifyGroup') {
-        const userConfirmed = await openConfirmationDialog({
-          message: tx('revive_verifygroup_explain', qr.grpname),
-          header: tx('revive_qr_code'),
-          confirmLabel: tx('revive_qr_code'),
-        })
-
-        if (userConfirmed) {
-          await processQrCode(accountId, url)
-        }
-
-        return callback?.()
-      }
-
-      /**
-       * DC_QR_WITHDRAW_JOINBROADCAST
-       *
-       * Same as DC_WITHDRAW_VERIFYCONTACT but for channels
-       */
-      if (qr.kind === 'withdrawJoinBroadcast') {
-        const userConfirmed = await openConfirmationDialog({
-          message: tx('withdraw_joinbroadcast_explain', qr.name),
-          header: tx('withdraw_qr_code'),
-          confirmLabel: tx('withdraw_qr_code'),
-          dataTestid: 'withdraw-verify-channel',
-        })
-
-        if (userConfirmed) {
-          await processQrCode(accountId, url)
-        }
-
-        return callback?.()
-      }
-
-      /**
-       * DC_QR_REVIVE_JOINBROADCAST
-       *
-       * Reactivate a previous withdrawn qr code
-       */
-      if (qr.kind === 'reviveJoinBroadcast') {
-        const userConfirmed = await openConfirmationDialog({
-          message: tx('revive_joinbroadcast_explain', qr.name),
-          header: tx('revive_qr_code'),
-          confirmLabel: tx('revive_qr_code'),
+          message: tx(withdrawOrReviveAction.messageKey, ...messageArgs),
+          header: tx(headerKey),
+          confirmLabel: tx(headerKey),
+          ...(withdrawOrReviveAction.dataTestid && {
+            dataTestid: withdrawOrReviveAction.dataTestid,
+          }),
         })
 
         if (userConfirmed) {
