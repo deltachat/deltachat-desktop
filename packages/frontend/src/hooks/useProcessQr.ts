@@ -44,45 +44,50 @@ export const enum SCAN_CONTEXT_TYPE {
 
 const log = getLogger('renderer/hooks/useProcessQr')
 
-type WithdrawOrReviveConfig = {
-  kind: T.Qr['kind']
-  messageKey: TranslationKey
-  getMessageArgs?: (qr: any) => string[]
-  dataTestid?: string
+type WithdrawOrReviveQrKinds = Extract<
+  T.Qr['kind'],
+  `withdraw${string}` | `revive${string}`
+>
+type WithdrawOrReviveConfigs_ = {
+  [P in WithdrawOrReviveQrKinds]: {
+    messageKey: TranslationKey
+    getMessageArgs?: (qr: any) => string[]
+    dataTestid?: string
+  }
+}
+// Allow indexing into with `string` type.
+type WithdrawOrReviveConfigs = WithdrawOrReviveConfigs_ & {
+  [key: string]:
+    | undefined
+    | WithdrawOrReviveConfigs_[keyof WithdrawOrReviveConfigs_]
 }
 
-const WITHDRAW_OR_REVIVE_CONFIGS: WithdrawOrReviveConfig[] = [
-  {
-    kind: 'withdrawVerifyContact',
+const WITHDRAW_OR_REVIVE_CONFIGS: WithdrawOrReviveConfigs = {
+  withdrawVerifyContact: {
     messageKey: 'withdraw_verifycontact_explain',
   },
-  {
-    kind: 'reviveVerifyContact',
+  reviveVerifyContact: {
     messageKey: 'revive_verifycontact_explain',
   },
-  {
-    kind: 'withdrawVerifyGroup',
+  withdrawVerifyGroup: {
     messageKey: 'withdraw_verifygroup_explain',
     getMessageArgs: qr => [qr.grpname],
     dataTestid: 'withdraw-verify-group',
   },
-  {
-    kind: 'reviveVerifyGroup',
+  reviveVerifyGroup: {
     messageKey: 'revive_verifygroup_explain',
     getMessageArgs: qr => [qr.grpname],
   },
-  {
-    kind: 'withdrawJoinBroadcast',
+  withdrawJoinBroadcast: {
     messageKey: 'withdraw_joinbroadcast_explain',
     getMessageArgs: qr => [qr.name],
     dataTestid: 'withdraw-verify-channel',
   },
-  {
-    kind: 'reviveJoinBroadcast',
+  reviveJoinBroadcast: {
     messageKey: 'revive_joinbroadcast_explain',
     getMessageArgs: qr => [qr.name],
   },
-]
+} satisfies WithdrawOrReviveConfigs_
 
 /**
  * Processes an unchecked string which was scanned from a QR code.
@@ -406,11 +411,9 @@ export default function useProcessQR() {
       /**
        * Handle withdraw/revive actions for contacts, groups, and channels
        */
-      const withdrawOrReviveAction = WITHDRAW_OR_REVIVE_CONFIGS.find(
-        config => config.kind === qr.kind
-      )
+      const withdrawOrReviveAction = WITHDRAW_OR_REVIVE_CONFIGS[qr.kind]
       if (withdrawOrReviveAction) {
-        const isWithdraw = withdrawOrReviveAction.kind.startsWith('withdraw')
+        const isWithdraw = qr.kind.startsWith('withdraw')
         const headerKey = isWithdraw ? 'withdraw_qr_code' : 'revive_qr_code'
         const messageArgs = withdrawOrReviveAction.getMessageArgs?.(qr) || []
         const userConfirmed = await openConfirmationDialog({
