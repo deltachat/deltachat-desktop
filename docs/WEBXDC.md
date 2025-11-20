@@ -1,6 +1,6 @@
 # Webxdc Implementation
 
-This document explains how Webxdc apps are integrated and executed within Delta Chat Desktop (Electron edition).
+This document describes how Webxdc (In-chat) apps are integrated and executed within Delta Chat Desktop (Electron edition). It should give a rough overview of the involved parts to help you understand the system better before making changes.
 
 ## Overview
 
@@ -23,16 +23,15 @@ This document explains how Webxdc apps are integrated and executed within Delta 
 │    - Injects webxdc.js API                                      │
 │    - CSP enforcement                                            │
 └─────────────────────────────────────────────────────────────────┘
-                                 │
-                                 ▼
+
 ┌─────────────────────────────────────────────────────────────────┐
 │              Sandboxed BrowserWindow (Renderer Process)         │
 ├─────────────────────────────────────────────────────────────────┤
 │ 3. Wrapper HTML (webxdc_wrapper.html)                           │
-│    - Container iframe                                           │
-├─────────────────────────────────────────────────────────────────┤
+│    - Container iframe                                           |
 │    - IPC bridge to main process                                 │
 │    - Context isolation bridge                                   │
+├─────────────────────────────────────────────────────────────────┤
 │ 4. Preload Script (webxdc-preload.js)                           │
 │    - webxdc API implementation                                  │
 ├─────────────────────────────────────────────────────────────────┤
@@ -43,7 +42,7 @@ This document explains how Webxdc apps are integrated and executed within Delta 
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-## Detailed Component Analysis
+## Detailed Description
 
 ### 1. Main Webxdc Controller ([src/deltachat/webxdc.ts](/packages/target-electron/src/deltachat/webxdc.ts))
 
@@ -66,21 +65,23 @@ A custom Electron protocol that serves Webxdc app content:
 
 ```
 webxdc://{accountId}.{messageId}.webxdc/
+
 ├── webxdc_wrapper.html          # Main wrapper page
-├── webxdc.js                    # API initialization script
+└── webxdc.js                    # API initialization script
+
 ├── index.html                   # Webxdc app entry point
 ├── app.js                       # Webxdc app JavaScript
 ├── style.css                    # Webxdc app styles
-└── [other app assets]           # Images, data files, etc.
+└── [other app assets]           # Images, data files, etc. inside the webxdcapp archive
 ```
 
 **Security Measures:**
 
 - All responses include strict Content Security Policy headers
-- PDF files are served as octet-stream to prevent PDF viewer exploitation
+- PDF files are served as `application/octet-stream` to prevent PDF viewer exploitation
 - Network access is restricted
 - MIME type validation
-- [hostRules](/packages/target-electron/src/index.ts#L12) for Chrome to block any dns requests
+- [hostRules](https://github.com/deltachat/deltachat-desktop/blob/d73ec257e9d384f950698d0d39a05d6ce091fc7c/packages/target-electron/src/index.ts#L19) for Chrome to block any DNS requests
 
 ### 3. Wrapper HTML ([static/webxdc_wrapper.html](/packages/target-electron/static/webxdc_wrapper.html))
 
@@ -168,7 +169,7 @@ Webxdc apps have extremely limited permissions:
 
 - **Allowed**: Fullscreen, pointer lock (for games)
 - **Blocked**: Camera, microphone, geolocation, notifications, etc.
-- **Network**: Controlled per-app (some apps can access internet via maps:// protocol)
+- **Network**: Controlled per-app (some integrated apps can access internet)
 
 ### Content Security Policy
 
@@ -186,7 +187,7 @@ const CSP =
 
 ## Real-time Communication
 
-WebRTC is disabled by setting WebRTCIPHandlingPolicy to 'disable_non_proxied_udp' for each BrowserWindow. This should force any WebRTC request to use the dummy proxy provided in [webxdc.ts](../packages/target-electron/src/deltachat/webxdc.ts#L123) (see comments [here](../packages/target-electron/src/deltachat/webxdc.ts#L325))
+WebRTC is disabled by setting `WebRTCIPHandlingPolicy` to `disable_non_proxied_udp` for each BrowserWindow. This should force any WebRTC request to use the dummy proxy provided in [webxdc.ts](../packages/target-electron/src/deltachat/webxdc.ts#L123) (see comments [here](../packages/target-electron/src/deltachat/webxdc.ts#L325))
 
 Webxdc apps can communicate in real-time through:
 
@@ -196,20 +197,39 @@ Webxdc apps can communicate in real-time through:
 
 ## File System Access
 
-Webxdc apps access files through secure channels:
+### Blob Storage Security
 
-- **Blob Storage**: Files are stored in Delta Chat's blob storage
-- **Import/Export**: Secure file picker and drag-out functionality
-- **Temporary Files**: Secure temporary file creation for exports
+Files from webxdc packages are stored in Delta Chat's blob storage and can only be accessed through the custom `webxdc://` protocol handler. Direct filesystem access is completely disabled.
+
+1. **App Instance Verification**: Each request URL contains the app's unique identifier (`webxdc://{accountId}.{messageId}.webxdc/filename`).
+
+2. **RPC-Layer Enforcement**: Even the protocol handler doesn't access the filesystem directly. Instead, it calls `rpc.getWebxdcBlob(accountId, msgId, filename)` which delegates to the Delta Chat core. The core:
+   - Validates that the requested file belongs to the specified webxdc message
+   - Only returns files that are part of that specific webxdc package
+   - Cannot be bypassed by manipulating URLs or parameters
+
+3. **No Cross-App Access**: Even if an app knows another app's accountId and messageId, it cannot access those files because:
+   - Each app runs in its own BrowserWindow with its own protocol handler context
+   - The handler only responds to requests matching the window's registered app ID
+   - Session isolation prevents shared state between different apps
+
+4. **Path Traversal Protection**: Filename validation prevents directory traversal attacks (e.g., `../../../etc/passwd`). Only files explicitly packaged within the webxdc archive can be accessed.
+
+### Import/Export
+
+Beyond accessing their own package files, webxdc apps can interact with external files through secure, user-controlled mechanisms:
+
+- **Import**: Secure file picker dialog (`webxdc.importFiles()`) where the user explicitly selects files
+- **Export/Drag-out**: Files are written to secure temporary locations before being offered to the user
+- No direct filesystem paths are ever exposed to the webxdc app
 
 ## Internet Access
 
 Webxdc apps can't access the internet with one exception:
 
-- **Controlled Access**: Only integrated and explicitly allowed apps get internet access (granted by core)
-- **CSP Relaxation**: Internet-enabled apps get modified CSP for external resources
+- integrated and explicitly allowed apps get internet access (granted by core). These apps get a modified CSP for external resources
 
-The integrated maps.xdc has access to internet via a custom maps protocol (to get map data from different map services). If a webxdc app has `request_integration = 'map'` in it's manifest and is saved to Saved messages (selfChat), it will replace the integrated maps.xdc. Note that this is an experimental feature and the implementation will probably change until we have final solution for integrated apps.
+Currently only the integrated maps.xdc has access to internet (to get map data from different map services). If any other webxdc app has `request_integration = 'map'` in its manifest and is saved to Saved messages (selfChat), it will replace the integrated maps.xdc. Note that this is an experimental feature and the implementation will probably change until we have a final solution for integrated apps.
 
 ### Security Considerations
 
@@ -217,14 +237,15 @@ The integrated maps.xdc has access to internet via a custom maps protocol (to ge
 - Validate all user input from Webxdc apps
 - Be cautious with new permission grants
 
-After changes in the implementation make sure to **test new features** with [webxdc test app](https://github.com/webxdc/webxdc-test)!
+> ⚠️ **Testing Required!**  
+> After changes in the implementation make sure to test new features with [webxdc test app](https://github.com/webxdc/webxdc-test)!
 
 ## Related Files
 
 - [/packages/target-electron/src/deltachat/webxdc.ts](/packages/target-electron/src/deltachat/webxdc.ts) - Main controller
 - [/packages/target-electron/static/webxdc-preload.js](/packages/target-electron/static/webxdc-preload.js) - Preload script with Webxdc API
 - [/packages/target-electron/static/webxdc_wrapper.html](/packages/target-electron/static/webxdc_wrapper.html) - Wrapper HTML container
-- Package `@webxdc/types` - TypeScript definitions for Webxdc API
+- Package [`@webxdc/types`](https://www.npmjs.com/package/@webxdc/types) - TypeScript definitions for Webxdc API
 
 ## External References
 
