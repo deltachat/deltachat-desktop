@@ -61,8 +61,6 @@ export default function TransportsDialog(
         'configured_addr',
         transport.addr
       )
-      await BackendRemote.rpc.stopIo(accountId)
-      await BackendRemote.rpc.startIo(accountId)
       setTransports(prev =>
         prev.map(t => ({ ...t, isDefault: t.addr === transport.addr }))
       )
