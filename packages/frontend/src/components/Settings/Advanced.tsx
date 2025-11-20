@@ -77,9 +77,7 @@ export default function Advanced({ settingsStore }: Props) {
         {tx('proxy_settings')}
       </SettingsButton>
 
-      {settingsStore.settings.is_chatmail === '0' && (
-        <ImapFolderHandling settingsStore={settingsStore} />
-      )}
+      <ImapFolderHandling settingsStore={settingsStore} />
     </>
   )
 }
