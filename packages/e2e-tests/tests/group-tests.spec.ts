@@ -356,6 +356,70 @@ test('Readd user to group', async () => {
   await page.getByTestId('view-group-dialog-header-close').click()
 })
 
+test('Withdraw group invite link', async ({ browserName }) => {
+  if (browserName.toLowerCase().indexOf('chrom') > -1) {
+    await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
+  }
+  const userA = existingProfiles[0]
+  const userB = existingProfiles[1]
+  await switchToProfile(page, userA.id)
+
+  const chatListItem = page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: groupName })
+  await expect(chatListItem).toBeVisible()
+  await chatListItem.click()
+  await page.getByTestId('chat-info-button').click()
+
+  // first we remove userB
+  const userBRow = page
+    .locator('.group-member-contact-list-wrapper .contact-list-item')
+    .filter({ hasText: userB.name })
+    .first()
+  await userBRow.locator('button.btn-remove').click()
+  await page
+    .getByTestId('remove-group-member-dialog')
+    .getByTestId('confirm')
+    .click()
+
+  // copy group invite link
+  await page.locator('#showqrcode button').click()
+  await clickThroughTestIds(page, [
+    'copy-qr-code',
+    'confirm-qr-code',
+    'view-group-dialog-header-close',
+  ])
+
+  // paste the group invite link into userA's QR scanner to withdraw it
+  await clickThroughTestIds(page, ['qr-scan-button', 'show-qr-scan', 'paste'])
+
+  // Confirm the withdraw dialog
+  const withdrawDialog = page.getByTestId('withdraw-verify-group')
+  await expect(withdrawDialog).toBeVisible()
+  await expect(withdrawDialog).toContainText(groupName)
+  await withdrawDialog.getByTestId('confirm').click()
+
+  // note the withdrawn code is still in clipboard
+  // now userB tries to readd himself by pasting the old invite link
+  await switchToProfile(page, userB.id)
+  await clickThroughTestIds(page, ['qr-scan-button', 'show-qr-scan', 'paste'])
+
+  const confirmJoinGroupDialog = page.getByTestId('confirm-join-group')
+  await expect(confirmJoinGroupDialog).toBeVisible()
+  await expect(confirmJoinGroupDialog).toContainText(groupName)
+  await confirmJoinGroupDialog.getByTestId('confirm').click()
+
+  // check for info message containing "waiting"
+  const lastMessage = page.locator('#message-list li').last()
+  await expect(lastMessage).toContainText(userA.name)
+  await expect(lastMessage).toContainText('Member Me removed', {
+    ignoreCase: true,
+  })
+  // the group chat opens but composer is not available
+  const composer = page.locator('textarea#composer-textarea')
+  await expect(composer).not.toBeVisible({ timeout: 1 })
+})
+
 test('Edit group profile from context menu and rename group', async () => {
   const userA = existingProfiles[0]
   const userC = existingProfiles[2]
