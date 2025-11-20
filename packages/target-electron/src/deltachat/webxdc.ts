@@ -70,6 +70,9 @@ const existing_sessions: string[] = []
 // TODO:
 // 2. on message deletion close webxdc if open and remove its DOMStorage data
 
+/**
+ * see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CSP
+ */
 const CSP =
   "default-src 'self';\
   style-src 'self' 'unsafe-inline' blob: ;\
@@ -92,8 +95,16 @@ const ALLOWED_PERMISSIONS: string[] = [
   'fullscreen',
 ]
 
+/**
+ * Path to the static webxdc wrapper HTML file which contains the
+ * iframe that will host the webxdc app
+ */
 const WRAPPER_PATH = 'webxdc-wrapper.45870014933640136498.html'
 
+/**
+ * Prefix for the webxdc bounds UI configuration
+ * used to save and retrieve the last bound of a webxdc window
+ */
 const BOUNDS_UI_CONFIG_PREFIX = 'ui.desktop.webxdcBounds'
 
 type Size = { width: number; height: number }
@@ -106,6 +117,11 @@ const DEFAULT_SIZE_MAP: Size = {
   width: 1000,
   height: 800,
 }
+
+/**
+ * see [docs/WEBXDC.md](../../docs/WEBXDC.md) for a detailed
+ * explanation of the Webxdc implementation
+ */
 
 export default class DCWebxdc {
   constructor(private readonly controller: DeltaChatController) {
