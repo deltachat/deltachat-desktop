@@ -55,7 +55,7 @@ export default function Advanced({ settingsStore }: Props) {
     })
   }
 
-  const addr = settingsStore.settings.addr
+  const addr = settingsStore.settings.configuredAddr
 
   return (
     <>

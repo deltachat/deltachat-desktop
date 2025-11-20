@@ -3,6 +3,7 @@ import { DialogProps } from '../../../contexts/DialogContext'
 import Dialog, { DialogBody, DialogHeader, DialogFooter } from '../../Dialog'
 import { BackendRemote } from '../../../backend-com'
 
+import SettingsStoreInstance from '../../../stores/settings'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import useConfirmationDialog from '../../../hooks/dialog/useConfirmationDialog'
 import useAlertDialog from '../../../hooks/dialog/useAlertDialog'
@@ -61,6 +62,8 @@ export default function TransportsDialog(
         'configured_addr',
         transport.addr
       )
+      SettingsStoreInstance.effect.setCoreSetting('configured_addr', transport.addr)
+
       setTransports(prev =>
         prev.map(t => ({ ...t, isDefault: t.addr === transport.addr }))
       )
