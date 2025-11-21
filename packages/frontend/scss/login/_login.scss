@@ -40,13 +40,14 @@
     div.advanced-icon {
       width: 20px;
       height: 20px;
-      -webkit-mask: url(./images/dc-cross.svg) no-repeat center;
+      -webkit-mask: url(./images/icons/cross.svg) no-repeat center;
       -webkit-mask-size: 100%;
       background-color: var(--loginInputFocusColor);
       display: -webkit-inline-box;
+      transform: rotate(45deg);
 
       &.opened {
-        transform: rotate(45deg);
+        transform: rotate(0);
       }
     }
   }
