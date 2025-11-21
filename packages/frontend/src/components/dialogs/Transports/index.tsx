@@ -17,6 +17,7 @@ import { EnteredLoginParam } from '@deltachat/jsonrpc-client/dist/generated/type
 import classNames from 'classnames'
 import useDialog from '../../../hooks/dialog/useDialog'
 import { processQr } from '../../../backend/qr'
+import Icon from '../../Icon'
 
 /**
  * Dialog for transports configuration
@@ -62,7 +63,10 @@ export default function TransportsDialog(
         'configured_addr',
         transport.addr
       )
-      SettingsStoreInstance.effect.setCoreSetting('configured_addr', transport.addr)
+      SettingsStoreInstance.effect.setCoreSetting(
+        'configured_addr',
+        transport.addr
+      )
 
       setTransports(prev =>
         prev.map(t => ({ ...t, isDefault: t.addr === transport.addr }))
@@ -148,7 +152,10 @@ export default function TransportsDialog(
                       aria-labelledby={`transport-label-${index}`}
                     />
                   </span>
-                  <span>{transport.addr}</span>
+                  <span>
+                    {transport.addr}{' '}
+                    {transport.isDefault ? ` (${tx('def')})` : ''}
+                  </span>
                 </div>
                 <div>
                   <Button
@@ -198,7 +205,7 @@ export default function TransportsDialog(
           aria-label={tx('add_transport')}
           title={tx('add_transport')}
         >
-          ＋
+          <Icon icon='plus' size={16} />
         </Button>
       </DialogFooter>
     </Dialog>
