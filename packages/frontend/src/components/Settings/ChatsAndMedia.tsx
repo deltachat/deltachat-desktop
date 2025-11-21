@@ -65,10 +65,10 @@ export default function ChatsAndMedia({
           <SettingsHeading>{tx('delete_old_messages')}</SettingsHeading>
           <Autodelete settingsStore={settingsStore} />
           <SettingsSeparator />
-          <SettingsHeading>{tx('pref_backup')}</SettingsHeading>
-          <Backup />
         </>
       )}
+      <SettingsHeading>{tx('pref_backup')}</SettingsHeading>
+      <Backup />
     </>
   )
 }
