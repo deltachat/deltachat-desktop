@@ -44,7 +44,7 @@ export default function EditAccountAndPasswordDialog({
             : tx('manual_account_setup_option')
         }
       />
-     {EditAccountInner(onClose, addr)}
+      {EditAccountInner(onClose, addr)}
     </Dialog>
   )
 }
