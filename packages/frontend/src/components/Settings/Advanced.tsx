@@ -7,7 +7,6 @@ import ImapFolderHandling from './ImapFolderHandling'
 import SettingsHeading from './SettingsHeading'
 import SettingsSeparator from './SettingsSeparator'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import EditAccountAndPasswordDialog from '../dialogs/EditAccountAndPasswordDialog'
 import useDialog from '../../hooks/dialog/useDialog'
 import SettingsButton from './SettingsButton'
 import { runtime } from '@deltachat-desktop/runtime-interface'
@@ -39,8 +38,6 @@ export default function Advanced({ settingsStore }: Props) {
     })
   }
 
-  const addr = settingsStore.settings.configuredAddr
-
   return (
     <>
       <SettingsButton onClick={() => runtime.openLogFile()}>
@@ -67,17 +64,6 @@ export default function Advanced({ settingsStore }: Props) {
       <Encryption />
       <SettingsSeparator />
 
-      <SettingsHeading>{tx('pref_server')}</SettingsHeading>
-      <SettingsButton
-        onClick={() => {
-          openDialog(EditAccountAndPasswordDialog, {
-            addr,
-          })
-        }}
-        dataTestid='open-account-and-password'
-      >
-        {tx('pref_password_and_account_settings')}
-      </SettingsButton>
       <SettingsButton
         onClick={() => {
           openProxySettings()
