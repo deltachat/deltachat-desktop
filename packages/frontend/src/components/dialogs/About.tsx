@@ -36,6 +36,19 @@ function useAboutInfo() {
       : { accountInfoError: 'loading' }
     : { accountInfoError: 'no account selected' }
 
+  const spaceUsageReportFetch = useRpcFetch(
+    BackendRemote.rpc.getSpaceUsageReportString,
+    accId ? [accId] : null
+  )
+
+  const spaceUsageReport: string = spaceUsageReportFetch
+    ? spaceUsageReportFetch.lingeringResult
+      ? spaceUsageReportFetch.lingeringResult.ok
+        ? spaceUsageReportFetch.lingeringResult.value
+        : JSON.stringify(spaceUsageReportFetch.lingeringResult.err)
+      : 'loading'
+    : 'no account selected'
+
   const info = {
     runtimeName: runtime.constructor.name,
     runtimeInfo,
@@ -46,7 +59,7 @@ function useAboutInfo() {
       systemInfoFetch?.lingeringResult?.ok == false
         ? systemInfoFetch.lingeringResult
         : null,
-
+    spaceUsageReport,
     ...accountInfo,
   }
 
@@ -185,7 +198,9 @@ export default function About({ onClose }: DialogProps) {
               </tbody>
             </table>
           </div>
-          <h3>Additional information about the runtime</h3>
+          <h4>Space Usage Of Current Account</h4>
+          <pre>{info.spaceUsageReport}</pre>
+          <h3>Additional Information About The Runtime</h3>
           <table>
             <tbody>
               <tr>
