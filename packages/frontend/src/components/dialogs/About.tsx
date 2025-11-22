@@ -195,7 +195,9 @@ export default function About({ onClose }: DialogProps) {
               {info.runtimeInfo.rpcServerPath && (
                 <tr>
                   <td>Path to core</td>
-                  <td>{info.runtimeInfo.rpcServerPath}</td>
+                  <td style={{ maxWidth: '500px' }}>
+                    {info.runtimeInfo.rpcServerPath}
+                  </td>
                 </tr>
               )}
               {info.runtimeInfo.runningUnderARM64Translation !== undefined && (
