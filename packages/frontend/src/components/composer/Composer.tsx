@@ -22,7 +22,7 @@ import { useSettingsStore } from '../../stores/settings'
 import { BackendRemote, EffectfulBackendActions, Type } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import { runtime } from '@deltachat-desktop/runtime-interface'
-import { confirmDialog } from '../message/messageFunctions'
+import { confirmDialog, isMessageEditable } from '../message/messageFunctions'
 import useDialog from '../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useMessage from '../../hooks/chat/useMessage'
@@ -72,6 +72,7 @@ const Composer = forwardRef<
     removeFile: () => void
     clearDraftState: () => void
     setDraftState: (newValue: DraftObject) => void
+    messageCache: { [msgId: number]: Type.MessageLoadResult | undefined }
   }
 >((props, ref) => {
   const {
@@ -86,6 +87,7 @@ const Composer = forwardRef<
     updateDraftText,
     addFileToDraft,
     removeFile,
+    messageCache,
   } = props
 
   const chatId = selectedChat.id
@@ -119,7 +121,8 @@ const Composer = forwardRef<
   const messageEditing = useMessageEditing(
     accountId,
     chatId,
-    editMessageInputRef
+    editMessageInputRef,
+    regularMessageInputRef
   )
   /**
    * Use this only if you're sure that what you want to do with the ref
@@ -133,6 +136,34 @@ const Composer = forwardRef<
     (newText: string) => updateDraftText(newText, chatId),
     [chatId, updateDraftText]
   )
+
+  const onArrowUpWhenEmpty = useCallback(async () => {
+    if (messageEditing.isEditingModeActive) {
+      return
+    }
+    try {
+      // Find the last message from messageCache
+      const messageIds = Object.keys(messageCache)
+        .map(Number)
+        .filter(id => id > 0)
+      if (messageIds.length === 0) {
+        return
+      }
+      const lastMessageId = Math.max(...messageIds)
+      const message = messageCache[lastMessageId]
+      if (
+        message &&
+        message.kind === 'message' &&
+        message.state >= 10 &&
+        isMessageEditable(message, selectedChat)
+      ) {
+        // Enter edit mode only for editable messages
+        window.__enterEditMessageMode?.(message)
+      }
+    } catch (error) {
+      log.error('Failed to load last sent message for editing', error)
+    }
+  }, [messageEditing.isEditingModeActive, messageCache, selectedChat])
 
   const voiceMessageDisabled =
     !!draftState.file || !!draftState.text || messageEditing.isEditingModeActive
@@ -292,6 +323,12 @@ const Composer = forwardRef<
       if (ev.type === 'keydown' && ev.code === 'Escape') {
         setShowEmojiPicker(false)
         setShowAppPicker(false)
+        if (messageEditing.isEditingModeActive) {
+          messageEditing.cancelEditing()
+          setTimeout(() => {
+            regularMessageInputRef.current?.focus()
+          })
+        }
       }
     }
     // these options are needed, otherwise emoji mart sometimes eats the keydown event
@@ -304,7 +341,7 @@ const Composer = forwardRef<
       document.removeEventListener('keydown', onKey, opt)
       document.removeEventListener('keyup', onKey, opt)
     }
-  }, [shiftPressed])
+  }, [shiftPressed, messageEditing, regularMessageInputRef])
 
   useEffect(() => {
     if (!showEmojiPicker) return
@@ -630,6 +667,7 @@ const Composer = forwardRef<
                 chatId={chatId}
                 onPaste={handlePaste ?? undefined}
                 onChange={onComposerMessageInputChange}
+                onArrowUpWhenEmpty={onArrowUpWhenEmpty}
               />
               <ComposerMessageInput
                 text={messageEditing.newText ?? ''}
@@ -726,7 +764,8 @@ export default Composer
 function useMessageEditing(
   accountId: number,
   chatId: T.BasicChat['id'],
-  editMessageInputRef: React.RefObject<ComposerMessageInput | null>
+  editMessageInputRef: React.RefObject<ComposerMessageInput | null>,
+  regularMessageInputRef: React.RefObject<ComposerMessageInput | null>
 ) {
   const tx = useTranslationFunction()
   const { userFeedback } = useContext(ScreenContext)
@@ -835,16 +874,18 @@ function useMessageEditing(
     // without waiting for the backend call to finish.
     setOriginalMessage(null)
     setNewText('')
-    // TODO focus the "regular message" input?
-    // Or is it not a bug but a feature,
-    // so that you don't accidentally send the draft
-    // right after editing a message?
-    // Though this doesn't apply if you send a message by clicking
-    // the "send" button with a pointer device (mouse).
-    //
-    // Maybe instead, to guard against this, we could simply disable
-    // the "send" function for ~1 second after the edit is done.
-  }, [accountId, newText, originalMessage, tx, userFeedback])
+    // Focus the regular message input after editing
+    setTimeout(() => {
+      regularMessageInputRef.current?.focus()
+    })
+  }, [
+    accountId,
+    newText,
+    originalMessage,
+    tx,
+    userFeedback,
+    regularMessageInputRef,
+  ])
 
   // An early return to help TypeScript.
   if (!isEditingModeActive) {
