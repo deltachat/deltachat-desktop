@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import reactStringReplace from 'react-string-replace'
 
-import { getLogger } from '../../../../shared/logger'
 import { gitHubUrl, gitHubLicenseUrl } from '../../../../shared/constants'
 import { ClickableNonMailtoLink } from '../helpers/ClickableLink'
 import { runtime } from '@deltachat-desktop/runtime-interface'
@@ -11,79 +10,87 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 import Button from '../Button'
+import { useRpcFetch } from '../../hooks/useFetch'
 
-const log = getLogger('renderer/dialogs/About')
+/** all info gathered by about screen, will be copied by the copy action
+ */
+function useAboutInfo() {
+  const runtimeInfo = runtime.getRuntimeInfo()
 
-function getInfo() {
-  if (window.__selectedAccountId === undefined) {
-    return BackendRemote.rpc.getSystemInfo()
-  } else {
-    return BackendRemote.rpc.getInfo(window.__selectedAccountId)
+  const systemInfoFetch = useRpcFetch(BackendRemote.rpc.getSystemInfo, [])
+
+  const accId = window.__selectedAccountId
+  const accountInfoFetch = useRpcFetch(
+    BackendRemote.rpc.getInfo,
+    accId ? [accId] : null
+  )
+  const accountInfo = accountInfoFetch
+    ? accountInfoFetch.lingeringResult
+      ? accountInfoFetch.lingeringResult.ok
+        ? { accountInfo: accountInfoFetch.lingeringResult.value }
+        : {
+            accountInfoError: JSON.stringify(
+              accountInfoFetch.lingeringResult.err
+            ),
+          }
+      : { accountInfoError: 'loading' }
+    : { accountInfoError: 'no account selected' }
+
+  const info = {
+    runtimeName: runtime.constructor.name,
+    runtimeInfo,
+    systemInfo: systemInfoFetch?.lingeringResult?.ok
+      ? systemInfoFetch.lingeringResult.value
+      : null,
+    systemInfoError:
+      systemInfoFetch?.lingeringResult?.ok == false
+        ? systemInfoFetch.lingeringResult
+        : null,
+
+    ...accountInfo,
+  }
+
+  const copyAction = () => {
+    runtime.writeClipboardText(JSON.stringify({ info: info }, null, 4))
+  }
+
+  return {
+    info,
+    copyAction,
   }
 }
 
-export function DCInfo(_props: any) {
-  const tx = useTranslationFunction()
-  const [content, setContent] = useState<{ [key: string]: any }>({})
-
-  useEffect(function fetchContent() {
-    getInfo().then(info => {
-      setContent(info)
-      log.debug('dcInfo', info)
-    })
-  }, [])
-
-  const copy2Clipboard = () => {
-    runtime.writeClipboardText(JSON.stringify(content, null, 4))
-  }
-
-  const keys = content && Object.keys(content)
-
-  return (
-    <>
-      <h3>Debug Info for System &amp; Selected Account</h3>
-      <p>
-        Local Account Id:{' '}
-        <b>{window.__selectedAccountId || '(no account selected)'}</b>
-      </p>
-      <div className='dialog-about__dc-details'>
-        <table>
-          <tbody>
-            {keys &&
-              keys.map(key => (
-                <tr key={key}>
-                  <td className='key'>{key.replace(/_/g, ' ')}</td>
-                  <td className='value'>{content[key]}</td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <Button onClick={copy2Clipboard}>{tx('copy_json')}</Button>
-      </div>
-    </>
-  )
+function getVersionsForDisplay(info: ReturnType<typeof useAboutInfo>['info']) {
+  const { VERSION, GIT_REF } = info.runtimeInfo.buildInfo
+  const versions: { label: string; value: string; important?: true }[] = [
+    {
+      label: 'Delta Chat Desktop',
+      value: `${VERSION} (git: ${GIT_REF})`,
+      important: true,
+    },
+    {
+      label: 'Delta Chat Core',
+      value: info.systemInfo?.['deltachat_core_version'] || '?',
+      important: true,
+    },
+    { label: 'SQLite', value: info.systemInfo?.['sqlite_version'] || '?' },
+    ...info.runtimeInfo.versions,
+  ]
+  return versions
 }
 
 export default function About({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
 
-  const [coreVersion, setCoreVersion] = useState('')
-  const [sqliteVersion, setSqliteVersion] = useState('')
+  const { info, copyAction } = useAboutInfo()
+
+  const versions = getVersionsForDisplay(info)
 
   useEffect(() => {
     window.__aboutDialogOpened = true
     return () => {
       window.__aboutDialogOpened = false
     }
-  }, [])
-
-  useEffect(() => {
-    BackendRemote.rpc.getSystemInfo().then(info => {
-      setCoreVersion(info['deltachat_core_version'])
-      setSqliteVersion(info['sqlite_version'])
-    })
   }, [])
 
   const desktopString = reactStringReplace(
@@ -113,7 +120,8 @@ export default function About({ onClose }: DialogProps) {
       </ClickableNonMailtoLink>
     )
   )
-  const { VERSION, GIT_REF } = runtime.getRuntimeInfo().buildInfo
+
+  const infoForTable = info.accountInfo || info.systemInfo
 
   return (
     <DialogWithHeader
@@ -126,63 +134,75 @@ export default function About({ onClose }: DialogProps) {
         <DialogContent>
           <p>{desktopString}</p>
           <p>{licenceAndSource}</p>
+          <h2>Debug Information</h2>
+          <p>
+            The following information is important when reporting problems to
+            the developers.
+          </p>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Button onClick={copyAction}>{tx('menu_copy_to_clipboard')}</Button>
+          </div>
           <h3>Versions</h3>
           <table>
             <tbody>
-              <tr>
-                <td>
-                  <b>Delta Chat Desktop</b>
-                </td>
-                <td
-                  style={{ userSelect: 'all' }}
-                >{`${VERSION} (git: ${GIT_REF})`}</td>
-              </tr>
-              <tr>
-                <td>Delta Chat Core</td>
-                <td style={{ color: 'grey', userSelect: 'all' }}>
-                  {coreVersion}
-                </td>
-              </tr>
-              <tr style={{ color: 'grey' }}>
-                <td>SQLite</td>
-                <td style={{ userSelect: 'all' }}>{sqliteVersion}</td>
-              </tr>
-              {runtime.getRuntimeInfo().versions.map(({ label, value }) => (
-                <tr key={label} style={{ color: 'grey' }}>
+              {versions.map(({ label, value, important }) => (
+                <tr
+                  key={label}
+                  style={{ color: important ? undefined : 'grey' }}
+                >
                   <td>{label}</td>
                   <td style={{ userSelect: 'all' }}>{value}</td>
                 </tr>
               ))}
-              {runtime.getRuntimeInfo().runningUnderARM64Translation && (
-                <tr>
-                  <td>runningUnderARM64Translation</td>
-                  <td>
-                    {runtime.getRuntimeInfo().runningUnderARM64Translation}
-                  </td>
-                </tr>
-              )}
             </tbody>
           </table>
-          <DCInfo />
+          <h3>Debug Info for System &amp; Selected Account</h3>
+          <p>
+            Local Account Id:{' '}
+            <b>{window.__selectedAccountId || '(no account selected)'}</b>
+          </p>
+          {info.systemInfoError && (
+            <p style={{ color: 'red' }}>
+              Error fetching system info:{' '}
+              {JSON.stringify(info.systemInfoError.err)}
+            </p>
+          )}
+          {info.accountInfoError && (
+            <p style={{ color: 'red' }}>
+              Error fetching account info: {info.accountInfoError}
+            </p>
+          )}
+          <div className='dialog-about__dc-details'>
+            <table>
+              <tbody>
+                {infoForTable &&
+                  Object.keys(infoForTable).map(key => (
+                    <tr key={key}>
+                      <td className='key'>{key.replace(/_/g, ' ')}</td>
+                      <td className='value'>{infoForTable[key]}</td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
           <h3>Additional information about the runtime</h3>
           <table>
             <tbody>
               <tr>
                 <td>Runtime</td>
-                <td>{runtime.constructor.name}</td>
+                <td>{info.runtimeName}</td>
               </tr>
-              {runtime.getRuntimeInfo().rpcServerPath && (
+              {info.runtimeInfo.rpcServerPath && (
                 <tr>
                   <td>Path to core</td>
-                  <td>{runtime.getRuntimeInfo().rpcServerPath}</td>
+                  <td>{info.runtimeInfo.rpcServerPath}</td>
                 </tr>
               )}
-              {runtime.getRuntimeInfo().runningUnderARM64Translation !==
-                undefined && (
+              {info.runtimeInfo.runningUnderARM64Translation !== undefined && (
                 <tr>
                   <td>running under arm64 translation</td>
                   <td>
-                    {runtime.getRuntimeInfo().runningUnderARM64Translation
+                    {info.runtimeInfo.runningUnderARM64Translation
                       ? 'true'
                       : 'false / native'}
                   </td>
