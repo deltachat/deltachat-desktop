@@ -189,10 +189,16 @@ test('Invite existing user to group', async ({ browserName }) => {
   // confirm dialog should contain group name
   await expect(confirmDialog).toContainText(groupName)
   await page.getByTestId('confirm-join-group').getByTestId('confirm').click()
+  const chatListGroupItem = page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: groupName })
+  await expect(chatListGroupItem).toBeVisible()
   // userA invited you to group message
   await expect(
-    page.locator('#message-list li.message-wrapper').nth(1)
-  ).toContainText(userA.name)
+    page
+      .locator('#message-list li.message-wrapper')
+      .filter({ hasText: userA.name })
+  ).toBeVisible()
   const composer = page.locator('textarea#composer-textarea')
   await expect(composer).not.toBeVisible({ timeout: 1 })
 
@@ -252,8 +258,10 @@ test('Invite new user to group', async ({ browserName }) => {
   await page.getByTestId('login-button').click()
   // userA invited you to group message
   await expect(
-    page.locator('#message-list li.message-wrapper').nth(1)
-  ).toContainText(userA.name)
+    page
+      .locator('#message-list li.message-wrapper')
+      .filter({ hasText: userA.name })
+  ).toBeVisible()
   const composer = page.locator('textarea#composer-textarea')
   await expect(composer).not.toBeVisible({ timeout: 1 })
 
