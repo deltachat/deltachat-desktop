@@ -189,6 +189,10 @@ test('Invite existing user to group', async ({ browserName }) => {
   // confirm dialog should contain group name
   await expect(confirmDialog).toContainText(groupName)
   await page.getByTestId('confirm-join-group').getByTestId('confirm').click()
+  const chatListGroupItem = page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: groupName })
+  await expect(chatListGroupItem).toBeVisible()
   // userA invited you to group message
   await expect(
     page
