@@ -125,8 +125,8 @@ export default function About({ onClose }: DialogProps) {
 
   return (
     <DialogWithHeader
-      width={600}
-      height={500}
+      width={800}
+      height={1000}
       title={tx('global_menu_help_about_desktop')}
       onClose={onClose}
     >
