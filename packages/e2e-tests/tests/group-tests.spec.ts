@@ -190,9 +190,9 @@ test('Invite existing user to group', async ({ browserName }) => {
   await expect(confirmDialog).toContainText(groupName)
   await page.getByTestId('confirm-join-group').getByTestId('confirm').click()
   // userA invited you to group message
-  await expect(page.locator('#message-list li').nth(1)).toContainText(
-    userA.name
-  )
+  await expect(
+    page.locator('#message-list li.message-wrapper').nth(1)
+  ).toContainText(userA.name)
   const composer = page.locator('textarea#composer-textarea')
   await expect(composer).not.toBeVisible({ timeout: 1 })
 
@@ -207,7 +207,9 @@ test('Invite existing user to group', async ({ browserName }) => {
   const msg = 'Hello chat!' + Math.random()
   await composer.fill(msg)
   await page.getByRole('button', { name: 'Send' }).click()
-  await expect(page.locator('#message-list li').last()).toContainText(msg)
+  await expect(
+    page.locator('#message-list li.message-wrapper').last()
+  ).toContainText(msg)
 })
 
 test('Invite new user to group', async ({ browserName }) => {
@@ -249,9 +251,9 @@ test('Invite new user to group', async ({ browserName }) => {
   await page.locator('#displayName').fill(newUserName)
   await page.getByTestId('login-button').click()
   // userA invited you to group message
-  await expect(page.locator('#message-list li').nth(1)).toContainText(
-    userA.name
-  )
+  await expect(
+    page.locator('#message-list li.message-wrapper').nth(1)
+  ).toContainText(userA.name)
   const composer = page.locator('textarea#composer-textarea')
   await expect(composer).not.toBeVisible({ timeout: 1 })
 
@@ -261,7 +263,9 @@ test('Invite new user to group', async ({ browserName }) => {
   const msg = 'Hello chat!' + Math.random()
   await composer.fill(msg)
   await page.getByRole('button', { name: 'Send' }).click()
-  await expect(page.locator('#message-list li').last()).toContainText(msg)
+  await expect(
+    page.locator('#message-list li.message-wrapper').last()
+  ).toContainText(msg)
 
   await page.getByTestId('chat-info-button').click()
   // new user sees group members
