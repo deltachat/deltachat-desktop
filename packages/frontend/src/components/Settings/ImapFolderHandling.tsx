@@ -4,7 +4,9 @@ import type { SettingsStoreState } from '../../stores/settings'
 import CoreSettingsSwitch from './CoreSettingsSwitch'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import ShowClassicEmail from './ShowClassicEmail'
-import useAlertDialog from '../../hooks/dialog/useAlertDialog'
+import { confirmDialog } from '../message/messageFunctions'
+import useDialog from '../../hooks/dialog/useDialog'
+import SettingsStoreInstance from '../../stores/settings'
 
 type Props = {
   settingsStore: SettingsStoreState
@@ -15,13 +17,18 @@ export default function ImapFolderHandling({ settingsStore }: Props) {
   const disableIfOnlyFetchMvBoxIsTrue =
     settingsStore.settings.only_fetch_mvbox === '1'
 
-  const openAlertDialog = useAlertDialog()
+  const { openDialog } = useDialog()
 
-  const showMultiDeviceWarning = (multiDeviceActive: boolean) => {
+  const showMultiDeviceWarning = async (multiDeviceActive: boolean) => {
     if (!multiDeviceActive) {
-      openAlertDialog({
-        message: tx('pref_multidevice_change_warn'),
-      })
+      const confirmed = await confirmDialog(
+        openDialog,
+        tx('pref_multidevice_change_warn'),
+        tx('ok')
+      )
+      if (confirmed === false) {
+        SettingsStoreInstance.effect.setCoreSetting('bcc_self', '1')
+      }
     }
   }
 
