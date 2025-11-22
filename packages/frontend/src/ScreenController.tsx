@@ -157,13 +157,6 @@ export default class ScreenController extends Component {
       await BackendRemote.rpc.startIo(accountId)
     }
 
-    BackendRemote.rpc.getInfo(accountId).then(info => {
-      log.info('account_info', info)
-    })
-    BackendRemote.rpc.getSystemInfo().then(info => {
-      log.info('system_info', info)
-    })
-
     await BackendRemote.rpc.selectAccount(accountId)
   }
 
