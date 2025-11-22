@@ -84,6 +84,9 @@ export default class ScreenController extends Component {
   }
 
   private async startup() {
+    BackendRemote.rpc.getSystemInfo().then(info => {
+      log.info('system_info', info)
+    })
     const lastLoggedInAccountId = await this._getLastUsedAccount()
     if (lastLoggedInAccountId) {
       await this.selectAccount(lastLoggedInAccountId)
@@ -159,9 +162,6 @@ export default class ScreenController extends Component {
 
     BackendRemote.rpc.getInfo(accountId).then(info => {
       log.info('account_info', info)
-    })
-    BackendRemote.rpc.getSystemInfo().then(info => {
-      log.info('system_info', info)
     })
 
     await BackendRemote.rpc.selectAccount(accountId)
