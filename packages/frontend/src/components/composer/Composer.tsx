@@ -72,6 +72,7 @@ const Composer = forwardRef<
     removeFile: () => void
     clearDraftState: () => void
     setDraftState: (newValue: DraftObject) => void
+    messageCache: { [msgId: number]: Type.MessageLoadResult | undefined }
   }
 >((props, ref) => {
   const {
@@ -86,6 +87,7 @@ const Composer = forwardRef<
     updateDraftText,
     addFileToDraft,
     removeFile,
+    messageCache,
   } = props
 
   const chatId = selectedChat.id
@@ -139,26 +141,15 @@ const Composer = forwardRef<
       return
     }
     try {
-      // Get message list items for the chat
-      const messageListItems = await BackendRemote.rpc.getMessageListItems(
-        accountId,
-        chatId,
-        false,
-        true
-      )
-      // Find the last message item (we'll check if it's outgoing when loading)
-      const lastMessageItem = messageListItems
-        .slice()
-        .reverse()
-        .find(item => item.kind === 'message' && item.msg_id > 0)
-      if (!lastMessageItem || lastMessageItem.kind !== 'message') {
+      // Find the last message from messageCache
+      const messageIds = Object.keys(messageCache)
+        .map(Number)
+        .filter(id => id > 0)
+      if (messageIds.length === 0) {
         return
       }
-      // Load the full message
-      const messages = await BackendRemote.rpc.getMessages(accountId, [
-        lastMessageItem.msg_id,
-      ])
-      const message = messages[lastMessageItem.msg_id]
+      const lastMessageId = Math.max(...messageIds)
+      const message = messageCache[lastMessageId]
       if (
         message &&
         message.kind === 'message' &&
@@ -171,7 +162,7 @@ const Composer = forwardRef<
     } catch (error) {
       log.error('Failed to load last sent message for editing', error)
     }
-  }, [accountId, chatId, messageEditing.isEditingModeActive, selectedChat])
+  }, [messageEditing.isEditingModeActive, messageCache, selectedChat])
 
   const voiceMessageDisabled =
     !!draftState.file || !!draftState.text || messageEditing.isEditingModeActive

@@ -321,6 +321,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
         removeFile={removeFile}
         clearDraftState={clearDraftState}
         setDraftState={setDraftState}
+        messageCache={messageListState.messageCache}
       />
     </div>
   )
