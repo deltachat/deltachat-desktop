@@ -60,11 +60,15 @@ export default function ChatsAndMedia({
         description={tx('pref_read_receipts_explain')}
       />
       <SettingsSeparator />
-      <SettingsHeading>{tx('delete_old_messages')}</SettingsHeading>
-      <Autodelete settingsStore={settingsStore} />
-      <SettingsSeparator />
-      <SettingsHeading>{tx('pref_backup')}</SettingsHeading>
-      <Backup />
+      {settingsStore.settings.is_chatmail === '0' && (
+        <>
+          <SettingsHeading>{tx('delete_old_messages')}</SettingsHeading>
+          <Autodelete settingsStore={settingsStore} />
+          <SettingsSeparator />
+          <SettingsHeading>{tx('pref_backup')}</SettingsHeading>
+          <Backup />
+        </>
+      )}
     </>
   )
 }
