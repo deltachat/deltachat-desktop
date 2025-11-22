@@ -121,7 +121,8 @@ const Composer = forwardRef<
   const messageEditing = useMessageEditing(
     accountId,
     chatId,
-    editMessageInputRef
+    editMessageInputRef,
+    regularMessageInputRef
   )
   /**
    * Use this only if you're sure that what you want to do with the ref
@@ -322,6 +323,12 @@ const Composer = forwardRef<
       if (ev.type === 'keydown' && ev.code === 'Escape') {
         setShowEmojiPicker(false)
         setShowAppPicker(false)
+        if (messageEditing.isEditingModeActive) {
+          messageEditing.cancelEditing()
+          setTimeout(() => {
+            regularMessageInputRef.current?.focus()
+          })
+        }
       }
     }
     // these options are needed, otherwise emoji mart sometimes eats the keydown event
@@ -334,7 +341,7 @@ const Composer = forwardRef<
       document.removeEventListener('keydown', onKey, opt)
       document.removeEventListener('keyup', onKey, opt)
     }
-  }, [shiftPressed])
+  }, [shiftPressed, messageEditing, regularMessageInputRef])
 
   useEffect(() => {
     if (!showEmojiPicker) return
@@ -757,7 +764,8 @@ export default Composer
 function useMessageEditing(
   accountId: number,
   chatId: T.BasicChat['id'],
-  editMessageInputRef: React.RefObject<ComposerMessageInput | null>
+  editMessageInputRef: React.RefObject<ComposerMessageInput | null>,
+  regularMessageInputRef: React.RefObject<ComposerMessageInput | null>
 ) {
   const tx = useTranslationFunction()
   const { userFeedback } = useContext(ScreenContext)
@@ -866,16 +874,18 @@ function useMessageEditing(
     // without waiting for the backend call to finish.
     setOriginalMessage(null)
     setNewText('')
-    // TODO focus the "regular message" input?
-    // Or is it not a bug but a feature,
-    // so that you don't accidentally send the draft
-    // right after editing a message?
-    // Though this doesn't apply if you send a message by clicking
-    // the "send" button with a pointer device (mouse).
-    //
-    // Maybe instead, to guard against this, we could simply disable
-    // the "send" function for ~1 second after the edit is done.
-  }, [accountId, newText, originalMessage, tx, userFeedback])
+    // Focus the regular message input after editing
+    setTimeout(() => {
+      regularMessageInputRef.current?.focus()
+    })
+  }, [
+    accountId,
+    newText,
+    originalMessage,
+    tx,
+    userFeedback,
+    regularMessageInputRef,
+  ])
 
   // An early return to help TypeScript.
   if (!isEditingModeActive) {
