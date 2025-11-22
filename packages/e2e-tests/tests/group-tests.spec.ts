@@ -209,7 +209,9 @@ test('Invite existing user to group', async ({ browserName }) => {
   const msg = 'Hello chat!' + Math.random()
   await composer.fill(msg)
   await page.getByRole('button', { name: 'Send' }).click()
-  await expect(page.locator('#message-list li').last()).toContainText(msg)
+  await expect(
+    page.locator('#message-list li.message-wrapper').last()
+  ).toContainText(msg)
 })
 
 test('Invite new user to group', async ({ browserName }) => {
@@ -265,7 +267,9 @@ test('Invite new user to group', async ({ browserName }) => {
   const msg = 'Hello chat!' + Math.random()
   await composer.fill(msg)
   await page.getByRole('button', { name: 'Send' }).click()
-  await expect(page.locator('#message-list li').last()).toContainText(msg)
+  await expect(
+    page.locator('#message-list li.message-wrapper').last()
+  ).toContainText(msg)
 
   await page.getByTestId('chat-info-button').click()
   // new user sees group members

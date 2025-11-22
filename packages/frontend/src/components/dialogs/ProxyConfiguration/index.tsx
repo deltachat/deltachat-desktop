@@ -220,6 +220,7 @@ export default function ProxyConfiguration(
           } else {
             openAlertDialog({
               message: tx('proxy_invalid'),
+              dataTestid: 'proxy-scan-failed',
             })
           }
         }
