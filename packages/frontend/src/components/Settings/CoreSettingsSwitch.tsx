@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import SettingsStoreInstance, {
   SettingsStoreState,
@@ -16,7 +16,11 @@ type Props = {
   description?: string
   disabled?: boolean
   disabledValue?: boolean
-  callback?: (updatedValue: boolean) => void
+  /**
+   * Called before the setting is changed. Return false to prevent the change.
+   * Can be async to show confirmation dialogs.
+   */
+  beforeChange?: (currentValue: boolean) => boolean | Promise<boolean>
 }
 
 /*
@@ -28,32 +32,56 @@ export default function CoreSettingsSwitch({
   description,
   disabled,
   disabledValue,
-  callback,
+  beforeChange,
 }: Props) {
   const settingsStore = useSettingsStore()[0]
+  const [isProcessing, setIsProcessing] = useState(false)
 
-  const disabledFinal: boolean = disabled || settingsStore == null
+  const disabledFinal: boolean =
+    disabled || settingsStore == null || isProcessing
+
+  // Get the actual value from the store
+  const storeValue = settingsStore?.settings[settingsKey] === '1'
+
   const value =
     disabledFinal === true && typeof disabledValue !== 'undefined'
       ? disabledValue
-      : settingsStore?.settings[settingsKey] === '1'
+      : storeValue
+
+  const handleChange = async () => {
+    if (settingsStore == null || isProcessing) {
+      return
+    }
+
+    // Call beforeChange hook if provided
+    if (beforeChange) {
+      setIsProcessing(true)
+      try {
+        const shouldProceed = await beforeChange(storeValue)
+        setIsProcessing(false)
+        if (!shouldProceed) {
+          // user cancelled, don't change the setting
+          return
+        }
+      } catch (_error) {
+        setIsProcessing(false)
+        return
+      }
+    }
+
+    // Change the setting
+    SettingsStoreInstance.effect.setCoreSetting(
+      settingsKey,
+      flipDeltaBoolean(settingsStore.settings[settingsKey])
+    )
+  }
 
   return (
     <SettingsSwitch
       label={label}
       value={value}
       description={description}
-      onChange={() => {
-        if (settingsStore == null) {
-          return
-        }
-        const previousValue = settingsStore.settings[settingsKey] === '1'
-        SettingsStoreInstance.effect.setCoreSetting(
-          settingsKey,
-          flipDeltaBoolean(settingsStore.settings[settingsKey])
-        )
-        callback?.(!previousValue)
-      }}
+      onChange={handleChange}
       disabled={disabledFinal}
     />
   )
