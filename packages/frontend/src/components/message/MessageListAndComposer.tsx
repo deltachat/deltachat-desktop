@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback } from 'react'
+import React, { useRef, useEffect, useCallback, useEffectEvent } from 'react'
 import { join, parse, ParsedPath } from 'path'
 import { T } from '@deltachat/jsonrpc-client'
 
@@ -129,68 +129,65 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     regularMessageInputRef
   )
 
-  const handleDrop = useCallback(
-    async (paths: string[]) => {
-      log.info('drag: handling drop: ', paths)
-      if (chat === null) {
-        log.warn('dropped something, but no chat is selected')
-        return
-      }
-      const sanitized = paths
-        .filter(path => {
-          const val = runtime.isDroppedFileFromOutside(path)
-          if (!val) {
-            log.warn(
-              'Prevented a file from being sent again while dragging it out',
-              path
-            )
+  const handleDrop = useEffectEvent(async (paths: string[]) => {
+    log.info('drag: handling drop: ', paths)
+    if (chat === null) {
+      log.warn('dropped something, but no chat is selected')
+      return
+    }
+    const sanitized = paths
+      .filter(path => {
+        const val = runtime.isDroppedFileFromOutside(path)
+        if (!val) {
+          log.warn(
+            'Prevented a file from being sent again while dragging it out',
+            path
+          )
+        }
+        return val
+      })
+      // TODO `parse` is a polyfill, and doesn't properly work
+      // for Windows paths.
+      // Namely, `name` is the full path, except for file extension
+      // (unless the file has no extension, then the things are even worse).
+      .map(path => ({ parsed: parse(path), pathStr: path }))
+
+    // send single file
+    if (sanitized.length == 1) {
+      const file = sanitized[0]
+      const msgViewType: Viewtype = isImage(file.parsed) ? 'Image' : 'File'
+      await addFileToDraft(
+        file.pathStr,
+        file.parsed.name + file.parsed.ext,
+        msgViewType
+      )
+    }
+    // send multiple files
+    else if (sanitized.length > 1 && !hasOpenDialogs) {
+      openDialog(ConfirmSendingFiles, {
+        sanitizedFileList: sanitized.map(path => ({
+          name: path.parsed.name,
+        })),
+        chatName: chat.name,
+        onClick: async (isConfirmed: boolean) => {
+          if (!isConfirmed) {
+            return
           }
-          return val
-        })
-        // TODO `parse` is a polyfill, and doesn't properly work
-        // for Windows paths.
-        // Namely, `name` is the full path, except for file extension
-        // (unless the file has no extension, then the things are even worse).
-        .map(path => ({ parsed: parse(path), pathStr: path }))
 
-      // send single file
-      if (sanitized.length == 1) {
-        const file = sanitized[0]
-        const msgViewType: Viewtype = isImage(file.parsed) ? 'Image' : 'File'
-        await addFileToDraft(
-          file.pathStr,
-          file.parsed.name + file.parsed.ext,
-          msgViewType
-        )
-      }
-      // send multiple files
-      else if (sanitized.length > 1 && !hasOpenDialogs) {
-        openDialog(ConfirmSendingFiles, {
-          sanitizedFileList: sanitized.map(path => ({
-            name: path.parsed.name,
-          })),
-          chatName: chat.name,
-          onClick: async (isConfirmed: boolean) => {
-            if (!isConfirmed) {
-              return
-            }
-
-            for (const file of sanitized) {
-              const msgViewType: Viewtype = isImage(file.parsed)
-                ? 'Image'
-                : 'File'
-              sendMessage(accountId, chat.id, {
-                file: file.pathStr,
-                filename: file.parsed.name + file.parsed.ext,
-                viewtype: msgViewType,
-              })
-            }
-          },
-        })
-      }
-    },
-    [accountId, addFileToDraft, chat, hasOpenDialogs, openDialog, sendMessage]
-  )
+          for (const file of sanitized) {
+            const msgViewType: Viewtype = isImage(file.parsed)
+              ? 'Image'
+              : 'File'
+            sendMessage(accountId, chat.id, {
+              file: file.pathStr,
+              filename: file.parsed.name + file.parsed.ext,
+              viewtype: msgViewType,
+            })
+          }
+        },
+      })
+    }
+  })
 
   useEffect(() => {
     log.debug('drag: register')
@@ -202,7 +199,7 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
       log.debug('drag: unregister')
       runtime.setDropListener(null)
     }
-  }, [handleDrop])
+  }, [])
 
   const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault()
