@@ -729,6 +729,10 @@ class BrowserRuntime implements Runtime {
     // eslint-disable-next-line no-console
     console.info('RC_Config', config)
     this.runtime_info = await RuntimeInfoRequest.json()
+    this.runtime_info?.versions.push({
+      label: 'Browser UA',
+      value: navigator.userAgent,
+    })
 
     setLogHandler((channel, level, stack_trace, ...args) => {
       this.sendToBackendOverWS({
