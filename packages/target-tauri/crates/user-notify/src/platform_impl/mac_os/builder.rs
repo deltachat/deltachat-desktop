@@ -1,4 +1,4 @@
-use std::{collections::HashMap, ops::Deref};
+use std::{collections::HashMap, env, fs, ops::Deref};
 
 use super::{NotificationManagerMacOS, handle::NotificationHandleMacOS};
 use objc2::{rc::Retained, runtime::AnyObject};
@@ -53,9 +53,21 @@ fn build(
             notification.setSubtitle(&NSString::from_str(&subtitle));
         }
 
-        if let Some(path) = builder.image {
-            let ns_url =
-                NSURL::fileURLWithPath(&NSString::from_str(path.to_string_lossy().as_ref()));
+        if let Some(original_path) = builder.image {
+            // file needs to be copied, because macOS will move it to internal datastore and delete it afterwards.
+            let copied_file_path = env::temp_dir().join(format!(
+                "{}.{}",
+                uuid::Uuid::new_v4().to_string(),
+                original_path
+                    .extension()
+                    .and_then(|e| e.to_str())
+                    .unwrap_or_default()
+            ));
+            fs::copy(original_path, &copied_file_path)?;
+
+            let ns_url = NSURL::fileURLWithPath(&NSString::from_str(
+                copied_file_path.to_string_lossy().as_ref(),
+            ));
             log::trace!("{ns_url:?}");
             let attachment = UNNotificationAttachment::attachmentWithIdentifier_URL_options_error(
                 ns_string!(""),

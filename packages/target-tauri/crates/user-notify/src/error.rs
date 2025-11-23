@@ -15,6 +15,9 @@ pub enum Error {
     #[cfg(any(target_os = "macos", target_os = "ios"))]
     #[error("NSError: {0}")]
     NSError(String),
+    #[cfg(any(target_os = "macos", target_os = "ios"))]
+    #[error(transparent)]
+    IoError(#[from] std::io::Error),
     #[error("Infallible error, something went really wrong: {0}")]
     Infallible(#[from] std::convert::Infallible),
     #[error(transparent)]
