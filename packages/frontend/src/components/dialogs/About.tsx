@@ -36,16 +36,16 @@ function useAboutInfo() {
       : { accountInfoError: 'loading' }
     : { accountInfoError: 'no account selected' }
 
-  const spaceUsageReportFetch = useRpcFetch(
-    BackendRemote.rpc.getSpaceUsageReportString,
+  const storageUsageReportFetch = useRpcFetch(
+    BackendRemote.rpc.getStorageUsageReportString,
     accId ? [accId] : null
   )
 
-  const spaceUsageReport: string = spaceUsageReportFetch
-    ? spaceUsageReportFetch.lingeringResult
-      ? spaceUsageReportFetch.lingeringResult.ok
-        ? spaceUsageReportFetch.lingeringResult.value
-        : JSON.stringify(spaceUsageReportFetch.lingeringResult.err)
+  const storageUsageReport: string = storageUsageReportFetch
+    ? storageUsageReportFetch.lingeringResult
+      ? storageUsageReportFetch.lingeringResult.ok
+        ? storageUsageReportFetch.lingeringResult.value
+        : JSON.stringify(storageUsageReportFetch.lingeringResult.err)
       : 'loading'
     : 'no account selected'
 
@@ -59,7 +59,7 @@ function useAboutInfo() {
       systemInfoFetch?.lingeringResult?.ok == false
         ? systemInfoFetch.lingeringResult
         : null,
-    spaceUsageReport,
+    storageUsageReport,
     ...accountInfo,
   }
 
@@ -198,8 +198,8 @@ export default function About({ onClose }: DialogProps) {
               </tbody>
             </table>
           </div>
-          <h4>Space Usage Of Current Account</h4>
-          <pre>{info.spaceUsageReport}</pre>
+          <h4>Storage Usage Of Current Account</h4>
+          <pre>{info.storageUsageReport}</pre>
           <h3>Additional Information About The Runtime</h3>
           <table>
             <tbody>
