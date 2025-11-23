@@ -7,7 +7,6 @@ import ImapFolderHandling from './ImapFolderHandling'
 import SettingsHeading from './SettingsHeading'
 import SettingsSeparator from './SettingsSeparator'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import EditAccountAndPasswordDialog from '../dialogs/EditAccountAndPasswordDialog'
 import useDialog from '../../hooks/dialog/useDialog'
 import SettingsButton from './SettingsButton'
 import { runtime } from '@deltachat-desktop/runtime-interface'
@@ -16,6 +15,7 @@ import DesktopSettingsSwitch from './DesktopSettingsSwitch'
 import { AutostartState } from '@deltachat-desktop/shared/shared-types'
 import ProxyConfiguration from '../dialogs/ProxyConfiguration'
 import { selectedAccountId } from '../../ScreenController'
+import TransportsDialog from '../dialogs/Transports'
 
 type Props = {
   settingsStore: SettingsStoreState
@@ -26,6 +26,13 @@ export default function Advanced({ settingsStore }: Props) {
   const { openDialog } = useDialog()
   const openProxySettings = () => {
     openDialog(ProxyConfiguration, {
+      accountId: selectedAccountId(),
+      configured: true,
+    })
+  }
+
+  const openTransportSettings = () => {
+    openDialog(TransportsDialog, {
       accountId: selectedAccountId(),
       configured: true,
     })
@@ -57,17 +64,6 @@ export default function Advanced({ settingsStore }: Props) {
       <Encryption />
       <SettingsSeparator />
 
-      <SettingsHeading>{tx('pref_server')}</SettingsHeading>
-      <SettingsButton
-        onClick={() => {
-          openDialog(EditAccountAndPasswordDialog, {
-            settingsStore,
-          })
-        }}
-        dataTestid='open-account-and-password'
-      >
-        {tx('pref_password_and_account_settings')}
-      </SettingsButton>
       <SettingsButton
         onClick={() => {
           openProxySettings()
@@ -75,6 +71,14 @@ export default function Advanced({ settingsStore }: Props) {
         dataTestid='open-proxy-settings'
       >
         {tx('proxy_settings')}
+      </SettingsButton>
+      <SettingsButton
+        onClick={() => {
+          openTransportSettings()
+        }}
+        dataTestid='open-transport-settings'
+      >
+        {tx('transport_settings')}
       </SettingsButton>
 
       {settingsStore.settings.is_chatmail === '0' && (

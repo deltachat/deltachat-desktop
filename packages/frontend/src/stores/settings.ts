@@ -12,7 +12,7 @@ export interface SettingsStoreState {
   settings: {
     [P in (typeof settingsKeys)[number]]: {
       mvbox_move: string
-      addr: string
+      configured_addr: string
       displayname: string
       selfstatus: string
       mdns_enabled: string
@@ -33,7 +33,7 @@ export interface SettingsStoreState {
 
 const settingsKeys = [
   'mvbox_move',
-  'addr',
+  'configured_addr',
   'displayname',
   'selfstatus',
   'mdns_enabled',

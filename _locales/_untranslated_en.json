@@ -85,5 +85,29 @@
   },
   "instant_onboarding_confirm_channel": {
     "message": "Do you want to create a new profile and join the channel \"%1$s\"?"
+  },
+  "transports": {
+    "message": "Transports"
+  },
+  "transport_settings": {
+    "message": "Transport Settings"
+  },
+  "add_transport": {
+    "message": "Add Transport"
+  },
+  "edit_transport": {
+    "message": "Edit Transport"
+  },
+  "remove_transport": {
+    "message": "Remove Transport"
+  },
+  "confirm_add_transport": {
+    "message": "Are you sure you want to add this transport?"
+  },
+  "confirm_remove_transport": {
+    "message": "Are you sure you want to remove this transport? %1$s"
+  },
+  "invalid_transport_qr": {
+    "message": "The scanned QR code does not contain a valid transport"
   }
 }
