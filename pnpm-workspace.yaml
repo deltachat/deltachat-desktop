@@ -3,8 +3,8 @@ packages:
 
 catalog:
   # deltachat specific
-  '@deltachat/jsonrpc-client': 2.27.0
-  '@deltachat/stdio-rpc-server': 2.27.0
+  '@deltachat/jsonrpc-client': 2.28.0
+  '@deltachat/stdio-rpc-server': 2.28.0
   '@webxdc/types': ^2.1.2
   '@deltachat/calls-webapp': 0.11.0-beta-debug
   mocha: ^10.7.0

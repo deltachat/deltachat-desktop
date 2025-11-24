@@ -80,10 +80,13 @@
   "accounts_list_item_menu_label": {
     "message": "Actions with Profile"
   },
-  "qrscan_ask_join_channel": {
-    "message": "Do you want to join the channel \"%1$s\"?"
-  },
   "instant_onboarding_confirm_channel": {
     "message": "Do you want to create a new profile and join the channel \"%1$s\"?"
+  },
+  "secure_join_channel_started": {
+    "message": "%1$s invited you to join this channel.\n\nWaiting for the device of %2$s to reply…"
+  },
+  "stats_msg_body": {
+    "message": "The attachment contains anonymous usage statistics, which help us improve Delta Chat. Thank you!"
   }
 }

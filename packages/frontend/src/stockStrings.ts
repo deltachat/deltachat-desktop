@@ -224,6 +224,10 @@ export async function updateCoreStrings() {
     [C.DC_STR_MISSED_CALL]: tx('missed_call'),
     [C.DC_STR_OUTGOING_CALL]: tx('outgoing_call'),
     [C.DC_STR_CHAT_UNENCRYPTED_EXPLANATON]: tx('chat_unencrypted_explanation'),
+    [C.DC_STR_MSG_YOU_JOINED_CHANNEL]: tx('you_joined_the_channel'),
+    [C.DC_STR_REMOVE_MEMBER]: tx('remove_member_by_you'),
+    [C.DC_STR_SECURE_JOIN_CHANNEL_STARTED]: tx('secure_join_channel_started'),
+    [C.DC_STR_STATS_MSG_BODY]: tx('stats_msg_body'),
   }
 
   await BackendRemote.rpc.setStockStrings(strings)
