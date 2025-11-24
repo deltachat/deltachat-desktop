@@ -190,9 +190,11 @@ test('Invite existing user to group', async ({ browserName }) => {
   await expect(confirmDialog).toContainText(groupName)
   await page.getByTestId('confirm-join-group').getByTestId('confirm').click()
   // userA invited you to group message
-  await expect(page.locator('#message-list li').nth(1)).toContainText(
-    userA.name
-  )
+  await expect(
+    page
+      .locator('#message-list li.message-wrapper')
+      .filter({ hasText: userA.name })
+  ).toBeVisible()
   const composer = page.locator('textarea#composer-textarea')
   await expect(composer).not.toBeVisible({ timeout: 1 })
 
@@ -249,9 +251,11 @@ test('Invite new user to group', async ({ browserName }) => {
   await page.locator('#displayName').fill(newUserName)
   await page.getByTestId('login-button').click()
   // userA invited you to group message
-  await expect(page.locator('#message-list li').nth(1)).toContainText(
-    userA.name
-  )
+  await expect(
+    page
+      .locator('#message-list li.message-wrapper')
+      .filter({ hasText: userA.name })
+  ).toBeVisible()
   const composer = page.locator('textarea#composer-textarea')
   await expect(composer).not.toBeVisible({ timeout: 1 })
 
