@@ -18,7 +18,7 @@ html {
   opacity: 0.9;
   border: 0;
   border-radius: 10px;
-  padding: 3px 8px;
+  padding: 4px 12px;
   cursor: pointer;
 }
 
@@ -34,10 +34,19 @@ body {
 
 a {
   text-decoration: none;
+  color: #0078f1;
 }
+a:hover {
+  text-decoration: underline;
+}
+a[href^='http']::after {
+  content: "\2009↗︎"; /* thin space + arrow as base+VS15 (text), cmp. https://en.wikipedia.org/wiki/Arrows_%28Unicode_block%29 */
+}
+
 h2,
 h3,
 h4 {
+  padding-top: 1rem; /* using padding+margin results in nicer scrolling position on tapping links */
   margin-top: 2rem;
 }
 ul {
@@ -77,11 +86,17 @@ ul#top li > ul > li::before {
 }
 
 .pagefind-ui__search-input {
+  position: absolute;
+  right: 40px;
+  top: 20px;
   padding: 8px;
   padding-right: 23px;
 }
 
 .pagefind-ui__search-clear {
+  position: absolute;
+  right: 10px;
+  top: 20px;
   border: none;
   margin-left: -34px;
   background: none;
