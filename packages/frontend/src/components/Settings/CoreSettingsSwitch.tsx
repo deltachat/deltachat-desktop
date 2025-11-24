@@ -20,7 +20,7 @@ type Props = {
    * Called before the setting is changed. Return false to prevent the change.
    * Can be async to show confirmation dialogs.
    */
-  beforeChange?: (currentValue: boolean) => boolean | Promise<boolean>
+  beforeChange?: (newValue: boolean) => boolean | Promise<boolean>
 }
 
 /*
@@ -57,7 +57,7 @@ export default function CoreSettingsSwitch({
     if (beforeChange) {
       setIsProcessing(true)
       try {
-        const shouldProceed = await beforeChange(storeValue)
+        const shouldProceed = await beforeChange(!storeValue)
         setIsProcessing(false)
         if (!shouldProceed) {
           // user cancelled, don't change the setting

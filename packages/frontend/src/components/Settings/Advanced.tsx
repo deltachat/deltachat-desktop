@@ -32,10 +32,10 @@ export default function Advanced({ settingsStore }: Props) {
     })
   }
   const confirmDisableMultiDevice = async (
-    currentValue: boolean // current state (true = enabled)
+    newValue: boolean // (true => multi-device enabled)
   ): Promise<boolean> => {
     // Show a warning when user wants to disable multi-device
-    if (currentValue) {
+    if (!newValue) {
       const confirmed = await confirmDialog(
         openDialog,
         tx('pref_multidevice_change_warn'),
