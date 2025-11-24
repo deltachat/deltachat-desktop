@@ -99,7 +99,10 @@ export default function Advanced({ settingsStore }: Props) {
         beforeChange={confirmDisableMultiDevice}
       />
       {settingsStore.settings.is_chatmail === '0' && (
-        <ImapFolderHandling settingsStore={settingsStore} />
+        <>
+          <SettingsSeparator />
+          <ImapFolderHandling settingsStore={settingsStore} />
+        </>
       )}
     </>
   )

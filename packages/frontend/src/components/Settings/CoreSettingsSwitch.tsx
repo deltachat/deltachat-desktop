@@ -69,7 +69,6 @@ export default function CoreSettingsSwitch({
       }
     }
 
-    // Change the setting
     SettingsStoreInstance.effect.setCoreSetting(
       settingsKey,
       flipDeltaBoolean(settingsStore.settings[settingsKey])

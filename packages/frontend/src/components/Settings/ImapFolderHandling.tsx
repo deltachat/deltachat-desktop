@@ -4,7 +4,6 @@ import type { SettingsStoreState } from '../../stores/settings'
 import CoreSettingsSwitch from './CoreSettingsSwitch'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import ShowClassicEmail from './ShowClassicEmail'
-import SettingsSeparator from './SettingsSeparator'
 
 type Props = {
   settingsStore: SettingsStoreState
@@ -17,7 +16,6 @@ export default function ImapFolderHandling({ settingsStore }: Props) {
 
   return (
     <>
-      <SettingsSeparator />
       <ShowClassicEmail settingsStore={settingsStore} />
       <CoreSettingsSwitch
         label={tx('pref_auto_folder_moves')}
