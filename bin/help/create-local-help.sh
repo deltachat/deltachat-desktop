@@ -4,6 +4,7 @@
 # be at relative path ../deltachat-pages
 set -e
 
+rm static/help/*.png
 ../deltachat-pages/tools/create-local-help.py ../deltachat-pages/result static/help --add_pagefind
 
 # remove the existing pagefind directory, before creating a new one
