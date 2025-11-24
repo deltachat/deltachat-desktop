@@ -9,6 +9,7 @@ import SettingsSeparator from './SettingsSeparator'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import EditAccountAndPasswordDialog from '../dialogs/EditAccountAndPasswordDialog'
 import useDialog from '../../hooks/dialog/useDialog'
+import { confirmDialog } from '../message/messageFunctions'
 import SettingsButton from './SettingsButton'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import CoreSettingsSwitch from './CoreSettingsSwitch'
@@ -29,6 +30,21 @@ export default function Advanced({ settingsStore }: Props) {
       accountId: selectedAccountId(),
       configured: true,
     })
+  }
+  const confirmDisableMultiDevice = async (
+    newValue: boolean // (true => multi-device enabled)
+  ): Promise<boolean> => {
+    // Show a warning when user wants to disable multi-device
+    if (!newValue) {
+      const confirmed = await confirmDialog(
+        openDialog,
+        tx('pref_multidevice_change_warn'),
+        tx('ok')
+      )
+      // If user didn't confirm, return false to prevent the change
+      return confirmed === true
+    }
+    return true
   }
 
   return (
@@ -76,8 +92,18 @@ export default function Advanced({ settingsStore }: Props) {
       >
         {tx('proxy_settings')}
       </SettingsButton>
-
-      <ImapFolderHandling settingsStore={settingsStore} />
+      <CoreSettingsSwitch
+        label={tx('pref_multidevice')}
+        settingsKey='bcc_self'
+        description={tx('pref_multidevice_explain')}
+        beforeChange={confirmDisableMultiDevice}
+      />
+      {settingsStore.settings.is_chatmail === '0' && (
+        <>
+          <SettingsSeparator />
+          <ImapFolderHandling settingsStore={settingsStore} />
+        </>
+      )}
     </>
   )
 }

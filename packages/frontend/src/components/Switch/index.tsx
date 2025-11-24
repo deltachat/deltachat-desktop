@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useEffect, useState } from 'react'
+import React, { PropsWithChildren } from 'react'
 
 import classNames from 'classnames'
 
@@ -6,22 +6,20 @@ import styles from './styles.module.scss'
 
 type Props = {
   disabled?: boolean
-  checked?: boolean
+  checked: boolean
   label?: string
   id?: string
-  onChange: (value: boolean) => void
+  onChange: (value: boolean) => void | Promise<void>
 }
 export default function Switch({ ...props }: PropsWithChildren<Props>) {
-  const [checked, setChecked] = useState(props.checked)
-
-  useEffect(() => {
-    setChecked(props.checked)
-  }, [props.checked])
+  // this component just shows the state of props.checked
+  // and triggers the onChange callback when the user toggles the switch
+  const checked = props.checked
 
   const toggle = (event: React.ChangeEvent<HTMLInputElement>) => {
     const v = event.target.checked
     props.onChange(v)
-    setChecked(v)
+    // No local state update! Parent controls everything
   }
 
   return (
