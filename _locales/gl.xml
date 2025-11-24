@@ -81,7 +81,9 @@
     <string name="always_load_remote_images">Descargar sempre imaxes remotas</string>
     <string name="once">Unha vez</string>
     <string name="show_warning">Mostrar aviso</string>
+    <!-- deprecated, UI must not offer an option to show the password -->
     <string name="show_password">Mostrar contrasinal</string>
+    <!-- deprecated, UI must not offer an option to show the password -->
     <string name="hide_password">Agochar contrasinal</string>
     <string name="not_now">Agora non</string>
     <string name="never">Nunca</string>
@@ -241,13 +243,14 @@
     <string name="channels">Canles</string>
     <!-- consider keeping the term "channel" as in WhatsApp or Telegram -->
     <string name="new_channel">Nova Canle</string>
+    <!-- deprecated -->
     <string name="add_recipients">Engadir correspondentes</string>
     <!-- consider keeping the term "channel" as in WhatsApp or Telegram -->
     <string name="channel_name">Nome da Canle</string>
     <string name="email">Email</string>
-    <!-- "New" as in "Create New E-Mail"; shown together with "New Group" and "New Channel" -->
+    <!-- "New" as in "Create New Email"; shown together with "New Group" and "New Channel" -->
     <string name="new_email">Novo email</string>
-    <!-- the "Subject" of an e-mail, use the term common in classic e-mail apps -->
+    <!-- the "Subject" of an email, use the term common in classic email apps -->
     <string name="subject">Asunto</string>
     <string name="menu_send">Enviar</string>
     <string name="menu_toggle_keyboard">Activar teclado emoji</string>
@@ -300,6 +303,7 @@
     <string name="menu_scroll_to_bottom">Moverse abaixo</string>
     <string name="menu_scroll_to_top">Moverse arriba</string>
     <string name="menu_help">Axuda</string>
+    <!-- use the same term for "Apps" as elsewhere -->
     <string name="what_is_webxdc">Que é Webxdc?</string>
     <string name="privacy_policy">Política de Privacidade</string>
     <string name="menu_select_all">Escoller todo</string>
@@ -361,7 +365,7 @@
     <string name="file_saved_to">Ficheiro gardado en \"%1$s\".</string>
 
     <!-- get confirmations -->
-    <!-- confirmation for leaving groups, channels, broadcasts or a mailinglists. If a subject is needed, "Are you sure you want to leave the chat?" would work as well -->
+    <!-- confirmation for leaving groups or channels. If a subject is needed, "Are you sure you want to leave the chat?" would work as well -->
     <string name="ask_leave_group">Tes a certeza de querer saír?</string>
     <plurals name="ask_delete_chat">
         <item quantity="one">Eliminar %d conversa en todos os teus dispositivos?</item>
@@ -535,7 +539,7 @@
     <string name="multidevice_install_dc_on_other_device">Instala Delta Chat no teu outro dispositivo (https://get.delta.chat)</string>
     <!-- "I Already Have a Profile / Add as Second Device” should be the same text as defined by the keys onboarding_alternative_logins and multidevice_receiver_title -->
     <string name="multidevice_tap_scan_on_other_device">Inicia Delta Chat, toca en \"Xa teño un perfil / Engadir como segundo dispositivo\" e escanea este código</string>
-    <!-- Shown inside a "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and/or address eg. "Scan to set up second device for Alice (alice@example.org)" -->
+    <!-- Shown inside a "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by the profile name eg. "Scan to set up second device for Alice" -->
     <string name="multidevice_qr_subtitle">Escanea para configurar un segundo dispositivo para %1$s</string>
     <string name="multidevice_receiver_title">Engadir como segundo dispositivo</string>
     <string name="multidevice_open_settings_on_other_device">No primeiro dispositivo, vai a \"Axustes / Engadir segundo dispositivo\" e escanea o código que alí se mostra</string>
@@ -580,7 +584,7 @@
     <string name="onboarding_create_instant_account">Crear novo perfil</string>
     <!-- Secondary button on the welcome screen, allows to "Add as Second Device", "Restore from Backup"  -->
     <string name="onboarding_alternative_logins">Xa teño un perfil</string>
-    <!-- Button, allows to log in to existing email accounts, setting ports, passwords and so on -->
+    <!-- Stay short here, alternative source string could be "Transport over Classic Email", avoiding maybe the maybe long term "Use". Context: this is Button and a title, allowing to log in to existing, classic email accounts, setting ports, passwords and so on -->
     <string name="manual_account_setup_option">Acceso clásido con correo</string>
     <!-- Instant onboarding title (there is not more to do than to set name and avatar) -->
     <string name="instant_onboarding_title">O teu perfil</string>
@@ -595,7 +599,7 @@
     <string name="instant_onboarding_other_server">Lista de servidores Chatmail</string>
     <!-- Hint about what happens when "Create Profile" button in pressed; the placeholder will be replaced by the group name -->
     <string name="instant_onboarding_group_info">Crear un perfil para unirse ao grupo \"%1$s\".</string>
-    <!-- Hint about what happens when "Create Profile" button in pressed; the placeholder will be replaced by contact name and/or address -->
+    <!-- Hint about what happens when "Create Profile" button in pressed; the placeholder will be replaced by contact name -->
     <string name="instant_onboarding_contact_info">Crear un perfil para conversar con %1$s.</string>
     <!-- Question shown when another user's QR code is scanned from onboarding screen -->
     <string name="instant_onboarding_confirm_contact">Queres crear un novo perfil e comezar a conversar con %1$s?</string>
@@ -609,10 +613,6 @@
     <string name="login_header">Accede ao teu servidor</string>
     <!-- deprecated -->
     <string name="login_explain">Accede cunha conta de correo existente</string>
-    <!-- deprecated -->
-    <string name="login_subheader">Para os provedores de correo máis frecuentes os axustes establécense automaticamente. Porén poderías ter que activar IMAP nos seus axustes. Consulta o teu provedor de correo ou aos amigos se tes dúbidas.</string>
-    <!-- deprecated -->
-    <string name="login_no_servers_hint">Non hai servidores Delta Chat, os teus datos permanecen no dispositivo.</string>
     <string name="login_inbox">Entrada</string>
     <string name="login_imap_login">identificador IMAP</string>
     <string name="login_imap_server">Servidor IMAP</string>
@@ -624,8 +624,6 @@
     <string name="login_smtp_server">Servidor SMTP</string>
     <string name="login_smtp_port">Porto SMTP</string>
     <string name="login_smtp_security">Seguridade SMTP</string>
-    <!-- deprecated -->
-    <string name="login_auth_method">Método de autorización</string>
     <!-- the word "Proxy" might be left untranslated unless the destination language has a well-known term for a "Proxy Server", acting intermediary between the app and the server -->
     <string name="proxy_settings">Proxy</string>
     <string name="proxy_use_proxy">Usar Proxy</string>
@@ -638,10 +636,6 @@
     <string name="proxy_delete_explain">Tes certeza de querer eliminar \"%1$s\"?</string>
     <string name="proxy_use_proxy_confirm">Queres usar o proxy \"%1$s\"?</string>
     <string name="proxy_share_link">Compartir ligazón</string>
-    <!-- deprecated -->
-    <string name="login_info_oauth2_title">Continuar co axuste simplificado?</string>
-    <!-- deprecated -->
-    <string name="login_info_oauth2_text">O enderezo introducido soporta o axuste simplificado (OAuth 2.0).\n\nNo seguinte paso, permite a Delta Chat actuar como app de Conversa sobre Correo-e.\n\nNon hai servidores Delta Chat, os teus datos permanecen no dispositivo.</string>
     <string name="login_certificate_checks">Comprobacións do certificado</string>
     <string name="login_error_mail">Introduce un enderezo de correo válido</string>
     <string name="login_error_server">Introduce un servidor válido / enderezo IP</string>
@@ -683,6 +677,7 @@
     <string name="pref_profile_photo">Imaxe de perfil</string>
     <string name="pref_blocked_contacts">Contactos bloqueados</string>
     <string name="blocked_empty_hint">Móstranse aquí os contactos que bloqueas.</string>
+    <!-- deprecated -->
     <string name="pref_password_and_account_settings">Contrasinal e conta</string>
     <string name="pref_who_can_see_profile_explain">A túa foto de perfil e nome móstranse xunto coas túas mensaxes ao comunicarte con outras persoas. A información xa enviada non se pode agochar o borrar.</string>
     <string name="pref_your_name">O teu nome</string>
@@ -736,8 +731,6 @@
     <string name="pref_backup">Respaldo</string>
     <string name="pref_backup_explain">Respaldar conversas na almacenaxe externa</string>
     <string name="pref_backup_export_explain">Un respaldo axúdache a configurar unha nova instalación neste ou noutro dispositivo.\n\nO respaldo contén as mensaxes, contactos e conversas e os axustes de cifrado extremo-a-extremo Autocrypt. Garda o ficheiro de respaldo nun lugar seguro ou bórrao tan pronto sexa posible.</string>
-    <!-- deprecated -->
-    <string name="pref_backup_export_x">Exportar %1$s</string>
     <!-- the placeholder will be replaced by the number of profiles to export; the number is always larger than 1 -->
     <string name="pref_backup_export_all">Exportar todos os %1$d perfís</string>
     <string name="pref_backup_export_start_button">Inciar respaldo</string>
@@ -750,10 +743,6 @@
     <string name="pref_background_btn_default">Usar imaxe por omisión</string>
     <string name="pref_background_btn_gallery">Escoller na galería</string>
     <string name="pref_imap_folder_warn_disable_defaults">Se desactivas esta opción, asegúrate de que o servidor e os teus outros clientes están configurados de xeito acorde.\n\nSe non, algo podería fallar.</string>
-    <!-- deprecated -->
-    <string name="pref_watch_sent_folder">Vixiar cartafol Enviados</string>
-    <string name="pref_send_copy_to_self">Enviar copia a ti mesmo</string>
-    <string name="pref_send_copy_to_self_explain">Requerido se utilizas esta conta en varios dispositivos.</string>
     <string name="pref_auto_folder_moves">Mover automáticamente ao cartafol DeltaChat</string>
     <string name="pref_auto_folder_moves_explain">As conversas móvense do cartafol de Entrada para evitar saturalo.</string>
     <string name="pref_only_fetch_mvbox_title">Obter só desde cartafol DeltaChat</string>
@@ -835,8 +824,6 @@
     <string name="autocrypt_prefer_e2ee">Preferir cifrado extremo-a-extremo</string>
 
     <!-- system messages -->
-    <!-- deprecated -->
-    <string name="systemmsg_unknown_sender_for_chat">Remitente descoñecido para esta convers. Mira en \'info\' para saber máis.</string>
     <string name="systemmsg_subject_for_new_contact">Mensaxe de %1$s</string>
     <string name="systemmsg_failed_sending_to">Fallou o envío para %1$s.</string>
     <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name -->
@@ -844,64 +831,64 @@
     <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name, %3$s will be replaced by name and address of the contact who did the action. -->
     <string name="group_name_changed_by_other">%3$s cambiou o nome do grupo de \"%1$s\" a \"%2$s\".</string>
     <string name="group_image_changed_by_you">Cambiaches a imaxe do grupo.</string>
-    <!-- %1$s will be replaced by name and address of the contact who did the action -->
+    <!-- %1$s will be replaced by name of the contact who did the action -->
     <string name="group_image_changed_by_other">Imaxe do grupo cambiada por %1$s.</string>
-    <!-- %1$s will be replaced by name and address of the contact added to the group -->
+    <!-- %1$s will be replaced by name of the contact added to the group -->
     <string name="member_x_added">Membro %1$s adicionado/a.</string>
-    <!-- %1$s will be replaced by name and address of the contact added to the group -->
+    <!-- %1$s will be replaced by name of the contact added to the group -->
     <string name="add_member_by_you">Engadiches un membro %1$s.</string>
-    <!-- %1$s will be replaced by name and address of the contact added to the group, %2$s will be replaced by name and address of the contact who did the action -->
+    <!-- %1$s will be replaced by name of the contact added to the group, %2$s will be replaced by name of the contact who did the action -->
     <string name="add_member_by_other">%1$s engadido por %2$s.</string>
-    <!-- %1$s will be replaced by name and address of the contact removed from the group -->
+    <!-- %1$s will be replaced by name of the contact removed from the group -->
     <string name="remove_member_by_you">Eliminaches a %1$s.</string>
-    <!-- %1$s will be replaced by name and address of the contact removed from the group, %2$s will be replaced by name and address of the contact who did the action -->
+    <!-- %1$s will be replaced by name of the contact removed from the group, %2$s will be replaced by name of the contact who did the action -->
     <string name="remove_member_by_other">%1$s eliminado por %2$s.</string>
-    <!-- "left" in the meaning of "exited"; %1$s will be replaced by name and address of the contact leaving the group -->
+    <!-- "left" in the meaning of "exited"; %1$s will be replaced by name of the contact leaving the group -->
     <string name="group_left_by_other">%1$s deixou o grupo.</string>
     <string name="group_image_deleted_by_you">Eliminaches a imaxe do grupo</string>
-    <!-- %1$s will be replaced by name and address of the contact -->
+    <!-- %1$s will be replaced by name of the contact -->
     <string name="group_image_deleted_by_other">%1$s eliminou a imaxe do grupo.</string>
     <string name="location_enabled_by_you">Activaches a compartición da localización.</string>
-    <!-- %1$s will be replaced by name and address of the contact -->
+    <!-- %1$s will be replaced by name of the contact -->
     <string name="location_enabled_by_other">Difusión da localización activada por %1$s.</string>
     <string name="ephemeral_timer_disabled_by_you">Desactivaches o temporizador de eliminación de mensaxes.</string>
-    <!-- %1$s will be replaced by name and address of the contact -->
+    <!-- %1$s will be replaced by name of the contact -->
     <string name="ephemeral_timer_disabled_by_other">Temporizador da eliminación de mensaxes descativado por %1$s.</string>
     <!-- %1$s will be replaced by the number of seconds (always >1) the timer is set to -->
     <string name="ephemeral_timer_seconds_by_you">Estableceches que as mensaxes desaparezan en  %1$s s</string>
-    <!-- %1$s will be replaced by the number of seconds (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <!-- %1$s will be replaced by the number of seconds (always >1) the timer is set to, %2$s will be replaced by name of the contact -->
     <string name="ephemeral_timer_seconds_by_other">O temporizador de desaparición de mensaxes establecido en %1$s segundos por %2$s.</string>
     <!-- deprecated, usage needs to be removed in core -->
     <string name="ephemeral_timer_1_minute_by_you">Puxeches en 1 minuto o temporizador de desaparición de mensaxes.</string>
     <!-- deprecated, usage needs to be removed in core -->
     <string name="ephemeral_timer_1_minute_by_other">Temporizador de desaparición de mensaxes definido en 1 minuto por %1$s.</string>
     <string name="ephemeral_timer_1_hour_by_you">Definiches o temporizador de desaparición de mensaxes en 1 hora.</string>
-    <!-- %1$s will be replaced by name and address of the contact -->
+    <!-- %1$s will be replaced by name of the contact -->
     <string name="ephemeral_timer_1_hour_by_other">Temporizador de desaparición de mensaxes definido en 1 hora por %1$s.</string>
     <string name="ephemeral_timer_1_day_by_you">Definiches o temporizador de desaparición de mensaxes en 1 día.</string>
-    <!-- %1$s will be replaced by name and address of the contact -->
+    <!-- %1$s will be replaced by name of the contact -->
     <string name="ephemeral_timer_1_day_by_other">Temporizador de desaparición de mensaxes definido en 1 día por %1$s.</string>
     <string name="ephemeral_timer_1_week_by_you">Definiches o temporizador de desaparición de mensaxes en 1 semana.</string>
-    <!-- %1$s will be replaced by name and address of the contact -->
+    <!-- %1$s will be replaced by name of the contact -->
     <string name="ephemeral_timer_1_week_by_other">Temporizador de desaparición de mensaxes definido en 1 semana por %1$s.</string>
     <string name="ephemeral_timer_1_year_by_you">Definiches o temporizador de desaparición de mensaxes en 1 ano.</string>
     <!-- %1$s will be replaced by name of the contact -->
     <string name="ephemeral_timer_1_year_by_other">Temporizador de desaparición de mensaxes definido en 1 ano por %1$s.</string>
     <!-- %1$s will be replaced by the number of minutes (always >1) the timer is set to -->
     <string name="ephemeral_timer_minutes_by_you">Definiches o temporizador de desaparición de mensaxes en %1$s minutos.</string>
-    <!-- %1$s will be replaced by the number of minutes (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <!-- %1$s will be replaced by the number of minutes (always >1) the timer is set to, %2$s will be replaced by name of the contact -->
     <string name="ephemeral_timer_minutes_by_other">Temporizador de desaparición de mensaxes definido en %1$s minutos por %2$s.</string>
     <!-- %1$s will be replaced by the number of hours (always >1) the timer is set to -->
     <string name="ephemeral_timer_hours_by_you">Definiches o temporizador de desaparición de mensaxes en %1$s horas.</string>
-    <!-- %1$s will be replaced by the number of hours (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <!-- %1$s will be replaced by the number of hours (always >1) the timer is set to, %2$s will be replaced by name of the contact -->
     <string name="ephemeral_timer_hours_by_other">Temporizador de desaparición de mensaxes definido en %1$s horas por %2$s.</string>
     <!-- %1$s will be replaced by the number of days (always >1) the timer is set to -->
     <string name="ephemeral_timer_days_by_you">Definiches o temporizador de desaparición de mensaxes en %1$s días.</string>
-    <!-- %1$s will be replaced by the number of days (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <!-- %1$s will be replaced by the number of days (always >1) the timer is set to, %2$s will be replaced by name of the contact -->
     <string name="ephemeral_timer_days_by_other">Temporizador de desaparición de mensaxes definido en %1$s días por %2$s.</string>
     <!-- %1$s will be replaced by the number of weeks (always >1) the timer is set to -->
     <string name="ephemeral_timer_weeks_by_you">Definiches o temporizador de desaparición de mensaxes en %1$s semanas.</string>
-    <!-- %1$s will be replaced by the number of weeks (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <!-- %1$s will be replaced by the number of weeks (always >1) the timer is set to, %2$s will be replaced by name of the contact -->
     <string name="ephemeral_timer_weeks_by_other">Temporizador de desaparición de mensaxes definido en %1$s semanas por %2$s.</string>
     <string name="devicemsg_self_deleted">Eliminaches o chat \"Mensaxes gardadas\".\n\nℹ️ Para usar \"Mensaxes gardadas\" de novo, crea un novo chat contigo mesmo.</string>
     <!-- %1$s will be replaced by the amount of storage already used, sth. as '500 MB'. If you want to use a percentage sign, type in two of them, eg. %1$s %% -->
@@ -939,7 +926,7 @@
     <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by the group name, eg. "Scan to join group \"Testing group\"" -->
     <string name="qrshow_join_group_hint">Escanea esto para unirte ao grupo \"%1$s\".</string>
     <string name="qrshow_join_contact_title">Código QR de convite</string>
-    <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and address eg. "Scan to chat with Alice (alice@example.org)" -->
+    <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by the profile name eg. "Scan to chat with Alice" -->
     <string name="qrshow_join_contact_hint">Escanea esto para conectar con %1$s-</string>
     <string name="qrshow_join_contact_no_connection_toast">Sen conexión a internet, non se pode facer o axuste por código QR</string>
     <string name="qraccount_ask_create_and_login">Crear un novo enderezo de correo en \"%1$s\" e acceder ali?</string>
@@ -947,7 +934,7 @@
     <string name="set_name_and_avatar_explain">Define un nome recoñecíbel polos teus contactos. Tamén podes definir unha imaxe de perfil.</string>
     <string name="please_enter_name">Por favor introduce un nome.</string>
     <string name="qraccount_qr_code_cannot_be_used">O código QR escaneado non se pode utilizar para crear unha nova conta.</string>
-    <!-- first placeholder will be replaced by name and address of the inviter, second placeholder will be replaced by the name of the inviter. -->
+    <!-- first placeholder will be replaced by name of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">%1$s convidoute a este grupo.\n\nAgardando a que responda o dispositivo de %2$s ...</string>
     <!-- placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_replies">%1$s respondeu, agardando a que sexa engadido ao grupo...</string>

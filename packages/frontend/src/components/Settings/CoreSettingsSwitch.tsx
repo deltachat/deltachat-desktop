@@ -16,6 +16,7 @@ type Props = {
   description?: string
   disabled?: boolean
   disabledValue?: boolean
+  callback?: (updatedValue: boolean) => void
 }
 
 /*
@@ -27,6 +28,7 @@ export default function CoreSettingsSwitch({
   description,
   disabled,
   disabledValue,
+  callback,
 }: Props) {
   const settingsStore = useSettingsStore()[0]
 
@@ -45,10 +47,12 @@ export default function CoreSettingsSwitch({
         if (settingsStore == null) {
           return
         }
+        const previousValue = settingsStore.settings[settingsKey] === '1'
         SettingsStoreInstance.effect.setCoreSetting(
           settingsKey,
           flipDeltaBoolean(settingsStore.settings[settingsKey])
         )
+        callback?.(!previousValue)
       }}
       disabled={disabledFinal}
     />

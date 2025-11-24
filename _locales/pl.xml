@@ -81,7 +81,9 @@
     <string name="always_load_remote_images">Zawsze wczytuj zdalne obrazy</string>
     <string name="once">Jeden raz</string>
     <string name="show_warning">Pokaż ostrzeżenie</string>
+    <!-- deprecated, UI must not offer an option to show the password -->
     <string name="show_password">Pokaż hasło</string>
+    <!-- deprecated, UI must not offer an option to show the password -->
     <string name="hide_password">Ukryj hasło</string>
     <string name="not_now">Nie teraz</string>
     <string name="never">Nigdy</string>
@@ -181,7 +183,7 @@
         <item quantity="one">%d odbiorca</item>
         <item quantity="few">%d odbiorców</item>
         <item quantity="many">%d odbiorców</item>
-        <item quantity="other">%d odbiorcy</item>
+        <item quantity="other">%d subskrybenci</item>
     </plurals>
     <!-- Short form for "N Items Selected" -->
     <plurals name="n_selected">
@@ -279,13 +281,14 @@
     <string name="channels">Kanały</string>
     <!-- consider keeping the term "channel" as in WhatsApp or Telegram -->
     <string name="new_channel">Nowy kanał</string>
-    <string name="add_recipients">Dodaj odbiorców</string>
+    <!-- deprecated -->
+    <string name="add_recipients">Dodaj subskrybentów</string>
     <!-- consider keeping the term "channel" as in WhatsApp or Telegram -->
     <string name="channel_name">Nazwa kanału</string>
     <string name="email">E-mail</string>
-    <!-- "New" as in "Create New E-Mail"; shown together with "New Group" and "New Channel" -->
+    <!-- "New" as in "Create New Email"; shown together with "New Group" and "New Channel" -->
     <string name="new_email">Nowy e-mail</string>
-    <!-- the "Subject" of an e-mail, use the term common in classic e-mail apps -->
+    <!-- the "Subject" of an email, use the term common in classic email apps -->
     <string name="subject">Temat</string>
     <string name="menu_send">Wyślij</string>
     <string name="menu_toggle_keyboard">Przełącz klawiaturę emoji</string>
@@ -338,7 +341,8 @@
     <string name="menu_scroll_to_bottom">Przewiń na dołu</string>
     <string name="menu_scroll_to_top">Przewiń na górę</string>
     <string name="menu_help">Pomoc</string>
-    <string name="what_is_webxdc">Co to jest Webxdc?</string>
+    <!-- use the same term for "Apps" as elsewhere -->
+    <string name="what_is_webxdc">O aplikacjach</string>
     <string name="privacy_policy">Polityka prywatności</string>
     <string name="menu_select_all">Zaznacz wszystko</string>
     <string name="select_chat">Zaznacz czat</string>
@@ -365,7 +369,7 @@
     <string name="device_talk">Komunikaty urządzenia</string>
     <string name="device_talk_subtitle">Wiadomości generowane lokalnie</string>
     <string name="device_talk_explain">Wiadomości w tym czacie są generowane lokalnie przez twoją aplikację Delta Chat. Twórcy używają go do informowania o aktualizacjach aplikacji i problemach podczas użytkowania.</string>
-    <string name="device_talk_welcome_message2">Skontaktuj się!\n\n🙌 Dotknij „Kod QR” na ekranie głównym obu urządzeń. Wybierz opcję „Zeskanuj kod QR” na jednym urządzeniu i skieruj go na drugie\n\n🌍 Jeśli nie znajdujesz się w tym samym pokoju, zeskanuj kod podczas rozmowy wideo lub udostępnij link z zaproszeniem w sekcji „Zeskanuj kod QR”\n\nNastępnie: korzystaj z komunikatora za pośrednictwem największej zdecentralizowanej sieci, jaka kiedykolwiek istniała: e-mail. W przeciwieństwie do innych popularnych aplikacji bez centralnej kontroli, śledzenia lub sprzedawania Ciebie, znajomych, współpracowników lub rodziny dużym organizacjom.</string>
+    <string name="device_talk_welcome_message2">Skontaktuj się!\n\n🙌 Dotknij „Kod QR” na ekranie głównym obu urządzeń. Wybierz opcję „Zeskanuj kod QR” na jednym urządzeniu i skieruj go na drugie\n\n🌍 Jeśli nie znajdujesz się w tym samym pomieszczeniu, zeskanuj kod podczas rozmowy wideo lub udostępnij link z zaproszeniem w sekcji „Zeskanuj kod QR”\n\nNastępnie: korzystaj z komunikatora za pośrednictwem największej zdecentralizowanej sieci, jaka kiedykolwiek istniała: e-mail. W przeciwieństwie do innych popularnych aplikacji bez centralnej kontroli, śledzenia lub sprzedawania Ciebie, znajomych, współpracowników lub rodziny dużym organizacjom.</string>
     <string name="edit_contact">Edytuj kontakt</string>
     <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin_chat">Przypnij czat</string>
@@ -418,7 +422,7 @@
     <string name="call_date_and_duration">%1$s, %2$s</string>
 
     <!-- get confirmations -->
-    <!-- confirmation for leaving groups, channels, broadcasts or a mailinglists. If a subject is needed, "Are you sure you want to leave the chat?" would work as well -->
+    <!-- confirmation for leaving groups or channels. If a subject is needed, "Are you sure you want to leave the chat?" would work as well -->
     <string name="ask_leave_group">Na pewno chcesz opuścić?</string>
     <plurals name="ask_delete_chat">
         <item quantity="one">Usunąć %d czat ze wszystkich urządzeń?</item>
@@ -494,7 +498,7 @@
     <string name="chat_record_explain">Dotknij i przytrzymaj, aby nagrać wiadomość głosową, zwolnij, aby wysłać</string>
     <string name="chat_no_chats_yet_title">Pusta skrzynka odbiorcza.\nNaciśnij \"+\" aby rozpocząć nowy czat.</string>
     <string name="chat_all_archived">Wszystkie czaty zarchiwizowane.\nNaciśnij „+” aby rozpocząć nowy czat.</string>
-    <string name="chat_share_with_title">Udostępnij</string>
+    <string name="chat_share_with_title">Udostępnij…</string>
     <string name="chat_input_placeholder">Wiadomość</string>
     <string name="chat_archived_label">Zarchiwizowane</string>
     <string name="chat_request_label">Prośba</string>
@@ -605,7 +609,7 @@
     <string name="multidevice_install_dc_on_other_device">Zainstaluj Delta Chat na swoim kolejnym urządzeniu (https://get.delta.chat)</string>
     <!-- "I Already Have a Profile / Add as Second Device” should be the same text as defined by the keys onboarding_alternative_logins and multidevice_receiver_title -->
     <string name="multidevice_tap_scan_on_other_device">Uruchom Delta Chat, dotknij „Mam już profil / Dodaj jako kolejne urządzenie” i zeskanuj pokazany tutaj kod</string>
-    <!-- Shown inside a "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and/or address eg. "Scan to set up second device for Alice (alice@example.org)" -->
+    <!-- Shown inside a "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by the profile name eg. "Scan to set up second device for Alice" -->
     <string name="multidevice_qr_subtitle">Zeskanuj, aby skonfigurować kolejne urządzenie dla %1$s</string>
     <string name="multidevice_receiver_title">Dodaj jako kolejne urządzenie</string>
     <string name="multidevice_open_settings_on_other_device">Na pierwszym urządzeniu przejdź do „Ustawienia » Dodaj kolejne urządzenie” i zeskanuj wyświetlony tam kod</string>
@@ -650,8 +654,8 @@
     <string name="onboarding_create_instant_account">Utwórz nowy profil</string>
     <!-- Secondary button on the welcome screen, allows to "Add as Second Device", "Restore from Backup"  -->
     <string name="onboarding_alternative_logins">Mam już profil</string>
-    <!-- Button, allows to log in to existing email accounts, setting ports, passwords and so on -->
-    <string name="manual_account_setup_option">Klasyczne logowanie e-mail</string>
+    <!-- Stay short here, alternative source string could be "Transport over Classic Email", avoiding maybe the maybe long term "Use". Context: this is Button and a title, allowing to log in to existing, classic email accounts, setting ports, passwords and so on -->
+    <string name="manual_account_setup_option">Transport przez klasyczny e-mail</string>
     <!-- Instant onboarding title (there is not more to do than to set name and avatar) -->
     <string name="instant_onboarding_title">Twój profil</string>
     <!-- The placeholder will be replaced by the default onboarding server -->
@@ -665,7 +669,7 @@
     <string name="instant_onboarding_other_server">Lista serwerów Chatmail</string>
     <!-- Hint about what happens when "Create Profile" button in pressed; the placeholder will be replaced by the group name -->
     <string name="instant_onboarding_group_info">Tworzy profil, aby dołączyć do grupy „%1$s”.</string>
-    <!-- Hint about what happens when "Create Profile" button in pressed; the placeholder will be replaced by contact name and/or address -->
+    <!-- Hint about what happens when "Create Profile" button in pressed; the placeholder will be replaced by contact name -->
     <string name="instant_onboarding_contact_info">Tworzy profil, aby rozmawiać z „%1$s”.</string>
     <!-- Question shown when another user's QR code is scanned from onboarding screen -->
     <string name="instant_onboarding_confirm_contact">Chcesz utworzyć nowy profil i rozpocząć rozmowę z %1$s?</string>
@@ -675,14 +679,11 @@
     <string name="welcome_chat_over_email">Bezpieczny zdecentralizowany czat</string>
     <string name="scan_invitation_code">Zeskanuj kod zaproszenia</string>
     <string name="login_title">Zaloguj się</string>
+    <string name="login_advanced_hint">To logowanie jest przeznaczone dla zaawansowanych użytkowników:\n\n• Nie używaj konta, z którego korzystasz w innej aplikacji.\n\n• Klasyczny serwer pocztowy umożliwia rozmowy bez szyfrowania end-to-end, oznaczone ikoną poczty.</string>
     <!-- deprecated -->
     <string name="login_header">Zaloguj się na swoje konto e-mail</string>
     <!-- deprecated -->
     <string name="login_explain">Zaloguj się przy użyciu istniejącego konta e-mail</string>
-    <!-- deprecated -->
-    <string name="login_subheader">Dla znanych dostawców usług poczty elektronicznej poniższe ustawienia są ustawiane automatycznie. Czasami IMAP musi być włączony w interfejsie WWW. O pomoc należy zwrócić się do usługodawcy e-mail lub znajomych.</string>
-    <!-- deprecated -->
-    <string name="login_no_servers_hint">Nie ma serwerów Delta Chat, Twoje dane pozostają na Twoim urządzeniu!</string>
     <string name="login_inbox">Skrzynka odbiorcza</string>
     <string name="login_imap_login">Nazwa użytkownika IMAP</string>
     <string name="login_imap_server">Serwer IMAP</string>
@@ -694,8 +695,6 @@
     <string name="login_smtp_server">Serwer SMTP</string>
     <string name="login_smtp_port">Port SMTP</string>
     <string name="login_smtp_security">Bezpieczeństwo SMTP</string>
-    <!-- deprecated -->
-    <string name="login_auth_method">Metoda autoryzacji</string>
     <!-- the word "Proxy" might be left untranslated unless the destination language has a well-known term for a "Proxy Server", acting intermediary between the app and the server -->
     <string name="proxy_settings">Proxy</string>
     <string name="proxy_use_proxy">Użyj proxy</string>
@@ -711,11 +710,16 @@
     <string name="proxy_share_link">Udostępnij link</string>
     <string name="proxy_enabled">Włączone proxy</string>
     <string name="proxy_enabled_hint">Używasz serwera proxy. Jeśli masz problemy z połączeniem, spróbuj użyć innego serwera proxy.</string>
+    <!-- "Transports", these are the relay servers used, can also be translated as "Transport Servers", if only "Transport" sounds too weird in the destination language -->
+    <string name="transports">Serwery transportowe</string>
+    <string name="add_transport">Dodaj serwer transportowy</string>
+    <string name="remove_transport">Usuń serwer transportowy</string>
+    <string name="edit_transport">Edytuj serwer transportowy</string>
+    <!-- shown if a QR code was scanned that can be used as a transport -->
+    <string name="confirm_add_transport">Dodać ten serwer transportowy?</string>
+    <string name="invalid_transport_qr">Zeskanowany kod QR zawiera nieprawidłowy serwer transportowy.</string>
+    <string name="confirm_remove_transport">Usunąć serwer transportowy „%1$s”?\n\nTwoje kontakty mogą się z tobą skontaktować tylko wtedy, gdy kontaktowałeś się z nimi wcześniej za pośrednictwem innego serwera transportowego.\n\nW razie wątpliwości usuń ten serwer transportowy.</string>
 
-    <!-- deprecated -->
-    <string name="login_info_oauth2_title">Kontynuuj w uproszczonej konfiguracji?</string>
-    <!-- deprecated -->
-    <string name="login_info_oauth2_text">Wprowadzony adres e-mail obsługuje uproszczoną konfigurację (OAuth2.0).\n\nW następnym kroku zezwól Delta Chat na wysyłanie i odbieranie wiadomości.\n\nNie ma serwerów Delta Chat, Twoje dane pozostają na Twoim urządzeniu!</string>
     <string name="login_certificate_checks">Sprawdzanie certyfikatów</string>
     <string name="login_error_mail">Podaj ważny adres e-mail</string>
     <string name="login_error_server">Wprowadź poprawny adres serwera / IP</string>
@@ -764,6 +768,7 @@
     <string name="pref_profile_photo">Zdjęcie profilowe</string>
     <string name="pref_blocked_contacts">Zablokowane kontakty</string>
     <string name="blocked_empty_hint">Zablokowane kontakty, zostaną pokazane tutaj.</string>
+    <!-- deprecated -->
     <string name="pref_password_and_account_settings">Hasło i konto</string>
     <string name="pref_who_can_see_profile_explain">Twoje zdjęcie profilowe i nazwa będą wyświetlane wraz z wiadomościami podczas komunikacji z innymi użytkownikami. Już wysłanych informacji nie można skasować ani usunąć.</string>
     <string name="pref_your_name">Twoja nazwa</string>
@@ -821,8 +826,6 @@
     <string name="pref_backup_explain">Wykonaj kopię zapasową czatów na pamięci zewnętrznej</string>
     <string name="pref_backup_export_explain">Kopia zapasowa pomaga skonfigurować nową instalację na tym lub na innym urządzeniu.\n\nKopia zapasowa będzie zawierała wszystkie wiadomości, kontakty i czaty oraz pełną konfigurację  funkcji automatycznego szyfrowania typu end-to-end. Przechowuj plik kopii zapasowej w bezpiecznym miejscu lub usuń go jak najszybciej.</string>
     <string name="pref_backup_export_this">Eksportuj ten profil</string>
-    <!-- deprecated -->
-    <string name="pref_backup_export_x">Eksportuj %1$s</string>
     <!-- the placeholder will be replaced by the number of profiles to export; the number is always larger than 1 -->
     <string name="pref_backup_export_all">Eksportuj wszystkie profile (%1$d)</string>
     <string name="pref_backup_export_start_button">Utwórz kopię</string>
@@ -835,10 +838,6 @@
     <string name="pref_background_btn_default">Użyj domyślnego obrazu</string>
     <string name="pref_background_btn_gallery">Wybierz z galerii</string>
     <string name="pref_imap_folder_warn_disable_defaults">Jeśli wyłączysz tę opcję, upewnij się, że twój serwer i inni klienci są odpowiednio skonfigurowani.\n\nW przeciwnym razie wszystko może w ogóle nie działać.</string>
-    <!-- deprecated -->
-    <string name="pref_watch_sent_folder">Pokaż katalog Wysłane</string>
-    <string name="pref_send_copy_to_self">Wyślij kopię do siebie</string>
-    <string name="pref_send_copy_to_self_explain">Wymagane kiedy korzystasz z tego konta na wielu urządzeniach.</string>
     <string name="pref_auto_folder_moves">Automatyczne przenoszenie do folderu DeltaChat</string>
     <string name="pref_auto_folder_moves_explain">Rozmowy na czacie są przenoszone, aby nie zaśmiecać folderu Skrzynka odbiorcza</string>
     <string name="pref_only_fetch_mvbox_title">Pobieraj tylko z folderu DeltaChat</string>
@@ -906,7 +905,7 @@
     <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
     <string name="autodel_device_ask">Czy chcesz teraz usunąć %1$d wiadomości i wszystkie nowo pobrane wiadomości w przyszłości „%2$s”?\n\n• Obejmuje to wszystkie multimedia\n\n• Wiadomości zostaną usunięte niezależnie od tego, czy były widoczne, czy nie\n\n• „Zapisane wiadomości” zostaną pominięte podczas lokalnego usuwania</string>
     <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
-    <string name="autodel_server_ask">Czy chcesz teraz usunąć %1$d wiadomości i wszystkie nowo pobrane wiadomości w przyszłości „%2$s”?\n\n⚠️ Obejmuje to e-maile, multimedia i „Zapisane wiadomości” we wszystkich folderach na serwerze.\n\n⚠️ Nie używaj tej funkcji, jeśli chcesz zachować dane na serwerze\n\n⚠️ Nie używaj tej funkcji, jeśli chcesz zachować dane na serwerze lub korzystasz także z klasycznych klientów poczty e-mail</string>
+    <string name="autodel_server_ask">Czy chcesz teraz usunąć %1$d wiadomości i wszystkie nowo pobierane wiadomości w przyszłości „%2$s”?\n\n⚠️ Obejmuje to e-maile, multimedia i „Zapisane wiadomości” we wszystkich folderach na serwerze.\n\n⚠️ Nie używaj tej funkcji, jeśli chcesz zachować dane na serwerze lub korzystasz także z klasycznych klientów poczty e-mail</string>
     <!-- shown below enabled autodel_server-option, should be a summary of autodel_server_ask and remind about the impact -->
     <string name="autodel_server_enabled_hint">Obejmuje to e-maile, multimedia i „Zapisane wiadomości” we wszystkich folderach na serwerze. Nie używaj tej funkcji, jeśli chcesz zachować dane na serwerze lub jeśli używasz klasycznych klientów poczty e-mail</string>
     <string name="autodel_server_warn_multi_device_title">Włącz natychmiastowe usuwanie</string>
@@ -929,8 +928,6 @@
     <string name="autocrypt_prefer_e2ee">Preferuj szyfrowanie typu end-to-end</string>
 
     <!-- system messages -->
-    <!-- deprecated -->
-    <string name="systemmsg_unknown_sender_for_chat">Nieznany nadawca tego czatu. Więcej szczegółów znajdziesz w sekcji „Informacje”.</string>
     <string name="systemmsg_subject_for_new_contact">Wiadomość od %1$s</string>
     <string name="systemmsg_failed_sending_to">Nie udało się wysłać wiadomości do %1$s.</string>
     <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name -->
@@ -938,70 +935,71 @@
     <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name, %3$s will be replaced by name and address of the contact who did the action. -->
     <string name="group_name_changed_by_other">Nazwa grupy zmieniona z „%1$s“ na „%2$s“ przez %3$s.</string>
     <string name="group_image_changed_by_you">Zmieniono obraz grupy.</string>
-    <!-- %1$s will be replaced by name and address of the contact who did the action -->
+    <!-- %1$s will be replaced by name of the contact who did the action -->
     <string name="group_image_changed_by_other">Obraz grupy zmieniony przez %1$s.</string>
-    <!-- %1$s will be replaced by name and address of the contact added to the group -->
+    <!-- %1$s will be replaced by name of the contact added to the group -->
     <string name="member_x_added">Dodano członka %1$s.</string>
-    <!-- %1$s will be replaced by name and address of the contact added to the group -->
+    <!-- %1$s will be replaced by name of the contact added to the group -->
     <string name="add_member_by_you">Dodano członka %1$s.</string>
-    <!-- %1$s will be replaced by name and address of the contact added to the group, %2$s will be replaced by name and address of the contact who did the action -->
+    <!-- %1$s will be replaced by name of the contact added to the group, %2$s will be replaced by name of the contact who did the action -->
     <string name="add_member_by_other">Użytkownik %2$s dodał członka %1$s.</string>
-    <!-- %1$s will be replaced by name and address of the contact removed from the group -->
+    <!-- %1$s will be replaced by name of the contact removed from the group -->
     <string name="remove_member_by_you">Usunięto członka %1$s.</string>
-    <!-- %1$s will be replaced by name and address of the contact removed from the group, %2$s will be replaced by name and address of the contact who did the action -->
+    <!-- %1$s will be replaced by name of the contact removed from the group, %2$s will be replaced by name of the contact who did the action -->
     <string name="remove_member_by_other">Użytkownik %2$s usunął członka %1$s.</string>
     <!-- "left" in the meaning of "exited". -->
     <string name="group_left_by_you">Opuszczono grupę</string>
     <!-- "left" in the meaning of "exited". -->
     <string name="channel_left_by_you">Opuszczono kanał.</string>
     <string name="you_joined_the_channel">Dołączono do kanału.</string>
-    <!-- "left" in the meaning of "exited"; %1$s will be replaced by name and address of the contact leaving the group -->
+    <!-- "left" in the meaning of "exited"; %1$s will be replaced by name of the contact leaving the group -->
     <string name="group_left_by_other">Grupa opuszczona przez %1$s.</string>
     <string name="group_image_deleted_by_you">Usunięto obraz grupy.</string>
-    <!-- %1$s will be replaced by name and address of the contact -->
+    <!-- %1$s will be replaced by name of the contact -->
     <string name="group_image_deleted_by_other">Użytkownik %1$s usunął obraz grupy.</string>
     <string name="location_enabled_by_you">Włączono strumieniowanie lokalizacji.</string>
-    <!-- %1$s will be replaced by name and address of the contact -->
+    <!-- %1$s will be replaced by name of the contact -->
     <string name="location_enabled_by_other">Strumieniowanie lokalizacji włączone przez %1$s.</string>
     <string name="ephemeral_timer_disabled_by_you">Wyłączono zegar znikających wiadomości.</string>
-    <!-- %1$s will be replaced by name and address of the contact -->
+    <!-- %1$s will be replaced by name of the contact -->
     <string name="ephemeral_timer_disabled_by_other">Zegar znikających wiadomości został wyłączony przez %1$s.</string>
     <!-- %1$s will be replaced by the number of seconds (always >1) the timer is set to -->
     <string name="ephemeral_timer_seconds_by_you">Ustawiono zegar znikających wiadomości na %1$s s.</string>
-    <!-- %1$s will be replaced by the number of seconds (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <!-- %1$s will be replaced by the number of seconds (always >1) the timer is set to, %2$s will be replaced by name of the contact -->
     <string name="ephemeral_timer_seconds_by_other">Użytkownik %2$s ustawił zegar znikających wiadomości na %1$s s.</string>
     <!-- deprecated, usage needs to be removed in core -->
     <string name="ephemeral_timer_1_minute_by_you">Ustawiono zegar znikających wiadomości na 1 minutę.</string>
     <!-- deprecated, usage needs to be removed in core -->
     <string name="ephemeral_timer_1_minute_by_other">Użytkownik %1$s ustawił zegar znikających wiadomości na 1 minutę.</string>
     <string name="ephemeral_timer_1_hour_by_you">Ustawiono zegar znikających wiadomości na 1 godzinę.</string>
-    <!-- %1$s will be replaced by name and address of the contact -->
+    <!-- %1$s will be replaced by name of the contact -->
     <string name="ephemeral_timer_1_hour_by_other">Użytkownik %1$s ustawił zegar znikających wiadomości na 1 godzinę.</string>
     <string name="ephemeral_timer_1_day_by_you">Ustawiono zegar znikających wiadomości na 1 dzień.</string>
-    <!-- %1$s will be replaced by name and address of the contact -->
+    <!-- %1$s will be replaced by name of the contact -->
     <string name="ephemeral_timer_1_day_by_other">Użytkownik %1$s ustawił zegar znikających wiadomości na 1 dzień.</string>
     <string name="ephemeral_timer_1_week_by_you">Ustawiono zegar znikających wiadomości na 1 tydzień.</string>
-    <!-- %1$s will be replaced by name and address of the contact -->
+    <!-- %1$s will be replaced by name of the contact -->
     <string name="ephemeral_timer_1_week_by_other">Użytkownik %1$s ustawił zegar znikających wiadomości na 1 tydzień.</string>
     <string name="ephemeral_timer_1_year_by_you">Ustawiono zegar znikających wiadomości na 1 rok.</string>
     <!-- %1$s will be replaced by name of the contact -->
     <string name="ephemeral_timer_1_year_by_other">Użytkownik %1$s ustawił zegar znikających wiadomości na 1 rok.</string>
     <!-- %1$s will be replaced by the number of minutes (always >1) the timer is set to -->
     <string name="ephemeral_timer_minutes_by_you">Ustawiono zegar znikających wiadomości na %1$s min.</string>
-    <!-- %1$s will be replaced by the number of minutes (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <!-- %1$s will be replaced by the number of minutes (always >1) the timer is set to, %2$s will be replaced by name of the contact -->
     <string name="ephemeral_timer_minutes_by_other">Użytkownik %2$s ustawił zegar znikających wiadomości na %1$s min.</string>
     <!-- %1$s will be replaced by the number of hours (always >1) the timer is set to -->
     <string name="ephemeral_timer_hours_by_you">Ustawiono zegar znikających wiadomości na %1$s godz.</string>
-    <!-- %1$s will be replaced by the number of hours (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <!-- %1$s will be replaced by the number of hours (always >1) the timer is set to, %2$s will be replaced by name of the contact -->
     <string name="ephemeral_timer_hours_by_other">Użytkownik %2$s ustawił zegar znikających wiadomości na %1$s godz.</string>
     <!-- %1$s will be replaced by the number of days (always >1) the timer is set to -->
     <string name="ephemeral_timer_days_by_you">Ustawiono zegar znikających wiadomości na %1$s dni.</string>
-    <!-- %1$s will be replaced by the number of days (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <!-- %1$s will be replaced by the number of days (always >1) the timer is set to, %2$s will be replaced by name of the contact -->
     <string name="ephemeral_timer_days_by_other"> Użytkownik %2$s ustawił zegar znikających wiadomości na %1$s dni.</string>
     <!-- %1$s will be replaced by the number of weeks (always >1) the timer is set to -->
     <string name="ephemeral_timer_weeks_by_you">Ustawiono zegar znikających wiadomości na %1$s tyg.</string>
-    <!-- %1$s will be replaced by the number of weeks (always >1) the timer is set to, %2$s will be replaced by name and address of the contact -->
+    <!-- %1$s will be replaced by the number of weeks (always >1) the timer is set to, %2$s will be replaced by name of the contact -->
     <string name="ephemeral_timer_weeks_by_other"> Użytkownik %2$s ustawił zegar znikających wiadomości na %1$s tyg.</string>
+    <string name="chat_unencrypted_explanation">Wiadomości w tym czacie są przesyłane za pomocą klasycznych e-maili i nie są szyfrowane metodą end-to-end.</string>
     <string name="chat_protection_enabled_tap_to_learn_more">Wiadomości będą szyfrowane metodą end-to-end. Dotknij, aby przeczytać więcej.</string>
     <string name="chat_protection_enabled_explanation">Wszystkie wiadomości w tym czacie są szyfrowane metodą end-to-end.\n\nSzyfrowanie end-to-end zapewnia prywatność wiadomości między tobą a twoimi partnerami czatów. Nawet serwery, dostawcy i pośrednicy nie są w stanie ich odczytać.</string>
     <string name="invalid_unencrypted_tap_to_learn_more">⚠️ %1$s wymaga szyfrowania end-to-end, które nie zostało jeszcze skonfigurowane dla tego czatu. Dotknij, aby dowiedzieć się więcej.</string>
@@ -1026,6 +1024,7 @@
     <string name="qrscan_hint_desktop">Przysuń kod QR do kamery</string>
     <string name="qrscan_failed">Nie udało się zdekodować kodu QR</string>
     <string name="qrscan_ask_join_group">Czy chcesz dołączyć do grupy „%1$s?</string>
+    <string name="qrscan_ask_join_channel">Czy chcesz dołączyć do kanału „%1$s”?</string>
     <string name="qrscan_fingerprint_mismatch">Zeskanowany odcisk palca nie pasuje do odcisku palca ostatnio widzianego u %1$s</string>
     <string name="qrscan_no_addr_found">Ten kod QR zawiera odcisk palca, ale nie zawiera adresu.\n\nW celu weryfikacji poza zasadniczym pasmem należy najpierw nawiązać szyfrowane połączenie z odbiorcą.</string>
     <string name="qrscan_contains_text">Zeskanowany kod QR zawiera następujący tekst:\n\n%1$s</string>
@@ -1033,9 +1032,11 @@
     <string name="qrscan_fingerprint_label">Odciski palca</string>
     <string name="withdraw_verifycontact_explain">Ten kod QR może zostać zeskanowany przez inne osoby w celu skontaktowania się z Tobą.\n\nTutaj możesz dezaktywować kod QR i ponownie go aktywować poprzez zeskanowanie.</string>
     <string name="withdraw_verifygroup_explain">Ten kod QR może zostać zeskanowany przez inne osoby, aby dołączyć do grupy „%1$s”.\n\nTutaj możesz dezaktywować kod QR i ponownie go aktywować poprzez zeskanowanie.</string>
+    <string name="withdraw_joinbroadcast_explain">Inni użytkownicy mogą zeskanować ten kod QR, aby dołączyć do kanału „%1$s”.\n\nMożesz go zresetować, aby istniejący kod QR lub link zaproszenia przestał działać.</string>
     <string name="withdraw_qr_code">Dezaktywuj kod QR</string>
     <string name="revive_verifycontact_explain">Ten kod QR mógł być skanowany przez inne osoby w celu skontaktowania się z Tobą.\n\nKod QR nie jest już aktywny na tym urządzeniu.</string>
     <string name="revive_verifygroup_explain">Ten kod QR mógł być skanowany przez inne osoby, aby dołączyć do grupy „%1$s”.\n\nKod QR nie jest już aktywny na tym urządzeniu.</string>
+    <string name="revive_joinbroadcast_explain">Ten kod QR umożliwiający dołączenie do kanału „%1$s” został zresetowany i nie jest już aktywny.</string>
     <string name="revive_qr_code">Aktywuj kod QR</string>
     <string name="qrshow_title">Kod QR zaproszenia</string>
     <string name="qrshow_x_joining">%1$s dołącza.</string>
@@ -1046,7 +1047,7 @@
     <string name="qrshow_join_group_hint">Zeskanuj go, aby dołączyć do grupy „%1$s”.</string>
     <string name="qrshow_join_channel_hint">Zeskanuj go, aby dołączyć do kanału „%1$s”.</string>
     <string name="qrshow_join_contact_title">Kod QR zaproszenia</string>
-    <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by name and address eg. "Scan to chat with Alice (alice@example.org)" -->
+    <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by the profile name eg. "Scan to chat with Alice" -->
     <string name="qrshow_join_contact_hint">Zeskanuj go w celu skonfigurowania kontaktu z %1$s</string>
     <string name="qrshow_join_contact_no_connection_toast">Brak połączenia z Internetem, nie można przeprowadzić konfiguracji kodu QR.</string>
     <string name="qraccount_ask_create_and_login">Utworzyć nowy adres e-mail „%1$s” i się zalogować?</string>
@@ -1058,11 +1059,11 @@
     <string name="qrlogin_ask_login">Zalogować się do „%1$s”?</string>
     <!-- the placeholder will be replaced by the address of the profile -->
     <string name="qrlogin_ask_login_another">Zalogować się do „%1$s”?\n\nTwoje istniejące konto nie zostanie usunięte. Użyj opcji „Przełącz konto”, aby przełączyć się między swoimi kontami.</string>
-    <!-- first placeholder will be replaced by name and address of the inviter, second placeholder will be replaced by the name of the inviter. -->
+    <!-- first placeholder will be replaced by name of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">Użytkownik %1$s zaprosił cię do dołączenia do tej grupy.\n\nCzekam na odpowiedź urządzenia %2$s…</string>
     <!-- placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_replies">Użytkownik %1$s odpowiedział, czekając na dodanie do grupy…</string>
-    <string name="secure_join_wait">Ustanawiam szyfrowanie typu end-to-end, proszę czekać…</string>
+    <string name="secure_join_wait">Ustanawiam połączenie, proszę czekać…</string>
     <string name="contact_verified">Kontakt %1$s zweryfikowany.</string>
     <!-- Shown in contact profile. The placeholder will be replaced by the name of the contact that introduced the contact. -->
     <string name="verified_by">Kontakt zweryfikowany przez %1$s</string>
