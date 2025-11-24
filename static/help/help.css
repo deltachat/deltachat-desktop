@@ -46,6 +46,7 @@ a[href^='http']::after {
 h2,
 h3,
 h4 {
+  padding-top: 1rem; /* using padding+margin results in nicer scrolling position on tapping links */
   margin-top: 2rem;
 }
 ul {
