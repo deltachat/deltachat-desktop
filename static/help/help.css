@@ -34,7 +34,15 @@ body {
 
 a {
   text-decoration: none;
+  color: #0078f1;
 }
+a:hover {
+  text-decoration: underline;
+}
+a[href^='http']::after {
+  content: "\2009↗︎"; /* thin space + arrow as base+VS15 (text), cmp. https://en.wikipedia.org/wiki/Arrows_%28Unicode_block%29 */
+}
+
 h2,
 h3,
 h4 {
