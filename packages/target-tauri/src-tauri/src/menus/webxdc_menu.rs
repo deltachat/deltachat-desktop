@@ -176,8 +176,13 @@ impl MenuAction<'static> for WebxdcMenuAction {
                 });
             }
             WebxdcMenuActionVariant::WhatIsWebxdc => {
-                app.opener()
-                    .open_url("https://webxdc.org", None::<String>)?;
+                crate::help_window::open_help_window(
+                    app.clone(),
+                    menu_manager.clone(),
+                    None,
+                    Some("webxdc"),
+                )
+                .await?;
             }
         }
 
