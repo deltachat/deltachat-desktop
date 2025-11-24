@@ -346,9 +346,7 @@ function CreateChatMain(props: CreateChatMainProps) {
           className='search-input'
           onChange={e => setQueryStr(e.target.value)}
           value={queryStr}
-          placeholder={
-            isChatmail ? tx('search') : tx('contacts_enter_name_or_email')
-          }
+          placeholder={tx('search')}
           onKeyDown={onKeyDown}
           autoFocus
           spellCheck={false}
