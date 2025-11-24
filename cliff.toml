@@ -22,7 +22,7 @@ commit_parsers = [
     { message = "^perf", group = "Performance"},
     { message = "^test", group = "Tests"},
     { message = "^style", group = "Styling"},
-    { message = "^chore\\(release\\): prepare for", skip = true},
+    { message = "^chore\\(release\\): prepare release", skip = true},
     { message = "^chore", group = "Miscellaneous Tasks"},
     { message = "^build", group = "Build system"},
     { message = "^docs", group = "Documentation"},
