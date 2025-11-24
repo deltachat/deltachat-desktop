@@ -4,6 +4,7 @@
   position: relative;
   line-height: 1; // So that it doesn't change the message height.
   top: 16px;
+  pointer-events: all;
 }
 
 .emoji {
