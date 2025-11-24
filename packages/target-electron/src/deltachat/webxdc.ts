@@ -39,6 +39,8 @@ import { T } from '@deltachat/jsonrpc-client'
 import type * as Jsonrpc from '@deltachat/jsonrpc-client'
 import { setContentProtection } from '../content-protection.js'
 import { Server } from 'net'
+import { openHelpWindow } from '../windows/help.js'
+import { getCurrentLocaleDate } from '../load-translations.js'
 
 const log = getLogger('main/deltachat/webxdc')
 
@@ -387,6 +389,8 @@ export default class DCWebxdc {
 
       const isMac = platform() === 'darwin'
 
+      const { locale } = getCurrentLocaleDate()
+
       const makeMenu = () => {
         return Menu.buildFromTemplate([
           ...(isMac ? [getAppMenu(webxdcWindow)] : []),
@@ -475,7 +479,7 @@ export default class DCWebxdc {
               },
               {
                 label: tx('what_is_webxdc'),
-                click: () => shell.openExternal('https://webxdc.org'),
+                click: () => openHelpWindow(locale, 'webxdc'),
               },
             ],
           },
