@@ -66,6 +66,7 @@ export default function SearchInput(props: Props) {
           value={value}
           className={styles.searchInput}
           data-no-drag-region
+          // eslint-disable-next-line react-hooks/refs
           ref={props.inputRef}
           spellCheck={false}
           // FYI there is also Ctrl + Shift + F to search in chat.
