@@ -29,7 +29,7 @@ export default function Profile({ settingsStore, onStatusClick }: Props) {
       : tx('pref_profile_info_headline')
 
   return (
-    <div className={styles.profile}>
+    <div className={styles.profile} onClick={onStatusClick}>
       <LargeProfileImage
         initials={initials}
         color={settingsStore.selfContact.color}
@@ -38,15 +38,7 @@ export default function Profile({ settingsStore, onStatusClick }: Props) {
       />
       <div className={styles.profileDetails}>
         <div className={styles.profileDisplayName}>{profileName}</div>
-        <div
-          className={styles.profileBio}
-          style={
-            !settingsStore.settings.selfstatus
-              ? { fontStyle: 'italic', cursor: 'pointer', opacity: 0.6 }
-              : undefined
-          }
-          onClick={onStatusClick}
-        >
+        <div className={styles.profileBio}>
           {settingsStore.settings.selfstatus?.replace('\n', ' ') ||
             tx('pref_default_status_label')}
         </div>

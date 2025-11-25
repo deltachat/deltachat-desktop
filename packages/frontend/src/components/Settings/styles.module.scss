@@ -157,9 +157,12 @@ $settingsHeight: 40px;
 
 .profile {
   display: flex;
-  margin-bottom: 20px;
-  margin-inline-start: 25px;
-  margin-inline-end: 30px;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--chatListItemBgHover);
+  }
+  padding: 10px 25px;
+  border-radius: 10px;
 }
 
 .profileDetails {
@@ -180,4 +183,5 @@ $settingsHeight: 40px;
   overflow: hidden;
   text-wrap-mode: nowrap;
   text-overflow: ellipsis;
+  opacity: 0.6;
 }
