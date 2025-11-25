@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react'
+import type { T } from '@deltachat/jsonrpc-client'
 
 import { Timespans } from '../../../../shared/constants'
 import { ContextMenuItem } from '../ContextMenu'
@@ -13,83 +14,88 @@ import useDialog from '../../hooks/dialog/useDialog'
 import useOpenViewGroupDialog from '../../hooks/dialog/useOpenViewGroupDialog'
 import useOpenViewProfileDialog from '../../hooks/dialog/useOpenViewProfileDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-
-import type { T } from '@deltachat/jsonrpc-client'
+import DisappearingMessages from '../dialogs/DisappearingMessages'
 import type { UnselectChat } from '../../contexts/ChatContext'
 import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
 import { getLogger } from '@deltachat-desktop/shared/logger'
+import { ActionEmitter, KeybindAction } from '../../keybindings'
+import { useSettingsStore } from '../../stores/settings'
 
 const log = getLogger('ChatListContextMenu')
 
-function archiveStateMenu(
+type ChatListItem = T.ChatListItemFetchResult & { kind: 'ChatListItem' }
+
+/**
+ * Helper to execute a function for all selected chats
+ */
+function createBatchAction(
+  chats: ChatListItem[],
+  fn: (chat: ChatListItem) => Promise<unknown>
+) {
+  return () => Promise.all(chats.map(chat => fn(chat)))
+}
+
+/**
+ * Builds archive and pin menu items based on chat states
+ */
+function buildArchiveAndPinMenuItems(
   unselectChat: UnselectChat,
   accountId: number,
-  chats: Array<T.ChatListItemFetchResult & { kind: 'ChatListItem' }>,
+  chats: ChatListItem[],
   tx: ReturnType<typeof useTranslationFunction>,
   selectedChatId: number | null
 ): { pin: ContextMenuItem; archive: ContextMenuItem } {
-  // This is copy-pasted.
-  const forAllChatsFn = (
-    fn: (chat: (typeof chats)[number]) => Promise<unknown>
-  ) => {
-    // TODO perf: maybe we need to introduce batch JSON-RPC methods,
-    // instead of simply making one request per each chat?
-    return () => Promise.all(chats.map(chat => fn(chat)))
-  }
+  const batchAction = (fn: (chat: ChatListItem) => Promise<unknown>) =>
+    () => Promise.all(chats.map(chat => fn(chat)))
 
   const archive: ContextMenuItem = {
     label: tx('menu_archive_chat'),
-    action: forAllChatsFn(async chat => {
+    action: batchAction(async chat => {
       if (chat.id === selectedChatId) {
         unselectChat()
       }
       await BackendRemote.rpc.setChatVisibility(accountId, chat.id, 'Archived')
     }),
   }
+
   const unArchive: ContextMenuItem = {
     label: tx('menu_unarchive_chat'),
-    action: forAllChatsFn(async chat => {
+    action: batchAction(async chat => {
       if (chat.id === selectedChatId) {
         unselectChat()
       }
       await BackendRemote.rpc.setChatVisibility(accountId, chat.id, 'Normal')
     }),
   }
+
   const pin: ContextMenuItem = {
     label: tx('pin_chat'),
-    action: forAllChatsFn(async chat => {
+    action: batchAction(async chat => {
       if (chat.id === selectedChatId && chat.isArchived) {
         unselectChat()
       }
-
       await BackendRemote.rpc.setChatVisibility(accountId, chat.id, 'Pinned')
     }),
   }
+
   const unPin: ContextMenuItem = {
     label: tx('unpin_chat'),
-    action: forAllChatsFn(chat =>
+    action: batchAction(chat =>
       BackendRemote.rpc.setChatVisibility(accountId, chat.id, 'Normal')
     ),
   }
 
-  /*
-            Archive	UnArchive	Pin	UnPin
-  pinned	  y	      n       	n	  y
-  archived  n       y       	y	  n
-  normal	  y	      n       	y	  n
-  */
-
+  // Determine which menu items to show based on chat states
   if (chats.every(chat => chat.isPinned)) {
     return { pin: unPin, archive }
   } else if (chats.every(chat => chat.isArchived)) {
     return { pin, archive: unArchive }
   } else {
-    // normal
     return { pin, archive }
   }
 }
 
-export function useChatListContextMenu(): {
+export function useChatListContextMenu(selectedChat?: T.FullChat): {
   openContextMenu: (
     event: React.MouseEvent<any, MouseEvent>,
     /**
@@ -101,11 +107,14 @@ export function useChatListContextMenu(): {
   activeContextMenuChatIds: number[]
 } {
   const { openDialog } = useDialog()
+  const [settingsStore] = useSettingsStore()
   const {
+    openChatAuditDialog,
     openBlockFirstContactOfChatDialog,
     openEncryptionInfoDialog,
     openDeleteChatsDialog,
     openLeaveGroupOrChannelDialog,
+    openClearChatDialog,
   } = useChatDialog()
   const openViewGroupDialog = useOpenViewGroupDialog()
   const openViewProfileDialog = useOpenViewProfileDialog()
@@ -196,12 +205,42 @@ export function useChatListContextMenu(): {
         selectedChatId
       )
 
+      const onDisappearingMessages = () => {
+        if (selectedChatId === null) {
+          return
+        }
+        openDialog(DisappearingMessages, {
+          chatId: selectedChatId,
+        })
+      }
+
       const singleChat = chatListItems.length === 1 ? chatListItems[0] : false
 
       const isGroup: boolean = singleChat && singleChat.chatType === 'Group'
 
       const isOutBroadcast: boolean =
         singleChat && singleChat.chatType === 'OutBroadcast'
+
+      const onChatAudit = () => {
+        if (selectedChat) {
+          openChatAuditDialog(selectedChat)
+        }
+      }
+
+      const onClearChat = () => {
+        if (selectedChat) {
+          openClearChatDialog(accountId, selectedChat.id)
+        }
+      }
+
+      const ephemeral = selectedChat &&
+        selectedChat.canSend &&
+        selectedChat.chatType !== 'InBroadcast' &&
+        selectedChat.chatType !== 'Mailinglist' &&
+        selectedChat.isEncrypted && {
+          label: tx('ephemeral_messages'),
+          action: onDisappearingMessages,
+        }
 
       // TODO pluralize strings.
       const viewCloneEncInfo = [
@@ -215,7 +254,7 @@ export function useChatListContextMenu(): {
         singleChat &&
           isGroup &&
           !singleChat.isEncrypted &&
-          singleChat.isSelfInGroup && {
+          singleChat.isSelfInGroup && !singleChat.isDeviceTalk && {
             label: tx('menu_view_profile'),
             action: () => onViewGroup(singleChat.id),
           },
@@ -256,6 +295,24 @@ export function useChatListContextMenu(): {
       ]
 
       const menu: (ContextMenuItem | false)[] = [
+        {
+          label: tx('search_in_chat'),
+          action: () => {
+            // Same as in with `KeybindAction.ChatList_SearchInChat`
+            //
+            // TODO improvement a11y: maybe we can add `aria-keyshortcuts=`
+            // to this menu item?
+            window.__chatlistSetSearch?.('', selectedChatId)
+            setTimeout(
+              () =>
+                ActionEmitter.emitAction(
+                  KeybindAction.ChatList_FocusSearchInput
+                ),
+              0
+            )
+          },
+        },
+        { type: 'separator' },
         // Pin
         pin,
         // Mute
@@ -309,10 +366,6 @@ export function useChatListContextMenu(): {
             },
         // Archive
         archive,
-        ...(viewCloneEncInfo.some(item => Boolean(item))
-          ? ([{ type: 'separator' }] as const)
-          : []),
-        ...viewCloneEncInfo,
         { type: 'separator' },
         // TODO support leaving multiple channels
         // and blocking multiple contacts.
@@ -344,12 +397,33 @@ export function useChatListContextMenu(): {
             label: tx('menu_block_contact'),
             action: () => onBlockContact(singleChat),
           },
+        selectedChat && {
+          label: tx('clear_chat'),
+          action: onClearChat,
+        },
         // Delete
         {
           label: tx('menu_delete_chat'),
           action: onDeleteChats,
         },
-      ]
+        {
+          label: tx('menu_more_options'),
+          subitems: [
+            ...(viewCloneEncInfo.some(item => Boolean(item))
+              ? ([{ type: 'separator' }] as const)
+              : []),
+            ...viewCloneEncInfo,
+            ephemeral,
+            !(selectedChat?.isSelfTalk || selectedChat?.isDeviceChat) &&
+              settingsStore !== null &&
+              settingsStore.desktopSettings.enableChatAuditLog &&
+              selectedChat && {
+                label: tx('menu_chat_audit_log'),
+                action: onChatAudit,
+              },
+          ].filter(Boolean) as ContextMenuItem[],
+        },
+      ].filter(Boolean) as ContextMenuItem[]
 
       event.preventDefault() // prevent default runtime context menu from opening
 
