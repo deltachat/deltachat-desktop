@@ -116,12 +116,15 @@ export function useMultiselect<T>(
   // Put this behind a ref, so that `onFocus` and `onClick`
   // don't have to be recalculated, just for performance.
   const availableItemsRef = useRef(availableItems)
+  // eslint-disable-next-line react-hooks/refs
   availableItemsRef.current = availableItems
 
   const selectedItemsRef = useRef(selectedItems)
+  // eslint-disable-next-line react-hooks/refs
   selectedItemsRef.current = selectedItems
 
   const loggerRef = useRef(logger)
+  // eslint-disable-next-line react-hooks/refs
   loggerRef.current = logger
 
   const toggleItemSelection = useCallback(
