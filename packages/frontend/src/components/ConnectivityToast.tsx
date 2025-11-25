@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react'
+import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 import { debounce } from 'debounce'
 
@@ -43,6 +43,10 @@ export default function ConnectivityToast() {
     ])
   }
 
+  const tryMaybeNetworkIfOfflineAfterXmsRef = useRef<(ms: number) => void>(
+    () => {}
+  )
+
   const tryMaybeNetworkIfOfflineAfterXms = useCallback(
     (ms: number) => {
       setTimeout(() => {
@@ -55,8 +59,8 @@ export default function ConnectivityToast() {
             )
             maybeNetwork()
           } else if (ms < 30000) {
-            /* eslint react-hooks/immutability: "warn" */
-            tryMaybeNetworkIfOfflineAfterXms(2 * ms)
+            // Recursive call using ref to avoid circular dependency
+            tryMaybeNetworkIfOfflineAfterXmsRef.current?.(2 * ms)
           } else {
             log.debug(
               `We tried reconnecting with waiting for more then 30 seconds, now stop`
@@ -70,6 +74,10 @@ export default function ConnectivityToast() {
     },
     [maybeNetwork]
   )
+
+  // Update ref to enable recursive calls without circular dependency
+  // eslint-disable-next-line react-hooks/refs
+  tryMaybeNetworkIfOfflineAfterXmsRef.current = tryMaybeNetworkIfOfflineAfterXms
 
   const onBrowserOnline = useCallback(() => {
     log.debug("Browser thinks we're back online, telling rust core")
