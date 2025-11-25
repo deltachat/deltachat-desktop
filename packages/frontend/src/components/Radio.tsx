@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useId } from 'react'
 import classNames from 'classnames'
 
 type RadioProps = {
@@ -25,7 +25,7 @@ export default function Radio({
   name,
   subtitle,
 }: RadioProps) {
-  const id: string = Math.floor(Math.random() * 10000).toString()
+  const id: string = useId()
   return (
     <div className={classNames('radiobutton', className)}>
       <input
