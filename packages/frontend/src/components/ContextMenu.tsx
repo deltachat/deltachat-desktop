@@ -26,7 +26,7 @@ type ContextMenuItemExpandable = {
 }
 
 export type ContextMenuItem =
-  | ({ type?: 'item'; label: string; dataTestid?: string } & (
+  | ({ type?: 'item'; label: string; dataTestid?: string; danger?: boolean } & (
       | ContextMenuItemActionable
       | ContextMenuItemExpandable
     ))
@@ -410,6 +410,7 @@ export function ContextMenu(props: {
                 className={classNames({
                   item: true,
                   selected: isExpanded,
+                  danger: !!item.danger,
                 })}
                 onClick={(ev: React.MouseEvent) => {
                   if (item.subitems) {

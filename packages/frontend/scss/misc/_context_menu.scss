@@ -61,6 +61,9 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    &.danger {
+      color: var(--colorDanger);
+    }
 
     & .left-icon {
       background-color: var(--iconColorPrimary);
