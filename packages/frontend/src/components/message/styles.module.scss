@@ -28,7 +28,12 @@
     margin-inline-start: 10px;
     position: absolute;
     inset-inline-end: 5px;
+    /** allow to click through the footer to the message body */
     pointer-events: none;
+    * {
+      /** enable clicks on reactions and other components inside the footer */
+      pointer-events: initial;
+    }
   }
 
   // &.withReactionsNoText {
