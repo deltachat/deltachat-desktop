@@ -488,14 +488,14 @@ function ChatNavButtons({
   lastUsedApps: T.Message[]
 }) {
   const tx = useTranslationFunction()
-  const { openContextMenu } = useChatListContextMenu(chat)
+  const { openContextMenu } = useChatListContextMenu()
   const onClickThreeDotMenu = useCallback(
     (event: React.MouseEvent) => {
       const activeChat = {
         ...chat,
         kind: 'ChatListItem',
       } as unknown as T.ChatListItemFetchResult & { kind: 'ChatListItem' }
-      openContextMenu(event, [activeChat], chat.id)
+      openContextMenu(event, [activeChat], chat.id, chat)
     },
     [openContextMenu, chat]
   )
