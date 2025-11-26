@@ -55,12 +55,9 @@ function mainWindowIsVisible() {
   return mainWindow.window.isVisible() && mainWindow.window.isFocused()
 }
 
-export function hideDeltaChat(minimize?: boolean) {
+export function hideDeltaChat() {
   if (!mainWindow.window) {
     throw new Error('window does not exist, this should never happen')
-  }
-  if (minimize === true) {
-    mainWindow.window.minimize()
   }
   mainWindow.window.hide()
   if (process.platform === 'linux') tray?.setContextMenu(getTrayMenu() as Menu)
@@ -74,7 +71,7 @@ export function showDeltaChat() {
 }
 
 function hideOrShowDeltaChat() {
-  mainWindowIsVisible() ? hideDeltaChat(true) : showDeltaChat()
+  mainWindowIsVisible() ? hideDeltaChat() : showDeltaChat()
 }
 
 export function quitDeltaChat() {
