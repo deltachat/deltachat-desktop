@@ -19,7 +19,7 @@ import AutoSizer from 'react-virtualized-auto-sizer'
 import InfiniteLoader from 'react-window-infinite-loader'
 
 import { useLazyLoadedContacts } from '../contact/ContactList'
-import { useChatListContextMenu } from './ChatListContextMenu'
+import { useChatContextMenu } from './ChatContextMenu'
 import { useMessageResultIds, useChatList } from './ChatListHelpers'
 import {
   ChatListItemRowChat,
@@ -207,7 +207,7 @@ export default function ChatList(props: {
     showArchivedChats
   )
 
-  const { openContextMenu, activeContextMenuChatIds } = useChatListContextMenu()
+  const { openContextMenu, activeContextMenuChatIds } = useChatContextMenu()
   const { selectChat } = useChat()
 
   const rovingTabindexItemsClassName = 'roving-tabindex'
