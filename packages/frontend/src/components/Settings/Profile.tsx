@@ -33,12 +33,13 @@ export default function Profile({ settingsStore, onStatusClick }: Props) {
       className={styles.profile}
       onClick={onStatusClick}
       data-testid='edit-profile-button'
+      title={`${tx('pref_edit_profile')}`}
     >
       <LargeProfileImage
         initials={initials}
         color={settingsStore.selfContact.color}
         imagePath={profileImagePath}
-        disableFullscreen={false}
+        disableFullscreen={true}
       />
       <div className={styles.profileDetails}>
         <div className={styles.profileDisplayName}>{profileName}</div>
