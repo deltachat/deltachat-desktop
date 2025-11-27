@@ -29,7 +29,11 @@ export default function Profile({ settingsStore, onStatusClick }: Props) {
       : tx('pref_profile_info_headline')
 
   return (
-    <div className={styles.profile} onClick={onStatusClick}>
+    <div
+      className={styles.profile}
+      onClick={onStatusClick}
+      data-testid='edit-profile-button'
+    >
       <LargeProfileImage
         initials={initials}
         color={settingsStore.selfContact.color}
