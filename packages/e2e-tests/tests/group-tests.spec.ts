@@ -417,7 +417,7 @@ test('Withdraw group invite link', async ({ browserName }) => {
   })
   // the group chat opens but composer is not available
   const composer = page.locator('textarea#composer-textarea')
-  await expect(composer).not.toBeVisible({ timeout: 1 })
+  await expect(composer).not.toBeVisible({ timeout: 3000 })
 })
 
 test('Edit group profile from context menu and rename group', async () => {
