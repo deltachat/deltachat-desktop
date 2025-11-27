@@ -104,6 +104,7 @@ test('start chat with user', async ({ browserName }) => {
     .filter({ hasText: userA.name })
     .first()
   await expect(chatListItem).toBeVisible()
+  // check for context menu items
   await chatListItem.click({
     button: 'right',
   })
@@ -111,7 +112,10 @@ test('start chat with user', async ({ browserName }) => {
     'Pin Chat',
     'Mute Notifications',
     'Archive Chat',
+    'View Profile',
+    'Block Contact',
     'Delete Chat',
+    'Encryption Info',
   ])
 })
 
