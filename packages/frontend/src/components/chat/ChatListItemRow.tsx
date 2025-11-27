@@ -11,7 +11,7 @@ import useMessage from '../../hooks/chat/useMessage'
 import { selectedAccountId } from '../../ScreenController'
 
 import type { T } from '@deltachat/jsonrpc-client'
-import type { useChatListContextMenu } from './ChatListContextMenu'
+import type { useChatContextMenu } from './ChatContextMenu'
 import type { useMultiselect } from '../../hooks/useMultiselect'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 
@@ -52,9 +52,9 @@ export type ChatListItemData = {
   onChatClick: (chatId: number) => void
   // onChatClick: (event: React.MouseEvent, chatId: number) => void
   // onChatFocus?: (chatId: number) => void
-  openContextMenu: ReturnType<typeof useChatListContextMenu>['openContextMenu']
+  openContextMenu: ReturnType<typeof useChatContextMenu>['openContextMenu']
   activeContextMenuChatIds: ReturnType<
-    typeof useChatListContextMenu
+    typeof useChatContextMenu
   >['activeContextMenuChatIds']
 }
 
