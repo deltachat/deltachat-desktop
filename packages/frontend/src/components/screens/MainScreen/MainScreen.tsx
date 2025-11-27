@@ -42,7 +42,7 @@ import { runtime } from '@deltachat-desktop/runtime-interface'
 import asyncThrottle from '@jcoreio/async-throttle'
 import { useFetch, useRpcFetch } from '../../../hooks/useFetch'
 import { getLogger } from '@deltachat-desktop/shared/logger'
-import { useChatListContextMenu } from '../../chat/ChatListContextMenu'
+import { useChatContextMenu } from '../../chat/ChatContextMenu'
 
 const log = getLogger('MainScreen')
 
@@ -488,7 +488,7 @@ function ChatNavButtons({
   lastUsedApps: T.Message[]
 }) {
   const tx = useTranslationFunction()
-  const { openContextMenu } = useChatListContextMenu()
+  const { openContextMenu } = useChatContextMenu()
   const onClickThreeDotMenu = useCallback(
     (event: React.MouseEvent) => {
       const activeChat = {

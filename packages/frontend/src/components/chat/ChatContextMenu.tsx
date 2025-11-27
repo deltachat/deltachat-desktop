@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import type { T } from '@deltachat/jsonrpc-client'
 
-import { Timespans } from '../../../../shared/constants'
+import { Timespans } from '@deltachat-desktop/shared/constants'
 import { ContextMenuItem } from '../ContextMenu'
 import MailingListProfile from '../dialogs/MailingListProfile'
 import { BackendRemote } from '../../backend-com'
@@ -250,7 +250,11 @@ function buildEncryptionInfoMenuItem(
   )
 }
 
-export function useChatListContextMenu(): {
+/**
+ * provides a context menu for chat list items
+ * and for the 3dot menu in main chat view
+ */
+export function useChatContextMenu(): {
   openContextMenu: (
     event: React.MouseEvent<any, MouseEvent>,
     chatListItems: ChatListItem[],
