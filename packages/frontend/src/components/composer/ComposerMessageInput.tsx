@@ -165,6 +165,8 @@ export default class ComposerMessageInput extends React.Component<
       e.stopPropagation()
     } else if (
       e.key === 'ArrowUp' &&
+      !e.ctrlKey &&
+      !e.metaKey &&
       this.props.text.trim() === '' &&
       this.props.onArrowUpWhenEmpty
     ) {
