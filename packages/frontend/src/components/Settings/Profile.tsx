@@ -10,9 +10,10 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 type Props = {
   settingsStore: SettingsStoreState
+  onStatusClick?: () => void
 }
 
-export default function Profile({ settingsStore }: Props) {
+export default function Profile({ settingsStore, onStatusClick }: Props) {
   const tx = useTranslationFunction()
 
   const initials = avatarInitial(
@@ -28,12 +29,17 @@ export default function Profile({ settingsStore }: Props) {
       : tx('pref_profile_info_headline')
 
   return (
-    <div className={styles.profile}>
+    <div
+      className={styles.profile}
+      onClick={onStatusClick}
+      data-testid='edit-profile-button'
+      title={`${tx('pref_edit_profile')}`}
+    >
       <LargeProfileImage
         initials={initials}
         color={settingsStore.selfContact.color}
         imagePath={profileImagePath}
-        disableFullscreen={false}
+        disableFullscreen={true}
       />
       <div className={styles.profileDetails}>
         <div className={styles.profileDisplayName}>{profileName}</div>
