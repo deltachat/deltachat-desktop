@@ -9,7 +9,10 @@ import DCWebxdc from './webxdc.js'
 import { DesktopSettings } from '../desktop_settings.js'
 import { StdioServer } from './stdio_server.js'
 import rc_config from '../rc.js'
-import { migrateAccountsIfNeeded } from './migration.js'
+import {
+  migrateAccountsIfNeeded,
+  disableDeleteFromServerConfig,
+} from './migration.js'
 
 const app = rawApp as ExtendedAppMainProcess
 const log = getLogger('main/deltachat')
@@ -203,6 +206,10 @@ export default class DeltaChatController {
       // Because there can be only one consumer of
       // `get_next_event`, and that is the renderer process's JSON-RPC client.
       false
+    )
+    await disableDeleteFromServerConfig(
+      this.jsonrpcRemote.rpc,
+      getLogger('migration')
     )
 
     if (DesktopSettings.state.syncAllAccounts) {
