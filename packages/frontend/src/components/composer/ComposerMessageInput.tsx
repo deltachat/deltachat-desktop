@@ -167,6 +167,8 @@ export default class ComposerMessageInput extends React.Component<
       e.key === 'ArrowUp' &&
       !e.ctrlKey &&
       !e.metaKey &&
+      !e.altKey &&
+      !e.shiftKey &&
       this.props.text.trim() === '' &&
       this.props.onArrowUpWhenEmpty
     ) {
