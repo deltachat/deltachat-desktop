@@ -242,7 +242,11 @@ export default class ComposerMessageInput extends React.Component<
                 : '')
             }
             style={{ '--maxLines': maxLines } as React.CSSProperties}
-            id='composer-textarea'
+            id={
+              this.props.isMessageEditingMode
+                ? 'composer-textarea-edit'
+                : 'composer-textarea-non-edit'
+            }
             ref={this.textareaRef}
             rows={1}
             // intent={this.state.error ? 'danger' : 'none'}

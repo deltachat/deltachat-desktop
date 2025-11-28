@@ -121,14 +121,14 @@ export function keyDownEvent2Action(
       ev.code === 'ArrowUp' &&
       (ev.ctrlKey || ev.metaKey) &&
       !(ev.ctrlKey && ev.metaKey) && // Both at the same time
-      (ev.target as HTMLElement)?.id === 'composer-textarea'
+      (ev.target as HTMLElement)?.id === 'composer-textarea-non-edit'
     ) {
       return KeybindAction.Composer_SelectReplyToUp
     } else if (
       ev.code === 'ArrowDown' &&
       (ev.ctrlKey || ev.metaKey) &&
       !(ev.ctrlKey && ev.metaKey) && // Both at the same time
-      (ev.target as HTMLElement)?.id === 'composer-textarea'
+      (ev.target as HTMLElement)?.id === 'composer-textarea-non-edit'
     ) {
       return KeybindAction.Composer_SelectReplyToDown
     } else if (
@@ -139,7 +139,7 @@ export function keyDownEvent2Action(
     } else if (ev.code === 'Escape') {
       if ((ev.target as any).id === 'chat-list-search') {
         return KeybindAction.ChatList_ExitSearch
-      } else if ((ev.target as any).id === 'composer-textarea') {
+      } else if ((ev.target as any).id === 'composer-textarea-non-edit') {
         return KeybindAction.Composer_CancelReply
       }
     } else if (
