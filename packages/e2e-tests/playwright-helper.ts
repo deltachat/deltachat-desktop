@@ -236,9 +236,10 @@ export async function getProfile(
 ): Promise<User> {
   await page.getByTestId(`account-item-${accountId}`).click({ button: 'right' })
   await page.getByTestId('open-settings-menu-item').click()
-  const nameLocator = page.locator('.styles_module_profileDisplayName')
+  const nameLocator = page.getByTestId('profile-display-name')
   await expect(nameLocator).not.toBeEmpty()
   const name = await nameLocator.textContent()
+
   await page.getByTestId('open-advanced-settings').click()
   await page.getByTestId('open-account-and-password').click()
   const addressLocator = page.locator('#addr')

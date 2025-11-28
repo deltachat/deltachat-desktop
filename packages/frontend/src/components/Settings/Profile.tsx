@@ -36,7 +36,12 @@ export default function Profile({ settingsStore }: Props) {
         disableFullscreen={false}
       />
       <div className={styles.profileDetails}>
-        <div className={styles.profileDisplayName}>{profileName}</div>
+        <div
+          className={styles.profileDisplayName}
+          data-testid='profile-display-name'
+        >
+          {profileName}
+        </div>
         <div className={styles.profileBio}>
           {settingsStore.settings.selfstatus?.replace('\n', ' ') ||
             tx('pref_default_status_label')}
