@@ -138,15 +138,17 @@ export default function Autodelete({
       >
         {tx('autodel_device_title')}
       </SettingsSelector>
-      <SettingsSelector
-        onClick={onOpenDialog.bind(null, true)}
-        currentValue={durationToString(
-          settingsStore.settings['delete_server_after'],
-          isChatMail
-        )}
-      >
-        {tx('autodel_server_title')}
-      </SettingsSelector>
+      {!isChatMail && (
+        <SettingsSelector
+          onClick={onOpenDialog.bind(null, true)}
+          currentValue={durationToString(
+            settingsStore.settings['delete_server_after'],
+            isChatMail
+          )}
+        >
+          {tx('autodel_server_title')}
+        </SettingsSelector>
+      )}
     </>
   )
 }
