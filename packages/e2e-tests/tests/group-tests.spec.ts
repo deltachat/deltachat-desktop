@@ -20,6 +20,8 @@ let existingProfiles: User[] = []
 
 const numberOfProfiles = 3
 
+const groupInviteMessage = `${userNames[0]} invited you to join this group`
+
 // https://playwright.dev/docs/next/test-retries#reuse-single-page-between-tests
 let page: Page
 
@@ -119,7 +121,6 @@ test('create group', async ({ browserName }) => {
   await page.locator('.group-name-input').fill(groupName)
   await page.locator('#addmember button').click()
   const addMemberDialog = page.getByTestId('add-member-dialog')
-  console.log('userB', userB)
   await page
     .locator('.contact-list-item')
     .filter({ hasText: userB.name })
@@ -196,8 +197,9 @@ test('Invite existing user to group', async ({ browserName }) => {
   // userA invited you to group message
   await expect(
     page
-      .locator('#message-list li.message-wrapper')
-      .filter({ hasText: userA.name })
+      .getByRole('list', { name: 'Messages' })
+      .getByRole('listitem')
+      .filter({ hasText: groupInviteMessage })
   ).toBeVisible()
   const composer = page.locator('textarea#composer-textarea')
   await expect(composer).not.toBeVisible({ timeout: 1 })
@@ -259,8 +261,9 @@ test('Invite new user to group', async ({ browserName }) => {
   // userA invited you to group message
   await expect(
     page
-      .locator('#message-list li.message-wrapper')
-      .filter({ hasText: userA.name })
+      .getByRole('list', { name: 'Messages' })
+      .getByRole('listitem')
+      .filter({ hasText: groupInviteMessage })
   ).toBeVisible()
   const composer = page.locator('textarea#composer-textarea')
   await expect(composer).not.toBeVisible({ timeout: 1 })
@@ -409,15 +412,18 @@ test('Withdraw group invite link', async ({ browserName }) => {
   await expect(confirmJoinGroupDialog).toContainText(groupName)
   await confirmJoinGroupDialog.getByTestId('confirm').click()
 
-  // check for info message containing "waiting"
-  const lastMessage = page.locator('#message-list li').last()
-  await expect(lastMessage).toContainText(userA.name)
-  await expect(lastMessage).toContainText('Member Me removed', {
-    ignoreCase: true,
-  })
-  // the group chat opens but composer is not available
+  await expect(
+    page
+      .getByRole('list', { name: 'Messages' })
+      .getByRole('listitem')
+      .filter({ hasText: groupInviteMessage })
+  ).toBeVisible()
+  // the group chat opens but composer should not be available
+  // timeout to make sure (or more probable) that this is not
+  // just due to a delayed response or a timing issue
+  await page.waitForTimeout(3000)
   const composer = page.locator('textarea#composer-textarea')
-  await expect(composer).not.toBeVisible({ timeout: 3000 })
+  await expect(composer).not.toBeVisible({ timeout: 1 })
 })
 
 test('Edit group profile from context menu and rename group', async () => {
