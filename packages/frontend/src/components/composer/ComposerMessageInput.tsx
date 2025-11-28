@@ -236,7 +236,7 @@ export default class ComposerMessageInput extends React.Component<
         {({ writingDirection }) => (
           <textarea
             className={
-              'message-input-area' +
+              'create-or-edit-message-input' +
               (browserSupportsCSSFieldSizing
                 ? ' use-field-sizing-css-prop'
                 : '')

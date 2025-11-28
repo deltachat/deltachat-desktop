@@ -597,8 +597,9 @@ export default function MessageList({
       return
     }
 
-    const composerTextarea =
-      refComposer.current.querySelector('#composer-textarea')
+    const composerTextarea = refComposer.current.querySelector(
+      '.create-or-edit-message-input'
+    )
     composerTextarea && composerTextarea.focus()
   }, [refComposer, chat.id])
 
@@ -606,8 +607,9 @@ export default function MessageList({
     if (!messageListRef.current || !refComposer.current) {
       return
     }
-    const composerTextarea =
-      refComposer.current.querySelector('#composer-textarea')
+    const composerTextarea = refComposer.current.querySelector(
+      '.create-or-edit-message-input'
+    )
     composerTextarea && composerTextarea.focus()
     messageListRef.current.scrollTop = messageListRef.current.scrollHeight
   }, [refComposer])

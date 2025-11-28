@@ -100,7 +100,7 @@ export async function sendMessage(
     .locator('.chat-list .chat-list-item')
     .filter({ hasText: userName })
     .click()
-  await page.locator('#composer-textarea').fill(messageText)
+  await page.locator('.create-or-edit-message-input').fill(messageText)
   await page.locator('button.send-button').click()
   const sentMessageText = page
     .locator(`.message.outgoing`)
