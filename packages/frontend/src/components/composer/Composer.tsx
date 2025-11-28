@@ -154,7 +154,6 @@ const Composer = forwardRef<
       if (
         message &&
         message.kind === 'message' &&
-        message.state >= 10 &&
         isMessageEditable(message, selectedChat)
       ) {
         // Enter edit mode only for editable messages
