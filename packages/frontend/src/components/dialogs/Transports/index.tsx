@@ -75,7 +75,18 @@ export default function TransportsDialog(
     [accountId]
   )
 
-  const openQrScanner = useCallback(() => {
+  const openQrScanner = useCallback(async () => {
+    const multiDeviceMode = await BackendRemote.rpc.getConfig(
+      accountId,
+      'bcc_self'
+    )
+    if (multiDeviceMode === '1') {
+      openAlertDialog({
+        message:
+          'It is not possible to add transports when multi-device mode is enabled.',
+      })
+      return
+    }
     openDialog(BasicQrScanner, {
       onSuccess: async (result: string) => {
         const { qr } = await processQr(accountId, result)
