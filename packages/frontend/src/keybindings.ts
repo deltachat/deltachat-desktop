@@ -151,11 +151,19 @@ export function keyDownEvent2Action(
     } else if (ev.code === 'F5') {
       return KeybindAction.Debug_MaybeNetwork
     } else if (ev.code === 'PageUp') {
-      if ((ev.target as HTMLElement)?.id === 'composer-textarea') {
+      if (
+        (ev.target as HTMLElement)?.classList.contains(
+          'create-or-edit-message-input'
+        )
+      ) {
         return KeybindAction.MessageList_PageUp
       }
     } else if (ev.code === 'PageDown') {
-      if ((ev.target as HTMLElement)?.id === 'composer-textarea') {
+      if (
+        (ev.target as HTMLElement)?.classList.contains(
+          'create-or-edit-message-input'
+        )
+      ) {
         return KeybindAction.MessageList_PageDown
       }
     } else if (
@@ -171,11 +179,19 @@ export function keyDownEvent2Action(
     } else if (ev.ctrlKey && ev.code === 'PageUp') {
       return KeybindAction.ChatList_SelectPreviousChat
     } else if (ev.code === 'PageUp') {
-      if ((ev.target as HTMLElement)?.id === 'composer-textarea') {
+      if (
+        (ev.target as HTMLElement)?.classList.contains(
+          'create-or-edit-message-input'
+        )
+      ) {
         return KeybindAction.MessageList_PageUp
       }
     } else if (ev.code === 'PageDown') {
-      if ((ev.target as HTMLElement)?.id === 'composer-textarea') {
+      if (
+        (ev.target as HTMLElement)?.classList.contains(
+          'create-or-edit-message-input'
+        )
+      ) {
         return KeybindAction.MessageList_PageDown
       }
     } else if (ev.altKey && ev.code === 'ArrowDown') {

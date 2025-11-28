@@ -126,7 +126,7 @@ test('send message', async () => {
     .click()
 
   const messageText = `Hello ${userB.name}!`
-  await page.locator('#composer-textarea').fill(messageText)
+  await page.locator('.create-or-edit-message-input').fill(messageText)
   await page.locator('button.send-button').click()
 
   const badgeNumber = page
@@ -139,7 +139,7 @@ test('send message', async () => {
   await expect(sentMessageText).toHaveText(messageText)
   await expect(badgeNumber).toHaveText('1')
 
-  await page.locator('#composer-textarea').fill(`${messageText} 2`)
+  await page.locator('.create-or-edit-message-input').fill(`${messageText} 2`)
   await page.locator('button.send-button').click()
 
   await expect(sentMessageText).toHaveText(messageText + ' 2')
@@ -273,7 +273,7 @@ test('edit message', async () => {
     .click()
 
   const originalMessageText = `Original message textttt`
-  await page.locator('#composer-textarea').fill(originalMessageText)
+  await page.locator('.create-or-edit-message-input').fill(originalMessageText)
   await page.locator('button.send-button').click()
   const lastMessageLocator = page
     .locator(`.message.outgoing`)
@@ -283,11 +283,11 @@ test('edit message', async () => {
 
   await lastMessageLocator.click({ button: 'right' })
   await page.locator('[role="menuitem"]').filter({ hasText: 'Edit ' }).click()
-  await expect(page.locator('#composer-textarea')).toHaveValue(
+  await expect(page.locator('.create-or-edit-message-input')).toHaveValue(
     originalMessageText
   )
   const editedMessageText = `Edited message texttttt`
-  await page.locator('#composer-textarea').fill(editedMessageText)
+  await page.locator('.create-or-edit-message-input').fill(editedMessageText)
   await page.locator('button.send-button').click()
   await expect(lastMessageLocator).toHaveText(editedMessageText)
   await expect(page.locator('body')).not.toContainText(originalMessageText)

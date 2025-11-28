@@ -94,7 +94,7 @@ test('start chat with user', async ({ browserName }) => {
     .click()
 
   const messageText = `Hello ${userA.name}!`
-  await page.locator('#composer-textarea').fill(messageText)
+  await page.locator('.create-or-edit-message-input').fill(messageText)
   await page.locator('button.send-button').click()
   const sentMessageText = page
     .locator(`.message.outgoing`)
@@ -132,7 +132,9 @@ test('create group', async ({ browserName }) => {
     .locator('.chat-list .chat-list-item')
     .filter({ hasText: groupName })
   await expect(chatListItem).toBeVisible()
-  await page.locator('#composer-textarea').fill(`Hello group members!`)
+  await page
+    .locator('.create-or-edit-message-input')
+    .fill(`Hello group members!`)
   await page.locator('button.send-button').click()
   const badgeNumber = page
     .getByTestId(`account-item-${userB.id}`)
@@ -199,7 +201,7 @@ test('Invite existing user to group', async ({ browserName }) => {
       .locator('#message-list li.message-wrapper')
       .filter({ hasText: userA.name })
   ).toBeVisible()
-  const composer = page.locator('textarea#composer-textarea')
+  const composer = page.locator('textarea.create-or-edit-message-input')
   await expect(composer).not.toBeVisible({ timeout: 1 })
 
   // userB has 2 new notifications now
@@ -262,7 +264,7 @@ test('Invite new user to group', async ({ browserName }) => {
       .locator('#message-list li.message-wrapper')
       .filter({ hasText: userA.name })
   ).toBeVisible()
-  const composer = page.locator('textarea#composer-textarea')
+  const composer = page.locator('textarea.create-or-edit-message-input')
   await expect(composer).not.toBeVisible({ timeout: 1 })
 
   // verified chat after response from userA
