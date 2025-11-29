@@ -1,4 +1,4 @@
-import React, { ReactElement, useRef, useState } from 'react'
+import React, { ReactElement, useId, useState } from 'react'
 import Button from './Button'
 import Icon from './Icon'
 import useTranslationFunction from '../hooks/useTranslationFunction'
@@ -12,8 +12,8 @@ export const DeltaSelect = React.memo(
       onChange: (ev: React.ChangeEvent<HTMLSelectElement>) => void
     }>
   ) => {
-    const defaultId = useRef(`delta-select-${Math.random()}`)
-    const id = props.id ?? defaultId.current
+    const defaultId = useId()
+    const id = props.id ?? `delta-select-${defaultId}`
 
     return (
       <div className='delta-form-group delta-select'>
@@ -47,8 +47,8 @@ export const DeltaTextarea = React.memo(
       ) => void
     }>
   ) => {
-    const defaultId = useRef(`delta-textarea-${Math.random()}`)
-    const id = props.id ?? defaultId.current
+    const defaultId = useId()
+    const id = props.id ?? `delta-textarea-${defaultId}`
 
     const alwaysShowLabel = (props.label?.length ?? 0) > 0
 
@@ -99,8 +99,8 @@ export const DeltaInput = React.memo(
       dataTestId?: string
     }>
   ) => {
-    const defaultId = useRef(`delta-input-${Math.random()}`)
-    const id = props.id ?? defaultId.current
+    const defaultId = useId()
+    const id = props.id ?? `delta-input-${defaultId}`
 
     const alwaysShowLabel = (props.label?.length ?? 0) > 0
 

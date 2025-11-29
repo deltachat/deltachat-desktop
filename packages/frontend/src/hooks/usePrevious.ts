@@ -14,6 +14,7 @@ export function usePrevious(value: any) {
   useEffect(() => {
     ref.current = value
   })
+  // eslint-disable-next-line react-hooks/refs
   return ref.current
 }
 
@@ -30,7 +31,9 @@ export function usePrevious(value: any) {
  */
 export function usePrevious2<T>(val: T): T | undefined {
   const prevRef = useRef<T>(undefined)
+  // eslint-disable-next-line react-hooks/refs
   const prev = prevRef.current
+  // eslint-disable-next-line react-hooks/refs
   prevRef.current = val
   return prev
 }

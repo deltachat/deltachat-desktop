@@ -188,6 +188,7 @@ export default function ChatAuditLogDialog(
   )
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     refresh()
   }, [selectedChat.id, refresh])
 
