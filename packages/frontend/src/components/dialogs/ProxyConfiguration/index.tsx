@@ -19,7 +19,8 @@ import { getLogger } from '@deltachat-desktop/shared/logger'
 import { unknownErrorToString } from '../../helpers/unknownErrorToString'
 
 import ProxyItemRow from './ProxyItemRow'
-import ProxyQrScanner from '../ProxyQrScanner'
+import { processQr } from '../../../backend/qr'
+import BasicQrScanner from '../BasicScanner'
 
 const log = getLogger('proxy-configuration')
 
@@ -210,12 +211,22 @@ export default function ProxyConfiguration(
   )
 
   const openQrScanner = useCallback(() => {
-    openDialog(ProxyQrScanner, {
-      onSuccess: (result: string) => {
-        addProxy(result)
+    openDialog(BasicQrScanner, {
+      onSuccess: async (result: string) => {
+        if (result) {
+          const { qr } = await processQr(accountId, result)
+          if (qr.kind === 'proxy') {
+            addProxy(result)
+          } else {
+            openAlertDialog({
+              message: tx('proxy_invalid'),
+              dataTestid: 'proxy-scan-failed',
+            })
+          }
+        }
       },
     })
-  }, [openDialog, addProxy])
+  }, [openDialog, accountId, addProxy, openAlertDialog, tx])
 
   const changeActiveProxy = useCallback(
     (proxyUrl: string) => {
