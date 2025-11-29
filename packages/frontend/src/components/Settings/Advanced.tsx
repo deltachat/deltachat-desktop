@@ -39,7 +39,8 @@ export default function Advanced({ settingsStore }: Props) {
       const confirmed = await confirmDialog(
         openDialog,
         tx('pref_multidevice_change_warn'),
-        tx('ok')
+        tx('perm_continue'),
+        true
       )
       // If user didn't confirm, return false to prevent the change
       return confirmed === true
