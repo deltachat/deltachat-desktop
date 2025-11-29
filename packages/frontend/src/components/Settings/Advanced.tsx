@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react'
 
 import type { SettingsStoreState } from '../../stores/settings'
-import Encryption from './Encryption'
 import { ExperimentalFeatures } from './ExperimentalFeatures'
 import ImapFolderHandling from './ImapFolderHandling'
 import SettingsHeading from './SettingsHeading'
@@ -67,10 +66,6 @@ export default function Advanced({ settingsStore }: Props) {
 
       <SettingsHeading>{tx('pref_experimental_features')}</SettingsHeading>
       <ExperimentalFeatures />
-      <SettingsSeparator />
-
-      <SettingsHeading>{tx('pref_encryption')}</SettingsHeading>
-      <Encryption />
       <SettingsSeparator />
 
       <SettingsHeading>{tx('pref_server')}</SettingsHeading>

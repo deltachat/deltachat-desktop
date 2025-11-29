@@ -2,7 +2,6 @@ import React, { useContext } from 'react'
 
 import { Timespans } from '../../../shared/constants'
 import { ContextMenuItem } from './ContextMenu'
-import { useSettingsStore } from '../stores/settings'
 import { BackendRemote } from '../backend-com'
 import { ActionEmitter, KeybindAction } from '../keybindings'
 import useChat from '../hooks/chat/useChat'
@@ -21,14 +20,12 @@ import type { T } from '@deltachat/jsonrpc-client'
 export function useThreeDotMenu(selectedChat?: T.FullChat) {
   const { openDialog } = useDialog()
   const { openContextMenu } = useContext(ContextMenuContext)
-  const [settingsStore] = useSettingsStore()
   const tx = useTranslationFunction()
   const accountId = selectedAccountId()
   const { unselectChat } = useChat()
   const writingDirection = useTranslationWritingDirection()
   const {
     openBlockFirstContactOfChatDialog,
-    openChatAuditDialog,
     openDeleteChatsDialog,
     openLeaveGroupOrChannelDialog,
     openClearChatDialog,
@@ -55,8 +52,6 @@ export function useThreeDotMenu(selectedChat?: T.FullChat) {
       openDeleteChatsDialog(accountId, [selectedChat], chatId)
 
     const onUnmuteChat = () => unmuteChat(accountId, chatId)
-
-    const onChatAudit = () => openChatAuditDialog(selectedChat)
 
     const onClearChat = () => openClearChatDialog(accountId, chatId)
 
@@ -88,12 +83,6 @@ export function useThreeDotMenu(selectedChat?: T.FullChat) {
         selectedChat.isEncrypted && {
           label: tx('ephemeral_messages'),
           action: onDisappearingMessages,
-        },
-      !(isSelfTalk || isDeviceChat) &&
-        settingsStore !== null &&
-        settingsStore.desktopSettings.enableChatAuditLog && {
-          label: tx('menu_chat_audit_log'),
-          action: onChatAudit,
         },
       { type: 'separator' },
       !selectedChat.isMuted

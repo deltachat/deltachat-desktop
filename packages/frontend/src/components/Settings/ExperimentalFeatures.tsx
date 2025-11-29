@@ -86,15 +86,6 @@ export function ExperimentalFeatures() {
           showExperimentalInfoDialog('enableOnDemandLocationStreaming', value)
         }
       />
-      <DesktopSettingsSwitch
-        settingsKey='enableChatAuditLog'
-        label={tx('menu_chat_audit_log')}
-        description={tx('chat_audit_log_description')}
-      />
-      <DesktopSettingsSwitch
-        settingsKey='enableRelatedChats'
-        label={tx('related_chats')}
-      />
       {runtime.getRuntimeInfo().isContentProtectionSupported && (
         <DesktopSettingsSwitch
           settingsKey='contentProtectionEnabled'
