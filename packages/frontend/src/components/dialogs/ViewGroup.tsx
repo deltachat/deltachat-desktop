@@ -3,9 +3,7 @@ import { C } from '@deltachat/jsonrpc-client'
 import type { T } from '@deltachat/jsonrpc-client'
 
 import { QrCodeShowQrInner } from './QrCode'
-import { useThemeCssVar } from '../../ThemeManager'
 import { ContactList } from '../contact/ContactList'
-import { useLogicVirtualChatList, ChatListPart } from '../chat/ChatList'
 import {
   PseudoListItemShowQrCode,
   PseudoListItemAddMember,
@@ -16,14 +14,12 @@ import { shouldDisableClickForFullscreen as shouldDisableFullscreenAvatar } from
 import { DeltaInput } from '../Login-Styles'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
-import { useSettingsStore } from '../../stores/settings'
 import Dialog, {
   DialogBody,
   DialogContent,
   DialogHeader,
   OkCancelFooterAction,
 } from '../Dialog'
-import useChat from '../../hooks/chat/useChat'
 import useConfirmationDialog from '../../hooks/dialog/useConfirmationDialog'
 import useDialog from '../../hooks/dialog/useDialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
@@ -36,7 +32,6 @@ import type { DialogProps } from '../../contexts/DialogContext'
 import ImageCropper from '../ImageCropper'
 import { AddMemberDialog } from './AddMember/AddMemberDialog'
 import { RovingTabindexProvider } from '../../contexts/RovingTabindex'
-import { ChatListItemRowChat } from '../chat/ChatListItemRow'
 import { copyToBlobDir } from '../../utils/copyToBlobDir'
 import AlertDialog from './AlertDialog'
 import { unknownErrorToString } from '../helpers/unknownErrorToString'
@@ -195,26 +190,11 @@ function ViewGroupInner(
   const accountId = selectedAccountId()
   const openConfirmationDialog = useConfirmationDialog()
   const tx = useTranslationFunction()
-  const { selectChat } = useChat()
-  const [settings] = useSettingsStore()
-  const [chatListIds, setChatListIds] = useState<number[]>([])
-  const isRelatedChatsEnabled =
-    settings?.desktopSettings.enableRelatedChats || false
-  useEffect(() => {
-    if (isRelatedChatsEnabled)
-      BackendRemote.rpc
-        .getSimilarChatIds(selectedAccountId(), chat.id)
-        .then((chatIds: number[]) => setChatListIds(chatIds))
-  }, [chat.id, isRelatedChatsEnabled])
-
-  const { isChatLoaded, loadChats, chatCache } =
-    useLogicVirtualChatList(chatListIds)
 
   const chatDisabled = !chat.canSend
 
   const groupMemberContactListWrapperRef = useRef<HTMLDivElement>(null)
   const groupPastMemberContactListWrapperRef = useRef<HTMLDivElement>(null)
-  const relatedChatsListWrapperRef = useRef<HTMLDivElement>(null)
 
   const {
     group,
@@ -362,14 +342,6 @@ function ViewGroupInner(
 
   const [profileContact, setProfileContact] = useState<T.Contact | null>(null)
 
-  const onChatClick = (chatId: number) => {
-    selectChat(accountId, chatId)
-    onClose()
-  }
-
-  const CHATLISTITEM_CHAT_HEIGHT =
-    Number(useThemeCssVar('--SPECIAL-chatlist-item-chat-height')) || 64
-
   return (
     <>
       {!profileContact && (
@@ -444,48 +416,6 @@ function ViewGroupInner(
                 />
               </RovingTabindexProvider>
             </div>
-            {isRelatedChatsEnabled && chatListIds.length > 0 && (
-              <>
-                <div
-                  id='view-group-related-chats-title'
-                  className='group-separator'
-                >
-                  {tx('related_chats')}
-                </div>
-                <div
-                  ref={relatedChatsListWrapperRef}
-                  className='group-related-chats-list-wrapper'
-                >
-                  <RovingTabindexProvider
-                    wrapperElementRef={relatedChatsListWrapperRef}
-                  >
-                    <ChatListPart
-                      olElementAttrs={{
-                        'aria-labelledby': 'view-group-related-chats-title',
-                      }}
-                      isRowLoaded={isChatLoaded}
-                      loadMoreRows={loadChats}
-                      rowCount={chatListIds.length}
-                      width={'100%'}
-                      height={CHATLISTITEM_CHAT_HEIGHT * chatListIds.length}
-                      itemKey={index => 'key' + chatListIds[index]}
-                      itemHeight={CHATLISTITEM_CHAT_HEIGHT}
-                      itemData={{
-                        chatCache,
-                        chatListIds,
-                        onChatClick,
-
-                        activeChatId: null,
-                        activeContextMenuChatIds: [],
-                        openContextMenu: async () => {},
-                      }}
-                    >
-                      {ChatListItemRowChat}
-                    </ChatListPart>
-                  </RovingTabindexProvider>
-                </div>
-              </>
-            )}
             {pastContacts.length > 0 && (
               <>
                 <div

@@ -1,6 +1,5 @@
 import { useCallback } from 'react'
 
-import ChatAuditLogDialog from '../../components/dialogs/ChatAuditLogDialog'
 import { Props, EncryptionInfo } from '../../components/dialogs/EncryptionInfo'
 import MuteChat from '../../components/dialogs/MuteChat'
 import useChat from './useChat'
@@ -61,15 +60,6 @@ export default function useChatDialog() {
       return openBlockContactById(accountId, dmChatContact)
     },
     [openBlockContactById]
-  )
-
-  const openChatAuditDialog = useCallback(
-    (
-      selectedChat: Parameters<typeof ChatAuditLogDialog>[0]['selectedChat']
-    ) => {
-      openDialog(ChatAuditLogDialog, { selectedChat })
-    },
-    [openDialog]
   )
 
   const openClearChatDialog = useCallback(
@@ -175,7 +165,6 @@ export default function useChatDialog() {
   return {
     openBlockFirstContactOfChatDialog,
     openBlockContactById,
-    openChatAuditDialog,
     openClearChatDialog,
     openDeleteChatsDialog,
     openEncryptionInfoDialog,

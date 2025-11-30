@@ -32,7 +32,6 @@ export interface DesktopSettingsType {
    */
   enableAVCallsV2: boolean
   enableBroadcastLists: boolean
-  enableChatAuditLog: boolean
   enableOnDemandLocationStreaming: boolean
   enterKeySends: boolean
   locale: string | null
@@ -68,7 +67,6 @@ export interface DesktopSettingsType {
   HTMLEmailAskForRemoteLoadingConfirmation: boolean
   /** always loads remote content without asking, for non contact requests  */
   HTMLEmailAlwaysLoadRemoteContent: boolean
-  enableRelatedChats: boolean
   /** gallery image & video - keep aspect ratio (true) or cover (false) */
   galleryImageKeepAspectRatio: boolean
   /** whether to use system ui font */
