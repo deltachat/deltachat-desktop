@@ -61,6 +61,7 @@ export default function QrCodeCopyConfirmationDialog({
             onClick={onCopy}
             data-testid='confirm-qr-code'
             styling='primary'
+            setAutoFocus
           >
             {tx('global_menu_edit_copy_desktop')}
           </FooterActionButton>

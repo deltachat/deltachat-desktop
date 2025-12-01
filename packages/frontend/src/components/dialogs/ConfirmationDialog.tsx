@@ -61,6 +61,7 @@ export default function ConfirmationDialog({
             {cancelLabel || tx('cancel')}
           </FooterActionButton>
           <FooterActionButton
+            setAutoFocus
             styling={isConfirmDanger ? 'danger' : 'primary'}
             onClick={() => handleClick(true)}
             data-testid='confirm'
