@@ -370,7 +370,12 @@ export default function ImageCropper({
       const absDelta = Math.abs(ev.deltaY)
       // NOTE(maxph): I'm not sure about this, but there are many sources stating that 'wheel' delta on touchpad is smaller (somewhere like 50 vs 100 at maximum)
       // so here we treat small delta as not a mouse wheel and zoom in different direction
-      const dir = absDelta < 50 ? 1 : -1
+      let dir = absDelta < 50 ? 1 : -1
+      const { isMac } = runtime.getRuntimeInfo()
+      if (isMac) {
+        // on macOS it seems we have to invert zoom direction
+        dir *= -1
+      }
       const normDelta = Math.min(8, absDelta)
       zoom.current *= 1 + (dir * Math.sign(ev.deltaY) * normDelta) / 100
       const [x, y] = moveImages(posX.current, posY.current)
