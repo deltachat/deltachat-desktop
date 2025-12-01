@@ -6,7 +6,7 @@ import { existsSync, lstatSync } from 'fs'
 import { join } from 'path'
 import { Logger } from '../../../shared/logger.js'
 import { mkdir, readdir, rename, rm, rmdir, stat } from 'fs/promises'
-import { DcEvent, RawClient } from '@deltachat/jsonrpc-client'
+import type { DcEvent, RawClient } from '@deltachat/jsonrpc-client'
 
 /**
  *
@@ -207,7 +207,7 @@ export async function disableDeleteFromServerConfig(
         log.info(
           `Disabling delete_server_after for chatmail account ${accountId}`
         )
-        await rpc.setConfig(accountId, 'delete_server_after', '0')
+        await rpc.setConfig(accountId, 'delete_server_after', null)
       }
     }
   } catch (error) {
