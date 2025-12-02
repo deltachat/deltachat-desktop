@@ -11,6 +11,7 @@ import reactStringReplace from 'react-string-replace'
 import classNames from 'classnames'
 import { C, T } from '@deltachat/jsonrpc-client'
 import { debounce } from 'debounce'
+import { filesize } from 'filesize'
 
 import MessageBody from './MessageBody'
 import MessageMetaData, { isMediaWithoutText } from './MessageMetaData'
@@ -716,9 +717,28 @@ export default function Message(props: {
   const { downloadState } = message
 
   if (downloadState !== 'Done') {
+    //@ts-ignore - we don't need exhausive type checking here, because we ignore cases that don't get a pre-/post message anyway
+    const viewTypeTranslations: Record<T.Viewtype, Parameters<typeof tx>[0]> = {
+      Audio: 'audio',
+      File: 'file',
+      Gif: 'gif',
+      Image: 'image',
+      Sticker: 'sticker',
+      Vcard: 'contact',
+      Video: 'video',
+      Voice: 'voice_message',
+      Webxdc: 'webxdc_app',
+    }
+    const viewType: T.Viewtype = (message as any).fullMessageViewType
+    const viewTypeTranlationKey = viewTypeTranslations[viewType]
+    const fileSize = filesize(message.fileBytes)
+    const metadata =
+      viewType == 'File'
+        ? `[${message.fileName} - ${fileSize}]`
+        : `[${viewTypeTranlationKey ? tx(viewTypeTranlationKey) : viewType} - ${fileSize}]`
     content = (
       <div className={'download'}>
-        {text} {'- '}
+        {text} {metadata}
         {downloadState == 'Failure' && (
           <span key='fail' className={'failed'}>
             {tx('download_failed')}
