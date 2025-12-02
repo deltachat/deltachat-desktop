@@ -102,15 +102,11 @@ export default function Advanced({ settingsStore }: Props) {
         </>
       )}
       <SettingsButton
-        onClick={() => {
-          openTransportSettings()
-        }}
+        onClick={openTransportSettings}
         dataTestid='open-transport-settings'
       >
         {tx('transports')}
       </SettingsButton>
-
-      <ImapFolderHandling settingsStore={settingsStore} />
     </>
   )
 }
