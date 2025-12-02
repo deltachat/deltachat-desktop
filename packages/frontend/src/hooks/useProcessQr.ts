@@ -21,6 +21,7 @@ import useChat from './chat/useChat'
 import { unknownErrorToString } from '../components/helpers/unknownErrorToString'
 import ProxyConfiguration from '../components/dialogs/ProxyConfiguration'
 import { useSettingsStore } from '../stores/settings'
+import TransportsDialog from '../components/dialogs/Transports'
 
 const ALLOWED_QR_CODES_ON_WELCOME_SCREEN: T.Qr['kind'][] = [
   'account',
@@ -291,18 +292,17 @@ export default function useProcessQR() {
        */
       if (qr.kind === 'account') {
         if (isLoggedIn) {
-          const userConfirmed = await openConfirmationDialog({
-            message: tx('qraccount_ask_create_and_login_another', qr.domain),
-            confirmLabel: tx('login_title'),
-            dataTestid: 'ask-create-account',
+          const confirmed = await openConfirmationDialog({
+            message: `${tx('confirm_add_transport')}\n ${qr.domain}`,
+            confirmLabel: tx('add_transport'),
           })
-
-          if (!userConfirmed) {
-            return callback?.()
+          if (!confirmed) {
+            return
           }
-
-          const new_accountId = await addAndSelectAccount()
-          await startInstantOnboarding(new_accountId, { ...parsed, qr })
+          await BackendRemote.rpc.addTransportFromQr(accountId, url)
+          openDialog(TransportsDialog, {
+            accountId,
+          })
         } else {
           await startInstantOnboarding(accountId, { ...parsed, qr })
         }
