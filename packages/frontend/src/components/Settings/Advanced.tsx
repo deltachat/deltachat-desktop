@@ -80,6 +80,7 @@ export default function Advanced({ settingsStore }: Props) {
       <Encryption />
       <SettingsSeparator />
 
+      <SettingsHeading>{tx('pref_server')}</SettingsHeading>
       <SettingsButton
         onClick={() => {
           openProxySettings()
