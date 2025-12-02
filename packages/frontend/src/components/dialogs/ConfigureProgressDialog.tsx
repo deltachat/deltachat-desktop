@@ -93,17 +93,11 @@ export function ConfigureProgressDialog({
           ) {
             const existingTransports =
               await BackendRemote.rpc.listTransports(accountId)
-            if (existingTransports.length > 0) {
-              const existingTransport = existingTransports[0]
-              // there is always a "default" transport with empty addr
-              if (existingTransport.addr === '') {
-                isInitialOnboarding = true
-              } else if (existingTransport.addr !== configuration.addr) {
-                // multiple transports are not supported yet
-                throw new Error(
-                  'Multi transport is not supported right now. Check back in a few months!'
-                )
-              }
+            if (
+              existingTransports.length === 1 &&
+              existingTransports[0].addr === ''
+            ) {
+              isInitialOnboarding = true
             }
             // If the address already exists the transport config is updated
             // otherwise a new transport is added (if the user entered credentials manually)

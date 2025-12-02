@@ -3,7 +3,6 @@ import { DialogProps } from '../../../contexts/DialogContext'
 import Dialog, { DialogBody, DialogHeader, DialogFooter } from '../../Dialog'
 import { BackendRemote } from '../../../backend-com'
 
-import SettingsStoreInstance from '../../../stores/settings'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import useConfirmationDialog from '../../../hooks/dialog/useConfirmationDialog'
 import useAlertDialog from '../../../hooks/dialog/useAlertDialog'
@@ -58,21 +57,19 @@ export default function TransportsDialog(
 
   const changeDefaultTransport = useCallback(
     async (transport: EnteredLoginParam) => {
+      // optimistically update UI
+      setTransports(prev =>
+        prev.map(t => ({ ...t, isDefault: t.addr === transport.addr }))
+      )
       await BackendRemote.rpc.setConfig(
         accountId,
         'configured_addr',
         transport.addr
       )
-      SettingsStoreInstance.effect.setCoreSetting(
-        'configured_addr',
-        transport.addr
-      )
-
-      setTransports(prev =>
-        prev.map(t => ({ ...t, isDefault: t.addr === transport.addr }))
-      )
+      // now load transports again to be sure
+      getTransports()
     },
-    [accountId]
+    [accountId, getTransports]
   )
 
   const openQrScanner = useCallback(async () => {
@@ -91,6 +88,12 @@ export default function TransportsDialog(
       onSuccess: async (result: string) => {
         const { qr } = await processQr(accountId, result)
         if (qr.kind === 'account') {
+          const confirmed = await openConfirmationDialog({
+            message: `${tx('confirm_add_transport')}\n ${qr.domain}`,
+          })
+          if (!confirmed) {
+            return
+          }
           await BackendRemote.rpc.addTransportFromQr(accountId, result)
           // refresh transport list
           getTransports()
@@ -101,7 +104,14 @@ export default function TransportsDialog(
         }
       },
     })
-  }, [openDialog, accountId, getTransports, openAlertDialog, tx])
+  }, [
+    openDialog,
+    accountId,
+    getTransports,
+    openAlertDialog,
+    openConfirmationDialog,
+    tx,
+  ])
 
   useEffect(() => {
     getTransports()
@@ -114,10 +124,11 @@ export default function TransportsDialog(
       })
       if (confirmed) {
         await BackendRemote.rpc.deleteTransport(accountId, transport.addr)
-        setTransports(prev => prev.filter(t => t.addr !== transport.addr))
+        getTransports()
+        // setTransports(prev => prev.filter(t => t.addr !== transport.addr))
       }
     },
-    [openConfirmationDialog, tx, accountId]
+    [openConfirmationDialog, tx, accountId, getTransports]
   )
 
   const editTransport = useCallback(
@@ -134,7 +145,7 @@ export default function TransportsDialog(
       fixed
       width={500}
       dataTestid='transports-dialog'
-      canOutsideClickClose={false}
+      canOutsideClickClose={true}
     >
       <DialogHeader
         title={tx('transports')}
@@ -161,6 +172,7 @@ export default function TransportsDialog(
                       checked={transport.isDefault}
                       className={styles.radioButton}
                       aria-labelledby={`transport-label-${index}`}
+                      readOnly
                     />
                   </span>
                   <span>

@@ -107,7 +107,7 @@ export default function Advanced({ settingsStore }: Props) {
         }}
         dataTestid='open-transport-settings'
       >
-        {tx('transport_settings')}
+        {tx('transports')}
       </SettingsButton>
 
       <ImapFolderHandling settingsStore={settingsStore} />
