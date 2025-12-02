@@ -222,12 +222,14 @@ test('onboarding with manual credentials', async ({ browserName }) => {
     newUsername
   )
   await page.getByTestId('open-advanced-settings').click()
-  await page.getByTestId('open-account-and-password').click()
+  await page.getByTestId('open-transport-settings').click()
+  await page.getByLabel('Edit Transport').first().click()
   const addressLocator = page.locator('#addr')
   await expect(addressLocator).toHaveValue(/.+@.+/)
   const addressFromSettings = await addressLocator.inputValue()
   expect(addressFromSettings).toEqual(address)
   await page.getByTestId('cancel').click()
+  await page.getByTestId('transports-settings-close').click()
   await page.getByTestId('settings-advanced-close').click()
   // needed in deleteAllProfiles
   existingProfiles.push({
@@ -291,7 +293,6 @@ test('wrong qr code for onboarding shows error message', async ({
   ])
   await expect(page.getByTestId('proxy-scan-failed')).toBeVisible()
   await page.getByTestId('alert-ok').click()
-  await page.getByTestId('proxy-qrscan-dialog').getByTestId('close').click()
   await page.getByTestId('proxy-settings-close').click()
 
   const accounts = page.getByLabel('profile').getByRole('tab')

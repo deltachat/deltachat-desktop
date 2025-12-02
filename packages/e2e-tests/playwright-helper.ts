@@ -204,12 +204,14 @@ export async function createNewProfile(
     name
   )
   await page.getByTestId('open-advanced-settings').click()
-  await page.getByTestId('open-account-and-password').click()
+  await page.getByTestId('open-transport-settings').click()
+  await page.getByLabel('Edit Transport').first().click()
   const addressLocator = page.locator('#addr')
   await expect(addressLocator).toHaveValue(/.+@.+/)
   const address = await addressLocator.inputValue()
 
   await page.getByTestId('cancel').click()
+  await page.getByTestId('transports-settings-close').click()
   await page.getByTestId('settings-advanced-close').click()
 
   const newId = await accountList
@@ -240,7 +242,8 @@ export async function getProfile(
   await expect(nameLocator).not.toBeEmpty()
   const name = await nameLocator.textContent()
   await page.getByTestId('open-advanced-settings').click()
-  await page.getByTestId('open-account-and-password').click()
+  await page.getByTestId('open-transport-settings').click()
+  await page.getByLabel('Edit Transport').first().click()
   const addressLocator = page.locator('#addr')
   await expect(addressLocator).toHaveValue(/.+@.+/)
   const address = await addressLocator.inputValue()
@@ -250,6 +253,7 @@ export async function getProfile(
     password = await passwdLocator.inputValue()
   }
   await page.getByTestId('cancel').click()
+  await page.getByTestId('transports-settings-close').click()
   await page.getByTestId('settings-advanced-close').click()
 
   return {
