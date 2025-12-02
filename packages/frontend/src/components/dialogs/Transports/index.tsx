@@ -141,6 +141,7 @@ export default function TransportsDialog(
   return (
     <Dialog
       fixed
+      onClose={onClose}
       width={500}
       dataTestid='transports-dialog'
       canOutsideClickClose={true}
@@ -157,9 +158,7 @@ export default function TransportsDialog(
               <div className={styles.transportRow} key={transport.addr}>
                 <div
                   onClick={() => changeDefaultTransport(transport)}
-                  className={classNames(styles.transportItem, {
-                    [styles.transportLabel]: transport.isDefault,
-                  })}
+                  className={styles.transportItem}
                 >
                   <span className={styles.transportRadioButton}>
                     <input
@@ -173,10 +172,10 @@ export default function TransportsDialog(
                       readOnly
                     />
                   </span>
-                  <span id={`transport-label-${index}`}>
+                  <label id={`transport-label-${index}`}>
                     {transport.addr}{' '}
                     {transport.isDefault ? ` (${tx('def')})` : ''}
-                  </span>
+                  </label>
                 </div>
                 <div>
                   <Button

@@ -1,17 +1,9 @@
-.transportList {
-  flex-grow: 1;
-  overflow-y: auto;
-}
-
 .container {
-  margin: 0 10px 0 30px;
+  margin-inline-start: 30px;
+  margin-inline-end: 10px;
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
-  h3 {
-    margin: 0;
-    margin-top: 10px;
-  }
 }
 
 .transportRow {
@@ -22,7 +14,7 @@
   &:hover {
     background-color: var(--globalHoverBg);
   }
-  div {
+  & > div {
     display: flex;
   }
   .transportRadioButton {
@@ -36,11 +28,6 @@
   .transportItem {
     cursor: pointer;
   }
-}
-
-.explain {
-  margin-inline-end: 20px;
-  margin-top: 10px;
 }
 
 $iconSize: 1.3em;
@@ -71,11 +58,4 @@ $iconSize: 1.3em;
 
 .addTransportButton {
   padding: 10px;
-}
-
-@media (max-height: 500px) {
-  .transportList {
-    flex-grow: 0;
-    overflow-y: visible;
-  }
 }
