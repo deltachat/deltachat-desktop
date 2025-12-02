@@ -132,12 +132,6 @@ export default function useProcessQR() {
     [openAlertDialog]
   )
 
-  const openTransportSettings = (accountId: number) => {
-    openDialog(TransportsDialog, {
-      accountId,
-    })
-  }
-
   // Users can enter the "Instant Onboarding" flow by scanning a QR code of these types:
   // DCACCOUNT (new transport from the included chatmail instance)
   // DCLOGIN ()
@@ -300,12 +294,15 @@ export default function useProcessQR() {
         if (isLoggedIn) {
           const confirmed = await openConfirmationDialog({
             message: `${tx('confirm_add_transport')}\n ${qr.domain}`,
+            confirmLabel: tx('add_transport'),
           })
           if (!confirmed) {
             return
           }
           await BackendRemote.rpc.addTransportFromQr(accountId, url)
-          openTransportSettings(accountId)
+          openDialog(TransportsDialog, {
+            accountId,
+          })
         } else {
           await startInstantOnboarding(accountId, { ...parsed, qr })
         }
@@ -483,7 +480,6 @@ export default function useProcessQR() {
       processQrCode,
       startInstantOnboarding,
       addAndSelectAccount,
-      openTransportSettings,
       selectChat,
       isChatmail,
       tx,
