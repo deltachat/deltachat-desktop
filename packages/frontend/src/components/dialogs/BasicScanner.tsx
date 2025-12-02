@@ -46,7 +46,7 @@ export default function BasicQrScanner({
   }, [])
 
   return (
-    <Dialog onClose={onClose} dataTestid='transport-qrscan-dialog'>
+    <Dialog onClose={onClose} dataTestid='basic-qrscan-dialog'>
       <DialogBody>
         <QrReader
           onScanSuccess={handleScan}

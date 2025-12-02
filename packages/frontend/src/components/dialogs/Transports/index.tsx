@@ -24,7 +24,6 @@ import Icon from '../../Icon'
 export default function TransportsDialog(
   props: DialogProps & {
     accountId: number
-    configured: boolean
     newTransport?: string
   }
 ) {
@@ -125,7 +124,6 @@ export default function TransportsDialog(
       if (confirmed) {
         await BackendRemote.rpc.deleteTransport(accountId, transport.addr)
         getTransports()
-        // setTransports(prev => prev.filter(t => t.addr !== transport.addr))
       }
     },
     [openConfirmationDialog, tx, accountId, getTransports]
@@ -156,7 +154,7 @@ export default function TransportsDialog(
         <div className={styles.container}>
           <div className={styles.transportList}>
             {transports.map((transport, index) => (
-              <div className={styles.transportRow} key={index}>
+              <div className={styles.transportRow} key={transport.addr}>
                 <div
                   onClick={() => changeDefaultTransport(transport)}
                   className={classNames(styles.transportItem, {
@@ -165,8 +163,8 @@ export default function TransportsDialog(
                 >
                   <span className={styles.transportRadioButton}>
                     <input
-                      id={`proxy-${index}`}
-                      name='proxy-selection'
+                      id={`transport-${index}`}
+                      name='transport-selection'
                       type='radio'
                       value={transport.addr}
                       checked={transport.isDefault}
@@ -175,7 +173,7 @@ export default function TransportsDialog(
                       readOnly
                     />
                   </span>
-                  <span>
+                  <span id={`transport-label-${index}`}>
                     {transport.addr}{' '}
                     {transport.isDefault ? ` (${tx('def')})` : ''}
                   </span>

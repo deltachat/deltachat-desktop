@@ -51,7 +51,6 @@ export default function Advanced({ settingsStore }: Props) {
   const openTransportSettings = () => {
     openDialog(TransportsDialog, {
       accountId: selectedAccountId(),
-      configured: true,
     })
   }
 
