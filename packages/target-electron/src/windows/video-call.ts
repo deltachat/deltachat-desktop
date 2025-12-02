@@ -385,7 +385,9 @@ function openVideoCallWindow<D extends CallDirection>(
   webAppMessagePort.start()
 
   const host = formatHost(accountId, chatId)
-  const query = callDirection === CallDirection.Incoming ? '?playRingtone' : ''
+  const query =
+    '?noOutgoingVideoInitially' +
+    (callDirection === CallDirection.Incoming ? '&playRingtone' : '')
   const hash =
     callDirection === CallDirection.Outgoing
       ? '' // We'll `#startCall` after a "grace period" below.
