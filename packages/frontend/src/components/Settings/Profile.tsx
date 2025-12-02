@@ -29,7 +29,7 @@ export default function Profile({ settingsStore, onStatusClick }: Props) {
       : tx('pref_profile_info_headline')
 
   return (
-    <div
+    <button
       className={styles.profile}
       onClick={onStatusClick}
       data-testid='edit-profile-button'
@@ -48,6 +48,6 @@ export default function Profile({ settingsStore, onStatusClick }: Props) {
             tx('pref_default_status_label')}
         </div>
       </div>
-    </div>
+    </button>
   )
 }

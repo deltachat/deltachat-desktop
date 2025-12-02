@@ -67,7 +67,8 @@ $settingsHeight: 40px;
   padding-top: 0;
   width: 100%;
 
-  &:hover {
+  &:hover,
+  &:focus {
     background-color: var(--chatListItemBgHover);
   }
 }
@@ -158,11 +159,14 @@ $settingsHeight: 40px;
 .profile {
   display: flex;
   cursor: pointer;
-  &:hover {
+  &:hover,
+  &:focus {
     background-color: var(--chatListItemBgHover);
   }
   padding: 10px 25px;
-  border-radius: 10px;
+  width: 100%;
+  border: none;
+  background-color: transparent;
 }
 
 .profileDetails {
