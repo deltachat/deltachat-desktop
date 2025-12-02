@@ -41,7 +41,11 @@ export default function QrCodeCopyConfirmationDialog({
   }
 
   return (
-    <Dialog onClose={onClose}>
+    <Dialog
+      onClose={onClose}
+      canEscapeKeyClose={true}
+      canOutsideClickClose={true}
+    >
       <DialogBody>
         <DialogContent paddingTop>
           <p>{message}</p>
@@ -50,11 +54,15 @@ export default function QrCodeCopyConfirmationDialog({
       </DialogBody>
       <DialogFooter>
         <FooterActions>
-          <FooterActionButton onClick={onCopy} data-testid='confirm-qr-code'>
-            {tx('global_menu_edit_copy_desktop')}
-          </FooterActionButton>
           <FooterActionButton onClick={onCancel}>
             {tx('cancel')}
+          </FooterActionButton>
+          <FooterActionButton
+            onClick={onCopy}
+            data-testid='confirm-qr-code'
+            styling='primary'
+          >
+            {tx('global_menu_edit_copy_desktop')}
           </FooterActionButton>
         </FooterActions>
       </DialogFooter>
