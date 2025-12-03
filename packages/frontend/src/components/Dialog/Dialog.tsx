@@ -9,6 +9,10 @@ const DEFAULT_WIDTH = 500
 
 type Props = React.PropsWithChildren<{
   onClose?: (result?: any) => void
+  /**
+   * If {@linkcode canOutsideClickClose} === true or is not provided,
+   * this has no effect and acts as `true`.
+   */
   canEscapeKeyClose?: boolean
   canOutsideClickClose?: boolean
   /** whether backdrop can be used to drag window around on tauri, used on onboarding screen and deletion screen */
@@ -35,48 +39,9 @@ const Dialog = React.memo<Props>(
   }) => {
     const dialog = useRef<HTMLDialogElement>(null)
 
-    const onClick = canOutsideClickClose
-      ? (ev: React.MouseEvent<HTMLDialogElement>) => {
-          if (!dialog.current) {
-            return
-          }
-          // pressing a button with Spacebar inside a dialog
-          // triggers the `onClick` event.
-          // Let's ignore such "clicks" here.
-          if (ev.screenX == 0 && ev.screenY == 0) {
-            return
-          }
-          ev.stopPropagation()
-          // that is the way to check if we clicked on dialog::backdrop
-          const rect = dialog.current.getBoundingClientRect()
-          const isInDialog =
-            rect.top <= ev.clientY &&
-            ev.clientY <= rect.top + rect.height &&
-            rect.left <= ev.clientX &&
-            ev.clientX <= rect.left + rect.width
-          if (!isInDialog) {
-            const cancelEvent = new Event('cancel')
-            dialog.current.dispatchEvent(cancelEvent)
-            // cancel event doesn't trigger dialog close
-            dialog.current.close()
-          }
-        }
-      : () => {}
-
     const onClose = (value: any) => {
       props.onClose && props.onClose(value)
       dialog.current!.style.display = 'none'
-    }
-
-    const onCancel = (ev: React.BaseSyntheticEvent) => {
-      if (!canEscapeKeyClose) {
-        ev.preventDefault()
-      }
-    }
-    const onKeyDown = (ev: React.KeyboardEvent) => {
-      if (ev.code === 'Escape') {
-        onCancel(ev)
-      }
     }
 
     useEffect(() => {
@@ -95,10 +60,14 @@ const Dialog = React.memo<Props>(
     }
     return (
       <dialog
-        onClick={onClick}
         onClose={onClose}
-        onCancel={onCancel}
-        onKeyDown={onKeyDown}
+        closedby={
+          canOutsideClickClose
+            ? 'any'
+            : canEscapeKeyClose
+              ? 'closerequest'
+              : 'none'
+        }
         ref={dialog}
         data-no-drag-region
         data-tauri-drag-region={
