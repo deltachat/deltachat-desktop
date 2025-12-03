@@ -733,7 +733,7 @@ export default function Message(props: {
       Voice: 'voice_message',
       Webxdc: 'webxdc_app',
     }
-    const viewType: T.Viewtype = (message as any).fullMessageViewType
+    const viewType: T.Viewtype = (message as any).postMessageViewType
     const viewTypeTranslationKey = viewTypeTranslations[viewType]
     const fileSize = filesize(message.fileBytes)
     const metadata = `[${viewTypeTranslationKey ? tx(viewTypeTranslationKey) : viewType} - ${fileSize}]`
