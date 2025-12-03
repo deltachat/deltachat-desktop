@@ -20,6 +20,7 @@ type Props = React.PropsWithChildren<{
   // takes full screen and is transparent
   unstyled?: boolean
   dataTestid?: string
+  skipAutoBlur?: boolean
 }>
 
 const Dialog = React.memo<Props>(
@@ -31,6 +32,7 @@ const Dialog = React.memo<Props>(
     width = DEFAULT_WIDTH,
     height,
     unstyled = false,
+    skipAutoBlur = false,
     ...props
   }) => {
     const dialog = useRef<HTMLDialogElement>(null)
@@ -83,6 +85,10 @@ const Dialog = React.memo<Props>(
       // calling showModal is "only" the way to have ::backdrop
       dialog.current?.showModal()
       dialog.current!.style.display = 'flex'
+      // Remove focus from any auto-focused element
+      if (!skipAutoBlur && document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur()
+      }
     })
 
     let style

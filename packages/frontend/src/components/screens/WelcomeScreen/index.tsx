@@ -73,6 +73,7 @@ export default function WelcomeScreen({ selectedAccountId, ...props }: Props) {
         canOutsideClickClose={false}
         onClose={onClose}
         dataTestid='onboarding-dialog'
+        skipAutoBlur={true}
       >
         {!showInstantOnboarding ? (
           <OnboardingScreen

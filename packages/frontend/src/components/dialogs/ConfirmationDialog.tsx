@@ -20,6 +20,7 @@ export type Props = {
   isConfirmDanger?: boolean
   noMargin?: boolean
   header?: string
+  skipAutoBlur?: boolean
 } & DialogProps
 
 export default function ConfirmationDialog({
