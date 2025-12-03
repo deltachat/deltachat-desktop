@@ -42,6 +42,7 @@ export function PseudoListItem(
         onFocus={rovingTabindex.setAsActiveElement}
         onKeyDown={rovingTabindex.onKeydown}
         data-testid={id}
+        type="button"
       >
         <PseudoContact cutoff={cutoff} text={text} subText={subText}>
           {props.children}

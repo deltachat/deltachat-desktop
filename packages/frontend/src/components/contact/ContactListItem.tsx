@@ -113,6 +113,7 @@ export function ContactListItem(
           rovingTabindex.className,
           { disabled }
         )}
+        type="button"
         // `aria-disabled` instead of just `disabled` because we probably
         // still want to keep it focusable so that the context menu can be
         // activated, and for screen-readers.
@@ -151,6 +152,7 @@ export function ContactListItem(
         <button
           type='button'
           className='btn-remove'
+          type="button"
           onClick={onRemoveClick}
           disabled={disabled}
           tabIndex={disabled ? undefined : rovingTabindex.tabIndex}

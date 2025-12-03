@@ -8,6 +8,7 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   // borderless means button element has no border and transparent background
   // and is of type button for accessibility reasons
   styling?: 'primary' | 'danger' | 'borderless'
+  type?: 'button' | 'submit' | 'reset'
 }
 
 export default function Button({
@@ -19,7 +20,8 @@ export default function Button({
 }: ButtonProps) {
   return (
     <button
-      type='button'
+      // eslint-disable-next-line react/button-has-type
+      type={props.type || 'button'}
       className={classNames(
         styles.button,
         active && styles.active,
