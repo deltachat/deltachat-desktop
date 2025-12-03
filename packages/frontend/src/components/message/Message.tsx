@@ -29,7 +29,11 @@ import {
   enterEditMessageMode,
 } from './messageFunctions'
 import Attachment from '../attachment/messageAttachment'
-import { isGenericAttachment, isImage } from '../attachment/Attachment'
+import {
+  getExtension,
+  isGenericAttachment,
+  isImage,
+} from '../attachment/Attachment'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { ConversationType } from './MessageList'
 import { getDirection } from '../../utils/getDirection'
@@ -730,33 +734,63 @@ export default function Message(props: {
       Webxdc: 'webxdc_app',
     }
     const viewType: T.Viewtype = (message as any).fullMessageViewType
-    const viewTypeTranlationKey = viewTypeTranslations[viewType]
+    const viewTypeTranslationKey = viewTypeTranslations[viewType]
     const fileSize = filesize(message.fileBytes)
-    const metadata =
-      viewType == 'File'
-        ? `[${message.fileName} - ${fileSize}]`
-        : `[${viewTypeTranlationKey ? tx(viewTypeTranlationKey) : viewType} - ${fileSize}]`
-    content = (
-      <div className={'download'}>
-        {text} {metadata}
-        {downloadState == 'Failure' && (
-          <span key='fail' className={'failed'}>
-            {tx('download_failed')}
-          </span>
-        )}
-        {downloadState == 'InProgress' && (
-          <span key='downloading'>{tx('downloading')}</span>
-        )}
-        {(downloadState == 'Failure' || downloadState === 'Available') && (
-          <button
-            onClick={downloadFullMessage.bind(null, message.id)}
-            tabIndex={tabindexForInteractiveContents}
-          >
-            {tx('download')}
-          </button>
-        )}
-      </div>
-    )
+    const metadata = `[${viewTypeTranslationKey ? tx(viewTypeTranslationKey) : viewType} - ${fileSize}]`
+    if (viewType == 'File') {
+      const extension = getExtension(message)
+      content = (
+        <div>
+          <div className={'media-attachment-generic'}>
+            <div className='file-icon'>
+              <div className='file-extension'>{extension ?? '?'}</div>
+            </div>
+            <div>
+              <div className='name'>{message.fileName}</div>
+              <div className='size'>{fileSize}</div>
+              {downloadState == 'Failure' && (
+                <span key='fail' className={'failed'}>
+                  {tx('download_failed')}
+                </span>
+              )}
+            </div>
+            <Button
+              disabled={downloadState !== 'Available'}
+              onClick={downloadFullMessage.bind(null, message.id)}
+              tabIndex={tabindexForInteractiveContents}
+              styling='primary'
+            >
+              {downloadState == 'InProgress'
+                ? tx('downloading')
+                : tx('download')}
+            </Button>
+          </div>
+          {text}
+        </div>
+      )
+    } else {
+      content = (
+        <div className={'download'}>
+          {text} {metadata}
+          {downloadState == 'Failure' && (
+            <span key='fail' className={'failed'}>
+              {tx('download_failed')}
+            </span>
+          )}
+          {downloadState == 'InProgress' && (
+            <span key='downloading'>{tx('downloading')}</span>
+          )}
+          {(downloadState == 'Failure' || downloadState === 'Available') && (
+            <button
+              onClick={downloadFullMessage.bind(null, message.id)}
+              tabIndex={tabindexForInteractiveContents}
+            >
+              {tx('download')}
+            </button>
+          )}
+        </div>
+      )
+    }
   }
 
   /** Whether to show author name and avatar */

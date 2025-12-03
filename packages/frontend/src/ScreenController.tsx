@@ -157,6 +157,17 @@ export default class ScreenController extends Component {
       await BackendRemote.rpc.startIo(accountId)
     }
 
+    // Hide the pre-message metadata that gets appended to message text, because we display it ourselves.
+    // This needs to be set once per account and the easiest way to do that is here, on selection
+    //
+    // It gets automatically reset when exporting a backup by core,
+    // because other clients may not display the info themselves and rely on this.
+    BackendRemote.rpc
+      .setConfig(accountId, 'hide_pre_message_metadata_text', '1')
+      .catch(() =>
+        log.error("failed to set 'hide_pre_message_metadata_text' config key")
+      )
+
     await BackendRemote.rpc.selectAccount(accountId)
   }
 
