@@ -4,13 +4,15 @@
 
 after running `pnpm install`
 
-cd into packages/e2e-tests
+cd into packages/e2e-tests and run `npx playwright install --with-deps`
 
-and run `npx playwright install --with-deps`
+Copy packages/e2e-tests/\_env to packages/e2e-tests/.env
 
 A convenient alternative to install and use playwright is the VSCode [plugin](https://playwright.dev/docs/getting-started-vscode). It also provides some functionality for running or recording tests.
 
-Copy packages/e2e-tests/\_env to packages/e2e-tests/.env
+<img src="./doc-assets/vscode-playwright-plugin.png" width="400px" />
+
+Be aware that the tests in each spec file are NOT isolated, so the order they are executed matters. Otherwise we would have to create and delete all profiles and preparations for each test which would slow down all tests dramatically.
 
 ## Usage
 
