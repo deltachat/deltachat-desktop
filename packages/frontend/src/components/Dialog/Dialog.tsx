@@ -8,7 +8,17 @@ import { runtime } from '@deltachat-desktop/runtime-interface'
 const DEFAULT_WIDTH = 500
 
 type Props = React.PropsWithChildren<{
-  onClose?: (result?: any) => void
+  /**
+   * This will be invoked when the dialog is closed e.g. with
+   * outside click ({@linkcode canOutsideClickClose})
+   * or {@linkcode canEscapeKeyClose}.
+   *
+   * You must respect this callback and unrender this component
+   * when the callback is invoked, otherwise it can so happen
+   * that this component is rendered, but the dialog is not acutally visible
+   * (this has to do with `showModal`).
+   */
+  onClose: ((result?: any) => void) | undefined
   canEscapeKeyClose?: boolean
   canOutsideClickClose?: boolean
   /** whether backdrop can be used to drag window around on tauri, used on onboarding screen and deletion screen */
