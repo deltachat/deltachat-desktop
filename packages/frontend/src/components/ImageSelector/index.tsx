@@ -72,6 +72,7 @@ export default function ImageSelector({
             aria-label={selectLabel ? selectLabel : tx('profile_image_select')}
             className={styles.imageSelectorButton}
             onClick={handleSelect}
+            type='button'
           >
             <Icon className={styles.imageSelectorIcon} icon='image' />
           </button>

@@ -188,50 +188,52 @@ export default function InstantOnboardingScreen({
       />
       <DialogBody className={styles.welcomeScreenBody}>
         <DialogContent paddingBottom>
-          <ProfileImageSelector
-            displayName={displayName}
-            profilePicture={profilePicture}
-            setProfilePicture={onChangeProfileImage}
-          />
-          <DeltaInput
-            key='displayName'
-            id='displayName'
-            placeholder={tx('pref_your_name')}
-            value={displayName}
-            onChange={onChangeDisplayName}
-            onBlur={saveDisplayName}
-            autoFocus={true}
-          />
-          {showMissingNameError && (
-            <p className={styles.inputError}>{tx('please_enter_name')}</p>
-          )}
-          <AdditionalActionInfo accountId={selectedAccountId} />
-          <p>{tx('set_name_and_avatar_explain')}</p>
-          <div className={styles.welcomeScreenButtonGroup}>
-            <div className={styles.instantOnboardingAgreement}>
-              {welcomeQr?.qr.kind !== 'login' && <UserAgreement />}
-              {welcomeQr?.qr.kind === 'login' && (
-                <>{tx('qrlogin_ask_login', welcomeQr.qr.address)}</>
-              )}
+          <form onSubmit={onConfirm}>
+            <ProfileImageSelector
+              displayName={displayName}
+              profilePicture={profilePicture}
+              setProfilePicture={onChangeProfileImage}
+            />
+            <DeltaInput
+              key='displayName'
+              id='displayName'
+              placeholder={tx('pref_your_name')}
+              value={displayName}
+              onChange={onChangeDisplayName}
+              onBlur={saveDisplayName}
+              autoFocus={true}
+            />
+            {showMissingNameError && (
+              <p className={styles.inputError}>{tx('please_enter_name')}</p>
+            )}
+            <AdditionalActionInfo accountId={selectedAccountId} />
+            <p>{tx('set_name_and_avatar_explain')}</p>
+            <div className={styles.welcomeScreenButtonGroup}>
+              <div className={styles.instantOnboardingAgreement}>
+                {welcomeQr?.qr.kind !== 'login' && <UserAgreement />}
+                {welcomeQr?.qr.kind === 'login' && (
+                  <>{tx('qrlogin_ask_login', welcomeQr.qr.address)}</>
+                )}
+              </div>
+              <Button
+                type='submit'
+                className={styles.welcomeScreenButton}
+                styling='primary'
+                data-testid='login-button'
+              >
+                {welcomeQr?.qr.kind === 'login'
+                  ? tx('login_title')
+                  : tx('instant_onboarding_create')}
+              </Button>
+              <Button
+                className={styles.welcomeScreenButton}
+                onClick={showOtherOptions}
+                data-testid='other-login-button'
+              >
+                {tx('instant_onboarding_show_more_instances')}
+              </Button>
             </div>
-            <Button
-              className={styles.welcomeScreenButton}
-              styling='primary'
-              onClick={onConfirm}
-              data-testid='login-button'
-            >
-              {welcomeQr?.qr.kind === 'login'
-                ? tx('login_title')
-                : tx('instant_onboarding_create')}
-            </Button>
-            <Button
-              className={styles.welcomeScreenButton}
-              onClick={showOtherOptions}
-              data-testid='other-login-button'
-            >
-              {tx('instant_onboarding_show_more_instances')}
-            </Button>
-          </div>
+          </form>
         </DialogContent>
       </DialogBody>
     </>

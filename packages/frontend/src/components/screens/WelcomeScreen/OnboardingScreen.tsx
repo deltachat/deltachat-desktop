@@ -44,33 +44,36 @@ export default function OnboardingScreen(props: Props) {
       />
       <DialogBody>
         <DialogContent>
-          <div className={styles.welcomeScreenSection}>
-            <img
-              className={styles.welcomeScreenImage}
-              src='./images/intro1.png'
-            />
-            <p className={styles.welcomeScreenTitle}>
-              {tx('welcome_chat_over_email')}
-            </p>
-          </div>
-          <div className={styles.welcomeScreenButtonGroup}>
-            <Button
-              className={styles.welcomeScreenButton}
-              styling='primary'
-              onClick={props.onNextStep}
-              data-testid='create-account-button'
-            >
-              {tx('onboarding_create_instant_account')}
-            </Button>
-            <Button
-              className={styles.welcomeScreenButton}
-              onClick={onAlreadyHaveAccount}
-              data-testid='have-account-button'
-            >
-              {tx('onboarding_alternative_logins')}
-            </Button>
-          </div>
-          <br /> {/* space after buttons */}
+          <form onSubmit={props.onNextStep}>
+            <div className={styles.welcomeScreenSection}>
+              <img
+                className={styles.welcomeScreenImage}
+                src='./images/intro1.png'
+              />
+              <p className={styles.welcomeScreenTitle}>
+                {tx('welcome_chat_over_email')}
+              </p>
+            </div>
+            <div className={styles.welcomeScreenButtonGroup}>
+              <Button
+                type='submit'
+                className={styles.welcomeScreenButton}
+                styling='primary'
+                onClick={props.onNextStep}
+                data-testid='create-account-button'
+              >
+                {tx('onboarding_create_instant_account')}
+              </Button>
+              <Button
+                className={styles.welcomeScreenButton}
+                onClick={onAlreadyHaveAccount}
+                data-testid='have-account-button'
+              >
+                {tx('onboarding_alternative_logins')}
+              </Button>
+            </div>
+            <br /> {/* space after buttons */}
+          </form>
         </DialogContent>
       </DialogBody>
     </>
