@@ -349,12 +349,13 @@ export default function ProxyConfiguration(
     proxyState.updateSettings,
   ])
 
+  const isValid = !(proxyState.enabled && proxyState.proxies.length === 0)
   /**
    * validate settings before closing
    * to avoid invalid settings
    */
   const closeDialog = () => {
-    if (proxyState.enabled && proxyState.proxies.length === 0) {
+    if (!isValid) {
       openAlertDialog({
         message: tx('proxy_invalid'),
       })
@@ -375,10 +376,12 @@ export default function ProxyConfiguration(
 
   return (
     <Dialog
+      onClose={closeDialog}
       fixed
       width={500}
       dataTestid='proxy-dialog'
       canOutsideClickClose={false}
+      canEscapeKeyClose={isValid}
     >
       <DialogHeader
         title={tx('proxy_settings')}
