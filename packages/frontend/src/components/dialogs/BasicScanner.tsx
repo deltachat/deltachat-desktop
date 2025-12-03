@@ -4,23 +4,19 @@ import Dialog, { DialogBody, DialogFooter, FooterActions } from '../Dialog'
 import FooterActionButton from '../Dialog/FooterActionButton'
 import { QrReader, QrCodeScanRef } from '../QrReader'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import { processQr } from '../../backend/qr'
 import useAlertDialog from '../../hooks/dialog/useAlertDialog'
-import { selectedAccountId } from '../../ScreenController'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 
 /**
- * QR code scanner for proxy configuration
- * Processes scanned QR code and calls onSuccess if it is a valid proxy QR code
- * copied from dialogs/QrCode.tsx
+ * Basic QR code scanner
+ * Just returns the scanned QR code as string
  */
-export default function ProxyQrScanner({
+export default function BasicQrScanner({
   onSuccess,
   onClose,
 }: DialogProps & { onSuccess: (result: string) => void }) {
   const tx = useTranslationFunction()
-  const accountId = selectedAccountId()
   const openAlertDialog = useAlertDialog()
   const qrReaderRef = useRef<QrCodeScanRef | null>(null)
 
@@ -29,7 +25,7 @@ export default function ProxyQrScanner({
       const errorMessage = error?.message || error.toString()
       openAlertDialog({
         message: `${tx('qrscan_failed')} ${errorMessage}`,
-        dataTestid: 'proxy-scan-failed',
+        dataTestid: 'scan-failed',
       })
     },
     [openAlertDialog, tx]
@@ -37,17 +33,10 @@ export default function ProxyQrScanner({
 
   const handleScan = useCallback(
     async (data: string) => {
-      if (data) {
-        const { qr } = await processQr(accountId, data)
-        if (qr.kind === 'proxy') {
-          onSuccess(data)
-          onClose()
-        } else {
-          handleError(new Error(tx('proxy_invalid')))
-        }
-      }
+      onSuccess(data)
+      onClose()
     },
-    [onSuccess, onClose, accountId, handleError, tx]
+    [onSuccess, onClose]
   )
 
   const pasteClipboard = useCallback(async () => {
@@ -57,7 +46,7 @@ export default function ProxyQrScanner({
   }, [])
 
   return (
-    <Dialog onClose={onClose} dataTestid='proxy-qrscan-dialog'>
+    <Dialog onClose={onClose} dataTestid='basic-qrscan-dialog'>
       <DialogBody>
         <QrReader
           onScanSuccess={handleScan}

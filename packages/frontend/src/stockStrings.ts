@@ -22,7 +22,6 @@ export async function updateCoreStrings() {
     | typeof C.DC_STR_MSGLOCATIONENABLED
     | typeof C.DC_STR_MSGLOCATIONDISABLED
     | typeof C.DC_STR_ERROR_NO_NETWORK
-    | typeof C.DC_STR_SERVER_TURNED_OFF
     | typeof C.DC_STR_SYNC_MSG_SUBJECT
     | typeof C.DC_STR_SYNC_MSG_BODY
 
@@ -59,12 +58,10 @@ export async function updateCoreStrings() {
     | typeof C.DC_STR_EPHEMERAL_WEEKS
     // | C.DC_STR_ONE_MOMENT
     | typeof C.DC_STR_AEAP_ADDR_CHANGED
-    | typeof C.DC_STR_CHAT_PROTECTION_DISABLED
     | typeof C.DC_STR_SECUREJOIN_WAIT_TIMEOUT
     | typeof C.DC_STR_SECUREJOIN_TAKES_LONGER
     | typeof C.DC_STR_SECURE_JOIN_CHANNEL_QR_DESC
     | typeof C.DC_STR_SECUREJOIN_WAIT
-    | typeof C.DC_STR_AEAP_EXPLANATION_AND_LINK
   >
   const strings: StockStringsSomeOmited = {
     // TODO: Check if we need the uncommented core translations

@@ -2,8 +2,7 @@
 import applicationConfig from 'application-config'
 if (process.env.NODE_ENV !== 'production') {
   try {
-    const { config } = await import('dotenv')
-    config()
+    process.loadEnvFile?.() // loads ./, falls back on cwd
   } catch (e) {
     // eslint-disable-next-line no-console
     console.error('Failed to load .env file', e)

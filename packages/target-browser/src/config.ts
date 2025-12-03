@@ -2,12 +2,18 @@ import { LocalStorage } from 'node-localstorage'
 import { existsSync, mkdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'path'
-import { config } from 'dotenv'
 import { isAbsolute } from 'node:path'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
-config({ path: join(__dirname, '../') + '.env' })
+const envPath = join(__dirname, '../.env')
+
+try {
+  process.loadEnvFile?.(envPath)
+} catch (error) {
+  // eslint-disable-next-line no-console
+  console.error(`Failed to load ${envPath}`, error)
+}
 
 // Directories & Files
 export const DIST_DIR = join(__dirname)

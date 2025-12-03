@@ -6,7 +6,6 @@ import ImapFolderHandling from './ImapFolderHandling'
 import SettingsHeading from './SettingsHeading'
 import SettingsSeparator from './SettingsSeparator'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import EditAccountAndPasswordDialog from '../dialogs/EditAccountAndPasswordDialog'
 import useDialog from '../../hooks/dialog/useDialog'
 import { confirmDialog } from '../message/messageFunctions'
 import SettingsButton from './SettingsButton'
@@ -16,6 +15,7 @@ import DesktopSettingsSwitch from './DesktopSettingsSwitch'
 import { AutostartState } from '@deltachat-desktop/shared/shared-types'
 import ProxyConfiguration from '../dialogs/ProxyConfiguration'
 import { selectedAccountId } from '../../ScreenController'
+import TransportsDialog from '../dialogs/Transports'
 
 type Props = {
   settingsStore: SettingsStoreState
@@ -38,12 +38,19 @@ export default function Advanced({ settingsStore }: Props) {
       const confirmed = await confirmDialog(
         openDialog,
         tx('pref_multidevice_change_warn'),
-        tx('ok')
+        tx('perm_continue'),
+        true
       )
       // If user didn't confirm, return false to prevent the change
       return confirmed === true
     }
     return true
+  }
+
+  const openTransportSettings = () => {
+    openDialog(TransportsDialog, {
+      accountId: selectedAccountId(),
+    })
   }
 
   return (
@@ -71,16 +78,6 @@ export default function Advanced({ settingsStore }: Props) {
       <SettingsHeading>{tx('pref_server')}</SettingsHeading>
       <SettingsButton
         onClick={() => {
-          openDialog(EditAccountAndPasswordDialog, {
-            settingsStore,
-          })
-        }}
-        dataTestid='open-account-and-password'
-      >
-        {tx('pref_password_and_account_settings')}
-      </SettingsButton>
-      <SettingsButton
-        onClick={() => {
           openProxySettings()
         }}
         dataTestid='open-proxy-settings'
@@ -99,6 +96,12 @@ export default function Advanced({ settingsStore }: Props) {
           <ImapFolderHandling settingsStore={settingsStore} />
         </>
       )}
+      <SettingsButton
+        onClick={openTransportSettings}
+        dataTestid='open-transport-settings'
+      >
+        {tx('transports')}
+      </SettingsButton>
     </>
   )
 }
