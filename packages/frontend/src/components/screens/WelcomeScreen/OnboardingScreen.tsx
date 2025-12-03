@@ -32,6 +32,11 @@ export default function OnboardingScreen(props: Props) {
     })
   }
 
+  const onSubmit = (event: React.FormEvent) => {
+    event.preventDefault()
+    props.onNextStep()
+  }
+
   return (
     <>
       <DialogHeader
@@ -44,7 +49,7 @@ export default function OnboardingScreen(props: Props) {
       />
       <DialogBody>
         <DialogContent>
-          <form onSubmit={props.onNextStep}>
+          <form onSubmit={onSubmit}>
             <div className={styles.welcomeScreenSection}>
               <img
                 className={styles.welcomeScreenImage}

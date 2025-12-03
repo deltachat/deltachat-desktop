@@ -141,7 +141,9 @@ export default function InstantOnboardingScreen({
   const saveDisplayName = () =>
     BackendRemote.rpc.setConfig(selectedAccountId, 'displayname', displayName)
 
-  const onConfirm = async () => {
+  const onConfirm = async (event: React.FormEvent) => {
+    event.preventDefault()
+
     if (!displayName) {
       setShowMissingNameError(true)
       return
