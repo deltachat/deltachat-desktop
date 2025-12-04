@@ -53,6 +53,7 @@ export default function ShortcutMenu(props: Props) {
       />
       {props.message.originalMsgId !== null && (
         <button
+          type='button'
           className={classNames(styles.originalMessageButton)}
           aria-label={tx('show_in_chat')}
           onClick={onClick}
@@ -93,6 +94,7 @@ function ReactButton(props: {
 
   return (
     <button
+      type='button'
       aria-label={tx('react')}
       className={styles.shortcutMenuButton}
       onClick={onClick}
@@ -111,6 +113,7 @@ function ContextMenuButton(props: {
 
   return (
     <button
+      type='button'
       aria-label={tx('a11y_message_context_menu_btn_label')}
       className={styles.shortcutMenuButton}
       onClick={props.onClick}

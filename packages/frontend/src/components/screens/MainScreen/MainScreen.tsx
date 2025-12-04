@@ -470,6 +470,7 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
         )}
       </div>
       <button
+        type='button'
         onClick={onTitleClick}
         aria-label={buttonLabel}
         data-testid='chat-info-button'

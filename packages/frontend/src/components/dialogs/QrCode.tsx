@@ -69,6 +69,7 @@ export default function QrCode({
     <Dialog onClose={onClose} dataTestid='qr-dialog'>
       <div className='qr-code-switch'>
         <button
+          type='button'
           className={classNames({ active: showQrCode })}
           onClick={() => setShowQrCode(true)}
           data-testid='qr-show'
@@ -76,6 +77,7 @@ export default function QrCode({
           {tx('qrshow_title')}
         </button>
         <button
+          type='button'
           className={classNames({ active: !showQrCode })}
           onClick={() => setShowQrCode(false)}
           data-testid='show-qr-scan'

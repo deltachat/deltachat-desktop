@@ -406,6 +406,7 @@ export function ContextMenu(props: {
             const isExpanded = index === openSublevels[levelIdx]
             return (
               <button
+                type='button'
                 className={classNames({
                   item: true,
                   selected: isExpanded,

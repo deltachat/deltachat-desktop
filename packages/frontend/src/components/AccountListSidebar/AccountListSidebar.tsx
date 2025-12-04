@@ -173,6 +173,7 @@ export default function AccountListSidebar({
           <RovingTabindexProvider wrapperElementRef={accountsListRef}>
             {accountsFetch.lingeringResult?.ok === false ? (
               <button
+                type='button'
                 onClick={() => {
                   if (
                     !accountsFetch.lingeringResult ||
@@ -241,6 +242,7 @@ export default function AccountListSidebar({
           inside a landmark / section.
           But which? It doesn't really belong to "Profiles". */}
           <button
+            type='button'
             aria-label={tx('menu_settings')}
             className={styles.settingsButton}
             onClick={openSettings}
@@ -277,6 +279,7 @@ function AddAccountButton(props: { onClick: () => void }) {
 
   return (
     <button
+      type='button'
       ref={ref}
       aria-label={tx('add_account')}
       className={classNames(styles.addButton, rovingTabindex.className)}

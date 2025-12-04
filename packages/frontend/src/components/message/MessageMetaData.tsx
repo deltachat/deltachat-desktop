@@ -128,6 +128,7 @@ export default function MessageMetaData(props: Props) {
           </div>
           {error !== null && (
             <button
+              type='button'
               className='error-button'
               tabIndex={tabindexForInteractiveContents}
               onClick={onClickError}

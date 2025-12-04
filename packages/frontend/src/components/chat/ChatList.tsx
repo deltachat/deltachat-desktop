@@ -439,6 +439,7 @@ export default function ChatList(props: {
               )}
             </RovingTabindexProvider>
             <button
+              type='button'
               className='floating-action-button'
               onClick={onCreateChat}
               id='new-chat-button'

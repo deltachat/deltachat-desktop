@@ -195,6 +195,7 @@ export default function MenuAttachment({
 
   return (
     <button
+      type='button'
       aria-label={tx('menu_add_attachment')}
       id='attachment-menu-button'
       data-testid='open-attachment-menu'

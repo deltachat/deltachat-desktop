@@ -418,6 +418,7 @@ export default function ImageCropper({
           </div>
           <div className={styles.imageCropperControls}>
             <button
+              type='button'
               className={styles.imageCropperControlsButton}
               onClick={onZoomIn}
               aria-label={tx('menu_zoom_in')}
@@ -425,6 +426,7 @@ export default function ImageCropper({
               <Icon coloring='navbar' icon='plus' size={18} />
             </button>
             <button
+              type='button'
               className={styles.imageCropperControlsButton}
               onClick={onZoomOut}
               aria-label={tx('menu_zoom_out')}
@@ -432,6 +434,7 @@ export default function ImageCropper({
               <Icon coloring='navbar' icon='minus' size={18} />
             </button>
             <button
+              type='button'
               className={styles.imageCropperControlsButton}
               onClick={onRotateImages}
               aria-label={tx('ImageEditorHud_rotate')}
@@ -439,6 +442,7 @@ export default function ImageCropper({
               <Icon coloring='navbar' icon='rotate-right' size={24} />
             </button>
             <button
+              type='button'
               className={styles.imageCropperControlsButton}
               onClick={onFlipX}
               aria-label={tx('ImageEditorHud_flip')}

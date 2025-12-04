@@ -529,6 +529,7 @@ export const QrReader = forwardRef<QrCodeScanRef, Props>(
         )}
         {!processingFile && (
           <button
+            type='button'
             className={styles.qrReaderButton}
             onClick={handleSelectInput}
             aria-label={tx('menu_settings')}

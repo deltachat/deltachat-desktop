@@ -85,6 +85,7 @@ export default function ReactionsBar({
         >
           {myReaction && !isMyReactionDefault && (
             <button
+              type='button'
               role='menuitemradio'
               aria-checked={true}
               onClick={() => toggleReaction(myReaction!)}
@@ -100,6 +101,7 @@ export default function ReactionsBar({
             const isChecked = myReaction === emoji
             return (
               <button
+                type='button'
                 role='menuitemradio'
                 aria-checked={isChecked}
                 key={`emoji-${index}`}
@@ -113,6 +115,7 @@ export default function ReactionsBar({
             )
           })}
           <button
+            type='button'
             role='menuitem'
             aria-haspopup='dialog'
             aria-label={tx('react_more_emojis')}

@@ -80,8 +80,12 @@ export class RecoverableCrashScreen extends React.Component<
             )
           </h2>
           <p>
-            <button onClick={_ => runtime.reloadWebContent()}>Reload</button>
-            <button onClick={_ => runtime.openLogFile()}>Open Logfile</button>
+            <button type='button' onClick={_ => runtime.reloadWebContent()}>
+              Reload
+            </button>
+            <button type='button' onClick={_ => runtime.openLogFile()}>
+              Open Logfile
+            </button>
           </p>
           <p>
             <pre className='error-details'>{this.state.error}</pre>

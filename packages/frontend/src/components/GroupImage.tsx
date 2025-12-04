@@ -59,6 +59,7 @@ export default function GroupImage(props: Props) {
         />
       </AvatarTag>
       <button
+        type='button'
         className='group-image-edit-button'
         data-testid='group-image-edit-button'
         onClick={openContextMenu}
