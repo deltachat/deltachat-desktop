@@ -30,6 +30,13 @@ type Props = React.PropsWithChildren<{
   // takes full screen and is transparent
   unstyled?: boolean
   dataTestid?: string
+  /**
+   * per default the first element in a modal dialog is focused
+   * but we remove that focus if the first element is a button or
+   * a 'button like' element to avoid unexpected behaviours
+   * set this to true to keep the default focus behavior also for buttons
+   */
+  allowDefaultFocus?: boolean
 }>
 
 const Dialog = React.memo<Props>(
@@ -41,6 +48,7 @@ const Dialog = React.memo<Props>(
     width = DEFAULT_WIDTH,
     height,
     unstyled = false,
+    allowDefaultFocus = false,
     ...props
   }) => {
     const dialog = useRef<HTMLDialogElement>(null)
@@ -93,7 +101,23 @@ const Dialog = React.memo<Props>(
       // calling showModal is "only" the way to have ::backdrop
       dialog.current?.showModal()
       dialog.current!.style.display = 'flex'
-    })
+      if (!allowDefaultFocus && document.activeElement instanceof HTMLElement) {
+        const tagName = document.activeElement.tagName.toLowerCase()
+        const isButtonLikeInput =
+          tagName === 'input' &&
+          ['submit', 'button', 'image', 'reset'].includes(
+            (document.activeElement as HTMLInputElement).type
+          )
+
+        if (
+          (tagName === 'button' || isButtonLikeInput) &&
+          !document.activeElement.hasAttribute('autofocus')
+        ) {
+          // Remove focus from auto-focused buttons or button like elements
+          document.activeElement.blur()
+        }
+      }
+    }, [allowDefaultFocus])
 
     let style
 
