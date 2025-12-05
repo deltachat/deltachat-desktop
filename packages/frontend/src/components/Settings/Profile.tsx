@@ -35,7 +35,6 @@ export default function Profile({ settingsStore, onStatusClick }: Props) {
       onClick={onStatusClick}
       data-testid='edit-profile-button'
       title={`${tx('pref_edit_profile')}`}
-      type='button'
     >
       <LargeProfileImage
         initials={initials}
