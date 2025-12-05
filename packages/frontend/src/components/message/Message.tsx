@@ -428,6 +428,7 @@ function buildContextMenu(
         message,
         chat
       ),
+      danger: true,
     },
   ]
 }
