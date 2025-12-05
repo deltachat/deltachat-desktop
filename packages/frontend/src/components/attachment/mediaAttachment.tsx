@@ -104,6 +104,7 @@ const contextMenuFactory = (
           chat,
         })
       },
+      danger: true,
     },
   ]
 }
@@ -150,6 +151,7 @@ function getBrokenMediaContextMenu(
             confirmLabel: tx('delete'),
             cb: (yes: boolean) => yes && deleteMessage(accountId, messageId),
           }),
+        danger: true,
       },
     ],
     openContextMenu
