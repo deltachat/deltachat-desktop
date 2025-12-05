@@ -166,6 +166,7 @@ export default function AccountItem({
         label: tx('delete_account'),
         action: openAccountDeletionScreen.bind(null, accountId),
         dataTestid: 'delete-account-menu-item',
+        danger: true,
       },
     ],
     { 'aria-label': tx('accounts_list_item_menu_label') }
