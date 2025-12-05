@@ -84,9 +84,7 @@ test('shows warning when scanning backups that are newer than supported', async 
 
   await sendBackupDialog.getByRole('button', { name: 'Continue' }).click()
 
-  const copyButton = sendBackupDialog.getByRole('button', { name: 'Copy' })
-  await expect(copyButton).toBeVisible()
-  await copyButton.click()
+  await sendBackupDialog.getByRole('button', { name: 'Copy' }).click()
   await page.getByTestId('alert-ok').click()
 
   const clipboardContent = await page.evaluate(async () => {
@@ -104,6 +102,7 @@ test('shows warning when scanning backups that are newer than supported', async 
   }, mutatedContent)
 
   await sendBackupDialog.getByRole('button', { name: 'Cancel' }).click()
+  // Confirm cancellation
   await page.getByTestId('confirm-dialog').getByTestId('confirm').click()
 
   await clickThroughTestIds(page, [
