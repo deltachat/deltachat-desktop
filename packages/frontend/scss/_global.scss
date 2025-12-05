@@ -289,3 +289,10 @@ p.whitespace {
     position: absolute !important;
   }
 }
+
+/**
+ * Forms inside dialogs should not affect the layout,
+ */
+dialog form {
+  display: contents;
+}

@@ -663,8 +663,25 @@ export function CreateGroup(props: CreateGroupProps) {
     })
   }
 
+  const submitForm = (ev: React.FormEvent) => {
+    ev.preventDefault()
+    if (groupName === '') {
+      setErrorMissingGroupName(true)
+      return
+    }
+    finishCreateGroup()
+      .then(groupId => {
+        if (groupId) {
+          selectChat(accountId, groupId)
+        } else {
+          // TODO: handle error
+        }
+      })
+      .finally(onClose)
+  }
+
   return (
-    <>
+    <form onSubmit={submitForm}>
       <DialogBody>
         <DialogContent>
           <ChatSettingsSetNameAndProfileImage
@@ -717,21 +734,7 @@ export function CreateGroup(props: CreateGroupProps) {
             {tx('cancel')}
           </FooterActionButton>
           <FooterActionButton
-            onClick={() => {
-              if (groupName === '') {
-                setErrorMissingGroupName(true)
-                return
-              }
-              finishCreateGroup()
-                .then(groupId => {
-                  if (groupId) {
-                    selectChat(accountId, groupId)
-                  } else {
-                    // TODO: handle error
-                  }
-                })
-                .finally(onClose)
-            }}
+            type='submit'
             data-testid='group-create-button'
             styling='primary'
           >
@@ -741,7 +744,7 @@ export function CreateGroup(props: CreateGroupProps) {
           </FooterActionButton>
         </FooterActions>
       </DialogFooter>
-    </>
+    </form>
   )
 }
 
@@ -760,43 +763,45 @@ function CreateBroadcastList(props: CreateBroadcastListProps) {
   const [errorMissingChatName, setErrorMissingChatName] =
     useState<boolean>(false)
 
+  const submitForm = (ev: React.FormEvent) => {
+    ev.preventDefault()
+    if (broadcastName === '') {
+      setErrorMissingChatName(true)
+      return
+    }
+    finishCreateBroadcast()
+  }
+
   return (
     <>
       <DialogHeader title={tx('new_channel')} />
-      <DialogBody>
-        <DialogContent>
-          <div className='broadcast-list-hint'>
-            <p>{tx('chat_new_channel_hint')}</p>
-          </div>
-          <br />
-          <ChatSettingsSetNameAndProfileImage
-            chatName={broadcastName}
-            setChatName={setBroadcastName}
-            errorMissingChatName={errorMissingChatName}
-            setErrorMissingChatName={setErrorMissingChatName}
-            groupType={GroupType.BROADCAST_LIST}
-          />
-        </DialogContent>
-      </DialogBody>
-      <DialogFooter>
-        <FooterActions align='spaceBetween'>
-          <FooterActionButton onClick={() => setViewMode('main_')}>
-            {tx('cancel')}
-          </FooterActionButton>
-          <FooterActionButton
-            onClick={() => {
-              if (broadcastName === '') {
-                setErrorMissingChatName(true)
-                return
-              }
-              finishCreateBroadcast()
-            }}
-            styling='primary'
-          >
-            {tx('create')}
-          </FooterActionButton>
-        </FooterActions>
-      </DialogFooter>
+      <form onSubmit={submitForm}>
+        <DialogBody>
+          <DialogContent>
+            <div className='broadcast-list-hint'>
+              <p>{tx('chat_new_channel_hint')}</p>
+            </div>
+            <br />
+            <ChatSettingsSetNameAndProfileImage
+              chatName={broadcastName}
+              setChatName={setBroadcastName}
+              errorMissingChatName={errorMissingChatName}
+              setErrorMissingChatName={setErrorMissingChatName}
+              groupType={GroupType.BROADCAST_LIST}
+            />
+          </DialogContent>
+        </DialogBody>
+        <DialogFooter>
+          <FooterActions align='spaceBetween'>
+            <FooterActionButton onClick={() => setViewMode('main_')}>
+              {tx('cancel')}
+            </FooterActionButton>
+            <FooterActionButton type='submit' styling='primary'>
+              {tx('create')}
+            </FooterActionButton>
+          </FooterActions>
+        </DialogFooter>
+      </form>
     </>
   )
 }
