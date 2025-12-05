@@ -428,6 +428,7 @@ export function useChatContextMenu(): {
       showBlockContactOption && {
         label: tx('menu_block_contact'),
         action: () => onBlockContact(singleChat),
+        danger: true,
       },
       {
         label: tx('menu_delete_chat'),
