@@ -14,6 +14,6 @@ npx pagefind --site ./static/help/
 node ./bin/help/help-translations.js
 
 echo
-echo "☝️ Compliance Warning: Add the following line to CHANGELOG.md:"
-echo "- Update local help ("`date "+%Y-%m-%d"`")"
+echo "☝️ compliance warning: pr title must read:"
+echo "change: update local help"
 echo
