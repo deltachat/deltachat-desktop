@@ -229,6 +229,7 @@ export default function useProcessQR() {
       if (qr.kind === 'backupTooNew') {
         await openAlertDialog({
           message: tx('multidevice_receiver_needs_update'),
+          dataTestid: 'backup-too-new',
         })
         return callback?.()
       }
