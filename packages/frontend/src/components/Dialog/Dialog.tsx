@@ -20,9 +20,12 @@ type Props = React.PropsWithChildren<{
   // takes full screen and is transparent
   unstyled?: boolean
   dataTestid?: string
-  /** per default the first element in a modal dialog is focused
-   * but we remove that focus to avoid unexpected behaviours
-   * set this to true to keep the default focus behavior */
+  /**
+   * per default the first element in a modal dialog is focused
+   * but we remove that focus if the first element is a button or
+   * a 'button like' element to avoid unexpected behaviours
+   * set this to true to keep the default focus behavior also for buttons
+   */
   allowDefaultFocus?: boolean
 }>
 
