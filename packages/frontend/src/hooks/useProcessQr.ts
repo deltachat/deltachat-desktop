@@ -226,6 +226,14 @@ export default function useProcessQR() {
 
       const { qr } = parsed
 
+      if (qr.kind === 'backupTooNew') {
+        await openAlertDialog({
+          message: tx('multidevice_receiver_needs_update'),
+          dataTestid: 'backup-too-new',
+        })
+        return callback?.()
+      }
+
       if (
         (scanContext === SCAN_CONTEXT_TYPE.TRANSFER_BACKUP &&
           qr.kind !== 'backup2') ||
@@ -255,13 +263,6 @@ export default function useProcessQR() {
         } else {
           await openMailtoLink(accountId, url)
         }
-        return callback?.()
-      }
-
-      if (qr.kind === 'backupTooNew') {
-        await openAlertDialog({
-          message: tx('multidevice_receiver_needs_update'),
-        })
         return callback?.()
       }
 
