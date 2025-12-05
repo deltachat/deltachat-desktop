@@ -111,9 +111,7 @@
  які пропонують миттєву доставку повідомлень та push-сповіщення для пристроїв iOS та Android.</p>
   </li>
   <li>
-    <p>Pervasive <a href="#multiple-accounts">multi-profile</a> and
-<a href="#multiclient">multi-device</a> support on all platforms
-and between different <a href="https://chatmail.at/clients">chatmail apps</a>.</p>
+    <p>Повсюдна підтримка багатьох <a href="#multiple-accounts">профілів</a> та   <a href="#multiclient">пристроїв</a> на всіх платформах та між різними <a href="https://chatmail.at/clients">поштовими програмами</a>.</p>
   </li>
   <li>
     <p>Інтерактивні <a href="https://webxdc.org/">веб-застосунки у чатах</a> для ігор та співпраці</p>
@@ -123,8 +121,7 @@ and between different <a href="https://chatmail.at/clients">chatmail apps</a>.</
  захищене від мережевих та серверних атак.</p>
   </li>
   <li>
-    <p>Free and Open Source software, both app and server side,
-built on <a href="https://github.com/chatmail/core/blob/main/standards.md#standards-used-in-delta-chat">Internet Standards</a>.</p>
+    <p>Вільне програмне забезпечення з відкритим вихідним кодом, як застосунок, так серверна частина, побудоване на основі <a href="https://github.com/chatmail/core/blob/main/standards.md#standards-used-in-delta-chat">Інтернет-стандартів</a>.</p>
   </li>
 </ul>
     
@@ -136,8 +133,7 @@ built on <a href="https://github.com/chatmail/core/blob/main/standards.md#standa
         
       </h3>
 
-<p>First, note that Delta Chat is a private messenger.
-There is no public discovery, <em>you</em> decide about your contacts.</p>
+<p>По-перше, зверніть увагу, що Delta Chat - це приватний месенджер. Тут немає публічного розкриття, <em>ви</em> самі вирішуєте, з ким спілкуватися.</p>
 
 <ul>
   <li>
@@ -1277,9 +1273,12 @@ but an implementation has not been agreed as a priority yet.</p>
 
 <p>Ні.</p>
 
-<p>Delta Chat генерує безпечні ключі OpenPGP відповідно до специфікації Autocrypt 1.1. Ви можете експортувати свій приватний ключ, але не можете імпортувати додаткові приватні ключі.</p>
-
-<p>Загалом, ми не рекомендуємо і не пропонуємо користувачам керувати ключами вручну. Ми хочемо гарантувати, що аудит безпеки може зосередитися на декількох перевірених криптографічних алгоритмах а не на всій широті можливих алгоритмів, дозволених у OpenPGP.</p>
+<p>Delta Chat generates secure OpenPGP keys according to the Autocrypt specification 1.1.
+We do not recommend or offer users to perform manual key management.
+We want to ensure that security audits can focus on a few proven cryptographic algorithms
+instead of the full breadth of possible algorithms allowed with OpenPGP.
+If you want to extract your OpenPGP key, there only is an expert method:
+you need to look it up in the “keypairs” SQLite table of a profile backup tar-file.</p>
     
       <h3 id="security-audits">
         
