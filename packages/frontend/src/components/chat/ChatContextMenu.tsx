@@ -19,7 +19,6 @@ import type { UnselectChat } from '../../contexts/ChatContext'
 import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { ActionEmitter, KeybindAction } from '../../keybindings'
-import { useSettingsStore } from '../../stores/settings'
 
 const log = getLogger('ChatListContextMenu')
 
@@ -264,9 +263,7 @@ export function useChatContextMenu(): {
   activeContextMenuChatIds: number[]
 } {
   const { openDialog } = useDialog()
-  const [settingsStore] = useSettingsStore()
   const {
-    openChatAuditDialog,
     openBlockFirstContactOfChatDialog,
     openEncryptionInfoDialog,
     openDeleteChatsDialog,
@@ -318,12 +315,6 @@ export function useChatContextMenu(): {
     const onClearChat = () => {
       if (isMainView) {
         openClearChatDialog(accountId, selectedChat.id)
-      }
-    }
-
-    const onChatAudit = () => {
-      if (isMainView) {
-        openChatAuditDialog(selectedChat)
       }
     }
 
@@ -397,26 +388,6 @@ export function useChatContextMenu(): {
       singleChat.isSelfInGroup &&
       !singleChat.isContactRequest
 
-    const showAuditLog =
-      isMainView &&
-      !selectedChat.isSelfTalk &&
-      !selectedChat.isDeviceChat &&
-      settingsStore?.desktopSettings.enableChatAuditLog
-
-    const moreOptionsMenu = [
-      ...viewEditMenuItems,
-      {
-        label: tx('clear_chat'),
-        action: onClearChat,
-        danger: true,
-      },
-      encryptionInfoItem,
-      showAuditLog && {
-        label: tx('menu_chat_audit_log'),
-        action: onChatAudit,
-      },
-    ].filter(Boolean) as ContextMenuItem[]
-
     // Build the complete menu
     const menu: (ContextMenuItem | false)[] = [
       isMainView && {
@@ -463,11 +434,12 @@ export function useChatContextMenu(): {
         action: onDeleteChats,
         danger: true,
       },
-      !isMainView && encryptionInfoItem,
       isMainView && {
-        label: tx('menu_more_options'),
-        subitems: moreOptionsMenu,
+        label: tx('clear_chat'),
+        action: onClearChat,
+        danger: true,
       },
+      !isMainView && encryptionInfoItem,
     ].filter(Boolean) as ContextMenuItem[]
 
     event.preventDefault()
