@@ -134,6 +134,7 @@ export default function Attachment({
     }
     return (
       <button
+        type='button'
         onClick={onClickAttachment}
         tabIndex={tabindexForInteractiveContents}
         className={classNames(
@@ -156,6 +157,7 @@ export default function Attachment({
     if (!message.file) {
       return (
         <button
+          type='button'
           onClick={onClickAttachment}
           tabIndex={tabindexForInteractiveContents}
           style={{ cursor: 'pointer' }}
@@ -204,6 +206,7 @@ export default function Attachment({
     const extension = getExtension(message)
     return (
       <button
+        type='button'
         className={classNames(
           'message-attachment-generic',
           withContentBelow ? 'content-below' : null

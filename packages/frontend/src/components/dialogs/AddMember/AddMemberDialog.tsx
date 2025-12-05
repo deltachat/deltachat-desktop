@@ -91,6 +91,7 @@ export const AddMemberChip = (props: {
         <div>{contact.displayName}</div>
       </div>
       <button
+        type='button'
         className={styles.removeMember}
         onClick={() => onRemoveClick(contact)}
         aria-label='Remove'

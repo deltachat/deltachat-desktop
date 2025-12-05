@@ -30,6 +30,7 @@ export default function Profile({ settingsStore, onStatusClick }: Props) {
 
   return (
     <button
+      type='button'
       className={styles.profile}
       onClick={onStatusClick}
       data-testid='edit-profile-button'

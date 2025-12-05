@@ -490,6 +490,7 @@ const Composer = forwardRef<
     return (
       <section ref={ref} className='composer contact-request'>
         <button
+          type='button'
           className='contact-request-button delete'
           onClick={async () => {
             if (selectedChat.chatType !== 'Single') {
@@ -512,6 +513,7 @@ const Composer = forwardRef<
           {selectedChat.chatType === 'Single' ? tx('block') : tx('delete')}
         </button>
         <button
+          type='button'
           className='contact-request-button accept'
           onClick={() => {
             EffectfulBackendActions.acceptChat(selectedAccountId(), chatId)
@@ -699,6 +701,7 @@ const Composer = forwardRef<
             )}
           {showSendButton && (
             <button
+              type='button'
               // This ensures that the button loses focus as we switch between
               // the editing mode and the regular mode,
               // so that it's harder to accidentally send a normal message

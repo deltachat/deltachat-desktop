@@ -131,6 +131,7 @@ export function ClickForFullscreenAvatarWrapper(
 
   return filename && !disableFullscreen ? (
     <button
+      type='button'
       className={styles.avatarButton}
       onClick={() => {
         openDialog(FullscreenAvatar, {

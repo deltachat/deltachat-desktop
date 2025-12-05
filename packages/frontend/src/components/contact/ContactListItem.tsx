@@ -106,6 +106,7 @@ export function ContactListItem(
       aria-posinset={props['aria-posinset']}
     >
       <button
+        type='button'
         ref={refMain}
         className={classNames(
           'contact-list-item-button',
@@ -148,6 +149,7 @@ export function ContactListItem(
       )}
       {showRemove && contact.id !== 1 && (
         <button
+          type='button'
           className='btn-remove'
           onClick={onRemoveClick}
           disabled={disabled}
