@@ -2,6 +2,57 @@
 
 All notable changes to this project will be documented in this file.
 
+<a id="2_32_0"></a>
+## [2.32.0] - 2025-12-05
+
+### Added
+
+- Add multitransport ([#5680](https://github.com/deltachat/deltachat-desktop/issues/5680))
+- Show warning when disabling multi-device mode ([#5743](https://github.com/deltachat/deltachat-desktop/issues/5743))
+- Withdraw and revive channel invitation codes ([#5747](https://github.com/deltachat/deltachat-desktop/issues/5747))
+
+### Build system
+- Upgrade to core 2.32.0 ([#5812](https://github.com/deltachat/deltachat-desktop/issues/5812))
+- **(deps)** Bump express from 4.21.2 to 4.22.0 ([#5793](https://github.com/deltachat/deltachat-desktop/issues/5793))
+- Limit esbuild to 0.25.x ([#5775](https://github.com/deltachat/deltachat-desktop/issues/5775))
+
+### Changes
+
+- Update local help ([#5761](https://github.com/deltachat/deltachat-desktop/issues/5761))
+- Move group member count ([#5738](https://github.com/deltachat/deltachat-desktop/issues/5738))
+
+### Documentation
+
+- Add "webxdc network isolation" to RELEASE.md
+- Add docs for webxdc implementation ([#5458](https://github.com/deltachat/deltachat-desktop/issues/5458))
+
+### Fixed
+
+- Tauri: user-notify deleted images when added to notifications on macOS. ([#5733](https://github.com/deltachat/deltachat-desktop/issues/5733))
+- Pass pointer events through footer ([#5768](https://github.com/deltachat/deltachat-desktop/issues/5768))
+- Do not minimize the window before hiding it ([#5774](https://github.com/deltachat/deltachat-desktop/issues/5774))
+- Readd delete from device ([#5782](https://github.com/deltachat/deltachat-desktop/issues/5782))
+- Skip key arrow up if meta key is pressed ([#5780](https://github.com/deltachat/deltachat-desktop/issues/5780))
+- Change confirm label ([#5787](https://github.com/deltachat/deltachat-desktop/issues/5787))
+- Invert pinch zoom on mac ([#5695](https://github.com/deltachat/deltachat-desktop/issues/5695))
+- Edit profile accessibility ([#5799](https://github.com/deltachat/deltachat-desktop/issues/5799))
+- Remove dotenv dependency ([#5803](https://github.com/deltachat/deltachat-desktop/issues/5803))
+- "Proxy" dialogs piling up
+- Blur buttons in dialogs ([#5807](https://github.com/deltachat/deltachat-desktop/issues/5807))
+- Reduce image footer width in media only messages ([#5745](https://github.com/deltachat/deltachat-desktop/issues/5745))
+- Fix [#4820](https://github.com/deltachat/deltachat-desktop/issues/4820) - Edit last message when pressing the UP arrow key ([#5713](https://github.com/deltachat/deltachat-desktop/issues/5713))
+- Handle ESC key to cancel message edition, Focus input after accepted
+- Simplify profile in settings ([#5765](https://github.com/deltachat/deltachat-desktop/issues/5765))
+- Disable delete_server_after ([#5784](https://github.com/deltachat/deltachat-desktop/issues/5784))
+- Change copy dialog button order ([#5796](https://github.com/deltachat/deltachat-desktop/issues/5796))
+- Allow add transport from main scanner ([#5795](https://github.com/deltachat/deltachat-desktop/issues/5795))
+- Remove experimental feature auditLog & relatedChats ([#5786](https://github.com/deltachat/deltachat-desktop/issues/5786))
+- Error backup too new ([#5813](https://github.com/deltachat/deltachat-desktop/issues/5813))
+
+### Performance
+
+- Don't load chats, contacts, gallery twice
+
 <a id="2_25_3"></a>
 ## [2.25.3] - 2025-11-17
 
@@ -3801,7 +3852,8 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.25.3...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.32.0...HEAD
+[2.32.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.25.3...v2.32.0
 [2.25.3]: https://github.com/deltachat/deltachat-desktop/compare/v2.25.2...v2.25.3
 [2.25.2]: https://github.com/deltachat/deltachat-desktop/compare/v2.25.1...v2.25.2
 [2.25.1]: https://github.com/deltachat/deltachat-desktop/compare/2.25.0...v2.25.1
