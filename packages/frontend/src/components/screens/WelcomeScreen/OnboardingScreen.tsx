@@ -64,7 +64,6 @@ export default function OnboardingScreen(props: Props) {
                 type='submit'
                 className={styles.welcomeScreenButton}
                 styling='primary'
-                onClick={props.onNextStep}
                 data-testid='create-account-button'
               >
                 {tx('onboarding_create_instant_account')}
