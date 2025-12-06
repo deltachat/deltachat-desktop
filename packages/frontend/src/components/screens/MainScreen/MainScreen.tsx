@@ -491,11 +491,7 @@ function ChatNavButtons({
   const { openContextMenu } = useChatContextMenu()
   const onClickThreeDotMenu = useCallback(
     (event: React.MouseEvent) => {
-      const activeChat = {
-        ...chat,
-        kind: 'ChatListItem',
-      } as unknown as T.ChatListItemFetchResult & { kind: 'ChatListItem' }
-      openContextMenu(event, [activeChat], chat.id, chat)
+      openContextMenu(event, [], chat.id, chat)
     },
     [openContextMenu, chat]
   )
