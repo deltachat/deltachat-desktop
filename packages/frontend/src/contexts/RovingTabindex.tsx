@@ -47,6 +47,7 @@ export function useRovingTabindex(elementRef: RefObject<HTMLElement | null>) {
     // If the active element has not been chosen yet,
     // let' keep the default behavior (tabindex="0")
     context.activeElement == null ||
+    // eslint-disable-next-line react-hooks/refs
     context.activeElement === elementRef.current
       ? 0
       : -1

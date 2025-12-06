@@ -123,6 +123,7 @@ export const ChatListItemRowChat = React.memo<{
   // TODO `useRef` docs recomment against updating refs during rendering.
   // Is it bad in this case?
   const onChatClick2Ref = useRef(onChatClick2)
+  // eslint-disable-next-line react-hooks/refs
   onChatClick2Ref.current = onChatClick2
 
   const onContextMenu = useCallback(
@@ -216,6 +217,7 @@ export const ChatListItemRowChat = React.memo<{
     [chat, chatCache, chatId, multiselect, openContextMenu, activeChatId]
   )
   const onContextMenuRef = useRef(onContextMenu)
+  // eslint-disable-next-line react-hooks/refs
   onContextMenuRef.current = onContextMenu
 
   const multiselectOnFocus = multiselect?.onFocus
@@ -226,6 +228,7 @@ export const ChatListItemRowChat = React.memo<{
     [chatId, multiselectOnFocus]
   )
   const onFocusRef = useRef(onFocus)
+  // eslint-disable-next-line react-hooks/refs
   onFocusRef.current = onFocus
 
   return (

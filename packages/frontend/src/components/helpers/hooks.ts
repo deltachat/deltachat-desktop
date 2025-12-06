@@ -27,7 +27,8 @@ export function useRefLock(): {
       return (lockRef.current = lock)
     },
   }) as RefObject<any>
-
+  // This ref contains stable methods and never changes after initialization
+  // eslint-disable-next-line react-hooks/refs
   return stableRef.current
 }
 

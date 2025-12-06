@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import classNames from 'classnames'
 import moment from 'moment'
 import formatRelativeTime from './formatRelativeTime'
@@ -104,8 +104,15 @@ const UpdatingTimestamp = (props: TimestampProps) => {
 const relativeTimeThreshold = 24 * 60 * 60 * 1000 // one day
 
 export default function Timestamp(props: TimestampProps) {
+  const [currentTime] = useState(() => Date.now())
+
   // if older than one week we don't need to update timestamps
-  if (props.timestamp < Date.now() - relativeTimeThreshold) {
+  const isOld = useMemo(
+    () => props.timestamp < currentTime - relativeTimeThreshold,
+    [props.timestamp, currentTime]
+  )
+
+  if (isOld) {
     return <NonUpdatingTimestamp {...props} />
   }
   return <UpdatingTimestamp {...props} />

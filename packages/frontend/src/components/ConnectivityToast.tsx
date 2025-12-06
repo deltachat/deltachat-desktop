@@ -44,7 +44,7 @@ export default function ConnectivityToast() {
   }
 
   const tryMaybeNetworkIfOfflineAfterXms = useCallback(
-    (ms: number) => {
+    function tryMaybeNetworkIfOfflineAfterXms_(ms: number) {
       setTimeout(() => {
         // This is a hack to get the current network state by abusing the setNetworkState function.
         // Not pretty but works.
@@ -55,14 +55,12 @@ export default function ConnectivityToast() {
             )
             maybeNetwork()
           } else if (ms < 30000) {
-            /* eslint react-hooks/immutability: "warn" */
-            tryMaybeNetworkIfOfflineAfterXms(2 * ms)
+            tryMaybeNetworkIfOfflineAfterXms_(2 * ms)
           } else {
             log.debug(
               `We tried reconnecting with waiting for more then 30 seconds, now stop`
             )
           }
-
           // Keep state unchanged
           return [connectivity, error]
         })
