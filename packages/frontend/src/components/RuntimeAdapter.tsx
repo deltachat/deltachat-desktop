@@ -53,7 +53,7 @@ export default function RuntimeAdapter({
           await saveLastChatId(notificationAccountId, chatId)
           await window.__selectAccount(notificationAccountId)
         } else if (chatId !== 0) {
-          await selectChat(accountId, chatId)
+          selectChat(accountId, chatId)
           clearNotificationsForChat(notificationAccountId, chatId)
         }
         if (msgId) {

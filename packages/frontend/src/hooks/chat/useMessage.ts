@@ -101,7 +101,7 @@ export default function useMessage() {
       }
 
       // Workaround to actual jump to message in regarding mounted component view
-      // We must set this before the potential `await selectChat()`,
+      // We must set this before the potential `selectChat()`,
       // i.e. before the render of the message list
       // so that it shows the target message right away.
       window.__internal_jump_to_message_asap = {
@@ -123,7 +123,7 @@ export default function useMessage() {
 
       // Check if target message is in same chat, if not switch first
       if (msgChatId !== chatId) {
-        await selectChat(accountId, msgChatId)
+        selectChat(accountId, msgChatId)
       }
 
       window.__closeAllDialogs?.()

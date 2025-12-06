@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import { ActionEmitter, KeybindAction } from '../keybindings'
 import { markChatAsSeen, saveLastChatId } from '../backend/chat'
@@ -12,10 +12,7 @@ import { useHasChanged2 } from '../hooks/useHasChanged'
 
 const log = getLogger('ChatContext')
 
-export type SelectChat = (
-  nextAccountId: number,
-  chatId: number
-) => Promise<boolean>
+export type SelectChat = (nextAccountId: number, chatId: number) => void
 
 export type UnselectChat = () => void
 
@@ -29,19 +26,10 @@ export type ChatContextValue = {
   chatNoLinger?: T.FullChat
   loadingChat: boolean
   chatId?: number
-  // The resolve value of the promise is unused at the time of writing.
-  // And the Promise itself doesn't seem to be used that much.
-  // Maybe we can make it just return `void`, or need to reconsider
-  // the correctness of the code that uses it.
   /**
    * Changes the active chat.
-   * Returns a Promise that resolves with `true`
-   * when we're done loading the chat
-   * and setting the state (`chatWithLinger`) accordingly.
-   *
-   * If this function gets called another time before the Promise
-   * from the previous call resolves,
-   * the previous call's Promise will immediately resolve to `false`.
+   * Note that the chat may never get selected
+   * if another call to `selecChat` interrupted it.
    *
    * @throws if `nextAccountId` is not the currently selected account.
    */
@@ -84,23 +72,6 @@ export const ChatProvider = ({
     ? chatFetch.result.value
     : undefined
 
-  type ChatOrNull = null | Awaited<
-    ReturnType<typeof BackendRemote.rpc.getFullChatById>
-  >
-  const resolvePendingSetChatPromise = useRef<
-    ((res: ChatOrNull) => void) | null
-  >(null)
-  if (
-    resolvePendingSetChatPromise.current &&
-    chatNoLinger != undefined &&
-    // This is implied by `chatNoLinger != undefined`, but let's double-check.
-    chatNoLinger.id === chatId
-  ) {
-    resolvePendingSetChatPromise.current(chatNoLinger)
-    resolvePendingSetChatPromise.current = null
-    // Maybe a callback passed to `useRpcFetch` would be simpler.
-  }
-
   const selectChat = useCallback<SelectChat>(
     (nextAccountId: number, nextChatId: number) => {
       if (!accountId) {
@@ -142,13 +113,6 @@ export const ChatProvider = ({
 
       // Remember that user selected this chat to open it again when they come back
       saveLastChatId(accountId, nextChatId)
-
-      resolvePendingSetChatPromise.current?.(null)
-      const setChatPromise = new Promise<ChatOrNull>(r => {
-        resolvePendingSetChatPromise.current = r
-      })
-
-      return setChatPromise.then(nextChat => nextChat != null)
     },
     [accountId, chatId]
   )
