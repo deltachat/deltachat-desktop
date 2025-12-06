@@ -104,11 +104,12 @@ const UpdatingTimestamp = (props: TimestampProps) => {
 const relativeTimeThreshold = 24 * 60 * 60 * 1000 // one day
 
 export default function Timestamp(props: TimestampProps) {
+  const [currentTime] = useState(() => Date.now())
+
   // if older than one week we don't need to update timestamps
   const isOld = useMemo(
-    () => props.timestamp < Date.now() - relativeTimeThreshold,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
+    () => props.timestamp < currentTime - relativeTimeThreshold,
+    [props.timestamp, currentTime]
   )
 
   if (isOld) {
