@@ -77,11 +77,10 @@ export default function TransportsDialog(
       'bcc_self'
     )
     if (multiDeviceMode === '1') {
-      openAlertDialog({
+      await openAlertDialog({
         message:
-          'It is not possible to add transports when multi-device mode is enabled.',
+          'Note if using multi-device:\nbefore changing or adding transports make sure all other devices have at least version 2.33.0 installed. Otherwise they will run out of sync.',
       })
-      return
     }
     openDialog(BasicQrScanner, {
       onSuccess: async (result: string) => {
@@ -227,6 +226,13 @@ export default function TransportsDialog(
         >
           <Icon icon='plus' size={16} />
         </Button>
+        <p>
+          Note if using multi-device:
+          <br />
+          before changing or adding transports make sure all other devices have
+          at least <strong>version 2.33.0</strong> installed. Otherwise they
+          will run out of sync.
+        </p>
       </DialogFooter>
     </Dialog>
   )
