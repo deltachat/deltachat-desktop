@@ -46,7 +46,7 @@ export default function VCardComponent({
     const chatId = await createChatByContactId(accountId, contactIds[0])
     if (chatId) {
       await BackendRemote.rpc.createContact(accountId, addr, displayName)
-      await selectChat(selectedAccountId(), chatId)
+      selectChat(selectedAccountId(), chatId)
     }
   }
   return (
