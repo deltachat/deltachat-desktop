@@ -2,7 +2,6 @@ import { useCallback } from 'react'
 
 import useChat from './useChat'
 import { BackendRemote } from '../../backend-com'
-import { ChatView } from '../../contexts/ChatContext'
 import { getLogger } from '../../../../shared/logger'
 import { notifyWebxdcMessageSent } from '../useWebxdcMessageSent'
 
@@ -82,7 +81,7 @@ const MESSAGE_DEFAULT: T.MessageData = {
 }
 
 export default function useMessage() {
-  const { chatId, setChatView, selectChat } = useChat()
+  const { chatId, selectChat } = useChat()
 
   const jumpToMessage = useCallback<JumpToMessage>(
     async ({
@@ -126,11 +125,10 @@ export default function useMessage() {
       if (msgChatId !== chatId) {
         await selectChat(accountId, msgChatId)
       }
-      setChatView(ChatView.MessageList)
 
       window.__closeAllDialogs?.()
     },
-    [chatId, selectChat, setChatView]
+    [chatId, selectChat]
   )
 
   const sendMessage = useCallback<SendMessage>(
