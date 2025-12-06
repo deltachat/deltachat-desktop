@@ -58,15 +58,23 @@ export const DialogContextProvider = ({ children }: PropsWithChildren<{}>) => {
     (dialogElement, additionalProps) => {
       const newDialogId = generateRandomUUID()
 
+      // Extract custom onClose handler if provided
+      const customOnClose = additionalProps?.onClose
+
       const newDialog = createElement(
         // From this point on we are only interested in the `DialogProps`
         dialogElement as DialogElementConstructor<DialogProps>,
         {
           key: `dialog-${newDialogId}`,
-          onClose: () => {
+          ...additionalProps,
+          onClose: (result?: any) => {
+            // Call custom onClose handler first if provided
+            if (customOnClose) {
+              customOnClose(result)
+            }
+            // Always close the dialog
             closeDialog(newDialogId)
           },
-          ...additionalProps,
         }
       )
 
