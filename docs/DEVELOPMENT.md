@@ -8,6 +8,7 @@
   - [Table of Contents](#table-of-contents)
   - [How to Contribute ](#how-to-contribute-)
     - [Run the Code ](#run-the-code-)
+      - [Running multiple versions/instances locally](#running-multiple-versionsinstances-locally)
     - [Code Style ](#code-style-)
       - [Checking Code Style](#checking-code-style)
       - [Fixing Code Style](#fixing-code-style)
@@ -57,6 +58,14 @@ $ pnpm -w start:electron
 After making your changes, go in the deltachat/electron Dev-console and press `F5` or `Cmd+R` to reload the frontend process.
 
 > **Note:** this only applies to the frontend code in `src/renderer`. To build the main process you still need to use `pnpm -w build:electron` and then restart the deltachat-desktop process. (`pnpm -w start:electron`)
+
+#### Running multiple versions/instances locally
+
+Per default (at least on linux) the local build uses the default config & account dir that also your installed desktop app uses (except for flatpak/AppImage). That might result in an error message when building the local app "Only one instance allowed. Quitting"
+
+You can define a different config dir by setting an env var DC_TEST_DIR in an .env file. See [.env.example](../packages/target-electron/.env.example)
+
+Be aware that the order matters: if the installed app is running you can start another instance with a different config dir. But if a local instances is running you can't start the installed app.
 
 ### Code Style <a id="code-style"></a>
 
