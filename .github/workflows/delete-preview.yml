@@ -11,7 +11,7 @@ jobs:
   delete:
 
     runs-on: ubuntu-latest
-    if: contains(github.event.pull_request.body, '#public-preview')
+    if: contains(github.event.pull_request.body, '#public-preview') || contains(github.event.pull_request.title, 'prepare release')
     steps:
     - name: Get Branch Name
       id: getid
