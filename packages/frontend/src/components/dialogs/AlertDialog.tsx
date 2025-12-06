@@ -33,7 +33,14 @@ export default function AlertDialog({
   }
 
   return (
-    <Dialog width={350} onClose={onClose} dataTestid={dataTestid}>
+    <Dialog
+      width={350}
+      onClose={() => {
+        cb && cb()
+        onClose()
+      }}
+      dataTestid={dataTestid}
+    >
       <DialogBody>
         <DialogContent paddingTop>
           <p className='whitespace'>{message}</p>
