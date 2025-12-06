@@ -28,7 +28,7 @@ export default function useSelectLastChat(accountId?: number) {
     if (account.kind === 'Configured') {
       const lastChatId = await getLastChatId(accountId)
       if (lastChatId && !smallScreenMode) {
-        await selectChat(accountId, lastChatId)
+        selectChat(accountId, lastChatId)
       }
     }
   }, [accountId, selectChat, smallScreenMode])
