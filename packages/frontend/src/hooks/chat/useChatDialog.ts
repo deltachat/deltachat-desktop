@@ -48,10 +48,19 @@ export default function useChatDialog() {
    * Block contacts based on a DM chat/chatlistentry with that contact.
    */
   const openBlockFirstContactOfChatDialog = useCallback(
-    async (accountId: number, chat: T.FullChat | ChatListItem) => {
+    async (
+      accountId: number,
+      chat:
+        | T.FullChat
+        | { dmChatContact: number | null }
+        | { contactIds: number[] }
+    ) => {
       const dmChatContact =
-        (chat as ChatListItem).dmChatContact ||
-        (chat as T.FullChat).contactIds[0]
+        'dmChatContact' in chat
+          ? chat.dmChatContact
+          : 'contactIds' in chat
+            ? chat.contactIds[0]
+            : null
 
       if (!dmChatContact) {
         return
