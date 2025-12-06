@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react'
+import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 import { debounce } from 'debounce'
 
@@ -43,12 +43,8 @@ export default function ConnectivityToast() {
     ])
   }
 
-  const tryMaybeNetworkIfOfflineAfterXmsRef = useRef<(ms: number) => void>(
-    () => {}
-  )
-
   const tryMaybeNetworkIfOfflineAfterXms = useCallback(
-    (ms: number) => {
+    function tryMaybeNetworkIfOfflineAfterXms_(ms: number) {
       setTimeout(() => {
         // This is a hack to get the current network state by abusing the setNetworkState function.
         // Not pretty but works.
@@ -59,14 +55,12 @@ export default function ConnectivityToast() {
             )
             maybeNetwork()
           } else if (ms < 30000) {
-            // Recursive call using ref to avoid circular dependency
-            tryMaybeNetworkIfOfflineAfterXmsRef.current?.(2 * ms)
+            tryMaybeNetworkIfOfflineAfterXms_(2 * ms)
           } else {
             log.debug(
               `We tried reconnecting with waiting for more then 30 seconds, now stop`
             )
           }
-
           // Keep state unchanged
           return [connectivity, error]
         })
@@ -74,10 +68,6 @@ export default function ConnectivityToast() {
     },
     [maybeNetwork]
   )
-
-  // Update ref to enable recursive calls without circular dependency
-  // eslint-disable-next-line react-hooks/refs
-  tryMaybeNetworkIfOfflineAfterXmsRef.current = tryMaybeNetworkIfOfflineAfterXms
 
   const onBrowserOnline = useCallback(() => {
     log.debug("Browser thinks we're back online, telling rust core")
