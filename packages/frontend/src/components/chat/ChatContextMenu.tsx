@@ -22,7 +22,50 @@ import { ActionEmitter, KeybindAction } from '../../keybindings'
 
 const log = getLogger('ChatListContextMenu')
 
-type ChatListItem = T.ChatListItemFetchResult & { kind: 'ChatListItem' }
+/**
+ * Reduced type containing only the properties from ChatListItemFetchResult
+ * that are actually needed by the ChatContextMenu
+ */
+type ChatListItem = Pick<
+  T.ChatListItemFetchResult & { kind: 'ChatListItem' },
+  | 'kind'
+  | 'id'
+  | 'name'
+  | 'chatType'
+  | 'isPinned'
+  | 'isArchived'
+  | 'isMuted'
+  | 'isDeviceTalk'
+  | 'isSelfTalk'
+  | 'isSelfInGroup'
+  | 'isContactRequest'
+  | 'isEncrypted'
+  | 'dmChatContact'
+>
+
+/**
+ * Converts a FullChat object into a reduced ChatListItem
+ */
+export function fullChatToChatListItem(chat: T.FullChat): ChatListItem {
+  return {
+    kind: 'ChatListItem',
+    id: chat.id,
+    name: chat.name,
+    chatType: chat.chatType,
+    isPinned: chat.pinned,
+    isArchived: chat.archived,
+    isMuted: chat.isMuted,
+    isDeviceTalk: chat.isDeviceChat,
+    isSelfTalk: chat.isSelfTalk,
+    isSelfInGroup: chat.selfInGroup,
+    isContactRequest: chat.isContactRequest,
+    isEncrypted: chat.isEncrypted,
+    dmChatContact:
+      chat.chatType === 'Single' && chat.contactIds.length > 0
+        ? chat.contactIds[0]
+        : null,
+  }
+}
 
 /**
  * Builds archive and pin menu items based on chat states
@@ -169,8 +212,6 @@ function buildViewEditMenuItems(
 ): (ContextMenuItem | false)[] {
   if (!singleChat) return []
 
-  const isGroup = singleChat.chatType === 'Group'
-
   const onViewProfile = async () => {
     const fullChat =
       selectedChat ??
@@ -201,11 +242,13 @@ function buildViewEditMenuItems(
     )
   }
 
-  const selfInGroup = isGroup && singleChat.isSelfInGroup
+  const selfInGroup =
+    singleChat.chatType === 'Group' && singleChat.isSelfInGroup
 
   return [
     // View Profile (for single chats)
-    !isGroup &&
+    (singleChat.chatType === 'Single' ||
+      singleChat.chatType === 'InBroadcast') &&
       !singleChat.isDeviceTalk && {
         label: tx('menu_view_profile'),
         action: onViewProfile,
@@ -286,15 +329,17 @@ export function useChatContextMenu(): {
     selectedChatId: number | null,
     selectedChat?: T.FullChat
   ) => {
-    if (chatListItems.length === 0) {
+    if (chatListItems.length === 0 && selectedChat === undefined) {
       log.error('openContextMenu called with 0 chats')
       return
     }
-    // is the context menu called in the chatlist or in the chat view?
-    const isMainView = selectedChat
+    const isMainView = !!selectedChat
+    const singleChat: ChatListItem | false = isMainView
+      ? fullChatToChatListItem(selectedChat)
+      : chatListItems.length === 1
+        ? chatListItems[0]
+        : false
 
-    // Extract single chat if only one selected
-    const singleChat = chatListItems.length === 1 ? chatListItems[0] : false
     const isGroup = singleChat && singleChat.chatType === 'Group'
     const isOutBroadcast = singleChat && singleChat.chatType === 'OutBroadcast'
 
@@ -395,6 +440,7 @@ export function useChatContextMenu(): {
         action: onSearchInChat,
       },
       !isMainView && pin,
+      ephemeralMessagesMenuItem,
       muteMenuItem,
       archive,
       { type: 'separator' },
@@ -423,21 +469,20 @@ export function useChatContextMenu(): {
         action: () => onLeaveGroupOrChannel(singleChat),
         danger: true,
       },
-      ephemeralMessagesMenuItem,
       // Block contact
       showBlockContactOption && {
         label: tx('menu_block_contact'),
         action: () => onBlockContact(singleChat),
         danger: true,
       },
-      {
-        label: tx('menu_delete_chat'),
-        action: onDeleteChats,
-        danger: true,
-      },
       isMainView && {
         label: tx('clear_chat'),
         action: onClearChat,
+        danger: true,
+      },
+      {
+        label: tx('menu_delete_chat'),
+        action: onDeleteChats,
         danger: true,
       },
       !isMainView && encryptionInfoItem,
