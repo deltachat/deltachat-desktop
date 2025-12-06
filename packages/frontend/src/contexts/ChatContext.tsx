@@ -8,6 +8,7 @@ import type { RefObject, PropsWithChildren } from 'react'
 import type { T } from '@deltachat/jsonrpc-client'
 import { useRpcFetch } from '../hooks/useFetch'
 import { getLogger } from '@deltachat-desktop/shared/logger'
+import { useHasChanged2 } from '../hooks/useHasChanged'
 
 const log = getLogger('ChatContext')
 
@@ -147,19 +148,6 @@ export const ChatProvider = ({
         resolvePendingSetChatPromise.current = r
       })
 
-      setChatPromise.then(nextChat => {
-        if (nextChat == null) {
-          return
-        }
-        // Switch to "archived" view if selected chat is there
-        // @TODO: We probably want this to be part of the UI logic instead
-        ActionEmitter.emitAction(
-          nextChat.archived
-            ? KeybindAction.ChatList_SwitchToArchiveView
-            : KeybindAction.ChatList_SwitchToNormalView
-        )
-      })
-
       return setChatPromise.then(nextChat => nextChat != null)
     },
     [accountId, chatId]
@@ -170,6 +158,16 @@ export const ChatProvider = ({
   }, [])
 
   unselectChatRef.current = unselectChat
+
+  if (useHasChanged2(chatNoLinger?.id) && chatNoLinger != undefined) {
+    // Switch to "archived" view if selected chat is there
+    // @TODO: We probably want this to be part of the UI logic instead
+    ActionEmitter.emitAction(
+      chatNoLinger.archived
+        ? KeybindAction.ChatList_SwitchToArchiveView
+        : KeybindAction.ChatList_SwitchToNormalView
+    )
+  }
 
   const refreshChat = chatFetch?.refresh
   // Subscribe to events coming from the core
