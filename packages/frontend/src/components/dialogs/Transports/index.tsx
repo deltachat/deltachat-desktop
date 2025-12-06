@@ -226,13 +226,6 @@ export default function TransportsDialog(
         >
           <Icon icon='plus' size={16} />
         </Button>
-        <p>
-          Note if using multi-device:
-          <br />
-          before changing or adding transports make sure all other devices have
-          at least <strong>version 2.33.0</strong> installed. Otherwise they
-          will run out of sync.
-        </p>
       </DialogFooter>
     </Dialog>
   )
