@@ -11,13 +11,6 @@ import { getLogger } from '@deltachat-desktop/shared/logger'
 
 const log = getLogger('ChatContext')
 
-export enum ChatView {
-  Media,
-  MessageList,
-}
-
-export type SetView = (nextView: ChatView) => void
-
 export type SelectChat = (
   nextAccountId: number,
   chatId: number
@@ -26,7 +19,6 @@ export type SelectChat = (
 export type UnselectChat = () => void
 
 export type ChatContextValue = {
-  activeView: ChatView
   /**
    * `withLinger` means that after `selectChat()` the value of `chatWithLinger`
    * does not change immediately (unlike `chatId`),
@@ -53,7 +45,6 @@ export type ChatContextValue = {
    * @throws if `nextAccountId` is not the currently selected account.
    */
   selectChat: SelectChat
-  setChatView: SetView
   unselectChat: UnselectChat
 }
 
@@ -73,16 +64,10 @@ export const ChatProvider = ({
   accountId,
   unselectChatRef,
 }: PropsWithChildren<Props>) => {
-  const [activeView, setActiveView] = useState(ChatView.MessageList)
-
   const [chatId, setChatId] = useState<number | undefined>()
   useEffect(() => {
     window.__selectedChatId = chatId
   }, [chatId])
-
-  const setChatView = useCallback<SetView>((nextView: ChatView) => {
-    setActiveView(nextView)
-  }, [])
 
   const chatFetch = useRpcFetch(
     BackendRemote.rpc.getFullChatById,
@@ -149,7 +134,6 @@ export const ChatProvider = ({
       }
 
       // Already set known state
-      setActiveView(ChatView.MessageList)
       setChatId(nextChatId)
 
       // Clear system notifications and mark chat as seen in backend
@@ -182,7 +166,6 @@ export const ChatProvider = ({
   )
 
   const unselectChat = useCallback<UnselectChat>(() => {
-    setActiveView(ChatView.MessageList)
     setChatId(undefined)
   }, [])
 
@@ -249,13 +232,11 @@ export const ChatProvider = ({
   }, [accountId, chatWithLinger, chatId, refreshChat])
 
   const value: ChatContextValue = {
-    activeView,
     chatWithLinger,
     chatNoLinger,
     loadingChat: chatFetch?.loading ?? false,
     chatId,
     selectChat,
-    setChatView,
     unselectChat,
   }
 
