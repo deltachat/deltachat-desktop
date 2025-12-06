@@ -2,6 +2,53 @@
 
 All notable changes to this project will be documented in this file.
 
+<a id="2_33_0"></a>
+## [2.33.0] - 2025-12-06
+
+### Added
+
+- Add multitransport ([#5680](https://github.com/deltachat/deltachat-desktop/issues/5680))
+- Allow add transport from main scanner ([#5795](https://github.com/deltachat/deltachat-desktop/issues/5795))
+- Show warning when disabling multi-device mode ([#5743](https://github.com/deltachat/deltachat-desktop/issues/5743))
+- Withdraw and revive channel invitation codes ([#5747](https://github.com/deltachat/deltachat-desktop/issues/5747))
+
+### Changed
+
+- Remove experimental feature auditLog & relatedChats ([#5786](https://github.com/deltachat/deltachat-desktop/issues/5786))
+- Reorder advanced settings ([#5830](https://github.com/deltachat/deltachat-desktop/issues/5830))
+- Update local help ([#5761](https://github.com/deltachat/deltachat-desktop/issues/5761))
+- Move group member count ([#5738](https://github.com/deltachat/deltachat-desktop/issues/5738))
+- Add "webxdc network isolation" to RELEASE.md
+- Add docs for webxdc implementation ([#5458](https://github.com/deltachat/deltachat-desktop/issues/5458))
+- Upgrade to core 2.33.0 ([#5817](https://github.com/deltachat/deltachat-desktop/issues/5817))
+  - Support multi transport
+  - Synchronize transports via sync messages.
+  - Case-insensitive search for non-ASCII chat and contact names
+  - [breaking] Increase backup version from 3 to 4
+
+### Fixed
+
+- Pass pointer events through footer ([#5768](https://github.com/deltachat/deltachat-desktop/issues/5768))
+- Do not minimize the window before hiding it ([#5774](https://github.com/deltachat/deltachat-desktop/issues/5774))
+- Readd delete from device ([#5782](https://github.com/deltachat/deltachat-desktop/issues/5782))
+- Skip key arrow up if meta key is pressed ([#5780](https://github.com/deltachat/deltachat-desktop/issues/5780))
+- Change confirm label ([#5787](https://github.com/deltachat/deltachat-desktop/issues/5787))
+- Invert pinch zoom on mac ([#5695](https://github.com/deltachat/deltachat-desktop/issues/5695))
+- Avoid "Proxy" dialogs piling up ([#5802](https://github.com/deltachat/deltachat-desktop/issues/5802))
+- Blur buttons in dialogs to avoid unexpected enter key behaviour ([#5807](https://github.com/deltachat/deltachat-desktop/issues/5807))
+- Reduce image footer width in media only messages ([#5745](https://github.com/deltachat/deltachat-desktop/issues/5745))
+- Edit last message when pressing the UP arrow key ([#5713](https://github.com/deltachat/deltachat-desktop/issues/5713))
+- Handle ESC key to cancel edit message
+- Simplify profile in settings ([#5765](https://github.com/deltachat/deltachat-desktop/issues/5765))
+- Remove "Delete from server" setting ([#5784](https://github.com/deltachat/deltachat-desktop/issues/5784))
+- Change copy dialog button order ([#5796](https://github.com/deltachat/deltachat-desktop/issues/5796))
+- Show correct error message if backup is too new ([#5813](https://github.com/deltachat/deltachat-desktop/issues/5813))
+
+### Performance
+
+- Don't load chats, contacts, gallery twice ([#5727](https://github.com/deltachat/deltachat-desktop/issues/5727))
+
+
 <a id="2_25_3"></a>
 ## [2.25.3] - 2025-11-17
 
@@ -3801,7 +3848,8 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.25.3...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.33.0...HEAD
+[2.33.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.25.3...v2.33.0
 [2.25.3]: https://github.com/deltachat/deltachat-desktop/compare/v2.25.2...v2.25.3
 [2.25.2]: https://github.com/deltachat/deltachat-desktop/compare/v2.25.1...v2.25.2
 [2.25.1]: https://github.com/deltachat/deltachat-desktop/compare/2.25.0...v2.25.1
