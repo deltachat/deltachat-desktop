@@ -21,7 +21,9 @@ import useChat from './chat/useChat'
 import { unknownErrorToString } from '../components/helpers/unknownErrorToString'
 import ProxyConfiguration from '../components/dialogs/ProxyConfiguration'
 import { useSettingsStore } from '../stores/settings'
-import TransportsDialog from '../components/dialogs/Transports'
+import TransportsDialog, {
+  addTransportConfirmationDialog,
+} from '../components/dialogs/Transports'
 
 const ALLOWED_QR_CODES_ON_WELCOME_SCREEN: T.Qr['kind'][] = [
   'account',
@@ -201,6 +203,9 @@ export default function useProcessQR() {
     [openConfirmationDialog, startInstantOnboardingFlow, tx]
   )
 
+  const multiDeviceMode =
+    (settingsStore && settingsStore.settings['bcc_self'] === '1') ?? false
+
   return useCallback(
     async (
       accountId: number,
@@ -293,10 +298,12 @@ export default function useProcessQR() {
        */
       if (qr.kind === 'account') {
         if (isLoggedIn) {
-          const confirmed = await openConfirmationDialog({
-            message: `${tx('confirm_add_transport')}\n ${qr.domain}`,
-            confirmLabel: tx('add_transport'),
-          })
+          const confirmed = await addTransportConfirmationDialog(
+            qr.domain,
+            multiDeviceMode,
+            openConfirmationDialog,
+            tx
+          )
           if (!confirmed) {
             return
           }
@@ -483,6 +490,7 @@ export default function useProcessQR() {
       addAndSelectAccount,
       selectChat,
       isChatmail,
+      multiDeviceMode,
       tx,
     ]
   )

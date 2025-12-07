@@ -17,6 +17,24 @@ import classNames from 'classnames'
 import useDialog from '../../../hooks/dialog/useDialog'
 import { processQr } from '../../../backend/qr'
 import Icon from '../../Icon'
+import { TranslationKey } from '@deltachat-desktop/shared/translationKeyType'
+
+export const addTransportConfirmationDialog = async (
+  domain: string,
+  multiDeviceMode: boolean,
+  openConfirmationDialog: (options: { message: string }) => Promise<boolean>,
+  tx: (key: TranslationKey, ...args: any[]) => string
+): Promise<boolean> => {
+  let message = `${tx('confirm_add_transport')}\n ${domain}`
+  if (multiDeviceMode) {
+    message +=
+      '\n\nNote if using multi-device:\nbefore changing or adding transports make sure all other devices have at least version 2.33.0 installed. Otherwise they will run out of sync.'
+  }
+  const confirmed = await openConfirmationDialog({
+    message,
+  })
+  return confirmed
+}
 
 /**
  * Dialog for transports configuration
@@ -76,19 +94,16 @@ export default function TransportsDialog(
       accountId,
       'bcc_self'
     )
-    if (multiDeviceMode === '1') {
-      await openAlertDialog({
-        message:
-          'Note if using multi-device:\nbefore changing or adding transports make sure all other devices have at least version 2.33.0 installed. Otherwise they will run out of sync.',
-      })
-    }
     openDialog(BasicQrScanner, {
       onSuccess: async (result: string) => {
         const { qr } = await processQr(accountId, result)
         if (qr.kind === 'account') {
-          const confirmed = await openConfirmationDialog({
-            message: `${tx('confirm_add_transport')}\n ${qr.domain}`,
-          })
+          const confirmed = await addTransportConfirmationDialog(
+            qr.domain,
+            multiDeviceMode === '1',
+            openConfirmationDialog,
+            tx
+          )
           if (!confirmed) {
             return
           }
