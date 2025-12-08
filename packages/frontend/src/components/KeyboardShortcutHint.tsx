@@ -111,42 +111,6 @@ export function ShortcutGroup({ title, keyBindings }: ShortcutAction) {
   )
 }
 
-export function KeybordShortcutHintInSettings({
-  actions,
-}: {
-  actions: ShortcutAction[]
-}) {
-  return (
-    <div className='keyboard-hints-box'>
-      {actions.map(action => (
-        <ShortcutGroup
-          key={action.title}
-          title={action.title}
-          keyBindings={action.keyBindings}
-        />
-      ))}
-    </div>
-  )
-}
-
-// export function KeybordShortcutHintPopover() {
-//   return (
-//     <div className='keyboard-hints-popover'>
-//       <Action
-//         title='Insert newline'
-//         keyBindings={[
-//           ['Ctrl', 'Enter'],
-//           ['Shift', 'Enter'],
-//         ]}
-//       />
-//       <Action title='Send' keyBindings={[['Enter']]} />
-//       <div className='explainer'>
-//         Change it in the <a href='#'>settings</a>.
-//       </div>
-//     </div>
-//   )
-// }
-
 export function enterKeySendsKeyboardShortcuts(
   enterKeySends: boolean
 ): ShortcutAction[] {
