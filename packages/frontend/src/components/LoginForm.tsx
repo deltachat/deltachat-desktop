@@ -2,7 +2,7 @@ import { C, T } from '@deltachat/jsonrpc-client'
 import React, { useState } from 'react'
 import { useDebouncedCallback } from 'use-debounce/lib'
 
-import { DeltaInput, DeltaPasswordInput, DeltaSelect } from './Login-Styles'
+import { DeltaInput, DeltaSelect } from './Login-Styles'
 import { ClickableLink } from './helpers/ClickableLink'
 import { getLogger } from '../../../shared/logger'
 import { BackendRemote, Type } from '../backend-com'
@@ -122,11 +122,12 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
             onBlur={onEmailBlur}
           />
 
-          <DeltaPasswordInput
+          <DeltaInput
             key='password'
             id='password'
+            type='password'
             placeholder={tx('existing_password')}
-            password={password || ''}
+            value={password || ''}
             onChange={handleCredentialsChange}
           />
 
@@ -212,12 +213,13 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
               value={smtpUser}
               onChange={handleCredentialsChange}
             />
-            <DeltaPasswordInput
+            <DeltaInput
               key='smtpPassword'
               id='smtpPassword'
               label={tx('login_smtp_password')}
               placeholder={tx('automatic')}
-              password={smtpPassword || ''}
+              type='password'
+              value={smtpPassword || ''}
               onChange={handleCredentialsChange}
             />
             <DeltaInput

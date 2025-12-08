@@ -1,5 +1,4 @@
 import React, { ReactElement, useRef } from 'react'
-import useTranslationFunction from '../hooks/useTranslationFunction'
 
 export const DeltaSelect = React.memo(
   (
@@ -130,36 +129,6 @@ export const DeltaInput = React.memo(
           <div className='right-element'>{props.rightElement}</div>
         )}
       </div>
-    )
-  }
-)
-
-export const DeltaPasswordInput = React.memo(
-  (
-    props: React.PropsWithChildren<{
-      password: string
-      id?: string
-      label?: string
-      placeholder?: string
-      onChange: (
-        event: React.FormEvent<HTMLElement> &
-          React.ChangeEvent<HTMLInputElement>
-      ) => void
-    }>
-  ) => {
-    const tx = useTranslationFunction()
-
-    const password = props.password || ''
-
-    return (
-      <DeltaInput
-        id={props.id}
-        type='password'
-        label={props.label ? props.label : ''}
-        value={password === null ? '' : password}
-        onChange={props.onChange}
-        placeholder={props.placeholder}
-      />
     )
   }
 )
