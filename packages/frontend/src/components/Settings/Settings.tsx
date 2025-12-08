@@ -159,10 +159,7 @@ export default function Settings({ onClose }: DialogProps) {
           />
           <DialogBody>
             {settingsStore != null && (
-              <ChatsAndMedia
-                settingsStore={settingsStore}
-                desktopSettings={settingsStore.desktopSettings}
-              />
+              <ChatsAndMedia settingsStore={settingsStore} />
             )}
             <SettingsEndSeparator />
           </DialogBody>
