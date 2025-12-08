@@ -302,7 +302,7 @@ export default function useProcessQR() {
             qr.domain,
             multiDeviceMode,
             openConfirmationDialog,
-            tx
+            tx('confirm_add_transport')
           )
           if (!confirmed) {
             return
