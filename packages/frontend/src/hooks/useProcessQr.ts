@@ -78,8 +78,7 @@ const WITHDRAW_OR_REVIVE_CONFIGS: WithdrawOrReviveConfigs = {
     dataTestid: 'withdraw-verify-group',
   },
   reviveVerifyGroup: {
-    messageKey: 'revive_verifygroup_explain',
-    getMessageArgs: qr => [qr.grpname],
+    messageKey: 'revive_verifycontact_explain',
   },
   withdrawJoinBroadcast: {
     messageKey: 'withdraw_joinbroadcast_explain',
@@ -87,8 +86,7 @@ const WITHDRAW_OR_REVIVE_CONFIGS: WithdrawOrReviveConfigs = {
     dataTestid: 'withdraw-verify-channel',
   },
   reviveJoinBroadcast: {
-    messageKey: 'revive_joinbroadcast_explain',
-    getMessageArgs: qr => [qr.name],
+    messageKey: 'revive_verifycontact_explain',
   },
 } satisfies WithdrawOrReviveConfigs_
 
