@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { DesktopSettingsType } from '../../../../shared/shared-types'
 import { SettingsStoreState } from '../../stores/settings'
 import OutgoingMediaQuality from './OutgoingMediaQuality'
 import DownloadOnDemand from './DownloadOnDemand'
@@ -17,7 +16,6 @@ import SettingsButton from './SettingsButton'
 
 type Props = {
   settingsStore: SettingsStoreState
-  desktopSettings: DesktopSettingsType
 }
 
 export default function ChatsAndMedia({ settingsStore }: Props) {
