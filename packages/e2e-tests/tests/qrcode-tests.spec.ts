@@ -223,7 +223,7 @@ test('onboarding with manual credentials', async ({ browserName }) => {
   )
   await page.getByTestId('open-advanced-settings').click()
   await page.getByTestId('open-transport-settings').click()
-  await page.getByLabel('Edit Transport').first().click()
+  await page.getByLabel('Edit Relay').first().click()
   const addressLocator = page.locator('#addr')
   await expect(addressLocator).toHaveValue(/.+@.+/)
   const addressFromSettings = await addressLocator.inputValue()
