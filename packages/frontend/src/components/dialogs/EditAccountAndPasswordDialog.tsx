@@ -39,9 +39,7 @@ export default function EditAccountAndPasswordDialog({
     <Dialog canOutsideClickClose={false} onClose={onClose}>
       <DialogHeader
         title={
-          isChatmail
-            ? tx('edit_transport')
-            : tx('manual_account_setup_option')
+          isChatmail ? tx('edit_transport') : tx('manual_account_setup_option')
         }
       />
       {EditAccountInner(onClose, addr)}
