@@ -6,8 +6,8 @@ const envPath = path.join(import.meta.dirname, '.env')
 
 try {
   process.loadEnvFile?.(envPath)
-} catch (error) {
-  console.error(`Failed to load ${envPath}`, error)
+} catch (_error) {
+  console.log(`No .env file to load ${envPath}`)
 }
 
 export const chatmailServerDomain = process.env.DC_CHATMAIL_DOMAIN
