@@ -40,7 +40,7 @@ export default function EditAccountAndPasswordDialog({
       <DialogHeader
         title={
           isChatmail
-            ? tx('pref_password_and_account_settings')
+            ? tx('edit_transport')
             : tx('manual_account_setup_option')
         }
       />
