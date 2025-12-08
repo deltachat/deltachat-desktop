@@ -331,7 +331,6 @@
     <string name="menu_save_log">Uložiť záznam</string>
     <string name="menu_more_options">Ďalšie možnosti</string>
     <string name="menu_learn_spelling">Naučiť sa pravopis</string>
-    <string name="menu_chat_audit_log">Auditovací protokol konverzácie</string>
     <string name="jump_to_message">Prejsť na správu</string>
     <string name="jump_to_original_message">Zobraziť pôvodnú správu</string>
     <string name="copy_json">Kopírovať JSON</string>
@@ -413,7 +412,6 @@
 
     <!-- contact list -->
     <string name="contacts_title">Kontakty</string>
-    <string name="contacts_enter_name_or_email">Zadajte meno alebo e-mailovú adresu</string>
     <string name="contacts_type_email_above">Vyššie zadajte e-mailovú adresu</string>
 
 
@@ -485,10 +483,6 @@
     <string name="show_location_traces">Zobraziť stopy</string>
     <string name="add_poi">Pošlite zaujímavé miesto</string>
 
-    <!-- chat audit log -->
-    <string name="chat_audit_log_empty_message">Tu sa zobrazia systémové správy tejto konverzácie</string>
-    <string name="chat_audit_log_title">Auditovací protokol konverzácie pre %1$s</string>
-    <string name="chat_audit_log_description">Toto zobrazenie zobrazuje iba systémové a informačné správy. Je užitočné na nájdenie posledných akcií konverzácie bez prezerania množstva bežných správ. </string>
 
     <!-- punycode warning / labeled links -->
     <!-- placeholder is domain/hostname that should be trusted -->
@@ -578,7 +572,7 @@ Ak chcete pokračovať, aktualizujte toto zariadenie na najnovšiu verziu Delta 
     <string name="sending">Odosielam...</string>
     <string name="last_msg_sent_successfully">Posledná správa odoslaná úspešne.</string>
     <string name="not_supported_by_provider">Nie je podporovaná vaším poskytovateľom.</string>
-    <!-- Subtitle in quota context of "Connetivity" view. Should be be plural always, no number is prefixed. -->
+    <!-- Subtitle in quota context of "Connectivity" view. Should be be plural always, no number is prefixed. -->
     <string name="messages">Správy</string>
     <!-- Used for describing resource usage, resulting string will be eg. "1.2 GiB of 3 GiB used" -->
     <string name="part_of_total_used">%1$s z %2$svyužitých </string>
@@ -589,7 +583,7 @@ Ak chcete pokračovať, aktualizujte toto zariadenie na najnovšiu verziu Delta 
     <string name="onboarding_create_instant_account">Nový účet</string>
     <!-- Secondary button on the welcome screen, allows to "Add as Second Device", "Restore from Backup"  -->
     <string name="onboarding_alternative_logins">Existujúci účet</string>
-    <!-- Stay short here, alternative source string could be "Transport over Classic Email", avoiding maybe the maybe long term "Use". Context: this is Button and a title, allowing to log in to existing, classic email accounts, setting ports, passwords and so on -->
+    <!-- This is a button and a title, allowing to log in to existing, classic email accounts, setting ports, passwords and so on -->
     <string name="manual_account_setup_option">Použiť bežné e-mailové konto</string>
     <!-- Instant onboarding title (there is not more to do than to set name and avatar) -->
     <string name="instant_onboarding_title">Váš účet</string>
@@ -606,10 +600,6 @@ Ak chcete pokračovať, aktualizujte toto zariadenie na najnovšiu verziu Delta 
     <string name="instant_onboarding_confirm_contact">Chcete vytvoriť nový účet a začať konverzáciu s %1$s?</string>
     <string name="scan_invitation_code">Skenovať kód pozvánky</string>
     <string name="login_title">Prihlásiť sa</string>
-    <!-- deprecated -->
-    <string name="login_header">Prihláste sa na server</string>
-    <!-- deprecated -->
-    <string name="login_explain">Prihláste sa pomocou existujúceho e-mailového účtu</string>
     <string name="login_inbox">Doručená pošta</string>
     <string name="login_imap_login">Prihlasovacie meno IMAP</string>
     <string name="login_imap_server">Server IMAP</string>
@@ -673,8 +663,6 @@ Ak chcete pokračovať, aktualizujte toto zariadenie na najnovšiu verziu Delta 
     <string name="pref_profile_photo">Profilový obrázok</string>
     <string name="pref_blocked_contacts">Blokované kontakty</string>
     <string name="blocked_empty_hint">Ak zablokujete kontakty, zobrazia sa tu.</string>
-    <!-- deprecated -->
-    <string name="pref_password_and_account_settings">Heslo a účet</string>
     <string name="pref_who_can_see_profile_explain">Pri komunikácii s ostatnými používateľmi sa vedľa vašich správ zobrazí váš profilový obrázok a meno. Už odoslané informácie nemožno vymazať ani odstrániť.</string>
     <string name="pref_your_name">Vaše meno</string>
     <!-- Label of the Bio/Signature/Status/Motto field -->
@@ -730,26 +718,19 @@ Ak chcete pokračovať, aktualizujte toto zariadenie na najnovšiu verziu Delta 
     <string name="pref_backup_export_all">Exportovať %1$d účty/účtov</string>
     <string name="pref_backup_export_start_button">Spustiť zálohovanie</string>
     <string name="pref_backup_written_to_x">Záloha bola úspešne zapísaná do priečinka „%1$s“.</string>
-    <string name="pref_managekeys_export_secret_keys">Exportovať tajné kľúče</string>
-    <string name="pref_managekeys_export_explain">Exportovať tajné kľúče do priečinka „%1$s“?</string>
-    <string name="pref_managekeys_secret_keys_exported_to_x">Tajné kľúče boli úspešne zapísané do priečinka „%1$s“.</string>
     <!-- No need to translate "Wallpaper" literally. Chose what is common in your language for a "Wallpaper" or a "Background". Avoid adding the term "image" here, as the "Wallpaper" may also be just a single color. -->
     <string name="pref_background">Pozadie</string>
     <string name="pref_background_btn_default">Použiť predvolený obrázok</string>
     <string name="pref_background_btn_gallery">Vyberte z galérie</string>
     <string name="pref_imap_folder_warn_disable_defaults">Ak túto možnosť zakážete, uistite sa, že váš server a ostatní klienti sú zodpovedajúcim spôsobom nakonfigurovaní.\n\nV opačnom prípade nemusí fungovať vôbec.</string>
     <string name="pref_auto_folder_moves">Automaticky presúvať do priečinka DeltaChat</string>
-    <string name="pref_auto_folder_moves_explain">Konverzácie sa presunú, aby sa predišlo preplneniu doručenej pošty</string>
     <string name="pref_only_fetch_mvbox_title">Prijímať iba z priečinka DeltaChat</string>
-    <string name="pref_only_fetch_mvbox_explain">Ignorovať zvyšné priečinky. Vyžaduje, aby váš server presúvať správy četu do priečinka DeltaChat.</string>
     <string name="pref_show_emails">Zobraziť klasické e-maily</string>
     <string name="pref_show_emails_no">Nie, iba konverzácie</string>
     <string name="pref_show_emails_accepted_contacts">Pre prijaté kontakty</string>
     <string name="pref_show_emails_all">Všetky</string>
     <string name="pref_experimental_features">Experimentálne vlastnosti</string>
     <string name="pref_on_demand_location_streaming">Vysielanie polohy na požiadanie</string>
-    <string name="pref_developer_mode">Režim pre vývojárov</string>
-    <string name="pref_developer_mode_explain">Zapína voľby pre ladenie a môže spôsobiť nižšiu stabilitu aplikácie. Iba pre vývojárov.</string>
     <string name="pref_background_default">Predvolené pozadie</string>
     <string name="pref_background_default_color">Predvolená farba</string>
     <string name="pref_background_custom_image">Vlastný obrázok</string>
@@ -772,8 +753,6 @@ Ak chcete pokračovať, aktualizujte toto zariadenie na najnovšiu verziu Delta 
     <string name="pref_show_tray_icon">Zobraziť ikonu v systémovej lište</string>
     <string name="pref_edit_profile">Upraviť účet</string>
     <string name="send_stats_to_devs">Zasielať štatistické údaje Delta Chat vývojárom</string>
-
-
     <!-- Emoji picker and categories -->
     <string name="emoji_search_results">Výsledky vyhľadávania</string>
     <string name="emoji_not_found">Nenašli sa žiadne emodži</string>
@@ -816,13 +795,6 @@ Ak chcete pokračovať, aktualizujte toto zariadenie na najnovšiu verziu Delta 
     <string name="after_5_weeks">Po 5 týždňoch</string>
     <string name="autodel_after_1_year">Po 1 roku</string>
 
-    <!-- autocrypt -->
-    <string name="autocrypt_send_asm_title">Pošlite správu s nastavením autokryptovania</string>
-    <string name="autocrypt_send_asm_explain_before">Správa o nastavení automatického šifrovania bezpečne zdieľa vaše komplexné nastavenie s ostatnými aplikáciami kompatibilnými s automatickým šifrovaním.\n\nNastavenie bude šifrované tu zobrazeným nastavovacím kódom a musí byť zadané na druhom zariadení.</string>
-    <string name="autocrypt_send_asm_button">Pošlite správu s nastavením autokryptovania</string>
-    <string name="autocrypt_send_asm_explain_after">Vaše nastavenie bolo odoslané vám. Prepnite na druhé zariadenie a otvorte správu o nastavení. Mali by ste byť požiadaní o nastavovací kód. Zadajte nasledujúce číslice:</string>
-    <string name="autocrypt_prefer_e2ee">Preferovať šifrovanie typu end-to-end</string>
-
     <!-- system messages -->
     <string name="systemmsg_subject_for_new_contact">Správa od %1$s</string>
     <string name="systemmsg_failed_sending_to">Správu sa nepodarilo odoslať %1$s .</string>
@@ -841,6 +813,8 @@ Ak chcete pokračovať, aktualizujte toto zariadenie na najnovšiu verziu Delta 
     <string name="remove_member_by_you">Člen %1$s bol odstránený mnou.</string>
     <!-- %1$s will be replaced by name of the contact removed from the group, %2$s will be replaced by name of the contact who did the action -->
     <string name="remove_member_by_other">Člen %1$s bol odstránený od %2$s.</string>
+    <!-- %1$s will be replaced by name of the contact removed from the group; this string is used when it's unclear who did the action -->
+    <string name="member_x_removed">Člen %1$s bol odstránený.</string>
     <!-- "left" in the meaning of "exited"; %1$s will be replaced by name of the contact leaving the group -->
     <string name="group_left_by_other">Skupinu opustil(a) %1$s.</string>
     <string name="group_image_deleted_by_you">Odstránili ste obrázok skupiny.</string>
@@ -914,7 +888,6 @@ Ak chcete pokračovať, aktualizujte toto zariadenie na najnovšiu verziu Delta 
     <string name="withdraw_verifygroup_explain">Tento QR kód môžu naskenovať ostatní, aby sa pripojili ku skupine \"%1$s\".\n\nTu môžete deaktivovať QR kód a znova ho aktivovať opätovným naskenovaním.</string>
     <string name="withdraw_qr_code">Vypnúť QR kód</string>
     <string name="revive_verifycontact_explain">Tento QR kód mohol byť naskenovaný inými, aby vás mohli kontaktovať.\n\nQR kód nie je na tomto zariadení aktívny.</string>
-    <string name="revive_verifygroup_explain">Tento QR kód mohli naskenovať iní, aby sa pripojili ku skupine „%1$s“.\n\nQR kód nie je na tomto zariadení aktívny.</string>
     <string name="revive_qr_code">Povoliť QR kód.</string>
     <string name="qrshow_title">QR pozývací kód</string>
     <string name="qrshow_x_joining">%1$s pripája sa.</string>
@@ -1014,8 +987,6 @@ Váš existujúci účet nebude odstránený. Medzi účtami môžete prepínať
     <string name="name_desktop">Názov</string>
     <string name="select_group_image_desktop">Vyberte obrázok skupiny</string>
     <string name="export_backup_desktop">Exportovať zálohu</string>
-    <string name="autocrypt_correct_desktop">Nastavenie automatického šifrovania bolo prenesené.</string>
-    <string name="forget_login_confirmation_desktop">Odstrániť tieto prihlasovacie údaje? Odstráni sa všetko vrátane vášho kompletného nastavenia, kontaktov, konverzácií, správ a médií. Túto akciu nie je možné vrátiť späť.</string>
     <string name="message_detail_sent_desktop">odoslané</string>
     <string name="message_detail_received_desktop">prijaté</string>
     <string name="menu.view.developer.open.log.folder">Otvoriť priečinok denníka</string>
@@ -1069,7 +1040,6 @@ Váš existujúci účet nebude odstránený. Medzi účtami môžete prepínať
     <string name="system_settings">Systémové nastavenia</string>
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Delta Chat používa váš fotoaparát na snímanie a odosielanie fotografií a videí a na skenovanie QR kódov.</string>
-    <string name="InfoPlist_NSContactsUsageDescription">Delta Chat používa vaše kontakty na zobrazenie zoznamu e-mailových adries, na ktoré môžete písať. Delta Chat nemá žiadny server, vaše kontakty sa nikam neposielajú.</string>
     <string name="InfoPlist_NSLocationAlwaysAndWhenInUseUsageDescription">Delta Chat vyžaduje oprávnenia na získanie polohy, aby ste mohli zdieľať Vašu polohu počas doby, ktorú ste stanovili.</string>
     <string name="InfoPlist_NSLocationWhenInUseUsageDescription">Delta Chat vyžaduje oprávnenia na zdieľanie vašej polohy počas doby, kedy bude zdieľanie polohy zapnuté.</string>
     <string name="InfoPlist_NSMicrophoneUsageDescription">Aplikácia Delta Chat používa váš mikrofón na zaznamenávanie a odosielanie hlasových správ a videí so zvukom.</string>
