@@ -58,24 +58,15 @@ export default function Advanced({ settingsStore }: Props) {
       <SettingsButton onClick={() => runtime.openLogFile()}>
         {tx('pref_view_log')}
       </SettingsButton>
-      <CoreSettingsSwitch
-        label={tx('enable_realtime')}
-        settingsKey='webxdc_realtime_enabled'
-        description={tx('enable_realtime_explain')}
-      />
-
-      {/*
-        don't show it on electron yet, as the message "not available on this runtime/platform"
-        would confuse users as long as tauri is not the default */}
-      {runtime.getRuntimeInfo().target === 'tauri' && <SettingsAutoStart />}
 
       <SettingsSeparator />
-
-      <SettingsHeading>{tx('pref_experimental_features')}</SettingsHeading>
-      <ExperimentalFeatures />
-      <SettingsSeparator />
-
       <SettingsHeading>{tx('pref_server')}</SettingsHeading>
+      <SettingsButton
+        onClick={openTransportSettings}
+        dataTestid='open-transport-settings'
+      >
+        {tx('transports')}
+      </SettingsButton>
       <SettingsButton
         onClick={() => {
           openProxySettings()
@@ -90,18 +81,32 @@ export default function Advanced({ settingsStore }: Props) {
         description={tx('pref_multidevice_explain')}
         beforeChange={confirmDisableMultiDevice}
       />
+
+      <SettingsSeparator />
+
+      <SettingsHeading>{tx('pref_experimental_features')}</SettingsHeading>
+      <ExperimentalFeatures />
+
+      <SettingsSeparator />
+
+      <CoreSettingsSwitch
+        label={tx('enable_realtime')}
+        settingsKey='webxdc_realtime_enabled'
+        description={tx('enable_realtime_explain')}
+      />
+
+      {/*
+        don't show it on electron yet, as the message "not available on this runtime/platform"
+        would confuse users as long as tauri is not the default */}
+      {runtime.getRuntimeInfo().target === 'tauri' && <SettingsAutoStart />}
+
       {settingsStore.settings.is_chatmail === '0' && (
         <>
           <SettingsSeparator />
+          <SettingsHeading>Legacy Options</SettingsHeading>
           <ImapFolderHandling settingsStore={settingsStore} />
         </>
       )}
-      <SettingsButton
-        onClick={openTransportSettings}
-        dataTestid='open-transport-settings'
-      >
-        {tx('transports')}
-      </SettingsButton>
     </>
   )
 }
