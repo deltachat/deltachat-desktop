@@ -15,8 +15,6 @@ export type IconName =
   | 'cross'
   | 'devices'
   | 'download'
-  | 'eye-off'
-  | 'eye-open'
   | 'favorite'
   | 'forum'
   | 'image'
