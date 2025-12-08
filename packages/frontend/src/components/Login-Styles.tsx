@@ -1,6 +1,4 @@
-import React, { ReactElement, useRef, useState } from 'react'
-import Button from './Button'
-import Icon from './Icon'
+import React, { ReactElement, useRef } from 'react'
 import useTranslationFunction from '../hooks/useTranslationFunction'
 
 export const DeltaSelect = React.memo(
@@ -151,32 +149,16 @@ export const DeltaPasswordInput = React.memo(
   ) => {
     const tx = useTranslationFunction()
 
-    const [showPassword, setShowPassword] = useState(false)
-
     const password = props.password || ''
 
-    const rightElement = (
-      <Button
-        onClick={() => setShowPassword(!showPassword)}
-        aria-label={showPassword ? tx('hide_password') : tx('show_password')}
-        styling='borderless'
-      >
-        <Icon
-          coloring='contextMenu'
-          size={16}
-          icon={showPassword ? 'eye-open' : 'eye-off'}
-        />
-      </Button>
-    )
     return (
       <DeltaInput
         id={props.id}
-        type={showPassword ? 'text' : 'password'}
+        type='password'
         label={props.label ? props.label : ''}
         value={password === null ? '' : password}
         onChange={props.onChange}
         placeholder={props.placeholder}
-        rightElement={rightElement}
       />
     )
   }
