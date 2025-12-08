@@ -3,10 +3,10 @@ use std::sync::Arc;
 use anyhow::Context;
 use deltachat_jsonrpc::{
     api::{Accounts, CommandApi},
-    yerpc::{RpcClient, RpcSession},
+    yerpc::{Response, RpcClient, RpcSession},
 };
 use futures_lite::stream::StreamExt;
-use log::{error, info};
+use log::{error, info, Level};
 use tauri::{async_runtime::JoinHandle, Manager};
 use tauri_plugin_store::StoreExt;
 use tokio::sync::RwLock;
@@ -58,6 +58,34 @@ impl DeltaChatAppState {
                     Some(message) => message,
                 };
                 // TODO fail will drop out of loop, do we want that here? or do we just want to log and ignore the error
+
+                // intercept and log core events. like in electron edition
+                // In the future it would be better to have a way to have multiple event listeners in core.
+                // This way we could also get typing here.
+                if let deltachat_jsonrpc::yerpc::Message::Response(Response {
+                    result: Some(response),
+                    ..
+                }) = &message
+                {
+                    if let Some(response) = response.as_object() {
+                        if let Some(event_object) =
+                            response.get("event").and_then(|e| e.as_object())
+                        {
+                            let kind = event_object.get("kind").and_then(|v| v.as_str());
+                            let msg = event_object.get("msg").and_then(|v| v.as_str());
+                            if let (Some(kind), Some(msg)) = (kind, msg) {
+                                match kind {
+                                    "Info" | "Warning" | "Error" => {
+                                        // These events are already logged as tracing/log events
+                                    }
+                                    _ => {
+                                        log::log!(target: "CORE-EVENT", Level::Debug, "{kind}: {msg}");
+                                    }
+                                };
+                            }
+                        }
+                    }
+                }
 
                 if let Err(err) = state.send_jsonrpc_response(message).await {
                     error!("send_jsonrpc_response failed: {err}");
