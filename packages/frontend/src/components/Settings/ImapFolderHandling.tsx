@@ -20,14 +20,12 @@ export default function ImapFolderHandling({ settingsStore }: Props) {
       <CoreSettingsSwitch
         label={tx('pref_auto_folder_moves')}
         settingsKey='mvbox_move'
-        description={tx('pref_auto_folder_moves_explain')}
         disabled={disableIfOnlyFetchMvBoxIsTrue}
         disabledValue={false}
       />
       <CoreSettingsSwitch
         label={tx('pref_only_fetch_mvbox_title')}
         settingsKey='only_fetch_mvbox'
-        description={tx('pref_only_fetch_mvbox_explain')}
       />
     </>
   )
