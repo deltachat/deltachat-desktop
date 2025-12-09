@@ -302,20 +302,6 @@ app.on('web-contents-created', (_ev, contents) => {
       }
     }
 
-    contents.on('will-navigate', (ev, navigationUrl) => {
-      if (navigationUrl.startsWith('webxdc://')) {
-        // allow internal webxdc nav
-        return
-      } else if (navigationUrl.startsWith('mailto:')) {
-        // handle mailto in dc
-        ev.preventDefault()
-        webxdcOpenUrl(navigationUrl)
-      } else {
-        // prevent navigation to unknown scheme
-        ev.preventDefault()
-      }
-    })
-
     contents.on('will-frame-navigate', ev => {
       if (ev.url.startsWith('webxdc://')) {
         // allow internal webxdc nav
