@@ -16,9 +16,9 @@ catalog:
 
   # tools / dev dependencies
   sass: ^1.86.3
-  typescript: ^5.9.2
+  typescript: ^5.9.3
   typescript-plugin-css-modules: ^5.2.0
   esbuild: ^0.25.0
-  '@types/node': ^20.14.13
+  '@types/node': ^22.15.33
   '@types/mocha': ^10.0.7
   '@types/chai': ^4.3.17
