@@ -96,9 +96,9 @@ export default function TransportsDialog(
     openDialog(BasicQrScanner, {
       onSuccess: async (result: string) => {
         const { qr } = await processQr(accountId, result)
-        if (qr.kind === 'account') {
+        if (qr.kind === 'account' || qr.kind === 'login') {
           const confirmed = await addTransportConfirmationDialog(
-            qr.domain,
+            qr.kind === 'account' ? qr.domain : qr.address,
             multiDeviceMode === '1',
             openConfirmationDialog,
             tx('confirm_add_transport')

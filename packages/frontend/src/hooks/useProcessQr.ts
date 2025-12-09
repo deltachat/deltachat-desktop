@@ -285,6 +285,9 @@ export default function useProcessQR() {
       /**
        * DCACCOUNT:
        * see https://github.com/deltachat/interface/blob/main/uri-schemes.md#DCACCOUNT
+       * or
+       * DCLOGIN
+       * see https://github.com/deltachat/interface/blob/main/uri-schemes.md#DCLOGIN
        *
        * contains the url to a chatmail instance which will be used in the
        * instant onboarding process initiated by this QR code scan
@@ -294,10 +297,10 @@ export default function useProcessQR() {
        * 2. unconfigured account: set instant onboarding chatmail instance
        *
        */
-      if (qr.kind === 'account') {
+      if (qr.kind === 'account' || qr.kind === 'login') {
         if (isLoggedIn) {
           const confirmed = await addTransportConfirmationDialog(
-            qr.domain,
+            qr.kind === 'account' ? qr.domain : qr.address,
             multiDeviceMode,
             openConfirmationDialog,
             tx('confirm_add_transport')
@@ -309,35 +312,6 @@ export default function useProcessQR() {
           openDialog(TransportsDialog, {
             accountId,
           })
-        } else {
-          await startInstantOnboarding(accountId, { ...parsed, qr })
-        }
-
-        return callback?.()
-      }
-
-      /**
-       * DCLOGIN
-       * see https://github.com/deltachat/interface/blob/main/uri-schemes.md#DCLOGIN
-       *
-       * contains credentials for an existing account as
-       * they could be provided by a mail hoster
-       * can be used to allow a user to login to an existing account
-       * and create a profile based on that transport
-       */
-      if (qr.kind === 'login') {
-        if (isLoggedIn) {
-          const userConfirmed = await openConfirmationDialog({
-            message: tx('qrlogin_ask_login_another', qr.address),
-            confirmLabel: tx('login_title'),
-          })
-
-          if (!userConfirmed) {
-            return callback?.()
-          }
-
-          const new_accountId = await addAndSelectAccount()
-          await startInstantOnboarding(new_accountId, { ...parsed, qr })
         } else {
           await startInstantOnboarding(accountId, { ...parsed, qr })
         }
