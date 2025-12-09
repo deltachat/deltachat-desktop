@@ -57,6 +57,7 @@ static/
 **/*.scss
 **/*.ts
 **/*.d.ts
+_locales
 _locales/*.xml
 build/
 runtime-electron/
