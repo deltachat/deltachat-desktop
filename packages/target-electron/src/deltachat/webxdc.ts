@@ -682,14 +682,6 @@ export default class DCWebxdc {
       }
     })
 
-    ipcMain.handle('webxdc.exit', async event => {
-      const app = lookupAppFromEvent(event)
-      if (app) {
-        app.win.loadURL('about:blank')
-        app.win.close()
-      }
-    })
-
     ipcMain.handle('webxdc.getAllUpdates', async (event, serial = 0) => {
       const app = lookupAppFromEvent(event)
       if (!app) {
