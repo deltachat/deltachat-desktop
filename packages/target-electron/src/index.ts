@@ -313,7 +313,34 @@ app.on('web-contents-created', (_ev, contents) => {
     }
 
     contents.on('will-frame-navigate', ev => {
-      if (ev.url.startsWith('webxdc://')) {
+      const navigationUrl = new URL(ev.url)
+      if (ev.frame == null || ev.frame.top == null) {
+        log.warn(
+          'will-frame-navigate event fired, but ev.frame or ev.frame.top is null. Will prevent navigation.'
+        )
+        ev.preventDefault()
+        return
+      }
+
+      // Checking `frame.top.url` instead of `frame.url`
+      // because `frame.url` is initially `about:blank` for the wrapped frame.
+      // For the top frame, however, we always expect it to be
+      // a `webxdc://` URL. As docs say
+      // https://www.electronjs.org/docs/latest/api/web-contents#event-will-frame-navigate
+      // > This event will not emit when the navigation
+      // > is started programmatically with APIs like `webContents.loadURL`
+      const topFrameUrl = new URL(ev.frame.top.url)
+
+      const isSaneWebxdcUrl =
+        navigationUrl.protocol === 'webxdc:' &&
+        navigationUrl.hostname.endsWith('.webxdc') &&
+        navigationUrl.port === ''
+      const isSameOrigin =
+        navigationUrl.protocol === topFrameUrl.protocol &&
+        navigationUrl.hostname === topFrameUrl.hostname &&
+        navigationUrl.port === topFrameUrl.port
+
+      if (isSaneWebxdcUrl && isSameOrigin) {
         // allow internal webxdc nav
         return
       } else if (ev.url.startsWith('mailto:')) {
