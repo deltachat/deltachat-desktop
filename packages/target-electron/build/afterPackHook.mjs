@@ -85,7 +85,7 @@ export default async context => {
 
   // delete not needed prebuilds
   // ---------------------------------------------------------------------------------
-  if (!env['NO_ASAR']) {
+  if (!env['NO_ASAR'] && existsSync(prebuild_dir)) {
     await deleteNotNeededPrebuildsFromUnpackedASAR(
       prebuild_dir,
       context,
