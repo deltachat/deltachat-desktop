@@ -7,8 +7,8 @@ catalog:
   '@deltachat/stdio-rpc-server': 2.35.0
   '@webxdc/types': ^2.1.2
   '@deltachat/calls-webapp': 0.11.0-beta-debug
-  mocha: ^10.7.0
-  chai: ^5.1.1
+  mocha: ^11.7.5
+  chai: ^6.2.1
 
   # dependencies
   '@types/mime-types': ^2.1.4
