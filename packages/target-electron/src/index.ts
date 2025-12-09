@@ -304,6 +304,10 @@ app.on('web-contents-created', (_ev, contents) => {
 
     contents.on('will-frame-navigate', ev => {
       const navigationUrl = new URL(ev.url)
+      // TODO remove `.top` check. Compare to the previous URL.
+      // And overall reconsider the whole "remove wrapper" thing.
+      // IIRC all we need is to ensure that we cannot navigate
+      // to other origins, that's it.
       if (ev.frame == null || ev.frame.top == null) {
         log.warn(
           'will-frame-navigate event fired, but ev.frame or ev.frame.top is null. Will prevent navigation.'

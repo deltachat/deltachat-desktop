@@ -98,12 +98,6 @@ const ALLOWED_PERMISSIONS: string[] = [
 ]
 
 /**
- * Path to the static webxdc wrapper HTML file which contains the
- * iframe that will host the webxdc app
- */
-const WRAPPER_PATH = 'webxdc-wrapper.45870014933640136498.html'
-
-/**
  * Prefix for the webxdc bounds UI configuration
  * used to save and retrieve the last bound of a webxdc window
  */
@@ -523,13 +517,8 @@ export default class DCWebxdc {
         }
       })
 
-      webxdcWindow.webContents.loadURL(appURL + '/' + WRAPPER_PATH, {
+      webxdcWindow.webContents.loadURL(appURL + '/index.html', {
         extraHeaders: 'Content-Security-Policy: ' + CSP,
-      })
-
-      // prevent reload and navigation of wrapper page
-      webxdcWindow.webContents.on('will-navigate', ev => {
-        ev.preventDefault()
       })
 
       let denyPreventUnload = false
@@ -617,9 +606,6 @@ export default class DCWebxdc {
           }
         }, 150)
       })
-
-      // we would like to make `mailto:`-links work,
-      // but https://github.com/electron/electron/pull/34418 is not merged yet.
 
       // prevent webxdc content from setting the window title
       webxdcWindow.on('page-title-updated', ev => {
@@ -1148,17 +1134,7 @@ async function webxdcProtocolHandler(
     mimeType = undefined
   }
 
-  if (filename === WRAPPER_PATH) {
-    const wrapperBuffer = await readFile(
-      join(htmlDistDir(), '/webxdc_wrapper.html')
-    )
-    return makeResponse({
-      body: new Uint8Array(wrapperBuffer),
-      responseInit: {},
-      mime_type: mimeType,
-      cspAllowHttpsImgSrc,
-    })
-  } else if (filename === 'webxdc.js') {
+  if (filename === 'webxdc.js') {
     const displayName = Buffer.from(open_apps[id].displayName).toString(
       'base64'
     )
@@ -1167,11 +1143,9 @@ async function webxdcProtocolHandler(
     // `window.webxdc` is found there: static/webxdc-preload.js
     return makeResponse({
       body: Buffer.from(
-        `window.parent.webxdc_internal.setup("${selfAddr}","${displayName}", ${Number(
+        `window.webxdc_internal.setup("${selfAddr}","${displayName}", ${Number(
           open_apps[id].sendUpdateInterval
-        )}, ${Number(open_apps[id].sendUpdateMaxSize)})
-        window.webxdc = window.parent.webxdc
-        window.webxdc_custom = window.parent.webxdc_custom`
+        )}, ${Number(open_apps[id].sendUpdateMaxSize)})`
       ),
       responseInit: {},
       mime_type: mimeType,
