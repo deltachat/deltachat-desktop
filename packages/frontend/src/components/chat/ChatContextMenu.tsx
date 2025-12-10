@@ -297,6 +297,11 @@ function buildEncryptionInfoMenuItem(
  * and for the 3dot menu in main chat view
  */
 export function useChatContextMenu(): {
+  /**
+   * @param chatListItems array of selected chat list items (empty if opened from main chat view)
+   * @param selectedChatId id of the currently selected chat (null if none selected)
+   * @param selectedChat the currently active chat (only in main view)
+   */
   openContextMenu: (
     event: React.MouseEvent<any, MouseEvent>,
     chatListItems: ChatListItem[],
@@ -340,6 +345,9 @@ export function useChatContextMenu(): {
         ? chatListItems[0]
         : false
 
+    if (chatListItems.length === 0 && singleChat) {
+      chatListItems.push(singleChat)
+    }
     const isGroup = singleChat && singleChat.chatType === 'Group'
     const isOutBroadcast = singleChat && singleChat.chatType === 'OutBroadcast'
 
