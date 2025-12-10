@@ -647,6 +647,11 @@ fn get_chromium_hardening_browser_args(dummy_proxy_url: &Url) -> String {
     // `host-resolver-rules` and `host-rules` primarily block
     // DNS prefetching. But they also block `fetch()` requests.
     //
+    // Note that `host-rules` has been removed from Chromium in 2025-08:
+    // https://chromium-review.googlesource.com/c/chromium/src/+/4867872.
+    // `host-resolver-rules` seems to be enough to patch DNS prefetching
+    // based on tests run on Electron.
+    //
     // Chromium docs that touch on `--host-resolver-rules` and DNS:
     // https://www.chromium.org/developers/design-documents/network-stack/socks-proxy/
     // https://www.chromium.org/developers/design-documents/dns-prefetching/
@@ -656,7 +661,7 @@ fn get_chromium_hardening_browser_args(dummy_proxy_url: &Url) -> String {
     // However, since the proxy won't work, this should, in theory,
     // effectively disable WebRTC.
     //
-    // Thanks to the fact that we specify `host-rules`,
+    // Thanks to the fact that we specify `host-resolver-rules`,
     // no connection attempt to the proxy should occur at all,
     // at least as of now.
     // See https://www.chromium.org/developers/design-documents/network-stack/socks-proxy/ :

@@ -17,7 +17,12 @@ import { initialisePowerMonitor } from './resume_from_sleep.js'
 // https://www.chromium.org/developers/design-documents/dns-prefetching/
 const hostRules = 'MAP * ~NOTFOUND'
 rawApp.commandLine.appendSwitch('host-resolver-rules', hostRules)
-rawApp.commandLine.appendSwitch('host-rules', hostRules)
+// We used to also apply `host-rules` for good measure,
+// but it has been removed from Chromium:
+// https://chromium-review.googlesource.com/c/chromium/src/+/4867872.
+// We're still not sure what the differences between the two are,
+// but specifying `host-resolver-rules` appears to be enough based on our tests.
+// rawApp.commandLine.appendSwitch('host-rules', hostRules)
 
 rawApp.commandLine.appendSwitch('disable-features', 'IsolateSandboxedIframes')
 
