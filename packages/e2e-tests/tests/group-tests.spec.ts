@@ -147,8 +147,8 @@ test('create group', async ({ browserName }) => {
   })
   await expect(page.getByRole('menu').getByRole('menuitem')).toHaveText([
     'Pin Chat',
-    'Mute Notifications',
     'Archive Chat',
+    'Mute Notifications',
     'View Profile',
     'Clone Chat',
     'Leave Group',
