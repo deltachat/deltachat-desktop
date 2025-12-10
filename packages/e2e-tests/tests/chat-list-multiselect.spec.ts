@@ -204,8 +204,8 @@ test.describe('context menu', () => {
     })
     await expect(page.getByRole('menu').getByRole('menuitem')).toHaveText([
       'Pin Chat',
-      'Mute Notifications',
       'Archive Chat',
+      'Mute Notifications',
       'Delete Chat',
     ])
     await expectSelectedChats([7, 5])
@@ -268,9 +268,8 @@ test.describe('context menu', () => {
     })
     await expect(page.getByRole('menu').getByRole('menuitem')).toHaveText([
       'Unpin Chat',
-
-      'Mute Notifications',
       'Archive Chat',
+      'Mute Notifications',
       'Delete Chat',
     ])
     await page.keyboard.press('Escape')
@@ -285,9 +284,8 @@ test.describe('context menu', () => {
     // Some of the selected are pinned, some are not.
     await expect(page.getByRole('menu').getByRole('menuitem')).toHaveText([
       'Pin Chat',
-
-      'Mute Notifications',
       'Archive Chat',
+      'Mute Notifications',
       'Delete Chat',
     ])
 
@@ -342,8 +340,8 @@ test.describe('context menu', () => {
     })
     await expect(page.getByRole('menu').getByRole('menuitem')).toHaveText([
       'Pin Chat',
-      'Unmute',
       'Archive Chat',
+      'Unmute',
       'Delete Chat',
     ])
     await page.keyboard.press('Escape')
@@ -358,8 +356,8 @@ test.describe('context menu', () => {
     // Some of the selected are muted, some are not.
     await expect(page.getByRole('menu').getByRole('menuitem')).toHaveText([
       'Pin Chat',
-      'Mute Notifications',
       'Archive Chat',
+      'Mute Notifications',
       'Delete Chat',
     ])
     await page.keyboard.press('Escape')
