@@ -60,6 +60,7 @@ export function fullChatToChatListItem(chat: T.FullChat): ChatListItem {
     isSelfInGroup: chat.selfInGroup,
     isContactRequest: chat.isContactRequest,
     isEncrypted: chat.isEncrypted,
+    // https://github.com/chatmail/core/blob/a3328ea2de1e675b1418b4e2ca0c23f88828c558/deltachat-jsonrpc/src/api/types/chat_list.rs#L130-L146
     dmChatContact:
       chat.chatType === 'Single' && chat.contactIds.length > 0
         ? chat.contactIds[0]
