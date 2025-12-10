@@ -132,7 +132,10 @@ import { ExtendedAppMainProcess } from './types.js'
 import { updateTrayIcon, hideDeltaChat, showDeltaChat } from './tray.js'
 import './notifications.js'
 import { acceptThemeCLI } from './themes.js'
-import { webxdcStartUpCleanup } from './deltachat/webxdc.js'
+import {
+  WEBXDC_PARTITION_PREFIX,
+  webxdcStartUpCleanup,
+} from './deltachat/webxdc.js'
 import {
   cleanupDraftTempDir,
   cleanupInternalTempDirs,
@@ -292,7 +295,9 @@ app.on('window-all-closed', () => quit())
 app.on('web-contents-created', (_ev, contents) => {
   const is_webxdc =
     contents.session.storagePath &&
-    contents.session.storagePath.indexOf('webxdc_') !== -1
+    contents.session.storagePath.indexOf(
+      WEBXDC_PARTITION_PREFIX satisfies 'webxdc_'
+    ) !== -1
   if (is_webxdc) {
     const webxdcOpenUrl = (url: string) => {
       if (url.startsWith('mailto:') || url.startsWith('openpgp4fpr:')) {

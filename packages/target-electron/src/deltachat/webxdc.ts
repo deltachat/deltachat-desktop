@@ -1211,8 +1211,9 @@ function makeTitle(webxdcInfo: T.WebxdcMessageInfo, chatName: string): string {
   }${truncateText(webxdcInfo.name, 42)} – ${chatName}`
 }
 
+export const WEBXDC_PARTITION_PREFIX = 'webxdc_'
 function partitionKeyFromAccountId(accountId: number, integrated = false) {
-  return `persist:webxdc_${accountId}${integrated ? '_integrated' : ''}`
+  return `persist:${WEBXDC_PARTITION_PREFIX}${accountId}${integrated ? '_integrated' : ''}`
 }
 
 /**
