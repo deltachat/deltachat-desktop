@@ -2,7 +2,7 @@
   "private": true,
   "type": "module",
   "name": "@deltachat-desktop/target-electron",
-  "version": "2.25.3",
+  "version": "2.33.0",
   "description": "Desktop Application for delta.chat",
   "repository": {
     "type": "git",
