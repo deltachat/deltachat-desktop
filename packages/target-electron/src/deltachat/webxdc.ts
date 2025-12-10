@@ -449,31 +449,11 @@ export default class DCWebxdc {
                 label: tx('source_code'),
                 enabled: !!webxdcInfo.sourceCodeUrl,
                 icon: app_icon?.resize({ width: 24 }) || undefined,
-                click: () => {
-                  if (
-                    webxdcInfo.sourceCodeUrl
-                      ?.toLowerCase()
-                      .startsWith('https:') ||
-                    webxdcInfo.sourceCodeUrl?.toLowerCase().startsWith('http:')
-                  ) {
-                    shell.openExternal(webxdcInfo.sourceCodeUrl)
-                  } else if (webxdcInfo.sourceCodeUrl) {
-                    const url = webxdcInfo.sourceCodeUrl
-                    dialog
-                      .showMessageBox(webxdcWindow, {
-                        buttons: [tx('no'), tx('menu_copy_link_to_clipboard')],
-                        message: tx(
-                          'ask_copy_unopenable_link_to_clipboard',
-                          url
-                        ),
-                      })
-                      .then(({ response }) => {
-                        if (response == 1) {
-                          clipboard.writeText(url)
-                        }
-                      })
-                  }
-                },
+                click: () =>
+                  openExternalHttpOrPromptToCopy(
+                    webxdcWindow,
+                    webxdcInfo.sourceCodeUrl ?? ''
+                  ),
               },
               {
                 type: 'separator',
@@ -1289,3 +1269,41 @@ ipcMain.handle('delete_webxdc_account_data', async (_ev, accountId: number) => {
     }
   }
 })
+
+/**
+ * Opens the link externally (in the browser) if it's an HTTP(S) link,
+ * or opens a dialog suggesting to copy the link if it's not an HTTP(S) link.
+ *
+ * This should only be called if the user confirmed their intent
+ * to open the link. Preferably the user also got a chance to look
+ * at the link text, in its ASCII (i.e. Punycode) form.
+ * If that's the case, this can be used for untrusted links.
+ *
+ * @param win the window on which the "copy?" dialog will be opened.
+ *
+ * @see `useOpenLinkSafely`
+ * @see `openLink` in `html_email.ts`
+ * @see `open_url`
+ */
+async function openExternalHttpOrPromptToCopy(
+  win: BrowserWindow,
+  url: string
+): Promise<void> {
+  if (
+    url.toLowerCase().startsWith('https:') ||
+    url.toLowerCase().startsWith('http:')
+  ) {
+    shell.openExternal(url)
+  } else if (url) {
+    await dialog
+      .showMessageBox(win, {
+        buttons: [tx('no'), tx('menu_copy_link_to_clipboard')],
+        message: tx('ask_copy_unopenable_link_to_clipboard', url),
+      })
+      .then(({ response }) => {
+        if (response == 1) {
+          clipboard.writeText(url)
+        }
+      })
+  }
+}
