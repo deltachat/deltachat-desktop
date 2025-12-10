@@ -76,7 +76,7 @@ function buildArchiveAndPinMenuItems(
   chats: ChatListItem[],
   tx: ReturnType<typeof useTranslationFunction>,
   selectedChatId: number | null
-): { pin: ContextMenuItem; archive: ContextMenuItem } {
+): { pin: ContextMenuItem | null; archive: ContextMenuItem } {
   const batchAction = (fn: (chat: ChatListItem) => Promise<unknown>) => () =>
     Promise.all(chats.map(chat => fn(chat)))
 
@@ -127,7 +127,7 @@ function buildArchiveAndPinMenuItems(
   if (chats.every(chat => chat.isPinned)) {
     return { pin: unPin, archive }
   } else if (chats.every(chat => chat.isArchived)) {
-    return { pin, archive: unArchive }
+    return { pin: null, archive: unArchive }
   } else {
     return { pin, archive }
   }
@@ -448,9 +448,9 @@ export function useChatContextMenu(): {
         action: onSearchInChat,
       },
       !isMainView && pin,
+      archive,
       ephemeralMessagesMenuItem,
       muteMenuItem,
-      archive,
       { type: 'separator' },
       ...(!isMainView ? viewEditMenuItems : []),
       // Clone Group
