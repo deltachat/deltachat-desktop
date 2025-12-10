@@ -110,8 +110,8 @@ test('start chat with user', async ({ browserName }) => {
   })
   await expect(page.getByRole('menu').getByRole('menuitem')).toHaveText([
     'Pin Chat',
-    'Mute Notifications',
     'Archive Chat',
+    'Mute Notifications',
     'View Profile',
     'Block Contact',
     'Delete Chat',
