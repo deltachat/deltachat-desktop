@@ -1285,7 +1285,7 @@ ipcMain.handle('delete_webxdc_account_data', async (_ev, accountId: number) => {
  * @see `openLink` in `html_email.ts`
  * @see `open_url`
  */
-async function openExternalHttpOrPromptToCopy(
+export async function openExternalHttpOrPromptToCopy(
   win: BrowserWindow,
   url: string
 ): Promise<void> {
