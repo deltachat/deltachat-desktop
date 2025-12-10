@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useCallback } from 'react'
 
 import CopyContentAlertDialog from '../components/CopyContentAlertDialog'
 import useAlertDialog from './dialog/useAlertDialog'
@@ -10,7 +10,6 @@ import useSecureJoin from './useSecureJoin'
 import useTranslationFunction from './useTranslationFunction'
 import { BackendRemote } from '../backend-com'
 import { ReceiveBackupProgressDialog } from '../components/dialogs/SetupMultiDevice'
-import { ScreenContext } from '../contexts/ScreenContext'
 import { getLogger } from '../../../shared/logger'
 import { processQr, QrWithUrl } from '../backend/qr'
 
@@ -102,7 +101,6 @@ const WITHDRAW_OR_REVIVE_CONFIGS: WithdrawOrReviveConfigs = {
  */
 export default function useProcessQR() {
   const tx = useTranslationFunction()
-  const { addAndSelectAccount } = useContext(ScreenContext)
   const { openDialog } = useDialog()
   const openAlertDialog = useAlertDialog()
   const openConfirmationDialog = useConfirmationDialog()
@@ -284,17 +282,18 @@ export default function useProcessQR() {
       }
       /**
        * DCACCOUNT:
+       * contains the url to a chatmail relay
        * see https://github.com/deltachat/interface/blob/main/uri-schemes.md#DCACCOUNT
        * or
+       *
        * DCLOGIN
+       * complete login credentials for a relay or mail server
        * see https://github.com/deltachat/interface/blob/main/uri-schemes.md#DCLOGIN
        *
-       * contains the url to a chatmail instance which will be used in the
-       * instant onboarding process initiated by this QR code scan
        *
        * Scenarios depending on the account status:
-       * 1. configured account: Ask the user if they want to create a new profile on the given chatmail instance
-       * 2. unconfigured account: set instant onboarding chatmail instance
+       * 1. configured account: Ask the user if they want to add a new relay to the current profile
+       * 2. unconfigured account: set instant onboarding instance
        *
        */
       if (qr.kind === 'account' || qr.kind === 'login') {
@@ -459,7 +458,6 @@ export default function useProcessQR() {
       secureJoin,
       processQrCode,
       startInstantOnboarding,
-      addAndSelectAccount,
       selectChat,
       isChatmail,
       multiDeviceMode,

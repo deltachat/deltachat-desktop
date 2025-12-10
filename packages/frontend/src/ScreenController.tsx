@@ -355,7 +355,6 @@ export default class ScreenController extends Component {
             userFeedback: this.userFeedback,
             changeScreen: this.changeScreen,
             screen: this.state.screen,
-            addAndSelectAccount: this.addAndSelectAccount,
             smallScreenMode: this.state.smallScreenMode,
           }}
         >
