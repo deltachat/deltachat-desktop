@@ -19,12 +19,12 @@ import { processQr } from '../../../backend/qr'
 import Icon from '../../Icon'
 
 export const addTransportConfirmationDialog = async (
-  domain: string,
+  domainOrAddress: string,
   multiDeviceMode: boolean,
   openConfirmationDialog: (options: { message: string }) => Promise<boolean>,
   confirmLabel: string
 ): Promise<boolean> => {
-  let message = `${confirmLabel}\n ${domain}`
+  let message = `${confirmLabel}\n ${domainOrAddress}`
   if (multiDeviceMode) {
     message +=
       '\n\nNote if using multi-device:\nbefore changing or adding transports make sure all other devices have at least version 2.33.0 installed. Otherwise they will run out of sync.'
