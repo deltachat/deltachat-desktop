@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react'
+import { useCallback } from 'react'
 
 import CopyContentAlertDialog from '../components/CopyContentAlertDialog'
 import useAlertDialog from './dialog/useAlertDialog'
@@ -10,7 +10,6 @@ import useSecureJoin from './useSecureJoin'
 import useTranslationFunction from './useTranslationFunction'
 import { BackendRemote } from '../backend-com'
 import { ReceiveBackupProgressDialog } from '../components/dialogs/SetupMultiDevice'
-import { ScreenContext } from '../contexts/ScreenContext'
 import { getLogger } from '../../../shared/logger'
 import { processQr, QrWithUrl } from '../backend/qr'
 
@@ -102,7 +101,6 @@ const WITHDRAW_OR_REVIVE_CONFIGS: WithdrawOrReviveConfigs = {
  */
 export default function useProcessQR() {
   const tx = useTranslationFunction()
-  const { addAndSelectAccount } = useContext(ScreenContext)
   const { openDialog } = useDialog()
   const openAlertDialog = useAlertDialog()
   const openConfirmationDialog = useConfirmationDialog()
@@ -284,20 +282,24 @@ export default function useProcessQR() {
       }
       /**
        * DCACCOUNT:
+       * contains the url to a chatmail relay
        * see https://github.com/deltachat/interface/blob/main/uri-schemes.md#DCACCOUNT
+       * or
        *
-       * contains the url to a chatmail instance which will be used in the
-       * instant onboarding process initiated by this QR code scan
+       * DCLOGIN
+       * complete login credentials for a relay or mail server
+       * see https://github.com/deltachat/interface/blob/main/uri-schemes.md#DCLOGIN
+       *
        *
        * Scenarios depending on the account status:
-       * 1. configured account: Ask the user if they want to create a new profile on the given chatmail instance
-       * 2. unconfigured account: set instant onboarding chatmail instance
+       * 1. configured account: Ask the user if they want to add a new relay to the current profile
+       * 2. unconfigured account: set instant onboarding instance
        *
        */
-      if (qr.kind === 'account') {
+      if (qr.kind === 'account' || qr.kind === 'login') {
         if (isLoggedIn) {
           const confirmed = await addTransportConfirmationDialog(
-            qr.domain,
+            qr.kind === 'account' ? qr.domain : qr.address,
             multiDeviceMode,
             openConfirmationDialog,
             tx('confirm_add_transport')
@@ -309,35 +311,6 @@ export default function useProcessQR() {
           openDialog(TransportsDialog, {
             accountId,
           })
-        } else {
-          await startInstantOnboarding(accountId, { ...parsed, qr })
-        }
-
-        return callback?.()
-      }
-
-      /**
-       * DCLOGIN
-       * see https://github.com/deltachat/interface/blob/main/uri-schemes.md#DCLOGIN
-       *
-       * contains credentials for an existing account as
-       * they could be provided by a mail hoster
-       * can be used to allow a user to login to an existing account
-       * and create a profile based on that transport
-       */
-      if (qr.kind === 'login') {
-        if (isLoggedIn) {
-          const userConfirmed = await openConfirmationDialog({
-            message: tx('qrlogin_ask_login_another', qr.address),
-            confirmLabel: tx('login_title'),
-          })
-
-          if (!userConfirmed) {
-            return callback?.()
-          }
-
-          const new_accountId = await addAndSelectAccount()
-          await startInstantOnboarding(new_accountId, { ...parsed, qr })
         } else {
           await startInstantOnboarding(accountId, { ...parsed, qr })
         }
@@ -485,7 +458,6 @@ export default function useProcessQR() {
       secureJoin,
       processQrCode,
       startInstantOnboarding,
-      addAndSelectAccount,
       selectChat,
       isChatmail,
       multiDeviceMode,
