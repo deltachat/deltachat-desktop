@@ -200,7 +200,7 @@ export default function AccountListSidebar({
                 <li
                   key={id}
                   draggable
-                  onDragStart={() => handleDragStart(id)}
+                  onDragStart={e => handleDragStart(e, id)}
                   onDragOver={e => handleDragOver(e, index)}
                   onDrop={handleDrop}
                   onDragEnd={handleDragEnd}

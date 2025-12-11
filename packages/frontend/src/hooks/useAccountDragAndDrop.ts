@@ -10,7 +10,7 @@ export interface DropIndicator {
 export interface UseAccountDragAndDropReturn {
   draggedAccountId: number | null
   dropIndicator: DropIndicator | null
-  handleDragStart: (accountId: number) => void
+  handleDragStart: (e: React.DragEvent, accountId: number) => void
   handleDragOver: (e: React.DragEvent, index: number) => void
   handleDragLeave: () => void
   handleDragEnd: () => void
@@ -29,7 +29,8 @@ export function useAccountDragAndDrop(
   const [draggedAccountId, setDraggedAccountId] = useState<number | null>(null)
   const [dropIndicator, setDropIndicator] = useState<DropIndicator | null>(null)
 
-  const handleDragStart = (accountId: number) => {
+  const handleDragStart = (e: React.DragEvent, accountId: number) => {
+    e.dataTransfer.effectAllowed = 'move'
     setDraggedAccountId(accountId)
   }
 
