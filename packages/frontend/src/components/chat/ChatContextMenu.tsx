@@ -203,7 +203,7 @@ function buildMuteMenuItem(
  * Builds view/edit profile menu items for chats
  */
 function buildViewEditMenuItems(
-  singleChat: ChatListItem | false,
+  singleChat: ChatListItem | undefined,
   selectedChat: T.FullChat | undefined,
   openDialog: ReturnType<typeof useDialog>['openDialog'],
   openViewGroupDialog: ReturnType<typeof useOpenViewGroupDialog>,
@@ -271,7 +271,7 @@ function buildViewEditMenuItems(
  * Builds encryption info menu item
  */
 function buildEncryptionInfoMenuItem(
-  singleChat: ChatListItem | false,
+  singleChat: ChatListItem | undefined,
   tx: ReturnType<typeof useTranslationFunction>,
   openEncryptionInfoDialog: (info: {
     chatId: number | null
@@ -298,11 +298,6 @@ function buildEncryptionInfoMenuItem(
  * and for the 3dot menu in main chat view
  */
 export function useChatContextMenu(): {
-  /**
-   * @param chatListItems array of selected chat list items (empty if opened from main chat view)
-   * @param selectedChatId id of the currently selected chat (null if none selected)
-   * @param selectedChat the currently active chat (only in main view)
-   */
   openContextMenu: (
     event: React.MouseEvent<any, MouseEvent>,
     chatListItems: ChatListItem[],
@@ -329,6 +324,11 @@ export function useChatContextMenu(): {
     number[]
   >([])
 
+  /**
+   * @param chatListItems array of selected chat list items (empty if opened from main chat view)
+   * @param selectedChatId id of the currently selected chat (null if none selected)
+   * @param selectedChat the currently active chat (only in main view)
+   */
   const openContextMenuHandler = async (
     event: React.MouseEvent<any, MouseEvent>,
     chatListItems: ChatListItem[],
@@ -339,12 +339,20 @@ export function useChatContextMenu(): {
       log.error('openContextMenu called with 0 chats')
       return
     }
+    // true if opened from main chat view (not from list)
     const isMainView = !!selectedChat
-    const singleChat: ChatListItem | false = isMainView
+
+    const multipleChatsSelected = chatListItems.length > 1
+
+    // Determine use case:
+    // 1. multiple selected chats in chat list (multipleChatsSelected = true, singleChat = undefined)
+    // 2. single selected chat in chat list
+    // 3. no selected chat in chat list, but main view chat
+    const singleChat: ChatListItem | undefined = isMainView
       ? fullChatToChatListItem(selectedChat)
       : chatListItems.length === 1
         ? chatListItems[0]
-        : false
+        : undefined
 
     if (chatListItems.length === 0 && singleChat) {
       chatListItems.push(singleChat)
@@ -402,21 +410,21 @@ export function useChatContextMenu(): {
     const muteMenuItem = buildMuteMenuItem(chatListItems, accountId, tx)
 
     // View and Edit menu items
-    const viewEditMenuItems = buildViewEditMenuItems(
-      singleChat,
-      selectedChat,
-      openDialog,
-      openViewGroupDialog,
-      openViewProfileDialog,
-      accountId,
-      tx
-    )
+    const viewEditMenuItems = multipleChatsSelected
+      ? []
+      : buildViewEditMenuItems(
+          singleChat,
+          selectedChat,
+          openDialog,
+          openViewGroupDialog,
+          openViewProfileDialog,
+          accountId,
+          tx
+        )
 
-    const encryptionInfoItem = buildEncryptionInfoMenuItem(
-      singleChat,
-      tx,
-      openEncryptionInfoDialog
-    )
+    const encryptionInfoItem = multipleChatsSelected
+      ? null
+      : buildEncryptionInfoMenuItem(singleChat, tx, openEncryptionInfoDialog)
 
     const ephemeralMessagesMenuItem = isMainView &&
       selectedChat.canSend &&
