@@ -26,6 +26,7 @@ await build({
   inject: ['src/cjs-shim.ts'],
   define: {
     BUILD_INFO_JSON_STRING: `"${BuildInfoString.replace(/"/g, '\\"')}"`,
+    'process.env.NODE_ENV': isProduction ? '"production"' : '"development"',
   },
 })
 
