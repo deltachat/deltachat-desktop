@@ -15,6 +15,7 @@ import { useDebouncedCallback } from 'use-debounce'
 import { debounce } from 'debounce'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { useSettingsStore } from './settings'
+import { shouldShowOSNotificationForCurrentChat } from '../system-integration/notifications'
 
 const log = getLogger('messagelist')
 
@@ -101,11 +102,14 @@ export function useMessageList(
         if (chatId === eventChatId) {
           store.effect.onEventIncomingMessage()
 
-          // Note that the element might already be playing,
-          // if we received two or more messages rapidly.
-          // In that case it could be nice to play multiple sounds in parallel.
-          incomingMessageAudioElement.currentTime = 0
-          incomingMessageAudioElement.play()
+          // Otherwise an OS notification will be shown, which is enough.
+          if (!shouldShowOSNotificationForCurrentChat()) {
+            // Note that the element might already be playing,
+            // if we received two or more messages rapidly.
+            // In that case it could be nice to play multiple sounds in parallel.
+            incomingMessageAudioElement.currentTime = 0
+            incomingMessageAudioElement.play()
+          }
         } else {
           store.log.debug(
             `chatId of IncomingMsg event (${chatId}) doesn't match id of selected chat (${eventChatId}). Skipping.`

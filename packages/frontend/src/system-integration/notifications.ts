@@ -106,10 +106,8 @@ function incomingMessageHandler(
   if (
     accountId === window.__selectedAccountId &&
     chatId === window.__selectedChatId &&
-    document.hasFocus()
+    !shouldShowOSNotificationForCurrentChat()
   ) {
-    // window has focus don't send notification for the selected chat
-    //
     // It is important for accessibility to notify the user of all new messages,
     // no matter what chat or account they belong to.
     // For the current chat we might utilize `aria-live` on the messages list,
@@ -140,6 +138,18 @@ function incomingMessageHandler(
     eventText,
     contactId,
   })
+}
+
+/**
+ * Determines whether we should use a custom in-app notification method
+ * (i.e. a custom sound currently) to let the user know about incoming messages
+ * in the currently open chat, instead of showing an OS notification.
+ */
+export function shouldShowOSNotificationForCurrentChat() {
+  // This is also important e.g. for OS'es "focus mode",
+  // OS notifications know how to respect it,
+  // and we should not play extra sounds unnecessarily.
+  return !document.hasFocus()
 }
 
 async function showNotification(
