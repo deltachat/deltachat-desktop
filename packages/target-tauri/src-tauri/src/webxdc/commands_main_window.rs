@@ -640,9 +640,9 @@ fn get_chromium_hardening_browser_args(dummy_proxy_url: &Url) -> String {
     // TODO refactior: probably need to DRY this, make a Tauri MR.
     let default_tauri_browser_args = "--disable-features=msWebOOUI,msPdfOOUI,msSmartScreenProtection --enable-features=RemoveRedirectionBitmap";
 
-    // The `~NOTFOUND` string is here:
-    // https://chromium.googlesource.com/chromium/src/+/6459548ee396bbe1104978b01e19fcb1bb68d0e5/net/dns/mapped_host_resolver.cc#46
-    let host_rules = "MAP * ~NOTFOUND";
+    // The `^NOTFOUND` string is here:
+    // https://source.chromium.org/chromium/chromium/src/+/main:net/dns/mapped_host_resolver.cc;l=71;drc=c1b102f35ec290df46da5093c2ab90d6616134c6
+    let host_rules = "MAP * ^NOTFOUND";
 
     // `host-resolver-rules` and `host-rules` primarily block
     // DNS prefetching. But they also block `fetch()` requests.
