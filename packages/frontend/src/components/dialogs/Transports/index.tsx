@@ -17,23 +17,7 @@ import classNames from 'classnames'
 import useDialog from '../../../hooks/dialog/useDialog'
 import { processQr } from '../../../backend/qr'
 import Icon from '../../Icon'
-
-export const addTransportConfirmationDialog = async (
-  domainOrAddress: string,
-  multiDeviceMode: boolean,
-  openConfirmationDialog: (options: { message: string }) => Promise<boolean>,
-  confirmLabel: string
-): Promise<boolean> => {
-  let message = `${confirmLabel}\n ${domainOrAddress}`
-  if (multiDeviceMode) {
-    message +=
-      '\n\nNote if using multi-device:\nbefore changing or adding transports make sure all other devices have at least version 2.33.0 installed. Otherwise they will run out of sync.'
-  }
-  const confirmed = await openConfirmationDialog({
-    message,
-  })
-  return confirmed
-}
+import useAddTransportDialog from '../../../hooks/dialog/useAddTransportDialog'
 
 /**
  * Dialog for transports configuration
@@ -47,6 +31,7 @@ export default function TransportsDialog(
   const tx = useTranslationFunction()
   const openAlertDialog = useAlertDialog()
   const { accountId, onClose } = props
+  const addTransportDialog = useAddTransportDialog()
 
   // used in  new transport form
   const [transports, setTransports] = useState<
@@ -97,25 +82,16 @@ export default function TransportsDialog(
       onSuccess: async (result: string) => {
         const { qr } = await processQr(accountId, result)
         if (qr.kind === 'account' || qr.kind === 'login') {
-          const confirmed = await addTransportConfirmationDialog(
+          const transportAdded = await addTransportDialog(
+            accountId,
+            result,
             qr.kind === 'account' ? qr.domain : qr.address,
-            multiDeviceMode === '1',
-            openConfirmationDialog,
-            tx('confirm_add_transport')
+            multiDeviceMode === '1'
           )
-          if (!confirmed) {
-            return
+          if (transportAdded) {
+            // refresh transport list
+            getTransports()
           }
-          try {
-            await BackendRemote.rpc.addTransportFromQr(accountId, result)
-          } catch (e) {
-            openAlertDialog({
-              message: 'Relay could not be added. ' + (e as Error).message,
-            })
-            return
-          }
-          // refresh transport list
-          getTransports()
         } else {
           openAlertDialog({
             message: tx('invalid_transport_qr'),
@@ -128,8 +104,8 @@ export default function TransportsDialog(
     accountId,
     getTransports,
     openAlertDialog,
-    openConfirmationDialog,
     tx,
+    addTransportDialog,
   ])
 
   useEffect(() => {
