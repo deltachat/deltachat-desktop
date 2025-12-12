@@ -307,7 +307,14 @@ export default function useProcessQR() {
           if (!confirmed) {
             return
           }
-          await BackendRemote.rpc.addTransportFromQr(accountId, url)
+          try {
+            await BackendRemote.rpc.addTransportFromQr(accountId, url)
+          } catch (e) {
+            openAlertDialog({
+              message: 'Relay could not be added. ' + (e as Error).message,
+            })
+            return
+          }
           openDialog(TransportsDialog, {
             accountId,
           })

@@ -106,7 +106,14 @@ export default function TransportsDialog(
           if (!confirmed) {
             return
           }
-          await BackendRemote.rpc.addTransportFromQr(accountId, result)
+          try {
+            await BackendRemote.rpc.addTransportFromQr(accountId, result)
+          } catch (e) {
+            openAlertDialog({
+              message: 'Relay could not be added. ' + (e as Error).message,
+            })
+            return
+          }
           // refresh transport list
           getTransports()
         } else {
