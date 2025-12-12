@@ -319,6 +319,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
       {showPreviousNextMessageButtons.previous && (
         <div className='media-previous-button'>
           <IconButton
+            // eslint-disable-next-line react-hooks/refs
             onClick={preventDefault(previousImage)}
             icon='chevron-left'
             coloring='fullscreenControls'
@@ -330,6 +331,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
       {showPreviousNextMessageButtons.next && (
         <div className='media-next-button'>
           <IconButton
+            // eslint-disable-next-line react-hooks/refs
             onClick={preventDefault(nextImage)}
             icon='chevron-right'
             coloring='fullscreenControls'
