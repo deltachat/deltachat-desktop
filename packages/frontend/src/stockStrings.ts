@@ -56,6 +56,8 @@ export async function updateCoreStrings() {
     | typeof C.DC_STR_EPHEMERAL_HOURS
     | typeof C.DC_STR_EPHEMERAL_DAYS
     | typeof C.DC_STR_EPHEMERAL_WEEKS
+    | typeof C.DC_STR_EPHEMERAL_TIMER_1_MINUTE_BY_YOU
+    | typeof C.DC_STR_EPHEMERAL_TIMER_1_MINUTE_BY_OTHER
     // | C.DC_STR_ONE_MOMENT
     | typeof C.DC_STR_AEAP_ADDR_CHANGED
     | typeof C.DC_STR_SECUREJOIN_WAIT_TIMEOUT
@@ -149,14 +151,6 @@ export async function updateCoreStrings() {
     ),
     [C.DC_STR_EPHEMERAL_TIMER_SECONDS_BY_OTHER]: tx(
       'ephemeral_timer_seconds_by_other'
-    ),
-    // deprecated only used in older versions
-    [C.DC_STR_EPHEMERAL_TIMER_1_MINUTE_BY_YOU]: tx(
-      'ephemeral_timer_1_minute_by_you'
-    ),
-    // deprecated only used in older versions
-    [C.DC_STR_EPHEMERAL_TIMER_1_MINUTE_BY_OTHER]: tx(
-      'ephemeral_timer_1_minute_by_other'
     ),
     [C.DC_STR_EPHEMERAL_TIMER_1_HOUR_BY_YOU]: tx(
       'ephemeral_timer_1_hour_by_you'
