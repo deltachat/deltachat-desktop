@@ -56,6 +56,8 @@ export async function updateCoreStrings() {
     | typeof C.DC_STR_EPHEMERAL_HOURS
     | typeof C.DC_STR_EPHEMERAL_DAYS
     | typeof C.DC_STR_EPHEMERAL_WEEKS
+    | typeof C.DC_STR_EPHEMERAL_TIMER_1_MINUTE_BY_YOU
+    | typeof C.DC_STR_EPHEMERAL_TIMER_1_MINUTE_BY_OTHER
     // | C.DC_STR_ONE_MOMENT
     | typeof C.DC_STR_AEAP_ADDR_CHANGED
     | typeof C.DC_STR_SECUREJOIN_WAIT_TIMEOUT
