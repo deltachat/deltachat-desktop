@@ -84,19 +84,20 @@
 
 ## Releasing
 
-1. Create a new branch for the new version (you could name it
+1. Create a new branch for the new version (you should name it
    `prepare-version-<version>`, for example `prepare-release-2.23.0`)
 2. Run `pnpm prepare-release <version>`
 3. check and cleanup the changes added to CHANGELOG
 4. Open a PR for your branch and get it reviewed.
-5. As soon as your PR is approved merge it to `main`
-6. After the PR is merged, checkout the latest version on `main`. Tag the latest commit
+5. use 'Prepare release X.ZY' as PR name. That will trigger a preview build that can be announced to testers for having a pre release testing.
+6. When the PR is approved and you want to publish the release merge it into `main`
+7. After the PR is merged, checkout the latest version on `main`. Tag the latest commit
    with your version number:
    ```bash
    git tag v<version> # for example v2.23.0
    git push origin main --tags
    ```
-7. The deployment script creates a [release](https://github.com/deltachat/deltachat-desktop/releases)
+8. The deployment script creates a [release](https://github.com/deltachat/deltachat-desktop/releases)
    draft on github which needs to be updated and published manually:
 
 - Copy the relevant part of the `CHANGELOG.md` file into the description field
@@ -118,6 +119,10 @@
 
 Rebase your PR and redo the steps as necessary. If you are unsure ask another
 contributor on how to proceed in your case.
+
+## After the release
+
+Consider doing pnpm updates & electron version updates couple of days after the release to have some time to detect compatibility issues.
 
 ## Upload build artefacts to GitHub release (if deployment script failed)
 
