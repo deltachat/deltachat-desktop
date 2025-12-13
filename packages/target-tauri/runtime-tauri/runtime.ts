@@ -575,6 +575,7 @@ class TauriRuntime implements Runtime {
         value === 0 ? undefined : 'images/tray/unread-badge.png'
       )
     }
+    window.setTitle(`Delta Chat Tauri${value === 0 ? '' : ` (${value})`}`)
 
     invoke('update_tray_icon_badge', { counter: value })
   }
