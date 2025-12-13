@@ -186,8 +186,12 @@ export default function TransportsDialog(
                     />
                   </span>
                   <label id={`transport-label-${index}`}>
-                    {transport.addr}{' '}
-                    {transport.isDefault ? ` (${tx('def')})` : ''}
+                    <strong>
+                      {transport.addr.split('@')[1]}
+                      {transport.isDefault && ` (${tx('def')})`}
+                    </strong>
+                    <br />
+                    {transport.addr.split('@')[0]}
                   </label>
                 </div>
                 <div>
