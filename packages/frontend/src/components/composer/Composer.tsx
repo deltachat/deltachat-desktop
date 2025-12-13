@@ -15,7 +15,6 @@ import MenuAttachment from './menuAttachment'
 import ComposerMessageInput from './ComposerMessageInput'
 import { getLogger } from '../../../../shared/logger'
 import { EmojiAndStickerPicker } from './EmojiAndStickerPicker'
-import { replaceColonsSafe } from '../conversations/emoji'
 import { Quote } from '../message/Message'
 import { DraftAttachment } from '../attachment/messageAttachment'
 import { useSettingsStore } from '../../stores/settings'
@@ -224,7 +223,7 @@ const Composer = forwardRef<
 
           const preSendDraftState = draftState
           const sendMessagePromise = sendMessage(accountId, chatId, {
-            text: replaceColonsSafe(draftState.text),
+            text: draftState.text,
             file: draftState.file || undefined,
             filename: draftState.fileName || undefined,
             quotedMessageId:
