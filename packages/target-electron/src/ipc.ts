@@ -49,6 +49,7 @@ import {
   startHandlingIncomingVideoCalls,
   startOutgoingVideoCall,
 } from './windows/video-call.js'
+import { appName } from '@deltachat-desktop/shared/constants.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -295,6 +296,7 @@ export async function init(cwd: string, logHandler: LogHandler) {
     (_, count: number) => {
       app.setBadgeCount(count)
       set_has_unread(count !== 0)
+      main.setTitle(count === 0 ? undefined : `${appName} (${count})`)
     }
   )
 
