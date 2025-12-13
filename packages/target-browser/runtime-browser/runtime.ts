@@ -198,7 +198,10 @@ class BrowserRuntime implements Runtime {
   notifyWebxdcMessageChanged(_accountId: number, _instanceId: number): void {
     this.log.critical('Method not implemented.')
   }
-  notifyWebxdcInstanceDeleted(_accountId: number, _instanceId: number): void {
+  notifyWebxdcInstanceDeleted(
+    _accountId: number,
+    _instanceId: number | null
+  ): void {
     this.log.critical('Method not implemented.')
   }
   startOutgoingVideoCall(): void {
