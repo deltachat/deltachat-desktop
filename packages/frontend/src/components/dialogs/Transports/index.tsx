@@ -95,23 +95,29 @@ export default function TransportsDialog(
     )
     openDialog(BasicQrScanner, {
       onSuccess: async (result: string) => {
-        const { qr } = await processQr(accountId, result)
-        if (qr.kind === 'account' || qr.kind === 'login') {
-          const confirmed = await addTransportConfirmationDialog(
-            qr.kind === 'account' ? qr.domain : qr.address,
-            multiDeviceMode === '1',
-            openConfirmationDialog,
-            tx('confirm_add_transport')
-          )
-          if (!confirmed) {
-            return
+        try {
+          const { qr } = await processQr(accountId, result)
+          if (qr.kind === 'account' || qr.kind === 'login') {
+            const confirmed = await addTransportConfirmationDialog(
+              qr.kind === 'account' ? qr.domain : qr.address,
+              multiDeviceMode === '1',
+              openConfirmationDialog,
+              tx('confirm_add_transport')
+            )
+            if (!confirmed) {
+              return
+            }
+            await BackendRemote.rpc.addTransportFromQr(accountId, result)
+            // refresh transport list
+            getTransports()
+          } else {
+            openAlertDialog({
+              message: tx('invalid_transport_qr'),
+            })
           }
-          await BackendRemote.rpc.addTransportFromQr(accountId, result)
-          // refresh transport list
-          getTransports()
-        } else {
+        } catch (error: unknown) {
           openAlertDialog({
-            message: tx('invalid_transport_qr'),
+            message: error.message,
           })
         }
       },
