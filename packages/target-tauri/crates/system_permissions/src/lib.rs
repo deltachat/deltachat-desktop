@@ -30,6 +30,7 @@ pub enum Error {
 #[cfg(target_vendor = "apple")]
 mod apple;
 
+#[allow(unused_variables)]
 pub fn check(permission: PermissionKind) -> Result<Status, Error> {
     #[cfg(target_vendor = "apple")]
     {
@@ -41,6 +42,7 @@ pub fn check(permission: PermissionKind) -> Result<Status, Error> {
     }
 }
 
+#[allow(unused_variables)]
 pub fn request(permission: PermissionKind, callback: Box<dyn FnOnce(bool)>) -> Result<(), Error> {
     #[cfg(target_vendor = "apple")]
     {
