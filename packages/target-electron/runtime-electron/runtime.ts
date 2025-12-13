@@ -24,6 +24,7 @@ import type { dialog, app, IpcRenderer, webUtils } from 'electron'
 import type { LocaleData } from '@deltachat-desktop/shared/localize.js'
 import type { getLogger as getLoggerFunction } from '@deltachat-desktop/shared/logger.js'
 import type { setLogHandler as setLogHandlerFunction } from '@deltachat-desktop/shared/logger.js'
+import { appName } from '@deltachat-desktop/shared/constants.js'
 
 const {
   app_getPath,
@@ -264,6 +265,7 @@ class ElectronRuntime implements Runtime {
     ipcBackend.invoke('notifications.clear', accountId, chatId)
   }
   setBadgeCounter(value: number): void {
+    document.title = `${appName}${value ? ` (${value})` : ''}`
     ipcBackend.invoke('app.setBadgeCountAndTrayIconIndicator', value)
   }
   deleteWebxdcAccountData(accountId: number): Promise<void> {
