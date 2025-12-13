@@ -523,6 +523,8 @@ export default class DCWebxdc {
             `window.webxdc_internal.setLocationUrl("${base64EncodedHref}")`
           )
         }
+        // also saving at the start, because this.webxdcCleanup uses this
+        // to find out which webxdc apps were opened at some point in time.
         saveBounds()
       })
 
