@@ -19,6 +19,11 @@ export function initWebxdc() {
   BackendRemote.on('WebxdcInstanceDeleted', (accountId, { msgId }) => {
     runtime.notifyWebxdcInstanceDeleted(accountId, msgId)
   })
+  BackendRemote.on('ChatDeleted', accountId => {
+    // This is only needed as long as it is not part of 'WebxdcInstanceDeleted'
+    // https://github.com/chatmail/core/issues/6670
+    runtime.notifyWebxdcInstanceDeleted(accountId, null)
+  })
 }
 
 /**
