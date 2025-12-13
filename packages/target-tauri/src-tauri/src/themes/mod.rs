@@ -6,6 +6,7 @@ use tauri::{AppHandle, Manager};
 pub mod cli;
 pub mod commands;
 mod error;
+#[allow(clippy::module_inception)]
 mod themes;
 
 pub(crate) fn custom_theme_dir(app: &AppHandle) -> Result<PathBuf, Error> {

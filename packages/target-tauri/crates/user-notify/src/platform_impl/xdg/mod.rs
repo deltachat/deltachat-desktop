@@ -37,6 +37,7 @@ impl NotificationHandle for NotificationHandleXdg {
 #[derive(Default)]
 pub struct NotificationManagerXdg {
     active_notifications: RwLock<Vec<NotificationHandleXdg>>,
+    #[allow(clippy::type_complexity)]
     handler: OnceLock<Arc<Box<dyn Fn(crate::NotificationResponse) + Send + Sync + 'static>>>,
 }
 

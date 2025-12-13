@@ -26,6 +26,6 @@ pub struct RunConfig {
 
 // Information about cli args that are also relevant for frontend
 #[tauri::command]
-pub fn get_frontend_run_config(state: tauri::State<RunConfig>) -> &RunConfig {
+pub fn get_frontend_run_config(state: tauri::State<'_, RunConfig>) -> &RunConfig {
     state.inner()
 }
