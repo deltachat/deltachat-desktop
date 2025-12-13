@@ -156,9 +156,6 @@ importers:
       debounce:
         specifier: ^1.2.1
         version: 1.2.1
-      emoji-js-clean:
-        specifier: ^4.0.0
-        version: 4.0.0
       emoji-mart:
         specifier: ^5.6.0
         version: 5.6.0
@@ -2132,9 +2129,6 @@ packages:
     resolution: {integrity: sha512-8AANcn6irYQ7cTAJRY7r0CovWckcGCHUniQecyGhw/jJ25vWwitVhF97skF+EyDztiEI6YBoF0G6tx1s37bO3g==}
     engines: {node: '>= 12.20.55'}
     hasBin: true
-
-  emoji-js-clean@4.0.0:
-    resolution: {integrity: sha512-6WZ/WH61ABR/s3TZpRW+nXBSRu6xMTdZSGjNTHo1ptv1vRjwOfbzEPQp9mtgbCi1vkFsFi1SZYz/UIliVxvLwg==}
 
   emoji-mart@5.6.0:
     resolution: {integrity: sha512-eJp3QRe79pjwa+duv+n7+5YsNhRcMl812EcFVwrnRvYKoNPoQb5qxU8DG6Bgwji0akHdp6D4Ln6tYLG58MFSow==}
@@ -5825,8 +5819,6 @@ snapshots:
       extract-zip: 2.0.1
     transitivePeerDependencies:
       - supports-color
-
-  emoji-js-clean@4.0.0: {}
 
   emoji-mart@5.6.0: {}
 

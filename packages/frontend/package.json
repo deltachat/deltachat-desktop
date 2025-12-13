@@ -32,7 +32,6 @@
     "@types/linkifyjs": "^2.1.7",
     "classnames": "^2.5.1",
     "debounce": "^1.2.1",
-    "emoji-js-clean": "^4.0.0",
     "emoji-mart": "^5.6.0",
     "filesize": "^10.1.4",
     "immutable": "^4.3.7",
