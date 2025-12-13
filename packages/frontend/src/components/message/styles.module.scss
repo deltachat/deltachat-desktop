@@ -60,8 +60,8 @@
   padding: 9px;
   padding-top: 0;
   padding-inline-end: 15px;
-  min-width: 220px;
-  max-width: 260px;
+  min-width: min(220px, 100%);
+  max-width: min(260px, 100%);
   .avatar {
     margin-bottom: 0;
   }
