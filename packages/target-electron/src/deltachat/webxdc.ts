@@ -510,10 +510,11 @@ export default class DCWebxdc {
         delete open_apps[`${accountId}.${msg_id}`]
       })
 
-      webxdcWindow.once('close', () => {
+      const saveBounds = () => {
         const lastBounds = webxdcWindow.getBounds()
         this.setLastBounds(accountId, msg_id, lastBounds)
-      })
+      }
+      webxdcWindow.once('close', saveBounds.bind(this))
 
       webxdcWindow.once('ready-to-show', () => {
         if (base64EncodedHref !== '') {
@@ -522,6 +523,7 @@ export default class DCWebxdc {
             `window.webxdc_internal.setLocationUrl("${base64EncodedHref}")`
           )
         }
+        saveBounds()
       })
 
       webxdcWindow.webContents.loadURL(appURL + '/' + WRAPPER_PATH, {
@@ -859,22 +861,11 @@ export default class DCWebxdc {
 
     ipcMain.handle(
       'webxdc:instance-deleted',
-      (_ev, accountId: number, instanceId: number) => {
-        const webxdcId = `${accountId}.${instanceId}`
-        const instance = open_apps[webxdcId]
-        if (instance) {
-          instance.win.close()
+      async (_ev, accountId: number, instanceId: number | null) => {
+        if (instanceId !== null) {
+          await this.removeWebxdcAppData(accountId, instanceId)
         }
-        this.removeLastBounds(accountId, instanceId)
-        const appURL = `webxdc://${webxdcId}.webxdc`
-        const sessions = getAllSessionsForAccount(accountId)
-        // clear all sessions for that account
-        for (const s of sessions) {
-          s.clearStorageData({ origin: appURL })
-          s.clearData({ origins: [appURL] })
-          s.clearCodeCaches({ urls: [appURL] })
-          s.clearCache()
-        }
+        this.webxdcCleanup(accountId)
       }
     )
 
@@ -984,6 +975,65 @@ export default class DCWebxdc {
       `${BOUNDS_UI_CONFIG_PREFIX}.${msgId}`,
       null
     )
+  }
+
+  webxdcCleanupRunning = false
+
+  async webxdcCleanup(accountId: number) {
+    if (this.webxdcCleanupRunning) {
+      log.warn('webxdcCleanup is still running, it can only run once at a time')
+      return
+    }
+    this.webxdcCleanupRunning = true
+
+    // get all webxdc's using the lastBounds ui config keys, which are created as soon as you open or close a webxdc app (previous versions set this only on close)
+    // this workaround is needed because electron does not currently have an api to list all origins which have data.
+    // see https://github.com/deltachat/deltachat-desktop/issues/5758
+    const uiConfigKeys = await this.rpc.getAllUiConfigKeys(accountId)
+    const boundsKeys = uiConfigKeys.filter(key =>
+      key.startsWith('ui.desktop.webxdcBounds.')
+    )
+    const instanceIds = boundsKeys.map(key =>
+      Number(key.replace('ui.desktop.webxdcBounds.', ''))
+    )
+    // check if they message ids exist
+    const stillExistingInstanceIds = await this.rpc.getExistingMsgIds(
+      accountId,
+      instanceIds
+    )
+    const nonExistingInstanceIds = instanceIds.filter(
+      id => stillExistingInstanceIds.includes(id) === false
+    )
+    log.debug('webxdcCleanup', accountId, {
+      stillExistingInstanceIds,
+      nonExistingInstanceIds,
+    })
+    for (const id of nonExistingInstanceIds) {
+      this.removeWebxdcAppData(accountId, id)
+    }
+    log.info(
+      `webxdcCleanup cleared data of ${nonExistingInstanceIds.length} deleted webxdc apps in account ${accountId}`
+    )
+    this.webxdcCleanupRunning = false
+  }
+
+  async removeWebxdcAppData(accountId: number, instanceId: number) {
+    log.debug('removeWebxdcApp', accountId, instanceId)
+    const webxdcId = `${accountId}.${instanceId}`
+    const instance = open_apps[webxdcId]
+    if (instance) {
+      instance.win.close()
+    }
+    await this.removeLastBounds(accountId, instanceId)
+    const appURL = `webxdc://${webxdcId}.webxdc`
+    const sessions = getAllSessionsForAccount(accountId)
+    // clear all sessions for that account
+    for (const s of sessions) {
+      s.clearStorageData({ origin: appURL })
+      s.clearData({ origins: [appURL] })
+      s.clearCodeCaches({ urls: [appURL] })
+      s.clearCache()
+    }
   }
 
   _closeAll() {

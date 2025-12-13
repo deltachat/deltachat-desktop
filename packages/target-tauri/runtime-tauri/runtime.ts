@@ -548,7 +548,10 @@ class TauriRuntime implements Runtime {
   notifyWebxdcMessageChanged(accountId: number, instanceId: number): void {
     invoke('on_webxdc_message_changed', { accountId, instanceId })
   }
-  notifyWebxdcInstanceDeleted(accountId: number, instanceId: number): void {
+  notifyWebxdcInstanceDeleted(
+    accountId: number,
+    instanceId: number | null
+  ): void {
     invoke('on_webxdc_message_deleted', { accountId, instanceId })
   }
   startOutgoingVideoCall(): void {
