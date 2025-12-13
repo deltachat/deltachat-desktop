@@ -20,9 +20,8 @@ import useChat from './chat/useChat'
 import { unknownErrorToString } from '../components/helpers/unknownErrorToString'
 import ProxyConfiguration from '../components/dialogs/ProxyConfiguration'
 import { useSettingsStore } from '../stores/settings'
-import TransportsDialog, {
-  addTransportConfirmationDialog,
-} from '../components/dialogs/Transports'
+import TransportsDialog from '../components/dialogs/Transports'
+import useAddTransportDialog from './dialog/useAddTransportDialog'
 
 const ALLOWED_QR_CODES_ON_WELCOME_SCREEN: T.Qr['kind'][] = [
   'account',
@@ -104,6 +103,7 @@ export default function useProcessQR() {
   const { openDialog } = useDialog()
   const openAlertDialog = useAlertDialog()
   const openConfirmationDialog = useConfirmationDialog()
+  const addTransportDialog = useAddTransportDialog()
 
   const openMailtoLink = useOpenMailtoLink()
   const { startInstantOnboardingFlow } = useInstantOnboarding()
@@ -298,19 +298,17 @@ export default function useProcessQR() {
        */
       if (qr.kind === 'account' || qr.kind === 'login') {
         if (isLoggedIn) {
-          const confirmed = await addTransportConfirmationDialog(
-            qr.kind === 'account' ? qr.domain : qr.address,
-            multiDeviceMode,
-            openConfirmationDialog,
-            tx('confirm_add_transport')
-          )
-          if (!confirmed) {
-            return
-          }
-          await BackendRemote.rpc.addTransportFromQr(accountId, url)
-          openDialog(TransportsDialog, {
+          const transportAdded = await addTransportDialog(
             accountId,
-          })
+            url,
+            qr.kind === 'account' ? qr.domain : qr.address,
+            multiDeviceMode
+          )
+          if (transportAdded) {
+            openDialog(TransportsDialog, {
+              accountId,
+            })
+          }
         } else {
           await startInstantOnboarding(accountId, { ...parsed, qr })
         }
@@ -461,6 +459,7 @@ export default function useProcessQR() {
       selectChat,
       isChatmail,
       multiDeviceMode,
+      addTransportDialog,
       tx,
     ]
   )
