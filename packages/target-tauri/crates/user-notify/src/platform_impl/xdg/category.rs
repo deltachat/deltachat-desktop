@@ -32,6 +32,6 @@ impl Display for XdgNotificationCategory {
             TransferError => "transfer.error",
             Custom(category) => category,
         };
-        write!(f, "{}", category_string)
+        write!(f, "{category_string}")
     }
 }
