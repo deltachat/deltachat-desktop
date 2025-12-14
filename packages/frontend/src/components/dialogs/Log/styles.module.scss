@@ -1,0 +1,13 @@
+.dialogBody {
+  display: flex;
+}
+
+.dialogContent {
+  display: flex;
+  flex-direction: column;
+
+  textarea {
+    font-family: 'monospace';
+    flex-grow: 1;
+  }
+}

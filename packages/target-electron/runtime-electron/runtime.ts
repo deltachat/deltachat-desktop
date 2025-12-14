@@ -525,6 +525,9 @@ class ElectronRuntime implements Runtime {
   getCurrentLogLocation(): string {
     return ipcBackend.sendSync('get-log-path')
   }
+  readCurrentLog(): Promise<string> {
+    return ipcBackend.invoke('read-current-log')
+  }
   reloadWebContent(): void {
     ipcBackend.send('reload-main-window')
   }

@@ -70,6 +70,7 @@ export interface Runtime {
   ): Promise<void>
   reloadWebContent(): void
   openLogFile(): void
+  readCurrentLog(): Promise<string>
   getCurrentLogLocation(): string
   /** Opens the help window at the specified anchor.
    *  Anchor needs to be written without the prefixed `#` */

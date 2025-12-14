@@ -16,6 +16,7 @@ import { AutostartState } from '@deltachat-desktop/shared/shared-types'
 import ProxyConfiguration from '../dialogs/ProxyConfiguration'
 import { selectedAccountId } from '../../ScreenController'
 import TransportsDialog from '../dialogs/Transports'
+import { LogDialog } from '../dialogs/Log'
 
 type Props = {
   settingsStore: SettingsStoreState
@@ -53,9 +54,11 @@ export default function Advanced({ settingsStore }: Props) {
     })
   }
 
+  const viewLog = () => openDialog(LogDialog)
+
   return (
     <>
-      <SettingsButton onClick={() => runtime.openLogFile()}>
+      <SettingsButton onClick={() => viewLog()}>
         {tx('pref_view_log')}
       </SettingsButton>
 
