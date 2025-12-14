@@ -1,0 +1,47 @@
+/* Set theme variables used for theme Generation */
+@use './_themebase' with (
+  $themeDarkOrLight: light,
+  $accentColor: #2090ea,
+  $bgChatView: #e6dcd4,
+  $bgImage: url('./images/background_light.svg'),
+  $bgMessageBubbleIncoming: #fff,
+  $bgMessageBubbleOutgoing: #efffde,
+  $bgNavBar: #415e6b,
+  $bgPrimary: #fff,
+  $bgSecondary: #f5f5f5,
+  $chatListItemSelectedBg: #4c6e7d,
+  $colorDanger: #f96856,
+  $colorNone: #a0a0a0,
+  $colorPrimary: #42a5f5,
+  $newChatButtonBg: #415e6b,
+  $keybindingHintsBoxBackground: rgba(0, 0, 0, 0.05),
+  $keybindingActionBackground: rgba(0, 0, 0, 0.05),
+  $keybindingKeyBackground: lightgray,
+  $keybindingKeyBorder: gray,
+  $keybindingKeyShadow: rgba(0, 0, 0, 0.35),
+  $textNavBar: #fff,
+  $textPrimary: #010101,
+  $textSecondary: #585a5f,
+  $btnPrimaryText: #fff,
+  $btnDangerText: #fff,
+  $btnDangerBackground: #f96856,
+  $colorLessContrast: #676767,
+
+  $scrollbarTransparency: 0.5
+);
+
+.theme-meta {
+  --name: 'Light Theme';
+  --description: 'Our default theme.';
+}
+
+/* overwrite themedata */
+:root {
+  --scrollbarThumb: #666666;
+  --scrollbarThumbHover: #606060;
+  --bp4DialogBgSecondary: #ececec;
+  --chatListItemBgHover: rgb(242, 242, 242);
+  --cli-search-result-divider: var(--delta-dialog-separator);
+  --cli-search-result-divider-border-width: 0px;
+  --emojiMartSelect: var(--chatListItemBgHover);
+}

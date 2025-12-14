@@ -1,0 +1,10 @@
+/* needed to enable AutoSizer calculating dynamic height */
+.selectContactDialogBody {
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+}
+.selectContactList {
+  flex-grow: 1;
+}

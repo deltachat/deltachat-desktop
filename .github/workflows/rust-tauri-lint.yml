@@ -1,0 +1,65 @@
+name: Code Checks for rust part of delta tauri
+
+on:
+  pull_request:
+    paths:
+      - packages/target-tauri/**
+
+jobs:
+  fmt:
+    name: Rustfmt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: 1.88
+          override: true
+      - run: rustup component add rustfmt
+      - uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check
+
+  run_clippy:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: install dependencies (ubuntu only)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: 1.88
+          components: clippy
+          override: true
+      - name: fake html dist dir to make it build
+        run: |
+          mkdir packages/target-tauri/html-dist
+          touch packages/target-tauri/html-dist/tauri_main.html
+      - uses: actions-rs/clippy-check@v1
+        env:
+          VERSION_INFO_GIT_REF: ${{ github.ref }}
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          args: --workspace --tests --examples

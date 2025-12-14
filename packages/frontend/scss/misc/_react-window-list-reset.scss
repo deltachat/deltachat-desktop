@@ -1,0 +1,8 @@
+.react-window-list-reset,
+.react-window-list-reset > ul,
+.react-window-list-reset > ol {
+  // Make it look like a div.
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}

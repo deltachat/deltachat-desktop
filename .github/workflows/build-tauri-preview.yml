@@ -1,0 +1,115 @@
+name: Build Tauri Preview
+
+on:
+  pull_request:
+    paths:
+      - packages/target-tauri/**
+
+jobs:
+  build-tauri:
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: 'macos-latest' # for Arm based macs (M1 and above).
+            label: 'aarch64'
+            args: '--target aarch64-apple-darwin'
+          - platform: 'macos-latest' # for Intel based macs.
+            label: 'x86_64'
+            args: '--target x86_64-apple-darwin'
+          - platform: 'ubuntu-22.04' # for Tauri v1 you could replace this with ubuntu-20.04.
+            label: 'x86_64'
+            args: ''
+          - platform: 'windows-latest'
+            label: 'x86_64'
+            args: ''
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            packages/target-tauri/src-tauri/target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          # Those targets are only used on macos runners so it's in an `if` to slightly speed up windows and linux builds.
+          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+      - name: install dependencies (ubuntu only)
+        if: matrix.platform == 'ubuntu-22.04' # This must match the platform value defined above.
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+        # webkitgtk 4.0 is for Tauri v1 - webkitgtk 4.1 is for Tauri v2.
+        # You can remove the one that doesn't apply to your app to speed up the workflow a bit.
+
+      - name: install frontend dependencies
+        run: |
+          npm i -g pnpm
+          pnpm install
+
+      - uses: tauri-apps/tauri-action@v0
+        id: build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION_INFO_GIT_REF: ${{ github.ref }}
+        with:
+          projectPath: packages/target-tauri
+          args: ${{ matrix.args }}
+
+      - name: run move artifacts
+        if: matrix.platform != 'windows-latest'
+        id: paths
+        run: |
+          mkdir out
+          paths=$(echo '${{ steps.build.outputs.artifactPaths }}' | jq -c '.[]' | sed 's/"//g')
+          for fn in $paths; do
+            if [[ -f $fn ]]; then
+              echo "copy $fn"
+              cp -r $fn out
+            fi
+          done
+
+      - name: run move artifacts
+        if: matrix.platform == 'windows-latest'
+        id: pathsWin
+        run: |
+          mkdir out
+          $jsonString = '${{ steps.build.outputs.artifactPaths }}'
+          $filePaths = ConvertFrom-Json $jsonString
+          foreach ($path in $filePaths) {
+            if (Test-Path $path -PathType Leaf) {
+              Write-Host "copy $path"
+              Copy-Item $path -Destination out
+            }
+          }
+        shell: pwsh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.platform }}-${{ matrix.label }}
+          path: out/*
+
+  check-webxdc-denied-permissions:
+    name: check the list of denied web permissions for webxdc
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: check the list of denied web permissions for webxdc
+        working-directory: packages/target-tauri
+        run: node ../../bin/webxdc-check-permissions-policy-count.js

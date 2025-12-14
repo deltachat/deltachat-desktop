@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "name": "@deltachat-desktop/runtime-interface",
+  "type": "module",
+  "main": "runtime.ts",
+  "scripts": {
+    "check:types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@deltachat-desktop/shared": "link:../shared",
+    "@deltachat/jsonrpc-client": "catalog:",
+    "@types/node": "catalog:"
+  }
+}

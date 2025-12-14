@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none';
+style-src 'self' 'unsafe-inline';
+font-src 'self';
+script-src 'self';
+connect-src ipc://localhost/get_html_window_info ipc://localhost/html_email_set_load_remote_content ipc://localhost/html_email_open_menu ipc://localhost/get_current_active_theme_address ipc://localhost/get_theme;
+"
+    />
+    <link rel="stylesheet" href="html_email_view.css" />
+    <link rel="stylesheet" href="../fallback-theme.css" />
+    <style id="theme-vars"></style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="title">
+        <p id="subject" aria-label="subject">SUBJECT</p>
+        <p class="details">
+          <span id="sender" aria-label="sender">sender</span>
+          -
+          <span id="receive-time" aria-label="receive time">time</span>
+        </p>
+      </div>
+      <div class="network-toggle">
+        <input type="checkbox" id="toggle_network" />
+        <label for="toggle_network" id="toggle_network_label"></label>
+        <button id="toggle_network_more_button">⋮</button>
+      </div>
+    </div>
+    <div id="content"></div>
+    <script src="html_email_view.js"></script>
+  </body>
+</html>

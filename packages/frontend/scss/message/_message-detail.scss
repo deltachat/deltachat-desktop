@@ -1,0 +1,23 @@
+// Module: Message Detail
+
+.module-message-detail {
+  margin-top: -20px;
+
+  p {
+    white-space: pre-line;
+    user-select: text;
+  }
+}
+
+.module-message-detail__info {
+  margin-bottom: 20px;
+}
+
+.module-message-detail__label {
+  font-weight: 300;
+  padding-inline-end: 5px;
+}
+
+.module-message-detail__unix-timestamp {
+  color: #eeefef;
+}

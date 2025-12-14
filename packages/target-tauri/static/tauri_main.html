@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <!-- disable scaling for tauri mobile -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" type="image/x-icon" href="/images/deltachat.ico" />
+    <!--
+      * script-src 'wasm-unsafe-eval' for script is needed for the message parser wasm,
+      maybe there is a way to build it differently to not need this CSP case.
+      * style-src 'unsafe-inline' is need for theming and for the virtual list,
+      See https://github.com/deltachat/deltachat-desktop/issues/2105.
+      * worker-src blob: is needed for mapbox afaik.
+    -->
+    <!--
+
+        THIS file needs to be kept in sync with the normal main.html manually!
+
+        These are the changes:
+        - moved CSP to packages/target-tauri/src-tauri/tauri.conf.json5
+        - disable scaling in viewport meta tag
+
+    -->
+    <link rel="stylesheet" href="./fonts/fonts.css" />
+    <link rel="stylesheet" href="./main.css" />
+    <link rel="stylesheet" href="./bundle.css" />
+    <link rel="stylesheet" href="./fallback-theme.css" />
+    <title>Delta Chat</title>
+    <style id="theme-vars"></style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/javascript" src="./avoid-eval.js"></script>
+    <script
+      type="text/javascript"
+      src="./browser-source-map-support.js"
+    ></script>
+    <script type="text/javascript" src="./fix-missing-vars.js"></script>
+    <script src="./runtime.js" type="module"></script>
+    <script src="./bundle.js" type="module"></script>
+    <div id="color-input-wrapper" aria-hidden="true">
+      <input id="color-input" tabindex="-1" type="color" />
+    </div>
+  </body>
+</html>

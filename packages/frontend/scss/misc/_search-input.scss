@@ -1,0 +1,24 @@
+input.search-input {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-wrap: normal;
+  -webkit-box-flex: 1;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  margin: 0;
+  line-height: inherit;
+  border: 0px;
+  font-size: 18px;
+  background-color: transparent;
+  caret-color: var(--navBarSearchPlaceholder);
+  color: var(--globalText);
+  // A blinking cursor is enough in terms of visibility. Or is it??
+  outline: none;
+
+  &.wrap {
+    margin-inline-start: 40px;
+    padding: 10px 0px;
+    width: calc(100% - 80px);
+  }
+}

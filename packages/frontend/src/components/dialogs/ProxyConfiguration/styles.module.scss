@@ -1,0 +1,85 @@
+.proxyList {
+  flex-grow: 1;
+  overflow-y: scroll;
+}
+
+.container {
+  margin: 0 10px 0 30px;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  h3 {
+    margin: 0;
+    margin-top: 10px;
+  }
+}
+
+.proxyItem {
+  display: flex;
+  border-bottom: 1px solid var(--separatorColor);
+  padding: 10px 0 10px 10px;
+  &:hover {
+    background-color: var(--globalHoverBg);
+  }
+}
+
+.explain {
+  margin-inline-end: 20px;
+  margin-top: 10px;
+}
+
+.proxyLabel {
+  margin-bottom: 6px;
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.proxyRow {
+  display: flex;
+  cursor: pointer;
+  flex-grow: 1;
+}
+
+.radioButton {
+  margin-inline-end: 10px;
+}
+
+.protocol {
+  border: 1px solid var(--globalText);
+  padding: 2px;
+  margin-inline-end: 10px;
+}
+
+$iconSize: 1.3em;
+
+.trash {
+  mask-size: $iconSize !important;
+  -webkit-mask-size: $iconSize !important;
+  width: $iconSize !important;
+  height: $iconSize !important;
+}
+
+.buttonsContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.buttons {
+  display: flex;
+  button {
+    padding: 6px;
+  }
+}
+
+.addProxyButton {
+  padding: 8px 10px 7px 10px;
+}
+
+@media (max-height: 500px) {
+  .proxyList {
+    flex-grow: 0;
+    overflow-y: visible;
+  }
+}

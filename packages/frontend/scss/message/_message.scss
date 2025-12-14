@@ -1,0 +1,679 @@
+@use '../mixins';
+@use '../variables';
+
+// limit for text width, needed to trigger ellipsis
+$info-text-max-width: 400px;
+
+.message-wrapper {
+  --shortcut-menu-visibility: hidden;
+  --shortcut-menu-multiplier: 0;
+  &:hover {
+    --shortcut-menu-visibility: visible;
+    --shortcut-menu-multiplier: 1;
+  }
+}
+
+/* Message Bubble */
+.message {
+  position: relative;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: stretch;
+  max-width: 75%;
+
+  & > .author-avatar {
+    @include mixins.button-reset;
+
+    align-self: flex-end;
+    bottom: 0px;
+    position: static;
+    margin-inline-end: 8px;
+    user-select: none;
+
+    img {
+      height: 36px;
+      width: 36px;
+      border-radius: 18px;
+      object-fit: cover;
+      cursor: pointer;
+    }
+
+    &.default {
+      // text letter version
+      text-align: center;
+
+      & > .label {
+        user-select: none;
+        color: var(--avatarLabelColor);
+        --local-avatar-color: #bcbac9;
+        background-color: var(--local-avatar-color);
+
+        top: -121px;
+        left: -10px;
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        font-size: 25px;
+        line-height: 36px;
+        cursor: pointer;
+
+        @supports (
+          // text-wrap was introduced in 2023 slightly after color-mix,
+          // since we can't test for color-mix support directly we use this instead.
+          text-wrap: wrap
+        ) {
+          // make avatars look slightly 3D
+          background: linear-gradient(
+            var(--avatarGradientAngle),
+            var(--local-avatar-color),
+            color-mix(
+              in srgb,
+              var(--local-avatar-color) var(--avatarGradientMixFactor),
+              white
+            )
+          );
+        }
+      }
+    }
+  }
+
+  .msg-container {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    border-radius: 16px;
+    --msg-container-padding-horizontal: 12px;
+    --msg-container-padding-top: 10px;
+    padding-inline-end: var(--msg-container-padding-horizontal);
+    padding-inline-start: var(--msg-container-padding-horizontal);
+    padding-top: var(--msg-container-padding-top);
+    padding-bottom: 10px;
+
+    .msg-body {
+      &.msg-body--clickable {
+        @include mixins.button-reset;
+        display: block;
+
+        > .text {
+          cursor: pointer;
+        }
+      }
+      &.call {
+        > .text {
+          --call-icon-size: 24px;
+          margin-inline-end: var(--call-icon-size);
+          white-space: nowrap;
+          font-weight: bold;
+          &::after {
+            content: '';
+            position: absolute;
+            top: 18px;
+            inset-inline-end: 8px;
+            transform: translateY(-50%);
+            width: var(--call-icon-size);
+            height: var(--call-icon-size);
+            @include mixins.color-svg(
+              './images/icons/phone.svg',
+              var(--messageText),
+              100%
+            );
+          }
+        }
+      }
+
+      & > .text {
+        color: var(--messageText);
+        font-size: 14px;
+        line-height: 18px;
+        text-align: start;
+
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
+        white-space: pre-wrap;
+        cursor: default;
+
+        margin-inline-end: 10px;
+      }
+    }
+
+    .webxdc {
+      img {
+        height: 171px;
+        border-radius: 7%;
+        cursor: pointer;
+        user-select: none;
+        // firefox does not support this, but chromium and webkit do https://caniuse.com/?search=user-drag
+        -webkit-user-drag: none;
+      }
+      // nowrap and min-height address the problem that
+      // the height of a message bubble should not change
+      // after it's first load, even if the content changes
+      // after loading webxdcInfo async
+      // see https://github.com/deltachat/deltachat-desktop/issues/3753
+      div.info-text {
+        display: flex;
+        flex-direction: row;
+        max-width: $info-text-max-width;
+        min-width: 0;
+        white-space: nowrap;
+        font-size: medium;
+        font-weight: 300;
+        gap: 3px;
+      }
+      div.name {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      div.document {
+        flex-shrink: 999999999999999;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        &:not(:empty)::after {
+          content: '–';
+          margin-inline-start: 3px;
+        }
+        &:empty {
+          display: none;
+        }
+      }
+      div.summary {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: $info-text-max-width;
+
+        $font-size: 0.875rem;
+        $line-height: 1.15;
+        font-size: $font-size;
+        line-height: $line-height;
+        // Ensure that even if the element is empty
+        // (e.g. while we're loading `webxdcInfo`),
+        // it still takes height, so that when the info finally loads
+        // and `summary` is present, the message bubble doesn't get taller,
+        // which would result in the message list getting scrolled.
+        // See
+        // https://github.com/deltachat/deltachat-desktop/pull/5227#discussion_r2173774006.
+        min-height: calc($font-size * $line-height);
+      }
+      div.experimental {
+        color: var(--colorDanger);
+        background: var(--contextMenuBg);
+        border-radius: 8px;
+      }
+    }
+  }
+
+  .metadata {
+    margin-top: 10px;
+    margin-bottom: -7px;
+  }
+
+  .module-message__img-attachment {
+    object-fit: cover;
+    width: auto;
+    max-width: 100%;
+    min-height: unset;
+  }
+
+  .show-html {
+    @include mixins.button-reset;
+
+    border: none;
+    background-color: transparent;
+    padding-inline-start: 0;
+    color: var(--colorPrimary);
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .download {
+    span.failed {
+      color: var(--colorDanger);
+      font-weight: bold;
+    }
+
+    button {
+      border: none;
+      background-color: transparent;
+      padding-inline-start: 0;
+      color: var(--colorPrimary);
+    }
+  }
+}
+
+// States that modify the message bubble appearance
+
+.message.incoming {
+  margin-inline-start: 0;
+
+  .msg-body.call > .text::after {
+    @include mixins.color-svg(
+      './images/icons/phone.svg',
+      var(--messageText),
+      100%
+    );
+  }
+
+  .metadata:not(.with-image-no-caption) {
+    .email-icon {
+      @include mixins.color-svg(
+        './images/icons/email.svg',
+        var(--messageMetadataIconColorIncoming),
+        125%
+      );
+    }
+
+    .location-icon {
+      @include mixins.color-svg(
+        './images/map-marker.svg',
+        var(--messageMetadataIconColorIncoming),
+        100%
+      );
+    }
+
+    .saved-message-icon {
+      @include mixins.color-svg(
+        './images/icons/bookmark-filled.svg',
+        var(--messageMetadataIconColorIncoming),
+        100%
+      );
+    }
+
+    .date,
+    .edited {
+      color: var(--messageMetadataIncoming);
+    }
+  }
+
+  .msg-container {
+    background-color: var(--messageIncomingBg);
+    --messageBg: var(--messageIncomingBg);
+
+    &,
+    .message-attachment-media {
+      border-end-start-radius: 1px;
+    }
+  }
+}
+
+.message.outgoing {
+  flex-direction: row-reverse;
+  float: inline-end;
+  margin-inline-end: 0;
+
+  .metadata:not(.with-image-no-caption) {
+    .date,
+    .edited {
+      color: var(--messageOutgoingStatusColor);
+    }
+
+    .email-icon {
+      @include mixins.color-svg(
+        './images/icons/email.svg',
+        var(--messageMetadataIconColorOutgoing),
+        125%
+      );
+    }
+
+    .location-icon {
+      @include mixins.color-svg(
+        './images/map-marker.svg',
+        var(--messageMetadataIconColorOutgoing),
+        100%
+      );
+    }
+
+    .saved-message-icon {
+      @include mixins.color-svg(
+        './images/icons/bookmark-filled.svg',
+        var(--messageMetadataIconColorOutgoing),
+        100%
+      );
+    }
+
+    .status-icon.read,
+    .status-icon.delivered {
+      background-color: var(--messageOutgoingStatusColor);
+    }
+  }
+  .metadata.with-image-no-caption .status-icon {
+    background-color: white;
+  }
+
+  .msg-container {
+    background-color: var(--messageOutgoingBg);
+    --messageBg: var(--messageOutgoingBg);
+
+    &,
+    .message-attachment-media {
+      border-end-end-radius: 1px;
+    }
+  }
+}
+
+.message.type-sticker {
+  .msg-container {
+    background-color: transparent !important;
+
+    .author-wrapper,
+    .forwarded-indicator {
+      display: none;
+    }
+
+    .quote-background {
+      // `.msg-container` background is transparent,
+      // so let's explicitly apply the color just for the quote.
+      background: var(--messageBg);
+
+      padding: 5px;
+      padding-inline-start: 6px;
+      border-radius: 7px;
+
+      & > .quote {
+        margin: 0;
+      }
+    }
+  }
+
+  .message-attachment-media {
+    background-color: transparent;
+    // no border radius for stickers
+    border-radius: 0px;
+    & > .attachment-content {
+      // Make space for the footer, which is `position: absolute;`.
+      // However, this does not account for the case
+      // where the footer text wraps.
+      margin-bottom: 26px;
+
+      cursor: default;
+    }
+  }
+
+  .metadata {
+    float: inline-end;
+    padding: 4px 8px 1px 8px;
+    background-color: #01010159;
+    border-radius: 4px;
+    color: black;
+    font-weight: bold;
+  }
+
+  .metadata {
+    .date,
+    .edited {
+      font-size: 11px;
+      color: white;
+    }
+
+    .email-icon {
+      @include mixins.color-svg('./images/icons/email.svg', white, 125%);
+    }
+
+    .location-icon {
+      @include mixins.color-svg('./images/map-marker.svg', white, 100%);
+    }
+
+    .saved-message-icon {
+      @include mixins.color-svg(
+        './images/icons/bookmark-filled.svg',
+        white,
+        100%
+      );
+    }
+  }
+
+  .status-icon.read,
+  .status-icon.delivered {
+    background-color: white;
+  }
+}
+
+.message.has-html {
+  .text {
+    padding-bottom: 10px;
+  }
+}
+
+.message.error.incoming {
+  .text {
+    font-style: italic;
+  }
+}
+
+.message.forwarded {
+  .forwarded-indicator {
+    font-weight: bold;
+    font-size: 0.9em;
+    margin-bottom: 3px;
+    opacity: 0.86;
+
+    .forwarded-indicator-button {
+      @include mixins.button-reset;
+
+      cursor: pointer;
+    }
+  }
+}
+
+.setupMessage {
+  .message {
+    .text {
+      color: var(--setupMessageText);
+    }
+  }
+}
+
+@media (max-width: variables.$breakpoint-messagelist) {
+  .message {
+    max-width: 100%;
+
+    img.portrait:not(.sticker) {
+      height: 300px;
+    }
+  }
+}
+
+.info-message {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .bubble {
+    @include mixins.button-reset;
+
+    display: inline-block;
+    text-align: center;
+    padding: 7px 14px;
+    padding-bottom: 5px;
+    background-color: var(--infoMessageBubbleBg);
+    border-radius: 20px;
+    opacity: 0.9;
+    color: var(--infoMessageBubbleText);
+    outline-offset: 4px;
+
+    .status-icon.sending {
+      background-color: var(--infoMessageBubbleText);
+    }
+  }
+
+  &.daymarker {
+    // Be careful with overriding margins on messages, see
+    // commit c56a78595df073bada81e1f769407990e37d8d57
+    // (https://github.com/deltachat/deltachat-desktop/pull/5244).
+    // `margin-top` should be fine, unlike margin-bottom.
+    margin-top: 1.5rem;
+
+    .bubble {
+      font-weight: bold;
+    }
+  }
+
+  &.interactive > .bubble {
+    cursor: pointer;
+
+    &:hover,
+    &:focus,
+    &:focus-within {
+      opacity: 1;
+    }
+  }
+
+  &.webxdc-info > .bubble {
+    padding: 7px 8px;
+    img {
+      height: 18px;
+      width: 18px;
+      margin-inline-end: 5px;
+      border-radius: 7%; // webxdc border radius
+      vertical-align: bottom;
+      background-color: black;
+    }
+  }
+
+  &.big > .bubble {
+    max-width: 550px;
+    font-size: 1rem;
+    padding: 2rem;
+    font-style: normal;
+    white-space: pre-wrap;
+    text-align: left;
+  }
+}
+
+// quote
+
+.quote-background {
+  @include mixins.button-reset;
+
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.message .msg-container .quote,
+.composer .quote {
+  border-inline-start: 3px gray solid;
+  padding: 0 4px;
+  padding-inline-start: 9px;
+  margin: 2px 0 5px 0;
+  display: flex;
+  --quote-img-size: 36px;
+
+  // &.has-message:hover {
+  //   background: rgba(0, 0, 0, 0.07);
+  // }
+
+  .author {
+    display: block;
+    height: 13px;
+    font-size: 13px;
+    line-height: 13px;
+    margin-bottom: 2px;
+    font-weight: 300;
+  }
+
+  .quote-author,
+  .quote-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .quoted-text {
+    font-size: 12px;
+    line-height: 12px;
+    margin: 0;
+    max-height: 40px;
+    overflow: hidden;
+    line-clamp: 3;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    // see https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-line-clamp
+    // and yes using this property is a bit hacky and depends on browser support
+    // but atleast its simpler than estimating size with js
+    -webkit-box-orient: vertical;
+    color: var(--messageQuotedText);
+    white-space: pre-line;
+    user-select: text;
+    position: relative;
+    word-break: break-word;
+  }
+
+  img.quoted-image {
+    // Remember that width and height need to be set prior to the image
+    // getting actually loaded by the browser, to avoid content shifts.
+    // Same goes for messages' `.attachment-content`.
+    // See https://github.com/deltachat/deltachat-desktop/issues/4404.
+    //
+    // Setting just the height is not enough, because there might be text
+    // displayed beside the image, which might wrap and thus change height.
+    //
+    // In addition, really short and wide images could make the message
+    // overflow the chat container, for non-self-sent messages at least.
+    height: var(--quote-img-size);
+    width: var(--quote-img-size);
+    // For some reason the image element can get shrunk
+    // while it's being loaded.
+    // This, however, is not the case for images with no `src` at all,
+    // god knows why.
+    // See https://github.com/deltachat/deltachat-desktop/issues/4404#issuecomment-2602438175
+    flex-shrink: 0;
+
+    object-fit: scale-down;
+    object-position: center;
+
+    margin-inline-start: 6px;
+  }
+
+  img.quoted-webxdc-icon {
+    // The dimensions need to be fixed, same as for `.quoted-image`.
+    height: var(--quote-img-size);
+    width: var(--quote-img-size);
+    flex-shrink: 0;
+
+    margin-inline-start: 6px;
+    border-radius: 7%;
+  }
+}
+
+.quoted-text,
+.msg-body > .text {
+  a {
+    text-decoration: underline;
+  }
+}
+
+/* This is for making links in quoted texts unclickable and
+   have an appereance like the rest of text in there */
+.quoted-text > a {
+  pointer-events: none;
+  text-decoration: none;
+  color: var(--messageQuotedText);
+}
+
+.author-wrapper {
+  &.can-hide {
+    display: none;
+  }
+  .author {
+    @include mixins.button-reset;
+
+    display: inline-block;
+    max-width: 40vw;
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 18px;
+    height: 18px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer;
+  }
+}

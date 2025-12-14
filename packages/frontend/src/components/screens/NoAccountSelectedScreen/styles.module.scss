@@ -1,0 +1,25 @@
+.noAccountSelectedScreen {
+  flex-grow: 1;
+}
+
+.background {
+  background-size: cover;
+  background-image: url('./images/backgrounds/petito-moreno.webp');
+  height: 100vh;
+  margin-top: 0px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.infoBox {
+  display: inline-block;
+  text-align: center;
+  padding: 7px 14px;
+  padding-bottom: 5px;
+  background-color: #0000008c;
+  border-radius: 20px;
+  opacity: 0.9;
+  color: white;
+}

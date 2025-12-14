@@ -1,0 +1,79 @@
+@use '../../../scss/mixins';
+
+// $reaction-transition-duration: 100ms;
+
+.message {
+  // Commented-out for now because of
+  // https://github.com/deltachat/deltachat-desktop/issues/3753
+  // (i.e. adding a reaction would change the height of the message,
+  // which would make the chat "scroll up", and so new messages would not
+  // get automatically scrolled into view).
+  //
+  // transition: margin-bottom ease-out $reaction-transition-duration;
+  // &.withReactions {
+  //   margin-bottom: 10px;
+  // }
+}
+
+.messageFooter {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  white-space: nowrap;
+  // transition: margin-bottom ease-out $reaction-transition-duration;
+
+  &.onlyMedia {
+    bottom: 5px;
+    inset-inline-start: 0;
+    margin-inline-start: 10px;
+    position: absolute;
+    inset-inline-end: 5px;
+    /** allow to click through the footer to the message body */
+    pointer-events: none;
+    * {
+      /** enable clicks on reactions and other components inside the footer */
+      pointer-events: initial;
+    }
+  }
+
+  // &.withReactionsNoText {
+  //   margin-bottom: 10px;
+  // }
+}
+
+.startWebxdcButton {
+  font-size: 14px;
+  margin: 10px 0;
+  padding-bottom: 6px;
+  padding-inline-start: 13px;
+  padding-inline-end: 13px;
+  padding-top: 7px;
+}
+
+.vcard {
+  @include mixins.button-reset;
+
+  display: flex;
+  // TODO should probably lighten instead of darkening if the theme is dark.
+  background-color: #0002;
+  border-radius: 10px;
+  padding: 9px;
+  padding-top: 0;
+  padding-inline-end: 15px;
+  .avatar {
+    margin-bottom: 0;
+  }
+  .contactInfo {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    padding-inline-start: 10px;
+    justify-content: center;
+  }
+  .displayName {
+    margin-bottom: 0;
+    margin-top: 10px;
+    font-weight: 200;
+    font-size: medium;
+  }
+}

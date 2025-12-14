@@ -1,0 +1,47 @@
+@use '../variables';
+
+.chat-list {
+  z-index: variables.$z-index-new-local-scope; // needed for .floating-action-button
+  flex-grow: 1;
+  overflow-y: auto;
+  box-shadow:
+    0 0 4px 1px rgba(16, 22, 26, 0.1),
+    0 0 0 rgba(16, 22, 26, 0),
+    0 1px 1px rgba(16, 22, 26, 0.2);
+  user-select: none;
+  // So that `.floating-action-button` is positioned relative to `.chat-list`.
+  position: relative;
+
+  // don't show extra scrollbar in browser edition
+  overflow: hidden;
+
+  .search-result-divider {
+    padding: 11px 15px;
+    font-weight: 200;
+    color: var(--globaltext);
+    background: var(--cli-search-result-divider);
+    border-bottom: var(--cli-search-result-divider-border-width) solid
+      var(--cli-search-result-divider-border);
+  }
+
+  .search-in-chat-label {
+    display: flex;
+    height: 64px;
+    flex-direction: row;
+    padding: 0px 10px;
+    align-items: center;
+
+    .chat-name {
+      flex-grow: 1;
+      vertical-align: baseline;
+      line-height: 18px;
+      overflow-x: hidden;
+      overflow-y: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-weight: 200;
+      font-size: medium;
+      margin-inline-start: 10px;
+    }
+  }
+}

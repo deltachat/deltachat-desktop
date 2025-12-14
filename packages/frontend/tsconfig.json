@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "outDir": "../../tsc-dist/renderer",
+    "rootDirs": [".", "../shared"],
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "module": "es6",
+    "target": "es2022",
+    "jsx": "react",
+    "allowJs": false,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "strictNullChecks": true,
+    "strict": true,
+    "plugins": [{ "name": "typescript-plugin-css-modules" }]
+  }
+}

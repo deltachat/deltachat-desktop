@@ -1,0 +1,18 @@
+.mediaViewDialog {
+  max-width: 90vw !important;
+  width: 90vw !important;
+  height: 90vh;
+}
+
+.mediaViewDialogBody {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  // apply margin as part of scroll content
+  // so that scroll area can go to the end of dialog
+  // while still spreserving the bottom margin when user srolled to the end
+  div:has(> :global(.item)) {
+    margin-bottom: 10px;
+  }
+}

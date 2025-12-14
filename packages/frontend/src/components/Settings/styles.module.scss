@@ -1,0 +1,191 @@
+@use '../../../scss/mixins';
+
+$settingsHeight: 40px;
+
+.settingsHeading {
+  color: var(--globalText);
+  font-size: 16px;
+  margin-bottom: 10px;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+  margin-top: 10px;
+  padding-inline-start: 30px;
+  padding-inline-end: 30px;
+}
+
+.settingsSeparator {
+  background-color: rgba(0, 0, 0, 0.05);
+  border: 0;
+  height: 5px;
+  margin-bottom: 15px;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+  margin-top: 15px;
+}
+
+.settingsEndSeparator {
+  background-color: transparent;
+  border: 0;
+  height: 0;
+  margin-bottom: 20px;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
+  margin-top: 0;
+}
+
+.settingsButton {
+  background-color: transparent;
+  border: 0;
+  color: var(--globalText);
+  min-height: $settingsHeight;
+  padding-inline-start: 30px;
+  padding-inline-end: 30px;
+  text-align: inherit;
+  width: 100%;
+
+  &:hover {
+    background-color: var(--chatListItemBgHover);
+    cursor: pointer;
+  }
+
+  &.highlight {
+    color: var(--colorPrimary);
+    font-weight: bold;
+  }
+}
+
+.settingsIconButton {
+  align-items: center;
+  background-color: unset;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  height: $settingsHeight;
+  padding-bottom: 0;
+  padding-inline-start: 30px;
+  padding-inline-end: 30px;
+  padding-top: 0;
+  width: 100%;
+
+  &:hover,
+  &:focus {
+    background-color: var(--chatListItemBgHover);
+  }
+}
+
+.settingsIconButtonLabel {
+  color: var(--globalText);
+  flex-grow: 1;
+  line-height: 2;
+  margin-inline-start: 20px;
+  text-align: start;
+}
+
+.settingsSelector {
+  @include mixins.button-reset;
+  width: 100%;
+
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  height: $settingsHeight;
+  justify-content: space-between;
+  padding-inline-start: 30px;
+  padding-inline-end: 30px;
+  user-select: none;
+
+  &:hover {
+    background-color: var(--chatListItemBgHover);
+  }
+}
+
+.settingsSelectorLabel {
+  color: var(--globalText);
+}
+
+.settingsSelectorValue {
+  color: var(--colorPrimary);
+  font-weight: lighter;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.settingsSwitch {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  min-height: $settingsHeight;
+  padding-bottom: 10px;
+  padding-inline-start: 30px;
+  padding-inline-end: 30px;
+  padding-top: 10px;
+  user-select: none;
+
+  &:hover {
+    background-color: var(--chatListItemBgHover);
+  }
+}
+
+.settingsSwitchLeft {
+  display: flex;
+  flex-direction: column;
+  margin-inline-end: 15px;
+}
+
+.settingsSwitchLabel {
+  color: var(--globalText);
+
+  &.disabled {
+    color: rgba(92, 112, 128, 0.6);
+  }
+}
+
+.settingsSwitchDescription {
+  color: var(--chat-list-item-archived-label-border);
+  font-size: smaller;
+  margin-top: 3px;
+
+  &.disabled {
+    color: rgba(92, 112, 128, 0.6);
+  }
+}
+
+.settingsSwitchRight {
+  align-items: center;
+  display: flex;
+}
+
+.profile {
+  display: flex;
+  cursor: pointer;
+  &:hover,
+  &:focus {
+    background-color: var(--chatListItemBgHover);
+  }
+  padding: 10px 25px;
+  width: 100%;
+  border: none;
+  background-color: transparent;
+}
+
+.profileDetails {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-inline-start: 20px;
+  overflow: hidden;
+}
+
+.profileDisplayName {
+  font-size: 18px;
+  font-weight: 200;
+}
+
+.profileBio {
+  margin-top: 5px;
+  overflow: hidden;
+  text-wrap-mode: nowrap;
+  text-overflow: ellipsis;
+  opacity: 0.6;
+}

@@ -1,0 +1,181 @@
+@use '../../../scss/variables.scss';
+
+$headerButtonSize: 30px;
+$paddingHorizontal: 30px;
+$paddingVertical: 20px;
+
+.dialog {
+  padding: 0;
+  @media (width < variables.$default-dialog-width) {
+    max-width: calc(100vw - 1rem) !important;
+    min-width: 0 !important;
+  }
+
+  &.unstyled {
+    background: none;
+    width: 100vw;
+    height: 100vh;
+    max-width: 100vw;
+    max-height: 100vh;
+    border: none;
+    margin: 0;
+  }
+
+  &:not(.unstyled) {
+    background-color: var(--bp4DialogBgPrimary);
+    color: var(--globalText);
+    border-radius: 10px;
+    border: none;
+    box-shadow:
+      0 0 0 1px rgba(16, 22, 26, 0.1),
+      0 4px 8px rgba(16, 22, 26, 0.2),
+      0 0 20px 3px rgba(16, 22, 26, 0.2);
+    // display: flex;
+    flex-direction: column;
+    max-height: calc(100% - 50px);
+    max-width: 733px;
+    min-width: 350px;
+    width: unset;
+
+    justify-content: center;
+  }
+  &::backdrop {
+    background-color: var(--dialogBackdropBackground);
+  }
+}
+
+.dialogHeader {
+  width: 100%;
+  align-items: center;
+  background-color: var(--bp4DialogHeaderBg);
+  border-bottom: var(--outlineProperties);
+  display: flex;
+  padding-bottom: 20px;
+  padding-inline-start: $paddingHorizontal;
+  padding-inline-end: $paddingHorizontal - 5px;
+  padding-top: $paddingVertical;
+  user-select: none;
+}
+
+.dialogHeading {
+  align-items: center;
+  color: var(--bp4Heading);
+  display: flex;
+  flex: 1 1 auto;
+  font-size: 18px;
+  font-weight: 600;
+  height: $headerButtonSize;
+  margin: 0;
+}
+
+.dialogBody {
+  width: 100%;
+  background-color: var(--bp4DialogBgPrimary);
+  flex: 1 1 auto;
+  max-height: 90vh;
+  overflow: overlay;
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+.dialogContent {
+  padding-inline-start: $paddingHorizontal;
+  padding-inline-end: $paddingHorizontal;
+  line-height: 22px;
+
+  &.paddingTop {
+    padding-top: $paddingVertical;
+  }
+
+  &.paddingBottom {
+    padding-bottom: $paddingVertical;
+  }
+}
+
+.dialogFooter {
+  width: 100%;
+  background-color: var(--bp4DialogBgPrimary);
+  padding-bottom: $paddingVertical;
+  padding-inline-start: $paddingHorizontal;
+  padding-inline-end: $paddingHorizontal;
+  padding-top: $paddingVertical;
+}
+
+.headerButton {
+  align-items: center;
+  background-color: transparent;
+  border-radius: 5px;
+  border: 0;
+  cursor: pointer;
+  display: flex;
+  height: $headerButtonSize;
+  justify-content: center;
+  padding: 0;
+  width: $headerButtonSize;
+
+  & + & {
+    margin-inline-start: 5px;
+  }
+
+  &:hover {
+    background-color: var(--chatListItemBgHover);
+  }
+}
+
+.headerButtonIcon {
+  background-color: var(--iconColorPrimary);
+  margin: 0 !important;
+}
+
+.headerThreeDotButton {
+  margin: 0 !important;
+  padding: 0 !important;
+  transform: rotate(90deg);
+}
+
+.backButton {
+  margin-inline-end: 20px;
+
+  :global([dir='rtl']) & {
+    transform: rotate(180deg);
+  }
+}
+
+.footerActions {
+  display: flex;
+  @media (width <= variables.$default-dialog-width) {
+    flex-direction: column;
+  }
+
+  &.spaceBetween {
+    justify-content: space-between;
+  }
+
+  &.start {
+    justify-content: flex-start;
+  }
+
+  &.end {
+    justify-content: flex-end;
+  }
+
+  &.center {
+    justify-content: center;
+  }
+}
+
+.footerActionButton {
+  min-width: 100px;
+  padding: 8px 12px !important;
+  margin: 10px 0;
+  & + & {
+    margin-inline-start: 20px;
+  }
+  @media (width <= variables.$default-dialog-width) {
+    & + & {
+      margin-inline-start: 10px;
+    }
+  }
+}

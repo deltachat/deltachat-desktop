@@ -1,0 +1,65 @@
+.welcomeScreenBody {
+  padding-bottom: 0;
+}
+
+.inputError {
+  color: var(--colorDanger);
+}
+
+.welcomeScreenSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+
+  .welcomeScreenImage {
+    width: 100%;
+  }
+
+  .welcomeScreenTitle {
+    color: var(--colorNone);
+    font-size: x-large;
+    margin-bottom: 0px;
+    margin-top: 10px;
+  }
+
+  @media (max-height: 720px) {
+    margin-bottom: 15px;
+
+    .welcomeScreenImage {
+      width: 30vh;
+    }
+    .welcomeScreenTitle {
+      margin-top: 8px;
+    }
+  }
+}
+
+.welcomeScreenButtonGroup {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin-top: 40px;
+
+  @media (max-height: 720px) {
+    margin-top: 20px;
+  }
+}
+
+.welcomeScreenButton {
+  letter-spacing: 0.25px;
+  margin: 7px 0;
+  width: 100%;
+}
+
+.instantOnboardingAgreement {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.openExternalIcon {
+  background-color: var(--buttonSecondaryText);
+  margin-inline-start: 0.2em;
+}

@@ -1,0 +1,85 @@
+// ChatView Background selector
+
+.bg-option-wrap {
+  display: flex;
+  justify-content: space-between;
+}
+
+.background-preview {
+  width: calc(50% - 10px);
+  height: auto;
+  border-radius: 5pt;
+  background-image: var(--chatViewBgImgPath);
+  background-color: var(--chatViewBg);
+  background-size: cover;
+}
+
+.background-options {
+  display: flex;
+  width: calc(50% - 10px);
+  height: 170px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-content: space-between;
+}
+
+.background-default-images {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  height: 170px;
+  justify-content: space-between;
+  align-content: space-between;
+  margin-top: 13px;
+}
+
+.custom-image,
+.custom-color {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  background-color: #d6d6d6 !important;
+  --icon-color: #545454;
+}
+
+.background-options > button,
+.background-default-images > button {
+  flex-wrap: wrap;
+  width: 75px;
+  height: 75px;
+  border: none;
+  border-radius: 3pt;
+  background-color: darkcyan;
+  background-size: cover;
+  cursor: pointer;
+}
+
+.profile-image-username {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  &.center {
+    align-items: center;
+    flex-direction: column;
+  }
+}
+
+.theme-meta {
+  background-color: #80808082;
+  padding: 6px;
+  margin: 3px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+
+  p {
+    margin-bottom: 0px;
+  }
+
+  p.name:before {
+    content: var(--name);
+  }
+  p.description:before {
+    content: var(--description);
+  }
+}

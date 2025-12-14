@@ -1,0 +1,58 @@
+:root {
+  /* 'EmojiMart' represents the general emoji font of the app, themes may redefine it */
+  --emojifonts: 'EmojiMart', 'Apple Color Emoji', NotoEmoji;
+
+  --fonts-default:
+    Roboto, var(--emojifonts), 'Helvetica Neue', Arial, Helvetica, NotoMono,
+    sans-serif;
+
+  --fonts-system: system-ui, var(--fonts-default);
+}
+
+/* Theming Colors */
+
+// Belongs to stuff we plan to remove / change anyway
+// so we don't put this into theming yet
+// because it will change
+$color-message-detail-delete-button-border: #a4a6a9;
+$color-message-detail-delete-bg: #f44336;
+$color-message-detail-delete: #ffffff;
+
+$color-global-textarea-outline: #2090ea;
+
+// A few layout variables used cross-file
+$header-height: 48px;
+$button-height: 24px;
+
+$border-radius: 5px;
+
+$font-size: 14px;
+
+// Breakpoint for messages/images in message list
+$breakpoint-messagelist: 900px;
+
+// Get these keys via: `map-get($z-index, keyname)`
+$z-index: (
+  // Local Scopes
+  // ============
+  chatlist-scope-floating-action-button: 1,
+  jump-down-button-scope-counter: 1,
+  account-list-sidebar-scope-account-badge: 1,
+  account-list-sidebar-scope-sticky-account: 1,
+
+  // Global Scope
+  // ============
+  emoji-sticker-picker: 10,
+
+  user-feedback: 100,
+
+  account-hover-info: 200,
+
+  // toast for errors and success messages
+  absolute-positioning-helper: 1000
+);
+
+// setting z-index to 0 creates a new scope for children without changing the ordering of the parent element
+$z-index-new-local-scope: 0;
+
+$default-dialog-width: 500px;

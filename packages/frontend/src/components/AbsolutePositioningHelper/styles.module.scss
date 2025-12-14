@@ -1,0 +1,7 @@
+@use 'sass:map';
+@use '../../../scss/variables';
+
+.absolutePositioningHelper {
+  position: fixed;
+  z-index: map.get(variables.$z-index, absolute-positioning-helper);
+}

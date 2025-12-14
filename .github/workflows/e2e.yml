@@ -1,0 +1,117 @@
+name: e2e Tests
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'docs/**'  # only trigger build if a file outside of /docs was changed
+      - '_locales/*.xml'
+      - '.vscode/**'
+      - 'README_ASSETS/**'
+      - 'README.md'
+  pull_request:
+    paths-ignore:
+      - 'docs/**'  # only trigger build if a file outside of /docs was changed
+      - '_locales/*.xml'
+      - '.vscode/**'
+      - 'README_ASSETS/**'
+      - 'README.md'
+
+env: # dummy certificates for testing
+  PRIVATE_CERTIFICATE_KEY: |
+    -----BEGIN PRIVATE KEY-----
+    MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCkARDceole0+De
+    GNRL7jDFUcm8YmrCbWNp/hT4IxQyavmYkLWZz5T1M8E4cDgnlM+n63owtS/bKENC
+    m0AeyZaTvktJXmCVsFIGZyS5yF13Ddp5qVU7VSAQz1/bqXmyppzSleJzl4q6S5+I
+    RIWvJuF/Nfs5lCuIwQ8ciyH2ceT+fAsPR0mTdOKYLdLzE9kAn0XVI28C/Z1z2E1M
+    Ck6yQsvJcHXZQ0ncGkVRv2ureujN5btpAc1RctUUXzPn8Pxh5AEfAVCR5tDXwy1V
+    /pI3GM/xcd4xsqa3rT+AcH6FPH7/8ltdlNVXH6DHZ8QW6NH/KGG75BP06YycVDOR
+    947dhrCZAgMBAAECggEAbI6YDpi9nRs6WUiuHaSIe9PraNrsN84YY+xfDPCLSeQt
+    WqNO0YTp4HRljWoagXirC0d/FgaYqsQ34TrKcpaVKS5ovyPNYsfXQ426bY8G7uso
+    lidT13Y9R2M83DWN7IcEfw/fWQwSM8YizxwsMQfXc1DT/gTp3BeOXSJrVKmHHjsF
+    0Op/kfRSytWwsfuobbYIUMjm0KxU5rX0iqftDmlUpCpR9eIQ2R0xUvyLZ3g+p8ic
+    z8UuhX/qANgj3cvvRt4Qz5T5ZO0ev1ke3L8+eamvToXUiy2Qh4pN2OKYXKZOLp3m
+    iax7A8Z8BM5/pW+m1X9cCsqIxZ7eMWUDWGh8ICsOQQKBgQDFK2B7xGQ4Jy85LKbV
+    hKTZH8Gck1+eU2V+hrGgTpdORReFpiSyp5A/64y0KIX5LVxNWyRLJuBd4pkh/jyf
+    Hl97UN4TD36v8UIUN78JFN3TQprIt/WE4lNtq715t8qaNr1Uc+EsBHPxBSkEnTEH
+    saGGYPQQvIHz5Bp5JzszRTNwTQKBgQDU8GMPQ4jWEaxcx+Mk5sEZUVvsTFUL+UU0
+    4k6ypep/ofRj+5Nx0bcRvmZ4IZAtBkGwkl+5w8Gn1y/1mUI54uqqN/MsjK8Qg/nx
+    x9cWK5nN0zuf5C+84/IjA7Hm5iTaTLxTd7Gai2KtKpbpR+ovokHNWDUtx6TgjJV6
+    Ue10KhHHfQKBgHo7svvnu83IFRGX6fHS4rOsaUYdYxjvUKuI61ObhVfDo5p6bqPH
+    F7lY2QjTWoMoqOFYEH76ofvyP8cAKyrmFIGJl7MvVvXSVoncKXWC1yZiUzz+Nppk
+    CR6jarqrw1Gpf+R8VmsIc6xG66/tl3jSmXWKY6SAiPvfPL5BIQVe8E29AoGAEFEz
+    ZhIIxE6qZJm0oDlGhsgjQSJASiCZ2wmUekAYjhs8/QRkMg6d9rAebgo0YB7gncU5
+    rKSBjHkC5dEOsBzhWpXa/ojxSVSzrIFhzAMfUBRlt0TnG5RkE6bO1SDBpjDHJaZA
+    Z9VShG6FDe9C1M+cNz4RJSbtTX+4XJ02kvY+UokCgYB2W/oKoOTSnCqejRvppRAP
+    rZNtJ6vOTS1U96poX7l2wKjcxa9WZmf4dXZjKR2IcEwbobektyArBZQkhEAdiZIG
+    JgJ2qyhVDUhz1i48BA1emGZLT78j6EThYb61T5BlhNf/95g/01Td6pTuCEyexDBn
+    8faJWpToLywABHOE1nKPaQ==
+    -----END PRIVATE KEY-----
+  
+  PRIVATE_CERTIFICATE_CERT: |
+    -----BEGIN CERTIFICATE-----
+    MIIEKzCCApOgAwIBAgIRAONXUH7qbHcyReFt2tumxXswDQYJKoZIhvcNAQELBQAw
+    czEeMBwGA1UEChMVbWtjZXJ0IGRldmVsb3BtZW50IENBMSQwIgYDVQQLDBtuZGhA
+    bmRoLWF1cmEgKE5pY28gZGUgSGFlbikxKzApBgNVBAMMIm1rY2VydCBuZGhAbmRo
+    LWF1cmEgKE5pY28gZGUgSGFlbikwHhcNMjQxMDE4MTUyOTM1WhcNMjcwMTE4MTYy
+    OTM1WjBPMScwJQYDVQQKEx5ta2NlcnQgZGV2ZWxvcG1lbnQgY2VydGlmaWNhdGUx
+    JDAiBgNVBAsMG25kaEBuZGgtYXVyYSAoTmljbyBkZSBIYWVuKTCCASIwDQYJKoZI
+    hvcNAQEBBQADggEPADCCAQoCggEBAKQBENx6iV7T4N4Y1EvuMMVRybxiasJtY2n+
+    FPgjFDJq+ZiQtZnPlPUzwThwOCeUz6frejC1L9soQ0KbQB7JlpO+S0leYJWwUgZn
+    JLnIXXcN2nmpVTtVIBDPX9upebKmnNKV4nOXirpLn4hEha8m4X81+zmUK4jBDxyL
+    IfZx5P58Cw9HSZN04pgt0vMT2QCfRdUjbwL9nXPYTUwKTrJCy8lwddlDSdwaRVG/
+    a6t66M3lu2kBzVFy1RRfM+fw/GHkAR8BUJHm0NfDLVX+kjcYz/Fx3jGypretP4Bw
+    foU8fv/yW12U1VcfoMdnxBbo0f8oYbvkE/TpjJxUM5H3jt2GsJkCAwEAAaNeMFww
+    DgYDVR0PAQH/BAQDAgWgMBMGA1UdJQQMMAoGCCsGAQUFBwMBMB8GA1UdIwQYMBaA
+    FM2ncK48RqCtnwRcMPHCbqwnp8n+MBQGA1UdEQQNMAuCCWxvY2FsaG9zdDANBgkq
+    hkiG9w0BAQsFAAOCAYEAJS0oh36ZwKZ6KDuN64j2JTjRP5WAwLaMfUtR/vebdUte
+    Ju7e6m3XgzRCbKOc4s2XOv5ONFVESgry6/DUBxPnibAFE41TKwp7+bLio4kcWpy1
+    ac5PxNXDxgdIkzMQrw6WTzBByOdJdvmtXfmjQdwtzQEgX41fddaHW2MV6mkJtoig
+    icyDUE98wrjdUPCHzxg9iFLrwmY/yS+gjoauZmHRCL5T66zURHskO+BinonPTe2P
+    xeFxysxsefVKTm3nlldpav4/FuHElJ1um8rMkZ3O8zfgn6WS/4W7gZpgjS6QuFsK
+    24bA9W3URqEZuHxRLGdBAcfE/E2YqFkgJ3FHt5UpivVbWkYybH1kd75Ng0TsbZBt
+    8vjGkIPMplcAo72nq7z+xkYE7/SHa6dXXuR+4TBoR72fhDJKiY4tJmLQ7f8n1jDP
+    orZZUaJvUBF/bamf6VyJB+4DYr8bsUCVpcnFfXzhzs1jfhwM6T08ywFVDVb1ShCP
+    LqYfg2Ehy45AAnnOPD6p
+    -----END CERTIFICATE-----
+
+jobs:
+  test:
+    name: E2E Tests
+    environment: test
+    env:
+      CI: true
+      NODE_ENV: test
+      VERSION_INFO_GIT_REF: ${{ github.ref }}
+      DC_ACCOUNTS_DIR: ../../e2e-tests/data/accounts
+      DC_CHATMAIL_DOMAIN: ${{ vars.DC_CHATMAIL_DOMAIN }}
+      DC_MAIL_SERVER: ${{ vars.CI_MAIL_SERVER }}
+      DC_MAIL_SERVER_TOKEN: ${{ secrets.CI_MAIL_SERVER_TOKEN }}
+    timeout-minutes: 60
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+      fail-fast: false
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 22.x
+    - name: Install dependencies
+      run: npm install -g pnpm && pnpm install
+    - name: Install Playwright Browsers
+      working-directory: ./packages/e2e-tests
+      run: npx playwright install --with-deps --only-shell chromium
+    - name: create data dir
+      run: mkdir -p packages/target-browser/data
+    - name: Run e2e tests
+      run: pnpm e2e
+    - uses: actions/upload-artifact@v4
+      # We may want to not upload artifacts if tests pass,
+      # (`if: ${{ failure() && !cancelled() }}`)
+      # but we want to debug flaky tests, so let's always upload them.
+      if: ${{ !cancelled() }}
+      with:
+        name: e2e-report
+        path: packages/e2e-tests/playwright-report
+        retention-days: 10

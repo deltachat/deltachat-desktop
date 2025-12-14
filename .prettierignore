@@ -1,0 +1,16 @@
+CONTRIBUTORS.md
+CHANGELOG.md
+node_modules
+
+packages/target-electron/bundle_out
+packages/target-electron/migration-tests/compiled
+packages/shared/ts-compiled-for-tests
+packages/e2e-tests/test-results
+packages/e2e-tests/playwright-report
+packages/e2e-tests/data
+
+packages/target-browser/dist
+packages/target-browser/data
+target
+packages/target-tauri/target
+packages/target-tauri/src-tauri/gen

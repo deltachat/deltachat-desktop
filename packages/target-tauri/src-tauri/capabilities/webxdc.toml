@@ -1,0 +1,13 @@
+"$schema" = "../gen/schemas/desktop-schema.json"
+
+identifier = "webxdc"
+webviews = ["webxdc:*"]
+permissions = [
+    "allow-send-webxdc-update",
+    "allow-get-webxdc-updates",
+    "allow-join-webxdc-realtime-channel",
+    "allow-leave-webxdc-realtime-channel",
+    "allow-send-webxdc-realtime-data",
+    "allow-register-webxdc-channel",
+    "allow-webxdc-send-to-chat",
+]

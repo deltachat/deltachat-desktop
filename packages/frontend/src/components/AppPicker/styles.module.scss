@@ -1,0 +1,204 @@
+@use '../../../scss/variables';
+.appPickerContainer {
+  position: absolute;
+  z-index: 10;
+  width: 56%;
+  max-width: 640px;
+  height: 70vh;
+  margin-inline-start: 8px;
+  bottom: 50px;
+  background-color: var(--bgPrimary);
+  border-radius: var(--picker-BorderRadius);
+  overflow: hidden;
+  box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.0901960784);
+  @media (max-width: variables.$breakpoint-messagelist) {
+    width: 50%;
+  }
+
+  @media (max-width: 720px) {
+    width: calc(100% - 18px);
+    min-width: 300px;
+  }
+}
+
+.appPicker {
+  position: relative;
+}
+
+.appPickerList {
+  flex-wrap: wrap;
+  gap: 6px;
+  flex-grow: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: calc(70vh - 70px);
+  padding: 8px 0 32px 8px;
+}
+
+.appListItem {
+  width: 300px;
+  height: 76px;
+  border-radius: 8px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: var(--picker-text-rgb);
+  text-align: left;
+  outline: none;
+  &:hover,
+  &:focus {
+    background-color: var(--picker-border-and-hover-color);
+  }
+}
+
+.appItem {
+  display: flex;
+  align-items: center;
+  color: var(--picker-text-rgb);
+  text-align: left;
+}
+
+.searchInput {
+  color: var(--picker-text-rgb);
+  width: 100%;
+  padding: 10px;
+  background: var(--bgPrimary);
+  border: none;
+  border-bottom: 1px solid var(--picker-border-and-hover-color);
+  font-size: 14px;
+  &:focus,
+  &:active {
+    outline: none;
+  }
+}
+
+.searchInputButton {
+  position: absolute;
+  top: 2px;
+  right: 0;
+
+  // For higher specificity, to ensure override.
+  &.searchInputButton {
+    color: var(--picker-text-rgb);
+  }
+}
+
+.appIcon {
+  width: 64px;
+  height: 64px;
+  margin-inline-end: 16px;
+  border-radius: 5px;
+}
+
+.appInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  p {
+    margin: 2px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  button {
+    border: none;
+    background: none;
+    color: var(--globalLinkColor);
+    text-align: left;
+    margin: 2px 0;
+    padding: 0;
+  }
+}
+
+/** limited width in app picker */
+.appListItem .appInfo {
+  width: 208px;
+}
+
+.appDetails {
+  p {
+    margin: 8px 0;
+    span {
+      font-weight: bold;
+    }
+  }
+}
+
+.appDescription {
+  margin: 12px 0;
+  line-height: 20px;
+}
+
+.appName {
+  font-size: 16px;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.appAuthor {
+  color: #808080;
+}
+
+.tabBar {
+  position: sticky;
+  bottom: 0px;
+  display: flex;
+  width: 100%;
+  background: var(--bgPrimary);
+  border-top: 1px solid var(--picker-border-and-hover-color);
+  button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--picker-text-rgb);
+    flex-grow: 1;
+    padding: 8px;
+    border: none;
+    border-right: 1px solid var(--picker-border-and-hover-color);
+    background: var(--bgPrimary);
+    cursor: pointer;
+    &.activeTab {
+      font-weight: bold;
+      background-color: var(--picker-border-and-hover-color);
+    }
+    &:last-child {
+      border-right: none;
+    }
+    &:hover {
+      background-color: var(--picker-border-and-hover-color);
+    }
+  }
+}
+
+.category {
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.categoryIcon {
+  width: 36px;
+  height: 36px;
+  margin: auto;
+}
+
+.categoryTitle {
+  padding: 6px 0;
+}
+
+/**
+should style the svg icons but doesn't?
+
+.category-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.icon-path {
+  fill: #999;
+}
+*/

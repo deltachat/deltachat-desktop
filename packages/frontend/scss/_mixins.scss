@@ -1,0 +1,28 @@
+// This is used to unstyle `<button>` elements so that
+// they look more like `<div>`s.
+// It's generally OK to apply this to already unstyled, non-button elements
+// as well, i.e. if the target element could either be
+// a `<button>` or a `<div>`.
+@mixin button-reset {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  text-align: inherit;
+}
+
+@mixin color-svg($svg, $color, $size: 100%) {
+  mask: url($svg) no-repeat center;
+  -webkit-mask: url($svg) no-repeat center;
+  mask-size: $size;
+  -webkit-mask-size: $size;
+  background-color: $color;
+}
+
+@mixin color-svg-rotated($svg, $color, $size: 100%) {
+  -webkit-mask: url($svg) no-repeat center;
+  -webkit-mask-size: $size;
+  background-color: $color;
+  transform: rotate(90deg);
+}

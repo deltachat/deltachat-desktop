@@ -1,0 +1,77 @@
+html, body {
+  background-color: white;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.formDiv {
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  background-color: rgba(46, 41, 41, 0.822);
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.formDiv form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.formDiv form input[type='text'],
+.formDiv form input[type='password'] {
+  background-color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 10px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+}
+
+.logo {
+  width: 240px;
+  height: 240px;
+}
+
+.heading {
+  color: white;
+  font-size: 18px;
+  margin: 0;
+  margin-bottom: 30px;
+  font-family: sans-serif;
+}
+
+.formDiv form button[type='submit'] {
+  background-color: white;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+}
+
+.formDiv form button:hover {
+  background-color: #000000;
+  color:white;
+}
+
+.formDiv form button[type='submit']:focus {
+  box-shadow: 0px 0px 5px rgba(0, 122, 255, 0.5);
+}

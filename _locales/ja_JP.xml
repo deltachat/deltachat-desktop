@@ -1,0 +1,621 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <!-- common strings without special context -->
+    <string name="app_name">Delta Chat</string>
+    <string name="ok">了承</string>
+    <string name="cancel">取消</string>
+    <string name="clear_search">検索履歴を消す</string>
+    <string name="yes">はい</string>
+    <string name="no">いいえ</string>
+    <string name="select">選択</string>
+    <string name="on">入</string>
+    <string name="off">切</string>
+    <string name="def">標準</string>
+    <string name="default_value">初期値（%1$s）</string>
+    <string name="default_value_as_above">初期値（同上）</string>
+    <string name="custom">カスタム</string>
+    <string name="none">無し</string>
+    <string name="automatic">自動</string>
+    <string name="strict">厳重</string>
+    <string name="open">開く</string>
+    <string name="download">ダウンロード</string>
+    <string name="downloading">ダウンロード中</string>
+    <string name="open_attachment">添付ファイルを開く</string>
+    <string name="join">参加</string>
+    <string name="rejoin">参加</string>
+    <string name="delete">削除</string>
+    <string name="info">情報</string>
+    <string name="update">アップデート</string>
+    <string name="emoji">絵文字</string>
+    <string name="attachment">添付ファイル</string>
+    <string name="back">前へ</string>
+    <string name="close">閉じる</string>
+    <string name="forward">転送</string>
+    <!-- Verb "to archive", as in "put a chat in the archive", not a noun "The Archive". -->
+    <string name="archive">アーカイブ</string>
+    <!-- Verb "to unarchive", as in "remove a chat from the archive", opposite of the previous string -->
+    <string name="unarchive">元に戻す</string>
+    <string name="mute">ミュート</string>
+    <string name="ephemeral_messages">消えるメッセージ</string>
+    <string name="ephemeral_messages_hint">この設定は、Delta Chatの利用する参加者に適用されます。ただし、参加者はメッセージをコピーしたり、保存したり、転送したり、他のアプリを利用したりすることができます。</string>
+    <string name="save">保存</string>
+    <string name="chat">チャット</string>
+    <string name="media">メディア</string>
+    <string name="profile">プロファイル</string>
+    <string name="main_menu">メインメニュー</string>
+    <string name="start_chat">チャットを開始する</string>
+    <string name="show_full_message">メッセージ全体を表示</string>
+    <!-- Placeholder text when something is loading -->
+    <string name="loading">読み込み中</string>
+    <string name="hide">非表示</string>
+    <string name="load_remote_content">リモート画像を読み込む</string>
+    <!-- Possible answers to the question are: Never, Always, Once -->
+    <string name="load_remote_content_ask">リモート画像で追跡ができる。\n\nこの設定はフォントや他のコンテツを読み込むことも許可する。無効にしても埋め込まれた画像やキャッシュされた画像を表示されます。\n\nリモート画像を読み込む？</string>
+    <string name="always">常に</string>
+    <string name="once">一回のみ</string>
+    <!-- deprecated, UI must not offer an option to show the password -->
+    <string name="show_password">パスワードを表示する</string>
+    <!-- deprecated, UI must not offer an option to show the password -->
+    <string name="hide_password">パスワードを非表示する</string>
+    <string name="not_now">今はしない</string>
+    <string name="never">しない</string>
+    <string name="one_moment">お待ち下さい…</string>
+    <string name="done">完了</string>
+    <string name="undo">元に戻す</string>
+    <string name="offline">オフライン</string>
+    <!-- For the next view or as "continue". Should be as short as possible. -->
+    <string name="next">次へ</string>
+    <string name="error">エラー</string>
+    <string name="error_x">エラー：%1$s</string>
+    <string name="no_app_to_handle_data">この種類のファイルを開くためのアプリが見つかりません。</string>
+    <string name="no_browser_installed">ブラウザーが見つかりません</string>
+    <string name="file_not_found">%1$sを見付けられません</string>
+    <string name="copied_to_clipboard">クリップボードにコピーしました</string>
+    <string name="contacts_headline">連絡先</string>
+    <string name="email_address">メールアドレス</string>
+    <string name="bad_email_address">メールアドレスが不正です。</string>
+    <string name="password">パスワード</string>
+    <string name="existing_password">既存のパスワード</string>
+    <string name="now">現在</string>
+    <!-- Headline for destructive actions with no undo. Could also be "Caution" or "Warning". -->
+    <string name="danger">危険</string>
+    <string name="today">今日</string>
+    <string name="yesterday">昨日</string>
+    <string name="this_week">今週</string>
+    <string name="this_month">今月</string>
+    <string name="last_week">先週</string>
+    <string name="last_month">先月</string>
+    <!-- Shown beside messages that are "N minutes old". Prefer short strings, or well-known abbreviations. -->
+    <plurals name="n_minutes">
+        <item quantity="other">%d分</item>
+    </plurals>
+
+    <!-- Shown beside messages that are "N hours old". Prefer short strings, or well-known abbreviations. -->
+    <plurals name="n_hours">
+        <item quantity="other">%d時間</item>
+    </plurals>
+    <plurals name="n_chats">
+        <item quantity="other">%d 個のチャット</item>
+    </plurals>
+    <plurals name="n_contacts">
+        <item quantity="other">%d個の連絡先</item>
+    </plurals>
+    <plurals name="n_messages">
+        <item quantity="other">%d個のメッセージ</item>
+    </plurals>
+    <plurals name="n_members">
+        <item quantity="other">%d人のメンバー</item>
+    </plurals>
+    <string name="self">自分</string>
+    <string name="draft">下書き</string>
+    <string name="image">画像</string>
+    <!-- Used in summaries as "Draft: Reply", similar as "Draft: Image". Use a noun here, not a verb (not: "to reply") -->
+    <string name="reply_noun">返信</string>
+    <string name="gif">Gif</string>
+    <string name="images">画像</string>
+    <string name="audio">音楽</string>
+    <string name="voice_message">音声メッセージ</string>
+    <string name="forwarded">転送された</string>
+    <string name="forwarded_message">転送されたメッセージ</string>
+    <!-- %1$s will be replaced by the name of the person who forwarded the message -->
+    <string name="forwarded_by">%1$sが転送しました</string>
+    <string name="video">動画</string>
+    <string name="documents">文章</string>
+    <string name="contact">連絡先</string>
+    <string name="camera">カメラ</string>
+    <!-- As in "start a video recording" or "take a photo"; eg. the description of the "shutter button" in cameras -->
+    <string name="capture">撮影</string>
+    <string name="switch_camera">カメラを切り替える</string>
+    <string name="toggle_fullscreen">フルスクリーン</string>
+    <string name="location">場所</string>
+    <string name="gallery">画像</string>
+    <string name="images_and_videos">画像・映像</string>
+    <string name="file">ファイル</string>
+    <string name="files">ファイル</string>
+    <string name="unknown">不明</string>
+
+    <string name="green">緑</string>
+    <string name="red">赤</string>
+    <string name="blue">青</string>
+    <string name="orange">橙</string>
+    <string name="cyan">青緑</string>
+    <string name="purple">紫</string>
+    <string name="magenta">赤紫</string>
+    <string name="white">白</string>
+
+    <string name="zoom">文字の大きさ</string>
+    <string name="extra_small">細小</string>
+    <string name="small">小</string>
+    <string name="normal">中</string>
+    <string name="large">大</string>
+    <string name="extra_large">巨大</string>
+
+    <string name="fast">高速</string>
+    <string name="slow">低速</string>
+
+    <!-- menu labels (or icon, buttons...) -->
+    <string name="menu_new_contact">新規連絡先</string>
+    <string name="menu_new_chat">新規チャット</string>
+    <string name="menu_new_group">新規グループ</string>
+    <string name="menu_send">送信</string>
+    <string name="menu_toggle_keyboard">絵文字キーボードを呼び出す</string>
+    <string name="menu_edit_group">グループを編集</string>
+    <string name="menu_group_name_and_image">グループ名と画像</string>
+    <string name="menu_show_global_map">全ての位置情報を表示する</string>
+    <string name="menu_archive_chat">チャットを保管</string>
+    <string name="menu_unarchive_chat">チャットを取り出す</string>
+    <string name="menu_add_attachment">ファイルを添付する</string>
+    <string name="menu_leave_group">退室する</string>
+    <string name="menu_delete_chat">チャットを削除</string>
+    <string name="delete_contact">連絡先を解除する</string>
+    <string name="menu_delete_location">この位置情報を削除しますか</string>
+    <string name="menu_message_details">メッセージの詳細</string>
+    <string name="menu_copy_to_clipboard">クリップボードにコピー</string>
+    <string name="menu_copy_selection_to_clipboard">コピー</string>
+    <string name="menu_copy_link_to_clipboard">リンクをコピー</string>
+    <string name="menu_copy_text_to_clipboard">テキストをコピー</string>
+    <string name="menu_copy_image_to_clipboard">画像をコピー</string>
+    <string name="paste_from_clipboard">クリップボードのデータを貼り付ける</string>
+    <string name="menu_forward">メッセージを転送</string>
+    <string name="menu_reply">メッセージに返答</string>
+    <string name="menu_mute">通知しない</string>
+    <string name="menu_unmute">ミュート解除</string>
+    <string name="menu_export_attachment">添付ファイルのエクスポート</string>
+    <string name="menu_all_media">全ての写真･動画･音楽</string>
+    <!-- Command to jump to the original message corresponding to a gallery image or document -->
+    <string name="show_in_chat">チャットに表示</string>
+    <string name="menu_share">共有</string>
+    <!-- Verb "to block sth." usually a mailing list or a contact, not a noun -->
+    <string name="block">ブロック</string>
+    <string name="menu_block_contact">拒否する</string>
+    <string name="menu_unblock_contact">拒否を解除</string>
+    <string name="menu_play">再生</string>
+    <string name="menu_pause">一時停止</string>
+    <string name="menu_scroll_to_bottom">一番下までスクロールする</string>
+    <string name="menu_scroll_to_top">一番上までスクロールする</string>
+    <string name="menu_help">ヘルプ</string>
+    <string name="privacy_policy">プライバシーについて</string>
+    <string name="menu_select_all">全選択</string>
+    <string name="select_more">さらに選択</string>
+    <string name="menu_edit_name">名前の編集</string>
+    <string name="menu_settings">設定</string>
+    <string name="menu_advanced">追加設定</string>
+    <string name="menu_view_profile">詳細を確認</string>
+    <string name="menu_zoom_in">拡大</string>
+    <string name="menu_zoom_out">縮小</string>
+    <string name="menu_save_log">ログ保存</string>
+    <string name="jump_to_message">メッセージへ移動</string>
+    <string name="copy_json">JSONをコピー</string>
+    <string name="title_share_location">現在地を全員に公開する</string>
+    <string name="device_talk">デバイスのメッセージ</string>
+    <string name="device_talk_subtitle">ローカルで生成されたメッセージ</string>
+    <string name="device_talk_explain">このチャットのメッセージはアプリで生成されます。アプリ開発者はアップデートや問題点をお知らせするために使用しています。</string>
+    <string name="edit_contact">連絡先を編集</string>
+    <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
+    <string name="pin_chat">チャットをピン留め</string>
+    <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
+    <string name="unpin_chat">チャットのピン留めを解除</string>
+    <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
+    <string name="pin">ピン留め</string>
+    <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
+    <string name="unpin">ピン留めを解除</string>
+    <string name="ConversationFragment_quoted_message_not_found">メッセージが見つかりません</string>
+    <string name="reply_privately">個別に返信する</string>
+    <string name="mute_for_one_hour">1時間停止する</string>
+    <string name="mute_for_eight_hours">8時間停止する</string>
+    <string name="mute_for_one_day">24時間停止する</string>
+    <string name="mute_for_seven_days">7日間停止する</string>
+    <string name="mute_forever">無効</string>
+
+    <string name="share_location_for_5_minutes">5分間</string>
+    <string name="share_location_for_30_minutes">30分間</string>
+    <string name="share_location_for_one_hour">1時間</string>
+    <string name="share_location_for_two_hours">2時間</string>
+    <string name="share_location_for_six_hours">6時間</string>
+
+    <plurals name="ask_send_following_n_files_to">
+        <item quantity="other">%sさんに%dつのファイルを送る？</item>
+    </plurals>
+    <string name="file_saved_to">%1$sに保存しました。</string>
+
+    <string name="ask_forward">%1$sにメッセージを転送しますか？</string>
+    <string name="ask_forward_multiple">%1$dチャットにメッセージを転送しますか？</string>
+    <string name="ask_export_attachment">添付ファイルをエクスポートしますか？添付ファイルをエクスポートすると、他のアプリからもアクセスできるようになります。\n\nよろしいですか？</string>
+    <string name="ask_block_contact">この連絡先を拒否しますか</string>
+    <string name="ask_unblock_contact">この連絡先の拒否設定を解除しますか</string>
+    <string name="ask_delete_contacts">連絡先を削除しますか？\n\nチャット中の連絡先やシステムのアドレス帳の連絡先は削除できません。</string>
+    <string name="ask_delete_contact">%1$s件の連絡先を削除しますか？\n\nチャット中の連絡先やシステムのアドレス帳の連絡先は削除できません。</string>
+    <string name="ask_start_chat_with">%1$sとチャットしますか</string>
+    <!-- %1$s is replaced by a comma-separated list of names -->
+    <string name="ask_remove_members">%1$sをグループから排除しますか</string>
+    <string name="open_url_confirmation">このリンクを開きますか？</string>
+
+
+    <!-- contact list -->
+    <string name="contacts_title">連絡先一覧</string>
+    <string name="contacts_type_email_above">上にメールアドレスを入力してください。</string>
+
+
+    <!-- chatlist and chat view -->
+    <plurals name="chat_archived">
+        <item quantity="other">%d個のアーカイブチャット</item>
+    </plurals>
+    <plurals name="chat_unarchived">
+        <item quantity="other">%d個のチャットを取り戻しました</item>
+    </plurals>
+    <string name="chat_archived_chats_title">アーカイブしたチャット</string>
+    <string name="chat_please_enter_message">メッセージを入力してください。</string>
+    <string name="chat_camera_unavailable">カメラは利用できません。</string>
+    <string name="chat_unable_to_record_audio">録音できません。</string>
+    <plurals name="chat_n_new_messages">
+        <item quantity="other">新着メッセージが%d件です</item>
+    </plurals>
+    <string name="chat_new_group_hint">最初のメッセージを送ってから他人が返信できるようになります。\n\n･Delta Chatを使わなくても構いません\n\n･最初のメッセージの配信は時間がかかる場合もあります。</string>
+    <string name="chat_record_slide_to_cancel">スライドしてキャンセル</string>
+    <string name="chat_record_explain">長押しして録音して、離すと送ります。</string>
+    <string name="chat_no_chats_yet_title">受信箱が空です。\n＋でチャットを開始します。</string>
+    <string name="chat_all_archived">すべてのチャットがアーカイブされました。\n＋でチャットを開始します。</string>
+    <string name="chat_share_with_title">共有</string>
+    <string name="chat_input_placeholder">メッセージ</string>
+    <string name="chat_archived_label">アーカイブ済み</string>
+    <string name="chat_no_messages">メッセージ無し</string>
+    <string name="chat_self_talk_subtitle">自分に送ったメッセージ</string>
+    <!-- Action to add a message to "Saved Messages". The longer form (instead of "Save" only) is needed esp. on desktop to make clear this is not about saving a file to disk -->
+    <string name="save_message">保存</string>
+    <string name="saved_messages">保存したメッセージ</string>
+    <string name="saved_messages_explain">ここにメッセージを転送しておけば、簡単にアクセスできます。メモやボイスメモも保存できます。メディアを添付して保存します。</string>
+    <!-- Should match "Saved" from "Saved messages" -->
+    <string name="saved">保存しました</string>
+    <string name="retry_send">メッセージの配信を再試行します</string>
+    <string name="cannot_display_unsuported_file_type">%s形式のファイルは表示できません</string>
+    <string name="attachment_failed_to_load">添付ファイルの読み込みに失敗しました</string>
+    <!-- For recording Voice messages: Description for the "Lock" button allowing to lift the thumb from the record button while recording continues -->
+    <string name="lock_recording">ずっと録音</string>
+
+    <!-- mailing lists -->
+    <string name="mailing_list">メーリングリスト</string>
+    <string name="show_location_traces">トレースを表示する</string>
+    <string name="add_poi">指定位置を送る</string>
+
+
+    <string name="puny_code_warning_header">疑わしいリンクが検出された</string>
+    <!-- search -->
+    <string name="search">検索</string>
+    <string name="search_explain">チャット･メッセージ･連絡先を検索</string>
+    <string name="search_no_result_for_x">｢%s｣は見付かりませんでした｡</string>
+    <!-- create/edit groups, contact/group profile -->
+    <string name="group_name">グループ名</string>
+    <string name="group_avatar">グループ画像</string>
+    <string name="remove_group_image">アイコン画像の削除</string>
+    <string name="change_group_image">グループ画像の編集</string>
+    <string name="group_create_button">グループ作成</string>
+    <string name="group_please_enter_group_name">グループ名を入力して下さい</string>
+    <string name="group_add_members">メンバーを追加</string>
+    <string name="group_self_not_in_group">グループのメンバーしかが実行されないアクションです。</string>
+    <string name="profile_encryption">暗号化</string>
+    <string name="profile_shared_chats">共有チャット</string>
+    <string name="tab_contact">連絡先</string>
+    <string name="tab_group">グループ</string>
+    <string name="tab_gallery">画像</string>
+    <string name="tab_docs">文章</string>
+    <string name="tab_links">リンク</string>
+    <string name="tab_map">地図</string>
+    <string name="tab_gallery_empty_hint">このチャットで共有された画像や映像はここに表示されます。</string>
+    <string name="tab_docs_empty_hint">このチャットで共有されたドキュメントや音楽などがここに表示されます。</string>
+    <string name="media_preview">メディアのプレビュー</string>
+    <string name="send_message">送る</string>
+
+    <string name="connectivity">接続性</string>
+    <!-- Shown in the title bar if the app is "Not connected"; prefer short strings. -->
+    <string name="connectivity_not_connected">未接続</string>
+    <!-- Shown in the title bar if the app is "Connecting"; prefer short strings. The ellipsis is a single character (…), not three (...) -->
+    <string name="connectivity_connecting">接続中</string>
+    <!-- Shown in the title bar if the app is "Updating" (eg. getting new/old message, sync things); prefer short strings. The ellipsis is a single character (…), not three (...) -->
+    <string name="connectivity_updating">アップデート中</string>
+    <!-- Shown in the setting if the app is "Connected" -->
+    <string name="connectivity_connected">接続済み</string>
+    <string name="login_title">ログイン</string>
+    <string name="login_inbox">受信</string>
+    <string name="login_imap_login">IMAPログイン名</string>
+    <string name="login_imap_server">IMAPサーバー</string>
+    <string name="login_imap_port">IMAPポート</string>
+    <string name="login_imap_security">IMAP暗号方式</string>
+    <string name="login_outbox">送信</string>
+    <string name="login_smtp_login">SMTPログイン名</string>
+    <string name="login_smtp_password">SMTPパスワード</string>
+    <string name="login_smtp_server">SMTPサーバー</string>
+    <string name="login_smtp_port">SMTPポート</string>
+    <string name="login_smtp_security">SMTP暗号方式</string>
+    <string name="login_certificate_checks">有効な証明書です</string>
+    <string name="login_error_mail">有効なメールアドレスを入力してください</string>
+    <string name="login_error_server">有効なサーバー或いはIPアドレスを入力してください</string>
+    <string name="login_error_port">有効なポート（１〜６５５３５）を入力してください</string>
+    <string name="login_error_required_fields">有効なメールアドレスとパスワードを入力してください</string>
+    <string name="import_backup_title">バックアップをインポート</string>
+    <string name="import_backup_ask">%1$sでバックアップがあります。\n\nすべての設定やデータを取り込んで使用しましょうか？</string>
+    <string name="import_backup_no_backup_found">バックアップが見つかりません。\n\n%1$sにバックアップをコピーして、再試行してください。又は、「メッセージの開始」を押して通常のセットアップを続行します。</string>
+    <!-- %1$s will be replaced by the failing address -->
+    <string name="login_error_cannot_login">%1$sとしてログインできません。メールアドレスとパスワードを確認してください。</string>
+    <!-- TLS certificate checks -->
+    <string name="accept_invalid_certificates">無効な証明書を受け入れます</string>
+    <string name="switch_account">アカウントを切り替え</string>
+    <string name="add_account">アカウントを追加</string>
+    <string name="delete_account">アカウントを削除</string>
+    <string name="delete_account_ask">本当にアカウントデータを削除しますか？</string>
+    <string name="delete_account_explain_with_name">暗号鍵・連絡先・チャット・メッセージを含めて%sのアカウントデータを端末から削除します。元に戻すことはできません。</string>
+    <string name="try_connect_now">今直ぐ接続します</string>
+    <!-- Translations: %1$s will be replaced by a more detailed error message -->
+    <string name="configuration_failed_with_error">設定失敗。エラー：%1$s</string>
+
+    <!-- share and forward messages -->
+    <!-- Translators: shown above a chat/contact list when selecting recipients to forward messages -->
+    <string name="forward_to">転送</string>
+    <string name="ask_send_files_to_selected_chats">%1$dつのファイルを%2$d個のチャットに送りますか。</string>
+    <string name="share_text_multiple_chats">%2$sを%1$d個のチャットに送りますか。</string>
+    <string name="share_abort">権限エラー：共有が一時中断されました。</string>
+
+
+    <!-- preferences -->
+    <string name="pref_using_custom">カスタムを使う：%s</string>
+    <string name="pref_using_default">デフォルトを使う：%s</string>
+    <string name="pref_profile_info_headline">ユーザープロファイル</string>
+    <string name="pref_profile_photo">アイコン画像</string>
+    <string name="pref_blocked_contacts">ブロックされた人</string>
+    <string name="blocked_empty_hint">ブロックされた連絡先がここに表示されます。</string>
+    <string name="pref_who_can_see_profile_explain">アイコン画像や名前は他のユーザーに連絡するとメッセージとともに表示されます。既に送信された情報を削除することができます。</string>
+    <string name="pref_your_name">あなたの名前</string>
+    <!-- Label of the Bio/Signature/Status/Motto field -->
+    <string name="pref_default_status_label">署名</string>
+    <string name="pref_enter_sends">エンターキーで送信</string>
+    <string name="pref_enter_sends_explain">エンターキーを押すとテキストメッセージが送信されます</string>
+    <string name="pref_outgoing_media_quality">送信する画像や映像の画質</string>
+    <string name="pref_outgoing_balanced">普通</string>
+    <string name="pref_outgoing_worse">低画質・サイズが小さい</string>
+    <string name="pref_vibrate">振動</string>
+    <string name="pref_screen_security">画面セキュリティ</string>
+    <!-- Translators: Must indicate that there is no guarantee as the system may not honor our request. -->
+    <string name="pref_screen_security_explain">アプリ内や「最近使ったアプリ」でスクリーンショットを禁止する</string>
+    <string name="pref_screen_security_please_restart_hint">画面のセキュリティ設定を適用してアプリを再起動してください。</string>
+    <string name="pref_notifications">通知</string>
+    <string name="pref_notifications_show">表示</string>
+    <string name="pref_notifications_priority">優先度</string>
+    <string name="pref_notifications_explain">新着メッセージ通知を有効にします</string>
+    <string name="pref_show_notification_content">通知にメッセージの内容を表示します</string>
+    <string name="pref_show_notification_content_explain">通知には、送信者と最初の単語を表示します</string>
+    <string name="pref_led_color">LED色</string>
+    <string name="pref_sound">通知音</string>
+    <string name="pref_silent">無音</string>
+    <string name="pref_privacy">機密保護</string>
+    <string name="pref_chats_and_media">チャットと写真･動画･音楽</string>
+    <string name="pref_system_default">システム既定</string>
+    <!-- Translators: as in "opposite of dark" -->
+    <string name="pref_light_theme">白</string>
+    <string name="pref_dark_theme">黒</string>
+    <string name="pref_appearance">外観</string>
+    <string name="pref_theme">見た目</string>
+    <string name="pref_language">言語</string>
+    <string name="pref_incognito_keyboard">シークレットキーボード</string>
+    <!-- Translators: Must indicate that there is no guarantee as the system may not honor our request. -->
+    <string name="pref_incognito_keyboard_explain">予測入力を無効にする</string>
+    <string name="pref_read_receipts">既読通知</string>
+    <string name="pref_read_receipts_explain">既読通知を無効にすると、相手の既読通知も受け取れません。</string>
+    <string name="pref_manage_keys">暗号鍵の管理</string>
+    <string name="pref_chats">チャット</string>
+    <string name="pref_in_chat_sounds">着信音</string>
+    <string name="pref_view_log">ログの表示</string>
+    <string name="pref_saved_log">ログはダウンロードフォルダに保存されました。</string>
+    <string name="pref_save_log_failed">ログの保存に失敗しました</string>
+    <string name="pref_log_header">ログ</string>
+    <string name="pref_other">その他</string>
+    <string name="pref_backup">バックアップ</string>
+    <string name="pref_backup_explain">外部記憶装置へチャットをバックアップする</string>
+    <string name="pref_backup_export_explain">バックアップは、本デバイスまたは別のデバイスに新たにインストールする際に役立ちます。\n\nこのバックアップには、すべてのメッセージ、連絡先、チャット、およびエンドツーエンドの自動暗号化設定が含まれます。バックアップファイルは安全な場所に保管するか、できるだけ早く削除してください。</string>
+    <string name="pref_backup_export_start_button">バックアップを開始する</string>
+    <string name="pref_backup_written_to_x">バックアップは%1$sに正常に完了しました。</string>
+    <!-- No need to translate "Wallpaper" literally. Chose what is common in your language for a "Wallpaper" or a "Background". Avoid adding the term "image" here, as the "Wallpaper" may also be just a single color. -->
+    <string name="pref_background">背景</string>
+    <string name="pref_background_btn_default">デフォルトの画像を使う</string>
+    <string name="pref_background_btn_gallery">ギャラリーから選ぶ</string>
+    <string name="pref_auto_folder_moves">DeltaChatフォルダに自動で移動する</string>
+    <string name="pref_show_emails">一般的なメールを表示する</string>
+    <string name="pref_show_emails_no">いいえ、チャットのみ</string>
+    <string name="pref_show_emails_accepted_contacts">許可されたユーザーのみ</string>
+    <string name="pref_show_emails_all">全部</string>
+    <string name="pref_experimental_features">実験的な機能</string>
+    <string name="pref_on_demand_location_streaming">オンデマンドの位置情報配信</string>
+    <string name="pref_background_default">デフォルトの壁紙</string>
+    <string name="pref_background_default_color">デフォルト色</string>
+    <string name="pref_background_custom_image">画像</string>
+    <string name="pref_background_custom_color">色</string>
+    <string name="export_aborted">エクスポートを停止しました。</string>
+    <string name="profile_image_select">アイコン画像を選択する</string>
+    <string name="select_your_new_profile_image">新しいアイコン画像を選択してください</string>
+    <string name="profile_image_delete">アイコン画像を削除する</string>
+    <string name="pref_show_tray_icon">トレイアイコンの表示</string>
+    <string name="pref_edit_profile">プロフィール編集</string>
+    <!-- Emoji picker and categories -->
+    <string name="emoji_search_results">検索結果</string>
+    <string name="emoji_not_found">絵文字がみつかりません</string>
+    <string name="emoji_recent">履歴</string>
+    <string name="emoji_people">人と体</string>
+    <string name="emoji_nature">自然と動物</string>
+    <string name="emoji_foods">食べ物と飲み物</string>
+    <string name="emoji_activity">活動</string>
+    <string name="emoji_places">旅行・場所</string>
+    <string name="emoji_objects">物</string>
+    <string name="emoji_symbols">シンボル</string>
+    <string name="emoji_flags">フラッグ</string>
+
+    <!-- automatically delete message -->
+    <string name="delete_old_messages">古いメッセージの削除</string>
+    <string name="autodel_device_title">端末からメッセージを削除する</string>
+    <string name="autodel_server_title">サーバーからメッセージを削除する</string>
+    <string name="autodel_confirm">分かりました。メッセージを削除していいです。</string>
+    <!-- "At once" in the meaning of "Immediately", without any intervening time. -->
+    <string name="autodel_at_once">すぐに</string>
+    <string name="after_5_minutes">5分</string>
+    <string name="autodel_after_1_hour">1時間</string>
+    <string name="autodel_after_1_day">1日後</string>
+    <string name="autodel_after_1_week">1週間後</string>
+    <string name="after_5_weeks">5週間後</string>
+    <string name="autodel_after_1_year">1年後</string>
+
+    <!-- system messages -->
+    <string name="systemmsg_subject_for_new_contact">%1$sさんからのメッセージ</string>
+    <string name="systemmsg_failed_sending_to">%1$sさんへのメッセージ送信に失敗しました。</string>
+    <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name -->
+    <string name="group_name_changed_by_you">自分からグループ名を%1$sから%2$sに変更しました。</string>
+    <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name, %3$s will be replaced by name and address of the contact who did the action. -->
+    <string name="group_name_changed_by_other">%3$sからグループ名を%1$sから%2$sに変更しました。</string>
+    <string name="group_image_changed_by_you">自分からグループ画像が変わりました。</string>
+    <!-- %1$s will be replaced by name of the contact who did the action -->
+    <string name="group_image_changed_by_other">%1$sからグループ画像が変わりました。</string>
+    <!-- %1$s will be replaced by name of the contact added to the group -->
+    <string name="add_member_by_you">自分から%1$sが追加されました。</string>
+    <!-- %1$s will be replaced by name of the contact added to the group, %2$s will be replaced by name of the contact who did the action -->
+    <string name="add_member_by_other">%2$sから%1$sが追加されました。</string>
+    <!-- %1$s will be replaced by name of the contact removed from the group -->
+    <string name="remove_member_by_you">自分から%1$sが退会されました。</string>
+    <!-- %1$s will be replaced by name of the contact removed from the group, %2$s will be replaced by name of the contact who did the action -->
+    <string name="remove_member_by_other">%2$sから%1$sが退会されました。</string>
+    <!-- %1$s will be replaced by name of the contact removed from the group; this string is used when it's unclear who did the action -->
+    <string name="member_x_removed">%1$sが退会されました。</string>
+    <string name="group_image_deleted_by_you">自分からグループ画像を削除しました。</string>
+    <!-- %1$s will be replaced by name of the contact -->
+    <string name="group_image_deleted_by_other">%1$sからグループ画像を削除しました。</string>
+    <string name="ephemeral_timer_disabled_by_you">自分から消えるメッセージを無効にしました。</string>
+    <!-- %1$s will be replaced by name of the contact -->
+    <string name="ephemeral_timer_disabled_by_other">%1$sから消えるメッセージを無効にしました。</string>
+    <!-- %1$s will be replaced by the number of seconds (always >1) the timer is set to -->
+    <string name="ephemeral_timer_seconds_by_you">自分から消えるメッセージを%1$s秒にしました。</string>
+    <!-- %1$s will be replaced by the number of seconds (always >1) the timer is set to, %2$s will be replaced by name of the contact -->
+    <string name="ephemeral_timer_seconds_by_other">%2$sから消えるメッセージを%1$s秒にしました。</string>
+    <!-- deprecated, usage needs to be removed in core -->
+    <string name="ephemeral_timer_1_minute_by_you">自分から消えるメッセージを1分にしました。</string>
+    <!-- deprecated, usage needs to be removed in core -->
+    <string name="ephemeral_timer_1_minute_by_other">%1$sから消えるメッセージを1分にしました。</string>
+    <string name="ephemeral_timer_1_hour_by_you">自分から消えるメッセージを1時間にしました。</string>
+    <!-- %1$s will be replaced by name of the contact -->
+    <string name="ephemeral_timer_1_hour_by_other">%1$sから消えるメッセージを1時間にしました。</string>
+    <string name="ephemeral_timer_1_day_by_you">自分から消えるメッセージを1日にしました。</string>
+    <!-- %1$s will be replaced by name of the contact -->
+    <string name="ephemeral_timer_1_day_by_other">%1$sから消えるメッセージを1日にしました。</string>
+    <string name="ephemeral_timer_1_week_by_you">自分から消えるメッセージを1週間にしました。</string>
+    <!-- %1$s will be replaced by name of the contact -->
+    <string name="ephemeral_timer_1_week_by_other">%1$sから消えるメッセージを1週間にしました。</string>
+    <!-- %1$s will be replaced by the number of minutes (always >1) the timer is set to -->
+    <string name="ephemeral_timer_minutes_by_you">自分から消えるメッセージを%1$s分にしました。</string>
+    <!-- %1$s will be replaced by the number of minutes (always >1) the timer is set to, %2$s will be replaced by name of the contact -->
+    <string name="ephemeral_timer_minutes_by_other">%2$sから消えるメッセージを%1$s分にしました。</string>
+    <!-- %1$s will be replaced by the number of hours (always >1) the timer is set to -->
+    <string name="ephemeral_timer_hours_by_you">自分から消えるメッセージを%1$s時間にしました。</string>
+    <!-- %1$s will be replaced by the number of hours (always >1) the timer is set to, %2$s will be replaced by name of the contact -->
+    <string name="ephemeral_timer_hours_by_other">%2$sから消えるメッセージを%1$s時間にしました。</string>
+    <!-- %1$s will be replaced by the number of days (always >1) the timer is set to -->
+    <string name="ephemeral_timer_days_by_you">自分から消えるメッセージを%1$s日にしました。</string>
+    <!-- %1$s will be replaced by the number of days (always >1) the timer is set to, %2$s will be replaced by name of the contact -->
+    <string name="ephemeral_timer_days_by_other">%2$sから消えるメッセージを%1$s日にしました。</string>
+    <!-- %1$s will be replaced by the number of weeks (always >1) the timer is set to -->
+    <string name="ephemeral_timer_weeks_by_you">自分から消えるメッセージを%1$s週間にしました。</string>
+    <!-- %1$s will be replaced by the number of weeks (always >1) the timer is set to, %2$s will be replaced by name of the contact -->
+    <string name="ephemeral_timer_weeks_by_other">%2$sから消えるメッセージを%1$s週間にしました。</string>
+    <!-- qr code stuff -->
+    <string name="qr_code">QRコード</string>
+    <string name="load_qr_code_as_image">QRコードを画像として読み込む</string>
+    <string name="qrscan_title">QRｺｰﾄﾞを読み取る</string>
+    <string name="qrscan_hint">QRコードを読み取って下さい</string>
+    <string name="qrscan_failed">QRコードを読み取りできなかった</string>
+    <string name="qrscan_ask_join_group">%1$sグループに参加しますか</string>
+    <string name="qrscan_contains_text">読み取り結果は以下:\n\n%1$s</string>
+    <string name="qrscan_contains_url">読み取り結果は以下:\n\n:\n\n%1$s</string>
+    <string name="qrshow_title">自分のQRｺｰﾄﾞ</string>
+    <string name="qrshow_x_joining">%1$sが参加しました</string>
+    <string name="qrshow_x_verified">%1$sを確認しました。</string>
+    <string name="qrshow_x_has_joined_group">%1$sが参加しました</string>
+    <string name="qrshow_join_group_title">自分のQRｺｰﾄﾞ</string>
+    <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by the group name, eg. "Scan to join group \"Testing group\"" -->
+    <string name="qrshow_join_group_hint">スキャンして%1$sに参加します</string>
+    <string name="qrshow_join_contact_title">自分のQRｺｰﾄﾞ</string>
+    <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by the profile name eg. "Scan to chat with Alice" -->
+    <string name="qrshow_join_contact_hint">スキャンして%1$sに連絡します。</string>
+    <string name="qrshow_join_contact_no_connection_toast">インターネットに接続されていないので、QRコードの設定ができません。</string>
+    <string name="qraccount_ask_create_and_login">%1$sに新しいメールアドレスを作ってログしますか。</string>
+    <string name="contact_verified">%1$sを確認しました。</string>
+    <!-- notifications  -->
+    <string name="notify_reply_button">返信</string>
+    <string name="notify_new_message">新規メッセージ</string>
+    <string name="notify_priority_high">高</string>
+    <string name="notify_priority_max">最大</string>
+    <string name="notify_name_and_message">名前とメッセージ</string>
+    <string name="notify_name_only">名前のみ</string>
+    <string name="notify_no_name_or_message">名前もメッセージも非表示</string>
+    <!-- permissions -->
+    <string name="perm_required_title">アクセス許可が必要です</string>
+    <string name="perm_continue">続行</string>
+    <string name="ImageEditorHud_add_text">テキストを作成</string>
+    <string name="ImageEditorHud_blur">ぼかし</string>
+    <string name="ImageEditorHud_crop">切り抜き</string>
+    <string name="ImageEditorHud_flip">反転</string>
+    <string name="ImageEditorHud_rotate">回転</string>
+
+    <string name="welcome_desktop">Delta Chatにようこそ</string>
+    <string name="global_menu_preferences_language_desktop">言語を選択して下さい</string>
+    <string name="global_menu_file_desktop">ファイル</string>
+    <string name="global_menu_file_quit_desktop">終了</string>
+    <string name="global_menu_edit_desktop">編集</string>
+    <string name="global_menu_edit_undo_desktop">元に戻す</string>
+    <string name="global_menu_edit_redo_desktop">やり直す</string>
+    <string name="global_menu_edit_cut_desktop">切り取り</string>
+    <string name="global_menu_edit_copy_desktop">複製</string>
+    <string name="global_menu_edit_paste_desktop">貼り付け</string>
+    <string name="global_menu_view_desktop">表示画面</string>
+    <string name="global_menu_view_floatontop_desktop">最前面に維持する</string>
+    <string name="global_menu_view_developer_desktop">開発者</string>
+    <string name="global_menu_view_developer_tools_desktop">開発者ツール</string>
+    <string name="global_menu_help_desktop">ヘルプ</string>
+    <string name="global_menu_help_report_desktop">問題を報告する</string>
+    <string name="global_menu_help_about_desktop">Delta Chatについて</string>
+    <string name="write_message_desktop">メッセージを送信</string>
+    <string name="encryption_info_title_desktop">暗号化情報</string>
+    <string name="delete_message_desktop">メッセージを削除する</string>
+    <string name="more_info_desktop">もっと詳しく</string>
+    <string name="timestamp_format_m_desktop">MMM D</string>
+    <string name="remove_desktop">削除</string>
+    <string name="save_desktop">保存</string>
+    <string name="name_desktop">名前</string>
+    <string name="select_group_image_desktop">グループ画像を選択する</string>
+    <string name="export_backup_desktop">バックアップをエクスポート</string>
+    <string name="message_detail_sent_desktop">送信済み</string>
+    <string name="message_detail_received_desktop">届きました</string>
+    <string name="menu.view.developer.open.log.folder">ログフォルダを開く</string>
+    <string name="menu.view.developer.open.current.log.file">現在のログファイルを開く</string>
+    <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
+    <string name="a11y_delivery_status_error">送信状態：エラー</string>
+    <string name="a11y_delivery_status_sending">送信状態：送信中</string>
+    <string name="a11y_delivery_status_draft">送信状態：下書き</string>
+    <string name="a11y_delivery_status_delivered">送信状態：送信済み</string>
+    <string name="a11y_delivery_status_read">送信状態：既読</string>
+    <string name="a11y_delivery_status_invalid">不明な送信状態</string>
+    <string name="a11y_disappearing_messages_activated">消えるメッセージを有効にしました。</string>
+
+    </resources>

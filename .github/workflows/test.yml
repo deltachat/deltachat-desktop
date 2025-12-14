@@ -1,0 +1,34 @@
+# Run unit & integration tests
+on:
+  push:
+    paths-ignore:
+      - 'docs/**'  # only trigger build if a file outside of /docs was changed
+      - '_locales/*.xml'
+      - '.vscode/**'
+      - 'README_ASSETS/**'
+      - 'README.md'
+
+jobs:
+  test:
+    name: Tests #and E2E Tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest] # macos-latest doesn't work currently: ERROR UnableToAccessScreenRecordingAPIError: The find-window process cannot access the Screen Recording API.
+      fail-fast: false # don't fail fast, because some tests can be flaky so better we get all results
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js 22.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 22.x
+    - name: install dependencies
+      run: |
+        npm i -g pnpm
+        pnpm install --frozen-lockfile
+    - name: build
+      run: |
+        pnpm run build
+    - name: test
+      run: |
+        pnpm run test

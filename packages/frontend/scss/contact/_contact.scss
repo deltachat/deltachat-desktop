@@ -1,0 +1,76 @@
+.chat-list .contact-list-item#newcontact div.contact {
+  width: 30vw;
+}
+
+.contact-list-item div.contact {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  .chat-list & {
+    width: unset; // otherwise you can scroll sidewards sometimes
+    padding: 0px 10px;
+  }
+
+  div.contact-name {
+    // Ensure it's as wide as the parent allows, but doesn't overflow
+    // the parent if the content is too long.
+    width: 0;
+    flex-grow: 1;
+
+    display: inline-block;
+    // height: 54px;
+    margin-inline-start: 10px;
+    .chat-list & {
+      width: calc(100% - 37px);
+    }
+    .display-name {
+      font-weight: bold;
+      margin-bottom: 0px;
+      margin-top: 3px;
+      white-space: nowrap;
+
+      display: inline-flex;
+      max-width: 100%;
+      align-items: center;
+      gap: 4px;
+      .truncated {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        min-width: 0;
+      }
+      .material-svg-icon {
+        flex-shrink: 0;
+      }
+    }
+    .email {
+      color: var(--contactEmailColor);
+      margin-bottom: 3px;
+      margin-top: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .pseudo-contact-text {
+      font-weight: bold;
+      margin-bottom: 0px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: medium;
+    }
+  }
+}
+
+// less padding for unblock contacts list
+.blocked-contacts {
+  padding-bottom: 20px;
+  padding-inline-start: 10px !important;
+  // hide blocked contact icon
+  .material-icon-blocked {
+    display: none;
+  }
+  p {
+    padding-inline-start: 20px;
+  }
+}

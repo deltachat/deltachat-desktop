@@ -1,0 +1,50 @@
+name: Basic Code Checks & Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    paths-ignore:
+      - 'docs/**'  # only trigger build if a file outside of /docs was changed
+      - 'README_ASSETS/**'
+      - '.prettierrc.yml'
+      - '.vscode/**'
+
+jobs:
+  check:
+    name: Code Validation
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js 22.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 22.x
+    - name: pnpm install
+      run: |
+        npm i -g pnpm
+        pnpm install --frozen-lockfile
+    - name: Run all checks
+      run: |
+        pnpm check
+  test:
+    name: Code Tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js 22.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 22.x
+    - name: pnpm install
+      run: |
+        npm i -g pnpm
+        pnpm install --frozen-lockfile
+    - name: Build
+      run: pnpm build:electron
+    - name: Run all checks
+      run: |
+        pnpm test

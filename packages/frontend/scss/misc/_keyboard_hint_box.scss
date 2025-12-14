@@ -1,0 +1,84 @@
+.keyboard-hints-popover,
+.keyboard-hints-box,
+.keyboard-hint-cheatsheet-dialog {
+  .keybinding {
+    display: block;
+    padding: 5px 0;
+
+    .key {
+      background: var(--keybindingKeyBackground);
+      border-radius: 6px;
+      border: 1px var(--keybindingKeyBorder) solid;
+      box-shadow: 0px 3px var(--keybindingKeyShadow);
+      color: var(--keybindingKeyFontColor);
+      display: inline-block;
+      font-size: 14px;
+      font-weight: 400;
+      padding: 3px 10px;
+
+      &:hover,
+      &.pressed {
+        box-shadow: 0px 1px var(--keybindingKeyShadow);
+        transform: translatey(2px);
+      }
+    }
+  }
+  .action {
+    display: block;
+    background-color: var(--keybindingActionBackground);
+    border-radius: 10px;
+    padding: 3px 6px;
+    margin: 6px 0px;
+
+    .heading {
+      margin-bottom: 0;
+      line-height: normal;
+      margin-top: 1px;
+    }
+
+    &:nth-last-child {
+      padding-bottom: 0;
+    }
+  }
+
+  .explainer {
+    margin-top: 14px;
+    font-size: 13px;
+  }
+}
+
+.keyboard-hints-popover,
+.keyboard-hints-box {
+  width: 260px;
+}
+
+.keyboard-hint-cheatsheet-dialog {
+  width: 80% !important;
+  max-width: 570px !important;
+  .keybinding {
+    font-size: 0.84em;
+  }
+  h4 .keybinding {
+    flex: none;
+    margin-inline-start: 20px;
+  }
+  .dialog-body {
+    padding-bottom: 0;
+  }
+  .keyboard-hint-dialog-body {
+    display: flex;
+    flex-wrap: wrap;
+    padding-bottom: 10px;
+    justify-content: space-evenly;
+    .action {
+      width: 260px;
+      margin: 4px;
+      padding: 7px;
+    }
+
+    h2 {
+      max-width: 280px;
+      font-size: 1.4em;
+    }
+  }
+}

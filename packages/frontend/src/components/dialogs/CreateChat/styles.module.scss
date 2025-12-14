@@ -1,0 +1,8 @@
+.createChatDialogBody {
+  // Stretch the parent. The parent is `display: flex`,
+  // so this will not make it overflow.
+  // Why not just let the content stretch the parent? Because this doesn't
+  // work with `react-virtualized-auto-sizer`.
+  // Similar approach is taken by the ForwardMessage component.
+  height: 100vh;
+}

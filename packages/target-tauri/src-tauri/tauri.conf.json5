@@ -1,0 +1,94 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "deltachat-tauri",
+  "identifier": "chat.delta.desktop.tauri",
+  "build": {
+    "devUrl": null,
+    "beforeDevCommand": "pnpm build",
+    "beforeBuildCommand": "pnpm build4production",
+    "frontendDist": "../html-dist"
+  },
+  "app": {
+    "withGlobalTauri": false,
+    "security": {
+      // The CSP will be further adjusted in `run()`, see `context.config_mut()`.
+      "csp": {
+        "default-src": "none",
+        "connect-src": "'self' ipc:",
+        // The sha-256 values are for
+        // - `emoji-mart`.
+        // - `react-zoom-pan-pinch`'s TransformComponent (2nd and 3rd entries).
+        // - "Connectivity" iframe styles (`rpc.getConnectivityHtml()`)
+        //   (4th entry)
+        // We can't use 'unsafe-inline',
+        // because Tauri injects nonce values,
+        // (see https://tauri.app/security/csp/), and the browser complains:
+        // > Note that 'unsafe-inline' is ignored if either a hash
+        // > or nonce value is present in the source list.
+        "style-src": "'self' 'sha256-+A14ONesVdzkn6nr37Osn+rUqNz4oFGZFDbLXrlae04=' 'sha256-31CP0ioHn9tdjnRPKUZDADOC/7ixdd8LUNgAG3CWiUg=' 'sha256-47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=' 'sha256-Zh4jUM9OY2WmO7yf9x6EN6kOIMV+Qs5XBO/aKendd1M='",
+        "font-src": "'self'",
+        "script-src": "'self' 'wasm-unsafe-eval'",
+        "worker-src": "blob:",
+        "child-src": "blob:",
+        "img-src": "'self' data: blob: dcblob: webxdc-icon: dcsticker: dcchatbgimage:",
+        "media-src": "'self' dcblob:"
+      }
+      // TODO postponed to later
+      // "pattern": {
+      //   "use": "isolation",
+      //   "options": {
+      //     "dir": "../isolation"
+      //   }
+      // },
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "resources": {
+      "../../../_locales/*.json": "_locales",
+      // Needed only for Windows, for the task bar icon overlay.
+      // Apparently Tauri can't get it from `./html-dist`.
+      "../../../images/tray/unread-badge.png": "images/tray/unread-badge.png"
+    },
+    "iOS": {
+      "minimumSystemVersion": "13.0",
+      "developmentTeam": "8Y86453UA8", // merlinux,
+      "frameworks": ["SystemConfiguration"] // needed for system configuration crate, which is used by iroh-net
+    },
+    "macOS": {
+      "entitlements": "../bundle_resources/Entitlements.plist",
+      "files": { "Resources/xdc.icns": "../bundle_resources/xdc.icns" },
+      "minimumSystemVersion": "14.0" // because it links to proxy apis that require atleast version 14
+    },
+    "windows": {
+      "nsis": {
+        "installerHooks": "./windows/hooks.nsi"
+      }
+    },
+    "linux": {
+      "rpm": {
+        "desktopTemplate": "./linux/desktop.template",
+        "files": {
+          "/usr/share/mime/packages/chat.delta.desktop.tauri.xml": "./linux/mime.xml" // mime association for xdc file
+        }
+      },
+      "deb": {
+        // this is also used by the nix package
+        "desktopTemplate": "./linux/desktop.template",
+        "files": {
+          "/usr/share/metainfo/deltachat-tauri.appdata.xml": "../metainfo.xml",
+          "/usr/share/icons/hicolor/scalable/apps/deltachat-tauri.svg": "../deltachat-tauri.svg",
+          "/usr/share/mime/packages/chat.delta.desktop.tauri.xml": "./linux/mime.xml" // mime association for xdc file
+        }
+      }
+    }
+  }
+}

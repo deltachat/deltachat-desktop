@@ -1,0 +1,82 @@
+name: Build Tauri Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-tauri:
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # macos release is build on our build machine
+          - platform: 'ubuntu-22.04'
+            label: 'x86_64'
+            args: ''
+          - platform: 'windows-latest'
+            label: 'x86_64'
+            args: ''
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            packages/target-tauri/src-tauri/target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: install dependencies (ubuntu only)
+        if: matrix.platform == 'ubuntu-22.04' # This must match the platform value defined above.
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+
+      - name: install frontend dependencies
+        run: |
+          npm i -g pnpm
+          pnpm install
+
+      - uses: tauri-apps/tauri-action@v0
+        id: build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION_INFO_GIT_REF: ${{ github.ref }}
+        with:
+          projectPath: packages/target-tauri
+          args: ${{ matrix.args }}
+
+      - name: log paths
+        run: |
+          echo ${{ steps.build.outputs.artifactPaths }}
+
+      - name: convert paths
+        run: |
+          node -e '
+          import fs from "fs";
+          const files = ${{ steps.build.outputs.artifactPaths }}.join("\n");
+          fs.appendFile(process.env.GITHUB_ENV,`UPLOAD_PATHS<<EOF\n${files}\nEOF`, err => {
+              if (err){
+                console.error("Error appending to GitHub Actions environment file:", err);
+                process.exit(1)
+              }
+          });
+          '
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: releases-${{ matrix.platform }}-${{ matrix.label }}
+          path: ${{ env.UPLOAD_PATHS }}

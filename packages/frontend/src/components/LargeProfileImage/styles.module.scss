@@ -1,0 +1,46 @@
+$imageSize: 100px;
+
+.largeProfileImage {
+  flex: 0 0 $imageSize;
+  height: $imageSize;
+  user-select: none;
+  width: $imageSize;
+}
+
+.largeProfileImageArea {
+  align-items: center;
+  --local-avatar-color: #bcbac9;
+  background-color: var(--local-avatar-color);
+
+  border-radius: 100%;
+  color: white;
+  display: flex;
+  font-size: 64px;
+  height: $imageSize;
+  justify-content: center;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+  width: $imageSize;
+
+  @supports (
+    // text-wrap was introduced in 2023 slightly after color-mix,
+    // since we can't test for color-mix support directly we use this instead.
+    text-wrap: wrap
+  ) {
+    // make avatars look slightly 3D
+    background: linear-gradient(
+      var(--avatarGradientAngle),
+      var(--local-avatar-color),
+      color-mix(
+        in srgb,
+        var(--local-avatar-color) var(--avatarGradientMixFactor),
+        white
+      )
+    );
+  }
+}
+
+.largeProfileImageDefaultIcon {
+  background-color: white;
+}

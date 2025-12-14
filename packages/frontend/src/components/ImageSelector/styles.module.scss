@@ -1,0 +1,29 @@
+.imageSelector {
+  position: relative;
+}
+
+.imageSelectorContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.imageSelectorButton {
+  align-items: center;
+  border-radius: 50%;
+  border: 0;
+  bottom: 0;
+  display: flex;
+  height: 35px;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  right: 0;
+  width: 35px;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  background-color: var(--colorPrimary);
+}
+
+.imageSelectorIcon {
+  background-color: white;
+}

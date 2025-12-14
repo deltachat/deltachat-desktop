@@ -1,0 +1,93 @@
+@use '../mixins';
+
+.dc-context-menu-layer {
+  width: 100vw;
+  height: 100vh;
+  // Built-in Chromium styles set `max-height` and `max-width`
+  // on `dialog:-internal-dialog-in-top-layer` to `calc(100% - 2em - 6px)`.
+  // Let's override that, otherwise the "backdrop" area doesn't
+  // fully cover the screen.
+  max-height: unset;
+  max-width: unset;
+  // position: absolute;
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+  border: none;
+  outline: none;
+
+  // prevent double context menu on macOS
+  // (when using touchpad it sometimes selects the text in the context menu, and then show a native context menu on top)
+  user-select: none;
+
+  pointer-events: all;
+
+  // default backdrop has almost transparent black background
+  &::backdrop {
+    display: none;
+  }
+}
+
+.dc-context-menu {
+  // position is determined in code
+  position: fixed;
+  pointer-events: auto;
+  background-color: var(--bgPrimary);
+  color: var(--textPrimary);
+
+  border-radius: 3px;
+  overflow: hidden;
+
+  box-shadow:
+    0 0 0 1px rgba(16, 22, 26, 0.1),
+    0 2px 4px rgba(16, 22, 26, 0.2),
+    0 8px 24px rgba(16, 22, 26, 0.2);
+
+  hr.separator {
+    background-color: var(--separatorColor);
+    height: 1px;
+    border: 0;
+    margin: 6px;
+    margin-inline: 7px;
+    border-radius: 1px;
+  }
+
+  .item {
+    @include mixins.button-reset;
+    width: 100%;
+    line-height: 20px;
+    padding: 5px 12px;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    & .left-icon {
+      background-color: var(--iconColorPrimary);
+      margin: 0 5px 0 0;
+    }
+
+    & .right-icon {
+      width: 18px;
+      height: 18px;
+      margin-inline-start: auto;
+      @include mixins.color-svg(
+        './images/icons/navigate_next.svg',
+        var(--textPrimary),
+        100%
+      );
+      transform: translate(10px, 0);
+      &:dir(rtl) {
+        transform: rotate(180deg) translate(10px, 0);
+      }
+    }
+
+    &:hover,
+    &.selected {
+      background-color: var(--chatListItemBgHover);
+    }
+    &:focus {
+      background-color: rgba(125, 125, 125, 0.4);
+    }
+  }
+}

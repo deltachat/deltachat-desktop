@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>deltachat-tauri</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0+</project_license>
+  <name>Delta Chat Tauri</name>
+  <developer id="@delta@chaos.social">
+    <name>Delta Chat Contributors</name>
+  </developer>
+  <summary>Decentralized private messenger with chat-shared tools and games</summary>
+  <branding>
+    <color type="primary" scheme_preference="light">#28df86</color>
+    <color type="primary" scheme_preference="dark">#174551</color>
+  </branding>
+  <description>
+    <p>Delta Chat Tauri has the following advantages over the classic Delta Chat Desktop:</p>
+    <ul>
+        <li>Autostarts with your system (can be turned off)</li>
+        <li>Faster and less resource hungry</li>
+        <li>Smaller download</li>
+        <li>Less permissions required on Flatpak</li>
+        <li>Based on Tauri instead of Electron</li>
+    </ul>
+    <p>Delta Chat is a reliable decentralized instant messenger that is easy and fun to use for friends, family, groups and organizations.
+    Delta Chat is developed by a dedicated FOSS contributor community that jointly releases refinements and new features several times a year,
+    across many stores and platforms world-wide.</p>
+    <p>Features at a glance:</p>
+    <ul>
+        <li>🌐 Anonymous. Instant onboarding without a phone number, e-mail or other private data.</li>
+        <li>📱 Flexible. Supports multiple chat profiles and is easy to setup on multiple devices.</li>
+        <li>🧩 Extensible. Add tools like shopping lists, calendars or gaming apps to any chat.</li>
+        <li>🌧️ Reliable. Works under bad and adversarial network conditions.</li>
+        <li>🛡️ Secure. Audited End-to-End encryption safe against network and server attacks.</li>
+        <li>🏠 Sovereign. Can be run with your own e-mail address or server.</li>
+        <li>📜 FOSS. Fully Open Source/Free Software, built on Internet Standards.</li>
+    </ul>
+  </description>
+  <launchable type="desktop-id">deltachat-tauri.desktop</launchable>
+  <screenshots>
+    <screenshot type="default" xml:lang="en">
+      <image>
+        https://raw.githubusercontent.com/deltachat/interface/d29d6199215bc13fe63b20b36b4f59dc6f54c449/screenshots/2024/desktop/linux/1.46_light_mode_beach_bg.png
+      </image>
+      <caption>Main View showcasing multiple accounts, chats and a group conversation</caption>
+    </screenshot>
+    <screenshot xml:lang="en">
+      <image>
+        https://raw.githubusercontent.com/deltachat/interface/d29d6199215bc13fe63b20b36b4f59dc6f54c449/screenshots/2024/desktop/linux/1.46_darkmode_beach_bg.png
+      </image>
+      <caption>We have different themes, here darkmode with beach background</caption>
+    </screenshot>
+    <screenshot xml:lang="en">
+      <image>
+        https://raw.githubusercontent.com/deltachat/interface/d29d6199215bc13fe63b20b36b4f59dc6f54c449/screenshots/2024/desktop/linux/1.46_create_chatmail_profile.png
+      </image>
+      <caption>You can have as many profiles as you like, just set a name to get a new chatmail account instantly
+      </caption>
+    </screenshot>
+    <screenshot xml:lang="en">
+      <image>
+        https://raw.githubusercontent.com/deltachat/interface/d29d6199215bc13fe63b20b36b4f59dc6f54c449/screenshots/2024/desktop/linux/1.46_login_with_email.png
+      </image>
+      <caption>You can also use Delta Chat as an email client with your existing email address</caption>
+    </screenshot>
+    <screenshot xml:lang="en">
+      <image>
+        https://raw.githubusercontent.com/deltachat/interface/d29d6199215bc13fe63b20b36b4f59dc6f54c449/screenshots/2024/desktop/linux/1.46_small_screen_mode_chat_list.png
+      </image>
+      <caption>small screen mode: here you can see profile sidebar and chat list</caption>
+    </screenshot>
+    <screenshot xml:lang="en">
+      <image>
+        https://raw.githubusercontent.com/deltachat/interface/d29d6199215bc13fe63b20b36b4f59dc6f54c449/screenshots/2024/desktop/linux/1.46_small_screen_mode_chat.png
+      </image>
+      <caption>small screen mode: here you can see a conversation in a chat</caption>
+    </screenshot>
+    <screenshot xml:lang="en">
+      <image>https://raw.githubusercontent.com/deltachat/interface/d29d6199215bc13fe63b20b36b4f59dc6f54c449/screenshots/2024/desktop/linux/1.46_darkmode_default_bg.png
+      </image>
+      <caption>Darkmode with default background</caption>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">https://delta.chat/</url>
+  <url type="vcs-browser">https://github.com/deltachat/deltachat-desktop</url>
+  <url type="bugtracker">https://github.com/deltachat/deltachat-desktop/issues</url>
+  <url type="faq">https://delta.chat/en/help</url>
+  <url type="donation">https://delta.chat/en/contribute#donate-money-or-devices</url>
+  <url type="translate">https://explore.transifex.com/delta-chat/</url>
+  <url type="contribute">https://delta.chat/en/contribute</url>
+  <releases>
+    <release version="v1.59.2" date="2025-06-25" />
+    <release version="v1.58.1" date="2025-05-10" />
+  </releases>
+  <content_rating type="oars-1.0">
+    <content_attribute id="violence-cartoon">none</content_attribute>
+    <content_attribute id="violence-fantasy">none</content_attribute>
+    <content_attribute id="violence-realistic">none</content_attribute>
+    <content_attribute id="violence-bloodshed">none</content_attribute>
+    <content_attribute id="violence-sexual">none</content_attribute>
+    <content_attribute id="drugs-alcohol">none</content_attribute>
+    <content_attribute id="drugs-narcotics">none</content_attribute>
+    <content_attribute id="drugs-tobacco">none</content_attribute>
+    <content_attribute id="sex-nudity">none</content_attribute>
+    <content_attribute id="sex-themes">none</content_attribute>
+    <content_attribute id="language-profanity">none</content_attribute>
+    <content_attribute id="language-humor">none</content_attribute>
+    <content_attribute id="language-discrimination">none</content_attribute>
+    <content_attribute id="social-chat">intense</content_attribute>
+    <content_attribute id="social-info">none</content_attribute>
+    <content_attribute id="social-audio">intense</content_attribute>
+    <content_attribute id="social-location">none</content_attribute>
+    <content_attribute id="social-contacts">intense</content_attribute>
+    <content_attribute id="money-purchasing">none</content_attribute>
+    <content_attribute id="money-gambling">none</content_attribute>
+  </content_rating>
+  <categories>
+    <category>Network</category>
+    <category>Chat</category>
+    <category>InstantMessaging</category>
+  </categories>
+  <provides>
+    <mediatype>x-scheme-handler/openpgp4fpr</mediatype>
+    <mediatype>x-scheme-handler/mailto</mediatype>
+    <mediatype>x-scheme-handler/dcaccount</mediatype>
+    <mediatype>x-scheme-handler/dclogin</mediatype>
+  </provides>
+  <recommends>
+    <memory>3102</memory> <!-- recommend at least 3GiB of memory -->
+  </recommends>
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+    <control>touch</control>
+  </supports>
+</component>

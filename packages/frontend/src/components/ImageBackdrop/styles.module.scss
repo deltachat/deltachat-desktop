@@ -1,0 +1,13 @@
+.imageBackdrop {
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+
+  &.welcome {
+    background-image: url('./images/backgrounds/petito-moreno.webp');
+  }
+
+  &.deletion {
+    background-image: url('./images/account_deletion_background.jpg');
+  }
+}

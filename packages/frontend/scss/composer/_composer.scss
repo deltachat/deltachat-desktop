@@ -1,0 +1,189 @@
+.composer {
+  border-left: 1px solid rgba(16, 22, 26, 0.1);
+  background-color: var(--composerBg);
+
+  &.contact-request {
+    display: flex;
+    justify-content: space-around;
+    padding: 15px 0px;
+    & > .contact-request-button {
+      border: none;
+      background-color: var(--chatListItemSelectedBg);
+      border-radius: 10px;
+      padding: 10px 15px;
+      color: #fff;
+      text-transform: uppercase;
+      font-weight: bold;
+      user-select: none;
+    }
+  }
+
+  .upper-bar {
+    & > .attachment-quote-section {
+      display: flex;
+      padding: 9px;
+      border-bottom: 1px solid
+        color-mix(in srgb, var(--messageQuotedText) 15%, transparent);
+
+      .quote {
+        // this is just overwrites for the quote styles defined in _message.scss
+        margin: 4px;
+        .quoted-text {
+          // Set fixed height to reduce layout shifts
+          // when changing the quote rapidly, e.g. with the Ctrl + Up shortcut.
+          // See https://github.com/deltachat/deltachat-desktop/issues/4314.
+          height: 24px;
+        }
+      }
+
+      // The "remove attachment / quote" buttons.
+      button:not(.quote-background) {
+        margin-inline-start: auto;
+        justify-content: flex-end;
+      }
+
+      .message-attachment-media {
+        flex-grow: 1;
+        margin: 4px;
+        border-radius: 0px;
+        cursor: unset;
+        img,
+        video {
+          cursor: unset;
+          max-height: 200px;
+        }
+      }
+
+      .message-attachment-generic {
+        margin: 4px;
+      }
+    }
+  }
+  .lower-bar {
+    display: flex;
+    align-items: flex-end;
+    background-color: var(--composerBg);
+    padding: 2px 0;
+
+    .attachment-button,
+    .emoji-button,
+    .microphone-button {
+      background: none;
+      border: none;
+
+      // So that the composer doesn't make them shrink as you type text.
+      flex-shrink: 0;
+    }
+
+    .attachment-button {
+      width: 40px;
+      height: 40px;
+      padding-top: 4px;
+      padding-inline-start: 8px;
+
+      box-shadow: none;
+      border: none;
+      outline-offset: -1px;
+
+      &:hover {
+        background: none;
+      }
+      &:focus:not(:focus-visible) {
+        outline: none;
+      }
+    }
+
+    .emoji-button {
+      height: 40px;
+      padding: 0px 3px;
+      margin-inline-end: 5px;
+      &:focus:not(:focus-visible) {
+        outline: none;
+      }
+
+      span {
+        display: block;
+        width: 25px;
+        height: 25px;
+        background-image: url(./images/emoji.png);
+        background-size: contain;
+      }
+    }
+
+    .send-button {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      margin: 4px 5px 4px 3px;
+      background-color: var(--composerSendButton);
+      border: none;
+      border-radius: 180px;
+      cursor: pointer;
+
+      &:focus:not(:focus-visible) {
+        outline: none;
+      }
+      &:focus-visible {
+        outline-offset: 2px;
+      }
+
+      .paper-plane {
+        height: 24px;
+        width: 24px;
+        margin: 4px;
+        border: none;
+        background-image: url(./images/send-button.png);
+        background-color: transparent;
+        background-repeat: no-repeat;
+        background-position: 3px 1px;
+        background-size: contain;
+
+        vertical-align: middle;
+        &:dir(rtl) {
+          transform: rotate(180deg);
+        }
+      }
+    }
+
+    textarea.message-input-area {
+      flex-grow: 1;
+      resize: unset;
+      padding: 0px;
+      border: 0;
+      height: auto;
+      $line-height: 24px;
+      line-height: $line-height;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      overflow-y: hidden;
+      background-color: var(--composerBg);
+      color: var(--composerText);
+
+      &.use-field-sizing-css-prop {
+        field-sizing: content;
+        max-height: calc(var(--maxLines) * $line-height);
+
+        overflow-y: auto;
+      }
+
+      &::placeholder {
+        color: var(--composerPlaceholderText);
+      }
+
+      // Let's not add `:not(:focus-visible)` since the blinking cursor
+      // might be enough, (or it might not, we'll see).
+      &:focus {
+        outline: none;
+      }
+
+      &.scroll {
+        overflow-y: scroll;
+      }
+
+      // The "edit message" mode hides the .attachment-button.
+      &:first-child {
+        margin-inline-start: 1rem;
+      }
+    }
+  }
+}

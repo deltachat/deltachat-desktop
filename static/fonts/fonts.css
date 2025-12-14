@@ -1,0 +1,44 @@
+@font-face {
+  font-family: "Roboto";
+  src: url("Roboto-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Roboto";
+  src: url("Roboto-Italic.ttf") format("truetype");
+  font-style: italic;
+}
+@font-face {
+  font-family: "Roboto";
+  src: url("Roboto-Medium.ttf") format("truetype");
+  font-weight: 300;
+}
+@font-face {
+  font-family: "Roboto";
+  src: url("Roboto-MediumItalic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: 300;
+}
+@font-face {
+  font-family: "Roboto";
+  src: url("Roboto-Bold.ttf") format("truetype");
+  font-weight: bold;
+}
+@font-face {
+  font-family: "Roboto";
+  src: url("Roboto-BoldItalic.ttf") format("truetype");
+  font-style: italic;
+  font-weight: bold;
+}
+@font-face {
+  font-family: "NotoMono";
+  src: url("noto/mono/NotoMono-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "NotoEmoji";
+  src: url("noto/emoji/NotoColorEmoji.ttf") format("truetype");
+}
+/* make emoji mart use the same emoji fonts in the same order that we use elsewhere */
+@font-face {
+  font-family: 'EmojiMart';
+  src: local('Apple Color Emoji'), url("noto/emoji/NotoColorEmoji.ttf") format("truetype");
+}

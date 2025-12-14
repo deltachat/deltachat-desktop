@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "noEmit": true,
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "module": "ES2022",
+    "target": "es2022",
+    "rootDirs": [".", "../shared"],
+    "lib": [],
+    "allowJs": false,
+    "esModuleInterop": true,
+    "moduleResolution": "Node10",
+    "resolveJsonModule": true,
+    "strictNullChecks": true,
+    "strict": true
+  },
+  "include": ["./src/**/*"]
+}

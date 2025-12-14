@@ -1,0 +1,90 @@
+@use '../mixins';
+
+$tab-height: 46px;
+
+.media-view {
+  background-color: var(--galleryBg);
+  padding-inline-start: 10px;
+  overflow: hidden;
+  min-width: 200px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+
+  .tab-list {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    margin-inline-start: 10px;
+
+    overflow-x: auto;
+
+    .tab-item {
+      @include mixins.button-reset;
+
+      font-size: 1.1rem;
+      padding-bottom: 6px;
+      &.selected,
+      &:hover {
+        color: var(--globalLinkColor);
+        border-bottom: 3px solid var(--globalLinkColor);
+        cursor: pointer;
+      }
+      &.big-date {
+        flex-grow: 1;
+        text-align: end;
+        align-self: center;
+        margin-inline-end: 12px;
+        font-size: 18px;
+        color: var(--summary-text-color);
+        white-space: nowrap;
+        &:hover {
+          color: var(--summary-text-color);
+          border-bottom: none;
+          cursor: default;
+        }
+      }
+    }
+  }
+
+  & .gallery {
+    height: 100%;
+
+    & > .empty-screen {
+      display: flex;
+      padding: 10px 10px;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      width: 100%;
+      & > .no-media-message {
+        font-size: 1.1rem;
+        text-align: center;
+      }
+    }
+
+    &.gallery-image-object-fit_contain {
+      --gallery-image-object-fit: contain;
+    }
+    &.gallery-image-object-fit_cover {
+      --gallery-image-object-fit: cover;
+    }
+  }
+
+  .searchbar {
+    input {
+      border: none;
+      border-bottom: 1px solid grey;
+      background: transparent;
+      color: var(--textPrimary);
+      outline: none;
+      margin-inline-end: 20px;
+    }
+  }
+}
+
+.image-context-menu-container:focus-visible {
+  // This element gets focused by default when you open
+  // the fullscreen media. Outlining it is unnecessary.
+  outline: none;
+}

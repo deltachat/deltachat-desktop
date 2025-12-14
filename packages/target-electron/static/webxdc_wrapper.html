@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="color-scheme" content="light dark">
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      .iframe-container {
+        overflow: hidden;
+        height: 100vh;
+        width: 100vw;
+        position: relative;
+      }
+      .iframe-container iframe {
+        border: 0;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="iframe-container">
+      <iframe id="frame"></iframe>
+    </div>
+    <script>
+      // TODO this might get executed before the initial `setLocationUrl()`.
+      // This can cause the app to load the default URL (index.html)
+      // initially, but then load the target URL.
+      // Nothing too bad, but probably should be fixed.
+      webxdc_internal.setInitialIframeSrc()
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1619 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8" /><meta name="viewport" content="initial-scale=1.0" /><link rel="stylesheet" href="../help.css" /><script src="../pagefind/pagefind-ui.js"></script><script src="../start-pagefind.js"></script></head><body><ul id="top">
+  <li><a href="#quest-ce-que-delta-chat-">Qu’est-ce que Delta Chat ?</a>
+    <ul>
+      <li><a href="#howtoe2ee">How can I find people to chat with?</a></li>
+      <li><a href="#why-is-a-chat-marked-as-request">Why is a chat marked as “Request”?</a></li>
+      <li><a href="#how-can-i-put-two-of-my-friends-in-contact-with-each-other">How can I put two of my friends in contact with each other?</a></li>
+      <li><a href="#delta-chat-prend-il-en-charge-les-images-vidéos-et-autres-pièces-jointes-">Delta Chat prend-il en charge les images, vidéos et autres pièces jointes ?</a></li>
+      <li><a href="#multiple-accounts">What are profiles? How can I switch between them?</a></li>
+      <li><a href="#qui-peut-voir-ma-photo-de-profil-">Qui peut voir ma photo de profil ?</a></li>
+      <li><a href="#signature">Can I set a Bio/Status with Delta Chat?</a></li>
+      <li><a href="#que-signifient-épingler-sourdine-et-archiver-">Que signifient “épingler”, “sourdine” et “archiver” ?</a></li>
+      <li><a href="#save">How do “Saved Messages” work?</a></li>
+      <li><a href="#que-signifie-le-point-vert-">Que signifie le point vert ?</a></li>
+      <li><a href="#que-signifient-les-coches-affichées-à-côté-des-messages-sortants-">Que signifient les coches affichées à côté des messages sortants ?</a></li>
+      <li><a href="#edit">Correct typos and delete messages after sending</a></li>
+      <li><a href="#ephemeralmsgs">How do disappearing messages work?</a></li>
+      <li><a href="#delold">Que se passe-t-il si j’active l’option “Supprimer les anciens messages de l’appareil” ?</a></li>
+      <li><a href="#remove-account">How can I delete my chat profile?</a></li>
+    </ul>
+  </li>
+  <li><a href="#groups">Groups</a>
+    <ul>
+      <li><a href="#création-dun-groupe">Création d’un groupe</a></li>
+      <li><a href="#addmembers">Add and remove members</a></li>
+      <li><a href="#jai-quitté-un-groupe-par-accident">J’ai quitté un groupe par accident.</a></li>
+      <li><a href="#je-ne-souhaite-plus-recevoir-les-messages-dun-groupe">Je ne souhaite plus recevoir les messages d’un groupe.</a></li>
+      <li><a href="#cloning-a-group">Cloning a group</a></li>
+    </ul>
+  </li>
+  <li><a href="#webxdc">In-chat apps</a>
+    <ul>
+      <li><a href="#where-can-i-get-in-chat-apps">Where can I get in-chat apps?</a></li>
+      <li><a href="#how-private-are-in-chat-apps">How private are in-chat apps?</a></li>
+      <li><a href="#create-xdc">How can I create my own in-chat apps?</a></li>
+    </ul>
+  </li>
+  <li><a href="#instant-delivery">Instant message delivery and Push Notifications</a>
+    <ul>
+      <li><a href="#what-are-push-notifications-how-can-i-get-instant-message-delivery">What are Push Notifications? How can I get instant message delivery?</a></li>
+      <li><a href="#are-push-notifications-enabled-on-ios-devices-is-there-an-alternative">Are Push Notifications enabled on iOS devices? Is there an alternative?</a></li>
+      <li><a href="#android-push">Are Push notifications enabled / needed on Android devices?</a></li>
+      <li><a href="#privacy-notifications">How private are Delta Chat Push Notifications?</a></li>
+      <li><a href="#why-does-delta-chat-integrate-with-centralized-proprietary-applegoogle-push-services">Why does Delta Chat integrate with centralized proprietary Apple/Google push services?</a></li>
+    </ul>
+  </li>
+  <li><a href="#multiclient">Multi-client</a>
+    <ul>
+      <li><a href="#puis-je-utiliser-delta-chat-sur-plusieurs-appareils-en-même-temps">Puis-je utiliser Delta Chat sur plusieurs appareils en même temps?</a></li>
+      <li><a href="#dépannage">Dépannage</a></li>
+      <li><a href="#backup">Manual Transfer</a></li>
+      <li><a href="#le-lancement-dun-client-web-delta-chat-est-il-prévu-">Le lancement d’un client Web Delta Chat est-il prévu ?</a></li>
+    </ul>
+  </li>
+  <li><a href="#advanced">Advanced</a>
+    <ul>
+      <li><a href="#experimental-features">Experimental Features</a></li>
+      <li><a href="#statssending">What is “Send statistics to Delta Chat’s developers”?</a></li>
+      <li><a href="#can-i-use-a-classic-email-address-with-delta-chat">Can I use a classic email address with Delta Chat?</a></li>
+      <li><a href="#classic-email">How can I configure a chat profile with a classic email address as relay?</a></li>
+      <li><a href="#i-want-to-manage-my-own-server-for-delta-chat-what-do-you-recommend">I want to manage my own server for Delta Chat. What do you recommend?</a></li>
+      <li><a href="#les-détails-techniques-mintéressent-pouvez-vous-men-dire-plus-">Les détails techniques m’intéressent. Pouvez-vous m’en dire plus ?</a></li>
+    </ul>
+  </li>
+  <li><a href="#e2ee">Encryption and Security</a>
+    <ul>
+      <li><a href="#which-standards-are-used-for-end-to-end-encryption">Which standards are used for end-to-end encryption?</a></li>
+      <li><a href="#whene2e">How can I know if messages are end-to-end encrypted?</a></li>
+      <li><a href="#can-i-still-receive-or-send-messages-without-end-to-end-encryption">Can I still receive or send messages without end-to-end encryption?</a></li>
+      <li><a href="#e2eeguarantee">What does the green checkmark in a contact profile mean?</a></li>
+      <li><a href="#are-attachments-pictures-files-audio-etc-end-to-end-encrypted">Are attachments (pictures, files, audio etc.) end-to-end encrypted?</a></li>
+      <li><a href="#openpgp-secure">Is OpenPGP secure?</a></li>
+      <li><a href="#openpgp-alternatives">Did you consider using alternatives to OpenPGP for end-to-end-encryption?</a></li>
+      <li><a href="#is-delta-chat-vulnerable-to-efail">Is Delta Chat vulnerable to EFAIL?</a></li>
+      <li><a href="#tls">Are messages marked with the mail icon exposed on the Internet?</a></li>
+      <li><a href="#message-metadata">How does Delta Chat protect metadata in messages?</a></li>
+      <li><a href="#device-seizure">How to protect metadata and contacts when a device is seized?</a></li>
+      <li><a href="#sealedsender">Does Delta Chat support “Sealed Sender”?</a></li>
+      <li><a href="#pfs">Does Delta Chat support Perfect Forward Secrecy?</a></li>
+      <li><a href="#pqc">Does Delta Chat support Post-Quantum-Cryptography?</a></li>
+      <li><a href="#how-can-i-manually-check-encryption-information">How can I manually check encryption information?</a></li>
+      <li><a href="#importkey">Puis-je ré-utiliser ma clé privée existante ?</a></li>
+      <li><a href="#security-audits">Est-ce qu’un audit indépendant des failles de sécurité a été réalisé sur Delta Chat ?</a></li>
+    </ul>
+  </li>
+  <li><a href="#divers">Divers</a>
+    <ul>
+      <li><a href="#de-quelles-autorisations-delta-chat-a-t-il-besoin">De quelles autorisations Delta Chat a-t-il besoin?</a></li>
+      <li><a href="#where-can-my-friends-find-delta-chat">Where can my friends find Delta Chat?</a></li>
+      <li><a href="#comment-est-financé-le-développement-de-delta-chat-">Comment est financé le développement de Delta Chat ?</a></li>
+    </ul>
+  </li>
+</ul>
+
+
+
+<h2 id="quest-ce-que-delta-chat-">
+        
+        
+          Qu’est-ce que Delta Chat ? <a href="#quest-ce-que-delta-chat-" class="anchor"></a>
+        
+        
+      </h2>
+
+<p>Delta Chat is a reliable, decentralized and secure instant messaging app,
+available for mobile and desktop platforms.</p>
+
+<ul>
+  <li>
+    <p>Instant creation of <strong>private chat profiles</strong>
+with secure and interoperable <a href="https://chatmail.at/relays">chatmail relays</a>
+that offer instant message delivery, and Push Notifications for iOS and Android devices.</p>
+  </li>
+  <li>
+    <p>Pervasive <a href="#multiple-accounts">multi-profile</a> and
+<a href="#multiclient">multi-device</a> support on all platforms
+and between different <a href="https://chatmail.at/clients">chatmail apps</a>.</p>
+  </li>
+  <li>
+    <p>Interactive <a href="#webxdc">in-chat apps</a> for gaming and collaboration</p>
+  </li>
+  <li>
+    <p><a href="#security-audits">Audited end-to-end encryption</a>
+safe against network and server attacks.</p>
+  </li>
+  <li>
+    <p>Free and Open Source software, both app and server side,
+built on <a href="https://github.com/chatmail/core/blob/main/standards.md#standards-used-in-delta-chat">Internet Standards</a>.</p>
+  </li>
+</ul>
+    
+      <h3 id="howtoe2ee">
+        
+        
+          How can I find people to chat with? <a href="#howtoe2ee" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>First, note that Delta Chat is a private messenger.
+There is no public discovery, <em>you</em> decide about your contacts.</p>
+
+<ul>
+  <li>
+    <p>If you are <strong>face to face</strong> with your friend or family,
+tap the <strong>QR Code</strong> icon <img style="vertical-align:middle; height:1.3em; margin:1px" src="../qr-icon.png" />
+on the main screen.<br />
+Ask your chat partner to <strong>scan</strong> the QR image
+with their Delta Chat app.</p>
+  </li>
+  <li>
+    <p>For a <strong>remote</strong> contact setup,
+from the same screen,
+click “Copy” or “Share” and send the <strong>invite link</strong>
+through another private chat.</p>
+  </li>
+</ul>
+
+<p>Now wait while connection gets established.</p>
+
+<ul>
+  <li>
+    <p>If both sides are online, they will soon see a chat
+and can start messaging securely.</p>
+  </li>
+  <li>
+    <p>If one side is offline or in bad network,
+the ability to chat is delayed until connectivity is restored.</p>
+  </li>
+</ul>
+
+<p>Congratulations!
+You now will automatically use <a href="#e2ee">end-to-end encryption</a> with this contact.
+If you add each other to <a href="#groups">groups</a>, end-to-end encryption will be established among all members.</p>
+    
+      <h3 id="why-is-a-chat-marked-as-request">
+        
+        
+          Why is a chat marked as “Request”? <a href="#why-is-a-chat-marked-as-request" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>As being a private messenger,
+only friends and family you <a href="#howtoe2ee">share your QR code or invite link with</a> can write to you.</p>
+
+<p>Your friends may share your contact with other friends, this appears as a <strong>request</strong>.</p>
+
+<ul>
+  <li>
+    <p>Vous devez d’abord <strong>accepter</strong> pour pouvoir répondre au message.</p>
+  </li>
+  <li>
+    <p>Vous pouvez également choisir de <strong>supprimer</strong> l’invitation si vous ne souhaitez pas discuter avec cet inconnu maintenant.</p>
+  </li>
+  <li>
+    <p>Si vous supprimez une invitation, les futurs messages de ce contact apparaîtront
+de nouveau comme des invitations, de sorte que vous pouvez changer d’avis par la suite. Si vous ne voulez vraiment pas
+recevoir de messages de cette personne, nous vous conseillons de la <strong>bloquer</strong>.</p>
+  </li>
+</ul>
+    
+      <h3 id="how-can-i-put-two-of-my-friends-in-contact-with-each-other">
+        
+        
+          How can I put two of my friends in contact with each other? <a href="#how-can-i-put-two-of-my-friends-in-contact-with-each-other" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Attach the first contact to the chat of the second using <img style="vertical-align:middle; width:1.0em; margin:1px" src="../paperclip.png" alt="Paperclip" /> <strong>Attachment Button → Contact</strong>.
+You can also add a little introduction message.</p>
+
+<p>The second contact will receive a <strong>card</strong> then
+and can tap it to start chatting with the first contact.</p>
+    
+      <h3 id="delta-chat-prend-il-en-charge-les-images-vidéos-et-autres-pièces-jointes-">
+        
+        
+          Delta Chat prend-il en charge les images, vidéos et autres pièces jointes ? <a href="#delta-chat-prend-il-en-charge-les-images-vidéos-et-autres-pièces-jointes-" class="anchor"></a>
+        
+        
+      </h3>
+
+<ul>
+  <li>
+    <p>Oui. Images, videos, files, voice messages etc. can be sent using the <img style="vertical-align:middle; width:1.0em; margin:1px" src="../paperclip.png" alt="Paperclip" /> <strong>Attachment-</strong>
+or <img style="vertical-align:middle; width:0.8em; margin:1px" src="../mic.png" alt="Microphone" /> <strong>Voice Message</strong> buttons</p>
+  </li>
+  <li>
+    <p>Pour améliorer les performances, les images sont redimensionnées et envoyées en taille réduite par défaut ; mais vous pouvez les envoyer en tant que “fichier” pour en conserver la taille originale.</p>
+  </li>
+</ul>
+    
+      <h3 id="multiple-accounts">
+        
+        
+          What are profiles? How can I switch between them? <a href="#multiple-accounts" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>A profile is <strong>a name, a picture</strong> and some additional information for encrypting messages.
+A profile lives on your device(s) only
+and uses the server only to relay messages.</p>
+
+<p>On first installation of Delta Chat a first profile is created.</p>
+
+<p>Later, you can tap your profile image in the upper left corner to <strong>Add Profiles</strong>
+or to <strong>Switch Profiles</strong>.</p>
+
+<p>You may want to use separate profiles for political, family or work related activities.</p>
+
+<p>You may also wish to learn <a href="#multiclient">how to use the same profile on multiple devices</a>.</p>
+    
+      <h3 id="qui-peut-voir-ma-photo-de-profil-">
+        
+        
+          Qui peut voir ma photo de profil ? <a href="#qui-peut-voir-ma-photo-de-profil-" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Dans les paramètres vous pouvez ajouter une photo de profil. Si vous écrivez à vos contacts ou que vous les ajoutez via le QR code, ils la verront automatiquement comme votre photo de profil.</p>
+
+<ul>
+  <li>Pour des raisons de confidentialité, personne ne peut voir votre photo de profil sans que vous ayez d’abord entamé une discussion.</li>
+</ul>
+    
+      <h3 id="signature">
+        
+        
+          Can I set a Bio/Status with Delta Chat? <a href="#signature" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Yes,
+you can do so under <strong>Settings → Profile → Bio</strong>.
+Once you sent a message to a contact,
+they will see it when they view your contact details.</p>
+    
+      <h3 id="que-signifient-épingler-sourdine-et-archiver-">
+        
+        
+          Que signifient “épingler”, “sourdine” et “archiver” ? <a href="#que-signifient-épingler-sourdine-et-archiver-" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Ces options vous permettent d’organiser et trier vos discussions :</p>
+
+<ul>
+  <li>
+    <p>Les <strong>discussions épinglées</strong> restent en haut de votre liste de discussions. Vous pouvez ainsi retrouver plus rapidement vos discussions favorites ou éviter d’oublier des messages importants.</p>
+  </li>
+  <li>
+    <p>Utilisez la <strong>sourdine</strong> pour les discussions dont vous ne voulez pas recevoir les notifications. Les discussions en sourdine figurent toujours dans votre liste et peuvent aussi être les épinglées.</p>
+  </li>
+  <li>
+    <p><strong>Archivez les discussions</strong> si vous ne voulez plus les voir apparaître dans votre liste de discussions.
+Les discussions archivées restent accessibles au-dessus de la liste de discussions ou via la recherche.</p>
+  </li>
+  <li>
+    <p>Lorsqu’un nouveau message est envoyé sur une discussion que vous avez archivée, et que vous n’avez pas mise en sourdine, la discussion <strong>sort des archives</strong> et reprend sa place dans votre liste de discussions.
+<strong>Les discussions en sourdine restent archivées</strong> tant que vous ne les désarchivez pas manuellement.</p>
+  </li>
+</ul>
+
+<p>Pour archiver ou épingler une discussion, faites un appui long sur la discussion concernée (Android), ouvrez le menu de la conversation (Android/application de bureau), ou balayez vers la gauche (iOS) ;
+pour mettre une discussion en sourdine, ouvrez le menu de la conversation (Android/application de bureau) ou le profil de la discussion (iOS).</p>
+    
+      <h3 id="save">
+        
+        
+          How do “Saved Messages” work? <a href="#save" class="anchor"></a>
+        
+        
+      </h3>
+
+<p><strong>Saved Messages</strong> is a chat that you can use to easily remember and find messages.</p>
+
+<ul>
+  <li>
+    <p>In any chat, long tap or right click a message and select <strong>Save</strong></p>
+  </li>
+  <li>
+    <p>Saved messages are marked by the symbol
+<img style="vertical-align:middle; width:1.2em; margin:1px" src="../saved-icon.png" alt="Saved icon" />
+next to the timestamp</p>
+  </li>
+  <li>
+    <p>Later, open the “Saved Messages” chat - and you will see the saved messages there.
+By tapping <img style="vertical-align:middle; width:1.2em; margin:1px" src="../go-to-original.png" alt="Arrow-right icon" />,
+you can go back to the original message in the original chat</p>
+  </li>
+  <li>
+    <p>Finally, you can also use “Save Messages” to take <strong>personal notes</strong> - open the chat, type something, add a photo or a voice message etc.</p>
+  </li>
+  <li>
+    <p>As “Saved Message” are synced, they can become very handy for transferring data between devices</p>
+  </li>
+</ul>
+
+<p>Messages stay saved even if they are edited or deleted -
+may it be by <a href="#edit">sender</a>, by <a href="#delold">device cleanup</a> or by <a href="#ephemeralmsgs">disappearing messages of other chats</a>.</p>
+    
+      <h3 id="que-signifie-le-point-vert-">
+        
+        
+          Que signifie le point vert ? <a href="#que-signifie-le-point-vert-" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>You can sometimes see a <strong>green dot</strong> <img style="vertical-align:middle; width:1.2em; margin:1px" src="../green-dot.png" alt="" />
+next to the avatar of a contact.
+It means they were <strong>recently seen by you</strong> in the last 10 minutes,
+e.g. because they messaged you or sent a read receipt.</p>
+
+<p>So this is not a real time online status
+and others will as well not always see that you are “online”.</p>
+    
+      <h3 id="que-signifient-les-coches-affichées-à-côté-des-messages-sortants-">
+        
+        
+          Que signifient les coches affichées à côté des messages sortants ? <a href="#que-signifient-les-coches-affichées-à-côté-des-messages-sortants-" class="anchor"></a>
+        
+        
+      </h3>
+
+<ul>
+  <li>
+    <p><strong>One tick</strong> <img style="vertical-align:middle; width:1.5em; margin:1px" src="../tick1.png" alt="" />
+means that the message was sent successfully to your provider.</p>
+  </li>
+  <li>
+    <p><strong>Two ticks</strong>  <img style="vertical-align:middle; width:1.5em; margin:1px" src="../tick2.png" alt="" />
+mean that at least one recipient’s device
+reported back to having received the message.</p>
+  </li>
+  <li>
+    <p>Recipients may have disabled read-receipts,
+so even if you see only one tick, the message may have been read.</p>
+  </li>
+  <li>
+    <p>The other way round, two ticks do not automatically mean
+that a human has read or understood the message ;)</p>
+  </li>
+</ul>
+    
+      <h3 id="edit">
+        
+        
+          Correct typos and delete messages after sending <a href="#edit" class="anchor"></a>
+        
+        
+      </h3>
+
+<ul>
+  <li>
+    <p>You can edit the text of your messages after sending.
+For that, long tap or right click the message and select <strong>Edit</strong>
+or <img style="vertical-align:middle; width:1.2em; margin:1px" src="../edit-icon.png" alt="Edit icon" />.</p>
+  </li>
+  <li>
+    <p>If you have sent a message accidentally,
+from the same menu, select <strong>Delete</strong> and then <strong>Delete for Everyone</strong>.</p>
+  </li>
+</ul>
+
+<p>While edited messages will have the word “Edited” next to the timestamp,
+deleted messages will be removed without a marker in the chat.
+Notifications are not sent and there is no time limit.</p>
+
+<p>Note, that the original message may still be received by chat members
+who could have already replied, forwarded, saved, screenshotted or otherwise copied the message.</p>
+    
+      <h3 id="ephemeralmsgs">
+        
+        
+          How do disappearing messages work? <a href="#ephemeralmsgs" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>You can turn on “disappearing messages”
+in the settings of a chat,
+at the top right of the chat window,
+by selecting a time span
+between 5 minutes and 1 year.</p>
+
+<p>Until the setting is turned off again,
+each chat member’s Delta Chat app takes care
+of deleting the messages
+after the selected time span.
+The time span begins
+when the receiver first sees the message in Delta Chat.
+The messages are deleted both,
+on the servers,
+and in the apps itself.</p>
+
+<p>Note that you can rely on disappearing messages
+only as long as you trust your chat partners;
+malicious chat partners can take photos,
+or otherwise save, copy or forward messages before deletion.</p>
+
+<p>Apart from that,
+if one chat partner uninstalls Delta Chat,
+the (anyway encrypted) messages may take longer to get deleted from their server.</p>
+    
+      <h3 id="delold">
+        
+        
+          Que se passe-t-il si j’active l’option “Supprimer les anciens messages de l’appareil” ? <a href="#delold" class="anchor"></a>
+        
+        
+      </h3>
+
+<ul>
+  <li>Vous pouvez choisir de supprimer automatiquement les anciens messages pour libérer de l’espace de stockage sur votre appareil.</li>
+  <li>Pour activer cette option, ouvrez les paramètres des “Discussions et fichiers multimédias” et cliquez sur “Supprimer les anciens messages de l’appareil”. Vous pouvez définir le délai après lequel <em>tous</em> les messages seront supprimés de votre appareil, parmi plusieurs choix allant de “Immédiatement” à “Après 1 année”.</li>
+</ul>
+    
+      <h3 id="remove-account">
+        
+        
+          How can I delete my chat profile? <a href="#remove-account" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>If you are using more than one chat profile,
+you can remove single ones in the top profile switcher menu (on Android and iOS),
+or in the sidebar with a right click (in the Desktop app).
+Chat profiles are only removed on the device where deletion was triggered. 
+Chat profiles on other devices will continue to fully function.</p>
+
+<p>If you use a single default chat profile you can simply uninstall the app.
+This will still automatically trigger deletion of all associated address data on the chatmail server.
+For more info, please refer to <a href="https://nine.testrun.org/info.html#account-deletion">nine.testrun.org address-deletion</a> 
+or the respective page from your chosen <a href="https://chatmail.at/relays">3rd party chatmail server</a>.</p>
+    
+      <h2 id="groups">
+        
+        
+          Groups <a href="#groups" class="anchor"></a>
+        
+        
+      </h2>
+
+<p>Groups let several people chat together privately with <strong>equal rights</strong>.</p>
+
+<p>Anyone can
+change the group name or avatar,
+<a href="#addmembers">add or remove members</a>,
+set <a href="#ephemeralmsgs">disappearing messages</a>,
+and <a href="#edit">delete their own messages</a> from all member’s devices.</p>
+
+<p>Because all members have the same rights, groups work best among <strong>trusted friends and family</strong>.</p>
+    
+      <h3 id="création-dun-groupe">
+        
+        
+          Création d’un groupe <a href="#création-dun-groupe" class="anchor"></a>
+        
+        
+      </h3>
+
+<ul>
+  <li>Sélectionnez <strong>Nouvelle discussion</strong> puis <strong>Nouveau groupe</strong> dans le menu à trois points situé en haut à droite de la fenêtre ou son équivalent sous Android et iOS.</li>
+  <li>Sur l’écran suivant, sélectionnez <strong>Ajouter des participants</strong> et choisissez un <strong>Nom du groupe</strong>. Vous pouvez aussi choisir une <strong>image de groupe</strong>.</li>
+  <li>Lorsque vous enverrez le <strong>premier message</strong> dans le groupe, tous les membres en seront informés et pourront répondre. Le groupe est invisible aux autres membres si vous n’écrivez pas de premier message.</li>
+</ul>
+    
+      <h3 id="addmembers">
+        
+        
+          Add and remove members <a href="#addmembers" class="anchor"></a>
+        
+        
+      </h3>
+
+<ul>
+  <li>
+    <p>All group members have the <strong>same rights</strong>.
+For this reason, everyone can delete any member or add new ones.</p>
+  </li>
+  <li>
+    <p>To <strong>add or delete members</strong>, tap the group name in the chat and select the member to add or remove.</p>
+  </li>
+  <li>
+    <p>If the member is not yet in your contact list, but <strong>face to face</strong> with you,
+from the same screen, show a <strong>QR code</strong>.<br />
+Ask your chat partner to <strong>scan</strong> the QR image with their Delta Chat app by tapping
+<img style="vertical-align:middle; height:1.3em; margin:1px" src="../qr-icon.png" /> on the main screen.</p>
+  </li>
+  <li>
+    <p>For a <strong>remote</strong> member addition,
+click “Copy” or “Share” and send the <strong>invite link</strong>
+through another private chat to the new member.</p>
+  </li>
+</ul>
+
+<p>QR code and invite link can be used to add several members.
+However, since groups are <a href="#groups">meant for trusted people</a>, avoid sharing them publicly.</p>
+    
+      <h3 id="jai-quitté-un-groupe-par-accident">
+        
+        
+          J’ai quitté un groupe par accident. <a href="#jai-quitté-un-groupe-par-accident" class="anchor"></a>
+        
+        
+      </h3>
+
+<ul>
+  <li>Comme vous n’êtes plus membre du groupe, vous ne pouvez pas vous y ajouter vous-même. 
+Contactez n’importe quel autre membre de ce groupe dans une discussion directe pour lui demander de vous y ré-inviter.</li>
+</ul>
+    
+      <h3 id="je-ne-souhaite-plus-recevoir-les-messages-dun-groupe">
+        
+        
+          Je ne souhaite plus recevoir les messages d’un groupe. <a href="#je-ne-souhaite-plus-recevoir-les-messages-dun-groupe" class="anchor"></a>
+        
+        
+      </h3>
+
+<ul>
+  <li>
+    <p>Supprimez-vous de la liste des membres ou supprimez la discussion entière. 
+Si souhaitez rejoindre le groupe plus tard, demandez à un autre membre du groupe de vous ré-inviter.</p>
+  </li>
+  <li>
+    <p>Vous pouvez également mettre un groupe en “Sourdine” : vous recevrez tous les messages et pourrez toujours écrire, mais n’aurez plus les notifications des nouveaux messages.</p>
+  </li>
+</ul>
+    
+      <h3 id="cloning-a-group">
+        
+        
+          Cloning a group <a href="#cloning-a-group" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>You can duplicate a group to start a separate discussion
+or to exclude members without them noticing.</p>
+
+<ul>
+  <li>
+    <p>Open the group profile and tap <strong>Clone Chat</strong> (Android/iOS),
+or right-click the group in the chat list (Desktop).</p>
+  </li>
+  <li>
+    <p>Set a new name, choose an avatar, and adjust the member list if needed.</p>
+  </li>
+</ul>
+
+<p>The new group is <strong>fully independent</strong> from the original,
+which continues to work as before.</p>
+    
+      <h2 id="webxdc">
+        
+        
+          In-chat apps <a href="#webxdc" class="anchor"></a>
+        
+        
+      </h2>
+
+<p>You can send apps to a chat - games, editors, polls and other tools.
+This makes Delta Chat a truly extensible messenger.</p>
+    
+      <h3 id="where-can-i-get-in-chat-apps">
+        
+        
+          Where can I get in-chat apps? <a href="#where-can-i-get-in-chat-apps" class="anchor"></a>
+        
+        
+      </h3>
+
+<ul>
+  <li>
+    <p>In a chat, using <img style="vertical-align:middle; width:1.0em; margin:1px" src="../paperclip.png" alt="Paperclip" /> <strong>Attachment Button → Apps</strong></p>
+  </li>
+  <li>
+    <p>You can also <a href="#create-xdc">create your own app</a> and attach it using <img style="vertical-align:middle; width:1.0em; margin:1px" src="../paperclip.png" alt="Paperclip" /> <strong>Attachment Button → File</strong></p>
+  </li>
+</ul>
+    
+      <h3 id="how-private-are-in-chat-apps">
+        
+        
+          How private are in-chat apps? <a href="#how-private-are-in-chat-apps" class="anchor"></a>
+        
+        
+      </h3>
+
+<ul>
+  <li>
+    <p>In-chat apps can not send data to the Internet, or download anything.</p>
+  </li>
+  <li>
+    <p>An in-chat app can only exchange data within a chat, with its
+copies on the devices of your chat partners. Other than that, it’s completely
+isolated from the Internet.</p>
+  </li>
+  <li>
+    <p>The privacy an in-chat app offers is the privacy of your chat - as long as you
+trust the people you chat with, you can trust the in-chat app as well.</p>
+  </li>
+  <li>
+    <p>This also means: Just like for web links, do not open apps from untrusted contacts.</p>
+  </li>
+</ul>
+    
+      <h3 id="create-xdc">
+        
+        
+          How can I create my own in-chat apps? <a href="#create-xdc" class="anchor"></a>
+        
+        
+      </h3>
+
+<ul>
+  <li>
+    <p>In-chat apps are zip files with <code class="language-plaintext highlighter-rouge">.xdc</code> extension containing html, css, and javascript code.</p>
+  </li>
+  <li>
+    <p>You can extend the <a href="https://github.com/webxdc/hello">Hello World example app</a>
+to get started.</p>
+  </li>
+  <li>
+    <p>All else you need to know is written in the
+<a href="https://webxdc.org/docs">Webxdc documentation</a>.</p>
+  </li>
+  <li>
+    <p>If you have question, you can ask others with experience
+in the <a href="https://support.delta.chat/c/webxdc/20">Delta Chat Forum</a>.</p>
+  </li>
+</ul>
+    
+      <h2 id="instant-delivery">
+        
+        
+          Instant message delivery and Push Notifications <a href="#instant-delivery" class="anchor"></a>
+        
+        
+      </h2>
+    
+      <h3 id="what-are-push-notifications-how-can-i-get-instant-message-delivery">
+        
+        
+          What are Push Notifications? How can I get instant message delivery? <a href="#what-are-push-notifications-how-can-i-get-instant-message-delivery" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Push Notifications are sent by Apple and Google “Push services” to a user’s device
+so that an inactive Delta Chat app can fetch messages in the background
+and show notifications on a user’s phone if needed.</p>
+
+<p>Push Notifications work with all <a href="https://delta.chat/chatmail">chatmail</a> servers on</p>
+
+<ul>
+  <li>
+    <p>iOS devices, by integrating with Apple Push services.</p>
+  </li>
+  <li>
+    <p>Android devices, by integrating with the Google FCM Push service,
+including on devices that use <a href="https://microg.org">microG</a>
+instead of proprietary Google code on the phone.</p>
+  </li>
+</ul>
+    
+      <h3 id="are-push-notifications-enabled-on-ios-devices-is-there-an-alternative">
+        
+        
+          Are Push Notifications enabled on iOS devices? Is there an alternative? <a href="#are-push-notifications-enabled-on-ios-devices-is-there-an-alternative" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Yes, Delta Chat automatically uses Push Notifications for <a href="https://delta.chat/chatmail">chatmail</a> profiles.
+And no, there is no alternative on Apple’s phones to achieve instant message delivery
+because Apple devices do not allow Delta Chat to fetch data in the background.
+Push notifications are automatically activated for iOS users because
+<a href="#privacy-notifications">Delta Chat’s privacy-preserving Push Notification system</a>
+does not expose data to Apple that it doesn’t already have.</p>
+    
+      <h3 id="android-push">
+        
+        
+          Are Push notifications enabled / needed on Android devices? <a href="#android-push" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>If a “Push Service” is available, Delta Chat enables Push Notifications
+to achieve instant message delivery for all chatmail users.</p>
+
+<p>In the Delta Chat “Notifications” settings for “Instant delivery”
+you can change the following settings effecting all chat profiles:</p>
+
+<ul>
+  <li>
+    <p>Use Background Connection: If you are not using a Push service,
+you may disable “battery optimizations” for Delta Chat,
+allowing it to fetch messages in the background.
+However, there could be delays from minutes to hours.
+Some Android vendors even restrict apps completely
+(see <a href="https://dontkillmyapp.com">dontkillmyapp.com</a>)
+and Delta Chat might not show  incoming messages
+until you manually open the app again.</p>
+  </li>
+  <li>
+    <p>Force Background Connection: This is the fallback option
+if the previous options are not available or do not achieve “instant delivery”.
+Enabling it causes a permanent notification on your phone
+which may sometimes be “minified” with recent Android phones.</p>
+  </li>
+</ul>
+
+<p>Both “Background Connection” options are energy-efficient and
+safe to try if you experience messages arrive only with long delays.</p>
+    
+      <h3 id="privacy-notifications">
+        
+        
+          How private are Delta Chat Push Notifications? <a href="#privacy-notifications" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Delta Chat Push Notification support avoids leakage of private information.
+It does not leak profile data, IP address or message content (not even encrypted)
+to any system involved in the delivery of Push Notifications.</p>
+
+<p>Here is how Delta Chat apps perform Push Notification delivery:</p>
+
+<ul>
+  <li>
+    <p>A Delta Chat app obtains a “device token” locally, encrypts it and stores it
+on the <a href="https://delta.chat/chatmail">chatmail</a> server.</p>
+  </li>
+  <li>
+    <p>When a <a href="https://delta.chat/chatmail">chatmail</a> server receives a message for a Delta Chat user
+it forwards the encrypted device token to the central Delta Chat notification proxy.</p>
+  </li>
+  <li>
+    <p>The central Delta Chat notification proxy decrypts the device token
+and forwards it to the respective Push service (Apple, Google, etc.),
+without ever knowing the IP or profile data of Delta Chat users.</p>
+  </li>
+  <li>
+    <p>The central Push Service (Apple, Google, etc.)
+wakes up the Delta Chat app on your device
+to check for new messages in the background.
+It does not know about the profile data of the device it wakes up.
+The central Apple/Google Push services never see any profile data (sender or receiver)
+and also never see any message content (also not in encrypted forms).</p>
+  </li>
+</ul>
+
+<p>The central Delta Chat notification proxy <a href="https://github.com/deltachat/notifiers">is small and fully implemented in Rust</a>
+and forgets about device-tokens as soon as Apple/Google/etc processed them,
+usually in a matter of milliseconds.</p>
+
+<p>Note that the device token is encrypted between apps and notification proxy
+but it is not signed. 
+The notification proxy thus never sees profile data, IP-addresses or
+any cryptographic identity information associated with a user’s device (token).</p>
+
+<p>Resulting from this overall privacy design, even the seizure of a chatmail server,
+or the full seizure of the central Delta Chat notification proxy
+would not reveal private information that Push services do not already have.</p>
+    
+      <h3 id="why-does-delta-chat-integrate-with-centralized-proprietary-applegoogle-push-services">
+        
+        
+          Why does Delta Chat integrate with centralized proprietary Apple/Google push services? <a href="#why-does-delta-chat-integrate-with-centralized-proprietary-applegoogle-push-services" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Delta Chat is a free and open source decentralized messenger with free server choice,
+but we want users to reliably experience “instant delivery” of messages,
+like they experience from WhatsApp, Signal or Telegram apps,
+without asking questions up-front that are more suited to expert users or developers.</p>
+
+<p>Note that Delta Chat has a <a href="#privacy-notifications">small and privacy-preserving Push Notification system</a>
+that achieves “instant delivery” of messages for all chatmail servers
+including a potential one <a href="https://delta.chat/chatmail#selfhosted">you might setup yourself without our permission</a>.
+Welcome to the power of the interoperable chatmail relay network :)</p>
+    
+      <h2 id="multiclient">
+        
+        
+          Multi-client <a href="#multiclient" class="anchor"></a>
+        
+        
+      </h2>
+    
+      <h3 id="puis-je-utiliser-delta-chat-sur-plusieurs-appareils-en-même-temps">
+        
+        
+          Puis-je utiliser Delta Chat sur plusieurs appareils en même temps? <a href="#puis-je-utiliser-delta-chat-sur-plusieurs-appareils-en-même-temps" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Oui. You can use the same profile on different devices:</p>
+
+<ul>
+  <li>
+    <p>Make sure both devices are on the same Wi-Fi or network</p>
+  </li>
+  <li>
+    <p>Sur le premier appareil, allez dans <strong>Paramètres → Ajouter un deuxième appareil</strong>, déverrouillez l’écran si nécessaire, et patientez un peu jusqu’à ce qu’un code QR s’affiche.</p>
+  </li>
+  <li>
+    <p>Sur le deuxième appareil, <a href="https://get.delta.chat">installez Delta Chat</a>.</p>
+  </li>
+  <li>
+    <p>Sur le deuxième appareil, ouvrez Delta Chat, sélectionnez <strong>Ajouter comme deuxième appareil</strong>, et scannez le code QR du premier appareil.</p>
+  </li>
+  <li>
+    <p>Le transfert devrait commencer quelques secondes après et, pendant l’opération, les deux appareils affichent l’<strong>état d’avancement</strong>.
+Patientez jusqu’à ce que le transfert soit terminé sur les deux appareils.</p>
+  </li>
+</ul>
+
+<p>Contrairement à de nombreuses autres messageries, une fois le transfert terminé, les deux <strong>appareils sont complètement indépendants</strong>.
+L’un n’a pas besoin de l’autre pour pouvoir fonctionner.</p>
+    
+      <h3 id="dépannage">
+        
+        
+          Dépannage <a href="#dépannage" class="anchor"></a>
+        
+        
+      </h3>
+
+<ul>
+  <li>
+    <p>Vérifier à nouveau que les deux appareils sont sur <strong>le même réseau ou le même Wi-Fi</strong>.</p>
+  </li>
+  <li>
+    <p>On <strong>Windows</strong>, go to <strong>Control Panel / Network and Internet</strong>
+and make sure, <strong>Private Network</strong> is selected as “Network profile type”
+(after transfer, you can change back to the original value)</p>
+  </li>
+  <li>
+    <p>On <strong>iOS</strong>, make sure “System Settings / Apps / Delta Chat / <strong>Local Network</strong>” access is granted</p>
+  </li>
+  <li>
+    <p>On <strong>macOS</strong>, enable “System Settings / Privacy &amp; Security / <strong>Local Network</strong> / Delta Chat”</p>
+  </li>
+  <li>
+    <p>Il se peut que votre système dispose d’un “pare-feu personnalisé”,
+source bien connue de dysfonctionnements (en particulier sur Windows).
+<strong>Désactivez le pare-feu personnalisé</strong> sur chaque appareil pour Delta Chat et réessayez.</p>
+  </li>
+  <li>
+    <p><strong>Guest Networks</strong> may not allow devices to communicate with each other.
+If possible, use a non-guest network.</p>
+  </li>
+  <li>
+    <p>If you still have troubles using the same network,
+try to open <strong>Mobile Hotspot</strong> on one device and join that Wi-Fi from the other one</p>
+  </li>
+  <li>
+    <p>Assurez-vous de disposer d’un <strong>espace de stockage suffisant</strong> sur l’appareil de destination.</p>
+  </li>
+  <li>
+    <p>Une fois que le transfert a commencé, assurez-vous que les appareils <strong>restent actifs</strong> et ne se mettent pas en veille.
+Ne quittez pas Delta Chat !
+(Nous faisons de notre mieux pour que l’application fonctionne en arrière-plan, mais les <a href="https://dontkillmyapp.com">systèmes ont une fâcheuse tendance à tuer les applis</a>.)</p>
+  </li>
+  <li>
+    <p>Si Delta Chat est <strong>déjà connecté</strong> sur l’appareil de destination.
+Vous pouvez utiliser plusieurs comptes par appareil : <a href="#multiple-accounts">ajoutez un nouveau compte</a>.</p>
+  </li>
+  <li>
+    <p>Si les problèmes persistent, ou si vous <strong>ne pouvez pas scanner de code QR</strong>,  essayez la méthode de <strong>transfert manuel</strong> décrite ci-dessous.</p>
+  </li>
+</ul>
+    
+      <h3 id="backup">
+        
+        
+          Manual Transfer <a href="#backup" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Recourez à cette méthode uniquement si les instructions ci-dessus pour “Ajouter un deuxième appareil” ont échoué.</p>
+
+<ul>
+  <li>On the old device, go to “Settings -&gt; Chats and media -&gt; Export Backup”. Enter your
+screen unlock PIN, pattern, or password. Then you can click on “Start
+Backup”. This saves the backup file to your device. Now you have to transfer
+it to the other device somehow.</li>
+  <li>On the new device, in the “I already have a profile” menu,
+choose “restore from backup”. After import, your conversations, encryption
+keys, and media should be copied to the new device.
+    <ul>
+      <li><strong>If you use iOS:</strong> and you encounter difficulties, maybe
+<a href="https://support.delta.chat/t/import-backup-to-ios/1628">this guide</a> will
+help you.</li>
+    </ul>
+  </li>
+  <li>You are now synchronized, and can use both devices for sending and receiving
+end-to-end encrypted messages with your communication partners.</li>
+</ul>
+    
+      <h3 id="le-lancement-dun-client-web-delta-chat-est-il-prévu-">
+        
+        
+          Le lancement d’un client Web Delta Chat est-il prévu ? <a href="#le-lancement-dun-client-web-delta-chat-est-il-prévu-" class="anchor"></a>
+        
+        
+      </h3>
+
+<ul>
+  <li>Il n’y a pas de plans immédiats mais quelques idées préliminaires.</li>
+  <li>Il y a 2-3 façons d’introduire un client Web Delta Chat, mais toutes représentent
+ un travail conséquent. Pour l’instant, nous nous concentrons à sortir des versions stables dans tous les magasins d’applications (Google Play/iOS/Windows/macOS/centre de paquets Linux) en tant qu’applications natives.</li>
+  <li>Si vous avez besoin d’un client Web parce que vous n’êtes pas autorisé à installer des logiciels sur l’ordinateur sur lequel vous travaillez, vous pouvez utiliser le Client Portable pour bureaux Windows ou l’AppImage pour Linux. Vous pouvez les trouver sur 
+<a href="https://get.delta.chat">get.delta.chat</a>.</li>
+</ul>
+    
+      <h2 id="advanced">
+        
+        
+          Advanced <a href="#advanced" class="anchor"></a>
+        
+        
+      </h2>
+    
+      <h3 id="experimental-features">
+        
+        
+          Experimental Features <a href="#experimental-features" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>At <strong>Settings → Advanced → Experimental Features</strong>
+you can try out features we are working on.</p>
+
+<p>The features may be <strong>unstable</strong> and may be <strong>changed or removed</strong>.</p>
+
+<p>You can find more information
+and give feedback in the <a href="https://support.delta.chat">Forum</a>.</p>
+    
+      <h3 id="statssending">
+        
+        
+          What is “Send statistics to Delta Chat’s developers”? <a href="#statssending" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>We would like to improve Delta Chat with your help,
+which is why Delta Chat for Android asks whether you want
+to send anonymous usage statistics.</p>
+
+<p>You can turn it on and off at
+<strong>Settings → Advanced → Send statistics to Delta Chat’s developers</strong>.</p>
+
+<p>When you turn it on,
+weekly statistics will be automatically sent to a bot.</p>
+
+<p>We are interested e.g. in statistics like:</p>
+
+<ul>
+  <li>How many contacts are introduced by personally scanning a QR code?</li>
+  <li>Which versions of Delta Chat are being used?</li>
+  <li>How many messages are unencrypted?</li>
+</ul>
+
+<p>We will <em>not</em> collect any personally identifiable information about you.</p>
+    
+      <h3 id="can-i-use-a-classic-email-address-with-delta-chat">
+        
+        
+          Can I use a classic email address with Delta Chat? <a href="#can-i-use-a-classic-email-address-with-delta-chat" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Yes, but only if the email address is used exclusively by <a href="https://chatmail.at/clients">chatmail clients</a>.</p>
+
+<p>It is not supported to share usage of an email address with non-chatmail apps or web-based mailers,
+for the following reasons:</p>
+
+<ul>
+  <li>
+    <p>Non-chatmail apps are largely not accomplishing automatic end-to-end email encryption for their users,
+while chatmail apps and relays pervasively enforce end-to-end encryption and security standards.</p>
+  </li>
+  <li>
+    <p>Non-chatmail apps use email servers as a long-term message archive
+while chatmail clients use email servers for ephemeral instant message relay.</p>
+  </li>
+  <li>
+    <p>Supporting the full variety of classic email setups
+would require considerable development and maintenance efforts,
+and complicate making chatmail-based messaging more resilient, reliable and fast.</p>
+  </li>
+</ul>
+    
+      <h3 id="classic-email">
+        
+        
+          How can I configure a chat profile with a classic email address as relay? <a href="#classic-email" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>First off, <strong>please do not use the same classic email address also from non-chatmail classic email apps</strong>
+unless you are prepared to deal with encrypted messages in the inbox,
+double notifications, accidentally deleted emails or similar annoyances.</p>
+
+<p>You can configure a email address for chatting at <strong>New Profile → Use Other Server → Use Classic Mail as Relay</strong>.
+Note that classic email providers will generally not support <a href="#instant-delivery">Push Notifications</a>
+and have other limitations, see <a href="https://providers.delta.chat">Provider Overview</a>.
+Chatmail uses the default INBOX for relay; ensure the provider setup does too. 
+A chat profile using a classic email address allows to to send and receive unencrypted messages.
+These messages, and the chats they appear in, are marked with an email icon
+<img style="vertical-align:middle; width:1.2em; margin:1px" src="../email-icon.png" alt="email" />.</p>
+    
+      <h3 id="i-want-to-manage-my-own-server-for-delta-chat-what-do-you-recommend">
+        
+        
+          I want to manage my own server for Delta Chat. What do you recommend? <a href="#i-want-to-manage-my-own-server-for-delta-chat-what-do-you-recommend" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Any well behaving email server setup will do fine 
+except if your users’ devices require Google/Apple <a href="#instant-delivery">Push Notifications</a> to work properly.</p>
+
+<p>We generally recommend to <a href="https://chatmail.at/doc/relay/getting_started.html">set up a chatmail relay</a>. 
+<a href="https://chatmail.at">Chatmail</a> is a community-driven project that encompasses both the setup of relays
+and <a href="https://github.com/chatmail/core">core Rust developments</a> 
+that power <a href="https://chatmail.at/clients">chatmail clients</a> of which Delta Chat is the most well known.</p>
+    
+      <h3 id="les-détails-techniques-mintéressent-pouvez-vous-men-dire-plus-">
+        
+        
+          Les détails techniques m’intéressent. Pouvez-vous m’en dire plus ? <a href="#les-détails-techniques-mintéressent-pouvez-vous-men-dire-plus-" class="anchor"></a>
+        
+        
+      </h3>
+
+<ul>
+  <li>Consultez les <a href="https://github.com/chatmail/core/blob/main/standards.md#standards-used-in-delta-chat">standards utilisés dans Delta Chat</a>.</li>
+</ul>
+    
+      <h2 id="e2ee">
+        
+        
+          Encryption and Security <a href="#e2ee" class="anchor"></a>
+        
+        
+      </h2>
+    
+      <h3 id="which-standards-are-used-for-end-to-end-encryption">
+        
+        
+          Which standards are used for end-to-end encryption? <a href="#which-standards-are-used-for-end-to-end-encryption" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Delta Chat uses a <a href="#openpgp-secure">secure subset of the OpenPGP standard</a>
+to provide automatic end-to-end encryption using these protocols:</p>
+
+<ul>
+  <li>
+    <p><a href="https://securejoin.delta.chat/en/latest/new.html">Secure-Join</a>
+to exchange encryption setup information through QR-code scanning or “invite links”.</p>
+  </li>
+  <li>
+    <p><a href="https://autocrypt.org">Autocrypt</a> is used for automatically
+establishing end-to-end encryption between contacts and all members of a group chat.</p>
+  </li>
+  <li>
+    <p><a href="https://github.com/chatmail/core/blob/main/spec.md#attaching-a-contact-to-a-message">Sharing a contact to a
+chat</a>
+enables receivers to use end-to-end encryption with the contact.</p>
+  </li>
+</ul>
+
+<p>Delta Chat does not query, publish or interact with any OpenPGP key servers.</p>
+    
+      <h3 id="whene2e">
+        
+        
+          How can I know if messages are end-to-end encrypted? <a href="#whene2e" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>All messages in Delta Chat are <strong>end-to-end encrypted by default</strong>.
+Since the Delta Chat Version 2 release series (July 2025) 
+there are no lock or similar markers on end-to-end encrypted messages, anymore.</p>
+    
+      <h3 id="can-i-still-receive-or-send-messages-without-end-to-end-encryption">
+        
+        
+          Can I still receive or send messages without end-to-end encryption? <a href="#can-i-still-receive-or-send-messages-without-end-to-end-encryption" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>If you use default <a href="https://chatmail.at/relays">chatmail relays</a>,
+it is impossible to receive or send messages without end-to-end encryption.</p>
+
+<p>If you instead use a <a href="#classic-email">classic email server</a>,
+you can send and receive messages with or without end-to-end encryption.
+Messages lacking end-to-end encryption are marked with an email icon
+<img style="vertical-align:middle; width:1.2em; margin:1px" src="../email-icon.png" alt="email" />.</p>
+    
+      <h3 id="e2eeguarantee">
+        
+        
+          What does the green checkmark in a contact profile mean? <a href="#e2eeguarantee" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>A contact profile might show a green checkmark
+<img style="vertical-align:middle; width:1.5em; margin:1px" src="../green-checkmark.png" alt="green checkmark" />
+and an “Introduced by” line.
+Every green-checkmarked contact either did a direct <a href="#howtoe2ee">QR-scan</a> with you
+or was introduced by a another green-checkmarked contact.
+Introductions happen automatically when adding members to groups. 
+Whoever adds a green-checkmarked contact to a group with only green-checkmarked members 
+becomes an introducer. 
+In a contact profile you can tap on the “Introduced by …” text repeatedly
+until you get to the one with whom you directly did a <a href="#howtoe2ee">QR-scan</a>.</p>
+
+<p>For more in-depth discussion of “guaranteed end-to-end encryption”
+please see <a href="https://securejoin.delta.chat/en/latest/new.html">Secure-Join protocols</a>
+and specifically read about “Verified Groups”, the technical term
+of what is called here “green-checkmarked” or “guaranteed end-to-end encrypted” chats.</p>
+    
+      <h3 id="are-attachments-pictures-files-audio-etc-end-to-end-encrypted">
+        
+        
+          Are attachments (pictures, files, audio etc.) end-to-end encrypted? <a href="#are-attachments-pictures-files-audio-etc-end-to-end-encrypted" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Oui.</p>
+
+<p>When we talk about an “end-to-end encrypted message”
+we always mean a whole message is encrypted,
+including all the attachments
+and attachment metadata such as filenames.</p>
+    
+      <h3 id="openpgp-secure">
+        
+        
+          Is OpenPGP secure? <a href="#openpgp-secure" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Yes, Delta Chat uses a secure subset of OpenPGP
+requiring the whole message to be properly encrypted and signed.
+For example, “Detached signatures” are not treated as secure.</p>
+
+<p>OpenPGP is not insecure by itself.
+Most publicly discussed OpenPGP security problems
+actually stem from bad usability or bad implementations of tools or apps (or both).
+It is particularly important to distinguish between OpenPGP, the IETF encryption standard, 
+and GnuPG (GPG), a command line tool implementing OpenPGP. 
+Many public critiques of OpenPGP actually discuss GnuPG which Delta Chat has never used. 
+Delta Chat rather uses the OpenPGP Rust implementation <a href="https://github.com/rpgp/rpgp">rPGP</a>,
+available as <a href="https://crates.io/crates/pgp">an independent “pgp” package</a>,
+and <a href="#security-audits">security-audited in 2019 and 2024</a>.</p>
+
+<p>We aim, along with other OpenPGP implementors, 
+to further improve security characteristics by implementing the
+<a href="https://datatracker.ietf.org/doc/draft-ietf-openpgp-crypto-refresh/">new IETF OpenPGP Crypto-Refresh</a> 
+which was thankfully adopted in summer 2023.</p>
+    
+      <h3 id="openpgp-alternatives">
+        
+        
+          Did you consider using alternatives to OpenPGP for end-to-end-encryption? <a href="#openpgp-alternatives" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Yes, we are following efforts like <a href="https://en.wikipedia.org/wiki/Messaging_Layer_Security">MLS</a>
+but adopting them would mean breaking end-to-end encryption interoperability.
+So it would not be a light decision to take 
+and there must be tangible improvements for users.</p>
+
+<p>Delta Chat takes a holistic “usable security” approach 
+and works with a wide range of activist groupings as well as 
+renowned researchers such as <a href="https://teamusec.de">TeamUSEC</a> 
+to improve actual user outcomes against security threats. 
+The wire protocol and standard for establishing end-to-end encryption is
+only one part of “user outcomes”,
+see also our answers to <a href="#device-seizure">device-seizure</a>
+and <a href="#message-metadata">message-metadata</a> questions.</p>
+    
+      <h3 id="is-delta-chat-vulnerable-to-efail">
+        
+        
+          Is Delta Chat vulnerable to EFAIL? <a href="#is-delta-chat-vulnerable-to-efail" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>No, <a href="https://delta.chat/en/2018-05-15-delta-chat-not-vulnerable-to-efail">Delta Chat never was vulnerable to EFAIL</a>
+because its OpenPGP implementation <a href="https://github.com/rpgp/rpgp">rPGP</a> 
+uses Modification Detection Code when encrypting messages
+and returns <a href="https://docs.rs/pgp/latest/pgp/errors/enum.Error.html#variant.MdcError">an error</a>
+if the Modification Detection Code is incorrect.</p>
+
+<p>Delta Chat also never was vulnerable to the “Direct Exfiltration” EFAIL attack
+because it only decrypts <code class="language-plaintext highlighter-rouge">multipart/encrypted</code> messages
+which contain exactly one encrypted and signed part,
+as defined by the Autocrypt Level 1 specification.</p>
+    
+      <h3 id="tls">
+        
+        
+          Are messages marked with the mail icon exposed on the Internet? <a href="#tls" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>If you are sending or receiving email messages without end-to-end encryption (using a classic email server),
+they are still protected from cell or cable companies who can not read or modify your email messages.
+But both your and your recipient’s email providers
+may read, analyze or modify your messages, including any attachments.</p>
+
+<p>Delta Chat by default uses strict 
+<a href="https://en.wikipedia.org/wiki/Transport_Layer_Security">TLS encryption</a> 
+which secures connections between your device and your email provider.
+All of Delta Chat’s TLS-handling has been independently <a href="#security-audits">security audited</a>.
+Moreover, the connection between your and the recipient’s email provider
+will typically be transport-encrypted as well.
+If the involved email servers support <a href="https://datatracker.ietf.org/doc/html/rfc8461">MTA-STS</a>
+then transport encryption will be enforced between email providers
+in which case Delta Chat communications will never be exposed in cleartext to the Internet
+even if the message was not end-to-end encrypted.</p>
+    
+      <h3 id="message-metadata">
+        
+        
+          How does Delta Chat protect metadata in messages? <a href="#message-metadata" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Unlike most other messengers, 
+Delta Chat apps do not store any metadata about contacts or groups on servers, also not in encrypted form. 
+Instead, all group metadata is end-to-end encrypted and stored on end-user devices, only.</p>
+
+<p>Servers can therefore only see:</p>
+
+<ul>
+  <li>the sender and receiver addresses</li>
+  <li>and the message size.</li>
+</ul>
+
+<p>By default, the addresses are randomly generated.</p>
+
+<p>All other message, contact and group metadata resides in the end-to-end encrypted part of messages.</p>
+    
+      <h3 id="device-seizure">
+        
+        
+          How to protect metadata and contacts when a device is seized? <a href="#device-seizure" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Both for protecting against metadata-collecting servers 
+as well as against the threat of device seizure
+we recommend to use a <a href="https://chatmail.at/relays">chatmail relay</a>
+to create chat profiles using random addresses for transport. 
+Note that Delta Chat apps on all platforms support multiple profiles
+so you can easily use situation-specific profiles next to your “main” profile
+with the knowledge that all their data, along with all metadata, will be deleted.
+Moreover, if a device is seized then chat contacts using short-lived profiles
+can not be identified easily.</p>
+    
+      <h3 id="sealedsender">
+        
+        
+          Does Delta Chat support “Sealed Sender”? <a href="#sealedsender" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>No, not yet.</p>
+
+<p>The Signal messenger introduced <a href="https://signal.org/blog/sealed-sender/">“Sealed Sender” in 2018</a>
+to keep their server infrastructure ignorant of who is sending a message to a set of recipients. 
+It is particularly important because the Signal server knows the mobile number of each account,
+which is usually associated with a passport identity.</p>
+
+<p>Even if <a href="https://chatmail.at/relays">chatmail relays</a> 
+do not ask for any private data (including no phone numbers), 
+it might still be worthwhile to protect relational metadata between addresses. 
+We don’t foresee bigger problems in using random throw-away addresses for sealed sending
+but an implementation has not been agreed as a priority yet.</p>
+    
+      <h3 id="pfs">
+        
+        
+          Does Delta Chat support Perfect Forward Secrecy? <a href="#pfs" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>No, not yet.</p>
+
+<p>Delta Chat today doesn’t support Perfect Forward Secrecy (PFS).
+This means that if your private decryption key is leaked,
+and someone has collected your prior in-transit messages,
+they will be able to decrypt and read them using the leaked decryption key.
+Note that Forward Secrecy only increases security if you delete messages. 
+Otherwise, someone obtaining your decryption keys
+is typically also able to get all your non-deleted messages
+and doesn’t even need to decrypt any previously collected messages.</p>
+
+<p>We designed a Forward Secrecy approach that withstood 
+initial examination from some cryptographers and implementation experts 
+but is pending a more formal write up 
+to ascertain it reliably works in federated messaging and with multi-device usage,
+before it could be implemented in <a href="https://github.com/chatmail/core">chatmail core</a>,
+which would make it available in all <a href="https://chatmail.at/clients">chatmail clients</a>.</p>
+    
+      <h3 id="pqc">
+        
+        
+          Does Delta Chat support Post-Quantum-Cryptography? <a href="#pqc" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>No, not yet.</p>
+
+<p>Delta Chat uses the Rust OpenPGP library <a href="https://github.com/rpgp/rpgp">rPGP</a>
+which supports the latest <a href="https://datatracker.ietf.org/doc/draft-ietf-openpgp-pqc/">IETF Post-Quantum-Cryptography OpenPGP draft</a>. 
+We aim to add PQC support in <a href="https://github.com/chatmail/core">chatmail core</a>  after the draft is finalized at the IETF
+in collaboration with other OpenPGP implementers.</p>
+    
+      <h3 id="how-can-i-manually-check-encryption-information">
+        
+        
+          How can I manually check encryption information? <a href="#how-can-i-manually-check-encryption-information" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>You may check the end-to-end encryption status manually in the “Encryption” dialog
+(user profile on Android/iOS or right-click a user’s chat-list item on desktop).
+Delta Chat shows two fingerprints there.
+If the same fingerprints appear on your own and your contact’s device,
+the connection is safe.</p>
+    
+      <h3 id="importkey">
+        
+        
+          Puis-je ré-utiliser ma clé privée existante ? <a href="#importkey" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>No.</p>
+
+<p>Delta Chat generates secure OpenPGP keys according to the Autocrypt specification 1.1.
+We do not recommend or offer users to perform manual key management.
+We want to ensure that security audits can focus on a few proven cryptographic algorithms
+instead of the full breadth of possible algorithms allowed with OpenPGP.
+If you want to extract your OpenPGP key, there only is an expert method:
+you need to look it up in the “keypairs” SQLite table of a profile backup tar-file.</p>
+    
+      <h3 id="security-audits">
+        
+        
+          Est-ce qu’un audit indépendant des failles de sécurité a été réalisé sur Delta Chat ? <a href="#security-audits" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Yes, multiple times. 
+The Delta Chat project continuously undergoes independent security audits and analysis,
+from most recent to older:</p>
+
+<ul>
+  <li>
+    <p>2024 December, an <a href="https://github.com/rpgp/docs/blob/main/audits/NGI%20Core%20rPGP%20penetration%20test%20report%202024%201.0.pdf">NLNET-commissioned Evaluation of
+rPGP</a> by <a href="https://www.radicallyopensecurity.com/">Radically Open Security</a> took place.
+rPGP serves as the end-to-end encryption <a href="https://openpgp.org">OpenPGP</a> engine of Delta Chat. 
+Two advisories were released related to the findings of this audit:</p>
+
+    <ul>
+      <li><a href="https://github.com/rpgp/rpgp/security/advisories/GHSA-9rmp-2568-59rv">“Panics on Malformed Untrusted Input”</a> CVE-2024-53856</li>
+      <li><a href="https://github.com/rpgp/rpgp/security/advisories/GHSA-4grw-m28r-q285">“Potential Resource Exhaustion when handling Untrusted Messages”</a> CVE-2024-53857</li>
+    </ul>
+
+    <p>The issues outlined in these advisories have been fixed and are part of Delta Chat 
+releases on all appstores since December 2024.</p>
+  </li>
+  <li>
+    <p>2024 March, we received a deep security analysis from the Applied Cryptography
+research group at ETH Zuerich and addressed all raised issues. 
+See our blog post about <a href="https://delta.chat/en/2024-03-25-crypto-analysis-securejoin">Hardening Guaranteed End-to-End encryption</a> for more detailed information and the
+<a href="https://eprint.iacr.org/2024/918.pdf">Cryptographic Analysis of Delta Chat</a> 
+research paper published afterwards.</p>
+  </li>
+  <li>
+    <p>Début 2023, nous avons réparé les failles de sécurité et de confidentialité de la fonctionnalité “partage d’appli web dans une discussion” liées à des dysfonctionnements en mode bac à sable, en particulier avec Chromium. Après quoi, nous avons soumis Delta Chat à un nouvel audit de sécurité indépendant par Cure53, puis effectué les réparations de toutes les failles découvertes pour la version 1.36 de nos applications, publiée en avril 2023. 
+Vous trouverez <a href="https://delta.chat/en/2023-05-22-webxdc-security">ici un article de fond complet à propos de la sécurité du chiffrement de bout-en-bout sur internet</a>.</p>
+  </li>
+  <li>
+    <p>Début 2023, <a href="https://cure53.de">Cure53</a> a analysé le chiffrement d’acheminement des connexions réseau de Delta Chat et testé une configuration de serveur de courriel reproductible, telle que <a href="https://delta.chat/fr/serverguide">recommandée sur ce site</a>.
+Vous trouverez plus d’informations sur cet audit <a href="https://delta.chat/en/2023-03-27-third-independent-security-audit">sur notre blog</a> ou dans <a href="https://delta.chat/assets/blog/MER-01-report.pdf">le rapport complet ici</a>.</p>
+  </li>
+  <li>
+    <p>En 2020, <a href="https://includesecurity.com">Include Security</a> a analysé les <a href="https://github.com/deltachat/deltachat-core-rust/">bibliothèques principales</a> Rust de Delta Chat, ainsi que ses bibliothèques <a href="https://github.com/async-email/async-imap">IMAP</a>, <a href="https://github.com/async-email/async-smtp">SMTP</a> et <a href="https://github.com/async-email/async-native-tls">TLS</a>.
+Aucun problème grave ou critique n’a été découvert.
+Le rapport a tout de même révélé quelques vulnérabilités de gravité moyenne, qui ne représentent pas une menace en elles-mêmes pour les utilisateurs et les utilisatrices de Delta Chat, car elles dépendent de l’environnement dans lequel Delta Chat est utilisé.
+Pour des raison de compatibilité et de facilité d’utilisation, nous ne pouvons pas les pallier toutes et avons préféré fournir des préconisations de sécurité aux personnes exposées.
+Le rapport complet <a href="https://delta.chat/assets/blog/2020-second-security-review.pdf">est consultable ici</a>.</p>
+  </li>
+  <li>
+    <p>En 2019, <a href="https://includesecurity.com">Include Security</a> a analysé les bibliothèques <a href="https://github.com/rpgp/rpgp">PGP</a> et
+<a href="https://github.com/RustCrypto/RSA">RSA</a> de Delta Chat.
+Aucune faille critique n’a été trouvée, mais deux failles sévères ont été identifiées et immédiatement réparées par nos soins.
+Une faille de gravité moyenne ainsi que quelques failles de gravité moindre ont également été découvertes, sans qu’il soit toutefois possible de les exploiter dans le fonctionnement de Delta Chat.
+Nous en avons néanmoins réparées certaines depuis le rapport d’audit.
+Le rapport complet <a href="https://delta.chat/assets/blog/2019-first-security-review.pdf">est consultable ici</a>.</p>
+  </li>
+</ul>
+    
+      <h2 id="divers">
+        
+        
+          Divers <a href="#divers" class="anchor"></a>
+        
+        
+      </h2>
+    
+      <h3 id="de-quelles-autorisations-delta-chat-a-t-il-besoin">
+        
+        
+          De quelles autorisations Delta Chat a-t-il besoin? <a href="#de-quelles-autorisations-delta-chat-a-t-il-besoin" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Some features require certain permissions,
+e.g. you need to grant camera permission if you want to <a href="#howtoe2ee">scan an invite QR code</a>.</p>
+
+<p>See <a href="https://delta.chat/en/gdpr#24-app-permissions">Privacy Policy</a> for a detailed overview.</p>
+    
+      <h3 id="where-can-my-friends-find-delta-chat">
+        
+        
+          Where can my friends find Delta Chat? <a href="#where-can-my-friends-find-delta-chat" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Delta Chat is available for all major and some minor platforms:</p>
+
+<ul>
+  <li>
+    <p>The <strong>official website</strong>, <a href="https://delta.chat/download">https://delta.chat/download</a> shows all options in detail</p>
+  </li>
+  <li>
+    <p>If unavailable, use the <strong>mirror</strong> at <a href="https://deltachat.github.io/deltachat-pages">https://deltachat.github.io/deltachat-pages</a></p>
+  </li>
+  <li>
+    <p>Open one of the following <strong>app stores and search for “Delta Chat”:</strong>
+Google Play Store, F-Droid, Huawei App Gallery, iOS and macOS App Store, Microsoft Store</p>
+  </li>
+  <li>
+    <p>Check the <strong>package manager</strong> of your Linux distributions</p>
+  </li>
+  <li>
+    <p><strong>Android APKs</strong> are also available on <a href="https://github.com/deltachat/deltachat-android/releases">https://github.com/deltachat/deltachat-android/releases</a></p>
+  </li>
+</ul>
+    
+      <h3 id="comment-est-financé-le-développement-de-delta-chat-">
+        
+        
+          Comment est financé le développement de Delta Chat ? <a href="#comment-est-financé-le-développement-de-delta-chat-" class="anchor"></a>
+        
+        
+      </h3>
+
+<p>Delta Chat ne reçoit par de fonds en capital-risque, n’est pas endetté et ne subit aucune pression pour générer de gros profits ou vendre ses utilisateurs et utilisatrices - en même temps que leurs amis et leur famille - à des annonceurs (ou pire). 
+Nous préférons utiliser des fonds provenant d’institutions publiques, jusqu’à présent basées en Europe ou aux États-Unis, pour soutenir nos efforts de développement d’un système de messagerie diversifié et décentralisé, basé sur les contributions de la communauté du libre et de l’open-source.</p>
+
+<p>Concretely, Delta Chat developments have so far been funded from these sources,
+ordered chronologically:</p>
+
+<ul>
+  <li>
+    <p>The <a href="https://nextleap.eu">NEXTLEAP</a> EU project funded the research
+and implementation of verified groups and setup contact protocols
+in 2017 and 2018 and also helped to integrate end-to-end Encryption
+through <a href="https://autocrypt.org">Autocrypt</a>.</p>
+  </li>
+  <li>
+    <p>L’association <a href="https://opentechfund.org">Open Technology Fund</a> nous a octroyé une première subvention en 2018/2019 (de 200.000$ environ), grâce à laquelle nous avons pu apporter des améliorations majeures à l’application Android et publier une première version Beta de l’application de bureau. Elle nous a aussi permis d’ancrer notre recherche UX de développement de fonctionnalités dans des contextes de droits humains. <br />
+À ce sujet, vous pouvez consulter notre rapport en anglais <a href="https://delta.chat/en/2019-07-19-uxreport">“Needfinding and UX report”</a>.
+La seconde subvention de 2019/2020 (environ 300.000$) nous a permis de publier des version iOS de Delta Chat, de convertir notre bibliothèque principale en Rust et de créer de nouvelles fonctionnalités pour toutes les plateformes.</p>
+  </li>
+  <li>
+    <p>The <a href="https://nlnet.nl/">NLnet foundation</a> granted in 2019/2020 EUR 46K for
+completing Rust/Python bindings and instigating a Chat-bot eco-system.</p>
+  </li>
+  <li>
+    <p>In 2021 we received further EU funding for two Next-Generation-Internet
+proposals, namely for <a href="https://dapsi.ngi.eu/hall-of-fame/eppd/">EPPD - email provider portability directory</a> (~97K EUR) and <a href="https://nlnet.nl/project/EmailPorting/">AEAP - email address porting</a> (~90K EUR) which resulted in better multi-profile support, improved QR-code contact and group setups and many networking improvements on all platforms.</p>
+  </li>
+  <li>
+    <p>From End 2021 till March 2023 we received <em>Internet Freedom</em> funding (500K USD) from the
+U.S. Bureau of Democracy, Human Rights and Labor (DRL). 
+This funding supported our long-running goals to make Delta Chat more usable 
+and compatible with a wide range of email servers world-wide, and more resilient and secure
+in places often affected by internet censorship and shutdowns.</p>
+  </li>
+  <li>
+    <p>2023-2024 we successfully completed the OTF-funded 
+<a href="https://www.opentech.fund/projects-we-support/supported-projects/secure-chat-mail-with-delta-chat/">Secure Chatmail project</a>, 
+allowing us to introduce guaranteed encryption, 
+creating a <a href="https://delta.chat/chatmail">chatmail server network</a> 
+and providing “instant onboarding” in all apps released from April 2024 on.</p>
+  </li>
+  <li>
+    <p>In 2023 and 2024 we got accepted in the Next Generation Internet (NGI)
+program for our work in <a href="https://nlnet.nl/project/WebXDC-Push/">webxdc PUSH</a>,
+along with collaboration partners working on 
+<a href="https://nlnet.nl/project/Webxdc-Evolve/">webxdc evolve</a>, 
+<a href="https://nlnet.nl/project/WebXDC-XMPP/">webxdc XMPP</a>, 
+<a href="https://nlnet.nl/project/DeltaTouch/">DeltaTouch</a> and 
+<a href="https://nlnet.nl/project/DeltaTauri/">DeltaTauri</a>. 
+All of these projects are partially completed or to be completed in early 2025.</p>
+  </li>
+  <li>
+    <p>Nous recevons parfois des dons ponctuels de la part de personnes privées. 
+ En 2021 par exemple, une généreuse personne nous a envoyé 4000€ par virement bancaire, avec l’intitulé “continuez votre super travail de développement !”. 💜 
+ Nous utilisons l’argent de ces dons pour financer des rencontres entre développeurs et développeuses ou pour des dépenses ponctuelles difficiles à anticiper ou à rembourser avec des subventions publiques.
+Recevoir plus de dons aide notre communauté de contributrices et contributeurs à devenir plus indépendante et à rester viable sur le long terme.</p>
+
+    
+  </li>
+  <li>
+    <p>Dernier point, mais certainement pas des moindres : quelques personnes passionnées et expertes ont apporté, et apportent toujours, leur contribution bénévole au développement de Delta Chat sans contrepartie financière - ou seulement de petites sommes. Sans leur énergie, Delta Chat n’en serait pas là aujourd’hui… et de très loin.</p>
+  </li>
+</ul>
+
+<p>Les financements mentionnés précédemment sont gérés principalement par merlinux GmbH à Fribourg (Allemagne) et redistribués à plus d’une douzaine de contributeurs et contributrices du monde entier.</p>
+
+<p>N’hésitez pas à consulter les <a href="https://delta.chat/fr/contribute">Canaux de contribution à Delta Chat Contribution</a> pour en savoir plus sur les différentes manières de contribuer, financières ou non.</p>
+
+
+
+
+</body></html>

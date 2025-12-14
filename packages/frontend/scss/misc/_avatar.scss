@@ -1,0 +1,122 @@
+// When changing these, consider also updating the avatar SVG
+// in `video-calls.ts`.
+.avatar {
+  --local-avatar-size: 48px;
+  --local-avatar-vertical-margin: 8px;
+  --local-avatar-font-size: 26px;
+
+  position: relative;
+  user-select: none;
+  display: inline-block;
+  font-weight: normal;
+
+  height: var(--local-avatar-size);
+  width: var(--local-avatar-size);
+  margin: var(--local-avatar-vertical-margin) 0;
+
+  div.content,
+  img.content {
+    height: var(--local-avatar-size);
+    width: var(--local-avatar-size);
+    border-radius: 100%;
+    pointer-events: none;
+  }
+
+  &.wasSeenRecently {
+    div.content,
+    img.content {
+      border-radius: 0;
+      mask: url('./images/avatar/online-avatar-mask-smaller.svg') no-repeat
+        center;
+      -webkit-mask: url('./images/avatar/online-avatar-mask-smaller.svg')
+        no-repeat center;
+      mask-size: var(--local-avatar-size);
+      -webkit-mask-size: var(--local-avatar-size);
+    }
+
+    &::after {
+      content: ''; // without this the dot will not render
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      height: var(--local-avatar-size);
+      width: var(--local-avatar-size);
+
+      background-color: var(--recently-seen-indicator-color);
+      mask: url('./images/avatar/online-avatar-dot.svg') no-repeat center;
+      -webkit-mask: url('./images/avatar/online-avatar-dot.svg') no-repeat
+        center;
+      mask-size: var(--local-avatar-size);
+      -webkit-mask-size: var(--local-avatar-size);
+    }
+  }
+
+  div.content {
+    --local-avatar-color: #505050;
+    background-color: var(--local-avatar-color);
+
+    line-height: var(--local-avatar-size);
+    object-fit: cover;
+    color: var(--avatarLabelColor);
+    text-align: center;
+    font-size: var(--local-avatar-font-size);
+
+    @supports (
+      // text-wrap was introduced in 2023 slightly after color-mix,
+      // since we can't test for color-mix support directly we use this instead.
+      text-wrap: wrap
+    ) {
+      // make avatars look slightly 3D
+      background: linear-gradient(
+        var(--avatarGradientAngle),
+        var(--local-avatar-color),
+        color-mix(
+          in srgb,
+          var(--local-avatar-color) var(--avatarGradientMixFactor),
+          white
+        )
+      );
+    }
+
+    .avatar-qr-code-img {
+      width: 22px;
+      height: 22px;
+      margin-top: calc((48px - 22px) / 2);
+    }
+  }
+
+  img.content {
+    object-fit: cover;
+  }
+}
+
+.avatar.small {
+  --local-avatar-size: 36px;
+  --local-avatar-font-size: 24px;
+  --local-avatar-vertical-margin: 0;
+}
+
+// contact list, search results etc.
+.avatar.large {
+  --local-avatar-size: 64px;
+  --local-avatar-font-size: 39px;
+}
+
+// for profile view
+.avatar.very-large {
+  --local-avatar-size: 128px;
+  --local-avatar-font-size: 78px;
+  margin: auto;
+}
+
+.avatar.no-search-results {
+  div.content {
+    transform: rotate(45deg);
+    line-height: 46px;
+    letter-spacing: 1px;
+    &::after {
+      content: ':-(';
+    }
+  }
+}

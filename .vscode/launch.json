@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Launch signed installed tauri app",
+      "program": "/Applications/deltachat-tauri.app/Contents/MacOS/deltachat-tauri",
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Debug Main Process",
+      "sourceMaps": true,
+      "restart": true,
+      "port": 9229
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "private": true,
+  "name": "@deltachat-desktop/shared",
+  "type": "module",
+  "scripts": {
+    "check:types": "tsc --noEmit",
+    "pretest": "esbuild *.ts --outdir=ts-compiled-for-tests --sourcemap",
+    "test": "NODE_OPTIONS=--enable-source-maps mocha 'tests/**/*.js'"
+  },
+  "dependencies": {
+    "@deltachat/jsonrpc-client": "catalog:",
+    "error-stack-parser": "^2.1.4",
+    "stackframe": "^1.3.4"
+  },
+  "devDependencies": {
+    "@types/chai": "catalog:",
+    "@types/mocha": "catalog:",
+    "chai": "catalog:",
+    "esbuild": "catalog:",
+    "mocha": "catalog:",
+    "@types/node": "catalog:"
+  }
+}

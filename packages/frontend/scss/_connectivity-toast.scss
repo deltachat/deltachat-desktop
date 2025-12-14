@@ -1,0 +1,54 @@
+@use 'mixins';
+
+.ConnectivityToast {
+  position: fixed;
+
+  bottom: 15px;
+  margin-inline-start: 8px;
+  text-align: center;
+  background-color: var(--contextMenuBg);
+  border: 1px solid var(--contextMenuBorder);
+  padding: 5px;
+  border-radius: 4px;
+  color: var(--contextMenuText);
+  user-select: none;
+
+  a {
+    font-weight: bold;
+    color: var(--globalText);
+    &:hover {
+      cursor: unset;
+      text-decoration: unset;
+      color: unset;
+    }
+  }
+
+  .showInfoButton {
+    position: absolute;
+    inset: 0;
+    background-color: transparent;
+    border: none;
+  }
+
+  .tryNowButton {
+    // So that it's on top of the `showInfoButton` and can be clicked.
+    @include mixins.button-reset;
+
+    display: block;
+    color: var(--colorPrimary);
+    margin-inline-start: 4px;
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+      text-decoration: solid var(--colorPrimary);
+      opacity: 0.8;
+    }
+
+    &:disabled {
+      text-decoration: none;
+      color: gray;
+      cursor: wait;
+    }
+  }
+}

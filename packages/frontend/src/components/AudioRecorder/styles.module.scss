@@ -1,0 +1,147 @@
+.microphoneButton {
+  height: 40px;
+  width: 40px;
+  padding-inline-start: 6px;
+  padding-bottom: 8px;
+  background-color: var(--composerBg);
+  border: none;
+
+  span {
+    display: block;
+    width: 25px;
+    height: 25px;
+    margin-top: calc((40px - 25px) / 2);
+    -webkit-mask-image: url(./images/microphone.svg);
+    -webkit-mask-size: contain;
+    background-color: var(--composerPlaceholderText);
+    &:hover {
+      background-color: var(--buttonSecondaryText);
+    }
+  }
+}
+
+.audioRecorder {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  align-items: stretch;
+  flex-grow: 1;
+  margin-inline-start: 10px;
+  p {
+    margin: 12px 0 0 3px;
+  }
+  .microphoneButton {
+    span {
+      animation: pulse 1.5s infinite ease-in-out;
+      @keyframes pulse {
+        0% {
+          background-color: #eb4c4c58;
+        }
+        50% {
+          background-color: #d70b0b;
+        }
+        100% {
+          background-color: #eb4c4c58;
+        }
+      }
+    }
+  }
+  button:not(.microphoneButton) {
+    padding: 4px;
+    height: 32px;
+    margin-top: 4px;
+    width: 85px;
+    border-radius: 5px;
+    border: none;
+    margin-inline-start: 16px;
+
+    &.stopRecording {
+      background-color: var(--buttonPrimaryBackground);
+      color: #fff;
+      margin-inline-end: 40px;
+      &:hover {
+        background-color: var(--buttonPrimaryHover);
+      }
+    }
+
+    &.cancel {
+      background-color: var(--buttonSecondaryBackground);
+      color: var(--buttonSecondaryText);
+      border: 1px solid #ccc;
+      &:hover {
+        background-color: var(--buttonSecondaryHover);
+      }
+    }
+  }
+}
+
+.timer {
+  margin-top: 12px;
+}
+
+.volumeBarContainer {
+  flex: 1;
+  padding-inline-end: 10px;
+  .volumeBar {
+    display: flex;
+    position: relative;
+    display: flex;
+    margin: 15px 20px 0 15px;
+    height: 12px;
+    width: 100%;
+    max-width: 250px;
+    min-width: 60px;
+
+    .mask {
+      display: flex;
+      width: 100%;
+      z-index: 10;
+      height: 12px;
+      position: absolute;
+      left: 0;
+
+      .step {
+        display: flex;
+        width: 10%;
+        height: 10px;
+        border-left: 1px solid #bbb;
+        border-top: 1px solid #bbb;
+        border-bottom: 1px solid #bbb;
+      }
+      .step:last-child {
+        border-right: 1px solid #bbb;
+      }
+    }
+
+    .level {
+      width: 100%;
+      background-color: var(--composerBg);
+      height: 10px;
+      position: absolute;
+      right: 0;
+      z-index: 5;
+    }
+
+    .colorBackground {
+      width: 100%;
+      background: none;
+      background: linear-gradient(
+        to right,
+        rgb(52, 237, 52),
+        rgb(52, 237, 52) 50%,
+        orange 75%,
+        red 90%
+      );
+      height: 10px;
+      position: absolute;
+    }
+  }
+}
+
+@media (max-width: 400px) {
+  .volumeBarContainer {
+    .volumeBar {
+      display: none;
+    }
+  }
+}

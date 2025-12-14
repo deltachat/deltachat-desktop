@@ -1,0 +1,14 @@
+Microsoft Visual C++ 2015-2019 (x64) Redistributable is provided in "local deployment" mode.
+
+The following files are part of the Microsoft Visual C++ 2019 (x64) Redistributable:
+
+concrt140.dll
+msvcp140_2.dll
+vcruntime140.dll
+msvcp140_1.dll
+msvcp140.dll
+vccorlib140.dll
+
+see:
+
+https://docs.microsoft.com/en-us/visualstudio/productinfo/2017-redistribution-vs#visual-c-runtime-files

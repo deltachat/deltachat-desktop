@@ -1,0 +1,12 @@
+.avatarButton {
+  background: none;
+  border: none;
+  border-radius: 50%;
+  padding: 0;
+  margin: auto;
+  // Ensure that this element is not taller than the children.
+  display: flex;
+  :global(.avatar) {
+    --local-avatar-vertical-margin: 0;
+  }
+}

@@ -1,0 +1,63 @@
+.switchWrapper {
+  position: relative;
+  margin-inline-start: 10px;
+
+  & input {
+    // Hide it, but keep in DOM purely for accessibility reasons
+    // (e.g. the outline).
+    appearance: none;
+    position: absolute;
+    inset: 0;
+    outline-offset: 5px;
+  }
+}
+
+.switchIndicator {
+  width: auto;
+  min-width: 1.75em;
+  height: 1em;
+  position: relative;
+
+  display: inline-block;
+  vertical-align: middle;
+
+  margin-top: 1px;
+  user-select: none;
+  cursor: pointer;
+  font-size: 16px;
+  border: none;
+  border-radius: 1.75em;
+  transition: background-color 100ms cubic-bezier(0.4, 1, 0.75, 0.9);
+  background: var(--bp4Switch);
+  box-shadow: var(--bp4SwitchShadow);
+  color: #fff;
+
+  &::before {
+    width: calc(1em + 4px);
+    height: calc(1em + 4px);
+    left: 0;
+    content: '';
+    display: block;
+    margin: -2px 2px 2px -2px;
+
+    background: #fff;
+    border-radius: 50%;
+    // box-shadow: 0 0 0 1px rgba(17, 20, 24, 0.5);
+    position: absolute;
+    transition: left 100ms cubic-bezier(0.4, 1, 0.75, 0.9);
+    box-shadow: var(--bp4SwitchKnobShadow);
+    background: var(--bp4SwitchKnob);
+  }
+}
+.switchIndicatorOn {
+  background: var(--bp4SwitchChecked);
+  &::before {
+    left: calc(100% - 1em);
+    box-shadow: var(--bp4SwitchKnobShadowChecked);
+    background: var(--bp4SwitchKnobChecked);
+  }
+}
+
+.disabled {
+  opacity: 0.4;
+}

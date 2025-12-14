@@ -1,0 +1,37 @@
+@use '../../../scss/mixins';
+
+.icon {
+  background-color: var(--iconColorPrimary);
+  display: inline-block;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+
+  &.navbar {
+    background-color: var(--navBarText);
+  }
+
+  &.contextMenu {
+    background-color: var(--contextMenuText);
+  }
+
+  &.fullscreenControls {
+    background-color: var(--fullScreenMediaButtons);
+  }
+
+  &.appearanceSelector {
+    background-color: var(--icon-color);
+  }
+
+  &.remove {
+    &:hover {
+      background-color: #bf0000;
+    }
+  }
+}
+.iconButton {
+  @include mixins.button-reset;
+  // Ensure that the button wraps the icon tightly and doesn't produce
+  // extra height.
+  display: flex;
+}

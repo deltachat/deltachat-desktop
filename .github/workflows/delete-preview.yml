@@ -1,0 +1,38 @@
+# documentation: https://github.com/deltachat/sysadmin/tree/master/download.delta.chat
+name: Delete Preview Deliverables
+
+on: 
+  pull_request:
+    types: [closed]
+    paths-ignore:
+      - 'docs/**'  # only trigger build if a file outside of /docs was changed
+
+jobs:
+  delete:
+
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.body, '#public-preview') || contains(github.event.pull_request.title, 'prepare release')
+    steps:
+    - name: Get Branch Name
+      id: getid
+      run: |
+        export BRANCH_NAME=$(jq -r .pull_request.head.ref < $GITHUB_EVENT_PATH | sed 's/[^A-Za-z0-9._-]/_/g')
+        echo "branch=$BRANCH_NAME" >> $GITHUB_OUTPUT
+    - name: Renaming
+      run: |
+        mkdir preview
+        # create empty file to copy it over the outdated deliverable on download.delta.chat
+        echo "This preview build is outdated and has been removed." > empty
+        cp empty preview/deltachat-desktop.${{ steps.getid.outputs.branch }}.AppImage
+        cp empty preview/deltachat-desktop.${{ steps.getid.outputs.branch }}.portable.exe
+        cp empty preview/deltachat-desktop.${{ steps.getid.outputs.branch }}.dmg
+        cp empty preview/deltachat-desktop-mas.${{ steps.getid.outputs.branch }}.zip
+    - name: Replace builds with dummy files
+      uses: horochx/deploy-via-scp@v1.0.1
+      with:
+        user: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        host: "download.delta.chat"
+        port: 22
+        local: "preview/*"
+        remote: "/var/www/html/download/desktop/preview/"

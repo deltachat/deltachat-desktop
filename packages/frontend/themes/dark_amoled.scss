@@ -1,0 +1,43 @@
+/* Set theme variables used for theme Generation */
+@use './_themebase' with (
+  $themeDarkOrLight: dark,
+  $accentColor: purple,
+  $bgChatView: #000,
+  $bgImage: none,
+  $bgMessageBubbleIncoming: #222,
+  $bgMessageBubbleOutgoing: #343,
+  $messageOutgoingStatusColor: #e4d4d3,
+  $bgNavBar: #000,
+  $bgPrimary: #000,
+  $bgSecondary: #222,
+  $chatListItemSelectedBg: #4c6e7d,
+  $colorDanger: #f96856,
+  $colorNone: #a0a0a0,
+  $colorPrimary: #42a5f5,
+  $newChatButtonBg: #a0a0a0,
+  $keybindingHintsBoxBackground: #222,
+  $keybindingActionBackground: #353535,
+  $keybindingKeyBackground: lightgray,
+  $keybindingKeyBorder: rgba(0, 0, 0, 0.2),
+  $keybindingKeyShadow: rgba(0, 0, 0, 0.35),
+  $scrollbarTransparency: 0.45,
+  $textNavBar: #ddd,
+  $textPrimary: #fff,
+  $textSecondary: #ddd,
+  $btnPrimaryText: #fff,
+  $btnDangerText: #fff,
+  $btnDangerBackground: #f96856
+);
+
+.theme-meta {
+  --name: 'Dark Amoled';
+  --description: 'An Dark theme optimized for amoled displays (black is really black)';
+}
+
+/* overwrite themedata */
+:root {
+  --bp4SelectorBottom: rgba(80, 80, 80, 0.6);
+  --bp4SelectorTop: rgba(80, 80, 80, 0.8);
+}
+
+/* overwrite css */

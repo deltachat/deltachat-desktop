@@ -1,0 +1,67 @@
+// Using BEM syntax explained here: https://csswizardry.com/2013/01/mindbemding-getting-your-head-round-bem-syntax/
+
+// import node_module dependencies (without ".css" means include)
+@use '../node_modules/normalize.css/normalize';
+
+// Global Settings, Variables, and Mixins
+@use 'variables';
+@use 'mixins';
+@use 'global';
+
+// Components
+@use 'emoji';
+
+// Chat
+@use 'chat/_chat-list-item';
+@use 'chat/_chat-list';
+
+// Composer
+@use 'composer/_composer';
+@use 'composer/_emoji-sticker-picker';
+
+// Contact
+@use 'contact/_contact-list';
+@use 'contact/_contact';
+
+// Gallery (media view)
+@use 'gallery/attachment-view';
+@use 'gallery/_media-attachment';
+@use 'gallery/media';
+
+// Dialogs
+@use 'dialogs/_about';
+@use 'dialogs/_select-chat';
+@use 'dialogs/_group-styles';
+@use 'dialogs/_settings';
+@use 'dialogs/_qr-code';
+
+// Login
+@use 'login/_login.scss';
+
+// MainScreen
+@use 'main_screen/main_screen';
+
+// Message
+@use 'message/_message-attachment';
+@use 'message/_message-detail';
+@use 'message/_message-list';
+@use 'message/_message';
+@use 'message/_metadata';
+@use 'message/_status-icon';
+@use 'message/_message-calls';
+
+// misc
+@use 'misc/_avatar.scss';
+@use 'misc/_context_menu.scss';
+@use 'misc/_keyboard_hint_box.scss';
+@use 'misc/_search-input.scss';
+@use 'misc/react-window-list-reset.scss';
+
+// ConnectivityToast
+@use '_connectivity-toast';
+
+// Icons
+@use '_icons';
+
+// Re-usable generic UI components
+@use 'components/_radios';

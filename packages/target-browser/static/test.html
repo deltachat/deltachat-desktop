@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- this page has less security restrictions to be used in e2e tests -->
+    <!-- that enables playwright to control the browser (i.e. use eval and more)-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="/images/deltachat.ico">
+    <link rel="stylesheet" href="./fonts/fonts.css" />
+    <link rel="stylesheet" href="./main.css" />
+    <link rel="stylesheet" href="./bundle.css" />
+    <link rel="stylesheet" href="./fallback-theme.css" />
+    <title>Delta Chat Testing</title>
+    <style id="theme-vars"></style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/javascript" src="./browser-source-map-support.js"></script>
+    <script type="text/javascript" src="./fix-missing-vars.js"></script>
+    <script src="./runtime.js" type="module"></script>
+    <script src="./bundle.js" type="module"></script>
+    <div id="color-input-wrapper" aria-hidden="true">
+      <input id="color-input" tabindex="-1" type="color" />
+    </div>
+  </body>
+</html>

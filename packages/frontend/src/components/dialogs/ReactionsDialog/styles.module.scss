@@ -1,0 +1,40 @@
+@use '../../../../scss/mixins';
+
+.reactionsDialogList {
+  margin: 0;
+  margin-bottom: 1rem;
+}
+
+.reactionsDialogListItem {
+  @include mixins.button-reset;
+
+  width: 100%;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  border-radius: 10px;
+}
+
+.reactionsDialogListClickable {
+  &:hover,
+  &:focus {
+    background-color: var(--chatListItemBgHover);
+  }
+}
+
+.reactionsDialogAvatar {
+  flex: 0 0 48px;
+  margin-inline: 10px;
+}
+
+.reactionsDialogContactName {
+  flex: 1;
+  margin-inline-end: 10px;
+  overflow: hidden;
+}
+
+.reactionsDialogEmoji {
+  flex: 0 0 50px;
+  font-size: 20px;
+  text-align: center;
+}

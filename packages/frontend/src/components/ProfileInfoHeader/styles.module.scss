@@ -1,0 +1,30 @@
+.profileInfoHeader {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.infoContainer {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  flex-wrap: nowrap;
+  justify-content: center;
+  word-break: break-word;
+}
+
+.displayName {
+  color: var(--globalText);
+  font-size: x-large;
+  line-height: 1.25;
+  margin: 15px 0 0;
+  user-select: text;
+}
+
+.address {
+  color: #565656;
+  margin-top: 0.25rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  user-select: text;
+}

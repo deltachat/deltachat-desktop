@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="/images/deltachat.ico" />
+    <!--
+      * style-src 'unsafe-inline' is need for theming and for the virtual list,
+      See https://github.com/deltachat/deltachat-desktop/issues/2105.
+      * worker-src blob: is needed for mapbox afaik.
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none';
+                   style-src 'self' 'unsafe-inline';
+                   font-src 'self';
+                   script-src 'self';
+                   worker-src blob: ;
+                   child-src blob: ;
+                   img-src 'self' data: blob: file: webxdc-icon: ;
+                   media-src 'self' file: ;
+                   connect-src 'self'"
+    />
+    <link rel="stylesheet" href="./fonts/fonts.css" />
+    <link rel="stylesheet" href="./main.css" />
+    <link rel="stylesheet" href="./bundle.css" />
+    <link rel="stylesheet" href="./fallback-theme.css" />
+    <title>Delta Chat</title>
+    <style id="theme-vars"></style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/javascript" src="./avoid-eval.js"></script>
+    <script
+      type="text/javascript"
+      src="./browser-source-map-support.js"
+    ></script>
+    <script type="text/javascript" src="./fix-missing-vars.js"></script>
+    <script src="./runtime.js" type="module"></script>
+    <script src="./bundle.js" type="module"></script>
+    <div id="color-input-wrapper" aria-hidden="true">
+      <input id="color-input" tabindex="-1" type="color" />
+    </div>
+  </body>
+</html>

@@ -1,0 +1,61 @@
+@use '../mixins';
+
+.qr-code-switch {
+  display: flex;
+  background-color: var(--globalBackground);
+
+  button {
+    @include mixins.button-reset;
+
+    width: 50%;
+    cursor: pointer;
+
+    margin: 0;
+    padding: 17px 0px;
+
+    color: var(--colorNone);
+
+    font-size: initial;
+    text-align: center;
+    text-transform: uppercase;
+
+    border-bottom-width: 3px;
+    border-bottom-style: none;
+
+    &.active {
+      color: var(--colorPrimary);
+      border-bottom-style: solid;
+      border-bottom-color: var(--colorPrimary);
+    }
+  }
+}
+
+// Ensure that the QR code image is always shown in full,
+// and doesn't cause scroll.
+.show-qr-dialog-body {
+  display: flex;
+  flex-direction: column;
+  .show-qr-dialog-content {
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  img.show-qr-dialog-qr-image {
+    min-height: 0;
+  }
+}
+
+.copy-link-icon {
+  width: 20px;
+  height: 20px;
+  transform: rotate(135deg);
+  margin-inline-end: 8px;
+  @include mixins.color-svg('./images/icons/link.svg', currentcolor, 100%);
+}
+
+.copy-content-preview {
+  background-color: var(--buttonSecondaryBackground);
+  word-wrap: break-word;
+  word-break: break-all;
+  padding: 10px;
+}

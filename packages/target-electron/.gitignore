@@ -1,0 +1,6 @@
+html-dist
+bundle_out
+themes
+migration-tests/compiled
+
+electron-builder.json5

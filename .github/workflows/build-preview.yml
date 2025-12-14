@@ -1,0 +1,132 @@
+# documentation: https://github.com/deltachat/sysadmin/tree/master/download.delta.chat
+name: Preview Builds
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+    paths-ignore:
+      - 'docs/**' # only trigger build if a file outside of /docs was changed
+      - 'README_ASSETS/**'
+      - 'test/**'
+      - '*.md'
+      - '.prettierrc.yml'
+      - '.vscode/**'
+
+jobs:
+  upload-preview:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+      fail-fast: false
+    name: Upload Preview
+    env:
+      IS_PREVIEW: true
+    steps:
+      # Preperation
+      - uses: actions/checkout@v1
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+      - name: Get Branch Name
+        id: prepare
+        shell: bash
+        run: |
+          echo "branch=$(echo '${{ github.head_ref }}' | sed 's/[^A-Za-z0-9._-]/_/g')" >> $GITHUB_OUTPUT
+      - name: change build name and Product Name to branch name
+        run: |
+          node ./bin/github-actions/devbuild.js
+      # Building JS
+      - name: pnpm install, build
+        run: |
+          npm i -g pnpm
+          pnpm install --frozen-lockfile
+          cd packages/target-electron
+          pnpm build
+          pnpm run pack:generate_config
+          pnpm run pack:patch-node-modules
+      # Packaging and processing
+      - name: LINUX electron builder
+        if: runner.os == 'Linux'
+        run: |
+          export DEBUG=electron-builder
+          cd packages/target-electron
+          pnpm electron-builder --publish never --linux AppImage
+      - name: LINUX renaming / upload Preperation
+        if: runner.os == 'Linux'
+        working-directory: packages/target-electron
+        run: |
+          cd dist
+          mkdir preview
+          mv *.AppImage preview/deltachat-desktop.${{ steps.prepare.outputs.branch }}.AppImage
+          ls preview
+          cd ..
+      - name: MAC electron builder
+        if: runner.os == 'macOS'
+        run: |
+          cd packages/target-electron
+          echo "module.exports=()=>Promise.resolve()" > stub.cjs
+          export CSC_IDENTITY_AUTO_DISCOVERY=false
+          export DEBUG=electron-builder
+          pnpm i dmg-license
+          # all archs are enabled, because only installing some is not supported yet by pnpm: https://github.com/pnpm/pnpm/issues/7510
+          # pnpm i --cpu x64 --os darwin
+          # pnpm i --cpu arm64 --os darwin
+          ls node_modules/@deltachat
+          pnpm electron-builder --publish never --mac mas dmg -c.mac.identity=null --universal --config.afterSign="stub.cjs"
+      - name: MAC renaming / upload Preperation
+        if: runner.os == 'macOS'
+        working-directory: packages/target-electron
+        run: |
+          ls -lah dist
+          mkdir -p dist/preview
+          zip -r dist/preview/deltachat-desktop-mas.${{ steps.prepare.outputs.branch }}.zip dist/mas-universal
+          cd dist
+          mv *.dmg preview/deltachat-desktop.${{ steps.prepare.outputs.branch }}.dmg || true
+          cd ..
+          ls dist/preview
+      - name: WINDOWS electron builder
+        if: runner.os == 'Windows'
+        run: |
+          cd packages/target-electron
+          set DEBUG=electron-builder
+          pnpm electron-builder --win portable --config.artifactName="deltachat-desktop.${{ steps.prepare.outputs.branch }}.portable.exe"
+      - name: WINDOWS renaming / upload Preperation
+        if: runner.os == 'Windows'
+        working-directory: packages/target-electron/dist
+        run: |
+          dir
+          mkdir preview
+          move Delta*Chat*.exe preview/deltachat-desktop.${{ steps.prepare.outputs.branch }}.portable.exe
+          dir preview
+          cd ..
+      # Upload Step
+      - name: upload folder
+        id: upload
+        shell: bash
+        if: contains(github.event.pull_request.body, '#public-preview')  || contains(github.event.pull_request.title, 'prepare release')
+        run: |
+          echo -e "${{ secrets.KEY }}" >__TEMP_INPUT_KEY_FILE
+          chmod 600 __TEMP_INPUT_KEY_FILE
+          scp -o StrictHostKeyChecking=no -v -i __TEMP_INPUT_KEY_FILE -P "22" -r packages/target-electron/dist/preview/* "${{ secrets.USERNAME }}"@"download.delta.chat":"/var/www/html/download/desktop/preview/"
+        continue-on-error: true
+      - name: 'Post links to details'
+        if: steps.upload.outcome == 'success'
+        run: node ./bin/github-actions/postLinksToDetails.js
+        env:
+          PR_BRANCH: ${{ steps.prepare.outputs.branch }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload result to artifacts
+        if: contains(github.event.pull_request.body, '#public-preview') == false || contains(github.event.pull_request.title, 'prepare release') == false || steps.upload.outcome == 'failure'
+        id: upload-github
+        uses: actions/upload-artifact@main
+        with:
+          name: ${{ matrix.os }} output
+          path: packages/target-electron/dist/preview/
+      - name: 'Post links to GitHub artifact to details'
+        if: steps.upload-github.outcome == 'success'
+        run: node ./bin/github-actions/postLinksToDetails.js
+        env:
+          FULL_ARTIFACT_URL: ${{ steps.upload-github.outputs.artifact-url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

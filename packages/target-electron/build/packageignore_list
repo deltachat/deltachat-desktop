@@ -1,0 +1,84 @@
+# syntax is basically https://www.electron.build/configuration/contents#files
+# but the `!` for exclude is added in `gen-electron-builder-config.js`
+
+# default
+**/node_modules/*/{CHANGELOG.md,README.md,README,readme.md,readme}
+**/node_modules/*/{test,__tests__,tests,powered-test,example,examples}
+**/node_modules/*.d.ts
+**/node_modules/.bin
+**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}
+.editorconfig
+**/._*
+**/{.DS_Store,.git,.hg,.svn,CVS,RCS,SCCS,.gitignore,.gitattributes}
+**/{__pycache__,thumbs.db,.flowconfig,.idea,.vs,.nyc_output}
+**/{appveyor.yml,.travis.yml,circle.yml}
+**/{npm-debug.log,yarn.lock,.yarn-integrity,.yarn-metadata.json}
+
+
+# misc unrelated stuff
+CHANGELOG.md
+CONTRIBUTORS.md
+LICENSE
+README_ASSETS/
+README.md
+bin/
+
+## dotfiles like prettier configuration
+.*
+test/
+jenkins/
+ci_scripts/
+**/.github/*
+electron-builder.json5
+package.json
+package-lock.json
+**/.eslintrc.yml
+**/.nycrc
+**/.editorconfig
+**/.eslintignore
+**/Makefile
+
+html-dist/help/**/.keep-dir
+
+# electron builder has problems copying it over in the CI (see https://github.com/deltachat/deltachat-desktop/pull/3876),
+# so we'll do it "manually" in the after pack hook now  
+html-dist/xdcs/
+
+## docs that are hidden in asar are useless
+docs/
+
+## don't bundle other packages
+dist/
+
+# Source files
+src/
+scss/
+static/
+**/*.scss
+**/*.ts
+**/*.d.ts
+_locales/*.xml
+build/
+runtime-electron/
+migration-tests/
+
+# Build artifacts
+tsc-dist/renderer/
+**/*.tsbuildinfo
+**/*.css.map
+html-dist/report.htm
+node_modules/typescript/
+node_modules/@babel/
+
+# sourcemap we don't need
+
+# re-add needed css stuff -> re-adding doesn't seem to work at this point in time
+
+# electron builder stuff
+node_modules/dmg-license
+node_modules/crc
+node_modules/xmlbuilder
+node_modules/verror
+node_modules/plist
+node_modules/node-addon-api
+node_modules/iconv-corefoundation

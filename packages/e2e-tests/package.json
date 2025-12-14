@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "name": "@deltachat-desktop/e2e-tests",
+  "type": "module",
+  "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^20.14.13"
+  },
+  "scripts": {
+    "e2e": "pnpm exec playwright test",
+    "e2e:report": "pnpm exec playwright show-report"
+  }
+}

@@ -1,0 +1,179 @@
+@use 'sass:map';
+@use '../variables';
+
+@use 'sass:math';
+
+.message-list-and-composer {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  // If you want to update this, don't forget to update
+  // the `.background-preview` element as well.
+  background-image: var(--chatViewBgImgPath);
+  background-size: cover;
+  background-color: var(--chatViewBg);
+
+  overflow: hidden;
+
+  .jump-down-button {
+    $heightUnreadCounter: 20px;
+    $heightJumpToBottomButton: 40px;
+    $width: 40px;
+    $height: $heightUnreadCounter + $heightJumpToBottomButton - 5px;
+    $marginBottom: 10px;
+    $marginRight: 10px;
+
+    position: relative;
+    left: calc(100% - #{$width} - #{$marginRight});
+    bottom: calc(-100% + #{$height} + #{$marginBottom});
+    height: $height;
+    width: $width;
+    z-index: variables.$z-index-new-local-scope; // needed for .jump-down-button>.counter
+
+    .counter {
+      position: relative;
+      z-index: map.get(variables.$z-index, jump-down-button-scope-counter);
+      width: 25px;
+      height: 25px;
+      margin: 0 auto;
+      margin-bottom: 0px;
+      border-radius: 100%;
+      background-color: var(--colorPrimary);
+      color: #fff;
+      line-height: 25px;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .counter-3digits {
+      font-size: 11px !important;
+    }
+
+    .button {
+      position: relative;
+
+      height: $heightJumpToBottomButton;
+      margin: 0 auto;
+      padding: 0;
+      border: none;
+      margin-top: -10px;
+      width: $width;
+
+      line-height: $heightJumpToBottomButton;
+      background-color: var(--jumpDownButtonBackgroundColor);
+      border-radius: 100%;
+      box-shadow: 0px 3px 5px #66666630;
+
+      cursor: pointer;
+      .icon {
+        height: $heightJumpToBottomButton;
+        width: $width;
+        background-color: var(--jumpDownButtonIconColor);
+        &.down {
+          mask: url(./images/ic_scroll_down.png) no-repeat center;
+          -webkit-mask: url(./images/ic_scroll_down.png) no-repeat center;
+          mask-size: 65%;
+          -webkit-mask-size: 65%;
+        }
+        &.back {
+          mask: url(./images/ic_scroll_back.svg) no-repeat center;
+          -webkit-mask: url(./images/ic_scroll_back.svg) no-repeat center;
+          mask-size: 65%;
+          -webkit-mask-size: 65%;
+        }
+      }
+    }
+  }
+}
+
+.message-list-and-composer__message-list {
+  position: relative;
+  flex-grow: 1;
+
+  #message-list {
+    position: absolute;
+    bottom: 0;
+    // There is also `will-change: scroll-position` dynamically set on this
+    // element.
+    overflow-y: scroll;
+    max-height: 100%;
+    width: 100%;
+    padding: 0 0.5em;
+
+    scrollbar-color: var(--scrollbarThumb) transparent;
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+  }
+
+  ol {
+    list-style: none;
+    min-width: 200px;
+    margin: 10px 0px;
+
+    li {
+      $margin-bottom: 10px;
+      margin-bottom: $margin-bottom;
+      // This is so that when we `scrollIntoView()` the last message
+      // in the chat, its margin is also scrolled into view.
+      // Otherwise only the visible part of the message would get scrolled
+      // into view, resulting in the message list not getting
+      // scrolled all the way to the bottom,
+      // resulting in the message list not not getting scrolled to the
+      // bottom when another message arrives.
+      scroll-margin-bottom: $margin-bottom;
+      // And this is purely cosmetic. For scrolling to a message
+      // that is above the visible area.
+      $scroll-margin-top: math.div($margin-bottom, 2);
+      scroll-margin-top: $scroll-margin-top;
+
+      min-width: 200px;
+
+      .roving-tabindex {
+        // The contents of the `<li>` are focusable (see `useRovingTabindex`).
+        // Focusing an element inside a scrollable region makes the browser
+        // scroll the focused element into view, so let's also apply the same
+        // margins for it.
+        // This is not as important though, but still nice.
+        //
+        // But ideally we'd probably want to refactor this in such a way that
+        // the focusabe element and the element that we `scrollIntoView()`
+        // when `jumpToMessage` is the same element, so only one
+        // needs `scroll-margin`.
+        scroll-margin-bottom: $margin-bottom;
+        scroll-margin-top: $scroll-margin-top;
+      }
+
+      &::after {
+        visibility: hidden;
+        display: block;
+        font-size: 0;
+        content: ' ';
+        clear: both;
+        height: 0;
+      }
+      &.highlight {
+        -webkit-animation: highlight-fade 3s 1;
+        -moz-animation: highlight-fade 3s 1;
+      }
+
+      @-webkit-keyframes highlight-fade {
+        0% {
+          background-color: var(--messageHightlightColor);
+        }
+        100% {
+          background-color: transparent;
+        }
+      }
+      @-moz-keyframes highlight-fade {
+        0% {
+          background-color: var(--messageHightlightColor);
+        }
+        100% {
+          background-color: transparent;
+        }
+      }
+    }
+  }
+}

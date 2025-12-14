@@ -1,0 +1,11 @@
+.audioPlayer {
+  min-width: 300px;
+  // width: 100%; // does not work in tauri. for now not completely filling is fine, in future we want a fully custom audio element. (one of the forum posts for more background info https://support.delta.chat/t/audio-attachment-design/3391/2)
+
+  // Overwrite user agent styles to make it look a tiny bit better but the real
+  // solution would be using a custom player
+  &::-webkit-media-controls-panel,
+  &::-webkit-media-controls-enclosure {
+    background-color: rgba(200, 200, 200, 0.3);
+  }
+}

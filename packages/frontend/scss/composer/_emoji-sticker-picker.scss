@@ -1,0 +1,151 @@
+@use 'sass:map';
+@use '../variables';
+
+$esp-height: 70vh;
+$esp-header-height: 40px;
+$esp-footer-height: 30px;
+$esp-border-color: #00000017;
+$emojimart-search-height: 31px + 6px;
+
+.emoji-sticker-picker {
+  position: fixed;
+  z-index: map.get(variables.$z-index, emoji-sticker-picker);
+
+  width: 438px;
+  height: $esp-height;
+  inset-inline-end: 13px;
+  bottom: 50px;
+  background-color: var(--picker-Background);
+  border-radius: var(--picker-BorderRadius);
+  overflow: hidden;
+  box-shadow: 0px 0px 0px 1px $esp-border-color;
+
+  div.emoji-or-sticker-header-nav {
+    width: 100%;
+    height: $esp-header-height;
+    display: flex;
+    border-bottom: 1px solid #00000017;
+
+    .selector-button {
+      background: transparent;
+      width: 50%;
+      padding-top: 7px;
+      font-size: large;
+      text-align: center;
+      border: none;
+      border-bottom-style: solid;
+      border-bottom-width: 4px;
+      border-bottom-color: transparent;
+      color: grey;
+
+      &:last-child {
+        float: right; // TODO: do this with flex box instead
+      }
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      &.selected {
+        color: var(--emojiSelectorSelectionColor) !important;
+        border-bottom-color: var(--emojiSelectorSelectionColor) !important;
+      }
+    }
+  }
+
+  div.sticker-picker {
+    height: $esp-height;
+  }
+  .emoji-or-sticker-header-nav ~ div.sticker-picker {
+    height: calc(#{$esp-height} - #{$esp-header-height});
+  }
+
+  div.sticker-picker {
+    background: var(--emojiMartBg);
+    width: 100%;
+    display: flex;
+    overflow: auto;
+    flex-direction: column;
+
+    $pack-title-vertical-padding: 8px;
+    $pack-title-font-size: 16px;
+    $pack-title-line-height: 1.15;
+    .sticker-container {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      padding: 0px 12px 12px;
+      overflow-y: auto;
+
+      // To account for the `position: sticky` title.
+      scroll-padding-top: $pack-title-font-size * $pack-title-line-height +
+        $pack-title-vertical-padding * 2;
+
+      .no-stickers {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+
+        & > .description {
+          font-size: large;
+          text-align: center;
+        }
+      }
+
+      .sticker-pack {
+        & > .title {
+          padding: $pack-title-vertical-padding 0px;
+          color: grey;
+          font-size: large;
+          font-weight: 500;
+          text-transform: capitalize;
+          font-family: var(--font-family);
+          font-size: $pack-title-font-size;
+          line-height: $pack-title-line-height;
+          font-weight: 500;
+          position: sticky;
+          top: -1px;
+          background-color: var(--picker-Background);
+        }
+        & > .container {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+
+          & > .sticker {
+            display: flex;
+            justify-content: center;
+            width: 133px;
+            height: 133px;
+            border-radius: 4px;
+
+            align-items: center;
+            padding: 0;
+            margin: 0;
+            background-color: transparent;
+            border-color: transparent;
+
+            &:hover,
+            &:focus {
+              background-color: lightgrey;
+              cursor: pointer;
+            }
+
+            img {
+              max-height: calc(133px - 6px);
+              max-width: calc(133px - 6px);
+              object-fit: contain;
+            }
+          }
+        }
+      }
+    }
+
+    .sticker-actions-container {
+      border-top: 1px solid $esp-border-color;
+      padding: 0px 12px;
+    }
+  }
+}

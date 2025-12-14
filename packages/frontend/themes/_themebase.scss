@@ -1,0 +1,268 @@
+@use 'sass:color';
+
+$hover-contrast-change: 2%;
+// set light theme variables as fallback
+$themeDarkOrLight: light !default;
+$colorPrimary: #42a5f5 !default;
+$colorDanger: #f96856 !default;
+$colorNone: #a0a0a0 !default;
+$colorLessContrast: #676767 !default;
+
+$textPrimary: #010101 !default;
+$textSecondary: #585a5f !default;
+$accentColor: #2090ea !default;
+
+$bgPrimary: #ffffff !default;
+$bgSecondary: #f5f5f5 !default;
+$bgImage: url('./images/background_light.svg') !default;
+$bgMessageBubbleIncoming: #fff !default;
+$bgMessageBubbleOutgoing: #efffde !default;
+$messageOutgoingStatusColor: #4caf50 !default;
+$bgNavBar: #f8f9fa !default;
+$bgChatView: #e6dcd4 !default;
+$textNavBar: #fff !default;
+
+$btnPrimaryText: #fff !default;
+$btnDangerText: #fff !default;
+$btnDangerBackground: #f96856 !default;
+
+$keybindingHintsBoxBackground: rgba(0, 0, 0, 0.05) !default;
+$keybindingActionBackground: rgba(0, 0, 0, 0.05) !default;
+$keybindingKeyBackground: lightgray !default;
+$keybindingKeyBorder: gray !default;
+$keybindingKeyShadow: rgba(0, 0, 0, 0.35) !default;
+
+$newChatButtonBg: #42a5f5 !default;
+$chatListItemSelectedBg: #e3f2fd !default;
+$scrollbarTransparency: 0.34 !default;
+
+/* Functions */
+@function changeContrast($color, $factor) {
+  @if color.channel($color, 'lightness', $space: hsl) < 50 {
+    @return color.adjust($color, $lightness: $factor);
+  } @else {
+    @return color.adjust($color, $lightness: -$factor);
+  }
+}
+
+@function colorToRGB($color) {
+  @return color.channel($color, 'red', $space: rgb),
+    color.channel($color, 'green', $space: rgb),
+    color.channel($color, 'blue', $space: rgb);
+}
+
+/* Root Variables */
+:root {
+  --themeDarkOrLight: #{$themeDarkOrLight};
+
+  --colorPrimary: #{$colorPrimary};
+  --colorDanger: #{$colorDanger};
+  --colorNone: #{$colorNone};
+  --bgPrimary: #{$bgPrimary};
+  /* Buttons */
+  --buttonPrimaryBackground: #{$colorPrimary};
+  --buttonPrimaryText: #{$btnPrimaryText};
+  --buttonPrimaryHover: #{changeContrast($colorPrimary, 10%)};
+  --buttonSecondaryBackground: #{$bgSecondary};
+  --buttonSecondaryText: #{$textSecondary};
+  --buttonSecondaryHover: #{changeContrast($bgSecondary, 10%)};
+  --buttonDangerText: #{$btnDangerText};
+  --buttonDangerBackground: #{$btnDangerBackground};
+  --buttonDangerHover: #{changeContrast($btnDangerBackground, 10%)};
+  --buttonDisabledBackground: #{changeContrast($bgSecondary, 10%)};
+  --buttonDisabledText: #{changeContrast($textSecondary, 25%)};
+  /* NavBar */
+  --navBarBackground: #{$bgNavBar};
+  --navBarHeight: 50px;
+  --navBarText: #{$textNavBar};
+  --navBarButtonHover: rgba(143, 153, 168, 0.15);
+  --navBarButtonActive: rgba(143, 153, 168, 0.3);
+  --navBarSearchPlaceholder: #{changeContrast($textNavBar, 27%)};
+  --navBarGroupSubtitle: #{changeContrast($textNavBar, 27%)};
+  /* ChatView */
+  --chatViewBg: #{$bgChatView};
+  --chatViewBgImgPath: #{$bgImage};
+  /* ChatView - Composer */
+  --composerBg: #{$bgPrimary};
+  --composerText: #{$textPrimary};
+  --composerPlaceholderText: #{rgba($textPrimary, 0.5)};
+  --composerBtnColor: #{rgba($textPrimary, 0.9)};
+  --composerSendButton: #415e6b;
+  --emojiSelectorSelectionColor: #{$accentColor};
+  /* Chat List */
+  --chatListItemSelectedBg: #{$chatListItemSelectedBg};
+  --chatListItemSelectedBgHover: #{changeContrast(
+      $chatListItemSelectedBg,
+      1% + $hover-contrast-change
+    )};
+  --chatListItemSelectedText: #{$bgPrimary};
+  --chatListItemBgHover: #{changeContrast($bgPrimary, $hover-contrast-change)};
+  --chatListItemBgPinned: #{changeContrast($bgPrimary, 7%)};
+  --chatListItemBgPinnedHover: #{changeContrast(
+      $bgPrimary,
+      7% + $hover-contrast-change
+    )};
+  --chat-list-item-summary-text: #{changeContrast($textPrimary, 33%)};
+  --chat-list-item-archived-label: #{changeContrast($textPrimary, 20%)};
+  --chat-list-item-archived-label-border: #{changeContrast($textPrimary, 33%)};
+  /* Chat List - search */
+  --cli-search-result-divider: #{changeContrast($bgSecondary, 5%)};
+  --cli-search-result-divider-border: #{changeContrast($bgSecondary, 10%)};
+  --cli-search-result-divider-border-width: 2px;
+  /* ContactList / AccountList */
+  --contactListItemBgHover: #{changeContrast(
+      $bgPrimary,
+      $hover-contrast-change
+    )};
+  --contactListItemBgFocus: #{changeContrast($bgPrimary, 12%)};
+  /* Keybindings Cheatsheet */
+  --keybindingHintsBoxBackground: #{$keybindingHintsBoxBackground};
+  --keybindingKeyBackground: #{$keybindingKeyBackground};
+  --keybindingKeyBorder: #{$keybindingKeyBorder};
+  --keybindingKeyFontColor: black;
+  --keybindingKeyShadow: #{$keybindingKeyShadow};
+  --keybindingActionBackground: #{$keybindingActionBackground};
+  /* Floating Action Button */
+  --newChatButtonBg: #{$newChatButtonBg};
+  /* Message Bubble */
+  --messageText: #{$textPrimary};
+  --messageQuotedText: #{changeContrast($textPrimary, 45%)};
+  /* same as message text */
+  --setupMessageText: #ed824e;
+  --infoMessageBubbleBg: #0000008c;
+  --infoMessageBubbleText: white;
+  --messageIncomingBg: #{$bgMessageBubbleIncoming};
+  --messageOutgoingBg: #{$bgMessageBubbleOutgoing};
+  --messageOutgoingStatusColor: #{$messageOutgoingStatusColor}; // Message Bubble - Buttons
+  /* Message Bubble - Metadata */
+  --messageStatusIcon: #4caf50;
+  --messageStatusIconSending: #62656a;
+  --messageMetadataIconColorOutgoing: #4caf50;
+  --messageMetadataIconColorIncoming: #a4a6a9;
+  --messageMetadataDate: #62656a;
+  --messageMetadataIncoming: rgba(#ffffff, 0.7);
+  /* Message Bubble - Attachments */
+  --messageAttachmentIconExtentionColor: #070c14;
+  /* Manual value: This will not get generated in the future */
+  --messageAttachmentIconBg: transparent;
+  /* Manual value: This will not get generated in the future */
+  --messageAttachmentFileInfo: #{$textPrimary};
+  --showInChatButtonBg: #{$colorNone};
+  /* Login Screen */
+  --loginInputFocusColor: #{$colorPrimary};
+  --deltaChatPrimaryFgLight: #{$textSecondary}; // todo rename this var
+  /* Context Menu */
+  --contextMenuBg: #{$bgPrimary};
+  --contextMenuBorder: #{changeContrast($bgSecondary, 10%)};
+  --contextMenuText: #{$textSecondary};
+  --separatorColor: #{$bgSecondary};
+  --bp4DialogHeaderBg: #{$bgPrimary};
+  /* BlueprintJS overwrites, used in code, just weren't renamed for the sake of renaming */
+  --bp4DialogBgSecondary: #{$bgSecondary};
+  --bp4DialogBgPrimary: #{$bgPrimary};
+  --bp4Heading: #{$textPrimary};
+  --bp4InputText: #{$textPrimary};
+  --bp4InputPlaceholder: lightgray;
+  --bp4MenuText: #{$textPrimary};
+  --bp4MenuBg: #{$bgPrimary};
+  --bp4Switch: #7a8084;
+  --bp4SwitchShadow: unset;
+  --bp4SwitchChecked: #acd4e8;
+  --bp4SwitchShadowChecked: unset;
+  --bp4SwitchKnob: #f5f5f5;
+  --bp4SwitchKnobShadow: 0px 2px 0 0px #d2cfcfad;
+  --bp4SwitchKnobChecked: #42a5f5;
+  --bp4SwitchKnobShadowChecked: 0px 1px 0 0px #c9d4d2d1;
+
+  --dialogBackdropBackground: rgba(17, 20, 24, 0.7);
+  --outlineProperties: 1px solid transparent;
+  --delta-dialog-separator: #{$bgSecondary};
+  --delta-dialog-separator-text: #{changeContrast($bgSecondary, 24%)};
+
+  /* progressBar */
+  --progressBarBg: #{changeContrast($bgPrimary, 10%)};
+  --progressBarSuccess: green;
+  --progressBarPrimary: var(--colorPrimary);
+  --progressBarDanger: var(--colorDanger);
+
+  /* Misc */
+  --galleryBg: #{$bgPrimary};
+  --avatarLabelColor: #ffffff; // Manual value: This will not get generated in the future
+  --avatarGradientMixFactor: 80%;
+  --avatarGradientAngle: -45deg;
+  --brokenMediaText: #070c14;
+  --brokenMediaBg: #ffffff;
+  --unreadCountBg: #{$accentColor};
+  --unreadCountLabel: #ffffff; // Manual value: This will not get generated in the future;
+  --contactEmailColor: #{$textSecondary};
+  --errorColor: #f44336;
+  --globalLinkColor: #2090ea; // Manual value: This will not get generated in the future
+  --globalBackground: #{$bgPrimary};
+  --globalText: #{$textPrimary};
+  --globalHoverBg: #{changeContrast($bgPrimary, 3%)};
+  --textLessContrast: #{$colorLessContrast}; // less contrast to background than global text
+  --videoPlayBtnIcon: #{$accentColor};
+  --videoPlayBtnBg: #ffffff; // Manual value: This will not get generated in the future
+  --videoPlayBtnBorder: #eaeaea;
+  --videoPlayBtnBgHover: #eeeeee;
+  --fullScreenMediaButtons: #8b8e91;
+  --messageHightlightColor: rgba(66, 165, 245, 0.8);
+  --addMemberChipBackgroundColor: #{$bgSecondary};
+  --searchInputBackgroundColor: ##666
+    --galleryWebxdcItem: #{changeContrast($bgPrimary, 10%)};
+  --galleryFileRowHover: #{changeContrast($bgPrimary, 7%)};
+  --recently-seen-indicator-color: #34c759;
+
+  /* Emoji, Sticker & App picker overwrites */
+  --picker-Background: #{$bgPrimary};
+  --picker-BorderRadius: 5px;
+  // emoji picker
+  --picker-background-rgb: #{colorToRGB($bgPrimary)};
+  // base color for text, seach placeholder an icons
+  --picker-text-rgb: #{colorToRGB($textPrimary)};
+  //  accent color
+  --picker-accent-rgb: #{colorToRGB($colorPrimary)};
+  //  selected input field bg
+  --picker-selected-input-bg-rgb: #{colorToRGB($bgSecondary)};
+  //  border, scrollbar, in-active search input, emoji hover background
+  --picker-border-and-hover-color: rgb(
+    #{colorToRGB(changeContrast($bgSecondary, 8%))}
+  );
+
+  /** HTML Email Window */
+  --htmlEmail-themeDarkOrLight: #{$themeDarkOrLight};
+  --htmlEmail-background: #{$bgPrimary};
+  --htmlEmail-color: #{$textPrimary};
+  --htmlEmail-border-color: #{changeContrast($bgPrimary, 20%)};
+
+  /** MessageDetails Colors **/
+  --MessageDetails-ReadReceipt-Bg: #{changeContrast($bgPrimary, 10%)};
+  --MessageDetails-ReadReceipt-Date: #{changeContrast($textPrimary, 30%)};
+
+  /** generic reusable colors */
+  --summary-text-color: #{changeContrast($textPrimary, 33%)};
+  --textPrimary: #{$textPrimary};
+  --textSecondary: #{$textSecondary};
+  --iconColorPrimary: #{changeContrast($textPrimary, 20%)};
+
+  @if color.channel($bgPrimary, 'lightness', $space: hsl) < 50 {
+    // dark theme
+    --scrollbarThumb: #{rgba(white, $scrollbarTransparency)};
+    --scrollbarThumbHover: #{rgba(white, $scrollbarTransparency + 0.14)};
+
+    --unreadCountBgMuted: grey;
+
+    --SPECIAL-emoji-picker-category-icon-style: solid;
+  } @else {
+    // light theme
+    --scrollbarThumb: #{rgba(grey, $scrollbarTransparency)};
+    --scrollbarThumbHover: #{rgba(grey, $scrollbarTransparency + 0.14)};
+
+    --jumpDownButtonBackgroundColor: white;
+    --jumpDownButtonIconColor: #808080;
+
+    --unreadCountBgMuted: #b6b6bb;
+
+    --SPECIAL-emoji-picker-category-icon-style: outline;
+  }
+}

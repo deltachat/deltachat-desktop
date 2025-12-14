@@ -1,0 +1,83 @@
+"$schema" = "../gen/schemas/desktop-schema.json"
+
+identifier = "main-window"
+windows = ["main"]
+permissions = [
+    "log:allow-log",
+    # list of core permissions can be found under https://github.com/tauri-apps/tauri/tree/dev/crates/tauri/permissions
+    # or when running `pnpm tauri permission list`
+    "clipboard-manager:allow-read-text",
+    "clipboard-manager:allow-write-image",
+    "clipboard-manager:allow-write-text",
+    "store:allow-get-store",
+    "store:allow-entries",
+    "store:allow-save",
+    "store:allow-get",
+    "store:allow-set",
+    "store:allow-delete",
+    # events - only used for drag and drop
+    "core:event:allow-listen",
+    "core:event:allow-unlisten",
+    # borderless titlebar
+    "core:window:allow-toggle-maximize",
+    "core:window:allow-start-dragging",
+    # open current logfile & open links
+    # "opener:allow-open-path" is defined in src/runtime_capabilities.rs
+    "opener:allow-open-url",
+    "opener:allow-default-urls",
+
+    # Badge counter
+    "core:window:allow-set-badge-count",
+    # This is only needed for Windows.
+    "core:window:allow-set-overlay-icon",
+
+    "allow-set-main-window-channels",
+    "allow-get-frontend-run-config",
+    "allow-deltachat-jsonrpc-request",
+
+    "allow-ui-ready",
+    "allow-ui-frontend-ready",
+
+    "allow-get-current-logfile",
+    "allow-copy-image-to-clipboard",
+    "allow-get-autostart-state",
+    "allow-get-app-path",
+    "allow-get-clipboard-image-as-data-uri",
+    "allow-download-file",
+    "allow-show-open-file-dialog",
+    "allow-get-locale-data",
+    "allow-change-lang",
+    "allow-write-temp-file-from-base64",
+    "allow-write-temp-file",
+    "allow-remove-temp-file",
+    "allow-copy-blob-file-to-internal-tmp-dir",
+    "allow-copy-background-image-file",
+
+    "allow-on-webxdc-message-changed",
+    "allow-on-webxdc-message-deleted",
+    "allow-on-webxdc-status-update",
+    "allow-on-webxdc-realtime-data",
+    "allow-delete-webxdc-account-data",
+    "allow-close-all-webxdc-instances",
+    "allow-open-webxdc",
+    "allow-debug-get-datastore-ids",
+
+    "allow-get-runtime-info",
+    "allow-change-desktop-settings-apply-side-effects",
+
+    "allow-open-help-window",
+    "allow-open-html-window",
+
+    "allow-update-tray-icon-badge",
+
+    "allow-get-available-themes",
+    "allow-get-current-active-theme-address",
+    "allow-get-theme",
+
+    "allow-show-notification",
+    "allow-clear-notifications",
+    "allow-clear-all-notifications",
+    "allow-check-media-permission",
+    "allow-request-media-permission",
+    "allow-drag-file-out",
+]

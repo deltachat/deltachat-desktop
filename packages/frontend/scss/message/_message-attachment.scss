@@ -1,0 +1,227 @@
+@use '../mixins';
+@use '../variables';
+// "Has content above" selector
+// (i.e. author title, "Forwarded" indicator, quote).
+//
+// Note that `.can-hide` means `display: none;`
+// only on non-experimental themes.
+// But TBH we don't care about the other themes too much.
+@mixin attachment-has-content-above {
+  // Has a preceding element
+  *:not(.can-hide) + &,
+  // Has a parent that has a preceding element
+  .msg-container *:not(.can-hide) + * & {
+    @content;
+  }
+}
+
+.message-attachment-media {
+  @include mixins.button-reset;
+  display: block;
+
+  // Entirely to ensure that images are centered if they aren't full width of bubble
+  text-align: center;
+  position: relative;
+
+  margin-inline-start: calc(-1 * var(--msg-container-padding-horizontal));
+  margin-inline-end: calc(-1 * var(--msg-container-padding-horizontal));
+  width: calc(100% + 2 * var(--msg-container-padding-horizontal));
+  margin-top: calc(-1 * var(--msg-container-padding-top));
+  margin-bottom: -12px;
+
+  border-radius: 16px;
+  overflow: hidden;
+
+  background-color: var(--messageAttachmentIconBg);
+  /**
+   * we need a fix height for images to prevent reflow when the image loads
+   * till we have a better solution (more flexible) we allow a maximum height
+   * of 200px for all images in landscape mode and 300px for portrait mode
+   *
+   * for higher values (than 200px) we have to add media queries otherwise
+   * messages with images get strange paddings on small windows
+   *
+   * The same goes for `.quoted-image`.
+   */
+  & > .attachment-content {
+    object-fit: cover;
+    object-position: center;
+    max-width: 450px;
+    min-width: 200px;
+    &.sticker {
+      min-width: auto;
+    }
+
+    // The padding on the bottom of the bubble produces 4 extra pixels of space at the
+    //   bottom, so this doesn't match up with the padding numbers above.
+    margin-bottom: -4px;
+
+    // redundant with attachment-container, but we get cursor flashing on move otherwise
+    cursor: pointer;
+
+    &.video-content {
+      height: 350px;
+      min-width: 300px;
+      background-color: black;
+      object-fit: scale-down;
+    }
+  }
+
+  & > .video-play-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 48px;
+    height: 48px;
+    background-color: var(--videoPlayBtnBg);
+    border-radius: 24px;
+
+    & > .video-play-btn-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      height: 36px;
+      width: 36px;
+      @include mixins.color-svg('./images/play.svg', var(--videoPlayBtnIcon));
+    }
+  }
+
+  &.content-below {
+    margin-bottom: 7px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+  }
+
+  @include attachment-has-content-above {
+    margin-top: 4px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+  }
+}
+@media (max-width: variables.$breakpoint-messagelist) {
+  .message-attachment-media {
+    & > .attachment-content {
+      max-width: 100%;
+      &.portrait {
+        max-width: 100%;
+      }
+    }
+  }
+}
+
+.message-attachment-broken-media {
+  @include mixins.button-reset;
+  display: block;
+
+  font-size: 11px;
+  line-height: 16px;
+  letter-spacing: 0.3px;
+
+  padding: 10px;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--brokenMediaBg);
+
+  &.incoming {
+    color: var(--brokenMediaText);
+  }
+}
+
+.message-attachment-audio {
+  margin-top: 2px;
+  display: block;
+  max-width: 100%;
+
+  &.content-below {
+    margin-bottom: 5px;
+  }
+
+  @include attachment-has-content-above {
+    margin-top: 6px;
+  }
+}
+
+.message-attachment-generic {
+  @include mixins.button-reset;
+
+  display: flex;
+  flex-direction: row;
+
+  &.content-below {
+    padding-bottom: 6px;
+  }
+
+  @include attachment-has-content-above {
+    padding-top: 4px;
+  }
+
+  & > .file-icon {
+    background: url('./images/file-gradient.svg') no-repeat center;
+    height: 44px;
+    width: 56px;
+    margin-inline-start: -13px;
+    margin-inline-end: -14px;
+    margin-bottom: -4px;
+
+    // So we can center the extension text inside this icon
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    & > .file-extension {
+      font-size: 10px;
+      line-height: 13px;
+      letter-spacing: 0.1px;
+      text-transform: uppercase;
+
+      // Along with flow layout in parent item, centers text
+      text-align: center;
+      width: 25px;
+      margin-inline-start: auto;
+      margin-inline-end: auto;
+
+      // We don't have much room for text here, cut it off without ellipse
+      overflow-x: hidden;
+      white-space: nowrap;
+      text-overflow: clip;
+
+      color: var(--messageAttachmentIconExtentionColor);
+      font-family: monospace;
+    }
+  }
+
+  & > .text-part {
+    flex-grow: 1;
+    margin-inline-start: 8px;
+    // The width of the icon plus our 8px margin
+    max-width: calc(100% - 37px);
+
+    & > .name {
+      color: var(--messageAttachmentFileInfo);
+      font-size: 14px;
+      line-height: 18px;
+      font-weight: 300;
+      margin-top: 2px;
+
+      // Handling really long filenames - cut them off
+      overflow-x: hidden;
+      display: inline-block;
+      white-space: pre-line;
+      user-select: text;
+      position: relative;
+      word-break: break-all;
+    }
+
+    & > .size {
+      color: var(--messageAttachmentFileInfo);
+      font-size: 11px;
+      line-height: 16px;
+      letter-spacing: 0.3px;
+      margin-top: 3px;
+    }
+  }
+}

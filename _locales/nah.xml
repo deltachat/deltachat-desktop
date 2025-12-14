@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <!-- common strings without special context -->
+    <string name="app_name">Delta Chat</string>
+    <string name="ok">Kwalli</string>
+    <string name="cancel">Axkanah</string>
+    <string name="clear_search">Xikixpolo</string>
+    <string name="yes">Kena</string>
+    <string name="no">Amo</string>
+    <string name="select">Xikpehpena</string>
+    <string name="on">Tlikwitok</string>
+    <string name="off">Sewtok</string>
+    <string name="info">Itechpa</string>
+    <string name="emoji">Emoji</string>
+    <string name="always">Nochipa</string>
+    <string name="now">Naman</string>
+    <!-- Shown beside messages that are "N hours old". Prefer short strings, or well-known abbreviations. -->
+    <plurals name="n_hours">
+        <item quantity="one">%d kawitl</item>
+        <item quantity="other">%d kawitl</item>
+    </plurals>
+    <plurals name="n_members">
+        <item quantity="one">%d masewalli</item>
+        <item quantity="other">%d masewalmeh</item>
+    </plurals>
+    <string name="gif">GIF</string>
+    <string name="images">Tlaixkopinalli</string>
+    <string name="audio">Kakistli</string>
+    <string name="voice_message">Tlahtolkopinalli</string>
+    <string name="video">Tlamawisolli</string>
+    <string name="gallery">Ixkopinpamitl</string>
+    <string name="file">Amatl</string>
+    <string name="files">Amatinih</string>
+    <string name="green">Xoxowik</string>
+    <string name="red">Chichiltik</string>
+    <string name="blue">Asoltik</string>
+    <string name="orange">Chilkostik</string>
+    <string name="purple">Kamohtik</string>
+    <string name="white">Chipawak</string>
+
+    <string name="menu_new_group">Yankwik nechikolli</string>
+    <string name="tab_group">Nechikolli</string>
+    <string name="tab_gallery">Ixkopinpamitl</string>
+    <string name="tab_docs">Amatinih</string>
+    <string name="pref_appearance">Iixneska</string>
+    <string name="pref_language">Tlahtolli</string>
+    <string name="pref_other">Seyok</string>
+    <string name="pref_show_emails_all">Nochi</string>
+    <string name="qrscan_fingerprint_label">Mahpilixmachiyotilli</string>
+    <string name="notify_new_message">Yankwik ehekatlahkwilolli</string>
+    <string name="global_menu_preferences_language_desktop">Tlahtolli</string>
+    <string name="global_menu_file_desktop">Amatl</string>
+    <string name="global_menu_edit_desktop">Xikpatla</string>
+    <string name="name_desktop">Tokaitl</string>
+    </resources>

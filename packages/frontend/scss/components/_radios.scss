@@ -1,0 +1,41 @@
+.radiogroup {
+  border: none;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  gap: 10px;
+  & > .radiobutton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    & > input {
+      margin: 0 3px 0 0;
+    }
+    & > img {
+      height: 36px;
+      width: 36px;
+    }
+    & > label {
+      padding-inline-start: 7px;
+      padding-inline-end: 4px;
+      display: inline-flex;
+      justify-content: space-between;
+      flex-direction: column;
+      & > span:nth-child(1) {
+        // the label
+        color: var(--bp4InputText);
+      }
+      & > span:nth-child(2) {
+        // the subtitle
+        color: var(--bp4InputPlaceholder);
+      }
+      &.subtitle-height {
+        height: 36px;
+      }
+      &.no-subtitle {
+        justify-content: center;
+      }
+    }
+  }
+}

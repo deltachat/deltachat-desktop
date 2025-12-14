@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "module": "NodeNext",
+    "target": "es2022",
+    "allowJs": false,
+    "strictNullChecks": true,
+    "strict": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "NodeNext"
+  },
+  "include": ["./**/*.ts", "./**/*.js", "../../_locales/*.json"],
+  "exclude": ["./ts-compiled-for-tests"]
+}

@@ -1,0 +1,298 @@
+@use 'sass:map';
+@use 'variables';
+
+* {
+  box-sizing: border-box;
+  font-variant-ligatures: none;
+}
+
+html {
+  height: 100%;
+
+  // Since we're managing the color scheme (theme) manually,
+  // let's specify that we're only supporting this color scheme (dark or light).
+  // This affects some default styles, such as outline color and
+  // input (radio buttons, etc) colors.
+  // Outline color is important, because if we don't do this,
+  // the outline is barely visible on dark theme on Tauri on Windows.
+  color-scheme: var(--themeDarkOrLight);
+}
+
+body {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  font-size: 14px;
+  color: var(--globalText);
+  background-color: var(--globalBackground);
+  cursor: default;
+
+  &:not(.system-fonts) {
+    --font-family: var(--fonts-default);
+    font-family: var(--font-family);
+  }
+  &.system-fonts {
+    --font-family: var(--fonts-system);
+    font-family: var(--font-family);
+  }
+
+  /*
+  prevent moving around of the whole app with the touchpad gestures on tauri windows
+  see https://github.com/deltachat/deltachat-desktop/issues/5075
+  */
+  overscroll-behavior: none;
+}
+
+#color-input-wrapper {
+  position: absolute;
+  touch-action: none;
+  z-index: 0;
+  user-select: none;
+  pointer-events: none;
+  opacity: 0;
+}
+
+ol,
+ul {
+  list-style: none;
+  padding-inline-start: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+p,
+button > span,
+label {
+  user-select: none;
+}
+
+button {
+  cursor: pointer;
+  font-size: inherit;
+  user-select: none;
+}
+
+a {
+  color: var(--globalLinkColor);
+}
+
+.SelectGroupImage {
+  width: 100px;
+}
+
+.GroupImage {
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
+}
+
+.RemoveGroupImage {
+  width: 100px;
+  margin-bottom: 4px;
+}
+
+$unread-badge-size: 21px;
+
+input[type='text'],
+input[type='search'],
+textarea {
+  &:active,
+  &:focus {
+    outline: 1px solid variables.$color-global-textarea-outline;
+  }
+}
+
+//yellow/blue border fix
+button:focus:not(:focus-visible) {
+  outline: none;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbarThumb) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 0;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--globalBackground);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbarThumb);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbarThumbHover);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+code {
+  background-color: rgba(0, 0, 0, 0.25);
+  border-radius: 0.8pt;
+  padding: 0.4pt 3pt;
+}
+
+.sharp-pixel-image {
+  -ms-interpolation-mode: nearest-neighbor;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -o-crisp-edges;
+  image-rendering: pixelated;
+}
+
+// toast for errors and success messages
+.user-feedback {
+  position: fixed;
+  top: 60px;
+  text-align: center;
+  width: 100%;
+  z-index: map.get(variables.$z-index, user-feedback);
+  pointer-events: none;
+
+  p {
+    display: inline-block;
+    text-align: center;
+    font-style: italic;
+    font-weight: bold;
+    padding: 10px 15px;
+    background-color: #696868;
+    border-radius: 50px;
+    color: white;
+    font-size: medium;
+    max-width: 90%;
+    pointer-events: all;
+  }
+  &.error p {
+    background-color: #b73a3a;
+  }
+  &.success p {
+    background-color: #415e6b;
+  }
+}
+
+.crash-screen {
+  padding: 10px;
+
+  h1,
+  h2,
+  code,
+  pre {
+    user-select: text;
+  }
+
+  p {
+    margin-top: 20px;
+  }
+
+  pre.error-details {
+    background-color: rgba(177, 10, 10, 0.25);
+    padding: 10px;
+    overflow-x: scroll;
+    font-family: monospace;
+  }
+
+  code {
+    background-color: none;
+  }
+}
+
+/* force usage of our emoji font in code blocks */
+code,
+kbd,
+samp {
+  font-family: monospace, var(--emojifonts);
+}
+
+.main-container-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+
+.main-container {
+  display: flex;
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+:root {
+  overscroll-behavior: none;
+}
+
+// tauri: normalization fix, because user stylesheet of chrome sets audio elements to 300px
+audio {
+  width: 300px;
+}
+
+// used on electron and tauri runtime (it is handled by tauri, this class is for electron)
+// means element is non-interactable and area can be used to window drag around
+*[data-tauri-drag-region] {
+  // so it can be used to drag the window around
+  -webkit-app-region: drag;
+}
+
+// used on electron and tauri runtime
+// (on tauri this is not nessesary, as tauri does not have the issue that all child elements also become drag areas
+// means element is interactable and area can not be used to window drag around
+*[data-no-drag-region] {
+  -webkit-app-region: no-drag;
+}
+
+#drag-area-visualisation {
+  background-color: transparent;
+  opacity: 0.5;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+// used in alert & confirmation dialogs
+p.whitespace {
+  white-space: break-spaces;
+}
+
+// Only for screen-readers.
+// Taken from
+// https://github.com/twbs/bootstrap/blob/4c98145482719f5113ca31e389a7be07c5404e13/scss/mixins/_visually-hidden.scss#L3-L22
+.visually-hidden {
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important; // Fix for https://github.com/twbs/bootstrap/issues/25686
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+
+  // Fix for positioned table caption that could become anonymous cells
+  &:not(caption) {
+    position: absolute !important;
+  }
+}
+
+/**
+ * Forms inside dialogs should not affect the layout,
+ */
+dialog form {
+  display: contents;
+}

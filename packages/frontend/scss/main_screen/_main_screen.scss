@@ -1,0 +1,76 @@
+@use '../mixins';
+
+// FYI there is also `MainScreen/styles.module.scss`.
+
+.main-screen {
+  flex-grow: 1;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+
+  .backButton {
+    $backBtnText: white;
+    .backButtonIcon {
+      background-color: $backBtnText;
+    }
+
+    &:hover {
+      background-color: rgba(143, 153, 168, 0.15);
+    }
+  }
+
+  .navbar-chat-name {
+    font-size: medium;
+    font-weight: bold;
+    display: flex;
+    user-select: none;
+
+    .truncated {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .chat_property_icons {
+      display: inline-block;
+      --chat-property-icon-size: 1em;
+      // about 1 white space's width
+      margin-inline-start: 0.3em;
+
+      .disapearing-messages-icon,
+      img.verified-icon {
+        width: var(--chat-property-icon-size);
+        height: var(--chat-property-icon-size);
+        vertical-align: middle;
+        // move it up a little bit so it looks more centered
+        transform: translate(0px, -0.07em);
+        margin-inline-start: 0;
+        margin-inline-end: 0.16em;
+      }
+
+      .disapearing-messages-icon {
+        display: inline-block;
+        @include mixins.color-svg(
+          './images/clock.svg',
+          var(--navBarGroupSubtitle)
+        );
+      }
+    }
+  }
+
+  .navbar-chat-subtitle {
+    font-size: small;
+    font-weight: 100;
+    cursor: pointer;
+    color: var(--navBarGroupSubtitle);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    user-select: none;
+  }
+
+  .no-chat-selected-screen {
+    width: 70%;
+    height: 100%;
+    margin-top: 50px;
+    text-align: center;
+  }
+}

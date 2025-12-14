@@ -1,0 +1,24 @@
+.contactName {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.contactNameDisplay {
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.contactNameTruncated {
+  text-overflow: ellipsis;
+  display: block;
+  overflow: hidden;
+}
+
+.contactNameAddress {
+  color: var(--contactEmailColor);
+  margin-top: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

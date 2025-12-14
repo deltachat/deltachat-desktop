@@ -1,0 +1,14 @@
+"$schema" = "../gen/schemas/desktop-schema.json"
+
+identifier = "html-email-viewer-header"
+# Allow _only_ for the header webview,
+# which has no user-controlled HTML content.
+webviews = ["html-window:*-header"]
+permissions = [
+    "allow-html-email-set-load-remote-content",
+    "allow-html-email-open-menu",
+    "allow-get-html-window-info",
+
+    "allow-get-current-active-theme-address",
+    "allow-get-theme",
+]

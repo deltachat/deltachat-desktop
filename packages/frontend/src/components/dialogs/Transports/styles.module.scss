@@ -1,0 +1,61 @@
+.container {
+  margin-inline-start: 30px;
+  margin-inline-end: 10px;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+.transportRow {
+  display: flex;
+  border-bottom: 1px solid var(--separatorColor);
+  padding: 10px 0 10px 10px;
+  justify-content: space-between;
+  &:hover {
+    background-color: var(--globalHoverBg);
+  }
+  & > div {
+    display: flex;
+  }
+  .transportRadioButton {
+    display: flex;
+    flex-grow: 1;
+    padding-inline-end: 10px;
+    input {
+      cursor: pointer;
+    }
+  }
+  .transportItem {
+    cursor: pointer;
+  }
+}
+
+$iconSize: 1.3em;
+
+.trash,
+.edit {
+  mask-size: $iconSize !important;
+  -webkit-mask-size: $iconSize !important;
+  width: $iconSize !important;
+  height: $iconSize !important;
+}
+
+.deleteButton,
+.editButton {
+  padding: 0 !important;
+}
+
+// Apply margin when editButton is the last child in its parent
+.editButton:last-child {
+  margin-inline-end: 30px;
+}
+
+.buttonsContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.addTransportButton {
+  padding: 10px;
+}

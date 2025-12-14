@@ -1,0 +1,50 @@
+name: Build for windows store (appx unsigned)
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  upload-preview:
+    runs-on: windows-latest
+    name: Upload Preview
+    steps:
+    # Preperation
+    - uses: actions/checkout@v1
+    - name: Use Node.js 22.x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22.x
+    # Building JS
+    - name: pnpm install, build
+      run: |
+        npm i -g pnpm
+        pnpm install --frozen-lockfile
+        cd packages/target-electron
+        pnpm build
+        pnpm run pack:generate_config
+        pnpm run pack:patch-node-modules
+    # Packaging and processing
+    - name: WINDOWS electron builder
+      if: runner.os == 'Windows'
+      env:
+       NODE_ENV: production
+      run: |
+        cd packages/target-electron
+        set DEBUG=electron-builder
+        pnpm electron-builder --win appx
+    - name: WINDOWS renaming / upload Preperation
+      working-directory: packages/target-electron/dist
+      run: |
+        dir
+        mkdir preview
+        move Delta*Chat*.appx preview/
+        dir preview
+        cd ..
+    # Upload Step
+    - name: Upload result to artifacts
+      uses: actions/upload-artifact@main
+      with:
+        name: windows appx release
+        path: packages/target-electron/dist/preview/

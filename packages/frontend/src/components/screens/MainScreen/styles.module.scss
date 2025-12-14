@@ -1,0 +1,157 @@
+@use '../../../../scss/mixins';
+
+// FYI there is also `_main_screen.scss`.
+
+:global(.main-screen.small-screen.chat-view-open) {
+  .chatListAndHeader {
+    display: none;
+  }
+}
+:global(.main-screen.small-screen:not(.chat-view-open)) {
+  .chatAndNavbar {
+    display: none;
+  }
+}
+
+@mixin navbar {
+  height: var(--navBarHeight);
+  background-color: var(--navBarBackground);
+  color: var(--navBarText);
+  border-bottom: var(--outlineProperties);
+  // Just in case the "main" section below the navbar decides
+  // to do something like `height: 100%` instead of `flex-grow: 1`.
+  flex-shrink: 0;
+}
+
+.chatListAndHeader {
+  display: flex;
+  flex-direction: column;
+
+  // See below, `.chatAndNavbar`'s flex-grow.
+  width: 0;
+  flex-grow: 3;
+
+  min-width: 295px;
+
+  .chatListHeader {
+    @include navbar;
+    display: flex;
+    align-items: center;
+    padding: 0px 10px;
+
+    .archivedChatsTitle {
+      flex: 1 1 auto;
+      overflow-x: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-size: 18px;
+      user-select: none;
+    }
+  }
+}
+.chatAndNavbar {
+  // Otherwise e.g. the contents of the gallery view
+  // (tabs, sepcifically) will refuse to shrink,
+  // and this element (`.chatAndNavbar`) will overflow the parent.
+  // Also this ensures that `.chatListAndHeader` and `.chatAndNavbar`
+  // take respectively 3 and 8 parts of the width of the parent
+  // on wide screens.
+  width: 0;
+  flex-grow: 8;
+
+  display: flex;
+  flex-direction: column;
+
+  .chatNavbar {
+    @include navbar;
+    display: flex;
+    align-items: center;
+    padding: 0px;
+
+    .chatNavbarHeadingWrapper {
+      // Otherwise it will refuse to truncate the chat name
+      // and will make the parent overflow instead.
+      width: 0;
+      flex-grow: 1;
+    }
+    :global(.navbar-heading) {
+      position: relative;
+
+      width: fit-content;
+      // See `.chatNavbarHeadingWrapper`.
+      max-width: 100%;
+
+      display: flex;
+      align-items: center;
+      padding-inline-start: 5px;
+      margin-inline-end: 0px;
+      overflow-x: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-size: 18px;
+      font-weight: bold;
+      overflow: hidden;
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-size: inherit;
+        font-weight: inherit;
+        display: block;
+        margin: 0;
+      }
+    }
+    :global(.navbar-heading-chat-info-button) {
+      // Fill the parent, overlay the siblings.
+      position: absolute;
+      inset: 0;
+      background-color: transparent;
+      border: none;
+    }
+
+    :global(.views) {
+      display: flex;
+      margin-top: 7px;
+    }
+
+    :global(.navbar-button) {
+      padding: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 0;
+      margin-inline-end: 12px;
+      &:hover {
+        background-color: var(--navBarButtonHover);
+      }
+    }
+
+    :global(#three-dot-menu-button) {
+      height: 20px;
+    }
+  }
+}
+
+.webxdcIcons {
+  margin: -2px 12px -2px 0px;
+  img.webxdcIcon {
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    border-radius: 3px;
+    background-color: #fff;
+  }
+}
+
+.webxdcIconButton {
+  display: inline-block !important;
+  margin: 0;
+  margin-inline-end: 10px;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  &:last-child {
+    margin-inline-end: 0;
+  }
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <!-- common strings without special context -->
+    <string name="app_name">Дилтачат</string>
+    <string name="ok">Хуб</string>
+    <string name="cancel">Бекор</string>
+    <string name="yes">Бале</string>
+    <string name="no">Не</string>
+    <string name="select">Интихоб</string>
+    <string name="on">Фаъол</string>
+    <string name="off">Хомӯш</string>
+    <string name="def">Пешфарз</string>
+    </resources>

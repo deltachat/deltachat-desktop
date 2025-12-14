@@ -1,0 +1,92 @@
+{
+  "no_account_selected": {
+    "message": "No profile selected"
+  },
+  "pref_background_sync_disabled": {
+    "message": "Only Synchronize Selected Profile"
+  },
+  "explain_background_sync_disabled": {
+    "message": "Other profiles will be deactivated and get no notifications."
+  },
+  "background_sync_disabled_explaination": {
+    "message": "Background sync disabled, profile is only synced when selected"
+  },
+  "webxdc_beforeunload_dialog_title": {
+    "message": "Close app?"
+  },
+  "webxdc_beforeunload_dialog_message": {
+    "message": "This app is asking you to confirm that you want to close it.\nChanges you made may not be saved."
+  },
+  "camera_access_failed": {
+    "message": "Could not access video camera. You might want to check your video permissions or if the camera is used already by another program"
+  },
+  "search_in": {
+    "message": "Search in %1$s"
+  },
+  "read_by": {
+    "message": "Read by"
+  },
+  "join_group": {
+    "message": "Join Group"
+  },
+  "explain_desktop_browser_disabled_tray_pref": {
+    "message": "Tray icon does exist in the web version, install the full version from https://get.delta.chat"
+  },
+  "react_more_emojis": {
+    "message": "More emojis…"
+  },
+  "contact_is_blocked": {
+    "message": "This contact is blocked"
+  },
+  "multidevice_connection_takes_too_long": {
+    "message": "This takes longer than expected 🐌 make sure both devices are on the same Wi-Fi or network and check troubleshooting"
+  },
+  "search_result_for_x": {
+    "message": "Result for \"%s\""
+  },
+  "voice_send": {
+    "message": "Record a voice message"
+  },
+  "stop_recording": {
+    "message": "Finish recording"
+  },
+  "pref_autostart": {
+    "message": "Autostart"
+  },
+  "pref_autostart_registered": {
+    "message": "Delta Chat is currently registered to startup with the system"
+  },
+  "pref_autostart_not_registered": {
+    "message": "Delta Chat is not registered to startup with the system"
+  },
+  "pref_autostart_not_supported": {
+    "message": "Autostart is not supported on this system"
+  },
+  "need_to_be_logged_in": {
+    "message": "Please log in first"
+  },
+  "need_to_be_logged_out": {
+    "message": "Please log out first"
+  },
+  "please_enter_channel_name": {
+    "message": "Please enter channel name"
+  },
+  "edit_channel": {
+    "message": "Edit Channel"
+  },
+  "chat_list_item_menu_label": {
+    "message": "Actions with Chat"
+  },
+  "accounts_list_item_menu_label": {
+    "message": "Actions with Profile"
+  },
+  "instant_onboarding_confirm_channel": {
+    "message": "Do you want to create a new profile and join the channel \"%1$s\"?"
+  },
+  "secure_join_channel_started": {
+    "message": "%1$s invited you to join this channel.\n\nWaiting for the device of %2$s to reply…"
+  },
+  "stats_msg_body": {
+    "message": "The attachment contains anonymous usage statistics, which help us improve Delta Chat. Thank you!"
+  }
+}

@@ -1,0 +1,19 @@
+.dialog-about__dc-details {
+  overflow-y: scroll;
+  font-family: 'Courier New', Courier, monospace;
+
+  .key {
+    opacity: 0.8;
+    font-weight: bold;
+    width: 200px;
+  }
+
+  .value {
+    user-select: all;
+    word-break: break-word;
+  }
+
+  tr:nth-child(odd) {
+    background-color: var(--bp4DialogBgSecondary);
+  }
+}

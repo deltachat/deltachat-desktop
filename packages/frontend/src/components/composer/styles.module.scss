@@ -1,0 +1,9 @@
+$esp-height: 70vh;
+$esp-header-height: 40px;
+
+.emojiPicker {
+  height: $esp-height;
+}
+:global(.emoji-or-sticker-header-nav) ~ .emojiPicker {
+  height: calc(#{$esp-height} - #{$esp-header-height});
+}

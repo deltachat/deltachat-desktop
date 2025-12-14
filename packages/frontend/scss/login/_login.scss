@@ -1,0 +1,240 @@
+.login-form {
+  p.text {
+    color: var(--deltaChatPrimaryFgLight);
+    white-space: pre-line;
+    line-height: 20px;
+  }
+
+  p.delta-headline {
+    font-weight: bold;
+  }
+
+  button.advanced {
+    background-color: transparent;
+    color: var(--loginInputFocusColor);
+    border: none;
+    font-size: 16px;
+    display: block;
+    width: 100%;
+    margin-top: 30px;
+    text-align: left;
+    &:dir(rtl) {
+      text-align: right;
+    }
+    &:hover {
+      cursor: pointer;
+    }
+    p {
+      margin-inline-start: 8px;
+      display: -webkit-inline-box;
+      position: relative;
+      font-size: 18px;
+      margin-bottom: 0px;
+      bottom: 3px;
+    }
+
+    div.advanced-icon {
+      width: 20px;
+      height: 20px;
+      -webkit-mask: url(./images/icons/cross.svg) no-repeat center;
+      -webkit-mask-size: 100%;
+      background-color: var(--loginInputFocusColor);
+      display: -webkit-inline-box;
+      transform: rotate(45deg);
+
+      &.opened {
+        transform: rotate(0);
+      }
+    }
+  }
+
+  .before-login-hint {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 5px;
+
+    background-color: #fdf7b2;
+    color: #101010;
+
+    &.broken {
+      background-color: #f9d7d7;
+      color: #c70404;
+    }
+
+    p {
+      user-select: text;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: underline;
+    }
+  }
+}
+
+div.delta-form-group {
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 15px;
+  position: relative;
+
+  label {
+    height: 13px;
+    font-size: 13px;
+    line-height: 13px;
+    width: 100%;
+    color: var(--deltaChatPrimaryFgLight);
+    &:not(.alwaysShow):has(~ input.isEmpty:not(:focus)),
+    &:not(.alwaysShow):has(~ textarea.isEmpty:not(:focus)) {
+      // A native placeholder is shown, we can hide the label
+      // so as to not duplicate the text.
+      visibility: hidden;
+    }
+  }
+  &:focus-within {
+    label {
+      color: var(--loginInputFocusColor);
+    }
+  }
+
+  div.right-element {
+    position: absolute;
+    right: 7px;
+    bottom: 7px;
+
+    // make buttons smaller
+    button {
+      padding: 3px;
+    }
+  }
+
+  &.delta-select {
+    .delta-select-inner {
+      width: 100%;
+
+      select {
+        width: 100%;
+        height: 30px;
+        display: inline-flex;
+        flex-direction: row;
+        appearance: none;
+        align-items: center;
+        text-align: left;
+        vertical-align: middle;
+        cursor: pointer;
+        border: none;
+        box-shadow: none;
+        background: none;
+        color: var(--deltaChatPrimaryFgLight);
+        font-size: 17px;
+        padding: 0 10px 0 0;
+        &:hover,
+        &:focus {
+          outline: unset;
+          outline-offset: unset;
+        }
+      }
+      &::after {
+        position: absolute;
+        pointer-events: none;
+        top: 13px;
+        right: 7px;
+        content: '^';
+        font:
+          17px 'Consolas',
+          monospace;
+        transform: rotate(180deg);
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-font-smoothing: antialiased;
+        letter-spacing: normal;
+      }
+    }
+  }
+
+  &.delta-input {
+    input {
+      appearance: none;
+      border: none;
+      color: var(--bp4InputText);
+      font-size: 16px;
+      font-weight: 400;
+      height: 30px;
+      line-height: 30px;
+      outline: none;
+      vertical-align: middle;
+      padding: unset;
+      border-radius: unset;
+      background: none;
+      box-shadow: none;
+      border-bottom: 1px solid var(--deltaChatPrimaryFgLight);
+
+      &:focus {
+        border-bottom-color: var(--loginInputFocusColor);
+        color: var(--loginInputFocusColor);
+      }
+
+      &:focus::placeholder {
+        color: transparent;
+      }
+    }
+  }
+
+  textarea {
+    width: 100%;
+    padding: 0px;
+    margin-top: 5px;
+    border: none;
+    border-radius: 0px;
+    border-bottom: 1px solid;
+    border-bottom-color: var(--deltaChatPrimaryFgLight);
+    background-color: transparent;
+    color: var(--bp4InputText);
+    font-size: 16px;
+    font-family: inherit;
+    box-shadow: none !important;
+    resize: vertical;
+    field-sizing: content;
+
+    &:focus,
+    &:active {
+      outline: none;
+      border-bottom-color: var(--loginInputFocusColor);
+      color: var(--loginInputFocusColor);
+      &::placeholder {
+        color: transparent;
+      }
+    }
+
+    &:hover {
+      outline: none;
+    }
+  }
+}
+
+div.delta-progress-bar {
+  width: 100%;
+  background-color: var(--progressBarBg);
+  height: 8px;
+  margin-block: 21pt;
+  --progressBarBorderRadius: 5px;
+  border-radius: var(--progressBarBorderRadius);
+
+  div.bar {
+    background: var(--progress-bar-color);
+    height: 100%;
+    border-radius: var(--progressBarBorderRadius);
+  }
+
+  &.delta-intent-primary {
+    --progress-bar-color: var(--progressBarPrimary);
+  }
+
+  &.delta-intent-success {
+    --progress-bar-color: var(--progressBarSuccess);
+  }
+
+  &.delta-intent-danger {
+    --progress-bar-color: var(--progressBarDanger);
+  }
+}

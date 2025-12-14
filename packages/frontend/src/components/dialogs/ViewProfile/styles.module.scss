@@ -1,0 +1,63 @@
+@use '../../../../scss/_mixins';
+// We need to force the dialog to full height to make `AutoSizer` work
+.viewProfileDialog {
+  height: 100%;
+}
+
+.viewProfileDialogBody {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 2px;
+}
+
+.statusText {
+  padding: 15px 0;
+  color: var(--globalText);
+  white-space: pre-wrap;
+}
+
+.contactAttributes,
+.contactAttributesBottom {
+  margin-top: 15px;
+  margin-inline-start: -4px;
+  font-size: 1.08em;
+
+  & > * {
+    margin-bottom: 8px;
+    & > img {
+      width: 1.15em;
+      height: 1.15em;
+      margin-inline-start: 0.3em;
+      margin-inline-end: 0.3em;
+      vertical-align: middle;
+    }
+  }
+}
+
+.contactAttributesBottom {
+  padding: 10px 15px;
+  margin-top: auto;
+}
+
+.verification {
+  @include mixins.button-reset;
+}
+
+.buttonWrap {
+  margin: 10px 0 24px 0;
+  margin-inline-start: 30px;
+
+  button {
+    min-width: 150px;
+  }
+}
+
+.extendedSeparator {
+  margin-inline-start: -30px;
+  margin-inline-end: -30px;
+  padding: 2px;
+}
+
+.mutualChats {
+  margin-top: 8px;
+}

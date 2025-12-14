@@ -1,0 +1,59 @@
+.attachment-view {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(49, 49, 49, 1);
+  overflow: hidden;
+
+  img,
+  video {
+    width: 100vw;
+    max-height: 100vh;
+    object-fit: contain;
+    user-select: none;
+  }
+}
+
+.btn-wrapper {
+  float: right;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.75);
+  border-radius: 3px;
+  display: flex;
+  gap: 5px;
+
+  right: 8px;
+  top: 6px;
+  padding: 5px;
+}
+
+.attachment-view-drag-bar {
+  background-color: transparent;
+  position: absolute;
+  top: 0px;
+  width: 100vw;
+  height: 50px;
+}
+
+.media-previous-button,
+.media-next-button {
+  position: absolute;
+  top: calc(50vh - (60px / 2));
+  background-color: #3131316b;
+  border-radius: 8%;
+}
+
+.media-previous-button {
+  left: 20px;
+}
+
+.media-next-button {
+  right: 20px;
+}
+
+.react-transform-wrapper {
+  overflow: unset !important;
+}

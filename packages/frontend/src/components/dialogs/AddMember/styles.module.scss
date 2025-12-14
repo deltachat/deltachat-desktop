@@ -1,0 +1,87 @@
+.createChatDialogBody {
+  // Stretch the parent. The parent is `display: flex`,
+  // so this will not make it overflow.
+  // Why not just let the content stretch the parent? Because this doesn't
+  // work with `react-virtualized-auto-sizer`.
+  // Similar approach is taken by the ForwardMessage component.
+  height: 100vh;
+}
+
+.addMemberDialogBody {
+  // Stretch the parent, same as above.
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+}
+.addMemberContactList {
+  flex-grow: 1;
+}
+
+.AddMemberChipsWrapper {
+  border-bottom: solid 2px #d3d3d3;
+  max-height: 33%;
+  overflow-y: scroll;
+  padding-inline-start: 19px;
+  padding-inline-end: 30px;
+
+  .AddMemberChips {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    margin-inline-start: -5px;
+    margin-inline-end: -5px;
+
+    .AddMemberChip {
+      display: flex;
+      width: auto;
+      max-width: fit-content;
+      margin: 5px;
+      background-color: var(--addMemberChipBackgroundColor);
+      border-radius: 25px;
+      padding: 4px 5px 0px 4px;
+
+      .DisplayName {
+        display: flex;
+        align-items: center;
+        padding-inline-end: 6px;
+        padding-bottom: 4px;
+        margin-inline-start: 5px;
+        div {
+          max-width: 90px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+      .Avatar {
+        height: var(--local-height);
+        .content {
+          margin: 0px !important;
+        }
+      }
+      .removeMember {
+        background-color: #777;
+        border: none;
+        border-radius: 15px;
+        padding: 3px;
+        padding-top: 2px;
+        height: 18px;
+        margin-top: 9px;
+        .removeIcon {
+          cursor: pointer;
+          background-color: #fff;
+        }
+      }
+    }
+
+    .groupMemberSearch {
+      display: flex;
+      line-height: var(--local-height);
+      height: var(--local-height);
+      width: 90px;
+      margin: 5px;
+      margin-top: 8px;
+    }
+  }
+}
