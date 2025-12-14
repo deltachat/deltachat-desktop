@@ -88,5 +88,8 @@
   },
   "stats_msg_body": {
     "message": "The attachment contains anonymous usage statistics, which help us improve Delta Chat. Thank you!"
+  },
+  "reload": {
+    "message": "Reload"
   }
 }

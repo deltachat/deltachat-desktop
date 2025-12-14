@@ -1,76 +1,21 @@
-import React, { useState, useEffect } from 'react'
-import reactStringReplace from 'react-string-replace'
+import React, { useEffect } from 'react'
 
-import { getLogger } from '../../../../shared/logger'
-import { gitHubUrl, gitHubLicenseUrl } from '../../../../shared/constants'
-import { ClickableNonMailtoLink } from '../helpers/ClickableLink'
+import { gitHubUrl, donationUrl } from '../../../../shared/constants'
 import { runtime } from '@deltachat-desktop/runtime-interface'
-import { BackendRemote } from '../../backend-com'
 import { DialogBody, DialogContent, DialogWithHeader } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
-import Button from '../Button'
 
-const log = getLogger('renderer/dialogs/About')
-
-function getInfo() {
-  if (window.__selectedAccountId === undefined) {
-    return BackendRemote.rpc.getSystemInfo()
-  } else {
-    return BackendRemote.rpc.getInfo(window.__selectedAccountId)
-  }
-}
-
-export function DCInfo(_props: any) {
-  const tx = useTranslationFunction()
-  const [content, setContent] = useState<{ [key: string]: any }>({})
-
-  useEffect(function fetchContent() {
-    getInfo().then(info => {
-      setContent(info)
-      log.debug('dcInfo', info)
-    })
-  }, [])
-
-  const copy2Clipboard = () => {
-    runtime.writeClipboardText(JSON.stringify(content, null, 4))
-  }
-
-  const keys = content && Object.keys(content)
-
-  return (
-    <>
-      <h3>Debug Info for System &amp; Selected Account</h3>
-      <p>
-        Local Account Id:{' '}
-        <b>{window.__selectedAccountId || '(no account selected)'}</b>
-      </p>
-      <div className='dialog-about__dc-details'>
-        <table>
-          <tbody>
-            {keys &&
-              keys.map(key => (
-                <tr key={key}>
-                  <td className='key'>{key.replace(/_/g, ' ')}</td>
-                  <td className='value'>{content[key]}</td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <Button onClick={copy2Clipboard}>{tx('copy_json')}</Button>
-      </div>
-    </>
-  )
-}
+import useDialog from '../../hooks/dialog/useDialog'
+import { LogDialog } from './Log'
+import SettingsSeparator, {
+  SettingsEndSeparator,
+} from '../Settings/SettingsSeparator'
+import SettingsIconButton from '../Settings/SettingsIconButton'
 
 export default function About({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
-
-  const [coreVersion, setCoreVersion] = useState('')
-  const [sqliteVersion, setSqliteVersion] = useState('')
 
   useEffect(() => {
     window.__aboutDialogOpened = true
@@ -79,119 +24,93 @@ export default function About({ onClose }: DialogProps) {
     }
   }, [])
 
-  useEffect(() => {
-    BackendRemote.rpc.getSystemInfo().then(info => {
-      setCoreVersion(info['deltachat_core_version'])
-      setSqliteVersion(info['sqlite_version'])
-    })
-  }, [])
+  const { openDialog } = useDialog()
+  const viewLog = () => openDialog(LogDialog)
 
-  const desktopString = reactStringReplace(
-    tx('about_offical_app_desktop'),
-    'Delta Chat',
-    (_match, _index, offset) => (
-      <ClickableNonMailtoLink key={offset} href='https://delta.chat'>
-        {'Delta Chat'}
-      </ClickableNonMailtoLink>
-    )
-  )
-  let licenceAndSource = reactStringReplace(
-    tx('about_licensed_under_desktop'),
-    'GNU GPL version 3',
-    (_match, _index, offset) => (
-      <ClickableNonMailtoLink key={offset} href={gitHubLicenseUrl}>
-        {'GNU GPL version 3'}
-      </ClickableNonMailtoLink>
-    )
-  )
-  licenceAndSource = reactStringReplace(
-    licenceAndSource,
-    'GitHub',
-    (_match, _index, offset) => (
-      <ClickableNonMailtoLink key={offset} href={gitHubUrl}>
-        {'GitHub'}
-      </ClickableNonMailtoLink>
-    )
-  )
-  const { VERSION, GIT_REF } = runtime.getRuntimeInfo().buildInfo
+  const runtimeInfo = runtime.getRuntimeInfo()
+  const { VERSION, GIT_REF } = runtimeInfo.buildInfo
 
   return (
     <DialogWithHeader
-      width={600}
-      height={500}
+      width={400}
       title={tx('global_menu_help_about_desktop')}
       onClose={onClose}
     >
       <DialogBody>
         <DialogContent>
-          <p>{desktopString}</p>
-          <p>{licenceAndSource}</p>
-          <h3>Versions</h3>
-          <table>
-            <tbody>
-              <tr>
-                <td>
-                  <b>Delta Chat Desktop</b>
-                </td>
-                <td
-                  style={{ userSelect: 'all' }}
-                >{`${VERSION} (git: ${GIT_REF})`}</td>
-              </tr>
-              <tr>
-                <td>Delta Chat Core</td>
-                <td style={{ color: 'grey', userSelect: 'all' }}>
-                  {coreVersion}
-                </td>
-              </tr>
-              <tr style={{ color: 'grey' }}>
-                <td>SQLite</td>
-                <td style={{ userSelect: 'all' }}>{sqliteVersion}</td>
-              </tr>
-              {runtime.getRuntimeInfo().versions.map(({ label, value }) => (
-                <tr key={label} style={{ color: 'grey' }}>
-                  <td>{label}</td>
-                  <td style={{ userSelect: 'all' }}>{value}</td>
-                </tr>
-              ))}
-              {runtime.getRuntimeInfo().runningUnderARM64Translation && (
-                <tr>
-                  <td>runningUnderARM64Translation</td>
-                  <td>
-                    {runtime.getRuntimeInfo().runningUnderARM64Translation}
-                  </td>
-                </tr>
+          <div
+            style={{
+              // TODO: own styles file (move about page to own folder)
+              display: 'flex',
+              flexDirection: 'column',
+              textAlign: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <img src='./images/intro1.png' style={{ width: '40%' }} />
+            <h1>
+              Delta Chat{' '}
+              {/* TODO: add tauri or browser edition hint if not electron */}
+            </h1>
+            <div>
+              {/* TODO translate everything*/}
+              Decentralized private messenger with chat-shared tools and games.
+            </div>
+            <br />
+            <div>
+              Version: {VERSION}
+              {runtime.getRC_Config().devmode && (
+                <>
+                  <br />
+                  <small>git: {GIT_REF}</small>
+                </>
               )}
-            </tbody>
-          </table>
-          <DCInfo />
-          <h3>Additional information about the runtime</h3>
-          <table>
-            <tbody>
-              <tr>
-                <td>Runtime</td>
-                <td>{runtime.constructor.name}</td>
-              </tr>
-              {runtime.getRuntimeInfo().rpcServerPath && (
-                <tr>
-                  <td>Path to core</td>
-                  <td>{runtime.getRuntimeInfo().rpcServerPath}</td>
-                </tr>
-              )}
-              {runtime.getRuntimeInfo().runningUnderARM64Translation !==
-                undefined && (
-                <tr>
-                  <td>running under arm64 translation</td>
-                  <td>
-                    {runtime.getRuntimeInfo().runningUnderARM64Translation
-                      ? 'true'
-                      : 'false / native'}
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-          <br /> {/* some space at the bottom of the dialog */}
+            </div>
+          </div>
         </DialogContent>
+        <SettingsSeparator />
+        <SettingsIconButton
+          icon='language'
+          onClick={() => runtime.openLink('https://delta.chat')}
+          isLink
+        >
+          {'Website'}
+        </SettingsIconButton>
+        <SettingsIconButton
+          icon='code-tags'
+          onClick={() => runtime.openLink(gitHubUrl)}
+          isLink
+        >
+          {tx('source_code')}
+        </SettingsIconButton>
+        <SettingsIconButton
+          icon='forum'
+          onClick={() => runtime.openLink('https://support.delta.chat')}
+          isLink
+        >
+          {/* todo translate */}
+          {'Community Forum'}
+        </SettingsIconButton>
+        {!runtime.getRuntimeInfo().isMac && (
+          <SettingsIconButton
+            icon='favorite'
+            onClick={() => runtime.openLink(donationUrl)}
+            isLink
+          >
+            {tx('donate')}
+          </SettingsIconButton>
+        )}
+        <SettingsSeparator />
+        <SettingsIconButton icon='frame_bug' onClick={viewLog}>
+          {tx('pref_view_log')}
+        </SettingsIconButton>
+        <SettingsIconButton
+          icon='question_mark'
+          onClick={() => runtime.openHelpWindow()}
+        >
+          {tx('menu_help')}
+        </SettingsIconButton>
+        <SettingsEndSeparator />
       </DialogBody>
     </DialogWithHeader>
   )

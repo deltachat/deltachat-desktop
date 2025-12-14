@@ -1,4 +1,4 @@
-import { copyFile, writeFile, mkdir, rm } from 'fs/promises'
+import { copyFile, writeFile, mkdir, rm, readFile } from 'fs/promises'
 import {
   app as rawApp,
   clipboard,
@@ -147,6 +147,9 @@ export async function init(cwd: string, logHandler: LogHandler) {
 
   ipcMain.on('get-log-path', ev => {
     ev.returnValue = logHandler.logFilePath()
+  })
+  ipcMain.handle('read-current-log', async () => {
+    return readFile(logHandler.logFilePath(), 'utf-8')
   })
 
   ipcMain.on('get-config-path', ev => {
