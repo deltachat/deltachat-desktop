@@ -31,6 +31,11 @@ export default function About({ onClose }: DialogProps) {
   const runtimeInfo = runtime.getRuntimeInfo()
   const { VERSION, GIT_REF } = runtimeInfo.buildInfo
 
+  let edition = '' // electron is default, so don't show it
+  if (runtime.constructor.name !== 'ElectronRuntime') {
+    edition = `${runtime.constructor.name.replace('Runtime', '')} Edition`
+  }
+
   return (
     <DialogWithHeader
       width={400}
@@ -41,10 +46,7 @@ export default function About({ onClose }: DialogProps) {
         <DialogContent>
           <div className={styles.aboutContent}>
             <img src='./images/intro1.png' />
-            <h1>
-              Delta Chat{' '}
-              {/* TODO: add tauri or browser edition hint if not electron */}
-            </h1>
+            <h1>Delta Chat {edition}</h1>
             <div>{tx('about_deltachat_claim')}</div>
             <br />
             <div>
