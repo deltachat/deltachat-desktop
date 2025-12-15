@@ -105,6 +105,7 @@ class BrowserRuntime implements Runtime {
       console.error('WebSocket error:', event)
     })
   }
+
   onDrop: DropListener | null = null
   setDropListener(onDrop: DropListener | null) {
     this.onDrop = onDrop
@@ -804,6 +805,9 @@ class BrowserRuntime implements Runtime {
       }
       this.onDrop.handler(paths)
     })
+    this.currentLogLocation = (
+      await (await fetch('/log/filePath')).json()
+    ).logFilePath
   }
 
   async askBrowserForNotificationPermission() {
@@ -831,10 +835,14 @@ class BrowserRuntime implements Runtime {
     }
   }
   openLogFile(): void {
-    throw new Error('Method not implemented.')
+    window.open('/log/current', '_blank')
   }
+  currentLogLocation: string = '[logFilePath not set yet]'
   getCurrentLogLocation(): string {
-    return 'not implemented.'
+    return this.currentLogLocation
+  }
+  async readCurrentLog(): Promise<string> {
+    return (await fetch('/log/current')).text()
   }
   reloadWebContent(): void {
     window.location.reload()
