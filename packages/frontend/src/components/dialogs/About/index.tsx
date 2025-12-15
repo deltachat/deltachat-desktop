@@ -1,18 +1,19 @@
 import React, { useEffect } from 'react'
 
-import { gitHubUrl, donationUrl } from '../../../../shared/constants'
+import { gitHubUrl, donationUrl } from '@deltachat-desktop/shared/constants'
 import { runtime } from '@deltachat-desktop/runtime-interface'
-import { DialogBody, DialogContent, DialogWithHeader } from '../Dialog'
-import useTranslationFunction from '../../hooks/useTranslationFunction'
-
-import type { DialogProps } from '../../contexts/DialogContext'
-
-import useDialog from '../../hooks/dialog/useDialog'
-import { LogDialog } from './Log'
+import { DialogBody, DialogContent, DialogWithHeader } from '../../Dialog'
+import useTranslationFunction from '../../../hooks/useTranslationFunction'
+import useDialog from '../../../hooks/dialog/useDialog'
+import { LogDialog } from '../Log'
 import SettingsSeparator, {
   SettingsEndSeparator,
-} from '../Settings/SettingsSeparator'
-import SettingsIconButton from '../Settings/SettingsIconButton'
+} from '../../Settings/SettingsSeparator'
+import SettingsIconButton from '../../Settings/SettingsIconButton'
+
+import styles from './styles.module.scss'
+
+import type { DialogProps } from '../../../contexts/DialogContext'
 
 export default function About({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
@@ -38,16 +39,8 @@ export default function About({ onClose }: DialogProps) {
     >
       <DialogBody>
         <DialogContent>
-          <div
-            style={{
-              // TODO: own styles file (move about page to own folder)
-              display: 'flex',
-              flexDirection: 'column',
-              textAlign: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <img src='./images/intro1.png' style={{ width: '40%' }} />
+          <div className={styles.aboutContent}>
+            <img src='./images/intro1.png' />
             <h1>
               Delta Chat{' '}
               {/* TODO: add tauri or browser edition hint if not electron */}
