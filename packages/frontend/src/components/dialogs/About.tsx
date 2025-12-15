@@ -52,10 +52,7 @@ export default function About({ onClose }: DialogProps) {
               Delta Chat{' '}
               {/* TODO: add tauri or browser edition hint if not electron */}
             </h1>
-            <div>
-              {/* TODO translate everything*/}
-              Decentralized private messenger with chat-shared tools and games.
-            </div>
+            <div>{tx('about_deltachat_claim')}</div>
             <br />
             <div>
               Version: {VERSION}
@@ -74,7 +71,7 @@ export default function About({ onClose }: DialogProps) {
           onClick={() => runtime.openLink('https://delta.chat')}
           isLink
         >
-          {'Website'}
+          {tx('delta_chat_homepage')}
         </SettingsIconButton>
         <SettingsIconButton
           icon='code-tags'
@@ -88,8 +85,7 @@ export default function About({ onClose }: DialogProps) {
           onClick={() => runtime.openLink('https://support.delta.chat')}
           isLink
         >
-          {/* todo translate */}
-          {'Community Forum'}
+          {tx('community_forum')}
         </SettingsIconButton>
         {!runtime.getRuntimeInfo().isMac && (
           <SettingsIconButton

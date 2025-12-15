@@ -91,5 +91,14 @@
   },
   "reload": {
     "message": "Reload"
+  },
+  "log_contains_sensitive_info_warning": {
+    "message": "This log may contain sensitive information. If you want to post it publicly, you may examine and edit it beforehand."
+  },
+  "about_deltachat_claim": {
+    "message": "Decentralized private messenger with chat-shared tools and games."
+  },
+  "community_forum": {
+    "message": "Community Forum"
   }
 }

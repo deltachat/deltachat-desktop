@@ -146,13 +146,9 @@ export function LogDialog({ onClose }: DialogProps) {
       />
       <DialogBody className={styles.dialogBody}>
         <DialogContent className={styles.dialogContent}>
-          {loading && 'Loading..'}
+          {loading && tx('loading')}
           <textarea ref={textAreaRef} disabled={loading}></textarea>
-          <p>
-            {/* TODO translate this text */}
-            This log may contain sensitive information. If you want to post it
-            publicly you may examine and edit it beforehand.
-          </p>
+          <p>{tx('log_contains_sensitive_info_warning')}</p>
         </DialogContent>
       </DialogBody>
       <DialogFooter>
