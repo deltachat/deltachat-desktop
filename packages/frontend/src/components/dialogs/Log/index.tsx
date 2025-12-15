@@ -42,12 +42,7 @@ async function getLog(): Promise<string> {
 
   // TODO: think about re-adding a prettier versions section
   // info['sqlite_version']
-  // {runtime.getRuntimeInfo().versions.map(({ label, value }) => (
-  //   <tr key={label} style={{ color: 'grey' }}>
-  //     <td>{label}</td>
-  //     <td style={{ userSelect: 'all' }}>{value}</td>
-  //   </tr>
-  // ))}
+  // {runtime.getRuntimeInfo().versions.map(({ label, value }) => `${label}=${value}`).join("\n")}
 
   let log = ''
   try {
