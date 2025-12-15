@@ -46,8 +46,6 @@ async function getLog(): Promise<string> {
 
   let log = ''
   try {
-    // TODO implement api in tauri
-    // TODO implement api in browser
     log = await runtime.readCurrentLog()
   } catch (error: any) {
     log = `failed to read log at ${runtime.getCurrentLogLocation()}
