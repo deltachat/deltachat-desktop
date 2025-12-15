@@ -37,6 +37,7 @@ fn main() {
             "ui_ready",
             "ui_frontend_ready",
             "get_current_logfile",
+            "get_current_logfile_content",
             "copy_image_to_clipboard",
             "get_autostart_state",
             "get_app_path",

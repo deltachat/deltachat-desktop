@@ -39,6 +39,7 @@ permissions = [
     "allow-ui-frontend-ready",
 
     "allow-get-current-logfile",
+    "allow-get-current-logfile-content",
     "allow-copy-image-to-clipboard",
     "allow-get-autostart-state",
     "allow-get-app-path",
