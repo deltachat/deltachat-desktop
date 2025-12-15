@@ -15,6 +15,8 @@ import useAlertDialog from '../../../hooks/dialog/useAlertDialog'
 import useContextMenu from '../../../hooks/useContextMenu'
 
 import styles from './styles.module.scss'
+import WebxdcSaveToChatDialog from '../WebxdcSendToChat'
+import useDialog from '../../../hooks/dialog/useDialog'
 
 function infoObjectToString(info: Record<string, string>): string {
   let result = ''
@@ -75,8 +77,23 @@ ${storage_usage}`
 ${log}`
 }
 
+const blobToBase64: (file: Blob) => Promise<string> = file => {
+  const data_start = ';base64,'
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => {
+      //@ts-ignore
+      const data: string = reader.result
+      resolve(data.slice(data.indexOf(data_start) + data_start.length))
+    }
+    reader.onerror = () => reject(reader.error)
+  })
+}
+
 export function LogDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
+  const { openDialog } = useDialog()
   const openAlertDialog = useAlertDialog()
 
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null)
@@ -117,8 +134,26 @@ export function LogDialog({ onClose }: DialogProps) {
       })
     }
   }
-  const shareToChat = () => {
-    // TODO (using webxdc share to chat dialog)
+
+  const shareToChat = async () => {
+    try {
+      const text = getModifiedText()
+      if (!text) throw new Error('text is unset')
+      // IDEA: import support contact vcard and pass a parameter to display it on top?
+      openDialog(WebxdcSaveToChatDialog, {
+        file: {
+          file_name: `deltachat_desktop_log_${new Date().toUTCString().replaceAll(' ', '_')}.log.txt`,
+          file_content: await blobToBase64(new Blob([text])),
+        },
+        messageText: null,
+      })
+      onClose()
+      // TODO: close about or settings dialog as well if it is still open.
+    } catch (error: any) {
+      openAlertDialog({
+        message: `Failed to prepare log file for sharing: ${error?.message || error}`,
+      })
+    }
   }
 
   const menu = useContextMenu([{ label: tx('reload'), action: update }])
