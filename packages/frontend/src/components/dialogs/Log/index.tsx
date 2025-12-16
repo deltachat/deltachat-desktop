@@ -12,7 +12,6 @@ import Dialog, {
 } from '../../Dialog'
 import { DialogProps } from '../../../contexts/DialogContext'
 import useAlertDialog from '../../../hooks/dialog/useAlertDialog'
-import useContextMenu from '../../../hooks/useContextMenu'
 
 import styles from './styles.module.scss'
 import WebxdcSaveToChatDialog from '../WebxdcSendToChat'
