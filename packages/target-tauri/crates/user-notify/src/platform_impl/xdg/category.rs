@@ -1,9 +1,11 @@
+use std::fmt::Display;
+
 use crate::xdg_category::XdgNotificationCategory;
 
-impl XdgNotificationCategory {
-    pub fn to_string(self) -> String {
+impl Display for XdgNotificationCategory {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         use XdgNotificationCategory::*;
-        match &self {
+        let category_string = match &self {
             Call => "call",
             CallEnded => "call.ended",
             CallIncoming => "call.incoming",
@@ -29,7 +31,7 @@ impl XdgNotificationCategory {
             TransferComplete => "transfer.complete",
             TransferError => "transfer.error",
             Custom(category) => category,
-        }
-        .to_owned()
+        };
+        write!(f, "{category_string}")
     }
 }
