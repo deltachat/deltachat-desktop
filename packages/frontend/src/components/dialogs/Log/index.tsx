@@ -16,6 +16,7 @@ import useAlertDialog from '../../../hooks/dialog/useAlertDialog'
 import styles from './styles.module.scss'
 import WebxdcSaveToChatDialog from '../WebxdcSendToChat'
 import useDialog from '../../../hooks/dialog/useDialog'
+import { yerpc } from '@deltachat/jsonrpc-client'
 
 function infoObjectToString(info: Record<string, string>): string {
   let result = ''
@@ -35,11 +36,19 @@ async function getLog(): Promise<string> {
 
   const selectedAccountId = window.__selectedAccountId
 
-  // TODO: add resistance if either call fails it should still show the rest
   const [profile_info, storage_usage] = selectedAccountId
     ? await Promise.all([
-        BackendRemote.rpc.getInfo(selectedAccountId),
-        BackendRemote.rpc.getStorageUsageReportString(selectedAccountId),
+        BackendRemote.rpc
+          .getInfo(selectedAccountId)
+          .catch((error: yerpc.Error) => ({
+            'failed to get info': error.message,
+          })),
+        BackendRemote.rpc
+          .getStorageUsageReportString(selectedAccountId)
+          .catch(
+            (error: yerpc.Error) =>
+              `failed to get storage report: ${error.message}`
+          ),
       ])
     : [{}, '']
 
