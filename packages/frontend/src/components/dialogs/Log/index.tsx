@@ -70,7 +70,6 @@ ${
     ? `[Core Info About Profile]
 Selected Profile ID: ${selectedAccountId}
 ${infoObjectToString(profile_info)}
-[Storage Usage Report]
 ${storage_usage}`
     : '[[no profile selected]]'
 }
