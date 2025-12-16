@@ -121,6 +121,8 @@ export function LogDialog({ onClose }: DialogProps) {
   const textAreaRef = useRef<HTMLTextAreaElement | null>(null)
   const [loading, setLoading] = useState(true)
 
+  const [copySuccess, setCopySuccess] = useState(false)
+
   const update = useCallback(async () => {
     try {
       setLoading(true)
@@ -148,10 +150,11 @@ export function LogDialog({ onClose }: DialogProps) {
   const copyToClipboard = async () => {
     try {
       const text = getModifiedText()
-      if (text) await runtime.writeClipboardText(text)
-      else throw new Error('text is unset')
+      if (!text) throw new Error('text is unset')
+      await runtime.writeClipboardText(text)
 
-      // TODO user feedback when copy was successful
+      setCopySuccess(true)
+      setTimeout(() => setCopySuccess(false), 1200)
     } catch (error: any) {
       openAlertDialog({
         message: `Failed to copy log to clipboard: ${error?.message || error}`,
@@ -199,7 +202,7 @@ export function LogDialog({ onClose }: DialogProps) {
       <DialogFooter>
         <FooterActions>
           <FooterActionButton onClick={copyToClipboard}>
-            {tx('menu_copy_to_clipboard')}
+            {tx(copySuccess ? 'copied_to_clipboard' : 'menu_copy_to_clipboard')}
           </FooterActionButton>
           <FooterActionButton styling='primary' onClick={shareToChat}>
             {tx('menu_share')}
