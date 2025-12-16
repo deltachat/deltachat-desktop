@@ -455,8 +455,8 @@ importers:
         specifier: ^1.2.0
         version: 1.2.1
       electron:
-        specifier: ^39.2.6
-        version: 39.2.6
+        specifier: ^37.6.0
+        version: 37.10.3
       electron-builder:
         specifier: ^24.13.3
         version: 24.13.3(electron-builder-squirrel-windows@24.13.3)
@@ -2128,8 +2128,8 @@ packages:
   electron-to-chromium@1.5.237:
     resolution: {integrity: sha512-icUt1NvfhGLar5lSWH3tHNzablaA5js3HVHacQimfP8ViEBOQv+L7DKEuHdbTZ0SKCO1ogTJTIL1Gwk9S6Qvcg==}
 
-  electron@39.2.6:
-    resolution: {integrity: sha512-dHBgTodWBZd+tL1Dt0PSh/CFLHeDkFCTKCTXu1dgPhlE9Z3k2zzlBQ9B2oW55CFsKanBDHiUomHJNw0XaSdQpA==}
+  electron@37.10.3:
+    resolution: {integrity: sha512-3IjCGSjQmH50IbW2PFveaTzK+KwcFX9PEhE7KXb9v5IT8cLAiryAN7qezm/XzODhDRlLu0xKG1j8xWBtZ/bx/g==}
     engines: {node: '>= 12.20.55'}
     hasBin: true
 
@@ -5818,7 +5818,7 @@ snapshots:
 
   electron-to-chromium@1.5.237: {}
 
-  electron@39.2.6:
+  electron@37.10.3:
     dependencies:
       '@electron/get': 2.0.3
       '@types/node': 22.15.33
