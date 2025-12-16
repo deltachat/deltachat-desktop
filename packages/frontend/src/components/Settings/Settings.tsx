@@ -209,7 +209,7 @@ export default function Settings({ onClose }: DialogProps) {
           />
           <DialogBody>
             {settingsStore != null && (
-              <Advanced settingsStore={settingsStore} />
+              <Advanced onClose={onClose} settingsStore={settingsStore} />
             )}
             <SettingsEndSeparator />
           </DialogBody>

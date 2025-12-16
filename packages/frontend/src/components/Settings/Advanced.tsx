@@ -17,12 +17,14 @@ import ProxyConfiguration from '../dialogs/ProxyConfiguration'
 import { selectedAccountId } from '../../ScreenController'
 import TransportsDialog from '../dialogs/Transports'
 import { LogDialog } from '../dialogs/Log'
+import { DialogProps } from '../../contexts/DialogContext'
 
 type Props = {
   settingsStore: SettingsStoreState
+  onClose: DialogProps['onClose']
 }
 
-export default function Advanced({ settingsStore }: Props) {
+export default function Advanced({ onClose, settingsStore }: Props) {
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
   const openProxySettings = () => {
@@ -54,7 +56,11 @@ export default function Advanced({ settingsStore }: Props) {
     })
   }
 
-  const viewLog = () => openDialog(LogDialog)
+  const viewLog = () => {
+    openDialog(LogDialog)
+    // Close the settings dialog so that it doesn't interfere with sharing the log.
+    onClose()
+  }
 
   return (
     <>

@@ -23,7 +23,11 @@ export default function About({ onClose }: DialogProps) {
   }, [])
 
   const { openDialog } = useDialog()
-  const viewLog = () => openDialog(LogDialog)
+  const viewLog = () => {
+    openDialog(LogDialog)
+    // Close the about dialog so that it doesn't interfere with sharing the log.
+    onClose()
+  }
 
   const runtimeInfo = runtime.getRuntimeInfo()
   const { VERSION, GIT_REF } = runtimeInfo.buildInfo
