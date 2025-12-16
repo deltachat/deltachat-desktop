@@ -17,10 +17,13 @@ import type { DialogProps } from '../../contexts/DialogContext'
 import AlertDialog from './AlertDialog'
 import { T } from '@deltachat/jsonrpc-client'
 import { useSettingsStore } from '../../stores/settings'
+import { getLogger } from '@deltachat-desktop/shared/logger'
 
 type AccountAndPasswordDialogProps = DialogProps & {
   addr?: string
 }
+
+const log = getLogger('renderer/EditAccountAndPasswordDialog')
 
 /**
  * uses a prefilled LoginForm with existing
@@ -98,10 +101,7 @@ function EditAccountInner(onClose: DialogProps['onClose'], addr?: string) {
     }
 
     if (initialSettings.addr !== accountSettings.addr) {
-      openDialog(AlertDialog, {
-        message:
-          'Changing your email address is not supported right now. Check back in a few months!',
-      })
+      log.error('changing email addres of transport is not allowed')
       return
     }
     update()
@@ -120,6 +120,7 @@ function EditAccountInner(onClose: DialogProps['onClose'], addr?: string) {
             <LoginForm
               credentials={accountSettings}
               setCredentials={setAccountSettings}
+              isEdit
             />
           )}
         </DialogContent>

@@ -29,9 +29,15 @@ const CertificateChecks = {
 type LoginProps = React.PropsWithChildren<{
   credentials: Credentials
   setCredentials: (credentials: Credentials) => void
+  /** whether editing existing account */
+  isEdit?: true
 }>
 
-export default function LoginForm({ credentials, setCredentials }: LoginProps) {
+export default function LoginForm({
+  credentials,
+  setCredentials,
+  isEdit,
+}: LoginProps) {
   const [uiShowAdvanced, setUiShowAdvanced] = useState<boolean>(false)
   const [providerInfo, setProviderInfo] = useState<
     Type.ProviderInfo | undefined
@@ -120,6 +126,7 @@ export default function LoginForm({ credentials, setCredentials }: LoginProps) {
             value={addr}
             onChange={onEmailChange}
             onBlur={onEmailBlur}
+            disabled={isEdit === true}
           />
 
           <DeltaInput
