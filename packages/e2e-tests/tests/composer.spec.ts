@@ -59,7 +59,7 @@ test.beforeAll(async ({ browser, isChatmail }) => {
   await reloadPage(page)
 
   chatList = page.getByLabel('Chats').getByRole('tablist')
-  textarea = page.locator('textarea#composer-textarea')
+  textarea = page.locator('textarea.create-or-edit-message-input')
   composerSection = page.getByRole('region', { name: 'Write a message' })
   composerReply = composerSection.getByRole('region', { name: 'Reply' })
   await createNDummyChats(page, numDummyChats, 'Some chat ')
