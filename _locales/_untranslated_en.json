@@ -89,12 +89,6 @@
   "stats_msg_body": {
     "message": "The attachment contains anonymous usage statistics, which help us improve Delta Chat. Thank you!"
   },
-  "reload": {
-    "message": "Reload"
-  },
-  "log_contains_sensitive_info_warning": {
-    "message": "This log may contain sensitive information. If you want to post it publicly, you may examine and edit it beforehand."
-  },
   "about_deltachat_claim": {
     "message": "Decentralized private messenger with chat-shared tools and games."
   },

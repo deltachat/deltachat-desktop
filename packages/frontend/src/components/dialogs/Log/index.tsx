@@ -54,7 +54,8 @@ async function getLog(): Promise<string> {
 Error: ${error?.message || error}`
   }
 
-  return `[Build Info]
+  return `** This log may contain sensitive information. If you want to post it publicly, you may examine and edit it beforehand. **
+[Build Info]
 DC Desktop Version: ${VERSION} (git: ${GIT_REF})
 Core Version: ${systemInfo['deltachat_core_version']}
 Runtime: ${runtime.constructor.name}
@@ -172,7 +173,6 @@ export function LogDialog({ onClose }: DialogProps) {
         <DialogContent className={styles.dialogContent}>
           {loading && tx('loading')}
           <textarea ref={textAreaRef} disabled={loading}></textarea>
-          <p>{tx('log_contains_sensitive_info_warning')}</p>
         </DialogContent>
       </DialogBody>
       <DialogFooter>
