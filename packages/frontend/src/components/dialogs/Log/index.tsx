@@ -63,15 +63,15 @@ Runtime: ${runtime.constructor.name}
 [Runtime Info]
 ${JSON.stringify(runtimeInfo, null, 2)}
 
-[Chatmail Core Info]
-${infoObjectToString(systemInfo)}
 ${
   selectedAccountId
-    ? `[Core Info About Profile]
+    ? `[Chatmail Core Info | About Current Profile]
 Selected Profile ID: ${selectedAccountId}
 ${infoObjectToString(profile_info)}
 ${storage_usage}`
-    : '[[no profile selected]]'
+    : `[Chatmail Core Info]
+Selected Profile ID: no profile selected
+${infoObjectToString(systemInfo)}`
 }
 [Log]
 ${log}`
