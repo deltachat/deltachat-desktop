@@ -88,11 +88,5 @@
   },
   "stats_msg_body": {
     "message": "The attachment contains anonymous usage statistics, which help us improve Delta Chat. Thank you!"
-  },
-  "about_deltachat_claim": {
-    "message": "Decentralized private messenger with chat-shared tools and games."
-  },
-  "community_forum": {
-    "message": "Community Forum"
   }
 }

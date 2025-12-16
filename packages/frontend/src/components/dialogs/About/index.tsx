@@ -58,39 +58,13 @@ export default function About({ onClose }: DialogProps) {
                 </>
               )}
             </div>
+            <div>
+              <ClickableLink href={runtime.openLink('https://delta.chat')}>
+                {runtime.openLink('https://delta.chat')}
+              </ClickableLink>
+            </div>
           </div>
         </DialogContent>
-        <SettingsSeparator />
-        <SettingsIconButton
-          icon='language'
-          onClick={() => runtime.openLink('https://delta.chat')}
-          isLink
-        >
-          {tx('delta_chat_homepage')}
-        </SettingsIconButton>
-        <SettingsIconButton
-          icon='code-tags'
-          onClick={() => runtime.openLink(gitHubUrl)}
-          isLink
-        >
-          {tx('source_code')}
-        </SettingsIconButton>
-        <SettingsIconButton
-          icon='forum'
-          onClick={() => runtime.openLink('https://support.delta.chat')}
-          isLink
-        >
-          {tx('community_forum')}
-        </SettingsIconButton>
-        {!runtime.getRuntimeInfo().isMac && (
-          <SettingsIconButton
-            icon='favorite'
-            onClick={() => runtime.openLink(donationUrl)}
-            isLink
-          >
-            {tx('donate')}
-          </SettingsIconButton>
-        )}
         <SettingsSeparator />
         <SettingsIconButton icon='frame_bug' onClick={viewLog}>
           {tx('pref_view_log')}
