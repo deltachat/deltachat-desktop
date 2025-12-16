@@ -114,7 +114,7 @@ export function LogDialog({ onClose }: DialogProps) {
   }, [openAlertDialog])
 
   useEffect(() => {
-    if (!textAreaRef.current) {
+    if (!textAreaRef.current?.value) {
       update()
     }
   }, [update])
