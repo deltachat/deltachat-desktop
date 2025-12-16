@@ -20,7 +20,9 @@ import useDialog from '../../../hooks/dialog/useDialog'
 function infoObjectToString(info: Record<string, string>): string {
   let result = ''
   for (const key of Object.keys(info)) {
-    result += `${key}=${info[key]}\n`
+    const value =
+      typeof info[key] == 'object' ? JSON.stringify(info[key]) : info[key]
+    result += `${key}=${value}\n`
   }
   return result
 }
@@ -41,9 +43,28 @@ async function getLog(): Promise<string> {
       ])
     : [{}, '']
 
-  // TODO: think about re-adding a prettier versions section
-  // info['sqlite_version']
-  // {runtime.getRuntimeInfo().versions.map(({ label, value }) => `${label}=${value}`).join("\n")}
+  const versions = [
+    ...runtime.getRuntimeInfo().versions,
+    { label: 'SQLite', value: systemInfo['sqlite_version'] },
+  ]
+  const versionInfoSection = versions
+    .map(({ label, value }) => `${label}=${value}`)
+    .join('\n')
+
+  const visibleRuntimeInfoObject = Object.assign({}, runtimeInfo) as Partial<
+    typeof runtimeInfo
+  > &
+    Record<string, string>
+  delete visibleRuntimeInfoObject.versions
+  delete visibleRuntimeInfoObject.buildInfo
+  // reproducible builds set this timestamp to 0
+  if (runtimeInfo.buildInfo.BUILD_TIMESTAMP != 0)
+    visibleRuntimeInfoObject.buildTimestamp = String(
+      runtimeInfo.buildInfo.BUILD_TIMESTAMP
+    )
+
+  /** runtime info, but flattened to string and only showing keys that are not already shown elsewhere */
+  const visibleRuntimeInfo = infoObjectToString(visibleRuntimeInfoObject)
 
   let log = ''
   try {
@@ -55,14 +76,15 @@ Error: ${error?.message || error}`
 
   return `** This log may contain sensitive information. If you want to post it publicly, you may examine and edit it beforehand. **
 
-[Build Info]
 DC Desktop Version: ${VERSION} (git: ${GIT_REF})
 Core Version: ${systemInfo['deltachat_core_version']}
 Runtime: ${runtime.constructor.name}
 
-[Runtime Info]
-${JSON.stringify(runtimeInfo, null, 2)}
+[Versions]
+${versionInfoSection}
 
+[Runtime Info]
+${visibleRuntimeInfo}
 ${
   selectedAccountId
     ? `[Chatmail Core Info | About Current Profile]
