@@ -111,10 +111,12 @@ export function LogDialog({ onClose }: DialogProps) {
         message: `Failed to load log: ${error?.message || error}`,
       })
     }
-  }, [openAlertDialog /* TODO check if this can trigger an unwanted reload */])
+  }, [openAlertDialog])
 
   useEffect(() => {
-    update()
+    if (!textAreaRef.current) {
+      update()
+    }
   }, [update])
 
   const getModifiedText = () => {
@@ -156,8 +158,6 @@ export function LogDialog({ onClose }: DialogProps) {
     }
   }
 
-  const menu = useContextMenu([{ label: tx('reload'), action: update }])
-
   return (
     <Dialog
       width={800}
@@ -167,11 +167,7 @@ export function LogDialog({ onClose }: DialogProps) {
       // When you accidentally let go of the mouse button outside the dialog, it closes.
       canOutsideClickClose={false}
     >
-      <DialogHeader
-        onClose={onClose}
-        onContextMenuClick={menu}
-        title={tx('pref_log_header')}
-      />
+      <DialogHeader onClose={onClose} title={tx('pref_log_header')} />
       <DialogBody className={styles.dialogBody}>
         <DialogContent className={styles.dialogContent}>
           {loading && tx('loading')}
