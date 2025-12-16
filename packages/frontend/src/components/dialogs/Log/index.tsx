@@ -54,6 +54,7 @@ Error: ${error?.message || error}`
   }
 
   return `** This log may contain sensitive information. If you want to post it publicly, you may examine and edit it beforehand. **
+
 [Build Info]
 DC Desktop Version: ${VERSION} (git: ${GIT_REF})
 Core Version: ${systemInfo['deltachat_core_version']}
