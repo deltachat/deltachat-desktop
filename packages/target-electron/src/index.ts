@@ -10,12 +10,12 @@ import { getHelpMenu } from './help_menu.js'
 import { initialisePowerMonitor } from './resume_from_sleep.js'
 
 // Hardening: prohibit all DNS queries
-// The `~NOTFOUND` string is here:
-// https://chromium.googlesource.com/chromium/src/+/6459548ee396bbe1104978b01e19fcb1bb68d0e5/net/dns/mapped_host_resolver.cc#46
+// The `^NOTFOUND` string is here:
+// https://source.chromium.org/chromium/chromium/src/+/main:net/dns/mapped_host_resolver.cc;l=71;drc=c1b102f35ec290df46da5093c2ab90d6616134c6
 // Chromium docs that touch on `--host-resolver-rules` and DNS:
 // https://www.chromium.org/developers/design-documents/network-stack/socks-proxy/
 // https://www.chromium.org/developers/design-documents/dns-prefetching/
-const hostRules = 'MAP * ~NOTFOUND'
+const hostRules = 'MAP * ^NOTFOUND'
 rawApp.commandLine.appendSwitch('host-resolver-rules', hostRules)
 rawApp.commandLine.appendSwitch('host-rules', hostRules)
 
