@@ -14,9 +14,7 @@
 }
 
 .buttonContainer {
-  width: 100%;
   display: flex;
-  margin-bottom: 42px;
-  justify-content: space-evenly;
-  margin-top: 43px;
+  margin: 42px 0;
+  gap: 20px;
 }
