@@ -33,6 +33,7 @@ use tauri::{
 
 use tauri_plugin_log::{Target, TargetKind};
 
+use tokio::fs::read_to_string;
 use tray::is_tray_icon_active;
 
 mod app_path;
@@ -153,6 +154,13 @@ fn get_current_logfile(state: tauri::State<AppState>) -> String {
     state.current_log_file_path.clone()
 }
 
+#[tauri::command]
+async fn get_current_logfile_content(state: tauri::State<'_, AppState>) -> Result<String, String> {
+    read_to_string(PathBuf::from_str(&state.current_log_file_path).map_err(|err| err.to_string())?)
+        .await
+        .map_err(|err| err.to_string())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() -> i32 {
     let startup_timestamp = SystemTime::now();
@@ -242,6 +250,7 @@ pub fn run() -> i32 {
             ui_ready,
             ui_frontend_ready,
             get_current_logfile,
+            get_current_logfile_content,
             copy_image_to_clipboard,
             autostart::get_autostart_state,
             app_path::get_app_path,

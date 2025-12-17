@@ -176,6 +176,16 @@ app.get('/download-backup/:filename', authMiddleWare, async (req, res) => {
   })
 })
 
+app.get('/log/filePath', authMiddleWare, async (_req, res) => {
+  res.json({ logFilePath: logHandler.logFilePath() })
+})
+
+app.get('/log/current', authMiddleWare, async (_req, res) => {
+  const filePath = logHandler.logFilePath()
+  res.set('Cache-Control', 'no-store')
+  res.download(filePath)
+})
+
 // TODO
 app.get('/stickers/:account/:?pack/:filename', authMiddleWare, (req, res) => {
   //TODO (also not sure how to make the pack optional)

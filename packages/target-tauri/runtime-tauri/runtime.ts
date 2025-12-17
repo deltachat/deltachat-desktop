@@ -400,6 +400,9 @@ class TauriRuntime implements Runtime {
     }
     return this.currentLogFileLocation
   }
+  async readCurrentLog(): Promise<string> {
+    return invoke('get_current_logfile_content')
+  }
   openHelpWindow(anchor?: string): void {
     invoke('open_help_window', { locale: window.localeData.locale, anchor })
   }

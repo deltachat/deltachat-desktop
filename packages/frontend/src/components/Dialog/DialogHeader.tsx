@@ -36,6 +36,7 @@ type Props = PropsWithChildren<{
    */
   onContextMenuClick?: (_event: any) => void
   dataTestid?: string
+  className?: string
 }>
 
 export default function DialogHeader(props: Props) {
@@ -50,7 +51,7 @@ export default function DialogHeader(props: Props) {
   const dataTestid = props.dataTestid ?? 'dialog-header'
   const tx = useTranslationFunction()
   return (
-    <header className={classNames(styles.dialogHeader)}>
+    <header className={classNames(styles.dialogHeader, props.className)}>
       {onClickBack && (
         <BackButton onClick={onClickBack} data-testid={dataTestid + '-back'} />
       )}

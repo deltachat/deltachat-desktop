@@ -1,0 +1,20 @@
+.aboutContent {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+
+  img {
+    width: 40%;
+  }
+}
+
+.appName {
+  margin-bottom: 15px;
+}
+
+.buttonContainer {
+  display: flex;
+  margin: 42px 0;
+  gap: 20px;
+}

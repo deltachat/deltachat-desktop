@@ -42,7 +42,11 @@ export default function SelectChat(props: Props) {
 
   return (
     <Dialog className={styles.selectChatDialog} onClose={props.onClose} fixed>
-      <DialogHeader onClose={props.onClose} title={props.headerTitle} />
+      <DialogHeader
+        onClose={props.onClose}
+        title={props.headerTitle}
+        className={styles.header}
+      />
       <DialogBody className={styles.selectChatDialogBody}>
         <div className='select-chat-account-input'>
           <input

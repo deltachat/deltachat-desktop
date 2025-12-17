@@ -14,3 +14,8 @@
   // the dialog to overflow: the stuff inside of it is scrollable anyway.
   overflow: hidden;
 }
+
+.header {
+  // long title should not make dialog scroll sidewards
+  word-break: break-all;
+}
