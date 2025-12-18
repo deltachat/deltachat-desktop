@@ -133,7 +133,8 @@ export default class DCWebxdc {
         if (!dummyProxy_.server.listening) {
           // TODO maybe also close all WebXDC instances
           // as soon as we encounter any error?
-          // This would be more important when/if we get rid of `host-rules`.
+          // This would be more important when/if we get rid of
+          // `host-resolver-rules`.
           throw new Error(
             'the dummy proxy is not working anymore, `server.listening` is `false`'
           )
@@ -215,7 +216,7 @@ export default class DCWebxdc {
         })
         existing_sessions.push(partition)
 
-        // Thanks to the fact that we specify `host-rules`,
+        // Thanks to the fact that we specify `host-resolver-rules`,
         // no connection attempt to the proxy should occur at all,
         // at least as of now.
         // See https://www.chromium.org/developers/design-documents/network-stack/socks-proxy/ :
