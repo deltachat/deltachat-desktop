@@ -114,7 +114,8 @@
 
     :global(.views) {
       display: flex;
-      margin-top: 7px;
+      align-items: center;
+      min-height: 26px;
     }
 
     :global(.navbar-button) {
@@ -135,7 +136,7 @@
 }
 
 .webxdcIcons {
-  margin: -2px 12px -2px 0px;
+  margin: 0px 12px -4px 0px;
   img.webxdcIcon {
     width: 25px;
     height: 25px;
