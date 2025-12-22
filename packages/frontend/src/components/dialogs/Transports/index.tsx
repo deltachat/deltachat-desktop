@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { DialogProps } from '../../../contexts/DialogContext'
 import Dialog, { DialogBody, DialogHeader, DialogFooter } from '../../Dialog'
-import { BackendRemote } from '../../../backend-com'
+import { BackendRemote, onDCEvent } from '../../../backend-com'
 
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
 import useConfirmationDialog from '../../../hooks/dialog/useConfirmationDialog'
@@ -55,6 +55,12 @@ export default function TransportsDialog(
 
   const { openDialog } = useDialog()
   const openConfirmationDialog = useConfirmationDialog()
+
+  useEffect(() => {
+    return onDCEvent(accountId, 'TransportsModified', () => {
+      getTransports()
+    })
+  }, [accountId, getTransports])
 
   const changeDefaultTransport = useCallback(
     async (transport: EnteredLoginParam) => {
