@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file.
 
+<a id="2_35_0"></a>
+## [2.35.0] - 2025-12-21
+
+### Added
+
+- Prettier About Dialog and introduce Protocol View Dialog (+ added storage usage report to that dialog) ([#5882](https://github.com/deltachat/deltachat-desktop/issues/5882))
+
+### Changes
+
+- Upgrade core to 2.35.0 ([#5886](https://github.com/deltachat/deltachat-desktop/issues/5886))
+  - sync default transport on multi devices
+  - improve calls by providing a turn server
+- Upgrade electron to v39.x ([#5843](https://github.com/deltachat/deltachat-desktop/issues/5843))
+  - Support for MacOS v11 ended due to Chrome not being compatible anymore!
+- Remove emoji replacement ([#5866](https://github.com/deltachat/deltachat-desktop/issues/5866))
+- Show the error message when add relay fails ([#5863](https://github.com/deltachat/deltachat-desktop/issues/5863))
+- Disable email address field when editing existing transports. ([#5884](https://github.com/deltachat/deltachat-desktop/issues/5884))
+- Split transport label ([#5864](https://github.com/deltachat/deltachat-desktop/issues/5864))
+
+### Fixed
+
+- Add transport for DCLOGIN ([#5846](https://github.com/deltachat/deltachat-desktop/issues/5846))
+- CloseHandler should not prevent dialog from closing ([#5825](https://github.com/deltachat/deltachat-desktop/issues/5825))
+- Don't play "plop" sound on msg if not focused
+- Vertical center navbar buttons ([#5889](https://github.com/deltachat/deltachat-desktop/issues/5889))
+
+### Styling
+
+- Apply "move" cursor on account list drag ([#5857](https://github.com/deltachat/deltachat-desktop/issues/5857))
+
 <a id="2_33_0"></a>
 ## [2.33.0] - 2025-12-06
 
@@ -3848,7 +3878,8 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.33.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.35.0...HEAD
+[2.35.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.33.0...v2.35.0
 [2.33.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.25.3...v2.33.0
 [2.25.3]: https://github.com/deltachat/deltachat-desktop/compare/v2.25.2...v2.25.3
 [2.25.2]: https://github.com/deltachat/deltachat-desktop/compare/v2.25.1...v2.25.2
