@@ -7,8 +7,8 @@ catalog:
   '@deltachat/stdio-rpc-server': 2.35.0
   '@webxdc/types': ^2.1.2
   '@deltachat/calls-webapp': 0.11.0-beta-debug
-  mocha: ^10.7.0
-  chai: ^5.1.1
+  mocha: ^11.7.5
+  chai: ^6.2.1
 
   # dependencies
   '@types/mime-types': ^2.1.4
@@ -16,9 +16,9 @@ catalog:
 
   # tools / dev dependencies
   sass: ^1.86.3
-  typescript: ^5.9.2
+  typescript: ^5.9.3
   typescript-plugin-css-modules: ^5.2.0
   esbuild: ^0.25.0
-  '@types/node': ^20.14.13
+  '@types/node': ^22.15.33
   '@types/mocha': ^10.0.7
   '@types/chai': ^4.3.17
