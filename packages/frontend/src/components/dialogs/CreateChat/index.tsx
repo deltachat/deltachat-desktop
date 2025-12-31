@@ -64,6 +64,7 @@ import { copyToBlobDir } from '../../../utils/copyToBlobDir'
 import { useRpcFetch } from '../../../hooks/useFetch'
 import { I18nContext } from '../../../contexts/I18nContext'
 import { SCAN_CONTEXT_TYPE } from '../../../hooks/useProcessQr'
+import { IMAGE_EXTENSIONS } from '@deltachat-desktop/shared/constants'
 
 const enum GroupType {
   /**
@@ -1006,7 +1007,7 @@ export function useGroupImage(image: string | null) {
     )
     const [file] = await runtime.showOpenFileDialog({
       title: tx('select_group_image_desktop'),
-      filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif', 'webp'] }],
+      filters: [{ name: tx('images'), extensions: IMAGE_EXTENSIONS }],
       properties: ['openFile'],
       defaultPath,
     })

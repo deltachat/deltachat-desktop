@@ -8,6 +8,7 @@ import { LastUsedSlot, rememberLastUsedPath } from '../../utils/lastUsedPaths'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 
 import styles from './styles.module.scss'
+import { IMAGE_EXTENSIONS } from '@deltachat-desktop/shared/constants'
 
 type Props = {
   color?: string
@@ -41,7 +42,7 @@ export default function ImageSelector({
       filters: [
         {
           name: tx('images'),
-          extensions: ['jpg', 'png', 'gif', 'jpeg', 'webp'],
+          extensions: IMAGE_EXTENSIONS,
         },
       ],
       properties: ['openFile'],
