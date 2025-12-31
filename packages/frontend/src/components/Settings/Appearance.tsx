@@ -23,6 +23,7 @@ import Icon from '../Icon'
 import Callout from '../Callout'
 import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
 import { getBackgroundImageStyle } from '../message/MessageListAndComposer'
+import { IMAGE_EXTENSIONS } from '@deltachat-desktop/shared/constants'
 
 const log = getLogger('renderer/settings/appearance')
 
@@ -205,7 +206,7 @@ function BackgroundSelector({
           await runtime.showOpenFileDialog({
             title: 'Select Background Image',
             filters: [
-              { name: 'Images', extensions: ['jpg', 'png', 'gif', 'webp'] },
+              { name: tx('images'), extensions: IMAGE_EXTENSIONS },
               { name: 'All Files', extensions: ['*'] },
             ],
             properties: ['openFile'],
