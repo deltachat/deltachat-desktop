@@ -247,7 +247,10 @@ export function DraftAttachment({
     isViewTypeWebxdc ? [selectedAccountId(), attachmentIdToLoad] : null
   )
   const hasFileNameChanged = useHasChanged2(attachment.fileName)
-  if (hasFileNameChanged || webxdcInfoFetch?.result?.ok === false) {
+  if (
+    (hasFileNameChanged || webxdcInfoFetch?.result?.ok === false) &&
+    attachmentIdToLoad !== attachment.id
+  ) {
     // Only reload webxdc info if filename has changed, because
     // the `id` itself could be changing as often as we update the draft.
     //
