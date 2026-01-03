@@ -63,9 +63,9 @@ function ConnectivityDialogInner() {
         <iframe
           style={{
             border: 0,
-            height: '100%',
+            height: '620px',
             width: '100%',
-            minHeight: '320px',
+            maxHeight: '76vh',
             backgroundColor: bgColor,
             color: textColor,
           }}
