@@ -310,14 +310,8 @@ test('wrong qr code for onboarding shows error message', async ({
 // maybe move this to group tests?
 test.fixme('instant onboarding with group invite link', async () => {})
 
-test.fixme(
-  'instant onboarding fails with withdrawn group invite link',
-  async () => {}
-)
+test.fixme('instant onboarding fails with withdrawn group invite link', async () => {})
 
 test.fixme('instant onboarding works with DCLOGIN qr code', async () => {})
 
-test.fixme(
-  'instant onboarding with DCACCOUNT link from loaded image',
-  async () => {}
-)
+test.fixme('instant onboarding with DCACCOUNT link from loaded image', async () => {})
