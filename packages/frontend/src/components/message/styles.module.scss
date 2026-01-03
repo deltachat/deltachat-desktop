@@ -60,20 +60,25 @@
   padding: 9px;
   padding-top: 0;
   padding-inline-end: 15px;
+  min-width: 200px;
+  max-width: 260px;
   .avatar {
     margin-bottom: 0;
   }
   .contactInfo {
     display: flex;
-    flex-grow: 1;
     flex-direction: column;
     padding-inline-start: 10px;
     justify-content: center;
+    min-width: 0;
   }
   .displayName {
     margin-bottom: 0;
     margin-top: 10px;
     font-weight: 200;
     font-size: medium;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
