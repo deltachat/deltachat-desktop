@@ -109,7 +109,6 @@ export async function updateCoreStrings() {
     //[C.DC_STR_SYNC_MSG_BODY]: tx(''),
     [C.DC_STR_INCOMING_MESSAGES]: tx('incoming_messages'),
     [C.DC_STR_OUTGOING_MESSAGES]: tx('outgoing_messages'),
-    [C.DC_STR_STORAGE_ON_DOMAIN]: tx('storage_on_domain'),
     [C.DC_STR_ONE_MOMENT]: tx('one_moment'),
     [C.DC_STR_CONNECTED]: tx('connectivity_connected'),
     [C.DC_STR_CONNTECTING]: tx('connectivity_connecting'),
