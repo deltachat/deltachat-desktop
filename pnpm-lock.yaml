@@ -59,10 +59,6 @@ overrides:
 importers:
 
   .:
-    dependencies:
-      '@types/node':
-        specifier: ^22.19.3
-        version: 22.19.3
     devDependencies:
       '@eslint/compat':
         specifier: ^2.0.0
@@ -76,6 +72,9 @@ importers:
       '@types/ignore-walk':
         specifier: ^4.0.3
         version: 4.0.3
+      '@types/node':
+        specifier: ^22.19.3
+        version: 22.19.3
       '@typescript-eslint/eslint-plugin':
         specifier: ^8.51.0
         version: 8.51.0(@typescript-eslint/parser@8.51.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
