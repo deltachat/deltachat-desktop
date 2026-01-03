@@ -17,6 +17,7 @@ import useDialog from '../../hooks/dialog/useDialog'
 import useMessage from '../../hooks/chat/useMessage'
 import { Viewtype } from '@deltachat/jsonrpc-client/dist/generated/types'
 import { useMessageList } from '../../stores/messagelist'
+import { IMAGE_EXTENSIONS } from '@deltachat-desktop/shared/constants'
 
 const log = getLogger('renderer/MessageListAndComposer')
 
@@ -89,8 +90,7 @@ export function getBackgroundImageStyle(
 }
 
 function isImage(file: ParsedPath) {
-  const imageExtensions = ['.jpg', '.jpeg', '.png']
-  return imageExtensions.includes(file.ext)
+  return IMAGE_EXTENSIONS.map(ext => '.' + ext).includes(file.ext)
 }
 
 export default function MessageListAndComposer({ accountId, chat }: Props) {
