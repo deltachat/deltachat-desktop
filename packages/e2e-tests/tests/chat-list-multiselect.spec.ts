@@ -523,11 +523,9 @@ test('delete several', async () => {
   })
   await page.getByRole('menuitem', { name: 'Delete Chat' }).click()
 
-  await expect(page.getByRole('dialog')).toContainText(
-    'Delete 4 chats on all your devices?'
-  )
+  await expect(page.getByRole('dialog')).toContainText('Delete 4 chats?')
   await expect(page.getByRole('dialog').locator('p')).toHaveText(
-    'Delete 4 chats on all your devices?' +
+    'Delete 4 chats?' +
       '\n\n' +
       'Some chat 7\n' +
       'Some chat 6\n' +
