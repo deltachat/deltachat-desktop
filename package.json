@@ -66,22 +66,22 @@
     "@eslint/eslintrc": "^3.3.3",
     "@eslint/js": "^9.39.2",
     "@types/ignore-walk": "^4.0.3",
-    "@typescript-eslint/eslint-plugin": "^8.49.0",
-    "@typescript-eslint/parser": "^8.49.0",
+    "@typescript-eslint/eslint-plugin": "^8.51.0",
+    "@typescript-eslint/parser": "^8.51.0",
     "chokidar": "^5.0.0",
     "eslint": "^9.39.2",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
-    "git-cliff": "^2.10.1",
-    "globals": "^16.5.0",
+    "git-cliff": "^2.11.0",
+    "globals": "^17.0.0",
     "ignore-walk": "^8.0.0",
     "prettier": "^3.7.4",
     "typescript": "catalog:",
-    "typescript-eslint": "^8.49.0",
+    "typescript-eslint": "^8.51.0",
     "xml-js": "^1.6.11",
     "yaml": "^2.8.2"
   },
   "dependencies": {
-    "@types/node": "^22.15.33"
+    "@types/node": "^22.19.3"
   }
 }
