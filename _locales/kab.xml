@@ -1012,7 +1012,7 @@
     <string name="perm_continue">Kemmel</string>
     <string name="perm_explain_access_to_camera_denied">Akken ad d-teṭṭfeḍ tiwlafin neɣ tividyutin, ddu ɣer iɣewwaṛen n usnas, fren \" tisirag \", sakin rmed \" takamirat \".</string>
     <!-- give the user an idea where to find the "Microphone" option. the hint is only shown if access was initially denied by the user. pick up wordings really used on the systems, but do not be overly precise: things shift around often and there are too many system we support to track every detail and click path -->
-    <string name="perm_explain_access_to_mic_denied">Akken ad tazneḍ iznan n umeslaw, ddu ɣer iɣewwaṛen n unagraw neɣ n usnas, fren \" tisirag \" neɣ \" tabaḍnit &amp ; taɣellist \", syin rmed \"Amikrufun\".</string>
+    <string name="perm_explain_access_to_mic_denied">Akken ad tazneḍ iznan n umeslaw, ddu ɣer iɣewwaṛen n unagraw neɣ n usnas, fren \" tisirag \" neɣ \" tabaḍnit &amp; taɣellist \", syin rmed \"Amikrufun\".</string>
     <string name="perm_explain_access_to_storage_denied">Akken ad tremseḍ neɣ ad tazneḍ ifuyla, ddu ɣer iɣewwaṛen n usnas, fren \" tisirag \", sakin rmed \" takatut \".</string>
     <string name="perm_explain_access_to_location_denied">Akken ad teqqneḍ adig, ddu ɣer iɣewwaṛen n usnas, fren \" tisirag \", sakin rmed \" adig \". </string>
     <string name="perm_explain_access_to_notifications_denied">Akken ad d-remseḍ ilɣa,  ddu ɣer \"Iɣewwaṛen n Unagraw / Isnas / Delta Chat\" akken ad tremdeḍ \"Ilɣa\".</string>
