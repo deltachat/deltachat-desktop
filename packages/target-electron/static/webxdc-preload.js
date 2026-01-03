@@ -45,6 +45,8 @@ class RealtimeListener {
 
 //@ts-check
 ;(() => {
+  // TODO remove all references of `frame`.
+
   const { contextBridge, ipcRenderer } = require('electron')
   // setup is finished
   let is_ready = false
@@ -258,11 +260,9 @@ class RealtimeListener {
 
       window.frames[0].window.addEventListener('keydown', keydown_handler)
     },
-    setInitialIframeSrc: async () => {
-      const iframe = document.getElementById('frame')
-      iframe.src = locationUrl !== '' ? locationUrl : 'index.html'
-      iframe.contentWindow.window.addEventListener('keydown', keydown_handler)
-    },
+    // TODO `loadURL` should be used instead? Then `locationUrl` is not needed.
+    // As a first step we can just use `location`
+    // instead of `window.frames[0].window.location`.
     /**
      * called via webContents.executeJavaScript
      */
