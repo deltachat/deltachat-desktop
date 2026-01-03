@@ -298,6 +298,7 @@ function CreateChatMain(props: CreateChatMainProps) {
                   .then(refreshContacts)
               }
             },
+            danger: true,
           },
         ],
         openContextMenu

@@ -9,7 +9,6 @@ import React, {
 } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
-import { useThreeDotMenu } from '../../ThreeDotMenu'
 import ChatList from '../../chat/ChatList'
 import { Avatar } from '../../Avatar'
 import ConnectivityToast from '../../ConnectivityToast'
@@ -43,6 +42,7 @@ import { runtime } from '@deltachat-desktop/runtime-interface'
 import asyncThrottle from '@jcoreio/async-throttle'
 import { useFetch, useRpcFetch } from '../../../hooks/useFetch'
 import { getLogger } from '@deltachat-desktop/shared/logger'
+import { useChatContextMenu } from '../../chat/ChatContextMenu'
 
 const log = getLogger('MainScreen')
 
@@ -488,7 +488,13 @@ function ChatNavButtons({
   lastUsedApps: T.Message[]
 }) {
   const tx = useTranslationFunction()
-  const onClickThreeDotMenu = useThreeDotMenu(chat)
+  const { openContextMenu } = useChatContextMenu()
+  const onClickThreeDotMenu = useCallback(
+    (event: React.MouseEvent) => {
+      openContextMenu(event, [], chat.id, chat)
+    },
+    [openContextMenu, chat]
+  )
   const chatId = chat.id
   const settingsStore = useSettingsStore()[0]
   const { openDialog } = useDialog()
