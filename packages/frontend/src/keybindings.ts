@@ -30,6 +30,7 @@ export enum KeybindAction {
   ChatList_SwitchToArchiveView = 'chatlist:switch-to-archive-view',
   ChatList_SwitchToNormalView = 'chatlist:switch-to-normal-view',
   AboutDialog_Open = 'about:open',
+  Chat_Unselect = 'chat:unselect',
 
   // Composite Actions (actions that trigger other actions)
   // ChatList_FocusAndClearSearchInput = 'chatlist:focus-and-clear-search',
@@ -47,7 +48,7 @@ export namespace ActionEmitter {
     if (!Array.isArray(handlers[action])) {
       handlers[action] = []
     }
-    ;(handlers[action] as any[]).push(handler)
+    ; (handlers[action] as any[]).push(handler)
   }
 
   export function unRegisterHandler(
@@ -65,7 +66,7 @@ export namespace ActionEmitter {
       return
     }
     log.debug('fire action', action, 'handlers:', handlers[action])
-    ;(handlers[action] as any[]).forEach(handler => handler())
+      ; (handlers[action] as any[]).forEach(handler => handler())
   }
 }
 
@@ -137,11 +138,12 @@ export function keyDownEvent2Action(
     ) {
       return KeybindAction.Settings_Open
     } else if (ev.code === 'Escape') {
-      if ((ev.target as any).id === 'chat-list-search') {
-        return KeybindAction.ChatList_ExitSearch
-      } else if ((ev.target as any).id === 'composer-textarea') {
-        return KeybindAction.Composer_CancelReply
-      }
+      // if ((ev.target as any).id === 'chat-list-search') {
+      //   return KeybindAction.ChatList_ExitSearch
+      // } else if ((ev.target as any).id === 'composer-textarea') {
+      //   return KeybindAction.Composer_CancelReply
+      // }
+      return KeybindAction.Chat_Unselect
     } else if (
       (ev.target as any).id === 'chat-list-search' &&
       (ev.key === 'Enter' || ev.code === 'ArrowDown')
