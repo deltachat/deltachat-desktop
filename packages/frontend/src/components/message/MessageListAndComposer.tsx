@@ -259,17 +259,8 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
     [hasOpenDialogs]
   )
 
-  const onEscapeKeyUp = useCallback((ev: KeyboardEvent) => {
-    if (ev.code === 'Escape') {
-      // Only one of these is actually rendered at any given moment.
-      regularMessageInputRef.current?.focus()
-      editMessageInputRef.current?.focus()
-    }
-  }, [])
-
   useEffect(() => {
     window.addEventListener('mouseup', onMouseUp)
-    window.addEventListener('keyup', onEscapeKeyUp)
 
     // Only one of these is actually rendered at any given moment.
     regularMessageInputRef.current?.focus()
@@ -277,9 +268,8 @@ export default function MessageListAndComposer({ accountId, chat }: Props) {
 
     return () => {
       window.removeEventListener('mouseup', onMouseUp)
-      window.removeEventListener('keyup', onEscapeKeyUp)
     }
-  }, [onMouseUp, onEscapeKeyUp])
+  }, [onMouseUp])
 
   const settingsStore = useSettingsStore()[0]
   // If you want to update this, don't forget to update
