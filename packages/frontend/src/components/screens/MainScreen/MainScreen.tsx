@@ -28,7 +28,7 @@ import useOpenViewGroupDialog from '../../../hooks/dialog/useOpenViewGroupDialog
 import useOpenViewProfileDialog from '../../../hooks/dialog/useOpenViewProfileDialog'
 import useSelectLastChat from '../../../hooks/chat/useSelectLastChat'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
-import { KeybindAction } from '../../../keybindings'
+import { ActionEmitter, KeybindAction } from '../../../keybindings'
 import { selectedAccountId } from '../../../ScreenController'
 import { openMapWebxdc } from '../../../system-integration/webxdc'
 import { ScreenContext } from '../../../contexts/ScreenContext'
@@ -106,11 +106,9 @@ export default function MainScreen({ accountId }: Props) {
   }
 
   const handleSearchClear = useCallback(() => {
-    if (!searchRef.current) {
-      return
+    if (searchRef.current) {
+      searchRef.current.value = ''
     }
-
-    searchRef.current.value = ''
     searchChats('')
     setQueryChatId(null)
 
@@ -149,6 +147,21 @@ export default function MainScreen({ accountId }: Props) {
   useKeyBindingAction(KeybindAction.NewChat_Open, () => {
     // Same as `onCreateChat` in ChatList.
     openDialog(CreateChat)
+  })
+
+  useKeyBindingAction(KeybindAction.Chat_Unselect, () => {
+    if (chatId !== undefined) {
+      unselectChat()
+    } else {
+      handleSearchClear()
+      if (archivedChatsSelected) {
+        setArchivedChatsSelected(false)
+      }
+      // refocus composer after clearing search, if on wide screen
+      if (!smallScreenMode) {
+        ActionEmitter.emitAction(KeybindAction.Composer_Focus)
+      }
+    }
   })
 
   useKeyBindingAction(KeybindAction.GlobalGallery_Open, () => {
@@ -241,9 +254,8 @@ export default function MainScreen({ accountId }: Props) {
 
   return (
     <div
-      className={`main-screen ${smallScreenMode ? 'small-screen' : ''} ${
-        !messageSectionShouldBeHidden ? 'chat-view-open' : ''
-      }`}
+      className={`main-screen ${smallScreenMode ? 'small-screen' : ''} ${!messageSectionShouldBeHidden ? 'chat-view-open' : ''
+        }`}
     >
       <section
         className={styles.chatListAndHeader}
