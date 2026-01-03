@@ -71,7 +71,7 @@ Webview: {:?}",
                     .map(|date| date.to_string())
                     .unwrap_or("??".to_owned()))
                 .unwrap_or("?".to_owned()),
-            *deltachat::constants::DC_VERSION_STR,
+            deltachat::constants::DC_VERSION_STR,
             *deltachat::release::DATE,
             tauri::VERSION,
             tauri::webview_version().unwrap_or("?".to_owned())
