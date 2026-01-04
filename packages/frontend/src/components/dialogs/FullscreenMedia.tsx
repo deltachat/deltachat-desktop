@@ -52,6 +52,12 @@ export default function FullscreenMedia(props: Props & DialogProps) {
   const resetImageZoom = useRef<(() => void) | null>(null) as React.RefObject<
     (() => void) | null
   >
+  const zoomInRef = useRef<(() => void) | null>(null) as React.RefObject<
+    (() => void) | null
+  >
+  const zoomOutRef = useRef<(() => void) | null>(null) as React.RefObject<
+    (() => void) | null
+  >
   const previousNextMessageId = useRef<[number | null, number | null]>([
     null,
     null,
@@ -144,9 +150,9 @@ export default function FullscreenMedia(props: Props & DialogProps) {
           }}
         >
           {utils => {
-            resetImageZoom.current = () => {
-              utils.resetTransform()
-            }
+            resetImageZoom.current = () => utils.resetTransform()
+            zoomInRef.current = () => utils.zoomIn()
+            zoomOutRef.current = () => utils.zoomOut()
             return (
               <TransformComponent
                 wrapperStyle={{
@@ -289,6 +295,29 @@ export default function FullscreenMedia(props: Props & DialogProps) {
     document.addEventListener('keydown', listener)
     return () => document.removeEventListener('keydown', listener)
   }, [previousImage, nextImage, isContextMenuActive])
+
+  // Handle Ctrl+Plus and Ctrl+Minus for zoom
+  useEffect(() => {
+    const handleKeyDown = (ev: KeyboardEvent) => {
+      if (ev.ctrlKey || ev.metaKey) {
+        if (ev.key === '+' || ev.key === '=') {
+          ev.preventDefault()
+          ev.stopPropagation()
+          zoomInRef.current?.()
+        } else if (ev.key === '-') {
+          ev.preventDefault()
+          ev.stopPropagation()
+          zoomOutRef.current?.()
+        }
+      }
+    }
+
+    // Use capture phase to intercept before other handlers
+    document.addEventListener('keydown', handleKeyDown, true)
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown, true)
+    }
+  }, [])
 
   if (!msg || !msg.file) return elm
 
