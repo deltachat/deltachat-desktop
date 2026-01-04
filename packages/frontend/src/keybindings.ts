@@ -69,17 +69,70 @@ export namespace ActionEmitter {
   }
 }
 
+/**
+ * Detect if the keyboard layout produces Latin letters for letter keys.
+ * On Latin-based layouts (US, German, French), letter keys produce a-z.
+ * On non-Latin layouts (Russian, Greek, Arabic), letter keys produce other scripts.
+ */
+function isLatinLayout(ev: KeyboardEvent): boolean {
+  // If we're pressing a letter key (KeyA-KeyZ), check if it produces a Latin letter
+  if (ev.code.startsWith('Key') && ev.code.length === 4) {
+    return /^[a-zA-Z]$/.test(ev.key)
+  }
+  // For non-letter keys, we can't determine layout from this event
+  return true
+}
+
+/**
+ * Helper for letter-based shortcuts (Ctrl+F, Ctrl+N, etc.)
+ * Works correctly for both Latin layouts (German, French) and non-Latin layouts (Russian, Greek).
+ * - On Latin layouts: matches by ev.key (the character produced)
+ * - On non-Latin layouts: falls back to ev.code (physical key position)
+ */
+function matchesLetterShortcut(ev: KeyboardEvent, letter: string): boolean {
+  const lower = letter.toLowerCase()
+  const code = `Key${letter.toUpperCase()}`
+
+  if (ev.key.toLowerCase() === lower) {
+    return true // Direct match (works for all Latin layouts)
+  }
+  // Fallback to physical position for non-Latin layouts
+  return !isLatinLayout(ev) && ev.code === code
+}
+
+/**
+ * Helper for symbol-based shortcuts (Ctrl+/, Ctrl+,, etc.)
+ * Matches by character, with fallback to physical position only for non-ASCII keys.
+ * This prevents capturing unintended shortcuts like Ctrl+- when we want Ctrl+/
+ * (on German keyboards, the Slash position produces '-').
+ */
+function matchesSymbolShortcut(
+  ev: KeyboardEvent,
+  symbol: string,
+  code: string
+): boolean {
+  if (ev.key === symbol) {
+    return true // Direct character match
+  }
+  // Only fall back to code if ev.key is NOT a printable ASCII character.
+  // This prevents capturing e.g. Ctrl+- when we want Ctrl+/
+  const isPrintableAscii = ev.key.length === 1 && ev.key >= ' ' && ev.key <= '~'
+  return !isPrintableAscii && ev.code === code
+}
+
 export function keyDownEvent2Action(
   ev: KeyboardEvent
 ): KeybindAction | undefined {
   if (window.__contextMenuActive) {
     return
   }
+  // Don't capture keys during IME composition (Chinese, Japanese, Korean input)
+  if (ev.isComposing) {
+    return
+  }
   // When modifying this, don't forget to also update the corresponding
   // `aria-keyshortcuts` properties, and the "Keybindings" help window.
   if (!ev.repeat) {
-    // check if key is latin, if not we have to use ev.code instead of ev.key
-    const isLatin = ev.key && /^\p{Script=Latin}$/u.test(ev.key)
     // fire only on first press
     if (ev.altKey && ev.code === 'ArrowDown') {
       return KeybindAction.ChatList_SelectNextChat
@@ -97,24 +150,15 @@ export function keyDownEvent2Action(
       // disabled until we find a better keycombination (see https://github.com/deltachat/deltachat-desktop/issues/1796)
       //   return KeybindAction.ChatList_ScrollToSelectedChat
       // }
-    } else if (
-      (ev.metaKey || ev.ctrlKey) &&
-      (ev.key.toLowerCase() === 'f' || (!isLatin && ev.code === 'KeyF'))
-    ) {
+    } else if ((ev.metaKey || ev.ctrlKey) && matchesLetterShortcut(ev, 'f')) {
       // https://github.com/deltachat/deltachat-desktop/issues/4579
       if (ev.shiftKey) {
         return KeybindAction.ChatList_SearchInChat
       }
       return KeybindAction.ChatList_FocusSearchInput
-    } else if (
-      (ev.metaKey || ev.ctrlKey) &&
-      (ev.key.toLowerCase() === 'n' || (!isLatin && ev.code === 'KeyN'))
-    ) {
+    } else if ((ev.metaKey || ev.ctrlKey) && matchesLetterShortcut(ev, 'n')) {
       return KeybindAction.NewChat_Open
-    } else if (
-      ev.ctrlKey &&
-      (ev.key.toLowerCase() === 'm' || (!isLatin && ev.code === 'KeyM'))
-    ) {
+    } else if (ev.ctrlKey && matchesLetterShortcut(ev, 'm')) {
       return KeybindAction.Composer_Focus
     } else if (
       // Also consider adding this to `ev.repeat` when it stops being so sluggish
@@ -133,7 +177,7 @@ export function keyDownEvent2Action(
       return KeybindAction.Composer_SelectReplyToDown
     } else if (
       (ev.metaKey || ev.ctrlKey) &&
-      (ev.key === ',' || (!isLatin && ev.code === 'Comma'))
+      matchesSymbolShortcut(ev, ',', 'Comma')
     ) {
       return KeybindAction.Settings_Open
     } else if (ev.code === 'Escape') {
@@ -160,7 +204,7 @@ export function keyDownEvent2Action(
       }
     } else if (
       (ev.metaKey || ev.ctrlKey) &&
-      (ev.key === '/' || (!isLatin && ev.code === 'Slash'))
+      matchesSymbolShortcut(ev, '/', 'Slash')
     ) {
       return KeybindAction.KeybindingCheatSheet_Open
     }
