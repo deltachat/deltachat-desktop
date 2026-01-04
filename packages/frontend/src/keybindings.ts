@@ -101,12 +101,12 @@ function matchesLetterShortcut(ev: KeyboardEvent, letter: string): boolean {
 }
 
 /**
- * Helper for symbol-based shortcuts (Ctrl+/, Ctrl+,, etc.)
+ * Helper for non-letter shortcuts (Ctrl+/, Ctrl+,, etc.)
  * Matches by character, with fallback to physical position only for non-ASCII keys.
  * This prevents capturing unintended shortcuts like Ctrl+- when we want Ctrl+/
  * (on German keyboards, the Slash position produces '-').
  */
-function matchesSymbolShortcut(
+function matchesNonLetterShortcut(
   ev: KeyboardEvent,
   symbol: string,
   code: string
@@ -177,7 +177,7 @@ export function keyDownEvent2Action(
       return KeybindAction.Composer_SelectReplyToDown
     } else if (
       (ev.metaKey || ev.ctrlKey) &&
-      matchesSymbolShortcut(ev, ',', 'Comma')
+      matchesNonLetterShortcut(ev, ',', 'Comma')
     ) {
       return KeybindAction.Settings_Open
     } else if (ev.code === 'Escape') {
@@ -204,7 +204,7 @@ export function keyDownEvent2Action(
       }
     } else if (
       (ev.metaKey || ev.ctrlKey) &&
-      matchesSymbolShortcut(ev, '/', 'Slash')
+      matchesNonLetterShortcut(ev, '/', 'Slash')
     ) {
       return KeybindAction.KeybindingCheatSheet_Open
     }

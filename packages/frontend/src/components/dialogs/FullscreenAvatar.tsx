@@ -1,10 +1,11 @@
-import React, { useEffect, useRef } from 'react'
+import React from 'react'
 import { basename } from 'path'
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
 
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useContextMenu from '../../hooks/useContextMenu'
+import { useZoomKeyboardShortcuts } from '../../hooks/useZoomKeyboardShortcuts'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 import Dialog from '../Dialog'
@@ -16,38 +17,7 @@ export default function FullscreenAvatar(
   const tx = useTranslationFunction()
   const { onClose, imagePath } = props
 
-  const resetImageZoom = useRef<(() => void) | null>(null) as React.RefObject<
-    (() => void) | null
-  >
-  const zoomInRef = useRef<(() => void) | null>(null) as React.RefObject<
-    (() => void) | null
-  >
-  const zoomOutRef = useRef<(() => void) | null>(null) as React.RefObject<
-    (() => void) | null
-  >
-
-  // Handle Ctrl+Plus and Ctrl+Minus for zoom
-  useEffect(() => {
-    const handleKeyDown = (ev: KeyboardEvent) => {
-      if (ev.ctrlKey || ev.metaKey) {
-        if (ev.key === '+' || ev.key === '=') {
-          ev.preventDefault()
-          ev.stopPropagation()
-          zoomInRef.current?.()
-        } else if (ev.key === '-') {
-          ev.preventDefault()
-          ev.stopPropagation()
-          zoomOutRef.current?.()
-        }
-      }
-    }
-
-    // Use capture phase to intercept before other handlers
-    document.addEventListener('keydown', handleKeyDown, true)
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown, true)
-    }
-  }, [])
+  const { zoomInRef, zoomOutRef, zoomResetRef } = useZoomKeyboardShortcuts()
 
   const saveAs = () => {
     runtime.downloadFile(imagePath, basename(imagePath))
@@ -80,9 +50,9 @@ export default function FullscreenAvatar(
             }}
           >
             {utils => {
-              resetImageZoom.current = () => utils.resetTransform()
               zoomInRef.current = () => utils.zoomIn()
               zoomOutRef.current = () => utils.zoomOut()
+              zoomResetRef.current = () => utils.resetTransform()
               return (
                 <TransformComponent
                   wrapperStyle={{
