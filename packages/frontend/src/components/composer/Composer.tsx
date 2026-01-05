@@ -213,68 +213,68 @@ const Composer = forwardRef<
     messageEditing.isEditingModeActive || draftIsLoading
       ? null
       : async () => {
-          if (chatId === null) {
-            throw new Error('chat id is undefined')
-          }
-          if (!(draftState.text.length > 0) && !draftState.file) {
-            log.debug(`Empty message: don't send it...`)
-            return
-          }
-
-          const preSendDraftState = draftState
-          const sendMessagePromise = sendMessage(accountId, chatId, {
-            text: draftState.text,
-            file: draftState.file || undefined,
-            filename: draftState.fileName || undefined,
-            quotedMessageId:
-              draftState.quote?.kind === 'WithMessage'
-                ? draftState.quote.messageId
-                : null,
-            viewtype: draftState.viewType,
-          })
-          // _Immediately_ clear the draft from React state.
-          // This does _not_ remove the draft from the back-end yet.
-          // This is primarily to make sure that you can't accidentally
-          // doube-send the same message.
-          //
-          // We could instead disable the textarea
-          // and disable sending the next message
-          // until the previous one has been sent,
-          // but it's unnecessary to block the user in such a way,
-          // because it's not often that `sendMessage` fails.
-          // And also disabling an input makes it lose focus,
-          // so we'd have to re-focus it, which would make screen readers
-          // re-announce it, which is disorienting.
-          // See https://github.com/deltachat/deltachat-desktop/issues/4590#issuecomment-2821985528.
-          props.clearDraftState()
-
-          let sentSuccessfully: boolean
-          try {
-            await sendMessagePromise
-            sentSuccessfully = true
-          } catch (err) {
-            sentSuccessfully = false
-            openDialog(AlertDialog, {
-              message:
-                tx('systemmsg_failed_sending_to', selectedChat.name) +
-                '\n' +
-                tx('error_x', unknownErrorToString(err)),
-            })
-            // Restore the draft, since we failed to send.
-            // Note that this will not save the draft to the backend.
-            //
-            // TODO fix: hypothetically by this point the user
-            // could have started typing a new message already,
-            // and so this would override it on the frontend.
-            props.setDraftState(preSendDraftState)
-          }
-          if (sentSuccessfully) {
-            // TODO fix: hypothetically by this point the user
-            // could have started typing (and even have sent!)
-            // a new message already, so this would override it on the backend.
-            await BackendRemote.rpc.removeDraft(accountId, chatId)
-          }
+        if (chatId === null) {
+          throw new Error('chat id is undefined')
         }
+        if (!(draftState.text.length > 0) && !draftState.file) {
+          log.debug(`Empty message: don't send it...`)
+          return
+        }
+
+        const preSendDraftState = draftState
+        const sendMessagePromise = sendMessage(accountId, chatId, {
+          text: draftState.text,
+          file: draftState.file || undefined,
+          filename: draftState.fileName || undefined,
+          quotedMessageId:
+            draftState.quote?.kind === 'WithMessage'
+              ? draftState.quote.messageId
+              : null,
+          viewtype: draftState.viewType,
+        })
+        // _Immediately_ clear the draft from React state.
+        // This does _not_ remove the draft from the back-end yet.
+        // This is primarily to make sure that you can't accidentally
+        // doube-send the same message.
+        //
+        // We could instead disable the textarea
+        // and disable sending the next message
+        // until the previous one has been sent,
+        // but it's unnecessary to block the user in such a way,
+        // because it's not often that `sendMessage` fails.
+        // And also disabling an input makes it lose focus,
+        // so we'd have to re-focus it, which would make screen readers
+        // re-announce it, which is disorienting.
+        // See https://github.com/deltachat/deltachat-desktop/issues/4590#issuecomment-2821985528.
+        props.clearDraftState()
+
+        let sentSuccessfully: boolean
+        try {
+          await sendMessagePromise
+          sentSuccessfully = true
+        } catch (err) {
+          sentSuccessfully = false
+          openDialog(AlertDialog, {
+            message:
+              tx('systemmsg_failed_sending_to', selectedChat.name) +
+              '\n' +
+              tx('error_x', unknownErrorToString(err)),
+          })
+          // Restore the draft, since we failed to send.
+          // Note that this will not save the draft to the backend.
+          //
+          // TODO fix: hypothetically by this point the user
+          // could have started typing a new message already,
+          // and so this would override it on the frontend.
+          props.setDraftState(preSendDraftState)
+        }
+        if (sentSuccessfully) {
+          // TODO fix: hypothetically by this point the user
+          // could have started typing (and even have sent!)
+          // a new message already, so this would override it on the backend.
+          await BackendRemote.rpc.removeDraft(accountId, chatId)
+        }
+      }
 
   const sendButtonAction: null | (() => void) =
     !messageEditing.isEditingModeActive
@@ -293,12 +293,6 @@ const Composer = forwardRef<
       return
     }
     onSelectReplyToShortcut(KeybindAction.Composer_SelectReplyToDown)
-  })
-  useKeyBindingAction(KeybindAction.Composer_CancelReply, () => {
-    if (messageEditing.isEditingModeActive) {
-      return
-    }
-    removeQuote()
   })
 
   const onEmojiIconClick = () => setShowEmojiPicker(!showEmojiPicker)
@@ -319,13 +313,30 @@ const Composer = forwardRef<
     const onKey = (ev: KeyboardEvent) => {
       shiftPressed.current = ev.shiftKey
       if (ev.type === 'keydown' && ev.code === 'Escape') {
-        setShowEmojiPicker(false)
-        setShowAppPicker(false)
+        let handled = false
+        if (showEmojiPicker) {
+          setShowEmojiPicker(false)
+          handled = true
+        }
+        if (showAppPicker) {
+          setShowAppPicker(false)
+          handled = true
+        }
         if (messageEditing.isEditingModeActive) {
           messageEditing.cancelEditing()
           setTimeout(() => {
             regularMessageInputRef.current?.focus()
           })
+          handled = true
+        } else if (draftState.quote) {
+          removeQuote()
+          handled = true
+        }
+
+        if (handled) {
+          ev.stopPropagation()
+          // prevent KeybindingsContext from seeing this Escape
+          // so it doesn't unselect the chat yet.
         }
       }
     }
@@ -367,93 +378,93 @@ const Composer = forwardRef<
   const onAppSelected = messageEditing.isEditingModeActive
     ? null
     : async (appInfo: AppInfo) => {
-        log.debug('App selected', appInfo)
-        const downloadUrl = AppStoreUrl + appInfo.cache_relname
-        const responseP = BackendRemote.rpc.getHttpResponse(
-          selectedAccountId(),
-          AppStoreUrl + appInfo.cache_relname
-        )
-        let response: Awaited<typeof responseP>
-        try {
-          response = await responseP
-          if (!(response?.blob?.length > 0)) {
-            throw new Error(
-              'BackendRemote.rpc.getHttpResponse did not return a body'
-            )
-          }
-        } catch (error) {
-          openDialog(AlertDialog, {
-            message: tx(
-              'error_x',
-              'Failed download the app file from the store:\n' +
-                unknownErrorToString(error) +
-                '\n\n' +
-                'You may try to download the app manually from\n\n' +
-                downloadUrl +
-                '\n\n' +
-                'or\n' +
-                'https://webxdc.org/apps'
-            ),
-          })
-          return
+      log.debug('App selected', appInfo)
+      const downloadUrl = AppStoreUrl + appInfo.cache_relname
+      const responseP = BackendRemote.rpc.getHttpResponse(
+        selectedAccountId(),
+        AppStoreUrl + appInfo.cache_relname
+      )
+      let response: Awaited<typeof responseP>
+      try {
+        response = await responseP
+        if (!(response?.blob?.length > 0)) {
+          throw new Error(
+            'BackendRemote.rpc.getHttpResponse did not return a body'
+          )
         }
-        const path = await runtime.writeTempFileFromBase64(
-          appInfo.cache_relname,
-          response.blob
-        )
-        await addFileToDraft(path, appInfo.cache_relname, 'File')
-        await runtime.removeTempFile(path)
-        setShowAppPicker(false)
+      } catch (error) {
+        openDialog(AlertDialog, {
+          message: tx(
+            'error_x',
+            'Failed download the app file from the store:\n' +
+            unknownErrorToString(error) +
+            '\n\n' +
+            'You may try to download the app manually from\n\n' +
+            downloadUrl +
+            '\n\n' +
+            'or\n' +
+            'https://webxdc.org/apps'
+          ),
+        })
+        return
       }
+      const path = await runtime.writeTempFileFromBase64(
+        appInfo.cache_relname,
+        response.blob
+      )
+      await addFileToDraft(path, appInfo.cache_relname, 'File')
+      await runtime.removeTempFile(path)
+      setShowAppPicker(false)
+    }
 
   // Paste file functionality
   // https://github.com/deltachat/deltachat-desktop/issues/2108
   const handlePaste = messageEditing.isEditingModeActive
     ? null
     : async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
-        // Skip if no file
-        if (!e.clipboardData.files.length) {
-          return
-        }
-        // when there is a file then don't paste text
-        // https://github.com/deltachat/deltachat-desktop/issues/3261
-        e.preventDefault()
-
-        // File object
-        const file = e.clipboardData.files[0]
-
-        log.debug(
-          `paste: received file: "${file.name}" ${file.type}`,
-          e.clipboardData.files
-        )
-
-        const msgType: T.Viewtype = file.type.startsWith('image')
-          ? 'Image'
-          : 'File'
-
-        try {
-          // Write clipboard to file then attach it to the draft
-          const file_content = await new Promise<string>((resolve, reject) => {
-            const reader = new FileReader()
-            reader.onloadend = () => {
-              resolve(reader.result as any)
-            }
-            reader.onabort = reject
-            reader.onerror = reject
-            reader.readAsDataURL(file)
-          })
-          const fileName = file.name || `file.${extension(file.type)}`
-          const path = await runtime.writeTempFileFromBase64(
-            fileName,
-            file_content.split(';base64,')[1]
-          )
-          await addFileToDraft(path, fileName, msgType)
-          // delete file again after it was sucessfuly added
-          await runtime.removeTempFile(path)
-        } catch (err) {
-          log.error('Failed to paste file.', err)
-        }
+      // Skip if no file
+      if (!e.clipboardData.files.length) {
+        return
       }
+      // when there is a file then don't paste text
+      // https://github.com/deltachat/deltachat-desktop/issues/3261
+      e.preventDefault()
+
+      // File object
+      const file = e.clipboardData.files[0]
+
+      log.debug(
+        `paste: received file: "${file.name}" ${file.type}`,
+        e.clipboardData.files
+      )
+
+      const msgType: T.Viewtype = file.type.startsWith('image')
+        ? 'Image'
+        : 'File'
+
+      try {
+        // Write clipboard to file then attach it to the draft
+        const file_content = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader()
+          reader.onloadend = () => {
+            resolve(reader.result as any)
+          }
+          reader.onabort = reject
+          reader.onerror = reject
+          reader.readAsDataURL(file)
+        })
+        const fileName = file.name || `file.${extension(file.type)}`
+        const path = await runtime.writeTempFileFromBase64(
+          fileName,
+          file_content.split(';base64,')[1]
+        )
+        await addFileToDraft(path, fileName, msgType)
+        // delete file again after it was sucessfuly added
+        await runtime.removeTempFile(path)
+      } catch (err) {
+        log.error('Failed to paste file.', err)
+      }
+    }
 
   const settingsStore = useSettingsStore()[0]
 
@@ -677,12 +688,12 @@ const Composer = forwardRef<
                 enterKeySends={settingsStore?.desktopSettings.enterKeySends}
                 loadingDraft={false}
                 sendMessageOrEditRequest={
-                  messageEditing.doSendEditRequest ?? (() => {})
+                  messageEditing.doSendEditRequest ?? (() => { })
                 }
                 chatId={chatId}
                 // Message editing mode doesn't support file pasting.
                 // onPaste={handlePaste}
-                onChange={messageEditing.setNewText ?? (() => {})}
+                onChange={messageEditing.setNewText ?? (() => { })}
               />
             </>
           )}
@@ -712,7 +723,7 @@ const Composer = forwardRef<
               // or includes only whitespace.
               // See `doSendEditRequest`.
               disabled={sendButtonAction == null}
-              onClick={sendButtonAction ?? (() => {})}
+              onClick={sendButtonAction ?? (() => { })}
               aria-label={tx('menu_send')}
               aria-keyshortcuts={ariaSendShortcut}
             >

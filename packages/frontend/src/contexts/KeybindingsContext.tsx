@@ -19,7 +19,7 @@ export const KeybindingsContext = createContext(null)
 export const KeybindingsContextProvider = ({
   children,
 }: PropsWithChildren<{}>) => {
-  const { openDialog } = useDialog()
+  const { openDialog, hasOpenDialogs } = useDialog()
 
   // @TODO: This probably needs another place
   useKeyBindingAction(KeybindAction.Settings_Open, () => {
@@ -52,6 +52,9 @@ export const KeybindingsContextProvider = ({
       const action = keyDownEvent2Action(event)
 
       if (action) {
+        if (hasOpenDialogs && event.code === 'Escape') {
+          return
+        }
         event.stopImmediatePropagation()
         event.preventDefault()
         ActionEmitter.emitAction(action)
