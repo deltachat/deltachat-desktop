@@ -400,16 +400,16 @@
     <!-- confirmation for leaving groups or channels. If a subject is needed, "Are you sure you want to leave the chat?" would work as well -->
     <string name="ask_leave_group">Ayrılmak istediğinizden emin misiniz?</string>
     <plurals name="ask_delete_chat">
-        <item quantity="one">Tüm aygıtlarınızdaki %d sohbet silinsin mi?</item>
-        <item quantity="other">Tüm aygıtlarınızdaki %d sohbet silinsin mi?</item>
+        <item quantity="one">%d sohbet silinsin mi?</item>
+        <item quantity="other">%d sohbet silinsin mi?</item>
     </plurals>
-    <string name="ask_delete_named_chat">Tüm aygıtlarınızdaki “%1$s” sohbeti silinsin mi?</string>
-    <string name="ask_delete_message">Tüm aygıtlarınızdaki bu ileti silinsin mi?</string>
+    <string name="ask_delete_named_chat">“%1$s” sohbeti silinsin mi?</string>
+    <string name="ask_delete_message">Bu ileti silinsin mi?</string>
     <plurals name="ask_delete_messages">
-        <item quantity="one">Tüm aygıtlarınızdaki %d ileti silinsin mi?</item>
-        <item quantity="other">Tüm aygıtlarınızdaki %d ileti silinsin mi?</item>
+        <item quantity="one">%d ileti silinsin mi?</item>
+        <item quantity="other">%d ileti silinsin mi?</item>
     </plurals>
-    <!-- Used for the deletion of Device messages -->
+    <!-- deprecated, use ask_delete_messages -->
     <plurals name="ask_delete_messages_simple">
         <item quantity="one">%d ileti silinsin mi?</item>
         <item quantity="other">%d ileti silinsin mi?</item>
@@ -483,6 +483,7 @@
 
     <!-- mailing lists -->
     <string name="mailing_list">Posta Listesi</string>
+    <!-- deprecated -->
     <string name="mailing_list_profile_info">Posta listesi adındaki ve görselindeki değişiklikler yalnızca bu aygıtta uygulanır.</string>
 
     <!-- webxdc -->
@@ -611,8 +612,8 @@
     <string name="onboarding_create_instant_account">Yeni Profil Oluştur</string>
     <!-- Secondary button on the welcome screen, allows to "Add as Second Device", "Restore from Backup"  -->
     <string name="onboarding_alternative_logins">Zaten Bir Profilim Var</string>
-    <!-- This is a button and a title, allowing to log in to existing, classic email accounts, setting ports, passwords and so on -->
-    <string name="manual_account_setup_option">Taşıma Aracı Olarak Klasik E-Posta Kullan</string>
+    <!-- This is a button and a title, allowing to use existing, classic email, setting ports, passwords and so on -->
+    <string name="manual_account_setup_option">Aktarıcı Olarak Klasik E-Posta Kullan</string>
     <!-- Instant onboarding title (there is not more to do than to set name and avatar) -->
     <string name="instant_onboarding_title">Profiliniz</string>
     <!-- The placeholder will be replaced by the default onboarding server -->
@@ -664,15 +665,15 @@
     <string name="proxy_enabled">Proxy Etkinleştirildi</string>
     <string name="proxy_enabled_hint">Bir proxy kullanıyorsunuz. Bağlanmakta sorun yaşıyorsanız başka bir proxy deneyin.</string>
     <!-- "Relay" refers to the relay servers used; please chose a common term in your language, no need to be literal. If in doubt, stay with "Relay" -->
-    <string name="transports">Taşıma Araçları</string>
-    <string name="add_transport">Taşıma Aracı Ekle</string>
-    <string name="remove_transport">Taşıma Aracını Kaldır</string>
-    <string name="edit_transport">Taşıma Aracını Düzenle</string>
+    <string name="transports">Aktarıcılar</string>
+    <string name="add_transport">Aktarıcı Ekle</string>
+    <string name="remove_transport">Aktarıcıyı Kaldır</string>
+    <string name="edit_transport">Aktarıcıyı Düzenle</string>
     <!-- shown if a QR code was scanned that can be used as a relay -->
-    <string name="confirm_add_transport">Bu taşıma aracı eklensin mi?</string>
-    <string name="invalid_transport_qr">Taranan QR kodu, geçerli bir taşıma aracı içermiyor.</string>
+    <string name="confirm_add_transport">Bu aktarıcı eklensin mi?</string>
+    <string name="invalid_transport_qr">Taranan QR kodu, geçerli bir aktarıcı içermiyor.</string>
     <!-- placeholder will be replaced by a relay server name -->
-    <string name="confirm_remove_transport">“%1$s” taşıma aracı kaldırılsın mı?\n\nKişileriniz yalnızca onlara önceden ulaştığınız başka bir taşıma aracı üzerinden size ulaşabilir.\n\nKuşkuluysanız taşıma aracını daha sonra kaldırın.</string>
+    <string name="confirm_remove_transport">“%1$s” aktarıcısı kaldırılsın mı?\n\nKişileriniz yalnızca onlara önceden ulaştığınız başka bir aktarıcı üzerinden size ulaşabilir.\n\nKuşkuluysanız aktarıcıyı daha sonra kaldırın.</string>
 
     <string name="login_certificate_checks">Sertifika Denetimleri</string>
     <string name="login_error_mail">Lütfen geçerli bir e-posta adresi girin</string>
@@ -748,6 +749,7 @@
     <string name="pref_sound">Ses</string>
     <string name="pref_silent">Sessiz</string>
     <string name="pref_privacy">Gizlilik</string>
+    <!-- deprecated, use pref_chats -->
     <string name="pref_chats_and_media">Sohbetler ve Ortamlar</string>
     <string name="pref_system_default">Sistem varsayılanı</string>
     <!-- Translators: as in "opposite of dark" -->
@@ -952,7 +954,7 @@
 
     <string name="devicemsg_self_deleted">“Kaydedilen İletiler” sohbetini sildiniz.\n\nℹ️ “Kaydedilen İletiler” özelliğini yeniden kullanmak için kendinizle yeni bir sohbet oluşturun.</string>
     <!-- %1$s will be replaced by the amount of storage already used, sth. as '500 MB'. If you want to use a percentage sign, type in two of them, eg. %1$s %% -->
-    <string name="devicemsg_storage_exceeding">⚠️ Sağlayıcınızın depolaması dolmak üzere: %1$s%% zaten kullanımda.\n\nDepolama tam dolduğunda iletileri alamayabilirsiniz.\n\n👉 Lütfen sağlayıcınızın web arabiriminden eski verileri silip silemeyeceğinizi denetleyin ve “Ayarlar / Sohbetler ve Ortamlar / Eski İletileri Sil”i etkinleştirmeyi düşünün. Herhangi bir zamanda şu anki depolama kullanımınızı “Ayarlar / Bağlanabilirlik”ten denetleyebilirsiniz.</string>
+    <string name="devicemsg_storage_exceeding">⚠️ Sağlayıcınızın depolaması dolmak üzere: %1$s%% zaten kullanımda.\n\nDepolama tam dolduğunda iletileri alamayabilirsiniz.\n\n👉 Lütfen sağlayıcınızın web arabiriminden eski verileri silip silemeyeceğinizi denetleyin ve “Ayarlar / Sohbetler / Eski İletileri Sil”i etkinleştirmeyi düşünün. Herhangi bir zamanda şu anki depolama kullanımınızı “Ayarlar / Bağlanabilirlik”ten denetleyebilirsiniz.</string>
     <!-- %1%s will be replaced by date and time in some human-readable format -->
     <string name="devicemsg_bad_time">⚠️ Aygıtınızdaki tarih ya da saat yanlış görünüyor (%1$s).\n\nİletilerinizin doğru şekilde alınmasını sağlamak için saatinizi ⏰🔧 ayarlayın.</string>
     <string name="devicemsg_update_reminder">⚠️ Delta Chat sürümünüz eski olabilir.\n\nBu, sorunlara neden olabilir; çünkü sohbet ortaklarınız daha yeni sürümleri kullanıyor - ve en yeni özellikleri kaybediyorsunuz 😳\nGüncelleştirmeler için lütfen https://get.delta.chat ya da uygulama mağazanızı denetleyin.</string>
@@ -993,13 +995,14 @@
     <string name="qrshow_join_contact_hint">%1$s ile sohbet etmek için bunu tarayın</string>
     <string name="qrshow_join_contact_no_connection_toast">Internet bağlantısı yok; QR kodu ayarlaması gerçekleştirilemiyor.</string>
     <string name="qraccount_ask_create_and_login">“%1$s” üzerinde yeni profil oluşturulsun ve orada giriş yapılsın mı?</string>
+    <!-- deprecated, use confirm_add_transport when scanning such a QR code from the main scanner -->
     <string name="qraccount_ask_create_and_login_another">“%1$s” üzerinde yeni profil oluşturulsun ve orada giriş yapılsın mı?\n\nVarolan profiliniz silinmeyecek. Profilleriniz arasında geçiş yapmak için “Profili Değiştir” öğesini kullanın.</string>
     <string name="set_name_and_avatar_explain">Kişilerinizin tanıyacağı bir ad ayarlayın. Bir profil görseli de ayarlayabilirsiniz.</string>
     <string name="please_enter_name">Lütfen bir ad girin.</string>
     <string name="qraccount_qr_code_cannot_be_used">Taranan QR kodu, yeni bir profil ayarlamak için kullanılamıyor.</string>
     <!-- the placeholder will be replaced by the address of the profile -->
     <string name="qrlogin_ask_login">“%1$s” adresine giriş yapılsın mı?</string>
-    <!-- the placeholder will be replaced by the address of the profile -->
+    <!-- deprecated, use confirm_add_transport when scanning such a QR code from the main scanner -->
     <string name="qrlogin_ask_login_another">“%1$s” adresine giriş yapılsın mı?\n\nVarolan profiliniz silinmeyecek. Profilleriniz arasında geçiş yapmak için “Profili Değiştir” öğesini kullanın.</string>
     <!-- first placeholder will be replaced by name of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">%1$s sizi bu gruba katılmaya çağırdı.\n\n%2$s kişisinin aygıtının yanıt vermesi bekleniyor…</string>
