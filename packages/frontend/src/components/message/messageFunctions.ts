@@ -70,9 +70,10 @@ export function confirmDialog(
 
 export async function confirmForwardMessage(
   openDialog: OpenDialog,
-  accountId: number,
+  srcAccountId: number,
   message: Type.Message,
-  chat: Pick<Type.BasicChat, 'name' | 'id'>
+  chat: Pick<Type.BasicChat, 'name' | 'id'>,
+  dstAccountId?: number
 ) {
   const tx = window.static_translate
   const yes = await confirmDialog(
@@ -81,7 +82,23 @@ export async function confirmForwardMessage(
     tx('forward')
   )
   if (yes) {
-    await BackendRemote.rpc.forwardMessages(accountId, [message.id], chat.id)
+    const targetAccountId = dstAccountId ?? srcAccountId
+    if (targetAccountId !== srcAccountId) {
+      // Cross-account forward
+      await BackendRemote.rpc.forwardMessagesToAccount(
+        srcAccountId,
+        [message.id],
+        targetAccountId,
+        chat.id
+      )
+    } else {
+      // Same-account forward
+      await BackendRemote.rpc.forwardMessages(
+        srcAccountId,
+        [message.id],
+        chat.id
+      )
+    }
   }
   return yes
 }

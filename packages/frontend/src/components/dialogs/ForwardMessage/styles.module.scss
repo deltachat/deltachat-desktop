@@ -1,0 +1,26 @@
+.switchAccountButton {
+  border: none;
+  display: flex;
+  justify-content: center;
+  padding: 8px 0;
+  background: transparent;
+  color: var(--textPrimary);
+  cursor: pointer;
+}
+
+.switchAccountText {
+  line-height: 1;
+}
+
+.switchAccountIcon {
+  margin-inline-end: 10px;
+  transform: rotate(180deg);
+}
+
+.switchAccountContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-shrink: 0;
+}
