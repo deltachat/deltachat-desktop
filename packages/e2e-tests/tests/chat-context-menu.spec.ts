@@ -122,9 +122,20 @@ test.describe('Setup', () => {
     await expect(
       page.locator('.chat-list .chat-list-item').filter({ hasText: userA.name })
     ).toHaveCount(1)
+
+    // Send a message from userB to userA so that userA learns userB's display name
+    await page
+      .locator('.chat-list .chat-list-item')
+      .filter({ hasText: userA.name })
+      .click()
+    await page.locator('#composer-textarea').fill(`Hello ${userA.name}!`)
+    await page.locator('button.send-button').click()
+    await expect(
+      page.locator('.message.outgoing').last().locator('.msg-body .text')
+    ).toHaveText(`Hello ${userA.name}!`)
   })
 
-  test('create encrypted group', async ({ browserName }) => {
+  test('create group chat', async ({ browserName }) => {
     if (browserName.toLowerCase().indexOf('chrom') > -1) {
       await page
         .context()
@@ -315,14 +326,6 @@ test.describe('Main View - 3-Dot Menu', () => {
       .filter({ hasText: userB.name })
       .click()
 
-    // Send a test message first
-    const testMessage = 'Test message to be cleared ' + Date.now()
-    await page.locator('#composer-textarea').fill(testMessage)
-    await page.locator('button.send-button').click()
-    await expect(page.locator('.message.outgoing').last()).toContainText(
-      testMessage
-    )
-
     // Clear the chat
     await openMainViewThreeDotMenu(page)
     await page.getByRole('menuitem', { name: 'Clear Chat' }).click()
@@ -380,6 +383,29 @@ test.describe('Chat List Context Menu - Single Selection', () => {
       'Encryption Info',
     ])
 
+    await closeMenu(page)
+  })
+
+  test('shows Unpin Chat when chat is pinned', async () => {
+    const userA = existingProfiles[0]
+    const userB = existingProfiles[1]
+
+    await switchToProfile(page, userA.id)
+
+    // Pin the chat first
+    await openChatListContextMenu(page, userB.name)
+    await page.getByRole('menuitem', { name: 'Pin Chat' }).click()
+
+    // Open context menu again and verify Unpin is shown as first item
+    await openChatListContextMenu(page, userB.name)
+    await expect(getMenuItems(page).first()).toHaveText('Unpin Chat')
+
+    // Unpin to restore state
+    await page.getByRole('menuitem', { name: 'Unpin Chat' }).click()
+
+    // Verify Pin Chat is back
+    await openChatListContextMenu(page, userB.name)
+    await expect(getMenuItems(page).first()).toHaveText('Pin Chat')
     await closeMenu(page)
   })
 
