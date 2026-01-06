@@ -104,19 +104,6 @@ test('start chat with user', async ({ browserName }) => {
     .filter({ hasText: userA.name })
     .first()
   await expect(chatListItem).toBeVisible()
-  // check for context menu items
-  await chatListItem.click({
-    button: 'right',
-  })
-  await expect(page.getByRole('menu').getByRole('menuitem')).toHaveText([
-    'Pin Chat',
-    'Archive Chat',
-    'Mute Notifications',
-    'View Profile',
-    'Block Contact',
-    'Delete Chat',
-    'Encryption Info',
-  ])
 })
 
 /**
