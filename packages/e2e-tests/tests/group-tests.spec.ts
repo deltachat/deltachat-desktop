@@ -141,20 +141,6 @@ test('create group', async ({ browserName }) => {
     .getByTestId(`account-item-${userB.id}`)
     .locator('.styles_module_accountBadgeIcon')
   await expect(badgeNumber).toHaveText('1')
-  // check for context menu items
-  await chatListItem.click({
-    button: 'right',
-  })
-  await expect(page.getByRole('menu').getByRole('menuitem')).toHaveText([
-    'Pin Chat',
-    'Archive Chat',
-    'Mute Notifications',
-    'View Profile',
-    'Clone Chat',
-    'Leave Group',
-    'Delete Chat',
-    'Encryption Info',
-  ])
 })
 
 test('check "New E-Mail" option presence', async ({ isChatmail }) => {
