@@ -10,6 +10,7 @@ import {
   switchToProfile,
   clickThroughTestIds,
   getUser,
+  createGroupChat,
 } from '../playwright-helper'
 
 /**
@@ -135,39 +136,10 @@ test.describe('Setup', () => {
     ).toHaveText(`Hello ${userA.name}!`)
   })
 
-  test('create group chat', async ({ browserName }) => {
-    if (browserName.toLowerCase().indexOf('chrom') > -1) {
-      await page
-        .context()
-        .grantPermissions(['clipboard-read', 'clipboard-write'])
-    }
+  test('create group chat', async () => {
     const userA = existingProfiles[0]
     const userB = existingProfiles[1]
-
-    await switchToProfile(page, userA.id)
-
-    // Create group with userB
-    await page.locator('#new-chat-button').click()
-    await page.locator('#newgroup button').click()
-    await page.locator('.group-name-input').fill(groupName)
-    await page.locator('#addmember button').click()
-
-    const addMemberDialog = page.getByTestId('add-member-dialog')
-    await page
-      .locator('.contact-list-item')
-      .filter({ hasText: userB.name })
-      .click()
-    await addMemberDialog.getByTestId('ok').click()
-    await page.getByTestId('group-create-button').click()
-
-    const chatListItem = page
-      .locator('.chat-list .chat-list-item')
-      .filter({ hasText: groupName })
-    await expect(chatListItem).toBeVisible()
-
-    // Send a message to make it an active group
-    await page.locator('#composer-textarea').fill('Hello group!')
-    await page.locator('button.send-button').click()
+    await createGroupChat(page, groupName, userA, userB)
   })
 })
 
