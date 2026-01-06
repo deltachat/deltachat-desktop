@@ -83,20 +83,6 @@ export default function ReactionsBar({
           ref={reactionsBarRef}
           className={styles.reactionsBar}
         >
-          {myReaction && !isMyReactionDefault && (
-            <button
-              type='button'
-              role='menuitemradio'
-              aria-checked={true}
-              onClick={() => toggleReaction(myReaction!)}
-              className={classNames(
-                styles.reactionsBarButton,
-                styles.isFromSelf
-              )}
-            >
-              <span className={styles.reactionsBarEmoji}>{myReaction}</span>
-            </button>
-          )}
           {DEFAULT_EMOJIS.map((emoji, index) => {
             const isChecked = myReaction === emoji
             return (
@@ -114,6 +100,20 @@ export default function ReactionsBar({
               </button>
             )
           })}
+          {myReaction && !isMyReactionDefault && (
+            <button
+              type='button'
+              role='menuitemradio'
+              aria-checked={true}
+              onClick={() => toggleReaction(myReaction!)}
+              className={classNames(
+                styles.reactionsBarButton,
+                styles.isFromSelf
+              )}
+            >
+              <span className={styles.reactionsBarEmoji}>{myReaction}</span>
+            </button>
+          )}
           <button
             type='button'
             role='menuitem'
