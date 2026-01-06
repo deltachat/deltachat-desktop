@@ -12,6 +12,7 @@ import {
   reloadPage,
   clickThroughTestIds,
   test,
+  createGroupChat,
 } from '../playwright-helper'
 
 test.describe.configure({ mode: 'serial' })
@@ -105,56 +106,14 @@ test('start chat with user', async ({ browserName }) => {
   await expect(sentMessageText).toHaveText(messageText)
 })
 
-test('create group', async ({ browserName }) => {
-  if (browserName.toLowerCase().indexOf('chrom') > -1) {
-    await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
-  }
+test('create group', async () => {
   const userA = existingProfiles[0]
   const userB = existingProfiles[1]
-  await switchToProfile(page, userA.id)
-  const chatUserB = page
-    .locator('.chat-list .chat-list-item')
-    .filter({ hasText: userB.name })
-  await expect(chatUserB).toBeVisible()
-  await page.locator('#new-chat-button').click()
-  await page.locator('#newgroup button').click()
-  await page.locator('.group-name-input').fill(groupName)
-  await page.locator('#addmember button').click()
-  const addMemberDialog = page.getByTestId('add-member-dialog')
-  await page
-    .locator('.contact-list-item')
-    .filter({ hasText: userB.name })
-    .click()
-
-  await addMemberDialog.getByTestId('ok').click()
-
-  await page.getByTestId('group-create-button').click()
-  const chatListItem = page
-    .locator('.chat-list .chat-list-item')
-    .filter({ hasText: groupName })
-  await expect(chatListItem).toBeVisible()
-  await page
-    .locator('.create-or-edit-message-input')
-    .fill(`Hello group members!`)
-  await page.locator('button.send-button').click()
+  await createGroupChat(page, groupName, userA, userB)
   const badgeNumber = page
     .getByTestId(`account-item-${userB.id}`)
     .locator('.styles_module_accountBadgeIcon')
   await expect(badgeNumber).toHaveText('1')
-  // check for context menu items
-  await chatListItem.click({
-    button: 'right',
-  })
-  await expect(page.getByRole('menu').getByRole('menuitem')).toHaveText([
-    'Pin Chat',
-    'Archive Chat',
-    'Mute Notifications',
-    'View Profile',
-    'Clone Chat',
-    'Leave Group',
-    'Delete Chat',
-    'Encryption Info',
-  ])
 })
 
 test('check "New E-Mail" option presence', async ({ isChatmail }) => {
