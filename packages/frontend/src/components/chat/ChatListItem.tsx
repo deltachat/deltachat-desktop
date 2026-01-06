@@ -9,7 +9,6 @@ import { mapCoreMsgStatus2String } from '../helpers/MapMsgStatus'
 import { getLogger } from '../../../../shared/logger'
 import { useContextMenuWithActiveState } from '../ContextMenu'
 import { selectedAccountId } from '../../ScreenController'
-import { runtime } from '@deltachat-desktop/runtime-interface'
 import { parseAndRenderMessage } from '../message/MessageParser'
 import { useRovingTabindex } from '../../contexts/RovingTabindex'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
@@ -77,8 +76,6 @@ const Message = React.memo<
     | 'freshMessageCounter'
     | 'isArchived'
     | 'isContactRequest'
-    | 'summaryPreviewImage'
-    | `lastMessageId`
   >
 >(function ({
   summaryStatus,
@@ -87,8 +84,6 @@ const Message = React.memo<
   freshMessageCounter,
   isArchived,
   isContactRequest,
-  summaryPreviewImage,
-  lastMessageId,
 }) {
   const isIncoming =
     summaryStatus === C.DC_STATE_IN_FRESH ||
@@ -96,8 +91,6 @@ const Message = React.memo<
     summaryStatus === C.DC_STATE_IN_NOTICED
 
   const status = isIncoming ? '' : mapCoreMsgStatus2String(summaryStatus)
-
-  const iswebxdc = summaryPreviewImage === 'webxdc-icon://last-msg-id'
 
   return (
     <div className='chat-list-item-message'>
@@ -110,27 +103,6 @@ const Message = React.memo<
           >
             {summaryText1 + ': '}
           </div>
-        )}
-        {summaryPreviewImage && !iswebxdc && (
-          <div
-            className='summary_thumbnail'
-            style={{
-              backgroundImage: `url(${JSON.stringify(
-                runtime.transformBlobURL(summaryPreviewImage)
-              )})`,
-            }}
-          />
-        )}
-        {iswebxdc && lastMessageId && (
-          <div
-            className='summary_thumbnail'
-            style={{
-              backgroundImage: `url("${runtime.getWebxdcIconURL(
-                selectedAccountId(),
-                lastMessageId
-              )}")`,
-            }}
-          />
         )}
         {parseAndRenderMessage(summaryText2 || '', true, -1)}
       </div>
@@ -401,11 +373,9 @@ function RegularChatListItem({
           summaryStatus={chat.summaryStatus}
           summaryText1={chat.summaryText1}
           summaryText2={chat.summaryText2}
-          summaryPreviewImage={chat.summaryPreviewImage}
           freshMessageCounter={chat.freshMessageCounter}
           isArchived={chat.isArchived}
           isContactRequest={chat.isContactRequest}
-          lastMessageId={chat.lastMessageId}
         />
       </div>
     </button>
