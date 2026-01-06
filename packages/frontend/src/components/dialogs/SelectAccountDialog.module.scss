@@ -1,0 +1,80 @@
+.dialogBody {
+  padding: 0;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.loading {
+  padding: 20px;
+  text-align: center;
+  color: var(--textSecondary);
+}
+
+.accountList {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+}
+
+.accountButton {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  background: none;
+  text-align: start;
+  cursor: pointer;
+  gap: 12px;
+
+  &:hover {
+    background-color: var(--chatListItemBgHover);
+  }
+}
+
+.avatar {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+}
+
+.avatarImage,
+.avatarInitial {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatarInitial {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--avatarLabelColor);
+  font-size: 22px;
+  font-weight: normal;
+}
+
+.accountInfo {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.displayName {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--textPrimary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.emailAddress {
+  font-size: 12px;
+  color: var(--textSecondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}

@@ -95,16 +95,22 @@ export function useMessageResultIds(
  * The resulting `chatListEntries` is cached for the initial query parameters
  * (i.e. with default initial parameters that would be all chats).
  * The said cache is also updated on `ChatlistChanged` event.
+ *
+ * @param listFlags - Chat list filter flags
+ * @param queryStr - Search query string
+ * @param queryContactId - Filter by contact ID
+ * @param overrideAccountId - Optional account ID to use instead of selected account
  */
 export function useChatList(
   listFlags: number | null = null,
   queryStr?: string,
-  queryContactId?: number
+  queryContactId?: number,
+  overrideAccountId?: number
 ) {
-  if (window.__selectedAccountId === undefined) {
+  const accountId = overrideAccountId ?? window.__selectedAccountId
+  if (accountId === undefined) {
     throw new Error('no context selected')
   }
-  const accountId = window.__selectedAccountId
   if (!queryStr) queryStr = ''
 
   const [initialListFlags] = useState(listFlags)
