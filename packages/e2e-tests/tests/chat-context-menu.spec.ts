@@ -129,7 +129,9 @@ test.describe('Setup', () => {
       .locator('.chat-list .chat-list-item')
       .filter({ hasText: userA.name })
       .click()
-    await page.locator('#composer-textarea').fill(`Hello ${userA.name}!`)
+    await page
+      .locator('textarea.create-or-edit-message-input')
+      .fill(`Hello ${userA.name}!`)
     await page.locator('button.send-button').click()
     await expect(
       page.locator('.message.outgoing').last().locator('.msg-body .text')
