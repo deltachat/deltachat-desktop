@@ -506,7 +506,9 @@ export const createGroupChat = async (
     .filter({ hasText: groupName })
   await expect(chatListItem).toBeVisible()
   // Send a message to make it an active group
-  await page.locator('#composer-textarea').fill('Hello group!')
+  await page
+    .locator('textarea.create-or-edit-message-input')
+    .fill('Hello group!')
   await page.locator('button.send-button').click()
 }
 
