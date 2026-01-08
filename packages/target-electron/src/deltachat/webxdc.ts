@@ -514,6 +514,9 @@ export default class DCWebxdc {
         const lastBounds = webxdcWindow.getBounds()
         this.setLastBounds(accountId, msg_id, lastBounds)
       }
+      // Note that this also runs when closing the window
+      // as a result of its message getting deleted.
+      // This is fine, we'll still clean it up next time.
       webxdcWindow.once('close', saveBounds.bind(this))
 
       webxdcWindow.once('ready-to-show', () => {
@@ -988,7 +991,7 @@ export default class DCWebxdc {
     }
     this.webxdcCleanupRunning = true
 
-    // get all webxdc's using the lastBounds ui config keys, which are created as soon as you open or close a webxdc app (previous versions set this only on close)
+    // get all webxdc's using the lastBounds ui config keys, which are created as soon as you open or close a webxdc app
     // this workaround is needed because electron does not currently have an api to list all origins which have data.
     // see https://github.com/deltachat/deltachat-desktop/issues/5758
     const uiConfigKeys = await this.rpc.getAllUiConfigKeys(accountId)

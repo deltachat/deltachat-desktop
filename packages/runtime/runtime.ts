@@ -121,7 +121,7 @@ export interface Runtime {
   /** notify runtime that a webxdc instance was deleted.
    * It then closes it's window if it was open and deletes its web data (like localstorage).
    *
-   * It also starts the webxdc cleanup which cleans up webxdc app data of app instances that don't exist anymore.
+   * It also starts the webxdc cleanup which cleans up webxdc app data of other app instances that don't exist anymore.
    *
    * @param instanceId webxdc instance if known. The isntance id provided here is cleaned up first.
    * */
