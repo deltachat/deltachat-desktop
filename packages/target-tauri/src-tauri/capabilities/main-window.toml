@@ -28,6 +28,8 @@ permissions = [
 
     # Badge counter
     "core:window:allow-set-badge-count",
+    # Badge counter in window title
+    "core:window:allow-set-title",
     # This is only needed for Windows.
     "core:window:allow-set-overlay-icon",
 
