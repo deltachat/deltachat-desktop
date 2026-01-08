@@ -122,6 +122,8 @@ pub(crate) async fn on_webxdc_message_deleted(
             }
         }
         delete_webxdc_data_for_instance(&app, account_id, instance_id).await
+    } else {
+        Ok(())
     }
 }
 
