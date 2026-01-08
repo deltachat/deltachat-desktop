@@ -984,21 +984,19 @@ export default class DCWebxdc {
 
   webxdcCleanupRunning = false
 
-  async webxdcCleanup(accountId: number) {
-    if (this.webxdcCleanupRunning) {
-      log.warn('webxdcCleanup is still running, it can only run once at a time')
-      return
-    }
-    this.webxdcCleanupRunning = true
-
+  private async webxdcCleanupInner(accountId: number) {
     // get all webxdc's using the lastBounds ui config keys, which are created as soon as you open or close a webxdc app
     // this workaround is needed because electron does not currently have an api to list all origins which have data.
     // see https://github.com/deltachat/deltachat-desktop/issues/5758
     const uiConfigKeys = await this.rpc.getAllUiConfigKeys(accountId)
-    const boundsKeys = uiConfigKeys.filter(key =>
+    const boundsKeys: string[] = uiConfigKeys.filter(key =>
       key.startsWith('ui.desktop.webxdcBounds.')
     )
-    const instanceIds = boundsKeys.map(key =>
+    if (boundsKeys.length == 0) {
+      log.warn('webxdcCleanup has nothing to do, boundsKeys is empty')
+      return
+    }
+    const instanceIds: number[] = boundsKeys.map(key =>
       Number(key.replace('ui.desktop.webxdcBounds.', ''))
     )
     // check if they message ids exist
@@ -1019,7 +1017,22 @@ export default class DCWebxdc {
     log.info(
       `webxdcCleanup cleared data of ${nonExistingInstanceIds.length} deleted webxdc apps in account ${accountId}`
     )
-    this.webxdcCleanupRunning = false
+  }
+
+  async webxdcCleanup(accountId: number) {
+    if (this.webxdcCleanupRunning) {
+      log.warn('webxdcCleanup is still running, it can only run once at a time')
+      return
+    }
+    this.webxdcCleanupRunning = true
+
+    try {
+      await this.webxdcCleanupInner(accountId)
+    } catch (err) {
+      log.warn('webxdcCleanup failed:', err)
+    } finally {
+      this.webxdcCleanupRunning = false
+    }
   }
 
   async removeWebxdcAppData(accountId: number, instanceId: number) {
