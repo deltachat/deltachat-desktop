@@ -8,6 +8,7 @@ import {
   reloadPage,
   test,
   createNDummyChats,
+  createDummyChat,
   makeDummyContactInviteLink,
   selectChat as selectChatByName,
 } from '../playwright-helper'
@@ -88,9 +89,19 @@ test.afterEach(async () => {
     await selectChat(i)
     // Just send a/the message to make sure the draft is cleared.
     // In case the draft is actually empty already, type some text.
-    await textarea.fill('dummy message to clear draft')
+    const msg = 'dummy message to clear draft'
+    await textarea.fill(msg)
     await page.getByRole('button', { name: 'Send' }).click()
     await testDraftIsEmpty()
+
+    // Delete it, to leave no side effects.
+    await page.getByLabel('Messages').getByText(msg).click({ button: 'right' })
+    await page.getByRole('menuitem', { name: 'Delete' }).click()
+    await page
+      .getByRole('dialog')
+      .getByRole('button', { name: 'Delete' })
+      .last()
+      .click()
   }
 })
 
@@ -486,5 +497,204 @@ test.describe('draft', () => {
 
     await getRemoveQuoteOrFileButton(composerSection).click()
     await testDraftIsEmpty()
+  })
+})
+
+test.describe('Ctrl + Up shortcut', () => {
+  test.describe.configure({ mode: 'serial' })
+
+  const chatName = 'Dummy chat for shortcut testing'
+  function getMessageText(i: number) {
+    return `Some message ${i}`
+  }
+  const numMessages = 10
+  test.beforeAll(async () => {
+    await createDummyChat(page, chatName)
+
+    for (let i = 0; i < numMessages; i++) {
+      const text = getMessageText(i)
+
+      // A hack against flakiness (same as other such occurrences)
+      await expect(textarea).toBeFocused()
+
+      await textarea.fill(text)
+      await textarea.press('ControlOrMeta+Enter')
+      await expect(page.getByLabel('Messages').getByText(text)).toBeVisible()
+    }
+  })
+  // This is to "negate" the effect of `afterEach` in global scope.
+  // A little stupid, but works I guess.
+  test.beforeEach(async () => {
+    await selectChatByName(page, chatName)
+  })
+
+  async function up() {
+    await textarea.press('ControlOrMeta+ArrowUp')
+  }
+  async function down() {
+    await textarea.press('ControlOrMeta+ArrowDown')
+  }
+  async function expectQuote(i: number) {
+    await expect(composerSection).toContainText('Me', { timeout: 500 })
+    await expect(composerSection).toContainText(getMessageText(i), {
+      timeout: 500,
+    })
+  }
+  async function expectNoQuote() {
+    await expect(composerSection).toHaveText('', { timeout: 500 })
+
+    await expect(composerSection).not.toContainText('Me', { timeout: 500 })
+  }
+
+  test('quotes last message', async () => {
+    await expectNoQuote()
+
+    await textarea.focus()
+    await up()
+    await expectQuote(9)
+
+    await expect(textarea).toBeFocused()
+
+    await textarea.press('Escape')
+    await expectNoQuote()
+  })
+
+  test('removes quote on Ctrl + Down', async () => {
+    await up()
+    await expectQuote(9)
+    await down()
+    await expectNoQuote()
+  })
+
+  test('quotes messages above', async () => {
+    await expectNoQuote()
+    for (let i = 9; i >= 1; i--) {
+      await up()
+      await expectQuote(i)
+    }
+    await expectQuote(1)
+    await up()
+    await expectQuote(0)
+
+    // Not quoting info messages above.
+    await up()
+    await expectQuote(0)
+    await up()
+    await expectQuote(0)
+
+    await composerSection
+      .getByRole('button', {
+        name: /(close|cancel|remove|delete)/i,
+      })
+      .click()
+    await expectNoQuote()
+  })
+
+  test('quotes messages back and forth', async () => {
+    await up()
+    await expectQuote(9)
+    await up()
+    await expectQuote(8)
+    await down()
+    await expectQuote(9)
+    await up()
+    await expectQuote(8)
+    await up()
+    await expectQuote(7)
+    await down()
+    await expectQuote(8)
+
+    await textarea.press('Escape')
+    await expectNoQuote()
+  })
+
+  // This is also a stress-test to the overall draft implementation.
+  test('handles rapid input', async () => {
+    await up()
+    await up()
+    await up()
+    await up()
+    await up()
+    await up()
+    let currQuoteInd = 4
+    await expectQuote(currQuoteInd)
+
+    // TODO maybe we can avoid `await`ing
+    // each individual `up()` or `down()`, for even more rapid input?
+    // const promises: Promise<void>[] = []
+    for (let i = 0; i < 100; i++) {
+      let indChange: -1 | 1
+      if (currQuoteInd === numMessages) {
+        // No quote, can only go up the list
+        indChange = -1
+      } else if (currQuoteInd === 0) {
+        // Topmost message is quoted, can only go down
+        indChange = 1
+      } else {
+        indChange = Math.random() > 0.5 ? 1 : -1
+      }
+
+      if (indChange === 1) {
+        // promises.push(down())
+        await down()
+      } else {
+        indChange satisfies -1
+        // promises.push(up())
+        await up()
+      }
+      currQuoteInd += indChange
+    }
+    // await Promise.all(promises)
+
+    const shouldExpectNoQuote = currQuoteInd === numMessages
+    if (shouldExpectNoQuote) {
+      await expectNoQuote()
+    } else {
+      await expectQuote(currQuoteInd)
+    }
+
+    // It might be that the UI still has not settled and the quote
+    // is still changing rapidly.
+    // Sending a message is out way to "lock" the quote,
+    // and check its final value.
+    const text = 'msg with quote' + Math.random()
+    await textarea.fill(text)
+    await textarea.press('ControlOrMeta+Enter')
+    const msg = page
+      .getByLabel('Messages')
+      .getByRole('listitem')
+      .filter({ hasText: text })
+    await expect(msg).toBeVisible()
+
+    if (shouldExpectNoQuote) {
+      await expect(msg).not.toContainText(getMessageText(currQuoteInd))
+    } else {
+      await expect(msg).toContainText(getMessageText(currQuoteInd))
+    }
+
+    await page.getByLabel('Messages').getByText(text).click({ button: 'right' })
+    await page.getByRole('menuitem', { name: 'Delete' }).click()
+    await page
+      .getByRole('dialog')
+      .getByRole('button', { name: 'Delete' })
+      .last()
+      .click()
+    await expectNoQuote()
+  })
+
+  test('sends the message with the quote', async () => {
+    await expectNoQuote()
+    await up()
+    await up()
+
+    await expectQuote(8)
+
+    const msg = 'Msg' + Math.random()
+    await textarea.fill(msg)
+    await textarea.press('ControlOrMeta+Enter')
+
+    await expect(
+      page.getByLabel('Messages').getByRole('listitem').filter({ hasText: msg })
+    ).toContainText(getMessageText(8))
   })
 })
