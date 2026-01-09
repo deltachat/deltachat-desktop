@@ -96,7 +96,7 @@ export default function Settings({ onClose }: DialogProps) {
               icon='forum'
               onClick={() => setSettingsMode('chats_and_media')}
             >
-              {tx('pref_chats_and_media')}
+              {tx('pref_chats')}
             </SettingsIconButton>
             <SettingsIconButton
               icon='bell'
@@ -153,7 +153,7 @@ export default function Settings({ onClose }: DialogProps) {
       {settingsMode === 'chats_and_media' && (
         <>
           <DialogHeader
-            title={tx('pref_chats_and_media')}
+            title={tx('pref_chats')}
             onClickBack={() => setSettingsMode('main')}
             onClose={onClose}
           />
