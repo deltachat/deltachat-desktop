@@ -30,7 +30,7 @@ import { useDraft, type DraftObject } from '../../hooks/chat/useDraft'
 
 import type { EmojiData, BaseEmoji } from 'emoji-mart/index'
 import { VisualVCardComponent } from '../message/VCard'
-import { KeybindAction } from '../../keybindings'
+import { ActionEmitter, KeybindAction } from '../../keybindings'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
 import { CloseButton } from '../Dialog'
 import { enterKeySendsKeyboardShortcuts } from '../KeyboardShortcutHint'
@@ -102,6 +102,7 @@ const Composer = forwardRef<
   const { openDialog } = useDialog()
   const { sendMessage } = useMessage()
   const { unselectChat } = useChat()
+  const { smallScreenMode } = useContext(ScreenContext)
 
   // The philosophy of the editing mode is as follows.
   // The edit mode can be thought of as a dialog,
@@ -308,11 +309,21 @@ const Composer = forwardRef<
     }
   }
   // track shift key -> update [shiftPressed]
-  // also handle escape key for emoji picker
+  // handle escape key for composer, emoji picker and app picker
   useEffect(() => {
     const onKey = (ev: KeyboardEvent) => {
       shiftPressed.current = ev.shiftKey
       if (ev.type === 'keydown' && ev.code === 'Escape') {
+        if (
+          !['composer-textarea-edit', 'composer-textarea-non-edit'].includes(
+            (ev.target as any).id
+          ) &&
+          !showEmojiPicker &&
+          !showAppPicker
+        ) {
+          // only handle escape events in composer or related components here
+          return
+        }
         let handled = false
         if (showEmojiPicker) {
           setShowEmojiPicker(false)
@@ -324,20 +335,27 @@ const Composer = forwardRef<
         }
         if (messageEditing.isEditingModeActive) {
           messageEditing.cancelEditing()
-          setTimeout(() => {
-            regularMessageInputRef.current?.focus()
-          })
           handled = true
         } else if (draftState.quote) {
           removeQuote()
           handled = true
         }
-
         if (handled) {
-          ev.stopPropagation()
-          // prevent KeybindingsContext from seeing this Escape
-          // so it doesn't unselect the chat yet.
+          // after all cases above you want to focus composer input again
+          setTimeout(() => {
+            regularMessageInputRef.current?.focus()
+          })
+        } else {
+          // No picker/edit mode/quote to close
+          if (smallScreenMode) {
+            // In small screen mode, unselect the chat to go back to chatlist
+            ActionEmitter.emitAction(KeybindAction.Chat_Unselect)
+          } else {
+            // Focus the chatlist item to enable arrow key navigation between chats
+            ActionEmitter.emitAction(KeybindAction.ChatList_FocusItems)
+          }
         }
+        ev.stopPropagation()
       }
     }
     // these options are needed, otherwise emoji mart sometimes eats the keydown event
@@ -350,7 +368,16 @@ const Composer = forwardRef<
       document.removeEventListener('keydown', onKey, opt)
       document.removeEventListener('keyup', onKey, opt)
     }
-  }, [shiftPressed, messageEditing, regularMessageInputRef])
+  }, [
+    shiftPressed,
+    messageEditing,
+    regularMessageInputRef,
+    smallScreenMode,
+    showEmojiPicker,
+    showAppPicker,
+    draftState.quote,
+    removeQuote,
+  ])
 
   useEffect(() => {
     if (!showEmojiPicker) return
