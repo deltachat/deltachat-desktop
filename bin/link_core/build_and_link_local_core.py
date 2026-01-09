@@ -170,7 +170,7 @@ def main():
 
     # Step 1: Run make_local_dev_version.py in core_path
     run_command(
-        "python deltachat-rpc-server/npm-package/scripts/make_local_dev_version.py",
+        f"{sys.executable} deltachat-rpc-server/npm-package/scripts/make_local_dev_version.py",
         cwd=core_path
     )
 
