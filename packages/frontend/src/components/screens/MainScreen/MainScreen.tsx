@@ -445,7 +445,7 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
 
   const subtitle = chatSubtitle(
     chat,
-    firstChatContact.result?.ok ? firstChatContact.result?.value : null
+    firstChatContact.result?.ok ? firstChatContact.result.value : null
   )
 
   return (
