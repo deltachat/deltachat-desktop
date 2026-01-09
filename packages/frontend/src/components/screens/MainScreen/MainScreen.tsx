@@ -386,10 +386,11 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
   const openViewProfileDialog = useOpenViewProfileDialog()
   const accountId = selectedAccountId()
 
-  const firstChatContact = useRpcFetch(BackendRemote.rpc.getContact, [
-    accountId,
-    chat.contactIds[0],
-  ])
+  const firstContactId: number | undefined = chat.contactIds[0]
+  const firstChatContact = useRpcFetch(
+    BackendRemote.rpc.getContact,
+    firstContactId ? [accountId, firstContactId] : null
+  )
 
   const onTitleClick = () => {
     if (!chat) {
