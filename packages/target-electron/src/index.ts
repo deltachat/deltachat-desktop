@@ -306,6 +306,10 @@ app.on('web-contents-created', (_ev, contents) => {
       WEBXDC_PARTITION_PREFIX satisfies 'webxdc_'
     ) !== -1
   if (is_webxdc) {
+    let linkClickDialogIsOpen = false
+    let userCancelledDialogAtLeastOnce = false
+    let preventOpeningLinkClickDialogs = false
+
     const webxdcOpenUrl = async (url: string) => {
       if (url.startsWith('mailto:') || url.startsWith('openpgp4fpr:')) {
         // handle mailto in dc, without any prompt.
@@ -315,6 +319,38 @@ app.on('web-contents-created', (_ev, contents) => {
         // https://github.com/deltachat/deltachat-desktop/issues/5785#issuecomment-3598142182.
         open_url(url)
         mainWindow.window?.show()
+        return
+      }
+
+      // Note that the app could just `setInterval(() => link.click(), 1)`,
+      // i.e. the user clicking a link is not the only way
+      // to get this code to execute.
+      //
+      // The following basically implements `safeDialogs`:
+      // https://www.electronjs.org/docs/latest/api/browser-window.
+      // Note that here we could have also utilized
+      // the native Electron `safeDialogs` directly,
+      // e.g. with `executeJavaScriptInIsolatedWorld('confirm("open link?")')`.
+      //
+      // TODO fix: we should probably also disallow opening this dialog
+      // when the window is not focused, or otherwise
+      // if there is no "user gesture" that caused the event.
+      if (linkClickDialogIsOpen) {
+        // This is important because otherwise a malicious app
+        // can make the machine unusable until reboot.
+        log.warn(
+          "WebXDC link: a dialog is already open, won't open another one to prevent app from spamming a bunch of them"
+        )
+        return
+      }
+      if (preventOpeningLinkClickDialogs) {
+        // This is important, because otherwise the app could spam the user
+        // until they give up and press "Open",
+        // leading to exfiltration, phishing or whatever, i.e.
+        // this is not only about annoying spam.
+        log.info(
+          'Prevented WebXDC app from opening "Open link?" dialog, as requested by user'
+        )
         return
       }
 
@@ -342,21 +378,14 @@ app.on('web-contents-created', (_ev, contents) => {
         return
       }
 
-      // TODO the app could spam link clicks.
-      // There is `safeDialogs`, but it only applies to dialogs
-      // that are invoked from inside the app itself.
-      // https://www.electronjs.org/docs/latest/api/browser-window.
-      // Maybe we could implement something like that here,
-      // or maybe just a hard limit of "if cancelled 5 times,
-      // stop showing dialogs".
-
       // Note that this dialog will also be shown for internal `webxdc://` links
       // that the user Shift / Ctrl + clicked.
       // There is probably no need to have special handling for that
       // because maybe there is a reason that the user held Shift or Ctrl,
       // so let's not be overly smart.
 
-      const { response } = await dialog.showMessageBox(win, {
+      linkClickDialogIsOpen = true
+      const { response, checkboxChecked } = await dialog.showMessageBox(win, {
         title: tx('open_url_confirmation'),
         // TODO this truncates links that are really long.
         message: tx('open_url_confirmation') + '\n\n' + asciiUrl,
@@ -366,11 +395,19 @@ app.on('web-contents-created', (_ev, contents) => {
           tx('global_menu_edit_copy_desktop'),
           tx('open'),
         ],
+        checkboxLabel: userCancelledDialogAtLeastOnce
+          ? tx('prevent_dialog_spam_checkbox')
+          : undefined,
         defaultId: 0,
         cancelId: 0,
       })
+      linkClickDialogIsOpen = false
+
+      preventOpeningLinkClickDialogs = checkboxChecked
+
       switch (response) {
         case 0:
+          userCancelledDialogAtLeastOnce = true
           return
         case 1: {
           clipboard.writeText(asciiUrl)
