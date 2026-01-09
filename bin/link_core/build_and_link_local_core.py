@@ -86,10 +86,10 @@ def get_required_pnpm_version(desktop_path):
         return None
 
 
-def get_required_rust_version(desktop_path):
-    """Get required rust version from Cargo.toml."""
+def get_required_rust_version(core_path):
+    """Get required rust version from core."""
     try:
-        cargo_toml = os.path.join(desktop_path, "packages", "target-tauri", "src-tauri", "Cargo.toml")
+        cargo_toml = os.path.join(core_path, "Cargo.toml")
         with open(cargo_toml, "r") as f:
             for line in f:
                 if line.strip().startswith("rust-version"):
