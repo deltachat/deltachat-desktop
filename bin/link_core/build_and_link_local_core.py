@@ -10,6 +10,8 @@ Run this script from the desktop repository directory.
 import subprocess
 import sys
 import os
+import json
+import re
 
 # Check Python version
 if sys.version_info < (3, 6):
@@ -58,6 +60,96 @@ def get_git_branch(core_path):
     return None
 
 
+def parse_version(version_str):
+    """Parse version string into tuple of integers for comparison."""
+    # Extract version numbers (e.g., "9.1.0" from "pnpm 9.1.0" or "cargo 1.75.0 (...)")
+    match = re.search(r'(\d+)\.(\d+)\.(\d+)', version_str)
+    if match:
+        return tuple(int(x) for x in match.groups())
+    # Try major.minor format (e.g., "1.88")
+    match = re.search(r'(\d+)\.(\d+)', version_str)
+    if match:
+        return (int(match.group(1)), int(match.group(2)), 0)
+    return (0, 0, 0)
+
+
+def get_required_pnpm_version(desktop_path):
+    """Get required pnpm version from package.json."""
+    try:
+        package_json = os.path.join(desktop_path, "package.json")
+        with open(package_json, "r") as f:
+            data = json.load(f)
+            pnpm_req = data.get("engines", {}).get("pnpm", "")
+            # Parse ">=9.6.0" or "^9.6.0" -> (9, 6, 0)
+            return parse_version(pnpm_req)
+    except Exception:
+        return None
+
+
+def get_required_rust_version(desktop_path):
+    """Get required rust version from Cargo.toml."""
+    try:
+        cargo_toml = os.path.join(desktop_path, "packages", "target-tauri", "src-tauri", "Cargo.toml")
+        with open(cargo_toml, "r") as f:
+            for line in f:
+                if line.strip().startswith("rust-version"):
+                    # Parse: rust-version = "1.88"
+                    version = line.split("=")[1].strip().strip('"').strip("'")
+                    return parse_version(version)
+    except Exception:
+        pass
+    return None
+
+
+def check_tool(name, min_version=None):
+    """Check if a tool is installed and optionally meets minimum version."""
+    try:
+        result = subprocess.run(
+            [name, "--version"],
+            capture_output=True,
+            text=True
+        )
+        if result.returncode == 0:
+            version_output = result.stdout.strip().split('\n')[0]
+            version = parse_version(version_output)
+
+            if min_version and version < min_version:
+                min_str = '.'.join(str(x) for x in min_version)
+                print(f"  {name}: {version_output} (requires >= {min_str})")
+                return False
+
+            print(f"  {name}: {version_output}")
+            return True
+    except FileNotFoundError:
+        pass
+    print(f"  {name}: NOT FOUND")
+    return False
+
+
+def check_required_tools(desktop_path):
+    """Check that all required tools are installed."""
+    print("Checking required tools...")
+    all_ok = True
+
+    # Get required versions from project files
+    pnpm_min = get_required_pnpm_version(desktop_path)
+    rust_min = get_required_rust_version(desktop_path)
+
+    if not check_tool("npm"):
+        all_ok = False
+    if not check_tool("pnpm", min_version=pnpm_min):
+        all_ok = False
+    if not check_tool("rustc", min_version=rust_min):
+        all_ok = False
+    if not check_tool("cargo"):
+        all_ok = False
+
+    if not all_ok:
+        print("\nError: Missing or outdated required tools")
+        sys.exit(1)
+    print()
+
+
 def main():
     if len(sys.argv) != 2:
         print(f"Usage: {sys.argv[0]} <core_path>")
@@ -70,6 +162,8 @@ def main():
     if not os.path.isdir(core_path):
         print(f"Error: core_path does not exist: {core_path}")
         sys.exit(1)
+
+    check_required_tools(desktop_path)
 
     print(f"Core directory: {core_path}")
     print(f"Desktop directory: {desktop_path}")
