@@ -33,7 +33,7 @@ export default function SelectAccountDialog({ onSelect, onClose }: Props) {
   }
 
   return (
-    <Dialog width={350} onClose={onClose}>
+    <Dialog width={350} onClose={onClose} dataTestid='select-account-dialog'>
       <DialogHeader onClose={onClose} title={tx('switch_account')} />
       <DialogBody className={styles.dialogBody}>
         {loading ? (
@@ -46,6 +46,7 @@ export default function SelectAccountDialog({ onSelect, onClose }: Props) {
                   type='button'
                   className={styles.accountButton}
                   onClick={() => handleAccountClick(account.id)}
+                  data-testid={`account-select-${account.id}`}
                 >
                   <div className={styles.avatar}>
                     {account.kind === 'Configured' && account.profileImage ? (

@@ -157,6 +157,7 @@ export default function ForwardMessage(props: ForwardMessageProps) {
           type='button'
           className={styles.switchAccountButton}
           onClick={onSwitchAccount}
+          data-testid='switch-account-button'
         >
           <span className={styles.switchAccountText}>
             {tx('switch_account')}
