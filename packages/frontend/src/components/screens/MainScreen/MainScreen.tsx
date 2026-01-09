@@ -28,7 +28,7 @@ import useOpenViewGroupDialog from '../../../hooks/dialog/useOpenViewGroupDialog
 import useOpenViewProfileDialog from '../../../hooks/dialog/useOpenViewProfileDialog'
 import useSelectLastChat from '../../../hooks/chat/useSelectLastChat'
 import useTranslationFunction from '../../../hooks/useTranslationFunction'
-import { ActionEmitter, KeybindAction } from '../../../keybindings'
+import { KeybindAction } from '../../../keybindings'
 import { selectedAccountId } from '../../../ScreenController'
 import { openMapWebxdc } from '../../../system-integration/webxdc'
 import { ScreenContext } from '../../../contexts/ScreenContext'
@@ -152,15 +152,6 @@ export default function MainScreen({ accountId }: Props) {
   useKeyBindingAction(KeybindAction.Chat_Unselect, () => {
     if (chatId !== undefined) {
       unselectChat()
-    } else {
-      handleSearchClear()
-      if (archivedChatsSelected) {
-        setArchivedChatsSelected(false)
-      }
-      // refocus composer after clearing search, if on wide screen
-      if (!smallScreenMode) {
-        ActionEmitter.emitAction(KeybindAction.Composer_Focus)
-      }
     }
   })
 
