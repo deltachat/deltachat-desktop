@@ -138,12 +138,11 @@ export function keyDownEvent2Action(
     ) {
       return KeybindAction.Settings_Open
     } else if (ev.code === 'Escape') {
-      // if ((ev.target as any).id === 'chat-list-search') {
-      //   return KeybindAction.ChatList_ExitSearch
-      // } else if ((ev.target as any).id === 'composer-textarea') {
-      //   return KeybindAction.Composer_CancelReply
-      // }
-      return KeybindAction.Chat_Unselect
+      if ((ev.target as any).id === 'chat-list-search') {
+        // Only handle Escape key events from chat list search input
+        // because others are handled in Composer and Dialogs already
+        return KeybindAction.ChatList_ExitSearch
+      }
     } else if (
       (ev.target as any).id === 'chat-list-search' &&
       (ev.key === 'Enter' || ev.code === 'ArrowDown')
