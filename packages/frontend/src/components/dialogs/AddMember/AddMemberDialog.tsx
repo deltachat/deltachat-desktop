@@ -13,14 +13,10 @@ export function AddMemberDialog({
   onOk,
   groupMembers,
   listFlags,
-  titleMembersOrRecipients,
 }: {
   onOk: (members: number[]) => void
   groupMembers: number[]
   listFlags: number
-  titleMembersOrRecipients: Parameters<
-    typeof AddMemberInnerDialog
-  >[0]['titleMembersOrRecipients']
 } & DialogProps) {
   const [queryStr, setQueryStr] = useState('')
   const {
@@ -61,7 +57,6 @@ export function AddMemberDialog({
         refreshContacts,
 
         groupMembers,
-        titleMembersOrRecipients,
         allowAddManually,
       })}
     </Dialog>

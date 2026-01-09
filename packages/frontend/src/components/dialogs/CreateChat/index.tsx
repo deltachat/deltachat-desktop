@@ -712,10 +712,7 @@ export function CreateGroup(props: CreateGroupProps) {
           <RovingTabindexProvider
             wrapperElementRef={groupMemberContactListWrapperRef}
           >
-            <PseudoListItemAddMember
-              onClick={showAddMemberDialog}
-              labelMembersOrRecipients={membersOrRecipients}
-            />
+            <PseudoListItemAddMember onClick={showAddMemberDialog} />
             <ContactList
               contacts={groupContacts}
               showRemove

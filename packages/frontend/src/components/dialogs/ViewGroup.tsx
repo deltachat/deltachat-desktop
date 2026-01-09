@@ -394,7 +394,6 @@ function ViewGroupInner(
                     {!isBroadcast && (
                       <PseudoListItemAddMember
                         onClick={() => showAddMemberDialog()}
-                        labelMembersOrRecipients={membersOrRecipients}
                       />
                     )}
                     <PseudoListItemShowQrCode onClick={() => showQRDialog()} />
