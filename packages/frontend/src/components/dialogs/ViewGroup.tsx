@@ -388,6 +388,16 @@ function ViewGroupInner(
                     <PseudoListItemShowQrCode onClick={() => showQRDialog()} />
                   </>
                 )}
+                {group.contactIds.length != 0 && groupContacts.length == 0 && (
+                  <div /* placeholder to keep layout from jumping around while contact info is loaded */
+                    style={{
+                      height:
+                        group.contactIds.length *
+                        64 /* 64px is the height of a contact list item */,
+                    }}
+                    aria-busy
+                  ></div>
+                )}
                 <ContactList
                   contacts={groupContacts}
                   showRemove={!chatDisabled && group.isEncrypted}
@@ -404,6 +414,16 @@ function ViewGroupInner(
                 />
               </RovingTabindexProvider>
             </div>
+            {group.pastContactIds.length != 0 && pastContacts.length == 0 && (
+              <div /* placeholder to keep layout from jumping around while contact info is loaded */
+                style={{
+                  height:
+                    group.pastContactIds.length *
+                    64 /* 64px is the height of a contact list item */,
+                }}
+                aria-busy
+              ></div>
+            )}
             {pastContacts.length > 0 && (
               <>
                 <div
