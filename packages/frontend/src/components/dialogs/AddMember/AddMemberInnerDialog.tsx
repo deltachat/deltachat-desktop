@@ -37,7 +37,6 @@ export function AddMemberInnerDialog({
   refreshContacts,
 
   groupMembers,
-  titleMembersOrRecipients,
   allowAddManually,
 }: {
   onOk: (addMembers: number[]) => void
@@ -53,7 +52,6 @@ export function AddMemberInnerDialog({
   refreshContacts: () => void
 
   groupMembers: number[]
-  titleMembersOrRecipients: 'members' | 'recipients'
   allowAddManually: boolean
 }) {
   const { tx, writingDirection } = useContext(I18nContext)
@@ -187,13 +185,7 @@ export function AddMemberInnerDialog({
 
   return (
     <>
-      <DialogHeader
-        title={
-          titleMembersOrRecipients === 'members'
-            ? tx('group_add_members')
-            : tx('add_recipients')
-        }
-      />
+      <DialogHeader title={tx('group_add_members')} />
       <DialogBody className={styles.addMemberDialogBody}>
         <div className={styles.AddMemberChipsWrapper}>
           <div className={styles.AddMemberChips}>
