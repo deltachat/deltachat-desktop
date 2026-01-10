@@ -660,7 +660,6 @@ export function CreateGroup(props: CreateGroupProps) {
       onOk: (members: number[]) => {
         members.forEach(contactId => addGroupMember({ id: contactId }))
       },
-      titleMembersOrRecipients: membersOrRecipients,
     })
   }
 
