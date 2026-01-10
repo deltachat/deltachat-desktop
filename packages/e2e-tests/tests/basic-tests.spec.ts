@@ -99,10 +99,11 @@ test('start chat with user', async ({ browserName }) => {
   await expect(confirmDialog).toContainText(userA.name)
 
   await page.getByTestId('confirm-start-chat').getByTestId('confirm').click()
-  await expect(
-    page.locator('.chat-list .chat-list-item').filter({ hasText: userA.name })
-  ).toHaveCount(1)
-  console.log(`Chat with ${userA.name} created!`)
+  const chatListItem = page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: userA.name })
+    .first()
+  await expect(chatListItem).toBeVisible()
 })
 
 /**

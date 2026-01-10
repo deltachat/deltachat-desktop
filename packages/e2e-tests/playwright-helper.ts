@@ -478,6 +478,40 @@ export const createProfileAndJoinChat = async (
   await page.getByTestId('login-button').click()
 }
 
+export const createGroupChat = async (
+  page: Page,
+  groupName: string,
+  creator: User,
+  member: User
+) => {
+  await switchToProfile(page, creator.id)
+  const chatUserB = page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: member.name })
+  await expect(chatUserB).toBeVisible()
+  await page.locator('#new-chat-button').click()
+  await page.locator('#newgroup button').click()
+  await page.locator('.group-name-input').fill(groupName)
+  await page.locator('#addmember button').click()
+  const addMemberDialog = page.getByTestId('add-member-dialog')
+  await page
+    .locator('.contact-list-item')
+    .filter({ hasText: member.name })
+    .click()
+
+  await addMemberDialog.getByTestId('ok').click()
+  await page.getByTestId('group-create-button').click()
+  const chatListItem = page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: groupName })
+  await expect(chatListItem).toBeVisible()
+  // Send a message to make it an active group
+  await page
+    .locator('textarea.create-or-edit-message-input')
+    .fill('Hello group!')
+  await page.locator('button.send-button').click()
+}
+
 export const makeDummyContactInviteLink = (
   contactName: string
 ) => `https://i.delta.chat/\
