@@ -106,11 +106,9 @@ export default function MainScreen({ accountId }: Props) {
   }
 
   const handleSearchClear = useCallback(() => {
-    if (!searchRef.current) {
-      return
+    if (searchRef.current) {
+      searchRef.current.value = ''
     }
-
-    searchRef.current.value = ''
     searchChats('')
     setQueryChatId(null)
 
@@ -149,6 +147,12 @@ export default function MainScreen({ accountId }: Props) {
   useKeyBindingAction(KeybindAction.NewChat_Open, () => {
     // Same as `onCreateChat` in ChatList.
     openDialog(CreateChat)
+  })
+
+  useKeyBindingAction(KeybindAction.Chat_Unselect, () => {
+    if (chatId !== undefined) {
+      unselectChat()
+    }
   })
 
   useKeyBindingAction(KeybindAction.GlobalGallery_Open, () => {

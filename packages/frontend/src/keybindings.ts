@@ -30,6 +30,7 @@ export enum KeybindAction {
   ChatList_SwitchToArchiveView = 'chatlist:switch-to-archive-view',
   ChatList_SwitchToNormalView = 'chatlist:switch-to-normal-view',
   AboutDialog_Open = 'about:open',
+  Chat_Unselect = 'chat:unselect',
 
   // Composite Actions (actions that trigger other actions)
   // ChatList_FocusAndClearSearchInput = 'chatlist:focus-and-clear-search',
@@ -138,9 +139,9 @@ export function keyDownEvent2Action(
       return KeybindAction.Settings_Open
     } else if (ev.code === 'Escape') {
       if ((ev.target as any).id === 'chat-list-search') {
+        // Only handle Escape key events from chat list search input
+        // because others are handled in Composer and Dialogs already
         return KeybindAction.ChatList_ExitSearch
-      } else if ((ev.target as any).id === 'composer-textarea-non-edit') {
-        return KeybindAction.Composer_CancelReply
       }
     } else if (
       (ev.target as any).id === 'chat-list-search' &&
