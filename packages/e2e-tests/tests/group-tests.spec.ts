@@ -106,10 +106,7 @@ test('start chat with user', async ({ browserName }) => {
   await expect(sentMessageText).toHaveText(messageText)
 })
 
-test('create group', async ({ browserName }) => {
-  if (browserName.toLowerCase().indexOf('chrom') > -1) {
-    await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
-  }
+test('create group', async () => {
   const userA = existingProfiles[0]
   const userB = existingProfiles[1]
   await createGroupChat(page, groupName, userA, userB)
