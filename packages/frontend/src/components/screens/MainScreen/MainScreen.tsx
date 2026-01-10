@@ -254,8 +254,9 @@ export default function MainScreen({ accountId }: Props) {
 
   return (
     <div
-      className={`main-screen ${smallScreenMode ? 'small-screen' : ''} ${!messageSectionShouldBeHidden ? 'chat-view-open' : ''
-        }`}
+      className={`main-screen ${smallScreenMode ? 'small-screen' : ''} ${
+        !messageSectionShouldBeHidden ? 'chat-view-open' : ''
+      }`}
     >
       <section
         className={styles.chatListAndHeader}
