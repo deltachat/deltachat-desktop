@@ -48,7 +48,7 @@ export namespace ActionEmitter {
     if (!Array.isArray(handlers[action])) {
       handlers[action] = []
     }
-    ; (handlers[action] as any[]).push(handler)
+    ;(handlers[action] as any[]).push(handler)
   }
 
   export function unRegisterHandler(
@@ -66,7 +66,7 @@ export namespace ActionEmitter {
       return
     }
     log.debug('fire action', action, 'handlers:', handlers[action])
-      ; (handlers[action] as any[]).forEach(handler => handler())
+    ;(handlers[action] as any[]).forEach(handler => handler())
   }
 }
 
