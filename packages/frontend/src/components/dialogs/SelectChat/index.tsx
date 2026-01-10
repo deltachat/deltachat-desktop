@@ -20,15 +20,26 @@ type Props = {
   onChatClick: (chatId: number) => void
   listFlags: number
   footer?: React.ReactElement
+  /** Optional account ID to use instead of the currently selected account */
+  accountId?: number
+  /** Optional account switch button */
+  accountSwitch?: React.ReactNode
 }
 
 export default function SelectChat(props: Props) {
   const tx = useTranslationFunction()
 
   const [queryStr, setQueryStr] = useState('')
-  const { chatListIds } = useChatList(props.listFlags, queryStr)
-  const { isChatLoaded, loadChats, chatCache } =
-    useLogicVirtualChatList(chatListIds)
+  const { chatListIds } = useChatList(
+    props.listFlags,
+    queryStr,
+    undefined,
+    props.accountId
+  )
+  const { isChatLoaded, loadChats, chatCache } = useLogicVirtualChatList(
+    chatListIds,
+    props.accountId
+  )
 
   const chatListRef = useRef<HTMLDivElement>(null)
 
@@ -48,16 +59,23 @@ export default function SelectChat(props: Props) {
         className={styles.header}
       />
       <DialogBody className={styles.selectChatDialogBody}>
-        <div className='select-chat-account-input'>
-          <input
-            className='search-input'
-            data-no-drag-region
-            onChange={onSearchChange}
-            value={queryStr}
-            placeholder={tx('search')}
-            autoFocus
-            spellCheck={false}
-          />
+        <div
+          className={`${styles.searchRow} ${
+            props.accountSwitch ? styles.withAccountSwitch : ''
+          }`}
+        >
+          <div className='select-chat-account-input'>
+            <input
+              className='search-input'
+              data-no-drag-region
+              onChange={onSearchChange}
+              value={queryStr}
+              placeholder={tx('search')}
+              autoFocus
+              spellCheck={false}
+            />
+          </div>
+          {props.accountSwitch}
         </div>
         <div className='select-chat-list-chat-list' ref={chatListRef}>
           <RovingTabindexProvider wrapperElementRef={chatListRef}>

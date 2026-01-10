@@ -729,8 +729,11 @@ function translate_n(
 }
 
 /** functions for the chat virtual list */
-export function useLogicVirtualChatList(chatListIds: number[]) {
-  const accountId = selectedAccountId()
+export function useLogicVirtualChatList(
+  chatListIds: number[],
+  overrideAccountId?: number
+) {
+  const accountId = overrideAccountId ?? selectedAccountId()
 
   const [chatCache, setChatCache] = useState<{
     [id: number]: Type.ChatListItemFetchResult | undefined
