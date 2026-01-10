@@ -304,13 +304,7 @@ function ViewGroupInner(
 
   const listFlags = C.DC_GCL_ADD_SELF
 
-  // Note that we are not checking `chat.isEncrypted`,
-  // unlike in "New E-Mail" dialog.
-  // See https://github.com/deltachat/deltachat-desktop/issues/5294
-  // > the chat itself picks up "group wording"
-  const membersOrRecipients = isBroadcast ? 'recipients' : 'members'
-
-  // We don't allow editing of non encryped groups (email groups)
+  // We don't allow editing of non encrypted groups (email groups)
   // i.e. changing name, avatar or recipients
   // since it cannot be guaranteed that the recipients will adapt
   // these changes (image is not shown at all in MTAs, group name is
@@ -323,7 +317,6 @@ function ViewGroupInner(
       listFlags,
       groupMembers: group.contactIds,
       onOk: addMembers,
-      titleMembersOrRecipients: membersOrRecipients,
     })
   }
 
