@@ -88,5 +88,8 @@
   },
   "stats_msg_body": {
     "message": "The attachment contains anonymous usage statistics, which help us improve Delta Chat. Thank you!"
+  },
+  "prevent_dialog_spam_checkbox": {
+    "message": "Don't allow the app to open this dialog again"
   }
 }
