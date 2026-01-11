@@ -101,7 +101,12 @@ export default function Advanced({ onClose, settingsStore }: Props) {
       {/*
         don't show it on electron yet, as the message "not available on this runtime/platform"
         would confuse users as long as tauri is not the default */}
-      {runtime.getRuntimeInfo().target === 'tauri' && <SettingsAutoStart />}
+      {runtime.getRuntimeInfo().target === 'tauri' && (
+        <>
+          <SettingsSeparator />
+          <SettingsAutoStart />
+        </>
+      )}
 
       {settingsStore.settings.is_chatmail === '0' && (
         <>
