@@ -172,7 +172,7 @@ pub(crate) async fn show_notification(
 pub(crate) async fn clear_notifications<R: Runtime>(
     window: tauri::Window<R>,
     account_id: u32,
-    chat_id: u32,
+    chat_id: Option<u32>,
     notifications: State<'_, Notifications>,
 ) -> Result<(), Error> {
     if window.label() != "main" {
@@ -210,7 +210,8 @@ pub(crate) async fn clear_notifications<R: Runtime>(
             match payload {
                 NotificationPayload::OpenAccount { account_id:a } => a == &account_id,
                 NotificationPayload::OpenChat { account_id:a, chat_id:c }
-                | NotificationPayload::OpenChatMessage { account_id:a, chat_id:c,..} => a == &account_id && c == &chat_id,
+                | NotificationPayload::OpenChatMessage { account_id:a, chat_id:c,..} =>
+                    a == &account_id && (chat_id.is_none() || Some(*c) == chat_id),
             }
         ).map(|(id,_payload)|id).collect();
 

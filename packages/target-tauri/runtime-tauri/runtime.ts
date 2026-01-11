@@ -604,6 +604,10 @@ class TauriRuntime implements Runtime {
   clearAllNotifications(): void {
     invoke('clear_all_notifications')
   }
+  clearNotificationsForAccount(accountId: number): void {
+    invoke('clear_notifications', { accountId })
+  }
+
   clearNotifications(accountId: number, chatId: number): void {
     invoke('clear_notifications', { accountId, chatId })
   }
