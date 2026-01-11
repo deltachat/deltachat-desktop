@@ -261,6 +261,9 @@ class ElectronRuntime implements Runtime {
   clearAllNotifications(): void {
     ipcBackend.invoke('notifications.clearAll')
   }
+  clearNotificationsForAccount(accountId: number): void {
+    ipcBackend.invoke('notifications.clearAccount', accountId)
+  }
   clearNotifications(accountId: number, chatId: number): void {
     ipcBackend.invoke('notifications.clear', accountId, chatId)
   }

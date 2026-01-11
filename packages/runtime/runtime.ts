@@ -136,6 +136,7 @@ export interface Runtime {
   setBadgeCounter(value: number): void
   showNotification(data: DcNotification): void
   clearAllNotifications(): void
+  clearNotificationsForAccount(accountId: number): void
   clearNotifications(accountId: number, chatId: number): void
   /** enables to set a callback (used in frontend RuntimeAdapter) */
   setNotificationCallback(
