@@ -369,7 +369,7 @@ function chatSubtitle(chat: Type.FullChat, firstContact: T.Contact | null) {
       } else if (chat.isDeviceChat) {
         return tx('device_talk_subtitle')
       }
-      if (chat.isProtected) {
+      if (chat.isEncrypted) {
         return null
       } else {
         return firstContact?.address
@@ -446,7 +446,7 @@ function ChatHeading({ chat }: { chat: T.FullChat }) {
 
   const subtitle = chatSubtitle(
     chat,
-    firstChatContact.result?.ok ? firstChatContact.result.value : null
+    firstChatContact?.result?.ok ? firstChatContact.result.value : null
   )
 
   return (
