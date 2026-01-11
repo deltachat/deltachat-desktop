@@ -361,9 +361,6 @@ test('Readd user to group', async () => {
   await page.getByTestId('view-group-dialog-header-close').click()
 })
 
-// Skipped because the message "Alice invited you to join this group" is too
-// often not visible even after 60000 ms wait, (line 425) - locally not reproducable
-// but almost always in CI.
 test('Withdraw group invite link', async ({ browserName }) => {
   if (browserName.toLowerCase().indexOf('chrom') > -1) {
     await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
@@ -416,7 +413,7 @@ test('Withdraw group invite link', async ({ browserName }) => {
   await expect(confirmJoinGroupDialog).toBeVisible()
   await expect(confirmJoinGroupDialog).toContainText(groupName)
   await confirmJoinGroupDialog.getByTestId('confirm').click()
-
+  // we paste the code twice to avoid flaky test failures
   await clickThroughTestIds(page, ['qr-scan-button', 'show-qr-scan', 'paste'])
 
   await expect(confirmJoinGroupDialog).toBeVisible()
