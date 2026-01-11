@@ -330,23 +330,6 @@ export default function AccountItem({
 
 // Marks all chats with fresh messages as noticed
 async function markAccountAsRead(accountId: number) {
-  const msgs = await BackendRemote.rpc.getFreshMsgs(accountId)
-  const messages = await BackendRemote.rpc.getMessages(accountId, msgs)
-
-  const uniqueChatIds = new Set<number>()
-  for (const key in messages) {
-    if (Object.prototype.hasOwnProperty.call(messages, key)) {
-      const message = messages[key]
-      if (message.kind === 'message') {
-        uniqueChatIds.add(message.chatId)
-      }
-    }
-  }
-  // Add archived chats to also mark them as read
-  uniqueChatIds.add(C.DC_CHAT_ID_ARCHIVED_LINK)
-
-  for (const chatId of uniqueChatIds) {
-    await BackendRemote.rpc.marknoticedChat(accountId, chatId)
-  }
+  await BackendRemote.rpc.marknoticedAllChats(accountId)
   clearNotificationsForAccount(accountId)
 }
