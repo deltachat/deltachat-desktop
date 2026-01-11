@@ -20,7 +20,7 @@
     "lint": "cd src-tauri && cargo clippy"
   },
   "dependencies": {
-    "@tauri-apps/api": "2.8.0",
+    "@tauri-apps/api": "2.9.1",
     "@tauri-apps/plugin-log": "^2.7.1",
     "@tauri-apps/plugin-opener": "^2.5.2",
     "@tauri-apps/plugin-store": "^2.4.1"
