@@ -3,7 +3,7 @@
 import { Channel, invoke } from '@tauri-apps/api/core'
 import { getCurrentWindow } from '@tauri-apps/api/window'
 
-import type { attachLogger } from '@tauri-apps/plugin-log'
+import { LogLevel } from '@tauri-apps/plugin-log'
 import { getStore } from '@tauri-apps/plugin-store'
 import type { Store } from '@tauri-apps/plugin-store'
 import { openPath, openUrl } from '@tauri-apps/plugin-opener'
@@ -267,11 +267,7 @@ class TauriRuntime implements Runtime {
     const runtime_info: RuntimeInfo = await invoke('get_runtime_info')
     this.runtime_info = runtime_info
 
-    type TauriLogVariants = Parameters<
-      Parameters<typeof attachLogger>[0]
-    >[0]['level']
-
-    const variants: Record<LogLevelString, TauriLogVariants> = {
+    const variants: Record<LogLevelString, LogLevel> = {
       DEBUG: 2,
       INFO: 3,
       WARNING: 4,
