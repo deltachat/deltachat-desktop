@@ -160,7 +160,7 @@ function clearNotificationsForChat(
   log.debug('after cleared Notifications', { accountId, chatId, notifications })
 }
 
-function clearAccount(accountId: number) {
+function clearAccount(_event: IpcMainInvokeEvent | null, accountId: number) {
   for (const chatId of Object.keys(notifications[Number(accountId)])) {
     if (!Number.isNaN(Number(chatId))) {
       clearNotificationsForChat(null, Number(accountId), Number(chatId))
@@ -171,7 +171,7 @@ function clearAccount(accountId: number) {
 function clearAll() {
   for (const accountId of Object.keys(notifications)) {
     if (!Number.isNaN(Number(accountId))) {
-      clearAccount(Number(accountId))
+      clearAccount(null, Number(accountId))
     }
   }
 }
