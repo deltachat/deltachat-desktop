@@ -24,7 +24,6 @@ export interface SettingsStoreState {
       only_fetch_mvbox: string
       media_quality: string
       is_chatmail: '0' | '1'
-      webxdc_realtime_enabled: string
     }[P]
   }
   desktopSettings: DesktopSettingsType
@@ -45,7 +44,6 @@ const settingsKeys = [
   'only_fetch_mvbox',
   'media_quality',
   'is_chatmail',
-  'webxdc_realtime_enabled',
 ] as const
 
 class SettingsStore extends Store<SettingsStoreState | null> {

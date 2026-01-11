@@ -98,12 +98,6 @@ export default function Advanced({ onClose, settingsStore }: Props) {
 
       <SettingsSeparator />
 
-      <CoreSettingsSwitch
-        label={tx('enable_realtime')}
-        settingsKey='webxdc_realtime_enabled'
-        description={tx('enable_realtime_explain')}
-      />
-
       {/*
         don't show it on electron yet, as the message "not available on this runtime/platform"
         would confuse users as long as tauri is not the default */}
