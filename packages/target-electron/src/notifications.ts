@@ -27,6 +27,7 @@ if (Notification.isSupported()) {
   ipcMain.handle('notifications.show', showNotification)
   ipcMain.handle('notifications.clear', clearNotificationsForChat)
   ipcMain.handle('notifications.clearAll', clearAll)
+  ipcMain.handle('notifications.clearAccount', clearAccount)
   process.on('beforeExit', clearAll)
 } else {
   // Register no-op handlers for notifications to silently fail when
@@ -159,14 +160,18 @@ function clearNotificationsForChat(
   log.debug('after cleared Notifications', { accountId, chatId, notifications })
 }
 
+function clearAccount(_event: IpcMainInvokeEvent | null, accountId: number) {
+  for (const chatId of Object.keys(notifications[Number(accountId)])) {
+    if (!Number.isNaN(Number(chatId))) {
+      clearNotificationsForChat(null, Number(accountId), Number(chatId))
+    }
+  }
+}
+
 function clearAll() {
   for (const accountId of Object.keys(notifications)) {
     if (!Number.isNaN(Number(accountId))) {
-      for (const chatId of Object.keys(notifications[Number(accountId)])) {
-        if (!Number.isNaN(Number(chatId))) {
-          clearNotificationsForChat(null, Number(accountId), Number(chatId))
-        }
-      }
+      clearAccount(null, Number(accountId))
     }
   }
 }

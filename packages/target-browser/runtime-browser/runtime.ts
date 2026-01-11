@@ -457,13 +457,14 @@ class BrowserRuntime implements Runtime {
   clearAllNotifications(): void {
     for (const accountId of Object.keys(this.activeNotifications)) {
       if (!Number.isNaN(Number(accountId))) {
-        for (const chatId of Object.keys(
-          this.activeNotifications[Number(accountId)]
-        )) {
-          if (!Number.isNaN(Number(chatId))) {
-            this.clearNotifications(Number(accountId), Number(chatId))
-          }
-        }
+        this.clearNotificationsForAccount(Number(accountId))
+      }
+    }
+  }
+  clearNotificationsForAccount(accountId: number): void {
+    for (const chatId of Object.keys(this.activeNotifications[accountId])) {
+      if (!Number.isNaN(Number(chatId))) {
+        this.clearNotifications(accountId, Number(chatId))
       }
     }
   }

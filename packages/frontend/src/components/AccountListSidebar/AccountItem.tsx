@@ -2,11 +2,7 @@ import React, { useEffect, useLayoutEffect, useRef } from 'react'
 import classNames from 'classnames'
 import { throttle } from '@deltachat-desktop/shared/util'
 
-import {
-  BackendRemote,
-  onDCEvent,
-  EffectfulBackendActions,
-} from '../../backend-com'
+import { BackendRemote, onDCEvent } from '../../backend-com'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { avatarInitial } from '@deltachat-desktop/shared/avatarInitial'
 import { getLogger } from '../../../../shared/logger'
@@ -24,6 +20,7 @@ import useDialog from '../../hooks/dialog/useDialog'
 import { EditPrivateTagDialog } from './EditPrivateTagDialog'
 import { useRovingTabindex } from '../../contexts/RovingTabindex'
 import { useRpcFetch } from '../../hooks/useFetch'
+import { clearNotificationsForAccount } from '../../system-integration/notifications'
 
 type Props = {
   accountId: number
@@ -348,6 +345,7 @@ async function markAccountAsRead(accountId: number) {
   uniqueChatIds.add(C.DC_CHAT_ID_ARCHIVED_LINK)
 
   for (const chatId of uniqueChatIds) {
-    await EffectfulBackendActions.marknoticedChat(accountId, chatId)
+    await BackendRemote.rpc.marknoticedChat(accountId, chatId)
   }
+  clearNotificationsForAccount(accountId)
 }
