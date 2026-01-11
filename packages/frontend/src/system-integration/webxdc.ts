@@ -19,6 +19,13 @@ export function initWebxdc() {
   BackendRemote.on('WebxdcInstanceDeleted', (accountId, { msgId }) => {
     runtime.notifyWebxdcInstanceDeleted(accountId, msgId)
   })
+  BackendRemote.on('ChatDeleted', accountId => {
+    // This is only needed as long as chat deletion
+    // still doesn't fire the 'WebxdcInstanceDeleted' event
+    // for WebXDC instances inside the chat.
+    // https://github.com/chatmail/core/issues/6670
+    runtime.notifyWebxdcInstanceDeleted(accountId, null)
+  })
 }
 
 /**

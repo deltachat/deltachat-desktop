@@ -110,18 +110,21 @@ pub(crate) async fn on_webxdc_message_deleted(
     app: AppHandle,
     webxdc_instances: State<'_, WebxdcInstancesState>,
     account_id: u32,
-    instance_id: u32,
+    instance_id: Option<u32>,
 ) -> Result<(), Error> {
-    if let Some((window_label, _)) = webxdc_instances
-        .get_webxdc_for_instance(account_id, instance_id)
-        .await
-    {
-        if let Some(window) = app.get_window(&window_label) {
-            window.destroy()?;
+    if let Some(instance_id) = instance_id {
+        if let Some((window_label, _)) = webxdc_instances
+            .get_webxdc_for_instance(account_id, instance_id)
+            .await
+        {
+            if let Some(window) = app.get_window(&window_label) {
+                window.destroy()?;
+            }
         }
+        delete_webxdc_data_for_instance(&app, account_id, instance_id).await
+    } else {
+        Ok(())
     }
-
-    delete_webxdc_data_for_instance(&app, account_id, instance_id).await
 }
 
 #[tauri::command]
