@@ -488,12 +488,12 @@ function ChatNavButtons({
   lastUsedApps: T.Message[]
 }) {
   const tx = useTranslationFunction()
-  const { openContextMenu } = useChatContextMenu()
+  const { openMainViewContextMenu } = useChatContextMenu()
   const onClickThreeDotMenu = useCallback(
     (event: React.MouseEvent) => {
-      openContextMenu(event, [], chat.id, chat)
+      openMainViewContextMenu(event, chat)
     },
-    [openContextMenu, chat]
+    [openMainViewContextMenu, chat]
   )
   const chatId = chat.id
   const settingsStore = useSettingsStore()[0]
