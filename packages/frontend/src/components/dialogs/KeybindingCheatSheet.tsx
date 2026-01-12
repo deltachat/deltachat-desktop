@@ -1,11 +1,7 @@
 import React, { useEffect } from 'react'
 
 import { useSettingsStore } from '../../stores/settings'
-import {
-  CheatSheetKeyboardShortcut,
-  getKeybindings,
-  ShortcutGroup,
-} from '../KeyboardShortcutHint'
+import { getKeybindings, ShortcutGroup } from '../KeyboardShortcutHint'
 import Dialog, { DialogBody, DialogHeader, DialogHeading } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
@@ -27,11 +23,7 @@ export default function KeybindingCheatSheet(props: DialogProps) {
   return (
     <Dialog onClose={onClose} className='keyboard-hint-cheatsheet-dialog'>
       <DialogHeader onClose={onClose}>
-        <DialogHeading>
-          {tx('keybindings')}
-          &nbsp;&nbsp;
-          <CheatSheetKeyboardShortcut />
-        </DialogHeading>
+        <DialogHeading>{tx('keybindings')}</DialogHeading>
       </DialogHeader>
       <DialogBody className='dialog-body'>
         <div className='keyboard-hint-dialog-body'>

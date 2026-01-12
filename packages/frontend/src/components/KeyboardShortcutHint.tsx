@@ -161,14 +161,6 @@ function Shortcut(action: ShortcutAction): CheatSheetEntryType {
   return { action, type: 'shortcut' }
 }
 
-export function CheatSheetKeyboardShortcut() {
-  if (runtime.getRuntimeInfo().isMac) {
-    return <KeyboardShortcut elements={['Meta', '/']} />
-  } else {
-    return <KeyboardShortcut elements={['Control', '/']} />
-  }
-}
-
 export function getKeybindings(
   settings: DesktopSettingsType
 ): CheatSheetEntryType[] {
