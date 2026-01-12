@@ -500,7 +500,7 @@ test.describe('Removal actions', () => {
 
     // Unblock the contact to restore state for other tests
     await clickThroughTestIds(page, ['open-settings-button'])
-    await page.getByRole('button', { name: 'Chats and Media' }).click()
+    await page.getByRole('button', { name: 'Chats' }).click()
     await page.getByRole('button', { name: 'Blocked Contacts' }).click()
 
     // Find and unblock userB
