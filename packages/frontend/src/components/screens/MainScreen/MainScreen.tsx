@@ -372,7 +372,7 @@ function chatSubtitle(chat: Type.FullChat, firstContact: T.Contact | null) {
       if (chat.isEncrypted) {
         return null
       } else {
-        return firstContact?.address
+        return firstContact != null ? firstContact.address : tx('loading')
       }
     }
   }
