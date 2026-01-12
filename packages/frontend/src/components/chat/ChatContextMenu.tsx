@@ -145,9 +145,9 @@ function buildMuteMenuItem(
   const batchAction = (fn: (chat: ChatListItem) => Promise<unknown>) => () =>
     Promise.all(chats.map(chat => fn(chat)))
 
-  const hasMutedChats = chats.some(item => !item.isMuted)
+  const hasNotMutedChats = chats.some(item => !item.isMuted)
 
-  if (hasMutedChats) {
+  if (hasNotMutedChats) {
     return {
       label: tx('menu_mute'),
       subitems: [
@@ -200,26 +200,21 @@ function buildMuteMenuItem(
 }
 
 /**
- * Builds view/edit profile menu items for chats
+ * Builds view/edit profile menu items for a chat in chat list
  */
 function buildViewEditMenuItems(
-  singleChat: ChatListItem | undefined,
-  selectedChat: T.FullChat | undefined,
+  singleChat: ChatListItem,
   openDialog: ReturnType<typeof useDialog>['openDialog'],
   openViewGroupDialog: ReturnType<typeof useOpenViewGroupDialog>,
   openViewProfileDialog: ReturnType<typeof useOpenViewProfileDialog>,
   accountId: number,
   tx: ReturnType<typeof useTranslationFunction>
 ): (ContextMenuItem | false)[] {
-  if (!singleChat) return []
-
   const onViewProfile = async () => {
-    const fullChat =
-      selectedChat ??
-      (await BackendRemote.rpc.getFullChatById(accountId, singleChat.id))
-    if (!fullChat) {
-      throw new Error('chat was not found')
-    }
+    const fullChat = await BackendRemote.rpc.getFullChatById(
+      accountId,
+      singleChat.id
+    )
     if (
       fullChat.chatType !== 'InBroadcast' &&
       fullChat.chatType !== 'Mailinglist'
@@ -228,16 +223,17 @@ function buildViewEditMenuItems(
     } else {
       openDialog(MailingListProfile, {
         chat: fullChat as T.FullChat & {
-          chatType: 'InBroadcast' | 'Mailinglist'
+          chatType: typeof fullChat.chatType
         },
       })
     }
   }
 
   const onViewGroup = async () => {
-    const fullChat =
-      selectedChat ??
-      (await BackendRemote.rpc.getFullChatById(accountId, singleChat.id))
+    const fullChat = await BackendRemote.rpc.getFullChatById(
+      accountId,
+      singleChat.id
+    )
     openViewGroupDialog(
       fullChat as T.FullChat & { chatType: 'Group' | 'OutBroadcast' }
     )
@@ -247,7 +243,6 @@ function buildViewEditMenuItems(
     singleChat.chatType === 'Group' && singleChat.isSelfInGroup
 
   return [
-    // View Profile (for single chats)
     (singleChat.chatType === 'Single' ||
       singleChat.chatType === 'InBroadcast') &&
       !singleChat.isDeviceTalk && {
@@ -327,29 +322,27 @@ export function useChatContextMenu(): {
   /**
    * @param chatListItems array of selected chat list items (empty if opened from main chat view)
    * @param selectedChatId id of the currently selected chat (null if none selected)
-   * @param selectedChat the currently active chat (only in main view)
+   * @param activeChat the currently active chat (openContextMenuHandler is called from main view)
    */
   const openContextMenuHandler = async (
     event: React.MouseEvent<any, MouseEvent>,
     chatListItems: ChatListItem[],
     selectedChatId: number | null,
-    selectedChat?: T.FullChat
+    activeChat?: T.FullChat
   ) => {
-    if (chatListItems.length === 0 && selectedChat === undefined) {
+    if (chatListItems.length === 0 && activeChat === undefined) {
       log.error('openContextMenu called with 0 chats')
       return
     }
     // true if opened from main chat view (not from list)
-    const isMainView = !!selectedChat
-
-    const multipleChatsSelected = chatListItems.length > 1
+    const isMainView = !!activeChat
 
     // Determine use case:
-    // 1. multiple selected chats in chat list (multipleChatsSelected = true, singleChat = undefined)
+    // 1. multiple selected chats in chat list (singleChat = undefined)
     // 2. single selected chat in chat list
     // 3. no selected chat in chat list, but main view chat
     const singleChat: ChatListItem | undefined = isMainView
-      ? fullChatToChatListItem(selectedChat)
+      ? fullChatToChatListItem(activeChat)
       : chatListItems.length === 1
         ? chatListItems[0]
         : undefined
@@ -376,7 +369,7 @@ export function useChatContextMenu(): {
 
     const onClearChat = () => {
       if (isMainView) {
-        openClearChatDialog(accountId, selectedChat.id)
+        openClearChatDialog(accountId, activeChat.id)
       }
     }
 
@@ -409,28 +402,32 @@ export function useChatContextMenu(): {
 
     const muteMenuItem = buildMuteMenuItem(chatListItems, accountId, tx)
 
-    // View and Edit menu items
-    const viewEditMenuItems = multipleChatsSelected
-      ? []
-      : buildViewEditMenuItems(
-          singleChat,
-          selectedChat,
-          openDialog,
-          openViewGroupDialog,
-          openViewProfileDialog,
-          accountId,
-          tx
-        )
+    // View and Edit menu items are only shown
+    // in chat list if a single chat is selected
+    const viewEditMenuItems =
+      isMainView || singleChat === undefined
+        ? []
+        : buildViewEditMenuItems(
+            singleChat,
+            openDialog,
+            openViewGroupDialog,
+            openViewProfileDialog,
+            accountId,
+            tx
+          )
 
-    const encryptionInfoItem = multipleChatsSelected
-      ? null
-      : buildEncryptionInfoMenuItem(singleChat, tx, openEncryptionInfoDialog)
+    // Encryption info is only shown in chatlist and
+    // only if a single chat is selected
+    const encryptionInfoItem =
+      singleChat !== undefined
+        ? buildEncryptionInfoMenuItem(singleChat, tx, openEncryptionInfoDialog)
+        : null
 
     const ephemeralMessagesMenuItem = isMainView &&
-      selectedChat.canSend &&
-      selectedChat.chatType !== 'InBroadcast' &&
-      selectedChat.chatType !== 'Mailinglist' &&
-      selectedChat.isEncrypted && {
+      activeChat.canSend &&
+      activeChat.chatType !== 'InBroadcast' &&
+      activeChat.chatType !== 'Mailinglist' &&
+      activeChat.isEncrypted && {
         label: tx('ephemeral_messages'),
         action: onDisappearingMessages,
       }
