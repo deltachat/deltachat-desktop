@@ -73,6 +73,7 @@
 
           # coding
           pnpm
+          python3 # for bin/link_core/build_and_link_local_core.py script
           rustToolchain
           rust-analyzer
           typescript-language-server
