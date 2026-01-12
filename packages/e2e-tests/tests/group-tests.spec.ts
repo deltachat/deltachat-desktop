@@ -413,6 +413,12 @@ test('Withdraw group invite link', async ({ browserName }) => {
   await expect(confirmJoinGroupDialog).toBeVisible()
   await expect(confirmJoinGroupDialog).toContainText(groupName)
   await confirmJoinGroupDialog.getByTestId('confirm').click()
+  // we paste the code twice to avoid flaky test failures
+  await clickThroughTestIds(page, ['qr-scan-button', 'show-qr-scan', 'paste'])
+
+  await expect(confirmJoinGroupDialog).toBeVisible()
+  await expect(confirmJoinGroupDialog).toContainText(groupName)
+  await confirmJoinGroupDialog.getByTestId('confirm').click()
 
   await expect(
     page
