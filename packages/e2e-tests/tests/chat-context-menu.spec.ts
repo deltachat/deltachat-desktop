@@ -19,7 +19,7 @@ import {
  * 2. Main chat view (3-dot menu button)
  *
  * These tests verify that the context menu items are
- * correct andthat the menu items work as expected.
+ * correct and that the menu items work as expected.
  */
 
 test.describe.configure({ mode: 'serial' })
