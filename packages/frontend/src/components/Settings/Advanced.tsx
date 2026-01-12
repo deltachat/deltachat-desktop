@@ -96,8 +96,6 @@ export default function Advanced({ onClose, settingsStore }: Props) {
       <SettingsHeading>{tx('pref_experimental_features')}</SettingsHeading>
       <ExperimentalFeatures />
 
-      <SettingsSeparator />
-
       {/*
         don't show it on electron yet, as the message "not available on this runtime/platform"
         would confuse users as long as tauri is not the default */}
