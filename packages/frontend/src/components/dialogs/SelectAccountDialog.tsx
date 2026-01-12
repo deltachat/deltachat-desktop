@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 import { avatarInitial } from '@deltachat-desktop/shared/avatarInitial'
 import { runtime } from '@deltachat-desktop/runtime-interface'
@@ -6,10 +6,11 @@ import { getConfiguredAccounts } from '../../backend/account'
 import Dialog, { DialogBody, DialogHeader } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
-import type { T } from '@deltachat/jsonrpc-client'
 import type { DialogProps } from '../../contexts/DialogContext'
 
 import styles from './SelectAccountDialog.module.scss'
+import { useRpcFetch } from '../../hooks/useFetch'
+import { unknownErrorToString } from '../helpers/unknownErrorToString'
 
 type Props = {
   onSelect: (accountId: number) => void
@@ -17,15 +18,8 @@ type Props = {
 
 export default function SelectAccountDialog({ onSelect, onClose }: Props) {
   const tx = useTranslationFunction()
-  const [accounts, setAccounts] = useState<T.Account[]>([])
-  const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    getConfiguredAccounts().then(accounts => {
-      setAccounts(accounts)
-      setLoading(false)
-    })
-  }, [])
+  const accountsFetch = useRpcFetch(getConfiguredAccounts, [])
 
   const handleAccountClick = (accountId: number) => {
     onSelect(accountId)
@@ -36,11 +30,15 @@ export default function SelectAccountDialog({ onSelect, onClose }: Props) {
     <Dialog width={350} onClose={onClose} dataTestid='select-account-dialog'>
       <DialogHeader onClose={onClose} title={tx('switch_account')} />
       <DialogBody className={styles.dialogBody}>
-        {loading ? (
+        {accountsFetch.loading ? (
           <div className={styles.loading}>{tx('loading')}</div>
+        ) : !accountsFetch.result.ok ? (
+          <div>
+            {tx('error_x', unknownErrorToString(accountsFetch.result?.err))}
+          </div>
         ) : (
           <ul className={styles.accountList}>
-            {accounts.map(account => (
+            {accountsFetch.result.value.map(account => (
               <li key={account.id}>
                 <button
                   type='button'

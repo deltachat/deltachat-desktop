@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
 import { BackendRemote } from '../../../backend-com'
@@ -30,18 +30,17 @@ export default function ForwardMessage(props: ForwardMessageProps) {
 
   const currentAccountId = selectedAccountId()
   const [targetAccountId, setTargetAccountId] = useState(currentAccountId)
-  const [hasMultipleAccounts, setHasMultipleAccounts] = useState(false)
 
   const tx = useTranslationFunction()
   const { openDialog } = useDialog()
   const { selectChat } = useChat()
   const { forwardMessage, jumpToMessage } = useMessage()
 
-  useEffect(() => {
-    getConfiguredAccounts().then(accounts => {
-      setHasMultipleAccounts(accounts.length > 1)
-    })
-  }, [])
+  const configuredAccountsFetch = useRpcFetch(getConfiguredAccounts, [])
+
+  const hasMultipleAccounts = configuredAccountsFetch.result?.ok
+    ? configuredAccountsFetch.result.value.length > 1
+    : false
 
   const onSwitchAccount = () => {
     openDialog(SelectAccountDialog, {
