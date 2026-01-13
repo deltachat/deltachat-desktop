@@ -333,10 +333,10 @@ const Composer = forwardRef<
           setShowAppPicker(false)
           handled = true
         }
-        if (messageEditing.isEditingModeActive) {
+        if (!handled && messageEditing.isEditingModeActive) {
           messageEditing.cancelEditing()
           handled = true
-        } else if (draftState.quote) {
+        } else if (!handled && draftState.quote) {
           removeQuote()
           handled = true
         }
