@@ -28,7 +28,6 @@ $btnDangerBackground: #f96856 !default;
 
 $keybindingHintsBoxBackground: rgba(0, 0, 0, 0.05) !default;
 $keybindingActionBackground: rgba(0, 0, 0, 0.05) !default;
-$keybindingKeyBackground: lightgray !default;
 $keybindingKeyBorder: gray !default;
 $keybindingKeyShadow: rgba(0, 0, 0, 0.35) !default;
 
@@ -117,7 +116,6 @@ $scrollbarTransparency: 0.34 !default;
   --contactListItemBgFocus: #{changeContrast($bgPrimary, 12%)};
   /* Keybindings Cheatsheet */
   --keybindingHintsBoxBackground: #{$keybindingHintsBoxBackground};
-  --keybindingKeyBackground: #{$keybindingKeyBackground};
   --keybindingKeyBorder: #{$keybindingKeyBorder};
   --keybindingKeyFontColor: black;
   --keybindingKeyShadow: #{$keybindingKeyShadow};
