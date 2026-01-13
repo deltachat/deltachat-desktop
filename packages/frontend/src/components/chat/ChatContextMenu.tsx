@@ -120,7 +120,7 @@ function buildArchiveAndPinMenuItems(
 
   /*      Archive  UnArchive  Pin  UnPin
   pinned      y       n       n      y
-  archived    n       y       y      n
+  archived    n       y       n      n
   normal      y       n       y      n
   */
 
@@ -401,11 +401,11 @@ export function useChatContextMenu(): {
     }
 
     const onDisappearingMessages = () => {
-      if (activeChatId === null) {
+      if (relatedChat === undefined) {
         return
       }
       openDialog(DisappearingMessages, {
-        chatId: activeChatId,
+        chatId: relatedChat.id,
       })
     }
 
@@ -536,9 +536,11 @@ export function useChatContextMenu(): {
     await openContextMenu({
       ...mouseEventToPosition(event),
       items: menu,
-      ariaAttrs: {
-        'aria-label': tx('chat_list_item_menu_label'),
-      },
+      ariaAttrs: isMainView
+        ? { 'aria-labelledby': 'three-dot-menu-button' }
+        : {
+            'aria-label': tx('chat_list_item_menu_label'),
+          },
     })
     setActiveContextMenuChatIds([])
   }
