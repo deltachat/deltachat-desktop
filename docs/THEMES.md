@@ -71,7 +71,7 @@ We use SCSS to create themes, because it allows us to save work by using its col
 
 1. copy the light or dark theme and save it to your user deltachat folder `DeltaChat/custom-themes/my_theme.scss`
 
-2. run `pnpm i && ` at your desktop checkout.
+2. run `pnpm i` at your desktop checkout.
 
 3. run `cd packages/frontend/` to move to the correct directory.
 
