@@ -269,6 +269,7 @@ audio {
 // used in alert & confirmation dialogs
 p.whitespace {
   white-space: break-spaces;
+  word-wrap: break-word;
 }
 
 // Only for screen-readers.
