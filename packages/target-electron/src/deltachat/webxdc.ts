@@ -367,16 +367,17 @@ export default class DCWebxdc {
       setContentProtection(webxdcWindow)
 
       // reposition the window to last position (or default)
-      const lastBounds: Bounds | null = await this.getLastBounds(
-        accountId,
-        msg_id
-      )
-      const size: Size = adjustSize(lastBounds || defaultSize)
-      const bounds: Partial<Bounds> = { ...(lastBounds || {}), ...size }
-      webxdcWindow.setBounds(bounds, true)
+      this.getLastBounds(accountId, msg_id)
+        .then(lastBounds => {
+          const size: Size = adjustSize(lastBounds || defaultSize)
+          const bounds: Partial<Bounds> = { ...(lastBounds || {}), ...size }
+          webxdcWindow.setBounds(bounds, true)
+        })
+        .finally(() => {
+          // show after repositioning to avoid blinking
+          webxdcWindow.show()
+        })
 
-      // show after repositioning to avoid blinking
-      webxdcWindow.show()
       open_apps[appId] = {
         win: webxdcWindow,
         accountId,
