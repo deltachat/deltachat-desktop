@@ -227,15 +227,11 @@ export function ViewProfileInner({
     Number(useThemeCssVar('--SPECIAL-chatlist-item-chat-height')) || 64
 
   let displayName = contact.displayName
-  let addressLine = contact.address
   let statusText = contact.status
   let avatarPath = contact.profileImage
 
-  if (isDeviceChat) {
-    addressLine = tx('device_talk_subtitle')
-  } else if (isSelfChat) {
+  if (isSelfChat) {
     displayName = tx('saved_messages')
-    addressLine = tx('chat_self_talk_subtitle')
     statusText = tx('saved_messages_explain')
     avatarPath = selfChatAvatar
   }
@@ -366,12 +362,6 @@ export function ViewProfileInner({
                   <InlineVerifiedIcon />
                   {verifier.label}
                 </VerificationTag>
-              )}
-              {contact.address && (
-                <div className={styles.addressLine}>
-                  <i className='material-svg-icon material-icon-server' />
-                  {addressLine}
-                </div>
               )}
             </div>
           )}
