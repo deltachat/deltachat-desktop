@@ -73,7 +73,9 @@ We use SCSS to create themes, because it allows us to save work by using its col
 
 2. run `pnpm i` at your desktop checkout.
 
-3. compile the theme to CSS in watch mode.
+3. run `cd packages/frontend/` to move to the correct directory.
+
+4. compile the theme to CSS in watch mode.
 
 ```sh
 pnpm sass --watch path/to/Deltachat/config/folder/custom-themes/my_theme.scss path/to/Deltachat/config/folder/custom-themes/my_theme.css -I packages/frontend/themes/ --no-source-map
