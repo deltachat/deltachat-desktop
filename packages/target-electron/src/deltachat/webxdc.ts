@@ -313,12 +313,6 @@ export default class DCWebxdc {
 
       log.info('opening new webxdc instance', { msg_id })
 
-      const icon = webxdcInfo.icon
-      const icon_blob = Buffer.from(
-        await this.rpc.getWebxdcBlob(accountId, msg_id, icon),
-        'base64'
-      )
-
       // TODO intercept / deny network access - CSP should probably be disabled for testing
 
       // used by BrowserWindow
@@ -326,8 +320,6 @@ export default class DCWebxdc {
         accountId,
         webxdcInfo['internetAccess']
       )
-
-      const app_icon = icon_blob && nativeImage?.createFromBuffer(icon_blob)
 
       const webxdcWindow = new BrowserWindow({
         webPreferences: {
@@ -342,7 +334,6 @@ export default class DCWebxdc {
           preload: join(htmlDistDir(), 'webxdc-preload.js'),
         },
         title: makeTitle(webxdcInfo, chatName),
-        icon: app_icon || undefined,
         alwaysOnTop: main_window?.isAlwaysOnTop(),
         show: false,
       })
@@ -377,6 +368,14 @@ export default class DCWebxdc {
           // show after repositioning to avoid blinking
           webxdcWindow.show()
         })
+      const appIconPromise = this.rpc
+        .getWebxdcBlob(accountId, msg_id, webxdcInfo.icon)
+        .then(blob => nativeImage.createFromBuffer(Buffer.from(blob, 'base64')))
+      let app_icon: Awaited<typeof appIconPromise> | undefined
+      appIconPromise.then(i => (app_icon = i))
+      appIconPromise.then(i => {
+        webxdcWindow.setIcon(i)
+      })
 
       open_apps[appId] = {
         win: webxdcWindow,
@@ -489,7 +488,11 @@ export default class DCWebxdc {
       }
 
       if (!isMac) {
-        webxdcWindow.setMenu(makeMenu())
+        if (app_icon != undefined) {
+          webxdcWindow.setMenu(makeMenu())
+        } else {
+          appIconPromise.then(() => webxdcWindow.setMenu(makeMenu()))
+        }
       }
 
       webxdcWindow.on('focus', () => {
