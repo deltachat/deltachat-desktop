@@ -1121,7 +1121,9 @@ async function webxdcProtocolHandler(
 
   const cspAllowHttpsImgSrc = open_apps[id].internet_access
 
-  let filename = url.pathname
+  // For reference see
+  // https://github.com/http-party/http-server/blob/9df08a05ca7eed91981cdcc093931cefc6def208/lib/core/show-dir/index.js#L31-L42
+  let filename = decodeURIComponent(url.pathname)
   // remove leading / trailing "/"
   if (filename.endsWith('/')) {
     filename = filename.substring(0, filename.length - 1)
