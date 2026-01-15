@@ -15,6 +15,7 @@ import { selectedAccountId } from '../../ScreenController'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { useContextMenuWithActiveState } from '../ContextMenu'
 import useMessage from '../../hooks/chat/useMessage'
+import { useZoomKeyboardShortcuts } from '../../hooks/useZoomKeyboardShortcuts'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 
@@ -49,9 +50,7 @@ export default function FullscreenMedia(props: Props & DialogProps) {
   const { onClose } = props
 
   const [msg, setMsg] = useState(props.msg)
-  const resetImageZoom = useRef<(() => void) | null>(null) as React.RefObject<
-    (() => void) | null
-  >
+  const { zoomInRef, zoomOutRef, zoomResetRef } = useZoomKeyboardShortcuts()
   const previousNextMessageId = useRef<[number | null, number | null]>([
     null,
     null,
@@ -144,9 +143,9 @@ export default function FullscreenMedia(props: Props & DialogProps) {
           }}
         >
           {utils => {
-            resetImageZoom.current = () => {
-              utils.resetTransform()
-            }
+            zoomInRef.current = () => utils.zoomIn()
+            zoomOutRef.current = () => utils.zoomOut()
+            zoomResetRef.current = () => utils.resetTransform()
             return (
               <TransformComponent
                 wrapperStyle={{
@@ -247,15 +246,15 @@ export default function FullscreenMedia(props: Props & DialogProps) {
       )
       if (message === null) return
       setMsg(message)
-      if (resetImageZoom.current !== null) {
-        resetImageZoom.current()
+      if (zoomResetRef.current !== null) {
+        zoomResetRef.current()
       }
     }
     return {
       previousImage: () => loadMessage(previousNextMessageId.current[0] || 0),
       nextImage: () => loadMessage(previousNextMessageId.current[1] || 0),
     }
-  }, [previousNextMessageId, setMsg])
+  }, [previousNextMessageId, setMsg, zoomResetRef])
 
   useEffect(() => {
     // use events directly for now
