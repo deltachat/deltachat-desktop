@@ -150,6 +150,7 @@ test.describe('Shift + Click', () => {
   test('Shift + Space', async () => {
     await getChat(7).click()
     await expectSelectedChats([7])
+    await getChat(7).focus()
 
     await page.keyboard.press('ArrowDown')
     await page.keyboard.press('ArrowDown')
@@ -168,6 +169,7 @@ test.describe('Shift + Click', () => {
   test('Shift + ArrowDown', async () => {
     await getChat(7).click()
     await expectSelectedChats([7])
+    await getChat(7).focus()
     await page.keyboard.press('Shift+ArrowDown')
     await expectSelectedChats([7, 6])
     await page.keyboard.press('Shift+ArrowDown')
