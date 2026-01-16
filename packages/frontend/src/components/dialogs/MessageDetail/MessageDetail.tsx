@@ -79,10 +79,7 @@ class MessageInfo extends React.Component<
                   {tx('message_detail_sent_desktop')}
                 </td>
                 <td>
-                  {moment(sentAt).format('LLLL')}{' '}
-                  <span className='module-message-detail__unix-timestamp'>
-                    ({sentAt})
-                  </span>
+                  {moment(sentAt).format('LLLL')} <span>({sentAt})</span>
                 </td>
               </tr>
               {receivedAt ? (
@@ -92,9 +89,7 @@ class MessageInfo extends React.Component<
                   </td>
                   <td>
                     {moment(receivedAt).format('LLLL')}{' '}
-                    <span className='module-message-detail__unix-timestamp'>
-                      ({receivedAt})
-                    </span>
+                    <span>({receivedAt})</span>
                   </td>
                 </tr>
               ) : null}
