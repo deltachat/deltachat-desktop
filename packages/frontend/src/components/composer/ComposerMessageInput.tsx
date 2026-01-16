@@ -80,9 +80,7 @@ export default class ComposerMessageInput extends React.Component<
 
   focus() {
     log.debug('Focus composer message input')
-    if (!this.context.hasOpenDialogs) {
-      setTimeout(() => this.textareaRef?.current?.focus())
-    }
+    setTimeout(() => this.textareaRef?.current?.focus())
   }
 
   componentDidUpdate(prevProps: ComposerMessageInputProps) {
