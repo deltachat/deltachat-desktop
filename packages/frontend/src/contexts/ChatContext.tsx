@@ -88,6 +88,7 @@ export const ChatProvider = ({
       // Remember that there might be no messages in the chat.
       // @TODO: We probably want this to be part of the UI logic instead
       if (nextChatId === chatId) {
+        const focusMessage = false
         window.__internal_jump_to_message_asap = {
           accountId,
           chatId: nextChatId,
@@ -95,7 +96,7 @@ export const ChatProvider = ({
             {
               msgId: undefined,
               highlight: false,
-              focus: false,
+              focus: focusMessage,
               addMessageIdToStack: undefined,
               // `scrollIntoViewArg:` doesn't really have effect when
               // jumping to the last message.
@@ -103,6 +104,23 @@ export const ChatProvider = ({
           ],
         }
         window.__internal_check_jump_to_message?.()
+
+        // Yes, we only run this in the `nextChatId === chatId` case.
+        // Otherwise the composer will get focused when the chat loads,
+        // in another `useEffect`.
+        if (!focusMessage) {
+          const composerTextarea = document.getElementsByClassName(
+            'create-or-edit-message-input'
+          )[0]
+          if (composerTextarea instanceof HTMLElement) {
+            composerTextarea.focus()
+          } else {
+            log.warn(
+              'Failed to focus composer: not an HTMLElement',
+              composerTextarea
+            )
+          }
+        }
       }
 
       // Already set known state

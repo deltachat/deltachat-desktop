@@ -488,3 +488,18 @@ test.describe('draft', () => {
     await testDraftIsEmpty()
   })
 })
+
+test('gets focused when selecting a chat', async () => {
+  await selectChat(1)
+  await page.getByRole('button').first().focus() // Focus a random button
+  await expect(textarea).not.toBeFocused()
+
+  await selectChat(2)
+  await expect(textarea).toBeFocused()
+
+  await textarea.blur()
+  // When clicking on a chat that is already active, still focus the composer.
+  await expect(textarea).not.toBeFocused()
+  await selectChat(2)
+  await expect(textarea).toBeFocused()
+})
