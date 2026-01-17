@@ -78,24 +78,14 @@ class MessageInfo extends React.Component<
                 <td className='module-message-detail__label'>
                   {tx('message_detail_sent_desktop')}
                 </td>
-                <td>
-                  {moment(sentAt).format('LLLL')}{' '}
-                  <span className='module-message-detail__unix-timestamp'>
-                    ({sentAt})
-                  </span>
-                </td>
+                <td>{moment(sentAt).format('LLLL')}</td>
               </tr>
               {receivedAt ? (
                 <tr>
                   <td className='module-message-detail__label'>
                     {tx('message_detail_received_desktop')}
                   </td>
-                  <td>
-                    {moment(receivedAt).format('LLLL')}{' '}
-                    <span className='module-message-detail__unix-timestamp'>
-                      ({receivedAt})
-                    </span>
-                  </td>
+                  <td>{moment(receivedAt).format('LLLL')}</td>
                 </tr>
               ) : null}
               {this.props.messageId && (
