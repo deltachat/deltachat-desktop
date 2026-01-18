@@ -13,7 +13,7 @@
 
 use std::collections::HashMap;
 
-use intl_pluralrules::{PluralCategory, PluralRuleType, PluralRules};
+use intl_pluralrules::{PluralCategory, PluralRuleType, PluralRules, operands::PluralOperands};
 use log::error;
 use regex::{self, Regex};
 use unic_langid::{LanguageIdentifier, LanguageIdentifierError};
@@ -24,12 +24,14 @@ pub enum Substitution<'a> {
     String(Vec<&'a str>),
     Quantity(usize),
     QuantityFloat(f32),
+    QuantityAndString(usize, Vec<&'a str>),
+    QuantityFloatAndString(f32, Vec<&'a str>),
 }
 
 pub struct TranslationEngine {
     messages: HashMap<String, HashMap<String, String>>,
     plural_rules: PluralRules,
-    var_finder: Regex,
+    var_finder_positional: Regex,
 }
 
 #[derive(Debug, thiserror::Error)]
@@ -57,14 +59,70 @@ impl TranslationEngine {
             .map_err(Error::LangIdParsingFailed)?;
         let pr = PluralRules::create(langid, PluralRuleType::CARDINAL)
             .map_err(Error::PluralRuleNotFound)?;
-        let var_finder = Regex::new(r"%\d\$[\w\d]")?;
+        let var_finder_positional = Regex::new(r"%\d\$[\w\d]")?;
 
         Ok(TranslationEngine {
             messages,
             plural_rules: pr,
-            var_finder,
+            var_finder_positional,
         })
     }
+
+    fn substitute_strings(&self, key: &str, message: &String, items: Vec<&str>) -> String {
+        let mut msg: String = message.clone();
+        let mut has_positional_replacement = false;
+        let mut replacement_happened = false;
+        for matches in self.var_finder_positional.find_iter(message) {
+            has_positional_replacement = true;
+            let from = matches.as_str();
+            let Some(position) = from.chars().nth(1).and_then(|from| from.to_digit(10)) else {
+                error!("Invalid format of replacement pattern");
+                return key.to_owned();
+            };
+            if let Some(item) = items.get(position as usize - 1) {
+                msg = msg.replace(from, item);
+            } else {
+                error!("Invalid item position {position}");
+                return key.to_owned();
+            }
+            replacement_happened = true;
+        }
+        // Assumptions:
+        // - `%s` instead of positional `%1$s` is only used when message only contains one placeholder.
+        // - `%s` and `%1$s` placeholders are never mixed.
+        if !has_positional_replacement && msg.contains("%s") {
+            if let Some(item) = items.get(0) {
+                msg = msg.replace("%s", item);
+            } else {
+                error!("no substitution item provided");
+                return key.to_owned();
+            }
+            replacement_happened = true;
+        }
+        if !replacement_happened {
+            error!("invalid translation string: {key}, no placeholders for substitution found");
+            return key.to_owned();
+        }
+
+        msg
+    }
+
+    fn quantity_to_plural_key<N>(&self, quantity: N) -> Result<&'static str, &'static str>
+    where
+        N: TryInto<PluralOperands>,
+    {
+        let plural_key = match self.plural_rules.select(quantity) {
+            Ok(PluralCategory::ZERO) => "zero",
+            Ok(PluralCategory::ONE) => "one",
+            Ok(PluralCategory::TWO) => "two",
+            Ok(PluralCategory::FEW) => "few",
+            Ok(PluralCategory::MANY) => "many",
+            Ok(PluralCategory::OTHER) => "other",
+            Err(err) => return Err(err),
+        };
+        Ok(plural_key)
+    }
+
     pub fn translate(&self, key: &str, substitution: Substitution) -> String {
         let Some(entry) = self.messages.get(key) else {
             error!("Translation for key {key} missing");
@@ -84,66 +142,49 @@ impl TranslationEngine {
                     error!("Message not existing for {key}");
                     return key.to_owned();
                 };
-                let mut msg = message.clone();
-                for matches in self.var_finder.find_iter(message) {
-                    let from = matches.as_str();
-                    let Some(position) = from.chars().nth(1).and_then(|from| from.to_digit(10))
-                    else {
-                        error!("Invalid format of replacement pattern");
-                        return key.to_owned();
-                    };
-                    if let Some(item) = items.get(position as usize - 1) {
-                        msg = msg.replace(from, item);
-                    } else {
-                        error!("Invalid item position {position}");
-                        return key.to_owned();
-                    }
-                }
-                msg
+                self.substitute_strings(key, message, items)
             }
-            Substitution::Quantity(quantity) => {
-                let quantity_key = match self.plural_rules.select(quantity) {
-                    Ok(PluralCategory::ZERO) => "zero",
-                    Ok(PluralCategory::ONE) => "one",
-                    Ok(PluralCategory::TWO) => "two",
-                    Ok(PluralCategory::FEW) => "few",
-                    Ok(PluralCategory::MANY) => "many",
-                    Ok(PluralCategory::OTHER) => "other",
-                    Err(_) => {
-                        error!("Failed to  {quantity}");
+            Substitution::QuantityFloat(..)
+            | Substitution::Quantity(..)
+            | Substitution::QuantityFloatAndString(..)
+            | Substitution::QuantityAndString(..) => {
+                let (quantity_key_result, quantity_string) = match substitution {
+                    Substitution::QuantityFloat(quantity_float)
+                    | Substitution::QuantityFloatAndString(quantity_float, ..) => (
+                        self.quantity_to_plural_key(quantity_float),
+                        quantity_float.to_string(),
+                    ),
+                    Substitution::Quantity(quantity)
+                    | Substitution::QuantityAndString(quantity, ..) => {
+                        (self.quantity_to_plural_key(quantity), quantity.to_string())
+                    }
+                    _ => unreachable!(),
+                };
+
+                let quantity_key = match quantity_key_result {
+                    Ok(key) => key,
+                    Err(err) => {
+                        error!("Failed to convert {quantity_string}: {err}");
                         return key.to_owned();
                     }
                 };
                 if let Some(message) = entry.get(quantity_key) {
-                    let quantity_string = quantity.to_string();
-                    message
+                    let msg = message
                         .replace("%1$d", &quantity_string)
-                        .replace("%d", &quantity_string)
-                } else {
-                    error!(
-                        "Message for key was found {key}, but variant {quantity_key} to represent quantity of {quantity} is missing"
-                    );
-                    key.to_owned()
-                }
-            }
-            Substitution::QuantityFloat(quantity_float) => {
-                let quantity_key = match self.plural_rules.select(quantity_float) {
-                    Ok(PluralCategory::ZERO) => "zero",
-                    Ok(PluralCategory::ONE) => "one",
-                    Ok(PluralCategory::TWO) => "two",
-                    Ok(PluralCategory::FEW) => "few",
-                    Ok(PluralCategory::MANY) => "many",
-                    Ok(PluralCategory::OTHER) => "other",
-                    Err(_) => {
-                        error!("Failed to  {quantity_float}");
-                        return key.to_owned();
+                        .replace("%d", &quantity_string);
+
+                    if let Some(items) = match substitution {
+                        Substitution::QuantityFloatAndString(.., items)
+                        | Substitution::QuantityAndString(.., items) => Some(items),
+                        _ => None,
+                    } {
+                        self.substitute_strings(key, &msg, items)
+                    } else {
+                        msg
                     }
-                };
-                if let Some(message) = entry.get(quantity_key) {
-                    message.replace("%d", &quantity_float.to_string())
                 } else {
                     error!(
-                        "Message for key was found {key}, but variant {quantity_key} to represent quantity of {quantity_float} is missing"
+                        "Message for key was found {key}, but variant {quantity_key} to represent quantity of {quantity_string} is missing"
                     );
                     key.to_owned()
                 }
@@ -357,5 +398,26 @@ mod tests {
         assert_eq!(result, "group_name_changed_by_other");
     }
     // TODO: tests: that errors do not crash the program and are returned as errors instead (creation of translation engine)
-    // TODO: handle different cases for substitution pattern matching (like now unhandeled %s)
+
+    #[test]
+    fn plural_and_substitution() {
+        let msgs: HashMap<String, HashMap<String, String>> =
+            serde_json::from_value(serde_json::json!({"ask_send_following_n_files_to": {
+              "one": "Send the following file to %s?",
+              "other": "Send the following %d files to %s?"
+            }}))
+            .unwrap();
+        let txen = TranslationEngine::new(msgs, "en").unwrap();
+        let result = txen.translate(
+            "ask_send_following_n_files_to",
+            Substitution::QuantityAndString(1, vec!["Alice"]),
+        );
+        assert_eq!(result, "Send the following file to Alice?");
+
+        let result = txen.translate(
+            "ask_send_following_n_files_to",
+            Substitution::QuantityFloatAndString(5.5, vec!["Bob"]),
+        );
+        assert_eq!(result, "Send the following 5.5 files to Bob?");
+    }
 }
