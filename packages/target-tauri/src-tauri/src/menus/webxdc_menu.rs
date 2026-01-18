@@ -153,17 +153,18 @@ impl MenuAction<'static> for WebxdcMenuAction {
                         let mut dialog_builder = app
                             .dialog()
                             .message(
-                                tx.translate(
+                                tx.sync_translate(
                                     "ask_copy_unopenable_link_to_clipboard",
                                     Substitution::None,
                                 )
-                                .await
                                 .replace("%1$d", &source_code_url),
                             )
                             .buttons(MessageDialogButtons::OkCancelCustom(
-                                tx.translate("menu_copy_link_to_clipboard", Substitution::None)
-                                    .await,
-                                tx.translate("no", Substitution::None).await,
+                                tx.sync_translate(
+                                    "menu_copy_link_to_clipboard",
+                                    Substitution::None,
+                                ),
+                                tx.sync_translate("no", Substitution::None),
                             ));
                         #[cfg(desktop)]
                         {
