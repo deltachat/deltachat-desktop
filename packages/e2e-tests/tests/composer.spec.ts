@@ -24,10 +24,18 @@ const numberOfProfiles = 1
 // https://playwright.dev/docs/next/test-retries#reuse-single-page-between-tests
 let page: Page
 
-let chatList: Locator
-let textarea: Locator
-let composerSection: Locator
-let composerReply: Locator
+function chatList(): Locator {
+  return page.getByLabel('Chats').getByRole('tablist')
+}
+function textarea(): Locator {
+  return page.locator('textarea.create-or-edit-message-input')
+}
+function composerSection(): Locator {
+  return page.getByRole('region', { name: 'Write a message' })
+}
+function composerReply(): Locator {
+  return composerSection().getByRole('region', { name: 'Reply' })
+}
 const numDummyChats = 3
 const getChatName = (chatNum: number) => `Some chat ${chatNum}`
 const selectChat = (chatNum: number) =>
@@ -58,10 +66,6 @@ test.beforeAll(async ({ browser, isChatmail }) => {
   page = await browser.newPage()
   await reloadPage(page)
 
-  chatList = page.getByLabel('Chats').getByRole('tablist')
-  textarea = page.locator('textarea.create-or-edit-message-input')
-  composerSection = page.getByRole('region', { name: 'Write a message' })
-  composerReply = composerSection.getByRole('region', { name: 'Reply' })
   await createNDummyChats(page, numDummyChats, 'Some chat ')
 })
 
@@ -71,16 +75,16 @@ function getRemoveQuoteOrFileButton(parent: Locator): Locator {
   })
 }
 async function testDraftIsEmpty() {
-  await expect(textarea).toBeEmpty({ timeout: 500 })
+  await expect(textarea()).toBeEmpty({ timeout: 500 })
 
-  await expect(composerSection).toHaveText('', { timeout: 500 })
+  await expect(composerSection()).toHaveText('', { timeout: 500 })
   // The above check should be enough, but let's double check
   // with these extra ones.
   await expect(
-    composerSection.getByRole('region', { name: /reply|attachment|/i })
+    composerSection().getByRole('region', { name: /reply|attachment|/i })
   ).not.toBeVisible()
-  await expect(getRemoveQuoteOrFileButton(composerSection)).not.toBeVisible()
-  await expect(composerSection.locator('.upper-bar')).toBeEmpty()
+  await expect(getRemoveQuoteOrFileButton(composerSection())).not.toBeVisible()
+  await expect(composerSection().locator('.upper-bar')).toBeEmpty()
 }
 
 test.afterEach(async () => {
@@ -88,7 +92,7 @@ test.afterEach(async () => {
     await selectChat(i)
     // Just send a/the message to make sure the draft is cleared.
     // In case the draft is actually empty already, type some text.
-    await textarea.fill('dummy message to clear draft')
+    await textarea().fill('dummy message to clear draft')
     await page.getByRole('button', { name: 'Send' }).click()
     await testDraftIsEmpty()
   }
@@ -106,19 +110,19 @@ test.afterAll(async ({ browser }) => {
 
 async function typeText(text: string) {
   // We might disable the textarea while we're loading the draft.
-  await expect(textarea).not.toBeDisabled()
+  await expect(textarea()).not.toBeDisabled()
 
-  await textarea.pressSequentially(text, { delay: 50 })
+  await textarea().pressSequentially(text, { delay: 50 })
 
   // Seems to be necessary, otherwise it's flaky.
   // This might indicate a bug in our app, actually.
-  await expect(textarea).toHaveText(text)
+  await expect(textarea()).toHaveText(text)
 }
 
 test("doesn't send the same message twice on multiple clicks", async () => {
   await selectChat(1)
   const messageText = `somee messageee foo ${Math.random()}`
-  await textarea.fill(messageText)
+  await textarea().fill(messageText)
 
   const sendButton = page.getByRole('button', { name: 'Send' })
 
@@ -141,15 +145,15 @@ test("doesn't send the same message twice on multiple clicks", async () => {
       .getByText(messageText)
   ).toHaveCount(1)
 
-  await textarea.fill(messageText)
+  await textarea().fill(messageText)
 
   await Promise.allSettled([
-    textarea.press('ControlOrMeta+Enter'),
-    textarea.press('ControlOrMeta+Enter'),
-    textarea.press('ControlOrMeta+Enter'),
+    textarea().press('ControlOrMeta+Enter'),
+    textarea().press('ControlOrMeta+Enter'),
+    textarea().press('ControlOrMeta+Enter'),
   ])
   // One more outside of the `Promise.allSettled`, for good measure.
-  await textarea.press('ControlOrMeta+Enter')
+  await textarea().press('ControlOrMeta+Enter')
 
   // Note that we're using the same message text so that we can check
   // that there are now 2 elements, and not that there is one element
@@ -164,7 +168,7 @@ test("doesn't send the same message twice on multiple clicks", async () => {
   // Now make sure that the message list is in its "final" state
   // and no message sends are pending.
   const finalMessageText = 'my final message'
-  await textarea.fill(finalMessageText)
+  await textarea().fill(finalMessageText)
   await sendButton.click()
   await expect(page.getByRole('list', { name: 'Messages' })).toContainText(
     finalMessageText
@@ -182,7 +186,7 @@ test.describe('draft', () => {
   async function sendMessageAndSetAsQuote(messageText: string) {
     // Note that this will clear the current text.
     // Maybe we should already have a message ready, e.g. in `beforeAll`.
-    await textarea.fill(messageText)
+    await textarea().fill(messageText)
     await page.getByRole('button', { name: 'Send' }).click()
 
     await page
@@ -192,14 +196,14 @@ test.describe('draft', () => {
     await page.getByRole('menuitem', { name: 'Reply' }).click()
   }
   async function testDraftHasQuote(quoteText: string) {
-    await expect(composerReply).toContainText('Me', { ignoreCase: false })
-    await expect(composerReply).toContainText(quoteText)
+    await expect(composerReply()).toContainText('Me', { ignoreCase: false })
+    await expect(composerReply()).toContainText(quoteText)
   }
 
   // A contact is also a file, and it's the easiest way
   // to attach a file, so let's go for it.
   async function attachFile() {
-    await composerSection
+    await composerSection()
       .getByRole('button', { name: 'Add attachment' })
       .click()
     await page.getByRole('menuitem', { name: 'Contact' }).click()
@@ -208,9 +212,9 @@ test.describe('draft', () => {
   async function testDraftHasFile() {
     const myName = 'Alice'
     await expect(
-      composerSection.getByRole('region', { name: 'Attachment' })
+      composerSection().getByRole('region', { name: 'Attachment' })
     ).toContainText(myName)
-    await expect(composerSection).toContainText(myName)
+    await expect(composerSection()).toContainText(myName)
   }
 
   async function testSavesText(text: string, targetChatNum: number = 1) {
@@ -224,14 +228,14 @@ test.describe('draft', () => {
     await selectChat(someOtherChatNum)
 
     // Shouldn't take long to clear the value.
-    await expect(textarea).toBeEmpty({ timeout: 300 })
+    await expect(textarea()).toBeEmpty({ timeout: 300 })
 
     // This is currently failing sometimes, probably due to some
     // `ChatlistItemChanged` race. TODO.
     // await expect(targetChat).toContainText(`Draft: ${text}`)
 
     await selectChat(targetChatNum)
-    await expect(textarea).toHaveText(text)
+    await expect(textarea()).toHaveText(text)
   }
 
   async function testSavesQuote(
@@ -246,10 +250,10 @@ test.describe('draft', () => {
     await testDraftHasQuote(messageText)
 
     await selectChat(someOtherChatNum)
-    await expect(composerSection).not.toContainText(messageText, {
+    await expect(composerSection()).not.toContainText(messageText, {
       timeout: 300,
     })
-    await expect(composerReply).not.toBeVisible({ timeout: 1 })
+    await expect(composerReply()).not.toBeVisible({ timeout: 1 })
 
     // This is currently failing sometimes, probably due to some
     // `ChatlistItemChanged` race. TODO.
@@ -279,18 +283,18 @@ test.describe('draft', () => {
     await testDraftIsEmpty()
 
     // Switch the chat back and forth.
-    const currChat = await chatList
+    const currChat = await chatList()
       .getByRole('tab', { selected: true })
       .elementHandle()
-    await chatList
+    await chatList()
       .getByRole('tab', { selected: false, name: 'Some chat' })
       .first()
       .click()
     // Make sure that we have actually switched the chat
     // and loaded its draft.
-    await textarea.fill('foo')
+    await textarea().fill('foo')
     await currChat!.click()
-    await expect(textarea).toBeEmpty()
+    await expect(textarea()).toBeEmpty()
 
     await testDraftIsEmpty()
   }
@@ -318,7 +322,7 @@ test.describe('draft', () => {
     await testSavesQuote()
 
     await expect(page.getByRole('button', { name: 'Send' })).not.toBeVisible()
-    await textarea.fill('foo')
+    await textarea().fill('foo')
     await sendDraftAndTestDraftIsCleared()
   })
 
@@ -332,7 +336,7 @@ test.describe('draft', () => {
     await testSavesText(draftText, chatNum)
 
     await selectChat(chatNum)
-    await expect(textarea).toHaveText(draftText)
+    await expect(textarea()).toHaveText(draftText)
     await testDraftHasQuote(quoteMessageText)
 
     await sendDraftAndTestDraftIsCleared()
@@ -357,8 +361,8 @@ test.describe('draft', () => {
   // see `useCreateDraftMessage`.
   test("bot command click doesn't override draft", async () => {
     await selectChat(1)
-    await textarea.fill('Try /someBotCommand')
-    await textarea.press('ControlOrMeta+Enter')
+    await textarea().fill('Try /someBotCommand')
+    await textarea().press('ControlOrMeta+Enter')
     const commandSuggestion = page.getByRole('link', {
       name: '/someBotCommand',
     })
@@ -375,33 +379,33 @@ test.describe('draft', () => {
 
     const somePriorDraftText =
       'Draft text before bot command has been clicked' + Math.random()
-    await expect(textarea).toBeFocused()
-    await textarea.fill(somePriorDraftText)
+    await expect(textarea()).toBeFocused()
+    await textarea().fill(somePriorDraftText)
     await clickCommandAndCancel()
-    await expect(textarea).toHaveText(somePriorDraftText)
+    await expect(textarea()).toHaveText(somePriorDraftText)
 
-    await textarea.clear()
+    await textarea().clear()
     await testDraftIsEmpty()
     // It probably doesn't make senese to warn when there is no text
     // but only a file, but let's test for this.
     await attachFile()
     await clickCommandAndCancel()
     await testDraftHasFile()
-    await expect(textarea).toBeEmpty()
+    await expect(textarea()).toBeEmpty()
 
     await selectChat(2)
-    await expect(textarea).toBeEmpty()
+    await expect(textarea()).toBeEmpty()
     await selectChat(1)
     await clickCommandAndCancel()
     await testDraftHasFile()
-    await expect(textarea).toBeEmpty()
+    await expect(textarea()).toBeEmpty()
 
     await commandSuggestion.click()
     await replaceDraftDialog
       .getByRole('button', { name: 'Replace Draft' })
       .click()
-    await expect(textarea).toHaveText('/someBotCommand')
-    await textarea.clear()
+    await expect(textarea()).toHaveText('/someBotCommand')
+    await textarea().clear()
     await testDraftIsEmpty()
   })
   // This is pretty similar to the previous test.
@@ -426,7 +430,7 @@ test.describe('draft', () => {
       .click()
 
     const shareProfile = async () => {
-      await chatList.getByText(dummyContactName).click({ button: 'right' })
+      await chatList().getByText(dummyContactName).click({ button: 'right' })
       await page.getByRole('menuitem', { name: 'View Profile' }).click()
       await page
         .getByRole('dialog')
@@ -452,39 +456,39 @@ test.describe('draft', () => {
     await selectChat(1)
     await attachFile()
     const somePriorDraftText = 'Some prior draft text' + Math.random()
-    await expect(textarea).toBeFocused()
-    await textarea.fill(somePriorDraftText)
+    await expect(textarea()).toBeFocused()
+    await textarea().fill(somePriorDraftText)
     await tryShareProfileAndCancel()
     const myName = 'Alice'
     await expect(
-      composerSection.getByRole('region', { name: 'Attachment' })
+      composerSection().getByRole('region', { name: 'Attachment' })
     ).toContainText(myName)
-    await expect(composerSection).not.toContainText(dummyContactName)
-    await expect(textarea).toHaveText(somePriorDraftText)
+    await expect(composerSection()).not.toContainText(dummyContactName)
+    await expect(textarea()).toHaveText(somePriorDraftText)
 
-    await getRemoveQuoteOrFileButton(composerSection).click()
+    await getRemoveQuoteOrFileButton(composerSection()).click()
     // Again, it probably doesn't make sense to replace the whole draft
     // if we only need to attach a file (contact), but let's test.
     await tryShareProfileAndCancel()
-    await expect(textarea).toHaveText(somePriorDraftText)
+    await expect(textarea()).toHaveText(somePriorDraftText)
 
     await selectChat(2)
-    await expect(textarea).toBeEmpty()
+    await expect(textarea()).toBeEmpty()
     await selectChat(1)
     await tryShareProfileAndCancel()
-    await expect(textarea).toHaveText(somePriorDraftText)
+    await expect(textarea()).toHaveText(somePriorDraftText)
 
     await shareProfile()
     await replaceDraftDialog
       .getByRole('button', { name: 'Replace Draft' })
       .click()
     await expect(
-      composerSection.getByRole('region', { name: 'Attachment' })
+      composerSection().getByRole('region', { name: 'Attachment' })
     ).not.toContainText(myName)
-    await expect(composerSection).toContainText(dummyContactName)
-    await expect(textarea).not.toHaveText(somePriorDraftText)
+    await expect(composerSection()).toContainText(dummyContactName)
+    await expect(textarea()).not.toHaveText(somePriorDraftText)
 
-    await getRemoveQuoteOrFileButton(composerSection).click()
+    await getRemoveQuoteOrFileButton(composerSection()).click()
     await testDraftIsEmpty()
   })
 })
