@@ -84,6 +84,8 @@ export default function useChatDialog() {
         message: tx('ask_delete_messages', String(messagesToDelete.length), {
           quantity: messagesToDelete.length,
         }),
+        confirmLabel: tx('clear_chat'),
+        isConfirmDanger: true,
       })
 
       if (hasUserConfirmed) {

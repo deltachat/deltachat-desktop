@@ -306,7 +306,10 @@ test.describe('Main View - 3-Dot Menu', () => {
 
     // Confirm the dialog (2 messages since we have a system message and the test message)
     await expect(page.getByRole('dialog')).toContainText('Delete 2 messages?')
-    await page.getByRole('dialog').getByRole('button', { name: 'Yes' }).click()
+    await page
+      .getByRole('dialog')
+      .getByRole('button', { name: 'Clear Chat' })
+      .click()
 
     // Verify messages are cleared
     await expect(page.locator('.message')).toHaveCount(0)
