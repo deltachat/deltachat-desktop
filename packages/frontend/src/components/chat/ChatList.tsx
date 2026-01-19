@@ -781,14 +781,6 @@ export function useLogicVirtualChatList(
       loadingChats.delete(id)
     }
   })
-  // Clear cache when accountId changes
-  useEffect(() => {
-    // Intentionally reset state when switching accounts to prevent showing
-    // cached data from the previous account
-    setChatCache({})
-    loadingChats.clear()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [accountId])
   useEffect(() => {
     const loadingChats = loadingChatsRef_.current
 

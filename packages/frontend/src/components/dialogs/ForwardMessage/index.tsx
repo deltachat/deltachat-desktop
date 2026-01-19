@@ -179,6 +179,7 @@ export default function ForwardMessage(props: ForwardMessageProps) {
       listFlags={C.DC_GCL_FOR_FORWARDING | C.DC_GCL_NO_SPECIALS}
       accountId={targetAccountId}
       accountSwitch={accountSwitch}
+      key={targetAccountId}
     />
   )
 }
