@@ -1,5 +1,9 @@
+.dialogHeader {
+  padding-bottom: 0;
+}
+
 .dialogBody {
-  padding: 0;
+  padding: 0 10px;
   max-height: 400px;
   overflow-y: auto;
 }

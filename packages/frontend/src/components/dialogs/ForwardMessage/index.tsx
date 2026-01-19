@@ -151,11 +151,10 @@ export default function ForwardMessage(props: ForwardMessageProps) {
 
   const accountSwitch =
     hasMultipleAccounts && accountInfo?.kind === 'Configured' ? (
-      <div className={styles.switchAccountContainer}>
+      <div className={styles.switchAccountContainer} onClick={onSwitchAccount}>
         <button
           type='button'
           className={styles.switchAccountButton}
-          onClick={onSwitchAccount}
           data-testid='switch-account-button'
         >
           <span className={styles.switchAccountText}>

@@ -5,7 +5,6 @@
   padding: 8px 0;
   background: transparent;
   color: var(--textPrimary);
-  cursor: pointer;
 }
 
 .switchAccountText {
@@ -24,4 +23,5 @@
   justify-content: flex-end;
   gap: 10px;
   flex-shrink: 0;
+  cursor: pointer;
 }

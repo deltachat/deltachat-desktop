@@ -29,7 +29,11 @@ export default function SelectAccountDialog({ onSelect, onClose }: Props) {
 
   return (
     <Dialog width={350} onClose={onClose} dataTestid='select-account-dialog'>
-      <DialogHeader onClose={onClose} title={tx('switch_account')} />
+      <DialogHeader
+        onClose={onClose}
+        title={tx('switch_account')}
+        className={styles.dialogHeader}
+      />
       <DialogBody className={styles.dialogBody}>
         {accountsFetch.loading ? (
           <div className={styles.loading}>{tx('loading')}</div>
