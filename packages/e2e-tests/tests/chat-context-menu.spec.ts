@@ -161,9 +161,9 @@ test.describe('Main View - 3-Dot Menu', () => {
     // Main view menu items for DM chat
     await expect(getMenuItems(page)).toHaveText([
       'Search in Chat',
-      'Archive Chat',
       'Disappearing Messages',
       'Mute Notifications',
+      'Archive Chat',
       'Block Contact',
       'Clear Chat',
       'Delete Chat',
@@ -186,9 +186,9 @@ test.describe('Main View - 3-Dot Menu', () => {
     // Main view menu items for group chat (encrypted, member)
     await expect(getMenuItems(page)).toHaveText([
       'Search in Chat',
-      'Archive Chat',
       'Disappearing Messages',
       'Mute Notifications',
+      'Archive Chat',
       'Clone Chat',
       'Leave Group',
       'Clear Chat',
@@ -328,12 +328,12 @@ test.describe('Chat List Context Menu - Single Selection', () => {
     // Chat list menu items for DM chat
     await expect(getMenuItems(page)).toHaveText([
       'Pin Chat',
-      'Archive Chat',
       'Mute Notifications',
+      'Archive Chat',
       'View Profile',
+      'Encryption Info',
       'Block Contact',
       'Delete Chat',
-      'Encryption Info',
     ])
 
     await closeMenu(page)
@@ -349,13 +349,13 @@ test.describe('Chat List Context Menu - Single Selection', () => {
     // Chat list menu items for group chat
     await expect(getMenuItems(page)).toHaveText([
       'Pin Chat',
-      'Archive Chat',
       'Mute Notifications',
+      'Archive Chat',
       'View Profile',
+      'Encryption Info',
       'Clone Chat',
       'Leave Group',
       'Delete Chat',
-      'Encryption Info',
     ])
 
     await closeMenu(page)
