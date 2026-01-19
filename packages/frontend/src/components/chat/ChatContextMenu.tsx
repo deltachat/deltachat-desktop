@@ -482,11 +482,12 @@ export function useChatContextMenu(): {
         action: onSearchInChat,
       },
       !isMainView && pin,
-      archive,
       ephemeralMessagesMenuItem,
       muteMenuItem,
+      archive,
       { type: 'separator' },
       ...(!isMainView ? viewEditMenuItems : []),
+      !isMainView && encryptionInfoItem,
       // Clone Group
       relatedChat &&
         isGroup && {
@@ -527,7 +528,6 @@ export function useChatContextMenu(): {
         action: onDeleteChats,
         danger: true,
       },
-      !isMainView && encryptionInfoItem,
     ].filter(Boolean) as ContextMenuItem[]
 
     event.preventDefault()
