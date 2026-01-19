@@ -64,7 +64,7 @@ export default function SearchInput(props: Props) {
           autoFocus
           onChange={onChange}
           value={value}
-          className={styles.searchInput}
+          className={`${styles.searchInput} search-input`}
           data-no-drag-region
           // eslint-disable-next-line react-hooks/refs
           ref={props.inputRef}
