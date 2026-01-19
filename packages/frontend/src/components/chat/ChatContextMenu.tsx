@@ -487,6 +487,7 @@ export function useChatContextMenu(): {
       muteMenuItem,
       { type: 'separator' },
       ...(!isMainView ? viewEditMenuItems : []),
+      !isMainView && encryptionInfoItem,
       // Clone Group
       relatedChat &&
         isGroup && {
@@ -527,7 +528,6 @@ export function useChatContextMenu(): {
         action: onDeleteChats,
         danger: true,
       },
-      !isMainView && encryptionInfoItem,
     ].filter(Boolean) as ContextMenuItem[]
 
     event.preventDefault()
