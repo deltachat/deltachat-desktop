@@ -13,6 +13,7 @@ import {
   clickThroughTestIds,
   test,
   createGroupChat,
+  createChat,
 } from '../playwright-helper'
 
 test.describe.configure({ mode: 'serial' })
@@ -67,43 +68,9 @@ test.afterAll(async ({ browser }) => {
 })
 
 test('start chat with user', async ({ browserName }) => {
-  if (browserName.toLowerCase().indexOf('chrom') > -1) {
-    await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
-  }
   const userA = getUser(0, existingProfiles)
   const userB = getUser(1, existingProfiles)
-  await switchToProfile(page, userA.id)
-  // copy invite link from user A
-  await clickThroughTestIds(page, [
-    'qr-scan-button',
-    'copy-qr-code',
-    'confirm-qr-code',
-  ])
-
-  await switchToProfile(page, userB.id)
-  // paste invite link in account of userB
-  await clickThroughTestIds(page, ['qr-scan-button', 'show-qr-scan', 'paste'])
-  const confirmDialog = page.getByTestId('confirm-start-chat')
-  await expect(confirmDialog).toContainText(userA.name)
-
-  await page.getByTestId('confirm-start-chat').getByTestId('confirm').click()
-  await expect(
-    page.locator('.chat-list .chat-list-item').filter({ hasText: userA.name })
-  ).toHaveCount(1)
-  console.log(`Chat with ${userA.name} created!`)
-  await page
-    .locator('.chat-list .chat-list-item')
-    .filter({ hasText: userA.name })
-    .click()
-
-  const messageText = `Hello ${userA.name}!`
-  await page.locator('.create-or-edit-message-input').fill(messageText)
-  await page.locator('button.send-button').click()
-  const sentMessageText = page
-    .locator(`.message.outgoing`)
-    .last()
-    .locator('.msg-body .text')
-  await expect(sentMessageText).toHaveText(messageText)
+  await createChat(userA, userB, page, browserName)
 })
 
 test('create group', async () => {

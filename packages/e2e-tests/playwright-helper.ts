@@ -450,6 +450,50 @@ export async function selectChat(
   ).toContainText(chatName)
 }
 
+export const createChat = async (
+  userA: User,
+  userB: User,
+  page: Page,
+  browserName: string
+) => {
+  if (browserName.toLowerCase().indexOf('chrom') > -1) {
+    await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
+  }
+  await switchToProfile(page, userA.id)
+  // copy invite link from user A
+  await clickThroughTestIds(page, [
+    'qr-scan-button',
+    'copy-qr-code',
+    'confirm-qr-code',
+  ])
+
+  await switchToProfile(page, userB.id)
+  // paste invite link in account of userB
+  await clickThroughTestIds(page, ['qr-scan-button', 'show-qr-scan', 'paste'])
+  const confirmDialog = page.getByTestId('confirm-start-chat')
+  await expect(confirmDialog).toContainText(userA.name)
+
+  await page.getByTestId('confirm-start-chat').getByTestId('confirm').click()
+  const chatListItem = page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: userA.name })
+    .first()
+  await expect(chatListItem).toBeVisible()
+
+  // Send a message from userB to userA so that userA learns userB's display name
+  await page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: userA.name })
+    .click()
+  await page
+    .locator('textarea.create-or-edit-message-input')
+    .fill(`Hello ${userA.name}!`)
+  await page.locator('button.send-button').click()
+  await expect(
+    page.locator('.message.outgoing').last().locator('.msg-body .text')
+  ).toHaveText(`Hello ${userA.name}!`)
+}
+
 /**
  * Create a profile from an invite link and start a chat
  * based on that link
