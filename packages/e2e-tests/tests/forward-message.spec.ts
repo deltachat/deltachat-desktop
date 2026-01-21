@@ -9,7 +9,6 @@ import {
   deleteAllProfiles,
   reloadPage,
   clickThroughTestIds,
-  sendMessage,
   test,
 } from '../playwright-helper'
 
@@ -112,7 +111,6 @@ test('forward message to another chat (same account, with confirmation)', async 
   // Switch to user A and send a message to user B
   await switchToProfile(page, userA.id)
   const messageText = `Test message to forward ${Date.now()}`
-  await sendMessage(page, userB.name, messageText)
 
   // Go to Saved Messages and send a message there
   await page
@@ -249,4 +247,95 @@ test('forward message to another account', async () => {
   await expect(
     page.locator('.message').filter({ hasText: messageText })
   ).toBeVisible()
+})
+
+test('forward message with webxdc attachment', async () => {
+  const userA = getUser(0, existingProfiles)
+  const userB = getUser(1, existingProfiles)
+
+  // Switch to user A and go to chat with user B
+  await switchToProfile(page, userA.id)
+  // Go to Saved Messages and send a message there
+  await page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: 'Saved Messages' })
+    .click()
+
+  // Add a webxdc app from the picker
+  await page.getByTestId('open-attachment-menu').click()
+  await page.getByTestId('open-app-picker').click()
+  const apps = page.locator('.styles_module_appPickerList button').first()
+  await apps.waitFor({ state: 'visible' })
+
+  // Search for an app to add
+  await page.locator('.styles_module_searchInput').fill('Cal')
+  const appName = 'Calendar'
+  const calendarApp = page
+    .locator('.styles_module_appPickerList button')
+    .getByText(appName)
+    .first()
+  await expect(calendarApp).toBeVisible()
+  await calendarApp.click()
+
+  // Confirm adding the app
+  const appInfoDialog = page.locator('.styles_module_dialogContent')
+  await expect(appInfoDialog).toBeVisible()
+  await page.getByTestId('add-app-to-chat').click()
+
+  // Verify the app appears in the draft
+  const appDraft = page.locator('.attachment-quote-section .text-part')
+  await expect(appDraft).toContainText(appName)
+
+  // Send the app
+  await page.locator('button.send-button').click()
+
+  // Wait for the webxdc message to appear
+  const webxdcMessage = page.locator('.msg-body .webxdc').last()
+  await expect(webxdcMessage).toContainText(appName)
+
+  // Right-click on the webxdc message and forward it
+  const messageWithWebxdc = page
+    .locator('.message')
+    .filter({ has: webxdcMessage })
+  await messageWithWebxdc.click({ button: 'right' })
+  await page.locator('[role="menuitem"]').filter({ hasText: 'Forward' }).click()
+
+  // Wait for the SelectChat dialog to appear
+  await expect(page.getByRole('dialog')).toContainText('Forward to')
+
+  // Click the switch account button
+  await page.getByTestId('switch-account-button').click()
+
+  // Wait for the SelectAccountDialog to appear
+  await expect(page.getByTestId('select-account-dialog')).toBeVisible()
+
+  // Click on user B's account
+  await page.getByTestId(`account-select-${userB.id}`).click()
+
+  // The SelectChat dialog should now show user B's chats
+  // Wait for the dialog to update (it should still be visible)
+  await expect(page.getByRole('dialog')).toContainText('Forward to')
+
+  // Forward to Saved Messages (no confirmation needed for self-chat)
+  await page
+    .getByRole('dialog')
+    .locator('.chat-list-item')
+    .filter({ hasText: 'Saved Messages' })
+    .click()
+
+  // Navigate to Saved Messages to verify the webxdc app was forwarded
+  await page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: 'Saved Messages' })
+    .click()
+
+  // Verify the forwarded webxdc app is visible in Saved Messages
+  const forwardedWebxdcMessage = page.locator('.msg-body .webxdc').last()
+  await expect(forwardedWebxdcMessage).toContainText(appName)
+
+  // Verify it's marked as forwarded
+  const forwardedMessage = page
+    .locator('.message')
+    .filter({ has: forwardedWebxdcMessage })
+  await expect(forwardedMessage).toContainText('Forwarded')
 })
