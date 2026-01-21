@@ -100,10 +100,7 @@ test('start chat between users', async ({ browserName }) => {
 async function openForwardDialog(pageRef: Page, messageText: string) {
   const message = pageRef.locator('.message').filter({ hasText: messageText })
   await message.click({ button: 'right' })
-  await pageRef
-    .locator('[role="menuitem"]')
-    .filter({ hasText: 'Forward' })
-    .click()
+  await pageRef.getByRole('menuitem', { name: 'Forward' }).click()
   // Wait for the SelectChat dialog to appear
   await expect(pageRef.getByRole('dialog')).toContainText('Forward to')
 }

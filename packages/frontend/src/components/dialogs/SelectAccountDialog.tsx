@@ -5,12 +5,11 @@ import { runtime } from '@deltachat-desktop/runtime-interface'
 import { getConfiguredAccounts } from '../../backend/account'
 import Dialog, { DialogBody, DialogHeader } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
-import { selectedAccountId } from '../../ScreenController'
 
 import type { DialogProps } from '../../contexts/DialogContext'
 
 import styles from './SelectAccountDialog.module.scss'
-import { useRpcFetch } from '../../hooks/useFetch'
+import { useFetch } from '../../hooks/useFetch'
 import { unknownErrorToString } from '../helpers/unknownErrorToString'
 
 type Props = {
@@ -20,7 +19,7 @@ type Props = {
 export default function SelectAccountDialog({ onSelect, onClose }: Props) {
   const tx = useTranslationFunction()
 
-  const accountsFetch = useRpcFetch(getConfiguredAccounts, [])
+  const accountsFetch = useFetch(getConfiguredAccounts, [])
 
   const handleAccountClick = (accountId: number) => {
     onSelect(accountId)
@@ -43,57 +42,55 @@ export default function SelectAccountDialog({ onSelect, onClose }: Props) {
           </div>
         ) : (
           <ul className={styles.accountList}>
-            {accountsFetch.result.value
-              .filter(account => account.id !== selectedAccountId())
-              .map(account => (
-                <li key={account.id}>
-                  <button
-                    type='button'
-                    className={styles.accountButton}
-                    onClick={() => handleAccountClick(account.id)}
-                    data-testid={`account-select-${account.id}`}
-                  >
-                    <div className={styles.avatar}>
-                      {account.kind === 'Configured' && account.profileImage ? (
-                        <img
-                          className={styles.avatarImage}
-                          src={runtime.transformBlobURL(account.profileImage)}
-                          alt=''
-                        />
-                      ) : (
-                        <div
-                          className={styles.avatarInitial}
-                          style={{
-                            backgroundColor:
-                              account.kind === 'Configured'
-                                ? account.color
-                                : '#505050',
-                          }}
-                        >
-                          {account.kind === 'Configured'
-                            ? avatarInitial(
-                                account.displayName || '',
-                                account.addr || undefined
-                              )
-                            : '?'}
-                        </div>
-                      )}
-                    </div>
-                    <div className={styles.accountInfo}>
-                      <div className={styles.displayName}>
+            {accountsFetch.result.value.map(account => (
+              <li key={account.id}>
+                <button
+                  type='button'
+                  className={styles.accountButton}
+                  onClick={() => handleAccountClick(account.id)}
+                  data-testid={`account-select-${account.id}`}
+                >
+                  <div className={styles.avatar}>
+                    {account.kind === 'Configured' && account.profileImage ? (
+                      <img
+                        className={styles.avatarImage}
+                        src={runtime.transformBlobURL(account.profileImage)}
+                        alt=''
+                      />
+                    ) : (
+                      <div
+                        className={styles.avatarInitial}
+                        style={{
+                          backgroundColor:
+                            account.kind === 'Configured'
+                              ? account.color
+                              : '#505050',
+                        }}
+                      >
                         {account.kind === 'Configured'
-                          ? account.displayName || account.addr
-                          : tx('unconfigured_account')}
+                          ? avatarInitial(
+                              account.displayName || '',
+                              account.addr || undefined
+                            )
+                          : '?'}
                       </div>
-                      {account.kind === 'Configured' && account.addr && (
-                        <div className={styles.emailAddress}>
-                          {account.addr}
-                        </div>
-                      )}
+                    )}
+                  </div>
+                  <div className={styles.accountInfo}>
+                    <div className={styles.displayName}>
+                      {account.kind === 'Configured'
+                        ? account.displayName || account.addr
+                        : tx('unconfigured_account')}
                     </div>
-                  </button>
-                </li>
-              ))}
+                    {account.kind === 'Configured' && account.addr && (
+                      <div className={styles.emailAddress}>
+                        {account.privateTag ?? account.addr}
+                      </div>
+                    )}
+                  </div>
+                </button>
+              </li>
+            ))}
           </ul>
         )}
       </DialogBody>

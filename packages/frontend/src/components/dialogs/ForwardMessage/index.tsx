@@ -19,6 +19,8 @@ import SelectChat from '../SelectChat'
 import styles from './styles.module.scss'
 import { useRpcFetch } from '../../../hooks/useFetch'
 import { Avatar } from '../../Avatar'
+import AlertDialog from '../AlertDialog'
+import { unknownErrorToString } from '../../helpers/unknownErrorToString'
 
 type ForwardMessageProps = {
   message: T.Message
@@ -135,16 +137,23 @@ export default function ForwardMessage(props: ForwardMessageProps) {
         }
       }
     } else {
-      // Self-talk: forward without confirmation
-      if (isCrossAccountForward) {
-        await BackendRemote.rpc.forwardMessagesToAccount(
-          currentAccountId,
-          [message.id],
-          targetAccountId,
-          chat.id
-        )
-      } else {
-        await forwardMessage(currentAccountId, message.id, chat.id)
+      try {
+        // Self-talk: forward without confirmation
+        if (isCrossAccountForward) {
+          await BackendRemote.rpc.forwardMessagesToAccount(
+            currentAccountId,
+            [message.id],
+            targetAccountId,
+            chat.id
+          )
+        } else {
+          await forwardMessage(currentAccountId, message.id, chat.id)
+        }
+      } catch (e) {
+        void openDialog(AlertDialog, {
+          message: unknownErrorToString(e),
+        })
+        return false
       }
     }
   }
