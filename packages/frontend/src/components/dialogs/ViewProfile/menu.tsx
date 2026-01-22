@@ -125,6 +125,7 @@ export default function useViewProfileMenu(
           label: tx('menu_block_contact'),
           action: () => openBlockContactById(accountId, contact.id),
           dataTestid: 'block-contact',
+          danger: true,
         },
   ]
 
