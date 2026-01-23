@@ -11,6 +11,7 @@ import {
   clickThroughTestIds,
   getUser,
   createGroupChat,
+  createChat,
 } from '../playwright-helper'
 
 /**
@@ -73,6 +74,18 @@ test.beforeAll(async ({ browser, isChatmail }) => {
     isChatmail
   )
 
+  const userA = getUser(0, existingProfiles)
+  const userB = getUser(1, existingProfiles)
+
+  await createChat(
+    userA,
+    userB,
+    pageForProfileCreation,
+    browser.browserType().name()
+  )
+
+  await createGroupChat(pageForProfileCreation, groupName, userA, userB)
+
   await contextForProfileCreation.close()
   page = await browser.newPage()
   await reloadPage(page)
@@ -93,56 +106,6 @@ test.afterAll(async ({ browser }) => {
   await reloadPage(pageForProfileDeletion)
   await deleteAllProfiles(pageForProfileDeletion, existingProfiles)
   await context.close()
-})
-
-test.describe('Setup', () => {
-  test('start chat between users', async ({ browserName }) => {
-    if (browserName.toLowerCase().indexOf('chrom') > -1) {
-      await page
-        .context()
-        .grantPermissions(['clipboard-read', 'clipboard-write'])
-    }
-    const userA = getUser(0, existingProfiles)
-    const userB = getUser(1, existingProfiles)
-
-    await switchToProfile(page, userA.id)
-    // copy invite link from user A
-    await clickThroughTestIds(page, [
-      'qr-scan-button',
-      'copy-qr-code',
-      'confirm-qr-code',
-    ])
-
-    await switchToProfile(page, userB.id)
-    // paste invite link in account of userB
-    await clickThroughTestIds(page, ['qr-scan-button', 'show-qr-scan', 'paste'])
-    const confirmDialog = page.getByTestId('confirm-start-chat')
-    await expect(confirmDialog).toContainText(userA.name)
-
-    await page.getByTestId('confirm-start-chat').getByTestId('confirm').click()
-    await expect(
-      page.locator('.chat-list .chat-list-item').filter({ hasText: userA.name })
-    ).toHaveCount(1)
-
-    // Send a message from userB to userA so that userA learns userB's display name
-    await page
-      .locator('.chat-list .chat-list-item')
-      .filter({ hasText: userA.name })
-      .click()
-    await page
-      .locator('textarea.create-or-edit-message-input')
-      .fill(`Hello ${userA.name}!`)
-    await page.locator('button.send-button').click()
-    await expect(
-      page.locator('.message.outgoing').last().locator('.msg-body .text')
-    ).toHaveText(`Hello ${userA.name}!`)
-  })
-
-  test('create group chat', async () => {
-    const userA = existingProfiles[0]
-    const userB = existingProfiles[1]
-    await createGroupChat(page, groupName, userA, userB)
-  })
 })
 
 test.describe('Main View - 3-Dot Menu', () => {

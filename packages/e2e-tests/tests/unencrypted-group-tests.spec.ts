@@ -10,6 +10,7 @@ import {
   switchToProfile,
   clickThroughTestIds,
   getUser,
+  createChat,
 } from '../playwright-helper'
 
 test.describe.configure({ mode: 'serial' })
@@ -123,30 +124,9 @@ test('check "New E-Mail" option is shown and a chat can be created', async () =>
 })
 
 test('start encrypted chat with user D', async ({ browserName }) => {
-  if (browserName.toLowerCase().indexOf('chrom') > -1) {
-    await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
-  }
   const userA = getUser(0, existingProfiles)
   const userD = getUser(3, existingProfiles)
-  await switchToProfile(page, userA.id)
-  // copy invite link from user A
-  await clickThroughTestIds(page, [
-    'qr-scan-button',
-    'copy-qr-code',
-    'confirm-qr-code',
-  ])
-
-  await switchToProfile(page, userD.id)
-  // paste invite link in account of userD
-  await clickThroughTestIds(page, ['qr-scan-button', 'show-qr-scan', 'paste'])
-  const confirmDialog = page.getByTestId('confirm-start-chat')
-  await expect(confirmDialog).toContainText(userA.name)
-
-  await page.getByTestId('confirm-start-chat').getByTestId('confirm').click()
-  await expect(
-    page.locator('.chat-list .chat-list-item').filter({ hasText: userA.name })
-  ).toHaveCount(1)
-  console.log(`Chat with ${userA.name} created!`)
+  await createChat(userA, userD, page, browserName)
 })
 
 test('check appropriate members are shown for new encrypted group', async () => {
