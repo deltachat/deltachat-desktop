@@ -1,4 +1,5 @@
 import { expect, type Page } from '@playwright/test'
+import path from 'path'
 
 import {
   getUser,
@@ -26,6 +27,9 @@ let existingProfiles: User[] = []
 const numberOfProfiles = 2
 
 let page: Page
+
+const fixturesPath = path.join(import.meta.dirname, '..', 'fixtures')
+const zipPath = path.join(fixturesPath, 'test.zip')
 
 test.beforeAll(async ({ browser, isChatmail }) => {
   const contextForProfileCreation = await browser.newContext()
@@ -249,7 +253,7 @@ test('forward message to another account', async () => {
   ).toBeVisible()
 })
 
-test('forward message with webxdc attachment', async () => {
+test('forward message with file attachment', async () => {
   const userA = getUser(0, existingProfiles)
   const userB = getUser(1, existingProfiles)
 
@@ -338,4 +342,67 @@ test('forward message with webxdc attachment', async () => {
     .locator('.message')
     .filter({ has: forwardedWebxdcMessage })
   await expect(forwardedMessage).toContainText('Forwarded')
+
+  // Now test forwarding a zip file attachment
+  const fileChooserPromise = page.waitForEvent('filechooser')
+  await page.getByTestId('open-attachment-menu').click()
+  await page.getByRole('menuitem', { name: 'File' }).click()
+
+  // Upload the zip file
+  const fileChooser = await fileChooserPromise
+  await fileChooser.setFiles(zipPath)
+
+  // Wait for the file to appear in the draft
+  const attachmentDraftPreview = page.locator(
+    '.attachment-quote-section .message-attachment-generic'
+  )
+  await expect(attachmentDraftPreview).toBeVisible()
+  await expect(attachmentDraftPreview).toContainText('test.zip')
+
+  // Add a message text
+  await page
+    .locator('textarea.create-or-edit-message-input')
+    .fill('Test file for forwarding')
+
+  // Send the message to Saved messages
+  await page.locator('button.send-button').click()
+
+  // Verify the file message appears in the chat
+  const fileMessage = page.locator('.message.outgoing').last()
+  await expect(fileMessage).toBeVisible()
+  await expect(fileMessage.locator('.msg-body')).toContainText('test.zip')
+
+  // Right-click on the file message and forward it
+  await fileMessage.click({ button: 'right' })
+  await page.locator('[role="menuitem"]').filter({ hasText: 'Forward' }).click()
+
+  // Wait for the SelectChat dialog to appear
+  await expect(page.getByRole('dialog')).toContainText('Forward to')
+
+  // Click the switch account button to forward to another account
+  await page.getByTestId('switch-account-button').click()
+  await expect(page.getByTestId('select-account-dialog')).toBeVisible()
+
+  // Click on user A's account (forward back to original account)
+  await page.getByTestId(`account-select-${userA.id}`).click()
+  await expect(page.getByRole('dialog')).toContainText('Forward to')
+
+  // Forward to Saved Messages
+  await page
+    .getByRole('dialog')
+    .locator('.chat-list-item')
+    .filter({ hasText: 'Saved Messages' })
+    .click()
+
+  // Verify the forwarded file message is visible
+  const forwardedFileMessage = page.locator('.message').last()
+  await expect(forwardedFileMessage).toBeVisible()
+  await expect(forwardedFileMessage.locator('.msg-body')).toContainText(
+    'test.zip'
+  )
+  await expect(forwardedFileMessage.locator('.msg-body .text')).toContainText(
+    'Test file for forwarding'
+  )
+  // Verify it's marked as forwarded
+  await expect(forwardedFileMessage).toContainText('Forwarded')
 })
