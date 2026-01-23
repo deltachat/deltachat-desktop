@@ -12,6 +12,7 @@ import type { IconName } from './Icon'
 
 import useContextMenu from '../hooks/useContextMenu'
 import { mouseEventToPosition } from '../utils/mouseEventToPosition'
+import { matchesLetterShortcut } from '../keybindings'
 
 type ContextMenuItemActionable = {
   icon?: IconName
@@ -26,10 +27,13 @@ type ContextMenuItemExpandable = {
 }
 
 export type ContextMenuItem =
-  | ({ type?: 'item'; label: string; dataTestid?: string; danger?: boolean } & (
-      | ContextMenuItemActionable
-      | ContextMenuItemExpandable
-    ))
+  | ({
+      type?: 'item'
+      label: string
+      dataTestid?: string
+      danger?: boolean
+      keyboardShortcut?: string[]
+    } & (ContextMenuItemActionable | ContextMenuItemExpandable))
   | { type: 'separator' }
 
 type MenuAriaAttrs = {
@@ -299,6 +303,53 @@ export function ContextMenu(props: {
     const onKeyDown = (ev: KeyboardEvent) => {
       const current = parent?.querySelector(':focus')
 
+      if (ev.key.length === 1 && !ev.altKey && !ev.shiftKey) {
+        const hasModifier = ev.ctrlKey || ev.metaKey
+        const items = levelItems[openSublevels.length].items
+
+        // Find first matching item with keyboard shortcut starting with
+        // modifier + key
+        const matchingItemIndex = items.findIndex(item => {
+          if (item.type === 'separator' || !item.keyboardShortcut) {
+            return false
+          }
+
+          const shortcut = item.keyboardShortcut
+
+          // we should only handle shortcuts with modifier + key
+          // otherwise screen reader shortcuts might conflict
+          if (shortcut.length === 2) {
+            // Modifier + key shortcut like ["Ctrl", "R"]
+            const modifier = shortcut[0].toLowerCase()
+            const shortcutKey = shortcut[1]
+            return (
+              hasModifier &&
+              modifier.includes('ctrl') &&
+              matchesLetterShortcut(ev, shortcutKey)
+            )
+          }
+
+          return false
+        })
+
+        if (matchingItemIndex !== -1) {
+          const matchingItem = items[matchingItemIndex]
+          if (matchingItem.type !== 'separator') {
+            ev.preventDefault()
+            if (!matchingItem.subitems) {
+              closeCallback()
+              keyboardFocus.current = -1
+              // perform the action of the matching menu item
+              matchingItem.action(ev as any)
+            } else {
+              expandMenu(matchingItemIndex, openSublevels.length)
+              keyboardFocus.current = 0
+            }
+            return
+          }
+        }
+      }
+
       enum Direction {
         Next = 0,
         Previous = 1,
@@ -378,7 +429,7 @@ export function ContextMenu(props: {
     return () => {
       document.removeEventListener('keydown', onKeyDown)
     }
-  }, [openSublevels, closeCallback, expandMenu])
+  }, [openSublevels, closeCallback, expandMenu, levelItems])
 
   return (
     <div>
@@ -441,7 +492,12 @@ export function ContextMenu(props: {
                 {...(item.subitems && { 'data-expandable-index': index })}
               >
                 {item.icon && <Icon className='left-icon' icon={item.icon} />}
-                {item.label}
+                <span className='menu-label'>{item.label}</span>
+                {item.keyboardShortcut && (
+                  <span className='keyboard-shortcut'>
+                    {item.keyboardShortcut.join('+')}
+                  </span>
+                )}
                 {item.subitems && <div className='right-icon' />}
               </button>
             )

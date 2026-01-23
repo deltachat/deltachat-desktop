@@ -262,6 +262,7 @@ function buildContextMenu(
     action: () => {
       text && runtime.writeClipboardText(text)
     },
+    keyboardShortcut: ['Ctrl', 'C'],
   }
 
   if (textSelected) {
@@ -270,11 +271,13 @@ function buildContextMenu(
       action: () => {
         runtime.writeClipboardText(selectedText as string)
       },
+      keyboardShortcut: ['Ctrl', 'C'],
     }
   } else if (email) {
     copy_item = {
       label: tx('menu_copy_email_to_clipboard'),
       action: () => runtime.writeClipboardText(email),
+      keyboardShortcut: ['Ctrl', 'C'],
     }
   }
   if (copy_item && message.viewType === 'Sticker') {
@@ -313,6 +316,7 @@ function buildContextMenu(
     showReply && {
       label: tx('notify_reply_button'),
       action: setQuoteInDraft.bind(null, message),
+      keyboardShortcut: ['Ctrl', 'R'],
     },
     // Reply privately
     showReplyPrivately && {
@@ -335,6 +339,7 @@ function buildContextMenu(
         label: tx('save_message'),
         action: () =>
           BackendRemote.rpc.saveMsgs(selectedAccountId(), [message.id]),
+        keyboardShortcut: ['Ctrl', 'S'],
       },
     // Unsave
     isSavedMessage && {
@@ -346,6 +351,7 @@ function buildContextMenu(
           ])
         }
       },
+      keyboardShortcut: ['Ctrl', 'U'],
     },
     // Send emoji reaction
     showSendReaction && {
@@ -357,6 +363,7 @@ function buildContextMenu(
       // See https://github.com/deltachat/deltachat-desktop/issues/4695#issuecomment-2688716592
       label: tx('global_menu_edit_desktop'),
       action: enterEditMessageMode.bind(null, message),
+      keyboardShortcut: ['Ctrl', 'E'],
     },
     { type: 'separator' },
     // Save attachment as
@@ -440,6 +447,7 @@ function buildContextMenu(
         chat
       ),
       danger: true,
+      keyboardShortcut: ['Ctrl', 'D'],
     },
   ]
 }
@@ -547,11 +555,12 @@ export default function Message(props: {
     ref,
     tabIndex: rovingTabindex.tabIndex,
     onKeyDown: (e: React.KeyboardEvent) => {
-      // Handle letter shortcuts with Ctrl/Cmd modifier
+      // Handle letter shortcuts without modifiers
+
       const isCtrlOrMetaKeyPress =
         (e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey && message
 
-      // Check if Ctrl/Cmd+"e" is pressed to enter edit mode
+      // Check if the "e" key is pressed to enter edit mode
       if (
         isCtrlOrMetaKeyPress &&
         matchesLetterShortcut(e, 'e') &&
@@ -563,7 +572,7 @@ export default function Message(props: {
         return
       }
 
-      // Check if Ctrl/Cmd+"r" is pressed to reply to message
+      // Check if the "r" key is pressed to reply to message
       if (
         isCtrlOrMetaKeyPress &&
         matchesLetterShortcut(e, 'r') &&
@@ -576,7 +585,7 @@ export default function Message(props: {
         return
       }
 
-      // Check if Ctrl/Cmd+"s" is pressed to save message
+      // Check if the "s" key is pressed to save message
       if (
         isCtrlOrMetaKeyPress &&
         matchesLetterShortcut(e, 's') &&
@@ -590,7 +599,7 @@ export default function Message(props: {
         return
       }
 
-      // Check if Ctrl/Cmd+"u" is pressed to unsave message
+      // Check if the "u" key is pressed to unsave message
       if (
         isCtrlOrMetaKeyPress &&
         matchesLetterShortcut(e, 'u') &&
@@ -602,12 +611,19 @@ export default function Message(props: {
         return
       }
 
-      // Check if Ctrl/Cmd+"d" is pressed to delete message
       if (isCtrlOrMetaKeyPress && matchesLetterShortcut(e, 'd')) {
         e.preventDefault()
         e.stopPropagation()
-        confirmDeleteMessage(openDialog, accountId, message, props.chat)
+        confirmDeleteMessage(openDialog, accountId, message, chat)
         return
+      }
+
+      if (isCtrlOrMetaKeyPress && matchesLetterShortcut(e, 'c')) {
+        e.preventDefault()
+        e.stopPropagation()
+        if (text) {
+          runtime.writeClipboardText(text)
+        }
       }
 
       // Audio / video elements have controls that utilize

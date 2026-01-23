@@ -70,6 +70,17 @@
       margin: 0 5px 0 0;
     }
 
+    & .menu-label {
+      flex: 1;
+    }
+
+    & .keyboard-shortcut {
+      margin-left: 2em;
+      opacity: 0.6;
+      font-size: 0.9em;
+      font-weight: 500;
+    }
+
     & .right-icon {
       width: 18px;
       height: 18px;
