@@ -104,7 +104,6 @@ export async function updateCoreStrings() {
     //[C.DC_STR_SERVER_TURNED_OFF]: tx(''),
     [C.DC_STR_QUOTA_EXCEEDING_MSG_BODY]: tx('devicemsg_storage_exceeding'),
     [C.DC_STR_PARTIAL_DOWNLOAD_MSG_BODY]: tx('n_bytes_message'),
-    [C.DC_STR_DOWNLOAD_AVAILABILITY]: tx('download_max_available_until'),
     //[C.DC_STR_SYNC_MSG_SUBJECT]: tx(''),
     //[C.DC_STR_SYNC_MSG_BODY]: tx(''),
     [C.DC_STR_INCOMING_MESSAGES]: tx('incoming_messages'),
