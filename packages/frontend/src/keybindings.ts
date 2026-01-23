@@ -75,7 +75,9 @@ export namespace ActionEmitter {
  * On Latin-based layouts (US, German, French), letter keys produce a-z.
  * On non-Latin layouts (Russian, Greek, Arabic), letter keys produce other scripts.
  */
-function isLatinLayout(ev: KeyboardEvent): boolean {
+function isLatinLayout(
+  ev: KeyboardEvent | React.KeyboardEvent<Element>
+): boolean {
   // If we're pressing a letter key (KeyA-KeyZ), check if it produces a Latin letter
   if (ev.code.startsWith('Key') && ev.code.length === 4) {
     return /^[a-zA-Z]$/.test(ev.key)
@@ -90,7 +92,10 @@ function isLatinLayout(ev: KeyboardEvent): boolean {
  * - On Latin layouts: matches by ev.key (the character produced)
  * - On non-Latin layouts: falls back to ev.code (physical key position)
  */
-function matchesLetterShortcut(ev: KeyboardEvent, letter: string): boolean {
+export function matchesLetterShortcut(
+  ev: KeyboardEvent | React.KeyboardEvent<Element>,
+  letter: string
+): boolean {
   const lower = letter.toLowerCase()
   const code = `Key${letter.toUpperCase()}`
 
