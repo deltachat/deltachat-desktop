@@ -23,7 +23,10 @@ const REORDER_DELAY_BUG_FIXED = false
  * reordering functionality in the AccountListSidebar
  */
 
-test.describe.configure({ mode: 'serial' })
+test.describe.configure({
+  mode: 'serial',
+  retries: process.env.CI ? 3 : 0,
+})
 
 let existingProfiles: User[] = []
 

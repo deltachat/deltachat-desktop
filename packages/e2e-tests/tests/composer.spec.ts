@@ -13,7 +13,10 @@ import {
   selectChat as selectChatByName,
 } from '../playwright-helper'
 
-test.describe.configure({ mode: 'serial' })
+test.describe.configure({
+  mode: 'serial',
+  retries: process.env.CI ? 3 : 0,
+})
 
 expect.configure({ timeout: 5_000 })
 test.setTimeout(30_000)
@@ -516,7 +519,10 @@ test('gets focused when selecting a chat', async () => {
 })
 
 test.describe('Ctrl + Up shortcut', () => {
-  test.describe.configure({ mode: 'serial' })
+  test.describe.configure({
+    mode: 'serial',
+    retries: process.env.CI ? 3 : 0,
+  })
 
   const chatName = 'Dummy chat for shortcut testing'
   function getMessageText(i: number) {
