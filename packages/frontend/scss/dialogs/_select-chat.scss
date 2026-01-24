@@ -1,9 +1,8 @@
 $side-padding: 30px;
 
 .select-chat-account-input {
-  padding-inline-end: $side-padding;
   padding-inline-start: $side-padding;
-  padding-bottom: 10px;
+  flex: 1 1 100%;
 
   .search-input {
     width: 100%;

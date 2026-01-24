@@ -15,6 +15,21 @@
   overflow: hidden;
 }
 
+.searchRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  justify-content: space-between;
+  padding-inline-end: 20px;
+
+  &.withAccountSwitch {
+    :global(.select-chat-account-input) {
+      flex: 1;
+    }
+  }
+}
+
 .header {
   // long title should not make dialog scroll sidewards
   word-break: break-all;

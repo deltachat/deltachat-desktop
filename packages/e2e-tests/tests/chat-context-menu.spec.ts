@@ -333,13 +333,13 @@ test.describe('Chat List Context Menu - Single Selection', () => {
     // Pin the chat first
     await openChatListContextMenu(page, userB.name)
     await page.getByRole('menuitem', { name: 'Pin Chat' }).click()
-
+    await closeMenu(page)
     // Open context menu again and verify Unpin is shown as first item
     await openChatListContextMenu(page, userB.name)
     await expect(getMenuItems(page).first()).toHaveText('Unpin Chat')
-
     // Unpin to restore state
     await page.getByRole('menuitem', { name: 'Unpin Chat' }).click()
+    await closeMenu(page)
 
     // Verify Pin Chat is back
     await openChatListContextMenu(page, userB.name)
