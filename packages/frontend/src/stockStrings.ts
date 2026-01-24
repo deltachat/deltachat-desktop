@@ -17,7 +17,6 @@ export async function updateCoreStrings() {
   type StockStringsSomeOmited = Omit<
     StockStrings,
     | typeof C.DC_STR_E2E_AVAILABLE
-    | typeof C.DC_STR_ENCR_TRANSP
     | typeof C.DC_STR_ENCR_NONE
     | typeof C.DC_STR_MSGLOCATIONENABLED
     | typeof C.DC_STR_MSGLOCATIONDISABLED
@@ -27,41 +26,6 @@ export async function updateCoreStrings() {
 
     // Deprecated, see
     // https://github.com/chatmail/core/blob/main/deltachat-ffi/deltachat.h
-    | typeof C.DC_STR_MSGGRPNAME
-    | typeof C.DC_STR_MSGGRPIMGCHANGED
-    | typeof C.DC_STR_MSGADDMEMBER
-    | typeof C.DC_STR_MSGDELMEMBER
-    | typeof C.DC_STR_MSGGROUPLEFT
-    | typeof C.DC_STR_ENCRYPTEDMSG
-    | typeof C.DC_STR_ENCR_TRANSP
-    | typeof C.DC_STR_READRCPT
-    | typeof C.DC_STR_READRCPT_MAILBODY
-    | typeof C.DC_STR_MSGGRPIMGDELETED
-    | typeof C.DC_STR_E2E_PREFERRED
-    | typeof C.DC_STR_CONTACT_NOT_VERIFIED
-    | typeof C.DC_STR_CONTACT_SETUP_CHANGED
-    | typeof C.DC_STR_AC_SETUP_MSG_SUBJECT
-    | typeof C.DC_STR_AC_SETUP_MSG_BODY
-    | typeof C.DC_STR_MSGACTIONBYUSER
-    | typeof C.DC_STR_MSGACTIONBYME
-    | typeof C.DC_STR_UNKNOWN_SENDER_FOR_CHAT
-    | typeof C.DC_STR_EPHEMERAL_DISABLED
-    | typeof C.DC_STR_EPHEMERAL_SECONDS
-    | typeof C.DC_STR_EPHEMERAL_MINUTE
-    | typeof C.DC_STR_EPHEMERAL_HOUR
-    | typeof C.DC_STR_EPHEMERAL_DAY
-    | typeof C.DC_STR_EPHEMERAL_WEEK
-    | typeof C.DC_STR_EPHEMERAL_FOUR_WEEKS
-    | typeof C.DC_STR_EPHEMERAL_MINUTES
-    | typeof C.DC_STR_EPHEMERAL_HOURS
-    | typeof C.DC_STR_EPHEMERAL_DAYS
-    | typeof C.DC_STR_EPHEMERAL_WEEKS
-    | typeof C.DC_STR_EPHEMERAL_TIMER_1_MINUTE_BY_YOU
-    | typeof C.DC_STR_EPHEMERAL_TIMER_1_MINUTE_BY_OTHER
-    // | C.DC_STR_ONE_MOMENT
-    | typeof C.DC_STR_AEAP_ADDR_CHANGED
-    | typeof C.DC_STR_SECUREJOIN_WAIT_TIMEOUT
-    | typeof C.DC_STR_SECUREJOIN_TAKES_LONGER
     | typeof C.DC_STR_SECURE_JOIN_CHANNEL_QR_DESC
     | typeof C.DC_STR_SECUREJOIN_WAIT
   >
@@ -103,12 +67,10 @@ export async function updateCoreStrings() {
     [C.DC_STR_SELF_DELETED_MSG_BODY]: tx('devicemsg_self_deleted'),
     //[C.DC_STR_SERVER_TURNED_OFF]: tx(''),
     [C.DC_STR_QUOTA_EXCEEDING_MSG_BODY]: tx('devicemsg_storage_exceeding'),
-    [C.DC_STR_PARTIAL_DOWNLOAD_MSG_BODY]: tx('n_bytes_message'),
     //[C.DC_STR_SYNC_MSG_SUBJECT]: tx(''),
     //[C.DC_STR_SYNC_MSG_BODY]: tx(''),
     [C.DC_STR_INCOMING_MESSAGES]: tx('incoming_messages'),
     [C.DC_STR_OUTGOING_MESSAGES]: tx('outgoing_messages'),
-    [C.DC_STR_ONE_MOMENT]: tx('one_moment'),
     [C.DC_STR_CONNECTED]: tx('connectivity_connected'),
     [C.DC_STR_CONNTECTING]: tx('connectivity_connecting'),
     [C.DC_STR_UPDATING]: tx('connectivity_updating'),
