@@ -79,7 +79,11 @@ export function KeyboardShortcut({ elements }: { elements: string[] }) {
 
   for (const element of elements) {
     bindingElements.push(<Key key={element} keyboardKey={element} />)
-    bindingElements.push(' + ')
+    bindingElements.push(
+      <span key={`separator-${element}`} className='key-separator'>
+        +
+      </span>
+    )
   }
 
   if (bindingElements.length !== 0) {
@@ -104,9 +108,9 @@ export function ShortcutGroup({ title, keyBindings }: ShortcutAction) {
   })
 
   return (
-    <div className='action'>
-      <div className='heading'>{title}</div>
-      {bindings}
+    <div className='shortcut-item'>
+      <div className='shortcut-title'>{title}</div>
+      <div className='shortcut-bindings'>{bindings}</div>
     </div>
   )
 }
