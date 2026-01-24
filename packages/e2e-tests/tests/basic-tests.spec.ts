@@ -181,15 +181,15 @@ test('message menu items presence', async () => {
     .first()
   await someRegularOutgoingMessage.click({ button: 'right' })
   await expect(page.getByRole('menu').getByRole('menuitem')).toHaveText([
-    'Reply',
+    'ReplyCtrl+R',
     'Forward',
-    'Save Message',
+    'Save MessageCtrl+S',
     'React',
-    'Edit',
-    'Copy Text',
+    'EditCtrl+E',
+    'Copy TextCtrl+C',
     'Resend',
     'Info',
-    'Delete Message',
+    'Delete MessageCtrl+D',
   ])
   await page.keyboard.press('Escape')
 
@@ -200,9 +200,9 @@ test('message menu items presence', async () => {
   await someInfoMessage.click({ button: 'right' })
   await expect(page.getByRole('menu').getByRole('menuitem')).toHaveText([
     'Forward',
-    'Copy Text',
+    'Copy TextCtrl+C',
     'Info',
-    'Delete Message',
+    'Delete MessageCtrl+D',
   ])
   await page.keyboard.press('Escape')
 })
