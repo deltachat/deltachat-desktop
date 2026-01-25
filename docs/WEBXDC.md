@@ -27,15 +27,10 @@ This document describes how Webxdc (In-chat) apps are integrated and executed wi
 ┌─────────────────────────────────────────────────────────────────┐
 │              Sandboxed BrowserWindow (Renderer Process)         │
 ├─────────────────────────────────────────────────────────────────┤
-│ 3. Wrapper HTML (webxdc_wrapper.html)                           │
-│    - Container iframe                                           |
-│    - IPC bridge to main process                                 │
-│    - Context isolation bridge                                   │
-├─────────────────────────────────────────────────────────────────┤
-│ 4. Preload Script (webxdc-preload.js)                           │
+│ 3. Preload Script (webxdc-preload.js)                           │
 │    - webxdc API implementation                                  │
 ├─────────────────────────────────────────────────────────────────┤
-│ 5. Webxdc App Content (iframe)                                  │
+│ 4. Webxdc App Content                                           │
 │    - The actual Webxdc application                              │
 │    - Isolated from parent context                               │
 │    - Access to webxdc API only                                  │
@@ -66,7 +61,6 @@ A custom Electron protocol that serves Webxdc app content:
 ```
 webxdc://{accountId}.{messageId}.webxdc/
 
-├── webxdc_wrapper.html          # Main wrapper page
 └── webxdc.js                    # API initialization script
 
 ├── index.html                   # Webxdc app entry point
@@ -83,19 +77,12 @@ webxdc://{accountId}.{messageId}.webxdc/
 - MIME type validation
 - [hostRules](https://github.com/deltachat/deltachat-desktop/blob/d73ec257e9d384f950698d0d39a05d6ce091fc7c/packages/target-electron/src/index.ts#L19) for Chrome to block any DNS requests
 
-### 3. Wrapper HTML ([static/webxdc_wrapper.html](/packages/target-electron/static/webxdc_wrapper.html))
-
-A minimal HTML container that:
-
-- Hosts the Webxdc app in an iframe for additional isolation
-- Adds another layer of sandboxing
-
 ### 4. Preload Script ([static/webxdc-preload.js](/packages/target-electron/static/webxdc-preload.js))
 
 The bridge between the Webxdc app and the main process:
 
 ```javascript
-// Exposes the Webxdc API to the iframe
+// Exposes the Webxdc API to the Webxdc app
 window.webxdc = {
   selfAddr: '...',
   selfName: '...',
@@ -147,11 +134,10 @@ The actual Webxdc app runs in a sandboxed environment:
 1. **App Launch**: User clicks on Webxdc message
 2. **Window Creation**: Main process creates isolated BrowserWindow
 3. **Protocol Registration**: Custom `webxdc://` handler is set up for this session
-4. **Wrapper Loading**: Browser loads `webxdc_wrapper.html` from protocol handler
-5. **Preload Injection**: `webxdc-preload.js` is injected and sets up the API bridge
-6. **API Setup**: `webxdc.js` script initializes the API with app-specific data
-7. **App Loading**: The iframe loads the actual Webxdc app (`index.html`)
-8. **Ready State**: App is fully loaded and can interact with the Webxdc API
+4. **Preload Injection**: `webxdc-preload.js` is injected and sets up the API bridge
+5. **API Setup**: `webxdc.js` script initializes the API with app-specific data
+6. **App Loading**: The window loads the actual Webxdc app (`index.html`)
+7. **Ready State**: App is fully loaded and can interact with the Webxdc API
 
 ## Security Model
 
@@ -160,8 +146,7 @@ The actual Webxdc app runs in a sandboxed environment:
 1. **Process Isolation**: Each Webxdc app runs in its own renderer process
 2. **Session Isolation**: Apps have separate storage, cookies and cache (per account)
 3. **Context Isolation**: Preload script runs in isolated context
-4. **Iframe Sandboxing**: Additional iframe isolation within the renderer
-5. **CSP Enforcement**: Strict Content Security Policy on all responses
+4. **CSP Enforcement**: Strict Content Security Policy on all responses
 
 ### Permission Model
 
@@ -244,7 +229,6 @@ Currently only the integrated maps.xdc has access to internet (to get map data f
 
 - [/packages/target-electron/src/deltachat/webxdc.ts](/packages/target-electron/src/deltachat/webxdc.ts) - Main controller
 - [/packages/target-electron/static/webxdc-preload.js](/packages/target-electron/static/webxdc-preload.js) - Preload script with Webxdc API
-- [/packages/target-electron/static/webxdc_wrapper.html](/packages/target-electron/static/webxdc_wrapper.html) - Wrapper HTML container
 - Package [`@webxdc/types`](https://www.npmjs.com/package/@webxdc/types) - TypeScript definitions for Webxdc API
 
 ## External References

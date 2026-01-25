@@ -304,6 +304,10 @@ app.on('web-contents-created', (_ev, contents) => {
       WEBXDC_PARTITION_PREFIX satisfies 'webxdc_'
     ) !== -1
   if (is_webxdc) {
+    let initialUrl:
+      | { protocol: string; hostname: string; port: string }
+      | undefined
+
     const webxdcOpenUrl = (url: string) => {
       if (url.startsWith('mailto:') || url.startsWith('openpgp4fpr:')) {
         // handle mailto in dc
@@ -313,7 +317,27 @@ app.on('web-contents-created', (_ev, contents) => {
     }
 
     contents.on('will-frame-navigate', ev => {
-      if (ev.url.startsWith('webxdc://')) {
+      const navigationUrl = new URL(ev.url)
+      // Note that, as docs say,
+      // https://www.electronjs.org/docs/latest/api/web-contents#event-will-frame-navigate
+      // > This event will not emit when the navigation
+      // > is started programmatically with APIs like `webContents.loadURL`
+      // So we expect this to be the URL that we set with `loadURL()`
+      // when initializing the WebXDC app window.
+      if (initialUrl == undefined) {
+        initialUrl = new URL(contents.getURL())
+      }
+
+      const isSaneWebxdcUrl =
+        navigationUrl.protocol === 'webxdc:' &&
+        navigationUrl.hostname.endsWith('.webxdc') &&
+        navigationUrl.port === ''
+      const isSameOrigin =
+        navigationUrl.protocol === initialUrl.protocol &&
+        navigationUrl.hostname === initialUrl.hostname &&
+        navigationUrl.port === initialUrl.port
+
+      if (isSaneWebxdcUrl && isSameOrigin) {
         // allow internal webxdc nav
         return
       } else if (ev.url.startsWith('mailto:')) {
