@@ -29,7 +29,9 @@ export function startOutgoingVideoCall(accountId: number, chatId: number) {
     accountId,
     chatId,
     CallDirection.Outgoing,
-    {}
+    {
+      noOutgoingVideoInitially: false,
+    }
   )
 
   const jsonrpcRemote = getDCJsonrpcRemote()
@@ -89,15 +91,23 @@ export function startHandlingIncomingVideoCalls(
       chat_id,
       msg_id,
       place_call_info,
-    }: { chat_id: number; msg_id: number; place_call_info: string }
+      has_video,
+    }: {
+      chat_id: number
+      msg_id: number
+      place_call_info: string
+      has_video: boolean
+    }
   ) => {
-    log.info('got IncomingCall event', eventAccountId, msg_id)
+    log.info('got IncomingCall event', { eventAccountId, msg_id, has_video })
 
+    const noOutgoingVideoInitially = !has_video
     openIncomingVideoCallWindow(
       eventAccountId,
       chat_id,
       msg_id,
-      place_call_info
+      place_call_info,
+      noOutgoingVideoInitially
     )
   }
 
@@ -109,9 +119,15 @@ function openIncomingVideoCallWindow(
   accountId: number,
   chatId: number,
   callMessageId: number,
-  callerWebrtcOffer: string
+  callerWebrtcOffer: string,
+  noOutgoingVideoInitially: boolean
 ) {
-  log.info('received incoming call', { accountId, chatId, callMessageId })
+  log.info('received incoming call', {
+    accountId,
+    chatId,
+    callMessageId,
+    noOutgoingVideoInitially,
+  })
 
   const { answerPromise, windowClosed, closeWindow } = openVideoCallWindow(
     accountId,
@@ -119,6 +135,7 @@ function openIncomingVideoCallWindow(
     CallDirection.Incoming,
     {
       callerWebrtcOffer,
+      noOutgoingVideoInitially,
     }
   )
 
@@ -159,13 +176,14 @@ function openVideoCallWindow<D extends CallDirection>(
   callDirection: D,
   {
     callerWebrtcOffer,
-  }: D extends CallDirection.Incoming
+    noOutgoingVideoInitially,
+  }: { noOutgoingVideoInitially: boolean } & (D extends CallDirection.Incoming
     ? {
         callerWebrtcOffer: string
       }
     : {
         callerWebrtcOffer?: undefined
-      }
+      })
 ): {
   closeWindow: () => void
   windowClosed: Promise<void>
@@ -385,7 +403,13 @@ function openVideoCallWindow<D extends CallDirection>(
   webAppMessagePort.start()
 
   const host = formatHost(accountId, chatId)
-  const query = callDirection === CallDirection.Incoming ? '?playRingtone' : ''
+  const query = new URLSearchParams()
+  if (noOutgoingVideoInitially) {
+    query.set('noOutgoingVideoInitially', '')
+  }
+  if (callDirection === CallDirection.Incoming) {
+    query.set('playRingtone', '')
+  }
   const hash =
     callDirection === CallDirection.Outgoing
       ? '' // We'll `#startCall` after a "grace period" below.
@@ -393,7 +417,7 @@ function openVideoCallWindow<D extends CallDirection>(
         ? `#offerIncomingCall=${btoa(callerWebrtcOffer!)}`
         : // Otherwise we'll set the hash later, when the call gets accepted.
           ''
-  win.webContents.loadURL(`${SCHEME_NAME}://${host}${query}${hash}`, {
+  win.webContents.loadURL(`${SCHEME_NAME}://${host}?${query}${hash}`, {
     extraHeaders: 'Content-Security-Policy: ' + CSP,
   })
 
