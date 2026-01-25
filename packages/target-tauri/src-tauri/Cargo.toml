@@ -63,6 +63,7 @@ register-default-handler = { version = "0.1.0", path = "../crates/register-defau
 
 system_permissions = { version = "0.1.0", path = "../crates/system_permissions" }
 drag = "2.1.0"
+user-notify = "0.4.1"
 
 [target.'cfg(any(target_os = "linux", target_os = "dragonfly", target_os = "freebsd", target_os = "openbsd", target_os = "netbsd"))'.dependencies]
 ashpd = "0.11.0"
@@ -75,7 +76,6 @@ include_dir = "0.7.4"
 tauri-plugin-autostart = "2"
 tauri-plugin-single-instance = "2"
 tauri-plugin-window-state = "2"
-user-notify = { version = "0.1.0", path = "../crates/user-notify" }
 
 [features]
 crabnebula_extras = ["tauri-plugin-devtools"]
