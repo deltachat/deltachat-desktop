@@ -74,7 +74,7 @@ jobs:
           # pnpm i --cpu x64 --os darwin
           # pnpm i --cpu arm64 --os darwin
           ls node_modules/@deltachat
-          pnpm electron-builder --publish never --mac mas dmg -c.mac.identity=null --universal --config.afterSign="stub.cjs"
+          pnpm electron-builder --publish never --mac mas dmg --universal --config.afterSign="stub.cjs"
       - name: MAC renaming / upload Preperation
         if: runner.os == 'macOS'
         working-directory: packages/target-electron
