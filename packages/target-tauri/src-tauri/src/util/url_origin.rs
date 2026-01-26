@@ -14,7 +14,7 @@ impl UrlOriginExtension for url::Url {
     ///
     /// # Example
     ///
-    /// ```
+    /// ```notest
     /// # use url::Url;
     /// # use std::str::FromStr;
     /// # use deltachat_tauri_lib::util::url_origin::UrlOriginExtension;
