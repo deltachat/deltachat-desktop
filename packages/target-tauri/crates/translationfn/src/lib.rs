@@ -1,4 +1,4 @@
-#![forbid(clippy::indexing_slicing, clippy::correctness)]
+#![deny(clippy::indexing_slicing, clippy::correctness)]
 #![warn(
     unused,
     clippy::all,
@@ -68,8 +68,8 @@ impl TranslationEngine {
         })
     }
 
-    fn substitute_strings(&self, key: &str, message: &String, items: Vec<&str>) -> String {
-        let mut msg: String = message.clone();
+    fn substitute_strings(&self, key: &str, message: &str, items: Vec<&str>) -> String {
+        let mut msg: String = message.to_owned();
         let mut has_positional_replacement = false;
         let mut replacement_happened = false;
         for matches in self.var_finder_positional.find_iter(message) {
@@ -91,7 +91,7 @@ impl TranslationEngine {
         // - `%s` instead of positional `%1$s` is only used when message only contains one placeholder.
         // - `%s` and `%1$s` placeholders are never mixed.
         if !has_positional_replacement && msg.contains("%s") {
-            if let Some(item) = items.get(0) {
+            if let Some(item) = items.first() {
                 msg = msg.replace("%s", item);
             } else {
                 error!("no substitution item provided");

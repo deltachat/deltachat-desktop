@@ -261,12 +261,16 @@ pub(crate) fn create_webxdc_window_menu(
                     #[cfg(target_os = "macos")]
                     &PredefinedMenuItem::undo(
                         app,
-                        Some(&tx.sync_translate("global_menu_edit_undo_desktop")),
+                        Some(
+                            &tx.sync_translate("global_menu_edit_undo_desktop", Substitution::None),
+                        ),
                     )?,
                     #[cfg(target_os = "macos")]
                     &PredefinedMenuItem::redo(
                         app,
-                        Some(&tx.sync_translate("global_menu_edit_redo_desktop")),
+                        Some(
+                            &tx.sync_translate("global_menu_edit_redo_desktop", Substitution::None),
+                        ),
                     )?,
                     #[cfg(target_os = "macos")]
                     &PredefinedMenuItem::separator(app)?,
