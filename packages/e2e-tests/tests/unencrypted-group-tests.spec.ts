@@ -13,7 +13,9 @@ import {
   createChat,
 } from '../playwright-helper'
 
-test.describe.configure({ mode: 'serial' })
+test.describe.configure({
+  mode: 'serial',
+})
 
 let existingProfiles: User[] = []
 

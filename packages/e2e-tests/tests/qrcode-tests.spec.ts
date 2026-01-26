@@ -21,7 +21,9 @@ import {
  * TODO: see fixme at bottom
  */
 
-test.describe.configure({ mode: 'serial' })
+test.describe.configure({
+  mode: 'serial',
+})
 
 let existingProfiles: User[] = []
 

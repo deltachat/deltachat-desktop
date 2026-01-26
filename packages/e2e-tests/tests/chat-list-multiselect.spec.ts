@@ -10,7 +10,9 @@ import {
   createNDummyChats,
 } from '../playwright-helper'
 
-test.describe.configure({ mode: 'serial' })
+test.describe.configure({
+  mode: 'serial',
+})
 
 expect.configure({ timeout: 5_000 })
 test.setTimeout(30_000)

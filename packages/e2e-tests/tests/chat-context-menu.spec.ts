@@ -23,7 +23,9 @@ import {
  * correct and that the menu items work as expected.
  */
 
-test.describe.configure({ mode: 'serial' })
+test.describe.configure({
+  mode: 'serial',
+})
 
 expect.configure({ timeout: 5_000 })
 test.setTimeout(60_000)
