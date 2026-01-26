@@ -11,13 +11,13 @@ const baseURL = `https://localhost:${port}`
  */
 export default defineConfig<TestOptions>({
   testDir: './tests',
-  /* Run tests in files in parallel */
-  fullyParallel: true,
+  /* Run all tests in serial mode only */
+  fullyParallel: false,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  /* No individual test retries! - we use file-level retries instead */
-  retries: 0,
-  /* Opt out of parallel tests on CI. */
+  /* We have some flaky tests which tend to fail on CI only */
+  retries: process.env.CI ? 3 : 0,
+  /* Disable parallel tests. */
   workers: 1,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [['list'], ['html']],

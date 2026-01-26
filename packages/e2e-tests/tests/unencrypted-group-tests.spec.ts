@@ -15,7 +15,6 @@ import {
 
 test.describe.configure({
   mode: 'serial',
-  retries: process.env.CI ? 3 : 0,
 })
 
 let existingProfiles: User[] = []
