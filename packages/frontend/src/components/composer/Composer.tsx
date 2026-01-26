@@ -8,7 +8,7 @@ import React, {
   useMemo,
   useContext,
 } from 'react'
-import { T } from '@deltachat/jsonrpc-client'
+import { T, C } from '@deltachat/jsonrpc-client'
 import { extension } from 'mime-types'
 
 import MenuAttachment from './menuAttachment'
@@ -142,14 +142,22 @@ const Composer = forwardRef<
       return
     }
     try {
-      // Find the last message from messageCache
-      const messageIds = Object.keys(messageCache)
+      // Find the last message from messageCache where fromId equals DC_CONTACT_ID_SELF
+      const selfMessageIds = Object.keys(messageCache)
         .map(Number)
-        .filter(id => id > 0)
-      if (messageIds.length === 0) {
+        .filter(id => {
+          const msg = messageCache[id]
+          return (
+            id > 0 &&
+            msg &&
+            msg.kind === 'message' &&
+            msg.fromId === C.DC_CONTACT_ID_SELF
+          )
+        })
+      if (selfMessageIds.length === 0) {
         return
       }
-      const lastMessageId = Math.max(...messageIds)
+      const lastMessageId = Math.max(...selfMessageIds)
       const message = messageCache[lastMessageId]
       if (
         message &&
