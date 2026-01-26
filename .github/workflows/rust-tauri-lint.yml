@@ -91,4 +91,6 @@ jobs:
           mkdir packages/target-tauri/html-dist
           touch packages/target-tauri/html-dist/tauri_main.html
       - name: Unit tests
+        env:
+            VERSION_INFO_GIT_REF: "testing"
         run: cargo test --all
