@@ -14,7 +14,7 @@ import Icon from '../Icon'
 
 import styles from './styles.module.scss'
 
-import { C, type T } from '@deltachat/jsonrpc-client'
+import { type T } from '@deltachat/jsonrpc-client'
 import { openMapWebxdc } from '../../system-integration/webxdc'
 import useDialog from '../../hooks/dialog/useDialog'
 import { EditPrivateTagDialog } from './EditPrivateTagDialog'
