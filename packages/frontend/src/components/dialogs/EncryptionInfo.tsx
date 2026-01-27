@@ -46,8 +46,8 @@ export function EncryptionInfo({
         onClose={onClose}
       />
       <DialogBody>
-        <DialogContent paddingTop>
-          <p style={{ whiteSpace: 'pre-wrap' }}>
+        <DialogContent>
+          <p style={{ whiteSpace: 'pre-wrap', marginBottom: '20px' }}>
             {infoFetch.loading
               ? tx('loading')
               : infoFetch.result.ok === false

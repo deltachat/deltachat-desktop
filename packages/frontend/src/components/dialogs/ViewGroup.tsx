@@ -351,7 +351,7 @@ function ViewGroupInner(
             />
           )}
           <DialogBody>
-            <DialogContent paddingBottom>
+            <DialogContent>
               <ProfileInfoHeader
                 avatarPath={groupImage ? groupImage : undefined}
                 color={chat.color}
