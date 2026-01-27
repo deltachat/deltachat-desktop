@@ -2,7 +2,8 @@
 console.time('init')
 
 import { mkdirSync, Stats, watchFile } from 'fs'
-import { app as rawApp, dialog, ipcMain, protocol } from 'electron'
+import { app as rawApp, dialog, ipcMain, protocol, clipboard } from 'electron'
+import { BrowserWindow } from 'electron/main'
 import rc from './rc.js'
 import contextMenu from './electron-context-menu.js'
 import { initIsWindowsStorePackageVar } from './isAppx.js'
@@ -128,7 +129,7 @@ process.on('uncaughtException', err => {
   )
 })
 
-import setLanguage, { getCurrentLocaleDate } from './load-translations.js'
+import setLanguage, { getCurrentLocaleDate, tx } from './load-translations.js'
 import * as ipc from './ipc.js'
 import { init as initMenu } from './menu.js'
 import { DesktopSettings } from './desktop_settings.js'
@@ -139,6 +140,7 @@ import './notifications.js'
 import { acceptThemeCLI } from './themes.js'
 import {
   WEBXDC_PARTITION_PREFIX,
+  openExternalHttpOrPromptToCopy,
   webxdcStartUpCleanup,
 } from './deltachat/webxdc.js'
 import {
@@ -304,11 +306,125 @@ app.on('web-contents-created', (_ev, contents) => {
       WEBXDC_PARTITION_PREFIX satisfies 'webxdc_'
     ) !== -1
   if (is_webxdc) {
-    const webxdcOpenUrl = (url: string) => {
+    let linkClickDialogIsOpen = false
+    let userCancelledDialogAtLeastOnce = false
+    let preventOpeningLinkClickDialogs = false
+
+    const webxdcOpenUrl = async (url: string) => {
       if (url.startsWith('mailto:') || url.startsWith('openpgp4fpr:')) {
-        // handle mailto in dc
+        // handle mailto in dc, without any prompt.
+        // Note that such links can also lead to exfiltration,
+        // however this has been regarded as acceptable,
+        // given that the network activity only happens after another dialog:
+        // https://github.com/deltachat/deltachat-desktop/issues/5785#issuecomment-3598142182.
         open_url(url)
         mainWindow.window?.show()
+        return
+      }
+
+      // Note that the app could just `setInterval(() => link.click(), 1)`,
+      // i.e. the user clicking a link is not the only way
+      // to get this code to execute.
+      //
+      // The following basically implements `safeDialogs`:
+      // https://www.electronjs.org/docs/latest/api/browser-window.
+      // Note that here we could have also utilized
+      // the native Electron `safeDialogs` directly,
+      // e.g. with `executeJavaScriptInIsolatedWorld('confirm("open link?")')`.
+      //
+      // TODO fix: we should probably also disallow opening this dialog
+      // when the window is not focused, or otherwise
+      // if there is no "user gesture" that caused the event.
+      if (linkClickDialogIsOpen) {
+        // This is important because otherwise a malicious app
+        // can make the machine unusable until reboot.
+        log.warn(
+          "WebXDC link: a dialog is already open, won't open another one to prevent app from spamming a bunch of them"
+        )
+        return
+      }
+      if (preventOpeningLinkClickDialogs) {
+        // This is important, because otherwise the app could spam the user
+        // until they give up and press "Open",
+        // leading to exfiltration, phishing or whatever, i.e.
+        // this is not only about annoying spam.
+        log.info(
+          'Prevented WebXDC app from opening "Open link?" dialog, as requested by user'
+        )
+        return
+      }
+
+      // This part should not be necessary
+      // because Electron already passes us a URL and not an arbitrary string,
+      // but let's double-check.
+      const parsedUrl = URL.parse(url)
+      if (parsedUrl == null) {
+        log.warn(`open WebXDC link: not a valid URL: ${url} - we'll proceed`)
+      }
+      // `href` is supposed to be an ASCII-string:
+      // https://url.spec.whatwg.org/
+      const asciiUrl = parsedUrl?.href ?? url
+      if (url !== asciiUrl) {
+        log.warn(
+          `open WebXDC link: passed a non-ASCII URL. We'll handle this, but it's not expected. Original: ${url}, ASCII: ${asciiUrl}`
+        )
+      }
+
+      const win = BrowserWindow.fromWebContents(contents)
+      if (win == null) {
+        log.error(
+          'Failed to handle WebXDC link: WebContents is not associated with a Window'
+        )
+        return
+      }
+
+      // Note that this dialog will also be shown for internal `webxdc://` links
+      // that the user Shift / Ctrl + clicked.
+      // There is probably no need to have special handling for that
+      // because maybe there is a reason that the user held Shift or Ctrl,
+      // so let's not be overly smart.
+
+      linkClickDialogIsOpen = true
+      const { response, checkboxChecked } = await dialog.showMessageBox(win, {
+        title: tx('open_url_confirmation'),
+        // TODO this truncates links that are really long.
+        message: tx('open_url_confirmation') + '\n\n' + asciiUrl,
+        type: 'question',
+        buttons: [
+          tx('cancel'),
+          tx('global_menu_edit_copy_desktop'),
+          tx('open'),
+        ],
+        checkboxLabel: userCancelledDialogAtLeastOnce
+          ? tx('prevent_dialog_spam_checkbox')
+          : undefined,
+        defaultId: 0,
+        cancelId: 0,
+      })
+      linkClickDialogIsOpen = false
+
+      preventOpeningLinkClickDialogs = checkboxChecked
+
+      switch (response) {
+        case 0:
+          userCancelledDialogAtLeastOnce = true
+          return
+        case 1: {
+          clipboard.writeText(asciiUrl)
+          break
+        }
+        case 2: {
+          // TODO apparently we want to support more than just HTTP(S) links:
+          // https://github.com/deltachat/deltachat-desktop/issues/5785.
+          await openExternalHttpOrPromptToCopy(win, url)
+          break
+        }
+        default: {
+          log.error(
+            `Unexpected "Copy Link?" dialog response ${response}. Are there more than 3 buttons?`
+          )
+          return
+        }
       }
     }
 
