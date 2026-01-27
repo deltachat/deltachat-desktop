@@ -189,7 +189,7 @@ export default function InstantOnboardingScreen({
         title={tx('instant_onboarding_title')}
       />
       <DialogBody className={styles.welcomeScreenBody}>
-        <DialogContent paddingBottom>
+        <DialogContent>
           <form onSubmit={onConfirm}>
             <ProfileImageSelector
               displayName={displayName}

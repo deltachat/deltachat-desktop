@@ -42,7 +42,7 @@ export default function AlertDialog({
       dataTestid={dataTestid}
     >
       <DialogBody>
-        <DialogContent paddingTop>
+        <DialogContent>
           <p className='whitespace'>{message}</p>
         </DialogContent>
       </DialogBody>

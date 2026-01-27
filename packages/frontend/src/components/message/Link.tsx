@@ -95,7 +95,7 @@ function PunycodeUrlConfirmationDialog(
   return (
     <Dialog onClose={props.onClose}>
       <DialogBody>
-        <DialogContent paddingTop>
+        <DialogContent>
           <div
             style={{
               fontSize: '1.5em',
