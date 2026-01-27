@@ -152,13 +152,10 @@ impl MenuAction<'static> for WebxdcMenuAction {
                         let cloned_app = app.clone();
                         let mut dialog_builder = app
                             .dialog()
-                            .message(
-                                tx.sync_translate(
-                                    "ask_copy_unopenable_link_to_clipboard",
-                                    Substitution::None,
-                                )
-                                .replace("%1$d", &source_code_url),
-                            )
+                            .message(tx.sync_translate(
+                                "ask_copy_unopenable_link_to_clipboard",
+                                Substitution::String(vec![&source_code_url]),
+                            ))
                             .buttons(MessageDialogButtons::OkCancelCustom(
                                 tx.sync_translate(
                                     "menu_copy_link_to_clipboard",
