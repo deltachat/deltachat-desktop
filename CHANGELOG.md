@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
 ## [2.35.0] - 2025-12-21
 
 ### Added
+- tauri: created translationfn library & added pluralisation functionality #4834
 
 - Prettier About Dialog and introduce Protocol View Dialog (+ added storage usage report to that dialog) ([#5882](https://github.com/deltachat/deltachat-desktop/issues/5882))
 

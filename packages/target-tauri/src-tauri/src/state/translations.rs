@@ -1,74 +1,55 @@
+use std::sync::Arc;
+
 use log::error;
 
 use tauri::AppHandle;
 use tauri_plugin_store::StoreExt;
 use tokio::sync::RwLock;
+use translationfn::{Substitution, TranslationEngine};
 
 use crate::{
-    i18n::{commands::get_locale_data, LocaleData},
+    i18n::commands::get_locale_data,
     settings::{CONFIG_FILE, LOCALE_KEY},
 };
 
 pub struct TranslationStateInner {
-    data: LocaleData,
+    tx_engine: TranslationEngine,
 }
 
 pub(crate) struct TranslationState {
-    inner: RwLock<TranslationStateInner>,
+    inner: Arc<RwLock<TranslationStateInner>>,
 }
 
 impl TranslationState {
-    pub(crate) async fn try_new(app: &tauri::App) -> anyhow::Result<Self> {
-        let locale = app
-            .store(CONFIG_FILE)?
-            .get(LOCALE_KEY)
-            .and_then(|s| s.as_str().map(|s| s.to_owned()))
-            .unwrap_or("en".to_owned());
-        let locale_data = get_locale_data(&locale, app.handle().clone()).await?;
-        let locale_data = RwLock::new(TranslationStateInner { data: locale_data });
+    pub(crate) async fn try_new(app: &AppHandle) -> anyhow::Result<Self> {
+        let state = Arc::new(RwLock::new(TranslationStateInner {
+            tx_engine: Self::load(app).await?,
+        }));
 
-        Ok(Self { inner: locale_data })
+        Ok(Self { inner: state })
     }
     pub(crate) async fn reload_from_config(&self, app: &AppHandle) -> anyhow::Result<()> {
         let mut inner = self.inner.write().await;
+        inner.tx_engine = Self::load(app).await?;
+        Ok(())
+    }
+
+    async fn load(app: &AppHandle) -> anyhow::Result<TranslationEngine> {
         let locale = app
             .store(CONFIG_FILE)?
             .get(LOCALE_KEY)
             .and_then(|s| s.as_str().map(|s| s.to_owned()))
             .unwrap_or("en".to_owned());
-        (*inner).data = get_locale_data(&locale, app.clone()).await?;
-        Ok(())
+        let locale_data = get_locale_data(&locale, app.clone()).await?;
+        Ok(TranslationEngine::new(
+            locale_data.messages,
+            &locale_data.locale,
+        )?)
     }
 
-    pub(crate) async fn translate(&self, key: &str) -> String {
-        let data = &self.inner.read().await.data;
-
-        if let Some(data) = data.messages.get(key) {
-            if let Some(message) = data.get("message") {
-                message.to_owned()
-            } else {
-                error!("Message not existing for {key}");
-                key.to_owned()
-            }
-        } else {
-            error!("Translation for key {key} missing");
-            key.to_owned()
-        }
-    }
-
-    pub(crate) fn sync_translate(&self, key: &str) -> String {
-        if let Ok(data) = &self.inner.try_read() {
-            if let Some(data) = data.data.messages.get(key) {
-                if let Some(message) = data.get("message") {
-                    message.to_owned()
-                } else {
-                    error!("Message not existing for {key}");
-                    key.to_owned()
-                }
-            } else {
-                error!("Translation for key {key} missing");
-                key.to_owned()
-            }
+    pub(crate) fn sync_translate(&self, key: &str, substitution: Substitution) -> String {
+        if let Ok(lock) = &self.inner.try_read() {
+            lock.tx_engine.translate(key, substitution)
         } else {
             error!("Translations are blocked {key}");
             format!("B {key}")

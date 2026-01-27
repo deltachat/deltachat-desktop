@@ -5,6 +5,7 @@ use tauri::{
     AppHandle, Manager, Wry,
 };
 use tauri_plugin_store::StoreExt;
+use translationfn::Substitution;
 
 use crate::{
     settings::{StoreExtBoolExt, NOTIFICATIONS, NOTIFICATIONS_DEFAULT},
@@ -56,14 +57,14 @@ pub(crate) fn create_tray_menu(app: &AppHandle) -> anyhow::Result<Menu<Wry>> {
     let quit = MenuItem::with_id(
         app,
         TrayMenuAction::Quit,
-        tx.sync_translate("global_menu_file_quit_desktop"),
+        tx.sync_translate("global_menu_file_quit_desktop", Substitution::None),
         true,
         None::<&str>,
     )?;
     let show = MenuItem::with_id(
         app,
         TrayMenuAction::Show,
-        tx.sync_translate("show_window"),
+        tx.sync_translate("show_window", Substitution::None),
         true,
         None::<&str>,
     )?;
@@ -71,7 +72,7 @@ pub(crate) fn create_tray_menu(app: &AppHandle) -> anyhow::Result<Menu<Wry>> {
     let mute_notifications = CheckMenuItem::with_id(
         app,
         TrayMenuAction::MuteNotifications,
-        tx.sync_translate("menu_mute"),
+        tx.sync_translate("menu_mute", Substitution::None),
         true,
         !notifications_enabled,
         None::<&str>,

@@ -12,6 +12,7 @@ use tauri::{
     AppHandle, Manager, Window, Wry,
 };
 use tauri_plugin_store::StoreExt;
+use translationfn::Substitution;
 
 #[derive(Debug, PartialEq, Eq)]
 pub(crate) struct HtmlWindowMenuAction {
@@ -136,8 +137,8 @@ pub(crate) fn create_html_window_menu(
         // TODO for some languages this is not quite correct.
         format!(
             "{} {}",
-            tx.sync_translate("global_menu_file_quit_desktop"),
-            tx.sync_translate("app_name")
+            tx.sync_translate("global_menu_file_quit_desktop", Substitution::None),
+            tx.sync_translate("app_name", Substitution::None)
         ),
         true,
         Some("CmdOrCtrl+Q"),
@@ -150,13 +151,13 @@ pub(crate) fn create_html_window_menu(
             &Submenu::with_items(app, "App", true, &[&quit])?,
             &Submenu::with_items(
                 app,
-                tx.sync_translate("file"),
+                tx.sync_translate("file", Substitution::None),
                 true,
                 &[
                     &MenuItem::with_id(
                         app,
                         action(HtmlWindowMenuActionVariant::CloseHtmlWindow),
-                        tx.sync_translate("close_window"),
+                        tx.sync_translate("close_window", Substitution::None),
                         true,
                         Some("CmdOrCtrl+W"),
                     )?,
@@ -167,35 +168,37 @@ pub(crate) fn create_html_window_menu(
             )?,
             &Submenu::with_items(
                 app,
-                tx.sync_translate("global_menu_edit_desktop"),
+                tx.sync_translate("global_menu_edit_desktop", Substitution::None),
                 true,
                 &[
                     &PredefinedMenuItem::copy(
                         app,
-                        Some(&tx.sync_translate("global_menu_edit_copy_desktop")),
+                        Some(
+                            &tx.sync_translate("global_menu_edit_copy_desktop", Substitution::None),
+                        ),
                     )?,
                     &PredefinedMenuItem::select_all(
                         app,
-                        Some(&tx.sync_translate("menu_select_all")),
+                        Some(&tx.sync_translate("menu_select_all", Substitution::None)),
                     )?,
                 ],
             )?,
             &Submenu::with_items(
                 app,
-                tx.sync_translate("global_menu_view_desktop"),
+                tx.sync_translate("global_menu_view_desktop", Substitution::None),
                 true,
                 &[
                     &MenuItem::with_id(
                         app,
                         action(HtmlWindowMenuActionVariant::ResetZoom),
-                        tx.sync_translate("actual_size"),
+                        tx.sync_translate("actual_size", Substitution::None),
                         true,
                         None::<&str>,
                     )?,
                     &MenuItem::with_id(
                         app,
                         action(HtmlWindowMenuActionVariant::ZoomIn),
-                        tx.sync_translate("menu_zoom_in"),
+                        tx.sync_translate("menu_zoom_in", Substitution::None),
                         true,
                         if cfg!(target_os = "macos") {
                             Some("Command++")
@@ -206,7 +209,7 @@ pub(crate) fn create_html_window_menu(
                     &MenuItem::with_id(
                         app,
                         action(HtmlWindowMenuActionVariant::ZoomOut),
-                        tx.sync_translate("menu_zoom_out"),
+                        tx.sync_translate("menu_zoom_out", Substitution::None),
                         true,
                         if cfg!(target_os = "macos") {
                             Some("Command+-")
@@ -218,14 +221,17 @@ pub(crate) fn create_html_window_menu(
                     &CheckMenuItem::with_id(
                         app,
                         action(HtmlWindowMenuActionVariant::FloatOnTop),
-                        tx.sync_translate("global_menu_view_floatontop_desktop"),
+                        tx.sync_translate(
+                            "global_menu_view_floatontop_desktop",
+                            Substitution::None,
+                        ),
                         true,
                         html_email_window.is_always_on_top()?,
                         None::<&str>,
                     )?,
                     &PredefinedMenuItem::fullscreen(
                         app,
-                        Some(&tx.sync_translate("toggle_fullscreen")),
+                        Some(&tx.sync_translate("toggle_fullscreen", Substitution::None)),
                     )?,
                 ],
             )?,
