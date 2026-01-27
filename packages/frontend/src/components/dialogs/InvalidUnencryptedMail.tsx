@@ -41,7 +41,7 @@ export default function InvalidUnencryptedMailDialog({ onClose }: DialogProps) {
   return (
     <Dialog onClose={onClose}>
       <DialogBody>
-        <DialogContent paddingTop>
+        <DialogContent>
           <p>{tx('invalid_unencrypted_explanation')}</p>
         </DialogContent>
       </DialogBody>
