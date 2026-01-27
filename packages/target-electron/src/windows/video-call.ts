@@ -616,13 +616,13 @@ function handleCallEnd(
 }
 
 // See https://github.com/deltachat/calls-webapp/pull/20.
-// font-src is needed for Eruda (debug) build and should be removed
-// when the "calls" feature goes to production. See
+// font-src and unsafe-eval are needed for Eruda (debug) build
+// and should be removed when the "calls" feature goes to production. See
 // https://github.com/deltachat/deltachat-desktop/issues/5547.
 const CSP =
   "default-src 'none';\
 style-src 'self' 'unsafe-inline';\
-script-src 'self' 'unsafe-inline';\
+script-src 'self' 'unsafe-inline' 'unsafe-eval';\
 img-src 'self';\
 font-src data:;\
 media-src 'self'"
