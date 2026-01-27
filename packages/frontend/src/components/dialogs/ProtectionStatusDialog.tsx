@@ -24,7 +24,7 @@ export function ProtectionEnabledDialog({ onClose }: DialogProps) {
   return (
     <Dialog onClose={onClose}>
       <DialogBody>
-        <DialogContent paddingTop>
+        <DialogContent>
           <p>{tx('chat_protection_enabled_explanation')}</p>
         </DialogContent>
       </DialogBody>

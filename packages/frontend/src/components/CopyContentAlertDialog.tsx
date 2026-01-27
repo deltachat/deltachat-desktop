@@ -41,7 +41,7 @@ export default function CopyContentAlertDialog({
       dataTestid='copy-content-alert-dialog'
     >
       <DialogBody>
-        <DialogContent paddingTop>
+        <DialogContent>
           <p>{message}</p>
         </DialogContent>
       </DialogBody>

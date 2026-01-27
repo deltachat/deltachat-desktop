@@ -47,8 +47,8 @@ export function EncryptionInfo({
         onClose={onClose}
       />
       <DialogBody>
-        <DialogContent paddingTop>
-          <p style={{ whiteSpace: 'pre-wrap' }}>
+        <DialogContent>
+          <p style={{ whiteSpace: 'pre-wrap', marginBottom: '20px' }}>
             {!encryptionInfo && 'Fetching...'}
             {encryptionInfo && encryptionInfo}
           </p>

@@ -149,7 +149,7 @@ export function ConfigureProgressDialog({
       canOutsideClickClose={false}
     >
       <DialogBody>
-        <DialogContent paddingTop>
+        <DialogContent>
           <DeltaProgressBar progress={progress} />
           <p>{progressComment}</p>
         </DialogContent>
