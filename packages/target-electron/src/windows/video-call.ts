@@ -18,6 +18,7 @@ import { getDCJsonrpcRemote } from '../ipc'
 import { pathToFileURL } from 'node:url'
 import type { T } from '@deltachat/jsonrpc-client'
 import { tx } from '../load-translations'
+import { setContentProtection } from '../content-protection'
 
 const log = getLogger('windows/video-call')
 
@@ -225,9 +226,7 @@ function openVideoCallWindow<D extends CallDirection>(
     // TODO
     // alwaysOnTop: main_window?.isAlwaysOnTop(),
   })
-  // TODO
-  // setContentProtection(webxdcWindow)
-  //
+  setContentProtection(win)
   // TODO maybe remember bounds.
   //
   // Maybe we could add a setting for this, i.e. "Allow calls to bypass VPN".
