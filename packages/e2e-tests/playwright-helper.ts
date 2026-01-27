@@ -11,6 +11,10 @@ try {
 }
 
 export const chatmailServerDomain = process.env.DC_CHATMAIL_DOMAIN
+  ? process.env.DC_CHATMAIL_DOMAIN
+  : // Use fallback so that the tests can run on people's forks
+    // without them having to specify this env variable in repository settings.
+    'ci-chatmail.testrun.org'
 
 export const mailServerUrl = process.env.DC_MAIL_SERVER
 
