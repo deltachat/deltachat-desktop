@@ -2,18 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { DesktopSettingsType } from '../../../shared/shared-types'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 
-const keySymbols: { [key: string]: string } = {
-  Control: '^',
-  Shift: '⇧',
-  Alt: '⌥',
-  Meta: '⌘',
-  Enter: '↵',
-  ArrowDown: '↓',
-  ArrowUp: '↑',
-}
-
-const showOnlySymbolOn = ['ArrowDown', 'ArrowUp']
-
 function getLabel(keyboardKey: string) {
   if (runtime.getRuntimeInfo().isMac) {
     switch (keyboardKey) {
@@ -29,6 +17,10 @@ function getLabel(keyboardKey: string) {
       case 'Control':
         // German seems to be the only language that uses another label for the control key
         return window.localeData.locale == 'de' ? 'Strg' : 'Ctrl'
+      case 'ArrowUp':
+        return '↑'
+      case 'ArrowDown':
+        return '↓'
       default:
         return keyboardKey
     }
@@ -37,6 +29,7 @@ function getLabel(keyboardKey: string) {
 
 function Key({ keyboardKey }: { keyboardKey: string }) {
   const [pressed, setPressed] = useState(false)
+  const isSymbol = keyboardKey === 'ArrowUp' || keyboardKey === 'ArrowDown'
 
   useEffect(() => {
     const onKeyDown = (ev: KeyboardEvent) => {
@@ -57,16 +50,9 @@ function Key({ keyboardKey }: { keyboardKey: string }) {
     }
   }, [keyboardKey])
 
-  const shouldHideLabel = showOnlySymbolOn.indexOf(keyboardKey) !== -1
+  const className = `key${pressed ? ' pressed' : ''}${isSymbol ? ' isSymbol' : ''}`
 
-  return (
-    <kbd className={pressed ? 'key pressed' : 'key'}>
-      {shouldHideLabel || getLabel(keyboardKey)}
-      {keySymbols[keyboardKey]
-        ? (shouldHideLabel ? '' : ' ') + keySymbols[keyboardKey]
-        : ''}
-    </kbd>
-  )
+  return <kbd className={className}>{getLabel(keyboardKey)}</kbd>
 }
 
 export type ShortcutAction = {
@@ -79,15 +65,6 @@ export function KeyboardShortcut({ elements }: { elements: string[] }) {
 
   for (const element of elements) {
     bindingElements.push(<Key key={element} keyboardKey={element} />)
-    bindingElements.push(
-      <span key={`separator-${element}`} className='key-separator'>
-        +
-      </span>
-    )
-  }
-
-  if (bindingElements.length !== 0) {
-    bindingElements.pop()
   }
 
   return <div className='keybinding'>{bindingElements}</div>
@@ -158,9 +135,6 @@ export type CheatSheetEntryType =
   | { title: string; type: 'header' }
   | { action: ShortcutAction; type: 'shortcut' }
 
-// function Title(title: string): CheatSheetEntryType {
-//   return { title, type: 'header' }
-// }
 function Shortcut(action: ShortcutAction): CheatSheetEntryType {
   return { action, type: 'shortcut' }
 }
@@ -171,28 +145,44 @@ export function getKeybindings(
   const { isMac } = runtime.getRuntimeInfo()
   const tx = window.static_translate
 
+  const ctrl = isMac ? 'Meta' : 'Control'
+
   return [
-    ...enterKeySendsKeyboardShortcuts(settings['enterKeySends']).map(Shortcut),
+    {
+      title: tx('navigation_shortcut_section'),
+      type: 'header',
+    } as CheatSheetEntryType,
     ...[
+      {
+        title: tx('menu_new_chat'),
+        keyBindings: [[ctrl, 'N']],
+      },
+      {
+        title: tx('focus_search_input'),
+        keyBindings: [[ctrl, 'F']],
+      },
+      {
+        title: tx('search_in_chat'),
+        keyBindings: [[ctrl, 'Shift', 'F']],
+      },
+      {
+        title: tx('switch_between_chats'),
+        keyBindings: [
+          ['Alt', 'ArrowUp'],
+          ['Alt', 'ArrowDown'],
+          [ctrl, 'PageUp'],
+          [ctrl, 'PageDown'],
+          [ctrl, 'Tab'],
+          [ctrl, 'Shift', 'Tab'],
+        ],
+      },
       {
         title: tx('scroll_messages'),
         keyBindings: [['PageUp'], ['PageDown']],
       },
       {
-        title: tx('focus_search_input'),
-        keyBindings: [[isMac ? 'Meta' : 'Control', 'F']],
-      },
-      {
-        title: tx('search_in_chat'),
-        keyBindings: [[isMac ? 'Meta' : 'Control', 'Shift', 'F']],
-      },
-      {
-        title: tx('menu_new_chat'),
-        keyBindings: [[isMac ? 'Meta' : 'Control', 'N']],
-      },
-      {
         title: tx('focus_message_input'),
-        keyBindings: [['Control', 'M']],
+        keyBindings: [[ctrl, 'M']],
       },
       {
         title: tx('menu_help'),
@@ -200,30 +190,55 @@ export function getKeybindings(
       },
       {
         title: tx('menu_settings'),
-        keyBindings: [['Control', ','], isMac && ['Meta', ',']],
+        keyBindings: [[ctrl, ','], isMac && ['Meta', ',']],
       },
       {
         title: tx('force_refresh_network'),
         keyBindings: [['F5']],
       },
-      {
-        title: tx('switch_between_chats'),
-        keyBindings: [
-          ['Alt', 'ArrowUp'],
-          ['Alt', 'ArrowDown'],
-          ['Control', 'PageUp'],
-          ['Control', 'PageDown'],
-          ['Control', 'Tab'],
-          ['Control', 'Shift', 'Tab'],
-        ],
-      },
+    ].map(Shortcut),
+    {
+      title: tx('message_input_shortcut_section'),
+      type: 'header',
+    } as CheatSheetEntryType,
+    ...enterKeySendsKeyboardShortcuts(settings['enterKeySends']).map(Shortcut),
+    ...[
       {
         title: tx('menu_reply'),
         keyBindings: [
-          ['Control', 'ArrowUp'],
-          ['Control', 'ArrowDown'],
-          ['Esc'],
+          [ctrl, 'ArrowUp'],
+          [ctrl, 'ArrowDown'],
         ],
+      },
+      {
+        title: tx('global_menu_edit_desktop'),
+        keyBindings: [['ArrowUp']],
+      },
+    ].map(Shortcut),
+    {
+      title: tx('message_selected_shortcut_section'),
+      type: 'header',
+    } as CheatSheetEntryType,
+    ...[
+      {
+        title: tx('global_menu_edit_desktop'),
+        keyBindings: [['Control', 'e']],
+      },
+      {
+        title: tx('delete'),
+        keyBindings: [['Delete']],
+      },
+      {
+        title: tx('save'),
+        keyBindings: [[ctrl, 's']],
+      },
+      {
+        title: tx('unsave'),
+        keyBindings: [[ctrl, 'Shift', 's']],
+      },
+      {
+        title: tx('react'),
+        keyBindings: [[ctrl, 'r']],
       },
     ].map(Shortcut),
   ]

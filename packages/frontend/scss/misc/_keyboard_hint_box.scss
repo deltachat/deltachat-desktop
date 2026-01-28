@@ -1,54 +1,31 @@
-.keyboard-hints-popover,
-.keyboard-hints-box,
-.keyboard-hint-cheatsheet-dialog,
 .keyboard-shortcuts-dialog {
   .keybinding {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 3px;
 
     .key {
       border-radius: 4px;
       border: 1px var(--keybindingKeyBorder) solid;
-      background-color: var(--keybindingKeyBackground, var(--colorBackground));
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
       display: inline-flex;
       align-items: center;
       justify-content: center;
       font-weight: 400;
       font-size: 12px;
-      padding: 4px 8px;
+      padding: 4px;
       min-width: 20px;
       min-height: 20px;
 
       &.pressed {
-        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+        box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.2);
         transform: translatey(1px);
       }
-    }
 
-    .key-separator {
-      font-size: 11px;
-      color: var(--colorTextSecondary);
-      margin: 0 2px;
-    }
-  }
-
-  .action {
-    display: block;
-    background-color: var(--keybindingActionBackground);
-    border-radius: 10px;
-    padding: 3px 6px;
-    margin: 6px 0px;
-
-    .heading {
-      margin-bottom: 0.5em;
-      font-weight: bold;
-      margin-top: 1px;
-    }
-
-    &:nth-last-child {
-      padding-bottom: 0;
+      &.isSymbol {
+        font-size: 18px;
+        padding: 0;
+      }
     }
   }
 
@@ -56,8 +33,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 0;
-    border-bottom: 1px solid var(--colorBorderLight, rgba(0, 0, 0, 0.1));
+    padding: 6px 30px;
+    padding-inline-end: 12px;
+    margin-bottom: 1px;
+    background-color: var(--keybindingActionBackground);
 
     &:last-child {
       border-bottom: none;
@@ -72,67 +51,34 @@
     .shortcut-bindings {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 8px;
       align-items: flex-end;
     }
   }
-
-  .explainer {
-    margin-top: 14px;
-    font-size: 13px;
-  }
 }
 
-.keyboard-hints-popover,
-.keyboard-hints-box {
-  width: 260px;
-}
-
-.keyboard-hint-cheatsheet-dialog,
 .keyboard-shortcuts-dialog {
-  width: 70% !important;
-  max-width: 600px !important;
-  
   .keybinding {
     font-size: 0.84em;
   }
-  
-  h4 .keybinding {
-    flex: none;
-    margin-inline-start: 20px;
-  }
-  
+
   .dialog-body,
   .shortcuts-dialog-body {
     padding: 0;
-    max-height: 70vh;
     overflow-y: auto;
   }
-  
+
   .keyboard-hint-dialog-body,
   .shortcuts-grid {
-    padding: 16px 24px;
+    padding-bottom: 16px;
     display: flex;
     flex-direction: column;
     gap: 0;
-    
-    .action {
-      width: 250px;
-      margin-bottom: 1em;
-      padding: 7px;
-    }
 
     .shortcuts-section-title {
-      padding: 16px 0 8px 0;
-      margin-bottom: 8px;
-      border-bottom: 2px solid var(--colorBorder, rgba(0, 0, 0, 0.1));
-      
-      h3 {
-        margin: 0;
-        font-size: 16px;
-        font-weight: 600;
-        color: var(--colorText);
-      }
+      margin-bottom: 1px;
+      background-color: var(--keybindingSectionHeaderBackground);
+      padding-inline-start: 30px;
     }
   }
 }

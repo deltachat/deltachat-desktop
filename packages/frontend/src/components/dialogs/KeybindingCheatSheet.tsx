@@ -21,7 +21,7 @@ export default function KeybindingCheatSheet(props: DialogProps) {
   }, [])
 
   return (
-    <Dialog onClose={onClose} className='keyboard-shortcuts-dialog'>
+    <Dialog onClose={onClose} className='keyboard-shortcuts-dialog' width={400}>
       <DialogHeader onClose={onClose}>
         <DialogHeading>{tx('keybindings')}</DialogHeading>
       </DialogHeader>
@@ -32,7 +32,7 @@ export default function KeybindingCheatSheet(props: DialogProps) {
               if (entry.type === 'header') {
                 return (
                   <div key={entry.title} className='shortcuts-section-title'>
-                    <h3>{entry.title}</h3>
+                    <h4>{entry.title}</h4>
                   </div>
                 )
               } else {
