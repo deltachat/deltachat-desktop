@@ -743,6 +743,9 @@ function parseHost(host: string): null | {
   chatId: number
 } {
   const [chatIdStr, accountIdStr, dummyHostName, ...rest] = host.split('.')
+  if (chatIdStr == undefined || accountIdStr == undefined) {
+    return null
+  }
   const [chatId, accountId] = [parseInt(chatIdStr), parseInt(accountIdStr)]
   const isValidId = (num: number) => Number.isFinite(num) && num >= 0
   if (!isValidId(accountId) || !isValidId(chatId)) {
