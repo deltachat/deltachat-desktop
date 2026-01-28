@@ -4,6 +4,7 @@
     "sourceMap": true,
     "module": "preserve",
     "allowJs": false,
-    "moduleResolution": "bundler"
+    "moduleResolution": "bundler",
+    "noUncheckedIndexedAccess": true
   }
 }

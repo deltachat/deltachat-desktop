@@ -9,6 +9,7 @@
     "esModuleInterop": true,
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
+    "noUncheckedIndexedAccess": true,
     "plugins": [{ "name": "typescript-plugin-css-modules" }]
   }
 }

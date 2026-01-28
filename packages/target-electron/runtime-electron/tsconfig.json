@@ -4,6 +4,7 @@
     "sourceMap": true,
     "module": "NodeNext",
     "allowJs": false,
-    "moduleResolution": "NodeNext"
+    "moduleResolution": "NodeNext",
+    "noUncheckedIndexedAccess": true
   }
 }

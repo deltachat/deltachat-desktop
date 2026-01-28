@@ -4,7 +4,8 @@
     "sourceMap": true,
     "module": "nodenext",
     "allowJs": false,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "noUncheckedIndexedAccess": true
   },
   "include": ["./**/*.ts", "./**/*.js"]
 }

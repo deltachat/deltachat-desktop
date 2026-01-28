@@ -29,7 +29,7 @@
   "productName": "DeltaChat",
   "homepage": "https://delta.chat",
   "scripts": {
-    "check:types": "tsc --noEmit && tsc --noEmit -p runtime-electron || node ./bin/printCheckWarning.js",
+    "check:types": "tsc --noEmit --noUncheckedIndexedAccess false && tsc --noEmit --noUncheckedIndexedAccess false -p runtime-electron || node ./bin/printCheckWarning.js",
     "build4production": "NODE_ENV=production pnpm build && pnpm -w check:types",
     "build": "pnpm build:locales && pnpm build:backend && pnpm --filter=@deltachat-desktop/frontend build && pnpm build:compose-frontend && pnpm build:calls-webapp",
     "build:locales": "pnpm -w translations:convert",

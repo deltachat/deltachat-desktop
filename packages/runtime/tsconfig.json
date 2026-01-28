@@ -4,6 +4,7 @@
     "sourceMap": true,
     "module": "preserve",
     "allowJs": false,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "noUncheckedIndexedAccess": true
   }
 }
