@@ -195,7 +195,10 @@ class ElectronRuntime implements Runtime {
   notifyWebxdcMessageChanged(accountId: number, instanceId: number): void {
     ipcBackend.invoke('webxdc:message-changed', accountId, instanceId)
   }
-  notifyWebxdcInstanceDeleted(accountId: number, instanceId: number): void {
+  notifyWebxdcInstanceDeleted(
+    accountId: number,
+    instanceId: number | null
+  ): void {
     ipcBackend.invoke('webxdc:instance-deleted', accountId, instanceId)
   }
   startOutgoingVideoCall(accountId: number, chatId: number): Promise<void> {
