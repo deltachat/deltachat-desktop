@@ -340,7 +340,7 @@ pub(crate) async fn open_webxdc<'a>(
         )
         .await;
 
-    // Contruct window
+    // Construct window
     let initial_url = if href.is_empty() {
         webxdc_base_url()?
     } else {
