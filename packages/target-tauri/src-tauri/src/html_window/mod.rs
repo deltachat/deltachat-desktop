@@ -203,6 +203,7 @@ pub(crate) async fn open_html_window(
                         "puny_code_warning_question",
                         Substitution::String(vec![&puny_code_encode_host(orginal_host_name)])
                     ),
+                    // TODO substitution
                     tx.sync_translate("puny_code_warning_description", Substitution::None),
                 ))
                 .title(tx.sync_translate("puny_code_warning_header", Substitution::None))
