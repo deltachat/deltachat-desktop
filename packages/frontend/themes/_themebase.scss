@@ -26,10 +26,9 @@ $btnPrimaryText: #fff !default;
 $btnDangerText: #fff !default;
 $btnDangerBackground: #ee0103 !default;
 
-$keybindingHintsBoxBackground: rgba(0, 0, 0, 0.05) !default;
+$keybindingSectionHeaderBackground: rgba(0, 0, 0, 0.05) !default;
 $keybindingActionBackground: rgba(0, 0, 0, 0.05) !default;
 $keybindingKeyBorder: gray !default;
-$keybindingKeyShadow: rgba(0, 0, 0, 0.35) !default;
 
 $newChatButtonBg: #42a5f5 !default;
 $chatListItemSelectedBg: #e3f2fd !default;
@@ -115,9 +114,8 @@ $scrollbarTransparency: 0.34 !default;
     )};
   --contactListItemBgFocus: #{changeContrast($bgPrimary, 12%)};
   /* Keybindings Cheatsheet */
-  --keybindingHintsBoxBackground: #{$keybindingHintsBoxBackground};
+  --keybindingSectionHeaderBackground: #{$keybindingSectionHeaderBackground};
   --keybindingKeyBorder: #{$keybindingKeyBorder};
-  --keybindingKeyShadow: #{$keybindingKeyShadow};
   --keybindingActionBackground: #{$keybindingActionBackground};
   /* Floating Action Button */
   --newChatButtonBg: #{$newChatButtonBg};
