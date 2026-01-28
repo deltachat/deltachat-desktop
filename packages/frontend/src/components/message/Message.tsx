@@ -50,6 +50,11 @@ import InvalidUnencryptedMailDialog from '../dialogs/InvalidUnencryptedMail'
 import Button from '../Button'
 import VCardComponent from './VCard'
 
+import {
+  matchesLetterShortcut,
+  matchesNonLetterShortcut,
+} from '../../keybindings'
+
 import styles from './styles.module.scss'
 
 import type { OpenDialog } from '../../contexts/DialogContext'
@@ -541,10 +546,93 @@ export default function Message(props: {
   )
   const ref = useRef<any>(null)
   const rovingTabindex = useRovingTabindex(ref)
-  const rovingTabindexAttrs = {
+  const commonAttrs = {
     ref,
     tabIndex: rovingTabindex.tabIndex,
     onKeyDown: (e: React.KeyboardEvent) => {
+      // Handle letter shortcuts with Ctrl/Cmd modifier
+      const isCtrlOrMetaKeyPress =
+        (e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey && message
+
+      // Check if Ctrl/Cmd+"e" is pressed to enter edit mode
+      if (
+        isCtrlOrMetaKeyPress &&
+        matchesLetterShortcut(e, 'e') &&
+        isMessageEditable(message, props.chat)
+      ) {
+        e.preventDefault()
+        e.stopPropagation()
+        enterEditMessageMode(message)
+        return
+      }
+
+      // Check if Ctrl/Cmd+"r" is pressed to react to message
+      if (
+        isCtrlOrMetaKeyPress &&
+        matchesLetterShortcut(e, 'r') &&
+        showReactionsUi(message, props.chat)
+      ) {
+        e.preventDefault()
+        e.stopPropagation()
+        // detect bounding box of the message element
+        // to get a position for the reactions bar
+        const boundingBox = (e.target as HTMLElement).getBoundingClientRect()
+        const position = {
+          x: boundingBox.x,
+          y: boundingBox.y + boundingBox.height / 2,
+        }
+        showReactionsBar({
+          messageId: message.id,
+          reactions: message.reactions,
+          ...position,
+        })
+        return
+      }
+
+      // Check if Ctrl/Cmd+"s" is pressed to save message
+      if (
+        isCtrlOrMetaKeyPress &&
+        matchesLetterShortcut(e, 's') &&
+        !chat.isSelfTalk &&
+        message.savedMessageId === null &&
+        !message.isInfo
+      ) {
+        e.preventDefault()
+        e.stopPropagation()
+        BackendRemote.rpc.saveMsgs(accountId, [message.id])
+        return
+      }
+
+      // Check if Ctrl/Cmd+Shift+"s" is pressed to unsave message
+      if (
+        (e.ctrlKey || e.metaKey) &&
+        e.shiftKey &&
+        !e.altKey &&
+        matchesLetterShortcut(e, 's') &&
+        message &&
+        message.savedMessageId !== null
+      ) {
+        e.preventDefault()
+        e.stopPropagation()
+        BackendRemote.rpc.deleteMessages(accountId, [message.savedMessageId])
+        return
+      }
+
+      // Check if Delete key is pressed to delete message
+      if (
+        !e.ctrlKey &&
+        !e.metaKey &&
+        !e.altKey &&
+        !e.shiftKey &&
+        matchesNonLetterShortcut(e, 'Delete', 'Delete') &&
+        message
+      ) {
+        e.preventDefault()
+        e.stopPropagation()
+        confirmDeleteMessage(openDialog, accountId, message, props.chat)
+        return
+      }
+
       // Audio / video elements have controls that utilize
       // arrows. That is seeking, changing volume.
       // So we don't want to switch focus if all user wanted to do
@@ -674,7 +762,7 @@ export default function Message(props: {
         <TagName
           className={'bubble ' + rovingTabindex.className}
           onClick={onClick}
-          {...rovingTabindexAttrs}
+          {...commonAttrs}
           // Note that the actual `onContextMenu` listener
           // is on the wrapper component.
           aria-haspopup='menu'
@@ -783,7 +871,7 @@ export default function Message(props: {
         }
       )}
       id={message.id.toString()}
-      {...rovingTabindexAttrs}
+      {...commonAttrs}
     >
       {showAuthor && direction === 'incoming' && (
         <Avatar
