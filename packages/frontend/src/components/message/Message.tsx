@@ -543,7 +543,7 @@ export default function Message(props: {
   )
   const ref = useRef<any>(null)
   const rovingTabindex = useRovingTabindex(ref)
-  const rovingTabindexAttrs = {
+  const commonAttrs = {
     ref,
     tabIndex: rovingTabindex.tabIndex,
     onKeyDown: (e: React.KeyboardEvent) => {
@@ -563,16 +563,26 @@ export default function Message(props: {
         return
       }
 
-      // Check if Ctrl/Cmd+"r" is pressed to reply to message
+      // Check if Ctrl/Cmd+"r" is pressed to react to message
       if (
         isCtrlOrMetaKeyPress &&
         matchesLetterShortcut(e, 'r') &&
-        chat.canSend &&
-        !message.isInfo
+        showReactionsUi(message, props.chat)
       ) {
         e.preventDefault()
         e.stopPropagation()
-        setQuoteInDraft(message)
+        // detect bounding box of the message element
+        // to get a position for the reactions bar
+        const boundingBox = (e.target as HTMLElement).getBoundingClientRect()
+        const position = {
+          x: boundingBox.x,
+          y: boundingBox.y + boundingBox.height / 2,
+        }
+        showReactionsBar({
+          messageId: message.id,
+          reactions: message.reactions,
+          ...position,
+        })
         return
       }
 
@@ -742,7 +752,7 @@ export default function Message(props: {
         <TagName
           className={'bubble ' + rovingTabindex.className}
           onClick={onClick}
-          {...rovingTabindexAttrs}
+          {...commonAttrs}
           // Note that the actual `onContextMenu` listener
           // is on the wrapper component.
           aria-haspopup='menu'
@@ -851,7 +861,7 @@ export default function Message(props: {
         }
       )}
       id={message.id.toString()}
-      {...rovingTabindexAttrs}
+      {...commonAttrs}
     >
       {showAuthor && direction === 'incoming' && (
         <Avatar
