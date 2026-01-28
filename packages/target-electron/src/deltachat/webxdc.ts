@@ -292,12 +292,13 @@ export default class DCWebxdc {
         // make href eval safe
         base64EncodedHref = Buffer.from(appURL + relativeUrl).toString('base64')
       }
-      if (open_apps[`${appId}`]) {
+      const alreadyOpenApp = open_apps[appId]
+      if (alreadyOpenApp) {
         log.warn(
           'webxdc instance for this app is already open, trying to focus it',
           { msg_id }
         )
-        const window = open_apps[`${appId}`].win
+        const window = alreadyOpenApp.win
         if (window.isMinimized()) {
           window.restore()
         }
@@ -1059,8 +1060,8 @@ export default class DCWebxdc {
   }
 
   _closeAll() {
-    for (const open_app of Object.keys(open_apps)) {
-      open_apps[open_app].win.close()
+    for (const open_app of Object.values(open_apps)) {
+      open_app.win.close()
     }
   }
 }
@@ -1271,8 +1272,7 @@ async function webxdcProtocolHandler(
 }
 
 function lookupAppFromEvent(event: IpcMainInvokeEvent): AppInstance | null {
-  for (const key of Object.keys(open_apps)) {
-    const app = open_apps[key]
+  for (const app of Object.values(open_apps)) {
     if (app.win.webContents === event.sender) {
       return app
     }
