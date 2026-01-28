@@ -10,6 +10,7 @@ use tauri::{
 use tauri_plugin_dialog::DialogExt;
 use tauri_plugin_opener::OpenerExt;
 use tauri_plugin_store::StoreExt;
+use translationfn::Substitution;
 
 use crate::{
     html_window::{
@@ -199,16 +200,22 @@ pub(crate) async fn open_html_window(
                 .message(format!(
                     "{}\n\n{}",
                     tx.sync_translate(
-                        "puny_code_warning_question", /*"puny_code_decode_host(orginal_host_name)"*/
+                        "puny_code_warning_question",
+                        Substitution::String(vec![&puny_code_encode_host(orginal_host_name)])
                     ),
-                    // TODO substitution
-                    tx.sync_translate("puny_code_warning_description"),
+                    tx.sync_translate(
+                        "puny_code_warning_description",
+                        Substitution::String(vec![
+                            orginal_host_name,
+                            &puny_code_encode_host(orginal_host_name)
+                        ])
+                    ),
                 ))
-                .title(tx.sync_translate("puny_code_warning_header"))
+                .title(tx.sync_translate("puny_code_warning_header", Substitution::None))
                 .kind(tauri_plugin_dialog::MessageDialogKind::Warning)
                 .buttons(tauri_plugin_dialog::MessageDialogButtons::OkCancelCustom(
-                    tx.sync_translate("open"),
-                    tx.sync_translate("cancel"),
+                    tx.sync_translate("open", Substitution::None),
+                    tx.sync_translate("cancel", Substitution::None),
                 ))
                 .show(move |ok| {
                     if ok {
