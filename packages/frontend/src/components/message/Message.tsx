@@ -616,7 +616,15 @@ export default function Message(props: {
       }
 
       // Check if Delete key is pressed to delete message
-      if (e.key === 'Delete' && message) {
+      if (
+        !e.ctrlKey &&
+        !e.metaKey &&
+        !e.altKey &&
+        !e.shiftKey &&
+        message &&
+        e.key === 'Delete' &&
+        message
+      ) {
         e.preventDefault()
         e.stopPropagation()
         confirmDeleteMessage(openDialog, accountId, message, props.chat)
