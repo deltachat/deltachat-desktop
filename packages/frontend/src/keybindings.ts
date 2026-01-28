@@ -112,8 +112,8 @@ export function matchesLetterShortcut(
  * This prevents capturing unintended shortcuts like Ctrl+- when we want Ctrl+/
  * (on German keyboards, the Slash position produces '-').
  */
-function matchesNonLetterShortcut(
-  ev: KeyboardEvent,
+export function matchesNonLetterShortcut(
+  ev: KeyboardEvent | React.KeyboardEvent<Element>,
   symbol: string,
   code: string
 ): boolean {

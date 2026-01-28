@@ -50,7 +50,10 @@ import InvalidUnencryptedMailDialog from '../dialogs/InvalidUnencryptedMail'
 import Button from '../Button'
 import VCardComponent from './VCard'
 
-import { matchesLetterShortcut } from '../../keybindings'
+import {
+  matchesLetterShortcut,
+  matchesNonLetterShortcut,
+} from '../../keybindings'
 
 import styles from './styles.module.scss'
 
@@ -621,8 +624,7 @@ export default function Message(props: {
         !e.metaKey &&
         !e.altKey &&
         !e.shiftKey &&
-        message &&
-        e.key === 'Delete' &&
+        matchesNonLetterShortcut(e, 'Delete', 'Delete') &&
         message
       ) {
         e.preventDefault()
