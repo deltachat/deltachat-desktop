@@ -590,10 +590,13 @@ export default function Message(props: {
         return
       }
 
-      // Check if Ctrl/Cmd+"u" is pressed to unsave message
+      // Check if Ctrl/Cmd+Shift+"s" is pressed to unsave message
       if (
-        isCtrlOrMetaKeyPress &&
-        matchesLetterShortcut(e, 'u') &&
+        (e.ctrlKey || e.metaKey) &&
+        e.shiftKey &&
+        !e.altKey &&
+        matchesLetterShortcut(e, 's') &&
+        message &&
         message.savedMessageId !== null
       ) {
         e.preventDefault()
@@ -602,8 +605,8 @@ export default function Message(props: {
         return
       }
 
-      // Check if Ctrl/Cmd+"d" is pressed to delete message
-      if (isCtrlOrMetaKeyPress && matchesLetterShortcut(e, 'd')) {
+      // Check if Delete key is pressed to delete message
+      if (e.key === 'Delete' && message) {
         e.preventDefault()
         e.stopPropagation()
         confirmDeleteMessage(openDialog, accountId, message, props.chat)
