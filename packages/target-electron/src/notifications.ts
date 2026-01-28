@@ -161,7 +161,7 @@ function clearNotificationsForChat(
 }
 
 function clearAccount(_event: IpcMainInvokeEvent | null, accountId: number) {
-  for (const chatId of Object.keys(notifications[Number(accountId)])) {
+  for (const chatId of Object.keys(notifications[Number(accountId)] || {})) {
     if (!Number.isNaN(Number(chatId))) {
       clearNotificationsForChat(null, Number(accountId), Number(chatId))
     }
@@ -169,7 +169,7 @@ function clearAccount(_event: IpcMainInvokeEvent | null, accountId: number) {
 }
 
 function clearAll() {
-  for (const accountId of Object.keys(notifications)) {
+  for (const accountId of Object.keys(notifications || {})) {
     if (!Number.isNaN(Number(accountId))) {
       clearAccount(null, Number(accountId))
     }
