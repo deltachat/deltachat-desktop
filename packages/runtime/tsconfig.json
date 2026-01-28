@@ -9,6 +9,7 @@
     "esModuleInterop": true,
     "moduleResolution": "node",
     "strictNullChecks": true,
-    "strict": true
+    "noUncheckedIndexedAccess": true,
+    "strict": true,
   }
 }
