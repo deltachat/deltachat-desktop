@@ -3,7 +3,7 @@
   "name": "@deltachat-desktop/shared",
   "type": "module",
   "scripts": {
-    "check:types": "tsc --noEmit",
+    "check:types": "tsc --noEmit --noUncheckedIndexedAccess false",
     "pretest": "esbuild *.ts --outdir=ts-compiled-for-tests --sourcemap",
     "test": "NODE_OPTIONS=--enable-source-maps mocha 'tests/**/*.js'"
   },

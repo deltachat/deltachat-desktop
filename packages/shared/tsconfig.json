@@ -5,7 +5,8 @@
     "module": "preserve",
     "target": "es2022",
     "allowJs": false,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "noUncheckedIndexedAccess": true
   },
   "include": ["./**/*.ts", "./**/*.js", "../../_locales/*.json"],
   "exclude": ["./ts-compiled-for-tests"]

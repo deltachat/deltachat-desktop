@@ -4,7 +4,7 @@
   "type": "module",
   "main": "runtime.ts",
   "scripts": {
-    "check:types": "tsc --noEmit"
+    "check:types": "tsc --noEmit --noUncheckedIndexedAccess false"
   },
   "dependencies": {
     "@deltachat-desktop/shared": "link:../shared",

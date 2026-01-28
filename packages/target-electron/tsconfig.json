@@ -6,7 +6,8 @@
     "target": "es2022",
     "allowJs": false,
     "esModuleInterop": true,
-    "moduleResolution": "bundler"
+    "moduleResolution": "bundler",
+    "noUncheckedIndexedAccess": true
   },
   "include": ["./**/*.ts", "./**/*.js"]
 }

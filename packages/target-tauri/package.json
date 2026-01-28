@@ -5,7 +5,7 @@
   "type": "module",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "check:types": "tsc --noEmit -p runtime-tauri",
+    "check:types": "tsc --noEmit --noUncheckedIndexedAccess false -p runtime-tauri",
     "check:webxdc-denied-permissions": "node ../../bin/webxdc-check-permissions-policy-count.js",
     "start": "tauri dev",
     "build4production": "NODE_ENV=production pnpm build",

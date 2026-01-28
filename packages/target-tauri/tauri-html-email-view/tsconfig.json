@@ -5,6 +5,7 @@
     "module": "preserve",
     "target": "es2018",
     "allowJs": false,
-    "moduleResolution": "bundler"
+    "moduleResolution": "bundler",
+    "noUncheckedIndexedAccess": true
   }
 }

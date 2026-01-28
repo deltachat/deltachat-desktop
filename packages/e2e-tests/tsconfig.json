@@ -5,7 +5,8 @@
     "module": "nodenext",
     "target": "ES2022",
     "allowJs": false,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "noUncheckedIndexedAccess": true
   },
   "include": ["./**/*.ts", "./**/*.js"]
 }

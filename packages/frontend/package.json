@@ -4,7 +4,7 @@
   "type": "module",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "check:types": "tsc --noEmit",
+    "check:types": "tsc --noEmit --noUncheckedIndexedAccess false",
     "build": "pnpm build:ts && pnpm build:themes && pnpm build:static && pnpm build:source-map-support && pnpm build:scss",
     "build:ts": "node ./bin/build-frontend-ts.mjs",
     "build:source-map-support": "node ./bin/build-frontend-source_map_support.js",
