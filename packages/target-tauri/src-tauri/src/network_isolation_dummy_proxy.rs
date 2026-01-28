@@ -22,16 +22,16 @@ So we need to occupy the port.
 use std::{
     net::{SocketAddr, SocketAddrV4, TcpListener},
     str::FromStr,
+    sync::LazyLock,
 };
 
 use anyhow::{anyhow, Context};
 use log::{error, info};
-use once_cell::sync::Lazy;
 use url::Url;
 
 /// The URL is in the form of `socks5://127.0.0.1:54321`,
 /// where only port is variable.
-pub static DUMMY_LOCALHOST_PROXY_URL: Lazy<Result<Url, ()>> = Lazy::new(|| {
+pub static DUMMY_LOCALHOST_PROXY_URL: LazyLock<Result<Url, ()>> = LazyLock::new(|| {
     DUMMY_LOCALHOST_PROXY_AND_URL
         .as_ref()
         .map(|(_listener, url)| url.clone())
@@ -43,14 +43,15 @@ pub static DUMMY_LOCALHOST_PROXY_URL: Lazy<Result<Url, ()>> = Lazy::new(|| {
 // to stop listening.
 //
 // TODO but is it fine not to close the listener on program exit?
-static DUMMY_LOCALHOST_PROXY_AND_URL: Lazy<Result<(TcpListener, Url), ()>> = Lazy::new(|| {
-    listen()
-        .context("failed to make dummy blackhole proxy listener")
-        // It's a pain to try to clone Error for users of `DUMMY_PROXY_URL`,
-        // so let's just print and return `Err(())`.
-        .inspect_err(|err| error!("{err}"))
-        .map_err(|_err| ())
-});
+static DUMMY_LOCALHOST_PROXY_AND_URL: LazyLock<Result<(TcpListener, Url), ()>> =
+    LazyLock::new(|| {
+        listen()
+            .context("failed to make dummy blackhole proxy listener")
+            // It's a pain to try to clone Error for users of `DUMMY_PROXY_URL`,
+            // so let's just print and return `Err(())`.
+            .inspect_err(|err| error!("{err}"))
+            .map_err(|_err| ())
+    });
 
 fn listen() -> anyhow::Result<(TcpListener, Url)> {
     // Regarding SOCKS5 and UDP: apparently we don't need to also listen on UDP,

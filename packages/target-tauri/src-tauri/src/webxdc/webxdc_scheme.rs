@@ -1,4 +1,4 @@
-use std::{collections::HashMap, str};
+use std::{collections::HashMap, str, sync::LazyLock};
 
 use anyhow::{anyhow, Context};
 use log::{error, trace};
@@ -14,9 +14,7 @@ use crate::{
     WebxdcInstancesState,
 };
 
-use once_cell::sync::Lazy;
-
-static CSP: Lazy<String> = Lazy::new(|| {
+static CSP: LazyLock<String> = LazyLock::new(|| {
     let mut m: HashMap<String, _> = HashMap::new();
     m.insert(
         "default-src".to_owned(),
