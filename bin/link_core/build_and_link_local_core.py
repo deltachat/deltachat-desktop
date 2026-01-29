@@ -147,6 +147,7 @@ def check_required_tools(desktop_path, core_path):
     """Check that all required tools are installed."""
     print("Checking required tools...")
     all_ok = True
+    node_failed = False
 
     # Get required versions from project files
     node_min = get_required_node_version(desktop_path)
@@ -155,6 +156,7 @@ def check_required_tools(desktop_path, core_path):
 
     if not check_tool("node", min_version=node_min):
         all_ok = False
+        node_failed = True
     if not check_tool("npm"):
         all_ok = False
     if not check_tool("pnpm", min_version=pnpm_min):
@@ -166,14 +168,16 @@ def check_required_tools(desktop_path, core_path):
 
     if not all_ok:
         print("\nError: Missing or outdated required tools")
-        nvmrc_path = os.path.join(desktop_path, ".nvmrc")
-        if os.path.exists(nvmrc_path):
-            with open(nvmrc_path, "r") as f:
-                nvmrc_version = f.read().strip()
-            print(f"\nNote: This project requires Node.js {nvmrc_version} (see .nvmrc)")
-            print("If you have nvm installed, you can run:")
-            print(f"  nvm install {nvmrc_version}")
-            print(f"  nvm use {nvmrc_version}")
+        # Only show nvm instructions if Node.js was the problem
+        if node_failed:
+            nvmrc_path = os.path.join(desktop_path, ".nvmrc")
+            if os.path.exists(nvmrc_path):
+                with open(nvmrc_path, "r") as f:
+                    nvmrc_version = f.read().strip()
+                print(f"\nNote: This project requires Node.js {nvmrc_version} (see .nvmrc)")
+                print("If you have nvm installed, you can run:")
+                print(f"  nvm install {nvmrc_version}")
+                print(f"  nvm use {nvmrc_version}")
         sys.exit(1)
     print()
 
