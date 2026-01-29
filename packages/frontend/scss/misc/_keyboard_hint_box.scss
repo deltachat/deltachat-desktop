@@ -32,7 +32,6 @@
   .shortcut-item {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     padding: 6px 30px;
     padding-inline-end: 12px;
     margin-bottom: 1px;
@@ -77,8 +76,11 @@
 
     .shortcuts-section-title {
       margin-bottom: 1px;
-      background-color: var(--keybindingSectionHeaderBackground);
       padding-inline-start: 30px;
+      padding-top: 4px;
+      h4 {
+        margin: 10px 0;
+      }
     }
   }
 }
