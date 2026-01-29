@@ -103,7 +103,7 @@ export default class ScreenController extends Component {
           .setConfig(accountId, 'disable_idle', null)
           .catch(() => log.error("failed to reset 'disable_idle' config key"))
 
-        // 2025-01-11: The `webxdc_realtime_enabled` setting was removed.
+        // 2026-01-11: The `webxdc_realtime_enabled` setting was removed.
         // Revert it to the default if it was changed in the past.
         BackendRemote.rpc
           .setConfig(accountId, 'webxdc_realtime_enabled', null)
