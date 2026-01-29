@@ -2,6 +2,7 @@
 
 $headerButtonSize: 30px;
 $paddingHorizontal: 30px;
+$paddingVertical: 20px;
 
 .dialog {
   padding: 0;
@@ -41,7 +42,7 @@ $paddingHorizontal: 30px;
     /* top needs always 20px padding but we have to make
     sure that first element does not add additional padding
     */
-    padding-top: 20px;
+    padding-top: $paddingVertical;
   }
   &::backdrop {
     background-color: var(--dialogBackdropBackground);
@@ -54,7 +55,7 @@ $paddingHorizontal: 30px;
   background-color: var(--bp4DialogHeaderBg);
   border-bottom: var(--outlineProperties);
   display: flex;
-  padding-bottom: 20px;
+  padding-bottom: $paddingVertical;
   padding-inline-start: $paddingHorizontal;
   padding-inline-end: $paddingHorizontal - 5px;
   user-select: none;
@@ -98,7 +99,7 @@ $paddingHorizontal: 30px;
 .dialogFooter {
   width: 100%;
   background-color: var(--bp4DialogBgPrimary);
-  padding-bottom: 20px;
+  padding-bottom: $paddingVertical;
   padding-inline-start: $paddingHorizontal;
   padding-inline-end: $paddingHorizontal;
 }

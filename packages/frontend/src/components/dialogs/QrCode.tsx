@@ -205,7 +205,7 @@ export function QrCodeShowQrInner({
                 width: '100%',
                 height: '100%',
                 userSelect: 'none',
-                paddingTop: '16px',
+                marginBottom: '20px',
               }}
               className='show-qr-dialog-qr-image'
               src={svgUrl}
