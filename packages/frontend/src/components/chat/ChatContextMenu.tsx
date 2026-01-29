@@ -260,10 +260,9 @@ function buildViewEditMenuItems(
 function buildEncryptionInfoMenuItem(
   relatedChat: T.FullChat,
   tx: ReturnType<typeof useTranslationFunction>,
-  openEncryptionInfoDialog: (info: {
-    chatId: number | null
-    dmChatContact: number | null
-  }) => void
+  openEncryptionInfoDialog: ReturnType<
+    typeof useChatDialog
+  >['openEncryptionInfoDialog']
 ): ContextMenuItem | false {
   return (
     !relatedChat.isDeviceChat &&

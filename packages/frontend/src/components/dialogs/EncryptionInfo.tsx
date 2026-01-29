@@ -8,10 +8,15 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import type { DialogProps } from '../../contexts/DialogContext'
 import { useSettingsStore } from '../../stores/settings'
 
-export type Props = {
-  chatId: number | null
-  dmChatContact: number | null
-}
+export type Props =
+  | {
+      chatId: number
+      dmChatContact: number | null
+    }
+  | {
+      chatId: number | null
+      dmChatContact: number
+    }
 
 export function EncryptionInfo({
   chatId,
