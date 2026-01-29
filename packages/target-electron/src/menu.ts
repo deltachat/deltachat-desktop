@@ -303,11 +303,6 @@ function getMenuTemplate(
       label: tx('global_menu_view_desktop'),
       submenu: [
         {
-          label: tx('global_menu_view_floatontop_desktop'),
-          type: 'checkbox',
-          click: () => mainWindow.toggleAlwaysOnTop(),
-        },
-        {
           accelerator: 'CmdOrCtrl+=',
           label: tx('menu_zoom_in'),
           role: 'zoomIn',
@@ -321,6 +316,17 @@ function getMenuTemplate(
           accelerator: 'CmdOrCtrl+0',
           label: `${tx('reset')}`,
           role: 'resetZoom',
+        },
+        {
+          type: 'separator',
+        },
+        {
+          label: tx('global_menu_view_floatontop_desktop'),
+          type: 'checkbox',
+          click: () => mainWindow.toggleAlwaysOnTop(),
+        },
+        {
+          type: 'separator',
         },
         {
           label: tx('pref_language'),

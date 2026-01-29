@@ -400,15 +400,6 @@ export default class DCWebxdc {
           {
             label: tx('global_menu_view_desktop'),
             submenu: [
-              ...(DesktopSettings.state.enableWebxdcDevTools
-                ? [
-                    {
-                      label: tx('global_menu_view_developer_tools_desktop'),
-                      role: 'toggleDevTools',
-                    } as MenuItemConstructorOptions,
-                  ]
-                : []),
-              { type: 'separator' },
               {
                 accelerator: 'CmdOrCtrl+=',
                 label: tx('menu_zoom_in'),
@@ -440,6 +431,20 @@ export default class DCWebxdc {
                 },
               },
               { role: 'togglefullscreen' },
+              ...(DesktopSettings.state.enableWebxdcDevTools
+                ? [
+                    { type: 'separator' } as MenuItemConstructorOptions,
+                    {
+                      label: tx('global_menu_view_developer_desktop'),
+                      submenu: [
+                        {
+                          label: tx('global_menu_view_developer_tools_desktop'),
+                          role: 'toggleDevTools',
+                        } as MenuItemConstructorOptions,
+                      ],
+                    },
+                  ]
+                : []),
             ],
           },
           {
