@@ -6,7 +6,6 @@ import Dialog, { DialogBody, DialogContent, DialogHeader } from '../Dialog'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import type { DialogProps } from '../../contexts/DialogContext'
-import { useSettingsStore } from '../../stores/settings'
 
 export type Props = {
   chatId: number | null
@@ -32,13 +31,8 @@ export function EncryptionInfo({
         )
     ).then(setEncryptionInfo)
   }, [dmChatContact, chatId])
-  const settings = useSettingsStore()[0]
 
   const tx = useTranslationFunction()
-
-  if (!settings) {
-    throw new Error('settings store missing')
-  }
 
   return (
     <Dialog onClose={onClose}>
