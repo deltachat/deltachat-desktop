@@ -69,19 +69,9 @@ export function useAccountDragAndDrop(
     const dropIndex = dropIndicator.index
 
     if (dragIndex === -1 || dragIndex === dropIndex) {
-      // If dropping on itself, check position to maybe move it one slot.
-      if (
-        dragIndex === dropIndex &&
-        ((dropIndicator.position === 'top' && dragIndex > 0) ||
-          (dropIndicator.position === 'bottom' &&
-            dragIndex < accounts.length - 1))
-      ) {
-        // This case is handled by dropping on the adjacent item, so we can ignore it.
-      } else {
-        setDraggedAccountId(null)
-        setDropIndicator(null)
-        return
-      }
+      setDraggedAccountId(null)
+      setDropIndicator(null)
+      return
     }
 
     // Create new array with reordered accounts
