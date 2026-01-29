@@ -272,7 +272,12 @@ function buildEncryptionInfoMenuItem(
       action: () =>
         openEncryptionInfoDialog({
           chatId: relatedChat.id,
-          dmChatContact: relatedChat.contactIds[0] ?? null,
+          // https://github.com/chatmail/core/blob/a3328ea2de1e675b1418b4e2ca0c23f88828c558/deltachat-jsonrpc/src/api/types/chat_list.rs#L130-L146
+          dmChatContact:
+            relatedChat.chatType === 'Single' &&
+            relatedChat.contactIds.length > 0
+              ? relatedChat.contactIds[0]
+              : null,
         }),
     }
   )
