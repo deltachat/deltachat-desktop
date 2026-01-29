@@ -6,7 +6,7 @@ import { BackendRemote } from '../backend-com'
 
 import type { RefObject, PropsWithChildren } from 'react'
 import type { T } from '@deltachat/jsonrpc-client'
-import { useRpcFetch } from '../hooks/useFetch'
+import { useFetch } from '../hooks/useFetch'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { useHasChanged2 } from '../hooks/useHasChanged'
 
@@ -48,6 +48,10 @@ type Props = {
 
 export const ChatContext = React.createContext<ChatContextValue | null>(null)
 
+/**
+ * This context tries to be capable of handling `accountId` changing,
+ * i.e. it does not need to be behind `key={accountId}`.
+ */
 export const ChatProvider = ({
   children,
   accountId,
@@ -58,19 +62,38 @@ export const ChatProvider = ({
     window.__selectedChatId = chatId
   }, [chatId])
 
-  const chatFetch = useRpcFetch(
-    BackendRemote.rpc.getFullChatById,
+  const chatFetch = useFetch(
+    useCallback(
+      async (accountId: number, chatId: number) => ({
+        chat: await BackendRemote.rpc.getFullChatById(accountId, chatId),
+        accountId,
+      }),
+      []
+    ),
     accountId != undefined && chatId != undefined ? [accountId, chatId] : null
   )
   if (chatFetch?.result?.ok === false) {
     log.error('Failed to fetch chat', chatFetch.result.err)
   }
-  const chatWithLinger = chatFetch?.lingeringResult?.ok
-    ? chatFetch.lingeringResult.value
-    : undefined
-  const chatNoLinger = chatFetch?.result?.ok
-    ? chatFetch.result.value
-    : undefined
+  const chatWithLinger =
+    chatFetch?.lingeringResult?.ok &&
+    // Make sure that the chat belongs to the current account,
+    // to prevent data leaking between accounts, and weird race-y bugs.
+    //
+    // We usually utilize `key={accountId}` for this,
+    // but applying `key=` to a React context provider
+    // makes _all_ its descendants (as opposed just the components
+    // that depend on the context) re-render, including `AccountListSidebar`.
+    accountId === chatFetch.lingeringResult.value.accountId
+      ? chatFetch.lingeringResult.value.chat
+      : undefined
+  const chatNoLinger =
+    chatFetch?.result?.ok &&
+    // For non-lingering result we expect `accountId` to always be equal,
+    // but let's double-check + to be consistent with the same check above.
+    accountId === chatFetch.result.value.accountId
+      ? chatFetch.result.value.chat
+      : undefined
 
   const selectChat = useCallback<SelectChat>(
     (nextAccountId: number, nextChatId: number) => {
