@@ -126,14 +126,14 @@ def check_tool(name, min_version=None):
     return False
 
 
-def check_required_tools(desktop_path):
+def check_required_tools(desktop_path, core_path):
     """Check that all required tools are installed."""
     print("Checking required tools...")
     all_ok = True
 
     # Get required versions from project files
     pnpm_min = get_required_pnpm_version(desktop_path)
-    rust_min = get_required_rust_version(desktop_path)
+    rust_min = get_required_rust_version(core_path)
 
     if not check_tool("npm"):
         all_ok = False
@@ -163,7 +163,7 @@ def main():
         print(f"Error: core_path does not exist: {core_path}")
         sys.exit(1)
 
-    check_required_tools(desktop_path)
+    check_required_tools(desktop_path, core_path)
 
     print(f"Core directory: {core_path}")
     print(f"Desktop directory: {desktop_path}")
