@@ -70,6 +70,10 @@ def parse_version(version_str):
     match = re.search(r'(\d+)\.(\d+)', version_str)
     if match:
         return (int(match.group(1)), int(match.group(2)), 0)
+    # Try major only format (e.g., "22" or "^22")
+    match = re.search(r'(\d+)', version_str)
+    if match:
+        return (int(match.group(1)), 0, 0)
     return (0, 0, 0)
 
 
@@ -82,6 +86,19 @@ def get_required_pnpm_version(desktop_path):
             pnpm_req = data.get("engines", {}).get("pnpm", "")
             # Parse ">=9.6.0" or "^9.6.0" -> (9, 6, 0)
             return parse_version(pnpm_req)
+    except Exception:
+        return None
+
+
+def get_required_node_version(desktop_path):
+    """Get required Node.js version from package.json."""
+    try:
+        package_json = os.path.join(desktop_path, "package.json")
+        with open(package_json, "r") as f:
+            data = json.load(f)
+            node_req = data.get("engines", {}).get("node", "")
+            # Parse "^22" -> (22, 0, 0)
+            return parse_version(node_req)
     except Exception:
         return None
 
@@ -132,9 +149,12 @@ def check_required_tools(desktop_path, core_path):
     all_ok = True
 
     # Get required versions from project files
+    node_min = get_required_node_version(desktop_path)
     pnpm_min = get_required_pnpm_version(desktop_path)
     rust_min = get_required_rust_version(core_path)
 
+    if not check_tool("node", min_version=node_min):
+        all_ok = False
     if not check_tool("npm"):
         all_ok = False
     if not check_tool("pnpm", min_version=pnpm_min):
@@ -146,6 +166,14 @@ def check_required_tools(desktop_path, core_path):
 
     if not all_ok:
         print("\nError: Missing or outdated required tools")
+        nvmrc_path = os.path.join(desktop_path, ".nvmrc")
+        if os.path.exists(nvmrc_path):
+            with open(nvmrc_path, "r") as f:
+                nvmrc_version = f.read().strip()
+            print(f"\nNote: This project requires Node.js {nvmrc_version} (see .nvmrc)")
+            print("If you have nvm installed, you can run:")
+            print(f"  nvm install {nvmrc_version}")
+            print(f"  nvm use {nvmrc_version}")
         sys.exit(1)
     print()
 
