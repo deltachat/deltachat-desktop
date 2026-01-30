@@ -209,6 +209,34 @@ test('message menu items presence', async () => {
   await page.keyboard.press('Escape')
 })
 
+test('React to a message', async () => {
+  const someMessage = page.getByLabel('Messages').getByText('Hello').first()
+  await someMessage.click({ button: 'right' })
+  await page.getByRole('menu').getByRole('menuitem', { name: 'React' }).click()
+  await expect(
+    page.getByRole('menu', { name: 'React' }).getByRole('menuitemradio').first()
+  ).toBeFocused()
+
+  await page.keyboard.press('Escape')
+  await expect(
+    page.getByRole('menu').getByRole('menuitemradio')
+  ).not.toBeVisible()
+
+  // Open again with Ctrl + R
+  // Click to transfer focus. We shouldn't have to require it probably,
+  // but this is how it works now.
+  await someMessage.click()
+  await page.keyboard.press('ControlOrMeta+R')
+  await expect(
+    page.getByRole('menu', { name: 'React' }).getByRole('menuitemradio').first()
+  ).toBeFocused()
+
+  const chatList = page.getByLabel('Chats').getByRole('tablist')
+  await expect(chatList).not.toContainText('You reacted')
+  await page.getByRole('menuitemradio', { name: '❤️' }).click()
+  await expect(chatList).toContainText('You reacted ❤️ to "Hello')
+})
+
 /**
  * user A deletes one message for himself
  */
