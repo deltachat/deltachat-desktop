@@ -210,9 +210,6 @@ export function AppPicker({ onAppSelected }: Props) {
     const onClose = () => {
       setSelectedAppInfo(null)
     }
-    if (!app) {
-      return null
-    }
     return (
       <DialogWithHeader
         title={tx('webxdc_app')}
