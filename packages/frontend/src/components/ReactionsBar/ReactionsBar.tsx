@@ -31,13 +31,17 @@ export default function ReactionsBar({
 
   const reactionsBarRef = useRef<HTMLDivElement>(null)
   useEffect(() => {
-    const firstButton =
-      reactionsBarRef.current?.getElementsByTagName('button')[0]
-    if (firstButton == undefined) {
-      log.warn('Failed to focus reactions bar after opening it')
-      return
-    }
-    firstButton.focus()
+    // IDK why, but `focus()` doesn't work if it's the first time
+    // that we open the reactions bar for a chat.
+    setTimeout(() => {
+      const firstButton =
+        reactionsBarRef.current?.getElementsByTagName('button')[0]
+      if (firstButton == undefined) {
+        log.warn('Failed to focus reactions bar after opening it')
+        return
+      }
+      firstButton.focus()
+    })
   }, [])
 
   const [showAllEmojis, setShowAllEmojis] = useState(false)
