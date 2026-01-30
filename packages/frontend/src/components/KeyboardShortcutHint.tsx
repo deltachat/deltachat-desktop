@@ -3,6 +3,14 @@ import { DesktopSettingsType } from '../../../shared/shared-types'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 
 function getLabel(keyboardKey: string) {
+  if (['ArrowUp', 'ArrowDown'].includes(keyboardKey)) {
+    switch (keyboardKey) {
+      case 'ArrowUp':
+        return '↑'
+      case 'ArrowDown':
+        return '↓'
+    }
+  }
   if (runtime.getRuntimeInfo().isMac) {
     switch (keyboardKey) {
       case 'Alt':
@@ -17,10 +25,6 @@ function getLabel(keyboardKey: string) {
       case 'Control':
         // German seems to be the only language that uses another label for the control key
         return window.localeData.locale == 'de' ? 'Strg' : 'Ctrl'
-      case 'ArrowUp':
-        return '↑'
-      case 'ArrowDown':
-        return '↓'
       default:
         return keyboardKey
     }
@@ -170,10 +174,10 @@ export function getKeybindings(
         keyBindings: [
           ['Alt', 'ArrowUp'],
           ['Alt', 'ArrowDown'],
-          [ctrl, 'PageUp'],
-          [ctrl, 'PageDown'],
-          [ctrl, 'Tab'],
-          [ctrl, 'Shift', 'Tab'],
+          ['Control', 'PageUp'],
+          ['Control', 'PageDown'],
+          ['Control', 'Tab'],
+          ['Control', 'Shift', 'Tab'],
         ],
       },
       {
@@ -182,7 +186,7 @@ export function getKeybindings(
       },
       {
         title: tx('focus_message_input'),
-        keyBindings: [[ctrl, 'M']],
+        keyBindings: [['Control', 'M']],
       },
       {
         title: tx('menu_help'),
@@ -190,7 +194,7 @@ export function getKeybindings(
       },
       {
         title: tx('menu_settings'),
-        keyBindings: [[ctrl, ','], isMac && ['Meta', ',']],
+        keyBindings: [['Control', ','], isMac && ['Meta', ',']],
       },
       {
         title: tx('force_refresh_network'),
@@ -206,8 +210,8 @@ export function getKeybindings(
       {
         title: tx('menu_reply'),
         keyBindings: [
-          [ctrl, 'ArrowUp'],
-          [ctrl, 'ArrowDown'],
+          ['Control', 'ArrowUp'],
+          ['Control', 'ArrowDown'],
         ],
       },
       {
@@ -222,7 +226,7 @@ export function getKeybindings(
     ...[
       {
         title: tx('global_menu_edit_desktop'),
-        keyBindings: [['Control', 'e']],
+        keyBindings: [[ctrl, 'E']],
       },
       {
         title: tx('delete'),
@@ -230,15 +234,15 @@ export function getKeybindings(
       },
       {
         title: tx('save'),
-        keyBindings: [[ctrl, 's']],
+        keyBindings: [[ctrl, 'S']],
       },
       {
         title: tx('unsave'),
-        keyBindings: [[ctrl, 'Shift', 's']],
+        keyBindings: [[ctrl, 'Shift', 'S']],
       },
       {
         title: tx('react'),
-        keyBindings: [[ctrl, 'r']],
+        keyBindings: [[ctrl, 'R']],
       },
     ].map(Shortcut),
   ]
