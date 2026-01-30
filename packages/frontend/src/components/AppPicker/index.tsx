@@ -67,7 +67,7 @@ const getJsonFromBase64 = (base64: string): any => {
 }
 
 type Props = {
-  onAppSelected: (app: AppInfo) => void
+  onAppSelected: (app: AppInfo) => Promise<void>
 }
 
 export function AppPicker({ onAppSelected }: Props) {
@@ -201,9 +201,12 @@ export function AppPicker({ onAppSelected }: Props) {
   const AppInfoOverlay = (props: {
     app: AppInfo
     setSelectedAppInfo: (app: AppInfo | null) => void
-    onSelect: (app: AppInfo) => void
+    onSelect: (app: AppInfo) => Promise<void>
   }) => {
     const { app, setSelectedAppInfo, onSelect } = props
+
+    const [isDownloading, setIsDownloading] = useState(false)
+
     const onClose = () => {
       setSelectedAppInfo(null)
     }
@@ -237,13 +240,25 @@ export function AppPicker({ onAppSelected }: Props) {
           </DialogContent>
           <DialogFooter>
             <FooterActions>
-              <FooterActionButton
-                data-testid='add-app-to-chat'
-                onClick={() => onSelect(app)}
-                styling='primary'
-              >
-                {tx('add_to_chat')}
-              </FooterActionButton>
+              {!isDownloading && (
+                <FooterActionButton
+                  data-testid='add-app-to-chat'
+                  onClick={() => {
+                    setIsDownloading(true)
+                    onSelect(app).finally(() => setIsDownloading(false))
+                  }}
+                  styling='primary'
+                >
+                  {tx('add_to_chat')}
+                </FooterActionButton>
+              )}
+              <div role='status'>
+                {isDownloading && (
+                  <div className={styles.appDownloadingStatus}>
+                    {tx('downloading')}
+                  </div>
+                )}
+              </div>
             </FooterActions>
           </DialogFooter>
         </DialogBody>
