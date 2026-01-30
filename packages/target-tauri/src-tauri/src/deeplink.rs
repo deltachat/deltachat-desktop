@@ -1,4 +1,4 @@
-use std::{env::current_dir, path::PathBuf, str::FromStr};
+use std::{env::current_dir, path::PathBuf};
 
 use anyhow::{bail, Context};
 use base64::Engine;
@@ -102,13 +102,13 @@ pub async fn handle_deep_link(
     }
 
     if deeplink_or_xdc.ends_with(".xdc") {
-        let mut path = if potential_scheme == Some("file".to_owned()) {
+        let mut path = if potential_scheme.as_deref() == Some("file") {
             let path = deeplink_or_xdc
                 .strip_prefix("file://")
                 .context("failed to remove file scheme prefix from {deeplink_or_xdc}")?;
-            PathBuf::from_str(path)?
+            PathBuf::from(path)
         } else {
-            PathBuf::from_str(&deeplink_or_xdc)?
+            PathBuf::from(&deeplink_or_xdc)
         };
         if !path.is_absolute() {
             path = alternative_cwd

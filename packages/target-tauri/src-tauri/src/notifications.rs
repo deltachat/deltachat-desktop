@@ -1,4 +1,4 @@
-use std::{collections::HashMap, path::PathBuf, str::FromStr};
+use std::{collections::HashMap, path::PathBuf};
 
 use serde::{Deserialize, Serialize};
 use tauri::{path::SafePathBuf, Runtime, State};
@@ -129,10 +129,9 @@ pub(crate) async fn show_notification(
                         Ok(tmp_file) => {
                             // IDEA: on non macos set icon of webxdc instead?
                             if cfg!(target_os = "windows") {
-                                notification = notification.set_icon(PathBuf::from_str(&tmp_file)?);
+                                notification = notification.set_icon(PathBuf::from(&tmp_file));
                             } else {
-                                notification =
-                                    notification.set_image(PathBuf::from_str(&tmp_file)?);
+                                notification = notification.set_image(PathBuf::from(&tmp_file));
                             }
                             temp_file_to_clean_up.replace(tmp_file);
                         }
@@ -144,10 +143,10 @@ pub(crate) async fn show_notification(
             }
         } else if cfg!(target_os = "windows") && icon_is_avatar {
             notification = notification
-                .set_icon(PathBuf::from_str(&icon)?)
+                .set_icon(PathBuf::from(icon))
                 .set_icon_round_crop(true);
         } else {
-            notification = notification.set_image(PathBuf::from_str(&icon)?);
+            notification = notification.set_image(PathBuf::from(icon));
         };
     }
 
@@ -159,7 +158,7 @@ pub(crate) async fn show_notification(
     if let Some(tmp_file) = temp_file_to_clean_up {
         remove_temp_file(
             app_clone.clone(),
-            SafePathBuf::from_str(&tmp_file).map_err(|_| Error::FailedToDeleteTmpFile)?,
+            SafePathBuf::new(tmp_file.into()).map_err(|_| Error::FailedToDeleteTmpFile)?,
         )
         .await
         .map_err(|_| Error::FailedToDeleteTmpFile)?;
