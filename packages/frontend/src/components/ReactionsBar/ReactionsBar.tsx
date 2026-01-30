@@ -11,6 +11,10 @@ import styles from './styles.module.scss'
 import type { BaseEmoji } from 'emoji-mart/index'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { getLogger } from '@deltachat-desktop/shared/logger'
+import {
+  RovingTabindexProvider,
+  useRovingTabindex,
+} from '../../contexts/RovingTabindex'
 
 const log = getLogger('ReactionsBar')
 
@@ -87,51 +91,90 @@ export default function ReactionsBar({
           ref={reactionsBarRef}
           className={styles.reactionsBar}
         >
-          {DEFAULT_EMOJIS.map(emoji => {
-            const isChecked = myReaction === emoji
-            return (
-              <button
-                type='button'
-                role='menuitemradio'
-                aria-checked={isChecked}
-                onClick={() => toggleReaction(emoji)}
-                className={classNames(styles.reactionsBarButton, {
-                  [styles.isFromSelf]: isChecked,
-                })}
-              >
-                <span className={styles.reactionsBarEmoji}>{emoji}</span>
-              </button>
-            )
-          })}
-          {myReaction && !isMyReactionDefault && (
-            <button
-              type='button'
-              role='menuitemradio'
-              aria-checked={true}
-              onClick={() => toggleReaction(myReaction!)}
-              className={classNames(
-                styles.reactionsBarButton,
-                styles.isFromSelf
-              )}
-            >
-              <span className={styles.reactionsBarEmoji}>{myReaction}</span>
-            </button>
-          )}
-          <button
-            type='button'
-            role='menuitem'
-            aria-haspopup='dialog'
-            aria-label={tx('react_more_emojis')}
-            className={classNames(
-              styles.reactionsBarButton,
-              styles.showAllEmojis
-            )}
-            onClick={handleShowAllEmojis}
+          <RovingTabindexProvider
+            wrapperElementRef={reactionsBarRef}
+            direction='horizontal'
           >
-            <Icon className={styles.showAllIcon} icon='more' />
-          </button>
+            {DEFAULT_EMOJIS.map(emoji => {
+              return (
+                <ReactionButton
+                  emoji={emoji}
+                  isChecked={myReaction === emoji}
+                  onClick={() => toggleReaction(emoji)}
+                />
+              )
+            })}
+
+            {myReaction && !isMyReactionDefault && (
+              <ReactionButton
+                emoji={myReaction}
+                isChecked={true}
+                onClick={() => toggleReaction(myReaction)}
+              />
+            )}
+            <MoreEmojisButton onClick={handleShowAllEmojis} />
+          </RovingTabindexProvider>
         </div>
       )}
     </>
+  )
+}
+
+function ReactionButton(props: {
+  emoji: string
+  isChecked: boolean
+  onClick: () => void
+}) {
+  const ref = useRef<HTMLButtonElement>(null)
+  const rovingTabindex = useRovingTabindex(ref)
+
+  return (
+    <button
+      ref={ref}
+      type='button'
+      role='menuitemradio'
+      aria-checked={props.isChecked}
+      onClick={props.onClick}
+      className={classNames(
+        styles.reactionsBarButton,
+        rovingTabindex.className,
+        {
+          [styles.isFromSelf]: props.isChecked,
+        }
+      )}
+      tabIndex={rovingTabindex.tabIndex}
+      onKeyDown={rovingTabindex.onKeydown}
+      onFocus={rovingTabindex.setAsActiveElement}
+    >
+      <span className={styles.reactionsBarEmoji}>{props.emoji}</span>
+    </button>
+  )
+}
+function MoreEmojisButton(props: {
+  onClick: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+}) {
+  const ref = useRef<HTMLButtonElement>(null)
+  const tx = useTranslationFunction()
+  const rovingTabindex = useRovingTabindex(ref)
+
+  return (
+    <button
+      ref={ref}
+      type='button'
+      role='menuitem'
+      aria-haspopup='dialog'
+      aria-label={tx('react_more_emojis')}
+      className={classNames(
+        styles.reactionsBarButton,
+        styles.showAllEmojis,
+        rovingTabindex.className
+      )}
+      onClick={props.onClick}
+      tabIndex={rovingTabindex.tabIndex}
+      onKeyDown={rovingTabindex.onKeydown}
+      onFocus={rovingTabindex.setAsActiveElement}
+    >
+      <Icon className={styles.showAllIcon} icon='more' />
+    </button>
   )
 }
