@@ -87,14 +87,13 @@ export default function ReactionsBar({
           ref={reactionsBarRef}
           className={styles.reactionsBar}
         >
-          {DEFAULT_EMOJIS.map((emoji, index) => {
+          {DEFAULT_EMOJIS.map(emoji => {
             const isChecked = myReaction === emoji
             return (
               <button
                 type='button'
                 role='menuitemradio'
                 aria-checked={isChecked}
-                key={`emoji-${index}`}
                 onClick={() => toggleReaction(emoji)}
                 className={classNames(styles.reactionsBarButton, {
                   [styles.isFromSelf]: isChecked,

@@ -66,9 +66,8 @@ const DisplayedStickerPack = ({
           wrapperElementRef={listRef}
           direction='horizontal'
         >
-          {stickerPackImages.map((filePath, index) => (
+          {stickerPackImages.map(filePath => (
             <StickersListItem
-              key={index}
               filePath={filePath}
               onClick={() => onClickSticker(filePath)}
             />
