@@ -234,7 +234,14 @@ test('React to a message', async () => {
   const chatList = page.getByLabel('Chats').getByRole('tablist')
   await expect(chatList).not.toContainText('You reacted')
   await page.getByRole('menuitemradio', { name: '❤️' }).click()
+
   await expect(chatList).toContainText('You reacted ❤️ to "Hello')
+  await someMessage.click()
+  await page.keyboard.press('ControlOrMeta+R')
+  await expect(page.getByRole('menuitemradio', { name: '❤️' })).toBeChecked()
+
+  await page.getByRole('menuitemradio', { name: '❤️' }).click()
+  await expect(chatList).not.toContainText('You reacted')
 })
 
 /**
