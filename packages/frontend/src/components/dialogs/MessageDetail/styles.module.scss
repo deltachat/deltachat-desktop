@@ -44,3 +44,55 @@
 .Date {
   color: var(--MessageDetails-ReadReceipt-Date);
 }
+
+// New formatted message info styles
+.FormattedMessageInfo {
+  margin: 10px;
+  font-family: monospace;
+  font-size: 0.95em;
+  padding: 5px 20px;
+}
+
+.InfoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 2px 0;
+}
+
+.InfoLabel {
+  min-width: 200px;
+  flex-shrink: 0;
+}
+
+.InfoValue {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.ReadByHeader {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.ReadReceiptFormatted {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.ReadReceiptLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.ContactName {
+  font-weight: normal;
+}

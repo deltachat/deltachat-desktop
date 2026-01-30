@@ -3,11 +3,19 @@ import moment from 'moment'
 
 import { selectedAccountId } from '../../../ScreenController'
 import { BackendRemote } from '../../../backend-com'
-import { DialogBody, DialogContent, DialogWithHeader } from '../../Dialog'
+import Dialog, {
+  DialogBody,
+  DialogContent,
+  DialogWithHeader,
+  DialogHeader,
+} from '../../Dialog'
 import Callout from '../../Callout'
 
 import type { DialogProps } from '../../../contexts/DialogContext'
-import { ReadReceiptsList } from './ReadReceipts'
+import { ReadReceiptsList, FormattedMessageInfo } from './ReadReceipts'
+import type { T } from '@deltachat/jsonrpc-client'
+import { ContextMenuContext } from '../../../contexts/ContextMenuContext'
+import { mouseEventToPosition } from '../../../utils/mouseEventToPosition'
 
 type MessageInfoProps = {
   messageId: number
@@ -18,19 +26,26 @@ class MessageInfo extends React.Component<
   {
     loading: boolean
     content?: string
+    message?: T.Message
     receivedAt?: number
     sentAt?: number
     isEdited?: boolean
+    showTechnicalDetails: boolean
   }
 > {
+  static contextType = ContextMenuContext
+  declare context: React.ContextType<typeof ContextMenuContext>
+
   constructor(props: MessageInfoProps) {
     super(props)
     this.state = {
       loading: true,
       content: undefined,
+      message: undefined,
       receivedAt: undefined,
       sentAt: undefined,
       isEdited: false,
+      showTechnicalDetails: false,
     }
   }
 
@@ -52,6 +67,7 @@ class MessageInfo extends React.Component<
     this.setState({
       loading: false,
       content: info,
+      message,
       sentAt: (message?.timestamp || 0) * 1000,
       receivedAt: (message?.receivedTimestamp || 0) * 1000,
       isEdited: message?.isEdited,
@@ -60,53 +76,52 @@ class MessageInfo extends React.Component<
   }
 
   render() {
-    const { receivedAt, sentAt, content, isEdited } = this.state
-    const tx = window.static_translate
+    const { message, content, showTechnicalDetails } = this.state
 
     return (
       <div className='module-message-detail'>
         <br />
-        <ReadReceiptsList messageId={this.props.messageId} />
-        <Callout>
-          <p>{content}</p>
-        </Callout>
-        <br />
-        <DialogContent>
-          <table className='module-message-detail__info'>
-            <tbody>
-              <tr>
-                <td className='module-message-detail__label'>
-                  {tx('message_detail_sent_desktop')}
-                </td>
-                <td>{moment(sentAt).format('LLLL')}</td>
-              </tr>
-              {receivedAt ? (
-                <tr>
-                  <td className='module-message-detail__label'>
-                    {tx('message_detail_received_desktop')}
-                  </td>
-                  <td>{moment(receivedAt).format('LLLL')}</td>
-                </tr>
-              ) : null}
-              {this.props.messageId && (
-                <tr>
-                  <td className='module-message-detail__label'>messageId</td>
-                  <td>{this.props.messageId}</td>
-                </tr>
-              )}
-              {isEdited && (
-                <tr>
-                  <td className='module-message-detail__label'>
-                    {tx('edited')}
-                  </td>
-                  <td>{tx('yes')}</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </DialogContent>
+        {message && content && (
+          <FormattedMessageInfo
+            message={message}
+            info={content}
+            messageId={this.props.messageId}
+          />
+        )}
+        {showTechnicalDetails && (
+          <DialogWithHeader
+            title='Technical Details'
+            onClose={() => this.setState({ showTechnicalDetails: false })}
+          >
+            <DialogBody>
+              <Callout>
+                <p style={{ whiteSpace: 'pre-wrap' }}>{content}</p>
+              </Callout>
+            </DialogBody>
+          </DialogWithHeader>
+        )}
       </div>
     )
+  }
+
+  showContextMenu = (
+    event: React.MouseEvent<
+      HTMLDivElement | HTMLAnchorElement | HTMLLIElement,
+      MouseEvent
+    >
+  ) => {
+    const tx = window.static_translate
+    const items = [
+      {
+        label: tx('developer'),
+        action: () => this.setState({ showTechnicalDetails: true }),
+      },
+    ]
+
+    this.context.openContextMenu({
+      ...mouseEventToPosition(event),
+      items,
+    })
   }
 }
 
@@ -119,14 +134,30 @@ export default function MessageDetail(
   const isOpen = !!id
   const tx = window.static_translate
 
+  const messageInfoRef = React.useRef<MessageInfo>(null)
+
   let body = <div />
   if (isOpen) {
-    body = <MessageInfo messageId={id} />
+    body = <MessageInfo ref={messageInfoRef} messageId={id} />
+  }
+
+  const showContextMenu = (
+    event: React.MouseEvent<
+      HTMLDivElement | HTMLAnchorElement | HTMLLIElement,
+      MouseEvent
+    >
+  ) => {
+    messageInfoRef.current?.showContextMenu(event)
   }
 
   return (
-    <DialogWithHeader title={tx('menu_message_details')} onClose={onClose}>
+    <Dialog onClose={onClose}>
+      <DialogHeader
+        title={tx('menu_message_details')}
+        onClose={onClose}
+        onContextMenuClick={isOpen ? showContextMenu : undefined}
+      />
       <DialogBody>{body}</DialogBody>
-    </DialogWithHeader>
+    </Dialog>
   )
 }
