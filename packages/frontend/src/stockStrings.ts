@@ -16,6 +16,10 @@ export async function updateCoreStrings() {
 
   type StockStringsSomeOmited = Omit<
     StockStrings,
+    // These are apparently somewhat deprecated.
+    // We don't seem to have strings for them in Transifex
+    // and on Android we also don't set translations for them:
+    // https://github.com/deltachat/deltachat-android/blob/f6756fc34be62aa5064c92cdd9242a6f1d622f38/src/main/java/org/thoughtcrime/securesms/connect/DcHelper.java#L115-L226
     | typeof C.DC_STR_ENCR_NONE
     | typeof C.DC_STR_MSGLOCATIONENABLED
     | typeof C.DC_STR_MSGLOCATIONDISABLED
@@ -28,7 +32,6 @@ export async function updateCoreStrings() {
     | typeof C.DC_STR_E2E_AVAILABLE
   >
   const strings: StockStringsSomeOmited = {
-    // TODO: Check if we need the uncommented core translations
     [C.DC_STR_NOMESSAGES]: tx('chat_no_messages'),
     [C.DC_STR_SELF]: tx('self'),
     [C.DC_STR_DRAFT]: tx('draft'),
@@ -38,9 +41,6 @@ export async function updateCoreStrings() {
     [C.DC_STR_VIDEO]: tx('video'),
     [C.DC_STR_AUDIO]: tx('audio'),
     [C.DC_STR_FILE]: tx('file'),
-    // [C.DC_STR_E2E_AVAILABLE]: tx('DC_STR_E2E_AVAILABLE'),
-    // [C.DC_STR_ENCR_TRANSP]: tx('DC_STR_ENCR_TRANSP'),
-    // [C.DC_STR_ENCR_NONE]: tx('DC_STR_ENCR_NONE'),
     [C.DC_STR_FINGERPRINTS]: tx('qrscan_fingerprint_label'),
     [C.DC_STR_ARCHIVEDCHATS]: tx('chat_archived_chats_title'),
     [C.DC_STR_CANNOT_LOGIN]: tx('login_error_cannot_login'),
@@ -55,18 +55,12 @@ export async function updateCoreStrings() {
     [C.DC_STR_CONFIGURATION_FAILED]: tx('configuration_failed_with_error'),
     [C.DC_STR_REPLY_NOUN]: tx('reply_noun'),
     [C.DC_STR_FORWARDED]: tx('forwarded'),
-    //[C.DC_STR_MSGLOCATIONENABLED]: tx(''),
-    //[C.DC_STR_MSGLOCATIONDISABLED]: tx(''),
     [C.DC_STR_LOCATION]: tx('location'),
     [C.DC_STR_STICKER]: tx('sticker'),
     [C.DC_STR_BAD_TIME_MSG_BODY]: tx('devicemsg_bad_time'),
     [C.DC_STR_UPDATE_REMINDER_MSG_BODY]: tx('devicemsg_update_reminder'),
-    //[C.DC_STR_ERROR_NO_NETWORK]: tx(''),
     [C.DC_STR_SELF_DELETED_MSG_BODY]: tx('devicemsg_self_deleted'),
-    //[C.DC_STR_SERVER_TURNED_OFF]: tx(''),
     [C.DC_STR_QUOTA_EXCEEDING_MSG_BODY]: tx('devicemsg_storage_exceeding'),
-    //[C.DC_STR_SYNC_MSG_SUBJECT]: tx(''),
-    //[C.DC_STR_SYNC_MSG_BODY]: tx(''),
     [C.DC_STR_INCOMING_MESSAGES]: tx('incoming_messages'),
     [C.DC_STR_OUTGOING_MESSAGES]: tx('outgoing_messages'),
     [C.DC_STR_CONNECTED]: tx('connectivity_connected'),
