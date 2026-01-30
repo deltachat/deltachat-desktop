@@ -16,7 +16,6 @@ export async function updateCoreStrings() {
 
   type StockStringsSomeOmited = Omit<
     StockStrings,
-    | typeof C.DC_STR_E2E_AVAILABLE
     | typeof C.DC_STR_ENCR_NONE
     | typeof C.DC_STR_MSGLOCATIONENABLED
     | typeof C.DC_STR_MSGLOCATIONDISABLED
@@ -26,8 +25,7 @@ export async function updateCoreStrings() {
 
     // Deprecated, see
     // https://github.com/chatmail/core/blob/main/deltachat-ffi/deltachat.h
-    | typeof C.DC_STR_SECURE_JOIN_CHANNEL_QR_DESC
-    | typeof C.DC_STR_SECUREJOIN_WAIT
+    | typeof C.DC_STR_E2E_AVAILABLE
   >
   const strings: StockStringsSomeOmited = {
     // TODO: Check if we need the uncommented core translations
@@ -82,6 +80,7 @@ export async function updateCoreStrings() {
     [C.DC_STR_BROADCAST_LIST]: tx('channel'),
     [C.DC_STR_PART_OF_TOTAL_USED]: tx('part_of_total_used'),
     [C.DC_STR_SECURE_JOIN_STARTED]: tx('secure_join_started'),
+    [C.DC_STR_SECUREJOIN_WAIT]: tx('secure_join_wait'),
     [C.DC_STR_SECURE_JOIN_REPLIES]: tx('secure_join_replies'),
     [C.DC_STR_SETUP_CONTACT_QR_DESC]: tx('qrshow_join_contact_hint'),
     [C.DC_STR_SECURE_JOIN_GROUP_QR_DESC]: tx('qrshow_join_group_hint'),
@@ -175,6 +174,7 @@ export async function updateCoreStrings() {
     [C.DC_STR_MISSED_CALL]: tx('missed_call'),
     [C.DC_STR_OUTGOING_CALL]: tx('outgoing_call'),
     [C.DC_STR_CHAT_UNENCRYPTED_EXPLANATON]: tx('chat_unencrypted_explanation'),
+    [C.DC_STR_SECURE_JOIN_CHANNEL_QR_DESC]: tx('qrshow_join_channel_hint'),
     [C.DC_STR_MSG_YOU_JOINED_CHANNEL]: tx('you_joined_the_channel'),
     [C.DC_STR_REMOVE_MEMBER]: tx('remove_member_by_you'),
     [C.DC_STR_SECURE_JOIN_CHANNEL_STARTED]: tx('secure_join_channel_started'),
