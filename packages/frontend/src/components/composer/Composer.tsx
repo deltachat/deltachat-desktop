@@ -447,9 +447,9 @@ const Composer = forwardRef<
           appInfo.cache_relname,
           response.blob
         )
+        setShowAppPicker(false)
         await addFileToDraft(path, appInfo.cache_relname, 'File')
         await runtime.removeTempFile(path)
-        setShowAppPicker(false)
       }
 
   // Paste file functionality
