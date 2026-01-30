@@ -60,7 +60,7 @@ function EditAccountInner(onClose: DialogProps['onClose'], addr?: string) {
   const { openDialog } = useDialog()
   const tx = useTranslationFunction()
 
-  const loadSettings = async () => {
+  const loadSettings = useCallback(async () => {
     if (window.__selectedAccountId === undefined) {
       throw new Error('can not load settings when no account is selected')
     }
@@ -81,11 +81,11 @@ function EditAccountInner(onClose: DialogProps['onClose'], addr?: string) {
 
     setInitialAccountSettings(accountSettings)
     setAccountSettings(accountSettings)
-  }
+  }, [addr])
 
   useEffect(() => {
     loadSettings()
-  }, [])
+  }, [loadSettings])
 
   const onUpdate = useCallback(async () => {
     const onSuccess = () => onClose()
