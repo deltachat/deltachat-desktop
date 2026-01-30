@@ -34,7 +34,7 @@ export default function EditProfileDialog({ onClose, ...props }: Props) {
   return (
     <Dialog canOutsideClickClose={false} onClose={onClose}>
       <DialogHeader title={tx('pref_profile_info_headline')} />
-      {EditProfileDialogInner({ onClose, ...props })}
+      <EditProfileDialogInner onClose={onClose} {...props} />
     </Dialog>
   )
 }

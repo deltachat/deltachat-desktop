@@ -18,7 +18,7 @@ export default function ConnectivityDialog({ onClose }: DialogProps) {
   return (
     <Dialog onClose={onClose} canOutsideClickClose={true}>
       <DialogHeader title={tx('connectivity')} onClose={onClose} />
-      {ConnectivityDialogInner()}
+      <ConnectivityDialogInner />
     </Dialog>
   )
 }

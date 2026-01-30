@@ -45,12 +45,18 @@ export default function EditAccountAndPasswordDialog({
           isChatmail ? tx('edit_transport') : tx('manual_account_setup_option')
         }
       />
-      {EditAccountInner(onClose, addr)}
+      <EditAccountInner {...{ onClose, addr }} />
     </Dialog>
   )
 }
 
-function EditAccountInner(onClose: DialogProps['onClose'], addr?: string) {
+function EditAccountInner({
+  onClose,
+  addr,
+}: {
+  onClose: DialogProps['onClose']
+  addr?: string
+}) {
   const [initialSettings, setInitialAccountSettings] =
     useState<Credentials>(defaultCredentials())
 
