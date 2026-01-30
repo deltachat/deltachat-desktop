@@ -130,6 +130,13 @@
   line-height: 20px;
 }
 
+.appDownloadingStatus {
+  // Simply copy-pasted from `.footerActionButton` to preserve height.
+  min-width: 100px;
+  padding: 8px 12px;
+  margin: 10px 0;
+}
+
 .appName {
   font-size: 16px;
   font-weight: bold;
