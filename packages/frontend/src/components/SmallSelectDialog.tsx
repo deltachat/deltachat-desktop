@@ -59,11 +59,9 @@ export default function SmallSelectDialog({
             selectedValue={selectedValue}
             name='small-dialog-value'
           >
-            {values.map((element, index) => {
+            {values.map(element => {
               const [value, label] = element
-              return (
-                <Radio key={'select-' + index} label={label} value={value} />
-              )
+              return <Radio label={label} value={value} />
             })}
           </RadioGroup>
         </DialogContent>

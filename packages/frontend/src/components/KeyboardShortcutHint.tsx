@@ -79,13 +79,8 @@ export function ShortcutGroup({ title, keyBindings }: ShortcutAction) {
   const non_empty = keyBindings.filter(
     e => typeof e !== 'boolean'
   ) as string[][]
-  const bindings = non_empty.map((elements, index) => {
-    return (
-      <KeyboardShortcut
-        elements={elements}
-        key={`${index}-${elements.length}`}
-      />
-    )
+  const bindings = non_empty.map(elements => {
+    return <KeyboardShortcut elements={elements} />
   })
 
   return (

@@ -404,7 +404,6 @@ export default function ProxyConfiguration(
           <div className={styles.proxyList} role='radiogroup'>
             {proxyState.proxies.map((proxyUrl, index) => (
               <ProxyItemRow
-                key={index}
                 proxyUrl={proxyUrl}
                 index={index}
                 isActive={proxyUrl === proxyState.activeProxy}
