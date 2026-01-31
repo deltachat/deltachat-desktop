@@ -16,7 +16,7 @@ import {
   ImageAttachment,
   VideoAttachment,
   WebxdcAttachment,
-} from './attachment/mediaAttachment'
+} from './attachment/galleryAttachment'
 import { getLogger } from '../../../shared/logger'
 import { BackendRemote, onDCEvent, Type } from '../backend-com'
 import { selectedAccountId } from '../ScreenController'
