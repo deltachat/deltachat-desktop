@@ -255,7 +255,10 @@ function openVideoCallWindow<D extends CallDirection>(
           { type: 'separator' },
           { role: 'togglefullscreen' },
           { type: 'separator' },
-          { role: 'toggleDevTools' },
+          {
+            label: tx('global_menu_view_developer_desktop'),
+            submenu: [{ role: 'toggleDevTools' }],
+          },
         ],
       },
     ])
