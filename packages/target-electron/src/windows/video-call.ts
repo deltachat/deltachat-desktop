@@ -249,15 +249,16 @@ function openVideoCallWindow<D extends CallDirection>(
       {
         label: tx('global_menu_view_desktop'),
         submenu: [
-          { role: 'toggleDevTools' },
-
-          { type: 'separator' },
-          { role: 'resetZoom' },
           { role: 'zoomIn' },
           { role: 'zoomOut' },
+          { role: 'resetZoom' },
           { type: 'separator' },
-
           { role: 'togglefullscreen' },
+          { type: 'separator' },
+          {
+            label: tx('global_menu_view_developer_desktop'),
+            submenu: [{ role: 'toggleDevTools' }],
+          },
         ],
       },
     ])
