@@ -2,19 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { DesktopSettingsType } from '../../../shared/shared-types'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 
-const keySymbols: { [key: string]: string } = {
-  Control: '^',
-  Shift: '⇧',
-  Alt: '⌥',
-  Meta: '⌘',
-  Enter: '↵',
-  ArrowDown: '↓',
-  ArrowUp: '↑',
-}
-
-const showOnlySymbolOn = ['ArrowDown', 'ArrowUp']
-
 function getLabel(keyboardKey: string) {
+  if (['ArrowUp', 'ArrowDown'].includes(keyboardKey)) {
+    switch (keyboardKey) {
+      case 'ArrowUp':
+        return '↑'
+      case 'ArrowDown':
+        return '↓'
+    }
+  }
   if (runtime.getRuntimeInfo().isMac) {
     switch (keyboardKey) {
       case 'Alt':
@@ -37,6 +33,7 @@ function getLabel(keyboardKey: string) {
 
 function Key({ keyboardKey }: { keyboardKey: string }) {
   const [pressed, setPressed] = useState(false)
+  const isSymbol = keyboardKey === 'ArrowUp' || keyboardKey === 'ArrowDown'
 
   useEffect(() => {
     const onKeyDown = (ev: KeyboardEvent) => {
@@ -57,16 +54,9 @@ function Key({ keyboardKey }: { keyboardKey: string }) {
     }
   }, [keyboardKey])
 
-  const shouldHideLabel = showOnlySymbolOn.indexOf(keyboardKey) !== -1
+  const className = `key${pressed ? ' pressed' : ''}${isSymbol ? ' isSymbol' : ''}`
 
-  return (
-    <kbd className={pressed ? 'key pressed' : 'key'}>
-      {shouldHideLabel || getLabel(keyboardKey)}
-      {keySymbols[keyboardKey]
-        ? (shouldHideLabel ? '' : ' ') + keySymbols[keyboardKey]
-        : ''}
-    </kbd>
-  )
+  return <kbd className={className}>{getLabel(keyboardKey)}</kbd>
 }
 
 export type ShortcutAction = {
@@ -79,11 +69,6 @@ export function KeyboardShortcut({ elements }: { elements: string[] }) {
 
   for (const element of elements) {
     bindingElements.push(<Key key={element} keyboardKey={element} />)
-    bindingElements.push(' + ')
-  }
-
-  if (bindingElements.length !== 0) {
-    bindingElements.pop()
   }
 
   return <div className='keybinding'>{bindingElements}</div>
@@ -104,9 +89,9 @@ export function ShortcutGroup({ title, keyBindings }: ShortcutAction) {
   })
 
   return (
-    <div className='action'>
-      <div className='heading'>{title}</div>
-      {bindings}
+    <div className='shortcut-item'>
+      <div className='shortcut-title'>{title}</div>
+      <div className='shortcut-bindings'>{bindings}</div>
     </div>
   )
 }
@@ -154,9 +139,6 @@ export type CheatSheetEntryType =
   | { title: string; type: 'header' }
   | { action: ShortcutAction; type: 'shortcut' }
 
-// function Title(title: string): CheatSheetEntryType {
-//   return { title, type: 'header' }
-// }
 function Shortcut(action: ShortcutAction): CheatSheetEntryType {
   return { action, type: 'shortcut' }
 }
@@ -167,24 +149,40 @@ export function getKeybindings(
   const { isMac } = runtime.getRuntimeInfo()
   const tx = window.static_translate
 
+  const ctrl = isMac ? 'Meta' : 'Control'
+
   return [
-    ...enterKeySendsKeyboardShortcuts(settings['enterKeySends']).map(Shortcut),
+    {
+      title: tx('navigation_shortcut_section'),
+      type: 'header',
+    } as CheatSheetEntryType,
     ...[
       {
-        title: tx('scroll_messages'),
-        keyBindings: [['PageUp'], ['PageDown']],
+        title: tx('menu_new_chat'),
+        keyBindings: [[ctrl, 'N']],
       },
       {
         title: tx('focus_search_input'),
-        keyBindings: [[isMac ? 'Meta' : 'Control', 'F']],
+        keyBindings: [[ctrl, 'F']],
       },
       {
         title: tx('search_in_chat'),
-        keyBindings: [[isMac ? 'Meta' : 'Control', 'Shift', 'F']],
+        keyBindings: [[ctrl, 'Shift', 'F']],
       },
       {
-        title: tx('menu_new_chat'),
-        keyBindings: [[isMac ? 'Meta' : 'Control', 'N']],
+        title: tx('switch_between_chats'),
+        keyBindings: [
+          ['Alt', 'ArrowUp'],
+          ['Alt', 'ArrowDown'],
+          ['Control', 'PageUp'],
+          ['Control', 'PageDown'],
+          ['Control', 'Tab'],
+          ['Control', 'Shift', 'Tab'],
+        ],
+      },
+      {
+        title: tx('scroll_messages'),
+        keyBindings: [['PageUp'], ['PageDown']],
       },
       {
         title: tx('focus_message_input'),
@@ -202,24 +200,49 @@ export function getKeybindings(
         title: tx('force_refresh_network'),
         keyBindings: [['F5']],
       },
-      {
-        title: tx('switch_between_chats'),
-        keyBindings: [
-          ['Alt', 'ArrowUp'],
-          ['Alt', 'ArrowDown'],
-          ['Control', 'PageUp'],
-          ['Control', 'PageDown'],
-          ['Control', 'Tab'],
-          ['Control', 'Shift', 'Tab'],
-        ],
-      },
+    ].map(Shortcut),
+    {
+      title: tx('message_input_shortcut_section'),
+      type: 'header',
+    } as CheatSheetEntryType,
+    ...enterKeySendsKeyboardShortcuts(settings['enterKeySends']).map(Shortcut),
+    ...[
       {
         title: tx('menu_reply'),
         keyBindings: [
           ['Control', 'ArrowUp'],
           ['Control', 'ArrowDown'],
-          ['Esc'],
         ],
+      },
+      {
+        title: tx('global_menu_edit_desktop'),
+        keyBindings: [['ArrowUp']],
+      },
+    ].map(Shortcut),
+    {
+      title: tx('message_selected_shortcut_section'),
+      type: 'header',
+    } as CheatSheetEntryType,
+    ...[
+      {
+        title: tx('global_menu_edit_desktop'),
+        keyBindings: [[ctrl, 'E']],
+      },
+      {
+        title: tx('delete'),
+        keyBindings: [['Delete']],
+      },
+      {
+        title: tx('save'),
+        keyBindings: [[ctrl, 'S']],
+      },
+      {
+        title: tx('unsave'),
+        keyBindings: [[ctrl, 'Shift', 'S']],
+      },
+      {
+        title: tx('react'),
+        keyBindings: [[ctrl, 'R']],
       },
     ].map(Shortcut),
   ]

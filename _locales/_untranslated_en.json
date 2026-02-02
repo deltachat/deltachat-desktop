@@ -88,5 +88,14 @@
   },
   "stats_msg_body": {
     "message": "The attachment contains anonymous usage statistics, which help us improve Delta Chat. Thank you!"
+  },
+  "navigation_shortcut_section": {
+    "message": "Navigation"
+  },
+  "message_input_shortcut_section": {
+    "message": "Message Input"
+  },
+  "message_selected_shortcut_section": {
+    "message": "Selected Message"
   }
 }
