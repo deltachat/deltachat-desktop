@@ -131,7 +131,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
       canEscapeKeyClose={true}
       canOutsideClickClose={false}
       onClose={cancel}
-      width={680}
+      width={500}
     >
       <DialogHeader title={tx('multidevice_title')} />
       {!inProgress && (
@@ -161,6 +161,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
           <DialogBody>
             <DialogContent>
               <SendBackup>
+                {stage !== 'transferring' && <SendBackupSteps />}
                 <SendBackupMain>
                   {stage === 'awaiting_scan' && svgUrl && qrContent && (
                     <img className={styles.qrCode} src={svgUrl} />
@@ -178,7 +179,6 @@ export function SendBackupDialog({ onClose }: DialogProps) {
                     )}
                   </SendBackupMainProgress>
                 </SendBackupMain>
-                {stage !== 'transferring' && <SendBackupSteps />}
               </SendBackup>
               {error}
             </DialogContent>
