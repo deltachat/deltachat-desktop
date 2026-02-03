@@ -167,7 +167,7 @@ export default function MenuAttachment({
     },
     { type: 'separator' },
     {
-      icon: 'image',
+      icon: 'image_outline',
       label: tx('image'),
       action: addFilenameMedia.bind(null),
     },
