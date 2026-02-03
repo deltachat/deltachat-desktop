@@ -440,7 +440,9 @@ export function ContextMenu(props: {
                 {...(item.subitems && { 'data-expandable-index': index })}
               >
                 {item.icon && <Icon className='left-icon' icon={item.icon} />}
-                {item.label}
+                <span className='menu-item-label'>
+                  {item.label}
+                </span>
                 {item.subitems && <div className='right-icon' />}
               </button>
             )

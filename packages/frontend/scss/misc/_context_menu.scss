@@ -55,25 +55,36 @@
   .item {
     @include mixins.button-reset;
     width: 100%;
-    line-height: 20px;
-    padding: 5px 12px;
+    line-height: 1;
+    padding: 6px 12px;
     white-space: nowrap;
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    gap: 6px;
     &.danger {
       color: var(--colorDanger);
     }
 
     & .left-icon {
       background-color: var(--iconColorPrimary);
-      margin: 0 5px 0 0;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    & .menu-item-label {
+      display: flex;
+      align-items: center;
     }
 
     & .right-icon {
       width: 18px;
       height: 18px;
       margin-inline-start: auto;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
       @include mixins.color-svg(
         './images/icons/navigate_next.svg',
         var(--textPrimary),
