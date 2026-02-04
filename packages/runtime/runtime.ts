@@ -133,7 +133,11 @@ export interface Runtime {
   /**
    * Initiates and conducts the video call fully, from start to end.
    */
-  startOutgoingVideoCall(accountId: number, chatId: number): void
+  startOutgoingVideoCall(
+    accountId: number,
+    chatId: number,
+    cameraEnabled: boolean
+  ): void
 
   // control app
   restartApp(): void

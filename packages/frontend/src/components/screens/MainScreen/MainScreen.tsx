@@ -43,6 +43,7 @@ import asyncThrottle from '@jcoreio/async-throttle'
 import { useFetch, useRpcFetch } from '../../../hooks/useFetch'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { useChatContextMenu } from '../../chat/ChatContextMenu'
+import useContextMenu from '../../../hooks/useContextMenu'
 
 const log = getLogger('MainScreen')
 
@@ -559,17 +560,7 @@ function ChatNavButtons({
         // https://github.com/chatmail/core/blob/738dc5ce197f589131479801db2fbd0fb0964599/src/calls.rs#L147
         chat.chatType === 'Single' &&
         chat.contactIds.some(id => id > C.DC_CONTACT_ID_LAST_SPECIAL) && (
-          <Button
-            aria-label={tx('start_call')}
-            title={tx('start_call')}
-            className='navbar-button'
-            styling='borderless'
-            onClick={() => {
-              runtime.startOutgoingVideoCall(selectedAccountId(), chat.id)
-            }}
-          >
-            <Icon coloring='navbar' icon='phone' size={18} />
-          </Button>
+          <CallButton chat={chat} />
         )}
       <Button
         id='three-dot-menu-button'
@@ -654,5 +645,42 @@ function AppIcons({
         <AppIcon key={app.id} accountId={accountId} app={app} />
       ))}
     </section>
+  )
+}
+
+function CallButton({ chat }: { chat: T.FullChat }) {
+  const tx = useTranslationFunction()
+  const accountId = selectedAccountId()
+
+  const onContextMenu = useContextMenu(
+    [
+      {
+        label: tx('audio_call'),
+        icon: 'phone',
+        action: () => {
+          runtime.startOutgoingVideoCall(accountId, chat.id, false)
+        },
+      },
+      {
+        label: tx('video_call'),
+        icon: 'camera',
+        action: () => {
+          runtime.startOutgoingVideoCall(accountId, chat.id, true)
+        },
+      },
+    ],
+    { 'aria-label': tx('start_call') }
+  )
+
+  return (
+    <Button
+      aria-label={tx('start_call')}
+      title={tx('start_call')}
+      className='navbar-button'
+      styling='borderless'
+      onClick={onContextMenu}
+    >
+      <Icon coloring='navbar' icon='phone' size={18} />
+    </Button>
   )
 }

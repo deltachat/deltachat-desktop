@@ -22,7 +22,11 @@ import { setContentProtection } from '../content-protection'
 
 const log = getLogger('windows/video-call')
 
-export function startOutgoingVideoCall(accountId: number, chatId: number) {
+export function startOutgoingVideoCall(
+  accountId: number,
+  chatId: number,
+  cameraEnabled: boolean
+) {
   log.info('starting outgoing video call', { accountId, chatId })
 
   const { offerPromise, windowClosed, closeWindow } = openVideoCallWindow(
@@ -30,7 +34,7 @@ export function startOutgoingVideoCall(accountId: number, chatId: number) {
     chatId,
     CallDirection.Outgoing,
     {
-      noOutgoingVideoInitially: false,
+      noOutgoingVideoInitially: cameraEnabled === false,
     }
   )
 
