@@ -431,7 +431,10 @@ export default class DCWebxdc {
                   }
                 },
               },
-              { role: 'togglefullscreen' },
+              // electron adds "Toggle Full Screen" to the menu on macOS automatically
+              ...(!isMac
+                ? [{ role: 'togglefullscreen' } as MenuItemConstructorOptions]
+                : []),
               ...(DesktopSettings.state.enableWebxdcDevTools
                 ? [
                     { type: 'separator' } as MenuItemConstructorOptions,
