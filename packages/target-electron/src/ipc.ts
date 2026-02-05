@@ -389,8 +389,13 @@ export async function init(cwd: string, logHandler: LogHandler) {
 
   ipcMain.handle(
     'startOutgoingVideoCall',
-    (_ev, accountId: number, chatId: number, cameraEnabled: boolean) => {
-      startOutgoingVideoCall(accountId, chatId, cameraEnabled)
+    (
+      _ev,
+      accountId: number,
+      chatId: number,
+      param: { startWithCameraEnabled: boolean }
+    ) => {
+      startOutgoingVideoCall(accountId, chatId, param)
     }
   )
   const stopHandlingIncomingVideoCalls = startHandlingIncomingVideoCalls(

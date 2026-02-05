@@ -25,7 +25,7 @@ const log = getLogger('windows/video-call')
 export function startOutgoingVideoCall(
   accountId: number,
   chatId: number,
-  cameraEnabled: boolean
+  param: { startWithCameraEnabled: boolean }
 ) {
   log.info('starting outgoing video call', { accountId, chatId })
 
@@ -34,7 +34,7 @@ export function startOutgoingVideoCall(
     chatId,
     CallDirection.Outgoing,
     {
-      noOutgoingVideoInitially: cameraEnabled === false,
+      noOutgoingVideoInitially: param.startWithCameraEnabled === false,
     }
   )
 
@@ -45,7 +45,7 @@ export function startOutgoingVideoCall(
     if (offer == null) {
       log.info("calls-webapp didn't return an offer, aborting outgoing call")
       // We expect this code path to be taken
-      // only if the window already got closed, but let's be defeinsive.
+      // only if the window already got closed, but let's be defensive.
       closeWindow()
       return
     }
@@ -53,7 +53,7 @@ export function startOutgoingVideoCall(
       accountId,
       chatId,
       offer,
-      false
+      param.startWithCameraEnabled
     )
     const { done, onCallAcceptedOnThisDevice: _ } = handleCallEnd(
       jsonrpcRemote,

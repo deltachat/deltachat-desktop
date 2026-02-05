@@ -136,7 +136,7 @@ export interface Runtime {
   startOutgoingVideoCall(
     accountId: number,
     chatId: number,
-    cameraEnabled: boolean
+    param: { startWithCameraEnabled: boolean }
   ): void
 
   // control app

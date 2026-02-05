@@ -204,14 +204,9 @@ class ElectronRuntime implements Runtime {
   startOutgoingVideoCall(
     accountId: number,
     chatId: number,
-    cameraEnabled: boolean
+    param: { startWithCameraEnabled: boolean }
   ): Promise<void> {
-    return ipcBackend.invoke(
-      'startOutgoingVideoCall',
-      accountId,
-      chatId,
-      cameraEnabled
-    )
+    return ipcBackend.invoke('startOutgoingVideoCall', accountId, chatId, param)
   }
   openMapsWebxdc(accountId: number, chatId?: number | undefined): void {
     ipcBackend.invoke('open-maps-webxdc', accountId, chatId)

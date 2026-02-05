@@ -6,6 +6,7 @@ import React, {
   useCallback,
   useContext,
   useMemo,
+  useId,
 } from 'react'
 import { C } from '@deltachat/jsonrpc-client'
 
@@ -651,6 +652,7 @@ function AppIcons({
 function CallButton({ chat }: { chat: T.FullChat }) {
   const tx = useTranslationFunction()
   const accountId = selectedAccountId()
+  const elId = useId()
 
   const onContextMenu = useContextMenu(
     [
@@ -658,22 +660,27 @@ function CallButton({ chat }: { chat: T.FullChat }) {
         label: tx('audio_call'),
         icon: 'phone',
         action: () => {
-          runtime.startOutgoingVideoCall(accountId, chat.id, false)
+          runtime.startOutgoingVideoCall(accountId, chat.id, {
+            startWithCameraEnabled: false,
+          })
         },
       },
       {
         label: tx('video_call'),
         icon: 'camera',
         action: () => {
-          runtime.startOutgoingVideoCall(accountId, chat.id, true)
+          runtime.startOutgoingVideoCall(accountId, chat.id, {
+            startWithCameraEnabled: true,
+          })
         },
       },
     ],
-    { 'aria-label': tx('start_call') }
+    { 'aria-labelledby': elId }
   )
 
   return (
     <Button
+      id={elId}
       aria-label={tx('start_call')}
       title={tx('start_call')}
       className='navbar-button'
