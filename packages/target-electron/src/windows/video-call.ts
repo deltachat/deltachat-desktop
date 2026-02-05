@@ -48,7 +48,8 @@ export function startOutgoingVideoCall(accountId: number, chatId: number) {
     const callMessageId = await jsonrpcRemote.rpc.placeOutgoingCall(
       accountId,
       chatId,
-      offer
+      offer,
+      false
     )
     const { done, onCallAcceptedOnThisDevice: _ } = handleCallEnd(
       jsonrpcRemote,
