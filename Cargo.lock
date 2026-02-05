@@ -1266,9 +1266,9 @@ dependencies = [
 
 [[package]]
 name = "chrono"
-version = "0.4.42"
+version = "0.4.43"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "145052bdd345b87320e369255277e3fb5152762ad123a901ef5c262dd38fe8d2"
+checksum = "fac4744fb15ae8337dc853fee7fb3f4e48c0fbaa23d0afe49c447b4fab126118"
 dependencies = [
  "iana-time-zone",
  "num-traits",
@@ -1875,8 +1875,8 @@ dependencies = [
 
 [[package]]
 name = "deltachat"
-version = "2.39.0"
-source = "git+https://github.com/chatmail/core?tag=v2.39.0#baeb31b5faa28d9cfc35ed5bb27a974d980dad6d"
+version = "2.40.0"
+source = "git+https://github.com/chatmail/core?tag=v2.40.0#b72a677f4c1b643fa56a4d15aefbf043fc5c9ee2"
 dependencies = [
  "anyhow",
  "astral-tokio-tar",
@@ -1960,7 +1960,7 @@ dependencies = [
 [[package]]
 name = "deltachat-contact-tools"
 version = "0.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.39.0#baeb31b5faa28d9cfc35ed5bb27a974d980dad6d"
+source = "git+https://github.com/chatmail/core?tag=v2.40.0#b72a677f4c1b643fa56a4d15aefbf043fc5c9ee2"
 dependencies = [
  "anyhow",
  "chrono",
@@ -1970,8 +1970,8 @@ dependencies = [
 
 [[package]]
 name = "deltachat-jsonrpc"
-version = "2.39.0"
-source = "git+https://github.com/chatmail/core?tag=v2.39.0#baeb31b5faa28d9cfc35ed5bb27a974d980dad6d"
+version = "2.40.0"
+source = "git+https://github.com/chatmail/core?tag=v2.40.0#b72a677f4c1b643fa56a4d15aefbf043fc5c9ee2"
 dependencies = [
  "anyhow",
  "async-channel 2.5.0",
@@ -2041,12 +2041,12 @@ dependencies = [
 [[package]]
 name = "deltachat-time"
 version = "1.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.39.0#baeb31b5faa28d9cfc35ed5bb27a974d980dad6d"
+source = "git+https://github.com/chatmail/core?tag=v2.40.0#b72a677f4c1b643fa56a4d15aefbf043fc5c9ee2"
 
 [[package]]
 name = "deltachat_derive"
 version = "2.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.39.0#baeb31b5faa28d9cfc35ed5bb27a974d980dad6d"
+source = "git+https://github.com/chatmail/core?tag=v2.40.0#b72a677f4c1b643fa56a4d15aefbf043fc5c9ee2"
 dependencies = [
  "quote",
  "syn 2.0.111",
@@ -2977,7 +2977,7 @@ dependencies = [
 [[package]]
 name = "format-flowed"
 version = "1.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.39.0#baeb31b5faa28d9cfc35ed5bb27a974d980dad6d"
+source = "git+https://github.com/chatmail/core?tag=v2.40.0#b72a677f4c1b643fa56a4d15aefbf043fc5c9ee2"
 
 [[package]]
 name = "fsevent-sys"
@@ -7273,7 +7273,7 @@ dependencies = [
 [[package]]
 name = "ratelimit"
 version = "1.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.39.0#baeb31b5faa28d9cfc35ed5bb27a974d980dad6d"
+source = "git+https://github.com/chatmail/core?tag=v2.40.0#b72a677f4c1b643fa56a4d15aefbf043fc5c9ee2"
 
 [[package]]
 name = "rav1e"
@@ -9550,9 +9550,9 @@ dependencies = [
 
 [[package]]
 name = "tokio-util"
-version = "0.7.17"
+version = "0.7.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2efa149fe76073d6e8fd97ef4f4eca7b67f599660115591483572e406e165594"
+checksum = "9ae9cec805b01e8fc3fd2fe289f89149a9b66dd16786abd8b19cfa7b48cb0098"
 dependencies = [
  "bytes",
  "futures-core",
