@@ -3,6 +3,7 @@
 .qr-code-switch {
   display: flex;
   background-color: var(--globalBackground);
+  margin-bottom: 30px;
 
   button {
     @include mixins.button-reset;

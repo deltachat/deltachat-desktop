@@ -37,6 +37,7 @@ type Props = React.PropsWithChildren<{
    * set this to true to keep the default focus behavior also for buttons
    */
   allowDefaultFocus?: boolean
+  noTopPadding?: boolean
 }>
 
 const Dialog = React.memo<Props>(
@@ -49,6 +50,7 @@ const Dialog = React.memo<Props>(
     height,
     unstyled = false,
     allowDefaultFocus = false,
+    noTopPadding = false,
     ...props
   }) => {
     const dialog = useRef<HTMLDialogElement>(null)
@@ -141,6 +143,7 @@ const Dialog = React.memo<Props>(
         }
         className={classNames(styles.dialog, props.className, {
           [styles.unstyled]: unstyled,
+          [styles.noTopPadding]: noTopPadding,
         })}
         style={style}
         data-testid={props['dataTestid']}

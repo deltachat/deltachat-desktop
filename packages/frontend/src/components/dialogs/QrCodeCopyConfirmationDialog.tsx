@@ -47,7 +47,7 @@ export default function QrCodeCopyConfirmationDialog({
       canOutsideClickClose={true}
     >
       <DialogBody>
-        <DialogContent paddingTop>
+        <DialogContent>
           <p>{message}</p>
           <div className='copy-content-preview'>{content}</div>
         </DialogContent>

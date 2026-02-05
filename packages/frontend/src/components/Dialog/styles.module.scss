@@ -38,6 +38,11 @@ $paddingVertical: 20px;
     width: unset;
 
     justify-content: center;
+    padding: 0;
+  }
+  &:not(.noTopPadding) {
+    /* we always add 20px top padding if not explicitly disabled */
+    padding-top: $paddingVertical;
   }
   &::backdrop {
     background-color: var(--dialogBackdropBackground);
@@ -50,10 +55,9 @@ $paddingVertical: 20px;
   background-color: var(--bp4DialogHeaderBg);
   border-bottom: var(--outlineProperties);
   display: flex;
-  padding-bottom: 20px;
+  padding-bottom: $paddingVertical;
   padding-inline-start: $paddingHorizontal;
   padding-inline-end: $paddingHorizontal - 5px;
-  padding-top: $paddingVertical;
   user-select: none;
 }
 
@@ -85,12 +89,12 @@ $paddingVertical: 20px;
   padding-inline-end: $paddingHorizontal;
   line-height: 22px;
 
-  &.paddingTop {
-    padding-top: $paddingVertical;
-  }
-
-  &.paddingBottom {
-    padding-bottom: $paddingVertical;
+  /* override additional top padding/margins of the first element
+     in dialog content, the whole dialog already has 20px
+   */
+  & > :first-child {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
   }
 }
 
@@ -100,7 +104,6 @@ $paddingVertical: 20px;
   padding-bottom: $paddingVertical;
   padding-inline-start: $paddingHorizontal;
   padding-inline-end: $paddingHorizontal;
-  padding-top: $paddingVertical;
 }
 
 .headerButton {
