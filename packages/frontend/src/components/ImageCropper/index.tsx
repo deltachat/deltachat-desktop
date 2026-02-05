@@ -100,8 +100,23 @@ export default function ImageCropper({
 
     const resultW = targetWidth.current / zoom.current
     const resultH = targetHeight.current / zoom.current
-    canvas.width = targetWidth.current
-    canvas.height = targetHeight.current
+
+    const naturalWidth = fullImage.current.naturalWidth
+    const naturalHeight = fullImage.current.naturalHeight
+    const displayWidth = fullImage.current.clientWidth
+    const displayHeight = fullImage.current.clientHeight
+
+    // Scale factor between displayed image and natural image dimensions
+    const scaleX = naturalWidth / displayWidth
+    const scaleY = naturalHeight / displayHeight
+
+    // Calculate the full-resolution dimensions of the cropped region
+    const outputWidth = Math.round(resultW * scaleX)
+    const outputHeight = Math.round(resultH * scaleY)
+
+    // Set canvas to the natural resolution of the cropped region
+    canvas.width = outputWidth
+    canvas.height = outputHeight
 
     const context = canvas.getContext('2d', {
       willReadFrequently: false,
@@ -116,11 +131,11 @@ export default function ImageCropper({
     context.scale(flipDirX.current, flipDirY.current)
     context.drawImage(
       fullImage.current as CanvasImageSource,
-      posX.current - Math.floor(resultW / 2) * flipDirX.current,
-      posY.current - Math.floor(resultW / 2) * flipDirY.current,
+      (posX.current - Math.floor(resultW / 2) * flipDirX.current) * scaleX,
+      (posY.current - Math.floor(resultH / 2) * flipDirY.current) * scaleY,
       // negative values flip the image
-      resultW * flipDirX.current,
-      resultH * flipDirY.current,
+      resultW * flipDirX.current * scaleX,
+      resultH * flipDirY.current * scaleY,
       canvas.width / -2,
       canvas.height / -2,
       canvas.width,
@@ -128,6 +143,7 @@ export default function ImageCropper({
     )
 
     const tempfilename = `profile_pic_${Date.now()}.png`
+
     const tempfilepath = await runtime.writeTempFileFromBase64(
       tempfilename,
       canvas.toDataURL('image/png').split(';base64,')[1]
