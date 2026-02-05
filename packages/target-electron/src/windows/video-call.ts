@@ -22,7 +22,11 @@ import { setContentProtection } from '../content-protection'
 
 const log = getLogger('windows/video-call')
 
-export function startOutgoingVideoCall(accountId: number, chatId: number) {
+export function startOutgoingVideoCall(
+  accountId: number,
+  chatId: number,
+  param: { startWithCameraEnabled: boolean }
+) {
   log.info('starting outgoing video call', { accountId, chatId })
 
   const { offerPromise, windowClosed, closeWindow } = openVideoCallWindow(
@@ -30,7 +34,7 @@ export function startOutgoingVideoCall(accountId: number, chatId: number) {
     chatId,
     CallDirection.Outgoing,
     {
-      noOutgoingVideoInitially: false,
+      noOutgoingVideoInitially: param.startWithCameraEnabled === false,
     }
   )
 
@@ -41,7 +45,7 @@ export function startOutgoingVideoCall(accountId: number, chatId: number) {
     if (offer == null) {
       log.info("calls-webapp didn't return an offer, aborting outgoing call")
       // We expect this code path to be taken
-      // only if the window already got closed, but let's be defeinsive.
+      // only if the window already got closed, but let's be defensive.
       closeWindow()
       return
     }
@@ -49,7 +53,7 @@ export function startOutgoingVideoCall(accountId: number, chatId: number) {
       accountId,
       chatId,
       offer,
-      false
+      param.startWithCameraEnabled
     )
     const { done, onCallAcceptedOnThisDevice: _ } = handleCallEnd(
       jsonrpcRemote,

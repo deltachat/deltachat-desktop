@@ -7,8 +7,8 @@ settings:
 catalogs:
   default:
     '@deltachat/calls-webapp':
-      specifier: 0.11.0-beta-debug
-      version: 0.11.0-beta-debug
+      specifier: 0.12.0-beta-debug
+      version: 0.12.0-beta-debug
     '@deltachat/jsonrpc-client':
       specifier: 2.40.0
       version: 2.40.0
@@ -380,7 +380,7 @@ importers:
     dependencies:
       '@deltachat/calls-webapp':
         specifier: 'catalog:'
-        version: 0.11.0-beta-debug
+        version: 0.12.0-beta-debug
       '@deltachat/jsonrpc-client':
         specifier: 'catalog:'
         version: 2.40.0(ws@7.5.10)
@@ -602,8 +602,8 @@ packages:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
 
-  '@deltachat/calls-webapp@0.11.0-beta-debug':
-    resolution: {integrity: sha512-W8ZknzRKHIUSieJ20P7Tiyfqu0UuqiPW3phisS+3AmK+b9fUM4Uu7j3bZdH1Kgaf0zbEr5OutJji6CHgGKLIRg==}
+  '@deltachat/calls-webapp@0.12.0-beta-debug':
+    resolution: {integrity: sha512-Fe7vCk3wlibxnupUjcew6F4eVVp6R20UaXNA3XAYwrZgquk4GKVJOUPonjBeMzMfDU3nzfmPyquhKuTZU/IZYQ==}
 
   '@deltachat/jsonrpc-client@2.40.0':
     resolution: {integrity: sha512-eQoYlYlh1wL7zYhlbSr+z5V/Lhc/vdq7H5OPnxRzft/YM15J6Cw3K0A+pI+kgF0j5xbdhb7hU35shyu8FUgKBg==}
@@ -3398,8 +3398,8 @@ packages:
     resolution: {integrity: sha512-3Ybi1tAuwAP9s0r1UQ2J4n5Y0G05bJkpUIO0/bI9MhwmD70S5aTWbXGBwxHrelT+XM1k6dM0pk+SwNkpTRN7Pg==}
     engines: {node: ^10 || ^12 || >=14}
 
-  preact@10.27.2:
-    resolution: {integrity: sha512-5SYSgFKSyhCbk6SrXyMpqjb5+MQBgfvEKE/OC+PujcY34sOpqtr+0AZQtPYx5IA6VxynQ7rUPCtKzyovpj9Bpg==}
+  preact@10.28.3:
+    resolution: {integrity: sha512-tCmoRkPQLpBeWzpmbhryairGnhW9tKV6c6gr/w+RhoRoKEJwsjzipwp//1oCpGPOchvSLaAPlpcJi9MwMmoPyA==}
 
   prelude-ls@1.2.1:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
@@ -4277,9 +4277,9 @@ snapshots:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
 
-  '@deltachat/calls-webapp@0.11.0-beta-debug':
+  '@deltachat/calls-webapp@0.12.0-beta-debug':
     dependencies:
-      preact: 10.27.2
+      preact: 10.28.3
 
   '@deltachat/jsonrpc-client@2.40.0(ws@7.5.10)':
     dependencies:
@@ -7293,7 +7293,7 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  preact@10.27.2: {}
+  preact@10.28.3: {}
 
   prelude-ls@1.2.1: {}
 

@@ -97,5 +97,11 @@
   },
   "message_selected_shortcut_section": {
     "message": "Selected Message"
+  },
+  "video_call": {
+    "message": "Video Call"
+  },
+  "audio_call": {
+    "message": "Audio Call"
   }
 }

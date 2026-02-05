@@ -9,6 +9,7 @@ export type IconName =
   | 'audio-muted'
   | 'bell'
   | 'brightness-6'
+  | 'camera'
   | 'chevron-left'
   | 'chevron-right'
   | 'code-tags'
