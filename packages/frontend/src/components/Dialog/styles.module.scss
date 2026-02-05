@@ -39,9 +39,9 @@ $paddingVertical: 20px;
 
     justify-content: center;
     padding: 0;
-    /* top needs always 20px padding but we have to make
-    sure that first element does not add additional padding
-    */
+  }
+  &:not(.noTopPadding) {
+    /* we always add 20px top padding if not explicitly disabled */
     padding-top: $paddingVertical;
   }
   &::backdrop {
@@ -89,8 +89,10 @@ $paddingVertical: 20px;
   padding-inline-end: $paddingHorizontal;
   line-height: 22px;
 
-  /* no top padding except for buttons */
-  :first-child:not(button) {
+  /* override additional top padding/margins of the first element
+     in dialog content, the whole dialog already has 20px
+   */
+  & > :first-child {
     margin-top: 0 !important;
     padding-top: 0 !important;
   }

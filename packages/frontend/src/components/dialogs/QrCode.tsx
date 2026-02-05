@@ -66,7 +66,7 @@ export default function QrCode({
   const addr = addrFetch?.result?.ok ? (addrFetch.result.value ?? '') : ''
 
   return (
-    <Dialog onClose={onClose} dataTestid='qr-dialog'>
+    <Dialog onClose={onClose} dataTestid='qr-dialog' noTopPadding>
       <div className='qr-code-switch'>
         <button
           type='button'
