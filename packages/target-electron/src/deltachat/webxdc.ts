@@ -431,7 +431,10 @@ export default class DCWebxdc {
                   }
                 },
               },
-              // electron adds "Toggle Full Screen" to the menu on macOS automatically
+              // due to bug https://github.com/electron/electron/issues/49048
+              // electron always adds "Toggle Full Screen" to the menu on macOS
+              // TODO: remove this workaround when we upgrade to electron v42
+              // or when the fix is backported
               ...(!isMac
                 ? [{ role: 'togglefullscreen' } as MenuItemConstructorOptions]
                 : []),
