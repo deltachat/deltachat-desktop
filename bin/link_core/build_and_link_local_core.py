@@ -70,6 +70,10 @@ def parse_version(version_str):
     match = re.search(r'(\d+)\.(\d+)', version_str)
     if match:
         return (int(match.group(1)), int(match.group(2)), 0)
+    # Try major only format (e.g., "22" or "^22")
+    match = re.search(r'(\d+)', version_str)
+    if match:
+        return (int(match.group(1)), 0, 0)
     return (0, 0, 0)
 
 
@@ -82,6 +86,19 @@ def get_required_pnpm_version(desktop_path):
             pnpm_req = data.get("engines", {}).get("pnpm", "")
             # Parse ">=9.6.0" or "^9.6.0" -> (9, 6, 0)
             return parse_version(pnpm_req)
+    except Exception:
+        return None
+
+
+def get_required_node_version(desktop_path):
+    """Get required Node.js version from package.json."""
+    try:
+        package_json = os.path.join(desktop_path, "package.json")
+        with open(package_json, "r") as f:
+            data = json.load(f)
+            node_req = data.get("engines", {}).get("node", "")
+            # Parse "^22" -> (22, 0, 0)
+            return parse_version(node_req)
     except Exception:
         return None
 
@@ -126,15 +143,20 @@ def check_tool(name, min_version=None):
     return False
 
 
-def check_required_tools(desktop_path):
+def check_required_tools(desktop_path, core_path):
     """Check that all required tools are installed."""
     print("Checking required tools...")
     all_ok = True
+    node_failed = False
 
     # Get required versions from project files
+    node_min = get_required_node_version(desktop_path)
     pnpm_min = get_required_pnpm_version(desktop_path)
-    rust_min = get_required_rust_version(desktop_path)
+    rust_min = get_required_rust_version(core_path)
 
+    if not check_tool("node", min_version=node_min):
+        all_ok = False
+        node_failed = True
     if not check_tool("npm"):
         all_ok = False
     if not check_tool("pnpm", min_version=pnpm_min):
@@ -146,6 +168,12 @@ def check_required_tools(desktop_path):
 
     if not all_ok:
         print("\nError: Missing or outdated required tools")
+        if node_failed:
+            nvmrc_path = os.path.join(desktop_path, ".nvmrc")
+            if os.path.exists(nvmrc_path):
+                with open(nvmrc_path, "r") as f:
+                    nvmrc_version = f.read().strip()
+                print(f"\nNote: This project requires Node.js {nvmrc_version} (see .nvmrc)")
         sys.exit(1)
     print()
 
@@ -163,14 +191,15 @@ def main():
         print(f"Error: core_path does not exist: {core_path}")
         sys.exit(1)
 
-    check_required_tools(desktop_path)
+    check_required_tools(desktop_path, core_path)
 
     print(f"Core directory: {core_path}")
     print(f"Desktop directory: {desktop_path}")
 
     # Step 1: Run make_local_dev_version.py in core_path
+    make_local_script = os.path.join("deltachat-rpc-server", "npm-package", "scripts", "make_local_dev_version.py")
     run_command(
-        f"{sys.executable} deltachat-rpc-server/npm-package/scripts/make_local_dev_version.py",
+        f"{sys.executable} {make_local_script}",
         cwd=core_path
     )
 
@@ -182,8 +211,10 @@ def main():
     run_command("npm run build", cwd=jsonrpc_ts_dir)
 
     # Step 4: Link core packages to desktop packages
-    jsonrpc_link = f"@deltachat/jsonrpc-client@link:{core_path}/deltachat-jsonrpc/typescript"
-    stdio_rpc_link = f"@deltachat/stdio-rpc-server@link:{core_path}/deltachat-rpc-server/npm-package"
+    jsonrpc_path = os.path.join(core_path, "deltachat-jsonrpc", "typescript")
+    stdio_rpc_path = os.path.join(core_path, "deltachat-rpc-server", "npm-package")
+    jsonrpc_link = f"@deltachat/jsonrpc-client@link:{jsonrpc_path}"
+    stdio_rpc_link = f"@deltachat/stdio-rpc-server@link:{stdio_rpc_path}"
 
     run_command(
         f"pnpm add {jsonrpc_link} {stdio_rpc_link}",
@@ -211,8 +242,9 @@ def main():
     )
 
     tauri_src_dir = os.path.join(desktop_path, "packages", "target-tauri", "src-tauri")
+    deltachat_jsonrpc_path = os.path.join(core_path, "deltachat-jsonrpc")
     result = subprocess.run(
-        f"cargo add deltachat --path {core_path} && cargo add deltachat-jsonrpc --path {core_path}/deltachat-jsonrpc",
+        f"cargo add deltachat --path {core_path} && cargo add deltachat-jsonrpc --path {deltachat_jsonrpc_path}",
         shell=True,
         cwd=tauri_src_dir
     )
