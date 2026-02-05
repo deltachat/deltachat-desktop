@@ -401,7 +401,7 @@ export function ContextMenu(props: {
         >
           {level.items.map((item, index) => {
             if (item.type === 'separator') {
-              return <hr className='separator' />
+              return <hr className='separator' key={index} />
             }
             const isExpanded = index === openSublevels[levelIdx]
             return (
@@ -435,6 +435,9 @@ export function ContextMenu(props: {
                 tabIndex={-1}
                 data-testid={item.dataTestid}
                 role='menuitem'
+                // Context menus are not expected to change,
+                // so it's fine to have index-based keys.
+                key={item.dataTestid ?? index}
                 aria-haspopup={item.subitems ? 'menu' : undefined}
                 aria-expanded={item.subitems ? isExpanded : undefined}
                 {...(item.subitems && { 'data-expandable-index': index })}
