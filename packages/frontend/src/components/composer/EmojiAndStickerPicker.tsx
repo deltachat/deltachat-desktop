@@ -68,6 +68,7 @@ const DisplayedStickerPack = ({
         >
           {stickerPackImages.map(filePath => (
             <StickersListItem
+              key={filePath}
               filePath={filePath}
               onClick={() => onClickSticker(filePath)}
             />
