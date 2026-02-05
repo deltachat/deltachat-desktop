@@ -61,7 +61,7 @@ export default function SmallSelectDialog({
           >
             {values.map(element => {
               const [value, label] = element
-              return <Radio label={label} value={value} />
+              return <Radio key={value} label={label} value={value} />
             })}
           </RadioGroup>
         </DialogContent>

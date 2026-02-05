@@ -80,7 +80,7 @@ export function ShortcutGroup({ title, keyBindings }: ShortcutAction) {
     e => typeof e !== 'boolean'
   ) as string[][]
   const bindings = non_empty.map(elements => {
-    return <KeyboardShortcut elements={elements} />
+    return <KeyboardShortcut key={elements.join('+')} elements={elements} />
   })
 
   return (
