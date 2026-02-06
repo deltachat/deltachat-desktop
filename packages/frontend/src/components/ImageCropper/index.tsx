@@ -87,8 +87,23 @@ export default function ImageCropper({
   /** we use degrees for simple comparision check */
   const rotation = useRef<number>(0)
 
+  /** Track if user has modified the image */
+  const userModified = useRef<boolean>(false)
+
   const onSubmit = async () => {
     if (!fullImage.current) {
+      return
+    }
+
+    // Check if the user made any modifications
+    if (!userModified.current) {
+      // User didn't modify anything, just copy the original file
+      rememberLastUsedPathPromise.then(({ setLastPath }) =>
+        setLastPath(dirname(filepath))
+      )
+      const blob_path = await copyToBlobDir(filepath)
+      onResult(blob_path)
+      onClose()
       return
     }
 
@@ -158,6 +173,7 @@ export default function ImageCropper({
   }
 
   const onFlipX = () => {
+    userModified.current = true
     if (rotation.current === 90 || rotation.current === 270) {
       flipDirY.current = flipDirY.current === 1 ? -1 : 1
     } else {
@@ -167,16 +183,19 @@ export default function ImageCropper({
   }
 
   const onZoomIn = () => {
+    userModified.current = true
     zoom.current += 0.01
     moveImages(posX.current, posY.current)
   }
 
   const onZoomOut = () => {
+    userModified.current = true
     zoom.current -= 0.01
     moveImages(posX.current, posY.current)
   }
 
   const onReset = () => {
+    userModified.current = false
     if (!cutImage.current || !fullImage.current) {
       return
     }
@@ -190,6 +209,7 @@ export default function ImageCropper({
   }
 
   const onRotateImages = () => {
+    userModified.current = true
     rotation.current = Math.round(rotation.current + 90)
 
     if (rotation.current >= 360) {
@@ -361,6 +381,11 @@ export default function ImageCropper({
       const [dx, dy] = handleMouseCoords(ev)
       const scaleFactor = zoom.current * containerScale.current
 
+      // Check if user actually moved the image
+      if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
+        userModified.current = true
+      }
+
       // we update position only when mouse movement stops
       ;[posX.current, posY.current] = moveImages(
         posX.current - (dx * flipDirX.current) / scaleFactor,
@@ -383,6 +408,7 @@ export default function ImageCropper({
     }
 
     const onZoom = (ev: WheelEvent) => {
+      userModified.current = true
       const absDelta = Math.abs(ev.deltaY)
       // NOTE(maxph): I'm not sure about this, but there are many sources stating that 'wheel' delta on touchpad is smaller (somewhere like 50 vs 100 at maximum)
       // so here we treat small delta as not a mouse wheel and zoom in different direction
