@@ -95,7 +95,6 @@ export default function ImageCropper({
       return
     }
 
-    // Check if the user made any modifications
     if (!userModified.current) {
       // User didn't modify anything, just copy the original file
       rememberLastUsedPathPromise.then(({ setLastPath }) =>
