@@ -605,8 +605,8 @@ export function GroupImageSelector(props: {
             shape: 'circle',
             onResult: props.setGroupImage,
             onCancel: () => {},
-            desiredWidth: 256,
-            desiredHeight: 256,
+            desiredWidth: 512,
+            desiredHeight: 512,
           })
         }
       }}
