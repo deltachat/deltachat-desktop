@@ -81,10 +81,6 @@
     <string name="always_load_remote_images">Toujours charger les images distantes</string>
     <string name="once">Une fois</string>
     <string name="show_warning">Montrer l\'avertissement</string>
-    <!-- deprecated, UI must not offer an option to show the password -->
-    <string name="show_password">Afficher le mot de passe</string>
-    <!-- deprecated, UI must not offer an option to show the password -->
-    <string name="hide_password">Masquer le mot de passe</string>
     <string name="not_now">Pas maintenant</string>
     <string name="never">Jamais</string>
     <string name="one_moment">Un instant …</string>
@@ -203,6 +199,7 @@
     <string name="video">Vidéo</string>
     <string name="documents">Documents</string>
     <string name="contact">Contact</string>
+    <string name="bot">Robot</string>
     <string name="camera">Caméra</string>
     <!-- As in "start a video recording" or "take a photo"; eg. the description of the "shutter button" in cameras -->
     <string name="capture">Enregistrer</string>
@@ -222,6 +219,8 @@
     <string name="webxdc_app">Appli</string>
     <!-- plural of "App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
     <string name="webxdc_apps">Applis</string>
+    <string name="webxdc_store_url">URL du catalogue des apps </string>
+    <string name="webxdc_store_url_explain">Si elle est définit l\'URL sera utilisée à la place de l\'URL par défaut.</string>
     <string name="webxdc_draft_hint">Appuyez \"Envoyer\" pour partager</string>
     <string name="home">Accueil</string>
     <string name="games">Jeux</string>
@@ -271,6 +270,9 @@
     <string name="add_recipients">Ajouter des destinataires</string>
     <!-- consider keeping the term "channel" as in WhatsApp or Telegram -->
     <string name="channel_name">Nom du canal</string>
+    <string name="email">Courriel</string>
+    <!-- "New" as in "Create New Email"; shown together with "New Group" and "New Channel" -->
+    <string name="new_email">Nouveau courriel</string>
     <!-- the "Subject" of an email, use the term common in classic email apps -->
     <string name="subject">Sujet</string>
     <string name="menu_send">Envoyer</string>
@@ -351,7 +353,7 @@
     <string name="device_talk">Messages de l\'appareil</string>
     <string name="device_talk_subtitle">Messages générés localement</string>
     <string name="device_talk_explain">Les messages dans cette discussion sont générés localement par votre application Delta Chat. Cela vous permet de recevoir des informations concernant les mises à jour et problèmes rencontrés à l\'utilisation.</string>
-    <string name="device_talk_welcome_message2">Gardez contact !\n\n🙌 Cliquez sur « code QR » sur la page d\'accueil des deux appareils. Sélectionnez « Scanner le code QR » sur un des appareils et positionnez les deux appareils l\'un vers l\'autre\n\n🌍 Si vous n\'êtes pas dans la même pièce, vous pouvez scanner le code QR pendant un appel vidéo ou partager un lien d\'invitation à partir de « Scanner le code QR »\n\n Profitez ensuite de votre expérience de messagerie sur le plus grand réseau décentralisé du monde : les emails. Contrairement aux autres applications populaires, tout cela se fait sans contrôle centralisé, suivi ou revente de vos données, celles de vos amis, collègues ou famille à de grandes entreprises.</string>
+    <string name="device_talk_welcome_message2">Entrez en contact !\n\n🙌 Cliquez sur « code QR » sur la page d\'accueil des deux appareils. Sélectionnez « Scanner le code QR » sur un des appareils et positionnez les deux appareils l\'un vers l\'autre\n\n🌍 Si vous n\'êtes pas dans la même pièce, vous pouvez scanner le code QR pendant un appel vidéo ou partager un lien d\'invitation à partir de « Scanner le code QR »\n\n Profitez ensuite de votre expérience de messagerie sur le plus grand réseau décentralisé du monde : les emails. Contrairement aux autres applications populaires, tout cela se fait sans contrôle centralisé, suivi ou revente de vos données, celles de vos amis, collègues ou famille à de grandes entreprises.</string>
     <string name="edit_contact">Mettre à jour le contact</string>
     <!-- Verb "to pin", making something sticky, not a noun or abbreviation for "pin number". -->
     <string name="pin_chat">Épingler la discussion</string>
@@ -367,7 +369,7 @@
     <!-- Menu item beside an app/chat that adds an icon to the system's home screen. If the user taps that icon, the app/chat is opened directly. -->
     <string name="add_to_home_screen">Ajouter à l\'écran d\'accueil</string>
     <string name="donate">Faire un don</string>
-    <string name="donate_device_msg">❤️ On dirait que vous aimez bien Delta Chat!\n\nMerci de considérer une donation à Delta Chat afin d\'assurer qu\'il reste libre et gratuit pour tout le monde.\n\nBien que Delta Chat est gratuit à l\'utilisation et un logiciel libre, le développer coûte de l\'argent. Aidez-nous à garder Delta Chat indépendent et le rendre encore plus incroyable dans le future.\n\nhttps://delta.chat/donate</string>
+    <string name="donate_device_msg">❤️ On dirait que vous aimez bien Delta Chat!\n\nMerci de considérer une donation à Delta Chat afin d\'assurer qu\'il reste libre et gratuit pour tout le monde.\n\nBien que Delta Chat soit gratuit à l\'utilisation et un logiciel libre, le développer coûte de l\'argent. Aidez-nous à garder Delta Chat indépendant et le rendre encore plus incroyable dans le futur.\n\nhttps://delta.chat/donate</string>
 
     <string name="mute_for_one_hour">Désactiver pour 1 heure</string>
     <string name="mute_for_eight_hours">Désactiver pour 8 heures</string>
@@ -394,11 +396,16 @@
     <string name="answer_call">Décrocher</string>
     <!-- the action "to decline" a call, not: "the decline" -->
     <string name="end_call">Raccrocher</string>
+    <!-- deprecated, use outgoing_audio_call or outgoing_video_call instead -->
     <string name="outgoing_call">Appel sortant</string>
+    <!-- deprecated, use incoming_audio_call or incoming_video_call instead -->
     <string name="incoming_call">Appel entrant</string>
     <string name="declined_call">Appel rejeté</string>
     <string name="canceled_call">Appel annulé</string>
     <string name="missed_call">Appel manqué</string>
+    <!-- the first placeholder will be replaced by a date, the second placeholder by duration, example: "Thu, 08:12 pm, 2 minutes" -->
+    <string name="call_date_and_duration">%1$s, %2$s</string>
+
     <!-- get confirmations -->
     <!-- confirmation for leaving groups or channels. If a subject is needed, "Are you sure you want to leave the chat?" would work as well -->
     <string name="ask_leave_group">Êtes-vous sûr de vouloir quitter la discussion ?</string>
@@ -413,12 +420,6 @@
         <item quantity="one">Effacer %d message ici et sur le serveur ?</item>
         <item quantity="many">Effacer %d messages ici et sur le serveur ?</item>
         <item quantity="other">Effacer %d messages ici et sur le serveur  ?</item>
-    </plurals>
-    <!-- deprecated, use ask_delete_messages -->
-    <plurals name="ask_delete_messages_simple">
-        <item quantity="one">Supprimer %d message ?</item>
-        <item quantity="many">Supprimer %d messages ?</item>
-        <item quantity="other">Supprimer %d messages ?</item>
     </plurals>
     <string name="ask_forward">Faire suivre les messages à %1$s ?</string>
     <string name="ask_forward_multiple">Faire suivre les messages à %1$d discussions ?</string>
@@ -473,6 +474,7 @@
     <string name="chat_input_placeholder">Message</string>
     <string name="chat_archived_label">Archivé</string>
     <string name="chat_request_label">Invitation</string>
+    <string name="chat_request_label_explain">Inclure les messages d\'invitations dans les compteurs et notifications</string>
     <string name="chat_no_messages">Aucun message.</string>
     <string name="chat_self_talk_subtitle">Messages envoyés à moi-même</string>
     <string name="archive_empty_hint">Les discussions archivées apparaîtront ici.</string>
@@ -491,8 +493,6 @@
 
     <!-- mailing lists -->
     <string name="mailing_list">Liste de diffusion</string>
-    <!-- deprecated -->
-    <string name="mailing_list_profile_info">Les changements du nom et de l\'avatar de la liste de diffusion s\'appliquent uniquement sur cet appareil.</string>
 
     <!-- webxdc -->
     <!-- "Start..." button for an app -->
@@ -595,7 +595,7 @@
     <string name="incoming_messages">Messages entrants</string>
     <!-- Headline for the "Outbox" eg. in the "Connectivity" view -->
     <string name="outgoing_messages">Messages sortants</string>
-    <!-- Headline in the "Connectivity" view. Placeholder will be replaced by a domain -->
+    <!-- deprecated -->
     <string name="storage_on_domain">Espace de stockage sur %1$s</string>
     <string name="connectivity">Connectivité</string>
     <!-- Shown in the title bar if the app is "Not connected"; prefer short strings. -->
@@ -665,7 +665,7 @@
     <string name="proxy_add_url_hint">Entrer le lien du proxy ici</string>
     <string name="proxy_invalid">Proxy invalide ou non supporté</string>
     <string name="proxy_list_header">Sauver les proxy</string>
-    <string name="proxy_delete">Effacer le proxy</string>
+    <string name="proxy_delete">Supprimer le proxy</string>
     <string name="proxy_delete_explain">Voulez-vous vraiment supprimer « %1$s » ?</string>
     <string name="proxy_use_proxy_confirm">Voulez-vous utilser le proxy \"%1$s\" ?</string>
     <string name="proxy_share_explain">Vos amis peuvent ajouter ce proxy en scannant le code QR.</string>
@@ -679,6 +679,10 @@
     <string name="edit_transport">Modifier le relais</string>
     <!-- shown if a QR code was scanned that can be used as a relay -->
     <string name="confirm_add_transport">Ajouter le relais ?</string>
+    <string name="invalid_transport_qr">Le QR code scanné ne renvoie pas vers un relai valide.</string>
+    <!-- placeholder will be replaced by a relay server name -->
+    <string name="confirm_remove_transport">Supprimer le relai \"%1$s\"\n\nVos contacts ne peuvent vous contacter que si vous les avez déjà contactés depuis un autre relai.\n\nDans le doute, supprimez le relai plus tard.</string>
+
     <string name="login_certificate_checks">Vérification du certificat</string>
     <string name="login_error_mail">Entrez une adresse email valide</string>
     <string name="login_error_server">Entre un serveur / adresse IP valide</string>
@@ -828,8 +832,13 @@
     <string name="disable_imap_idle">Désactiver IMAP IDLE</string>
     <string name="disable_imap_idle_explain">N\'utilisez pas d\'extension IMAP IDLE, même si elle est prise en charge par votre serveur, car elle provoque des retards dans la récupération des messages. Activez cette option uniquement pour effectuer des tests.</string>
     <string name="send_stats_to_devs">Envoyer les statistiques aux développeurs Delta Chat</string>
+    <string name="stats_device_message">Voulez-vous aider à améliorer Delta Chat et soutenir notre recherche en envoyant des statistiques d\'utilisation hebdomadaires ?\n\n👉 Touchez ici... 👈</string>
+    <string name="stats_confirmation_dialog">Voulez-vous aider à améliorer Delta Chat et soutenir notre recherche en envoyant des statistiques d\'utilisation hebdomadaires ?</string>
+    <string name="stats_thanks">Merci ! Vous pouvez toujours désactiver l\'envoi dans \"Paramètres -> Avancé\".\n\nAvez-vous en plus 5 minutes pour participer à une étude scientifique sur la sécurité de Delta Chat ?</string>
+    <string name="stats_disable_dialog">L\'envoi de statistiques est déjà activé.\n\nSouhaitez-vous le désactiver ?</string>
+    <string name="disable">Désactiver</string>
+    <string name="stats_keep_sending">Continuer l\'envoi</string>
     <string name="stats_msg_body">La pièce jointe contient des statistiques d\'usage anonymisés, qui nous aide à améliorer Delta Chat. Merci !</string>
-
 
     <!-- Emoji picker and categories -->
     <string name="emoji_search_results">Résultats de la recherche</string>
@@ -949,7 +958,7 @@
     <string name="ephemeral_timer_weeks_by_you">Vous avez réglé le temps d\'affichage des messages éphémères à %1$s semaines.</string>
     <!-- %1$s will be replaced by the number of weeks (always >1) the timer is set to, %2$s will be replaced by name of the contact -->
     <string name="ephemeral_timer_weeks_by_other">Minuterie des messages éphémères réglée à %1$s semaines par %2$s.</string>
-    <string name="chat_unencrypted_explanation">Les messages de cette conversation utilise le mail classique et ne sont pas chiffrés de bout-en-bout.</string>
+    <string name="chat_unencrypted_explanation">Les messages de cette conversation utilisent le mail classique et ne sont pas chiffrés de bout-en-bout.</string>
     <string name="chat_protection_enabled_tap_to_learn_more">Les messages sont désormais garantis chiffrés de bout en bout. Appuyer pour en savoir plus.</string>
     <string name="chat_protection_enabled_explanation">Il n\'est pas garanti que tous les messages de cette discussion sont chiffrés de bout en bout.\n\nLe chiffrement de bout en bout assure la confidentialité des messages échangés par les membres d\'une discussion. Même votre fournisseur de courriel ne peut pas les lire. </string>
     <string name="invalid_unencrypted_tap_to_learn_more">⚠️ %1$s nécessite un chiffrement de bout en bout qui n\'est pas encore configuré sur cette discussion. Appuyez pour en savoir plus.</string>
@@ -999,15 +1008,11 @@
     <string name="qrshow_join_contact_hint">Scanner pour discuter avec %1$s</string>
     <string name="qrshow_join_contact_no_connection_toast">Pas de connexion Internet, ne peut pas effectuer la configuration du QR code.</string>
     <string name="qraccount_ask_create_and_login">Créer une nouvelle adresse de courriel sur « %1$s » et se connecter ici ?</string>
-    <!-- deprecated, use confirm_add_transport when scanning such a QR code from the main scanner -->
-    <string name="qraccount_ask_create_and_login_another">Créer une nouvelle adresse de courriel sur « %1$s » et s\'y connecter ?\n\nVotre compte existant ne sera pas supprimé. Utilisez l\'élément de menu « Changer de compte » pour passer d\'un compte à l\'autre.</string>
-    <string name="set_name_and_avatar_explain">Choisissez un nom que vos contacts reconnaîtrons. Vous pouvez également définir une image pour votre profile.</string>
+    <string name="set_name_and_avatar_explain">Choisissez un nom que vos contacts reconnaîtront. Vous pouvez également définir une image pour votre profil.</string>
     <string name="please_enter_name">Veuillez saisir un nom.</string>
     <string name="qraccount_qr_code_cannot_be_used">Le code QR scanné ne peut pas être utilisé pour ouvrir un nouveau compte.</string>
     <!-- the placeholder will be replaced by the address of the profile -->
     <string name="qrlogin_ask_login">Se connecter au compte « %1$s » ?</string>
-    <!-- deprecated, use confirm_add_transport when scanning such a QR code from the main scanner -->
-    <string name="qrlogin_ask_login_another">Se connecter à « %1$s » ?\n\nVotre compte existant ne sera pas supprimé. Utiliser l\'élément de menu « Changer de compte » pour passer d\'un compte à l\'autre.</string>
     <!-- first placeholder will be replaced by name of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">%1$s vous a invité à rejoindre ce groupe.\n\nEn attente de la réponse de l’appareil de %2$s…</string>
     <!-- first placeholder will be replaced by name of the inviter, second placeholder will be replaced by the name of the inviter. -->
@@ -1016,6 +1021,7 @@
     <string name="secure_join_replies">%1$s a répondu, en attente d’être ajouté au groupe…</string>
     <string name="secure_join_wait">Chiffrement de bout en bout en cours d\'établissement, merci de patienter...</string>
     <string name="contact_verified">%1$s connu.</string>
+    <string name="contact_blocked">Vous avez bloqué le contact</string>
     <!-- Shown in contact profile. The placeholder will be replaced by the name of the contact that introduced the contact. -->
     <string name="verified_by">Connu par %1$s</string>
     <string name="verified_by_you">Connu par vous</string>
@@ -1152,9 +1158,17 @@
     <string name="notifications_avg_hours">Toutes les %1$d heures en moyenne</string>
     <string name="last_check_at">Dernièrement vu à %1$s</string>
     <string name="system_settings">Paramètres du système</string>
+    <!-- shown below the button "System Settings" on the notification screen. this is a hint about what can be edited on System Settings' Notification page - eg. the notification type (banner, lock screen, notification centre), sound, badges and so on. no need to be exhaustive here, it is only to give the user an idea. -->
+    <string name="system_settings_notify_explain_ios">Éditer le type, les badges, les prévisualisation et plus encore.</string>
     <!-- iOS shortcut widget -->
     <!-- use the same translation for "Shortcuts" as the system is using, often the term "Shortcut" stays untranslated; check eg. how the "Shortcuts" system app is called in your locale -->
     <string name="shortcuts_widget_title">Raccourcis</string>
+    <!-- use the same translation for "Widget" as the system is using; often the term "Widget" stays untranslated -->
+    <string name="shortcuts_widget_description">Utiliser la fonction \"Ajouter au Widget\" de Delta Chat pour ajouter un élément.</string>
+    <!-- use the same translation for "Widget" as the system is using; often the term "Widget" stays untranslated -->
+    <string name="remove_from_widget">Retirer du Widget</string>
+    <!-- use the same translation for "Widget" as the system is using; often the term "Widget" stays untranslated -->
+    <string name="add_to_widget">Ajouter au Widget</string>
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Delta Chat utilise votre appareil photo pour prendre des photos et des vidéos et les envoyer, ainsi que pour scanner des QR codes.</string>
     <string name="InfoPlist_NSLocationAlwaysAndWhenInUseUsageDescription">Delta Chat a besoin de votre autorisation pour partager votre position pour la durée d\'activation du partage de position.</string>
@@ -1169,11 +1183,13 @@
     <string name="pref_background_notifications">Utiliser une connexion en arrière plan</string>
     <string name="pref_background_notifications_explain">Requiert la désactivation des optimisations de battterie, utilisez cette option si les notifications sont en retard.</string>
     <string name="pref_reliable_service">Forcer une connexion en arrière plan</string>
+    <string name="pref_reliable_service_explain">Entraîne une notification permanente.</string>
+
     <string name="pref_background_notifications_rationale">Pour maintenir une connexion à votre serveur de courriel et recevoir les messages en arrière-plan, ignorez l\'optimisation de la batterie à l\'étape suivante.\n\nDelta Chat utilise peu de ressources et prend garde à ne pas vider votre batterie.</string>
     <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
     <string name="perm_enable_bg_reminder_title">Touchez ici pour recevoir des messages pendant que DeltaChat est en arrière-plan.</string>
     <string name="perm_enable_bg_already_done">Vous avez déjà autorisé Delta Chat à recevoir des messages en arrière plan.\n\nSi vous ne les recevez toujours pas en arrière plan, vérifiez les paramètres de votre système.</string>
 
     <!-- device messages for updates -->
-    <string name="update_2_0">Quoi de neuf?\n\n💯 Le chiffrement de bout-en-bout est maintenant fiable et péreint. 🔒Fini les cadenas !\n\n✉️ Les mails sans chiffrement de bout-en-bout sont maintenant marqués par une icône de mail \n\n😻 Nouvelle fenêtre de profil améliorée pour tous les contactsn\n🔲 Un nouveau button pour l\'accès rapide aux applis utilisés dans une discussion\n\n❤️ Merci de considérer à faire une donation afin que nous restions indépendents et continuons à améliorer Delta Chat: %1$s</string>
+    <string name="update_2_0">Quoi de neuf?\n\n💯 Le chiffrement de bout-en-bout est maintenant fiable et pérenne. 🔒Fini les cadenas !\n\n✉️ Les mails sans chiffrement de bout-en-bout sont maintenant marqués par une icône de mail \n\n😻 Nouvelle fenêtre de profil améliorée pour tous les contacts \n\n🔲 Nouveau bouton pour l\'accès rapide aux applis utilisées dans une discussion\n\n❤️ Merci d\'envisager de faire une donation afin que nous restions indépendants et continuions à améliorer Delta Chat: %1$s</string>
 </resources>
