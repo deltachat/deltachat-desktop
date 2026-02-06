@@ -657,7 +657,7 @@ function CallButton({ chat }: { chat: T.FullChat }) {
   const onContextMenu = useContextMenu(
     [
       {
-        label: tx('audio_call'),
+        label: tx('start_audio_call'),
         icon: 'phone',
         action: () => {
           runtime.startOutgoingVideoCall(accountId, chat.id, {
@@ -666,7 +666,7 @@ function CallButton({ chat }: { chat: T.FullChat }) {
         },
       },
       {
-        label: tx('video_call'),
+        label: tx('start_video_call'),
         icon: 'camera',
         action: () => {
           runtime.startOutgoingVideoCall(accountId, chat.id, {
