@@ -81,10 +81,6 @@
     <string name="always_load_remote_images">Her Zaman Uzak Görselleri Yükle</string>
     <string name="once">Bir kez</string>
     <string name="show_warning">Uyarı Göster</string>
-    <!-- deprecated, UI must not offer an option to show the password -->
-    <string name="show_password">Parolayı Göster</string>
-    <!-- deprecated, UI must not offer an option to show the password -->
-    <string name="hide_password">Parolayı Gizle</string>
     <string name="not_now">Şimdi değil</string>
     <string name="never">Hiçbir zaman</string>
     <string name="one_moment">Bir dakika…</string>
@@ -384,12 +380,20 @@
 
     <!-- the action "to call someone", used as a tooltip for the "phone" icon. not: "the call" -->
     <string name="start_call">Ara</string>
+    <string name="start_audio_call">Sesli Arama</string>
+    <string name="start_video_call">Görüntülü Arama</string>
     <!-- the action "to answer" or to "accept" or to "pick up" a call. not: "the answer" -->
     <string name="answer_call">Yanıtla</string>
     <!-- the action "to decline" a call, not: "the decline" -->
     <string name="end_call">Reddet</string>
+    <!-- deprecated, use outgoing_audio_call or outgoing_video_call instead -->
     <string name="outgoing_call">Giden arama</string>
+    <string name="outgoing_audio_call">Giden sesli arama</string>
+    <string name="outgoing_video_call">Giden görüntülü arama</string>
+    <!-- deprecated, use incoming_audio_call or incoming_video_call instead -->
     <string name="incoming_call">Gelen arama</string>
+    <string name="incoming_audio_call">Gelen sesli arama</string>
+    <string name="incoming_video_call">Gelen görüntülü arama</string>
     <string name="declined_call">Reddedilen arama</string>
     <string name="canceled_call">İptal edilen arama</string>
     <string name="missed_call">Yanıtlanmayan arama</string>
@@ -406,11 +410,6 @@
     <string name="ask_delete_named_chat">“%1$s” sohbeti silinsin mi?</string>
     <string name="ask_delete_message">Bu ileti silinsin mi?</string>
     <plurals name="ask_delete_messages">
-        <item quantity="one">%d ileti silinsin mi?</item>
-        <item quantity="other">%d ileti silinsin mi?</item>
-    </plurals>
-    <!-- deprecated, use ask_delete_messages -->
-    <plurals name="ask_delete_messages_simple">
         <item quantity="one">%d ileti silinsin mi?</item>
         <item quantity="other">%d ileti silinsin mi?</item>
     </plurals>
@@ -483,8 +482,6 @@
 
     <!-- mailing lists -->
     <string name="mailing_list">Posta Listesi</string>
-    <!-- deprecated -->
-    <string name="mailing_list_profile_info">Posta listesi adındaki ve görselindeki değişiklikler yalnızca bu aygıtta uygulanır.</string>
 
     <!-- webxdc -->
     <!-- "Start..." button for an app -->
@@ -587,7 +584,7 @@
     <string name="incoming_messages">Gelen İletiler</string>
     <!-- Headline for the "Outbox" eg. in the "Connectivity" view -->
     <string name="outgoing_messages">Giden İletiler</string>
-    <!-- Headline in the "Connectivity" view. Placeholder will be replaced by a domain -->
+    <!-- deprecated -->
     <string name="storage_on_domain">%1$s Üzerinde Depolama</string>
     <string name="connectivity">Bağlanabilirlik</string>
     <!-- Shown in the title bar if the app is "Not connected"; prefer short strings. -->
@@ -824,8 +821,13 @@
     <string name="disable_imap_idle">IMAP IDLE\'ı Etkisizleştir</string>
     <string name="disable_imap_idle_explain">Sunucu desteklese bile IMAP IDLE uzantısını kullanmayın. Bu seçeneği etkinleştirmek ileti getirmeyi geciktirecek; yalnızca sınama için etkinleştirin.</string>
     <string name="send_stats_to_devs">Delta Chat\'in geliştiricilerine istatistikleri gönder</string>
-    <string name="stats_msg_body">İlişik, Delta Chat\'i geliştirmemize yardımcı olan belirsiz kullanım istatistikleri içerir. Teşekkür ederiz!</string>
-
+    <string name="stats_device_message">Haftalık belirsiz kullanım istatistiklerini göndererek Delta Chat\'i geliştirmeye yardımcı olmak ve araştırmaları desteklemek istiyor musunuz?\n\n👉 Buraya dokunun… 👈</string>
+    <string name="stats_confirmation_dialog">Haftalık belirsiz kullanım istatistiklerini göndererek Delta Chat\'i geliştirmeye yardımcı olmak ve araştırmaları desteklemek istiyor musunuz?</string>
+    <string name="stats_thanks">Teşekkür ederiz! Gönderimi “Ayarlar -> Gelişmiş”ten her zaman etkisizleştirebilirsiniz.\n\nEk olarak Delta Chat\'in güvenliği üzerine yapılacak bilimsel bir araştırmaya katılmak için 5 dakikanız var mı?</string>
+    <string name="stats_disable_dialog">İstatistiklerin gönderimi zaten etkinleştirildi.\n\nOnu etkisizleştirmek istiyor musunuz?</string>
+    <string name="disable">Etkisizleştir</string>
+    <string name="stats_keep_sending">Gönderimde tut</string>
+    <string name="stats_msg_body">İlişik, Delta Chat\'i geliştirmemize yardımcı olan belirsiz kullanım istatistikleri içerir. Daha fazla bilgi için https://delta.chat/help#statssending adresine bakın. Teşekkür ederiz!</string>
 
     <!-- Emoji picker and categories -->
     <string name="emoji_search_results">Arama Sonuçları</string>
@@ -995,15 +997,11 @@
     <string name="qrshow_join_contact_hint">%1$s ile sohbet etmek için bunu tarayın</string>
     <string name="qrshow_join_contact_no_connection_toast">Internet bağlantısı yok; QR kodu ayarlaması gerçekleştirilemiyor.</string>
     <string name="qraccount_ask_create_and_login">“%1$s” üzerinde yeni profil oluşturulsun ve orada giriş yapılsın mı?</string>
-    <!-- deprecated, use confirm_add_transport when scanning such a QR code from the main scanner -->
-    <string name="qraccount_ask_create_and_login_another">“%1$s” üzerinde yeni profil oluşturulsun ve orada giriş yapılsın mı?\n\nVarolan profiliniz silinmeyecek. Profilleriniz arasında geçiş yapmak için “Profili Değiştir” öğesini kullanın.</string>
     <string name="set_name_and_avatar_explain">Kişilerinizin tanıyacağı bir ad ayarlayın. Bir profil görseli de ayarlayabilirsiniz.</string>
     <string name="please_enter_name">Lütfen bir ad girin.</string>
     <string name="qraccount_qr_code_cannot_be_used">Taranan QR kodu, yeni bir profil ayarlamak için kullanılamıyor.</string>
     <!-- the placeholder will be replaced by the address of the profile -->
     <string name="qrlogin_ask_login">“%1$s” adresine giriş yapılsın mı?</string>
-    <!-- deprecated, use confirm_add_transport when scanning such a QR code from the main scanner -->
-    <string name="qrlogin_ask_login_another">“%1$s” adresine giriş yapılsın mı?\n\nVarolan profiliniz silinmeyecek. Profilleriniz arasında geçiş yapmak için “Profili Değiştir” öğesini kullanın.</string>
     <!-- first placeholder will be replaced by name of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">%1$s sizi bu gruba katılmaya çağırdı.\n\n%2$s kişisinin aygıtının yanıt vermesi bekleniyor…</string>
     <!-- first placeholder will be replaced by name of the inviter, second placeholder will be replaced by the name of the inviter. -->
@@ -1012,6 +1010,7 @@
     <string name="secure_join_replies">%1$s yanıtladı; gruba eklenmesi bekleniyor…</string>
     <string name="secure_join_wait">Bağlantı kuruluyor, lütfen bekleyin…</string>
     <string name="contact_verified">%1$s tanıtıldı.</string>
+    <string name="contact_blocked">Kişiyi engellediniz</string>
     <!-- Shown in contact profile. The placeholder will be replaced by the name of the contact that introduced the contact. -->
     <string name="verified_by">%1$s tarafından tanıtıldı</string>
     <string name="verified_by_you">Benim tarafımdan tanıtıldı</string>
@@ -1097,8 +1096,8 @@
     <string name="name_desktop">Ad</string>
     <string name="select_group_image_desktop">Grup Görseli Seç</string>
     <string name="export_backup_desktop">Yedeği Dışa Aktar</string>
-    <string name="message_detail_sent_desktop">gönderilme</string>
-    <string name="message_detail_received_desktop">alınma</string>
+    <string name="message_detail_sent_desktop">Gönderilme</string>
+    <string name="message_detail_received_desktop">Alınma</string>
     <string name="menu.view.developer.open.log.folder">Günlük Klasörünü Aç</string>
     <string name="menu.view.developer.open.current.log.file">Şu Anki Günlük Dosyasını Aç</string>
     <string name="explain_desktop_minimized_disabled_tray_pref" tools:ignore="TypographyDashes">Delta Chat --minimized seçeneğiyle başlatıldığından tepsi simgesi etkisizleştirilemez.</string>

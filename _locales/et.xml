@@ -81,10 +81,6 @@
     <string name="always_load_remote_images">Alati laadi kaugseadmes asuvaid pilte</string>
     <string name="once">Vaid see kord</string>
     <string name="show_warning">Näita hoiatust</string>
-    <!-- deprecated, UI must not offer an option to show the password -->
-    <string name="show_password">Näita salasõna</string>
-    <!-- deprecated, UI must not offer an option to show the password -->
-    <string name="hide_password">Peida salasõna</string>
     <string name="not_now">Mitte praegu</string>
     <string name="never">Mitte kunagi</string>
     <string name="one_moment">Üks hetk…</string>
@@ -388,7 +384,9 @@
     <string name="answer_call">Vasta</string>
     <!-- the action "to decline" a call, not: "the decline" -->
     <string name="end_call">Keeldu</string>
+    <!-- deprecated, use outgoing_audio_call or outgoing_video_call instead -->
     <string name="outgoing_call">Väljuv kõne</string>
+    <!-- deprecated, use incoming_audio_call or incoming_video_call instead -->
     <string name="incoming_call">Saabuv kõne</string>
     <string name="declined_call">Keeldutud kõne</string>
     <string name="canceled_call">katkestatud kõne</string>
@@ -408,11 +406,6 @@
     <plurals name="ask_delete_messages">
         <item quantity="one">Kas kustutad %d sõnumi kõikidest oma seadmetest?</item>
         <item quantity="other">Kas kustutad %d sõnumit kõikidest oma seadmetest?</item>
-    </plurals>
-    <!-- deprecated, use ask_delete_messages -->
-    <plurals name="ask_delete_messages_simple">
-        <item quantity="one">Kas soovid kustutada %d sõnumi?</item>
-        <item quantity="other">Kas soovid kustutada %d sõnumit?</item>
     </plurals>
     <string name="ask_forward">Kas edastad sõnumi kasutajale %1$s?</string>
     <string name="ask_forward_multiple">Kas edastad sõnumid %1$d vestlusesse?</string>
@@ -483,8 +476,6 @@
 
     <!-- mailing lists -->
     <string name="mailing_list">Postiloend</string>
-    <!-- deprecated -->
-    <string name="mailing_list_profile_info">Postiloendi nime ja tunnuspildi muudatused kehtivad vaid selles seadmes.</string>
 
     <!-- webxdc -->
     <!-- "Start..." button for an app -->
@@ -500,6 +491,7 @@
 
     <!-- map -->
     <string name="filter_map_on_time">Näita asukohti ajavahemike kaupa</string>
+    <string name="show_location_traces">Näita asukohti kaardil</string>
     <string name="add_poi">Saada huvipunkti teave</string>
 
 
@@ -586,7 +578,7 @@
     <string name="incoming_messages">Saabuvad sõnumid</string>
     <!-- Headline for the "Outbox" eg. in the "Connectivity" view -->
     <string name="outgoing_messages">Väljuvad sõnumid</string>
-    <!-- Headline in the "Connectivity" view. Placeholder will be replaced by a domain -->
+    <!-- deprecated -->
     <string name="storage_on_domain">Andmeruum domeenis %1$s</string>
     <string name="connectivity">Ühenduvus</string>
     <!-- Shown in the title bar if the app is "Not connected"; prefer short strings. -->
@@ -623,6 +615,7 @@
     <string name="instant_onboarding_create">Nõustun ja alustan profiili loomist</string>
     <!-- Secondary, link-like button to open a page with other possible instances -->
     <string name="instant_onboarding_show_more_instances">Kasuta muud serverid</string>
+    <string name="instant_onboarding_other_server">Edastusserverite loend</string>
     <!-- Hint about what happens when "Create Profile" button in pressed; the placeholder will be replaced by the group name -->
     <string name="instant_onboarding_group_info">„%1$s“ grupiga liitumiseks loo profiil.</string>
     <!-- Hint about what happens when "Create Profile" button in pressed; the placeholder will be replaced by contact name -->
@@ -822,8 +815,13 @@
     <string name="disable_imap_idle">Lülita IMAP IDLE välja</string>
     <string name="disable_imap_idle_explain">Ära kasuta IMAP IDLE meetodit, seda isegi siis, kui server seda toetab. Sisselülitamisel tekib sõnumite laadimisel viivitusi. Kasuta seda vaid testimiseks.</string>
     <string name="send_stats_to_devs">Saada statistikat Delta Chati kasutajatele</string>
+    <string name="stats_device_message">Kas sa tahad aidata Delta Chati paremaks muuta? Siis luba rakendusel kord nädalas saata anonüümset statistikat kasutuse kohta.\n\n👉 Klõpsa siia… 👈</string>
+    <string name="stats_confirmation_dialog">Kas sa tahad aidata Delta Chati paremaks muuta? Siis luba rakendusel kord nädalas saata anonüümset statistikat kasutuse kohta.</string>
+    <string name="stats_thanks">Suur tänu! Soovi korral võid saatmise siit välja lülitada: „Seadistused“ → „Täiendavad seadistused“.\n\nKas sul on ka 5 minuti jagu aega osalemaks Delta Chati turvalisust käsitlevas teaduslikus uuringus?</string>
+    <string name="stats_disable_dialog">Statistika saatmine on juba kasutusel\n\nKas sa tahaksid ta välja lülitada?</string>
+    <string name="disable">Lülita välja</string>
+    <string name="stats_keep_sending">Jätka saatmist</string>
     <string name="stats_msg_body">Selles manuses leidub anonüümne statistika rakenduse kasutuse kohta ja see aitab meil Delta Chatti paremaks muuta. Suur tänu!</string>
-
 
     <!-- Emoji picker and categories -->
     <string name="emoji_search_results">Otsingutulemused</string>
@@ -993,15 +991,11 @@
     <string name="qrshow_join_contact_hint">Skaneeri vestlemaks kasutajaga „%1$s“</string>
     <string name="qrshow_join_contact_no_connection_toast">Internetiühendus puudub ja QR-koodil põhinevat seadistamist kasutada ei saa.</string>
     <string name="qraccount_ask_create_and_login">Kas lood uue profiili nimega „%1$s“ ja logid sinna sisse?</string>
-    <!-- deprecated, use confirm_add_transport when scanning such a QR code from the main scanner -->
-    <string name="qraccount_ask_create_and_login_another">Kas soovid lisada uue profiili „%1$s“ serverisse ja sellega sisse logida?\n\nSinu olemasolev profiil jääb alles. Profiile saad vahetada käsuga „Vaheta profiili“.</string>
     <string name="set_name_and_avatar_explain">Vali nimi, mida sinu kontaktid ära tunnevad. Saad ka lisada profiili tunnuspildi.</string>
     <string name="please_enter_name">Palun sisesta nimi.</string>
     <string name="qraccount_qr_code_cannot_be_used">Selle skaneeritud QR-koodi abil ei saa uut profiili kasutusele võtta.</string>
     <!-- the placeholder will be replaced by the address of the profile -->
     <string name="qrlogin_ask_login">Kas logid sisse „%1$s“ profiili?</string>
-    <!-- deprecated, use confirm_add_transport when scanning such a QR code from the main scanner -->
-    <string name="qrlogin_ask_login_another">Kas soovid sisse logid oma kontoga „%1$s“ serveris?\n\nSinu olemasolev profiil jääb alles. Profiile saad vahetada käsuga „Vaheta profiili“.</string>
     <!-- first placeholder will be replaced by name of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">%1$s kutsus sind liituma selle grupiga.\n\nOotan vastust kasutaja %2$s seadmest…</string>
     <!-- first placeholder will be replaced by name of the inviter, second placeholder will be replaced by the name of the inviter. -->
@@ -1010,6 +1004,7 @@
     <string name="secure_join_replies">%1$s vastas, ootan gruppi lisamist…</string>
     <string name="secure_join_wait">Panen aluse läbivale krüptimisele…</string>
     <string name="contact_verified">%1$s lisas vestlusesse.</string>
+    <string name="contact_blocked">Sina blokeerisid selle kontakti</string>
     <!-- Shown in contact profile. The placeholder will be replaced by the name of the contact that introduced the contact. -->
     <string name="verified_by">%1$s lisas kontakti vestlusesse</string>
     <string name="verified_by_you">Mina lisasin kontakti vestlusesse</string>

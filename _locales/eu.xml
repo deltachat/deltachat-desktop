@@ -58,15 +58,18 @@
     <string name="save">Gorde</string>
     <string name="chat">Txata</string>
     <string name="media">Multimedia</string>
-    <string name="profile">Profila</string>
-    <string name="all_profiles">Profil guztiak</string>
-    <string name="current_profile">Oraingo profila</string>
+    <string name="apps_and_media">Aplikazioak eta multimedia</string>
+    <string name="profile">Kontua</string>
+    <string name="all_profiles">Kontu guztiak</string>
+    <string name="current_profile">Oraingo kontua</string>
     <string name="main_menu">Menu nagusia</string>
     <string name="start_chat">Hasi txata</string>
     <string name="show_full_message">Erakutsi mezu osoa</string>
     <!-- Stay short here, say ~16 characters. The source string could also be "All Read", maybe that hint can make translations easier :) -->
     <string name="mark_all_as_read">Ezarri denak irakurri gisa</string>
     <string name="mark_as_read">Ezarri irakurri gisa</string>
+    <!-- Shortest text for "Mark as being read". In english, this could be "Read" (past tense of "to read"), in german, this could be "Gelesen". -->
+    <string name="mark_as_read_short">Markatu irakurrita</string>
     <!-- Placeholder text when something is loading -->
     <string name="loading">Kargatzen...</string>
     <string name="hide">Ezkutatu</string>
@@ -78,10 +81,6 @@
     <string name="always_load_remote_images">Kargatu urrutiko irudiak beti</string>
     <string name="once">Behin</string>
     <string name="show_warning">Erakutsi abisua</string>
-    <!-- deprecated, UI must not offer an option to show the password -->
-    <string name="show_password">Erakutsi pasahitza</string>
-    <!-- deprecated, UI must not offer an option to show the password -->
-    <string name="hide_password">Ezkutatu pasahitza</string>
     <string name="not_now">Orain ez</string>
     <string name="never">Inoiz ez</string>
     <string name="one_moment">Unetxo bat...</string>
@@ -189,6 +188,7 @@
     <string name="video">Bideoa</string>
     <string name="documents">Dokumentuak</string>
     <string name="contact">Kontaktua</string>
+    <string name="bot">Bot</string>
     <string name="camera">Kamera</string>
     <string name="switch_camera">Aldatu kamera</string>
     <string name="toggle_fullscreen">Aldatu pantaila osoa modua</string>
@@ -239,6 +239,7 @@
     <!-- menu labels (or icon, buttons...) -->
     <string name="menu_new_contact">Kontaktu berria</string>
     <string name="menu_new_classic_contact">Gehitu kontaktua eskuz</string>
+    <string name="new_classic_contact_explain">Eskuz gehitutako kontaktuak eposta helbide klasikoetara idazteko erabil daitezke, eta ez da bermatzen muturretik muturrera zifratuta egotea.</string>
     <string name="menu_new_chat">Txat berria</string>
     <string name="menu_new_group">Talde berria</string>
     <!-- "Chat" is a verb here, "Message to" would also fit. the string might be used in the "New Chat" screen above the contact list -->
@@ -277,28 +278,56 @@
     <string name="menu_message_details">Mezuaren xehetasunak</string>
     <string name="menu_copy_to_clipboard">Kopiatu arbelera</string>
     <string name="share_invite_link">Partekatu gonbidapen esteka</string>
+    <string name="share_invite_link_explain">Esteka hau duen edonork ikus dezake zure profila eta txat bat hasi zurekin. Partekatu konfiantzazko pertsonekin bakarrik.</string>
+    <string name="invite_friends">Gonbidatu lagunak</string>
+    <!-- %1$s is replaced by the user's invitation link ("https://i.delta.chat/...") -->
+    <string name="invite_friends_text">Jarri nirekin harremanetan Delta Chat bidez:\n%1$s</string>
+    <string name="menu_copy_selection_to_clipboard">Kopiatu hautaketa</string>
+    <string name="menu_copy_link_to_clipboard">Kopiatu esteka</string>
+    <string name="menu_copy_text_to_clipboard">Kopiatu testua</string>
+    <string name="menu_copy_image_to_clipboard">Kopiatu irudia</string>
+    <string name="menu_copy_email_to_clipboard">Kopiatu eposta</string>
+    <string name="paste_from_clipboard">Kopiatu arbeletik</string>
     <string name="menu_forward">Birbidali mezua</string>
     <string name="menu_reply">Erantzun mezuari</string>
     <string name="menu_mute">Mututu jakinarazpenak</string>
     <string name="menu_unmute">Utzi mututzeari</string>
     <string name="menu_export_attachment">Esportatu eranskina</string>
+    <string name="menu_export_attachments">Esportatu eranskinak</string>
     <string name="menu_all_media">Multimedia guztia</string>
+    <string name="all_apps_and_media">Aplikazio guztiak eta multimedia</string>
+    <!-- Command to jump to the original message corresponding to a gallery image or document -->
+    <string name="show_in_chat">Erakutsi txatean</string>
+    <string name="show_app_in_chat">Erakutsi aplikazioa txatean</string>
     <string name="menu_share">Partekatu</string>
+    <!-- Verb "to block sth." usually a mailing list or a contact, not a noun -->
+    <string name="block">Bloketau</string>
     <string name="menu_block_contact">Blokeatu kontaktuak</string>
     <string name="menu_unblock_contact">Desblokeatu kontaktua</string>
+    <string name="accept">Onartu</string>
     <string name="menu_play">Erreproduzitu</string>
     <string name="menu_pause">Pausatu</string>
     <string name="menu_scroll_to_bottom">Korritu behealdera</string>
     <string name="menu_scroll_to_top">Korritu goialdera</string>
     <string name="menu_help">Laguntza</string>
+    <!-- use the same term for "Apps" as elsewhere -->
+    <string name="what_is_webxdc">Aplikazioei buruz</string>
+    <string name="privacy_policy">Pribatutasun politika</string>
     <string name="menu_select_all">Hautatu guztiak</string>
+    <string name="select_chat">Aukeratu txata</string>
+    <string name="select_more">Aukeratu gehiago</string>
     <string name="menu_edit_name">Editatu izena</string>
     <string name="menu_settings">Ezarpenak</string>
     <string name="menu_advanced">Aurreratua</string>
-    <string name="menu_view_profile">Ikusi profila</string>
+    <string name="menu_view_profile">Ikusi kontua</string>
     <string name="menu_zoom_in">Hurbildu zooma</string>
     <string name="menu_zoom_out">Urrundu zooma</string>
     <string name="menu_save_log">Gorde egunkaria</string>
+    <string name="menu_more_options">Aukera gehiago</string>
+    <string name="jump_to_message">Joan mezura</string>
+    <string name="jump_to_original_message">Joan jatorrizko mezura</string>
+    <string name="copy_json">Kopiatu JSON</string>
+    <string name="replace_draft">Ordeztu zirriborroa</string>
     <string name="title_share_location">Partekatu kokalekua taldeko kide guztiak</string>
     <string name="device_talk">Gailuaren mezuak</string>
     <string name="device_talk_subtitle">Lokalki sortutako mezuak</string>
@@ -312,6 +341,12 @@
     <string name="pin">Finkatu</string>
     <!-- Opposite of "Pin chat", removing the sticky-state from a chat. -->
     <string name="unpin">Desfinkatu</string>
+    <string name="ConversationFragment_quoted_message_not_found">Ez da jatorrizko mezua aurkitu</string>
+    <string name="reply_privately">Erantzun modu pribatuan</string>
+    <string name="source_code">Iturburu kodea</string>
+    <!-- Menu item beside an app/chat that adds an icon to the system's home screen. If the user taps that icon, the app/chat is opened directly. -->
+    <string name="add_to_home_screen">Gehitu hasierako pantailan</string>
+    <string name="donate">Egin dohaintza</string>
     <string name="mute_for_one_hour">Mututu ordubete</string>
     <string name="mute_for_eight_hours">Mututu 8 ordu</string>
     <string name="mute_for_one_day">Mututu egun bat</string>
@@ -326,6 +361,34 @@
 
     <string name="file_saved_to">Fitxategia \"%1$s\" helbidean gordeta</string>
 
+    <!-- the action "to call someone", used as a tooltip for the "phone" icon. not: "the call" -->
+    <string name="start_call">Deitu</string>
+    <string name="start_audio_call">Audio deia</string>
+    <string name="start_video_call">Bideo deia</string>
+    <!-- the action "to answer" or to "accept" or to "pick up" a call. not: "the answer" -->
+    <string name="answer_call">Erantzun</string>
+    <!-- the action "to decline" a call, not: "the decline" -->
+    <string name="end_call">Ukatu</string>
+    <!-- deprecated, use outgoing_audio_call or outgoing_video_call instead -->
+    <string name="outgoing_call">Irteerako deia</string>
+    <!-- deprecated, use incoming_audio_call or incoming_video_call instead -->
+    <string name="incoming_call">Sarrerako deia</string>
+    <string name="declined_call">Ukatutako deia</string>
+    <string name="canceled_call">Bertan behera utzitako deia</string>
+    <string name="missed_call">Galdutako deia</string>
+    <!-- get confirmations -->
+    <!-- confirmation for leaving groups or channels. If a subject is needed, "Are you sure you want to leave the chat?" would work as well -->
+    <string name="ask_leave_group">Ziur irten nahi duzula?</string>
+    <plurals name="ask_delete_chat">
+        <item quantity="one">Ezabatu txat %d?</item>
+        <item quantity="other">Ezabatu %d txat?</item>
+    </plurals>
+    <string name="ask_delete_named_chat">Ezabatu \"%1$s\" txata?</string>
+    <string name="ask_delete_message">Ezabatu mezu hau?</string>
+    <plurals name="ask_delete_messages">
+        <item quantity="one">Ezabatu mezu %d?</item>
+        <item quantity="other">Ezabatu %d mezu?</item>
+    </plurals>
     <string name="ask_forward">Birbidali mezuak %1$s erabiltzaileari?</string>
     <string name="ask_export_attachment">Esportatu eranskina? Eranskinak esportatzeak zure beste gailuko beste aplikazioek atzitzea ahalbidetuko du.\n\nJarraitu?</string>
     <string name="ask_block_contact">Blokeatu kontaktu hau? Ez dituzu kontaktu honen mezu gehiago jasoko.</string>
@@ -335,6 +398,11 @@
     <string name="ask_start_chat_with">Txateatu %1$s erabiltzailearekin?</string>
     <!-- %1$s is replaced by a comma-separated list of names -->
     <string name="ask_remove_members">Kendu %1$s taldetik?</string>
+    <!-- %1$s is replaced by a comma-separated list of names -->
+    <string name="ask_remove_from_channel">Ezabatu %1$s kanaletik?</string>
+    <string name="open_url_confirmation">Esteka hau ireki nahi duzu?</string>
+
+
     <!-- contact list -->
     <string name="contacts_title">Kontaktuak</string>
     <string name="contacts_type_email_above">Idatzi e-mail helbidea goian</string>
@@ -357,6 +425,8 @@
         <item quantity="one">Mezu berri %d</item>
         <item quantity="other">%d mezu berri</item>
     </plurals>
+    <!-- consider keeping the term "channel" as in WhatsApp or Telegram -->
+    <string name="chat_new_channel_hint">Kanalak zure mezuak jende askori aldi berean helarazteko tresnak dira.</string>
     <string name="chat_new_group_hint">Idatzi lehen mezua, besteek taldera erantzutea baimenduz\n\n• Ez du axola denek ez badute Delta Chat erabiltzen.\n\n• Lehen mezua bidaltzeko denbora bat behar daiteke.</string>
     <string name="chat_record_slide_to_cancel">Irristatu ezeztatzeko</string>
     <string name="chat_record_explain">Sakatu eta mantendu ahots-mezu bat grabatzeko, askatu bidaltzeko.</string>
@@ -365,32 +435,70 @@
     <string name="chat_share_with_title">Partekatu honekin</string>
     <string name="chat_input_placeholder">Mezua</string>
     <string name="chat_archived_label">Artxibatuta</string>
+    <string name="chat_request_label">Eskaera</string>
+    <string name="chat_request_label_explain">Sartu eskaerak kontagailuetan eta jakinarazpenetan</string>
     <string name="chat_no_messages">Mezurik ez.</string>
     <string name="chat_self_talk_subtitle">Nire buruari bidalitako mezuak</string>
+    <string name="archive_empty_hint">Artxibatutako txatak hemen agertuko dira.</string>
     <!-- Action to add a message to "Saved Messages". The longer form (instead of "Save" only) is needed esp. on desktop to make clear this is not about saving a file to disk -->
     <string name="save_message">Gorde</string>
     <string name="saved_messages">Gordetako mezuak</string>
     <string name="saved_messages_explain">• Birbidali mezuak hona eskura izateko\n\n• Hartu oharrak edo ahots mezuak\n\n• Gehitu multimedia horietara</string>
+    <!-- Should match "Saved" from "Saved messages" -->
+    <string name="saved">Gordeta</string>
+    <string name="save_as">Gorde honela</string>
     <string name="retry_send">Saiatu berriro mezua bidaltzen</string>
+    <string name="attachment_failed_to_load">Eranskina kargatzean huts egin du</string>
+    <!-- For recording Voice messages: Description for the "Lock" button allowing to lift the thumb from the record button while recording continues -->
+    <string name="lock_recording">Blokeatu grabazioa</string>
+
+    <!-- mailing lists -->
+    <string name="mailing_list">Mailin zerrenda</string>
+
+    <!-- webxdc -->
+    <!-- "Start..." button for an app -->
+    <string name="start_app">Hasi...</string>
+    <!-- this is a warning that is shown when one tries to send something to a chat that is not yet accepted. -->
+    <string name="accept_request_first">Onartu txat-eskaera lehenik, mesedez.</string>
+    <!-- title shown above a list of chats where one should be selected (eg. when sharing files from a webxdc). the placeholder will be replaced by a file name -->
+    <string name="send_file_to">Bidali \"%1$s\" honi...</string>
+    <!-- title shown above a list contacts where one should be selected (eg. when a webxdc attempts to send a message to a chat) -->
+    <string name="send_message_to">Bidali mezua honi...</string>
+    <string name="enable_realtime">Denbora errealeko aplikazioak</string>
+    <string name="enable_realtime_explain">Gaitu denbora errealeko konexioak txatei atxikitako aplikazioentzat. Gaituz gero, baliteke txat-kideek zure IP helbidea ezagutu ahal izatea aplikazio bat abiarazten duzunean.</string>
+
     <!-- map -->
     <string name="filter_map_on_time">Erakutsi kokalekuak denbora markoan</string>
     <string name="show_location_traces">Erakutsi lorratzak</string>
     <string name="add_poi">Bidali interesezko puntua</string>
 
 
+    <string name="puny_code_warning_header">Esteka susmagarria atzeman da</string>
+    <!-- placeholder contains the hostname converted to ascii -->
+    <string name="puny_code_warning_question">Ziur zaude %1$s bisitatu nahi duzula?</string>
     <!-- search -->
     <string name="search">Bilatu</string>
+    <string name="search_in_chat">Bilatu txatetan</string>
+    <string name="search_files">Bilatu fitxategiak</string>
     <string name="search_explain">Bilatu txatak, kontaktuak, eta mezuak.</string>
     <string name="search_no_result_for_x">Ez da emaitzarik aurkitu \"%s\" bilaketarentzat</string>
+    <!-- Adjective, as in "Show Unread Messages" -->
+    <string name="search_unread">Irakurri gabe</string>
+
+
     <!-- create/edit groups, contact/group profile -->
     <string name="group_name">Taldearen izena</string>
     <string name="group_avatar">Taldearen abatarra</string>
+    <string name="remove_group_image">Ezabatu taldearen irudia</string>
+    <string name="change_group_image">Aldatu taldearen irudia</string>
     <string name="group_create_button">Sortu taldea</string>
     <string name="group_please_enter_group_name">Idatzi izen bat taldearentzat.</string>
     <string name="group_add_members">Gehitu kideak</string>
     <string name="group_self_not_in_group">Taldeko kidea izan behar zara ekintza hau burutzeko.</string>
     <string name="profile_encryption">Zifratzea</string>
     <string name="profile_shared_chats">Partekatutako txatak</string>
+    <!-- Separator between the list of actual members and past members -->
+    <string name="past_members">Kide izandakoak</string>
     <string name="tab_contact">Kontaktua</string>
     <string name="tab_group">Taldea</string>
     <string name="tab_gallery">Galeria</string>
@@ -399,10 +507,73 @@
     <string name="tab_map">Mapa</string>
     <string name="tab_gallery_empty_hint">Txat honetan partekatutako irudi eta bideoak agertuko dira hemen</string>
     <string name="tab_docs_empty_hint">Txat honetan partekatutako dokumentuak, musika, eta bestelako fitxategiak agertuko dira hemen</string>
+    <string name="tab_image_empty_hint">Txat honi erantsitako irudiak hemen agertuko dira.</string>
+    <string name="tab_video_empty_hint">Txat honi erantsitako bideoak hemen agertuko dira.</string>
+    <string name="tab_audio_empty_hint">Txat honi erantsitako fitxategiak eta audio mezuak hemen agertuko dira.</string>
+    <string name="tab_webxdc_empty_hint">Txat honi erantsitako aplikazioak hemen agertuko dira.</string>
+    <string name="tab_all_media_empty_hint">Edozein txati erantsitako multimedia-fitxategiak hemen agertuko dira.</string>
+    <string name="all_files_empty_hint">Edozein txati erantsitako dokumentuak eta bestelako fitxategiak hemen agertuko dira.</string>
+    <string name="all_apps_empty_hint">Edozein txati erantsitako aplikazioak hemen agertuko dira.</string>
     <string name="media_preview">Multimediaren aurrebista</string>
+    <!-- option to show images in the gallery with the correct width/height aspect (instead of square); other gallery apps may be a source of inspiration for translation :) -->
+    <string name="aspect_ratio_grid">Proportzio-sareta</string>
+    <!-- option to show images in the gallery as square (instead of using correct width/height) -->
+    <string name="square_grid">Lauki-sareta</string>
     <string name="send_message">Bidali mezua</string>
 
+    <!-- Multi Device -->
+    <!-- "Second Device" can also be translated as "Another Device", if that is catchier in the destination language. However, make sure to use the term consistently. -->
+    <string name="multidevice_title">Gehitu bigarren gailua</string>
+    <string name="multidevice_same_network_hint">Ziurtatu gailu biak Wi-Fi edo sare berera konektatuta daudela.</string>
+    <string name="multidevice_receiver_title">Gehitu bigarren gailu gisa</string>
+    <string name="multidevice_abort">Bertan behera utzi bigarren gailuaren konfigurazioa?</string>
+    <string name="multidevice_abort_will_invalidate_copied_qr">Honek arbelean kopiatutako QR kodea baliogabetuko du.</string>
+    <string name="multidevice_transfer_done_devicemsg">ℹ️ Kontua zure bigarren gailura transferitu da.</string>
+    <!-- Shown beside progress bar, stay short -->
+    <string name="preparing_account">Kontua prestatzen...</string>
+    <!-- Shown beside progress bar, stay short -->
+    <string name="transferring">Transferitzen...</string>
+    <string name="troubleshooting">Arazoak konpontzea</string>
+
+    <!-- Connectivity -->
+    <!-- Headline for the "Inbox" eg. in the "Connectivity" view -->
+    <string name="incoming_messages">Sarrerako mezuak</string>
+    <!-- Headline for the "Outbox" eg. in the "Connectivity" view -->
+    <string name="outgoing_messages">Irteerako mezuak</string>
+    <string name="connectivity">Konektagarritasuna</string>
+    <!-- Shown in the title bar if the app is "Not connected"; prefer short strings. -->
+    <string name="connectivity_not_connected">Konektatu gabe</string>
+    <!-- Shown in the title bar if the app is "Connecting"; prefer short strings. The ellipsis is a single character (…), not three (...) -->
+    <string name="connectivity_connecting">Konektatzen...</string>
+    <!-- Shown in the title bar if the app is "Updating" (eg. getting new/old message, sync things); prefer short strings. The ellipsis is a single character (…), not three (...) -->
+    <string name="connectivity_updating">Eguneratzen...</string>
+    <!-- Shown in the setting if the app is "Connected" -->
+    <string name="connectivity_connected">Konektatuta</string>
+    <string name="sending">Bidaltzen...</string>
+    <string name="last_msg_sent_successfully">Azken mezua ondo bidali da.</string>
+    <string name="not_supported_by_provider">Zure hornitzaileak ez du onartzen.</string>
+    <!-- Subtitle in quota context of "Connectivity" view. Should be be plural always, no number is prefixed. -->
+    <string name="messages">Mezuak</string>
+    <!-- welcome and login -->
+    <!-- Primary button on the welcome screen, allows to create an instant profile -->
+    <string name="onboarding_create_instant_account">Sortu kontu berria</string>
+    <!-- Secondary button on the welcome screen, allows to "Add as Second Device", "Restore from Backup"  -->
+    <string name="onboarding_alternative_logins">Dagoeneko badut kontu bat</string>
+    <!-- This is a button and a title, allowing to use existing, classic email, setting ports, passwords and so on -->
+    <string name="manual_account_setup_option">Erabili eposta klasikoa errele gisa</string>
+    <!-- Instant onboarding title (there is not more to do than to set name and avatar) -->
+    <string name="instant_onboarding_title">Zure kontua</string>
+    <!-- The placeholder will be replaced by the default onboarding server -->
+    <string name="instant_onboarding_agree_default2">%1$s-(r)en pribatutasun-politika</string>
+    <!-- Confirmation button on the instant onboarding screen -->
+    <string name="instant_onboarding_create">Ados eta sortu kontua</string>
+    <!-- Secondary, link-like button to open a page with other possible instances -->
+    <string name="instant_onboarding_show_more_instances">Erabili beste zerbitzari bat</string>
+    <string name="instant_onboarding_other_server">Zerrendatu txatmail zerbitzariak</string>
+    <string name="welcome_chat_over_email">Txat deszentralizatu segurua</string>
+    <string name="scan_invitation_code">Eskaneatu gonbidapen kodea</string>
     <string name="login_title">Hasi saioa</string>
+    <string name="login_advanced_hint">Saio-hasiera hau erabiltzaile aurreratuentzat da:\n\n• Ez erabili beste aplikazio batean erabiltzen ari zaren helbiderik.\n\n• Posta elektronikoko zerbitzari klasikoak txatak baimentzen ditu, muturretik muturrera zifratu gabe, posta-ikono batek markatuta.</string>
     <string name="login_inbox">Sarrera ontzia</string>
     <string name="login_imap_login">IMAP erabiltzaile-izena</string>
     <string name="login_imap_server">IMAP zerbitzaria</string>
@@ -414,6 +585,26 @@
     <string name="login_smtp_server">SMTP zerbitzaria</string>
     <string name="login_smtp_port">SMTP ataka</string>
     <string name="login_smtp_security">SMTP segurtasuna</string>
+    <!-- the word "Proxy" might be left untranslated unless the destination language has a well-known term for a "Proxy Server", acting intermediary between the app and the server -->
+    <string name="proxy_settings">Proxy-a</string>
+    <string name="proxy_use_proxy">Erabili proxy-a</string>
+    <string name="proxy_add">Gehitu proxy-a</string>
+    <string name="proxy_add_url_hint">Sartu proxy-aren esteka hemen</string>
+    <string name="proxy_invalid">Proxy baliogabea edo ez-bateragarria</string>
+    <string name="proxy_list_header">Gordetako proxy-ak</string>
+    <string name="proxy_delete">Ezabatu proxy-a</string>
+    <string name="proxy_share_explain">Zure lagunek QR kodea eskaneatuta gehitu dezakete proxy hau.</string>
+    <string name="proxy_share_link">Partekatu esteka</string>
+    <string name="proxy_enabled">Proxy-a gaituta</string>
+    <string name="proxy_enabled_hint">Proxy bat erabiltzen ari zara. Konektatzeko arazoak badituzu, probatu beste proxy bat.</string>
+    <!-- "Relay" refers to the relay servers used; please chose a common term in your language, no need to be literal. If in doubt, stay with "Relay" -->
+    <string name="transports">Erreleak</string>
+    <string name="add_transport">Gehitu errelea</string>
+    <string name="remove_transport">Ezabatu errelea</string>
+    <string name="edit_transport">Editatu errelea</string>
+    <!-- shown if a QR code was scanned that can be used as a relay -->
+    <string name="confirm_add_transport">Gehitu errelea?</string>
+    <string name="invalid_transport_qr">Eskaneatutako QR kodeak ez dauka baliozko errelerik.</string>
     <string name="login_certificate_checks">Ziurtagiri-egiaztaketak</string>
     <string name="login_error_mail">Sartu baliozko e-mail helbide bat</string>
     <string name="login_error_server">Sartu baliozko zerbitzari / IP helbide bat</string>
@@ -428,8 +619,17 @@
     <string name="accept_invalid_certificates">Onartu ziurtagiri baliogabeak</string>
     <string name="switch_account">Aldatu kontua</string>
     <string name="add_account">Gehitu kontua</string>
+    <!-- for translations, you can also think of "Profile Tag" or "Profile Description" as the source string -->
+    <string name="profile_tag">Kontuaren etiketa</string>
+    <string name="profile_tag_hint">Adib. Lana, Familia</string>
+    <!-- Menu entry to sort an item to the beginning of a list. Only "To Top" may do as well in some translations, if that helps to stay shorter. -->
+    <string name="move_to_top">Mugitu gora</string>
     <string name="delete_account">Ezabatu kontua</string>
     <string name="delete_account_ask">Ziur al zaude zure kontuaren datuak ezabatu nahi dituzula?</string>
+    <string name="unconfigured_account">Konfiguratu gabeko kontua</string>
+    <string name="unconfigured_account_hint">Ireki kontua konfiguratzeko.</string>
+    <string name="try_connect_now">Saiatu orain konektatzen</string>
+    <string name="sync_all">Sinkronizatu guztiak</string>
     <!-- share and forward messages -->
     <!-- Translators: shown above a chat/contact list when selecting recipients to forward messages -->
     <string name="forward_to">Birbidali honi …</string>
@@ -442,6 +642,7 @@
     <string name="pref_profile_info_headline">Zure profileko informazioa</string>
     <string name="pref_profile_photo">Profileko argazkia</string>
     <string name="pref_blocked_contacts">Blokeatutako kontaktuak</string>
+    <string name="blocked_empty_hint">Blokeatutako kontaktuak hemen agertuko dira.</string>
     <string name="pref_who_can_see_profile_explain">Zure profileko argazkia eta izena zure mezuekin batera erakutsiko dira beste erabiltzaileekin komunikatzen zarenean. Informazioa behin bidalita ezin da ezabatu edo kendu.</string>
     <string name="pref_your_name">Zure izena</string>
     <!-- Label of the Bio/Signature/Status/Motto field -->
@@ -457,8 +658,12 @@
     <string name="pref_screen_security_explain">Eskatu pantaila-argazkiak blokeatzea azkenak zerrendan eta aplikazio barruan.</string>
     <string name="pref_screen_security_please_restart_hint">Pantailaren segurtasun ezarpenak aplikatzeko berrabiarazi aplikazioa.</string>
     <string name="pref_notifications">Jakinarazpenak</string>
+    <string name="pref_mention_notifications">Aipamenak</string>
     <string name="pref_notifications_show">Erakutsi</string>
     <string name="pref_notifications_priority">Lehentasuna</string>
+    <string name="pref_notifications_explain">Gaitu sistemaren jakinarazpenak mezu berrientzat</string>
+    <string name="pref_show_notification_content">Erakutsi mezuaren edukia jakinarazpenean</string>
+    <string name="pref_show_notification_content_explain">Erakutsi bidaltzailea eta mezuaren lehen hitza jakinarazpenetan</string>
     <string name="pref_led_color">LED kolorea</string>
     <string name="pref_sound">Soinua</string>
     <string name="pref_silent">Isila</string>
@@ -472,11 +677,14 @@
     <string name="pref_appearance">Itxura</string>
     <string name="pref_theme">Azala</string>
     <string name="pref_language">Hizkuntza</string>
+    <string name="pref_use_system_ui_font">Erabili sistemaren letra-mota</string>
     <string name="pref_incognito_keyboard">Teklatu pribatua</string>
     <!-- Translators: Must indicate that there is no guarantee as the system may not honor our request. -->
     <string name="pref_incognito_keyboard_explain">Eskatu teklatuari pertsonalizatutako ikasketa desgaitzea</string>
     <string name="pref_read_receipts">Irakurragiriak</string>
     <string name="pref_read_receipts_explain">Irakurragiriak desgaituta badaude, ezin izango dituzu besteen irakurragiriak ikusi.</string>
+    <string name="pref_server">Zerbitzaria</string>
+    <string name="pref_encryption">Zifratua</string>
     <string name="pref_manage_keys">Kudeatu gakoak</string>
     <string name="pref_chats">Txatak</string>
     <string name="pref_in_chat_sounds">Txat bitarteko soinuak</string>
@@ -488,6 +696,7 @@
     <string name="pref_backup">Babeskopia</string>
     <string name="pref_backup_explain">Egin txaten babes-kopia kanpo biltegian</string>
     <string name="pref_backup_export_explain">Babes-kopia batek instalazio berri bat ezartzen laguntzen dizu, bai gailu honetan zein beste batean.\n\nBabes-kopiak mezu guztiak, kontaktuak eta txatak, eta zure Autocrypt ezarpena daramatza. Gorde babes-kopiaren fitxategia toki seguruan edo ezabatu ahalik eta lasterren.</string>
+    <string name="pref_backup_export_this">Esportatu kontu hau</string>
     <string name="pref_backup_export_start_button">Hasi babes-kopia</string>
     <string name="pref_backup_written_to_x">Babes-kopia ongi idatzi da hemen: %1$s</string>
     <!-- No need to translate "Wallpaper" literally. Chose what is common in your language for a "Wallpaper" or a "Background". Avoid adding the term "image" here, as the "Wallpaper" may also be just a single color. -->
@@ -495,6 +704,8 @@
     <string name="pref_background_btn_default">Erabili lehenetsitako irudia</string>
     <string name="pref_background_btn_gallery">Hautatu galeriatik</string>
     <string name="pref_imap_folder_warn_disable_defaults">Aukera hau desaktibatuz gero, egiaztatu zure zerbitzaria eta beste bezeroen konfigurazioa bat datorrela.\n\nBestela agian gauzak ez dabiltza.</string>
+    <!-- No need to be literal here, you can also use "Use Multiple Devices", "Support Multiple Devices" or other fitting terms. However, it should fit to the wording or your language at https://delta.chat/help  -->
+    <string name="pref_multidevice">Gailu anitzeko modua</string>
     <string name="pref_auto_folder_moves">Automatikoki mugitzen du DeltaChat karpetara</string>
     <string name="pref_show_emails">Erakutsi ohiko e-mailak</string>
     <string name="pref_show_emails_no">Ez, txatak besterik ez</string>
@@ -506,6 +717,35 @@
     <string name="pref_background_default_color">Lehenetsitako kolorea</string>
     <string name="pref_background_custom_image">Irudi pertsonalizatua</string>
     <string name="pref_background_custom_color">Kolore pertsonalizatua</string>
+    <string name="export_aborted">Esportazioa bertan behera geratu da.</string>
+    <string name="download_failed">Deskargak huts egin du</string>
+    <!-- %1$s will be replaced by a human-readable number of bytes, eg. 32 KiB, 1 MiB. Resulting string eg. "1 MiB message" -->
+    <string name="n_bytes_message">%1$s mezu</string>
+    <string name="select_profile">Aukeratu kontua</string>
+    <string name="profile_image_select">Aukeratu abatarra</string>
+    <string name="select_your_new_profile_image">Aukeratu zure abatar berria</string>
+    <string name="profile_image_delete">Ezabatu abatarra</string>
+    <string name="pref_edit_profile">Editatu kontua</string>
+    <string name="disable_imap_idle">Desgaitu IMAP IDLE</string>
+    <string name="send_stats_to_devs">Bidali estatistikak Delta Chat-eko garatzaileei</string>
+    <string name="disable">Desgaitu</string>
+    <!-- Emoji picker and categories -->
+    <string name="emoji_search_results">Bilatu emaitzak</string>
+    <string name="emoji_recent">Azkenaldian erabiliak</string>
+    <string name="emoji_people">Pertsonak eta gorputza</string>
+    <string name="emoji_nature">Animaliak eta natura</string>
+    <string name="emoji_foods">Janaria eta edaria</string>
+    <string name="emoji_places">Bidaiak eta lekuak</string>
+    <string name="emoji_objects">Objetuak</string>
+    <string name="emoji_symbols">Sinboloak</string>
+    <string name="emoji_flags">Banderak</string>
+
+    <!-- Reactions -->
+    <string name="reactions">Erreakzioak</string>
+    <!-- Verb, the action of adding a "Reaction" to a message. Used eg. in context menus, similar to "Reply" or "Forward" -->
+    <string name="react">Erreakzionatu</string>
+    <!-- automatically delete message -->
+    <string name="delete_old_messages">Ezabatu mezu zaharrak</string>
     <string name="autodel_device_title">Ezabatu mezuak gailutik</string>
     <string name="autodel_server_title">Ezabatu mezuak zerbitzaritik</string>
     <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
@@ -513,9 +753,11 @@
     <string name="autodel_confirm">Ulertzen dut, ezabatu mezuk guzti hauek</string>
     <!-- "At once" in the meaning of "Immediately", without any intervening time. -->
     <string name="autodel_at_once">Berehala</string>
+    <string name="after_5_minutes">5 minutu pasatutakoan</string>
     <string name="autodel_after_1_hour">Ordubete eta gero</string>
     <string name="autodel_after_1_day">Egun bat eta gero</string>
     <string name="autodel_after_1_week">Aste bat eta gero</string>
+    <string name="after_5_weeks">5 aste pasatutakoan</string>
     <string name="autodel_after_1_year">Urtebete eta gero</string>
 
     <!-- %1$s will be replaced by the old group name, %2$s will be replaced by the new group name -->
@@ -533,19 +775,30 @@
     <string name="remove_member_by_you">Nik: %1$s kidea kenduta</string>
     <!-- %1$s will be replaced by name of the contact removed from the group, %2$s will be replaced by name of the contact who did the action -->
     <string name="remove_member_by_other">%2$s(e)k: %1$s kidea kenduta</string>
+    <!-- "left" in the meaning of "exited". -->
+    <string name="group_left_by_you">Taldetik atera zara</string>
+    <!-- "left" in the meaning of "exited". -->
+    <string name="channel_left_by_you">Kanaletik atera zara.</string>
+    <string name="you_joined_the_channel">Kanalera batu zara.</string>
     <string name="group_image_deleted_by_you">Nik: Taldearen irudia ezabatuta</string>
     <!-- %1$s will be replaced by name of the contact -->
     <string name="group_image_deleted_by_other">%1$s(e)k: Taldearen irudia ezabatuta</string>
+    <string name="chat_protection_enabled_tap_to_learn_more">Mezuak muturretik muturrera zifratuta daude. Sakatu gehiago jakiteko.</string>
+    <!-- Some options as "Add Second Device" or "Backup" may require the system PIN/Fingerprint/Gesture/Etc. to be entered in a system dialog. This hint is added to the system dialog, below a title as "Add Second Device" or "Backup". -->
+    <string name="enter_system_secret_to_continue">Desblokeatu jarraitzeko</string>
+
     <!-- qr code stuff -->
     <string name="qr_code">QR kodea</string>
     <string name="qrscan_title">Eskaneatu QR kodea</string>
     <string name="qrscan_hint">Kokatu zure kamera QR kodearen gainean</string>
     <string name="qrscan_ask_join_group">\"%1$s\" taldera elkartu nahi duzu?</string>
+    <string name="qrscan_ask_join_channel">\"%1$s\" kanalera batu nahi duzu?</string>
     <string name="qrscan_fingerprint_mismatch">Eskaneatutako hatz-marka eta %1$s erabiltzaileari ikusitako azken hatz-marka ez datoz bat.</string>
     <string name="qrscan_no_addr_found">QR kode honek hatz-marka bat du baina ez e-mail helbidea.\n\nBandaz kanpoko egiaztaketa baterako, ezarri zifratutako konexio bat hartzailearekin aurretik.</string>
     <string name="qrscan_contains_text">Eskaneatutako QR kodearen testua:\n\n%1$s</string>
     <string name="qrscan_contains_url">Eskaneatutako QR kodearen URL-a:\n\n%1$s</string>
     <string name="qrscan_fingerprint_label">Hatz-marka</string>
+    <string name="revive_qr_code">Aktibatu QR kodea</string>
     <string name="qrshow_title">QR gonbidapen-kodea</string>
     <string name="qrshow_x_joining">%1$s elkartu da.</string>
     <string name="qrshow_x_verified">%1$s egiaztatuta.</string>
@@ -553,13 +806,17 @@
     <string name="qrshow_join_group_title">QR gonbidapen-kodea</string>
     <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by the group name, eg. "Scan to join group \"Testing group\"" -->
     <string name="qrshow_join_group_hint">Eskaneatu hau \"%1$s\" taldera elkartzeko.</string>
+    <string name="qrshow_join_channel_hint">Eskaneatu \"%1$s\" kanalera batzeko</string>
     <string name="qrshow_join_contact_title">QR gonbidapen-kodea</string>
     <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by the profile name eg. "Scan to chat with Alice" -->
     <string name="qrshow_join_contact_hint">Eskaneatu hau %1$s erabiltzailearen kontaktua ezartzeko</string>
     <string name="qrshow_join_contact_no_connection_toast">Ez dago Internet konexiorik, ezin da QR kode bidezko ezarpena aplikatu</string>
     <string name="qraccount_ask_create_and_login">Sortu kontu berria \"%1$s\" zerbitzarian eta saioa han hasi?</string>
+    <string name="please_enter_name">Mesedez, sartu izen bat.</string>
     <string name="qraccount_qr_code_cannot_be_used">Eskaneatutako QR kodea ezin da kontu berri bat ezartzeko erabili.</string>
+    <string name="secure_join_wait">Konexioa ezartzen, itxaron mesedez...</string>
     <string name="contact_verified">%1$s egiaztatuta.</string>
+    <string name="contact_blocked">Kontaktua blokeatu duzu</string>
     <!-- notifications  -->
     <string name="notify_reply_button">Erantzun</string>
     <string name="notify_new_message">Mezu berria</string>
@@ -569,6 +826,10 @@
     <string name="notify_name_and_message">Izena eta mezua</string>
     <string name="notify_name_only">Izena besterik ez</string>
     <string name="notify_no_name_or_message">Izenik edo mezurik ez</string>
+    <string name="notifications_disabled">Jakinarazpenak desgaituta</string>
+    <string name="new_messages">Mezu berriak</string>
+    <!-- Body text for a generic "New messages" notification. Shown if we do not have more information about a new messages. Note, that the string is also referenced at https://github.com/deltachat/notifiers -->
+    <string name="new_messages_body">Mezu berriak dituzu</string>
     <!-- permissions -->
     <string name="perm_required_title">Baimena behar da</string>
     <string name="perm_continue">Jarraitu</string>
@@ -577,6 +838,14 @@
     <string name="perm_explain_access_to_mic_denied">Delta Chat-ek mikrofonoa erabiltzeko baimena behar du ahots-mezuak bidali ahal izateko, baina behin betiko ukatu zaio. Joan aplikazioaren ezarpenetara, hautatu \"Baimenak\" eta gaitu \"Mikrofonoa\".</string>
     <string name="perm_explain_access_to_storage_denied">Delta Chat-ek biltegiratze baimena behar du argazkiak, bideoak edo audioa erantsi edo esportatzeko, baina behin betiko ukatu zaio. Joan aplikazioaren ezarpen menura, hautatu \"baimenak\", eta gaitu \"Biltegiratzea\"</string>
     <string name="perm_explain_access_to_location_denied">Delta Chat-ek kokaleku aatzitzeko baimena behar du kokalekua eransteko, baina behin betiko ukatu zaio. Joan aplikazioaren ezarpen menura, hautatu \"baimenak\", eta gaitu \"Kokalekua\".</string>
+    <string name="ImageEditorHud_add_text">Gehitu testua</string>
+    <string name="ImageEditorHud_crop">Ezabatu</string>
+    <string name="ImageEditorHud_flip">Irauli</string>
+    <string name="ImageEditorHud_rotate">Biratu</string>
+
+    <!-- strings introduced on desktop. we want to share strings between the os, in general, please do not add generic strings here -->
+    <string name="about_offical_app_desktop">Hau Delta Chat Desktop aplikazio ofiziala da.</string>
+    <string name="about_licensed_under_desktop">Software honek GNU GPL 3 bertsioaren lizentziapean dago eta iturburu-kodea GitHub-en dago eskuragarri.</string>
     <string name="welcome_desktop">Ongi etorri Delta Chat-era</string>
     <string name="global_menu_preferences_language_desktop">Hautatu hizkuntza...</string>
     <string name="global_menu_file_desktop">Fitxategia</string>
@@ -592,8 +861,12 @@
     <string name="global_menu_view_developer_desktop">Garatzailea</string>
     <string name="global_menu_view_developer_tools_desktop">Garatzaile-tresnak</string>
     <string name="global_menu_help_desktop">Laguntza</string>
+    <string name="delta_chat_homepage">Delta Chat-en hasiera orria</string>
+    <string name="contribute">Lagundu</string>
     <string name="global_menu_help_report_desktop">Eman arazo baten berri</string>
     <string name="global_menu_help_about_desktop">Delta Chat-i buruz</string>
+    <string name="global_menu_file_open_desktop">Ireki Delta Chat</string>
+    <string name="global_menu_minimize_to_tray">Txikitu</string>
     <string name="no_chat_selected_suggestion_desktop">Hautatu txat bat edo sortu txat berri bat</string>
     <string name="write_message_desktop">Idatzi mezu bat</string>
     <string name="encryption_info_title_desktop">Zifratzeari buruzko informazioa</string>
@@ -609,6 +882,11 @@
     <string name="message_detail_received_desktop">jasota</string>
     <string name="menu.view.developer.open.log.folder">Ireki egunkarien karpeta</string>
     <string name="menu.view.developer.open.current.log.file">Ireki uneko egunkari-fitxategia</string>
+    <string name="no_spellcheck_suggestions_found">Ez dago ortografia-iradokizunik.</string>
+    <string name="show_window">Erakutsi leihoa</string>
+
+    <string name="switch_between_chats">Aldatu txaten artean</string>
+    <string name="force_refresh_network">Behartu sarea eguneratzera</string>
     <!-- accessibility, the general idea is to use the normal strings for accessibility hints wherever possible -->
     <string name="a11y_delivery_status_error">Bidalketa-egoera: Errorea</string>
     <string name="a11y_delivery_status_sending">Bidalketa-egoera: Bidaltzen</string>
@@ -618,10 +896,28 @@
     <string name="a11y_delivery_status_invalid">Bidalketa-egoera baliogabea</string>
     <string name="a11y_message_context_menu_btn_label">Mezu-ekintzak</string>
     <string name="a11y_background_preview_label">Atzealdearen aurrebista</string>
+    <!-- iOS specific strings, developers: please take care to remove strings that are no longer used! -->
+    <string name="stop_sharing_location">Utzi kokapena partekatzeari</string>
+    <string name="a11y_connectivity_hint">Klik bikoitza konexio xehetasunak ikusteko.</string>
+    <string name="login_error_no_internet_connection">Ez dago Internet konexiorik, saio-hasierak huts egin du.</string>
+    <string name="share_account_not_configured">Kontua ez dago konfiguratuta</string>
+    <string name="cannot_play_audio_file">Ezin da audio-fitxategia erreproduzitu.</string>
+    <string name="open_settings">Ireki ezarpenak</string>
+    <!-- iOS device contact alert -->
+    <string name="import_device_contacts">Inportatu gailuko kontaktuak</string>
+    <!-- iOS notification settings -->
+    <string name="disabled_in_dc">Desgaitu Delta Chat-en</string>
+    <string name="disabled_in_system_settings">Desgaitu sistemaren ezarpenetan</string>
+    <string name="system_settings">Sistemaren ezarpenak</string>
+    <!-- iOS shortcut widget -->
+    <!-- use the same translation for "Shortcuts" as the system is using, often the term "Shortcut" stays untranslated; check eg. how the "Shortcuts" system app is called in your locale -->
+    <string name="shortcuts_widget_title">Lasterbideak</string>
     <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
     <string name="InfoPlist_NSCameraUsageDescription">Kamera atzitzeko baimena emateak argazkiak eta bideoak ateratzea ahalbidetzen dizu.</string>
     <string name="InfoPlist_NSMicrophoneUsageDescription">Mikrofonoa  atzitzeko baimena emateak audioa grabatzea ahalbidetzen dizu.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Argazkien bilduma atzitzeko baimena emateak bertatik argazkiak igotzea ahalbidetzen dizu.</string>
+    <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
+    <string name="pref_instant_delivery">Berehalako bidalketa</string>
     <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
     <string name="perm_enable_bg_reminder_title">Sakatu hemen mezuak jasotzeko Delta Chat bigarren planoan dagoenean.</string>
     <string name="perm_enable_bg_already_done">Dagoeneko baimendu diozu Delta Chat aplikazioari bigarren planoan mezuak jasotzea,\n\nOraindik ere mezuak heltzen ez badira, egiaztatu ere zure sistemaren ezarpenak.</string>

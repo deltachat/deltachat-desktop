@@ -81,10 +81,6 @@
     <string name="always_load_remote_images">Always Load Remote Images</string>
     <string name="once">Once</string>
     <string name="show_warning">Show Warning</string>
-    <!-- deprecated, UI must not offer an option to show the password -->
-    <string name="show_password">Show Password</string>
-    <!-- deprecated, UI must not offer an option to show the password -->
-    <string name="hide_password">Hide Password</string>
     <string name="not_now">Not now</string>
     <string name="never">Never</string>
     <string name="one_moment">One moment…</string>
@@ -384,12 +380,20 @@
 
     <!-- the action "to call someone", used as a tooltip for the "phone" icon. not: "the call" -->
     <string name="start_call">Call</string>
+    <string name="start_audio_call">Audio Call</string>
+    <string name="start_video_call">Video Call</string>
     <!-- the action "to answer" or to "accept" or to "pick up" a call. not: "the answer" -->
     <string name="answer_call">Answer</string>
     <!-- the action "to decline" a call, not: "the decline" -->
     <string name="end_call">Decline</string>
+    <!-- deprecated, use outgoing_audio_call or outgoing_video_call instead -->
     <string name="outgoing_call">Outgoing call</string>
+    <string name="outgoing_audio_call">Outgoing audio call</string>
+    <string name="outgoing_video_call">Outgoing video call</string>
+    <!-- deprecated, use incoming_audio_call or incoming_video_call instead -->
     <string name="incoming_call">Incoming call</string>
+    <string name="incoming_audio_call">Incoming audio call</string>
+    <string name="incoming_video_call">Incoming video call</string>
     <string name="declined_call">Declined call</string>
     <string name="canceled_call">Canceled call</string>
     <string name="missed_call">Missed call</string>
@@ -406,11 +410,6 @@
     <string name="ask_delete_named_chat">Delete chat \"%1$s\"?</string>
     <string name="ask_delete_message">Delete this message?</string>
     <plurals name="ask_delete_messages">
-        <item quantity="one">Delete %d message?</item>
-        <item quantity="other">Delete %d messages?</item>
-    </plurals>
-    <!-- deprecated, use ask_delete_messages -->
-    <plurals name="ask_delete_messages_simple">
         <item quantity="one">Delete %d message?</item>
         <item quantity="other">Delete %d messages?</item>
     </plurals>
@@ -483,8 +482,6 @@
 
     <!-- mailing lists -->
     <string name="mailing_list">Mailing List</string>
-    <!-- deprecated -->
-    <string name="mailing_list_profile_info">Changes to mailing list name and image apply on this device only.</string>
 
     <!-- webxdc -->
     <!-- "Start..." button for an app -->
@@ -570,7 +567,7 @@
     <!-- Shown inside a "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by the profile name eg. "Scan to set up second device for Alice" -->
     <string name="multidevice_qr_subtitle">Scan to set up second device for %1$s</string>
     <string name="multidevice_receiver_title">Add as Second Device</string>
-    <string name="multidevice_open_settings_on_other_device">On the first device, go to “Settings / Add Second Device“ and scan the code shown there</string>
+    <string name="multidevice_open_settings_on_other_device">On the first device, start Delta Chat, go to “Settings / Add Second Device“ and scan the code shown there</string>
     <string name="multidevice_receiver_scanning_ask">Copy the profile from the other device to this device?</string>
     <string name="multidevice_receiver_needs_update">The profile you want to import is from a newer Delta Chat version.\n\nTo continue setting up second device, please update this device to the latest version of Delta Chat.</string>
     <string name="multidevice_abort">Abort setting up second device?</string>
@@ -587,7 +584,7 @@
     <string name="incoming_messages">Incoming Messages</string>
     <!-- Headline for the "Outbox" eg. in the "Connectivity" view -->
     <string name="outgoing_messages">Outgoing Messages</string>
-    <!-- Headline in the "Connectivity" view. Placeholder will be replaced by a domain -->
+    <!-- deprecated -->
     <string name="storage_on_domain">Storage on %1$s</string>
     <string name="connectivity">Connectivity</string>
     <!-- Shown in the title bar if the app is "Not connected"; prefer short strings. -->
@@ -824,8 +821,13 @@
     <string name="disable_imap_idle">Disable IMAP IDLE</string>
     <string name="disable_imap_idle_explain">Do not use IMAP IDLE extension even if the server supports it. Enabling this option will delay message retrieval, enable it only for testing.</string>
     <string name="send_stats_to_devs">Send statistics to Delta Chat\'s developers</string>
-    <string name="stats_msg_body">The attachment contains anonymous usage statistics, which help us improve Delta Chat. Thank you!</string>
-
+    <string name="stats_device_message">Do you want to help improve Delta Chat and support research by sending weekly anonymous usage statistics?\n\n👉 Tap here… 👈</string>
+    <string name="stats_confirmation_dialog">Do you want to help improve Delta Chat and support research by sending weekly anonymous usage statistics?</string>
+    <string name="stats_thanks">Thank you! You can always disable the sending at \"Settings -> Advanced\".\n\nDo you additionally have 5 minutes to take part in a scientific study on the security of Delta Chat?</string>
+    <string name="stats_disable_dialog">Sending of statistics is already enabled.\n\nDo you want to disable it?</string>
+    <string name="disable">Disable</string>
+    <string name="stats_keep_sending">Keep sending</string>
+    <string name="stats_msg_body">The attachment contains anonymous usage statistics, which helps us improve Delta Chat. See https://delta.chat/help#statssending for more information. Thank you!</string>
 
     <!-- Emoji picker and categories -->
     <string name="emoji_search_results">Search Results</string>
@@ -995,15 +997,11 @@
     <string name="qrshow_join_contact_hint">Scan to chat with %1$s</string>
     <string name="qrshow_join_contact_no_connection_toast">No internet connection, can\'t perform QR code setup.</string>
     <string name="qraccount_ask_create_and_login">Create new profile on \"%1$s\" and log in there?</string>
-    <!-- deprecated, use confirm_add_transport when scanning such a QR code from the main scanner -->
-    <string name="qraccount_ask_create_and_login_another">Create new profile on \"%1$s\" and log in there?\n\nYour existing profile will not be deleted. Use the \"Switch Profile\" item to switch between your profiles.</string>
     <string name="set_name_and_avatar_explain">Set a name that your contacts will recognize. You can also set a profile image.</string>
     <string name="please_enter_name">Please enter a name.</string>
     <string name="qraccount_qr_code_cannot_be_used">The scanned QR code cannot be used to set up a new profile.</string>
     <!-- the placeholder will be replaced by the address of the profile -->
     <string name="qrlogin_ask_login">Log into \"%1$s\"?</string>
-    <!-- deprecated, use confirm_add_transport when scanning such a QR code from the main scanner -->
-    <string name="qrlogin_ask_login_another">Log into \"%1$s\"?\n\nYour existing profile will not be deleted. Use the \"Switch Profile\" item to switch between your profiles.</string>
     <!-- first placeholder will be replaced by name of the inviter, second placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_started">%1$s invited you to join this group.\n\nWaiting for the device of %2$s to reply…</string>
     <!-- first placeholder will be replaced by name of the inviter, second placeholder will be replaced by the name of the inviter. -->
@@ -1012,6 +1010,7 @@
     <string name="secure_join_replies">%1$s replied, waiting for being added to the group…</string>
     <string name="secure_join_wait">Establishing connection, please wait…</string>
     <string name="contact_verified">%1$s introduced.</string>
+    <string name="contact_blocked">You blocked the contact</string>
     <!-- Shown in contact profile. The placeholder will be replaced by the name of the contact that introduced the contact. -->
     <string name="verified_by">Introduced by %1$s</string>
     <string name="verified_by_you">Introduced by me</string>
@@ -1097,8 +1096,8 @@
     <string name="name_desktop">Name</string>
     <string name="select_group_image_desktop">Select Group Image</string>
     <string name="export_backup_desktop">Export Backup</string>
-    <string name="message_detail_sent_desktop">sent</string>
-    <string name="message_detail_received_desktop">received</string>
+    <string name="message_detail_sent_desktop">Sent</string>
+    <string name="message_detail_received_desktop">Received</string>
     <string name="menu.view.developer.open.log.folder">Open the Log Folder</string>
     <string name="menu.view.developer.open.current.log.file">Open Current Logfile</string>
     <string name="explain_desktop_minimized_disabled_tray_pref" tools:ignore="TypographyDashes">Tray icon cannot be disabled as Delta Chat was started with the --minimized option.</string>
