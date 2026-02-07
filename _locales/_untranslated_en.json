@@ -103,5 +103,8 @@
   },
   "audio_call": {
     "message": "Audio Call"
+  },
+  "description": {
+    "message": "Description"
   }
 }

@@ -77,3 +77,11 @@ input.group-name-input {
   text-align: center;
   padding-top: 6px;
 }
+
+.group-profile-description {
+  text-align: center;
+  margin-top: 10px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  user-select: text;
+}
