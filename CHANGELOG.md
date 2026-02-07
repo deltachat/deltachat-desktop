@@ -2,6 +2,101 @@
 
 All notable changes to this project will be documented in this file.
 
+<a id="2_41_0"></a>
+## [2.41.0] - 2026-02-06
+
+### Added
+
+- Switch profile when forwarding ([#5916](https://github.com/deltachat/deltachat-desktop/issues/5916))
+- Shortcuts for selected message ([#5963](https://github.com/deltachat/deltachat-desktop/issues/5963))
+- Add audio/video select menu ([#6017](https://github.com/deltachat/deltachat-desktop/issues/6017))
+- Calls: don't enable video if caller did not
+- Move freely-selected emoji to end ([#5910](https://github.com/deltachat/deltachat-desktop/issues/5910))
+- Add badge counter to window title ([#5875](https://github.com/deltachat/deltachat-desktop/issues/5875))
+- Clearer 'clear chat' confirmation button ([#5954](https://github.com/deltachat/deltachat-desktop/issues/5954))
+- Tweak chat menus ([#5955](https://github.com/deltachat/deltachat-desktop/issues/5955))
+- Add "Downloading..." in app picker
+- Add arrow key nav to "React" menu
+
+### Build system
+
+- Upgrade Core to 2.41.0 ([#6019](https://github.com/deltachat/deltachat-desktop/issues/6024))
+- Upgrade @tauri-apps/api etc ([#5789](https://github.com/deltachat/deltachat-desktop/issues/5789))
+- Upgrade Electron
+- Move back to `esbenp.prettier-vscode`
+
+### Changes
+
+- New translations ([#5907](https://github.com/deltachat/deltachat-desktop/issues/5907))
+- Tweak dark themes
+- More danger color contrast, while keeping tone and overall appearance ([#5953](https://github.com/deltachat/deltachat-desktop/issues/5953))
+- Use outline image icon ([#6012](https://github.com/deltachat/deltachat-desktop/issues/6012))
+- Allow Escape key to navigate back to the chat list
+- Remove email from profile
+- Focus composer on already active chat click
+- Remove UNIX time from msg info dialog ([#5951](https://github.com/deltachat/deltachat-desktop/issues/5951))
+- Consistent summaries across platforms
+
+### Fixed
+
+- All "image" pickers to accept same formats
+- Crash on adding invalid .xdc to draft
+- Recognize more formats as img on drop event
+- Add min/max width to vcard ([#5865](https://github.com/deltachat/deltachat-desktop/issues/5865))
+- More space/height for connectivity dialog, because it can be larger ([#5896](https://github.com/deltachat/deltachat-desktop/issues/5896))
+- Don't change reply when editing message
+- Remove wrong keybinding ([#5931](https://github.com/deltachat/deltachat-desktop/issues/5931))
+
+- Break long words in dialogs ([#5940](https://github.com/deltachat/deltachat-desktop/issues/5940))
+- Show 'block contact' in red everywhere ([#5958](https://github.com/deltachat/deltachat-desktop/issues/5958))
+- Only edit own messages ([#5959](https://github.com/deltachat/deltachat-desktop/issues/5959))
+- Muted chats were not marked read when marking account as read ([#5923](https://github.com/deltachat/deltachat-desktop/issues/5923))
+- Improve webxdc data cleanup when chat is deleted. ([#5871](https://github.com/deltachat/deltachat-desktop/issues/5871))
+- Also apply content protection to call window
+- Account reordering when dropping on itself
+- "React" menu not getting focused on open
+- Handle error in `EncryptionInfo`
+- Proper `EncryptionInfo` for non-single chats
+- Fix double close bug
+- WebXDC: fix 404 weird file names
+- Correct a date in a comment
+
+### Other
+
+- Try scanning twice to get the expected message ([#5926](https://github.com/deltachat/deltachat-desktop/issues/5926))
+- COnsistent keyboard zoom shortcuts ([#5909](https://github.com/deltachat/deltachat-desktop/issues/5909))
+- E2e tests for sending file attachments ([#5956](https://github.com/deltachat/deltachat-desktop/issues/5956))
+* test: new createChat helper function
+- Created tx lib & added pluralizations to tx function ([#4834](https://github.com/deltachat/deltachat-desktop/issues/4834))
+- Redesign shortcut hints ([#5980](https://github.com/deltachat/deltachat-desktop/issues/5980))
+
+### Refactor
+
+- Move "switch to archive on selectChat"
+- Remove deprecated `host-rules`
+- New runtime method to clear all notifications for an account ([#5922](https://github.com/deltachat/deltachat-desktop/issues/5922))
+- Merge context menues
+- Synchronize search input font size ([#5945](https://github.com/deltachat/deltachat-desktop/issues/5945))
+
+### Removed
+
+- Remove VerifiedContactsRequiredDialog and string verified_contact_required_explain
+- Remove another occurance of membersOrRecipients
+- Option to disable realtime-channels ([#5925](https://github.com/deltachat/deltachat-desktop/issues/5925))
+- Remove unused css var
+
+### Styling
+
+- Fix account size on deletion text contrast ([#5949](https://github.com/deltachat/deltachat-desktop/issues/5949))
+
+### Tests
+
+- Withdraw group invite link ([#5771](https://github.com/deltachat/deltachat-desktop/issues/5771))
+- Add context menu e2e test
+- Add Ctrl + Up shortcut tests
+- Retry failing e2e tests 3 times ([#5964](https://github.com/deltachat/deltachat-desktop/issues/5964))
+- Add "React to a message" test
+
 <a id="2_35_0"></a>
 ## [2.35.0] - 2025-12-21
 
@@ -3878,7 +3973,8 @@ This section is only relevant to contributors.
 **Historical Note 2** We removed the older changelog, you can look at the git history to get it. (version numbers made hallmark crazy)
 
 
-[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.35.0...HEAD
+[unreleased]: https://github.com/deltachat/deltachat-desktop/compare/v2.41.0...HEAD
+[2.41.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.35.0...v2.41.0
 [2.35.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.33.0...v2.35.0
 [2.33.0]: https://github.com/deltachat/deltachat-desktop/compare/v2.25.3...v2.33.0
 [2.25.3]: https://github.com/deltachat/deltachat-desktop/compare/v2.25.2...v2.25.3
