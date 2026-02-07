@@ -410,6 +410,172 @@ test('Edit group profile from context menu and rename group', async () => {
   await expect(renamedGroupchatListItem).toBeVisible()
 })
 
+test('Add group description', async () => {
+  const userA = existingProfiles[0]
+  const userC = existingProfiles[2]
+  const groupDescription = 'This is a test group description'
+
+  await switchToProfile(page, userA.id)
+  const chatListItem = page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: groupName + ' edited' })
+  await expect(chatListItem).toBeVisible()
+  await chatListItem.click()
+
+  // Open group profile
+  await page.getByTestId('chat-info-button').click()
+
+  // Description should not be visible initially
+  const descriptionDiv = page.locator('.group-profile-description')
+  await expect(descriptionDiv).not.toBeVisible()
+
+  // Open edit dialog
+  await page.getByTestId('view-group-dialog-header-edit').click()
+
+  // Add description
+  await page.locator('#description').fill(groupDescription)
+  await page.getByTestId('ok').click()
+
+  // Description should now be visible in the group profile
+  await expect(descriptionDiv).toBeVisible()
+  await expect(descriptionDiv).toHaveText(groupDescription)
+
+  await page.getByTestId('view-group-dialog-header-close').click()
+
+  // Check for system message about description change
+  await expect(
+    page
+      .getByRole('list', { name: 'Messages' })
+      .getByRole('listitem')
+      .filter({ hasText: `You changed the chat description` })
+  ).toBeVisible()
+
+  // Verify other user receives notification and sees the description
+  await switchToProfile(page, userC.id)
+
+  // Check for notification badge
+  const badgeNumber = page
+    .getByTestId(`account-item-${userC.id}`)
+    .locator('.styles_module_accountBadgeIcon')
+  await expect(badgeNumber).toBeVisible()
+
+  const userCChatListItem = page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: groupName + ' edited' })
+  await expect(userCChatListItem).toBeVisible()
+  await userCChatListItem.click()
+
+  // Check for system message about description change
+  await expect(
+    page
+      .getByRole('list', { name: 'Messages' })
+      .getByRole('listitem')
+      .filter({ hasText: `Chat description changed by ${userA.name}` })
+  ).toBeVisible()
+
+  await page.getByTestId('chat-info-button').click()
+  await expect(page.locator('.group-profile-description')).toBeVisible()
+  await expect(page.locator('.group-profile-description')).toHaveText(
+    groupDescription
+  )
+  await page.getByTestId('view-group-dialog-header-close').click()
+})
+
+test('Update group description', async () => {
+  // Now let user C update the group description just
+  // to make sure any user is allowed to do so
+  const userA = existingProfiles[0]
+  const userC = existingProfiles[2]
+  const updatedDescription = 'Updated group description with new information'
+
+  await switchToProfile(page, userC.id)
+  const chatListItem = page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: groupName })
+  await expect(chatListItem).toBeVisible()
+  await chatListItem.click()
+
+  // Open group profile
+  await page.getByTestId('chat-info-button').click()
+
+  // Open edit dialog
+  await page.getByTestId('view-group-dialog-header-edit').click()
+
+  // Update description
+  const descriptionInput = page.locator('#description')
+  await descriptionInput.clear()
+  await descriptionInput.fill(updatedDescription)
+  await page.getByTestId('ok').click()
+
+  // Verify updated description is visible
+  const descriptionDiv = page.locator('.group-profile-description')
+  await expect(descriptionDiv).toBeVisible()
+  await expect(descriptionDiv).toHaveText(updatedDescription)
+
+  await page.getByTestId('view-group-dialog-header-close').click()
+
+  // Verify other user receives notification and sees the updated description
+  await switchToProfile(page, userA.id)
+
+  // Check for notification badge
+  const badgeNumber = page
+    .getByTestId(`account-item-${userA.id}`)
+    .locator('.styles_module_accountBadgeIcon')
+  await expect(badgeNumber).toBeVisible()
+
+  const userAChatListItem = page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: groupName + ' edited' })
+  await expect(userAChatListItem).toBeVisible()
+  await userAChatListItem.click()
+  // Check for system message about description change
+  await expect(
+    page
+      .getByRole('list', { name: 'Messages' })
+      .getByRole('listitem')
+      .filter({ hasText: `Chat description changed by ${userC.name}` })
+      .last()
+  ).toBeVisible()
+
+  await page.getByTestId('chat-info-button').click()
+  await expect(page.locator('.group-profile-description')).toBeVisible()
+  await expect(page.locator('.group-profile-description')).toHaveText(
+    updatedDescription
+  )
+  await page.getByTestId('view-group-dialog-header-close').click()
+})
+
+test('Clear group description', async () => {
+  const userA = existingProfiles[0]
+
+  await switchToProfile(page, userA.id)
+  const chatListItem = page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: groupName + ' edited' })
+  await expect(chatListItem).toBeVisible()
+  await chatListItem.click()
+
+  // Open group profile
+  await page.getByTestId('chat-info-button').click()
+
+  // Description should be visible
+  const descriptionDiv = page.locator('.group-profile-description')
+  await expect(descriptionDiv).toBeVisible()
+
+  // Open edit dialog
+  await page.getByTestId('view-group-dialog-header-edit').click()
+
+  // Clear description
+  const descriptionInput = page.locator('#description')
+  await descriptionInput.clear()
+  await page.getByTestId('ok').click()
+
+  // Description should not be visible anymore
+  await expect(descriptionDiv).not.toBeVisible()
+
+  await page.getByTestId('view-group-dialog-header-close').click()
+})
+
 test.fixme('create channel and add members', async () => {})
 
 test.fixme('accept or decline channel invite', async () => {})
