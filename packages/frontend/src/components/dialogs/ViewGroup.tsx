@@ -11,7 +11,7 @@ import {
 import ViewProfile from './ViewProfile'
 import { avatarInitial } from '@deltachat-desktop/shared/avatarInitial'
 import { shouldDisableClickForFullscreen as shouldDisableFullscreenAvatar } from '../Avatar'
-import { DeltaInput } from '../Login-Styles'
+import { DeltaInput, DeltaTextarea } from '../Login-Styles'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import Dialog, {
@@ -68,18 +68,31 @@ export default function ViewGroup(
 export const useGroup = (accountId: number, chat: T.FullChat) => {
   const [group, setGroup] = useState(chat)
   const [groupName, setGroupName] = useState(chat.name)
+  const [groupDescription, setGroupDescription] = useState<string | null>(null)
   const [groupImage, setGroupImage] = useState(chat.profileImage)
   const firstLoad = useRef(true)
   const { openDialog } = useDialog()
   const tx = useTranslationFunction()
 
   useEffect(() => {
+    const fetchGroupDescription = async () => {
+      const groupDescription = await BackendRemote.rpc.getChatDescription(
+        accountId,
+        chat.id
+      )
+      setGroupDescription(groupDescription)
+    }
+    fetchGroupDescription()
+  }, [chat.id, accountId])
+
+  useEffect(() => {
+    if (groupDescription === null) return // Not loaded yet
     if (firstLoad.current) {
       firstLoad.current = false
-    } else {
-      modifyGroup(accountId, chat.id, groupName, groupImage)
+      return
     }
-  }, [groupName, groupImage, chat.id, accountId])
+    modifyGroup(accountId, chat.id, groupName, groupDescription, groupImage)
+  }, [groupName, groupDescription, groupImage, chat.id, accountId])
 
   const addMembers = useCallback(
     async (members: number[]) => {
@@ -223,8 +236,10 @@ export const useGroup = (accountId: number, chat: T.FullChat) => {
   return {
     group,
     groupName,
+    groupDescription,
     groupImage,
     setGroupName,
+    setGroupDescription,
     groupContacts,
     addMembers,
     removeMember,
@@ -255,8 +270,10 @@ function ViewGroupInner(
   const {
     group,
     groupName,
+    groupDescription,
     groupImage,
     setGroupName,
+    setGroupDescription,
     groupContacts,
     pastContacts,
     addMembers,
@@ -284,14 +301,20 @@ function ViewGroupInner(
   const onClickEdit = () => {
     openDialog(EditGroupNameDialog, {
       groupName,
+      groupDescription: groupDescription ?? '',
       groupImage,
       groupColor: chat.color,
-      onOk: (groupName: string, groupImage: string | null) => {
+      onOk: (
+        groupName: string,
+        groupDescription: string,
+        groupImage: string | null
+      ) => {
         // TODO this check should be way earlier, you should not be able to "OK" the dialog if there is no group name
         if (groupName.length > 1) {
           setGroupName(groupName)
         }
-
+        // Description can be empty, so always set it
+        setGroupDescription(groupDescription)
         setGroupImage(groupImage)
       },
       isBroadcast,
@@ -358,6 +381,11 @@ function ViewGroupInner(
                 displayName={groupName}
                 disableFullscreen={shouldDisableFullscreenAvatar(chat)}
               />
+              {groupDescription && (
+                <div className='group-profile-description'>
+                  {groupDescription}
+                </div>
+              )}
               <div className='group-profile-subtitle'>
                 {!isBroadcast
                   ? group.contactIds.length > 1 || group.selfInGroup
@@ -501,16 +529,25 @@ export function EditGroupNameDialog({
   onOk,
   isBroadcast,
   groupName: initialGroupName,
+  groupDescription: initialGroupDescription,
   groupColor,
   groupImage: initialGroupImage,
 }: {
-  onOk: (groupName: string, groupImage: string | null) => void
+  onOk: (
+    groupName: string,
+    groupDescription: string,
+    groupImage: string | null
+  ) => void
   groupName: string
+  groupDescription: string
   groupImage: string | null
   groupColor: string
   isBroadcast?: boolean
 } & DialogProps) {
   const [groupName, setGroupName] = useState(initialGroupName)
+  const [groupDescription, setGroupDescription] = useState(
+    initialGroupDescription
+  )
   const [groupImage, setGroupImage] = useState(initialGroupImage)
   const tx = useTranslationFunction()
 
@@ -520,11 +557,13 @@ export function EditGroupNameDialog({
 
   const onClickOk = () => {
     onClose()
-    onOk(groupName, groupImage)
+    onOk(groupName, groupDescription, groupImage)
   }
 
   const haveUnsavedChanges =
-    groupName !== initialGroupName || groupImage !== initialGroupImage
+    groupName !== initialGroupName ||
+    groupDescription !== initialGroupDescription ||
+    groupImage !== initialGroupImage
 
   return (
     <Dialog onClose={onClose} canOutsideClickClose={!haveUnsavedChanges} fixed>
@@ -573,6 +612,18 @@ export function EditGroupNameDialog({
                 : tx('please_enter_channel_name')}
             </p>
           )}
+          <DeltaTextarea
+            key='description'
+            id='description'
+            placeholder={tx('description')}
+            value={groupDescription}
+            onChange={(
+              event: React.FormEvent<HTMLElement> &
+                React.ChangeEvent<HTMLTextAreaElement>
+            ) => {
+              setGroupDescription(event.target.value)
+            }}
+          />
         </DialogContent>
       </DialogBody>
       <OkCancelFooterAction onCancel={onClickCancel} onOk={onClickOk} />
