@@ -84,9 +84,14 @@ export function ContextMenuLayer({
   const cursorY = useRef<number>(0)
 
   const [currentItems, setCurrentItems] = useState<ContextMenuItem[]>([])
-  const [position, setPosition] = useState<{ top: number; left: number }>({
+  const [position, setPosition] = useState<{
+    top: number
+    left: number
+    rightLimit: number
+  }>({
     top: 0,
     left: 0,
+    rightLimit: 0,
   })
   const [currentAriaAttrs, setCurrentAriaAttrs] = useState<
     undefined | MenuAriaAttrs
@@ -153,7 +158,9 @@ export function ContextMenuLayer({
     }
 
     // Displaying Menu
-    setPosition({ top, left })
+    const rightLimit =
+      layerRef.current.clientLeft + layerRef.current.clientWidth
+    setPosition({ top, left, rightLimit })
   }, [])
 
   const cancel = useCallback((evt?: React.MouseEvent) => {
@@ -185,10 +192,7 @@ export function ContextMenuLayer({
     >
       {currentItems.length > 0 && (
         <ContextMenu
-          rightLimit={
-            (layerRef.current as HTMLElement).clientLeft +
-            (layerRef.current as HTMLElement).clientWidth
-          }
+          rightLimit={position.rightLimit}
           top={position.top}
           left={position.left}
           items={currentItems}
