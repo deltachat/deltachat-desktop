@@ -1,12 +1,6 @@
 import { copyFileSync, existsSync } from 'fs'
 import { flipFuses, FuseVersion, FuseV1Options } from '@electron/fuses'
-import {
-  readdir,
-  writeFile,
-  rm,
-  cp,
-  mkdir,
-} from 'fs/promises'
+import { readdir, writeFile, rm, cp, mkdir } from 'fs/promises'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
@@ -189,6 +183,18 @@ async function deleteNotNeededPrebuildsFromUnpackedASAR(
 }
 
 async function setFuses(context) {
+  // Skip fuse flipping for temporary arch-specific builds when creating a universal build.
+  // electron-builder creates separate arm64 and x64 builds in *-temp directories first,
+  // then merges them. If we flip fuses on these temp builds, the CodeResources signatures
+  // won't match and the universal merge will fail.
+  if (context.appOutDir.includes('-temp')) {
+    console.log(
+      'Skipping fuse flipping for temporary universal build:',
+      context.appOutDir
+    )
+    return
+  }
+
   // Apply security fuses for all builds
   let appPath
   let executableName = context.packager.executableName ?? 'DeltaChat'
@@ -210,18 +216,30 @@ async function setFuses(context) {
 
   if (!existsSync(appPath)) {
     const files = await readdir(context.appOutDir)
-    
+
     // Log the list of file names
-    console.log(`Files in context.appOutDir (${context.appOutDir}):`);
+    console.log(`Files in context.appOutDir (${context.appOutDir}):`)
     files.forEach(file => {
-      console.log(file);
-    });
-    throw new Error('Could not apply electron fuses since target not exists: ' + appPath)
+      console.log(file)
+    })
+    throw new Error(
+      'Could not apply electron fuses since target not exists: ' + appPath
+    )
   }
 
   console.log('Applying electron fuses to:', appPath)
+
+  // For macOS arm64/universal builds without proper code signing (e.g. preview builds),
+  // we need to reset the ad-hoc signature after flipping fuses, otherwise the app
+  // will fail to launch with "Code Signature Invalid" errors on Apple Silicon.
+  const isMac =
+    context.electronPlatformName === 'darwin' ||
+    context.electronPlatformName === 'mas'
+  const needsAdHocReset =
+    isMac && process.env.CSC_IDENTITY_AUTO_DISCOVERY === 'false'
   await flipFuses(appPath, {
     version: FuseVersion.V1,
+    resetAdHocDarwinSignature: needsAdHocReset,
     [FuseV1Options.RunAsNode]: false, // Disables ELECTRON_RUN_AS_NODE
     [FuseV1Options.EnableNodeOptionsEnvironmentVariable]: false, // Disables the NODE_OPTIONS environment variable
     [FuseV1Options.EnableNodeCliInspectArguments]: false, // Disables the --inspect and --inspect-brk family of CLI options
