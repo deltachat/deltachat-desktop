@@ -176,7 +176,11 @@ function BackgroundSelector({
         `position:absolute;top:${y}px;left:${eventPos.x}px;`
       )
       if (desktopSettings?.chatViewBgImg?.startsWith('color: ')) {
-        /* eslint react-hooks/immutability: "warn" */
+        // linter throws a a immutable error and a "modify in useEffect is
+        // not allowed" warning here
+        // both are false positives, the modifications happens in an event
+        // handler so the element can be modified and is not immutable
+        // eslint-disable-next-line
         colorInput.value = desktopSettings?.chatViewBgImg.slice(7) || ''
       }
       setTimeout(() => colorInput.click(), 0)
