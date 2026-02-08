@@ -229,9 +229,12 @@ export const useGroup = (accountId: number, chat: T.FullChat) => {
     return onDCEvent(accountId, 'ChatModified', ({ chatId }) => {
       if (chatId === group.id) {
         BackendRemote.rpc.getFullChatById(accountId, group.id).then(setGroup)
+        BackendRemote.rpc
+          .getChatDescription(accountId, chatId)
+          .then(setGroupDescription)
       }
     })
-  })
+  }, [accountId, group.id])
 
   return {
     group,
