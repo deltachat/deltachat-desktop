@@ -183,6 +183,18 @@ async function deleteNotNeededPrebuildsFromUnpackedASAR(
 }
 
 async function setFuses(context) {
+  // Skip fuse flipping for temporary arch-specific builds when creating a universal build.
+  // electron-builder creates separate arm64 and x64 builds in *-temp directories first,
+  // then merges them. If we flip fuses on these temp builds, the CodeResources signatures
+  // won't match and the universal merge will fail.
+  if (context.appOutDir.includes('-temp')) {
+    console.log(
+      'Skipping fuse flipping for temporary universal build:',
+      context.appOutDir
+    )
+    return
+  }
+
   // Apply security fuses for all builds
   let appPath
   let executableName = context.packager.executableName ?? 'DeltaChat'
