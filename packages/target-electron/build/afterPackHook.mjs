@@ -157,7 +157,7 @@ async function deleteNotNeededPrebuildsFromUnpackedASAR(
     if (architecture === convertArch(context.arch)) {
       return false
     } else if (
-      // convertArch(context.arch) === 'universal' && does not work for some reason
+      // Keep both darwin architectures for mac builds (needed for universal builds)
       isMacBuild &&
       (architecture === 'arm64' || architecture === 'x64')
     ) {
