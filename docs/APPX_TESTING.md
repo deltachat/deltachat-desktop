@@ -17,7 +17,7 @@ cd packages/target-electron
 pnpm build
 pnpm run pack:generate_config
 pnpm run pack:patch-node-modules
-pnpm electron-builder --config ./electron-builder.json5 --config.win.certificateFile=../my.pfx --win appx
+pnpm electron-builder --config ./electron-builder.json5 --config.win.signtoolOptions.certificateFile=../my.pfx --win appx
 ```
 
 To install your self-signed appx, you first need to import it: double click on the certificate and install it into the **Trusted People** store. After that you should be able to double click the appx package in the `dist/` folder to install it. If not have a look at the properties of that file (right click in Explorer), select Certificates => Details => View Certificate => Install => Store => Trusted People
