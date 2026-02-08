@@ -137,8 +137,10 @@ build['linux'] = {
   target: ['AppImage', 'deb'],
   category: 'Network;Chat;InstantMessaging;',
   desktop: {
-    Comment: 'Delta Chat email-based messenger',
-    Keywords: 'dc;chat;delta;messaging;messenger;email',
+    entry: {
+      Comment: 'Delta Chat email-based messenger',
+      Keywords: 'dc;chat;delta;messaging;messenger;email',
+    },
   },
   files: [...files, PREBUILD_FILTERS.NOT_MAC, PREBUILD_FILTERS.NOT_WINDOWS],
   icon: 'build/icon.icns', // electron builder gets the icon out of the mac icon archive
