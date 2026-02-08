@@ -109,6 +109,8 @@ build['mac'] = {
   provisioningProfile: '../../../embedded.provisionprofile',
   files: [...files, PREBUILD_FILTERS.NOT_LINUX, PREBUILD_FILTERS.NOT_WINDOWS],
   darkModeSupport: true,
+  // For universal builds: allow these binaries to be x64 in both ASAR files
+  x64ArchFiles: '**/*darwin*/**',
 }
 
 build['mas'] = {
@@ -116,6 +118,8 @@ build['mas'] = {
   entitlements: 'build/entitlements.mas.plist',
   entitlementsInherit: 'build/entitlements.mas.inherit.plist',
   // binaries // Paths of any extra binaries that need to be signed.
+  // For universal builds: allow these binaries to be x64 in both ASAR files
+  x64ArchFiles: '**/*darwin*/**',
 }
 
 build['dmg'] = {
@@ -137,8 +141,10 @@ build['linux'] = {
   target: ['AppImage', 'deb'],
   category: 'Network;Chat;InstantMessaging;',
   desktop: {
-    Comment: 'Delta Chat email-based messenger',
-    Keywords: 'dc;chat;delta;messaging;messenger;email',
+    entry: {
+      Comment: 'Delta Chat email-based messenger',
+      Keywords: 'dc;chat;delta;messaging;messenger;email',
+    },
   },
   files: [...files, PREBUILD_FILTERS.NOT_MAC, PREBUILD_FILTERS.NOT_WINDOWS],
   icon: 'build/icon.icns', // electron builder gets the icon out of the mac icon archive
