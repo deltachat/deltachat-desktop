@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useMemo } from 'react'
 import classNames from 'classnames'
 
 import useDialog from '../../hooks/dialog/useDialog'
@@ -20,17 +20,14 @@ type Props = {
 
 export default function Reactions(props: Props) {
   const tx = useTranslationFunction()
-  // number of different emojis we display under each message
-  const [visibleEmojis, setVisibleEmojis] = useState(4)
-  // total number of hidden reactions (including counts)
-  const [hiddenReactionsCount, setHiddenReactionsCount] = useState(0)
 
   const { messageWidth } = props
 
   const { openDialog } = useDialog()
   const { reactionsByContact, reactions } = props.reactions
 
-  useEffect(() => {
+  // Compute visibleEmojis and hiddenReactionsCount from props
+  const { visibleEmojis, hiddenReactionsCount } = useMemo(() => {
     let emojiSpaces = 0
     if (messageWidth <= 234) {
       emojiSpaces = 1
@@ -46,11 +43,13 @@ export default function Reactions(props: Props) {
       .reduce((sum, item) => sum + item.count, 0)
     if (reactions.length - emojiSpaces <= 1) {
       emojiSpaces++
-      setHiddenReactionsCount(0)
+      return { visibleEmojis: emojiSpaces, hiddenReactionsCount: 0 }
     } else {
-      setHiddenReactionsCount(totalReactionsCount - visibleReactionsCount)
+      return {
+        visibleEmojis: emojiSpaces,
+        hiddenReactionsCount: totalReactionsCount - visibleReactionsCount,
+      }
     }
-    setVisibleEmojis(emojiSpaces)
   }, [messageWidth, reactions])
 
   const handleClick = () => {
