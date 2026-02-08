@@ -183,11 +183,14 @@ async function deleteNotNeededPrebuildsFromUnpackedASAR(
 }
 
 async function setFuses(context) {
-  // Skip fuse flipping for temporary arch-specific builds when creating a universal build.
+  // Skip fuse flipping for temporary arch-specific builds when creating a macOS universal build.
   // electron-builder creates separate arm64 and x64 builds in *-temp directories first,
   // then merges them. If we flip fuses on these temp builds, the CodeResources signatures
   // won't match and the universal merge will fail.
-  if (context.appOutDir.includes('-temp')) {
+  const isMac =
+    context.electronPlatformName === 'darwin' ||
+    context.electronPlatformName === 'mas'
+  if (isMac && context.appOutDir.includes('-temp')) {
     console.log(
       'Skipping fuse flipping for temporary universal build:',
       context.appOutDir
@@ -201,17 +204,12 @@ async function setFuses(context) {
   if (process.env.IS_PREVIEW) {
     executableName = executableName + '-DevBuild'
   }
-  switch (context.electronPlatformName) {
-    case 'darwin':
-    case 'mas':
-      appPath = `${context.appOutDir}/${executableName}.app`
-      break
-    case 'win32':
-      appPath = `${context.appOutDir}/${executableName}.exe`
-      break
-    default:
-      appPath = `${context.appOutDir}/${context.packager.executableName ?? 'deltachat-desktop'}`
-      break
+  if (isMac) {
+    appPath = `${context.appOutDir}/${executableName}.app`
+  } else if (context.electronPlatformName === 'win32') {
+    appPath = `${context.appOutDir}/${executableName}.exe`
+  } else {
+    appPath = `${context.appOutDir}/${context.packager.executableName ?? 'deltachat-desktop'}`
   }
 
   if (!existsSync(appPath)) {
@@ -232,9 +230,6 @@ async function setFuses(context) {
   // For macOS arm64/universal builds without proper code signing (e.g. preview builds),
   // we need to reset the ad-hoc signature after flipping fuses, otherwise the app
   // will fail to launch with "Code Signature Invalid" errors on Apple Silicon.
-  const isMac =
-    context.electronPlatformName === 'darwin' ||
-    context.electronPlatformName === 'mas'
   const needsAdHocReset =
     isMac && process.env.CSC_IDENTITY_AUTO_DISCOVERY === 'false'
   await flipFuses(appPath, {
