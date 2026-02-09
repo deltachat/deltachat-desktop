@@ -7,14 +7,14 @@ type Props = React.AudioHTMLAttributes<HTMLAudioElement> & {
   src: string
 }
 
-export default function AudioPlayer({ src, className, ...restProps }: Props) {
+export default function AudioPlayer({ className, ...restProps }: Props) {
   return (
     <audio
       controls
       className={classNames(styles.audioPlayer, className)}
       {...restProps}
     >
-      <source src={src} />
+      {/* <source src={src} /> */}
     </audio>
   )
 }
