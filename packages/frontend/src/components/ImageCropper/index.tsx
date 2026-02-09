@@ -187,13 +187,13 @@ export default function ImageCropper({
 
   const onZoomIn = () => {
     userModified.current = true
-    zoom.current += 0.01
+    zoom.current += 0.03
     moveImages(posX.current, posY.current)
   }
 
   const onZoomOut = () => {
     userModified.current = true
-    zoom.current -= 0.01
+    zoom.current -= 0.03
     moveImages(posX.current, posY.current)
   }
 
@@ -208,7 +208,7 @@ export default function ImageCropper({
     flipDirX.current = 1
     flipDirY.current = 1
     rotation.current = 0
-    moveImages(0, 0)
+    moveImages(posX.current, posY.current)
   }
 
   const onRotateImages = () => {
