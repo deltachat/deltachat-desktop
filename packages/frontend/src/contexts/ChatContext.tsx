@@ -162,6 +162,8 @@ export const ChatProvider = ({
     setChatId(undefined)
   }, [])
 
+  // Callback ref pattern: keeping ref in sync for external callers
+  // eslint-disable-next-line react-hooks/refs
   unselectChatRef.current = unselectChat
 
   if (useHasChanged2(chatNoLinger?.id) && chatNoLinger != undefined) {
