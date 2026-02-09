@@ -198,7 +198,7 @@ export function QrCodeShowQrInner({
   return (
     <>
       <DialogBody className='show-qr-dialog-body'>
-        <DialogContent className='show-qr-dialog-content'>
+        <DialogContent className='show-qr-dialog-content' allowTopPadding>
           {svgUrl && (
             <img
               style={{
@@ -206,6 +206,7 @@ export function QrCodeShowQrInner({
                 height: '100%',
                 userSelect: 'none',
                 marginBottom: '20px',
+                marginTop: '20px',
               }}
               className='show-qr-dialog-qr-image'
               src={svgUrl}

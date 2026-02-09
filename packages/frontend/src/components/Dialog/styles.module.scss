@@ -92,7 +92,7 @@ $paddingVertical: 20px;
   /* override additional top padding/margins of the first element
      in dialog content, the whole dialog already has 20px
    */
-  & > :first-child {
+  &:not(.allowTopPadding) > :first-child {
     margin-top: 0 !important;
     padding-top: 0 !important;
   }
