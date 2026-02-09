@@ -95,8 +95,14 @@ export default function ImageCropper({
       return
     }
 
-    if (!userModified.current) {
-      // User didn't modify anything, just copy the original file
+    const naturalWidth = fullImage.current.naturalWidth
+    const naturalHeight = fullImage.current.naturalHeight
+
+    // Check if image is already square (or close enough)
+    const isSquare = Math.abs(naturalWidth - naturalHeight) < 2
+
+    if (!userModified.current && isSquare) {
+      // User didn't modify anything and image is already square, just copy the original file
       rememberLastUsedPathPromise.then(({ setLastPath }) =>
         setLastPath(dirname(filepath))
       )
@@ -115,8 +121,6 @@ export default function ImageCropper({
     const resultW = targetWidth.current / zoom.current
     const resultH = targetHeight.current / zoom.current
 
-    const naturalWidth = fullImage.current.naturalWidth
-    const naturalHeight = fullImage.current.naturalHeight
     const displayWidth = fullImage.current.clientWidth
     const displayHeight = fullImage.current.clientHeight
 
