@@ -244,12 +244,16 @@ export default function ImageCropper({
       }
     }
 
+    // Calculate the scale factor but don't apply it to the container
+    // The container stays fixed size, only images are scaled
     containerScale.current = Math.min(
       container.current?.clientWidth / targetWidth.current,
       container.current?.clientHeight / targetHeight.current
     )
 
-    container.current.style.transform = `scale(${containerScale.current})`
+    // Don't scale the container - keep it at fixed size
+    // container.current.style.transform = `scale(${containerScale.current})`
+
     initialZoom.current = zoom.current = Math.min(
       targetWidth.current / imgW,
       targetHeight.current / imgH
@@ -289,15 +293,13 @@ export default function ImageCropper({
     const imgW = fullImage.current.clientWidth
     const imgH = fullImage.current.clientHeight
 
-    zoom.current = Math.min(
-      imgW / targetWidth.current,
-      imgH / targetHeight.current,
-      Math.max(
-        targetWidth.current / imgW,
-        targetHeight.current / imgH,
-        zoom.current
-      )
+    // Only enforce minimum zoom (crop area must fit in image)
+    // No maximum zoom limit - allow zooming in as much as desired
+    const minZoom = Math.max(
+      targetWidth.current / imgW,
+      targetHeight.current / imgH
     )
+    zoom.current = Math.max(minZoom, zoom.current)
 
     // clamp cursor position
     const nX = Math.max(
@@ -314,14 +316,18 @@ export default function ImageCropper({
     // we rotate and scale around cursor
     const transformOriginValue = `${nX}px ${nY}px`
 
+    // Calculate total scale including container scale factor
+    const totalScaleX = zoom.current * containerScale.current * flipDirX.current
+    const totalScaleY = zoom.current * containerScale.current * flipDirY.current
+
     // now we compensate for origin with -nX, -nY, rotate and scale
+    // The transform-origin point stays fixed during scale/rotate, so we just need
+    // to translate so that point ends up at the container center
     const imgX = container.current.clientWidth / 2 - nX
     const imgY = container.current.clientHeight / 2 - nY
     const transformValue = `translate(${imgX}px, ${imgY}px) rotate(${
       rotation.current
-    }deg) scale(${zoom.current * flipDirX.current}, ${
-      zoom.current * flipDirY.current
-    })`
+    }deg) scale(${totalScaleX}, ${totalScaleY})`
 
     cutImage.current.style.transform = transformValue
     fullImage.current.style.transform = transformValue
@@ -437,59 +443,66 @@ export default function ImageCropper({
     }
   })
   return (
-    <Dialog canEscapeKeyClose onClose={onClose} canOutsideClickClose={false}>
+    <Dialog
+      canEscapeKeyClose
+      onClose={onClose}
+      canOutsideClickClose={false}
+      width={550}
+    >
       <DialogHeader title={tx('ImageEditorHud_crop')} />
       <DialogBody>
         <DialogContent className={styles.imageCropperDialogContent}>
-          <div ref={container} className={styles.imageCropperContainer}>
-            <div ref={shade} className={styles.imageCropperShade}></div>
-            <img
-              ref={cutImage}
-              className={styles.imageCropperCutImage}
-              src={transformed}
-              onLoad={setupImages}
-              crossOrigin='anonymous'
-            />
-            <img
-              ref={fullImage}
-              className={styles.imageCropperFullImage}
-              src={transformed}
-              crossOrigin='anonymous'
-            />
-          </div>
-          <div className={styles.imageCropperControls}>
-            <button
-              type='button'
-              className={styles.imageCropperControlsButton}
-              onClick={onZoomIn}
-              aria-label={tx('menu_zoom_in')}
-            >
-              <Icon coloring='navbar' icon='plus' size={18} />
-            </button>
-            <button
-              type='button'
-              className={styles.imageCropperControlsButton}
-              onClick={onZoomOut}
-              aria-label={tx('menu_zoom_out')}
-            >
-              <Icon coloring='navbar' icon='minus' size={18} />
-            </button>
-            <button
-              type='button'
-              className={styles.imageCropperControlsButton}
-              onClick={onRotateImages}
-              aria-label={tx('ImageEditorHud_rotate')}
-            >
-              <Icon coloring='navbar' icon='rotate-right' size={24} />
-            </button>
-            <button
-              type='button'
-              className={styles.imageCropperControlsButton}
-              onClick={onFlipX}
-              aria-label={tx('ImageEditorHud_flip')}
-            >
-              <Icon coloring='navbar' icon='swap_hor' size={24} />
-            </button>
+          <div className={styles.imageCropperWrapper}>
+            <div ref={container} className={styles.imageCropperContainer}>
+              <div ref={shade} className={styles.imageCropperShade}></div>
+              <img
+                ref={cutImage}
+                className={styles.imageCropperCutImage}
+                src={transformed}
+                onLoad={setupImages}
+                crossOrigin='anonymous'
+              />
+              <img
+                ref={fullImage}
+                className={styles.imageCropperFullImage}
+                src={transformed}
+                crossOrigin='anonymous'
+              />
+            </div>
+            <div className={styles.imageCropperControls}>
+              <button
+                type='button'
+                className={styles.imageCropperControlsButton}
+                onClick={onZoomIn}
+                aria-label={tx('menu_zoom_in')}
+              >
+                <Icon coloring='navbar' icon='plus' size={18} />
+              </button>
+              <button
+                type='button'
+                className={styles.imageCropperControlsButton}
+                onClick={onZoomOut}
+                aria-label={tx('menu_zoom_out')}
+              >
+                <Icon coloring='navbar' icon='minus' size={18} />
+              </button>
+              <button
+                type='button'
+                className={styles.imageCropperControlsButton}
+                onClick={onRotateImages}
+                aria-label={tx('ImageEditorHud_rotate')}
+              >
+                <Icon coloring='navbar' icon='rotate-right' size={24} />
+              </button>
+              <button
+                type='button'
+                className={styles.imageCropperControlsButton}
+                onClick={onFlipX}
+                aria-label={tx('ImageEditorHud_flip')}
+              >
+                <Icon coloring='navbar' icon='swap_hor' size={24} />
+              </button>
+            </div>
           </div>
           <canvas ref={tmpCanvas} style={{ display: 'none' }}></canvas>
         </DialogContent>
