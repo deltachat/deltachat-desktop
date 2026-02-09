@@ -66,32 +66,43 @@ function EditAccountInner({
   const { openDialog } = useDialog()
   const tx = useTranslationFunction()
 
-  const loadSettings = useCallback(async () => {
-    if (window.__selectedAccountId === undefined) {
-      throw new Error('can not load settings when no account is selected')
-    }
-    const accountId = window.__selectedAccountId
-    const transports = await BackendRemote.rpc.listTransports(accountId)
-    if (transports.length === 0) {
-      throw new Error('no transport found')
-    }
-    const configuredAddress =
-      addr || (await BackendRemote.rpc.getConfig(accountId, 'configured_addr'))
-    const accountSettings: T.EnteredLoginParam | undefined = transports.find(
-      t => t.addr === configuredAddress
-    )
-
-    if (!accountSettings) {
-      throw new Error('configured transport not found in transport list')
-    }
-
-    setInitialAccountSettings(accountSettings)
-    setAccountSettings(accountSettings)
-  }, [addr])
-
   useEffect(() => {
-    loadSettings()
-  }, [loadSettings])
+    let cancelled = false
+
+    const loadSettings = async () => {
+      if (window.__selectedAccountId === undefined) {
+        throw new Error('can not load settings when no account is selected')
+      }
+      const accountId = window.__selectedAccountId
+      const transports = await BackendRemote.rpc.listTransports(accountId)
+      if (cancelled) return
+      if (transports.length === 0) {
+        throw new Error('no transport found')
+      }
+      const configuredAddress =
+        addr ||
+        (await BackendRemote.rpc.getConfig(accountId, 'configured_addr'))
+      if (cancelled) return
+      const accountSettings: T.EnteredLoginParam | undefined = transports.find(
+        t => t.addr === configuredAddress
+      )
+
+      if (!accountSettings) {
+        throw new Error('configured transport not found in transport list')
+      }
+
+      setInitialAccountSettings(accountSettings)
+      setAccountSettings(accountSettings)
+    }
+
+    loadSettings().catch(error => {
+      log.error('Failed to load settings:', error)
+    })
+
+    return () => {
+      cancelled = true
+    }
+  }, [addr])
 
   const onUpdate = useCallback(async () => {
     const onSuccess = () => onClose()
