@@ -152,19 +152,22 @@ function BackgroundSelector({
   desktopSettings: DesktopSettingsType
 }) {
   // the #color-input element is located in index.html outside of react
-  const colorInput = document.getElementById('color-input') as HTMLInputElement
+  const getColorInput = () =>
+    document.getElementById('color-input') as HTMLInputElement
 
   useEffect(() => {
+    const colorInput = getColorInput()
     colorInput.oninput = (ev: any) => onChange(ev.target.value)
     return () => {
       colorInput.oninput = null
     }
-  }, [onChange, colorInput])
+  }, [onChange])
 
   const openColorInput = (
     ev: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     // opens the color input and sets its offset so it lines up with the button
+    const colorInput = getColorInput()
     if (colorInput) {
       const eventPos = mouseEventToPosition(ev)
       const y =
@@ -176,11 +179,6 @@ function BackgroundSelector({
         `position:absolute;top:${y}px;left:${eventPos.x}px;`
       )
       if (desktopSettings?.chatViewBgImg?.startsWith('color: ')) {
-        // linter throws a a immutable error and a "modify in useEffect is
-        // not allowed" warning here
-        // both are false positives, the modifications happens in an event
-        // handler so the element can be modified and is not immutable
-        // eslint-disable-next-line
         colorInput.value = desktopSettings?.chatViewBgImg.slice(7) || ''
       }
       setTimeout(() => colorInput.click(), 0)
