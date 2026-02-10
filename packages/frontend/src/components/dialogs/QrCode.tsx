@@ -142,6 +142,10 @@ export function QrCodeShowQrInner({
         const url = URL.createObjectURL(
           new Blob([qrCodeSVG], { type: 'image/svg+xml' })
         )
+        // setState inside an effect is needed here since
+        // Blob URL creation requires an effect for cleanup
+        // and another render is needed to display the QR code image
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setSvgUrl(url)
         svgUrlRef.current = url
         return () => URL.revokeObjectURL(url)
