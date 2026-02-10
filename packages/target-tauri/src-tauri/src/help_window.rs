@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use anyhow::Context;
-use log::{error, warn};
+use log::warn;
 use tauri::{Manager, State, WebviewWindow};
 use tauri_plugin_store::StoreExt;
 use translationfn::Substitution;
