@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 import classNames from 'classnames'
 import { filesize } from 'filesize'
 
@@ -26,6 +26,7 @@ import { selectedAccountId } from '../../ScreenController'
 import { BackendRemote } from '../../backend-com'
 import { useRpcFetch } from '../../hooks/useFetch'
 import { useHasChanged2 } from '../../hooks/useHasChanged'
+import { GlobalVoiceMessagePlayerContext } from '../../contexts/GlobalVoiceMessagePlayerContext'
 
 type AttachmentProps = {
   text?: string
@@ -193,11 +194,9 @@ export default function Attachment({
           withContentBelow ? 'content-below' : null
         )}
       >
-        <AudioPlayer
-          src={runtime.transformBlobURL(message.file)}
-          // Despite the element having multiple interactive
-          // (pseudo?) elements inside of it, tabindex applies to all of them.
-          tabIndex={tabindexForInteractiveContents}
+        <AudioAttachment
+          file={message.file}
+          tabindexForInteractiveContents={tabindexForInteractiveContents}
         />
       </div>
     )
@@ -233,6 +232,27 @@ export default function Attachment({
       </button>
     )
   }
+}
+
+function AudioAttachment(props: {
+  file: string
+  tabindexForInteractiveContents: number
+}) {
+  const ctx = useContext(GlobalVoiceMessagePlayerContext)
+  const src = useMemo(() => runtime.transformBlobURL(props.file), [props.file])
+
+  return (
+    <AudioPlayer
+      src={src}
+      // Despite the element having multiple interactive
+      // (pseudo?) elements inside of it, tabindex applies to all of them.
+      tabIndex={props.tabindexForInteractiveContents}
+      // TODO needed?
+      muted
+      // TODO also onpause
+      onPlay={() => ctx.setSrc(src)}
+    />
+  )
 }
 
 export function DraftAttachment({
