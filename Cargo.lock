@@ -1875,8 +1875,8 @@ dependencies = [
 
 [[package]]
 name = "deltachat"
-version = "2.41.0"
-source = "git+https://github.com/chatmail/core?tag=v2.41.0#5bb0b86f6aa3d6acf4f9bcb261d058a58b4ec04c"
+version = "2.42.0"
+source = "git+https://github.com/chatmail/core?tag=v2.42.0#983f43c33ca0636df3d80de439c4dd7d8e2548ce"
 dependencies = [
  "anyhow",
  "astral-tokio-tar",
@@ -1923,7 +1923,7 @@ dependencies = [
  "pgp",
  "pin-project",
  "qrcodegen",
- "quick-xml 0.38.4",
+ "quick-xml 0.39.0",
  "rand 0.8.5",
  "rand 0.9.2",
  "ratelimit",
@@ -1960,7 +1960,7 @@ dependencies = [
 [[package]]
 name = "deltachat-contact-tools"
 version = "0.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.41.0#5bb0b86f6aa3d6acf4f9bcb261d058a58b4ec04c"
+source = "git+https://github.com/chatmail/core?tag=v2.42.0#983f43c33ca0636df3d80de439c4dd7d8e2548ce"
 dependencies = [
  "anyhow",
  "chrono",
@@ -1970,8 +1970,8 @@ dependencies = [
 
 [[package]]
 name = "deltachat-jsonrpc"
-version = "2.41.0"
-source = "git+https://github.com/chatmail/core?tag=v2.41.0#5bb0b86f6aa3d6acf4f9bcb261d058a58b4ec04c"
+version = "2.42.0"
+source = "git+https://github.com/chatmail/core?tag=v2.42.0#983f43c33ca0636df3d80de439c4dd7d8e2548ce"
 dependencies = [
  "anyhow",
  "async-channel 2.5.0",
@@ -2041,12 +2041,12 @@ dependencies = [
 [[package]]
 name = "deltachat-time"
 version = "1.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.41.0#5bb0b86f6aa3d6acf4f9bcb261d058a58b4ec04c"
+source = "git+https://github.com/chatmail/core?tag=v2.42.0#983f43c33ca0636df3d80de439c4dd7d8e2548ce"
 
 [[package]]
 name = "deltachat_derive"
 version = "2.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.41.0#5bb0b86f6aa3d6acf4f9bcb261d058a58b4ec04c"
+source = "git+https://github.com/chatmail/core?tag=v2.42.0#983f43c33ca0636df3d80de439c4dd7d8e2548ce"
 dependencies = [
  "quote",
  "syn 2.0.111",
@@ -2977,7 +2977,7 @@ dependencies = [
 [[package]]
 name = "format-flowed"
 version = "1.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.41.0#5bb0b86f6aa3d6acf4f9bcb261d058a58b4ec04c"
+source = "git+https://github.com/chatmail/core?tag=v2.42.0#983f43c33ca0636df3d80de439c4dd7d8e2548ce"
 
 [[package]]
 name = "fsevent-sys"
@@ -6286,16 +6286,16 @@ dependencies = [
 
 [[package]]
 name = "pgp"
-version = "0.18.0"
+version = "0.19.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "66d4a27a4d5cfd4e185ddd3eff94dee0f611c4c3e776422254237c54c336c160"
+checksum = "eaffe1ec22db286599c30ae6be75b37493b558735d86c8e59ec5c38794415fe4"
 dependencies = [
  "aead",
  "aes",
  "aes-gcm",
  "aes-kw",
  "argon2",
- "base64 0.22.1",
+ "base64 0.21.7",
  "bitfields",
  "block-padding",
  "blowfish",
@@ -6305,7 +6305,6 @@ dependencies = [
  "camellia",
  "cast5",
  "cfb-mode",
- "chrono",
  "cipher",
  "const-oid",
  "crc24",
@@ -7069,6 +7068,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "quick-xml"
+version = "0.39.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f2e3bf4aa9d243beeb01a7b3bc30b77cfe2c44e24ec02d751a7104a53c2c49a1"
+dependencies = [
+ "memchr",
+]
+
+[[package]]
 name = "quinn"
 version = "0.11.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -7273,7 +7281,7 @@ dependencies = [
 [[package]]
 name = "ratelimit"
 version = "1.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.41.0#5bb0b86f6aa3d6acf4f9bcb261d058a58b4ec04c"
+source = "git+https://github.com/chatmail/core?tag=v2.42.0#983f43c33ca0636df3d80de439c4dd7d8e2548ce"
 
 [[package]]
 name = "rav1e"
