@@ -20,7 +20,6 @@ import { throttledUpdateBadgeCounter } from '../../system-integration/badge-coun
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
-import { useHasChanged2 } from '../../hooks/useHasChanged'
 import { useReactionsBar } from '../ReactionsBar'
 import EmptyChatMessage from './EmptyChatMessage'
 
@@ -80,8 +79,10 @@ function useUnreadCount(
   accountId: number,
   chat: Pick<T.FullChat, 'freshMessageCounter' | 'id'>
 ) {
-  const [updatedValue, setUpdatedValue] = useState<number | null>(null)
-  const updatedValueForChat = useRef<typeof chat>(null)
+  const [cachedData, setCachedData] = useState<{
+    chat: typeof chat
+    count: number
+  } | null>(null)
 
   useEffect(() => {
     let outdated = false
@@ -90,8 +91,7 @@ function useUnreadCount(
       if (chat.id === eventChatId) {
         const count = await BackendRemote.rpc.getFreshMsgCnt(accountId, chat.id)
         if (!outdated) {
-          setUpdatedValue(count)
-          updatedValueForChat.current = chat
+          setCachedData({ chat, count })
         }
       }
     }
@@ -109,9 +109,7 @@ function useUnreadCount(
     return () => cleanup.forEach(off => off())
   }, [accountId, chat])
 
-  return updatedValueForChat.current === chat && updatedValue != null
-    ? updatedValue
-    : chat.freshMessageCounter
+  return cachedData?.chat === chat ? cachedData.count : chat.freshMessageCounter
 }
 
 type Props = {
@@ -834,6 +832,9 @@ export const MessageListInner = React.memo(
       [messageListRef]
     )
     const debouncedResetScrolledRecently = useMemo(
+      // avoid warning "Passing a ref to a function may read its value during render"
+      // the linter seems not to detect that the call is wrapped in a debounce
+      // eslint-disable-next-line react-hooks/refs
       () => debounce(() => onScrolledRecentlyChange(false), 3000),
       [onScrolledRecentlyChange]
     )
@@ -850,11 +851,10 @@ export const MessageListInner = React.memo(
 
       onScroll(...args)
     }
-    const hasChatChanged = useHasChanged2(chat)
     const switchedChatAt = useRef(0)
-    if (hasChatChanged) {
+    useLayoutEffect(() => {
       switchedChatAt.current = Date.now()
-    }
+    }, [chat])
 
     // onScrollend is not defined in React, let's attach manually...
     useEffect(() => {
