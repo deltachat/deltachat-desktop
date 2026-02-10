@@ -280,74 +280,65 @@ export default function MessageList({
   const pendingProgrammaticSmoothScrollTo = useRef<null | number>(null)
   const pendingProgrammaticSmoothScrollTimeout = useRef<number>(-1)
 
-  const onScroll = useCallback(
-    (ev: React.UIEvent<HTMLDivElement> | null) => {
-      if (!messageListRef.current) {
-        return
-      }
-      if (scheduler.isLocked('scroll') === true) {
-        return
+  const onScroll = useCallback(() => {
+    if (!messageListRef.current) {
+      return
+    }
+    if (scheduler.isLocked('scroll') === true) {
+      return
+    }
+
+    const distanceToTop = messageListRef.current.scrollTop
+    const distanceToBottom =
+      messageListRef.current.scrollHeight -
+      messageListRef.current.scrollTop -
+      messageListRef.current.clientHeight
+
+    const isNewestMessageLoaded =
+      newestFetchedMessageListItemIndex === messageListItems.length - 1
+    const newShowJumpDownButton =
+      !isNewestMessageLoaded ||
+      distanceToBottom > maxScrollToBottomDistanceConsideredShort
+    if (newShowJumpDownButton != showJumpDownButton) {
+      setShowJumpDownButton(newShowJumpDownButton)
+    }
+    if (!newShowJumpDownButton) {
+      clearJumpStack()
+    }
+
+    // Remember that `distanceToTop` and `distanceToBottom` can both be true.
+    if (distanceToTop < 800) {
+      // Prevent the scroll position from "sticking" to the top,
+      // which would disable scroll anchoring, and would make
+      // the scroll position continuosuly jump to the very top and we'd
+      // continuously load older messages without the user scrolling.
+      //
+      // See https://drafts.csswg.org/css-scroll-anchoring/#suppression-triggers
+      // > A suppression trigger is an operation that suppresses
+      // > the scroll anchoring
+      // > ...
+      // > The scroll offset of the scrollable element being zero.
+      if (distanceToTop < 3) {
+        messageListRef.current.scrollTop = 3
       }
 
-      // We might call `onScroll` manually with `null` argument.
-      // We only want to hide the reactions bar when _the user_ scrolls,
-      // intentionally.
-      if (ev) hideReactionsBar()
-
-      const distanceToTop = messageListRef.current.scrollTop
-      const distanceToBottom =
-        messageListRef.current.scrollHeight -
-        messageListRef.current.scrollTop -
-        messageListRef.current.clientHeight
-
-      const isNewestMessageLoaded =
-        newestFetchedMessageListItemIndex === messageListItems.length - 1
-      const newShowJumpDownButton =
-        !isNewestMessageLoaded ||
-        distanceToBottom > maxScrollToBottomDistanceConsideredShort
-      if (newShowJumpDownButton != showJumpDownButton) {
-        setShowJumpDownButton(newShowJumpDownButton)
-      }
-      if (!newShowJumpDownButton) {
-        clearJumpStack()
-      }
-
-      // Remember that `distanceToTop` and `distanceToBottom` can both be true.
-      if (distanceToTop < 800) {
-        // Prevent the scroll position from "sticking" to the top,
-        // which would disable scroll anchoring, and would make
-        // the scroll position continuosuly jump to the very top and we'd
-        // continuously load older messages without the user scrolling.
-        //
-        // See https://drafts.csswg.org/css-scroll-anchoring/#suppression-triggers
-        // > A suppression trigger is an operation that suppresses
-        // > the scroll anchoring
-        // > ...
-        // > The scroll offset of the scrollable element being zero.
-        if (distanceToTop < 3) {
-          messageListRef.current.scrollTop = 3
-        }
-
-        log.debug('onScroll: Scrolled to top, fetching more messages!')
-        setTimeout(() => fetchMoreTop(), 0)
-      }
-      if (distanceToBottom < 800) {
-        log.debug('onScroll: Scrolled to bottom, fetching more messages!')
-        setTimeout(() => fetchMoreBottom(), 0)
-      }
-    },
-    [
-      clearJumpStack,
-      fetchMoreBottom,
-      fetchMoreTop,
-      hideReactionsBar,
-      messageListItems.length,
-      newestFetchedMessageListItemIndex,
-      scheduler,
-      setShowJumpDownButton,
-      showJumpDownButton,
-    ]
-  )
+      log.debug('onScroll: Scrolled to top, fetching more messages!')
+      setTimeout(() => fetchMoreTop(), 0)
+    }
+    if (distanceToBottom < 800) {
+      log.debug('onScroll: Scrolled to bottom, fetching more messages!')
+      setTimeout(() => fetchMoreBottom(), 0)
+    }
+  }, [
+    clearJumpStack,
+    fetchMoreBottom,
+    fetchMoreTop,
+    messageListItems.length,
+    newestFetchedMessageListItemIndex,
+    scheduler,
+    setShowJumpDownButton,
+    showJumpDownButton,
+  ])
   const onScrollEnd = useCallback((_ev: Event) => {
     clearTimeout(pendingProgrammaticSmoothScrollTimeout.current)
     pendingProgrammaticSmoothScrollTo.current = null
@@ -579,7 +570,7 @@ export default function MessageList({
         // Since the scroll position might have changed,
         // let's invoke `onScroll`, e.g. to load more messages if we're close
         // to top / bottom
-        onScroll(null)
+        onScroll()
       }, 0)
     }, 0)
   }, [
@@ -697,6 +688,7 @@ export default function MessageList({
       <MessageListInner
         onScroll={onScroll}
         onScrollEnd={onScrollEnd}
+        onWheel={isReactionsBarShown ? hideReactionsBar : undefined}
         oldestFetchedMessageIndex={oldestFetchedMessageListItemIndex}
         messageListItems={messageListItems}
         activeView={activeView}
@@ -737,6 +729,7 @@ export const MessageListInner = React.memo(
   (props: {
     onScroll: (event: React.UIEvent<HTMLDivElement>) => void
     onScrollEnd: (event: Event) => void
+    onWheel?: React.WheelEventHandler<HTMLDivElement>
     oldestFetchedMessageIndex: number
     messageListItems: T.MessageListItem[]
     activeView: T.MessageListItem[]
@@ -752,6 +745,7 @@ export const MessageListInner = React.memo(
     const {
       onScroll,
       onScrollEnd,
+      onWheel,
       messageListItems,
       messageCache,
       activeView,
@@ -872,14 +866,24 @@ export const MessageListInner = React.memo(
 
     if (!loaded) {
       return (
-        <div id='message-list' ref={messageListRef} onScroll={onScroll2}>
+        <div
+          id='message-list'
+          ref={messageListRef}
+          onScroll={onScroll2}
+          onWheel={onWheel}
+        >
           <ol aria-label={tx('messages')}></ol>
         </div>
       )
     }
 
     return (
-      <div id='message-list' ref={messageListRef} onScroll={onScroll2}>
+      <div
+        id='message-list'
+        ref={messageListRef}
+        onScroll={onScroll2}
+        onWheel={onWheel}
+      >
         <ol aria-label={tx('messages')}>
           <RovingTabindexProvider wrapperElementRef={messageListRef}>
             {messageListItems.length === 0 && <EmptyChatMessage chat={chat} />}
@@ -934,7 +938,8 @@ export const MessageListInner = React.memo(
       prevProps.messageCache === nextProps.messageCache &&
       prevProps.oldestFetchedMessageIndex ===
         nextProps.oldestFetchedMessageIndex &&
-      prevProps.onScroll === nextProps.onScroll
+      prevProps.onScroll === nextProps.onScroll &&
+      prevProps.onWheel === nextProps.onWheel
     return areEqual
   }
 )
