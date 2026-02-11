@@ -12,8 +12,11 @@ import SettingsSwitch from './SettingsSwitch'
 import SettingsHeading from './SettingsHeading'
 import SettingsSelector from './SettingsSelector'
 import SmallSelectDialog from '../SmallSelectDialog'
-import SettingsStoreInstance from '../../stores/settings'
+import SettingsStoreInstance, { useSettingsStore } from '../../stores/settings'
 import useDialog from '../../hooks/dialog/useDialog'
+import { getLogger } from '@deltachat-desktop/shared/logger'
+
+const log = getLogger('Settings/Notifications.tsx')
 
 type Props = {
   desktopSettings: DesktopSettingsType
@@ -21,6 +24,7 @@ type Props = {
 
 export default function Notifications({ desktopSettings }: Props) {
   const tx = useTranslationFunction()
+  const settingsStore = useSettingsStore()[0]
   const accountId = selectedAccountId()
   const { accounts } = useAccountNotificationStore()[0]!
   const isMuted = accounts[accountId]?.muted || false
@@ -62,6 +66,31 @@ export default function Notifications({ desktopSettings }: Props) {
       },
     })
   }
+  const whoCanCallMeOptions = [
+    ['0', tx('who_can_call_me_everybody')],
+    ['1', tx('who_can_call_me_contacts')],
+    ['2', tx('who_can_call_me_nobody')],
+  ] satisfies Parameters<typeof SmallSelectDialog>[0]['values']
+  const whoCanCallMeValToString = (
+    val: NonNullable<typeof settingsStore>['settings']['who_can_call_me']
+  ) => whoCanCallMeOptions.find(([v]) => val === v)?.[1] ?? val
+  const onOpenWhoCanCallMeDialog = async () => {
+    if (settingsStore == null) {
+      log.warn("settingsStore not loaded yet, can't open dialog")
+      return
+    }
+    openDialog(SmallSelectDialog, {
+      values: whoCanCallMeOptions,
+      initialSelectedValue: settingsStore.settings.who_can_call_me,
+      title: tx('who_can_call_me'),
+      onSave: async (val: string) => {
+        await SettingsStoreInstance.effect.setCoreSetting(
+          'who_can_call_me',
+          val
+        )
+      },
+    })
+  }
 
   return (
     <>
@@ -83,6 +112,18 @@ export default function Notifications({ desktopSettings }: Props) {
       </SettingsSelector>
       <SettingsSeparator></SettingsSeparator>
       <SettingsHeading>{tx('current_profile')}</SettingsHeading>
+      {desktopSettings.enableAVCallsV2 && (
+        <SettingsSelector
+          onClick={onOpenWhoCanCallMeDialog}
+          currentValue={
+            settingsStore
+              ? whoCanCallMeValToString(settingsStore.settings.who_can_call_me)
+              : undefined
+          }
+        >
+          {tx('who_can_call_me')}
+        </SettingsSelector>
+      )}
       <SettingsSwitch
         label={tx('menu_mute')}
         value={isMuted}
