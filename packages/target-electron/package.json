@@ -80,7 +80,6 @@
     "adm-zip": "0.5.14",
     "application-config": "^3.0.0",
     "chai": "^5.1.1",
-    "chokidar": "^3.6.0",
     "debounce": "^1.2.0",
     "electron": "^40.2.1",
     "electron-builder": "^24.13.3",
