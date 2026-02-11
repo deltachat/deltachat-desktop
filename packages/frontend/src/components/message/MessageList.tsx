@@ -20,6 +20,7 @@ import { throttledUpdateBadgeCounter } from '../../system-integration/badge-coun
 import { MessagesDisplayContext } from '../../contexts/MessagesDisplayContext'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useKeyBindingAction from '../../hooks/useKeyBindingAction'
+import { useHasChanged2 } from '../../hooks/useHasChanged'
 import { useReactionsBar } from '../ReactionsBar'
 import EmptyChatMessage from './EmptyChatMessage'
 
@@ -832,9 +833,6 @@ export const MessageListInner = React.memo(
       [messageListRef]
     )
     const debouncedResetScrolledRecently = useMemo(
-      // avoid warning "Passing a ref to a function may read its value during render"
-      // the linter seems not to detect that the call is wrapped in a debounce
-      // eslint-disable-next-line react-hooks/refs
       () => debounce(() => onScrolledRecentlyChange(false), 3000),
       [onScrolledRecentlyChange]
     )
@@ -851,10 +849,12 @@ export const MessageListInner = React.memo(
 
       onScroll(...args)
     }
+    const hasChatChanged = useHasChanged2(chat)
     const switchedChatAt = useRef(0)
-    useLayoutEffect(() => {
+    if (hasChatChanged) {
+      // eslint-disable-next-line react-hooks/purity
       switchedChatAt.current = Date.now()
-    }, [chat])
+    }
 
     // onScrollend is not defined in React, let's attach manually...
     useEffect(() => {
