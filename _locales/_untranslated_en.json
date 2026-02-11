@@ -100,5 +100,17 @@
   },
   "prevent_dialog_spam_checkbox": {
     "message": "Don't allow the app to open this dialog again"
+  },
+  "who_can_call_me": {
+    "message": "Who can call me"
+  },
+  "who_can_call_me_everybody": {
+    "message": "Everybody"
+  },
+  "who_can_call_me_contacts": {
+    "message": "Contacts"
+  },
+  "who_can_call_me_nobody": {
+    "message": "Nobody"
   }
 }

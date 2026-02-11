@@ -24,6 +24,7 @@ export interface SettingsStoreState {
       only_fetch_mvbox: string
       media_quality: string
       is_chatmail: '0' | '1'
+      who_can_call_me: '0' | '1' | '2'
     }[P]
   }
   desktopSettings: DesktopSettingsType
@@ -44,6 +45,7 @@ const settingsKeys = [
   'only_fetch_mvbox',
   'media_quality',
   'is_chatmail',
+  'who_can_call_me',
 ] as const
 
 class SettingsStore extends Store<SettingsStoreState | null> {
