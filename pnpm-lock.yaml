@@ -99,9 +99,6 @@ importers:
       globals:
         specifier: ^17.0.0
         version: 17.0.0
-      ignore-walk:
-        specifier: ^8.0.0
-        version: 8.0.0
       prettier:
         specifier: ^3.7.4
         version: 3.7.4
@@ -140,7 +137,7 @@ importers:
         version: link:../shared
       '@deltachat/jsonrpc-client':
         specifier: 'catalog:'
-        version: 2.44.0(ws@7.5.10)
+        version: 2.44.0(ws@8.18.2)
       '@emoji-mart/data':
         specifier: ^1.2.1
         version: 1.2.1
@@ -165,9 +162,6 @@ importers:
       filesize:
         specifier: ^10.1.4
         version: 10.1.6
-      immutable:
-        specifier: ^4.3.7
-        version: 4.3.7
       jsqr:
         specifier: ^1.4.0
         version: 1.4.0
@@ -186,9 +180,6 @@ importers:
       path-browserify:
         specifier: ^1.0.1
         version: 1.0.1
-      punycode:
-        specifier: ^2.3.1
-        version: 2.3.1
       react:
         specifier: ^19.2.0
         version: 19.2.0
@@ -213,9 +204,6 @@ importers:
       use-debounce:
         specifier: ^3.3.0
         version: 3.4.3(react@19.2.0)
-      ws:
-        specifier: 7.5.10
-        version: 7.5.10
     devDependencies:
       '@types/chai':
         specifier: 'catalog:'
@@ -448,9 +436,6 @@ importers:
       chai:
         specifier: ^5.1.1
         version: 5.2.0
-      chokidar:
-        specifier: ^3.6.0
-        version: 3.6.0
       debounce:
         specifier: ^1.2.0
         version: 1.2.1
@@ -2781,10 +2766,6 @@ packages:
   ieee754@1.2.1:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
 
-  ignore-walk@8.0.0:
-    resolution: {integrity: sha512-FCeMZT4NiRQGh+YkeKMtWrOmBgWjHjMJ26WQWrRQyoyzqevdaGSakUaJW5xQYmjLlUVk2qUnCjYVBax9EKKg8A==}
-    engines: {node: ^20.17.0 || >=22.9.0}
-
   ignore@5.3.2:
     resolution: {integrity: sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==}
     engines: {node: '>= 4'}
@@ -2797,9 +2778,6 @@ packages:
     resolution: {integrity: sha512-6TDAlDPZxUFCv+fuOkIoXT/V/f3Qbq8e37p+YOiYrUv3v9cc3/6x78VdfPgFVaB9dZYeLUfKgHRebpkm/oP2VQ==}
     engines: {node: '>=0.10.0'}
     hasBin: true
-
-  immutable@4.3.7:
-    resolution: {integrity: sha512-1hqclzwYwjRDFLjcFxOM5AYkkG0rpFPpr1RLPMEuGczoS7YA8gLhy8SWXYRAA/XwfEHpfo3cw5JGioS32fnMRw==}
 
   immutable@5.1.1:
     resolution: {integrity: sha512-3jatXi9ObIsPGr3N5hGw/vWWcTkq6hUYhpQz4k0wLC+owqWi/LiugIw9x0EdNZ2yGedKN/HzePiBvaJRXa0Ujg==}
@@ -7106,18 +7084,12 @@ snapshots:
 
   ieee754@1.2.1: {}
 
-  ignore-walk@8.0.0:
-    dependencies:
-      minimatch: 10.1.1
-
   ignore@5.3.2: {}
 
   ignore@7.0.5: {}
 
   image-size@0.5.5:
     optional: true
-
-  immutable@4.3.7: {}
 
   immutable@5.1.1: {}
 
