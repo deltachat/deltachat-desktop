@@ -1,5 +1,11 @@
 import { app as rawApp, ipcMain } from 'electron'
-import { yerpc, BaseDeltaChat, type T } from '@deltachat/jsonrpc-client'
+import {
+  yerpc,
+  BaseDeltaChat,
+  type T,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  type RawClient,
+} from '@deltachat/jsonrpc-client'
 import { getRPCServerPath } from '@deltachat/stdio-rpc-server'
 
 import { getLogger } from '../../../shared/logger.js'
@@ -114,7 +120,20 @@ export default class DeltaChatController {
         if (response.indexOf('event') !== -1)
           try {
             const { result } = JSON.parse(response)
-            if (isEventResponse(result)) {
+            if (isEventResponse(result[0])) {
+              /** Handle {@linkcode RawClient.getNextEventBatch} */
+              for (const event of result) {
+                handleEventResponse(event, this._jsonrpcRemote)
+              }
+            } else if (isEventResponse(result)) {
+              /** Handle {@linkcode RawClient.getNextEvent} */
+
+              // We can remove this "else" branch
+              // after we have upgraded to Core with
+              // https://github.com/chatmail/core/pull/7825,
+              // because then the transport is not gonna use
+              // `getNextEvent`.
+
               handleEventResponse(result, this._jsonrpcRemote)
             }
           } catch (_error) {
