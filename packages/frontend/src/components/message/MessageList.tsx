@@ -80,8 +80,10 @@ function useUnreadCount(
   accountId: number,
   chat: Pick<T.FullChat, 'freshMessageCounter' | 'id'>
 ) {
-  const [updatedValue, setUpdatedValue] = useState<number | null>(null)
-  const updatedValueForChat = useRef<typeof chat>(null)
+  const [cachedData, setCachedData] = useState<{
+    chat: typeof chat
+    count: number
+  } | null>(null)
 
   useEffect(() => {
     let outdated = false
@@ -90,8 +92,7 @@ function useUnreadCount(
       if (chat.id === eventChatId) {
         const count = await BackendRemote.rpc.getFreshMsgCnt(accountId, chat.id)
         if (!outdated) {
-          setUpdatedValue(count)
-          updatedValueForChat.current = chat
+          setCachedData({ chat, count })
         }
       }
     }
@@ -109,9 +110,7 @@ function useUnreadCount(
     return () => cleanup.forEach(off => off())
   }, [accountId, chat])
 
-  return updatedValueForChat.current === chat && updatedValue != null
-    ? updatedValue
-    : chat.freshMessageCounter
+  return cachedData?.chat === chat ? cachedData.count : chat.freshMessageCounter
 }
 
 type Props = {
@@ -853,6 +852,7 @@ export const MessageListInner = React.memo(
     const hasChatChanged = useHasChanged2(chat)
     const switchedChatAt = useRef(0)
     if (hasChatChanged) {
+      // eslint-disable-next-line react-hooks/purity
       switchedChatAt.current = Date.now()
     }
 
