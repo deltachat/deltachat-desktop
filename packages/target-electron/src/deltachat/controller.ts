@@ -1,5 +1,5 @@
 import { app as rawApp, ipcMain } from 'electron'
-import { yerpc, BaseDeltaChat } from '@deltachat/jsonrpc-client'
+import { yerpc, BaseDeltaChat, type T } from '@deltachat/jsonrpc-client'
 import { getRPCServerPath } from '@deltachat/stdio-rpc-server'
 
 import { getLogger } from '../../../shared/logger.js'
@@ -114,68 +114,8 @@ export default class DeltaChatController {
         if (response.indexOf('event') !== -1)
           try {
             const { result } = JSON.parse(response)
-            const { contextId, event } = result
-            if (
-              contextId !== undefined &&
-              typeof event === 'object' &&
-              event.kind
-            ) {
-              // A workaround.
-              // Intercept the events that go to the renderer
-              // and manually fire them on this JSON-RPC client.
-              // See comments below about why we don't call `rpc.getNextEvent()`
-              // on this JSON-RPC client.
-              //
-              // Note that, as you can see, if the renderer process
-              // stops polling for events for whatever reason,
-              // we will also stop emitting them here.
-              //
-              // The code is copy-pasted from
-              // https://github.com/chatmail/core/blob/df0c0c47bacabfb8dcb4a5ea5edd92dc0652e0b3/deltachat-jsonrpc/typescript/src/client.ts#L56-L70
-              const jsonrpcRemote_ = this._jsonrpcRemote
-              if (jsonrpcRemote_) {
-                type JRPCDeltaChatWithPrivateExposed = {
-                  [P in keyof typeof jsonrpcRemote_]: (typeof jsonrpcRemote_)[P]
-                } & {
-                  contextEmitters: (typeof jsonrpcRemote_)['contextEmitters']
-                }
-                const jsonrpcRemote =
-                  jsonrpcRemote_ as unknown as JRPCDeltaChatWithPrivateExposed
-                jsonrpcRemote.emit(
-                  result.event.kind,
-                  result.contextId,
-                  result.event
-                )
-                jsonrpcRemote.emit('ALL', result.contextId, result.event)
-                if (jsonrpcRemote.contextEmitters[result.contextId]) {
-                  jsonrpcRemote.contextEmitters[result.contextId].emit(
-                    result.event.kind,
-                    result.event as any
-                  )
-                  jsonrpcRemote.contextEmitters[result.contextId].emit(
-                    'ALL',
-                    result.event as any
-                  )
-                }
-              }
-
-              if (event.kind === 'WebxdcRealtimeData') {
-                return
-              }
-              if (event.kind === 'Warning') {
-                logCoreEvent.warn(contextId, event.msg)
-              } else if (event.kind === 'Info') {
-                logCoreEvent.info(contextId, event.msg)
-              } else if (event.kind.startsWith('Error')) {
-                logCoreEvent.error(contextId, event.msg)
-              } else if (app.rc['log-debug']) {
-                // in debug mode log all core events
-                const event_clone = Object.assign({}, event) as Partial<
-                  typeof event
-                >
-                delete event_clone.kind
-                logCoreEvent.debug(contextId, event.kind, event)
-              }
+            if (isEventResponse(result)) {
+              handleEventResponse(result, this._jsonrpcRemote)
             }
           } catch (_error) {
             // ignore json parse errors
@@ -220,4 +160,81 @@ export default class DeltaChatController {
   }
 
   readonly webxdc = new DCWebxdc(this)
+}
+
+/**
+ * @throws if not an event response
+ */
+function isEventResponse(
+  result: Exclude<yerpc.Response['result'], undefined>
+): boolean {
+  const { contextId, event } = result as Record<string, any>
+  return contextId !== undefined && typeof event === 'object' && event.kind
+}
+
+function handleEventResponse(
+  result: T.Event,
+  jsonrpcRemote_: DeltaChatController['_jsonrpcRemote']
+): void {
+  // A workaround.
+  // Intercept the events that go to the renderer
+  // and manually fire them on this JSON-RPC client.
+  // See comments above about why we don't call `rpc.getNextEvent()`
+  // on this JSON-RPC client.
+  //
+  // Note that, as you can see, if the renderer process
+  // stops polling for events for whatever reason,
+  // we will also stop emitting them here.
+  //
+  // The code is copy-pasted from
+  // https://github.com/chatmail/core/blob/df0c0c47bacabfb8dcb4a5ea5edd92dc0652e0b3/deltachat-jsonrpc/typescript/src/client.ts#L56-L70
+  if (jsonrpcRemote_) {
+    type JRPCDeltaChatWithPrivateExposed = {
+      [P in keyof typeof jsonrpcRemote_]: (typeof jsonrpcRemote_)[P]
+    } & {
+      contextEmitters: (typeof jsonrpcRemote_)['contextEmitters']
+    }
+    const jsonrpcRemote =
+      jsonrpcRemote_ as unknown as JRPCDeltaChatWithPrivateExposed
+    jsonrpcRemote.emit(
+      result.event.kind,
+      ...([result.contextId, result.event] as any)
+    )
+    jsonrpcRemote.emit('ALL', result.contextId, result.event)
+    if (jsonrpcRemote.contextEmitters[result.contextId]) {
+      jsonrpcRemote.contextEmitters[result.contextId].emit(
+        result.event.kind,
+        result.event
+      )
+      jsonrpcRemote.contextEmitters[result.contextId].emit('ALL', result.event)
+    }
+  }
+
+  const { event, contextId } = result
+  if (event.kind === 'WebxdcRealtimeData') {
+    return
+  }
+  if (event.kind === 'Warning') {
+    logCoreEvent.warn(contextId, event.msg)
+  } else if (event.kind === 'Info') {
+    logCoreEvent.info(contextId, event.msg)
+  } else if (startsWith(event.kind, 'Error')) {
+    logCoreEvent.error(
+      contextId,
+      // Help TypeScript with this hack.
+      (event as Extract<typeof event, { kind: typeof event.kind }>).msg
+    )
+  } else if (app.rc['log-debug']) {
+    // in debug mode log all core events
+    const event_clone = Object.assign({}, event) as Partial<typeof event>
+    delete event_clone.kind
+    logCoreEvent.debug(contextId, event.kind, event)
+  }
+}
+
+function startsWith<T extends string>(
+  str: string,
+  searchString: T
+): str is `${T}${string}` {
+  return str.startsWith(searchString)
 }
