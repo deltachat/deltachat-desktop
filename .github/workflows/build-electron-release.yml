@@ -146,10 +146,21 @@ jobs:
             --config ./electron-builder.json5 \
             --ia32 --win nsis portable
 
+      - name: Package Windows appx
+        shell: bash
+        working-directory: packages/target-electron
+        run: |
+          pnpm electron-builder \
+            --publish never \
+            --config ./electron-builder.json5 \
+            --win appx
+
       - uses: actions/upload-artifact@v4
         with:
           name: electron-windows
-          path: packages/target-electron/dist/*.exe
+          path: |
+            packages/target-electron/dist/*.exe
+            packages/target-electron/dist/*.appx
 
   # ── macOS DMG (universal + arm64, signed + notarized) ────────
   build-mac-dmg:
