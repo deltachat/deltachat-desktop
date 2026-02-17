@@ -106,7 +106,9 @@ build['mac'] = {
   gatekeeperAssess: true,
   hardenedRuntime: true,
   icon: 'build/icon-mac.icns',
-  provisioningProfile: '../../../embedded.provisionprofile',
+  provisioningProfile: process.env.SECRETS_DIR
+    ? process.env.SECRETS_DIR
+    : '../../../embedded.provisionprofile',
   files: [...files, PREBUILD_FILTERS.NOT_LINUX, PREBUILD_FILTERS.NOT_WINDOWS],
   darkModeSupport: true,
   // For universal builds: allow these binaries to be x64 in both ASAR files
