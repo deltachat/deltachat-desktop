@@ -97,5 +97,17 @@
   },
   "message_selected_shortcut_section": {
     "message": "Selected Message"
+  },
+  "who_can_call_me": {
+    "message": "Who can call me"
+  },
+  "who_can_call_me_everybody": {
+    "message": "Everybody"
+  },
+  "who_can_call_me_contacts": {
+    "message": "Contacts"
+  },
+  "who_can_call_me_nobody": {
+    "message": "Nobody"
   }
 }
