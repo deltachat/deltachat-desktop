@@ -70,8 +70,8 @@ const VolumeMeter = (prop: { volume: number }) => {
     >
       <div className={styles.volumeBar}>
         <div className={styles.mask}>
-          {Array.from({ length: steps }).map(() => (
-            <div className={styles.step} />
+          {Array.from({ length: steps }).map((_, index) => (
+            <div key={index} className={styles.step} />
           ))}
         </div>
         <div className={styles.level} style={{ width: levelPercentage }} />
