@@ -1017,8 +1017,8 @@ export function useGroupImage(image: string | null) {
           setLastPath(dirname(file))
         }) as (path: string) => void /* typescript is weird and wants this */,
         onCancel: () => {},
-        desiredWidth: 256,
-        desiredHeight: 256,
+        desiredWidth: 512,
+        desiredHeight: 512,
       })
     }
   }
