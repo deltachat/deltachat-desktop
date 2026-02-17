@@ -119,10 +119,7 @@ pub(crate) async fn open_html_window(
     #[allow(unused_mut)]
     let mut header_webview_builder = WebviewBuilder::new(
         format!("{window_id}-header"),
-        WebviewUrl::App(
-            PathBuf::from_str("tauri_html_email_view/html_email_view.html")
-                .expect("path conversion failed"),
-        ),
+        WebviewUrl::App(PathBuf::from("tauri_html_email_view/html_email_view.html")),
     );
     #[cfg(target_os = "macos")]
     {

@@ -97,7 +97,7 @@ async fn copy_background_image_file_<R: tauri::Runtime>(
     let bg_images_dir = get_background_images_dir(&app)
         .context("failed to get the chat background images directory")?;
 
-    log::info!("Copying the new chat background image {src_path:?} to the backgroud images directory {bg_images_dir:?}...");
+    log::info!("Copying the new chat background image {src_path:?} to the background images directory {bg_images_dir:?}...");
 
     if let Err(err) = fs::create_dir(&bg_images_dir).await {
         if err.kind() == std::io::ErrorKind::AlreadyExists {
