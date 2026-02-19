@@ -78,6 +78,7 @@ build['asarUnpack'] = [] // ['./node_modules/@deltachat/stdio-rpc-server']
 
 build['afterPack'] = './build/afterPackHook.mjs'
 build['afterSign'] = './build/afterSignHook.cjs'
+build['npmRebuild'] = false
 
 if (typeof env.NO_ASAR !== 'undefined' && env.NO_ASAR != 'false') {
   build['asar'] = false
@@ -106,9 +107,13 @@ build['mac'] = {
   gatekeeperAssess: true,
   hardenedRuntime: true,
   icon: 'build/icon-mac.icns',
-  provisioningProfile: '../../../embedded.provisionprofile',
+  provisioningProfile: process.env.SECRETS_DIR
+    ? `${process.env.SECRETS_DIR}/electron.provisionprofile`
+    : '../../../electron.provisionprofile',
   files: [...files, PREBUILD_FILTERS.NOT_LINUX, PREBUILD_FILTERS.NOT_WINDOWS],
   darkModeSupport: true,
+  // For universal builds: allow these binaries to be x64 in both ASAR files
+  x64ArchFiles: '**/*darwin*/**',
 }
 
 build['mas'] = {
@@ -116,6 +121,8 @@ build['mas'] = {
   entitlements: 'build/entitlements.mas.plist',
   entitlementsInherit: 'build/entitlements.mas.inherit.plist',
   // binaries // Paths of any extra binaries that need to be signed.
+  // For universal builds: allow these binaries to be x64 in both ASAR files
+  x64ArchFiles: '**/*darwin*/**',
 }
 
 build['dmg'] = {
@@ -137,8 +144,10 @@ build['linux'] = {
   target: ['AppImage', 'deb'],
   category: 'Network;Chat;InstantMessaging;',
   desktop: {
-    Comment: 'Delta Chat email-based messenger',
-    Keywords: 'dc;chat;delta;messaging;messenger;email',
+    entry: {
+      Comment: 'Delta Chat email-based messenger',
+      Keywords: 'dc;chat;delta;messaging;messenger;email',
+    },
   },
   files: [...files, PREBUILD_FILTERS.NOT_MAC, PREBUILD_FILTERS.NOT_WINDOWS],
   icon: 'build/icon.icns', // electron builder gets the icon out of the mac icon archive
