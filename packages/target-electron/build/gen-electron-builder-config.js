@@ -78,6 +78,7 @@ build['asarUnpack'] = [] // ['./node_modules/@deltachat/stdio-rpc-server']
 
 build['afterPack'] = './build/afterPackHook.mjs'
 build['afterSign'] = './build/afterSignHook.cjs'
+build['npmRebuild'] = false
 
 if (typeof env.NO_ASAR !== 'undefined' && env.NO_ASAR != 'false') {
   build['asar'] = false
@@ -107,8 +108,8 @@ build['mac'] = {
   hardenedRuntime: true,
   icon: 'build/icon-mac.icns',
   provisioningProfile: process.env.SECRETS_DIR
-    ? process.env.SECRETS_DIR
-    : '../../../embedded.provisionprofile',
+    ? `${process.env.SECRETS_DIR}/electron.provisionprofile`
+    : '../../../electron.provisionprofile',
   files: [...files, PREBUILD_FILTERS.NOT_LINUX, PREBUILD_FILTERS.NOT_WINDOWS],
   darkModeSupport: true,
   // For universal builds: allow these binaries to be x64 in both ASAR files
