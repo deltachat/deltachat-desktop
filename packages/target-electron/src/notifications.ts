@@ -7,6 +7,7 @@ import type { DcNotification } from '../../shared/shared-types.js'
 import { getLogger } from '../../shared/logger.js'
 
 import type { NativeImage, IpcMainInvokeEvent } from 'electron'
+import { DCJsonrpcRemoteInitializedP } from './ipc.js'
 
 /**
  * Notification related functions to:
@@ -215,3 +216,9 @@ function filterNotificationText(text: string) {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
 }
+
+DCJsonrpcRemoteInitializedP.then(jsonrpcRemote => {
+  jsonrpcRemote.on('MsgDeleted', (accountId, { chatId, msgId }) => {
+    clearNotificationsForMessage(null, accountId, chatId, msgId)
+  })
+})

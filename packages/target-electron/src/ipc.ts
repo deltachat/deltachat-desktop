@@ -60,6 +60,10 @@ let dcController: typeof DeltaChatController.prototype
 export function getDCJsonrpcRemote() {
   return dcController.jsonrpcRemote
 }
+let onInitialized: (val: DeltaChatController['jsonrpcRemote']) => void
+export const DCJsonrpcRemoteInitializedP = new Promise<
+  DeltaChatController['jsonrpcRemote']
+>(r => (onInitialized = r))
 
 /** returns shutdown function */
 export async function init(cwd: string, logHandler: LogHandler) {
@@ -402,6 +406,7 @@ export async function init(cwd: string, logHandler: LogHandler) {
     dcController.jsonrpcRemote
   )
 
+  onInitialized(dcController.jsonrpcRemote)
   // the shutdown function
   return () => {
     stopHandlingIncomingVideoCalls()
