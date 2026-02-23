@@ -24,7 +24,7 @@ import { useHasChanged2 } from '../../hooks/useHasChanged'
 import { useReactionsBar } from '../ReactionsBar'
 import EmptyChatMessage from './EmptyChatMessage'
 
-const log = getLogger('render/components/message/MessageList')
+const log = getLogger('renderer/components/message/MessageList')
 
 import type { T } from '@deltachat/jsonrpc-client'
 import {

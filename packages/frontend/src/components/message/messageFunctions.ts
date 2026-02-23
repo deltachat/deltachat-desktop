@@ -15,7 +15,7 @@ import ConfirmDeleteMessageDialog from '../dialogs/ConfirmDeleteMessage'
 import { unknownErrorToString } from '../helpers/unknownErrorToString'
 import AlertDialog from '../dialogs/AlertDialog'
 
-const log = getLogger('render/msgFunctions')
+const log = getLogger('renderer/msgFunctions')
 
 /**
  * json representation of the message object we get from the backend
