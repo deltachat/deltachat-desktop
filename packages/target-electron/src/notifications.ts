@@ -90,8 +90,13 @@ function onClickNotification(
   mainWindow.window?.focus()
 }
 
+/**
+ * As of writing we expect one notification per message,
+ * but just in case let's have an array of notifications
+ * for each message.
+ */
 const notifications: {
-  [accountId: number]: { [chatId: number]: Notification[] }
+  [accountId: number]: { [chatId: number]: { [msgId: number]: Notification[] } }
 } = {}
 
 /**
@@ -113,8 +118,10 @@ function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
 
     notify.on('click', Event => {
       onClickNotification(data.accountId, chatId, data.messageId, Event)
-      notifications[accountId][chatId] =
-        notifications[accountId]?.[chatId]?.filter(n => n !== notify) || []
+      notifications[accountId][chatId][data.messageId] =
+        notifications[accountId]?.[chatId]?.[data.messageId]?.filter(
+          n => n !== notify
+        ) || []
       notify.close()
     })
     notify.on('close', () => {
@@ -122,8 +129,10 @@ function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
       // when the message is moved to notification center so only close
       // the notification on this event on Mac
       if (isMac) {
-        notifications[accountId][chatId] =
-          notifications[accountId]?.[chatId]?.filter(n => n !== notify) || []
+        notifications[accountId][chatId][data.messageId] =
+          notifications[accountId]?.[chatId]?.[data.messageId]?.filter(
+            n => n !== notify
+          ) || []
       }
       // eslint-disable-next-line no-console
       console.log('Notification close event triggered', notify)
@@ -132,17 +141,36 @@ function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
     if (!notifications[accountId]) {
       notifications[accountId] = {}
     }
+    if (!notifications[accountId][chatId]) {
+      notifications[accountId][chatId] = {}
+    }
 
-    if (notifications[accountId][chatId]) {
-      notifications[accountId][chatId].push(notify)
+    if (notifications[accountId][chatId][data.messageId]) {
+      notifications[accountId][chatId][data.messageId].push(notify)
     } else {
-      notifications[accountId][chatId] = [notify]
+      notifications[accountId][chatId][data.messageId] = [notify]
     }
 
     notify.show()
   } catch (error) {
     log.warn('could not create notification:', error)
   }
+}
+
+function clearNotificationsForMessage(
+  _: unknown,
+  accountId: number,
+  chatId: number,
+  messageId: number
+) {
+  const arr = notifications[accountId]?.[chatId]?.[messageId]
+  if (arr == undefined) {
+    return
+  }
+  arr.forEach(notify => {
+    notify.close()
+  })
+  delete notifications[accountId][chatId][messageId]
 }
 
 function clearNotificationsForChat(
@@ -152,8 +180,10 @@ function clearNotificationsForChat(
 ) {
   log.debug('clearNotificationsForChat', { accountId, chatId, notifications })
   if (notifications[accountId]?.[chatId]) {
-    for (const notify of notifications[accountId]?.[chatId] || []) {
-      notify.close()
+    for (const messageId of Object.keys(
+      notifications[accountId]?.[chatId] || {}
+    )) {
+      clearNotificationsForMessage(_, accountId, chatId, Number(messageId))
     }
     delete notifications[accountId][chatId]
   }
