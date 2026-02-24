@@ -4,6 +4,7 @@ import {
   useCallback,
   useMemo,
   useEffectEvent,
+  useRef,
 } from 'react'
 import { T } from '@deltachat/jsonrpc-client'
 
@@ -64,7 +65,6 @@ export function useDraft(
   messageListState: MessageListStore['state'],
   accountId: number,
   chatId: number | null,
-  isContactRequest: boolean,
   canSend: boolean, // no draft needed in chats we can't send messages
   inputRef: React.RefObject<ComposerMessageInput | null>
 ): {
@@ -96,6 +96,10 @@ export function useDraft(
   const openConfirmationDialog = useConfirmationDialog()
   const openAlertDialog = useAlertDialog()
 
+  const focusComposerIfRendered = useEffectEvent(() => {
+    inputRef.current?.focus()
+  })
+
   const [
     draftState,
     /**
@@ -108,49 +112,26 @@ export function useDraft(
     setDraftState(emptyDraft(chatId))
   }, [chatId])
 
-  /**
-   * Aborts and gets re-created when {@linkcode accountId} or
-   * {@linkcode chatId} change, or simply when the component unmounts.
-   *
-   * It is needed to avoid races where e.g. `getDraft` started but then
-   * {@linkcode chatId} changed before it finished.
-   * The approach is similar to
-   * https://react.dev/learn/you-might-not-need-an-effect#fetching-data.
-   */
-  const abortController = useMemo(
-    () => new AbortController(),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [accountId, chatId]
-  )
-  useEffect(() => {
-    // The fact that `abortController` updated means that its dependencies,
-    // i.e. `[accountId, chatId]`, updated.
-    return () => {
-      // This is now the "old" `abortController`. Let's abort it.
-      abortController.abort()
-    }
-  }, [abortController])
-
   const [draftIsLoading_, setDraftIsLoading] = useState(true)
-  const skipLoadingDraft = chatId === null || !canSend
+  const skipLoadingDraft = chatId === null
   const draftIsLoading = skipLoadingDraft ? false : draftIsLoading_
-  const loadDraft = useCallback(() => {
+  const effectRanRef = useRef(false)
+  useEffect(() => {
+    if (effectRanRef.current) {
+      log.warn(
+        "useEffect to load draft already ran. `useDraft` doesn't support this well"
+      )
+    }
+    effectRanRef.current = true
+
     if (skipLoadingDraft) {
-      clearDraftState()
       return
     }
     setDraftIsLoading(true)
     BackendRemote.rpc
       .getDraft(accountId, chatId)
       .then(newDraft => {
-        if (abortController.signal.aborted) {
-          return
-        }
-
-        if (!newDraft) {
-          log.debug('no draft')
-          clearDraftState()
-        } else {
+        if (newDraft) {
           setDraftState(_old => ({
             chatId,
             id: newDraft.id,
@@ -165,27 +146,13 @@ export function useDraft(
           }))
         }
         setDraftIsLoading(false)
-        setTimeout(() => {
-          inputRef.current?.focus()
-        })
+        setTimeout(focusComposerIfRendered)
       })
       .catch(error => {
         setDraftIsLoading(false)
         throw error
       })
-  }, [
-    accountId,
-    chatId,
-    abortController,
-    clearDraftState,
-    inputRef,
-    skipLoadingDraft,
-  ])
-
-  useEffect(() => {
-    log.debug('reloading chat because id changed', chatId)
-    loadDraft()
-  }, [chatId, loadDraft, isContactRequest])
+  }, [accountId, chatId, skipLoadingDraft])
 
   /**
    * Saving (uploading) the draft to the backend is not always enough.
@@ -218,13 +185,7 @@ export function useDraft(
         await BackendRemote.rpc.removeDraft(accountId, chatId)
       }
 
-      if (abortController.signal.aborted) {
-        return
-      }
       const newDraft = await BackendRemote.rpc.getDraft(accountId, chatId)
-      if (abortController.signal.aborted) {
-        return
-      }
 
       // don't load text to prevent bugging back
       if (newDraft) {
@@ -248,7 +209,7 @@ export function useDraft(
         }))
       }
     },
-    [accountId, abortController]
+    [accountId]
   )
   const saveAndRefetchDraft = useMemo(
     () =>
@@ -267,7 +228,7 @@ export function useDraft(
           debounce(saveAndRefetchDraft, 15_000),
     [saveAndRefetchDraft]
   )
-  // Flush the draft to backend when switching chats.
+  // Flush the draft to backend when ~~switching chats~~ unmounting.
   // Note that specifying `chatId` as a dependency is not necessary,
   // because `debouncedSaveAndRefetchDraft` itself already depends on it.
   useEffect(() => {
@@ -519,12 +480,12 @@ export function useDraft(
       messageOrMessageId: Parameters<Exclude<typeof quoteMessage, null>>[0]
     ) => {
       quoteMessage?.(messageOrMessageId)
-      inputRef.current?.focus()
+      focusComposerIfRendered()
     }
     return () => {
       window.__setQuoteInDraft = null
     }
-  }, [quoteMessage, inputRef])
+  }, [quoteMessage])
 
   /**
    * Handle {@linkcode window.__setDraftRequest} which might have been set
