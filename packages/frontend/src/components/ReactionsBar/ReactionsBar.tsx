@@ -98,6 +98,7 @@ export default function ReactionsBar({
             {DEFAULT_EMOJIS.map(emoji => {
               return (
                 <ReactionButton
+                  key={emoji}
                   emoji={emoji}
                   isChecked={myReaction === emoji}
                   onClick={() => toggleReaction(emoji)}
