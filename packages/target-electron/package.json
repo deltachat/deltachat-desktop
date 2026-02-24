@@ -82,7 +82,7 @@
     "chai": "^5.1.1",
     "chokidar": "^3.6.0",
     "debounce": "^1.2.0",
-    "electron": "^40.4.1",
+    "electron": "^40.6.0",
     "electron-builder": "^26.7.0",
     "esbuild": "^0.25.0",
     "mocha": "^10.7.0",
