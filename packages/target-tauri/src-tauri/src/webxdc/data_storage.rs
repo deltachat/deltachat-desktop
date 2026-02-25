@@ -18,7 +18,7 @@ use tauri::{AppHandle, Manager, Runtime, WebviewWindowBuilder};
 use super::error::Error;
 
 #[cfg(not(target_vendor = "apple"))]
-use tokio::fs::{create_dir_all, remove_dir_all};
+use tokio::fs::{create_dir_all, read_dir, remove_dir_all};
 
 #[cfg(target_vendor = "apple")]
 const DATA_STORE_PREFIX: &[u8; 8] = b"webxdc__";
@@ -40,6 +40,14 @@ fn account_id_from_store_id(data_store_id: &[u8; 16]) -> u32 {
     // rust type system needs "try_into().unwrap()" here, because it does not understand yet that
     //  [8..12] returns exactly [u8; 4] and not a slice with an unknown length ([u8])
     let bytes: [u8; 4] = data_store_id[8..12].try_into().unwrap();
+    u32::from_be_bytes(bytes)
+}
+
+#[cfg(target_vendor = "apple")]
+fn instance_id_from_store_id(data_store_id: &[u8; 16]) -> u32 {
+    // rust type system needs "try_into().unwrap()" here, because it does not understand yet that
+    //  [12..] returns exactly [u8; 4] and not a slice with an unknown length ([u8])
+    let bytes: [u8; 4] = data_store_id[12..].try_into().unwrap();
     u32::from_be_bytes(bytes)
 }
 
@@ -74,6 +82,45 @@ pub(super) async fn set_data_store<'a, R: Runtime, M: Manager<R>>(
         create_dir_all(&browser_data_dir).await?;
         Ok(builder.data_directory(browser_data_dir))
     }
+}
+
+/// Returns all webxdc instances for an account which have a webdata folder
+pub(super) async fn get_webxdc_instances_with_data(
+    app: &AppHandle,
+    account_id: u32,
+) -> Result<Vec<u32>, Error> {
+    let mut instances: Vec<u32> = Vec::new();
+
+    #[cfg(target_vendor = "apple")]
+    {
+        let all_data_stores: Vec<[u8; 16]> = app.fetch_data_store_identifiers().await?;
+        for data_store_id in all_data_stores
+            .iter()
+            .filter(|id| account_id_from_store_id(id) == account_id)
+        {
+            let instance_id = instance_id_from_store_id(data_store_id);
+            instances.push(instance_id);
+        }
+    }
+
+    #[cfg(not(target_vendor = "apple"))]
+    {
+        let mut dir = read_dir(path_to_webxdc_browser_data_dir(app, account_id)?).await?;
+        while let Ok(Some(entry)) = dir.next_entry().await {
+            if entry.metadata().await?.is_dir() {
+                let Ok(name) = entry.file_name().into_string() else {
+                    log::warn!("folder name is not valid utf-8");
+                    continue;
+                };
+                let Ok(instance_id) = name.parse() else {
+                    log::warn!("folder name is not a number");
+                    continue;
+                };
+                instances.push(instance_id);
+            }
+        }
+    }
+    Ok(instances)
 }
 
 #[allow(unused_variables)]

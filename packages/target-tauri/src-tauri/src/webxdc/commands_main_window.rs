@@ -8,7 +8,7 @@ use std::{str::FromStr, sync::Arc};
 use anyhow::Context;
 use deltachat::{
     chat::Chat,
-    message::{Message, MsgId},
+    message::{get_existing_msg_ids, Message, MsgId},
     peer_channels::leave_webxdc_realtime,
     webxdc::WebxdcInfo,
 };
@@ -37,7 +37,8 @@ use crate::{
     },
     util::{truncate_text, url_origin::UrlOriginExtension},
     webxdc::data_storage::{
-        delete_webxdc_data_for_account, delete_webxdc_data_for_instance, set_data_store,
+        delete_webxdc_data_for_account, delete_webxdc_data_for_instance,
+        get_webxdc_instances_with_data, set_data_store,
     },
     DeltaChatAppState, CONFIG_FILE,
 };
@@ -104,15 +105,16 @@ pub(crate) async fn on_webxdc_message_changed<'a>(
     Ok(())
 }
 
-#[cfg(desktop)]
 #[tauri::command]
 pub(crate) async fn on_webxdc_message_deleted(
     app: AppHandle,
+    deltachat_state: State<'_, DeltaChatAppState>,
     webxdc_instances: State<'_, WebxdcInstancesState>,
     account_id: u32,
     instance_id: Option<u32>,
 ) -> Result<(), Error> {
     if let Some(instance_id) = instance_id {
+        #[cfg(desktop)]
         if let Some((window_label, _)) = webxdc_instances
             .get_webxdc_for_instance(account_id, instance_id)
             .await
@@ -121,10 +123,50 @@ pub(crate) async fn on_webxdc_message_deleted(
                 window.destroy()?;
             }
         }
-        delete_webxdc_data_for_instance(&app, account_id, instance_id).await
-    } else {
-        Ok(())
+        delete_webxdc_data_for_instance(&app, account_id, instance_id).await?;
     }
+
+    // cleanup old webxdc instances
+    // TODO: only one instance of the cleanup method should be running at a time
+
+    // 1. get all webxdc instance ids for account
+    let instance_ids: Vec<MsgId> = get_webxdc_instances_with_data(&app, account_id)
+        .await?
+        .iter()
+        .map(|id| MsgId::new(*id))
+        .collect();
+
+    // 2. check if their messages still exist
+    let deltachat = deltachat_state.deltachat.read().await;
+    let Some(account) = deltachat.get_account(account_id) else {
+        error!("account not found");
+        return Ok(());
+    };
+    let existing_instance_ids = get_existing_msg_ids(&account, &instance_ids)
+        .await
+        .map_err(Error::DeltaChat)?;
+
+    let non_existing_instance_ids: Vec<u32> = instance_ids
+        .iter()
+        .filter(|id| !existing_instance_ids.contains(id))
+        .map(|id| id.to_u32())
+        .collect();
+
+    // 3. delete data for webxdc apps (and close them if they are open) whose messages do not exist anymore
+    for non_existing_instance_id in non_existing_instance_ids {
+        #[cfg(desktop)]
+        if let Some((window_label, _)) = webxdc_instances
+            .get_webxdc_for_instance(account_id, non_existing_instance_id)
+            .await
+        {
+            if let Some(window) = app.get_window(&window_label) {
+                window.destroy()?;
+            }
+        }
+        delete_webxdc_data_for_instance(&app, account_id, non_existing_instance_id).await?;
+    }
+
+    Ok(())
 }
 
 #[tauri::command]
