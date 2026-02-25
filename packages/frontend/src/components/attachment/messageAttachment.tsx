@@ -20,7 +20,7 @@ import FullscreenMedia, {
 } from '../dialogs/FullscreenMedia'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/dialog/useDialog'
-import AudioPlayer from '../AudioPlayer'
+import { AudioPlayer } from '../AudioPlayer'
 import { T } from '@deltachat/jsonrpc-client'
 import { selectedAccountId } from '../../ScreenController'
 import { BackendRemote } from '../../backend-com'
