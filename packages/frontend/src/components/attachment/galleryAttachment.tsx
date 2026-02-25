@@ -25,7 +25,7 @@ import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useMessage from '../../hooks/chat/useMessage'
 import MessageDetail from '../dialogs/MessageDetail/MessageDetail'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
-import AudioPlayer from '../AudioPlayer'
+import { AudioPlayer } from '../AudioPlayer'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import type { OpenDialog } from '../../contexts/DialogContext'
