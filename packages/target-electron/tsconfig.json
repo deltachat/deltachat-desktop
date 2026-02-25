@@ -10,7 +10,8 @@
     "esModuleInterop": true,
     "moduleResolution": "Node10",
     "strictNullChecks": true,
-    "strict": true
+    "strict": true,
+    "noUncheckedIndexedAccess": true
   },
   "include": ["./**/*.ts", "./**/*.js"]
 }

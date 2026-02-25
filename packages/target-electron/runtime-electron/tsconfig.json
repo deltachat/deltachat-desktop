@@ -8,6 +8,7 @@
     "allowJs": false,
     "strictNullChecks": true,
     "strict": true,
+    "noUncheckedIndexedAccess": true,
     "moduleResolution": "NodeNext"
   }
 }
