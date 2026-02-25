@@ -36,7 +36,7 @@ import { useTranslationWritingDirection } from '../hooks/useTranslationFunction'
 
 const log = getLogger('renderer/Gallery')
 
-type MediaTabKey = 'webxdc_apps' | 'images' | 'video' | 'audio' | 'files'
+type MediaTabKey = 'webxdc_apps' | 'gallery' | 'audio' | 'files'
 
 type GalleryElement = (
   props: GalleryAttachmentElementProps & {
@@ -54,13 +54,13 @@ const MediaTabs: Readonly<{
     values: ['Webxdc'],
     element: WebxdcAttachment,
   },
-  images: {
-    values: ['Gif', 'Image'],
-    element: ImageAttachment,
-  },
-  video: {
-    values: ['Video'],
-    element: VideoAttachment,
+  gallery: {
+    values: ['Gif', 'Image', 'Video'],
+    element: props =>
+      props.loadResult.kind === 'message' &&
+      props.loadResult.viewType === 'Video'
+        ? VideoAttachment(props)
+        : ImageAttachment(props),
   },
   audio: {
     values: ['Audio', 'Voice'],
@@ -203,7 +203,7 @@ export default class Gallery extends Component<
     if (this.props.chatId !== prevProps.chatId) {
       // reset
       this.reset()
-      this.onSelect('images')
+      this.onSelect('webxdc_apps')
     }
   }
 
@@ -218,7 +218,7 @@ export default class Gallery extends Component<
     this.setState({ loading: true })
 
     BackendRemote.rpc
-      .getChatMedia(accountId, chatId, msgTypes[0], msgTypes[1], null)
+      .getChatMedia(accountId, chatId, msgTypes[0], msgTypes[1], msgTypes[2])
       .then(async media_ids => {
         const mediaLoadResult =
           tab !== 'files'
@@ -247,14 +247,10 @@ export default class Gallery extends Component<
     const allMedia = this.props.chatId === 'all'
     const tx = window.static_translate // static because dynamic isn't too important here
     switch (tab) {
-      case 'images':
+      case 'gallery':
         return allMedia
           ? tx('tab_all_media_empty_hint')
           : tx('tab_image_empty_hint')
-      case 'video':
-        return allMedia
-          ? tx('tab_all_media_empty_hint')
-          : tx('tab_video_empty_hint')
       case 'audio':
         return allMedia
           ? tx('tab_all_media_empty_hint')
