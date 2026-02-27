@@ -91,6 +91,12 @@ export async function updateCoreStrings() {
     [C.DC_STR_GROUP_LEFT_BY_OTHER]: tx('group_left_by_other'),
     [C.DC_STR_GROUP_IMAGE_DELETED_BY_YOU]: tx('group_image_deleted_by_you'),
     [C.DC_STR_GROUP_IMAGE_DELETED_BY_OTHER]: tx('group_image_deleted_by_other'),
+    [C.DC_STR_GROUP_DESCRIPTION_CHANGED_BY_YOU]: tx(
+      'chat_description_changed_by_you'
+    ),
+    [C.DC_STR_GROUP_DESCRIPTION_CHANGED_BY_OTHER]: tx(
+      'chat_description_changed_by_other'
+    ),
     [C.DC_STR_LOCATION_ENABLED_BY_YOU]: tx('location_enabled_by_you'),
     [C.DC_STR_LOCATION_ENABLED_BY_OTHER]: tx('location_enabled_by_other'),
     [C.DC_STR_EPHEMERAL_TIMER_DISABLED_BY_YOU]: tx(
