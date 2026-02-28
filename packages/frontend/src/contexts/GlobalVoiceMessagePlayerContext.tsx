@@ -1,9 +1,19 @@
 import { getLogger } from '@deltachat-desktop/shared/logger'
-import React, { createContext, useCallback, useState } from 'react'
+import React, { createContext, useCallback, useRef, useState } from 'react'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { type runtime } from '@deltachat-desktop/runtime-interface'
 
 const log = getLogger('GlobalVoiceMessagePlayerContext')
 
 type GlobalPlayerContextValue = {
+  /**
+   * This never changes
+   */
+  audioElement: HTMLAudioElement
+  /**
+   * The string is provided in the form returned from
+   * {@linkcode runtime.transformBlobURL}.
+   */
   currentSrc: string | null
   eventListeners: {
     onPlay: React.ReactEventHandler<HTMLMediaElement>
@@ -11,6 +21,14 @@ type GlobalPlayerContextValue = {
     onSeeking: React.ReactEventHandler<HTMLMediaElement>
     onVolumeChange: React.ReactEventHandler<HTMLMediaElement>
   }
+  /**
+   * Same as {@linkcode GlobalPlayerContextValue.eventListeners['onPlay']},
+   * but takes only `src` instead of an entire event.
+   */
+  onPlay2: (src: string) => void
+
+  // Only needed for the "close" button of the global player UI.
+  stop: () => void
 }
 
 const audioEl = document.createElement('audio')
@@ -24,6 +42,7 @@ const noContextErrStr =
  */
 export const GlobalVoiceMessagePlayerContext =
   createContext<GlobalPlayerContextValue>({
+    audioElement: audioEl,
     currentSrc: null,
     eventListeners: {
       onPlay: () => {
@@ -38,6 +57,12 @@ export const GlobalVoiceMessagePlayerContext =
       onVolumeChange: () => {
         log.warn(noContextErrStr)
       },
+    },
+    onPlay2: () => {
+      log.warn(noContextErrStr)
+    },
+    stop: () => {
+      log.warn(noContextErrStr)
     },
   })
 
@@ -54,18 +79,21 @@ export function GlobalVoiceMessagePlayerProvider({
     }
 
     const newSrcStr = newSrc ?? ''
-    if (audioEl.src !== newSrcStr) {
+    if (audioEl.getAttribute('src') !== newSrcStr) {
       audioEl.src = newSrcStr
     }
     audioEl.play()
+    // TODO fix: also sync `currentTime` if the element started playing
+    // not from the start.
   }, [])
 
   return (
     <GlobalVoiceMessagePlayerContext.Provider
       value={{
+        audioElement: audioEl,
         currentSrc,
         eventListeners: {
-          onPlay: e => setSrcAndPlay(e.currentTarget.src),
+          onPlay: e => setSrcAndPlay(e.currentTarget.getAttribute('src')),
           // Be careful with `HTMLMediaElement.src` comparisons.
           // `src`'s getter might return a value different from the one you set.
           // Namely, for `.src = '/home/me/vid.mp4`
@@ -102,6 +130,11 @@ export function GlobalVoiceMessagePlayerProvider({
             audioEl.muted = e.currentTarget.muted
           },
         },
+        onPlay2: setSrcAndPlay,
+        stop: useCallback(() => {
+          setCurrentSrc(null)
+          audioEl.src = ''
+        }, [])
       }}
     >
       {children}
