@@ -39,10 +39,10 @@ $paddingVertical: 20px;
 
     justify-content: center;
     padding: 0;
-  }
-  &:not(.noTopPadding) {
-    /* we always add 20px top padding if not explicitly disabled */
-    padding-top: $paddingVertical;
+    &:not(.noTopPadding) {
+      /* we always add 20px top padding if not explicitly disabled */
+      padding-top: $paddingVertical;
+    }
   }
   &::backdrop {
     background-color: var(--dialogBackdropBackground);
