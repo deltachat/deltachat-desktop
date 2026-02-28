@@ -43,7 +43,8 @@
       "os": [
         "darwin",
         "win32",
-        "linux"
+        "linux",
+        "freebsd"
       ],
       "cpu": [
         "x64",
