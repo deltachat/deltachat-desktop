@@ -45,6 +45,7 @@ import { useFetch, useRpcFetch } from '../../../hooks/useFetch'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { useChatContextMenu } from '../../chat/ChatContextMenu'
 import useContextMenu from '../../../hooks/useContextMenu'
+import { GlobalVoiceMessagePlayer } from '../../GlobalVoiceMessagePlayer/GlobalVoiceMessagePlayer'
 
 const log = getLogger('MainScreen')
 
@@ -337,6 +338,8 @@ export default function MainScreen({ accountId }: Props) {
         </nav>
         <MessageListView accountId={accountId} />
       </section>
+      {/* TODO move this, style properly */}
+      <GlobalVoiceMessagePlayer />
       {!chatListShouldBeHidden && <ConnectivityToast />}
     </div>
   )
