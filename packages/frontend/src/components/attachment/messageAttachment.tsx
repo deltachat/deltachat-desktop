@@ -77,10 +77,16 @@ export default function Attachment({
     const minHeight = 50 // needed for readable footer
     const maxLandscapeWidth = 450 // also set by css
     const maxPortraitHeight = 450 // also set by css
-    const stickerHeight = 200
+    const maxStickerSize = 200
 
     if (message.viewType === 'Sticker') {
-      return stickerHeight
+      const w = message.dimensionsWidth
+      const h = message.dimensionsHeight
+      if (w > 0 && h > 0) {
+        const scale = Math.min(maxStickerSize / w, maxStickerSize / h, 1)
+        return Math.round(h * scale)
+      }
+      return maxStickerSize
     }
 
     const height = message.dimensionsHeight
@@ -108,6 +114,19 @@ export default function Attachment({
       }
     }
     return finalHeight
+  }
+
+  const calculateStickerWidth = (
+    message: Pick<T.Message, 'dimensionsHeight' | 'dimensionsWidth'>
+  ): number | undefined => {
+    const maxStickerSize = 200
+    const w = message.dimensionsWidth
+    const h = message.dimensionsHeight
+    if (w > 0 && h > 0) {
+      const scale = Math.min(maxStickerSize / w, maxStickerSize / h, 1)
+      return Math.round(w * scale)
+    }
+    return undefined
   }
 
   const isPortrait = (
@@ -150,6 +169,11 @@ export default function Attachment({
           )}
           src={runtime.transformBlobURL(message.file)}
           height={calculateHeight(message)}
+          width={
+            message.viewType === 'Sticker'
+              ? calculateStickerWidth(message)
+              : undefined
+          }
         />
       </button>
     )

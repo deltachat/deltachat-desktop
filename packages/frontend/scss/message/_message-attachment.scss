@@ -50,6 +50,7 @@
     min-width: 200px;
     &.sticker {
       min-width: auto;
+      object-fit: contain;
     }
 
     // The padding on the bottom of the bubble produces 4 extra pixels of space at the
