@@ -1,4 +1,11 @@
-import React, { useState } from 'react'
+import React, {
+  useContext,
+  useEffect,
+  useEffectEvent,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import classNames from 'classnames'
 import { filesize } from 'filesize'
 
@@ -26,6 +33,12 @@ import { selectedAccountId } from '../../ScreenController'
 import { BackendRemote } from '../../backend-com'
 import { useRpcFetch } from '../../hooks/useFetch'
 import { useHasChanged2 } from '../../hooks/useHasChanged'
+import { getLogger } from '@deltachat-desktop/shared/logger'
+import {
+  NextVoiceMesagePlayerContext,
+} from '../../contexts/NextVoiceMesagePlayerContext'
+
+const log = getLogger('messageAttachment')
 
 type AttachmentProps = {
   text?: string
@@ -193,11 +206,20 @@ export default function Attachment({
           withContentBelow ? 'content-below' : null
         )}
       >
-        <AudioPlayer
+        {/* <AudioPlayer
           src={runtime.transformBlobURL(message.file)}
           // Despite the element having multiple interactive
           // (pseudo?) elements inside of it, tabindex applies to all of them.
           tabIndex={tabindexForInteractiveContents}
+        /> */}
+        {/* <AudioAttachment
+          file={message.file}
+          tabindexForInteractiveContents={tabindexForInteractiveContents}
+        /> */}
+        <AudioAttachment
+          // Help TypeScript out a little.
+          message={message as (typeof message & { file: typeof message.file})}
+          tabindexForInteractiveContents={tabindexForInteractiveContents}
         />
       </div>
     )
@@ -233,6 +255,42 @@ export default function Attachment({
       </button>
     )
   }
+}
+
+// Also see `AudioAttachment` in the Gallery.
+function AudioAttachment(props: {
+  message: Type.Message & { file: string }
+  tabindexForInteractiveContents: number
+}) {
+  const nextVoiceMessagePlayerCtx = useContext(NextVoiceMesagePlayerContext)
+  const src = useMemo(
+    () => runtime.transformBlobURL(props.message.file),
+    [props.message.file]
+  )
+
+  return (
+    <AudioPlayer
+      src={src}
+      // Despite the element having multiple interactive
+      // (pseudo?) elements inside of it, tabindex applies to all of them.
+      tabIndex={props.tabindexForInteractiveContents}
+      // TODO lmaoooo, this gets invoked
+      // when we try to play the same element from the gallery!!
+      // Well maybe it's a feature and not a bug?
+      // I mean the global player starts playing this element.
+      //
+      // OK, I think we need to make another prop, which we would not invoke
+      // if `play` is not caused by the user.
+      onPlay={() =>
+        nextVoiceMessagePlayerCtx.setCurrMessage({
+          accountId: selectedAccountId(),
+          chatId: props.message.chatId,
+          messageId: props.message.id,
+          src,
+        })
+      }
+    />
+  )
 }
 
 export function DraftAttachment({

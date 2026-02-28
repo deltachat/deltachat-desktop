@@ -1,0 +1,29 @@
+@use '../../../scss/mixins';
+
+.root {
+  display: grid;
+  grid-template-columns: auto min-content;
+}
+.audioElContainer {
+  // Otherwise the `<audio>` has some extra margin.
+  line-height: 0;
+
+  audio {
+    width: 100%;
+    // min-width: 100%;
+  }
+  audio::-webkit-media-controls-enclosure {
+    border-radius: 0;
+  }
+}
+.closeButton {
+  @include mixins.button-reset;
+  border-radius: 9999999px;
+  padding: 0.5rem;
+  line-height: 0;
+  align-self: center;
+
+  .closeButtonIcon {
+    vertical-align: middle;
+  }
+}

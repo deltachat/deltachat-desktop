@@ -45,6 +45,7 @@ import { useFetch, useRpcFetch } from '../../../hooks/useFetch'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { useChatContextMenu } from '../../chat/ChatContextMenu'
 import useContextMenu from '../../../hooks/useContextMenu'
+import { GlobalVoiceMessagePlayer } from '../../GlobalVoiceMessagePlayer/GlobalVoiceMessagePlayer'
 
 const log = getLogger('MainScreen')
 
@@ -306,6 +307,9 @@ export default function MainScreen({ accountId }: Props) {
             setQueryChatId(null)
           }}
         />
+        {/* TODO fix aria-label of wrapper, fix class name. */}
+        {/* And this is probably not the right place for the player overall. */}
+        <GlobalVoiceMessagePlayer />
       </section>
       <section
         role='region'

@@ -34,6 +34,7 @@ import { useRovingTabindex } from '../../contexts/RovingTabindex'
 import ConfirmDeleteMessageDialog from '../dialogs/ConfirmDeleteMessage'
 import { BackendRemote } from '../../backend-com'
 import { useRpcFetch } from '../../hooks/useFetch'
+import { NextVoiceMesagePlayerContext } from '../../contexts/NextVoiceMesagePlayerContext'
 
 const log = getLogger('mediaAttachment')
 
@@ -354,12 +355,14 @@ export function VideoAttachment({
   }
 }
 
+// Also see `AudioAttachment` in `messageAttachment.tsx`.
 export function AudioAttachment({
   messageId,
   loadResult,
 }: GalleryAttachmentElementProps) {
   const { openDialog } = useDialog()
   const tx = useTranslationFunction()
+  const nextVoiceMessagePlayerCtx = useContext(NextVoiceMesagePlayerContext)
   const contextMenu = useContext(ContextMenuContext)
   const { deleteMessage, jumpToMessage } = useMessage()
   const accountId = selectedAccountId()
@@ -408,6 +411,7 @@ export function AudioAttachment({
       accountId
     )
     const { file, fileMime } = message
+    const src = runtime.transformBlobURL(file || '')
     const hasSupportedFormat = isAudio(fileMime)
     const isBroken = !file || !hasSupportedFormat
     return (
@@ -461,10 +465,18 @@ export function AudioAttachment({
         </div>
         {hasSupportedFormat ? (
           <AudioPlayer
-            src={runtime.transformBlobURL(file || '')}
+            src={src}
             // Despite the element having multiple interactive
             // (pseudo?) elements inside of it, tabindex applies to all of them.
             tabIndex={rovingTabindex.tabIndex}
+            onPlay={() =>
+              nextVoiceMessagePlayerCtx.setCurrMessage({
+                accountId,
+                chatId: message.chatId,
+                messageId: message.id,
+                src,
+              })
+            }
           />
         ) : (
           <div>

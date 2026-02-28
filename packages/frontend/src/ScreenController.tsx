@@ -24,6 +24,7 @@ import { ContextMenuProvider } from './contexts/ContextMenuContext'
 import { InstantOnboardingProvider } from './contexts/InstantOnboardingContext'
 import { GlobalVoiceMessagePlayerProvider } from './contexts/GlobalVoiceMessagePlayerContext'
 import { SmallScreenModeMacOSTitleBar } from './components/SmallScreenModeMacOSTitleBar'
+import { NextVoiceMesagePlayerProvider } from './contexts/NextVoiceMesagePlayerContext'
 
 const log = getLogger('renderer/ScreenController')
 
@@ -378,28 +379,36 @@ export default class ScreenController extends Component {
                 because the "Gallery" dialog is rendered
                 inside of `DialogContextProvider`. */}
                 <GlobalVoiceMessagePlayerProvider>
-                  <DialogContextProvider>
-                    <RuntimeAdapter accountId={this.selectedAccountId} />
-                    <KeybindingsContextProvider>
-                      <div className='main-container-container'>
-                        {this.state.smallScreenMode &&
-                          runtime.getRuntimeInfo().isMac && (
-                            <SmallScreenModeMacOSTitleBar />
-                          )}
-                        <div className='main-container'>
-                          <AccountListSidebar
-                            selectedAccountId={this.selectedAccountId}
-                            onAddAccount={this.addAndSelectAccount}
-                            onSelectAccount={this.selectAccount.bind(this)}
-                            openAccountDeletionScreen={this.openAccountDeletionScreen.bind(
-                              this
+                  <NextVoiceMesagePlayerProvider>
+                    <DialogContextProvider>
+                      <RuntimeAdapter accountId={this.selectedAccountId} />
+                      <KeybindingsContextProvider>
+                        <div className='main-container-container'>
+                          {this.state.smallScreenMode &&
+                            runtime.getRuntimeInfo().isMac && (
+                              <SmallScreenModeMacOSTitleBar />
                             )}
-                          />
-                          {this.renderScreen(this.selectedAccountId)}
+                          <div className='main-container'>
+                            <AccountListSidebar
+                              selectedAccountId={this.selectedAccountId}
+                              onAddAccount={this.addAndSelectAccount}
+                              onSelectAccount={this.selectAccount.bind(this)}
+                              openAccountDeletionScreen={this.openAccountDeletionScreen.bind(
+                                this
+                              )}
+                            />
+                            {this.renderScreen(this.selectedAccountId)}
+                            {/* TODO or hmmmmmm, maybe the player goes here
+                            and then we don't even need to worry about portals,
+                            since it's not goung to be behind `key={accountId}`? */}
+                            {/* TODO also - note that if we don't do this
+                            then the global player is not displayed for screens
+                            other than "main screen" */}
+                          </div>
                         </div>
-                      </div>
-                    </KeybindingsContextProvider>
-                  </DialogContextProvider>
+                      </KeybindingsContextProvider>
+                    </DialogContextProvider>
+                  </NextVoiceMesagePlayerProvider>
                 </GlobalVoiceMessagePlayerProvider>
               </ContextMenuProvider>
             </ChatProvider>
