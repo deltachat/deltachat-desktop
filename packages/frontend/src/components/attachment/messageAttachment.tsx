@@ -255,7 +255,7 @@ function AudioAttachment(props: {
       // Despite the element having multiple interactive
       // (pseudo?) elements inside of it, tabindex applies to all of them.
       tabIndex={props.tabindexForInteractiveContents}
-      onPlay={() =>
+      onPlayNonProgrammatic={() =>
         nextVoiceMessagePlayerCtx.setCurrMessage({
           accountId: selectedAccountId(),
           chatId: props.message.chatId,

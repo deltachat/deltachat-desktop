@@ -18,21 +18,35 @@ type Props = React.AudioHTMLAttributes<HTMLAudioElement> & {
 /**
  * Mutex-aware audio player. When one player starts playing, others get paused.
  */
-export function AudioPlayer(
-  props: Omit<Props, keyof MediaPlayerMutexContextValue['eventListeners']> &
-    Pick<Props, 'onPlay' | 'onPause'>
-) {
+export function AudioPlayer({
+  onPlayNonProgrammatic,
+  ...props
+}: Omit<Props, keyof MediaPlayerMutexContextValue['eventListeners']> &
+  Pick<Props, 'onPlay' | 'onPause'> & {
+    /**
+     * `onPlay` that is caused by the user (not programmatic).
+     * The regular `play` event might fire as a consequence
+     * of us calling `play()`.
+     */
+    onPlayNonProgrammatic?: React.ReactEventHandler<HTMLMediaElement>
+  }) {
   const ref = useRef<HTMLAudioElement>(null)
 
   const mediaPlayerMutexCtx = useContext(MediaPlayerMutexContext)
 
+  const ignoreOnePlayEvent = useRef(false)
+  const ignoreOnePauseEvent = useRef(false)
+
   // When we start playing another media, pause this one.
+  //
+  // Also mirror the `paused` state of the global audio element.
   useEffect(() => {
     const el = ref.current
     if (el == null) {
       log.error('media element not mounted, cannot pause it')
       return
     }
+    const globalEl = mediaPlayerMutexCtx.audioElement
 
     if (
       mediaPlayerMutexCtx.currentSrc == null ||
@@ -41,11 +55,39 @@ export function AudioPlayer(
       return
     }
 
+    // This is very primitive syncing. Only the `paused` state,
+    // no regard for `currentTime`, `playbackRate` etc.
+    // But it's good enough for a start.
+    const onPlayGlobal = () => {
+      if (el.paused) {
+        el.play()
+        ignoreOnePlayEvent.current = true
+      }
+    }
+    const onPauseGlobal = () => {
+      if (!el.paused) {
+        el.pause()
+        ignoreOnePauseEvent.current = true
+      }
+    }
+    if (!globalEl.paused) {
+      onPlayGlobal()
+    }
+    globalEl.addEventListener('play', onPlayGlobal)
+    globalEl.addEventListener('pause', onPauseGlobal)
+
     return () => {
       el.pause()
       el.currentTime = 0
+
+      globalEl.removeEventListener('play', onPlayGlobal)
+      globalEl.removeEventListener('pause', onPauseGlobal)
     }
-  }, [mediaPlayerMutexCtx.currentSrc, props.src])
+  }, [
+    mediaPlayerMutexCtx.audioElement,
+    mediaPlayerMutexCtx.currentSrc,
+    props.src,
+  ])
 
   return (
     // Muted because it's gonna be the <audio> element inside of
@@ -56,11 +98,18 @@ export function AudioPlayer(
       {...mediaPlayerMutexCtx.eventListeners}
       onPlay={e => {
         props.onPlay?.(e)
-        mediaPlayerMutexCtx.eventListeners.onPlay(e)
+        if (!ignoreOnePlayEvent.current) {
+          onPlayNonProgrammatic?.(e)
+          mediaPlayerMutexCtx.eventListeners.onPlay(e)
+        }
+        ignoreOnePlayEvent.current = false
       }}
       onPause={e => {
         props.onPause?.(e)
-        mediaPlayerMutexCtx.eventListeners.onPause(e)
+        if (!ignoreOnePauseEvent.current) {
+          mediaPlayerMutexCtx.eventListeners.onPause(e)
+        }
+        ignoreOnePauseEvent.current = false
       }}
     />
   )
