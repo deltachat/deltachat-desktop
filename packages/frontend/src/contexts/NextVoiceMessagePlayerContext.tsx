@@ -53,6 +53,7 @@ export function NextVoiceMessagePlayerProvider({
     (endedSrc: string, _nextMessageIsLoading: false) => {
       if (nextMessage == null) {
         log.info('no next voice message to play, stopping sequential playback')
+        mediaPlayerMutexCtx.stop()
         setCurrMessage(null)
         return
       }

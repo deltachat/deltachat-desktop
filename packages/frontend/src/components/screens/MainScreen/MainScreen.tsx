@@ -45,6 +45,7 @@ import { useFetch, useRpcFetch } from '../../../hooks/useFetch'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 import { useChatContextMenu } from '../../chat/ChatContextMenu'
 import useContextMenu from '../../../hooks/useContextMenu'
+import { GlobalVoiceMessagePlayer } from '../../GlobalVoiceMessagePlayer/GlobalVoiceMessagePlayer'
 
 const log = getLogger('MainScreen')
 
@@ -251,62 +252,66 @@ export default function MainScreen({ accountId }: Props) {
         !messageSectionShouldBeHidden ? 'chat-view-open' : ''
       }`}
     >
-      <section
-        className={styles.chatListAndHeader}
-        role='region'
-        // TODO a11y: reconsider whether it's OK to use the "Chats" label
-        // even when we're searching for messages in one particular chat
-        // (`queryChatId`), and even despite the fact
-        // that search results, besides chats,
-        // also include messages and contacts.
-        // For the former, perhaps one could argue that `queryChatId`
-        // is just a part of the search query.
-        //
-        // TODO a11y: perhaps `pref_` is not nice, we might need
-        // a separate string.
-        // The same goes for other occurrences of `tx('pref_chats')`.
-        aria-label={tx('pref_chats')}
-      >
-        <section className={styles.chatListHeader} data-tauri-drag-region>
-          {showArchivedChats && (
-            <>
-              <span data-no-drag-region>
-                <Button
-                  aria-label={tx('back')}
-                  onClick={() => setArchivedChatsSelected(false)}
-                  className='backButton'
-                  styling='borderless'
-                >
-                  <Icon icon='arrow-left' className='backButtonIcon'></Icon>
-                </Button>
-              </span>
-              <div className={styles.archivedChatsTitle}>
-                {tx('chat_archived_chats_title')}
-              </div>
-            </>
-          )}
-          {!showArchivedChats && (
-            <SearchInput
-              id='chat-list-search'
-              inputRef={searchRef}
-              onChange={handleSearchChange}
-              onClear={queryChatId ? () => handleSearchClear() : undefined}
-              value={queryStr}
-            />
-          )}
+      <div className={styles.chatListAndHeaderAndAudioPlayer}>
+        <section
+          className={styles.chatListAndHeader}
+          role='region'
+          // TODO a11y: reconsider whether it's OK to use the "Chats" label
+          // even when we're searching for messages in one particular chat
+          // (`queryChatId`), and even despite the fact
+          // that search results, besides chats,
+          // also include messages and contacts.
+          // For the former, perhaps one could argue that `queryChatId`
+          // is just a part of the search query.
+          //
+          // TODO a11y: perhaps `pref_` is not nice, we might need
+          // a separate string.
+          // The same goes for other occurrences of `tx('pref_chats')`.
+          aria-label={tx('pref_chats')}
+        >
+          <section className={styles.chatListHeader} data-tauri-drag-region>
+            {showArchivedChats && (
+              <>
+                <span data-no-drag-region>
+                  <Button
+                    aria-label={tx('back')}
+                    onClick={() => setArchivedChatsSelected(false)}
+                    className='backButton'
+                    styling='borderless'
+                  >
+                    <Icon icon='arrow-left' className='backButtonIcon'></Icon>
+                  </Button>
+                </span>
+                <div className={styles.archivedChatsTitle}>
+                  {tx('chat_archived_chats_title')}
+                </div>
+              </>
+            )}
+            {!showArchivedChats && (
+              <SearchInput
+                id='chat-list-search'
+                inputRef={searchRef}
+                onChange={handleSearchChange}
+                onClear={queryChatId ? () => handleSearchClear() : undefined}
+                value={queryStr}
+              />
+            )}
+          </section>
+          <ChatList
+            queryStr={queryStr}
+            showArchivedChats={showArchivedChats}
+            onChatClick={onChatClick}
+            selectedChatId={chatId ?? null}
+            queryChatId={queryChatId}
+            onExitSearch={() => {
+              setQueryStr('')
+              setQueryChatId(null)
+            }}
+          />
         </section>
-        <ChatList
-          queryStr={queryStr}
-          showArchivedChats={showArchivedChats}
-          onChatClick={onChatClick}
-          selectedChatId={chatId ?? null}
-          queryChatId={queryChatId}
-          onExitSearch={() => {
-            setQueryStr('')
-            setQueryChatId(null)
-          }}
-        />
-      </section>
+
+        <GlobalVoiceMessagePlayer />
+      </div>
       <section
         role='region'
         aria-labelledby='chat-section-heading'
