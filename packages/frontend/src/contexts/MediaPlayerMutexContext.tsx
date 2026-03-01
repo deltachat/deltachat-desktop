@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useCallback, useState } from 'react'
 import { getLogger } from '@deltachat-desktop/shared/logger'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { type runtime } from '@deltachat-desktop/runtime-interface'
@@ -13,8 +13,14 @@ export type MediaPlayerMutexContextValue = {
   currentSrc: string | null
   eventListeners: {
     onPlay: React.ReactEventHandler<HTMLMediaElement>
+    onPause: React.ReactEventHandler<HTMLMediaElement>
+    onSeeking: React.ReactEventHandler<HTMLMediaElement>
+    onRateChange: React.ReactEventHandler<HTMLMediaElement>
+    onVolumeChange: React.ReactEventHandler<HTMLMediaElement>
   }
 }
+
+const audioEl = document.createElement('audio')
 
 const noContextErrStr =
   'tried to use MediaPlayerMutexContextValue outside of context provider'
@@ -29,6 +35,18 @@ export const MediaPlayerMutexContext =
       onPlay: () => {
         log.warn(noContextErrStr)
       },
+      onPause: () => {
+        log.warn(noContextErrStr)
+      },
+      onSeeking: () => {
+        log.warn(noContextErrStr)
+      },
+      onRateChange: () => {
+        log.warn(noContextErrStr)
+      },
+      onVolumeChange: () => {
+        log.warn(noContextErrStr)
+      },
     },
   })
 
@@ -36,6 +54,16 @@ export function MediaPlayerMutexProvider({
   children,
 }: React.PropsWithChildren<{}>) {
   const [currentSrc, setCurrentSrc] = useState<string | null>(null)
+
+  const setSrcAndPlay = useCallback((newSrc: string | null) => {
+    setCurrentSrc(newSrc)
+
+    const newSrcStr = newSrc ?? ''
+    if (audioEl.getAttribute('src') !== newSrcStr) {
+      audioEl.src = newSrcStr
+    }
+    audioEl.play()
+  }, [])
 
   return (
     <MediaPlayerMutexContext.Provider
@@ -49,7 +77,40 @@ export function MediaPlayerMutexProvider({
           // `getAttribute('src')` returns the value that was provided
           // to the setter, which is what we should always be using
           // for comparisons.
-          onPlay: e => setCurrentSrc(e.currentTarget.getAttribute('src')),
+          onPlay: e => setSrcAndPlay(e.currentTarget.getAttribute('src')),
+          onPause: e => {
+            if (e.currentTarget.getAttribute('src') !== currentSrc) {
+              return
+            }
+            if (e.currentTarget.ended) {
+              // The media probably got paused simply because it ended.
+              // Let's not manually pause and just let it end naturally,
+              // to make sure that we fully play it through.
+              return
+            }
+            audioEl.pause()
+          },
+          onSeeking: e => {
+            if (e.currentTarget.getAttribute('src') !== currentSrc) {
+              return
+            }
+            audioEl.currentTime = e.currentTarget.currentTime
+          },
+          onRateChange: e => {
+            if (e.currentTarget.getAttribute('src') !== currentSrc) {
+              return
+            }
+
+            audioEl.playbackRate = e.currentTarget.playbackRate
+          },
+          onVolumeChange: e => {
+            if (e.currentTarget.getAttribute('src') !== currentSrc) {
+              return
+            }
+
+            audioEl.volume = e.currentTarget.volume
+            audioEl.muted = e.currentTarget.muted
+          },
         },
       }}
     >
