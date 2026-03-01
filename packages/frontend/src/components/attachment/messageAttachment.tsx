@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 import classNames from 'classnames'
 import { filesize } from 'filesize'
 
@@ -21,6 +21,9 @@ import FullscreenMedia, {
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import useDialog from '../../hooks/dialog/useDialog'
 import { AudioPlayer } from '../AudioPlayer'
+import { NextVoiceMessagePlayerContext } from '../../contexts/NextVoiceMessagePlayerContext'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { AudioAttachment as GalleryAudioAttachment } from './galleryAttachment'
 import { T } from '@deltachat/jsonrpc-client'
 import { selectedAccountId } from '../../ScreenController'
 import { BackendRemote } from '../../backend-com'
@@ -193,11 +196,10 @@ export default function Attachment({
           withContentBelow ? 'content-below' : null
         )}
       >
-        <AudioPlayer
-          src={runtime.transformBlobURL(message.file)}
-          // Despite the element having multiple interactive
-          // (pseudo?) elements inside of it, tabindex applies to all of them.
-          tabIndex={tabindexForInteractiveContents}
+        <AudioAttachment
+          // Help TypeScript out a little.
+          message={message as typeof message & { file: typeof message.file }}
+          tabindexForInteractiveContents={tabindexForInteractiveContents}
         />
       </div>
     )
@@ -233,6 +235,36 @@ export default function Attachment({
       </button>
     )
   }
+}
+/**
+ * @see also {@linkcode GalleryAudioAttachment}.
+ */
+function AudioAttachment(props: {
+  message: Type.Message & { file: string }
+  tabindexForInteractiveContents: number
+}) {
+  const nextVoiceMessagePlayerCtx = useContext(NextVoiceMessagePlayerContext)
+  const src = useMemo(
+    () => runtime.transformBlobURL(props.message.file),
+    [props.message.file]
+  )
+
+  return (
+    <AudioPlayer
+      src={src}
+      // Despite the element having multiple interactive
+      // (pseudo?) elements inside of it, tabindex applies to all of them.
+      tabIndex={props.tabindexForInteractiveContents}
+      onPlay={() =>
+        nextVoiceMessagePlayerCtx.setCurrMessage({
+          accountId: selectedAccountId(),
+          chatId: props.message.chatId,
+          messageId: props.message.id,
+          src,
+        })
+      }
+    />
+  )
 }
 
 export function DraftAttachment({
