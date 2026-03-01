@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useRef } from 'react'
 import styles from './styles.module.scss'
 import classNames from 'classnames'
 import { getLogger } from '@deltachat-desktop/shared/logger'
+import { ForceMutedAudioPlayer } from './ForceMutedAudioPlayer'
 import {
   MediaPlayerMutexContext,
   type MediaPlayerMutexContextValue,
@@ -46,7 +47,9 @@ export function AudioPlayer(
   }, [mediaPlayerMutexCtx.currentSrc, props.src])
 
   return (
-    <AudioPlayerNonMutex
+    // Muted because it's gonna be the <audio> element inside of
+    // `MediaPlayerMutexContext` that actually plays the media.
+    <ForceMutedAudioPlayer
       ref={ref}
       {...props}
       {...mediaPlayerMutexCtx.eventListeners}
