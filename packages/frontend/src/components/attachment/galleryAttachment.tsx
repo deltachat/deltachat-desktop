@@ -469,7 +469,7 @@ export function AudioAttachment({
             // Despite the element having multiple interactive
             // (pseudo?) elements inside of it, tabindex applies to all of them.
             tabIndex={rovingTabindex.tabIndex}
-            onPlay={() =>
+            onPlayNonProgrammatic={() =>
               nextVoiceMessagePlayerCtx.setCurrMessage({
                 accountId,
                 chatId: message.chatId,
