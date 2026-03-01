@@ -28,9 +28,11 @@ export type MediaPlayerMutexContextValue = {
    * but takes only `src` instead of an entire event.
    */
   play: (src: string) => void
+  stop: () => void
 }
 
 const audioEl = document.createElement('audio')
+audioEl.controls = true
 
 const noContextErrStr =
   'tried to use MediaPlayerMutexContextValue outside of context provider'
@@ -60,6 +62,9 @@ export const MediaPlayerMutexContext =
       },
     },
     play: () => {
+      log.warn(noContextErrStr)
+    },
+    stop: () => {
       log.warn(noContextErrStr)
     },
   })
@@ -128,6 +133,10 @@ export function MediaPlayerMutexProvider({
           },
         },
         play: setSrcAndPlay,
+        stop: useCallback(() => {
+          setCurrentSrc(null)
+          audioEl.src = ''
+        }, []),
       }}
     >
       {children}
