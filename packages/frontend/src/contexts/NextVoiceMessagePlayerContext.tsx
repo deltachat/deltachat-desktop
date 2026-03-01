@@ -40,7 +40,13 @@ export function NextVoiceMessagePlayerProvider({
 }: React.PropsWithChildren<{}>) {
   const mediaPlayerMutexCtx = useContext(MediaPlayerMutexContext)
 
-  const [currMessage, setCurrMessage] = useState<null | AudioMessageInfo>(null)
+  const [currMessage_, setCurrMessage] = useState<null | AudioMessageInfo>(null)
+  const currMessage =
+    // Check in case the global player has started playing something else,
+    // i.e. not a voice message.
+    currMessage_ != null && mediaPlayerMutexCtx.currentSrc === currMessage_.src
+      ? currMessage_
+      : null
 
   const { nextMessage, nextMessageIsLoading } =
     useGetNextVoiceMessage(currMessage)
