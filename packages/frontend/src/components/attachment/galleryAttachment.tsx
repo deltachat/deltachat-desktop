@@ -26,6 +26,7 @@ import useMessage from '../../hooks/chat/useMessage'
 import MessageDetail from '../dialogs/MessageDetail/MessageDetail'
 import { ContextMenuContext } from '../../contexts/ContextMenuContext'
 import { AudioPlayer } from '../AudioPlayer'
+import { NextVoiceMessagePlayerContext } from '../../contexts/NextVoiceMessagePlayerContext'
 
 import type { T } from '@deltachat/jsonrpc-client'
 import type { OpenDialog } from '../../contexts/DialogContext'
@@ -354,12 +355,14 @@ export function VideoAttachment({
   }
 }
 
+// Also see `AudioAttachment` in `messageAttachment.tsx`.
 export function AudioAttachment({
   messageId,
   loadResult,
 }: GalleryAttachmentElementProps) {
   const { openDialog } = useDialog()
   const tx = useTranslationFunction()
+  const nextVoiceMessagePlayerCtx = useContext(NextVoiceMessagePlayerContext)
   const contextMenu = useContext(ContextMenuContext)
   const { deleteMessage, jumpToMessage } = useMessage()
   const accountId = selectedAccountId()
@@ -408,6 +411,7 @@ export function AudioAttachment({
       accountId
     )
     const { file, fileMime } = message
+    const src = runtime.transformBlobURL(file || '')
     const hasSupportedFormat = isAudio(fileMime)
     const isBroken = !file || !hasSupportedFormat
     return (
@@ -461,10 +465,18 @@ export function AudioAttachment({
         </div>
         {hasSupportedFormat ? (
           <AudioPlayer
-            src={runtime.transformBlobURL(file || '')}
+            src={src}
             // Despite the element having multiple interactive
             // (pseudo?) elements inside of it, tabindex applies to all of them.
             tabIndex={rovingTabindex.tabIndex}
+            onPlay={() =>
+              nextVoiceMessagePlayerCtx.setCurrMessage({
+                accountId,
+                chatId: message.chatId,
+                messageId: message.id,
+                src,
+              })
+            }
           />
         ) : (
           <div>

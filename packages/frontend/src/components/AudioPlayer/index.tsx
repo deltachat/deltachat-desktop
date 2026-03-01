@@ -19,7 +19,8 @@ type Props = React.AudioHTMLAttributes<HTMLAudioElement> & {
  * Mutex-aware audio player. When one player starts playing, others get paused.
  */
 export function AudioPlayer(
-  props: Omit<Props, keyof MediaPlayerMutexContextValue['eventListeners']>
+  props: Omit<Props, keyof MediaPlayerMutexContextValue['eventListeners']> &
+    Pick<Props, 'onPlay' | 'onPause'>
 ) {
   const ref = useRef<HTMLAudioElement>(null)
 
@@ -53,6 +54,14 @@ export function AudioPlayer(
       ref={ref}
       {...props}
       {...mediaPlayerMutexCtx.eventListeners}
+      onPlay={e => {
+        props.onPlay?.(e)
+        mediaPlayerMutexCtx.eventListeners.onPlay(e)
+      }}
+      onPause={e => {
+        props.onPause?.(e)
+        mediaPlayerMutexCtx.eventListeners.onPause(e)
+      }}
     />
   )
 }

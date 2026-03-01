@@ -7,6 +7,10 @@ const log = getLogger('MediaPlayerMutexContext')
 
 export type MediaPlayerMutexContextValue = {
   /**
+   * This never changes
+   */
+  audioElement: HTMLAudioElement
+  /**
    * The string is provided in the form returned from
    * {@linkcode runtime.transformBlobURL}.
    */
@@ -18,6 +22,12 @@ export type MediaPlayerMutexContextValue = {
     onRateChange: React.ReactEventHandler<HTMLMediaElement>
     onVolumeChange: React.ReactEventHandler<HTMLMediaElement>
   }
+  /**
+   * Basically the same as
+   * {@linkcode MediaPlayerMutexContextValue.eventListeners['onPlay']},
+   * but takes only `src` instead of an entire event.
+   */
+  play: (src: string) => void
 }
 
 const audioEl = document.createElement('audio')
@@ -30,6 +40,7 @@ const noContextErrStr =
  */
 export const MediaPlayerMutexContext =
   createContext<MediaPlayerMutexContextValue>({
+    audioElement: audioEl,
     currentSrc: null,
     eventListeners: {
       onPlay: () => {
@@ -47,6 +58,9 @@ export const MediaPlayerMutexContext =
       onVolumeChange: () => {
         log.warn(noContextErrStr)
       },
+    },
+    play: () => {
+      log.warn(noContextErrStr)
     },
   })
 
@@ -68,6 +82,7 @@ export function MediaPlayerMutexProvider({
   return (
     <MediaPlayerMutexContext.Provider
       value={{
+        audioElement: audioEl,
         currentSrc,
         eventListeners: {
           // Be careful with `HTMLMediaElement.src` comparisons.
@@ -112,6 +127,7 @@ export function MediaPlayerMutexProvider({
             audioEl.muted = e.currentTarget.muted
           },
         },
+        play: setSrcAndPlay,
       }}
     >
       {children}
