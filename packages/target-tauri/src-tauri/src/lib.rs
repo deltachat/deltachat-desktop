@@ -1,4 +1,4 @@
-use std::{path::PathBuf, str::FromStr, time::SystemTime};
+use std::{path::PathBuf, time::SystemTime};
 
 use anyhow::Context;
 use cli::parse_cli_options_from_args;
@@ -156,7 +156,7 @@ fn get_current_logfile(state: tauri::State<AppState>) -> String {
 
 #[tauri::command]
 async fn get_current_logfile_content(state: tauri::State<'_, AppState>) -> Result<String, String> {
-    read_to_string(PathBuf::from_str(&state.current_log_file_path).map_err(|err| err.to_string())?)
+    read_to_string(&state.current_log_file_path)
         .await
         .map_err(|err| err.to_string())
 }
@@ -201,7 +201,7 @@ pub fn run() -> i32 {
             .plugin(tauri_plugin_single_instance::init(move |app, args, cwd| {
                 log::info!("second instance launched, focusing the original instance instead");
 
-                let cwd = PathBuf::from_str(&cwd).unwrap();
+                let cwd = PathBuf::from(cwd);
                 log::debug!("tauri_plugin_single_instance {args:?} {cwd:?}");
 
                 let options = parse_cli_options_from_args(args);
@@ -233,7 +233,7 @@ pub fn run() -> i32 {
         // registering here does not seem to work
     }
 
-    // sepcified here, so the open handler does not rely on appstate to be ready
+    // specified here, so the open handler does not rely on appstate to be ready
     // (that it can be used "outside" of tauri)
     let inner_appstate = InnerAppState::new();
     let cloned_inner_appstate = inner_appstate.clone();

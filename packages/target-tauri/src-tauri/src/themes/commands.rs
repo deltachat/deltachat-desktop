@@ -1,5 +1,3 @@
-use std::str::FromStr;
-
 use tauri::{path::SafePathBuf, AppHandle, Manager};
 use tauri_plugin_store::StoreExt;
 use tokio::fs::{create_dir_all, read_to_string};
@@ -75,13 +73,13 @@ pub async fn get_theme(
         }
     };
 
-    let file_name = SafePathBuf::from_str(&format!("{name}.css"))
-        .map_err(|_| Error::InvalidAddress(theme_address.clone()))?
+    let file_path = SafePathBuf::new(format!("{name}.css").into())
+        .map_err(|_| Error::InvalidAddress(theme_address.clone()))?;
+    let file_name = file_path
         .as_ref()
         .file_name()
         .ok_or(Error::InvalidAddress(theme_address.clone()))?
-        .to_string_lossy()
-        .to_string();
+        .to_string_lossy();
 
     let theme_content = if prefix == "dc" {
         if app.asset_resolver().iter().count() == 0 {
@@ -90,7 +88,7 @@ pub async fn get_theme(
                 .path()
                 .resource_dir()?
                 .join("../../packages/target-tauri/html-dist/themes");
-            read_to_string(themes_dir.join(&file_name)).await?
+            read_to_string(themes_dir.join(&*file_name)).await?
         } else {
             let filename = format!("/themes/{file_name}");
             // search in assets
@@ -105,7 +103,7 @@ pub async fn get_theme(
     } else if prefix == "custom" {
         // search in folder
         let themes_dir = custom_theme_dir(&app)?;
-        read_to_string(themes_dir.join(&file_name)).await?
+        read_to_string(themes_dir.join(&*file_name)).await?
     } else {
         return Err(Error::InvalidAddressPrefixUnknown(
             prefix.to_owned(),
