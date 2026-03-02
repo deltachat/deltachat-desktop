@@ -93,7 +93,13 @@ export default function CreateChat(props: DialogProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('main_')
 
   return (
-    <Dialog width={400} onClose={onClose} fixed dataTestid='create-chat-dialog'>
+    <Dialog
+      width={400}
+      onClose={onClose}
+      canOutsideClickClose={viewMode === 'main_'}
+      fixed
+      dataTestid='create-chat-dialog'
+    >
       {viewMode == 'main_' && <CreateChatMain {...{ setViewMode, onClose }} />}
       {viewMode == GroupType.REGULAR_GROUP && (
         <>
