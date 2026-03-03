@@ -524,11 +524,6 @@ export default function MessageList({
             behavior: 'smooth',
           })
           pendingProgrammaticSmoothScrollTo.current = scrollTo
-          // Mark all messages as noticed. This is needed for messages that are
-          // not picked up by the IntersectionObserver (e.g. info messages
-          // from the current user's own actions such as changing the group
-          // name, whose state is not DC_STATE_IN_FRESH).
-          markChatAsSeen(accountId, chat.id)
 
           // Smooth scroll duration is not defined by the spec:
           // https://drafts.csswg.org/cssom-view/#scrolling:
@@ -583,7 +578,6 @@ export default function MessageList({
     }, 0)
   }, [
     chat,
-    accountId,
     onScroll,
     unlockScroll,
     viewState,
