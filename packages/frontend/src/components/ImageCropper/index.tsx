@@ -31,9 +31,6 @@ import { copyToBlobDir } from '../../utils/copyToBlobDir'
 //
 // * on export we just cut the bounding box (targetWidth, targetHeight) around cursor position and rotate/flip it
 
-/** Scale factor for the circular clip (slightly smaller circle) */
-const CIRCLE_CLIP_SCALE = 0.9
-
 export default function ImageCropper({
   filepath,
   shape,
@@ -133,8 +130,8 @@ export default function ImageCropper({
     const scaleY = naturalHeight / displayHeight
 
     // For circle shape, crop a slightly smaller region to match the visible clip
-    const cropW = shape === 'circle' ? resultW * CIRCLE_CLIP_SCALE : resultW
-    const cropH = shape === 'circle' ? resultH * CIRCLE_CLIP_SCALE : resultH
+    const cropW = resultW
+    const cropH = resultH
 
     // Output keeps requested dimensions (full resolution)
     const outputWidth = Math.round(resultW * scaleX)
@@ -280,7 +277,7 @@ export default function ImageCropper({
     const hw = targetWidth.current / zoom.current / 2
     const hh = targetHeight.current / zoom.current / 2
     if (shape === 'circle') {
-      const r = Math.min(hw, hh) * CIRCLE_CLIP_SCALE
+      const r = Math.min(hw, hh)
       return `circle(${r}px at ${x}px ${y}px)`
     } else {
       return (
