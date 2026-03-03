@@ -618,7 +618,7 @@ export function EditGroupNameDialog({
           <DeltaTextarea
             key='description'
             id='description'
-            placeholder={tx('description')}
+            placeholder={tx('chat_description')}
             value={groupDescription}
             onChange={(
               event: React.FormEvent<HTMLElement> &
