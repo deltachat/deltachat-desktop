@@ -125,16 +125,6 @@ export default class DeltaChatController {
               for (const event of result) {
                 handleEventResponse(event, this._jsonrpcRemote)
               }
-            } else if (isEventResponse(result)) {
-              /** Handle {@linkcode RawClient.getNextEvent} */
-
-              // We can remove this "else" branch
-              // after we have upgraded to Core with
-              // https://github.com/chatmail/core/pull/7825,
-              // because then the transport is not gonna use
-              // `getNextEvent`.
-
-              handleEventResponse(result, this._jsonrpcRemote)
             }
           } catch (_error) {
             // ignore json parse errors
