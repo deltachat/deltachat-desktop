@@ -298,8 +298,12 @@ export default function MessageList({
     const newShowJumpDownButton =
       !isNewestMessageLoaded ||
       distanceToBottom > maxScrollToBottomDistanceConsideredShort
-    if (newShowJumpDownButton != showJumpDownButton) {
-      setShowJumpDownButton(newShowJumpDownButton)
+    // Don't flash the button during a programmatic smooth scroll —
+    // we already know we're scrolling to the bottom.
+    if (pendingProgrammaticSmoothScrollTo.current === null) {
+      if (newShowJumpDownButton != showJumpDownButton) {
+        setShowJumpDownButton(newShowJumpDownButton)
+      }
     }
     if (!newShowJumpDownButton) {
       clearJumpStack()
