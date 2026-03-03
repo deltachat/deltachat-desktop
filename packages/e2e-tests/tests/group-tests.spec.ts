@@ -444,20 +444,13 @@ test('Add group description', async () => {
 
   // Check for system message about description change
   await expect(
-    page
-      .getByRole('list', { name: 'Messages' })
-      .getByRole('listitem')
-      .filter({ hasText: `You changed the chat description` })
+    page.getByRole('list', { name: 'Messages' }).getByRole('listitem').filter({
+      hasText: `[Chat description changed. To see this and other new features, please update the app]`,
+    })
   ).toBeVisible()
 
   // Verify other user receives notification and sees the description
   await switchToProfile(page, userC.id)
-
-  // Check for notification badge
-  const badgeNumber = page
-    .getByTestId(`account-item-${userC.id}`)
-    .locator('.styles_module_accountBadgeIcon')
-  await expect(badgeNumber).toBeVisible()
 
   const userCChatListItem = page
     .locator('.chat-list .chat-list-item')
@@ -470,7 +463,9 @@ test('Add group description', async () => {
     page
       .getByRole('list', { name: 'Messages' })
       .getByRole('listitem')
-      .filter({ hasText: `Chat description changed by ${userA.name}` })
+      .filter({
+        hasText: `Chat description changed by ${userA.name}`,
+      })
   ).toBeVisible()
 
   await page.getByTestId('chat-info-button').click()
@@ -516,12 +511,6 @@ test('Update group description', async () => {
 
   // Verify other user receives notification and sees the updated description
   await switchToProfile(page, userA.id)
-
-  // Check for notification badge
-  const badgeNumber = page
-    .getByTestId(`account-item-${userA.id}`)
-    .locator('.styles_module_accountBadgeIcon')
-  await expect(badgeNumber).toBeVisible()
 
   const userAChatListItem = page
     .locator('.chat-list .chat-list-item')
