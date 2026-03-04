@@ -3,6 +3,14 @@
 .root {
   display: grid;
   grid-template-columns: auto min-content;
+
+  background-color: var(--accountSidebarBg);
+  border-left: 1px solid var(--accountSidebarInnerBorderColor);
+
+  // We're using account sidebar color scheme,
+  // which is always dark. This ensures that the browser
+  // also uses dark native colors for the audio player.
+  color-scheme: dark;
 }
 .audioElContainer {
   // Otherwise the `<audio>` has some extra margin.
@@ -13,6 +21,7 @@
   }
   audio::-webkit-media-controls-enclosure {
     border-radius: 0;
+    background: transparent;
   }
 }
 .closeButton {
@@ -24,5 +33,6 @@
 
   .closeButtonIcon {
     vertical-align: middle;
+    background-color: var(--accountSidebarIconColor);
   }
 }
