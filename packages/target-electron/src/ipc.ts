@@ -45,6 +45,7 @@ import DeltaChatController from './deltachat/controller.js'
 import { BuildInfo } from './get-build-info.js'
 import { updateContentProtectionOnAllActiveWindows } from './content-protection.js'
 import { MediaType } from '@deltachat-desktop/runtime-interface'
+import { applyAutostart, getAutostartState } from './autostart.js'
 import {
   startHandlingIncomingVideoCalls,
   startOutgoingVideoCall,
@@ -280,7 +281,7 @@ export async function init(cwd: string, logHandler: LogHandler) {
 
   ipcMain.handle(
     'set-desktop-setting',
-    (
+    async (
       _ev,
       key: keyof DesktopSettingsType,
       value: string | number | boolean | undefined
@@ -291,11 +292,17 @@ export async function init(cwd: string, logHandler: LogHandler) {
         updateTrayIcon()
       } else if (key === 'contentProtectionEnabled') {
         updateContentProtectionOnAllActiveWindows(Boolean(value))
+      } else if (key === 'autostart') {
+        await applyAutostart(Boolean(value))
       }
 
       return true
     }
   )
+
+  ipcMain.handle('get-autostart-state', () => {
+    return getAutostartState()
+  })
 
   ipcMain.handle(
     'app.setBadgeCountAndTrayIconIndicator',
