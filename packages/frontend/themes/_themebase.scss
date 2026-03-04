@@ -69,6 +69,11 @@ $scrollbarTransparency: 0.34 !default;
   --buttonDangerHover: #{changeContrast($btnDangerBackground, 10%)};
   --buttonDisabledBackground: #{changeContrast($bgSecondary, 10%)};
   --buttonDisabledText: #{changeContrast($textSecondary, 25%)};
+  /* AccountList */
+  --accountSidebarBg: #2c2c2c;
+  --accountSidebarInnerBorderColor: #404040;
+  --accountSidebarIconColor: #bcbcbc;
+  --accountSidebarIconColorHover: #efefef;
   /* NavBar */
   --navBarBackground: #{$bgNavBar};
   --navBarHeight: 50px;
