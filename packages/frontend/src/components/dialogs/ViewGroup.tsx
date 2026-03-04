@@ -348,14 +348,15 @@ function ViewGroupInner(
   }
 
   const showQRDialog = async () => {
-    const [qrCode, svg] = await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(
+    const qrCode = await BackendRemote.rpc.getChatSecurejoinQrCode(
       accountId,
       chat.id
     )
+    const qrCodeSVG = await BackendRemote.rpc.createQrSvg(qrCode)
 
     openDialog(ShowQRDialog, {
       qrCode,
-      qrCodeSVG: svg,
+      qrCodeSVG,
       groupName,
     })
   }

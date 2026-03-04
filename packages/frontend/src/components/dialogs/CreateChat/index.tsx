@@ -249,8 +249,11 @@ function CreateChatMain(props: CreateChatMainProps) {
   )
 
   const openQRScan = async () => {
-    const [qrCode, qrCodeSVG] =
-      await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(accountId, null)
+    const qrCode = await BackendRemote.rpc.getChatSecurejoinQrCode(
+      accountId,
+      null
+    )
+    const qrCodeSVG = await BackendRemote.rpc.createQrSvg(qrCode)
     openDialog(QrCode, {
       qrCode,
       qrCodeSVG,
