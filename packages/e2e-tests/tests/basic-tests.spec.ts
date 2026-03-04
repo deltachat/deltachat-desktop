@@ -402,6 +402,20 @@ test('add app from picker to chat', async () => {
   expect(finalAppIconsCount).toBeGreaterThan(initialAppIconsCount)
 })
 
+test('recent apps context menu', async () => {
+  await page
+    .getByTestId('last-used-apps')
+    .getByRole('button')
+    .first()
+    .click({ button: 'right' })
+
+  await expect(page.getByRole('menu').getByRole('menuitem')).toHaveText([
+    'Show in Chat',
+  ])
+
+  await page.keyboard.press('Escape')
+})
+
 test('focuses first visible item on arrow down key on input in create chat dialog', async () => {
   const userA = existingProfiles[0]
   await switchToProfile(page, userA.id)
