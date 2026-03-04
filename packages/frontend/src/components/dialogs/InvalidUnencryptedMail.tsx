@@ -23,8 +23,11 @@ export default function InvalidUnencryptedMailDialog({ onClose }: DialogProps) {
   const accountId = selectedAccountId()
 
   const onQRScan = async () => {
-    const [qrCode, qrCodeSVG] =
-      await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(accountId, null)
+    const qrCode = await BackendRemote.rpc.getChatSecurejoinQrCode(
+      accountId,
+      null
+    )
+    const qrCodeSVG = await BackendRemote.rpc.createQrSvg(qrCode)
     onClose()
     openDialog(QrCode, {
       selectScan: true,
