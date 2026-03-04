@@ -46,6 +46,9 @@ import { getLogger } from '@deltachat-desktop/shared/logger'
 import { useChatContextMenu } from '../../chat/ChatContextMenu'
 import useContextMenu from '../../../hooks/useContextMenu'
 import { GlobalVoiceMessagePlayer } from '../../GlobalVoiceMessagePlayer/GlobalVoiceMessagePlayer'
+import { ContextMenuContext } from '../../../contexts/ContextMenuContext'
+import { mouseEventToPosition } from '../../../utils/mouseEventToPosition'
+import useMessage from '../../../hooks/chat/useMessage'
 
 const log = getLogger('MainScreen')
 
@@ -583,6 +586,9 @@ function ChatNavButtons({
 
 function AppIcon({ accountId, app }: { accountId: number; app: T.Message }) {
   const tx = useTranslationFunction()
+  const { openContextMenu } = useContext(ContextMenuContext)
+  const { jumpToMessage } = useMessage()
+  const id = useId()
 
   const webxdcInfoFetch = useRpcFetch(BackendRemote.rpc.getWebxdcInfo, [
     accountId,
@@ -604,6 +610,7 @@ function AppIcon({ accountId, app }: { accountId: number; app: T.Message }) {
 
   return (
     <Button
+      id={id}
       styling='borderless'
       key={app.id}
       className={styles.webxdcIconButton}
@@ -616,6 +623,28 @@ function AppIcon({ accountId, app }: { accountId: number; app: T.Message }) {
           webxdcInfoFetch.result?.ok ? webxdcInfoFetch.result.value : undefined
         )
       }}
+      onContextMenu={event => {
+        openContextMenu({
+          ...mouseEventToPosition(event),
+          items: [
+            {
+              label: tx('show_in_chat'),
+              action: () =>
+                jumpToMessage({
+                  accountId,
+                  msgId: app.id,
+                  msgChatId: app.chatId,
+                  focus: true,
+                  scrollIntoViewArg: { block: 'center' },
+                }),
+            },
+          ],
+          ariaAttrs: {
+            'aria-labelledby': id,
+          },
+        })
+      }}
+      aria-haspopup='menu'
     >
       <img
         className={styles.webxdcIcon}
