@@ -23,6 +23,11 @@
     border-radius: 0;
     background: transparent;
   }
+  audio::-webkit-media-controls-panel {
+    // No need to have extra space from the "close" button,
+    // because we want to make it look as part of a single widget.
+    padding-right: 0;
+  }
 }
 .closeButton {
   @include mixins.button-reset;
