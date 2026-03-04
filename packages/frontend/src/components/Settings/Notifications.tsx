@@ -12,7 +12,10 @@ import SettingsSwitch from './SettingsSwitch'
 import SettingsHeading from './SettingsHeading'
 import SettingsSelector from './SettingsSelector'
 import SmallSelectDialog from '../SmallSelectDialog'
-import SettingsStoreInstance from '../../stores/settings'
+import SettingsStoreInstance, {
+  useSettingsStore,
+  WhoCanCallMe,
+} from '../../stores/settings'
 import useDialog from '../../hooks/dialog/useDialog'
 
 type Props = {
@@ -21,6 +24,7 @@ type Props = {
 
 export default function Notifications({ desktopSettings }: Props) {
   const tx = useTranslationFunction()
+  const settingsStore = useSettingsStore()[0]
   const accountId = selectedAccountId()
   const { accounts } = useAccountNotificationStore()[0]!
   const isMuted = accounts[accountId]?.muted || false
@@ -83,6 +87,22 @@ export default function Notifications({ desktopSettings }: Props) {
       </SettingsSelector>
       <SettingsSeparator></SettingsSeparator>
       <SettingsHeading>{tx('current_profile')}</SettingsHeading>
+      {desktopSettings.enableAVCallsV2 && (
+        // https://github.com/deltachat/deltachat-desktop/pull/6044#issuecomment-3977395069
+        <SettingsSwitch
+          label={tx('who_can_call_me_toggle')}
+          value={
+            settingsStore?.settings.who_can_call_me !== WhoCanCallMe.Nobody
+          }
+          disabled={settingsStore == undefined}
+          onChange={async (val: boolean) => {
+            await SettingsStoreInstance.effect.setCoreSetting(
+              'who_can_call_me',
+              val ? WhoCanCallMe.Contacts : WhoCanCallMe.Nobody
+            )
+          }}
+        />
+      )}
       <SettingsSwitch
         label={tx('menu_mute')}
         value={isMuted}
