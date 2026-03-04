@@ -247,6 +247,7 @@ build['appx'] = {
   identityName: 'merlinux.DeltaChat',
   languages,
   artifactName: '${productName}-${version}-Package.${arch}.${ext}',
+  addAutoLaunchExtension: true,
 }
 
 // see https://www.electron.build/configuration/nsis
