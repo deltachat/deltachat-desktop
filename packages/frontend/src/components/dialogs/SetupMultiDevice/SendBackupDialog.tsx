@@ -85,8 +85,10 @@ export function SendBackupDialog({ onClose }: DialogProps) {
       setError(null)
       setStage('preparing')
       const transfer = BackendRemote.rpc.provideBackup(accountId)
-      setQrSvg(await BackendRemote.rpc.getBackupQrSvg(accountId))
-      setQrContent(await BackendRemote.rpc.getBackupQr(accountId))
+      const qrCode = await BackendRemote.rpc.getBackupQr(accountId)
+      const qrCodeSvg = await BackendRemote.rpc.createQrSvg(qrCode)
+      setQrSvg(qrCodeSvg)
+      setQrContent(qrCode)
       setStage('awaiting_scan')
       await transfer
       onClose()
@@ -161,13 +163,12 @@ export function SendBackupDialog({ onClose }: DialogProps) {
           <DialogBody>
             <DialogContent>
               <SendBackup>
-                {stage !== 'transferring' && <SendBackupSteps />}
                 <SendBackupMain>
                   {stage === 'awaiting_scan' && svgUrl && qrContent && (
                     <img className={styles.qrCode} src={svgUrl} />
                   )}
                   <SendBackupMainProgress
-                    style={stage === 'transferring' ? { width: '100%' } : {}}
+                    style={stage === 'transferring' ? { width: '90%' } : {}}
                   >
                     {stage === 'preparing' && <>{tx('preparing_account')}</>}
                     {stage === 'transferring' && <>{tx('transferring')}</>}
@@ -179,6 +180,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
                     )}
                   </SendBackupMainProgress>
                 </SendBackupMain>
+                {stage !== 'transferring' && <SendBackupSteps />}
               </SendBackup>
               {error}
             </DialogContent>
