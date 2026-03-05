@@ -38,10 +38,6 @@
 }
 
 .accountListSidebar {
-  --accountSidebarBg: #2c2c2c;
-  --accountSidebarIconColor: #bcbcbc;
-  --accountSidebarIconColorHover: #efefef;
-
   background-color: var(--accountSidebarBg);
   display: flex;
   flex-direction: column;
@@ -229,7 +225,7 @@
 
 .buttonsContainer {
   align-items: center;
-  border-top: 1px #404040 solid;
+  border-top: 1px var(--accountSidebarInnerBorderColor) solid;
   display: flex;
   flex-direction: column;
   padding: 8px 0;
