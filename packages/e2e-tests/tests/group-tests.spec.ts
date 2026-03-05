@@ -635,6 +635,13 @@ test('create channel and add members', async ({ browserName }) => {
     page.locator('#message-list li.message-wrapper').last()
   ).toContainText(channelMsg)
 
+  // userB has 1 new notification now
+  const badge = page
+    .getByTestId(`account-item-${userB.id}`)
+    .locator('.styles_module_accountBadgeIcon')
+    .getByText('1')
+  await expect(badge).toBeVisible()
+
   // userB sees the posted message
   await switchToProfile(page, userB.id)
   await channelChatItemB.click()
