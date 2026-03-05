@@ -19,7 +19,18 @@ export function GlobalVoiceMessagePlayer() {
     <section className={styles.root} aria-label={tx('audio')}>
       <div
         className={styles.audioElContainer}
-        ref={el => el?.append(mediaPlayerMutexCtx.audioElement)}
+        ref={el => {
+          if (el == undefined) {
+            return
+          }
+          // Don't append if already appended.
+          // Otherwise the submenus of the audio element would close,
+          // e.g. "playback rate".
+          if (el.contains(mediaPlayerMutexCtx.audioElement)) {
+            return
+          }
+          el.append(mediaPlayerMutexCtx.audioElement)
+        }}
       />
       <button
         className={styles.closeButton}
