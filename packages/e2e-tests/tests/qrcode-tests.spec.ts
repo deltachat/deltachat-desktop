@@ -18,7 +18,6 @@ import {
 
 /**
  * Test for instant onboarding with contact invite link
- * TODO: see fixme at bottom
  */
 
 test.describe.configure({
@@ -309,11 +308,141 @@ test('wrong qr code for onboarding shows error message', async ({
   await expect(accounts).toHaveCount(priorCount - 1)
 })
 
-// maybe move this to group tests?
-test.fixme('instant onboarding with group invite link', async () => {})
+test('instant onboarding fails with withdrawn group invite link', async ({
+  browserName,
+}) => {
+  if (browserName.toLowerCase().indexOf('chrom') > -1) {
+    await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
+  }
+  const userA = getUser(0, existingProfiles)
+  const groupName = 'WithdrawnGroupTest'
+  const newUserName = 'Withdrawn'
 
-test.fixme('instant onboarding fails with withdrawn group invite link', async () => {})
+  await switchToProfile(page, userA.id)
 
-test.fixme('instant onboarding works with DCLOGIN qr code', async () => {})
+  // Create a group
+  await page.locator('#new-chat-button').click()
+  await page.locator('#newgroup button').click()
+  await page.locator('.group-name-input').fill(groupName)
+  await page.getByTestId('group-create-button').click()
 
-test.fixme('instant onboarding with DCACCOUNT link from loaded image', async () => {})
+  const groupChatItem = page
+    .locator('.chat-list .chat-list-item')
+    .filter({ hasText: groupName })
+  await expect(groupChatItem).toBeVisible()
+
+  // Copy the group invite link (we're already in the group chat after creation)
+  await page.getByTestId('chat-info-button').click()
+  await page.locator('#showqrcode button').click()
+  await clickThroughTestIds(page, ['copy-qr-code', 'confirm-qr-code'])
+
+  // Re-open ShowQR to withdraw the invite
+  await page.locator('#showqrcode button').click()
+  await page.getByTestId('qr-code-image').click({ button: 'right' })
+  await page.getByTestId('withdraw-qr-code').click()
+  await page.getByTestId('withdraw-verify-group').getByTestId('confirm').click()
+  await page.getByTestId('view-group-dialog-header-close').click()
+
+  // Try instant onboarding with the withdrawn invite link
+  await clickThroughTestIds(page, [
+    'add-account-button',
+    'create-account-button',
+    'other-login-button',
+    'scan-qr-login',
+    'paste',
+  ])
+
+  const confirmDialog = page.getByTestId('ask-join-group')
+  await expect(confirmDialog).toBeVisible()
+  await expect(confirmDialog).toContainText(groupName)
+  await confirmDialog.getByTestId('confirm').click()
+  await page.locator('#displayName').fill(newUserName)
+  await page.getByTestId('login-button').click()
+
+  // Wait for the new account to become active
+  const newAccountList = page.locator('.styles_module_account')
+  await expect(newAccountList.last()).toHaveClass(
+    /(^|\s)styles_module_active(\s|$)/
+  )
+
+  // Switch to userA and verify the new user is NOT in the group
+  await switchToProfile(page, userA.id)
+  await groupChatItem.click()
+  await page.getByTestId('chat-info-button').click()
+  await expect(
+    page
+      .locator('.group-member-contact-list-wrapper .contact-list-item')
+      .filter({ hasText: newUserName })
+  ).not.toBeVisible()
+  await page.getByTestId('view-group-dialog-header-close').click()
+})
+
+test('instant onboarding works with DCLOGIN qr code', async ({
+  browserName,
+}) => {
+  if (browserName.toLowerCase().indexOf('chrom') > -1) {
+    await page.context().grantPermissions(['clipboard-read', 'clipboard-write'])
+  }
+  const userA = getUser(0, existingProfiles)
+  const userAProfile = await getProfile(page, userA.id, true)
+  const { address, password } = userAProfile
+  if (!password) {
+    throw new Error(`Profile ${userA.name} has no password!`)
+  }
+  const newUsername = userA.name + '2'
+
+  await page.evaluate(
+    ([addr, pass]) => {
+      navigator.clipboard.writeText(
+        `dclogin://${addr}?p=${encodeURIComponent(pass)}&v=1`
+      )
+    },
+    [address, password]
+  )
+  await clickThroughTestIds(page, [
+    'add-account-button',
+    'create-account-button',
+    'other-login-button',
+    'scan-qr-login',
+    'paste',
+  ])
+
+  // For DCLOGIN there is no confirmation dialog, just wait for the scanner to close
+  await expect(page.getByTestId('qrscan-dialog')).not.toBeVisible()
+  const nameInput = page.locator('#displayName')
+  await expect(nameInput).toBeVisible()
+  await nameInput.fill(newUsername)
+  await page.getByTestId('login-button').click()
+
+  const newAccountList = page.locator('.styles_module_account')
+  await expect(newAccountList.last()).toHaveClass(
+    /(^|\s)styles_module_active(\s|$)/
+  )
+
+  // Verify the new account uses the same address as the DCLOGIN credentials
+  await clickThroughTestIds(page, [
+    'open-settings-button',
+    'open-advanced-settings',
+    'open-transport-settings',
+  ])
+  await page.getByLabel('Edit Relay').first().click()
+  const addressLocator = page.locator('#addr')
+  await expect(addressLocator).toHaveValue(/.+@.+/)
+  const addressFromSettings = await addressLocator.inputValue()
+  expect(addressFromSettings).toEqual(address)
+  await clickThroughTestIds(page, [
+    'cancel',
+    'transports-settings-close',
+    'settings-advanced-close',
+  ])
+
+  // Update existingProfiles for afterAll cleanup
+  existingProfiles.push({
+    id:
+      (await newAccountList
+        .last()
+        .getAttribute('x-account-sidebar-account-id')) ?? '',
+    name: newUsername,
+    address: addressFromSettings,
+  })
+})
