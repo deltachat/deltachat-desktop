@@ -51,7 +51,9 @@
     <string name="archive">Arşivle</string>
     <!-- Verb "to unarchive", as in "remove a chat from the archive", opposite of the previous string -->
     <string name="unarchive">Arşivleme</string>
+    <!-- Verb "to mute". used to mute a chat, so that it is silenced e.g. does not make noise or cause notifications -->
     <string name="mute">Sessize Al</string>
+    <!-- Adjective "smth is muted". used to describe a muted or silenced chat, that e.g. does not make noise or cause notifications -->
     <string name="muted">Sessize alındı</string>
     <string name="ephemeral_messages">Kaybolan İletiler</string>
     <string name="ephemeral_messages_hint">Bu sohbetin tüm üyelerine uygulanır; onlar hâlâ iletileri kopyalayabilir, kaydedebilir ve iletebilir.</string>
@@ -179,6 +181,7 @@
     <string name="add_stickers_instructions">Çıkartmalar eklemek için “Çıkartma Klasörünü Aç”a dokunun, çıkartma paketiniz için bir alt klasör oluşturun ve görseli ve çıkartma dosyalarını oraya sürükleyin</string>
     <string name="open_sticker_folder">Çıkartma Klasörünü Aç</string>
     <string name="images">Görseller</string>
+    <!-- a noun, used for "Music" and other "Audio" files -->
     <string name="audio">Ses</string>
     <string name="voice_message">Sesli İleti</string>
     <string name="forwarded">İletildi</string>
@@ -215,6 +218,7 @@
     <string name="games">Oyunlar</string>
     <string name="tools">Araçlar</string>
     <string name="app_size">Boyut</string>
+    <!-- Used as a headline for a date. E.g. in the details of a mini app in the app picker -->
     <string name="app_date_published">Yayımlanma</string>
     <string name="add_to_chat">Sohbete Ekle</string>
     <!-- short for "Browse through the App Picker/Store/Catalogue"; could also be translated as "Discover" or "Search" -->
@@ -259,6 +263,11 @@
     <string name="add_recipients">Aboneleri Ekle</string>
     <!-- consider keeping the term "channel" as in WhatsApp or Telegram -->
     <string name="channel_name">Kanal Adı</string>
+    <!-- The number of times a message is shown in channels, may be used for alt-text or a11y -->
+    <plurals name="n_views">
+        <item quantity="one">%d görüntülenme</item>
+        <item quantity="other">%d görüntülenme</item>
+    </plurals>
     <string name="email">E-Posta</string>
     <!-- "New" as in "Create New Email"; shown together with "New Group" and "New Channel" -->
     <string name="new_email">Yeni E-Posta</string>
@@ -708,7 +717,7 @@
     <!-- first placeholder is replaced by the number of files (always 2 or more); second placeholder is replaced by a chat name -->
     <string name="ask_send_files_to_chat">%1$d dosya “%2$s” sohbetine gönderilsin mi?</string>
     <string name="ask_send_files_to_selected_chats">%1$d dosya %2$d sohbete gönderilsin mi?</string>
-    <string name="videos_sent_without_recoding">(Videolar özgün, büyük dosyalar olarak gönderilir. Videoları daha küçük dosyalar olarak göndermek için onları ayrı ayrı iliştirin)</string>
+    <string name="videos_sent_without_recoding">(Çoklu video göndermek, onları olduğu gibi gönderecektir ve bu da büyük boyutlara yol açabilir. Boyutlarını küçültmek ve veri tasarrufu sağlamak için her videoyu kendi iletisinde gönderebilirsiniz.)</string>
     <string name="share_text_multiple_chats">Bu metin %1$d sohbete gönderilsin mi?\n\n“%2$s”</string>
     <string name="share_abort">Eksik izinlerden dolayı paylaşımdan vazgeçildi.</string>
 
@@ -724,6 +733,8 @@
     <string name="pref_your_name">Adınız</string>
     <!-- Label of the Bio/Signature/Status/Motto field -->
     <string name="pref_default_status_label">Biyografi</string>
+    <string name="chat_description">Açıklama</string>
+    <!-- Option name for changing behaviour of the "Enter key" to sending out a message directly (instead of adding new line). If in doubt, please refer to a similar option in other messengers. -->
     <string name="pref_enter_sends">Enter Tuşu Göndersin</string>
     <string name="pref_enter_sends_explain">Enter tuşuna basma, metin iletileri gönderecek</string>
     <string name="pref_outgoing_media_quality">Giden Ortam Kalitesi</string>
@@ -812,6 +823,7 @@
     <string name="n_bytes_message">%1$s ileti</string>
     <!-- %1$s will be replaced by human-readable date and time -->
     <string name="download_max_available_until">İndirme en fazla %1$s zamanına kadar kullanılabilir</string>
+    <!-- deprecated -->
     <string name="select_profile">Profil Seç</string>
     <string name="profile_image_select">Profil Görseli Seç</string>
     <string name="select_your_new_profile_image">Yeni profil görselinizi seçin</string>
@@ -883,6 +895,9 @@
     <string name="group_image_changed_by_you">Grup görselini değiştirdiniz.</string>
     <!-- %1$s will be replaced by name of the contact who did the action -->
     <string name="group_image_changed_by_other">%1$s tarafından grup görseli değiştirildi.</string>
+    <string name="chat_description_changed_by_you">Sohbet açıklamasını değiştirdiniz.</string>
+    <!-- %1$s will be replaced by name of the contact who did the action -->
+    <string name="chat_description_changed_by_other">%1$s tarafından sohbet açıklaması değiştirildi.</string>
     <!-- %1$s will be replaced by name of the contact added to the group -->
     <string name="member_x_added">%1$s üyesi eklendi.</string>
     <!-- %1$s will be replaced by name of the contact added to the group -->

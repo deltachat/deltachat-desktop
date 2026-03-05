@@ -25,6 +25,7 @@
     </plurals>
     <string name="gif">GIF</string>
     <string name="images">Tlaixkopinalli</string>
+    <!-- a noun, used for "Music" and other "Audio" files -->
     <string name="audio">Kakistli</string>
     <string name="voice_message">Tlahtolkopinalli</string>
     <string name="video">Tlamawisolli</string>
