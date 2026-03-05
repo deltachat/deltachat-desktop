@@ -32,10 +32,18 @@ export default function AccountDeletionScreen({
   const tx = useTranslationFunction()
 
   const [accountInfo, setAccountInfo] = useState<null | T.Account>()
+  const [selfstatus, setSelfstatus] = useState<string | null>(null)
 
   useEffect(() => {
     BackendRemote.rpc.getAccountInfo(selectedAccountId).then(setAccountInfo)
   }, [selectedAccountId])
+
+  useEffect(() => {
+    if (!accountInfo || accountInfo.kind !== 'Configured') return
+    BackendRemote.rpc
+      .getConfig(selectedAccountId, 'selfstatus')
+      .then(status => setSelfstatus(status || null))
+  }, [selectedAccountId, accountInfo])
 
   const onCancel = () => {
     if (!accountInfo) {
@@ -90,7 +98,11 @@ export default function AccountDeletionScreen({
                     <div>
                       <b>{accountInfo.displayName}</b>
                     </div>
-                    <div>{accountInfo.addr}</div>
+                    <div>
+                      {accountInfo.privateTag ||
+                        (selfstatus ? selfstatus.split('\n')[0] : null) ||
+                        accountInfo.addr}
+                    </div>
                     <div>
                       <div className={styles.accountSize}>
                         <AccountSize accountId={accountInfo.id} />
@@ -104,7 +116,7 @@ export default function AccountDeletionScreen({
                   tx(
                     'delete_account_explain_with_name',
                     accountInfo.kind === 'Configured'
-                      ? accountInfo.addr || undefined
+                      ? accountInfo.displayName || undefined
                       : tx('unconfigured_account')
                   )}
               </p>

@@ -50,6 +50,8 @@
   flex-direction: column;
   margin-inline-start: 8px;
   justify-content: center;
+  max-width: 240px;
+  word-wrap: break-word;
 }
 
 .accountSize {
