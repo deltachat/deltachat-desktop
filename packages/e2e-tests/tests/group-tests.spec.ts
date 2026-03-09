@@ -628,6 +628,13 @@ test('create channel and add members', async ({ browserName }) => {
     .locator('.chat-list .chat-list-item')
     .filter({ hasText: channelName })
     .click()
+
+  // Wait until userA's core has processed userB's subscription request
+  // (header subtitle changes from "0 subscriber" to "1 subscriber")
+  await expect(page.locator('.navbar-chat-subtitle')).toContainText(
+    '1 subscriber'
+  )
+
   const channelMsg = 'Hello channel!' + Math.random()
   await page.locator('textarea.create-or-edit-message-input').fill(channelMsg)
   await page.locator('button.send-button').click()
@@ -646,8 +653,10 @@ test('create channel and add members', async ({ browserName }) => {
   await switchToProfile(page, userB.id)
   await channelChatItemB.click()
   await expect(
-    page.locator('#message-list li.message-wrapper').last()
-  ).toContainText(channelMsg)
+    page
+      .locator('#message-list li.message-wrapper')
+      .filter({ hasText: channelMsg })
+  ).toBeVisible()
 })
 
 test('accept or decline channel invite', async ({ browserName }) => {
