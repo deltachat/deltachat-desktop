@@ -189,6 +189,7 @@ class TauriRuntime implements Runtime {
       enableAVCallsV2: false,
       enableBroadcastLists: false,
       enableOnDemandLocationStreaming: false,
+      enableMarkdownInMessages: false,
       chatViewBgImg: undefined,
       galleryImageKeepAspectRatio: false,
       isMentionsEnabled: false,

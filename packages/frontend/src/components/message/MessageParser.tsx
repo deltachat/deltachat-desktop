@@ -1,4 +1,6 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
+import Markdown from 'react-markdown'
+import type { Components } from 'react-markdown'
 
 import * as linkify from 'linkifyjs'
 import 'linkify-plugin-hashtag'
@@ -15,6 +17,53 @@ import useChat from '../../hooks/chat/useChat'
 import useCreateChatByEmail from '../../hooks/chat/useCreateChatByEmail'
 
 const log = getLogger('renderer/message-parser')
+
+const ALLOWED_LINK_SCHEMES = ['http', 'https']
+
+/**
+ * Build a link destination object with punycode detection for security.
+ * Detects IDN homograph attacks by comparing the original URL with the parsed URL.
+ */
+function buildLinkDestination(fullUrl: string, linkText: string) {
+  try {
+    const url = new URL(fullUrl)
+    const scheme = url.protocol.replace(':', '')
+    if (!ALLOWED_LINK_SCHEMES.includes(scheme)) {
+      return null
+    }
+    let suspicousUrl = false
+    const stripLastSlash = (url: string) => {
+      if (url.endsWith('/')) {
+        url = url.slice(0, -1)
+      }
+      return url
+    }
+    // according to https://developer.mozilla.org/docs/Web/API/URL/hostname
+    // domain names will be transformed to punycode automatically
+    // so we just need to check if the original hostname is different
+    // from the punycode one
+    if (stripLastSlash(url.href) !== stripLastSlash(fullUrl)) {
+      suspicousUrl = true
+    }
+    const destination = {
+      target: fullUrl,
+      hostname: url.hostname,
+      punycode: suspicousUrl
+        ? {
+          ascii_hostname: url.hostname,
+          punycode_encoded_url: url.href,
+          original_hostname_or_full_url: linkText,
+        }
+        : null,
+      scheme,
+      linkText,
+    }
+    return destination
+  } catch {
+    log.warn('buildLinkDestination: invalid URL', fullUrl)
+    return null
+  }
+}
 
 function renderElement(
   elm: linkify.MultiToken,
@@ -46,33 +95,9 @@ function renderElement(
         // see https://github.com/nfrasser/linkifyjs/blob/3abe9abbcb4e069aeadde2f42de7dfcc2371c0f0/packages/linkifyjs/src/text.mjs#L24
         fullUrl = 'https://' + fullUrl
       }
-      const url = new URL(fullUrl)
-      let suspicousUrl = false
-      const stripLastSlash = (url: string) => {
-        if (url.endsWith('/')) {
-          url = url.slice(0, -1)
-        }
-        return url
-      }
-      // according to https://developer.mozilla.org/docs/Web/API/URL/hostname
-      // domain names will be transformed to punycode automatically
-      // so we just need to check if the original hostname is different
-      // from the punycode one
-      if (stripLastSlash(url.href) !== stripLastSlash(fullUrl)) {
-        suspicousUrl = true
-      }
-      const destination = {
-        target: fullUrl,
-        hostname: url.hostname,
-        punycode: suspicousUrl
-          ? {
-              ascii_hostname: url.hostname,
-              punycode_encoded_url: url.href,
-              original_hostname_or_full_url: elm.v,
-            }
-          : null,
-        scheme: url.protocol.replace(':', ''),
-        linkText: elm.v,
+      const destination = buildLinkDestination(fullUrl, elm.v)
+      if (!destination) {
+        return <span key={key}>{elm.v}</span>
       }
       return (
         <Link
@@ -119,12 +144,145 @@ function renderElement(
 }
 
 /**
+ * Process text children through existing parseElements() for hashtags/emails/bot commands/URLs.
+ * This ensures that linkify detection (emails, hashtags, bot commands, URLs without markdown syntax)
+ * still works within markdown-rendered text.
+ */
+function processTextChildren(
+  children: React.ReactNode,
+  tabIndex: -1 | 0,
+  nonInteractiveContent: boolean
+): React.ReactNode {
+  if (nonInteractiveContent) {
+    // Skip linkify processing for non-interactive content
+    return children
+  }
+  return React.Children.map(children, (child, index) => {
+    if (typeof child === 'string') {
+      const elements = parseElements(child)
+      return elements.map((el, i) =>
+        renderElement(el, tabIndex, index * 1000 + i)
+      )
+    }
+    return child
+  })
+}
+
+/** Only these elements are allowed in markdown rendering. */
+const MARKDOWN_ALLOWED_ELEMENTS = [
+  'p',
+  'a',
+  'strong',
+  'em',
+  'code',
+  'pre',
+  'blockquote',
+  'ul',
+  'ol',
+  'li',
+  'h1',
+  'h2',
+  'h3',
+  'h4',
+  'h5',
+  'h6',
+  'br',
+]
+
+/**
+ * Create custom markdown components for react-markdown.
+ * These integrate with Delta Chat's existing link handling and linkify detection.
+ */
+function createMarkdownComponents(
+  tabIndex: -1 | 0,
+  nonInteractiveContent: boolean
+): Components {
+  return {
+    // Override link rendering to use existing Link component
+    a: ({ href, children }) => {
+      // Extract text content from children for display
+      const linkText =
+        typeof children === 'string'
+          ? children
+          : React.Children.toArray(children)
+            .map(child => (typeof child === 'string' ? child : ''))
+            .join('')
+
+      if (nonInteractiveContent) {
+        // Render as plain text for non-interactive content (e.g., quoted messages)
+        return <>{linkText}</>
+      }
+
+      const destination = buildLinkDestination(
+        href || '',
+        linkText || href || ''
+      )
+      if (!destination) {
+        return <>{linkText}</>
+      }
+
+      return <Link destination={destination} tabIndex={tabIndex} />
+    },
+
+    // Process text children through linkify for hashtags/emails/bot commands
+    p: ({ children }) => (
+      <p>{processTextChildren(children, tabIndex, nonInteractiveContent)}</p>
+    ),
+    li: ({ children }) => (
+      <li>{processTextChildren(children, tabIndex, nonInteractiveContent)}</li>
+    ),
+    em: ({ children }) => (
+      <em>{processTextChildren(children, tabIndex, nonInteractiveContent)}</em>
+    ),
+    strong: ({ children }) => (
+      <strong>
+        {processTextChildren(children, tabIndex, nonInteractiveContent)}
+      </strong>
+    ),
+
+    // Code blocks and inline code - no linkify processing needed
+    code: ({ children }) => {
+      return <code>{children}</code>
+    },
+    pre: ({ children }) => <pre>{children}</pre>,
+  }
+}
+
+/**
+ * Render message text with markdown support.
+ */
+function MarkdownMessage({
+  text,
+  tabIndex,
+  nonInteractiveContent,
+}: {
+  text: string
+  tabIndex: -1 | 0
+  nonInteractiveContent: boolean
+}) {
+  const components = useMemo(
+    () => createMarkdownComponents(tabIndex, nonInteractiveContent),
+    [tabIndex, nonInteractiveContent]
+  )
+  return (
+    <Markdown
+      className='markdown-content'
+      components={components}
+      allowedElements={MARKDOWN_ALLOWED_ELEMENTS}
+    >
+      {text}
+    </Markdown>
+  )
+}
+
+/**
  * parse message text (for links and interactive elements)
  * and render as React elements
  *
  * @param preview - render in preview mode for ChatListItem summary
  * and for quoted messages, without interactive elements
  * (links can not be clicked etc.)
+ * @param enableMarkdown - render markdown formatting
  */
 export function parseAndRenderMessage(
   message: string,
@@ -133,8 +291,19 @@ export function parseAndRenderMessage(
    * Has no effect if `{@link preview} === true`, because there should be
    * no interactive elements in the first place
    */
-  tabindexForInteractiveContents: -1 | 0
+  tabindexForInteractiveContents: -1 | 0,
+  enableMarkdown: boolean,
 ): React.ReactElement {
+  if (enableMarkdown) {
+    return (
+      <MarkdownMessage
+        text={message}
+        tabIndex={tabindexForInteractiveContents}
+        nonInteractiveContent={preview}
+      />
+    )
+  }
+
   if (preview) {
     return <div className='truncated'>{message}</div>
   }

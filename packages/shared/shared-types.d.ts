@@ -60,8 +60,8 @@ export interface DesktopSettingsType {
   syncAllAccounts: boolean
   /** @deprecated The last used file location for the save dialog is now only kept in memory and not persisted anymore between sessions. */
   lastSaveDialogLocation: string | undefined
-  /** @deprecated */
-  experimentalEnableMarkdownInMessages?: boolean
+  /** Enable markdown rendering in chat messages (experimental) */
+  enableMarkdownInMessages: boolean
   enableWebxdcDevTools: boolean
   /** set to false to disable the confirmation dialog for loading remote content */
   HTMLEmailAskForRemoteLoadingConfirmation: boolean

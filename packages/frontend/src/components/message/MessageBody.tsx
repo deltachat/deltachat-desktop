@@ -1,6 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
 import { parseAndRenderMessage } from './MessageParser'
+import { useSettingsStore } from '../../stores/settings'
 import * as linkify from 'linkifyjs'
 
 /** limit where message parser will not parse the message, limit of core is lower, this is just a failsafe */
@@ -79,6 +80,10 @@ function MessageBody({
    */
   tabindexForInteractiveContents?: -1 | 0
 }): React.ReactElement {
+  const settingsStore = useSettingsStore()[0]
+  const enableMarkdown =
+    settingsStore?.desktopSettings.enableMarkdownInMessages ?? false
+
   if (text.length >= UPPER_LIMIT_FOR_PARSED_MESSAGES) {
     return <>{text}</>
   }
@@ -97,7 +102,8 @@ function MessageBody({
   return parseAndRenderMessage(
     textTrimmed,
     nonInteractiveContent,
-    tabindexForInteractiveContents ?? 0
+    tabindexForInteractiveContents ?? 0,
+    enableMarkdown,
   )
 }
 const trimRegex = /^[\s\uFEFF\xA0\n\t]+|[\s\uFEFF\xA0\n\t]+$/g

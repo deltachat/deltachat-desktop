@@ -104,7 +104,7 @@ const Message = React.memo<
             {summaryText1 + ': '}
           </div>
         )}
-        {parseAndRenderMessage(summaryText2 || '', true, -1)}
+        {parseAndRenderMessage(summaryText2 || '', true, -1, false)}
       </div>
       {isContactRequest && (
         <div className='label'>

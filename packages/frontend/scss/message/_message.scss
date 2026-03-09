@@ -634,10 +634,105 @@ $info-text-max-width: 400px;
   }
 }
 
+// Markdown container: override pre-wrap from .text so block elements
+// don't get extra whitespace from newlines in the rendered HTML
+.markdown-content {
+  white-space: normal;
+}
+
 .quoted-text,
 .msg-body > .text {
   a {
     text-decoration: underline;
+  }
+
+  // Make markdown headings more compact
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+    line-height: 1.2;
+    user-select: text;
+  }
+
+  h1 {
+    font-size: 1.5em;
+  }
+
+  h2 {
+    font-size: 1.25em;
+  }
+
+  h3 {
+    font-size: 1.1em;
+  }
+
+  h4,
+  h5,
+  h6 {
+    font-size: 1em;
+  }
+
+  code {
+    font-family: monospace;
+    background-color: var(--messageCodeBg, rgba(0, 0, 0, 0.08));
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-size: 0.9em;
+  }
+
+  pre {
+    margin: 4px 0;
+    padding: 8px 12px;
+    background-color: var(--messageCodeBg, rgba(0, 0, 0, 0.08));
+    border-radius: 6px;
+    overflow-x: auto;
+    max-width: 100%;
+
+    code {
+      background-color: transparent;
+      padding: 0;
+      border-radius: 0;
+      font-size: 0.85em;
+      white-space: pre;
+    }
+  }
+
+  p {
+    margin: 0;
+  }
+
+  blockquote {
+    margin: 2px 0;
+    padding-inline-start: 12px;
+    border-inline-start: 3px solid var(--messageText, currentColor);
+    opacity: 0.85;
+  }
+
+  ul,
+  ol {
+    margin: 2px 0;
+    padding-inline-start: 1.2em;
+    white-space: normal;
+  }
+
+  ul {
+    list-style-type: disc;
+  }
+
+  ol {
+    list-style-type: decimal;
+  }
+
+  li {
+    margin: 0;
+
+    > p {
+      margin: 0;
+    }
   }
 }
 

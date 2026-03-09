@@ -23,6 +23,7 @@ export function getDefaultState(): DesktopSettingsType {
     minimizeToTray: true,
     syncAllAccounts: true,
     lastSaveDialogLocation: undefined,
+    enableMarkdownInMessages: false,
     enableWebxdcDevTools: false,
     HTMLEmailAskForRemoteLoadingConfirmation: true,
     HTMLEmailAlwaysLoadRemoteContent: false,
