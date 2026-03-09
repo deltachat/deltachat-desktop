@@ -443,11 +443,20 @@ test('Add group description', async () => {
   await page.getByTestId('view-group-dialog-header-close').click()
 
   // Check for system message about description change
-  await expect(
-    page.getByRole('list', { name: 'Messages' }).getByRole('listitem').filter({
+  const infoMsg = page
+    .getByRole('list', { name: 'Messages' })
+    .getByRole('listitem')
+    .filter({
       hasText: `[Chat description changed. To see this and other new features, please update the app]`,
     })
-  ).toBeVisible()
+  await expect(infoMsg).toBeVisible()
+
+  // Clicking on the info message opens the group dialog.
+  await expect(descriptionDiv).not.toBeVisible()
+  await infoMsg.click()
+  await expect(descriptionDiv).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(descriptionDiv).not.toBeVisible()
 
   // Verify other user receives notification and sees the description
   await switchToProfile(page, userC.id)
