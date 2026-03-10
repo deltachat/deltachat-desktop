@@ -51,7 +51,9 @@
     <string name="archive">Отправить в архив</string>
     <!-- Verb "to unarchive", as in "remove a chat from the archive", opposite of the previous string -->
     <string name="unarchive">Вернуть из архива</string>
+    <!-- Verb "to mute". used to mute a chat, so that it is silenced e.g. does not make noise or cause notifications -->
     <string name="mute">Отключить уведомления</string>
+    <!-- Adjective "smth is muted". used to describe a muted or silenced chat, that e.g. does not make noise or cause notifications -->
     <string name="muted">Беззвучный</string>
     <string name="ephemeral_messages">Исчезающие сообщения</string>
     <string name="ephemeral_messages_hint">Применяется ко всем участникам этого чата, но они по-прежнему могут копировать, сохранять и пересылать сообщения.</string>
@@ -201,6 +203,7 @@
     <string name="add_stickers_instructions">Для добавления стикеров, нажмите \"Открыть папку стикеров\", создайте подпапку для набора ваших стикеров и перетащите туда изображения и файлы стикеров</string>
     <string name="open_sticker_folder">Открыть папку стикеров</string>
     <string name="images">Изображения</string>
+    <!-- a noun, used for "Music" and other "Audio" files -->
     <string name="audio">Аудио</string>
     <string name="voice_message">Голосовое сообщение</string>
     <string name="forwarded">Переслано</string>
@@ -237,6 +240,7 @@
     <string name="games">Игры</string>
     <string name="tools">Инструменты</string>
     <string name="app_size">Размер</string>
+    <!-- Used as a headline for a date. E.g. in the details of a mini app in the app picker -->
     <string name="app_date_published">Опубликовано</string>
     <string name="add_to_chat">Добавить в чат</string>
     <!-- short for "Browse through the App Picker/Store/Catalogue"; could also be translated as "Discover" or "Search" -->
@@ -281,6 +285,13 @@
     <string name="add_recipients">Добавить получателей</string>
     <!-- consider keeping the term "channel" as in WhatsApp or Telegram -->
     <string name="channel_name">Название канала</string>
+    <!-- The number of times a message is shown in channels, may be used for alt-text or a11y -->
+    <plurals name="n_views">
+        <item quantity="one">%d просмотр</item>
+        <item quantity="few">%d просмотра</item>
+        <item quantity="many">%d просмотров</item>
+        <item quantity="other">%d просмотров</item>
+    </plurals>
     <string name="email">Электронная почта</string>
     <!-- "New" as in "Create New Email"; shown together with "New Group" and "New Channel" -->
     <string name="new_email">Новое письмо</string>
@@ -404,14 +415,20 @@
 
     <!-- the action "to call someone", used as a tooltip for the "phone" icon. not: "the call" -->
     <string name="start_call">Позвонить</string>
+    <string name="start_audio_call">Аудиозвонок</string>
+    <string name="start_video_call">Видеозвонок</string>
     <!-- the action "to answer" or to "accept" or to "pick up" a call. not: "the answer" -->
     <string name="answer_call">Ответить</string>
     <!-- the action "to decline" a call, not: "the decline" -->
     <string name="end_call">Отклонить</string>
     <!-- deprecated, use outgoing_audio_call or outgoing_video_call instead -->
     <string name="outgoing_call">Исходящий звонок</string>
+    <string name="outgoing_audio_call">Исходящий аудиозвонок</string>
+    <string name="outgoing_video_call">Исходящий видеозвонок</string>
     <!-- deprecated, use incoming_audio_call or incoming_video_call instead -->
     <string name="incoming_call">Входящий звонок</string>
+    <string name="incoming_audio_call">Входящий аудиозвонок</string>
+    <string name="incoming_video_call">Входящий видеозвонок</string>
     <string name="declined_call">Отклонённый звонок</string>
     <string name="canceled_call">Отменённый звонок</string>
     <string name="missed_call">Пропущенный звонок</string>
@@ -736,7 +753,7 @@
     <!-- first placeholder is replaced by the number of files (always 2 or more); second placeholder is replaced by a chat name -->
     <string name="ask_send_files_to_chat">Отправить %1$d файла(ов) в \"%2$s\"?</string>
     <string name="ask_send_files_to_selected_chats">Отправить %1$d файл(ов) в %2$d чата(ов)?</string>
-    <string name="videos_sent_without_recoding">(Видеофайлы отправляются в исходном виде, без сжатия. Чтобы отправить видео в более компактном виде, прикрепите их отдельно)</string>
+    <string name="videos_sent_without_recoding">(Отправка нескольких видео приведет к их отправке в исходном виде, что может потребовать значительного объема данных. Чтобы уменьшить размер файлов и сэкономить трафик, отправляйте каждое видео в отдельном сообщении.)</string>
     <string name="share_text_multiple_chats">Отправить текст в %1$d чата(ов)?\n\n\"%2$s\"</string>
     <string name="share_abort">Общий доступ прерван из-за отсутствия необходимых разрешений.</string>
 
@@ -752,6 +769,8 @@
     <string name="pref_your_name">Ваше имя</string>
     <!-- Label of the Bio/Signature/Status/Motto field -->
     <string name="pref_default_status_label">О себе</string>
+    <string name="chat_description">Описание</string>
+    <!-- Option name for changing behaviour of the "Enter key" to sending out a message directly (instead of adding new line). If in doubt, please refer to a similar option in other messengers. -->
     <string name="pref_enter_sends">Отправка по Enter</string>
     <string name="pref_enter_sends_explain">Нажатие клавиши Enter отправит текстовые сообщения</string>
     <string name="pref_outgoing_media_quality">Качество отправляемых медиафайлов</string>
@@ -840,6 +859,7 @@
     <string name="n_bytes_message">%1$s сообщение</string>
     <!-- %1$s will be replaced by human-readable date and time -->
     <string name="download_max_available_until">Максимальная загрузка доступна до %1$s</string>
+    <!-- deprecated -->
     <string name="select_profile">Выбрать профиль</string>
     <string name="profile_image_select">Выбрать изображение профиля</string>
     <string name="select_your_new_profile_image">Выбрать новое изображение профиля</string>
@@ -911,6 +931,9 @@
     <string name="group_image_changed_by_you">Вы изменили изображение группы.</string>
     <!-- %1$s will be replaced by name of the contact who did the action -->
     <string name="group_image_changed_by_other">%1$s меняет изображение группы.</string>
+    <string name="chat_description_changed_by_you">Вы изменили описание чата.</string>
+    <!-- %1$s will be replaced by name of the contact who did the action -->
+    <string name="chat_description_changed_by_other">Описание чата изменено пользователем %1$s.</string>
     <!-- %1$s will be replaced by name of the contact added to the group -->
     <string name="member_x_added">Добавлен участник %1$s.</string>
     <!-- %1$s will be replaced by name of the contact added to the group -->

@@ -24,6 +24,7 @@
     <string name="forward">Ante</string>
     <!-- Verb "to archive", as in "put a chat in the archive", not a noun "The Archive". -->
     <string name="archive">Conservare</string>
+    <!-- Verb "to mute". used to mute a chat, so that it is silenced e.g. does not make noise or cause notifications -->
     <string name="mute">Mutus</string>
     <string name="save">Salvare</string>
     <string name="chat">Colloquium</string>

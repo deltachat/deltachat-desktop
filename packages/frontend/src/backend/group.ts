@@ -4,11 +4,17 @@ export async function modifyGroup(
   accountId: number,
   chatId: number,
   name: string,
+  groupDescription: string,
   image: string | null | undefined
 ): Promise<void> {
   const chat = await BackendRemote.rpc.getBasicChatInfo(accountId, chatId)
 
   await BackendRemote.rpc.setChatName(accountId, chatId, name)
+  await BackendRemote.rpc.setChatDescription(
+    accountId,
+    chatId,
+    groupDescription
+  )
 
   if (typeof image !== 'undefined' && chat.profileImage !== image) {
     await BackendRemote.rpc.setChatProfileImage(

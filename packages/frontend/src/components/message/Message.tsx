@@ -40,6 +40,7 @@ import { ProtectionEnabledDialog } from '../dialogs/ProtectionStatusDialog'
 import useDialog from '../../hooks/dialog/useDialog'
 import useMessage from '../../hooks/chat/useMessage'
 import useOpenViewProfileDialog from '../../hooks/dialog/useOpenViewProfileDialog'
+import useOpenViewGroupDialog from '../../hooks/dialog/useOpenViewGroupDialog'
 import usePrivateReply from '../../hooks/chat/usePrivateReply'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 import { useReactionsBar, showReactionsUi } from '../ReactionsBar'
@@ -465,6 +466,7 @@ export default function Message(props: {
   const privateReply = usePrivateReply()
   const { openContextMenu } = useContext(ContextMenuContext)
   const openViewProfileDialog = useOpenViewProfileDialog()
+  const openViewGroupDialog = useOpenViewGroupDialog()
   const { jumpToMessage } = useMessage()
   const [messageWidth, setMessageWidth] = useState(0)
 
@@ -734,6 +736,13 @@ export default function Message(props: {
         if (isWebxdcInfo) {
           // open or focus the webxdc app
           openWebxdc(message)
+        } else if (
+          message.systemMessageType === 'GroupDescriptionChanged' &&
+          (chat.chatType === 'Group' || chat.chatType === 'OutBroadcast')
+        ) {
+          openViewGroupDialog(
+            chat as typeof chat & { chatType: typeof chat.chatType }
+          )
         } else if (
           message.infoContactId != null &&
           message.infoContactId !== C.DC_CONTACT_ID_SELF
