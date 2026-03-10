@@ -33,9 +33,7 @@ export function startOutgoingVideoCall(
     accountId,
     chatId,
     CallDirection.Outgoing,
-    {
-      noOutgoingVideoInitially: param.startWithCameraEnabled === false,
-    }
+    param
   )
 
   const jsonrpcRemote = getDCJsonrpcRemote()
@@ -111,7 +109,7 @@ export function startHandlingIncomingVideoCalls(
       chatId: chat_id,
       callMessageId: msg_id,
       callerWebrtcOffer: place_call_info,
-      noOutgoingVideoInitially: !has_video,
+      startWithCameraEnabled: has_video,
     })
   }
 
@@ -124,19 +122,19 @@ function openIncomingVideoCallWindow({
   chatId,
   callMessageId,
   callerWebrtcOffer,
-  noOutgoingVideoInitially,
+  startWithCameraEnabled,
 }: {
   accountId: number
   chatId: number
   callMessageId: number
   callerWebrtcOffer: string
-  noOutgoingVideoInitially: boolean
+  startWithCameraEnabled: boolean
 }) {
   log.info('received incoming call', {
     accountId,
     chatId,
     callMessageId,
-    noOutgoingVideoInitially,
+    startWithCameraEnabled,
   })
 
   const { answerPromise, windowClosed, closeWindow } = openVideoCallWindow(
@@ -145,7 +143,7 @@ function openIncomingVideoCallWindow({
     CallDirection.Incoming,
     {
       callerWebrtcOffer,
-      noOutgoingVideoInitially,
+      startWithCameraEnabled,
     }
   )
 
@@ -186,8 +184,8 @@ function openVideoCallWindow<D extends CallDirection>(
   callDirection: D,
   {
     callerWebrtcOffer,
-    noOutgoingVideoInitially,
-  }: { noOutgoingVideoInitially: boolean } & (D extends CallDirection.Incoming
+    startWithCameraEnabled,
+  }: { startWithCameraEnabled: boolean } & (D extends CallDirection.Incoming
     ? {
         callerWebrtcOffer: string
       }
@@ -414,7 +412,7 @@ function openVideoCallWindow<D extends CallDirection>(
 
   const host = formatHost(accountId, chatId)
   const query = new URLSearchParams()
-  if (noOutgoingVideoInitially) {
+  if (!startWithCameraEnabled) {
     query.set('noOutgoingVideoInitially', '')
   }
   if (callDirection === CallDirection.Incoming) {
