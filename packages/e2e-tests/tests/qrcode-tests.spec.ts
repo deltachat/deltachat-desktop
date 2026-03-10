@@ -392,8 +392,8 @@ test('instant onboarding works with DCLOGIN qr code', async ({
   const newUsername = userA.name + '2'
 
   await page.evaluate(
-    ([addr, pass]) => {
-      navigator.clipboard.writeText(
+    async ([addr, pass]) => {
+      await navigator.clipboard.writeText(
         `dclogin://${addr}?p=${encodeURIComponent(pass)}&v=1`
       )
     },
