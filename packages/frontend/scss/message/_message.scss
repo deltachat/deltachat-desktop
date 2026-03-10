@@ -90,6 +90,7 @@ $info-text-max-width: 400px;
     padding-bottom: 10px;
 
     .msg-body {
+      min-width: 150px;
       &.msg-body--clickable {
         @include mixins.button-reset;
         display: block;
