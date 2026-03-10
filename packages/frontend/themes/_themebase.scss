@@ -127,8 +127,6 @@ $scrollbarTransparency: 0.34 !default;
   /* Message Bubble */
   --messageText: #{$textPrimary};
   --messageQuotedText: #{changeContrast($textPrimary, 45%)};
-  /* same as message text */
-  --setupMessageText: #ed824e;
   --infoMessageBubbleBg: #0000008c;
   --infoMessageBubbleText: white;
   --messageIncomingBg: #{$bgMessageBubbleIncoming};
