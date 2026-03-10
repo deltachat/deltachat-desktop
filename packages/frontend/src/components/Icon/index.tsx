@@ -53,7 +53,7 @@ type IconColoring =
 
 type PropsBase = {
   className?: string
-  onClick?: (ev: Event | React.SyntheticEvent<Element, Event>) => void
+  onClick?: React.MouseEventHandler<HTMLElement>
   icon: IconName
   coloring?: IconColoring
   size?: number
@@ -62,9 +62,10 @@ type JustIconProps = PropsBase & {
   /** Consider using IconButton instead */
   onClick?: undefined
 }
-type IconButtonProps = PropsBase & {
-  'aria-label': string
-}
+type IconButtonProps = PropsBase &
+  React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    'aria-label': string
+  }
 
 export default function Icon({
   coloring,
