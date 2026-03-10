@@ -200,11 +200,6 @@ $info-text-max-width: 400px;
         // https://github.com/deltachat/deltachat-desktop/pull/5227#discussion_r2173774006.
         min-height: calc($font-size * $line-height);
       }
-      div.experimental {
-        color: var(--colorDanger);
-        background: var(--contextMenuBg);
-        border-radius: 8px;
-      }
     }
   }
 
