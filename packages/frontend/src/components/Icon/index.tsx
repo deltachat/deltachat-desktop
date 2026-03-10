@@ -44,6 +44,7 @@ export type IconName =
   | 'upload-file'
 
 type IconColoring =
+  | 'currentColor'
   | 'navbar'
   | 'contextMenu'
   | 'fullscreenControls'
