@@ -302,9 +302,14 @@ function ViewGroupInner(
   )
 
   const onClickEdit = () => {
+    if (groupDescription === null) {
+      // just in case the group description is not yet loaded
+      // (it defaults to an empty string)
+      return
+    }
     openDialog(EditGroupNameDialog, {
       groupName,
-      groupDescription: groupDescription ?? '',
+      groupDescription,
       groupImage,
       groupColor: chat.color,
       onOk: (
