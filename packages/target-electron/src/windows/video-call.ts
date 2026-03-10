@@ -106,27 +106,32 @@ export function startHandlingIncomingVideoCalls(
   ) => {
     log.info('got IncomingCall event', { eventAccountId, msg_id, has_video })
 
-    const noOutgoingVideoInitially = !has_video
-    openIncomingVideoCallWindow(
-      eventAccountId,
-      chat_id,
-      msg_id,
-      place_call_info,
-      noOutgoingVideoInitially
-    )
+    openIncomingVideoCallWindow({
+      accountId: eventAccountId,
+      chatId: chat_id,
+      callMessageId: msg_id,
+      callerWebrtcOffer: place_call_info,
+      noOutgoingVideoInitially: !has_video,
+    })
   }
 
   jsonrpcRemote.on('IncomingCall', incomingCallListener)
   return () => jsonrpcRemote.off('IncomingCall', incomingCallListener)
 }
 
-function openIncomingVideoCallWindow(
-  accountId: number,
-  chatId: number,
-  callMessageId: number,
-  callerWebrtcOffer: string,
+function openIncomingVideoCallWindow({
+  accountId,
+  chatId,
+  callMessageId,
+  callerWebrtcOffer,
+  noOutgoingVideoInitially,
+}: {
+  accountId: number
+  chatId: number
+  callMessageId: number
+  callerWebrtcOffer: string
   noOutgoingVideoInitially: boolean
-) {
+}) {
   log.info('received incoming call', {
     accountId,
     chatId,
