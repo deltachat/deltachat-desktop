@@ -138,6 +138,13 @@ export interface Runtime {
     chatId: number,
     param: { startWithCameraEnabled: boolean }
   ): void
+  openIncomingVideoCallWindow(params: {
+    accountId: number
+    chatId: number
+    callMessageId: number
+    callerWebrtcOffer: string
+    startWithCameraEnabled: boolean
+  }): Promise<void>
 
   // control app
   restartApp(): void

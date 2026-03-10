@@ -44,10 +44,11 @@ import { appx, mapPackagePath } from './isAppx.js'
 import DeltaChatController from './deltachat/controller.js'
 import { BuildInfo } from './get-build-info.js'
 import { updateContentProtectionOnAllActiveWindows } from './content-protection.js'
-import { MediaType } from '@deltachat-desktop/runtime-interface'
+import { MediaType, type Runtime } from '@deltachat-desktop/runtime-interface'
 import {
   startHandlingIncomingVideoCalls,
   startOutgoingVideoCall,
+  openIncomingVideoCallWindow,
 } from './windows/video-call.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
@@ -400,6 +401,12 @@ export async function init(cwd: string, logHandler: LogHandler) {
       param: { startWithCameraEnabled: boolean }
     ) => {
       startOutgoingVideoCall(accountId, chatId, param)
+    }
+  )
+  ipcMain.handle(
+    'openIncomingVideoCallWindow',
+    (_ev, ...args: Parameters<Runtime['openIncomingVideoCallWindow']>) => {
+      openIncomingVideoCallWindow(...args)
     }
   )
   const stopHandlingIncomingVideoCalls = startHandlingIncomingVideoCalls(

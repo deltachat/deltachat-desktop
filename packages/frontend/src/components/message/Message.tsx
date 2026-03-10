@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useEffectEvent,
   useMemo,
   useRef,
   useState,
@@ -65,7 +66,8 @@ import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
 import { useRovingTabindex } from '../../contexts/RovingTabindex'
 import { avatarInitial } from '@deltachat-desktop/shared/avatarInitial'
 import { getLogger } from '@deltachat-desktop/shared/logger'
-import Icon from '../Icon'
+import { IconButton } from '../Icon'
+import { useRpcFetch } from '../../hooks/useFetch'
 
 const log = getLogger('Message')
 
@@ -817,12 +819,10 @@ export default function Message(props: {
         />
       ) : null}
       {message.viewType === 'Call' && (
-        <Icon
-          icon='phone'
-          className='phone-icon'
-          coloring='currentColor'
-          // `size` will be overridden in CSS
-          size={24}
+        <CallIconButton
+          accountId={accountId}
+          chatId={message.chatId}
+          messageId={message.id}
         />
       )}
     </div>
@@ -1247,5 +1247,62 @@ function WebxdcMessageContent({
         {tx('start_app')}
       </Button>
     </div>
+  )
+}
+
+function CallIconButton({
+  accountId,
+  chatId,
+  messageId,
+}: {
+  accountId: number
+  chatId: number
+  messageId: number
+}) {
+  const callInfoFetch = useRpcFetch(BackendRemote.rpc.callInfo, [
+    accountId,
+    messageId,
+  ])
+  const refresh = useEffectEvent(callInfoFetch.refresh)
+  useEffect(() => {
+    return onDCEvent(accountId, 'MsgsChanged', event => {
+      if (event.msgId !== messageId) {
+        return
+      }
+      refresh()
+    })
+  }, [accountId, messageId])
+
+  const onClickParams:
+    | undefined
+    | Parameters<typeof runtime.openIncomingVideoCallWindow>[0] =
+    callInfoFetch.result?.ok &&
+    callInfoFetch.result.value.state.kind === 'Alerting'
+      ? {
+          accountId,
+          chatId,
+          callMessageId: messageId,
+          callerWebrtcOffer: callInfoFetch.result.value.sdpOffer,
+          startWithCameraEnabled: callInfoFetch.result.value.hasVideo,
+        }
+      : undefined
+  // TODO fix: don't open a second window if one is already open
+  // for this message (this should be done in the main process).
+  const onClick = onClickParams
+    ? () => runtime.openIncomingVideoCallWindow(onClickParams)
+    : undefined
+
+  return (
+    <IconButton
+      aria-label='📞'
+      onClick={onClick}
+      aria-busy={callInfoFetch.loading}
+      disabled={onClick == undefined}
+      icon='phone'
+      className='phone-icon'
+      coloring='currentColor'
+      // `size` will be overridden in CSS
+      size={24}
+    />
   )
 }
