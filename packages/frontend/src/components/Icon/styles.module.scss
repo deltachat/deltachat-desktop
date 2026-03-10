@@ -7,6 +7,10 @@
   mask-repeat: no-repeat;
   mask-size: contain;
 
+  &.currentColor {
+    background-color: currentColor;
+  }
+
   &.navbar {
     background-color: var(--navBarText);
   }
