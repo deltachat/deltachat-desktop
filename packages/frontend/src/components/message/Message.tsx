@@ -801,8 +801,6 @@ export default function Message(props: {
     openViewProfileDialog(accountId, contact.id)
   }
 
-  let onClickMessageBody
-
   // Check if the message is saved or has a saved message
   // in both cases we display the bookmark icon
   const isOrHasSavedMessage = message.originalMsgId
@@ -924,11 +922,8 @@ export default function Message(props: {
         )}
         <div
           className={classNames('msg-body', {
-            'msg-body--clickable': onClickMessageBody,
             call: message.viewType === 'Call',
           })}
-          onClick={onClickMessageBody}
-          tabIndex={onClickMessageBody ? tabindexForInteractiveContents : -1}
         >
           {message.quote !== null && (
             <Quote
