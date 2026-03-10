@@ -87,9 +87,19 @@ export default function Icon({
   )
 }
 
-export function IconButton({ coloring, size, icon, ...rest }: IconButtonProps) {
+export function IconButton({
+  coloring,
+  size,
+  icon,
+  className,
+  ...rest
+}: IconButtonProps) {
   return (
-    <button type='button' {...rest} className={classNames(styles.iconButton)}>
+    <button
+      type='button'
+      {...rest}
+      className={classNames(styles.iconButton, className)}
+    >
       <Icon coloring={coloring} size={size} icon={icon} />
     </button>
   )
