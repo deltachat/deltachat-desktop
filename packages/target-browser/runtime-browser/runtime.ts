@@ -207,6 +207,9 @@ class BrowserRuntime implements Runtime {
   startOutgoingVideoCall(): void {
     this.log.critical('Method not implemented.')
   }
+  async openIncomingVideoCallWindow() {
+    throw new Error('Method not implemented.')
+  }
   async saveBackgroundImage(
     file: string,
     isDefaultPicture: boolean

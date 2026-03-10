@@ -553,6 +553,9 @@ class TauriRuntime implements Runtime {
   startOutgoingVideoCall(): void {
     throw new Error('Method not implemented.101')
   }
+  async openIncomingVideoCallWindow() {
+    throw new Error('Method not implemented.102')
+  }
   restartApp(): void {
     // will not be implemented in tauri for now, as this method is currently unused
     this.log.error('Method not implemented: restartApp')

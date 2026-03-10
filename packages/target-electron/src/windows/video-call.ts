@@ -117,7 +117,7 @@ export function startHandlingIncomingVideoCalls(
   return () => jsonrpcRemote.off('IncomingCall', incomingCallListener)
 }
 
-function openIncomingVideoCallWindow({
+export function openIncomingVideoCallWindow({
   accountId,
   chatId,
   callMessageId,
@@ -130,7 +130,7 @@ function openIncomingVideoCallWindow({
   callerWebrtcOffer: string
   startWithCameraEnabled: boolean
 }) {
-  log.info('received incoming call', {
+  log.info('openIncomingVideoCallWindow', {
     accountId,
     chatId,
     callMessageId,
