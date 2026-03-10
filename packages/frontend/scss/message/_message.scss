@@ -461,14 +461,6 @@ $info-text-max-width: 400px;
   }
 }
 
-.setupMessage {
-  .message {
-    .text {
-      color: var(--setupMessageText);
-    }
-  }
-}
-
 @media (max-width: variables.$breakpoint-messagelist) {
   .message {
     max-width: 100%;
