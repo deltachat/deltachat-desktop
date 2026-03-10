@@ -65,6 +65,7 @@ import { mouseEventToPosition } from '../../utils/mouseEventToPosition'
 import { useRovingTabindex } from '../../contexts/RovingTabindex'
 import { avatarInitial } from '@deltachat-desktop/shared/avatarInitial'
 import { getLogger } from '@deltachat-desktop/shared/logger'
+import Icon from '../Icon'
 
 const log = getLogger('Message')
 
@@ -815,6 +816,15 @@ export default function Message(props: {
           tabindexForInteractiveContents={tabindexForInteractiveContents}
         />
       ) : null}
+      {message.viewType === 'Call' && (
+        <Icon
+          icon='phone'
+          className='phone-icon'
+          coloring='currentColor'
+          // `size` will be overridden in CSS
+          size={24}
+        />
+      )}
     </div>
   )
 
