@@ -90,14 +90,6 @@ $info-text-max-width: 400px;
     padding-bottom: 10px;
 
     .msg-body {
-      &.msg-body--clickable {
-        @include mixins.button-reset;
-        display: block;
-
-        > .text {
-          cursor: pointer;
-        }
-      }
       &.call {
         > .text {
           --call-icon-size: 24px;
