@@ -2,7 +2,7 @@ import { app } from 'electron'
 import { platform } from 'os'
 import { writeFile, rm, mkdir } from 'fs/promises'
 import { join } from 'path'
-import { existsSync, readFileSync } from 'fs'
+import { existsSync } from 'fs'
 
 import { getLogger } from '../../shared/logger.js'
 import { appx } from './isAppx.js'
@@ -10,10 +10,17 @@ import { AutostartState } from '../../shared/shared-types.js'
 
 const log = getLogger('main/autostart')
 
+function getLinuxPackageType(): 'other' | 'appimage' | 'flatpak' {
+  if (process.env.APPIMAGE) return 'appimage'
+  if (process.env.FLATPAK_ID) return 'flatpak'
+  return 'other'
+}
+
 function getLinuxAutostartDir(): string {
   // In Flatpak, $XDG_CONFIG_HOME is redirected to the app sandbox even with
   // --filesystem=host. Detect Flatpak and use $HOME directly so the autostart
   // file ends up where the desktop environment can find it.
+  // see https://docs.flatpak.org/en/latest/conventions.html#xdg-base-directories
   const isInsideFlatpak = Boolean(process.env.FLATPAK_ID)
   const configHome = isInsideFlatpak
     ? join(app.getPath('home'), '.config')
@@ -22,7 +29,9 @@ function getLinuxAutostartDir(): string {
 }
 
 function getLinuxAutostartFilePath(): string {
-  return join(getLinuxAutostartDir(), 'deltachat-desktop.desktop')
+  const packageType = getLinuxPackageType()
+  const suffix = packageType !== 'other' ? `-${packageType}` : ''
+  return join(getLinuxAutostartDir(), `deltachat-desktop${suffix}.desktop`)
 }
 
 function getLinuxExecPath(): string {
@@ -30,73 +39,19 @@ function getLinuxExecPath(): string {
   return process.env.APPIMAGE || process.execPath
 }
 
+// see https://specifications.freedesktop.org/desktop-entry/latest/exec-variables.html
 function escapeDesktopExecArg(arg: string): string {
   const escaped = arg
     .replace(/\\/g, '\\\\')
     .replace(/"/g, '\\"')
     .replace(/\$/g, '\\$')
+    .replace(/`/g, '\\`')
   return `"${escaped}"`
 }
 
-/**
- * Extracts the executable path from a Desktop Entry `Exec=` value,
- * stripping any arguments (e.g. `--minimized`) that follow it.
- *
- * Check whether an existing autostart file was created
- * by this installation: after writing the file we may have a different
- * AppImage path or binary location than what was recorded, so we compare
- * only the executable part rather than the full `Exec=` string.
- */
-function extractDesktopExecPath(execValue: string): string | null {
-  const trimmed = execValue.trim()
-  if (!trimmed) return null
-
-  if (trimmed.startsWith('"')) {
-    let value = ''
-    let escaped = false
-    for (let i = 1; i < trimmed.length; i++) {
-      const ch = trimmed[i]
-      if (escaped) {
-        value += ch
-        escaped = false
-        continue
-      }
-      if (ch === '\\') {
-        escaped = true
-        continue
-      }
-      if (ch === '"') {
-        return value
-      }
-      value += ch
-    }
-    return null
-  }
-
-  return trimmed.split(/\s+/)[0] || null
-}
-
-function getLinuxAutostartRegisteredState(): boolean | null {
+function getLinuxAutostartRegisteredState(): boolean {
   const autostartFile = getLinuxAutostartFilePath()
-  if (!existsSync(autostartFile)) return false
-
-  try {
-    const content = readFileSync(autostartFile, 'utf-8')
-    const execLine = content
-      .split(/\r?\n/)
-      .find(line => line.startsWith('Exec='))
-
-    if (!execLine) return null
-
-    const execValue = execLine.slice('Exec='.length)
-    const execPath = extractDesktopExecPath(execValue)
-    if (!execPath) return null
-
-    return execPath === getLinuxExecPath()
-  } catch (error) {
-    log.warn('Failed to read autostart desktop file', error)
-    return null
-  }
+  return existsSync(autostartFile)
 }
 
 function getLinuxDesktopFileContent(): string {
@@ -157,15 +112,24 @@ export async function applyAutostart(enable: boolean): Promise<void> {
       return
     }
     const autostartFile = getLinuxAutostartFilePath()
-    if (enable) {
-      await mkdir(getLinuxAutostartDir(), { recursive: true })
-      await writeFile(autostartFile, getLinuxDesktopFileContent(), 'utf-8')
-      log.info(`Autostart enabled: created ${autostartFile}`)
-    } else {
-      if (existsSync(autostartFile)) {
-        await rm(autostartFile)
-        log.info(`Autostart disabled: removed ${autostartFile}`)
+    const legacyFile = join(getLinuxAutostartDir(), 'deltachat-desktop.desktop')
+    try {
+      if (enable) {
+        await mkdir(getLinuxAutostartDir(), { recursive: true })
+        await writeFile(autostartFile, getLinuxDesktopFileContent(), 'utf-8')
+        log.info(`Autostart enabled: created ${autostartFile}`)
+      } else {
+        if (existsSync(autostartFile)) {
+          await rm(autostartFile)
+          log.info(`Autostart disabled: removed ${autostartFile}`)
+        }
       }
+      // Clean up legacy autostart file from before per-package-type naming
+      if (existsSync(legacyFile) && legacyFile !== autostartFile) {
+        await rm(legacyFile)
+      }
+    } catch (error) {
+      log.error(`Failed to ${enable ? 'enable' : 'disable'} autostart`, error)
     }
   }
 }
