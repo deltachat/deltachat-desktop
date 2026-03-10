@@ -594,7 +594,6 @@ export function EditGroupNameDialog({
             />
           </div>
           <DeltaInput
-            key='groupname'
             id='groupname'
             placeholder={!isBroadcast ? tx('group_name') : tx('channel_name')}
             value={groupName}
@@ -621,7 +620,6 @@ export function EditGroupNameDialog({
             </p>
           )}
           <DeltaTextarea
-            key='description'
             id='description'
             placeholder={tx('chat_description')}
             value={groupDescription}
