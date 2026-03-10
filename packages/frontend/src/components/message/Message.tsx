@@ -736,9 +736,12 @@ export default function Message(props: {
         if (isWebxdcInfo) {
           // open or focus the webxdc app
           openWebxdc(message)
-        } else if (message.systemMessageType === 'GroupDescriptionChanged') {
+        } else if (
+          message.systemMessageType === 'GroupDescriptionChanged' &&
+          (chat.chatType === 'Group' || chat.chatType === 'OutBroadcast')
+        ) {
           openViewGroupDialog(
-            chat as T.FullChat & { chatType: 'Group' | 'OutBroadcast' }
+            chat as typeof chat & { chatType: typeof chat.chatType }
           )
         } else if (
           message.infoContactId != null &&
