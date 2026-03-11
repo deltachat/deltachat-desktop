@@ -28,7 +28,7 @@ import {
   enterEditMessageMode,
 } from './messageFunctions'
 import Attachment from '../attachment/messageAttachment'
-import { isGenericAttachment, isImage } from '../attachment/Attachment'
+import { isGenericAttachment, isImage, isVideo } from '../attachment/Attachment'
 import { runtime } from '@deltachat-desktop/runtime-interface'
 import { ConversationType } from './MessageList'
 import { getDirection } from '../../utils/getDirection'
@@ -869,6 +869,7 @@ export default function Message(props: {
         direction,
         styles.message,
         rovingTabindex.className,
+        isWithoutText && isVideo(fileMime) ? 'video-only' : '',
         {
           [styles.withReactions]: message.reactions,
           'type-sticker': viewType === 'Sticker',
