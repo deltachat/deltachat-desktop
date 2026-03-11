@@ -91,14 +91,6 @@ $info-text-max-width: 400px;
 
     .msg-body {
       min-width: 150px;
-      &.msg-body--clickable {
-        @include mixins.button-reset;
-        display: block;
-
-        > .text {
-          cursor: pointer;
-        }
-      }
       &.call {
         > .text {
           --call-icon-size: 24px;
@@ -200,11 +192,6 @@ $info-text-max-width: 400px;
         // See
         // https://github.com/deltachat/deltachat-desktop/pull/5227#discussion_r2173774006.
         min-height: calc($font-size * $line-height);
-      }
-      div.experimental {
-        color: var(--colorDanger);
-        background: var(--contextMenuBg);
-        border-radius: 8px;
       }
     }
   }
@@ -458,14 +445,6 @@ $info-text-max-width: 400px;
       @include mixins.button-reset;
 
       cursor: pointer;
-    }
-  }
-}
-
-.setupMessage {
-  .message {
-    .text {
-      color: var(--setupMessageText);
     }
   }
 }
