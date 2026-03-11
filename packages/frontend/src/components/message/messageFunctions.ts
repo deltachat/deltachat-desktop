@@ -14,6 +14,7 @@ import { C, T } from '@deltachat/jsonrpc-client'
 import ConfirmDeleteMessageDialog from '../dialogs/ConfirmDeleteMessage'
 import { unknownErrorToString } from '../helpers/unknownErrorToString'
 import AlertDialog from '../dialogs/AlertDialog'
+import type { msgStatus } from '../../types-app'
 
 const log = getLogger('renderer/msgFunctions')
 
@@ -209,5 +210,19 @@ export function isMessageEditable(
     !message.isInfo &&
     !message.hasHtml &&
     message.viewType !== 'Call'
+  )
+}
+
+/**
+ * If this returns `false` then it doesn't always mean
+ * that the status should be shown.
+ */
+export function shouldHideDeliveryStatus(
+  chatType: T.ChatType,
+  status: msgStatus
+): boolean {
+  return (
+    // https://github.com/deltachat/deltachat-desktop/issues/5978
+    chatType === 'OutBroadcast' && (status === 'delivered' || status === 'read')
   )
 }
