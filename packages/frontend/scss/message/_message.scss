@@ -362,6 +362,10 @@ $info-text-max-width: 400px;
   .msg-container {
     /* make the whole container black, as videos always have a black background */
     background-color: #000;
+    .message-attachment-media {
+      /* nneeded to avoid metadata video controls overlap */
+      padding-bottom: 12px;
+    }
   }
 }
 

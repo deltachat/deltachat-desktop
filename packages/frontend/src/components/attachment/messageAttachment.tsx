@@ -172,9 +172,7 @@ export default function Attachment({
     }
     // the native fullscreen option is better right now so we don't need to open our own one
     return (
-      // content-below is always needed even if there is no text,
-      // because videos controls should not be overlapped by meta data
-      <div className={classNames('message-attachment-media', 'content-below')}>
+      <div className={classNames('message-attachment-media')}>
         <video
           className='attachment-content video-content'
           src={runtime.transformBlobURL(message.file)}
