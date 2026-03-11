@@ -10,6 +10,7 @@ import { useRpcFetch } from '../../hooks/useFetch'
 import { BackendRemote, onDCEvent } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 import asyncThrottle from '@jcoreio/async-throttle'
+import { shouldHideDeliveryStatus } from './messageFunctions'
 
 type Props = {
   messageId: T.Message['id']
@@ -101,7 +102,9 @@ export default function MessageMetaData(props: Props) {
 
       {chatType === 'OutBroadcast' && <ViewCount messageId={messageId} />}
 
-      {(direction === 'outgoing' || error !== null) && (
+      {((direction === 'outgoing' &&
+        !shouldHideDeliveryStatus(chatType, status)) ||
+        error !== null) && (
         <div className='delivery-status-wrapper'>
           {/* The main point of `role='status'` here is to let the user know
           that their message has been sent or delievered

@@ -12,6 +12,7 @@ import { selectedAccountId } from '../../ScreenController'
 import { parseAndRenderMessage } from '../message/MessageParser'
 import { useRovingTabindex } from '../../contexts/RovingTabindex'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { shouldHideDeliveryStatus } from '../message/messageFunctions'
 
 const log = getLogger('renderer/chatlist/item')
 
@@ -70,6 +71,7 @@ function Header({
 const Message = React.memo<
   Pick<
     ChatListItemType,
+    | 'chatType'
     | 'summaryStatus'
     | 'summaryText1'
     | 'summaryText2'
@@ -78,6 +80,7 @@ const Message = React.memo<
     | 'isContactRequest'
   >
 >(function ({
+  chatType,
   summaryStatus,
   summaryText1,
   summaryText2,
@@ -116,9 +119,10 @@ const Message = React.memo<
           {window.static_translate('chat_archived_label')}
         </div>
       )}
-      {!isArchived && !isContactRequest && status && (
-        <div className={classNames('status-icon', status)} />
-      )}
+      {!isArchived &&
+        !isContactRequest &&
+        !shouldHideDeliveryStatus(chatType, status) &&
+        status && <div className={classNames('status-icon', status)} />}
       {!isContactRequest && (
         <FreshMessageCounter counter={freshMessageCounter} />
       )}
@@ -370,6 +374,7 @@ function RegularChatListItem({
         />
 
         <Message
+          chatType={chat.chatType}
           summaryStatus={chat.summaryStatus}
           summaryText1={chat.summaryText1}
           summaryText2={chat.summaryText2}
