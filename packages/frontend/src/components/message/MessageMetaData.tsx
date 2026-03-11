@@ -100,7 +100,11 @@ export default function MessageMetaData(props: Props) {
       />
       <span className='spacer' />
 
-      {chatType === 'OutBroadcast' && <ViewCount messageId={messageId} />}
+      {chatType === 'OutBroadcast' &&
+        // Don't show while sending, to reduce content shifting,
+        // because we'd be showing the "sending..." icon then,
+        // which we'll then hide when the message is delivered.
+        status !== 'sending' && <ViewCount messageId={messageId} />}
 
       {((direction === 'outgoing' &&
         !shouldHideDeliveryStatus(chatType, status)) ||
