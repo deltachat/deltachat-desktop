@@ -60,6 +60,8 @@ export default function Attachment({
     }
   }
 
+  const maxStickerSize = 200
+
   /**
    * height has to be calculated before images are loaded to enable
    * the virtual list to calculate the correct height of all messages
@@ -80,10 +82,9 @@ export default function Attachment({
     const minHeight = 50 // needed for readable footer
     const maxLandscapeWidth = 450 // also set by css
     const maxPortraitHeight = 450 // also set by css
-    const stickerHeight = 200
 
     if (message.viewType === 'Sticker') {
-      return stickerHeight
+      return maxStickerSize
     }
 
     const height = message.dimensionsHeight
@@ -153,6 +154,7 @@ export default function Attachment({
           )}
           src={runtime.transformBlobURL(message.file)}
           height={calculateHeight(message)}
+          width={message.viewType === 'Sticker' ? maxStickerSize : undefined}
         />
       </button>
     )
