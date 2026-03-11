@@ -90,6 +90,7 @@ $info-text-max-width: 400px;
     padding-bottom: 10px;
 
     .msg-body {
+      min-width: 150px;
       &.call {
         > .text {
           --call-icon-size: 24px;
