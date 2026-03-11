@@ -260,7 +260,8 @@ $info-text-max-width: 400px;
     }
 
     .date,
-    .edited {
+    .edited,
+    .viewCount {
       color: var(--messageMetadataIncoming);
     }
   }
@@ -283,7 +284,8 @@ $info-text-max-width: 400px;
 
   .metadata:not(.with-image-no-caption) {
     .date,
-    .edited {
+    .edited,
+    .viewCount {
       color: var(--messageOutgoingStatusColor);
     }
 
@@ -392,7 +394,8 @@ $info-text-max-width: 400px;
 
   .metadata {
     .date,
-    .edited {
+    .edited,
+    .viewCount {
       font-size: 11px;
       color: white;
     }

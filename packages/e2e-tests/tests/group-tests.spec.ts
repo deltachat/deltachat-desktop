@@ -647,9 +647,11 @@ test('create channel and add members', async ({ browserName }) => {
   const channelMsg = 'Hello channel!' + Math.random()
   await page.locator('textarea.create-or-edit-message-input').fill(channelMsg)
   await page.locator('button.send-button').click()
-  await expect(
-    page.locator('#message-list li.message-wrapper').last()
-  ).toContainText(channelMsg)
+  const msg = page.locator('#message-list li.message-wrapper').last()
+  await expect(msg).toContainText(channelMsg)
+
+  const viewCount = msg.getByRole('status').filter({ hasText: '👁️' })
+  await expect(viewCount).toHaveText('👁️0')
 
   // userB has 1 new notification now
   const badge = page
@@ -666,6 +668,9 @@ test('create channel and add members', async ({ browserName }) => {
       .locator('#message-list li.message-wrapper')
       .filter({ hasText: channelMsg })
   ).toBeVisible()
+
+  await switchToProfile(page, userA.id)
+  await expect(viewCount).toHaveText('👁️1')
 })
 
 test('accept or decline channel invite', async ({ browserName }) => {

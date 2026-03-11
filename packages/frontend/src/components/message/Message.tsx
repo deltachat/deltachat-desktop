@@ -982,6 +982,7 @@ export default function Message(props: {
             })}
           >
             <MessageMetaData
+              messageId={message.id}
               fileMime={fileMime}
               direction={direction}
               status={status}
@@ -995,6 +996,7 @@ export default function Message(props: {
               isSavedMessage={isOrHasSavedMessage}
               onClickError={openMessageInfo.bind(null, openDialog, message)}
               viewType={message.viewType}
+              chatType={chat.chatType}
               tabindexForInteractiveContents={tabindexForInteractiveContents}
             />
             <div

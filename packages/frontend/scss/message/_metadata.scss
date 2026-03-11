@@ -16,7 +16,8 @@
     font-weight: bold;
 
     .date,
-    .edited {
+    .edited,
+    .viewCount {
       color: white;
     }
 
@@ -59,7 +60,8 @@
   }
 
   .date,
-  .edited {
+  .edited,
+  .viewCount {
     font-size: 11.5px;
     line-height: 16px;
     letter-spacing: 0.3px;
@@ -68,6 +70,18 @@
   .edited {
     // Assumes that there is always a date after it.
     margin-inline-end: 0.5ch;
+  }
+  .viewCount {
+    margin-inline-start: 1ch;
+
+    // Reduce content shifting during loading.
+    // Works for two-digit view counts.
+    min-width: 4.5ch;
+    text-align: end;
+    .viewCountValue {
+      min-width: 1.5ch;
+      display: inline-block;
+    }
   }
 
   .spacer {
