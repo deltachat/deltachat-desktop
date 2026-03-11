@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useEffectEvent, useMemo } from 'react'
 import classNames from 'classnames'
 import { T } from '@deltachat/jsonrpc-client'
 
@@ -6,8 +6,13 @@ import Timestamp from '../conversations/Timestamp'
 import { isImage, isVideo } from '../attachment/Attachment'
 import { msgStatus } from '../../types-app'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
+import { useRpcFetch } from '../../hooks/useFetch'
+import { BackendRemote, onDCEvent } from '../../backend-com'
+import { selectedAccountId } from '../../ScreenController'
+import asyncThrottle from '@jcoreio/async-throttle'
 
 type Props = {
+  messageId: T.Message['id']
   encrypted: boolean
   fileMime: string | null
   direction?: 'incoming' | 'outgoing'
@@ -21,6 +26,7 @@ type Props = {
   onClickError?: () => void
   tabindexForInteractiveContents: -1 | 0
   viewType: T.Viewtype
+  chatType: T.ChatType
   isSavedMessage: boolean
 }
 
@@ -28,6 +34,7 @@ export default function MessageMetaData(props: Props) {
   const tx = useTranslationFunction()
 
   const {
+    messageId,
     encrypted,
     fileMime,
     direction,
@@ -41,6 +48,7 @@ export default function MessageMetaData(props: Props) {
     onClickError,
     tabindexForInteractiveContents,
     viewType,
+    chatType,
     isSavedMessage,
   } = props
 
@@ -90,6 +98,9 @@ export default function MessageMetaData(props: Props) {
         module='date'
       />
       <span className='spacer' />
+
+      {chatType === 'OutBroadcast' && <ViewCount messageId={messageId} />}
+
       {(direction === 'outgoing' || error !== null) && (
         <div className='delivery-status-wrapper'>
           {/* The main point of `role='status'` here is to let the user know
@@ -140,6 +151,54 @@ export default function MessageMetaData(props: Props) {
           )}
         </div>
       )}
+    </div>
+  )
+}
+
+function ViewCount(props: { messageId: number }) {
+  const viewCountFetch = useRpcFetch(
+    useMemo(
+      () =>
+        asyncThrottle(
+          (
+            ...args: Parameters<
+              typeof BackendRemote.rpc.getMessageReadReceiptCount
+            >
+          ) => BackendRemote.rpc.getMessageReadReceiptCount(...args),
+          250
+        ),
+      []
+    ),
+    [selectedAccountId(), props.messageId]
+  )
+
+  const refreshViewCount = useEffectEvent(() => viewCountFetch?.refresh())
+  useEffect(() => {
+    return onDCEvent(selectedAccountId(), 'MsgRead', event => {
+      if (event.msgId !== props.messageId) {
+        return
+      }
+      refreshViewCount()
+    })
+  }, [props.messageId])
+
+  return (
+    <div
+      role='status'
+      aria-atomic='true'
+      aria-busy={
+        viewCountFetch.loading && viewCountFetch.lingeringResult == null
+      }
+      className='viewCount'
+    >
+      <span aria-label='👁️'>👁️</span>
+      <span className='viewCountValue'>
+        {viewCountFetch.lingeringResult?.ok === false
+          ? '?'
+          : viewCountFetch.lingeringResult == null
+            ? '⏳'
+            : viewCountFetch.lingeringResult.value}
+      </span>
     </div>
   )
 }
