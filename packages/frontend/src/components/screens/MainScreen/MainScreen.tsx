@@ -14,9 +14,7 @@ import ChatList from '../../chat/ChatList'
 import { Avatar } from '../../Avatar'
 import ConnectivityToast from '../../ConnectivityToast'
 import MailingListProfile from '../../dialogs/MailingListProfile'
-import SettingsStoreInstance, {
-  useSettingsStore,
-} from '../../../stores/settings'
+import { useSettingsStore } from '../../../stores/settings'
 import { BackendRemote, onDCEvent, Type } from '../../../backend-com'
 import Button from '../../Button'
 import Icon from '../../Icon'
@@ -235,11 +233,6 @@ export default function MainScreen({ accountId }: Props) {
       lastUsedAppsFetch?.refresh()
     })
   }, [accountId, lastUsedAppsFetch])
-
-  useEffect(() => {
-    // Make sure it uses new version of settings store instance
-    SettingsStoreInstance.effect.load()
-  }, [])
 
   const isSearchActive = queryStr.length > 0 || queryChatId !== null
   const showArchivedChats = !isSearchActive && archivedChatsSelected
