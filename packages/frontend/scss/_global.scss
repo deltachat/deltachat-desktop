@@ -75,6 +75,9 @@ button {
   font-size: inherit;
   user-select: none;
 }
+button:disabled {
+  cursor: default;
+}
 
 a {
   color: var(--globalLinkColor);
