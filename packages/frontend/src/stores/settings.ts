@@ -25,6 +25,7 @@ export interface SettingsStoreState {
       media_quality: string
       is_chatmail: '0' | '1'
       who_can_call_me: WhoCanCallMe
+      'ui.mentions_enabled': '0' | '1'
     }[P]
   }
   desktopSettings: DesktopSettingsType
@@ -46,6 +47,7 @@ const settingsKeys = [
   'media_quality',
   'is_chatmail',
   'who_can_call_me',
+  'ui.mentions_enabled',
 ] as const
 
 export const enum WhoCanCallMe {
@@ -53,6 +55,9 @@ export const enum WhoCanCallMe {
   Contacts = '1',
   Nobody = '2',
 }
+
+export const mentionsEnabledDefaultVal: SettingsStoreState['settings']['ui.mentions_enabled'] =
+  '1'
 
 class SettingsStore extends Store<SettingsStoreState | null> {
   reducer = {
@@ -130,6 +135,10 @@ class SettingsStore extends Store<SettingsStoreState | null> {
         C.DC_CONTACT_ID_SELF
       )
       const desktopSettings = await runtime.getDesktopSettings()
+
+      if (settings['ui.mentions_enabled'] == null) {
+        settings['ui.mentions_enabled'] = mentionsEnabledDefaultVal
+      }
 
       const rc = runtime.getRC_Config()
       this.reducer.setState({

@@ -4,7 +4,9 @@ import { NOTIFICATION_TYPE } from '../../../shared/constants'
 import { BackendRemote } from '../backend-com'
 import { isImage } from '../components/attachment/Attachment'
 import { runtime } from '@deltachat-desktop/runtime-interface'
-import SettingsStoreInstance from '../stores/settings'
+import SettingsStoreInstance, {
+  mentionsEnabledDefaultVal,
+} from '../stores/settings'
 import AccountNotificationStoreInstance from '../stores/accountNotifications'
 
 import { C, type T } from '@deltachat/jsonrpc-client'
@@ -345,6 +347,17 @@ async function flushNotifications(accountId: number) {
     .filter(e => e.muted)
     .map(e => e.id)
 
+  let isMentionsEnabled: undefined | boolean
+  async function getIsMentionsEnabled(): Promise<boolean> {
+    if (isMentionsEnabled == undefined) {
+      const str =
+        (await BackendRemote.rpc.getConfig(accountId, 'ui.mentions_enabled')) ??
+        mentionsEnabledDefaultVal
+      isMentionsEnabled = str === '1'
+    }
+    return isMentionsEnabled
+  }
+
   const filteredNotifications = (
     await Promise.all(
       notifications.map(async notification => {
@@ -353,7 +366,7 @@ async function flushNotifications(accountId: number) {
         }
         // muted chat - only show if it's a mention and mentions are enabled
         // see  https://github.com/deltachat/interface/pull/78#issuecomment-2536719734
-        if (SettingsStoreInstance.state?.desktopSettings.isMentionsEnabled) {
+        if (await getIsMentionsEnabled()) {
           const isMention = await notificationIsMention(accountId, notification)
           if (isMention) {
             const chat = await BackendRemote.rpc.getBasicChatInfo(

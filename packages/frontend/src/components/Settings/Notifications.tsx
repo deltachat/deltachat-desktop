@@ -17,6 +17,7 @@ import SettingsStoreInstance, {
   WhoCanCallMe,
 } from '../../stores/settings'
 import useDialog from '../../hooks/dialog/useDialog'
+import CoreSettingsSwitch from './CoreSettingsSwitch'
 
 type Props = {
   desktopSettings: DesktopSettingsType
@@ -111,8 +112,8 @@ export default function Notifications({ desktopSettings }: Props) {
           AccountNotificationStoreInstance.effect.setMuted(accountId, !isMuted)
         }}
       />
-      <DesktopSettingsSwitch
-        settingsKey='isMentionsEnabled'
+      <CoreSettingsSwitch
+        settingsKey='ui.mentions_enabled'
         label={tx('pref_mention_notifications')}
         description={tx('pref_mention_notifications_explain')}
         disabled={isMuted || !desktopSettings['notifications']}
