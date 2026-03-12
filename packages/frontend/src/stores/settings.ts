@@ -121,15 +121,15 @@ class SettingsStore extends Store<SettingsStoreState | null> {
       if (accountId === undefined) {
         throw new Error('can not load settings when no account is selected')
       }
-      const settings = (await BackendRemote.rpc.batchGetConfig(
-        accountId,
-        settingsKeys as unknown as Array<(typeof settingsKeys)[number]>
-      )) as SettingsStoreState['settings']
-      const selfContact = await BackendRemote.rpc.getContact(
-        accountId,
-        C.DC_CONTACT_ID_SELF
-      )
-      const desktopSettings = await runtime.getDesktopSettings()
+
+      const [settings, selfContact, desktopSettings] = await Promise.all([
+        BackendRemote.rpc.batchGetConfig(
+          accountId,
+          settingsKeys as unknown as Array<(typeof settingsKeys)[number]>
+        ) as Promise<SettingsStoreState['settings']>,
+        BackendRemote.rpc.getContact(accountId, C.DC_CONTACT_ID_SELF),
+        runtime.getDesktopSettings(),
+      ])
 
       const rc = runtime.getRC_Config()
       this.reducer.setState({
