@@ -146,8 +146,6 @@ export default class ScreenController extends Component {
       await this.unSelectAccount()
       this.selectedAccountId = accountId
       ;(window.__selectedAccountId as number) = accountId
-      // forcing to load settings here so when we for example switch to Settings
-      // from context menu they're already present and we avoid crashing
       SettingsStoreInstance.effect.load()
     } else {
       log.info('account is already selected')
