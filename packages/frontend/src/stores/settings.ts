@@ -97,7 +97,7 @@ class SettingsStore extends Store<SettingsStoreState | null> {
       this.setState(state => {
         if (state === null) {
           this.log.warn(
-            'trying to update local version of desktop settings object, but it was not loaded yet'
+            'trying to update local version of core settings object, but it was not loaded yet'
           )
           return
         }
