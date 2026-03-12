@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+  useEffectEvent,
+  useMemo,
+  useState,
+} from 'react'
 import classNames from 'classnames'
 import { filesize } from 'filesize'
 import moment from 'moment'
@@ -8,7 +14,7 @@ import { getLogger } from '../../../../shared/logger'
 import useTranslationFunction from '../../hooks/useTranslationFunction'
 
 import styles from './styles.module.scss'
-import { BackendRemote } from '../../backend-com'
+import { BackendRemote, onDCEvent } from '../../backend-com'
 import { selectedAccountId } from '../../ScreenController'
 
 import {
@@ -108,21 +114,31 @@ export function AppPicker({ onAppSelected }: Props) {
   }, [])
   const appsFetch = useFetch(fetchApps, [])
   const apps = appsFetch.result?.ok ? appsFetch.result.value : null
-
   const appsFetchFailed = appsFetch.result?.ok === false
+
   const connectivityFetch = useRpcFetch(BackendRemote.rpc.getConnectivity, [
     selectedAccountId(),
   ])
-  const connectivityFetchRefresh = connectivityFetch?.refresh
+  const connectivityFetchRefresh = useEffectEvent(() =>
+    connectivityFetch?.refresh()
+  )
   useEffect(() => {
-    if (!appsFetchFailed) {
-      return
-    }
-    connectivityFetchRefresh()
-  }, [appsFetchFailed, connectivityFetchRefresh])
+    return onDCEvent(
+      selectedAccountId(),
+      'ConnectivityChanged',
+      connectivityFetchRefresh
+    )
+  }, [])
+
   const isOffline =
     connectivityFetch.result?.ok === true &&
     connectivityFetch.result.value !== C.DC_CONNECTIVITY_CONNECTED
+  const refreshApps = useEffectEvent(appsFetch.refresh)
+  useEffect(() => {
+    if (appsFetchFailed && !isOffline) {
+      refreshApps()
+    }
+  }, [appsFetchFailed, isOffline])
 
   useEffect(() => {
     const loadIcons = async () => {
