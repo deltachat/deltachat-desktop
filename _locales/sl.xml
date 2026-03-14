@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <!-- common strings without special context -->
+    <string name="app_name">Delta Chat</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Prekliči</string>
+    <string name="clear_search">Počisti iskanje</string>
+    <!-- a noun, used on a button, short for "show link" -->
+    <string name="link">Povezava</string>
+    <!-- "scan" in the meaning of "scan QR code" -->
+    <string name="scan">Skeniraj</string>
+    <string name="yes">Da</string>
+    <string name="no">Ne</string>
+    <string name="select">Izberi</string>
+    <string name="on">Prižgano</string>
+    <string name="off">Ugasnjeno</string>
+    <string name="def">Privzeto</string>
+    <string name="default_value">Privzeto (%1$s)</string>
+    <string name="default_value_as_above">Privzeto (enako kot zgoraj)</string>
+    <string name="custom">Po meri</string>
+    <string name="none">Nič</string>
+    <string name="automatic">Samodejno</string>
+    <string name="strict">Strogo</string>
+    <string name="open">Odpri</string>
+    <string name="download">Prenesi</string>
+    <string name="downloading">Prenašanje...</string>
+    <string name="open_attachment">Odpri priponko</string>
+    <string name="join">Pridruži se</string>
+    <string name="rejoin">Pridruži se ponovno</string>
+    <string name="delete">Izbriši</string>
+    <string name="delete_for_me">Izbriši le zame</string>
+    <string name="delete_for_everyone">Izbriši za vse</string>
+    <string name="info">Info</string>
+    <string name="update">Posodobi</string>
+    <string name="emoji">Emoji</string>
+    <string name="attachment">Priponka</string>
+    <!-- the placeholder will be replaced by the name of the image or file to attach -->
+    <string name="ask_attach">Pripni \"%1$s\"?</string>
+    <string name="back">Nazaj</string>
+    <string name="close">Zapri</string>
+    <string name="close_window">Zapri okno</string>
+    <string name="forward">Posreduj</string>
+    <string name="create">Ustvari</string>
+    <string name="reset">Ponastavi</string>
+    <string name="later">Kasneje</string>
+    <!-- "Resend" means "Sending the selected message(s) again to the same chat". The string is used in a menu and should be as short as possible. Resending may be needed after failures or to repost old messages to new members. -->
+    <string name="resend">Pošlji ponovno</string>
+    <string name="edited">Urejeno</string>
+    <string name="edit_message">Uredi sporočilo</string>
+    <!-- Verb "to archive", as in "put a chat in the archive", not a noun "The Archive". -->
+    <string name="archive">Arhiviraj</string>
+    <!-- Verb "to unarchive", as in "remove a chat from the archive", opposite of the previous string -->
+    <string name="unarchive">Vrni iz arhiva</string>
+    <!-- Verb "to mute". used to mute a chat, so that it is silenced e.g. does not make noise or cause notifications -->
+    <string name="mute">Utišaj</string>
+    <!-- Adjective "smth is muted". used to describe a muted or silenced chat, that e.g. does not make noise or cause notifications -->
+    <string name="muted">Utišan</string>
+    <string name="ephemeral_messages">Izginjajoča sporočila</string>
+    <string name="ephemeral_messages_hint">Velja za vsa sporočila v tem klepetu. Sporočila lahko še vedno kopirajo, shranijo ali posredujejo.</string>
+    <string name="save">Shrani</string>
+    <string name="chat">Klepet</string>
+    <string name="media">Večpredstavnost</string>
+    <string name="apps_and_media">Aplikacije in večpredstavnost</string>
+    <string name="profile">Profil</string>
+    <string name="all_profiles">Vsi profili</string>
+    <string name="current_profile">Trenuten profil</string>
+    <string name="main_menu">Glavni meni</string>
+    <string name="start_chat">Začni klepet</string>
+    <string name="show_full_message">Prikaži celotno sporočilo...</string>
+    <!-- Stay short here, say ~16 characters. The source string could also be "All Read", maybe that hint can make translations easier :) -->
+    <string name="mark_all_as_read">Označi vse kot prebrano</string>
+    <string name="mark_as_read">Označi kot prebrano</string>
+    <!-- Shortest text for "Mark as being read". In english, this could be "Read" (past tense of "to read"), in german, this could be "Gelesen". -->
+    <string name="mark_as_read_short">Prebrano</string>
+    <!-- Placeholder text when something is loading -->
+    <string name="loading">Nalaganje...</string>
+    <string name="hide">Skrij</string>
+    <string name="activate">Aktiviraj</string>
+    <string name="load_remote_content">Naloži oddaljene slike</string>
+    <!-- Possible answers to the question are: Never, Always, Once -->
+    <string name="load_remote_content_ask">Oddaljene slike vam lahko sledijo.\n\nTa nastavitev nastavitev omogoča tudi nalaganje fontov in sorodnih vsebin.\n\nOmogoči nalaganje oddaljenih slik?</string>
+    <string name="always">Vedno</string>
+    <string name="always_load_remote_images">Vedno naloži oddaljene slike</string>
+    <string name="once">Enkrat</string>
+    <string name="show_warning">Prikaži opozorilo</string>
+    <string name="not_now">Ne zdaj</string>
+    <string name="never">Nikoli</string>
+    <string name="one_moment">Trenutek...</string>
+    <string name="done">Končano</string>
+    <string name="undo">Razveljavi</string>
+    <!-- For the next view or as "continue". Should be as short as possible. -->
+    <string name="next">Naprej</string>
+    <string name="error">Napaka</string>
+    <string name="error_x">Napaka: %1$s</string>
+    <string name="no_app_to_handle_data">Ni bilo mogoče najti aplikacije za to vrsto podatkov.</string>
+    <string name="no_browser_installed">Brskalnik ni nameščen.</string>
+    <string name="file_not_found">Ni bilo mogoče najti \"%1$s\".</string>
+    <!-- the placeholder will be replaced by the name of a file -->
+    <string name="cannot_save_file">Ni bilo mogoče shraniti \"%1$s\".</string>
+    <string name="copied_to_clipboard">Kopirano v odložišče.</string>
+    <string name="contacts_headline">Stiki</string>
+    <string name="email_address">E-poštni naslov</string>
+    <string name="bad_email_address">Neveljaven elektronski naslov.</string>
+    <string name="password">Geslo</string>
+    <string name="now">Zdaj</string>
+    <!-- Headline for destructive actions with no undo. Could also be "Caution" or "Warning". -->
+    <string name="danger">Pozor</string>
+    <string name="today">Danes</string>
+    <string name="yesterday">Včeraj</string>
+    <string name="this_week">Ta teden</string>
+    <string name="this_month">Ta mesec</string>
+    <string name="last_week">Zadnji teden</string>
+    <string name="last_month">Zadnji mesec</string>
+    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by date or time, resulting in "Last seen at 12:13 AM" or "Last seen Nov 12" -->
+    <string name="last_seen_at">Nazadnje viden %1$s</string>
+    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by a relative point in time as "3 minutes ago" (see https://momentjs.com for more examples and languages)-->
+    <string name="last_seen_relative">Nazadnje viden %1$s</string>
+    <string name="last_seen_unknown">Nazadnje viden: neznano</string>
+    <!-- Shown beside messages that are "N minutes old". Prefer short strings, or well-known abbreviations. -->
+    <plurals name="n_minutes">
+        <item quantity="one">%d min</item>
+        <item quantity="two">%d min</item>
+        <item quantity="few">%d min</item>
+        <item quantity="other">%d min</item>
+    </plurals>
+
+    <!-- Shown beside messages that are "N hours old". Prefer short strings, or well-known abbreviations. -->
+    <plurals name="n_hours">
+        <item quantity="one">%d ura</item>
+        <item quantity="two">%d uri</item>
+        <item quantity="few">%d ure</item>
+        <item quantity="other">%d ur</item>
+    </plurals>
+    <plurals name="n_chats">
+        <item quantity="one">%d klepet</item>
+        <item quantity="two">%d pogovora</item>
+        <item quantity="few">%d klepeti</item>
+        <item quantity="other">%d klepetov</item>
+    </plurals>
+    <plurals name="n_contacts">
+        <item quantity="one">%d stik</item>
+        <item quantity="two">%d stika</item>
+        <item quantity="few">%d stiki</item>
+        <item quantity="other">%d stikov</item>
+    </plurals>
+    <plurals name="n_messages">
+        <item quantity="one">%d sporočilo</item>
+        <item quantity="two">%d sporočili</item>
+        <item quantity="few">%d sporočila</item>
+        <item quantity="other">%d sporočil</item>
+    </plurals>
+    <plurals name="n_reactions">
+        <item quantity="one">%d reakcija</item>
+        <item quantity="two">%d reakciji</item>
+        <item quantity="few">%d reakcije</item>
+        <item quantity="other">%d reakcij</item>
+    </plurals>
+    <plurals name="n_members">
+        <item quantity="one">%d član</item>
+        <item quantity="two">%d člana</item>
+        <item quantity="few">%d člani</item>
+        <item quantity="other">%d članov</item>
+    </plurals>
+    <plurals name="n_recipients">
+        <item quantity="one">%d naročnik</item>
+        <item quantity="two">%d naročnika</item>
+        <item quantity="few">%d naročniki</item>
+        <item quantity="other">%d naročnikov</item>
+    </plurals>
+    <!-- Short form for "N Items Selected" -->
+    <plurals name="n_selected">
+        <item quantity="one">%d izbran</item>
+        <item quantity="two">%d izbrana</item>
+        <item quantity="few">%d izbrani</item>
+        <item quantity="other">%d izbranih</item>
+    </plurals>
+    <string name="selected_colon">Izbrano:</string>
+    <string name="self">Jaz</string>
+    <string name="draft">Osnutek</string>
+    <string name="image">Slika</string>
+    <!-- Used in summaries as "Draft: Reply", similar as "Draft: Image". Use a noun here, not a verb (not: "to reply") -->
+    <string name="reply_noun">Odziv</string>
+    <string name="gif">GIF</string>
+    <!-- "Stickers" as known from other messengers; in some languages, the English "Sticker" is fine. -->
+    <string name="sticker">Nalepka</string>
+    <string name="add_to_sticker_collection">Dodaj v zbirko nalepk</string>
+    <string name="add_stickers_instructions">Če želite dodati svoje nalepke, tapnite \"Odpri mapo z nalepkami,\" tam ustvarite podmapo ter vanjo prenesite svoje datoteke s slikami oz. nalepkami.</string>
+    <string name="open_sticker_folder">Odpri mapo z nalepkami</string>
+    <string name="images">Slike</string>
+    <!-- a noun, used for "Music" and other "Audio" files -->
+    <string name="audio">Zvok</string>
+    <string name="voice_message">Glasovno sporočilo</string>
+    <string name="forwarded">Posredovano</string>
+    <string name="forwarded_message">Posredovano sporočilo</string>
+    <!-- %1$s will be replaced by the name of the person who forwarded the message -->
+    <string name="forwarded_by">Posredoval/a %1$s</string>
+    <string name="video">Video</string>
+    <string name="documents">Dokumenti</string>
+    <string name="contact">Stik</string>
+    <string name="bot">Bot</string>
+    <string name="camera">Kamera</string>
+    <!-- As in "start a video recording" or "take a photo"; eg. the description of the "shutter button" in cameras -->
+    <string name="capture">Zajemi</string>
+    <string name="switch_camera">Zamenjaj kamero</string>
+    <string name="toggle_fullscreen">Preklopi celozaslonski način</string>
+    <string name="location">Lokacija</string>
+    <string name="locations">Lokacije</string>
+    <string name="gallery">Galerija</string>
+    <string name="images_and_videos">Slike in videoposnetki</string>
+    <string name="file">Datoteka</string>
+    <string name="files">Datoteke</string>
+    <string name="files_attach_hint">Pošlji originalne datoteke in ne stiskaj slik</string>
+    <!-- "Files" here means the "Files Selector App" or "Files Manager App" -->
+    <string name="choose_from_files">Izberi iz datotek</string>
+    <string name="choose_from_gallery">Izberi iz galerije</string>
+    <!-- "App" is used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <string name="webxdc_app">Aplikacija</string>
+    <!-- plural of "App"; used to present "Webxdc App" (https://webxdc.org) in a user friendly way. Please stay close to the original term and keep it short (it is used in menus with few screen space). -->
+    <string name="webxdc_apps">Aplikacije</string>
+    <string name="webxdc_store_url">Povezava do repozitorija z aplikacijami</string>
+    <string name="webxdc_store_url_explain">Nastavljena povezava se bo uporabljala za izbiro aplikacij namesto privzete.</string>
+    <string name="webxdc_draft_hint">Za deljenje tapni \"Pošlji\"</string>
+    <string name="home">Dom</string>
+    <string name="games">Videoigre</string>
+    <string name="tools">Orodja</string>
+    <string name="app_size">Velikost</string>
+    <!-- Used as a headline for a date. E.g. in the details of a mini app in the app picker -->
+    <string name="app_date_published">Objavljeno</string>
+    <string name="add_to_chat">Dodaj v klepet</string>
+    <!-- short for "Browse through the App Picker/Store/Catalogue"; could also be translated as "Discover" or "Search" -->
+    <string name="browse">Brskaj</string>
+    <string name="unknown">Neznano</string>
+
+    <string name="green">Zeleno</string>
+    <string name="red">Rdeče</string>
+    <string name="blue">Modro</string>
+    <string name="orange">Oranžno</string>
+    <string name="cyan">Sinja</string>
+    <string name="purple">Vijolično</string>
+    <string name="magenta">Magenta</string>
+    <string name="white">Belo</string>
+
+    <string name="zoom">Povečava</string>
+    <string name="extra_small">Zelo majhno</string>
+    <string name="small">Majhno</string>
+    <string name="normal">Normalno</string>
+    <string name="large">Veliko</string>
+    <string name="extra_large">Zelo veliko</string>
+
+    <string name="fast">Hitro</string>
+    <string name="slow">Počasno</string>
+
+    <!-- menu labels (or icon, buttons...) -->
+    <string name="menu_new_contact">Nov stik</string>
+    <string name="menu_new_classic_contact">Dodak stik ročno</string>
+    <string name="menu_new_chat">Nov klepet</string>
+    <string name="menu_new_group">Nova skupina</string>
+    <!-- "Chat" is a verb here, "Message to" would also fit. the string might be used in the "New Chat" screen above the contact list -->
+    <string name="chat_with">Klepetaj z...</string>
+    <string name="clone_chat">Kloniraj klepet</string>
+    <string name="menu_archive_chat">Arhiviraj klepet</string>
+    <string name="menu_delete_chat">Zbriši klepet</string>
+    <!-- Command to delete all messages in a chat. The chat itself will not be deleted but will be empty afterwards, so make sure to be different from "Delete Chat" here. "Clear" is a verb here, "Empty Chat" would also be fine (eg. in German "Chat leeren") -->
+    <string name="clear_chat">Izbriši vsa sporočila v klepetu</string>
+    <string name="share_invite_link_explain">Vsakdo s to povezavo lahko vidi vaš profil ter začne klepet v vami. Delite jo le z osebami, ki jim zaupate.</string>
+    <!-- %1$s is replaced by the user's invitation link ("https://i.delta.chat/...") -->
+    <string name="invite_friends_text">Kontraktiraj me na Delta Chat:\n%1$s</string>
+    <string name="menu_reply">Odziv na sporočilo</string>
+    <!-- Command to jump to the original message corresponding to a gallery image or document -->
+    <string name="show_in_chat">Prikaži v klepetu</string>
+    <string name="show_app_in_chat">Prikaži aplikacijo v klepetu</string>
+    <string name="select_chat">Izberi klepet</string>
+    <string name="reply_privately">Odzovi se zasebno</string>
+    <string name="mute_forever">Utišaj zavedno</string>
+
+    <string name="ask_start_chat_with">Začni klepet z \"%1$s\"?</string>
+    <!-- %1$s is replaced by a comma-separated list of names -->
+    <string name="ask_remove_members">Odstrani \"%1$s\" iz skupine?</string>
+    <string name="contacts_type_email_above">Spodaj vnesite e-poštni naslov</string>
+
+
+    <string name="chat_record_explain">Tapni in drži za snemanje glasovnega sporočila, spusti za pošiljanje.</string>
+    <string name="chat_share_with_title">Deli z...</string>
+    <string name="archive_empty_hint">Arhivirani klepeti bodo prikazani tu.</string>
+    <string name="saved_messages_explain">• Posreduj sporočila sem za lažji dostop\n\n• Delaj zapiske ali si shrani glasovna sporočila\n\n• Pripni datoteke za shrambo</string>
+    <!-- this is a warning that is shown when one tries to send something to a chat that is not yet accepted. -->
+    <string name="accept_request_first">Najprej sprejmite prošnjo za klepet.</string>
+    <string name="search_in_chat">Išči v klepetu</string>
+    <string name="search_explain">Išči med klepeti, stiki in sporočili</string>
+    <string name="tab_contact">Stik</string>
+    <string name="tab_group">Skupina</string>
+    <string name="tab_gallery">Galerija</string>
+    <string name="tab_docs">Dokumentacija</string>
+    <string name="tab_links">Povezave</string>
+    <string name="tab_map">Zemljevid</string>
+    <string name="tab_audio_empty_hint">Zvočne datoteke in glasovna sporočila, ki so pripeta k temu pogovoru, bodo prikazana tu.</string>
+    <string name="instant_onboarding_other_server">Prikaži Chatmail strežnike</string>
+    <string name="login_error_mail">Vnesite veljaven e-poštni naslov</string>
+    <string name="login_error_required_fields">Vnesi veljaven e-poštni naslov in geslo zanj</string>
+    <string name="pref_server">Strežnik</string>
+    <string name="pref_encryption">Šifriranje</string>
+    <string name="pref_chats">Klepeti</string>
+    <string name="pref_show_emails_no">Ne, le klepeti</string>
+    <string name="pref_show_emails_accepted_contacts">Za sprejete stike</string>
+    <string name="pref_show_emails_all">Vsi</string>
+    <string name="pref_experimental_features">Eksperimentalne funkcije</string>
+    <string name="pref_background_default">Privzeta slika</string>
+    <string name="pref_background_default_color">Privzeta barva</string>
+    <!-- Reactions -->
+    <string name="reactions">Reakcije</string>
+    <!-- Verb, the action of adding a "Reaction" to a message. Used eg. in context menus, similar to "Reply" or "Forward" -->
+    <string name="react">Reagiraj</string>
+    <!-- %1$s will be replaced by an emoji. %2$s will be replaced by message summary (the summary is often long and whole string gets truncated; words after %2$s will often not being visible). Eg. 'You reacted 👍 to "Found my suitcase"'. Use less than 20 characters, otherwise the string will be truncated too soon and too few information are shown. Do not try to translate "reacted to" too strict. Depending on the language, "added 👍 to" or "gave 👍 to" or just "👍 to" may be shorter and/or clearer and work as well. -->
+    <string name="reaction_by_you">Reagiral si %1$s na \"%2$s\"</string>
+    <!-- %1$s will be replaced a name. %2$s will be replaced by an emoji. %3$s will be replaced by message summary (the summary is often long and whole string gets truncated; words after %3$s will often not being visible). Eg. 'Alice reacted 👍 to "Nice photos"'. Use less than 20 characters, otherwise the string will be truncated too soon and too few information are shown. Do not try to translate "reacted to" too strict. Depending on the language, "added 👍 to" or "gave 👍 to" or just "👍 to" may be shorter and/or clearer work as well. -->
+    <string name="reaction_by_other">%1$s je reagiral %2$s na \"%3$s\"</string>
+
+    <!-- automatically delete message -->
+    <string name="delete_old_messages">Briši stara sporočila</string>
+    <string name="autodel_device_title">Briši sporočila z naprave</string>
+    <string name="autodel_server_title">Briši sporočila s strežnika</string>
+    <string name="secure_join_wait">Vzpostavljanje povezave, prosimo počakajte...</string>
+    <!-- notifications  -->
+    <string name="notify_reply_button">Odziv</string>
+    <string name="InfoPlist_NSMicrophoneUsageDescription">Delta Chat uporablja vaš mikrofon za snemanje glasovnih sporočil in videoposnetkov.</string>
+    </resources>

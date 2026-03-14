@@ -78,7 +78,7 @@
     <string name="activate">Aktivera</string>
     <string name="load_remote_content">Läs in fjärrbilder</string>
     <!-- Possible answers to the question are: Never, Always, Once -->
-    <string name="load_remote_content_ask">Fjärrbilder kan användas för att spåra dig.\n\nInställningen att fonter och annat innehåll laddas in. Även om inställningen är inaktiverad kan eventuellt inbäddade eller cachade fjärrbilder visas.\n\nLadda in fjärrbilder?</string>
+    <string name="load_remote_content_ask">Fjärrbilder kan användas för att spåra dig.\n\nInställningen att fonter och annat innehåll laddas in. Även om inställningen är inaktiverad kan eventuellt inbäddade eller cachade fjärrbilder visas.\n\nVill du läsa in fjärrbilder?</string>
     <string name="always">Alltid</string>
     <string name="always_load_remote_images">Läs alltid in fjärrbilder</string>
     <string name="once">en gång</string>
@@ -118,16 +118,13 @@
     <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by a relative point in time as "3 minutes ago" (see https://momentjs.com for more examples and languages)-->
     <string name="last_seen_relative">Sågs senast %1$s</string>
     <string name="last_seen_unknown">Sågs senast: Okänt</string>
-    <!-- Shown in call duration. Avoid abbreviations, prefer full words ex. "N seconds". -->
-    <plurals name="n_seconds_ext">
-        <item quantity="one">%d sekund</item>
-        <item quantity="other">%d sekunder</item>
+    <!-- Call duration as shown in the call bubbles. There is some risk to mix with the sending time, so the word "Duration" may be helpful. Might also be "Duration: %d minutes", "%d-minute duration", "%d-minute length" or "%d-minute call" -->
+    <plurals name="call_duration_minutes">
+        <item quantity="one">%d minuts fördröjning</item>
+        <item quantity="other">%d minuters fördröjning</item>
     </plurals>
-    <!-- Shown in call duration. Avoid abbreviations, prefer full words ex. "N minutes". -->
-    <plurals name="n_minutes_ext">
-        <item quantity="one">%d minut</item>
-        <item quantity="other">%d minuter</item>
-    </plurals>
+    <!-- Call duration as shown in the call bubbles in case the call is less than one minute. If the context is not clear enough, one may want to add the word "Duration". -->
+    <string name="call_duration_less_than_a_minute">Mindre än 1 minut</string>
     <!-- Shown beside messages that are "N minutes old". Prefer short strings, or well-known abbreviations. -->
     <plurals name="n_minutes">
         <item quantity="one">%d min</item>
@@ -180,6 +177,9 @@
     <string name="add_to_sticker_collection">Lägg till i dekalsamling</string>
     <string name="add_stickers_instructions">För att lägga till dekaler trycker du på \"Öppna dekalmapp\", skapar en undermapp för ditt dekalpaket och drar bild- och dekalfiler dit.</string>
     <string name="open_sticker_folder">Öppna dekalmapp</string>
+    <string name="ask_add_sticker_to_collection">Vill du lägga till denna dekal till din samling?</string>
+    <string name="ask_delete_sticker">Vill du ta bort denna dekal?</string>
+    <string name="sticker_picker_empty_hint">Tryck på en dekal för att lägga till den här.</string>
     <string name="images">Bilder</string>
     <!-- a noun, used for "Music" and other "Audio" files -->
     <string name="audio">Ljud</string>
@@ -259,10 +259,13 @@
     <string name="channels">Kanaler</string>
     <!-- consider keeping the term "channel" as in WhatsApp or Telegram -->
     <string name="new_channel">Ny kanal</string>
-    <!-- deprecated -->
-    <string name="add_recipients">Lägg till mottagare</string>
     <!-- consider keeping the term "channel" as in WhatsApp or Telegram -->
     <string name="channel_name">Kanalnamn</string>
+    <!-- The number of times a message is shown in channels. Use what other messengers are using here, smth. as "N-times seen" or "1 Aufruf" (german) work as well, where "1 impression" or "1 hit" may sound too formal and may be more marketing slang. -->
+    <plurals name="n_views">
+        <item quantity="one">%d visning</item>
+        <item quantity="other">%d visningar</item>
+    </plurals>
     <string name="email">E-post</string>
     <!-- "New" as in "Create New Email"; shown together with "New Group" and "New Channel" -->
     <string name="new_email">Ny e-post</string>
@@ -278,11 +281,12 @@
     <string name="menu_add_attachment">Lägg till bilaga</string>
     <string name="menu_leave_group">Lämna grupp</string>
     <string name="menu_leave_channel">Lämna kanalen</string>
+    <string name="menu_leave_and_delete">Lämna &amp; ta bort för mig</string>
     <string name="menu_delete_chat">Ta bort chatt</string>
     <!-- Command to delete all messages in a chat. The chat itself will not be deleted but will be empty afterwards, so make sure to be different from "Delete Chat" here. "Clear" is a verb here, "Empty Chat" would also be fine (eg. in German "Chat leeren") -->
     <string name="clear_chat">Rensa chatt</string>
     <string name="delete_contact">Ta bort kontakt</string>
-    <string name="menu_delete_location">Ta bort denna plats?</string>
+    <string name="menu_delete_location">Vill du ta bort denna plats?</string>
     <string name="menu_message_details">Meddelandedetaljer</string>
     <string name="menu_copy_to_clipboard">Kopiera till urklipp</string>
     <string name="share_invite_link">Dela inbjudningslänk</string>
@@ -378,31 +382,35 @@
 
     <plurals name="ask_send_following_n_files_to">
         <item quantity="one">Skicka följande fil till %s?</item>
-        <item quantity="other">Skicka de följande filerna %d till %s ?</item>
+        <item quantity="other">Vill du skicka följande %d filer  till %s ?</item>
     </plurals>
     <string name="file_saved_to">Filen är sparad i \"%1$s\".</string>
 
     <!-- the action "to call someone", used as a tooltip for the "phone" icon. not: "the call" -->
     <string name="start_call">Ring upp</string>
+    <!-- Menu item to start an audio call; verbs as "start" are probably superfluous in many translations -->
     <string name="start_audio_call">Ljudsamtal</string>
+    <!-- Menu item to start a video call; verbs as "start" are probably superfluous in many translations -->
     <string name="start_video_call">Videosamtal</string>
     <!-- the action "to answer" or to "accept" or to "pick up" a call. not: "the answer" -->
     <string name="answer_call">Svara</string>
     <!-- the action "to decline" a call, not: "the decline" -->
     <string name="end_call">Avböj</string>
-    <!-- deprecated, use outgoing_audio_call or outgoing_video_call instead -->
-    <string name="outgoing_call">Utgående samtal</string>
+    <!-- Used in call bubbles, summaries, notifications -->
+    <string name="audio_call">Ljudsamtal</string>
+    <!-- Used in call bubbles, summaries, notifications -->
+    <string name="video_call">Videosamtal</string>
+    <!-- deprecated, use "Audio call" instead -->
     <string name="outgoing_audio_call">Utgående ljudsamtal</string>
+    <!-- deprecated, use "Video call" instead -->
     <string name="outgoing_video_call">Utgående videosamtal</string>
-    <!-- deprecated, use incoming_audio_call or incoming_video_call instead -->
-    <string name="incoming_call">Inkommande samtal</string>
+    <!-- deprecated, use "Audio call" instead -->
     <string name="incoming_audio_call">Inkommande ljudsamtal</string>
+    <!-- deprecated, use "Video call" instead -->
     <string name="incoming_video_call">Inkommande videosamtal</string>
     <string name="declined_call">Nekade samtal</string>
     <string name="canceled_call">Avbrutna samtal</string>
     <string name="missed_call">Missade samtal</string>
-    <!-- the first placeholder will be replaced by a date, the second placeholder by duration, example: "Thu, 08:12 pm, 2 minutes" -->
-    <string name="call_date_and_duration">%1$s, %2$s</string>
 
     <!-- get confirmations -->
     <!-- confirmation for leaving groups or channels. If a subject is needed, "Are you sure you want to leave the chat?" would work as well -->
@@ -417,16 +425,16 @@
         <item quantity="one">Vill du ta bort %d meddelande?</item>
         <item quantity="other">Vill du ta bort %d meddelanden?</item>
     </plurals>
-    <string name="ask_forward">Vidarebefordra meddelanden till %1$s?</string>
+    <string name="ask_forward">Vill du vidarebefordra meddelanden till %1$s?</string>
     <string name="ask_forward_multiple">Vill du vidarebefordra meddelanden till %1$d chattar?</string>
-    <string name="ask_export_attachment">Exportera bilagor? Exporterade bilagor tillåter andra appar på din enhet att komma åt dem.\n\nVill du fortsätta?</string>
-    <string name="ask_block_contact">Blockera den här kontakten? Du kommer inte att få fler meddelanden från den här kontakten.</string>
-    <string name="ask_unblock_contact">Avblockera den här kontakten? Du kommer återigen att kunna ta emot meddelanden från den här kontakten.</string>
-    <string name="ask_delete_contacts">Ta bort kontakter? Detta kommer att ta bort de valda kontakterna permanent.\n\nKontakter med pågående chattar och kontakter från systemets adressbok kan inte tas bort permanent.</string>
-    <string name="ask_delete_contact">Ta bort kontakten %1$s?\n\nKontakter med pågående chattar och kontakter från systemets adressbok kan inte tas bort permanent. </string>
-    <string name="ask_start_chat_with">Chatta med %1$s ?</string>
+    <string name="ask_export_attachment">Vill du exportera bilagor? Exporterade bilagor tillåter andra appar på din enhet att komma åt dem.\n\nVill du fortsätta?</string>
+    <string name="ask_block_contact">Vill du blockera den här kontakten? Du kommer inte att få fler meddelanden från den här kontakten.</string>
+    <string name="ask_unblock_contact">Vill du avblockera den här kontakten? Du kommer återigen att kunna ta emot meddelanden från den här kontakten.</string>
+    <string name="ask_delete_contacts">Vill du ta bort kontakter? Detta kommer att ta bort de valda kontakterna permanent.\n\nKontakter med pågående chattar och kontakter från systemets adressbok kan inte tas bort permanent.</string>
+    <string name="ask_delete_contact">Vill du ta bort kontakten %1$s?\n\nKontakter med pågående chattar och kontakter från systemets adressbok kan inte tas bort permanent. </string>
+    <string name="ask_start_chat_with">Vill du chatta med %1$s?</string>
     <!-- %1$s is replaced by a comma-separated list of names -->
-    <string name="ask_remove_members">Ta bort %1$s från gruppen?</string>
+    <string name="ask_remove_members">Vill du ta bort %1$s från gruppen?</string>
     <!-- %1$s is replaced by a comma-separated list of names -->
     <string name="ask_remove_from_channel">Vill du ta bort %1$s från kanalen?</string>
     <string name="open_url_confirmation">Vill du öppna denna länk?</string>
@@ -588,8 +596,6 @@
     <string name="incoming_messages">Inkommande meddelanden</string>
     <!-- Headline for the "Outbox" eg. in the "Connectivity" view -->
     <string name="outgoing_messages">Utgående meddelanden</string>
-    <!-- deprecated -->
-    <string name="storage_on_domain">Lagring på %1$s</string>
     <string name="connectivity">Anslutning</string>
     <!-- Shown in the title bar if the app is "Not connected"; prefer short strings. -->
     <string name="connectivity_not_connected">Inte ansluten</string>
@@ -718,8 +724,6 @@
 
 
     <!-- preferences -->
-    <string name="pref_using_custom">Använder anpassat: %s</string>
-    <string name="pref_using_default">Använder standard: %s</string>
     <string name="pref_profile_info_headline">Din profilinformation</string>
     <string name="pref_profile_photo">Profilbild</string>
     <string name="pref_blocked_contacts">Blockerade kontakter</string>
@@ -733,6 +737,7 @@
     <string name="pref_enter_sends">Returtangenten skickar</string>
     <string name="pref_enter_sends_explain">Tryck på returtangenten för att skicka textmeddelanden</string>
     <string name="pref_outgoing_media_quality">Utgående ljudkvalitet</string>
+    <string name="pref_outgoing_media_quality_hint">För att skicka originalkvalitet skall du bifoga media som en \"fil\". Detta använder betydligt mer data för dig och dina mottagare.</string>
     <string name="pref_outgoing_balanced">Balanserad</string>
     <string name="pref_outgoing_worse">Sämre kvalitet, mindre storlek</string>
     <string name="pref_vibrate">Vibrera</string>
@@ -743,6 +748,10 @@
     <string name="pref_notifications">Avisering</string>
     <string name="pref_mention_notifications">Omnämnanden</string>
     <string name="pref_mention_notifications_explain">Avisera meddelanden som riktas till dig, i tystade grupper, såsom svar eller reaktioner</string>
+    <!-- Title for the "Calls" notification setting. This is a plural noun, not a verb. -->
+    <string name="pref_calls">Samtal</string>
+    <!-- Details about what the "Calls" notification setting does -->
+    <string name="pref_calls_explain">Visa samtalsskärm vid inkommande samtal</string>
     <string name="pref_notifications_show">Visa</string>
     <string name="pref_notifications_priority">Prioritet</string>
     <string name="pref_notifications_explain">Aktivera systemavisering för nya meddelanden</string>
@@ -752,8 +761,6 @@
     <string name="pref_sound">Ljud</string>
     <string name="pref_silent">Tyst</string>
     <string name="pref_privacy">Integritet</string>
-    <!-- deprecated, use pref_chats -->
-    <string name="pref_chats_and_media">Chattar och media</string>
     <string name="pref_system_default">Systemets standardinställning</string>
     <!-- Translators: as in "opposite of dark" -->
     <string name="pref_light_theme">Ljust</string>
@@ -818,8 +825,6 @@
     <string name="n_bytes_message">%1$s meddelande</string>
     <!-- %1$s will be replaced by human-readable date and time -->
     <string name="download_max_available_until">Ladda ner max tillgängligt till %1$s</string>
-    <!-- deprecated -->
-    <string name="select_profile">Välj profil</string>
     <string name="profile_image_select">Välj profilbild</string>
     <string name="select_your_new_profile_image">Välj din nya profilbild</string>
     <string name="profile_image_delete">Ta bort profilbild</string>
@@ -925,10 +930,6 @@
     <string name="ephemeral_timer_seconds_by_you">Tiduret för meddelandeborttagning är satt till %1$s s av mig.</string>
     <!-- %1$s will be replaced by the number of seconds (always >1) the timer is set to, %2$s will be replaced by name of the contact -->
     <string name="ephemeral_timer_seconds_by_other">Tiduret för meddelandeborttagning är satt till %1$s s av %2$s.</string>
-    <!-- deprecated, usage needs to be removed in core -->
-    <string name="ephemeral_timer_1_minute_by_you">Tiduret för meddelandeborttagning är satt till 1 minut av mig.</string>
-    <!-- deprecated, usage needs to be removed in core -->
-    <string name="ephemeral_timer_1_minute_by_other">Tiduret för meddelandeborttagning är satt till 1 minut av %1$s.</string>
     <string name="ephemeral_timer_1_hour_by_you">Tiduret för meddelandeborttagning är satt till 1 timma av mig.</string>
     <!-- %1$s will be replaced by name of the contact -->
     <string name="ephemeral_timer_1_hour_by_other">Tiduret för meddelandeborttagning är satt till 1 timma av %1$s.</string>
@@ -1006,7 +1007,7 @@
     <!-- This text is shown inside the "QR code card" with very limited space; please formulate the text as short as possible therefore. The placeholder will be replaced by the profile name eg. "Scan to chat with Alice" -->
     <string name="qrshow_join_contact_hint">Skanna det här för att få kontakt med %1$s.</string>
     <string name="qrshow_join_contact_no_connection_toast">Ingen internetanslutning, kan inte utföra QR-kod-inställning.</string>
-    <string name="qraccount_ask_create_and_login">Skapa ny e-postadress på \"%1$s\" och logga in där?</string>
+    <string name="qraccount_ask_create_and_login">Vill du skapa ny profil på \"%1$s\" och logga in där?</string>
     <string name="set_name_and_avatar_explain">Ange ett namn som dina kontakter kommer att känna igen. Du kan också ange en profilbild.</string>
     <string name="please_enter_name">Ange ett namn.</string>
     <string name="qraccount_qr_code_cannot_be_used">Den skannade QR-koden kan inte användas för att konfigurera ett nytt konto.</string>
@@ -1025,11 +1026,9 @@
     <string name="verified_by">Introducerad av %1$s</string>
     <string name="verified_by_you">Introducerad av mig</string>
     <string name="verified_by_unknown">Introducerad</string>
-    <!-- deprecated -->
-    <string name="verified_contact_required_explain">För att garantera totalsträckskryptering  kan du bara lägga till kontakter med en grön bock i den här gruppen.\n\nDu kan träffa kontakter personligen och skanna deras QR-kod för att introducera dem.</string>
     <string name="mailto_dialog_header_select_chat">Välj chatt för att skicka meddelandet till</string>
     <!-- first placeholder is the name of the chat -->
-    <string name="confirm_replace_draft">%1$s redan har ett utkast till meddelande, vill du ersätta det?</string>
+    <string name="confirm_replace_draft">%1$s har redan ett utkast till meddelande, vill du ersätta det?</string>
     <string name="mailto_link_could_not_be_decoded">mailto-länken kunde inte avkodas: %1$s</string>
 
     <!-- notifications  -->

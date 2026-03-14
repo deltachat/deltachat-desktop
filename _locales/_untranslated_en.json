@@ -103,5 +103,14 @@
   },
   "who_can_call_me_toggle": {
     "message": "Show call screen on incoming calls"
+  },
+  "channel_image_changed": {
+    "message": "Channel image changed"
+  },
+  "channel_name_changed": {
+    "message": "Channel name changed from \"%1$s\" to \"%2$s\""
+  },
+  "messages_are_e2ee": {
+    "message": "Messages are end-to-end encrypted."
   }
 }
