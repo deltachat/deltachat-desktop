@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # checks if there are any new translations which reached the threshold to be included in the language selection
+# deletes files which are below the threshold
 
 threshold=150
 
@@ -17,9 +18,8 @@ process.stdin.on('data', (d) => {
     // remove non lang file entries
     list.pop()
     list.pop()
-    // delete xml files below threshold (except he.xml - hebrew should stay just to show the hebrew date label)
     for (const [n, l] of list) {
-        if (l && l !== 'he' && n < $threshold) {
+        if (l && n < $threshold) {
             unlinkSync('_locales/' + l + '.xml')
             console.log('deleted _locales/' + l + '.xml (only ' + n + ' lines)')
         }

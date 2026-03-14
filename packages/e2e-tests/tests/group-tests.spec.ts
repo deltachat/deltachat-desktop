@@ -447,7 +447,7 @@ test('Add group description', async () => {
     .getByRole('list', { name: 'Messages' })
     .getByRole('listitem')
     .filter({
-      hasText: `[Chat description changed. To see this and other new features, please update the app]`,
+      hasText: `You changed the chat description.`,
     })
   await expect(infoMsg).toBeVisible()
 
