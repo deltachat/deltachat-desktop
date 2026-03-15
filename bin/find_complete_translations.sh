@@ -1,13 +1,12 @@
 #!/bin/bash
 
 # checks if there are any new translations which reached the threshold to be included in the language selection
-# deletes files which are below the threshold
 
 threshold=150
 
 code=$(cat <<EOF
 
-const {readFileSync, unlinkSync} = require('fs');
+const {readFileSync} = require('fs');
 
 process.stdin.on('data', (d) => {
     let list = d.toString().split('\n').map(l=>{
@@ -18,12 +17,6 @@ process.stdin.on('data', (d) => {
     // remove non lang file entries
     list.pop()
     list.pop()
-    for (const [n, l] of list) {
-        if (l && n < $threshold) {
-            unlinkSync('_locales/' + l + '.xml')
-            console.log('deleted _locales/' + l + '.xml (only ' + n + ' lines)')
-        }
-    }
     // filter list
     list = list.sort(([n1], [n2])=> n1-n2)
     list = list.filter(([n])=> n >= $threshold)
@@ -37,7 +30,6 @@ process.stdin.on('data', (d) => {
             console.log(l + ' is not in languagelist, despite having enough lines, maybe it is new')
         }
     }
-
 })
 
 EOF
