@@ -21,7 +21,7 @@ export default function SettingsSelector(props: Props) {
       className={classNames(styles.settingsRow, styles.settingsSelector)}
       onClick={onClick}
     >
-      <div className={styles.settingsSelectorLabel}>{children}</div>
+      <div className={styles.settingsRowLabel}>{children}</div>
       {currentValue && (
         <div className={styles.settingsSelectorValue}>{currentValue}</div>
       )}
