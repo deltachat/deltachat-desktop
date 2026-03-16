@@ -11,6 +11,7 @@ import { AutostartState } from '../../shared/shared-types.js'
 const log = getLogger('main/autostart')
 
 function getLinuxPackageType(): 'other' | 'appimage' | 'flatpak' {
+  // https://docs.appimage.org/packaging-guide/environment-variables.html#environment-variables
   if (process.env.APPIMAGE) return 'appimage'
   if (process.env.FLATPAK_ID) return 'flatpak'
   return 'other'
@@ -57,8 +58,8 @@ function getLinuxAutostartRegisteredState(): boolean {
 function getLinuxDesktopFileContent(): string {
   return `[Desktop Entry]
 Type=Application
-Name=DeltaChat
-Comment=Delta Chat email-based messenger
+Name=Delta Chat
+Comment=Delta Chat decentralized private messenger
 Exec=${escapeDesktopExecArg(getLinuxExecPath())} --minimized
 Hidden=false
 NoDisplay=false
@@ -103,7 +104,7 @@ export async function applyAutostart(enable: boolean): Promise<void> {
     }
     const loginItemSettings = app.getLoginItemSettings()
     if (loginItemSettings.openAtLogin !== enable) {
-      app.setLoginItemSettings({ openAtLogin: enable })
+      app.setLoginItemSettings({ openAtLogin: enable, args: ['--minimized'] })
       log.info(`Autostart ${enable ? 'enabled' : 'disabled'}`)
     }
   } else if (currentPlatform === 'linux') {
