@@ -213,7 +213,10 @@ async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
   cleanupDraftTempDir()
   cleanupInternalTempDirs()
   applyAutostart(DesktopSettings.state.autostart).catch(err =>
-    log.error('Failed to apply autostart setting: ', err)
+    log.error(
+      `Failed to ${DesktopSettings.state.autostart ? 'enable' : 'disable'} autostart`,
+      err
+    )
   )
   // NOTE: Make sure to use `powerMonitor` only when electron signals it is ready
   initialisePowerMonitor()

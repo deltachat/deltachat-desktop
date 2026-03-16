@@ -113,24 +113,15 @@ export async function applyAutostart(enable: boolean): Promise<void> {
       return
     }
     const autostartFile = getLinuxAutostartFilePath()
-    const legacyFile = join(getLinuxAutostartDir(), 'deltachat-desktop.desktop')
-    try {
-      if (enable) {
-        await mkdir(getLinuxAutostartDir(), { recursive: true })
-        await writeFile(autostartFile, getLinuxDesktopFileContent(), 'utf-8')
-        log.info(`Autostart enabled: created ${autostartFile}`)
-      } else {
-        if (existsSync(autostartFile)) {
-          await rm(autostartFile)
-          log.info(`Autostart disabled: removed ${autostartFile}`)
-        }
+    if (enable) {
+      await mkdir(getLinuxAutostartDir(), { recursive: true })
+      await writeFile(autostartFile, getLinuxDesktopFileContent(), 'utf-8')
+      log.info(`Autostart enabled: created ${autostartFile}`)
+    } else {
+      if (existsSync(autostartFile)) {
+        await rm(autostartFile)
+        log.info(`Autostart disabled: removed ${autostartFile}`)
       }
-      // Clean up legacy autostart file from before per-package-type naming
-      if (existsSync(legacyFile) && legacyFile !== autostartFile) {
-        await rm(legacyFile)
-      }
-    } catch (error) {
-      log.error(`Failed to ${enable ? 'enable' : 'disable'} autostart`, error)
     }
   }
 }
