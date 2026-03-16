@@ -26,9 +26,9 @@ export default function SettingsSwitch({
         [styles.disabled]: disabled,
       })}
     >
-      <div className={styles.settingsSwitchLeft}>
+      <div className={styles.settingsRowLeft}>
         <span
-          className={classNames(styles.settingsSwitchLabel, {
+          className={classNames(styles.settingsRowLabel, {
             [styles.disabled]: disabled,
           })}
         >
@@ -36,7 +36,7 @@ export default function SettingsSwitch({
         </span>
         {description && (
           <div
-            className={classNames(styles.settingsSwitchDescription, {
+            className={classNames(styles.settingsRowDescription, {
               [styles.disabled]: disabled,
             })}
           >
@@ -44,7 +44,7 @@ export default function SettingsSwitch({
           </div>
         )}
       </div>
-      <div className={styles.settingsSwitchRight}>
+      <div className={styles.settingsRowRight}>
         <Switch checked={value} disabled={disabled} onChange={onChange} />
       </div>
     </label>
