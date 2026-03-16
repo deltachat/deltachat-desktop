@@ -108,6 +108,9 @@ $settingsHeight: 40px;
   font-weight: lighter;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  max-width: 33.33333%;
+  flex-shrink: 0;
 }
 
 .settingsRowLeft {
