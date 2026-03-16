@@ -8,10 +8,11 @@ import classNames from 'classnames'
 type Props = PropsWithChildren<{
   onClick: () => void
   currentValue?: string
+  description?: string
 }>
 
 export default function SettingsSelector(props: Props) {
-  const { onClick, currentValue, children } = props
+  const { onClick, currentValue, children, description } = props
 
   return (
     // TODO a11y: this component implements `<select>` functionality,
@@ -21,7 +22,12 @@ export default function SettingsSelector(props: Props) {
       className={classNames(styles.settingsRow, styles.settingsSelector)}
       onClick={onClick}
     >
-      <div className={styles.settingsRowLabel}>{children}</div>
+      <div className={styles.settingsRowLeft}>
+        <div className={styles.settingsRowLabel}>{children}</div>
+        {description && (
+          <div className={styles.settingsRowDescription}>{description}</div>
+        )}
+      </div>
       {currentValue && (
         <div className={styles.settingsSelectorValue}>{currentValue}</div>
       )}
