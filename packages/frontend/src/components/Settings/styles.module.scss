@@ -114,13 +114,13 @@ $settingsHeight: 40px;
   text-overflow: ellipsis;
 }
 
-.settingsSwitchLeft {
+.settingsRowLeft {
   display: flex;
   flex-direction: column;
   margin-inline-end: 15px;
 }
 
-.settingsSwitchLabel {
+.settingsRowLabel {
   color: var(--globalText);
 
   &.disabled {
@@ -128,7 +128,7 @@ $settingsHeight: 40px;
   }
 }
 
-.settingsSwitchDescription {
+.settingsRowDescription {
   color: var(--chat-list-item-archived-label-border);
   font-size: smaller;
   margin-top: 3px;
@@ -138,7 +138,7 @@ $settingsHeight: 40px;
   }
 }
 
-.settingsSwitchRight {
+.settingsRowRight {
   align-items: center;
   display: flex;
 }
