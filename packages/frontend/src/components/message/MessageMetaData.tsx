@@ -194,7 +194,9 @@ function ViewCount(props: { messageId: number }) {
       }
       className='viewCount'
     >
-      <span aria-label='👁️'>👁️</span>
+      <span aria-hidden className='viewCountIcon' />
+      <span className='visually-hidden'>👁️</span>
+
       <span className='viewCountValue'>
         {viewCountFetch.lingeringResult?.ok === false
           ? '?'

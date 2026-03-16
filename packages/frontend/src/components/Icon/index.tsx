@@ -42,6 +42,7 @@ export type IconName =
   | 'swap_vert'
   | 'swap_hor'
   | 'upload-file'
+  | 'visibility'
 
 type IconColoring =
   | 'currentColor'
