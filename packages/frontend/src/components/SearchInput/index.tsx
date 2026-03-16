@@ -33,11 +33,8 @@ export default function SearchInput(props: Props) {
   }
 
   const handleQRScan = async () => {
-    const qrCode = await BackendRemote.rpc.getChatSecurejoinQrCode(
-      accountId,
-      null
-    )
-    const qrCodeSVG = await BackendRemote.rpc.createQrSvg(qrCode)
+    const [qrCode, qrCodeSVG] =
+      await BackendRemote.rpc.getChatSecurejoinQrCodeSvg(accountId, null)
     openDialog(QrCode, {
       qrCode,
       qrCodeSVG,
