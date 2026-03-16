@@ -7,6 +7,8 @@
   align-items: center;
   margin-top: 3px;
   margin-bottom: -3px;
+  $font-size: 11.5px;
+  $line-height: 16px;
 
   &.with-image-no-caption {
     padding: 4px 10px 1px 10px;
@@ -62,8 +64,8 @@
   .date,
   .edited,
   .viewCount {
-    font-size: 11.5px;
-    line-height: 16px;
+    font-size: $font-size;
+    line-height: $line-height;
     letter-spacing: 0.3px;
     color: var(--messageMetadataDate);
   }
@@ -90,11 +92,27 @@
 
   .location-icon,
   .email-icon,
+  .saved-message-icon,
+  .viewCountIcon {
+    display: inline-block;
+  }
+  .location-icon,
+  .email-icon,
   .saved-message-icon {
     width: 12px;
     height: 12px;
-    display: inline-block;
     margin-inline-end: 4px;
     margin-bottom: 0px;
+  }
+  .viewCountIcon {
+    @include mixins.color-svg(
+      './images/icons/visibility.svg',
+      currentColor,
+      $line-height
+    );
+    width: $line-height;
+    height: $line-height;
+    // This value doesn't change the height of the wrapper.
+    vertical-align: bottom;
   }
 }
