@@ -5,8 +5,7 @@ host = https://app.transifex.com
 file_filter            = _locales/<lang>.xml
 source_file            = _locales/en.xml
 type                   = ANDROID
-minimum_perc           = 0
+minimum_perc           = 20
 resource_name          = strings.xml
 replace_edited_strings = false
 keep_translations      = false
-

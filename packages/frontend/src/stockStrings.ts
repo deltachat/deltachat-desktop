@@ -181,6 +181,10 @@ export async function updateCoreStrings() {
     [C.DC_STR_REMOVE_MEMBER]: tx('remove_member_by_you'),
     [C.DC_STR_SECURE_JOIN_CHANNEL_STARTED]: tx('secure_join_channel_started'),
     [C.DC_STR_STATS_MSG_BODY]: tx('stats_msg_body'),
+
+    [C.DC_STR_CHANNEL_IMAGE_CHANGED]: tx('channel_image_changed'),
+    [C.DC_STR_CHANNEL_NAME_CHANGED]: tx('channel_name_changed'),
+    [C.DC_STR_MESSAGES_ARE_E2EE]: tx('messages_are_e2ee'),
   }
 
   await BackendRemote.rpc.setStockStrings(strings)
