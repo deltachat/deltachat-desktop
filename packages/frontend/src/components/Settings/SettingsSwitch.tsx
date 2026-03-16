@@ -22,7 +22,7 @@ export default function SettingsSwitch({
 }: Props) {
   return (
     <label
-      className={classNames(styles.settingsSwitch, {
+      className={classNames(styles.settingsRow, {
         [styles.disabled]: disabled,
       })}
     >
