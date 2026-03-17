@@ -37,7 +37,10 @@ export interface DesktopSettingsType {
   locale: string | null
   notifications: boolean
   showNotificationContent: boolean
-  isMentionsEnabled: boolean
+  /**
+   * @deprecated moved to core, per-account `ui.mentions_enabled`.
+   */
+  isMentionsEnabled?: boolean
   /**
    * Controls the volume of the sound accompanying incoming
    * (and possibly outgoing, in the future) messages
