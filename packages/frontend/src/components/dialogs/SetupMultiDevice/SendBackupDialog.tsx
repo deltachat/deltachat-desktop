@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useContext } from 'react'
 
 import { getLogger } from '../../../../../shared/logger'
 import { BackendRemote, onDCEvent } from '../../../backend-com'
@@ -20,6 +20,9 @@ import type { PropsWithChildren } from 'react'
 import type { DialogProps } from '../../../contexts/DialogContext'
 
 import styles from './styles.module.scss'
+import { mouseEventToPosition } from '../../../utils/mouseEventToPosition'
+import { ContextMenuContext } from '../../../contexts/ContextMenuContext'
+import { type ContextMenuItem } from '../../ContextMenu'
 
 const log = getLogger('renderer/send_backup')
 
@@ -27,6 +30,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
   const tx = useTranslationFunction()
   const openConfirmationDialog = useConfirmationDialog()
   const openAlertDialog = useAlertDialog()
+  const { openContextMenu } = useContext(ContextMenuContext)
 
   const [inProgress, setInProgress] = useState<boolean>(false)
   const [qrCodeSVG, setQrSvg] = useState<string | null>(null)
@@ -135,7 +139,33 @@ export function SendBackupDialog({ onClose }: DialogProps) {
       onClose={cancel}
       width={500}
     >
-      <DialogHeader title={tx('multidevice_title')} onClose={cancel} />
+      <DialogHeader
+        title={tx('multidevice_title')}
+        onClose={cancel}
+        onContextMenuClick={
+          !inProgress
+            ? undefined
+            : event => {
+                openContextMenu({
+                  ...mouseEventToPosition(event),
+                  items: [
+                    {
+                      label: tx('troubleshooting'),
+                      action: () => runtime.openHelpWindow('multiclient'),
+                    },
+                    ...(stage === 'awaiting_scan' && svgUrl && qrContent
+                      ? [
+                          {
+                            label: tx('global_menu_edit_copy_desktop'),
+                            action: copyQrToClipboard,
+                          } satisfies ContextMenuItem,
+                        ]
+                      : []),
+                  ],
+                })
+              }
+        }
+      />
       {!inProgress && (
         <>
           <DialogBody>
@@ -156,47 +186,31 @@ export function SendBackupDialog({ onClose }: DialogProps) {
         </>
       )}
       {inProgress && (
-        <>
-          <DialogBody>
-            <DialogContent>
-              <SendBackup>
-                <SendBackupMain>
-                  {stage === 'awaiting_scan' && svgUrl && qrContent && (
-                    <img className={styles.qrCode} src={svgUrl} />
+        <DialogBody>
+          <DialogContent>
+            <SendBackup>
+              <SendBackupMain>
+                {stage === 'awaiting_scan' && svgUrl && qrContent && (
+                  <img className={styles.qrCode} src={svgUrl} />
+                )}
+                <SendBackupMainProgress
+                  style={stage === 'transferring' ? { width: '90%' } : {}}
+                >
+                  {stage === 'preparing' && <>{tx('preparing_account')}</>}
+                  {stage === 'transferring' && <>{tx('transferring')}</>}
+                  {progress && stage !== 'awaiting_scan' && (
+                    <>
+                      <br />
+                      <progress value={progress} max={1000} />
+                    </>
                   )}
-                  <SendBackupMainProgress
-                    style={stage === 'transferring' ? { width: '90%' } : {}}
-                  >
-                    {stage === 'preparing' && <>{tx('preparing_account')}</>}
-                    {stage === 'transferring' && <>{tx('transferring')}</>}
-                    {progress && stage !== 'awaiting_scan' && (
-                      <>
-                        <br />
-                        <progress value={progress} max={1000} />
-                      </>
-                    )}
-                  </SendBackupMainProgress>
-                </SendBackupMain>
-                {stage !== 'transferring' && <SendBackupSteps />}
-              </SendBackup>
-              {error}
-            </DialogContent>
-          </DialogBody>
-          <DialogFooter>
-            <FooterActions align='spaceBetween'>
-              <FooterActionButton
-                onClick={() => runtime.openHelpWindow('multiclient')}
-              >
-                {tx('troubleshooting')}
-              </FooterActionButton>
-              {stage === 'awaiting_scan' && svgUrl && qrContent && (
-                <FooterActionButton onClick={copyQrToClipboard}>
-                  {tx('global_menu_edit_copy_desktop')}
-                </FooterActionButton>
-              )}
-            </FooterActions>
-          </DialogFooter>
-        </>
+                </SendBackupMainProgress>
+              </SendBackupMain>
+              {stage !== 'transferring' && <SendBackupSteps />}
+            </SendBackup>
+            {error}
+          </DialogContent>
+        </DialogBody>
       )}
     </Dialog>
   )
