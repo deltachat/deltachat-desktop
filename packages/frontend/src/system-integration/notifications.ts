@@ -350,6 +350,9 @@ async function flushNotifications(accountId: number) {
   let isMentionsEnabled: undefined | boolean
   async function getIsMentionsEnabled(): Promise<boolean> {
     if (isMentionsEnabled == undefined) {
+      // Note that we're not using `SettingsStoreInstance`
+      // because it only relevant for currently selected account
+      // whereas notifications can come for any accounts.
       const str =
         (await BackendRemote.rpc.getConfig(accountId, 'ui.mentions_enabled')) ??
         mentionsEnabledDefaultVal
