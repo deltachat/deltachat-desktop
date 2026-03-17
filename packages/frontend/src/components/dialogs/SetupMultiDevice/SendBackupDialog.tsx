@@ -135,7 +135,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
       onClose={cancel}
       width={500}
     >
-      <DialogHeader title={tx('multidevice_title')} />
+      <DialogHeader title={tx('multidevice_title')} onClose={cancel} />
       {!inProgress && (
         <>
           <DialogBody>
@@ -144,10 +144,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
             </DialogContent>
           </DialogBody>
           <DialogFooter>
-            <FooterActions align='spaceBetween'>
-              <FooterActionButton onClick={cancel}>
-                {tx('cancel')}
-              </FooterActionButton>
+            <FooterActions>
               <FooterActionButton
                 styling='primary'
                 onClick={startNetworkedTransfer}
@@ -187,21 +184,16 @@ export function SendBackupDialog({ onClose }: DialogProps) {
           </DialogBody>
           <DialogFooter>
             <FooterActions align='spaceBetween'>
-              <span className={styles.buttonGroup}>
-                <FooterActionButton
-                  onClick={() => runtime.openHelpWindow('multiclient')}
-                >
-                  {tx('troubleshooting')}
-                </FooterActionButton>
-                {stage === 'awaiting_scan' && svgUrl && qrContent && (
-                  <FooterActionButton onClick={copyQrToClipboard}>
-                    {tx('global_menu_edit_copy_desktop')}
-                  </FooterActionButton>
-                )}
-              </span>
-              <FooterActionButton onClick={cancel}>
-                {tx('cancel')}
+              <FooterActionButton
+                onClick={() => runtime.openHelpWindow('multiclient')}
+              >
+                {tx('troubleshooting')}
               </FooterActionButton>
+              {stage === 'awaiting_scan' && svgUrl && qrContent && (
+                <FooterActionButton onClick={copyQrToClipboard}>
+                  {tx('global_menu_edit_copy_desktop')}
+                </FooterActionButton>
+              )}
             </FooterActions>
           </DialogFooter>
         </>
