@@ -103,7 +103,7 @@ test('shows warning when scanning backups that are newer than supported', async 
     await navigator.clipboard.writeText(text)
   }, mutatedContent)
 
-  await sendBackupDialog.getByRole('button', { name: 'Cancel' }).click()
+  await sendBackupDialog.getByRole('button', { name: 'Close' }).click()
   // Confirm cancellation
   await page.getByTestId('confirm-dialog').getByTestId('confirm').click()
 
