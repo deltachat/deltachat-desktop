@@ -41,12 +41,20 @@ function getLinuxExecPath(): string {
 
 // see https://specifications.freedesktop.org/desktop-entry/latest/exec-variables.html
 function escapeDesktopExecArg(arg: string): string {
-  const escaped = arg
+  // Desktop entry files have two layers of parsing:
+  // 1. String-value unescaping (only \\, \s, \n, \t, \r are valid sequences)
+  // 2. Exec-key double-quote unescaping (\, ", $, ` must be \-escaped)
+
+  // Exec-level: escape special chars per double-quoting rules
+  const execEscaped = arg
     .replace(/\\/g, '\\\\')
     .replace(/"/g, '\\"')
     .replace(/\$/g, '\\$')
     .replace(/`/g, '\\`')
-  return `"${escaped}"`
+  // String-level: double all backslashes so string-value unescaping
+  // yields the Exec-level escapes above
+  const stringEscaped = execEscaped.replace(/\\/g, '\\\\')
+  return `"${stringEscaped}"`
 }
 
 async function getLinuxAutostartRegisteredState(): Promise<boolean> {
@@ -102,7 +110,6 @@ export async function getAutostartState(): Promise<AutostartState> {
 
 export async function applyAutostart(enable: boolean): Promise<void> {
   const currentPlatform = platform()
-
   if (currentPlatform === 'darwin' || currentPlatform === 'win32') {
     if (appx) {
       log.warn('Autostart not supported for Windows Store (APPX) builds')
@@ -124,9 +131,13 @@ export async function applyAutostart(enable: boolean): Promise<void> {
       await writeFile(autostartFile, getLinuxDesktopFileContent(), 'utf-8')
       log.info(`Autostart enabled: created ${autostartFile}`)
     } else {
-      await access(autostartFile)
-      await rm(autostartFile)
-      log.info(`Autostart disabled: removed ${autostartFile}`)
+      try {
+        await rm(autostartFile)
+        log.info(`Autostart disabled: removed ${autostartFile}`)
+      } catch {
+        // no autostart file, nothing to delete
+        log.info(`Could not find or remove Autostart file ${autostartFile}`)
+      }
     }
   }
 }

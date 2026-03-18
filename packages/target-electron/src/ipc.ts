@@ -293,8 +293,12 @@ export async function init(cwd: string, logHandler: LogHandler) {
         updateTrayIcon()
       } else if (key === 'contentProtectionEnabled') {
         updateContentProtectionOnAllActiveWindows(Boolean(value))
-      } else if (key === 'autostart') {
-        await applyAutostart(Boolean(value))
+      } else if (key === 'autostartElectron') {
+        try {
+          await applyAutostart(Boolean(value))
+        } catch (error) {
+          log.error('Failed to apply autostart setting', error)
+        }
       }
 
       return true

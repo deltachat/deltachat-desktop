@@ -147,7 +147,6 @@ import {
   cleanupDraftTempDir,
   cleanupInternalTempDirs,
 } from './cleanup_temp_dir.js'
-import { applyAutostart } from './autostart.js'
 
 app.ipcReady = false
 app.isQuitting = false
@@ -212,12 +211,6 @@ async function onReady([_appReady, _loadedState, _appx, _webxdc_cleanup]: [
   )
   cleanupDraftTempDir()
   cleanupInternalTempDirs()
-  applyAutostart(DesktopSettings.state.autostart).catch(err =>
-    log.error(
-      `Failed to ${DesktopSettings.state.autostart ? 'enable' : 'disable'} autostart`,
-      err
-    )
-  )
   // NOTE: Make sure to use `powerMonitor` only when electron signals it is ready
   initialisePowerMonitor()
 }
