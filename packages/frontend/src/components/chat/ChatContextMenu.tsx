@@ -23,6 +23,28 @@ import { ActionEmitter, KeybindAction } from '../../keybindings'
 const log = getLogger('ChatListContextMenu')
 
 /**
+ * Returns true if the user should leave the group/channel before deleting it.
+ * When true, the menu shows "Leave" instead of "Delete Chat".
+ */
+export function shallLeaveBeforeDelete(
+  chat: Pick<ChatListItem, 'chatType' | 'isEncrypted'> &
+    Partial<Pick<ChatListItem, 'isSelfInGroup' | 'isContactRequest'>>
+): boolean {
+  if (chat.chatType === 'InBroadcast') {
+    return !!chat.isSelfInGroup
+  }
+  if (
+    chat.chatType === 'Group' &&
+    chat.isEncrypted &&
+    chat.isSelfInGroup &&
+    !chat.isContactRequest
+  ) {
+    return true
+  }
+  return false
+}
+
+/**
  * Reduced type containing only the properties from ChatListItemFetchResult
  * that are actually needed by the ChatContextMenu
  */
@@ -81,8 +103,10 @@ function buildArchiveAndPinMenuItems(
   const batchAction = (fn: (chat: ChatListItem) => Promise<unknown>) => () =>
     Promise.all(chats.map(chat => fn(chat)))
 
+  const isMultiSelect = chats.length > 1
+
   const archive: ContextMenuItem = {
-    label: tx('menu_archive_chat'),
+    label: isMultiSelect ? tx('archive') : tx('menu_archive_chat'),
     action: batchAction(async chat => {
       if (chat.id === activeChatId) {
         unselectChat()
@@ -92,7 +116,7 @@ function buildArchiveAndPinMenuItems(
   }
 
   const unArchive: ContextMenuItem = {
-    label: tx('menu_unarchive_chat'),
+    label: isMultiSelect ? tx('unarchive') : tx('menu_unarchive_chat'),
     action: batchAction(async chat => {
       if (chat.id === activeChatId) {
         unselectChat()
@@ -102,7 +126,7 @@ function buildArchiveAndPinMenuItems(
   }
 
   const pin: ContextMenuItem = {
-    label: tx('pin_chat'),
+    label: isMultiSelect ? tx('pin') : tx('pin_chat'),
     action: batchAction(async chat => {
       if (chat.id === activeChatId && chat.isArchived) {
         unselectChat()
@@ -112,7 +136,7 @@ function buildArchiveAndPinMenuItems(
   }
 
   const unPin: ContextMenuItem = {
-    label: tx('unpin_chat'),
+    label: isMultiSelect ? tx('unpin') : tx('unpin_chat'),
     action: batchAction(chat =>
       BackendRemote.rpc.setChatVisibility(accountId, chat.id, 'Normal')
     ),
@@ -472,12 +496,11 @@ export function useChatContextMenu(): {
       !isOutBroadcast &&
       relatedChat.chatType !== 'InBroadcast'
 
-    const showLeaveGroupOption =
+    // In the main view, show either "Leave" or "Delete Chat", not both
+    const shouldLeaveBeforeDelete =
+      isMainView &&
       relatedChat &&
-      isGroup &&
-      relatedChat.isEncrypted &&
-      relatedChat.selfInGroup &&
-      !relatedChat.isContactRequest
+      shallLeaveBeforeDelete(fullChatToChatListItem(relatedChat))
 
     // Build the complete menu
     const menu: (ContextMenuItem | false)[] = [
@@ -503,33 +526,34 @@ export function useChatContextMenu(): {
             })
           },
         },
-      // Leave channel
-      relatedChat &&
-        relatedChat.chatType === 'InBroadcast' &&
-        !relatedChat.isContactRequest && {
-          label: tx('menu_leave_channel'),
-          action: () => onLeaveGroupOrChannel(relatedChat),
-          danger: true,
-        },
-      showLeaveGroupOption && {
-        label: tx('menu_leave_group'),
-        action: () => onLeaveGroupOrChannel(relatedChat),
-        danger: true,
-      },
       // Block contact
       showBlockContactOption && {
         label: tx('menu_block_contact'),
         action: () => onBlockContact(relatedChat),
         danger: true,
       },
+      // Leave channel or group (shown instead of Delete when shallLeaveBeforeDelete)
+      shouldLeaveBeforeDelete &&
+        relatedChat.chatType === 'InBroadcast' && {
+          label: tx('menu_leave_channel'),
+          action: () => onLeaveGroupOrChannel(relatedChat),
+          danger: true,
+        },
+      shouldLeaveBeforeDelete &&
+        relatedChat.chatType === 'Group' && {
+          label: tx('menu_leave_group'),
+          action: () => onLeaveGroupOrChannel(relatedChat),
+          danger: true,
+        },
+      // Delete Chat (hidden when shallLeaveBeforeDelete in main view)
+      !shouldLeaveBeforeDelete && {
+        label: isMainView ? tx('menu_delete_chat') : tx('delete'),
+        action: onDeleteChats,
+        danger: true,
+      },
       isMainView && {
         label: tx('clear_chat'),
         action: onClearChat,
-        danger: true,
-      },
-      {
-        label: tx('menu_delete_chat'),
-        action: onDeleteChats,
         danger: true,
       },
     ].filter(Boolean) as ContextMenuItem[]
