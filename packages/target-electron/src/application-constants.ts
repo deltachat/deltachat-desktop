@@ -68,7 +68,12 @@ export function getCustomThemesPath() {
 // this is used for temporary files (because core expects file paths, can not accept blobs directly yet)
 // used when sending file from webxdc and when pasting a file from clipboard
 export function getDraftTempDir() {
-  return join(app.getPath('temp'), 'chat.delta.desktop-draft')
+  // On POSIX (Linux, macOS) the system temp dir is shared between users
+  // (e.g. /tmp), so we append the numeric UID to avoid permission conflicts
+  // if multiple users use the same tmp dir
+  const uid = process.getuid?.()
+  const suffix = uid !== undefined ? `-${uid}` : ''
+  return join(app.getPath('temp'), `chat.delta.desktop-draft${suffix}`)
 }
 
 export const supportedURISchemes = [
