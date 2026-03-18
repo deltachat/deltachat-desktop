@@ -1,8 +1,7 @@
 import { app } from 'electron'
 import { platform } from 'os'
-import { writeFile, rm, mkdir } from 'fs/promises'
+import { writeFile, rm, mkdir, access } from 'fs/promises'
 import { join } from 'path'
-import { existsSync } from 'fs'
 
 import { getLogger } from '../../shared/logger.js'
 import { appx } from './isAppx.js'
@@ -50,9 +49,14 @@ function escapeDesktopExecArg(arg: string): string {
   return `"${escaped}"`
 }
 
-function getLinuxAutostartRegisteredState(): boolean {
+async function getLinuxAutostartRegisteredState(): Promise<boolean> {
   const autostartFile = getLinuxAutostartFilePath()
-  return existsSync(autostartFile)
+  try {
+    await access(autostartFile)
+    return true
+  } catch {
+    return false
+  }
 }
 
 function getLinuxDesktopFileContent(): string {
@@ -67,7 +71,7 @@ X-GNOME-Autostart-enabled=true
 `
 }
 
-export function getAutostartState(): AutostartState {
+export async function getAutostartState(): Promise<AutostartState> {
   const currentPlatform = platform()
 
   if (currentPlatform === 'darwin' || currentPlatform === 'win32') {
@@ -87,7 +91,7 @@ export function getAutostartState(): AutostartState {
     }
     return {
       isSupported: true,
-      isRegistered: getLinuxAutostartRegisteredState(),
+      isRegistered: await getLinuxAutostartRegisteredState(),
     }
   }
 
@@ -118,9 +122,12 @@ export async function applyAutostart(enable: boolean): Promise<void> {
       await writeFile(autostartFile, getLinuxDesktopFileContent(), 'utf-8')
       log.info(`Autostart enabled: created ${autostartFile}`)
     } else {
-      if (existsSync(autostartFile)) {
+      try {
+        await access(autostartFile)
         await rm(autostartFile)
         log.info(`Autostart disabled: removed ${autostartFile}`)
+      } catch {
+        // file doesn't exist, nothing to remove
       }
     }
   }
