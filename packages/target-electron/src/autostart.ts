@@ -124,13 +124,9 @@ export async function applyAutostart(enable: boolean): Promise<void> {
       await writeFile(autostartFile, getLinuxDesktopFileContent(), 'utf-8')
       log.info(`Autostart enabled: created ${autostartFile}`)
     } else {
-      try {
-        await access(autostartFile)
-        await rm(autostartFile)
-        log.info(`Autostart disabled: removed ${autostartFile}`)
-      } catch {
-        // file doesn't exist, nothing to remove
-      }
+      await access(autostartFile)
+      await rm(autostartFile)
+      log.info(`Autostart disabled: removed ${autostartFile}`)
     }
   }
 }
