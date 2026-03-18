@@ -71,6 +71,8 @@ X-GNOME-Autostart-enabled=true
 `
 }
 
+const winArgs = ['--minimized']
+
 export async function getAutostartState(): Promise<AutostartState> {
   const currentPlatform = platform()
 
@@ -79,7 +81,7 @@ export async function getAutostartState(): Promise<AutostartState> {
       // Windows Store (APPX) builds manage startup tasks differently
       return { isSupported: false, isRegistered: null }
     }
-    const loginItemSettings = app.getLoginItemSettings()
+    const loginItemSettings = app.getLoginItemSettings({ args: winArgs })
     return {
       isSupported: true,
       isRegistered: loginItemSettings.openAtLogin,
@@ -106,9 +108,9 @@ export async function applyAutostart(enable: boolean): Promise<void> {
       log.warn('Autostart not supported for Windows Store (APPX) builds')
       return
     }
-    const loginItemSettings = app.getLoginItemSettings()
+    const loginItemSettings = app.getLoginItemSettings({ args: winArgs })
     if (loginItemSettings.openAtLogin !== enable) {
-      app.setLoginItemSettings({ openAtLogin: enable, args: ['--minimized'] })
+      app.setLoginItemSettings({ openAtLogin: enable, args: winArgs })
       log.info(`Autostart ${enable ? 'enabled' : 'disabled'}`)
     }
   } else if (currentPlatform === 'linux') {
