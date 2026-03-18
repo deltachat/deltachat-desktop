@@ -64,14 +64,14 @@ function getLinuxDesktopFileContent(): string {
 Type=Application
 Name=Delta Chat
 Comment=Delta Chat decentralized private messenger
-Exec=${escapeDesktopExecArg(getLinuxExecPath())} --minimized
+Exec=${escapeDesktopExecArg(getLinuxExecPath())} -- --minimized
 Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true
 `
 }
 
-const winArgs = ['--minimized']
+const winArgs = ['--', '--minimized']
 
 export async function getAutostartState(): Promise<AutostartState> {
   const currentPlatform = platform()
