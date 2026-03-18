@@ -58,7 +58,11 @@
     ],
     "overrides": {
       "stylus": "npm:empty-npm-package@1.0.0",
-      "esbuild-plugin-inline-worker>esbuild": "^0.25.0"
+      "esbuild-plugin-inline-worker>esbuild": "^0.25.0",
+      "minimatch@>=3.0.0 <3.1.4": "^3.1.4",
+      "minimatch@>=5.0.0 <5.1.8": "^5.1.8",
+      "minimatch@>=9.0.0 <9.0.7": "^9.0.7",
+      "minimatch@>=10.0.0 <10.2.3": "^10.2.3"
     }
   },
   "devDependencies": {
