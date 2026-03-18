@@ -55,7 +55,7 @@
 
 .qrCode {
   width: 100%;
-  max-height: 60vh;
+  max-height: 45vh;
 }
 
 .linkIcon {
@@ -63,10 +63,12 @@
   margin-inline-start: 10px;
 }
 
-.buttonGroup {
-  display: flex;
-}
-
 .receiveSteps {
   padding: 4px 22px;
+}
+
+@media (max-height: 600px) {
+  .qrCode {
+    max-height: 60vh;
+  }
 }

@@ -85,8 +85,10 @@ export function SendBackupDialog({ onClose }: DialogProps) {
       setError(null)
       setStage('preparing')
       const transfer = BackendRemote.rpc.provideBackup(accountId)
-      setQrSvg(await BackendRemote.rpc.getBackupQrSvg(accountId))
-      setQrContent(await BackendRemote.rpc.getBackupQr(accountId))
+      const qrCode = await BackendRemote.rpc.getBackupQr(accountId)
+      const qrCodeSvg = await BackendRemote.rpc.createQrSvg(qrCode)
+      setQrSvg(qrCodeSvg)
+      setQrContent(qrCode)
       setStage('awaiting_scan')
       await transfer
       onClose()
@@ -133,7 +135,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
       onClose={cancel}
       width={500}
     >
-      <DialogHeader title={tx('multidevice_title')} />
+      <DialogHeader title={tx('multidevice_title')} onClose={cancel} />
       {!inProgress && (
         <>
           <DialogBody>
@@ -142,10 +144,7 @@ export function SendBackupDialog({ onClose }: DialogProps) {
             </DialogContent>
           </DialogBody>
           <DialogFooter>
-            <FooterActions align='spaceBetween'>
-              <FooterActionButton onClick={cancel}>
-                {tx('cancel')}
-              </FooterActionButton>
+            <FooterActions>
               <FooterActionButton
                 styling='primary'
                 onClick={startNetworkedTransfer}
@@ -161,13 +160,12 @@ export function SendBackupDialog({ onClose }: DialogProps) {
           <DialogBody>
             <DialogContent>
               <SendBackup>
-                {stage !== 'transferring' && <SendBackupSteps />}
                 <SendBackupMain>
                   {stage === 'awaiting_scan' && svgUrl && qrContent && (
                     <img className={styles.qrCode} src={svgUrl} />
                   )}
                   <SendBackupMainProgress
-                    style={stage === 'transferring' ? { width: '100%' } : {}}
+                    style={stage === 'transferring' ? { width: '90%' } : {}}
                   >
                     {stage === 'preparing' && <>{tx('preparing_account')}</>}
                     {stage === 'transferring' && <>{tx('transferring')}</>}
@@ -179,27 +177,23 @@ export function SendBackupDialog({ onClose }: DialogProps) {
                     )}
                   </SendBackupMainProgress>
                 </SendBackupMain>
+                {stage !== 'transferring' && <SendBackupSteps />}
               </SendBackup>
               {error}
             </DialogContent>
           </DialogBody>
           <DialogFooter>
             <FooterActions align='spaceBetween'>
-              <span className={styles.buttonGroup}>
-                <FooterActionButton
-                  onClick={() => runtime.openHelpWindow('multiclient')}
-                >
-                  {tx('troubleshooting')}
-                </FooterActionButton>
-                {stage === 'awaiting_scan' && svgUrl && qrContent && (
-                  <FooterActionButton onClick={copyQrToClipboard}>
-                    {tx('global_menu_edit_copy_desktop')}
-                  </FooterActionButton>
-                )}
-              </span>
-              <FooterActionButton onClick={cancel}>
-                {tx('cancel')}
+              <FooterActionButton
+                onClick={() => runtime.openHelpWindow('multiclient')}
+              >
+                {tx('troubleshooting')}
               </FooterActionButton>
+              {stage === 'awaiting_scan' && svgUrl && qrContent && (
+                <FooterActionButton onClick={copyQrToClipboard}>
+                  {tx('global_menu_edit_copy_desktop')}
+                </FooterActionButton>
+              )}
             </FooterActions>
           </DialogFooter>
         </>
