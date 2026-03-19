@@ -1,4 +1,7 @@
-use std::{collections::HashMap, path::PathBuf, str::FromStr};
+use std::{
+    collections::HashMap,
+    path::{Path, PathBuf},
+};
 
 use serde::Serialize;
 use tauri::AppHandle;
@@ -103,11 +106,12 @@ pub(super) async fn read_theme_dir(
     let mut files = read_dir(directory).await?;
     let mut themes = Vec::new();
     while let Some(file) = files.next_entry().await? {
-        let file_name = file.file_name().to_string_lossy().to_string();
+        let file_name = file.file_name();
+        let file_name = file_name.to_string_lossy();
         if !file_name.ends_with(".css") || file_name.starts_with('_') {
             continue;
         }
-        let path_to_file = directory.join(&file_name);
+        let path_to_file = directory.join(&*file_name);
 
         let content = match read_to_string(&path_to_file).await {
             Err(err) => {
@@ -132,48 +136,39 @@ pub(super) async fn read_theme_dir(
 pub(super) async fn load_builtin_themes(app: &AppHandle) -> Result<Vec<ThemeMetadata>, Error> {
     let prefix = BUILT_IN_THEMES_PREFIX;
 
-    let asset_resolver = app.asset_resolver();
-    let assets: Vec<String> = asset_resolver
+    app.asset_resolver()
         .iter()
-        .filter(|(path, _content)| path.starts_with("/themes"))
-        .map(|(path, _)| path.to_string())
-        .collect();
-    log::debug!("potential theme candidates: {assets:?}");
-    let mut themes = Vec::new();
-    for asset_path in assets {
-        let asset_bytes = app
-            .asset_resolver()
-            .get(asset_path.clone())
-            .ok_or(Error::AssetLoadFailed)?
-            .bytes;
-        let file_name = PathBuf::from_str(&asset_path)
-            .map_err(|_| Error::AssetPathParse)?
-            .file_name()
-            .ok_or(Error::AssetPathParse)?
-            .to_string_lossy()
-            .to_string();
-        if !file_name.ends_with(".css") || file_name.starts_with('_') {
-            continue;
-        }
-
-        let content = match String::from_utf8(asset_bytes.to_vec()) {
-            Err(err) => {
-                log::error!("load theme (failed to read asset) '{asset_path}': {err}",);
-                continue;
+        .filter_map(|(path, asset_bytes)| {
+            if !path.starts_with("/themes") {
+                return None;
             }
-            Ok(content) => content,
-        };
+            log::debug!("potential theme candidate: {path}");
+            let Some(file_name) = Path::new(&*path).file_name().map(|os| os.to_string_lossy())
+            else {
+                return Some(Err(Error::AssetPathParse));
+            };
 
-        match ThemeMetadata::load_from_file_content(prefix, &file_name, &content) {
-            Err(err) => {
-                log::error!("load theme '{asset_path}': {err}");
-                continue;
+            if !file_name.ends_with(".css") || file_name.starts_with('_') {
+                return None;
             }
-            Ok(theme) => themes.push(theme),
-        }
-    }
 
-    Ok(themes)
+            let content = match str::from_utf8(&asset_bytes) {
+                Err(err) => {
+                    log::error!("load theme (failed to read asset) '{path}': {err}",);
+                    return None;
+                }
+                Ok(content) => content,
+            };
+
+            match ThemeMetadata::load_from_file_content(prefix, &file_name, content) {
+                Err(err) => {
+                    log::error!("load theme '{path}': {err}");
+                    None
+                }
+                Ok(theme) => Some(Ok(theme)),
+            }
+        })
+        .collect::<Result<Vec<_>, _>>()
 }
 
 #[cfg(test)]
@@ -202,7 +197,7 @@ mod tests {
         assert_eq!(description, "Our default dark theme.");
     }
     #[test]
-    fn parse_meta_data_block_double_qoutes() {
+    fn parse_meta_data_block_double_quotes() {
         let raw_theme =
             r#".theme-meta {--name: "Dark Theme"; --description: "Our default dark theme.";}"#;
         let (name, description) = ThemeMetadata::parse_theme_meta_data(raw_theme).unwrap();
