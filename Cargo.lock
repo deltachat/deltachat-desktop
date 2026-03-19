@@ -328,9 +328,9 @@ dependencies = [
 
 [[package]]
 name = "astral-tokio-tar"
-version = "0.5.6"
+version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ec179a06c1769b1e42e1e2cbe74c7dcdb3d6383c838454d063eaac5bbb7ebbe5"
+checksum = "3c23f3af104b40a3430ccb90ed5f7bd877a8dc5c26fc92fde51a22b40890dcf9"
 dependencies = [
  "filetime",
  "futures-core",
@@ -1875,8 +1875,8 @@ dependencies = [
 
 [[package]]
 name = "deltachat"
-version = "2.45.0"
-source = "git+https://github.com/chatmail/core?tag=v2.45.0#d9056fd18708bf35dfb2f6fd1bd2b2f75cf550d8"
+version = "2.46.0"
+source = "git+https://github.com/chatmail/core?tag=v2.46.0#191e6c2821b0a420e93cbec911a50accbfcd87e1"
 dependencies = [
  "anyhow",
  "astral-tokio-tar",
@@ -1929,7 +1929,6 @@ dependencies = [
  "ratelimit",
  "regex",
  "rusqlite",
- "rustls-pki-types",
  "sanitize-filename",
  "sdp",
  "serde",
@@ -1960,7 +1959,7 @@ dependencies = [
 [[package]]
 name = "deltachat-contact-tools"
 version = "0.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.45.0#d9056fd18708bf35dfb2f6fd1bd2b2f75cf550d8"
+source = "git+https://github.com/chatmail/core?tag=v2.46.0#191e6c2821b0a420e93cbec911a50accbfcd87e1"
 dependencies = [
  "anyhow",
  "chrono",
@@ -1970,8 +1969,8 @@ dependencies = [
 
 [[package]]
 name = "deltachat-jsonrpc"
-version = "2.45.0"
-source = "git+https://github.com/chatmail/core?tag=v2.45.0#d9056fd18708bf35dfb2f6fd1bd2b2f75cf550d8"
+version = "2.46.0"
+source = "git+https://github.com/chatmail/core?tag=v2.46.0#191e6c2821b0a420e93cbec911a50accbfcd87e1"
 dependencies = [
  "anyhow",
  "async-channel 2.5.0",
@@ -2040,12 +2039,12 @@ dependencies = [
 [[package]]
 name = "deltachat-time"
 version = "1.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.45.0#d9056fd18708bf35dfb2f6fd1bd2b2f75cf550d8"
+source = "git+https://github.com/chatmail/core?tag=v2.46.0#191e6c2821b0a420e93cbec911a50accbfcd87e1"
 
 [[package]]
 name = "deltachat_derive"
 version = "2.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.45.0#d9056fd18708bf35dfb2f6fd1bd2b2f75cf550d8"
+source = "git+https://github.com/chatmail/core?tag=v2.46.0#191e6c2821b0a420e93cbec911a50accbfcd87e1"
 dependencies = [
  "quote",
  "syn 2.0.111",
@@ -2977,7 +2976,7 @@ dependencies = [
 [[package]]
 name = "format-flowed"
 version = "1.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.45.0#d9056fd18708bf35dfb2f6fd1bd2b2f75cf550d8"
+source = "git+https://github.com/chatmail/core?tag=v2.46.0#191e6c2821b0a420e93cbec911a50accbfcd87e1"
 
 [[package]]
 name = "fsevent-sys"
@@ -7280,7 +7279,7 @@ dependencies = [
 [[package]]
 name = "ratelimit"
 version = "1.0.0"
-source = "git+https://github.com/chatmail/core?tag=v2.45.0#d9056fd18708bf35dfb2f6fd1bd2b2f75cf550d8"
+source = "git+https://github.com/chatmail/core?tag=v2.46.0#191e6c2821b0a420e93cbec911a50accbfcd87e1"
 
 [[package]]
 name = "rav1e"
