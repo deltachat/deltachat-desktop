@@ -134,6 +134,9 @@ function showNotification(_event: IpcMainInvokeEvent, data: DcNotification) {
           notifications[accountId]?.[chatId]?.[data.messageId]?.filter(
             n => n !== notify
           ) || []
+        // But now that we've removed the references to the notification,
+        // make sure that it really is closed.
+        notify.close()
       }
       // eslint-disable-next-line no-console
       console.log('Notification close event triggered', notify)
