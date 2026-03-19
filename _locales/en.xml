@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
     <!-- common strings without special context -->
     <string name="app_name">Delta Chat</string>
     <string name="ok">OK</string>
@@ -115,7 +117,7 @@
     <string name="last_month">Last month</string>
     <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by date or time, resulting in "Last seen at 12:13 AM" or "Last seen Nov 12" -->
     <string name="last_seen_at">Last seen at %1$s</string>
-    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by a relative point in time as "3 minutes ago" (see https://momentjs.com for more examples and languages)-->
+    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by a relative point in time as "3 minutes ago" (see https://momentjs.com for more examples and languages) -->
     <string name="last_seen_relative">Last seen %1$s</string>
     <string name="last_seen_unknown">Last seen: Unknown</string>
     <!-- Call duration as shown in the call bubbles. There is some risk to mix with the sending time, so the word "Duration" may be helpful. Might also be "Duration: %d minutes", "%d-minute duration", "%d-minute length" or "%d-minute call" -->
@@ -166,6 +168,7 @@
         <item quantity="other">%d Selected</item>
     </plurals>
     <string name="selected_colon">Selected:</string>
+    <string name="selected">Selected</string>
     <string name="self">Me</string>
     <string name="draft">Draft</string>
     <string name="image">Image</string>
@@ -400,6 +403,12 @@
     <string name="audio_call">Audio call</string>
     <!-- Used in call bubbles, summaries, notifications -->
     <string name="video_call">Video call</string>
+    <string name="call_initializing">Initializing…</string>
+    <string name="call_incoming">Incoming call</string>
+    <string name="call_ringing">Ringing…</string>
+    <string name="call_reconnecting">Reconnecting…</string>
+    <string name="call_ended">Call ended</string>
+    <string name="call_failed">Call failed</string>
     <!-- deprecated, use "Audio call" instead -->
     <string name="outgoing_audio_call">Outgoing audio call</string>
     <!-- deprecated, use "Video call" instead -->
@@ -617,7 +626,7 @@
     <!-- welcome and login -->
     <!-- Primary button on the welcome screen, allows to create an instant profile -->
     <string name="onboarding_create_instant_account">Create New Profile</string>
-    <!-- Secondary button on the welcome screen, allows to "Add as Second Device", "Restore from Backup"  -->
+    <!-- Secondary button on the welcome screen, allows to "Add as Second Device", "Restore from Backup" -->
     <string name="onboarding_alternative_logins">I Already Have a Profile</string>
     <!-- This is a button and a title, allowing to use existing, classic email, setting ports, passwords and so on -->
     <string name="manual_account_setup_option">Use Classic Email as Relay</string>
@@ -676,12 +685,16 @@
     <string name="add_transport">Add Relay</string>
     <string name="remove_transport">Remove Relay</string>
     <string name="edit_transport">Edit Relay</string>
+    <string name="used_for_sending">Used for sending</string>
+    <string name="hide_from_contacts">Hide from Contacts</string>
+    <string name="hidden_from_contacts">Hidden from contacts</string>
+    <!-- Hint for the list of relays -->
+    <string name="transport_list_hint">Messages are received on all relays.</string>
     <!-- shown if a QR code was scanned that can be used as a relay -->
     <string name="confirm_add_transport">Add this relay?</string>
     <string name="invalid_transport_qr">The scanned QR code does not contain a valid relay.</string>
     <!-- placeholder will be replaced by a relay server name -->
-    <string name="confirm_remove_transport">Remove relay \"%1$s\"?\n\nYour contacts can only reach you if you\'ve previously contacted them via another relay.\n\nIf in doubt, remove the relay later.</string>
-
+    <string name="confirm_remove_or_hide_transport_x">Remove relay \"%1$s\"?\n\nContacts who only know this relay may not reach you until you message them again.\n\nIf in doubt, hide it rather than removing it.</string>
     <string name="login_certificate_checks">Certificate Checks</string>
     <string name="login_error_mail">Please enter a valid email address</string>
     <string name="login_error_server">Please enter a valid server / IP address</string>
@@ -797,7 +810,7 @@
     <string name="pref_background_btn_default">Use Default Image</string>
     <string name="pref_background_btn_gallery">Select From Gallery</string>
     <string name="pref_imap_folder_warn_disable_defaults">If you change this option, make sure, your server and your other clients are configured accordingly.\n\nOtherwise things may not work at all.</string>
-    <!-- No need to be literal here, you can also use "Use Multiple Devices", "Support Multiple Devices" or other fitting terms. However, it should fit to the wording or your language at https://delta.chat/help  -->
+    <!-- No need to be literal here, you can also use "Use Multiple Devices", "Support Multiple Devices" or other fitting terms. However, it should fit to the wording or your language at https://delta.chat/help -->
     <string name="pref_multidevice">Multi-Device Mode</string>
     <string name="pref_multidevice_explain">Synchronize your messages with your other devices. Automatically enabled on adding a second device</string>
     <string name="pref_multidevice_change_warn">Multi-Device Mode must be enabled when using the same profile on multiple devices. Only disable this setting if you have removed this profile from all your other devices.\n\nDisabling Multi-Device Mode while using the profile on multiple devices will result in missed messages and other problems.</string>
@@ -1031,7 +1044,7 @@
     <string name="confirm_replace_draft">%1$s already has a draft message, do you want to replace it?</string>
     <string name="mailto_link_could_not_be_decoded">mailto link could not be decoded: %1$s</string>
 
-    <!-- notifications  -->
+    <!-- notifications -->
     <string name="notify_reply_button">Reply</string>
     <string name="notify_new_message">New message</string>
     <string name="notify_background_connection_enabled">Background connection enabled</string>
@@ -1109,7 +1122,9 @@
     <string name="message_detail_received_desktop">Received</string>
     <string name="menu.view.developer.open.log.folder">Open the Log Folder</string>
     <string name="menu.view.developer.open.current.log.file">Open Current Logfile</string>
-    <string name="explain_desktop_minimized_disabled_tray_pref" tools:ignore="TypographyDashes">Tray icon cannot be disabled as Delta Chat was started with the --minimized option.</string>
+    <string
+        name="explain_desktop_minimized_disabled_tray_pref"
+        tools:ignore="TypographyDashes">Tray icon cannot be disabled as Delta Chat was started with the --minimized option.</string>
     <string name="no_spellcheck_suggestions_found">No spelling suggestions found.</string>
     <string name="show_window">Show Window</string>
 

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
     <!-- common strings without special context -->
     <string name="app_name">Delta Chat</string>
     <string name="ok">OK</string>
@@ -115,7 +117,7 @@
     <string name="last_month">Letzter Monat</string>
     <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by date or time, resulting in "Last seen at 12:13 AM" or "Last seen Nov 12" -->
     <string name="last_seen_at">Zuletzt gesehen %1$s</string>
-    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by a relative point in time as "3 minutes ago" (see https://momentjs.com for more examples and languages)-->
+    <!-- Refers to the time a contact was last seen. Shown below contact name in the profile. The placeholder will be replaced by a relative point in time as "3 minutes ago" (see https://momentjs.com for more examples and languages) -->
     <string name="last_seen_relative">Zuletzt gesehen %1$s</string>
     <string name="last_seen_unknown">Zuletzt gesehen: Unbekannt</string>
     <!-- Call duration as shown in the call bubbles. There is some risk to mix with the sending time, so the word "Duration" may be helpful. Might also be "Duration: %d minutes", "%d-minute duration", "%d-minute length" or "%d-minute call" -->
@@ -166,6 +168,7 @@
         <item quantity="other">%d ausgewählt</item>
     </plurals>
     <string name="selected_colon">Ausgewählt:</string>
+    <string name="selected">Ausgewählt</string>
     <string name="self">Ich</string>
     <string name="draft">Entwurf</string>
     <string name="image">Bild</string>
@@ -400,6 +403,12 @@
     <string name="audio_call">Sprachanruf</string>
     <!-- Used in call bubbles, summaries, notifications -->
     <string name="video_call">Videoanruf</string>
+    <string name="call_initializing">Initialisieren…</string>
+    <string name="call_incoming">Eingehender Anruf</string>
+    <string name="call_ringing">Klingeln…</string>
+    <string name="call_reconnecting">Wiederverbinden…</string>
+    <string name="call_ended">Anruf beendet</string>
+    <string name="call_failed">Anruf fehlgeschlagen</string>
     <!-- deprecated, use "Audio call" instead -->
     <string name="outgoing_audio_call">Ausgehender Sprachanruf</string>
     <!-- deprecated, use "Video call" instead -->
@@ -617,7 +626,7 @@
     <!-- welcome and login -->
     <!-- Primary button on the welcome screen, allows to create an instant profile -->
     <string name="onboarding_create_instant_account">Neues Profil erstellen</string>
-    <!-- Secondary button on the welcome screen, allows to "Add as Second Device", "Restore from Backup"  -->
+    <!-- Secondary button on the welcome screen, allows to "Add as Second Device", "Restore from Backup" -->
     <string name="onboarding_alternative_logins">Ich habe bereits ein Profil</string>
     <!-- This is a button and a title, allowing to use existing, classic email, setting ports, passwords and so on -->
     <string name="manual_account_setup_option">Klassische E-Mail als Relay</string>
@@ -676,12 +685,11 @@
     <string name="add_transport">Relay hinzufügen</string>
     <string name="remove_transport">Relay entfernen</string>
     <string name="edit_transport">Relay bearbeiten</string>
+    <string name="used_for_sending">Zum Senden verwendet</string>
+    <string name="hide_from_contacts">Vor Kontakten verstecken</string>
     <!-- shown if a QR code was scanned that can be used as a relay -->
     <string name="confirm_add_transport">Relay hinzufügen?</string>
     <string name="invalid_transport_qr">Der gescannte QR-Code enthält keine gültiges Relay.</string>
-    <!-- placeholder will be replaced by a relay server name -->
-    <string name="confirm_remove_transport">Relay \"%1$s\" entfernen?\n\nDeine Kontakte können dich nur erreichen, wenn du sie zuvor über einen anderes Relay erreicht hast.\n\nIm Zweifel, entferne den Relay später.</string>
-
     <string name="login_certificate_checks">Zertifikatsüberprüfung</string>
     <string name="login_error_mail">Bitte eine gültige E-Mail-Adresse eingeben</string>
     <string name="login_error_server">Bitte eine gültige Server/IP-Adresse eingeben</string>
@@ -773,7 +781,6 @@
     <!-- Translators: Must indicate that there is no guarantee as the system may not honor our request. -->
     <string name="pref_incognito_keyboard_explain">Deaktivierung des personalisierten Lernens der Tastatur anfordern.</string>
     <string name="pref_read_receipts">Lesebestätigungen</string>
-    <string name="pref_read_receipts_explain">Wenn Lesebestätigungen ausgeschaltet sind, werden auch keine Lesebestätigungen von anderen angezeigt. </string>
     <string name="pref_server">Server</string>
     <string name="pref_encryption">Verschlüsselung</string>
     <string name="pref_manage_keys">Schlüssel verwalten</string>
@@ -786,7 +793,6 @@
     <string name="pref_other">Sonstiges</string>
     <string name="pref_backup">Backup</string>
     <string name="pref_backup_explain">Chats auf externem Speicher speichern</string>
-    <string name="pref_backup_export_explain">Ein Backup hilft bei einer Neuinstallation auf diesem oder einem anderen Gerät.\n\nDas Backup enthält alle Nachrichten, Kontakte und Chats sowie die Ende-zu-Ende Autocrypt-Einstellungen. Das Backup bitte an einem sicheren Ort aufbewahren oder es so bald wie möglich löschen.</string>
     <string name="pref_backup_export_this">Dieses Profil exportieren</string>
     <!-- the placeholder will be replaced by the number of profiles to export; the number is always larger than 1 -->
     <string name="pref_backup_export_all">Alle %1$d Profile exportieren</string>
@@ -796,11 +802,8 @@
     <string name="pref_background">Hintergrund</string>
     <string name="pref_background_btn_default">Standard-Bild verwenden</string>
     <string name="pref_background_btn_gallery">Aus Galerie auswählen</string>
-    <string name="pref_imap_folder_warn_disable_defaults">Wenn du diese Option änderst, stelle sicher, dass der Server und die anderen Geräte entsprechend konfiguriert sind\n\nAndernfalls funktionieren Dinge möglicherweise nicht wie erwartet.</string>
-    <!-- No need to be literal here, you can also use "Use Multiple Devices", "Support Multiple Devices" or other fitting terms. However, it should fit to the wording or your language at https://delta.chat/help  -->
+    <!-- No need to be literal here, you can also use "Use Multiple Devices", "Support Multiple Devices" or other fitting terms. However, it should fit to the wording or your language at https://delta.chat/help -->
     <string name="pref_multidevice">Mehrgerätemodus</string>
-    <string name="pref_multidevice_explain">Synchronisiere deine Nachrichten mit deinen anderen Geräten. Wird beim Hinzufügen eines zweiten Geräts automatisch aktiviert.</string>
-    <string name="pref_multidevice_change_warn">Der Mehrgerätemodus muss aktiviert sein, wenn dasselbe Profil auf mehreren Geräten verwendet wird. Deaktiviere diese Einstellung nur, wenn du dieses Profil von allen anderen Geräten entfernt hast.\n\nDie Deaktivierung des Mehrgerätemodus bei Verwendung des Profils auf mehreren Geräten führt zu verlorenen Nachrichten und anderen Problemen.</string>
     <string name="pref_auto_folder_moves">Autom. Verschieben in den DeltaChat-Ordner</string>
     <string name="pref_only_fetch_mvbox_title">Nur aus DeltaChat-Ordner lesen</string>
     <string name="pref_show_emails">Normale E-Mails anzeigen</string>
@@ -831,16 +834,10 @@
     <string name="pref_show_tray_icon">Benachrichtigungssymbol anzeigen</string>
     <string name="pref_edit_profile">Profil bearbeiten</string>
     <string name="disable_imap_idle">IMAP IDLE deaktivieren</string>
-    <string name="disable_imap_idle_explain">IMAP IDLE ausschalten, selbst wenn vom Server unterstützt. Die Aktivierung dieser Option verzögert den Abruf von Nachrichten; nur zu Testzwecken aktivieren</string>
     <string name="send_stats_to_devs">Statistik an Delta Chat Entwickler senden</string>
-    <string name="stats_device_message">Möchtest du helfen, Delta Chat zu verbessern, indem du wöchentlich anonyme Nutzungsstatistiken sendest?\n\n👉 Hier tippen … 👈</string>
-    <string name="stats_confirmation_dialog">Möchtest du helfen, Delta Chat zu verbessern, indem du wöchentlich anonyme Nutzungsstatistiken sendest?</string>
-    <string name="stats_thanks">Danke! Du kannst das Senden der Statistik jederzeit unter \"Einstellungen / Erweitert\" ausschalten.\n\nHast du zusätzlich 5 Minuten Zeit, um an einer wissenschaftlichen Studie zur Sicherheit von Delta Chat teilzunehmen?</string>
     <string name="stats_disable_dialog">Das Senden von Statistiken ist bereits eingeschaltet.\n\nMöchtest du es ausschalten?</string>
     <string name="disable">Ausschalten</string>
     <string name="stats_keep_sending">Weiter senden</string>
-    <string name="stats_msg_body">Der Anhang enthält anonyme Statistiken, die uns helfen, Delta Chat zu verbessern. Vielen Dank!</string>
-
     <!-- Emoji picker and categories -->
     <string name="emoji_search_results">Suchergebnisse</string>
     <string name="emoji_not_found">Keine Emoji gefunden</string>
@@ -867,14 +864,7 @@
     <string name="delete_old_messages">Alte Nachrichten löschen</string>
     <string name="autodel_device_title">Nachrichten vom Gerät löschen</string>
     <string name="autodel_server_title">Nachrichten vom Server löschen</string>
-    <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
-    <string name="autodel_device_ask">Wirklich %1$d Nachrichten jetzt und zukünftig alle neuen Nachrichten \"%2$s\" löschen?\n\n• Dies schliesst alle Medien mit ein\n\n• Nachrichten werden gelöscht, auch wenn sie nicht angesehen wurden\n\n• \"Gespeicherte Nachrichten\" werden nicht gelöscht</string>
-    <!-- %1$d will be replaced by the number of messages, you can assume plural/lots here. %2$s will be replaced by a timespan option. -->
-    <string name="autodel_server_ask">Wirklich %1$d Nachrichten jetzt und zukünftig alle neuen Nachrichten \"%2$s\" löschen?\n\n⚠️ Dies schließt E-Mails, Medien und \"Gespeicherte Nachrichten\" aus allen Server-Ordnern mit ein\n\n⚠️ Verwende diese Funktion nicht, wenn du Daten auf dem Server behalten möchtest oder auch klassische E-Mail-Clients verwendest</string>
-    <!-- shown below enabled autodel_server-option, should be a summary of autodel_server_ask and remind about the impact -->
-    <string name="autodel_server_enabled_hint">Dies schließt E-Mails, Medien und \"Gespeicherte Nachrichten\" aus allen Server-Ordnern mit ein. Verwenden diese Funktion nicht, wenn du Daten auf dem Server behalten möchtest oder auch klassische E-Mail-Clients verwendest.</string>
     <string name="autodel_server_warn_multi_device_title">Sofortiges Löschen einschalten</string>
-    <string name="autodel_server_warn_multi_device">Wenn sofortiges Löschen aktiviert ist, können nicht mehrere Geräte für dieses Profil verwendet werden.</string>
     <string name="autodel_confirm">Verstanden, all diese Nachrichten löschen</string>
     <!-- "At once" in the meaning of "Immediately", without any intervening time. -->
     <string name="autodel_at_once">Sofort nach Download</string>
@@ -960,17 +950,7 @@
     <string name="ephemeral_timer_weeks_by_other">Ablaufzeit verschwindender Nachrichten auf %1$s Wochen gesetzt von %2$s.</string>
     <string name="chat_unencrypted_explanation">Dieser Chat verwendet klassische E-Mails und ist nicht Ende-zu-Ende-verschlüsselt.</string>
     <string name="chat_protection_enabled_tap_to_learn_more">Nachrichten sind Ende-zu-Ende-verschlüsselt. Tippen, um mehr zu erfahren.</string>
-    <string name="chat_protection_enabled_explanation">Alle Nachrichten in diesem Chat sind Ende-zu-Ende verschlüsselt.\n\nDurch die Ende-zu-Ende-Verschlüsselung bleiben die Nachrichten zwischen dir und deinen Chat-Partnern privat. Nicht einmal Server, Provider oder Relays können sie lesen.</string>
-    <string name="invalid_unencrypted_tap_to_learn_more">⚠️ %1$s verlangt eine Ende-zu-Ende-Verschlüsselung, die für diesen Chat noch nicht hergestellt wurde. Tippen, um mehr zu erfahren.</string>
-    <string name="invalid_unencrypted_explanation">Um eine Ende-zu-Ende-Verschlüsselung herzustellen, kannst du Kontakte persönlich treffen und ihren QR-Code scannen.</string>
     <string name="learn_more">Mehr erfahren</string>
-
-    <string name="devicemsg_self_deleted">Du hast den Chat \"Gespeicherte Nachrichten\" gelöscht.\n\nℹ️ Um die Funktion \"Gespeicherte Nachrichten\" erneut zu verwenden, erstelle einfach einen Chat mit dir selbst.</string>
-    <!-- %1$s will be replaced by the amount of storage already used, sth. as '500 MB'. If you want to use a percentage sign, type in two of them, eg. %1$s %% -->
-    <string name="devicemsg_storage_exceeding">⚠️ Der Speicherplatz deines Anbieters ist bald erschöpft; bereits %1$s%% sind verbraucht.\n\nDu kannst möglicherweise keine Nachrichten mehr empfangen, wenn der Speicherplatz komplett verbraucht ist.\n\n👉 Bitte prüfe, ob du alte Daten im Webinterface des Anbieters löschen kannst, und erwäge, \"Einstellungen / Chats / Alte Nachrichten löschen\" zu aktivieren. Den aktuellen Speicherverbrauch kannst du jederzeit unter \"Einstellungen / Verbindungsstatus\" überprüfen.</string>
-    <!-- %1%s will be replaced by date and time in some human-readable format -->
-    <string name="devicemsg_bad_time">⚠️ Dein Gerät scheint ein falsches Datum oder eine falsche Uhrzeit (%1$s) zu verwenden.\n\nStelle deine Uhr ⏰🔧 richtig ein, um sicherzustellen, dass deine Nachrichten korrekt empfangen werden.</string>
-    <string name="devicemsg_update_reminder">⚠️ Deine Delta-Chat-Version ist möglicherweise veraltet.\n\nDies kann zu Problemen führen, wenn deine Chat-PartnerInnen neuere Versionen verwenden - und dir die neuesten Funktionen fehlen. 😳\nBitte überprüfe https://get.delta.chat oder den App-Store auf Updates.</string>
 
     <!-- Some options as "Add Second Device" or "Backup" may require the system PIN/Fingerprint/Gesture/Etc. to be entered in a system dialog. This hint is added to the system dialog, below a title as "Add Second Device" or "Backup". -->
     <string name="enter_system_secret_to_continue">Entsperren zum Fortfahren</string>
@@ -985,13 +965,9 @@
     <string name="qrscan_ask_join_group">Der Gruppe \"%1$s\" beitreten?</string>
     <string name="qrscan_ask_join_channel">Dem Kanal \"%1$s\" beitreten?</string>
     <string name="qrscan_fingerprint_mismatch">Der gescannte Fingerabdruck stimmt nicht mit dem zuletzt für %1$s gesehenen Fingerabdruck überein.</string>
-    <string name="qrscan_no_addr_found">Dieser QR-Code enthält einen Fingerabdruck, aber keine Adresse.\n\nFür eine Out-of-Band-Verifizierung bitte zuerst eine verschlüsselte Verbindung zur EmpfängerIn herstellen.</string>
     <string name="qrscan_contains_text">Gescannter QR-Code text:\n\n%1$s</string>
     <string name="qrscan_contains_url">Gescannter QR-Code URL:\n\n%1$s</string>
     <string name="qrscan_fingerprint_label">Fingerabdruck</string>
-    <string name="withdraw_verifycontact_explain">Dieser QR-Code kann von anderen gescannt werden, um dich zu kontaktieren.\n\nDu kannst den QR-Code zurücksetzen; der bestehende QR-Code oder Einladungslink wird dann nicht mehr funktionieren.</string>
-    <string name="withdraw_verifygroup_explain">Dieser QR-Code kann von anderen gescannt werden, um der Gruppe \"%1$s\" beizutreten.\n\nDu kannst den QR-Code zurücksetzen; der bestehende QR-Code oder Einladungslink wird dann nicht mehr funktionieren.</string>
-    <string name="withdraw_joinbroadcast_explain">Dieser QR-Code kann von anderen gescannt werden, um dem Kanal \"%1$s\" beizutreten.\n\nDu kannst den QR-Code zurücksetzen; der bestehende QR-Code oder Einladungslink wird dann nicht mehr funktionieren.</string>
     <string name="withdraw_qr_code">QR-Code zurücksetzen</string>
     <string name="revive_verifycontact_explain">Dieser QR-Code wurde zurückgesetzt und ist nicht mehr aktiv.</string>
     <string name="revive_qr_code">QR-Code aktivieren</string>
@@ -1008,15 +984,10 @@
     <string name="qrshow_join_contact_hint">Scannen für Chat mit %1$s</string>
     <string name="qrshow_join_contact_no_connection_toast">Keine Verbindung zum Internet, Austausch des QR-Codes nicht möglich.</string>
     <string name="qraccount_ask_create_and_login">Profil auf \"%1$s\" erzeugen und dort anmelden?</string>
-    <string name="set_name_and_avatar_explain">Lege einen Namen fest, unter dem deine Kontakte dich kennen. Du kannst auch ein Profilbild festlegen.</string>
     <string name="please_enter_name">Bitte gib einen Namen an.</string>
     <string name="qraccount_qr_code_cannot_be_used">Der eingescannte QR-Code kann nicht dazu verwendet werden, eine neues Profil zu erstellen.</string>
     <!-- the placeholder will be replaced by the address of the profile -->
     <string name="qrlogin_ask_login">Bei \"%1$s\" anmelden?</string>
-    <!-- first placeholder will be replaced by name of the inviter, second placeholder will be replaced by the name of the inviter. -->
-    <string name="secure_join_started">%1$s hat dich zu dieser Gruppe eingeladen.\n\nWarte auf die Antwort des Gerätes von %2$s…</string>
-    <!-- first placeholder will be replaced by name of the inviter, second placeholder will be replaced by the name of the inviter. -->
-    <string name="secure_join_channel_started">%1$s hat dich zu diesem Kanal eingeladen.\n\nWarte auf die Antwort des Gerätes von %2$s…</string>
     <!-- placeholder will be replaced by the name of the inviter. -->
     <string name="secure_join_replies">%1$s antwortet. Warte, zur Gruppe hinzugefügt zu werden…</string>
     <string name="secure_join_wait">Verbindungsaufbau, bitte warten…</string>
@@ -1031,7 +1002,7 @@
     <string name="confirm_replace_draft">%1$s hat bereits einen Entwurf. Möchtest du diesen ersetzen?</string>
     <string name="mailto_link_could_not_be_decoded">Mailto-Link konnte nicht dekodiert werden: %1$s</string>
 
-    <!-- notifications  -->
+    <!-- notifications -->
     <string name="notify_reply_button">Antworten</string>
     <string name="notify_new_message">Neue Nachricht</string>
     <string name="notify_background_connection_enabled">Hintergrundverbindung aktiviert</string>
@@ -1051,13 +1022,6 @@
     <!-- permissions -->
     <string name="perm_required_title">Berechtigung erforderlich</string>
     <string name="perm_continue">Weiter</string>
-    <string name="perm_explain_access_to_camera_denied">Um Fotos oder Videos aufzunehmen, bitte in den System-Einstellungen DeltaChat den Zugriff auf die Kamera erlauben. </string>
-    <!-- give the user an idea where to find the "Microphone" option. the hint is only shown if access was initially denied by the user. pick up wordings really used on the systems, but do not be overly precise: things shift around often and there are too many system we support to track every detail and click path -->
-    <string name="perm_explain_access_to_mic_denied">Um Audio-Nachrichten zu senden, bitte in den System- oder App-Einstellungen den Zugriff auf das Mikrophon erlauben.</string>
-    <string name="perm_explain_access_to_storage_denied">Um Dateien zu empfangen oder zu versenden, bitte in den System-Einstellungen Delta Chat den Zugriff auf den Speicher erlauben.</string>
-    <string name="perm_explain_access_to_location_denied">Um einen Standort anzuhängen, bitte in den Systemeinstellungen DeltaChat den Zugriff auf \"Standort\" erlauben.</string>
-    <string name="perm_explain_access_to_notifications_denied">Um Benachrichtigungen zu erhalten, öffne \"Systemeinstellungen / Apps / Delta Chat\" und aktiviere \"Benachrichtigungen\".</string>
-
     <!-- ImageEditorHud -->
     <string name="ImageEditorHud_draw_anywhere_to_blur">Zeichne zum Verwischen in beliebige Bereiche</string>
     <string name="ImageEditorHud_add_text">Text hinzufügen</string>
@@ -1070,7 +1034,6 @@
 
     <!-- strings introduced on desktop. we want to share strings between the os, in general, please do not add generic strings here -->
     <string name="about_offical_app_desktop">Dies ist die offizielle Delta Chat Desktop App.</string>
-    <string name="about_licensed_under_desktop">Dieses Programm ist lizenziert unter der GNU GPL version 3 und der Quellcode ist auf Github verfügbar.</string>
     <string name="welcome_desktop">Willkommen bei Delta Chat</string>
     <string name="global_menu_preferences_language_desktop">Sprache</string>
     <string name="global_menu_file_desktop">Datei</string>
@@ -1109,7 +1072,6 @@
     <string name="message_detail_received_desktop">Empfangen</string>
     <string name="menu.view.developer.open.log.folder">Log-Ordner öffnen</string>
     <string name="menu.view.developer.open.current.log.file">Aktuelle Logdatei öffnen</string>
-    <string name="explain_desktop_minimized_disabled_tray_pref" tools:ignore="TypographyDashes">Benachrichtigungssymbol kann nicht deaktiviert werden, da Delta Chat mit der Option --minimized gestartet wurde.</string>
     <string name="no_spellcheck_suggestions_found">Keine Rechtschreibvorschläge gefunden.</string>
     <string name="show_window">Fenster anzeigen</string>
 
@@ -1137,17 +1099,13 @@
 
     <!-- iOS specific strings, developers: please take care to remove strings that are no longer used! -->
     <string name="stop_sharing_location">Teilen des Standorts beenden</string>
-    <string name="a11y_voice_message_hint_ios">Nach der Aufnahme zum Senden doppelt tippen. Um die Aufnahme zu verwerfen, mit zwei Fingern links-rechts hin- und herwischen.</string>
     <string name="a11y_connectivity_hint">Doppelt Tippen für Verbindungsdetails.</string>
     <string name="login_error_no_internet_connection">Keine Internetverbindung, Anmeldung fehlgeschlagen.</string>
     <string name="share_account_not_configured">Profil nicht konfiguriert.</string>
     <string name="cannot_play_audio_file">Audiodatei kann nicht abgespielt werden.</string>
-    <!-- iOS camera permission alert -->
-    <string name="perm_ios_explain_access_to_camera_denied">Um Fotos oder Videos aufzunehmen oder den QR-Code-Scanner zu verwenden, öffne die Systemeinstellungen und aktiviere \"Kamera\".</string>
     <string name="open_settings">Einstellungen öffnen</string>
     <!-- iOS device contact alert -->
     <string name="import_device_contacts">Kontakte vom Gerät importieren</string>
-    <string name="import_device_contacts_hint">Um mit Kontakten auf deinem Gerät zu chatten, öffne die Systemeinstellungen und aktiviere \"Kontakte\".</string>
     <!-- iOS notification settings -->
     <string name="disabled_in_dc">Deaktiviert in Delta Chat</string>
     <string name="disabled_in_system_settings">Deaktiviert in den Systemeinstellungen</string>
@@ -1167,27 +1125,14 @@
     <string name="remove_from_widget">Aus Widget entfernen</string>
     <!-- use the same translation for "Widget" as the system is using; often the term "Widget" stays untranslated -->
     <string name="add_to_widget">Zum Widget hinzufügen</string>
-    <!-- iOS permissions, copy from "deltachat-ios/Info.plist", which is used on missing translations in "deltachat-ios/LANG.lproj/InfoPlist.strings" -->
-    <string name="InfoPlist_NSCameraUsageDescription">Delta Chat verwendet die Kamera, um Fotos aufzunehmen und zu versenden und um QR-Codes zu scannen.</string>
-    <string name="InfoPlist_NSLocationAlwaysAndWhenInUseUsageDescription">Delta Chat benötigt die Standort-Berechtigung, um deinen Standort für den Zeitraum, in dem du die Standortfreigabe aktiviert hast, zu teilen.</string>
-    <string name="InfoPlist_NSLocationWhenInUseUsageDescription">Delta Chat benötigt die Standort-Berechtigung, um deinen Standort für den Zeitraum, in dem du die Standortfreigabe aktiviert hast, zu teilen.</string>
-    <string name="InfoPlist_NSMicrophoneUsageDescription">Delta Chat verwendet das Mikrofon, um Sprachnachrichten und Videos mit Sound aufzunehmen und zu versenden.</string>
     <string name="InfoPlist_NSPhotoLibraryUsageDescription">Delta Chat verwendet die Fotos, um dir die Möglichkeit zu geben, diese auszuwählen und zu versenden.</string>
     <string name="InfoPlist_NSPhotoLibraryAddUsageDescription">Delta Chat möchte Bilder in deiner Fotobibliothek speichern.</string>
-    <string name="InfoPlist_NSFaceIDUsageDescription">Delta Chat kann Face-ID verwenden, um dein lokales Profil, Backups und die Einrichtung eines zweiten Geräts zu schützen.</string>
-
     <!-- android specific strings, developers: please take care to remove strings that are no longer used! -->
     <string name="pref_instant_delivery">Sofortige Benachrichtigungen</string>
     <string name="pref_background_notifications">Hintergrundverbindung verwenden</string>
-    <string name="pref_background_notifications_explain">Erfordert das Deaktivieren der Akku-Optimierungen; empfohlen, wenn Nachrichten nicht rechtzeitig ankommen</string>
     <string name="pref_reliable_service">Hintergrundverbindung erzwingen</string>
     <string name="pref_reliable_service_explain">Verursacht eine permanente Benachrichtigung</string>
 
-    <string name="pref_background_notifications_rationale">Um die Verbindung aufrechtzuerhalten und Nachrichten im Hintergrund zu empfangen, ignorieren im nächsten Schritt die \"Akku-Optimierungen\".\n\nDelta Chat verbraucht nur minimale Ressourcen und achtet darauf, den Akku zu schonen.</string>
     <!-- disabling "Reliable service" will hide a the maybe annoying permanent-notification with the drawback that new-message-notifications get potentially unreliable -->
     <string name="perm_enable_bg_reminder_title">Tippen hier, um Nachrichten zu empfangen, während Delta Chat im Hintergrund läuft.</string>
-    <string name="perm_enable_bg_already_done">Du hast Delta Chat bereits erlaubt, Nachrichten im Hintergrund zu empfangen.\n\nFalls keine Nachrichten eingehen, überprüfe bitte auch die Systemeinstellungen.</string>
-
-    <!-- device messages for updates -->
-    <string name="update_2_0">Was ist neu?\n\n💯 Die Ende-zu-Ende-Verschlüsselung ist jetzt dauerhaft. Vorhängeschlösser 🔒 gibt es nicht mehr!\n\n✉️ Klassische E-Mails ohne Ende-zu-Ende-Verschlüsselung sind mit einem Umschlag-Symbol gekennzeichnet\n\n😻 Neues, verbessertes Profil für alle Kontakte\n\n🔲 Neue Schaltfläche für den schnellen Zugriff auf Apps, die in einem Chat verwendet werden\n\n❤️ Bitte spende und hilf uns, unabhängig zu bleiben und weiterhin Verbesserungen zu bringen: %1$s</string>
-</resources>
+    </resources>

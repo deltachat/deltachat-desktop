@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
     <!-- common strings without special context -->
     <string name="app_name">Delta Chat</string>
     <string name="ok">موافق</string>
@@ -186,7 +188,7 @@
     <string name="pref_background">الخلفية</string>
     <string name="pref_show_emails_all">كلها</string>
     <string name="qrscan_fingerprint_label">البصمة</string>
-    <!-- notifications  -->
+    <!-- notifications -->
     <string name="notify_reply_button">رد</string>
     <string name="notify_new_message">رسالة جديدة</string>
     <string name="notify_priority_high">عالي</string>
