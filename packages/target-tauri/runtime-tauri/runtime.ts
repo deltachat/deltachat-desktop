@@ -166,6 +166,7 @@ class TauriRuntime implements Runtime {
       ...deprecated,
       bounds: {}, // managed by tauri_plugin_window_state plugin
       HTMLEmailWindowBounds: undefined, // managed by tauri_plugin_window_state plugin
+      autostartElectron: false, // not needed in tauri version
     } satisfies Partial<DesktopSettingsType>
 
     const frontendAndTauri = {

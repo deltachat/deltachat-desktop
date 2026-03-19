@@ -31,5 +31,6 @@ export function getDefaultState(): DesktopSettingsType {
     contentProtectionEnabled: false,
     inChatSoundsVolume: 0.5,
     autostart: true,
+    autostartElectron: false,
   }
 }

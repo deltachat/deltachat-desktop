@@ -79,8 +79,10 @@ export interface DesktopSettingsType {
    * also called screen_security
    */
   contentProtectionEnabled: boolean
-  /** whether to start with system on supported platforms */
+  /** whether to start Tauri with system on supported platforms */
   autostart: boolean
+  /** whether to start Electron with system on supported platforms */
+  autostartElectron: boolean
 }
 
 export interface RC_Config {
