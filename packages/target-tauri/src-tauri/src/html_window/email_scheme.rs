@@ -5,6 +5,7 @@ use tauri::{Manager, UriSchemeContext, UriSchemeResponder};
 use crate::HtmlEmailInstancesState;
 
 const CSP_DENY: &str = "default-src 'none';
+sandbox;
 font-src 'self' data:;
 frame-src 'none';
 img-src 'self' data:;
@@ -15,6 +16,7 @@ script-src 'none';";
 
 const CSP_ALLOW: &str = "
 default-src 'none';
+sandbox;
 font-src 'self' data: http: https:;
 frame-src 'none';
 img-src 'self' blob: data: https: http:;
