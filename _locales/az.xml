@@ -175,12 +175,12 @@
 
     <string name="ask_forward">Mesajları yönləndirin %1$sə-?</string>
     <string name="ask_export_attachment">Faylı ixrac etmək? Faylların ixracı cihazınızdakı hər hansı digər tətbiqlərə
-        daxil olmağa imkan verəcəkdir.  Razısan?</string>
+        daxil olmağa imkan verəcəkdir. \n\n Razısan?</string>
     <string name="ask_block_contact">Bu kontaktı bloklamaq? Bu kontaktdan artıq mesaj qəbul etməyəcəksiniz.</string>
     <string name="ask_unblock_contact">Bu kontaktı blokdan çıxarmaq istəyirsiniz? Nəticədə kontaktdan mesajlar ala
         bilərsiniz.</string>
     <string name="ask_delete_contacts">Kontaktları silmək? Bu əməliyyat seçilmiş kontaktları daimi olaraq
-        silməyəcək.  Sistem kontakt kitabından davam edən söhbətlər və kontaktlar ilə əlaqə
+        silməyəcək. \n\n Sistem kontakt kitabından davam edən söhbətlər və kontaktlar ilə əlaqə
         saxlanıla bilməz.</string>
     <string name="ask_start_chat_with">%1$s ilə çat? </string>
     <!-- %1$s is replaced by a comma-separated list of names -->
@@ -208,7 +208,7 @@
         <item quantity="other">%d yeni messaj</item>
     </plurals>
     <string name="chat_new_group_hint">Başqalarının bu qrup daxilində cavab verməsinə imkan verən ilk mesajı
-        yaradın. • Bütün üzvlər Delta Chat istifadə etsələr daha yaxşıdır. • İlk mesajı
+        yaradın. \n\n• Bütün üzvlər Delta Chat istifadə etsələr daha yaxşıdır. \n\n• İlk mesajı
         çatdırmaq bir müddət ala bilər.</string>
     <string name="chat_record_slide_to_cancel">Ləğv etmək üçün sürüşdürün</string>
     <string name="chat_record_explain">Bir səsli mesajı yazmaq üçün toxunun və saxlayın, göndərmək üçün buraxın</string>
@@ -270,7 +270,7 @@
     <string name="login_error_port">Xahiş edirik, düzgün bir port (1-65535) daxil et</string>
     <string name="login_error_required_fields">Xahiş edirik düzgün bir e-poçt ünvanı və parol daxil et</string>
     <string name="import_backup_title">Nüsxənin importu</string>
-    <string name="import_backup_ask">\"%1$s\" - də ehtiyat nüsxəsi tapıldı.İndi bütün məlumatları və
+    <string name="import_backup_ask">\"%1$s\" - də ehtiyat nüsxəsi tapıldı.\n\nİndi bütün məlumatları və
         parametrləri idxal etmək və istifadə etmək istəyirsiniz?</string>
     <!-- %1$s will be replaced by the failing address -->
     <string name="login_error_cannot_login"> \"%1$s\" kimi giriş alınmadı. E-poçt ünvanı və parolun düzgün olub
@@ -333,7 +333,7 @@
     <string name="pref_backup">Nüsxə</string>
     <string name="pref_backup_explain">Daxili yaddaşa mesaj nüsxəsi</string>
     <string name="pref_backup_export_explain">Ehtiyat nüsxəsi bu və ya digər bir cihazda yeni bir quraşdırma qurmağa kömək
-        edir. Nüsxədə bütün mesajlar, kontaktlar, çatlar və son ucdan uca avtoşifrələmə
+        edir. \n\nNüsxədə bütün mesajlar, kontaktlar, çatlar və son ucdan uca avtoşifrələmə
         quraşdırmaınız olacaq. Nüsxə faylını təhlükəsiz yerdə saxlayın və ya mümkün qədər tez silin.</string>
     <string name="pref_backup_export_start_button">Nüsxəyə başla</string>
     <string name="pref_backup_written_to_x">Ehtiyat nüsxə %1$s- ə uğurla yazılmışdır</string>
@@ -342,7 +342,7 @@
     <string name="pref_background_btn_default">Hal hazırdaki şəkili istifadə edin</string>
     <string name="pref_background_btn_gallery">Fotoalbomdan götürün</string>
     <string name="pref_imap_folder_warn_disable_defaults">Bu seçimi ləğv etsəniz, serverinizin və digər müştərilərinizin müvafiq
-        olaraq konfiqurasiya olunduğundan əmin olun. Ayrıca şeylər işləməyəcəkdir.</string>
+        olaraq konfiqurasiya olunduğundan əmin olun. \n\nAyrıca şeylər işləməyəcəkdir.</string>
     <string name="pref_auto_folder_moves">DeltaChat qovluğuna avtomatik keçid</string>
     <string name="pref_show_emails">Klassik e-poçtları göstər</string>
     <string name="pref_show_emails_no">Xeyir, ancaq çatlar</string>
@@ -374,10 +374,10 @@
     <string name="qrscan_hint">QR kodu kamera ilə izləyin</string>
     <string name="qrscan_ask_join_group">\"%1$s\" qrupa qoşulmaq istəyirsinizmi?</string>
     <string name="qrscan_fingerprint_mismatch">%1$süçün skan olunan barmaq izi son görüldüyü barmaq izinə uyğun deyil</string>
-    <string name="qrscan_no_addr_found">QR kodu iz ehtiva edir, lakin heç bir e-poçt ünvanı yoxdur.Əlaqə qurmaq
+    <string name="qrscan_no_addr_found">QR kodu iz ehtiva edir, lakin heç bir e-poçt ünvanı yoxdur.\n\nƏlaqə qurmaq
         üçün əvvəlcə abonentlə şifrəli bir əlaqə qurun.</string>
-    <string name="qrscan_contains_text">QR kod mətni skan olundu:%1$s</string>
-    <string name="qrscan_contains_url">QR kod linki skan olundu:%1$s</string>
+    <string name="qrscan_contains_text">QR kod mətni skan olundu:\n\n%1$s</string>
+    <string name="qrscan_contains_url">QR kod linki skan olundu:\n\n%1$s</string>
     <string name="qrscan_fingerprint_label">İz</string>
     <string name="qrshow_title">QR dəvət kodu</string>
     <string name="qrshow_x_joining">%1$s qoşulur.</string>
