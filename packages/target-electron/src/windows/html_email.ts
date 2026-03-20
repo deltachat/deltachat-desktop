@@ -6,11 +6,10 @@ import electron, {
   MenuItemConstructorOptions,
   nativeTheme,
   session,
-  shell,
   WebContents,
   WebContentsView,
 } from 'electron'
-import { clipboard } from 'electron/common'
+import { openExternalHttpOrPromptToCopy } from '../deltachat/link-clicks.js'
 import { join } from 'path'
 import { platform } from 'os'
 
@@ -511,23 +510,7 @@ function makeBrowserView(
       open_url(url)
       mainWindow.window?.show()
     } else {
-      if (
-        url.toLowerCase().startsWith('http:') ||
-        url.toLowerCase().startsWith('https:')
-      ) {
-        shell.openExternal(url)
-      } else {
-        dialog
-          .showMessageBox(window, {
-            buttons: [tx('no'), tx('menu_copy_link_to_clipboard')],
-            message: tx('ask_copy_unopenable_link_to_clipboard', url),
-          })
-          .then(({ response }) => {
-            if (response == 1) {
-              clipboard.writeText(url)
-            }
-          })
-      }
+      openExternalHttpOrPromptToCopy(window, url)
     }
   }
 

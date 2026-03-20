@@ -13,7 +13,6 @@ import { tx } from '../load-translations.js'
  * @param win the window on which the "copy?" dialog will be opened.
  *
  * @see `useOpenLinkSafely`
- * @see `openLink` in `html_email.ts`
  * @see `open_url`
  */
 export async function openExternalHttpOrPromptToCopy(
