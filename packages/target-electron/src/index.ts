@@ -140,9 +140,9 @@ import './notifications.js'
 import { acceptThemeCLI } from './themes.js'
 import {
   WEBXDC_PARTITION_PREFIX,
-  openExternalHttpOrPromptToCopy,
   webxdcStartUpCleanup,
 } from './deltachat/webxdc.js'
+import { openExternalHttpOrPromptToCopy } from './deltachat/link-clicks.js'
 import {
   cleanupDraftTempDir,
   cleanupInternalTempDirs,
