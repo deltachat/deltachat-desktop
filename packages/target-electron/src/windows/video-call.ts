@@ -247,7 +247,8 @@ function openVideoCallWindow<D extends CallDirection>(
     autoHideMenuBar: true,
     // The `calls-webapp` theme is dark. Reduce flashing.
     backgroundColor: '#000',
-    title: tx('start_call'), // To be changed later.
+    // We'll also do `setTitle()` later.
+    title: startWithCameraEnabled ? tx('video_call') : tx('audio_call'),
     icon: appIcon(), // To be changed later.
     // TODO
     // alwaysOnTop: main_window?.isAlwaysOnTop(),
@@ -265,8 +266,13 @@ function openVideoCallWindow<D extends CallDirection>(
     if (win.isDestroyed()) {
       return
     }
-    // TODO i18n
-    win.setTitle(`Call with ${chat.name}`)
+    // Separating name with space is not appropriate in all languages,
+    // but we don't have other strings.
+    // Also it's perhaps not suitable to still show "audio call"
+    // when parties have later enabled their cameras, but good enough.
+    win.setTitle(
+      `${startWithCameraEnabled ? tx('video_call') : tx('audio_call')} ${chat.name}`
+    )
     chat.profileImage && win.setIcon(chat.profileImage)
   })
 
