@@ -369,7 +369,7 @@ function openVideoCallWindow<D extends CallDirection>(
         // TODO show the account name / label that received the call?
         message: chatInfo
           ? `📞 ${chatInfo.name} is calling`
-          : `📞 ${tx('incoming_call')}`,
+          : `📞 ${tx('call_incoming')}`,
         type: 'question',
         buttons: ['Decline', 'Answer'],
         defaultId: 0,
