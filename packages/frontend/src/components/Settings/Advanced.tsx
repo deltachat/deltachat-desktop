@@ -142,7 +142,11 @@ function SettingsAutoStart() {
       <DesktopSettingsSwitch
         // force react to rerender element, so that the switch does not animate
         key={String(!autostartState)}
-        settingsKey='autostartElectron'
+        settingsKey={
+          runtime.getRuntimeInfo().target === 'electron'
+            ? 'autostartElectron'
+            : 'autostart'
+        }
         label={tx('pref_autostart')}
         description={
           autostartState
