@@ -35,7 +35,7 @@ async function xmlToJson(filename) {
 
   async function done() {
     const newFile = filename.replace(extname(filename), '') + '.json'
-    await writeFile(newFile, JSON.stringify(res, null, 2))
+    await writeFile(newFile, JSON.stringify(res, null, 2) + '\n')
   }
 
   if (!js.resources || !js.resources.string || !js.resources.plurals)
