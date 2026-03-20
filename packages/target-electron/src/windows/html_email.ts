@@ -409,6 +409,7 @@ export function openHtmlEmailWindow(
 }
 
 const CSP_DENY = `default-src 'none';
+sandbox;
 font-src 'self' data:;
 frame-src 'none';
 img-src 'self' data:;
@@ -418,6 +419,7 @@ form-action 'none';
 script-src 'none';`.replace(/\n/g, '')
 const CSP_ALLOW = `
 default-src 'none';
+sandbox;
 font-src 'self' data: http: https:;
 frame-src 'none';
 img-src 'self' blob: data: https: http:;
